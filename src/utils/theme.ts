@@ -25,8 +25,8 @@ const baseTheme: ThemeOptions = {
     },
 }
 // 主题
-export const MaskbookLightTheme = createMuiTheme({ ...baseTheme })
-export const MaskbookDarkTheme = createMuiTheme({ ...baseTheme })
+export const MaskbookLightTheme = createMuiTheme({ ...baseTheme, palette: { ...baseTheme.palette, type: 'light' } })
+export const MaskbookDarkTheme = createMuiTheme({ ...baseTheme, palette: { ...baseTheme.palette, type: 'dark' } })
 
 // 类型安全的 withStyles
 export function withStylesTyped<ClassKey extends string, Options extends WithStylesOptions<ClassKey> = {}>(
