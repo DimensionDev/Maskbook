@@ -1,0 +1,58 @@
+{
+  "name": "maskbook",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@material-ui/core": "^3.9.2",
+    "@material-ui/icons": "^3.0.2",
+    "@types/classnames": "^2.2.7",
+    "@types/jest": "^24.0.6",
+    "@types/node": "11.9.4",
+    "@types/react": "16.8.4",
+    "@types/react-dom": "16.8.2",
+    "classnames": "^2.2.6",
+    "node-sass": "^4.11.0",
+    "react": "^16.8.3",
+    "react-dom": "^16.8.3",
+    "react-scripts": "2.1.5",
+    "storybook-addon-material-ui": "0.9.0-alpha.17",
+    "tslint": "^5.12.1",
+    "typescript": "^3.3.3333"
+  },
+  "scripts": {
+    "watch": "react-app-rewired start",
+    "build": "react-app-rewired build",
+    "test": "react-app-rewired test",
+    "start": "start-storybook -p 9009 -s public",
+    "build-storybook": "build-storybook -s public"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ],
+  "devDependencies": {
+    "@babel/core": "^7.3.3",
+    "@storybook/addon-actions": "^4.1.13",
+    "@storybook/addon-info": "^4.1.13",
+    "@storybook/addon-knobs": "^4.1.13",
+    "@storybook/addon-links": "^4.1.13",
+    "@storybook/addon-options": "^4.1.13",
+    "@storybook/addons": "^4.1.13",
+    "@storybook/react": "^4.1.13",
+    "@types/storybook__addon-actions": "^3.4.2",
+    "@types/storybook__addon-info": "^4.1.0",
+    "@types/storybook__addon-knobs": "^4.0.1",
+    "@types/storybook__addon-links": "^3.3.4",
+    "@types/storybook__addon-options": "^4.0.1",
+    "@types/storybook__react": "^4.0.1",
+    "awesome-typescript-loader": "^5.2.1",
+    "babel-loader": "^8.0.5",
+    "react-app-rewired": "^2.1.0",
+    "react-docgen-typescript-loader": "^3.0.1"
+  }
+}

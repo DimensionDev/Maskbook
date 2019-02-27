@@ -1,0 +1,3 @@
+*.test.tsx
+package.json
+package-lock.json
