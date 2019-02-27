@@ -13,6 +13,8 @@ import { action } from '@storybook/addon-actions'
 import Identity from '../components/Dashboard/Identity'
 import Dashboard from '../components/Dashboard/Dashboard'
 
+import EncryptionCheckbox from '../components/InjectedComponents/EncryptionCheckbox'
+
 storiesOf('Welcome', module)
     .add('Step 0', () => <Welcome0 create={to('Welcome', 'Step 1a-1')} restore={to('Welcome', 'Step 1b-1')} />)
     .add('Step 1a-1', () => <Welcome1a1 next={to('Welcome', 'Step 1a-2')} />)
@@ -57,3 +59,7 @@ storiesOf('Dashboard', module)
             ]}
         />
     ))
+
+storiesOf('Injections', module)
+    //
+    .add('Checkbox', () => <EncryptionCheckbox onCheck={action('Check')} />)
