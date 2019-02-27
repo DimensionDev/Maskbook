@@ -5,9 +5,9 @@ import { withStylesTyped } from '../../utils/theme'
 import { Theme } from '@material-ui/core/styles/createMuiTheme'
 import createStyles from '@material-ui/core/styles/createStyles'
 import Button from '@material-ui/core/Button/Button'
-import { createThemedBox } from '../../utils/Flex'
+import { createBox } from '../../utils/Flex'
 
-const TextField = createThemedBox(theme => ({
+const TextField = createBox(theme => ({
     background: theme.palette.background.default,
     color: theme.palette.grey[700],
     padding: `${theme.spacing.unit * 2}px`,

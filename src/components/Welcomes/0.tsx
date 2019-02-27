@@ -5,9 +5,9 @@ import { withStylesTyped } from '../../utils/theme'
 import { Theme } from '@material-ui/core/styles/createMuiTheme'
 import createStyles from '@material-ui/core/styles/createStyles'
 import Button from '@material-ui/core/Button/Button'
-import { VerticalCenter, FullWidth, createThemedBox } from '../../utils/Flex'
+import { VerticalCenter, FullWidth, createBox } from '../../utils/Flex'
 
-const LinedBox = createThemedBox(theme => ({
+const LinedBox = createBox(theme => ({
     border: '1px solid #ddd',
     borderRadius: theme.shape.borderRadius,
     textAlign: 'start',

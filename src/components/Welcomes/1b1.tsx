@@ -5,11 +5,11 @@ import { withStylesTyped } from '../../utils/theme'
 import { Theme } from '@material-ui/core/styles/createMuiTheme'
 import createStyles from '@material-ui/core/styles/createStyles'
 import Button from '@material-ui/core/Button/Button'
-import { createThemedBox } from '../../utils/Flex'
+import { createBox } from '../../utils/Flex'
 
 import ArrowBack from '@material-ui/icons/ArrowBack'
 
-const RestoreBox = createThemedBox(theme => ({
+const RestoreBox = createBox(theme => ({
     color: theme.palette.grey[700],
     border: `2px dashed ${theme.palette.divider}`,
     whiteSpace: 'pre-line',
