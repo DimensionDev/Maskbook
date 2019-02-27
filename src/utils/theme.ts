@@ -6,21 +6,23 @@ import withStyles, {
     StyleRulesCallback,
 } from '@material-ui/core/styles/withStyles'
 import React from 'react'
-import createMuiTheme from '@material-ui/core/styles/createMuiTheme'
+import createMuiTheme, { ThemeOptions } from '@material-ui/core/styles/createMuiTheme'
 
-// 主题
-export const MaskbookLightTheme = createMuiTheme({
+const baseTheme: ThemeOptions = {
     palette: { primary: { main: '#486db6' }, secondary: { main: '#486db6' } },
+    shape: { borderRadius: 10 },
     typography: {
         useNextVariants: true,
     },
-})
-export const MaskbookDarkTheme = createMuiTheme({
-    palette: { primary: blue, secondary: purple, type: 'dark' },
-    typography: {
-        useNextVariants: true,
+    overrides: {
+        MuiButton: {
+            root: { textTransform: 'none' },
+        },
     },
-})
+}
+// 主题
+export const MaskbookLightTheme = createMuiTheme({ ...baseTheme })
+export const MaskbookDarkTheme = createMuiTheme({ ...baseTheme })
 
 // 类型安全的 withStyles
 export function withStylesTyped<ClassKey extends string, Options extends WithStylesOptions<ClassKey> = {}>(
