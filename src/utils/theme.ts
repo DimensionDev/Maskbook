@@ -8,6 +8,7 @@ import withStyles, {
 import React from 'react'
 import createMuiTheme, { ThemeOptions } from '@material-ui/core/styles/createMuiTheme'
 
+const _refTheme = createMuiTheme()
 const baseTheme: ThemeOptions = {
     palette: { primary: { main: '#486db6' }, secondary: { main: '#486db6' } },
     shape: { borderRadius: 10 },
@@ -16,7 +17,10 @@ const baseTheme: ThemeOptions = {
     },
     overrides: {
         MuiButton: {
-            root: { textTransform: 'none' },
+            root: {
+                textTransform: 'none',
+                padding: `${_refTheme.spacing.unit}px ${_refTheme.spacing.unit * 3}px`,
+            },
         },
     },
 }

@@ -22,6 +22,7 @@ export default withStylesTyped((theme: Theme) =>
         paper: {
             padding: '3rem 3rem 1rem 3rem',
             textAlign: 'center',
+            maxWidth: '35rem',
         },
         title: {
             marginBottom: theme.spacing.unit * 3,
@@ -32,7 +33,6 @@ export default withStylesTyped((theme: Theme) =>
         },
         button: {
             minWidth: 180,
-            padding: `${theme.spacing.unit}px ${theme.spacing.unit * 3}px`,
         },
     }),
 )<{}>(function Welcome({ classes }) {
