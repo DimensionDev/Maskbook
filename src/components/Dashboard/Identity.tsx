@@ -5,22 +5,34 @@ import CardHeader from '@material-ui/core/CardHeader/CardHeader'
 import Avatar from '@material-ui/core/Avatar/Avatar'
 import { FixedWidthFonts, withStylesTyped } from '../../utils/theme'
 import { createBox } from '../../utils/Flex'
-import createStyles from '@material-ui/core/styles/createStyles'
 import { Theme } from '@material-ui/core/styles/createMuiTheme'
 import classNames from 'classnames'
+import createStyles from '@material-ui/core/styles/createStyles'
 
-interface Props {
-    /* Design variant */
-    avatar?: string
-    atSymbolBefore?: boolean
-    /* Props */
+export interface IIdentity {
     nickname: string
     username: string
     fingerprint: string
 }
+interface Props extends IIdentity {
+    /* Design variant */
+    avatar?: string
+    atSymbolBefore?: boolean
+    onClick?(): void
+}
 const FixedWidth = createBox({ fontFamily: FixedWidthFonts })
 export default withStylesTyped((theme: Theme) =>
     createStyles({
+        card: {
+            display: 'inline-block',
+            marginBottom: theme.spacing.unit * 3,
+            textAlign: 'start',
+            cursor: 'pointer',
+            transition: '0.4s',
+            '&:hover': {
+                boxShadow: theme.shadows[6],
+            },
+        },
         text: {
             fontWeight: 'bold',
             marginRight: theme.spacing.unit,
@@ -30,9 +42,9 @@ export default withStylesTyped((theme: Theme) =>
         },
     }),
 )<Props>(function Identity(props) {
-    const { avatar } = props
+    const { avatar, onClick } = props
     return (
-        <Card style={{ display: 'inline-block' }}>
+        <Card onClick={onClick} className={props.classes.card}>
             <CardHeader
                 classes={{ avatar: classNames({ [props.classes.avatarDisabled]: !avatar }) }}
                 avatar={

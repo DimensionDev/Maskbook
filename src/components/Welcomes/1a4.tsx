@@ -9,7 +9,7 @@ import { createBox } from '../../utils/Flex'
 
 const TextField = createBox(theme => ({
     background: theme.palette.background.default,
-    color: theme.palette.grey[700],
+    color: theme.palette.text.hint,
     padding: `${theme.spacing.unit * 2}px`,
     border: `1px solid ${theme.palette.divider}`,
     textAlign: 'start',

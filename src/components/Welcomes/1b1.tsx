@@ -10,7 +10,7 @@ import { createBox } from '../../utils/Flex'
 import ArrowBack from '@material-ui/icons/ArrowBack'
 
 const RestoreBox = createBox(theme => ({
-    color: theme.palette.grey[700],
+    color: theme.palette.text.hint,
     border: `2px dashed ${theme.palette.divider}`,
     whiteSpace: 'pre-line',
     minHeight: 160 - theme.spacing.unit * 8,
@@ -37,7 +37,7 @@ export default withStylesTyped((theme: Theme) =>
             paddingLeft: theme.spacing.unit,
         },
         navButton: {
-            color: theme.palette.grey[600],
+            color: theme.palette.text.hint,
         },
         navButtonIcon: {
             marginRight: theme.spacing.unit,
