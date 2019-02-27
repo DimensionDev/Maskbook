@@ -6,6 +6,7 @@ import Welcome1a1 from '../components/Welcomes/1a1'
 import Welcome1a2 from '../components/Welcomes/1a2'
 import Welcome1a3 from '../components/Welcomes/1a3'
 import Welcome1a4 from '../components/Welcomes/1a4'
+import Welcome1b1 from '../components/Welcomes/1b1'
 
 storiesOf('Welcome', module)
     .add('Step 0', () => <Welcome0 />)
@@ -13,3 +14,4 @@ storiesOf('Welcome', module)
     .add('Step 1a-2', () => <Welcome1a2 />)
     .add('Step 1a-3', () => <Welcome1a3 />)
     .add('Step 1a-4', () => <Welcome1a4 />)
+    .add('Step 1b-1', () => <Welcome1b1 />)
