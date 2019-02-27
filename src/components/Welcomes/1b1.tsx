@@ -23,7 +23,10 @@ const RestoreBox = createThemedBox(theme => ({
     cursor: 'pointer',
     padding: theme.spacing.unit * 4,
 }))
-interface Props {}
+interface Props {
+    back(): void
+    restore(blob: string): void
+}
 export default withStylesTyped((theme: Theme) =>
     createStyles({
         paper: {
@@ -50,13 +53,13 @@ export default withStylesTyped((theme: Theme) =>
             minWidth: 180,
         },
     }),
-)<{}>(function Welcome({ classes }) {
+)<Props>(function Welcome({ classes, back, restore }) {
     const ref = React.useRef<HTMLInputElement>(null)
     const [[name, blob], setJSON] = React.useState<[string, string]>(['', ''])
     return (
         <Paper className={classes.paper}>
             <nav className={classes.nav}>
-                <Button disableFocusRipple disableRipple className={classes.navButton}>
+                <Button onClick={back} disableFocusRipple disableRipple className={classes.navButton}>
                     <ArrowBack className={classes.navButtonIcon} />
                     Back
                 </Button>
@@ -75,7 +78,12 @@ export default withStylesTyped((theme: Theme) =>
                         {!name ? 'Select exported keystore file' : `Selected exported keystore file ${name}`}
                     </RestoreBox>
                 </form>
-                <Button variant="raised" color="primary" className={classes.button}>
+                <Button
+                    onClick={() => restore(blob)}
+                    disabled={!name}
+                    variant="contained"
+                    color="primary"
+                    className={classes.button}>
                     Restore
                 </Button>
             </main>

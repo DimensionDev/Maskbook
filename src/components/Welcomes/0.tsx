@@ -16,7 +16,10 @@ const LinedBox = createThemedBox(theme => ({
     display: 'flex',
 }))
 
-interface Props {}
+interface Props {
+    create(): void
+    restore(): void
+}
 export default withStylesTyped((theme: Theme) =>
     createStyles({
         paper: {
@@ -35,7 +38,7 @@ export default withStylesTyped((theme: Theme) =>
             minWidth: 180,
         },
     }),
-)<{}>(function Welcome({ classes }) {
+)<Props>(function Welcome({ classes, create, restore }) {
     return (
         <Paper className={classes.paper}>
             <Typography variant="h5" className={classes.title}>
@@ -50,7 +53,7 @@ export default withStylesTyped((theme: Theme) =>
                     <Typography variant="h6">Connect Facebook Account</Typography>
                 </FullWidth>
                 <VerticalCenter>
-                    <Button variant="raised" color="primary" className={classes.button}>
+                    <Button onClick={create} variant="contained" color="primary" className={classes.button}>
                         Connect Facebook
                     </Button>
                 </VerticalCenter>
@@ -61,7 +64,7 @@ export default withStylesTyped((theme: Theme) =>
                     <Typography variant="h6">Restore Keyparis</Typography>
                 </FullWidth>
                 <VerticalCenter>
-                    <Button variant="outlined" className={classes.button}>
+                    <Button onClick={restore} variant="outlined" className={classes.button}>
                         Restore
                     </Button>
                 </VerticalCenter>

@@ -6,7 +6,9 @@ import { Theme } from '@material-ui/core/styles/createMuiTheme'
 import createStyles from '@material-ui/core/styles/createStyles'
 import Button from '@material-ui/core/Button/Button'
 
-interface Props {}
+interface Props {
+    next(): void
+}
 export default withStylesTyped((theme: Theme) =>
     createStyles({
         paper: {
@@ -21,13 +23,13 @@ export default withStylesTyped((theme: Theme) =>
             minWidth: 180,
         },
     }),
-)<{}>(function Welcome({ classes }) {
+)<Props>(function Welcome({ classes, next }) {
     return (
         <Paper className={classes.paper}>
             <Typography variant="h5">Check this box when you post</Typography>
             <img src={require('./1a2.jpg')} width="100%" />
             <Typography variant="subtitle1">Then only your friends with Maskbook can see the post content</Typography>
-            <Button variant="raised" color="primary" className={classes.button}>
+            <Button onClick={next} variant="contained" color="primary" className={classes.button}>
                 Nice!
             </Button>
         </Paper>

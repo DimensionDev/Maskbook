@@ -17,7 +17,10 @@ const TextField = createThemedBox(theme => ({
     minHeight: '10em',
     borderRadius: theme.shape.borderRadius,
 }))
-interface Props {}
+interface Props {
+    post(): void
+    link: string
+}
 export default withStylesTyped((theme: Theme) =>
     createStyles({
         paper: {
@@ -32,7 +35,7 @@ export default withStylesTyped((theme: Theme) =>
             minWidth: 180,
         },
     }),
-)<{}>(function Welcome({ classes }) {
+)<Props>(function Welcome({ classes, post, link }) {
     return (
         <Paper className={classes.paper}>
             <Typography variant="h5">Let your friends join Maskbook</Typography>
@@ -41,13 +44,13 @@ export default withStylesTyped((theme: Theme) =>
                 well so that you may read my encrypted posts, and may prevent Facebook from intercepting our
                 communication.
                 {`
-Link: https://maskbook.app/s/#mQINBF-BxAcBEA-zyfSodx`}
+Link: ${link}`}
             </TextField>
             <Typography variant="subtitle1">
                 Mathematically, you have to post this. Or your friends cannot verify the connection between your keypair
                 and your account.
             </Typography>
-            <Button variant="raised" color="primary" className={classes.button}>
+            <Button onClick={post} variant="contained" color="primary" className={classes.button}>
                 Post Now
             </Button>
         </Paper>
