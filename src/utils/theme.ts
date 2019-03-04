@@ -7,6 +7,7 @@ import withStyles, {
 } from '@material-ui/core/styles/withStyles'
 import React from 'react'
 import createMuiTheme, { ThemeOptions } from '@material-ui/core/styles/createMuiTheme'
+import { TypographyOptions } from '@material-ui/core/styles/createTypography'
 
 const _refTheme = createMuiTheme()
 const _refThemeDark = createMuiTheme({ palette: { type: 'dark' } })
@@ -23,7 +24,13 @@ const baseTheme = (theme: 'dark' | 'light') =>
         shape: { borderRadius: 10 },
         typography: {
             useNextVariants: true,
-        },
+            caption: {
+                color: '#4b4f56',
+                letterSpacing: 'initial',
+                fontWeight: 600,
+                lineHeight: '14px',
+            },
+        } as TypographyOptions,
         overrides: {
             MuiButton: {
                 root: {

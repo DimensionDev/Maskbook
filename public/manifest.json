@@ -1,0 +1,24 @@
+{
+  "name": "Maskbook",
+  "version": "1.0",
+  "manifest_version": 2,
+  "content_scripts": [
+    {
+      "matches": [
+        "https://www.facebook.com/"
+      ],
+      "js": [
+        "/static/js/contentscript.js"
+      ],
+      "run_at": "document_idle"
+    }
+  ],
+  "web_accessible_resources": [
+    "*.css",
+    "*.js"
+  ],
+  "permissions": [
+    "https://www.facebook.com/",
+    "storage"
+  ]
+}
