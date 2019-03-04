@@ -21,7 +21,7 @@ const baseTheme = (theme: 'dark' | 'light') =>
                 default: theme === 'light' ? '#eeeeef' : _refThemeDark.palette.background.default,
             },
         },
-        shape: { borderRadius: 10 },
+        shape: { borderRadius: 3 },
         typography: {
             useNextVariants: true,
             caption: {
@@ -40,6 +40,18 @@ const baseTheme = (theme: 'dark' | 'light') =>
                 outlined: {
                     background: theme === 'light' ? 'white' : _refThemeDark.palette.background.default,
                     padding: `${_refTheme.spacing.unit}px ${_refTheme.spacing.unit * 3}px`,
+                },
+            },
+            MuiCard: {
+                root: {
+                    borderRadius: 3,
+                },
+            },
+            MuiCardHeader: {
+                root: {
+                    background: '#f5f6f7',
+                    width: '100%',
+                    padding: '8px 24px 8px 8px',
                 },
             },
         },
