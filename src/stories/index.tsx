@@ -15,6 +15,7 @@ import Dashboard from '../components/Dashboard/Dashboard'
 
 import EncryptionCheckbox from '../components/InjectedComponents/EncryptionCheckbox'
 import { AdditionalPostBox } from '../components/InjectedComponents/AdditionalPostBox'
+import { DecryptedPost } from '../components/InjectedComponents/DecryptedPost'
 
 storiesOf('Welcome', module)
     .add('Step 0', () => <Welcome0 create={to('Welcome', 'Step 1a-1')} restore={to('Welcome', 'Step 1b-1')} />)
@@ -64,4 +65,5 @@ storiesOf('Dashboard', module)
 storiesOf('Injections', module)
     //
     .add('Checkbox', () => <EncryptionCheckbox onCheck={action('Check')} />)
-    .add('Post box', () => <AdditionalPostBox />)
+    .add('Post box', () => <AdditionalPostBox encrypt={x => btoa(unescape(encodeURIComponent(x)))} />)
+    .add('Decrypt', () => <DecryptedPost decryptedContent="Decrypted content" />)

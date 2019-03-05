@@ -13,6 +13,7 @@ import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider'
 
 interface Props {
     avatar?: string
+    encrypt(content: string, options: { shareWith: string[] }): string
 }
 const _AdditionalPostBox = withStylesTyped({
     root: { maxWidth: 500, marginBottom: 10 },
@@ -31,7 +32,7 @@ const _AdditionalPostBox = withStylesTyped({
 })<Props>(props => {
     const { classes } = props
     const [text, setText] = React.useState('')
-    const encrypted = `Decrypt this post with https://maskbook.io/d/?${btoa(unescape(encodeURIComponent(text)))}`
+    const encrypted = `Decrypt this post with maskbook://${props.encrypt(text, { shareWith: [] })}`
     return (
         <Card className={classes.root}>
             <CardHeader title={<Typography variant="caption">Encrypt with Maskbook</Typography>} />
