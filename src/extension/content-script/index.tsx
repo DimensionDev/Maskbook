@@ -1,18 +1,18 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { LiveSelector, Watcher } from '@holoflows/kit'
+import { LiveSelector, MutationObserverWatcher } from '@holoflows/kit'
 import { AdditionalPostBox } from '../../components/InjectedComponents/AdditionalPostBox'
 import { DecryptedPost } from '../../components/InjectedComponents/DecryptedPost'
 
-const box = new Watcher(
+const box = new MutationObserverWatcher(
     new LiveSelector()
         .querySelector('[role="dialog"][aria-label="Create a post"]')
         .map(x => x.lastElementChild)
         .map(x => x.lastElementChild),
 ).startWatch()
-ReactDOM.render(<AdditionalPostBox encrypt={x => btoa(unescape(encodeURIComponent(x)))} />, box.virtualNode.after)
+ReactDOM.render(<AdditionalPostBox encrypt={x => btoa(unescape(encodeURIComponent(x)))} />, box.firstVirtualNode.after)
 
-new Watcher(
+new MutationObserverWatcher(
     new LiveSelector().querySelectorAll<HTMLDivElement>('.userContent').filter((x: HTMLElement | null) => {
         while (x) {
             if (x.classList.contains('hidden_elem')) return false
