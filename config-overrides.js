@@ -21,11 +21,30 @@ module.exports = function override(/** @type{import("webpack").Configuration} */
             [
                 {
                     from: path.join(__dirname, './public'),
-                    to: path.join(__dirname, './build'),
+                    to: path.join(__dirname, './dist'),
                 },
             ],
             { ignore: ['*.html'] },
         ),
     )
+    for (const x of config.module.rules) {
+        if (!x.oneOf) continue
+        for (const rule of x.oneOf) {
+            if (rule.loader === require.resolve('babel-loader')) {
+                if (rule.include) {
+                    rule.loader = require.resolve('ts-loader')
+                    rule.options = {
+                        transpileOnly: true,
+                        compilerOptions: {
+                            jsx: 'react',
+                        },
+                    }
+                }
+            }
+        }
+    }
+    config.module.rules.forEach(rule => {
+        if (rule.oneOf) rule.oneOf = rule.oneOf.filter(x => x.loader !== require.resolve('babel-loader'))
+    })
     return config
 }
