@@ -1,3 +1,4 @@
+import '../../crypto'
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { LiveSelector, MutationObserverWatcher } from '@holoflows/kit'
@@ -24,7 +25,7 @@ new MutationObserverWatcher(
 )
     .useNodeForeach((virtualNode, key, realNode) => {
         const Comp = () => {
-            const text = virtualNode.current.innerText.match(/Decrypt this post with maskbook\:\/\/?(?<text>.+)/)
+            const text = virtualNode.current.innerText.match(/maskbook\:\/\/?(?<text>.+)/)
             if (!text) return null
             try {
                 return <DecryptedPost decryptedContent={decodeURIComponent(escape(atob(text.groups!.text)))} />
@@ -39,3 +40,8 @@ new MutationObserverWatcher(
         }
     })
     .startWatch()
+Object.assign(window, {
+    LiveSelector,
+    MutationObserverWatcher,
+    box,
+})
