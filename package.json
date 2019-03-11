@@ -21,9 +21,11 @@
     "react-app-rewired": "^2.1.0",
     "react-dom": "^16.8.3",
     "react-scripts": "2.1.5",
+    "reflect-metadata": "^0.1.13",
     "storybook-addon-material-ui": "0.9.0-alpha.17",
     "ts-loader": "^5.3.3",
     "tslint": "^5.12.1",
+    "typed-db": "^1.0.1-1",
     "typescript": "^3.3.3333",
     "webcrypto-liner": "^0.1.38",
     "write-file-webpack-plugin": "^4.5.0"

@@ -1,6 +1,6 @@
 {
   "rules": {
-    "await-promise": true,
+    "await-promise": [true, "PromiseLike"],
     "deprecation": true,
     "encoding": true,
     "increment-decrement": true,

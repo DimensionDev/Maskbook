@@ -1,24 +1,18 @@
 {
-  "name": "Maskbook",
-  "version": "1.0",
-  "manifest_version": 2,
-  "content_scripts": [
-    {
-      "matches": [
-        "https://www.facebook.com/"
-      ],
-      "js": [
-        "/static/js/contentscript.js"
-      ],
-      "run_at": "document_idle"
+    "name": "Maskbook",
+    "version": "1.0",
+    "manifest_version": 2,
+    "content_scripts": [
+        {
+            "matches": ["https://www.facebook.com/*"],
+            "js": ["/static/js/contentscript.js"],
+            "run_at": "document_idle",
+            "all_frames": true
+        }
+    ],
+    "web_accessible_resources": ["*.css", "*.js"],
+    "permissions": ["https://www.facebook.com/", "storage"],
+    "background": {
+        "scripts": ["/static/js/backgroundscript.js"]
     }
-  ],
-  "web_accessible_resources": [
-    "*.css",
-    "*.js"
-  ],
-  "permissions": [
-    "https://www.facebook.com/",
-    "storage"
-  ]
 }

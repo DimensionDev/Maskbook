@@ -7,7 +7,8 @@ module.exports = function override(/** @type{import("webpack").Configuration} */
     if (env === 'development') config.devtool = 'inline-source-map'
     config.entry = {
         app: path.join(__dirname, './src/index.tsx'),
-        contentscript: path.join(__dirname, './src/content-script.tsx'),
+        contentscript: path.join(__dirname, './src/content-script.ts'),
+        backgroundservice: path.join(__dirname, './src/background-service.ts'),
     }
     config.output.filename = 'static/js/[name].js'
     config.output.chunkFilename = 'static/js/[name].chunk.js'
