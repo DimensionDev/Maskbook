@@ -1,4 +1,5 @@
 import 'webcrypto-liner/dist/webcrypto-liner.shim'
+// ! This is not a debug statement
 Object.assign(window, {
     elliptic: require('elliptic'),
 })

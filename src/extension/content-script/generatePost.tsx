@@ -1,7 +1,6 @@
 import { generateMyKey } from '../../key-management/keys'
 import { sign, verify, ArrayBufferToString } from '../../crypto/crypto'
 import { storeKey, getMyPrivateKey, toStoreCryptoKey } from '../../key-management/db'
-import { MessageCenter } from '../../utils/messages'
 
 export async function generateMyProvePost() {
     let myKey = await getMyPrivateKey()

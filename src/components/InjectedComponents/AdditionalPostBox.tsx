@@ -13,7 +13,7 @@ import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider'
 import { KeysProvider, KeysConsumer } from '../../key-management/keys'
 import { SelectPeopleSingle } from './SelectPeopleSingle'
 import { PersonCryptoKey, getMyPrivateKey } from '../../key-management/db'
-import AsyncComponent, { useAsync } from '../../utils/AsyncComponent'
+import { useAsync } from '../../utils/AsyncComponent'
 import { encryptText } from '../../crypto/crypto'
 
 interface Props {
