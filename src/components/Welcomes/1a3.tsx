@@ -27,7 +27,7 @@ export default withStylesTyped((theme: Theme) =>
 )<Props>(function Welcome({ classes, next, jsonFileName }) {
     return (
         <Paper className={classes.paper}>
-            <Typography variant="h5">Keep your backupds carefully</Typography>
+            <Typography variant="h5">Keep your backups carefully</Typography>
             <img src={require('./1a3.jpg')} width="auto" height={160} />
             {jsonFileName && (
                 <>

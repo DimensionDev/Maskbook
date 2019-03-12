@@ -1,4 +1,3 @@
-import { blue, purple } from '@material-ui/core/colors'
 import withStyles, {
     WithStyles,
     WithStylesOptions,

@@ -5,7 +5,8 @@ import { buildQuery } from '../utils/utils'
 import { MessageCenter } from '../utils/messages'
 
 @Entity()
-class CryptoKeyRecord {
+/** DO NOT Change the name of this class! It is used as key in the db! */
+export class CryptoKeyRecord {
     @Index({ unique: true })
     @Key()
     username!: string
@@ -26,14 +27,14 @@ export type PersonCryptoKey = {
 }
 export async function getAllKeys(): Promise<PersonCryptoKey[]> {
     const record = await query(t => t.openCursor().asList())
-    return Promise.all(record.map(toRead))
+    return Promise.all(record.map(toReadCryptoKey))
 }
 export async function queryPersonCryptoKey(username: string): Promise<PersonCryptoKey | null> {
     const record = await query(t => t.get(username))
-    return record ? toRead(record) : null
+    return record ? toReadCryptoKey(record) : null
 }
 export async function storeKey(key: Omit<PersonCryptoKey, 'fingerprint'>) {
-    const k = await toStore(key)
+    const k = await toStoreCryptoKey(key)
     MessageCenter.send('newKeyStored', key.username)
     return query(t => t.add(k), 'readwrite')
 }
@@ -41,7 +42,7 @@ export async function getMyPrivateKey(): Promise<PersonCryptoKey | null> {
     const record = await queryPersonCryptoKey('$self')
     return record || null
 }
-async function toStore(x: Omit<PersonCryptoKey, 'fingerprint'>): Promise<CryptoKeyRecord> {
+export async function toStoreCryptoKey(x: Omit<PersonCryptoKey, 'fingerprint'>): Promise<CryptoKeyRecord> {
     let priv: JsonWebKey | undefined = undefined,
         pub: JsonWebKey
     if (x.key.privateKey) priv = await crypto.subtle.exportKey('jwk', x.key.privateKey)
@@ -57,7 +58,7 @@ async function calculateFingerprint(key: JsonWebKey) {
     const hash = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(key.x! + key.y))
     return ArrayBufferToString(hash)
 }
-async function toRead(y: CryptoKeyRecord): Promise<PersonCryptoKey> {
+export async function toReadCryptoKey(y: CryptoKeyRecord): Promise<PersonCryptoKey> {
     const pub = await crypto.subtle.importKey('jwk', y.key.publicKey, y.algor, true, y.usages)
     let priv: CryptoKey | undefined = undefined
     if (y.key.privateKey) priv = await crypto.subtle.importKey('jwk', y.key.privateKey, y.algor, true, y.usages)

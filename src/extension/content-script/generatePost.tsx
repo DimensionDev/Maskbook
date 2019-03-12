@@ -1,6 +1,6 @@
 import { generateMyKey } from '../../key-management/keys'
 import { sign, verify, ArrayBufferToString } from '../../crypto/crypto'
-import { storeKey, getMyPrivateKey } from '../../key-management/db'
+import { storeKey, getMyPrivateKey, toStoreCryptoKey } from '../../key-management/db'
 import { MessageCenter } from '../../utils/messages'
 
 export async function generateMyProvePost() {
@@ -10,7 +10,6 @@ export async function generateMyProvePost() {
     let cont = `I'm using Maskbook! Here is my public key >${btoa(JSON.stringify(pub))}`
     const sig = await sign(cont, myKey.key.privateKey!)
     cont = cont + '|' + ArrayBufferToString(sig)
-    MessageCenter.send('requireSaveKeypair', cont)
     return cont
 }
 generateMyProvePost().then(console.log)

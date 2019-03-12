@@ -1,9 +1,8 @@
 import { MessageCenter as MC } from '@holoflows/kit/es'
-import { PersonCryptoKey } from '../key-management/db'
+import { CryptoKeyRecord } from '../key-management/db'
 
 interface UIEvent {
-    requireSaveKeypair: string
-    responseSaveKeypair: string
+    requireSaveKeypair: CryptoKeyRecord
 }
 interface KeyStoreEvent {
     /** New key stored. string = username */
@@ -13,6 +12,3 @@ interface TypedMessages extends UIEvent, KeyStoreEvent {}
 
 export const MessageCenter = new MC<TypedMessages>()
 MessageCenter.writeToConsole = true
-MessageCenter.on('requireSaveKeypair', m => {
-    MessageCenter.send('responseSaveKeypair', 'ACK:' + m)
-})
