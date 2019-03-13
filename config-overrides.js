@@ -15,6 +15,10 @@ module.exports = function override(/** @type{import("webpack").Configuration} */
     config.optimization.runtimeChunk = false
     config.optimization.splitChunks = undefined
 
+    config.module.wrappedContextCritical = false
+    config.module.exprContextCritical = false
+    config.module.unknownContextCritical = false
+
     // @ts-ignore
     config.plugins.push(new (require('write-file-webpack-plugin'))())
     config.plugins.push(

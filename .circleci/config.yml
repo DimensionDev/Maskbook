@@ -1,0 +1,60 @@
+# Javascript Node CircleCI 2.0 configuration file
+#
+# Check https://circleci.com/docs/2.0/language-javascript/ for more details
+#
+version: 2
+jobs:
+    build:
+        docker:
+            # specify the version you desire here
+            - image: circleci/node:11.0
+
+            # Specify service dependencies here if necessary
+            # CircleCI maintains a library of pre-built images
+            # documented at https://circleci.com/docs/2.0/circleci-images/
+            # - image: circleci/mongo:3.4.4
+
+        working_directory: ~/repo
+
+        steps:
+            # build holoflows-kit
+            - run: |
+                  cd ..
+                  mkdir ~/.ssh
+                  ssh-keygen -F github.com || ssh-keyscan github.com >> ~/.ssh/known_hosts
+                  git clone -q git@github.com:SujiTech/Holoflows-kit-temp.git
+            - restore_cache:
+                  keys:
+                      - v1-dependencies-holoflows-{{ checksum "~/Holoflows-kit-temp/package.json" }}
+                      # fallback to using the latest cache if no exact match is found
+                      - v1-dependencies-holoflows-
+            - run: |
+                  cd ../Holoflows-kit-temp
+                  yarn install
+            - save_cache:
+                  paths:
+                      - ~/Holoflows-kit-temp/node_modules
+                  key: v1-dependencies-holoflows-{{ checksum "~/Holoflows-kit-temp/package.json" }}
+            - run: |
+                  cd ../Holoflows-kit-temp
+                  yarn build
+                  yarn link
+
+            # build maskbook
+            - checkout
+            - restore_cache:
+                  keys:
+                      - v1-dependencies-{{ checksum "package.json" }}
+                      # fallback to using the latest cache if no exact match is found
+                      - v1-dependencies-
+            - run: yarn install
+            - save_cache:
+                  paths:
+                      - node_modules
+                  key: v1-dependencies-{{ checksum "package.json" }}
+            - run: yarn link @holoflows/kit
+            - run: yarn build
+            - run: sudo apt-get install zip
+            - run: zip -r build.zip build/
+            - store_artifacts:
+                  path: build.zip
