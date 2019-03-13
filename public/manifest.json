@@ -11,7 +11,7 @@
             "all_frames": true
         }
     ],
-    "web_accessible_resources": ["*.css", "*.js"],
+    "web_accessible_resources": ["*.css", "*.js", "*.jpg", "*.png"],
     "permissions": ["https://www.facebook.com/", "storage", "downloads", "background"],
     "background": {
         "scripts": ["/static/js/backgroundservice.js"]

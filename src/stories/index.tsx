@@ -25,14 +25,12 @@ storiesOf('Welcome', module)
     .add('Step 0', () => <Welcome0 create={to('Welcome', 'Step 1a-1')} restore={to('Welcome', 'Step 1b-1')} />)
     .add('Step 1a-1', () => <Welcome1a1 next={to('Welcome', 'Step 1a-2')} />)
     .add('Step 1a-2', () => <Welcome1a2 next={to('Welcome', 'Step 1a-3')} />)
-    .add('Step 1a-3', () => (
-        <Welcome1a3
-            next={to('Welcome', 'Step 1a-4')}
-            jsonFileName={text('File', 'maskbook-keystore-backup-20190227.json')}
-        />
-    ))
+    .add('Step 1a-3', () => <Welcome1a3 next={to('Welcome', 'Step 1a-4')} />)
     .add('Step 1a-4', () => (
-        <Welcome1a4 post={action('Post click')} link={text('URL', 'https://maskbook.app/s/#mQINBF-BxAcBEA-zyfSodx')} />
+        <Welcome1a4
+            copyToClipboard={action('Post click')}
+            provePost={text('URL', 'https://maskbook.app/s/#mQINBF-BxAcBEA-zyfSodx')}
+        />
     ))
     .add('Step 1b-1', () => <Welcome1b1 back={linkTo('Welcome', 'Step 0')} restore={action('Restore with')} />)
 

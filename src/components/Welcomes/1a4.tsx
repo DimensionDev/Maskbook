@@ -16,10 +16,12 @@ const TextField = createBox(theme => ({
     whiteSpace: 'pre-line',
     minHeight: '10em',
     borderRadius: theme.shape.borderRadius,
+    fontSize: '1.15rem',
+    wordBreak: 'break-all',
 }))
 interface Props {
-    post(): void
-    link: string
+    copyToClipboard(): void
+    provePost: string
 }
 export default withStylesTyped((theme: Theme) =>
     createStyles({
@@ -35,23 +37,17 @@ export default withStylesTyped((theme: Theme) =>
             minWidth: 180,
         },
     }),
-)<Props>(function Welcome({ classes, post, link }) {
+)<Props>(function Welcome({ classes, copyToClipboard, provePost }) {
     return (
         <Paper className={classes.paper}>
             <Typography variant="h5">Let your friends join Maskbook</Typography>
-            <TextField>
-                I'm using Maskbook to encrypt my posts to prevent Facebook from peeping into them. Install Maskbook as
-                well so that you may read my encrypted posts, and may prevent Facebook from intercepting our
-                communication.
-                {`
-Link: ${link}`}
-            </TextField>
+            <TextField>{provePost}</TextField>
             <Typography variant="subtitle1">
                 Mathematically, you have to post this. Or your friends cannot verify the connection between your keypair
                 and your account.
             </Typography>
-            <Button onClick={post} variant="contained" color="primary" className={classes.button}>
-                Post Now
+            <Button onClick={copyToClipboard} variant="contained" color="primary" className={classes.button}>
+                Copy to clipboard
             </Button>
         </Paper>
     )

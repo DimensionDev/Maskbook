@@ -6,7 +6,9 @@ export async function generateMyProvePost() {
     let myKey = await getMyPrivateKey()
     if (!myKey) myKey = await generateMyKey()
     const pub = await crypto.subtle.exportKey('jwk', myKey.key.publicKey!)
-    let cont = `I'm using Maskbook! Here is my public key >${btoa(JSON.stringify(pub))}`
+    let cont = `I'm using Maskbook to encrypt my posts to prevent Facebook from peeping into them. Install Maskbook as well so that you may read my encrypted posts, and may prevent Facebook from intercepting our communication. Here is my public key >${btoa(
+        JSON.stringify(pub),
+    )}`
     const sig = await sign(cont, myKey.key.privateKey!)
     cont = cont + '|' + ArrayBufferToString(sig)
     return cont

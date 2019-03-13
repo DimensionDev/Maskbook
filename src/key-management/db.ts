@@ -36,7 +36,7 @@ export async function queryPersonCryptoKey(username: string): Promise<PersonCryp
 export async function storeKey(key: Omit<PersonCryptoKey, 'fingerprint'>) {
     const k = await toStoreCryptoKey(key)
     MessageCenter.send('newKeyStored', key.username)
-    return query(t => t.add(k), 'readwrite')
+    return query(t => t.put(k), 'readwrite')
 }
 export async function getMyPrivateKey(): Promise<PersonCryptoKey | null> {
     const record = await queryPersonCryptoKey('$self')

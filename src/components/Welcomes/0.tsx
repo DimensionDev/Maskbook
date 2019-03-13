@@ -36,6 +36,7 @@ export default withStylesTyped((theme: Theme) =>
         },
         button: {
             minWidth: 180,
+            marginLeft: theme.spacing.unit * 2,
         },
     }),
 )<Props>(function Welcome({ classes, create, restore }) {

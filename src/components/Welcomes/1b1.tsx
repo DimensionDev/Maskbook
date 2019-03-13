@@ -25,7 +25,7 @@ const RestoreBox = createBox(theme => ({
 }))
 interface Props {
     back(): void
-    restore(blob: string): void
+    restore(file: File): void
 }
 export default withStylesTyped((theme: Theme) =>
     createStyles({
@@ -55,7 +55,7 @@ export default withStylesTyped((theme: Theme) =>
     }),
 )<Props>(function Welcome({ classes, back, restore }) {
     const ref = React.useRef<HTMLInputElement>(null)
-    const [[name, blob], setJSON] = React.useState<[string, string]>(['', ''])
+    const [[name, blob], setJSON] = React.useState<[string, File]>(['', null as any])
     return (
         <Paper className={classes.paper}>
             <nav className={classes.nav}>
@@ -91,12 +91,12 @@ export default withStylesTyped((theme: Theme) =>
     )
 })
 
-function getBlob(event: React.ChangeEvent<HTMLInputElement> | React.DragEvent<HTMLDivElement>): [string, string] {
+function getBlob(event: React.ChangeEvent<HTMLInputElement> | React.DragEvent<HTMLDivElement>): [string, File] {
     const files = (
         (event as React.DragEvent).dataTransfer || (event as React.ChangeEvent<HTMLInputElement>).currentTarget
     ).files
-    if (!files) return ['', '']
+    if (!files) return ['', null as any]
     const file = files.item(0)
-    if (!file) return ['', '']
-    return [file.name, URL.createObjectURL(file)]
+    if (!file) return ['', null as any]
+    return [file.name, file]
 }

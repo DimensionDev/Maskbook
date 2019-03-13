@@ -26,8 +26,11 @@ const baseTheme = (theme: 'dark' | 'light') =>
             caption: {
                 color: '#4b4f56',
                 letterSpacing: 'initial',
-                fontWeight: 600,
+                fontWeight: 'normal',
                 lineHeight: '14px',
+            },
+            h6: {
+                fontWeight: 'normal',
             },
         } as TypographyOptions,
         overrides: {

@@ -12,3 +12,9 @@ export const buildQuery = <Q extends Newable<any>>(db: Db, record: Q) => {
         mode: 'readonly' | 'readwrite' = 'readonly',
     ) => db.transaction([record], mode, t => cb(t.for(record)))
 }
+
+/** Return the correct file url in different context. */
+export const fileReference = (url: string) => {
+    if (chrome && chrome.runtime) return chrome.runtime.getURL(url)
+    return url
+}

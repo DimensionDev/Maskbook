@@ -8,7 +8,7 @@ MessageCenter.on('requireSaveKeypair', keyRecord => {
     const date = new Date()
     const today = date.getFullYear() + '' + (date.getMonth() + 1) + '' + date.getDate()
     chrome.downloads.download(
-        { url, filename: `maskbook-keystore-backup-${today}.json`, conflictAction: 'prompt' },
+        { url, filename: `maskbook-keystore-backup-${today}.json`, conflictAction: 'prompt', saveAs: true },
         downloadId => {},
     )
 })
