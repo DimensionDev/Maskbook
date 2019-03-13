@@ -92,7 +92,8 @@ const _AdditionalPostBox = withStylesTyped({
                     onClick={() => (navigator as any).clipboard.writeText(encrypted)}
                     variant="contained"
                     color="primary"
-                    className={classes.button}>
+                    className={classes.button}
+                    disabled={!(people && text)}>
                     Copy Encrypted Text
                 </Button>
             </FlexBox>

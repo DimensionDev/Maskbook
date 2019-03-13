@@ -15,19 +15,20 @@ export async function generateMyKey(): Promise<PersonCryptoKey> {
     return (await db.queryPersonCryptoKey('$self'))!
 }
 
-let allKeys: Person[] = []
 let updateState: any
 async function update() {
-    const n = allKeys.length
-    allKeys = await getAllKeys()
-    await Promise.all(allKeys.map(async x => (x.avatar = await queryAvatar(x.username))))
-    if (n !== allKeys.length) updateState(allKeys)
+    const avataredKeys = await Promise.all(
+        (await getAllKeys()).map<Promise<Person>>(async x => {
+            return { ...x, avatar: await queryAvatar(x.username) }
+        }),
+    )
+    updateState(avataredKeys)
 }
 update()
 MessageCenter.on('newKeyStored', () => {
     update()
 })
-const Context = React.createContext(allKeys)
+const Context = React.createContext([] as Person[])
 export const KeysProvider: React.FC = props => {
     const [s, x] = React.useState([] as Person[])
     updateState = x
