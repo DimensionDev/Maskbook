@@ -37,6 +37,7 @@ import {
     toReadCryptoKey,
     storeKey,
 } from '../../../key-management/db'
+import { Background } from '../rpc'
 const isLogined = () => !document.querySelector('.login_form_label_field')
 const loginWatcher = async () => {
     while (!isLogined()) await sleep(500)
@@ -80,7 +81,7 @@ function Welcome(props: {
                 <Welcome1a2
                     next={() => {
                         setCurrent(WelcomeState.BackupKey)
-                        MessageCenter.send('requireSaveKeypair', keyPair)
+                        Background.saveKeypair(keyPair)
                     }}
                 />
             )
@@ -123,8 +124,8 @@ function WelcomePortal() {
     }
     useAsync(() => getStorage(), [0]).then(data => setInit(data.init))
     // Only render in main page
-    if (location.href !== 'https://www.facebook.com/') return null
-    if (init) return null
+    if (location.pathname === '/') return null
+    if (init && !chrome.extension.inIncognitoContext) return null
     return (
         <MuiThemeProvider theme={MaskbookLightTheme}>
             <Dialog open={open}>

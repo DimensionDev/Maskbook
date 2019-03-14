@@ -1,6 +1,6 @@
-import { MessageCenter } from '../../utils/messages'
+import { CryptoKeyRecord } from '../../key-management/db'
 
-MessageCenter.on('requireSaveKeypair', keyRecord => {
+export async function SaveKeypair(keyRecord: CryptoKeyRecord) {
     const string = JSON.stringify(keyRecord)
     const buffer = new TextEncoder().encode(string)
     const blob = new Blob([buffer], { type: 'application/json' })
@@ -11,4 +11,4 @@ MessageCenter.on('requireSaveKeypair', keyRecord => {
         { url, filename: `maskbook-keystore-backup-${today}.json`, conflictAction: 'prompt', saveAs: true },
         downloadId => {},
     )
-})
+}
