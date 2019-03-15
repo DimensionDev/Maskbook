@@ -1,9 +1,9 @@
 import { MessageCenter as MC } from '@holoflows/kit/es'
+import { Person } from '../extension/background-script/PeopleService'
 
 interface UIEvent {}
 interface KeyStoreEvent {
-    /** New key stored. string = username */
-    newKeyStored: string
+    newPerson: Person
 }
 interface TypedMessages extends UIEvent, KeyStoreEvent {}
 

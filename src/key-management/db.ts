@@ -4,6 +4,8 @@ import { buildQuery } from '../utils/utils'
 import { MessageCenter } from '../utils/messages'
 import { encodeArrayBuffer, encodeText } from '../utils/EncodeDecode'
 import { OnlyRunInContext } from '@holoflows/kit/es'
+import { memoize } from 'lodash-es'
+import { queryAvatar } from './avatar-db'
 
 OnlyRunInContext('background', 'Key Store')
 @Entity()
@@ -39,17 +41,35 @@ export async function queryPersonCryptoKey(username: string): Promise<PersonCryp
 }
 export async function storeKey(key: Omit<PersonCryptoKey & PersonCryptoKeyWithPrivate, 'fingerprint'>) {
     const k = await toStoreCryptoKey(key)
-    MessageCenter.send('newKeyStored', key.username)
+    const fingerprint = await calculateFingerprint(key)
+    queryAvatar(key.username).then(avatar =>
+        MessageCenter.send('newPerson', {
+            username: key.username,
+            avatar: avatar,
+            fingerprint: fingerprint,
+        }),
+    )
     return query(t => t.put(k), 'readwrite')
 }
 export async function getMyPrivateKey(): Promise<PersonCryptoKey & PersonCryptoKeyWithPrivate<true> | null> {
     const record = await queryPersonCryptoKey('$self')
     return (record as any) || null
 }
-async function calculateFingerprint(key: JsonWebKey) {
+const isPersonCryptoKey = (x: any): x is Omit<PersonCryptoKey, 'fingerprint'> => !!x.username
+async function _calculateFingerprint(key: JsonWebKey | Omit<PersonCryptoKey, 'fingerprint'> | string) {
+    if (typeof key === 'string') {
+        // tslint:disable-next-line: no-parameter-reassignment
+        key = (await queryPersonCryptoKey(key))!
+    }
+    if (isPersonCryptoKey(key)) {
+        const store = await toStoreCryptoKey(key)
+        // tslint:disable-next-line: no-parameter-reassignment
+        key = store.key.publicKey
+    }
     const hash = await crypto.subtle.digest('SHA-256', encodeText(key.x! + key.y))
     return encodeArrayBuffer(hash)
 }
+export const calculateFingerprint = memoize(_calculateFingerprint)
 //#region Store & Read CryptoKey
 export async function toStoreCryptoKey(
     x: Omit<PersonCryptoKey & PersonCryptoKeyWithPrivate, 'fingerprint'>,

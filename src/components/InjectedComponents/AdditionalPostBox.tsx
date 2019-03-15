@@ -10,11 +10,11 @@ import { FlexBox, FullWidth } from '../../utils/Flex'
 import Button from '@material-ui/core/Button/Button'
 import { withStylesTyped, MaskbookLightTheme } from '../../utils/theme'
 import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider'
-import { KeysProvider, KeysConsumer } from '../../key-management/keys'
 import { SelectPeopleSingle } from './SelectPeopleSingle'
 import { useAsync } from '../../utils/AsyncComponent'
 import { CryptoService } from '../../extension/content-script/rpc'
 import { Person } from '../../extension/background-script/PeopleService'
+import { usePeople } from '../DataSource/PeopleRef'
 
 interface Props {
     avatar?: string
@@ -38,8 +38,10 @@ const _AdditionalPostBox = withStylesTyped({
 })<Props>(props => {
     const { classes } = props
     const [text, setText] = React.useState('')
-    const [people, setPeople] = React.useState<Person>({} as any)
+    const [selectedPeople, setPeople] = React.useState<Person>({} as any)
     const encrypted = `Decrypt this post with maskbook://${props.encrypted}`
+
+    const people = usePeople()
     return (
         <Card className={classes.root}>
             <CardHeader title={<Typography variant="caption">Encrypt with Maskbook</Typography>} />
@@ -59,7 +61,7 @@ const _AdditionalPostBox = withStylesTyped({
                     value={text}
                     onChange={e => {
                         setText(e.currentTarget.value)
-                        props.onCombinationChange(people, e.currentTarget.value)
+                        props.onCombinationChange(selectedPeople, e.currentTarget.value)
                     }}
                     fullWidth
                     multiline
@@ -67,21 +69,15 @@ const _AdditionalPostBox = withStylesTyped({
                 />
             </Paper>
             <Divider />
-            <KeysProvider>
-                <KeysConsumer>
-                    {k => (
-                        <SelectPeopleSingle
-                            all={k}
-                            onSelect={p => {
-                                const q = k.find(x => x.username === p.username)!
-                                setPeople(q)
-                                props.onCombinationChange(q, text)
-                            }}
-                            selected={people}
-                        />
-                    )}
-                </KeysConsumer>
-            </KeysProvider>
+            <SelectPeopleSingle
+                all={people}
+                onSelect={p => {
+                    const q = people.find(x => x.username === p.username)!
+                    setPeople(q)
+                    props.onCombinationChange(q, text)
+                }}
+                selected={selectedPeople}
+            />
             <Divider />
             <FlexBox className={classes.grayArea}>
                 <Typography className={classes.typo} variant="caption">
@@ -93,7 +89,7 @@ const _AdditionalPostBox = withStylesTyped({
                     variant="contained"
                     color="primary"
                     className={classes.button}
-                    disabled={!(people && text)}>
+                    disabled={!(selectedPeople && text)}>
                     Copy Encrypted Text
                 </Button>
             </FlexBox>
