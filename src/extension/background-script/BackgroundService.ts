@@ -1,10 +1,9 @@
-import { AsyncCall, MessageCenter } from '@holoflows/kit/es'
+import { AsyncCall, MessageCenter, OnlyRunInContext } from '@holoflows/kit'
 import { CryptoKeyRecord } from '../../key-management/db'
 import { encodeText } from '../../utils/EncodeDecode'
+import { BackgroundName } from '../../utils/Names'
 
-if (location.protocol !== 'chrome-extension:') {
-    throw new TypeError('BackgroundService run in wrong context. (Should be chrome-extension:)')
-}
+OnlyRunInContext('background', 'BackgroundService')
 async function backupMyKeyPair(keyRecord: CryptoKeyRecord) {
     const string = JSON.stringify(keyRecord)
     const buffer = encodeText(string)
@@ -17,8 +16,9 @@ async function backupMyKeyPair(keyRecord: CryptoKeyRecord) {
         downloadId => {},
     )
 }
-const BackgroundServices = {
+const Impl = {
     backupMyKeyPair: backupMyKeyPair,
 }
-export type Background = typeof BackgroundServices
-AsyncCall<Background, {}>('bgs', BackgroundServices, {}, MessageCenter, true)
+Object.assign(window, { backgroundService: Impl })
+export type Background = typeof Impl
+AsyncCall<Background, {}>(BackgroundName, Impl, {}, MessageCenter, true)

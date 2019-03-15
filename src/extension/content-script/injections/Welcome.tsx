@@ -27,17 +27,14 @@ import { MuiThemeProvider } from '@material-ui/core'
 import { MaskbookLightTheme } from '../../../utils/theme'
 import { sleep } from '../../../utils/utils'
 import { useAsync } from '../../../utils/AsyncComponent'
-import { generateMyProvePost } from '../generatePost'
-import { MessageCenter } from '../../../utils/messages'
 import {
-    PersonCryptoKey,
     CryptoKeyRecord,
     getMyPrivateKey,
     toStoreCryptoKey,
     toReadCryptoKey,
     storeKey,
 } from '../../../key-management/db'
-import { BackgroundService } from '../rpc'
+import { BackgroundService, CryptoService } from '../rpc'
 const isLogined = () => !document.querySelector('.login_form_label_field')
 const loginWatcher = async () => {
     while (!isLogined()) await sleep(500)
@@ -61,7 +58,7 @@ function Welcome(props: {
     const { current, setCurrent, waitLogin } = props
     const [provePost, setProvePost] = React.useState('')
     const [keyPair, setKeyPair] = React.useState<CryptoKeyRecord>(undefined as any)
-    useAsync(() => generateMyProvePost(), [provePost.length !== 0]).then(setProvePost)
+    useAsync(() => CryptoService.getMyProvePost(), [provePost.length !== 0]).then(setProvePost)
     useAsync(() => getMyPrivateKey(), [!!keyPair, !!provePost]).then(
         async kp => setKeyPair(await toStoreCryptoKey(kp!)),
         () => setKeyPair(undefined as any),

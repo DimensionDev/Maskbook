@@ -3,7 +3,9 @@ import { Entity, Index, Db, Key } from 'typed-db'
 import { buildQuery } from '../utils/utils'
 import { MessageCenter } from '../utils/messages'
 import { encodeArrayBuffer, encodeText } from '../utils/EncodeDecode'
+import { OnlyRunInContext } from '@holoflows/kit/es'
 
+OnlyRunInContext('background', 'Key Store')
 @Entity()
 /** DO NOT Change the name of this class! It is used as key in the db! */
 export class CryptoKeyRecord {
@@ -44,6 +46,11 @@ export async function getMyPrivateKey(): Promise<PersonCryptoKey & PersonCryptoK
     const record = await queryPersonCryptoKey('$self')
     return (record as any) || null
 }
+async function calculateFingerprint(key: JsonWebKey) {
+    const hash = await crypto.subtle.digest('SHA-256', encodeText(key.x! + key.y))
+    return encodeArrayBuffer(hash)
+}
+//#region Store & Read CryptoKey
 export async function toStoreCryptoKey(
     x: Omit<PersonCryptoKey & PersonCryptoKeyWithPrivate, 'fingerprint'>,
 ): Promise<CryptoKeyRecord> {
@@ -57,10 +64,6 @@ export async function toStoreCryptoKey(
         algor: x.key.publicKey!.algorithm!,
         usages: x.key.publicKey!.algorithm.name === 'ECDH' ? ['deriveKey'] : x.key.publicKey!.usages,
     }
-}
-async function calculateFingerprint(key: JsonWebKey) {
-    const hash = await crypto.subtle.digest('SHA-256', encodeText(key.x! + key.y))
-    return encodeArrayBuffer(hash)
 }
 export async function toReadCryptoKey(y: CryptoKeyRecord) {
     const pub = await crypto.subtle.importKey('jwk', y.key.publicKey, y.algor, true, y.usages)
@@ -77,6 +80,15 @@ export async function toReadCryptoKey(y: CryptoKeyRecord) {
         fingerprint: await calculateFingerprint(y.key.publicKey),
     } as PersonCryptoKey & PersonCryptoKeyWithPrivate
 }
+//#endregion
 Object.assign(window, {
-    queryPersonCryptoKey,
+    db: {
+        getAllKeys,
+        queryPersonCryptoKey,
+        storeKey,
+        getMyPrivateKey,
+        toStoreCryptoKey,
+        calculateFingerprint,
+        toReadCryptoKey,
+    },
 })

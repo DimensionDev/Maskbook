@@ -11,9 +11,10 @@ import Button from '@material-ui/core/Button/Button'
 import { withStylesTyped, MaskbookLightTheme } from '../../utils/theme'
 import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider'
 import { KeysProvider, KeysConsumer } from '../../key-management/keys'
-import { SelectPeopleSingle, Person } from './SelectPeopleSingle'
+import { SelectPeopleSingle } from './SelectPeopleSingle'
 import { useAsync } from '../../utils/AsyncComponent'
-import { EncryptService } from '../../extension/content-script/rpc'
+import { CryptoService } from '../../extension/content-script/rpc'
+import { Person } from '../../extension/background-script/PeopleService'
 
 interface Props {
     avatar?: string
@@ -115,7 +116,7 @@ const enum VERSION {
 }
 async function encrypt(people: Person | null, text: string) {
     if (!people) return undefined
-    const { encryptedText, salt, signature } = await EncryptService.encryptTo(text, people.username)
+    const { encryptedText, salt, signature } = await CryptoService.encryptTo(text, people.username)
     return VERSION.PreAlpha0 + '|' + people.username + '|' + salt + '|' + encryptedText + '|' + signature
 }
 export function AdditionalPostBox() {

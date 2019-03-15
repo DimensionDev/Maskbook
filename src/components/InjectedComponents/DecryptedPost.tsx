@@ -1,11 +1,8 @@
 import React from 'react'
 import AsyncComponent from '../../utils/AsyncComponent'
-import { sleep } from '../../utils/utils'
-import { queryPersonCryptoKey, getMyPrivateKey, PersonCryptoKey } from '../../key-management/db'
-import { decryptText } from '../../crypto/crypto'
 import { AdditionalContent } from './AdditionalPostContent'
 import { FullWidth } from '../../utils/Flex'
-import { EncryptService } from '../../extension/content-script/rpc'
+import { CryptoService } from '../../extension/content-script/rpc'
 
 interface Props {
     postBy: string
@@ -17,7 +14,7 @@ export function DecryptPost({ postBy, whoAmI, encryptedText }: Props) {
         <AsyncComponent
             promise={async (encryptedString: string) => {
                 const [version, postTo, salt, text, sig] = encryptedString.split('|')
-                return EncryptService.decryptFrom(text, sig, salt, postBy, postTo, whoAmI)
+                return CryptoService.decryptFrom(text, sig, salt, postBy, postTo, whoAmI)
             }}
             values={[encryptedText]}
             awaitingComponent={DecryptPostAwaiting}

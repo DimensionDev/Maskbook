@@ -1,4 +1,4 @@
-import { decodeArrayBuffer as decodeArrayBuffer, encodeArrayBuffer as encodeArrayBuffer, decodeText as decodeText, encodeText as encodeText } from "../utils/EncodeDecode";
+import { decodeArrayBuffer, encodeArrayBuffer, decodeText, encodeText } from '../utils/EncodeDecode'
 
 async function toECDSA(key: CryptoKey) {
     const exported = await crypto.subtle.exportKey('jwk', key)
@@ -16,6 +16,7 @@ function addUint8Array(a: ArrayBuffer, b: ArrayBuffer) {
     c.set(y, x.length)
     return c
 }
+//#region Generate AES Key
 export async function generateAESKey(
     privateKey: CryptoKey,
     othersPublicKey: CryptoKey,
@@ -54,6 +55,8 @@ export async function generateAESKey(
     ])
     return { key: AESKey, salt: salt, iv }
 }
+//#endregion
+//#region Encrypt & decrypt
 export async function encryptText(content: string, privateKeyECDH: CryptoKey, othersPublicKeyECDH: CryptoKey) {
     const contentArrayBuffer = encodeText(content)
     const sig = await sign(content, privateKeyECDH)
@@ -79,7 +82,8 @@ export async function decryptText(
     const orig = decodeText(decryptText)
     return orig
 }
-
+//#endregion
+//#region Sign & verify
 export async function sign(msg: string | ArrayBuffer, privateKey: CryptoKey) {
     const ecdsakey = privateKey.usages.indexOf('sign') !== -1 ? privateKey : await toECDSA(privateKey)
     // tslint:disable-next-line: no-parameter-reassignment
@@ -95,11 +99,15 @@ export async function verify(msg: string | ArrayBuffer, signature: string | Arra
     if (typeof signature === 'string') signature = decodeArrayBuffer(signature)
     return crypto.subtle.verify({ name: 'ECDSA', hash: { name: 'SHA-256' } }, ecdsakey, signature, msg)
 }
-
+//#endregion
 Object.assign(window, {
-    generateAESKey,
-    encryptText,
-    decryptText,
-    verify,
-    sign,
+    cryptos: {
+        toECDSA,
+        toECDH,
+        generateAESKey,
+        encryptText,
+        decryptText,
+        sign,
+        verify,
+    },
 })

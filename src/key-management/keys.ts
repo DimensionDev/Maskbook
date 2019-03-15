@@ -1,9 +1,9 @@
 import { getMyPrivateKey, storeKey, getAllKeys, PersonCryptoKey } from './db'
 import * as db from './db'
 import React, { Context } from 'react'
-import { Person } from '../components/InjectedComponents/SelectPeopleSingle'
 import { queryAvatar } from './avatar-db'
 import { MessageCenter } from '../utils/messages'
+import { Person } from '../extension/background-script/PeopleService'
 
 export async function generateMyKey(): Promise<PersonCryptoKey & { key: { privateKey: CryptoKey } }> {
     const has = await getMyPrivateKey()

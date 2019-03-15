@@ -1,7 +1,7 @@
 import React from 'react'
 import AsyncComponent from '../../utils/AsyncComponent'
 import { AdditionalContent } from './AdditionalPostContent'
-import { verifyOthersProvePost } from '../../extension/content-script/generatePost'
+import { CryptoService } from '../../extension/content-script/rpc'
 
 interface Props {
     provePost: string
@@ -11,7 +11,7 @@ export function AddToKeyStore({ provePost, postBy }: Props) {
     return (
         <AsyncComponent
             promise={async (provePost, postBy) => {
-                verifyOthersProvePost(provePost, postBy)
+                CryptoService.verifyOthersProvePost(provePost, postBy)
             }}
             values={[provePost, postBy]}
             awaitingComponent={AddToKeyStoreUI.awaiting}

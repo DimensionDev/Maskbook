@@ -1,2 +1,3 @@
 export const BackgroundName = 'background'
-export const EncryptName = 'encrypt'
+export const CryptoName = 'crypto'
+export const FriendServiceName = 'friends'

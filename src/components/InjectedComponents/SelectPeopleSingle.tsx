@@ -1,18 +1,13 @@
 import * as React from 'react'
-import { FlexBox, FullWidth } from '../../utils/Flex'
+import { FullWidth } from '../../utils/Flex'
 import Avatar from '@material-ui/core/Avatar/Avatar'
 import Paper from '@material-ui/core/Paper/Paper'
 import List from '@material-ui/core/List/List'
 import ListItem from '@material-ui/core/ListItem/ListItem'
 import ListItemText from '@material-ui/core/ListItemText/ListItemText'
 import ListItemAvatar from '@material-ui/core/ListItemAvatar/ListItemAvatar'
-import { PersonCryptoKey } from '../../key-management/db'
+import { Person } from '../../extension/background-script/PeopleService'
 
-export interface Person {
-    username: string
-    avatar?: string
-    fingerprint?: string
-}
 interface Props {
     all: Person[]
     selected?: Person
