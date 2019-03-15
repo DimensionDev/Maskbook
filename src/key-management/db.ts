@@ -101,6 +101,17 @@ export async function toReadCryptoKey(y: CryptoKeyRecord) {
     } as PersonCryptoKey & PersonCryptoKeyWithPrivate
 }
 //#endregion
+
+//#region Generate a new private key
+export async function generateNewKey(): Promise<PersonCryptoKey & PersonCryptoKeyWithPrivate<true>> {
+    const has = await getMyPrivateKey()
+    if (has) throw new TypeError('You already have a key-pair!')
+
+    const mine = await crypto.subtle.generateKey({ name: 'ECDH', namedCurve: 'K-256' }, true, ['deriveKey'])
+    await storeKey({ username: '$self', key: mine })
+    return (await queryPersonCryptoKey('$self')) as PersonCryptoKey & PersonCryptoKeyWithPrivate<true>
+}
+//#endregion
 Object.assign(window, {
     db: {
         getAllKeys,

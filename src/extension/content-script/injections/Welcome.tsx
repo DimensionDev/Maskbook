@@ -27,14 +27,7 @@ import { MuiThemeProvider } from '@material-ui/core'
 import { MaskbookLightTheme } from '../../../utils/theme'
 import { sleep } from '../../../utils/utils'
 import { useAsync } from '../../../utils/AsyncComponent'
-import {
-    CryptoKeyRecord,
-    getMyPrivateKey,
-    toStoreCryptoKey,
-    toReadCryptoKey,
-    storeKey,
-} from '../../../key-management/db'
-import { BackgroundService, CryptoService } from '../rpc'
+import { BackgroundService, CryptoService, PeopleService } from '../rpc'
 const isLogined = () => !document.querySelector('.login_form_label_field')
 const loginWatcher = async () => {
     while (!isLogined()) await sleep(500)
@@ -44,9 +37,7 @@ function restoreFromFile(file: File) {
     fr.readAsText(file)
     fr.addEventListener('loadend', async f => {
         const json = JSON.parse(fr.result as string)
-        const key = await toReadCryptoKey(json)
-        await storeKey(key)
-        console.log('Keypair restored.', key)
+        PeopleService.storeKey(json)
     })
 }
 function Welcome(props: {
@@ -57,12 +48,7 @@ function Welcome(props: {
 }) {
     const { current, setCurrent, waitLogin } = props
     const [provePost, setProvePost] = React.useState('')
-    const [keyPair, setKeyPair] = React.useState<CryptoKeyRecord>(undefined as any)
     useAsync(() => CryptoService.getMyProvePost(), [provePost.length !== 0]).then(setProvePost)
-    useAsync(() => getMyPrivateKey(), [!!keyPair, !!provePost]).then(
-        async kp => setKeyPair(await toStoreCryptoKey(kp!)),
-        () => setKeyPair(undefined as any),
-    )
     switch (current) {
         case WelcomeState.Start:
             return (
@@ -78,7 +64,7 @@ function Welcome(props: {
                 <Welcome1a2
                     next={() => {
                         setCurrent(WelcomeState.BackupKey)
-                        BackgroundService.backupMyKeyPair(keyPair)
+                        BackgroundService.backupMyKeyPair()
                     }}
                 />
             )

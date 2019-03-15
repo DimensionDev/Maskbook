@@ -16,7 +16,7 @@ export function usePeople() {
     const cb = React.useCallback(() => setPeople(ref.value), [setPeople])
     React.useEffect(() => {
         ref.addListener('onChange', cb)
-        return () => (ref.removeListener('onChange', cb), void 0)
+        return () => void ref.removeListener('onChange', cb)
     })
     return people
 }

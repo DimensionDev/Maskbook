@@ -1,10 +1,13 @@
 import { AsyncCall, MessageCenter, OnlyRunInContext } from '@holoflows/kit'
-import { CryptoKeyRecord } from '../../key-management/db'
+import { CryptoKeyRecord, getMyPrivateKey, toStoreCryptoKey } from '../../key-management/db'
 import { encodeText } from '../../utils/EncodeDecode'
 import { BackgroundName } from '../../utils/Names'
 
 OnlyRunInContext('background', 'BackgroundService')
-async function backupMyKeyPair(keyRecord: CryptoKeyRecord) {
+async function backupMyKeyPair() {
+    const key = await getMyPrivateKey()
+    if (!key) throw new TypeError('You have no private key yet')
+    const keyRecord: CryptoKeyRecord = await toStoreCryptoKey(key)
     const string = JSON.stringify(keyRecord)
     const buffer = encodeText(string)
     const blob = new Blob([buffer], { type: 'application/json' })

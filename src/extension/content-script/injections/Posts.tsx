@@ -1,10 +1,9 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { LiveSelector, MutationObserverWatcher } from '@holoflows/kit'
-import { uploadProvePostUrl } from '../../../key-management'
 import { DecryptPost } from '../../../components/InjectedComponents/DecryptedPost'
-import { storeAvatar } from '../../../key-management/avatar-db'
 import { AddToKeyStore } from '../../../components/InjectedComponents/AddToKeyStore'
+import { PeopleService } from '../rpc'
 
 const myUsername = new LiveSelector()
     .querySelector<HTMLAnchorElement>(`[aria-label="Facebook"][role="navigation"] [data-click="profile_icon"] a`)
@@ -35,7 +34,7 @@ const PostInspector = (props: { post: string; postBy: string; postId: string }) 
             />
         )
     } else if (type.provePost) {
-        uploadProvePostUrl(postBy, postId)
+        PeopleService.uploadProvePostUrl(postBy, postId)
         return <AddToKeyStore postBy={postBy} provePost={post} />
     }
     return null
@@ -49,7 +48,7 @@ new MutationObserverWatcher(posts)
         // Save author's avatar
         try {
             const avatar = node.current.previousElementSibling!.querySelector('img')!
-            storeAvatar(postBy, avatar.src)
+            PeopleService.storeAvatar(postBy, avatar.src)
         } catch {}
         // Get post id
         let postId = ''

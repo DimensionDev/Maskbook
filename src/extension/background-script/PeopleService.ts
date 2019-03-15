@@ -1,8 +1,14 @@
 import { AsyncCall, MessageCenter, OnlyRunInContext } from '@holoflows/kit/es'
 import { FriendServiceName } from '../../utils/Names'
-import { getAllKeys, PersonCryptoKey, calculateFingerprint } from '../../key-management/db'
-import { memoize } from 'lodash-es'
-import { queryAvatar } from '../../key-management/avatar-db'
+import {
+    getAllKeys,
+    calculateFingerprint,
+    getMyPrivateKey,
+    CryptoKeyRecord,
+    toReadCryptoKey,
+} from '../../key-management/db'
+import { queryAvatar, storeAvatar } from '../../key-management/avatar-db'
+import { uploadProvePostUrl } from '../../key-management'
 
 OnlyRunInContext('background', 'FriendService')
 export interface Person {
@@ -24,9 +30,18 @@ async function getAllPeople(): Promise<Person[]> {
     )
     return p
 }
+async function storeKey(key: CryptoKeyRecord) {
+    const k = await toReadCryptoKey(key)
+    await storeKey(key)
+    console.log('Keypair restored.', key)
+}
 
 const Impl = {
     getAllPeople,
+    uploadProvePostUrl,
+    storeAvatar,
+    getMyPrivateKey,
+    storeKey,
 }
 Object.assign(window, { friendService: Impl })
 export type PeopleService = typeof Impl

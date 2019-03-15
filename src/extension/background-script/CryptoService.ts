@@ -1,8 +1,7 @@
 import { encryptText, decryptText, verify, sign } from '../../crypto/crypto'
-import { queryPersonCryptoKey, getMyPrivateKey, storeKey } from '../../key-management/db'
+import { queryPersonCryptoKey, getMyPrivateKey, storeKey, generateNewKey } from '../../key-management/db'
 import { AsyncCall, MessageCenter, OnlyRunInContext } from '@holoflows/kit/es'
 import { CryptoName } from '../../utils/Names'
-import { generateMyKey } from '../../key-management/keys'
 import { encodeArrayBuffer } from '../../utils/EncodeDecode'
 
 OnlyRunInContext('background', 'EncryptService')
@@ -47,7 +46,7 @@ async function decryptFrom(encrypted: string, sig: string, salt: string, by: str
 //#region ProvePost, create & verify
 async function getMyProvePost() {
     let myKey = await getMyPrivateKey()
-    if (!myKey) myKey = await generateMyKey()
+    if (!myKey) myKey = await generateNewKey()
     const pub = await crypto.subtle.exportKey('jwk', myKey.key.publicKey!)
     let post = `I'm using Maskbook to encrypt my posts to prevent Facebook from peeping into them.
 Install Maskbook as well so that you may read my encrypted posts,
