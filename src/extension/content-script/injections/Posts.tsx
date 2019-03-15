@@ -30,7 +30,7 @@ const PostInspector = (props: { post: string; postBy: string; postId: string }) 
         return (
             <DecryptPost
                 encryptedText={type.encryptedPost.groups!.text!}
-                myself={myUsername.evaluateOnce()[0]!}
+                whoAmI={myUsername.evaluateOnce()[0]!}
                 postBy={postBy}
             />
         )

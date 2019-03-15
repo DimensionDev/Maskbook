@@ -5,6 +5,7 @@ import { Store } from 'typed-db/dist-release/src/db/Store'
 import 'reflect-metadata'
 
 export const sleep = (time: number) => new Promise<void>(resolve => setTimeout(resolve, time))
+/** Build a db */
 export const buildQuery = <Q extends Newable<any>>(db: Db, record: Q) => {
     db.use(record)
     return <T>(

@@ -11,15 +11,14 @@ import Button from '@material-ui/core/Button/Button'
 import { withStylesTyped, MaskbookLightTheme } from '../../utils/theme'
 import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider'
 import { KeysProvider, KeysConsumer } from '../../key-management/keys'
-import { SelectPeopleSingle } from './SelectPeopleSingle'
-import { PersonCryptoKey, getMyPrivateKey } from '../../key-management/db'
+import { SelectPeopleSingle, Person } from './SelectPeopleSingle'
 import { useAsync } from '../../utils/AsyncComponent'
-import { encryptText } from '../../crypto/crypto'
+import { EncryptService } from '../../extension/content-script/rpc'
 
 interface Props {
     avatar?: string
     encrypted: string
-    onCombinationChange(person: PersonCryptoKey, text: string): void
+    onCombinationChange(person: Person, text: string): void
 }
 const _AdditionalPostBox = withStylesTyped({
     root: { maxWidth: 500, marginBottom: 10 },
@@ -38,7 +37,7 @@ const _AdditionalPostBox = withStylesTyped({
 })<Props>(props => {
     const { classes } = props
     const [text, setText] = React.useState('')
-    const [people, setPeople] = React.useState<PersonCryptoKey>({} as any)
+    const [people, setPeople] = React.useState<Person>({} as any)
     const encrypted = `Decrypt this post with maskbook://${props.encrypted}`
     return (
         <Card className={classes.root}>
@@ -114,15 +113,14 @@ export function AdditionalPostBoxUI(props: Props) {
 const enum VERSION {
     PreAlpha0 = -42,
 }
-async function encrypt(people: PersonCryptoKey | null, text: string) {
+async function encrypt(people: Person | null, text: string) {
     if (!people) return undefined
-    const myPrivate = (await getMyPrivateKey())!.key.privateKey!
-    const { encryptedText, salt, signature } = await encryptText(text, myPrivate, people.key.publicKey!)
+    const { encryptedText, salt, signature } = await EncryptService.encryptTo(text, people.username)
     return VERSION.PreAlpha0 + '|' + people.username + '|' + salt + '|' + encryptedText + '|' + signature
 }
 export function AdditionalPostBox() {
     const [text, setText] = React.useState('')
-    const [people, setPeople] = React.useState<PersonCryptoKey | null>(null)
+    const [people, setPeople] = React.useState<Person | null>(null)
     const [encrypted, setEncrypted] = React.useState<string | undefined>('')
     useAsync(() => encrypt(people, text), [text, people]).then(setEncrypted)
     return (

@@ -8,8 +8,10 @@ import ListItemText from '@material-ui/core/ListItemText/ListItemText'
 import ListItemAvatar from '@material-ui/core/ListItemAvatar/ListItemAvatar'
 import { PersonCryptoKey } from '../../key-management/db'
 
-export interface Person extends PersonCryptoKey {
+export interface Person {
+    username: string
     avatar?: string
+    fingerprint?: string
 }
 interface Props {
     all: Person[]
@@ -29,7 +31,7 @@ function PeopleInList(props: { people: Person; onClick(): void; selected?: boole
     return (
         <ListItem selected={props.selected} button onClick={props.onClick}>
             <ListItemAvatar>{avatar}</ListItemAvatar>
-            <ListItemText primary={props.people.username} secondary={props.people.fingerprint.toLowerCase()} />
+            <ListItemText primary={props.people.username} secondary={(props.people.fingerprint || '?').toLowerCase()} />
         </ListItem>
     )
 }

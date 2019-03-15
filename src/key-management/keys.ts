@@ -5,14 +5,14 @@ import { Person } from '../components/InjectedComponents/SelectPeopleSingle'
 import { queryAvatar } from './avatar-db'
 import { MessageCenter } from '../utils/messages'
 
-export async function generateMyKey(): Promise<PersonCryptoKey> {
+export async function generateMyKey(): Promise<PersonCryptoKey & { key: { privateKey: CryptoKey } }> {
     const has = await getMyPrivateKey()
     if (has) throw new TypeError('You already have a key-pair!')
 
     // tslint:disable-next-line: await-promise
     const mine = await crypto.subtle.generateKey({ name: 'ECDH', namedCurve: 'K-256' }, true, ['deriveKey'])
     await storeKey({ username: '$self', key: mine })
-    return (await db.queryPersonCryptoKey('$self'))!
+    return ((await db.queryPersonCryptoKey('$self'))! as PersonCryptoKey) as any
 }
 
 let updateState: any

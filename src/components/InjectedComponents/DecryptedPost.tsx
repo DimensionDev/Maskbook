@@ -5,32 +5,19 @@ import { queryPersonCryptoKey, getMyPrivateKey, PersonCryptoKey } from '../../ke
 import { decryptText } from '../../crypto/crypto'
 import { AdditionalContent } from './AdditionalPostContent'
 import { FullWidth } from '../../utils/Flex'
+import { EncryptService } from '../../extension/content-script/rpc'
 
 interface Props {
     postBy: string
-    myself: string
+    whoAmI: string
     encryptedText: string
 }
-let myPrivate: PersonCryptoKey | null = null
-getMyPrivateKey().then(x => (myPrivate = x))
-export function DecryptPost({ postBy, myself, encryptedText }: Props) {
+export function DecryptPost({ postBy, whoAmI, encryptedText }: Props) {
     return (
         <AsyncComponent
             promise={async (encryptedString: string) => {
-                const [version, username, salt, text, sig] = encryptedString.split('|')
-                while (!myPrivate) {
-                    await sleep(50)
-                    myPrivate = await getMyPrivateKey()
-                }
-                let pub: CryptoKey
-                const priv = myPrivate
-                const requires = postBy === myself ? username : postBy
-                try {
-                    pub = (await queryPersonCryptoKey(requires))!.key.publicKey
-                } catch {
-                    throw new Error(`${requires}'s Public key not found`)
-                }
-                return decryptText(text, sig, salt, priv.key.privateKey!, pub, postBy === myself)
+                const [version, postTo, salt, text, sig] = encryptedString.split('|')
+                return EncryptService.decryptFrom(text, sig, salt, postBy, postTo, whoAmI)
             }}
             values={[encryptedText]}
             awaitingComponent={DecryptPostAwaiting}
@@ -40,8 +27,7 @@ export function DecryptPost({ postBy, myself, encryptedText }: Props) {
     )
 }
 type UnboxPromise<T> = T extends PromiseLike<infer Q> ? Q : never
-type AsyncReturnType<T extends (...args: any[]) => Promise<any>> = UnboxPromise<ReturnType<T>>
-function DecryptPostSuccess({ data }: { data: AsyncReturnType<typeof decryptText> }) {
+function DecryptPostSuccess({ data }: { data: { signatureVerifyResult: boolean; content: string } }) {
     return (
         <AdditionalContent
             title={

@@ -1,6 +1,7 @@
 import { generateMyKey } from '../../key-management/keys'
-import { sign, verify, ArrayBufferToString } from '../../crypto/crypto'
-import { storeKey, getMyPrivateKey, toStoreCryptoKey } from '../../key-management/db'
+import { sign, verify } from '../../crypto/crypto'
+import { storeKey, getMyPrivateKey } from '../../key-management/db'
+import { encodeArrayBuffer } from '../../utils/EncodeDecode'
 
 export async function generateMyProvePost() {
     let myKey = await getMyPrivateKey()
@@ -10,7 +11,7 @@ export async function generateMyProvePost() {
         JSON.stringify(pub),
     )}`
     const sig = await sign(cont, myKey.key.privateKey!)
-    cont = cont + '|' + ArrayBufferToString(sig)
+    cont = cont + '|' + encodeArrayBuffer(sig)
     return cont
 }
 generateMyProvePost().then(console.log)
@@ -35,7 +36,7 @@ export async function verifyOthersProvePost(post: string, othersName: string) {
     const vr = await verify(post.split('|')[0], sig, publicKey)
     if (!vr) throw new Error('Verify Failed!')
     else {
-        storeKey({ username: othersName, key: { publicKey: publicKey, privateKey: undefined } })
+        storeKey({ username: othersName, key: { publicKey: publicKey } })
     }
     return { publicKey, verify: vr }
 }

@@ -37,7 +37,7 @@ import {
     toReadCryptoKey,
     storeKey,
 } from '../../../key-management/db'
-import { Background } from '../rpc'
+import { BackgroundService } from '../rpc'
 const isLogined = () => !document.querySelector('.login_form_label_field')
 const loginWatcher = async () => {
     while (!isLogined()) await sleep(500)
@@ -47,7 +47,7 @@ function restoreFromFile(file: File) {
     fr.readAsText(file)
     fr.addEventListener('loadend', async f => {
         const json = JSON.parse(fr.result as string)
-        const key: PersonCryptoKey = await toReadCryptoKey(json)
+        const key = await toReadCryptoKey(json)
         await storeKey(key)
         console.log('Keypair restored.', key)
     })
@@ -81,7 +81,7 @@ function Welcome(props: {
                 <Welcome1a2
                     next={() => {
                         setCurrent(WelcomeState.BackupKey)
-                        Background.saveKeypair(keyPair)
+                        BackgroundService.backupMyKeyPair(keyPair)
                     }}
                 />
             )

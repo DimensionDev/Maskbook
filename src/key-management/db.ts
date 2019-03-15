@@ -1,8 +1,8 @@
-import { ArrayBufferToString } from '../crypto/crypto'
 import { Omit } from '@material-ui/core'
 import { Entity, Index, Db, Key } from 'typed-db'
 import { buildQuery } from '../utils/utils'
 import { MessageCenter } from '../utils/messages'
+import { encodeArrayBuffer, encodeText } from '../utils/EncodeDecode'
 
 @Entity()
 /** DO NOT Change the name of this class! It is used as key in the db! */
@@ -20,10 +20,12 @@ const query = buildQuery(new Db('maskbook-keystore-demo-v2', 1), CryptoKeyRecord
 export type PersonCryptoKey = {
     username: string
     key: {
-        privateKey?: CryptoKey
         publicKey: CryptoKey
     }
     fingerprint: string
+}
+export type PersonCryptoKeyWithPrivate<T = false> = {
+    key: T extends false ? { privateKey?: CryptoKey } : { privateKey: CryptoKey }
 }
 export async function getAllKeys(): Promise<PersonCryptoKey[]> {
     const record = await query(t => t.openCursor().asList())
@@ -33,16 +35,18 @@ export async function queryPersonCryptoKey(username: string): Promise<PersonCryp
     const record = await query(t => t.get(username))
     return record ? toReadCryptoKey(record) : null
 }
-export async function storeKey(key: Omit<PersonCryptoKey, 'fingerprint'>) {
+export async function storeKey(key: Omit<PersonCryptoKey & PersonCryptoKeyWithPrivate, 'fingerprint'>) {
     const k = await toStoreCryptoKey(key)
     MessageCenter.send('newKeyStored', key.username)
     return query(t => t.put(k), 'readwrite')
 }
-export async function getMyPrivateKey(): Promise<PersonCryptoKey | null> {
+export async function getMyPrivateKey(): Promise<PersonCryptoKey & PersonCryptoKeyWithPrivate<true> | null> {
     const record = await queryPersonCryptoKey('$self')
-    return record || null
+    return (record as any) || null
 }
-export async function toStoreCryptoKey(x: Omit<PersonCryptoKey, 'fingerprint'>): Promise<CryptoKeyRecord> {
+export async function toStoreCryptoKey(
+    x: Omit<PersonCryptoKey & PersonCryptoKeyWithPrivate, 'fingerprint'>,
+): Promise<CryptoKeyRecord> {
     let priv: JsonWebKey | undefined = undefined,
         pub: JsonWebKey
     if (x.key.privateKey) priv = await crypto.subtle.exportKey('jwk', x.key.privateKey)
@@ -55,21 +59,23 @@ export async function toStoreCryptoKey(x: Omit<PersonCryptoKey, 'fingerprint'>):
     }
 }
 async function calculateFingerprint(key: JsonWebKey) {
-    const hash = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(key.x! + key.y))
-    return ArrayBufferToString(hash)
+    const hash = await crypto.subtle.digest('SHA-256', encodeText(key.x! + key.y))
+    return encodeArrayBuffer(hash)
 }
-export async function toReadCryptoKey(y: CryptoKeyRecord): Promise<PersonCryptoKey> {
+export async function toReadCryptoKey(y: CryptoKeyRecord) {
     const pub = await crypto.subtle.importKey('jwk', y.key.publicKey, y.algor, true, y.usages)
     let priv: CryptoKey | undefined = undefined
     if (y.key.privateKey) priv = await crypto.subtle.importKey('jwk', y.key.privateKey, y.algor, true, y.usages)
     return {
         username: y.username,
-        key: {
-            privateKey: priv,
-            publicKey: pub,
-        },
+        key: priv
+            ? {
+                  privateKey: priv,
+                  publicKey: pub,
+              }
+            : { publicKey: pub },
         fingerprint: await calculateFingerprint(y.key.publicKey),
-    } as PersonCryptoKey
+    } as PersonCryptoKey & PersonCryptoKeyWithPrivate
 }
 Object.assign(window, {
     queryPersonCryptoKey,
