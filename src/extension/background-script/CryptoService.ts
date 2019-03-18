@@ -3,6 +3,8 @@ import { queryPersonCryptoKey, getMyPrivateKey, storeKey, generateNewKey } from 
 import { AsyncCall, MessageCenter, OnlyRunInContext } from '@holoflows/kit/es'
 import { CryptoName } from '../../utils/Names'
 import { encodeArrayBuffer } from '../../utils/EncodeDecode'
+import { addPersonPublicKey } from '../../key-management'
+import { timeout } from '../../utils/utils'
 
 OnlyRunInContext('background', 'EncryptService')
 //#region Encrypt & Decrypt
@@ -29,10 +31,14 @@ async function encryptTo(content: string, to: string) {
  * @param whoAmI My username
  */
 async function decryptFrom(encrypted: string, sig: string, salt: string, by: string, to: string, whoAmI: string) {
-    const byKey = await queryPersonCryptoKey(by)
-    if (!byKey) throw new Error(`${byKey}'s public key not found.`)
-    const toKey = await queryPersonCryptoKey(to)
-    if (!toKey) throw new Error(`${toKey}'s public key not found.`)
+    async function getKey(name: string) {
+        let key = await queryPersonCryptoKey(by)
+        if (!key) key = await timeout(addPersonPublicKey(name), 5000)
+        if (!key) throw new Error(`${name}'s public key not found.`)
+        return key
+    }
+    const byKey = await getKey(by)
+    const toKey = await getKey(to)
 
     const mine = (await getMyPrivateKey())!
     const result = await decryptText(encrypted, salt, mine.key.privateKey, byKey.key.publicKey)

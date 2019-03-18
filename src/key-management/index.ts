@@ -2,7 +2,9 @@ import Gun from 'gun'
 import 'gun/lib/then'
 import { sleep } from '../utils/utils'
 import { queryPersonCryptoKey, PersonCryptoKey } from './db'
+import { OnlyRunInContext } from '@holoflows/kit/es'
 
+OnlyRunInContext('background', 'Gun')
 interface Person {
     provePostId: string
 }
@@ -25,16 +27,24 @@ export async function queryPerson(username: string) {
 export function addPersonPublicKey(username: string) {
     return new Promise<PersonCryptoKey>(async (resolve, reject) => {
         const person = await queryPerson(username)
-        if (!person) reject('User not in gun')
-        const provePost = `https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/${username}/posts/${
-            person.provePostId
-        }&width=500`
+        if (!person) return reject(`User ${username} not in gun`)
+        // https://www.facebook.com/permalink.php?story_fbid=117886292707657&id=100034588593645
+        let url
+        if (username.match(/^\d+$/))
+            url = `https://www.facebook.com/permalink.php?story_fbid=${person.provePostId}&id=${username}`
+        else url = `https://www.facebook.com/${username}/posts/${person.provePostId}&width=500`
+        const provePost = `https://www.facebook.com/plugins/post.php?href=${url}`
         const ir = document.createElement('iframe')
         ir.src = provePost
         document.body.appendChild(ir)
         ir.onload = async () => {
-            await sleep(200)
-            resolve((await queryPersonCryptoKey(username))!)
+            let key = await queryPersonCryptoKey(username)
+            while (!key) {
+                await sleep(50)
+                key = await queryPersonCryptoKey(username)
+            }
+            resolve(key)
+            ir.remove()
         }
     })
 }

@@ -107,7 +107,7 @@ function WelcomePortal() {
     }
     useAsync(() => getStorage(), [0]).then(data => setInit(data.init))
     // Only render in main page
-    if (location.pathname === '/') return null
+    if (location.pathname !== '/') return null
     if (init && !chrome.extension.inIncognitoContext) return null
     return (
         <MuiThemeProvider theme={MaskbookLightTheme}>

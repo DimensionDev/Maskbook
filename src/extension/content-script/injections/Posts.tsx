@@ -5,9 +5,15 @@ import { DecryptPost } from '../../../components/InjectedComponents/DecryptedPos
 import { AddToKeyStore } from '../../../components/InjectedComponents/AddToKeyStore'
 import { PeopleService } from '../rpc'
 
+function getUsername(url: string) {
+    const after = url.split('https://www.facebook.com/')[1]
+    if (after.match('profile.php')) return after.match(/id=(?<id>\d+)/)!.groups!.id
+    else return after.split('?')[0]
+}
 const myUsername = new LiveSelector()
     .querySelector<HTMLAnchorElement>(`[aria-label="Facebook"][role="navigation"] [data-click="profile_icon"] a`)
-    .map(x => x.href.split('https://www.facebook.com/')[1])
+    .map(x => x.href)
+    .map(getUsername)
 
 const posts = new LiveSelector().querySelectorAll<HTMLDivElement>('.userContent').filter((x: HTMLElement | null) => {
     while (x) {
@@ -42,9 +48,7 @@ const PostInspector = (props: { post: string; postBy: string; postId: string }) 
 new MutationObserverWatcher(posts)
     .useNodeForeach((node, key, realNode) => {
         // Get author
-        const postBy = node.current
-            .previousElementSibling!.querySelector('a')!
-            .href.match('https://www.facebook.com/(?<name>[a-zA-Z0-9.]+)?')!.groups!.name
+        const postBy = getUsername(node.current.previousElementSibling!.querySelector('a')!.href)
         // Save author's avatar
         try {
             const avatar = node.current.previousElementSibling!.querySelector('img')!
