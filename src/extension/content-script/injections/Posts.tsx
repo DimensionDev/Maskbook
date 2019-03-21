@@ -57,7 +57,9 @@ new MutationObserverWatcher(posts)
         // Get post id
         let postId = ''
         try {
-            const postIdInHref = location.href.match(/plugins.+posts.(?<id>\d+)&wi/)
+            const postIdInHref = location.href.match(
+                /plugins.+(perma.+story_fbid%3D|posts%2F)((?<id>\d+)%26).+(&width=500)?/,
+            )
             postId =
                 // In single url
                 (postIdInHref && postIdInHref.groups!.id) ||

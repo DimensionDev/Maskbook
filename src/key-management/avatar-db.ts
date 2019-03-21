@@ -1,5 +1,5 @@
 import { Entity, Index, Db } from 'typed-db'
-import { buildQuery } from '../utils/utils'
+import { buildQuery, fileReference } from '../utils/utils'
 
 @Entity()
 class AvatarRecord {
@@ -31,10 +31,17 @@ async function downloadAvatar(url: string): Promise<ArrayBuffer> {
     return res.arrayBuffer()
 }
 const cache = new Map<string, string>()
-function toDataUrl(x: ArrayBuffer, username?: string): string {
-    const createAndStore = () => {
-        const f = new Blob([x], { type: 'image/png' })
-        const u = URL.createObjectURL(f)
+async function toDataUrl(x: ArrayBuffer, username?: string): Promise<string> {
+    function ArrayBufferToBase64(buffer: ArrayBuffer) {
+        const f = new Blob([buffer], { type: 'image/png' })
+        const fr = new FileReader()
+        return new Promise<string>(resolve => {
+            fr.onload = () => resolve(fr.result as string)
+            fr.readAsDataURL(f)
+        })
+    }
+    const createAndStore = async () => {
+        const u = await ArrayBufferToBase64(x)
         cache.set(username || '$', u)
         return u
     }

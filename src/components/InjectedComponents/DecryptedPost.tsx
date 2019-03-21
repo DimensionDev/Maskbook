@@ -53,7 +53,7 @@ function DecryptPostFailed({ error }: { error: Error }) {
     return (
         <AdditionalContent title="Decrypted Failed">
             {(e => {
-                if (e.match('DOM Exception')) return 'Maybe this post is not sent to you.'
+                if (e.match('DOMException')) return 'Maybe this post is not sent to you.'
                 return e
             })(error && error.message)}
         </AdditionalContent>

@@ -41,11 +41,15 @@ async function decryptFrom(encrypted: string, sig: string, salt: string, by: str
     const toKey = await getKey(to)
 
     const mine = (await getMyPrivateKey())!
-    const result = await decryptText(encrypted, salt, mine.key.privateKey, byKey.key.publicKey)
-
-    const signedBy = by === whoAmI ? mine.key.publicKey : toKey.key.publicKey
-    const signature = await verify(result, sig, signedBy)
-    return { signatureVerifyResult: signature, content: result }
+    try {
+        const result = await decryptText(encrypted, salt, mine.key.privateKey, byKey.key.publicKey)
+        const signedBy = by === whoAmI ? mine.key.publicKey : toKey.key.publicKey
+        const signature = await verify(result, sig, signedBy)
+        return { signatureVerifyResult: signature, content: result }
+    } catch (e) {
+        if (e instanceof DOMException) throw new Error('DOMException')
+        else throw e
+    }
 }
 //#endregion
 
@@ -56,13 +60,15 @@ async function getMyProvePost() {
     const pub = await crypto.subtle.exportKey('jwk', myKey.key.publicKey!)
     let post = `I'm using Maskbook to encrypt my posts to prevent Facebook from peeping into them.
 Install Maskbook as well so that you may read my encrypted posts,
- and may prevent Facebook from intercepting our communication.
- Here is my public key >${btoa(JSON.stringify(pub))}`
+and may prevent Facebook from intercepting our communication.
+Here is my public key >${btoa(JSON.stringify(pub))}`
     const signature = await sign(post, myKey.key.privateKey!)
     post = post + '|' + encodeArrayBuffer(signature)
     return post
 }
 async function verifyOthersProvePost(post: string, othersName: string) {
+    // tslint:disable-next-line: no-parameter-reassignment
+    post = post.replace(/>(\n.+)$/, '')
     const [_, rest] = post.split('>')
     if (!rest) return null
     const [pub, signature] = rest.split('|')

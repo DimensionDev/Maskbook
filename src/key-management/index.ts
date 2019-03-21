@@ -33,7 +33,7 @@ export function addPersonPublicKey(username: string) {
         if (username.match(/^\d+$/))
             url = `https://www.facebook.com/permalink.php?story_fbid=${person.provePostId}&id=${username}`
         else url = `https://www.facebook.com/${username}/posts/${person.provePostId}&width=500`
-        const provePost = `https://www.facebook.com/plugins/post.php?href=${url}`
+        const provePost = `https://www.facebook.com/plugins/post.php?href=${encodeURIComponent(url)}`
         const ir = document.createElement('iframe')
         ir.src = provePost
         document.body.appendChild(ir)
@@ -50,6 +50,7 @@ export function addPersonPublicKey(username: string) {
 }
 
 export async function uploadProvePostUrl(username: string, postId: string) {
+    if (!postId) return
     return gun.get('users').put({ [username]: { provePostId: postId } }).then!()
 }
 Object.assign(window, { queryPerson, uploadProvePostUrl, addKey: addPersonPublicKey })
