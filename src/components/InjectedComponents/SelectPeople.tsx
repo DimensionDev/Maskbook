@@ -10,13 +10,15 @@ import { PeopleInList } from './SelectPeopleSingle'
 import ListItem from '@material-ui/core/ListItem/ListItem'
 import ListItemText from '@material-ui/core/ListItemText/ListItemText'
 import { usePeople } from '../DataSource/PeopleRef'
+import Button from '@material-ui/core/Button/Button'
+import { withStylesTyped } from '../../utils/theme'
 
 interface Props {
     all: Person[]
     selected: Person[]
     onSetSelected: (n: Person[]) => void
 }
-function People(props: { onDelete(): void; people: Person }) {
+function PeopleChip(props: { onDelete(): void; people: Person }) {
     const avatar = props.people.avatar ? <Avatar src={props.people.avatar} /> : undefined
     return (
         <Chip
@@ -28,10 +30,20 @@ function People(props: { onDelete(): void; people: Person }) {
         />
     )
 }
-export function SelectPeopleUI(props: Props) {
+export const SelectPeopleUI = withStylesTyped({
+    paper: { maxWidth: 500 },
+    selectedArea: {
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        display: 'flex',
+        padding: '12px 6px 6px 12px',
+    },
+    input: { flex: 1 },
+    button: { marginLeft: 8, padding: '2px 6px' },
+})<Props>(function SelectPeopleUI({ all: allPeople, classes, onSetSelected, selected }) {
     const [search, setSearch] = React.useState('')
-    const listBeforeSearch = props.all.filter(x => {
-        if (props.selected.find(y => y.username === x.username)) return false
+    const listBeforeSearch = allPeople.filter(x => {
+        if (selected.find(y => y.username === x.username)) return false
         return true
     })
     const listAfterSearch = listBeforeSearch.filter(x => {
@@ -42,33 +54,40 @@ export function SelectPeopleUI(props: Props) {
         )
     })
     return (
-        <Paper style={{ maxWidth: 500 }}>
-            <FlexBox
-                style={
-                    {
-                        flexDirection: 'row',
-                        flexWrap: 'wrap',
-                        display: 'flex',
-                        padding: '12px 6px 6px 12px',
-                    } as React.CSSProperties
-                }>
-                {props.selected.map(p => (
-                    <People
+        <Paper className={classes.paper}>
+            <FlexBox className={classes.selectedArea}>
+                {selected.map(p => (
+                    <PeopleChip
                         key={p.username}
                         people={p}
-                        onDelete={() => props.onSetSelected(props.selected.filter(x => x.username !== p.username))}
+                        onDelete={() => onSetSelected(selected.filter(x => x.username !== p.username))}
                     />
                 ))}
                 <InputBase
-                    style={{ flex: 1 }}
+                    className={classes.input}
                     value={search}
                     onChange={e => setSearch(e.target.value)}
                     onKeyDown={e => {
                         if (search === '' && e.key === 'Backspace') {
-                            props.onSetSelected(props.selected.slice(0, props.selected.length - 1))
+                            onSetSelected(selected.slice(0, selected.length - 1))
                         }
                     }}
                 />
+            </FlexBox>
+            <FlexBox>
+                {listAfterSearch.length > 0 && (
+                    <Button
+                        className={classes.button}
+                        color="primary"
+                        onClick={() => onSetSelected(selected.concat(listAfterSearch))}>
+                        Select All
+                    </Button>
+                )}
+                {selected.length > 0 && (
+                    <Button className={classes.button} onClick={() => onSetSelected([])}>
+                        Select None
+                    </Button>
+                )}
             </FlexBox>
             <FullWidth>
                 <List dense>
@@ -82,7 +101,7 @@ export function SelectPeopleUI(props: Props) {
                             key={p.username}
                             people={p}
                             onClick={() => {
-                                props.onSetSelected(props.selected.concat(p))
+                                onSetSelected(selected.concat(p))
                                 setSearch('')
                             }}
                         />
@@ -91,7 +110,7 @@ export function SelectPeopleUI(props: Props) {
             </FullWidth>
         </Paper>
     )
-}
+})
 export function SelectPeople() {
     const [selected, select] = React.useState<Person[]>([])
     const people = usePeople()
