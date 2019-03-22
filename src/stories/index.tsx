@@ -16,10 +16,11 @@ import Dashboard from '../components/Dashboard/Dashboard'
 import EncryptionCheckbox from '../components/InjectedComponents/EncryptionCheckbox'
 import { AdditionalPostBoxUI } from '../components/InjectedComponents/AdditionalPostBox'
 import { AdditionalContent } from '../components/InjectedComponents/AdditionalPostContent'
-import { SelectPeople } from '../components/InjectedComponents/SelectPeople'
+import { SelectPeopleUI } from '../components/InjectedComponents/SelectPeople'
 import { SelectPeopleSingle } from '../components/InjectedComponents/SelectPeopleSingle'
 import { DecryptPostUI } from '../components/InjectedComponents/DecryptedPost'
 import { AddToKeyStoreUI } from '../components/InjectedComponents/AddToKeyStore'
+import { Person } from '../extension/background-script/PeopleService'
 
 storiesOf('Welcome', module)
     .add('Step 0', () => <Welcome0 create={to('Welcome', 'Step 1a-1')} restore={to('Welcome', 'Step 1b-1')} />)
@@ -34,8 +35,8 @@ storiesOf('Welcome', module)
     ))
     .add('Step 1b-1', () => <Welcome1b1 back={linkTo('Welcome', 'Step 0')} restore={action('Restore with')} />)
 
-storiesOf('Dashboard', module)
-    .add('Identity Component', () => (
+storiesOf('Dashboard (unused)', module)
+    .add('Identity Component (unused)', () => (
         <Identity
             avatar={text('Avatar (length > 3 will treat as url)', false as any)}
             fingerprint={text('Fingerprint', 'FDFE333CE20ED446AD88F3C8BA3AD1AA5ECAF521')}
@@ -44,7 +45,7 @@ storiesOf('Dashboard', module)
             atSymbolBefore={boolean('Add a @ on username?', false)}
         />
     ))
-    .add('Dashboard', () => (
+    .add('Dashboard (unused)', () => (
         <Dashboard
             addAccount={action('Add account')}
             exportBackup={action('Export backup')}
@@ -83,13 +84,47 @@ const FakePost: React.FC<{ title: string }> = props => (
         </div>
     </>
 )
+
+const demoPeople: Person[] = [
+    {
+        username: 'People A',
+        fingerprint: 'FDFE333CE20ED446AD88F3C8BA3AD1AA5ECAF521',
+    },
+    {
+        username: 'People B',
+        fingerprint: 'FDFE333CE20ED446AD88F3C8BA3AD1AA5ECAF521'
+            .split('')
+            .reverse()
+            .join(''),
+    },
+    {
+        username: 'People C',
+        fingerprint: 'a2f7643cd1aed446ad88f3c8ba13843dfa2f321d',
+    },
+    {
+        username: 'People D',
+        fingerprint: 'a2f7643cd1aed446ad88f3c8ba13843dfa2f321d',
+    },
+]
 storiesOf('Injections', module)
     //
     .add('Checkbox (unused)', () => <EncryptionCheckbox onCheck={action('Check')} />)
     .add('Post box', () => <AdditionalPostBoxUI encrypted="" onCombinationChange={() => {}} />)
     .add('Additional Post Content', () => <AdditionalContent title="Additional Content" children="Content" />)
-    .add('Select people (unused)', () => <SelectPeople />)
-    .add('Select 1 people', () => <SelectPeopleSingle all={[]} onSelect={() => {}} selected={{} as any} />)
+    .add('Select people', () => {
+        function SelectPeople() {
+            const [selected, select] = React.useState<Person[]>([])
+            return <SelectPeopleUI all={demoPeople} selected={selected} onSetSelected={select} />
+        }
+        return <SelectPeople />
+    })
+    .add('Select 1 people (unused)', () => {
+        function SelectPeople() {
+            const [selected, select] = React.useState<Person>()
+            return <SelectPeopleSingle all={demoPeople} selected={selected} onSelect={select} />
+        }
+        return <SelectPeople />
+    })
     .add('Decrypted post', () => {
         const msg = text(
             'Post content',

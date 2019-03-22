@@ -5,63 +5,42 @@ import Avatar from '@material-ui/core/Avatar/Avatar'
 import Paper from '@material-ui/core/Paper/Paper'
 import InputBase from '@material-ui/core/InputBase/InputBase'
 import List from '@material-ui/core/List/List'
+import { Person } from '../../extension/background-script/PeopleService'
+import { PeopleInList } from './SelectPeopleSingle'
 import ListItem from '@material-ui/core/ListItem/ListItem'
 import ListItemText from '@material-ui/core/ListItemText/ListItemText'
-import ListItemAvatar from '@material-ui/core/ListItemAvatar/ListItemAvatar'
+import { usePeople } from '../DataSource/PeopleRef'
 
-interface People {
-    name: string
-    fingerprint: string
-    avatar?: string
+interface Props {
+    all: Person[]
+    selected: Person[]
+    onSetSelected: (n: Person[]) => void
 }
-interface Props {}
-function People(props: { onDelete(): void; people: People }) {
+function People(props: { onDelete(): void; people: Person }) {
     const avatar = props.people.avatar ? <Avatar src={props.people.avatar} /> : undefined
     return (
         <Chip
             style={{ marginRight: 6, marginBottom: 6 }}
             color="primary"
             onDelete={props.onDelete}
-            label={props.people.name}
+            label={props.people.username}
             avatar={avatar}
         />
     )
 }
-function PeopleInList(props: { people: People; onClick(): void }) {
-    const name = props.people.name.split(' ')
-    const avatar = props.people.avatar ? (
-        <Avatar src={props.people.avatar} />
-    ) : (
-        <Avatar>
-            {name[0][0]}
-            {(name[1] || '')[0]}
-        </Avatar>
-    )
-    return (
-        <ListItem button onClick={props.onClick}>
-            <ListItemAvatar>{avatar}</ListItemAvatar>
-            <ListItemText primary={props.people.name} secondary={props.people.fingerprint.toLowerCase()} />
-        </ListItem>
-    )
-}
-const demoPeople: Record<string, People> = {
-    jack: {
-        name: 'People A',
-        fingerprint: 'FDFE333CE20ED446AD88F3C8BA3AD1AA5ECAF521',
-    },
-    alex: {
-        name: 'People B',
-        fingerprint: 'FDFE333CE20ED446AD88F3C8BA3AD1AA5ECAF521'
-            .split('')
-            .reverse()
-            .join(''),
-    },
-    lee: {
-        name: 'People C',
-        fingerprint: 'a2f7643cd1aed446ad88f3c8ba13843dfa2f321d',
-    },
-}
-export function SelectPeople(props: Props) {
+export function SelectPeopleUI(props: Props) {
+    const [search, setSearch] = React.useState('')
+    const listBeforeSearch = props.all.filter(x => {
+        if (props.selected.find(y => y.username === x.username)) return false
+        return true
+    })
+    const listAfterSearch = listBeforeSearch.filter(x => {
+        if (search === '') return true
+        return (
+            !!x.username.toLocaleLowerCase().match(search.toLocaleLowerCase()) ||
+            !!(x.fingerprint || '').toLocaleLowerCase().match(search.toLocaleLowerCase())
+        )
+    })
     return (
         <Paper style={{ maxWidth: 500 }}>
             <FlexBox
@@ -73,18 +52,48 @@ export function SelectPeople(props: Props) {
                         padding: '12px 6px 6px 12px',
                     } as React.CSSProperties
                 }>
-                <People onDelete={() => {}} people={demoPeople.jack} />
-                <People onDelete={() => {}} people={demoPeople.alex} />
-                <People onDelete={() => {}} people={demoPeople.lee} />
-                <InputBase style={{ flex: 1 }} />
+                {props.selected.map(p => (
+                    <People
+                        key={p.username}
+                        people={p}
+                        onDelete={() => props.onSetSelected(props.selected.filter(x => x.username !== p.username))}
+                    />
+                ))}
+                <InputBase
+                    style={{ flex: 1 }}
+                    value={search}
+                    onChange={e => setSearch(e.target.value)}
+                    onKeyDown={e => {
+                        if (search === '' && e.key === 'Backspace') {
+                            props.onSetSelected(props.selected.slice(0, props.selected.length - 1))
+                        }
+                    }}
+                />
             </FlexBox>
             <FullWidth>
                 <List dense>
-                    <PeopleInList onClick={() => {}} people={demoPeople.jack} />
-                    <PeopleInList onClick={() => {}} people={demoPeople.lee} />
-                    <PeopleInList onClick={() => {}} people={demoPeople.alex} />
+                    {listBeforeSearch.length > 0 && listBeforeSearch.length === 0 && (
+                        <ListItem>
+                            <ListItemText primary="Not found" />
+                        </ListItem>
+                    )}
+                    {listAfterSearch.map(p => (
+                        <PeopleInList
+                            key={p.username}
+                            people={p}
+                            onClick={() => {
+                                props.onSetSelected(props.selected.concat(p))
+                                setSearch('')
+                            }}
+                        />
+                    ))}
                 </List>
             </FullWidth>
         </Paper>
     )
+}
+export function SelectPeople() {
+    const [selected, select] = React.useState<Person[]>([])
+    const people = usePeople()
+    return <SelectPeopleUI all={people} selected={selected} onSetSelected={select} />
 }

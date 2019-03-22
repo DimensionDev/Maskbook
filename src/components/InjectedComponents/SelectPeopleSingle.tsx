@@ -13,7 +13,7 @@ interface Props {
     selected?: Person
     onSelect(person: Person): void
 }
-function PeopleInList(props: { people: Person; onClick(): void; selected?: boolean }) {
+export function PeopleInList(props: { people: Person; onClick(): void; selected?: boolean }) {
     const name = props.people.username.split(' ')
     const avatar = props.people.avatar ? (
         <Avatar src={props.people.avatar} />
