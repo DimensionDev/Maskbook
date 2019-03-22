@@ -12,10 +12,7 @@ interface Props {
 export function DecryptPost({ postBy, whoAmI, encryptedText }: Props) {
     return (
         <AsyncComponent
-            promise={async (encryptedString: string) => {
-                const [version, postTo, salt, text, sig] = encryptedString.split('|')
-                return CryptoService.decryptFrom(text, sig, salt, postBy, postTo, whoAmI)
-            }}
+            promise={async (encryptedString: string) => CryptoService.decryptFrom(encryptedString, postBy, whoAmI)}
             values={[encryptedText]}
             awaitingComponent={DecryptPostAwaiting}
             completeComponent={DecryptPostSuccess}
@@ -23,7 +20,6 @@ export function DecryptPost({ postBy, whoAmI, encryptedText }: Props) {
         />
     )
 }
-type UnboxPromise<T> = T extends PromiseLike<infer Q> ? Q : never
 function DecryptPostSuccess({ data }: { data: { signatureVerifyResult: boolean; content: string } }) {
     return (
         <AdditionalContent

@@ -111,8 +111,3 @@ export const SelectPeopleUI = withStylesTyped({
         </Paper>
     )
 })
-export function SelectPeople() {
-    const [selected, select] = React.useState<Person[]>([])
-    const people = usePeople()
-    return <SelectPeopleUI all={people} selected={selected} onSetSelected={select} />
-}
