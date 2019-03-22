@@ -20,23 +20,21 @@ jobs:
             # build holoflows-kit
             - run: |
                   cd ..
-                  mkdir ~/.ssh
-                  ssh-keygen -F github.com || ssh-keyscan github.com >> ~/.ssh/known_hosts
-                  git clone -q git@github.com:SujiTech/Holoflows-kit-temp.git
+                  git clone -q --depth=1 https://github.com/DimensionFoundation/holoflows-kit
             - restore_cache:
                   keys:
-                      - v1-dependencies-holoflows-{{ checksum "~/Holoflows-kit-temp/package.json" }}
+                      - v1-dependencies-holoflows-{{ checksum "~/holoflows-kit/package.json" }}
                       # fallback to using the latest cache if no exact match is found
                       - v1-dependencies-holoflows-
             - run: |
-                  cd ../Holoflows-kit-temp
+                  cd ../holoflows-kit
                   yarn install
             - save_cache:
                   paths:
-                      - ~/Holoflows-kit-temp/node_modules
-                  key: v1-dependencies-holoflows-{{ checksum "~/Holoflows-kit-temp/package.json" }}
+                      - ~/holoflows-kit/node_modules
+                  key: v1-dependencies-holoflows-{{ checksum "~/holoflows-kit/package.json" }}
             - run: |
-                  cd ../Holoflows-kit-temp
+                  cd ../holoflows-kit
                   yarn build
                   yarn link
 
