@@ -123,7 +123,7 @@ export async function encrypt1ToN(info: {
                 key: PromiseReturnType<typeof encrypt1To1>
                 name: string
             }>
-        >(export async ({ key, name }) => {
+        >(async ({ key, name }) => {
             return {
                 name,
                 key: await encrypt1To1({
