@@ -18,6 +18,7 @@ export async function publishPostAESKey(
         }
     },
 ) {
+    console.log('Save to gun', postIdentifier, receiversKeys)
     await gun.get('posts').put({
         [postIdentifier]: receiversKeys,
     }).then!()

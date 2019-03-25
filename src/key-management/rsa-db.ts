@@ -29,7 +29,7 @@ async function generateRSAKeyPair() {
         ({
             name: 'RSA-OAEP',
             modulusLength: 2048,
-            publicExponent: 65537,
+            publicExponent: new Uint8Array([0x01, 0x00, 0x01]),
             hash: 'SHA-256',
         } as any) as RsaHashedKeyGenParams,
         true,

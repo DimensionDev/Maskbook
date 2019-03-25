@@ -7,12 +7,13 @@ import {
     CryptoKeyRecord,
     toReadCryptoKey,
 } from '../../key-management/keystore-db'
-import { queryAvatar, storeAvatar } from '../../key-management/avatar-db'
+import { queryAvatar, storeAvatar, queryNickname } from '../../key-management/avatar-db'
 import { uploadProvePostUrl } from '../../key-management/people-gun'
 
 OnlyRunInContext('background', 'FriendService')
 export interface Person {
     username: string
+    nickname?: string
     avatar?: string
     fingerprint?: string
 }
@@ -26,6 +27,7 @@ async function getAllPeople(): Promise<Person[]> {
             username: k.username,
             fingerprint: await calculateFingerprint(k.username),
             avatar: await queryAvatar(k.username),
+            nickname: await queryNickname(k.username),
         })),
     )
     return p
