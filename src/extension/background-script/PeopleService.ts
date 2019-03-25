@@ -6,9 +6,9 @@ import {
     getMyPrivateKey,
     CryptoKeyRecord,
     toReadCryptoKey,
-} from '../../key-management/db'
+} from '../../key-management/keystore-db'
 import { queryAvatar, storeAvatar } from '../../key-management/avatar-db'
-import { uploadProvePostUrl } from '../../key-management'
+import { uploadProvePostUrl } from '../../key-management/people-gun'
 
 OnlyRunInContext('background', 'FriendService')
 export interface Person {

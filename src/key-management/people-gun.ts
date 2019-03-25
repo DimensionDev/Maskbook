@@ -1,21 +1,6 @@
-import Gun from 'gun'
-import 'gun/lib/then'
 import { sleep } from '../utils/utils'
-import { queryPersonCryptoKey, PersonCryptoKey } from './db'
-import { OnlyRunInContext } from '@holoflows/kit/es'
-
-OnlyRunInContext('background', 'Gun')
-interface Person {
-    provePostId: string
-}
-interface MaskbookDemoServerState {
-    maskbook: {
-        users: {
-            [user: string]: Person
-        }
-    }
-}
-const gun = new Gun<MaskbookDemoServerState>('https://gungame.herokuapp.com/gun').get('maskbook')
+import { queryPersonCryptoKey, PersonCryptoKey } from './keystore-db'
+import { gun } from './gun'
 
 export async function queryPerson(username: string) {
     return gun

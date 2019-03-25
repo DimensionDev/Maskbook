@@ -15,7 +15,7 @@ type PromiseReturnType<T extends (...args: any[]) => Promise<any>> = T extends (
  * @param othersPublicKey Public key of someone you want to derive key to
  * @param salt Salt
  */
-export async function deriveAESKey(
+async function deriveAESKey(
     privateKey: CryptoKey,
     othersPublicKey: CryptoKey,
     /** If salt is not provided, we will generate one. And you should send it to your friend. */
@@ -97,18 +97,19 @@ export async function encrypt1ToN(info: {
     ownersRSAKeyPair: CryptoKeyPair
     /** Other's public keys. For everyone, will use 1 to 1 encryption to encrypt the random aes key */
     othersPublicKeyECDH: { key: CryptoKey; name: string }[]
+    /** iv */
+    iv: Uint8Array
 }): Promise<{
     version: -41
     encryptedText: string
-    salt: string
+    iv: string
     /** Your encrypted post aes key. Should be attached in the post. */
     ownersAESKeyEncrypted: string
     /** All encrypted post aes key. Should be post on the gun. */
     othersAESKeyEncrypted: { key: PromiseReturnType<typeof encrypt1To1>; name: string }[]
 }> {
-    const { version, content, othersPublicKeyECDH, privateKeyECDH, ownersRSAKeyPair } = info
+    const { version, content, othersPublicKeyECDH, privateKeyECDH, ownersRSAKeyPair, iv } = info
     const AESKey = await crypto.subtle.generateKey({ name: 'AES-CBC', length: 256 }, true, ['encrypt', 'decrypt'])
-    const iv = crypto.getRandomValues(new Uint8Array(1024))
     const encryptedText = await crypto.subtle.encrypt({ name: 'AES-CBC', iv: iv }, AESKey, encodeText(content))
 
     const exportedAESKey = encodeText(JSON.stringify(await crypto.subtle.exportKey('jwk', AESKey)))
@@ -138,7 +139,7 @@ export async function encrypt1ToN(info: {
 
     return {
         encryptedText: encodeArrayBuffer(encryptedText),
-        salt: encodeArrayBuffer(iv),
+        iv: encodeArrayBuffer(iv),
         version: -41,
         ownersAESKeyEncrypted: encodeArrayBuffer(ownersAESKeyEncrypted),
         othersAESKeyEncrypted: othersAESKeyEncrypted,
@@ -240,7 +241,8 @@ export async function decryptAESEncryptedText(info: {
 export async function sign(message: string | ArrayBuffer, privateKey: CryptoKey): Promise<string> {
     const ecdsakey = privateKey.usages.indexOf('sign') !== -1 ? privateKey : await toECDSA(privateKey)
     if (typeof message === 'string') message = encodeText(message)
-    return encodeArrayBuffer(await crypto.subtle.sign({ name: 'ECDSA', hash: { name: 'SHA-256' } }, ecdsakey, message))}
+    return encodeArrayBuffer(await crypto.subtle.sign({ name: 'ECDSA', hash: { name: 'SHA-256' } }, ecdsakey, message))
+}
 export async function verify(
     content: string | ArrayBuffer,
     signature: string | ArrayBuffer,
