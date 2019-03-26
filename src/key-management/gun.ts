@@ -1,6 +1,7 @@
 import Gun from 'gun'
 import 'gun/lib/then'
 import { OnlyRunInContext } from '@holoflows/kit/es'
+import { PublishedAESKey } from '../crypto/crypto-alpha-41'
 
 OnlyRunInContext('background', 'Gun')
 interface Person {
@@ -22,11 +23,7 @@ interface MaskbookDemoServerState {
             [postIdentifier: string]: {
                 // TODO: This will leak post targets. (But keys are safe
                 // TODO: Consider using hash(id+username) or something
-                [receiversUsername: string]: {
-                    version: -41
-                    encryptedText: string
-                    salt: string
-                }
+                [receiversUsername: string]: PublishedAESKey
             }
         }
     }

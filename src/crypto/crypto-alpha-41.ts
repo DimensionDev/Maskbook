@@ -1,10 +1,7 @@
 import { encodeText, encodeArrayBuffer, decodeArrayBuffer, decodeText } from '../utils/EncodeDecode'
 import { toECDH, addUint8Array, toECDSA } from '../utils/CryptoUtils'
 // tslint:disable: no-parameter-reassignment
-type PromiseReturnType<T extends (...args: any[]) => Promise<any>> = T extends (...args: any[]) => Promise<infer U>
-    ? U
-    : never
-
+export type PublishedAESKey = { encryptedKey: string; salt: string }
 //#region Derive AES Key from ECDH key
 /**
  * Derive the key from your private ECDH key and someone else's ECDH key.
@@ -19,7 +16,7 @@ async function deriveAESKey(
     privateKey: CryptoKey,
     othersPublicKey: CryptoKey,
     /** If salt is not provided, we will generate one. And you should send it to your friend. */
-    salt = crypto.getRandomValues(new Uint8Array(64)),
+    salt: ArrayBuffer | string = crypto.getRandomValues(new Uint8Array(64)),
 ) {
     const op = othersPublicKey.usages.find(x => x === 'deriveKey') ? othersPublicKey : await toECDH(othersPublicKey)
     const pr = privateKey.usages.find(x => x === 'deriveKey') ? privateKey : await toECDH(privateKey)
@@ -30,16 +27,18 @@ async function deriveAESKey(
         true,
         ['encrypt', 'decrypt'],
     )
+
+    const _salt = typeof salt === 'string' ? decodeArrayBuffer(salt) : salt
     // TODO: Need a name.
-    const UntitledUint8Array = addUint8Array(new Uint8Array(await crypto.subtle.exportKey('raw', derivedKey)), salt)
+    const UntitledUint8Array = addUint8Array(new Uint8Array(await crypto.subtle.exportKey('raw', derivedKey)), _salt)
     const password = await crypto.subtle.digest(
         'SHA-256',
-        addUint8Array(addUint8Array(UntitledUint8Array, salt), decodeArrayBuffer('KEY')),
+        addUint8Array(addUint8Array(UntitledUint8Array, _salt), decodeArrayBuffer('KEY')),
     )
     const iv_pre = new Uint8Array(
         await crypto.subtle.digest(
             'SHA-256',
-            addUint8Array(addUint8Array(UntitledUint8Array, salt), decodeArrayBuffer('IV')),
+            addUint8Array(addUint8Array(UntitledUint8Array, _salt), decodeArrayBuffer('IV')),
         ),
     )
     const iv = new Uint8Array(16)
@@ -47,11 +46,11 @@ async function deriveAESKey(
         // tslint:disable-next-line: no-bitwise
         iv[i] = iv_pre[i] ^ iv_pre[16 + i]
     }
-    const AESKey = await crypto.subtle.importKey('raw', password, { name: 'AES-CBC', length: 32 }, true, [
+    const key = await crypto.subtle.importKey('raw', password, { name: 'AES-CBC', length: 32 }, true, [
         'encrypt',
         'decrypt',
     ])
-    return { key: AESKey, salt: salt, iv }
+    return { key, salt: _salt, iv }
 }
 //#endregion
 //#region encrypt text
@@ -68,21 +67,16 @@ export async function encrypt1To1(info: {
     othersPublicKeyECDH: CryptoKey
 }): Promise<{
     version: -41
-    encryptedText: string
-    salt: string
+    encryptedContent: ArrayBuffer
+    salt: ArrayBuffer
 }> {
     const { version, privateKeyECDH, othersPublicKeyECDH } = info
     let { content } = info
-
     if (typeof content === 'string') content = encodeText(content)
 
-    const { iv, key: AESKey, salt } = await deriveAESKey(privateKeyECDH, othersPublicKeyECDH)
-    const encryptedText = await crypto.subtle.encrypt({ name: 'AES-CBC', iv: iv.buffer }, AESKey, content)
-    return {
-        salt: encodeArrayBuffer(salt),
-        encryptedText: encodeArrayBuffer(encryptedText),
-        version: -41,
-    }
+    const { iv, key, salt } = await deriveAESKey(privateKeyECDH, othersPublicKeyECDH)
+    const encryptedContent = await crypto.subtle.encrypt({ name: 'AES-CBC', iv }, key, content)
+    return { salt, encryptedContent, version: -41 }
 }
 /**
  * Encrypt 1 to N
@@ -90,60 +84,66 @@ export async function encrypt1To1(info: {
 export async function encrypt1ToN(info: {
     version: -41
     /** Message to encrypt */
-    content: string
+    content: string | ArrayBuffer
     /** Your private key */
     privateKeyECDH: CryptoKey
-    /** Your RSA key pair, used to encrypt the random AES key to decrypt the post by yourself */
-    ownersRSAKeyPair: CryptoKeyPair
+    /** Your local AES key, used to encrypt the random AES key to decrypt the post by yourself */
+    ownersLocalKey: CryptoKey
     /** Other's public keys. For everyone, will use 1 to 1 encryption to encrypt the random aes key */
     othersPublicKeyECDH: { key: CryptoKey; name: string }[]
     /** iv */
-    iv: Uint8Array
+    iv: ArrayBuffer
 }): Promise<{
     version: -41
-    encryptedText: string
-    iv: string
+    encryptedContent: ArrayBuffer
+    iv: ArrayBuffer
     /** Your encrypted post aes key. Should be attached in the post. */
-    ownersAESKeyEncrypted: string
+    ownersAESKeyEncrypted: ArrayBuffer
     /** All encrypted post aes key. Should be post on the gun. */
-    othersAESKeyEncrypted: { key: PromiseReturnType<typeof encrypt1To1>; name: string }[]
+    othersAESKeyEncrypted: {
+        key: PublishedAESKey
+        name: string
+    }[]
 }> {
-    const { version, content, othersPublicKeyECDH, privateKeyECDH, ownersRSAKeyPair, iv } = info
+    const { version, content, othersPublicKeyECDH, privateKeyECDH, ownersLocalKey, iv } = info
     const AESKey = await crypto.subtle.generateKey({ name: 'AES-CBC', length: 256 }, true, ['encrypt', 'decrypt'])
-    const encryptedText = await crypto.subtle.encrypt({ name: 'AES-CBC', iv: iv }, AESKey, encodeText(content))
+    const encryptedContent = await crypto.subtle.encrypt(
+        { name: 'AES-CBC', iv },
+        AESKey,
+        typeof content === 'string' ? encodeText(content) : content,
+    )
 
     const exportedAESKey = encodeText(JSON.stringify(await crypto.subtle.exportKey('jwk', AESKey)))
-    const ownersAESKeyEncrypted = await crypto.subtle.encrypt(
-        { name: 'RSA-OAEP' },
-        ownersRSAKeyPair.publicKey,
-        exportedAESKey,
-    )
+    const ownersAESKeyEncrypted = (await encryptWithAES({
+        aesKey: ownersLocalKey,
+        content: exportedAESKey,
+        iv,
+    })).content
     const othersAESKeyEncrypted = await Promise.all(
         othersPublicKeyECDH.map<
             Promise<{
-                key: PromiseReturnType<typeof encrypt1To1>
+                key: PublishedAESKey
                 name: string
             }>
         >(async ({ key, name }) => {
+            const encrypted = await encrypt1To1({
+                version: -41,
+                content: exportedAESKey,
+                othersPublicKeyECDH: key,
+                privateKeyECDH: privateKeyECDH,
+            })
             return {
                 name,
-                key: await encrypt1To1({
+                key: {
                     version: -41,
-                    content: exportedAESKey,
-                    othersPublicKeyECDH: key,
-                    privateKeyECDH: privateKeyECDH,
-                }),
+                    salt: encodeArrayBuffer(encrypted.salt),
+                    encryptedKey: encodeArrayBuffer(encrypted.encryptedContent),
+                },
             }
         }),
     )
 
-    return {
-        encryptedText: encodeArrayBuffer(encryptedText),
-        iv: encodeArrayBuffer(iv),
-        version: -41,
-        ownersAESKeyEncrypted: encodeArrayBuffer(ownersAESKeyEncrypted),
-        othersAESKeyEncrypted: othersAESKeyEncrypted,
-    }
+    return { encryptedContent, iv, version: -41, ownersAESKeyEncrypted, othersAESKeyEncrypted }
 }
 //#endregion
 //#region decrypt text
@@ -152,96 +152,109 @@ export async function encrypt1ToN(info: {
  */
 export async function decryptMessage1To1(info: {
     version: -41
-    encryptedText: string
-    salt: string
+    encryptedContent: string | ArrayBuffer
+    salt: string | ArrayBuffer
     /** Your private key */
     privateKeyECDH: CryptoKey
     /** If you are the author, this should be the receiver's public key.
      * Otherwise, this should be the author's public key */
     anotherPublicKeyECDH: CryptoKey
-}): Promise<string> {
-    const { anotherPublicKeyECDH, version, salt, encryptedText, privateKeyECDH } = info
+}): Promise<ArrayBuffer> {
+    const { anotherPublicKeyECDH, version, salt, encryptedContent, privateKeyECDH } = info
+    const encrypted = typeof encryptedContent === 'string' ? decodeArrayBuffer(encryptedContent) : encryptedContent
 
-    const _encryptedText = decodeArrayBuffer(encryptedText)
-    const _salt = decodeArrayBuffer(salt)
-
-    const { iv, key: AESKey } = await deriveAESKey(privateKeyECDH, anotherPublicKeyECDH, new Uint8Array(_salt))
-    const decryptText = await crypto.subtle.decrypt({ name: 'AES-CBC', iv: iv.buffer }, AESKey, _encryptedText)
-    const originalText = decodeText(decryptText)
-    return originalText
+    const { iv, key } = await deriveAESKey(privateKeyECDH, anotherPublicKeyECDH, salt)
+    return crypto.subtle.decrypt({ name: 'AES-CBC', iv }, key, encrypted)
 }
 /**
  * Decrypt 1 to N message that send by other
  */
 export async function decryptMessage1ToNByOther(info: {
     version: -41
-    encryptedText: string
+    encryptedContent: string | ArrayBuffer
     privateKeyECDH: CryptoKey
-    authorsPublickKeyECDH: CryptoKey
-    AESKeyEncrypted: PromiseReturnType<typeof encrypt1To1>
-}): Promise<string> {
-    const { AESKeyEncrypted, version, encryptedText, privateKeyECDH, authorsPublickKeyECDH } = info
-
-    const aesKeyJWK = decodeArrayBuffer(
+    authorsPublicKeyECDH: CryptoKey
+    AESKeyEncrypted: PublishedAESKey
+    iv: ArrayBuffer | string
+}): Promise<ArrayBuffer> {
+    const { AESKeyEncrypted, version, encryptedContent, privateKeyECDH, authorsPublicKeyECDH, iv } = info
+    const aesKeyJWK = decodeText(
         await decryptMessage1To1({
             version: -41,
             salt: AESKeyEncrypted.salt,
-            encryptedText: AESKeyEncrypted.encryptedText,
-            anotherPublicKeyECDH: authorsPublickKeyECDH,
+            encryptedContent: AESKeyEncrypted.encryptedKey,
+            anotherPublicKeyECDH: authorsPublicKeyECDH,
             privateKeyECDH: privateKeyECDH,
         }),
     )
     const aesKey = await crypto.subtle.importKey(
         'jwk',
-        JSON.parse(decodeText(aesKeyJWK)),
+        JSON.parse(aesKeyJWK),
         { name: 'AES-CBC', length: 256 },
         false,
         ['decrypt'],
     )
-    return decryptAESEncryptedText({ encryptedText, version: -41, aesKey })
+    return decryptWithAES({ aesKey, iv, encrypted: encryptedContent })
 }
 /**
  * Decrypt 1 to N message that send by myself
  */
 export async function decryptMessage1ToNByMyself(info: {
     version: -41
-    encryptedText: string
+    encryptedContent: string | ArrayBuffer
     /** This should be included in the message */
-    encryptedAESKey: string
-    myRSAKeyPair: CryptoKeyPair
-}): Promise<string> {
-    const { encryptedAESKey, encryptedText, myRSAKeyPair, version } = info
+    encryptedAESKey: string | ArrayBuffer
+    myLocalKey: CryptoKey
+    iv: string | ArrayBuffer
+}): Promise<ArrayBuffer> {
+    const { encryptedContent, myLocalKey, version } = info
+    const iv = typeof info.iv === 'string' ? decodeArrayBuffer(info.iv) : info.iv
+    const encryptedAESKey =
+        typeof info.encryptedAESKey === 'string' ? decodeArrayBuffer(info.encryptedAESKey) : info.encryptedAESKey
 
-    const aesKeyJWK = JSON.parse(
-        decodeText(
-            await crypto.subtle.decrypt(
-                { name: 'RSA-OAEP' },
-                myRSAKeyPair.privateKey,
-                decodeArrayBuffer(encryptedAESKey),
-            ),
-        ),
+    const decryptedAESKeyJWK = JSON.parse(
+        decodeText(await decryptWithAES({ aesKey: myLocalKey, iv, encrypted: encryptedAESKey })),
     )
-    const aesKey = await crypto.subtle.importKey('jwk', aesKeyJWK, { name: 'AES-CBC', length: 256 }, false, ['decrypt'])
-    return decryptAESEncryptedText({ version: -41, encryptedText, aesKey })
+    const decryptedAESKey = await crypto.subtle.importKey(
+        'jwk',
+        decryptedAESKeyJWK,
+        { name: 'AES-CBC', length: 256 },
+        false,
+        ['decrypt'],
+    )
+    const post = await decryptWithAES({ aesKey: decryptedAESKey, encrypted: encryptedContent, iv })
+    return post
 }
 /**
  * Decrypt the content encrypted by AES
  */
-export async function decryptAESEncryptedText(info: {
-    encryptedText: string
+export async function decryptWithAES(info: {
+    encrypted: string | ArrayBuffer
     aesKey: CryptoKey
-    version: -41
-}): Promise<string> {
-    return decodeText(
-        await crypto.subtle.decrypt({ name: 'AES-CBC' }, info.aesKey, decodeArrayBuffer(info.encryptedText)),
-    )
+    iv: ArrayBuffer | string
+}): Promise<ArrayBuffer> {
+    const { aesKey } = info
+    const iv = typeof info.iv === 'string' ? decodeArrayBuffer(info.iv) : info.iv
+    const encrypted = typeof info.encrypted === 'string' ? decodeArrayBuffer(info.encrypted) : info.encrypted
+    return crypto.subtle.decrypt({ name: 'AES-CBC', iv }, aesKey, encrypted)
+}
+export async function encryptWithAES(info: {
+    content: string | ArrayBuffer
+    aesKey: CryptoKey
+    iv?: ArrayBuffer
+}): Promise<{ content: ArrayBuffer; iv: ArrayBuffer }> {
+    const iv = info.iv ? info.iv : crypto.getRandomValues(new Uint8Array(16))
+    const content = typeof info.content === 'string' ? encodeText(info.content) : info.content
+
+    const encrypted = await crypto.subtle.encrypt({ name: 'AES-CBC', iv }, info.aesKey, content)
+    return { content: encrypted, iv }
 }
 //#endregion
 //#region Sign & verify
-export async function sign(message: string | ArrayBuffer, privateKey: CryptoKey): Promise<string> {
+export async function sign(message: string | ArrayBuffer, privateKey: CryptoKey): Promise<ArrayBuffer> {
     const ecdsakey = privateKey.usages.indexOf('sign') !== -1 ? privateKey : await toECDSA(privateKey)
     if (typeof message === 'string') message = encodeText(message)
-    return encodeArrayBuffer(await crypto.subtle.sign({ name: 'ECDSA', hash: { name: 'SHA-256' } }, ecdsakey, message))
+    return crypto.subtle.sign({ name: 'ECDSA', hash: { name: 'SHA-256' } }, ecdsakey, message)
 }
 export async function verify(
     content: string | ArrayBuffer,

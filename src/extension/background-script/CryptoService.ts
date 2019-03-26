@@ -5,19 +5,20 @@ import { CryptoName } from '../../utils/Names'
 import { addPersonPublicKey } from '../../key-management/people-gun'
 import { timeout } from '../../utils/utils'
 import { Person } from './PeopleService'
-import { getMyRSAKeyPair } from '../../key-management/rsa-db'
+import { getMyLocalKey } from '../../key-management/local-db'
 import { publishPostAESKey, queryPostAESKey } from '../../key-management/posts-gun'
 
 import { debounce } from 'lodash-es'
+import { decodeText, encodeArrayBuffer } from '../../utils/EncodeDecode'
 
 OnlyRunInContext('background', 'EncryptService')
 const publishPostAESKeyDebounce = debounce(publishPostAESKey, 2000, { trailing: true })
 /**
  * ! Remember to call requestRegenerateIV !
  */
-let lastiv = crypto.getRandomValues(new Uint8Array(1024))
+let lastiv = crypto.getRandomValues(new Uint8Array(16))
 async function requestRegenerateIV() {
-    lastiv = crypto.getRandomValues(new Uint8Array(1024))
+    lastiv = crypto.getRandomValues(new Uint8Array(16))
 }
 //#region Encrypt & Decrypt
 /**
@@ -35,12 +36,18 @@ async function encryptTo(content: string, to: Person[]) {
     })
 
     const mine = await getMyPrivateKey()
-    const mineRSA = await getMyRSAKeyPair()
-    const { encryptedText, version, othersAESKeyEncrypted, ownersAESKeyEncrypted, iv } = await Alpha41.encrypt1ToN({
+    const mineRSA = await getMyLocalKey()
+    const {
+        encryptedContent: encryptedText,
+        version,
+        othersAESKeyEncrypted,
+        ownersAESKeyEncrypted,
+        iv,
+    } = await Alpha41.encrypt1ToN({
         version: -41,
         content: content,
         othersPublicKeyECDH: toKey,
-        ownersRSAKeyPair: mineRSA.key,
+        ownersLocalKey: mineRSA.key,
         privateKeyECDH: mine!.key.privateKey,
         iv: lastiv,
     })
@@ -48,11 +55,11 @@ async function encryptTo(content: string, to: Person[]) {
     const signature = Alpha41.sign(str, mine!.key.privateKey)
     {
         // Store AES key to gun
-        const stored: Record<string, any> = {}
+        const stored: Record<string, Alpha41.PublishedAESKey> = {}
         for (const k of othersAESKeyEncrypted) {
             stored[k.name] = k.key
         }
-        publishPostAESKeyDebounce(iv, stored)
+        publishPostAESKeyDebounce(encodeArrayBuffer(iv), stored)
     }
     return `${str}|${signature}`
 }
@@ -82,22 +89,28 @@ async function decryptFrom(
     try {
         const unverified = [version, ownersAESKeyEncrypted, salt, encryptedText].join('|')
         if (by === whoAmI) {
-            const content = await Alpha41.decryptMessage1ToNByMyself({
-                version: -41,
-                encryptedAESKey: ownersAESKeyEncrypted,
-                encryptedText: encryptedText,
-                myRSAKeyPair: (await getMyRSAKeyPair()).key,
-            })
+            const content = decodeText(
+                await Alpha41.decryptMessage1ToNByMyself({
+                    version: -41,
+                    encryptedAESKey: ownersAESKeyEncrypted,
+                    encryptedContent: encryptedText,
+                    myLocalKey: (await getMyLocalKey()).key,
+                    iv: salt,
+                }),
+            )
             const signatureVerifyResult = await Alpha41.verify(unverified, signature, mine.key.publicKey)
             return { signatureVerifyResult, content }
         } else {
-            const content = await Alpha41.decryptMessage1ToNByOther({
-                version: -41,
-                AESKeyEncrypted: await queryPostAESKey(salt, whoAmI),
-                authorsPublickKeyECDH: byKey.key.publicKey,
-                encryptedText: encryptedText,
-                privateKeyECDH: mine.key.privateKey,
-            })
+            const content = decodeText(
+                await Alpha41.decryptMessage1ToNByOther({
+                    version: -41,
+                    AESKeyEncrypted: await queryPostAESKey(salt, whoAmI),
+                    authorsPublicKeyECDH: byKey.key.publicKey,
+                    encryptedContent: encryptedText,
+                    privateKeyECDH: mine.key.privateKey,
+                    iv: salt,
+                }),
+            )
             const signatureVerifyResult = await Alpha41.verify(unverified, signature, byKey.key.publicKey)
             return { signatureVerifyResult, content }
         }
@@ -156,6 +169,6 @@ const Impl = {
     verifyOthersProvePost,
     requestRegenerateIV,
 }
-Object.assign(window, { encryptService: Impl })
+Object.assign(window, { encryptService: Impl, crypto41: Alpha41 })
 export type Encrypt = typeof Impl
 AsyncCall<Encrypt, {}>(CryptoName, Impl, {}, MessageCenter, true)

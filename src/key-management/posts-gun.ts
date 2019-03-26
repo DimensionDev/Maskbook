@@ -1,4 +1,5 @@
 import { gun } from './gun'
+import { PublishedAESKey } from '../crypto/crypto-alpha-41'
 
 export async function queryPostAESKey(postIdentifier: string, myUsername: string) {
     return gun
@@ -11,11 +12,7 @@ export async function queryPostAESKey(postIdentifier: string, myUsername: string
 export async function publishPostAESKey(
     postIdentifier: string,
     receiversKeys: {
-        [username: string]: {
-            version: -41
-            encryptedText: string
-            salt: string
-        }
+        [username: string]: PublishedAESKey
     },
 ) {
     console.log('Save to gun', postIdentifier, receiversKeys)
