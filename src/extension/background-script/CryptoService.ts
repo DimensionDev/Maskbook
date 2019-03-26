@@ -132,7 +132,7 @@ async function getMyProvePost() {
 Install Maskbook as well so that you may read my encrypted posts,
 and may prevent Facebook from intercepting our communication.
 Here is my public key >${btoa(JSON.stringify(pub))}`
-    const signature = await Alpha41.sign(post, myKey.key.privateKey!)
+    const signature = encodeArrayBuffer(await Alpha41.sign(post, myKey.key.privateKey!))
     post = post + '|' + signature
     return post
 }
