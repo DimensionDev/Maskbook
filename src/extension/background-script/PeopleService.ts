@@ -6,6 +6,7 @@ import {
     getMyPrivateKey,
     CryptoKeyRecord,
     toReadCryptoKey,
+    storeKey,
 } from '../../key-management/keystore-db'
 import { queryAvatar, storeAvatar, queryNickname } from '../../key-management/avatar-db'
 import { uploadProvePostUrl } from '../../key-management/people-gun'
@@ -32,9 +33,9 @@ async function getAllPeople(): Promise<Person[]> {
     )
     return p
 }
-async function storeKey(key: CryptoKeyRecord) {
+async function storeKeyService(key: CryptoKeyRecord) {
     const k = await toReadCryptoKey(key)
-    await storeKey(key)
+    await storeKey(k)
     console.log('Keypair restored.', key)
 }
 
@@ -43,7 +44,7 @@ const Impl = {
     uploadProvePostUrl,
     storeAvatar,
     getMyPrivateKey,
-    storeKey,
+    storeKey: storeKeyService,
 }
 Object.assign(window, { friendService: Impl })
 export type PeopleService = typeof Impl
