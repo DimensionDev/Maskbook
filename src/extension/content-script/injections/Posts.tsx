@@ -52,7 +52,7 @@ new MutationObserverWatcher(posts)
         // Save author's avatar
         try {
             const avatar = node.current.previousElementSibling!.querySelector('img')!
-            PeopleService.storeAvatar(postBy, avatar.src)
+            PeopleService.storeAvatar(postBy, avatar.getAttribute('aria-label')!, avatar.src)
         } catch {}
         // Get post id
         let postId = ''

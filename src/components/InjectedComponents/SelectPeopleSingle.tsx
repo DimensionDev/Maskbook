@@ -14,7 +14,7 @@ interface Props {
     onSelect(person: Person): void
 }
 export function PeopleInList(props: { people: Person; onClick(): void; selected?: boolean }) {
-    const name = props.people.username.split(' ')
+    const name = (props.people.nickname || props.people.username).split(' ')
     const avatar = props.people.avatar ? (
         <Avatar src={props.people.avatar} />
     ) : (
@@ -26,7 +26,10 @@ export function PeopleInList(props: { people: Person; onClick(): void; selected?
     return (
         <ListItem selected={props.selected} button onClick={props.onClick}>
             <ListItemAvatar>{avatar}</ListItemAvatar>
-            <ListItemText primary={props.people.username} secondary={(props.people.fingerprint || '?').toLowerCase()} />
+            <ListItemText
+                primary={props.people.nickname || props.people.username}
+                secondary={(props.people.fingerprint || '?').toLowerCase()}
+            />
         </ListItem>
     )
 }

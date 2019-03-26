@@ -1,36 +1,85 @@
-import { encryptText, decryptText, verify, sign } from '../../crypto/crypto'
-import { queryPersonCryptoKey, getMyPrivateKey, storeKey, generateNewKey } from '../../key-management/db'
+import { queryPersonCryptoKey, getMyPrivateKey, storeKey, generateNewKey } from '../../key-management/keystore-db'
+import * as Alpha41 from '../../crypto/crypto-alpha-41'
 import { AsyncCall, MessageCenter, OnlyRunInContext } from '@holoflows/kit/es'
 import { CryptoName } from '../../utils/Names'
-import { encodeArrayBuffer } from '../../utils/EncodeDecode'
-import { addPersonPublicKey } from '../../key-management'
+import { addPersonPublicKey } from '../../key-management/people-gun'
 import { timeout } from '../../utils/utils'
+import { Person } from './PeopleService'
+import { getMyLocalKey } from '../../key-management/local-db'
+import { publishPostAESKey, queryPostAESKey } from '../../key-management/posts-gun'
+
+import { debounce } from 'lodash-es'
+import { decodeText, encodeArrayBuffer } from '../../utils/EncodeDecode'
 
 OnlyRunInContext('background', 'EncryptService')
+const publishPostAESKeyDebounce = debounce(publishPostAESKey, 2000, { trailing: true })
+/**
+ * ! Remember to call requestRegenerateIV !
+ */
+let lastiv = crypto.getRandomValues(new Uint8Array(16))
+async function requestRegenerateIV() {
+    lastiv = crypto.getRandomValues(new Uint8Array(16))
+}
 //#region Encrypt & Decrypt
 /**
  * Encrypt to a user
  * @param content Original text
  * @param to Encrypt target
  */
-async function encryptTo(content: string, to: string) {
-    const toKey = await queryPersonCryptoKey(to)
-    if (!toKey) throw new Error(`${to}'s public key not found.`)
+async function encryptTo(content: string, to: Person[]) {
+    if (to.length === 0) return ''
+    const toKey = (await Promise.all(
+        to.map(async person => ({ name: person.username, key: await queryPersonCryptoKey(person.username) })),
+    )).map(person => ({ name: person.name, key: (person.key === null ? null : person.key.key.publicKey)! }))
+    toKey.forEach(x => {
+        if (x.key === null) throw new Error(`${x.name}'s public key not found!`)
+    })
 
     const mine = await getMyPrivateKey()
-    return encryptText(content, mine!.key.privateKey, toKey.key.publicKey)
+    const mineLocal = await getMyLocalKey()
+    const {
+        encryptedContent: encryptedText,
+        version,
+        othersAESKeyEncrypted,
+        ownersAESKeyEncrypted,
+        iv,
+    } = await Alpha41.encrypt1ToN({
+        version: -41,
+        content: content,
+        othersPublicKeyECDH: toKey,
+        ownersLocalKey: mineLocal.key,
+        privateKeyECDH: mine!.key.privateKey,
+        iv: lastiv,
+    })
+    const str = `${version}|${encodeArrayBuffer(ownersAESKeyEncrypted)}|${encodeArrayBuffer(iv)}|${encodeArrayBuffer(
+        encryptedText,
+    )}`
+    const signature = encodeArrayBuffer(await Alpha41.sign(str, mine!.key.privateKey))
+    {
+        // Store AES key to gun
+        const stored: Record<string, Alpha41.PublishedAESKey> = {}
+        for (const k of othersAESKeyEncrypted) {
+            stored[k.name] = k.key
+        }
+        publishPostAESKeyDebounce(encodeArrayBuffer(iv), stored)
+    }
+    return `${str}|${signature}`
 }
 
 /**
  * Decrypt message from a user
- * @param encrypted Encrypted text
- * @param sig Signature
- * @param salt Salt
+ * @param encrypted post
  * @param by Post by
- * @param to Post to
  * @param whoAmI My username
  */
-async function decryptFrom(encrypted: string, sig: string, salt: string, by: string, to: string, whoAmI: string) {
+async function decryptFrom(
+    encrypted: string,
+    by: string,
+    whoAmI: string,
+): Promise<{ signatureVerifyResult: boolean; content: string }> {
+    const [version, ownersAESKeyEncrypted, salt, encryptedText, signature] = encrypted.split('|')
+    if (version !== '-41') throw new TypeError('Unknown post type')
+    if (!ownersAESKeyEncrypted || !salt || !encryptedText || !signature) throw new TypeError('Invalid post')
     async function getKey(name: string) {
         let key = await queryPersonCryptoKey(by)
         if (!key) key = await timeout(addPersonPublicKey(name), 5000)
@@ -38,14 +87,35 @@ async function decryptFrom(encrypted: string, sig: string, salt: string, by: str
         return key
     }
     const byKey = await getKey(by)
-    const toKey = await getKey(to)
-
     const mine = (await getMyPrivateKey())!
     try {
-        const result = await decryptText(encrypted, salt, mine.key.privateKey, byKey.key.publicKey)
-        const signedBy = by === whoAmI ? mine.key.publicKey : toKey.key.publicKey
-        const signature = await verify(result, sig, signedBy)
-        return { signatureVerifyResult: signature, content: result }
+        const unverified = [version, ownersAESKeyEncrypted, salt, encryptedText].join('|')
+        if (by === whoAmI) {
+            const content = decodeText(
+                await Alpha41.decryptMessage1ToNByMyself({
+                    version: -41,
+                    encryptedAESKey: ownersAESKeyEncrypted,
+                    encryptedContent: encryptedText,
+                    myLocalKey: (await getMyLocalKey()).key,
+                    iv: salt,
+                }),
+            )
+            const signatureVerifyResult = await Alpha41.verify(unverified, signature, mine.key.publicKey)
+            return { signatureVerifyResult, content }
+        } else {
+            const content = decodeText(
+                await Alpha41.decryptMessage1ToNByOther({
+                    version: -41,
+                    AESKeyEncrypted: await queryPostAESKey(salt, whoAmI),
+                    authorsPublicKeyECDH: byKey.key.publicKey,
+                    encryptedContent: encryptedText,
+                    privateKeyECDH: mine.key.privateKey,
+                    iv: salt,
+                }),
+            )
+            const signatureVerifyResult = await Alpha41.verify(unverified, signature, byKey.key.publicKey)
+            return { signatureVerifyResult, content }
+        }
     } catch (e) {
         if (e instanceof DOMException) throw new Error('DOMException')
         else throw e
@@ -62,8 +132,8 @@ async function getMyProvePost() {
 Install Maskbook as well so that you may read my encrypted posts,
 and may prevent Facebook from intercepting our communication.
 Here is my public key >${btoa(JSON.stringify(pub))}`
-    const signature = await sign(post, myKey.key.privateKey!)
-    post = post + '|' + encodeArrayBuffer(signature)
+    const signature = encodeArrayBuffer(await Alpha41.sign(post, myKey.key.privateKey!))
+    post = post + '|' + signature
     return post
 }
 async function verifyOthersProvePost(post: string, othersName: string) {
@@ -85,7 +155,7 @@ async function verifyOthersProvePost(post: string, othersName: string) {
     } catch {
         throw new Error('Key parse failed')
     }
-    const verifyResult = await verify(post.split('|')[0], signature, publicKey)
+    const verifyResult = await Alpha41.verify(post.split('|')[0], signature, publicKey)
     if (!verifyResult) throw new Error('Verify Failed!')
     else {
         storeKey({ username: othersName, key: { publicKey: publicKey } })
@@ -99,7 +169,8 @@ const Impl = {
     decryptFrom,
     getMyProvePost,
     verifyOthersProvePost,
+    requestRegenerateIV,
 }
-Object.assign(window, { encryptService: Impl })
+Object.assign(window, { encryptService: Impl, crypto41: Alpha41 })
 export type Encrypt = typeof Impl
 AsyncCall<Encrypt, {}>(CryptoName, Impl, {}, MessageCenter, true)

@@ -9,7 +9,6 @@ import { Person } from '../../extension/background-script/PeopleService'
 import { PeopleInList } from './SelectPeopleSingle'
 import ListItem from '@material-ui/core/ListItem/ListItem'
 import ListItemText from '@material-ui/core/ListItemText/ListItemText'
-import { usePeople } from '../DataSource/PeopleRef'
 import Button from '@material-ui/core/Button/Button'
 import { withStylesTyped } from '../../utils/theme'
 
@@ -25,7 +24,7 @@ function PeopleChip(props: { onDelete(): void; people: Person }) {
             style={{ marginRight: 6, marginBottom: 6 }}
             color="primary"
             onDelete={props.onDelete}
-            label={props.people.username}
+            label={props.people.nickname || props.people.username}
             avatar={avatar}
         />
     )
@@ -111,8 +110,3 @@ export const SelectPeopleUI = withStylesTyped({
         </Paper>
     )
 })
-export function SelectPeople() {
-    const [selected, select] = React.useState<Person[]>([])
-    const people = usePeople()
-    return <SelectPeopleUI all={people} selected={selected} onSetSelected={select} />
-}

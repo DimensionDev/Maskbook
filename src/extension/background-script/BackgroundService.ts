@@ -1,5 +1,5 @@
 import { AsyncCall, MessageCenter, OnlyRunInContext } from '@holoflows/kit'
-import { CryptoKeyRecord, getMyPrivateKey, toStoreCryptoKey } from '../../key-management/db'
+import { CryptoKeyRecord, getMyPrivateKey, toStoreCryptoKey } from '../../key-management/keystore-db'
 import { encodeText } from '../../utils/EncodeDecode'
 import { BackgroundName } from '../../utils/Names'
 

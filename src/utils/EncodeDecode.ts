@@ -15,3 +15,4 @@ export function encodeArrayBuffer(buffer: ArrayBuffer) {
     const encodedString = String.fromCharCode.apply(null, x)
     return btoa(encodedString)
 }
+Object.assign(window, { encodeText, decodeText, decodeArrayBuffer, encodeArrayBuffer })
