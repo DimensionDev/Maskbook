@@ -36,7 +36,7 @@ async function encryptTo(content: string, to: Person[]) {
     })
 
     const mine = await getMyPrivateKey()
-    const mineRSA = await getMyLocalKey()
+    const mineLocal = await getMyLocalKey()
     const {
         encryptedContent: encryptedText,
         version,
@@ -47,12 +47,14 @@ async function encryptTo(content: string, to: Person[]) {
         version: -41,
         content: content,
         othersPublicKeyECDH: toKey,
-        ownersLocalKey: mineRSA.key,
+        ownersLocalKey: mineLocal.key,
         privateKeyECDH: mine!.key.privateKey,
         iv: lastiv,
     })
-    const str = `${version}|${ownersAESKeyEncrypted}|${iv}|${encryptedText}`
-    const signature = Alpha41.sign(str, mine!.key.privateKey)
+    const str = `${version}|${encodeArrayBuffer(ownersAESKeyEncrypted)}|${encodeArrayBuffer(iv)}|${encodeArrayBuffer(
+        encryptedText,
+    )}`
+    const signature = encodeArrayBuffer(await Alpha41.sign(str, mine!.key.privateKey))
     {
         // Store AES key to gun
         const stored: Record<string, Alpha41.PublishedAESKey> = {}

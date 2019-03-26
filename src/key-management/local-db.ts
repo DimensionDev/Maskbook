@@ -24,10 +24,10 @@ export async function getMyLocalKey(): Promise<LocalCryptoKeyRecord> {
     return record
 }
 async function generateAESKey() {
-    return crypto.subtle.generateKey({ name: 'AES-CBC', length: 512 }, true, ['encrypt', 'decrypt'])
+    return crypto.subtle.generateKey({ name: 'AES-CBC', length: 256 }, true, ['encrypt', 'decrypt'])
 }
 export async function storeLocalKey(username: string, key: CryptoKey) {
-    return query(t => t.put({ username: '$self', key }))
+    return query(t => t.put({ username: '$self', key }), 'readwrite')
 }
 //#endregion
 Object.assign(window, {})

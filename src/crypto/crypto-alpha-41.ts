@@ -46,7 +46,7 @@ async function deriveAESKey(
         // tslint:disable-next-line: no-bitwise
         iv[i] = iv_pre[i] ^ iv_pre[16 + i]
     }
-    const key = await crypto.subtle.importKey('raw', password, { name: 'AES-CBC', length: 32 }, true, [
+    const key = await crypto.subtle.importKey('raw', password, { name: 'AES-CBC', length: 256 }, true, [
         'encrypt',
         'decrypt',
     ])
