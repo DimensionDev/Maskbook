@@ -27,9 +27,15 @@ export default withStylesTyped((theme: Theme) =>
 )<Props>(function Welcome({ classes, next }) {
     return (
         <Paper className={classes.paper}>
-            <Typography variant="h5">Check this box when you post</Typography>
-            <img src={fileReference(require('./1a2.jpg'))} width="100%" />
-            <Typography variant="subtitle1">Then only your friends with Maskbook can see the post content</Typography>
+            <Typography variant="h5">Encrypt message use this postbox</Typography>
+            <img
+                src={fileReference(require('./1a2.jpg'))}
+                width="75%"
+                style={{ border: '1px solid #ddd', borderRadius: 5 }}
+            />
+            <Typography variant="subtitle1">
+                Then only people you selected with Maskbook can see the post content
+            </Typography>
             <Button onClick={next} variant="contained" color="primary" className={classes.button}>
                 Nice!
             </Button>
