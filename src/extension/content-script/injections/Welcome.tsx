@@ -1,6 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { DomProxy } from '@holoflows/kit'
+import { DomProxy, LiveSelector, IntervalWatcher, ValueRef } from '@holoflows/kit'
+//#region Welcome
 enum WelcomeState {
     // Step 0
     Start,
@@ -12,6 +13,7 @@ enum WelcomeState {
     Restore1,
     // End
 }
+let setOpenRef: any = () => {}
 const body = DomProxy()
 body.realCurrent = document.body
 ReactDOM.render(<WelcomePortal />, body.after)
@@ -101,6 +103,10 @@ function getStorage() {
 }
 function WelcomePortal() {
     const [open, setOpen] = React.useState(true)
+    setOpenRef = (val: boolean) => {
+        setCurrent(WelcomeState.Start)
+        setOpen(true)
+    }
     const [current, setCurrent] = React.useState(WelcomeState.Start)
     const [init, setInit] = React.useState(true)
 
@@ -116,7 +122,7 @@ function WelcomePortal() {
     useEsc(onFinish)
     // Only render in main page
     if (location.pathname !== '/') return null
-    if (init && !chrome.extension.inIncognitoContext) return null
+    if (init) return null
     return (
         <MuiThemeProvider theme={MaskbookLightTheme}>
             <Dialog open={open}>
@@ -125,3 +131,28 @@ function WelcomePortal() {
         </MuiThemeProvider>
     )
 }
+//#endregion
+//#region Welcome invoke manually
+{
+    const to = new IntervalWatcher(
+        new LiveSelector().querySelector<HTMLAnchorElement>('#createNav a').map(x => {
+            if (x.innerText === 'Maskbook Setup') return x.nextElementSibling
+            return x
+        }),
+    ).startWatch(3000)
+    ReactDOM.render(
+        <>
+            <a
+                href="#"
+                onClick={() => {
+                    chrome.storage.local.clear()
+                    setOpenRef(true)
+                }}>
+                Maskbook Setup
+            </a>
+            {' · '}
+        </>,
+        to.firstVirtualNode.before,
+    )
+}
+//#endregion
