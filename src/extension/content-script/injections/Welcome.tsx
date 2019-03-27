@@ -28,6 +28,7 @@ import { MaskbookLightTheme } from '../../../utils/theme'
 import { sleep } from '../../../utils/utils'
 import { useAsync } from '../../../utils/AsyncComponent'
 import { BackgroundService, CryptoService, PeopleService } from '../rpc'
+import { useEsc } from '../../../components/Welcomes/useEsc'
 const isLogined = () => !document.querySelector('.login_form_label_field')
 const loginWatcher = async () => {
     while (!isLogined()) await sleep(500)
@@ -55,6 +56,7 @@ function Welcome(props: {
                 <Welcome0
                     create={() => setCurrent(isLogined() ? WelcomeState.Intro : WelcomeState.WaitLogin)}
                     restore={() => setCurrent(WelcomeState.Restore1)}
+                    close={() => props.finish()}
                 />
             )
         case WelcomeState.WaitLogin:
@@ -101,26 +103,24 @@ function WelcomePortal() {
     const [open, setOpen] = React.useState(true)
     const [current, setCurrent] = React.useState(WelcomeState.Start)
     const [init, setInit] = React.useState(true)
+
+    function onFinish() {
+        setOpen(false)
+        chrome.storage.local.set({ init: true })
+    }
     function waitLogin() {
         setOpen(false)
         loginWatcher().then(() => setOpen(true))
     }
     useAsync(() => getStorage(), [0]).then(data => setInit(data.init))
+    useEsc(onFinish)
     // Only render in main page
     if (location.pathname !== '/') return null
     if (init && !chrome.extension.inIncognitoContext) return null
     return (
         <MuiThemeProvider theme={MaskbookLightTheme}>
             <Dialog open={open}>
-                <Welcome
-                    current={current}
-                    setCurrent={setCurrent}
-                    waitLogin={waitLogin}
-                    finish={() => {
-                        setOpen(false)
-                        chrome.storage.local.set({ init: true })
-                    }}
-                />
+                <Welcome current={current} setCurrent={setCurrent} waitLogin={waitLogin} finish={onFinish} />
             </Dialog>
         </MuiThemeProvider>
     )

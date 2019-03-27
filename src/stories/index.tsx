@@ -23,7 +23,9 @@ import { AddToKeyStoreUI } from '../components/InjectedComponents/AddToKeyStore'
 import { Person } from '../extension/background-script/PeopleService'
 
 storiesOf('Welcome', module)
-    .add('Step 0', () => <Welcome0 create={to('Welcome', 'Step 1a-1')} restore={to('Welcome', 'Step 1b-1')} />)
+    .add('Step 0', () => (
+        <Welcome0 close={action('Close')} create={to('Welcome', 'Step 1a-1')} restore={to('Welcome', 'Step 1b-1')} />
+    ))
     .add('Step 1a-1', () => <Welcome1a1 next={to('Welcome', 'Step 1a-2')} />)
     .add('Step 1a-2', () => <Welcome1a2 next={to('Welcome', 'Step 1a-3')} />)
     .add('Step 1a-3', () => <Welcome1a3 next={to('Welcome', 'Step 1a-4')} />)

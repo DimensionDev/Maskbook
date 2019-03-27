@@ -4,5 +4,5 @@ if (
     (location.protocol === 'chrome-extension:' && location.pathname === '/index.html')
 ) {
 } else {
-    import('./extension/background-script')
+    require('./extension/background-script')
 }
