@@ -9,7 +9,7 @@ import { getMyLocalKey } from '../../key-management/local-db'
 import { publishPostAESKey, queryPostAESKey } from '../../key-management/posts-gun'
 
 import { debounce } from 'lodash-es'
-import { decodeText, encodeArrayBuffer } from '../../utils/EncodeDecode'
+import { decodeText, encodeArrayBuffer, encodeTextOrange, decodeTextOrange } from '../../utils/EncodeDecode'
 
 OnlyRunInContext('background', 'EncryptService')
 const publishPostAESKeyDebounce = debounce(publishPostAESKey, 2000, { trailing: true })
@@ -135,6 +135,42 @@ Here is my public key >${btoa(JSON.stringify(pub))}`
     const signature = encodeArrayBuffer(await Alpha41.sign(post, myKey.key.privateKey!))
     post = post + '|' + signature
     return post
+}
+async function getMyProveBio() {
+    let myKey = await getMyPrivateKey()
+    if (!myKey) myKey = await generateNewKey()
+    const pub = await crypto.subtle.exportKey('jwk', myKey.key.publicKey!)
+    let post = `🔒${encodeTextOrange(pub.x!)}🔒${encodeTextOrange(pub.y!)}`
+    const signature = encodeArrayBuffer(await Alpha41.sign(post, myKey.key.privateKey))
+    post = post + '🔒' + encodeTextOrange(signature) + '🔒'
+    return post
+}
+getMyProveBio().then(console.log)
+async function verifyOthersProveBio(bio: string, othersName: string) {
+    const [_, x, y, sig, _2] = bio.split('🔒')
+    if (!x || !y || !sig) return null
+    const key: JsonWebKey = {
+        crv: 'K-256',
+        ext: true,
+        x: decodeTextOrange(x),
+        y: decodeTextOrange(y),
+        key_ops: ['deriveKey'],
+        kty: 'EC',
+    }
+    let publicKey: CryptoKey
+    try {
+        publicKey = await crypto.subtle.importKey('jwk', key, { name: 'ECDH', namedCurve: 'K-256' }, true, [
+            'deriveKey',
+        ])
+    } catch {
+        throw new Error('Key parse failed')
+    }
+    const verifyResult = await Alpha41.verify(`🔒${x}🔒${y}`, decodeTextOrange(sig), publicKey)
+    if (!verifyResult) throw new Error('Verify Failed!')
+    else {
+        storeKey({ username: othersName, key: { publicKey: publicKey } })
+    }
+    return { publicKey, verify: verifyResult }
 }
 async function verifyOthersProvePost(post: string, othersName: string) {
     // tslint:disable-next-line: no-parameter-reassignment
