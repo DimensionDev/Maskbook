@@ -6,7 +6,7 @@ import { CryptoService } from '../rpc'
 
 const box = new MutationObserverWatcher(
     new LiveSelector()
-        .querySelector('[role="dialog"][aria-label="Create a post"]')
+        .querySelector('[role="main"] [role="dialog"][aria-label]')
         .map(x => x.lastElementChild)
         .map(x => x.lastElementChild),
 )
