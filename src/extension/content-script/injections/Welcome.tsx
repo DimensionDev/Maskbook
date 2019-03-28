@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { DomProxy, LiveSelector, IntervalWatcher, ValueRef } from '@holoflows/kit'
+import { DomProxy, LiveSelector, MutationObserverWatcher } from '@holoflows/kit'
 //#region Welcome
 enum WelcomeState {
     // Step 0
@@ -13,7 +13,6 @@ enum WelcomeState {
     Restore1,
     // End
 }
-let setOpenRef: any = () => {}
 const body = DomProxy()
 body.realCurrent = document.body
 ReactDOM.render(<WelcomePortal />, body.after)
@@ -103,10 +102,6 @@ function getStorage() {
 }
 function WelcomePortal() {
     const [open, setOpen] = React.useState(true)
-    setOpenRef = (val: boolean) => {
-        setCurrent(WelcomeState.Start)
-        setOpen(true)
-    }
     const [current, setCurrent] = React.useState(WelcomeState.Start)
     const [init, setInit] = React.useState(true)
 
@@ -134,25 +129,22 @@ function WelcomePortal() {
 //#endregion
 //#region Welcome invoke manually
 {
-    const to = new IntervalWatcher(
-        new LiveSelector().querySelector<HTMLAnchorElement>('#createNav a').map(x => {
-            if (x.innerText === 'Maskbook Setup') return x.nextElementSibling
-            return x
-        }),
-    ).startWatch(3000)
+    const to = new MutationObserverWatcher(
+        new LiveSelector().querySelectorAll<HTMLAnchorElement>('#createNav a').nth(3),
+    ).startWatch()
     ReactDOM.render(
         <>
+            {' · '}
             <a
                 href="#"
                 onClick={() => {
                     chrome.storage.local.clear()
-                    setOpenRef(true)
+                    location.reload()
                 }}>
                 Maskbook Setup
             </a>
-            {' · '}
         </>,
-        to.firstVirtualNode.before,
+        to.firstVirtualNode.after,
     )
 }
 //#endregion

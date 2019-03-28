@@ -10,6 +10,7 @@ import {
 } from '../../key-management/keystore-db'
 import { queryAvatar, storeAvatar, queryNickname } from '../../key-management/avatar-db'
 import { uploadProvePostUrl } from '../../key-management/people-gun'
+import { storeLocalKey } from '../../key-management/local-db'
 
 OnlyRunInContext('background', 'FriendService')
 export interface Person {
@@ -33,9 +34,14 @@ async function getAllPeople(): Promise<Person[]> {
     )
     return p
 }
-async function storeKeyService(key: CryptoKeyRecord) {
-    const k = await toReadCryptoKey(key)
-    await storeKey(k)
+async function storeKeyService(key: { key: CryptoKeyRecord; local: JsonWebKey }) {
+    const k = await toReadCryptoKey(key.key)
+    const a = storeKey(k)
+    const b = storeLocalKey(
+        await crypto.subtle.importKey('jwk', key.local, { name: 'AES-CBC', length: 256 }, true, ['encrypt', 'decrypt']),
+    )
+    await a
+    await b
     console.log('Keypair restored.', key)
 }
 
