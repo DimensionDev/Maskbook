@@ -9,7 +9,15 @@ import { getMyLocalKey } from '../../key-management/local-db'
 import { publishPostAESKey, queryPostAESKey } from '../../key-management/posts-gun'
 
 import { debounce } from 'lodash-es'
-import { decodeText, encodeArrayBuffer, encodeTextOrange, decodeTextOrange } from '../../utils/EncodeDecode'
+import {
+    decodeText,
+    encodeArrayBuffer,
+    toCompressSecp256k1Point,
+    unCompressSecp256k1Point,
+    encodeTextOrange,
+    decodeTextOrange,
+    decodeArrayBuffer,
+} from '../../utils/EncodeDecode'
 
 OnlyRunInContext('background', 'EncryptService')
 const publishPostAESKeyDebounce = debounce(publishPostAESKey, 2000, { trailing: true })
@@ -140,20 +148,18 @@ async function getMyProveBio() {
     let myKey = await getMyPrivateKey()
     if (!myKey) myKey = await generateNewKey()
     const pub = await crypto.subtle.exportKey('jwk', myKey.key.publicKey!)
-    let post = `🔒${encodeTextOrange(pub.x!)}🔒${encodeTextOrange(pub.y!)}`
-    const signature = encodeArrayBuffer(await Alpha41.sign(post, myKey.key.privateKey))
-    post = post + '🔒' + encodeTextOrange(signature) + '🔒'
-    return post
+    const compressed = toCompressSecp256k1Point(pub.x!, pub.y!)
+    return `🔒${encodeTextOrange(encodeArrayBuffer(compressed))}🔒`
 }
-getMyProveBio().then(console.log)
 async function verifyOthersProveBio(bio: string, othersName: string) {
-    const [_, x, y, sig, _2] = bio.split('🔒')
-    if (!x || !y || !sig) return null
+    const [_, compressedX, _2] = bio.split('🔒')
+    if (!compressedX) return null
+    const { x, y } = unCompressSecp256k1Point(decodeArrayBuffer(decodeTextOrange(compressedX)))
     const key: JsonWebKey = {
         crv: 'K-256',
         ext: true,
-        x: decodeTextOrange(x),
-        y: decodeTextOrange(y),
+        x: x,
+        y: y,
         key_ops: ['deriveKey'],
         kty: 'EC',
     }
@@ -165,12 +171,8 @@ async function verifyOthersProveBio(bio: string, othersName: string) {
     } catch {
         throw new Error('Key parse failed')
     }
-    const verifyResult = await Alpha41.verify(`🔒${x}🔒${y}`, decodeTextOrange(sig), publicKey)
-    if (!verifyResult) throw new Error('Verify Failed!')
-    else {
-        storeKey({ username: othersName, key: { publicKey: publicKey } })
-    }
-    return { publicKey, verify: verifyResult }
+    storeKey({ username: othersName, key: { publicKey: publicKey } })
+    return publicKey
 }
 async function verifyOthersProvePost(post: string, othersName: string) {
     // tslint:disable-next-line: no-parameter-reassignment
