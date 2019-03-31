@@ -13,8 +13,6 @@ import {
     encodeArrayBuffer,
     toCompressSecp256k1Point,
     unCompressSecp256k1Point,
-    encodeTextOrange,
-    decodeTextOrange,
     decodeArrayBuffer,
 } from '../../utils/EncodeDecode'
 
@@ -27,6 +25,7 @@ let lastiv = crypto.getRandomValues(new Uint8Array(16))
 async function requestRegenerateIV() {
     lastiv = crypto.getRandomValues(new Uint8Array(16))
 }
+// v41: 🎼1/4|ownersAESKeyEncrypted|iv|encryptedText|signature:||
 //#region Encrypt & Decrypt
 /**
  * Encrypt to a user
@@ -58,7 +57,7 @@ async function encryptTo(content: string, to: Person[]) {
         privateKeyECDH: mine!.key.privateKey,
         iv: lastiv,
     })
-    const str = `${version}|${encodeArrayBuffer(ownersAESKeyEncrypted)}|${encodeArrayBuffer(iv)}|${encodeArrayBuffer(
+    const str = `1/4|${encodeArrayBuffer(ownersAESKeyEncrypted)}|${encodeArrayBuffer(iv)}|${encodeArrayBuffer(
         encryptedText,
     )}`
     const signature = encodeArrayBuffer(await Alpha41.sign(str, mine!.key.privateKey))
@@ -70,7 +69,7 @@ async function encryptTo(content: string, to: Person[]) {
         }
         publishPostAESKeyDebounce(encodeArrayBuffer(iv), stored)
     }
-    return `${str}|${signature}`
+    return `Maskbook.io:🎼${str}|${signature}:||`
 }
 
 /**
@@ -84,8 +83,10 @@ async function decryptFrom(
     by: string,
     whoAmI: string,
 ): Promise<{ signatureVerifyResult: boolean; content: string }> {
-    const [version, ownersAESKeyEncrypted, salt, encryptedText, signature] = encrypted.split('|')
-    if (version !== '-41') throw new TypeError('Unknown post type')
+    const [version, ownersAESKeyEncrypted, salt, encryptedText, _signature] = encrypted.split('|')
+    const signature = _signature.replace(/:$/, '')
+    // 1/4 === version 41
+    if (version !== '1/4') throw new TypeError('Unknown post type')
     if (!ownersAESKeyEncrypted || !salt || !encryptedText || !signature) throw new TypeError('Invalid post')
     async function getKey(name: string) {
         let key = await queryPersonCryptoKey(by)
@@ -107,8 +108,12 @@ async function decryptFrom(
                     iv: salt,
                 }),
             )
-            const signatureVerifyResult = await Alpha41.verify(unverified, signature, mine.key.publicKey)
-            return { signatureVerifyResult, content }
+            try {
+                const signatureVerifyResult = await Alpha41.verify(unverified, signature, mine.key.publicKey)
+                return { signatureVerifyResult, content }
+            } catch {
+                return { signatureVerifyResult: false, content }
+            }
         } else {
             const content = decodeText(
                 await Alpha41.decryptMessage1ToNByOther({
@@ -120,8 +125,12 @@ async function decryptFrom(
                     iv: salt,
                 }),
             )
-            const signatureVerifyResult = await Alpha41.verify(unverified, signature, byKey.key.publicKey)
-            return { signatureVerifyResult, content }
+            try {
+                const signatureVerifyResult = await Alpha41.verify(unverified, signature, byKey.key.publicKey)
+                return { signatureVerifyResult, content }
+            } catch {
+                return { signatureVerifyResult: false, content }
+            }
         }
     } catch (e) {
         if (e instanceof DOMException) throw new Error('DOMException')

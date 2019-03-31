@@ -39,7 +39,7 @@ const _AdditionalPostBox = withStylesTyped({
     const { classes } = props
     const [text, setText] = React.useState('')
     const [selectedPeople, selectPeople] = React.useState<Person[]>([])
-    const encrypted = `Decrypt this post with maskbook://${props.encrypted}`
+    const encrypted = `Decrypt this post with ${props.encrypted}`
 
     const people = usePeople()
     return (
