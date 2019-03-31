@@ -1,8 +1,7 @@
-import { sleep } from '../utils/utils'
 import { queryPersonCryptoKey, PersonCryptoKey } from './keystore-db'
 import { gun } from './gun'
 import tasks from '../extension/content-script/tasks'
-import { verifyOthersProveBio, verifyOthersProvePost } from '../extension/background-script/CryptoService'
+import { verifyOthersProve } from '../extension/background-script/CryptoService'
 
 export async function queryPerson(username: string) {
     return gun
@@ -23,13 +22,13 @@ export async function addPersonPublicKey(username: string): Promise<PersonCrypto
 
     const fromBio = async () => {
         const bio = await tasks(bioUrl, Infinity).getBioContent()
-        if ((await verifyOthersProveBio(bio, username)) === null) throw new Error('Not in bio!')
+        if ((await verifyOthersProve(bio, username)) === null) throw new Error('Not in bio!')
     }
     const fromPost = async () => {
         const person = await queryPerson(username)
         if (!person) throw new Error('Not in gun!')
         const post = await tasks(postUrl(person.provePostId), Infinity).getPostContent()
-        if ((await verifyOthersProvePost(post, username)) === null) throw new Error('Not in prove post!')
+        if ((await verifyOthersProve(post, username)) === null) throw new Error('Not in prove post!')
     }
     let bioRejected = false
     let proveRejected = false

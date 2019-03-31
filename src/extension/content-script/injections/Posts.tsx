@@ -28,7 +28,7 @@ const PostInspector = (props: { post: string; postBy: string; postId: string }) 
     const { post, postBy, postId } = props
     const type = {
         encryptedPost: post.match(/maskbook\:\/\/?(?<text>.+)(?<!See More)( .+)?$/)!,
-        provePost: post.match('Here is my public key')!,
+        provePost: post.match(/🔒(.+)🔒/)!,
     }
 
     if (type.encryptedPost) {

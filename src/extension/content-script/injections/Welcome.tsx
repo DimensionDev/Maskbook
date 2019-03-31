@@ -50,7 +50,7 @@ function Welcome(props: {
 }) {
     const { current, setCurrent, waitLogin } = props
     const [provePost, setProvePost] = React.useState('')
-    useAsync(() => CryptoService.getMyProvePost(), [provePost.length !== 0]).then(setProvePost)
+    useAsync(() => CryptoService.getMyProveBio(), [provePost.length !== 0]).then(setProvePost)
     switch (current) {
         case WelcomeState.Start:
             return (
@@ -77,8 +77,8 @@ function Welcome(props: {
             return (
                 <Welcome1a4
                     provePost={provePost}
-                    copyToClipboard={() => {
-                        ;(navigator as any).clipboard.writeText(provePost)
+                    copyToClipboard={(text) => {
+                        ;(navigator as any).clipboard.writeText(text)
                         props.finish()
                     }}
                 />

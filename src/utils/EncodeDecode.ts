@@ -21,6 +21,7 @@ import { Convert, combine } from 'pvtsutils'
  * Be careful when using it.
  */
 export function encodeTextOrange(str: string) {
+    throw new Error('Dont use it. We will encode to emoji later')
     const pre = [...str].map(x => x.codePointAt(0)!)
     while (pre.length % 4 !== 0) pre.push(0)
     const code8 = new Uint8Array(pre)
@@ -29,6 +30,7 @@ export function encodeTextOrange(str: string) {
     return post.map(x => String.fromCodePoint(x)).join('')
 }
 export function decodeTextOrange(str: string) {
+    throw new Error('Dont use it. We will encode to emoji later')
     const post = [...str].map(x => x.codePointAt(0)!)
     const code16 = new Uint16Array(post)
     const code8 = new Uint8Array(code16.buffer)

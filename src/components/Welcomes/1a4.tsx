@@ -6,6 +6,8 @@ import { Theme } from '@material-ui/core/styles/createMuiTheme'
 import createStyles from '@material-ui/core/styles/createStyles'
 import Button from '@material-ui/core/Button/Button'
 import { createBox } from '../../utils/Flex'
+import Checkbox from '@material-ui/core/Checkbox'
+import FormControlLabel from '@material-ui/core/FormControlLabel/FormControlLabel'
 
 const TextField = createBox(theme => ({
     background: theme.palette.background.default,
@@ -20,7 +22,7 @@ const TextField = createBox(theme => ({
     wordBreak: 'break-all',
 }))
 interface Props {
-    copyToClipboard(): void
+    copyToClipboard(text: string): void
     provePost: string
 }
 export default withStylesTyped((theme: Theme) =>
@@ -38,15 +40,29 @@ export default withStylesTyped((theme: Theme) =>
         },
     }),
 )<Props>(function Welcome({ classes, copyToClipboard, provePost }) {
+    const full = `I'm using Maskbook to encrypt my posts to prevent Facebook from peeping into them.
+Install Maskbook as well so that you may read my encrypted posts,
+and may prevent Facebook from intercepting our communication.
+Here is my public key ${provePost}`
+    const [showShort, setShort] = React.useState(false)
     return (
         <Paper className={classes.paper}>
             <Typography variant="h5">Let your friends join Maskbook</Typography>
-            <TextField>{provePost}</TextField>
+            <TextField>{showShort ? provePost : full}</TextField>
             <Typography variant="subtitle1">
-                Mathematically, you have to post this. Or your friends cannot verify the connection between your keypair
-                and your account.
+                Mathematically, you have to {!showShort ? 'post this' : 'add it to your bio'}. Or your friends cannot
+                verify the connection between your keypair and your account.
             </Typography>
-            <Button onClick={copyToClipboard} variant="contained" color="primary" className={classes.button}>
+            <FormControlLabel
+                control={<Checkbox onChange={e => setShort(e.currentTarget.checked)} checked={showShort} />}
+                label="No, I don't want to create a post."
+            />
+            <br />
+            <Button
+                onClick={() => copyToClipboard(showShort ? provePost : full)}
+                variant="contained"
+                color="primary"
+                className={classes.button}>
                 Copy to clipboard
             </Button>
         </Paper>

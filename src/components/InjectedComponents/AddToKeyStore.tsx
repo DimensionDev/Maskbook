@@ -10,7 +10,7 @@ interface Props {
 export function AddToKeyStore({ provePost, postBy }: Props) {
     return (
         <AsyncComponent
-            promise={async (provePost, postBy) => CryptoService.verifyOthersProvePost(provePost, postBy)}
+            promise={async (provePost, postBy) => CryptoService.verifyOthersProve(provePost, postBy)}
             values={[provePost, postBy]}
             awaitingComponent={AddToKeyStoreUI.awaiting}
             completeComponent={() => AddToKeyStoreUI.success}
