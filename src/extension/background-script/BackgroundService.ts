@@ -21,8 +21,12 @@ async function backupMyKeyPair() {
         downloadId => {},
     )
 }
+async function logInBackground(...args: any[]) {
+    console.log(...args)
+}
 const Impl = {
-    backupMyKeyPair: backupMyKeyPair,
+    backupMyKeyPair,
+    logInBackground,
 }
 Object.assign(window, { backgroundService: Impl })
 export type Background = typeof Impl

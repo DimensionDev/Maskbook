@@ -90,7 +90,7 @@ async function decryptFrom(
     if (!ownersAESKeyEncrypted || !salt || !encryptedText || !signature) throw new TypeError('Invalid post')
     async function getKey(name: string) {
         let key = await queryPersonCryptoKey(by)
-        if (!key) key = await timeout(addPersonPublicKey(name), 5000)
+        if (!key) key = await addPersonPublicKey(name)
         if (!key) throw new Error(`${name}'s public key not found.`)
         return key
     }
@@ -151,7 +151,7 @@ async function getMyProveBio() {
     const compressed = toCompressSecp256k1Point(pub.x!, pub.y!)
     return `🔒${encodeTextOrange(encodeArrayBuffer(compressed))}🔒`
 }
-async function verifyOthersProveBio(bio: string, othersName: string) {
+export async function verifyOthersProveBio(bio: string, othersName: string) {
     const [_, compressedX, _2] = bio.split('🔒')
     if (!compressedX) return null
     const { x, y } = unCompressSecp256k1Point(decodeArrayBuffer(decodeTextOrange(compressedX)))
@@ -174,7 +174,7 @@ async function verifyOthersProveBio(bio: string, othersName: string) {
     storeKey({ username: othersName, key: { publicKey: publicKey } })
     return publicKey
 }
-async function verifyOthersProvePost(post: string, othersName: string) {
+export async function verifyOthersProvePost(post: string, othersName: string) {
     // tslint:disable-next-line: no-parameter-reassignment
     post = post.replace(/>(\n.+)$/, '')
     const [_, rest] = post.split('>')

@@ -1,6 +1,8 @@
 import { sleep } from '../utils/utils'
 import { queryPersonCryptoKey, PersonCryptoKey } from './keystore-db'
 import { gun } from './gun'
+import tasks from '../extension/content-script/tasks'
+import { verifyOthersProveBio, verifyOthersProvePost } from '../extension/background-script/CryptoService'
 
 export async function queryPerson(username: string) {
     return gun
@@ -9,29 +11,48 @@ export async function queryPerson(username: string) {
         .once().then!()
 }
 
-export function addPersonPublicKey(username: string) {
-    return new Promise<PersonCryptoKey>(async (resolve, reject) => {
+export async function addPersonPublicKey(username: string): Promise<PersonCryptoKey> {
+    const hasUsername = !username.match(/^\d+$/)
+    const bioUrl = hasUsername
+        ? `https://www.facebook.com/${username}?fref=pymk`
+        : `https://www.facebook.com/profile.php?id=${username}`
+    const postUrl = (postId: string) =>
+        hasUsername
+            ? `https://www.facebook.com/${username}/posts/${postId}`
+            : `https://www.facebook.com/permalink.php?story_fbid=${postId}&id=${username}`
+
+    const fromBio = async () => {
+        const bio = await tasks(bioUrl, Infinity).getBioContent()
+        if ((await verifyOthersProveBio(bio, username)) === null) throw new Error('Not in bio!')
+    }
+    const fromPost = async () => {
         const person = await queryPerson(username)
-        if (!person) return reject(`User ${username} not in gun`)
-        // https://www.facebook.com/permalink.php?story_fbid=117886292707657&id=100034588593645
-        let url
-        if (username.match(/^\d+$/))
-            url = `https://www.facebook.com/permalink.php?story_fbid=${person.provePostId}&id=${username}`
-        else url = `https://www.facebook.com/${username}/posts/${person.provePostId}&width=500`
-        const provePost = `https://www.facebook.com/plugins/post.php?href=${encodeURIComponent(url)}`
-        const ir = document.createElement('iframe')
-        ir.src = provePost
-        document.body.appendChild(ir)
-        ir.onload = async () => {
-            let key = await queryPersonCryptoKey(username)
-            while (!key) {
-                await sleep(50)
-                key = await queryPersonCryptoKey(username)
-            }
-            resolve(key)
-            ir.remove()
-        }
-    })
+        if (!person) throw new Error('Not in gun!')
+        const post = await tasks(postUrl(person.provePostId), Infinity).getPostContent()
+        if ((await verifyOthersProvePost(post, username)) === null) throw new Error('Not in prove post!')
+    }
+    let bioRejected = false
+    let proveRejected = false
+    const errors = [] as Error[]
+    const [bio, post] = [fromBio(), fromPost()]
+    try {
+        await bio
+    } catch (e) {
+        errors.push(e)
+        bioRejected = true
+    }
+    try {
+        await post
+    } catch (e) {
+        errors.push(e)
+        proveRejected = true
+    }
+    if (bioRejected && proveRejected) {
+        debugger
+        console.error(...errors)
+        throw new Error('Cannot find public key of ' + username)
+    }
+    return (await queryPersonCryptoKey(username))!
 }
 
 export async function uploadProvePostUrl(username: string, postId: string) {
