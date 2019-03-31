@@ -32,7 +32,7 @@
     "ts-loader": "^5.3.3",
     "tslint": "^5.12.1",
     "typed-db": "^1.0.1-1",
-    "typescript": "^3.3.3333",
+    "typescript": "^3.4.1",
     "webcrypto-liner": "^0.1.38",
     "write-file-webpack-plugin": "^4.5.0"
   },

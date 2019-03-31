@@ -42,6 +42,9 @@ jobs:
             - checkout
             - restore_cache:
                   keys:
+                      - tsbuild-cache
+            - restore_cache:
+                  keys:
                       - v1-dependencies-{{ checksum "package.json" }}
                       # fallback to using the latest cache if no exact match is found
                       - v1-dependencies-
@@ -53,6 +56,10 @@ jobs:
             - run: yarn link @holoflows/kit
             - run: yarn build
             - run: sudo apt-get install zip
+            - save_cache:
+                  paths:
+                      - .tscache/
+                  key: tsbuild-cache
             - run: zip -r build.zip build/
             - store_artifacts:
                   path: build.zip
