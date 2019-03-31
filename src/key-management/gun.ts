@@ -28,4 +28,7 @@ interface MaskbookDemoServerState {
         }
     }
 }
-export const gun = new Gun<MaskbookDemoServerState>('https://gungame.herokuapp.com/gun').get('maskbook')
+export const gun = new Gun<MaskbookDemoServerState>([
+    'https://gungame.herokuapp.com/gun',
+    'http://172.104.123.119:8765/gun',
+]).get('maskbook')

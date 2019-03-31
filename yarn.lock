@@ -1702,10 +1702,10 @@
   resolved "https://registry.yarnpkg.com/@types/filewriter/-/filewriter-0.0.28.tgz#c054e8af4d9dd75db4e63abc76f885168714d4b3"
   integrity sha1-wFTor02d11205jq8dviFFocU1LM=
 
-"@types/gun@^0.9.0":
-  version "0.9.0"
-  resolved "https://registry.yarnpkg.com/@types/gun/-/gun-0.9.0.tgz#9db0cd35cef51f865985458f1dfccc3d52fb8dba"
-  integrity sha512-irl8WinX9tIEyAWSN9/1/saK08RsmO6ZnFPZvVX/lLa1Kd3ZK/38/svyDqyIX3quNgGVQrF0zkM0p+RABYdIoQ==
+"@types/gun@^0.9.1":
+  version "0.9.1"
+  resolved "https://registry.yarnpkg.com/@types/gun/-/gun-0.9.1.tgz#00ce80f50305e9583f807e750275547aaeb4737d"
+  integrity sha512-frQF4+FbyG70MhfNmY3jPhXA5nRA+145B5QcXk2mo+n3qpxLhO28YEET/gjH0lxxqQQrHPKjLMt1yEtaIErtgw==
 
 "@types/jest-diff@*":
   version "20.0.1"
@@ -6155,10 +6155,10 @@ growly@^1.3.0:
   resolved "https://registry.yarnpkg.com/growly/-/growly-1.3.0.tgz#f10748cbe76af964b7c96c93c6bcc28af120c081"
   integrity sha1-8QdIy+dq+WS3yWyTxrzCivEgwIE=
 
-gun@^0.9.9999991:
-  version "0.9.9999991"
-  resolved "https://registry.yarnpkg.com/gun/-/gun-0.9.9999991.tgz#d0d0e3230992dbd2306bbfe6372bb3a57c3a3ffa"
-  integrity sha512-tH29XmVl5PPJp2wKEaIKrT5OQhqrPAzAzfYRuKjBIubDqQQPs7SIa7EplOY/K1j7L9Rex5zPAyEBZFj+lz0y+Q==
+gun@0.2019.323:
+  version "0.2019.323"
+  resolved "https://registry.yarnpkg.com/gun/-/gun-0.2019.323.tgz#e5bb6a47a3a761fb10bc8aeada46da8cb114728b"
+  integrity sha512-uq4NeGBzIfbi2qsbProKD35mS0Jg699lyECfSFlK7gvJgFMjjf1vfEp1ITpkt+pTdQrloCXEhDbYdgVnkPnnjQ==
   dependencies:
     ws "~>5.2.0"
   optionalDependencies:
