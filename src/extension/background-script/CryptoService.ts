@@ -181,4 +181,4 @@ const Impl = {
 }
 Object.assign(window, { encryptService: Impl, crypto41: Alpha41 })
 export type Encrypt = typeof Impl
-AsyncCall<Encrypt, {}>(CryptoName, Impl, {}, MessageCenter, true)
+AsyncCall<Encrypt, {}>(Impl, { key: CryptoName })

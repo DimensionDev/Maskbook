@@ -54,4 +54,4 @@ const Impl = {
 }
 Object.assign(window, { friendService: Impl })
 export type PeopleService = typeof Impl
-AsyncCall<PeopleService, {}>(FriendServiceName, Impl, {}, MessageCenter, true)
+AsyncCall<PeopleService, {}>(Impl, { key: FriendServiceName })
