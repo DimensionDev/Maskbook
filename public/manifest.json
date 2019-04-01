@@ -20,5 +20,9 @@
         "page": "/index.html",
         "open_in_tab": true,
         "chrome_style": true
+    },
+    "icons": {
+        "256": "/maskbook-icon.png",
+        "16": "/maskbook-icon-padded.png"
     }
 }
