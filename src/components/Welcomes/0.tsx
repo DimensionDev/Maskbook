@@ -7,6 +7,8 @@ import createStyles from '@material-ui/core/styles/createStyles'
 import Button from '@material-ui/core/Button/Button'
 import { VerticalCenter, FullWidth, createBox } from '../../utils/Flex'
 
+import Close from '@material-ui/icons/Close'
+
 const LinedBox = createBox(theme => ({
     border: '1px solid #ddd',
     borderRadius: theme.shape.borderRadius,
@@ -19,13 +21,17 @@ const LinedBox = createBox(theme => ({
 interface Props {
     create(): void
     restore(): void
+    close(): void
 }
 export default withStylesTyped((theme: Theme) =>
     createStyles({
         paper: {
-            padding: '3rem 3rem 1rem 3rem',
-            textAlign: 'center',
+            paddingBottom: '1rem',
             maxWidth: '35rem',
+            '& article': {
+                padding: '0 3rem',
+                textAlign: 'center',
+            },
         },
         title: {
             marginBottom: theme.spacing.unit * 3,
@@ -38,41 +44,60 @@ export default withStylesTyped((theme: Theme) =>
             minWidth: 180,
             marginLeft: theme.spacing.unit * 2,
         },
+        nav: {
+            paddingTop: theme.spacing.unit,
+            paddingRight: theme.spacing.unit,
+            textAlign: 'right',
+        },
+        navButton: {
+            color: theme.palette.text.hint,
+        },
+        navButtonIcon: {
+            marginLeft: theme.spacing.unit,
+        },
     }),
-)<Props>(function Welcome({ classes, create, restore }) {
+)<Props>(function Welcome({ classes, create, restore, close }) {
     return (
         <Paper className={classes.paper}>
-            <Typography variant="h5" className={classes.title}>
-                Welcome to Maskbook
-            </Typography>
-            <Typography variant="subtitle1" className={classes.subtitle}>
-                You can post on Facebook without allowing Facebook to stalk, analyze, and peep into you.
-            </Typography>
-            <LinedBox>
-                <FullWidth>
-                    <Typography variant="body1">New user?</Typography>
-                    <Typography variant="h6">Connect Facebook Account</Typography>
-                </FullWidth>
-                <VerticalCenter>
-                    <Button onClick={create} variant="contained" color="primary" className={classes.button}>
-                        Connect Facebook
-                    </Button>
-                </VerticalCenter>
-            </LinedBox>
-            <LinedBox>
-                <FullWidth>
-                    <Typography variant="body1">Returning user?</Typography>
-                    <Typography variant="h6">Restore Keyparis</Typography>
-                </FullWidth>
-                <VerticalCenter>
-                    <Button onClick={restore} variant="outlined" className={classes.button}>
-                        Restore
-                    </Button>
-                </VerticalCenter>
-            </LinedBox>
-            <Typography variant="caption" className={classes.title}>
-                Lost your keystore backup? No worry. Simply start as a new user.
-            </Typography>
+            <nav className={classes.nav}>
+                <Button onClick={close} disableFocusRipple disableRipple className={classes.navButton}>
+                    I'll do it later
+                    <Close className={classes.navButtonIcon} />
+                </Button>
+            </nav>
+            <article>
+                <Typography variant="h5" className={classes.title}>
+                    Welcome to Maskbook
+                </Typography>
+                <Typography variant="subtitle1" className={classes.subtitle}>
+                    You can post on Facebook without allowing Facebook to stalk, analyze, and peep into you.
+                </Typography>
+                <LinedBox>
+                    <FullWidth>
+                        <Typography variant="body1">New user?</Typography>
+                        <Typography variant="h6">Connect Facebook Account</Typography>
+                    </FullWidth>
+                    <VerticalCenter>
+                        <Button onClick={create} variant="contained" color="primary" className={classes.button}>
+                            Connect Facebook
+                        </Button>
+                    </VerticalCenter>
+                </LinedBox>
+                <LinedBox>
+                    <FullWidth>
+                        <Typography variant="body1">Returning user?</Typography>
+                        <Typography variant="h6">Restore Keyparis</Typography>
+                    </FullWidth>
+                    <VerticalCenter>
+                        <Button onClick={restore} variant="outlined" className={classes.button}>
+                            Restore
+                        </Button>
+                    </VerticalCenter>
+                </LinedBox>
+                <Typography variant="caption" className={classes.title}>
+                    Lost your keystore backup? No worry. Simply start as a new user.
+                </Typography>
+            </article>
         </Paper>
     )
 })

@@ -1,6 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { DomProxy } from '@holoflows/kit'
+import { DomProxy, LiveSelector, MutationObserverWatcher } from '@holoflows/kit'
+//#region Welcome
 enum WelcomeState {
     // Step 0
     Start,
@@ -28,6 +29,7 @@ import { MaskbookLightTheme } from '../../../utils/theme'
 import { sleep } from '../../../utils/utils'
 import { useAsync } from '../../../utils/AsyncComponent'
 import { BackgroundService, CryptoService, PeopleService } from '../rpc'
+import { useEsc } from '../../../components/Welcomes/useEsc'
 const isLogined = () => !document.querySelector('.login_form_label_field')
 const loginWatcher = async () => {
     while (!isLogined()) await sleep(500)
@@ -48,13 +50,14 @@ function Welcome(props: {
 }) {
     const { current, setCurrent, waitLogin } = props
     const [provePost, setProvePost] = React.useState('')
-    useAsync(() => CryptoService.getMyProvePost(), [provePost.length !== 0]).then(setProvePost)
+    useAsync(() => CryptoService.getMyProveBio(), [provePost.length !== 0]).then(setProvePost)
     switch (current) {
         case WelcomeState.Start:
             return (
                 <Welcome0
                     create={() => setCurrent(isLogined() ? WelcomeState.Intro : WelcomeState.WaitLogin)}
                     restore={() => setCurrent(WelcomeState.Restore1)}
+                    close={() => props.finish()}
                 />
             )
         case WelcomeState.WaitLogin:
@@ -74,8 +77,8 @@ function Welcome(props: {
             return (
                 <Welcome1a4
                     provePost={provePost}
-                    copyToClipboard={() => {
-                        ;(navigator as any).clipboard.writeText(provePost)
+                    copyToClipboard={(text) => {
+                        ;(navigator as any).clipboard.writeText(text)
                         props.finish()
                     }}
                 />
@@ -101,27 +104,47 @@ function WelcomePortal() {
     const [open, setOpen] = React.useState(true)
     const [current, setCurrent] = React.useState(WelcomeState.Start)
     const [init, setInit] = React.useState(true)
+
+    function onFinish() {
+        setOpen(false)
+        chrome.storage.local.set({ init: true })
+    }
     function waitLogin() {
         setOpen(false)
         loginWatcher().then(() => setOpen(true))
     }
     useAsync(() => getStorage(), [0]).then(data => setInit(data.init))
+    useEsc(onFinish)
     // Only render in main page
     if (location.pathname !== '/') return null
-    if (init && !chrome.extension.inIncognitoContext) return null
+    if (init) return null
     return (
         <MuiThemeProvider theme={MaskbookLightTheme}>
             <Dialog open={open}>
-                <Welcome
-                    current={current}
-                    setCurrent={setCurrent}
-                    waitLogin={waitLogin}
-                    finish={() => {
-                        setOpen(false)
-                        chrome.storage.local.set({ init: true })
-                    }}
-                />
+                <Welcome current={current} setCurrent={setCurrent} waitLogin={waitLogin} finish={onFinish} />
             </Dialog>
         </MuiThemeProvider>
     )
 }
+//#endregion
+//#region Welcome invoke manually
+{
+    const to = new MutationObserverWatcher(
+        new LiveSelector().querySelectorAll<HTMLAnchorElement>('#createNav a').nth(3),
+    ).startWatch()
+    ReactDOM.render(
+        <>
+            {' · '}
+            <a
+                href="#"
+                onClick={() => {
+                    chrome.storage.local.clear()
+                    location.reload()
+                }}>
+                Maskbook Setup
+            </a>
+        </>,
+        to.firstVirtualNode.after,
+    )
+}
+//#endregion

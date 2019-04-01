@@ -27,8 +27,8 @@ const posts = new LiveSelector().querySelectorAll<HTMLDivElement>('.userContent'
 const PostInspector = (props: { post: string; postBy: string; postId: string }) => {
     const { post, postBy, postId } = props
     const type = {
-        encryptedPost: post.match(/maskbook\:\/\/?(?<text>.+)(?<!See More)( .+)?$/)!,
-        provePost: post.match('Here is my public key')!,
+        encryptedPost: post.match(/Maskbook.io:🎼?(?<text>.+)(?<!See More)( .+)?$/)!,
+        provePost: post.match(/🔒(.+)🔒/)!,
     }
 
     if (type.encryptedPost) {
@@ -52,7 +52,7 @@ new MutationObserverWatcher(posts)
         // Save author's avatar
         try {
             const avatar = node.current.previousElementSibling!.querySelector('img')!
-            PeopleService.storeAvatar(postBy, avatar.src)
+            PeopleService.storeAvatar(postBy, avatar.getAttribute('aria-label')!, avatar.src)
         } catch {}
         // Get post id
         let postId = ''
@@ -69,7 +69,7 @@ new MutationObserverWatcher(posts)
         // Click "See more" if it may be a encrypted post
         {
             const more = node.current.parentElement!.querySelector<HTMLSpanElement>('.see_more_link_inner')
-            if (more && node.current.innerText.match('maskbook://')) {
+            if (more && node.current.innerText.match('Maskbook.io:🎼')) {
                 more.click()
             }
         }

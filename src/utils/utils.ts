@@ -1,15 +1,9 @@
 import { Db } from 'typed-db'
 import { Newable } from 'typed-db/dist-release/src/db/Db'
 import { Store } from 'typed-db/dist-release/src/db/Store'
-
 import 'reflect-metadata'
 
-export const sleep = (time: number) => new Promise<void>(resolve => setTimeout(resolve, time))
-export const timeout = <T>(promise: Promise<T>, time: number, rejectReason?: string) =>
-    Promise.race([
-        promise,
-        new Promise<T>((r, reject) => setTimeout(() => reject(new Error(rejectReason || 'timeout')), time)),
-    ])
+export { sleep, timeout } from '@holoflows/kit/es/util/sleep'
 /** Build a db */
 export const buildQuery = <Q extends Newable<any>>(db: Db, record: Q) => {
     db.use(record)

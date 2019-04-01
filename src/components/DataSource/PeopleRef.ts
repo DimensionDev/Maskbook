@@ -18,5 +18,5 @@ export function usePeople() {
         ref.addListener('onChange', cb)
         return () => void ref.removeListener('onChange', cb)
     })
-    return people
+    return people.filter(x => x.username !== '$self')
 }

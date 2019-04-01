@@ -1,14 +1,16 @@
 import { AsyncCall, MessageCenter, OnlyRunInContext } from '@holoflows/kit'
-import { CryptoKeyRecord, getMyPrivateKey, toStoreCryptoKey } from '../../key-management/db'
+import { CryptoKeyRecord, getMyPrivateKey, toStoreCryptoKey } from '../../key-management/keystore-db'
 import { encodeText } from '../../utils/EncodeDecode'
 import { BackgroundName } from '../../utils/Names'
+import { getMyLocalKey } from '../../key-management/local-db'
 
 OnlyRunInContext('background', 'BackgroundService')
 async function backupMyKeyPair() {
     const key = await getMyPrivateKey()
+    const localKey = await crypto.subtle.exportKey('jwk', (await getMyLocalKey()).key)
     if (!key) throw new TypeError('You have no private key yet')
     const keyRecord: CryptoKeyRecord = await toStoreCryptoKey(key)
-    const string = JSON.stringify(keyRecord)
+    const string = JSON.stringify({ key: keyRecord, local: localKey })
     const buffer = encodeText(string)
     const blob = new Blob([buffer], { type: 'application/json' })
     const url = URL.createObjectURL(blob)
@@ -19,9 +21,13 @@ async function backupMyKeyPair() {
         downloadId => {},
     )
 }
+async function logInBackground(...args: any[]) {
+    console.log(...args)
+}
 const Impl = {
-    backupMyKeyPair: backupMyKeyPair,
+    backupMyKeyPair,
+    logInBackground,
 }
 Object.assign(window, { backgroundService: Impl })
 export type Background = typeof Impl
-AsyncCall<Background, {}>(BackgroundName, Impl, {}, MessageCenter, true)
+AsyncCall<Background, {}>(Impl, { key: BackgroundName })
