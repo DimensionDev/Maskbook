@@ -2,6 +2,7 @@ import { queryPersonCryptoKey, PersonCryptoKey } from './keystore-db'
 import { gun } from './gun'
 import tasks from '../extension/content-script/tasks'
 import { verifyOthersProve } from '../extension/background-script/CryptoService'
+import { sleep } from '../utils/utils'
 
 export async function queryPerson(username: string) {
     return gun
@@ -46,12 +47,14 @@ export async function addPersonPublicKey(username: string): Promise<PersonCrypto
         errors.push(e)
         proveRejected = true
     }
-    if (bioRejected && proveRejected) {
-        debugger
+    // HACK
+    await sleep(1000)
+    const key = await queryPersonCryptoKey(username)
+    if ((bioRejected && proveRejected) || !key) {
         console.error(...errors)
         throw new Error('Cannot find public key of ' + username)
     }
-    return (await queryPersonCryptoKey(username))!
+    return key
 }
 
 export async function uploadProvePostUrl(username: string, postId: string) {
