@@ -119,7 +119,7 @@ async function decryptFrom(
             const aesKeyEncrypted = await queryPostAESKey(salt, whoAmI)
             if (aesKeyEncrypted === undefined) {
                 throw new Error(
-                    'Maskbook does not find key that you can used to decrypt this post. Maybe this post is not send to you?',
+                    'Maskbook does not find the key used to decrypt this post. Maybe this post is not intended to share with you?',
                 )
             }
             const content = decodeText(
