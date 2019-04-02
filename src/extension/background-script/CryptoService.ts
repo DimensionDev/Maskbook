@@ -115,10 +115,16 @@ async function decryptFrom(
                 return { signatureVerifyResult: false, content }
             }
         } else {
+            const aesKeyEncrypted = await queryPostAESKey(salt, whoAmI)
+            if (aesKeyEncrypted === undefined) {
+                throw new Error(
+                    'Maskbook does not find key that you can used to decrypt this post. Maybe this post is not send to you?',
+                )
+            }
             const content = decodeText(
                 await Alpha41.decryptMessage1ToNByOther({
                     version: -41,
-                    AESKeyEncrypted: await queryPostAESKey(salt, whoAmI),
+                    AESKeyEncrypted: aesKeyEncrypted,
                     authorsPublicKeyECDH: byKey.key.publicKey,
                     encryptedContent: encryptedText,
                     privateKeyECDH: mine.key.privateKey,
