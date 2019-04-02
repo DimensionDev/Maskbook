@@ -10,9 +10,11 @@ interface Props {
     encryptedText: string
 }
 export function DecryptPost({ postBy, whoAmI, encryptedText }: Props) {
+    const [_, a] = encryptedText.split('🎼')
+    const [b, _2] = a.split(':||')
     return (
         <AsyncComponent
-            promise={async (encryptedString: string) => CryptoService.decryptFrom(encryptedString, postBy, whoAmI)}
+            promise={async (encryptedString: string) => CryptoService.decryptFrom(b, postBy, whoAmI)}
             values={[encryptedText]}
             awaitingComponent={DecryptPostAwaiting}
             completeComponent={DecryptPostSuccess}
