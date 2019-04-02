@@ -24,7 +24,7 @@ const posts = new LiveSelector().querySelectorAll<HTMLDivElement>('.userContent'
     return true
 })
 
-const PostInspector = (props: { post: string; postBy: string; postId: string }) => {
+const PostInspector = (props: { post: string; postBy: string; postId: string; needZip(): void }) => {
     const { post, postBy, postId } = props
     const type = {
         encryptedPost: post.match('Maskbook.io:🎼') && post.match(':||'),
@@ -32,6 +32,7 @@ const PostInspector = (props: { post: string; postBy: string; postId: string }) 
     }
 
     if (type.encryptedPost) {
+        props.needZip()
         return <DecryptPost encryptedText={post} whoAmI={myUsername.evaluateOnce()[0]!} postBy={postBy} />
     } else if (type.provePost) {
         PeopleService.uploadProvePostUrl(postBy, postId)
@@ -69,7 +70,24 @@ new MutationObserverWatcher(posts)
         }
         // Render it
         const render = () => {
-            ReactDOM.render(<PostInspector postId={postId} post={node.current.innerText} postBy={postBy} />, node.after)
+            console.log(node)
+            ReactDOM.render(
+                <PostInspector
+                    needZip={() => {
+                        const pe = node.current.parentElement
+                        if (!pe) return
+                        const p = pe.querySelector('p')
+                        if (!p) return
+                        p.style.display = 'block'
+                        p.style.maxHeight = '20px'
+                        p.style.overflow = 'hidden'
+                    }}
+                    postId={postId}
+                    post={node.current.innerText}
+                    postBy={postBy}
+                />,
+                node.after,
+            )
         }
         render()
         return {
