@@ -72,7 +72,14 @@ export function withStylesTyped<ClassKey extends string, Options extends WithSty
             ? React.ComponentType<Props & WithStyles<typeof style>>
             : React.ForwardRefExoticComponent<Props & WithStyles<typeof style> & React.RefAttributes<Ref>>,
     ) {
-        return withStyles(style, options as any)(component as any) as Ref extends null
+        const Styled = withStyles(style, options as any)(component as any)
+        const Wrap = React.forwardRef((props: any, ref: any) => {
+            return React.createElement(Styled, {
+                innerRef: ref,
+                ...props,
+            })
+        })
+        return Wrap as Ref extends null
             ? React.ComponentType<Props>
             : React.ForwardRefExoticComponent<React.RefAttributes<Ref> & Props>
     }

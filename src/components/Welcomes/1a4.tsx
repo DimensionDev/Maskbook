@@ -9,18 +9,25 @@ import { createBox } from '../../utils/Flex'
 import Checkbox from '@material-ui/core/Checkbox'
 import FormControlLabel from '@material-ui/core/FormControlLabel/FormControlLabel'
 
-const TextField = createBox(theme => ({
-    background: theme.palette.background.default,
-    color: theme.palette.text.hint,
-    padding: `${theme.spacing.unit * 2}px`,
-    border: `1px solid ${theme.palette.divider}`,
-    textAlign: 'start',
-    whiteSpace: 'pre-line',
-    minHeight: '10em',
-    borderRadius: theme.shape.borderRadius,
-    fontSize: '1.15rem',
-    wordBreak: 'break-all',
-}))
+const TextField = createBox(
+    theme => ({
+        background: theme.palette.background.default,
+        color: theme.palette.text.hint,
+        padding: `${theme.spacing.unit * 2}px`,
+        border: `1px solid ${theme.palette.divider}`,
+        textAlign: 'start',
+        whiteSpace: 'pre-line',
+        minHeight: '10em',
+        borderRadius: theme.shape.borderRadius,
+        fontSize: '1.15rem',
+        wordBreak: 'break-all',
+        display: 'block',
+        resize: 'none',
+        width: '100%',
+        boxSizing: 'border-box',
+    }),
+    'textarea',
+)
 interface Props {
     copyToClipboard(text: string): void
     provePost: string
@@ -45,10 +52,29 @@ Install Maskbook as well so that you may read my encrypted posts,
 and may prevent Facebook from intercepting our communication.
 Here is my public key ${provePost}`
     const [showShort, setShort] = React.useState(false)
+    const ref = React.createRef<HTMLTextAreaElement>()
+    function onFocus() {
+        setTimeout(() => {
+            if (!ref.current) return
+            ref.current.select()
+        }, 20)
+    }
+    const onBlur = React.useCallback(() => {
+        const selection = getSelection()
+        if (!selection) return
+        selection.removeAllRanges()
+    }, [])
     return (
         <Paper className={classes.paper}>
             <Typography variant="h5">Let your friends join Maskbook</Typography>
-            <TextField>{showShort ? provePost : full}</TextField>
+            <TextField
+                ref={ref}
+                readOnly
+                onClick={onFocus}
+                onFocus={onFocus}
+                onBlur={onBlur}
+                defaultValue={showShort ? provePost : full}
+            />
             <Typography variant="subtitle1">
                 Mathematically, you have to {!showShort ? 'post this' : 'add it to your bio'}. Or your friends cannot
                 verify the connection between your keypair and your account.
