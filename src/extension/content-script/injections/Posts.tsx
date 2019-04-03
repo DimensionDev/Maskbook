@@ -24,7 +24,7 @@ const posts = new LiveSelector().querySelectorAll<HTMLDivElement>('.userContent'
 const PostInspector = (props: { post: string; postBy: string; postId: string; needZip(): void }) => {
     const { post, postBy, postId } = props
     const type = {
-        encryptedPost: post.match('Maskbook.io:🎼') && post.match(':||'),
+        encryptedPost: post.match('🎼') && post.match(':||'),
         provePost: post.match(/🔒(.+)🔒/)!,
     }
 
@@ -67,7 +67,7 @@ new MutationObserverWatcher(posts)
         // Click "See more" if it may be a encrypted post
         {
             const more = node.current.parentElement!.querySelector<HTMLSpanElement>('.see_more_link_inner')
-            if (more && node.current.innerText.match('Maskbook.io:🎼')) {
+            if (more && node.current.innerText.match(/🎼.+|/)) {
                 more.click()
             }
         }
