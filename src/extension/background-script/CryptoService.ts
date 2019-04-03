@@ -117,6 +117,10 @@ async function decryptFrom(
             }
         } else {
             const aesKeyEncrypted = await queryPostAESKey(salt, whoAmI)
+            // TODO: Replace this error with:
+            // You do not have the necessary private key to decrypt this message.
+            // What to do next: You can ask your friend to visit your profile page, so that their Maskbook extension will detect and add you to recipients.
+            // ? after the auto-share with friends is done.
             if (aesKeyEncrypted === undefined) {
                 throw new Error(
                     'Maskbook does not find the key used to decrypt this post. Maybe this post is not intended to share with you?',
