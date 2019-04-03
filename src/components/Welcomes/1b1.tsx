@@ -8,6 +8,8 @@ import Button from '@material-ui/core/Button/Button'
 import { createBox } from '../../utils/Flex'
 
 import ArrowBack from '@material-ui/icons/ArrowBack'
+import { useDragAndDrop } from '../../utils/useDragAndDrop'
+import classNames from 'classnames'
 
 const RestoreBox = createBox(theme => ({
     color: theme.palette.text.hint,
@@ -31,6 +33,11 @@ export default withStylesTyped((theme: Theme) =>
     createStyles({
         paper: {
             maxWidth: '35rem',
+            transition: '0.4s filter',
+            filter: 'drop-shadow(0px 0px 0px #777)',
+        },
+        paperDropped: {
+            filter: 'drop-shadow(0px 0px 5px #777)',
         },
         nav: {
             paddingTop: theme.spacing.unit,
@@ -55,9 +62,11 @@ export default withStylesTyped((theme: Theme) =>
     }),
 )<Props>(function Welcome({ classes, back, restore }) {
     const ref = React.useRef<HTMLInputElement>(null)
-    const [[name, blob], setJSON] = React.useState<[string, File]>(['', null as any])
+    const { dragEvents, fileReceiver, fileRef, dragStatus } = useDragAndDrop()
     return (
-        <Paper className={classes.paper}>
+        <Paper
+            {...dragEvents}
+            className={classNames(classes.paper, dragStatus === 'drag-enter' && classes.paperDropped)}>
             <nav className={classes.nav}>
                 <Button onClick={back} disableFocusRipple disableRipple className={classes.navButton}>
                     <ArrowBack className={classes.navButtonIcon} />
@@ -72,15 +81,19 @@ export default withStylesTyped((theme: Theme) =>
                         type="file"
                         accept="application/json"
                         ref={ref}
-                        onChange={e => setJSON(getBlob(e))}
+                        onChange={fileReceiver}
                     />
                     <RestoreBox onClick={() => ref.current && ref.current.click()}>
-                        {!name ? 'Select exported keystore file' : `Selected exported keystore file ${name}`}
+                        {dragStatus === 'drag-enter'
+                            ? 'Drag your key backup into this dialog'
+                            : fileRef.current
+                            ? `Selected exported key backup: ${fileRef.current.name}`
+                            : 'Select your exported key backup'}
                     </RestoreBox>
                 </form>
                 <Button
-                    onClick={() => restore(blob)}
-                    disabled={!name}
+                    onClick={() => restore(fileRef.current!)}
+                    disabled={!fileRef.current}
                     variant="contained"
                     color="primary"
                     className={classes.button}>
@@ -90,13 +103,3 @@ export default withStylesTyped((theme: Theme) =>
         </Paper>
     )
 })
-
-function getBlob(event: React.ChangeEvent<HTMLInputElement> | React.DragEvent<HTMLDivElement>): [string, File] {
-    const files = (
-        (event as React.DragEvent).dataTransfer || (event as React.ChangeEvent<HTMLInputElement>).currentTarget
-    ).files
-    if (!files) return ['', null as any]
-    const file = files.item(0)
-    if (!file) return ['', null as any]
-    return [file.name, file]
-}
