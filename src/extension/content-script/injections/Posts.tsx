@@ -24,21 +24,16 @@ const posts = new LiveSelector().querySelectorAll<HTMLDivElement>('.userContent'
     return true
 })
 
-const PostInspector = (props: { post: string; postBy: string; postId: string }) => {
+const PostInspector = (props: { post: string; postBy: string; postId: string; needZip(): void }) => {
     const { post, postBy, postId } = props
     const type = {
-        encryptedPost: post.match(/Maskbook.io:🎼?(?<text>.+)(?<!See More)( .+)?$/)!,
+        encryptedPost: post.match('Maskbook.io:🎼') && post.match(':||'),
         provePost: post.match(/🔒(.+)🔒/)!,
     }
 
     if (type.encryptedPost) {
-        return (
-            <DecryptPost
-                encryptedText={type.encryptedPost.groups!.text!}
-                whoAmI={myUsername.evaluateOnce()[0]!}
-                postBy={postBy}
-            />
-        )
+        props.needZip()
+        return <DecryptPost encryptedText={post} whoAmI={myUsername.evaluateOnce()[0]!} postBy={postBy} />
     } else if (type.provePost) {
         PeopleService.uploadProvePostUrl(postBy, postId)
         return <AddToKeyStore postBy={postBy} provePost={post} />
@@ -75,7 +70,24 @@ new MutationObserverWatcher(posts)
         }
         // Render it
         const render = () => {
-            ReactDOM.render(<PostInspector postId={postId} post={node.current.innerText} postBy={postBy} />, node.after)
+            console.log(node)
+            ReactDOM.render(
+                <PostInspector
+                    needZip={() => {
+                        const pe = node.current.parentElement
+                        if (!pe) return
+                        const p = pe.querySelector('p')
+                        if (!p) return
+                        p.style.display = 'block'
+                        p.style.maxHeight = '20px'
+                        p.style.overflow = 'hidden'
+                    }}
+                    postId={postId}
+                    post={node.current.innerText}
+                    postBy={postBy}
+                />,
+                node.after,
+            )
         }
         render()
         return {
