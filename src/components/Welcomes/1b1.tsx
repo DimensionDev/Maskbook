@@ -24,6 +24,7 @@ const RestoreBox = createBox(theme => ({
     textAlign: 'center',
     cursor: 'pointer',
     padding: theme.spacing.unit * 4,
+    transition: '0.4s',
 }))
 interface Props {
     back(): void
@@ -33,11 +34,6 @@ export default withStylesTyped((theme: Theme) =>
     createStyles({
         paper: {
             maxWidth: '35rem',
-            transition: '0.4s filter',
-            filter: 'drop-shadow(0px 0px 0px #777)',
-        },
-        paperDropped: {
-            filter: 'drop-shadow(0px 0px 5px #777)',
         },
         nav: {
             paddingTop: theme.spacing.unit,
@@ -64,9 +60,7 @@ export default withStylesTyped((theme: Theme) =>
     const ref = React.useRef<HTMLInputElement>(null)
     const { dragEvents, fileReceiver, fileRef, dragStatus } = useDragAndDrop()
     return (
-        <Paper
-            {...dragEvents}
-            className={classNames(classes.paper, dragStatus === 'drag-enter' && classes.paperDropped)}>
+        <Paper {...dragEvents} className={classes.paper}>
             <nav className={classes.nav}>
                 <Button onClick={back} disableFocusRipple disableRipple className={classes.navButton}>
                     <ArrowBack className={classes.navButtonIcon} />
@@ -83,7 +77,11 @@ export default withStylesTyped((theme: Theme) =>
                         ref={ref}
                         onChange={fileReceiver}
                     />
-                    <RestoreBox onClick={() => ref.current && ref.current.click()}>
+                    <RestoreBox
+                        style={{
+                            fontSize: dragStatus === 'drag-enter' ? '1.2em' : 'unset',
+                        }}
+                        onClick={() => ref.current && ref.current.click()}>
                         {dragStatus === 'drag-enter'
                             ? 'Drag your key backup into this dialog'
                             : fileRef.current
