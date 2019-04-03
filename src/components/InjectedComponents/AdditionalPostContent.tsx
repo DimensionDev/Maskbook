@@ -13,6 +13,12 @@ const _AdditionalContent = withStylesTyped({})<Props>(props => {
         <>
             <Divider style={{ marginBottom: 6 }} />
             <Typography variant="caption" style={{ display: 'flex' }}>
+                <img
+                    src={chrome.runtime.getURL('/maskbook-icon-padded.png')}
+                    style={{ transform: 'translate(-1px, -1px)' }}
+                    width={16}
+                    height={16}
+                />
                 {props.title}
             </Typography>
             <Typography variant="body1" style={{ marginBottom: 6, marginTop: 6, lineHeight: 1.2 }}>

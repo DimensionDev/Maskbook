@@ -83,8 +83,9 @@ async function decryptFrom(
     by: string,
     whoAmI: string,
 ): Promise<{ signatureVerifyResult: boolean; content: string }> {
-    const [version, ownersAESKeyEncrypted, salt, encryptedText, _signature] = encrypted.split('|')
-    const signature = _signature.replace(/:$/, '')
+    const [version, ownersAESKeyEncrypted, salt, encryptedText, signature] = encrypted.split('|')
+    if (!version || !ownersAESKeyEncrypted || !salt || !encryptedText || !signature)
+        throw new TypeError('This post is not complete, you need to view the full post.')
     // 1/4 === version 41
     if (version !== '1/4') throw new TypeError('Unknown post type')
     if (!ownersAESKeyEncrypted || !salt || !encryptedText || !signature) throw new TypeError('Invalid post')
@@ -118,7 +119,7 @@ async function decryptFrom(
             const aesKeyEncrypted = await queryPostAESKey(salt, whoAmI)
             if (aesKeyEncrypted === undefined) {
                 throw new Error(
-                    'Maskbook does not find key that you can used to decrypt this post. Maybe this post is not send to you?',
+                    'Maskbook does not find the key used to decrypt this post. Maybe this post is not intended to share with you?',
                 )
             }
             const content = decodeText(
