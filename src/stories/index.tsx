@@ -32,7 +32,7 @@ storiesOf('Welcome', module)
     .add('Step 1a-4', () => (
         <Welcome1a4
             copyToClipboard={action('Post click')}
-            provePost={text('URL', 'https://maskbook.app/s/#mQINBF-BxAcBEA-zyfSodx')}
+            provePost={text('URL', '🔒ApfdMwLoV/URKn7grgcNWdMR2iWMGdHpQBk5LVGFxhul🔒')}
         />
     ))
     .add('Step 1b-1', () => <Welcome1b1 back={linkTo('Welcome', 'Step 0')} restore={action('Restore with')} />)

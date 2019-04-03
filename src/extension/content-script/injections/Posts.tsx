@@ -4,16 +4,13 @@ import { LiveSelector, MutationObserverWatcher } from '@holoflows/kit'
 import { DecryptPost } from '../../../components/InjectedComponents/DecryptedPost'
 import { AddToKeyStore } from '../../../components/InjectedComponents/AddToKeyStore'
 import { PeopleService } from '../rpc'
+import { myUsername } from './LiveSelectors'
 
 function getUsername(url: string) {
     const after = url.split('https://www.facebook.com/')[1]
     if (after.match('profile.php')) return after.match(/id=(?<id>\d+)/)!.groups!.id
     else return after.split('?')[0]
 }
-const myUsername = new LiveSelector()
-    .querySelector<HTMLAnchorElement>(`[aria-label="Facebook"][role="navigation"] [data-click="profile_icon"] a`)
-    .map(x => x.href)
-    .map(getUsername)
 
 const posts = new LiveSelector().querySelectorAll<HTMLDivElement>('.userContent').filter((x: HTMLElement | null) => {
     while (x) {
@@ -35,7 +32,7 @@ const PostInspector = (props: { post: string; postBy: string; postId: string }) 
         return (
             <DecryptPost
                 encryptedText={type.encryptedPost.groups!.text!}
-                whoAmI={myUsername.evaluateOnce()[0]!}
+                whoAmI={myUsername.evaluateOnce().map(x => getUsername(x.href))[0]!}
                 postBy={postBy}
             />
         )

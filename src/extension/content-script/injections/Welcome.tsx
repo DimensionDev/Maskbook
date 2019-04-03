@@ -30,6 +30,7 @@ import { sleep } from '../../../utils/utils'
 import { useAsync } from '../../../utils/AsyncComponent'
 import { BackgroundService, CryptoService, PeopleService } from '../rpc'
 import { useEsc } from '../../../components/Welcomes/useEsc'
+import { myUsername } from './LiveSelectors'
 const isLogined = () => !document.querySelector('.login_form_label_field')
 const loginWatcher = async () => {
     while (!isLogined()) await sleep(500)
@@ -77,8 +78,12 @@ function Welcome(props: {
             return (
                 <Welcome1a4
                     provePost={provePost}
-                    copyToClipboard={(text) => {
+                    copyToClipboard={(text, goToProfile) => {
                         ;(navigator as any).clipboard.writeText(text)
+                        if (goToProfile) {
+                            const a = myUsername.evaluateOnce()[0]
+                            if (a) location.href = a.href
+                        }
                         props.finish()
                     }}
                 />
