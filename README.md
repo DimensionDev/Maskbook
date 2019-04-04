@@ -1,5 +1,7 @@
 # Maskbook &middot; ![GitHub license](https://img.shields.io/badge/license-AGPL-blue.svg?style=flat-square) ![Ciecle CI](https://img.shields.io/circleci/project/github/project-maskbook/Maskbook.svg?style=flat-square&logo=circleci)
 
+[![Join the chat at https://gitter.im/Maskbook/community](https://badges.gitter.im/Maskbook/community.svg)](https://gitter.im/Maskbook/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 Encrypt your posts & chats on You-Know-Where. Allow only your friends to decrypt.
 
 For general introductions, see https://Maskbook.io/
