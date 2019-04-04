@@ -13,7 +13,7 @@ For general introductions, see https://Maskbook.io/
 -   [Git flow](https://github.com/nvie/gitflow) enabled, `master` as the latest branch, `released` as the stable branch
 -   UI developing: Use `yarn start` / `npm start` to start a [Storybook](https://storybook.js.org/)
 -   Extension developing: Use `yarn watch` / `npm run watch` to start watch build for extension
--   Crypto: We're using [ECDHA SECP256-k1](https://en.wikipedia.org/wiki/ECC) and [AES-CBC](https://en.wikipedia.org/wiki/AES)
+-   Crypto: We're using [ECDH SECP256-k1](https://en.wikipedia.org/wiki/ECC) and [AES-CBC](https://en.wikipedia.org/wiki/AES)
 -   Data transfer between users: We're using [gun.js](https://gun.eco)
 
 ### Prepare
