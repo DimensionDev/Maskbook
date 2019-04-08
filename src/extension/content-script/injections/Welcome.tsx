@@ -1,6 +1,23 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { DomProxy, LiveSelector, MutationObserverWatcher } from '@holoflows/kit'
+import { DomProxy, LiveSelector, MutationObserverWatcher, ValueRef } from '@holoflows/kit'
+import Welcome0 from '../../../components/Welcomes/0'
+import Welcome1a1 from '../../../components/Welcomes/1a1'
+import Welcome1a2 from '../../../components/Welcomes/1a2'
+import Welcome1a3 from '../../../components/Welcomes/1a3'
+import Welcome1a4 from '../../../components/Welcomes/1a4'
+import Welcome1b1 from '../../../components/Welcomes/1b1'
+import Dialog from '@material-ui/core/Dialog'
+import { MuiThemeProvider } from '@material-ui/core'
+import { MaskbookLightTheme } from '../../../utils/theme'
+import { sleep } from '../../../utils/utils'
+import { useAsync } from '../../../utils/AsyncComponent'
+import { BackgroundService, CryptoService, PeopleService } from '../rpc'
+import { useEsc } from '../../../components/Welcomes/useEsc'
+import { myUsername } from './LiveSelectors'
+import { Banner } from '../../../components/Welcomes/Banner'
+
+const displayOnExternal = new ValueRef(false)
 //#region Welcome
 enum WelcomeState {
     // Step 0
@@ -17,23 +34,9 @@ const body = DomProxy()
 body.realCurrent = document.body
 ReactDOM.render(<WelcomePortal />, body.after)
 
-import Welcome0 from '../../../components/Welcomes/0'
-import Welcome1a1 from '../../../components/Welcomes/1a1'
-import Welcome1a2 from '../../../components/Welcomes/1a2'
-import Welcome1a3 from '../../../components/Welcomes/1a3'
-import Welcome1a4 from '../../../components/Welcomes/1a4'
-import Welcome1b1 from '../../../components/Welcomes/1b1'
-import Dialog from '@material-ui/core/Dialog'
-import { MuiThemeProvider } from '@material-ui/core'
-import { MaskbookLightTheme } from '../../../utils/theme'
-import { sleep } from '../../../utils/utils'
-import { useAsync } from '../../../utils/AsyncComponent'
-import { BackgroundService, CryptoService, PeopleService } from '../rpc'
-import { useEsc } from '../../../components/Welcomes/useEsc'
-import { myUsername } from './LiveSelectors'
-const isLogined = () => !document.querySelector('.login_form_label_field')
+const isLogin = () => !document.querySelector('.login_form_label_field')
 const loginWatcher = async () => {
-    while (!isLogined()) await sleep(500)
+    while (!isLogin()) await sleep(500)
 }
 function restoreFromFile(file: File) {
     const fr = new FileReader()
@@ -43,57 +46,63 @@ function restoreFromFile(file: File) {
         PeopleService.storeKey(json)
     })
 }
-function Welcome(props: {
-    current: WelcomeState
-    setCurrent(x: WelcomeState): void
-    waitLogin(): void
-    finish(): void
-}) {
-    const { current, setCurrent, waitLogin } = props
+interface Welcome {
+    // Display
+    currentStep: WelcomeState
+    onStepChange(state: WelcomeState): void
+    // Actions
+    waitForLogin(): void
+    onFinish(reason: 'done' | 'quit'): void
+}
+function Welcome(props: Welcome) {
+    const { currentStep, onFinish, onStepChange, waitForLogin } = props
+
     const [provePost, setProvePost] = React.useState('')
     useAsync(() => CryptoService.getMyProveBio(), [provePost.length !== 0]).then(setProvePost)
-    switch (current) {
+
+    switch (currentStep) {
         case WelcomeState.Start:
             return (
                 <Welcome0
-                    create={() => setCurrent(isLogined() ? WelcomeState.Intro : WelcomeState.WaitLogin)}
-                    restore={() => setCurrent(WelcomeState.Restore1)}
-                    close={() => props.finish()}
+                    create={() => onStepChange(isLogin() ? WelcomeState.Intro : WelcomeState.WaitLogin)}
+                    restore={() => onStepChange(WelcomeState.Restore1)}
+                    close={() => onFinish('quit')}
                 />
             )
         case WelcomeState.WaitLogin:
-            return <Welcome1a1 next={() => (waitLogin(), setCurrent(WelcomeState.Intro))} />
-        case WelcomeState.Intro:
             return (
-                <Welcome1a2
+                <Welcome1a1
                     next={() => {
-                        setCurrent(WelcomeState.BackupKey)
-                        BackgroundService.backupMyKeyPair()
+                        waitForLogin()
+                        onStepChange(WelcomeState.Intro)
                     }}
                 />
             )
+        case WelcomeState.Intro:
+            return <Welcome1a2 next={() => onStepChange(WelcomeState.BackupKey)} />
         case WelcomeState.BackupKey:
-            return <Welcome1a3 next={() => setCurrent(WelcomeState.ProvePost)} />
+            BackgroundService.backupMyKeyPair()
+            return <Welcome1a3 next={() => onStepChange(WelcomeState.ProvePost)} />
         case WelcomeState.ProvePost:
             return (
                 <Welcome1a4
                     provePost={provePost}
-                    copyToClipboard={(text, goToProfile) => {
-                        ;(navigator as any).clipboard.writeText(text)
-                        if (goToProfile) {
+                    copyToClipboard={(text, goToBio) => {
+                        navigator.clipboard.writeText(text)
+                        if (goToBio) {
                             const a = myUsername.evaluateOnce()[0]
                             if (a) location.href = a.href
                         }
-                        props.finish()
+                        onFinish('done')
                     }}
                 />
             )
         case WelcomeState.Restore1:
             return (
                 <Welcome1b1
-                    back={() => setCurrent(WelcomeState.Start)}
+                    back={() => onStepChange(WelcomeState.Start)}
                     restore={url => {
-                        props.finish()
+                        onFinish('done')
                         restoreFromFile(url)
                     }}
                 />
@@ -107,26 +116,33 @@ function getStorage() {
 }
 function WelcomePortal() {
     const [open, setOpen] = React.useState(true)
-    const [current, setCurrent] = React.useState(WelcomeState.Start)
+    const [step, setStep] = React.useState(WelcomeState.Start)
     const [init, setInit] = React.useState(true)
 
-    function onFinish() {
+    // React.useEffect()
+    // React.useEffect(() => {
+    //     const cb = () => {}
+    //     display.onChange(cb)
+    //     return () => display.onRemoveChange(cb)
+    // })
+
+    const onFinish: Welcome['onFinish'] = reason => {
         setOpen(false)
         chrome.storage.local.set({ init: true })
     }
-    function waitLogin() {
+    function waitForLogin() {
         setOpen(false)
         loginWatcher().then(() => setOpen(true))
     }
     useAsync(() => getStorage(), [0]).then(data => setInit(data.init))
-    useEsc(onFinish)
+    useEsc(onFinish.bind(null, 'quit'))
     // Only render in main page
     if (location.pathname !== '/') return null
     if (init) return null
     return (
         <MuiThemeProvider theme={MaskbookLightTheme}>
             <Dialog open={open}>
-                <Welcome current={current} setCurrent={setCurrent} waitLogin={waitLogin} finish={onFinish} />
+                <Welcome currentStep={step} onStepChange={setStep} waitForLogin={waitForLogin} onFinish={onFinish} />
             </Dialog>
         </MuiThemeProvider>
     )
@@ -151,5 +167,13 @@ function WelcomePortal() {
         </>,
         to.firstVirtualNode.after,
     )
+}
+//#endregion
+//#region Banner
+{
+    const to = new MutationObserverWatcher(
+        new LiveSelector().querySelector<HTMLDivElement>('#pagelet_composer'),
+    ).startWatch()
+    ReactDOM.render(<Banner close={() => {}} getStarted={() => {}} />, to.firstVirtualNode.before)
 }
 //#endregion

@@ -73,7 +73,6 @@ new MutationObserverWatcher(posts)
         }
         // Render it
         const render = () => {
-            console.log(node)
             ReactDOM.render(
                 <PostInspector
                     needZip={() => {

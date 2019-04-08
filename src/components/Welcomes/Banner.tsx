@@ -17,14 +17,14 @@ const _Banner = withStylesTyped({
     root: {
         border: '1px solid #ccc',
         borderRadius: 4,
+        marginBottom: 10,
     },
     toolbar: {
         display: 'flex',
         paddingRight: 0,
     },
     button: {
-        paddingLeft: '3em',
-        paddingRight: '3em',
+        padding: '4px 3em',
     },
     close: {
         margin: 6,
@@ -35,7 +35,7 @@ const _Banner = withStylesTyped({
         <AppBar position="static" color="default" elevation={0} classes={{ root: props.classes.root }}>
             <Toolbar className={props.classes.toolbar}>
                 <FullWidth>
-                    <Typography variant="h6" color="inherit">
+                    <Typography variant="subtitle1" color="inherit">
                         Welcome to Maskbook
                     </Typography>
                 </FullWidth>

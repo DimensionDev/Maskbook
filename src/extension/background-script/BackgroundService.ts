@@ -36,4 +36,4 @@ const Impl = {
 }
 Object.assign(window, { backgroundService: Impl })
 export type Background = typeof Impl
-AsyncCall<Background, {}>(Impl, { key: BackgroundName })
+AsyncCall(Impl, { key: BackgroundName })
