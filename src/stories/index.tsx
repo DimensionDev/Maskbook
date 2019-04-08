@@ -21,8 +21,10 @@ import { SelectPeopleSingle } from '../components/InjectedComponents/SelectPeopl
 import { DecryptPostUI } from '../components/InjectedComponents/DecryptedPost'
 import { AddToKeyStoreUI } from '../components/InjectedComponents/AddToKeyStore'
 import { Person } from '../extension/background-script/PeopleService'
+import { Banner } from '../components/Welcomes/Banner'
 
 storiesOf('Welcome', module)
+    .add('Banner', () => <Banner close={action('Close')} getStarted={action('Get Started')} />)
     .add('Step 0', () => (
         <Welcome0 close={action('Close')} create={to('Welcome', 'Step 1a-1')} restore={to('Welcome', 'Step 1b-1')} />
     ))
