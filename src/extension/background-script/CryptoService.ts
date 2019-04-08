@@ -69,7 +69,7 @@ async function encryptTo(content: string, to: Person[]) {
         }
         publishPostAESKeyDebounce(encodeArrayBuffer(iv), stored)
     }
-    return `Maskbook.io: 🎼${str}|${signature}:||`
+    return `https://Maskbook.io : 🎼${str}|${signature}:||`
 }
 
 /**
