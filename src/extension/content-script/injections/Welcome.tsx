@@ -17,7 +17,6 @@ import { useEsc } from '../../../components/Welcomes/useEsc'
 import { myUsername } from './LiveSelectors'
 import { Banner } from '../../../components/Welcomes/Banner'
 
-const displayOnExternal = new ValueRef(false)
 //#region Welcome
 enum WelcomeState {
     // Step 0
@@ -30,13 +29,25 @@ enum WelcomeState {
     Restore1,
     // End
 }
-const body = DomProxy()
-body.realCurrent = document.body
-ReactDOM.render(<WelcomePortal />, body.after)
+type setWelcomeDisplay = (newState: boolean) => void
+const setWelcomeDisplayRef = React.createRef<setWelcomeDisplay>()
+const setWelcomeDisplay: setWelcomeDisplay = newState => {
+    const current = setWelcomeDisplayRef.current
+    if (!current) return
+    current(newState)
+}
+{
+    const body = DomProxy()
+    body.realCurrent = document.body
+    const WelcomePortal = React.forwardRef(_WelcomePortal)
+    ReactDOM.render(<WelcomePortal ref={setWelcomeDisplayRef} />, body.after)
+}
 
-const isLogin = () => !document.querySelector('.login_form_label_field')
-const loginWatcher = async () => {
+async function loginWatcher() {
     while (!isLogin()) await sleep(500)
+}
+function isLogin() {
+    return !document.querySelector('.login_form_label_field')
 }
 function restoreFromFile(file: File) {
     const fr = new FileReader()
@@ -109,36 +120,53 @@ function Welcome(props: Welcome) {
             )
     }
 }
-function getStorage() {
-    return new Promise<any>((resolve, reject) => {
-        chrome.storage.local.get(resolve)
+{
+    /**
+     * Upgrade version from true to number.
+     * Remove this after 1/1/2020
+     */
+    chrome.storage.local.get(items => {
+        if (items.init === true) chrome.storage.local.set({ init: WelcomeVersion.A })
     })
 }
-function WelcomePortal() {
-    const [open, setOpen] = React.useState(true)
+interface Storage {
+    init: WelcomeVersion
+    userDismissedWelcomeAtVersion: WelcomeVersion
+}
+function getStorage() {
+    return new Promise<Partial<Storage>>(resolve => chrome.storage.local.get(resolve))
+}
+function setStorage(item: Partial<Storage>) {
+    return new Promise<void>(resolve => chrome.storage.local.set(item, resolve))
+}
+const enum WelcomeVersion {
+    A = 1,
+}
+const LATEST_VERSION = WelcomeVersion.A
+function _WelcomePortal(props: {}, ref: React.Ref<setWelcomeDisplay>) {
     const [step, setStep] = React.useState(WelcomeState.Start)
-    const [init, setInit] = React.useState(true)
+    const [open, setOpen] = React.useState(false)
 
-    // React.useEffect()
-    // React.useEffect(() => {
-    //     const cb = () => {}
-    //     display.onChange(cb)
-    //     return () => display.onRemoveChange(cb)
-    // })
+    React.useImperativeHandle(
+        ref,
+        () => (newState: boolean) => {
+            if (newState) setStep(WelcomeState.Start)
+            setOpen(newState)
+        },
+        [setOpen],
+    )
 
     const onFinish: Welcome['onFinish'] = reason => {
         setOpen(false)
-        chrome.storage.local.set({ init: true })
+        setStorage({ init: LATEST_VERSION })
     }
     function waitForLogin() {
         setOpen(false)
         loginWatcher().then(() => setOpen(true))
     }
-    useAsync(() => getStorage(), [0]).then(data => setInit(data.init))
     useEsc(onFinish.bind(null, 'quit'))
     // Only render in main page
     if (location.pathname !== '/') return null
-    if (init) return null
     return (
         <MuiThemeProvider theme={MaskbookLightTheme}>
             <Dialog open={open}>
@@ -156,12 +184,7 @@ function WelcomePortal() {
     ReactDOM.render(
         <>
             {' · '}
-            <a
-                href="#"
-                onClick={() => {
-                    chrome.storage.local.clear()
-                    location.reload()
-                }}>
+            <a href="#" onClick={() => setWelcomeDisplay(true)}>
                 Maskbook Setup
             </a>
         </>,
@@ -171,9 +194,25 @@ function WelcomePortal() {
 //#endregion
 //#region Banner
 {
-    const to = new MutationObserverWatcher(
-        new LiveSelector().querySelector<HTMLDivElement>('#pagelet_composer'),
-    ).startWatch()
-    ReactDOM.render(<Banner close={() => {}} getStarted={() => {}} />, to.firstVirtualNode.before)
+    getStorage().then(({ init, userDismissedWelcomeAtVersion }) => {
+        const to = new MutationObserverWatcher(
+            new LiveSelector().querySelector<HTMLDivElement>('#pagelet_composer'),
+        ).startWatch()
+        if (userDismissedWelcomeAtVersion && userDismissedWelcomeAtVersion >= LATEST_VERSION) return
+        ReactDOM.render(
+            <Banner
+                close={() => {
+                    setWelcomeDisplay(false)
+                    setStorage({ userDismissedWelcomeAtVersion: LATEST_VERSION })
+                    ReactDOM.unmountComponentAtNode(to.firstVirtualNode.before)
+                }}
+                getStarted={() => {
+                    setWelcomeDisplay(true)
+                    ReactDOM.unmountComponentAtNode(to.firstVirtualNode.before)
+                }}
+            />,
+            to.firstVirtualNode.before,
+        )
+    })
 }
 //#endregion
