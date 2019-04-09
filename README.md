@@ -29,7 +29,7 @@ After `Maskbook` and `@holoflows/kit` gets stable, we will directly add `@holofl
 #### Prepare for library @holoflows/kit
 
 -   `cd ..`
--   `git clone https://github.com/DimensionFoundation/Holoflows-kit.git`
+-   `git clone https://github.com/project-holoflows/Holoflows-kit.git`
 -   `cd Holoflows-kit`
 -   `yarn install`
 -   `yarn build`

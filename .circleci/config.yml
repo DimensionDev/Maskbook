@@ -14,7 +14,7 @@ jobs:
                   name: Clone @holoflows/kit
                   command: |
                       cd ..
-                      git clone -q --depth=1 https://github.com/DimensionFoundation/holoflows-kit
+                      git clone -q --depth=1 https://github.com/project-holoflows/holoflows-kit
             - restore_cache:
                   keys:
                       - v1-holoflows-{{ checksum "~/holoflows-kit/yarn.lock" }}
