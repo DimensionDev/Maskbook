@@ -9,6 +9,7 @@ module.exports = function override(/** @type{import("webpack").Configuration} */
         app: path.join(__dirname, './src/index.tsx'),
         contentscript: path.join(__dirname, './src/content-script.ts'),
         backgroundservice: path.join(__dirname, './src/background-service.ts'),
+        injectedscript: path.join(__dirname, './src/extension/injected-script/index.ts'),
     }
     config.output.filename = 'static/js/[name].js'
     config.output.chunkFilename = 'static/js/[name].chunk.js'

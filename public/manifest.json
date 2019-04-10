@@ -9,6 +9,12 @@
             "js": ["/static/js/contentscript.js"],
             "run_at": "document_idle",
             "all_frames": true
+        },
+        {
+            "matches": ["https://www.facebook.com/*"],
+            "js": ["/static/js/injectedscript.js"],
+            "run_at": "document_start",
+            "all_frames": true
         }
     ],
     "web_accessible_resources": ["*.css", "*.js", "*.jpg", "*.png"],
