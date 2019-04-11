@@ -11,15 +11,18 @@ import Button from '@material-ui/core/Button/Button'
 import { withStylesTyped, MaskbookLightTheme } from '../../utils/theme'
 import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider'
 import { useAsync } from '../../utils/AsyncComponent'
-import { CryptoService } from '../../extension/content-script/rpc'
+import { CryptoService, PeopleService } from '../../extension/content-script/rpc'
 import { Person } from '../../extension/background-script/PeopleService'
 import { usePeople } from '../DataSource/PeopleRef'
 import { SelectPeopleUI } from './SelectPeople'
 import { CustomPasteEventId } from '../../utils/Names'
 import { sleep } from '../../utils/utils'
+import { myUsername, getUsername } from '../../extension/content-script/injections/LiveSelectors'
 
 interface Props {
     avatar?: string
+    nickname?: string
+    username?: string
     encrypted: string
     onCombinationChange(people: Person[], text: string): void
     onRequestPost(text: string): void
@@ -33,6 +36,9 @@ const _AdditionalPostBox = withStylesTyped({
         flexDirection: 'column',
         padding: 12,
         boxSizing: 'border-box',
+    },
+    innerInput: {
+        minHeight: '3em',
     },
     // todo: theme
     grayArea: { background: '#f5f6f7', padding: 8, wordBreak: 'break-all' },
@@ -60,7 +66,7 @@ const _AdditionalPostBox = withStylesTyped({
                     undefined
                 )}
                 <InputBase
-                    className={classes.input}
+                    classes={{ root: classes.input, input: classes.innerInput }}
                     value={text}
                     onChange={e => {
                         setText(e.currentTarget.value)
@@ -68,12 +74,14 @@ const _AdditionalPostBox = withStylesTyped({
                     }}
                     fullWidth
                     multiline
-                    placeholder="What's your mind? Encrypt with Maskbook"
+                    placeholder={`${
+                        props.nickname ? `Hey ${props.nickname}, w` : 'W'
+                    }hat's your mind? Encrypt with Maskbook`}
                 />
             </Paper>
             <Divider />
             <SelectPeopleUI
-                all={people}
+                all={people.filter(x => x.username !== props.username)}
                 onSetSelected={p => {
                     selectPeople(p)
                     props.onCombinationChange(p, text)
@@ -121,13 +129,24 @@ export function AdditionalPostBox() {
     const [people, setPeople] = React.useState<Person[]>([])
     const [encrypted, setEncrypted] = React.useState<string | undefined>('')
     const publisherToken = React.useRef<string>()
+    const [avatar, setAvatar] = React.useState<string | undefined>('')
     useAsync(() => CryptoService.encryptTo(text, people), [text, people]).then(data => {
         const [str, pub] = data
         setEncrypted(str)
         publisherToken.current = pub
     })
+    let nickname
+    {
+        const link = myUsername.evaluateOnce()[0]
+        if (link) nickname = link.innerText
+    }
+    const username = getUsername()
+    useAsync(() => PeopleService.queryAvatar(username || ''), []).then(setAvatar)
     return (
         <AdditionalPostBoxUI
+            avatar={avatar}
+            nickname={nickname}
+            username={username}
             onRequestPost={async text => {
                 if (!publisherToken.current) return
                 const element = document.querySelector<HTMLDivElement>('.notranslate')!
@@ -136,6 +155,8 @@ export function AdditionalPostBox() {
                 selectElementContents(element)
                 await sleep(100)
                 document.dispatchEvent(new CustomEvent(CustomPasteEventId, { detail: text }))
+                navigator.clipboard.writeText(text)
+                // Prevent Custom Paste failed, this will cause service not available to user.
                 CryptoService.publishPostAESKey(publisherToken.current)
             }}
             encrypted={publisherToken.current ? encrypted || '' : ''}

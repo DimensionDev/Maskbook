@@ -49,6 +49,7 @@ const Impl = {
     getAllPeople,
     uploadProvePostUrl,
     storeAvatar,
+    queryAvatar,
     getMyPrivateKey,
     storeKey: storeKeyService,
 }

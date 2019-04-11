@@ -4,13 +4,7 @@ import { LiveSelector, MutationObserverWatcher } from '@holoflows/kit'
 import { DecryptPost } from '../../../components/InjectedComponents/DecryptedPost'
 import { AddToKeyStore } from '../../../components/InjectedComponents/AddToKeyStore'
 import { PeopleService } from '../rpc'
-import { myUsername } from './LiveSelectors'
-
-function getUsername(url: string) {
-    const after = url.split('https://www.facebook.com/')[1]
-    if (after.match('profile.php')) return after.match(/id=(?<id>\d+)/)!.groups!.id
-    else return after.split('?')[0]
-}
+import { getUsername } from './LiveSelectors'
 
 const posts = new LiveSelector().querySelectorAll<HTMLDivElement>('.userContent').filter((x: HTMLElement | null) => {
     while (x) {
@@ -30,13 +24,7 @@ const PostInspector = (props: { post: string; postBy: string; postId: string; ne
 
     if (type.encryptedPost) {
         props.needZip()
-        return (
-            <DecryptPost
-                encryptedText={post}
-                whoAmI={myUsername.evaluateOnce().map(x => getUsername(x.href))[0]!}
-                postBy={postBy}
-            />
-        )
+        return <DecryptPost encryptedText={post} whoAmI={getUsername()!} postBy={postBy} />
     } else if (type.provePost) {
         PeopleService.uploadProvePostUrl(postBy, postId)
         return <AddToKeyStore postBy={postBy} provePost={post} />
@@ -46,7 +34,7 @@ const PostInspector = (props: { post: string; postBy: string; postId: string; ne
 new MutationObserverWatcher(posts)
     .useNodeForeach((node, key, realNode) => {
         // Get author
-        const postBy = getUsername(node.current.previousElementSibling!.querySelector('a')!.href)
+        const postBy = getUsername(node.current.previousElementSibling!.querySelector('a'))!
         // Save author's avatar
         try {
             const avatar = node.current.previousElementSibling!.querySelector('img')!
