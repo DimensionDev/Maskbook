@@ -114,7 +114,12 @@ storiesOf('Injections', module)
     //
     .add('Checkbox (unused)', () => <EncryptionCheckbox onCheck={action('Check')} />)
     .add('Post box', () => (
-        <AdditionalPostBoxUI onRequestPost={action('onRequestPost')} encrypted="" onCombinationChange={() => {}} />
+        <AdditionalPostBoxUI
+            onRequestPost={action('onRequestPost')}
+            avatar={text('Avatar URL', '')}
+            nickname={text('Nickname', '')}
+            onCombinationChange={() => {}}
+        />
     ))
     .add('Additional Post Content', () => <AdditionalContent title="Additional Content" children="Content" />)
     .add('Select people', () => {

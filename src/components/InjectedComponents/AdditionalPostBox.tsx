@@ -23,9 +23,8 @@ interface Props {
     avatar?: string
     nickname?: string
     username?: string
-    encrypted: string
     onCombinationChange(people: Person[], text: string): void
-    onRequestPost(text: string): void
+    onRequestPost(): void
 }
 const _AdditionalPostBox = withStylesTyped({
     root: { maxWidth: 500, marginBottom: 10 },
@@ -42,13 +41,11 @@ const _AdditionalPostBox = withStylesTyped({
     },
     // todo: theme
     grayArea: { background: '#f5f6f7', padding: 8, wordBreak: 'break-all' },
-    typo: { lineHeight: '28.5px' },
-    button: { padding: '2px 30px' },
+    button: { padding: '2px 30px', flex: 1 },
 })<Props>(props => {
     const { classes } = props
     const [text, setText] = React.useState('')
     const [selectedPeople, selectPeople] = React.useState<Person[]>([])
-    const encrypted = `Decrypt this post with ${props.encrypted}`
 
     const people = usePeople()
     return (
@@ -90,21 +87,14 @@ const _AdditionalPostBox = withStylesTyped({
             />
             <Divider />
             <FlexBox className={classes.grayArea}>
-                <Typography className={classes.typo} variant="caption">
-                    Encrypted Text Preview
-                </Typography>
-                <FullWidth />
                 <Button
-                    onClick={() => props.onRequestPost(encrypted)}
+                    onClick={() => props.onRequestPost()}
                     variant="contained"
                     color="primary"
                     className={classes.button}
                     disabled={!(selectedPeople.length && text)}>
                     📫 Post it!
                 </Button>
-            </FlexBox>
-            <FlexBox className={classes.grayArea}>
-                <Typography variant="caption">{encrypted}</Typography>
             </FlexBox>
         </Card>
     )
@@ -127,14 +117,7 @@ function selectElementContents(el: Node) {
 export function AdditionalPostBox() {
     const [text, setText] = React.useState('')
     const [people, setPeople] = React.useState<Person[]>([])
-    const [encrypted, setEncrypted] = React.useState<string | undefined>('')
-    const publisherToken = React.useRef<string>()
     const [avatar, setAvatar] = React.useState<string | undefined>('')
-    useAsync(() => CryptoService.encryptTo(text, people), [text, people]).then(data => {
-        const [str, pub] = data
-        setEncrypted(str)
-        publisherToken.current = pub
-    })
     let nickname
     {
         const link = myUsername.evaluateOnce()[0]
@@ -147,22 +130,22 @@ export function AdditionalPostBox() {
             avatar={avatar}
             nickname={nickname}
             username={username}
-            onRequestPost={async text => {
-                if (!publisherToken.current) return
+            onRequestPost={async () => {
+                const [encrypted, token] = await CryptoService.encryptTo(text, people)
+                const fullPost = 'Decrypt this post with ' + encrypted
                 const element = document.querySelector<HTMLDivElement>('.notranslate')!
                 element.focus()
                 await sleep(100)
                 selectElementContents(element)
                 await sleep(100)
-                document.dispatchEvent(new CustomEvent(CustomPasteEventId, { detail: text }))
-                navigator.clipboard.writeText(text)
+                document.dispatchEvent(new CustomEvent(CustomPasteEventId, { detail: fullPost }))
+                navigator.clipboard.writeText(fullPost)
                 // Prevent Custom Paste failed, this will cause service not available to user.
-                CryptoService.publishPostAESKey(publisherToken.current)
+                CryptoService.publishPostAESKey(token)
             }}
-            encrypted={publisherToken.current ? encrypted || '' : ''}
             onCombinationChange={(p, t) => {
-                if (p !== people) setPeople(p)
-                if (t !== text) setText(t)
+                setPeople(p)
+                setText(t)
             }}
         />
     )
