@@ -113,7 +113,9 @@ const demoPeople: Person[] = [
 storiesOf('Injections', module)
     //
     .add('Checkbox (unused)', () => <EncryptionCheckbox onCheck={action('Check')} />)
-    .add('Post box', () => <AdditionalPostBoxUI encrypted="" onCombinationChange={() => {}} />)
+    .add('Post box', () => (
+        <AdditionalPostBoxUI onRequestPost={action('onRequestPost')} encrypted="" onCombinationChange={() => {}} />
+    ))
     .add('Additional Post Content', () => <AdditionalContent title="Additional Content" children="Content" />)
     .add('Select people', () => {
         function SelectPeople() {

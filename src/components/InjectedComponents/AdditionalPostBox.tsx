@@ -15,11 +15,14 @@ import { CryptoService } from '../../extension/content-script/rpc'
 import { Person } from '../../extension/background-script/PeopleService'
 import { usePeople } from '../DataSource/PeopleRef'
 import { SelectPeopleUI } from './SelectPeople'
+import { CustomPasteEventId } from '../../utils/Names'
+import { sleep } from '../../utils/utils'
 
 interface Props {
     avatar?: string
     encrypted: string
     onCombinationChange(people: Person[], text: string): void
+    onRequestPost(text: string): void
 }
 const _AdditionalPostBox = withStylesTyped({
     root: { maxWidth: 500, marginBottom: 10 },
@@ -84,12 +87,12 @@ const _AdditionalPostBox = withStylesTyped({
                 </Typography>
                 <FullWidth />
                 <Button
-                    onClick={() => (navigator as any).clipboard.writeText(encrypted)}
+                    onClick={() => props.onRequestPost(encrypted)}
                     variant="contained"
                     color="primary"
                     className={classes.button}
                     disabled={!(selectedPeople.length && text)}>
-                    Copy Encrypted Text
+                    📫 Post it!
                 </Button>
             </FlexBox>
             <FlexBox className={classes.grayArea}>
@@ -105,15 +108,37 @@ export function AdditionalPostBoxUI(props: Props) {
         </MuiThemeProvider>
     )
 }
+function selectElementContents(el: Node) {
+    const range = document.createRange()
+    range.selectNodeContents(el)
+    const sel = window.getSelection()!
+    sel.removeAllRanges()
+    sel.addRange(range)
+}
 
 export function AdditionalPostBox() {
     const [text, setText] = React.useState('')
     const [people, setPeople] = React.useState<Person[]>([])
     const [encrypted, setEncrypted] = React.useState<string | undefined>('')
-    useAsync(() => CryptoService.encryptTo(text, people), [text, people]).then(setEncrypted)
+    const publisherToken = React.useRef<string>()
+    useAsync(() => CryptoService.encryptTo(text, people), [text, people]).then(data => {
+        const [str, pub] = data
+        setEncrypted(str)
+        publisherToken.current = pub
+    })
     return (
         <AdditionalPostBoxUI
-            encrypted={encrypted || ''}
+            onRequestPost={async text => {
+                if (!publisherToken.current) return
+                const element = document.querySelector<HTMLDivElement>('.notranslate')!
+                element.focus()
+                await sleep(100)
+                selectElementContents(element)
+                await sleep(100)
+                document.dispatchEvent(new CustomEvent(CustomPasteEventId, { detail: text }))
+                CryptoService.publishPostAESKey(publisherToken.current)
+            }}
+            encrypted={publisherToken.current ? encrypted || '' : ''}
             onCombinationChange={(p, t) => {
                 if (p !== people) setPeople(p)
                 if (t !== text) setText(t)

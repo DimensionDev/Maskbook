@@ -5,7 +5,7 @@ import { CryptoName } from '../../utils/Names'
 import { addPersonPublicKey } from '../../key-management/people-gun'
 import { Person } from './PeopleService'
 import { getMyLocalKey } from '../../key-management/local-db'
-import { publishPostAESKey, queryPostAESKey } from '../../key-management/posts-gun'
+import { publishPostAESKey as publishPostAESKey_Service, queryPostAESKey } from '../../key-management/posts-gun'
 
 import { debounce } from 'lodash-es'
 import {
@@ -17,7 +17,6 @@ import {
 } from '../../utils/EncodeDecode'
 
 OnlyRunInContext('background', 'EncryptService')
-const publishPostAESKeyDebounce = debounce(publishPostAESKey, 2000, { trailing: true })
 /**
  * ! Remember to call requestRegenerateIV !
  */
@@ -27,13 +26,22 @@ async function requestRegenerateIV() {
 }
 // v41: 🎼1/4|ownersAESKeyEncrypted|iv|encryptedText|signature:||
 //#region Encrypt & Decrypt
+type EncryptedText = string
+type OthersAESKeyEncryptedToken = string
+/**
+ * This map stores <token, othersAESKeyEncrypted>.
+ */
+const OthersAESKeyEncryptedMap = new Map<OthersAESKeyEncryptedToken, Record<string, Alpha41.PublishedAESKey>>()
 /**
  * Encrypt to a user
  * @param content Original text
  * @param to Encrypt target
+ * @returns Will return a tuple of [encrypted: string, token: string] where
+ * - `encrypted` is the encrypted string
+ * - `token` is used to call `publishPostAESKey` before post the content
  */
-async function encryptTo(content: string, to: Person[]) {
-    if (to.length === 0) return ''
+async function encryptTo(content: string, to: Person[]): Promise<[EncryptedText, OthersAESKeyEncryptedToken]> {
+    if (to.length === 0) return ['', '']
     const toKey = (await Promise.all(
         to.map(async person => ({ name: person.username, key: await queryPersonCryptoKey(person.username) })),
     )).map(person => ({ name: person.name, key: (person.key === null ? null : person.key.key.publicKey)! }))
@@ -61,15 +69,22 @@ async function encryptTo(content: string, to: Person[]) {
         encryptedText,
     )}`
     const signature = encodeArrayBuffer(await Alpha41.sign(str, mine!.key.privateKey))
-    {
-        // Store AES key to gun
-        const stored: Record<string, Alpha41.PublishedAESKey> = {}
-        for (const k of othersAESKeyEncrypted) {
-            stored[k.name] = k.key
-        }
-        publishPostAESKeyDebounce(encodeArrayBuffer(iv), stored)
+    // Store AES key to gun
+    const stored: Record<string, Alpha41.PublishedAESKey> = {}
+    for (const k of othersAESKeyEncrypted) {
+        stored[k.name] = k.key
     }
-    return `https://Maskbook.io : 🎼${str}|${signature}:||`
+    const key = encodeArrayBuffer(iv)
+    OthersAESKeyEncryptedMap.set(key, stored)
+    return [`https://Maskbook.io : 🎼${str}|${signature}:||`, key]
+}
+/**
+ * MUST call before send post, or othersAESKeyEncrypted will not be published to the internet!
+ * @param token Token that returns in the encryptTo
+ */
+async function publishPostAESKey(token: string) {
+    if (!OthersAESKeyEncryptedMap.has(token)) throw new Error('Publish AES key failed!')
+    return publishPostAESKey_Service(token, OthersAESKeyEncryptedMap.get(token)!)
 }
 
 /**
@@ -189,6 +204,7 @@ const Impl = {
     getMyProveBio,
     verifyOthersProve,
     requestRegenerateIV,
+    publishPostAESKey,
 }
 Object.assign(window, { encryptService: Impl, crypto41: Alpha41 })
 export type Encrypt = typeof Impl

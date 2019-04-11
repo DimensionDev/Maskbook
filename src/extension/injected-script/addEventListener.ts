@@ -1,6 +1,6 @@
-import {} from '@holoflows/kit'
+import { CustomPasteEventId } from '../../utils/Names'
 {
-    const store: Partial<Record<keyof DocumentEventMap, Set<any>>> = {}
+    const store: Partial<Record<keyof DocumentEventMap, Set<(event: Event) => void>>> = {}
     function hijack(key: keyof DocumentEventMap) {
         store[key] = new Set()
     }
@@ -8,8 +8,25 @@ import {} from '@holoflows/kit'
         return key in store
     }
 
-    document.addEventListener('debug', () => {
-        console.log(store)
+    document.addEventListener(CustomPasteEventId, e => {
+        const ev = e as CustomEvent<string>
+        const transfer = new DataTransfer()
+        transfer.setData('text/plain', ev.detail)
+        const event = {
+            clipboardData: transfer,
+            defaultPrevented: false,
+            preventDefault: () => {},
+            target: document.activeElement,
+            // ! Magic. Why?
+            _inherits_from_prototype: true,
+        }
+        for (const f of store.paste || []) {
+            try {
+                f(event as any)
+            } catch (e) {
+                console.error(e)
+            }
+        }
     })
 
     hijack('paste')
