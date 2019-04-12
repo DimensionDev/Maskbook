@@ -1,7 +1,7 @@
 import Gun from 'gun'
 import 'gun/lib/then'
 import { OnlyRunInContext } from '@holoflows/kit/es'
-import { PublishedAESKey } from '../crypto/crypto-alpha-41'
+import { PublishedAESKey } from '../crypto/crypto-alpha-40'
 
 OnlyRunInContext('background', 'Gun')
 interface Person {

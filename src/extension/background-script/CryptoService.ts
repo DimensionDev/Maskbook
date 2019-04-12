@@ -1,5 +1,5 @@
 import { queryPersonCryptoKey, getMyPrivateKey, storeKey, generateNewKey } from '../../key-management/keystore-db'
-import * as Alpha41 from '../../crypto/crypto-alpha-41'
+import * as Alpha40 from '../../crypto/crypto-alpha-40'
 import { AsyncCall, MessageCenter, OnlyRunInContext } from '@holoflows/kit/es'
 import { CryptoName } from '../../utils/Names'
 import { addPersonPublicKey } from '../../key-management/people-gun'
@@ -7,7 +7,6 @@ import { Person } from './PeopleService'
 import { getMyLocalKey } from '../../key-management/local-db'
 import { publishPostAESKey as publishPostAESKey_Service, queryPostAESKey } from '../../key-management/posts-gun'
 
-import { debounce } from 'lodash-es'
 import {
     decodeText,
     encodeArrayBuffer,
@@ -24,14 +23,14 @@ let lastiv = crypto.getRandomValues(new Uint8Array(16))
 async function requestRegenerateIV() {
     lastiv = crypto.getRandomValues(new Uint8Array(16))
 }
-// v41: 🎼1/4|ownersAESKeyEncrypted|iv|encryptedText|signature:||
+// v40: 🎼2/4|ownersAESKeyEncrypted|iv|encryptedText|signature:||
 //#region Encrypt & Decrypt
 type EncryptedText = string
 type OthersAESKeyEncryptedToken = string
 /**
  * This map stores <token, othersAESKeyEncrypted>.
  */
-const OthersAESKeyEncryptedMap = new Map<OthersAESKeyEncryptedToken, Record<string, Alpha41.PublishedAESKey>>()
+const OthersAESKeyEncryptedMap = new Map<OthersAESKeyEncryptedToken, Record<string, Alpha40.PublishedAESKey>>()
 /**
  * Encrypt to a user
  * @param content Original text
@@ -57,20 +56,20 @@ async function encryptTo(content: string, to: Person[]): Promise<[EncryptedText,
         othersAESKeyEncrypted,
         ownersAESKeyEncrypted,
         iv,
-    } = await Alpha41.encrypt1ToN({
-        version: -41,
+    } = await Alpha40.encrypt1ToN({
+        version: -40,
         content: content,
         othersPublicKeyECDH: toKey,
         ownersLocalKey: mineLocal.key,
         privateKeyECDH: mine!.key.privateKey,
         iv: lastiv,
     })
-    const str = `1/4|${encodeArrayBuffer(ownersAESKeyEncrypted)}|${encodeArrayBuffer(iv)}|${encodeArrayBuffer(
+    const str = `2/4|${encodeArrayBuffer(ownersAESKeyEncrypted)}|${encodeArrayBuffer(iv)}|${encodeArrayBuffer(
         encryptedText,
     )}`
-    const signature = encodeArrayBuffer(await Alpha41.sign(str, mine!.key.privateKey))
+    const signature = encodeArrayBuffer(await Alpha40.sign(str, mine!.key.privateKey))
     // Store AES key to gun
-    const stored: Record<string, Alpha41.PublishedAESKey> = {}
+    const stored: Record<string, Alpha40.PublishedAESKey> = {}
     for (const k of othersAESKeyEncrypted) {
         stored[k.name] = k.key
     }
@@ -101,8 +100,8 @@ async function decryptFrom(
     const [version, ownersAESKeyEncrypted, salt, encryptedText, signature] = encrypted.split('|')
     if (!version || !ownersAESKeyEncrypted || !salt || !encryptedText || !signature)
         throw new TypeError('This post is not complete, you need to view the full post.')
-    // 1/4 === version 41
-    if (version !== '1/4') throw new TypeError('Unknown post type')
+    // 2/4 === version 40
+    if (version !== '2/4') throw new TypeError('Unknown post type')
     if (!ownersAESKeyEncrypted || !salt || !encryptedText || !signature) throw new TypeError('Invalid post')
     async function getKey(name: string) {
         let key = await queryPersonCryptoKey(by)
@@ -116,8 +115,8 @@ async function decryptFrom(
         const unverified = [version, ownersAESKeyEncrypted, salt, encryptedText].join('|')
         if (by === whoAmI) {
             const content = decodeText(
-                await Alpha41.decryptMessage1ToNByMyself({
-                    version: -41,
+                await Alpha40.decryptMessage1ToNByMyself({
+                    version: -40,
                     encryptedAESKey: ownersAESKeyEncrypted,
                     encryptedContent: encryptedText,
                     myLocalKey: (await getMyLocalKey()).key,
@@ -125,7 +124,7 @@ async function decryptFrom(
                 }),
             )
             try {
-                const signatureVerifyResult = await Alpha41.verify(unverified, signature, mine.key.publicKey)
+                const signatureVerifyResult = await Alpha40.verify(unverified, signature, mine.key.publicKey)
                 return { signatureVerifyResult, content }
             } catch {
                 return { signatureVerifyResult: false, content }
@@ -142,8 +141,8 @@ async function decryptFrom(
                 )
             }
             const content = decodeText(
-                await Alpha41.decryptMessage1ToNByOther({
-                    version: -41,
+                await Alpha40.decryptMessage1ToNByOther({
+                    version: -40,
                     AESKeyEncrypted: aesKeyEncrypted,
                     authorsPublicKeyECDH: byKey.key.publicKey,
                     encryptedContent: encryptedText,
@@ -152,7 +151,7 @@ async function decryptFrom(
                 }),
             )
             try {
-                const signatureVerifyResult = await Alpha41.verify(unverified, signature, byKey.key.publicKey)
+                const signatureVerifyResult = await Alpha40.verify(unverified, signature, byKey.key.publicKey)
                 return { signatureVerifyResult, content }
             } catch {
                 return { signatureVerifyResult: false, content }
@@ -206,6 +205,6 @@ const Impl = {
     requestRegenerateIV,
     publishPostAESKey,
 }
-Object.assign(window, { encryptService: Impl, crypto41: Alpha41 })
+Object.assign(window, { encryptService: Impl, crypto40: Alpha40 })
 export type Encrypt = typeof Impl
 AsyncCall(Impl, { key: CryptoName })

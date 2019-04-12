@@ -1,5 +1,5 @@
 import { gun } from './gun'
-import { PublishedAESKey } from '../crypto/crypto-alpha-41'
+import { PublishedAESKey } from '../crypto/crypto-alpha-40'
 
 export async function queryPostAESKey(postIdentifier: string, myUsername: string) {
     return gun
