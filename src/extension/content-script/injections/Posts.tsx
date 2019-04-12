@@ -6,14 +6,7 @@ import { AddToKeyStore } from '../../../components/InjectedComponents/AddToKeySt
 import { PeopleService } from '../rpc'
 import { getUsername } from './LiveSelectors'
 
-const posts = new LiveSelector().querySelectorAll<HTMLDivElement>('.userContent').filter((x: HTMLElement | null) => {
-    while (x) {
-        if (x.classList.contains('hidden_elem')) return false
-        // tslint:disable-next-line: no-parameter-reassignment
-        x = x.parentElement
-    }
-    return true
-})
+const posts = new LiveSelector().querySelectorAll<HTMLDivElement>('.userContent, .userContent+*+div>div>div>div>div')
 
 const PostInspector = (props: { post: string; postBy: string; postId: string; needZip(): void }) => {
     const { post, postBy, postId } = props
@@ -34,10 +27,10 @@ const PostInspector = (props: { post: string; postBy: string; postId: string; ne
 new MutationObserverWatcher(posts)
     .useNodeForeach((node, key, realNode) => {
         // Get author
-        const postBy = getUsername(node.current.previousElementSibling!.querySelector('a'))!
+        const postBy = getUsername(node.current.parentElement!.querySelectorAll('a')[1])!
         // Save author's avatar
         try {
-            const avatar = node.current.previousElementSibling!.querySelector('img')!
+            const avatar = node.current.parentElement!.querySelector('img')!
             PeopleService.storeAvatar(postBy, avatar.getAttribute('aria-label')!, avatar.src)
         } catch {}
         // Get post id
@@ -50,7 +43,7 @@ new MutationObserverWatcher(posts)
                 // In single url
                 (postIdInHref && postIdInHref.groups!.id) ||
                 // In timeline
-                node.current.previousElementSibling!.querySelector('div[id^=feed]')!.id.split(';')[2]
+                node.current.parentElement!.querySelector('div[id^=feed]')!.id.split(';')[2]
         } catch {}
         // Click "See more" if it may be a encrypted post
         {
@@ -59,18 +52,47 @@ new MutationObserverWatcher(posts)
                 more.click()
             }
         }
+        {
+            // Style modification for repost
+            if (!node.current.className.match('userContent') && node.current.innerText.length > 0) {
+                node.after.setAttribute(
+                    'style',
+                    `
+                border: 1px solid #ebedf0;
+                display: block;
+                border-top: none;
+                border-bottom: none;
+                margin-bottom: -23px;
+                padding: 0px 10px;`,
+                )
+            }
+        }
         // Render it
         const render = () => {
             ReactDOM.render(
                 <PostInspector
                     needZip={() => {
-                        const pe = node.current.parentElement
-                        if (!pe) return
-                        const p = pe.querySelector('p')
-                        if (!p) return
-                        p.style.display = 'block'
-                        p.style.maxHeight = '20px'
-                        p.style.overflow = 'hidden'
+                        {
+                            // Post content
+                            const pe = node.current.parentElement
+                            if (pe) {
+                                const p = pe.querySelector('p')
+                                if (p) {
+                                    p.style.display = 'block'
+                                    p.style.maxHeight = '20px'
+                                    p.style.overflow = 'hidden'
+                                    p.style.marginBottom = '0'
+                                }
+                            }
+                        }
+                        {
+                            // Link preview
+                            const parent = node.current.parentElement!.querySelector('a[href*="maskbook.io"] img')
+                            if (parent) {
+                                parent.parentElement!.parentElement!.parentElement!.parentElement!.parentElement!.parentElement!.style.display =
+                                    'none'
+                            }
+                        }
                     }}
                     postId={postId}
                     post={node.current.innerText}
