@@ -12,8 +12,12 @@ const box = new MutationObserverWatcher(
 )
 box.useNodeForeach(node => {
     return {
-        onRemove: () => CryptoService.requestRegenerateIV(),
-        onTargetChanged: () => CryptoService.requestRegenerateIV(),
+        onTargetChanged: () => {
+            console.log('target changed')
+        },
+        onNodeMutation: () => {
+            console.log('node mutation')
+        },
     }
 }).startWatch()
 ReactDOM.render(<AdditionalPostBox />, box.firstVirtualNode.after)

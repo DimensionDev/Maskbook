@@ -16,13 +16,6 @@ import {
 } from '../../utils/EncodeDecode'
 
 OnlyRunInContext('background', 'EncryptService')
-/**
- * ! Remember to call requestRegenerateIV !
- */
-let lastiv = crypto.getRandomValues(new Uint8Array(16))
-async function requestRegenerateIV() {
-    lastiv = crypto.getRandomValues(new Uint8Array(16))
-}
 // v40: 🎼2/4|ownersAESKeyEncrypted|iv|encryptedText|signature:||
 //#region Encrypt & Decrypt
 type EncryptedText = string
@@ -62,7 +55,7 @@ async function encryptTo(content: string, to: Person[]): Promise<[EncryptedText,
         othersPublicKeyECDH: toKey,
         ownersLocalKey: mineLocal.key,
         privateKeyECDH: mine!.key.privateKey,
-        iv: lastiv,
+        iv: crypto.getRandomValues(new Uint8Array(16)),
     })
     const str = `2/4|${encodeArrayBuffer(ownersAESKeyEncrypted)}|${encodeArrayBuffer(iv)}|${encodeArrayBuffer(
         encryptedText,
@@ -202,7 +195,6 @@ const Impl = {
     decryptFrom,
     getMyProveBio,
     verifyOthersProve,
-    requestRegenerateIV,
     publishPostAESKey,
 }
 Object.assign(window, { encryptService: Impl, crypto40: Alpha40 })
