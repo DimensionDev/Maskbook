@@ -199,6 +199,7 @@ function _WelcomePortal(props: {}, ref: React.Ref<setWelcomeDisplay>) {
             new LiveSelector().querySelector<HTMLDivElement>('#pagelet_composer'),
         ).startWatch()
         if (userDismissedWelcomeAtVersion && userDismissedWelcomeAtVersion >= LATEST_VERSION) return
+        if (init && init >= LATEST_VERSION) return
         ReactDOM.render(
             <Banner
                 close={() => {
