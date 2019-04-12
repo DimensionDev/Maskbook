@@ -18,7 +18,7 @@ const posts = new LiveSelector().querySelectorAll<HTMLDivElement>('.userContent'
 const PostInspector = (props: { post: string; postBy: string; postId: string; needZip(): void }) => {
     const { post, postBy, postId } = props
     const type = {
-        encryptedPost: post.match('🎼') && post.match(':||'),
+        encryptedPost: post.match(/🎼([a-zA-Z0-9\+=\/|]+):\|\|/),
         provePost: post.match(/🔒(.+)🔒/)!,
     }
 
