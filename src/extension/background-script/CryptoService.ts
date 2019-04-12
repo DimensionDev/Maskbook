@@ -93,8 +93,11 @@ async function decryptFrom(
     const [version, ownersAESKeyEncrypted, salt, encryptedText, signature] = encrypted.split('|')
     if (!version || !ownersAESKeyEncrypted || !salt || !encryptedText || !signature)
         throw new TypeError('This post is not complete, you need to view the full post.')
+    // 1/4 === version 41, has dropped.
     // 2/4 === version 40
-    if (version !== '2/4') throw new TypeError('Unknown post type')
+    if (version === '1/4')
+        throw new TypeError('We have dropped support for preview version 🎼1/4. Tell your friend to update Maskbook!')
+    if (version !== '2/4') throw new TypeError('Unknown post version, maybe you should update Maskbook?')
     if (!ownersAESKeyEncrypted || !salt || !encryptedText || !signature) throw new TypeError('Invalid post')
     async function getKey(name: string) {
         let key = await queryPersonCryptoKey(by)
