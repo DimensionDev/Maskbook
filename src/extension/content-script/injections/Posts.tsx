@@ -87,10 +87,10 @@ new MutationObserverWatcher(posts)
                         }
                         {
                             // Link preview
-                            const parent = node.current.parentElement!.querySelector('a[href*="maskbook.io"] img')
-                            if (parent) {
-                                parent.parentElement!.parentElement!.parentElement!.parentElement!.parentElement!.parentElement!.style.display =
-                                    'none'
+                            const img = node.current.parentElement!.querySelector('a[href*="maskbook.io"] img')
+                            const parent = img && img.closest('span')
+                            if (img && parent) {
+                                parent.style.display = 'none'
                             }
                         }
                     }}
