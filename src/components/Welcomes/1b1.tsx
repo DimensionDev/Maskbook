@@ -33,7 +33,8 @@ interface Props {
 export default withStylesTyped((theme: Theme) =>
     createStyles({
         paper: {
-            maxWidth: '35rem',
+            width: 600,
+            boxSizing: 'border-box',
         },
         nav: {
             paddingTop: theme.spacing.unit,
