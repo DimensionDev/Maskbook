@@ -9,7 +9,6 @@ import { createBox } from '../../utils/Flex'
 
 import ArrowBack from '@material-ui/icons/ArrowBack'
 import { useDragAndDrop } from '../../utils/useDragAndDrop'
-import classNames from 'classnames'
 
 const RestoreBox = createBox(theme => ({
     color: theme.palette.text.hint,
@@ -69,7 +68,7 @@ export default withStylesTyped((theme: Theme) =>
                 </Button>
             </nav>
             <main className={classes.main}>
-                <Typography variant="h5">Restore Keypairs</Typography>
+                <Typography variant="h5">Restore your keypair</Typography>
                 <form>
                     <input
                         style={{ display: 'none' }}
@@ -80,7 +79,7 @@ export default withStylesTyped((theme: Theme) =>
                     />
                     <RestoreBox
                         style={{
-                            fontSize: dragStatus === 'drag-enter' ? '1.2em' : 'unset',
+                            color: dragStatus === 'drag-enter' ? 'black' : 'gray',
                         }}
                         onClick={() => ref.current && ref.current.click()}>
                         {dragStatus === 'drag-enter'

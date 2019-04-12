@@ -9,7 +9,7 @@ import React from 'react'
  * </div>
  */
 export function useDragAndDrop() {
-    const [status, setStatus] = React.useState<undefined | 'drag-enter'>(undefined)
+    const [status, setStatus] = React.useState<undefined | 'drag-enter' | 'selected'>(undefined)
     const fileRef = React.useRef<File | null>()
     const onChange = React.useCallback((event: React.ChangeEvent<HTMLInputElement> | React.DragEvent) => {
         const files = (
@@ -18,6 +18,7 @@ export function useDragAndDrop() {
         if (!files) return
         const file = files.item(0)
         fileRef.current = file
+        setStatus('selected')
     }, [])
     const onEnter = React.useCallback((e: React.DragEvent) => {
         e.preventDefault()
