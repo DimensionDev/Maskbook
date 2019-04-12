@@ -2,7 +2,6 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import { LiveSelector, MutationObserverWatcher } from '@holoflows/kit'
 import { AdditionalPostBox } from '../../../components/InjectedComponents/AdditionalPostBox'
-import { CryptoService } from '../rpc'
 
 const box = new MutationObserverWatcher(
     new LiveSelector()

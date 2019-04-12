@@ -50,3 +50,4 @@ After `Maskbook` and `@holoflows/kit` gets stable, we will directly add `@holofl
 -   ./src/extension
 -   -   ./background-script - Scripts that running in the background page as a service
 -   -   ./content-script - Script that be injected into the web page
+-   -   ./injected-script - Script that will run in the main frame of the injected web page

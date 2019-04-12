@@ -27,7 +27,7 @@ interface Props {
     onRequestPost(): void
 }
 const _AdditionalPostBox = withStylesTyped({
-    root: { maxWidth: 500, marginBottom: 10 },
+    root: { margin: '10px 0' },
     paper: { borderRadius: 0, display: 'flex' },
     avatar: { margin: '12px 0 0 12px' },
     input: {
