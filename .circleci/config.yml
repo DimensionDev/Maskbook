@@ -53,7 +53,8 @@ jobs:
                       yarn link @holoflows/kit
                       yarn build
                       sudo apt-get install zip
-                      zip -r Maskbook.zip build/
+                      cd build
+                      zip -r ../Maskbook.zip ./*
             - save_cache:
                   paths:
                       - node_modules
