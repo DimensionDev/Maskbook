@@ -1,12 +1,11 @@
-# Maskbook &middot; ![GitHub license](https://img.shields.io/badge/license-AGPL-blue.svg?style=flat-square) ![Ciecle CI](https://img.shields.io/circleci/project/github/project-maskbook/Maskbook.svg?style=flat-square&logo=circleci)
+# Maskbook &middot; ![GitHub license](https://img.shields.io/badge/license-AGPL-blue.svg?style=flat-square) ![Ciecle CI](https://img.shields.io/circleci/project/github/project-maskbook/Maskbook.svg?style=flat-square&logo=circleci) [![Join the chat at https://gitter.im/Maskbook/community](https://badges.gitter.im/Maskbook/community.svg)](https://gitter.im/Maskbook/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) ![Chrome Web Store](https://img.shields.io/chrome-web-store/v/jkoeaghipilijlahjplgbfiocjhldnap.svg?logo=Maskbook&logoColor=%231c68f3&style=flat-square)
 
-[![Join the chat at https://gitter.im/Maskbook/community](https://badges.gitter.im/Maskbook/community.svg)](https://gitter.im/Maskbook/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 Encrypt your posts & chats on You-Know-Where. Allow only your friends to decrypt.
 
 For general introductions, see https://Maskbook.io/
 
-[Install Maskbook](https://maskbook.io/install/)
+[Install Maskbook on Chrome Web Store](https://chrome.google.com/webstore/detail/maskbook/jkoeaghipilijlahjplgbfiocjhldnap/)
 
 ## Documentation for developers
 
