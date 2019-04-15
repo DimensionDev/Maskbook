@@ -2,7 +2,6 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import { LiveSelector, MutationObserverWatcher } from '@holoflows/kit'
 import { AdditionalPostBox } from '../../../components/InjectedComponents/AdditionalPostBox'
-import { CryptoService } from '../rpc'
 
 const box = new MutationObserverWatcher(
     new LiveSelector()
@@ -12,8 +11,12 @@ const box = new MutationObserverWatcher(
 )
 box.useNodeForeach(node => {
     return {
-        onRemove: () => CryptoService.requestRegenerateIV(),
-        onTargetChanged: () => CryptoService.requestRegenerateIV(),
+        onTargetChanged: () => {
+            console.log('target changed')
+        },
+        onNodeMutation: () => {
+            console.log('node mutation')
+        },
     }
 }).startWatch()
 ReactDOM.render(<AdditionalPostBox />, box.firstVirtualNode.after)

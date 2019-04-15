@@ -21,8 +21,10 @@ import { SelectPeopleSingle } from '../components/InjectedComponents/SelectPeopl
 import { DecryptPostUI } from '../components/InjectedComponents/DecryptedPost'
 import { AddToKeyStoreUI } from '../components/InjectedComponents/AddToKeyStore'
 import { Person } from '../extension/background-script/PeopleService'
+import { Banner } from '../components/Welcomes/Banner'
 
 storiesOf('Welcome', module)
+    .add('Banner', () => <Banner close={action('Close')} getStarted={action('Get Started')} />)
     .add('Step 0', () => (
         <Welcome0 close={action('Close')} create={to('Welcome', 'Step 1a-1')} restore={to('Welcome', 'Step 1b-1')} />
     ))
@@ -32,7 +34,7 @@ storiesOf('Welcome', module)
     .add('Step 1a-4', () => (
         <Welcome1a4
             copyToClipboard={action('Post click')}
-            provePost={text('URL', 'https://maskbook.app/s/#mQINBF-BxAcBEA-zyfSodx')}
+            provePost={text('URL', '🔒ApfdMwLoV/URKn7grgcNWdMR2iWMGdHpQBk5LVGFxhul🔒')}
         />
     ))
     .add('Step 1b-1', () => <Welcome1b1 back={linkTo('Welcome', 'Step 0')} restore={action('Restore with')} />)
@@ -111,7 +113,14 @@ const demoPeople: Person[] = [
 storiesOf('Injections', module)
     //
     .add('Checkbox (unused)', () => <EncryptionCheckbox onCheck={action('Check')} />)
-    .add('Post box', () => <AdditionalPostBoxUI encrypted="" onCombinationChange={() => {}} />)
+    .add('Post box', () => (
+        <AdditionalPostBoxUI
+            onRequestPost={action('onRequestPost')}
+            avatar={text('Avatar URL', '')}
+            nickname={text('Nickname', '')}
+            onCombinationChange={() => {}}
+        />
+    ))
     .add('Additional Post Content', () => <AdditionalContent title="Additional Content" children="Content" />)
     .add('Select people', () => {
         function SelectPeople() {

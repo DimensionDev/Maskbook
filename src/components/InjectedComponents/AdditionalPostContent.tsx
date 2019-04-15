@@ -11,7 +11,7 @@ interface Props {
 const _AdditionalContent = withStylesTyped({})<Props>(props => {
     return (
         <>
-            <Divider style={{ marginBottom: 6 }} />
+            <Divider style={{ marginBottom: 6, marginBlock: 6 }} />
             <Typography variant="caption" style={{ display: 'flex' }}>
                 <img
                     src={chrome.runtime.getURL('/maskbook-icon-padded.png')}
@@ -24,6 +24,7 @@ const _AdditionalContent = withStylesTyped({})<Props>(props => {
             <Typography variant="body1" style={{ marginBottom: 6, marginTop: 6, lineHeight: 1.2 }}>
                 {props.children}
             </Typography>
+            <Divider />
         </>
     )
 })

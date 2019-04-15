@@ -14,8 +14,8 @@ export function DecryptPost({ postBy, whoAmI, encryptedText }: Props) {
     const [b, _2] = a.split(':||')
     return (
         <AsyncComponent
-            promise={async (encryptedString: string) => CryptoService.decryptFrom(b, postBy, whoAmI)}
-            values={[encryptedText]}
+            promise={async (encryptedString: string) => CryptoService.decryptFrom(encryptedString, postBy, whoAmI)}
+            values={[b]}
             awaitingComponent={DecryptPostAwaiting}
             completeComponent={DecryptPostSuccess}
             failedComponent={DecryptPostFailed}
@@ -27,7 +27,7 @@ function DecryptPostSuccess({ data }: { data: { signatureVerifyResult: boolean; 
         <AdditionalContent
             title={
                 <>
-                    Decrypted with Maskbook: <FullWidth />
+                    Maskbook decrypted content: <FullWidth />
                     {data.signatureVerifyResult ? (
                         <span style={{ color: 'green' }}>Signature verified ✔</span>
                     ) : (
@@ -46,10 +46,10 @@ function DecryptPostSuccess({ data }: { data: { signatureVerifyResult: boolean; 
     )
 }
 
-const DecryptPostAwaiting = <AdditionalContent title="Maskbook is decrypting..." />
+const DecryptPostAwaiting = <AdditionalContent title="Maskbook decrypting..." />
 function DecryptPostFailed({ error }: { error: Error }) {
     return (
-        <AdditionalContent title="Decrypted Failed">
+        <AdditionalContent title="Maskbook decryption failed">
             {(e => {
                 if (e.match('DOMException')) return 'Maybe this post is not sent to you.'
                 return e

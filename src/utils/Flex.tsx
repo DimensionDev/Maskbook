@@ -1,22 +1,24 @@
-import React, { ReactHTML, ClassAttributes, HTMLAttributes } from 'react'
+import React from 'react'
 import { Theme } from '@material-ui/core/styles/createMuiTheme'
 import { withStylesTyped } from './theme'
 import { CSSProperties } from '@material-ui/core/styles/withStyles'
 import classNames from 'classnames'
 import createStyles from '@material-ui/core/styles/createStyles'
 
-export function createBox<T extends keyof ReactHTML>(
+export function createBox<T extends keyof JSX.IntrinsicElements = 'div'>(
     fn: ((theme: Theme) => CSSProperties) | CSSProperties,
     element?: T,
 ) {
-    return withStylesTyped(typeof fn === 'function' ? (theme: Theme) => createStyles({ box: fn(theme) }) : { box: fn })<
-        ClassAttributes<T> & HTMLAttributes<T>
-    >(({ classes, ...props }) =>
-        React.createElement(element || 'div', {
+    const style = typeof fn === 'function' ? (theme: Theme) => createStyles({ box: fn(theme) }) : { box: fn }
+    const Real = React.forwardRef(({ classes, className, ...props }: any, ref: any) => {
+        return React.createElement(element || 'div', {
             ...props,
-            className: classNames(classes.box, (props as any).className),
-        }),
-    )
+            ref,
+            className: classNames(classes.box, className),
+        })
+    })
+    const Styled = withStylesTyped(style)(Real)
+    return Styled as React.ComponentType<JSX.IntrinsicElements[T]>
 }
 
 export const FlexBox = createBox({ display: 'flex' })

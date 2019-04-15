@@ -11,18 +11,23 @@ import Button from '@material-ui/core/Button/Button'
 import { withStylesTyped, MaskbookLightTheme } from '../../utils/theme'
 import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider'
 import { useAsync } from '../../utils/AsyncComponent'
-import { CryptoService } from '../../extension/content-script/rpc'
+import { CryptoService, PeopleService } from '../../extension/content-script/rpc'
 import { Person } from '../../extension/background-script/PeopleService'
 import { usePeople } from '../DataSource/PeopleRef'
 import { SelectPeopleUI } from './SelectPeople'
+import { CustomPasteEventId } from '../../utils/Names'
+import { sleep } from '../../utils/utils'
+import { myUsername, getUsername } from '../../extension/content-script/injections/LiveSelectors'
 
 interface Props {
     avatar?: string
-    encrypted: string
+    nickname?: string
+    username?: string
     onCombinationChange(people: Person[], text: string): void
+    onRequestPost(): void
 }
 const _AdditionalPostBox = withStylesTyped({
-    root: { maxWidth: 500, marginBottom: 10 },
+    root: { margin: '10px 0' },
     paper: { borderRadius: 0, display: 'flex' },
     avatar: { margin: '12px 0 0 12px' },
     input: {
@@ -31,15 +36,16 @@ const _AdditionalPostBox = withStylesTyped({
         padding: 12,
         boxSizing: 'border-box',
     },
+    innerInput: {
+        minHeight: '3em',
+    },
     // todo: theme
     grayArea: { background: '#f5f6f7', padding: 8, wordBreak: 'break-all' },
-    typo: { lineHeight: '28.5px' },
-    button: { padding: '2px 30px' },
+    button: { padding: '2px 30px', flex: 1 },
 })<Props>(props => {
     const { classes } = props
     const [text, setText] = React.useState('')
     const [selectedPeople, selectPeople] = React.useState<Person[]>([])
-    const encrypted = `Decrypt this post with ${props.encrypted}`
 
     const people = usePeople()
     return (
@@ -57,7 +63,7 @@ const _AdditionalPostBox = withStylesTyped({
                     undefined
                 )}
                 <InputBase
-                    className={classes.input}
+                    classes={{ root: classes.input, input: classes.innerInput }}
                     value={text}
                     onChange={e => {
                         setText(e.currentTarget.value)
@@ -65,12 +71,14 @@ const _AdditionalPostBox = withStylesTyped({
                     }}
                     fullWidth
                     multiline
-                    placeholder="What's your mind? Encrypt with Maskbook"
+                    placeholder={`${
+                        props.nickname ? `Hey ${props.nickname}, w` : 'W'
+                    }hat's your mind? Encrypt with Maskbook`}
                 />
             </Paper>
             <Divider />
             <SelectPeopleUI
-                all={people}
+                all={people.filter(x => x.username !== props.username)}
                 onSetSelected={p => {
                     selectPeople(p)
                     props.onCombinationChange(p, text)
@@ -79,21 +87,14 @@ const _AdditionalPostBox = withStylesTyped({
             />
             <Divider />
             <FlexBox className={classes.grayArea}>
-                <Typography className={classes.typo} variant="caption">
-                    Encrypted Text Preview
-                </Typography>
-                <FullWidth />
                 <Button
-                    onClick={() => (navigator as any).clipboard.writeText(encrypted)}
+                    onClick={() => props.onRequestPost()}
                     variant="contained"
                     color="primary"
                     className={classes.button}
                     disabled={!(selectedPeople.length && text)}>
-                    Copy Encrypted Text
+                    📫 Post it!
                 </Button>
-            </FlexBox>
-            <FlexBox className={classes.grayArea}>
-                <Typography variant="caption">{encrypted}</Typography>
             </FlexBox>
         </Card>
     )
@@ -105,18 +106,46 @@ export function AdditionalPostBoxUI(props: Props) {
         </MuiThemeProvider>
     )
 }
+function selectElementContents(el: Node) {
+    const range = document.createRange()
+    range.selectNodeContents(el)
+    const sel = window.getSelection()!
+    sel.removeAllRanges()
+    sel.addRange(range)
+}
 
 export function AdditionalPostBox() {
     const [text, setText] = React.useState('')
     const [people, setPeople] = React.useState<Person[]>([])
-    const [encrypted, setEncrypted] = React.useState<string | undefined>('')
-    useAsync(() => CryptoService.encryptTo(text, people), [text, people]).then(setEncrypted)
+    const [avatar, setAvatar] = React.useState<string | undefined>('')
+    let nickname
+    {
+        const link = myUsername.evaluateOnce()[0]
+        if (link) nickname = link.innerText
+    }
+    const username = getUsername()
+    useAsync(() => PeopleService.queryAvatar(username || ''), []).then(setAvatar)
     return (
         <AdditionalPostBoxUI
-            encrypted={encrypted || ''}
+            avatar={avatar}
+            nickname={nickname}
+            username={username}
+            onRequestPost={async () => {
+                const [encrypted, token] = await CryptoService.encryptTo(text, people)
+                const fullPost = 'Decrypt this post with ' + encrypted
+                const element = document.querySelector<HTMLDivElement>('.notranslate')!
+                element.focus()
+                await sleep(100)
+                selectElementContents(element)
+                await sleep(100)
+                document.dispatchEvent(new CustomEvent(CustomPasteEventId, { detail: fullPost }))
+                navigator.clipboard.writeText(fullPost)
+                // Prevent Custom Paste failed, this will cause service not available to user.
+                CryptoService.publishPostAESKey(token)
+            }}
             onCombinationChange={(p, t) => {
-                if (p !== people) setPeople(p)
-                if (t !== text) setText(t)
+                setPeople(p)
+                setText(t)
             }}
         />
     )

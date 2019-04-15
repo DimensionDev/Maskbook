@@ -78,7 +78,7 @@ export const SelectPeopleUI = withStylesTyped({
                     <Button
                         className={classes.button}
                         color="primary"
-                        onClick={() => onSetSelected(selected.concat(listAfterSearch))}>
+                        onClick={() => onSetSelected([...selected, ...listAfterSearch])}>
                         Select All
                     </Button>
                 )}

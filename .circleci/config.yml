@@ -2,41 +2,39 @@
 #
 # Check https://circleci.com/docs/2.0/language-javascript/ for more details
 #
-version: 2
+version: 2.1
 jobs:
     build:
         docker:
-            # specify the version you desire here
             - image: circleci/node:11.0
-
-            # Specify service dependencies here if necessary
-            # CircleCI maintains a library of pre-built images
-            # documented at https://circleci.com/docs/2.0/circleci-images/
-            # - image: circleci/mongo:3.4.4
-
         working_directory: ~/repo
-
         steps:
             # build holoflows-kit
-            - run: |
-                  cd ..
-                  git clone -q --depth=1 https://github.com/DimensionFoundation/holoflows-kit
+            - run:
+                  name: Clone @holoflows/kit
+                  command: |
+                      cd ..
+                      git clone -q --depth=1 https://github.com/project-holoflows/holoflows-kit
             - restore_cache:
                   keys:
-                      - v1-dependencies-holoflows-{{ checksum "~/holoflows-kit/package.json" }}
+                      - v1-holoflows-{{ checksum "~/holoflows-kit/yarn.lock" }}
                       # fallback to using the latest cache if no exact match is found
-                      - v1-dependencies-holoflows-
-            - run: |
-                  cd ../holoflows-kit
-                  yarn install
+                      - v1-holoflows-
+            - run:
+                  name: Install @holoflows/kit
+                  command: |
+                      cd ../holoflows-kit
+                      yarn install --frozen-lockfile
             - save_cache:
                   paths:
                       - ~/holoflows-kit/node_modules
-                  key: v1-dependencies-holoflows-{{ checksum "~/holoflows-kit/package.json" }}
-            - run: |
-                  cd ../holoflows-kit
-                  yarn build
-                  yarn link
+                  key: v1-holoflows-{{ checksum "~/holoflows-kit/yarn.lock" }}
+            - run:
+                  name: Build @holoflows/kit
+                  command: |
+                      cd ../holoflows-kit
+                      yarn build
+                      yarn link
 
             # build maskbook
             - checkout
@@ -45,21 +43,61 @@ jobs:
                       - tsbuild-cache
             - restore_cache:
                   keys:
-                      - v1-dependencies-{{ checksum "package.json" }}
-                      # fallback to using the latest cache if no exact match is found
-                      - v1-dependencies-
-            - run: yarn install
+                      - v1-maskbook-{{ .Branch }}-{{ checksum "yarn.lock" }}
+                      - v1-maskbook-{{ .Branch }}-
+                      - v1-maskbook-
+            - run:
+                  name: Build Maskbook
+                  command: |
+                      yarn install --frozen-lockfile
+                      yarn link @holoflows/kit
+                      yarn build
+                      sudo apt-get install zip
+                      cd build
+                      zip -r ../Maskbook.zip ./*
             - save_cache:
                   paths:
                       - node_modules
-                  key: v1-dependencies-{{ checksum "package.json" }}
-            - run: yarn link @holoflows/kit
-            - run: yarn build
-            - run: sudo apt-get install zip
+                  key: v1-maskbook-{{ .Branch }}-{{ checksum "yarn.lock" }}
             - save_cache:
                   paths:
                       - .tscache/
                   key: tsbuild-cache
-            - run: zip -r build.zip build/
             - store_artifacts:
-                  path: build.zip
+                  path: Maskbook.zip
+                  destination: /Maskbook.zip
+            - persist_to_workspace:
+                  root: ~/repo/
+                  paths:
+                      - Maskbook.zip
+    publish-github-release:
+        docker:
+            - image: cibuilds/github:0.10
+        steps:
+            - checkout
+            - attach_workspace:
+                  at: ~/repo/
+            - run:
+                  name: 'Publish Release on GitHub'
+                  command: |
+                      set -o nounset
+                      ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} -b "✔ No breaking changes. / ⚠ Has breaking changes!
+
+                      🎨 UI Improvements
+
+                      👩‍💻 Miscellaneous" -replace -draft -prerelease $(git describe HEAD) ~/repo/Maskbook.zip
+                  # -b BODY \         # Set text describing the contents of the release
+                  # -delete \         # Delete release and its git tag in advance if it exists (same as -recreate)
+                  # -n TITLE \        # Set release title
+workflows:
+    version: 2
+    main:
+        jobs:
+            - build
+            - publish-github-release:
+                  requires:
+                      - build
+                  filters:
+                      branches:
+                          only: released
+# test

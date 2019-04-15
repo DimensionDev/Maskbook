@@ -23,7 +23,7 @@ async function deriveAESKey(
     const derivedKey = await crypto.subtle.deriveKey(
         { name: 'ECDH', public: op },
         pr,
-        { name: 'AES-CBC', length: 256 },
+        { name: 'AES-GCM', length: 256 },
         true,
         ['encrypt', 'decrypt'],
     )
@@ -46,7 +46,7 @@ async function deriveAESKey(
         // tslint:disable-next-line: no-bitwise
         iv[i] = iv_pre[i] ^ iv_pre[16 + i]
     }
-    const key = await crypto.subtle.importKey('raw', password, { name: 'AES-CBC', length: 256 }, true, [
+    const key = await crypto.subtle.importKey('raw', password, { name: 'AES-GCM', length: 256 }, true, [
         'encrypt',
         'decrypt',
     ])
@@ -58,7 +58,7 @@ async function deriveAESKey(
  * Encrypt 1 to 1
  */
 export async function encrypt1To1(info: {
-    version: -41
+    version: -40
     /** Message that you want to encrypt */
     content: string | ArrayBuffer
     /** Your private key */
@@ -66,7 +66,7 @@ export async function encrypt1To1(info: {
     /** Other's public key */
     othersPublicKeyECDH: CryptoKey
 }): Promise<{
-    version: -41
+    version: -40
     encryptedContent: ArrayBuffer
     salt: ArrayBuffer
 }> {
@@ -75,14 +75,14 @@ export async function encrypt1To1(info: {
     if (typeof content === 'string') content = encodeText(content)
 
     const { iv, key, salt } = await deriveAESKey(privateKeyECDH, othersPublicKeyECDH)
-    const encryptedContent = await crypto.subtle.encrypt({ name: 'AES-CBC', iv }, key, content)
-    return { salt, encryptedContent, version: -41 }
+    const encryptedContent = await crypto.subtle.encrypt({ name: 'AES-GCM', iv }, key, content)
+    return { salt, encryptedContent, version: -40 }
 }
 /**
  * Encrypt 1 to N
  */
 export async function encrypt1ToN(info: {
-    version: -41
+    version: -40
     /** Message to encrypt */
     content: string | ArrayBuffer
     /** Your private key */
@@ -94,7 +94,7 @@ export async function encrypt1ToN(info: {
     /** iv */
     iv: ArrayBuffer
 }): Promise<{
-    version: -41
+    version: -40
     encryptedContent: ArrayBuffer
     iv: ArrayBuffer
     /** Your encrypted post aes key. Should be attached in the post. */
@@ -106,9 +106,9 @@ export async function encrypt1ToN(info: {
     }[]
 }> {
     const { version, content, othersPublicKeyECDH, privateKeyECDH, ownersLocalKey, iv } = info
-    const AESKey = await crypto.subtle.generateKey({ name: 'AES-CBC', length: 256 }, true, ['encrypt', 'decrypt'])
+    const AESKey = await crypto.subtle.generateKey({ name: 'AES-GCM', length: 256 }, true, ['encrypt', 'decrypt'])
     const encryptedContent = await crypto.subtle.encrypt(
-        { name: 'AES-CBC', iv },
+        { name: 'AES-GCM', iv },
         AESKey,
         typeof content === 'string' ? encodeText(content) : content,
     )
@@ -127,7 +127,7 @@ export async function encrypt1ToN(info: {
             }>
         >(async ({ key, name }) => {
             const encrypted = await encrypt1To1({
-                version: -41,
+                version: -40,
                 content: exportedAESKey,
                 othersPublicKeyECDH: key,
                 privateKeyECDH: privateKeyECDH,
@@ -135,7 +135,7 @@ export async function encrypt1ToN(info: {
             return {
                 name,
                 key: {
-                    version: -41,
+                    version: -40,
                     salt: encodeArrayBuffer(encrypted.salt),
                     encryptedKey: encodeArrayBuffer(encrypted.encryptedContent),
                 },
@@ -143,7 +143,7 @@ export async function encrypt1ToN(info: {
         }),
     )
 
-    return { encryptedContent, iv, version: -41, ownersAESKeyEncrypted, othersAESKeyEncrypted }
+    return { encryptedContent, iv, version: -40, ownersAESKeyEncrypted, othersAESKeyEncrypted }
 }
 //#endregion
 //#region decrypt text
@@ -151,7 +151,7 @@ export async function encrypt1ToN(info: {
  * Decrypt 1 to 1
  */
 export async function decryptMessage1To1(info: {
-    version: -41
+    version: -40
     encryptedContent: string | ArrayBuffer
     salt: string | ArrayBuffer
     /** Your private key */
@@ -164,13 +164,13 @@ export async function decryptMessage1To1(info: {
     const encrypted = typeof encryptedContent === 'string' ? decodeArrayBuffer(encryptedContent) : encryptedContent
 
     const { iv, key } = await deriveAESKey(privateKeyECDH, anotherPublicKeyECDH, salt)
-    return crypto.subtle.decrypt({ name: 'AES-CBC', iv }, key, encrypted)
+    return crypto.subtle.decrypt({ name: 'AES-GCM', iv }, key, encrypted)
 }
 /**
  * Decrypt 1 to N message that send by other
  */
 export async function decryptMessage1ToNByOther(info: {
-    version: -41
+    version: -40
     encryptedContent: string | ArrayBuffer
     privateKeyECDH: CryptoKey
     authorsPublicKeyECDH: CryptoKey
@@ -180,7 +180,7 @@ export async function decryptMessage1ToNByOther(info: {
     const { AESKeyEncrypted, version, encryptedContent, privateKeyECDH, authorsPublicKeyECDH, iv } = info
     const aesKeyJWK = decodeText(
         await decryptMessage1To1({
-            version: -41,
+            version: -40,
             salt: AESKeyEncrypted.salt,
             encryptedContent: AESKeyEncrypted.encryptedKey,
             anotherPublicKeyECDH: authorsPublicKeyECDH,
@@ -190,7 +190,7 @@ export async function decryptMessage1ToNByOther(info: {
     const aesKey = await crypto.subtle.importKey(
         'jwk',
         JSON.parse(aesKeyJWK),
-        { name: 'AES-CBC', length: 256 },
+        { name: 'AES-GCM', length: 256 },
         false,
         ['decrypt'],
     )
@@ -200,7 +200,7 @@ export async function decryptMessage1ToNByOther(info: {
  * Decrypt 1 to N message that send by myself
  */
 export async function decryptMessage1ToNByMyself(info: {
-    version: -41
+    version: -40
     encryptedContent: string | ArrayBuffer
     /** This should be included in the message */
     encryptedAESKey: string | ArrayBuffer
@@ -218,7 +218,7 @@ export async function decryptMessage1ToNByMyself(info: {
     const decryptedAESKey = await crypto.subtle.importKey(
         'jwk',
         decryptedAESKeyJWK,
-        { name: 'AES-CBC', length: 256 },
+        { name: 'AES-GCM', length: 256 },
         false,
         ['decrypt'],
     )
@@ -236,7 +236,7 @@ export async function decryptWithAES(info: {
     const { aesKey } = info
     const iv = typeof info.iv === 'string' ? decodeArrayBuffer(info.iv) : info.iv
     const encrypted = typeof info.encrypted === 'string' ? decodeArrayBuffer(info.encrypted) : info.encrypted
-    return crypto.subtle.decrypt({ name: 'AES-CBC', iv }, aesKey, encrypted)
+    return crypto.subtle.decrypt({ name: 'AES-GCM', iv }, aesKey, encrypted)
 }
 export async function encryptWithAES(info: {
     content: string | ArrayBuffer
@@ -246,7 +246,7 @@ export async function encryptWithAES(info: {
     const iv = info.iv ? info.iv : crypto.getRandomValues(new Uint8Array(16))
     const content = typeof info.content === 'string' ? encodeText(info.content) : info.content
 
-    const encrypted = await crypto.subtle.encrypt({ name: 'AES-CBC', iv }, info.aesKey, content)
+    const encrypted = await crypto.subtle.encrypt({ name: 'AES-GCM', iv }, info.aesKey, content)
     return { content: encrypted, iv }
 }
 //#endregion

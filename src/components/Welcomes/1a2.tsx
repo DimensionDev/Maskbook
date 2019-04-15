@@ -15,7 +15,8 @@ export default withStylesTyped((theme: Theme) =>
         paper: {
             padding: '2rem 1rem 1rem 1rem',
             textAlign: 'center',
-            maxWidth: '35rem',
+            width: 600,
+            boxSizing: 'border-box',
             '& > *': {
                 marginBottom: theme.spacing.unit * 3,
             },

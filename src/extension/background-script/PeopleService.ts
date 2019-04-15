@@ -38,7 +38,7 @@ async function storeKeyService(key: { key: CryptoKeyRecord; local: JsonWebKey })
     const k = await toReadCryptoKey(key.key)
     const a = storeKey(k)
     const b = storeLocalKey(
-        await crypto.subtle.importKey('jwk', key.local, { name: 'AES-CBC', length: 256 }, true, ['encrypt', 'decrypt']),
+        await crypto.subtle.importKey('jwk', key.local, { name: 'AES-GCM', length: 256 }, true, ['encrypt', 'decrypt']),
     )
     await a
     await b
@@ -49,9 +49,10 @@ const Impl = {
     getAllPeople,
     uploadProvePostUrl,
     storeAvatar,
+    queryAvatar,
     getMyPrivateKey,
     storeKey: storeKeyService,
 }
 Object.assign(window, { friendService: Impl })
 export type PeopleService = typeof Impl
-AsyncCall<PeopleService, {}>(Impl, { key: FriendServiceName })
+AsyncCall(Impl, { key: FriendServiceName })

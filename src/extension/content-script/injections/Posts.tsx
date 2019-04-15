@@ -4,36 +4,20 @@ import { LiveSelector, MutationObserverWatcher } from '@holoflows/kit'
 import { DecryptPost } from '../../../components/InjectedComponents/DecryptedPost'
 import { AddToKeyStore } from '../../../components/InjectedComponents/AddToKeyStore'
 import { PeopleService } from '../rpc'
+import { getUsername } from './LiveSelectors'
 
-function getUsername(url: string) {
-    const after = url.split('https://www.facebook.com/')[1]
-    if (after.match('profile.php')) return after.match(/id=(?<id>\d+)/)!.groups!.id
-    else return after.split('?')[0]
-}
-const myUsername = new LiveSelector()
-    .querySelector<HTMLAnchorElement>(`[aria-label="Facebook"][role="navigation"] [data-click="profile_icon"] a`)
-    .map(x => x.href)
-    .map(getUsername)
-
-const posts = new LiveSelector().querySelectorAll<HTMLDivElement>('.userContent').filter((x: HTMLElement | null) => {
-    while (x) {
-        if (x.classList.contains('hidden_elem')) return false
-        // tslint:disable-next-line: no-parameter-reassignment
-        x = x.parentElement
-    }
-    return true
-})
+const posts = new LiveSelector().querySelectorAll<HTMLDivElement>('.userContent, .userContent+*+div>div>div>div>div')
 
 const PostInspector = (props: { post: string; postBy: string; postId: string; needZip(): void }) => {
     const { post, postBy, postId } = props
     const type = {
-        encryptedPost: post.match('Maskbook.io:🎼') && post.match(':||'),
+        encryptedPost: post.match(/🎼([a-zA-Z0-9\+=\/|]+):\|\|/),
         provePost: post.match(/🔒(.+)🔒/)!,
     }
 
     if (type.encryptedPost) {
         props.needZip()
-        return <DecryptPost encryptedText={post} whoAmI={myUsername.evaluateOnce()[0]!} postBy={postBy} />
+        return <DecryptPost encryptedText={post} whoAmI={getUsername()!} postBy={postBy} />
     } else if (type.provePost) {
         PeopleService.uploadProvePostUrl(postBy, postId)
         return <AddToKeyStore postBy={postBy} provePost={post} />
@@ -43,10 +27,10 @@ const PostInspector = (props: { post: string; postBy: string; postId: string; ne
 new MutationObserverWatcher(posts)
     .useNodeForeach((node, key, realNode) => {
         // Get author
-        const postBy = getUsername(node.current.previousElementSibling!.querySelector('a')!.href)
+        const postBy = getUsername(node.current.parentElement!.querySelectorAll('a')[1])!
         // Save author's avatar
         try {
-            const avatar = node.current.previousElementSibling!.querySelector('img')!
+            const avatar = node.current.parentElement!.querySelector('img')!
             PeopleService.storeAvatar(postBy, avatar.getAttribute('aria-label')!, avatar.src)
         } catch {}
         // Get post id
@@ -59,28 +43,56 @@ new MutationObserverWatcher(posts)
                 // In single url
                 (postIdInHref && postIdInHref.groups!.id) ||
                 // In timeline
-                node.current.previousElementSibling!.querySelector('div[id^=feed]')!.id.split(';')[2]
+                node.current.parentElement!.querySelector('div[id^=feed]')!.id.split(';')[2]
         } catch {}
         // Click "See more" if it may be a encrypted post
         {
             const more = node.current.parentElement!.querySelector<HTMLSpanElement>('.see_more_link_inner')
-            if (more && node.current.innerText.match('Maskbook.io:🎼')) {
+            if (more && node.current.innerText.match(/🎼.+|/)) {
                 more.click()
+            }
+        }
+        {
+            // Style modification for repost
+            if (!node.current.className.match('userContent') && node.current.innerText.length > 0) {
+                node.after.setAttribute(
+                    'style',
+                    `
+                border: 1px solid #ebedf0;
+                display: block;
+                border-top: none;
+                border-bottom: none;
+                margin-bottom: -23px;
+                padding: 0px 10px;`,
+                )
             }
         }
         // Render it
         const render = () => {
-            console.log(node)
             ReactDOM.render(
                 <PostInspector
                     needZip={() => {
-                        const pe = node.current.parentElement
-                        if (!pe) return
-                        const p = pe.querySelector('p')
-                        if (!p) return
-                        p.style.display = 'block'
-                        p.style.maxHeight = '20px'
-                        p.style.overflow = 'hidden'
+                        {
+                            // Post content
+                            const pe = node.current.parentElement
+                            if (pe) {
+                                const p = pe.querySelector('p')
+                                if (p) {
+                                    p.style.display = 'block'
+                                    p.style.maxHeight = '20px'
+                                    p.style.overflow = 'hidden'
+                                    p.style.marginBottom = '0'
+                                }
+                            }
+                        }
+                        {
+                            // Link preview
+                            const img = node.current.parentElement!.querySelector('a[href*="maskbook.io"] img')
+                            const parent = img && img.closest('span')
+                            if (img && parent) {
+                                parent.style.display = 'none'
+                            }
+                        }
                     }}
                     postId={postId}
                     post={node.current.innerText}

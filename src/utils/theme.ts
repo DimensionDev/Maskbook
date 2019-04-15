@@ -8,6 +8,10 @@ import React from 'react'
 import createMuiTheme, { ThemeOptions } from '@material-ui/core/styles/createMuiTheme'
 import { TypographyOptions } from '@material-ui/core/styles/createTypography'
 
+// See: https://material-ui.com/style/typography/#migration-to-typography-v2
+Object.assign(window, {
+    __MUI_USE_NEXT_TYPOGRAPHY_VARIANTS__: true,
+})
 const _refTheme = createMuiTheme()
 const _refThemeDark = createMuiTheme({ palette: { type: 'dark' } })
 const baseTheme = (theme: 'dark' | 'light') =>
@@ -72,7 +76,14 @@ export function withStylesTyped<ClassKey extends string, Options extends WithSty
             ? React.ComponentType<Props & WithStyles<typeof style>>
             : React.ForwardRefExoticComponent<Props & WithStyles<typeof style> & React.RefAttributes<Ref>>,
     ) {
-        return withStyles(style, options as any)(component as any) as Ref extends null
+        const Styled = withStyles(style, options as any)(component as any)
+        const Wrap = React.forwardRef((props: any, ref: any) => {
+            return React.createElement(Styled, {
+                innerRef: ref,
+                ...props,
+            })
+        })
+        return Wrap as Ref extends null
             ? React.ComponentType<Props>
             : React.ForwardRefExoticComponent<React.RefAttributes<Ref> & Props>
     }

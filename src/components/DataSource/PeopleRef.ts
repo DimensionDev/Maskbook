@@ -5,7 +5,6 @@ import { MessageCenter } from '../../utils/messages'
 import { PeopleService } from '../../extension/content-script/rpc'
 
 const ref = new ValueRef<Person[]>([])
-ref.startWatch()
 PeopleService.getAllPeople().then(p => (ref.value = p))
 MessageCenter.on('newPerson', p => {
     const old = ref.value.filter(x => x.username !== p.username)
@@ -13,10 +12,6 @@ MessageCenter.on('newPerson', p => {
 })
 export function usePeople() {
     const [people, setPeople] = React.useState<Person[]>([])
-    const cb = React.useCallback(() => setPeople(ref.value), [setPeople])
-    React.useEffect(() => {
-        ref.addListener('onChange', cb)
-        return () => void ref.removeListener('onChange', cb)
-    })
+    React.useEffect(() => ref.addListener(val => setPeople(val)))
     return people.filter(x => x.username !== '$self')
 }

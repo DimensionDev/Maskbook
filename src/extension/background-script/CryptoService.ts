@@ -1,13 +1,12 @@
 import { queryPersonCryptoKey, getMyPrivateKey, storeKey, generateNewKey } from '../../key-management/keystore-db'
-import * as Alpha41 from '../../crypto/crypto-alpha-41'
+import * as Alpha40 from '../../crypto/crypto-alpha-40'
 import { AsyncCall, MessageCenter, OnlyRunInContext } from '@holoflows/kit/es'
 import { CryptoName } from '../../utils/Names'
 import { addPersonPublicKey } from '../../key-management/people-gun'
 import { Person } from './PeopleService'
 import { getMyLocalKey } from '../../key-management/local-db'
-import { publishPostAESKey, queryPostAESKey } from '../../key-management/posts-gun'
+import { publishPostAESKey as publishPostAESKey_Service, queryPostAESKey } from '../../key-management/posts-gun'
 
-import { debounce } from 'lodash-es'
 import {
     decodeText,
     encodeArrayBuffer,
@@ -17,23 +16,24 @@ import {
 } from '../../utils/EncodeDecode'
 
 OnlyRunInContext('background', 'EncryptService')
-const publishPostAESKeyDebounce = debounce(publishPostAESKey, 2000, { trailing: true })
-/**
- * ! Remember to call requestRegenerateIV !
- */
-let lastiv = crypto.getRandomValues(new Uint8Array(16))
-async function requestRegenerateIV() {
-    lastiv = crypto.getRandomValues(new Uint8Array(16))
-}
-// v41: 🎼1/4|ownersAESKeyEncrypted|iv|encryptedText|signature:||
+// v40: 🎼2/4|ownersAESKeyEncrypted|iv|encryptedText|signature:||
 //#region Encrypt & Decrypt
+type EncryptedText = string
+type OthersAESKeyEncryptedToken = string
+/**
+ * This map stores <token, othersAESKeyEncrypted>.
+ */
+const OthersAESKeyEncryptedMap = new Map<OthersAESKeyEncryptedToken, Record<string, Alpha40.PublishedAESKey>>()
 /**
  * Encrypt to a user
  * @param content Original text
  * @param to Encrypt target
+ * @returns Will return a tuple of [encrypted: string, token: string] where
+ * - `encrypted` is the encrypted string
+ * - `token` is used to call `publishPostAESKey` before post the content
  */
-async function encryptTo(content: string, to: Person[]) {
-    if (to.length === 0) return ''
+async function encryptTo(content: string, to: Person[]): Promise<[EncryptedText, OthersAESKeyEncryptedToken]> {
+    if (to.length === 0) return ['', '']
     const toKey = (await Promise.all(
         to.map(async person => ({ name: person.username, key: await queryPersonCryptoKey(person.username) })),
     )).map(person => ({ name: person.name, key: (person.key === null ? null : person.key.key.publicKey)! }))
@@ -49,27 +49,34 @@ async function encryptTo(content: string, to: Person[]) {
         othersAESKeyEncrypted,
         ownersAESKeyEncrypted,
         iv,
-    } = await Alpha41.encrypt1ToN({
-        version: -41,
+    } = await Alpha40.encrypt1ToN({
+        version: -40,
         content: content,
         othersPublicKeyECDH: toKey,
         ownersLocalKey: mineLocal.key,
         privateKeyECDH: mine!.key.privateKey,
-        iv: lastiv,
+        iv: crypto.getRandomValues(new Uint8Array(16)),
     })
-    const str = `1/4|${encodeArrayBuffer(ownersAESKeyEncrypted)}|${encodeArrayBuffer(iv)}|${encodeArrayBuffer(
+    const str = `2/4|${encodeArrayBuffer(ownersAESKeyEncrypted)}|${encodeArrayBuffer(iv)}|${encodeArrayBuffer(
         encryptedText,
     )}`
-    const signature = encodeArrayBuffer(await Alpha41.sign(str, mine!.key.privateKey))
-    {
-        // Store AES key to gun
-        const stored: Record<string, Alpha41.PublishedAESKey> = {}
-        for (const k of othersAESKeyEncrypted) {
-            stored[k.name] = k.key
-        }
-        publishPostAESKeyDebounce(encodeArrayBuffer(iv), stored)
+    const signature = encodeArrayBuffer(await Alpha40.sign(str, mine!.key.privateKey))
+    // Store AES key to gun
+    const stored: Record<string, Alpha40.PublishedAESKey> = {}
+    for (const k of othersAESKeyEncrypted) {
+        stored[k.name] = k.key
     }
-    return `Maskbook.io:🎼${str}|${signature}:||`
+    const key = encodeArrayBuffer(iv)
+    OthersAESKeyEncryptedMap.set(key, stored)
+    return [`https://Maskbook.io : 🎼${str}|${signature}:||`, key]
+}
+/**
+ * MUST call before send post, or othersAESKeyEncrypted will not be published to the internet!
+ * @param token Token that returns in the encryptTo
+ */
+async function publishPostAESKey(token: string) {
+    if (!OthersAESKeyEncryptedMap.has(token)) throw new Error('Publish AES key failed!')
+    return publishPostAESKey_Service(token, OthersAESKeyEncryptedMap.get(token)!)
 }
 
 /**
@@ -86,8 +93,11 @@ async function decryptFrom(
     const [version, ownersAESKeyEncrypted, salt, encryptedText, signature] = encrypted.split('|')
     if (!version || !ownersAESKeyEncrypted || !salt || !encryptedText || !signature)
         throw new TypeError('This post is not complete, you need to view the full post.')
-    // 1/4 === version 41
-    if (version !== '1/4') throw new TypeError('Unknown post type')
+    // 1/4 === version 41, has dropped.
+    // 2/4 === version 40
+    if (version === '1/4')
+        throw new TypeError('We have dropped support for preview version 🎼1/4. Tell your friend to update Maskbook!')
+    if (version !== '2/4') throw new TypeError('Unknown post version, maybe you should update Maskbook?')
     if (!ownersAESKeyEncrypted || !salt || !encryptedText || !signature) throw new TypeError('Invalid post')
     async function getKey(name: string) {
         let key = await queryPersonCryptoKey(by)
@@ -101,8 +111,8 @@ async function decryptFrom(
         const unverified = [version, ownersAESKeyEncrypted, salt, encryptedText].join('|')
         if (by === whoAmI) {
             const content = decodeText(
-                await Alpha41.decryptMessage1ToNByMyself({
-                    version: -41,
+                await Alpha40.decryptMessage1ToNByMyself({
+                    version: -40,
                     encryptedAESKey: ownersAESKeyEncrypted,
                     encryptedContent: encryptedText,
                     myLocalKey: (await getMyLocalKey()).key,
@@ -110,21 +120,25 @@ async function decryptFrom(
                 }),
             )
             try {
-                const signatureVerifyResult = await Alpha41.verify(unverified, signature, mine.key.publicKey)
+                const signatureVerifyResult = await Alpha40.verify(unverified, signature, mine.key.publicKey)
                 return { signatureVerifyResult, content }
             } catch {
                 return { signatureVerifyResult: false, content }
             }
         } else {
             const aesKeyEncrypted = await queryPostAESKey(salt, whoAmI)
+            // TODO: Replace this error with:
+            // You do not have the necessary private key to decrypt this message.
+            // What to do next: You can ask your friend to visit your profile page, so that their Maskbook extension will detect and add you to recipients.
+            // ? after the auto-share with friends is done.
             if (aesKeyEncrypted === undefined) {
                 throw new Error(
                     'Maskbook does not find the key used to decrypt this post. Maybe this post is not intended to share with you?',
                 )
             }
             const content = decodeText(
-                await Alpha41.decryptMessage1ToNByOther({
-                    version: -41,
+                await Alpha40.decryptMessage1ToNByOther({
+                    version: -40,
                     AESKeyEncrypted: aesKeyEncrypted,
                     authorsPublicKeyECDH: byKey.key.publicKey,
                     encryptedContent: encryptedText,
@@ -133,7 +147,7 @@ async function decryptFrom(
                 }),
             )
             try {
-                const signatureVerifyResult = await Alpha41.verify(unverified, signature, byKey.key.publicKey)
+                const signatureVerifyResult = await Alpha40.verify(unverified, signature, byKey.key.publicKey)
                 return { signatureVerifyResult, content }
             } catch {
                 return { signatureVerifyResult: false, content }
@@ -184,8 +198,8 @@ const Impl = {
     decryptFrom,
     getMyProveBio,
     verifyOthersProve,
-    requestRegenerateIV,
+    publishPostAESKey,
 }
-Object.assign(window, { encryptService: Impl, crypto41: Alpha41 })
+Object.assign(window, { encryptService: Impl, crypto40: Alpha40 })
 export type Encrypt = typeof Impl
-AsyncCall<Encrypt, {}>(Impl, { key: CryptoName })
+AsyncCall(Impl, { key: CryptoName })

@@ -6,23 +6,27 @@ import { Theme } from '@material-ui/core/styles/createMuiTheme'
 import createStyles from '@material-ui/core/styles/createStyles'
 import Button from '@material-ui/core/Button/Button'
 import { createBox } from '../../utils/Flex'
-import Checkbox from '@material-ui/core/Checkbox'
-import FormControlLabel from '@material-ui/core/FormControlLabel/FormControlLabel'
 
-const TextField = createBox(theme => ({
-    background: theme.palette.background.default,
-    color: theme.palette.text.hint,
-    padding: `${theme.spacing.unit * 2}px`,
-    border: `1px solid ${theme.palette.divider}`,
-    textAlign: 'start',
-    whiteSpace: 'pre-line',
-    minHeight: '10em',
-    borderRadius: theme.shape.borderRadius,
-    fontSize: '1.15rem',
-    wordBreak: 'break-all',
-}))
+const TextField = createBox(
+    theme => ({
+        background: theme.palette.background.default,
+        color: theme.palette.text.hint,
+        padding: `${theme.spacing.unit * 2}px`,
+        border: `1px solid ${theme.palette.divider}`,
+        textAlign: 'start',
+        whiteSpace: 'pre-line',
+        borderRadius: theme.shape.borderRadius,
+        fontSize: '1.15rem',
+        wordBreak: 'break-all',
+        display: 'block',
+        resize: 'none',
+        width: '100%',
+        boxSizing: 'border-box',
+    }),
+    'textarea',
+)
 interface Props {
-    copyToClipboard(text: string): void
+    copyToClipboard(text: string, gotoBio: boolean): void
     provePost: string
 }
 export default withStylesTyped((theme: Theme) =>
@@ -30,7 +34,8 @@ export default withStylesTyped((theme: Theme) =>
         paper: {
             padding: '2rem 2rem 1rem 2rem',
             textAlign: 'center',
-            maxWidth: '35rem',
+            width: 600,
+            boxSizing: 'border-box',
             '& > *': {
                 marginBottom: theme.spacing.unit * 3,
             },
@@ -40,30 +45,50 @@ export default withStylesTyped((theme: Theme) =>
         },
     }),
 )<Props>(function Welcome({ classes, copyToClipboard, provePost }) {
-    const full = `I'm using Maskbook to encrypt my posts to prevent Facebook from peeping into them.
-Install Maskbook as well so that you may read my encrypted posts,
-and may prevent Facebook from intercepting our communication.
-Here is my public key ${provePost}`
+    const full = `I'm using https://maskbook.io/ to encrypt my posts to prevent Facebook from peeping into them.
+Install Maskbook as well, so that you may read my encrypted posts, and prevent Facebook from imposing surveillance on our communication.
+Privacy, enforced.
+${provePost}`
     const [showShort, setShort] = React.useState(false)
+    const ref = React.createRef<HTMLTextAreaElement>()
+    function onFocus() {
+        setTimeout(() => {
+            if (!ref.current) return
+            ref.current.select()
+        }, 20)
+    }
+    const onBlur = React.useCallback(() => {
+        const selection = getSelection()
+        if (!selection) return
+        selection.removeAllRanges()
+    }, [])
     return (
         <Paper className={classes.paper}>
             <Typography variant="h5">Let your friends join Maskbook</Typography>
-            <TextField>{showShort ? provePost : full}</TextField>
-            <Typography variant="subtitle1">
-                Mathematically, you have to {!showShort ? 'post this' : 'add it to your bio'}. Or your friends cannot
-                verify the connection between your keypair and your account.
-            </Typography>
-            <FormControlLabel
-                control={<Checkbox onChange={e => setShort(e.currentTarget.checked)} checked={showShort} />}
-                label="No, I don't want to create a post."
+            <TextField
+                ref={ref}
+                readOnly
+                onClick={onFocus}
+                onFocus={onFocus}
+                onBlur={onBlur}
+                value={showShort ? provePost : full}
+                style={{ minHeight: showShort ? '10em' : '11em' }}
             />
-            <br />
+            <Typography variant="subtitle1">
+                {showShort
+                    ? 'Paste this into your profile bio, then your friends can verify the connection between your Maskbook and your Facebook account.'
+                    : 'Avoid any confusion before your first encrypted post.'}
+            </Typography>
             <Button
-                onClick={() => copyToClipboard(showShort ? provePost : full)}
+                onClick={() => copyToClipboard(showShort ? provePost : full, showShort)}
                 variant="contained"
                 color="primary"
                 className={classes.button}>
-                Copy to clipboard
+                {showShort ? 'Copy & Go to profile' : 'Copy to clipboard'}
+            </Button>
+            <br />
+            <Button color="primary" onClick={() => setShort(!showShort)}>
+                But I want to {showShort ? 'create a post' : 'add it to my bio'} instead ...
             </Button>
         </Paper>
     )
