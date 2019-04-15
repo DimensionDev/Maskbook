@@ -30,5 +30,7 @@
     "icons": {
         "256": "/maskbook-icon.png",
         "16": "/maskbook-icon-padded.png"
-    }
+    },
+    "homepage_url": "https://maskbook.io",
+    "description": "Encrypt your posts & chats on You-Know-Where. Allow only your friends to decrypt."
 }
