@@ -22,13 +22,13 @@ export async function addPersonPublicKey(username: string): Promise<PersonCrypto
             : `https://www.facebook.com/permalink.php?story_fbid=${postId}&id=${username}`
 
     const fromBio = async () => {
-        const bio = await tasks(bioUrl, Infinity).getBioContent()
+        const bio = await tasks(bioUrl).getBioContent()
         if ((await verifyOthersProve(bio, username)) === null) throw new Error('Not in bio!')
     }
     const fromPost = async () => {
         const person = await queryPerson(username)
         if (!person) throw new Error('Not in gun!')
-        const post = await tasks(postUrl(person.provePostId), Infinity).getPostContent()
+        const post = await tasks(postUrl(person.provePostId)).getPostContent()
         if ((await verifyOthersProve(post, username)) === null) throw new Error('Not in prove post!')
     }
     let bioRejected = false
