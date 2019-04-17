@@ -17,6 +17,8 @@ import { SelectPeopleUI } from './SelectPeople'
 import { CustomPasteEventId } from '../../utils/Names'
 import { sleep } from '../../utils/utils'
 import { myUsername, getUsername } from '../../extension/content-script/injections/LiveSelectors'
+import { useRef } from 'react'
+import { useCapturedInput } from '../../utils/useCapturedEvents'
 
 interface Props {
     avatar?: string
@@ -47,6 +49,11 @@ export const AdditionalPostBoxUI = withStylesTyped({
     const [selectedPeople, selectPeople] = React.useState<Person[]>([])
 
     const people = usePeople()
+    const inputRef = useRef<HTMLInputElement>()
+    useCapturedInput(inputRef, val => {
+        setText(val)
+        props.onCombinationChange(selectedPeople, val)
+    })
     return (
         <Card className={classes.root}>
             <CardHeader title={<Typography variant="caption">Encrypt with Maskbook</Typography>} />
@@ -63,11 +70,7 @@ export const AdditionalPostBoxUI = withStylesTyped({
                 )}
                 <InputBase
                     classes={{ root: classes.input, input: classes.innerInput }}
-                    value={text}
-                    onChange={e => {
-                        setText(e.currentTarget.value)
-                        props.onCombinationChange(selectedPeople, e.currentTarget.value)
-                    }}
+                    inputRef={inputRef}
                     fullWidth
                     multiline
                     placeholder={`${
