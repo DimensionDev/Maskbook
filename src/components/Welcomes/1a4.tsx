@@ -2,7 +2,6 @@ import * as React from 'react'
 import Paper from '@material-ui/core/Paper/Paper'
 import Typography from '@material-ui/core/Typography/Typography'
 import { withStylesTyped } from '../../utils/theme'
-import { Theme } from '@material-ui/core/styles/createMuiTheme'
 import createStyles from '@material-ui/core/styles/createStyles'
 import Button from '@material-ui/core/Button/Button'
 import { createBox } from '../../utils/Flex'
@@ -29,7 +28,7 @@ interface Props {
     copyToClipboard(text: string, gotoBio: boolean): void
     provePost: string
 }
-export default withStylesTyped((theme: Theme) =>
+export default withStylesTyped(theme =>
     createStyles({
         paper: {
             padding: '2rem 2rem 1rem 2rem',

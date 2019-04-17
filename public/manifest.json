@@ -18,7 +18,7 @@
         }
     ],
     "web_accessible_resources": ["*.css", "*.js", "*.jpg", "*.png"],
-    "permissions": ["https://www.facebook.com/", "storage", "downloads", "background"],
+    "permissions": ["https://*.facebook.com/*", "storage", "downloads", "background"],
     "background": {
         "scripts": ["/static/js/backgroundservice.js"]
     },

@@ -6,10 +6,9 @@ import Paper from '@material-ui/core/Paper/Paper'
 import InputBase from '@material-ui/core/InputBase/InputBase'
 import Avatar from '@material-ui/core/Avatar/Avatar'
 import Divider from '@material-ui/core/Divider/Divider'
-import { FlexBox, FullWidth } from '../../utils/Flex'
+import { FlexBox } from '../../utils/Flex'
 import Button from '@material-ui/core/Button/Button'
-import { withStylesTyped, MaskbookLightTheme } from '../../utils/theme'
-import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider'
+import { withStylesTyped } from '../../utils/theme'
 import { useAsync } from '../../utils/AsyncComponent'
 import { CryptoService, PeopleService } from '../../extension/content-script/rpc'
 import { Person } from '../../extension/background-script/PeopleService'
@@ -26,7 +25,7 @@ interface Props {
     onCombinationChange(people: Person[], text: string): void
     onRequestPost(): void
 }
-const _AdditionalPostBox = withStylesTyped({
+export const AdditionalPostBoxUI = withStylesTyped({
     root: { margin: '10px 0' },
     paper: { borderRadius: 0, display: 'flex' },
     avatar: { margin: '12px 0 0 12px' },
@@ -99,13 +98,6 @@ const _AdditionalPostBox = withStylesTyped({
         </Card>
     )
 })
-export function AdditionalPostBoxUI(props: Props) {
-    return (
-        <MuiThemeProvider theme={MaskbookLightTheme}>
-            <_AdditionalPostBox {...props} />
-        </MuiThemeProvider>
-    )
-}
 function selectElementContents(el: Node) {
     const range = document.createRange()
     range.selectNodeContents(el)

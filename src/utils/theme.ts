@@ -5,8 +5,9 @@ import withStyles, {
     StyleRulesCallback,
 } from '@material-ui/core/styles/withStyles'
 import React from 'react'
-import createMuiTheme, { ThemeOptions } from '@material-ui/core/styles/createMuiTheme'
+import createMuiTheme, { ThemeOptions, Theme } from '@material-ui/core/styles/createMuiTheme'
 import { TypographyOptions } from '@material-ui/core/styles/createTypography'
+import { MuiThemeProvider } from '@material-ui/core'
 
 // See: https://material-ui.com/style/typography/#migration-to-typography-v2
 Object.assign(window, {
@@ -87,4 +88,9 @@ export function withStylesTyped<ClassKey extends string, Options extends WithSty
             ? React.ComponentType<Props>
             : React.ForwardRefExoticComponent<React.RefAttributes<Ref> & Props>
     }
+}
+
+export function useMaskbookTheme(node: React.ReactNode) {
+    const themeClone = createMuiTheme(MaskbookLightTheme)
+    return React.createElement(MuiThemeProvider, { theme: themeClone, children: node })
 }

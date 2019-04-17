@@ -1,10 +1,10 @@
 import React from 'react'
-import ReactDOM from 'react-dom'
 import { LiveSelector, MutationObserverWatcher } from '@holoflows/kit'
 import { DecryptPost } from '../../../components/InjectedComponents/DecryptedPost'
 import { AddToKeyStore } from '../../../components/InjectedComponents/AddToKeyStore'
 import { PeopleService } from '../rpc'
 import { getUsername } from './LiveSelectors'
+import { renderInShadowRoot } from '../../../utils/IsolateInject'
 
 const posts = new LiveSelector().querySelectorAll<HTMLDivElement>('.userContent, .userContent+*+div>div>div>div>div')
 
@@ -67,44 +67,38 @@ new MutationObserverWatcher(posts)
                 )
             }
         }
-        // Render it
-        const render = () => {
-            ReactDOM.render(
-                <PostInspector
-                    needZip={() => {
-                        {
-                            // Post content
-                            const pe = node.current.parentElement
-                            if (pe) {
-                                const p = pe.querySelector('p')
-                                if (p) {
-                                    p.style.display = 'block'
-                                    p.style.maxHeight = '20px'
-                                    p.style.overflow = 'hidden'
-                                    p.style.marginBottom = '0'
-                                }
-                            }
-                        }
-                        {
-                            // Link preview
-                            const img = node.current.parentElement!.querySelector('a[href*="maskbook.io"] img')
-                            const parent = img && img.closest('span')
-                            if (img && parent) {
-                                parent.style.display = 'none'
-                            }
-                        }
-                    }}
-                    postId={postId}
-                    post={node.current.innerText}
-                    postBy={postBy}
-                />,
-                node.after,
-            )
+        function zipPostContent() {
+            const pe = node.current.parentElement
+            if (pe) {
+                const p = pe.querySelector('p')
+                if (p) {
+                    p.style.display = 'block'
+                    p.style.maxHeight = '20px'
+                    p.style.overflow = 'hidden'
+                    p.style.marginBottom = '0'
+                }
+            }
         }
-        render()
+        function zipPostLinkPreview() {
+            const img = node.current.parentElement!.querySelector('a[href*="maskbook.io"] img')
+            const parent = img && img.closest('span')
+            if (img && parent) {
+                parent.style.display = 'none'
+            }
+        }
+        function needZip() {
+            zipPostContent()
+            zipPostLinkPreview()
+        }
+        // Render it
+        const render = () =>
+            renderInShadowRoot(
+                <PostInspector needZip={needZip} postId={postId} post={node.current.innerText} postBy={postBy} />,
+                node.afterShadow,
+            )
         return {
             onNodeMutation: render,
-            onRemove: () => ReactDOM.unmountComponentAtNode(node.after),
+            onRemove: render(),
         }
     })
     .startWatch()

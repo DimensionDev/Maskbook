@@ -5,7 +5,6 @@ import CardHeader from '@material-ui/core/CardHeader/CardHeader'
 import Avatar from '@material-ui/core/Avatar/Avatar'
 import { FixedWidthFonts, withStylesTyped } from '../../utils/theme'
 import { createBox } from '../../utils/Flex'
-import { Theme } from '@material-ui/core/styles/createMuiTheme'
 import classNames from 'classnames'
 import createStyles from '@material-ui/core/styles/createStyles'
 
@@ -21,7 +20,7 @@ interface Props extends IIdentity {
     onClick?(): void
 }
 const FixedWidth = createBox({ fontFamily: FixedWidthFonts })
-export default withStylesTyped((theme: Theme) =>
+export default withStylesTyped(theme =>
     createStyles({
         card: {
             display: 'inline-block',

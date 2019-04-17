@@ -1,6 +1,4 @@
 import * as React from 'react'
-import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider'
-import { MaskbookLightTheme, withStylesTyped } from '../../utils/theme'
 import Divider from '@material-ui/core/Divider/Divider'
 import Typography from '@material-ui/core/Typography/Typography'
 
@@ -8,7 +6,7 @@ interface Props {
     title: React.ReactNode
     children?: any
 }
-const _AdditionalContent = withStylesTyped({})<Props>(props => {
+export const AdditionalContent = (props: Props) => {
     return (
         <>
             <Divider style={{ marginBottom: 6, marginBlock: 6 }} />
@@ -26,13 +24,5 @@ const _AdditionalContent = withStylesTyped({})<Props>(props => {
             </Typography>
             <Divider />
         </>
-    )
-})
-
-export function AdditionalContent(props: Props) {
-    return (
-        <MuiThemeProvider theme={MaskbookLightTheme}>
-            <_AdditionalContent {...props} />
-        </MuiThemeProvider>
     )
 }
