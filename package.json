@@ -16,6 +16,7 @@
     "@types/react-jss": "^8.6.3",
     "@types/tiny-secp256k1": "^1.0.0",
     "classnames": "^2.2.6",
+    "construct-style-sheets-polyfill": "^1.0.3",
     "copy-webpack-plugin": "^5.0.0",
     "elliptic": "^6.4.1",
     "gun": "0.2019.323",
