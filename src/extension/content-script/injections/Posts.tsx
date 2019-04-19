@@ -52,7 +52,8 @@ new MutationObserverWatcher(posts)
                 more.click()
             }
         }
-        {
+        function zipPostContent() {
+            const pe = node.current.parentElement
             // Style modification for repost
             if (!node.current.className.match('userContent') && node.current.innerText.length > 0) {
                 node.after.setAttribute(
@@ -66,9 +67,6 @@ new MutationObserverWatcher(posts)
                 padding: 0px 10px;`,
                 )
             }
-        }
-        function zipPostContent() {
-            const pe = node.current.parentElement
             if (pe) {
                 const p = pe.querySelector('p')
                 if (p) {
