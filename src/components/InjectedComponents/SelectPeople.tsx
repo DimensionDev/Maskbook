@@ -6,12 +6,32 @@ import Paper from '@material-ui/core/Paper/Paper'
 import InputBase from '@material-ui/core/InputBase/InputBase'
 import List from '@material-ui/core/List/List'
 import { Person } from '../../extension/background-script/PeopleService'
-import { PeopleInList } from './SelectPeopleSingle'
 import ListItem from '@material-ui/core/ListItem/ListItem'
 import ListItemText from '@material-ui/core/ListItemText/ListItemText'
 import Button from '@material-ui/core/Button/Button'
 import { withStylesTyped } from '../../utils/theme'
+import ListItemAvatar from '@material-ui/core/ListItemAvatar/ListItemAvatar'
 
+function PeopleInList(props: { people: Person; onClick(): void; selected?: boolean }) {
+    const name = (props.people.nickname || props.people.username).split(' ')
+    const avatar = props.people.avatar ? (
+        <Avatar src={props.people.avatar} />
+    ) : (
+        <Avatar>
+            {name[0][0]}
+            {(name[1] || '')[0]}
+        </Avatar>
+    )
+    return (
+        <ListItem selected={props.selected} button onClick={props.onClick}>
+            <ListItemAvatar>{avatar}</ListItemAvatar>
+            <ListItemText
+                primary={props.people.nickname || props.people.username}
+                secondary={(props.people.fingerprint || '?').toLowerCase()}
+            />
+        </ListItem>
+    )
+}
 interface Props {
     all: Person[]
     selected: Person[]

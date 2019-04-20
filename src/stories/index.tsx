@@ -17,7 +17,6 @@ import EncryptionCheckbox from '../components/InjectedComponents/EncryptionCheck
 import { AdditionalPostBoxUI } from '../components/InjectedComponents/AdditionalPostBox'
 import { AdditionalContent } from '../components/InjectedComponents/AdditionalPostContent'
 import { SelectPeopleUI } from '../components/InjectedComponents/SelectPeople'
-import { SelectPeopleSingle } from '../components/InjectedComponents/SelectPeopleSingle'
 import { DecryptPostUI } from '../components/InjectedComponents/DecryptedPost'
 import { AddToKeyStoreUI } from '../components/InjectedComponents/AddToKeyStore'
 import { Person } from '../extension/background-script/PeopleService'
@@ -144,13 +143,6 @@ storiesOf('Injections', module)
                     <Button onClick={showShare}>Show dialog</Button>
                 </>
             )
-        }
-        return <SelectPeople />
-    })
-    .add('Select 1 people (unused)', () => {
-        function SelectPeople() {
-            const [selected, select] = React.useState<Person>()
-            return <SelectPeopleSingle all={demoPeople} selected={selected} onSelect={select} />
         }
         return <SelectPeople />
     })
