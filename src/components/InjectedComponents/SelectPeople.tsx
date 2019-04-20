@@ -12,10 +12,17 @@ import Button from '@material-ui/core/Button/Button'
 import { withStylesTyped } from '../../utils/theme'
 import ListItemAvatar from '@material-ui/core/ListItemAvatar/ListItemAvatar'
 
-function PeopleInList(props: { people: Person; onClick(): void; selected?: boolean }) {
-    const name = (props.people.nickname || props.people.username).split(' ')
-    const avatar = props.people.avatar ? (
-        <Avatar src={props.people.avatar} />
+interface PeopleInListProps {
+    person: Person
+    onClick(): void
+}
+/**
+ * Item in the list
+ */
+function PersonInList({ person, onClick }: PeopleInListProps) {
+    const name = (person.nickname || person.username).split(' ')
+    const avatar = person.avatar ? (
+        <Avatar src={person.avatar} />
     ) : (
         <Avatar>
             {name[0][0]}
@@ -23,33 +30,37 @@ function PeopleInList(props: { people: Person; onClick(): void; selected?: boole
         </Avatar>
     )
     return (
-        <ListItem selected={props.selected} button onClick={props.onClick}>
+        <ListItem button onClick={onClick}>
             <ListItemAvatar>{avatar}</ListItemAvatar>
             <ListItemText
-                primary={props.people.nickname || props.people.username}
-                secondary={(props.people.fingerprint || '?').toLowerCase()}
+                primary={person.nickname || person.username}
+                secondary={person.fingerprint ? person.fingerprint.toLowerCase() : undefined}
             />
         </ListItem>
     )
 }
-interface Props {
-    all: Person[]
-    selected: Person[]
-    onSetSelected: (n: Person[]) => void
-    borderless?: boolean
+interface PersonInChipProps {
+    person: Person
+    onDelete(): void
     disabled?: boolean
 }
-function PeopleChip(props: { onDelete(): void; people: Person; disabled?: boolean }) {
-    const avatar = props.people.avatar ? <Avatar src={props.people.avatar} /> : undefined
+function PersonInChip({ disabled, onDelete, person }: PersonInChipProps) {
+    const avatar = person.avatar ? <Avatar src={person.avatar} /> : undefined
     return (
         <Chip
             style={{ marginRight: 6, marginBottom: 6 }}
             color="primary"
-            onDelete={props.disabled ? undefined : props.onDelete}
-            label={props.people.nickname || props.people.username}
+            onDelete={disabled ? undefined : onDelete}
+            label={person.nickname || person.username}
             avatar={avatar}
         />
     )
+}
+interface SelectPeopleUI {
+    all: Person[]
+    selected: Person[]
+    onSetSelected: (selected: Person[]) => void
+    disabled?: boolean
 }
 export const SelectPeopleUI = withStylesTyped({
     paper: { maxWidth: 500 },
@@ -61,7 +72,7 @@ export const SelectPeopleUI = withStylesTyped({
     },
     input: { flex: 1 },
     button: { marginLeft: 8, padding: '2px 6px' },
-})<Props>(function SelectPeopleUI({ all, classes, onSetSelected, selected, borderless, disabled }) {
+})<SelectPeopleUI>(function({ all, classes, onSetSelected, selected, disabled }) {
     const [search, setSearch] = React.useState('')
     const listBeforeSearch = all.filter(x => {
         if (selected.find(y => y.username === x.username)) return false
@@ -74,14 +85,14 @@ export const SelectPeopleUI = withStylesTyped({
             !!(x.fingerprint || '').toLocaleLowerCase().match(search.toLocaleLowerCase())
         )
     })
-    const ui = (
+    return (
         <>
             <FlexBox className={classes.selectedArea}>
                 {selected.map(p => (
-                    <PeopleChip
+                    <PersonInChip
                         disabled={disabled}
                         key={p.username}
-                        people={p}
+                        person={p}
                         onDelete={() => onSetSelected(selected.filter(x => x.username !== p.username))}
                     />
                 ))}
@@ -129,9 +140,9 @@ export const SelectPeopleUI = withStylesTyped({
                             </ListItem>
                         )}
                         {listAfterSearch.map(p => (
-                            <PeopleInList
+                            <PersonInList
                                 key={p.username}
-                                people={p}
+                                person={p}
                                 onClick={() => {
                                     if (disabled) return
                                     onSetSelected(selected.concat(p))
@@ -144,6 +155,4 @@ export const SelectPeopleUI = withStylesTyped({
             )}
         </>
     )
-    if (borderless) return ui
-    else return <Paper className={classes.paper}>{ui}</Paper>
 })

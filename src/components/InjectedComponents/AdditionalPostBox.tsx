@@ -21,11 +21,11 @@ import { useRef } from 'react'
 import { useCapturedInput } from '../../utils/useCapturedEvents'
 
 interface Props {
+    people: Person[]
     avatar?: string
     nickname?: string
     username?: string
-    onCombinationChange(people: Person[], text: string): void
-    onRequestPost(): void
+    onRequestPost(people: Person[], text: string): void
 }
 export const AdditionalPostBoxUI = withStylesTyped({
     root: { margin: '10px 0' },
@@ -44,16 +44,12 @@ export const AdditionalPostBoxUI = withStylesTyped({
     grayArea: { background: '#f5f6f7', padding: 8, wordBreak: 'break-all' },
     button: { padding: '2px 30px', flex: 1 },
 })<Props>(props => {
-    const { classes } = props
+    const { classes, people } = props
     const [text, setText] = React.useState('')
     const [selectedPeople, selectPeople] = React.useState<Person[]>([])
 
-    const people = usePeople()
     const inputRef = useRef<HTMLInputElement>()
-    useCapturedInput(inputRef, val => {
-        setText(val)
-        props.onCombinationChange(selectedPeople, val)
-    })
+    useCapturedInput(inputRef, setText)
     return (
         <Card className={classes.root}>
             <CardHeader title={<Typography variant="caption">Encrypt with Maskbook</Typography>} />
@@ -79,18 +75,17 @@ export const AdditionalPostBoxUI = withStylesTyped({
                 />
             </Paper>
             <Divider />
-            <SelectPeopleUI
-                all={people.filter(x => x.username !== props.username)}
-                onSetSelected={p => {
-                    selectPeople(p)
-                    props.onCombinationChange(p, text)
-                }}
-                selected={selectedPeople}
-            />
+            <Paper>
+                <SelectPeopleUI
+                    all={people.filter(x => x.username !== props.username)}
+                    onSetSelected={selectPeople}
+                    selected={selectedPeople}
+                />
+            </Paper>
             <Divider />
             <FlexBox className={classes.grayArea}>
                 <Button
-                    onClick={() => props.onRequestPost()}
+                    onClick={() => props.onRequestPost(selectedPeople, text)}
                     variant="contained"
                     color="primary"
                     className={classes.button}
@@ -101,6 +96,7 @@ export const AdditionalPostBoxUI = withStylesTyped({
         </Card>
     )
 })
+
 function selectElementContents(el: Node) {
     const range = document.createRange()
     range.selectNodeContents(el)
@@ -108,10 +104,7 @@ function selectElementContents(el: Node) {
     sel.removeAllRanges()
     sel.addRange(range)
 }
-
 export function AdditionalPostBox() {
-    const [text, setText] = React.useState('')
-    const [people, setPeople] = React.useState<Person[]>([])
     const [avatar, setAvatar] = React.useState<string | undefined>('')
     let nickname
     {
@@ -120,28 +113,26 @@ export function AdditionalPostBox() {
     }
     const username = getUsername()
     useAsync(() => PeopleService.queryAvatar(username || ''), []).then(setAvatar)
+    const onRequestPost = React.useCallback(async (people, text) => {
+        const [encrypted, token] = await CryptoService.encryptTo(text, people)
+        const fullPost = 'Decrypt this post with ' + encrypted
+        const element = document.querySelector<HTMLDivElement>('.notranslate')!
+        element.focus()
+        await sleep(100)
+        selectElementContents(element)
+        await sleep(100)
+        document.dispatchEvent(new CustomEvent(CustomPasteEventId, { detail: fullPost }))
+        navigator.clipboard.writeText(fullPost)
+        // Prevent Custom Paste failed, this will cause service not available to user.
+        CryptoService.publishPostAESKey(token)
+    }, [])
     return (
         <AdditionalPostBoxUI
+            people={usePeople()}
             avatar={avatar}
             nickname={nickname}
             username={username}
-            onRequestPost={async () => {
-                const [encrypted, token] = await CryptoService.encryptTo(text, people)
-                const fullPost = 'Decrypt this post with ' + encrypted
-                const element = document.querySelector<HTMLDivElement>('.notranslate')!
-                element.focus()
-                await sleep(100)
-                selectElementContents(element)
-                await sleep(100)
-                document.dispatchEvent(new CustomEvent(CustomPasteEventId, { detail: fullPost }))
-                navigator.clipboard.writeText(fullPost)
-                // Prevent Custom Paste failed, this will cause service not available to user.
-                CryptoService.publishPostAESKey(token)
-            }}
-            onCombinationChange={(p, t) => {
-                setPeople(p)
-                setText(t)
-            }}
+            onRequestPost={onRequestPost}
         />
     )
 }

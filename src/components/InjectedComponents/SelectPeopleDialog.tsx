@@ -28,13 +28,7 @@ export function SelectPeopleDialog(props: Props) {
         <Dialog open={props.open} scroll="paper" fullWidth maxWidth="sm">
             <DialogTitle style={{ paddingBottom: 0 }}>Share to ...</DialogTitle>
             <DialogContent style={{ padding: '0 12px' }}>
-                <SelectPeopleUI
-                    disabled={committed}
-                    borderless
-                    all={props.people}
-                    selected={people}
-                    onSetSelected={select}
-                />
+                <SelectPeopleUI disabled={committed} all={props.people} selected={people} onSetSelected={select} />
             </DialogContent>
             <DialogActions>
                 <Button size="large" disabled={committed || people.length === 0} color="primary" onClick={share}>

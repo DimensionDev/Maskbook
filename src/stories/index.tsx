@@ -25,6 +25,27 @@ import { useShareMenu } from '../components/InjectedComponents/SelectPeopleDialo
 import { sleep } from '../utils/utils'
 import Button from '@material-ui/core/Button/Button'
 
+const demoPeople: Person[] = [
+    {
+        username: 'People A',
+        fingerprint: 'FDFE333CE20ED446AD88F3C8BA3AD1AA5ECAF521',
+    },
+    {
+        username: 'People B',
+        fingerprint: 'FDFE333CE20ED446AD88F3C8BA3AD1AA5ECAF521'
+            .split('')
+            .reverse()
+            .join(''),
+    },
+    {
+        username: 'People C',
+        fingerprint: 'a2f7643cd1aed446ad88f3c8ba13843dfa2f321d',
+    },
+    {
+        username: 'People D',
+        fingerprint: 'a2f7643cd1aed446ad88f3c8ba13843dfa2f321d',
+    },
+]
 storiesOf('Welcome', module)
     .add('Banner', () => <Banner close={action('Close')} getStarted={action('Get Started')} />)
     .add('Step 0', () => (
@@ -91,52 +112,28 @@ const FakePost: React.FC<{ title: string }> = props => (
     </>
 )
 
-const demoPeople: Person[] = [
-    {
-        username: 'People A',
-        fingerprint: 'FDFE333CE20ED446AD88F3C8BA3AD1AA5ECAF521',
-    },
-    {
-        username: 'People B',
-        fingerprint: 'FDFE333CE20ED446AD88F3C8BA3AD1AA5ECAF521'
-            .split('')
-            .reverse()
-            .join(''),
-    },
-    {
-        username: 'People C',
-        fingerprint: 'a2f7643cd1aed446ad88f3c8ba13843dfa2f321d',
-    },
-    {
-        username: 'People D',
-        fingerprint: 'a2f7643cd1aed446ad88f3c8ba13843dfa2f321d',
-    },
-]
 storiesOf('Injections', module)
-    //
     .add('Checkbox (unused)', () => <EncryptionCheckbox onCheck={action('Check')} />)
-    .add('Post box', () => (
+    .add('AdditionalPostBox', () => (
         <AdditionalPostBoxUI
+            people={demoPeople}
+            username={text('Username', '')}
             onRequestPost={action('onRequestPost')}
             avatar={text('Avatar URL', '')}
             nickname={text('Nickname', '')}
-            onCombinationChange={() => {}}
         />
     ))
     .add('Additional Post Content', () => <AdditionalContent title="Additional Content" children="Content" />)
-    .add('Select people', () => {
+    .add('SelectPeople', () => {
         function SelectPeople() {
             const [selected, select] = React.useState<Person[]>([])
             return <SelectPeopleUI all={demoPeople} selected={selected} onSetSelected={select} />
         }
         return <SelectPeople />
     })
-    .add('Use select people', () => {
+    .add('Select people dialog', () => {
         function SelectPeople() {
-            const { ShareMenu, hideShare, showShare } = useShareMenu(
-                'ABCDEFG'.split('').map(x => ({ username: 'Test ' + x })),
-                async people => sleep(3000),
-            )
+            const { ShareMenu, hideShare, showShare } = useShareMenu(demoPeople, async people => sleep(3000))
             return (
                 <>
                     {ShareMenu}

@@ -9,31 +9,36 @@ export function useCapturedInput(
 ) {
     const stop = useCallback((e: Event) => e.stopPropagation(), [])
     const use = useCallback((e: Event) => onChange((e.currentTarget as HTMLInputElement).value), [onChange])
-    useEffect(() => {
-        if (!ref.current) return
-        ref.current.addEventListener('change', use, true)
-    }, [ref.current])
-    useEffect(() => {
-        if (!ref.current) return
-        const keys: (keyof HTMLElementEventMap)[] = [
-            'paste',
-            'keydown',
-            'keypress',
-            'keyup',
-            'input',
-            'drag',
-            'dragend',
-            'dragenter',
-            'dragexit',
-            'dragleave',
-            'dragover',
-            'dragstart',
-            'change',
-        ]
-        keys.forEach(k => ref.current!.addEventListener(k, stop, true))
+    function binder(keys: (keyof HTMLElementEventMap)[], fn: (e: Event) => void) {
         return () => {
             if (!ref.current) return
-            keys.forEach(k => ref.current!.removeEventListener(k, stop, true))
+            keys.forEach(k => ref.current!.addEventListener(k, fn, true))
+            return () => {
+                if (!ref.current) return
+                keys.forEach(k => ref.current!.removeEventListener(k, fn, true))
+            }
         }
-    }, [ref.current])
+    }
+    useEffect(binder(['keydown', 'keyup', 'keypress', 'change'], use), [ref.current])
+    useEffect(
+        binder(
+            [
+                'paste',
+                'keydown',
+                'keypress',
+                'keyup',
+                'input',
+                'drag',
+                'dragend',
+                'dragenter',
+                'dragexit',
+                'dragleave',
+                'dragover',
+                'dragstart',
+                'change',
+            ],
+            stop,
+        ),
+        [ref.current],
+    )
 }
