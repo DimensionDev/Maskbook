@@ -3,26 +3,22 @@ import AsyncComponent from '../../utils/AsyncComponent'
 import { AdditionalContent } from './AdditionalPostContent'
 import { FullWidth } from '../../utils/Flex'
 import { CryptoService } from '../../extension/content-script/rpc'
+import Button from '@material-ui/core/Button/Button'
 
 interface Props {
     postBy: string
     whoAmI: string
     encryptedText: string
 }
-export function DecryptPost({ postBy, whoAmI, encryptedText }: Props) {
-    const [_, a] = encryptedText.split('🎼')
-    const [b, _2] = a.split(':||')
-    return (
-        <AsyncComponent
-            promise={async (encryptedString: string) => CryptoService.decryptFrom(encryptedString, postBy, whoAmI)}
-            values={[b]}
-            awaitingComponent={DecryptPostAwaiting}
-            completeComponent={DecryptPostSuccess}
-            failedComponent={DecryptPostFailed}
-        />
-    )
-}
-function DecryptPostSuccess({ data }: { data: { signatureVerifyResult: boolean; content: string } }) {
+function DecryptPostSuccess({
+    data,
+    displayAddDecryptor,
+    requestAddDecryptor,
+}: {
+    data: { signatureVerifyResult: boolean; content: string }
+    displayAddDecryptor: boolean
+    requestAddDecryptor(): void
+}) {
     return (
         <AdditionalContent
             title={
@@ -33,6 +29,16 @@ function DecryptPostSuccess({ data }: { data: { signatureVerifyResult: boolean; 
                     ) : (
                         <span style={{ color: 'red' }}>Signature NOT verified ❌</span>
                     )}
+                    {displayAddDecryptor ? (
+                        <Button
+                            variant="raised"
+                            color="primary"
+                            size="small"
+                            onClick={requestAddDecryptor}
+                            style={{ position: 'absolute', transform: 'translateY(-40px)', right: 10 }}>
+                            Add decryptor
+                        </Button>
+                    ) : null}
                 </>
             }
             children={data.content.split('\n').reduce(
@@ -57,8 +63,29 @@ function DecryptPostFailed({ error }: { error: Error }) {
         </AdditionalContent>
     )
 }
+
+function DecryptPost({ postBy, whoAmI, encryptedText }: Props) {
+    const [_, a] = encryptedText.split('🎼')
+    const [b, _2] = a.split(':||')
+    return (
+        <AsyncComponent
+            promise={async (encryptedString: string) => CryptoService.decryptFrom(encryptedString, postBy, whoAmI)}
+            values={[b]}
+            awaitingComponent={DecryptPostAwaiting}
+            completeComponent={props => (
+                <DecryptPostSuccess
+                    data={props.data}
+                    displayAddDecryptor={whoAmI === postBy}
+                    requestAddDecryptor={React.useCallback(() => {}, [props.data])}
+                />
+            )}
+            failedComponent={DecryptPostFailed}
+        />
+    )
+}
 export const DecryptPostUI = {
     success: DecryptPostSuccess,
     awaiting: DecryptPostAwaiting,
     failed: DecryptPostFailed,
+    UI: React.memo(DecryptPost),
 }

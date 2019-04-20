@@ -1,6 +1,6 @@
 import React from 'react'
 import { LiveSelector, MutationObserverWatcher } from '@holoflows/kit'
-import { DecryptPost } from '../../../components/InjectedComponents/DecryptedPost'
+import { DecryptPostUI } from '../../../components/InjectedComponents/DecryptedPost'
 import { AddToKeyStore } from '../../../components/InjectedComponents/AddToKeyStore'
 import { PeopleService } from '../rpc'
 import { getUsername } from './LiveSelectors'
@@ -17,7 +17,7 @@ const PostInspector = (props: { post: string; postBy: string; postId: string; ne
 
     if (type.encryptedPost) {
         props.needZip()
-        return <DecryptPost encryptedText={post} whoAmI={getUsername()!} postBy={postBy} />
+        return <DecryptPostUI.UI encryptedText={post} whoAmI={getUsername()!} postBy={postBy} />
     } else if (type.provePost) {
         PeopleService.uploadProvePostUrl(postBy, postId)
         return <AddToKeyStore postBy={postBy} provePost={post} />

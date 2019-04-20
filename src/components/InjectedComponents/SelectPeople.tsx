@@ -16,14 +16,16 @@ interface Props {
     all: Person[]
     selected: Person[]
     onSetSelected: (n: Person[]) => void
+    borderless?: boolean
+    disabled?: boolean
 }
-function PeopleChip(props: { onDelete(): void; people: Person }) {
+function PeopleChip(props: { onDelete(): void; people: Person; disabled?: boolean }) {
     const avatar = props.people.avatar ? <Avatar src={props.people.avatar} /> : undefined
     return (
         <Chip
             style={{ marginRight: 6, marginBottom: 6 }}
             color="primary"
-            onDelete={props.onDelete}
+            onDelete={props.disabled ? undefined : props.onDelete}
             label={props.people.nickname || props.people.username}
             avatar={avatar}
         />
@@ -39,9 +41,9 @@ export const SelectPeopleUI = withStylesTyped({
     },
     input: { flex: 1 },
     button: { marginLeft: 8, padding: '2px 6px' },
-})<Props>(function SelectPeopleUI({ all: allPeople, classes, onSetSelected, selected }) {
+})<Props>(function SelectPeopleUI({ all, classes, onSetSelected, selected, borderless, disabled }) {
     const [search, setSearch] = React.useState('')
-    const listBeforeSearch = allPeople.filter(x => {
+    const listBeforeSearch = all.filter(x => {
         if (selected.find(y => y.username === x.username)) return false
         return true
     })
@@ -52,11 +54,12 @@ export const SelectPeopleUI = withStylesTyped({
             !!(x.fingerprint || '').toLocaleLowerCase().match(search.toLocaleLowerCase())
         )
     })
-    return (
-        <Paper className={classes.paper}>
+    const ui = (
+        <>
             <FlexBox className={classes.selectedArea}>
                 {selected.map(p => (
                     <PeopleChip
+                        disabled={disabled}
                         key={p.username}
                         people={p}
                         onDelete={() => onSetSelected(selected.filter(x => x.username !== p.username))}
@@ -64,49 +67,63 @@ export const SelectPeopleUI = withStylesTyped({
                 ))}
                 <InputBase
                     className={classes.input}
-                    value={search}
+                    value={disabled ? '' : search}
                     onChange={e => setSearch(e.target.value)}
                     onKeyDown={e => {
                         if (search === '' && e.key === 'Backspace') {
                             onSetSelected(selected.slice(0, selected.length - 1))
                         }
                     }}
+                    placeholder={disabled ? '' : 'Type here to search'}
+                    disabled={disabled}
                 />
             </FlexBox>
-            <FlexBox>
-                {listAfterSearch.length > 0 && (
-                    <Button
-                        className={classes.button}
-                        color="primary"
-                        onClick={() => onSetSelected([...selected, ...listAfterSearch])}>
-                        Select All
-                    </Button>
-                )}
-                {selected.length > 0 && (
-                    <Button className={classes.button} onClick={() => onSetSelected([])}>
-                        Select None
-                    </Button>
-                )}
-            </FlexBox>
-            <FullWidth>
-                <List dense>
-                    {listBeforeSearch.length > 0 && listBeforeSearch.length === 0 && (
-                        <ListItem>
-                            <ListItemText primary="Not found" />
-                        </ListItem>
+            {disabled ? (
+                undefined
+            ) : (
+                <FlexBox>
+                    {listAfterSearch.length > 0 && (
+                        <Button
+                            className={classes.button}
+                            color="primary"
+                            onClick={() => onSetSelected([...selected, ...listAfterSearch])}>
+                            Select All
+                        </Button>
                     )}
-                    {listAfterSearch.map(p => (
-                        <PeopleInList
-                            key={p.username}
-                            people={p}
-                            onClick={() => {
-                                onSetSelected(selected.concat(p))
-                                setSearch('')
-                            }}
-                        />
-                    ))}
-                </List>
-            </FullWidth>
-        </Paper>
+                    {selected.length > 0 && (
+                        <Button className={classes.button} onClick={() => onSetSelected([])}>
+                            Select None
+                        </Button>
+                    )}
+                </FlexBox>
+            )}
+
+            {disabled ? (
+                undefined
+            ) : (
+                <FullWidth>
+                    <List dense>
+                        {listBeforeSearch.length > 0 && listBeforeSearch.length === 0 && (
+                            <ListItem>
+                                <ListItemText primary="Not found" />
+                            </ListItem>
+                        )}
+                        {listAfterSearch.map(p => (
+                            <PeopleInList
+                                key={p.username}
+                                people={p}
+                                onClick={() => {
+                                    if (disabled) return
+                                    onSetSelected(selected.concat(p))
+                                    setSearch('')
+                                }}
+                            />
+                        ))}
+                    </List>
+                </FullWidth>
+            )}
+        </>
     )
+    if (borderless) return ui
+    else return <Paper className={classes.paper}>{ui}</Paper>
 })

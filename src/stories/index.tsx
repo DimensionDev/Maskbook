@@ -22,6 +22,9 @@ import { DecryptPostUI } from '../components/InjectedComponents/DecryptedPost'
 import { AddToKeyStoreUI } from '../components/InjectedComponents/AddToKeyStore'
 import { Person } from '../extension/background-script/PeopleService'
 import { Banner } from '../components/Welcomes/Banner'
+import { useShareMenu } from '../components/InjectedComponents/SelectPeopleDialog'
+import { sleep } from '../utils/utils'
+import Button from '@material-ui/core/Button/Button'
 
 storiesOf('Welcome', module)
     .add('Banner', () => <Banner close={action('Close')} getStarted={action('Get Started')} />)
@@ -129,6 +132,21 @@ storiesOf('Injections', module)
         }
         return <SelectPeople />
     })
+    .add('Use select people', () => {
+        function SelectPeople() {
+            const { ShareMenu, hideShare, showShare } = useShareMenu(
+                'ABCDEFG'.split('').map(x => ({ username: 'Test ' + x })),
+                async people => sleep(3000),
+            )
+            return (
+                <>
+                    {ShareMenu}
+                    <Button onClick={showShare}>Show dialog</Button>
+                </>
+            )
+        }
+        return <SelectPeople />
+    })
     .add('Select 1 people (unused)', () => {
         function SelectPeople() {
             const [selected, select] = React.useState<Person>()
@@ -149,7 +167,11 @@ storiesOf('Injections', module)
         return (
             <>
                 <FakePost title="Decrypted:">
-                    <DecryptPostUI.success data={{ content: msg, signatureVerifyResult: vr }} />
+                    <DecryptPostUI.success
+                        displayAddDecryptor={false}
+                        requestAddDecryptor={() => {}}
+                        data={{ content: msg, signatureVerifyResult: vr }}
+                    />
                 </FakePost>
                 <FakePost title="Decrypting:">{DecryptPostUI.awaiting}</FakePost>
                 <FakePost title="Failed:">
