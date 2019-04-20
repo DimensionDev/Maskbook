@@ -12,6 +12,6 @@ MessageCenter.on('newPerson', p => {
 })
 export function usePeople() {
     const [people, setPeople] = React.useState<Person[]>([])
-    React.useEffect(() => ref.addListener(val => setPeople(val)))
+    React.useEffect(() => ref.addListener(val => setPeople(val)), [])
     return people.filter(x => x.username !== '$self')
 }

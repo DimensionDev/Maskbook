@@ -5,19 +5,27 @@ import { AddToKeyStore } from '../../../components/InjectedComponents/AddToKeySt
 import { PeopleService } from '../rpc'
 import { getUsername } from './LiveSelectors'
 import { renderInShadowRoot } from '../../../utils/IsolateInject'
+import { usePeople } from '../../../components/DataSource/PeopleRef'
 
 const posts = new LiveSelector().querySelectorAll<HTMLDivElement>('.userContent, .userContent+*+div>div>div>div>div')
 
-const PostInspector = (props: { post: string; postBy: string; postId: string; needZip(): void }) => {
+interface PostInspectorProps {
+    post: string
+    postBy: string
+    postId: string
+    needZip(): void
+}
+const PostInspector = (props: PostInspectorProps) => {
     const { post, postBy, postId } = props
     const type = {
         encryptedPost: post.match(/🎼([a-zA-Z0-9\+=\/|]+):\|\|/),
         provePost: post.match(/🔒(.+)🔒/)!,
     }
+    const people = usePeople()
 
     if (type.encryptedPost) {
         props.needZip()
-        return <DecryptPostUI.UI encryptedText={post} whoAmI={getUsername()!} postBy={postBy} />
+        return <DecryptPostUI.UI people={people} encryptedText={post} whoAmI={getUsername()!} postBy={postBy} />
     } else if (type.provePost) {
         PeopleService.uploadProvePostUrl(postBy, postId)
         return <AddToKeyStore postBy={postBy} provePost={post} />

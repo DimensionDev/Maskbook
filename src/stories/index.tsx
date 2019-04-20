@@ -100,14 +100,14 @@ const FakePost: React.FC<{ title: string }> = props => (
                 style={{
                     border: '1px solid #dfe0e2',
                     background: 'white',
-                    borderTop: 0,
                     borderBottom: 0,
-                    padding: 12,
-                    paddingBottom: 6,
+                    borderTop: 0,
+                    padding: '0 12px 6px',
+                    transform: 'translateY(-14px)',
                 }}>
                 {props.children}
             </div>
-            <img style={{ marginTop: -6 }} width={500} src={require('./post-b.jpg')} />
+            <img style={{ marginTop: -20 }} width={500} src={require('./post-b.jpg')} />
         </div>
     </>
 )
@@ -157,8 +157,9 @@ storiesOf('Injections', module)
             <>
                 <FakePost title="Decrypted:">
                     <DecryptPostUI.success
-                        displayAddDecryptor={false}
-                        requestAddDecryptor={() => {}}
+                        displayAddDecryptor={boolean('Post by myself?', true)}
+                        requestAddDecryptor={async () => {}}
+                        people={demoPeople}
                         data={{ content: msg, signatureVerifyResult: vr }}
                     />
                 </FakePost>

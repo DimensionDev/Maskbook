@@ -3,42 +3,44 @@ import AsyncComponent from '../../utils/AsyncComponent'
 import { AdditionalContent } from './AdditionalPostContent'
 import { FullWidth } from '../../utils/Flex'
 import { CryptoService } from '../../extension/content-script/rpc'
-import Button from '@material-ui/core/Button/Button'
+import { useShareMenu } from './SelectPeopleDialog'
+import { Person } from '../../extension/background-script/PeopleService'
+import Link from '@material-ui/core/Link'
 
 interface Props {
     postBy: string
     whoAmI: string
     encryptedText: string
+    people: Person[]
 }
 function DecryptPostSuccess({
     data,
     displayAddDecryptor,
     requestAddDecryptor,
+    people,
 }: {
     data: { signatureVerifyResult: boolean; content: string }
     displayAddDecryptor: boolean
-    requestAddDecryptor(): void
+    requestAddDecryptor(to: Person[]): Promise<void>
+    people: Person[]
 }) {
+    const { ShareMenu, hideShare, showShare } = useShareMenu(people, requestAddDecryptor)
     return (
         <AdditionalContent
             title={
                 <>
+                    {ShareMenu}
                     Maskbook decrypted content: <FullWidth />
+                    {displayAddDecryptor ? (
+                        <Link color="primary" onClick={showShare} style={{ marginRight: '1em', cursor: 'pointer' }}>
+                            Add decryptor
+                        </Link>
+                    ) : null}
                     {data.signatureVerifyResult ? (
                         <span style={{ color: 'green' }}>Signature verified ✔</span>
                     ) : (
                         <span style={{ color: 'red' }}>Signature NOT verified ❌</span>
                     )}
-                    {displayAddDecryptor ? (
-                        <Button
-                            variant="raised"
-                            color="primary"
-                            size="small"
-                            onClick={requestAddDecryptor}
-                            style={{ position: 'absolute', transform: 'translateY(-40px)', right: 10 }}>
-                            Add decryptor
-                        </Button>
-                    ) : null}
                 </>
             }
             children={data.content.split('\n').reduce(
@@ -64,7 +66,7 @@ function DecryptPostFailed({ error }: { error: Error }) {
     )
 }
 
-function DecryptPost({ postBy, whoAmI, encryptedText }: Props) {
+function DecryptPost({ postBy, whoAmI, encryptedText, people }: Props) {
     const [_, a] = encryptedText.split('🎼')
     const [b, _2] = a.split(':||')
     return (
@@ -76,7 +78,8 @@ function DecryptPost({ postBy, whoAmI, encryptedText }: Props) {
                 <DecryptPostSuccess
                     data={props.data}
                     displayAddDecryptor={whoAmI === postBy}
-                    requestAddDecryptor={React.useCallback(() => {}, [props.data])}
+                    requestAddDecryptor={React.useCallback(async () => {}, [props.data])}
+                    people={people}
                 />
             )}
             failedComponent={DecryptPostFailed}
