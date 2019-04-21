@@ -4,7 +4,7 @@ import { OnlyRunInContext } from '@holoflows/kit/es'
 import { PublishedAESKey } from '../crypto/crypto-alpha-40'
 
 OnlyRunInContext('background', 'Gun')
-interface Person {
+interface PersonInGun {
     provePostId: string
 }
 interface Post {
@@ -16,7 +16,7 @@ interface MaskbookDemoServerState {
     maskbook: {
         users: {
             // Prove post id
-            [user: string]: Person
+            [user: string]: PersonInGun
         }
         posts: {
             // Post id or salt

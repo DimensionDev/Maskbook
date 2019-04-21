@@ -2,6 +2,10 @@ import { encodeText, encodeArrayBuffer, decodeArrayBuffer, decodeText } from '..
 import { toECDH, addUint8Array, toECDSA } from '../utils/type-transform/CryptoUtils'
 // tslint:disable: no-parameter-reassignment
 export type PublishedAESKey = { encryptedKey: string; salt: string }
+export type PublishedAESKeyRecord = {
+    key: PublishedAESKey
+    name: string
+}
 //#region Derive AES Key from ECDH key
 /**
  * Derive the key from your private ECDH key and someone else's ECDH key.
@@ -78,6 +82,32 @@ export async function encrypt1To1(info: {
     const encryptedContent = await crypto.subtle.encrypt({ name: 'AES-GCM', iv }, key, content)
     return { salt, encryptedContent, version: -40 }
 }
+export async function generateOthersAESKeyEncrypted(
+    version: -40,
+    AESKey: CryptoKey,
+    privateKeyECDH: CryptoKey,
+    othersPublicKeyECDH: { key: CryptoKey; name: string }[],
+): Promise<PublishedAESKeyRecord[]> {
+    const exportedAESKey = encodeText(JSON.stringify(await crypto.subtle.exportKey('jwk', AESKey)))
+    return Promise.all(
+        othersPublicKeyECDH.map<Promise<PublishedAESKeyRecord>>(async ({ key, name }) => {
+            const encrypted = await encrypt1To1({
+                version: -40,
+                content: exportedAESKey,
+                othersPublicKeyECDH: key,
+                privateKeyECDH: privateKeyECDH,
+            })
+            return {
+                name,
+                key: {
+                    version: -40,
+                    salt: encodeArrayBuffer(encrypted.salt),
+                    encryptedKey: encodeArrayBuffer(encrypted.encryptedContent),
+                },
+            }
+        }),
+    )
+}
 /**
  * Encrypt 1 to N
  */
@@ -119,30 +149,7 @@ export async function encrypt1ToN(info: {
         content: exportedAESKey,
         iv,
     })).content
-    const othersAESKeyEncrypted = await Promise.all(
-        othersPublicKeyECDH.map<
-            Promise<{
-                key: PublishedAESKey
-                name: string
-            }>
-        >(async ({ key, name }) => {
-            const encrypted = await encrypt1To1({
-                version: -40,
-                content: exportedAESKey,
-                othersPublicKeyECDH: key,
-                privateKeyECDH: privateKeyECDH,
-            })
-            return {
-                name,
-                key: {
-                    version: -40,
-                    salt: encodeArrayBuffer(encrypted.salt),
-                    encryptedKey: encodeArrayBuffer(encrypted.encryptedContent),
-                },
-            }
-        }),
-    )
-
+    const othersAESKeyEncrypted = await generateOthersAESKeyEncrypted(-40, AESKey, privateKeyECDH, othersPublicKeyECDH)
     return { encryptedContent, iv, version: -40, ownersAESKeyEncrypted, othersAESKeyEncrypted }
 }
 //#endregion
@@ -196,6 +203,20 @@ export async function decryptMessage1ToNByOther(info: {
     )
     return decryptWithAES({ aesKey, iv, encrypted: encryptedContent })
 }
+export async function extractAESKeyInMessage(
+    version: -40,
+    encodedEncryptedKey: string | ArrayBuffer,
+    _iv: string | ArrayBuffer,
+    myLocalKey: CryptoKey,
+): Promise<CryptoKey> {
+    const iv = typeof _iv === 'string' ? decodeArrayBuffer(_iv) : _iv
+    const encryptedKey =
+        typeof encodedEncryptedKey === 'string' ? decodeArrayBuffer(encodedEncryptedKey) : encodedEncryptedKey
+    const decryptedAESKeyJWK = JSON.parse(
+        decodeText(await decryptWithAES({ aesKey: myLocalKey, iv, encrypted: encryptedKey })),
+    )
+    return crypto.subtle.importKey('jwk', decryptedAESKeyJWK, { name: 'AES-GCM', length: 256 }, false, ['decrypt'])
+}
 /**
  * Decrypt 1 to N message that send by myself
  */
@@ -208,20 +229,8 @@ export async function decryptMessage1ToNByMyself(info: {
     iv: string | ArrayBuffer
 }): Promise<ArrayBuffer> {
     const { encryptedContent, myLocalKey, version } = info
+    const decryptedAESKey = await extractAESKeyInMessage(-40, info.encryptedAESKey, info.iv, info.myLocalKey)
     const iv = typeof info.iv === 'string' ? decodeArrayBuffer(info.iv) : info.iv
-    const encryptedAESKey =
-        typeof info.encryptedAESKey === 'string' ? decodeArrayBuffer(info.encryptedAESKey) : info.encryptedAESKey
-
-    const decryptedAESKeyJWK = JSON.parse(
-        decodeText(await decryptWithAES({ aesKey: myLocalKey, iv, encrypted: encryptedAESKey })),
-    )
-    const decryptedAESKey = await crypto.subtle.importKey(
-        'jwk',
-        decryptedAESKeyJWK,
-        { name: 'AES-GCM', length: 256 },
-        false,
-        ['decrypt'],
-    )
     const post = await decryptWithAES({ aesKey: decryptedAESKey, encrypted: encryptedContent, iv })
     return post
 }

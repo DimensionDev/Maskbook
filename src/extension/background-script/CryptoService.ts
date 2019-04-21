@@ -1,9 +1,9 @@
 import { queryPersonCryptoKey, getMyPrivateKey, storeKey, generateNewKey } from '../../key-management/keystore-db'
 import * as Alpha40 from '../../crypto/crypto-alpha-40'
-import { AsyncCall, MessageCenter, OnlyRunInContext } from '@holoflows/kit/es'
+import { AsyncCall, OnlyRunInContext } from '@holoflows/kit/es'
 import { CryptoName } from '../../utils/constants'
 import { addPersonPublicKey } from '../../key-management/people-gun'
-import { Person } from './PeopleService'
+import { Person, queryPerson } from './PeopleService'
 import { getMyLocalKey } from '../../key-management/local-db'
 import { publishPostAESKey as publishPostAESKey_Service, queryPostAESKey } from '../../key-management/posts-gun'
 
@@ -14,6 +14,7 @@ import {
     unCompressSecp256k1Point,
     decodeArrayBuffer,
 } from '../../utils/type-transform/EncodeDecode'
+import { gun } from '../../key-management/gun'
 
 OnlyRunInContext('background', 'EncryptService')
 // v40: 🎼2/4|ownersAESKeyEncrypted|iv|encryptedText|signature:||
@@ -21,9 +22,27 @@ OnlyRunInContext('background', 'EncryptService')
 type EncryptedText = string
 type OthersAESKeyEncryptedToken = string
 /**
+ * @internal
+ */
+async function prepareOthersKeyForEncryption(to: Person[]) {
+    const toKey = (await Promise.all(
+        to.map(async person => ({ name: person.username, key: await queryPersonCryptoKey(person.username) })),
+    )).map(person => ({ name: person.name, key: (person.key === null ? null : person.key.key.publicKey)! }))
+    toKey.forEach(x => {
+        if (x.key === null) throw new Error(`${x.name}'s public key not found!`)
+    })
+    return toKey
+}
+/**
  * This map stores <token, othersAESKeyEncrypted>.
  */
-const OthersAESKeyEncryptedMap = new Map<OthersAESKeyEncryptedToken, Record<string, Alpha40.PublishedAESKey>>()
+const OthersAESKeyEncryptedMap = new Map<
+    OthersAESKeyEncryptedToken,
+    {
+        key: Alpha40.PublishedAESKey
+        name: string
+    }[]
+>()
 /**
  * Encrypt to a user
  * @param content Original text
@@ -34,12 +53,7 @@ const OthersAESKeyEncryptedMap = new Map<OthersAESKeyEncryptedToken, Record<stri
  */
 async function encryptTo(content: string, to: Person[]): Promise<[EncryptedText, OthersAESKeyEncryptedToken]> {
     if (to.length === 0) return ['', '']
-    const toKey = (await Promise.all(
-        to.map(async person => ({ name: person.username, key: await queryPersonCryptoKey(person.username) })),
-    )).map(person => ({ name: person.name, key: (person.key === null ? null : person.key.key.publicKey)! }))
-    toKey.forEach(x => {
-        if (x.key === null) throw new Error(`${x.name}'s public key not found!`)
-    })
+    const toKey = await prepareOthersKeyForEncryption(to)
 
     const mine = await getMyPrivateKey()
     const mineLocal = await getMyLocalKey()
@@ -61,13 +75,11 @@ async function encryptTo(content: string, to: Person[]): Promise<[EncryptedText,
         encryptedText,
     )}`
     const signature = encodeArrayBuffer(await Alpha40.sign(str, mine!.key.privateKey))
+
     // Store AES key to gun
-    const stored: Record<string, Alpha40.PublishedAESKey> = {}
-    for (const k of othersAESKeyEncrypted) {
-        stored[k.name] = k.key
-    }
     const key = encodeArrayBuffer(iv)
-    OthersAESKeyEncryptedMap.set(key, stored)
+    OthersAESKeyEncryptedMap.set(key, othersAESKeyEncrypted)
+
     return [`https://Maskbook.io : 🎼${str}|${signature}:||`, key]
 }
 /**
@@ -190,6 +202,42 @@ export async function verifyOthersProve(bio: string, othersName: string) {
     }
     storeKey({ username: othersName, key: { publicKey: publicKey } })
     return publicKey
+}
+//#endregion
+
+//#region Append decryptor in future
+/**
+ * Get already shared target of the post
+ * @param postIdentifier Post identifier
+ */
+async function getSharedListOfPost(postIdentifier: string): Promise<Person[]> {
+    const post = await gun
+        .get('posts')
+        .get(postIdentifier)
+        .once().then!()
+    if (!post) return []
+    return Promise.all(Object.keys(post).map(queryPerson))
+}
+async function appendShareTarget(
+    postIdentifier: string,
+    ownersAESKeyEncrypted: string,
+    iv: string,
+    people: Person[],
+): Promise<void> {
+    const toKey = await prepareOthersKeyForEncryption(people)
+    const ownersAESKey = await Alpha40.extractAESKeyInMessage(
+        -40,
+        ownersAESKeyEncrypted,
+        iv,
+        (await getMyLocalKey()).key,
+    )
+    const othersAESKeyEncrypted = await Alpha40.generateOthersAESKeyEncrypted(
+        -40,
+        ownersAESKey,
+        (await getMyPrivateKey())!.key.privateKey,
+        toKey,
+    )
+    publishPostAESKey_Service(postIdentifier, othersAESKeyEncrypted)
 }
 //#endregion
 

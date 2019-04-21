@@ -5,7 +5,7 @@ import { MessageCenter } from '../../utils/messages'
 import { PeopleService } from '../../extension/content-script/rpc'
 
 const ref = new ValueRef<Person[]>([])
-PeopleService.getAllPeople().then(p => (ref.value = p))
+PeopleService.queryPeople().then(p => (ref.value = p))
 MessageCenter.on('newPerson', p => {
     const old = ref.value.filter(x => x.username !== p.username)
     ref.value = [...old, p]
