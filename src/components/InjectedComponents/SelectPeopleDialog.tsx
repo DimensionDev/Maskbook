@@ -2,7 +2,6 @@ import React, { useState, useCallback } from 'react'
 import { useEsc } from '../Welcomes/useEsc'
 import { SelectPeopleUI } from './SelectPeople'
 import Dialog from '@material-ui/core/Dialog/Dialog'
-import { usePeople } from '../DataSource/PeopleRef'
 import { Person } from '../../extension/background-script/PeopleService'
 import CircularProgress from '@material-ui/core/CircularProgress/CircularProgress'
 import Button from '@material-ui/core/Button/Button'
@@ -18,19 +17,27 @@ interface Props {
 export function SelectPeopleDialog(props: Props) {
     const [people, select] = useState<Person[]>([] as Person[])
     const [committed, setCommitted] = useState(false)
+    const onClose = useCallback(() => {
+        props.onClose()
+        setCommitted(false)
+        select([])
+    }, [props.onClose])
     const share = useCallback(() => {
         setCommitted(true)
         // TODO: On rejected
-        props.onSelect(people).then(props.onClose)
+        props.onSelect(people).then(onClose)
     }, [people])
-    useEsc(() => (committed ? void 0 : props.onClose()))
+    // useEsc(() => (committed ? void 0 : onClose))
     return (
-        <Dialog open={props.open} scroll="paper" fullWidth maxWidth="sm">
+        <Dialog onClose={onClose} open={props.open} scroll="paper" fullWidth maxWidth="sm">
             <DialogTitle style={{ paddingBottom: 0 }}>Share to ...</DialogTitle>
             <DialogContent style={{ padding: '0 12px' }}>
                 <SelectPeopleUI disabled={committed} all={props.people} selected={people} onSetSelected={select} />
             </DialogContent>
             <DialogActions>
+                <Button size="large" disabled={committed} onClick={onClose}>
+                    Cancel
+                </Button>
                 <Button size="large" disabled={committed || people.length === 0} color="primary" onClick={share}>
                     {committed && <CircularProgress style={{ marginRight: 6 }} size={16} variant="indeterminate" />}
                     {committed ? 'Sharing' : 'Share'}
@@ -44,6 +51,7 @@ export function useShareMenu(people: Person[], onSelect: (people: Person[]) => P
     const [show, setShow] = useState(false)
     const showShare = useCallback(() => setShow(true), [])
     const hideShare = useCallback(() => setShow(false), [])
+
     return {
         showShare,
         hideShare,

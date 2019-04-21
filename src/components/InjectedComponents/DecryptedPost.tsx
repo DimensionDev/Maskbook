@@ -71,8 +71,8 @@ function DecryptPost({ postBy, whoAmI, encryptedText, people }: Props) {
     const [b, _2] = a.split(':||')
     return (
         <AsyncComponent
-            promise={async (encryptedString: string) => CryptoService.decryptFrom(encryptedString, postBy, whoAmI)}
-            values={[b]}
+            promise={async () => CryptoService.decryptFrom(b, postBy, whoAmI)}
+            dependencies={[b, people]}
             awaitingComponent={DecryptPostAwaiting}
             completeComponent={props => (
                 <DecryptPostSuccess

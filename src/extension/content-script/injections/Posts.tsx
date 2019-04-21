@@ -15,17 +15,15 @@ interface PostInspectorProps {
     postId: string
     needZip(): void
 }
-const PostInspector = (props: PostInspectorProps) => {
+function PostInspector(props: PostInspectorProps) {
     const { post, postBy, postId } = props
     const type = {
         encryptedPost: post.match(/🎼([a-zA-Z0-9\+=\/|]+):\|\|/),
         provePost: post.match(/🔒(.+)🔒/)!,
     }
-    const people = usePeople()
-
     if (type.encryptedPost) {
         props.needZip()
-        return <DecryptPostUI.UI people={people} encryptedText={post} whoAmI={getUsername()!} postBy={postBy} />
+        return <DecryptPostUI.UI people={usePeople()} encryptedText={post} whoAmI={getUsername()!} postBy={postBy} />
     } else if (type.provePost) {
         PeopleService.uploadProvePostUrl(postBy, postId)
         return <AddToKeyStore postBy={postBy} provePost={post} />

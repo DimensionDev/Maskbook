@@ -4,15 +4,15 @@ type PromiseState<T> =
     | { status: 'await' | 'not-started' }
     | { status: 'complete'; data: T }
     | { status: 'fail'; error: Error }
-export default function AsyncComponent<Param extends any[], Return>(props: {
-    promise: (...args: Param) => Promise<Return>
-    values: Param
+export default function AsyncComponent<Return>(props: {
+    promise: () => Promise<Return>
+    dependencies: any[]
     completeComponent: React.ComponentType<{ data: Return }>
     awaitingComponent: React.SuspenseProps['fallback']
     failedComponent: React.ComponentType<{ error: Error }>
 }) {
     const [state, setState] = React.useState<PromiseState<Return>>({ status: 'not-started' })
-    const promise = React.useMemo(() => props.promise(...props.values), props.values)
+    const promise = React.useMemo(() => props.promise(), props.dependencies)
     if (state.status === 'not-started') {
         promise.then(data => setState({ status: 'complete', data }), error => setState({ status: 'fail', error }))
         setState({ status: 'await' })
@@ -27,7 +27,7 @@ export default function AsyncComponent<Param extends any[], Return>(props: {
                     return { default: () => <props.failedComponent error={e} /> }
                 }
             }),
-        props.values,
+        props.dependencies,
     )
     return (
         <React.Suspense fallback={props.awaitingComponent}>
