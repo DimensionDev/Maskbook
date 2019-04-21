@@ -1,5 +1,5 @@
 import React from 'react'
-import AsyncComponent from '../../utils/AsyncComponent'
+import AsyncComponent from '../../utils/components/AsyncComponent'
 import { AdditionalContent } from './AdditionalPostContent'
 import { CryptoService } from '../../extension/content-script/rpc'
 

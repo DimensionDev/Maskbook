@@ -1,7 +1,7 @@
 import React from 'react'
 import { LiveSelector, MutationObserverWatcher } from '@holoflows/kit'
 import { AdditionalPostBox } from '../../../components/InjectedComponents/AdditionalPostBox'
-import { renderInShadowRoot } from '../../../utils/IsolateInject'
+import { renderInShadowRoot } from '../../../utils/jss/renderInShadowRoot'
 
 const box = new MutationObserverWatcher(
     new LiveSelector()

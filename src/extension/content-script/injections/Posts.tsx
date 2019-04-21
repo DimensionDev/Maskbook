@@ -4,7 +4,7 @@ import { DecryptPostUI } from '../../../components/InjectedComponents/DecryptedP
 import { AddToKeyStore } from '../../../components/InjectedComponents/AddToKeyStore'
 import { PeopleService } from '../rpc'
 import { getUsername } from './LiveSelectors'
-import { renderInShadowRoot } from '../../../utils/IsolateInject'
+import { renderInShadowRoot } from '../../../utils/jss/renderInShadowRoot'
 import { usePeople } from '../../../components/DataSource/PeopleRef'
 
 const posts = new LiveSelector().querySelectorAll<HTMLDivElement>('.userContent, .userContent+*+div>div>div>div>div')

@@ -4,7 +4,7 @@ import JssProvider from 'react-jss/lib/JssProvider'
 import ReactDOM from 'react-dom'
 import { memoize } from 'lodash-es'
 import React from 'react'
-import { useMaskbookTheme } from './theme'
+import { useMaskbookTheme } from '../theme'
 import ConstructableStylesheetsRendererGenerator from './ConstructableStylesheetsRenderer'
 
 const createJSS = memoize((shadow: ShadowRoot) => {

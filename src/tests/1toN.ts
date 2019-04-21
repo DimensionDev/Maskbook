@@ -1,5 +1,5 @@
 import { encrypt1ToN, decryptMessage1ToNByMyself, decryptMessage1ToNByOther } from '../crypto/crypto-alpha-40'
-import { decodeText } from '../utils/EncodeDecode'
+import { decodeText } from '../utils/type-transform/EncodeDecode'
 
 async function test1toN(msg: string) {
     const alice = await crypto.subtle.generateKey({ name: 'ECDH', namedCurve: 'K-256' }, true, ['deriveKey'])

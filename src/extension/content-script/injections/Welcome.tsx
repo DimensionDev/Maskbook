@@ -8,12 +8,11 @@ import Welcome1a4 from '../../../components/Welcomes/1a4'
 import Welcome1b1 from '../../../components/Welcomes/1b1'
 import Dialog from '@material-ui/core/Dialog'
 import { sleep } from '../../../utils/utils'
-import { useAsync } from '../../../utils/AsyncComponent'
+import { useAsync } from '../../../utils/components/AsyncComponent'
 import { BackgroundService, CryptoService, PeopleService } from '../rpc'
-import { useEsc } from '../../../components/Welcomes/useEsc'
 import { myUsername } from './LiveSelectors'
 import { Banner } from '../../../components/Welcomes/Banner'
-import { renderInShadowRoot } from '../../../utils/IsolateInject'
+import { renderInShadowRoot } from '../../../utils/jss/renderInShadowRoot'
 import ReactDOM from 'react-dom'
 
 //#region Welcome
@@ -163,11 +162,10 @@ function _WelcomePortal(props: {}, ref: React.Ref<setWelcomeDisplay>) {
         setOpen(false)
         loginWatcher().then(() => setOpen(true))
     }
-    useEsc(onFinish.bind(null, 'quit'))
     // Only render in main page
     if (location.pathname !== '/') return null
     return (
-        <Dialog open={open}>
+        <Dialog open={open} onClose={onFinish.bind(null, 'quit')}>
             <Welcome currentStep={step} onStepChange={setStep} waitForLogin={waitForLogin} onFinish={onFinish} />
         </Dialog>
     )

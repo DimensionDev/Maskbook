@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { FlexBox, FullWidth } from '../../utils/Flex'
+import { FlexBox, FullWidth } from '../../utils/components/Flex'
 import Chip from '@material-ui/core/Chip/Chip'
 import Avatar from '@material-ui/core/Avatar/Avatar'
 import Paper from '@material-ui/core/Paper/Paper'

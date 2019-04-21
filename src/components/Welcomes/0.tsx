@@ -4,7 +4,7 @@ import Typography from '@material-ui/core/Typography/Typography'
 import { withStylesTyped } from '../../utils/theme'
 import createStyles from '@material-ui/core/styles/createStyles'
 import Button from '@material-ui/core/Button/Button'
-import { VerticalCenter, FullWidth, createBox } from '../../utils/Flex'
+import { VerticalCenter, FullWidth, createBox } from '../../utils/components/Flex'
 
 import Close from '@material-ui/icons/Close'
 

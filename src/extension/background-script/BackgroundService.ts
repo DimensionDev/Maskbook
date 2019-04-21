@@ -1,7 +1,7 @@
 import { AsyncCall, OnlyRunInContext } from '@holoflows/kit'
 import { CryptoKeyRecord, getMyPrivateKey, toStoreCryptoKey } from '../../key-management/keystore-db'
-import { encodeText } from '../../utils/EncodeDecode'
-import { BackgroundName } from '../../utils/Names'
+import { encodeText } from '../../utils/type-transform/EncodeDecode'
+import { BackgroundName } from '../../utils/constants'
 import { getMyLocalKey } from '../../key-management/local-db'
 import { sleep } from '../../utils/utils'
 

@@ -4,7 +4,7 @@ import Typography from '@material-ui/core/Typography/Typography'
 import { withStylesTyped } from '../../utils/theme'
 import createStyles from '@material-ui/core/styles/createStyles'
 import Button from '@material-ui/core/Button/Button'
-import { fileReference } from '../../utils/utils'
+import { getUrl } from '../../utils/utils'
 
 interface Props {
     next(): void
@@ -28,11 +28,7 @@ export default withStylesTyped(theme =>
     return (
         <Paper className={classes.paper}>
             <Typography variant="h5">Encrypt message use this postbox</Typography>
-            <img
-                src={fileReference(require('./1a2.jpg'))}
-                width="75%"
-                style={{ border: '1px solid #ddd', borderRadius: 5 }}
-            />
+            <img src={getUrl(require('./1a2.jpg'))} width="75%" style={{ border: '1px solid #ddd', borderRadius: 5 }} />
             <Typography variant="subtitle1">
                 Then only people you selected with Maskbook can see the post content
             </Typography>

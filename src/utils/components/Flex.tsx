@@ -1,6 +1,6 @@
 import React from 'react'
 import { Theme } from '@material-ui/core/styles/createMuiTheme'
-import { withStylesTyped } from './theme'
+import { withStylesTyped } from '../theme'
 import { CSSProperties } from '@material-ui/core/styles/withStyles'
 import classNames from 'classnames'
 import createStyles from '@material-ui/core/styles/createStyles'

@@ -1,7 +1,7 @@
 import { queryPersonCryptoKey, getMyPrivateKey, storeKey, generateNewKey } from '../../key-management/keystore-db'
 import * as Alpha40 from '../../crypto/crypto-alpha-40'
 import { AsyncCall, MessageCenter, OnlyRunInContext } from '@holoflows/kit/es'
-import { CryptoName } from '../../utils/Names'
+import { CryptoName } from '../../utils/constants'
 import { addPersonPublicKey } from '../../key-management/people-gun'
 import { Person } from './PeopleService'
 import { getMyLocalKey } from '../../key-management/local-db'
@@ -13,7 +13,7 @@ import {
     toCompressSecp256k1Point,
     unCompressSecp256k1Point,
     decodeArrayBuffer,
-} from '../../utils/EncodeDecode'
+} from '../../utils/type-transform/EncodeDecode'
 
 OnlyRunInContext('background', 'EncryptService')
 // v40: 🎼2/4|ownersAESKeyEncrypted|iv|encryptedText|signature:||

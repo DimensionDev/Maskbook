@@ -1,5 +1,5 @@
-import { encodeText, encodeArrayBuffer, decodeArrayBuffer, decodeText } from '../utils/EncodeDecode'
-import { toECDH, addUint8Array, toECDSA } from '../utils/CryptoUtils'
+import { encodeText, encodeArrayBuffer, decodeArrayBuffer, decodeText } from '../utils/type-transform/EncodeDecode'
+import { toECDH, addUint8Array, toECDSA } from '../utils/type-transform/CryptoUtils'
 // tslint:disable: no-parameter-reassignment
 export type PublishedAESKey = { encryptedKey: string; salt: string }
 //#region Derive AES Key from ECDH key

@@ -4,7 +4,7 @@ import Typography from '@material-ui/core/Typography/Typography'
 import { withStylesTyped } from '../../utils/theme'
 import createStyles from '@material-ui/core/styles/createStyles'
 import Button from '@material-ui/core/Button/Button'
-import { fileReference } from '../../utils/utils'
+import { getUrl } from '../../utils/utils'
 
 interface Props {
     next(): void
@@ -31,7 +31,7 @@ export default withStylesTyped(theme =>
     return (
         <Paper className={classes.paper}>
             <Typography variant="h5">Keep your backups carefully</Typography>
-            <img src={fileReference(require('./1a3.jpg'))} width="auto" height={160} />
+            <img src={getUrl(require('./1a3.jpg'))} width="auto" height={160} />
             <Typography variant="caption">{filename}</Typography>
             <Typography variant="subtitle1">
                 The first backup has been put in your Downloads folder.

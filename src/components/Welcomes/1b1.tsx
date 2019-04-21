@@ -4,10 +4,10 @@ import Typography from '@material-ui/core/Typography/Typography'
 import { withStylesTyped } from '../../utils/theme'
 import createStyles from '@material-ui/core/styles/createStyles'
 import Button from '@material-ui/core/Button/Button'
-import { createBox } from '../../utils/Flex'
+import { createBox } from '../../utils/components/Flex'
 
 import ArrowBack from '@material-ui/icons/ArrowBack'
-import { useDragAndDrop } from '../../utils/useDragAndDrop'
+import { useDragAndDrop } from '../../utils/hooks/useDragAndDrop'
 
 const RestoreBox = createBox(theme => ({
     color: theme.palette.text.hint,

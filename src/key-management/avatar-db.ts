@@ -1,5 +1,5 @@
 import { Entity, Index, Db } from 'typed-db'
-import { buildQuery, fileReference } from '../utils/utils'
+import { buildQuery } from '../utils/utils'
 
 @Entity()
 class AvatarRecord {

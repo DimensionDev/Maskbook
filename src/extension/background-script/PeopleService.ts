@@ -1,5 +1,5 @@
 import { AsyncCall, MessageCenter, OnlyRunInContext } from '@holoflows/kit/es'
-import { FriendServiceName } from '../../utils/Names'
+import { FriendServiceName } from '../../utils/constants'
 import {
     getAllKeys,
     calculateFingerprint,

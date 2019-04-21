@@ -1,5 +1,4 @@
 import React, { useState, useCallback } from 'react'
-import { useEsc } from '../Welcomes/useEsc'
 import { SelectPeopleUI } from './SelectPeople'
 import Dialog from '@material-ui/core/Dialog/Dialog'
 import { Person } from '../../extension/background-script/PeopleService'

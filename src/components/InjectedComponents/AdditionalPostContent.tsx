@@ -1,7 +1,7 @@
 import * as React from 'react'
 import Divider from '@material-ui/core/Divider/Divider'
 import Typography from '@material-ui/core/Typography/Typography'
-import { getUrl } from '../../utils/Names'
+import { getUrl } from '../../utils/utils'
 
 interface Props {
     title: React.ReactNode

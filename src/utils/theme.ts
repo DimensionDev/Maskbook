@@ -91,6 +91,5 @@ export function withStylesTyped<ClassKey extends string, Options extends WithSty
 }
 
 export function useMaskbookTheme(node: React.ReactNode) {
-    const themeClone = createMuiTheme(MaskbookLightTheme)
-    return React.createElement(MuiThemeProvider, { theme: themeClone, children: node })
+    return React.createElement(MuiThemeProvider, { theme: MaskbookLightTheme, children: node })
 }

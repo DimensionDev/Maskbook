@@ -4,7 +4,7 @@ import Card from '@material-ui/core/Card/Card'
 import CardHeader from '@material-ui/core/CardHeader/CardHeader'
 import Avatar from '@material-ui/core/Avatar/Avatar'
 import { FixedWidthFonts, withStylesTyped } from '../../utils/theme'
-import { createBox } from '../../utils/Flex'
+import { createBox } from '../../utils/components/Flex'
 import classNames from 'classnames'
 import createStyles from '@material-ui/core/styles/createStyles'
 

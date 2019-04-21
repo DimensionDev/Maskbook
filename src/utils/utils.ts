@@ -13,8 +13,12 @@ export const buildQuery = <Q extends Newable<any>>(db: Db, record: Q) => {
     ) => db.transaction([record], mode, t => cb(t.for(record)))
 }
 
-/** Return the correct file url in different context. */
-export const fileReference = (url: string) => {
-    if (chrome && chrome.runtime) return chrome.runtime.getURL(url)
-    return url
+/**
+ * Get reference of file in both chrome extension and storybook
+ */
+export function getUrl(path: string, fallback: string = '') {
+    if (typeof chrome === 'object' && chrome.runtime && chrome.runtime.getURL) {
+        return chrome.runtime.getURL(path)
+    }
+    return fallback || path
 }
