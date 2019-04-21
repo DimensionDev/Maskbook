@@ -33,7 +33,7 @@ export const AdditionalContent = withStylesTyped({
         <>
             <Divider className={classes.upDivider} />
             <Typography variant="caption" className={classes.title}>
-                <img src={icon} className={classes.icon} />
+                <img alt="Logo of Maskbook" src={icon} className={classes.icon} />
                 {props.title}
             </Typography>
             <Typography variant="body1" className={classes.content}>

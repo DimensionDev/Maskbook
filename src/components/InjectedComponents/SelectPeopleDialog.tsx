@@ -43,7 +43,9 @@ export const SelectPeopleDialog = withStylesTyped({
                     Cancel
                 </Button>
                 <Button size="large" disabled={committed || people.length === 0} color="primary" onClick={share}>
-                    {committed && <CircularProgress className={classes.progress} size={16} variant="indeterminate" />}
+                    {committed && (
+                        <CircularProgress aria-busy className={classes.progress} size={16} variant="indeterminate" />
+                    )}
                     {committed ? 'Sharing' : 'Share'}
                 </Button>
             </DialogActions>

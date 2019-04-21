@@ -45,7 +45,10 @@ export const Banner = withStylesTyped({
                     color="primary">
                     Get started
                 </Button>
-                <IconButton onClick={props.close} classes={{ root: props.classes.close }} aria-label="Close">
+                <IconButton
+                    aria-label="Dismiss the banner"
+                    onClick={props.close}
+                    classes={{ root: props.classes.close }}>
                     <CloseIcon />
                 </IconButton>
             </Toolbar>

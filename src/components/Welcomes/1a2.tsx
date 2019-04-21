@@ -32,7 +32,12 @@ export default withStylesTyped(theme =>
     return (
         <Paper className={classes.paper}>
             <Typography variant="h5">Encrypt message use this postbox</Typography>
-            <img src={getUrl(require('./1a2.jpg'))} width="75%" className={classes.img} />
+            <img
+                alt="Screenshot of how to encrypt message with Maskbook"
+                src={getUrl(require('./1a2.jpg'))}
+                width="75%"
+                className={classes.img}
+            />
             <Typography variant="subtitle1">
                 Then only people you selected with Maskbook can see the post content
             </Typography>

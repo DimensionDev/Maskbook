@@ -31,7 +31,7 @@ export default withStylesTyped(theme =>
     return (
         <Paper className={classes.paper}>
             <Typography variant="h5">Keep your backups carefully</Typography>
-            <img src={getUrl(require('./1a3.jpg'))} width="auto" height={160} />
+            <img alt="" src={getUrl(require('./1a3.jpg'))} width="auto" height={160} />
             <Typography variant="caption">{filename}</Typography>
             <Typography variant="subtitle1">
                 The first backup has been put in your Downloads folder.
