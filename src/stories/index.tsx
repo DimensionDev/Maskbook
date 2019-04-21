@@ -69,7 +69,6 @@ storiesOf('Dashboard (unused)', module)
             fingerprint={text('Fingerprint', 'FDFE333CE20ED446AD88F3C8BA3AD1AA5ECAF521')}
             nickname={text('Name', 'Jack Works')}
             username={text('Username', 'jackworks_vfs')}
-            atSymbolBefore={boolean('Add a @ on username?', false)}
         />
     ))
     .add('Dashboard (unused)', () => (
@@ -133,7 +132,7 @@ storiesOf('Injections', module)
     })
     .add('Select people dialog', () => {
         function SelectPeople() {
-            const { ShareMenu, hideShare, showShare } = useShareMenu(demoPeople, async people => sleep(3000))
+            const { ShareMenu, showShare } = useShareMenu(demoPeople, async people => sleep(3000))
             return (
                 <>
                     {ShareMenu}

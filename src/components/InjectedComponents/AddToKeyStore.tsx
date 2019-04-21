@@ -22,7 +22,7 @@ export const AddToKeyStoreUI = {
     success: <AdditionalContent title="Maskbook public key added to keystore ✔" />,
     awaiting: <AdditionalContent title="Maskbook public key found, verifying..." />,
     failed: (props: { error: Error }) => (
-        <AdditionalContent title={<span style={{ color: 'red' }}>Maskbook public key NOT verified ❌</span>}>
+        <AdditionalContent title="Maskbook public key NOT verified ❌">
             {props.error.message} This public key won't be saved.{console.error(props.error)}
         </AdditionalContent>
     ),

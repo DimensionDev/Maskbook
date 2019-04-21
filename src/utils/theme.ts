@@ -1,8 +1,8 @@
 import withStyles, {
     WithStyles,
     WithStylesOptions,
-    StyleRules,
     StyleRulesCallback,
+    StyleRules,
 } from '@material-ui/core/styles/withStyles'
 import React from 'react'
 import createMuiTheme, { ThemeOptions, Theme } from '@material-ui/core/styles/createMuiTheme'
@@ -67,9 +67,10 @@ const baseTheme = (theme: 'dark' | 'light') =>
 export const MaskbookLightTheme = createMuiTheme(baseTheme('light'))
 export const MaskbookDarkTheme = createMuiTheme(baseTheme('dark'))
 export const FixedWidthFonts = `Droid Sans Mono', Consolas, Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace, serif`
+
 // 类型安全的 withStyles
 export function withStylesTyped<ClassKey extends string, Options extends WithStylesOptions<ClassKey> = {}>(
-    style: StyleRulesCallback<ClassKey> | StyleRules<ClassKey>,
+    style: StyleRulesCallback<ClassKey> | StyleRules<ClassKey> = {} as any,
     options?: Options,
 ) {
     return function<Props, Ref = null>(

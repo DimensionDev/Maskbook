@@ -14,9 +14,7 @@ export interface IIdentity {
     fingerprint: string
 }
 interface Props extends IIdentity {
-    /* Design variant */
     avatar?: string
-    atSymbolBefore?: boolean
     onClick?(): void
 }
 const FixedWidth = createBox({ fontFamily: FixedWidthFonts })
@@ -39,34 +37,34 @@ export default withStylesTyped(theme =>
         avatarDisabled: {
             marginRight: 0,
         },
+        emptyAvatar: {
+            width: 0,
+            height: 0,
+        },
     }),
-)<Props>(function Identity(props) {
-    const { avatar, onClick } = props
+)<Props>(function({ avatar, onClick, classes, nickname, fingerprint, username }) {
     return (
-        <Card onClick={onClick} className={props.classes.card}>
+        <Card onClick={onClick} className={classes.card}>
             <CardHeader
-                classes={{ avatar: classNames({ [props.classes.avatarDisabled]: !avatar }) }}
+                classes={{ avatar: classNames({ [classes.avatarDisabled]: !avatar }) }}
                 avatar={
                     avatar ? (
-                        <Avatar aria-label={props.nickname} src={avatar.length > 3 ? avatar : undefined}>
+                        <Avatar aria-label={nickname} src={avatar.length > 3 ? avatar : undefined}>
                             {avatar.length <= 3 ? avatar : undefined}
                         </Avatar>
                     ) : (
-                        <Avatar style={{ width: 0, height: 0 }} />
+                        <Avatar className={classes.emptyAvatar} />
                     )
                 }
                 title={
                     <>
-                        <Typography inline className={props.classes.text}>
-                            {props.nickname}
+                        <Typography inline className={classes.text}>
+                            {nickname}
                         </Typography>
-                        <Typography inline>
-                            {props.atSymbolBefore && '@'}
-                            {props.username}
-                        </Typography>
+                        <Typography inline>{username}</Typography>
                     </>
                 }
-                subheader={<FixedWidth>{props.fingerprint}</FixedWidth>}
+                subheader={<FixedWidth>{fingerprint}</FixedWidth>}
             />
         </Card>
     )

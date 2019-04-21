@@ -54,6 +54,16 @@ export default withStylesTyped(theme =>
         button: {
             minWidth: 180,
         },
+        file: {
+            display: 'none',
+        },
+        restoreBox: {
+            color: 'gray',
+            transition: '0.4s',
+            '&[data-active=true]': {
+                color: 'black',
+            },
+        },
     }),
 )<Props>(function Welcome({ classes, back, restore }) {
     const ref = React.useRef<HTMLInputElement>(null)
@@ -70,16 +80,15 @@ export default withStylesTyped(theme =>
                 <Typography variant="h5">Restore your keypair</Typography>
                 <form>
                     <input
-                        style={{ display: 'none' }}
+                        className={classes.file}
                         type="file"
                         accept="application/json"
                         ref={ref}
                         onChange={fileReceiver}
                     />
                     <RestoreBox
-                        style={{
-                            color: dragStatus === 'drag-enter' ? 'black' : 'gray',
-                        }}
+                        className={classes.restoreBox}
+                        data-active={dragStatus === 'drag-enter'}
                         onClick={() => ref.current && ref.current.click()}>
                         {dragStatus === 'drag-enter'
                             ? 'Drag your key backup into this dialog'

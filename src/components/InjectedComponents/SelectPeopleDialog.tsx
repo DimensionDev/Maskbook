@@ -7,13 +7,18 @@ import Button from '@material-ui/core/Button/Button'
 import DialogTitle from '@material-ui/core/DialogTitle/DialogTitle'
 import DialogActions from '@material-ui/core/DialogActions/DialogActions'
 import DialogContent from '@material-ui/core/DialogContent/DialogContent'
+import { withStylesTyped } from '../../utils/theme'
 interface Props {
     open: boolean
     people: Person[]
     onClose(): void
     onSelect(people: Person[]): Promise<void>
 }
-export function SelectPeopleDialog(props: Props) {
+export const SelectPeopleDialog = withStylesTyped({
+    title: { paddingBottom: 0 },
+    content: { padding: '0 12px' },
+    progress: { marginRight: 6 },
+})<Props>(({ classes, ...props }) => {
     const [people, select] = useState<Person[]>([] as Person[])
     const [committed, setCommitted] = useState(false)
     const onClose = useCallback(() => {
@@ -29,8 +34,8 @@ export function SelectPeopleDialog(props: Props) {
     // useEsc(() => (committed ? void 0 : onClose))
     return (
         <Dialog onClose={onClose} open={props.open} scroll="paper" fullWidth maxWidth="sm">
-            <DialogTitle style={{ paddingBottom: 0 }}>Share to ...</DialogTitle>
-            <DialogContent style={{ padding: '0 12px' }}>
+            <DialogTitle className={classes.title}>Share to ...</DialogTitle>
+            <DialogContent className={classes.content}>
                 <SelectPeopleUI disabled={committed} all={props.people} selected={people} onSetSelected={select} />
             </DialogContent>
             <DialogActions>
@@ -38,13 +43,13 @@ export function SelectPeopleDialog(props: Props) {
                     Cancel
                 </Button>
                 <Button size="large" disabled={committed || people.length === 0} color="primary" onClick={share}>
-                    {committed && <CircularProgress style={{ marginRight: 6 }} size={16} variant="indeterminate" />}
+                    {committed && <CircularProgress className={classes.progress} size={16} variant="indeterminate" />}
                     {committed ? 'Sharing' : 'Share'}
                 </Button>
             </DialogActions>
         </Dialog>
     )
-}
+})
 
 export function useShareMenu(people: Person[], onSelect: (people: Person[]) => Promise<void>) {
     const [show, setShow] = useState(false)
@@ -53,7 +58,7 @@ export function useShareMenu(people: Person[], onSelect: (people: Person[]) => P
 
     return {
         showShare,
-        hideShare,
+        // hideShare,
         ShareMenu: <SelectPeopleDialog people={people} open={show} onClose={hideShare} onSelect={onSelect} />,
     }
 }

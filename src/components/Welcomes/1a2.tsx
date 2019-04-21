@@ -23,12 +23,16 @@ export default withStylesTyped(theme =>
         button: {
             minWidth: 180,
         },
+        img: {
+            border: '1px solid #ddd',
+            borderRadius: 5,
+        },
     }),
 )<Props>(function Welcome({ classes, next }) {
     return (
         <Paper className={classes.paper}>
             <Typography variant="h5">Encrypt message use this postbox</Typography>
-            <img src={getUrl(require('./1a2.jpg'))} width="75%" style={{ border: '1px solid #ddd', borderRadius: 5 }} />
+            <img src={getUrl(require('./1a2.jpg'))} width="75%" className={classes.img} />
             <Typography variant="subtitle1">
                 Then only people you selected with Maskbook can see the post content
             </Typography>

@@ -6,25 +6,20 @@ import { CryptoService } from '../../extension/content-script/rpc'
 import { useShareMenu } from './SelectPeopleDialog'
 import { Person } from '../../extension/background-script/PeopleService'
 import Link from '@material-ui/core/Link'
+import { withStylesTyped } from '../../utils/theme'
 
-interface Props {
-    postBy: string
-    whoAmI: string
-    encryptedText: string
-    people: Person[]
-}
-function DecryptPostSuccess({
-    data,
-    displayAddDecryptor,
-    requestAddDecryptor,
-    people,
-}: {
+interface DecryptPostSuccessProps {
     data: { signatureVerifyResult: boolean; content: string }
     displayAddDecryptor: boolean
     requestAddDecryptor(to: Person[]): Promise<void>
     people: Person[]
-}) {
-    const { ShareMenu, hideShare, showShare } = useShareMenu(people, requestAddDecryptor)
+}
+const DecryptPostSuccess = withStylesTyped({
+    link: { marginRight: '1em', cursor: 'pointer' },
+    pass: { color: 'green' },
+    fail: { color: 'red' },
+})<DecryptPostSuccessProps>(({ data, displayAddDecryptor, requestAddDecryptor, people, classes }) => {
+    const { ShareMenu, showShare } = useShareMenu(people, requestAddDecryptor)
     return (
         <AdditionalContent
             title={
@@ -32,14 +27,14 @@ function DecryptPostSuccess({
                     {ShareMenu}
                     Maskbook decrypted content: <FullWidth />
                     {displayAddDecryptor ? (
-                        <Link color="primary" onClick={showShare} style={{ marginRight: '1em', cursor: 'pointer' }}>
+                        <Link color="primary" onClick={showShare} className={classes.link}>
                             Add decryptor
                         </Link>
                     ) : null}
                     {data.signatureVerifyResult ? (
-                        <span style={{ color: 'green' }}>Signature verified ✔</span>
+                        <span className={classes.pass}>Signature verified ✔</span>
                     ) : (
-                        <span style={{ color: 'red' }}>Signature NOT verified ❌</span>
+                        <span className={classes.fail}>Signature NOT verified ❌</span>
                     )}
                 </>
             }
@@ -52,7 +47,7 @@ function DecryptPostSuccess({
             )}
         />
     )
-}
+})
 
 const DecryptPostAwaiting = <AdditionalContent title="Maskbook decrypting..." />
 function DecryptPostFailed({ error }: { error: Error }) {
@@ -66,7 +61,13 @@ function DecryptPostFailed({ error }: { error: Error }) {
     )
 }
 
-function DecryptPost({ postBy, whoAmI, encryptedText, people }: Props) {
+interface DecryptPostProps {
+    postBy: string
+    whoAmI: string
+    encryptedText: string
+    people: Person[]
+}
+function DecryptPost({ postBy, whoAmI, encryptedText, people }: DecryptPostProps) {
     const [_, a] = encryptedText.split('🎼')
     const [b, _2] = a.split(':||')
     return (

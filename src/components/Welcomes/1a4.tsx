@@ -42,6 +42,12 @@ export default withStylesTyped(theme =>
         button: {
             minWidth: 180,
         },
+        textFieldShort: {
+            minHeight: '10em',
+        },
+        textFieldLong: {
+            minHeight: '11em',
+        },
     }),
 )<Props>(function Welcome({ classes, copyToClipboard, provePost }) {
     const full = `I'm using https://maskbook.io/ to encrypt my posts to prevent Facebook from peeping into them.
@@ -71,7 +77,7 @@ ${provePost}`
                 onFocus={onFocus}
                 onBlur={onBlur}
                 value={showShort ? provePost : full}
-                style={{ minHeight: showShort ? '10em' : '11em' }}
+                className={showShort ? classes.textFieldShort : classes.textFieldLong}
             />
             <Typography variant="subtitle1">
                 {showShort
