@@ -34,7 +34,7 @@ function PersonInList({ person, onClick, disabled }: PeopleInListProps) {
 }
 interface PersonInChipProps {
     person: Person
-    onDelete(): void
+    onDelete?(): void
     disabled?: boolean
 }
 function PersonInChip({ disabled, onDelete, person }: PersonInChipProps) {
@@ -50,8 +50,9 @@ function PersonInChip({ disabled, onDelete, person }: PersonInChipProps) {
     )
 }
 interface SelectPeopleUI {
-    all: Person[]
+    people: Person[]
     selected: Person[]
+    frozenSelected?: Person[]
     onSetSelected: (selected: Person[]) => void
     disabled?: boolean
 }
@@ -65,13 +66,14 @@ export const SelectPeopleUI = withStylesTyped({
     },
     input: { flex: 1 },
     button: { marginLeft: 8, padding: '2px 6px' },
-})<SelectPeopleUI>(function({ all, classes, onSetSelected, selected, disabled }) {
+})<SelectPeopleUI>(function({ people, frozenSelected, classes, onSetSelected, selected, disabled }) {
     const [search, setSearch] = React.useState('')
-    const listBeforeSearch = all.filter(x => {
+    const listBeforeSearch = people.filter(x => {
         if (selected.find(y => y.username === x.username)) return false
         return true
     })
     const listAfterSearch = listBeforeSearch.filter(x => {
+        if (frozenSelected && frozenSelected.find(y => x.username === y.username)) return false
         if (search === '') return true
         return (
             !!x.username.toLocaleLowerCase().match(search.toLocaleLowerCase()) ||
@@ -81,6 +83,7 @@ export const SelectPeopleUI = withStylesTyped({
     return (
         <>
             <FlexBox className={classes.selectedArea}>
+                {frozenSelected && frozenSelected.map(p => <PersonInChip disabled key={p.username} person={p} />)}
                 {selected.map(p => (
                     <PersonInChip
                         disabled={disabled}

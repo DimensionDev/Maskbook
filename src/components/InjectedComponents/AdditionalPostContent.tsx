@@ -14,14 +14,8 @@ export const AdditionalContent = withStylesTyped({
         // TODO: ? is this useful?
         marginBlock: 6,
     },
-    title: {
-        display: 'flex',
-    },
-    icon: {
-        transform: 'translate(-1px, -1px)',
-        width: 16,
-        height: 16,
-    },
+    title: { display: 'flex' },
+    icon: { transform: 'translate(-1px, -1px)' },
     content: {
         marginBottom: 6,
         marginTop: 6,
@@ -33,7 +27,7 @@ export const AdditionalContent = withStylesTyped({
         <>
             <Divider className={classes.upDivider} />
             <Typography variant="caption" className={classes.title}>
-                <img alt="Logo of Maskbook" src={icon} className={classes.icon} />
+                <img alt="" width={16} height={16} src={icon} className={classes.icon} />
                 {props.title}
             </Typography>
             <Typography variant="body1" className={classes.content}>

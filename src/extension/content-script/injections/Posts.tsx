@@ -1,11 +1,13 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { LiveSelector, MutationObserverWatcher } from '@holoflows/kit'
 import { DecryptPostUI } from '../../../components/InjectedComponents/DecryptedPost'
 import { AddToKeyStore } from '../../../components/InjectedComponents/AddToKeyStore'
-import { PeopleService } from '../rpc'
+import { PeopleService, CryptoService } from '../rpc'
 import { getUsername } from './LiveSelectors'
 import { renderInShadowRoot } from '../../../utils/jss/renderInShadowRoot'
 import { usePeople } from '../../../components/DataSource/PeopleRef'
+import { useAsync } from '../../../utils/components/AsyncComponent'
+import { Person } from '../../background-script/PeopleService'
 
 const posts = new LiveSelector().querySelectorAll<HTMLDivElement>('.userContent, .userContent+*+div>div>div>div>div')
 
@@ -15,6 +17,10 @@ interface PostInspectorProps {
     postId: string
     needZip(): void
 }
+function removeMyself(people: Person[]): Person[] {
+    const i = getUsername()!
+    return people.filter(x => x.username !== i)
+}
 function PostInspector(props: PostInspectorProps) {
     const { post, postBy, postId } = props
     const type = {
@@ -23,7 +29,29 @@ function PostInspector(props: PostInspectorProps) {
     }
     if (type.encryptedPost) {
         props.needZip()
-        return <DecryptPostUI.UI people={usePeople()} encryptedText={post} whoAmI={getUsername()!} postBy={postBy} />
+        const whoAmI = getUsername()!
+        const people = usePeople()
+        const [alreadySelectedPreviously, setAlreadySelectedPreviously] = useState<Person[]>([])
+        const str = post.split('🎼')[1]
+        const [version, ownersAESKeyEncrypted, iv] = str.split('|')
+        if (whoAmI === postBy) {
+            useAsync(() => CryptoService.getSharedListOfPost(iv), [post]).then(p =>
+                setAlreadySelectedPreviously(removeMyself(p)),
+            )
+        }
+        return (
+            <DecryptPostUI.UI
+                requestAppendDecryptor={async people => {
+                    setAlreadySelectedPreviously(alreadySelectedPreviously.concat(people))
+                    return CryptoService.appendShareTarget(iv, ownersAESKeyEncrypted, iv, people)
+                }}
+                alreadySelectedPreviously={alreadySelectedPreviously}
+                people={removeMyself(people)}
+                encryptedText={post}
+                whoAmI={whoAmI}
+                postBy={postBy}
+            />
+        )
     } else if (type.provePost) {
         PeopleService.uploadProvePostUrl(postBy, postId)
         return <AddToKeyStore postBy={postBy} provePost={post} />

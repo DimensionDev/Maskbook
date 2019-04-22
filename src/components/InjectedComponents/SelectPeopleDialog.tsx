@@ -11,6 +11,7 @@ import { withStylesTyped } from '../../utils/theme'
 interface Props {
     open: boolean
     people: Person[]
+    alreadySelectedPreviously: Person[]
     onClose(): void
     onSelect(people: Person[]): Promise<void>
 }
@@ -26,23 +27,36 @@ export const SelectPeopleDialog = withStylesTyped({
         setCommitted(false)
         select([])
     }, [props.onClose])
+    const [rejection, onReject] = useState<Error>()
     const share = useCallback(() => {
         setCommitted(true)
-        // TODO: On rejected
-        props.onSelect(people).then(onClose)
+        props.onSelect(people).then(onClose, onReject)
     }, [people])
-    // useEsc(() => (committed ? void 0 : onClose))
+
+    const canClose = !rejection && committed
+    const canCommit = committed || people.length === 0
     return (
-        <Dialog onClose={onClose} open={props.open} scroll="paper" fullWidth maxWidth="sm">
+        <Dialog onClose={canClose ? onClose : void 0} open={props.open} scroll="paper" fullWidth maxWidth="sm">
             <DialogTitle className={classes.title}>Share to ...</DialogTitle>
             <DialogContent className={classes.content}>
-                <SelectPeopleUI disabled={committed} all={props.people} selected={people} onSetSelected={select} />
+                <SelectPeopleUI
+                    frozenSelected={props.alreadySelectedPreviously}
+                    disabled={committed}
+                    people={props.people}
+                    selected={people}
+                    onSetSelected={select}
+                />
             </DialogContent>
+            {rejection && (
+                <DialogContent className={classes.content}>
+                    Error: {rejection.message} {console.error(rejection)}
+                </DialogContent>
+            )}
             <DialogActions>
-                <Button size="large" disabled={committed} onClick={onClose}>
+                <Button size="large" disabled={canClose} onClick={onClose}>
                     Cancel
                 </Button>
-                <Button size="large" disabled={committed || people.length === 0} color="primary" onClick={share}>
+                <Button size="large" disabled={canCommit} color="primary" onClick={share}>
                     {committed && (
                         <CircularProgress aria-busy className={classes.progress} size={16} variant="indeterminate" />
                     )}
@@ -53,7 +67,11 @@ export const SelectPeopleDialog = withStylesTyped({
     )
 })
 
-export function useShareMenu(people: Person[], onSelect: (people: Person[]) => Promise<void>) {
+export function useShareMenu(
+    people: Person[],
+    onSelect: (people: Person[]) => Promise<void>,
+    alreadySelectedPreviously: Person[],
+) {
     const [show, setShow] = useState(false)
     const showShare = useCallback(() => setShow(true), [])
     const hideShare = useCallback(() => setShow(false), [])
@@ -61,6 +79,14 @@ export function useShareMenu(people: Person[], onSelect: (people: Person[]) => P
     return {
         showShare,
         // hideShare,
-        ShareMenu: <SelectPeopleDialog people={people} open={show} onClose={hideShare} onSelect={onSelect} />,
+        ShareMenu: (
+            <SelectPeopleDialog
+                alreadySelectedPreviously={alreadySelectedPreviously}
+                people={people}
+                open={show}
+                onClose={hideShare}
+                onSelect={onSelect}
+            />
+        ),
     }
 }

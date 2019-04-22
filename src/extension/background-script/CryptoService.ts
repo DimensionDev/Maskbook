@@ -216,6 +216,7 @@ async function getSharedListOfPost(postIdentifier: string): Promise<Person[]> {
         .get(postIdentifier)
         .once().then!()
     if (!post) return []
+    delete post._
     return Promise.all(Object.keys(post).map(queryPerson))
 }
 async function appendShareTarget(
@@ -247,6 +248,8 @@ const Impl = {
     getMyProveBio,
     verifyOthersProve,
     publishPostAESKey,
+    getSharedListOfPost,
+    appendShareTarget,
 }
 Object.assign(window, { encryptService: Impl, crypto40: Alpha40 })
 export type Encrypt = typeof Impl

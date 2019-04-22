@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import AsyncComponent from '../../utils/components/AsyncComponent'
 import { AdditionalContent } from './AdditionalPostContent'
 import { FullWidth } from '../../utils/components/Flex'
@@ -7,26 +7,28 @@ import { useShareMenu } from './SelectPeopleDialog'
 import { Person } from '../../extension/background-script/PeopleService'
 import Link from '@material-ui/core/Link'
 import { withStylesTyped } from '../../utils/theme'
+import { sleep } from '../../utils/utils'
 
 interface DecryptPostSuccessProps {
     data: { signatureVerifyResult: boolean; content: string }
-    displayAddDecryptor: boolean
-    requestAddDecryptor(to: Person[]): Promise<void>
+    displayAppendDecryptor: boolean
+    requestAppendDecryptor(to: Person[]): Promise<void>
+    alreadySelectedPreviously: Person[]
     people: Person[]
 }
 const DecryptPostSuccess = withStylesTyped({
     link: { marginRight: '1em', cursor: 'pointer' },
     pass: { color: 'green' },
     fail: { color: 'red' },
-})<DecryptPostSuccessProps>(({ data, displayAddDecryptor, requestAddDecryptor, people, classes }) => {
-    const { ShareMenu, showShare } = useShareMenu(people, requestAddDecryptor)
+})<DecryptPostSuccessProps>(({ data, people, classes, ...props }) => {
+    const { ShareMenu, showShare } = useShareMenu(people, props.requestAppendDecryptor, props.alreadySelectedPreviously)
     return (
         <AdditionalContent
             title={
                 <>
                     {ShareMenu}
                     Maskbook decrypted content: <FullWidth />
-                    {displayAddDecryptor ? (
+                    {props.displayAppendDecryptor ? (
                         <Link color="primary" onClick={showShare} className={classes.link}>
                             Add decryptor
                         </Link>
@@ -66,20 +68,37 @@ interface DecryptPostProps {
     whoAmI: string
     encryptedText: string
     people: Person[]
+    alreadySelectedPreviously: Person[]
+    requestAppendDecryptor(to: Person[]): Promise<void>
 }
-function DecryptPost({ postBy, whoAmI, encryptedText, people }: DecryptPostProps) {
+function DecryptPost({
+    postBy,
+    whoAmI,
+    encryptedText,
+    people,
+    alreadySelectedPreviously,
+    requestAppendDecryptor,
+}: DecryptPostProps) {
     const [_, a] = encryptedText.split('🎼')
     const [b, _2] = a.split(':||')
+    const rAD = useCallback(
+        async (people: Person[]) => {
+            await requestAppendDecryptor(people)
+            await sleep(1500)
+        },
+        [requestAppendDecryptor],
+    )
     return (
         <AsyncComponent
             promise={async () => CryptoService.decryptFrom(b, postBy, whoAmI)}
-            dependencies={[b, people]}
+            dependencies={[b, people, alreadySelectedPreviously]}
             awaitingComponent={DecryptPostAwaiting}
             completeComponent={props => (
                 <DecryptPostSuccess
                     data={props.data}
-                    displayAddDecryptor={whoAmI === postBy}
-                    requestAddDecryptor={React.useCallback(async () => {}, [props.data])}
+                    alreadySelectedPreviously={alreadySelectedPreviously}
+                    displayAppendDecryptor={whoAmI === postBy && alreadySelectedPreviously.length !== people.length}
+                    requestAppendDecryptor={rAD}
                     people={people}
                 />
             )}

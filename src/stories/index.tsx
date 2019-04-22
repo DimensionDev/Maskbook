@@ -39,15 +39,17 @@ const demoPeople: Person[] = [
             .reverse()
             .join(''),
         avatar: 'https://avatars1.githubusercontent.com/u/3343358?s=460&v=4',
-        nickname: 'Roboto of the century',
+        nickname: 'Robot of the century',
     },
     {
-        username: 'People C',
+        username: 'usernamec',
         fingerprint: 'a2f7643cd1aed446ad88f3c8ba13843dfa2f321d',
+        nickname: 'Material Design',
     },
     {
-        username: 'People D',
+        username: 'usernamed',
         fingerprint: 'a2f7643cd1aed446ad88f3c8ba13843dfa2f321d',
+        nickname: 'コノハ',
     },
 ]
 storiesOf('Welcome', module)
@@ -114,13 +116,17 @@ storiesOf('Injections', module)
     .add('SelectPeople', () => {
         function SelectPeople() {
             const [selected, select] = React.useState<Person[]>([])
-            return <SelectPeopleUI all={demoPeople} selected={selected} onSetSelected={select} />
+            return <SelectPeopleUI people={demoPeople} selected={selected} onSetSelected={select} />
         }
         return <SelectPeople />
     })
     .add('Select people dialog', () => {
         function SelectPeople() {
-            const { ShareMenu, showShare } = useShareMenu(demoPeople, async people => sleep(3000))
+            const { ShareMenu, showShare } = useShareMenu(
+                demoPeople,
+                async people => sleep(3000),
+                boolean('Has frozen item?', true) ? [demoPeople[0]] : [],
+            )
             return (
                 <>
                     {ShareMenu}
@@ -144,8 +150,9 @@ storiesOf('Injections', module)
             <>
                 <FakePost title="Decrypted:">
                     <DecryptPostUI.success
-                        displayAddDecryptor={boolean('Post by myself?', true)}
-                        requestAddDecryptor={async () => {}}
+                        alreadySelectedPreviously={[]}
+                        displayAppendDecryptor={boolean('Post by myself?', true)}
+                        requestAppendDecryptor={async () => {}}
                         people={demoPeople}
                         data={{ content: msg, signatureVerifyResult: vr }}
                     />

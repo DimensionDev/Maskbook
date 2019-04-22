@@ -67,7 +67,7 @@ export const AdditionalPostBoxUI = withStylesTyped({
             <Divider />
             <Paper>
                 <SelectPeopleUI
-                    all={people.filter(x => x.username !== myself.username)}
+                    people={people.filter(x => x.username !== myself.username)}
                     onSetSelected={selectPeople}
                     selected={selectedPeople}
                 />

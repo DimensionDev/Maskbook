@@ -215,7 +215,7 @@ export async function extractAESKeyInMessage(
     const decryptedAESKeyJWK = JSON.parse(
         decodeText(await decryptWithAES({ aesKey: myLocalKey, iv, encrypted: encryptedKey })),
     )
-    return crypto.subtle.importKey('jwk', decryptedAESKeyJWK, { name: 'AES-GCM', length: 256 }, false, ['decrypt'])
+    return crypto.subtle.importKey('jwk', decryptedAESKeyJWK, { name: 'AES-GCM', length: 256 }, true, ['decrypt'])
 }
 /**
  * Decrypt 1 to N message that send by myself
