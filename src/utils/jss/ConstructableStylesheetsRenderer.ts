@@ -25,9 +25,10 @@ function isCSSKeyFramesRule(x: any): x is CSSKeyframesRule {
 }
 
 let SharedStyleSheets: StyleSheet[] = []
-function applyAdoptedStyleSheets(shadow: ShadowRoot, shadowOnly = false) {
+const appliedShadowRoot = new Set<ShadowRoot>()
+function applyAdoptedStyleSheets(shadowOnly = false) {
     if (!shadowOnly) document.adoptedStyleSheets = [...SharedStyleSheets]
-    shadow.adoptedStyleSheets = [...SharedStyleSheets]
+    appliedShadowRoot.forEach(shadow => (shadow.adoptedStyleSheets = [...SharedStyleSheets]))
 }
 const styleMap = new Map<string, StyleSheet>()
 function addStyle(e: HTMLStyleElement, shadow: ShadowRoot, insertAfter?: HTMLStyleElement | null): void {
@@ -46,26 +47,26 @@ function addStyle(e: HTMLStyleElement, shadow: ShadowRoot, insertAfter?: HTMLSty
         SharedStyleSheets.push(style)
     }
     styleMap.set(e.innerHTML, style)
-    applyAdoptedStyleSheets(shadow)
+    applyAdoptedStyleSheets()
 }
-function insertRule(e: HTMLStyleElement, shadow: ShadowRoot) {
+function insertRule(e: HTMLStyleElement) {
     const sheet = styleMap.get(e.innerHTML)!
     styleMap.delete(e.innerHTML)
     return (rule: string, index: number) => {
         e.sheet!.insertRule(rule, index)
         sheet.insertRule(rule, index)
         styleMap.set(e.innerHTML, sheet)
-        applyAdoptedStyleSheets(shadow)
+        applyAdoptedStyleSheets()
     }
 }
-function deleteRule(e: HTMLStyleElement, shadow: ShadowRoot) {
+function deleteRule(e: HTMLStyleElement) {
     const sheet = styleMap.get(e.innerHTML)!
     styleMap.delete(e.innerHTML)
     return (index: number) => {
         e.sheet!.deleteRule(index)
         sheet.deleteRule(index)
         styleMap.set(e.innerHTML, sheet)
-        applyAdoptedStyleSheets(shadow)
+        applyAdoptedStyleSheets()
     }
 }
 function removeStyle(e: HTMLStyleElement, shadow: ShadowRoot) {
@@ -75,7 +76,7 @@ function removeStyle(e: HTMLStyleElement, shadow: ShadowRoot) {
     }
     SharedStyleSheets = SharedStyleSheets.filter(y => sheet !== y)
     styleMap.delete(e.innerHTML)
-    applyAdoptedStyleSheets(shadow)
+    applyAdoptedStyleSheets()
 }
 /**
  * Find attached sheet with an index higher than the passed one.
@@ -123,6 +124,8 @@ const getNonce = (): string | null => {
 }
 
 export default function ConstructableStylesheetsRendererGenerator(shadow: ShadowRoot) {
+    appliedShadowRoot.add(shadow)
+    applyAdoptedStyleSheets()
     return class ConstructableStylesheetsRenderer implements Renderer {
         getPropertyValue(cssRule: HTMLElement | CSSStyleRule, prop: string): string {
             return cssRule.style.getPropertyValue(prop)
@@ -251,7 +254,7 @@ export default function ConstructableStylesheetsRendererGenerator(shadow: Shadow
 
             if (!str) return false
             try {
-                insertRule(this.element, shadow)(str, index)
+                insertRule(this.element)(str, index)
             } catch (err) {
                 warning(false, '[JSS] Can not insert an unsupported rule \n\r%s', rule)
                 return false
@@ -266,7 +269,7 @@ export default function ConstructableStylesheetsRendererGenerator(shadow: Shadow
         deleteRule(cssRule: CSSStyleRule): boolean {
             const index = this.indexOf(cssRule)
             if (index === -1) return false
-            deleteRule(this.element, shadow)(index)
+            deleteRule(this.element)(index)
             return true
         }
 
@@ -283,7 +286,7 @@ export default function ConstructableStylesheetsRendererGenerator(shadow: Shadow
         replaceRule(cssRule: CSSStyleRule, rule: Rule): false | CSSStyleRule {
             const index = this.indexOf(cssRule)
             const newCssRule = this.insertRule(rule, index)
-            deleteRule(this.element, shadow)
+            deleteRule(this.element)
             return newCssRule
         }
 
