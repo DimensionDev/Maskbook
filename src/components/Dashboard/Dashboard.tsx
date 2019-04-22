@@ -1,14 +1,15 @@
 import * as React from 'react'
 import Typography from '@material-ui/core/Typography/Typography'
 import { createBox } from '../../utils/components/Flex'
-import Identity, { IIdentity } from './Identity'
+import Identity from './Identity'
 import Button from '@material-ui/core/Button/Button'
+import { Person } from '../../extension/background-script/PeopleService'
 
 interface Props {
-    identities: IIdentity[]
+    identities: Person[]
     addAccount(): void
     exportBackup(): void
-    onProfileClick(fingerprint: string): void
+    onProfileClick(username: string): void
 }
 
 const Main = createBox(theme => ({
@@ -32,7 +33,7 @@ export default function Dashboard(props: Props) {
             <Typography variant="h5">Maskbook Identity Management</Typography>
             <main>
                 {props.identities.map(x => (
-                    <Identity onClick={() => props.onProfileClick(x.fingerprint)} {...x} />
+                    <Identity key={x.username} person={x} onClick={() => props.onProfileClick(x.username)} />
                 ))}
             </main>
             <div>

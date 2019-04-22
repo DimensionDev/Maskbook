@@ -2,19 +2,15 @@ import * as React from 'react'
 import Typography from '@material-ui/core/Typography/Typography'
 import Card from '@material-ui/core/Card/Card'
 import CardHeader from '@material-ui/core/CardHeader/CardHeader'
-import Avatar from '@material-ui/core/Avatar/Avatar'
 import { FixedWidthFonts, withStylesTyped } from '../../utils/theme'
 import { createBox } from '../../utils/components/Flex'
 import classNames from 'classnames'
 import createStyles from '@material-ui/core/styles/createStyles'
+import { Avatar } from '../../utils/components/Avatar'
+import { Person } from '../../extension/background-script/PeopleService'
 
-export interface IIdentity {
-    nickname: string
-    username: string
-    fingerprint: string
-}
-interface Props extends IIdentity {
-    avatar?: string
+interface Props {
+    person: Person
     onClick?(): void
 }
 const FixedWidth = createBox({ fontFamily: FixedWidthFonts })
@@ -29,6 +25,7 @@ export default withStylesTyped(theme =>
             '&:hover': {
                 boxShadow: theme.shadows[6],
             },
+            width: '27.5em',
         },
         text: {
             fontWeight: 'bold',
@@ -42,20 +39,13 @@ export default withStylesTyped(theme =>
             height: 0,
         },
     }),
-)<Props>(function({ avatar, onClick, classes, nickname, fingerprint, username }) {
+)<Props>(function({ person, classes, onClick }) {
+    const { avatar, fingerprint, nickname, username } = person
     return (
         <Card onClick={onClick} className={classes.card}>
             <CardHeader
                 classes={{ avatar: classNames({ [classes.avatarDisabled]: !avatar }) }}
-                avatar={
-                    avatar ? (
-                        <Avatar aria-label={nickname} src={avatar.length > 3 ? avatar : undefined}>
-                            {avatar.length <= 3 ? avatar : undefined}
-                        </Avatar>
-                    ) : (
-                        <Avatar className={classes.emptyAvatar} />
-                    )
-                }
+                avatar={<Avatar className={classNames({ [classes.emptyAvatar]: !avatar })} person={person} />}
                 title={
                     <>
                         <Typography inline className={classes.text}>

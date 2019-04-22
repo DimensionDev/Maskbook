@@ -27,15 +27,19 @@ import Button from '@material-ui/core/Button/Button'
 
 const demoPeople: Person[] = [
     {
-        username: 'People A',
+        username: 'usernamea',
         fingerprint: 'FDFE333CE20ED446AD88F3C8BA3AD1AA5ECAF521',
+        avatar: 'https://avatars3.githubusercontent.com/u/5390719?s=460&v=4',
+        nickname: 'Jack Works',
     },
     {
-        username: 'People B',
+        username: 'usernameb',
         fingerprint: 'FDFE333CE20ED446AD88F3C8BA3AD1AA5ECAF521'
             .split('')
             .reverse()
             .join(''),
+        avatar: 'https://avatars1.githubusercontent.com/u/3343358?s=460&v=4',
+        nickname: 'Roboto of the century',
     },
     {
         username: 'People C',
@@ -63,31 +67,13 @@ storiesOf('Welcome', module)
     .add('Step 1b-1', () => <Welcome1b1 back={linkTo('Welcome', 'Step 0')} restore={action('Restore with')} />)
 
 storiesOf('Dashboard (unused)', module)
-    .add('Identity Component (unused)', () => (
-        <Identity
-            avatar={text('Avatar (length > 3 will treat as url)', false as any)}
-            fingerprint={text('Fingerprint', 'FDFE333CE20ED446AD88F3C8BA3AD1AA5ECAF521')}
-            nickname={text('Name', 'Jack Works')}
-            username={text('Username', 'jackworks_vfs')}
-        />
-    ))
+    .add('Identity Component (unused)', () => <Identity person={demoPeople[0]} onClick={action('Click')} />)
     .add('Dashboard (unused)', () => (
         <Dashboard
             addAccount={action('Add account')}
             exportBackup={action('Export backup')}
             onProfileClick={action('Click on profile')}
-            identities={[
-                {
-                    fingerprint: '8AFD47D6A3CDA8CE35884C5104B61F26232DC9C9',
-                    nickname: 'Julie Zhuo',
-                    username: 'julie.zhuo.9102',
-                },
-                {
-                    fingerprint: '8AFD47D6A3CDA8CE35884C5104B61F26232DC9C9',
-                    nickname: 'Yisi Liu',
-                    username: 'yisiliu.146',
-                },
-            ]}
+            identities={demoPeople}
         />
     ))
 const FakePost: React.FC<{ title: string }> = props => (
@@ -116,10 +102,12 @@ storiesOf('Injections', module)
     .add('AdditionalPostBox', () => (
         <AdditionalPostBoxUI
             people={demoPeople}
-            username={text('Username', '')}
+            myself={{
+                avatar: text('Avatar URL', demoPeople[0].avatar!),
+                nickname: text('Nickname', demoPeople[0].nickname!),
+                username: text('Username', demoPeople[0].username!),
+            }}
             onRequestPost={action('onRequestPost')}
-            avatar={text('Avatar URL', '')}
-            nickname={text('Nickname', '')}
         />
     ))
     .add('Additional Post Content', () => <AdditionalContent title="Additional Content" children="Content" />)

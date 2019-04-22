@@ -4,7 +4,6 @@ import CardHeader from '@material-ui/core/CardHeader/CardHeader'
 import Typography from '@material-ui/core/Typography/Typography'
 import Paper from '@material-ui/core/Paper/Paper'
 import InputBase from '@material-ui/core/InputBase/InputBase'
-import Avatar from '@material-ui/core/Avatar/Avatar'
 import Divider from '@material-ui/core/Divider/Divider'
 import { FlexBox } from '../../utils/components/Flex'
 import Button from '@material-ui/core/Button/Button'
@@ -19,12 +18,11 @@ import { sleep } from '../../utils/utils'
 import { myUsername, getUsername } from '../../extension/content-script/injections/LiveSelectors'
 import { useRef } from 'react'
 import { useCapturedInput } from '../../utils/hooks/useCapturedEvents'
+import { Avatar } from '../../utils/components/Avatar'
 
 interface Props {
     people: Person[]
-    avatar?: string
-    nickname?: string
-    username?: string
+    myself: Person
     onRequestPost(people: Person[], text: string): void
 }
 export const AdditionalPostBoxUI = withStylesTyped({
@@ -44,7 +42,7 @@ export const AdditionalPostBoxUI = withStylesTyped({
     grayArea: { background: '#f5f6f7', padding: 8, wordBreak: 'break-all' },
     button: { padding: '2px 30px', flex: 1 },
 })<Props>(props => {
-    const { classes, people } = props
+    const { classes, people, myself } = props
     const [text, setText] = React.useState('')
     const [selectedPeople, selectPeople] = React.useState<Person[]>([])
 
@@ -55,29 +53,21 @@ export const AdditionalPostBoxUI = withStylesTyped({
             <CardHeader title={<Typography variant="caption">Encrypt with Maskbook</Typography>} />
             <Divider />
             <Paper elevation={0} className={classes.paper}>
-                {props.avatar ? (
-                    props.avatar.length > 3 ? (
-                        <Avatar className={classes.avatar} src={props.avatar} />
-                    ) : (
-                        <Avatar className={classes.avatar} children={props.avatar} />
-                    )
-                ) : (
-                    undefined
-                )}
+                <Avatar className={classes.avatar} person={myself} />
                 <InputBase
                     classes={{ root: classes.input, input: classes.innerInput }}
                     inputRef={inputRef}
                     fullWidth
                     multiline
                     placeholder={`${
-                        props.nickname ? `Hey ${props.nickname}, w` : 'W'
+                        myself.nickname ? `Hey ${myself.nickname}, w` : 'W'
                     }hat's your mind? Encrypt with Maskbook`}
                 />
             </Paper>
             <Divider />
             <Paper>
                 <SelectPeopleUI
-                    all={people.filter(x => x.username !== props.username)}
+                    all={people.filter(x => x.username !== myself.username)}
                     onSetSelected={selectPeople}
                     selected={selectedPeople}
                 />
@@ -126,12 +116,14 @@ export function AdditionalPostBox() {
         // Prevent Custom Paste failed, this will cause service not available to user.
         CryptoService.publishPostAESKey(token)
     }, [])
+    if (!username) {
+        console.error('Username not found.')
+        return null
+    }
     return (
         <AdditionalPostBoxUI
             people={usePeople()}
-            avatar={avatar}
-            nickname={nickname}
-            username={username}
+            myself={{ avatar, nickname, username }}
             onRequestPost={onRequestPost}
         />
     )
