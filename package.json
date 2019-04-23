@@ -1,6 +1,6 @@
 {
   "name": "maskbook",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "private": true,
   "dependencies": {
     "@material-ui/core": "^3.9.2",
