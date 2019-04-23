@@ -79,8 +79,6 @@ function DecryptPost({
     alreadySelectedPreviously,
     requestAppendDecryptor,
 }: DecryptPostProps) {
-    const [_, a] = encryptedText.split('🎼')
-    const [b, _2] = a.split(':||')
     const rAD = useCallback(
         async (people: Person[]) => {
             await requestAppendDecryptor(people)
@@ -90,8 +88,8 @@ function DecryptPost({
     )
     return (
         <AsyncComponent
-            promise={async () => CryptoService.decryptFrom(b, postBy, whoAmI)}
-            dependencies={[b, people, alreadySelectedPreviously]}
+            promise={() => CryptoService.decryptFrom(encryptedText, postBy, whoAmI)}
+            dependencies={[encryptedText, people, alreadySelectedPreviously]}
             awaitingComponent={DecryptPostAwaiting}
             completeComponent={props => (
                 <DecryptPostSuccess

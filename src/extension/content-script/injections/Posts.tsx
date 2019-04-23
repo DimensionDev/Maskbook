@@ -8,6 +8,7 @@ import { renderInShadowRoot } from '../../../utils/jss/renderInShadowRoot'
 import { usePeople } from '../../../components/DataSource/PeopleRef'
 import { useAsync } from '../../../utils/components/AsyncComponent'
 import { Person } from '../../background-script/PeopleService'
+import { deconstructPayload } from '../../../utils/type-transform/Payload'
 
 const posts = new LiveSelector().querySelectorAll<HTMLDivElement>('.userContent, .userContent+*+div>div>div>div>div')
 
@@ -24,7 +25,7 @@ function removeMyself(people: Person[]): Person[] {
 function PostInspector(props: PostInspectorProps) {
     const { post, postBy, postId } = props
     const type = {
-        encryptedPost: post.match(/🎼([a-zA-Z0-9\+=\/|]+):\|\|/),
+        encryptedPost: deconstructPayload(post, false),
         provePost: post.match(/🔒(.+)🔒/)!,
     }
     if (type.encryptedPost) {
@@ -32,8 +33,7 @@ function PostInspector(props: PostInspectorProps) {
         const whoAmI = getUsername()!
         const people = usePeople()
         const [alreadySelectedPreviously, setAlreadySelectedPreviously] = useState<Person[]>([])
-        const str = post.split('🎼')[1]
-        const [version, ownersAESKeyEncrypted, iv] = str.split('|')
+        const { iv, ownersAESKeyEncrypted } = type.encryptedPost
         if (whoAmI === postBy) {
             useAsync(() => CryptoService.getSharedListOfPost(iv), [post]).then(p =>
                 setAlreadySelectedPreviously(removeMyself(p)),
