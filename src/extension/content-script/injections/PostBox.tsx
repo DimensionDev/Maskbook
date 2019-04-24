@@ -1,7 +1,7 @@
 import React from 'react'
-import ReactDOM from 'react-dom'
 import { LiveSelector, MutationObserverWatcher } from '@holoflows/kit'
 import { AdditionalPostBox } from '../../../components/InjectedComponents/AdditionalPostBox'
+import { renderInShadowRoot } from '../../../utils/jss/renderInShadowRoot'
 
 const box = new MutationObserverWatcher(
     new LiveSelector()
@@ -19,4 +19,4 @@ box.useNodeForeach(node => {
         },
     }
 }).startWatch()
-ReactDOM.render(<AdditionalPostBox />, box.firstVirtualNode.after)
+renderInShadowRoot(<AdditionalPostBox />, box.firstVirtualNode.afterShadow)

@@ -2,15 +2,14 @@ import * as React from 'react'
 import Paper from '@material-ui/core/Paper/Paper'
 import Typography from '@material-ui/core/Typography/Typography'
 import { withStylesTyped } from '../../utils/theme'
-import { Theme } from '@material-ui/core/styles/createMuiTheme'
 import createStyles from '@material-ui/core/styles/createStyles'
 import Button from '@material-ui/core/Button/Button'
-import { fileReference } from '../../utils/utils'
+import { getUrl } from '../../utils/utils'
 
 interface Props {
     next(): void
 }
-export default withStylesTyped((theme: Theme) =>
+export default withStylesTyped(theme =>
     createStyles({
         paper: {
             padding: '2rem 1rem 1rem 1rem',
@@ -24,15 +23,20 @@ export default withStylesTyped((theme: Theme) =>
         button: {
             minWidth: 180,
         },
+        img: {
+            border: '1px solid #ddd',
+            borderRadius: 5,
+        },
     }),
 )<Props>(function Welcome({ classes, next }) {
     return (
         <Paper className={classes.paper}>
             <Typography variant="h5">Encrypt message use this postbox</Typography>
             <img
-                src={fileReference(require('./1a2.jpg'))}
+                alt="Screenshot of how to encrypt message with Maskbook"
+                src={getUrl(require('./1a2.jpg'))}
                 width="75%"
-                style={{ border: '1px solid #ddd', borderRadius: 5 }}
+                className={classes.img}
             />
             <Typography variant="subtitle1">
                 Then only people you selected with Maskbook can see the post content

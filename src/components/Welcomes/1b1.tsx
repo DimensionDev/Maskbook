@@ -2,13 +2,12 @@ import * as React from 'react'
 import Paper from '@material-ui/core/Paper/Paper'
 import Typography from '@material-ui/core/Typography/Typography'
 import { withStylesTyped } from '../../utils/theme'
-import { Theme } from '@material-ui/core/styles/createMuiTheme'
 import createStyles from '@material-ui/core/styles/createStyles'
 import Button from '@material-ui/core/Button/Button'
-import { createBox } from '../../utils/Flex'
+import { createBox } from '../../utils/components/Flex'
 
 import ArrowBack from '@material-ui/icons/ArrowBack'
-import { useDragAndDrop } from '../../utils/useDragAndDrop'
+import { useDragAndDrop } from '../../utils/hooks/useDragAndDrop'
 
 const RestoreBox = createBox(theme => ({
     color: theme.palette.text.hint,
@@ -29,7 +28,7 @@ interface Props {
     back(): void
     restore(file: File): void
 }
-export default withStylesTyped((theme: Theme) =>
+export default withStylesTyped(theme =>
     createStyles({
         paper: {
             width: 600,
@@ -55,6 +54,16 @@ export default withStylesTyped((theme: Theme) =>
         button: {
             minWidth: 180,
         },
+        file: {
+            display: 'none',
+        },
+        restoreBox: {
+            color: 'gray',
+            transition: '0.4s',
+            '&[data-active=true]': {
+                color: 'black',
+            },
+        },
     }),
 )<Props>(function Welcome({ classes, back, restore }) {
     const ref = React.useRef<HTMLInputElement>(null)
@@ -71,16 +80,15 @@ export default withStylesTyped((theme: Theme) =>
                 <Typography variant="h5">Restore your keypair</Typography>
                 <form>
                     <input
-                        style={{ display: 'none' }}
+                        className={classes.file}
                         type="file"
                         accept="application/json"
                         ref={ref}
                         onChange={fileReceiver}
                     />
                     <RestoreBox
-                        style={{
-                            color: dragStatus === 'drag-enter' ? 'black' : 'gray',
-                        }}
+                        className={classes.restoreBox}
+                        data-active={dragStatus === 'drag-enter'}
                         onClick={() => ref.current && ref.current.click()}>
                         {dragStatus === 'drag-enter'
                             ? 'Drag your key backup into this dialog'

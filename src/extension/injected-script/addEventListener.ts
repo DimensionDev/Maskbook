@@ -1,4 +1,4 @@
-import { CustomPasteEventId } from '../../utils/Names'
+import { CustomPasteEventId } from '../../utils/constants'
 {
     const store: Partial<Record<keyof DocumentEventMap, Set<(event: Event) => void>>> = {}
     function hijack(key: keyof DocumentEventMap) {

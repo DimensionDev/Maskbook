@@ -1,6 +1,5 @@
 import React from 'react'
-import ReactDOM from 'react-dom'
-import { DomProxy, LiveSelector, MutationObserverWatcher, ValueRef } from '@holoflows/kit'
+import { DomProxy, LiveSelector, MutationObserverWatcher } from '@holoflows/kit'
 import Welcome0 from '../../../components/Welcomes/0'
 import Welcome1a1 from '../../../components/Welcomes/1a1'
 import Welcome1a2 from '../../../components/Welcomes/1a2'
@@ -8,14 +7,13 @@ import Welcome1a3 from '../../../components/Welcomes/1a3'
 import Welcome1a4 from '../../../components/Welcomes/1a4'
 import Welcome1b1 from '../../../components/Welcomes/1b1'
 import Dialog from '@material-ui/core/Dialog'
-import { MuiThemeProvider } from '@material-ui/core'
-import { MaskbookLightTheme } from '../../../utils/theme'
 import { sleep } from '../../../utils/utils'
-import { useAsync } from '../../../utils/AsyncComponent'
+import { useAsync } from '../../../utils/components/AsyncComponent'
 import { BackgroundService, CryptoService, PeopleService } from '../rpc'
-import { useEsc } from '../../../components/Welcomes/useEsc'
 import { myUsername } from './LiveSelectors'
 import { Banner } from '../../../components/Welcomes/Banner'
+import { renderInShadowRoot } from '../../../utils/jss/renderInShadowRoot'
+import ReactDOM from 'react-dom'
 
 //#region Welcome
 enum WelcomeState {
@@ -40,7 +38,7 @@ const setWelcomeDisplay: setWelcomeDisplay = newState => {
     const body = DomProxy()
     body.realCurrent = document.body
     const WelcomePortal = React.forwardRef(_WelcomePortal)
-    ReactDOM.render(<WelcomePortal ref={setWelcomeDisplayRef} />, body.after)
+    renderInShadowRoot(<WelcomePortal ref={setWelcomeDisplayRef} />, body.afterShadow)
 }
 
 async function loginWatcher() {
@@ -164,15 +162,12 @@ function _WelcomePortal(props: {}, ref: React.Ref<setWelcomeDisplay>) {
         setOpen(false)
         loginWatcher().then(() => setOpen(true))
     }
-    useEsc(onFinish.bind(null, 'quit'))
     // Only render in main page
     if (location.pathname !== '/') return null
     return (
-        <MuiThemeProvider theme={MaskbookLightTheme}>
-            <Dialog open={open}>
-                <Welcome currentStep={step} onStepChange={setStep} waitForLogin={waitForLogin} onFinish={onFinish} />
-            </Dialog>
-        </MuiThemeProvider>
+        <Dialog open={open} onClose={onFinish.bind(null, 'quit')}>
+            <Welcome currentStep={step} onStepChange={setStep} waitForLogin={waitForLogin} onFinish={onFinish} />
+        </Dialog>
     )
 }
 //#endregion
@@ -181,6 +176,7 @@ function _WelcomePortal(props: {}, ref: React.Ref<setWelcomeDisplay>) {
     const to = new MutationObserverWatcher(
         new LiveSelector().querySelectorAll<HTMLAnchorElement>('#createNav a').nth(3),
     ).startWatch()
+    // Don't render this in shadow root. This will share CSS with Facebook.
     ReactDOM.render(
         <>
             {' · '}
@@ -200,19 +196,19 @@ function _WelcomePortal(props: {}, ref: React.Ref<setWelcomeDisplay>) {
         ).startWatch()
         if (userDismissedWelcomeAtVersion && userDismissedWelcomeAtVersion >= LATEST_VERSION) return
         if (init && init >= LATEST_VERSION) return
-        ReactDOM.render(
+        const unmount = renderInShadowRoot(
             <Banner
                 close={() => {
                     setWelcomeDisplay(false)
                     setStorage({ userDismissedWelcomeAtVersion: LATEST_VERSION })
-                    ReactDOM.unmountComponentAtNode(to.firstVirtualNode.before)
+                    unmount()
                 }}
                 getStarted={() => {
                     setWelcomeDisplay(true)
-                    ReactDOM.unmountComponentAtNode(to.firstVirtualNode.before)
+                    unmount()
                 }}
             />,
-            to.firstVirtualNode.before,
+            to.firstVirtualNode.beforeShadow,
         )
     })
 }

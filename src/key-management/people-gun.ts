@@ -4,7 +4,7 @@ import tasks from '../extension/content-script/tasks'
 import { verifyOthersProve } from '../extension/background-script/CryptoService'
 import { sleep } from '../utils/utils'
 
-export async function queryPerson(username: string) {
+export async function queryPersonFromGun(username: string) {
     return gun
         .get('users')
         .get(username)
@@ -26,8 +26,8 @@ export async function addPersonPublicKey(username: string): Promise<PersonCrypto
         if ((await verifyOthersProve(bio, username)) === null) throw new Error('Not in bio!')
     }
     const fromPost = async () => {
-        const person = await queryPerson(username)
-        if (!person) throw new Error('Not in gun!')
+        const person = await queryPersonFromGun(username)
+        if (!person || !person.provePostId) throw new Error('Not in gun!')
         const post = await tasks(postUrl(person.provePostId)).getPostContent()
         if ((await verifyOthersProve(post, username)) === null) throw new Error('Not in prove post!')
     }
@@ -61,4 +61,4 @@ export async function uploadProvePostUrl(username: string, postId: string) {
     if (!postId) return
     return gun.get('users').put({ [username]: { provePostId: postId } }).then!()
 }
-Object.assign(window, { queryPerson, uploadProvePostUrl, addKey: addPersonPublicKey })
+Object.assign(window, { queryPersonFromGun, uploadProvePostUrl, addKey: addPersonPublicKey })

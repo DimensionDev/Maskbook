@@ -1,37 +1,42 @@
-import React from 'react'
-import AsyncComponent from '../../utils/AsyncComponent'
+import React, { useCallback } from 'react'
+import AsyncComponent from '../../utils/components/AsyncComponent'
 import { AdditionalContent } from './AdditionalPostContent'
-import { FullWidth } from '../../utils/Flex'
+import { FullWidth } from '../../utils/components/Flex'
 import { CryptoService } from '../../extension/content-script/rpc'
+import { useShareMenu } from './SelectPeopleDialog'
+import { Person } from '../../extension/background-script/PeopleService'
+import Link from '@material-ui/core/Link'
+import { withStylesTyped } from '../../utils/theme'
+import { sleep } from '../../utils/utils'
 
-interface Props {
-    postBy: string
-    whoAmI: string
-    encryptedText: string
+interface DecryptPostSuccessProps {
+    data: { signatureVerifyResult: boolean; content: string }
+    displayAppendDecryptor: boolean
+    requestAppendDecryptor(to: Person[]): Promise<void>
+    alreadySelectedPreviously: Person[]
+    people: Person[]
 }
-export function DecryptPost({ postBy, whoAmI, encryptedText }: Props) {
-    const [_, a] = encryptedText.split('🎼')
-    const [b, _2] = a.split(':||')
-    return (
-        <AsyncComponent
-            promise={async (encryptedString: string) => CryptoService.decryptFrom(encryptedString, postBy, whoAmI)}
-            values={[b]}
-            awaitingComponent={DecryptPostAwaiting}
-            completeComponent={DecryptPostSuccess}
-            failedComponent={DecryptPostFailed}
-        />
-    )
-}
-function DecryptPostSuccess({ data }: { data: { signatureVerifyResult: boolean; content: string } }) {
+const DecryptPostSuccess = withStylesTyped({
+    link: { marginRight: '1em', cursor: 'pointer' },
+    pass: { color: 'green' },
+    fail: { color: 'red' },
+})<DecryptPostSuccessProps>(({ data, people, classes, ...props }) => {
+    const { ShareMenu, showShare } = useShareMenu(people, props.requestAppendDecryptor, props.alreadySelectedPreviously)
     return (
         <AdditionalContent
             title={
                 <>
+                    {ShareMenu}
                     Maskbook decrypted content: <FullWidth />
+                    {props.displayAppendDecryptor ? (
+                        <Link color="primary" onClick={showShare} className={classes.link}>
+                            Add decryptor
+                        </Link>
+                    ) : null}
                     {data.signatureVerifyResult ? (
-                        <span style={{ color: 'green' }}>Signature verified ✔</span>
+                        <span className={classes.pass}>Signature verified ✔</span>
                     ) : (
-                        <span style={{ color: 'red' }}>Signature NOT verified ❌</span>
+                        <span className={classes.fail}>Signature NOT verified ❌</span>
                     )}
                 </>
             }
@@ -44,21 +49,64 @@ function DecryptPostSuccess({ data }: { data: { signatureVerifyResult: boolean; 
             )}
         />
     )
-}
+})
 
 const DecryptPostAwaiting = <AdditionalContent title="Maskbook decrypting..." />
 function DecryptPostFailed({ error }: { error: Error }) {
     return (
         <AdditionalContent title="Maskbook decryption failed">
             {(e => {
-                if (e.match('DOMException')) return 'Maybe this post is not sent to you.'
+                if (e.match('DOMException')) return 'Decryption failed.'
                 return e
             })(error && error.message)}
         </AdditionalContent>
+    )
+}
+
+interface DecryptPostProps {
+    postBy: string
+    whoAmI: string
+    encryptedText: string
+    people: Person[]
+    alreadySelectedPreviously: Person[]
+    requestAppendDecryptor(to: Person[]): Promise<void>
+}
+function DecryptPost({
+    postBy,
+    whoAmI,
+    encryptedText,
+    people,
+    alreadySelectedPreviously,
+    requestAppendDecryptor,
+}: DecryptPostProps) {
+    const rAD = useCallback(
+        async (people: Person[]) => {
+            await requestAppendDecryptor(people)
+            await sleep(1500)
+        },
+        [requestAppendDecryptor],
+    )
+    return (
+        <AsyncComponent
+            promise={() => CryptoService.decryptFrom(encryptedText, postBy, whoAmI)}
+            dependencies={[encryptedText, people, alreadySelectedPreviously]}
+            awaitingComponent={DecryptPostAwaiting}
+            completeComponent={props => (
+                <DecryptPostSuccess
+                    data={props.data}
+                    alreadySelectedPreviously={alreadySelectedPreviously}
+                    displayAppendDecryptor={whoAmI === postBy && alreadySelectedPreviously.length !== people.length}
+                    requestAppendDecryptor={rAD}
+                    people={people}
+                />
+            )}
+            failedComponent={DecryptPostFailed}
+        />
     )
 }
 export const DecryptPostUI = {
     success: DecryptPostSuccess,
     awaiting: DecryptPostAwaiting,
     failed: DecryptPostFailed,
+    UI: React.memo(DecryptPost),
 }

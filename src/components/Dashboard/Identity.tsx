@@ -2,26 +2,19 @@ import * as React from 'react'
 import Typography from '@material-ui/core/Typography/Typography'
 import Card from '@material-ui/core/Card/Card'
 import CardHeader from '@material-ui/core/CardHeader/CardHeader'
-import Avatar from '@material-ui/core/Avatar/Avatar'
 import { FixedWidthFonts, withStylesTyped } from '../../utils/theme'
-import { createBox } from '../../utils/Flex'
-import { Theme } from '@material-ui/core/styles/createMuiTheme'
+import { createBox } from '../../utils/components/Flex'
 import classNames from 'classnames'
 import createStyles from '@material-ui/core/styles/createStyles'
+import { Avatar } from '../../utils/components/Avatar'
+import { Person } from '../../extension/background-script/PeopleService'
 
-export interface IIdentity {
-    nickname: string
-    username: string
-    fingerprint: string
-}
-interface Props extends IIdentity {
-    /* Design variant */
-    avatar?: string
-    atSymbolBefore?: boolean
+interface Props {
+    person: Person
     onClick?(): void
 }
 const FixedWidth = createBox({ fontFamily: FixedWidthFonts })
-export default withStylesTyped((theme: Theme) =>
+export default withStylesTyped(theme =>
     createStyles({
         card: {
             display: 'inline-block',
@@ -32,6 +25,7 @@ export default withStylesTyped((theme: Theme) =>
             '&:hover': {
                 boxShadow: theme.shadows[6],
             },
+            width: '27.5em',
         },
         text: {
             fontWeight: 'bold',
@@ -40,34 +34,27 @@ export default withStylesTyped((theme: Theme) =>
         avatarDisabled: {
             marginRight: 0,
         },
+        emptyAvatar: {
+            width: 0,
+            height: 0,
+        },
     }),
-)<Props>(function Identity(props) {
-    const { avatar, onClick } = props
+)<Props>(function({ person, classes, onClick }) {
+    const { avatar, fingerprint, nickname, username } = person
     return (
-        <Card onClick={onClick} className={props.classes.card}>
+        <Card onClick={onClick} className={classes.card}>
             <CardHeader
-                classes={{ avatar: classNames({ [props.classes.avatarDisabled]: !avatar }) }}
-                avatar={
-                    avatar ? (
-                        <Avatar aria-label={props.nickname} src={avatar.length > 3 ? avatar : undefined}>
-                            {avatar.length <= 3 ? avatar : undefined}
-                        </Avatar>
-                    ) : (
-                        <Avatar style={{ width: 0, height: 0 }} />
-                    )
-                }
+                classes={{ avatar: classNames({ [classes.avatarDisabled]: !avatar }) }}
+                avatar={<Avatar className={classNames({ [classes.emptyAvatar]: !avatar })} person={person} />}
                 title={
                     <>
-                        <Typography inline className={props.classes.text}>
-                            {props.nickname}
+                        <Typography inline className={classes.text}>
+                            {nickname}
                         </Typography>
-                        <Typography inline>
-                            {props.atSymbolBefore && '@'}
-                            {props.username}
-                        </Typography>
+                        <Typography inline>{username}</Typography>
                     </>
                 }
-                subheader={<FixedWidth>{props.fingerprint}</FixedWidth>}
+                subheader={<FixedWidth>{fingerprint}</FixedWidth>}
             />
         </Card>
     )

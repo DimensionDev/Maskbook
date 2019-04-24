@@ -1,33 +1,60 @@
 import * as React from 'react'
-import { FlexBox, FullWidth } from '../../utils/Flex'
+import { FlexBox, FullWidth } from '../../utils/components/Flex'
 import Chip from '@material-ui/core/Chip/Chip'
-import Avatar from '@material-ui/core/Avatar/Avatar'
-import Paper from '@material-ui/core/Paper/Paper'
 import InputBase from '@material-ui/core/InputBase/InputBase'
 import List from '@material-ui/core/List/List'
 import { Person } from '../../extension/background-script/PeopleService'
-import { PeopleInList } from './SelectPeopleSingle'
 import ListItem from '@material-ui/core/ListItem/ListItem'
 import ListItemText from '@material-ui/core/ListItemText/ListItemText'
 import Button from '@material-ui/core/Button/Button'
 import { withStylesTyped } from '../../utils/theme'
+import ListItemAvatar from '@material-ui/core/ListItemAvatar/ListItemAvatar'
+import { Avatar } from '../../utils/components/Avatar'
 
-interface Props {
-    all: Person[]
-    selected: Person[]
-    onSetSelected: (n: Person[]) => void
+interface PeopleInListProps {
+    person: Person
+    onClick(): void
+    disabled?: boolean
 }
-function PeopleChip(props: { onDelete(): void; people: Person }) {
-    const avatar = props.people.avatar ? <Avatar src={props.people.avatar} /> : undefined
+/**
+ * Item in the list
+ */
+function PersonInList({ person, onClick, disabled }: PeopleInListProps) {
+    return (
+        <ListItem button onClick={disabled ? void 0 : onClick}>
+            <ListItemAvatar>
+                <Avatar person={person} />
+            </ListItemAvatar>
+            <ListItemText
+                primary={person.nickname || person.username}
+                secondary={person.fingerprint ? person.fingerprint.toLowerCase() : undefined}
+            />
+        </ListItem>
+    )
+}
+interface PersonInChipProps {
+    person: Person
+    onDelete?(): void
+    disabled?: boolean
+}
+function PersonInChip({ disabled, onDelete, person }: PersonInChipProps) {
+    const avatar = person.avatar ? <Avatar person={person} /> : undefined
     return (
         <Chip
             style={{ marginRight: 6, marginBottom: 6 }}
             color="primary"
-            onDelete={props.onDelete}
-            label={props.people.nickname || props.people.username}
+            onDelete={disabled ? undefined : onDelete}
+            label={person.nickname || person.username}
             avatar={avatar}
         />
     )
+}
+interface SelectPeopleUI {
+    people: Person[]
+    selected: Person[]
+    frozenSelected?: Person[]
+    onSetSelected: (selected: Person[]) => void
+    disabled?: boolean
 }
 export const SelectPeopleUI = withStylesTyped({
     paper: { maxWidth: 500 },
@@ -39,13 +66,14 @@ export const SelectPeopleUI = withStylesTyped({
     },
     input: { flex: 1 },
     button: { marginLeft: 8, padding: '2px 6px' },
-})<Props>(function SelectPeopleUI({ all: allPeople, classes, onSetSelected, selected }) {
+})<SelectPeopleUI>(function({ people, frozenSelected, classes, onSetSelected, selected, disabled }) {
     const [search, setSearch] = React.useState('')
-    const listBeforeSearch = allPeople.filter(x => {
+    const listBeforeSearch = people.filter(x => {
         if (selected.find(y => y.username === x.username)) return false
         return true
     })
     const listAfterSearch = listBeforeSearch.filter(x => {
+        if (frozenSelected && frozenSelected.find(y => x.username === y.username)) return false
         if (search === '') return true
         return (
             !!x.username.toLocaleLowerCase().match(search.toLocaleLowerCase()) ||
@@ -53,60 +81,74 @@ export const SelectPeopleUI = withStylesTyped({
         )
     })
     return (
-        <Paper className={classes.paper}>
+        <>
             <FlexBox className={classes.selectedArea}>
+                {frozenSelected && frozenSelected.map(p => <PersonInChip disabled key={p.username} person={p} />)}
                 {selected.map(p => (
-                    <PeopleChip
+                    <PersonInChip
+                        disabled={disabled}
                         key={p.username}
-                        people={p}
+                        person={p}
                         onDelete={() => onSetSelected(selected.filter(x => x.username !== p.username))}
                     />
                 ))}
                 <InputBase
                     className={classes.input}
-                    value={search}
+                    value={disabled ? '' : search}
                     onChange={e => setSearch(e.target.value)}
                     onKeyDown={e => {
                         if (search === '' && e.key === 'Backspace') {
                             onSetSelected(selected.slice(0, selected.length - 1))
                         }
                     }}
+                    placeholder={disabled ? '' : 'Type here to search'}
+                    disabled={disabled}
                 />
             </FlexBox>
-            <FlexBox>
-                {listAfterSearch.length > 0 && (
-                    <Button
-                        className={classes.button}
-                        color="primary"
-                        onClick={() => onSetSelected([...selected, ...listAfterSearch])}>
-                        Select All
-                    </Button>
-                )}
-                {selected.length > 0 && (
-                    <Button className={classes.button} onClick={() => onSetSelected([])}>
-                        Select None
-                    </Button>
-                )}
-            </FlexBox>
-            <FullWidth>
-                <List dense>
-                    {listBeforeSearch.length > 0 && listBeforeSearch.length === 0 && (
-                        <ListItem>
-                            <ListItemText primary="Not found" />
-                        </ListItem>
+            {disabled ? (
+                undefined
+            ) : (
+                <FlexBox>
+                    {listAfterSearch.length > 0 && (
+                        <Button
+                            className={classes.button}
+                            color="primary"
+                            onClick={() => onSetSelected([...selected, ...listAfterSearch])}>
+                            Select All
+                        </Button>
                     )}
-                    {listAfterSearch.map(p => (
-                        <PeopleInList
-                            key={p.username}
-                            people={p}
-                            onClick={() => {
-                                onSetSelected(selected.concat(p))
-                                setSearch('')
-                            }}
-                        />
-                    ))}
-                </List>
-            </FullWidth>
-        </Paper>
+                    {selected.length > 0 && (
+                        <Button className={classes.button} onClick={() => onSetSelected([])}>
+                            Select None
+                        </Button>
+                    )}
+                </FlexBox>
+            )}
+
+            {disabled ? (
+                undefined
+            ) : (
+                <FullWidth>
+                    <List dense>
+                        {listBeforeSearch.length > 0 && listBeforeSearch.length === 0 && (
+                            <ListItem>
+                                <ListItemText primary="Not found" />
+                            </ListItem>
+                        )}
+                        {listAfterSearch.map(p => (
+                            <PersonInList
+                                key={p.username}
+                                person={p}
+                                disabled={disabled}
+                                onClick={() => {
+                                    onSetSelected(selected.concat(p))
+                                    setSearch('')
+                                }}
+                            />
+                        ))}
+                    </List>
+                </FullWidth>
+            )}
+        </>
     )
 })

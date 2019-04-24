@@ -1,12 +1,13 @@
 import withStyles, {
     WithStyles,
     WithStylesOptions,
-    StyleRules,
     StyleRulesCallback,
+    StyleRules,
 } from '@material-ui/core/styles/withStyles'
 import React from 'react'
-import createMuiTheme, { ThemeOptions } from '@material-ui/core/styles/createMuiTheme'
+import createMuiTheme, { ThemeOptions, Theme } from '@material-ui/core/styles/createMuiTheme'
 import { TypographyOptions } from '@material-ui/core/styles/createTypography'
+import { MuiThemeProvider } from '@material-ui/core'
 
 // See: https://material-ui.com/style/typography/#migration-to-typography-v2
 Object.assign(window, {
@@ -66,9 +67,10 @@ const baseTheme = (theme: 'dark' | 'light') =>
 export const MaskbookLightTheme = createMuiTheme(baseTheme('light'))
 export const MaskbookDarkTheme = createMuiTheme(baseTheme('dark'))
 export const FixedWidthFonts = `Droid Sans Mono', Consolas, Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace, serif`
+
 // 类型安全的 withStyles
 export function withStylesTyped<ClassKey extends string, Options extends WithStylesOptions<ClassKey> = {}>(
-    style: StyleRulesCallback<ClassKey> | StyleRules<ClassKey>,
+    style: StyleRulesCallback<ClassKey> | StyleRules<ClassKey> = {} as any,
     options?: Options,
 ) {
     return function<Props, Ref = null>(
@@ -87,4 +89,8 @@ export function withStylesTyped<ClassKey extends string, Options extends WithSty
             ? React.ComponentType<Props>
             : React.ForwardRefExoticComponent<React.RefAttributes<Ref> & Props>
     }
+}
+
+export function useMaskbookTheme(node: React.ReactNode) {
+    return React.createElement(MuiThemeProvider, { theme: MaskbookLightTheme, children: node })
 }

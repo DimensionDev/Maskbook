@@ -1,7 +1,7 @@
 {
     "$schema": "http://json.schemastore.org/chrome-manifest",
     "name": "Maskbook",
-    "version": "1.1.1",
+    "version": "1.2.0",
     "manifest_version": 2,
     "content_scripts": [
         {
@@ -18,7 +18,7 @@
         }
     ],
     "web_accessible_resources": ["*.css", "*.js", "*.jpg", "*.png"],
-    "permissions": ["https://www.facebook.com/", "storage", "downloads", "background"],
+    "permissions": ["https://*.facebook.com/*", "storage", "downloads", "background"],
     "background": {
         "scripts": ["/static/js/backgroundservice.js"]
     },

@@ -4,29 +4,28 @@ import CardHeader from '@material-ui/core/CardHeader/CardHeader'
 import Typography from '@material-ui/core/Typography/Typography'
 import Paper from '@material-ui/core/Paper/Paper'
 import InputBase from '@material-ui/core/InputBase/InputBase'
-import Avatar from '@material-ui/core/Avatar/Avatar'
 import Divider from '@material-ui/core/Divider/Divider'
-import { FlexBox, FullWidth } from '../../utils/Flex'
+import { FlexBox } from '../../utils/components/Flex'
 import Button from '@material-ui/core/Button/Button'
-import { withStylesTyped, MaskbookLightTheme } from '../../utils/theme'
-import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider'
-import { useAsync } from '../../utils/AsyncComponent'
+import { withStylesTyped } from '../../utils/theme'
+import { useAsync } from '../../utils/components/AsyncComponent'
 import { CryptoService, PeopleService } from '../../extension/content-script/rpc'
 import { Person } from '../../extension/background-script/PeopleService'
 import { usePeople } from '../DataSource/PeopleRef'
 import { SelectPeopleUI } from './SelectPeople'
-import { CustomPasteEventId } from '../../utils/Names'
+import { CustomPasteEventId } from '../../utils/constants'
 import { sleep } from '../../utils/utils'
 import { myUsername, getUsername } from '../../extension/content-script/injections/LiveSelectors'
+import { useRef } from 'react'
+import { useCapturedInput } from '../../utils/hooks/useCapturedEvents'
+import { Avatar } from '../../utils/components/Avatar'
 
 interface Props {
-    avatar?: string
-    nickname?: string
-    username?: string
-    onCombinationChange(people: Person[], text: string): void
-    onRequestPost(): void
+    people: Person[]
+    myself: Person
+    onRequestPost(people: Person[], text: string): void
 }
-const _AdditionalPostBox = withStylesTyped({
+export const AdditionalPostBoxUI = withStylesTyped({
     root: { margin: '10px 0' },
     paper: { borderRadius: 0, display: 'flex' },
     avatar: { margin: '12px 0 0 12px' },
@@ -43,52 +42,40 @@ const _AdditionalPostBox = withStylesTyped({
     grayArea: { background: '#f5f6f7', padding: 8, wordBreak: 'break-all' },
     button: { padding: '2px 30px', flex: 1 },
 })<Props>(props => {
-    const { classes } = props
+    const { classes, people, myself } = props
     const [text, setText] = React.useState('')
     const [selectedPeople, selectPeople] = React.useState<Person[]>([])
 
-    const people = usePeople()
+    const inputRef = useRef<HTMLInputElement>()
+    useCapturedInput(inputRef, setText)
     return (
         <Card className={classes.root}>
             <CardHeader title={<Typography variant="caption">Encrypt with Maskbook</Typography>} />
             <Divider />
             <Paper elevation={0} className={classes.paper}>
-                {props.avatar ? (
-                    props.avatar.length > 3 ? (
-                        <Avatar className={classes.avatar} src={props.avatar} />
-                    ) : (
-                        <Avatar className={classes.avatar} children={props.avatar} />
-                    )
-                ) : (
-                    undefined
-                )}
+                <Avatar className={classes.avatar} person={myself} />
                 <InputBase
                     classes={{ root: classes.input, input: classes.innerInput }}
-                    value={text}
-                    onChange={e => {
-                        setText(e.currentTarget.value)
-                        props.onCombinationChange(selectedPeople, e.currentTarget.value)
-                    }}
+                    inputRef={inputRef}
                     fullWidth
                     multiline
                     placeholder={`${
-                        props.nickname ? `Hey ${props.nickname}, w` : 'W'
+                        myself.nickname ? `Hey ${myself.nickname}, w` : 'W'
                     }hat's your mind? Encrypt with Maskbook`}
                 />
             </Paper>
             <Divider />
-            <SelectPeopleUI
-                all={people.filter(x => x.username !== props.username)}
-                onSetSelected={p => {
-                    selectPeople(p)
-                    props.onCombinationChange(p, text)
-                }}
-                selected={selectedPeople}
-            />
+            <Paper>
+                <SelectPeopleUI
+                    people={people.filter(x => x.username !== myself.username)}
+                    onSetSelected={selectPeople}
+                    selected={selectedPeople}
+                />
+            </Paper>
             <Divider />
             <FlexBox className={classes.grayArea}>
                 <Button
-                    onClick={() => props.onRequestPost()}
+                    onClick={() => props.onRequestPost(selectedPeople, text)}
                     variant="contained"
                     color="primary"
                     className={classes.button}
@@ -99,13 +86,7 @@ const _AdditionalPostBox = withStylesTyped({
         </Card>
     )
 })
-export function AdditionalPostBoxUI(props: Props) {
-    return (
-        <MuiThemeProvider theme={MaskbookLightTheme}>
-            <_AdditionalPostBox {...props} />
-        </MuiThemeProvider>
-    )
-}
+
 function selectElementContents(el: Node) {
     const range = document.createRange()
     range.selectNodeContents(el)
@@ -113,10 +94,7 @@ function selectElementContents(el: Node) {
     sel.removeAllRanges()
     sel.addRange(range)
 }
-
 export function AdditionalPostBox() {
-    const [text, setText] = React.useState('')
-    const [people, setPeople] = React.useState<Person[]>([])
     const [avatar, setAvatar] = React.useState<string | undefined>('')
     let nickname
     {
@@ -125,28 +103,28 @@ export function AdditionalPostBox() {
     }
     const username = getUsername()
     useAsync(() => PeopleService.queryAvatar(username || ''), []).then(setAvatar)
+    const onRequestPost = React.useCallback(async (people, text) => {
+        const [encrypted, token] = await CryptoService.encryptTo(text, people)
+        const fullPost = 'Decrypt this post with ' + encrypted
+        const element = document.querySelector<HTMLDivElement>('.notranslate')!
+        element.focus()
+        await sleep(100)
+        selectElementContents(element)
+        await sleep(100)
+        document.dispatchEvent(new CustomEvent(CustomPasteEventId, { detail: fullPost }))
+        navigator.clipboard.writeText(fullPost)
+        // Prevent Custom Paste failed, this will cause service not available to user.
+        CryptoService.publishPostAESKey(token)
+    }, [])
+    if (!username) {
+        console.error('Username not found.')
+        return null
+    }
     return (
         <AdditionalPostBoxUI
-            avatar={avatar}
-            nickname={nickname}
-            username={username}
-            onRequestPost={async () => {
-                const [encrypted, token] = await CryptoService.encryptTo(text, people)
-                const fullPost = 'Decrypt this post with ' + encrypted
-                const element = document.querySelector<HTMLDivElement>('.notranslate')!
-                element.focus()
-                await sleep(100)
-                selectElementContents(element)
-                await sleep(100)
-                document.dispatchEvent(new CustomEvent(CustomPasteEventId, { detail: fullPost }))
-                navigator.clipboard.writeText(fullPost)
-                // Prevent Custom Paste failed, this will cause service not available to user.
-                CryptoService.publishPostAESKey(token)
-            }}
-            onCombinationChange={(p, t) => {
-                setPeople(p)
-                setText(t)
-            }}
+            people={usePeople()}
+            myself={{ avatar, nickname, username }}
+            onRequestPost={onRequestPost}
         />
     )
 }

@@ -1,12 +1,13 @@
-import { AsyncCall, MessageCenter, OnlyRunInContext } from '@holoflows/kit/es'
-import { FriendServiceName } from '../../utils/Names'
+import { AsyncCall, OnlyRunInContext } from '@holoflows/kit/es'
+import { FriendServiceName } from '../../utils/constants'
 import {
-    getAllKeys,
+    queryPeopleCryptoKey,
     calculateFingerprint,
     getMyPrivateKey,
     CryptoKeyRecord,
     toReadCryptoKey,
     storeKey,
+    queryPersonCryptoKey,
 } from '../../key-management/keystore-db'
 import { queryAvatar, storeAvatar, queryNickname } from '../../key-management/avatar-db'
 import { uploadProvePostUrl } from '../../key-management/people-gun'
@@ -20,18 +21,20 @@ export interface Person {
     fingerprint?: string
 }
 
-async function fetchPublicKey(name: string) {}
-async function fetchStoredPeople() {}
-async function getAllPeople(): Promise<Person[]> {
-    const keys = await getAllKeys()
-    const p = Promise.all(
-        keys.map<Promise<Person>>(async k => ({
-            username: k.username,
-            fingerprint: await calculateFingerprint(k.username),
-            avatar: await queryAvatar(k.username),
-            nickname: await queryNickname(k.username),
-        })),
-    )
+export async function queryPerson(username: string): Promise<Person> {
+    const avatar = queryAvatar(username)
+    const nickname = queryNickname(username)
+    const key = await queryPersonCryptoKey(username)
+    return {
+        username: username,
+        fingerprint: key ? await calculateFingerprint(key) : undefined,
+        avatar: await avatar,
+        nickname: await nickname,
+    }
+}
+async function queryPeople(): Promise<Person[]> {
+    const keys = await queryPeopleCryptoKey()
+    const p = Promise.all(keys.map<Promise<Person>>(k => queryPerson(k.username)))
     return p
 }
 async function storeKeyService(key: { key: CryptoKeyRecord; local: JsonWebKey }) {
@@ -46,12 +49,13 @@ async function storeKeyService(key: { key: CryptoKeyRecord; local: JsonWebKey })
 }
 
 const Impl = {
-    getAllPeople,
+    queryPeople,
     uploadProvePostUrl,
     storeAvatar,
     queryAvatar,
     getMyPrivateKey,
     storeKey: storeKeyService,
+    queryPerson,
 }
 Object.assign(window, { friendService: Impl })
 export type PeopleService = typeof Impl

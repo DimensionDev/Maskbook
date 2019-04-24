@@ -2,7 +2,7 @@ import { Omit } from '@material-ui/core'
 import { Entity, Index, Db, Key } from 'typed-db'
 import { buildQuery } from '../utils/utils'
 import { MessageCenter } from '../utils/messages'
-import { encodeArrayBuffer, encodeText } from '../utils/EncodeDecode'
+import { encodeArrayBuffer, encodeText } from '../utils/type-transform/EncodeDecode'
 import { OnlyRunInContext } from '@holoflows/kit/es'
 import { memoize } from 'lodash-es'
 import { queryAvatar } from './avatar-db'
@@ -31,7 +31,7 @@ export type PersonCryptoKey = {
 export type PersonCryptoKeyWithPrivate<T = false> = {
     key: T extends false ? { privateKey?: CryptoKey } : { privateKey: CryptoKey }
 }
-export async function getAllKeys(): Promise<PersonCryptoKey[]> {
+export async function queryPeopleCryptoKey(): Promise<PersonCryptoKey[]> {
     const record = await query(t => t.openCursor().asList())
     return Promise.all(record.map(toReadCryptoKey))
 }
@@ -114,7 +114,7 @@ export async function generateNewKey(): Promise<PersonCryptoKey & PersonCryptoKe
 //#endregion
 Object.assign(window, {
     db: {
-        getAllKeys,
+        getAllKeys: queryPeopleCryptoKey,
         queryPersonCryptoKey,
         storeKey,
         getMyPrivateKey,

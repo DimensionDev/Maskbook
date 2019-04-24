@@ -1,23 +1,57 @@
-import React from 'react'
-import ReactDOM from 'react-dom'
+import React, { useState } from 'react'
 import { LiveSelector, MutationObserverWatcher } from '@holoflows/kit'
-import { DecryptPost } from '../../../components/InjectedComponents/DecryptedPost'
+import { DecryptPostUI } from '../../../components/InjectedComponents/DecryptedPost'
 import { AddToKeyStore } from '../../../components/InjectedComponents/AddToKeyStore'
-import { PeopleService } from '../rpc'
+import { PeopleService, CryptoService } from '../rpc'
 import { getUsername } from './LiveSelectors'
+import { renderInShadowRoot } from '../../../utils/jss/renderInShadowRoot'
+import { usePeople } from '../../../components/DataSource/PeopleRef'
+import { useAsync } from '../../../utils/components/AsyncComponent'
+import { Person } from '../../background-script/PeopleService'
+import { deconstructPayload } from '../../../utils/type-transform/Payload'
 
 const posts = new LiveSelector().querySelectorAll<HTMLDivElement>('.userContent, .userContent+*+div>div>div>div>div')
 
-const PostInspector = (props: { post: string; postBy: string; postId: string; needZip(): void }) => {
+interface PostInspectorProps {
+    post: string
+    postBy: string
+    postId: string
+    needZip(): void
+}
+function removeMyself(people: Person[]): Person[] {
+    const i = getUsername()!
+    return people.filter(x => x.username !== i)
+}
+function PostInspector(props: PostInspectorProps) {
     const { post, postBy, postId } = props
     const type = {
-        encryptedPost: post.match(/🎼([a-zA-Z0-9\+=\/|]+):\|\|/),
+        encryptedPost: deconstructPayload(post, false),
         provePost: post.match(/🔒(.+)🔒/)!,
     }
-
     if (type.encryptedPost) {
         props.needZip()
-        return <DecryptPost encryptedText={post} whoAmI={getUsername()!} postBy={postBy} />
+        const whoAmI = getUsername()!
+        const people = usePeople()
+        const [alreadySelectedPreviously, setAlreadySelectedPreviously] = useState<Person[]>([])
+        const { iv, ownersAESKeyEncrypted } = type.encryptedPost
+        if (whoAmI === postBy) {
+            useAsync(() => CryptoService.getSharedListOfPost(iv), [post]).then(p =>
+                setAlreadySelectedPreviously(removeMyself(p)),
+            )
+        }
+        return (
+            <DecryptPostUI.UI
+                requestAppendDecryptor={async people => {
+                    setAlreadySelectedPreviously(alreadySelectedPreviously.concat(people))
+                    return CryptoService.appendShareTarget(iv, ownersAESKeyEncrypted, iv, people)
+                }}
+                alreadySelectedPreviously={alreadySelectedPreviously}
+                people={removeMyself(people)}
+                encryptedText={post}
+                whoAmI={whoAmI}
+                postBy={postBy}
+            />
+        )
     } else if (type.provePost) {
         PeopleService.uploadProvePostUrl(postBy, postId)
         return <AddToKeyStore postBy={postBy} provePost={post} />
@@ -52,7 +86,8 @@ new MutationObserverWatcher(posts)
                 more.click()
             }
         }
-        {
+        function zipPostContent() {
+            const pe = node.current.parentElement
             // Style modification for repost
             if (!node.current.className.match('userContent') && node.current.innerText.length > 0) {
                 node.after.setAttribute(
@@ -66,45 +101,36 @@ new MutationObserverWatcher(posts)
                 padding: 0px 10px;`,
                 )
             }
+            if (pe) {
+                const p = pe.querySelector('p')
+                if (p) {
+                    p.style.display = 'block'
+                    p.style.maxHeight = '20px'
+                    p.style.overflow = 'hidden'
+                    p.style.marginBottom = '0'
+                }
+            }
+        }
+        function zipPostLinkPreview() {
+            const img = node.current.parentElement!.querySelector('a[href*="maskbook.io"] img')
+            const parent = img && img.closest('span')
+            if (img && parent) {
+                parent.style.display = 'none'
+            }
+        }
+        function needZip() {
+            zipPostContent()
+            zipPostLinkPreview()
         }
         // Render it
-        const render = () => {
-            ReactDOM.render(
-                <PostInspector
-                    needZip={() => {
-                        {
-                            // Post content
-                            const pe = node.current.parentElement
-                            if (pe) {
-                                const p = pe.querySelector('p')
-                                if (p) {
-                                    p.style.display = 'block'
-                                    p.style.maxHeight = '20px'
-                                    p.style.overflow = 'hidden'
-                                    p.style.marginBottom = '0'
-                                }
-                            }
-                        }
-                        {
-                            // Link preview
-                            const img = node.current.parentElement!.querySelector('a[href*="maskbook.io"] img')
-                            const parent = img && img.closest('span')
-                            if (img && parent) {
-                                parent.style.display = 'none'
-                            }
-                        }
-                    }}
-                    postId={postId}
-                    post={node.current.innerText}
-                    postBy={postBy}
-                />,
-                node.after,
+        const render = () =>
+            renderInShadowRoot(
+                <PostInspector needZip={needZip} postId={postId} post={node.current.innerText} postBy={postBy} />,
+                node.afterShadow,
             )
-        }
-        render()
         return {
             onNodeMutation: render,
-            onRemove: () => ReactDOM.unmountComponentAtNode(node.after),
+            onRemove: render(),
         }
     })
     .startWatch()

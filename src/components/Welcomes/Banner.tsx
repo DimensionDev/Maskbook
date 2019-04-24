@@ -1,19 +1,18 @@
 import * as React from 'react'
-import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider'
-import { MaskbookLightTheme, withStylesTyped } from '../../utils/theme'
 import AppBar from '@material-ui/core/AppBar/AppBar'
 import Toolbar from '@material-ui/core/Toolbar/Toolbar'
 import Typography from '@material-ui/core/Typography/Typography'
 import Button from '@material-ui/core/Button/Button'
-import { FullWidth } from '../../utils/Flex'
+import { FullWidth } from '../../utils/components/Flex'
 import IconButton from '@material-ui/core/IconButton/IconButton'
 import CloseIcon from '@material-ui/icons/Close'
+import { withStylesTyped } from '../../utils/theme'
 
 interface Props {
     getStarted(): void
     close(): void
 }
-const _Banner = withStylesTyped({
+export const Banner = withStylesTyped({
     root: {
         border: '1px solid #ccc',
         borderRadius: 4,
@@ -46,18 +45,13 @@ const _Banner = withStylesTyped({
                     color="primary">
                     Get started
                 </Button>
-                <IconButton onClick={props.close} classes={{ root: props.classes.close }} aria-label="Close">
+                <IconButton
+                    aria-label="Dismiss the banner"
+                    onClick={props.close}
+                    classes={{ root: props.classes.close }}>
                     <CloseIcon />
                 </IconButton>
             </Toolbar>
         </AppBar>
     )
 })
-
-export function Banner(props: Props) {
-    return (
-        <MuiThemeProvider theme={MaskbookLightTheme}>
-            <_Banner {...props} />
-        </MuiThemeProvider>
-    )
-}

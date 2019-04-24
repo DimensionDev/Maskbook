@@ -17,12 +17,41 @@ import EncryptionCheckbox from '../components/InjectedComponents/EncryptionCheck
 import { AdditionalPostBoxUI } from '../components/InjectedComponents/AdditionalPostBox'
 import { AdditionalContent } from '../components/InjectedComponents/AdditionalPostContent'
 import { SelectPeopleUI } from '../components/InjectedComponents/SelectPeople'
-import { SelectPeopleSingle } from '../components/InjectedComponents/SelectPeopleSingle'
 import { DecryptPostUI } from '../components/InjectedComponents/DecryptedPost'
 import { AddToKeyStoreUI } from '../components/InjectedComponents/AddToKeyStore'
 import { Person } from '../extension/background-script/PeopleService'
 import { Banner } from '../components/Welcomes/Banner'
+import { useShareMenu } from '../components/InjectedComponents/SelectPeopleDialog'
+import { sleep } from '../utils/utils'
+import Button from '@material-ui/core/Button/Button'
 
+const demoPeople: Person[] = [
+    {
+        username: 'usernamea',
+        fingerprint: 'FDFE333CE20ED446AD88F3C8BA3AD1AA5ECAF521',
+        avatar: 'https://avatars3.githubusercontent.com/u/5390719?s=460&v=4',
+        nickname: 'Jack Works',
+    },
+    {
+        username: 'usernameb',
+        fingerprint: 'FDFE333CE20ED446AD88F3C8BA3AD1AA5ECAF521'
+            .split('')
+            .reverse()
+            .join(''),
+        avatar: 'https://avatars1.githubusercontent.com/u/3343358?s=460&v=4',
+        nickname: 'Robot of the century',
+    },
+    {
+        username: 'usernamec',
+        fingerprint: 'a2f7643cd1aed446ad88f3c8ba13843dfa2f321d',
+        nickname: 'Material Design',
+    },
+    {
+        username: 'usernamed',
+        fingerprint: 'a2f7643cd1aed446ad88f3c8ba13843dfa2f321d',
+        nickname: 'コノハ',
+    },
+]
 storiesOf('Welcome', module)
     .add('Banner', () => <Banner close={action('Close')} getStarted={action('Get Started')} />)
     .add('Step 0', () => (
@@ -40,32 +69,13 @@ storiesOf('Welcome', module)
     .add('Step 1b-1', () => <Welcome1b1 back={linkTo('Welcome', 'Step 0')} restore={action('Restore with')} />)
 
 storiesOf('Dashboard (unused)', module)
-    .add('Identity Component (unused)', () => (
-        <Identity
-            avatar={text('Avatar (length > 3 will treat as url)', false as any)}
-            fingerprint={text('Fingerprint', 'FDFE333CE20ED446AD88F3C8BA3AD1AA5ECAF521')}
-            nickname={text('Name', 'Jack Works')}
-            username={text('Username', 'jackworks_vfs')}
-            atSymbolBefore={boolean('Add a @ on username?', false)}
-        />
-    ))
+    .add('Identity Component (unused)', () => <Identity person={demoPeople[0]} onClick={action('Click')} />)
     .add('Dashboard (unused)', () => (
         <Dashboard
             addAccount={action('Add account')}
             exportBackup={action('Export backup')}
             onProfileClick={action('Click on profile')}
-            identities={[
-                {
-                    fingerprint: '8AFD47D6A3CDA8CE35884C5104B61F26232DC9C9',
-                    nickname: 'Julie Zhuo',
-                    username: 'julie.zhuo.9102',
-                },
-                {
-                    fingerprint: '8AFD47D6A3CDA8CE35884C5104B61F26232DC9C9',
-                    nickname: 'Yisi Liu',
-                    username: 'yisiliu.146',
-                },
-            ]}
+            identities={demoPeople}
         />
     ))
 const FakePost: React.FC<{ title: string }> = props => (
@@ -77,62 +87,52 @@ const FakePost: React.FC<{ title: string }> = props => (
                 style={{
                     border: '1px solid #dfe0e2',
                     background: 'white',
-                    borderTop: 0,
                     borderBottom: 0,
-                    padding: 12,
-                    paddingBottom: 6,
+                    borderTop: 0,
+                    padding: '0 12px 6px',
+                    transform: 'translateY(-14px)',
                 }}>
                 {props.children}
             </div>
-            <img style={{ marginTop: -6 }} width={500} src={require('./post-b.jpg')} />
+            <img style={{ marginTop: -20 }} width={500} src={require('./post-b.jpg')} />
         </div>
     </>
 )
 
-const demoPeople: Person[] = [
-    {
-        username: 'People A',
-        fingerprint: 'FDFE333CE20ED446AD88F3C8BA3AD1AA5ECAF521',
-    },
-    {
-        username: 'People B',
-        fingerprint: 'FDFE333CE20ED446AD88F3C8BA3AD1AA5ECAF521'
-            .split('')
-            .reverse()
-            .join(''),
-    },
-    {
-        username: 'People C',
-        fingerprint: 'a2f7643cd1aed446ad88f3c8ba13843dfa2f321d',
-    },
-    {
-        username: 'People D',
-        fingerprint: 'a2f7643cd1aed446ad88f3c8ba13843dfa2f321d',
-    },
-]
 storiesOf('Injections', module)
-    //
     .add('Checkbox (unused)', () => <EncryptionCheckbox onCheck={action('Check')} />)
-    .add('Post box', () => (
+    .add('AdditionalPostBox', () => (
         <AdditionalPostBoxUI
+            people={demoPeople}
+            myself={{
+                avatar: text('Avatar URL', demoPeople[0].avatar!),
+                nickname: text('Nickname', demoPeople[0].nickname!),
+                username: text('Username', demoPeople[0].username!),
+            }}
             onRequestPost={action('onRequestPost')}
-            avatar={text('Avatar URL', '')}
-            nickname={text('Nickname', '')}
-            onCombinationChange={() => {}}
         />
     ))
     .add('Additional Post Content', () => <AdditionalContent title="Additional Content" children="Content" />)
-    .add('Select people', () => {
+    .add('SelectPeople', () => {
         function SelectPeople() {
             const [selected, select] = React.useState<Person[]>([])
-            return <SelectPeopleUI all={demoPeople} selected={selected} onSetSelected={select} />
+            return <SelectPeopleUI people={demoPeople} selected={selected} onSetSelected={select} />
         }
         return <SelectPeople />
     })
-    .add('Select 1 people (unused)', () => {
+    .add('Select people dialog', () => {
         function SelectPeople() {
-            const [selected, select] = React.useState<Person>()
-            return <SelectPeopleSingle all={demoPeople} selected={selected} onSelect={select} />
+            const { ShareMenu, showShare } = useShareMenu(
+                demoPeople,
+                async people => sleep(3000),
+                boolean('Has frozen item?', true) ? [demoPeople[0]] : [],
+            )
+            return (
+                <>
+                    {ShareMenu}
+                    <Button onClick={showShare}>Show dialog</Button>
+                </>
+            )
         }
         return <SelectPeople />
     })
@@ -149,7 +149,13 @@ storiesOf('Injections', module)
         return (
             <>
                 <FakePost title="Decrypted:">
-                    <DecryptPostUI.success data={{ content: msg, signatureVerifyResult: vr }} />
+                    <DecryptPostUI.success
+                        alreadySelectedPreviously={[]}
+                        displayAppendDecryptor={boolean('Post by myself?', true)}
+                        requestAppendDecryptor={async () => {}}
+                        people={demoPeople}
+                        data={{ content: msg, signatureVerifyResult: vr }}
+                    />
                 </FakePost>
                 <FakePost title="Decrypting:">{DecryptPostUI.awaiting}</FakePost>
                 <FakePost title="Failed:">
