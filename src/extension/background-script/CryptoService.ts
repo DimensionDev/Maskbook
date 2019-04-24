@@ -237,15 +237,10 @@ async function appendShareTarget(
     people: Person[],
 ): Promise<void> {
     const toKey = await prepareOthersKeyForEncryption(people)
-    const ownersAESKey = await Alpha40.extractAESKeyInMessage(
-        -40,
-        ownersAESKeyEncrypted,
-        iv,
-        (await getMyLocalKey()).key,
-    )
+    const AESKey = await Alpha40.extractAESKeyInMessage(-40, ownersAESKeyEncrypted, iv, (await getMyLocalKey()).key)
     const othersAESKeyEncrypted = await Alpha40.generateOthersAESKeyEncrypted(
         -40,
-        ownersAESKey,
+        AESKey,
         (await getMyPrivateKey())!.key.privateKey,
         toKey,
     )

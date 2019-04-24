@@ -21,7 +21,11 @@ module.exports = function override(/** @type{import("webpack").Configuration} */
     config.module.unknownContextCritical = false
 
     // @ts-ignore
-    config.plugins.push(new (require('write-file-webpack-plugin'))())
+    config.plugins.push(
+        new (require('write-file-webpack-plugin'))({
+            test: /(static\/.*|.+\.png|index\.html|manifest\.json)/,
+        }),
+    )
     // Write files to /public
     config.plugins.push(
         new (require('copy-webpack-plugin'))(

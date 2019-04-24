@@ -27,7 +27,7 @@ export async function addPersonPublicKey(username: string): Promise<PersonCrypto
     }
     const fromPost = async () => {
         const person = await queryPersonFromGun(username)
-        if (!person) throw new Error('Not in gun!')
+        if (!person || !person.provePostId) throw new Error('Not in gun!')
         const post = await tasks(postUrl(person.provePostId)).getPostContent()
         if ((await verifyOthersProve(post, username)) === null) throw new Error('Not in prove post!')
     }
