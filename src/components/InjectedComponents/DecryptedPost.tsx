@@ -56,7 +56,7 @@ function DecryptPostFailed({ error }: { error: Error }) {
     return (
         <AdditionalContent title="Maskbook decryption failed">
             {(e => {
-                if (e.match('DOMException')) return 'Maybe this post is not sent to you.'
+                if (e.match('DOMException')) return 'Decryption failed.'
                 return e
             })(error && error.message)}
         </AdditionalContent>

@@ -21,7 +21,12 @@ module.exports = function override(/** @type{import("webpack").Configuration} */
     config.module.unknownContextCritical = false
 
     // @ts-ignore
-    config.plugins.push(new (require('write-file-webpack-plugin'))())
+    config.plugins.push(
+        new (require('write-file-webpack-plugin'))({
+            test: /(static\/.*|.+\.png|index\.html|manifest\.json)/,
+        }),
+    )
+    // Write files to /public
     config.plugins.push(
         new (require('copy-webpack-plugin'))(
             [
@@ -36,6 +41,7 @@ module.exports = function override(/** @type{import("webpack").Configuration} */
     for (const x of config.module.rules) {
         if (!x.oneOf) continue
         for (const rule of x.oneOf) {
+            // Replace babel-loader with ts-loader
             if (rule.loader === require.resolve('babel-loader')) {
                 if (rule.include) {
                     rule.loader = require.resolve('ts-loader')
@@ -50,7 +56,11 @@ module.exports = function override(/** @type{import("webpack").Configuration} */
         }
     }
     config.module.rules.forEach(rule => {
+        // Remove the babel-loader
         if (rule.oneOf) rule.oneOf = rule.oneOf.filter(x => x.loader !== require.resolve('babel-loader'))
     })
+    // Disable the eslint linter. We have tslint.
+    config.module.rules = config.module.rules.filter(x => x.enforce !== 'pre')
+    config.output.futureEmitAssets = false
     return config
 }
