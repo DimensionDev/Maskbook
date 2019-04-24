@@ -14,7 +14,7 @@ jobs:
                   name: Clone @holoflows/kit
                   command: |
                       cd ..
-                      git clone -q --depth=1 https://github.com/project-holoflows/holoflows-kit
+                      git clone -q --depth=1 https://github.com/DimensionDev/holoflows-kit
             - restore_cache:
                   keys:
                       - v1-holoflows-{{ checksum "~/holoflows-kit/yarn.lock" }}
@@ -83,7 +83,13 @@ jobs:
                       set -o nounset
                       ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} -b "✔ No breaking changes. / ⚠ Has breaking changes!
 
+                      🆕 New Feature
+
+                      🔐 Security
+
                       🎨 UI Improvements
+
+                      🐛 Bug Fixes
 
                       👩‍💻 Miscellaneous" -replace -draft -prerelease $(git describe HEAD) ~/repo/Maskbook.zip
                   # -b BODY \         # Set text describing the contents of the release

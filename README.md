@@ -1,6 +1,5 @@
 # Maskbook &middot; ![GitHub license](https://img.shields.io/badge/license-AGPL-blue.svg?style=flat-square) ![Ciecle CI](https://img.shields.io/circleci/project/github/DimensionDev/Maskbook.svg?style=flat-square&logo=circleci) [![Join the chat at https://gitter.im/Maskbook/community](https://badges.gitter.im/Maskbook/community.svg)](https://gitter.im/Maskbook/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) ![Chrome Web Store](https://img.shields.io/chrome-web-store/v/jkoeaghipilijlahjplgbfiocjhldnap.svg?logo=Maskbook&logoColor=%231c68f3&style=flat-square)
 
-
 Encrypt your posts & chats on You-Know-Where. Allow only your friends to decrypt.
 
 For general introductions, see https://Maskbook.io/
@@ -28,7 +27,7 @@ After `Maskbook` and `@holoflows/kit` gets stable, we will directly add `@holofl
 #### Prepare for library @holoflows/kit
 
 -   `cd ..`
--   `git clone https://github.com/project-holoflows/Holoflows-kit.git`
+-   `git clone https://github.com/DimensionDev/holoflows-kit.git`
 -   `cd Holoflows-kit`
 -   `yarn install`
 -   `yarn build`
