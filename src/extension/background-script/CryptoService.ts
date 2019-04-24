@@ -173,8 +173,10 @@ async function decryptFrom(
                 }
             }
         } catch (e) {
-            if (e instanceof DOMException) throw new Error('DOMException')
-            else throw e
+            if (e instanceof DOMException) {
+                console.log(e)
+                throw new Error('DOMException')
+            } else throw e
         }
     }
     throw new TypeError('Unknown post version, maybe you should update Maskbook?')
