@@ -5,9 +5,9 @@ import withStyles, {
     StyleRules,
 } from '@material-ui/core/styles/withStyles'
 import React from 'react'
-import createMuiTheme, { ThemeOptions, Theme } from '@material-ui/core/styles/createMuiTheme'
+import createMuiTheme, { ThemeOptions } from '@material-ui/core/styles/createMuiTheme'
 import { TypographyOptions } from '@material-ui/core/styles/createTypography'
-import { MuiThemeProvider } from '@material-ui/core'
+import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider'
 
 // See: https://material-ui.com/style/typography/#migration-to-typography-v2
 Object.assign(window, {

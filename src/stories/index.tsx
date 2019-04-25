@@ -6,6 +6,7 @@ import Welcome1a1 from '../components/Welcomes/1a1'
 import Welcome1a2 from '../components/Welcomes/1a2'
 import Welcome1a3 from '../components/Welcomes/1a3'
 import Welcome1a4 from '../components/Welcomes/1a4'
+import Welcome1a4v2 from '../components/Welcomes/1a4.v2'
 import Welcome1b1 from '../components/Welcomes/1b1'
 import { linkTo as to, linkTo } from '@storybook/addon-links'
 import { text, boolean } from '@storybook/addon-knobs'
@@ -64,6 +65,13 @@ storiesOf('Welcome', module)
         <Welcome1a4
             copyToClipboard={action('Post click')}
             provePost={text('URL', '🔒ApfdMwLoV/URKn7grgcNWdMR2iWMGdHpQBk5LVGFxhul🔒')}
+        />
+    ))
+    .add('New Step 1a-4', () => (
+        <Welcome1a4v2
+            provePost={text('URL', '🔒ApfdMwLoV/URKn7grgcNWdMR2iWMGdHpQBk5LVGFxhul🔒')}
+            requestAutoVerify={action('Auto')}
+            requestManualVerify={action('Manual')}
         />
     ))
     .add('Step 1b-1', () => <Welcome1b1 back={linkTo('Welcome', 'Step 0')} restore={action('Restore with')} />)
