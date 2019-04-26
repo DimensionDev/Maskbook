@@ -9,10 +9,6 @@ import createMuiTheme, { ThemeOptions } from '@material-ui/core/styles/createMui
 import { TypographyOptions } from '@material-ui/core/styles/createTypography'
 import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider'
 
-// See: https://material-ui.com/style/typography/#migration-to-typography-v2
-Object.assign(window, {
-    __MUI_USE_NEXT_TYPOGRAPHY_VARIANTS__: true,
-})
 const _refTheme = createMuiTheme()
 const _refThemeDark = createMuiTheme({ palette: { type: 'dark' } })
 const baseTheme = (theme: 'dark' | 'light') =>

@@ -1,4 +1,4 @@
-Object.assign(window, { browser: require('webextension-polyfill') })
+import './setup'
 import React from 'react'
 import ReactDOM from 'react-dom'
 

@@ -1,4 +1,4 @@
-Object.assign(window, { browser: require('webextension-polyfill') })
+import '../../setup'
 import { GetContext } from '@holoflows/kit/es'
 switch (GetContext()) {
     case 'content':

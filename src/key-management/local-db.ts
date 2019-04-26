@@ -30,4 +30,3 @@ export async function storeLocalKey(key: CryptoKey) {
     return query(t => t.put({ username: '$self', key }), 'readwrite')
 }
 //#endregion
-Object.assign(window, {})
