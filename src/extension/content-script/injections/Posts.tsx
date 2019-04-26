@@ -59,6 +59,7 @@ function PostInspector(props: PostInspectorProps) {
     return null
 }
 new MutationObserverWatcher(posts)
+    .assignKeys(node => node.innerText)
     .useNodeForeach((node, key, realNode) => {
         // Get author
         const postBy = getUsername(node.current.parentElement!.querySelectorAll('a')[1])!
@@ -123,14 +124,9 @@ new MutationObserverWatcher(posts)
             zipPostLinkPreview()
         }
         // Render it
-        const render = () =>
-            renderInShadowRoot(
-                <PostInspector needZip={needZip} postId={postId} post={node.current.innerText} postBy={postBy} />,
-                node.afterShadow,
-            )
-        return {
-            onNodeMutation: render,
-            onRemove: render(),
-        }
+        return renderInShadowRoot(
+            <PostInspector needZip={needZip} postId={postId} post={node.current.innerText} postBy={postBy} />,
+            node.afterShadow,
+        )
     })
     .startWatch()
