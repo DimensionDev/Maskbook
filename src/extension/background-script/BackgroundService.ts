@@ -22,10 +22,12 @@ async function backupMyKeyPair() {
         .getDate()
         .toString()
         .padStart(2, '0')}`
-    chrome.downloads.download(
-        { url, filename: `maskbook-keystore-backup-${today}.json`, conflictAction: 'prompt', saveAs: true },
-        downloadId => {},
-    )
+    browser.downloads.download({
+        url,
+        filename: `maskbook-keystore-backup-${today}.json`,
+        conflictAction: 'prompt',
+        saveAs: true,
+    })
 }
 async function logInBackground(...args: any[]) {
     console.log(...args)

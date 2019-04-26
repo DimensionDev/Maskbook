@@ -1,5 +1,5 @@
-export default undefined
-if (location.href === 'http://localhost:3000/' || location.protocol === 'chrome-extension:') {
-} else {
+Object.assign(window, { browser: require('webextension-polyfill') })
+import { GetContext } from '@holoflows/kit/es'
+if (GetContext() === 'content') {
     require('./extension/content-script/index')
 }

@@ -14,11 +14,11 @@ export const buildQuery = <Q extends Newable<any>>(db: Db, record: Q) => {
 }
 
 /**
- * Get reference of file in both chrome extension and storybook
+ * Get reference of file in both extension and storybook
  */
 export function getUrl(path: string, fallback: string = '') {
-    if (typeof chrome === 'object' && chrome.runtime && chrome.runtime.getURL) {
-        return chrome.runtime.getURL(path)
+    if (typeof browser === 'object' && browser.runtime && browser.runtime.getURL) {
+        return browser.runtime.getURL(path)
     }
     return fallback || path
 }
