@@ -1,4 +1,4 @@
-import { AsyncCall, MessageCenter } from '@holoflows/kit/es'
+import { AsyncCall } from '@holoflows/kit/es'
 import { Background } from '../background-script/BackgroundService'
 import { BackgroundName, CryptoName, FriendServiceName } from '../../utils/constants'
 import { Encrypt } from '../background-script/CryptoService'

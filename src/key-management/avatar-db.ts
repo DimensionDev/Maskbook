@@ -1,5 +1,6 @@
 import { Entity, Index, Db } from 'typed-db'
 import { buildQuery } from '../utils/utils'
+import { regularUsername } from '../utils/type-transform/Username'
 
 @Entity()
 class AvatarRecord {
@@ -23,6 +24,7 @@ export async function queryNickname(username: string): Promise<string | undefine
     return result.nickname
 }
 export async function storeAvatar(username: string, nickname: string, avatar: ArrayBuffer | string) {
+    if (regularUsername(username) === null) return
     const last = await query(t => t.get(username))
     if (last && (Date.now() - last.lastUpdateTime.getTime()) / 1000 / 60 / 60 / 24 < 14) {
         return

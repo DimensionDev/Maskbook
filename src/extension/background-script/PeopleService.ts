@@ -14,6 +14,7 @@ import { uploadProvePostUrl } from '../../key-management/people-gun'
 import { storeLocalKey } from '../../key-management/local-db'
 
 OnlyRunInContext('background', 'FriendService')
+
 export interface Person {
     username: string
     nickname?: string

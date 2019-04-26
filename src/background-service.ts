@@ -5,8 +5,9 @@ if (GetContext() === 'background') {
     require('./extension/background-script')
 }
 
-const old = console.log
-console.log = (...args: any[]) => {
-    if (args[0] === 'secp256k1') return // drop the annoying log
-    return old(...args)
-}
+console.log = new Proxy(console.log, {
+    apply(target, _, args) {
+        if (args[0] === 'secp256k1') return
+        return target(...args)
+    },
+})
