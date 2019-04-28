@@ -1,4 +1,3 @@
-import '../../setup'
 import { GetContext } from '@holoflows/kit/es'
 switch (GetContext()) {
     case 'content':
