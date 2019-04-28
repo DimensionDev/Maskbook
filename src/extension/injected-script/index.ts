@@ -9,7 +9,8 @@ switch (GetContext()) {
         break
     case 'webpage':
         require('./addEventListener')
-        document.querySelector('script[data-chrome=true]')!.remove()
+        const e = document.querySelector('script[data-chrome=true]')
+        e && e.remove()
         console.log('Injected script loaded')
         break
 }

@@ -35,6 +35,7 @@ export default withStylesTyped(theme =>
         },
         title: {
             marginBottom: theme.spacing.unit * 3,
+            color: theme.palette.grey[500],
         },
         subtitle: {
             maxWidth: '24rem',

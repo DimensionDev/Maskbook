@@ -13,14 +13,16 @@ module.exports = function override(/** @type{import("webpack").Configuration} */
     }
     config.output.filename = 'static/js/[name].js'
     config.output.chunkFilename = 'static/js/[name].chunk.js'
+
+    // No split
     config.optimization.runtimeChunk = false
     config.optimization.splitChunks = undefined
 
+    // Dismiss warning for gun.js
     config.module.wrappedContextCritical = false
     config.module.exprContextCritical = false
     config.module.unknownContextCritical = false
 
-    // @ts-ignore
     config.plugins.push(
         new (require('write-file-webpack-plugin'))({
             test: /(static\/.*|.+\.png|index\.html|manifest\.json)/,
@@ -61,6 +63,8 @@ module.exports = function override(/** @type{import("webpack").Configuration} */
     })
     // Disable the eslint linter. We have tslint.
     config.module.rules = config.module.rules.filter(x => x.enforce !== 'pre')
+    // write-file-webpack-plugin conflict with this
+    // ! Don't upgrade webpack to 5 until they fix this
     config.output.futureEmitAssets = false
     return config
 }

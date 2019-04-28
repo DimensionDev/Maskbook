@@ -54,7 +54,7 @@ const demoPeople: Person[] = [
     },
 ]
 storiesOf('Welcome', module)
-    .add('Banner', () => <Banner close={action('Close')} getStarted={action('Get Started')} />)
+    .add('Banner', () => <Banner close={action('Close')} getStarted={to('Welcome', 'Step 0')} />)
     .add('Step 0', () => (
         <Welcome0 close={action('Close')} create={to('Welcome', 'Step 1a-1')} restore={to('Welcome', 'Step 1b-1')} />
     ))
@@ -64,12 +64,12 @@ storiesOf('Welcome', module)
     .add('Step 1a-4', () => (
         <Welcome1a4
             copyToClipboard={action('Post click')}
-            provePost={text('URL', '🔒ApfdMwLoV/URKn7grgcNWdMR2iWMGdHpQBk5LVGFxhul🔒')}
+            provePost={text('Prove', '🔒ApfdMwLoV/URKn7grgcNWdMR2iWMGdHpQBk5LVGFxhul🔒')}
         />
     ))
     .add('New Step 1a-4', () => (
         <Welcome1a4v2
-            provePost={text('URL', '🔒ApfdMwLoV/URKn7grgcNWdMR2iWMGdHpQBk5LVGFxhul🔒')}
+            provePost={text('Prove', '🔒ApfdMwLoV/URKn7grgcNWdMR2iWMGdHpQBk5LVGFxhul🔒')}
             requestAutoVerify={action('Auto')}
             requestManualVerify={action('Manual')}
         />

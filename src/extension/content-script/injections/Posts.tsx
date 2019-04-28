@@ -2,13 +2,13 @@ import React, { useState } from 'react'
 import { LiveSelector, MutationObserverWatcher } from '@holoflows/kit'
 import { DecryptPostUI } from '../../../components/InjectedComponents/DecryptedPost'
 import { AddToKeyStore } from '../../../components/InjectedComponents/AddToKeyStore'
-import { PeopleService, CryptoService } from '../rpc'
 import { getUsername } from './LiveSelectors'
 import { renderInShadowRoot } from '../../../utils/jss/renderInShadowRoot'
 import { usePeople } from '../../../components/DataSource/PeopleRef'
 import { useAsync } from '../../../utils/components/AsyncComponent'
 import { Person } from '../../background-script/PeopleService'
 import { deconstructPayload } from '../../../utils/type-transform/Payload'
+import Services from '../../service'
 
 const posts = new LiveSelector().querySelectorAll<HTMLDivElement>('.userContent, .userContent+*+div>div>div>div>div')
 
@@ -35,7 +35,7 @@ function PostInspector(props: PostInspectorProps) {
         const [alreadySelectedPreviously, setAlreadySelectedPreviously] = useState<Person[]>([])
         const { iv, ownersAESKeyEncrypted } = type.encryptedPost
         if (whoAmI === postBy) {
-            useAsync(() => CryptoService.getSharedListOfPost(iv), [post]).then(p =>
+            useAsync(() => Services.Crypto.getSharedListOfPost(iv), [post]).then(p =>
                 setAlreadySelectedPreviously(removeMyself(p)),
             )
         }
@@ -43,7 +43,7 @@ function PostInspector(props: PostInspectorProps) {
             <DecryptPostUI.UI
                 requestAppendDecryptor={async people => {
                     setAlreadySelectedPreviously(alreadySelectedPreviously.concat(people))
-                    return CryptoService.appendShareTarget(iv, ownersAESKeyEncrypted, iv, people)
+                    return Services.Crypto.appendShareTarget(iv, ownersAESKeyEncrypted, iv, people)
                 }}
                 alreadySelectedPreviously={alreadySelectedPreviously}
                 people={removeMyself(people)}
@@ -53,12 +53,12 @@ function PostInspector(props: PostInspectorProps) {
             />
         )
     } else if (type.provePost) {
-        PeopleService.uploadProvePostUrl(postBy, postId)
+        Services.People.uploadProvePostUrl(postBy, postId)
         return <AddToKeyStore postBy={postBy} provePost={post} />
     }
     return null
 }
-new MutationObserverWatcher(posts)
+const watcher = new MutationObserverWatcher(posts)
     .assignKeys(node => node.innerText)
     .useNodeForeach((node, key, realNode) => {
         // Get author
@@ -66,7 +66,7 @@ new MutationObserverWatcher(posts)
         // Save author's avatar
         try {
             const avatar = node.current.parentElement!.querySelector('img')!
-            PeopleService.storeAvatar(postBy, avatar.getAttribute('aria-label')!, avatar.src)
+            Services.People.storeAvatar(postBy, avatar.getAttribute('aria-label')!, avatar.src)
         } catch {}
         // Get post id
         let postId = ''
@@ -130,3 +130,4 @@ new MutationObserverWatcher(posts)
         )
     })
     .startWatch()
+watcher.omitWarningForRepeatedKeys = true

@@ -2,12 +2,12 @@ import React, { useCallback } from 'react'
 import AsyncComponent from '../../utils/components/AsyncComponent'
 import { AdditionalContent } from './AdditionalPostContent'
 import { FullWidth } from '../../utils/components/Flex'
-import { CryptoService } from '../../extension/content-script/rpc'
 import { useShareMenu } from './SelectPeopleDialog'
 import { Person } from '../../extension/background-script/PeopleService'
 import Link from '@material-ui/core/Link'
 import { withStylesTyped } from '../../utils/theme'
 import { sleep } from '../../utils/utils'
+import Services from '../../extension/service'
 
 interface DecryptPostSuccessProps {
     data: { signatureVerifyResult: boolean; content: string }
@@ -88,7 +88,7 @@ function DecryptPost({
     )
     return (
         <AsyncComponent
-            promise={() => CryptoService.decryptFrom(encryptedText, postBy, whoAmI)}
+            promise={() => Services.Crypto.decryptFrom(encryptedText, postBy, whoAmI)}
             dependencies={[encryptedText, people, alreadySelectedPreviously]}
             awaitingComponent={DecryptPostAwaiting}
             completeComponent={props => (

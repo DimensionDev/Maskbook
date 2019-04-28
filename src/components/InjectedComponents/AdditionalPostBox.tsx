@@ -9,7 +9,6 @@ import { FlexBox } from '../../utils/components/Flex'
 import Button from '@material-ui/core/Button/Button'
 import { withStylesTyped } from '../../utils/theme'
 import { useAsync } from '../../utils/components/AsyncComponent'
-import { CryptoService, PeopleService } from '../../extension/content-script/rpc'
 import { Person } from '../../extension/background-script/PeopleService'
 import { usePeople } from '../DataSource/PeopleRef'
 import { SelectPeopleUI } from './SelectPeople'
@@ -19,6 +18,7 @@ import { myUsername, getUsername } from '../../extension/content-script/injectio
 import { useRef } from 'react'
 import { useCapturedInput } from '../../utils/hooks/useCapturedEvents'
 import { Avatar } from '../../utils/components/Avatar'
+import Services from '../../extension/service'
 
 interface Props {
     people: Person[]
@@ -102,9 +102,9 @@ export function AdditionalPostBox() {
         if (link) nickname = link.innerText
     }
     const username = getUsername()
-    useAsync(() => PeopleService.queryAvatar(username || ''), []).then(setAvatar)
+    useAsync(() => Services.People.queryAvatar(username || ''), []).then(setAvatar)
     const onRequestPost = React.useCallback(async (people, text) => {
-        const [encrypted, token] = await CryptoService.encryptTo(text, people)
+        const [encrypted, token] = await Services.Crypto.encryptTo(text, people)
         const fullPost = 'Decrypt this post with ' + encrypted
         const element = document.querySelector<HTMLDivElement>('.notranslate')!
         element.focus()
@@ -114,7 +114,7 @@ export function AdditionalPostBox() {
         document.dispatchEvent(new CustomEvent(CustomPasteEventId, { detail: fullPost }))
         navigator.clipboard.writeText(fullPost)
         // Prevent Custom Paste failed, this will cause service not available to user.
-        CryptoService.publishPostAESKey(token)
+        Services.Crypto.publishPostAESKey(token)
     }, [])
     if (!username) {
         console.error('Username not found.')

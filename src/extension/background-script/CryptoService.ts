@@ -1,7 +1,6 @@
 import { queryPersonCryptoKey, getMyPrivateKey, storeKey, generateNewKey } from '../../key-management/keystore-db'
 import * as Alpha40 from '../../crypto/crypto-alpha-40'
-import { AsyncCall, OnlyRunInContext } from '@holoflows/kit/es'
-import { CryptoName } from '../../utils/constants'
+import { OnlyRunInContext } from '@holoflows/kit/es'
 import { addPersonPublicKey } from '../../key-management/people-gun'
 import { Person, queryPerson } from './PeopleService'
 import { getMyLocalKey } from '../../key-management/local-db'
@@ -51,7 +50,7 @@ const OthersAESKeyEncryptedMap = new Map<
  * - `encrypted` is the encrypted string
  * - `token` is used to call `publishPostAESKey` before post the content
  */
-async function encryptTo(content: string, to: Person[]): Promise<[EncryptedText, OthersAESKeyEncryptedToken]> {
+export async function encryptTo(content: string, to: Person[]): Promise<[EncryptedText, OthersAESKeyEncryptedToken]> {
     if (to.length === 0) return ['', '']
     const toKey = await prepareOthersKeyForEncryption(to)
 
@@ -97,7 +96,7 @@ async function encryptTo(content: string, to: Person[]): Promise<[EncryptedText,
  * MUST call before send post, or othersAESKeyEncrypted will not be published to the internet!
  * @param token Token that returns in the encryptTo
  */
-async function publishPostAESKey(token: string) {
+export async function publishPostAESKey(token: string) {
     if (!OthersAESKeyEncryptedMap.has(token)) throw new Error('Publish AES key failed!')
     return publishPostAESKey_Service(token, OthersAESKeyEncryptedMap.get(token)!)
 }
@@ -108,7 +107,7 @@ async function publishPostAESKey(token: string) {
  * @param by Post by
  * @param whoAmI My username
  */
-async function decryptFrom(
+export async function decryptFrom(
     encrypted: string,
     by: string,
     whoAmI: string,
@@ -184,7 +183,7 @@ async function decryptFrom(
 //#endregion
 
 //#region ProvePost, create & verify
-async function getMyProveBio() {
+export async function getMyProveBio() {
     let myKey = await getMyPrivateKey()
     if (!myKey) myKey = await generateNewKey()
     const pub = await crypto.subtle.exportKey('jwk', myKey.key.publicKey!)
@@ -221,7 +220,7 @@ export async function verifyOthersProve(bio: string, othersName: string) {
  * Get already shared target of the post
  * @param postIdentifier Post identifier
  */
-async function getSharedListOfPost(postIdentifier: string): Promise<Person[]> {
+export async function getSharedListOfPost(postIdentifier: string): Promise<Person[]> {
     const post = await gun
         .get('posts')
         .get(postIdentifier)
@@ -230,7 +229,7 @@ async function getSharedListOfPost(postIdentifier: string): Promise<Person[]> {
     delete post._
     return Promise.all(Object.keys(post).map(queryPerson))
 }
-async function appendShareTarget(
+export async function appendShareTarget(
     postIdentifier: string,
     ownersAESKeyEncrypted: string,
     iv: string,
@@ -247,16 +246,3 @@ async function appendShareTarget(
     publishPostAESKey_Service(postIdentifier, othersAESKeyEncrypted)
 }
 //#endregion
-
-const Impl = {
-    encryptTo,
-    decryptFrom,
-    getMyProveBio,
-    verifyOthersProve,
-    publishPostAESKey,
-    getSharedListOfPost,
-    appendShareTarget,
-}
-Object.assign(window, { encryptService: Impl, crypto40: Alpha40 })
-export type Encrypt = typeof Impl
-AsyncCall(Impl, { key: CryptoName })

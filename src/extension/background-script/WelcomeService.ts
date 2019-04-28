@@ -1,12 +1,11 @@
-import { AsyncCall, OnlyRunInContext } from '@holoflows/kit'
+import { OnlyRunInContext } from '@holoflows/kit'
 import { CryptoKeyRecord, getMyPrivateKey, toStoreCryptoKey } from '../../key-management/keystore-db'
 import { encodeText } from '../../utils/type-transform/EncodeDecode'
-import { BackgroundName } from '../../utils/constants'
 import { getMyLocalKey } from '../../key-management/local-db'
 import { sleep } from '../../utils/utils'
 
-OnlyRunInContext('background', 'BackgroundService')
-async function backupMyKeyPair() {
+OnlyRunInContext('background', 'WelcomeService')
+export async function backupMyKeyPair() {
     // Don't make the download pop so fast
     await sleep(1000)
     const key = await getMyPrivateKey()
@@ -29,13 +28,3 @@ async function backupMyKeyPair() {
         saveAs: true,
     })
 }
-async function logInBackground(...args: any[]) {
-    console.log(...args)
-}
-const Impl = {
-    backupMyKeyPair,
-    logInBackground,
-}
-Object.assign(window, { backgroundService: Impl })
-export type Background = typeof Impl
-AsyncCall(Impl, { key: BackgroundName })

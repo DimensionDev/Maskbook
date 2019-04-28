@@ -7,15 +7,17 @@ Object.assign(window, {
     __MUI_USE_NEXT_TYPOGRAPHY_VARIANTS__: true,
 })
 
-{
+if (!('__reduceLog__' in window)) {
     const banList = ['secp256k1', 'not intended to share', 'DOMException']
     const trap = {
         apply(target: any, _: any, args: any[]) {
             const msg = args.join('')
             for (const word of banList) if (msg.indexOf(word) !== -1) return
-            return target(...args)
+            target(...args)
+            console.debug(new Error().stack)
         },
     }
     console.log = new Proxy(console.log, trap)
     console.error = new Proxy(console.error, trap)
+    Object.assign(window, { __reduceLog__: true })
 }
