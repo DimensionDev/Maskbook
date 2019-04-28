@@ -72,11 +72,15 @@ const watcher = new MutationObserverWatcher(posts)
         let postId = ''
         try {
             const postIdInHref = location.href.match(
-                /plugins.+(perma.+story_fbid%3D|posts%2F)((?<id>\d+)%26).+(&width=500)?/,
+                // Firefox doesnot support it.
+                // /plugins.+(perma.+story_fbid%3D|posts%2F)((?<id>\d+)%26).+(&width=500)?/,
+                /plugins.+(perma.+story_fbid%3D|posts%2F)((\d+)%26).+(&width=500)?/,
             )
             postId =
                 // In single url
-                (postIdInHref && postIdInHref.groups!.id) ||
+                // Firefox doesnot support it.
+                // (postIdInHref && postIdInHref.groups!.id) ||
+                (postIdInHref && postIdInHref[3]) ||
                 // In timeline
                 node.current.parentElement!.querySelector('div[id^=feed]')!.id.split(';')[2]
         } catch {}

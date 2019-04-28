@@ -1,7 +1,5 @@
 export function backgroundSetup() {
-    require('webcrypto-liner/dist/webcrypto-liner.shim')
     Object.assign(window, {
-        browser: require('webextension-polyfill'),
         elliptic: require('elliptic'),
     })
     if (!('__reduceLog__' in window)) {
@@ -21,8 +19,6 @@ export function backgroundSetup() {
 }
 export function uiSetup() {
     Object.assign(window, {
-        browser: require('webextension-polyfill'),
-        React: require('react'),
         // See: https://material-ui.com/style/typography/#migration-to-typography-v2
         __MUI_USE_NEXT_TYPOGRAPHY_VARIANTS__: true,
     })

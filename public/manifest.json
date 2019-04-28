@@ -6,32 +6,32 @@
     "content_scripts": [
         {
             "matches": ["https://www.facebook.com/*"],
-            "js": ["/static/js/contentscript.js"],
+            "js": ["polyfill/adoptedStyleSheets.min.js", "polyfill/browser-polyfill.min.js", "js/contentscript.js"],
             "run_at": "document_idle",
             "all_frames": true
         },
         {
             "matches": ["https://www.facebook.com/*"],
-            "js": ["/static/js/injectedscript.js"],
+            "js": ["polyfill/browser-polyfill.min.js", "js/injectedscript.js"],
             "run_at": "document_start",
             "all_frames": true
         }
     ],
     "web_accessible_resources": ["*.css", "*.js", "*.jpg", "*.png"],
-    "permissions": ["https://*.facebook.com/*", "storage", "downloads", "background"],
+    "permissions": ["https://www.facebook.com/*", "storage", "downloads", "background"],
     "background": {
-        "scripts": ["/static/js/backgroundservice.js"]
+        "scripts": ["polyfill/webcrypto-liner.shim.js", "polyfill/browser-polyfill.min.js", "js/backgroundservice.js"]
     },
     "options_ui": {
-        "page": "/index.html",
+        "page": "index.html",
         "open_in_tab": true,
         "chrome_style": true
     },
     "icons": {
-        "16": "/16x16.png",
-        "48": "/48x48.png",
-        "128": "/128x128.png",
-        "256": "/256x256.png"
+        "16": "16x16.png",
+        "48": "48x48.png",
+        "128": "128x128.png",
+        "256": "256x256.png"
     },
     "homepage_url": "https://maskbook.io",
     "description": "Encrypt your posts & chats on You-Know-Where. Allow only your friends to decrypt."

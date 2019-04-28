@@ -11,8 +11,8 @@ module.exports = function override(/** @type{import("webpack").Configuration} */
         backgroundservice: path.join(__dirname, './src/background-service.ts'),
         injectedscript: path.join(__dirname, './src/extension/injected-script/index.ts'),
     }
-    config.output.filename = 'static/js/[name].js'
-    config.output.chunkFilename = 'static/js/[name].chunk.js'
+    config.output.filename = 'js/[name].js'
+    config.output.chunkFilename = 'js/[name].chunk.js'
 
     // No split
     config.optimization.runtimeChunk = false
@@ -25,13 +25,20 @@ module.exports = function override(/** @type{import("webpack").Configuration} */
 
     config.plugins.push(
         new (require('write-file-webpack-plugin'))({
-            test: /(static\/.*|.+\.png|index\.html|manifest\.json)/,
+            test: /(shim|polyfill|js\/.*|.+\.png|index\.html|manifest\.json)/,
         }),
     )
     // Write files to /public
+    const polyfills = [
+        'node_modules/construct-style-sheets-polyfill/adoptedStyleSheets.min.js',
+        'node_modules/webextension-polyfill/dist/browser-polyfill.min.js',
+        'node_modules/webextension-polyfill/dist/browser-polyfill.min.js.map',
+        'node_modules/webcrypto-liner/dist/webcrypto-liner.shim.js',
+    ].map(x => ({ from: x, to: path.join(__dirname, './public/polyfill/') }))
     config.plugins.push(
         new (require('copy-webpack-plugin'))(
             [
+                ...polyfills,
                 {
                     from: path.join(__dirname, './public'),
                     to: path.join(__dirname, './dist'),

@@ -32,8 +32,8 @@ async function register<T extends Service>(service: () => Promise<T>, name: keyo
         const loaded = await service()
         Object.assign(Services, { [name]: loaded })
         AsyncCall(loaded, { key: name })
-    } else if (GetContext() === 'content' || location.hostname === 'localhost') {
-        console.log(`Service ${name} registered in Content script`)
+    } else if (GetContext() === 'content' || GetContext() === 'options' || location.hostname === 'localhost') {
+        console.log(`Service ${name} registered in Content script & Options page`)
         Object.assign(Services, { [name]: AsyncCall({}, { key: name }) })
         if (location.hostname === 'localhost') {
             // ? -> UI developing
