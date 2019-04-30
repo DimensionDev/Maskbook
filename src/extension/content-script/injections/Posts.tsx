@@ -58,7 +58,7 @@ function PostInspector(props: PostInspectorProps) {
     }
     return null
 }
-const watcher = new MutationObserverWatcher(posts)
+new MutationObserverWatcher(posts)
     .assignKeys(node => node.innerText)
     .useNodeForeach((node, key, realNode) => {
         // Get author
@@ -133,5 +133,6 @@ const watcher = new MutationObserverWatcher(posts)
             node.afterShadow,
         )
     })
+    .setDomProxyOption({ afterShadowRootInit: { mode: 'closed' } })
+    .omitWarningForRepeatedKeys()
     .startWatch()
-watcher.omitWarningForRepeatedKeys = true

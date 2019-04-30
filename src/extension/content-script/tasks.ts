@@ -1,5 +1,4 @@
-import { AutomatedTabTask, LiveSelector } from '@holoflows/kit'
-import { sleep } from '../../utils/utils'
+import { AutomatedTabTask, LiveSelector, MutationObserverWatcher } from '@holoflows/kit'
 export default AutomatedTabTask({
     /**
      * Access: https://www.facebook.com/${username}/posts/${postId}
@@ -7,8 +6,8 @@ export default AutomatedTabTask({
      */
     async getPostContent() {
         const post = new LiveSelector().querySelector<HTMLParagraphElement>('#contentArea p')
-        while (!post.evaluateOnce()[0]) await sleep(200)
-        return post.evaluateOnce()[0].innerText
+        const [data] = await new MutationObserverWatcher(post).once(node => node.innerText)
+        return data
     },
     /**
      * Access: https://www.facebook.com/profile.php?id=${userId}
@@ -16,7 +15,7 @@ export default AutomatedTabTask({
      */
     async getBioContent() {
         const bio = new LiveSelector().querySelector<HTMLDivElement>('#profile_timeline_intro_card')
-        while (!bio.evaluateOnce()[0]) await sleep(200)
-        return bio.evaluateOnce()[0].innerText
+        const [data] = await new MutationObserverWatcher(bio).once(node => node.innerText)
+        return data
     },
 })!

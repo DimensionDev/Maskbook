@@ -37,7 +37,7 @@ const setWelcomeDisplay: setWelcomeDisplay = newState => {
     current(newState)
 }
 {
-    const body = DomProxy()
+    const body = DomProxy<HTMLElement>({ afterShadowRootInit: { mode: 'closed' } })
     body.realCurrent = document.body
     const WelcomePortal = React.forwardRef(_WelcomePortal)
     renderInShadowRoot(<WelcomePortal ref={setWelcomeDisplayRef} />, body.afterShadow)
@@ -221,9 +221,9 @@ function _WelcomePortal(props: {}, ref: React.Ref<setWelcomeDisplay>) {
 //#region Banner
 {
     getStorage().then(({ init, userDismissedWelcomeAtVersion }) => {
-        const to = new MutationObserverWatcher(
-            new LiveSelector().querySelector<HTMLDivElement>('#pagelet_composer'),
-        ).startWatch()
+        const to = new MutationObserverWatcher(new LiveSelector().querySelector<HTMLDivElement>('#pagelet_composer'))
+            .setDomProxyOption({ beforeShadowRootInit: { mode: 'closed' } })
+            .startWatch()
         if (userDismissedWelcomeAtVersion && userDismissedWelcomeAtVersion >= LATEST_VERSION) return
         if (init && init >= LATEST_VERSION) return
         const unmount = renderInShadowRoot(
