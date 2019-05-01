@@ -40,9 +40,6 @@ jobs:
             - checkout
             - restore_cache:
                   keys:
-                      - tsbuild-cache
-            - restore_cache:
-                  keys:
                       - v1-maskbook-{{ .Branch }}-{{ checksum "yarn.lock" }}
                       - v1-maskbook-{{ .Branch }}-
                       - v1-maskbook-
@@ -55,17 +52,20 @@ jobs:
                       sudo apt-get install zip
                       cd build
                       zip -r ../Maskbook.zip ./*
+                      cd ..
+                      node ./.circleci/remove-dev-key.js
+                      cd build
+                      zip -r ../MaskbookChromeStore.zip ./
             - save_cache:
                   paths:
                       - node_modules
                   key: v1-maskbook-{{ .Branch }}-{{ checksum "yarn.lock" }}
-            - save_cache:
-                  paths:
-                      - .tscache/
-                  key: tsbuild-cache
             - store_artifacts:
                   path: Maskbook.zip
                   destination: /Maskbook.zip
+            - store_artifacts:
+                  path: MaskbookChromeStore.zip
+                  destination: /MaskbookChromeStore.zip
             - persist_to_workspace:
                   root: ~/repo/
                   paths:
