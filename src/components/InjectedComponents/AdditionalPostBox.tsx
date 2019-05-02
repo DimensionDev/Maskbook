@@ -112,8 +112,14 @@ export function AdditionalPostBox() {
         selectElementContents(element)
         await sleep(100)
         document.dispatchEvent(new CustomEvent(CustomPasteEventId, { detail: fullPost }))
-        navigator.clipboard.writeText(fullPost)
         // Prevent Custom Paste failed, this will cause service not available to user.
+        if (!element.innerText.match('🎼')) {
+            console.warn('Text not pasted to the text area')
+            navigator.clipboard.writeText(fullPost)
+            alert(
+                'Encrypted text has been copied into the clipboard!\nHowever, you need to paste it to the post box by yourself.',
+            )
+        }
         Services.Crypto.publishPostAESKey(token)
     }, [])
     if (!username) {
