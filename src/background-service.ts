@@ -3,13 +3,16 @@ import { backgroundSetup } from './setup'
 backgroundSetup()
 
 browser.webNavigation.onCommitted.addListener(
-    arg =>
-        browser.tabs
-            .executeScript(arg.tabId, {
+    async arg => {
+        try {
+            await browser.tabs.executeScript(arg.tabId, {
                 frameId: arg.frameId,
                 runAt: 'document_start',
-                file: browser.runtime.getURL('js/injectedscript.js'),
+                file: 'js/injectedscript.js',
             })
-            .then(console.log, console.log),
-    { url: [{ hostSuffix: 'facebook.com' }] },
+        } catch (e) {
+            console.error('Inject error', e, arg, browser.runtime.getURL('js/injectedscript.js'))
+        }
+    },
+    { url: [{ hostEquals: 'www.facebook.com' }] },
 )
