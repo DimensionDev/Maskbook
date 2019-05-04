@@ -8,6 +8,7 @@ import Welcome1a3 from '../components/Welcomes/1a3'
 import Welcome1a4 from '../components/Welcomes/1a4'
 import Welcome1a4v2 from '../components/Welcomes/1a4.v2'
 import Welcome1b1 from '../components/Welcomes/1b1'
+import Welcome2 from '../components/Welcomes/2'
 import { linkTo as to, linkTo } from '@storybook/addon-links'
 import { text, boolean } from '@storybook/addon-knobs'
 import { action } from '@storybook/addon-actions'
@@ -58,7 +59,7 @@ storiesOf('Welcome', module)
     .add('Step 0', () => (
         <Welcome0 close={action('Close')} create={to('Welcome', 'Step 1a-1')} restore={to('Welcome', 'Step 1b-1')} />
     ))
-    .add('Step 1a-1', () => <Welcome1a1 next={to('Welcome', 'Step 1a-2')} />)
+    .add('Step 1a-1 (Unused)', () => <Welcome1a1 next={to('Welcome', 'Step 1a-2')} />)
     .add('Step 1a-2', () => <Welcome1a2 next={to('Welcome', 'Step 1a-3')} />)
     .add('Step 1a-3', () => <Welcome1a3 next={to('Welcome', 'Step 1a-4')} />)
     .add('Step 1a-4', () => (
@@ -75,6 +76,7 @@ storiesOf('Welcome', module)
         />
     ))
     .add('Step 1b-1', () => <Welcome1b1 back={linkTo('Welcome', 'Step 0')} restore={action('Restore with')} />)
+    .add('Step 2', () => <Welcome2 />)
 
 storiesOf('Dashboard (unused)', module)
     .add('Identity Component (unused)', () => <Identity person={demoPeople[0]} onClick={action('Click')} />)

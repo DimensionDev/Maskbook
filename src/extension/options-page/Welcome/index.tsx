@@ -1,15 +1,12 @@
 import React from 'react'
 import Welcome0 from '../../../components/Welcomes/0'
-import Welcome1a1 from '../../../components/Welcomes/1a1'
 import Welcome1a2 from '../../../components/Welcomes/1a2'
 import Welcome1a3 from '../../../components/Welcomes/1a3'
-import Welcome1a4 from '../../../components/Welcomes/1a4'
 import Welcome1a4v2 from '../../../components/Welcomes/1a4.v2'
 import Welcome1b1 from '../../../components/Welcomes/1b1'
+import Welcome2 from '../../../components/Welcomes/2'
 import Dialog from '@material-ui/core/Dialog'
-import { sleep } from '../../../utils/utils'
 import { useAsync } from '../../../utils/components/AsyncComponent'
-import { myUsername } from '../../content-script/injections/LiveSelectors'
 import Services from '../../service'
 
 //#region Welcome
@@ -17,22 +14,18 @@ enum WelcomeState {
     // Step 0
     Start,
     // Step 1
-    WaitLogin,
     Intro,
     BackupKey,
     ProvePost,
-    ProvePostV2,
-    Restore1,
+    RestoreKeypair,
     // End
+    End,
 }
 
-async function loginWatcher() {
-    while (!isLogin()) await sleep(500)
-}
-function isLogin() {
-    return !document.querySelector('.login_form_label_field')
-}
 const WelcomeActions = {
+    backupMyKeyPair() {
+        return Services.Welcome.backupMyKeyPair()
+    },
     restoreFromFile(file: File) {
         const fr = new FileReader()
         fr.readAsText(file)
@@ -50,103 +43,81 @@ const WelcomeActions = {
     manualVerifyBio(prove: string) {
         throw new Error('Not implemented')
     },
+    onFinish() {
+        throw new Error('Not implemented')
+    },
 }
 interface Welcome {
     // Display
+    provePost: string
     currentStep: WelcomeState
     onStepChange(state: WelcomeState): void
     // Actions
-    waitForLogin(): void
     onFinish(reason: 'done' | 'quit'): void
+    sideEffects: typeof WelcomeActions
 }
 function Welcome(props: Welcome) {
-    const { currentStep, onFinish, onStepChange, waitForLogin } = props
-
-    const [provePost, setProvePost] = React.useState('')
-    useAsync(() => Services.Crypto.getMyProveBio(), [provePost.length !== 0]).then(setProvePost)
-
+    const { currentStep, onFinish, onStepChange, provePost, sideEffects } = props
     switch (currentStep) {
         case WelcomeState.Start:
             return (
                 <Welcome0
-                    create={() => onStepChange(isLogin() ? WelcomeState.Intro : WelcomeState.WaitLogin)}
-                    restore={() => onStepChange(WelcomeState.Restore1)}
+                    create={() => onStepChange(WelcomeState.Intro)}
+                    restore={() => onStepChange(WelcomeState.RestoreKeypair)}
                     close={() => onFinish('quit')}
-                />
-            )
-        case WelcomeState.WaitLogin:
-            return (
-                <Welcome1a1
-                    next={() => {
-                        waitForLogin()
-                        onStepChange(WelcomeState.Intro)
-                    }}
                 />
             )
         case WelcomeState.Intro:
             return <Welcome1a2 next={() => onStepChange(WelcomeState.BackupKey)} />
         case WelcomeState.BackupKey:
-            Services.Welcome.backupMyKeyPair()
-            return (
-                <Welcome1a3
-                    next={() => {
-                        if ('next' in window) onStepChange(WelcomeState.ProvePostV2)
-                        else onStepChange(WelcomeState.ProvePost)
-                    }}
-                />
-            )
+            sideEffects.backupMyKeyPair()
+            return <Welcome1a3 next={() => onStepChange(WelcomeState.ProvePost)} />
         case WelcomeState.ProvePost:
-            return (
-                <Welcome1a4
-                    provePost={provePost}
-                    copyToClipboard={(text, goToBio) => {
-                        navigator.clipboard.writeText(text)
-                        if (goToBio) {
-                            const a = myUsername.evaluateOnce()[0]
-                            if (a) location.href = a.href
-                        }
-                        onFinish('done')
-                    }}
-                />
-            )
-        case WelcomeState.ProvePostV2:
             return (
                 <Welcome1a4v2
                     provePost={provePost}
-                    requestManualVerify={() => WelcomeActions.manualVerifyBio(provePost)}
-                    requestAutoVerify={type =>
-                        (type === 'bio' ? WelcomeActions.autoVerifyBio : WelcomeActions.autoVerifyPost)(provePost)
-                    }
+                    requestManualVerify={() => {
+                        sideEffects.manualVerifyBio(provePost)
+                        onStepChange(WelcomeState.End)
+                    }}
+                    requestAutoVerify={type => {
+                        if (type === 'bio') sideEffects.autoVerifyBio(provePost)
+                        else if (type === 'post') sideEffects.autoVerifyPost(provePost)
+                        onStepChange(WelcomeState.End)
+                    }}
                 />
             )
-        case WelcomeState.Restore1:
+        case WelcomeState.RestoreKeypair:
             return (
                 <Welcome1b1
                     back={() => onStepChange(WelcomeState.Start)}
                     restore={url => {
-                        onFinish('done')
-                        WelcomeActions.restoreFromFile(url)
+                        sideEffects.restoreFromFile(url)
+                        onStepChange(WelcomeState.End)
                     }}
                 />
             )
+        case WelcomeState.End:
+            return <Welcome2 />
     }
 }
-interface Storage {
-    init: WelcomeVersion
-    userDismissedWelcomeAtVersion: WelcomeVersion
-}
-const enum WelcomeVersion {
-    A = 1,
-}
-const LATEST_VERSION = WelcomeVersion.A
 export default function _WelcomePortal(props: {}) {
     const [step, setStep] = React.useState(WelcomeState.Start)
+
+    const [provePost, setProvePost] = React.useState('')
+    useAsync(() => Services.Crypto.getMyProveBio(), [provePost.length !== 0]).then(setProvePost)
 
     // Only render in main page
     if (location.pathname !== '/') return null
     return (
         <Dialog open>
-            <Welcome currentStep={step} onStepChange={setStep} waitForLogin={() => {}} onFinish={() => {}} />
+            <Welcome
+                provePost={provePost}
+                currentStep={step}
+                sideEffects={WelcomeActions}
+                onStepChange={setStep}
+                onFinish={WelcomeActions.onFinish}
+            />
         </Dialog>
     )
 }
