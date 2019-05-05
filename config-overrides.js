@@ -1,9 +1,9 @@
 const path = require('path')
 
-process.env.NODE_ENV = 'development'
-const env = process.env.NODE_ENV
-process.env.GENERATE_SOURCEMAP = (env === 'development') + ''
+process.env.BROWSER = 'none'
 module.exports = function override(/** @type{import("webpack").Configuration} */ config, env) {
+    // CSP bans eval
+    // And non-inline source-map not working
     if (env === 'development') config.devtool = 'inline-source-map'
     config.entry = {
         app: path.join(__dirname, './src/index.tsx'),
@@ -14,7 +14,7 @@ module.exports = function override(/** @type{import("webpack").Configuration} */
     config.output.filename = 'js/[name].js'
     config.output.chunkFilename = 'js/[name].chunk.js'
 
-    // No split
+    // Leads a loading failure in background service
     config.optimization.runtimeChunk = false
     config.optimization.splitChunks = undefined
 
@@ -25,7 +25,7 @@ module.exports = function override(/** @type{import("webpack").Configuration} */
 
     config.plugins.push(
         new (require('write-file-webpack-plugin'))({
-            test: /(shim|polyfill|js\/.*|.+\.png|index\.html|manifest\.json)/,
+            test: /(webp|jpg|png|shim|polyfill|js\/.*|index\.html|manifest\.json)/,
         }),
     )
     // Write files to /public
@@ -47,6 +47,7 @@ module.exports = function override(/** @type{import("webpack").Configuration} */
             { ignore: ['*.html'] },
         ),
     )
+    // Let webpack build to es2017 instead of es5
     for (const x of config.module.rules) {
         if (!x.oneOf) continue
         for (const rule of x.oneOf) {
