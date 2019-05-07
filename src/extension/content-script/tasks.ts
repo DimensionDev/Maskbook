@@ -1,7 +1,38 @@
 import { AutomatedTabTask, LiveSelector, MutationObserverWatcher } from '@holoflows/kit'
-import { sleep, dispatchCustomEvents } from '../../utils/utils'
+import { sleep, dispatchCustomEvents, selectElementContents } from '../../utils/utils'
 
 const bioCard = new LiveSelector().querySelector<HTMLDivElement>('#profile_timeline_intro_card')
+/**
+ * Access: https://www.facebook.com/
+ * @param text
+ */
+export async function pasteIntoPostBox(text: string, warningText: string) {
+    const scrolling = document.scrollingElement || document.documentElement
+    const scroll = (top => () => scrolling.scroll({ top }))(scrolling.scrollTop)
+
+    const notActivated = new LiveSelector().querySelector(`[role="region"]`).querySelector('textarea')
+    const activated = new LiveSelector().querySelector<HTMLDivElement>('.notranslate')
+    // If page is just loaded
+    if (!activated.evaluateOnce()[0]) {
+        const [dom] = await new MutationObserverWatcher(notActivated).once()
+        dom.click()
+        await sleep(1500)
+        await new MutationObserverWatcher(activated.clone().unstable_closest(`[role="dialog"]`)).once()
+    }
+    const [element] = activated.evaluateOnce()
+    element.focus()
+    await sleep(100)
+    dispatchCustomEvents('paste', text)
+    await sleep(400)
+    // Prevent Custom Paste failed, this will cause service not available to user.
+    if (element.innerText.indexOf(text) === -1) {
+        console.warn('Text not pasted to the text area')
+        navigator.clipboard.writeText(text)
+        alert(warningText)
+    }
+
+    scroll()
+}
 export default AutomatedTabTask(
     {
         /**
@@ -25,7 +56,7 @@ export default AutomatedTabTask(
          * Access: https://www.facebook.com/profile.php?id=${userId}
          * Or: https://www.facebook.com/${username}?fref=pymk
          */
-        async verifyBio(text: string) {
+        async pasteIntoBio(text: string) {
             const [bioEditButton] = await new MutationObserverWatcher(
                 bioCard.clone().querySelector<HTMLAnchorElement>('[data-tooltip-content][href="#"]'),
             ).once()
@@ -37,6 +68,7 @@ export default AutomatedTabTask(
             input.focus()
             dispatchCustomEvents('input', input.value + text)
         },
+        pasteIntoPostBox,
     },
     { memorable: true },
 )!

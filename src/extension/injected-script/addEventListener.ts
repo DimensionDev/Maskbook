@@ -12,13 +12,15 @@ export interface CustomEvents {
         return key in store
     }
 
-    function getEvent<T extends Event>(x: T) {
+    function getEvent<T extends Event>(x: T, mocks: Partial<T> = {}) {
         const mockTable = {
             target: document.activeElement,
             srcElement: document.activeElement,
             // Since it is bubbled to the document.
             currentTarget: document,
+            // ! Why?
             _inherits_from_prototype: true,
+            ...mocks,
         }
         return new Proxy(x, {
             get(target: T, key: keyof T) {
@@ -32,7 +34,8 @@ export interface CustomEvents {
             const transfer = new DataTransfer()
             transfer.setData('text/plain', text)
             const e = new ClipboardEvent('paste', { clipboardData: transfer })
-            return getEvent(e)
+            // ! Why?
+            return getEvent(e, { defaultPrevented: false, preventDefault() {} })
         },
         input(text) {
             // Cause react hooks the input.value getter & setter

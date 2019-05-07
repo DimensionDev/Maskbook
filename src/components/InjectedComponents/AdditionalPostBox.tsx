@@ -12,12 +12,12 @@ import { useAsync } from '../../utils/components/AsyncComponent'
 import { Person } from '../../extension/background-script/PeopleService'
 import { usePeople } from '../DataSource/PeopleRef'
 import { SelectPeopleUI } from './SelectPeople'
-import { sleep, dispatchCustomEvents, selectElementContents } from '../../utils/utils'
 import { myUsername, getUsername } from '../../extension/content-script/injections/LiveSelectors'
 import { useRef } from 'react'
 import { useCapturedInput } from '../../utils/hooks/useCapturedEvents'
 import { Avatar } from '../../utils/components/Avatar'
 import Services from '../../extension/service'
+import { pasteIntoPostBox } from '../../extension/content-script/tasks'
 
 interface Props {
     people: Person[]
@@ -98,20 +98,10 @@ export function AdditionalPostBox() {
     const onRequestPost = React.useCallback(async (people, text) => {
         const [encrypted, token] = await Services.Crypto.encryptTo(text, people)
         const fullPost = 'Decrypt this post with ' + encrypted
-        const element = document.querySelector<HTMLDivElement>('.notranslate')!
-        element.focus()
-        await sleep(100)
-        selectElementContents(element)
-        await sleep(100)
-        dispatchCustomEvents('paste', fullPost)
-        // Prevent Custom Paste failed, this will cause service not available to user.
-        if (!element.innerText.match('🎼')) {
-            console.warn('Text not pasted to the text area')
-            navigator.clipboard.writeText(fullPost)
-            alert(
-                'Encrypted text has been copied into the clipboard!\nHowever, you need to paste it to the post box by yourself.',
-            )
-        }
+        pasteIntoPostBox(
+            fullPost,
+            'Encrypted text has been copied into the clipboard!\nHowever, you need to paste it to the post box by yourself.',
+        )
         Services.Crypto.publishPostAESKey(token)
     }, [])
     if (!username) {
