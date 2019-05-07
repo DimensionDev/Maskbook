@@ -1,6 +1,6 @@
 import { uiSetup } from './setup'
 import React from 'react'
-import { HashRouter as Router, Route } from 'react-router-dom'
+import { HashRouter as Router, Route, Link } from 'react-router-dom'
 import ReactDOM from 'react-dom'
 
 import Welcome from './extension/options-page/Welcome'
@@ -12,7 +12,7 @@ function App() {
     return (
         <MuiThemeProvider theme={MaskbookLightTheme}>
             <Router>
-                <Route exact path="/" component={() => <></>} />
+                <Route exact path="/" component={() => <Link to="/welcome">-> Welcome</Link>} />
                 <Route path="/welcome" component={Welcome} />
             </Router>
         </MuiThemeProvider>

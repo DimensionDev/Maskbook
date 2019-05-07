@@ -12,8 +12,7 @@ import { useAsync } from '../../utils/components/AsyncComponent'
 import { Person } from '../../extension/background-script/PeopleService'
 import { usePeople } from '../DataSource/PeopleRef'
 import { SelectPeopleUI } from './SelectPeople'
-import { CustomPasteEventId } from '../../utils/constants'
-import { sleep } from '../../utils/utils'
+import { sleep, dispatchCustomEvents, selectElementContents } from '../../utils/utils'
 import { myUsername, getUsername } from '../../extension/content-script/injections/LiveSelectors'
 import { useRef } from 'react'
 import { useCapturedInput } from '../../utils/hooks/useCapturedEvents'
@@ -87,13 +86,6 @@ export const AdditionalPostBoxUI = withStylesTyped({
     )
 })
 
-function selectElementContents(el: Node) {
-    const range = document.createRange()
-    range.selectNodeContents(el)
-    const sel = window.getSelection()!
-    sel.removeAllRanges()
-    sel.addRange(range)
-}
 export function AdditionalPostBox() {
     const [avatar, setAvatar] = React.useState<string | undefined>('')
     let nickname
@@ -111,7 +103,7 @@ export function AdditionalPostBox() {
         await sleep(100)
         selectElementContents(element)
         await sleep(100)
-        document.dispatchEvent(new CustomEvent(CustomPasteEventId, { detail: fullPost }))
+        dispatchCustomEvents('paste', fullPost)
         // Prevent Custom Paste failed, this will cause service not available to user.
         if (!element.innerText.match('🎼')) {
             console.warn('Text not pasted to the text area')

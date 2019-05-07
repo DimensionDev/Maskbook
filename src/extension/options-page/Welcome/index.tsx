@@ -107,8 +107,6 @@ export default function _WelcomePortal(props: {}) {
     const [provePost, setProvePost] = React.useState('')
     useAsync(() => Services.Crypto.getMyProveBio(), [provePost.length !== 0]).then(setProvePost)
 
-    // Only render in main page
-    if (location.pathname !== '/') return null
     return (
         <Dialog open>
             <Welcome

@@ -1,37 +1,61 @@
-import { CustomPasteEventId } from '../../utils/constants'
+import { CustomEventId } from '../../utils/constants'
+export interface CustomEvents {
+    paste: [string]
+    input: [string]
+}
 {
     const store: Partial<Record<keyof DocumentEventMap, Set<(event: Event) => void>>> = {}
-    function hijack(key: keyof DocumentEventMap) {
-        store[key] = new Set()
+    function hijack(key: string) {
+        store[key as keyof DocumentEventMap] = new Set()
     }
     function isEnabled(key: any): key is keyof typeof store {
         return key in store
     }
 
-    document.addEventListener(CustomPasteEventId, e => {
-        const ev = e as CustomEvent<string>
-        const transfer = new DataTransfer()
-        transfer.setData('text/plain', ev.detail)
-        const event = {
-            clipboardData: transfer,
-            defaultPrevented: false,
-            preventDefault: () => {},
+    function getEvent<T extends Event>(x: T) {
+        const mockTable = {
             target: document.activeElement,
-            // ! Magic. Why?
+            srcElement: document.activeElement,
+            // Since it is bubbled to the document.
+            currentTarget: document,
             _inherits_from_prototype: true,
         }
-        for (const f of store.paste || []) {
+        return new Proxy(x, {
+            get(target: T, key: keyof T) {
+                return (mockTable as any)[key] || target[key]
+            },
+        })
+    }
+
+    const hacks: { [key in keyof CustomEvents & keyof DocumentEventMap]: (...params: CustomEvents[key]) => Event } = {
+        paste(text) {
+            const transfer = new DataTransfer()
+            transfer.setData('text/plain', text)
+            const e = new ClipboardEvent('paste', { clipboardData: transfer })
+            return getEvent(e)
+        },
+        input(text) {
+            // Cause react hooks the input.value getter & setter
+            const proto: HTMLInputElement | HTMLTextAreaElement = (document.activeElement!.constructor as any).prototype
+            Object.getOwnPropertyDescriptor(proto, 'value')!.set!.call(document.activeElement, text)
+            return getEvent(new (window as any).InputEvent('input', { inputType: 'insertText', data: text }))
+        },
+    }
+    ;(Object.keys(hacks) as (keyof DocumentEventMap)[]).concat(['keyup', 'input']).forEach(hijack)
+    const invokeCustomEvent: EventListenerOrEventListenerObject = e => {
+        const ev = e as CustomEvent<[keyof CustomEvents, CustomEvents[keyof CustomEvents]]>
+        const [eventName, param] = ev.detail
+        for (const f of store[eventName] || []) {
             try {
-                f(event as any)
+                const hack = hacks[eventName]
+                if (hack) f((hack as any)(...param))
+                else f(param as any)
             } catch (e) {
                 console.error(e)
             }
         }
-    })
-
-    hijack('paste')
-    hijack('click')
-
+    }
+    document.addEventListener(CustomEventId, invokeCustomEvent)
     document.addEventListener = new Proxy(document.addEventListener, {
         apply(target, thisRef, [event, callback, ...args]) {
             if (isEnabled(event)) store[event]!.add(callback)
