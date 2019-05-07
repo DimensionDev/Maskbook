@@ -32,6 +32,7 @@ const Option = withStylesTyped(theme => ({
     <div className={classNames(classes.root, { [classes.activated]: activated })} children={children} />
 ))
 interface Props {
+    bioDisabled: boolean
     type: 'bio' | 'post'
     setType(type: Props['type']): void
 }
@@ -52,8 +53,9 @@ export default withStylesTyped(theme =>
         },
         checked: {},
         title: { fontWeight: 'bold', '& + *': { opacity: 0.6 } },
+        red: { color: 'red' },
     }),
-)<Props>(function Auto({ classes, type, setType }) {
+)<Props>(function Auto({ classes, type, setType, bioDisabled }) {
     return (
         <div className={classes.root}>
             <FormControl component={'fieldset' as any} className={classes.root}>
@@ -63,6 +65,7 @@ export default withStylesTyped(theme =>
                     value={type}
                     onChange={(e, v) => setType(v as any)}>
                     <FormControlLabel
+                        disabled={bioDisabled}
                         value="bio"
                         labelPlacement="top"
                         control={<Radio classes={{ root: classes.radio, checked: classes.checked }} />}

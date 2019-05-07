@@ -1,5 +1,5 @@
 import { AsyncCall } from '@holoflows/kit/es/Extension/Async-Call'
-import { GetContext } from '@holoflows/kit/es/Extension/Context'
+import { GetContext, OnlyRunInContext } from '@holoflows/kit/es/Extension/Context'
 interface Services {
     Crypto: typeof import('./background-script/CryptoService')
     People: typeof import('./background-script/PeopleService')
@@ -32,10 +32,10 @@ async function register<T extends Service>(service: () => Promise<T>, name: keyo
         const loaded = await service()
         Object.assign(Services, { [name]: loaded })
         AsyncCall(loaded, { key: name })
-    } else if (GetContext() === 'content' || GetContext() === 'options' || location.hostname === 'localhost') {
+    } else if (OnlyRunInContext(['content', 'options', 'debugging'], false)) {
         console.log(`Service ${name} registered in Content script & Options page`)
         Object.assign(Services, { [name]: AsyncCall({}, { key: name }) })
-        if (location.hostname === 'localhost') {
+        if (GetContext() === 'debugging') {
             // ? -> UI developing
             console.log(`Service ${name} mocked`)
             const mockService = new Proxy(mock || {}, {

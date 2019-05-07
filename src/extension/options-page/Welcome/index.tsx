@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import Welcome0 from '../../../components/Welcomes/0'
 import Welcome1a2 from '../../../components/Welcomes/1a2'
 import Welcome1a3 from '../../../components/Welcomes/1a3'
@@ -8,6 +8,8 @@ import Welcome2 from '../../../components/Welcomes/2'
 import Dialog from '@material-ui/core/Dialog'
 import { useAsync } from '../../../utils/components/AsyncComponent'
 import Services from '../../service'
+import tasks from '../../content-script/tasks'
+import { RouteComponentProps, withRouter } from 'react-router'
 
 //#region Welcome
 enum WelcomeState {
@@ -34,17 +36,32 @@ const WelcomeActions = {
             Services.People.storeMyKey(json)
         })
     },
-    autoVerifyBio(prove: string) {
-        throw new Error('Not implemented')
+    autoVerifyBio(userId: string, prove: string) {
+        tasks(`https://www.facebook.com/profile.php?id=${userId}`, {
+            active: true,
+            autoClose: false,
+            memorable: false,
+            pinned: false,
+            timeout: Infinity,
+        }).pasteIntoBio(prove)
     },
     autoVerifyPost(prove: string) {
-        throw new Error('Not implemented')
+        tasks(`https://www.facebook.com/`, {
+            active: true,
+            autoClose: false,
+            memorable: false,
+            pinned: false,
+            timeout: Infinity,
+        }).pasteIntoPostBox(
+            prove,
+            'Prove content has been copied into the clipboard!\nHowever, you need to paste it to the post box by yourself.',
+        )
     },
-    manualVerifyBio(prove: string) {
-        throw new Error('Not implemented')
+    manualVerifyBio(userId: string, prove: string) {
+        this.autoVerifyBio(userId, prove)
     },
     onFinish() {
-        throw new Error('Not implemented')
+        window.close()
     },
 }
 interface Welcome {
@@ -52,12 +69,13 @@ interface Welcome {
     provePost: string
     currentStep: WelcomeState
     onStepChange(state: WelcomeState): void
+    username: string
     // Actions
     onFinish(reason: 'done' | 'quit'): void
     sideEffects: typeof WelcomeActions
 }
 function Welcome(props: Welcome) {
-    const { currentStep, onFinish, onStepChange, provePost, sideEffects } = props
+    const { currentStep, onFinish, onStepChange, provePost, sideEffects, username } = props
     switch (currentStep) {
         case WelcomeState.Start:
             return (
@@ -75,13 +93,14 @@ function Welcome(props: Welcome) {
         case WelcomeState.ProvePost:
             return (
                 <Welcome1a4v2
+                    bioDisabled={!username}
                     provePost={provePost}
                     requestManualVerify={() => {
-                        sideEffects.manualVerifyBio(provePost)
+                        sideEffects.manualVerifyBio(username, provePost)
                         onStepChange(WelcomeState.End)
                     }}
                     requestAutoVerify={type => {
-                        if (type === 'bio') sideEffects.autoVerifyBio(provePost)
+                        if (type === 'bio') sideEffects.autoVerifyBio(username, provePost)
                         else if (type === 'post') sideEffects.autoVerifyPost(provePost)
                         onStepChange(WelcomeState.End)
                     }}
@@ -101,12 +120,16 @@ function Welcome(props: Welcome) {
             return <Welcome2 />
     }
 }
-export default function _WelcomePortal(props: {}) {
-    const [step, setStep] = React.useState(WelcomeState.Start)
+export default withRouter(function _WelcomePortal(props: RouteComponentProps<{ username: string }>) {
+    const [step, setStep] = useState(WelcomeState.Start)
 
-    const [provePost, setProvePost] = React.useState('')
+    const [provePost, setProvePost] = useState('')
     useAsync(() => Services.Crypto.getMyProveBio(), [provePost.length !== 0]).then(setProvePost)
 
+    const [username, setUsername] = useState('')
+    useEffect(() => {
+        setUsername(new URLSearchParams(props.location.search).get('username') || '')
+    }, [props.location.search])
     return (
         <Dialog open>
             <Welcome
@@ -115,8 +138,9 @@ export default function _WelcomePortal(props: {}) {
                 sideEffects={WelcomeActions}
                 onStepChange={setStep}
                 onFinish={WelcomeActions.onFinish}
+                username={username || ''}
             />
         </Dialog>
     )
-}
+})
 //#endregion

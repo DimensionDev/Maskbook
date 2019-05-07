@@ -9,6 +9,7 @@ import Auto from './1a4.auto'
 import Manual from './1a4.manual'
 
 interface Props {
+    bioDisabled?: boolean
     provePost: string
     requestAutoVerify(type: 'bio' | 'post'): void
     requestManualVerify(): void
@@ -24,19 +25,14 @@ export default withStylesTyped(theme =>
                 marginBottom: theme.spacing.unit * 3,
             },
         },
-        button: {
-            minWidth: 180,
-        },
-        textFieldShort: {
-            minHeight: '10em',
-        },
-        textFieldLong: {
-            minHeight: '11em',
-        },
+        button: { minWidth: 180 },
+        textFieldShort: { minHeight: '10em' },
+        textFieldLong: { minHeight: '11em' },
+        red: { color: 'red' },
     }),
-)<Props>(function Welcome({ classes, provePost, requestAutoVerify, requestManualVerify }) {
+)<Props>(function Welcome({ classes, provePost, requestAutoVerify, requestManualVerify, bioDisabled }) {
     const [actionType, setActionType] = React.useState<'auto' | 'manual'>('auto')
-    const [type, setType] = React.useState<'bio' | 'post'>('bio')
+    const [type, setType] = React.useState<'bio' | 'post'>(bioDisabled ? 'post' : 'bio')
 
     const setManual = React.useCallback(() => setActionType('manual'), [])
     const setAuto = React.useCallback(() => setActionType('auto'), [])
@@ -77,7 +73,16 @@ export default withStylesTyped(theme =>
     return (
         <Paper className={classes.paper}>
             <Typography variant="h5">Verify Account Ownership</Typography>
-            {actionType === 'auto' ? <Auto type={type} setType={setType} /> : <Manual provePost={provePost} />}
+            {actionType === 'auto' ? (
+                <Auto bioDisabled={!!bioDisabled} type={type} setType={setType} />
+            ) : (
+                <Manual provePost={provePost} />
+            )}
+            {actionType === 'auto' && bioDisabled && (
+                <span className={classes.red}>
+                    Sorry, automatically verify your account through bio is not available now.
+                </span>
+            )}
             {actionType === 'auto' ? auto : manual}
         </Paper>
     )
