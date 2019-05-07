@@ -34,19 +34,26 @@ module.exports = function override(/** @type{import("webpack").Configuration} */
         'node_modules/webextension-polyfill/dist/browser-polyfill.min.js',
         'node_modules/webextension-polyfill/dist/browser-polyfill.min.js.map',
         'node_modules/webcrypto-liner/dist/webcrypto-liner.shim.js',
-    ].map(x => ({ from: x, to: path.join(__dirname, './public/polyfill/') }))
-    config.plugins.push(
-        new (require('copy-webpack-plugin'))(
-            [
-                ...polyfills,
-                {
-                    from: path.join(__dirname, './public'),
-                    to: path.join(__dirname, './dist'),
-                },
-            ],
-            { ignore: ['*.html'] },
-        ),
-    )
+    ]
+    const public = path.join(__dirname, './public')
+    const publicPolyfill = path.join(__dirname, './public/polyfill')
+    const dist = path.join(__dirname, './dist')
+    if (env === 'development') {
+        config.plugins.push(
+            new (require('copy-webpack-plugin'))(
+                [...polyfills.map(from => ({ from, to: publicPolyfill })), { from: public, to: dist }],
+                { ignore: ['*.html'] },
+            ),
+        )
+    } else {
+        const fs = require('fs')
+        if (!fs.existsSync(publicPolyfill)) fs.mkdirSync(publicPolyfill)
+        polyfills.map(x =>
+            fs.copyFile(x, path.join(publicPolyfill, path.basename(x)), err => {
+                if (err) throw err
+            }),
+        )
+    }
     // Let webpack build to es2017 instead of es5
     for (const x of config.module.rules) {
         if (!x.oneOf) continue
