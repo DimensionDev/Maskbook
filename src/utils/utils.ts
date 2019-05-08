@@ -43,3 +43,10 @@ export function selectElementContents(el: Node) {
     sel.removeAllRanges()
     sel.addRange(range)
 }
+
+export function untilDocumentReady() {
+    if (document.readyState === 'complete') return Promise.resolve()
+    return new Promise(resolve => {
+        document.addEventListener('readystatechange', resolve, { once: true, passive: true })
+    })
+}

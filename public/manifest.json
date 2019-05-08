@@ -18,8 +18,7 @@
     },
     "options_ui": {
         "page": "index.html",
-        "open_in_tab": true,
-        "chrome_style": true
+        "open_in_tab": true
     },
     "icons": {
         "16": "16x16.png",

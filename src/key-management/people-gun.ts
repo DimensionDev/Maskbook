@@ -3,6 +3,7 @@ import { gun } from './gun'
 import tasks from '../extension/content-script/tasks'
 import { verifyOthersProve } from '../extension/background-script/CryptoService'
 import { sleep } from '../utils/utils'
+import { getProfilePageUrl, getPostUrl } from '../utils/type-transform/Username'
 
 export async function queryPersonFromGun(username: string) {
     return gun
@@ -13,22 +14,15 @@ export async function queryPersonFromGun(username: string) {
 
 export async function addPersonPublicKey(username: string): Promise<PersonCryptoKey> {
     const hasUsername = !username.match(/^\d+$/)
-    const bioUrl = hasUsername
-        ? `https://www.facebook.com/${username}?fref=pymk`
-        : `https://www.facebook.com/profile.php?id=${username}`
-    const postUrl = (postId: string) =>
-        hasUsername
-            ? `https://www.facebook.com/${username}/posts/${postId}`
-            : `https://www.facebook.com/permalink.php?story_fbid=${postId}&id=${username}`
 
     const fromBio = async () => {
-        const bio = await tasks(bioUrl).getBioContent()
+        const bio = await tasks(getProfilePageUrl(username)).getBioContent()
         if ((await verifyOthersProve(bio, username)) === null) throw new Error('Not in bio!')
     }
     const fromPost = async () => {
         const person = await queryPersonFromGun(username)
         if (!person || !person.provePostId) throw new Error('Not in gun!')
-        const post = await tasks(postUrl(person.provePostId)).getPostContent()
+        const post = await tasks(getPostUrl(username, person.provePostId)).getPostContent()
         if ((await verifyOthersProve(post, username)) === null) throw new Error('Not in prove post!')
     }
     let bioRejected = false

@@ -10,6 +10,7 @@ import { useAsync } from '../../../utils/components/AsyncComponent'
 import Services from '../../service'
 import tasks from '../../content-script/tasks'
 import { RouteComponentProps, withRouter } from 'react-router'
+import { getProfilePageUrl } from '../../../utils/type-transform/Username'
 
 //#region Welcome
 enum WelcomeState {
@@ -37,7 +38,7 @@ const WelcomeActions = {
         })
     },
     autoVerifyBio(userId: string, prove: string) {
-        tasks(`https://www.facebook.com/profile.php?id=${userId}`, {
+        tasks(getProfilePageUrl(userId), {
             active: true,
             autoClose: false,
             memorable: false,

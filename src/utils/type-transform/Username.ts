@@ -12,3 +12,19 @@ export function regularUsername(name: string) {
     }
     return null
 }
+/**
+ * Normalize post url
+ */
+export function getPostUrl(username: string, postId: string | number) {
+    if (!regularUsername(username)) throw new TypeError('Username is invalid')
+    if (parseFloat(username)) return `https://www.facebook.com/permalink.php?story_fbid=${postId}&id=${username}`
+    return `https://www.facebook.com/${username}/posts/${postId}`
+}
+/**
+ * Normalize profile url
+ */
+export function getProfilePageUrl(username: string) {
+    if (!regularUsername(username)) throw new TypeError('Username is invalid!')
+    if (parseFloat(username)) return `https://www.facebook.com/profile.php?id=${username}`
+    return `https://www.facebook.com/${username}?fref=pymk`
+}

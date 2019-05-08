@@ -1,5 +1,5 @@
 import { AutomatedTabTask, LiveSelector, MutationObserverWatcher } from '@holoflows/kit'
-import { sleep, dispatchCustomEvents, selectElementContents } from '../../utils/utils'
+import { sleep, dispatchCustomEvents, timeout, untilDocumentReady } from '../../utils/utils'
 
 const bioCard = new LiveSelector().querySelector<HTMLDivElement>('#profile_timeline_intro_card')
 /**
@@ -7,17 +7,31 @@ const bioCard = new LiveSelector().querySelector<HTMLDivElement>('#profile_timel
  * @param text
  */
 export async function pasteIntoPostBox(text: string, warningText: string) {
+    await untilDocumentReady()
     const scrolling = document.scrollingElement || document.documentElement
     const scroll = (top => () => scrolling.scroll({ top }))(scrolling.scrollTop)
 
-    const notActivated = new LiveSelector().querySelector(`[role="region"]`).querySelector('textarea')
+    const notActivated = new LiveSelector()
+        .querySelector(`[role="region"]`)
+        .querySelector<HTMLTextAreaElement | HTMLDivElement>('textarea, [aria-multiline="true"]')
     const activated = new LiveSelector().querySelector<HTMLDivElement>('.notranslate')
+    const dialog = activated.clone().unstable_closest(`[role="dialog"]`)
+    await sleep(2000)
     // If page is just loaded
     if (!activated.evaluateOnce()[0]) {
-        const [dom] = await new MutationObserverWatcher(notActivated).once()
-        dom.click()
-        await sleep(1500)
-        await new MutationObserverWatcher(activated.clone().unstable_closest(`[role="dialog"]`)).once()
+        try {
+            console.log('Awaiting to click the post box')
+            const [dom] = await timeout(new MutationObserverWatcher(notActivated).once(), 2500)
+            console.log('Non-activated post box found', dom)
+            await sleep(1500)
+            dom.click()
+            if (!dialog.evaluateOnce()[0]) throw new Error('Click not working')
+        } catch {
+            alert('Click the post box please!')
+        }
+        console.log('Awaiting dialog')
+        await new MutationObserverWatcher(dialog).once()
+        console.log('Dialog appeared')
     }
     const [element] = activated.evaluateOnce()
     element.focus()
@@ -36,8 +50,8 @@ export async function pasteIntoPostBox(text: string, warningText: string) {
 export default AutomatedTabTask(
     {
         /**
-         * Access: https://www.facebook.com/${username}/posts/${postId}
-         * Or: https://www.facebook.com/permalink.php?story_fbid=${postId}&id=${userId}
+         * Access post url
+         * Get post content
          */
         async getPostContent() {
             const post = new LiveSelector().querySelector('#contentArea').getElementsByTagName('p')
@@ -45,16 +59,16 @@ export default AutomatedTabTask(
             return data
         },
         /**
-         * Access: https://www.facebook.com/profile.php?id=${userId}
-         * Or: https://www.facebook.com/${username}?fref=pymk
+         * Access profile page
+         * Get bio content
          */
         async getBioContent() {
             const [data] = await new MutationObserverWatcher(bioCard).once(node => node.innerText)
             return data
         },
         /**
-         * Access: https://www.facebook.com/profile.php?id=${userId}
-         * Or: https://www.facebook.com/${username}?fref=pymk
+         * Access profile page
+         * Paste text into bio
          */
         async pasteIntoBio(text: string) {
             const [bioEditButton] = await new MutationObserverWatcher(
