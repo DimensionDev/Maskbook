@@ -3,7 +3,7 @@ export function backgroundSetup() {
         elliptic: require('elliptic'),
     })
     if (!('__reduceLog__' in window)) {
-        const banList = ['secp256k1', 'not intended to share', 'DOMException']
+        const banList = ['secp256k1']
         const trap = {
             apply(target: any, _: any, args: any[]) {
                 const msg = args.join('')

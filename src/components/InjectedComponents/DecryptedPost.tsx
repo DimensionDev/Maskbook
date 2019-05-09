@@ -53,14 +53,7 @@ const DecryptPostSuccess = withStylesTyped({
 
 const DecryptPostAwaiting = <AdditionalContent title="Maskbook decrypting..." />
 function DecryptPostFailed({ error }: { error: Error }) {
-    return (
-        <AdditionalContent title="Maskbook decryption failed">
-            {(e => {
-                if (e.match('DOMException')) return 'Decryption failed.'
-                return e
-            })(error && error.message)}
-        </AdditionalContent>
-    )
+    return <AdditionalContent title="Maskbook decryption failed">{error && error.message}</AdditionalContent>
 }
 
 interface DecryptPostProps {
@@ -86,20 +79,27 @@ function DecryptPost({
         },
         [requestAppendDecryptor],
     )
+    function ifError(x: any): x is { error: string } {
+        return 'error' in x
+    }
     return (
         <AsyncComponent
             promise={() => Services.Crypto.decryptFrom(encryptedText, postBy, whoAmI)}
             dependencies={[encryptedText, people, alreadySelectedPreviously]}
             awaitingComponent={DecryptPostAwaiting}
-            completeComponent={props => (
-                <DecryptPostSuccess
-                    data={props.data}
-                    alreadySelectedPreviously={alreadySelectedPreviously}
-                    displayAppendDecryptor={whoAmI === postBy && alreadySelectedPreviously.length !== people.length}
-                    requestAppendDecryptor={rAD}
-                    people={people}
-                />
-            )}
+            completeComponent={props =>
+                ifError(props.data) ? (
+                    <DecryptPostFailed error={new Error(props.data.error)} />
+                ) : (
+                    <DecryptPostSuccess
+                        data={props.data}
+                        alreadySelectedPreviously={alreadySelectedPreviously}
+                        displayAppendDecryptor={whoAmI === postBy && alreadySelectedPreviously.length !== people.length}
+                        requestAppendDecryptor={rAD}
+                        people={people}
+                    />
+                )
+            }
             failedComponent={DecryptPostFailed}
         />
     )

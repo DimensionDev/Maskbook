@@ -25,7 +25,7 @@ function removeMyself(people: Person[]): Person[] {
 function PostInspector(props: PostInspectorProps) {
     const { post, postBy, postId } = props
     const type = {
-        encryptedPost: deconstructPayload(post, false),
+        encryptedPost: deconstructPayload(post),
         provePost: post.match(/🔒(.+)🔒/)!,
     }
     if (type.encryptedPost) {

@@ -13,8 +13,6 @@ export async function queryPersonFromGun(username: string) {
 }
 
 export async function addPersonPublicKey(username: string): Promise<PersonCryptoKey> {
-    const hasUsername = !username.match(/^\d+$/)
-
     const fromBio = async () => {
         const bio = await tasks(getProfilePageUrl(username)).getBioContent()
         if ((await verifyOthersProve(bio, username)) === null) throw new Error('Not in bio!')
