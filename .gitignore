@@ -1,4 +1,6 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+.vscode/launch.json
+.vscode/tasks.json
 /.awcache
 /.tscache
 public/polyfill
