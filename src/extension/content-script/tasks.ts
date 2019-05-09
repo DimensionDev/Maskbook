@@ -11,11 +11,11 @@ export async function pasteIntoPostBox(text: string, warningText: string) {
     const scrolling = document.scrollingElement || document.documentElement
     const scroll = (top => () => scrolling.scroll({ top }))(scrolling.scrollTop)
 
+    const dialog = new LiveSelector().querySelector<HTMLDivElement>('[role=main] [role=dialog]')
     const notActivated = new LiveSelector()
         .querySelector(`[role="region"]`)
         .querySelector<HTMLTextAreaElement | HTMLDivElement>('textarea, [aria-multiline="true"]')
     const activated = new LiveSelector().querySelector<HTMLDivElement>('.notranslate')
-    const dialog = activated.clone().unstable_closest(`[role="dialog"]`)
     await sleep(2000)
     // If page is just loaded
     if (!activated.evaluateOnce()[0]) {
@@ -30,22 +30,32 @@ export async function pasteIntoPostBox(text: string, warningText: string) {
             alert('Click the post box please!')
         }
         console.log('Awaiting dialog')
-        await new MutationObserverWatcher(dialog).once()
-        console.log('Dialog appeared')
     }
-    const [element] = activated.evaluateOnce()
-    element.focus()
-    await sleep(100)
-    dispatchCustomEvents('paste', text)
-    await sleep(400)
-    // Prevent Custom Paste failed, this will cause service not available to user.
-    if (element.innerText.indexOf(text) === -1) {
+
+    try {
+        await timeout(new MutationObserverWatcher(dialog).once(), 4000)
+        console.log('Dialog appeared')
+        const [element] = activated.evaluateOnce()
+        element.focus()
+        await sleep(100)
+        dispatchCustomEvents('paste', text)
+        await sleep(400)
+
+        // Prevent Custom Paste failed, this will cause service not available to user.
+        if (element.innerText.indexOf(text) === -1) {
+            copyFailed()
+        }
+    } catch {
+        copyFailed()
+    }
+
+    scroll()
+
+    function copyFailed() {
         console.warn('Text not pasted to the text area')
         navigator.clipboard.writeText(text)
         alert(warningText)
     }
-
-    scroll()
 }
 export default AutomatedTabTask(
     {
@@ -71,16 +81,36 @@ export default AutomatedTabTask(
          * Paste text into bio
          */
         async pasteIntoBio(text: string) {
-            const [bioEditButton] = await new MutationObserverWatcher(
-                bioCard.clone().querySelector<HTMLAnchorElement>('[data-tooltip-content][href="#"]'),
-            ).once()
-            await sleep(200)
-            bioEditButton.click()
+            await sleep(1000)
+            try {
+                const pencil = new MutationObserverWatcher(
+                    bioCard.clone().querySelector<HTMLAnchorElement>('[data-tooltip-content][href="#"]'),
+                ).once()
+                const edit = new MutationObserverWatcher(
+                    bioCard.clone().querySelector<HTMLButtonElement>('button[type="submit"]'),
+                ).once()
+                const [bioEditButton] = await timeout(Promise.race([pencil, edit]), 2000)
+                await sleep(200)
+                bioEditButton.click()
+            } catch {
+                alert('Please click the "Edit bio" button or the pencil on the bio box.')
+            }
 
-            const [input] = await new MutationObserverWatcher(bioCard.clone().getElementsByTagName('textarea')).once()
-            await sleep(200)
-            input.focus()
-            dispatchCustomEvents('input', input.value + text)
+            await sleep(400)
+
+            try {
+                const [input] = await timeout(
+                    new MutationObserverWatcher(bioCard.clone().getElementsByTagName('textarea')).once(),
+                    2000,
+                )
+                await sleep(200)
+                input.focus()
+                dispatchCustomEvents('input', input.value + text)
+            } catch {
+                console.warn('Text not pasted to the text area')
+                navigator.clipboard.writeText(text)
+                alert('Your prove content is write to your clipboard. Please paste into the bio input!')
+            }
         },
         pasteIntoPostBox,
     },

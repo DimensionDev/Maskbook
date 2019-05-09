@@ -11,6 +11,7 @@ import Services from '../../service'
 import tasks from '../../content-script/tasks'
 import { RouteComponentProps, withRouter } from 'react-router'
 import { getProfilePageUrl } from '../../../utils/type-transform/Username'
+import { setStorage, LATEST_WELCOME_VERSION } from '../../../components/Welcomes/WelcomeVersion'
 
 //#region Welcome
 enum WelcomeState {
@@ -61,7 +62,8 @@ const WelcomeActions = {
     manualVerifyBio(userId: string, prove: string) {
         this.autoVerifyBio(userId, prove)
     },
-    onFinish() {
+    onFinish(reason: 'quit' | 'done') {
+        if (reason === 'done') setStorage({ init: LATEST_WELCOME_VERSION })
         window.close()
     },
 }

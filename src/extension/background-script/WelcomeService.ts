@@ -3,6 +3,7 @@ import { CryptoKeyRecord, getMyPrivateKey, toStoreCryptoKey } from '../../key-ma
 import { encodeText } from '../../utils/type-transform/EncodeDecode'
 import { getMyLocalKey } from '../../key-management/local-db'
 import { sleep } from '../../utils/utils'
+import { regularUsername } from '../../utils/type-transform/Username'
 
 OnlyRunInContext('background', 'WelcomeService')
 export async function backupMyKeyPair() {
@@ -27,4 +28,9 @@ export async function backupMyKeyPair() {
         conflictAction: 'prompt',
         saveAs: true,
     })
+}
+
+export async function openWelcomePage(username: string) {
+    if (!regularUsername(username)) throw new TypeError('Username not valid')
+    return browser.tabs.create({ url: browser.runtime.getURL('index.html#/welcome?username=' + username) })
 }
