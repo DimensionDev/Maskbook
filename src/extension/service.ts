@@ -1,5 +1,7 @@
 import { AsyncCall } from '@holoflows/kit/es/Extension/Async-Call'
 import { GetContext, OnlyRunInContext } from '@holoflows/kit/es/Extension/Context'
+import * as MockService from './mock-service'
+
 interface Services {
     Crypto: typeof import('./background-script/CryptoService')
     People: typeof import('./background-script/PeopleService')
@@ -9,11 +11,9 @@ const Services: Services = {} as any
 export default Services
 if (!('Services' in window)) {
     Object.assign(window, { Services })
-    register(() => import('./background-script/CryptoService'), 'Crypto', {
-        getMyProveBio: async () => 'Mock bio',
-    })
-    register(() => import('./background-script/WelcomeService'), 'Welcome')
-    register(() => import('./background-script/PeopleService'), 'People')
+    register(() => import('./background-script/CryptoService'), 'Crypto', MockService.CryptoService)
+    register(() => import('./background-script/WelcomeService'), 'Welcome', MockService.WelcomeService)
+    register(() => import('./background-script/PeopleService'), 'People', MockService.PeopleService)
 }
 
 if (GetContext() === 'background') {

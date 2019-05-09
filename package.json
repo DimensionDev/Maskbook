@@ -71,7 +71,6 @@
     "@types/storybook__addon-knobs": "^5.0.0",
     "@types/storybook__addon-links": "^3.3.4",
     "@types/storybook__react": "^4.0.1",
-    "awesome-typescript-loader": "^5.2.1",
-    "react-docgen-typescript-loader": "^3.1.0"
+    "awesome-typescript-loader": "^5.2.1"
   }
 }
