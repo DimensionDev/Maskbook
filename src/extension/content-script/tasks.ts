@@ -1,4 +1,4 @@
-import { AutomatedTabTask, LiveSelector, MutationObserverWatcher } from '@holoflows/kit'
+import { AutomatedTabTask, LiveSelector, MutationObserverWatcher, IntervalWatcher } from '@holoflows/kit'
 import { sleep, dispatchCustomEvents, timeout, untilDocumentReady } from '../../utils/utils'
 
 const bioCard = new LiveSelector().querySelector<HTMLDivElement>('#profile_timeline_intro_card')
@@ -14,20 +14,24 @@ export async function pasteIntoPostBox(text: string, warningText: string) {
     const dialog = new LiveSelector().querySelector<HTMLDivElement>('[role=main] [role=dialog]')
     const notActivated = new LiveSelector()
         .querySelector(`[role="region"]`)
-        .querySelector<HTMLTextAreaElement | HTMLDivElement>('textarea, [aria-multiline="true"]')
+        .querySelector('textarea, [aria-multiline="true"]')
+        .closest<HTMLDivElement>(1)
     const activated = new LiveSelector().querySelector<HTMLDivElement>('.notranslate')
     await sleep(2000)
     // If page is just loaded
     if (!activated.evaluateOnce()[0]) {
         try {
             console.log('Awaiting to click the post box')
-            const [dom] = await timeout(new MutationObserverWatcher(notActivated).once(), 2500)
-            console.log('Non-activated post box found', dom)
-            await sleep(1500)
-            dom.click()
+            const [dom1] = await timeout(new MutationObserverWatcher(notActivated).once(), 1000)
+            dom1.click()
+            console.log('Non-activated post box found Stage 1', dom1)
+            const [dom2] = await timeout(new IntervalWatcher(notActivated.clone().filter(x => x !== dom1)).once(), 3000)
+            console.log('Non-activated post box found Stage 2', dom2)
+            dom2.click()
             if (!dialog.evaluateOnce()[0]) throw new Error('Click not working')
-        } catch {
-            alert('Click the post box please!')
+        } catch (e) {
+            console.warn(e)
+            if (!dialog.evaluateOnce()[0]) alert('Click the post box please!')
         }
         console.log('Awaiting dialog')
     }
