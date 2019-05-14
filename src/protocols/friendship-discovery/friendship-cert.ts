@@ -1,16 +1,9 @@
 /**
  * Server guide:
- * - On receive `signed`:
- *      1. If `signed.cryptoKey` is used before, drop it.
- *      2. Set `signed.timestamp` to current time.
+ * - On receive `packed`:
+ *      1. If `packed.cryptoKey` is used before, drop it.
+ *      2. Set `packed.timestamp` to current time.
  *      3. Drop this object after a period of time. e.g. 31days
- */
-/**
- * Verify Steps:
- * For each `signed` ({@link FriendshipCertificateSignedV1}):
- *      1. Derive an AES key by `signed.cryptoKey` and your own key, let it be `aes`
- *      2. Decrypt `signed.payload`, if failed, drop it; else, let it be `cert`
- *      3. Manual or automatically verify friendship of `cert.myId` on network `cert.network`
  */
 /**
  * @remarks
@@ -31,7 +24,7 @@ export interface FriendshipCertificateV1 {
      */
     myId: string
 }
-export interface FriendshipCertificateSignedV1 {
+export interface FriendshipCertificatePackedV1 {
     version: 1
     /**
      * ! A NEW RANDOM crypto key !
@@ -39,7 +32,7 @@ export interface FriendshipCertificateSignedV1 {
      */
     cryptoKey: JsonWebKey
     /**
-     * This is encrypted {@link FriendshipCertificate} by {@link FriendshipCertificateSigned.cryptoKey}
+     * This is encrypted {@link FriendshipCertificate} by {@link FriendshipCertificatePacked.cryptoKey}
      */
     payload: string
     /**
