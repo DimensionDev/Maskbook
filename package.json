@@ -16,7 +16,7 @@
     "@types/react-router-dom": "^4.3.2",
     "@types/tiny-secp256k1": "^1.0.0",
     "classnames": "^2.2.6",
-    "construct-style-sheets-polyfill": "^1.0.3",
+    "construct-style-sheets-polyfill": "https://github.com/calebdwilliams/construct-style-sheets",
     "copy-webpack-plugin": "^5.0.0",
     "elliptic": "^6.4.1",
     "gun": "0.2019.422",

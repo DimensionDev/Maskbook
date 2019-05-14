@@ -30,7 +30,7 @@ module.exports = function override(/** @type{import("webpack").Configuration} */
     )
     // Write files to /public
     const polyfills = [
-        'node_modules/construct-style-sheets-polyfill/adoptedStyleSheets.min.js',
+        'node_modules/construct-style-sheets-polyfill/adoptedStyleSheets.js',
         'node_modules/webextension-polyfill/dist/browser-polyfill.min.js',
         'node_modules/webextension-polyfill/dist/browser-polyfill.min.js.map',
         'node_modules/webcrypto-liner/dist/webcrypto-liner.shim.js',

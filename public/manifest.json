@@ -6,7 +6,7 @@
     "content_scripts": [
         {
             "matches": ["https://www.facebook.com/*"],
-            "js": ["polyfill/adoptedStyleSheets.min.js", "polyfill/browser-polyfill.min.js", "js/contentscript.js"],
+            "js": ["polyfill/adoptedStyleSheets.js", "polyfill/browser-polyfill.min.js", "js/contentscript.js"],
             "run_at": "document_idle",
             "all_frames": true
         }
