@@ -1,13 +1,4 @@
 /**
- * Sign Steps:
- * 1. let `cert` = New {@link FriendshipCertificateV1}
- * 2. let `key` = A new random CryptoKey. algorithm = 'ECDH', curve: 'K-256'
- * 3. Derive an AES key by key of `cert target` and `key`, let it be `aes`
- * 4. Encrypt `cert` with `aes`, let it be `payload`
- * 5. let `signed` = @{link FriendshipCertificateSignedV1} (version: `1`, payload: `payload`, cryptoKey: `key`)
- * 6. Send `signed` to server
- */
-/**
  * Server guide:
  * - On receive `signed`:
  *      1. If `signed.cryptoKey` is used before, drop it.
@@ -56,4 +47,8 @@ export interface FriendshipCertificateSignedV1 {
      * ! Server should overwrite it !
      */
     timestamp: number
+    /**
+     * iv
+     */
+    iv: string
 }
