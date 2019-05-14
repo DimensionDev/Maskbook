@@ -1,9 +1,9 @@
 const path = require('path')
 
-process.env.NODE_ENV = 'development'
-const env = process.env.NODE_ENV
-process.env.GENERATE_SOURCEMAP = (env === 'development') + ''
+process.env.BROWSER = 'none'
 module.exports = function override(/** @type{import("webpack").Configuration} */ config, env) {
+    // CSP bans eval
+    // And non-inline source-map not working
     if (env === 'development') config.devtool = 'inline-source-map'
     config.entry = {
         app: path.join(__dirname, './src/index.tsx'),
@@ -11,33 +11,50 @@ module.exports = function override(/** @type{import("webpack").Configuration} */
         backgroundservice: path.join(__dirname, './src/background-service.ts'),
         injectedscript: path.join(__dirname, './src/extension/injected-script/index.ts'),
     }
-    config.output.filename = 'static/js/[name].js'
-    config.output.chunkFilename = 'static/js/[name].chunk.js'
+    config.output.filename = 'js/[name].js'
+    config.output.chunkFilename = 'js/[name].chunk.js'
+
+    // Leads a loading failure in background service
     config.optimization.runtimeChunk = false
     config.optimization.splitChunks = undefined
 
+    // Dismiss warning for gun.js
     config.module.wrappedContextCritical = false
     config.module.exprContextCritical = false
     config.module.unknownContextCritical = false
 
-    // @ts-ignore
     config.plugins.push(
         new (require('write-file-webpack-plugin'))({
-            test: /(static\/.*|.+\.png|index\.html|manifest\.json)/,
+            test: /(webp|jpg|png|shim|polyfill|js\/.*|index\.html|manifest\.json)/,
         }),
     )
     // Write files to /public
-    config.plugins.push(
-        new (require('copy-webpack-plugin'))(
-            [
-                {
-                    from: path.join(__dirname, './public'),
-                    to: path.join(__dirname, './dist'),
-                },
-            ],
-            { ignore: ['*.html'] },
-        ),
-    )
+    const polyfills = [
+        'node_modules/construct-style-sheets-polyfill/adoptedStyleSheets.js',
+        'node_modules/webextension-polyfill/dist/browser-polyfill.min.js',
+        'node_modules/webextension-polyfill/dist/browser-polyfill.min.js.map',
+        'node_modules/webcrypto-liner/dist/webcrypto-liner.shim.js',
+    ]
+    const public = path.join(__dirname, './public')
+    const publicPolyfill = path.join(__dirname, './public/polyfill')
+    const dist = path.join(__dirname, './dist')
+    if (env === 'development') {
+        config.plugins.push(
+            new (require('copy-webpack-plugin'))(
+                [...polyfills.map(from => ({ from, to: publicPolyfill })), { from: public, to: dist }],
+                { ignore: ['*.html'] },
+            ),
+        )
+    } else {
+        const fs = require('fs')
+        if (!fs.existsSync(publicPolyfill)) fs.mkdirSync(publicPolyfill)
+        polyfills.map(x =>
+            fs.copyFile(x, path.join(publicPolyfill, path.basename(x)), err => {
+                if (err) throw err
+            }),
+        )
+    }
+    // Let webpack build to es2017 instead of es5
     for (const x of config.module.rules) {
         if (!x.oneOf) continue
         for (const rule of x.oneOf) {
@@ -61,6 +78,8 @@ module.exports = function override(/** @type{import("webpack").Configuration} */
     })
     // Disable the eslint linter. We have tslint.
     config.module.rules = config.module.rules.filter(x => x.enforce !== 'pre')
+    // write-file-webpack-plugin conflict with this
+    // ! Don't upgrade webpack to 5 until they fix this
     config.output.futureEmitAssets = false
     return config
 }

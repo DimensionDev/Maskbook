@@ -1,5 +1,6 @@
-export default undefined
-if (location.href === 'http://localhost:3000/' || location.protocol === 'chrome-extension:') {
-} else {
+import { GetContext } from '@holoflows/kit/es'
+import { uiSetup } from './setup'
+if (GetContext() === 'content') {
+    uiSetup()
     require('./extension/content-script/index')
 }

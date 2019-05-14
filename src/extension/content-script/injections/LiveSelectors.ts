@@ -10,6 +10,8 @@ export function getUsername(link?: HTMLAnchorElement | null) {
     const url = link.href
     const after = url.split('https://www.facebook.com/')[1]
     if (!after) return undefined
-    if (after.match('profile.php')) return after.match(/id=(?<id>\d+)/)!.groups!.id
+    // Firefox doesn't support it
+    // if (after.match('profile.php')) return after.match(/id=(?<id>\d+)/)!.groups!.id
+    if (after.match('profile.php')) return after.match(/id=(\d+)/)![1]
     else return after.split('?')[0]
 }

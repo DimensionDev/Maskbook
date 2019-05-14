@@ -1,12 +1,12 @@
-import { AsyncCall, OnlyRunInContext } from '@holoflows/kit'
+import { OnlyRunInContext } from '@holoflows/kit'
 import { CryptoKeyRecord, getMyPrivateKey, toStoreCryptoKey } from '../../key-management/keystore-db'
 import { encodeText } from '../../utils/type-transform/EncodeDecode'
-import { BackgroundName } from '../../utils/constants'
 import { getMyLocalKey } from '../../key-management/local-db'
 import { sleep } from '../../utils/utils'
+import { regularUsername } from '../../utils/type-transform/Username'
 
-OnlyRunInContext('background', 'BackgroundService')
-async function backupMyKeyPair() {
+OnlyRunInContext('background', 'WelcomeService')
+export async function backupMyKeyPair() {
     // Don't make the download pop so fast
     await sleep(1000)
     const key = await getMyPrivateKey()
@@ -22,18 +22,15 @@ async function backupMyKeyPair() {
         .getDate()
         .toString()
         .padStart(2, '0')}`
-    chrome.downloads.download(
-        { url, filename: `maskbook-keystore-backup-${today}.json`, conflictAction: 'prompt', saveAs: true },
-        downloadId => {},
-    )
+    browser.downloads.download({
+        url,
+        filename: `maskbook-keystore-backup-${today}.json`,
+        conflictAction: 'prompt',
+        saveAs: true,
+    })
 }
-async function logInBackground(...args: any[]) {
-    console.log(...args)
+
+export async function openWelcomePage(username: string) {
+    if (!regularUsername(username)) throw new TypeError('Username not valid')
+    return browser.tabs.create({ url: browser.runtime.getURL('index.html#/welcome?username=' + username) })
 }
-const Impl = {
-    backupMyKeyPair,
-    logInBackground,
-}
-Object.assign(window, { backgroundService: Impl })
-export type Background = typeof Impl
-AsyncCall(Impl, { key: BackgroundName })

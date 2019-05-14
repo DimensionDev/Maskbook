@@ -9,14 +9,6 @@ const box = new MutationObserverWatcher(
         .map(x => x.lastElementChild)
         .map(x => x.lastElementChild),
 )
-box.useNodeForeach(node => {
-    return {
-        onTargetChanged: () => {
-            console.log('target changed')
-        },
-        onNodeMutation: () => {
-            console.log('node mutation')
-        },
-    }
-}).startWatch()
+    .setDomProxyOption({ afterShadowRootInit: { mode: 'closed' } })
+    .startWatch()
 renderInShadowRoot(<AdditionalPostBox />, box.firstVirtualNode.afterShadow)

@@ -1,9 +1,22 @@
+import { uiSetup } from './setup'
 import React from 'react'
+import { HashRouter as Router, Route, Link } from 'react-router-dom'
 import ReactDOM from 'react-dom'
 
-// import Comp from './components/Dashboard/Dashboard'
+import Welcome from './extension/options-page/Welcome'
+import { MuiThemeProvider } from '@material-ui/core'
+import { MaskbookLightTheme } from './utils/theme'
 
-// ReactDOM.render(
-//     <Comp identities={[]} addAccount={() => {}} exportBackup={() => {}} onProfileClick={() => {}} />,
-//     document.querySelector('#root'),
-// )
+uiSetup()
+function App() {
+    return (
+        <MuiThemeProvider theme={MaskbookLightTheme}>
+            <Router>
+                <Route exact path="/" component={() => <Link to="/welcome">-> Welcome</Link>} />
+                <Route path="/welcome" component={Welcome} />
+            </Router>
+        </MuiThemeProvider>
+    )
+}
+
+ReactDOM.render(<App />, document.getElementById('root')!)

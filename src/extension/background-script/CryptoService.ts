@@ -1,7 +1,6 @@
 import { queryPersonCryptoKey, getMyPrivateKey, storeKey, generateNewKey } from '../../key-management/keystore-db'
 import * as Alpha40 from '../../crypto/crypto-alpha-40'
-import { AsyncCall, OnlyRunInContext } from '@holoflows/kit/es'
-import { CryptoName } from '../../utils/constants'
+import { OnlyRunInContext } from '@holoflows/kit/es'
 import { addPersonPublicKey } from '../../key-management/people-gun'
 import { Person, queryPerson } from './PeopleService'
 import { getMyLocalKey } from '../../key-management/local-db'
@@ -51,7 +50,7 @@ const OthersAESKeyEncryptedMap = new Map<
  * - `encrypted` is the encrypted string
  * - `token` is used to call `publishPostAESKey` before post the content
  */
-async function encryptTo(content: string, to: Person[]): Promise<[EncryptedText, OthersAESKeyEncryptedToken]> {
+export async function encryptTo(content: string, to: Person[]): Promise<[EncryptedText, OthersAESKeyEncryptedToken]> {
     if (to.length === 0) return ['', '']
     const toKey = await prepareOthersKeyForEncryption(to)
 
@@ -97,7 +96,7 @@ async function encryptTo(content: string, to: Person[]): Promise<[EncryptedText,
  * MUST call before send post, or othersAESKeyEncrypted will not be published to the internet!
  * @param token Token that returns in the encryptTo
  */
-async function publishPostAESKey(token: string) {
+export async function publishPostAESKey(token: string) {
     if (!OthersAESKeyEncryptedMap.has(token)) throw new Error('Publish AES key failed!')
     return publishPostAESKey_Service(token, OthersAESKeyEncryptedMap.get(token)!)
 }
@@ -108,21 +107,32 @@ async function publishPostAESKey(token: string) {
  * @param by Post by
  * @param whoAmI My username
  */
-async function decryptFrom(
+export async function decryptFrom(
     encrypted: string,
     by: string,
     whoAmI: string,
-): Promise<{ signatureVerifyResult: boolean; content: string }> {
-    const data = deconstructPayload(encrypted, true)!
+): Promise<{ signatureVerifyResult: boolean; content: string } | { error: string }> {
+    const data = deconstructPayload(encrypted)!
+    if (!data) {
+        try {
+            deconstructPayload(encrypted, true)
+        } catch (e) {
+            return { error: e.message }
+        }
+    }
     if (data.version === -40) {
         const { encryptedText, iv: salt, ownersAESKeyEncrypted, signature, version } = data
         async function getKey(name: string) {
             let key = await queryPersonCryptoKey(by)
-            if (!key) key = await addPersonPublicKey(name)
-            if (!key) throw new Error(`${name}'s public key not found.`)
+            try {
+                if (!key) key = await addPersonPublicKey(name)
+            } catch {
+                return null
+            }
             return key
         }
         const byKey = await getKey(by)
+        if (!byKey) return { error: `${name}'s public key not found.` }
         const mine = (await getMyPrivateKey())!
         try {
             const unverified = ['2/4', ownersAESKeyEncrypted, salt, encryptedText].join('|')
@@ -150,9 +160,10 @@ async function decryptFrom(
                 // What to do next: You can ask your friend to visit your profile page, so that their Maskbook extension will detect and add you to recipients.
                 // ? after the auto-share with friends is done.
                 if (aesKeyEncrypted === undefined) {
-                    throw new Error(
-                        'Maskbook does not find the key used to decrypt this post. Maybe this post is not intended to share with you?',
-                    )
+                    return {
+                        error:
+                            'Maskbook does not find the key used to decrypt this post. Maybe this post is not intended to share with you?',
+                    }
                 }
                 const content = decodeText(
                     await Alpha40.decryptMessage1ToNByOther({
@@ -174,17 +185,17 @@ async function decryptFrom(
             }
         } catch (e) {
             if (e instanceof DOMException) {
-                console.log(e)
-                throw new Error('DOMException')
+                console.error(e)
+                return { error: 'Decryption failed.' }
             } else throw e
         }
     }
-    throw new TypeError('Unknown post version, maybe you should update Maskbook?')
+    return { error: 'Unknown post version, maybe you should update Maskbook?' }
 }
 //#endregion
 
 //#region ProvePost, create & verify
-async function getMyProveBio() {
+export async function getMyProveBio() {
     let myKey = await getMyPrivateKey()
     if (!myKey) myKey = await generateNewKey()
     const pub = await crypto.subtle.exportKey('jwk', myKey.key.publicKey!)
@@ -221,7 +232,7 @@ export async function verifyOthersProve(bio: string, othersName: string) {
  * Get already shared target of the post
  * @param postIdentifier Post identifier
  */
-async function getSharedListOfPost(postIdentifier: string): Promise<Person[]> {
+export async function getSharedListOfPost(postIdentifier: string): Promise<Person[]> {
     const post = await gun
         .get('posts')
         .get(postIdentifier)
@@ -230,7 +241,7 @@ async function getSharedListOfPost(postIdentifier: string): Promise<Person[]> {
     delete post._
     return Promise.all(Object.keys(post).map(queryPerson))
 }
-async function appendShareTarget(
+export async function appendShareTarget(
     postIdentifier: string,
     ownersAESKeyEncrypted: string,
     iv: string,
@@ -247,16 +258,3 @@ async function appendShareTarget(
     publishPostAESKey_Service(postIdentifier, othersAESKeyEncrypted)
 }
 //#endregion
-
-const Impl = {
-    encryptTo,
-    decryptFrom,
-    getMyProveBio,
-    verifyOthersProve,
-    publishPostAESKey,
-    getSharedListOfPost,
-    appendShareTarget,
-}
-Object.assign(window, { encryptService: Impl, crypto40: Alpha40 })
-export type Encrypt = typeof Impl
-AsyncCall(Impl, { key: CryptoName })

@@ -40,7 +40,9 @@ function deconstructAlpha41(str: string, throws = false): null | never {
 }
 
 const versions = new Set([deconstructAlpha40, deconstructAlpha41])
-export function deconstructPayload(str: string, throws = false) {
+export function deconstructPayload(str: string): PayloadAlpha40 | null
+export function deconstructPayload(str: string, throws: true): PayloadAlpha40
+export function deconstructPayload(str: string, throws = false): PayloadAlpha40 | null {
     for (const ver of versions) {
         const result = ver(str, false)
         if (throws === false) return result

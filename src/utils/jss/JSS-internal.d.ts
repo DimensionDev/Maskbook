@@ -77,4 +77,6 @@ interface ConstructableStyleSheets {
     adoptedStyleSheets: ReadonlyArray<StyleSheet>
 }
 interface Document extends ConstructableStyleSheets {}
-interface ShadowRoot extends ConstructableStyleSheets {}
+interface ShadowRoot extends ConstructableStyleSheets {
+    __polyfilled_root_: HTMLElement
+}
