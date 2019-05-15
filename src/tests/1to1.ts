@@ -1,6 +1,6 @@
 import * as crypto40 from '../crypto/crypto-alpha-40'
 import { decodeText } from '../utils/type-transform/EncodeDecode'
-export async function test1to1(text: string) {
+async function test1to1(text: string) {
     const alice = await crypto.subtle.generateKey({ name: 'ECDH', namedCurve: 'K-256' }, true, ['deriveKey'])
     const bob = await crypto.subtle.generateKey({ name: 'ECDH', namedCurve: 'K-256' }, true, ['deriveKey'])
 
