@@ -1,17 +1,38 @@
-/** [network, username] */
-export interface Identifier extends Array<string> {
+import { GroupIdentifier, PersonIdentifier } from './type'
+
+enum Relation {
     /**
-     * Which social network
-     * Special value: "localhost"
+     * Due to technical reasons,
+     * if program cannot automatically verify the friendship or non-friendship,
+     * use this level.
      */
-    [0]: string
-    /** Unique id in the current "network" */
-    [1]: string
+    unknown = 'unknown',
+    /**
+     * I banned this person.
+     * (Only available on some social networks)
+     */
+    IBanned = 'i banned',
+    /**
+     * This person bans me.
+     * (Only available on some social networks)
+     */
+    IAmBanned = 'i am banned',
+    /** I am following this person. So their post can appear in my timeline. */
+    following = 'following',
+    /** This person follows me. So my post can appear in their timeline. */
+    followed = 'followed',
 }
 export interface PersonRecord {
-    identifier: Identifier
-    /** Friend of mine? */
-    isFriend: boolean
-    /** Last check time of isFriend */
-    isFriendLastCheckTime: Date
+    identifier: PersonIdentifier
+    name: string
+    // nickname: string
+    relation: Relation[]
+    /** Last check time of relation */
+    relationLastCheckTime: Date
+    cryptoKey: JsonWebKey | null
+    groups: GroupIdentifier[]
 }
+
+export async function storeNewPersonDB(record: PersonRecord) {}
+export async function queryPersonDB(id: GroupIdentifier) {}
+export async function updatePersonDB(person: Partial<PersonRecord> & Pick<PersonRecord, 'identifier'>) {}

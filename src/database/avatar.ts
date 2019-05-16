@@ -1,5 +1,5 @@
 import { openDB, DBSchema } from 'idb/with-async-ittr'
-import { Identifier } from './people'
+import { Identifier, PersonIdentifier } from './type'
 
 //#region Schema
 export type AvatarRecord = ArrayBuffer
@@ -12,12 +12,12 @@ interface AvatarDB extends DBSchema {
     /** Use out-of-line keys */
     avatars: {
         value: AvatarRecord
-        key: Identifier
+        key: [string, string, string, string] | [string, string, string]
     }
     /** Key is value.identifier */
     metadata: {
         value: AvatarMetadataRecord
-        key: Identifier
+        key: [string, string, string, string] | [string, string, string]
     }
 }
 //#endregion
@@ -47,7 +47,7 @@ export async function storeAvatarDB(id: Identifier, avatar: ArrayBuffer) {
 /**
  * Read avatar out
  */
-export async function queryAvatarDB(id: Identifier) {
+export async function queryAvatarDB(id: PersonIdentifier) {
     const t = (await db).transaction('avatars')
     const result = t.objectStore('avatars').get(id)
 
@@ -59,7 +59,7 @@ export async function queryAvatarDB(id: Identifier) {
 /**
  * Store avatar metadata
  */
-async function updateAvatarMetaDB(id: Identifier, newMeta: Partial<AvatarMetadataRecord>) {
+async function updateAvatarMetaDB(id: PersonIdentifier, newMeta: Partial<AvatarMetadataRecord>) {
     const t = (await db).transaction('metadata', 'readwrite')
     const meta = await t.objectStore('metadata').get(id)
     const newRecord = Object.assign({}, meta, newMeta)
@@ -85,7 +85,7 @@ export async function queryAvatarOutdatedDB(
 /**
  * Batch delete avatars
  */
-export async function deleteAvatarsDB(ids: Identifier[]) {
+export async function deleteAvatarsDB(ids: PersonIdentifier[]) {
     const t = (await db).transaction(['avatars', 'metadata'], 'readwrite')
     const promises: Promise<void>[] = []
     for (const id of ids) {
