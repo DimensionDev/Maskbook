@@ -2,7 +2,7 @@
 
 Encrypt your posts & chats on You-Know-Where. Allow only your friends to decrypt.
 
-For general introductions, see https://Maskbook.io/
+For general introductions, see https://Maskbook.com/
 
 [Install Maskbook on Chrome Web Store](https://chrome.google.com/webstore/detail/maskbook/jkoeaghipilijlahjplgbfiocjhldnap/)
 
