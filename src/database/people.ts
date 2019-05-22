@@ -11,12 +11,12 @@ enum Relation {
      * I banned this person.
      * (Only available on some social networks)
      */
-    IBanned = 'i banned',
+    IBanned = 'I banned',
     /**
      * This person bans me.
      * (Only available on some social networks)
      */
-    IAmBanned = 'i am banned',
+    IAmBanned = 'I am banned',
     /** I am following this person. So their post can appear in my timeline. */
     following = 'following',
     /** This person follows me. So my post can appear in their timeline. */
@@ -24,8 +24,7 @@ enum Relation {
 }
 export interface PersonRecord {
     identifier: PersonIdentifier
-    name: string
-    // nickname: string
+    nickname: string
     relation: Relation[]
     /** Last check time of relation */
     relationLastCheckTime: Date

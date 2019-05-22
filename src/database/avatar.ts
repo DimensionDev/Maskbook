@@ -4,7 +4,7 @@ import { Identifier, PersonIdentifier } from './type'
 //#region Schema
 export type AvatarRecord = ArrayBuffer
 export interface AvatarMetadataRecord {
-    identifier: Identifier
+    identifier: string
     lastUpdateTime: Date
     lastAccessTime: Date
 }
@@ -12,17 +12,17 @@ interface AvatarDB extends DBSchema {
     /** Use out-of-line keys */
     avatars: {
         value: AvatarRecord
-        key: [string, string, string, string] | [string, string, string]
+        key: string
     }
     /** Key is value.identifier */
     metadata: {
         value: AvatarMetadataRecord
-        key: [string, string, string, string] | [string, string, string]
+        key: string
     }
 }
 //#endregion
 
-const db = openDB<AvatarDB>('maskbook-avatar-store-v2', 1, {
+const db = openDB<AvatarDB>('maskbook-avatar-cache-v2', 1, {
     upgrade(db, oldVersion, newVersion, transaction) {
         // Out line keys
         const avatarStore = db.createObjectStore('avatars')
@@ -34,12 +34,12 @@ const db = openDB<AvatarDB>('maskbook-avatar-store-v2', 1, {
  */
 export async function storeAvatarDB(id: Identifier, avatar: ArrayBuffer) {
     const meta: AvatarMetadataRecord = {
-        identifier: id,
+        identifier: id.toString(),
         lastUpdateTime: new Date(),
         lastAccessTime: new Date(),
     }
     const t = (await db).transaction(['avatars', 'metadata'], 'readwrite')
-    const a = t.objectStore('avatars').put(avatar, id)
+    const a = t.objectStore('avatars').put(avatar, id.toString())
     await t.objectStore('metadata').put(meta)
     await a
     return
@@ -49,7 +49,7 @@ export async function storeAvatarDB(id: Identifier, avatar: ArrayBuffer) {
  */
 export async function queryAvatarDB(id: PersonIdentifier) {
     const t = (await db).transaction('avatars')
-    const result = t.objectStore('avatars').get(id)
+    const result = t.objectStore('avatars').get(id.toString())
 
     try {
         updateAvatarMetaDB(id, { lastAccessTime: new Date() })
@@ -61,7 +61,7 @@ export async function queryAvatarDB(id: PersonIdentifier) {
  */
 async function updateAvatarMetaDB(id: PersonIdentifier, newMeta: Partial<AvatarMetadataRecord>) {
     const t = (await db).transaction('metadata', 'readwrite')
-    const meta = await t.objectStore('metadata').get(id)
+    const meta = await t.objectStore('metadata').get(id.toString())
     const newRecord = Object.assign({}, meta, newMeta)
     await t.objectStore('metadata').put(newRecord)
     return newRecord
@@ -89,8 +89,8 @@ export async function deleteAvatarsDB(ids: PersonIdentifier[]) {
     const t = (await db).transaction(['avatars', 'metadata'], 'readwrite')
     const promises: Promise<void>[] = []
     for (const id of ids) {
-        const a = t.objectStore('avatars').delete(id)
-        const b = t.objectStore('metadata').delete(id)
+        const a = t.objectStore('avatars').delete(id.toString())
+        const b = t.objectStore('metadata').delete(id.toString())
         promises.push(a, b)
     }
     return
