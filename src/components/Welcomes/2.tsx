@@ -3,6 +3,7 @@ import Paper from '@material-ui/core/Paper/Paper'
 import Typography from '@material-ui/core/Typography/Typography'
 import { withStylesTyped } from '../../utils/theme'
 import createStyles from '@material-ui/core/styles/createStyles'
+import { geti18nString } from '../../utils/i18n'
 
 interface Props {}
 export default withStylesTyped(theme =>
@@ -20,8 +21,8 @@ export default withStylesTyped(theme =>
 )<Props>(function Welcome({ classes }) {
     return (
         <Paper className={classes.paper}>
-            <Typography variant="h5">You're done!</Typography>
-            <Typography variant="subtitle1">You can use Maskbook now!</Typography>
+            <Typography variant="h5">{geti18nString('welcome-2-title')}</Typography>
+            <Typography variant="subtitle1">{geti18nString('welcome-2-greeting')}</Typography>
         </Paper>
     )
 })

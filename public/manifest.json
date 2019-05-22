@@ -27,5 +27,6 @@
         "256": "256x256.png"
     },
     "homepage_url": "https://maskbook.io",
-    "description": "Encrypt your posts & chats on You-Know-Where. Allow only your friends to decrypt."
+    "description": "Encrypt your posts & chats on You-Know-Where. Allow only your friends to decrypt.",
+    "default_locale": "en"
 }

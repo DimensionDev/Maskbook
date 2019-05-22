@@ -1,0 +1,251 @@
+{
+    "additional-post-box--placeholder-w-name": {
+        "message": "Hey $1, what's your mind? Encrypt with Maskbook"
+    },
+    "additional-post-box--placeholder-wo-name": {
+        "message": "What's your mind? Encrypt with Maskbook"
+    },
+    "additional-post-box--post-button": {
+        "message": "📫 Post it!"
+    },
+    "additional-post-box--encrypted-post-pre": {
+        "message": "Decrypt this post with $1"
+    },
+    "additional-post-box--encrypted-failed": {
+        "message": "Encrypted text has been copied into the clipboard!\nHowever, you need to paste it to the post box by yourself."
+    },
+    "add-to-key-store-success": {
+        "message": "Maskbook public key added to keystore ✔"
+    },
+    "add-to-key-store-verifying": {
+        "message": "Maskbook public key found, verifying..."
+    },
+    "add-to-key-store-failed-title": {
+        "message": "Maskbook public key NOT verified ❌"
+    },
+    "add-to-key-store-failed-text": {
+        "message": "$1\nThis public key won't be saved."
+    },
+    "decrypted-postbox-title": {
+        "message": "Maskbook decrypted content:"
+    },
+    "decrypted-postbox-add-decryptor": {
+        "message": "Add decryptor"
+    },
+    "decrypted-postbox-verified": {
+        "message": "Signature verified ✔"
+    },
+    "decrypted-postbox-not-verified": {
+        "message": "Signature NOT verified ❌"
+    },
+    "decrypted-postbox-decrypting": {
+        "message": "Maskbook decrypting..."
+    },
+    "decrypted-postbox-failed": {
+        "message": "Maskbook decryption failed"
+    },
+    "search-box-placeholder": {
+        "message": "Type here to search"
+    },
+    "select-all": {
+        "message": "Select All"
+    },
+    "select-none": {
+        "message": "Select None"
+    },
+    "not-found": {
+        "message": "Not found"
+    },
+    "cancel": {
+        "message": "Cancel"
+    },
+    "sharing": {
+        "message": "Sharing"
+    },
+    "share": {
+        "message": "Share"
+    },
+    "restore": {
+        "message": "Restore"
+    },
+    "back": {
+        "message": "Back"
+    },
+    "finish": {
+        "message": "Finish"
+    },
+    "welcome-0-close-button": {
+        "message": "I'll do it later"
+    },
+    "welcome-0-title": {
+        "message": "Welcome to Maskbook"
+    },
+    "welcome-0-description": {
+        "message": "You can post on Facebook without allowing Facebook to stalk, analyze, and peep into you."
+    },
+    "welcome-0-new-user": {
+        "message": "New user?"
+    },
+    "welcome-0-connect-facebook": {
+        "message": "Connect Facebook"
+    },
+    "welcome-0-old-user": {
+        "message": "Returning user?"
+    },
+    "welcome-0-restore-key": {
+        "message": "Restore Keypair"
+    },
+    "welcome-0-caption": {
+        "message": "Lost your keypair backup? No worry. Simply start as a new user."
+    },
+    "welcome-1a2-title": {
+        "message": "Encrypt message use this postbox"
+    },
+    "welcome-1a2-imgalt": {
+        "message": "Screenshot of how to encrypt message with Maskbook"
+    },
+    "welcome-1a2-description": {
+        "message": "Then only people you selected with Maskbook can see the post content"
+    },
+    "welcome-1a2-done-button": {
+        "message": "Nice!"
+    },
+    "welcome-1a3-title": {
+        "message": "Keep your backups carefully"
+    },
+    "welcome-1a3-description1": {
+        "message": "The first backup has been put in your Downloads folder."
+    },
+    "welcome-1a3-description2": {
+        "message": "And export backups frequently!"
+    },
+    "welcome-1a3-done-button": {
+        "message": "Got it!"
+    },
+    "welcome-1a4-auto-radio-aria": {
+        "message": "Choose how to verify your account"
+    },
+    "welcome-1a4-auto-profile-title": {
+        "message": "Add public key to profile"
+    },
+    "welcome-1a4-auto-profile-description1": {
+        "message": "Easy and lightweight."
+    },
+    "welcome-1a4-auto-profile-description2": {
+        "message": "Never disturb anyone."
+    },
+    "welcome-1a4-auto-post-title": {
+        "message": "Create a verification post"
+    },
+    "welcome-1a4-auto-post-description1": {
+        "message": "We appreciate your valor!"
+    },
+    "welcome-1a4-auto-post-description2": {
+        "message": "Editable after posting."
+    },
+    "welcome-1a4-title": {
+        "message": "Verify Account Ownership"
+    },
+    "welcome-1a4-bio-disabled": {
+        "message": "Sorry, automatically verify your account through bio is not available now."
+    },
+    "welcome-1a4-type-auto-subtitle1": {
+        "message": "Avoid any confusion before your first encrypted post."
+    },
+    "welcome-1a4-type-auto-subtitle2": {
+        "message": "This allows your friends to verify the connection between your Facebook account and your keypair."
+    },
+    "welcome-1a4-type-auto-switch": {
+        "message": "Prefer doing it manually?"
+    },
+    "welcome-1a4-type-manual-subtitle1": {
+        "message": "Add this to bio, or post on timeline, before your first encrypted post."
+    },
+    "welcome-1a4-type-manual-subtitle2": {
+        "message": "This allows your friends to verify the connection between your Facebook account and your keypair."
+    },
+    "welcome-1a4-type-manual-goto": {
+        "message": "Copy & Go to Profile"
+    },
+    "welcome-1a4-type-manual-switch": {
+        "message": "Prefer automating the steps?"
+    },
+    "welcome-1b-title": {
+        "message": "Restore your keypair"
+    },
+    "welcome-1b-dragging": {
+        "message": "Drag your key backup into this dialog"
+    },
+    "welcome-1b-no-file-selected": {
+        "message": "Select your exported key backup"
+    },
+    "welcome-1b-file-selected": {
+        "message": "Selected exported key backup: $1"
+    },
+    "welcome-2-title": {
+        "message": "You're done!"
+    },
+    "welcome-2-greeting": {
+        "message": "You can use Maskbook now!"
+    },
+    "banner-title": {
+        "message": "Welcome to Maskbook"
+    },
+    "banner-get-started": {
+        "message": "Get started"
+    },
+    "banner-dismiss-aria": {
+        "message": "Dismiss the banner"
+    },
+    "service-others-key-not-found": {
+        "message": "$1's public key not found!"
+    },
+    "service-publish-post-aes-key-failed": {
+        "message": "Publish AES key failed!"
+    },
+    "service-not-share-target": {
+        "message": "Maskbook does not find the key used to decrypt this post. Maybe this post is not intended to share with you?"
+    },
+    "service-decryption-failed": {
+        "message": "Decryption failed."
+    },
+    "service-unknown-payload": {
+        "message": "Unknown post version, maybe you should update Maskbook?"
+    },
+    "service-key-parse-failed": {
+        "message": "Key parse failed"
+    },
+    "service-have-no-own-key-yet": {
+        "message": "You have no private key yet"
+    },
+    "service-username-invalid": {
+        "message": "Username not valid"
+    },
+    "automation-request-click-post-box": {
+        "message": "Click the post box please!"
+    },
+    "automation-request-click-edit-bio-button": {
+        "message": "Please click the \"Edit bio\" button or the pencil on the bio box."
+    },
+    "automation-request-paste-into-bio-box": {
+        "message": "Your prove content is write to your clipboard. Please paste into the bio input!"
+    },
+    "automation-request-paste-into-post-box": {
+        "message": "Prove content has been copied into the clipboard!\nHowever, you need to paste it to the post box by yourself."
+    },
+    "payload-not-found": {
+        "message": "Doesn't find payload"
+    },
+    "payload-incomplete": {
+        "message": "This post is not complete, you need to view the full post."
+    },
+    "payload-bad": {
+        "message": "This post seemed to be corrupted. Maskbook cannot decrypt it."
+    },
+    "payload-throw-in-alpha41": {
+        "message": "Support for Alpha41 is dropped. Tell your friends to upgrade Maskbook!"
+    },
+    "options-index-welcome": {
+        "message": "First to Maskbook?"
+    }
+}

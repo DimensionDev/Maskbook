@@ -15,6 +15,7 @@ import {
 } from '../../utils/type-transform/EncodeDecode'
 import { gun } from '../../key-management/gun'
 import { constructAlpha40, deconstructPayload } from '../../utils/type-transform/Payload'
+import { geti18nString } from '../../utils/i18n'
 
 OnlyRunInContext('background', 'EncryptService')
 //#region Encrypt & Decrypt
@@ -28,7 +29,7 @@ async function prepareOthersKeyForEncryption(to: Person[]) {
         to.map(async person => ({ name: person.username, key: await queryPersonCryptoKey(person.username) })),
     )).map(person => ({ name: person.name, key: (person.key === null ? null : person.key.key.publicKey)! }))
     toKey.forEach(x => {
-        if (x.key === null) throw new Error(`${x.name}'s public key not found!`)
+        if (x.key === null) throw new Error(geti18nString('service-others-key-not-found', x.name))
     })
     return toKey
 }
@@ -97,7 +98,7 @@ export async function encryptTo(content: string, to: Person[]): Promise<[Encrypt
  * @param token Token that returns in the encryptTo
  */
 export async function publishPostAESKey(token: string) {
-    if (!OthersAESKeyEncryptedMap.has(token)) throw new Error('Publish AES key failed!')
+    if (!OthersAESKeyEncryptedMap.has(token)) throw new Error(geti18nString('service-publish-post-aes-key-failed'))
     return publishPostAESKey_Service(token, OthersAESKeyEncryptedMap.get(token)!)
 }
 
@@ -132,7 +133,7 @@ export async function decryptFrom(
             return key
         }
         const byKey = await getKey(by)
-        if (!byKey) return { error: `${name}'s public key not found.` }
+        if (!byKey) return { error: geti18nString('service-others-key-not-found', by) }
         const mine = (await getMyPrivateKey())!
         try {
             const unverified = ['2/4', ownersAESKeyEncrypted, salt, encryptedText].join('|')
@@ -161,8 +162,7 @@ export async function decryptFrom(
                 // ? after the auto-share with friends is done.
                 if (aesKeyEncrypted === undefined) {
                     return {
-                        error:
-                            'Maskbook does not find the key used to decrypt this post. Maybe this post is not intended to share with you?',
+                        error: geti18nString('service-not-share-target'),
                     }
                 }
                 const content = decodeText(
@@ -186,11 +186,11 @@ export async function decryptFrom(
         } catch (e) {
             if (e instanceof DOMException) {
                 console.error(e)
-                return { error: 'Decryption failed.' }
+                return { error: geti18nString('service-decryption-failed') }
             } else throw e
         }
     }
-    return { error: 'Unknown post version, maybe you should update Maskbook?' }
+    return { error: geti18nString('service-unknown-payload') }
 }
 //#endregion
 
@@ -220,7 +220,7 @@ export async function verifyOthersProve(bio: string, othersName: string) {
             'deriveKey',
         ])
     } catch {
-        throw new Error('Key parse failed')
+        throw new Error(geti18nString('service-key-parse-failed'))
     }
     storeKey({ username: othersName, key: { publicKey: publicKey } })
     return publicKey

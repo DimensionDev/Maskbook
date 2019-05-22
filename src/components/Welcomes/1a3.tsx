@@ -5,6 +5,7 @@ import { withStylesTyped } from '../../utils/theme'
 import createStyles from '@material-ui/core/styles/createStyles'
 import Button from '@material-ui/core/Button/Button'
 import { getUrl } from '../../utils/utils'
+import { geti18nString } from '../../utils/i18n'
 
 interface Props {
     next(): void
@@ -30,16 +31,16 @@ export default withStylesTyped(theme =>
     const filename = `maskbook-keystore-backup-${today}.json`
     return (
         <Paper className={classes.paper}>
-            <Typography variant="h5">Keep your backups carefully</Typography>
+            <Typography variant="h5">{geti18nString('welcome-1a3-title')}</Typography>
             <img alt="" src={getUrl(require('./1a3.jpg'))} width="auto" height={160} />
             <Typography variant="caption">{filename}</Typography>
             <Typography variant="subtitle1">
-                The first backup has been put in your Downloads folder.
+                {geti18nString('welcome-1a3-description1')}
                 <br />
-                And export backups frequently!
+                {geti18nString('welcome-1a3-description2')}
             </Typography>
             <Button onClick={next} variant="contained" color="primary" className={classes.button}>
-                Got it!
+                {geti18nString('welcome-1a3-done-button')}
             </Button>
         </Paper>
     )

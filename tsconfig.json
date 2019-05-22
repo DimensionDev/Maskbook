@@ -18,5 +18,5 @@
     "incremental": true,
     "tsBuildInfoFile": "./.tscache/"
   },
-  "include": ["src"]
+  "include": ["src", "./public/_locales"]
 }

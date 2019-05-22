@@ -7,6 +7,7 @@ import { FullWidth } from '../../utils/components/Flex'
 import IconButton from '@material-ui/core/IconButton/IconButton'
 import CloseIcon from '@material-ui/icons/Close'
 import { withStylesTyped } from '../../utils/theme'
+import { geti18nString } from '../../utils/i18n'
 
 interface Props {
     getStarted(): void
@@ -35,7 +36,7 @@ export const Banner = withStylesTyped({
             <Toolbar className={props.classes.toolbar}>
                 <FullWidth>
                     <Typography variant="subtitle1" color="inherit">
-                        Welcome to Maskbook
+                        {geti18nString('banner-title')}
                     </Typography>
                 </FullWidth>
                 <Button
@@ -43,10 +44,10 @@ export const Banner = withStylesTyped({
                     classes={{ root: props.classes.button }}
                     variant="contained"
                     color="primary">
-                    Get started
+                    {geti18nString('banner-get-started')}
                 </Button>
                 <IconButton
-                    aria-label="Dismiss the banner"
+                    aria-label={geti18nString('banner-dismiss-aria')}
                     onClick={props.close}
                     classes={{ root: props.classes.close }}>
                     <CloseIcon />

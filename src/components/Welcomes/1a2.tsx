@@ -5,6 +5,7 @@ import { withStylesTyped } from '../../utils/theme'
 import createStyles from '@material-ui/core/styles/createStyles'
 import Button from '@material-ui/core/Button/Button'
 import { getUrl } from '../../utils/utils'
+import { geti18nString } from '../../utils/i18n'
 
 interface Props {
     next(): void
@@ -31,18 +32,16 @@ export default withStylesTyped(theme =>
 )<Props>(function Welcome({ classes, next }) {
     return (
         <Paper className={classes.paper}>
-            <Typography variant="h5">Encrypt message use this postbox</Typography>
+            <Typography variant="h5">{geti18nString('welcome-1a2-title')}</Typography>
             <img
-                alt="Screenshot of how to encrypt message with Maskbook"
+                alt={geti18nString('welcome-1a2-imgalt')}
                 src={getUrl(require('./1a2.jpg'))}
                 width="75%"
                 className={classes.img}
             />
-            <Typography variant="subtitle1">
-                Then only people you selected with Maskbook can see the post content
-            </Typography>
+            <Typography variant="subtitle1">{geti18nString('welcome-1a2-description')}</Typography>
             <Button onClick={next} variant="contained" color="primary" className={classes.button}>
-                Nice!
+                {geti18nString('welcome-1a2-done-button')}
             </Button>
         </Paper>
     )

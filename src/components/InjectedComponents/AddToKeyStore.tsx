@@ -2,6 +2,7 @@ import React from 'react'
 import AsyncComponent from '../../utils/components/AsyncComponent'
 import { AdditionalContent } from './AdditionalPostContent'
 import Services from '../../extension/service'
+import { geti18nString } from '../../utils/i18n'
 
 interface Props {
     provePost: string
@@ -19,11 +20,12 @@ export function AddToKeyStore({ provePost, postBy }: Props) {
     )
 }
 export const AddToKeyStoreUI = {
-    success: <AdditionalContent title="Maskbook public key added to keystore ✔" />,
-    awaiting: <AdditionalContent title="Maskbook public key found, verifying..." />,
+    success: <AdditionalContent title={geti18nString('add-to-key-store-success')} />,
+    awaiting: <AdditionalContent title={geti18nString('add-to-key-store-verifying')} />,
     failed: (props: { error: Error }) => (
-        <AdditionalContent title="Maskbook public key NOT verified ❌">
-            {props.error.message} This public key won't be saved.{console.error(props.error)}
+        <AdditionalContent title={geti18nString('add-to-key-store-failed-title')}>
+            {geti18nString('add-to-key-store-failed-text', props.error.message)}
+            {console.error(props.error)}
         </AdditionalContent>
     ),
 }

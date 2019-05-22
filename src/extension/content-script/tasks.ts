@@ -1,5 +1,6 @@
 import { AutomatedTabTask, LiveSelector, MutationObserverWatcher, IntervalWatcher } from '@holoflows/kit'
 import { sleep, dispatchCustomEvents, timeout, untilDocumentReady } from '../../utils/utils'
+import { geti18nString } from '../../utils/i18n'
 
 const bioCard = new LiveSelector().querySelector<HTMLDivElement>('#profile_timeline_intro_card')
 /**
@@ -31,7 +32,7 @@ export async function pasteIntoPostBox(text: string, warningText: string) {
             if (!dialog.evaluateOnce()[0]) throw new Error('Click not working')
         } catch (e) {
             console.warn(e)
-            if (!dialog.evaluateOnce()[0]) alert('Click the post box please!')
+            if (!dialog.evaluateOnce()[0]) alert(geti18nString('automation-request-click-post-box'))
         }
         console.log('Awaiting dialog')
     }
@@ -97,7 +98,7 @@ export default AutomatedTabTask(
                 await sleep(200)
                 bioEditButton.click()
             } catch {
-                alert('Please click the "Edit bio" button or the pencil on the bio box.')
+                alert(geti18nString('automation-request-click-edit-bio-button'))
             }
 
             await sleep(400)
@@ -113,7 +114,7 @@ export default AutomatedTabTask(
             } catch {
                 console.warn('Text not pasted to the text area')
                 navigator.clipboard.writeText(text)
-                alert('Your prove content is write to your clipboard. Please paste into the bio input!')
+                alert(geti18nString('automation-request-paste-into-bio-box'))
             }
         },
         pasteIntoPostBox,
