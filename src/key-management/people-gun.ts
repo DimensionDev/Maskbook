@@ -45,7 +45,7 @@ export async function addPersonPublicKey(username: string): Promise<PersonCrypto
     const key = await queryPersonCryptoKey(username)
     if ((bioRejected && proveRejected) || !key) {
         console.error(...errors)
-        throw new Error(geti18nString('service-others-key-not-found', username))
+        throw new Error(geti18nString('service_others_key_not_found', username))
     }
     return key
 }

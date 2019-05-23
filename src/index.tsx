@@ -16,7 +16,7 @@ function App() {
                 <Route
                     exact
                     path="/"
-                    component={() => <Link to="/welcome">{geti18nString('options-index-welcome')}</Link>}
+                    component={() => <Link to="/welcome">{geti18nString('options_index_welcome')}</Link>}
                 />
                 <Route path="/welcome" component={Welcome} />
             </Router>

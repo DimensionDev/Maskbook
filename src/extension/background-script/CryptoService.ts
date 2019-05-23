@@ -29,7 +29,7 @@ async function prepareOthersKeyForEncryption(to: Person[]) {
         to.map(async person => ({ name: person.username, key: await queryPersonCryptoKey(person.username) })),
     )).map(person => ({ name: person.name, key: (person.key === null ? null : person.key.key.publicKey)! }))
     toKey.forEach(x => {
-        if (x.key === null) throw new Error(geti18nString('service-others-key-not-found', x.name))
+        if (x.key === null) throw new Error(geti18nString('service_others_key_not_found', x.name))
     })
     return toKey
 }
@@ -98,7 +98,7 @@ export async function encryptTo(content: string, to: Person[]): Promise<[Encrypt
  * @param token Token that returns in the encryptTo
  */
 export async function publishPostAESKey(token: string) {
-    if (!OthersAESKeyEncryptedMap.has(token)) throw new Error(geti18nString('service-publish-post-aes-key-failed'))
+    if (!OthersAESKeyEncryptedMap.has(token)) throw new Error(geti18nString('service_publish_post_aes_key_failed'))
     return publishPostAESKey_Service(token, OthersAESKeyEncryptedMap.get(token)!)
 }
 
@@ -133,7 +133,7 @@ export async function decryptFrom(
             return key
         }
         const byKey = await getKey(by)
-        if (!byKey) return { error: geti18nString('service-others-key-not-found', by) }
+        if (!byKey) return { error: geti18nString('service_others_key_not_found', by) }
         const mine = (await getMyPrivateKey())!
         try {
             const unverified = ['2/4', ownersAESKeyEncrypted, salt, encryptedText].join('|')
@@ -162,7 +162,7 @@ export async function decryptFrom(
                 // ? after the auto-share with friends is done.
                 if (aesKeyEncrypted === undefined) {
                     return {
-                        error: geti18nString('service-not-share-target'),
+                        error: geti18nString('service_not_share_target'),
                     }
                 }
                 const content = decodeText(
@@ -186,11 +186,11 @@ export async function decryptFrom(
         } catch (e) {
             if (e instanceof DOMException) {
                 console.error(e)
-                return { error: geti18nString('service-decryption-failed') }
+                return { error: geti18nString('service_decryption_failed') }
             } else throw e
         }
     }
-    return { error: geti18nString('service-unknown-payload') }
+    return { error: geti18nString('service_unknown_payload') }
 }
 //#endregion
 
@@ -220,7 +220,7 @@ export async function verifyOthersProve(bio: string, othersName: string) {
             'deriveKey',
         ])
     } catch {
-        throw new Error(geti18nString('service-key-parse-failed'))
+        throw new Error(geti18nString('service_key_parse_failed'))
     }
     storeKey({ username: othersName, key: { publicKey: publicKey } })
     return publicKey

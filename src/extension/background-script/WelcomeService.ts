@@ -12,7 +12,7 @@ export async function backupMyKeyPair() {
     await sleep(1000)
     const key = await getMyPrivateKey()
     const localKey = await crypto.subtle.exportKey('jwk', (await getMyLocalKey()).key)
-    if (!key) throw new TypeError(geti18nString('service-have-no-own-key-yet'))
+    if (!key) throw new TypeError(geti18nString('service_have_no_own_key_yet'))
     const keyRecord: CryptoKeyRecord = await toStoreCryptoKey(key)
     const string = JSON.stringify({ key: keyRecord, local: localKey })
     const buffer = encodeText(string)
@@ -32,7 +32,7 @@ export async function backupMyKeyPair() {
 }
 
 export async function openWelcomePage(username: string) {
-    if (!regularUsername(username)) throw new TypeError(geti18nString('service-username-invalid'))
+    if (!regularUsername(username)) throw new TypeError(geti18nString('service_username_invalid'))
     // TODO: move to .open options page api
     return browser.tabs.create({ url: browser.runtime.getURL('index.html#/welcome?username=' + username) })
 }

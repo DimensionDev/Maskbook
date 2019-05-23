@@ -62,7 +62,7 @@ export default withStylesTyped(theme =>
             <FormControl component={'fieldset' as any} className={classes.root}>
                 <RadioGroup
                     className={classes.group}
-                    aria-label={geti18nString('welcome-1a4-auto-radio-aria')}
+                    aria-label={geti18nString('welcome_1a4_auto_radio_aria')}
                     value={type}
                     onChange={(e, v) => setType(v as any)}>
                     <FormControlLabel
@@ -73,12 +73,12 @@ export default withStylesTyped(theme =>
                         label={
                             <Option activated={type === 'bio'}>
                                 <Typography variant="subtitle2" className={classes.title}>
-                                    {geti18nString('welcome-1a4-auto-profile-title')}
+                                    {geti18nString('welcome_1a4_auto_profile_title')}
                                 </Typography>
                                 <Typography variant="subtitle2">
-                                    {geti18nString('welcome-1a4-auto-profile-description1')}
+                                    {geti18nString('welcome_1a4_auto_profile_description1')}
                                     <br />
-                                    {geti18nString('welcome-1a4-auto-profile-description2')}
+                                    {geti18nString('welcome_1a4_auto_profile_description2')}
                                 </Typography>
                             </Option>
                         }
@@ -90,12 +90,12 @@ export default withStylesTyped(theme =>
                         label={
                             <Option activated={type === 'post'}>
                                 <Typography variant="subtitle2" className={classes.title}>
-                                    {geti18nString('welcome-1a4-auto-post-title')}
+                                    {geti18nString('welcome_1a4_auto_post_title')}
                                 </Typography>
                                 <Typography variant="subtitle2">
-                                    {geti18nString('welcome-1a4-auto-post-description1')}
+                                    {geti18nString('welcome_1a4_auto_post_description1')}
                                     <br />
-                                    {geti18nString('welcome-1a4-auto-post-description2')}
+                                    {geti18nString('welcome_1a4_auto_post_description2')}
                                 </Typography>
                             </Option>
                         }

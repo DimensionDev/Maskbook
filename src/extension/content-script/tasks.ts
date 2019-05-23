@@ -32,7 +32,7 @@ export async function pasteIntoPostBox(text: string, warningText: string) {
             if (!dialog.evaluateOnce()[0]) throw new Error('Click not working')
         } catch (e) {
             console.warn(e)
-            if (!dialog.evaluateOnce()[0]) alert(geti18nString('automation-request-click-post-box'))
+            if (!dialog.evaluateOnce()[0]) alert(geti18nString('automation_request_click_post_box'))
         }
         console.log('Awaiting dialog')
     }
@@ -98,7 +98,7 @@ export default AutomatedTabTask(
                 await sleep(200)
                 bioEditButton.click()
             } catch {
-                alert(geti18nString('automation-request-click-edit-bio-button'))
+                alert(geti18nString('automation_request_click_edit_bio_button'))
             }
 
             await sleep(400)
@@ -114,7 +114,7 @@ export default AutomatedTabTask(
             } catch {
                 console.warn('Text not pasted to the text area')
                 navigator.clipboard.writeText(text)
-                alert(geti18nString('automation-request-paste-into-bio-box'))
+                alert(geti18nString('automation_request_paste_into_bio_box'))
             }
         },
         pasteIntoPostBox,

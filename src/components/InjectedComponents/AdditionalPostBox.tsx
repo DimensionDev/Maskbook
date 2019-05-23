@@ -61,8 +61,8 @@ export const AdditionalPostBoxUI = withStylesTyped({
                     multiline
                     placeholder={geti18nString(
                         myself.nickname
-                            ? 'additional-post-box--placeholder-w-name'
-                            : 'additional-post-box--placeholder-wo-name',
+                            ? 'additional_post_box__placeholder_w_name'
+                            : 'additional_post_box__placeholder_wo_name',
                         myself.nickname,
                     )}
                 />
@@ -83,7 +83,7 @@ export const AdditionalPostBoxUI = withStylesTyped({
                     color="primary"
                     className={classes.button}
                     disabled={!(selectedPeople.length && text)}>
-                    {geti18nString('additional-post-box--post-button')}
+                    {geti18nString('additional_post_box__post_button')}
                 </Button>
             </FlexBox>
         </Card>
@@ -101,8 +101,8 @@ export function AdditionalPostBox() {
     useAsync(() => Services.People.queryAvatar(username || ''), []).then(setAvatar)
     const onRequestPost = React.useCallback(async (people, text) => {
         const [encrypted, token] = await Services.Crypto.encryptTo(text, people)
-        const fullPost = geti18nString('additional-post-box--encrypted-post-pre', encrypted)
-        pasteIntoPostBox(fullPost, geti18nString('additional-post-box--encrypted-failed'))
+        const fullPost = geti18nString('additional_post_box__encrypted_post_pre', encrypted)
+        pasteIntoPostBox(fullPost, geti18nString('additional_post_box__encrypted_failed'))
         Services.Crypto.publishPostAESKey(token)
     }, [])
     if (!username) {

@@ -28,17 +28,17 @@ const DecryptPostSuccess = withStylesTyped({
             title={
                 <>
                     {ShareMenu}
-                    {geti18nString('decrypted-postbox-title')}
+                    {geti18nString('decrypted_postbox_title')}
                     <FullWidth />
                     {props.displayAppendDecryptor ? (
                         <Link color="primary" onClick={showShare} className={classes.link}>
-                            {geti18nString('decrypted-postbox-add-decryptor')}
+                            {geti18nString('decrypted_postbox_add_decryptor')}
                         </Link>
                     ) : null}
                     {data.signatureVerifyResult ? (
-                        <span className={classes.pass}>{geti18nString('decrypted-postbox-verified')}</span>
+                        <span className={classes.pass}>{geti18nString('decrypted_postbox_verified')}</span>
                     ) : (
-                        <span className={classes.fail}>{geti18nString('decrypted-postbox-not-verified')}</span>
+                        <span className={classes.fail}>{geti18nString('decrypted_postbox_not_verified')}</span>
                     )}
                 </>
             }
@@ -53,10 +53,10 @@ const DecryptPostSuccess = withStylesTyped({
     )
 })
 
-const DecryptPostAwaiting = <AdditionalContent title={geti18nString('decrypted-postbox-decrypting')} />
+const DecryptPostAwaiting = <AdditionalContent title={geti18nString('decrypted_postbox_decrypting')} />
 function DecryptPostFailed({ error }: { error: Error }) {
     return (
-        <AdditionalContent title={geti18nString('decrypted-postbox-failed')}>
+        <AdditionalContent title={geti18nString('decrypted_postbox_failed')}>
             {error && error.message}
         </AdditionalContent>
     )

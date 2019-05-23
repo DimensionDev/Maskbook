@@ -78,7 +78,7 @@ export default withStylesTyped(theme =>
                 </Button>
             </nav>
             <main className={classes.main}>
-                <Typography variant="h5">{geti18nString('welcome-1b-title')}</Typography>
+                <Typography variant="h5">{geti18nString('welcome_1b_title')}</Typography>
                 <form>
                     <input
                         className={classes.file}
@@ -92,10 +92,10 @@ export default withStylesTyped(theme =>
                         data-active={dragStatus === 'drag-enter'}
                         onClick={() => ref.current && ref.current.click()}>
                         {dragStatus === 'drag-enter'
-                            ? geti18nString('welcome-1b-dragging')
+                            ? geti18nString('welcome_1b_dragging')
                             : fileRef.current
-                            ? geti18nString('welcome-1b-file-selected', fileRef.current.name)
-                            : geti18nString('welcome-1b-no-file-selected')}
+                            ? geti18nString('welcome_1b_file_selected', fileRef.current.name)
+                            : geti18nString('welcome_1b_no_file_selected')}
                     </RestoreBox>
                 </form>
                 <Button

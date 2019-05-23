@@ -36,7 +36,7 @@ export const Banner = withStylesTyped({
             <Toolbar className={props.classes.toolbar}>
                 <FullWidth>
                     <Typography variant="subtitle1" color="inherit">
-                        {geti18nString('banner-title')}
+                        {geti18nString('banner_title')}
                     </Typography>
                 </FullWidth>
                 <Button
@@ -44,10 +44,10 @@ export const Banner = withStylesTyped({
                     classes={{ root: props.classes.button }}
                     variant="contained"
                     color="primary">
-                    {geti18nString('banner-get-started')}
+                    {geti18nString('banner_get_started')}
                 </Button>
                 <IconButton
-                    aria-label={geti18nString('banner-dismiss-aria')}
+                    aria-label={geti18nString('banner_dismiss_aria')}
                     onClick={props.close}
                     classes={{ root: props.classes.close }}>
                     <CloseIcon />

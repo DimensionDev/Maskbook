@@ -31,16 +31,16 @@ export default withStylesTyped(theme =>
     const filename = `maskbook-keystore-backup-${today}.json`
     return (
         <Paper className={classes.paper}>
-            <Typography variant="h5">{geti18nString('welcome-1a3-title')}</Typography>
+            <Typography variant="h5">{geti18nString('welcome_1a3_title')}</Typography>
             <img alt="" src={getUrl(require('./1a3.jpg'))} width="auto" height={160} />
             <Typography variant="caption">{filename}</Typography>
             <Typography variant="subtitle1">
-                {geti18nString('welcome-1a3-description1')}
+                {geti18nString('welcome_1a3_description1')}
                 <br />
-                {geti18nString('welcome-1a3-description2')}
+                {geti18nString('welcome_1a3_description2')}
             </Typography>
             <Button onClick={next} variant="contained" color="primary" className={classes.button}>
-                {geti18nString('welcome-1a3-done-button')}
+                {geti18nString('welcome_1a3_done_button')}
             </Button>
         </Paper>
     )

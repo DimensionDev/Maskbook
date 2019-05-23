@@ -102,7 +102,7 @@ export const SelectPeopleUI = withStylesTyped({
                             onSetSelected(selected.slice(0, selected.length - 1))
                         }
                     }}
-                    placeholder={disabled ? '' : geti18nString('search-box-placeholder')}
+                    placeholder={disabled ? '' : geti18nString('search_box_placeholder')}
                     disabled={disabled}
                 />
             </FlexBox>
@@ -115,12 +115,12 @@ export const SelectPeopleUI = withStylesTyped({
                             className={classes.button}
                             color="primary"
                             onClick={() => onSetSelected([...selected, ...listAfterSearch])}>
-                            {geti18nString('select-all')}
+                            {geti18nString('select_all')}
                         </Button>
                     )}
                     {selected.length > 0 && (
                         <Button className={classes.button} onClick={() => onSetSelected([])}>
-                            {geti18nString('select-none')}
+                            {geti18nString('select_none')}
                         </Button>
                     )}
                 </FlexBox>
@@ -133,7 +133,7 @@ export const SelectPeopleUI = withStylesTyped({
                     <List dense>
                         {listBeforeSearch.length > 0 && listBeforeSearch.length === 0 && (
                             <ListItem>
-                                <ListItemText primary={geti18nString('not-found')} />
+                                <ListItemText primary={geti18nString('not_found')} />
                             </ListItem>
                         )}
                         {listAfterSearch.map(p => (

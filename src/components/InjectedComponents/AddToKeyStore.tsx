@@ -20,11 +20,11 @@ export function AddToKeyStore({ provePost, postBy }: Props) {
     )
 }
 export const AddToKeyStoreUI = {
-    success: <AdditionalContent title={geti18nString('add-to-key-store-success')} />,
-    awaiting: <AdditionalContent title={geti18nString('add-to-key-store-verifying')} />,
+    success: <AdditionalContent title={geti18nString('add_to_key_store_success')} />,
+    awaiting: <AdditionalContent title={geti18nString('add_to_key_store_verifying')} />,
     failed: (props: { error: Error }) => (
-        <AdditionalContent title={geti18nString('add-to-key-store-failed-title')}>
-            {geti18nString('add-to-key-store-failed-text', props.error.message)}
+        <AdditionalContent title={geti18nString('add_to_key_store_failed_title')}>
+            {geti18nString('add_to_key_store_failed_text', props.error.message)}
             {console.error(props.error)}
         </AdditionalContent>
     ),

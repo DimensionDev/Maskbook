@@ -25,7 +25,7 @@ module.exports = function override(/** @type{import("webpack").Configuration} */
 
     config.plugins.push(
         new (require('write-file-webpack-plugin'))({
-            test: /(webp|jpg|png|shim|polyfill|js\/.*|index\.html|manifest\.json)/,
+            test: /(webp|jpg|png|shim|polyfill|js\/.*|index\.html|manifest\.json|_locales)/,
         }),
     )
     // Write files to /public

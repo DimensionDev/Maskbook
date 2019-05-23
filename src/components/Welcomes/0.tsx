@@ -63,32 +63,32 @@ export default withStylesTyped(theme =>
         <Paper className={classes.paper}>
             <nav className={classes.nav}>
                 <Button onClick={close} disableFocusRipple disableRipple className={classes.navButton}>
-                    {geti18nString('welcome-0-title')}
+                    {geti18nString('welcome_0_title')}
                     <Close className={classes.navButtonIcon} />
                 </Button>
             </nav>
             <article>
                 <Typography variant="h5" className={classes.title}>
-                    {geti18nString('welcome-0-title')}
+                    {geti18nString('welcome_0_title')}
                 </Typography>
                 <Typography variant="subtitle1" className={classes.subtitle}>
-                    {geti18nString('welcome-0-description')}
+                    {geti18nString('welcome_0_description')}
                 </Typography>
                 <LinedBox>
                     <FullWidth>
-                        <Typography variant="body1">{geti18nString('welcome-0-new-user')}</Typography>
-                        <Typography variant="h6">{geti18nString('welcome-0-connect-facebook')}</Typography>
+                        <Typography variant="body1">{geti18nString('welcome_0_new_user')}</Typography>
+                        <Typography variant="h6">{geti18nString('welcome_0_connect_facebook')}</Typography>
                     </FullWidth>
                     <VerticalCenter>
                         <Button onClick={create} variant="contained" color="primary" className={classes.button}>
-                            {geti18nString('welcome-0-connect-facebook')}
+                            {geti18nString('welcome_0_connect_facebook')}
                         </Button>
                     </VerticalCenter>
                 </LinedBox>
                 <LinedBox>
                     <FullWidth>
-                        <Typography variant="body1">{geti18nString('welcome-0-old-user')}</Typography>
-                        <Typography variant="h6">{geti18nString('welcome-0-restore-key')}</Typography>
+                        <Typography variant="body1">{geti18nString('welcome_0_old_user')}</Typography>
+                        <Typography variant="h6">{geti18nString('welcome_0_restore_key')}</Typography>
                     </FullWidth>
                     <VerticalCenter>
                         <Button onClick={restore} variant="outlined" className={classes.button}>
@@ -97,7 +97,7 @@ export default withStylesTyped(theme =>
                     </VerticalCenter>
                 </LinedBox>
                 <Typography variant="caption" className={classes.title}>
-                    {geti18nString('welcome-0-caption')}
+                    {geti18nString('welcome_0_caption')}
                 </Typography>
             </article>
         </Paper>

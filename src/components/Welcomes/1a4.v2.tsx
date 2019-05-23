@@ -42,45 +42,45 @@ export default withStylesTyped(theme =>
     const auto = (
         <>
             <Typography variant="subtitle1">
-                {geti18nString('welcome-1a4-type-auto-subtitle1')}
+                {geti18nString('welcome_1a4_type_auto_subtitle1')}
                 <br />
-                {geti18nString('welcome-1a4-type-auto-subtitle2')}
+                {geti18nString('welcome_1a4_type_auto_subtitle2')}
             </Typography>
             <Button onClick={finish} variant="contained" color="primary" className={classes.button}>
                 {geti18nString('finish')}
             </Button>
             <br />
             <Button color="primary" onClick={setManual}>
-                {geti18nString('welcome-1a4-type-auto-switch')}
+                {geti18nString('welcome_1a4_type_auto_switch')}
             </Button>
         </>
     )
     const manual = (
         <>
             <Typography variant="subtitle1">
-                {geti18nString('welcome-1a4-type-manual-subtitle1')}
+                {geti18nString('welcome_1a4_type_manual_subtitle1')}
                 <br />
-                {geti18nString('welcome-1a4-type-manual-subtitle2')}
+                {geti18nString('welcome_1a4_type_manual_subtitle2')}
             </Typography>
             <Button onClick={requestManualVerify} variant="contained" color="primary" className={classes.button}>
-                {geti18nString('welcome-1a4-type-manual-goto')}
+                {geti18nString('welcome_1a4_type_manual_goto')}
             </Button>
             <br />
             <Button color="primary" onClick={setAuto}>
-                {geti18nString('welcome-1a4-type-manual-switch')}
+                {geti18nString('welcome_1a4_type_manual_switch')}
             </Button>
         </>
     )
     return (
         <Paper className={classes.paper}>
-            <Typography variant="h5">{geti18nString('welcome-1a4-title')}</Typography>
+            <Typography variant="h5">{geti18nString('welcome_1a4_title')}</Typography>
             {actionType === 'auto' ? (
                 <Auto bioDisabled={!!bioDisabled} type={type} setType={setType} />
             ) : (
                 <Manual provePost={provePost} />
             )}
             {actionType === 'auto' && bioDisabled && (
-                <span className={classes.red}>{geti18nString('welcome-1a4-bio-disabled')}</span>
+                <span className={classes.red}>{geti18nString('welcome_1a4_bio_disabled')}</span>
             )}
             {actionType === 'auto' ? auto : manual}
         </Paper>

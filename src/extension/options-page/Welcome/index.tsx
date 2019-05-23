@@ -55,7 +55,7 @@ const WelcomeActions = {
             memorable: false,
             pinned: false,
             timeout: Infinity,
-        }).pasteIntoPostBox(prove, geti18nString('automation-request-paste-into-post-box'))
+        }).pasteIntoPostBox(prove, geti18nString('automation_request_paste_into_post_box'))
     },
     manualVerifyBio(userId: string, prove: string) {
         this.autoVerifyBio(userId, prove)

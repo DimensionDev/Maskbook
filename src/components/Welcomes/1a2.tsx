@@ -32,16 +32,16 @@ export default withStylesTyped(theme =>
 )<Props>(function Welcome({ classes, next }) {
     return (
         <Paper className={classes.paper}>
-            <Typography variant="h5">{geti18nString('welcome-1a2-title')}</Typography>
+            <Typography variant="h5">{geti18nString('welcome_1a2_title')}</Typography>
             <img
-                alt={geti18nString('welcome-1a2-imgalt')}
+                alt={geti18nString('welcome_1a2_imgalt')}
                 src={getUrl(require('./1a2.jpg'))}
                 width="75%"
                 className={classes.img}
             />
-            <Typography variant="subtitle1">{geti18nString('welcome-1a2-description')}</Typography>
+            <Typography variant="subtitle1">{geti18nString('welcome_1a2_description')}</Typography>
             <Button onClick={next} variant="contained" color="primary" className={classes.button}>
-                {geti18nString('welcome-1a2-done-button')}
+                {geti18nString('welcome_1a2_done_button')}
             </Button>
         </Paper>
     )

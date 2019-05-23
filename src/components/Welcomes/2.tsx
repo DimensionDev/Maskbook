@@ -21,8 +21,8 @@ export default withStylesTyped(theme =>
 )<Props>(function Welcome({ classes }) {
     return (
         <Paper className={classes.paper}>
-            <Typography variant="h5">{geti18nString('welcome-2-title')}</Typography>
-            <Typography variant="subtitle1">{geti18nString('welcome-2-greeting')}</Typography>
+            <Typography variant="h5">{geti18nString('welcome_2_title')}</Typography>
+            <Typography variant="subtitle1">{geti18nString('welcome_2_greeting')}</Typography>
         </Paper>
     )
 })
