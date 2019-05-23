@@ -6,13 +6,18 @@ import ReactDOM from 'react-dom'
 import Welcome from './extension/options-page/Welcome'
 import { MuiThemeProvider } from '@material-ui/core'
 import { MaskbookLightTheme } from './utils/theme'
+import { geti18nString } from './utils/i18n'
 
 uiSetup()
 function App() {
     return (
         <MuiThemeProvider theme={MaskbookLightTheme}>
             <Router>
-                <Route exact path="/" component={() => <Link to="/welcome">-> Welcome</Link>} />
+                <Route
+                    exact
+                    path="/"
+                    component={() => <Link to="/welcome">{geti18nString('options_index_welcome')}</Link>}
+                />
                 <Route path="/welcome" component={Welcome} />
             </Router>
         </MuiThemeProvider>

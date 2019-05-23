@@ -8,6 +8,7 @@ import DialogTitle from '@material-ui/core/DialogTitle/DialogTitle'
 import DialogActions from '@material-ui/core/DialogActions/DialogActions'
 import DialogContent from '@material-ui/core/DialogContent/DialogContent'
 import { withStylesTyped } from '../../utils/theme'
+import { geti18nString } from '../../utils/i18n'
 interface Props {
     open: boolean
     people: Person[]
@@ -54,13 +55,13 @@ export const SelectPeopleDialog = withStylesTyped({
             )}
             <DialogActions>
                 <Button size="large" disabled={canClose} onClick={onClose}>
-                    Cancel
+                    {geti18nString('cancel')}
                 </Button>
                 <Button size="large" disabled={canCommit} color="primary" onClick={share}>
                     {committed && (
                         <CircularProgress aria-busy className={classes.progress} size={16} variant="indeterminate" />
                     )}
-                    {committed ? 'Sharing' : 'Share'}
+                    {geti18nString(committed ? 'sharing' : 'share')}
                 </Button>
             </DialogActions>
         </Dialog>
