@@ -1,254 +1,254 @@
 {
     "manifest_description": {
-        "message": "Encrypt your posts & chats on You-Know-Where. Allow only your friends to decrypt."
+        "message": "在臉書發佈加密訊息，只讓你的朋友閱讀。"
     },
     "additional_post_box__placeholder_w_name": {
-        "message": "Hey $1, what's your mind? Encrypt with Maskbook"
+        "message": "Hey $1, 有何所思？用 Maskbook 加密分享。"
     },
     "additional_post_box__placeholder_wo_name": {
-        "message": "What's your mind? Encrypt with Maskbook"
+        "message": "有何所思？用 Maskbook 加密分享。"
     },
     "additional_post_box__post_button": {
-        "message": "📫 Post it!"
+        "message": "現在發佈！"
     },
     "additional_post_box__encrypted_post_pre": {
-        "message": "Decrypt this post with $1"
+        "message": "使用 $1 來解密這個訊息"
     },
     "additional_post_box__encrypted_failed": {
-        "message": "Encrypted text has been copied into the clipboard!\nHowever, you need to paste it to the post box by yourself."
+        "message": "加密文本已經拷貝至剪貼板！\n不過，你需要手動粘貼到發佈框。"
     },
     "add_to_key_store_success": {
-        "message": "Maskbook public key added to keystore ✔"
+        "message": "Maskbook 已獲取此公鑰並添加至本地 ✔"
     },
     "add_to_key_store_verifying": {
-        "message": "Maskbook public key found, verifying..."
+        "message": "Maskbook 公鑰已獲取，驗證中…"
     },
     "add_to_key_store_failed_title": {
-        "message": "Maskbook public key NOT verified ❌"
+        "message": "Maskbook 公鑰驗證失敗 ❌"
     },
     "add_to_key_store_failed_text": {
-        "message": "$1\nThis public key won't be saved."
+        "message": "$1\n這個公鑰不會被相信。"
     },
     "decrypted_postbox_title": {
-        "message": "Maskbook decrypted content:"
+        "message": "Maskbook 解密出的文本："
     },
     "decrypted_postbox_add_decryptor": {
-        "message": "Add decryptor"
+        "message": "添加解密權限者："
     },
     "decrypted_postbox_verified": {
-        "message": "Signature verified ✔"
+        "message": "數字簽名驗證成功 ✔"
     },
     "decrypted_postbox_not_verified": {
-        "message": "Signature NOT verified ❌"
+        "message": "數字簽名驗證失敗，對方可能被駭了 ❌"
     },
     "decrypted_postbox_decrypting": {
-        "message": "Maskbook decrypting..."
+        "message": "Maskbook 解密中…"
     },
     "decrypted_postbox_failed": {
-        "message": "Maskbook decryption failed"
+        "message": "Maskbook 解密失敗"
     },
     "search_box_placeholder": {
-        "message": "Type here to search"
+        "message": "鍵入以搜尋"
     },
     "select_all": {
-        "message": "Select All"
+        "message": "選取全部"
     },
     "select_none": {
-        "message": "Select None"
+        "message": "全部取消選取"
     },
     "not_found": {
-        "message": "Not found"
+        "message": "找不到"
     },
     "cancel": {
-        "message": "Cancel"
+        "message": "取消"
     },
     "sharing": {
-        "message": "Sharing"
+        "message": "分享"
     },
     "share": {
-        "message": "Share"
+        "message": "分享"
     },
     "restore": {
-        "message": "Restore"
+        "message": "恢復"
     },
     "back": {
-        "message": "Back"
+        "message": "返回"
     },
     "finish": {
-        "message": "Finish"
+        "message": "完成"
     },
     "welcome_0_close_button": {
-        "message": "I'll do it later"
+        "message": "我想以後再做"
     },
     "welcome_0_title": {
-        "message": "Welcome to Maskbook"
+        "message": "歡迎使用 Maskbook"
     },
     "welcome_0_description": {
-        "message": "You can post on Facebook without allowing Facebook to stalk, analyze, and peep into you."
+        "message": "從此無需擔心 Facebook 追蹤、分析、窺視你的數字生活"
     },
     "welcome_0_new_user": {
-        "message": "New user?"
+        "message": "新用戶？"
     },
     "welcome_0_connect_facebook": {
-        "message": "Connect Facebook"
+        "message": "連接 Facebook 賬號"
     },
     "welcome_0_old_user": {
-        "message": "Returning user?"
+        "message": "老用戶？"
     },
     "welcome_0_restore_key": {
-        "message": "Restore Keypair"
+        "message": "導入備份檔案"
     },
     "welcome_0_caption": {
-        "message": "Lost your keypair backup? No worry. Simply start as a new user."
+        "message": "弄丟了備份檔案？不用擔心，當作自己是新用戶即可。"
     },
     "welcome_1a2_title": {
-        "message": "Encrypt message use this postbox"
+        "message": "使用這個輸入框來加密"
     },
     "welcome_1a2_imgalt": {
-        "message": "Screenshot of how to encrypt message with Maskbook"
+        "message": "關於如何使用 Maskbook 加密的截圖"
     },
     "welcome_1a2_description": {
-        "message": "Then only people you selected with Maskbook can see the post content"
+        "message": "這樣，只有你選中的好友才能解密這條訊息"
     },
     "welcome_1a2_done_button": {
-        "message": "Nice!"
+        "message": "棒耶！"
     },
     "welcome_1a3_title": {
-        "message": "Keep your backups carefully"
+        "message": "請妥善保管備份檔案"
     },
     "welcome_1a3_description1": {
-        "message": "The first backup has been put in your Downloads folder."
+        "message": "第一個備份檔案已經放在「下載」文件夾。"
     },
     "welcome_1a3_description2": {
-        "message": "And export backups frequently!"
+        "message": "記得經常創建新備份！"
     },
     "welcome_1a3_done_button": {
-        "message": "Got it!"
+        "message": "瞭解！"
     },
     "welcome_1a4_auto_radio_aria": {
-        "message": "Choose how to verify your account"
+        "message": "選擇賬號歸屬權驗證手段"
     },
     "welcome_1a4_auto_profile_title": {
-        "message": "Add public key to profile"
+        "message": "添加公鑰到個人簡介"
     },
     "welcome_1a4_auto_profile_description1": {
-        "message": "Easy and lightweight."
+        "message": "簡潔高效"
     },
     "welcome_1a4_auto_profile_description2": {
-        "message": "Never disturb anyone."
+        "message": "不會打擾到任何人"
     },
     "welcome_1a4_auto_post_title": {
-        "message": "Create a verification post"
+        "message": "發佈一個聲明訊息"
     },
     "welcome_1a4_auto_post_description1": {
-        "message": "We appreciate your valor!"
+        "message": "我們感謝你的支持"
     },
     "welcome_1a4_auto_post_description2": {
-        "message": "Editable after posting."
+        "message": "你可以調整文本措辭"
     },
     "welcome_1a4_title": {
-        "message": "Verify Account Ownership"
+        "message": "驗證賬號歸屬權"
     },
     "welcome_1a4_bio_disabled": {
-        "message": "Sorry, automatically verify your account through bio is not available now."
+        "message": "由於技術問題，此驗證方式暫時不可用。"
     },
     "welcome_1a4_type_auto_subtitle1": {
-        "message": "Avoid any confusion before your first encrypted post."
+        "message": "避免好友感到迷惑"
     },
     "welcome_1a4_type_auto_subtitle2": {
-        "message": "This allows your friends to verify the connection between your Facebook account and your keypair."
+        "message": "這使得你的好友能夠驗證你的 Facebook 賬號與你的 Maskbook 公鑰都屬於你。"
     },
     "welcome_1a4_type_auto_switch": {
-        "message": "Prefer doing it manually?"
+        "message": "更願意手動操作？"
     },
     "welcome_1a4_type_manual_subtitle1": {
-        "message": "Add this to bio, or post on timeline, before your first encrypted post."
+        "message": "將這串文本添加到個人簡介或分享到時間線，在發佈第一條加密訊息之前。"
     },
     "welcome_1a4_type_manual_subtitle2": {
-        "message": "This allows your friends to verify the connection between your Facebook account and your keypair."
+        "message": "這使得你的好友能夠驗證你的 Facebook 賬號與你的 Maskbook 公鑰都屬於你。"
     },
     "welcome_1a4_type_manual_goto": {
-        "message": "Copy & Go to Profile"
+        "message": "拷貝並跳轉到個人簡介"
     },
     "welcome_1a4_type_manual_switch": {
-        "message": "Prefer automating the steps?"
+        "message": "更願意讓 Maskbook 代勞？"
     },
     "welcome_1b_title": {
-        "message": "Restore your keypair"
+        "message": "導入備份檔案"
     },
     "welcome_1b_dragging": {
-        "message": "Drag your key backup into this dialog"
+        "message": "將備份檔案拖拽到此處"
     },
     "welcome_1b_no_file_selected": {
-        "message": "Select your exported key backup"
+        "message": "選取備份檔案"
     },
     "welcome_1b_file_selected": {
-        "message": "Selected exported key backup: $1"
+        "message": "已選取備份檔案：$1"
     },
     "welcome_2_title": {
-        "message": "You're done!"
+        "message": "完畢！"
     },
     "welcome_2_greeting": {
-        "message": "You can use Maskbook now!"
+        "message": "你現在可以使用 Maskbook 了！"
     },
     "banner_title": {
-        "message": "Welcome to Maskbook"
+        "message": "歡迎使用 Maskbook"
     },
     "banner_get_started": {
-        "message": "Get started"
+        "message": "開始使用"
     },
     "banner_dismiss_aria": {
-        "message": "Dismiss the banner"
+        "message": "關閉消息"
     },
     "service_others_key_not_found": {
-        "message": "$1's public key not found!"
+        "message": "$1 的公鑰無法找到！"
     },
     "service_publish_post_aes_key_failed": {
-        "message": "Publish AES key failed!"
+        "message": "未能發佈 AES 密鑰。"
     },
     "service_not_share_target": {
-        "message": "Maskbook does not find the key used to decrypt this post. Maybe this post is not intended to share with you?"
+        "message": "找不到 AES 密鑰。或許這條訊息不是分享給你的？"
     },
     "service_decryption_failed": {
-        "message": "Decryption failed."
+        "message": "解密失敗。"
     },
     "service_unknown_payload": {
-        "message": "Unknown post version, maybe you should update Maskbook?"
+        "message": "不支持的訊息構造。或許你需要更新 Maskbook 版本了？"
     },
     "service_key_parse_failed": {
         "message": "Key parse failed"
     },
     "service_have_no_own_key_yet": {
-        "message": "You have no private key yet"
+        "message": "你還沒有私鑰"
     },
     "service_username_invalid": {
-        "message": "Username not valid"
+        "message": "無效用戶名"
     },
     "automation_request_click_post_box": {
-        "message": "Click the post box please!"
+        "message": "請點擊發佈框"
     },
     "automation_request_click_edit_bio_button": {
-        "message": "Please click the \"Edit bio\" button or the pencil on the bio box."
+        "message": "請點擊「編輯簡介」按鈕或簡介旁的鉛筆圖標"
     },
     "automation_request_paste_into_bio_box": {
-        "message": "Your prove content is write to your clipboard. Please paste into the bio input!"
+        "message": "已將公鑰拷貝至剪貼板，可以直接粘貼到輸入框。"
     },
     "automation_request_paste_into_post_box": {
-        "message": "Prove content has been copied into the clipboard!\nHowever, you need to paste it to the post box by yourself."
+        "message": "已將公鑰拷貝至剪貼板，可以直接粘貼到輸入框。"
     },
     "payload_not_found": {
-        "message": "Doesn't find payload"
+        "message": "找不到 payload"
     },
     "payload_incomplete": {
-        "message": "This post is not complete, you need to view the full post."
+        "message": "不完整的 payload。請點擊「查看全文」。"
     },
     "payload_bad": {
-        "message": "This post seemed to be corrupted. Maskbook cannot decrypt it."
+        "message": "Payload 可能遭到了篡改。"
     },
     "payload_throw_in_alpha41": {
-        "message": "Support for Alpha41 is dropped. Tell your friends to upgrade Maskbook!"
+        "message": "已經不再支持 Alpha41。請提醒對方安裝新版 Maskbook。"
     },
     "options_index_welcome": {
-        "message": "First to Maskbook?"
+        "message": "首次來到 Maskbook？"
     }
 }
