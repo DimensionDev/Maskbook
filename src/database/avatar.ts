@@ -3,7 +3,7 @@ import { Identifier, PersonIdentifier } from './type'
 
 //#region Schema
 export type AvatarRecord = ArrayBuffer
-export interface AvatarMetadataRecord {
+interface AvatarMetadataRecord {
     identifier: string
     lastUpdateTime: Date
     lastAccessTime: Date

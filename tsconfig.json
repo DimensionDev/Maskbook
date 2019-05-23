@@ -1,9 +1,11 @@
 {
   "compilerOptions": {
-    "baseUrl": ".",
-    "paths": { "*": ["types/*"] },
     "target": "es2017",
-    "lib": ["dom", "dom.iterable", "es2017"],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "es2017"
+    ],
     "allowJs": false,
     "skipLibCheck": true,
     "esModuleInterop": true,
@@ -20,5 +22,7 @@
     "incremental": true,
     "tsBuildInfoFile": "./.tscache/"
   },
-  "include": ["src"]
+  "include": [
+    "src"
+  ]
 }
