@@ -18,6 +18,7 @@ import { useCapturedInput } from '../../utils/hooks/useCapturedEvents'
 import { Avatar } from '../../utils/components/Avatar'
 import Services from '../../extension/service'
 import { pasteIntoPostBox } from '../../extension/content-script/tasks'
+import { geti18nString } from '../../utils/i18n'
 
 interface Props {
     people: Person[]
@@ -58,9 +59,12 @@ export const AdditionalPostBoxUI = withStylesTyped({
                     inputRef={inputRef}
                     fullWidth
                     multiline
-                    placeholder={`${
-                        myself.nickname ? `Hey ${myself.nickname}, w` : 'W'
-                    }hat's your mind? Encrypt with Maskbook`}
+                    placeholder={geti18nString(
+                        myself.nickname
+                            ? 'additional_post_box__placeholder_w_name'
+                            : 'additional_post_box__placeholder_wo_name',
+                        myself.nickname,
+                    )}
                 />
             </Paper>
             <Divider />
@@ -79,7 +83,7 @@ export const AdditionalPostBoxUI = withStylesTyped({
                     color="primary"
                     className={classes.button}
                     disabled={!(selectedPeople.length && text)}>
-                    📫 Post it!
+                    {geti18nString('additional_post_box__post_button')}
                 </Button>
             </FlexBox>
         </Card>
@@ -97,11 +101,8 @@ export function AdditionalPostBox() {
     useAsync(() => Services.People.queryAvatar(username || ''), []).then(setAvatar)
     const onRequestPost = React.useCallback(async (people, text) => {
         const [encrypted, token] = await Services.Crypto.encryptTo(text, people)
-        const fullPost = 'Decrypt this post with ' + encrypted
-        pasteIntoPostBox(
-            fullPost,
-            'Encrypted text has been copied into the clipboard!\nHowever, you need to paste it to the post box by yourself.',
-        )
+        const fullPost = geti18nString('additional_post_box__encrypted_post_pre', encrypted)
+        pasteIntoPostBox(fullPost, geti18nString('additional_post_box__encrypted_failed'))
         Services.Crypto.publishPostAESKey(token)
     }, [])
     if (!username) {

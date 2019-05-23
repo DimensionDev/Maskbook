@@ -7,6 +7,7 @@ import Radio from '@material-ui/core/Radio/Radio'
 import FormControl from '@material-ui/core/FormControl/FormControl'
 import RadioGroup from '@material-ui/core/RadioGroup/RadioGroup'
 import FormControlLabel from '@material-ui/core/FormControlLabel/FormControlLabel'
+import { geti18nString } from '../../utils/i18n'
 
 const Option = withStylesTyped(theme => ({
     root: {
@@ -61,7 +62,7 @@ export default withStylesTyped(theme =>
             <FormControl component={'fieldset' as any} className={classes.root}>
                 <RadioGroup
                     className={classes.group}
-                    aria-label="Choose how to verify your account"
+                    aria-label={geti18nString('welcome_1a4_auto_radio_aria')}
                     value={type}
                     onChange={(e, v) => setType(v as any)}>
                     <FormControlLabel
@@ -72,12 +73,12 @@ export default withStylesTyped(theme =>
                         label={
                             <Option activated={type === 'bio'}>
                                 <Typography variant="subtitle2" className={classes.title}>
-                                    Add public key to profile
+                                    {geti18nString('welcome_1a4_auto_profile_title')}
                                 </Typography>
                                 <Typography variant="subtitle2">
-                                    Easy and lightweight.
+                                    {geti18nString('welcome_1a4_auto_profile_description1')}
                                     <br />
-                                    Never disturb anyone.
+                                    {geti18nString('welcome_1a4_auto_profile_description2')}
                                 </Typography>
                             </Option>
                         }
@@ -89,12 +90,12 @@ export default withStylesTyped(theme =>
                         label={
                             <Option activated={type === 'post'}>
                                 <Typography variant="subtitle2" className={classes.title}>
-                                    Create a verification post
+                                    {geti18nString('welcome_1a4_auto_post_title')}
                                 </Typography>
                                 <Typography variant="subtitle2">
-                                    We appreciate your valor!
+                                    {geti18nString('welcome_1a4_auto_post_description1')}
                                     <br />
-                                    Editable after posting.
+                                    {geti18nString('welcome_1a4_auto_post_description2')}
                                 </Typography>
                             </Option>
                         }

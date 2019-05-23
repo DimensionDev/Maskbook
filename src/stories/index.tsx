@@ -5,7 +5,6 @@ import Welcome0 from '../components/Welcomes/0'
 import Welcome1a1 from '../components/Welcomes/1a1'
 import Welcome1a2 from '../components/Welcomes/1a2'
 import Welcome1a3 from '../components/Welcomes/1a3'
-import Welcome1a4 from '../components/Welcomes/1a4'
 import Welcome1a4v2 from '../components/Welcomes/1a4.v2'
 import Welcome1b1 from '../components/Welcomes/1b1'
 import Welcome2 from '../components/Welcomes/2'
@@ -62,12 +61,6 @@ storiesOf('Welcome', module)
     .add('Step 1a-1 (Unused)', () => <Welcome1a1 next={to('Welcome', 'Step 1a-2')} />)
     .add('Step 1a-2', () => <Welcome1a2 next={to('Welcome', 'Step 1a-3')} />)
     .add('Step 1a-3', () => <Welcome1a3 next={to('Welcome', 'Step 1a-4')} />)
-    .add('Step 1a-4', () => (
-        <Welcome1a4
-            copyToClipboard={action('Post click')}
-            provePost={text('Prove', '🔒ApfdMwLoV/URKn7grgcNWdMR2iWMGdHpQBk5LVGFxhul🔒')}
-        />
-    ))
     .add('New Step 1a-4', () => (
         <Welcome1a4v2
             provePost={text('Prove', '🔒ApfdMwLoV/URKn7grgcNWdMR2iWMGdHpQBk5LVGFxhul🔒')}

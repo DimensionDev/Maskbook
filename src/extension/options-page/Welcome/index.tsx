@@ -12,6 +12,7 @@ import tasks from '../../content-script/tasks'
 import { RouteComponentProps, withRouter } from 'react-router'
 import { getProfilePageUrl } from '../../../utils/type-transform/Username'
 import { setStorage, LATEST_WELCOME_VERSION } from '../../../components/Welcomes/WelcomeVersion'
+import { geti18nString } from '../../../utils/i18n'
 
 //#region Welcome
 enum WelcomeState {
@@ -54,10 +55,7 @@ const WelcomeActions = {
             memorable: false,
             pinned: false,
             timeout: Infinity,
-        }).pasteIntoPostBox(
-            prove,
-            'Prove content has been copied into the clipboard!\nHowever, you need to paste it to the post box by yourself.',
-        )
+        }).pasteIntoPostBox(prove, geti18nString('automation_request_paste_into_post_box'))
     },
     manualVerifyBio(userId: string, prove: string) {
         this.autoVerifyBio(userId, prove)

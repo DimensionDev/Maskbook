@@ -4,6 +4,7 @@ import tasks from '../extension/content-script/tasks'
 import { verifyOthersProve } from '../extension/background-script/CryptoService'
 import { sleep } from '../utils/utils'
 import { getProfilePageUrl, getPostUrl } from '../utils/type-transform/Username'
+import { geti18nString } from '../utils/i18n'
 
 export async function queryPersonFromGun(username: string) {
     return gun
@@ -44,7 +45,7 @@ export async function addPersonPublicKey(username: string): Promise<PersonCrypto
     const key = await queryPersonCryptoKey(username)
     if ((bioRejected && proveRejected) || !key) {
         console.error(...errors)
-        throw new Error('Cannot find public key of ' + username)
+        throw new Error(geti18nString('service_others_key_not_found', username))
     }
     return key
 }

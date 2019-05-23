@@ -8,6 +8,7 @@ import { createBox } from '../../utils/components/Flex'
 
 import ArrowBack from '@material-ui/icons/ArrowBack'
 import { useDragAndDrop } from '../../utils/hooks/useDragAndDrop'
+import { geti18nString } from '../../utils/i18n'
 
 const RestoreBox = createBox(theme => ({
     color: theme.palette.text.hint,
@@ -73,11 +74,11 @@ export default withStylesTyped(theme =>
             <nav className={classes.nav}>
                 <Button onClick={back} disableFocusRipple disableRipple className={classes.navButton}>
                     <ArrowBack className={classes.navButtonIcon} />
-                    Back
+                    {geti18nString('back')}
                 </Button>
             </nav>
             <main className={classes.main}>
-                <Typography variant="h5">Restore your keypair</Typography>
+                <Typography variant="h5">{geti18nString('welcome_1b_title')}</Typography>
                 <form>
                     <input
                         className={classes.file}
@@ -91,10 +92,10 @@ export default withStylesTyped(theme =>
                         data-active={dragStatus === 'drag-enter'}
                         onClick={() => ref.current && ref.current.click()}>
                         {dragStatus === 'drag-enter'
-                            ? 'Drag your key backup into this dialog'
+                            ? geti18nString('welcome_1b_dragging')
                             : fileRef.current
-                            ? `Selected exported key backup: ${fileRef.current.name}`
-                            : 'Select your exported key backup'}
+                            ? geti18nString('welcome_1b_file_selected', fileRef.current.name)
+                            : geti18nString('welcome_1b_no_file_selected')}
                     </RestoreBox>
                 </form>
                 <Button
@@ -103,7 +104,7 @@ export default withStylesTyped(theme =>
                     variant="contained"
                     color="primary"
                     className={classes.button}>
-                    Restore
+                    {geti18nString('restore')}
                 </Button>
             </main>
         </Paper>

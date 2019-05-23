@@ -8,6 +8,7 @@ import Link from '@material-ui/core/Link'
 import { withStylesTyped } from '../../utils/theme'
 import { sleep } from '../../utils/utils'
 import Services from '../../extension/service'
+import { geti18nString } from '../../utils/i18n'
 
 interface DecryptPostSuccessProps {
     data: { signatureVerifyResult: boolean; content: string }
@@ -27,16 +28,17 @@ const DecryptPostSuccess = withStylesTyped({
             title={
                 <>
                     {ShareMenu}
-                    Maskbook decrypted content: <FullWidth />
+                    {geti18nString('decrypted_postbox_title')}
+                    <FullWidth />
                     {props.displayAppendDecryptor ? (
                         <Link color="primary" onClick={showShare} className={classes.link}>
-                            Add decryptor
+                            {geti18nString('decrypted_postbox_add_decryptor')}
                         </Link>
                     ) : null}
                     {data.signatureVerifyResult ? (
-                        <span className={classes.pass}>Signature verified ✔</span>
+                        <span className={classes.pass}>{geti18nString('decrypted_postbox_verified')}</span>
                     ) : (
-                        <span className={classes.fail}>Signature NOT verified ❌</span>
+                        <span className={classes.fail}>{geti18nString('decrypted_postbox_not_verified')}</span>
                     )}
                 </>
             }
@@ -51,9 +53,13 @@ const DecryptPostSuccess = withStylesTyped({
     )
 })
 
-const DecryptPostAwaiting = <AdditionalContent title="Maskbook decrypting..." />
+const DecryptPostAwaiting = <AdditionalContent title={geti18nString('decrypted_postbox_decrypting')} />
 function DecryptPostFailed({ error }: { error: Error }) {
-    return <AdditionalContent title="Maskbook decryption failed">{error && error.message}</AdditionalContent>
+    return (
+        <AdditionalContent title={geti18nString('decrypted_postbox_failed')}>
+            {error && error.message}
+        </AdditionalContent>
+    )
 }
 
 interface DecryptPostProps {
