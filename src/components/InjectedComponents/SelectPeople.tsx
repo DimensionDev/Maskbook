@@ -10,6 +10,7 @@ import Button from '@material-ui/core/Button/Button'
 import { withStylesTyped } from '../../utils/theme'
 import ListItemAvatar from '@material-ui/core/ListItemAvatar/ListItemAvatar'
 import { Avatar } from '../../utils/components/Avatar'
+import { geti18nString } from '../../utils/i18n'
 
 interface PeopleInListProps {
     person: Person
@@ -101,7 +102,7 @@ export const SelectPeopleUI = withStylesTyped({
                             onSetSelected(selected.slice(0, selected.length - 1))
                         }
                     }}
-                    placeholder={disabled ? '' : 'Type here to search'}
+                    placeholder={disabled ? '' : geti18nString('search_box_placeholder')}
                     disabled={disabled}
                 />
             </FlexBox>
@@ -114,12 +115,12 @@ export const SelectPeopleUI = withStylesTyped({
                             className={classes.button}
                             color="primary"
                             onClick={() => onSetSelected([...selected, ...listAfterSearch])}>
-                            Select All
+                            {geti18nString('select_all')}
                         </Button>
                     )}
                     {selected.length > 0 && (
                         <Button className={classes.button} onClick={() => onSetSelected([])}>
-                            Select None
+                            {geti18nString('select_none')}
                         </Button>
                     )}
                 </FlexBox>
@@ -132,7 +133,7 @@ export const SelectPeopleUI = withStylesTyped({
                     <List dense>
                         {listBeforeSearch.length > 0 && listBeforeSearch.length === 0 && (
                             <ListItem>
-                                <ListItemText primary="Not found" />
+                                <ListItemText primary={geti18nString('not_found')} />
                             </ListItem>
                         )}
                         {listAfterSearch.map(p => (
