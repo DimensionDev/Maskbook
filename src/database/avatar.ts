@@ -1,7 +1,8 @@
 import { openDB, DBSchema } from 'idb/with-async-ittr'
-import { Identifier, PersonIdentifier } from './type'
+import { Identifier, PersonIdentifier, GroupIdentifier } from './type'
 
 //#region Schema
+type IdentityWithAvatar = PersonIdentifier | GroupIdentifier
 export type AvatarRecord = ArrayBuffer
 interface AvatarMetadataRecord {
     identifier: string
@@ -32,7 +33,7 @@ const db = openDB<AvatarDB>('maskbook-avatar-cache-v2', 1, {
 /**
  * Store avatar into database
  */
-export async function storeAvatarDB(id: Identifier, avatar: ArrayBuffer) {
+export async function storeAvatarDB(id: IdentityWithAvatar, avatar: ArrayBuffer) {
     const meta: AvatarMetadataRecord = {
         identifier: id.toString(),
         lastUpdateTime: new Date(),
@@ -47,7 +48,7 @@ export async function storeAvatarDB(id: Identifier, avatar: ArrayBuffer) {
 /**
  * Read avatar out
  */
-export async function queryAvatarDB(id: PersonIdentifier) {
+export async function queryAvatarDB(id: IdentityWithAvatar) {
     const t = (await db).transaction('avatars')
     const result = t.objectStore('avatars').get(id.toString())
 
@@ -59,7 +60,7 @@ export async function queryAvatarDB(id: PersonIdentifier) {
 /**
  * Store avatar metadata
  */
-async function updateAvatarMetaDB(id: PersonIdentifier, newMeta: Partial<AvatarMetadataRecord>) {
+async function updateAvatarMetaDB(id: IdentityWithAvatar, newMeta: Partial<AvatarMetadataRecord>) {
     const t = (await db).transaction('metadata', 'readwrite')
     const meta = await t.objectStore('metadata').get(id.toString())
     const newRecord = Object.assign({}, meta, newMeta)
@@ -75,17 +76,17 @@ export async function queryAvatarOutdatedDB(
     deadline: Date = new Date(Date.now() - 1000 * 60 * 60 * 24 * 30),
 ) {
     const t = (await db).transaction('metadata')
-    const outdated: Identifier[] = []
+    const outdated: IdentityWithAvatar[] = []
     // tslint:disable-next-line: await-promise
     for await (const { value } of t.store) {
-        if (deadline > value[attribute]) outdated.push(Identifier.fromString(value.identifier)!)
+        if (deadline > value[attribute]) outdated.push(Identifier.fromString(value.identifier) as IdentityWithAvatar)
     }
     return outdated
 }
 /**
  * Batch delete avatars
  */
-export async function deleteAvatarsDB(ids: PersonIdentifier[]) {
+export async function deleteAvatarsDB(ids: IdentityWithAvatar[]) {
     const t = (await db).transaction(['avatars', 'metadata'], 'readwrite')
     const promises: Promise<void>[] = []
     for (const id of ids) {
