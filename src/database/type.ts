@@ -1,11 +1,15 @@
+import '../global'
 type Identifiers = 'person' | 'group' | 'post'
 const fromString = Symbol()
 function noSlash(str: string) {
     if (str.split('/')[1]) throw new TypeError('Cannot contain / in a part of identifier')
 }
 export abstract class Identifier {
+    // Don't remove this property, or this class will compatible with type `string`
+    abstract readonly type: 'post' | 'group' | 'person'
     abstract toString(): string
     static fromString<T extends Identifier>(id: T): T
+    static fromString(id: string): Identifier | null
     static fromString<T extends Identifier>(id: string | T): Identifier | null {
         if (id instanceof Identifier) return id
         const [type, ...rest] = id.split(':') as [Identifiers, string]
@@ -22,6 +26,7 @@ export abstract class Identifier {
     }
 }
 export class PersonIdentifier extends Identifier {
+    readonly type = 'person'
     /**
      * @param network - Network belongs to
      * @param userId - User ID
@@ -41,6 +46,7 @@ export class PersonIdentifier extends Identifier {
     }
 }
 export class GroupIdentifier extends Identifier {
+    readonly type = 'group'
     constructor(public network: string, public groupId: string, public virtual = false) {
         super()
         noSlash(network)
@@ -56,6 +62,7 @@ export class GroupIdentifier extends Identifier {
     }
 }
 export class PostIdentifier extends Identifier {
+    readonly type = 'post'
     /**
      * If identifier is a PostIdentifier, that means this post is binded with other post in some kind
      * e.g. a comment.

@@ -78,7 +78,7 @@ export async function queryAvatarOutdatedDB(
     const outdated: Identifier[] = []
     // tslint:disable-next-line: await-promise
     for await (const { value } of t.store) {
-        if (deadline > value[attribute]) outdated.push(value.identifier)
+        if (deadline > value[attribute]) outdated.push(Identifier.fromString(value.identifier)!)
     }
     return outdated
 }
