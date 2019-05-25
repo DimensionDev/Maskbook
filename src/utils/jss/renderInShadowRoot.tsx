@@ -1,19 +1,20 @@
 import { create } from 'jss'
-import { jssPreset, createGenerateClassName } from '@material-ui/core/styles'
-import JssProvider from 'react-jss/lib/JssProvider'
+import { jssPreset, createGenerateClassName } from '@material-ui/styles'
+import { JssProvider } from 'react-jss'
 import ReactDOM from 'react-dom'
 import { memoize } from 'lodash-es'
 import React from 'react'
 import { useMaskbookTheme } from '../theme'
-import ConstructableStylesheetsRendererGenerator from './ConstructableStylesheetsRenderer'
+import { ConstructableStyleSheetsRenderer } from './ConstructableStylesheetsRenderer'
 
 const isPolyfilled = CSSStyleSheet.name !== 'CSSStyleSheet'
 if (isPolyfilled) console.warn('Browser does not support Constructable Stylesheets. Using polyfill.')
 
 const createJSS = memoize((shadow: ShadowRoot) => {
-    const jss = create({ ...jssPreset() })
-    ;(jss as any).options.Renderer = ConstructableStylesheetsRendererGenerator(shadow)
-    return jss
+    return create({
+        ...jssPreset(),
+        Renderer: new ConstructableStyleSheetsRenderer(shadow),
+    })
 })
 const generateClassName = createGenerateClassName()
 /**
@@ -24,7 +25,7 @@ const generateClassName = createGenerateClassName()
 export function renderInShadowRoot(node: React.ReactNode, shadow: ShadowRoot) {
     const jss = createJSS(shadow)
     const jsx = (
-        <JssProvider jss={jss} generateClassName={generateClassName}>
+        <JssProvider jss={jss} generateId={generateClassName}>
             {useMaskbookTheme(node)}
         </JssProvider>
     )

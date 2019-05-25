@@ -1,29 +1,26 @@
 /// <reference path="./JSS-internal.d.ts" />
+/// <reference path="./CSSOM.d.ts" />
+
 /**
  * This file is granted to [JSS](https://github.com/cssinjs/jss) with MIT Licence
  */
 import warning from 'warning'
-import { SheetsRegistry, StyleSheet as JSSStyleSheet, Rule } from 'jss'
-import { CSSStyleRule, CSSOMRule, JssValue, InsertionPoint, Renderer } from 'jss/lib/types/'
-import StyleRule from 'jss/lib/rules/StyleRule.js'
-import toCssValue from 'jss/lib/utils/toCssValue.js'
+import {
+    SheetsRegistry,
+    StyleSheet as JSSStyleSheet,
+    Rule,
+    toCssValue,
+    InsertionPoint,
+    JssValue,
+    RuleList,
+    Renderer,
+} from 'jss'
 
 type PriorityOptions = {
     index: number
     insertionPoint?: InsertionPoint
 }
-
-const enum CSSRuleTypes {
-    STYLE_RULE = 1,
-    KEYFRAMES_RULE = 7,
-}
-function isCSSStyleRule(x: any): x is CSSStyleRule {
-    return x.type === CSSRuleTypes.STYLE_RULE
-}
-function isCSSKeyFramesRule(x: any): x is CSSKeyframesRule {
-    return x.type === CSSRuleTypes.KEYFRAMES_RULE
-}
-
+//#region Code for ConstrucatbleStylesheetsRenderer
 let SharedStyleSheets: StyleSheet[] = []
 const appliedShadowRoot = new Set<ShadowRoot>()
 function applyAdoptedStyleSheets(shadowOnly = false) {
@@ -49,25 +46,13 @@ function addStyle(e: HTMLStyleElement, shadow: ShadowRoot, insertAfter?: HTMLSty
     styleMap.set(e.innerHTML, style)
     applyAdoptedStyleSheets()
 }
-function insertRule(e: HTMLStyleElement) {
+function deleteRule(e: HTMLStyleElement, index: number) {
     const sheet = styleMap.get(e.innerHTML)!
     styleMap.delete(e.innerHTML)
-    return (rule: string, index: number) => {
-        e.sheet!.insertRule(rule, index)
-        sheet.insertRule(rule, index)
-        styleMap.set(e.innerHTML, sheet)
-        applyAdoptedStyleSheets()
-    }
-}
-function deleteRule(e: HTMLStyleElement) {
-    const sheet = styleMap.get(e.innerHTML)!
-    styleMap.delete(e.innerHTML)
-    return (index: number) => {
-        e.sheet!.deleteRule(index)
-        sheet.deleteRule(index)
-        styleMap.set(e.innerHTML, sheet)
-        applyAdoptedStyleSheets()
-    }
+    e.sheet!.deleteRule(index)
+    sheet.deleteRule(index)
+    styleMap.set(e.innerHTML, sheet)
+    applyAdoptedStyleSheets()
 }
 function removeStyle(e: HTMLStyleElement, shadow: ShadowRoot) {
     const sheet = styleMap.get(e.innerHTML)
@@ -78,41 +63,72 @@ function removeStyle(e: HTMLStyleElement, shadow: ShadowRoot) {
     styleMap.delete(e.innerHTML)
     applyAdoptedStyleSheets()
 }
+//#endregion
+
+// ? function memoize: unused
+// ? function getPropertyValue: moved to class
+// ? function setProperty: moved to class
+// ? function removeProperty: moved to class
+// ? function setSelector: moved to class
+// ? function getHead: unused
+// ? function findHigherSheet: not modified
 /**
  * Find attached sheet with an index higher than the passed one.
  */
 function findHigherSheet(registry: JSSStyleSheet[], options: PriorityOptions): JSSStyleSheet | null {
-    return (
-        registry.find(
-            sheet =>
-                sheet.attached &&
-                sheet.options.index > options.index &&
-                sheet.options.insertionPoint === options.insertionPoint,
-        ) || null
-    )
-}
-
-/**
- * Find a node before which we can insert the sheet.
- */
-function findPrevNode(options: PriorityOptions, sheets: SheetsRegistry): HTMLStyleElement | null {
-    const { registry } = sheets
-    if (registry.length > 0) {
-        // Try to insert before the next higher sheet.
-        const sheet = findHigherSheet(registry as any, options)
-        if (sheet) return (sheet.renderer as Renderer).element
+    for (let i = 0; i < registry.length; i++) {
+        const sheet = registry[i]
+        if (
+            sheet.attached &&
+            sheet.options.index > options.index &&
+            sheet.options.insertionPoint === options.insertionPoint
+        ) {
+            return sheet
+        }
     }
     return null
 }
+// ? function findHighestSheet: unused
+// ? function findCommentNode: unused
+type PrevNode = {
+    parent?: Node
+    node?: Node
+}
+// ! function findPrevNode: modified(signature, body)
+/**
+ * Find a node before which we can insert the sheet.
+ */
+function findPrevNode(options: PriorityOptions, sheets: SheetsRegistry): PrevNode | false {
+    const { registry } = sheets
 
+    if (registry.length > 0) {
+        // Try to insert before the next higher sheet.
+        const sheet = findHigherSheet(registry, options)
+        if (sheet && sheet.renderer) {
+            return {
+                parent: sheet.renderer.element.parentNode!,
+                node: sheet.renderer.element,
+            }
+        }
+        // ! call to findHighestSheet removed
+    }
+    // ! call to findCommentNode removed
+
+    return false
+}
+// ! function insertStyle modified (signature, body)
 /**
  * Insert style element into the DOM.
  */
 function insertStyle(style: HTMLStyleElement, options: PriorityOptions, shadow: ShadowRoot, sheets: SheetsRegistry) {
     if (styleMap.has(style.innerHTML)) return
     // To keep the priority
-    const prevNode = findPrevNode(options, sheets)
-    addStyle(style, shadow, prevNode)
+    const nextNode = findPrevNode(options, sheets)
+    if (nextNode !== false) {
+        addStyle(style, shadow, nextNode.node! as HTMLStyleElement)
+    }
+    // ! remove things about insertionPoint
+    // ! remove call to getHead
 }
 
 /**
@@ -122,179 +138,223 @@ const getNonce = (): string | null => {
     const node = document.querySelector('meta[property="csp-nonce"]')
     return node ? node.getAttribute('content') : null
 }
-
-export default function ConstructableStylesheetsRendererGenerator(shadow: ShadowRoot) {
-    appliedShadowRoot.add(shadow)
-    applyAdoptedStyleSheets()
-    return class ConstructableStylesheetsRenderer implements Renderer {
-        getPropertyValue(cssRule: HTMLElement | CSSStyleRule, prop: string): string {
-            return cssRule.style.getPropertyValue(prop)
+// ! function insertRule: modified(signature, body)
+function insertRule(
+    e: HTMLStyleElement,
+    container: StyleSheet | CSSMediaRule | CSSKeyframesRule,
+    rule: string,
+    index: number = container.cssRules.length,
+): false | StyleSheet | CSSMediaRule | CSSKeyframesRule {
+    const sheetInMemory = styleMap.get(e.innerHTML)!
+    styleMap.delete(e.innerHTML)
+    try {
+        if ('insertRule' in container) {
+            container.insertRule(rule, index)
+        } else if ('appendRule' in container) {
+            container.appendRule(rule)
         }
-        setProperty(cssRule: HTMLElement | CSSStyleRule, prop: string, value: JssValue): true {
-            let cssValue = (value as any) as string
 
-            if (Array.isArray(value)) {
-                cssValue = toCssValue(value, true)
+        sheetInMemory.insertRule(rule, index)
+        styleMap.set(e.innerHTML, sheetInMemory)
+        applyAdoptedStyleSheets()
+    } catch (err) {
+        warning(false, `[JSS] Can not insert an unsupported rule \n${rule}`)
+        return false
+    }
+    return container.cssRules[index] as StyleSheet | CSSMediaRule | CSSKeyframesRule
+}
 
-                if (value[value.length - 1] === '!important') {
-                    cssRule.style.setProperty(prop, cssValue, 'important')
-                    return true
-                }
+// ! function createStyle: unused
+
+export class ConstructableStyleSheetsRenderer implements Renderer {
+    getPropertyValue(cssRule: HTMLElement | CSSStyleRule | CSSKeyframeRule, prop: string): string {
+        // Support CSSTOM.
+        if ('attributeStyleMap' in cssRule) {
+            return cssRule.attributeStyleMap.get(prop)!
+        }
+        return cssRule.style.getPropertyValue(prop)
+    }
+    setProperty(cssRule: HTMLElement | CSSStyleRule | CSSKeyframeRule, prop: string, value: JssValue): true {
+        let cssValue = value as string
+
+        if (Array.isArray(value)) {
+            cssValue = toCssValue(value, true)
+
+            if (value[value.length - 1] === '!important') {
+                cssRule.style.setProperty(prop, cssValue, 'important')
+                return true
             }
+        }
+        // Support CSSTOM.
+        if ('attributeStyleMap' in cssRule) {
+            cssRule.attributeStyleMap.set(prop, cssValue)
+        } else {
             cssRule.style.setProperty(prop, cssValue)
-            return true
         }
-        removeProperty(cssRule: HTMLElement | CSSStyleRule, prop: string) {
-            try {
+        return true
+    }
+    removeProperty(cssRule: HTMLElement | CSSStyleRule | CSSKeyframeRule, prop: string) {
+        try {
+            // Support CSSTOM.
+            if ('attributeStyleMap' in cssRule) {
+                cssRule.attributeStyleMap.delete(prop)
+            } else {
                 cssRule.style.removeProperty(prop)
-            } catch (err) {
-                warning(false, '[JSS] DOMException "%s" was thrown. Tried to remove property "%s".', err.message, prop)
+            }
+        } catch (err) {
+            warning(false, `[JSS] DOMException "${err.message}" was thrown. Tried to remove property "${prop}".`)
+        }
+    }
+    setSelector(cssRule: CSSStyleRule, selectorText: string): boolean {
+        cssRule.selectorText = selectorText
+
+        // Return false if setter was not successful.
+        // Currently works in chrome only.
+        return cssRule.selectorText === selectorText
+    }
+    element!: HTMLStyleElement
+    sheet: JSSStyleSheet | void
+    // ! ourselves property. Don't want to use the global registry.
+    static registry = new SheetsRegistry()
+    hasInsertedRules: boolean = false
+    constructor(public shadow: ShadowRoot, sheet?: JSSStyleSheet) {
+        appliedShadowRoot.add(shadow)
+        applyAdoptedStyleSheets()
+
+        // There is no sheet when the renderer is used from a standalone StyleRule.
+        if (sheet) ConstructableStyleSheetsRenderer.registry.add(sheet)
+
+        this.sheet = sheet
+        const { media, meta, element } = this.sheet ? this.sheet.options : ({} as Record<string, any>)
+        // ! We're not using createStyle()
+        this.element = element || document.createElement('style')
+        this.element.setAttribute('data-jss', '')
+        if (media) this.element.setAttribute('media', media)
+        if (meta) this.element.setAttribute('data-meta', meta)
+        const nonce = getNonce()
+        if (nonce) this.element.setAttribute('nonce', nonce)
+    }
+
+    /**
+     * Insert style element into render tree.
+     */
+    attach(): void {
+        if (!this.sheet) return
+        insertStyle(this.element, this.sheet.options, this.shadow, ConstructableStyleSheetsRenderer.registry)
+    }
+
+    /**
+     * Remove style element from render tree.
+     */
+    detach(): void {
+        removeStyle(this.element, this.shadow)
+    }
+
+    /**
+     * Inject CSS string into element.
+     */
+    deploy(): void {
+        const { sheet } = this
+        if (!sheet) return
+        if (sheet.options.link) {
+            this.insertRules(sheet.rules)
+            return
+        }
+        this.element.textContent = `\n${sheet.toString()}\n`
+    }
+
+    /**
+     * Insert RuleList into an element.
+     */
+
+    insertRules(rules: RuleList, nativeParent?: StyleSheet | CSSMediaRule | CSSKeyframesRule) {
+        // @ts-ignore
+        for (let i = 0; i < rules.index.length; i++) {
+            // @ts-ignore
+            this.insertRule(rules.index[i], i, nativeParent)
+        }
+    }
+
+    /**
+     * Insert a rule into element.
+     */
+    insertRule(
+        rule: Rule,
+        index: number = this.element.cssRules.length,
+        nativeParent: StyleSheet | CSSMediaRule | CSSKeyframesRule = this.element.sheet!,
+    ): false | CSSRule {
+        const { sheet } = this.element
+        if (!sheet) return false
+
+        if ('rules' in rule) {
+            const parent = rule
+            let latestNativeParent = nativeParent
+
+            if (rule.type === 'conditional' || rule.type === 'keyframes') {
+                const result = insertRule(
+                    this.element,
+                    nativeParent,
+                    parent.toString({ children: false } as any),
+                    index,
+                )
+                if (result === false) return false
+                latestNativeParent = result
+                this.insertRules(parent.rules, result)
+                return latestNativeParent as CSSRule
             }
         }
-        setSelector(cssRule: CSSStyleRule, selectorText: string): boolean {
-            cssRule.selectorText = selectorText
-            return cssRule.selectorText === selectorText
-        }
-        getKey = (() => {
-            const extractKey = (cssText: string, from: number = 0) => cssText.substr(from, cssText.indexOf('{') - 1)
+        const ruleStr = rule.toString()
 
-            return (cssRule: CSSOMRule): string => {
-                if (isCSSStyleRule(cssRule)) return cssRule.selectorText
-                if (isCSSKeyFramesRule(cssRule)) {
-                    const { name } = cssRule
-                    return `@keyframes ${name}`
-                }
-                // Conditionals.
-                return extractKey(cssRule.cssText)
-            }
-        })()
+        if (!ruleStr) return false
 
-        /**
-         * @unused Copied from DomRenderer.
-         */
-        getUnescapedKeysMap = (() => {
-            let style: HTMLStyleElement
-            let isAttached = false
-
-            return (rules: CSSOMRule[]): Object => {
-                const map: Record<string, unknown> = {}
-                if (!style) style = document.createElement('style')
-                for (let i = 0; i < rules.length; i++) {
-                    const rule = rules[i]
-                    if (!(rule instanceof StyleRule)) continue
-                    const rule2: StyleRule = rule
-                    const { selector } = rule2
-                    // Only unescape selector over CSSOM if it contains a back slash.
-                    if (selector && selector.indexOf('\\') !== -1) {
-                        // Lazilly attach when needed.
-                        if (!isAttached) {
-                            shadow.appendChild(style)
-                            isAttached = true
-                        }
-                        style.textContent = `${selector} {}`
-                        const { sheet } = style
-                        if (sheet) {
-                            const { cssRules } = sheet
-                            if (cssRules) map[(cssRules[0] as CSSStyleRule).selectorText] = rule2.key
-                        }
-                    }
-                }
-                if (isAttached) {
-                    shadow.removeChild(style)
-                    isAttached = false
-                }
-                return map
-            }
-        })()
-        element!: HTMLStyleElement
-        static registry = new SheetsRegistry()
-        hasInsertedRules: boolean = false
-        constructor(public sheet?: JSSStyleSheet) {
-            // There is no sheet when the renderer is used from a standalone StyleRule.
-            if (sheet) ConstructableStylesheetsRenderer.registry.add(sheet as any)
-            const { media, meta, element } = (this.sheet ? this.sheet.options : {}) as any
-            this.element = element || document.createElement('style')
-            this.element.setAttribute('data-jss', '')
-            if (media) this.element.setAttribute('media', media)
-            if (meta) this.element.setAttribute('data-meta', meta)
-            const nonce = getNonce()
-            if (nonce) this.element.setAttribute('nonce', nonce)
+        const nativeRule = insertRule(this.element, nativeParent, ruleStr, index)
+        if (nativeRule === false) {
+            return false
         }
 
-        /**
-         * Insert style element into render tree.
-         */
-        attach(): void {
-            if (!this.sheet) return
-            insertStyle(this.element, this.sheet.options, shadow, ConstructableStylesheetsRenderer.registry)
-        }
+        this.hasInsertedRules = true
+        Object.assign(rule, { renderable: nativeRule })
+        return nativeRule as CSSRule
+    }
 
-        /**
-         * Remove style element from render tree.
-         */
-        detach(): void {
-            removeStyle(this.element, shadow)
-        }
+    /**
+     * Delete a rule.
+     */
+    deleteRule(cssRule: CSSRule): boolean {
+        const { sheet } = this.element
+        const index = this.indexOf(cssRule)
+        if (index === -1) return false
+        deleteRule(this.element, index)
+        return true
+    }
 
-        /**
-         * Inject CSS string into element.
-         */
-        deploy(): void {
-            if (!this.sheet) return
-            this.element.textContent = `\n${this.sheet.toString()}\n`
+    /**
+     * Get index of a CSS Rule.
+     */
+    indexOf(cssRule: CSSRule): number {
+        const { cssRules } = this.element.sheet!
+        for (let index = 0; index < cssRules.length; index++) {
+            if (cssRule === cssRules[index]) return index
         }
+        return -1
+    }
 
-        /**
-         * Insert a rule into element.
-         */
-        insertRule(rule: Rule, index: number = this.element.cssRules.length): false | CSSStyleRule {
-            const { sheet } = this.element
-            const { cssRules } = sheet!
-            const str = rule.toString()
+    /**
+     * Generate a new CSS rule and replace the existing one.
+     *
+     * Only used for some old browsers because they can't set a selector.
+     */
+    replaceRule(cssRule: CSSRule, rule: Rule): false | CSSRule {
+        const index = this.indexOf(cssRule)
+        if (index === -1) return false
+        deleteRule(this.element, index)
+        return this.insertRule(rule, index)
+    }
 
-            if (!str) return false
-            try {
-                insertRule(this.element)(str, index)
-            } catch (err) {
-                warning(false, '[JSS] Can not insert an unsupported rule \n\r%s', rule)
-                return false
-            }
-            this.hasInsertedRules = true
-            return cssRules[index] as CSSStyleRule
-        }
-
-        /**
-         * Delete a rule.
-         */
-        deleteRule(cssRule: CSSStyleRule): boolean {
-            const index = this.indexOf(cssRule)
-            if (index === -1) return false
-            deleteRule(this.element)(index)
-            return true
-        }
-
-        /**
-         * Get index of a CSS Rule.
-         */
-        indexOf(cssRule: CSSStyleRule): number {
-            return Array.from(this.element.sheet!.cssRules).indexOf(cssRule)
-        }
-
-        /**
-         * Generate a new CSS rule and replace the existing one.
-         */
-        replaceRule(cssRule: CSSStyleRule, rule: Rule): false | CSSStyleRule {
-            const index = this.indexOf(cssRule)
-            const newCssRule = this.insertRule(rule, index)
-            deleteRule(this.element)
-            return newCssRule
-        }
-
-        /**
-         * Get all rules elements.
-         */
-        getRules(): CSSRuleList {
-            return this.element.sheet!.cssRules
-        }
+    /**
+     * Get all rules elements.
+     */
+    getRules(): CSSRuleList {
+        return this.element.sheet!.cssRules
     }
 }
