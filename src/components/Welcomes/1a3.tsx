@@ -18,7 +18,7 @@ export default withStylesTyped(theme =>
             width: 600,
             boxSizing: 'border-box',
             '& > *': {
-                marginBottom: theme.spacing.unit * 3,
+                marginBottom: theme.spacing(3),
             },
         },
         button: {
@@ -30,7 +30,7 @@ export default withStylesTyped(theme =>
     const today = date.getFullYear() + '' + (date.getMonth() + 1) + '' + date.getDate()
     const filename = `maskbook-keystore-backup-${today}.json`
     return (
-        <Paper className={classes.paper}>
+        <Paper elevation={2} className={classes.paper}>
             <Typography variant="h5">{geti18nString('welcome_1a3_title')}</Typography>
             <img alt="" src={getUrl(require('./1a3.jpg'))} width="auto" height={160} />
             <Typography variant="caption">{filename}</Typography>

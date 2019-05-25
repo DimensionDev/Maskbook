@@ -11,7 +11,7 @@ import { geti18nString } from '../../utils/i18n'
 
 const Option = withStylesTyped(theme => ({
     root: {
-        padding: `${theme.spacing.unit * 2}px ${theme.spacing.unit * 4}px`,
+        padding: `${theme.spacing(2)}px ${theme.spacing(4)}px`,
         paddingBottom: 24,
         border: '1px solid',
         display: 'flex',
@@ -21,7 +21,7 @@ const Option = withStylesTyped(theme => ({
         background: 'transparent',
         borderColor: theme.palette.grey[300],
         '& > *': {
-            marginBottom: theme.spacing.unit,
+            marginBottom: theme.spacing(1),
         },
     },
     activated: {

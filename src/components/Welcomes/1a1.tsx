@@ -16,7 +16,7 @@ export default withStylesTyped(theme =>
             width: 600,
             boxSizing: 'border-box',
             '& > *': {
-                marginBottom: theme.spacing.unit * 3,
+                marginBottom: theme.spacing(3),
             },
         },
         button: {
@@ -25,7 +25,7 @@ export default withStylesTyped(theme =>
     }),
 )<Props>(function Welcome({ classes, next }) {
     return (
-        <Paper className={classes.paper}>
+        <Paper elevation={2} className={classes.paper}>
             <Typography variant="h5">Log in to your account</Typography>
             <Typography variant="subtitle1">Further instructions will show up after you log in.</Typography>
             <Button onClick={next} variant="contained" color="primary" className={classes.button}>

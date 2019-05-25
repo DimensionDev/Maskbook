@@ -18,7 +18,7 @@ export default withStylesTyped(theme =>
             width: 600,
             boxSizing: 'border-box',
             '& > *': {
-                marginBottom: theme.spacing.unit * 3,
+                marginBottom: theme.spacing(3),
             },
         },
         button: {
@@ -31,7 +31,7 @@ export default withStylesTyped(theme =>
     }),
 )<Props>(function Welcome({ classes, next }) {
     return (
-        <Paper className={classes.paper}>
+        <Paper elevation={2} className={classes.paper}>
             <Typography variant="h5">{geti18nString('welcome_1a2_title')}</Typography>
             <img
                 alt={geti18nString('welcome_1a2_imgalt')}

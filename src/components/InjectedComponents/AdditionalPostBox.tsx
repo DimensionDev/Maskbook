@@ -56,6 +56,7 @@ export const AdditionalPostBoxUI = withStylesTyped({
                 <Avatar className={classes.avatar} person={myself} />
                 <InputBase
                     classes={{ root: classes.input, input: classes.innerInput }}
+                    // Todo: Test if this is break after @material/ui^4
                     inputRef={inputRef}
                     fullWidth
                     multiline
@@ -68,7 +69,7 @@ export const AdditionalPostBoxUI = withStylesTyped({
                 />
             </Paper>
             <Divider />
-            <Paper>
+            <Paper elevation={2}>
                 <SelectPeopleUI
                     people={people.filter(x => x.username !== myself.username)}
                     onSetSelected={selectPeople}

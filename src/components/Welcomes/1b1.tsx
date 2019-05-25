@@ -14,7 +14,7 @@ const RestoreBox = createBox(theme => ({
     color: theme.palette.text.hint,
     border: `2px dashed ${theme.palette.divider}`,
     whiteSpace: 'pre-line',
-    minHeight: 160 - theme.spacing.unit * 8,
+    minHeight: 160 - theme.spacing(8),
     width: 300,
     borderRadius: theme.shape.borderRadius,
     display: 'inline-flex',
@@ -22,7 +22,7 @@ const RestoreBox = createBox(theme => ({
     justifyContent: 'center',
     textAlign: 'center',
     cursor: 'pointer',
-    padding: theme.spacing.unit * 4,
+    padding: theme.spacing(4),
     transition: '0.4s',
 }))
 interface Props {
@@ -36,20 +36,20 @@ export default withStylesTyped(theme =>
             boxSizing: 'border-box',
         },
         nav: {
-            paddingTop: theme.spacing.unit,
-            paddingLeft: theme.spacing.unit,
+            paddingTop: theme.spacing(1),
+            paddingLeft: theme.spacing(1),
         },
         navButton: {
             color: theme.palette.text.hint,
         },
         navButtonIcon: {
-            marginRight: theme.spacing.unit,
+            marginRight: theme.spacing(1),
         },
         main: {
             padding: '2rem 2rem 1rem 2rem',
             textAlign: 'center',
             '& > *': {
-                marginBottom: theme.spacing.unit * 3,
+                marginBottom: theme.spacing(3),
             },
         },
         button: {
@@ -70,7 +70,7 @@ export default withStylesTyped(theme =>
     const ref = React.useRef<HTMLInputElement>(null)
     const { dragEvents, fileReceiver, fileRef, dragStatus } = useDragAndDrop()
     return (
-        <Paper {...dragEvents} className={classes.paper}>
+        <Paper elevation={2} {...dragEvents} className={classes.paper}>
             <nav className={classes.nav}>
                 <Button onClick={back} disableFocusRipple disableRipple className={classes.navButton}>
                     <ArrowBack className={classes.navButtonIcon} />

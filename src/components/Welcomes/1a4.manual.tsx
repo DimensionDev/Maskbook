@@ -7,7 +7,7 @@ const TextField = createBox(
     theme => ({
         background: theme.palette.background.default,
         color: theme.palette.text.hint,
-        padding: `${theme.spacing.unit * 2}px`,
+        padding: `${theme.spacing(2)}px`,
         border: `1px solid ${theme.palette.divider}`,
         textAlign: 'start',
         whiteSpace: 'pre-line',

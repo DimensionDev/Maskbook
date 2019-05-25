@@ -23,7 +23,7 @@ export default withStylesTyped(theme =>
             width: 600,
             boxSizing: 'border-box',
             '& > *': {
-                marginBottom: theme.spacing.unit * 3,
+                marginBottom: theme.spacing(3),
             },
         },
         button: { minWidth: 180 },
@@ -72,7 +72,7 @@ export default withStylesTyped(theme =>
         </>
     )
     return (
-        <Paper className={classes.paper}>
+        <Paper elevation={2} className={classes.paper}>
             <Typography variant="h5">{geti18nString('welcome_1a4_title')}</Typography>
             {actionType === 'auto' ? (
                 <Auto bioDisabled={!!bioDisabled} type={type} setType={setType} />

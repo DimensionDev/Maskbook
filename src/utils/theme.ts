@@ -7,7 +7,7 @@ import withStyles, {
 import React from 'react'
 import createMuiTheme, { ThemeOptions } from '@material-ui/core/styles/createMuiTheme'
 import { TypographyOptions } from '@material-ui/core/styles/createTypography'
-import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider'
+import { ThemeProvider } from '@material-ui/styles'
 
 const _refTheme = createMuiTheme()
 const _refThemeDark = createMuiTheme({ palette: { type: 'dark' } })
@@ -23,7 +23,6 @@ const baseTheme = (theme: 'dark' | 'light') =>
         },
         shape: { borderRadius: 3 },
         typography: {
-            useNextVariants: true,
             caption: {
                 color: '#4b4f56',
                 letterSpacing: 'initial',
@@ -38,11 +37,11 @@ const baseTheme = (theme: 'dark' | 'light') =>
             MuiButton: {
                 root: {
                     textTransform: 'none',
-                    padding: `${_refTheme.spacing.unit}px ${_refTheme.spacing.unit * 3}px`,
+                    padding: _refTheme.spacing(1, 3),
                 },
                 outlined: {
                     background: theme === 'light' ? 'white' : _refThemeDark.palette.background.default,
-                    padding: `${_refTheme.spacing.unit}px ${_refTheme.spacing.unit * 3}px`,
+                    padding: _refTheme.spacing(1, 3),
                 },
             },
             MuiCard: {
@@ -65,7 +64,7 @@ export const MaskbookDarkTheme = createMuiTheme(baseTheme('dark'))
 export const FixedWidthFonts = `Droid Sans Mono', Consolas, Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace, serif`
 
 // 类型安全的 withStyles
-export function withStylesTyped<ClassKey extends string, Options extends WithStylesOptions<ClassKey> = {}>(
+export function withStylesTyped<ClassKey extends string, Options extends WithStylesOptions = {}>(
     style: StyleRulesCallback<ClassKey> | StyleRules<ClassKey> = {} as any,
     options?: Options,
 ) {
@@ -88,5 +87,5 @@ export function withStylesTyped<ClassKey extends string, Options extends WithSty
 }
 
 export function useMaskbookTheme(node: React.ReactNode) {
-    return React.createElement(MuiThemeProvider, { theme: MaskbookLightTheme, children: node })
+    return React.createElement(ThemeProvider, { theme: MaskbookLightTheme, children: node })
 }

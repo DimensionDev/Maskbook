@@ -18,7 +18,7 @@ export default withStylesTyped(theme =>
     createStyles({
         card: {
             display: 'inline-block',
-            marginBottom: theme.spacing.unit * 3,
+            marginBottom: theme.spacing(3),
             textAlign: 'start',
             cursor: 'pointer',
             transition: '0.4s',
@@ -29,7 +29,7 @@ export default withStylesTyped(theme =>
         },
         text: {
             fontWeight: 'bold',
-            marginRight: theme.spacing.unit,
+            marginRight: theme.spacing(1),
         },
         avatarDisabled: {
             marginRight: 0,
@@ -48,10 +48,10 @@ export default withStylesTyped(theme =>
                 avatar={<Avatar className={classNames({ [classes.emptyAvatar]: !avatar })} person={person} />}
                 title={
                     <>
-                        <Typography inline className={classes.text}>
+                        <Typography display="inline" className={classes.text}>
                             {nickname}
                         </Typography>
-                        <Typography inline>{username}</Typography>
+                        <Typography display="inline">{username}</Typography>
                     </>
                 }
                 subheader={<FixedWidth>{fingerprint}</FixedWidth>}

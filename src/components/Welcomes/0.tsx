@@ -35,7 +35,7 @@ export default withStylesTyped(theme =>
             },
         },
         title: {
-            marginBottom: theme.spacing.unit * 3,
+            marginBottom: theme.spacing(3),
             color: theme.palette.grey[500],
         },
         subtitle: {
@@ -44,23 +44,23 @@ export default withStylesTyped(theme =>
         },
         button: {
             minWidth: 180,
-            marginLeft: theme.spacing.unit * 2,
+            marginLeft: theme.spacing(2),
         },
         nav: {
-            paddingTop: theme.spacing.unit,
-            paddingRight: theme.spacing.unit,
+            paddingTop: theme.spacing(1),
+            paddingRight: theme.spacing(1),
             textAlign: 'right',
         },
         navButton: {
             color: theme.palette.text.hint,
         },
         navButtonIcon: {
-            marginLeft: theme.spacing.unit,
+            marginLeft: theme.spacing(1),
         },
     }),
 )<Props>(function Welcome({ classes, create, restore, close }) {
     return (
-        <Paper className={classes.paper}>
+        <Paper elevation={2} className={classes.paper}>
             <nav className={classes.nav}>
                 <Button onClick={close} disableFocusRipple disableRipple className={classes.navButton}>
                     {geti18nString('welcome_0_title')}

@@ -14,13 +14,13 @@ export default withStylesTyped(theme =>
             width: 600,
             boxSizing: 'border-box',
             '& > *': {
-                marginBottom: theme.spacing.unit * 3,
+                marginBottom: theme.spacing(3),
             },
         },
     }),
 )<Props>(function Welcome({ classes }) {
     return (
-        <Paper className={classes.paper}>
+        <Paper elevation={2} className={classes.paper}>
             <Typography variant="h5">{geti18nString('welcome_2_title')}</Typography>
             <Typography variant="subtitle1">{geti18nString('welcome_2_greeting')}</Typography>
         </Paper>

@@ -17,14 +17,14 @@ const Main = createBox(theme => ({
     flexDirection: 'column',
     textAlign: 'center',
     background: theme.palette.background.default,
-    padding: theme.spacing.unit * 4,
+    padding: theme.spacing(4),
     paddingBottom: 0,
     '& > *': {
-        marginBottom: theme.spacing.unit * 4,
+        marginBottom: theme.spacing(4),
     },
     '& button': {
         minWidth: 220,
-        marginBottom: theme.spacing.unit * 2,
+        marginBottom: theme.spacing(2),
     },
 }))
 export default function Dashboard(props: Props) {
