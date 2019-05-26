@@ -2,7 +2,7 @@ import * as React from 'react'
 import { makeStyles, Theme } from '@material-ui/core'
 import { styled } from '@material-ui/styles'
 
-const TextField = styled('textarea')((theme: Theme) => ({
+const TextField = styled('textarea')(({ theme }: { theme: Theme }) => ({
     background: theme.palette.background.default,
     color: theme.palette.text.hint,
     padding: `${theme.spacing(2)}px`,

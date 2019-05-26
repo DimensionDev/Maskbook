@@ -1,11 +1,11 @@
 import * as React from 'react'
 import Close from '@material-ui/icons/Close'
 import { geti18nString } from '../../utils/i18n'
-import { makeStyles, Paper, Button, Typography, Box } from '@material-ui/core'
+import { makeStyles, Paper, Button, Typography, Box, Theme } from '@material-ui/core'
 import { styled } from '@material-ui/styles'
 
 const VerticalCenter = styled('div')({ display: 'flex', flexDirection: 'column', justifyContent: 'center' })
-const LinedBox = styled('div')(theme => ({
+const LinedBox = styled('div')(({ theme }: { theme: Theme }) => ({
     border: '1px solid #ddd',
     borderRadius: theme.shape.borderRadius,
     textAlign: 'start',

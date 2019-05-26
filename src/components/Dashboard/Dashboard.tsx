@@ -11,7 +11,7 @@ interface Props {
     onProfileClick(username: string): void
 }
 
-const Main = styled('div')((theme: Theme) => ({
+const Main = styled('div')(({ theme }: { theme: Theme }) => ({
     display: 'flex',
     flexDirection: 'column',
     textAlign: 'center',

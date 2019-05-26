@@ -62,8 +62,11 @@
     "cancel": {
         "message": "取消"
     },
+    "share_to": {
+        "message": "分享给..."
+    },
     "sharing": {
-        "message": "分享"
+        "message": "分享中..."
     },
     "share": {
         "message": "分享"

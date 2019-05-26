@@ -1369,7 +1369,7 @@
     react-lifecycles-compat "^3.0.4"
     warning "^3.0.0"
 
-"@storybook/addon-actions@^5.1.0-alpha.33":
+"@storybook/addon-actions@^5.1.0-rc.1":
   version "5.1.0-rc.1"
   resolved "https://registry.yarnpkg.com/@storybook/addon-actions/-/addon-actions-5.1.0-rc.1.tgz#95b7a5abfb5fb24403499bc48436143a0e9856fd"
   integrity sha512-0QZUZGo7PJvssB++Trg/XBDvyALpoXRbdxXU8TpiVRsUVLG8hwrNQ4n1dbSzZTmA1EBpFw715YZkqlOGW9KW/A==
@@ -1389,7 +1389,7 @@
     react-inspector "^3.0.2"
     uuid "^3.3.2"
 
-"@storybook/addon-info@^5.1.0-alpha.33":
+"@storybook/addon-info@^5.1.0-rc.1":
   version "5.1.0-rc.1"
   resolved "https://registry.yarnpkg.com/@storybook/addon-info/-/addon-info-5.1.0-rc.1.tgz#af1092b50c1312d9116d6592f505d274d6530206"
   integrity sha512-mtUtYL1FdvyLr0V6QKTa28A5Jo9Dk9xe2YXkJbSECDh73wB0yDWKaCet7XxjVf5g+BCVxolsBvW5Y1B9hlPuzQ==
@@ -1410,7 +1410,7 @@
     react-lifecycles-compat "^3.0.4"
     util-deprecate "^1.0.2"
 
-"@storybook/addon-knobs@^5.1.0-alpha.33":
+"@storybook/addon-knobs@^5.1.0-rc.1":
   version "5.1.0-rc.1"
   resolved "https://registry.yarnpkg.com/@storybook/addon-knobs/-/addon-knobs-5.1.0-rc.1.tgz#9c6b0fc3b72c38f3731e3dcfcf6114a8b294747e"
   integrity sha512-eMlpmFKKWp4IOdhC8dBBhIN941jPnypOEBv4XgIdfDepnAjmyAEotrSFNWMmKC2t+ZOv/ecX1o9M8pw28nHTGQ==
@@ -1432,7 +1432,7 @@
     react-lifecycles-compat "^3.0.4"
     react-select "^2.2.0"
 
-"@storybook/addon-links@^5.1.0-alpha.33":
+"@storybook/addon-links@^5.1.0-rc.1":
   version "5.1.0-rc.1"
   resolved "https://registry.yarnpkg.com/@storybook/addon-links/-/addon-links-5.1.0-rc.1.tgz#b056052080cc8b8980d5454cb9efea97821c8fb8"
   integrity sha512-6RWRaqmoIkulfBuHodRW4jttfufWX5qiEh0gIPfnKG4rBvgRZKIuDySakvqmwuN38e7hf6M4JJjgIFuuGUFUGA==
@@ -1446,7 +1446,7 @@
     prop-types "^15.7.2"
     qs "^6.6.0"
 
-"@storybook/addons@5.1.0-rc.1", "@storybook/addons@^5.1.0-alpha.33":
+"@storybook/addons@5.1.0-rc.1", "@storybook/addons@^5.1.0-rc.1":
   version "5.1.0-rc.1"
   resolved "https://registry.yarnpkg.com/@storybook/addons/-/addons-5.1.0-rc.1.tgz#018d7f6a068f815807fb044838ff1e87d21c4948"
   integrity sha512-RdkYn5mq7J6XJ2jF7ClUFvrw0ioCEQm/ofzEQLk2g779+/lvCTIyZ5qajjKUPVbb7cLErYuVNht4WkbOaxVyYA==
@@ -1636,7 +1636,7 @@
     pretty-hrtime "^1.0.3"
     regenerator-runtime "^0.12.1"
 
-"@storybook/react@^5.1.0-alpha.33":
+"@storybook/react@^5.1.0-rc.1":
   version "5.1.0-rc.1"
   resolved "https://registry.yarnpkg.com/@storybook/react/-/react-5.1.0-rc.1.tgz#8a72df57be650e2e5d762f0f426b689867b3bd35"
   integrity sha512-niw/5+tFSTxMXw+HEUvlc+wnIl9xgKYkM1Uy6HLm/vFAQLKsKjaivqzoOAYU5uvbgH3l+GXAhG7qAQH4kGkL/Q==

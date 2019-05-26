@@ -35,7 +35,7 @@ export function SelectPeopleDialog(props: Props) {
     const canCommit = committed || people.length === 0
     return (
         <Dialog onClose={canClose ? onClose : void 0} open={props.open} scroll="paper" fullWidth maxWidth="sm">
-            <DialogTitle className={classes.title}>Share to ...</DialogTitle>
+            <DialogTitle className={classes.title}>{geti18nString('share_to')}</DialogTitle>
             <DialogContent className={classes.content}>
                 <SelectPeopleUI
                     frozenSelected={props.alreadySelectedPreviously}
