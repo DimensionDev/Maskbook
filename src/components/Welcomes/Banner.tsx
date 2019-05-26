@@ -1,9 +1,8 @@
 import * as React from 'react'
-import { FullWidth } from '../../utils/components/Flex'
 import CloseIcon from '@material-ui/icons/Close'
 import { geti18nString } from '../../utils/i18n'
 import { makeStyles } from '@material-ui/styles'
-import { AppBar, Toolbar, Typography, Button, IconButton } from '@material-ui/core'
+import { AppBar, Toolbar, Typography, Button, IconButton, Box } from '@material-ui/core'
 
 interface Props {
     getStarted(): void
@@ -32,11 +31,11 @@ export function Banner(props: Props) {
     return (
         <AppBar position="static" color="default" elevation={0} classes={{ root: classes.root }}>
             <Toolbar className={classes.toolbar}>
-                <FullWidth>
+                <Box flex={1}>
                     <Typography variant="subtitle1" color="inherit">
                         {geti18nString('banner_title')}
                     </Typography>
-                </FullWidth>
+                </Box>
                 <Button
                     onClick={props.getStarted}
                     classes={{ root: classes.button }}

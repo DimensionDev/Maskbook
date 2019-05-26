@@ -1,16 +1,16 @@
 import * as React from 'react'
 import { FixedWidthFonts } from '../../utils/theme'
-import { createBox } from '../../utils/components/Flex'
 import classNames from 'classnames'
 import { Avatar } from '../../utils/components/Avatar'
 import { Person } from '../../extension/background-script/PeopleService'
 import { makeStyles, Typography, Card, CardHeader } from '@material-ui/core'
+import { styled } from '@material-ui/styles'
 
 interface Props {
     person: Person
     onClick?(): void
 }
-const FixedWidth = createBox({ fontFamily: FixedWidthFonts })
+const FixedWidth = styled('div')({ fontFamily: FixedWidthFonts })
 const useStyles = makeStyles(theme => ({
     card: {
         display: 'inline-block',

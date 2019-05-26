@@ -1,11 +1,11 @@
 import * as React from 'react'
-import { VerticalCenter, FullWidth, createBox } from '../../utils/components/Flex'
-
 import Close from '@material-ui/icons/Close'
 import { geti18nString } from '../../utils/i18n'
-import { makeStyles, Paper, Button, Typography } from '@material-ui/core'
+import { makeStyles, Paper, Button, Typography, Box } from '@material-ui/core'
+import { styled } from '@material-ui/styles'
 
-const LinedBox = createBox(theme => ({
+const VerticalCenter = styled('div')({ display: 'flex', flexDirection: 'column', justifyContent: 'center' })
+const LinedBox = styled('div')(theme => ({
     border: '1px solid #ddd',
     borderRadius: theme.shape.borderRadius,
     textAlign: 'start',
@@ -71,10 +71,10 @@ export default function Welcome({ create, restore, close }: Props) {
                     {geti18nString('welcome_0_description')}
                 </Typography>
                 <LinedBox>
-                    <FullWidth>
+                    <Box flex={1}>
                         <Typography variant="body1">{geti18nString('welcome_0_new_user')}</Typography>
                         <Typography variant="h6">{geti18nString('welcome_0_connect_facebook')}</Typography>
-                    </FullWidth>
+                    </Box>
                     <VerticalCenter>
                         <Button onClick={create} variant="contained" color="primary" className={classes.button}>
                             {geti18nString('welcome_0_connect_facebook')}
@@ -82,10 +82,10 @@ export default function Welcome({ create, restore, close }: Props) {
                     </VerticalCenter>
                 </LinedBox>
                 <LinedBox>
-                    <FullWidth>
+                    <Box flex={1}>
                         <Typography variant="body1">{geti18nString('welcome_0_old_user')}</Typography>
                         <Typography variant="h6">{geti18nString('welcome_0_restore_key')}</Typography>
-                    </FullWidth>
+                    </Box>
                     <VerticalCenter>
                         <Button onClick={restore} variant="outlined" className={classes.button}>
                             {geti18nString('restore')}

@@ -1,5 +1,4 @@
 import * as React from 'react'
-import { FlexBox } from '../../utils/components/Flex'
 import { useAsync } from '../../utils/components/AsyncComponent'
 import { Person } from '../../extension/background-script/PeopleService'
 import { usePeople } from '../DataSource/PeopleRef'
@@ -12,7 +11,7 @@ import Services from '../../extension/service'
 import { pasteIntoPostBox } from '../../extension/content-script/tasks'
 import { geti18nString } from '../../utils/i18n'
 import { makeStyles } from '@material-ui/styles'
-import { Card, CardHeader, Typography, Divider, Paper, InputBase, Button } from '@material-ui/core'
+import { Card, CardHeader, Typography, Divider, Paper, InputBase, Button, Box } from '@material-ui/core'
 
 interface Props {
     people: Person[]
@@ -73,7 +72,7 @@ export function AdditionalPostBoxUI(props: Props) {
                 />
             </Paper>
             <Divider />
-            <FlexBox className={classes.grayArea}>
+            <Box display="flex" className={classes.grayArea}>
                 <Button
                     onClick={() => props.onRequestPost(selectedPeople, text)}
                     variant="contained"
@@ -82,7 +81,7 @@ export function AdditionalPostBoxUI(props: Props) {
                     disabled={!(selectedPeople.length && text)}>
                     {geti18nString('additional_post_box__post_button')}
                 </Button>
-            </FlexBox>
+            </Box>
         </Card>
     )
 }

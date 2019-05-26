@@ -1,8 +1,8 @@
 import * as React from 'react'
-import { createBox } from '../../utils/components/Flex'
 import Identity from './Identity'
 import { Person } from '../../extension/background-script/PeopleService'
-import { Typography, Button } from '@material-ui/core'
+import { Typography, Button, Theme } from '@material-ui/core'
+import { styled } from '@material-ui/styles'
 
 interface Props {
     identities: Person[]
@@ -11,7 +11,7 @@ interface Props {
     onProfileClick(username: string): void
 }
 
-const Main = createBox(theme => ({
+const Main = styled('div')((theme: Theme) => ({
     display: 'flex',
     flexDirection: 'column',
     textAlign: 'center',

@@ -1,12 +1,12 @@
 import * as React from 'react'
-import { createBox } from '../../utils/components/Flex'
 
 import ArrowBack from '@material-ui/icons/ArrowBack'
 import { useDragAndDrop } from '../../utils/hooks/useDragAndDrop'
 import { geti18nString } from '../../utils/i18n'
 import { makeStyles, Paper, Button, Typography } from '@material-ui/core'
+import { styled } from '@material-ui/styles'
 
-const RestoreBox = createBox(theme => ({
+const RestoreBox = styled('div')(theme => ({
     color: theme.palette.text.hint,
     border: `2px dashed ${theme.palette.divider}`,
     whiteSpace: 'pre-line',

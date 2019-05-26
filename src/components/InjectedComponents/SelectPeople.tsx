@@ -1,9 +1,18 @@
 import * as React from 'react'
-import { FlexBox, FullWidth } from '../../utils/components/Flex'
 import { Person } from '../../extension/background-script/PeopleService'
 import { Avatar } from '../../utils/components/Avatar'
 import { geti18nString } from '../../utils/i18n'
-import { makeStyles, ListItem, ListItemAvatar, ListItemText, Chip, InputBase, Button, List } from '@material-ui/core'
+import {
+    makeStyles,
+    ListItem,
+    ListItemAvatar,
+    ListItemText,
+    Chip,
+    InputBase,
+    Button,
+    List,
+    Box,
+} from '@material-ui/core'
 
 interface PeopleInListProps {
     person: Person
@@ -78,7 +87,7 @@ export function SelectPeopleUI({ people, frozenSelected, onSetSelected, selected
     })
     return (
         <>
-            <FlexBox className={classes.selectedArea}>
+            <Box display="flex" className={classes.selectedArea}>
                 {frozenSelected && frozenSelected.map(p => <PersonInChip disabled key={p.username} person={p} />)}
                 {selected.map(p => (
                     <PersonInChip
@@ -100,11 +109,11 @@ export function SelectPeopleUI({ people, frozenSelected, onSetSelected, selected
                     placeholder={disabled ? '' : geti18nString('search_box_placeholder')}
                     disabled={disabled}
                 />
-            </FlexBox>
+            </Box>
             {disabled ? (
                 undefined
             ) : (
-                <FlexBox>
+                <Box display="flex">
                     {listAfterSearch.length > 0 && (
                         <Button
                             className={classes.button}
@@ -118,13 +127,13 @@ export function SelectPeopleUI({ people, frozenSelected, onSetSelected, selected
                             {geti18nString('select_none')}
                         </Button>
                     )}
-                </FlexBox>
+                </Box>
             )}
 
             {disabled ? (
                 undefined
             ) : (
-                <FullWidth>
+                <Box flex={1}>
                     <List dense>
                         {listBeforeSearch.length > 0 && listBeforeSearch.length === 0 && (
                             <ListItem>
@@ -143,7 +152,7 @@ export function SelectPeopleUI({ people, frozenSelected, onSetSelected, selected
                             />
                         ))}
                     </List>
-                </FullWidth>
+                </Box>
             )}
         </>
     )

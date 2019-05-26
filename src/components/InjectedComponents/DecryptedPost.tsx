@@ -1,14 +1,13 @@
 import React, { useCallback } from 'react'
 import AsyncComponent from '../../utils/components/AsyncComponent'
 import { AdditionalContent } from './AdditionalPostContent'
-import { FullWidth } from '../../utils/components/Flex'
 import { useShareMenu } from './SelectPeopleDialog'
 import { Person } from '../../extension/background-script/PeopleService'
 import { sleep } from '../../utils/utils'
 import Services from '../../extension/service'
 import { geti18nString } from '../../utils/i18n'
 import { makeStyles } from '@material-ui/styles'
-import { Link } from '@material-ui/core'
+import { Link, Box } from '@material-ui/core'
 
 interface DecryptPostSuccessProps {
     data: { signatureVerifyResult: boolean; content: string }
@@ -31,7 +30,7 @@ function DecryptPostSuccess({ data, people, ...props }: DecryptPostSuccessProps)
                 <>
                     {ShareMenu}
                     {geti18nString('decrypted_postbox_title')}
-                    <FullWidth />
+                    <Box flex={1} />
                     {props.displayAppendDecryptor ? (
                         <Link color="primary" onClick={showShare} className={classes.link}>
                             {geti18nString('decrypted_postbox_add_decryptor')}
