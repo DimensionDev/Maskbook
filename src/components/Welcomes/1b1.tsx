@@ -1,14 +1,10 @@
 import * as React from 'react'
-import Paper from '@material-ui/core/Paper/Paper'
-import Typography from '@material-ui/core/Typography/Typography'
-import { withStylesTyped } from '../../utils/theme'
-import createStyles from '@material-ui/core/styles/createStyles'
-import Button from '@material-ui/core/Button/Button'
 import { createBox } from '../../utils/components/Flex'
 
 import ArrowBack from '@material-ui/icons/ArrowBack'
 import { useDragAndDrop } from '../../utils/hooks/useDragAndDrop'
 import { geti18nString } from '../../utils/i18n'
+import { makeStyles, Paper, Button, Typography } from '@material-ui/core'
 
 const RestoreBox = createBox(theme => ({
     color: theme.palette.text.hint,
@@ -29,44 +25,44 @@ interface Props {
     back(): void
     restore(file: File): void
 }
-export default withStylesTyped(theme =>
-    createStyles({
-        paper: {
-            width: 600,
-            boxSizing: 'border-box',
+const useStyles = makeStyles(theme => ({
+    paper: {
+        width: 600,
+        boxSizing: 'border-box',
+    },
+    nav: {
+        paddingTop: theme.spacing(1),
+        paddingLeft: theme.spacing(1),
+    },
+    navButton: {
+        color: theme.palette.text.hint,
+    },
+    navButtonIcon: {
+        marginRight: theme.spacing(1),
+    },
+    main: {
+        padding: '2rem 2rem 1rem 2rem',
+        textAlign: 'center',
+        '& > *': {
+            marginBottom: theme.spacing(3),
         },
-        nav: {
-            paddingTop: theme.spacing(1),
-            paddingLeft: theme.spacing(1),
+    },
+    button: {
+        minWidth: 180,
+    },
+    file: {
+        display: 'none',
+    },
+    restoreBox: {
+        color: 'gray',
+        transition: '0.4s',
+        '&[data-active=true]': {
+            color: 'black',
         },
-        navButton: {
-            color: theme.palette.text.hint,
-        },
-        navButtonIcon: {
-            marginRight: theme.spacing(1),
-        },
-        main: {
-            padding: '2rem 2rem 1rem 2rem',
-            textAlign: 'center',
-            '& > *': {
-                marginBottom: theme.spacing(3),
-            },
-        },
-        button: {
-            minWidth: 180,
-        },
-        file: {
-            display: 'none',
-        },
-        restoreBox: {
-            color: 'gray',
-            transition: '0.4s',
-            '&[data-active=true]': {
-                color: 'black',
-            },
-        },
-    }),
-)<Props>(function Welcome({ classes, back, restore }) {
+    },
+}))
+export default function Welcome({ back, restore }: Props) {
+    const classes = useStyles()
     const ref = React.useRef<HTMLInputElement>(null)
     const { dragEvents, fileReceiver, fileRef, dragStatus } = useDragAndDrop()
     return (
@@ -109,4 +105,4 @@ export default withStylesTyped(theme =>
             </main>
         </Paper>
     )
-})
+}

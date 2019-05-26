@@ -1,14 +1,12 @@
 import * as React from 'react'
-import Divider from '@material-ui/core/Divider/Divider'
-import Typography from '@material-ui/core/Typography/Typography'
 import { getUrl } from '../../utils/utils'
-import { withStylesTyped } from '../../utils/theme'
+import { makeStyles, Divider, Typography } from '@material-ui/core'
 
 interface Props {
     title: React.ReactNode
     children?: any
 }
-export const AdditionalContent = withStylesTyped({
+const useStyles = makeStyles({
     upDivider: {
         marginBottom: 6,
         // TODO: ? is this useful?
@@ -21,7 +19,9 @@ export const AdditionalContent = withStylesTyped({
         marginTop: 6,
         lineHeight: 1.2,
     },
-})<Props>(({ classes, ...props }) => {
+})
+export function AdditionalContent(props: Props) {
+    const classes = useStyles()
     const icon = getUrl('/maskbook-icon-padded.png')
     return (
         <>
@@ -36,4 +36,4 @@ export const AdditionalContent = withStylesTyped({
             <Divider />
         </>
     )
-})
+}

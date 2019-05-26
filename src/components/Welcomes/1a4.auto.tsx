@@ -1,16 +1,9 @@
 import * as React from 'react'
-import Typography from '@material-ui/core/Typography/Typography'
-import { withStylesTyped } from '../../utils/theme'
-import createStyles from '@material-ui/core/styles/createStyles'
-import classNames from 'classnames'
-import Radio from '@material-ui/core/Radio/Radio'
-import FormControl from '@material-ui/core/FormControl/FormControl'
-import RadioGroup from '@material-ui/core/RadioGroup/RadioGroup'
-import FormControlLabel from '@material-ui/core/FormControlLabel/FormControlLabel'
 import { geti18nString } from '../../utils/i18n'
+import { FormControl, RadioGroup, FormControlLabel, Radio, Typography, Theme, makeStyles } from '@material-ui/core'
 
-const Option = withStylesTyped(theme => ({
-    root: {
+const useOptionStyles = makeStyles<Theme, { activated: boolean }, 'root'>(theme => ({
+    root: props => ({
         padding: `${theme.spacing(2)}px ${theme.spacing(4)}px`,
         paddingBottom: 24,
         border: '1px solid',
@@ -18,45 +11,44 @@ const Option = withStylesTyped(theme => ({
         flexDirection: 'column',
         borderRadius: theme.shape.borderRadius * 2,
         transition: '0.4s',
-        background: 'transparent',
-        borderColor: theme.palette.grey[300],
+        // TODO: Theme
+        background: props.activated ? '#f3fcff' : 'transparent',
+        // TODO: Theme
+        borderColor: props.activated ? '#7edfff' : theme.palette.grey[300],
         '& > *': {
             marginBottom: theme.spacing(1),
         },
-    },
-    activated: {
-        // TODO: Theme
-        borderColor: '#7edfff',
-        background: '#f3fcff',
-    },
-}))<{ activated: boolean }>(({ classes, children, activated }) => (
-    <div className={classNames(classes.root, { [classes.activated]: activated })} children={children} />
-))
+    }),
+}))
+function Option(props: React.PropsWithChildren<{ activated: boolean }>) {
+    const classes = useOptionStyles(props)
+    return <div className={classes.root} children={props.children} />
+}
 interface Props {
     bioDisabled: boolean
     type: 'bio' | 'post'
     setType(type: Props['type']): void
 }
-export default withStylesTyped(theme =>
-    createStyles({
-        root: {
-            display: 'flex',
-            justifyContent: 'space-around',
+const useStyles = makeStyles(theme => ({
+    root: {
+        display: 'flex',
+        justifyContent: 'space-around',
+    },
+    group: { flexDirection: 'row' },
+    radio: {
+        marginTop: '-2em',
+        zoom: 0.75,
+        color: theme.palette.grey[300],
+        '&$checked': {
+            color: '#3497ff',
         },
-        group: { flexDirection: 'row' },
-        radio: {
-            marginTop: '-2em',
-            zoom: 0.75,
-            color: theme.palette.grey[300],
-            '&$checked': {
-                color: '#3497ff',
-            },
-        },
-        checked: {},
-        title: { fontWeight: 'bold', '& + *': { opacity: 0.6 } },
-        red: { color: 'red' },
-    }),
-)<Props>(function Auto({ classes, type, setType, bioDisabled }) {
+    },
+    checked: {},
+    title: { fontWeight: 'bold', '& + *': { opacity: 0.6 } },
+    red: { color: 'red' },
+}))
+export default function Auto({ type, setType, bioDisabled }: Props) {
+    const classes = useStyles()
     return (
         <div className={classes.root}>
             <FormControl component={'fieldset' as any} className={classes.root}>
@@ -104,4 +96,4 @@ export default withStylesTyped(theme =>
             </FormControl>
         </div>
     )
-})
+}

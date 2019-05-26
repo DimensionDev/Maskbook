@@ -1,7 +1,5 @@
 import * as React from 'react'
-import FormControlLabel from '@material-ui/core/FormControlLabel/FormControlLabel'
-import Checkbox from '@material-ui/core/Checkbox'
-import Typography from '@material-ui/core/Typography/Typography'
+import { FormControlLabel, Checkbox, Typography } from '@material-ui/core'
 
 interface Props {
     onCheck(val: boolean): void

@@ -1,31 +1,27 @@
 import * as React from 'react'
-import Paper from '@material-ui/core/Paper/Paper'
-import Typography from '@material-ui/core/Typography/Typography'
-import { withStylesTyped } from '../../utils/theme'
-import createStyles from '@material-ui/core/styles/createStyles'
-import Button from '@material-ui/core/Button/Button'
 import { getUrl } from '../../utils/utils'
 import { geti18nString } from '../../utils/i18n'
+import { Paper, Typography, Button, makeStyles } from '@material-ui/core'
 
 interface Props {
     next(): void
 }
-export default withStylesTyped(theme =>
-    createStyles({
-        paper: {
-            padding: '2rem 1rem 1rem 1rem',
-            textAlign: 'center',
-            width: 600,
-            boxSizing: 'border-box',
-            '& > *': {
-                marginBottom: theme.spacing(3),
-            },
+const useStyles = makeStyles(theme => ({
+    paper: {
+        padding: '2rem 1rem 1rem 1rem',
+        textAlign: 'center',
+        width: 600,
+        boxSizing: 'border-box',
+        '& > *': {
+            marginBottom: theme.spacing(3),
         },
-        button: {
-            minWidth: 180,
-        },
-    }),
-)<Props>(function Welcome({ classes, next }) {
+    },
+    button: {
+        minWidth: 180,
+    },
+}))
+export default function Welcome({ next }: Props) {
+    const classes = useStyles()
     const date = new Date()
     const today = date.getFullYear() + '' + (date.getMonth() + 1) + '' + date.getDate()
     const filename = `maskbook-keystore-backup-${today}.json`
@@ -44,4 +40,4 @@ export default withStylesTyped(theme =>
             </Button>
         </Paper>
     )
-})
+}

@@ -1,7 +1,6 @@
 import * as React from 'react'
-import { withStylesTyped } from '../../utils/theme'
-import createStyles from '@material-ui/core/styles/createStyles'
 import { createBox } from '../../utils/components/Flex'
+import { makeStyles } from '@material-ui/core'
 
 const TextField = createBox(
     theme => ({
@@ -24,10 +23,9 @@ const TextField = createBox(
 interface Props {
     provePost: string
 }
-export default withStylesTyped(createStyles({ textField: { minHeight: '10em' } }))<Props>(function Manual({
-    classes,
-    provePost,
-}) {
+const useStyles = makeStyles({ textField: { minHeight: '10em' } })
+export default function Manual({ provePost }: Props) {
+    const classes = useStyles()
     const ref = React.createRef<HTMLTextAreaElement>()
     function onFocus() {
         setTimeout(() => {
@@ -51,4 +49,4 @@ export default withStylesTyped(createStyles({ textField: { minHeight: '10em' } }
             className={classes.textField}
         />
     )
-})
+}

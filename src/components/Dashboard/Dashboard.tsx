@@ -1,9 +1,8 @@
 import * as React from 'react'
-import Typography from '@material-ui/core/Typography/Typography'
 import { createBox } from '../../utils/components/Flex'
 import Identity from './Identity'
-import Button from '@material-ui/core/Button/Button'
 import { Person } from '../../extension/background-script/PeopleService'
+import { Typography, Button } from '@material-ui/core'
 
 interface Props {
     identities: Person[]

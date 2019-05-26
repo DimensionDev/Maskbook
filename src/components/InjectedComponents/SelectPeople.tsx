@@ -1,16 +1,9 @@
 import * as React from 'react'
 import { FlexBox, FullWidth } from '../../utils/components/Flex'
-import Chip from '@material-ui/core/Chip/Chip'
-import InputBase from '@material-ui/core/InputBase/InputBase'
-import List from '@material-ui/core/List/List'
 import { Person } from '../../extension/background-script/PeopleService'
-import ListItem from '@material-ui/core/ListItem/ListItem'
-import ListItemText from '@material-ui/core/ListItemText/ListItemText'
-import Button from '@material-ui/core/Button/Button'
-import { withStylesTyped } from '../../utils/theme'
-import ListItemAvatar from '@material-ui/core/ListItemAvatar/ListItemAvatar'
 import { Avatar } from '../../utils/components/Avatar'
 import { geti18nString } from '../../utils/i18n'
+import { makeStyles, ListItem, ListItemAvatar, ListItemText, Chip, InputBase, Button, List } from '@material-ui/core'
 
 interface PeopleInListProps {
     person: Person
@@ -57,7 +50,7 @@ interface SelectPeopleUI {
     onSetSelected: (selected: Person[]) => void
     disabled?: boolean
 }
-export const SelectPeopleUI = withStylesTyped({
+const useStyles = makeStyles({
     paper: { maxWidth: 500 },
     selectedArea: {
         flexDirection: 'row',
@@ -67,7 +60,9 @@ export const SelectPeopleUI = withStylesTyped({
     },
     input: { flex: 1 },
     button: { marginLeft: 8, padding: '2px 6px' },
-})<SelectPeopleUI>(function({ people, frozenSelected, classes, onSetSelected, selected, disabled }) {
+})
+export function SelectPeopleUI({ people, frozenSelected, onSetSelected, selected, disabled }: SelectPeopleUI) {
+    const classes = useStyles()
     const [search, setSearch] = React.useState('')
     const listBeforeSearch = people.filter(x => {
         if (selected.find(y => y.username === x.username)) return false
@@ -152,4 +147,4 @@ export const SelectPeopleUI = withStylesTyped({
             )}
         </>
     )
-})
+}

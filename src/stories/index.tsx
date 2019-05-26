@@ -24,7 +24,7 @@ import { Person } from '../extension/background-script/PeopleService'
 import { Banner } from '../components/Welcomes/Banner'
 import { useShareMenu } from '../components/InjectedComponents/SelectPeopleDialog'
 import { sleep } from '../utils/utils'
-import Button from '@material-ui/core/Button/Button'
+import { Button } from '@material-ui/core'
 
 const demoPeople: Person[] = [
     {

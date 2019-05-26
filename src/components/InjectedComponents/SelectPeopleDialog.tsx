@@ -1,14 +1,9 @@
 import React, { useState, useCallback } from 'react'
 import { SelectPeopleUI } from './SelectPeople'
-import Dialog from '@material-ui/core/Dialog/Dialog'
 import { Person } from '../../extension/background-script/PeopleService'
-import CircularProgress from '@material-ui/core/CircularProgress/CircularProgress'
-import Button from '@material-ui/core/Button/Button'
-import DialogTitle from '@material-ui/core/DialogTitle/DialogTitle'
-import DialogActions from '@material-ui/core/DialogActions/DialogActions'
-import DialogContent from '@material-ui/core/DialogContent/DialogContent'
-import { withStylesTyped } from '../../utils/theme'
 import { geti18nString } from '../../utils/i18n'
+import { makeStyles } from '@material-ui/styles'
+import { Dialog, DialogTitle, DialogContent, DialogActions, Button, CircularProgress } from '@material-ui/core'
 interface Props {
     open: boolean
     people: Person[]
@@ -16,11 +11,13 @@ interface Props {
     onClose(): void
     onSelect(people: Person[]): Promise<void>
 }
-export const SelectPeopleDialog = withStylesTyped({
+const useStyles = makeStyles({
     title: { paddingBottom: 0 },
     content: { padding: '0 12px' },
     progress: { marginRight: 6 },
-})<Props>(({ classes, ...props }) => {
+})
+export function SelectPeopleDialog(props: Props) {
+    const classes = useStyles()
     const [people, select] = useState<Person[]>([] as Person[])
     const [committed, setCommitted] = useState(false)
     const onClose = useCallback(() => {
@@ -66,7 +63,7 @@ export const SelectPeopleDialog = withStylesTyped({
             </DialogActions>
         </Dialog>
     )
-})
+}
 
 export function useShareMenu(
     people: Person[],

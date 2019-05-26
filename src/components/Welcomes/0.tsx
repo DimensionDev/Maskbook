@@ -1,13 +1,9 @@
 import * as React from 'react'
-import Paper from '@material-ui/core/Paper/Paper'
-import Typography from '@material-ui/core/Typography/Typography'
-import { withStylesTyped } from '../../utils/theme'
-import createStyles from '@material-ui/core/styles/createStyles'
-import Button from '@material-ui/core/Button/Button'
 import { VerticalCenter, FullWidth, createBox } from '../../utils/components/Flex'
 
 import Close from '@material-ui/icons/Close'
 import { geti18nString } from '../../utils/i18n'
+import { makeStyles, Paper, Button, Typography } from '@material-ui/core'
 
 const LinedBox = createBox(theme => ({
     border: '1px solid #ddd',
@@ -23,42 +19,42 @@ interface Props {
     restore(): void
     close(): void
 }
-export default withStylesTyped(theme =>
-    createStyles({
-        paper: {
-            paddingBottom: '1rem',
-            width: 600,
-            boxSizing: 'border-box',
-            '& article': {
-                padding: '0 3rem',
-                textAlign: 'center',
-            },
+const useStyles = makeStyles(theme => ({
+    paper: {
+        paddingBottom: '1rem',
+        width: 600,
+        boxSizing: 'border-box',
+        '& article': {
+            padding: '0 3rem',
+            textAlign: 'center',
         },
-        title: {
-            marginBottom: theme.spacing(3),
-            color: theme.palette.grey[500],
-        },
-        subtitle: {
-            maxWidth: '24rem',
-            margin: 'auto',
-        },
-        button: {
-            minWidth: 180,
-            marginLeft: theme.spacing(2),
-        },
-        nav: {
-            paddingTop: theme.spacing(1),
-            paddingRight: theme.spacing(1),
-            textAlign: 'right',
-        },
-        navButton: {
-            color: theme.palette.text.hint,
-        },
-        navButtonIcon: {
-            marginLeft: theme.spacing(1),
-        },
-    }),
-)<Props>(function Welcome({ classes, create, restore, close }) {
+    },
+    title: {
+        marginBottom: theme.spacing(3),
+        color: theme.palette.grey[500],
+    },
+    subtitle: {
+        maxWidth: '24rem',
+        margin: 'auto',
+    },
+    button: {
+        minWidth: 180,
+        marginLeft: theme.spacing(2),
+    },
+    nav: {
+        paddingTop: theme.spacing(1),
+        paddingRight: theme.spacing(1),
+        textAlign: 'right',
+    },
+    navButton: {
+        color: theme.palette.text.hint,
+    },
+    navButtonIcon: {
+        marginLeft: theme.spacing(1),
+    },
+}))
+export default function Welcome({ create, restore, close }: Props) {
+    const classes = useStyles()
     return (
         <Paper elevation={2} className={classes.paper}>
             <nav className={classes.nav}>
@@ -102,4 +98,4 @@ export default withStylesTyped(theme =>
             </article>
         </Paper>
     )
-})
+}

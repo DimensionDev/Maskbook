@@ -1,9 +1,9 @@
 import React from 'react'
 import { Theme } from '@material-ui/core/styles/createMuiTheme'
-import { withStylesTyped } from '../theme'
 import { CSSProperties } from '@material-ui/core/styles/withStyles'
 import classNames from 'classnames'
 import createStyles from '@material-ui/core/styles/createStyles'
+import { withStyles } from '@material-ui/styles'
 
 export function createBox<T extends keyof JSX.IntrinsicElements = 'div'>(
     fn: ((theme: Theme) => CSSProperties) | CSSProperties,
@@ -17,7 +17,7 @@ export function createBox<T extends keyof JSX.IntrinsicElements = 'div'>(
             className: classNames(classes.box, className),
         })
     })
-    const Styled = withStylesTyped(style)(Real)
+    const Styled = withStyles(style)(Real)
     return Styled as React.ComponentType<JSX.IntrinsicElements[T]>
 }
 

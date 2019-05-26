@@ -1,13 +1,8 @@
-import withStyles, {
-    WithStyles,
-    WithStylesOptions,
-    StyleRulesCallback,
-    StyleRules,
-} from '@material-ui/core/styles/withStyles'
 import React from 'react'
-import createMuiTheme, { ThemeOptions } from '@material-ui/core/styles/createMuiTheme'
-import { TypographyOptions } from '@material-ui/core/styles/createTypography'
 import { ThemeProvider } from '@material-ui/styles'
+import { createMuiTheme } from '@material-ui/core'
+import { TypographyOptions } from '@material-ui/core/styles/createTypography'
+import { ThemeOptions } from '@material-ui/core/styles/createMuiTheme'
 
 const _refTheme = createMuiTheme()
 const _refThemeDark = createMuiTheme({ palette: { type: 'dark' } })
@@ -62,30 +57,6 @@ const baseTheme = (theme: 'dark' | 'light') =>
 export const MaskbookLightTheme = createMuiTheme(baseTheme('light'))
 export const MaskbookDarkTheme = createMuiTheme(baseTheme('dark'))
 export const FixedWidthFonts = `Droid Sans Mono', Consolas, Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace, serif`
-
-// 类型安全的 withStyles
-export function withStylesTyped<ClassKey extends string, Options extends WithStylesOptions = {}>(
-    style: StyleRulesCallback<ClassKey> | StyleRules<ClassKey> = {} as any,
-    options?: Options,
-) {
-    return function<Props, Ref = null>(
-        component: Ref extends null
-            ? React.ComponentType<Props & WithStyles<typeof style>>
-            : React.ForwardRefExoticComponent<Props & WithStyles<typeof style> & React.RefAttributes<Ref>>,
-    ) {
-        const Styled = withStyles(style, options as any)(component as any)
-        const Wrap = React.forwardRef((props: any, ref: any) => {
-            return React.createElement(Styled, {
-                innerRef: ref,
-                ...props,
-            })
-        })
-        return Wrap as Ref extends null
-            ? React.ComponentType<Props>
-            : React.ForwardRefExoticComponent<React.RefAttributes<Ref> & Props>
-    }
-}
-
 export function useMaskbookTheme(node: React.ReactNode) {
     return React.createElement(ThemeProvider, { theme: MaskbookLightTheme, children: node })
 }
