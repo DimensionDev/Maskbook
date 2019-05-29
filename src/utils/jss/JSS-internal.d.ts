@@ -1,8 +1,12 @@
 declare module 'warning' {
     export default function warning(...args: any[]): void
 }
+declare module 'tiny-warning' {
+    export default function warning(...args: any[]): void
+}
 
 declare module 'jss' {
+    import { FakeHTMLStyleElement } from './ConstructableStyleSheetsRenderer.2'
     import { BaseRule } from './CSSOM'
     import {
         SheetsRegistry as JSSSheetsRegistry,
@@ -14,7 +18,7 @@ declare module 'jss' {
     interface StyleSheetX<RuleName extends string = string> extends JSSStyleSheet {
         rules: RuleList
         attached: boolean
-        renderer?: Renderer & { element: HTMLElement }
+        renderer?: Renderer & { element: FakeHTMLStyleElement }
     }
     export interface StyleSheet<RuleName extends string = string> extends StyleSheetX {}
     export declare class SheetsRegistry extends JSSSheetsRegistry {

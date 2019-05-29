@@ -1,5 +1,8 @@
 type DOMString = string
 declare global {
+    interface CSSRule {
+        style: CSSStyleDeclaration
+    }
     interface HTMLElement {
         attributeStyleMap: Map<string, string>
     }

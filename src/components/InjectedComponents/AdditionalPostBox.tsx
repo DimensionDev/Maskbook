@@ -15,7 +15,7 @@ import { Card, CardHeader, Typography, Divider, Paper, InputBase, Button, Box } 
 
 interface Props {
     people: Person[]
-    myself: Person
+    myself?: Person
     onRequestPost(people: Person[], text: string): void
 }
 const useStyles = makeStyles({
@@ -48,7 +48,7 @@ export function AdditionalPostBoxUI(props: Props) {
             <CardHeader title={<Typography variant="caption">Encrypt with Maskbook</Typography>} />
             <Divider />
             <Paper elevation={0} className={classes.paper}>
-                <Avatar className={classes.avatar} person={myself} />
+                {myself && <Avatar className={classes.avatar} person={myself} />}
                 <InputBase
                     classes={{ root: classes.input, input: classes.innerInput }}
                     // Todo: Test if this is break after @material/ui^4
@@ -56,17 +56,17 @@ export function AdditionalPostBoxUI(props: Props) {
                     fullWidth
                     multiline
                     placeholder={geti18nString(
-                        myself.nickname
+                        myself && myself.nickname
                             ? 'additional_post_box__placeholder_w_name'
                             : 'additional_post_box__placeholder_wo_name',
-                        myself.nickname,
+                        myself ? myself.nickname : '',
                     )}
                 />
             </Paper>
             <Divider />
             <Paper elevation={2}>
                 <SelectPeopleUI
-                    people={people.filter(x => x.username !== myself.username)}
+                    people={people.filter(x => x.username !== (myself ? myself.username : ''))}
                     onSetSelected={selectPeople}
                     selected={selectedPeople}
                 />
@@ -102,8 +102,7 @@ export function AdditionalPostBox() {
         Services.Crypto.publishPostAESKey(token)
     }, [])
     if (!username) {
-        console.error('Username not found.')
-        return null
+        return <AdditionalPostBoxUI people={usePeople()} onRequestPost={onRequestPost} />
     }
     return (
         <AdditionalPostBoxUI

@@ -4,9 +4,10 @@ export const myUsername = new LiveSelector().querySelector<HTMLAnchorElement>(
     `[aria-label="Facebook"][role="navigation"] [data-click="profile_icon"] a`,
 )
 export function getUsername(link?: HTMLAnchorElement | null) {
+    if (link === null) return undefined
     // tslint:disable-next-line: no-parameter-reassignment
     if (link === undefined) link = myUsername.evaluateOnce()[0]
-    if (link === null) return undefined
+    if (!link) return undefined
     const url = link.href
     const after = url.split('https://www.facebook.com/')[1]
     if (!after) return undefined

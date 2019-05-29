@@ -1,19 +1,20 @@
-import { create } from 'jss'
-import { jssPreset, createGenerateClassName } from '@material-ui/styles'
-import { JssProvider } from 'react-jss'
+import { create, StyleSheet } from 'jss'
+import { jssPreset, createGenerateClassName, StylesProvider } from '@material-ui/styles'
 import ReactDOM from 'react-dom'
 import { memoize } from 'lodash-es'
 import React from 'react'
 import { useMaskbookTheme } from '../theme'
-import { ConstructableStyleSheetsRenderer } from './ConstructableStylesheetsRenderer'
+import ConstructableStyleSheetsRenderer from './ConstructableStyleSheetsRenderer'
 
-const isPolyfilled = CSSStyleSheet.name !== 'CSSStyleSheet'
+const isPolyfilled = CSSStyleSheet.name !== 'CSSStyleSheet' && process.env.NODE_ENV === 'development'
 if (isPolyfilled) console.warn('Browser does not support Constructable Stylesheets. Using polyfill.')
 
 const createJSS = memoize((shadow: ShadowRoot) => {
     return create({
         ...jssPreset(),
-        Renderer: new ConstructableStyleSheetsRenderer(shadow),
+        Renderer: function(sheet: StyleSheet) {
+            return new ConstructableStyleSheetsRenderer(sheet, shadow)
+        } as any,
     })
 })
 const generateClassName = createGenerateClassName()
@@ -25,9 +26,9 @@ const generateClassName = createGenerateClassName()
 export function renderInShadowRoot(node: React.ReactNode, shadow: ShadowRoot) {
     const jss = createJSS(shadow)
     const jsx = (
-        <JssProvider jss={jss} generateId={generateClassName}>
+        <StylesProvider jss={jss} generateClassName={generateClassName}>
             {useMaskbookTheme(node)}
-        </JssProvider>
+        </StylesProvider>
     )
     const Component = class extends React.Component {
         state: { error?: Error } = { error: undefined }
