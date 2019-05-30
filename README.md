@@ -13,12 +13,12 @@ For general introductions, see https://Maskbook.com/
 -   [Git flow](https://github.com/nvie/gitflow) enabled, `master` as the latest branch, `released` as the stable branch
 -   UI developing: Use `yarn start` / `npm start` to start a [Storybook](https://storybook.js.org/)
 -   Extension developing: Use `yarn watch` / `npm run watch` to start watch build for extension
--   Crypto: We're using [ECDH SECP256-k1](https://en.wikipedia.org/wiki/ECC) and [AES-GCM](https://en.wikipedia.org/wiki/AES)
+-   Crypto: We're using [Elliptic Curve Cryptography (ECC)](https://en.wikipedia.org/wiki/ECC) of the [SECP256-k1](https://en.bitcoin.it/wiki/Secp256k1) parameters for [sharing sharing](https://en.wikipedia.org/wiki/Elliptic-curve_Diffie–Hellman) and [AES-GCM](https://en.wikipedia.org/wiki/Galois/Counter_Mode) for encryption
 -   Data transfer between users: We're using [gun.js](https://gun.eco)
 
 ### Prepare
 
-After `Maskbook` and `@holoflows/kit` gets stable, we will directly add `@holoflows/kit` as a dependency. Currently, you need to install and build the latest version of `@holoflows/kit`.
+After `Maskbook` and `@holoflows/kit` get stable, we will directly add `@holoflows/kit` as a dependency. Currently, you need to install and build the latest version of `@holoflows/kit`.
 
 #### Install dependencies
 
