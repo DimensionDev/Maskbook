@@ -2,19 +2,26 @@
  * This file is granted to [JSS](https://github.com/cssinjs/jss) with MIT Licence
  */
 import warning from 'tiny-warning'
-const polyfilled = CSSStyleSheet.name !== 'CSSStyleSheet' && process.env.NODE_ENV === 'development'
-if (process.env.NODE_ENV === 'development') {
+/**
+ * Chrome < 73, enable polyfill
+ * Chrome = 73, disable polyfill
+ * ! Due to https://bugs.chromium.org/p/chromium/issues/detail?id=967273
+ * Chrome = 74, enable polyfill and modify behavior to prevent crashing
+ * Chrome > 74, disable polyfill
+ * Isn't Chrome, enable polyfill
+ */
+const isChrome74 = navigator.appVersion.match(/(Chromium|Chrome)\/74/)
+const needPolyfill = 'adoptedStyleSheets' in document || isChrome74
+if (!isChrome74) {
+    if (process.env.NODE_ENV === 'development') delete Document.prototype.adoptedStyleSheets
+} else {
     delete Document.prototype.adoptedStyleSheets
 }
-require('./polyfill')
 // require('construct-style-sheets-polyfill')
+require('./polyfill')
+const isPolyfilled = CSSStyleSheet.name !== 'CSSStyleSheet'
+if (isPolyfilled) console.warn('Browser does not support Constructable Stylesheets. Using polyfill.')
 
-function preventChrome74() {
-    const isChrome74 = navigator.appVersion.match(/(Chromium|Chrome)\/74/)
-    // ! Due to https://bugs.chromium.org/p/chromium/issues/detail?id=967273
-    // ! If we continue to run the code, Chrome will crash the whole tab.
-    if (isChrome74) throw new Error("Sorry, but Maskbook doesn't work with Chrome 74. Please upgrade to Chrome 75!")
-}
 // tslint:disable: deprecation
 // tslint:disable: increment-decrement
 type HTMLElementWithStyleMap = HTMLElement
@@ -61,7 +68,12 @@ function setProperty(
     prop: string,
     value: JssValue,
 ): boolean {
-    console.log('Set property', cssRule, prop, value)
+    /**
+     * ! Need to hook in polyfill:
+     * ! cssRule.style.setProperty(...)
+     * ! cssRule.attributeStyleMap.set(...)
+     */
+    console.warn('Set property', cssRule, prop, value)
     try {
         let cssValue = (value as any) as string
 
@@ -91,7 +103,12 @@ function setProperty(
  * Remove a style property.
  */
 function removeProperty(cssRule: HTMLElementWithStyleMap | CSSStyleRule | CSSKeyframeRule, prop: string) {
-    console.log('Remove property', cssRule, prop)
+    /**
+     * ! Need to hook in polyfill
+     * ! cssRule.attributeStyleMap.delete(...)
+     * ! cssRule.style.removeProperty(...)
+     */
+    console.warn('Remove property', cssRule, prop)
 
     try {
         // Support CSSTOM.
@@ -112,33 +129,39 @@ function removeProperty(cssRule: HTMLElementWithStyleMap | CSSStyleRule | CSSKey
  * Set the selector.
  */
 function setSelector(cssRule: CSSStyleRule, selectorText: string): boolean {
+    console.warn('Set selector', cssRule, selectorText)
     cssRule.selectorText = selectorText
 
     // Return false if setter was not successful.
     // Currently works in chrome only.
+    // ! Hack this since it is not implemented !
+    if (needPolyfill) return false
     return cssRule.selectorText === selectorText
 }
 //#region ConstructableStyleSheetsRenderer
 const fakeHead = document.createElement('head')
-console.log(fakeHead)
 const livingShadowRoots = new Set<ShadowRoot>()
 const livingStylesheets = new WeakMap<HTMLStyleElement, CSSStyleSheet>()
 const proxyWeakMap = new WeakMap<HTMLStyleElement, HTMLStyleElement>()
 function getStyleSheet(x: HTMLStyleElement) {
-    preventChrome74()
     const e = livingStylesheets.get(x)
     if (e) return e
     const y = new CSSStyleSheet()
-    y.replaceSync(x.textContent || '')
     livingStylesheets.set(x, y)
     return y
 }
 function applyAdoptedStyleSheets(shadowOnly = true) {
-    preventChrome74()
     const styles = Array.from(fakeHead.children).filter((x): x is HTMLStyleElement => x instanceof HTMLStyleElement)
     const shadows = [...livingShadowRoots.values()]
     const nextAdoptedStyleSheets = styles.map(getStyleSheet)
-    shadows.forEach(x => (x.adoptedStyleSheets = nextAdoptedStyleSheets))
+    for (const shadow of shadows) {
+        // if (needPolyfill) {
+        //     const head = shadow.querySelector('head')
+        //     // https://github.com/calebdwilliams/construct-style-sheets/issues/3
+        //     if (head) head.innerHTML = ''
+        // }
+        shadow.adoptedStyleSheets = nextAdoptedStyleSheets
+    }
     if (shadowOnly === false) document.adoptedStyleSheets = nextAdoptedStyleSheets
 }
 
@@ -150,7 +173,6 @@ function adoptStylesheets(
     return {
         ...descriptor,
         value: function(...args: any[]) {
-            preventChrome74()
             const result = descriptor.value.apply(this, args)
             applyAdoptedStyleSheets()
             return result
@@ -296,16 +318,23 @@ const insertRule = (
     rule: string,
     index: number = container.cssRules.length,
 ): false | any => {
+    /**
+     * ! Need hook in polyfill
+     * ! CSSMediaRule.insertRule(...)
+     * ! CSSKeyframesRule.appendRule(...)
+     */
     try {
         if ('insertRule' in container) {
             const c = container
-            // ! Polyfill only implemented CSSStyleSheet.insertRule !
+            console.log(c)
             c.insertRule(rule, index)
+            if (process.env.NODE_ENV === 'development')
+                if (c instanceof CSSMediaRule) throw new Error('Not implemented')
         }
         // Keyframes rule.
         else if ('appendRule' in container) {
             const c = container
-            // ! Not implemented !
+            if (process.env.NODE_ENV === 'development') throw new Error('Not implemented')
             c.appendRule(rule)
         }
     } catch (err) {
@@ -325,13 +354,14 @@ export default class ConstructableStyleSheetsRenderer {
     setProperty(...args: Parameters<typeof setProperty>) {
         return setProperty(...args)
     }
-
+    @adoptStylesheets
     removeProperty(...args: Parameters<typeof removeProperty>) {
         return removeProperty(...args)
     }
-
-    setSelector = setSelector
-
+    @adoptStylesheets
+    setSelector(...args: Parameters<typeof setSelector>) {
+        return setSelector(...args)
+    }
     // HTMLStyleElement needs fixing https://github.com/facebook/flow/issues/2696
     // ! Hook this !
     get element(): HTMLStyleElement {
@@ -340,14 +370,20 @@ export default class ConstructableStyleSheetsRenderer {
                 if (key === 'sheet') return getStyleSheet(target)
                 if (key === 'setAttribute')
                     return (k: string, v: string) => {
+                        if (k === 'media') console.warn('Not implemented')
                         if (k === 'media') getStyleSheet(target).media.mediaText = v
                         return target.setAttribute(k, v)
                     }
                 return (target as any)[key]
             },
             set(target, key, value, receiver) {
-                if (key === 'textContent') getStyleSheet(target).replaceSync(value)
-                return ((target as any)[key] = value)
+                if (key === 'textContent')
+                    getStyleSheet(target).replaceSync(value)
+                    // if (!isChrome74) {
+                    //     // ! This will cause crash on Chrome 74 !
+                ;(target as any)[key] = value
+                // }
+                return true
             },
         })
         if (this.realElement) proxyWeakMap.set(proxy, this.realElement)
@@ -514,6 +550,10 @@ export default class ConstructableStyleSheetsRenderer {
      * Get all rules elements.
      */
     getRules(): CSSRuleList {
+        /**
+         * ! Need hook in polyfill !
+         */
+        if (process.env.NODE_ENV === 'development') console.trace('Access cssRules')
         return this.element.sheet!.cssRules
     }
 }

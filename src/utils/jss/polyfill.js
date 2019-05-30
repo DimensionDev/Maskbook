@@ -1,6 +1,3 @@
-/**
- * This file is published with MIT Licence
- */
 ;(function() {
     'use strict'
 
@@ -40,6 +37,7 @@
         const constructed = Symbol('constructed')
         const obsolete = Symbol('obsolete')
         const iframe = document.createElement('iframe')
+        const styles = Symbol('Styles')
         const mutationCallback = mutations => {
             mutations.forEach(mutation => {
                 const { addedNodes, removedNodes } = mutation
@@ -73,7 +71,15 @@
             location.body ? (location = location.body) : null
             clone[constructed] = location
             sheet[node]._adopters.push({ location, clone })
-            location.appendChild(clone)
+            if (location instanceof ShadowRoot) {
+                if (!location[styles]) {
+                    location[styles] = document.createElement('head')
+                    location.appendChild(location[styles])
+                }
+                location[styles].appendChild(clone)
+            } else {
+                location.appendChild(clone)
+            }
             return clone
         }
 
@@ -123,33 +129,6 @@
         hookCSSStyleSheetMethod('insertRule')
         hookCSSStyleSheetMethod('removeImport')
         hookCSSStyleSheetMethod('removeRule')
-        // function hookCSSRules(
-        //     /** @type {typeof CSSMediaRule | typeof  CSSKeyframesRule} */ target,
-        //     /** @type {keyof ((typeof CSSMediaRule.prototype) & (typeof CSSKeyframesRule.prototype))} */ key,
-        // ) {
-        //     const old = target[key]
-        //     target.prototype[key] = function hook(...args) {
-        //         debugger
-        //         // if (node in this) this[node]._adopters.forEach(i => i.clone.sheet[key](...args))
-        //         return old.call(this, ...args)
-        //     }
-        // }
-        // hookCSSRules(CSSMediaRule, 'deleteRule')
-        // hookCSSRules(CSSMediaRule, 'insertRule')
-        // hookCSSRules(CSSKeyframesRule, 'appendRule')
-        // hookCSSRules(CSSKeyframesRule, 'deleteRule')
-        // Need to hook
-        // CSSStyleRule.prototype.style
-        // CSSStyleRule.prototype.selectorText
-        // CSSStyleRule.prototype.cssText
-        // CSSKeyframeRule.prototype.cssText
-        // CSSKeyframeRule.prototype.style
-        // CSSKeyframeRule.prototype.keyText
-        // CSSKeyframesRule.prototype.cssText
-        // CSSKeyframesRule.prototype.deleteRule
-        // CSSKeyframesRule.prototype.appendRule
-        // CSSKeyframesRule.prototype.name
-        // CSSKeyframesRule.prototype.cssRules
 
         window.CSSStyleSheet = _StyleSheet
         const adoptedStyleSheetsConfig = {
@@ -178,11 +157,9 @@
                 })
                 this._adopted = uniqueSheets
 
-                // if (this.isConnected) {
                 sheets.forEach(sheet => {
                     appendContent(this, sheet)
                 })
-                // }
             },
         }
 
