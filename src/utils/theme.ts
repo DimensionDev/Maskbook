@@ -1,5 +1,3 @@
-import React from 'react'
-import { ThemeProvider } from '@material-ui/styles'
 import { createMuiTheme } from '@material-ui/core'
 import { TypographyOptions } from '@material-ui/core/styles/createTypography'
 import { ThemeOptions } from '@material-ui/core/styles/createMuiTheme'
@@ -57,6 +55,3 @@ const baseTheme = (theme: 'dark' | 'light') =>
 export const MaskbookLightTheme = createMuiTheme(baseTheme('light'))
 export const MaskbookDarkTheme = createMuiTheme(baseTheme('dark'))
 export const FixedWidthFonts = `Droid Sans Mono', Consolas, Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace, serif`
-export function useMaskbookTheme(node: React.ReactNode) {
-    return React.createElement(ThemeProvider, { theme: MaskbookLightTheme, children: node })
-}

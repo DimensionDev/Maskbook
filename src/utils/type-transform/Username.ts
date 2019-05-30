@@ -6,6 +6,7 @@ import { geti18nString } from '../i18n'
  * ! Start to use this in a breaking change!
  */
 export function regularUsername(name: string) {
+    if (!name) return null
     // Avoid common mistake
     if (name === 'photo.php') return null
     const n = name.toLowerCase().replace(/\./g, '')

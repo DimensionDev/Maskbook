@@ -10,10 +10,59 @@ import warning from 'tiny-warning'
  * Chrome > 74, disable polyfill
  * Isn't Chrome, enable polyfill
  */
+
+//#region ConstructableStyleSheetsRenderer
+const fakeHead = document.createElement('head')
+export const livingShadowRoots = new Set<ShadowRoot>()
+const livingStylesheets = new WeakMap<HTMLStyleElement, CSSStyleSheet>()
+const proxyWeakMap = new WeakMap<HTMLStyleElement, HTMLStyleElement>()
+function getStyleSheet(x: HTMLStyleElement) {
+    const e = livingStylesheets.get(x)
+    if (e) return e
+    const y = new CSSStyleSheet()
+    livingStylesheets.set(x, y)
+    return y
+}
+let rafAwaiting = false
+export function applyAdoptedStyleSheets(shadowOnly = true) {
+    if (rafAwaiting) return
+    rafAwaiting = true
+    requestAnimationFrame(() => {
+        rafAwaiting = false
+        const styles = Array.from(fakeHead.children).filter((x): x is HTMLStyleElement => x instanceof HTMLStyleElement)
+        const shadows = Array.from(livingShadowRoots)
+        const nextAdoptedStyleSheets = styles.map(getStyleSheet)
+        for (const shadow of shadows) {
+            if (needPolyfill) {
+                const head = shadow.querySelector('head')
+                // https://github.com/calebdwilliams/construct-style-sheets/issues/3
+                if (head) head.innerHTML = ''
+            }
+            shadow.adoptedStyleSheets = nextAdoptedStyleSheets
+        }
+        if (shadowOnly === false) document.adoptedStyleSheets = nextAdoptedStyleSheets
+    })
+}
+
+function adoptStylesheets(
+    target: ConstructableStyleSheetsRenderer,
+    propertyKey: string | symbol,
+    descriptor: PropertyDescriptor,
+) {
+    return {
+        ...descriptor,
+        value: function(...args: any[]) {
+            const result = descriptor.value.apply(this, args)
+            applyAdoptedStyleSheets()
+            return result
+        },
+    }
+}
+
 const isChrome74 = navigator.appVersion.match(/(Chromium|Chrome)\/74/)
 const needPolyfill = 'adoptedStyleSheets' in document || isChrome74
 if (!isChrome74) {
-    if (process.env.NODE_ENV === 'development') delete Document.prototype.adoptedStyleSheets
+    // if (process.env.NODE_ENV === 'development') delete Document.prototype.adoptedStyleSheets
 } else {
     delete Document.prototype.adoptedStyleSheets
 }
@@ -21,6 +70,7 @@ if (!isChrome74) {
 require('./polyfill')
 const isPolyfilled = CSSStyleSheet.name !== 'CSSStyleSheet'
 if (isPolyfilled) console.warn('Browser does not support Constructable Stylesheets. Using polyfill.')
+//#endregion
 
 // tslint:disable: deprecation
 // tslint:disable: increment-decrement
@@ -138,48 +188,6 @@ function setSelector(cssRule: CSSStyleRule, selectorText: string): boolean {
     if (needPolyfill) return false
     return cssRule.selectorText === selectorText
 }
-//#region ConstructableStyleSheetsRenderer
-const fakeHead = document.createElement('head')
-const livingShadowRoots = new Set<ShadowRoot>()
-const livingStylesheets = new WeakMap<HTMLStyleElement, CSSStyleSheet>()
-const proxyWeakMap = new WeakMap<HTMLStyleElement, HTMLStyleElement>()
-function getStyleSheet(x: HTMLStyleElement) {
-    const e = livingStylesheets.get(x)
-    if (e) return e
-    const y = new CSSStyleSheet()
-    livingStylesheets.set(x, y)
-    return y
-}
-function applyAdoptedStyleSheets(shadowOnly = true) {
-    const styles = Array.from(fakeHead.children).filter((x): x is HTMLStyleElement => x instanceof HTMLStyleElement)
-    const shadows = [...livingShadowRoots.values()]
-    const nextAdoptedStyleSheets = styles.map(getStyleSheet)
-    for (const shadow of shadows) {
-        // if (needPolyfill) {
-        //     const head = shadow.querySelector('head')
-        //     // https://github.com/calebdwilliams/construct-style-sheets/issues/3
-        //     if (head) head.innerHTML = ''
-        // }
-        shadow.adoptedStyleSheets = nextAdoptedStyleSheets
-    }
-    if (shadowOnly === false) document.adoptedStyleSheets = nextAdoptedStyleSheets
-}
-
-function adoptStylesheets(
-    target: ConstructableStyleSheetsRenderer,
-    propertyKey: string | symbol,
-    descriptor: PropertyDescriptor,
-) {
-    return {
-        ...descriptor,
-        value: function(...args: any[]) {
-            const result = descriptor.value.apply(this, args)
-            applyAdoptedStyleSheets()
-            return result
-        },
-    }
-}
-//#endregion
 /**
  * Gets the `head` element upon the first call and caches it.
  * We assume it can't be null.
@@ -326,7 +334,6 @@ const insertRule = (
     try {
         if ('insertRule' in container) {
             const c = container
-            console.log(c)
             c.insertRule(rule, index)
             if (process.env.NODE_ENV === 'development')
                 if (c instanceof CSSMediaRule) throw new Error('Not implemented')
@@ -396,19 +403,13 @@ export default class ConstructableStyleSheetsRenderer {
     sheet: StyleSheet
 
     hasInsertedRules: boolean = false
-    // ! Hook this !
-    constructor(sheet: StyleSheet, public shadowRoot: ShadowRoot) {
+    constructor(sheet: StyleSheet) {
         // There is no sheet when the renderer is used from a standalone StyleRule.
         if (sheet) sheets.add(sheet)
 
-        // ! Hook this !
-        if (!sheet) throw new TypeError('No sheet found!')
         this.sheet = sheet
         const { media, meta, element } = this.sheet ? this.sheet.options : ({} as any)
         this.element = element || createStyle()
-        // ! Hook this !
-        livingShadowRoots.add(shadowRoot)
-        applyAdoptedStyleSheets()
         this.element.setAttribute('data-jss', '')
         if (media) this.element.setAttribute('media', media)
         if (meta) this.element.setAttribute('data-meta', meta)
