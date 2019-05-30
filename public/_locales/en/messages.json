@@ -62,6 +62,9 @@
     "cancel": {
         "message": "Cancel"
     },
+    "share_to": {
+        "message": "Share to..."
+    },
     "sharing": {
         "message": "Sharing"
     },

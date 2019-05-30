@@ -1,13 +1,10 @@
 import * as React from 'react'
-import Paper from '@material-ui/core/Paper/Paper'
-import Typography from '@material-ui/core/Typography/Typography'
-import { withStylesTyped } from '../../utils/theme'
-import createStyles from '@material-ui/core/styles/createStyles'
-import Button from '@material-ui/core/Button/Button'
 
 import Auto from './1a4.auto'
 import Manual from './1a4.manual'
 import { geti18nString } from '../../utils/i18n'
+import { withStatement } from '@babel/types'
+import { makeStyles, Typography, Button, Paper } from '@material-ui/core'
 
 interface Props {
     bioDisabled?: boolean
@@ -15,23 +12,23 @@ interface Props {
     requestAutoVerify(type: 'bio' | 'post'): void
     requestManualVerify(): void
 }
-export default withStylesTyped(theme =>
-    createStyles({
-        paper: {
-            padding: '2rem 2rem 1rem 2rem',
-            textAlign: 'center',
-            width: 600,
-            boxSizing: 'border-box',
-            '& > *': {
-                marginBottom: theme.spacing.unit * 3,
-            },
+const useStyles = makeStyles(theme => ({
+    paper: {
+        padding: '2rem 2rem 1rem 2rem',
+        textAlign: 'center',
+        width: 600,
+        boxSizing: 'border-box',
+        '& > *': {
+            marginBottom: theme.spacing(3),
         },
-        button: { minWidth: 180 },
-        textFieldShort: { minHeight: '10em' },
-        textFieldLong: { minHeight: '11em' },
-        red: { color: 'red' },
-    }),
-)<Props>(function Welcome({ classes, provePost, requestAutoVerify, requestManualVerify, bioDisabled }) {
+    },
+    button: { minWidth: 180 },
+    textFieldShort: { minHeight: '10em' },
+    textFieldLong: { minHeight: '11em' },
+    red: { color: 'red' },
+}))
+export default function Welcome({ provePost, requestAutoVerify, requestManualVerify, bioDisabled }: Props) {
+    const classes = useStyles()
     const [actionType, setActionType] = React.useState<'auto' | 'manual'>('auto')
     const [type, setType] = React.useState<'bio' | 'post'>(bioDisabled ? 'post' : 'bio')
 
@@ -72,7 +69,7 @@ export default withStylesTyped(theme =>
         </>
     )
     return (
-        <Paper className={classes.paper}>
+        <Paper elevation={2} className={classes.paper}>
             <Typography variant="h5">{geti18nString('welcome_1a4_title')}</Typography>
             {actionType === 'auto' ? (
                 <Auto bioDisabled={!!bioDisabled} type={type} setType={setType} />
@@ -85,4 +82,4 @@ export default withStylesTyped(theme =>
             {actionType === 'auto' ? auto : manual}
         </Paper>
     )
-})
+}

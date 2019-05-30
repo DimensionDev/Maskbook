@@ -12,7 +12,8 @@
         "message": "現在發佈！"
     },
     "additional_post_box__encrypted_post_pre": {
-        "message": "使用 $1 來解密這個訊息"
+        "message": "來 Maskbook 解密這個訊息！ $1",
+        "description": "$1 must at the end of the string."
     },
     "additional_post_box__encrypted_failed": {
         "message": "加密文本已經拷貝至剪貼板！\n不過，你需要手動粘貼到發佈框。"
@@ -62,8 +63,11 @@
     "cancel": {
         "message": "取消"
     },
+    "share_to": {
+        "message": "分享给..."
+    },
     "sharing": {
-        "message": "分享"
+        "message": "分享中..."
     },
     "share": {
         "message": "分享"

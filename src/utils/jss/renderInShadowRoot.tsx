@@ -1,52 +1,43 @@
 import { create } from 'jss'
-import { jssPreset, createGenerateClassName } from '@material-ui/core/styles'
-import JssProvider from 'react-jss/lib/JssProvider'
+import { jssPreset, createGenerateClassName, StylesProvider, ThemeProvider } from '@material-ui/styles'
 import ReactDOM from 'react-dom'
-import { memoize } from 'lodash-es'
 import React from 'react'
-import { useMaskbookTheme } from '../theme'
-import ConstructableStylesheetsRendererGenerator from './ConstructableStylesheetsRenderer'
+import { MaskbookLightTheme } from '../theme'
+import ConstructableStyleSheetsRenderer, {
+    livingShadowRoots,
+    applyAdoptedStyleSheets,
+} from './ConstructableStyleSheetsRenderer'
 
-const isPolyfilled = CSSStyleSheet.name !== 'CSSStyleSheet'
-if (isPolyfilled) console.warn('Browser does not support Constructable Stylesheets. Using polyfill.')
-
-const createJSS = memoize((shadow: ShadowRoot) => {
-    const jss = create({ ...jssPreset() })
-    ;(jss as any).options.Renderer = ConstructableStylesheetsRendererGenerator(shadow)
-    return jss
-})
-const generateClassName = createGenerateClassName()
+const jss = create({ ...jssPreset(), Renderer: ConstructableStyleSheetsRenderer as any })
 /**
- *
+ * Render the Node in the ShadowRoot
  * @param node React Node
  * @param shadow ShadowRoot that want to inject to
  */
 export function renderInShadowRoot(node: React.ReactNode, shadow: ShadowRoot) {
-    const jss = createJSS(shadow)
-    const jsx = (
-        <JssProvider jss={jss} generateClassName={generateClassName}>
-            {useMaskbookTheme(node)}
-        </JssProvider>
-    )
-    const Component = class extends React.Component {
-        state: { error?: Error } = { error: undefined }
-        render() {
-            if (this.state.error) return this.state.error.message
-            return jsx
-        }
-        componentDidCatch(error: Error, errorInfo: any) {
-            console.error(error, errorInfo)
-            this.setState({ error })
-        }
+    ReactDOM.render(<Wrapper children={node} shadowRoot={shadow} />, shadow as any)
+    livingShadowRoots.add(shadow)
+    applyAdoptedStyleSheets()
+    return () => {
+        ReactDOM.unmountComponentAtNode(shadow as any)
+        livingShadowRoots.delete(shadow)
     }
-    if (isPolyfilled) {
-        const hostRoot = shadow.__polyfilled_root_ || document.createElement('host')
-        shadow.__polyfilled_root_ = hostRoot
-        shadow.appendChild(hostRoot)
-        ReactDOM.render(<Component />, hostRoot)
-        return () => ReactDOM.unmountComponentAtNode(hostRoot)
-    } else {
-        ReactDOM.render(<Component />, shadow as any)
-        return () => ReactDOM.unmountComponentAtNode(shadow as any)
+}
+
+const generateClassName = createGenerateClassName()
+class Wrapper extends React.PureComponent<{ shadowRoot: ShadowRoot }> {
+    state: { error?: Error } = { error: undefined }
+    render() {
+        if (this.state.error) return this.state.error.message
+        return (
+            <StylesProvider jss={jss} generateClassName={generateClassName}>
+                <ThemeProvider theme={MaskbookLightTheme}>
+                    <div children={this.props.children} />
+                </ThemeProvider>
+            </StylesProvider>
+        )
+    }
+    componentDidCatch(error: Error, errorInfo: any) {
+        this.setState({ error })
     }
 }

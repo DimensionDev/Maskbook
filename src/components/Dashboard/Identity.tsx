@@ -1,46 +1,43 @@
 import * as React from 'react'
-import Typography from '@material-ui/core/Typography/Typography'
-import Card from '@material-ui/core/Card/Card'
-import CardHeader from '@material-ui/core/CardHeader/CardHeader'
-import { FixedWidthFonts, withStylesTyped } from '../../utils/theme'
-import { createBox } from '../../utils/components/Flex'
+import { FixedWidthFonts } from '../../utils/theme'
 import classNames from 'classnames'
-import createStyles from '@material-ui/core/styles/createStyles'
 import { Avatar } from '../../utils/components/Avatar'
 import { Person } from '../../extension/background-script/PeopleService'
+import { makeStyles, Typography, Card, CardHeader } from '@material-ui/core'
+import { styled } from '@material-ui/styles'
 
 interface Props {
     person: Person
     onClick?(): void
 }
-const FixedWidth = createBox({ fontFamily: FixedWidthFonts })
-export default withStylesTyped(theme =>
-    createStyles({
-        card: {
-            display: 'inline-block',
-            marginBottom: theme.spacing.unit * 3,
-            textAlign: 'start',
-            cursor: 'pointer',
-            transition: '0.4s',
-            '&:hover': {
-                boxShadow: theme.shadows[6],
-            },
-            width: '27.5em',
+const FixedWidth = styled('div')({ fontFamily: FixedWidthFonts })
+const useStyles = makeStyles(theme => ({
+    card: {
+        display: 'inline-block',
+        marginBottom: theme.spacing(3),
+        textAlign: 'start',
+        cursor: 'pointer',
+        transition: '0.4s',
+        '&:hover': {
+            boxShadow: theme.shadows[6],
         },
-        text: {
-            fontWeight: 'bold',
-            marginRight: theme.spacing.unit,
-        },
-        avatarDisabled: {
-            marginRight: 0,
-        },
-        emptyAvatar: {
-            width: 0,
-            height: 0,
-        },
-    }),
-)<Props>(function({ person, classes, onClick }) {
+        width: '27.5em',
+    },
+    text: {
+        fontWeight: 'bold',
+        marginRight: theme.spacing(1),
+    },
+    avatarDisabled: {
+        marginRight: 0,
+    },
+    emptyAvatar: {
+        width: 0,
+        height: 0,
+    },
+}))
+export default function Identity({ person, onClick }: Props) {
     const { avatar, fingerprint, nickname, username } = person
+    const classes = useStyles()
     return (
         <Card onClick={onClick} className={classes.card}>
             <CardHeader
@@ -48,14 +45,14 @@ export default withStylesTyped(theme =>
                 avatar={<Avatar className={classNames({ [classes.emptyAvatar]: !avatar })} person={person} />}
                 title={
                     <>
-                        <Typography inline className={classes.text}>
+                        <Typography display="inline" className={classes.text}>
                             {nickname}
                         </Typography>
-                        <Typography inline>{username}</Typography>
+                        <Typography display="inline">{username}</Typography>
                     </>
                 }
                 subheader={<FixedWidth>{fingerprint}</FixedWidth>}
             />
         </Card>
     )
-})
+}

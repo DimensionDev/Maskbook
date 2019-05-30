@@ -1,9 +1,8 @@
 import * as React from 'react'
-import Typography from '@material-ui/core/Typography/Typography'
-import { createBox } from '../../utils/components/Flex'
 import Identity from './Identity'
-import Button from '@material-ui/core/Button/Button'
 import { Person } from '../../extension/background-script/PeopleService'
+import { Typography, Button, Theme } from '@material-ui/core'
+import { styled } from '@material-ui/styles'
 
 interface Props {
     identities: Person[]
@@ -12,19 +11,19 @@ interface Props {
     onProfileClick(username: string): void
 }
 
-const Main = createBox(theme => ({
+const Main = styled('div')(({ theme }: { theme: Theme }) => ({
     display: 'flex',
     flexDirection: 'column',
     textAlign: 'center',
     background: theme.palette.background.default,
-    padding: theme.spacing.unit * 4,
+    padding: theme.spacing(4),
     paddingBottom: 0,
     '& > *': {
-        marginBottom: theme.spacing.unit * 4,
+        marginBottom: theme.spacing(4),
     },
     '& button': {
         minWidth: 220,
-        marginBottom: theme.spacing.unit * 2,
+        marginBottom: theme.spacing(2),
     },
 }))
 export default function Dashboard(props: Props) {

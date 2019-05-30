@@ -1,14 +1,13 @@
 import React, { useCallback } from 'react'
 import AsyncComponent from '../../utils/components/AsyncComponent'
 import { AdditionalContent } from './AdditionalPostContent'
-import { FullWidth } from '../../utils/components/Flex'
 import { useShareMenu } from './SelectPeopleDialog'
 import { Person } from '../../extension/background-script/PeopleService'
-import Link from '@material-ui/core/Link'
-import { withStylesTyped } from '../../utils/theme'
 import { sleep } from '../../utils/utils'
 import Services from '../../extension/service'
 import { geti18nString } from '../../utils/i18n'
+import { makeStyles } from '@material-ui/styles'
+import { Link, Box } from '@material-ui/core'
 
 interface DecryptPostSuccessProps {
     data: { signatureVerifyResult: boolean; content: string }
@@ -17,11 +16,13 @@ interface DecryptPostSuccessProps {
     alreadySelectedPreviously: Person[]
     people: Person[]
 }
-const DecryptPostSuccess = withStylesTyped({
+const useStyles = makeStyles({
     link: { marginRight: '1em', cursor: 'pointer' },
     pass: { color: 'green' },
     fail: { color: 'red' },
-})<DecryptPostSuccessProps>(({ data, people, classes, ...props }) => {
+})
+function DecryptPostSuccess({ data, people, ...props }: DecryptPostSuccessProps) {
+    const classes = useStyles()
     const { ShareMenu, showShare } = useShareMenu(people, props.requestAppendDecryptor, props.alreadySelectedPreviously)
     return (
         <AdditionalContent
@@ -29,7 +30,7 @@ const DecryptPostSuccess = withStylesTyped({
                 <>
                     {ShareMenu}
                     {geti18nString('decrypted_postbox_title')}
-                    <FullWidth />
+                    <Box flex={1} />
                     {props.displayAppendDecryptor ? (
                         <Link color="primary" onClick={showShare} className={classes.link}>
                             {geti18nString('decrypted_postbox_add_decryptor')}
@@ -51,7 +52,7 @@ const DecryptPostSuccess = withStylesTyped({
             )}
         />
     )
-})
+}
 
 const DecryptPostAwaiting = <AdditionalContent title={geti18nString('decrypted_postbox_decrypting')} />
 function DecryptPostFailed({ error }: { error: Error }) {

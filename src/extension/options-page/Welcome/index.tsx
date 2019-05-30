@@ -5,7 +5,6 @@ import Welcome1a3 from '../../../components/Welcomes/1a3'
 import Welcome1a4v2 from '../../../components/Welcomes/1a4.v2'
 import Welcome1b1 from '../../../components/Welcomes/1b1'
 import Welcome2 from '../../../components/Welcomes/2'
-import Dialog from '@material-ui/core/Dialog'
 import { useAsync } from '../../../utils/components/AsyncComponent'
 import Services from '../../service'
 import tasks from '../../content-script/tasks'
@@ -13,6 +12,7 @@ import { RouteComponentProps, withRouter } from 'react-router'
 import { getProfilePageUrl } from '../../../utils/type-transform/Username'
 import { setStorage, LATEST_WELCOME_VERSION } from '../../../components/Welcomes/WelcomeVersion'
 import { geti18nString } from '../../../utils/i18n'
+import { Dialog } from '@material-ui/core'
 
 //#region Welcome
 enum WelcomeState {

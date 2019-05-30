@@ -1,15 +1,11 @@
 import * as React from 'react'
-import Paper from '@material-ui/core/Paper/Paper'
-import Typography from '@material-ui/core/Typography/Typography'
-import { withStylesTyped } from '../../utils/theme'
-import createStyles from '@material-ui/core/styles/createStyles'
-import Button from '@material-ui/core/Button/Button'
-import { VerticalCenter, FullWidth, createBox } from '../../utils/components/Flex'
-
 import Close from '@material-ui/icons/Close'
 import { geti18nString } from '../../utils/i18n'
+import { makeStyles, Paper, Button, Typography, Box, Theme } from '@material-ui/core'
+import { styled } from '@material-ui/styles'
 
-const LinedBox = createBox(theme => ({
+const VerticalCenter = styled('div')({ display: 'flex', flexDirection: 'column', justifyContent: 'center' })
+const LinedBox = styled('div')(({ theme }: { theme: Theme }) => ({
     border: '1px solid #ddd',
     borderRadius: theme.shape.borderRadius,
     textAlign: 'start',
@@ -23,44 +19,44 @@ interface Props {
     restore(): void
     close(): void
 }
-export default withStylesTyped(theme =>
-    createStyles({
-        paper: {
-            paddingBottom: '1rem',
-            width: 600,
-            boxSizing: 'border-box',
-            '& article': {
-                padding: '0 3rem',
-                textAlign: 'center',
-            },
+const useStyles = makeStyles(theme => ({
+    paper: {
+        paddingBottom: '1rem',
+        width: 600,
+        boxSizing: 'border-box',
+        '& article': {
+            padding: '0 3rem',
+            textAlign: 'center',
         },
-        title: {
-            marginBottom: theme.spacing.unit * 3,
-            color: theme.palette.grey[500],
-        },
-        subtitle: {
-            maxWidth: '24rem',
-            margin: 'auto',
-        },
-        button: {
-            minWidth: 180,
-            marginLeft: theme.spacing.unit * 2,
-        },
-        nav: {
-            paddingTop: theme.spacing.unit,
-            paddingRight: theme.spacing.unit,
-            textAlign: 'right',
-        },
-        navButton: {
-            color: theme.palette.text.hint,
-        },
-        navButtonIcon: {
-            marginLeft: theme.spacing.unit,
-        },
-    }),
-)<Props>(function Welcome({ classes, create, restore, close }) {
+    },
+    title: {
+        marginBottom: theme.spacing(3),
+        color: theme.palette.grey[500],
+    },
+    subtitle: {
+        maxWidth: '24rem',
+        margin: 'auto',
+    },
+    button: {
+        minWidth: 180,
+        marginLeft: theme.spacing(2),
+    },
+    nav: {
+        paddingTop: theme.spacing(1),
+        paddingRight: theme.spacing(1),
+        textAlign: 'right',
+    },
+    navButton: {
+        color: theme.palette.text.hint,
+    },
+    navButtonIcon: {
+        marginLeft: theme.spacing(1),
+    },
+}))
+export default function Welcome({ create, restore, close }: Props) {
+    const classes = useStyles()
     return (
-        <Paper className={classes.paper}>
+        <Paper elevation={2} className={classes.paper}>
             <nav className={classes.nav}>
                 <Button onClick={close} disableFocusRipple disableRipple className={classes.navButton}>
                     {geti18nString('welcome_0_title')}
@@ -75,10 +71,10 @@ export default withStylesTyped(theme =>
                     {geti18nString('welcome_0_description')}
                 </Typography>
                 <LinedBox>
-                    <FullWidth>
+                    <Box flex={1}>
                         <Typography variant="body1">{geti18nString('welcome_0_new_user')}</Typography>
                         <Typography variant="h6">{geti18nString('welcome_0_connect_facebook')}</Typography>
-                    </FullWidth>
+                    </Box>
                     <VerticalCenter>
                         <Button onClick={create} variant="contained" color="primary" className={classes.button}>
                             {geti18nString('welcome_0_connect_facebook')}
@@ -86,10 +82,10 @@ export default withStylesTyped(theme =>
                     </VerticalCenter>
                 </LinedBox>
                 <LinedBox>
-                    <FullWidth>
+                    <Box flex={1}>
                         <Typography variant="body1">{geti18nString('welcome_0_old_user')}</Typography>
                         <Typography variant="h6">{geti18nString('welcome_0_restore_key')}</Typography>
-                    </FullWidth>
+                    </Box>
                     <VerticalCenter>
                         <Button onClick={restore} variant="outlined" className={classes.button}>
                             {geti18nString('restore')}
@@ -102,4 +98,4 @@ export default withStylesTyped(theme =>
             </article>
         </Paper>
     )
-})
+}

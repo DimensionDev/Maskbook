@@ -1,16 +1,18 @@
 import * as React from 'react'
-import { FlexBox, FullWidth } from '../../utils/components/Flex'
-import Chip from '@material-ui/core/Chip/Chip'
-import InputBase from '@material-ui/core/InputBase/InputBase'
-import List from '@material-ui/core/List/List'
 import { Person } from '../../extension/background-script/PeopleService'
-import ListItem from '@material-ui/core/ListItem/ListItem'
-import ListItemText from '@material-ui/core/ListItemText/ListItemText'
-import Button from '@material-ui/core/Button/Button'
-import { withStylesTyped } from '../../utils/theme'
-import ListItemAvatar from '@material-ui/core/ListItemAvatar/ListItemAvatar'
 import { Avatar } from '../../utils/components/Avatar'
 import { geti18nString } from '../../utils/i18n'
+import {
+    makeStyles,
+    ListItem,
+    ListItemAvatar,
+    ListItemText,
+    Chip,
+    InputBase,
+    Button,
+    List,
+    Box,
+} from '@material-ui/core'
 
 interface PeopleInListProps {
     person: Person
@@ -57,7 +59,7 @@ interface SelectPeopleUI {
     onSetSelected: (selected: Person[]) => void
     disabled?: boolean
 }
-export const SelectPeopleUI = withStylesTyped({
+const useStyles = makeStyles({
     paper: { maxWidth: 500 },
     selectedArea: {
         flexDirection: 'row',
@@ -67,7 +69,9 @@ export const SelectPeopleUI = withStylesTyped({
     },
     input: { flex: 1 },
     button: { marginLeft: 8, padding: '2px 6px' },
-})<SelectPeopleUI>(function({ people, frozenSelected, classes, onSetSelected, selected, disabled }) {
+})
+export function SelectPeopleUI({ people, frozenSelected, onSetSelected, selected, disabled }: SelectPeopleUI) {
+    const classes = useStyles()
     const [search, setSearch] = React.useState('')
     const listBeforeSearch = people.filter(x => {
         if (selected.find(y => y.username === x.username)) return false
@@ -83,7 +87,7 @@ export const SelectPeopleUI = withStylesTyped({
     })
     return (
         <>
-            <FlexBox className={classes.selectedArea}>
+            <Box display="flex" className={classes.selectedArea}>
                 {frozenSelected && frozenSelected.map(p => <PersonInChip disabled key={p.username} person={p} />)}
                 {selected.map(p => (
                     <PersonInChip
@@ -105,11 +109,11 @@ export const SelectPeopleUI = withStylesTyped({
                     placeholder={disabled ? '' : geti18nString('search_box_placeholder')}
                     disabled={disabled}
                 />
-            </FlexBox>
+            </Box>
             {disabled ? (
                 undefined
             ) : (
-                <FlexBox>
+                <Box display="flex">
                     {listAfterSearch.length > 0 && (
                         <Button
                             className={classes.button}
@@ -123,13 +127,13 @@ export const SelectPeopleUI = withStylesTyped({
                             {geti18nString('select_none')}
                         </Button>
                     )}
-                </FlexBox>
+                </Box>
             )}
 
             {disabled ? (
                 undefined
             ) : (
-                <FullWidth>
+                <Box flex={1}>
                     <List dense>
                         {listBeforeSearch.length > 0 && listBeforeSearch.length === 0 && (
                             <ListItem>
@@ -148,8 +152,8 @@ export const SelectPeopleUI = withStylesTyped({
                             />
                         ))}
                     </List>
-                </FullWidth>
+                </Box>
             )}
         </>
     )
-})
+}
