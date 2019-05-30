@@ -80,6 +80,14 @@
             } else {
                 location.appendChild(clone)
             }
+            if (clone.sheet) {
+                console.log('copying')
+                for (const action of sheet[node].pastActions) {
+                    if (action.type === 'method') {
+                        clone.sheet[action.key](...action.args)
+                    }
+                }
+            }
             return clone
         }
 
@@ -93,6 +101,8 @@
             constructor() {
                 /** @type {{location: Document|ShadowRoot, clone: HTMLStyleElement}[]} */
                 this._adopters = []
+                /** @type {{type: 'method', key: string, args: any[]}[]} */
+                this.pastActions = []
                 const style = document.createElement('style')
                 frameBody.appendChild(style)
                 this._sheet = style
@@ -111,14 +121,17 @@
         CSSStyleSheet.prototype.replaceSync = replaceSync
         StyleSheet.prototype.replaceSync = replaceSync
 
+        // ! Actions cloned.
         function hookCSSStyleSheetMethod(/** @type {keyof typeof CSSStyleSheet.prototype} */ key) {
             const old = CSSStyleSheet.prototype[key]
             CSSStyleSheet.prototype[key] = function hook(...args) {
                 /** @type {_StyleSheet | CSSStyleSheet} */
-                if (node in this)
+                if (node in this) {
                     this[node]._adopters.forEach(i => {
                         i.clone.sheet && i.clone.sheet[key](...args)
                     })
+                    this[node].pastActions.push({ type: 'method', key, args })
+                }
                 return old.call(this, ...args)
             }
         }
@@ -129,6 +142,51 @@
         hookCSSStyleSheetMethod('insertRule')
         hookCSSStyleSheetMethod('removeImport')
         hookCSSStyleSheetMethod('removeRule')
+
+        // Actions not cloned.
+        {
+            const orig = Object.getOwnPropertyDescriptors(CSSStyleRule.prototype)
+            Object.defineProperty(CSSStyleRule.prototype, 'selectorText', {
+                ...orig.selectorText,
+                set(v) {
+                    /** @type{CSSStyleRule} */
+                    const self = this
+                    console.trace('Set selector', v)
+                    orig.selectorText.set.call(self, v)
+                    if (self.parentStyleSheet[node]) {
+                        const index = Array.from(self.parentStyleSheet.rules).indexOf(self)
+                        self.parentStyleSheet[node]._adopters.forEach(({ clone }) => {
+                            if (clone.sheet && clone.sheet.rules[index]) {
+                                clone.sheet.rules[index].selectorText = v
+                            }
+                        })
+                    }
+                    return true
+                },
+            })
+        }
+        // Actions not cloned.
+        {
+            const orig = Object.getOwnPropertyDescriptor(CSSRule.prototype, 'cssText')
+            Object.defineProperty(CSSRule.prototype, 'cssText', {
+                ...orig,
+                set(css) {
+                    /** @type{CSSStyleRule} */
+                    const self = this
+                    console.trace('Set cssText', css)
+                    orig.set.call(self, css)
+                    if (self.parentStyleSheet[node]) {
+                        const index = Array.from(self.parentStyleSheet.rules).indexOf(self)
+                        self.parentStyleSheet[node]._adopters.forEach(({ clone }) => {
+                            if (clone.sheet && clone.sheet.rules[index]) {
+                                clone.sheet.rules[index].cssText = css
+                            }
+                        })
+                    }
+                    return true
+                },
+            })
+        }
 
         window.CSSStyleSheet = _StyleSheet
         const adoptedStyleSheetsConfig = {

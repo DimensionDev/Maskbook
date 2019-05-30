@@ -12,6 +12,18 @@ import warning from 'tiny-warning'
  */
 
 //#region ConstructableStyleSheetsRenderer
+const isChrome74 = navigator.appVersion.match(/(Chromium|Chrome)\/74/)
+const needPolyfill = 'adoptedStyleSheets' in document || isChrome74
+if (!isChrome74) {
+    // if (process.env.NODE_ENV === 'development') delete Document.prototype.adoptedStyleSheets
+} else {
+    delete Document.prototype.adoptedStyleSheets
+}
+// require('construct-style-sheets-polyfill')
+require('./polyfill')
+const isPolyfilled = CSSStyleSheet.name !== 'CSSStyleSheet'
+if (isPolyfilled) console.warn('Browser does not support Constructable Stylesheets. Using polyfill.')
+
 const fakeHead = document.createElement('head')
 export const livingShadowRoots = new Set<ShadowRoot>()
 const livingStylesheets = new WeakMap<HTMLStyleElement, CSSStyleSheet>()
@@ -33,11 +45,6 @@ export function applyAdoptedStyleSheets(shadowOnly = true) {
         const shadows = Array.from(livingShadowRoots)
         const nextAdoptedStyleSheets = styles.map(getStyleSheet)
         for (const shadow of shadows) {
-            if (needPolyfill) {
-                const head = shadow.querySelector('head')
-                // https://github.com/calebdwilliams/construct-style-sheets/issues/3
-                if (head) head.innerHTML = ''
-            }
             shadow.adoptedStyleSheets = nextAdoptedStyleSheets
         }
         if (shadowOnly === false) document.adoptedStyleSheets = nextAdoptedStyleSheets
@@ -58,18 +65,6 @@ function adoptStylesheets(
         },
     }
 }
-
-const isChrome74 = navigator.appVersion.match(/(Chromium|Chrome)\/74/)
-const needPolyfill = 'adoptedStyleSheets' in document || isChrome74
-if (!isChrome74) {
-    // if (process.env.NODE_ENV === 'development') delete Document.prototype.adoptedStyleSheets
-} else {
-    delete Document.prototype.adoptedStyleSheets
-}
-// require('construct-style-sheets-polyfill')
-require('./polyfill')
-const isPolyfilled = CSSStyleSheet.name !== 'CSSStyleSheet'
-if (isPolyfilled) console.warn('Browser does not support Constructable Stylesheets. Using polyfill.')
 //#endregion
 
 // tslint:disable: deprecation
@@ -554,7 +549,7 @@ export default class ConstructableStyleSheetsRenderer {
         /**
          * ! Need hook in polyfill !
          */
-        if (process.env.NODE_ENV === 'development') console.trace('Access cssRules')
+        console.trace('Access cssRules')
         return this.element.sheet!.cssRules
     }
 }
