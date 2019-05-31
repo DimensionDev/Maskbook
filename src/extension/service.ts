@@ -23,6 +23,16 @@ if (GetContext() === 'background') {
     require('../tests/1toN')
     require('../tests/sign&verify')
     require('../tests/friendship-discover')
+    Object.assign(window, {
+        db2: {
+            avatar: require('../database/avatar'),
+            group: require('../database/group'),
+            people: require('../database/people'),
+            type: require('../database/type'),
+            util: require('../database/utils'),
+            post: require('../database/post'),
+        },
+    })
 }
 
 //#region

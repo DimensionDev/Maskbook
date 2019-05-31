@@ -1,3 +1,4 @@
+/// <reference path="./idb.d.ts" />
 import { Relation, PersonIdentifier, Identifier, GroupIdentifier } from './type'
 import { openDB, DBSchema } from 'idb/with-async-ittr'
 import { JsonWebKeyToCryptoKey, CryptoKeyToJsonWebKey } from './utils'
@@ -82,7 +83,7 @@ export async function updatePersonDB(
     const t = (await db).transaction('people', 'readwrite')
     const full = await t.objectStore('people').get(person.identifier.toString())
     if (!full) throw new Error('Person is not in the db')
-    const o: PersonDBRecord = { ...full, ...toDb(person as PersonOutDBRecord) }
+    const o: PersonDBRecord = { ...full, ...(await toDb(person as PersonOutDBRecord)) }
     await t.objectStore('people').put(o)
 }
 export async function removePersonDB(people: PersonIdentifier[]): Promise<void> {

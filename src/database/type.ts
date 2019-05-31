@@ -1,4 +1,3 @@
-import '../global'
 type Identifiers = 'person' | 'group' | 'post'
 const fromString = Symbol()
 function noSlash(str: string) {
@@ -15,11 +14,11 @@ export abstract class Identifier {
         const [type, ...rest] = id.split(':') as [Identifiers, string]
         switch (type) {
             case 'person':
-                return PersonIdentifier[fromString](rest.join(''))
+                return PersonIdentifier[fromString](rest.join(':'))
             case 'group':
-                return GroupIdentifier[fromString](rest.join(''))
+                return GroupIdentifier[fromString](rest.join(':'))
             case 'post':
-                return PostIdentifier[fromString](rest.join(''))
+                return PostIdentifier[fromString](rest.join(':'))
             default:
                 return null
         }

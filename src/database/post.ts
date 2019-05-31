@@ -1,3 +1,4 @@
+/// <reference path="./idb.d.ts" />
 import { PostIdentifier, PersonIdentifier, Identifier } from './type'
 import { openDB, DBSchema } from 'idb/with-async-ittr'
 
@@ -18,7 +19,10 @@ interface PostOutDBRecordV40 extends Omit<PostDBRecordV40, 'identifier'> {
 }
 interface PostDBRecordV40 {
     identifier: string
-    postCryptoKey: JsonWebKey
+    /**
+     * ! This MUST BE a native CryptoKey
+     */
+    postCryptoKey: CryptoKey
     version: -40
     recipients: PersonIdentifier[]
 }
@@ -42,13 +46,13 @@ export async function storePostCryptoKeyDB(record: PostOutDBRecordV40): Promise<
 }
 export async function queryPostCryptoKeyDB(record: PostIdentifier): Promise<PostOutDBRecordV40 | null> {
     const t = (await db).transaction('post')
-    const result = await t.objectStore('post').get(record.identifier.toString())
+    const result = await t.objectStore('post').get(record.toString())
     if (result) return outDb(result)
     return null
 }
 export async function deletePostCryptoKeyDB(record: PostIdentifier) {
     const t = (await db).transaction('post', 'readwrite')
-    await t.objectStore('post').delete(record.identifier.toString())
+    await t.objectStore('post').delete(record.toString())
 }
 export async function backupPostCryptoKeyDB() {
     throw new Error('Not implemented')

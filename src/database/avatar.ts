@@ -1,3 +1,4 @@
+/// <reference path="./idb.d.ts" />
 import { openDB, DBSchema } from 'idb/with-async-ittr'
 import { Identifier, PersonIdentifier, GroupIdentifier } from './type'
 
@@ -48,14 +49,15 @@ export async function storeAvatarDB(id: IdentityWithAvatar, avatar: ArrayBuffer)
 /**
  * Read avatar out
  */
-export async function queryAvatarDB(id: IdentityWithAvatar) {
+export async function queryAvatarDB(id: IdentityWithAvatar): Promise<ArrayBuffer | null> {
     const t = (await db).transaction('avatars')
-    const result = t.objectStore('avatars').get(id.toString())
-
-    try {
-        updateAvatarMetaDB(id, { lastAccessTime: new Date() })
-    } catch (e) {}
-    return result
+    const result = await t.objectStore('avatars').get(id.toString())
+    if (result) {
+        updateAvatarMetaDB(id, { lastAccessTime: new Date() }).catch(e => {
+            console.warn('Update last use record failed', e)
+        })
+    }
+    return result || null
 }
 /**
  * Store avatar metadata
