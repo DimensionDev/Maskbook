@@ -1,12 +1,7 @@
 import { OnlyRunInContext } from '@holoflows/kit/es'
-import {
-    queryPeopleCryptoKey,
-    CryptoKeyRecord,
-    toReadCryptoKey,
-    storeKey as storeKeyDB,
-} from '../../key-management/keystore-db'
-import { storeLocalKey } from '../../key-management/local-db'
+import { CryptoKeyRecord, toReadCryptoKey, storeKey as storeKeyDB } from '../../key-management/keystore-db'
 import { Person, queryPeopleWithQuery } from '../../database'
+import { storeDefaultLocalKeyDB } from '../../database/people'
 
 OnlyRunInContext('background', 'FriendService')
 export { getMyPrivateKey } from '../../key-management/keystore-db'
@@ -25,7 +20,7 @@ export async function queryPeople(network: string): Promise<Person[]> {
 export async function storeMyKey(key: { key: CryptoKeyRecord; local: JsonWebKey }) {
     const k = await toReadCryptoKey(key.key)
     const a = storeKeyDB(k)
-    const b = storeLocalKey(
+    const b = storeDefaultLocalKeyDB(
         await crypto.subtle.importKey('jwk', key.local, { name: 'AES-GCM', length: 256 }, true, ['encrypt', 'decrypt']),
     )
     await a

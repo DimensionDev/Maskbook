@@ -1,4 +1,24 @@
 /// <reference path="./global.d.ts" />
+/**
+ * Database structure:
+ *
+ * # ObjectStore `people`:
+ * @description Store Other people.
+ * @type {PersonRecordInDatabase}
+ * @keys inline, {@link PersonIdentifier.identifier}
+ *
+ * # ObjectStore `myself`:
+ * @description Store my identities.
+ * @type {PersonRecordInDatabase}
+ * @keys inline, {@link PersonIdentifier.identifier}
+ *
+ * # ObjectStore `localKeys`:
+ * @description Store local AES keys.
+ * @type {Record<string, CryptoKey>} Record of <userId, CryptoKey>
+ * @keys outline, string, which means network.
+ *
+ * There is a special localKeys called `defaultKey` stored at network `localhost`
+ */
 import { Relation, PersonIdentifier, Identifier, GroupIdentifier } from './type'
 import { openDB, DBSchema } from 'idb/with-async-ittr'
 import { JsonWebKeyToCryptoKey, CryptoKeyToJsonWebKey } from '../utils/type-transform/CryptoKey-JsonWebKey'
@@ -45,7 +65,7 @@ interface PersonRecordInDatabase {
     privateKey?: JsonWebKey
     groups: GroupIdentifier[]
 }
-type LocalKeys = Record<string, CryptoKey>
+type LocalKeys = Record<string, CryptoKey | undefined>
 interface PeopleDB extends DBSchema {
     /** Use inline keys */
     people: {
@@ -57,7 +77,7 @@ interface PeopleDB extends DBSchema {
         value: PersonRecordInDatabase
         key: string
     }
-    /** Use out-of-line keys */
+    /** Use `network` as out-of-line keys */
     localKeys: {
         value: LocalKeys
         key: string
@@ -67,6 +87,7 @@ const db = openDB<PeopleDB>('maskbook-people-v2', 1, {
     upgrade(db, oldVersion, newVersion, transaction) {
         // inline keys
         db.createObjectStore('people', { keyPath: 'identifier' })
+        // inline keys
         db.createObjectStore('myself', { keyPath: 'identifier' })
         db.createObjectStore('localKeys')
     },
@@ -133,7 +154,7 @@ export async function removePersonDB(people: PersonIdentifier[]): Promise<void> 
  * Get my record
  * @param id - Identifier
  */
-export async function queryMyIdentityAt(id: PersonIdentifier): Promise<null | PersonRecord> {
+export async function queryMyIdentityAtDB(id: PersonIdentifier): Promise<null | PersonRecord> {
     const t = (await db).transaction('myself')
     const result = await t.objectStore('myself').get(id.toString())
     if (!result) return null
@@ -143,48 +164,95 @@ export async function queryMyIdentityAt(id: PersonIdentifier): Promise<null | Pe
  * Store my record
  * @param record - Record
  */
-export async function storeMyIdentity(record: PersonRecord): Promise<void> {
+export async function storeMyIdentityDB(record: PersonRecord): Promise<void> {
     const t = (await db).transaction('myself', 'readwrite')
     await t.objectStore('myself').put(await toDb(record))
 }
 /**
  * Get all my identities.
  */
-export async function getMyIdentities(): Promise<PersonRecord[]> {
+export async function getMyIdentitiesDB(): Promise<PersonRecord[]> {
     const t = (await db).transaction('myself')
     const result = await t.objectStore('myself').getAll()
     return Promise.all(result.map(outDb))
 }
 //#endregion
 //#region LocalKeys
-/**
- * Query my local key for a idnetifier
- * @param id - Identifier
- */
-export async function queryLocalKey(id: PersonIdentifier): Promise<Record<string, CryptoKey> | null> {
-    const t = (await db).transaction('localKeys')
-    const result = await t.objectStore('localKeys').get(id.toString())
-    return result || null
+function generateAESKey(exportable: boolean) {
+    return crypto.subtle.generateKey({ name: 'AES-GCM', length: 256 }, exportable, ['encrypt', 'decrypt'])
 }
 /**
- * Store my local key binded with a identifier
- * @param id - Identifier
- * @param key - ! This key MUST BE a native CryptoKey object !
+ * @deprecated
  */
-export async function storeLocalKey(id: PersonIdentifier, key: LocalKeys): Promise<void> {
-    if (!(key instanceof CryptoKey)) throw new TypeError('It is not a real CryptoKey!')
+export async function getDefaultLocalKeyOrGenerateOneDB() {
+    const orig = await getDefaultLocalKeyDB()
+    if (orig) return orig
+    return generateLocalKeyDB('default')
+}
+/**
+ * Generate a new local key and store it
+ * @param id - Identifier or 'default'
+ * @param exportable - If the key is exportable
+ */
+export async function generateLocalKeyDB(id: PersonIdentifier | 'default', exportable = true) {
+    const key = await generateAESKey(exportable)
+    if (id === 'default') {
+        const orig = await getDefaultLocalKeyDB()
+        if (orig) {
+            throw new Error('Generate a new default key again?')
+        } else await storeDefaultLocalKeyDB(key)
+    } else
+        await storeLocalKeyDB(id.network, {
+            [id.userId]: key,
+        })
+    return key
+}
+/**
+ * Store my default local key.
+ * @param key - CryptoKey
+ */
+export function storeDefaultLocalKeyDB(key: CryptoKey) {
+    return storeLocalKeyDB('localhost', { defaultKey: key })
+}
+/**
+ * Query my default local key.
+ */
+export async function getDefaultLocalKeyDB(): Promise<CryptoKey | null> {
+    const key = await queryLocalKeyDB('localhost')
+    return key.defaultKey || null
+}
+/**
+ *
+ * @param network
+ */
+export async function queryLocalKeyDB(network: string): Promise<LocalKeys> {
+    const t = (await db).transaction('localKeys')
+    const result = await t.objectStore('localKeys').get(network)
+    return result || {}
+}
+/**
+ * Store my local key for a network
+ * @param network - Network
+ * @param keys - ! Keys MUST BE a native CryptoKey object !
+ */
+export async function storeLocalKeyDB(network: string, keys: LocalKeys): Promise<void> {
+    for (const key of Object.values(keys)) {
+        if (!(key instanceof CryptoKey)) throw new TypeError('It is not a real CryptoKey!')
+    }
     const t = (await db).transaction('localKeys', 'readwrite')
-    await t.objectStore('localKeys').put(key, id.toString())
+    const previous = (await t.objectStore('localKeys').get(network)) || {}
+    const next = { ...previous, ...keys }
+    await t.objectStore('localKeys').put(next, network)
 }
 /**
- * Query all my local keys.
+ * Get all my local keys.
  */
-export async function queryAllLocalKeys() {
+export async function getLocalKeysDB() {
     const t = (await db).transaction('localKeys')
-    const result: Map<PersonIdentifier, LocalKeys> = new Map()
+    const result: Map<string, LocalKeys> = new Map()
     // tslint:disable-next-line: await-promise
     for await (const { key, value } of t.objectStore('localKeys')) {
-        result.set(Identifier.fromString(key) as PersonIdentifier, value)
+        result.set(key, value)
     }
     return result
 }

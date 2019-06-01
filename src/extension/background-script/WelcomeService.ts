@@ -1,17 +1,17 @@
 import { OnlyRunInContext } from '@holoflows/kit'
 import { CryptoKeyRecord, getMyPrivateKey, toStoreCryptoKey } from '../../key-management/keystore-db'
 import { encodeText } from '../../utils/type-transform/String-ArrayBuffer'
-import { getMyLocalKey } from '../../key-management/local-db'
 import { sleep } from '../../utils/utils'
 import { regularUsername } from '../../utils/type-transform/Username'
 import { geti18nString } from '../../utils/i18n'
+import { getDefaultLocalKeyOrGenerateOneDB } from '../../database/people'
 
 OnlyRunInContext('background', 'WelcomeService')
 export async function backupMyKeyPair() {
     // Don't make the download pop so fast
     await sleep(1000)
     const key = await getMyPrivateKey()
-    const localKey = await crypto.subtle.exportKey('jwk', (await getMyLocalKey()).key)
+    const localKey = await crypto.subtle.exportKey('jwk', await getDefaultLocalKeyOrGenerateOneDB())
     if (!key) throw new TypeError(geti18nString('service_have_no_own_key_yet'))
     const keyRecord: CryptoKeyRecord = await toStoreCryptoKey(key)
     const string = JSON.stringify({ key: keyRecord, local: localKey })

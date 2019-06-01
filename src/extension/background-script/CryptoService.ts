@@ -2,16 +2,19 @@ import { queryPersonCryptoKey, getMyPrivateKey, storeKey, generateNewKey } from 
 import * as Alpha40 from '../../crypto/crypto-alpha-40'
 import { OnlyRunInContext } from '@holoflows/kit/es'
 import { addPersonPublicKey } from '../../key-management/people-gun'
-import { queryPerson } from './PeopleService'
-import { getMyLocalKey } from '../../key-management/local-db'
 import { publishPostAESKey as publishPostAESKey_Service, queryPostAESKey } from '../../key-management/posts-gun'
 
 import { decodeText, encodeArrayBuffer, decodeArrayBuffer } from '../../utils/type-transform/String-ArrayBuffer'
-import { gun } from '../../key-management/gun'
 import { constructAlpha40, deconstructPayload } from '../../utils/type-transform/Payload'
 import { geti18nString } from '../../utils/i18n'
 import { toCompressSecp256k1Point, unCompressSecp256k1Point } from '../../utils/type-transform/SECP256k1-Compression'
 import { Person } from '../../database'
+import {
+    getDefaultLocalKeyDB,
+    storeDefaultLocalKeyDB,
+    generateLocalKeyDB,
+    getDefaultLocalKeyOrGenerateOneDB,
+} from '../../database/people'
 
 OnlyRunInContext('background', 'EncryptService')
 //#region Encrypt & Decrypt
@@ -55,7 +58,6 @@ export async function encryptTo(content: string, to: Person[]): Promise<[Encrypt
     const toKey = await prepareOthersKeyForEncryption(to)
 
     const mine = await getMyPrivateKey()
-    const mineLocal = await getMyLocalKey()
     const {
         encryptedContent: encryptedText,
         version,
@@ -66,7 +68,7 @@ export async function encryptTo(content: string, to: Person[]): Promise<[Encrypt
         version: -40,
         content: content,
         othersPublicKeyECDH: toKey,
-        ownersLocalKey: mineLocal.key,
+        ownersLocalKey: await getDefaultLocalKeyOrGenerateOneDB(),
         privateKeyECDH: mine!.key.privateKey,
         iv: crypto.getRandomValues(new Uint8Array(16)),
     })
@@ -142,7 +144,7 @@ export async function decryptFrom(
                         version: -40,
                         encryptedAESKey: ownersAESKeyEncrypted,
                         encryptedContent: encryptedText,
-                        myLocalKey: (await getMyLocalKey()).key,
+                        myLocalKey: await getDefaultLocalKeyOrGenerateOneDB(),
                         iv: salt,
                     }),
                 )
@@ -249,7 +251,12 @@ export async function appendShareTarget(
     people: Person[],
 ): Promise<void> {
     const toKey = await prepareOthersKeyForEncryption(people)
-    const AESKey = await Alpha40.extractAESKeyInMessage(-40, ownersAESKeyEncrypted, iv, (await getMyLocalKey()).key)
+    const AESKey = await Alpha40.extractAESKeyInMessage(
+        -40,
+        ownersAESKeyEncrypted,
+        iv,
+        await getDefaultLocalKeyOrGenerateOneDB(),
+    )
     const othersAESKeyEncrypted = await Alpha40.generateOthersAESKeyEncrypted(
         -40,
         AESKey,
