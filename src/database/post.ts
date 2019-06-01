@@ -1,4 +1,4 @@
-/// <reference path="./idb.d.ts" />
+/// <reference path="./global.d.ts" />
 import { PostIdentifier, PersonIdentifier, Identifier } from './type'
 import { openDB, DBSchema } from 'idb/with-async-ittr'
 

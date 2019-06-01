@@ -1,11 +1,11 @@
-import { Omit } from '@material-ui/core'
 import { Entity, Index, Db, Key } from 'typed-db'
 import { buildQuery } from '../utils/utils'
 import { MessageCenter } from '../utils/messages'
-import { encodeArrayBuffer, encodeText } from '../utils/type-transform/EncodeDecode'
+import { encodeArrayBuffer, encodeText } from '../utils/type-transform/String-ArrayBuffer'
 import { OnlyRunInContext } from '@holoflows/kit/es'
 import { memoize } from 'lodash-es'
-import { queryAvatar } from './avatar-db'
+import { getAvatarBlobURL } from '../database'
+import { PersonIdentifier } from '../database/type'
 
 OnlyRunInContext('background', 'Key Store')
 @Entity()
@@ -42,13 +42,8 @@ export async function queryPersonCryptoKey(username: string): Promise<PersonCryp
 export async function storeKey(key: Omit<PersonCryptoKey & PersonCryptoKeyWithPrivate, 'fingerprint'>) {
     const k = await toStoreCryptoKey(key)
     const fingerprint = await calculateFingerprint(key)
-    queryAvatar(key.username).then(avatar =>
-        MessageCenter.send('newPerson', {
-            username: key.username,
-            avatar: avatar,
-            fingerprint: fingerprint,
-        }),
-    )
+    // TODO: Send new person message
+    // getAvatarBlobURL(new PersonIdentifier('facebook.com', key.username)).then(avatarUrl => {})
     return query(t => t.put(k), 'readwrite')
 }
 export async function getMyPrivateKey(): Promise<PersonCryptoKey & PersonCryptoKeyWithPrivate<true> | null> {

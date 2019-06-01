@@ -20,37 +20,50 @@ import { AdditionalContent } from '../components/InjectedComponents/AdditionalPo
 import { SelectPeopleUI } from '../components/InjectedComponents/SelectPeople'
 import { DecryptPostUI } from '../components/InjectedComponents/DecryptedPost'
 import { AddToKeyStoreUI } from '../components/InjectedComponents/AddToKeyStore'
-import { Person } from '../extension/background-script/PeopleService'
 import { Banner } from '../components/Welcomes/Banner'
 import { useShareMenu } from '../components/InjectedComponents/SelectPeopleDialog'
 import { sleep } from '../utils/utils'
 import { Button } from '@material-ui/core'
+import { Person } from '../database'
+import { PersonIdentifier } from '../database/type'
 
 const demoPeople: Person[] = [
     {
-        username: 'usernamea',
         fingerprint: 'FDFE333CE20ED446AD88F3C8BA3AD1AA5ECAF521',
         avatar: 'https://avatars3.githubusercontent.com/u/5390719?s=460&v=4',
         nickname: 'Jack Works',
+        identifier: new PersonIdentifier('localhost', 'test'),
+        groups: [],
+        relation: [],
+        relationLastCheckTime: new Date(),
     },
     {
-        username: 'usernameb',
         fingerprint: 'FDFE333CE20ED446AD88F3C8BA3AD1AA5ECAF521'
             .split('')
             .reverse()
             .join(''),
         avatar: 'https://avatars1.githubusercontent.com/u/3343358?s=460&v=4',
         nickname: 'Robot of the century',
+        identifier: new PersonIdentifier('localhost', 'test'),
+        groups: [],
+        relation: [],
+        relationLastCheckTime: new Date(),
     },
     {
-        username: 'usernamec',
         fingerprint: 'a2f7643cd1aed446ad88f3c8ba13843dfa2f321d',
         nickname: 'Material Design',
+        identifier: new PersonIdentifier('localhost', 'test'),
+        groups: [],
+        relation: [],
+        relationLastCheckTime: new Date(),
     },
     {
-        username: 'usernamed',
         fingerprint: 'a2f7643cd1aed446ad88f3c8ba13843dfa2f321d',
         nickname: 'コノハ',
+        identifier: new PersonIdentifier('localhost', 'test'),
+        groups: [],
+        relation: [],
+        relationLastCheckTime: new Date(),
     },
 ]
 storiesOf('Welcome', module)
@@ -107,11 +120,6 @@ storiesOf('Injections', module)
     .add('AdditionalPostBox', () => (
         <AdditionalPostBoxUI
             people={demoPeople}
-            myself={{
-                avatar: text('Avatar URL', demoPeople[0].avatar!),
-                nickname: text('Nickname', demoPeople[0].nickname!),
-                username: text('Username', demoPeople[0].username!),
-            }}
             onRequestPost={action('onRequestPost')}
         />
     ))

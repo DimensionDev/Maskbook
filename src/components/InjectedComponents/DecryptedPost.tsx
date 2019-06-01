@@ -2,12 +2,12 @@ import React, { useCallback } from 'react'
 import AsyncComponent from '../../utils/components/AsyncComponent'
 import { AdditionalContent } from './AdditionalPostContent'
 import { useShareMenu } from './SelectPeopleDialog'
-import { Person } from '../../extension/background-script/PeopleService'
 import { sleep } from '../../utils/utils'
 import Services from '../../extension/service'
 import { geti18nString } from '../../utils/i18n'
 import { makeStyles } from '@material-ui/styles'
 import { Link, Box } from '@material-ui/core'
+import { Person } from '../../database'
 
 interface DecryptPostSuccessProps {
     data: { signatureVerifyResult: boolean; content: string }

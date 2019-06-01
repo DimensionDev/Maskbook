@@ -6,9 +6,10 @@ import { getUsername } from './LiveSelectors'
 import { renderInShadowRoot } from '../../../utils/jss/renderInShadowRoot'
 import { usePeople } from '../../../components/DataSource/PeopleRef'
 import { useAsync } from '../../../utils/components/AsyncComponent'
-import { Person } from '../../background-script/PeopleService'
 import { deconstructPayload } from '../../../utils/type-transform/Payload'
 import Services from '../../service'
+import { PersonIdentifier } from '../../../database/type'
+import { Person } from '../../../database'
 
 const posts = new LiveSelector().querySelectorAll<HTMLDivElement>('.userContent, .userContent+*+div>div>div>div>div')
 
@@ -17,10 +18,6 @@ interface PostInspectorProps {
     postBy: string
     postId: string
     needZip(): void
-}
-function removeMyself(people: Person[]): Person[] {
-    const i = getUsername()!
-    return people.filter(x => x.username !== i)
 }
 function PostInspector(props: PostInspectorProps) {
     const { post, postBy, postId } = props
@@ -35,9 +32,7 @@ function PostInspector(props: PostInspectorProps) {
         const [alreadySelectedPreviously, setAlreadySelectedPreviously] = useState<Person[]>([])
         const { iv, ownersAESKeyEncrypted } = type.encryptedPost
         if (whoAmI === postBy) {
-            useAsync(() => Services.Crypto.getSharedListOfPost(iv), [post]).then(p =>
-                setAlreadySelectedPreviously(removeMyself(p)),
-            )
+            useAsync(() => Services.Crypto.getSharedListOfPost(iv), [post]).then(p => setAlreadySelectedPreviously(p))
         }
         return (
             <DecryptPostUI.UI
@@ -46,7 +41,7 @@ function PostInspector(props: PostInspectorProps) {
                     return Services.Crypto.appendShareTarget(iv, ownersAESKeyEncrypted, iv, people)
                 }}
                 alreadySelectedPreviously={alreadySelectedPreviously}
-                people={removeMyself(people)}
+                people={people}
                 encryptedText={post}
                 whoAmI={whoAmI}
                 postBy={postBy}
@@ -66,7 +61,7 @@ new MutationObserverWatcher(posts)
         // Save author's avatar
         try {
             const avatar = node.current.parentElement!.querySelector('img')!
-            Services.People.storeAvatar(postBy, avatar.getAttribute('aria-label')!, avatar.src)
+            Services.People.storeAvatar(new PersonIdentifier('facebook.com', postBy), avatar.src)
         } catch {}
         // Get post id
         let postId = ''

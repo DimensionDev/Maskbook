@@ -1,4 +1,4 @@
-/// <reference path="./idb.d.ts" />
+/// <reference path="./global.d.ts" />
 import { openDB, DBSchema } from 'idb/with-async-ittr'
 import { Identifier, PersonIdentifier, GroupIdentifier } from './type'
 
@@ -24,7 +24,7 @@ interface AvatarDB extends DBSchema {
 }
 //#endregion
 
-const db = openDB<AvatarDB>('maskbook-avatar-cache-v2', 1, {
+const db = openDB<AvatarDB>('maskbook-avatar-cache', 1, {
     upgrade(db, oldVersion, newVersion, transaction) {
         // Out line keys
         const avatarStore = db.createObjectStore('avatars')
@@ -62,20 +62,22 @@ export async function queryAvatarDB(id: IdentityWithAvatar): Promise<ArrayBuffer
 /**
  * Store avatar metadata
  */
-async function updateAvatarMetaDB(id: IdentityWithAvatar, newMeta: Partial<AvatarMetadataRecord>) {
+export async function updateAvatarMetaDB(id: IdentityWithAvatar, newMeta: Partial<AvatarMetadataRecord>) {
     const t = (await db).transaction('metadata', 'readwrite')
     const meta = await t.objectStore('metadata').get(id.toString())
     const newRecord = Object.assign({}, meta, newMeta)
     await t.objectStore('metadata').put(newRecord)
-    return newRecord
 }
 /**
  * Find avatar lastUpdateTime or lastAccessTime out-of-date
- * @param deadline - Select all identifiers before a date, defaults to 30 days
+ * @param attribute - Which attribute want to query
+ * @param deadline - Select all identifiers before a date
+ * defaults to 30 days for lastAccessTime
+ * defaults to 7 days for lastUpdateTime
  */
 export async function queryAvatarOutdatedDB(
     attribute: 'lastUpdateTime' | 'lastAccessTime',
-    deadline: Date = new Date(Date.now() - 1000 * 60 * 60 * 24 * 30),
+    deadline: Date = new Date(Date.now() - 1000 * 60 * 60 * 24 * (attribute === 'lastAccessTime' ? 30 : 7)),
 ) {
     const t = (await db).transaction('metadata')
     const outdated: IdentityWithAvatar[] = []
@@ -84,6 +86,24 @@ export async function queryAvatarOutdatedDB(
         if (deadline > value[attribute]) outdated.push(Identifier.fromString(value.identifier) as IdentityWithAvatar)
     }
     return outdated
+}
+/**
+ * Query if the avatar is outdated
+ * @param attribute - Which attribute want to query
+ * @param deadline - Select all identifiers before a date
+ * defaults to 30 days for lastAccessTime
+ * defaults to 7 days for lastUpdateTime
+ */
+export async function isAvatarOutdatedDB(
+    identifier: PersonIdentifier | GroupIdentifier,
+    attribute: 'lastUpdateTime' | 'lastAccessTime',
+    deadline: Date = new Date(Date.now() - 1000 * 60 * 60 * 24 * (attribute === 'lastAccessTime' ? 30 : 7)),
+): Promise<boolean> {
+    const t = (await db).transaction('metadata')
+    const meta = await t.objectStore('metadata').get(identifier.toString())
+    if (!meta) return true
+    if (deadline > meta[attribute]) return true
+    return false
 }
 /**
  * Batch delete avatars

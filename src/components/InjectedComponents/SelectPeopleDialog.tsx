@@ -1,9 +1,9 @@
 import React, { useState, useCallback } from 'react'
 import { SelectPeopleUI } from './SelectPeople'
-import { Person } from '../../extension/background-script/PeopleService'
 import { geti18nString } from '../../utils/i18n'
 import { makeStyles } from '@material-ui/styles'
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button, CircularProgress } from '@material-ui/core'
+import { Person } from '../../database'
 interface Props {
     open: boolean
     people: Person[]

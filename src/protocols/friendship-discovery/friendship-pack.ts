@@ -1,7 +1,7 @@
 import { FriendshipCertificateV1, FriendshipCertificatePackedV1 } from './friendship-cert'
 import { encryptWithAES, decryptWithAES } from '../../crypto/crypto-alpha-40'
-import { encodeArrayBuffer, decodeText } from '../../utils/type-transform/EncodeDecode'
-import { toECDH } from '../../utils/type-transform/CryptoUtils'
+import { encodeArrayBuffer, decodeText } from '../../utils/type-transform/String-ArrayBuffer'
+import { toECDH } from '../../utils/type-transform/ECDSA-ECDH'
 /**
  * Pack steps for {@link FriendshipCertificateV1}
  * @remakrs

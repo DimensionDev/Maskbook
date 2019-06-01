@@ -1,6 +1,13 @@
+/**
+ * @deprecated
+ * ! This version of database is deprecated
+ * ! Don't use it.
+ *
+ * ! Scheduled to remove it after Jan/1/2019
+ * ! This database should be readonly now.
+ */
 import { Entity, Index, Db } from 'typed-db'
 import { buildQuery } from '../utils/utils'
-import { regularUsername } from '../utils/type-transform/Username'
 
 @Entity()
 class AvatarRecord {
@@ -11,34 +18,21 @@ class AvatarRecord {
     lastUpdateTime!: Date
 }
 
-const query = buildQuery(new Db('maskbook-avatar-store', 1), AvatarRecord)
-
-export async function queryAvatar(username: string): Promise<undefined | string> {
-    const result = await query(t => t.get(username))
-    if (!result) return
-    return toDataUrl(result.avatar, username)
+/**
+ * @deprecated
+ */
+export async function queryAvatarDataDeprecated() {
+    const query = buildQuery(new Db('maskbook-avatar-store', 1), AvatarRecord)
+    const record = await query(t => t.openCursor().asList())
+    return record
 }
-export async function queryNickname(username: string): Promise<string | undefined> {
-    const result = await query(t => t.get(username))
-    if (!result) return
-    return result.nickname
-}
-export async function storeAvatar(username: string, nickname: string, avatar: ArrayBuffer | string) {
-    if (regularUsername(username) === null) return
-    const last = await query(t => t.get(username))
-    if (last && (Date.now() - last.lastUpdateTime.getTime()) / 1000 / 60 / 60 / 24 < 14) {
-        return
-    }
-    let bf: ArrayBuffer
-    if (typeof avatar === 'string') bf = await downloadAvatar(avatar)
-    else bf = avatar
-    query(t => t.add({ username, avatar: bf, lastUpdateTime: new Date(), nickname }, username), 'readwrite')
-}
-async function downloadAvatar(url: string): Promise<ArrayBuffer> {
-    const res = await fetch(url)
-    return res.arrayBuffer()
-}
+/**
+ * @deprecated
+ */
 const cache = new Map<string, string>()
+/**
+ * @deprecated
+ */
 async function toDataUrl(x: ArrayBuffer, username?: string): Promise<string> {
     function ArrayBufferToBase64(buffer: ArrayBuffer) {
         const f = new Blob([buffer], { type: 'image/png' })

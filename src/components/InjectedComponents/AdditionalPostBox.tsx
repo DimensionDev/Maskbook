@@ -1,6 +1,5 @@
 import * as React from 'react'
 import { useAsync } from '../../utils/components/AsyncComponent'
-import { Person } from '../../extension/background-script/PeopleService'
 import { usePeople } from '../DataSource/PeopleRef'
 import { SelectPeopleUI } from './SelectPeople'
 import { myUsername, getUsername } from '../../extension/content-script/injections/LiveSelectors'
@@ -12,6 +11,8 @@ import { pasteIntoPostBox } from '../../extension/content-script/tasks'
 import { geti18nString } from '../../utils/i18n'
 import { makeStyles } from '@material-ui/styles'
 import { Card, CardHeader, Typography, Divider, Paper, InputBase, Button, Box } from '@material-ui/core'
+import { PersonIdentifier } from '../../database/type'
+import { Person } from '../../database'
 
 interface Props {
     people: Person[]
@@ -65,11 +66,7 @@ export function AdditionalPostBoxUI(props: Props) {
             </Paper>
             <Divider />
             <Paper elevation={2}>
-                <SelectPeopleUI
-                    people={people.filter(x => x.username !== (myself ? myself.username : ''))}
-                    onSetSelected={selectPeople}
-                    selected={selectedPeople}
-                />
+                <SelectPeopleUI people={people} onSetSelected={selectPeople} selected={selectedPeople} />
             </Paper>
             <Divider />
             <Box display="flex" className={classes.grayArea}>
@@ -87,14 +84,10 @@ export function AdditionalPostBoxUI(props: Props) {
 }
 
 export function AdditionalPostBox() {
-    const [avatar, setAvatar] = React.useState<string | undefined>('')
-    let nickname
-    {
-        const link = myUsername.evaluateOnce()[0]
-        if (link) nickname = link.innerText
-    }
     const username = getUsername()
-    useAsync(() => Services.People.queryAvatar(username || ''), []).then(setAvatar)
+    const [identity, setIdentity] = React.useState<Person | undefined>(undefined)
+    // ! TODO: Query my identity //
+    // useAsync(() => ).then(setIdentity)
     const onRequestPost = React.useCallback(async (people, text) => {
         const [encrypted, token] = await Services.Crypto.encryptTo(text, people)
         const fullPost = geti18nString('additional_post_box__encrypted_post_pre', encrypted)
@@ -104,11 +97,5 @@ export function AdditionalPostBox() {
     if (!username) {
         return <AdditionalPostBoxUI people={usePeople()} onRequestPost={onRequestPost} />
     }
-    return (
-        <AdditionalPostBoxUI
-            people={usePeople()}
-            myself={{ avatar, nickname, username }}
-            onRequestPost={onRequestPost}
-        />
-    )
+    return <AdditionalPostBoxUI people={usePeople()} myself={identity} onRequestPost={onRequestPost} />
 }

@@ -1,6 +1,7 @@
-import { AsyncCall } from '@holoflows/kit/es/Extension/Async-Call'
+import { AsyncCall, Serialization } from '@holoflows/kit/es/Extension/Async-Call'
 import { GetContext, OnlyRunInContext } from '@holoflows/kit/es/Extension/Context'
 import * as MockService from './mock-service'
+import { Identifier } from '../database/type'
 
 interface Services {
     Crypto: typeof import('./background-script/CryptoService')
@@ -29,12 +30,26 @@ if (GetContext() === 'background') {
             group: require('../database/group'),
             people: require('../database/people'),
             type: require('../database/type'),
-            util: require('../database/utils'),
             post: require('../database/post'),
         },
     })
 }
 
+const serializer: Serialization = {
+    async serialization(before, changed = false) {
+        if (before instanceof Identifier) {
+            return before.toString()
+        }
+        return before
+    },
+    async deserialization(after) {
+        if (typeof after === 'string') {
+            // If Identifier.fromString returns null, it isn't an identifier
+            return Identifier.fromString(after) || after
+        }
+        return after
+    },
+}
 //#region
 type Service = Record<string, (...args: any[]) => Promise<any>>
 async function register<T extends Service>(service: () => Promise<T>, name: keyof Services, mock?: Partial<T>) {
@@ -42,10 +57,10 @@ async function register<T extends Service>(service: () => Promise<T>, name: keyo
         console.log(`Service ${name} registered in Background page`)
         const loaded = await service()
         Object.assign(Services, { [name]: loaded })
-        AsyncCall(loaded, { key: name })
+        AsyncCall(loaded, { key: name, serializer })
     } else if (OnlyRunInContext(['content', 'options', 'debugging'], false)) {
         console.log(`Service ${name} registered in Content script & Options page`)
-        Object.assign(Services, { [name]: AsyncCall({}, { key: name }) })
+        Object.assign(Services, { [name]: AsyncCall({}, { key: name, serializer }) })
         if (GetContext() === 'debugging') {
             // ? -> UI developing
             console.log(`Service ${name} mocked`)
@@ -57,7 +72,7 @@ async function register<T extends Service>(service: () => Promise<T>, name: keyo
                     }
                 },
             })
-            AsyncCall(mockService, { key: name })
+            AsyncCall(mockService, { key: name, serializer })
         }
     } else {
         console.warn('Unknown environment, service not registered')

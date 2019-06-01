@@ -1,5 +1,4 @@
 import * as React from 'react'
-import { Person } from '../../extension/background-script/PeopleService'
 import { Avatar } from '../../utils/components/Avatar'
 import { geti18nString } from '../../utils/i18n'
 import {
@@ -13,6 +12,7 @@ import {
     List,
     Box,
 } from '@material-ui/core'
+import { Person } from '../../database'
 
 interface PeopleInListProps {
     person: Person
@@ -29,7 +29,7 @@ function PersonInList({ person, onClick, disabled }: PeopleInListProps) {
                 <Avatar person={person} />
             </ListItemAvatar>
             <ListItemText
-                primary={person.nickname || person.username}
+                primary={person.nickname || person.identifier.userId}
                 secondary={person.fingerprint ? person.fingerprint.toLowerCase() : undefined}
             />
         </ListItem>
@@ -47,7 +47,7 @@ function PersonInChip({ disabled, onDelete, person }: PersonInChipProps) {
             style={{ marginRight: 6, marginBottom: 6 }}
             color="primary"
             onDelete={disabled ? undefined : onDelete}
-            label={person.nickname || person.username}
+            label={person.nickname || person.identifier.userId}
             avatar={avatar}
         />
     )
@@ -74,27 +74,30 @@ export function SelectPeopleUI({ people, frozenSelected, onSetSelected, selected
     const classes = useStyles()
     const [search, setSearch] = React.useState('')
     const listBeforeSearch = people.filter(x => {
-        if (selected.find(y => y.username === x.username)) return false
+        if (selected.find(y => y.identifier.userId === x.identifier.userId)) return false
         return true
     })
     const listAfterSearch = listBeforeSearch.filter(x => {
-        if (frozenSelected && frozenSelected.find(y => x.username === y.username)) return false
+        if (frozenSelected && frozenSelected.find(y => x.identifier.userId === y.identifier.userId)) return false
         if (search === '') return true
         return (
-            !!x.username.toLocaleLowerCase().match(search.toLocaleLowerCase()) ||
+            !!x.identifier.userId.toLocaleLowerCase().match(search.toLocaleLowerCase()) ||
             !!(x.fingerprint || '').toLocaleLowerCase().match(search.toLocaleLowerCase())
         )
     })
     return (
         <>
             <Box display="flex" className={classes.selectedArea}>
-                {frozenSelected && frozenSelected.map(p => <PersonInChip disabled key={p.username} person={p} />)}
+                {frozenSelected &&
+                    frozenSelected.map(p => <PersonInChip disabled key={p.identifier.userId} person={p} />)}
                 {selected.map(p => (
                     <PersonInChip
                         disabled={disabled}
-                        key={p.username}
+                        key={p.identifier.userId}
                         person={p}
-                        onDelete={() => onSetSelected(selected.filter(x => x.username !== p.username))}
+                        onDelete={() =>
+                            onSetSelected(selected.filter(x => x.identifier.userId !== p.identifier.userId))
+                        }
                     />
                 ))}
                 <InputBase
@@ -142,7 +145,7 @@ export function SelectPeopleUI({ people, frozenSelected, onSetSelected, selected
                         )}
                         {listAfterSearch.map(p => (
                             <PersonInList
-                                key={p.username}
+                                key={p.identifier.userId}
                                 person={p}
                                 disabled={disabled}
                                 onClick={() => {

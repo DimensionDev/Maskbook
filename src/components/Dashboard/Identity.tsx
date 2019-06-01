@@ -2,9 +2,9 @@ import * as React from 'react'
 import { FixedWidthFonts } from '../../utils/theme'
 import classNames from 'classnames'
 import { Avatar } from '../../utils/components/Avatar'
-import { Person } from '../../extension/background-script/PeopleService'
 import { makeStyles, Typography, Card, CardHeader } from '@material-ui/core'
 import { styled } from '@material-ui/styles'
+import { Person } from '../../database'
 
 interface Props {
     person: Person
@@ -36,7 +36,7 @@ const useStyles = makeStyles(theme => ({
     },
 }))
 export default function Identity({ person, onClick }: Props) {
-    const { avatar, fingerprint, nickname, username } = person
+    const { avatar, fingerprint, nickname, identifier } = person
     const classes = useStyles()
     return (
         <Card onClick={onClick} className={classes.card}>
@@ -48,7 +48,7 @@ export default function Identity({ person, onClick }: Props) {
                         <Typography display="inline" className={classes.text}>
                             {nickname}
                         </Typography>
-                        <Typography display="inline">{username}</Typography>
+                        <Typography display="inline">{identifier.userId}</Typography>
                     </>
                 }
                 subheader={<FixedWidth>{fingerprint}</FixedWidth>}

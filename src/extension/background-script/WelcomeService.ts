@@ -1,6 +1,6 @@
 import { OnlyRunInContext } from '@holoflows/kit'
 import { CryptoKeyRecord, getMyPrivateKey, toStoreCryptoKey } from '../../key-management/keystore-db'
-import { encodeText } from '../../utils/type-transform/EncodeDecode'
+import { encodeText } from '../../utils/type-transform/String-ArrayBuffer'
 import { getMyLocalKey } from '../../key-management/local-db'
 import { sleep } from '../../utils/utils'
 import { regularUsername } from '../../utils/type-transform/Username'

@@ -2,20 +2,16 @@ import { queryPersonCryptoKey, getMyPrivateKey, storeKey, generateNewKey } from 
 import * as Alpha40 from '../../crypto/crypto-alpha-40'
 import { OnlyRunInContext } from '@holoflows/kit/es'
 import { addPersonPublicKey } from '../../key-management/people-gun'
-import { Person, queryPerson } from './PeopleService'
+import { queryPerson } from './PeopleService'
 import { getMyLocalKey } from '../../key-management/local-db'
 import { publishPostAESKey as publishPostAESKey_Service, queryPostAESKey } from '../../key-management/posts-gun'
 
-import {
-    decodeText,
-    encodeArrayBuffer,
-    toCompressSecp256k1Point,
-    unCompressSecp256k1Point,
-    decodeArrayBuffer,
-} from '../../utils/type-transform/EncodeDecode'
+import { decodeText, encodeArrayBuffer, decodeArrayBuffer } from '../../utils/type-transform/String-ArrayBuffer'
 import { gun } from '../../key-management/gun'
 import { constructAlpha40, deconstructPayload } from '../../utils/type-transform/Payload'
 import { geti18nString } from '../../utils/i18n'
+import { toCompressSecp256k1Point, unCompressSecp256k1Point } from '../../utils/type-transform/SECP256k1-Compression'
+import { Person } from '../../database'
 
 OnlyRunInContext('background', 'EncryptService')
 //#region Encrypt & Decrypt
@@ -26,7 +22,10 @@ type OthersAESKeyEncryptedToken = string
  */
 async function prepareOthersKeyForEncryption(to: Person[]) {
     const toKey = (await Promise.all(
-        to.map(async person => ({ name: person.username, key: await queryPersonCryptoKey(person.username) })),
+        to.map(async person => ({
+            name: person.identifier.userId,
+            key: await queryPersonCryptoKey(person.identifier.userId),
+        })),
     )).map(person => ({ name: person.name, key: (person.key === null ? null : person.key.key.publicKey)! }))
     toKey.forEach(x => {
         if (x.key === null) throw new Error(geti18nString('service_others_key_not_found', x.name))
@@ -231,15 +230,17 @@ export async function verifyOthersProve(bio: string, othersName: string) {
 /**
  * Get already shared target of the post
  * @param postIdentifier Post identifier
+ * TODO: Rewrite this.
  */
 export async function getSharedListOfPost(postIdentifier: string): Promise<Person[]> {
-    const post = await gun
-        .get('posts')
-        .get(postIdentifier)
-        .once().then!()
-    if (!post) return []
-    delete post._
-    return Promise.all(Object.keys(post).map(queryPerson))
+    return []
+    // const post = await gun
+    //     .get('posts')
+    //     .get(postIdentifier)
+    //     .once().then!()
+    // if (!post) return []
+    // delete post._
+    // return Promise.all(Object.keys(post).map(queryPerson))
 }
 export async function appendShareTarget(
     postIdentifier: string,

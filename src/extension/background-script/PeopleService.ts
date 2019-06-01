@@ -1,53 +1,22 @@
 import { OnlyRunInContext } from '@holoflows/kit/es'
 import {
     queryPeopleCryptoKey,
-    calculateFingerprint,
     CryptoKeyRecord,
     toReadCryptoKey,
     storeKey as storeKeyDB,
-    queryPersonCryptoKey,
-    getMyPrivateKey as getMyPrivateKeyDB,
 } from '../../key-management/keystore-db'
-import {
-    queryAvatar as queryAvatarDB,
-    storeAvatar as storeAvatarDB,
-    queryNickname,
-} from '../../key-management/avatar-db'
 import { storeLocalKey } from '../../key-management/local-db'
-import { uploadProvePostUrl as uploadProvePostUrlDB } from '../../key-management/people-gun'
+import { Person, queryPeopleWithQuery } from '../../database'
 
 OnlyRunInContext('background', 'FriendService')
-export interface Person {
-    username: string
-    nickname?: string
-    avatar?: string
-    fingerprint?: string
-}
-export const getMyPrivateKey = getMyPrivateKeyDB
-export const storeAvatar = storeAvatarDB
-export const queryAvatar = queryAvatarDB
-export const uploadProvePostUrl = uploadProvePostUrlDB
-/**
- * Query a single person. If this person is not stored, will return a { username }
- * @param username Username for quest
- */
-export async function queryPerson(username: string): Promise<Person> {
-    const avatar = queryAvatarDB(username)
-    const nickname = queryNickname(username)
-    const key = await queryPersonCryptoKey(username)
-    return {
-        username: username,
-        fingerprint: key ? await calculateFingerprint(key) : undefined,
-        avatar: await avatar,
-        nickname: await nickname,
-    }
-}
+export { getMyPrivateKey } from '../../key-management/keystore-db'
+export { storeAvatar, getAvatarBlobURL, queryPerson } from '../../database'
+export { uploadProvePostUrl } from '../../key-management/people-gun'
 /**
  * Query all people stored
  */
-export async function queryPeople(): Promise<Person[]> {
-    const keys = await queryPeopleCryptoKey()
-    return Promise.all(keys.map<Promise<Person>>(k => queryPerson(k.username)))
+export async function queryPeople(network: string): Promise<Person[]> {
+    return queryPeopleWithQuery((k, r) => !!(k.network === network && r.publicKey))
 }
 /**
  * Store Key for myself
