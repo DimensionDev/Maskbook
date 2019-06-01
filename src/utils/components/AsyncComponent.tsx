@@ -1,3 +1,4 @@
+/** This file is published under MIT License */
 import * as React from 'react'
 
 type PromiseState<T> =

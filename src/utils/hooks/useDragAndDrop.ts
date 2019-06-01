@@ -1,3 +1,4 @@
+/** This file is published under MIT License */
 import React from 'react'
 /**
  * Usage:
