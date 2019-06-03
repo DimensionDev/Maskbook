@@ -106,9 +106,9 @@ export enum Relation {
 /**
  * Person representation in ui
  */
-export interface Person {
-    identity: PersonIdentifier
-    previousIdentities: PersonIdentifier[]
+export interface PersonUI {
+    identifier: PersonIdentifier
+    previousIdentities?: PersonIdentifier[]
     relation: Relation[]
     nickname?: string
     avatar?: string

@@ -3,10 +3,14 @@ import { PublishedAESKey } from '../crypto/crypto-alpha-40'
 import { OnlyRunInContext } from '@holoflows/kit/es'
 
 OnlyRunInContext('background', 'gun')
-export async function queryPostAESKey(postIdentifier: string, myUsername: string) {
+/**
+ * @param salt The salt of this post
+ * @param myUsername My username of this post
+ */
+export async function queryPostAESKey(salt: string, myUsername: string) {
     return gun
         .get('posts')
-        .get(postIdentifier)
+        .get(salt)
         .get(myUsername)
         .once().then!()
 }

@@ -26,9 +26,6 @@ export async function queryAvatarDataDeprecated() {
     const record = await query(t => t.openCursor().asList())
     return record
 }
-/**
- * @deprecated
- */
 const cache = new Map<string, string>()
 /**
  * @deprecated

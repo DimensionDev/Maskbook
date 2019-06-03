@@ -20,7 +20,7 @@ interface MaskbookDemoServerState {
         }
         posts: {
             // Post id or salt
-            [postIdentifier: string]: {
+            [salt: string]: {
                 // TODO: This will leak post targets. (But keys are safe
                 // TODO: Consider using hash(id+username) or something
                 [receiversUsername: string]: PublishedAESKey
@@ -28,6 +28,4 @@ interface MaskbookDemoServerState {
         }
     }
 }
-export const gun = new Gun<MaskbookDemoServerState>([
-    'http://172.104.123.119:8765/gun',
-]).get('maskbook')
+export const gun = new Gun<MaskbookDemoServerState>(['http://172.104.123.119:8765/gun']).get('maskbook')

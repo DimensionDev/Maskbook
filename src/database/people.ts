@@ -54,10 +54,18 @@ export interface PersonRecord extends Omit<PersonRecordInDatabase, 'identifier' 
     publicKey?: CryptoKey
     privateKey?: CryptoKey
 }
+export type PersonRecordPublic = PersonRecord & Required<Pick<PersonRecord, 'publicKey'>>
+export function isPersonRecordPublic(data: PersonRecord): data is PersonRecordPublic {
+    return 'publicKey' in data
+}
+export type PersonRecordPublicPrivate = PersonRecord & Required<Pick<PersonRecord, 'publicKey' | 'privateKey'>>
+export function isPersonRecordPublicPrivate(data: PersonRecord): data is PersonRecordPublicPrivate {
+    return 'publicKey' in data && 'privateKey' in data
+}
 interface PersonRecordInDatabase {
     identifier: string
     previousIdentifiers?: PersonIdentifier[]
-    nickname: string
+    nickname?: string
     relation: Relation[]
     /** Last check time of relation */
     relationLastCheckTime: Date
@@ -101,6 +109,7 @@ const db = openDB<PeopleDB>('maskbook-people-v2', 1, {
 export async function storeNewPersonDB(record: PersonRecord): Promise<void> {
     const t = (await db).transaction('people', 'readwrite')
     await t.objectStore('people').put(await toDb(record))
+    // TODO: Send new person message
     return
 }
 /**
@@ -137,6 +146,7 @@ export async function updatePersonDB(person: Partial<PersonRecord> & Pick<Person
     const full = await t.objectStore('people').get(person.identifier.toString())
     if (!full) throw new Error('Person is not in the db')
     const o: PersonRecordInDatabase = { ...full, ...(await toDb(person as PersonRecord)) }
+    // TODO: Send new person message
     await t.objectStore('people').put(o)
 }
 /**
@@ -154,27 +164,29 @@ export async function removePersonDB(people: PersonIdentifier[]): Promise<void> 
  * Get my record
  * @param id - Identifier
  */
-export async function queryMyIdentityAtDB(id: PersonIdentifier): Promise<null | PersonRecord> {
+export async function queryMyIdentityAtDB(id: PersonIdentifier): Promise<null | PersonRecordPublicPrivate> {
     const t = (await db).transaction('myself')
     const result = await t.objectStore('myself').get(id.toString())
     if (!result) return null
-    return outDb(result)
+    return outDb(result) as Promise<PersonRecordPublicPrivate>
 }
 /**
  * Store my record
  * @param record - Record
  */
-export async function storeMyIdentityDB(record: PersonRecord): Promise<void> {
+export async function storeMyIdentityDB(record: PersonRecordPublicPrivate): Promise<void> {
+    if (!record.publicKey || !record.privateKey)
+        throw new TypeError('No public/private key pair found when store self identity')
     const t = (await db).transaction('myself', 'readwrite')
     await t.objectStore('myself').put(await toDb(record))
 }
 /**
  * Get all my identities.
  */
-export async function getMyIdentitiesDB(): Promise<PersonRecord[]> {
+export async function getMyIdentitiesDB(): Promise<PersonRecordPublicPrivate[]> {
     const t = (await db).transaction('myself')
     const result = await t.objectStore('myself').getAll()
-    return Promise.all(result.map(outDb))
+    return Promise.all(result.map(outDb)) as Promise<PersonRecordPublicPrivate[]>
 }
 //#endregion
 //#region LocalKeys
@@ -182,7 +194,7 @@ function generateAESKey(exportable: boolean) {
     return crypto.subtle.generateKey({ name: 'AES-GCM', length: 256 }, exportable, ['encrypt', 'decrypt'])
 }
 /**
- * @deprecated
+ * Get local key (even there isn't one)
  */
 export async function getDefaultLocalKeyOrGenerateOneDB() {
     const orig = await getDefaultLocalKeyDB()
@@ -201,10 +213,7 @@ export async function generateLocalKeyDB(id: PersonIdentifier | 'default', expor
         if (orig) {
             throw new Error('Generate a new default key again?')
         } else await storeDefaultLocalKeyDB(key)
-    } else
-        await storeLocalKeyDB(id.network, {
-            [id.userId]: key,
-        })
+    } else await storeLocalKeyDB(id, key)
     return key
 }
 /**
@@ -212,7 +221,7 @@ export async function generateLocalKeyDB(id: PersonIdentifier | 'default', expor
  * @param key - CryptoKey
  */
 export function storeDefaultLocalKeyDB(key: CryptoKey) {
-    return storeLocalKeyDB('localhost', { defaultKey: key })
+    return storeLocalKeyDB(new PersonIdentifier('localhost', 'defaultKey'), key)
 }
 /**
  * Query my default local key.
@@ -235,13 +244,13 @@ export async function queryLocalKeyDB(network: string): Promise<LocalKeys> {
  * @param network - Network
  * @param keys - ! Keys MUST BE a native CryptoKey object !
  */
-export async function storeLocalKeyDB(network: string, keys: LocalKeys): Promise<void> {
-    for (const key of Object.values(keys)) {
-        if (!(key instanceof CryptoKey)) throw new TypeError('It is not a real CryptoKey!')
+export async function storeLocalKeyDB({ network, userId }: PersonIdentifier, key: CryptoKey): Promise<void> {
+    if (!(key instanceof CryptoKey)) {
+        throw new TypeError('It is not a real CryptoKey!')
     }
     const t = (await db).transaction('localKeys', 'readwrite')
     const previous = (await t.objectStore('localKeys').get(network)) || {}
-    const next = { ...previous, ...keys }
+    const next = { ...previous, [userId]: key }
     await t.objectStore('localKeys').put(next, network)
 }
 /**

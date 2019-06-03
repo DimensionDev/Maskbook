@@ -1,4 +1,4 @@
-import { queryPersonDB, PersonRecord, queryPeopleDB } from '../people'
+import { queryPersonDB, PersonRecord, queryPeopleDB, getMyIdentitiesDB } from '../people'
 import { PersonIdentifier, Relation } from '../type'
 import { getAvatarBlobURL } from './avatar'
 import { memoize } from 'lodash-es'
@@ -53,3 +53,12 @@ const calculateFingerprint = memoize(async function(_key: CryptoKey) {
     const hash = await crypto.subtle.digest('SHA-256', encodeText(key.x! + key.y))
     return encodeArrayBuffer(hash)
 })
+
+/**
+ * @deprecated
+ */
+export async function getMyPrivateKeyAtFacebook() {
+    const x = await getMyIdentitiesDB()
+    const y = x.find(y => y.identifier.network === 'facebook.com' && y.privateKey)
+    return y!.privateKey
+}

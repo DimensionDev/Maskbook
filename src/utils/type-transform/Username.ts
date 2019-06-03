@@ -1,4 +1,5 @@
 import { geti18nString } from '../i18n'
+import { PersonIdentifier, GroupIdentifier, PostIdentifier } from '../../database/type'
 
 /**
  * @see https://www.facebook.com/help/105399436216001#What-are-the-guidelines-around-creating-a-custom-username?
@@ -18,15 +19,25 @@ export function regularUsername(name: string) {
 /**
  * Normalize post url
  */
-export function getPostUrl(username: string, postId: string | number) {
-    if (!regularUsername(username)) throw new TypeError(geti18nString('service_username_invalid'))
-    if (parseFloat(username)) return `https://www.facebook.com/permalink.php?story_fbid=${postId}&id=${username}`
-    return `https://www.facebook.com/${username}/posts/${postId}`
+export function getPostUrlAtFacebook(post: PostIdentifier) {
+    const id = post.identifier
+    // TODO:
+    if (!(id instanceof PersonIdentifier)) throw new Error('Not implemented')
+
+    const { postId } = post
+    const { userId } = id
+    if (!regularUsername(userId)) throw new TypeError(geti18nString('service_username_invalid'))
+    if (parseFloat(userId)) return `https://www.facebook.com/permalink.php?story_fbid=${postId}&id=${userId}`
+    return `https://www.facebook.com/${userId}/posts/${postId}`
 }
 /**
  * Normalize profile url
  */
-export function getProfilePageUrl(username: string) {
+export function getProfilePageUrlAtFacebook(user: PersonIdentifier | GroupIdentifier) {
+    // TODO:
+    if (user instanceof GroupIdentifier) throw new Error('Not implemented')
+    if (user.network !== 'facebook.com') throw new Error('Not implemented')
+    const username = user.userId
     if (!regularUsername(username)) throw new TypeError(geti18nString('service_username_invalid'))
     if (parseFloat(username)) return `https://www.facebook.com/profile.php?id=${username}`
     return `https://www.facebook.com/${username}?fref=pymk`
