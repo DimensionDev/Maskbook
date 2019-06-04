@@ -60,13 +60,13 @@ export class GroupIdentifier extends Identifier {
         return new GroupIdentifier(network, groupId, virtual === 'virtual')
     }
 }
-export class PostIdentifier extends Identifier {
+export class PostIdentifier<T extends Identifier = Identifier> extends Identifier {
     readonly type = 'post'
     /**
      * If identifier is a PostIdentifier, that means this post is binded with other post in some kind
      * e.g. a comment.
      */
-    constructor(public identifier: Identifier, public postId: string) {
+    constructor(public identifier: T, public postId: string) {
         super()
         noSlash(postId)
     }

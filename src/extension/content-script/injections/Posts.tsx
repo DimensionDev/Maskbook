@@ -8,14 +8,14 @@ import { usePeople } from '../../../components/DataSource/PeopleRef'
 import { useAsync } from '../../../utils/components/AsyncComponent'
 import { deconstructPayload } from '../../../utils/type-transform/Payload'
 import Services from '../../service'
-import { PersonIdentifier } from '../../../database/type'
+import { PersonIdentifier, PostIdentifier } from '../../../database/type'
 import { Person } from '../../../database'
 
 const posts = new LiveSelector().querySelectorAll<HTMLDivElement>('.userContent, .userContent+*+div>div>div>div>div')
 
 interface PostInspectorProps {
     post: string
-    postBy: string
+    postBy: PersonIdentifier
     postId: string
     needZip(): void
 }
@@ -27,11 +27,11 @@ function PostInspector(props: PostInspectorProps) {
     }
     if (type.encryptedPost) {
         props.needZip()
-        const whoAmI = getUsername()!
+        const whoAmI = new PersonIdentifier('facebook.com', getUsername()!)
         const people = usePeople()
         const [alreadySelectedPreviously, setAlreadySelectedPreviously] = useState<Person[]>([])
         const { iv, ownersAESKeyEncrypted } = type.encryptedPost
-        if (whoAmI === postBy) {
+        if (whoAmI.userId === postBy.userId) {
             useAsync(() => Services.Crypto.getSharedListOfPost(iv), [post]).then(p => setAlreadySelectedPreviously(p))
         }
         return (
@@ -48,7 +48,7 @@ function PostInspector(props: PostInspectorProps) {
             />
         )
     } else if (type.provePost) {
-        Services.People.uploadProvePostUrl(postBy, postId)
+        Services.People.uploadProvePostUrl(new PostIdentifier(postBy, postId))
         return <AddToKeyStore postBy={postBy} provePost={post} />
     }
     return null
@@ -57,11 +57,14 @@ new MutationObserverWatcher(posts)
     .assignKeys(node => node.innerText)
     .useNodeForeach((node, key, realNode) => {
         // Get author
-        const postBy = getUsername(node.current.parentElement!.querySelectorAll('a')[1])!
+        const postBy = new PersonIdentifier(
+            'facebook.com',
+            getUsername(node.current.parentElement!.querySelectorAll('a')[1])!,
+        )
         // Save author's avatar
         try {
             const avatar = node.current.parentElement!.querySelector('img')!
-            Services.People.storeAvatar(new PersonIdentifier('facebook.com', postBy), avatar.src)
+            Services.People.storeAvatar(postBy, avatar.src)
         } catch {}
         // Get post id
         let postId = ''

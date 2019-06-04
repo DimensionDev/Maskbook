@@ -1,5 +1,3 @@
-import { PostIdentifier } from '../../database/type'
-
 export const Version2Person = '1edc22d2-ca62-4d0a-b842-148f6faa4269'
 export const Version2Post = 'd7cc9636-be26-447b-a1bb-798b126f7ace'
 

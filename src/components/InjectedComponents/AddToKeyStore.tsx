@@ -3,10 +3,11 @@ import AsyncComponent from '../../utils/components/AsyncComponent'
 import { AdditionalContent } from './AdditionalPostContent'
 import Services from '../../extension/service'
 import { geti18nString } from '../../utils/i18n'
+import { PersonIdentifier } from '../../database/type'
 
 interface Props {
     provePost: string
-    postBy: string
+    postBy: PersonIdentifier
 }
 export function AddToKeyStore({ provePost, postBy }: Props) {
     return (

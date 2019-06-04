@@ -52,7 +52,10 @@ export async function addPersonPublicKey(user: PersonIdentifier): Promise<Person
     return person
 }
 
-export async function uploadProvePostUrl(username: string, postId: string) {
+export async function uploadProvePostUrl(post: PostIdentifier<PersonIdentifier>) {
+    const { postId, identifier } = post
+    if (!(identifier instanceof PersonIdentifier)) return
+    const { userId: username } = identifier
     if (!postId) return
     return gun.get('users').put({ [username]: { provePostId: postId } }).then!()
 }

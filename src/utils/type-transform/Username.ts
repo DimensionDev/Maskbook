@@ -19,11 +19,8 @@ export function regularUsername(name: string) {
 /**
  * Normalize post url
  */
-export function getPostUrlAtFacebook(post: PostIdentifier) {
+export function getPostUrlAtFacebook(post: PostIdentifier<PersonIdentifier>) {
     const id = post.identifier
-    // TODO:
-    if (!(id instanceof PersonIdentifier)) throw new Error('Not implemented')
-
     const { postId } = post
     const { userId } = id
     if (!regularUsername(userId)) throw new TypeError(geti18nString('service_username_invalid'))

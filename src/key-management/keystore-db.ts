@@ -28,11 +28,12 @@ class CryptoKeyRecord {
 type Exporting = {
     username: string
     publicKey: CryptoKey
+    privateKey?: CryptoKey
 }
 /**
  * @deprecated
  */
-async function queryPeopleCryptoKey(): Promise<Exporting[]> {
+export async function queryPeopleCryptoKey(): Promise<Exporting[]> {
     async function toReadCryptoKey(y: CryptoKeyRecord): Promise<Exporting> {
         const pub = await crypto.subtle.importKey('jwk', y.key.publicKey, y.algor, true, y.usages)
         let priv: CryptoKey | undefined = undefined
@@ -40,6 +41,7 @@ async function queryPeopleCryptoKey(): Promise<Exporting[]> {
         return {
             username: y.username,
             publicKey: pub,
+            privateKey: priv,
         }
     }
     const query = buildQuery(new Db('maskbook-keystore-demo-v2', 1), CryptoKeyRecord)

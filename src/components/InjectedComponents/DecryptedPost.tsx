@@ -8,6 +8,7 @@ import { geti18nString } from '../../utils/i18n'
 import { makeStyles } from '@material-ui/styles'
 import { Link, Box } from '@material-ui/core'
 import { Person } from '../../database'
+import { PersonIdentifier } from '../../database/type'
 
 interface DecryptPostSuccessProps {
     data: { signatureVerifyResult: boolean; content: string }
@@ -64,8 +65,8 @@ function DecryptPostFailed({ error }: { error: Error }) {
 }
 
 interface DecryptPostProps {
-    postBy: string
-    whoAmI: string
+    postBy: PersonIdentifier
+    whoAmI: PersonIdentifier
     encryptedText: string
     people: Person[]
     alreadySelectedPreviously: Person[]
