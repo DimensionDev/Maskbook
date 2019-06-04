@@ -1,8 +1,58 @@
-import { queryAvatarDataDeprecated } from '../../key-management/avatar-db'
+/**
+ * @deprecated
+ * ! This version of database is deprecated
+ * ! Don't use it.
+ *
+ * ! Scheduled to remove it after Jan/1/2019
+ * ! This database should be readonly now.
+ */
 import { PersonIdentifier, Relation } from '../type'
 import { deleteDB } from 'idb/with-async-ittr'
 import * as Avatar from '../avatar'
 import * as People from '../people'
+
+import { Entity, Index, Db } from 'typed-db'
+import { buildQuery } from '../../utils/utils'
+
+@Entity()
+class AvatarRecord {
+    @Index({ unique: true })
+    username!: string
+    nickname!: string
+    avatar!: ArrayBuffer
+    lastUpdateTime!: Date
+}
+
+/**
+ * @deprecated
+ */
+async function queryAvatarData() {
+    // tslint:disable-next-line: deprecation
+    const query = buildQuery(new Db('maskbook-avatar-store', 1), AvatarRecord)
+    const record = await query(t => t.openCursor().asList())
+    return record
+}
+const cache = new Map<string, string>()
+/**
+ * @deprecated
+ */
+async function toDataUrl(x: ArrayBuffer, username?: string): Promise<string> {
+    function ArrayBufferToBase64(buffer: ArrayBuffer) {
+        const f = new Blob([buffer], { type: 'image/png' })
+        const fr = new FileReader()
+        return new Promise<string>(resolve => {
+            fr.onload = () => resolve(fr.result as string)
+            fr.readAsDataURL(f)
+        })
+    }
+    const createAndStore = async () => {
+        const u = await ArrayBufferToBase64(x)
+        cache.set(username || '$', u)
+        return u
+    }
+    if (username) return cache.get(username) || createAndStore()
+    return createAndStore()
+}
 
 async function updatePartialPersonRecord(...args: Parameters<typeof People.updatePersonDB>) {
     const id = args[0].identifier
@@ -19,10 +69,7 @@ async function updatePartialPersonRecord(...args: Parameters<typeof People.updat
         })
     }
 }
-/**
- * ! Migrate old database into new one.
- * ! Scheduled to remove it after Jan/1/2019
- */
+
 export default async function migrate() {
     if (indexedDB.databases) {
         const dbs = await indexedDB.databases()
@@ -30,7 +77,7 @@ export default async function migrate() {
     }
     const promises: Promise<unknown>[] = []
     // tslint:disable-next-line: deprecation
-    for (const record of await queryAvatarDataDeprecated()) {
+    for (const record of await queryAvatarData()) {
         const person = new PersonIdentifier('facebook.com', record.username)
         promises.push(
             Avatar.storeAvatarDB(person, record.avatar),

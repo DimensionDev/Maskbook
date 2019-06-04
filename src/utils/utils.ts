@@ -6,7 +6,10 @@ import { CustomEventId } from './constants'
 import { CustomEvents } from '../extension/injected-script/addEventListener'
 
 export { sleep, timeout } from '@holoflows/kit/es/util/sleep'
-/** Build a db */
+/**
+ * Build a db
+ * @deprecated
+ */
 export const buildQuery = <Q extends Newable<any>>(db: Db, record: Q) => {
     db.use(record)
     return <T>(
