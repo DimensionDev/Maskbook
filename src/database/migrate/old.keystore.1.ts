@@ -6,15 +6,11 @@
  * ! Scheduled to remove it after May/31/2019
  * ! This database should be readonly now.
  */
-import { Entity, Index, Db, Key } from 'typed-db'
 import { OnlyRunInContext } from '@holoflows/kit/es'
 // tslint:disable: deprecation
 OnlyRunInContext('background', 'Key Store')
-@Entity()
 /** DO NOT Change the name of this class! It is used as key in the db! */
 class CryptoKeyRecord {
-    @Index({ unique: true })
-    @Key()
     username!: string
     key!: { publicKey: JsonWebKey; privateKey?: JsonWebKey }
     algor!: any
@@ -41,8 +37,7 @@ async function queryPeopleCryptoKey(): Promise<Exporting[]> {
             privateKey: priv,
         }
     }
-    const query = buildQuery(new Db('maskbook-keystore-demo-v2', 1), CryptoKeyRecord)
-    const record = await query(t => t.openCursor().asList())
+    const record: CryptoKeyRecord[] = await readMangledDB('maskbook-keystore-demo-v2', 1)
     return Promise.all(record.map(toReadCryptoKey))
 }
 //#region Store & Read CryptoKey
@@ -74,7 +69,7 @@ async function generateNewKey(whoami: PersonIdentifier): Promise<People.PersonRe
 import { deleteDB } from 'idb/with-async-ittr'
 import * as People from '../people'
 import { PersonIdentifier } from '../type'
-import { buildQuery } from '../../utils/utils'
+import { readMangledDB } from './old.mangled.helper.1'
 
 export default async function migrate() {
     if (indexedDB.databases) {

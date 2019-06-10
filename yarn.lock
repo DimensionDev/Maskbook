@@ -12612,11 +12612,6 @@ type-is@~1.6.17, type-is@~1.6.18:
     media-typer "0.3.0"
     mime-types "~2.1.24"
 
-typed-db@^1.0.1-1:
-  version "1.0.1-1"
-  resolved "https://registry.yarnpkg.com/typed-db/-/typed-db-1.0.1-1.tgz#e1453a4d0edc0a5b54fba9c46347d13e7e51cef7"
-  integrity sha1-4UU6TQ7cCltU+6nEY0fRPn5Rzvc=
-
 typed-styles@^0.0.7:
   version "0.0.7"
   resolved "https://registry.yarnpkg.com/typed-styles/-/typed-styles-0.0.7.tgz#93392a008794c4595119ff62dde6809dbc40a3d9"

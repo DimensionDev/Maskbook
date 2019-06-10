@@ -6,17 +6,14 @@
  * ! Scheduled to remove it after Jan/1/2019
  * ! This database should be readonly now.
  */
+// tslint:disable: deprecation
+import { readMangledDB } from './old.mangled.helper.1'
 import { PersonIdentifier, Relation } from '../type'
 import { deleteDB } from 'idb/with-async-ittr'
 import * as Avatar from '../avatar'
 import * as People from '../people'
 
-import { Entity, Index, Db } from 'typed-db'
-import { buildQuery } from '../../utils/utils'
-
-@Entity()
 class AvatarRecord {
-    @Index({ unique: true })
     username!: string
     nickname!: string
     avatar!: ArrayBuffer
@@ -27,10 +24,7 @@ class AvatarRecord {
  * @deprecated
  */
 async function queryAvatarData() {
-    // tslint:disable-next-line: deprecation
-    const query = buildQuery(new Db('maskbook-avatar-store', 1), AvatarRecord)
-    const record = await query(t => t.openCursor().asList())
-    return record
+    return readMangledDB('maskbook-avatar-store', 1) as Promise<AvatarRecord[]>
 }
 const cache = new Map<string, string>()
 /**

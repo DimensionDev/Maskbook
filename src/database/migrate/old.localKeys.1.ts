@@ -8,16 +8,12 @@
  */
 import { deleteDB } from 'idb/with-async-ittr'
 import * as People from '../people'
-import { Entity, Index, Db, Key } from 'typed-db'
 import { OnlyRunInContext } from '@holoflows/kit/es'
-import { buildQuery } from '../../utils/utils'
-
+import { readMangledDB } from './old.mangled.helper.1'
+// tslint:disable: deprecation
 OnlyRunInContext('background', 'Local Key Store')
-@Entity()
 /** DO NOT Change the name of this class! It is used as key in the db! */
 class LocalCryptoKeyRecord {
-    @Index({ unique: true })
-    @Key()
     username!: string
     key!: CryptoKey
 }
@@ -25,11 +21,8 @@ class LocalCryptoKeyRecord {
  * @deprecated
  */
 async function getMyLocalKey(): Promise<LocalCryptoKeyRecord | null> {
-    // tslint:disable-next-line: deprecation
-    const query = buildQuery(new Db('maskbook-localkeystore-demo-v1', 1), LocalCryptoKeyRecord)
-    const record = await query(t => t.get('$self'))
-    if (!record) return null
-    return record
+    const [key] = (await readMangledDB('maskbook-localkeystore-demo-v1', 1)) as LocalCryptoKeyRecord[]
+    return key || null
 }
 
 /**
