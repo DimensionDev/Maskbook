@@ -6,6 +6,7 @@
  * @description Store Other people.
  * @type {PersonRecordInDatabase}
  * @keys inline, {@link PersonIdentifier.identifier}
+ * @index network
  *
  * # ObjectStore `myself`:
  * @description Store my identities.
@@ -44,12 +45,17 @@ async function outDb({ identifier, publicKey, privateKey, ...rest }: PersonRecor
  * Transform outside data into db format
  */
 async function toDb({ publicKey, privateKey, ...rest }: PersonRecord): Promise<PersonRecordInDatabase> {
-    const result: PersonRecordInDatabase = { ...rest, identifier: rest.identifier.toString() }
+    const result: PersonRecordInDatabase = {
+        ...rest,
+        identifier: rest.identifier.toString(),
+        network: rest.identifier.network,
+    }
     if (publicKey) result.publicKey = await CryptoKeyToJsonWebKey(publicKey)
     if (privateKey) result.privateKey = await CryptoKeyToJsonWebKey(privateKey)
     return result
 }
-export interface PersonRecord extends Omit<PersonRecordInDatabase, 'identifier' | 'publicKey' | 'privateKey'> {
+export interface PersonRecord
+    extends Omit<PersonRecordInDatabase, 'identifier' | 'publicKey' | 'privateKey' | 'network'> {
     identifier: PersonIdentifier
     publicKey?: CryptoKey
     privateKey?: CryptoKey
@@ -64,6 +70,7 @@ export function isPersonRecordPublicPrivate(data: PersonRecord): data is PersonR
 }
 interface PersonRecordInDatabase {
     identifier: string
+    network: string
     previousIdentifiers?: PersonIdentifier[]
     nickname?: string
     relation: Relation[]
@@ -79,6 +86,10 @@ interface PeopleDB extends DBSchema {
     people: {
         value: PersonRecordInDatabase
         key: string
+        indexes: {
+            // Use `network` field as index
+            network: string
+        }
     }
     /** Use inline keys */
     myself: {
@@ -93,11 +104,16 @@ interface PeopleDB extends DBSchema {
 }
 const db = openDB<PeopleDB>('maskbook-people-v2', 1, {
     upgrade(db, oldVersion, newVersion, transaction) {
-        // inline keys
-        db.createObjectStore('people', { keyPath: 'identifier' })
-        // inline keys
-        db.createObjectStore('myself', { keyPath: 'identifier' })
-        db.createObjectStore('localKeys')
+        function v0_v1() {
+            // inline keys
+            db.createObjectStore('people', { keyPath: 'identifier' })
+            // inline keys
+            db.createObjectStore('myself', { keyPath: 'identifier' })
+            db.createObjectStore('localKeys')
+
+            transaction.objectStore('people').createIndex('network', 'network', { unique: false })
+        }
+        if (oldVersion < 1) v0_v1()
     },
 })
 //#endregion
