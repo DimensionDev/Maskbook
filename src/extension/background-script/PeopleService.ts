@@ -18,7 +18,7 @@ export { uploadProvePostUrl } from '../../key-management/people-gun'
  * Query all people stored
  */
 export async function queryPeople(network: string): Promise<Person[]> {
-    return queryPeopleWithQuery((k, r) => !!(k.network === network && r.publicKey))
+    return queryPeopleWithQuery({ network })
 }
 
 /**

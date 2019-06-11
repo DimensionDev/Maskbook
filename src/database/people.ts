@@ -133,13 +133,22 @@ export async function storeNewPersonDB(record: PersonRecord): Promise<void> {
  * @param id - Identifier
  */
 export async function queryPeopleDB(
-    query: (key: PersonIdentifier, record: PersonRecordInDatabase) => boolean,
+    query: ((key: PersonIdentifier, record: PersonRecordInDatabase) => boolean) | { network: string },
 ): Promise<PersonRecord[]> {
     const t = (await db).transaction('people')
     const result: PersonRecordInDatabase[] = []
-    // tslint:disable-next-line: await-promise
-    for await (const { value, key } of t.store) {
-        if (query(Identifier.fromString(key) as PersonIdentifier, value)) result.push(value)
+    if (typeof query === 'function') {
+        // tslint:disable-next-line: await-promise
+        for await (const { value, key } of t.store) {
+            if (query(Identifier.fromString(key) as PersonIdentifier, value)) result.push(value)
+        }
+    } else {
+        result.push(
+            ...(await t
+                .objectStore('people')
+                .index('network')
+                .getAll(IDBKeyRange.only(query.network))),
+        )
     }
     return Promise.all(result.map(outDb))
 }
