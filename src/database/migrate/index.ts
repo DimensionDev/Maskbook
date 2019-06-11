@@ -3,5 +3,5 @@ import localKeys from './old.localKeys.1'
 import keys from './old.keystore.1'
 
 avatar()
-localKeys()
-keys()
+    .finally(() => localKeys())
+    .finally(() => keys())
