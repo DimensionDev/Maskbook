@@ -1,12 +1,16 @@
+import { serializable } from '../utils/type-transform/Serialization'
+
 type Identifiers = 'person' | 'group' | 'post'
 const fromString = Symbol()
-function noSlash(str: string) {
+function noSlash(str?: string) {
+    if (!str) return
     if (str.split('/')[1]) throw new TypeError('Cannot contain / in a part of identifier')
 }
 export abstract class Identifier {
-    // Don't remove this property, or this class will compatible with type `string`
-    abstract readonly type: 'post' | 'group' | 'person'
-    abstract toString(): string
+    public equals(other: Identifier) {
+        return this === other || this.toText() === other.toText()
+    }
+    abstract toText(): string
     static fromString<T extends Identifier>(id: T): T
     static fromString(id: string): Identifier | null
     static fromString<T extends Identifier>(id: string | T): Identifier | null {
@@ -24,8 +28,13 @@ export abstract class Identifier {
         }
     }
 }
+
+@serializable('PersonIdentifier')
 export class PersonIdentifier extends Identifier {
-    readonly type = 'person'
+    static unknown = new PersonIdentifier('localhost', '$unknown')
+    get isUnknown() {
+        return this.equals(PersonIdentifier.unknown)
+    }
     /**
      * @param network - Network belongs to
      * @param userId - User ID
@@ -35,7 +44,7 @@ export class PersonIdentifier extends Identifier {
         noSlash(network)
         noSlash(userId)
     }
-    toString() {
+    toText() {
         return `person:${this.network}/${this.userId}`
     }
     static [fromString](str: string) {
@@ -44,14 +53,15 @@ export class PersonIdentifier extends Identifier {
         return new PersonIdentifier(network, userId)
     }
 }
+
+@serializable('GroupIdentifier')
 export class GroupIdentifier extends Identifier {
-    readonly type = 'group'
     constructor(public network: string, public groupId: string, public virtual = false) {
         super()
         noSlash(network)
         noSlash(groupId)
     }
-    toString() {
+    toText() {
         return `group:${this.network}/${this.groupId}/${this.virtual ? 'virtual' : 'real'}`
     }
     static [fromString](str: string) {
@@ -60,6 +70,8 @@ export class GroupIdentifier extends Identifier {
         return new GroupIdentifier(network, groupId, virtual === 'virtual')
     }
 }
+
+@serializable('PostIdentifier')
 export class PostIdentifier<T extends Identifier = Identifier> extends Identifier {
     readonly type = 'post'
     /**
@@ -70,8 +82,8 @@ export class PostIdentifier<T extends Identifier = Identifier> extends Identifie
         super()
         noSlash(postId)
     }
-    toString() {
-        return `post:${this.postId}/${this.identifier.toString()}`
+    toText() {
+        return `post:${this.postId}/${this.identifier.toText()}`
     }
     static [fromString](str: string) {
         const [postId, ...identifier] = str.split('/')

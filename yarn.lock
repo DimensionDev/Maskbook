@@ -11461,6 +11461,14 @@ send@0.17.1:
     range-parser "~1.2.1"
     statuses "~1.5.0"
 
+serialijse@^0.1.3:
+  version "0.1.3"
+  resolved "https://registry.yarnpkg.com/serialijse/-/serialijse-0.1.3.tgz#2293f115f87391f44bad13c44c074e5f9e24cd1f"
+  integrity sha512-Ra9NpfBmQqfefQjte6fjk3KXOvkK8oiCfRhui9wIehkAwAu+sVYymQzwJ1xkSpWjqey4a3pcCa/ugB3vMWoEmw==
+  optionalDependencies:
+    object-assign "^4.1.1"
+    zlib "1.0.5"
+
 serialize-javascript@^1.4.0, serialize-javascript@^1.7.0:
   version "1.7.0"
   resolved "https://registry.yarnpkg.com/serialize-javascript/-/serialize-javascript-1.7.0.tgz#d6e0dfb2a3832a8c94468e6eb1db97e55a192a65"
@@ -13588,3 +13596,8 @@ yargs@^7.0.0:
     which-module "^1.0.0"
     y18n "^3.2.1"
     yargs-parser "^5.0.0"
+
+zlib@1.0.5:
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/zlib/-/zlib-1.0.5.tgz#6e7c972fc371c645a6afb03ab14769def114fcc0"
+  integrity sha1-bnyXL8NxxkWmr7A6sUdp3vEU/MA=

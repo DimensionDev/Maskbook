@@ -36,12 +36,12 @@ const db = openDB<AvatarDB>('maskbook-avatar-cache', 1, {
  */
 export async function storeAvatarDB(id: IdentityWithAvatar, avatar: ArrayBuffer) {
     const meta: AvatarMetadataRecord = {
-        identifier: id.toString(),
+        identifier: id.toText(),
         lastUpdateTime: new Date(),
         lastAccessTime: new Date(),
     }
     const t = (await db).transaction(['avatars', 'metadata'], 'readwrite')
-    const a = t.objectStore('avatars').put(avatar, id.toString())
+    const a = t.objectStore('avatars').put(avatar, id.toText())
     await t.objectStore('metadata').put(meta)
     await a
     return
@@ -51,7 +51,7 @@ export async function storeAvatarDB(id: IdentityWithAvatar, avatar: ArrayBuffer)
  */
 export async function queryAvatarDB(id: IdentityWithAvatar): Promise<ArrayBuffer | null> {
     const t = (await db).transaction('avatars')
-    const result = await t.objectStore('avatars').get(id.toString())
+    const result = await t.objectStore('avatars').get(id.toText())
     if (result) {
         updateAvatarMetaDB(id, { lastAccessTime: new Date() }).catch(e => {
             console.warn('Update last use record failed', e)
@@ -64,7 +64,7 @@ export async function queryAvatarDB(id: IdentityWithAvatar): Promise<ArrayBuffer
  */
 export async function updateAvatarMetaDB(id: IdentityWithAvatar, newMeta: Partial<AvatarMetadataRecord>) {
     const t = (await db).transaction('metadata', 'readwrite')
-    const meta = await t.objectStore('metadata').get(id.toString())
+    const meta = await t.objectStore('metadata').get(id.toText())
     const newRecord = Object.assign({}, meta, newMeta)
     await t.objectStore('metadata').put(newRecord)
 }
@@ -100,7 +100,7 @@ export async function isAvatarOutdatedDB(
     deadline: Date = new Date(Date.now() - 1000 * 60 * 60 * 24 * (attribute === 'lastAccessTime' ? 30 : 7)),
 ): Promise<boolean> {
     const t = (await db).transaction('metadata')
-    const meta = await t.objectStore('metadata').get(identifier.toString())
+    const meta = await t.objectStore('metadata').get(identifier.toText())
     if (!meta) return true
     if (deadline > meta[attribute]) return true
     return false
@@ -112,8 +112,8 @@ export async function deleteAvatarsDB(ids: IdentityWithAvatar[]) {
     const t = (await db).transaction(['avatars', 'metadata'], 'readwrite')
     const promises: Promise<void>[] = []
     for (const id of ids) {
-        const a = t.objectStore('avatars').delete(id.toString())
-        const b = t.objectStore('metadata').delete(id.toString())
+        const a = t.objectStore('avatars').delete(id.toText())
+        const b = t.objectStore('metadata').delete(id.toText())
         promises.push(a, b)
     }
     return

@@ -54,6 +54,7 @@ export async function encryptTo(content: string, to: Person[]): Promise<[Encrypt
 
     // tslint:disable-next-line: deprecation
     const mine = await getMyPrivateKeyAtFacebook()
+    if (!mine) throw new TypeError('Not inited yet')
     const {
         encryptedContent: encryptedText,
         version,
@@ -134,6 +135,7 @@ export async function decryptFrom(
         if (!byKey) return { error: geti18nString('service_others_key_not_found', by.userId) }
         // tslint:disable-next-line: deprecation
         const mine = await getMyPrivateKeyAtFacebook()
+        if (!mine) return { error: geti18nString('service_not_setup_yet') }
         try {
             const unverified = ['2/4', ownersAESKeyEncrypted, salt, encryptedText].join('|')
             if (by === whoAmI) {
@@ -266,7 +268,7 @@ export async function appendShareTarget(
         -40,
         AESKey,
         // tslint:disable-next-line: deprecation
-        await getMyPrivateKeyAtFacebook(),
+        (await getMyPrivateKeyAtFacebook())!,
         toKey,
     )
     publishPostAESKey_Service(postIdentifier, othersAESKeyEncrypted)

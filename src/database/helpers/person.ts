@@ -57,8 +57,9 @@ const calculateFingerprint = memoize(async function(_key: CryptoKey) {
 /**
  * @deprecated
  */
-export async function getMyPrivateKeyAtFacebook() {
+export async function getMyPrivateKeyAtFacebook(): Promise<null | CryptoKey> {
     const x = await getMyIdentitiesDB()
     const y = x.find(y => y.identifier.network === 'facebook.com' && y.privateKey)
-    return y!.privateKey
+    if (y) return y.privateKey
+    return null
 }

@@ -29,8 +29,8 @@ enum WelcomeState {
 }
 
 const WelcomeActions = {
-    backupMyKeyPair() {
-        return Services.Welcome.backupMyKeyPair()
+    backupMyKeyPair(id: PersonIdentifier) {
+        return Services.Welcome.backupMyKeyPair(id)
     },
     restoreFromFile(file: File, id: PersonIdentifier) {
         const fr = new FileReader()
@@ -90,12 +90,12 @@ function Welcome(props: Welcome) {
         case WelcomeState.Intro:
             return <Welcome1a2 next={() => onStepChange(WelcomeState.BackupKey)} />
         case WelcomeState.BackupKey:
-            sideEffects.backupMyKeyPair()
+            sideEffects.backupMyKeyPair(props.identity)
             return <Welcome1a3 next={() => onStepChange(WelcomeState.ProvePost)} />
         case WelcomeState.ProvePost:
             return (
                 <Welcome1a4v2
-                    bioDisabled={!username}
+                    bioDisabled={username.isUnknown}
                     provePost={provePost}
                     requestManualVerify={() => {
                         sideEffects.manualVerifyBio(username, provePost)
@@ -125,26 +125,25 @@ function Welcome(props: Welcome) {
 // TODO: Update the router
 export default withRouter(function _WelcomePortal(props: RouteComponentProps<{ identifier: string }>) {
     const [step, setStep] = useState(WelcomeState.Start)
-
     const [provePost, setProvePost] = useState('')
+    const [identifier, setIdentifier] = useState<PersonIdentifier>(PersonIdentifier.unknown)
 
-    const [identifier, setIdentifier] = useState<PersonIdentifier>()
     useEffect(() => {
-        const raw = new URLSearchParams(props.location.search).get('username') || ''
+        // TODO: Make caller provides a identifier
+        const raw = new URLSearchParams(props.location.search).get('identifier') || ''
+        if (identifier && identifier.toText() === raw) return // ? Quit early to prevent equality change
         const id = Identifier.fromString(raw)
         if (id && id instanceof PersonIdentifier) {
             setIdentifier(id)
         }
-        // TODO: Let user select a existing identity when re-welcome.
-        useAsync(() => {
-            if (id && id instanceof PersonIdentifier) {
-                return Services.Crypto.getMyProveBio(id)
-            }
-            return Promise.resolve(null)
-        }, [raw]).then(provePost => provePost && setProvePost(provePost))
     }, [props.location.search])
-    // TODO: Remove this
-    if (!identifier) return <>Waiting for identity...</>
+
+    // TODO: Let user select a existing identity when re-welcome.
+    useAsync(async () => {
+        if (!identifier || !(identifier instanceof PersonIdentifier)) return null
+        return Services.Crypto.getMyProveBio(identifier)
+    }, [identifier]).then(provePost => provePost && setProvePost(provePost))
+
     return (
         <Dialog open>
             <Welcome

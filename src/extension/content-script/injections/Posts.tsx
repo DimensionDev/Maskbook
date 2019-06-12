@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { LiveSelector, MutationObserverWatcher } from '@holoflows/kit'
 import { DecryptPostUI } from '../../../components/InjectedComponents/DecryptedPost'
 import { AddToKeyStore } from '../../../components/InjectedComponents/AddToKeyStore'
-import { getUsername } from './LiveSelectors'
+import { getPersonIdentifierAtFacebook } from './LiveSelectors'
 import { renderInShadowRoot } from '../../../utils/jss/renderInShadowRoot'
 import { usePeople } from '../../../components/DataSource/PeopleRef'
 import { useAsync } from '../../../utils/components/AsyncComponent'
@@ -27,7 +27,7 @@ function PostInspector(props: PostInspectorProps) {
     }
     if (type.encryptedPost) {
         props.needZip()
-        const whoAmI = new PersonIdentifier('facebook.com', getUsername()!)
+        const whoAmI = getPersonIdentifierAtFacebook()
         const people = usePeople()
         const [alreadySelectedPreviously, setAlreadySelectedPreviously] = useState<Person[]>([])
         const { iv, ownersAESKeyEncrypted } = type.encryptedPost
@@ -57,10 +57,7 @@ new MutationObserverWatcher(posts)
     .assignKeys(node => node.innerText)
     .useNodeForeach((node, key, realNode) => {
         // Get author
-        const postBy = new PersonIdentifier(
-            'facebook.com',
-            getUsername(node.current.parentElement!.querySelectorAll('a')[1])!,
-        )
+        const postBy = getPersonIdentifierAtFacebook(node.current.parentElement!.querySelectorAll('a')[1])
         // Save author's avatar
         try {
             const avatar = node.current.parentElement!.querySelector('img')!

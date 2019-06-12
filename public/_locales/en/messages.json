@@ -206,6 +206,9 @@
     "service_others_key_not_found": {
         "message": "$1's public key not found!"
     },
+    "service_not_setup_yet": {
+        "message": "You have not set up Maskbook yet!"
+    },
     "service_publish_post_aes_key_failed": {
         "message": "Publish AES key failed!"
     },

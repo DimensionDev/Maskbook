@@ -34,7 +34,7 @@ export default function Dashboard(props: Props) {
             <main>
                 {props.identities.map(x => (
                     <Identity
-                        key={x.identifier.toString()}
+                        key={x.identifier.toText()}
                         person={x}
                         onClick={() => props.onProfileClick(x.identifier)}
                     />

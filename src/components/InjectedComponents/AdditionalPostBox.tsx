@@ -2,7 +2,7 @@ import * as React from 'react'
 import { useAsync } from '../../utils/components/AsyncComponent'
 import { usePeople } from '../DataSource/PeopleRef'
 import { SelectPeopleUI } from './SelectPeople'
-import { myUsername, getUsername } from '../../extension/content-script/injections/LiveSelectors'
+import { myUsername, getPersonIdentifierAtFacebook } from '../../extension/content-script/injections/LiveSelectors'
 import { useRef } from 'react'
 import { useCapturedInput } from '../../utils/hooks/useCapturedEvents'
 import { Avatar } from '../../utils/components/Avatar'
@@ -84,7 +84,7 @@ export function AdditionalPostBoxUI(props: Props) {
 }
 
 export function AdditionalPostBox() {
-    const username = getUsername()
+    const username = getPersonIdentifierAtFacebook()
     const [identity, setIdentity] = React.useState<Person | undefined>(undefined)
     // ! TODO: Query my identity //
     // useAsync(() => ).then(setIdentity)
@@ -94,7 +94,7 @@ export function AdditionalPostBox() {
         pasteIntoPostBox(fullPost, geti18nString('additional_post_box__encrypted_failed'))
         Services.Crypto.publishPostAESKey(token)
     }, [])
-    if (!username) {
+    if (username.isUnknown) {
         return <AdditionalPostBoxUI people={usePeople()} onRequestPost={onRequestPost} />
     }
     return <AdditionalPostBoxUI people={usePeople()} myself={identity} onRequestPost={onRequestPost} />

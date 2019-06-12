@@ -7,7 +7,7 @@ const avatarCache = new Map<string, string>()
  * Get a (cached) blob url for an identifier.
  */
 export async function getAvatarBlobURL(identifier: PersonIdentifier | GroupIdentifier): Promise<string | undefined> {
-    const id = identifier.toString()
+    const id = identifier.toText()
     if (avatarCache.has(id)) return avatarCache.get(id)!
     const buffer = await queryAvatarDB(identifier)
     if (!buffer) return undefined

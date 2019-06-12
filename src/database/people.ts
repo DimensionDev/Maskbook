@@ -47,7 +47,7 @@ async function outDb({ identifier, publicKey, privateKey, ...rest }: PersonRecor
 async function toDb({ publicKey, privateKey, ...rest }: PersonRecord): Promise<PersonRecordInDatabase> {
     const result: PersonRecordInDatabase = {
         ...rest,
-        identifier: rest.identifier.toString(),
+        identifier: rest.identifier.toText(),
         network: rest.identifier.network,
     }
     if (publicKey) result.publicKey = await CryptoKeyToJsonWebKey(publicKey)
@@ -158,7 +158,7 @@ export async function queryPeopleDB(
  */
 export async function queryPersonDB(id: PersonIdentifier): Promise<null | PersonRecord> {
     const t = (await db).transaction('people', 'readonly')
-    const result = await t.objectStore('people').get(id.toString())
+    const result = await t.objectStore('people').get(id.toText())
     if (!result) return null
     return outDb(result)
 }
@@ -168,7 +168,7 @@ export async function queryPersonDB(id: PersonIdentifier): Promise<null | Person
  */
 export async function updatePersonDB(person: Partial<PersonRecord> & Pick<PersonRecord, 'identifier'>): Promise<void> {
     const t = (await db).transaction('people', 'readwrite')
-    const full = await t.objectStore('people').get(person.identifier.toString())
+    const full = await t.objectStore('people').get(person.identifier.toText())
     if (!full) throw new Error('Person is not in the db')
     const o: PersonRecordInDatabase = { ...full, ...(await toDb(person as PersonRecord)) }
     // TODO: Send new person message
@@ -180,7 +180,7 @@ export async function updatePersonDB(person: Partial<PersonRecord> & Pick<Person
  */
 export async function removePersonDB(people: PersonIdentifier[]): Promise<void> {
     const t = (await db).transaction('people', 'readwrite')
-    for (const person of people) await t.objectStore('people').delete(person.toString())
+    for (const person of people) await t.objectStore('people').delete(person.toText())
     return
 }
 //#endregion
@@ -191,7 +191,7 @@ export async function removePersonDB(people: PersonIdentifier[]): Promise<void> 
  */
 export async function queryMyIdentityAtDB(id: PersonIdentifier): Promise<null | PersonRecordPublicPrivate> {
     const t = (await db).transaction('myself')
-    const result = await t.objectStore('myself').get(id.toString())
+    const result = await t.objectStore('myself').get(id.toText())
     if (!result) return null
     return outDb(result) as Promise<PersonRecordPublicPrivate>
 }
@@ -212,6 +212,22 @@ export async function getMyIdentitiesDB(): Promise<PersonRecordPublicPrivate[]> 
     const t = (await db).transaction('myself')
     const result = await t.objectStore('myself').getAll()
     return Promise.all(result.map(outDb)) as Promise<PersonRecordPublicPrivate[]>
+}
+/**
+ * Generate a new identity
+ */
+export async function generateMyIdentityDB(identifier: PersonIdentifier): Promise<void> {
+    const now = await getMyIdentitiesDB()
+    if (now.some(id => id.identifier.equals(identifier))) return
+    const key = await crypto.subtle.generateKey({ name: 'ECDH', namedCurve: 'K-256' }, true, ['deriveKey'])
+    await storeMyIdentityDB({
+        groups: [],
+        identifier,
+        relation: [],
+        relationLastCheckTime: new Date(),
+        publicKey: key.publicKey,
+        privateKey: key.privateKey,
+    })
 }
 //#endregion
 //#region LocalKeys

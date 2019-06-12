@@ -7,7 +7,7 @@ import { Person } from '../../database'
 const ref = new ValueRef<Person[]>([])
 Services.People.queryPeople('facebook.com').then(p => (ref.value = p))
 MessageCenter.on('newPerson', p => {
-    const old = ref.value.filter(x => x.identifier.toString() !== p.identifier.toString())
+    const old = ref.value.filter(x => x.identifier.toText() !== p.identifier.toText())
     ref.value = [...old, p]
 })
 export function usePeople() {
