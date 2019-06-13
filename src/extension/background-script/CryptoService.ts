@@ -13,6 +13,7 @@ import {
     queryMyIdentityAtDB,
     storeNewPersonDB,
     queryPersonDB,
+    PersonRecord,
 } from '../../database/people'
 import { PersonIdentifier } from '../../database/type'
 
@@ -23,12 +24,11 @@ type OthersAESKeyEncryptedToken = string
 /**
  * @internal
  */
-async function prepareOthersKeyForEncryption(to: Person[]) {
-    const toKey = to.map(x => ({ name: x.identifier.userId, key: x.publicKey! }))
-    toKey.forEach(x => {
-        if (x.key === null) throw new Error(geti18nString('service_others_key_not_found', x.name))
-    })
-    return toKey
+async function prepareOthersKeyForEncryption(to: PersonIdentifier[]): Promise<{ name: string; key: CryptoKey }[]> {
+    const data = await Promise.all(to.map(x => x).map(queryPersonDB))
+    return data
+        .filter((x): x is NonNullable<typeof x> => !!x)
+        .map(x => ({ name: x.identifier.userId, key: x.publicKey! }))
 }
 /**
  * This map stores <token, othersAESKeyEncrypted>.
@@ -48,7 +48,10 @@ const OthersAESKeyEncryptedMap = new Map<
  * - `encrypted` is the encrypted string
  * - `token` is used to call `publishPostAESKey` before post the content
  */
-export async function encryptTo(content: string, to: Person[]): Promise<[EncryptedText, OthersAESKeyEncryptedToken]> {
+export async function encryptTo(
+    content: string,
+    to: PersonIdentifier[],
+): Promise<[EncryptedText, OthersAESKeyEncryptedToken]> {
     if (to.length === 0) return ['', '']
     const toKey = await prepareOthersKeyForEncryption(to)
 
@@ -66,7 +69,7 @@ export async function encryptTo(content: string, to: Person[]): Promise<[Encrypt
         content: content,
         othersPublicKeyECDH: toKey,
         ownersLocalKey: await getDefaultLocalKeyOrGenerateOneDB(),
-        privateKeyECDH: mine,
+        privateKeyECDH: mine.privateKey,
         iv: crypto.getRandomValues(new Uint8Array(16)),
     })
     const ownersAESKeyStr = encodeArrayBuffer(ownersAESKeyEncrypted)
@@ -74,7 +77,7 @@ export async function encryptTo(content: string, to: Person[]): Promise<[Encrypt
     const encryptedTextStr = encodeArrayBuffer(encryptedText)
     // ! Don't use payload.ts, this is an internal representation used for signature.
     const str = `2/4|${ownersAESKeyStr}|${ivStr}|${encryptedTextStr}`
-    const signature = encodeArrayBuffer(await Alpha40.sign(str, mine))
+    const signature = encodeArrayBuffer(await Alpha40.sign(str, mine.privateKey))
 
     // Store AES key to gun
     const key = encodeArrayBuffer(iv)
@@ -134,11 +137,11 @@ export async function decryptFrom(
         const byKey = await getKey(by)
         if (!byKey) return { error: geti18nString('service_others_key_not_found', by.userId) }
         // tslint:disable-next-line: deprecation
-        const mine = await getMyPrivateKeyAtFacebook()
+        const mine = await getMyPrivateKeyAtFacebook(whoAmI)
         if (!mine) return { error: geti18nString('service_not_setup_yet') }
         try {
             const unverified = ['2/4', ownersAESKeyEncrypted, salt, encryptedText].join('|')
-            if (by === whoAmI) {
+            if (by.equals(whoAmI)) {
                 const content = decodeText(
                     await Alpha40.decryptMessage1ToNByMyself({
                         version: -40,
@@ -150,7 +153,7 @@ export async function decryptFrom(
                 )
                 try {
                     if (!signature) throw new TypeError('No signature')
-                    const signatureVerifyResult = await Alpha40.verify(unverified, signature, mine)
+                    const signatureVerifyResult = await Alpha40.verify(unverified, signature, mine.publicKey)
                     return { signatureVerifyResult, content }
                 } catch {
                     return { signatureVerifyResult: false, content }
@@ -172,7 +175,7 @@ export async function decryptFrom(
                         AESKeyEncrypted: aesKeyEncrypted,
                         authorsPublicKeyECDH: byKey,
                         encryptedContent: encryptedText,
-                        privateKeyECDH: mine,
+                        privateKeyECDH: mine.privateKey,
                         iv: salt,
                     }),
                 )
@@ -255,7 +258,7 @@ export async function appendShareTarget(
     postIdentifier: string,
     ownersAESKeyEncrypted: string,
     iv: string,
-    people: Person[],
+    people: PersonIdentifier[],
 ): Promise<void> {
     const toKey = await prepareOthersKeyForEncryption(people)
     const AESKey = await Alpha40.extractAESKeyInMessage(
@@ -268,7 +271,7 @@ export async function appendShareTarget(
         -40,
         AESKey,
         // tslint:disable-next-line: deprecation
-        (await getMyPrivateKeyAtFacebook())!,
+        (await getMyPrivateKeyAtFacebook())!.privateKey,
         toKey,
     )
     publishPostAESKey_Service(postIdentifier, othersAESKeyEncrypted)

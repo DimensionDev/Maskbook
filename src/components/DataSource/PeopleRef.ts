@@ -7,7 +7,7 @@ import { Person } from '../../database'
 const ref = new ValueRef<Person[]>([])
 Services.People.queryPeople('facebook.com').then(p => (ref.value = p))
 MessageCenter.on('newPerson', p => {
-    const old = ref.value.filter(x => x.identifier.toText() !== p.identifier.toText())
+    const old = ref.value.filter(x => !x.identifier.equals(p.identifier))
     ref.value = [...old, p]
 })
 export function usePeople() {
@@ -15,3 +15,5 @@ export function usePeople() {
     React.useEffect(() => ref.addListener(val => setPeople(val)), [])
     return people
 }
+
+export const MyIdentityContext = React.createContext<Person | null>(null)

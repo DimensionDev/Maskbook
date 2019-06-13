@@ -1,7 +1,7 @@
 import { encrypt1ToN, decryptMessage1ToNByMyself, decryptMessage1ToNByOther } from '../crypto/crypto-alpha-40'
 import { decodeText } from '../utils/type-transform/String-ArrayBuffer'
 
-async function test1toN(msg: string) {
+async function test1toN(msg: string = 'test string') {
     const alice = await crypto.subtle.generateKey({ name: 'ECDH', namedCurve: 'K-256' }, true, ['deriveKey'])
     const aliceLocal = await crypto.subtle.generateKey({ name: 'AES-GCM', length: 256 }, true, ['encrypt', 'decrypt'])
     const bob = await crypto.subtle.generateKey({ name: 'ECDH', namedCurve: 'K-256' }, true, ['deriveKey'])

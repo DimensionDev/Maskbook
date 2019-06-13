@@ -1,5 +1,5 @@
 import { OnlyRunInContext } from '@holoflows/kit/es'
-import { Person, queryPeopleWithQuery } from '../../database'
+import { Person, queryPeopleWithQuery, personRecordToPerson } from '../../database'
 import {
     storeDefaultLocalKeyDB,
     storeMyIdentityDB,
@@ -7,18 +7,25 @@ import {
     getDefaultLocalKeyDB,
     storeLocalKeyDB,
     storeNewPersonDB,
+    queryMyIdentityAtDB,
 } from '../../database/people'
 import { UpgradeBackupJSONFile } from '../../utils/type-transform/BackupFile'
 import { PersonIdentifier, GroupIdentifier } from '../../database/type'
 
 OnlyRunInContext('background', 'FriendService')
-export { storeAvatar, getAvatarBlobURL, queryPerson } from '../../database'
+export { storeAvatar, getAvatarDataURL as getAvatarBlobURL, queryPerson } from '../../database'
 export { uploadProvePostUrl } from '../../key-management/people-gun'
 /**
  * Query all people stored
  */
 export async function queryPeople(network: string): Promise<Person[]> {
     return queryPeopleWithQuery({ network })
+}
+
+export async function queryMyIdentity(identifier: PersonIdentifier) {
+    const result = await queryMyIdentityAtDB(identifier)
+    if (result) return personRecordToPerson(result)
+    return null
 }
 
 /**

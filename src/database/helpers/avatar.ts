@@ -5,16 +5,24 @@ const avatarCache = new Map<string, string>()
 
 /**
  * Get a (cached) blob url for an identifier.
+ * ? Because of cross-origin restrictions, we cannot use blob url here. sad :(
  */
-export async function getAvatarBlobURL(identifier: PersonIdentifier | GroupIdentifier): Promise<string | undefined> {
+export async function getAvatarDataURL(identifier: PersonIdentifier | GroupIdentifier): Promise<string | undefined> {
     const id = identifier.toText()
     if (avatarCache.has(id)) return avatarCache.get(id)!
     const buffer = await queryAvatarDB(identifier)
     if (!buffer) return undefined
-    const blob = new Blob([buffer], { type: 'image/png' })
-    const url = URL.createObjectURL(blob)
+    const url = await ArrayBufferToBase64(buffer)
     avatarCache.set(id, url)
     return url
+}
+function ArrayBufferToBase64(buffer: ArrayBuffer) {
+    const f = new Blob([buffer], { type: 'image/png' })
+    const fr = new FileReader()
+    return new Promise<string>(resolve => {
+        fr.onload = () => resolve(fr.result as string)
+        fr.readAsDataURL(f)
+    })
 }
 
 /**
@@ -24,6 +32,7 @@ export async function getAvatarBlobURL(identifier: PersonIdentifier | GroupIdent
  */
 
 export async function storeAvatar(identifier: PersonIdentifier | GroupIdentifier, avatar: ArrayBuffer | string) {
+    if (identifier instanceof PersonIdentifier && identifier.isUnknown) return
     try {
         if (typeof avatar === 'string') {
             if (await isAvatarOutdatedDB(identifier, 'lastUpdateTime')) {

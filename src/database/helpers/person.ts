@@ -1,20 +1,26 @@
 import { queryPersonDB, PersonRecord, queryPeopleDB, getMyIdentitiesDB } from '../people'
 import { PersonIdentifier, Relation } from '../type'
-import { getAvatarBlobURL } from './avatar'
+import { getAvatarDataURL } from './avatar'
 import { memoize } from 'lodash-es'
 import { CryptoKeyToJsonWebKey } from '../../utils/type-transform/CryptoKey-JsonWebKey'
 import { encodeArrayBuffer, encodeText } from '../../utils/type-transform/String-ArrayBuffer'
 
-export interface Person extends PersonRecord {
+/**
+ * Person in UI do not include publickey / privatekey!
+ */
+export interface Person extends Omit<PersonRecord, 'publicKey' | 'privateKey'> {
+    publicKey?: undefined
+    privateKey?: undefined
     avatar?: string
     /** Fingerprint for the public key */
     fingerprint?: string
 }
 
-async function personRecordToPerson(record: PersonRecord): Promise<Person> {
-    const avatar = await getAvatarBlobURL(record.identifier)
+export async function personRecordToPerson(record: PersonRecord): Promise<Person> {
+    const avatar = await getAvatarDataURL(record.identifier)
+    const { privateKey, publicKey, ...rec } = record
     return {
-        ...record,
+        ...rec,
         avatar,
         fingerprint: record.publicKey ? await calculateFingerprint(record.publicKey) : undefined,
     }
@@ -57,9 +63,10 @@ const calculateFingerprint = memoize(async function(_key: CryptoKey) {
 /**
  * @deprecated
  */
-export async function getMyPrivateKeyAtFacebook(): Promise<null | CryptoKey> {
+export async function getMyPrivateKeyAtFacebook(
+    whoami: PersonIdentifier = new PersonIdentifier('facebook.com', '$self'),
+) {
     const x = await getMyIdentitiesDB()
     const y = x.find(y => y.identifier.network === 'facebook.com' && y.privateKey)
-    if (y) return y.privateKey
-    return null
+    return y || null
 }

@@ -38,7 +38,12 @@ function PostInspector(props: PostInspectorProps) {
             <DecryptPostUI.UI
                 requestAppendDecryptor={async people => {
                     setAlreadySelectedPreviously(alreadySelectedPreviously.concat(people))
-                    return Services.Crypto.appendShareTarget(iv, ownersAESKeyEncrypted, iv, people)
+                    return Services.Crypto.appendShareTarget(
+                        iv,
+                        ownersAESKeyEncrypted,
+                        iv,
+                        people.map(x => x.identifier),
+                    )
                 }}
                 alreadySelectedPreviously={alreadySelectedPreviously}
                 people={people}
