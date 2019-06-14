@@ -12,7 +12,6 @@ import { PersonIdentifier } from '../../database/type'
 
 interface DecryptPostSuccessProps {
     data: { signatureVerifyResult: boolean; content: string }
-    displayAppendDecryptor: boolean
     requestAppendDecryptor(to: Person[]): Promise<void>
     alreadySelectedPreviously: Person[]
     people: Person[]
@@ -32,11 +31,9 @@ function DecryptPostSuccess({ data, people, ...props }: DecryptPostSuccessProps)
                     {ShareMenu}
                     {geti18nString('decrypted_postbox_title')}
                     <Box flex={1} />
-                    {props.displayAppendDecryptor ? (
-                        <Link color="primary" onClick={showShare} className={classes.link}>
-                            {geti18nString('decrypted_postbox_add_decryptor')}
-                        </Link>
-                    ) : null}
+                    <Link color="primary" onClick={showShare} className={classes.link}>
+                        {geti18nString('decrypted_postbox_add_decryptor')}
+                    </Link>
                     {data.signatureVerifyResult ? (
                         <span className={classes.pass}>{geti18nString('decrypted_postbox_verified')}</span>
                     ) : (
@@ -72,14 +69,8 @@ interface DecryptPostProps {
     alreadySelectedPreviously: Person[]
     requestAppendDecryptor(to: Person[]): Promise<void>
 }
-function DecryptPost({
-    postBy,
-    whoAmI,
-    encryptedText,
-    people,
-    alreadySelectedPreviously,
-    requestAppendDecryptor,
-}: DecryptPostProps) {
+function DecryptPost(props: DecryptPostProps) {
+    const { postBy, whoAmI, encryptedText, people, alreadySelectedPreviously, requestAppendDecryptor } = props
     const rAD = useCallback(
         async (people: Person[]) => {
             await requestAppendDecryptor(people)
@@ -102,7 +93,6 @@ function DecryptPost({
                     <DecryptPostSuccess
                         data={props.data}
                         alreadySelectedPreviously={alreadySelectedPreviously}
-                        displayAppendDecryptor={whoAmI === postBy && alreadySelectedPreviously.length !== people.length}
                         requestAppendDecryptor={rAD}
                         people={people}
                     />

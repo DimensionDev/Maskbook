@@ -31,7 +31,7 @@ function PostInspector(props: PostInspectorProps) {
         const people = usePeople()
         const [alreadySelectedPreviously, setAlreadySelectedPreviously] = useState<Person[]>([])
         const { iv, ownersAESKeyEncrypted } = type.encryptedPost
-        if (whoAmI.userId === postBy.userId) {
+        if (whoAmI.equals(postBy)) {
             useAsync(() => Services.Crypto.getSharedListOfPost(iv), [post]).then(p => setAlreadySelectedPreviously(p))
         }
         return (

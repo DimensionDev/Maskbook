@@ -7,7 +7,7 @@ import { decodeText, encodeArrayBuffer, decodeArrayBuffer } from '../../utils/ty
 import { constructAlpha40, deconstructPayload } from '../../utils/type-transform/Payload'
 import { geti18nString } from '../../utils/i18n'
 import { toCompressSecp256k1Point, unCompressSecp256k1Point } from '../../utils/type-transform/SECP256k1-Compression'
-import { Person, getMyPrivateKeyAtFacebook } from '../../database'
+import { Person, getMyPrivateKeyAtFacebook, queryPerson } from '../../database'
 import {
     getDefaultLocalKeyOrGenerateOneDB,
     queryMyIdentityAtDB,
@@ -16,6 +16,7 @@ import {
     PersonRecord,
 } from '../../database/people'
 import { PersonIdentifier } from '../../database/type'
+import { gun } from '../../key-management/gun'
 
 OnlyRunInContext('background', 'EncryptService')
 //#region Encrypt & Decrypt
@@ -242,17 +243,15 @@ export async function verifyOthersProve(bio: string, others: PersonIdentifier) {
 /**
  * Get already shared target of the post
  * @param postIdentifier Post identifier
- * TODO: Rewrite this.
  */
 export async function getSharedListOfPost(postIdentifier: string): Promise<Person[]> {
-    return []
-    // const post = await gun
-    //     .get('posts')
-    //     .get(postIdentifier)
-    //     .once().then!()
-    // if (!post) return []
-    // delete post._
-    // return Promise.all(Object.keys(post).map(queryPerson))
+    const post = await gun
+        .get('posts')
+        .get(postIdentifier)
+        .once().then!()
+    if (!post) return []
+    delete post._
+    return Promise.all(Object.keys(post).map(id => queryPerson(new PersonIdentifier('facebook.com', id))))
 }
 export async function appendShareTarget(
     postIdentifier: string,

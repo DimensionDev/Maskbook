@@ -34,7 +34,7 @@
         "message": "Maskbook 解密出的文本："
     },
     "decrypted_postbox_add_decryptor": {
-        "message": "添加解密權限者："
+        "message": "查看或添加可解密權限者"
     },
     "decrypted_postbox_verified": {
         "message": "數字簽名驗證成功 ✔"

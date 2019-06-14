@@ -26,6 +26,7 @@ import { sleep } from '../utils/utils'
 import { Button } from '@material-ui/core'
 import { Person } from '../database'
 import { PersonIdentifier } from '../database/type'
+import { RenderInShadowRootWrapper } from '../utils/jss/renderInShadowRoot'
 
 const demoPeople: Person[] = [
     {
@@ -117,12 +118,7 @@ const FakePost: React.FC<{ title: string }> = props => (
 
 storiesOf('Injections', module)
     .add('Checkbox (unused)', () => <EncryptionCheckbox onCheck={action('Check')} />)
-    .add('AdditionalPostBox', () => (
-        <AdditionalPostBoxUI
-            people={demoPeople}
-            onRequestPost={action('onRequestPost')}
-        />
-    ))
+    .add('AdditionalPostBox', () => <AdditionalPostBoxUI people={demoPeople} onRequestPost={action('onRequestPost')} />)
     .add('Additional Post Content', () => <AdditionalContent title="Additional Content" children="Content" />)
     .add('SelectPeople', () => {
         function SelectPeople() {
@@ -139,10 +135,10 @@ storiesOf('Injections', module)
                 boolean('Has frozen item?', true) ? [demoPeople[0]] : [],
             )
             return (
-                <>
+                <RenderInShadowRootWrapper>
                     {ShareMenu}
                     <Button onClick={showShare}>Show dialog</Button>
-                </>
+                </RenderInShadowRootWrapper>
             )
         }
         return <SelectPeople />
@@ -162,7 +158,6 @@ storiesOf('Injections', module)
                 <FakePost title="Decrypted:">
                     <DecryptPostUI.success
                         alreadySelectedPreviously={[]}
-                        displayAppendDecryptor={boolean('Post by myself?', true)}
                         requestAppendDecryptor={async () => {}}
                         people={demoPeople}
                         data={{ content: msg, signatureVerifyResult: vr }}

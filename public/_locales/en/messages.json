@@ -33,7 +33,7 @@
         "message": "Maskbook decrypted content:"
     },
     "decrypted_postbox_add_decryptor": {
-        "message": "Add decryptor"
+        "message": "View / add receiver"
     },
     "decrypted_postbox_verified": {
         "message": "Signature verified ✔"
