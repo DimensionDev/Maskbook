@@ -1,65 +1,99 @@
 import { OnlyRunInContext } from '@holoflows/kit/es'
+import { Person, queryPeopleWithQuery, personRecordToPerson } from '../../database'
 import {
-    queryPeopleCryptoKey,
-    calculateFingerprint,
-    CryptoKeyRecord,
-    toReadCryptoKey,
-    storeKey as storeKeyDB,
-    queryPersonCryptoKey,
-    getMyPrivateKey as getMyPrivateKeyDB,
-} from '../../key-management/keystore-db'
-import {
-    queryAvatar as queryAvatarDB,
-    storeAvatar as storeAvatarDB,
-    queryNickname,
-} from '../../key-management/avatar-db'
-import { storeLocalKey } from '../../key-management/local-db'
-import { uploadProvePostUrl as uploadProvePostUrlDB } from '../../key-management/people-gun'
+    storeDefaultLocalKeyDB,
+    storeMyIdentityDB,
+    PersonRecordPublicPrivate,
+    getDefaultLocalKeyDB,
+    storeLocalKeyDB,
+    storeNewPersonDB,
+    queryMyIdentityAtDB,
+} from '../../database/people'
+import { UpgradeBackupJSONFile } from '../../utils/type-transform/BackupFile'
+import { PersonIdentifier, GroupIdentifier } from '../../database/type'
 
 OnlyRunInContext('background', 'FriendService')
-export interface Person {
-    username: string
-    nickname?: string
-    avatar?: string
-    fingerprint?: string
-}
-export const getMyPrivateKey = getMyPrivateKeyDB
-export const storeAvatar = storeAvatarDB
-export const queryAvatar = queryAvatarDB
-export const uploadProvePostUrl = uploadProvePostUrlDB
-/**
- * Query a single person. If this person is not stored, will return a { username }
- * @param username Username for quest
- */
-export async function queryPerson(username: string): Promise<Person> {
-    const avatar = queryAvatarDB(username)
-    const nickname = queryNickname(username)
-    const key = await queryPersonCryptoKey(username)
-    return {
-        username: username,
-        fingerprint: key ? await calculateFingerprint(key) : undefined,
-        avatar: await avatar,
-        nickname: await nickname,
-    }
-}
+export { storeAvatar, getAvatarDataURL as getAvatarBlobURL, queryPerson } from '../../database'
+export { uploadProvePostUrl } from '../../key-management/people-gun'
 /**
  * Query all people stored
  */
-export async function queryPeople(): Promise<Person[]> {
-    const keys = await queryPeopleCryptoKey()
-    return Promise.all(keys.map<Promise<Person>>(k => queryPerson(k.username)))
+export async function queryPeople(network: string): Promise<Person[]> {
+    return queryPeopleWithQuery({ network })
 }
+
+export async function queryMyIdentity(identifier: PersonIdentifier) {
+    const result = await queryMyIdentityAtDB(identifier)
+    if (result) return personRecordToPerson(result)
+    return null
+}
+
 /**
- * Store Key for myself
- * @param key Key to be stored
+ * Restore the backup
  */
-export async function storeMyKey(key: { key: CryptoKeyRecord; local: JsonWebKey }) {
-    const k = await toReadCryptoKey(key.key)
-    const a = storeKeyDB(k)
-    const b = storeLocalKey(
-        await crypto.subtle.importKey('jwk', key.local, { name: 'AES-GCM', length: 256 }, true, ['encrypt', 'decrypt']),
+export async function restoreBackup(json: object, iam?: PersonIdentifier) {
+    async function storeMyIdentity(person: PersonRecordPublicPrivate, local: JsonWebKey) {
+        await storeMyIdentityDB(person)
+        const aes = await crypto.subtle.importKey('jwk', local, { name: 'AES-GCM', length: 256 }, true, [
+            'encrypt',
+            'decrypt',
+        ])
+        if (await getDefaultLocalKeyDB()) {
+        } else {
+            await storeDefaultLocalKeyDB(aes)
+        }
+        await storeLocalKeyDB(person.identifier, aes)
+    }
+    function importKey(x: JsonWebKey) {
+        return crypto.subtle.importKey('jwk', x, { name: 'ECDH', namedCurve: 'K-256' }, true, ['deriveKey'])
+    }
+    function mapID(x: { network: string; userId: string }): PersonIdentifier {
+        return new PersonIdentifier(x.network, x.userId)
+    }
+    function mapGroup(x: { network: string; groupId: string; virtual: boolean }): GroupIdentifier {
+        return new GroupIdentifier(x.network, x.groupId, x.virtual)
+    }
+    const data = UpgradeBackupJSONFile(json, iam)
+    if (!data) return false
+
+    const whoami = Promise.all(
+        data.whoami.map(async rec => {
+            const IAm = mapID(rec)
+            const previousIdentifiers = (rec.previousIdentifiers || []).map(mapID)
+            await storeMyIdentity(
+                {
+                    identifier: IAm,
+                    groups: [],
+                    nickname: rec.nickname,
+                    previousIdentifiers: previousIdentifiers,
+                    publicKey: await importKey(rec.publicKey),
+                    privateKey: await importKey(rec.privateKey),
+                    relation: [],
+                    relationLastCheckTime: new Date(),
+                },
+                rec.localKey,
+            )
+        }),
     )
-    await a
-    await b
-    console.log('Keypair restored.', key)
+
+    const people = Promise.all(
+        (data.people || []).map(async rec => {
+            const id = new PersonIdentifier(rec.network, rec.userId)
+            const groups = (rec.groups || []).map(mapGroup)
+            const prevIds = (rec.previousIdentifiers || []).map(mapID)
+            await storeNewPersonDB({
+                identifier: id,
+                groups: groups,
+                nickname: rec.nickname,
+                previousIdentifiers: prevIds,
+                publicKey: await importKey(rec.publicKey),
+                relation: rec.relation || [],
+                relationLastCheckTime: rec.relationLastCheckTime ? new Date(rec.relationLastCheckTime) : new Date(),
+            })
+        }),
+    )
+
+    await whoami
+    await people
+    return true
 }

@@ -59,7 +59,7 @@ export default function Welcome({ create, restore, close }: Props) {
         <Paper elevation={2} className={classes.paper}>
             <nav className={classes.nav}>
                 <Button onClick={close} disableFocusRipple disableRipple className={classes.navButton}>
-                    {geti18nString('welcome_0_title')}
+                    {geti18nString('welcome_0_close_button')}
                     <Close className={classes.navButtonIcon} />
                 </Button>
             </nav>

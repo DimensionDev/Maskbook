@@ -1,5 +1,10 @@
-import { encodeText, encodeArrayBuffer, decodeArrayBuffer, decodeText } from '../utils/type-transform/EncodeDecode'
-import { toECDH, addUint8Array, toECDSA } from '../utils/type-transform/CryptoUtils'
+import {
+    encodeText,
+    encodeArrayBuffer,
+    decodeArrayBuffer,
+    decodeText,
+} from '../utils/type-transform/String-ArrayBuffer'
+import { toECDH, addUint8Array, toECDSA } from '../utils/type-transform/ECDSA-ECDH'
 // tslint:disable: no-parameter-reassignment
 export type PublishedAESKey = { encryptedKey: string; salt: string }
 export type PublishedAESKeyRecord = {

@@ -34,7 +34,7 @@
         "message": "Maskbook 解密出的文本："
     },
     "decrypted_postbox_add_decryptor": {
-        "message": "添加解密權限者"
+        "message": "查看或添加可解密權限者"
     },
     "decrypted_postbox_verified": {
         "message": "數字簽名驗證成功 ✔"
@@ -206,6 +206,9 @@
     },
     "service_others_key_not_found": {
         "message": "$1 的公鑰無法找到！"
+    },
+    "service_not_setup_yet": {
+        "message": "您還沒有進行初始設置，在您沒有導入或生成您的密鑰之前，我們暫時無法爲您解密此消息！"
     },
     "service_publish_post_aes_key_failed": {
         "message": "未能發佈 AES 密鑰。"

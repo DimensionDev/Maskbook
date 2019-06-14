@@ -1,14 +1,15 @@
 import * as React from 'react'
 import Identity from './Identity'
-import { Person } from '../../extension/background-script/PeopleService'
 import { Typography, Button, Theme } from '@material-ui/core'
 import { styled } from '@material-ui/styles'
+import { Person } from '../../database'
+import { PersonIdentifier } from '../../database/type'
 
 interface Props {
     identities: Person[]
     addAccount(): void
     exportBackup(): void
-    onProfileClick(username: string): void
+    onProfileClick(identifier: PersonIdentifier): void
 }
 
 const Main = styled('div')(({ theme }: { theme: Theme }) => ({
@@ -32,7 +33,11 @@ export default function Dashboard(props: Props) {
             <Typography variant="h5">Maskbook Identity Management</Typography>
             <main>
                 {props.identities.map(x => (
-                    <Identity key={x.username} person={x} onClick={() => props.onProfileClick(x.username)} />
+                    <Identity
+                        key={x.identifier.toText()}
+                        person={x}
+                        onClick={() => props.onProfileClick(x.identifier)}
+                    />
                 ))}
             </main>
             <div>

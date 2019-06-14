@@ -15,7 +15,7 @@ const jss = create({ ...jssPreset(), Renderer: ConstructableStyleSheetsRenderer 
  * @param shadow ShadowRoot that want to inject to
  */
 export function renderInShadowRoot(node: React.ReactNode, shadow: ShadowRoot) {
-    ReactDOM.render(<Wrapper children={node} shadowRoot={shadow} />, shadow as any)
+    ReactDOM.render(<RenderInShadowRootWrapper children={node} />, shadow as any)
     livingShadowRoots.add(shadow)
     applyAdoptedStyleSheets()
     return () => {
@@ -25,7 +25,7 @@ export function renderInShadowRoot(node: React.ReactNode, shadow: ShadowRoot) {
 }
 
 const generateClassName = createGenerateClassName()
-class Wrapper extends React.PureComponent<{ shadowRoot: ShadowRoot }> {
+export class RenderInShadowRootWrapper extends React.PureComponent {
     state: { error?: Error } = { error: undefined }
     render() {
         if (this.state.error) return this.state.error.message

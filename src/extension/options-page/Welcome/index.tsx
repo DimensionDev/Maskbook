@@ -9,10 +9,11 @@ import { useAsync } from '../../../utils/components/AsyncComponent'
 import Services from '../../service'
 import tasks from '../../content-script/tasks'
 import { RouteComponentProps, withRouter } from 'react-router'
-import { getProfilePageUrl } from '../../../utils/type-transform/Username'
+import { getProfilePageUrlAtFacebook } from '../../../utils/type-transform/Username'
 import { setStorage, LATEST_WELCOME_VERSION } from '../../../components/Welcomes/WelcomeVersion'
 import { geti18nString } from '../../../utils/i18n'
 import { Dialog } from '@material-ui/core'
+import { Identifier, PersonIdentifier } from '../../../database/type'
 
 //#region Welcome
 enum WelcomeState {
@@ -28,19 +29,19 @@ enum WelcomeState {
 }
 
 const WelcomeActions = {
-    backupMyKeyPair() {
-        return Services.Welcome.backupMyKeyPair()
+    backupMyKeyPair(id: PersonIdentifier) {
+        return Services.Welcome.backupMyKeyPair(id)
     },
-    restoreFromFile(file: File) {
+    restoreFromFile(file: File, id: PersonIdentifier) {
         const fr = new FileReader()
         fr.readAsText(file)
         fr.addEventListener('loadend', async f => {
             const json = JSON.parse(fr.result as string)
-            Services.People.storeMyKey(json)
+            Services.People.restoreBackup(json, id)
         })
     },
-    autoVerifyBio(userId: string, prove: string) {
-        tasks(getProfilePageUrl(userId), {
+    autoVerifyBio(user: PersonIdentifier, prove: string) {
+        tasks(getProfilePageUrlAtFacebook(user), {
             active: true,
             autoClose: false,
             memorable: false,
@@ -57,8 +58,8 @@ const WelcomeActions = {
             timeout: Infinity,
         }).pasteIntoPostBox(prove, geti18nString('automation_request_paste_into_post_box'))
     },
-    manualVerifyBio(userId: string, prove: string) {
-        this.autoVerifyBio(userId, prove)
+    manualVerifyBio(user: PersonIdentifier, prove: string) {
+        this.autoVerifyBio(user, prove)
     },
     onFinish(reason: 'quit' | 'done') {
         if (reason === 'done') setStorage({ init: LATEST_WELCOME_VERSION })
@@ -70,13 +71,13 @@ interface Welcome {
     provePost: string
     currentStep: WelcomeState
     onStepChange(state: WelcomeState): void
-    username: string
+    identity: PersonIdentifier
     // Actions
     onFinish(reason: 'done' | 'quit'): void
     sideEffects: typeof WelcomeActions
 }
 function Welcome(props: Welcome) {
-    const { currentStep, onFinish, onStepChange, provePost, sideEffects, username } = props
+    const { currentStep, onFinish, onStepChange, provePost, sideEffects, identity: username } = props
     switch (currentStep) {
         case WelcomeState.Start:
             return (
@@ -89,12 +90,12 @@ function Welcome(props: Welcome) {
         case WelcomeState.Intro:
             return <Welcome1a2 next={() => onStepChange(WelcomeState.BackupKey)} />
         case WelcomeState.BackupKey:
-            sideEffects.backupMyKeyPair()
+            sideEffects.backupMyKeyPair(props.identity)
             return <Welcome1a3 next={() => onStepChange(WelcomeState.ProvePost)} />
         case WelcomeState.ProvePost:
             return (
                 <Welcome1a4v2
-                    bioDisabled={!username}
+                    bioDisabled={username.isUnknown}
                     provePost={provePost}
                     requestManualVerify={() => {
                         sideEffects.manualVerifyBio(username, provePost)
@@ -112,7 +113,7 @@ function Welcome(props: Welcome) {
                 <Welcome1b1
                     back={() => onStepChange(WelcomeState.Start)}
                     restore={url => {
-                        sideEffects.restoreFromFile(url)
+                        sideEffects.restoreFromFile(url, props.identity)
                         onStepChange(WelcomeState.End)
                     }}
                 />
@@ -121,16 +122,28 @@ function Welcome(props: Welcome) {
             return <Welcome2 />
     }
 }
-export default withRouter(function _WelcomePortal(props: RouteComponentProps<{ username: string }>) {
+// TODO: Update the router
+export default withRouter(function _WelcomePortal(props: RouteComponentProps<{ identifier: string }>) {
     const [step, setStep] = useState(WelcomeState.Start)
-
     const [provePost, setProvePost] = useState('')
-    useAsync(() => Services.Crypto.getMyProveBio(), [provePost.length !== 0]).then(setProvePost)
+    const [identifier, setIdentifier] = useState<PersonIdentifier>(PersonIdentifier.unknown)
 
-    const [username, setUsername] = useState('')
     useEffect(() => {
-        setUsername(new URLSearchParams(props.location.search).get('username') || '')
+        // TODO: Make caller provides a identifier
+        const raw = new URLSearchParams(props.location.search).get('identifier') || ''
+        if (identifier && identifier.toText() === raw) return // ? Quit early to prevent equality change
+        const id = Identifier.fromString(raw)
+        if (id && id instanceof PersonIdentifier) {
+            setIdentifier(id)
+        }
     }, [props.location.search])
+
+    // TODO: Let user select a existing identity when re-welcome.
+    useAsync(async () => {
+        if (!identifier || !(identifier instanceof PersonIdentifier)) return null
+        return Services.Crypto.getMyProveBio(identifier)
+    }, [identifier]).then(provePost => provePost && setProvePost(provePost))
+
     return (
         <Dialog open>
             <Welcome
@@ -139,7 +152,7 @@ export default withRouter(function _WelcomePortal(props: RouteComponentProps<{ u
                 sideEffects={WelcomeActions}
                 onStepChange={setStep}
                 onFinish={WelcomeActions.onFinish}
-                username={username || ''}
+                identity={identifier}
             />
         </Dialog>
     )

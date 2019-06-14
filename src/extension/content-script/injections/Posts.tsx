@@ -2,25 +2,22 @@ import React, { useState } from 'react'
 import { LiveSelector, MutationObserverWatcher } from '@holoflows/kit'
 import { DecryptPostUI } from '../../../components/InjectedComponents/DecryptedPost'
 import { AddToKeyStore } from '../../../components/InjectedComponents/AddToKeyStore'
-import { getUsername } from './LiveSelectors'
+import { getPersonIdentifierAtFacebook } from './LiveSelectors'
 import { renderInShadowRoot } from '../../../utils/jss/renderInShadowRoot'
 import { usePeople } from '../../../components/DataSource/PeopleRef'
 import { useAsync } from '../../../utils/components/AsyncComponent'
-import { Person } from '../../background-script/PeopleService'
 import { deconstructPayload } from '../../../utils/type-transform/Payload'
 import Services from '../../service'
+import { PersonIdentifier, PostIdentifier } from '../../../database/type'
+import { Person } from '../../../database'
 
 const posts = new LiveSelector().querySelectorAll<HTMLDivElement>('.userContent, .userContent+*+div>div>div>div>div')
 
 interface PostInspectorProps {
     post: string
-    postBy: string
+    postBy: PersonIdentifier
     postId: string
     needZip(): void
-}
-function removeMyself(people: Person[]): Person[] {
-    const i = getUsername()!
-    return people.filter(x => x.username !== i)
 }
 function PostInspector(props: PostInspectorProps) {
     const { post, postBy, postId } = props
@@ -30,30 +27,33 @@ function PostInspector(props: PostInspectorProps) {
     }
     if (type.encryptedPost) {
         props.needZip()
-        const whoAmI = getUsername()!
+        const whoAmI = getPersonIdentifierAtFacebook()
         const people = usePeople()
         const [alreadySelectedPreviously, setAlreadySelectedPreviously] = useState<Person[]>([])
         const { iv, ownersAESKeyEncrypted } = type.encryptedPost
-        if (whoAmI === postBy) {
-            useAsync(() => Services.Crypto.getSharedListOfPost(iv), [post]).then(p =>
-                setAlreadySelectedPreviously(removeMyself(p)),
-            )
+        if (whoAmI.equals(postBy)) {
+            useAsync(() => Services.Crypto.getSharedListOfPost(iv), [post]).then(p => setAlreadySelectedPreviously(p))
         }
         return (
             <DecryptPostUI.UI
                 requestAppendDecryptor={async people => {
                     setAlreadySelectedPreviously(alreadySelectedPreviously.concat(people))
-                    return Services.Crypto.appendShareTarget(iv, ownersAESKeyEncrypted, iv, people)
+                    return Services.Crypto.appendShareTarget(
+                        iv,
+                        ownersAESKeyEncrypted,
+                        iv,
+                        people.map(x => x.identifier),
+                    )
                 }}
                 alreadySelectedPreviously={alreadySelectedPreviously}
-                people={removeMyself(people)}
+                people={people}
                 encryptedText={post}
                 whoAmI={whoAmI}
                 postBy={postBy}
             />
         )
     } else if (type.provePost) {
-        Services.People.uploadProvePostUrl(postBy, postId)
+        Services.People.uploadProvePostUrl(new PostIdentifier(postBy, postId))
         return <AddToKeyStore postBy={postBy} provePost={post} />
     }
     return null
@@ -62,11 +62,11 @@ new MutationObserverWatcher(posts)
     .assignKeys(node => node.innerText)
     .useNodeForeach((node, key, realNode) => {
         // Get author
-        const postBy = getUsername(node.current.parentElement!.querySelectorAll('a')[1])!
+        const postBy = getPersonIdentifierAtFacebook(node.current.parentElement!.querySelectorAll('a')[1])
         // Save author's avatar
         try {
             const avatar = node.current.parentElement!.querySelector('img')!
-            Services.People.storeAvatar(postBy, avatar.getAttribute('aria-label')!, avatar.src)
+            Services.People.storeAvatar(postBy, avatar.src)
         } catch {}
         // Get post id
         let postId = ''

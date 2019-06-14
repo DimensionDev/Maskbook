@@ -1,9 +1,10 @@
 import React, { useState, useCallback } from 'react'
 import { SelectPeopleUI } from './SelectPeople'
-import { Person } from '../../extension/background-script/PeopleService'
 import { geti18nString } from '../../utils/i18n'
 import { makeStyles } from '@material-ui/styles'
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button, CircularProgress } from '@material-ui/core'
+import { Person } from '../../database'
+import { PortalShadowRoot } from '../../utils/jss/ShadowRootPortal'
 interface Props {
     open: boolean
     people: Person[]
@@ -34,7 +35,13 @@ export function SelectPeopleDialog(props: Props) {
     const canClose = !rejection && committed
     const canCommit = committed || people.length === 0
     return (
-        <Dialog onClose={canClose ? onClose : void 0} open={props.open} scroll="paper" fullWidth maxWidth="sm">
+        <Dialog
+            container={PortalShadowRoot}
+            onClose={canClose ? onClose : void 0}
+            open={props.open}
+            scroll="paper"
+            fullWidth
+            maxWidth="sm">
             <DialogTitle className={classes.title}>{geti18nString('share_to')}</DialogTitle>
             <DialogContent className={classes.content}>
                 <SelectPeopleUI
