@@ -43,7 +43,6 @@ async function register<T extends Service>(service: () => Promise<T>, name: keyo
         Object.assign(Services, { [name]: loaded })
         AsyncCall(loaded, { key: name, serializer: Serialization })
     } else if (OnlyRunInContext(['content', 'options', 'debugging'], false)) {
-        console.log(`Service ${name} registered in Content script & Options page`)
         Object.assign(Services, { [name]: AsyncCall({}, { key: name, serializer: Serialization }) })
         if (GetContext() === 'debugging') {
             // ? -> UI developing

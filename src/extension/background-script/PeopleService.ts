@@ -8,6 +8,7 @@ import {
     storeLocalKeyDB,
     storeNewPersonDB,
     queryMyIdentityAtDB,
+    getMyIdentitiesDB,
 } from '../../database/people'
 import { UpgradeBackupJSONFile } from '../../utils/type-transform/BackupFile'
 import { PersonIdentifier, GroupIdentifier } from '../../database/type'
@@ -21,10 +22,21 @@ export { uploadProvePostUrl } from '../../key-management/people-gun'
 export async function queryPeople(network: string): Promise<Person[]> {
     return queryPeopleWithQuery({ network })
 }
-
+/**
+ * Query my identity. If can't get it programmatically, use PersonIdentifier { network: 'localhost', userId: network }
+ * this will return the first result in this network
+ */
 export async function queryMyIdentity(identifier: PersonIdentifier) {
     const result = await queryMyIdentityAtDB(identifier)
     if (result) return personRecordToPerson(result)
+    else {
+        if (identifier.unknownAtNetwork) {
+            const results = await getMyIdentitiesDB()
+            const record = results.find(x => x.identifier.network === identifier.unknownAtNetwork)
+            if (record) return personRecordToPerson(record)
+            return null
+        }
+    }
     return null
 }
 
