@@ -1,9 +1,22 @@
 import { LiveSelector } from '@holoflows/kit/es/DOM/LiveSelector'
 import { PersonIdentifier } from '../../../database/type'
+import { useEffect, useState } from 'react'
+import { ValueRef, MutationObserverWatcher } from '@holoflows/kit/es'
 
-export const myUsername = new LiveSelector().querySelector<HTMLAnchorElement>(
+const myUsername = new LiveSelector().querySelector<HTMLAnchorElement>(
     `[aria-label="Facebook"][role="navigation"] [data-click="profile_icon"] a`,
 )
+const myUsernameRef = new ValueRef(PersonIdentifier.unknown)
+new MutationObserverWatcher(myUsername.clone().map(getPersonIdentifierAtFacebook))
+    .enableSingleMode()
+    .addListener('onAdd', e => (myUsernameRef.value = e.data.value))
+    .addListener('onChange', e => (myUsernameRef.value = e.data.newValue))
+    .startWatch()
+export function usePersonIdentifierAtFacebook(): PersonIdentifier {
+    const [currentID, setID] = useState(PersonIdentifier.unknown)
+    useEffect(() => myUsernameRef.addListener(id => !id.equals(currentID) && setID(id)), [])
+    return currentID
+}
 export function getPersonIdentifierAtFacebook(link?: HTMLAnchorElement | null): PersonIdentifier {
     if (link === null) return PersonIdentifier.unknown
     // tslint:disable-next-line: no-parameter-reassignment

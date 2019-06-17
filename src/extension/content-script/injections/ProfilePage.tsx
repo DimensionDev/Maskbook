@@ -1,7 +1,6 @@
-import { LiveSelector } from '@holoflows/kit/es/DOM/LiveSelector'
-import { MutationObserverWatcher } from '@holoflows/kit/es/DOM/Watchers/MutationObserverWatcher'
 import Services from '../../service'
 import { PersonIdentifier } from '../../../database/type'
+import { LiveSelector, MutationObserverWatcher } from '@holoflows/kit/es'
 
 const bio = new LiveSelector().querySelector<HTMLDivElement>('#profile_timeline_intro_card')
 function verify(text: string) {
@@ -14,7 +13,8 @@ function verify(text: string) {
     Services.Crypto.verifyOthersProve(text, new PersonIdentifier('facebook.com', username))
 }
 new MutationObserverWatcher(bio)
-    .useNodeForeach(node => {
+    .enableSingleMode()
+    .useForeach(node => {
         verify(node.current.innerText)
         return {
             onNodeMutation() {

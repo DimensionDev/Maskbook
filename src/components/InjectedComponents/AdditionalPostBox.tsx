@@ -2,7 +2,7 @@ import * as React from 'react'
 import { useAsync } from '../../utils/components/AsyncComponent'
 import { usePeople, MyIdentityContext } from '../DataSource/PeopleRef'
 import { SelectPeopleUI } from './SelectPeople'
-import { getPersonIdentifierAtFacebook } from '../../extension/content-script/injections/LiveSelectors'
+import { usePersonIdentifierAtFacebook } from '../../extension/content-script/injections/LiveSelectors'
 import { useRef, useContext, useState, useCallback } from 'react'
 import { useCapturedInput } from '../../utils/hooks/useCapturedEvents'
 import { Avatar } from '../../utils/components/Avatar'
@@ -83,11 +83,12 @@ export function AdditionalPostBoxUI(props: Props) {
 }
 
 export function AdditionalPostBox() {
-    const username = getPersonIdentifierAtFacebook()
+    const identifier = usePersonIdentifierAtFacebook()
 
     const people = usePeople()
     const [identity, setIdentity] = useState<Person | null>(null)
-    useAsync(() => Services.People.queryMyIdentity(username)).then(setIdentity)
+
+    useAsync(() => Services.People.queryMyIdentity(identifier), [identifier]).then(setIdentity)
 
     const onRequestPost = useCallback(async (people: Person[], text: string) => {
         const [encrypted, token] = await Services.Crypto.encryptTo(text, people.map(x => x.identifier))

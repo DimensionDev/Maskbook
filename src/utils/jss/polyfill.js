@@ -81,7 +81,6 @@
                 location.appendChild(clone)
             }
             if (clone.sheet) {
-                console.log('copying')
                 for (const action of sheet[node].pastActions) {
                     if (action.type === 'method') {
                         clone.sheet[action.key](...action.args)
