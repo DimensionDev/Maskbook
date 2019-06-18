@@ -207,9 +207,9 @@ export async function getMyProveBio(whoami: PersonIdentifier): Promise<string | 
     const compressed = toCompressSecp256k1Point(pub.x!, pub.y!)
     return `🔒${encodeArrayBuffer(compressed)}🔒`
 }
-export async function verifyOthersProve(bio: string, others: PersonIdentifier) {
+export async function verifyOthersProve(bio: string, others: PersonIdentifier): Promise<boolean> {
     const [_, compressedX, _2] = bio.split('🔒')
-    if (!compressedX) return null
+    if (!compressedX) return false
     const { x, y } = unCompressSecp256k1Point(decodeArrayBuffer(compressedX))
     const key: JsonWebKey = {
         crv: 'K-256',
@@ -235,7 +235,7 @@ export async function verifyOthersProve(bio: string, others: PersonIdentifier) {
         // TODO: Add relation verify at caller, then change to new Date()
         relationLastCheckTime: new Date('Jan 1 2019'),
     })
-    return publicKey
+    return true
 }
 //#endregion
 

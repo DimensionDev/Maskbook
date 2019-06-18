@@ -17,13 +17,13 @@ export async function queryPersonFromGun(username: string) {
 export async function addPersonPublicKey(user: PersonIdentifier): Promise<PersonUI> {
     const fromBio = async () => {
         const bio = await tasks(getProfilePageUrlAtFacebook(user)).getBioContent()
-        if ((await verifyOthersProve(bio, user)) === null) throw new Error('Not in bio!')
+        if ((await verifyOthersProve(bio, user)) === false) throw new Error('Not in bio!')
     }
     const fromPost = async () => {
         const person = await queryPersonFromGun(user.userId)
         if (!person || !person.provePostId) throw new Error('Not in gun!')
         const post = await tasks(getPostUrlAtFacebook(new PostIdentifier(user, person.provePostId))).getPostContent()
-        if ((await verifyOthersProve(post, user)) === null) throw new Error('Not in prove post!')
+        if ((await verifyOthersProve(post, user)) === false) throw new Error('Not in prove post!')
     }
     let bioRejected = false
     let proveRejected = false

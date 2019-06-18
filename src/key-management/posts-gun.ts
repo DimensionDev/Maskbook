@@ -13,7 +13,7 @@ export async function queryPostAESKey(salt: string, myUsername: string) {
         .get(salt)
         .get(myUsername)
         .once().then!()
-    if (result.encryptedKey && result.salt) return result
+    if (result && result.encryptedKey && result.salt) return result
     return undefined
 }
 
