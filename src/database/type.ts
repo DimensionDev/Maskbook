@@ -32,7 +32,7 @@ export abstract class Identifier {
 @serializable('PersonIdentifier')
 export class PersonIdentifier extends Identifier {
     static unknown = new PersonIdentifier('localhost', '$unknown')
-    static unknownAtNetwork(network: string) {
+    static unknownMyIdentityAtNetwork(network: string) {
         return new PersonIdentifier('localhost', network)
     }
     get unknownAtNetwork() {

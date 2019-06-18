@@ -21,6 +21,7 @@ interface PostInspectorProps {
 }
 function PostInspector(props: PostInspectorProps) {
     const { post, postBy, postId } = props
+    if (postBy.isUnknown) return null
     const type = {
         encryptedPost: deconstructPayload(post),
         provePost: post.match(/🔒(.+)🔒/)!,
@@ -62,12 +63,10 @@ new MutationObserverWatcher(posts)
     .assignKeys(node => node.innerText)
     .useForeach(node => {
         // Get author
-        const postBy = getPersonIdentifierAtFacebook(node.current.parentElement!.querySelectorAll('a')[1])
-        // Save author's avatar
+        let postBy: PersonIdentifier = PersonIdentifier.unknown
         try {
-            const avatar = node.current.parentElement!.querySelector('img')!
-            Services.People.storeAvatar(postBy, avatar.src)
-        } catch {}
+            postBy = getPersonIdentifierAtFacebook(node.current.parentElement!.querySelectorAll('a')[1])
+        } catch (e) {}
         // Get post id
         let postId = ''
         try {

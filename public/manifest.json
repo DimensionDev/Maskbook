@@ -7,8 +7,7 @@
         {
             "matches": ["https://www.facebook.com/*"],
             "js": ["polyfill/browser-polyfill.min.js", "js/contentscript.js"],
-            "run_at": "document_idle",
-            "all_frames": true
+            "run_at": "document_idle"
         }
     ],
     "web_accessible_resources": ["*.css", "*.js", "*.jpg", "*.png"],

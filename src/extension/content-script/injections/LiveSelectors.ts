@@ -6,7 +6,7 @@ import { ValueRef, MutationObserverWatcher } from '@holoflows/kit/es'
 const myUsername = new LiveSelector().querySelector<HTMLAnchorElement>(
     `[aria-label="Facebook"][role="navigation"] [data-click="profile_icon"] a`,
 )
-const myUsernameRef = new ValueRef(PersonIdentifier.unknownAtNetwork('facebook.com'))
+const myUsernameRef = new ValueRef(PersonIdentifier.unknownMyIdentityAtNetwork('facebook.com'))
 new MutationObserverWatcher(myUsername.clone().map(getPersonIdentifierAtFacebook))
     .enableSingleMode()
     .setComparer(undefined, (a, b) => a.equals(b))
