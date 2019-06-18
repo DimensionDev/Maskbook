@@ -61,20 +61,33 @@ export class PersonIdentifier extends Identifier {
     }
 }
 
+export enum GroupType {
+    virtual = 'virtual',
+    real = 'real',
+}
 @serializable('GroupIdentifier')
 export class GroupIdentifier extends Identifier {
-    constructor(public network: string, public groupId: string, public virtual = false) {
+    constructor(public network: string, public groupId: string, public type = GroupType.real) {
         super()
         noSlash(network)
         noSlash(groupId)
     }
     toText() {
-        return `group:${this.network}/${this.groupId}/${this.virtual ? 'virtual' : 'real'}`
+        return `group:${this.network}/${this.groupId}/${this.type}`
+    }
+    get isReal() {
+        return this.type === GroupType.real
+    }
+    get isVirtual() {
+        return this.type === GroupType.virtual
     }
     static [fromString](str: string) {
         const [network, groupId, virtual] = str.split('/')
         if (!network || !groupId || !virtual) return null
-        return new GroupIdentifier(network, groupId, virtual === 'virtual')
+        if (GroupType.real === virtual || GroupType.real === virtual) {
+            return new GroupIdentifier(network, groupId, virtual)
+        }
+        return null
     }
 }
 

@@ -54,12 +54,12 @@ async function toDb({ publicKey, privateKey, ...rest }: PersonRecord): Promise<P
     if (privateKey) result.privateKey = await CryptoKeyToJsonWebKey(privateKey)
     return result
 }
-export interface PersonRecord
-    extends Omit<PersonRecordInDatabase, 'identifier' | 'publicKey' | 'privateKey' | 'network'> {
-    identifier: PersonIdentifier
-    publicKey?: CryptoKey
-    privateKey?: CryptoKey
+interface Base<db> {
+    identifier: IF<db, string, PersonIdentifier>
+    publicKey?: IF<db, JsonWebKey, CryptoKey>
+    privateKey?: IF<db, JsonWebKey, CryptoKey>
 }
+export interface PersonRecord extends Omit<PersonRecordInDatabase, keyof Base<true> | 'network'>, Base<false> {}
 export type PersonRecordPublic = PersonRecord & Required<Pick<PersonRecord, 'publicKey'>>
 export function isPersonRecordPublic(data: PersonRecord): data is PersonRecordPublic {
     return 'publicKey' in data
@@ -68,13 +68,10 @@ export type PersonRecordPublicPrivate = PersonRecord & Required<Pick<PersonRecor
 export function isPersonRecordPublicPrivate(data: PersonRecord): data is PersonRecordPublicPrivate {
     return 'publicKey' in data && 'privateKey' in data
 }
-interface PersonRecordInDatabase {
-    identifier: string
+interface PersonRecordInDatabase extends Base<true> {
     network: string
     previousIdentifiers?: PersonIdentifier[]
     nickname?: string
-    publicKey?: JsonWebKey
-    privateKey?: JsonWebKey
     groups: GroupIdentifier[]
 }
 type LocalKeys = Record<string, CryptoKey | undefined>

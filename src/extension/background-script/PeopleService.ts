@@ -11,7 +11,7 @@ import {
     getMyIdentitiesDB,
 } from '../../database/people'
 import { UpgradeBackupJSONFile } from '../../utils/type-transform/BackupFile'
-import { PersonIdentifier, GroupIdentifier } from '../../database/type'
+import { PersonIdentifier, GroupIdentifier, GroupType } from '../../database/type'
 
 OnlyRunInContext('background', 'FriendService')
 export { storeAvatar, getAvatarDataURL as getAvatarBlobURL, queryPerson } from '../../database'
@@ -62,8 +62,8 @@ export async function restoreBackup(json: object, iam?: PersonIdentifier) {
     function mapID(x: { network: string; userId: string }): PersonIdentifier {
         return new PersonIdentifier(x.network, x.userId)
     }
-    function mapGroup(x: { network: string; groupId: string; virtual: boolean }): GroupIdentifier {
-        return new GroupIdentifier(x.network, x.groupId, x.virtual)
+    function mapGroup(x: { network: string; groupId: string; type: GroupType }): GroupIdentifier {
+        return new GroupIdentifier(x.network, x.groupId, x.type)
     }
     const data = UpgradeBackupJSONFile(json, iam)
     if (!data) return false

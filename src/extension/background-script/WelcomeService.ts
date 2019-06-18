@@ -52,7 +52,7 @@ async function generateBackupJSON(identifier: PersonIdentifier, full = false): P
         people.push({
             network: data.identifier.network,
             userId: data.identifier.userId,
-            groups: data.groups.map(g => ({ network: g.network, groupId: g.groupId, virtual: g.virtual })),
+            groups: data.groups.map(g => ({ network: g.network, groupId: g.groupId, type: g.type })),
             nickname: data.nickname,
             previousIdentifiers: (data.previousIdentifiers || []).map(p => ({ network: p.network, userId: p.userId })),
             publicKey: await exportKey(data.publicKey),
