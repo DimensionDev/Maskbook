@@ -231,9 +231,6 @@ export async function verifyOthersProve(bio: string, others: PersonIdentifier): 
         identifier: others,
         groups: [],
         publicKey: publicKey,
-        relation: [],
-        // TODO: Add relation verify at caller, then change to new Date()
-        relationLastCheckTime: new Date('Jan 1 2019'),
     })
     return true
 }

@@ -1,5 +1,5 @@
 import { queryPersonDB, PersonRecord, queryPeopleDB, getMyIdentitiesDB } from '../people'
-import { PersonIdentifier, Relation } from '../type'
+import { PersonIdentifier } from '../type'
 import { getAvatarDataURL } from './avatar'
 import { memoize } from 'lodash-es'
 import { CryptoKeyToJsonWebKey } from '../../utils/type-transform/CryptoKey-JsonWebKey'
@@ -38,8 +38,6 @@ export async function queryPerson(identifier: PersonIdentifier): Promise<Person>
             groups: [],
             nickname: identifier.userId,
             previousIdentifiers: [],
-            relation: [Relation.unknown],
-            relationLastCheckTime: new Date(),
             avatar: undefined,
         }
     return personRecordToPerson(person)

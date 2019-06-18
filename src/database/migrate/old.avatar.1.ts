@@ -8,7 +8,7 @@
  */
 // tslint:disable: deprecation
 import { readMangledDB } from './old.mangled.helper.1'
-import { PersonIdentifier, Relation } from '../type'
+import { PersonIdentifier } from '../type'
 import { deleteDB } from 'idb/with-async-ittr'
 import * as Avatar from '../avatar'
 import * as People from '../people'
@@ -36,8 +36,6 @@ async function updatePartialPersonRecord(...args: Parameters<typeof People.updat
             groups: [],
             identifier: id,
             nickname: '',
-            relation: [Relation.unknown],
-            relationLastCheckTime: new Date('May 15 2019'),
             ...args[0],
         })
     }

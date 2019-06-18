@@ -80,8 +80,6 @@ export async function restoreBackup(json: object, iam?: PersonIdentifier) {
                     previousIdentifiers: previousIdentifiers,
                     publicKey: await importKey(rec.publicKey),
                     privateKey: await importKey(rec.privateKey),
-                    relation: [],
-                    relationLastCheckTime: new Date(),
                 },
                 rec.localKey,
             )
@@ -99,8 +97,6 @@ export async function restoreBackup(json: object, iam?: PersonIdentifier) {
                 nickname: rec.nickname,
                 previousIdentifiers: prevIds,
                 publicKey: await importKey(rec.publicKey),
-                relation: rec.relation || [],
-                relationLastCheckTime: rec.relationLastCheckTime ? new Date(rec.relationLastCheckTime) : new Date(),
             })
         }),
     )

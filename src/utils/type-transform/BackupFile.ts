@@ -1,4 +1,4 @@
-import { Relation, PersonIdentifier } from '../../database/type'
+import { PersonIdentifier } from '../../database/type'
 
 export function UpgradeBackupJSONFile(json: object, identity?: PersonIdentifier): BackupJSONFileLatest | null {
     if (isVersion1(json)) return json
@@ -43,8 +43,6 @@ export interface BackupJSONFileVersion1 {
         publicKey: JsonWebKey
         previousIdentifiers?: { network: string; userId: string }[]
         nickname?: string
-        relation?: Relation[]
-        relationLastCheckTime?: number
         groups?: { network: string; groupId: string; virtual: boolean }[]
     }>
 }

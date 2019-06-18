@@ -100,35 +100,12 @@ export class PostIdentifier<T extends Identifier = Identifier> extends Identifie
     }
 }
 
-export enum Relation {
-    /**
-     * Due to technical reasons,
-     * if program cannot automatically verify the friendship or non-friendship,
-     * use this level.
-     */
-    unknown = 'unknown',
-    /**
-     * I banned this person.
-     * (Only available on some social networks)
-     */
-    IBanned = 'I banned',
-    /**
-     * This person bans me.
-     * (Only available on some social networks)
-     */
-    IAmBanned = 'I am banned',
-    /** I am following this person. So their post can appear in my timeline. */
-    following = 'following',
-    /** This person follows me. So my post can appear in their timeline. */
-    followed = 'followed',
-}
 /**
  * Person representation in ui
  */
 export interface PersonUI {
     identifier: PersonIdentifier
     previousIdentities?: PersonIdentifier[]
-    relation: Relation[]
     nickname?: string
     avatar?: string
     fingerprint?: string

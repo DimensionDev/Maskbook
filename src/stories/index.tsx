@@ -35,8 +35,6 @@ const demoPeople: Person[] = [
         nickname: 'Jack Works',
         identifier: new PersonIdentifier('localhost', 'test'),
         groups: [],
-        relation: [],
-        relationLastCheckTime: new Date(),
     },
     {
         fingerprint: 'FDFE333CE20ED446AD88F3C8BA3AD1AA5ECAF521'
@@ -47,24 +45,18 @@ const demoPeople: Person[] = [
         nickname: 'Robot of the century',
         identifier: new PersonIdentifier('localhost', 'test'),
         groups: [],
-        relation: [],
-        relationLastCheckTime: new Date(),
     },
     {
         fingerprint: 'a2f7643cd1aed446ad88f3c8ba13843dfa2f321d',
         nickname: 'Material Design',
         identifier: new PersonIdentifier('localhost', 'test'),
         groups: [],
-        relation: [],
-        relationLastCheckTime: new Date(),
     },
     {
         fingerprint: 'a2f7643cd1aed446ad88f3c8ba13843dfa2f321d',
         nickname: 'コノハ',
         identifier: new PersonIdentifier('localhost', 'test'),
         groups: [],
-        relation: [],
-        relationLastCheckTime: new Date(),
     },
 ]
 storiesOf('Welcome', module)

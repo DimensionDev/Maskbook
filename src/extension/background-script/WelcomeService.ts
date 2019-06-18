@@ -56,8 +56,6 @@ async function generateBackupJSON(identifier: PersonIdentifier, full = false): P
             nickname: data.nickname,
             previousIdentifiers: (data.previousIdentifiers || []).map(p => ({ network: p.network, userId: p.userId })),
             publicKey: await exportKey(data.publicKey),
-            relation: data.relation,
-            relationLastCheckTime: data.relationLastCheckTime.getTime(),
         })
     }
     if (full) {

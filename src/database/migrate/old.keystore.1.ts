@@ -58,8 +58,6 @@ async function generateNewKey(whoami: PersonIdentifier): Promise<People.PersonRe
         groups: [],
         publicKey: mine.publicKey,
         privateKey: mine.privateKey,
-        relation: [],
-        relationLastCheckTime: new Date(),
     }
     await People.storeMyIdentityDB(record)
     return record
@@ -83,8 +81,6 @@ export default async function migrate() {
                 // TODO: Need to update later !
                 identifier: new PersonIdentifier('facebook.com', '$self'),
                 groups: [],
-                relation: [],
-                relationLastCheckTime: new Date(),
                 publicKey: record.publicKey,
                 privateKey: record.privateKey!,
             })
@@ -93,8 +89,6 @@ export default async function migrate() {
                 identifier: new PersonIdentifier('facebook.com', record.username),
                 publicKey: record.publicKey,
                 groups: [],
-                relation: [],
-                relationLastCheckTime: new Date('May 1 2019'),
             })
     })
     await Promise.all(wait)

@@ -20,7 +20,7 @@
  *
  * There is a special localKeys called `defaultKey` stored at network `localhost`
  */
-import { Relation, PersonIdentifier, Identifier, GroupIdentifier } from './type'
+import { PersonIdentifier, Identifier, GroupIdentifier } from './type'
 import { openDB, DBSchema } from 'idb/with-async-ittr'
 import { JsonWebKeyToCryptoKey, CryptoKeyToJsonWebKey } from '../utils/type-transform/CryptoKey-JsonWebKey'
 
@@ -73,9 +73,6 @@ interface PersonRecordInDatabase {
     network: string
     previousIdentifiers?: PersonIdentifier[]
     nickname?: string
-    relation: Relation[]
-    /** Last check time of relation */
-    relationLastCheckTime: Date
     publicKey?: JsonWebKey
     privateKey?: JsonWebKey
     groups: GroupIdentifier[]
@@ -223,8 +220,6 @@ export async function generateMyIdentityDB(identifier: PersonIdentifier): Promis
     await storeMyIdentityDB({
         groups: [],
         identifier,
-        relation: [],
-        relationLastCheckTime: new Date(),
         publicKey: key.publicKey,
         privateKey: key.privateKey,
     })
