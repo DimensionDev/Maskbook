@@ -2,7 +2,6 @@ import * as React from 'react'
 import { useAsync } from '../../utils/components/AsyncComponent'
 import { usePeople, MyIdentityContext } from '../DataSource/PeopleRef'
 import { SelectPeopleUI } from './SelectPeople'
-import { usePersonIdentifierAtFacebook } from '../../extension/content-script/injections/LiveSelectors'
 import { useRef, useContext, useState, useCallback } from 'react'
 import { useCapturedInput } from '../../utils/hooks/useCapturedEvents'
 import { Avatar } from '../../utils/components/Avatar'
@@ -83,21 +82,25 @@ export function AdditionalPostBoxUI(props: Props) {
 }
 
 export function AdditionalPostBox() {
-    const identifier = usePersonIdentifierAtFacebook()
-
     const people = usePeople()
-    const [identity, setIdentity] = useState<Person | null>(null)
+    const [identity, setIdentity] = useState<Person[]>([])
+    useAsync(() => Services.People.queryMyIdentity('facebook.com'), []).then(setIdentity)
 
-    useAsync(() => Services.People.queryMyIdentity(identifier), [identifier]).then(setIdentity)
+    // TODO: Multiple account
+    if (identity.length > 1) console.warn('Multiple identity found. Let user choose one.')
 
     const onRequestPost = useCallback(async (people: Person[], text: string) => {
-        const [encrypted, token] = await Services.Crypto.encryptTo(text, people.map(x => x.identifier))
+        const [encrypted, token] = await Services.Crypto.encryptTo(
+            text,
+            people.map(x => x.identifier),
+            identity[0].identifier,
+        )
         const fullPost = geti18nString('additional_post_box__encrypted_post_pre', encrypted)
         pasteIntoPostBox(fullPost, geti18nString('additional_post_box__encrypted_failed'))
         Services.Crypto.publishPostAESKey(token)
     }, [])
     return (
-        <MyIdentityContext.Provider value={identity}>
+        <MyIdentityContext.Provider value={identity[0]}>
             <AdditionalPostBoxUI people={people} onRequestPost={onRequestPost} />
         </MyIdentityContext.Provider>
     )

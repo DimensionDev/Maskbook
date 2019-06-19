@@ -1,14 +1,15 @@
 import { OnlyRunInContext } from '@holoflows/kit/es'
 import { Person, queryPeopleWithQuery, personRecordToPerson } from '../../database'
 import {
-    storeDefaultLocalKeyDB,
     storeMyIdentityDB,
     PersonRecordPublicPrivate,
-    getDefaultLocalKeyDB,
     storeLocalKeyDB,
     storeNewPersonDB,
     queryMyIdentityAtDB,
     getMyIdentitiesDB,
+    removeMyIdentityAtDB,
+    queryLocalKeyDB,
+    deleteLocalKeyDB,
 } from '../../database/people'
 import { UpgradeBackupJSONFile } from '../../utils/type-transform/BackupFile'
 import { PersonIdentifier, GroupIdentifier, GroupType } from '../../database/type'
@@ -23,37 +24,33 @@ export async function queryPeople(network: string): Promise<Person[]> {
     return queryPeopleWithQuery({ network })
 }
 /**
- * Query my identity. If can't get it programmatically, use PersonIdentifier { network: 'localhost', userId: network }
- * this will return the first result in this network
+ * Query my identity.
  */
-export async function queryMyIdentity(identifier: PersonIdentifier) {
-    const result = await queryMyIdentityAtDB(identifier)
-    if (result) return personRecordToPerson(result)
-    else {
-        if (identifier.unknownAtNetwork) {
-            const results = await getMyIdentitiesDB()
-            const record = results.find(x => x.identifier.network === identifier.unknownAtNetwork)
-            if (record) return personRecordToPerson(record)
-            return null
-        }
+export async function queryMyIdentity(network: string): Promise<Person[]>
+export async function queryMyIdentity(identifier: PersonIdentifier): Promise<Person[]>
+export async function queryMyIdentity(identifier: PersonIdentifier | string): Promise<Person[]> {
+    if (typeof identifier === 'string') {
+        const all = await getMyIdentitiesDB()
+        const atSite = all.filter(x => x.identifier.network === identifier)
+        return Promise.all(atSite.map(personRecordToPerson))
+    } else {
+        const result = await queryMyIdentityAtDB(identifier)
+        if (result) return [await personRecordToPerson(result)]
+        return []
     }
-    return null
 }
 
 /**
  * Restore the backup
  */
-export async function restoreBackup(json: object, iam?: PersonIdentifier) {
+export async function restoreBackup(json: object, whoAmI?: PersonIdentifier) {
     async function storeMyIdentity(person: PersonRecordPublicPrivate, local: JsonWebKey) {
         await storeMyIdentityDB(person)
         const aes = await crypto.subtle.importKey('jwk', local, { name: 'AES-GCM', length: 256 }, true, [
             'encrypt',
             'decrypt',
         ])
-        if (await getDefaultLocalKeyDB()) {
-        } else {
-            await storeDefaultLocalKeyDB(aes)
-        }
+        await storeLocalKeyDB(new PersonIdentifier('facebook.com', '$self'), aes)
         await storeLocalKeyDB(person.identifier, aes)
     }
     function importKey(x: JsonWebKey) {
@@ -65,7 +62,7 @@ export async function restoreBackup(json: object, iam?: PersonIdentifier) {
     function mapGroup(x: { network: string; groupId: string; type: GroupType }): GroupIdentifier {
         return new GroupIdentifier(x.network, x.groupId, x.type)
     }
-    const data = UpgradeBackupJSONFile(json, iam)
+    const data = UpgradeBackupJSONFile(json, whoAmI)
     if (!data) return false
 
     const whoami = Promise.all(
@@ -104,4 +101,33 @@ export async function restoreBackup(json: object, iam?: PersonIdentifier) {
     await whoami
     await people
     return true
+}
+
+/**
+ * Resolve identity at facebook.com
+ */
+export async function resolveIdentityAtFacebook(identifier: PersonIdentifier) {
+    const unknown = new PersonIdentifier('facebook.com', '$unknown')
+    const self = new PersonIdentifier('facebook.com', '$self')
+    {
+        const ids = (await getMyIdentitiesDB()).filter(x => x.identifier.equals(unknown) || x.identifier.equals(self))
+        for (const id of ids) {
+            await storeMyIdentityDB({ ...id, identifier })
+        }
+        removeMyIdentityAtDB(unknown)
+        removeMyIdentityAtDB(self)
+    }
+    {
+        const locals = await queryLocalKeyDB('facebook.com')
+        if (locals) {
+            if (locals.$unknown) {
+                await storeLocalKeyDB(identifier, locals.$unknown)
+            }
+            if (locals.$self) {
+                await storeLocalKeyDB(identifier, locals.$self)
+            }
+            deleteLocalKeyDB(unknown)
+            deleteLocalKeyDB(self)
+        }
+    }
 }

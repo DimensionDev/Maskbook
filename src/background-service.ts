@@ -25,6 +25,6 @@ if (GetContext() === 'background') {
                 } else console.error('Inject error', e, arg, browser.runtime.getURL('js/injectedscript.js'))
             }
         },
-        { url: [{ hostEquals: 'www.facebook.com' }] },
+        { url: [{ hostEquals: 'www.facebook.com' }, { hostEquals: 'm.facebook.com' }] },
     )
 }

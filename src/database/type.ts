@@ -32,15 +32,8 @@ export abstract class Identifier {
 @serializable('PersonIdentifier')
 export class PersonIdentifier extends Identifier {
     static unknown = new PersonIdentifier('localhost', '$unknown')
-    static unknownMyIdentityAtNetwork(network: string) {
-        return new PersonIdentifier('localhost', network)
-    }
-    get unknownAtNetwork() {
-        if (this.network === 'localhost' && this.userId !== '$unknown') return this.userId
-        else return null
-    }
     get isUnknown() {
-        return this.equals(PersonIdentifier.unknown) || !!this.unknownAtNetwork
+        return this.equals(PersonIdentifier.unknown)
     }
     /**
      * @param network - Network belongs to

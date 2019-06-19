@@ -11,7 +11,7 @@ export function UpgradeBackupJSONFile(json: object, identity?: PersonIdentifier)
                     network: 'facebook.com',
                     publicKey: json.key.key.publicKey,
                     privateKey: json.key.key.privateKey!,
-                    userId: identity.userId,
+                    userId: identity.userId || '$self',
                 },
             ],
         }

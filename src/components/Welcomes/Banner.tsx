@@ -7,6 +7,7 @@ import { AppBar, Toolbar, Typography, Button, IconButton, Box } from '@material-
 interface Props {
     getStarted(): void
     close(): void
+    disabled?: boolean
 }
 const useStyles = makeStyles({
     root: {
@@ -33,13 +34,17 @@ export function Banner(props: Props) {
             <Toolbar className={classes.toolbar}>
                 <Box flex={1}>
                     <Typography variant="subtitle1" color="inherit">
-                        {geti18nString('banner_title')}
+                        {/* // TODO: i18n */}
+                        {props.disabled
+                            ? "Sorry, you can't setup your maskbook account currently, please try again later"
+                            : geti18nString('banner_title')}
                     </Typography>
                 </Box>
                 <Button
                     onClick={props.getStarted}
                     classes={{ root: classes.button }}
                     variant="contained"
+                    disabled={props.disabled}
                     color="primary">
                     {geti18nString('banner_get_started')}
                 </Button>

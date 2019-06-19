@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
-import { LiveSelector, MutationObserverWatcher } from '@holoflows/kit'
+import { LiveSelector, MutationObserverWatcher, DomProxy } from '@holoflows/kit'
 import { DecryptPostUI } from '../../../components/InjectedComponents/DecryptedPost'
 import { AddToKeyStore } from '../../../components/InjectedComponents/AddToKeyStore'
-import { getPersonIdentifierAtFacebook, usePersonIdentifierAtFacebook } from './LiveSelectors'
+import { getPersonIdentifierAtFacebook, useIdentitiesAtFacebook } from './LiveSelectors'
 import { renderInShadowRoot } from '../../../utils/jss/renderInShadowRoot'
 import { usePeople } from '../../../components/DataSource/PeopleRef'
 import { useAsync } from '../../../utils/components/AsyncComponent'
@@ -11,7 +11,10 @@ import Services from '../../service'
 import { PersonIdentifier, PostIdentifier } from '../../../database/type'
 import { Person } from '../../../database'
 
-const posts = new LiveSelector().querySelectorAll<HTMLDivElement>('.userContent, .userContent+*+div>div>div>div>div')
+const isMobile = location.hostname.match('m.facebook.com')
+const posts = new LiveSelector().querySelectorAll<HTMLDivElement>(
+    isMobile ? '.story_body_container ' : '.userContent, .userContent+*+div>div>div>div>div',
+)
 
 interface PostInspectorProps {
     post: string
@@ -21,6 +24,8 @@ interface PostInspectorProps {
 }
 function PostInspector(props: PostInspectorProps) {
     const { post, postBy, postId } = props
+    const whoAmI = (useIdentitiesAtFacebook()[0] || { identifier: PersonIdentifier.unknown }).identifier
+    const people = usePeople()
     if (postBy.isUnknown) return null
     const type = {
         encryptedPost: deconstructPayload(post),
@@ -28,8 +33,6 @@ function PostInspector(props: PostInspectorProps) {
     }
     if (type.encryptedPost) {
         props.needZip()
-        const whoAmI = usePersonIdentifierAtFacebook()
-        const people = usePeople()
         const [alreadySelectedPreviously, setAlreadySelectedPreviously] = useState<Person[]>([])
         const { iv, ownersAESKeyEncrypted } = type.encryptedPost
         if (whoAmI.equals(postBy)) {
@@ -44,6 +47,7 @@ function PostInspector(props: PostInspectorProps) {
                         ownersAESKeyEncrypted,
                         iv,
                         people.map(x => x.identifier),
+                        whoAmI,
                     )
                 }}
                 alreadySelectedPreviously={alreadySelectedPreviously}
@@ -63,30 +67,13 @@ new MutationObserverWatcher(posts)
     .assignKeys(node => node.innerText)
     .useForeach(node => {
         // Get author
-        let postBy: PersonIdentifier = PersonIdentifier.unknown
-        try {
-            postBy = getPersonIdentifierAtFacebook(node.current.parentElement!.querySelectorAll('a')[1])
-        } catch (e) {}
+        const postBy = getPostBy(node)
         // Get post id
-        let postId = ''
-        try {
-            const postIdInHref = location.href.match(
-                // Firefox doesnot support it.
-                // /plugins.+(perma.+story_fbid%3D|posts%2F)((?<id>\d+)%26).+(&width=500)?/,
-                /plugins.+(perma.+story_fbid%3D|posts%2F)((\d+)%26).+(&width=500)?/,
-            )
-            postId =
-                // In single url
-                // Firefox doesnot support it.
-                // (postIdInHref && postIdInHref.groups!.id) ||
-                (postIdInHref && postIdInHref[3]) ||
-                // In timeline
-                node.current.parentElement!.querySelector('div[id^=feed]')!.id.split(';')[2]
-        } catch {}
+        const postId = getPostID(node)
         // Click "See more" if it may be a encrypted post
         {
             const more = node.current.parentElement!.querySelector<HTMLSpanElement>('.see_more_link_inner')
-            if (more && node.current.innerText.match(/🎼.+|/)) {
+            if (!isMobile && more && node.current.innerText.match(/🎼.+|/)) {
                 more.click()
             }
         }
@@ -128,10 +115,35 @@ new MutationObserverWatcher(posts)
         }
         // Render it
         return renderInShadowRoot(
-            <PostInspector needZip={needZip} postId={postId} post={node.current.innerText} postBy={postBy} />,
+            <PostInspector needZip={needZip} postId={postId || ''} post={node.current.innerText} postBy={postBy} />,
             node.afterShadow,
         )
     })
     .setDomProxyOption({ afterShadowRootInit: { mode: 'closed' } })
     .omitWarningForRepeatedKeys()
     .startWatch()
+
+function getPostBy(node: DomProxy) {
+    const dom = isMobile ? node.current.querySelectorAll('a') : [node.current.parentElement!.querySelectorAll('a')[1]]
+    return getPersonIdentifierAtFacebook(Array.from(dom))
+}
+function getPostID(node: DomProxy) {
+    if (isMobile) {
+        const idElement = node.current.querySelector('abbr')!.closest('a')!
+        const id = new URL(idElement.href)
+        return id.searchParams.get('id') || ''
+    } else {
+        // In single url
+        if (location.href.match(/plugins.+(perma.+story_fbid%3D|posts%2F)?/)) {
+            const url = new URL(location.href)
+            return url.searchParams.get('id')
+        } else {
+            // In timeline
+            const parent = node.current.parentElement
+            if (!parent) return ''
+            const idNode = parent.querySelector('div[id^=feed]')
+            if (!idNode) return ''
+            return idNode.id.split(';')[2]
+        }
+    }
+}

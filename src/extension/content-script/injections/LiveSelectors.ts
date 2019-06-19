@@ -2,32 +2,63 @@ import { LiveSelector } from '@holoflows/kit/es/DOM/LiveSelector'
 import { PersonIdentifier } from '../../../database/type'
 import { useEffect, useState } from 'react'
 import { ValueRef, MutationObserverWatcher } from '@holoflows/kit/es'
+import Services from '../../service'
+import { Person } from '../../../database'
 
-const myUsername = new LiveSelector().querySelector<HTMLAnchorElement>(
+// Try to resolve my identities
+const myUsernameLiveSelector = new LiveSelector().querySelector<HTMLAnchorElement>(
     `[aria-label="Facebook"][role="navigation"] [data-click="profile_icon"] a`,
 )
-const myUsernameRef = new ValueRef(PersonIdentifier.unknownMyIdentityAtNetwork('facebook.com'))
-new MutationObserverWatcher(myUsername.clone().map(getPersonIdentifierAtFacebook))
+export const myUsernameRef = new ValueRef(PersonIdentifier.unknown)
+function assign(i: PersonIdentifier) {
+    if (i.isUnknown) return
+    if (i.equals(myUsernameRef.value)) return
+    myUsernameRef.value = i
+}
+myUsernameRef.addListener(id => {
+    if (id.isUnknown) return
+    Services.People.resolveIdentityAtFacebook(id)
+})
+new MutationObserverWatcher(myUsernameLiveSelector.clone().map(getPersonIdentifierAtFacebook))
     .enableSingleMode()
     .setComparer(undefined, (a, b) => a.equals(b))
-    .addListener('onAdd', e => (myUsernameRef.value = e.data.value))
-    .addListener('onChange', e => (myUsernameRef.value = e.data.newValue))
+    .addListener('onAdd', e => assign(e.data.value))
+    .addListener('onChange', e => assign(e.data.newValue))
     .startWatch()
-export function usePersonIdentifierAtFacebook(): PersonIdentifier {
-    const [currentID, setID] = useState(myUsernameRef.value)
-    useEffect(() => myUsernameRef.addListener(id => !id.equals(currentID) && setID(id)), [])
-    return currentID
+
+const identities = new ValueRef<Person[]>([])
+Services.People.queryMyIdentity('facebook.com').then(x => (identities.value = x))
+export function useIdentitiesAtFacebook(): Person[] {
+    const [currentIdentities, set] = useState(identities.value)
+    useEffect(() => identities.addListener(set))
+    return currentIdentities
 }
-export function getPersonIdentifierAtFacebook(link?: HTMLAnchorElement | null): PersonIdentifier {
-    if (link === null) return PersonIdentifier.unknown
-    // tslint:disable-next-line: no-parameter-reassignment
-    if (link === undefined) link = myUsername.evaluateOnce()[0]
-    if (!link) return PersonIdentifier.unknown
-    const url = link.href
-    const after = url.split('https://www.facebook.com/')[1]
-    if (!after) return PersonIdentifier.unknown
-    // Firefox doesn't support it
-    // if (after.match('profile.php')) return after.match(/id=(?<id>\d+)/)!.groups!.id
-    if (after.match('profile.php')) return new PersonIdentifier('facebook.com', after.match(/id=(\d+)/)![1])
-    else return new PersonIdentifier('facebook.com', after.split('?')[0])
+export function getPersonIdentifierAtFacebook(links: HTMLAnchorElement[] | HTMLAnchorElement | null): PersonIdentifier {
+    try {
+        if (links === null) return PersonIdentifier.unknown
+        if (!links) return PersonIdentifier.unknown
+        // tslint:disable-next-line: no-parameter-reassignment
+        if (!Array.isArray(links)) links = [links]
+        const [id] = links
+            .map(link => link.href)
+            .map(getUserID)
+            .filter((x): x is string => !!x)
+        if (id) return new PersonIdentifier('facebook.com', id)
+    } catch (e) {
+        console.error(e)
+    }
+    return PersonIdentifier.unknown
+}
+function getUserID(x: string) {
+    if (!x) return null
+    const relative = !x.startsWith('https://') && !x.startsWith('http://')
+    const url = new URL(x, relative ? location.host : undefined)
+
+    if (url.hostname !== 'www.facebook.com' && url.hostname !== 'm.facebook.com') return null
+    if (url.pathname.endsWith('.php')) {
+        if (!url.search) return null
+        const search = new URLSearchParams(url.search)
+        return search.get('id')
+    }
+    return url.pathname.replace(/^\//, '')
 }

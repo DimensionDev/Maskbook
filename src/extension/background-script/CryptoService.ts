@@ -8,13 +8,7 @@ import { constructAlpha40, deconstructPayload } from '../../utils/type-transform
 import { geti18nString } from '../../utils/i18n'
 import { toCompressSecp256k1Point, unCompressSecp256k1Point } from '../../utils/type-transform/SECP256k1-Compression'
 import { Person, getMyPrivateKeyAtFacebook, queryPerson } from '../../database'
-import {
-    getDefaultLocalKeyOrGenerateOneDB,
-    queryMyIdentityAtDB,
-    storeNewPersonDB,
-    queryPersonDB,
-    PersonRecord,
-} from '../../database/people'
+import { queryMyIdentityAtDB, storeNewPersonDB, queryPersonDB, queryLocalKeyDB } from '../../database/people'
 import { PersonIdentifier } from '../../database/type'
 import { gun } from '../../key-management/gun'
 
@@ -52,6 +46,7 @@ const OthersAESKeyEncryptedMap = new Map<
 export async function encryptTo(
     content: string,
     to: PersonIdentifier[],
+    whoAmI: PersonIdentifier,
 ): Promise<[EncryptedText, OthersAESKeyEncryptedToken]> {
     if (to.length === 0) return ['', '']
     const toKey = await prepareOthersKeyForEncryption(to)
@@ -69,7 +64,7 @@ export async function encryptTo(
         version: -40,
         content: content,
         othersPublicKeyECDH: toKey,
-        ownersLocalKey: await getDefaultLocalKeyOrGenerateOneDB(),
+        ownersLocalKey: (await queryLocalKeyDB(whoAmI))!,
         privateKeyECDH: mine.privateKey,
         iv: crypto.getRandomValues(new Uint8Array(16)),
     })
@@ -148,7 +143,7 @@ export async function decryptFrom(
                         version: -40,
                         encryptedAESKey: ownersAESKeyEncrypted,
                         encryptedContent: encryptedText,
-                        myLocalKey: await getDefaultLocalKeyOrGenerateOneDB(),
+                        myLocalKey: (await queryLocalKeyDB(whoAmI))!,
                         iv: salt,
                     }),
                 )
@@ -200,8 +195,8 @@ export async function decryptFrom(
 //#endregion
 
 //#region ProvePost, create & verify
-export async function getMyProveBio(whoami: PersonIdentifier): Promise<string | null> {
-    const myIdentity = await queryMyIdentityAtDB(whoami)
+export async function getMyProveBio(whoAmI: PersonIdentifier): Promise<string | null> {
+    const myIdentity = await queryMyIdentityAtDB(whoAmI)
     if (!myIdentity) return null
     const pub = await crypto.subtle.exportKey('jwk', myIdentity.publicKey)
     const compressed = toCompressSecp256k1Point(pub.x!, pub.y!)
@@ -255,13 +250,14 @@ export async function appendShareTarget(
     ownersAESKeyEncrypted: string,
     iv: string,
     people: PersonIdentifier[],
+    whoAmI: PersonIdentifier,
 ): Promise<void> {
     const toKey = await prepareOthersKeyForEncryption(people)
     const AESKey = await Alpha40.extractAESKeyInMessage(
         -40,
         ownersAESKeyEncrypted,
         iv,
-        await getDefaultLocalKeyOrGenerateOneDB(),
+        (await queryLocalKeyDB(whoAmI))!,
     )
     const othersAESKeyEncrypted = await Alpha40.generateOthersAESKeyEncrypted(
         -40,

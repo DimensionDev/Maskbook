@@ -9,7 +9,7 @@ import { LiveSelector, MutationObserverWatcher } from '@holoflows/kit/es'
         const a = document.querySelector<HTMLAnchorElement>('#fb-timeline-cover-name a')
         if (!text || !a) return
         const id = a.href.match(/profile\.php\?id=(.+)/)
-        const name = a.href.match(/^https:..www.facebook.com\/(.+)/)
+        const name = a.href.match(/^https:..\.facebook.com\/(.+)/)
         if (!id && !name) return
         const username = id ? id[1] : name![1]
         Services.Crypto.verifyOthersProve(text, new PersonIdentifier('facebook.com', username))
@@ -48,18 +48,18 @@ import { LiveSelector, MutationObserverWatcher } from '@holoflows/kit/es'
         else if (arr.length === 4) return [Status.NonFriend]
         return [Status.Unknown]
     })
-    new MutationObserverWatcher(isFriend)
-        .useForeach(status => {
-            console.log(`You and this person is ${Status[status]}`)
-            return {
-                onTargetChanged() {
-                    console.log(`target changed ${Status[status]}`)
-                },
-                onRemove() {
-                    console.log(`on remove ${Status[status]}`)
-                },
-            }
-        })
-        .startWatch()
+    // new MutationObserverWatcher(isFriend)
+    //     .useForeach(status => {
+    //         console.log(`You and this person is ${Status[status]}`)
+    //         return {
+    //             onTargetChanged() {
+    //                 console.log(`target changed ${Status[status]}`)
+    //             },
+    //             onRemove() {
+    //                 console.log(`on remove ${Status[status]}`)
+    //             },
+    //         }
+    //     })
+    //     .startWatch()
 }
 //#endregion

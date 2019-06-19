@@ -139,10 +139,9 @@ export default withRouter(function _WelcomePortal(props: RouteComponentProps<{ i
     }, [props.location.search])
 
     // TODO: Let user select a existing identity when re-welcome.
-    useAsync(async () => {
-        if (!identifier || !(identifier instanceof PersonIdentifier)) return null
-        return Services.Crypto.getMyProveBio(identifier)
-    }, [identifier]).then(provePost => provePost && setProvePost(provePost))
+    useAsync(() => Services.Crypto.getMyProveBio(identifier), [identifier]).then(
+        provePost => provePost && setProvePost(provePost),
+    )
 
     return (
         <Dialog open>

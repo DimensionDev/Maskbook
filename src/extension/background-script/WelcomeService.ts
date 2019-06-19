@@ -4,7 +4,6 @@ import { sleep } from '../../utils/utils'
 import { regularUsername } from '../../utils/type-transform/Username'
 import { geti18nString } from '../../utils/i18n'
 import {
-    getDefaultLocalKeyOrGenerateOneDB,
     getMyIdentitiesDB,
     PersonRecordPublicPrivate,
     getLocalKeysDB,

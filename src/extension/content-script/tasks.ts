@@ -4,7 +4,7 @@ import { geti18nString } from '../../utils/i18n'
 
 const bioCard = new LiveSelector().querySelector<HTMLDivElement>('#profile_timeline_intro_card')
 /**
- * Access: https://www.facebook.com/
+ * Access: https://(www|m).facebook.com/
  * @param text
  */
 export async function pasteIntoPostBox(text: string, warningText: string) {

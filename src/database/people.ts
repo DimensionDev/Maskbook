@@ -17,8 +17,6 @@
  * @description Store local AES keys.
  * @type {Record<string, CryptoKey>} Record of <userId, CryptoKey>
  * @keys outline, string, which means network.
- *
- * There is a special localKeys called `defaultKey` stored at network `localhost`
  */
 import { PersonIdentifier, Identifier, GroupIdentifier } from './type'
 import { openDB, DBSchema } from 'idb/with-async-ittr'
@@ -190,6 +188,14 @@ export async function queryMyIdentityAtDB(id: PersonIdentifier): Promise<null | 
     return outDb(result) as Promise<PersonRecordPublicPrivate>
 }
 /**
+ * Remove my record
+ * @param id - Identifier
+ */
+export async function removeMyIdentityAtDB(id: PersonIdentifier): Promise<void> {
+    const t = (await db).transaction('myself', 'readwrite')
+    await t.objectStore('myself').delete(id.toText())
+}
+/**
  * Store my record
  * @param record - Record
  */
@@ -226,51 +232,32 @@ export async function generateMyIdentityDB(identifier: PersonIdentifier): Promis
 function generateAESKey(exportable: boolean) {
     return crypto.subtle.generateKey({ name: 'AES-GCM', length: 256 }, exportable, ['encrypt', 'decrypt'])
 }
-/**
- * Get local key (even there isn't one)
- */
-export async function getDefaultLocalKeyOrGenerateOneDB() {
-    const orig = await getDefaultLocalKeyDB()
-    if (orig) return orig
-    return generateLocalKeyDB('default')
-}
+
 /**
  * Generate a new local key and store it
  * @param id - Identifier or 'default'
  * @param exportable - If the key is exportable
  */
-export async function generateLocalKeyDB(id: PersonIdentifier | 'default', exportable = true) {
+export async function generateLocalKeyDB(id: PersonIdentifier, exportable = true) {
     const key = await generateAESKey(exportable)
-    if (id === 'default') {
-        const orig = await getDefaultLocalKeyDB()
-        if (orig) {
-            throw new Error('Generate a new default key again?')
-        } else await storeDefaultLocalKeyDB(key)
-    } else await storeLocalKeyDB(id, key)
+    await storeLocalKeyDB(id, key)
     return key
-}
-/**
- * Store my default local key.
- * @param key - CryptoKey
- */
-export function storeDefaultLocalKeyDB(key: CryptoKey) {
-    return storeLocalKeyDB(new PersonIdentifier('localhost', 'defaultKey'), key)
-}
-/**
- * Query my default local key.
- */
-export async function getDefaultLocalKeyDB(): Promise<CryptoKey | null> {
-    const key = await queryLocalKeyDB('localhost')
-    return key.defaultKey || null
 }
 /**
  *
  * @param network
  */
-export async function queryLocalKeyDB(network: string): Promise<LocalKeys> {
+export async function queryLocalKeyDB(network: string): Promise<LocalKeys>
+export async function queryLocalKeyDB(identifier: PersonIdentifier): Promise<CryptoKey | null>
+export async function queryLocalKeyDB(identifier: string | PersonIdentifier): Promise<LocalKeys | CryptoKey | null> {
     const t = (await db).transaction('localKeys')
-    const result = await t.objectStore('localKeys').get(network)
-    return result || {}
+    if (typeof identifier === 'string') {
+        const result = await t.objectStore('localKeys').get(identifier)
+        return result || {}
+    } else {
+        const store = await queryLocalKeyDB(identifier.network)
+        return store[identifier.userId] || null
+    }
 }
 /**
  * Store my local key for a network
@@ -285,6 +272,16 @@ export async function storeLocalKeyDB({ network, userId }: PersonIdentifier, key
     const previous = (await t.objectStore('localKeys').get(network)) || {}
     const next = { ...previous, [userId]: key }
     await t.objectStore('localKeys').put(next, network)
+}
+/**
+ * Remove local key
+ */
+export async function deleteLocalKeyDB({ network, userId }: PersonIdentifier): Promise<void> {
+    const t = (await db).transaction('localKeys', 'readwrite')
+    const result = await t.objectStore('localKeys').get(network)
+    if (!result) return
+    delete result[userId]
+    await t.objectStore('localKeys').put(result, network)
 }
 /**
  * Get all my local keys.

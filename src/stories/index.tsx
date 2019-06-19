@@ -60,7 +60,7 @@ const demoPeople: Person[] = [
     },
 ]
 storiesOf('Welcome', module)
-    .add('Banner', () => <Banner close={action('Close')} getStarted={to('Welcome', 'Step 0')} />)
+    .add('Banner', () => <Banner disabled={false} close={action('Close')} getStarted={to('Welcome', 'Step 0')} />)
     .add('Step 0', () => (
         <Welcome0 close={action('Close')} create={to('Welcome', 'Step 1a-1')} restore={to('Welcome', 'Step 1b-1')} />
     ))
