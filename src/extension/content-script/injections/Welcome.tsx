@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { LiveSelector, MutationObserverWatcher } from '@holoflows/kit'
-import { myUsernameRef } from './LiveSelectors'
+import { myUsernameRef } from './MyUsername'
 import { Banner } from '../../../components/Welcomes/Banner'
 import { renderInShadowRoot } from '../../../utils/jss/renderInShadowRoot'
 import Services from '../../service'

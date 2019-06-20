@@ -77,7 +77,7 @@ interface Welcome {
     sideEffects: typeof WelcomeActions
 }
 function Welcome(props: Welcome) {
-    const { currentStep, onFinish, onStepChange, provePost, sideEffects, identity: username } = props
+    const { currentStep, onFinish, onStepChange, provePost, sideEffects, identity } = props
     switch (currentStep) {
         case WelcomeState.Start:
             return (
@@ -95,14 +95,14 @@ function Welcome(props: Welcome) {
         case WelcomeState.ProvePost:
             return (
                 <Welcome1a4v2
-                    bioDisabled={username.isUnknown}
+                    bioDisabled={identity.isUnknown}
                     provePost={provePost}
                     requestManualVerify={() => {
-                        sideEffects.manualVerifyBio(username, provePost)
+                        sideEffects.manualVerifyBio(identity, provePost)
                         onStepChange(WelcomeState.End)
                     }}
                     requestAutoVerify={type => {
-                        if (type === 'bio') sideEffects.autoVerifyBio(username, provePost)
+                        if (type === 'bio') sideEffects.autoVerifyBio(identity, provePost)
                         else if (type === 'post') sideEffects.autoVerifyPost(provePost)
                         onStepChange(WelcomeState.End)
                     }}
@@ -122,23 +122,20 @@ function Welcome(props: Welcome) {
             return <Welcome2 />
     }
 }
-// TODO: Update the router
 export default withRouter(function _WelcomePortal(props: RouteComponentProps<{ identifier: string }>) {
     const [step, setStep] = useState(WelcomeState.Start)
     const [provePost, setProvePost] = useState('')
     const [identifier, setIdentifier] = useState<PersonIdentifier>(PersonIdentifier.unknown)
 
     useEffect(() => {
-        // TODO: Make caller provides a identifier
         const raw = new URLSearchParams(props.location.search).get('identifier') || ''
-        if (identifier && identifier.toText() === raw) return // ? Quit early to prevent equality change
         const id = Identifier.fromString(raw)
-        if (id && id instanceof PersonIdentifier) {
+        if (id && id.equals(identifier)) return
+        if (id instanceof PersonIdentifier) {
             setIdentifier(id)
         }
     }, [props.location.search])
 
-    // TODO: Let user select a existing identity when re-welcome.
     useAsync(() => Services.Crypto.getMyProveBio(identifier), [identifier]).then(
         provePost => provePost && setProvePost(provePost),
     )
