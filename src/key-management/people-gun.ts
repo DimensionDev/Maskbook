@@ -6,6 +6,8 @@ import { geti18nString } from '../utils/i18n'
 import { PersonIdentifier, PostIdentifier, PersonUI } from '../database/type'
 import { queryPerson } from '../database'
 import { gun } from '../network/gun/version.1'
+import { fetchFacebookBio } from '../social-network/facebook.com/fetch-bio'
+import { fetchFacebookProvePost } from '../social-network/facebook.com/fetch-prove-post'
 
 export async function queryPersonFromGun(username: string) {
     return gun
@@ -13,16 +15,49 @@ export async function queryPersonFromGun(username: string) {
         .get(username)
         .once().then!()
 }
-
+async function getActiveTab() {
+    const [tab] = await browser.tabs.query({ active: true })
+    if (tab) return tab.id
+    return undefined
+}
 export async function addPersonPublicKey(user: PersonIdentifier): Promise<PersonUI> {
+    // ? Try to execute query in the extension environment
+    // ? If it is the true extension environment (Chrome, Firefox, GeckoView)
+    // ? Will go through this path
+    // ? If it it the fake extension environment (Webview on iOS)
+    // ? this will fail due to cross-origin restriction.
+
+    // ? if failed
+    // ? we go to the old way.
+    // ? Invoke a task on the current activating page.
     const fromBio = async () => {
-        const bio = await tasks(getProfilePageUrlAtFacebook(user)).getBioContent()
-        if ((await verifyOthersProve(bio, user)) === false) throw new Error('Not in bio!')
+        async function getBio() {
+            try {
+                return fetchFacebookBio(user)
+            } catch {
+                const tabId = await getActiveTab()
+                return tasks(getProfilePageUrlAtFacebook(user), { runAtTabID: tabId }).getBioContent(user)
+            }
+        }
+        if (!(await verifyOthersProve(await getBio(), user))) {
+            throw new Error('Not in bio!')
+        }
     }
     const fromPost = async () => {
         const person = await queryPersonFromGun(user.userId)
-        if (!person || !person.provePostId) throw new Error('Not in gun!')
-        const post = await tasks(getPostUrlAtFacebook(new PostIdentifier(user, person.provePostId))).getPostContent()
+        if (!person || !person.provePostId || !person.provePostId.length) throw new Error('Not in gun!')
+        const postId = new PostIdentifier(user, person.provePostId)
+        async function getPost() {
+            try {
+                return fetchFacebookProvePost(postId)
+            } catch {
+                const tabId = await getActiveTab()
+                return tasks(getPostUrlAtFacebook(postId), {
+                    runAtTabID: tabId,
+                }).getPostContent(postId)
+            }
+        }
+        const post = await getPost()
         if ((await verifyOthersProve(post, user)) === false) throw new Error('Not in prove post!')
     }
     let bioRejected = false

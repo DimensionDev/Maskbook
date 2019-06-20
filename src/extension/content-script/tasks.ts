@@ -1,6 +1,9 @@
 import { AutomatedTabTask, LiveSelector, MutationObserverWatcher, IntervalWatcher } from '@holoflows/kit'
 import { sleep, dispatchCustomEvents, timeout, untilDocumentReady } from '../../utils/utils'
 import { geti18nString } from '../../utils/i18n'
+import { fetchFacebookProvePost } from '../../social-network/facebook.com/fetch-prove-post'
+import { PersonIdentifier, PostIdentifier } from '../../database/type'
+import { fetchFacebookBio } from '../../social-network/facebook.com/fetch-bio'
 
 const bioCard = new LiveSelector().querySelector<HTMLDivElement>('#profile_timeline_intro_card')
 /**
@@ -71,18 +74,20 @@ export default AutomatedTabTask(
          * Access post url
          * Get post content
          */
-        async getPostContent() {
-            const post = new LiveSelector().querySelector('#contentArea').getElementsByTagName('p')
-            const [data] = await new MutationObserverWatcher(post).await(node => node.innerText)
-            return data
+        getPostContent(identifier: PostIdentifier<PersonIdentifier>) {
+            return fetchFacebookProvePost(identifier)
+            // const post = new LiveSelector().querySelector('#contentArea').getElementsByTagName('p')
+            // const [data] = await new MutationObserverWatcher(post).await(node => node.innerText)
+            // return data
         },
         /**
          * Access profile page
          * Get bio content
          */
-        async getBioContent() {
-            const [data] = await new MutationObserverWatcher(bioCard).await(node => node.innerText)
-            return data
+        getBioContent(identifier: PersonIdentifier) {
+            return fetchFacebookBio(identifier)
+            // const [data] = await new MutationObserverWatcher(bioCard).await(node => node.innerText)
+            // return data
         },
         /**
          * Access profile page
