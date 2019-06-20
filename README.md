@@ -61,4 +61,5 @@ After `Maskbook` and `@holoflows/kit` get stable, we will directly add `@holoflo
 -   ./tests - Some tests for Crypto algorithms
 -   ./stories - Folder for StoryBook
 -   ./protocols - Some standard definitions of protocols that used in Maskbook
--   ./network - How does Maskbook exchange informations between users
+-   ./network - How does Maskbook exchange information between users
+-   ./social-network/ - Maskbook's multiple network support (Work in progress)

@@ -1,7 +1,7 @@
 import tasks from '../extension/content-script/tasks'
 import { verifyOthersProve } from '../extension/background-script/CryptoService'
 import { sleep } from '../utils/utils'
-import { getProfilePageUrlAtFacebook, getPostUrlAtFacebook } from '../utils/type-transform/Username'
+import { getProfilePageUrlAtFacebook, getPostUrlAtFacebook } from '../social-network/facebook.com/parse-username'
 import { geti18nString } from '../utils/i18n'
 import { PersonIdentifier, PostIdentifier, PersonUI } from '../database/type'
 import { queryPerson } from '../database'

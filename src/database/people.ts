@@ -21,7 +21,8 @@
 import { PersonIdentifier, Identifier, GroupIdentifier } from './type'
 import { openDB, DBSchema } from 'idb/with-async-ittr'
 import { JsonWebKeyToCryptoKey, CryptoKeyToJsonWebKey } from '../utils/type-transform/CryptoKey-JsonWebKey'
-import { sendNewPersonMessageDB } from '../utils/messages'
+import { MessageCenter } from '../utils/messages'
+import { personRecordToPerson } from './helpers/person'
 
 //#region Type and utils
 /**
@@ -297,3 +298,7 @@ export async function getLocalKeysDB() {
     return result
 }
 //#endregion
+
+async function sendNewPersonMessageDB(personRecord: PersonRecord) {
+    MessageCenter.send('newPerson', await personRecordToPerson(personRecord))
+}

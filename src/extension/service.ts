@@ -2,6 +2,9 @@ import { AsyncCall } from '@holoflows/kit/es/Extension/Async-Call'
 import { GetContext, OnlyRunInContext } from '@holoflows/kit/es/Extension/Context'
 import * as MockService from './mock-service'
 import Serialization from '../utils/type-transform/Serialization'
+import { PersonIdentifier, GroupIdentifier, PostIdentifier } from '../database/type'
+import { fetchFacebookBio } from '../social-network/facebook.com/fetch-bio'
+import { fetchFacebookProvePost } from '../social-network/facebook.com/fetch-prove-post'
 
 interface Services {
     Crypto: typeof import('./background-script/CryptoService')
@@ -17,6 +20,15 @@ if (!('Services' in window)) {
     register(() => import('./background-script/PeopleService'), 'People', MockService.PeopleService)
 }
 
+Object.assign(window, {
+    PersonIdentifier,
+    GroupIdentifier,
+    PostIdentifier,
+    fetchs: {
+        bio: fetchFacebookBio,
+        post: fetchFacebookProvePost,
+    },
+})
 if (GetContext() === 'background') {
     Object.assign(window, { tasks: require('./content-script/tasks') })
     // Run tests
@@ -25,7 +37,7 @@ if (GetContext() === 'background') {
     require('../tests/sign&verify')
     require('../tests/friendship-discover')
     Object.assign(window, {
-        db2: {
+        db: {
             avatar: require('../database/avatar'),
             group: require('../database/group'),
             people: require('../database/people'),
