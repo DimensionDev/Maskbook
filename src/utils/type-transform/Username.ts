@@ -31,7 +31,6 @@ export function getPostUrlAtFacebook(post: PostIdentifier<PersonIdentifier>) {
  * Normalize profile url
  */
 export function getProfilePageUrlAtFacebook(user: PersonIdentifier | GroupIdentifier) {
-    // TODO:
     if (user instanceof GroupIdentifier) throw new Error('Not implemented')
     if (user.network !== 'facebook.com') throw new Error('Not implemented')
     const username = user.userId

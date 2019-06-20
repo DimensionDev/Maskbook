@@ -78,7 +78,6 @@ export default async function migrate() {
     const wait = (await queryPeopleCryptoKey()).map(record => {
         if (record.username === '$self')
             return People.storeMyIdentityDB({
-                // TODO: Need to update later !
                 identifier: new PersonIdentifier('facebook.com', '$self'),
                 groups: [],
                 publicKey: record.publicKey,

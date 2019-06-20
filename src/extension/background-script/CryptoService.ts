@@ -1,6 +1,5 @@
 import * as Alpha40 from '../../crypto/crypto-alpha-40'
 import { OnlyRunInContext } from '@holoflows/kit/es'
-import { addPersonPublicKey } from '../../key-management/people-gun'
 import { publishPostAESKey as publishPostAESKey_Service, queryPostAESKey } from '../../key-management/posts-gun'
 
 import { decodeText, encodeArrayBuffer, decodeArrayBuffer } from '../../utils/type-transform/String-ArrayBuffer'
@@ -10,7 +9,8 @@ import { toCompressSecp256k1Point, unCompressSecp256k1Point } from '../../utils/
 import { Person, getMyPrivateKeyAtFacebook, queryPerson } from '../../database'
 import { queryMyIdentityAtDB, storeNewPersonDB, queryPersonDB, queryLocalKeyDB } from '../../database/people'
 import { PersonIdentifier } from '../../database/type'
-import { gun } from '../../key-management/gun'
+import { addPersonPublicKey } from '../../key-management/people-gun'
+import { gun } from '../../network/gun/version.1'
 
 OnlyRunInContext('background', 'EncryptService')
 //#region Encrypt & Decrypt

@@ -1,4 +1,3 @@
-import { gun } from './gun'
 import tasks from '../extension/content-script/tasks'
 import { verifyOthersProve } from '../extension/background-script/CryptoService'
 import { sleep } from '../utils/utils'
@@ -6,6 +5,7 @@ import { getProfilePageUrlAtFacebook, getPostUrlAtFacebook } from '../utils/type
 import { geti18nString } from '../utils/i18n'
 import { PersonIdentifier, PostIdentifier, PersonUI } from '../database/type'
 import { queryPerson } from '../database'
+import { gun } from '../network/gun/version.1'
 
 export async function queryPersonFromGun(username: string) {
     return gun

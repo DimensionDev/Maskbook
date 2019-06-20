@@ -21,6 +21,7 @@
 import { PersonIdentifier, Identifier, GroupIdentifier } from './type'
 import { openDB, DBSchema } from 'idb/with-async-ittr'
 import { JsonWebKeyToCryptoKey, CryptoKeyToJsonWebKey } from '../utils/type-transform/CryptoKey-JsonWebKey'
+import { sendNewPersonMessageDB } from '../utils/messages'
 
 //#region Type and utils
 /**
@@ -117,7 +118,7 @@ const db = openDB<PeopleDB>('maskbook-people-v2', 1, {
 export async function storeNewPersonDB(record: PersonRecord): Promise<void> {
     const t = (await db).transaction('people', 'readwrite')
     await t.objectStore('people').put(await toDb(record))
-    // TODO: Send new person message
+    sendNewPersonMessageDB(record)
     return
 }
 /**
@@ -163,8 +164,8 @@ export async function updatePersonDB(person: Partial<PersonRecord> & Pick<Person
     const full = await t.objectStore('people').get(person.identifier.toText())
     if (!full) throw new Error('Person is not in the db')
     const o: PersonRecordInDatabase = { ...full, ...(await toDb(person as PersonRecord)) }
-    // TODO: Send new person message
     await t.objectStore('people').put(o)
+    sendNewPersonMessageDB(await outDb(o))
 }
 /**
  * Remove people from database

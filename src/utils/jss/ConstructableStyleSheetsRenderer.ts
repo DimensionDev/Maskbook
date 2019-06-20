@@ -424,7 +424,6 @@ export default class ConstructableStyleSheetsRenderer {
 
         // When rules are inserted using `insertRule` API, after `sheet.detach().attach()`
         // browsers remove those rules.
-        // TODO figure out if its a bug and if it is known.
         // Workaround is to redeploy the sheet.
         if (this.hasInsertedRules) {
             this.hasInsertedRules = false

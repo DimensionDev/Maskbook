@@ -34,10 +34,7 @@ export function Banner(props: Props) {
             <Toolbar className={classes.toolbar}>
                 <Box flex={1}>
                     <Typography variant="subtitle1" color="inherit">
-                        {/* // TODO: i18n */}
-                        {props.disabled
-                            ? "Sorry, you can't setup your maskbook account currently, please try again later"
-                            : geti18nString('banner_title')}
+                        {props.disabled ? geti18nString('banner_collecting_identity') : geti18nString('banner_title')}
                     </Typography>
                 </Box>
                 <Button

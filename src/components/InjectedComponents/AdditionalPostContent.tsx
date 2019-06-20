@@ -7,11 +7,7 @@ interface Props {
     children?: any
 }
 const useStyles = makeStyles({
-    upDivider: {
-        marginBottom: 6,
-        // TODO: ? is this useful?
-        marginBlock: 6,
-    },
+    upDivider: { marginBottom: 6 },
     title: { display: 'flex' },
     icon: { transform: 'translate(-1px, -1px)' },
     content: {

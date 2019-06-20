@@ -1,6 +1,6 @@
-import { gun } from './gun'
 import { PublishedAESKey } from '../crypto/crypto-alpha-40'
 import { OnlyRunInContext } from '@holoflows/kit/es'
+import { gun } from '../network/gun/version.1'
 
 OnlyRunInContext('background', 'gun')
 /**

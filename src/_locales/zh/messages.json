@@ -198,6 +198,9 @@
     "banner_title": {
         "message": "歡迎使用 Maskbook"
     },
+    "banner_collecting_identity": {
+        "message": "Maskbook 正在準備向導過程……"
+    },
     "banner_get_started": {
         "message": "開始使用"
     },
