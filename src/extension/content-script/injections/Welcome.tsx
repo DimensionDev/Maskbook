@@ -5,10 +5,12 @@ import { Banner } from '../../../components/Welcomes/Banner'
 import { renderInShadowRoot } from '../../../utils/jss/renderInShadowRoot'
 import Services from '../../service'
 import { getStorage, setStorage, LATEST_WELCOME_VERSION } from '../../../components/Welcomes/WelcomeVersion'
-import { PersonIdentifier } from '../../../database/type'
+import { isMobile } from '../../../social-network/facebook.com/isMobile'
 
 getStorage().then(({ init, userDismissedWelcomeAtVersion }) => {
-    const to = new MutationObserverWatcher(new LiveSelector().querySelector<HTMLDivElement>('#pagelet_composer'))
+    const to = new MutationObserverWatcher(
+        new LiveSelector().querySelector<HTMLDivElement>(isMobile ? '#MComposer' : '#pagelet_composer'),
+    )
         .enableSingleMode()
         .setDomProxyOption({ beforeShadowRootInit: { mode: 'closed' } })
         .startWatch()
@@ -17,7 +19,7 @@ getStorage().then(({ init, userDismissedWelcomeAtVersion }) => {
     const unmount = renderInShadowRoot(<BannerContainer unmount={() => unmount()} />, to.firstVirtualNode.beforeShadow)
 })
 function BannerContainer({ unmount }: { unmount: () => void }) {
-    const [id, set] = useState(PersonIdentifier.unknown)
+    const [id, set] = useState(myUsernameRef.value)
     useEffect(() => myUsernameRef.addListener(set))
     return (
         <Banner
@@ -28,7 +30,7 @@ function BannerContainer({ unmount }: { unmount: () => void }) {
             }}
             getStarted={() => {
                 unmount()
-                Services.Welcome.openWelcomePage(id)
+                Services.Welcome.openWelcomePage(id, isMobile)
                 setStorage({ init: LATEST_WELCOME_VERSION })
             }}
         />

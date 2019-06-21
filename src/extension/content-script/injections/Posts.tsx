@@ -10,8 +10,8 @@ import { deconstructPayload } from '../../../utils/type-transform/Payload'
 import Services from '../../service'
 import { PersonIdentifier, PostIdentifier } from '../../../database/type'
 import { Person } from '../../../database'
+import { isMobile } from '../../../social-network/facebook.com/isMobile'
 
-const isMobile = location.hostname.match('m.facebook.com')
 const posts = new LiveSelector().querySelectorAll<HTMLDivElement>(
     isMobile ? '.story_body_container ' : '.userContent, .userContent+*+div>div>div>div>div',
 )

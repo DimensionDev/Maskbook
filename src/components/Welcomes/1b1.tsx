@@ -27,7 +27,8 @@ interface Props {
 }
 const useStyles = makeStyles(theme => ({
     paper: {
-        width: 600,
+        maxWidth: 600,
+        width: '100%',
         boxSizing: 'border-box',
     },
     nav: {

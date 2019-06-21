@@ -22,7 +22,8 @@ interface Props {
 const useStyles = makeStyles(theme => ({
     paper: {
         paddingBottom: '1rem',
-        width: 600,
+        maxWidth: 600,
+        width: '100%',
         boxSizing: 'border-box',
         '& article': {
             padding: '0 3rem',

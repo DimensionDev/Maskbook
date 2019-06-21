@@ -12,7 +12,7 @@ import { RouteComponentProps, withRouter } from 'react-router'
 import { getProfilePageUrlAtFacebook } from '../../../social-network/facebook.com/parse-username'
 import { setStorage, LATEST_WELCOME_VERSION } from '../../../components/Welcomes/WelcomeVersion'
 import { geti18nString } from '../../../utils/i18n'
-import { Dialog } from '@material-ui/core'
+import { Dialog, withMobileDialog } from '@material-ui/core'
 import { Identifier, PersonIdentifier } from '../../../database/type'
 
 //#region Welcome
@@ -122,6 +122,7 @@ function Welcome(props: Welcome) {
             return <Welcome2 />
     }
 }
+const ResponsiveDialog = withMobileDialog()(Dialog)
 export default withRouter(function _WelcomePortal(props: RouteComponentProps<{ identifier: string }>) {
     const [step, setStep] = useState(WelcomeState.Start)
     const [provePost, setProvePost] = useState('')
@@ -141,7 +142,7 @@ export default withRouter(function _WelcomePortal(props: RouteComponentProps<{ i
     )
 
     return (
-        <Dialog open>
+        <ResponsiveDialog open>
             <Welcome
                 provePost={provePost}
                 currentStep={step}
@@ -150,7 +151,7 @@ export default withRouter(function _WelcomePortal(props: RouteComponentProps<{ i
                 onFinish={WelcomeActions.onFinish}
                 identity={identifier}
             />
-        </Dialog>
+        </ResponsiveDialog>
     )
 })
 //#endregion

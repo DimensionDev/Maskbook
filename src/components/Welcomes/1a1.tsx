@@ -8,7 +8,8 @@ const useStyles = makeStyles(theme => ({
     paper: {
         padding: '2rem 4rem 1rem 4rem',
         textAlign: 'center',
-        width: 600,
+        maxWidth: 600,
+        width: '100%',
         boxSizing: 'border-box',
         '& > *': {
             marginBottom: theme.spacing(3),

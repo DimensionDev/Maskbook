@@ -9,7 +9,28 @@ import { Person } from '../../../database'
 const myUsernameLiveSelector = new LiveSelector().querySelector<HTMLAnchorElement>(
     `[aria-label="Facebook"][role="navigation"] [data-click="profile_icon"] a`,
 )
+
+const myUsernameLiveSelectorOnMobile = new LiveSelector()
+    .querySelectorAll('article')
+    .map(x => x.dataset.store)
+    .map(x => JSON.parse(x).actor_id as number)
+    .replace(orig => [
+        orig.reduce((previous, current) => {
+            if (location.hostname === 'm.facebook.com' && location.pathname === '/') {
+                if (previous === current) return current
+            }
+            return undefined!
+        }),
+    ])
+    .map(x => new PersonIdentifier('facebook.com', x.toString()))
 export const myUsernameRef = new ValueRef(PersonIdentifier.unknown)
+Object.assign(window, {
+    whoAmI: {
+        ref: myUsernameRef,
+        pc: myUsernameLiveSelector,
+        m: myUsernameLiveSelectorOnMobile,
+    },
+})
 function assign(i: PersonIdentifier) {
     if (i.isUnknown) return
     if (i.equals(myUsernameRef.value)) return
@@ -19,7 +40,12 @@ myUsernameRef.addListener(id => {
     if (id.isUnknown) return
     Services.People.resolveIdentityAtFacebook(id)
 })
-new MutationObserverWatcher(myUsernameLiveSelector.clone().map(getPersonIdentifierAtFacebook))
+new MutationObserverWatcher(
+    myUsernameLiveSelector
+        .clone()
+        .map(getPersonIdentifierAtFacebook)
+        .concat(myUsernameLiveSelectorOnMobile),
+)
     .enableSingleMode()
     .setComparer(undefined, (a, b) => a.equals(b))
     .addListener('onAdd', e => assign(e.data.value))
@@ -30,7 +56,7 @@ const identities = new ValueRef<Person[]>([])
 Services.People.queryMyIdentity('facebook.com').then(x => (identities.value = x))
 export function useIdentitiesAtFacebook(): Person[] {
     const [currentIdentities, set] = useState(identities.value)
-    useEffect(() => identities.addListener(set))
+    useEffect(() => identities.addListener(v => set(v)))
     return currentIdentities
 }
 export function getPersonIdentifierAtFacebook(links: HTMLAnchorElement[] | HTMLAnchorElement | null): PersonIdentifier {
