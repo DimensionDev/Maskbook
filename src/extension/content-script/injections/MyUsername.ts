@@ -14,14 +14,18 @@ const myUsernameLiveSelectorOnMobile = new LiveSelector()
     .querySelectorAll('article')
     .map(x => x.dataset.store)
     .map(x => JSON.parse(x).actor_id as number)
-    .replace(orig => [
-        orig.reduce((previous, current) => {
-            if (location.hostname === 'm.facebook.com' && location.pathname === '/') {
-                if (previous === current) return current
-            }
-            return undefined!
-        }),
-    ])
+    .replace(orig =>
+        orig.length
+            ? [
+                  orig.reduce((previous, current) => {
+                      if (location.hostname === 'm.facebook.com' && location.pathname === '/') {
+                          if (previous === current) return current
+                      }
+                      return undefined!
+                  }),
+              ]
+            : [],
+    )
     .map(x => new PersonIdentifier('facebook.com', x.toString()))
 export const myUsernameRef = new ValueRef(PersonIdentifier.unknown)
 Object.assign(window, {
