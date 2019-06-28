@@ -26,13 +26,10 @@ export async function pasteIntoPostBox(text: string, warningText: string) {
     if (!activated.evaluateOnce()[0]) {
         try {
             console.log('Awaiting to click the post box')
-            const [dom1] = await timeout(new MutationObserverWatcher(notActivated).await(), 1000)
+            const [dom1] = await timeout(new MutationObserverWatcher(notActivated), 1000)
             dom1.click()
             console.log('Non-activated post box found Stage 1', dom1)
-            const [dom2] = await timeout(
-                new IntervalWatcher(notActivated.clone().filter(x => x !== dom1)).await(),
-                3000,
-            )
+            const [dom2] = await timeout(new IntervalWatcher(notActivated.clone().filter(x => x !== dom1)), 3000)
             console.log('Non-activated post box found Stage 2', dom2)
             dom2.click()
             if (!dialog.evaluateOnce()[0]) throw new Error('Click not working')
@@ -44,7 +41,7 @@ export async function pasteIntoPostBox(text: string, warningText: string) {
     }
 
     try {
-        await timeout(new MutationObserverWatcher(dialog).await(), 4000)
+        await timeout(new MutationObserverWatcher(dialog), 4000)
         console.log('Dialog appeared')
         const [element] = activated.evaluateOnce()
         element.focus()
@@ -98,10 +95,10 @@ export default AutomatedTabTask(
             try {
                 const pencil = new MutationObserverWatcher(
                     bioCard.clone().querySelector<HTMLAnchorElement>('[data-tooltip-content][href="#"]'),
-                ).await()
+                )
                 const edit = new MutationObserverWatcher(
                     bioCard.clone().querySelector<HTMLButtonElement>('button[type="submit"]'),
-                ).await()
+                )
                 const [bioEditButton] = await timeout(Promise.race([pencil, edit]), 2000)
                 await sleep(200)
                 bioEditButton.click()
@@ -113,7 +110,7 @@ export default AutomatedTabTask(
 
             try {
                 const [input] = await timeout(
-                    new MutationObserverWatcher(bioCard.clone().getElementsByTagName('textarea')).await(),
+                    new MutationObserverWatcher(bioCard.clone().getElementsByTagName('textarea')),
                     2000,
                 )
                 await sleep(200)
