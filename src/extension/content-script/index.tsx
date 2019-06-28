@@ -1,7 +1,3 @@
-if (process.env.NODE_ENV === 'development') {
-    require('react-devtools')
-}
-
 import './injections/Welcome' // ? Inject welcome
 import './injections/PostBox' // ? Inject postbox
 import './injections/Posts' // ? Inject all posts
