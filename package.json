@@ -15,6 +15,7 @@
     "@types/react-dom": "^16.8.4",
     "@types/react-router-dom": "^4.3.3",
     "@types/tiny-secp256k1": "^1.0.0",
+    "anchorme": "^1.1.2",
     "classnames": "^2.2.6",
     "construct-style-sheets-polyfill": "^2.0.1",
     "copy-webpack-plugin": "^5.0.3",

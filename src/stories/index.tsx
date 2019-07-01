@@ -23,7 +23,7 @@ import { AddToKeyStoreUI } from '../components/InjectedComponents/AddToKeyStore'
 import { Banner } from '../components/Welcomes/Banner'
 import { useShareMenu } from '../components/InjectedComponents/SelectPeopleDialog'
 import { sleep } from '../utils/utils'
-import { Button } from '@material-ui/core'
+import { Button, Paper } from '@material-ui/core'
 import { Person } from '../database'
 import { PersonIdentifier } from '../database/type'
 import { RenderInShadowRootWrapper } from '../utils/jss/renderInShadowRoot'
@@ -114,7 +114,11 @@ const FakePost: React.FC<{ title: string }> = props => (
 storiesOf('Injections', module)
     .add('Checkbox (unused)', () => <EncryptionCheckbox onCheck={action('Check')} />)
     .add('AdditionalPostBox', () => <AdditionalPostBoxUI people={demoPeople} onRequestPost={action('onRequestPost')} />)
-    .add('Additional Post Content', () => <AdditionalContent title="Additional Content" children="Content" />)
+    .add('Additional Post Content', () => (
+        <Paper>
+            <AdditionalContent title="Additional Content" renderText={text('Rich text', '')} />
+        </Paper>
+    ))
     .add('SelectPeople', () => {
         function SelectPeople() {
             const [selected, select] = React.useState<Person[]>([])

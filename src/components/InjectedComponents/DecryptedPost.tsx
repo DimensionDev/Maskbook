@@ -43,13 +43,7 @@ function DecryptPostSuccess({ data, people, ...props }: DecryptPostSuccessProps)
                     )}
                 </>
             }
-            children={data.content.split('\n').reduce(
-                (prev, curr, i) => {
-                    if (i === 0) return [curr]
-                    else return [...prev, curr, <br />]
-                },
-                [] as React.ReactNode[],
-            )}
+            renderText={data.content}
         />
     )
 }

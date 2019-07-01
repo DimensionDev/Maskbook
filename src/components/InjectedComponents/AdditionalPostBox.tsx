@@ -86,19 +86,25 @@ export function AdditionalPostBox() {
     const [identity, setIdentity] = useState<Person[]>([])
     useAsync(() => Services.People.queryMyIdentity('facebook.com'), []).then(setIdentity)
 
+    const onRequestPost = useCallback(
+        async (people: Person[], text: string) => {
+            const [encrypted, token] = await Services.Crypto.encryptTo(
+                text,
+                people.map(x => x.identifier),
+                identity[0].identifier,
+            )
+            const fullPost = geti18nString('additional_post_box__encrypted_post_pre', encrypted)
+            pasteIntoPostBox(fullPost, geti18nString('additional_post_box__encrypted_failed'))
+            Services.Crypto.publishPostAESKey(token)
+        },
+        [identity[0]],
+    )
+    // TODO: i18n
+    if (identity.length === 0) return <>Sorry, Maskbook cannot identify who you are. Please try again later.</>
+
     // TODO: Multiple account
     if (identity.length > 1) console.warn('Multiple identity found. Let user choose one.')
 
-    const onRequestPost = useCallback(async (people: Person[], text: string) => {
-        const [encrypted, token] = await Services.Crypto.encryptTo(
-            text,
-            people.map(x => x.identifier),
-            identity[0].identifier,
-        )
-        const fullPost = geti18nString('additional_post_box__encrypted_post_pre', encrypted)
-        pasteIntoPostBox(fullPost, geti18nString('additional_post_box__encrypted_failed'))
-        Services.Crypto.publishPostAESKey(token)
-    }, [])
     return (
         <MyIdentityContext.Provider value={identity[0]}>
             <AdditionalPostBoxUI people={people} onRequestPost={onRequestPost} />
