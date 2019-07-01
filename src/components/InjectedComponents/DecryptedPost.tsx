@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useState, useEffect } from 'react'
 import AsyncComponent from '../../utils/components/AsyncComponent'
 import { AdditionalContent } from './AdditionalPostContent'
 import { useShareMenu } from './SelectPeopleDialog'
@@ -6,9 +6,11 @@ import { sleep } from '../../utils/utils'
 import Services from '../../extension/service'
 import { geti18nString } from '../../utils/i18n'
 import { makeStyles } from '@material-ui/styles'
-import { Link, Box } from '@material-ui/core'
+import { Link, Box, SnackbarContent, Button } from '@material-ui/core'
 import { Person } from '../../database'
 import { PersonIdentifier } from '../../database/type'
+import { myUsernameRef } from '../../extension/content-script/injections/MyUsername'
+import { isMobile } from '../../social-network/facebook.com/isMobile'
 
 interface DecryptPostSuccessProps {
     data: { signatureVerifyResult: boolean; content: string }
@@ -53,7 +55,34 @@ function DecryptPostSuccess({ data, people, ...props }: DecryptPostSuccessProps)
 }
 
 const DecryptPostAwaiting = <AdditionalContent title={geti18nString('decrypted_postbox_decrypting')} />
+const useNotSetUpYetStyles = makeStyles({
+    root: {
+        marginBottom: '2em',
+    },
+})
+function NotSetupYetPrompt() {
+    const [id, set] = useState(myUsernameRef.value)
+    useEffect(() => myUsernameRef.addListener(set))
+
+    const styles = useNotSetUpYetStyles()
+    const button = (
+        <Button onClick={() => Services.Welcome.openWelcomePage(id, isMobile)} color="primary" size="small">
+            {geti18nString('click_to_setup')}
+        </Button>
+    )
+    return (
+        <SnackbarContent
+            classes={styles}
+            elevation={0}
+            message={geti18nString('service_not_setup_yet')}
+            action={button}
+        />
+    )
+}
 function DecryptPostFailed({ error }: { error: Error }) {
+    if (error && error.message === geti18nString('service_not_setup_yet')) {
+        return <NotSetupYetPrompt />
+    }
     return (
         <AdditionalContent title={geti18nString('decrypted_postbox_failed')}>
             {error && error.message}

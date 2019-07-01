@@ -36,6 +36,9 @@
     "decrypted_postbox_add_decryptor": {
         "message": "查看或添加可解密權限者"
     },
+    "click_to_setup": {
+        "message": "點此開始配置"
+    },
     "decrypted_postbox_verified": {
         "message": "數字簽名驗證成功 ✔"
     },

@@ -35,6 +35,9 @@
     "decrypted_postbox_add_decryptor": {
         "message": "View / add receiver"
     },
+    "click_to_setup": {
+        "message": "Click here to setup your Maskbook account!"
+    },
     "decrypted_postbox_verified": {
         "message": "Signature verified ✔"
     },
