@@ -10,7 +10,7 @@ if (location.hostname.match('m.facebook.com')) {
     composeBox = new LiveSelector()
         .querySelector('[role="main"] [role="dialog"][aria-label]')
         .map(x => x.lastElementChild)
-        .map(x => x.lastElementChild)
+        .map(x => x.firstElementChild)
 }
 const watcher = new MutationObserverWatcher(composeBox)
     .enableSingleMode()

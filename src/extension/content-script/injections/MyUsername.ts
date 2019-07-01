@@ -63,16 +63,14 @@ export function useIdentitiesAtFacebook(): Person[] {
     useEffect(() => identities.addListener(v => set(v)))
     return currentIdentities
 }
-export function getPersonIdentifierAtFacebook(links: HTMLAnchorElement[] | HTMLAnchorElement | null): PersonIdentifier {
+type link = HTMLAnchorElement | null | undefined
+export function getPersonIdentifierAtFacebook(links: link[] | link): PersonIdentifier {
     try {
-        if (links === null) return PersonIdentifier.unknown
-        if (!links) return PersonIdentifier.unknown
         // tslint:disable-next-line: no-parameter-reassignment
         if (!Array.isArray(links)) links = [links]
-        const [id] = links
-            .map(link => link.href)
-            .map(getUserID)
-            .filter((x): x is string => !!x)
+        const [link] = links
+        if (link === null || link === undefined) return PersonIdentifier.unknown
+        const id = getUserID(link.href)
         if (id) return new PersonIdentifier('facebook.com', id)
     } catch (e) {
         console.error(e)
