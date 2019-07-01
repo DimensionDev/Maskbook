@@ -258,6 +258,9 @@
         "message": "Support for Alpha41 is dropped. Tell your friends to upgrade Maskbook!"
     },
     "options_index_welcome": {
-        "message": "First to Maskbook?"
+        "message": "Maskbook options page"
+    },
+    "options_index_setup": {
+        "message": "Setup or backup your account"
     }
 }

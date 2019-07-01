@@ -27,6 +27,7 @@ import { Button } from '@material-ui/core'
 import { Person } from '../database'
 import { PersonIdentifier } from '../database/type'
 import { RenderInShadowRootWrapper } from '../utils/jss/renderInShadowRoot'
+import { OptionsPage } from '../components/OptionsPage'
 
 const demoPeople: Person[] = [
     {
@@ -76,6 +77,8 @@ storiesOf('Welcome', module)
     ))
     .add('Step 1b-1', () => <Welcome1b1 back={linkTo('Welcome', 'Step 0')} restore={action('Restore with')} />)
     .add('Step 2', () => <Welcome2 />)
+
+storiesOf('Options page', module).add('Index', () => <OptionsPage />)
 
 storiesOf('Dashboard (unused)', module)
     .add('Identity Component (unused)', () => <Identity person={demoPeople[0]} onClick={action('Click')} />)

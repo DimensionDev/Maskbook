@@ -1,5 +1,3 @@
-import { GetContext } from '@holoflows/kit/es'
-
 import en from '../_locales/en/messages.json'
 import zh from '../_locales/zh/messages.json'
 

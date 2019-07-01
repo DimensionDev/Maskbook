@@ -259,6 +259,9 @@
         "message": "已經不再支持 Alpha41。請提醒對方安裝新版 Maskbook。"
     },
     "options_index_welcome": {
-        "message": "首次來到 Maskbook？"
+        "message": "Maskbook 設置頁面"
+    },
+    "options_index_setup": {
+        "message": "設置或備份您的 Maskbook"
     }
 }
