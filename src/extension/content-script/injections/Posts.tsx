@@ -129,7 +129,10 @@ function getPostBy(node: DomProxy) {
 }
 function getPostID(node: DomProxy) {
     if (isMobile) {
-        const idElement = node.current.querySelector('abbr')!.closest('a')!
+        const abbr = node.current.querySelector('abbr')
+        if (!abbr) return null
+        const idElement = abbr.closest('a')
+        if (!idElement) return null
         const id = new URL(idElement.href)
         return id.searchParams.get('id') || ''
     } else {
