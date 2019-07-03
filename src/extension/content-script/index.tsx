@@ -7,6 +7,8 @@ import './tasks' // ? AutomatedTabTask Run tasks when invoked by background page
 import * as HoloflowsKit from '@holoflows/kit'
 Object.assign(window, HoloflowsKit)
 
+// Safari does not have navigator.clipboard
+if (!navigator.clipboard) Object.assign(navigator, { clipboard: {} })
 navigator.clipboard.writeText = async (data: string) => {
     const textArea = document.createElement('textarea')
     textArea.value = data
