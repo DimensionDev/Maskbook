@@ -5,5 +5,6 @@ if (process.env.NODE_ENV === 'development') {
 }
 if (GetContext() === 'content') {
     uiSetup()
+    console.log('Maskbook content script loaded')
     require('./extension/content-script/index')
 }

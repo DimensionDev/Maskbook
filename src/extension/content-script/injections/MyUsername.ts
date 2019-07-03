@@ -26,6 +26,7 @@ const myUsernameLiveSelectorOnMobile = new LiveSelector()
               ]
             : [],
     )
+    .map(x => x)
     .map(x => new PersonIdentifier('facebook.com', x.toString()))
 export const myUsernameRef = new ValueRef(PersonIdentifier.unknown)
 Object.assign(window, {
