@@ -76,8 +76,9 @@ export async function pasteIntoPostBox(text: string, warningText: string) {
 
     function copyFailed() {
         console.warn('Text not pasted to the text area')
-        navigator.clipboard.writeText(text)
-        alert(warningText)
+        // navigator.clipboard.writeText(text)
+        // alert(warningText)
+        prompt(warningText, text)
     }
 }
 export default AutomatedTabTask(

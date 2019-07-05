@@ -15,7 +15,7 @@
         "message": "Decrypt this post with $1"
     },
     "additional_post_box__encrypted_failed": {
-        "message": "Encrypted text has been copied into the clipboard!\nHowever, you need to paste it to the post box by yourself."
+        "message": "Please paste the following text into the paste box."
     },
     "add_to_key_store_success": {
         "message": "Maskbook public key added to keystore ✔"

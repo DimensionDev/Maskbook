@@ -16,7 +16,7 @@
         "description": "$1 must at the end of the string."
     },
     "additional_post_box__encrypted_failed": {
-        "message": "加密文本已經拷貝至剪貼板！\n不過，你需要手動粘貼到發佈框。"
+        "message": "請將以下内容拷貝至發佈框。"
     },
     "add_to_key_store_success": {
         "message": "Maskbook 已獲取此公鑰並添加至本地 ✔"
