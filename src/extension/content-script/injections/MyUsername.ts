@@ -69,10 +69,12 @@ export function getPersonIdentifierAtFacebook(links: link[] | link): PersonIdent
     try {
         // tslint:disable-next-line: no-parameter-reassignment
         if (!Array.isArray(links)) links = [links]
-        const [link] = links
-        if (link === null || link === undefined) return PersonIdentifier.unknown
-        const id = getUserID(link.href)
+        const [id] = links
+            .filter(x => x)
+            .map(x => getUserID(x!.href))
+            .filter(x => x)
         if (id) return new PersonIdentifier('facebook.com', id)
+        return PersonIdentifier.unknown
     } catch (e) {
         console.error(e)
     }
