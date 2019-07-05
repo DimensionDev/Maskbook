@@ -26,18 +26,22 @@ function PostInspector(props: PostInspectorProps) {
     const { post, postBy, postId } = props
     const whoAmI = (useIdentitiesAtFacebook()[0] || { identifier: PersonIdentifier.unknown }).identifier
     const people = usePeople()
+    const [alreadySelectedPreviously, setAlreadySelectedPreviously] = useState<Person[]>([])
+
     if (postBy.isUnknown) return null
     const type = {
         encryptedPost: deconstructPayload(post),
         provePost: post.match(/🔒(.+)🔒/)!,
     }
+    useAsync(() => {
+        if (!whoAmI.equals(postBy)) return Promise.resolve([])
+        if (!type.encryptedPost) return Promise.resolve([])
+        const { iv } = type.encryptedPost
+        return Services.Crypto.getSharedListOfPost(iv)
+    }, [post]).then(p => setAlreadySelectedPreviously(p))
     if (type.encryptedPost) {
         props.needZip()
-        const [alreadySelectedPreviously, setAlreadySelectedPreviously] = useState<Person[]>([])
         const { iv, ownersAESKeyEncrypted } = type.encryptedPost
-        if (whoAmI.equals(postBy)) {
-            useAsync(() => Services.Crypto.getSharedListOfPost(iv), [post]).then(p => setAlreadySelectedPreviously(p))
-        }
         return (
             <DecryptPostUI.UI
                 requestAppendDecryptor={async people => {

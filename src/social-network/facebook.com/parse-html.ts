@@ -1,5 +1,6 @@
 /**
  * Parse static result from fb
+ * ! TODO: This is not work in Firefox Desktop
  */
 export async function parseFacebookStaticHTML(url: RequestInfo) {
     const request = await fetch(url, { credentials: 'include' })
