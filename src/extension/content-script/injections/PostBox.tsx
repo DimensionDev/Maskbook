@@ -5,7 +5,7 @@ import { renderInShadowRoot } from '../../../utils/jss/renderInShadowRoot'
 
 let composeBox: LiveSelector<Element>
 if (location.hostname.match('m.facebook.com')) {
-    composeBox = new LiveSelector().querySelector('form textarea')
+    composeBox = new LiveSelector().querySelector('#structured_composer_form')
 } else {
     composeBox = new LiveSelector()
         .querySelector('[role="main"] [role="dialog"][aria-label]')

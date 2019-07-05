@@ -4,6 +4,7 @@ import { geti18nString } from '../../utils/i18n'
 import { fetchFacebookProvePost } from '../../social-network/facebook.com/fetch-prove-post'
 import { PersonIdentifier, PostIdentifier } from '../../database/type'
 import { fetchFacebookBio } from '../../social-network/facebook.com/fetch-bio'
+import { isMobile } from '../../social-network/facebook.com/isMobile'
 
 const bioCard = new LiveSelector().querySelector<HTMLDivElement>('#profile_timeline_intro_card')
 /**
@@ -20,10 +21,12 @@ export async function pasteIntoPostBox(text: string, warningText: string) {
         .querySelector(`[role="region"]`)
         .querySelector('textarea, [aria-multiline="true"]')
         .closest<HTMLDivElement>(1)
-    const activated = new LiveSelector().querySelector<HTMLDivElement>('.notranslate')
-    await sleep(2000)
+    const activated = new LiveSelector().querySelector<HTMLDivElement | HTMLTextAreaElement>(
+        isMobile ? 'form textarea' : '.notranslate',
+    )
+    await sleep(1000)
     // If page is just loaded
-    if (!activated.evaluateOnce()[0]) {
+    if (isMobile === false && !activated.evaluateOnce()[0]) {
         try {
             console.log('Awaiting to click the post box')
             const [dom1] = await timeout(new MutationObserverWatcher(notActivated), 1000)
@@ -41,17 +44,28 @@ export async function pasteIntoPostBox(text: string, warningText: string) {
     }
 
     try {
-        await timeout(new MutationObserverWatcher(dialog), 4000)
-        console.log('Dialog appeared')
+        if (!isMobile) {
+            await timeout(new MutationObserverWatcher(dialog), 4000)
+            console.log('Dialog appeared')
+        }
         const [element] = activated.evaluateOnce()
         element.focus()
         await sleep(100)
-        dispatchCustomEvents('paste', text)
+        if (isMobile) {
+            dispatchCustomEvents('input', text)
+        } else {
+            dispatchCustomEvents('paste', text)
+        }
         await sleep(400)
 
-        // Prevent Custom Paste failed, this will cause service not available to user.
-        if (element.innerText.indexOf(text) === -1) {
-            copyFailed()
+        if (isMobile) {
+            const e = document.querySelector<HTMLDivElement>('.mentions-placeholder')
+            if (e) e.style.display = 'none'
+        } else {
+            // Prevent Custom Paste failed, this will cause service not available to user.
+            if (element.innerText.indexOf(text) === -1) {
+                copyFailed()
+            }
         }
     } catch {
         copyFailed()
