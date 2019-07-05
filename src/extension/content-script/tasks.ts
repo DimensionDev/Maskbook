@@ -61,6 +61,7 @@ export async function pasteIntoPostBox(text: string, warningText: string) {
         if (isMobile) {
             const e = document.querySelector<HTMLDivElement>('.mentions-placeholder')
             if (e) e.style.display = 'none'
+            copyFailed()
         } else {
             // Prevent Custom Paste failed, this will cause service not available to user.
             if (element.innerText.indexOf(text) === -1) {

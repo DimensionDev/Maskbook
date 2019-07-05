@@ -1,7 +1,9 @@
 import { GetContext } from '@holoflows/kit/es'
 import { uiSetup } from './setup'
 if (process.env.NODE_ENV === 'development') {
-    require('react-devtools')
+    try {
+        require('react-devtools')
+    } catch {}
 }
 if (GetContext() === 'content') {
     uiSetup()
