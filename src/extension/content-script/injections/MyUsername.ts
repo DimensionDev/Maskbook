@@ -83,7 +83,7 @@ export function getPersonIdentifierAtFacebook(links: link[] | link): PersonIdent
 function getUserID(x: string) {
     if (!x) return null
     const relative = !x.startsWith('https://') && !x.startsWith('http://')
-    const url = new URL(x, relative ? location.host : undefined)
+    const url = relative ? new URL(x, location.host) : new URL(x)
 
     if (url.hostname !== 'www.facebook.com' && url.hostname !== 'm.facebook.com') return null
     if (url.pathname.endsWith('.php')) {
