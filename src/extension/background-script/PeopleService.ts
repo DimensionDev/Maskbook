@@ -1,5 +1,5 @@
 import { OnlyRunInContext } from '@holoflows/kit/es'
-import { Person, queryPeopleWithQuery, personRecordToPerson } from '../../database'
+import { Person, queryPeopleWithQuery, personRecordToPerson, storeAvatar } from '../../database'
 import {
     storeMyIdentityDB,
     PersonRecordPublicPrivate,
@@ -10,6 +10,7 @@ import {
     removeMyIdentityAtDB,
     queryLocalKeyDB,
     deleteLocalKeyDB,
+    updatePersonDB,
 } from '../../database/people'
 import { UpgradeBackupJSONFile } from '../../utils/type-transform/BackupFile'
 import { PersonIdentifier, GroupIdentifier, GroupType } from '../../database/type'
@@ -104,7 +105,7 @@ export async function restoreBackup(json: object, whoAmI?: PersonIdentifier) {
 }
 
 /**
- * Resolve identity at facebook.com
+ * Resolve my possible identity at facebook.com
  */
 export async function resolveIdentityAtFacebook(identifier: PersonIdentifier) {
     const unknown = new PersonIdentifier('facebook.com', '$unknown')
@@ -130,4 +131,10 @@ export async function resolveIdentityAtFacebook(identifier: PersonIdentifier) {
             deleteLocalKeyDB(self)
         }
     }
+}
+
+export async function updatePersonInfo(identifier: PersonIdentifier, data: { nickname?: string; avatarURL?: string }) {
+    const { avatarURL, nickname } = data
+    if (nickname) updatePersonDB({ identifier, nickname })
+    if (avatarURL) storeAvatar(identifier, avatarURL)
 }

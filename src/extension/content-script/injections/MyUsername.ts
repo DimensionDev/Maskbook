@@ -48,7 +48,7 @@ myUsernameRef.addListener(id => {
 new MutationObserverWatcher(
     myUsernameLiveSelector
         .clone()
-        .map(getPersonIdentifierAtFacebook)
+        .map(x => getPersonIdentifierAtFacebook(x, false))
         .concat(myUsernameLiveSelectorOnMobile),
 )
     .enableSingleMode()
@@ -65,15 +65,26 @@ export function useIdentitiesAtFacebook(): Person[] {
     return currentIdentities
 }
 type link = HTMLAnchorElement | null | undefined
-export function getPersonIdentifierAtFacebook(links: link[] | link): PersonIdentifier {
+export function getPersonIdentifierAtFacebook(links: link[] | link, allowCollectInfo: boolean): PersonIdentifier {
     try {
         // tslint:disable-next-line: no-parameter-reassignment
         if (!Array.isArray(links)) links = [links]
-        const [id] = links
+        const result = links
             .filter(x => x)
-            .map(x => getUserID(x!.href))
-            .filter(x => x)
-        if (id) return new PersonIdentifier('facebook.com', id)
+            .map(x => ({ nickname: x!.innerText, id: getUserID(x!.href), dom: x }))
+            .filter(x => x.id)
+        const { dom, id, nickname } = result[0] || ({} as any)
+        if (id) {
+            const result = new PersonIdentifier('facebook.com', id)
+            if (allowCollectInfo)
+                try {
+                    const avatar = dom!.closest('.clearfix')!.parentElement!.querySelector('img')!
+                    if (avatar.getAttribute('aria-label') === nickname && nickname) {
+                        Services.People.updatePersonInfo(result, { nickname, avatarURL: avatar.src })
+                    }
+                } catch {}
+            return result
+        }
         return PersonIdentifier.unknown
     } catch (e) {
         console.error(e)

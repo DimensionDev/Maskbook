@@ -79,7 +79,7 @@ new MutationObserverWatcher(posts)
     .assignKeys(node => node.innerText)
     .useForeach(node => {
         // Get author
-        const postBy = getPostBy(node)
+        const postBy = getPostBy(node, deconstructPayload(node.current.innerText) !== null)
         // Get post id
         const postId = getPostID(node)
         // Click "See more" if it may be a encrypted post
@@ -135,9 +135,9 @@ new MutationObserverWatcher(posts)
     .omitWarningForRepeatedKeys()
     .startWatch()
 
-function getPostBy(node: DomProxy) {
+function getPostBy(node: DomProxy, allowCollectInfo: boolean) {
     const dom = isMobile ? node.current.querySelectorAll('a') : [node.current.parentElement!.querySelectorAll('a')[1]]
-    return getPersonIdentifierAtFacebook(Array.from(dom))
+    return getPersonIdentifierAtFacebook(Array.from(dom), allowCollectInfo)
 }
 function getPostID(node: DomProxy) {
     if (isMobile) {
