@@ -1,6 +1,6 @@
 {
   "name": "maskbook",
-  "version": "1.3.2",
+  "version": "1.4.0",
   "private": true,
   "dependencies": {
     "@holoflows/kit": "https://github.com/DimensionDev/holoflows-kit",
