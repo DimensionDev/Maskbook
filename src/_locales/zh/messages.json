@@ -2,6 +2,9 @@
     "manifest_description": {
         "message": "在臉書發佈加密訊息，只讓你的朋友閱讀。"
     },
+    "additional_post_box__dont_know_who_you_are": {
+        "message": "抱歉，Maskbook 無法發現你是誰，所以加密框暫時不可用。"
+    },
     "additional_post_box__placeholder_w_name": {
         "message": "Hey $1, 有何所思？用 Maskbook 加密分享。"
     },

@@ -38,7 +38,6 @@ async function deriveAESKey(
     )
 
     const _salt = typeof salt === 'string' ? decodeArrayBuffer(salt) : salt
-    // TODO: Need a name.
     const UntitledUint8Array = addUint8Array(new Uint8Array(await crypto.subtle.exportKey('raw', derivedKey)), _salt)
     const password = await crypto.subtle.digest(
         'SHA-256',

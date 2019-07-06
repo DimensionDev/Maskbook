@@ -99,8 +99,7 @@ export function AdditionalPostBox() {
         },
         [identity[0]],
     )
-    // TODO: i18n
-    if (identity.length === 0) return <>Sorry, Maskbook cannot identify who you are. Please try again later.</>
+    if (identity.length === 0) return <>{geti18nString('additional_post_box__dont_know_who_you_are')}</>
 
     // TODO: Multiple account
     if (identity.length > 1) console.warn('Multiple identity found. Let user choose one.')

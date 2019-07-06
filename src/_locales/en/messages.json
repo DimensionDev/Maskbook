@@ -2,6 +2,9 @@
     "manifest_description": {
         "message": "Encrypt your posts & chats on You-Know-Where. Allow only your friends to decrypt."
     },
+    "additional_post_box__dont_know_who_you_are": {
+        "message": "Sorry, Maskbook cannot identify who you are. Please try again later."
+    },
     "additional_post_box__placeholder_w_name": {
         "message": "Hey $1, what's your mind? Encrypt with Maskbook"
     },
