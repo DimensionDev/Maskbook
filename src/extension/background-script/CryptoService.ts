@@ -234,12 +234,12 @@ export async function verifyOthersProve(bio: string, others: PersonIdentifier): 
 //#region Append decryptor in future
 /**
  * Get already shared target of the post
- * @param postIdentifier Post identifier
+ * @param postSalt
  */
-export async function getSharedListOfPost(postIdentifier: string): Promise<Person[]> {
+export async function getSharedListOfPost(postSalt: string): Promise<Person[]> {
     const post = await gun
         .get('posts')
-        .get(postIdentifier)
+        .get(postSalt)
         .once().then!()
     if (!post) return []
     delete post._

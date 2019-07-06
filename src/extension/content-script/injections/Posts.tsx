@@ -11,6 +11,9 @@ import Services from '../../service'
 import { PersonIdentifier, PostIdentifier } from '../../../database/type'
 import { Person } from '../../../database'
 import { isMobile } from '../../../social-network/facebook.com/isMobile'
+import { styled } from '@material-ui/core/styles'
+
+const Debug = styled('div')({ display: 'none' })
 
 const posts = new LiveSelector().querySelectorAll<HTMLDivElement>(
     isMobile ? '.story_body_container ' : '.userContent, .userContent+*+div>div>div>div>div',
@@ -43,23 +46,28 @@ function PostInspector(props: PostInspectorProps) {
         props.needZip()
         const { iv, ownersAESKeyEncrypted } = type.encryptedPost
         return (
-            <DecryptPostUI.UI
-                requestAppendDecryptor={async people => {
-                    setAlreadySelectedPreviously(alreadySelectedPreviously.concat(people))
-                    return Services.Crypto.appendShareTarget(
-                        iv,
-                        ownersAESKeyEncrypted,
-                        iv,
-                        people.map(x => x.identifier),
-                        whoAmI,
-                    )
-                }}
-                alreadySelectedPreviously={alreadySelectedPreviously}
-                people={people}
-                encryptedText={post}
-                whoAmI={whoAmI}
-                postBy={postBy}
-            />
+            <>
+                <Debug children={post} data-id="post" />
+                <Debug children={postBy.toText()} data-id="post by" />
+                <Debug children={postId} data-id="post id" />
+                <DecryptPostUI.UI
+                    requestAppendDecryptor={async people => {
+                        setAlreadySelectedPreviously(alreadySelectedPreviously.concat(people))
+                        return Services.Crypto.appendShareTarget(
+                            iv,
+                            ownersAESKeyEncrypted,
+                            iv,
+                            people.map(x => x.identifier),
+                            whoAmI,
+                        )
+                    }}
+                    alreadySelectedPreviously={alreadySelectedPreviously}
+                    people={people}
+                    encryptedText={post}
+                    whoAmI={whoAmI}
+                    postBy={postBy}
+                />
+            </>
         )
     } else if (type.provePost) {
         Services.People.uploadProvePostUrl(new PostIdentifier(postBy, postId))
