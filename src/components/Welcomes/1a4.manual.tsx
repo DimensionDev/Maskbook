@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { makeStyles, Theme } from '@material-ui/core'
+import { makeStyles, Theme, useTheme } from '@material-ui/core'
 import { styled } from '@material-ui/styles'
 
 const TextField = styled('textarea')(({ theme }: { theme: Theme }) => ({
@@ -23,6 +23,7 @@ interface Props {
 const useStyles = makeStyles({ textField: { minHeight: '10em' } })
 export default function Manual({ provePost }: Props) {
     const classes = useStyles()
+    const theme = useTheme()
     const ref = React.createRef<HTMLTextAreaElement>()
     function onFocus() {
         setTimeout(() => {
@@ -37,6 +38,7 @@ export default function Manual({ provePost }: Props) {
     }, [])
     return (
         <TextField
+            theme={theme}
             ref={ref}
             readOnly
             onClick={onFocus}

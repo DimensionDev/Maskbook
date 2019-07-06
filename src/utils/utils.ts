@@ -2,8 +2,9 @@ import 'reflect-metadata'
 import { CustomEventId } from './constants'
 import { CustomEvents } from '../extension/injected-script/addEventListener'
 
-export { sleep, timeout } from '@holoflows/kit/es/util/sleep'
-
+import { sleep as _sleep, timeout as _timeout } from '@holoflows/kit/es/util/sleep'
+export const sleep = _sleep
+export const timeout = _timeout
 /**
  * Get reference of file in both extension and storybook
  */
