@@ -2,9 +2,8 @@ const path = require('path')
 
 process.env.BROWSER = 'none'
 module.exports = function override(/** @type{import("webpack").Configuration} */ config, env) {
-    // CSP bans eval
-    // And non-inline source-map not working
-    if (env === 'development') config.devtool = 'inline-source-map'
+    // CSP bans eval and non-inline source-map not working
+    config.devtool = 'inline-source-map'
     config.entry = {
         app: path.join(__dirname, './src/index.tsx'),
         contentscript: path.join(__dirname, './src/content-script.ts'),
@@ -17,11 +16,8 @@ module.exports = function override(/** @type{import("webpack").Configuration} */
     // Leads a loading failure in background service
     config.optimization.runtimeChunk = false
     config.optimization.splitChunks = undefined
-
     // Dismiss warning for gun.js
-    config.module.wrappedContextCritical = false
     config.module.exprContextCritical = false
-    config.module.unknownContextCritical = false
 
     config.plugins.push(
         new (require('write-file-webpack-plugin'))({
