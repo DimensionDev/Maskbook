@@ -1,27 +1,30 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useState, useEffect } from 'react'
 import AsyncComponent from '../../utils/components/AsyncComponent'
 import { AdditionalContent } from './AdditionalPostContent'
-import { FullWidth } from '../../utils/components/Flex'
 import { useShareMenu } from './SelectPeopleDialog'
-import { Person } from '../../extension/background-script/PeopleService'
-import Link from '@material-ui/core/Link'
-import { withStylesTyped } from '../../utils/theme'
 import { sleep } from '../../utils/utils'
 import Services from '../../extension/service'
 import { geti18nString } from '../../utils/i18n'
+import { makeStyles } from '@material-ui/styles'
+import { Link, Box, SnackbarContent, Button } from '@material-ui/core'
+import { Person } from '../../database'
+import { PersonIdentifier } from '../../database/type'
+import { myUsernameRef } from '../../extension/content-script/injections/MyUsername'
+import { isMobile } from '../../social-network/facebook.com/isMobile'
 
 interface DecryptPostSuccessProps {
     data: { signatureVerifyResult: boolean; content: string }
-    displayAppendDecryptor: boolean
     requestAppendDecryptor(to: Person[]): Promise<void>
     alreadySelectedPreviously: Person[]
     people: Person[]
 }
-const DecryptPostSuccess = withStylesTyped({
+const useStyles = makeStyles({
     link: { marginRight: '1em', cursor: 'pointer' },
     pass: { color: 'green' },
     fail: { color: 'red' },
-})<DecryptPostSuccessProps>(({ data, people, classes, ...props }) => {
+})
+function DecryptPostSuccess({ data, people, ...props }: DecryptPostSuccessProps) {
+    const classes = useStyles()
     const { ShareMenu, showShare } = useShareMenu(people, props.requestAppendDecryptor, props.alreadySelectedPreviously)
     return (
         <AdditionalContent
@@ -29,12 +32,10 @@ const DecryptPostSuccess = withStylesTyped({
                 <>
                     {ShareMenu}
                     {geti18nString('decrypted_postbox_title')}
-                    <FullWidth />
-                    {props.displayAppendDecryptor ? (
-                        <Link color="primary" onClick={showShare} className={classes.link}>
-                            {geti18nString('decrypted_postbox_add_decryptor')}
-                        </Link>
-                    ) : null}
+                    <Box flex={1} />
+                    <Link color="primary" onClick={showShare} className={classes.link}>
+                        {geti18nString('decrypted_postbox_add_decryptor')}
+                    </Link>
                     {data.signatureVerifyResult ? (
                         <span className={classes.pass}>{geti18nString('decrypted_postbox_verified')}</span>
                     ) : (
@@ -42,19 +43,40 @@ const DecryptPostSuccess = withStylesTyped({
                     )}
                 </>
             }
-            children={data.content.split('\n').reduce(
-                (prev, curr, i) => {
-                    if (i === 0) return [curr]
-                    else return [...prev, curr, <br />]
-                },
-                [] as React.ReactNode[],
-            )}
+            renderText={data.content}
         />
     )
-})
+}
 
 const DecryptPostAwaiting = <AdditionalContent title={geti18nString('decrypted_postbox_decrypting')} />
+const useNotSetUpYetStyles = makeStyles({
+    root: {
+        marginBottom: '2em',
+    },
+})
+function NotSetupYetPrompt() {
+    const [id, set] = useState(myUsernameRef.value)
+    useEffect(() => myUsernameRef.addListener(set))
+
+    const styles = useNotSetUpYetStyles()
+    const button = (
+        <Button onClick={() => Services.Welcome.openWelcomePage(id, isMobile)} color="primary" size="small">
+            {geti18nString('click_to_setup')}
+        </Button>
+    )
+    return (
+        <SnackbarContent
+            classes={styles}
+            elevation={0}
+            message={geti18nString('service_not_setup_yet')}
+            action={button}
+        />
+    )
+}
 function DecryptPostFailed({ error }: { error: Error }) {
+    if (error && error.message === geti18nString('service_not_setup_yet')) {
+        return <NotSetupYetPrompt />
+    }
     return (
         <AdditionalContent title={geti18nString('decrypted_postbox_failed')}>
             {error && error.message}
@@ -63,21 +85,15 @@ function DecryptPostFailed({ error }: { error: Error }) {
 }
 
 interface DecryptPostProps {
-    postBy: string
-    whoAmI: string
+    postBy: PersonIdentifier
+    whoAmI: PersonIdentifier
     encryptedText: string
     people: Person[]
     alreadySelectedPreviously: Person[]
     requestAppendDecryptor(to: Person[]): Promise<void>
 }
-function DecryptPost({
-    postBy,
-    whoAmI,
-    encryptedText,
-    people,
-    alreadySelectedPreviously,
-    requestAppendDecryptor,
-}: DecryptPostProps) {
+function DecryptPost(props: DecryptPostProps) {
+    const { postBy, whoAmI, encryptedText, people, alreadySelectedPreviously, requestAppendDecryptor } = props
     const rAD = useCallback(
         async (people: Person[]) => {
             await requestAppendDecryptor(people)
@@ -100,7 +116,6 @@ function DecryptPost({
                     <DecryptPostSuccess
                         data={props.data}
                         alreadySelectedPreviously={alreadySelectedPreviously}
-                        displayAppendDecryptor={whoAmI === postBy && alreadySelectedPreviously.length !== people.length}
                         requestAppendDecryptor={rAD}
                         people={people}
                     />

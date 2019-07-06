@@ -1,19 +1,15 @@
 import * as React from 'react'
-import AppBar from '@material-ui/core/AppBar/AppBar'
-import Toolbar from '@material-ui/core/Toolbar/Toolbar'
-import Typography from '@material-ui/core/Typography/Typography'
-import Button from '@material-ui/core/Button/Button'
-import { FullWidth } from '../../utils/components/Flex'
-import IconButton from '@material-ui/core/IconButton/IconButton'
 import CloseIcon from '@material-ui/icons/Close'
-import { withStylesTyped } from '../../utils/theme'
 import { geti18nString } from '../../utils/i18n'
+import { makeStyles } from '@material-ui/styles'
+import { AppBar, Toolbar, Typography, Button, IconButton, Box } from '@material-ui/core'
 
 interface Props {
     getStarted(): void
     close(): void
+    disabled?: boolean
 }
-export const Banner = withStylesTyped({
+const useStyles = makeStyles({
     root: {
         border: '1px solid #ccc',
         borderRadius: 4,
@@ -30,29 +26,32 @@ export const Banner = withStylesTyped({
         margin: 6,
         padding: 6,
     },
-})<Props>(props => {
+})
+export function Banner(props: Props) {
+    const classes = useStyles()
     return (
-        <AppBar position="static" color="default" elevation={0} classes={{ root: props.classes.root }}>
-            <Toolbar className={props.classes.toolbar}>
-                <FullWidth>
+        <AppBar position="static" color="default" elevation={0} classes={{ root: classes.root }}>
+            <Toolbar className={classes.toolbar}>
+                <Box flex={1}>
                     <Typography variant="subtitle1" color="inherit">
-                        {geti18nString('banner_title')}
+                        {props.disabled ? geti18nString('banner_collecting_identity') : geti18nString('banner_title')}
                     </Typography>
-                </FullWidth>
+                </Box>
                 <Button
                     onClick={props.getStarted}
-                    classes={{ root: props.classes.button }}
+                    classes={{ root: classes.button }}
                     variant="contained"
+                    disabled={props.disabled}
                     color="primary">
                     {geti18nString('banner_get_started')}
                 </Button>
                 <IconButton
                     aria-label={geti18nString('banner_dismiss_aria')}
                     onClick={props.close}
-                    classes={{ root: props.classes.close }}>
+                    classes={{ root: classes.close }}>
                     <CloseIcon />
                 </IconButton>
             </Toolbar>
         </AppBar>
     )
-})
+}

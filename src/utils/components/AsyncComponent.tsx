@@ -1,3 +1,4 @@
+/** This file is published under MIT License */
 import * as React from 'react'
 
 type PromiseState<T> =
@@ -37,7 +38,7 @@ export default function AsyncComponent<Return>(props: {
 }
 
 /** React hook for not-cancelable async calculation */
-export function useAsync<T>(fn: () => Promise<T>, dep?: ReadonlyArray<any>): PromiseLike<T> {
+export function useAsync<T>(fn: () => Promise<T>, dep: ReadonlyArray<any>): PromiseLike<T> {
     let res: any, rej: any
     React.useLayoutEffect(() => {
         let unmounted = false

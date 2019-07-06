@@ -2,6 +2,9 @@
     "manifest_description": {
         "message": "在臉書發佈加密訊息，只讓你的朋友閱讀。"
     },
+    "additional_post_box__dont_know_who_you_are": {
+        "message": "抱歉，Maskbook 無法發現你是誰，所以加密框暫時不可用。"
+    },
     "additional_post_box__placeholder_w_name": {
         "message": "Hey $1, 有何所思？用 Maskbook 加密分享。"
     },
@@ -12,10 +15,11 @@
         "message": "現在發佈！"
     },
     "additional_post_box__encrypted_post_pre": {
-        "message": "使用 $1 來解密這個訊息"
+        "message": "來 Maskbook 解密這個訊息！ $1",
+        "description": "$1 must at the end of the string."
     },
     "additional_post_box__encrypted_failed": {
-        "message": "加密文本已經拷貝至剪貼板！\n不過，你需要手動粘貼到發佈框。"
+        "message": "請將以下内容拷貝至發佈框。"
     },
     "add_to_key_store_success": {
         "message": "Maskbook 已獲取此公鑰並添加至本地 ✔"
@@ -33,7 +37,10 @@
         "message": "Maskbook 解密出的文本："
     },
     "decrypted_postbox_add_decryptor": {
-        "message": "添加解密權限者："
+        "message": "查看或添加可解密權限者"
+    },
+    "click_to_setup": {
+        "message": "點此開始配置"
     },
     "decrypted_postbox_verified": {
         "message": "數字簽名驗證成功 ✔"
@@ -62,8 +69,11 @@
     "cancel": {
         "message": "取消"
     },
+    "share_to": {
+        "message": "分享给..."
+    },
     "sharing": {
-        "message": "分享"
+        "message": "分享中..."
     },
     "share": {
         "message": "分享"
@@ -194,6 +204,9 @@
     "banner_title": {
         "message": "歡迎使用 Maskbook"
     },
+    "banner_collecting_identity": {
+        "message": "Maskbook 正在準備向導過程……"
+    },
     "banner_get_started": {
         "message": "開始使用"
     },
@@ -202,6 +215,9 @@
     },
     "service_others_key_not_found": {
         "message": "$1 的公鑰無法找到！"
+    },
+    "service_not_setup_yet": {
+        "message": "您還沒有進行初始設置，在您沒有導入或生成您的密鑰之前，我們暫時無法爲您解密此消息！"
     },
     "service_publish_post_aes_key_failed": {
         "message": "未能發佈 AES 密鑰。"
@@ -249,6 +265,9 @@
         "message": "已經不再支持 Alpha41。請提醒對方安裝新版 Maskbook。"
     },
     "options_index_welcome": {
-        "message": "首次來到 Maskbook？"
+        "message": "Maskbook 設置頁面"
+    },
+    "options_index_setup": {
+        "message": "設置或備份您的 Maskbook"
     }
 }

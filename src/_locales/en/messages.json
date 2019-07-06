@@ -2,6 +2,9 @@
     "manifest_description": {
         "message": "Encrypt your posts & chats on You-Know-Where. Allow only your friends to decrypt."
     },
+    "additional_post_box__dont_know_who_you_are": {
+        "message": "Sorry, Maskbook cannot identify who you are. Please try again later."
+    },
     "additional_post_box__placeholder_w_name": {
         "message": "Hey $1, what's your mind? Encrypt with Maskbook"
     },
@@ -15,7 +18,7 @@
         "message": "Decrypt this post with $1"
     },
     "additional_post_box__encrypted_failed": {
-        "message": "Encrypted text has been copied into the clipboard!\nHowever, you need to paste it to the post box by yourself."
+        "message": "Please paste the following text into the paste box."
     },
     "add_to_key_store_success": {
         "message": "Maskbook public key added to keystore ✔"
@@ -33,7 +36,10 @@
         "message": "Maskbook decrypted content:"
     },
     "decrypted_postbox_add_decryptor": {
-        "message": "Add decryptor"
+        "message": "View / add receiver"
+    },
+    "click_to_setup": {
+        "message": "Click here to setup your Maskbook account!"
     },
     "decrypted_postbox_verified": {
         "message": "Signature verified ✔"
@@ -61,6 +67,9 @@
     },
     "cancel": {
         "message": "Cancel"
+    },
+    "share_to": {
+        "message": "Share to..."
     },
     "sharing": {
         "message": "Sharing"
@@ -194,6 +203,9 @@
     "banner_title": {
         "message": "Welcome to Maskbook"
     },
+    "banner_collecting_identity": {
+        "message": "Maskbook is identifying how to setup your account..."
+    },
     "banner_get_started": {
         "message": "Get started"
     },
@@ -202,6 +214,9 @@
     },
     "service_others_key_not_found": {
         "message": "$1's public key not found!"
+    },
+    "service_not_setup_yet": {
+        "message": "You have not set up Maskbook yet!"
     },
     "service_publish_post_aes_key_failed": {
         "message": "Publish AES key failed!"
@@ -249,6 +264,9 @@
         "message": "Support for Alpha41 is dropped. Tell your friends to upgrade Maskbook!"
     },
     "options_index_welcome": {
-        "message": "First to Maskbook?"
+        "message": "Maskbook options page"
+    },
+    "options_index_setup": {
+        "message": "Setup or backup your account"
     }
 }

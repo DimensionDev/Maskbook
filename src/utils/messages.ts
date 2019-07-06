@@ -1,5 +1,5 @@
 import { MessageCenter as MC } from '@holoflows/kit/es'
-import { Person } from '../extension/background-script/PeopleService'
+import { Person } from '../database'
 
 interface UIEvent {}
 interface KeyStoreEvent {

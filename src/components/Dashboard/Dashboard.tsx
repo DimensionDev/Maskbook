@@ -1,39 +1,44 @@
 import * as React from 'react'
-import Typography from '@material-ui/core/Typography/Typography'
-import { createBox } from '../../utils/components/Flex'
 import Identity from './Identity'
-import Button from '@material-ui/core/Button/Button'
-import { Person } from '../../extension/background-script/PeopleService'
+import { Typography, Button, Theme, useTheme } from '@material-ui/core'
+import { styled } from '@material-ui/styles'
+import { Person } from '../../database'
+import { PersonIdentifier } from '../../database/type'
 
 interface Props {
     identities: Person[]
     addAccount(): void
     exportBackup(): void
-    onProfileClick(username: string): void
+    onProfileClick(identifier: PersonIdentifier): void
 }
 
-const Main = createBox(theme => ({
+const Main = styled('div')(({ theme }: { theme: Theme }) => ({
     display: 'flex',
     flexDirection: 'column',
     textAlign: 'center',
     background: theme.palette.background.default,
-    padding: theme.spacing.unit * 4,
+    padding: theme.spacing(4),
     paddingBottom: 0,
     '& > *': {
-        marginBottom: theme.spacing.unit * 4,
+        marginBottom: theme.spacing(4),
     },
     '& button': {
         minWidth: 220,
-        marginBottom: theme.spacing.unit * 2,
+        marginBottom: theme.spacing(2),
     },
 }))
 export default function Dashboard(props: Props) {
+    const theme = useTheme()
     return (
-        <Main>
+        <Main theme={theme}>
             <Typography variant="h5">Maskbook Identity Management</Typography>
             <main>
                 {props.identities.map(x => (
-                    <Identity key={x.username} person={x} onClick={() => props.onProfileClick(x.username)} />
+                    <Identity
+                        key={x.identifier.toText()}
+                        person={x}
+                        onClick={() => props.onProfileClick(x.identifier)}
+                    />
                 ))}
             </main>
             <div>

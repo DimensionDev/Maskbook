@@ -1,12 +1,12 @@
 import React from 'react'
 import MuiAvatar, { AvatarProps } from '@material-ui/core/Avatar/Avatar'
-import { Person } from '../../extension/background-script/PeopleService'
+import { Person } from '../../database'
 interface Props extends AvatarProps {
     person: Person
 }
 export function Avatar({ person, ...props }: Props) {
-    const { avatar, nickname, username } = person
-    const name = nickname || username || ''
+    const { avatar, nickname, identifier } = person
+    const name = nickname || identifier.userId || ''
     const [first, last] = name.split(' ')
     return avatar ? (
         <MuiAvatar aria-label={name} src={avatar} {...props} />

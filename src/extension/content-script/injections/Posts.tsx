@@ -1,93 +1,91 @@
 import React, { useState } from 'react'
-import { LiveSelector, MutationObserverWatcher } from '@holoflows/kit'
+import { LiveSelector, MutationObserverWatcher, DomProxy } from '@holoflows/kit'
 import { DecryptPostUI } from '../../../components/InjectedComponents/DecryptedPost'
 import { AddToKeyStore } from '../../../components/InjectedComponents/AddToKeyStore'
-import { getUsername } from './LiveSelectors'
+import { getPersonIdentifierAtFacebook, useIdentitiesAtFacebook } from './MyUsername'
 import { renderInShadowRoot } from '../../../utils/jss/renderInShadowRoot'
 import { usePeople } from '../../../components/DataSource/PeopleRef'
 import { useAsync } from '../../../utils/components/AsyncComponent'
-import { Person } from '../../background-script/PeopleService'
 import { deconstructPayload } from '../../../utils/type-transform/Payload'
 import Services from '../../service'
+import { PersonIdentifier, PostIdentifier } from '../../../database/type'
+import { Person } from '../../../database'
+import { isMobile } from '../../../social-network/facebook.com/isMobile'
+import { styled } from '@material-ui/core/styles'
 
-const posts = new LiveSelector().querySelectorAll<HTMLDivElement>('.userContent, .userContent+*+div>div>div>div>div')
+const Debug = styled('div')({ display: 'none' })
+
+const posts = new LiveSelector().querySelectorAll<HTMLDivElement>(
+    isMobile ? '.story_body_container ' : '.userContent, .userContent+*+div>div>div>div>div',
+)
 
 interface PostInspectorProps {
     post: string
-    postBy: string
+    postBy: PersonIdentifier
     postId: string
     needZip(): void
 }
-function removeMyself(people: Person[]): Person[] {
-    const i = getUsername()!
-    return people.filter(x => x.username !== i)
-}
 function PostInspector(props: PostInspectorProps) {
     const { post, postBy, postId } = props
+    const whoAmI = (useIdentitiesAtFacebook()[0] || { identifier: PersonIdentifier.unknown }).identifier
+    const people = usePeople()
+    const [alreadySelectedPreviously, setAlreadySelectedPreviously] = useState<Person[]>([])
+
+    if (postBy.isUnknown) return null
     const type = {
         encryptedPost: deconstructPayload(post),
         provePost: post.match(/🔒(.+)🔒/)!,
     }
+    useAsync(() => {
+        if (!whoAmI.equals(postBy)) return Promise.resolve([])
+        if (!type.encryptedPost) return Promise.resolve([])
+        const { iv } = type.encryptedPost
+        return Services.Crypto.getSharedListOfPost(iv)
+    }, [post]).then(p => setAlreadySelectedPreviously(p))
     if (type.encryptedPost) {
         props.needZip()
-        const whoAmI = getUsername()!
-        const people = usePeople()
-        const [alreadySelectedPreviously, setAlreadySelectedPreviously] = useState<Person[]>([])
         const { iv, ownersAESKeyEncrypted } = type.encryptedPost
-        if (whoAmI === postBy) {
-            useAsync(() => Services.Crypto.getSharedListOfPost(iv), [post]).then(p =>
-                setAlreadySelectedPreviously(removeMyself(p)),
-            )
-        }
         return (
-            <DecryptPostUI.UI
-                requestAppendDecryptor={async people => {
-                    setAlreadySelectedPreviously(alreadySelectedPreviously.concat(people))
-                    return Services.Crypto.appendShareTarget(iv, ownersAESKeyEncrypted, iv, people)
-                }}
-                alreadySelectedPreviously={alreadySelectedPreviously}
-                people={removeMyself(people)}
-                encryptedText={post}
-                whoAmI={whoAmI}
-                postBy={postBy}
-            />
+            <>
+                <Debug children={post} data-id="post" />
+                <Debug children={postBy.toText()} data-id="post by" />
+                <Debug children={postId} data-id="post id" />
+                <DecryptPostUI.UI
+                    requestAppendDecryptor={async people => {
+                        setAlreadySelectedPreviously(alreadySelectedPreviously.concat(people))
+                        return Services.Crypto.appendShareTarget(
+                            iv,
+                            ownersAESKeyEncrypted,
+                            iv,
+                            people.map(x => x.identifier),
+                            whoAmI,
+                        )
+                    }}
+                    alreadySelectedPreviously={alreadySelectedPreviously}
+                    people={people}
+                    encryptedText={post}
+                    whoAmI={whoAmI}
+                    postBy={postBy}
+                />
+            </>
         )
     } else if (type.provePost) {
-        Services.People.uploadProvePostUrl(postBy, postId)
+        Services.People.uploadProvePostUrl(new PostIdentifier(postBy, postId))
         return <AddToKeyStore postBy={postBy} provePost={post} />
     }
     return null
 }
 new MutationObserverWatcher(posts)
     .assignKeys(node => node.innerText)
-    .useNodeForeach((node, key, realNode) => {
+    .useForeach(node => {
         // Get author
-        const postBy = getUsername(node.current.parentElement!.querySelectorAll('a')[1])!
-        // Save author's avatar
-        try {
-            const avatar = node.current.parentElement!.querySelector('img')!
-            Services.People.storeAvatar(postBy, avatar.getAttribute('aria-label')!, avatar.src)
-        } catch {}
+        const postBy = getPostBy(node, deconstructPayload(node.current.innerText) !== null)
         // Get post id
-        let postId = ''
-        try {
-            const postIdInHref = location.href.match(
-                // Firefox doesnot support it.
-                // /plugins.+(perma.+story_fbid%3D|posts%2F)((?<id>\d+)%26).+(&width=500)?/,
-                /plugins.+(perma.+story_fbid%3D|posts%2F)((\d+)%26).+(&width=500)?/,
-            )
-            postId =
-                // In single url
-                // Firefox doesnot support it.
-                // (postIdInHref && postIdInHref.groups!.id) ||
-                (postIdInHref && postIdInHref[3]) ||
-                // In timeline
-                node.current.parentElement!.querySelector('div[id^=feed]')!.id.split(';')[2]
-        } catch {}
+        const postId = getPostID(node)
         // Click "See more" if it may be a encrypted post
         {
             const more = node.current.parentElement!.querySelector<HTMLSpanElement>('.see_more_link_inner')
-            if (more && node.current.innerText.match(/🎼.+|/)) {
+            if (!isMobile && more && node.current.innerText.match(/🎼.+|/)) {
                 more.click()
             }
         }
@@ -129,10 +127,38 @@ new MutationObserverWatcher(posts)
         }
         // Render it
         return renderInShadowRoot(
-            <PostInspector needZip={needZip} postId={postId} post={node.current.innerText} postBy={postBy} />,
+            <PostInspector needZip={needZip} postId={postId || ''} post={node.current.innerText} postBy={postBy} />,
             node.afterShadow,
         )
     })
     .setDomProxyOption({ afterShadowRootInit: { mode: 'closed' } })
     .omitWarningForRepeatedKeys()
     .startWatch()
+
+function getPostBy(node: DomProxy, allowCollectInfo: boolean) {
+    const dom = isMobile ? node.current.querySelectorAll('a') : [node.current.parentElement!.querySelectorAll('a')[1]]
+    return getPersonIdentifierAtFacebook(Array.from(dom), allowCollectInfo)
+}
+function getPostID(node: DomProxy) {
+    if (isMobile) {
+        const abbr = node.current.querySelector('abbr')
+        if (!abbr) return null
+        const idElement = abbr.closest('a')
+        if (!idElement) return null
+        const id = new URL(idElement.href)
+        return id.searchParams.get('id') || ''
+    } else {
+        // In single url
+        if (location.href.match(/plugins.+(perma.+story_fbid%3D|posts%2F)?/)) {
+            const url = new URL(location.href)
+            return url.searchParams.get('id')
+        } else {
+            // In timeline
+            const parent = node.current.parentElement
+            if (!parent) return ''
+            const idNode = parent.querySelector('div[id^=feed]')
+            if (!idNode) return ''
+            return idNode.id.split(';')[2]
+        }
+    }
+}

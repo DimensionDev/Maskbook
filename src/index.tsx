@@ -4,23 +4,19 @@ import { HashRouter as Router, Route, Link } from 'react-router-dom'
 import ReactDOM from 'react-dom'
 
 import Welcome from './extension/options-page/Welcome'
-import { MuiThemeProvider } from '@material-ui/core'
+import { ThemeProvider } from '@material-ui/styles'
 import { MaskbookLightTheme } from './utils/theme'
-import { geti18nString } from './utils/i18n'
+import { OptionsPage } from './components/OptionsPage'
 
 uiSetup()
 function App() {
     return (
-        <MuiThemeProvider theme={MaskbookLightTheme}>
+        <ThemeProvider theme={MaskbookLightTheme}>
             <Router>
-                <Route
-                    exact
-                    path="/"
-                    component={() => <Link to="/welcome">{geti18nString('options_index_welcome')}</Link>}
-                />
+                <Route exact path="/" component={() => <OptionsPage linkComponent={Link} />} />
                 <Route path="/welcome" component={Welcome} />
             </Router>
-        </MuiThemeProvider>
+        </ThemeProvider>
     )
 }
 

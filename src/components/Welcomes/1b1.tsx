@@ -1,20 +1,16 @@
 import * as React from 'react'
-import Paper from '@material-ui/core/Paper/Paper'
-import Typography from '@material-ui/core/Typography/Typography'
-import { withStylesTyped } from '../../utils/theme'
-import createStyles from '@material-ui/core/styles/createStyles'
-import Button from '@material-ui/core/Button/Button'
-import { createBox } from '../../utils/components/Flex'
 
 import ArrowBack from '@material-ui/icons/ArrowBack'
 import { useDragAndDrop } from '../../utils/hooks/useDragAndDrop'
 import { geti18nString } from '../../utils/i18n'
+import { makeStyles, Paper, Button, Typography, Theme } from '@material-ui/core'
+import { styled } from '@material-ui/styles'
 
-const RestoreBox = createBox(theme => ({
+const RestoreBox = styled('div')(({ theme }) => ({
     color: theme.palette.text.hint,
     border: `2px dashed ${theme.palette.divider}`,
     whiteSpace: 'pre-line',
-    minHeight: 160 - theme.spacing.unit * 8,
+    minHeight: 160 - theme.spacing(8),
     width: 300,
     borderRadius: theme.shape.borderRadius,
     display: 'inline-flex',
@@ -22,55 +18,56 @@ const RestoreBox = createBox(theme => ({
     justifyContent: 'center',
     textAlign: 'center',
     cursor: 'pointer',
-    padding: theme.spacing.unit * 4,
+    padding: theme.spacing(4),
     transition: '0.4s',
 }))
 interface Props {
     back(): void
     restore(file: File): void
 }
-export default withStylesTyped(theme =>
-    createStyles({
-        paper: {
-            width: 600,
-            boxSizing: 'border-box',
+const useStyles = makeStyles(theme => ({
+    paper: {
+        maxWidth: 600,
+        width: '100%',
+        boxSizing: 'border-box',
+    },
+    nav: {
+        paddingTop: theme.spacing(1),
+        paddingLeft: theme.spacing(1),
+    },
+    navButton: {
+        color: theme.palette.text.hint,
+    },
+    navButtonIcon: {
+        marginRight: theme.spacing(1),
+    },
+    main: {
+        padding: '2rem 2rem 1rem 2rem',
+        textAlign: 'center',
+        '& > *': {
+            marginBottom: theme.spacing(3),
         },
-        nav: {
-            paddingTop: theme.spacing.unit,
-            paddingLeft: theme.spacing.unit,
+    },
+    button: {
+        minWidth: 180,
+    },
+    file: {
+        display: 'none',
+    },
+    restoreBox: {
+        color: 'gray',
+        transition: '0.4s',
+        '&[data-active=true]': {
+            color: 'black',
         },
-        navButton: {
-            color: theme.palette.text.hint,
-        },
-        navButtonIcon: {
-            marginRight: theme.spacing.unit,
-        },
-        main: {
-            padding: '2rem 2rem 1rem 2rem',
-            textAlign: 'center',
-            '& > *': {
-                marginBottom: theme.spacing.unit * 3,
-            },
-        },
-        button: {
-            minWidth: 180,
-        },
-        file: {
-            display: 'none',
-        },
-        restoreBox: {
-            color: 'gray',
-            transition: '0.4s',
-            '&[data-active=true]': {
-                color: 'black',
-            },
-        },
-    }),
-)<Props>(function Welcome({ classes, back, restore }) {
+    },
+}))
+export default function Welcome({ back, restore }: Props) {
+    const classes = useStyles()
     const ref = React.useRef<HTMLInputElement>(null)
     const { dragEvents, fileReceiver, fileRef, dragStatus } = useDragAndDrop()
     return (
-        <Paper {...dragEvents} className={classes.paper}>
+        <Paper elevation={2} {...dragEvents} className={classes.paper}>
             <nav className={classes.nav}>
                 <Button onClick={back} disableFocusRipple disableRipple className={classes.navButton}>
                     <ArrowBack className={classes.navButtonIcon} />
@@ -109,4 +106,4 @@ export default withStylesTyped(theme =>
             </main>
         </Paper>
     )
-})
+}

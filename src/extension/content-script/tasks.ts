@@ -1,10 +1,14 @@
 import { AutomatedTabTask, LiveSelector, MutationObserverWatcher, IntervalWatcher } from '@holoflows/kit'
 import { sleep, dispatchCustomEvents, timeout, untilDocumentReady } from '../../utils/utils'
 import { geti18nString } from '../../utils/i18n'
+import { fetchFacebookProvePost } from '../../social-network/facebook.com/fetch-prove-post'
+import { PersonIdentifier, PostIdentifier } from '../../database/type'
+import { fetchFacebookBio } from '../../social-network/facebook.com/fetch-bio'
+import { isMobile } from '../../social-network/facebook.com/isMobile'
 
 const bioCard = new LiveSelector().querySelector<HTMLDivElement>('#profile_timeline_intro_card')
 /**
- * Access: https://www.facebook.com/
+ * Access: https://(www|m).facebook.com/
  * @param text
  */
 export async function pasteIntoPostBox(text: string, warningText: string) {
@@ -17,16 +21,18 @@ export async function pasteIntoPostBox(text: string, warningText: string) {
         .querySelector(`[role="region"]`)
         .querySelector('textarea, [aria-multiline="true"]')
         .closest<HTMLDivElement>(1)
-    const activated = new LiveSelector().querySelector<HTMLDivElement>('.notranslate')
-    await sleep(2000)
+    const activated = new LiveSelector().querySelector<HTMLDivElement | HTMLTextAreaElement>(
+        isMobile ? 'form textarea' : '.notranslate',
+    )
+    await sleep(1000)
     // If page is just loaded
-    if (!activated.evaluateOnce()[0]) {
+    if (isMobile === false && !activated.evaluateOnce()[0]) {
         try {
             console.log('Awaiting to click the post box')
-            const [dom1] = await timeout(new MutationObserverWatcher(notActivated).once(), 1000)
+            const [dom1] = await timeout(new MutationObserverWatcher(notActivated), 1000)
             dom1.click()
             console.log('Non-activated post box found Stage 1', dom1)
-            const [dom2] = await timeout(new IntervalWatcher(notActivated.clone().filter(x => x !== dom1)).once(), 3000)
+            const [dom2] = await timeout(new IntervalWatcher(notActivated.clone().filter(x => x !== dom1)), 3000)
             console.log('Non-activated post box found Stage 2', dom2)
             dom2.click()
             if (!dialog.evaluateOnce()[0]) throw new Error('Click not working')
@@ -38,17 +44,29 @@ export async function pasteIntoPostBox(text: string, warningText: string) {
     }
 
     try {
-        await timeout(new MutationObserverWatcher(dialog).once(), 4000)
-        console.log('Dialog appeared')
+        if (!isMobile) {
+            await timeout(new MutationObserverWatcher(dialog), 4000)
+            console.log('Dialog appeared')
+        }
         const [element] = activated.evaluateOnce()
         element.focus()
         await sleep(100)
-        dispatchCustomEvents('paste', text)
+        if (isMobile) {
+            dispatchCustomEvents('input', text)
+        } else {
+            dispatchCustomEvents('paste', text)
+        }
         await sleep(400)
 
-        // Prevent Custom Paste failed, this will cause service not available to user.
-        if (element.innerText.indexOf(text) === -1) {
+        if (isMobile) {
+            const e = document.querySelector<HTMLDivElement>('.mentions-placeholder')
+            if (e) e.style.display = 'none'
             copyFailed()
+        } else {
+            // Prevent Custom Paste failed, this will cause service not available to user.
+            if (element.innerText.indexOf(text) === -1) {
+                copyFailed()
+            }
         }
     } catch {
         copyFailed()
@@ -58,8 +76,9 @@ export async function pasteIntoPostBox(text: string, warningText: string) {
 
     function copyFailed() {
         console.warn('Text not pasted to the text area')
-        navigator.clipboard.writeText(text)
-        alert(warningText)
+        // navigator.clipboard.writeText(text)
+        // alert(warningText)
+        prompt(warningText, text)
     }
 }
 export default AutomatedTabTask(
@@ -68,18 +87,20 @@ export default AutomatedTabTask(
          * Access post url
          * Get post content
          */
-        async getPostContent() {
-            const post = new LiveSelector().querySelector('#contentArea').getElementsByTagName('p')
-            const [data] = await new MutationObserverWatcher(post).once(node => node.innerText)
-            return data
+        getPostContent(identifier: PostIdentifier<PersonIdentifier>) {
+            return fetchFacebookProvePost(identifier)
+            // const post = new LiveSelector().querySelector('#contentArea').getElementsByTagName('p')
+            // const [data] = await new MutationObserverWatcher(post).await(node => node.innerText)
+            // return data
         },
         /**
          * Access profile page
          * Get bio content
          */
-        async getBioContent() {
-            const [data] = await new MutationObserverWatcher(bioCard).once(node => node.innerText)
-            return data
+        getBioContent(identifier: PersonIdentifier) {
+            return fetchFacebookBio(identifier)
+            // const [data] = await new MutationObserverWatcher(bioCard).await(node => node.innerText)
+            // return data
         },
         /**
          * Access profile page
@@ -90,10 +111,10 @@ export default AutomatedTabTask(
             try {
                 const pencil = new MutationObserverWatcher(
                     bioCard.clone().querySelector<HTMLAnchorElement>('[data-tooltip-content][href="#"]'),
-                ).once()
+                )
                 const edit = new MutationObserverWatcher(
                     bioCard.clone().querySelector<HTMLButtonElement>('button[type="submit"]'),
-                ).once()
+                )
                 const [bioEditButton] = await timeout(Promise.race([pencil, edit]), 2000)
                 await sleep(200)
                 bioEditButton.click()
@@ -105,7 +126,7 @@ export default AutomatedTabTask(
 
             try {
                 const [input] = await timeout(
-                    new MutationObserverWatcher(bioCard.clone().getElementsByTagName('textarea')).once(),
+                    new MutationObserverWatcher(bioCard.clone().getElementsByTagName('textarea')),
                     2000,
                 )
                 await sleep(200)

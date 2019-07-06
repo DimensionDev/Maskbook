@@ -2,9 +2,8 @@ const path = require('path')
 
 process.env.BROWSER = 'none'
 module.exports = function override(/** @type{import("webpack").Configuration} */ config, env) {
-    // CSP bans eval
-    // And non-inline source-map not working
-    if (env === 'development') config.devtool = 'inline-source-map'
+    // CSP bans eval and non-inline source-map not working
+    config.devtool = 'inline-source-map'
     config.entry = {
         app: path.join(__dirname, './src/index.tsx'),
         contentscript: path.join(__dirname, './src/content-script.ts'),
@@ -17,11 +16,8 @@ module.exports = function override(/** @type{import("webpack").Configuration} */
     // Leads a loading failure in background service
     config.optimization.runtimeChunk = false
     config.optimization.splitChunks = undefined
-
     // Dismiss warning for gun.js
-    config.module.wrappedContextCritical = false
     config.module.exprContextCritical = false
-    config.module.unknownContextCritical = false
 
     config.plugins.push(
         new (require('write-file-webpack-plugin'))({
@@ -55,29 +51,47 @@ module.exports = function override(/** @type{import("webpack").Configuration} */
         )
     }
     // Let webpack build to es2017 instead of es5
-    for (const x of config.module.rules) {
-        if (!x.oneOf) continue
-        for (const rule of x.oneOf) {
-            // Replace babel-loader with ts-loader
-            if (rule.loader === require.resolve('babel-loader')) {
-                if (rule.include) {
-                    rule.loader = require.resolve('ts-loader')
-                    rule.options = {
+    config.module.rules = [
+        // from cra
+        {
+            parser: { requireEnsure: false },
+        },
+        // eslint omitted
+        {
+            oneOf: [
+                // url-loader from cra
+                {
+                    test: [/\.bmp$/, /\.gif$/, /\.jpe?g$/, /\.png$/],
+                    loader: require.resolve('url-loader'),
+                    options: { limit: 10000, name: 'static/media/[name].[hash:8].[ext]' },
+                },
+                // babel-loader omitted
+                // babel-loader omitted
+                // css module loader omitted
+                // css module loader omitted
+                // scss loader omitted
+                // scss (with css module) loader omitted,
+                // file-loader from cra
+                {
+                    loader: require.resolve('file-loader'),
+                    exclude: [/\.(js|mjs|jsx|ts|tsx)$/, /\.html$/, /\.json$/],
+                    options: { name: 'static/media/[name].[hash:8].[ext]' },
+                },
+                // our own ts-loader
+                {
+                    test: /\.(js|mjs|jsx|ts|tsx)$/,
+                    include: path.resolve(__dirname, './src'),
+                    loader: require.resolve('ts-loader'),
+                    options: {
                         transpileOnly: true,
                         compilerOptions: {
                             jsx: 'react',
                         },
-                    }
-                }
-            }
-        }
-    }
-    config.module.rules.forEach(rule => {
-        // Remove the babel-loader
-        if (rule.oneOf) rule.oneOf = rule.oneOf.filter(x => x.loader !== require.resolve('babel-loader'))
-    })
-    // Disable the eslint linter. We have tslint.
-    config.module.rules = config.module.rules.filter(x => x.enforce !== 'pre')
+                    },
+                },
+            ],
+        },
+    ]
     // write-file-webpack-plugin conflict with this
     // ! Don't upgrade webpack to 5 until they fix this
     config.output.futureEmitAssets = false

@@ -1,5 +1,10 @@
-import { encodeText, encodeArrayBuffer, decodeArrayBuffer, decodeText } from '../utils/type-transform/EncodeDecode'
-import { toECDH, addUint8Array, toECDSA } from '../utils/type-transform/CryptoUtils'
+import {
+    encodeText,
+    encodeArrayBuffer,
+    decodeArrayBuffer,
+    decodeText,
+} from '../utils/type-transform/String-ArrayBuffer'
+import { toECDH, addUint8Array, toECDSA } from '../utils/type-transform/ECDSA-ECDH'
 // tslint:disable: no-parameter-reassignment
 export type PublishedAESKey = { encryptedKey: string; salt: string }
 export type PublishedAESKeyRecord = {
@@ -33,7 +38,6 @@ async function deriveAESKey(
     )
 
     const _salt = typeof salt === 'string' ? decodeArrayBuffer(salt) : salt
-    // TODO: Need a name.
     const UntitledUint8Array = addUint8Array(new Uint8Array(await crypto.subtle.exportKey('raw', derivedKey)), _salt)
     const password = await crypto.subtle.digest(
         'SHA-256',
