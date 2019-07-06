@@ -11,32 +11,30 @@ For general introductions, see https://Maskbook.com/
 -   License: AGPL
 -   Code Style: Use [prettier](https://github.com/prettier/prettier)
 -   [Git flow](https://github.com/nvie/gitflow) enabled, `master` as the latest branch, `released` as the stable branch
--   UI developing: Use `yarn start` / `npm start` to start a [Storybook](https://storybook.js.org/)
--   Extension developing: Use `yarn watch` / `npm run watch` to start watch build for extension
 -   Crypto: We're using [Elliptic Curve Cryptography (ECC)](https://en.wikipedia.org/wiki/ECC) of the [SECP256-k1](https://en.bitcoin.it/wiki/Secp256k1) parameters for [secret sharing](https://en.wikipedia.org/wiki/Elliptic-curve_Diffie–Hellman) and [AES-GCM](https://en.wikipedia.org/wiki/Galois/Counter_Mode) for encryption
 -   Data transfer between users: We're using [gun.js](https://gun.eco)
-
-### Prepare
-
-After `Maskbook` and `@holoflows/kit` get stable, we will directly add `@holoflows/kit` as a dependency. Currently, you need to install and build the latest version of `@holoflows/kit`.
 
 #### Install dependencies
 
 -   `yarn install`
 
-#### Prepare for library @holoflows/kit
+#### Build and developing
 
--   `cd ..`
--   `git clone https://github.com/DimensionDev/holoflows-kit.git`
--   `cd Holoflows-kit`
--   `yarn install`
--   `yarn build`
--   `yarn link`
--   `cd ../Maskbook`
+-   `yarn watch` runs a watching mode. Output files in `./dist/`. Load it as unpacked Chrome or Firefox extension
+-   `yarn build` build a production version. Output files in `./build/`
+-   `yarn test` to run test (we didn't have one yet)
+-   `yarn start` to start StoryBook. Used for UI only developing.
 
-#### Install @holoflows/kit in Maskbook
+#### Non-famous libraries we are using
 
--   `yarn link @holoflows/kit`
+-   `@holoflows/kit` - A toolkit for extension developing
+-   `anchrome` - Use it to detect links in the text
+-   `construct-style-sheets-polyfill` - A polyfill for a web api
+-   `elliptic` - A crypto library, we use it to encrypt and decrypt
+-   `gun` - A decentralized graph databasem we use it to sync user's shared crypto key
+-   `pvtsutils` and `tiny-secp256k1` - A crypto library, we use it to zip and unzip SECP256k1 keys but not using it to encrypt/decrypt
+-   `serialijse` - A serialization / deserialization library
+-   `webcrypto-liner` - A wrapper library, it wrap `elliptic` into WebCrypto API
 
 ### Folder Structure
 

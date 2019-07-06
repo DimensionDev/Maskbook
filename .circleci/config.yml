@@ -9,38 +9,7 @@ jobs:
             - image: circleci/node:11.0
         working_directory: ~/repo
         steps:
-            # build holoflows-kit
-            - run:
-                  name: Clone @holoflows/kit
-                  command: |
-                      cd ..
-                      git clone -q --depth=1 https://github.com/DimensionDev/holoflows-kit
-            - restore_cache:
-                  keys:
-                      - v1-holoflows-{{ checksum "~/holoflows-kit/yarn.lock" }}
-                      # fallback to using the latest cache if no exact match is found
-                      - v1-holoflows-
-            - run:
-                  name: Install @holoflows/kit
-                  command: |
-                      cd ../holoflows-kit
-                      yarn install --frozen-lockfile
-            - save_cache:
-                  paths:
-                      - ~/holoflows-kit/node_modules
-                  key: v1-holoflows-{{ checksum "~/holoflows-kit/yarn.lock" }}
-            - run:
-                  name: Build @holoflows/kit
-                  command: |
-                      cd ../holoflows-kit
-                      yarn build
-                      yarn link
-
-            # build maskbook
             - checkout
-            - restore_cache:
-                  keys:
-                      - tsbuild-cache
             - restore_cache:
                   keys:
                       - v1-maskbook-{{ .Branch }}-{{ checksum "yarn.lock" }}
@@ -50,7 +19,6 @@ jobs:
                   name: Build Maskbook
                   command: |
                       yarn install --frozen-lockfile
-                      yarn link @holoflows/kit
                       yarn build
                       sudo apt-get install zip
                       cd build
@@ -59,10 +27,6 @@ jobs:
                   paths:
                       - node_modules
                   key: v1-maskbook-{{ .Branch }}-{{ checksum "yarn.lock" }}
-            - save_cache:
-                  paths:
-                      - .tscache/
-                  key: tsbuild-cache
             - store_artifacts:
                   path: Maskbook.zip
                   destination: /Maskbook.zip
