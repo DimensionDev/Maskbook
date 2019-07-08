@@ -13,7 +13,7 @@ export interface ApplicationStateInGunVersion1 {
         }
         posts: {
             // Post id or salt
-            [postIdentifier: string]: {
+            [salt: string]: {
                 // NON-TODO: This will leak post targets. (But keys are safe
                 // NON-TODO: Consider using hash(id+username) or something
                 // ? Resolved in version -40. But not implemented yet.
