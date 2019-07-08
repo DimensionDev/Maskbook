@@ -11,6 +11,7 @@ For general introductions, see https://Maskbook.com/
 -   License: AGPL
 -   Code Style: Use [prettier](https://github.com/prettier/prettier)
 -   [Git flow](https://github.com/nvie/gitflow) enabled, `master` as the latest branch, `released` as the stable branch
+-   Use [Conventional Commits](https://www.conventionalcommits.org/) since 1.4.0
 -   Crypto: We're using [Elliptic Curve Cryptography (ECC)](https://en.wikipedia.org/wiki/ECC) of the [SECP256-k1](https://en.bitcoin.it/wiki/Secp256k1) parameters for [secret sharing](https://en.wikipedia.org/wiki/Elliptic-curve_Diffie–Hellman) and [AES-GCM](https://en.wikipedia.org/wiki/Galois/Counter_Mode) for encryption
 -   Data transfer between users: We're using [gun.js](https://gun.eco)
 
