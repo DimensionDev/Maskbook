@@ -104,17 +104,5 @@ export async function backupMyKeyPair(identifier: PersonIdentifier) {
 export async function openWelcomePage(id: PersonIdentifier, isMobile: boolean) {
     if (!regularUsername(id.userId)) throw new TypeError(geti18nString('service_username_invalid'))
     const url = browser.runtime.getURL('index.html#/welcome?identifier=' + id.toText())
-    if (isMobile) {
-        const [current] = await browser.tabs.query({ active: true })
-        if (current)
-            // ? need implement in polyfill
-            // return browser.tabs.update(current.id, {
-            //     url,
-            // })
-            return browser.tabs.executeScript(current.id, {
-                code: 'location.href = ' + JSON.stringify(url),
-            })
-    } else {
-        return browser.tabs.create({ url })
-    }
+    return browser.tabs.create({ url })
 }
