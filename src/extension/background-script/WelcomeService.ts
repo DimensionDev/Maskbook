@@ -107,8 +107,12 @@ export async function openWelcomePage(id: PersonIdentifier, isMobile: boolean) {
     if (isMobile) {
         const [current] = await browser.tabs.query({ active: true })
         if (current)
-            return browser.tabs.update(current.id, {
-                url,
+            // ? need implement in polyfill
+            // return browser.tabs.update(current.id, {
+            //     url,
+            // })
+            return browser.tabs.executeScript(current.id, {
+                code: 'location.href = ' + JSON.stringify(url),
             })
     } else {
         return browser.tabs.create({ url })

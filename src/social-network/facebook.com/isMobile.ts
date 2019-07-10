@@ -1,1 +1,1 @@
-export const isMobile = !!location.hostname.match('m.facebook.com')
+export const isMobile = !!navigator.userAgent.match(/Mobile|mobile/)
