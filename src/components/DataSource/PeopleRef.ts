@@ -3,7 +3,7 @@ import { ValueRef } from '@holoflows/kit/es'
 import { MessageCenter } from '../../utils/messages'
 import Services from '../../extension/service'
 import { Person } from '../../database'
-import { PersonIdentifier, GroupIdentifier, PostIdentifier } from '../../database/type'
+import { PersonIdentifier, GroupIdentifier } from '../../database/type'
 
 const ref = new ValueRef<Person[]>([])
 Services.People.queryPeople('facebook.com').then(p => (ref.value = p))

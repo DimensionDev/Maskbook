@@ -1,10 +1,13 @@
 const path = require('path')
+const webpack = require('webpack')
 
 process.env.BROWSER = 'none'
 module.exports = function override(/** @type{import("webpack").Configuration} */ config, env) {
     // CSP bans eval
     // And non-inline source-map not working
     if (env === 'development') config.devtool = 'inline-source-map'
+    else delete config.devtool
+    config.optimization.minimize = false
     config.entry = {
         app: path.join(__dirname, './src/index.tsx'),
         contentscript: path.join(__dirname, './src/content-script.ts'),
@@ -27,6 +30,16 @@ module.exports = function override(/** @type{import("webpack").Configuration} */
         new (require('write-file-webpack-plugin'))({
             test: /(webp|jpg|png|shim|polyfill|js\/.*|index\.html|manifest\.json|_locales)/,
         }),
+    )
+    config.plugins.push(
+        new webpack.BannerPlugin(`Maskbook is a open source project under GNU AGPL 3.0 licence.
+
+More info about our project at https://github.com/DimensionDev/Maskbook
+
+Maskbook is built on CircleCI, in which all the building process is available to the public.
+
+We directly take the output to submit to the Web Store. We will integrate the automatic submission
+into the CircleCI in the near future.`),
     )
     // Write files to /public
     const polyfills = [
