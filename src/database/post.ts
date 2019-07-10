@@ -41,7 +41,7 @@ const db = openDB<PostDB>('maskbook-post-v2', 1, {
 })
 export async function storePostCryptoKeyDB(record: PostOutDBRecordV40): Promise<void> {
     const t = (await db).transaction('post', 'readwrite')
-    const o: typeof record = { ...record, identifier: record.identifier.toText() as any }
+    // const o: typeof record = { ...record, identifier: record.identifier.toText() as any }
     await t.objectStore('post').put(toDb(record))
 }
 export async function queryPostCryptoKeyDB(record: PostIdentifier): Promise<PostOutDBRecordV40 | null> {
