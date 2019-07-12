@@ -4,7 +4,12 @@ import { geti18nString } from '../../utils/i18n'
 import { makeStyles, Paper, Button, Typography, Box, Theme, useTheme } from '@material-ui/core'
 import { styled } from '@material-ui/styles'
 
-const VerticalCenter = styled('div')({ display: 'flex', flexDirection: 'column', justifyContent: 'center' })
+const VerticalCenter = styled('div')({
+    display: 'flex',
+    flexDirection: 'column',
+    margin: 'auto',
+    width: 180,
+})
 const LinedBox = styled('div')(({ theme }: { theme: Theme }) => ({
     border: '1px solid #ddd',
     borderRadius: theme.shape.borderRadius,
@@ -12,6 +17,11 @@ const LinedBox = styled('div')(({ theme }: { theme: Theme }) => ({
     padding: '1rem 1.25rem',
     margin: '2rem 0',
     display: 'flex',
+    flexWrap: 'wrap',
+    [theme.breakpoints.down('xs')]: {
+        '& > *': { minWidth: '100%' },
+        textAlign: 'center',
+    },
 }))
 
 interface Props {
@@ -26,6 +36,9 @@ const useStyles = makeStyles(theme => ({
         width: '100%',
         boxSizing: 'border-box',
         '& article': {
+            [theme.breakpoints.down('xs')]: {
+                padding: '0 1rem',
+            },
             padding: '0 3rem',
             textAlign: 'center',
         },
@@ -37,10 +50,6 @@ const useStyles = makeStyles(theme => ({
     subtitle: {
         maxWidth: '24rem',
         margin: 'auto',
-    },
-    button: {
-        minWidth: 180,
-        marginLeft: theme.spacing(2),
     },
     nav: {
         paddingTop: theme.spacing(1),
@@ -78,7 +87,7 @@ export default function Welcome({ create, restore, close }: Props) {
                         <Typography variant="h6">{geti18nString('welcome_0_connect_facebook')}</Typography>
                     </Box>
                     <VerticalCenter>
-                        <Button onClick={create} variant="contained" color="primary" className={classes.button}>
+                        <Button onClick={create} variant="contained" color="primary">
                             {geti18nString('welcome_0_connect_facebook')}
                         </Button>
                     </VerticalCenter>
@@ -89,7 +98,7 @@ export default function Welcome({ create, restore, close }: Props) {
                         <Typography variant="h6">{geti18nString('welcome_0_restore_key')}</Typography>
                     </Box>
                     <VerticalCenter>
-                        <Button onClick={restore} variant="outlined" className={classes.button}>
+                        <Button onClick={restore} variant="outlined">
                             {geti18nString('restore')}
                         </Button>
                     </VerticalCenter>
