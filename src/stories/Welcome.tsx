@@ -7,11 +7,13 @@ import Welcome1a4v2 from '../components/Welcomes/1a4.v2'
 import Welcome1b1 from '../components/Welcomes/1b1'
 import Welcome2 from '../components/Welcomes/2'
 import { linkTo as to, linkTo } from '@storybook/addon-links'
-import { text } from '@storybook/addon-knobs'
+import { text, boolean } from '@storybook/addon-knobs'
 import { action } from '@storybook/addon-actions'
 import { Banner } from '../components/Welcomes/Banner'
 storiesOf('Welcome', module)
-    .add('Banner', () => <Banner disabled={false} close={action('Close')} getStarted={to('Welcome', 'Step 0')} />)
+    .add('Banner', () => (
+        <Banner disabled={boolean('disabled', false)} close={action('Close')} getStarted={to('Welcome', 'Step 0')} />
+    ))
     .add('Step 0', () => (
         <Welcome0 close={action('Close')} create={to('Welcome', 'Step 1a-2')} restore={to('Welcome', 'Step 1b-1')} />
     ))
