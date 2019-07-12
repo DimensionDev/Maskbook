@@ -1,4 +1,4 @@
-import { AsyncCall } from '@holoflows/kit/es/Extension/Async-Call'
+import { AsyncCall } from '@holoflows/kit/es/util/AsyncCall'
 import { GetContext, OnlyRunInContext } from '@holoflows/kit/es/Extension/Context'
 import * as MockService from './mock-service'
 import Serialization from '../utils/type-transform/Serialization'
