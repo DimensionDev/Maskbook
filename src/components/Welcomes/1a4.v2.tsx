@@ -3,8 +3,8 @@ import * as React from 'react'
 import Auto from './1a4.auto'
 import Manual from './1a4.manual'
 import { geti18nString } from '../../utils/i18n'
-import { withStatement } from '@babel/types'
 import { makeStyles, Typography, Button, Paper } from '@material-ui/core'
+import WelcomeContainer from './WelcomeContainer'
 
 interface Props {
     bioDisabled?: boolean
@@ -16,9 +16,6 @@ const useStyles = makeStyles(theme => ({
     paper: {
         padding: '2rem 2rem 1rem 2rem',
         textAlign: 'center',
-        maxWidth: 600,
-        width: '100%',
-        boxSizing: 'border-box',
         '& > *': {
             marginBottom: theme.spacing(3),
         },
@@ -70,7 +67,7 @@ export default function Welcome({ provePost, requestAutoVerify, requestManualVer
         </>
     )
     return (
-        <Paper elevation={2} className={classes.paper}>
+        <WelcomeContainer className={classes.paper}>
             <Typography variant="h5">{geti18nString('welcome_1a4_title')}</Typography>
             {actionType === 'auto' ? (
                 <Auto bioDisabled={!!bioDisabled} type={type} setType={setType} />
@@ -81,6 +78,6 @@ export default function Welcome({ provePost, requestAutoVerify, requestManualVer
                 <span className={classes.red}>{geti18nString('welcome_1a4_bio_disabled')}</span>
             )}
             {actionType === 'auto' ? auto : manual}
-        </Paper>
+        </WelcomeContainer>
     )
 }
