@@ -247,10 +247,10 @@
         "message": "請點擊「編輯簡介」按鈕或簡介旁的鉛筆圖標"
     },
     "automation_request_paste_into_bio_box": {
-        "message": "已將公鑰拷貝至剪貼板，可以直接粘貼到輸入框。"
+        "message": "請拷貝公鑰，然後發佈到個人簡介上。"
     },
     "automation_request_paste_into_post_box": {
-        "message": "已將公鑰拷貝至剪貼板，可以直接粘貼到輸入框。"
+        "message": "請拷貝公鑰，然後發佈到時間綫上。"
     },
     "payload_not_found": {
         "message": "找不到 payload"

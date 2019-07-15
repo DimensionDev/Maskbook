@@ -76,8 +76,6 @@ export async function pasteIntoPostBox(text: string, warningText: string) {
 
     function copyFailed() {
         console.warn('Text not pasted to the text area')
-        // navigator.clipboard.writeText(text)
-        // alert(warningText)
         prompt(warningText, text)
     }
 }
@@ -134,8 +132,7 @@ export default AutomatedTabTask(
                 dispatchCustomEvents('input', input.value + text)
             } catch {
                 console.warn('Text not pasted to the text area')
-                navigator.clipboard.writeText(text)
-                alert(geti18nString('automation_request_paste_into_bio_box'))
+                prompt(geti18nString('automation_request_paste_into_bio_box'), text)
             }
         },
         pasteIntoPostBox,

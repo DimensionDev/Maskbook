@@ -246,10 +246,10 @@
         "message": "Please click the \"Edit bio\" button or the pencil on the bio box."
     },
     "automation_request_paste_into_bio_box": {
-        "message": "Your prove content is write to your clipboard. Please paste into the bio input!"
+        "message": "Please copy your public key into the bio box and publish it."
     },
     "automation_request_paste_into_post_box": {
-        "message": "Prove content has been copied into the clipboard!\nHowever, you need to paste it to the post box by yourself."
+        "message": "Please copy your public key and publish it to your timeline!"
     },
     "payload_not_found": {
         "message": "Doesn't find payload"
