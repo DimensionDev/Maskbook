@@ -100,7 +100,7 @@ new MutationObserverWatcher(posts)
                 display: block;
                 border-top: none;
                 border-bottom: none;
-                margin-bottom: -23px;
+                margin-bottom: 0px;
                 padding: 0px 10px;`,
                 )
             }

@@ -6,7 +6,7 @@ import { sleep } from '../../utils/utils'
 import Services from '../../extension/service'
 import { geti18nString } from '../../utils/i18n'
 import { makeStyles } from '@material-ui/styles'
-import { Link, Box, SnackbarContent, Button } from '@material-ui/core'
+import { Link, Box, SnackbarContent, Button, useMediaQuery, useTheme } from '@material-ui/core'
 import { Person } from '../../database'
 import { PersonIdentifier } from '../../database/type'
 import { myUsernameRef } from '../../extension/content-script/injections/MyUsername'
@@ -26,6 +26,12 @@ const useStyles = makeStyles({
 function DecryptPostSuccess({ data, people, ...props }: DecryptPostSuccessProps) {
     const classes = useStyles()
     const { ShareMenu, showShare } = useShareMenu(people, props.requestAppendDecryptor, props.alreadySelectedPreviously)
+    const theme = useTheme()
+    const mediaQuery = useMediaQuery(theme.breakpoints.down('sm'))
+    let passString = geti18nString('decrypted_postbox_verified')
+    let failString = geti18nString('decrypted_postbox_not_verified')
+    if (mediaQuery) passString = passString[passString.length - 1]
+    if (failString) failString = failString[failString.length - 1]
     return (
         <AdditionalContent
             title={
@@ -37,9 +43,9 @@ function DecryptPostSuccess({ data, people, ...props }: DecryptPostSuccessProps)
                         {geti18nString('decrypted_postbox_add_decryptor')}
                     </Link>
                     {data.signatureVerifyResult ? (
-                        <span className={classes.pass}>{geti18nString('decrypted_postbox_verified')}</span>
+                        <span className={classes.pass}>{passString}</span>
                     ) : (
-                        <span className={classes.fail}>{geti18nString('decrypted_postbox_not_verified')}</span>
+                        <span className={classes.fail}>{failString}</span>
                     )}
                 </>
             }

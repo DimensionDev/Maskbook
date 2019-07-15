@@ -21,16 +21,25 @@ interface PeopleInListProps {
     onClick(): void
     disabled?: boolean
 }
+const usePeopleInListStyle = makeStyles({
+    overflow: {
+        textOverflow: 'ellipsis',
+        whiteSpace: 'nowrap',
+        overflow: 'hidden',
+    },
+})
 /**
  * Item in the list
  */
 function PersonInList({ person, onClick, disabled }: PeopleInListProps) {
+    const classes = usePeopleInListStyle()
     return (
         <ListItem button onClick={disabled ? void 0 : onClick}>
             <ListItemAvatar>
                 <Avatar person={person} />
             </ListItemAvatar>
             <ListItemText
+                classes={{ primary: classes.overflow, secondary: classes.overflow }}
                 primary={person.nickname || person.identifier.userId}
                 secondary={person.fingerprint ? person.fingerprint.toLowerCase() : undefined}
             />

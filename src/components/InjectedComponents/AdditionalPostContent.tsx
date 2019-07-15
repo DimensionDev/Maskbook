@@ -11,7 +11,7 @@ interface Props {
 const useStyles = makeStyles({
     upDivider: { marginBottom: 6 },
     title: { display: 'flex' },
-    icon: { transform: 'translate(-1px, -1px)' },
+    icon: { transform: 'translate(-1px, -1px)', marginLeft: 6 },
     content: {
         marginBottom: 6,
         marginTop: 6,
