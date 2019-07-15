@@ -29,7 +29,7 @@ For general introductions, see https://Maskbook.com/
 #### Non-famous libraries we are using
 
 -   `@holoflows/kit` - A toolkit for extension developing
--   `anchrome` - Use it to detect links in the text
+-   `anchorme` - Use it to detect links in the text
 -   `construct-style-sheets-polyfill` - A polyfill for a web api
 -   `elliptic` - A crypto library, we use it to encrypt and decrypt
 -   `gun` - A decentralized graph databasem we use it to sync user's shared crypto key
