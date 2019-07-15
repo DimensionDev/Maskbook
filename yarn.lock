@@ -1240,8 +1240,8 @@
     "@hapi/hoek" "6.x.x"
 
 "@holoflows/kit@https://github.com/DimensionDev/holoflows-kit":
-  version "0.3.0"
-  resolved "https://github.com/DimensionDev/holoflows-kit#b425d1eb1043a61c0e3746588100c627e47e004c"
+  version "0.4.0"
+  resolved "https://github.com/DimensionDev/holoflows-kit#25b39874d6468d94993611dba48bc3a484a2b489"
   dependencies:
     "@types/lodash-es" "^4.1.4"
     concurrent-lock "^1.0.7"
@@ -1582,22 +1582,6 @@
     global "^4.3.2"
     prop-types "^15.7.2"
     qs "^6.6.0"
-
-"@storybook/addon-viewport@^5.1.9":
-  version "5.1.9"
-  resolved "https://registry.yarnpkg.com/@storybook/addon-viewport/-/addon-viewport-5.1.9.tgz#509819730ae99a9e08d1e1f71e8e567b068da01c"
-  integrity sha512-0EEsZ7rWTj3q3M8AFjm6dXjQPS0w4gto8clMzGzdLHXA6D6KG3w10t9XsVr4mxve7PrEpiFXc6mhqsg7wbTDnQ==
-  dependencies:
-    "@storybook/addons" "5.1.9"
-    "@storybook/client-logger" "5.1.9"
-    "@storybook/components" "5.1.9"
-    "@storybook/core-events" "5.1.9"
-    "@storybook/theming" "5.1.9"
-    core-js "^3.0.1"
-    global "^4.3.2"
-    memoizerific "^1.11.3"
-    prop-types "^15.7.2"
-    util-deprecate "^1.0.2"
 
 "@storybook/addons@5.1.9", "@storybook/addons@^5.1.0-rc.1":
   version "5.1.9"
@@ -13479,10 +13463,15 @@ wbuf@^1.1.0, wbuf@^1.7.3:
   dependencies:
     minimalistic-assert "^1.0.0"
 
-web-ext-types@^3.1.0, web-ext-types@^3.2.0:
+web-ext-types@^3.1.0:
   version "3.2.0"
   resolved "https://registry.yarnpkg.com/web-ext-types/-/web-ext-types-3.2.0.tgz#df5cfc6c5b614b8e5a98b51642d1b2ad3b9b41e2"
   integrity sha512-85MBVBvZTCtc5yTfwz+xKzycrW6lUpBi68Sn8dlMwOFNDyWroUHXRJNCO4Bs80ScfePf7ciF2J2N+1UDWpq1Lg==
+
+web-ext-types@^3.2.0:
+  version "3.2.1"
+  resolved "https://registry.yarnpkg.com/web-ext-types/-/web-ext-types-3.2.1.tgz#3edc0e3c2e8fe121d7d7e4ca0b7ee0c883cea832"
+  integrity sha512-oQZYDU3W8X867h8Jmt3129kRVKklz70db40Y6OzoTTuzOJpF/dB2KULJUf0txVPyUUXuyzV8GmT3nVvRHoG+Ew==
 
 web-namespaces@^1.1.2:
   version "1.1.3"
