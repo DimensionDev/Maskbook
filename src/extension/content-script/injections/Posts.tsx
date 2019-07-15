@@ -115,10 +115,18 @@ new MutationObserverWatcher(posts)
             }
         }
         function zipPostLinkPreview() {
-            const img = node.current.parentElement!.querySelector('a[href*="maskbook.io"] img')
-            const parent = img && img.closest('span')
-            if (img && parent) {
-                parent.style.display = 'none'
+            if (isMobile) {
+                const img = node.current.parentElement!.querySelector('a[href*="maskbook.io"]')
+                const parent = img && img.closest('section')
+                if (img && parent) {
+                    parent.style.display = 'none'
+                }
+            } else {
+                const img = node.current.parentElement!.querySelector('a[href*="maskbook.io"] img')
+                const parent = img && img.closest('span')
+                if (img && parent) {
+                    parent.style.display = 'none'
+                }
             }
         }
         function needZip() {
