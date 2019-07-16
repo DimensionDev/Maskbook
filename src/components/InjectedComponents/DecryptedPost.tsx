@@ -107,16 +107,13 @@ function DecryptPost(props: DecryptPostProps) {
         },
         [requestAppendDecryptor],
     )
-    function ifError(x: any): x is { error: string } {
-        return 'error' in x
-    }
     return (
         <AsyncComponent
             promise={() => Services.Crypto.decryptFrom(encryptedText, postBy, whoAmI)}
             dependencies={[encryptedText, people, alreadySelectedPreviously]}
             awaitingComponent={DecryptPostAwaiting}
             completeComponent={props =>
-                ifError(props.data) ? (
+                'error' in props.data ? (
                     <DecryptPostFailed error={new Error(props.data.error)} />
                 ) : (
                     <DecryptPostSuccess

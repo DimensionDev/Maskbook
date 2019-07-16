@@ -187,7 +187,7 @@ export async function decryptMessage1ToNByOther(info: {
     authorsPublicKeyECDH: CryptoKey
     AESKeyEncrypted: PublishedAESKey
     iv: ArrayBuffer | string
-}): Promise<ArrayBuffer> {
+}): Promise<[ArrayBuffer, CryptoKey]> {
     const { AESKeyEncrypted, version, encryptedContent, privateKeyECDH, authorsPublicKeyECDH, iv } = info
     const aesKeyJWK = decodeText(
         await decryptMessage1To1({
@@ -205,7 +205,7 @@ export async function decryptMessage1ToNByOther(info: {
         false,
         ['decrypt'],
     )
-    return decryptWithAES({ aesKey, iv, encrypted: encryptedContent })
+    return [await decryptWithAES({ aesKey, iv, encrypted: encryptedContent }), aesKey]
 }
 export async function extractAESKeyInMessage(
     version: -40,
@@ -231,12 +231,12 @@ export async function decryptMessage1ToNByMyself(info: {
     encryptedAESKey: string | ArrayBuffer
     myLocalKey: CryptoKey
     iv: string | ArrayBuffer
-}): Promise<ArrayBuffer> {
+}): Promise<[ArrayBuffer, CryptoKey]> {
     const { encryptedContent, myLocalKey, version } = info
     const decryptedAESKey = await extractAESKeyInMessage(-40, info.encryptedAESKey, info.iv, info.myLocalKey)
     const iv = typeof info.iv === 'string' ? decodeArrayBuffer(info.iv) : info.iv
     const post = await decryptWithAES({ aesKey: decryptedAESKey, encrypted: encryptedContent, iv })
-    return post
+    return [post, decryptedAESKey]
 }
 /**
  * Decrypt the content encrypted by AES

@@ -17,7 +17,7 @@ async function test1toN(msg: string = 'test string') {
         ownersLocalKey: aliceLocal,
     })
 
-    const aliceDecrypt = await decryptMessage1ToNByMyself({
+    const [aliceDecrypt] = await decryptMessage1ToNByMyself({
         version: -40,
         encryptedAESKey: encrypted.ownersAESKeyEncrypted,
         encryptedContent: encrypted.encryptedContent,
@@ -26,7 +26,7 @@ async function test1toN(msg: string = 'test string') {
     })
     if (decodeText(aliceDecrypt) !== msg) throw new Error('Alice decrypted not equal')
 
-    const bobDecrypt = await decryptMessage1ToNByOther({
+    const [bobDecrypt] = await decryptMessage1ToNByOther({
         version: -40,
         AESKeyEncrypted: encrypted.othersAESKeyEncrypted.find(x => x.name === 'bob')!.key,
         authorsPublicKeyECDH: alice.publicKey,

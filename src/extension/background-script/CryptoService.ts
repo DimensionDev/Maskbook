@@ -8,9 +8,10 @@ import { geti18nString } from '../../utils/i18n'
 import { toCompressSecp256k1Point, unCompressSecp256k1Point } from '../../utils/type-transform/SECP256k1-Compression'
 import { Person, getMyPrivateKeyAtFacebook, queryPerson } from '../../database'
 import { queryMyIdentityAtDB, storeNewPersonDB, queryPersonDB, queryLocalKeyDB } from '../../database/people'
-import { PersonIdentifier } from '../../database/type'
+import { PersonIdentifier, PostIdentifier } from '../../database/type'
 import { addPersonPublicKey } from '../../key-management/people-gun'
 import { gun } from '../../network/gun/version.1'
+import { storePostCryptoKeyDB, queryPostCryptoKeyDB } from '../../database/post'
 
 OnlyRunInContext('background', 'EncryptService')
 //#region Encrypt & Decrypt
@@ -120,6 +121,25 @@ export async function decryptFrom(
     }
     if (data.version === -40) {
         const { encryptedText, iv: salt, ownersAESKeyEncrypted, signature, version } = data
+        const postIdentifier = new PostIdentifier(by, salt.replace(/\//g, '|'))
+        const unverified = ['2/4', ownersAESKeyEncrypted, salt, encryptedText].join('|')
+        {
+            const cachedKey = await queryPostCryptoKeyDB(postIdentifier)
+            if (cachedKey) {
+                return {
+                    content: decodeText(
+                        await Alpha40.decryptWithAES({
+                            aesKey: cachedKey.postCryptoKey,
+                            encrypted: encryptedText,
+                            iv: salt,
+                        }),
+                    ),
+                    // ! TODO: verify the message again
+                    signatureVerifyResult: true,
+                }
+            }
+        }
+
         async function getKey(user: PersonIdentifier) {
             let person = await queryPersonDB(by)
             try {
@@ -136,20 +156,25 @@ export async function decryptFrom(
         const mine = await getMyPrivateKeyAtFacebook(whoAmI)
         if (!mine) return { error: geti18nString('service_not_setup_yet') }
         try {
-            const unverified = ['2/4', ownersAESKeyEncrypted, salt, encryptedText].join('|')
             if (by.equals(whoAmI)) {
-                const content = decodeText(
-                    await Alpha40.decryptMessage1ToNByMyself({
-                        version: -40,
-                        encryptedAESKey: ownersAESKeyEncrypted,
-                        encryptedContent: encryptedText,
-                        myLocalKey: (await queryLocalKeyDB(whoAmI))!,
-                        iv: salt,
-                    }),
-                )
+                const [contentArrayBuffer, postAESKey] = await Alpha40.decryptMessage1ToNByMyself({
+                    version: -40,
+                    encryptedAESKey: ownersAESKeyEncrypted,
+                    encryptedContent: encryptedText,
+                    myLocalKey: (await queryLocalKeyDB(whoAmI))!,
+                    iv: salt,
+                })
+                const content = decodeText(contentArrayBuffer)
                 try {
                     if (!signature) throw new TypeError('No signature')
                     const signatureVerifyResult = await Alpha40.verify(unverified, signature, mine.publicKey)
+                    // Store the key to speed up next time decrypt
+                    signatureVerifyResult &&
+                        storePostCryptoKeyDB({
+                            identifier: postIdentifier,
+                            postCryptoKey: postAESKey,
+                            version: -40,
+                        })
                     return { signatureVerifyResult, content }
                 } catch {
                     return { signatureVerifyResult: false, content }
@@ -165,19 +190,25 @@ export async function decryptFrom(
                         error: geti18nString('service_not_share_target'),
                     }
                 }
-                const content = decodeText(
-                    await Alpha40.decryptMessage1ToNByOther({
-                        version: -40,
-                        AESKeyEncrypted: aesKeyEncrypted,
-                        authorsPublicKeyECDH: byKey,
-                        encryptedContent: encryptedText,
-                        privateKeyECDH: mine.privateKey,
-                        iv: salt,
-                    }),
-                )
+                const [contentArrayBuffer, postAESKey] = await Alpha40.decryptMessage1ToNByOther({
+                    version: -40,
+                    AESKeyEncrypted: aesKeyEncrypted,
+                    authorsPublicKeyECDH: byKey,
+                    encryptedContent: encryptedText,
+                    privateKeyECDH: mine.privateKey,
+                    iv: salt,
+                })
+                const content = decodeText(contentArrayBuffer)
                 try {
                     if (!signature) throw new TypeError('No signature')
                     const signatureVerifyResult = await Alpha40.verify(unverified, signature, byKey)
+                    // Store the key to speed up next time decrypt
+                    signatureVerifyResult &&
+                        storePostCryptoKeyDB({
+                            identifier: postIdentifier,
+                            postCryptoKey: postAESKey,
+                            version: -40,
+                        })
                     return { signatureVerifyResult, content }
                 } catch {
                     return { signatureVerifyResult: false, content }

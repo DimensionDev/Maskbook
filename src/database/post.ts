@@ -4,8 +4,6 @@ import { openDB, DBSchema } from 'idb/with-async-ittr'
 
 function outDb(db: PostDBRecordV40): PostOutDBRecordV40 {
     const { identifier, ...rest } = db
-    // Restore prototype
-    rest.recipients.forEach(y => Object.setPrototypeOf(y, PersonIdentifier.prototype))
     return {
         ...rest,
         identifier: Identifier.fromString(identifier) as PostIdentifier,
@@ -24,7 +22,6 @@ interface PostDBRecordV40 {
      */
     postCryptoKey: CryptoKey
     version: -40
-    recipients: PersonIdentifier[]
 }
 interface PostDB extends DBSchema {
     /** Use inline keys */
