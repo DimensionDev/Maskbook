@@ -53,8 +53,8 @@ new MutationObserverWatcher(
 )
     .enableSingleMode()
     .setComparer(undefined, (a, b) => a.equals(b))
-    .addListener('onAdd', e => assign(e.detail.value))
-    .addListener('onChange', e => assign(e.detail.newValue))
+    .addListener('onAdd', e => assign(e.value))
+    .addListener('onChange', e => assign(e.newValue))
     .startWatch()
 
 const identities = new ValueRef<Person[]>([])

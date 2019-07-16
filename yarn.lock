@@ -1241,7 +1241,7 @@
 
 "@holoflows/kit@https://github.com/DimensionDev/holoflows-kit":
   version "0.4.0"
-  resolved "https://github.com/DimensionDev/holoflows-kit#ea426afa30acd4af3f64ab352ae7166e5d199c17"
+  resolved "https://github.com/DimensionDev/holoflows-kit#dea7ede388b2f1b57ec3241cdf1434506e748601"
   dependencies:
     "@types/lodash-es" "^4.1.4"
     concurrent-lock "^1.0.7"
