@@ -18,6 +18,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     snackbar: {
         backgroundColor: theme.palette.background.default,
         color: theme.palette.text.primary,
+        boxShadow: 'none',
     },
     button: {
         padding: '4px 3em',
