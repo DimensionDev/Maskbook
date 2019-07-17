@@ -4,6 +4,8 @@ import { openDB, DBSchema } from 'idb/with-async-ittr'
 
 function outDb(db: PostDBRecordV40): PostOutDBRecordV40 {
     const { identifier, ...rest } = db
+        // Restore prototype
+    ;(rest.recipients || []).forEach(y => Object.setPrototypeOf(y, PersonIdentifier.prototype))
     return {
         ...rest,
         identifier: Identifier.fromString(identifier) as PostIdentifier,
@@ -20,8 +22,9 @@ interface PostDBRecordV40 {
     /**
      * ! This MUST BE a native CryptoKey
      */
-    postCryptoKey: CryptoKey
+    postCryptoKey?: CryptoKey
     version: -40
+    recipients?: PersonIdentifier[]
 }
 interface PostDB extends DBSchema {
     /** Use inline keys */
@@ -36,12 +39,18 @@ const db = openDB<PostDB>('maskbook-post-v2', 1, {
         db.createObjectStore('post', { keyPath: 'identifier' })
     },
 })
-export async function storePostCryptoKeyDB(record: PostOutDBRecordV40): Promise<void> {
+export async function updatePostDB(
+    record: Partial<PostOutDBRecordV40> & Pick<PostOutDBRecordV40, 'identifier'>,
+    mode: 'append' | 'override',
+): Promise<void> {
+    const _rec = (await queryPostDB(record.identifier)) || { identifier: record.identifier, version: -40 }
+    const rec = { ...toDb(_rec), ...record }
+    if (mode === 'append') rec.recipients = [...(toDb(_rec).recipients || []), ...(record.recipients || [])]
+
     const t = (await db).transaction('post', 'readwrite')
-    // const o: typeof record = { ...record, identifier: record.identifier.toText() as any }
-    await t.objectStore('post').put(toDb(record))
+    await t.objectStore('post').put(toDb(rec))
 }
-export async function queryPostCryptoKeyDB(record: PostIdentifier): Promise<PostOutDBRecordV40 | null> {
+export async function queryPostDB(record: PostIdentifier): Promise<PostOutDBRecordV40 | null> {
     const t = (await db).transaction('post')
     const result = await t.objectStore('post').get(record.toText())
     if (result) return outDb(result)

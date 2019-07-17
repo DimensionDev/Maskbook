@@ -40,8 +40,8 @@ function PostInspector(props: PostInspectorProps) {
         if (!whoAmI.equals(postBy)) return Promise.resolve([])
         if (!type.encryptedPost) return Promise.resolve([])
         const { iv } = type.encryptedPost
-        return Services.Crypto.getSharedListOfPost(iv)
-    }, [post]).then(p => setAlreadySelectedPreviously(p))
+        return Services.Crypto.getSharedListOfPost(iv, postBy)
+    }, [post, postBy, whoAmI]).then(p => setAlreadySelectedPreviously(p))
     if (type.encryptedPost) {
         props.needZip()
         const { iv, ownersAESKeyEncrypted } = type.encryptedPost

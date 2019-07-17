@@ -11,7 +11,7 @@ import { queryMyIdentityAtDB, storeNewPersonDB, queryPersonDB, queryLocalKeyDB }
 import { PersonIdentifier, PostIdentifier } from '../../database/type'
 import { addPersonPublicKey } from '../../key-management/people-gun'
 import { gun } from '../../network/gun/version.1'
-import { storePostCryptoKeyDB, queryPostCryptoKeyDB } from '../../database/post'
+import { queryPostDB, updatePostDB } from '../../database/post'
 
 OnlyRunInContext('background', 'EncryptService')
 //#region Encrypt & Decrypt
@@ -95,9 +95,9 @@ export async function encryptTo(
  * MUST call before send post, or othersAESKeyEncrypted will not be published to the internet!
  * @param token Token that returns in the encryptTo
  */
-export async function publishPostAESKey(token: string) {
+export async function publishPostAESKey(token: string, whoAmI: PersonIdentifier) {
     if (!OthersAESKeyEncryptedMap.has(token)) throw new Error(geti18nString('service_publish_post_aes_key_failed'))
-    return publishPostAESKey_Service(token, OthersAESKeyEncryptedMap.get(token)!)
+    return publishPostAESKey_Service(token, whoAmI, OthersAESKeyEncryptedMap.get(token)!)
 }
 
 /**
@@ -124,8 +124,8 @@ export async function decryptFrom(
         const postIdentifier = new PostIdentifier(by, salt.replace(/\//g, '|'))
         const unverified = ['2/4', ownersAESKeyEncrypted, salt, encryptedText].join('|')
         {
-            const cachedKey = await queryPostCryptoKeyDB(postIdentifier)
-            if (cachedKey) {
+            const cachedKey = await queryPostDB(postIdentifier)
+            if (cachedKey && cachedKey.postCryptoKey) {
                 return {
                     content: decodeText(
                         await Alpha40.decryptWithAES({
@@ -170,11 +170,14 @@ export async function decryptFrom(
                     const signatureVerifyResult = await Alpha40.verify(unverified, signature, mine.publicKey)
                     // Store the key to speed up next time decrypt
                     signatureVerifyResult &&
-                        storePostCryptoKeyDB({
-                            identifier: postIdentifier,
-                            postCryptoKey: postAESKey,
-                            version: -40,
-                        })
+                        updatePostDB(
+                            {
+                                identifier: postIdentifier,
+                                postCryptoKey: postAESKey,
+                                version: -40,
+                            },
+                            'append',
+                        )
                     return { signatureVerifyResult, content }
                 } catch {
                     return { signatureVerifyResult: false, content }
@@ -204,11 +207,14 @@ export async function decryptFrom(
                     const signatureVerifyResult = await Alpha40.verify(unverified, signature, byKey)
                     // Store the key to speed up next time decrypt
                     signatureVerifyResult &&
-                        storePostCryptoKeyDB({
-                            identifier: postIdentifier,
-                            postCryptoKey: postAESKey,
-                            version: -40,
-                        })
+                        updatePostDB(
+                            {
+                                identifier: postIdentifier,
+                                postCryptoKey: postAESKey,
+                                version: -40,
+                            },
+                            'append',
+                        )
                     return { signatureVerifyResult, content }
                 } catch {
                     return { signatureVerifyResult: false, content }
@@ -267,14 +273,22 @@ export async function verifyOthersProve(bio: string, others: PersonIdentifier): 
  * Get already shared target of the post
  * @param postSalt
  */
-export async function getSharedListOfPost(postSalt: string): Promise<Person[]> {
+export async function getSharedListOfPost(postSalt: string, postBy: PersonIdentifier): Promise<Person[]> {
+    const nameInDB =
+        ((await queryPostDB(new PostIdentifier(postBy, postSalt.replace(/\//g, '|')))) || { recipients: [] })
+            .recipients || []
     const post = await gun
         .get('posts')
         .get(postSalt)
         .once().then!()
     if (!post) return []
     delete post._
-    return Promise.all(Object.keys(post).map(id => queryPerson(new PersonIdentifier('facebook.com', id))))
+    const nameInGun = Object.keys(post)
+
+    const names = new Set(nameInGun)
+    nameInDB.forEach(x => names.add(x.userId))
+
+    return Promise.all([...names.values()].map(x => new PersonIdentifier('facebook.com', x)).map(queryPerson))
 }
 export async function appendShareTarget(
     postIdentifier: string,
@@ -297,6 +311,6 @@ export async function appendShareTarget(
         (await getMyPrivateKeyAtFacebook())!.privateKey,
         toKey,
     )
-    publishPostAESKey_Service(postIdentifier, othersAESKeyEncrypted)
+    publishPostAESKey_Service(postIdentifier, whoAmI, othersAESKeyEncrypted)
 }
 //#endregion

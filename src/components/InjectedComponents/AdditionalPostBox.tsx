@@ -95,7 +95,7 @@ export function AdditionalPostBox() {
             )
             const fullPost = geti18nString('additional_post_box__encrypted_post_pre', encrypted)
             pasteIntoPostBox(fullPost, geti18nString('additional_post_box__encrypted_failed'))
-            Services.Crypto.publishPostAESKey(token)
+            Services.Crypto.publishPostAESKey(token, identity[0].identifier)
         },
         [identity[0]],
     )

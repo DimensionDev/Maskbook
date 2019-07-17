@@ -14,7 +14,7 @@ import { isMobile } from '../../social-network/facebook.com/isMobile'
 
 interface DecryptPostSuccessProps {
     data: { signatureVerifyResult: boolean; content: string }
-    requestAppendDecryptor(to: Person[]): Promise<void>
+    requestAppendDecryptor?(to: Person[]): Promise<void>
     alreadySelectedPreviously: Person[]
     people: Person[]
 }
@@ -25,7 +25,11 @@ const useStyles = makeStyles({
 })
 function DecryptPostSuccess({ data, people, ...props }: DecryptPostSuccessProps) {
     const classes = useStyles()
-    const { ShareMenu, showShare } = useShareMenu(people, props.requestAppendDecryptor, props.alreadySelectedPreviously)
+    const { ShareMenu, showShare } = useShareMenu(
+        people,
+        props.requestAppendDecryptor || (async () => {}),
+        props.alreadySelectedPreviously,
+    )
     const theme = useTheme()
     const mediaQuery = useMediaQuery(theme.breakpoints.down('sm'))
     let passString = geti18nString('decrypted_postbox_verified')
@@ -39,9 +43,11 @@ function DecryptPostSuccess({ data, people, ...props }: DecryptPostSuccessProps)
                     {ShareMenu}
                     {geti18nString('decrypted_postbox_title')}
                     <Box flex={1} />
-                    <Link color="primary" onClick={showShare} className={classes.link}>
-                        {geti18nString('decrypted_postbox_add_decryptor')}
-                    </Link>
+                    {props.requestAppendDecryptor && (
+                        <Link color="primary" onClick={showShare} className={classes.link}>
+                            {geti18nString('decrypted_postbox_add_decryptor')}
+                        </Link>
+                    )}
                     {data.signatureVerifyResult ? (
                         <span className={classes.pass}>{passString}</span>
                     ) : (
@@ -119,7 +125,7 @@ function DecryptPost(props: DecryptPostProps) {
                     <DecryptPostSuccess
                         data={props.data}
                         alreadySelectedPreviously={alreadySelectedPreviously}
-                        requestAppendDecryptor={rAD}
+                        requestAppendDecryptor={postBy.equals(whoAmI) ? rAD : undefined}
                         people={people}
                     />
                 )
