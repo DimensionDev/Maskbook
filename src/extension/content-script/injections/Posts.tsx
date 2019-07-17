@@ -51,7 +51,7 @@ function PostInspector(props: PostInspectorProps) {
                 <Debug children={postBy.toText()} data-id="post by" />
                 <Debug children={postId} data-id="post id" />
                 <DecryptPostUI.UI
-                    requestAppendDecryptor={async people => {
+                    requestAppendRecipients={async people => {
                         setAlreadySelectedPreviously(alreadySelectedPreviously.concat(people))
                         return Services.Crypto.appendShareTarget(
                             iv,

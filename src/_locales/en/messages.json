@@ -35,8 +35,8 @@
     "decrypted_postbox_title": {
         "message": "Maskbook decrypted content:"
     },
-    "decrypted_postbox_add_decryptor": {
-        "message": "View / add receiver"
+    "decrypted_postbox_add_recipients": {
+        "message": "View / add recipients"
     },
     "click_to_setup": {
         "message": "Click here to setup your Maskbook account!"

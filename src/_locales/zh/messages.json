@@ -36,8 +36,8 @@
     "decrypted_postbox_title": {
         "message": "Maskbook 解密出的文本："
     },
-    "decrypted_postbox_add_decryptor": {
-        "message": "查看或添加可解密權限者"
+    "decrypted_postbox_add_recipients": {
+        "message": "查看或添加收件人"
     },
     "click_to_setup": {
         "message": "點此開始配置"

@@ -50,7 +50,7 @@ storiesOf('Injections', module)
                 <FakePost title="Decrypted:">
                     <DecryptPostUI.success
                         alreadySelectedPreviously={[]}
-                        requestAppendDecryptor={async () => {}}
+                        requestAppendRecipients={async () => {}}
                         people={demoPeople}
                         data={{ content: msg, signatureVerifyResult: vr }}
                     />

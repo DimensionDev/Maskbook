@@ -268,7 +268,7 @@ export async function verifyOthersProve(bio: string, others: PersonIdentifier): 
 }
 //#endregion
 
-//#region Append decryptor in future
+//#region Append Recipients in future
 /**
  * Get already shared target of the post
  * @param postSalt

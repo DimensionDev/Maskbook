@@ -14,7 +14,7 @@ import { isMobile } from '../../social-network/facebook.com/isMobile'
 
 interface DecryptPostSuccessProps {
     data: { signatureVerifyResult: boolean; content: string }
-    requestAppendDecryptor?(to: Person[]): Promise<void>
+    requestAppendRecipients?(to: Person[]): Promise<void>
     alreadySelectedPreviously: Person[]
     people: Person[]
 }
@@ -27,7 +27,7 @@ function DecryptPostSuccess({ data, people, ...props }: DecryptPostSuccessProps)
     const classes = useStyles()
     const { ShareMenu, showShare } = useShareMenu(
         people,
-        props.requestAppendDecryptor || (async () => {}),
+        props.requestAppendRecipients || (async () => {}),
         props.alreadySelectedPreviously,
     )
     const theme = useTheme()
@@ -43,9 +43,9 @@ function DecryptPostSuccess({ data, people, ...props }: DecryptPostSuccessProps)
                     {ShareMenu}
                     {geti18nString('decrypted_postbox_title')}
                     <Box flex={1} />
-                    {props.requestAppendDecryptor && (
+                    {props.requestAppendRecipients && (
                         <Link color="primary" onClick={showShare} className={classes.link}>
-                            {geti18nString('decrypted_postbox_add_decryptor')}
+                            {geti18nString('decrypted_postbox_add_recipients')}
                         </Link>
                     )}
                     {data.signatureVerifyResult ? (
@@ -102,16 +102,16 @@ interface DecryptPostProps {
     encryptedText: string
     people: Person[]
     alreadySelectedPreviously: Person[]
-    requestAppendDecryptor(to: Person[]): Promise<void>
+    requestAppendRecipients(to: Person[]): Promise<void>
 }
 function DecryptPost(props: DecryptPostProps) {
-    const { postBy, whoAmI, encryptedText, people, alreadySelectedPreviously, requestAppendDecryptor } = props
+    const { postBy, whoAmI, encryptedText, people, alreadySelectedPreviously, requestAppendRecipients } = props
     const rAD = useCallback(
         async (people: Person[]) => {
-            await requestAppendDecryptor(people)
+            await requestAppendRecipients(people)
             await sleep(1500)
         },
-        [requestAppendDecryptor],
+        [requestAppendRecipients],
     )
     return (
         <AsyncComponent
@@ -125,7 +125,7 @@ function DecryptPost(props: DecryptPostProps) {
                     <DecryptPostSuccess
                         data={props.data}
                         alreadySelectedPreviously={alreadySelectedPreviously}
-                        requestAppendDecryptor={postBy.equals(whoAmI) ? rAD : undefined}
+                        requestAppendRecipients={postBy.equals(whoAmI) ? rAD : undefined}
                         people={people}
                     />
                 )
