@@ -82,6 +82,17 @@ new MutationObserverWatcher(posts)
         const postBy = getPostBy(node, deconstructPayload(node.current.innerText) !== null)
         // Get post id
         const postId = getPostID(node)
+        try {
+            console.log(
+                'comments',
+                Array.from<HTMLSpanElement>(
+                    node.current
+                        .closest('.userContentWrapper')!
+                        .querySelector('[role=article]')!
+                        .querySelectorAll('a+span'),
+                ).map(t => t.innerText),
+            )
+        } catch {}
         // Click "See more" if it may be a encrypted post
         {
             const more = node.current.parentElement!.querySelector<HTMLSpanElement>('.see_more_link_inner')
