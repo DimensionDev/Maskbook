@@ -30,12 +30,13 @@ Object.assign(window, {
     },
 })
 if (GetContext() === 'background') {
-    Object.assign(window, { tasks: require('./content-script/tasks') })
+    Object.assign(window, { tasks: require('./content-script/tasks'), alpha40: require('../crypto/crypto-alpha-40') })
     // Run tests
     require('../tests/1to1')
     require('../tests/1toN')
     require('../tests/sign&verify')
     require('../tests/friendship-discover')
+    require('../tests/comment')
     require('./background-script/Debugger')
     Object.assign(window, {
         db: {

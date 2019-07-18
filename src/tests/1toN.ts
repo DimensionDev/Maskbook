@@ -48,4 +48,5 @@ async function test1toN(msg: string = 'test string') {
         throw new Error('Zoe decrypted success')
     } catch {}
 }
+test1toN()
 Object.assign(window, { test1toN })

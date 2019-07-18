@@ -19,4 +19,5 @@ async function testFriendshipDiscover() {
     // Bob should verify their friendship by other channel.
     return true
 }
+testFriendshipDiscover()
 Object.assign(window, { testFriendshipDiscover })

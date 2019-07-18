@@ -82,11 +82,11 @@ type InspectedPostInfo = {
     postBy: ValueRef<PersonIdentifier>
     postID: ValueRef<string | null>
     postContent: ValueRef<string>
+    comments: Set<HTMLElement>
 }
 
 const inspectedPosts = new Set<InspectedPostInfo>()
 new MutationObserverWatcher(posts)
-    .assignKeys(node => node.innerText)
     .useForeach(node => {
         const info = {} as InspectedPostInfo
         inspectedPosts.add(info)
@@ -98,28 +98,26 @@ new MutationObserverWatcher(posts)
         }
         collectPostInfo()
 
-        try {
-            Array.from<HTMLSpanElement>(
-                new Set(
-                    node.current
-                        .closest('.userContentWrapper')!
-                        .querySelector('[role=article]')!
-                        .querySelectorAll('a+span'),
-                ),
-            ).forEach(t => {
-                const parent = t.parentElement!.parentElement!.parentElement!
-                if (commentUnload.has(parent)) return
-                const i = DomProxy()
-                // i.realCurrent = parent
-                commentUnload.set(i.realCurrent!, [
-                    renderInShadowRoot(
-                        <PostCommentDecrypted>{i.current.innerText}</PostCommentDecrypted>,
-                        i.afterShadow,
-                    ),
-                    node,
-                ])
+        const root = new LiveSelector().replace(() => [node.current]).closest('.userContentWrapper')
+        const commentSelector = root
+            .clone()
+            .querySelectorAll('[role=article]')
+            .querySelectorAll('a+span')
+            .closest<HTMLElement>(3)
+
+        const commentWatcher = new MutationObserverWatcher(commentSelector, root.evaluateOnce()[0])
+            .useForeach(commentNode => {
+                if (!commentUnload.has(commentNode.realCurrent!)) {
+                    commentUnload.set(commentNode.realCurrent!, [
+                        renderInShadowRoot(
+                            <PostCommentDecrypted>{commentNode.current.innerText}</PostCommentDecrypted>,
+                            commentNode.afterShadow,
+                        ),
+                        node,
+                    ])
+                }
             })
-        } catch {}
+            .startWatch()
 
         clickSeeMore(node)
         const zipPost = () => {
@@ -140,6 +138,7 @@ new MutationObserverWatcher(posts)
             onRemove() {
                 unmount()
                 commentUnload.forEach(([f, n]) => n === node && f())
+                commentWatcher.stopWatch()
             },
         }
     })
