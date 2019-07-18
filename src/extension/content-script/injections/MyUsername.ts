@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { ValueRef, MutationObserverWatcher } from '@holoflows/kit/es'
 import Services from '../../service'
 import { Person } from '../../../database'
+import { useValueRef } from '../../../utils/hooks/useValueRef'
 
 // Try to resolve my identities
 const myUsernameLiveSelector = new LiveSelector().querySelector<HTMLAnchorElement>(
@@ -60,9 +61,7 @@ new MutationObserverWatcher(
 const identities = new ValueRef<Person[]>([])
 Services.People.queryMyIdentity('facebook.com').then(x => (identities.value = x))
 export function useIdentitiesAtFacebook(): Person[] {
-    const [currentIdentities, set] = useState(identities.value)
-    useEffect(() => identities.addListener(v => set(v)))
-    return currentIdentities
+    return useValueRef(identities)
 }
 type link = HTMLAnchorElement | null | undefined
 export function getPersonIdentifierAtFacebook(links: link[] | link, allowCollectInfo: boolean): PersonIdentifier {

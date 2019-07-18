@@ -11,6 +11,7 @@ import { Person } from '../../database'
 import { PersonIdentifier } from '../../database/type'
 import { myUsernameRef } from '../../extension/content-script/injections/MyUsername'
 import { isMobile } from '../../social-network/facebook.com/isMobile'
+import { useValueRef } from '../../utils/hooks/useValueRef'
 
 interface DecryptPostSuccessProps {
     data: { signatureVerifyResult: boolean; content: string }
@@ -67,9 +68,7 @@ const useNotSetUpYetStyles = makeStyles({
     },
 })
 function NotSetupYetPrompt() {
-    const [id, set] = useState(myUsernameRef.value)
-    useEffect(() => myUsernameRef.addListener(set))
-
+    const id = useValueRef(myUsernameRef)
     const styles = useNotSetUpYetStyles()
     const button = (
         <Button onClick={() => Services.Welcome.openWelcomePage(id, isMobile)} color="primary" size="small">
