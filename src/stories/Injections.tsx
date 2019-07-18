@@ -11,6 +11,7 @@ import { sleep } from '../utils/utils'
 import { Button, Paper } from '@material-ui/core'
 import { RenderInShadowRootWrapper } from '../utils/jss/renderInShadowRoot'
 import { demoPeople } from './demoPeople'
+import { PostCommentDecrypted } from '../components/InjectedComponents/PostComments'
 
 storiesOf('Injections', module)
     .add('AdditionalPostBox', () => <AdditionalPostBoxUI people={demoPeople} onRequestPost={action('onRequestPost')} />)
@@ -72,6 +73,9 @@ storiesOf('Injections', module)
                 </FakePost>
             </>
         )
+    })
+    .add('Decrypted comment', () => {
+        return <PostCommentDecrypted />
     })
 
 function FakePost(props: { title: string; children: any }) {

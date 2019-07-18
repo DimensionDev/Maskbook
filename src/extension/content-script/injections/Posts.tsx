@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { LiveSelector, MutationObserverWatcher, DomProxy } from '@holoflows/kit'
+import { LiveSelector, MutationObserverWatcher, DomProxy, ValueRef } from '@holoflows/kit'
 import { DecryptPostUI } from '../../../components/InjectedComponents/DecryptedPost'
 import { AddToKeyStore } from '../../../components/InjectedComponents/AddToKeyStore'
 import { getPersonIdentifierAtFacebook, useIdentitiesAtFacebook } from './MyUsername'
@@ -12,6 +12,8 @@ import { PersonIdentifier, PostIdentifier } from '../../../database/type'
 import { Person } from '../../../database'
 import { isMobile } from '../../../social-network/facebook.com/isMobile'
 import { styled } from '@material-ui/core/styles'
+import { PostCommentDecrypted } from '../../../components/InjectedComponents/PostComments'
+import { useValueRef } from '../../../utils/hooks/useValueRef'
 
 const Debug = styled('div')({ display: 'none' })
 
@@ -75,84 +77,123 @@ function PostInspector(props: PostInspectorProps) {
     }
     return null
 }
+const commentUnload = new Map<HTMLElement, [() => void, DomProxy]>()
+type InspectedPostInfo = {
+    postBy: ValueRef<PersonIdentifier>
+    postID: ValueRef<string | null>
+    postContent: ValueRef<string>
+}
+
+const inspectedPosts = new Set<InspectedPostInfo>()
 new MutationObserverWatcher(posts)
     .assignKeys(node => node.innerText)
     .useForeach(node => {
-        // Get author
-        const postBy = getPostBy(node, deconstructPayload(node.current.innerText) !== null)
-        // Get post id
-        const postId = getPostID(node)
+        const info = {} as InspectedPostInfo
+        inspectedPosts.add(info)
+
+        function collectPostInfo() {
+            info.postContent = new ValueRef(node.current.innerText)
+            info.postBy = new ValueRef(getPostBy(node, deconstructPayload(info.postContent.value) !== null))
+            info.postID = new ValueRef(getPostID(node))
+        }
+        collectPostInfo()
+
         try {
-            console.log(
-                'comments',
-                Array.from<HTMLSpanElement>(
+            Array.from<HTMLSpanElement>(
+                new Set(
                     node.current
                         .closest('.userContentWrapper')!
                         .querySelector('[role=article]')!
                         .querySelectorAll('a+span'),
-                ).map(t => t.innerText),
-            )
+                ),
+            ).forEach(t => {
+                const parent = t.parentElement!.parentElement!.parentElement!
+                if (commentUnload.has(parent)) return
+                const i = DomProxy()
+                // i.realCurrent = parent
+                commentUnload.set(i.realCurrent!, [
+                    renderInShadowRoot(
+                        <PostCommentDecrypted>{i.current.innerText}</PostCommentDecrypted>,
+                        i.afterShadow,
+                    ),
+                    node,
+                ])
+            })
         } catch {}
-        // Click "See more" if it may be a encrypted post
-        {
-            const more = node.current.parentElement!.querySelector<HTMLSpanElement>('.see_more_link_inner')
-            if (!isMobile && more && node.current.innerText.match(/🎼.+|/)) {
-                more.click()
-            }
+
+        clickSeeMore(node)
+        const zipPost = () => {
+            zipEncryptedPostContent(node)
+            zipPostLinkPreview(node)
         }
-        function zipPostContent() {
-            const pe = node.current.parentElement
-            // Style modification for repost
-            if (!node.current.className.match('userContent') && node.current.innerText.length > 0) {
-                node.after.setAttribute(
-                    'style',
-                    `
-                border: 1px solid #ebedf0;
-                display: block;
-                border-top: none;
-                border-bottom: none;
-                margin-bottom: 0px;
-                padding: 0px 10px;`,
-                )
-            }
-            if (pe) {
-                const p = pe.querySelector('p')
-                if (p) {
-                    p.style.display = 'block'
-                    p.style.maxHeight = '20px'
-                    p.style.overflow = 'hidden'
-                    p.style.marginBottom = '0'
-                }
-            }
-        }
-        function zipPostLinkPreview() {
-            if (isMobile) {
-                const img = node.current.parentElement!.querySelector('a[href*="maskbook.io"]')
-                const parent = img && img.closest('section')
-                if (img && parent) {
-                    parent.style.display = 'none'
-                }
-            } else {
-                const img = node.current.parentElement!.querySelector('a[href*="maskbook.io"] img')
-                const parent = img && img.closest('span')
-                if (img && parent) {
-                    parent.style.display = 'none'
-                }
-            }
-        }
-        function needZip() {
-            zipPostContent()
-            zipPostLinkPreview()
+        const UI = () => {
+            const id = useValueRef(info.postID)
+            const by = useValueRef(info.postBy)
+            const content = useValueRef(info.postContent)
+            return <PostInspector needZip={zipPost} postId={id || ''} post={content} postBy={by} />
         }
         // Render it
-        return renderInShadowRoot(
-            <PostInspector needZip={needZip} postId={postId || ''} post={node.current.innerText} postBy={postBy} />,
-            node.afterShadow,
-        )
+        const unmount = renderInShadowRoot(<UI />, node.afterShadow)
+        return {
+            onNodeMutation: collectPostInfo,
+            onTargetChanged: collectPostInfo,
+            onRemove() {
+                unmount()
+                commentUnload.forEach(([f, n]) => n === node && f())
+            },
+        }
     })
     .setDomProxyOption({ afterShadowRootInit: { mode: 'closed' } })
     .omitWarningForRepeatedKeys()
     .startWatch()
+
+function zipPostLinkPreview(node: DomProxy) {
+    if (isMobile) {
+        const img = node.current.parentElement!.querySelector('a[href*="maskbook.io"]')
+        const parent = img && img.closest('section')
+        if (img && parent) {
+            parent.style.display = 'none'
+        }
+    } else {
+        const img = node.current.parentElement!.querySelector('a[href*="maskbook.io"] img')
+        const parent = img && img.closest('span')
+        if (img && parent) {
+            parent.style.display = 'none'
+        }
+    }
+}
+function zipEncryptedPostContent(node: DomProxy) {
+    const parent = node.current.parentElement
+    // Style modification for repost
+    if (!node.current.className.match('userContent') && node.current.innerText.length > 0) {
+        node.after.setAttribute(
+            'style',
+            `border: 1px solid #ebedf0;
+display: block;
+border-top: none;
+border-bottom: none;
+margin-bottom: 0px;
+padding: 0px 10px;`,
+        )
+    }
+    if (parent) {
+        // post content
+        const p = parent.querySelector('p')
+        if (p) {
+            p.style.display = 'block'
+            p.style.maxHeight = '20px'
+            p.style.overflow = 'hidden'
+            p.style.marginBottom = '0'
+        }
+    }
+}
+
+function clickSeeMore(node: DomProxy) {
+    const more = node.current.parentElement!.querySelector<HTMLSpanElement>('.see_more_link_inner')
+    if (!isMobile && more && node.current.innerText.match(/🎼.+|/)) {
+        more.click()
+    }
+}
 
 function getPostBy(node: DomProxy, allowCollectInfo: boolean) {
     const dom = isMobile ? node.current.querySelectorAll('a') : [node.current.parentElement!.querySelectorAll('a')[1]]
