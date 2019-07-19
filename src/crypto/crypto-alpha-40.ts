@@ -285,7 +285,7 @@ export async function verify(
 //#region Comment
 function extractCommentPayload(text: string) {
     const [_, toEnd] = text.split('🎶2/4|')
-    const [content, _2] = toEnd.split(':||')
+    const [content, _2] = (toEnd || '').split(':||')
     if (content.length) return content
     return
 }

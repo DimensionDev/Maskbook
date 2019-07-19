@@ -5,7 +5,7 @@ import { renderInShadowRoot } from '../../../utils/jss/renderInShadowRoot'
 import { deconstructPayload } from '../../../utils/type-transform/Payload'
 import { PersonIdentifier } from '../../../database/type'
 import { isMobile } from '../../../social-network/facebook.com/isMobile'
-import { PostCommentDecrypted } from '../../../components/InjectedComponents/PostComments'
+import { PostCommentDecrypted, PostComment } from '../../../components/InjectedComponents/PostComments'
 import { useValueRef } from '../../../utils/hooks/useValueRef'
 import { PostInspector } from './Posts/PostInspector'
 
@@ -13,24 +13,30 @@ const posts = new LiveSelector().querySelectorAll<HTMLDivElement>(
     isMobile ? '.story_body_container ' : '.userContent, .userContent+*+div>div>div>div>div',
 )
 
-const commentUnload = new Map<HTMLElement, [() => void, DomProxy]>()
 type InspectedPostInfo = {
     postBy: ValueRef<PersonIdentifier>
     postID: ValueRef<string | null>
     postContent: ValueRef<string>
     comments: Set<HTMLElement>
+    decryptedPostContent: ValueRef<string>
 }
 
 const inspectedPosts = new Set<InspectedPostInfo>()
 new MutationObserverWatcher(posts)
     .useForeach(node => {
-        const info = {} as InspectedPostInfo
+        const info: InspectedPostInfo = {
+            comments: new Set(),
+            decryptedPostContent: new ValueRef(''),
+            postBy: new ValueRef(PersonIdentifier.unknown),
+            postContent: new ValueRef(''),
+            postID: new ValueRef(''),
+        }
         inspectedPosts.add(info)
 
         function collectPostInfo() {
-            info.postContent = new ValueRef(node.current.innerText)
-            info.postBy = new ValueRef(getPostBy(node, deconstructPayload(info.postContent.value) !== null))
-            info.postID = new ValueRef(getPostID(node))
+            info.postContent.value = node.current.innerText
+            info.postBy.value = getPostBy(node, deconstructPayload(info.postContent.value) !== null)
+            info.postID.value = getPostID(node)
         }
         collectPostInfo()
 
@@ -40,17 +46,33 @@ new MutationObserverWatcher(posts)
             .querySelectorAll('[role=article]')
             .querySelectorAll('a+span')
             .closest<HTMLElement>(3)
-
+        console.log(inspectedPosts)
         const commentWatcher = new MutationObserverWatcher(commentSelector, root.evaluateOnce()[0])
             .useForeach(commentNode => {
-                if (!commentUnload.has(commentNode.realCurrent!)) {
-                    commentUnload.set(commentNode.realCurrent!, [
-                        renderInShadowRoot(
-                            <PostCommentDecrypted>{commentNode.current.innerText}</PostCommentDecrypted>,
-                            commentNode.afterShadow,
-                        ),
-                        node,
-                    ])
+                const commentRef = new ValueRef(commentNode.current.innerText)
+                const UI = () => {
+                    const postContent = useValueRef(info.decryptedPostContent)
+                    const postIV = useValueRef(info.postContent)
+                    const comment = useValueRef(commentRef)
+                    return (
+                        <PostComment
+                            comment={comment}
+                            postContent={postContent}
+                            postIV={(deconstructPayload(postIV) || { iv: '' }).iv}
+                        />
+                    )
+                }
+                const unmount = renderInShadowRoot(<UI />, commentNode.afterShadow)
+                return {
+                    onNodeMutation() {
+                        commentRef.value = commentNode.current.innerText
+                    },
+                    onTargetChanged() {
+                        commentRef.value = commentNode.current.innerText
+                    },
+                    onRemove() {
+                        unmount()
+                    },
                 }
             })
             .startWatch()
@@ -60,11 +82,20 @@ new MutationObserverWatcher(posts)
             zipEncryptedPostContent(node)
             zipPostLinkPreview(node)
         }
+        const onDecrypted = (val: string) => (info.decryptedPostContent.value = val)
         const UI = () => {
             const id = useValueRef(info.postID)
             const by = useValueRef(info.postBy)
             const content = useValueRef(info.postContent)
-            return <PostInspector needZip={zipPost} postId={id || ''} post={content} postBy={by} />
+            return (
+                <PostInspector
+                    onDecrypted={onDecrypted}
+                    needZip={zipPost}
+                    postId={id || ''}
+                    post={content}
+                    postBy={by}
+                />
+            )
         }
         // Render it
         const unmount = renderInShadowRoot(<UI />, node.afterShadow)
@@ -73,7 +104,6 @@ new MutationObserverWatcher(posts)
             onTargetChanged: collectPostInfo,
             onRemove() {
                 unmount()
-                commentUnload.forEach(([f, n]) => n === node && f())
                 commentWatcher.stopWatch()
             },
         }

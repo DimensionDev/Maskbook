@@ -12,6 +12,7 @@ import { styled } from '@material-ui/core/styles'
 
 const Debug = styled('div')({ display: 'none' })
 interface PostInspectorProps {
+    onDecrypted(post: string): void
     post: string
     postBy: PersonIdentifier
     postId: string
@@ -42,6 +43,7 @@ export function PostInspector(props: PostInspectorProps) {
                 <Debug children={postBy.toText()} data-id="post by" />
                 <Debug children={postId} data-id="post id" />
                 <DecryptPostUI.UI
+                    onDecrypted={props.onDecrypted}
                     requestAppendRecipients={async people => {
                         setAlreadySelectedPreviously(alreadySelectedPreviously.concat(people))
                         return Services.Crypto.appendShareTarget(

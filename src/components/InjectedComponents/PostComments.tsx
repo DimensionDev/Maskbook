@@ -1,6 +1,8 @@
 import React from 'react'
 import { Chip, makeStyles } from '@material-ui/core'
 import Lock from '@material-ui/icons/Lock'
+import AsyncComponent from '../../utils/components/AsyncComponent'
+import Services from '../../extension/service'
 
 const useStyle = makeStyles({
     root: {
@@ -17,5 +19,23 @@ export function PostCommentDecrypted(props: React.PropsWithChildren<{}>) {
         <>
             <Chip classes={style} icon={<Lock />} label={props.children} color="secondary" />
         </>
+    )
+}
+interface Props {
+    postIV: string
+    postContent: string
+    comment: string
+}
+export function PostComment({ comment, postContent, postIV }: Props) {
+    return (
+        <AsyncComponent
+            promise={() => Services.Crypto.decryptComment(postIV, postContent, comment)}
+            dependencies={[postIV, postContent, comment]}
+            awaitingComponent=""
+            completeComponent={result =>
+                result.data ? <PostCommentDecrypted>{result.data}</PostCommentDecrypted> : null
+            }
+            failedComponent={() => null}
+        />
     )
 }

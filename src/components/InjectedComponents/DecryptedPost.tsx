@@ -96,6 +96,7 @@ function DecryptPostFailed({ error }: { error: Error }) {
 }
 
 interface DecryptPostProps {
+    onDecrypted(post: string): void
     postBy: PersonIdentifier
     whoAmI: PersonIdentifier
     encryptedText: string
@@ -117,16 +118,19 @@ function DecryptPost(props: DecryptPostProps) {
             promise={() => Services.Crypto.decryptFrom(encryptedText, postBy, whoAmI)}
             dependencies={[encryptedText, people, alreadySelectedPreviously]}
             awaitingComponent={DecryptPostAwaiting}
-            completeComponent={props =>
-                'error' in props.data ? (
-                    <DecryptPostFailed error={new Error(props.data.error)} />
+            completeComponent={_props =>
+                'error' in _props.data ? (
+                    <DecryptPostFailed error={new Error(_props.data.error)} />
                 ) : (
-                    <DecryptPostSuccess
-                        data={props.data}
-                        alreadySelectedPreviously={alreadySelectedPreviously}
-                        requestAppendRecipients={postBy.equals(whoAmI) ? rAD : undefined}
-                        people={people}
-                    />
+                    (props.onDecrypted(_props.data.content),
+                    (
+                        <DecryptPostSuccess
+                            data={_props.data}
+                            alreadySelectedPreviously={alreadySelectedPreviously}
+                            requestAppendRecipients={postBy.equals(whoAmI) ? rAD : undefined}
+                            people={people}
+                        />
+                    ))
                 )
             }
             failedComponent={DecryptPostFailed}
