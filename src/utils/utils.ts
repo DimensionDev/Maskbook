@@ -22,6 +22,7 @@ export function getUrl(path: string, fallback: string = '') {
 export function dispatchCustomEvents<T extends keyof CustomEvents>(event: T, ...x: CustomEvents[T]) {
     document.dispatchEvent(new CustomEvent(CustomEventId, { detail: [event, x] }))
 }
+Object.assign(window, { dispatchCustomEvents })
 /**
  * Select all text in a node
  * @param el Element

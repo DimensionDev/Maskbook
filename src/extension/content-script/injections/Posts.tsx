@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import { LiveSelector, MutationObserverWatcher, DomProxy, ValueRef } from '@holoflows/kit'
 import { getPersonIdentifierAtFacebook } from './MyUsername'
 import { renderInShadowRoot } from '../../../utils/jss/renderInShadowRoot'
@@ -8,6 +8,9 @@ import { isMobile } from '../../../social-network/facebook.com/isMobile'
 import { PostCommentDecrypted, PostComment } from '../../../components/InjectedComponents/PostComments'
 import { useValueRef } from '../../../utils/hooks/useValueRef'
 import { PostInspector } from './Posts/PostInspector'
+import { CommentBox } from '../../../components/InjectedComponents/CommentBox'
+import { selectElementContents, dispatchCustomEvents, sleep } from '../../../utils/utils'
+import Services from '../../service'
 
 const posts = new LiveSelector().querySelectorAll<HTMLDivElement>(
     isMobile ? '.story_body_container ' : '.userContent, .userContent+*+div>div>div>div>div',
@@ -17,6 +20,7 @@ type InspectedPostInfo = {
     postBy: ValueRef<PersonIdentifier>
     postID: ValueRef<string | null>
     postContent: ValueRef<string>
+    postPayload: ValueRef<ReturnType<typeof deconstructPayload> | null>
     comments: Set<HTMLElement>
     decryptedPostContent: ValueRef<string>
 }
@@ -30,39 +34,45 @@ new MutationObserverWatcher(posts)
             postBy: new ValueRef(PersonIdentifier.unknown),
             postContent: new ValueRef(''),
             postID: new ValueRef(''),
+            postPayload: new ValueRef(null),
         }
         inspectedPosts.add(info)
 
         function collectPostInfo() {
             info.postContent.value = node.current.innerText
-            info.postBy.value = getPostBy(node, deconstructPayload(info.postContent.value) !== null)
+            info.postPayload.value = deconstructPayload(info.postContent.value)
+            info.postBy.value = getPostBy(node, info.postPayload.value !== null)
             info.postID.value = getPostID(node)
         }
         collectPostInfo()
+        clickSeeMore(node)
 
         const root = new LiveSelector().replace(() => [node.current]).closest('.userContentWrapper')
+        // ? inject after comments
         const commentSelector = root
             .clone()
             .querySelectorAll('[role=article]')
             .querySelectorAll('a+span')
-            .closest<HTMLElement>(3)
-        console.log(inspectedPosts)
+            .closest<HTMLElement>(2)
         const commentWatcher = new MutationObserverWatcher(commentSelector, root.evaluateOnce()[0])
             .useForeach(commentNode => {
                 const commentRef = new ValueRef(commentNode.current.innerText)
-                const UI = () => {
+                const CommentUI = () => {
                     const postContent = useValueRef(info.decryptedPostContent)
-                    const postIV = useValueRef(info.postContent)
                     const comment = useValueRef(commentRef)
                     return (
                         <PostComment
+                            needZip={useCallback(() => {
+                                commentNode.current.style.whiteSpace = 'nowrap'
+                                commentNode.current.style.overflow = 'hidden'
+                            }, [])}
                             comment={comment}
                             postContent={postContent}
-                            postIV={(deconstructPayload(postIV) || { iv: '' }).iv}
+                            postIV={info.postPayload.value ? info.postPayload.value.iv : ''}
                         />
                     )
                 }
-                const unmount = renderInShadowRoot(<UI />, commentNode.afterShadow)
+                const unmount = renderInShadowRoot(<CommentUI />, commentNode.afterShadow)
                 return {
                     onNodeMutation() {
                         commentRef.value = commentNode.current.innerText
@@ -75,15 +85,45 @@ new MutationObserverWatcher(posts)
                     },
                 }
             })
+            .setDomProxyOption({ afterShadowRootInit: { mode: 'closed' } })
             .startWatch()
 
-        clickSeeMore(node)
+        // ? inject comment text field
+        const commentBoxSelector = root
+            .clone()
+            .querySelector<HTMLFormElement>('form form')
+            .enableSingleMode()
+        const commentBoxWatcher = new MutationObserverWatcher(commentBoxSelector, root.evaluateOnce()[0])
+            .setDomProxyOption({ afterShadowRootInit: { mode: 'closed' } })
+            .enableSingleMode()
+            .startWatch()
+        const CommentBoxUI = () => {
+            const payload = useValueRef(info.postPayload)
+            const decrypted = useValueRef(info.decryptedPostContent)
+            return (
+                <CommentBox
+                    display={!!(payload && decrypted)}
+                    onSubmit={async content => {
+                        const encryptedComment = await Services.Crypto.encryptComment(payload!.iv, decrypted, content)
+                        const _root = root.evaluateOnce()[0] as HTMLDivElement
+                        selectElementContents(_root.querySelector('[contenteditable]')!)
+                        dispatchCustomEvents('paste', encryptedComment)
+                        await sleep(200)
+                        if (_root.innerText.match(encryptedComment)) console.log('Okay')
+                        else prompt('Please paste it into the comment box!', encryptedComment)
+                    }}
+                />
+            )
+        }
+        const unmountCommentBox = renderInShadowRoot(<CommentBoxUI />, commentBoxWatcher.firstVirtualNode.afterShadow)
+
+        // ? inject after posts
         const zipPost = () => {
             zipEncryptedPostContent(node)
             zipPostLinkPreview(node)
         }
         const onDecrypted = (val: string) => (info.decryptedPostContent.value = val)
-        const UI = () => {
+        const PostDecryptUI = () => {
             const id = useValueRef(info.postID)
             const by = useValueRef(info.postBy)
             const content = useValueRef(info.postContent)
@@ -98,18 +138,19 @@ new MutationObserverWatcher(posts)
             )
         }
         // Render it
-        const unmount = renderInShadowRoot(<UI />, node.afterShadow)
+        const unmountPostInspector = renderInShadowRoot(<PostDecryptUI />, node.afterShadow)
         return {
             onNodeMutation: collectPostInfo,
             onTargetChanged: collectPostInfo,
             onRemove() {
-                unmount()
+                unmountPostInspector()
+                unmountCommentBox()
                 commentWatcher.stopWatch()
+                commentBoxWatcher.stopWatch()
             },
         }
     })
     .setDomProxyOption({ afterShadowRootInit: { mode: 'closed' } })
-    .omitWarningForRepeatedKeys()
     .startWatch()
 
 function zipPostLinkPreview(node: DomProxy) {

@@ -333,11 +333,15 @@ export async function decryptComment(
     const payload = extractCommentPayload(encryptComment)
     if (!payload) return
     const key = await getCommentKey(postIV, postContent)
-    const x = await decryptWithAES({
-        aesKey: key,
-        iv: decodeArrayBuffer(postIV),
-        encrypted: payload,
-    })
-    return decodeText(x)
+    try {
+        const x = await decryptWithAES({
+            aesKey: key,
+            iv: decodeArrayBuffer(postIV),
+            encrypted: payload,
+        })
+        return decodeText(x)
+    } catch {
+        return undefined
+    }
 }
 //#endregion
