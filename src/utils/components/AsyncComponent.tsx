@@ -7,10 +7,10 @@ type PromiseState<T> =
     | { status: 'fail'; error: Error }
 export default function AsyncComponent<Return>(props: {
     promise: () => Promise<Return>
-    dependencies: any[]
-    completeComponent: React.ComponentType<{ data: Return }>
+    dependencies: ReadonlyArray<any>
+    completeComponent: React.ComponentType<{ data: Return }> | React.ReactNode
     awaitingComponent: React.SuspenseProps['fallback']
-    failedComponent: React.ComponentType<{ error: Error }>
+    failedComponent: React.ComponentType<{ error: Error }> | React.ReactNode
 }) {
     const [state, setState] = React.useState<PromiseState<Return>>({ status: 'not-started' })
     const promise = React.useMemo(() => props.promise(), props.dependencies)
@@ -23,9 +23,21 @@ export default function AsyncComponent<Return>(props: {
             React.lazy(async () => {
                 try {
                     const data = await promise
-                    return { default: () => <props.completeComponent data={data} /> }
+                    return {
+                        default: () => {
+                            const CompleteComponent = props.completeComponent
+                            if (isComponent(CompleteComponent)) return <CompleteComponent data={data} />
+                            else return (CompleteComponent as React.ReactElement) || null
+                        },
+                    }
                 } catch (e) {
-                    return { default: () => <props.failedComponent error={e} /> }
+                    return {
+                        default: () => {
+                            const FailedComponent = props.failedComponent
+                            if (isComponent(FailedComponent)) return <FailedComponent error={e} />
+                            else return (FailedComponent as React.ReactElement) || null
+                        },
+                    }
                 }
             }),
         props.dependencies,
@@ -37,10 +49,14 @@ export default function AsyncComponent<Return>(props: {
     )
 }
 
+function isComponent<T>(f?: React.ComponentType<T> | NonNullable<React.ReactNode> | null): f is React.ComponentType<T> {
+    return typeof f === 'function'
+}
+
 /** React hook for not-cancelable async calculation */
 export function useAsync<T>(fn: () => Promise<T>, dep: ReadonlyArray<any>): PromiseLike<T> {
     let res: any, rej: any
-    React.useLayoutEffect(() => {
+    React.useEffect(() => {
         let unmounted = false
         fn().then(x => unmounted || res(x), err => unmounted || rej(err))
         return () => {

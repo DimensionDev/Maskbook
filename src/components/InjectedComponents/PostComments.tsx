@@ -31,11 +31,11 @@ export function PostComment({ comment, postContent, postIV }: Props) {
         <AsyncComponent
             promise={() => Services.Crypto.decryptComment(postIV, postContent, comment)}
             dependencies={[postIV, postContent, comment]}
-            awaitingComponent=""
+            awaitingComponent={null}
             completeComponent={result =>
                 result.data ? <PostCommentDecrypted>{result.data}</PostCommentDecrypted> : null
             }
-            failedComponent={() => null}
+            failedComponent={null}
         />
     )
 }
