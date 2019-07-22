@@ -98,7 +98,6 @@ export async function backupMyKeyPair(identifier: PersonIdentifier) {
     browser.downloads.download({
         url,
         filename: `maskbook-keystore-backup-${today}.json`,
-        conflictAction: 'prompt',
         saveAs: true,
     })
 }
