@@ -1,147 +1,205 @@
-import React, { useState } from 'react'
-import { LiveSelector, MutationObserverWatcher, DomProxy } from '@holoflows/kit'
-import { DecryptPostUI } from '../../../components/InjectedComponents/DecryptedPost'
-import { AddToKeyStore } from '../../../components/InjectedComponents/AddToKeyStore'
-import { getPersonIdentifierAtFacebook, useIdentitiesAtFacebook } from './MyUsername'
+import React, { useCallback } from 'react'
+import { LiveSelector, MutationObserverWatcher, DomProxy, ValueRef } from '@holoflows/kit'
+import { getPersonIdentifierAtFacebook } from './MyUsername'
 import { renderInShadowRoot } from '../../../utils/jss/renderInShadowRoot'
-import { usePeople } from '../../../components/DataSource/PeopleRef'
-import { useAsync } from '../../../utils/components/AsyncComponent'
 import { deconstructPayload } from '../../../utils/type-transform/Payload'
-import Services from '../../service'
-import { PersonIdentifier, PostIdentifier } from '../../../database/type'
-import { Person } from '../../../database'
+import { PersonIdentifier } from '../../../database/type'
 import { isMobile } from '../../../social-network/facebook.com/isMobile'
-import { styled } from '@material-ui/core/styles'
-
-const Debug = styled('div')({ display: 'none' })
+import { PostCommentDecrypted, PostComment } from '../../../components/InjectedComponents/PostComments'
+import { useValueRef } from '../../../utils/hooks/useValueRef'
+import { PostInspector } from './Posts/PostInspector'
+import { CommentBox } from '../../../components/InjectedComponents/CommentBox'
+import { selectElementContents, dispatchCustomEvents, sleep } from '../../../utils/utils'
+import Services from '../../service'
 
 const posts = new LiveSelector().querySelectorAll<HTMLDivElement>(
     isMobile ? '.story_body_container ' : '.userContent, .userContent+*+div>div>div>div>div',
 )
 
-interface PostInspectorProps {
-    post: string
-    postBy: PersonIdentifier
-    postId: string
-    needZip(): void
+type InspectedPostInfo = {
+    postBy: ValueRef<PersonIdentifier>
+    postID: ValueRef<string | null>
+    postContent: ValueRef<string>
+    postPayload: ValueRef<ReturnType<typeof deconstructPayload> | null>
+    comments: Set<HTMLElement>
+    decryptedPostContent: ValueRef<string>
 }
-function PostInspector(props: PostInspectorProps) {
-    const { post, postBy, postId } = props
-    const whoAmI = (useIdentitiesAtFacebook()[0] || { identifier: PersonIdentifier.unknown }).identifier
-    const people = usePeople()
-    const [alreadySelectedPreviously, setAlreadySelectedPreviously] = useState<Person[]>([])
 
-    if (postBy.isUnknown) return null
-    const type = {
-        encryptedPost: deconstructPayload(post),
-        provePost: post.match(/🔒(.+)🔒/)!,
-    }
-    useAsync(() => {
-        if (!whoAmI.equals(postBy)) return Promise.resolve([])
-        if (!type.encryptedPost) return Promise.resolve([])
-        const { iv } = type.encryptedPost
-        return Services.Crypto.getSharedListOfPost(iv, postBy)
-    }, [post, postBy, whoAmI]).then(p => setAlreadySelectedPreviously(p))
-    if (type.encryptedPost) {
-        props.needZip()
-        const { iv, ownersAESKeyEncrypted } = type.encryptedPost
-        return (
-            <>
-                <Debug children={post} data-id="post" />
-                <Debug children={postBy.toText()} data-id="post by" />
-                <Debug children={postId} data-id="post id" />
-                <DecryptPostUI.UI
-                    requestAppendRecipients={async people => {
-                        setAlreadySelectedPreviously(alreadySelectedPreviously.concat(people))
-                        return Services.Crypto.appendShareTarget(
-                            iv,
-                            ownersAESKeyEncrypted,
-                            iv,
-                            people.map(x => x.identifier),
-                            whoAmI,
-                        )
-                    }}
-                    alreadySelectedPreviously={alreadySelectedPreviously}
-                    people={people}
-                    encryptedText={post}
-                    whoAmI={whoAmI}
-                    postBy={postBy}
-                />
-            </>
-        )
-    } else if (type.provePost) {
-        Services.People.uploadProvePostUrl(new PostIdentifier(postBy, postId))
-        return <AddToKeyStore postBy={postBy} provePost={post} />
-    }
-    return null
-}
+const inspectedPosts = new Set<InspectedPostInfo>()
 new MutationObserverWatcher(posts)
-    .assignKeys(node => node.innerText)
     .useForeach(node => {
-        // Get author
-        const postBy = getPostBy(node, deconstructPayload(node.current.innerText) !== null)
-        // Get post id
-        const postId = getPostID(node)
-        // Click "See more" if it may be a encrypted post
-        {
-            const more = node.current.parentElement!.querySelector<HTMLSpanElement>('.see_more_link_inner')
-            if (!isMobile && more && node.current.innerText.match(/🎼.+|/)) {
-                more.click()
-            }
+        const info: InspectedPostInfo = {
+            comments: new Set(),
+            decryptedPostContent: new ValueRef(''),
+            postBy: new ValueRef(PersonIdentifier.unknown),
+            postContent: new ValueRef(''),
+            postID: new ValueRef(''),
+            postPayload: new ValueRef(null),
         }
-        function zipPostContent() {
-            const pe = node.current.parentElement
-            // Style modification for repost
-            if (!node.current.className.match('userContent') && node.current.innerText.length > 0) {
-                node.after.setAttribute(
-                    'style',
-                    `
-                border: 1px solid #ebedf0;
-                display: block;
-                border-top: none;
-                border-bottom: none;
-                margin-bottom: 0px;
-                padding: 0px 10px;`,
-                )
-            }
-            if (pe) {
-                const p = pe.querySelector('p')
-                if (p) {
-                    p.style.display = 'block'
-                    p.style.maxHeight = '20px'
-                    p.style.overflow = 'hidden'
-                    p.style.marginBottom = '0'
-                }
-            }
+        inspectedPosts.add(info)
+
+        function collectPostInfo() {
+            info.postContent.value = node.current.innerText
+            info.postPayload.value = deconstructPayload(info.postContent.value)
+            info.postBy.value = getPostBy(node, info.postPayload.value !== null)
+            info.postID.value = getPostID(node)
         }
-        function zipPostLinkPreview() {
-            if (isMobile) {
-                const img = node.current.parentElement!.querySelector('a[href*="maskbook.io"]')
-                const parent = img && img.closest('section')
-                if (img && parent) {
-                    parent.style.display = 'none'
+        collectPostInfo()
+        clickSeeMore(node)
+
+        const root = new LiveSelector().replace(() => [node.current]).closest('.userContentWrapper')
+        // ? inject after comments
+        const commentSelector = root
+            .clone()
+            .querySelectorAll('[role=article]')
+            .querySelectorAll('a+span')
+            .closest<HTMLElement>(2)
+        const commentWatcher = new MutationObserverWatcher(commentSelector, root.evaluateOnce()[0])
+            .useForeach(commentNode => {
+                const commentRef = new ValueRef(commentNode.current.innerText)
+                const CommentUI = () => {
+                    const postContent = useValueRef(info.decryptedPostContent)
+                    const comment = useValueRef(commentRef)
+                    return (
+                        <PostComment
+                            needZip={useCallback(() => {
+                                commentNode.current.style.whiteSpace = 'nowrap'
+                                commentNode.current.style.overflow = 'hidden'
+                            }, [])}
+                            comment={comment}
+                            postContent={postContent}
+                            postIV={info.postPayload.value ? info.postPayload.value.iv : ''}
+                        />
+                    )
                 }
-            } else {
-                const img = node.current.parentElement!.querySelector('a[href*="maskbook.io"] img')
-                const parent = img && img.closest('span')
-                if (img && parent) {
-                    parent.style.display = 'none'
+                const unmount = renderInShadowRoot(<CommentUI />, commentNode.afterShadow)
+                return {
+                    onNodeMutation() {
+                        commentRef.value = commentNode.current.innerText
+                    },
+                    onTargetChanged() {
+                        commentRef.value = commentNode.current.innerText
+                    },
+                    onRemove() {
+                        unmount()
+                    },
                 }
-            }
+            })
+            .setDomProxyOption({ afterShadowRootInit: { mode: 'closed' } })
+            .startWatch()
+
+        // ? inject comment text field
+        const commentBoxSelector = root
+            .clone()
+            .querySelector<HTMLFormElement>('form form')
+            .enableSingleMode()
+        const commentBoxWatcher = new MutationObserverWatcher(commentBoxSelector, root.evaluateOnce()[0])
+            .setDomProxyOption({ afterShadowRootInit: { mode: 'closed' } })
+            .enableSingleMode()
+            .startWatch()
+        const CommentBoxUI = () => {
+            const payload = useValueRef(info.postPayload)
+            const decrypted = useValueRef(info.decryptedPostContent)
+            return (
+                <CommentBox
+                    display={!!(payload && decrypted)}
+                    onSubmit={async content => {
+                        const encryptedComment = await Services.Crypto.encryptComment(payload!.iv, decrypted, content)
+                        const _root = root.evaluateOnce()[0] as HTMLDivElement
+                        selectElementContents(_root.querySelector('[contenteditable]')!)
+                        dispatchCustomEvents('paste', encryptedComment)
+                        await sleep(200)
+                        if (_root.innerText.match(encryptedComment)) console.log('Okay')
+                        else prompt('Please paste it into the comment box!', encryptedComment)
+                    }}
+                />
+            )
         }
-        function needZip() {
-            zipPostContent()
-            zipPostLinkPreview()
+        const unmountCommentBox = renderInShadowRoot(<CommentBoxUI />, commentBoxWatcher.firstVirtualNode.afterShadow)
+
+        // ? inject after posts
+        const zipPost = () => {
+            zipEncryptedPostContent(node)
+            zipPostLinkPreview(node)
+        }
+        const onDecrypted = (val: string) => (info.decryptedPostContent.value = val)
+        const PostDecryptUI = () => {
+            const id = useValueRef(info.postID)
+            const by = useValueRef(info.postBy)
+            const content = useValueRef(info.postContent)
+            return (
+                <PostInspector
+                    onDecrypted={onDecrypted}
+                    needZip={zipPost}
+                    postId={id || ''}
+                    post={content}
+                    postBy={by}
+                />
+            )
         }
         // Render it
-        return renderInShadowRoot(
-            <PostInspector needZip={needZip} postId={postId || ''} post={node.current.innerText} postBy={postBy} />,
-            node.afterShadow,
-        )
+        const unmountPostInspector = renderInShadowRoot(<PostDecryptUI />, node.afterShadow)
+        return {
+            onNodeMutation: collectPostInfo,
+            onTargetChanged: collectPostInfo,
+            onRemove() {
+                unmountPostInspector()
+                unmountCommentBox()
+                commentWatcher.stopWatch()
+                commentBoxWatcher.stopWatch()
+            },
+        }
     })
     .setDomProxyOption({ afterShadowRootInit: { mode: 'closed' } })
-    .omitWarningForRepeatedKeys()
     .startWatch()
+
+function zipPostLinkPreview(node: DomProxy) {
+    if (isMobile) {
+        const img = node.current.parentElement!.querySelector('a[href*="maskbook.io"]')
+        const parent = img && img.closest('section')
+        if (img && parent) {
+            parent.style.display = 'none'
+        }
+    } else {
+        const img = node.current.parentElement!.querySelector('a[href*="maskbook.io"] img')
+        const parent = img && img.closest('span')
+        if (img && parent) {
+            parent.style.display = 'none'
+        }
+    }
+}
+function zipEncryptedPostContent(node: DomProxy) {
+    const parent = node.current.parentElement
+    // Style modification for repost
+    if (!node.current.className.match('userContent') && node.current.innerText.length > 0) {
+        node.after.setAttribute(
+            'style',
+            `border: 1px solid #ebedf0;
+display: block;
+border-top: none;
+border-bottom: none;
+margin-bottom: 0px;
+padding: 0px 10px;`,
+        )
+    }
+    if (parent) {
+        // post content
+        const p = parent.querySelector('p')
+        if (p) {
+            p.style.display = 'block'
+            p.style.maxHeight = '20px'
+            p.style.overflow = 'hidden'
+            p.style.marginBottom = '0'
+        }
+    }
+}
+
+function clickSeeMore(node: DomProxy) {
+    const more = node.current.parentElement!.querySelector<HTMLSpanElement>('.see_more_link_inner')
+    if (!isMobile && more && node.current.innerText.match(/🎼.+|/)) {
+        more.click()
+    }
+}
 
 function getPostBy(node: DomProxy, allowCollectInfo: boolean) {
     const dom = isMobile ? node.current.querySelectorAll('a') : [node.current.parentElement!.querySelectorAll('a')[1]]

@@ -281,3 +281,67 @@ export async function verify(
     return crypto.subtle.verify({ name: 'ECDSA', hash: { name: 'SHA-256' } }, ecdsakey, signature, content)
 }
 //#endregion
+
+//#region Comment
+function extractCommentPayload(text: string) {
+    const [_, toEnd] = text.split('🎶2/4|')
+    const [content, _2] = (toEnd || '').split(':||')
+    if (content.length) return content
+    return
+}
+const commentKeyCache = new Map<string, CryptoKey>()
+async function getCommentKey(postIV: string, postContent: string) {
+    if (commentKeyCache.has(postIV + postContent)) return commentKeyCache.get(postIV + postContent)!
+    const pbkdf = await crypto.subtle.importKey('raw', encodeText(postContent), 'PBKDF2', false, [
+        'deriveBits',
+        'deriveKey',
+    ])
+    const aes = await crypto.subtle.deriveKey(
+        { name: 'PBKDF2', salt: encodeText(postIV), iterations: 100000, hash: 'SHA-256' },
+        pbkdf,
+        { name: 'AES-GCM', length: 256 },
+        true,
+        ['encrypt', 'decrypt'],
+    )
+    commentKeyCache.set(postIV + postContent, aes)
+    return aes
+}
+// * Payload format: 🎶2/4|encrypted_comment:||
+export async function encryptComment(
+    postIV: string | ArrayBuffer,
+    postContent: string | ArrayBuffer,
+    comment: string | ArrayBuffer,
+) {
+    if (typeof postIV !== 'string') postIV = encodeArrayBuffer(postIV)
+    if (typeof postContent !== 'string') postContent = decodeText(postContent)
+    const key = await getCommentKey(postIV, postContent)
+    const x = await encryptWithAES({
+        content: comment,
+        aesKey: key,
+        iv: decodeArrayBuffer(postIV),
+    })
+    return `🎶2/4|${encodeArrayBuffer(x.content)}:||`
+}
+export async function decryptComment(
+    postIV: string | ArrayBuffer,
+    postContent: string | ArrayBuffer,
+    encryptComment: string | ArrayBuffer,
+) {
+    if (typeof postIV !== 'string') postIV = encodeArrayBuffer(postIV)
+    if (typeof postContent !== 'string') postContent = decodeText(postContent)
+    if (typeof encryptComment !== 'string') encryptComment = decodeText(encryptComment)
+    const payload = extractCommentPayload(encryptComment)
+    if (!payload) return
+    const key = await getCommentKey(postIV, postContent)
+    try {
+        const x = await decryptWithAES({
+            aesKey: key,
+            iv: decodeArrayBuffer(postIV),
+            encrypted: payload,
+        })
+        return decodeText(x)
+    } catch {
+        return undefined
+    }
+}
+//#endregion

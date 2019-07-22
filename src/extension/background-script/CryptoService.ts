@@ -314,3 +314,4 @@ export async function appendShareTarget(
     publishPostAESKey_Service(postIdentifier, whoAmI, othersAESKeyEncrypted)
 }
 //#endregion
+export { encryptComment, decryptComment } from '../../crypto/crypto-alpha-40'

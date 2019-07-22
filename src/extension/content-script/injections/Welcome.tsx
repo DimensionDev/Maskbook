@@ -6,6 +6,7 @@ import { renderInShadowRoot } from '../../../utils/jss/renderInShadowRoot'
 import Services from '../../service'
 import { getStorage, setStorage, LATEST_WELCOME_VERSION } from '../../../components/Welcomes/WelcomeVersion'
 import { isMobile } from '../../../social-network/facebook.com/isMobile'
+import { useValueRef } from '../../../utils/hooks/useValueRef'
 
 getStorage().then(({ init, userDismissedWelcomeAtVersion }) => {
     const to = new MutationObserverWatcher(
@@ -19,8 +20,7 @@ getStorage().then(({ init, userDismissedWelcomeAtVersion }) => {
     const unmount = renderInShadowRoot(<BannerContainer unmount={() => unmount()} />, to.firstVirtualNode.beforeShadow)
 })
 function BannerContainer({ unmount }: { unmount: () => void }) {
-    const [id, set] = useState(myUsernameRef.value)
-    useEffect(() => myUsernameRef.addListener(set))
+    const id = useValueRef(myUsernameRef)
     return (
         <Banner
             disabled={id.isUnknown}

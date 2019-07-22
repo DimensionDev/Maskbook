@@ -11,6 +11,7 @@ import { Person } from '../../database'
 import { PersonIdentifier } from '../../database/type'
 import { myUsernameRef } from '../../extension/content-script/injections/MyUsername'
 import { isMobile } from '../../social-network/facebook.com/isMobile'
+import { useValueRef } from '../../utils/hooks/useValueRef'
 
 interface DecryptPostSuccessProps {
     data: { signatureVerifyResult: boolean; content: string }
@@ -67,9 +68,7 @@ const useNotSetUpYetStyles = makeStyles({
     },
 })
 function NotSetupYetPrompt() {
-    const [id, set] = useState(myUsernameRef.value)
-    useEffect(() => myUsernameRef.addListener(set))
-
+    const id = useValueRef(myUsernameRef)
     const styles = useNotSetUpYetStyles()
     const button = (
         <Button onClick={() => Services.Welcome.openWelcomePage(id, isMobile)} color="primary" size="small">
@@ -97,6 +96,7 @@ function DecryptPostFailed({ error }: { error: Error }) {
 }
 
 interface DecryptPostProps {
+    onDecrypted(post: string): void
     postBy: PersonIdentifier
     whoAmI: PersonIdentifier
     encryptedText: string
@@ -118,16 +118,19 @@ function DecryptPost(props: DecryptPostProps) {
             promise={() => Services.Crypto.decryptFrom(encryptedText, postBy, whoAmI)}
             dependencies={[encryptedText, people, alreadySelectedPreviously]}
             awaitingComponent={DecryptPostAwaiting}
-            completeComponent={props =>
-                'error' in props.data ? (
-                    <DecryptPostFailed error={new Error(props.data.error)} />
+            completeComponent={_props =>
+                'error' in _props.data ? (
+                    <DecryptPostFailed error={new Error(_props.data.error)} />
                 ) : (
-                    <DecryptPostSuccess
-                        data={props.data}
-                        alreadySelectedPreviously={alreadySelectedPreviously}
-                        requestAppendRecipients={postBy.equals(whoAmI) ? rAD : undefined}
-                        people={people}
-                    />
+                    (props.onDecrypted(_props.data.content),
+                    (
+                        <DecryptPostSuccess
+                            data={_props.data}
+                            alreadySelectedPreviously={alreadySelectedPreviously}
+                            requestAppendRecipients={postBy.equals(whoAmI) ? rAD : undefined}
+                            people={people}
+                        />
+                    ))
                 )
             }
             failedComponent={DecryptPostFailed}
