@@ -3,9 +3,11 @@
      * Upgrade version from true to number.
      * Remove this after 1/1/2020
      */
-    browser.storage.local.get().then(items => {
-        if (items.init === true) browser.storage.local.set({ init: WelcomeVersion.A })
-    })
+    typeof browser === 'object' &&
+        browser.storage &&
+        browser.storage.local.get().then(items => {
+            if (items.init === true) browser.storage.local.set({ init: WelcomeVersion.A })
+        })
 }
 interface Storage {
     init: WelcomeVersion
