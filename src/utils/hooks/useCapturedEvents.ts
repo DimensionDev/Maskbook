@@ -7,6 +7,7 @@ export function useCapturedInput(
     ref: React.MutableRefObject<HTMLInputElement | undefined | null>,
     onChange: (newVal: string) => void,
 ) {
+    console.log(ref)
     const stop = useCallback((e: Event) => e.stopPropagation(), [])
     const use = useCallback((e: Event) => onChange((e.currentTarget as HTMLInputElement).value), [onChange])
     function binder<T extends keyof HTMLElementEventMap>(keys: T[], fn: (e: HTMLElementEventMap[T]) => void) {
