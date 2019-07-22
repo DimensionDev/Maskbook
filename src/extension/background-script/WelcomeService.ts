@@ -14,6 +14,7 @@ import {
 } from '../../database/people'
 import { BackupJSONFileLatest } from '../../utils/type-transform/BackupFile'
 import { PersonIdentifier } from '../../database/type'
+import { MessageCenter } from '../../utils/messages'
 
 OnlyRunInContext('background', 'WelcomeService')
 async function generateBackupJSON(identifier: PersonIdentifier, full = false): Promise<BackupJSONFileLatest> {
@@ -24,10 +25,11 @@ async function generateBackupJSON(identifier: PersonIdentifier, full = false): P
     //#region data.whoami
     const localKeys = await getLocalKeysDB()
     if (localKeys.size === 0) {
-        // ? New user !
-        console.log('New user! Generating key pairs')
         await generateLocalKeyDB(identifier)
         await generateMyIdentityDB(identifier)
+        // ? New user !
+        MessageCenter.emit('generateKeyPair', undefined)
+        console.log('New user! Generating key pairs')
         return generateBackupJSON(identifier, full)
     }
     async function addWhoAmI(data: PersonRecordPublicPrivate) {

@@ -14,6 +14,9 @@ import { setStorage, LATEST_WELCOME_VERSION } from '../../../components/Welcomes
 import { geti18nString } from '../../../utils/i18n'
 import { Dialog, withMobileDialog } from '@material-ui/core'
 import { Identifier, PersonIdentifier } from '../../../database/type'
+import { MessageCenter } from '../../../utils/messages'
+import { ValueRef } from '@holoflows/kit/es'
+import { useValueRef } from '../../../utils/hooks/useValueRef'
 
 //#region Welcome
 enum WelcomeState {
@@ -123,23 +126,28 @@ function Welcome(props: Welcome) {
     }
 }
 const ResponsiveDialog = withMobileDialog()(Dialog)
+const ProvePostRef = new ValueRef('')
+const IdentifierRef = new ValueRef(PersonIdentifier.unknown)
+const getMyProveBio = async () => {
+    const post = await Services.Crypto.getMyProveBio(IdentifierRef.value)
+    if (post) ProvePostRef.value = post
+}
+MessageCenter.on('generateKeyPair', getMyProveBio)
+IdentifierRef.addListener(getMyProveBio)
+
 export default withRouter(function _WelcomePortal(props: RouteComponentProps<{ identifier: string }>) {
     const [step, setStep] = useState(WelcomeState.Start)
-    const [provePost, setProvePost] = useState('')
-    const [identifier, setIdentifier] = useState<PersonIdentifier>(PersonIdentifier.unknown)
+    const provePost = useValueRef(ProvePostRef)
+    const identifier = useValueRef(IdentifierRef)
 
     useEffect(() => {
         const raw = new URLSearchParams(props.location.search).get('identifier') || ''
         const id = Identifier.fromString(raw)
         if (id && id.equals(identifier)) return
         if (id instanceof PersonIdentifier) {
-            setIdentifier(id)
+            IdentifierRef.value = id
         }
     }, [props.location.search])
-
-    useAsync(() => Services.Crypto.getMyProveBio(identifier), [identifier]).then(
-        provePost => provePost && setProvePost(provePost),
-    )
 
     return (
         <ResponsiveDialog open>

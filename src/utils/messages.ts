@@ -4,6 +4,7 @@ import { Person } from '../database'
 interface UIEvent {}
 interface KeyStoreEvent {
     newPerson: Person
+    generateKeyPair: undefined
 }
 interface TypedMessages extends UIEvent, KeyStoreEvent {}
 
