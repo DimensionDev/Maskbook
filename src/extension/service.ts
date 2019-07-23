@@ -3,8 +3,8 @@ import { GetContext, OnlyRunInContext } from '@holoflows/kit/es/Extension/Contex
 import * as MockService from './mock-service'
 import Serialization from '../utils/type-transform/Serialization'
 import { PersonIdentifier, GroupIdentifier, PostIdentifier } from '../database/type'
-import { fetchFacebookBio } from '../social-network/facebook.com/fetch-bio'
-import { fetchFacebookProvePost } from '../social-network/facebook.com/fetch-prove-post'
+import { fetchFacebookBio } from '../social-network-provider/facebook.com/fetch-bio'
+import { fetchFacebookProvePost } from '../social-network-provider/facebook.com/fetch-prove-post'
 
 interface Services {
     Crypto: typeof import('./background-script/CryptoService')

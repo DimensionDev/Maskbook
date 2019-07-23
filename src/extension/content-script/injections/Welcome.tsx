@@ -4,9 +4,9 @@ import { myUsernameRef } from './MyUsername'
 import { Banner } from '../../../components/Welcomes/Banner'
 import { renderInShadowRoot } from '../../../utils/jss/renderInShadowRoot'
 import Services from '../../service'
-import { isMobile } from '../../../social-network/facebook.com/isMobile'
 import { useValueRef } from '../../../utils/hooks/useValueRef'
 import { getStorage, setStorage } from '../../../components/Welcomes/WelcomeVersion'
+import { isMobile } from '../../../social-network-provider/facebook.com/isMobile'
 
 async function main() {
     const ids = await Services.People.queryMyIdentity()

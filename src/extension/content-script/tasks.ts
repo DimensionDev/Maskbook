@@ -1,10 +1,10 @@
 import { AutomatedTabTask, LiveSelector, MutationObserverWatcher, IntervalWatcher } from '@holoflows/kit'
 import { sleep, dispatchCustomEvents, timeout, untilDocumentReady } from '../../utils/utils'
 import { geti18nString } from '../../utils/i18n'
-import { fetchFacebookProvePost } from '../../social-network/facebook.com/fetch-prove-post'
+import { fetchFacebookProvePost } from '../../social-network-provider/facebook.com/fetch-prove-post'
 import { PersonIdentifier, PostIdentifier } from '../../database/type'
-import { fetchFacebookBio } from '../../social-network/facebook.com/fetch-bio'
-import { isMobile } from '../../social-network/facebook.com/isMobile'
+import { fetchFacebookBio } from '../../social-network-provider/facebook.com/fetch-bio'
+import { isMobile } from '../../social-network-provider/facebook.com/isMobile'
 
 const bioCard = new LiveSelector().querySelector<HTMLDivElement>('#profile_timeline_intro_card')
 /**

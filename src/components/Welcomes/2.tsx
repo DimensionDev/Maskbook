@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { geti18nString } from '../../utils/i18n'
 import { makeStyles, Paper, Typography, Button } from '@material-ui/core'
-import { isMobile } from '../../social-network/facebook.com/isMobile'
+import { isMobile } from '../../social-network-provider/facebook.com/isMobile'
 
 const useStyles = makeStyles(theme => ({
     paper: {

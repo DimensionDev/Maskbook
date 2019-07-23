@@ -1,7 +1,7 @@
 import { OnlyRunInContext } from '@holoflows/kit'
 import { encodeText } from '../../utils/type-transform/String-ArrayBuffer'
 import { sleep } from '../../utils/utils'
-import { regularUsername } from '../../social-network/facebook.com/parse-username'
+import { regularUsername } from '../../social-network-provider/facebook.com/parse-username'
 import { geti18nString } from '../../utils/i18n'
 import {
     getMyIdentitiesDB,

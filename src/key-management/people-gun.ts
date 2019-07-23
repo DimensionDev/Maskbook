@@ -1,13 +1,16 @@
 import tasks from '../extension/content-script/tasks'
 import { verifyOthersProve } from '../extension/background-script/CryptoService'
 import { sleep } from '../utils/utils'
-import { getProfilePageUrlAtFacebook, getPostUrlAtFacebook } from '../social-network/facebook.com/parse-username'
+import {
+    getProfilePageUrlAtFacebook,
+    getPostUrlAtFacebook,
+} from '../social-network-provider/facebook.com/parse-username'
 import { geti18nString } from '../utils/i18n'
 import { PersonIdentifier, PostIdentifier, PersonUI } from '../database/type'
 import { queryPerson } from '../database'
 import { gun } from '../network/gun/version.1'
-import { fetchFacebookBio } from '../social-network/facebook.com/fetch-bio'
-import { fetchFacebookProvePost } from '../social-network/facebook.com/fetch-prove-post'
+import { fetchFacebookBio } from '../social-network-provider/facebook.com/fetch-bio'
+import { fetchFacebookProvePost } from '../social-network-provider/facebook.com/fetch-prove-post'
 
 export async function queryPersonFromGun(username: string) {
     return gun

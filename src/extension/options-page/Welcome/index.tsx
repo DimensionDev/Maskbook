@@ -8,7 +8,6 @@ import Welcome2 from '../../../components/Welcomes/2'
 import Services from '../../service'
 import tasks from '../../content-script/tasks'
 import { RouteComponentProps, withRouter } from 'react-router'
-import { getProfilePageUrlAtFacebook } from '../../../social-network/facebook.com/parse-username'
 import { geti18nString } from '../../../utils/i18n'
 import { Dialog, withMobileDialog } from '@material-ui/core'
 import { Identifier, PersonIdentifier } from '../../../database/type'
@@ -16,6 +15,7 @@ import { MessageCenter } from '../../../utils/messages'
 import { ValueRef } from '@holoflows/kit/es'
 import { useValueRef } from '../../../utils/hooks/useValueRef'
 import { makeStyles } from '@material-ui/core'
+import { getProfilePageUrlAtFacebook } from '../../../social-network-provider/facebook.com/parse-username'
 
 //#region Welcome
 enum WelcomeState {
