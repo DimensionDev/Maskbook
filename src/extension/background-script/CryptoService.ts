@@ -6,7 +6,7 @@ import { decodeText, encodeArrayBuffer, decodeArrayBuffer } from '../../utils/ty
 import { constructAlpha40, deconstructPayload } from '../../utils/type-transform/Payload'
 import { geti18nString } from '../../utils/i18n'
 import { toCompressSecp256k1Point, unCompressSecp256k1Point } from '../../utils/type-transform/SECP256k1-Compression'
-import { Person, getMyPrivateKeyAtFacebook, queryPerson } from '../../database'
+import { Person, getMyPrivateKey, queryPerson } from '../../database'
 import { queryMyIdentityAtDB, storeNewPersonDB, queryPersonDB, queryLocalKeyDB } from '../../database/people'
 import { PersonIdentifier, PostIdentifier } from '../../database/type'
 import { addPersonPublicKey } from '../../key-management/people-gun'
@@ -51,9 +51,7 @@ export async function encryptTo(
 ): Promise<[EncryptedText, OthersAESKeyEncryptedToken]> {
     if (to.length === 0) return ['', '']
     const toKey = await prepareOthersKeyForEncryption(to)
-
-    // tslint:disable-next-line: deprecation
-    const mine = await getMyPrivateKeyAtFacebook()
+    const mine = await getMyPrivateKey(whoAmI)
     if (!mine) throw new TypeError('Not inited yet')
     const {
         encryptedContent: encryptedText,
@@ -152,8 +150,7 @@ export async function decryptFrom(
         }
         const byKey = await getKey(by)
         if (!byKey) return { error: geti18nString('service_others_key_not_found', by.userId) }
-        // tslint:disable-next-line: deprecation
-        const mine = await getMyPrivateKeyAtFacebook(whoAmI)
+        const mine = await getMyPrivateKey(whoAmI)
         if (!mine) return { error: geti18nString('service_not_setup_yet') }
         try {
             if (by.equals(whoAmI)) {
@@ -308,7 +305,7 @@ export async function appendShareTarget(
         -40,
         AESKey,
         // tslint:disable-next-line: deprecation
-        (await getMyPrivateKeyAtFacebook())!.privateKey,
+        (await getMyPrivateKey(whoAmI))!.privateKey,
         toKey,
     )
     publishPostAESKey_Service(postIdentifier, whoAmI, othersAESKeyEncrypted)
