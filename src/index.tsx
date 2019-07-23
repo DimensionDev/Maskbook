@@ -1,4 +1,3 @@
-import { uiSetup } from './setup'
 import React from 'react'
 import { HashRouter as Router, Route, Link } from 'react-router-dom'
 import ReactDOM from 'react-dom'
@@ -31,7 +30,6 @@ import Assignment from '@material-ui/icons/Assignment'
 import Phonelink from '@material-ui/icons/Phonelink'
 import { ExportData } from './components/MobileImportExport/Export'
 
-uiSetup()
 const drawerWidth = 240
 const empty = (
     <div

@@ -1,29 +1,26 @@
-import { getUrl } from '../utils/utils'
+import { env, SocialNetworkWorkerAndUI } from './shared'
+import { GetContext } from '@holoflows/kit/es'
 
-export interface WorkerEnv {
-    platform: 'desktop' | 'mobile'
-    implementation: 'WebExtension' | 'chrome-extension' | 'holoflows-extension' | 'unknown'
-}
-
-export interface SocialNetworkWorker {
+/**
+ * A SocialNetworkWorker is running in the background page
+ */
+export interface SocialNetworkWorker extends SocialNetworkWorkerAndUI {
+    /**
+     * If this worker need to inject script into the main context of the page
+     */
     injectedScript?: {
+        /** JavaScript code */
         code: string
+        /** Inject to which URL */
         url: browser.events.UrlFilter[]
     }
 }
 
-export const definedSocialNetworks = new Map<string, SocialNetworkWorker>()
-export function defineSocialNetworkWorker(networkIdentifier: string, config: (env: WorkerEnv) => SocialNetworkWorker) {
-    definedSocialNetworks.set(networkIdentifier, config(env))
-}
-const url = getUrl('/')
-const env: WorkerEnv = {
-    implementation: url.startsWith('chrome-extension://')
-        ? 'chrome-extension'
-        : url.startsWith('holoflows-extension://')
-        ? 'holoflows-extension'
-        : url.indexOf('-extension://') !== -1
-        ? 'WebExtension'
-        : 'unknown',
-    platform: navigator.userAgent.match(/Mobile|mobile/) ? 'mobile' : 'desktop',
+export const definedSocialNetworkWorkers = new Set<SocialNetworkWorker>()
+export function defineSocialNetworkWorker<T extends SocialNetworkWorker>(worker: T) {
+    definedSocialNetworkWorkers.add(worker)
+    if (GetContext() === 'background') {
+        console.log('Activating social network provider', worker.name, worker)
+        worker.init(env, {})
+    }
 }
