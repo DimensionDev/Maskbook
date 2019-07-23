@@ -48,7 +48,7 @@
     "start": "start-storybook -p 9009 -s public",
     "build-storybook": "build-storybook -s public",
     "load-to-firefox": "npx web-ext run --source-dir ./dist/ --verbose",
-    "postinstall": "cd node_modules/@holoflows/kit\nyarn\nyarn build"
+    "postinstall": "cd node_modules/@holoflows/kit && yarn && yarn build"
   },
   "devDependencies": {
     "@babel/core": "^7.4.3",
