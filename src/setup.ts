@@ -5,12 +5,7 @@ export function backgroundSetup() {
         elliptic: require('elliptic'),
     })
 }
-import { definedSocialNetworkUIs } from './social-network/ui'
-import { env } from './social-network/shared'
+import { activateSocialNetworkUI } from './social-network/ui'
 export function uiSetup() {
-    for (const ui of definedSocialNetworkUIs)
-        if (ui.shouldActivate()) {
-            console.log('Activating UI provider', ui.name, ui)
-            ui.init(env, {})
-        }
+    activateSocialNetworkUI()
 }
