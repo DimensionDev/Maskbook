@@ -83,6 +83,7 @@ export function AdditionalPostBoxUI(props: Props) {
 
 export function AdditionalPostBox() {
     const people = usePeople()
+    const classes = useStyles()
     const [identity, setIdentity] = useState<Person[]>([])
     useAsync(() => Services.People.queryMyIdentity('facebook.com'), []).then(setIdentity)
 
@@ -99,7 +100,14 @@ export function AdditionalPostBox() {
         },
         [identity[0]],
     )
-    if (identity.length === 0) return <>{geti18nString('additional_post_box__dont_know_who_you_are')}</>
+
+    if (identity.length === 0) {
+        return (
+            <Card className={classes.grayArea}>
+                {geti18nString('additional_post_box__dont_know_who_you_are')}
+            </Card>
+        )
+    }
 
     // TODO: Multiple account
     if (identity.length > 1) console.warn('Multiple identity found. Let user choose one.')
