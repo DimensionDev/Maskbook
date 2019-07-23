@@ -1,6 +1,5 @@
 import { LiveSelector } from '@holoflows/kit/es/DOM/LiveSelector'
 import { PersonIdentifier } from '../../../database/type'
-import { useEffect, useState } from 'react'
 import { ValueRef, MutationObserverWatcher } from '@holoflows/kit/es'
 import Services from '../../service'
 import { Person } from '../../../database'
