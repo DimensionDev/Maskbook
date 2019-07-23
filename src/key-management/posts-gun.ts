@@ -38,7 +38,7 @@ export async function publishPostAESKey(
     updatePostDB(
         {
             identifier: new PostIdentifier(whoAmI, postIdentifier.replace(/\//g, '|')),
-            recipients: receiversKeys.map(x => new PersonIdentifier('facebook.com', x.name)),
+            recipients: receiversKeys.map(x => new PersonIdentifier(whoAmI.network, x.name)),
         },
         'append',
     )
