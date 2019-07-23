@@ -1,21 +1,23 @@
 import * as React from 'react'
+import { useCallback, useContext, useRef, useState } from 'react'
 import { useAsync } from '../../utils/components/AsyncComponent'
-import { usePeople, MyIdentityContext } from '../DataSource/PeopleRef'
+import { MyIdentityContext, usePeople } from '../DataSource/PeopleRef'
 import { SelectPeopleUI } from './SelectPeople'
-import { useRef, useContext, useState, useCallback } from 'react'
 import { useCapturedInput } from '../../utils/hooks/useCapturedEvents'
 import { Avatar } from '../../utils/components/Avatar'
 import Services from '../../extension/service'
 import { pasteIntoPostBox } from '../../extension/content-script/tasks'
 import { geti18nString } from '../../utils/i18n'
 import { makeStyles } from '@material-ui/styles'
-import { Card, CardHeader, Typography, Divider, Paper, InputBase, Button, Box } from '@material-ui/core'
+import { Box, Button, Card, CardHeader, Divider, InputBase, Paper, Typography } from '@material-ui/core'
 import { Person } from '../../database'
 
 interface Props {
     people: Person[]
+
     onRequestPost(people: Person[], text: string): void
 }
+
 const useStyles = makeStyles({
     root: { margin: '10px 0' },
     paper: { borderRadius: 0, display: 'flex' },
@@ -33,6 +35,7 @@ const useStyles = makeStyles({
     grayArea: { background: '#f5f6f7', padding: 8, wordBreak: 'break-all' },
     button: { padding: '2px 30px', flex: 1 },
 })
+
 export function AdditionalPostBoxUI(props: Props) {
     const { people } = props
     const classes = useStyles()
@@ -45,10 +48,10 @@ export function AdditionalPostBoxUI(props: Props) {
     useCapturedInput(inputRef, setText)
     return (
         <Card className={classes.root}>
-            <CardHeader title={<Typography variant="caption">Encrypt with Maskbook</Typography>} />
-            <Divider />
+            <CardHeader title={<Typography variant="caption">Encrypt with Maskbook</Typography>}/>
+            <Divider/>
             <Paper elevation={0} className={classes.paper}>
-                {myself && <Avatar className={classes.avatar} person={myself} />}
+                {myself && <Avatar className={classes.avatar} person={myself}/>}
                 <InputBase
                     classes={{ root: classes.input, input: classes.innerInput }}
                     inputRef={inputRef}
@@ -62,11 +65,11 @@ export function AdditionalPostBoxUI(props: Props) {
                     )}
                 />
             </Paper>
-            <Divider />
+            <Divider/>
             <Paper elevation={2}>
-                <SelectPeopleUI ignoreMyself people={people} onSetSelected={selectPeople} selected={selectedPeople} />
+                <SelectPeopleUI ignoreMyself people={people} onSetSelected={selectPeople} selected={selectedPeople}/>
             </Paper>
-            <Divider />
+            <Divider/>
             <Box display="flex" className={classes.grayArea}>
                 <Button
                     onClick={() => props.onRequestPost(selectedPeople, text)}
@@ -83,6 +86,7 @@ export function AdditionalPostBoxUI(props: Props) {
 
 export function AdditionalPostBox() {
     const people = usePeople()
+    const classes = useStyles()
     const [identity, setIdentity] = useState<Person[]>([])
     useAsync(() => Services.People.queryMyIdentity('facebook.com'), []).then(setIdentity)
 
@@ -99,14 +103,20 @@ export function AdditionalPostBox() {
         },
         [identity[0]],
     )
-    if (identity.length === 0) return <>{geti18nString('additional_post_box__dont_know_who_you_are')}</>
+    if (identity.length === 0) {
+        return (
+            <Card className={classes.grayArea}>
+                {geti18nString('additional_post_box__dont_know_who_you_are')}
+            </Card>
+        )
+    }
 
     // TODO: Multiple account
     if (identity.length > 1) console.warn('Multiple identity found. Let user choose one.')
 
     return (
         <MyIdentityContext.Provider value={identity[0]}>
-            <AdditionalPostBoxUI people={people} onRequestPost={onRequestPost} />
+            <AdditionalPostBoxUI people={people} onRequestPost={onRequestPost}/>
         </MyIdentityContext.Provider>
     )
 }
