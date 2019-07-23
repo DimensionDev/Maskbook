@@ -274,6 +274,7 @@ export async function getSharedListOfPost(postSalt: string, postBy: PersonIdenti
     const nameInDB =
         ((await queryPostDB(new PostIdentifier(postBy, postSalt.replace(/\//g, '|')))) || { recipients: [] })
             .recipients || []
+    // ! todo: gun 1
     const post = await gun
         .get('posts')
         .get(postSalt)
@@ -285,7 +286,7 @@ export async function getSharedListOfPost(postSalt: string, postBy: PersonIdenti
     const names = new Set(nameInGun)
     nameInDB.forEach(x => names.add(x.userId))
 
-    return Promise.all([...names.values()].map(x => new PersonIdentifier('facebook.com', x)).map(queryPerson))
+    return Promise.all([...names.values()].map(x => new PersonIdentifier(postBy.network, x)).map(queryPerson))
 }
 export async function appendShareTarget(
     postIdentifier: string,
@@ -304,7 +305,6 @@ export async function appendShareTarget(
     const othersAESKeyEncrypted = await Alpha40.generateOthersAESKeyEncrypted(
         -40,
         AESKey,
-        // tslint:disable-next-line: deprecation
         (await getMyPrivateKey(whoAmI))!.privateKey,
         toKey,
     )

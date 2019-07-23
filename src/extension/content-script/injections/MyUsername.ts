@@ -44,7 +44,7 @@ function assign(i: PersonIdentifier) {
 }
 myUsernameRef.addListener(id => {
     if (id.isUnknown) return
-    Services.People.resolveIdentityAtFacebook(id)
+    Services.People.resolveIdentity(id)
 })
 new MutationObserverWatcher(
     myUsernameLiveSelector

@@ -1,4 +1,4 @@
-import { queryPersonDB, PersonRecord, queryPeopleDB, getMyIdentitiesDB, queryMyIdentityAtDB } from '../people'
+import { queryPersonDB, PersonRecord, queryPeopleDB, queryMyIdentityAtDB } from '../people'
 import { PersonIdentifier } from '../type'
 import { getAvatarDataURL } from './avatar'
 import { memoize } from 'lodash-es'
