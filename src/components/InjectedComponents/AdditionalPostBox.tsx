@@ -11,6 +11,7 @@ import { geti18nString } from '../../utils/i18n'
 import { makeStyles } from '@material-ui/styles'
 import { Card, CardHeader, Typography, Divider, Paper, InputBase, Button, Box } from '@material-ui/core'
 import { Person } from '../../database'
+import { NotSetupYetPrompt } from './NotSetupYetPrompt'
 
 interface Props {
     people: Person[]
@@ -102,11 +103,7 @@ export function AdditionalPostBox() {
     )
 
     if (identity.length === 0) {
-        return (
-            <Card className={classes.grayArea}>
-                {geti18nString('additional_post_box__dont_know_who_you_are')}
-            </Card>
-        )
+        return <NotSetupYetPrompt />
     }
 
     // TODO: Multiple account

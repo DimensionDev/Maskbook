@@ -6,12 +6,10 @@ import { sleep } from '../../utils/utils'
 import Services from '../../extension/service'
 import { geti18nString } from '../../utils/i18n'
 import { makeStyles } from '@material-ui/styles'
-import { Link, Box, SnackbarContent, Button, useMediaQuery, useTheme } from '@material-ui/core'
+import { Link, Box, useMediaQuery, useTheme } from '@material-ui/core'
 import { Person } from '../../database'
 import { PersonIdentifier } from '../../database/type'
-import { myUsernameRef } from '../../extension/content-script/injections/MyUsername'
-import { isMobile } from '../../social-network/facebook.com/isMobile'
-import { useValueRef } from '../../utils/hooks/useValueRef'
+import { NotSetupYetPrompt } from './NotSetupYetPrompt'
 
 interface DecryptPostSuccessProps {
     data: { signatureVerifyResult: boolean; content: string }
@@ -62,28 +60,11 @@ function DecryptPostSuccess({ data, people, ...props }: DecryptPostSuccessProps)
 }
 
 const DecryptPostAwaiting = <AdditionalContent title={geti18nString('decrypted_postbox_decrypting')} />
-const useNotSetUpYetStyles = makeStyles({
+export const useNotSetUpYetStyles = makeStyles({
     root: {
         marginBottom: '2em',
     },
 })
-function NotSetupYetPrompt() {
-    const id = useValueRef(myUsernameRef)
-    const styles = useNotSetUpYetStyles()
-    const button = (
-        <Button onClick={() => Services.Welcome.openWelcomePage(id, isMobile)} color="primary" size="small">
-            {geti18nString('click_to_setup')}
-        </Button>
-    )
-    return (
-        <SnackbarContent
-            classes={styles}
-            elevation={0}
-            message={geti18nString('service_not_setup_yet')}
-            action={button}
-        />
-    )
-}
 function DecryptPostFailed({ error }: { error: Error }) {
     if (error && error.message === geti18nString('service_not_setup_yet')) {
         return <NotSetupYetPrompt />
