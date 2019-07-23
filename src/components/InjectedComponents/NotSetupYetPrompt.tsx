@@ -3,7 +3,7 @@ import Services from '../../extension/service'
 import { geti18nString } from '../../utils/i18n'
 import { SnackbarContent, Button, makeStyles } from '@material-ui/core'
 import { myUsernameRef } from '../../extension/content-script/injections/MyUsername'
-import { isMobile } from '../../social-network/facebook.com/isMobile'
+import { isMobile } from '../../social-network-provider/facebook.com/isMobile'
 import { useValueRef } from '../../utils/hooks/useValueRef'
 import { GetContext } from '@holoflows/kit/es'
 

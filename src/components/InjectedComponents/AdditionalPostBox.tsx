@@ -1,6 +1,5 @@
 import * as React from 'react'
-import { useAsync } from '../../utils/components/AsyncComponent'
-import { usePeople, MyIdentityContext } from '../DataSource/PeopleRef'
+import { usePeople, MyIdentityContext, useMyIdentities } from '../DataSource/PeopleRef'
 import { SelectPeopleUI } from './SelectPeople'
 import { useRef, useContext, useState, useCallback } from 'react'
 import { useCapturedInput } from '../../utils/hooks/useCapturedEvents'
@@ -85,8 +84,7 @@ export function AdditionalPostBoxUI(props: Props) {
 export function AdditionalPostBox() {
     const people = usePeople()
     const classes = useStyles()
-    const [identity, setIdentity] = useState<Person[]>([])
-    useAsync(() => Services.People.queryMyIdentity('facebook.com'), []).then(setIdentity)
+    const identity = useMyIdentities()
 
     const onRequestPost = useCallback(
         async (people: Person[], text: string) => {

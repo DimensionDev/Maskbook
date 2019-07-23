@@ -199,6 +199,7 @@ export async function queryMyIdentityAtDB(id: PersonIdentifier): Promise<null | 
 export async function removeMyIdentityAtDB(id: PersonIdentifier): Promise<void> {
     const t = (await db).transaction('myself', 'readwrite')
     await t.objectStore('myself').delete(id.toText())
+    MessageCenter.emit('identityUpdated', undefined)
 }
 /**
  * Store my record
@@ -211,6 +212,7 @@ export async function storeMyIdentityDB(record: PersonRecordPublicPrivate): Prom
 
     const t = (await db).transaction('myself', 'readwrite')
     await t.objectStore('myself').put(data)
+    MessageCenter.emit('identityUpdated', undefined)
 }
 /**
  * Get all my identities.
@@ -233,6 +235,7 @@ export async function generateMyIdentityDB(identifier: PersonIdentifier): Promis
         publicKey: key.publicKey,
         privateKey: key.privateKey,
     })
+    MessageCenter.emit('identityUpdated', undefined)
 }
 //#endregion
 //#region LocalKeys
@@ -248,6 +251,7 @@ function generateAESKey(exportable: boolean) {
 export async function generateLocalKeyDB(id: PersonIdentifier, exportable = true) {
     const key = await generateAESKey(exportable)
     await storeLocalKeyDB(id, key)
+    MessageCenter.emit('identityUpdated', undefined)
     return key
 }
 /**
@@ -279,6 +283,7 @@ export async function storeLocalKeyDB({ network, userId }: PersonIdentifier, key
     const previous = (await t.objectStore('localKeys').get(network)) || {}
     const next = { ...previous, [userId]: key }
     await t.objectStore('localKeys').put(next, network)
+    MessageCenter.emit('identityUpdated', undefined)
 }
 /**
  * Remove local key
@@ -289,6 +294,7 @@ export async function deleteLocalKeyDB({ network, userId }: PersonIdentifier): P
     if (!result) return
     delete result[userId]
     await t.objectStore('localKeys').put(result, network)
+    MessageCenter.emit('identityUpdated', undefined)
 }
 /**
  * Get all my local keys.

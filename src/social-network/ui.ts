@@ -7,6 +7,7 @@ export interface SocialNetworkUI extends SocialNetworkWorkerAndUI, SocialNetwork
 }
 export interface SocialNetworkUIDataSources {
     friendsRef: ValueRef<Person[]>
+    myIdentitiesRef: ValueRef<Person[]>
 }
 
 const definedSocialNetworkUIs = new Set<SocialNetworkUI>()
