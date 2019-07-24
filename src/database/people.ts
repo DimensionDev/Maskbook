@@ -164,8 +164,7 @@ export async function queryPersonDB(id: PersonIdentifier): Promise<null | Person
  * @param person - Partial of person record
  */
 export async function updatePersonDB(person: Partial<PersonRecord> & Pick<PersonRecord, 'identifier'>): Promise<void> {
-    const full = await queryPersonDB(person.identifier)
-    if (!full) throw new Error('Person is not in the db')
+    const full = (await queryPersonDB(person.identifier)) || { groups: [], identifier: person.identifier }
     const o: PersonRecordInDatabase = { ...(await toDb(full)), ...(await toDb(person as PersonRecord)) }
 
     const t = (await db).transaction('people', 'readwrite')
