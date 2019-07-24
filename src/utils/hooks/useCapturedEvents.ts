@@ -19,7 +19,7 @@ export function useCapturedInput(
             }
         }
     }
-    useEffect(binder(['change'], use), [ref.current])
+    useEffect(binder(['input'], use), [ref.current])
     useEffect(
         binder(
             [
