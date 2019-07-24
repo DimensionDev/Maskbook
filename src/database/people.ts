@@ -117,8 +117,11 @@ const db = openDB<PeopleDB>('maskbook-people-v2', 1, {
  * @param record - PersonRecord
  */
 export async function storeNewPersonDB(record: PersonRecord): Promise<void> {
+    // ! Add await between a transaction and function end will cause the transaction closes !
+    // ! Do ALL async works before opening an transaction
+    const data = await toDb(record)
     const t = (await db).transaction('people', 'readwrite')
-    await t.objectStore('people').put(await toDb(record))
+    await t.objectStore('people').put(data)
     sendNewPersonMessageDB(record)
     return
 }
@@ -161,10 +164,10 @@ export async function queryPersonDB(id: PersonIdentifier): Promise<null | Person
  * @param person - Partial of person record
  */
 export async function updatePersonDB(person: Partial<PersonRecord> & Pick<PersonRecord, 'identifier'>): Promise<void> {
+    const full = (await queryPersonDB(person.identifier)) || { groups: [], identifier: person.identifier }
+    const o: PersonRecordInDatabase = { ...(await toDb(full)), ...(await toDb(person as PersonRecord)) }
+
     const t = (await db).transaction('people', 'readwrite')
-    const full = await t.objectStore('people').get(person.identifier.toText())
-    if (!full) throw new Error('Person is not in the db')
-    const o: PersonRecordInDatabase = { ...full, ...(await toDb(person as PersonRecord)) }
     await t.objectStore('people').put(o)
     sendNewPersonMessageDB(await outDb(o))
 }
@@ -204,8 +207,10 @@ export async function removeMyIdentityAtDB(id: PersonIdentifier): Promise<void> 
 export async function storeMyIdentityDB(record: PersonRecordPublicPrivate): Promise<void> {
     if (!record.publicKey || !record.privateKey)
         throw new TypeError('No public/private key pair found when store self identity')
+    const data = await toDb(record)
+
     const t = (await db).transaction('myself', 'readwrite')
-    await t.objectStore('myself').put(await toDb(record))
+    await t.objectStore('myself').put(data)
 }
 /**
  * Get all my identities.

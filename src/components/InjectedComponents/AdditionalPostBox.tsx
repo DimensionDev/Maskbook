@@ -11,6 +11,7 @@ import { geti18nString } from '../../utils/i18n'
 import { makeStyles } from '@material-ui/styles'
 import { Card, CardHeader, Typography, Divider, Paper, InputBase, Button, Box } from '@material-ui/core'
 import { Person } from '../../database'
+import { NotSetupYetPrompt } from './NotSetupYetPrompt'
 
 interface Props {
     people: Person[]
@@ -83,6 +84,7 @@ export function AdditionalPostBoxUI(props: Props) {
 
 export function AdditionalPostBox() {
     const people = usePeople()
+    const classes = useStyles()
     const [identity, setIdentity] = useState<Person[]>([])
     useAsync(() => Services.People.queryMyIdentity('facebook.com'), []).then(setIdentity)
 
@@ -95,11 +97,14 @@ export function AdditionalPostBox() {
             )
             const fullPost = geti18nString('additional_post_box__encrypted_post_pre', encrypted)
             pasteIntoPostBox(fullPost, geti18nString('additional_post_box__encrypted_failed'))
-            Services.Crypto.publishPostAESKey(token)
+            Services.Crypto.publishPostAESKey(token, identity[0].identifier)
         },
         [identity[0]],
     )
-    if (identity.length === 0) return <>{geti18nString('additional_post_box__dont_know_who_you_are')}</>
+
+    if (identity.length === 0) {
+        return <NotSetupYetPrompt />
+    }
 
     // TODO: Multiple account
     if (identity.length > 1) console.warn('Multiple identity found. Let user choose one.')

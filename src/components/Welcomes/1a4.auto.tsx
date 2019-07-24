@@ -34,9 +34,10 @@ const useStyles = makeStyles(theme => ({
         display: 'flex',
         justifyContent: 'space-around',
     },
-    group: { flexDirection: 'row' },
+    group: { flexDirection: 'row', justifyContent: 'center' },
     radio: {
         marginTop: '-2em',
+        marginBottom: '1em',
         zoom: 0.75,
         color: theme.palette.grey[300],
         '&$checked': {

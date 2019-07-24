@@ -1,6 +1,8 @@
 import { PublishedAESKey } from '../crypto/crypto-alpha-40'
 import { OnlyRunInContext } from '@holoflows/kit/es'
 import { gun } from '../network/gun/version.1'
+import { updatePostDB } from '../database/post'
+import { PostIdentifier, PersonIdentifier } from '../database/type'
 
 OnlyRunInContext('background', 'gun')
 /**
@@ -19,6 +21,7 @@ export async function queryPostAESKey(salt: string, myUsername: string) {
 
 export async function publishPostAESKey(
     postIdentifier: string,
+    whoAmI: PersonIdentifier,
     receiversKeys: {
         key: PublishedAESKey
         name: string
@@ -32,6 +35,13 @@ export async function publishPostAESKey(
         stored[k.name] = k.key
     }
     console.log('Save to gun', postIdentifier, receiversKeys)
+    updatePostDB(
+        {
+            identifier: new PostIdentifier(whoAmI, postIdentifier.replace(/\//g, '|')),
+            recipients: receiversKeys.map(x => new PersonIdentifier('facebook.com', x.name)),
+        },
+        'append',
+    )
     await gun
         .get('posts')
         .get(postIdentifier)

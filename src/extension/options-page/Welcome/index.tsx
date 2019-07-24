@@ -5,15 +5,17 @@ import Welcome1a3 from '../../../components/Welcomes/1a3'
 import Welcome1a4v2 from '../../../components/Welcomes/1a4.v2'
 import Welcome1b1 from '../../../components/Welcomes/1b1'
 import Welcome2 from '../../../components/Welcomes/2'
-import { useAsync } from '../../../utils/components/AsyncComponent'
 import Services from '../../service'
 import tasks from '../../content-script/tasks'
 import { RouteComponentProps, withRouter } from 'react-router'
 import { getProfilePageUrlAtFacebook } from '../../../social-network/facebook.com/parse-username'
-import { setStorage, LATEST_WELCOME_VERSION } from '../../../components/Welcomes/WelcomeVersion'
 import { geti18nString } from '../../../utils/i18n'
 import { Dialog, withMobileDialog } from '@material-ui/core'
 import { Identifier, PersonIdentifier } from '../../../database/type'
+import { MessageCenter } from '../../../utils/messages'
+import { ValueRef } from '@holoflows/kit/es'
+import { useValueRef } from '../../../utils/hooks/useValueRef'
+import { makeStyles } from '@material-ui/core'
 
 //#region Welcome
 enum WelcomeState {
@@ -29,8 +31,8 @@ enum WelcomeState {
 }
 
 const WelcomeActions = {
-    backupMyKeyPair(id: PersonIdentifier) {
-        return Services.Welcome.backupMyKeyPair(id)
+    backupMyKeyPair(whoAmI: PersonIdentifier) {
+        return Services.Welcome.backupMyKeyPair(whoAmI)
     },
     restoreFromFile(file: File, id: PersonIdentifier) {
         const fr = new FileReader()
@@ -62,7 +64,6 @@ const WelcomeActions = {
         this.autoVerifyBio(user, prove)
     },
     onFinish(reason: 'quit' | 'done') {
-        if (reason === 'done') setStorage({ init: LATEST_WELCOME_VERSION })
         window.close()
     },
 }
@@ -123,34 +124,56 @@ function Welcome(props: Welcome) {
     }
 }
 const ResponsiveDialog = withMobileDialog()(Dialog)
+const ProvePostRef = new ValueRef('')
+const IdentifierRef = new ValueRef(PersonIdentifier.unknown)
+const getMyProveBio = async () => {
+    if (IdentifierRef.value.isUnknown) {
+        const all = await Services.People.queryMyIdentity()
+        if (all[0]) IdentifierRef.value = all[0].identifier
+    }
+    const post = await Services.Crypto.getMyProveBio(IdentifierRef.value)
+    if (post) ProvePostRef.value = post
+}
+MessageCenter.on('generateKeyPair', getMyProveBio)
+IdentifierRef.addListener(getMyProveBio)
+getMyProveBio()
+
+const useStyles = makeStyles(theme => ({
+    full: {
+        width: '100%',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+}))
+export const IdentifierRefContext = React.createContext(IdentifierRef)
 export default withRouter(function _WelcomePortal(props: RouteComponentProps<{ identifier: string }>) {
     const [step, setStep] = useState(WelcomeState.Start)
-    const [provePost, setProvePost] = useState('')
-    const [identifier, setIdentifier] = useState<PersonIdentifier>(PersonIdentifier.unknown)
+    const provePost = useValueRef(ProvePostRef)
+    const identifier = useValueRef(IdentifierRef)
+    const classes = useStyles()
 
     useEffect(() => {
         const raw = new URLSearchParams(props.location.search).get('identifier') || ''
         const id = Identifier.fromString(raw)
         if (id && id.equals(identifier)) return
         if (id instanceof PersonIdentifier) {
-            setIdentifier(id)
+            IdentifierRef.value = id
         }
     }, [props.location.search])
 
-    useAsync(() => Services.Crypto.getMyProveBio(identifier), [identifier]).then(
-        provePost => provePost && setProvePost(provePost),
-    )
-
     return (
-        <ResponsiveDialog open>
-            <Welcome
-                provePost={provePost}
-                currentStep={step}
-                sideEffects={WelcomeActions}
-                onStepChange={setStep}
-                onFinish={WelcomeActions.onFinish}
-                identity={identifier}
-            />
+        <ResponsiveDialog classes={{ paperWidthSm: classes.full }} open>
+            <IdentifierRefContext.Provider value={IdentifierRef}>
+                <Welcome
+                    provePost={provePost}
+                    currentStep={step}
+                    sideEffects={WelcomeActions}
+                    onStepChange={setStep}
+                    onFinish={WelcomeActions.onFinish}
+                    identity={identifier}
+                />
+            </IdentifierRefContext.Provider>
         </ResponsiveDialog>
     )
 })

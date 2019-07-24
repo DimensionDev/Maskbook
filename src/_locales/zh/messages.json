@@ -2,9 +2,6 @@
     "manifest_description": {
         "message": "在臉書發佈加密訊息，只讓你的朋友閱讀。"
     },
-    "additional_post_box__dont_know_who_you_are": {
-        "message": "抱歉，Maskbook 無法發現你是誰，所以加密框暫時不可用。"
-    },
     "additional_post_box__placeholder_w_name": {
         "message": "Hey $1, 有何所思？用 Maskbook 加密分享。"
     },
@@ -36,8 +33,8 @@
     "decrypted_postbox_title": {
         "message": "Maskbook 解密出的文本："
     },
-    "decrypted_postbox_add_decryptor": {
-        "message": "查看或添加可解密權限者"
+    "decrypted_postbox_add_recipients": {
+        "message": "查看或添加收件人"
     },
     "click_to_setup": {
         "message": "點此開始配置"
@@ -247,10 +244,10 @@
         "message": "請點擊「編輯簡介」按鈕或簡介旁的鉛筆圖標"
     },
     "automation_request_paste_into_bio_box": {
-        "message": "已將公鑰拷貝至剪貼板，可以直接粘貼到輸入框。"
+        "message": "請拷貝公鑰，然後發佈到個人簡介上。"
     },
     "automation_request_paste_into_post_box": {
-        "message": "已將公鑰拷貝至剪貼板，可以直接粘貼到輸入框。"
+        "message": "請拷貝公鑰，然後發佈到時間綫上。"
     },
     "payload_not_found": {
         "message": "找不到 payload"

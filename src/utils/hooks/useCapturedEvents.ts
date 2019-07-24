@@ -4,12 +4,12 @@ import { useEffect, useCallback } from 'react'
  * ! Call this hook inside Shadow Root!
  */
 export function useCapturedInput(
-    ref: React.MutableRefObject<HTMLInputElement | undefined>,
+    ref: React.MutableRefObject<HTMLInputElement | undefined | null>,
     onChange: (newVal: string) => void,
 ) {
     const stop = useCallback((e: Event) => e.stopPropagation(), [])
     const use = useCallback((e: Event) => onChange((e.currentTarget as HTMLInputElement).value), [onChange])
-    function binder(keys: (keyof HTMLElementEventMap)[], fn: (e: Event) => void) {
+    function binder<T extends keyof HTMLElementEventMap>(keys: T[], fn: (e: HTMLElementEventMap[T]) => void) {
         return () => {
             if (!ref.current) return
             keys.forEach(k => ref.current!.addEventListener(k, fn, true))
@@ -19,7 +19,7 @@ export function useCapturedInput(
             }
         }
     }
-    useEffect(binder(['keydown', 'keyup', 'keypress', 'change'], use), [ref.current])
+    useEffect(binder(['input'], use), [ref.current])
     useEffect(
         binder(
             [
@@ -41,4 +41,5 @@ export function useCapturedInput(
         ),
         [ref.current],
     )
+    return binder
 }

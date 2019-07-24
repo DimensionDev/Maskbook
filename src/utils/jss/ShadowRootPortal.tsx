@@ -5,25 +5,28 @@ document.body.appendChild(div)
 export const PortalShadowRoot = (div.attachShadow({ mode: 'closed' }) as unknown) as any
 livingShadowRoots.add(PortalShadowRoot as any)
 
-Object.defineProperty(ShadowRoot.prototype, 'nodeType', {
-    get() {
-        if (this === PortalShadowRoot) return 1
-        else return Object.getOwnPropertyDescriptor(Node.prototype, 'nodeType')!.get!.call(this)
+Object.defineProperties(ShadowRoot.prototype, {
+    setAttribute: { value() {} },
+    removeAttribute: { value() {} },
+    nodeType: {
+        get() {
+            if (this === PortalShadowRoot) return 1
+            else return Object.getOwnPropertyDescriptor(Node.prototype, 'nodeType')!.get!.call(this)
+        },
+    },
+    tagName: {
+        get() {
+            if (this === PortalShadowRoot) return 'div'
+            else return undefined
+        },
+    },
+    style: {
+        get() {
+            if (this === PortalShadowRoot) return div.style
+            else return undefined
+        },
     },
 })
-Object.defineProperty(ShadowRoot.prototype, 'tagName', {
-    get() {
-        if (this === PortalShadowRoot) return 'div'
-        else return undefined
-    },
-})
-Object.defineProperty(ShadowRoot.prototype, 'style', {
-    get() {
-        if (this === PortalShadowRoot) return div.style
-        else return undefined
-    },
-})
-
 {
     // ? Hack for React, let event go through ShadowDom
     const hackingEvents = new WeakMap<Event, EventTarget[]>()

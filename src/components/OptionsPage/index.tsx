@@ -25,7 +25,8 @@ const useStyles = makeStyles(
     }),
 )
 
-export function OptionsPage({ linkComponent }: { linkComponent?: any }) {
+export function OptionsPage(props: { linkComponent?: any; title: string; buttonTitle: string; to: string }) {
+    const { linkComponent, title, buttonTitle, to } = props
     const classes = useStyles()
 
     return (
@@ -33,12 +34,12 @@ export function OptionsPage({ linkComponent }: { linkComponent?: any }) {
             <CardMedia className={classes.media} />
             <CardContent>
                 <Typography gutterBottom variant="h5" component="h2">
-                    {geti18nString('options_index_welcome')}
+                    {title}
                 </Typography>
             </CardContent>
             <CardActions>
-                <Button component={linkComponent} to="/welcome" color="primary" variant="contained">
-                    {geti18nString('options_index_setup')}
+                <Button component={linkComponent} to={to} color="primary" variant="contained">
+                    {buttonTitle}
                 </Button>
             </CardActions>
         </Card>

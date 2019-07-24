@@ -2,7 +2,15 @@ import React, { useState, useCallback } from 'react'
 import { SelectPeopleUI } from './SelectPeople'
 import { geti18nString } from '../../utils/i18n'
 import { makeStyles } from '@material-ui/styles'
-import { Dialog, DialogTitle, DialogContent, DialogActions, Button, CircularProgress } from '@material-ui/core'
+import {
+    Dialog,
+    DialogTitle,
+    DialogContent,
+    DialogActions,
+    Button,
+    CircularProgress,
+    withMobileDialog,
+} from '@material-ui/core'
 import { Person } from '../../database'
 import { PortalShadowRoot } from '../../utils/jss/ShadowRootPortal'
 interface Props {
@@ -17,6 +25,7 @@ const useStyles = makeStyles({
     content: { padding: '0 12px' },
     progress: { marginRight: 6 },
 })
+const ResponsiveDialog = withMobileDialog()(Dialog)
 export function SelectPeopleDialog(props: Props) {
     const classes = useStyles()
     const [people, select] = useState<Person[]>([] as Person[])
@@ -35,7 +44,7 @@ export function SelectPeopleDialog(props: Props) {
     const canClose = !rejection && committed
     const canCommit = committed || people.length === 0
     return (
-        <Dialog
+        <ResponsiveDialog
             container={PortalShadowRoot}
             onClose={canClose ? onClose : void 0}
             open={props.open}
@@ -68,7 +77,7 @@ export function SelectPeopleDialog(props: Props) {
                     {geti18nString(committed ? 'sharing' : 'share')}
                 </Button>
             </DialogActions>
-        </Dialog>
+        </ResponsiveDialog>
     )
 }
 

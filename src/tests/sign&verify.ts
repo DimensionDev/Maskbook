@@ -6,4 +6,5 @@ async function testSignVerify(msg: string = 'test string') {
     const result = await verify(msg, signature, alice.publicKey)
     if (result === false) throw new Error()
 }
+testSignVerify()
 Object.assign(window, { testSignVerify })

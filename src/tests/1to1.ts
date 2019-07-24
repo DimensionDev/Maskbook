@@ -19,5 +19,5 @@ async function test1to1(text: string = 'test string') {
     })
     if (decodeText(decrypted) !== text) throw new Error()
 }
-
+test1to1()
 Object.assign(window, { test1to1 })

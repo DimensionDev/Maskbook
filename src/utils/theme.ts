@@ -30,11 +30,9 @@ const baseTheme = (theme: 'dark' | 'light') =>
             MuiButton: {
                 root: {
                     textTransform: 'none',
-                    padding: _refTheme.spacing(1, 3),
                 },
                 outlined: {
                     background: theme === 'light' ? 'white' : _refThemeDark.palette.background.default,
-                    padding: _refTheme.spacing(1, 3),
                 },
             },
             MuiCard: {

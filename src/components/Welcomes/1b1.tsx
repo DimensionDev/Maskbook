@@ -5,13 +5,14 @@ import { useDragAndDrop } from '../../utils/hooks/useDragAndDrop'
 import { geti18nString } from '../../utils/i18n'
 import { makeStyles, Paper, Button, Typography, Theme } from '@material-ui/core'
 import { styled } from '@material-ui/styles'
+import WelcomeContainer from './WelcomeContainer'
 
 const RestoreBox = styled('div')(({ theme }) => ({
     color: theme.palette.text.hint,
     border: `2px dashed ${theme.palette.divider}`,
     whiteSpace: 'pre-line',
     minHeight: 160 - theme.spacing(8),
-    width: 300,
+    maxWidth: 300,
     borderRadius: theme.shape.borderRadius,
     display: 'inline-flex',
     flexDirection: 'column',
@@ -26,11 +27,6 @@ interface Props {
     restore(file: File): void
 }
 const useStyles = makeStyles(theme => ({
-    paper: {
-        maxWidth: 600,
-        width: '100%',
-        boxSizing: 'border-box',
-    },
     nav: {
         paddingTop: theme.spacing(1),
         paddingLeft: theme.spacing(1),
@@ -55,6 +51,7 @@ const useStyles = makeStyles(theme => ({
         display: 'none',
     },
     restoreBox: {
+        width: '100%',
         color: 'gray',
         transition: '0.4s',
         '&[data-active=true]': {
@@ -67,7 +64,7 @@ export default function Welcome({ back, restore }: Props) {
     const ref = React.useRef<HTMLInputElement>(null)
     const { dragEvents, fileReceiver, fileRef, dragStatus } = useDragAndDrop()
     return (
-        <Paper elevation={2} {...dragEvents} className={classes.paper}>
+        <WelcomeContainer {...dragEvents}>
             <nav className={classes.nav}>
                 <Button onClick={back} disableFocusRipple disableRipple className={classes.navButton}>
                     <ArrowBack className={classes.navButtonIcon} />
@@ -104,6 +101,6 @@ export default function Welcome({ back, restore }: Props) {
                     {geti18nString('restore')}
                 </Button>
             </main>
-        </Paper>
+        </WelcomeContainer>
     )
 }

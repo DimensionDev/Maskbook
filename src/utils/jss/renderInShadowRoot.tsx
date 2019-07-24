@@ -15,6 +15,7 @@ const jss = create({ ...jssPreset(), Renderer: ConstructableStyleSheetsRenderer 
  * @param shadow ShadowRoot that want to inject to
  */
 export function renderInShadowRoot(node: React.ReactNode, shadow: ShadowRoot) {
+    if (shadow.mode === 'open') console.warn('Do not render with open ShadowRoot!')
     ReactDOM.render(<RenderInShadowRootWrapper children={node} />, shadow as any)
     livingShadowRoots.add(shadow)
     applyAdoptedStyleSheets()

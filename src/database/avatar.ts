@@ -41,9 +41,8 @@ export async function storeAvatarDB(id: IdentityWithAvatar, avatar: ArrayBuffer)
         lastAccessTime: new Date(),
     }
     const t = (await db).transaction(['avatars', 'metadata'], 'readwrite')
-    const a = t.objectStore('avatars').put(avatar, id.toText())
+    await t.objectStore('avatars').put(avatar, id.toText())
     await t.objectStore('metadata').put(meta)
-    await a
     return
 }
 /**
@@ -110,11 +109,9 @@ export async function isAvatarOutdatedDB(
  */
 export async function deleteAvatarsDB(ids: IdentityWithAvatar[]) {
     const t = (await db).transaction(['avatars', 'metadata'], 'readwrite')
-    const promises: Promise<void>[] = []
     for (const id of ids) {
-        const a = t.objectStore('avatars').delete(id.toText())
-        const b = t.objectStore('metadata').delete(id.toText())
-        promises.push(a, b)
+        t.objectStore('avatars').delete(id.toText())
+        t.objectStore('metadata').delete(id.toText())
     }
     return
 }
