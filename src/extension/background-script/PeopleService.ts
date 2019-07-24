@@ -27,10 +27,13 @@ export async function queryPeople(network: string): Promise<Person[]> {
 /**
  * Query my identity.
  */
-export async function queryMyIdentity(network: string): Promise<Person[]>
+export async function queryMyIdentity(network?: string): Promise<Person[]>
 export async function queryMyIdentity(identifier: PersonIdentifier): Promise<Person[]>
-export async function queryMyIdentity(identifier: PersonIdentifier | string): Promise<Person[]> {
-    if (typeof identifier === 'string') {
+export async function queryMyIdentity(identifier?: PersonIdentifier | string): Promise<Person[]> {
+    if (identifier === undefined) {
+        const all = await getMyIdentitiesDB()
+        return Promise.all(all.map(personRecordToPerson))
+    } else if (typeof identifier === 'string') {
         const all = await getMyIdentitiesDB()
         const atSite = all.filter(x => x.identifier.network === identifier)
         return Promise.all(atSite.map(personRecordToPerson))

@@ -130,11 +130,16 @@ const ResponsiveDialog = withMobileDialog()(Dialog)
 const ProvePostRef = new ValueRef('')
 const IdentifierRef = new ValueRef(PersonIdentifier.unknown)
 const getMyProveBio = async () => {
+    if (IdentifierRef.value.isUnknown) {
+        const all = await Services.People.queryMyIdentity()
+        if (all[0]) IdentifierRef.value = all[0].identifier
+    }
     const post = await Services.Crypto.getMyProveBio(IdentifierRef.value)
     if (post) ProvePostRef.value = post
 }
 MessageCenter.on('generateKeyPair', getMyProveBio)
 IdentifierRef.addListener(getMyProveBio)
+getMyProveBio()
 
 const useStyles = makeStyles(theme => ({
     full: {
@@ -144,6 +149,7 @@ const useStyles = makeStyles(theme => ({
         alignItems: 'center',
     },
 }))
+export const IdentifierRefContext = React.createContext(IdentifierRef)
 export default withRouter(function _WelcomePortal(props: RouteComponentProps<{ identifier: string }>) {
     const [step, setStep] = useState(WelcomeState.Start)
     const provePost = useValueRef(ProvePostRef)
@@ -161,14 +167,16 @@ export default withRouter(function _WelcomePortal(props: RouteComponentProps<{ i
 
     return (
         <ResponsiveDialog classes={{ paperWidthSm: classes.full }} open>
-            <Welcome
-                provePost={provePost}
-                currentStep={step}
-                sideEffects={WelcomeActions}
-                onStepChange={setStep}
-                onFinish={WelcomeActions.onFinish}
-                identity={identifier}
-            />
+            <IdentifierRefContext.Provider value={IdentifierRef}>
+                <Welcome
+                    provePost={provePost}
+                    currentStep={step}
+                    sideEffects={WelcomeActions}
+                    onStepChange={setStep}
+                    onFinish={WelcomeActions.onFinish}
+                    identity={identifier}
+                />
+            </IdentifierRefContext.Provider>
         </ResponsiveDialog>
     )
 })

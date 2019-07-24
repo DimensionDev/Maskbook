@@ -4,6 +4,8 @@ import { geti18nString } from '../../utils/i18n'
 import { makeStyles, Paper, Button, Typography, Box, Theme, useTheme } from '@material-ui/core'
 import { styled } from '@material-ui/styles'
 import WelcomeContainer from './WelcomeContainer'
+import { IdentifierRefContext } from '../../extension/options-page/Welcome'
+import { useValueRef } from '../../utils/hooks/useValueRef'
 
 const VerticalCenter = styled('div')({
     display: 'flex',
@@ -64,6 +66,7 @@ const useStyles = makeStyles(theme => ({
 export default function Welcome({ create, restore, close }: Props) {
     const theme = useTheme()
     const classes = useStyles()
+    const idContext = useValueRef(React.useContext(IdentifierRefContext))
     return (
         <WelcomeContainer>
             <nav className={classes.nav}>
@@ -85,7 +88,16 @@ export default function Welcome({ create, restore, close }: Props) {
                         <Typography variant="h6">{geti18nString('welcome_0_connect_facebook')}</Typography>
                     </Box>
                     <VerticalCenter>
-                        <Button className={classes.commonButton} onClick={create} variant="contained" color="primary">
+                        <Button
+                            disabled={idContext.isUnknown}
+                            className={classes.commonButton}
+                            onClick={() => {
+                                if (idContext.isUnknown) {
+                                    location.href = 'https://facebook.com/'
+                                } else create()
+                            }}
+                            variant="contained"
+                            color="primary">
                             {geti18nString('welcome_0_connect_facebook')}
                         </Button>
                     </VerticalCenter>
