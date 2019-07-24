@@ -34,7 +34,7 @@ const useStyles = makeStyles(theme => ({
         display: 'flex',
         justifyContent: 'space-around',
     },
-    group: { flexDirection: 'row' },
+    group: { flexDirection: 'row', justifyContent: 'center' },
     radio: {
         marginTop: '-2em',
         marginBottom: '1em',

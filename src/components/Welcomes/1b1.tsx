@@ -51,6 +51,7 @@ const useStyles = makeStyles(theme => ({
         display: 'none',
     },
     restoreBox: {
+        width: '100%',
         color: 'gray',
         transition: '0.4s',
         '&[data-active=true]': {

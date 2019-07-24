@@ -57,6 +57,9 @@ const useStyles = makeStyles(theme => ({
     navButtonIcon: {
         marginLeft: theme.spacing(1),
     },
+    commonButton: {
+        margin: '0 0.5rem',
+    },
 }))
 export default function Welcome({ create, restore, close }: Props) {
     const theme = useTheme()
@@ -82,7 +85,7 @@ export default function Welcome({ create, restore, close }: Props) {
                         <Typography variant="h6">{geti18nString('welcome_0_connect_facebook')}</Typography>
                     </Box>
                     <VerticalCenter>
-                        <Button onClick={create} variant="contained" color="primary">
+                        <Button className={classes.commonButton} onClick={create} variant="contained" color="primary">
                             {geti18nString('welcome_0_connect_facebook')}
                         </Button>
                     </VerticalCenter>
@@ -93,7 +96,7 @@ export default function Welcome({ create, restore, close }: Props) {
                         <Typography variant="h6">{geti18nString('welcome_0_restore_key')}</Typography>
                     </Box>
                     <VerticalCenter>
-                        <Button onClick={restore} variant="outlined">
+                        <Button className={classes.commonButton} onClick={restore} variant="outlined">
                             {geti18nString('restore')}
                         </Button>
                     </VerticalCenter>

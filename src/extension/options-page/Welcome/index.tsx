@@ -17,6 +17,7 @@ import { Identifier, PersonIdentifier } from '../../../database/type'
 import { MessageCenter } from '../../../utils/messages'
 import { ValueRef } from '@holoflows/kit/es'
 import { useValueRef } from '../../../utils/hooks/useValueRef'
+import { makeStyles } from '@material-ui/core'
 
 //#region Welcome
 enum WelcomeState {
@@ -135,10 +136,19 @@ const getMyProveBio = async () => {
 MessageCenter.on('generateKeyPair', getMyProveBio)
 IdentifierRef.addListener(getMyProveBio)
 
+const useStyles = makeStyles(theme => ({
+    full: {
+        width: '100%',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+}))
 export default withRouter(function _WelcomePortal(props: RouteComponentProps<{ identifier: string }>) {
     const [step, setStep] = useState(WelcomeState.Start)
     const provePost = useValueRef(ProvePostRef)
     const identifier = useValueRef(IdentifierRef)
+    const classes = useStyles()
 
     useEffect(() => {
         const raw = new URLSearchParams(props.location.search).get('identifier') || ''
@@ -150,7 +160,7 @@ export default withRouter(function _WelcomePortal(props: RouteComponentProps<{ i
     }, [props.location.search])
 
     return (
-        <ResponsiveDialog open>
+        <ResponsiveDialog classes={{ paperWidthSm: classes.full }} open>
             <Welcome
                 provePost={provePost}
                 currentStep={step}
