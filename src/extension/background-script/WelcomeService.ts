@@ -11,29 +11,30 @@ import {
     queryPeopleDB,
     generateLocalKeyDB,
     generateMyIdentityDB,
+    queryLocalKeyDB,
+    queryMyIdentityAtDB,
 } from '../../database/people'
 import { BackupJSONFileLatest } from '../../utils/type-transform/BackupFile'
 import { PersonIdentifier } from '../../database/type'
 import { MessageCenter } from '../../utils/messages'
 
 OnlyRunInContext('background', 'WelcomeService')
-async function generateBackupJSON(identifier: PersonIdentifier, full = false): Promise<BackupJSONFileLatest> {
-    const whoami: BackupJSONFileLatest['whoami'] = []
-    const people: NonNullable<BackupJSONFileLatest['people']> = []
+async function generateBackupJSON(whoAmI: PersonIdentifier, full = false): Promise<BackupJSONFileLatest> {
+    const myIdentitiesInDB: BackupJSONFileLatest['whoami'] = []
+    const peopleInDB: NonNullable<BackupJSONFileLatest['people']> = []
 
     const promises: Promise<void>[] = []
     //#region data.whoami
     const localKeys = await getLocalKeysDB()
-    if (localKeys.size === 0) {
-        await generateLocalKeyDB(identifier)
-        await generateMyIdentityDB(identifier)
-        // ? New user !
-        MessageCenter.emit('generateKeyPair', undefined)
-        console.log('New user! Generating key pairs')
-        return generateBackupJSON(identifier, full)
+    const myIdentity = await getMyIdentitiesDB()
+    if (!whoAmI.isUnknown) {
+        if ((await hasValidIdentity(whoAmI)) === false) {
+            await createNewIdentity(whoAmI)
+            return generateBackupJSON(whoAmI, full)
+        }
     }
-    async function addWhoAmI(data: PersonRecordPublicPrivate) {
-        whoami.push({
+    async function addMyIdentitiesInDB(data: PersonRecordPublicPrivate) {
+        myIdentitiesInDB.push({
             network: data.identifier.network,
             userId: data.identifier.userId,
             nickname: data.nickname,
@@ -43,14 +44,14 @@ async function generateBackupJSON(identifier: PersonIdentifier, full = false): P
             privateKey: await exportKey(data.privateKey),
         })
     }
-    for (const id of await getMyIdentitiesDB()) {
-        promises.push(addWhoAmI(id))
+    for (const id of myIdentity) {
+        promises.push(addMyIdentitiesInDB(id))
     }
     //#endregion
 
     //#region data.people
     async function addPeople(data: PersonRecordPublic) {
-        people.push({
+        peopleInDB.push({
             network: data.identifier.network,
             userId: data.identifier.userId,
             groups: data.groups.map(g => ({ network: g.network, groupId: g.groupId, type: g.type })),
@@ -70,22 +71,37 @@ async function generateBackupJSON(identifier: PersonIdentifier, full = false): P
     if (full)
         return {
             version: 1,
-            whoami,
-            people,
+            whoami: myIdentitiesInDB,
+            people: peopleInDB,
         }
     else
         return {
             version: 1,
-            whoami,
+            whoami: myIdentitiesInDB,
         }
     function exportKey(k: CryptoKey) {
         return crypto.subtle.exportKey('jwk', k)
     }
 }
-export async function backupMyKeyPair(identifier: PersonIdentifier) {
+async function hasValidIdentity(whoAmI: PersonIdentifier) {
+    const local = await queryLocalKeyDB(whoAmI)
+    const ecdh = await queryMyIdentityAtDB(whoAmI)
+    if (!local || !ecdh || !ecdh.privateKey || !ecdh.publicKey) return false
+    return true
+}
+
+async function createNewIdentity(whoAmI: PersonIdentifier) {
+    await generateLocalKeyDB(whoAmI)
+    await generateMyIdentityDB(whoAmI)
+    // ? New user !
+    MessageCenter.emit('generateKeyPair', undefined)
+    console.log('New user! Generating key pairs')
+}
+
+export async function backupMyKeyPair(whoAmI: PersonIdentifier) {
     // Don't make the download pop so fast
     await sleep(1000)
-    const obj = await generateBackupJSON(identifier)
+    const obj = await generateBackupJSON(whoAmI)
     const string = JSON.stringify(obj)
     const buffer = encodeText(string)
     const blob = new Blob([buffer], { type: 'application/json' })

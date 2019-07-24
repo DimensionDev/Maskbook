@@ -5,12 +5,10 @@ import Welcome1a3 from '../../../components/Welcomes/1a3'
 import Welcome1a4v2 from '../../../components/Welcomes/1a4.v2'
 import Welcome1b1 from '../../../components/Welcomes/1b1'
 import Welcome2 from '../../../components/Welcomes/2'
-import { useAsync } from '../../../utils/components/AsyncComponent'
 import Services from '../../service'
 import tasks from '../../content-script/tasks'
 import { RouteComponentProps, withRouter } from 'react-router'
 import { getProfilePageUrlAtFacebook } from '../../../social-network/facebook.com/parse-username'
-import { setStorage, LATEST_WELCOME_VERSION } from '../../../components/Welcomes/WelcomeVersion'
 import { geti18nString } from '../../../utils/i18n'
 import { Dialog, withMobileDialog } from '@material-ui/core'
 import { Identifier, PersonIdentifier } from '../../../database/type'
@@ -33,8 +31,8 @@ enum WelcomeState {
 }
 
 const WelcomeActions = {
-    backupMyKeyPair(id: PersonIdentifier) {
-        return Services.Welcome.backupMyKeyPair(id)
+    backupMyKeyPair(whoAmI: PersonIdentifier) {
+        return Services.Welcome.backupMyKeyPair(whoAmI)
     },
     restoreFromFile(file: File, id: PersonIdentifier) {
         const fr = new FileReader()
@@ -66,7 +64,6 @@ const WelcomeActions = {
         this.autoVerifyBio(user, prove)
     },
     onFinish(reason: 'quit' | 'done') {
-        if (reason === 'done') setStorage({ init: LATEST_WELCOME_VERSION })
         window.close()
     },
 }

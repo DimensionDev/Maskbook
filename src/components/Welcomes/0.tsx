@@ -6,6 +6,7 @@ import { styled } from '@material-ui/styles'
 import WelcomeContainer from './WelcomeContainer'
 import { IdentifierRefContext } from '../../extension/options-page/Welcome'
 import { useValueRef } from '../../utils/hooks/useValueRef'
+import { setStorage } from './WelcomeVersion'
 
 const VerticalCenter = styled('div')({
     display: 'flex',
@@ -89,10 +90,10 @@ export default function Welcome({ create, restore, close }: Props) {
                     </Box>
                     <VerticalCenter>
                         <Button
-                            disabled={idContext.isUnknown}
                             className={classes.commonButton}
                             onClick={() => {
                                 if (idContext.isUnknown) {
+                                    setStorage({ userDismissedWelcome: false })
                                     location.href = 'https://facebook.com/'
                                 } else create()
                             }}
