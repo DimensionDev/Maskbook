@@ -7,14 +7,17 @@ import { PersonIdentifier, GroupIdentifier } from '../../database/type'
 import { useValueRef } from '../../utils/hooks/useValueRef'
 
 const ref = new ValueRef<Person[]>([])
-Services.People.queryPeople('facebook.com').then(p => (ref.value = p))
+function hasFingerprint(x: Person) {
+    return !!x.fingerprint
+}
+Services.People.queryPeople('facebook.com').then(p => (ref.value = p.filter(hasFingerprint)))
 MessageCenter.on('newPerson', person => {
     person.groups.forEach(group => Object.setPrototypeOf(group, GroupIdentifier.prototype))
     person.previousIdentifiers &&
         person.previousIdentifiers.forEach(id => Object.setPrototypeOf(id, PersonIdentifier.prototype))
     Object.setPrototypeOf(person.identifier, PersonIdentifier.prototype)
     const old = ref.value.filter(x => !x.identifier.equals(person.identifier))
-    ref.value = [...old, person]
+    ref.value = [...old, person].filter(hasFingerprint)
 })
 export function usePeople() {
     return useValueRef(ref)
