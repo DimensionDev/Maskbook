@@ -28,6 +28,7 @@ export function PostInspector(props: PostInspectorProps) {
         encryptedPost: deconstructPayload(post),
         provePost: post.match(/🔒(.+)🔒/)!,
     }
+    if (type.provePost) Services.People.uploadProvePostUrl(new PostIdentifier(postBy, postId))
     useAsync(() => {
         if (!whoAmI.equals(postBy)) return Promise.resolve([])
         if (!type.encryptedPost) return Promise.resolve([])
@@ -63,7 +64,6 @@ export function PostInspector(props: PostInspectorProps) {
             </>
         )
     } else if (type.provePost) {
-        Services.People.uploadProvePostUrl(new PostIdentifier(postBy, postId))
         return <AddToKeyStore postBy={postBy} provePost={post} />
     }
     return null
