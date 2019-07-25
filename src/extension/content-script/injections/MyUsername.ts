@@ -90,7 +90,7 @@ export function getPersonIdentifierAtFacebook(links: link[] | link, allowCollect
     }
     return PersonIdentifier.unknown
 }
-function getUserID(x: string) {
+export function getUserID(x: string) {
     if (!x) return null
     const relative = !x.startsWith('https://') && !x.startsWith('http://')
     const url = relative ? new URL(x, location.host) : new URL(x)
@@ -101,5 +101,5 @@ function getUserID(x: string) {
         const search = new URLSearchParams(url.search)
         return search.get('id')
     }
-    return url.pathname.replace(/^\//, '')
+    return url.pathname.replace(/^\//, '').replace(/\/$/, '')
 }

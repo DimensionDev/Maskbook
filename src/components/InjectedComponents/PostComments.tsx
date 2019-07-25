@@ -30,7 +30,10 @@ interface Props {
 export function PostComment({ comment, postContent, postIV, needZip }: Props) {
     return (
         <AsyncComponent
-            promise={() => Services.Crypto.decryptComment(postIV, postContent, comment)}
+            promise={() => {
+                if (!postIV || !postContent) return Promise.resolve('')
+                return Services.Crypto.decryptComment(postIV, postContent, comment)
+            }}
             dependencies={[postIV, postContent, comment]}
             awaitingComponent={null}
             completeComponent={result =>

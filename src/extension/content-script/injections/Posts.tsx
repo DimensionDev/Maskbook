@@ -109,7 +109,7 @@ new MutationObserverWatcher(posts)
                         selectElementContents(_root.querySelector('[contenteditable]')!)
                         dispatchCustomEvents('paste', encryptedComment)
                         await sleep(200)
-                        if (_root.innerText.match(encryptedComment)) console.log('Okay')
+                        if (_root.innerText.match(encryptedComment)) 'Okay'
                         else prompt('Please paste it into the comment box!', encryptedComment)
                     }}
                 />
