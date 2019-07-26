@@ -8,7 +8,7 @@ import { ThemeProvider } from '@material-ui/styles'
 import { MaskbookLightTheme } from './utils/theme'
 import { OptionsPage } from './components/OptionsPage'
 import { geti18nString } from './utils/i18n'
-import Privacy from './extension/options-page/Welcome/Privacy'
+import Privacy from './extension/options-page/Privacy'
 
 uiSetup()
 function App() {
