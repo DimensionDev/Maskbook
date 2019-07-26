@@ -60,11 +60,6 @@ function DecryptPostSuccess({ data, people, ...props }: DecryptPostSuccessProps)
 }
 
 const DecryptPostAwaiting = <AdditionalContent title={geti18nString('decrypted_postbox_decrypting')} />
-export const useNotSetUpYetStyles = makeStyles({
-    root: {
-        marginBottom: '2em',
-    },
-})
 function DecryptPostFailed({ error }: { error: Error }) {
     if (error && error.message === geti18nString('service_not_setup_yet')) {
         return <NotSetupYetPrompt />

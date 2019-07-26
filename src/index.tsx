@@ -28,6 +28,8 @@ import {
 import Menu from '@material-ui/icons/Menu'
 import NearMe from '@material-ui/icons/NearMe'
 import Assignment from '@material-ui/icons/Assignment'
+import Phonelink from '@material-ui/icons/Phonelink'
+import { ExportData } from './components/MobileImportExport/Export'
 
 uiSetup()
 const drawerWidth = 240
@@ -45,16 +47,18 @@ const OptionsPageRouters = (
         <Route exact path="/" component={() => empty} />
         <Route path="/welcome" component={Welcome} />
         <Route path="/privacy" component={() => Privacy} />
+        <Route path="/mobile-setup" component={ExportData} />
     </>
 )
 const Links1st = (
     <>
         <LinkItem icon={<NearMe />} title={geti18nString('options_index_setup')} to="/welcome" />
+        <LinkItem icon={<Phonelink />} title={geti18nString('options_index_mobile_export')} to="/mobile-setup" />
     </>
 )
 const Links2rd = (
     <>
-        <LinkItem icon={<Assignment />} title="Privacy policy" to="/privacy" />
+        <LinkItem icon={<Assignment />} title={geti18nString('options_index_privacy')} to="/privacy" />
     </>
 )
 

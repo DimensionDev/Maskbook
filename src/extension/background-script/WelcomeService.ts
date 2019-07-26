@@ -98,10 +98,11 @@ async function createNewIdentity(whoAmI: PersonIdentifier) {
     console.log('New user! Generating key pairs')
 }
 
-export async function backupMyKeyPair(whoAmI: PersonIdentifier) {
+export async function backupMyKeyPair(whoAmI: PersonIdentifier, download = true) {
     // Don't make the download pop so fast
     await sleep(1000)
     const obj = await generateBackupJSON(whoAmI)
+    if (!download) return obj
     const string = JSON.stringify(obj)
     const buffer = encodeText(string)
     const blob = new Blob([buffer], { type: 'application/json' })
@@ -116,6 +117,7 @@ export async function backupMyKeyPair(whoAmI: PersonIdentifier) {
         filename: `maskbook-keystore-backup-${today}.json`,
         saveAs: true,
     })
+    return obj
 }
 
 export async function openWelcomePage(id: PersonIdentifier, isMobile: boolean) {

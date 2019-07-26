@@ -5,7 +5,11 @@ export const CryptoService: Partial<typeof import('./background-script/CryptoSer
         return 'mock-prove-bio'
     },
 }
-export const WelcomeService: Partial<typeof import('./background-script/WelcomeService')> = {}
+export const WelcomeService: Partial<typeof import('./background-script/WelcomeService')> = {
+    async backupMyKeyPair(a, b) {
+        return { version: 1, whoami: [] }
+    },
+}
 export const PeopleService: Partial<typeof import('./background-script/PeopleService')> = {
     async queryPeople() {
         const demoPeople = [
@@ -40,5 +44,16 @@ export const PeopleService: Partial<typeof import('./background-script/PeopleSer
             },
         ]
         return demoPeople
+    },
+    async queryMyIdentity() {
+        return [
+            {
+                fingerprint: 'FDFE333CE20ED446AD88F3C8BA3AD1AA5ECAF521',
+                avatar: 'https://avatars3.githubusercontent.com/u/5390719?s=460&v=4',
+                nickname: 'Jack Works',
+                identifier: new PersonIdentifier('localhost', 'test'),
+                groups: [],
+            },
+        ]
     },
 }

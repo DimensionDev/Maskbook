@@ -261,10 +261,22 @@
     "payload_throw_in_alpha41": {
         "message": "已經不再支持 Alpha41。請提醒對方安裝新版 Maskbook。"
     },
-    "options_index_welcome": {
-        "message": "Maskbook 設置頁面"
-    },
     "options_index_setup": {
-        "message": "設置或備份您的 Maskbook"
+        "message": "設定您的 Maskbook"
+    },
+    "options_index_mobile_export": {
+        "message": "設定移動版"
+    },
+    "options_index_privacy": {
+        "message": "隱私政策"
+    },
+    "options_mobile_export_generating": {
+        "message": "正在生成 QR 碼..."
+    },
+    "options_mobile_export_title": {
+        "message": "請在移動版 Maskbook 中掃描此 QR 碼以完成設定"
+    },
+    "options_mobile_export_subtitle": {
+        "message": "請不要保存或將此 QR 碼分享給他人！"
     }
 }
