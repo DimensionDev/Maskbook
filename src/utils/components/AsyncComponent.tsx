@@ -55,7 +55,8 @@ function isComponent<T>(f?: React.ComponentType<T> | NonNullable<React.ReactNode
 
 /** React hook for not-cancelable async calculation */
 export function useAsync<T>(fn: () => Promise<T>, dep: ReadonlyArray<any>): PromiseLike<T> {
-    let res: any, rej: any
+    let res: any = () => {},
+        rej: any = () => {}
     React.useEffect(() => {
         let unmounted = false
         fn().then(x => unmounted || res(x), err => unmounted || rej(err))
