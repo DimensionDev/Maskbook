@@ -13,6 +13,9 @@ export function useQRCodeScan(
         const permission = useRequestCamera(isScanning)
         const ref = useRef<MediaStream | null>(null)
         useEffect(() => {
+            ref.current && ref.current.getTracks().forEach(x => x.stop())
+        }, [])
+        useEffect(() => {
             async function start() {
                 if (permission !== 'granted') return
                 const device = await getFrontVideoDevices()
@@ -26,7 +29,7 @@ export function useQRCodeScan(
                 video.current.play()
             }
             function stop() {
-                ref.current!.getTracks().forEach(x => x.stop())
+                ref.current && ref.current.getTracks().forEach(x => x.stop())
                 ref.current = null
                 video.current!.pause()
             }
