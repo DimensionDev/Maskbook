@@ -7,10 +7,11 @@ import Welcome1a4v2 from '../components/Welcomes/1a4.v2'
 import Welcome1b1 from '../components/Welcomes/1b1'
 import Welcome2 from '../components/Welcomes/2'
 import { linkTo as to, linkTo } from '@storybook/addon-links'
-import { text, boolean } from '@storybook/addon-knobs'
+import { text, boolean, number } from '@storybook/addon-knobs'
 import { action } from '@storybook/addon-actions'
 import { Banner } from '../components/Welcomes/Banner'
 import { withMobileDialog, Dialog } from '@material-ui/core'
+import QRScanner from '../components/Welcomes/QRScanner'
 
 const ResponsiveDialog = withMobileDialog()(Dialog)
 storiesOf('Welcome', module)
@@ -54,4 +55,13 @@ storiesOf('Welcome', module)
         <ResponsiveDialog open>
             <Welcome2 />
         </ResponsiveDialog>
+    ))
+    .add('QRCode Scanner', () => (
+        <QRScanner
+            scanning={boolean('start scanning?', false)}
+            height={number('width', 500)}
+            width={number('height', 500)}
+            onResult={action('scan')}
+            onError={action('error')}
+        />
     ))
