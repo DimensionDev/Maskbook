@@ -7,18 +7,18 @@ interface Props {
     scanning: boolean
     onResult(data: string): void
     onError(): void
-    width: number
-    height: number
 }
-export default function QRScanner(props: Props) {
-    const { scanning, onResult, height, width, onError } = props
+export default function QRScanner(
+    props: Props & React.DetailedHTMLProps<React.VideoHTMLAttributes<HTMLVideoElement>, HTMLVideoElement>,
+) {
+    const { scanning, onResult, onError, ...videoProps } = props
 
     const video = useRef<HTMLVideoElement | null>(null)
 
     useQRCodeScan(video, scanning, onResult, onError)
     return (
         <>
-            <video ref={video} width={width} height={height} aria-label="QR Code scanner" />
+            <video ref={video} aria-label="QR Code scanner" {...videoProps} />
         </>
     )
 }

@@ -34,13 +34,17 @@ const WelcomeActions = {
     backupMyKeyPair(whoAmI: PersonIdentifier) {
         return Services.Welcome.backupMyKeyPair(whoAmI)
     },
-    restoreFromFile(file: File, id: PersonIdentifier) {
-        const fr = new FileReader()
-        fr.readAsText(file)
-        fr.addEventListener('loadend', async f => {
-            const json = JSON.parse(fr.result as string)
-            Services.People.restoreBackup(json, id)
-        })
+    restoreFromFile(file: File | string, id: PersonIdentifier) {
+        if (typeof file === 'string') {
+            Services.People.restoreBackup(JSON.parse(file as string), id)
+        } else {
+            const fr = new FileReader()
+            fr.readAsText(file)
+            fr.addEventListener('loadend', async f => {
+                const json = JSON.parse(fr.result as string)
+                Services.People.restoreBackup(json, id)
+            })
+        }
     },
     autoVerifyBio(user: PersonIdentifier, prove: string) {
         tasks(getProfilePageUrlAtFacebook(user), {
