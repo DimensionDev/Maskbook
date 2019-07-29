@@ -109,7 +109,7 @@ export default function Welcome({ back, restore }: Props) {
                 aria-label="icon tabs example">
                 {/* // TODO: i18n */}
                 <Tab icon={<FolderOpen />} aria-label="select backup file" />
-                <Tab icon={<Camera />} aria-label="scan QR code" />
+                <Tab disabled={!('BarcodeDetector' in window)} icon={<Camera />} aria-label="scan QR code" />
                 <Tab icon={<Text />} aria-label="paste the JSON by yourself" />
             </Tabs>
             <main className={classes.main}>
