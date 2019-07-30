@@ -68,7 +68,7 @@ const WelcomeActions = {
         this.autoVerifyBio(user, prove)
     },
     onFinish(reason: 'quit' | 'done') {
-        location.hash = ''
+        window.close()
     },
 }
 interface Welcome {
