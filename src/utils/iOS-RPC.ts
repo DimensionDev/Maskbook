@@ -12,6 +12,8 @@ export interface Host {
 export interface ThisSideImplementation {}
 
 const key = 'maskbookjsonrpc'
+const _window: any = window
+export const isWKWebkit = _window.webkit && _window.webkit.messageHandlers && _window.webkit.messageHandlers[key]
 class iOSWebkitChannel {
     constructor() {
         document.addEventListener(key, e => {
@@ -29,12 +31,11 @@ class iOSWebkitChannel {
     }
     emit(_: string, data: any): void {
         const _window: any = window
-        if (_window.webkit && _window.webkit.messageHandlers && _window.webkit.messageHandlers[key])
-            _window.webkit.messageHandlers[key].postMessage(data)
+        if (isWKWebkit) _window.webkit.messageHandlers[key].postMessage(data)
     }
 }
 const ThisSideImplementation: ThisSideImplementation = {}
-export const Host = AsyncCall<Host>(ThisSideImplementation as any, {
+export const iOSHost = AsyncCall<Host>(ThisSideImplementation as any, {
     key: '',
     log: false,
     messageChannel: new iOSWebkitChannel(),

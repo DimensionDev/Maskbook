@@ -10,6 +10,8 @@ import Camera from '@material-ui/icons/CameraAlt'
 import Text from '@material-ui/icons/TextFormat'
 import WelcomeContainer from './WelcomeContainer'
 import QRScanner from './QRScanner'
+import { isWKWebkit, iOSHost } from '../../utils/iOS-RPC'
+import { useAsync } from '../../utils/components/AsyncComponent'
 
 const RestoreBox = styled('div')(({ theme }) => ({
     color: theme.palette.text.hint,
@@ -109,12 +111,16 @@ export default function Welcome({ back, restore }: Props) {
                 aria-label="icon tabs example">
                 {/* // TODO: i18n */}
                 <Tab icon={<FolderOpen />} aria-label="select backup file" />
-                <Tab disabled={!('BarcodeDetector' in window)} icon={<Camera />} aria-label="scan QR code" />
+                <Tab
+                    disabled={!('BarcodeDetector' in window || isWKWebkit)}
+                    icon={<Camera />}
+                    aria-label="scan QR code"
+                />
                 <Tab icon={<Text />} aria-label="paste the JSON by yourself" />
             </Tabs>
             <main className={classes.main}>
                 {tab === 0 ? FileUI() : null}
-                {tab === 1 ? QR() : null}
+                {tab === 1 ? isWKWebkit ? <WKWebkitQR onScan={restore} onQuit={() => setTab(0)} /> : QR() : null}
                 {tab === 2 ? TextArea() : null}
 
                 {tab === 0 ? (
@@ -130,7 +136,6 @@ export default function Welcome({ back, restore }: Props) {
                 {tab === 2 ? (
                     <Button
                         onClick={() => restore(textAreaRef.current!.value)}
-                        disabled={!textAreaRef.current!.value}
                         variant="contained"
                         color="primary"
                         className={classes.button}>
@@ -166,6 +171,10 @@ export default function Welcome({ back, restore }: Props) {
                 </form>
             </>
         )
+    }
+    function WKWebkitQR(props: { onScan(val: string): void; onQuit(): void }) {
+        useAsync(() => iOSHost.scanQRCode(), []).then(props.onScan, props.onQuit)
+        return null
     }
     function QR() {
         return (
