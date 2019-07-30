@@ -113,25 +113,30 @@ export default function Welcome({ back, restore }: Props) {
                 <Tab icon={<Text />} aria-label="paste the JSON by yourself" />
             </Tabs>
             <main className={classes.main}>
-                {tab === 0 ? FileUI() : ''}
-                {tab === 1 ? QR() : ''}
-                {tab === 2 ? TextArea() : ''}
+                {tab === 0 ? FileUI() : null}
+                {tab === 1 ? QR() : null}
+                {tab === 2 ? TextArea() : null}
 
-                {tab === 0 || tab === 2 ? (
+                {tab === 0 ? (
                     <Button
-                        onClick={() => {
-                            tab === 0 && restore(fileRef.current!)
-                            tab === 2 && restore(textAreaRef.current!.value)
-                        }}
+                        onClick={() => restore(fileRef.current!)}
                         disabled={!fileRef.current}
                         variant="contained"
                         color="primary"
                         className={classes.button}>
                         {geti18nString('restore')}
                     </Button>
-                ) : (
-                    ''
-                )}
+                ) : null}
+                {tab === 2 ? (
+                    <Button
+                        onClick={() => restore(textAreaRef.current!.value)}
+                        disabled={!textAreaRef.current!.value}
+                        variant="contained"
+                        color="primary"
+                        className={classes.button}>
+                        {geti18nString('restore')}
+                    </Button>
+                ) : null}
             </main>
         </WelcomeContainer>
     )
