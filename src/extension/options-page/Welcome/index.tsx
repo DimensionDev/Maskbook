@@ -142,20 +142,11 @@ MessageCenter.on('generateKeyPair', getMyProveBio)
 IdentifierRef.addListener(getMyProveBio)
 getMyProveBio()
 
-const useStyles = makeStyles(theme => ({
-    full: {
-        width: '100%',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-}))
 export const IdentifierRefContext = React.createContext(IdentifierRef)
 export default withRouter(function _WelcomePortal(props: RouteComponentProps<{ identifier: string }>) {
     const [step, setStep] = useState(WelcomeState.Start)
     const provePost = useValueRef(ProvePostRef)
     const identifier = useValueRef(IdentifierRef)
-    const classes = useStyles()
 
     useEffect(() => {
         const raw = new URLSearchParams(props.location.search).get('identifier') || ''
@@ -167,7 +158,7 @@ export default withRouter(function _WelcomePortal(props: RouteComponentProps<{ i
     }, [props.location.search])
 
     return (
-        <ResponsiveDialog classes={{ paperWidthSm: classes.full }} open>
+        <ResponsiveDialog open>
             <IdentifierRefContext.Provider value={IdentifierRef}>
                 <Welcome
                     provePost={provePost}
