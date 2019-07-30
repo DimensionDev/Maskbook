@@ -130,7 +130,6 @@ export default function Welcome({ back, restore }: Props) {
                 {tab === 2 ? (
                     <Button
                         onClick={() => restore(textAreaRef.current!.value)}
-                        disabled={!textAreaRef.current!.value}
                         variant="contained"
                         color="primary"
                         className={classes.button}>
