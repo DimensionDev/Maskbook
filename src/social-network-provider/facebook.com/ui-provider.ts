@@ -5,6 +5,7 @@ import { InitMyIdentitiesValueRef } from '../../social-network/defaults/MyIdenti
 
 defineSocialNetworkUI({
     name: 'Facebook',
+    networkURL: 'https://www.facebook.com/',
     init(env, pref) {
         InitFriendsValueRef(this, 'facebook.com')
         InitMyIdentitiesValueRef(this, 'facebook.com')

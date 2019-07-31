@@ -5,7 +5,7 @@ import { Banner } from '../../../components/Welcomes/Banner'
 import { renderInShadowRoot } from '../../../utils/jss/renderInShadowRoot'
 import Services from '../../service'
 import { useValueRef } from '../../../utils/hooks/useValueRef'
-import { getStorage, setStorage } from '../../../components/Welcomes/WelcomeVersion'
+import { getStorage, setStorage } from '../../../utils/browser.storage'
 import { isMobile } from '../../../social-network-provider/facebook.com/isMobile'
 
 async function main() {

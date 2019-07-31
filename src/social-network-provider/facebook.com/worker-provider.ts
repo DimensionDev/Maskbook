@@ -2,6 +2,7 @@ import { defineSocialNetworkWorker } from '../../social-network/worker'
 
 defineSocialNetworkWorker({
     name: 'Facebook',
+    networkURL: 'https://www.facebook.com/',
     init(env, pref) {},
     injectedScript: {
         code: `{

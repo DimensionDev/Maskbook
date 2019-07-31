@@ -6,6 +6,10 @@ export interface SocialNetworkWorkerAndUI {
      * @param preference Users settings about Maskbook
      */
     init(env: Env, preference: Preference): void
+    /**
+     * URL of the network
+     */
+    networkURL: string | ((env: Env, preference: Preference) => string)
 }
 /**
  * Users settings about Maskbook
