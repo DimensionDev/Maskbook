@@ -16,7 +16,7 @@ export const getActivatedUI = () => activatedSocialNetworkUI
 export function activateSocialNetworkUI() {
     for (const ui of definedSocialNetworkUIs)
         if (ui.shouldActivate()) {
-            console.log('Activating UI provider', ui.name, ui)
+            console.log('Activating UI provider', ui.networkIdentifier, ui)
             ui.init(env, {})
             activatedSocialNetworkUI = ui
         }

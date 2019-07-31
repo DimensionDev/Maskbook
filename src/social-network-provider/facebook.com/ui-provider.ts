@@ -2,11 +2,12 @@ import { defineSocialNetworkUI } from '../../social-network/ui'
 import { ValueRef } from '@holoflows/kit/es'
 import { InitFriendsValueRef } from '../../social-network/defaults/FriendsValueRef'
 import { InitMyIdentitiesValueRef } from '../../social-network/defaults/MyIdentitiesRef'
+import { sharedProvider } from './shared-provider'
 
 defineSocialNetworkUI({
-    name: 'Facebook',
-    networkURL: 'https://www.facebook.com/',
+    ...sharedProvider,
     init(env, pref) {
+        sharedProvider.init(env, pref)
         InitFriendsValueRef(this, 'facebook.com')
         InitMyIdentitiesValueRef(this, 'facebook.com')
     },

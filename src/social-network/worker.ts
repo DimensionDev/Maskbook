@@ -20,7 +20,7 @@ export const definedSocialNetworkWorkers = new Set<SocialNetworkWorker>()
 export function defineSocialNetworkWorker<T extends SocialNetworkWorker>(worker: T) {
     definedSocialNetworkWorkers.add(worker)
     if (GetContext() === 'background') {
-        console.log('Activating social network provider', worker.name, worker)
+        console.log('Activating social network provider', worker.networkIdentifier, worker)
         worker.init(env, {})
     }
 }

@@ -1,6 +1,17 @@
 import { getUrl } from '../utils/utils'
 export interface SocialNetworkWorkerAndUI {
-    name: string
+    /**
+     * Detect if an Identifier belongs to this provider.
+     *
+     * For normal network, string like 'twitter.com' is enough.
+     *
+     * If it works across networks like mastodon,
+     * use 'mastodon@your-instance.org' and set this to a function
+     *
+     * @example 'twitter.com'
+     * (networkIdentifier) => networkIdentifier.startsWith('mastodon')
+     */
+    networkIdentifier: string | ((networkIdentifier: string, env: Env, preference: Preference) => boolean)
     /**
      * @param env The env that Maskbook running in
      * @param preference Users settings about Maskbook
@@ -10,6 +21,10 @@ export interface SocialNetworkWorkerAndUI {
      * URL of the network
      */
     networkURL: string | ((env: Env, preference: Preference) => string)
+    /**
+     * Is this username valid in this network
+     */
+    isValidUsername(username: string): boolean
 }
 /**
  * Users settings about Maskbook
