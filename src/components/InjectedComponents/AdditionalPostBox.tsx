@@ -1,6 +1,4 @@
 import * as React from 'react'
-import { useFriendsList } from '../DataSource/useFriendsList'
-import { MyIdentityContext, useMyIdentities } from '../DataSource/useMyIdentities'
 import { SelectPeopleUI } from './SelectPeople'
 import { useRef, useContext, useState, useCallback } from 'react'
 import { useCapturedInput } from '../../utils/hooks/useCapturedEvents'
@@ -12,6 +10,7 @@ import { makeStyles } from '@material-ui/styles'
 import { Card, CardHeader, Typography, Divider, Paper, InputBase, Button, Box } from '@material-ui/core'
 import { Person } from '../../database'
 import { NotSetupYetPrompt } from './NotSetupYetPrompt'
+import { MyIdentitiesContext, useFriendsList, useMyIdentities } from '../DataSource/useActivatedUI'
 
 interface Props {
     people: Person[]
@@ -38,7 +37,7 @@ export function AdditionalPostBoxUI(props: Props) {
     const { people } = props
     const classes = useStyles()
 
-    const myself = useContext(MyIdentityContext)
+    const myself = useContext(MyIdentitiesContext)
     const [text, setText] = useState('')
     const [selectedPeople, selectPeople] = useState<Person[]>([])
 
@@ -108,8 +107,8 @@ export function AdditionalPostBox() {
     if (identity.length > 1) console.warn('Multiple identity found. Let user choose one.')
 
     return (
-        <MyIdentityContext.Provider value={identity[0]}>
+        <MyIdentitiesContext.Provider value={identity[0]}>
             <AdditionalPostBoxUI people={people} onRequestPost={onRequestPost} />
-        </MyIdentityContext.Provider>
+        </MyIdentitiesContext.Provider>
     )
 }

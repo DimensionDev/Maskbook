@@ -1,17 +1,15 @@
 import Services from '../../service'
-import { PersonIdentifier } from '../../../database/type'
 import { LiveSelector, MutationObserverWatcher } from '@holoflows/kit/es'
-import { getUserID } from './MyUsername'
+import { getPersonIdentifierAtFacebook } from '../../../social-network-provider/facebook.com/getPersonIdentifierAtFacebook'
 
 //#region Find key from bio
 {
     const bio = new LiveSelector().querySelector<HTMLDivElement>('#profile_timeline_intro_card')
     function tryFindBioKey(text: string) {
         const a = document.querySelector<HTMLAnchorElement>('#fb-timeline-cover-name a')
-        if (!text || !a) return
-        const id = getUserID(a.href)
+        const id = getPersonIdentifierAtFacebook(a, true)
         if (!id) return
-        Services.Crypto.verifyOthersProve(text, new PersonIdentifier('facebook.com', id))
+        Services.Crypto.verifyOthersProve(text, id)
     }
     new MutationObserverWatcher(bio)
         .enableSingleMode()

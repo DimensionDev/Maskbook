@@ -1,6 +1,5 @@
 import React, { useCallback } from 'react'
 import { LiveSelector, MutationObserverWatcher, DomProxy, ValueRef } from '@holoflows/kit'
-import { getPersonIdentifierAtFacebook } from './MyUsername'
 import { renderInShadowRoot } from '../../../utils/jss/renderInShadowRoot'
 import { deconstructPayload } from '../../../utils/type-transform/Payload'
 import { PersonIdentifier } from '../../../database/type'
@@ -11,6 +10,7 @@ import { PostInspector } from './Posts/PostInspector'
 import { CommentBox } from '../../../components/InjectedComponents/CommentBox'
 import { selectElementContents, dispatchCustomEvents, sleep } from '../../../utils/utils'
 import Services from '../../service'
+import { getPersonIdentifierAtFacebook } from '../../../social-network-provider/facebook.com/getPersonIdentifierAtFacebook'
 
 const posts = new LiveSelector().querySelectorAll<HTMLDivElement>(
     isMobile ? '.story_body_container ' : '.userContent, .userContent+*+div>div>div>div>div',

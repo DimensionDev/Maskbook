@@ -1,12 +1,11 @@
 import React from 'react'
 import { LiveSelector, MutationObserverWatcher } from '@holoflows/kit'
-import { myUsernameRef } from './MyUsername'
 import { Banner } from '../../../components/Welcomes/Banner'
 import { renderInShadowRoot } from '../../../utils/jss/renderInShadowRoot'
 import Services from '../../service'
-import { useValueRef } from '../../../utils/hooks/useValueRef'
 import { getStorage, setStorage } from '../../../utils/browser.storage'
 import { isMobile } from '../../../social-network-provider/facebook.com/isMobile'
+import { useLastRecognizedIdentity } from '../../../components/DataSource/useActivatedUI'
 
 async function main() {
     const ids = await Services.People.queryMyIdentity()
@@ -23,7 +22,7 @@ async function main() {
 }
 main()
 function BannerContainer({ unmount }: { unmount: () => void }) {
-    const id = useValueRef(myUsernameRef)
+    const id = useLastRecognizedIdentity().identifier
     return (
         <Banner
             disabled={id.isUnknown}

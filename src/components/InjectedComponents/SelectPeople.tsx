@@ -14,7 +14,7 @@ import {
 } from '@material-ui/core'
 import { Person } from '../../database'
 import { useState, useContext, useCallback } from 'react'
-import { MyIdentityContext } from '../DataSource/useMyIdentities'
+import { MyIdentitiesContext } from '../DataSource/useActivatedUI'
 
 interface PeopleInListProps {
     person: Person
@@ -86,7 +86,7 @@ export function SelectPeopleUI(props: SelectPeopleUI) {
     const { people, frozenSelected, onSetSelected, selected, disabled, ignoreMyself } = props
     const classes = useStyles()
 
-    const myself = useContext(MyIdentityContext)
+    const myself = useContext(MyIdentitiesContext)
     const [search, setSearch] = useState('')
     const listBeforeSearch = people.filter(x => {
         if (selected.find(y => y.identifier.userId === x.identifier.userId)) return false

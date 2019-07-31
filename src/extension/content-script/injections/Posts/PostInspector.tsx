@@ -1,14 +1,13 @@
 import React, { useState } from 'react'
 import { DecryptPostUI } from '../../../../components/InjectedComponents/DecryptedPost'
 import { AddToKeyStore } from '../../../../components/InjectedComponents/AddToKeyStore'
-import { useIdentitiesAtFacebook } from '../MyUsername'
-import { useFriendsList } from '../../../../components/DataSource/useFriendsList'
 import { useAsync } from '../../../../utils/components/AsyncComponent'
 import { deconstructPayload } from '../../../../utils/type-transform/Payload'
 import Services from '../../../service'
 import { PersonIdentifier, PostIdentifier } from '../../../../database/type'
 import { Person } from '../../../../database'
 import { styled } from '@material-ui/core/styles'
+import { useFriendsList, useMyIdentities } from '../../../../components/DataSource/useActivatedUI'
 
 const Debug = styled('div')({ display: 'none' })
 interface PostInspectorProps {
@@ -20,7 +19,8 @@ interface PostInspectorProps {
 }
 export function PostInspector(props: PostInspectorProps) {
     const { post, postBy, postId } = props
-    const whoAmI = (useIdentitiesAtFacebook()[0] || { identifier: PersonIdentifier.unknown }).identifier
+    // TODO:
+    const whoAmI = useMyIdentities()[0].identifier || PersonIdentifier.unknown
     const people = useFriendsList()
     const [alreadySelectedPreviously, setAlreadySelectedPreviously] = useState<Person[]>([])
     if (postBy.isUnknown) return null

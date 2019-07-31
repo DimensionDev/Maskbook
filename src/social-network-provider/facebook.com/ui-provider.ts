@@ -3,6 +3,8 @@ import { ValueRef } from '@holoflows/kit/es'
 import { InitFriendsValueRef } from '../../social-network/defaults/FriendsValueRef'
 import { InitMyIdentitiesValueRef } from '../../social-network/defaults/MyIdentitiesRef'
 import { sharedProvider } from './shared-provider'
+import { PersonIdentifier } from '../../database/type'
+import resolveLastRecognizedIdentity from './resolveLastRecognizedIdentity'
 
 defineSocialNetworkUI({
     ...sharedProvider,
@@ -16,4 +18,8 @@ defineSocialNetworkUI({
     },
     friendsRef: new ValueRef([]),
     myIdentitiesRef: new ValueRef([]),
+    lastRecognizedIdentity: new ValueRef({ identifier: PersonIdentifier.unknown }),
+    resolveLastRecognizedIdentity() {
+        resolveLastRecognizedIdentity(this.lastRecognizedIdentity)
+    },
 })
