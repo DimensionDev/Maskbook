@@ -120,7 +120,7 @@ export async function backupMyKeyPair(whoAmI: PersonIdentifier, download = true)
     return obj
 }
 
-export async function openWelcomePage(id: PersonIdentifier, isMobile: boolean) {
+export async function openWelcomePage(id: PersonIdentifier) {
     if (!regularUsername(id.userId)) throw new TypeError(geti18nString('service_username_invalid'))
     const url = browser.runtime.getURL('index.html#/welcome?identifier=' + id.toText())
     return browser.tabs.create({ url })

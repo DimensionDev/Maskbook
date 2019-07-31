@@ -33,7 +33,7 @@ function BannerContainer({ unmount }: { unmount: () => void }) {
             }}
             getStarted={() => {
                 unmount()
-                Services.Welcome.openWelcomePage(id, isMobile)
+                Services.Welcome.openWelcomePage(id)
             }}
         />
     )

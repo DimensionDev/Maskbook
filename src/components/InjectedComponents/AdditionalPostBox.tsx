@@ -84,7 +84,6 @@ export function AdditionalPostBoxUI(props: Props) {
 
 export function AdditionalPostBox() {
     const people = useFriendsList()
-    const classes = useStyles()
     const identity = useMyIdentities()
 
     const onRequestPost = useCallback(
