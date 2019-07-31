@@ -3,6 +3,6 @@ import { useState, useEffect } from 'react'
 
 export function useValueRef<T>(ref: ValueRef<T>) {
     const [value, setValue] = useState<T>(ref.value)
-    useEffect(() => ref.addListener(newValue => setValue(newValue)))
+    useEffect(() => ref.addListener(newValue => setValue(newValue)), [ref])
     return value
 }

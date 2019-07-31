@@ -14,7 +14,7 @@ import {
 } from '@material-ui/core'
 import { Person } from '../../database'
 import { useState, useContext, useCallback } from 'react'
-import { MyIdentityContext } from '../DataSource/PeopleRef'
+import { MyIdentityContext } from '../DataSource/useMyIdentities'
 
 interface PeopleInListProps {
     person: Person

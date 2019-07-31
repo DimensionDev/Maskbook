@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useEffect } from 'react'
+import React, { useCallback } from 'react'
 import AsyncComponent from '../../utils/components/AsyncComponent'
 import { AdditionalContent } from './AdditionalPostContent'
 import { useShareMenu } from './SelectPeopleDialog'
@@ -10,9 +10,6 @@ import { Link, Box, useMediaQuery, useTheme } from '@material-ui/core'
 import { Person } from '../../database'
 import { PersonIdentifier } from '../../database/type'
 import { NotSetupYetPrompt } from './NotSetupYetPrompt'
-import { myUsernameRef } from '../../extension/content-script/injections/MyUsername'
-import { isMobile } from '../../social-network-provider/facebook.com/isMobile'
-import { useValueRef } from '../../utils/hooks/useValueRef'
 
 interface DecryptPostSuccessProps {
     data: { signatureVerifyResult: boolean; content: string }

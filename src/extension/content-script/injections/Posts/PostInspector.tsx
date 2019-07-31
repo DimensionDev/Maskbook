@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { DecryptPostUI } from '../../../../components/InjectedComponents/DecryptedPost'
 import { AddToKeyStore } from '../../../../components/InjectedComponents/AddToKeyStore'
 import { useIdentitiesAtFacebook } from '../MyUsername'
-import { usePeople } from '../../../../components/DataSource/PeopleRef'
+import { useFriendsList } from '../../../../components/DataSource/useFriendsList'
 import { useAsync } from '../../../../utils/components/AsyncComponent'
 import { deconstructPayload } from '../../../../utils/type-transform/Payload'
 import Services from '../../../service'
@@ -21,7 +21,7 @@ interface PostInspectorProps {
 export function PostInspector(props: PostInspectorProps) {
     const { post, postBy, postId } = props
     const whoAmI = (useIdentitiesAtFacebook()[0] || { identifier: PersonIdentifier.unknown }).identifier
-    const people = usePeople()
+    const people = useFriendsList()
     const [alreadySelectedPreviously, setAlreadySelectedPreviously] = useState<Person[]>([])
     if (postBy.isUnknown) return null
     const type = {

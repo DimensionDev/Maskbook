@@ -1,5 +1,6 @@
 import * as React from 'react'
-import { usePeople, MyIdentityContext, useMyIdentities } from '../DataSource/PeopleRef'
+import { useFriendsList } from '../DataSource/useFriendsList'
+import { MyIdentityContext, useMyIdentities } from '../DataSource/useMyIdentities'
 import { SelectPeopleUI } from './SelectPeople'
 import { useRef, useContext, useState, useCallback } from 'react'
 import { useCapturedInput } from '../../utils/hooks/useCapturedEvents'
@@ -82,7 +83,7 @@ export function AdditionalPostBoxUI(props: Props) {
 }
 
 export function AdditionalPostBox() {
-    const people = usePeople()
+    const people = useFriendsList()
     const classes = useStyles()
     const identity = useMyIdentities()
 
