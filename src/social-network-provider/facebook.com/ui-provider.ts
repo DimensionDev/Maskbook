@@ -7,6 +7,7 @@ import { PersonIdentifier } from '../../database/type'
 import resolveLastRecognizedIdentity from './UI/resolveLastRecognizedIdentity'
 import { injectPostBoxFacebook } from './UI/injectPostBox'
 import { collectPeopleFacebook } from './UI/collectPeople'
+import { pasteIntoPostBoxFacebook } from './tasks/pasteIntoPostBox'
 
 defineSocialNetworkUI({
     ...sharedProvider,
@@ -24,4 +25,5 @@ defineSocialNetworkUI({
     resolveLastRecognizedIdentity: resolveLastRecognizedIdentity,
     injectPostBox: injectPostBoxFacebook,
     collectPeople: collectPeopleFacebook,
+    taskPasteIntoPostBox: pasteIntoPostBoxFacebook,
 })

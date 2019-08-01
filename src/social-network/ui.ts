@@ -26,6 +26,11 @@ export interface SocialNetworkUI extends SocialNetworkWorkerAndUI, SocialNetwork
      * like avatar, nickname, friendship relation and Maskbook Key
      */
     collectPeople(): void
+    /**
+     * This function should paste `text` into the paste box.
+     * If failed, warning user to do it by themselves with `warningText`
+     */
+    taskPasteIntoPostBox(text: string, warningText: string): Promise<void>
 }
 export interface SocialNetworkUIDataSources {
     friendsRef: ValueRef<Person[]>

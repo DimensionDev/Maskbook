@@ -4,13 +4,13 @@ import { useRef, useContext, useState, useCallback } from 'react'
 import { useCapturedInput } from '../../utils/hooks/useCapturedEvents'
 import { Avatar } from '../../utils/components/Avatar'
 import Services from '../../extension/service'
-import { pasteIntoPostBox } from '../../extension/content-script/tasks'
 import { geti18nString } from '../../utils/i18n'
 import { makeStyles } from '@material-ui/styles'
 import { Card, CardHeader, Typography, Divider, Paper, InputBase, Button, Box } from '@material-ui/core'
 import { Person } from '../../database'
 import { NotSetupYetPrompt } from './NotSetupYetPrompt'
 import { MyIdentitiesContext, useFriendsList, useMyIdentities } from '../DataSource/useActivatedUI'
+import { getActivatedUI } from '../../social-network/ui'
 
 interface Props {
     people: Person[]
@@ -93,7 +93,7 @@ export function AdditionalPostBox() {
                 identity[0].identifier,
             )
             const fullPost = geti18nString('additional_post_box__encrypted_post_pre', encrypted)
-            pasteIntoPostBox(fullPost, geti18nString('additional_post_box__encrypted_failed'))
+            getActivatedUI().taskPasteIntoPostBox(fullPost, geti18nString('additional_post_box__encrypted_failed'))
             Services.Crypto.publishPostAESKey(token, identity[0].identifier)
         },
         [identity[0]],
