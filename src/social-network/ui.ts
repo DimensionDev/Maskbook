@@ -67,11 +67,11 @@ export function activateSocialNetworkUI() {
     for (const ui of definedSocialNetworkUIs)
         if (ui.shouldActivate()) {
             console.log('Activating UI provider', ui.networkIdentifier, ui)
+            activatedSocialNetworkUI = ui
             ui.init(env, {})
             ui.resolveLastRecognizedIdentity()
             ui.injectPostBox()
             ui.collectPeople()
-            activatedSocialNetworkUI = ui
             return
         }
 }

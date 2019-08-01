@@ -1,5 +1,6 @@
 import { AutomatedTabTask } from '@holoflows/kit'
 import { getActivatedUI } from '../../social-network/ui'
+import { PersonIdentifier, PostIdentifier } from '../../database/type'
 
 export default AutomatedTabTask(
     {
@@ -7,22 +8,22 @@ export default AutomatedTabTask(
          * Access post url
          * Get post content
          */
-        getPostContent: getActivatedUI().taskGetPostContent,
+        getPostContent: (postIdentifier: PostIdentifier<PersonIdentifier>) => getActivatedUI().taskGetPostContent(postIdentifier),
         /**
          * Access profile page
          * Get Profile
          */
-        getProfile: getActivatedUI().taskGetProfile,
+        getProfile: (identifier: PersonIdentifier) => getActivatedUI().taskGetProfile(identifier),
         /**
          * Access profile page
          * Paste text into bio
          */
-        pasteIntoBio: getActivatedUI().taskPasteIntoBio,
+        pasteIntoBio: (text: string) => getActivatedUI().taskPasteIntoBio(text),
         /**
          * Access main page
          * Paste text into PostBox
          */
-        pasteIntoPostBox: getActivatedUI().taskPasteIntoPostBox,
+        pasteIntoPostBox: (text: string, warningText: string) => getActivatedUI().taskPasteIntoPostBox(text, warningText),
     },
     { memorable: true },
 )!

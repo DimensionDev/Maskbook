@@ -1,4 +1,4 @@
-import { OnlyRunInContext } from '@holoflows/kit/es'
+// import { OnlyRunInContext } from '@holoflows/kit/es'
 
-OnlyRunInContext('content', 'isMobile')
+// OnlyRunInContext('content', 'isMobile')
 export const isMobileFacebook = location.hostname === 'm.facebook.com'
