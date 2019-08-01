@@ -7,6 +7,10 @@ export interface SocialNetworkUI extends SocialNetworkWorkerAndUI, SocialNetwork
     /** Should this UI content script activate? */
     shouldActivate(): boolean
     /**
+     * Should Maskbook show Welcome Banner?
+     */
+    shouldDisplayWelcome(): Promise<boolean>
+    /**
      * This function should find out which account does user using currently
      * and write it to `SocialNetworkUIDataSources.lastRecognizedIdentity`
      *
@@ -23,6 +27,10 @@ export interface SocialNetworkUI extends SocialNetworkWorkerAndUI, SocialNetwork
      * This function should inject UI into the Post box
      */
     injectPostBox(): void
+    /**
+     * This function should inject the Welcome Banner
+     */
+    injectWelcomeBanner(): void
     /**
      * This function should inspect the profile page and collect info
      * like avatar, nickname, friendship relation and Maskbook Key
@@ -72,6 +80,7 @@ export function activateSocialNetworkUI() {
             ui.resolveLastRecognizedIdentity()
             ui.injectPostBox()
             ui.collectPeople()
+            ui.shouldDisplayWelcome().then(r => r && ui.injectWelcomeBanner())
             return
         }
 }
