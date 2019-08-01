@@ -4,7 +4,7 @@ import { Banner } from '../../../components/Welcomes/Banner'
 import { renderInShadowRoot } from '../../../utils/jss/renderInShadowRoot'
 import Services from '../../service'
 import { getStorage, setStorage } from '../../../utils/browser.storage'
-import { isMobile } from '../../../social-network-provider/facebook.com/isMobile'
+import { isMobileFacebook } from '../../../social-network-provider/facebook.com/isMobile'
 import { useLastRecognizedIdentity } from '../../../components/DataSource/useActivatedUI'
 
 async function main() {
@@ -13,7 +13,7 @@ async function main() {
     if (ids.length) return
     if (storage.userDismissedWelcome) return
     const to = new MutationObserverWatcher(
-        new LiveSelector().querySelector<HTMLDivElement>(isMobile ? '#MComposer' : '#pagelet_composer'),
+        new LiveSelector().querySelector<HTMLDivElement>(isMobileFacebook ? '#MComposer' : '#pagelet_composer'),
     )
         .enableSingleMode()
         .setDomProxyOption({ beforeShadowRootInit: { mode: 'closed' } })

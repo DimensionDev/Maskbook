@@ -3,7 +3,7 @@ import { LiveSelector, MutationObserverWatcher, DomProxy, ValueRef } from '@holo
 import { renderInShadowRoot } from '../../../utils/jss/renderInShadowRoot'
 import { deconstructPayload } from '../../../utils/type-transform/Payload'
 import { PersonIdentifier } from '../../../database/type'
-import { isMobile } from '../../../social-network-provider/facebook.com/isMobile'
+import { isMobileFacebook } from '../../../social-network-provider/facebook.com/isMobile'
 import { PostComment } from '../../../components/InjectedComponents/PostComments'
 import { useValueRef } from '../../../utils/hooks/useValueRef'
 import { PostInspector } from './Posts/PostInspector'
@@ -13,7 +13,7 @@ import Services from '../../service'
 import { getPersonIdentifierAtFacebook } from '../../../social-network-provider/facebook.com/getPersonIdentifierAtFacebook'
 
 const posts = new LiveSelector().querySelectorAll<HTMLDivElement>(
-    isMobile ? '.story_body_container ' : '.userContent, .userContent+*+div>div>div>div>div',
+    isMobileFacebook ? '.story_body_container ' : '.userContent, .userContent+*+div>div>div>div>div',
 )
 
 type InspectedPostInfo = {
@@ -154,7 +154,7 @@ new MutationObserverWatcher(posts)
     .startWatch()
 
 function zipPostLinkPreview(node: DomProxy) {
-    if (isMobile) {
+    if (isMobileFacebook) {
         const img = node.current.parentElement!.querySelector('a[href*="maskbook.io"]')
         const parent = img && img.closest('section')
         if (img && parent) {
@@ -196,17 +196,19 @@ padding: 0px 10px;`,
 
 function clickSeeMore(node: DomProxy) {
     const more = node.current.parentElement!.querySelector<HTMLSpanElement>('.see_more_link_inner')
-    if (!isMobile && more && node.current.innerText.match(/🎼.+|/)) {
+    if (!isMobileFacebook && more && node.current.innerText.match(/🎼.+|/)) {
         more.click()
     }
 }
 
 function getPostBy(node: DomProxy, allowCollectInfo: boolean) {
-    const dom = isMobile ? node.current.querySelectorAll('a') : [node.current.parentElement!.querySelectorAll('a')[1]]
+    const dom = isMobileFacebook
+        ? node.current.querySelectorAll('a')
+        : [node.current.parentElement!.querySelectorAll('a')[1]]
     return getPersonIdentifierAtFacebook(Array.from(dom), allowCollectInfo)
 }
 function getPostID(node: DomProxy) {
-    if (isMobile) {
+    if (isMobileFacebook) {
         const abbr = node.current.querySelector('abbr')
         if (!abbr) return null
         const idElement = abbr.closest('a')
