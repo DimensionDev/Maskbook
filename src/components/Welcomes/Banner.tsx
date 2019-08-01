@@ -32,7 +32,7 @@ const useStyles = makeStyles((theme: Theme) => ({
         padding: 6,
     },
 }))
-export function Banner(props: Props) {
+export function BannerUI(props: Props) {
     const classes = useStyles()
     const Title = (
         <Typography variant="subtitle1" color="inherit">
@@ -73,7 +73,7 @@ export function Banner(props: Props) {
     )
 }
 
-export function BannerContainerDefault({ unmount, ...props }: { unmount: () => void } & Partial<Props>) {
+export function Banner({ unmount, ...props }: { unmount: () => void } & Partial<Props>) {
     const id = useLastRecognizedIdentity().identifier
     const closeDefault = useCallback(() => {
         setStorage({ userDismissedWelcome: true })
@@ -83,5 +83,5 @@ export function BannerContainerDefault({ unmount, ...props }: { unmount: () => v
         unmount()
         Services.Welcome.openWelcomePage(id)
     }, [unmount])
-    return <Banner disabled={id.isUnknown} close={closeDefault} getStarted={getStartedDefault} {...props} />
+    return <BannerUI disabled={id.isUnknown} close={closeDefault} getStarted={getStartedDefault} {...props} />
 }

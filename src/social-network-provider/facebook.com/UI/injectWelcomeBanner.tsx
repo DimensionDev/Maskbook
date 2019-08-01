@@ -1,7 +1,7 @@
 import { MutationObserverWatcher, LiveSelector } from '@holoflows/kit/es'
 import { isMobileFacebook } from '../isMobile'
 import { renderInShadowRoot } from '../../../utils/jss/renderInShadowRoot'
-import { BannerContainerDefault } from '../../../components/Welcomes/Banner'
+import { Banner } from '../../../components/Welcomes/Banner'
 
 export function injectWelcomeBannerFacebook() {
     const to = new MutationObserverWatcher(
@@ -10,8 +10,5 @@ export function injectWelcomeBannerFacebook() {
         .enableSingleMode()
         .setDomProxyOption({ beforeShadowRootInit: { mode: 'closed' } })
         .startWatch()
-    const unmount = renderInShadowRoot(
-        <BannerContainerDefault unmount={() => unmount()} />,
-        to.firstVirtualNode.beforeShadow,
-    )
+    const unmount = renderInShadowRoot(<Banner unmount={() => unmount()} />, to.firstVirtualNode.beforeShadow)
 }

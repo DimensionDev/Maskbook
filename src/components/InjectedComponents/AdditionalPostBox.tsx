@@ -81,7 +81,7 @@ export function AdditionalPostBoxUI(props: Props) {
     )
 }
 
-export function AdditionalPostBox() {
+export function AdditionalPostBox(props: Partial<Props>) {
     const people = useFriendsList()
     const identity = useMyIdentities()
 
@@ -108,7 +108,7 @@ export function AdditionalPostBox() {
 
     return (
         <CurrentUsingIdentityContext.Provider value={identity[0]}>
-            <AdditionalPostBoxUI people={people} onRequestPost={onRequestPost} />
+            <AdditionalPostBoxUI people={people} onRequestPost={onRequestPost} {...props} />
         </CurrentUsingIdentityContext.Provider>
     )
 }
