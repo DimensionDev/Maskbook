@@ -2,6 +2,7 @@
 import { useRef, useEffect } from 'react'
 import { useRequestCamera, getFrontVideoDevices } from './useRequestCamera'
 import { useInterval } from './useInterval'
+import { BarcodeDetector } from '../../components/Welcomes/QRScanner/ShapeDetectionPolyfill'
 export function useQRCodeScan(
     video: React.MutableRefObject<HTMLVideoElement | null>,
     isScanning: boolean,
@@ -63,6 +64,6 @@ export function useQRCodeScan(
             } finally {
                 lastScanning.current = false
             }
-        }, 20)
+        }, 500)
     }
 }

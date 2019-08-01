@@ -1,13 +1,16 @@
-/// <reference path="./ShapeDetection.d.ts" />
+/// <reference path="./ShapeDetectionPolyfill.ts" />
 import * as React from 'react'
-import { useRef, useState } from 'react'
+import { useRef} from 'react'
 import { useQRCodeScan } from '../../../utils/hooks/useQRCodeScan'
 
 interface Props {
     scanning: boolean
+
     onResult(data: string): void
+
     onError(): void
 }
+
 export default function QRScanner(
     props: Props & React.DetailedHTMLProps<React.VideoHTMLAttributes<HTMLVideoElement>, HTMLVideoElement>,
 ) {
