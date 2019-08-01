@@ -38,5 +38,5 @@ function getUserID(x: string) {
         const search = new URLSearchParams(url.search)
         return search.get('id')
     }
-    return url.pathname.replace(/^\//, '').replace(/\/$/, '')
+    return url.pathname.replace(/^\//, '').replace(/\/$/, '').split('/')[0]
 }
