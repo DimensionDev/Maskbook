@@ -22,4 +22,5 @@ defineSocialNetworkUI({
     lastRecognizedIdentity: new ValueRef({ identifier: PersonIdentifier.unknown }),
     resolveLastRecognizedIdentity: resolveLastRecognizedIdentity,
     injectPostBox: injectPostBoxFacebook,
+    collectPeople() {},
 })

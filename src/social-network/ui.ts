@@ -21,6 +21,11 @@ export interface SocialNetworkUI extends SocialNetworkWorkerAndUI, SocialNetwork
      * This function should inject UI into the Post box
      */
     injectPostBox(): void
+    /**
+     * This function should inspect the profile page and collect info
+     * like avatar, nickname, friendship relation and Maskbook Key
+     */
+    collectPeople(): void
 }
 export interface SocialNetworkUIDataSources {
     friendsRef: ValueRef<Person[]>
@@ -41,6 +46,7 @@ export function activateSocialNetworkUI() {
             ui.init(env, {})
             ui.resolveLastRecognizedIdentity()
             ui.injectPostBox()
+            ui.collectPeople()
             activatedSocialNetworkUI = ui
             return
         }
