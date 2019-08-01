@@ -1,4 +1,5 @@
-// import { OnlyRunInContext } from '@holoflows/kit/es'
+import { OnlyRunInContext } from '@holoflows/kit/es'
 
-// OnlyRunInContext('content', 'isMobile')
-export const isMobileFacebook = location.hostname === 'm.facebook.com'
+export const isMobileFacebook = OnlyRunInContext('content', false)
+    ? location.hostname === 'm.facebook.com'
+    : navigator.userAgent.match(/Mobile|mobile/)
