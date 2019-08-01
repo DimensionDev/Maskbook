@@ -121,7 +121,7 @@ export async function backupMyKeyPair(whoAmI: PersonIdentifier, download = true)
 }
 
 export async function openWelcomePage(id: PersonIdentifier) {
-    if (getCurrentNetworkWorker(id).isValidUsername(id.userId))
+    if (!getCurrentNetworkWorker(id).isValidUsername(id.userId))
         throw new TypeError(geti18nString('service_username_invalid'))
     const url = browser.runtime.getURL('index.html#/welcome?identifier=' + id.toText())
     return browser.tabs.create({ url })

@@ -20,7 +20,8 @@ interface PostInspectorProps {
 export function PostInspector(props: PostInspectorProps) {
     const { post, postBy, postId } = props
     // TODO:
-    const whoAmI = useMyIdentities()[0].identifier || PersonIdentifier.unknown
+    const identities = useMyIdentities()
+    const whoAmI = identities[0] && identities[0].identifier || PersonIdentifier.unknown
     const people = useFriendsList()
     const [alreadySelectedPreviously, setAlreadySelectedPreviously] = useState<Person[]>([])
     if (postBy.isUnknown) return null
