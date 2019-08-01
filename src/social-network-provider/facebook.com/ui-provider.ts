@@ -7,9 +7,10 @@ import { PersonIdentifier } from '../../database/type'
 import { injectPostBoxFacebook } from './UI/injectPostBox'
 import { collectPeopleFacebook } from './UI/collectPeople'
 import { pasteIntoPostBoxFacebook } from './tasks/pasteIntoPostBox'
-import { getPostContentFacebook } from './tasks/getPostContentFacebook'
+import { getPostContentFacebook } from './tasks/getPostContent'
 import { resolveLastRecognizedIdentityFacebook } from './UI/resolveLastRecognizedIdentity'
 import { getProfileFacebook } from './tasks/getProfile'
+import { pasteIntoBioFacebook } from './tasks/pasteIntoBio'
 
 defineSocialNetworkUI({
     ...sharedProvider,
@@ -28,6 +29,7 @@ defineSocialNetworkUI({
     injectPostBox: injectPostBoxFacebook,
     collectPeople: collectPeopleFacebook,
     taskPasteIntoPostBox: pasteIntoPostBoxFacebook,
+    taskPasteIntoBio: pasteIntoBioFacebook,
     taskGetPostContent: getPostContentFacebook,
     taskGetProfile: getProfileFacebook,
 })

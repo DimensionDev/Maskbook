@@ -34,6 +34,11 @@ export interface SocialNetworkUI extends SocialNetworkWorkerAndUI, SocialNetwork
      */
     taskPasteIntoPostBox(text: string, warningText: string): Promise<void>
     /**
+     * This function should paste `text` into the bio box.
+     * If failed, warning user to do it by themselves with automation_request_click_edit_bio_button
+     */
+    taskPasteIntoBio(text: string): Promise<void>
+    /**
      * This function should return the given post on the current page,
      * Called by `AutomatedTabTask`
      * @param postIdentifier The post id
