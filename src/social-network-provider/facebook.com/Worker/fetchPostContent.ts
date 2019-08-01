@@ -1,8 +1,17 @@
-import { PostIdentifier, PersonIdentifier } from '../../database/type'
-import { parseFacebookStaticHTML } from './parse-html'
-import { getPostUrlAtFacebook } from './parse-username'
-import tasks from '../../extension/content-script/tasks'
+import { PostIdentifier, PersonIdentifier } from '../../../database/type'
+import { parseFacebookStaticHTML } from '../parse-html'
+import { getPostUrlAtFacebook } from '../parse-username'
+import tasks from '../../../extension/content-script/tasks'
 
+// ? Try to execute query in the extension environment
+// ? If it is the true extension environment (Chrome, Firefox, GeckoView)
+// ? Will go through this path
+// ? If it it the fake extension environment (Webview on iOS)
+// ? this will fail due to cross-origin restriction.
+
+// ? if failed
+// ? we go to the old way.
+// ? Invoke a task on the current activating page.
 export async function fetchPostContentFacebook(post: PostIdentifier<PersonIdentifier>) {
     // Path 1: fetch by http req
     try {

@@ -1,4 +1,4 @@
-import { env, SocialNetworkWorkerAndUI } from './shared'
+import { env, SocialNetworkWorkerAndUI, Profile } from './shared'
 import { ValueRef } from '@holoflows/kit/es'
 import { Person } from '../database/helpers/person'
 import { PostIdentifier, PersonIdentifier } from '../database/type'
@@ -39,6 +39,12 @@ export interface SocialNetworkUI extends SocialNetworkWorkerAndUI, SocialNetwork
      * @param postIdentifier The post id
      */
     taskGetPostContent(postIdentifier: PostIdentifier<PersonIdentifier>): Promise<string>
+    /**
+     * This function should return the profile info on the current page,
+     * Called by `AutomatedTabTask`
+     * @param identifier The post id
+     */
+    taskGetProfile(identifier: PersonIdentifier): Promise<Profile>
 }
 export interface SocialNetworkUIDataSources {
     friendsRef: ValueRef<Person[]>

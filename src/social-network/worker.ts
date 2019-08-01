@@ -1,4 +1,4 @@
-import { env, SocialNetworkWorkerAndUI } from './shared'
+import { env, SocialNetworkWorkerAndUI, Profile } from './shared'
 import { GetContext } from '@holoflows/kit/es'
 import { PostIdentifier, PersonIdentifier } from '../database/type'
 
@@ -20,6 +20,11 @@ export interface SocialNetworkWorker extends SocialNetworkWorkerAndUI {
      * @param postIdentifier The post id
      */
     fetchPostContent(postIdentifier: PostIdentifier<PersonIdentifier>): Promise<string>
+    /**
+     * This function should fetch the given post by `fetch`, `AutomatedTabTask` or anything
+     * @param postIdentifier The post id
+     */
+    fetchProfile(identifier: PersonIdentifier): Promise<Profile>
 }
 
 export const definedSocialNetworkWorkers = new Set<SocialNetworkWorker>()

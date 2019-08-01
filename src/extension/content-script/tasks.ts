@@ -1,8 +1,6 @@
 import { AutomatedTabTask, LiveSelector, MutationObserverWatcher } from '@holoflows/kit'
 import { sleep, dispatchCustomEvents, timeout } from '../../utils/utils'
 import { geti18nString } from '../../utils/i18n'
-import { PersonIdentifier } from '../../database/type'
-import { fetchFacebookBio } from '../../social-network-provider/facebook.com/fetch-bio'
 import { getActivatedUI } from '../../social-network/ui'
 
 const bioCard = new LiveSelector().querySelector<HTMLDivElement>('#profile_timeline_intro_card')
@@ -15,13 +13,9 @@ export default AutomatedTabTask(
         getPostContent: getActivatedUI().taskGetPostContent,
         /**
          * Access profile page
-         * Get bio content
+         * Get Profile
          */
-        getBioContent(identifier: PersonIdentifier) {
-            return fetchFacebookBio(identifier)
-            // const [data] = await new MutationObserverWatcher(bioCard).await(node => node.innerText)
-            // return data
-        },
+        getProfile: getActivatedUI().taskGetProfile,
         /**
          * Access profile page
          * Paste text into bio

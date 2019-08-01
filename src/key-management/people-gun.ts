@@ -1,12 +1,9 @@
-import tasks from '../extension/content-script/tasks'
 import { verifyOthersProve } from '../extension/background-script/CryptoService'
 import { sleep } from '../utils/utils'
-import { getProfilePageUrlAtFacebook } from '../social-network-provider/facebook.com/parse-username'
 import { geti18nString } from '../utils/i18n'
 import { PersonIdentifier, PostIdentifier, PersonUI } from '../database/type'
 import { queryPerson } from '../database'
 import { gun } from '../network/gun/version.1'
-import { fetchFacebookBio } from '../social-network-provider/facebook.com/fetch-bio'
 import getCurrentNetworkWorker from '../social-network/utils/getCurrentNetworkWorker'
 
 export async function queryPersonFromGun(username: string) {
@@ -15,31 +12,10 @@ export async function queryPersonFromGun(username: string) {
         .get(username)
         .once().then!()
 }
-async function getActiveTab() {
-    const [tab] = await browser.tabs.query({ active: true })
-    if (tab) return tab.id
-    return undefined
-}
 export async function addPersonPublicKey(user: PersonIdentifier): Promise<PersonUI> {
-    // ? Try to execute query in the extension environment
-    // ? If it is the true extension environment (Chrome, Firefox, GeckoView)
-    // ? Will go through this path
-    // ? If it it the fake extension environment (Webview on iOS)
-    // ? this will fail due to cross-origin restriction.
-
-    // ? if failed
-    // ? we go to the old way.
-    // ? Invoke a task on the current activating page.
     const fromBio = async () => {
-        async function getBio() {
-            try {
-                return fetchFacebookBio(user)
-            } catch {
-                const tabId = await getActiveTab()
-                return tasks(getProfilePageUrlAtFacebook(user), { runAtTabID: tabId }).getBioContent(user)
-            }
-        }
-        if (!(await verifyOthersProve(await getBio(), user))) {
+        const profile = await getCurrentNetworkWorker(user).fetchProfile(user)
+        if (!(await verifyOthersProve(profile.bioContent, user))) {
             throw new Error('Not in bio!')
         }
     }

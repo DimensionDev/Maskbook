@@ -9,6 +9,7 @@ import { collectPeopleFacebook } from './UI/collectPeople'
 import { pasteIntoPostBoxFacebook } from './tasks/pasteIntoPostBox'
 import { getPostContentFacebook } from './tasks/getPostContentFacebook'
 import { resolveLastRecognizedIdentityFacebook } from './UI/resolveLastRecognizedIdentity'
+import { getProfileFacebook } from './tasks/getProfile'
 
 defineSocialNetworkUI({
     ...sharedProvider,
@@ -28,4 +29,5 @@ defineSocialNetworkUI({
     collectPeople: collectPeopleFacebook,
     taskPasteIntoPostBox: pasteIntoPostBoxFacebook,
     taskGetPostContent: getPostContentFacebook,
+    taskGetProfile: getProfileFacebook,
 })
