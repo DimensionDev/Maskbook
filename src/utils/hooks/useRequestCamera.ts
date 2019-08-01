@@ -27,7 +27,10 @@ async function requestPermission(): Promise<unknown> {
     if (navigator.permissions.request) return navigator.permissions.request({ name: 'camera' })
     const t = await navigator.mediaDevices.getUserMedia({
         audio: false,
-        video: true,
+        video: {
+            width: { ideal: 1920 },
+            height: { ideal: 1080 }
+        },
     })
     t.getTracks()[0].stop()
 }

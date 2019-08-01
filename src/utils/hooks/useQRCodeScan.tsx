@@ -2,7 +2,8 @@
 import { useRef, useEffect } from 'react'
 import { useRequestCamera, getFrontVideoDevices } from './useRequestCamera'
 import { useInterval } from './useInterval'
-import { BarcodeDetector } from '../../components/Welcomes/QRScanner/ShapeDetectionPolyfill'
+import '../../components/Welcomes/QRScanner/ShapeDetectionPolyfill'
+
 export function useQRCodeScan(
     video: React.MutableRefObject<HTMLVideoElement | null>,
     isScanning: boolean,
@@ -43,6 +44,8 @@ export function useQRCodeScan(
     }
     // ? Do scan
     {
+        // @ts-ignore
+        // noinspection TypeScriptUnresolvedFunction
         const scanner = useRef(new BarcodeDetector({ formats: ['qr_code'] }))
         const lastScanning = useRef(false)
         const errorTimes = useRef(0)
@@ -57,13 +60,13 @@ export function useQRCodeScan(
             lastScanning.current = true
             try {
                 const [result] = await scanner.current.detect(video.current)
-                if (result) onResult(result.rawValue)
+                if (result) onResult(result)
             } catch (e) {
                 errorTimes.current += 1
                 console.error(e)
             } finally {
                 lastScanning.current = false
             }
-        }, 500)
+        }, 100)
     }
 }
