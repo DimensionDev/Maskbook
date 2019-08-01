@@ -22,4 +22,5 @@ defineSocialNetworkUI({
     resolveLastRecognizedIdentity() {
         resolveLastRecognizedIdentity(this.lastRecognizedIdentity)
     },
+    injectPostBox() {},
 })

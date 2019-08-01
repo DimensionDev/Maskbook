@@ -17,10 +17,13 @@ export interface SocialNetworkWorker extends SocialNetworkWorkerAndUI {
 }
 
 export const definedSocialNetworkWorkers = new Set<SocialNetworkWorker>()
-export function defineSocialNetworkWorker<T extends SocialNetworkWorker>(worker: T) {
+export function defineSocialNetworkWorker(worker: SocialNetworkWorker) {
     definedSocialNetworkWorkers.add(worker)
     if (GetContext() === 'background') {
         console.log('Activating social network provider', worker.networkIdentifier, worker)
         worker.init(env, {})
     }
+}
+export function defineSocialNetworkWorkerExtended<T extends SocialNetworkWorker>(worker: T) {
+    defineSocialNetworkWorker(worker)
 }

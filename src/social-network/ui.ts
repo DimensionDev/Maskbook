@@ -4,7 +4,23 @@ import { Person } from '../database/helpers/person'
 export interface SocialNetworkUI extends SocialNetworkWorkerAndUI, SocialNetworkUIDataSources {
     /** Should this UI content script activate? */
     shouldActivate(): boolean
+    /**
+     * This function should find out which account does user using currently
+     * and write it to `SocialNetworkUIDataSources.lastRecognizedIdentity`
+     *
+     * If this network stores `$self` or `$unknown` into the database, you should also do this
+     * ```ts
+     * lastRecognizedIdentity.addListener(id => {
+     *      if (id.identifier.isUnknown) return
+     *      Services.People.resolveIdentity(id.identifier)
+     * })
+     * ```
+     */
     resolveLastRecognizedIdentity(): void
+    /**
+     * This function should inject UI into the Post box
+     */
+    injectPostBox(): void
 }
 export interface SocialNetworkUIDataSources {
     friendsRef: ValueRef<Person[]>
@@ -24,10 +40,14 @@ export function activateSocialNetworkUI() {
             console.log('Activating UI provider', ui.networkIdentifier, ui)
             ui.init(env, {})
             ui.resolveLastRecognizedIdentity()
+            ui.injectPostBox()
             activatedSocialNetworkUI = ui
             return
         }
 }
-export function defineSocialNetworkUI<T extends SocialNetworkUI>(UI: T) {
+export function defineSocialNetworkUI(UI: SocialNetworkUI): void {
     definedSocialNetworkUIs.add(UI)
+}
+export function defineSocialNetworkUIExtended<T extends SocialNetworkUI>(UI: T): void {
+    defineSocialNetworkUI(UI)
 }

@@ -1,5 +1,10 @@
 import { getUrl } from '../utils/utils'
 export interface SocialNetworkWorkerAndUI {
+    version: 1
+    /**
+     * If using Maskbook on this network is dangerous, set it to true (not supported yet)
+     */
+    isDangerousNetwork: false
     /**
      * Detect if an Identifier belongs to this provider.
      *
