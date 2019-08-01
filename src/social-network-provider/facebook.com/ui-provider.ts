@@ -6,6 +6,7 @@ import { sharedProvider } from './shared-provider'
 import { PersonIdentifier } from '../../database/type'
 import resolveLastRecognizedIdentity from './UI/resolveLastRecognizedIdentity'
 import { injectPostBoxFacebook } from './UI/injectPostBox'
+import { collectPeopleFacebook } from './UI/collectPeople'
 
 defineSocialNetworkUI({
     ...sharedProvider,
@@ -22,5 +23,5 @@ defineSocialNetworkUI({
     lastRecognizedIdentity: new ValueRef({ identifier: PersonIdentifier.unknown }),
     resolveLastRecognizedIdentity: resolveLastRecognizedIdentity,
     injectPostBox: injectPostBoxFacebook,
-    collectPeople() {},
+    collectPeople: collectPeopleFacebook,
 })
