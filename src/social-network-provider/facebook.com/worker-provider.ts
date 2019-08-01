@@ -1,5 +1,6 @@
 import { defineSocialNetworkWorker } from '../../social-network/worker'
 import { sharedProvider } from './shared-provider'
+import { fetchPostContentFacebook } from './fetchPostContent'
 
 defineSocialNetworkWorker({
     ...sharedProvider,
@@ -13,4 +14,5 @@ defineSocialNetworkWorker({
         `,
         url: [{ hostEquals: 'www.facebook.com' }, { hostEquals: 'm.facebook.com' }],
     },
+    fetchPostContent: fetchPostContentFacebook,
 })

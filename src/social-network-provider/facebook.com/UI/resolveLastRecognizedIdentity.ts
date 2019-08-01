@@ -5,7 +5,7 @@ import Services from '../../../extension/service'
 import { SocialNetworkUI } from '../../../social-network/ui'
 import { getPersonIdentifierAtFacebook } from '../getPersonIdentifierAtFacebook'
 
-export default function resolveLastRecognizedIdentity(this: SocialNetworkUI) {
+export function resolveLastRecognizedIdentityFacebook(this: SocialNetworkUI) {
     const ref = this.lastRecognizedIdentity
     ref.addListener(id => {
         if (id.identifier.isUnknown) return

@@ -1,5 +1,6 @@
 import { env, SocialNetworkWorkerAndUI } from './shared'
 import { GetContext } from '@holoflows/kit/es'
+import { PostIdentifier, PersonIdentifier } from '../database/type'
 
 /**
  * A SocialNetworkWorker is running in the background page
@@ -14,6 +15,11 @@ export interface SocialNetworkWorker extends SocialNetworkWorkerAndUI {
         /** Inject to which URL */
         url: browser.events.UrlFilter[]
     }
+    /**
+     * This function should fetch the given post by `fetch`, `AutomatedTabTask` or anything
+     * @param postIdentifier The post id
+     */
+    fetchPostContent(postIdentifier: PostIdentifier<PersonIdentifier>): Promise<string>
 }
 
 export const definedSocialNetworkWorkers = new Set<SocialNetworkWorker>()

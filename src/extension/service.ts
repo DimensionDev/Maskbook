@@ -3,8 +3,6 @@ import { GetContext, OnlyRunInContext } from '@holoflows/kit/es/Extension/Contex
 import * as MockService from './mock-service'
 import Serialization from '../utils/type-transform/Serialization'
 import { PersonIdentifier, GroupIdentifier, PostIdentifier } from '../database/type'
-import { fetchFacebookBio } from '../social-network-provider/facebook.com/fetch-bio'
-import { fetchFacebookProvePost } from '../social-network-provider/facebook.com/fetch-prove-post'
 
 interface Services {
     Crypto: typeof import('./background-script/CryptoService')
@@ -24,10 +22,6 @@ Object.assign(window, {
     PersonIdentifier,
     GroupIdentifier,
     PostIdentifier,
-    fetchs: {
-        bio: fetchFacebookBio,
-        post: fetchFacebookProvePost,
-    },
 })
 if (GetContext() === 'background') {
     Object.assign(window, { tasks: require('./content-script/tasks'), alpha40: require('../crypto/crypto-alpha-40') })

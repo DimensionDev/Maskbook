@@ -1,6 +1,8 @@
 import { env, SocialNetworkWorkerAndUI } from './shared'
 import { ValueRef } from '@holoflows/kit/es'
 import { Person } from '../database/helpers/person'
+import { PostIdentifier, PersonIdentifier } from '../database/type'
+
 export interface SocialNetworkUI extends SocialNetworkWorkerAndUI, SocialNetworkUIDataSources {
     /** Should this UI content script activate? */
     shouldActivate(): boolean
@@ -31,6 +33,12 @@ export interface SocialNetworkUI extends SocialNetworkWorkerAndUI, SocialNetwork
      * If failed, warning user to do it by themselves with `warningText`
      */
     taskPasteIntoPostBox(text: string, warningText: string): Promise<void>
+    /**
+     * This function should return the given post on the current page,
+     * Called by `AutomatedTabTask`
+     * @param postIdentifier The post id
+     */
+    taskGetPostContent(postIdentifier: PostIdentifier<PersonIdentifier>): Promise<string>
 }
 export interface SocialNetworkUIDataSources {
     friendsRef: ValueRef<Person[]>

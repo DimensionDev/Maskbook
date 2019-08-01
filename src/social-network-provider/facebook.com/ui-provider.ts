@@ -4,10 +4,11 @@ import { InitFriendsValueRef } from '../../social-network/defaults/FriendsValueR
 import { InitMyIdentitiesValueRef } from '../../social-network/defaults/MyIdentitiesRef'
 import { sharedProvider } from './shared-provider'
 import { PersonIdentifier } from '../../database/type'
-import resolveLastRecognizedIdentity from './UI/resolveLastRecognizedIdentity'
 import { injectPostBoxFacebook } from './UI/injectPostBox'
 import { collectPeopleFacebook } from './UI/collectPeople'
 import { pasteIntoPostBoxFacebook } from './tasks/pasteIntoPostBox'
+import { getPostContentFacebook } from './tasks/getPostContentFacebook'
+import { resolveLastRecognizedIdentityFacebook } from './UI/resolveLastRecognizedIdentity'
 
 defineSocialNetworkUI({
     ...sharedProvider,
@@ -22,8 +23,9 @@ defineSocialNetworkUI({
     friendsRef: new ValueRef([]),
     myIdentitiesRef: new ValueRef([]),
     lastRecognizedIdentity: new ValueRef({ identifier: PersonIdentifier.unknown }),
-    resolveLastRecognizedIdentity: resolveLastRecognizedIdentity,
+    resolveLastRecognizedIdentity: resolveLastRecognizedIdentityFacebook,
     injectPostBox: injectPostBoxFacebook,
     collectPeople: collectPeopleFacebook,
     taskPasteIntoPostBox: pasteIntoPostBoxFacebook,
+    taskGetPostContent: getPostContentFacebook,
 })

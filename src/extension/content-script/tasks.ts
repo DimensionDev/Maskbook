@@ -1,8 +1,7 @@
 import { AutomatedTabTask, LiveSelector, MutationObserverWatcher } from '@holoflows/kit'
 import { sleep, dispatchCustomEvents, timeout } from '../../utils/utils'
 import { geti18nString } from '../../utils/i18n'
-import { fetchFacebookProvePost } from '../../social-network-provider/facebook.com/fetch-prove-post'
-import { PersonIdentifier, PostIdentifier } from '../../database/type'
+import { PersonIdentifier } from '../../database/type'
 import { fetchFacebookBio } from '../../social-network-provider/facebook.com/fetch-bio'
 import { getActivatedUI } from '../../social-network/ui'
 
@@ -13,12 +12,7 @@ export default AutomatedTabTask(
          * Access post url
          * Get post content
          */
-        getPostContent(identifier: PostIdentifier<PersonIdentifier>) {
-            return fetchFacebookProvePost(identifier)
-            // const post = new LiveSelector().querySelector('#contentArea').getElementsByTagName('p')
-            // const [data] = await new MutationObserverWatcher(post).await(node => node.innerText)
-            // return data
-        },
+        getPostContent: getActivatedUI().taskGetPostContent,
         /**
          * Access profile page
          * Get bio content
