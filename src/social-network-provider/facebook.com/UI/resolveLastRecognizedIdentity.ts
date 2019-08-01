@@ -1,11 +1,12 @@
 import { LiveSelector } from '@holoflows/kit/es/DOM/LiveSelector'
 import { MutationObserverWatcher } from '@holoflows/kit/es'
-import { PersonIdentifier } from '../../database/type'
-import Services from '../../extension/service'
-import { SocialNetworkUI } from '../../social-network/ui'
-import { getPersonIdentifierAtFacebook } from './getPersonIdentifierAtFacebook'
+import { PersonIdentifier } from '../../../database/type'
+import Services from '../../../extension/service'
+import { SocialNetworkUI } from '../../../social-network/ui'
+import { getPersonIdentifierAtFacebook } from '../getPersonIdentifierAtFacebook'
 
-export default function resolveLastRecognizedIdentity(ref: SocialNetworkUI['lastRecognizedIdentity']) {
+export default function resolveLastRecognizedIdentity(this: SocialNetworkUI) {
+    const ref = this.lastRecognizedIdentity
     ref.addListener(id => {
         if (id.identifier.isUnknown) return
         Services.People.resolveIdentity(id.identifier)

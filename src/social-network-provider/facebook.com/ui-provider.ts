@@ -4,7 +4,8 @@ import { InitFriendsValueRef } from '../../social-network/defaults/FriendsValueR
 import { InitMyIdentitiesValueRef } from '../../social-network/defaults/MyIdentitiesRef'
 import { sharedProvider } from './shared-provider'
 import { PersonIdentifier } from '../../database/type'
-import resolveLastRecognizedIdentity from './resolveLastRecognizedIdentity'
+import resolveLastRecognizedIdentity from './UI/resolveLastRecognizedIdentity'
+import { injectPostBoxFacebook } from './UI/injectPostBox'
 
 defineSocialNetworkUI({
     ...sharedProvider,
@@ -19,8 +20,6 @@ defineSocialNetworkUI({
     friendsRef: new ValueRef([]),
     myIdentitiesRef: new ValueRef([]),
     lastRecognizedIdentity: new ValueRef({ identifier: PersonIdentifier.unknown }),
-    resolveLastRecognizedIdentity() {
-        resolveLastRecognizedIdentity(this.lastRecognizedIdentity)
-    },
-    injectPostBox() {},
+    resolveLastRecognizedIdentity: resolveLastRecognizedIdentity,
+    injectPostBox: injectPostBoxFacebook,
 })
