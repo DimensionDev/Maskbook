@@ -90,7 +90,7 @@
         "message": "Welcome to Maskbook"
     },
     "welcome_0_description": {
-        "message": "You can post on Facebook without allowing Facebook to stalk, analyze, and peep into you."
+        "message": "You can post on Facebook without allowing Facebook to stalk, analyze, or spy on you."
     },
     "welcome_0_new_user": {
         "message": "New user?"
@@ -108,13 +108,13 @@
         "message": "Lost your keypair backup? No worry. Simply start as a new user."
     },
     "welcome_1a2_title": {
-        "message": "Encrypt message use this postbox"
+        "message": "Encrypt message in a Maskbook postbox"
     },
     "welcome_1a2_imgalt": {
         "message": "Screenshot of how to encrypt message with Maskbook"
     },
     "welcome_1a2_description": {
-        "message": "Then only people you selected with Maskbook can see the post content"
+        "message": "Then only people you select with Maskbook can see the posted content."
     },
     "welcome_1a2_done_button": {
         "message": "Nice!"
@@ -123,7 +123,7 @@
         "message": "Keep your backups carefully"
     },
     "welcome_1a3_description1": {
-        "message": "The first backup has been put in your Downloads folder."
+        "message": "Our extension is asking you to download your key as a file. Back it up often."
     },
     "welcome_1a3_description2": {
         "message": "And export backups frequently!"
