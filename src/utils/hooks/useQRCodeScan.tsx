@@ -1,3 +1,4 @@
+/// <reference path="../../components/Welcomes/QRScanner/ShapeDetectionSpec.d.ts" />
 /** This file is published under MIT License */
 import { useRef, useEffect } from 'react'
 import { useRequestCamera, getFrontVideoDevices } from './useRequestCamera'
@@ -44,8 +45,6 @@ export function useQRCodeScan(
     }
     // ? Do scan
     {
-        // @ts-ignore
-        // noinspection TypeScriptUnresolvedFunction
         const scanner = useRef(new BarcodeDetector({ formats: ['qr_code'] }))
         const lastScanning = useRef(false)
         const errorTimes = useRef(0)
@@ -60,7 +59,7 @@ export function useQRCodeScan(
             lastScanning.current = true
             try {
                 const [result] = await scanner.current.detect(video.current)
-                if (result) onResult(result)
+                if (result) onResult(result.rawValue)
             } catch (e) {
                 errorTimes.current += 1
                 console.error(e)

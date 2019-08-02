@@ -1,21 +1,13 @@
 import jsQR from 'jsqr'
-import { isNull, isUndefined } from 'lodash-es'
+import { isNull } from 'lodash-es'
+/// <reference path="./ShapeDetectionSpec.d.ts" />
 
-/**
- * TODO: the polyfill was not strictly same as future one.
- */
-export class BarcodeDetector {
-    // noinspection JSUnusedLocalSymbols
-    /**
-     * At this time we only support qr_code
-     */
-    constructor(options: { formats: ['qr_code'] }) {
-    }
-
+class BarcodeDetectorPolyfill implements BarcodeDetector {
+    constructor() {}
     // noinspection JSMethodCanBeStatic
-    public async detect(mediaSource: CanvasImageSource): Promise<string[]> {
-        const canvas = document.createElement('canvas');
-        [canvas.width, canvas.height] = [1920, 1080]
+    public async detect(mediaSource: CanvasImageSource) {
+        const canvas = document.createElement('canvas')
+        ;[canvas.width, canvas.height] = [1920, 1080]
         const ctx = canvas.getContext('2d')
         if (isNull(ctx)) {
             throw new Error('Canvas was not supported')
@@ -26,12 +18,23 @@ export class BarcodeDetector {
         if (isNull(res)) {
             return []
         }
-        return [res.data]
+        const result = new DetectedBarcodePolyfill()
+        result.rawValue = res.data
+        return [result]
     }
 }
+class DetectedBarcodePolyfill implements DetectedBarcode {
+    get boundingBox(): DOMRectReadOnly {
+        throw new Error('Not implemented')
+    }
+    cornerPoints: { x: number; y: number }[] = []
+    format = 'qr_code'
+    rawValue!: string
+}
 
-// @ts-ignore
-if (isUndefined(window.BarcodeDetector)) {
-    // @ts-ignore
-    window.BarcodeDetector = BarcodeDetector
+if (!('BarcodeDetector' in window)) {
+    Object.assign(window, {
+        BarcodeDetector: BarcodeDetectorPolyfill,
+        DetectedBarcode: DetectedBarcodePolyfill,
+    })
 }
