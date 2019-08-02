@@ -123,10 +123,10 @@
         "message": "Keep your backups carefully"
     },
     "welcome_1a3_description1": {
-        "message": "Our extension is asking you to download your key as a file. Back it up often."
+        "message": "Our extension is asking you to download your key as a file."
     },
     "welcome_1a3_description2": {
-        "message": "And export backups frequently!"
+        "message": "Back it up often."
     },
     "welcome_1a3_done_button": {
         "message": "Got it!"
@@ -182,6 +182,15 @@
     "welcome_1b_title": {
         "message": "Restore your keypair"
     },
+    "welcome_1b_tabs_backup": {
+        "message": "Select the backup file"
+    },
+    "welcome_1b_tabs_qr": {
+        "message": "Scan the QR Code"
+    },
+    "welcome_1b_tabs_text": {
+        "message": "Paste the content of the backup file by yourself"
+    },
     "welcome_1b_dragging": {
         "message": "Drag your key backup into this dialog"
     },
@@ -190,6 +199,24 @@
     },
     "welcome_1b_file_selected": {
         "message": "Selected exported key backup: $1"
+    },
+    "welcome_1b_qr_0": {
+        "message": "You can find QR Code by"
+    },
+    "welcome_1b_qr_1": {
+        "message": "1. right-click the icon of the Maskbook in the browser address bar"
+    },
+    "welcome_1b_qr_2": {
+        "message": "2. click \"Options\""
+    },
+    "welcome_1b_qr_3": {
+        "message": "3. click \"Setup for Mobile\""
+    },
+    "welcome_1b_qr_error_1": {
+        "message": "There is an error occur during the scanning."
+    },
+    "welcome_1b_qr_error_2": {
+        "message": "You may try other ways to restore your account."
     },
     "welcome_2_title": {
         "message": "You're done!"
