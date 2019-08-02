@@ -124,7 +124,7 @@
         "message": "請妥善保管備份檔案"
     },
     "welcome_1a3_description1": {
-        "message": "稍後會有一個保存提示，請妥善保管備份檔案。記得經常備份！"
+        "message": "稍後會有一個保存提示，請妥善保管備份檔案。"
     },
     "welcome_1a3_description2": {
         "message": "記得經常創建新備份！"
@@ -183,6 +183,15 @@
     "welcome_1b_title": {
         "message": "導入備份檔案"
     },
+    "welcome_1b_tabs_backup": {
+        "message": "選擇備份檔案"
+    },
+    "welcome_1b_tabs_qr": {
+        "message": "掃描 QR 碼"
+    },
+    "welcome_1b_tabs_text": {
+        "message": "手動貼入備份檔案的内容"
+    },
     "welcome_1b_dragging": {
         "message": "將備份檔案拖拽到此處"
     },
@@ -191,6 +200,24 @@
     },
     "welcome_1b_file_selected": {
         "message": "已選取備份檔案：$1"
+    },
+    "welcome_1b_qr_0": {
+        "message": "你可以以以下方式找到 QR 碼"
+    },
+    "welcome_1b_qr_1": {
+        "message": "1. 右鍵點擊瀏覽器右上方的 Maskbook 按鈕"
+    },
+    "welcome_1b_qr_2": {
+        "message": "2. 點擊「選項」"
+    },
+    "welcome_1b_qr_3": {
+        "message": "3. 點擊「設定移動版」"
+    },
+    "welcome_1b_qr_error_1": {
+        "message": "掃描過程中出現錯誤"
+    },
+    "welcome_1b_qr_error_2": {
+        "message": "你或許可以試試其他方式來恢復賬號設定。"
     },
     "welcome_2_title": {
         "message": "完畢！"

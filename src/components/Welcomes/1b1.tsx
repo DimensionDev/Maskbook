@@ -109,14 +109,13 @@ export default function Welcome({ back, restore }: Props) {
                 indicatorColor="primary"
                 textColor="primary"
                 aria-label="icon tabs example">
-                {/* // TODO: i18n */}
-                <Tab icon={<FolderOpen />} aria-label="select backup file" />
+                <Tab icon={<FolderOpen />} aria-label={geti18nString('welcome_1b_tabs_backup')} />
                 <Tab
                     disabled={!('BarcodeDetector' in window || isWKWebkit)}
                     icon={<Camera />}
-                    aria-label="scan QR code"
+                    aria-label={geti18nString('welcome_1b_tabs_qr')}
                 />
-                <Tab icon={<Text />} aria-label="paste the JSON by yourself" />
+                <Tab icon={<Text />} aria-label={geti18nString('welcome_1b_tabs_text')} />
             </Tabs>
             <main className={classes.main}>
                 {tab === 0 ? FileUI() : null}
@@ -179,13 +178,12 @@ export default function Welcome({ back, restore }: Props) {
     function QR() {
         return (
             <>
-                {/* // TODO i18n */}
-                <Typography variant="h5">Scan the QR Code</Typography>
+                <Typography variant="h5">{geti18nString('welcome_1b_tabs_qr')}</Typography>
                 <Typography variant="body1">
-                    You can find QR Code by <br />
-                    1. right-click the icon of the Maskbook in the browser address bar <br />
-                    2. click "Options" <br />
-                    3. click "Setup for Mobile"
+                    {geti18nString('welcome_1b_qr_0')} <br />
+                    {geti18nString('welcome_1b_qr_1')} <br />
+                    {geti18nString('welcome_1b_qr_2')} <br />
+                    {geti18nString('welcome_1b_qr_3')}
                 </Typography>
                 <QRScanner
                     onError={() => setError(true)}
@@ -196,8 +194,10 @@ export default function Welcome({ back, restore }: Props) {
                 />
                 {qrError ? (
                     <div className={classes.videoError}>
+                        {geti18nString('welcome_1b_qr_error_1')}
                         There is an error occur during the scanning.
                         <br />
+                        {geti18nString('welcome_1b_qr_error_2')}
                         You may try other ways to restore your account.
                     </div>
                 ) : null}
