@@ -109,7 +109,7 @@
         "message": "弄丟了備份檔案？不用擔心，當作自己是新用戶即可。"
     },
     "welcome_1a2_title": {
-        "message": "使用這個輸入框來加密"
+        "message": "使用 Maskbook 的輸入框來加密"
     },
     "welcome_1a2_imgalt": {
         "message": "關於如何使用 Maskbook 加密的截圖"
@@ -124,7 +124,7 @@
         "message": "請妥善保管備份檔案"
     },
     "welcome_1a3_description1": {
-        "message": "第一個備份檔案已經放在「下載」文件夾。"
+        "message": "稍後會有一個保存提示，請妥善保管備份檔案。記得經常備份！"
     },
     "welcome_1a3_description2": {
         "message": "記得經常創建新備份！"
