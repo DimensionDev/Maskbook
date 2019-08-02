@@ -194,11 +194,13 @@ export default function Welcome({ back, restore }: Props) {
                     width="100%"
                     onResult={restore}
                 />
-                <div className={qrError ? classes.videoError : ''}>
-                    There is an error occur during the scanning.
-                    <br />
-                    You may try other ways to restore your account.
-                </div>
+                {qrError ? (
+                    <div className={classes.videoError}>
+                        There is an error occur during the scanning.
+                        <br />
+                        You may try other ways to restore your account.
+                    </div>
+                ) : null}
             </>
         )
     }
