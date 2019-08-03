@@ -46,8 +46,9 @@ export interface CustomEvents {
     }
     ;(Object.keys(hacks) as (keyof DocumentEventMap)[]).concat(['keyup', 'input']).forEach(hijack)
     const invokeCustomEvent: EventListenerOrEventListenerObject = e => {
-        const ev = e as CustomEvent<[keyof CustomEvents, CustomEvents[keyof CustomEvents]]>
-        const [eventName, param] = ev.detail
+        const ev = e as CustomEvent<string>
+        const [eventName, param]: [keyof CustomEvents, CustomEvents[keyof CustomEvents]] = JSON.parse(ev.detail)
+
         for (const f of store[eventName] || []) {
             try {
                 const hack = hacks[eventName]
