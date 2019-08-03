@@ -31,9 +31,8 @@ export interface CustomEvents {
 
     const hacks: { [key in keyof CustomEvents & keyof DocumentEventMap]: (...params: CustomEvents[key]) => Event } = {
         paste(text) {
-            const transfer = new DataTransfer()
-            transfer.setData('text/plain', text)
-            const e = new ClipboardEvent('paste', { clipboardData: transfer })
+            const e = new ClipboardEvent('paste', { clipboardData: new DataTransfer() })
+            e.clipboardData!.setData('text/plain', text)
             // ! Why?
             return getEvent(e, { defaultPrevented: false, preventDefault() {} })
         },
