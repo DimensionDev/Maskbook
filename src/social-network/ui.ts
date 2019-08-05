@@ -145,8 +145,8 @@ export type PostInfo = {
     readonly postID: ValueRef<string | null>
     readonly postContent: ValueRef<string>
     readonly postPayload: ValueRef<PayloadAlpha40 | null>
-    readonly commentsSelector: LiveSelector<HTMLElement, any>
-    readonly commentBoxSelector: LiveSelector<HTMLElement, any>
+    readonly commentsSelector: LiveSelector<HTMLElement, false>
+    readonly commentBoxSelector: LiveSelector<HTMLElement, true>
     readonly decryptedPostContent: ValueRef<string>
     readonly rootNode: HTMLElement
 }
@@ -178,7 +178,7 @@ export function activateSocialNetworkUI() {
                         undo2()
                         undo3()
                     })
-                    Reflect.apply(setter, ui, [key, value])
+                    Reflect.apply(setter, this, [key, value])
                     return this
                 }
 

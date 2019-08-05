@@ -10,48 +10,50 @@ const posts = new LiveSelector().querySelectorAll<HTMLDivElement>(
 )
 
 export function collectPostsFacebook(this: SocialNetworkUI) {
-    new MutationObserverWatcher(posts).useForeach(node => {
-        const root = new LiveSelector()
-            .replace(() => [node.current])
-            .closest('.userContentWrapper')
-            .enableSingleMode()
-        // ? inject after comments
-        const commentSelector = root
-            .clone()
-            .querySelectorAll('[role=article]')
-            .querySelectorAll('a+span')
-            .closest<HTMLElement>(2)
-        // ? inject comment text field
-        const commentBoxSelector = new LiveSelector()
-            .replace(() => [root])
-            .querySelector<HTMLFormElement>('form form')
-            .enableSingleMode()
-        const info: PostInfo = {
-            commentsSelector: commentSelector,
-            commentBoxSelector: commentBoxSelector,
-            decryptedPostContent: new ValueRef(''),
-            postBy: new ValueRef(PersonIdentifier.unknown),
-            postContent: new ValueRef(''),
-            postID: new ValueRef(''),
-            postPayload: new ValueRef(null),
-            get rootNode() {
-                return root.evaluateOnce()! as HTMLElement
-            },
-        }
-        this.posts.set(node, info)
-        function collectPostInfo() {
-            info.postContent.value = node.current.innerText
-            info.postPayload.value = deconstructPayload(info.postContent.value)
-            info.postBy.value = getPostBy(node, info.postPayload.value !== null)
-            info.postID.value = getPostID(node)
-        }
-        collectPostInfo()
-        return {
-            onNodeMutation: collectPostInfo,
-            onTargetChanged: collectPostInfo,
-            onRemove: () => this.posts.delete(node),
-        }
-    })
+    new MutationObserverWatcher(posts)
+        .useForeach(node => {
+            const root = new LiveSelector().replace(() => [node.current]).closest('.userContentWrapper')
+            // ? inject after comments
+            const commentSelector = root
+                .clone()
+                .querySelectorAll('[role=article]')
+                .querySelectorAll('a+span')
+                .closest<HTMLElement>(2)
+
+            // ? inject comment text field
+            const commentBoxSelector = root
+                .clone()
+                .querySelector<HTMLFormElement>('form form')
+                .enableSingleMode()
+
+            const info: PostInfo = {
+                commentsSelector: commentSelector,
+                commentBoxSelector: commentBoxSelector,
+                decryptedPostContent: new ValueRef(''),
+                postBy: new ValueRef(PersonIdentifier.unknown),
+                postContent: new ValueRef(''),
+                postID: new ValueRef(''),
+                postPayload: new ValueRef(null),
+                get rootNode() {
+                    return root.evaluateOnce()[0]! as HTMLElement
+                },
+            }
+            this.posts.set(node, info)
+            function collectPostInfo() {
+                info.postContent.value = node.current.innerText
+                info.postPayload.value = deconstructPayload(info.postContent.value)
+                info.postBy.value = getPostBy(node, info.postPayload.value !== null)
+                info.postID.value = getPostID(node)
+            }
+            collectPostInfo()
+            return {
+                onNodeMutation: collectPostInfo,
+                onTargetChanged: collectPostInfo,
+                onRemove: () => this.posts.delete(node),
+            }
+        })
+        .setDomProxyOption({ afterShadowRootInit: { mode: 'closed' } })
+        .startWatch()
 }
 
 function getPostBy(node: DomProxy, allowCollectInfo: boolean) {
