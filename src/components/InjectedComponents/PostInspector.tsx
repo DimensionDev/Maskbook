@@ -1,13 +1,13 @@
 import React, { useState } from 'react'
-import { DecryptPostUI } from '../../../../components/InjectedComponents/DecryptedPost'
-import { AddToKeyStore } from '../../../../components/InjectedComponents/AddToKeyStore'
-import { useAsync } from '../../../../utils/components/AsyncComponent'
-import { deconstructPayload } from '../../../../utils/type-transform/Payload'
-import Services from '../../../service'
-import { PersonIdentifier, PostIdentifier } from '../../../../database/type'
-import { Person } from '../../../../database'
+import { DecryptPostUI } from './DecryptedPost'
+import { AddToKeyStore } from './AddToKeyStore'
+import { useAsync } from '../../utils/components/AsyncComponent'
+import { deconstructPayload } from '../../utils/type-transform/Payload'
+import Services from '../../extension/service'
+import { PersonIdentifier, PostIdentifier } from '../../database/type'
+import { Person } from '../../database'
 import { styled } from '@material-ui/core/styles'
-import { useFriendsList, useMyIdentities } from '../../../../components/DataSource/useActivatedUI'
+import { useFriendsList, useMyIdentities } from '../DataSource/useActivatedUI'
 
 const Debug = styled('div')({ display: 'none' })
 interface PostInspectorProps {
@@ -21,10 +21,9 @@ export function PostInspector(props: PostInspectorProps) {
     const { post, postBy, postId } = props
     // TODO:
     const identities = useMyIdentities()
-    const whoAmI = identities[0] && identities[0].identifier || PersonIdentifier.unknown
+    const whoAmI = (identities[0] && identities[0].identifier) || PersonIdentifier.unknown
     const people = useFriendsList()
     const [alreadySelectedPreviously, setAlreadySelectedPreviously] = useState<Person[]>([])
-    if (postBy.isUnknown) return null
     const type = {
         encryptedPost: deconstructPayload(post),
         provePost: post.match(/🔒(.+)🔒/)!,
@@ -36,6 +35,9 @@ export function PostInspector(props: PostInspectorProps) {
         const { iv } = type.encryptedPost
         return Services.Crypto.getSharedListOfPost(iv, postBy)
     }, [post, postBy, whoAmI]).then(p => setAlreadySelectedPreviously(p))
+
+    if (postBy.isUnknown) return null
+
     if (type.encryptedPost) {
         props.needZip()
         const { iv, ownersAESKeyEncrypted } = type.encryptedPost

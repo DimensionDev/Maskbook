@@ -13,6 +13,11 @@ import { getProfileFacebook } from './tasks/getProfile'
 import { pasteIntoBioFacebook } from './tasks/pasteIntoBio'
 import { shouldDisplayWelcomeDefault } from '../../social-network/defaults/shouldDisplayWelcome'
 import { injectWelcomeBannerFacebook } from './UI/injectWelcomeBanner'
+import { injectPostCommentsDefault } from '../../social-network/defaults/injectComments'
+import { injectCommentBoxDefault } from '../../social-network/defaults/injectCommentBox'
+import { selectElementContents, dispatchCustomEvents, sleep } from '../../utils/utils'
+import { collectPostsFacebook } from './UI/collectPosts'
+import { injectPostInspectorFacebook } from './UI/injectPostInspector'
 
 defineSocialNetworkUI({
     ...sharedProvider,
@@ -28,10 +33,25 @@ defineSocialNetworkUI({
     friendsRef: new ValueRef([]),
     myIdentitiesRef: new ValueRef([]),
     lastRecognizedIdentity: new ValueRef({ identifier: PersonIdentifier.unknown }),
+    posts: new Map(),
     resolveLastRecognizedIdentity: resolveLastRecognizedIdentityFacebook,
     injectPostBox: injectPostBoxFacebook,
     injectWelcomeBanner: injectWelcomeBannerFacebook,
+    injectPostComments: injectPostCommentsDefault(),
+    injectCommentBox: injectCommentBoxDefault(async function onPasteToCommentBoxFacebook(
+        encryptedComment: string,
+        root: Element,
+    ) {
+        const _root = root as HTMLDivElement
+        selectElementContents(_root.querySelector('[contenteditable]')!)
+        dispatchCustomEvents('paste', encryptedComment)
+        await sleep(200)
+        if (_root.innerText.match(encryptedComment)) 'Okay'
+        else prompt('Please paste it into the comment box!', encryptedComment)
+    }),
+    injectPostInspector: injectPostInspectorFacebook,
     collectPeople: collectPeopleFacebook,
+    collectPosts: collectPostsFacebook,
     taskPasteIntoPostBox: pasteIntoPostBoxFacebook,
     taskPasteIntoBio: pasteIntoBioFacebook,
     taskGetPostContent: getPostContentFacebook,

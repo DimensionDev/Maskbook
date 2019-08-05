@@ -1,7 +1,8 @@
 import { env, SocialNetworkWorkerAndUI, Profile } from './shared'
-import { ValueRef } from '@holoflows/kit/es'
+import { ValueRef, LiveSelector, DomProxy } from '@holoflows/kit/es'
 import { Person } from '../database/helpers/person'
 import { PostIdentifier, PersonIdentifier } from '../database/type'
+import { PayloadAlpha40 } from '../utils/type-transform/Payload'
 
 //#region SocialNetworkUI
 export interface SocialNetworkUI
@@ -41,6 +42,10 @@ interface SocialNetworkUIInformationCollector {
      * like avatar, nickname, friendship relation and Maskbook Key
      */
     collectPeople(): void
+    /**
+     * This function should find the posts on the page
+     */
+    collectPosts(): void
 }
 //#endregion
 //#region SocialNetworkUIInjections
@@ -56,6 +61,30 @@ interface SocialNetworkUIInjections {
      * This function should inject the Welcome Banner
      */
     injectWelcomeBanner(): void
+    /**
+     * This function should inject the comment
+     * @param current The current post
+     * @param root The post root
+     * @returns unmount the injected components
+     */
+    injectPostComments(current: PostInfo, root: Element): () => void
+    /**
+     * This function should inject the comment box
+     * @param current The current post
+     * @param root The post root
+     * @returns unmount the injected components
+     */
+    injectCommentBox(current: PostInfo, root: Element): () => void
+    /**
+     * This function should inject the comment box
+     * @param current The current post
+     * @param root The post root
+     * @returns unmount the injected components
+     */
+    injectPostInspector(
+        current: PostInfo,
+        node: DomProxy<HTMLDivElement & Node, HTMLSpanElement, HTMLSpanElement>,
+    ): () => void
 }
 //#endregion
 //#region SocialNetworkUITasks
@@ -88,6 +117,7 @@ export interface SocialNetworkUITasks {
      */
     taskGetProfile(identifier: PersonIdentifier): Promise<Profile>
 }
+
 //#endregion
 //#region SocialNetworkUIDataSources
 /**
@@ -96,12 +126,31 @@ export interface SocialNetworkUITasks {
  * These data sources may used in UI components. Make sure you fill the correct information into these sources.
  */
 export interface SocialNetworkUIDataSources {
-    friendsRef: ValueRef<Person[]>
-    myIdentitiesRef: ValueRef<Person[]>
+    /**
+     * My Maskbook friends at this network
+     */
+    readonly friendsRef: ValueRef<Person[]>
+    /**
+     * My identities at current network
+     */
+    readonly myIdentitiesRef: ValueRef<Person[]>
     /**
      * The account that user is using (may not in the database)
      */
-    lastRecognizedIdentity: ValueRef<Pick<Person, 'identifier' | 'nickname' | 'avatar'>>
+    readonly lastRecognizedIdentity: ValueRef<Pick<Person, 'identifier' | 'nickname' | 'avatar'>>
+    /**
+     * Posts that Maskbook detects
+     */
+    readonly posts: WeakMap<DomProxy<HTMLDivElement & Node, HTMLSpanElement, HTMLSpanElement>, PostInfo>
+}
+export type PostInfo = {
+    readonly postBy: ValueRef<PersonIdentifier>
+    readonly postID: ValueRef<string | null>
+    readonly postContent: ValueRef<string>
+    readonly postPayload: ValueRef<PayloadAlpha40 | null>
+    readonly commentsSelector: LiveSelector<HTMLElement, any>
+    readonly commentBoxSelector: LiveSelector<HTMLElement, any>
+    readonly decryptedPostContent: ValueRef<string>
 }
 //#endregion
 
