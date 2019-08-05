@@ -12,9 +12,9 @@ interface injectPostCommentsDefaultConfig {
  */
 export function injectPostCommentsDefault(config: injectPostCommentsDefaultConfig = {}) {
     const { needZip, getInjectionPoint } = config
-    return function injectPostComments(this: SocialNetworkUI, current: PostInfo, root: Element) {
+    return function injectPostComments(this: SocialNetworkUI, current: PostInfo) {
         const selector = current.commentsSelector
-        const commentWatcher = new MutationObserverWatcher(selector, root)
+        const commentWatcher = new MutationObserverWatcher(selector, current.rootNode)
             .useForeach(commentNode => {
                 const commentRef = new ValueRef(commentNode.current.innerText)
                 const needZipDefault = () => {

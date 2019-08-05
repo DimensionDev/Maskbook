@@ -38,15 +38,12 @@ defineSocialNetworkUI({
     injectPostBox: injectPostBoxFacebook,
     injectWelcomeBanner: injectWelcomeBannerFacebook,
     injectPostComments: injectPostCommentsDefault(),
-    injectCommentBox: injectCommentBoxDefault(async function onPasteToCommentBoxFacebook(
-        encryptedComment: string,
-        root: Element,
-    ) {
-        const _root = root as HTMLDivElement
-        selectElementContents(_root.querySelector('[contenteditable]')!)
+    injectCommentBox: injectCommentBoxDefault(async function onPasteToCommentBoxFacebook(encryptedComment, current) {
+        const root = current.rootNode
+        selectElementContents(root.querySelector('[contenteditable]')!)
         dispatchCustomEvents('paste', encryptedComment)
         await sleep(200)
-        if (_root.innerText.match(encryptedComment)) 'Okay'
+        if (root.innerText.match(encryptedComment)) 'Okay'
         else prompt('Please paste it into the comment box!', encryptedComment)
     }),
     injectPostInspector: injectPostInspectorFacebook,

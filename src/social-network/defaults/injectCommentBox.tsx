@@ -5,11 +5,9 @@ import { CommentBox } from '../../components/InjectedComponents/CommentBox'
 import Services from '../../extension/service'
 import { renderInShadowRoot } from '../../utils/jss/renderInShadowRoot'
 
-export function injectCommentBoxDefault(
-    onPasteToCommentBox: (encryptedComment: string, root: Element, current: PostInfo) => void,
-) {
-    return function injectPostBox(current: PostInfo, root: Element) {
-        const commentBoxWatcher = new MutationObserverWatcher(current.commentBoxSelector, root)
+export function injectCommentBoxDefault(onPasteToCommentBox: (encryptedComment: string, current: PostInfo) => void) {
+    return function injectPostBox(current: PostInfo) {
+        const commentBoxWatcher = new MutationObserverWatcher(current.commentBoxSelector, current.rootNode)
             .setDomProxyOption({ afterShadowRootInit: { mode: 'closed' } })
             .enableSingleMode()
             .startWatch()
@@ -21,7 +19,7 @@ export function injectCommentBoxDefault(
                     display={!!(payload && decrypted)}
                     onSubmit={async content => {
                         const encryptedComment = await Services.Crypto.encryptComment(payload!.iv, decrypted, content)
-                        onPasteToCommentBox(encryptedComment, root, current)
+                        onPasteToCommentBox(encryptedComment, current)
                     }}
                 />
             )

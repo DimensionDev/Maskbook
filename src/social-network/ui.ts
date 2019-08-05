@@ -64,27 +64,24 @@ interface SocialNetworkUIInjections {
     /**
      * This function should inject the comment
      * @param current The current post
-     * @param root The post root
+     * @param node The post root
      * @returns unmount the injected components
      */
-    injectPostComments(current: PostInfo, root: Element): () => void
+    injectPostComments(current: PostInfo, node: DomProxy): () => void
     /**
      * This function should inject the comment box
      * @param current The current post
-     * @param root The post root
+     * @param node The post root
      * @returns unmount the injected components
      */
-    injectCommentBox(current: PostInfo, root: Element): () => void
+    injectCommentBox(current: PostInfo, node: DomProxy): () => void
     /**
      * This function should inject the comment box
      * @param current The current post
-     * @param root The post root
+     * @param node The post root
      * @returns unmount the injected components
      */
-    injectPostInspector(
-        current: PostInfo,
-        node: DomProxy<HTMLDivElement & Node, HTMLSpanElement, HTMLSpanElement>,
-    ): () => void
+    injectPostInspector(current: PostInfo, node: DomProxy): () => void
 }
 //#endregion
 //#region SocialNetworkUITasks
@@ -141,7 +138,7 @@ export interface SocialNetworkUIDataSources {
     /**
      * Posts that Maskbook detects
      */
-    readonly posts: WeakMap<DomProxy<HTMLDivElement & Node, HTMLSpanElement, HTMLSpanElement>, PostInfo>
+    readonly posts: WeakMap<DomProxy, PostInfo>
 }
 export type PostInfo = {
     readonly postBy: ValueRef<PersonIdentifier>
@@ -151,6 +148,7 @@ export type PostInfo = {
     readonly commentsSelector: LiveSelector<HTMLElement, any>
     readonly commentBoxSelector: LiveSelector<HTMLElement, any>
     readonly decryptedPostContent: ValueRef<string>
+    readonly rootNode: HTMLElement
 }
 //#endregion
 
@@ -166,7 +164,31 @@ export function activateSocialNetworkUI() {
             ui.resolveLastRecognizedIdentity()
             ui.injectPostBox()
             ui.collectPeople()
+            ui.collectPosts()
             ui.shouldDisplayWelcome().then(r => r && ui.injectWelcomeBanner())
+            {
+                const undoMap = new WeakMap<object, () => void>()
+                const setter = ui.posts.set
+                ui.posts.set = function(key, value) {
+                    const undo1 = ui.injectPostInspector(value, key)
+                    const undo2 = ui.injectCommentBox(value, key)
+                    const undo3 = ui.injectPostInspector(value, key)
+                    undoMap.set(key, () => {
+                        undo1()
+                        undo2()
+                        undo3()
+                    })
+                    Reflect.apply(setter, ui, [key, value])
+                    return this
+                }
+
+                const remove = ui.posts.delete
+                ui.posts.delete = function(key) {
+                    const f = undoMap.get(key)
+                    f && f()
+                    return Reflect.apply(remove, this, [key])
+                }
+            }
             return
         }
 }

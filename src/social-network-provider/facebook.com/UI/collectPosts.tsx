@@ -34,6 +34,9 @@ export function collectPostsFacebook(this: SocialNetworkUI) {
             postContent: new ValueRef(''),
             postID: new ValueRef(''),
             postPayload: new ValueRef(null),
+            get rootNode() {
+                return root.evaluateOnce()! as HTMLElement
+            },
         }
         this.posts.set(node, info)
         function collectPostInfo() {
