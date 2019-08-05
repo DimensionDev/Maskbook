@@ -3,13 +3,26 @@ import { ValueRef } from '@holoflows/kit/es'
 import { Person } from '../database/helpers/person'
 import { PostIdentifier, PersonIdentifier } from '../database/type'
 
-export interface SocialNetworkUI extends SocialNetworkWorkerAndUI, SocialNetworkUIDataSources {
+//#region SocialNetworkUI
+export interface SocialNetworkUI
+    extends SocialNetworkWorkerAndUI,
+        SocialNetworkUIDataSources,
+        SocialNetworkUITasks,
+        SocialNetworkUIInjections,
+        SocialNetworkUIInformationCollector {
     /** Should this UI content script activate? */
     shouldActivate(): boolean
     /**
      * Should Maskbook show Welcome Banner?
      */
     shouldDisplayWelcome(): Promise<boolean>
+}
+//#endregion
+//#region SocialNetworkUIInformationCollector
+/**
+ * SocialNetworkUIInformationCollector defines what info this UI provider should collect
+ */
+interface SocialNetworkUIInformationCollector {
     /**
      * This function should find out which account does user using currently
      * and write it to `SocialNetworkUIDataSources.lastRecognizedIdentity`
@@ -24,6 +37,18 @@ export interface SocialNetworkUI extends SocialNetworkWorkerAndUI, SocialNetwork
      */
     resolveLastRecognizedIdentity(): void
     /**
+     * This function should inspect the profile page and collect info
+     * like avatar, nickname, friendship relation and Maskbook Key
+     */
+    collectPeople(): void
+}
+//#endregion
+//#region SocialNetworkUIInjections
+/**
+ * SocialNetworkUIInjections defines what UI components this UI provider should inject.
+ */
+interface SocialNetworkUIInjections {
+    /**
      * This function should inject UI into the Post box
      */
     injectPostBox(): void
@@ -31,11 +56,15 @@ export interface SocialNetworkUI extends SocialNetworkWorkerAndUI, SocialNetwork
      * This function should inject the Welcome Banner
      */
     injectWelcomeBanner(): void
-    /**
-     * This function should inspect the profile page and collect info
-     * like avatar, nickname, friendship relation and Maskbook Key
-     */
-    collectPeople(): void
+}
+//#endregion
+//#region SocialNetworkUITasks
+/**
+ * SocialNetworkUITasks defines the "tasks" this UI provider should execute
+ *
+ * These tasks may be called directly or call through @holoflows/kit/AutomatedTabTask
+ */
+export interface SocialNetworkUITasks {
     /**
      * This function should paste `text` into the paste box.
      * If failed, warning user to do it by themselves with `warningText`
@@ -59,6 +88,13 @@ export interface SocialNetworkUI extends SocialNetworkWorkerAndUI, SocialNetwork
      */
     taskGetProfile(identifier: PersonIdentifier): Promise<Profile>
 }
+//#endregion
+//#region SocialNetworkUIDataSources
+/**
+ * SocialNetworkUIDataSources defines the data sources this UI provider should provide.
+ *
+ * These data sources may used in UI components. Make sure you fill the correct information into these sources.
+ */
 export interface SocialNetworkUIDataSources {
     friendsRef: ValueRef<Person[]>
     myIdentitiesRef: ValueRef<Person[]>
@@ -67,6 +103,7 @@ export interface SocialNetworkUIDataSources {
      */
     lastRecognizedIdentity: ValueRef<Pick<Person, 'identifier' | 'nickname' | 'avatar'>>
 }
+//#endregion
 
 const definedSocialNetworkUIs = new Set<SocialNetworkUI>()
 let activatedSocialNetworkUI: SocialNetworkUI = undefined as any
