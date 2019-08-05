@@ -8,8 +8,15 @@ export async function parseFacebookStaticHTML(url: RequestInfo) {
     const parser = new DOMParser()
     const doc1 = parser.parseFromString(text, 'text/html')
     const codeDom = doc1.body.querySelector('code')
-    if (!codeDom) return null
-    const code = codeDom.innerHTML.replace('<!--', '').replace('-->', '')
-    const doc2 = parser.parseFromString(code, 'text/html')
-    return doc2
+    const rootDom = doc1.body.querySelector('#root')
+
+    if (codeDom) {
+        return parser.parseFromString(codeDom.innerHTML.replace('<!--', '').replace('-->', ''), 'text/html')
+    }
+
+    // <code /> node is absent in old version profile page since use timeline node instead
+    if (rootDom) {
+        return parser.parseFromString(rootDom.innerHTML, 'text/html')
+    }
+    return null
 }
