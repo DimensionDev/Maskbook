@@ -86,7 +86,7 @@ export default function Welcome({ create, restore, close }: Props) {
                 <LinedBox theme={theme}>
                     <Box flex={1}>
                         <Typography variant="body1">{geti18nString('welcome_0_new_user')}</Typography>
-                        <Typography variant="h6">{geti18nString('welcome_0_connect_facebook')}</Typography>
+                        <Typography variant="h6">{geti18nString('welcome_0_connect_maskbook')}</Typography>
                     </Box>
                     <VerticalCenter>
                         <Button
@@ -99,7 +99,7 @@ export default function Welcome({ create, restore, close }: Props) {
                             }}
                             variant="contained"
                             color="primary">
-                            {geti18nString('welcome_0_connect_facebook')}
+                            {geti18nString('welcome_0_connect_maskbook')}
                         </Button>
                     </VerticalCenter>
                 </LinedBox>

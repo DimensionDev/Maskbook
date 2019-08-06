@@ -25,7 +25,7 @@ const useStyles = makeStyles({
     content: { padding: '0 12px' },
     progress: { marginRight: 6 },
 })
-const ResponsiveDialog = withMobileDialog()(Dialog)
+const ResponsiveDialog = withMobileDialog({ breakpoint: 'xs' })(Dialog)
 export function SelectPeopleDialog(props: Props) {
     const classes = useStyles()
     const [people, select] = useState<Person[]>([] as Person[])

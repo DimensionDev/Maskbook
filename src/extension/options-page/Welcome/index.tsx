@@ -127,7 +127,7 @@ function Welcome(props: Welcome) {
             return <Welcome2 />
     }
 }
-const ResponsiveDialog = withMobileDialog()(Dialog)
+const ResponsiveDialog = withMobileDialog({ breakpoint: 'xs' })(Dialog)
 const ProvePostRef = new ValueRef('')
 const IdentifierRef = new ValueRef(PersonIdentifier.unknown)
 const getMyProveBio = async () => {
