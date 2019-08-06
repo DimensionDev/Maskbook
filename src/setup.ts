@@ -8,4 +8,15 @@ export function backgroundSetup() {
 import { activateSocialNetworkUI } from './social-network/ui'
 export function uiSetup() {
     activateSocialNetworkUI()
+
+    if (typeof browser !== 'undefined' && browser.tabs && browser.tabs.query && browser.tabs.remove) {
+        const close = window.close
+        window.close = () => {
+            Reflect.apply(close, window, [])
+            setTimeout(async () => {
+                const { id } = await browser.tabs.getCurrent()
+                id && (await browser.tabs.remove(id))
+            }, 400)
+        }
+    }
 }
