@@ -1,7 +1,17 @@
 {
   "name": "maskbook",
+  "license": "AGPL-3.0-or-later",
   "version": "1.5.2",
   "private": true,
+  "scripts": {
+    "watch": "npx just react",
+    "build": "npx just react/build",
+    "test": "npx just react/test",
+    "start": "npx just storybook",
+    "build-storybook": "npx just storybook/build",
+    "load-to-firefox": "npx web-ext run --source-dir ./dist/ --verbose",
+    "postinstall": "npx just post-install"
+  },
   "dependencies": {
     "@holoflows/kit": "https://github.com/DimensionDev/holoflows-kit",
     "@material-ui/core": "^4.0.0",
@@ -45,15 +55,6 @@
     "webextension-polyfill": "^0.4.0",
     "write-file-webpack-plugin": "^4.5.0"
   },
-  "scripts": {
-    "watch": "react-app-rewired start",
-    "build": "react-app-rewired build",
-    "test": "react-app-rewired test",
-    "start": "start-storybook -p 9009 -s public",
-    "build-storybook": "build-storybook -s public",
-    "load-to-firefox": "npx web-ext run --source-dir ./dist/ --verbose",
-    "postinstall": "cd node_modules/@holoflows/kit && yarn && yarn build"
-  },
   "devDependencies": {
     "@babel/core": "^7.4.3",
     "@storybook/addon-actions": "^5.1.0-rc.1",
@@ -69,9 +70,16 @@
     "@types/storybook__addon-links": "^3.3.4",
     "@types/storybook__react": "^4.0.1",
     "awesome-typescript-loader": "^5.2.1",
+    "just-scripts": "^0.27.0",
+    "just-scripts-utils": "^0.8.3",
+    "just-task": "^0.13.1",
     "react-devtools": "^3.6.1",
     "storybook-addon-material-ui": "^0.9.0-alpha.19"
   },
+  "globalDevDependencies": [
+    "prettier",
+    "onchange"
+  ],
   "browserslist": {
     "production": [
       ">0.2%",
