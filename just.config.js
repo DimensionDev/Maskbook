@@ -7,7 +7,13 @@ const pkg = JSON.parse(fs.readFileSync('package.json').toString())
 const globalDepList = Reflect.get(pkg, 'globalDevDependencies')
 
 task('install/holoflows', () => exec('cd node_modules/@holoflows/kit && yarn && yarn build'))
-task('install/global-dep', () => exec(`npm i -g ${globalDepList.join(' ')} --ignore-scripts`))
+task('install/global-dep', () => {
+    try {
+        exec(`npm i -g ${globalDepList.join(' ')} --ignore-scripts`)
+    } catch {
+        exec(`npm i -D ${globalDepList.join(' ')} --ignore-scripts`)
+    }
+})
 
 task('post-install', () => parallel('install/holoflows', 'install/global-dep'))
 
