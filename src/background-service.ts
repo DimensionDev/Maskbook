@@ -17,9 +17,9 @@ if (GetContext() === 'background') {
                         code,
                     })
                 } catch (e) {
-                    if (e.message.match('non-structured-clonable data')) {
+                    if (e.message.includes('non-structured-clonable data')) {
                         // It's okay we don't need the result, happened on Firefox
-                    } else if (e.message.match('Frame not found, or missing host permission')) {
+                    } else if (e.message.includes('Frame not found, or missing host permission')) {
                         // It's maybe okay, happened on Firefox
                     } else console.error('Inject error', e, arg, browser.runtime.getURL('js/injectedscript.js'))
                 }

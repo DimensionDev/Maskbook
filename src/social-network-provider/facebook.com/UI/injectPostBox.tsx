@@ -4,7 +4,7 @@ import { renderInShadowRoot } from '../../../utils/jss/renderInShadowRoot'
 import { AdditionalPostBox } from '../../../components/InjectedComponents/AdditionalPostBox'
 
 let composeBox: LiveSelector<Element>
-if (location.hostname.match('m.facebook.com')) {
+if (location.hostname.includes('m.facebook.com')) {
     composeBox = new LiveSelector().querySelector('#structured_composer_form')
 } else {
     composeBox = new LiveSelector()

@@ -34,7 +34,7 @@ function zipPostLinkPreview(node: DomProxy) {
 function zipEncryptedPostContent(node: DomProxy) {
     const parent = node.current.parentElement
     // Style modification for repost
-    if (!node.current.className.match('userContent') && node.current.innerText.length > 0) {
+    if (!node.current.className.includes('userContent') && node.current.innerText.length > 0) {
         node.after.setAttribute(
             'style',
             `border: 1px solid #ebedf0;
