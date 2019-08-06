@@ -160,29 +160,7 @@ export function activateSocialNetworkUI() {
         if (ui.shouldActivate()) {
             console.log('Activating UI provider', ui.networkIdentifier, ui)
             activatedSocialNetworkUI = ui
-            {
-                const undoMap = new WeakMap<object, () => void>()
-                const setter = ui.posts.set
-                ui.posts.set = function(key, value) {
-                    const undo1 = ui.injectPostInspector(value, key)
-                    const undo2 = ui.injectCommentBox(value, key)
-                    const undo3 = ui.injectPostInspector(value, key)
-                    undoMap.set(key, () => {
-                        undo1()
-                        undo2()
-                        undo3()
-                    })
-                    Reflect.apply(setter, this, [key, value])
-                    return this
-                }
-
-                const remove = ui.posts.delete
-                ui.posts.delete = function(key) {
-                    const f = undoMap.get(key)
-                    f && f()
-                    return Reflect.apply(remove, this, [key])
-                }
-            }
+            hookUIPostMap(ui)
             ui.init(env, {})
             ui.resolveLastRecognizedIdentity()
             ui.injectPostBox()
@@ -192,6 +170,31 @@ export function activateSocialNetworkUI() {
             return
         }
 }
+function hookUIPostMap(ui: SocialNetworkUI) {
+    const undoMap = new WeakMap<object, () => void>()
+    const setter = ui.posts.set
+    ui.posts.set = function(key, value) {
+        const undo1 = ui.injectPostInspector(value, key)
+        const undo2 = ui.injectCommentBox(value, key)
+        const undo3 = ui.injectPostInspector(value, key)
+        const undo4 = ui.injectPostComments(value, key)
+        undoMap.set(key, () => {
+            undo1()
+            undo2()
+            undo3()
+            undo4()
+        })
+        Reflect.apply(setter, this, [key, value])
+        return this
+    }
+    const remove = ui.posts.delete
+    ui.posts.delete = function(key) {
+        const f = undoMap.get(key)
+        f && f()
+        return Reflect.apply(remove, this, [key])
+    }
+}
+
 export function defineSocialNetworkUI(UI: SocialNetworkUI): void {
     definedSocialNetworkUIs.add(UI)
 }
