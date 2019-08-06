@@ -1,7 +1,6 @@
 import { OnlyRunInContext } from '@holoflows/kit'
 import { encodeText } from '../../utils/type-transform/String-ArrayBuffer'
 import { sleep } from '../../utils/utils'
-import { regularUsername } from '../../social-network/facebook.com/parse-username'
 import { geti18nString } from '../../utils/i18n'
 import {
     getMyIdentitiesDB,
@@ -17,6 +16,7 @@ import {
 import { BackupJSONFileLatest } from '../../utils/type-transform/BackupFile'
 import { PersonIdentifier } from '../../database/type'
 import { MessageCenter } from '../../utils/messages'
+import getCurrentNetworkWorker from '../../social-network/utils/getCurrentNetworkWorker'
 
 OnlyRunInContext('background', 'WelcomeService')
 async function generateBackupJSON(whoAmI: PersonIdentifier, full = false): Promise<BackupJSONFileLatest> {
@@ -120,8 +120,9 @@ export async function backupMyKeyPair(whoAmI: PersonIdentifier, download = true)
     return obj
 }
 
-export async function openWelcomePage(id: PersonIdentifier, isMobile: boolean) {
-    if (!regularUsername(id.userId)) throw new TypeError(geti18nString('service_username_invalid'))
+export async function openWelcomePage(id: PersonIdentifier) {
+    if (!getCurrentNetworkWorker(id).isValidUsername(id.userId))
+        throw new TypeError(geti18nString('service_username_invalid'))
     const url = browser.runtime.getURL('index.html#/welcome?identifier=' + id.toText())
     return browser.tabs.create({ url })
 }

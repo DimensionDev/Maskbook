@@ -1,7 +1,6 @@
 import * as React from 'react'
 import { geti18nString } from '../../utils/i18n'
 import { makeStyles, Paper, Typography, Button } from '@material-ui/core'
-import { isMobile } from '../../social-network/facebook.com/isMobile'
 
 const useStyles = makeStyles(theme => ({
     paper: {
@@ -20,12 +19,7 @@ export default function Welcome() {
     return (
         <Paper elevation={2} className={classes.paper}>
             <Typography variant="h5">{geti18nString('welcome_2_title')}</Typography>
-            <Button
-                variant="contained"
-                onClick={() => {
-                    if (isMobile) location.href = 'https://m.facebook.com/'
-                    else location.href = 'https://www.facebook.com/'
-                }}>
+            <Button variant="contained" onClick={() => window.close()}>
                 {geti18nString('welcome_2_greeting')}
             </Button>
         </Paper>

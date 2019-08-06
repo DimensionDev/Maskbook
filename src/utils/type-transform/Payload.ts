@@ -35,7 +35,7 @@ function deconstructAlpha40(str: string, throws = false): PayloadAlpha40 | null 
 }
 function deconstructAlpha41(str: string, throws = false): null | never {
     // 🎼1/4|ownersAESKeyEncrypted|iv|encryptedText|signature:||
-    if (str.match('🎼1/4') && str.match(':||'))
+    if (str.includes('🎼1/4') && str.includes(':||'))
         if (throws) throw new Error(geti18nString('payload_throw_in_alpha41'))
         else return null
     return null
@@ -51,7 +51,7 @@ export function deconstructPayload(str: string, throws = false): PayloadAlpha40 
         if (result) return result
         return ver(str, true)
     }
-    if (str.match('🎼') && str.match(':||'))
+    if (str.includes('🎼') && str.includes(':||'))
         if (throws) throw new TypeError(geti18nString('service_unknown_payload'))
         else return null
     if (throws) throw new TypeError(geti18nString('payload_not_found'))

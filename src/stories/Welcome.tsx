@@ -9,14 +9,14 @@ import Welcome2 from '../components/Welcomes/2'
 import { linkTo as to, linkTo } from '@storybook/addon-links'
 import { text, boolean, number } from '@storybook/addon-knobs'
 import { action } from '@storybook/addon-actions'
-import { Banner } from '../components/Welcomes/Banner'
+import { BannerUI } from '../components/Welcomes/Banner'
 import { withMobileDialog, Dialog } from '@material-ui/core'
 import QRScanner from '../components/Welcomes/QRScanner'
 
 const ResponsiveDialog = withMobileDialog()(Dialog)
 storiesOf('Welcome', module)
     .add('Banner', () => (
-        <Banner disabled={boolean('disabled', false)} close={action('Close')} getStarted={to('Welcome', 'Step 0')} />
+        <BannerUI disabled={boolean('disabled', false)} close={action('Close')} getStarted={to('Welcome', 'Step 0')} />
     ))
     .add('Step 0', () => (
         <ResponsiveDialog open>

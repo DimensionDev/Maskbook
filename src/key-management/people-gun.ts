@@ -1,13 +1,10 @@
-import tasks from '../extension/content-script/tasks'
 import { verifyOthersProve } from '../extension/background-script/CryptoService'
 import { sleep } from '../utils/utils'
-import { getProfilePageUrlAtFacebook, getPostUrlAtFacebook } from '../social-network/facebook.com/parse-username'
 import { geti18nString } from '../utils/i18n'
 import { PersonIdentifier, PostIdentifier, PersonUI } from '../database/type'
-import { queryPerson } from '../database'
 import { gun } from '../network/gun/version.1'
-import { fetchFacebookBio } from '../social-network/facebook.com/fetch-bio'
-import { fetchFacebookProvePost } from '../social-network/facebook.com/fetch-prove-post'
+import getCurrentNetworkWorker from '../social-network/utils/getCurrentNetworkWorker'
+import { queryPersonDB } from '../database/people'
 
 export async function queryPersonFromGun(username: string) {
     return gun
@@ -15,49 +12,30 @@ export async function queryPersonFromGun(username: string) {
         .get(username)
         .once().then!()
 }
-async function getActiveTab() {
-    const [tab] = await browser.tabs.query({ active: true })
-    if (tab) return tab.id
-    return undefined
+const fetchKeyCache = new Map<string, Promise<PersonUI>>()
+export function addPersonPublicKey(user: PersonIdentifier): Promise<PersonUI> {
+    if (fetchKeyCache.has(user.toText())) {
+        return fetchKeyCache.get(user.toText())!
+    }
+    const promise = addPersonPublicKeyImpl(user)
+    promise.catch(() => setTimeout(() => fetchKeyCache.delete(user.toText()), 10000))
+    fetchKeyCache.set(user.toText(), promise)
+    return promise
 }
-export async function addPersonPublicKey(user: PersonIdentifier): Promise<PersonUI> {
-    // ? Try to execute query in the extension environment
-    // ? If it is the true extension environment (Chrome, Firefox, GeckoView)
-    // ? Will go through this path
-    // ? If it it the fake extension environment (Webview on iOS)
-    // ? this will fail due to cross-origin restriction.
-
-    // ? if failed
-    // ? we go to the old way.
-    // ? Invoke a task on the current activating page.
+async function addPersonPublicKeyImpl(user: PersonIdentifier): Promise<PersonUI> {
     const fromBio = async () => {
-        async function getBio() {
-            try {
-                return fetchFacebookBio(user)
-            } catch {
-                const tabId = await getActiveTab()
-                return tasks(getProfilePageUrlAtFacebook(user), { runAtTabID: tabId }).getBioContent(user)
-            }
-        }
-        if (!(await verifyOthersProve(await getBio(), user))) {
+        const profile = await getCurrentNetworkWorker(user).fetchProfile(user)
+        if (!(await verifyOthersProve(profile.bioContent, user))) {
             throw new Error('Not in bio!')
         }
     }
     const fromPost = async () => {
         const person = await queryPersonFromGun(user.userId)
         if (!person || !person.provePostId || !person.provePostId.length) throw new Error('Not in gun!')
+
         const postId = new PostIdentifier(user, person.provePostId)
-        async function getPost() {
-            try {
-                return fetchFacebookProvePost(postId)
-            } catch {
-                const tabId = await getActiveTab()
-                return tasks(getPostUrlAtFacebook(postId), {
-                    runAtTabID: tabId,
-                }).getPostContent(postId)
-            }
-        }
-        const post = await getPost()
+        const post = await getCurrentNetworkWorker(postId).fetchPostContent(postId)
+
         if ((await verifyOthersProve(post, user)) === false) throw new Error('Not in prove post!')
     }
     let bioRejected = false
@@ -78,12 +56,10 @@ export async function addPersonPublicKey(user: PersonIdentifier): Promise<Person
     }
     // HACK
     await sleep(1000)
-    const person = await queryPerson(user)
+    const person = await queryPersonDB(user)
     if ((bioRejected && proveRejected) || !person || !person.publicKey) {
-        console.error(...errors)
         throw new Error(geti18nString('service_others_key_not_found', user.userId))
     }
-    if (!person.publicKey) throw ''
     return person
 }
 

@@ -1,4 +1,4 @@
-import { queryPersonDB, PersonRecord, queryPeopleDB, getMyIdentitiesDB } from '../people'
+import { queryPersonDB, PersonRecord, queryPeopleDB, queryMyIdentityAtDB } from '../people'
 import { PersonIdentifier } from '../type'
 import { getAvatarDataURL } from './avatar'
 import { memoize } from 'lodash-es'
@@ -9,8 +9,6 @@ import { encodeArrayBuffer, encodeText } from '../../utils/type-transform/String
  * Person in UI do not include publickey / privatekey!
  */
 export interface Person extends Omit<PersonRecord, 'publicKey' | 'privateKey'> {
-    publicKey?: undefined
-    privateKey?: undefined
     avatar?: string
     /** Fingerprint for the public key */
     fingerprint?: string
@@ -59,12 +57,10 @@ const calculateFingerprint = memoize(async function(_key: CryptoKey) {
 })
 
 /**
- * @deprecated
+ * Get your id at a network even it is unresolved
  */
-export async function getMyPrivateKeyAtFacebook(
-    whoami: PersonIdentifier = new PersonIdentifier('facebook.com', '$self'),
-) {
-    const x = await getMyIdentitiesDB()
-    const y = x.find(y => y.identifier.network === 'facebook.com' && y.privateKey)
-    return y || null
+export async function getMyPrivateKey(whoAmI: PersonIdentifier) {
+    const r1 = await queryMyIdentityAtDB(whoAmI)
+    if (r1) return r1
+    return queryMyIdentityAtDB(new PersonIdentifier(whoAmI.network, '$self'))
 }
