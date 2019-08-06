@@ -89,16 +89,7 @@ export default function Welcome({ create, restore, close }: Props) {
                         <Typography variant="h6">{geti18nString('welcome_0_connect_maskbook')}</Typography>
                     </Box>
                     <VerticalCenter>
-                        <Button
-                            className={classes.commonButton}
-                            onClick={() => {
-                                if (idContext.isUnknown) {
-                                    setStorage({ userDismissedWelcome: false })
-                                    location.href = 'https://facebook.com/'
-                                } else create()
-                            }}
-                            variant="contained"
-                            color="primary">
+                        <Button className={classes.commonButton} onClick={create} variant="contained" color="primary">
                             {geti18nString('welcome_0_connect_maskbook')}
                         </Button>
                     </VerticalCenter>

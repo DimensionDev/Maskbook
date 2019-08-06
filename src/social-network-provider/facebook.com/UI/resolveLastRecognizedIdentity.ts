@@ -1,9 +1,10 @@
 import { LiveSelector } from '@holoflows/kit/es/DOM/LiveSelector'
-import { MutationObserverWatcher } from '@holoflows/kit/es'
+import { MutationObserverWatcher, ValueRef } from '@holoflows/kit/es'
 import { PersonIdentifier } from '../../../database/type'
 import Services from '../../../extension/service'
 import { SocialNetworkUI } from '../../../social-network/ui'
 import { getPersonIdentifierAtFacebook } from '../getPersonIdentifierAtFacebook'
+import { Person } from '../../../database'
 
 export function resolveLastRecognizedIdentityFacebook(this: SocialNetworkUI) {
     const ref = this.lastRecognizedIdentity
@@ -11,21 +12,21 @@ export function resolveLastRecognizedIdentityFacebook(this: SocialNetworkUI) {
         if (id.identifier.isUnknown) return
         Services.People.resolveIdentity(id.identifier)
     })
-    new MutationObserverWatcher(
-        myUsernameLiveSelectorPC
-            .clone()
-            .map(x => getPersonIdentifierAtFacebook(x, false))
-            .concat(myUsernameLiveSelectorOnMobile),
-    )
+    const self = myUsernameLiveSelectorPC
+        .clone()
+        .map(x => getPersonIdentifierAtFacebook(x, false))
+        .concat(myUsernameLiveSelectorOnMobile)
         .enableSingleMode()
-        .setComparer(undefined, (a, b) => a.equals(b))
+    new MutationObserverWatcher(self)
+        .enableSingleMode()
+        .setComparer(undefined, (a, b) => a.identifier.equals(b.identifier))
         .addListener('onAdd', e => assign(e.value))
         .addListener('onChange', e => assign(e.newValue))
         .startWatch()
-    function assign(i: PersonIdentifier) {
-        if (i.isUnknown) return
-        if (i.equals(ref.value.identifier)) return
-        ref.value = { identifier: i }
+    function assign(i: part) {
+        if (i.identifier.isUnknown) return
+        if (i.identifier.equals(ref.value.identifier)) return
+        ref.value = i
     }
 }
 
@@ -34,6 +35,8 @@ export function resolveLastRecognizedIdentityFacebook(this: SocialNetworkUI) {
 const myUsernameLiveSelectorPC = new LiveSelector().querySelector<HTMLAnchorElement>(
     `[aria-label="Facebook"][role="navigation"] [data-click="profile_icon"] a`,
 )
+
+type part = Pick<Person, 'identifier' | 'nickname' | 'avatar'>
 
 const myUsernameLiveSelectorOnMobile = new LiveSelector()
     .querySelectorAll('article')
@@ -52,5 +55,5 @@ const myUsernameLiveSelectorOnMobile = new LiveSelector()
             : [],
     )
     .map(x => x)
-    .map(x => new PersonIdentifier('facebook.com', x.toString()))
+    .map(x => ({ identifier: new PersonIdentifier('facebook.com', x.toString()) } as part))
 //#endregion

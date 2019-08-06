@@ -42,7 +42,7 @@ export function collectPostsFacebook(this: SocialNetworkUI) {
             function collectPostInfo() {
                 info.postContent.value = node.current.innerText
                 info.postPayload.value = deconstructPayload(info.postContent.value)
-                info.postBy.value = getPostBy(node, info.postPayload.value !== null)
+                info.postBy.value = getPostBy(node, info.postPayload.value !== null).identifier
                 info.postID.value = getPostID(node)
             }
             collectPostInfo()

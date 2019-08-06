@@ -1,7 +1,12 @@
 import { PersonIdentifier } from '../../database/type'
 import Services from '../../extension/service'
+import { Person } from '../../database'
 type link = HTMLAnchorElement | null | undefined
-export function getPersonIdentifierAtFacebook(links: link[] | link, allowCollectInfo: boolean): PersonIdentifier {
+export function getPersonIdentifierAtFacebook(
+    links: link[] | link,
+    allowCollectInfo: boolean,
+): Pick<Person, 'identifier' | 'nickname' | 'avatar'> {
+    const unknown = { identifier: PersonIdentifier.unknown, avatar: undefined, nickname: undefined }
     try {
         // tslint:disable-next-line: no-parameter-reassignment
         if (!Array.isArray(links)) links = [links]
@@ -12,20 +17,30 @@ export function getPersonIdentifierAtFacebook(links: link[] | link, allowCollect
         const { dom, id, nickname } = result[0] || ({} as any)
         if (id) {
             const result = new PersonIdentifier('facebook.com', id)
-            if (allowCollectInfo)
-                try {
-                    const avatar = dom!.closest('.clearfix')!.parentElement!.querySelector('img')!
-                    if (avatar.getAttribute('aria-label') === nickname && nickname) {
-                        Services.People.updatePersonInfo(result, { nickname, avatarURL: avatar.src })
-                    }
-                } catch {}
-            return result
+            let avatar: HTMLImageElement | undefined = undefined
+            try {
+                avatar = dom!.closest('.clearfix')!.parentElement!.querySelector('img')!
+                if (allowCollectInfo && avatar.getAttribute('aria-label') === nickname && nickname) {
+                    Services.People.updatePersonInfo(result, { nickname, avatarURL: avatar.src })
+                }
+            } catch {}
+            try {
+                avatar = dom!.querySelector('img')!
+                if (avatar) {
+                    Services.People.updatePersonInfo(result, { nickname, avatarURL: avatar.src })
+                }
+            } catch {}
+            return {
+                identifier: result,
+                avatar: avatar ? avatar.src : '',
+                nickname: nickname,
+            }
         }
-        return PersonIdentifier.unknown
+        return unknown
     } catch (e) {
         console.error(e)
     }
-    return PersonIdentifier.unknown
+    return unknown
 }
 function getUserID(x: string) {
     if (!x) return null

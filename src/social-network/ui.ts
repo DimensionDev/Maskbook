@@ -1,4 +1,4 @@
-import { env, SocialNetworkWorkerAndUI, Profile } from './shared'
+import { env, SocialNetworkWorkerAndUI, Profile, Env, Preference } from './shared'
 import { ValueRef, LiveSelector, DomProxy } from '@holoflows/kit/es'
 import { Person } from '../database/helpers/person'
 import { PostIdentifier, PersonIdentifier } from '../database/type'
@@ -17,6 +17,20 @@ export interface SocialNetworkUI
      * Should Maskbook show Welcome Banner?
      */
     shouldDisplayWelcome(): Promise<boolean>
+    /**
+     * A user friendly name for this network.
+     */
+    friendlyName: string
+    /**
+     * This function should open a new page,
+     * and then shouldDisplayWelcome should return true
+     */
+    setupAccount(env: Env, preference: Preference): void
+    /**
+     * This function should open a new page,
+     * and then shouldDisplayWelcome should return true
+     */
+    ignoreSetupAccount(env: Env, preference: Preference): void
 }
 //#endregion
 //#region SocialNetworkUIInformationCollector

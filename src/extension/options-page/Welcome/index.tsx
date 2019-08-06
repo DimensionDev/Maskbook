@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import Welcome0 from '../../../components/Welcomes/0'
+import Welcome1a1 from '../../../components/Welcomes/1a1'
 import Welcome1a2 from '../../../components/Welcomes/1a2'
 import Welcome1a3 from '../../../components/Welcomes/1a3'
 import Welcome1a4v2 from '../../../components/Welcomes/1a4.v2'
@@ -14,14 +15,14 @@ import { Identifier, PersonIdentifier } from '../../../database/type'
 import { MessageCenter } from '../../../utils/messages'
 import { ValueRef } from '@holoflows/kit/es'
 import { useValueRef } from '../../../utils/hooks/useValueRef'
-import { makeStyles } from '@material-ui/core'
 import { getProfilePageUrlAtFacebook } from '../../../social-network-provider/facebook.com/parse-username'
+import { Person } from '../../../database'
 
-//#region Welcome
 enum WelcomeState {
     // Step 0
     Start,
     // Step 1
+    SelectIdentity,
     Intro,
     BackupKey,
     ProvePost,
@@ -72,42 +73,68 @@ const WelcomeActions = {
     },
 }
 interface Welcome {
+    whoAmI: Person
     // Display
     provePost: string
     currentStep: WelcomeState
-    onStepChange(state: WelcomeState): void
-    identity: PersonIdentifier
+    personHintFromSearch: Person
+    currentIdentities: Person[]
     // Actions
+    onStepChange(state: WelcomeState): void
+    onSelectIdentity(person: Person): void
     onFinish(reason: 'done' | 'quit'): void
     sideEffects: typeof WelcomeActions
 }
 function Welcome(props: Welcome) {
-    const { currentStep, onFinish, onStepChange, provePost, sideEffects, identity } = props
+    const { currentStep, onFinish, onStepChange, provePost, sideEffects, whoAmI, currentIdentities } = props
+    const { onSelectIdentity, personHintFromSearch } = props
     switch (currentStep) {
         case WelcomeState.Start:
             return (
                 <Welcome0
-                    create={() => onStepChange(WelcomeState.Intro)}
+                    create={() => {
+                        if (personHintFromSearch.identifier.isUnknown) {
+                            onStepChange(WelcomeState.SelectIdentity)
+                        } else {
+                            onStepChange(WelcomeState.Intro)
+                            onSelectIdentity(personHintFromSearch)
+                        }
+                    }}
                     restore={() => onStepChange(WelcomeState.RestoreKeypair)}
                     close={() => onFinish('quit')}
+                />
+            )
+        case WelcomeState.SelectIdentity:
+            return (
+                <Welcome1a1
+                    next={selected => {
+                        onSelectIdentity(selected)
+                        onStepChange(WelcomeState.Intro)
+                    }}
+                    didntFindAccount={() => onStepChange(WelcomeState.Start)}
+                    identities={
+                        personHintFromSearch.identifier.isUnknown
+                            ? currentIdentities
+                            : [personHintFromSearch, ...currentIdentities]
+                    }
                 />
             )
         case WelcomeState.Intro:
             return <Welcome1a2 next={() => onStepChange(WelcomeState.BackupKey)} />
         case WelcomeState.BackupKey:
-            sideEffects.backupMyKeyPair(props.identity)
+            sideEffects.backupMyKeyPair(props.whoAmI.identifier)
             return <Welcome1a3 next={() => onStepChange(WelcomeState.ProvePost)} />
         case WelcomeState.ProvePost:
             return (
                 <Welcome1a4v2
-                    bioDisabled={identity.isUnknown}
+                    bioDisabled={whoAmI.identifier.isUnknown}
                     provePost={provePost}
                     requestManualVerify={() => {
-                        sideEffects.manualVerifyBio(identity, provePost)
+                        sideEffects.manualVerifyBio(whoAmI.identifier, provePost)
                         onStepChange(WelcomeState.End)
                     }}
                     requestAutoVerify={type => {
-                        if (type === 'bio') sideEffects.autoVerifyBio(identity, provePost)
+                        if (type === 'bio') sideEffects.autoVerifyBio(whoAmI.identifier, provePost)
                         else if (type === 'post') sideEffects.autoVerifyPost(provePost)
                         onStepChange(WelcomeState.End)
                     }}
@@ -118,7 +145,7 @@ function Welcome(props: Welcome) {
                 <Welcome1b1
                     back={() => onStepChange(WelcomeState.Start)}
                     restore={url => {
-                        sideEffects.restoreFromFile(url, props.identity)
+                        sideEffects.restoreFromFile(url, props.whoAmI.identifier)
                         onStepChange(WelcomeState.End)
                     }}
                 />
@@ -128,45 +155,64 @@ function Welcome(props: Welcome) {
     }
 }
 const ResponsiveDialog = withMobileDialog({ breakpoint: 'xs' })(Dialog)
-const ProvePostRef = new ValueRef('')
-const IdentifierRef = new ValueRef(PersonIdentifier.unknown)
+const provePostRef = new ValueRef('')
+const personInferFromURLRef = new ValueRef<Person>({
+    identifier: PersonIdentifier.unknown,
+    groups: [],
+})
+const selectedIdRef = new ValueRef<Person>(personInferFromURLRef.value)
+const ownedIdsRef = new ValueRef<Person[]>([])
 const getMyProveBio = async () => {
-    if (IdentifierRef.value.isUnknown) {
+    if (selectedIdRef.value.identifier.isUnknown) {
         const all = await Services.People.queryMyIdentity()
-        if (all[0]) IdentifierRef.value = all[0].identifier
+        ownedIdsRef.value = all
+        if (all[0]) selectedIdRef.value = all[0]
     }
-    const post = await Services.Crypto.getMyProveBio(IdentifierRef.value)
-    if (post) ProvePostRef.value = post
+    const post = await Services.Crypto.getMyProveBio(selectedIdRef.value.identifier)
+    if (post) provePostRef.value = post
 }
 MessageCenter.on('generateKeyPair', getMyProveBio)
-IdentifierRef.addListener(getMyProveBio)
+selectedIdRef.addListener(getMyProveBio)
 getMyProveBio()
 
-export const IdentifierRefContext = React.createContext(IdentifierRef)
-export default withRouter(function _WelcomePortal(props: RouteComponentProps<{ identifier: string }>) {
+export const IdentifierRefContext = React.createContext(selectedIdRef)
+// Query { identifier: string; avatar: string; nickname: string }
+export default withRouter(function _WelcomePortal(props: RouteComponentProps) {
     const [step, setStep] = useState(WelcomeState.Start)
-    const provePost = useValueRef(ProvePostRef)
-    const identifier = useValueRef(IdentifierRef)
+    const provePost = useValueRef(provePostRef)
+    const personFromURL = useValueRef(personInferFromURLRef)
+    const selectedId = useValueRef(selectedIdRef)
+    const ownIds = useValueRef(ownedIdsRef)
 
+    // ? Update info from search
     useEffect(() => {
-        const raw = new URLSearchParams(props.location.search).get('identifier') || ''
-        const id = Identifier.fromString(raw)
-        if (id && id.equals(identifier)) return
+        const search = new URLSearchParams(props.location.search)
+
+        const identifier = search.get('identifier') || ''
+        const avatar = search.get('avatar') || ''
+        const nickname = search.get('nickname') || ''
+        const id = Identifier.fromString(identifier)
+        if (id && id.equals(selectedId.identifier)) return
+
         if (id instanceof PersonIdentifier) {
-            IdentifierRef.value = id
+            if (id.isUnknown) return
+            personInferFromURLRef.value = { identifier: id, nickname, avatar, groups: [] }
         }
     }, [props.location.search])
 
     return (
         <ResponsiveDialog open>
-            <IdentifierRefContext.Provider value={IdentifierRef}>
+            <IdentifierRefContext.Provider value={selectedIdRef}>
                 <Welcome
                     provePost={provePost}
                     currentStep={step}
                     sideEffects={WelcomeActions}
                     onStepChange={setStep}
                     onFinish={WelcomeActions.onFinish}
-                    identity={identifier}
+                    whoAmI={selectedId}
+                    currentIdentities={ownIds}
+                    personHintFromSearch={personFromURL}
+                    onSelectIdentity={p => (selectedIdRef.value = p)}
                 />
             </IdentifierRefContext.Provider>
         </ResponsiveDialog>

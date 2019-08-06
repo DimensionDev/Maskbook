@@ -13,6 +13,7 @@ const useNotSetUpYetStyles = makeStyles({
 })
 export function NotSetupYetPrompt() {
     const id = GetContext() !== 'options' ? useLastRecognizedIdentity().identifier : null
+    const lastRecognizedIdentity = useLastRecognizedIdentity()
     const styles = useNotSetUpYetStyles()
     const button = (
         <Button

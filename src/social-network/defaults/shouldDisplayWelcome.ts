@@ -3,10 +3,13 @@ import { getStorage } from '../../utils/browser.storage'
 
 export function shouldDisplayWelcomeDefault(network: string) {
     return async () => {
+        const storage = (await getStorage(network)) || {}
+        if (storage.forceDisplayWelcome) return true
+
         const ids = await Services.People.queryMyIdentity(network)
-        const storage = await getStorage()
         if (ids.length) return false
-        if (storage.userDismissedWelcome) return false
+
+        if (storage.userIgnoredWelcome) return false
         return true
     }
 }

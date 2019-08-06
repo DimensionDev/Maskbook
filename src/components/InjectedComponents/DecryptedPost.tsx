@@ -92,7 +92,17 @@ function DecryptPost(props: DecryptPostProps) {
     return (
         <AsyncComponent
             promise={() => Services.Crypto.decryptFrom(encryptedText, postBy, whoAmI)}
-            dependencies={[encryptedText, people, alreadySelectedPreviously]}
+            dependencies={[
+                encryptedText,
+                people
+                    .map(x => x.identifier.toText())
+                    .sort()
+                    .join(','),
+                alreadySelectedPreviously
+                    .map(x => x.identifier.toText())
+                    .sort()
+                    .join(','),
+            ]}
             awaitingComponent={DecryptPostAwaiting}
             completeComponent={_props =>
                 'error' in _props.data ? (

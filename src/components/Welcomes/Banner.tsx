@@ -7,6 +7,8 @@ import { useLastRecognizedIdentity } from '../DataSource/useActivatedUI'
 import { setStorage } from '../../utils/browser.storage'
 import Services from '../../extension/service'
 import { useCallback } from 'react'
+import { getActivatedUI } from '../../social-network/ui'
+import { env } from '../../social-network/shared'
 
 interface Props {
     getStarted(): void
@@ -74,14 +76,21 @@ export function BannerUI(props: Props) {
 }
 
 export function Banner({ unmount, ...props }: { unmount: () => void } & Partial<Props>) {
-    const id = useLastRecognizedIdentity().identifier
+    const lastRecognizedIdentity = useLastRecognizedIdentity()
     const closeDefault = useCallback(() => {
-        setStorage({ userDismissedWelcome: true })
+        getActivatedUI().ignoreSetupAccount(env, {})
         unmount()
     }, [unmount])
     const getStartedDefault = useCallback(() => {
         unmount()
-        Services.Welcome.openWelcomePage(id)
+        Services.Welcome.openWelcomePage(lastRecognizedIdentity)
     }, [unmount])
-    return <BannerUI disabled={id.isUnknown} close={closeDefault} getStarted={getStartedDefault} {...props} />
+    return (
+        <BannerUI
+            disabled={lastRecognizedIdentity.identifier.isUnknown}
+            close={closeDefault}
+            getStarted={getStartedDefault}
+            {...props}
+        />
+    )
 }
