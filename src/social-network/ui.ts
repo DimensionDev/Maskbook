@@ -176,13 +176,11 @@ function hookUIPostMap(ui: SocialNetworkUI) {
     ui.posts.set = function(key, value) {
         const undo1 = ui.injectPostInspector(value, key)
         const undo2 = ui.injectCommentBox(value, key)
-        const undo3 = ui.injectPostInspector(value, key)
-        const undo4 = ui.injectPostComments(value, key)
+        const undo3 = ui.injectPostComments(value, key)
         undoMap.set(key, () => {
             undo1()
             undo2()
             undo3()
-            undo4()
         })
         Reflect.apply(setter, this, [key, value])
         return this
