@@ -43,8 +43,8 @@ defineSocialNetworkUI({
         selectElementContents(root.querySelector('[contenteditable]')!)
         dispatchCustomEvents('paste', encryptedComment)
         await sleep(200)
-        if (root.innerText.match(encryptedComment)) 'Okay'
-        else prompt('Please paste it into the comment box!', encryptedComment)
+        if (!root.innerText.match(encryptedComment))
+            prompt('Please paste it into the comment box!', encryptedComment)
     }),
     injectPostInspector: injectPostInspectorFacebook,
     collectPeople: collectPeopleFacebook,

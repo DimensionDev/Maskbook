@@ -4,7 +4,6 @@ import Gun from 'gun/gun'
 import 'gun/sea'
 import { PostIdentifier } from '../../database/type'
 import { PublishedAESKey } from '../../crypto/crypto-alpha-40'
-import { queryPostAESKey } from '../../key-management/posts-gun'
 interface PersonOnGun {
     proofPostId: string
 }
@@ -50,16 +49,5 @@ export async function publishPostAESKey(
         name: string
     }[],
 ) {
-    // Store AES key to gun
-    const stored: {
-        [postIdentifier: string]: PublishedAESKey
-    } = {}
-    for (const k of receiversKeys) {
-        stored[k.name] = k.key
-    }
-    console.log('Save to gun', postIdentifier, receiversKeys)
-    // await gun
-    //     .get('posts')
-    //     .get(postIdentifier)
-    //     .put(stored).then!()
+    throw new Error('Not implemented')
 }

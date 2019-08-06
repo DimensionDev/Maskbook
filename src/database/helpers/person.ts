@@ -9,8 +9,6 @@ import { encodeArrayBuffer, encodeText } from '../../utils/type-transform/String
  * Person in UI do not include publickey / privatekey!
  */
 export interface Person extends Omit<PersonRecord, 'publicKey' | 'privateKey'> {
-    publicKey?: undefined
-    privateKey?: undefined
     avatar?: string
     /** Fingerprint for the public key */
     fingerprint?: string
