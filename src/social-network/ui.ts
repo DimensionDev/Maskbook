@@ -160,12 +160,6 @@ export function activateSocialNetworkUI() {
         if (ui.shouldActivate()) {
             console.log('Activating UI provider', ui.networkIdentifier, ui)
             activatedSocialNetworkUI = ui
-            ui.init(env, {})
-            ui.resolveLastRecognizedIdentity()
-            ui.injectPostBox()
-            ui.collectPeople()
-            ui.collectPosts()
-            ui.shouldDisplayWelcome().then(r => r && ui.injectWelcomeBanner())
             {
                 const undoMap = new WeakMap<object, () => void>()
                 const setter = ui.posts.set
@@ -189,6 +183,12 @@ export function activateSocialNetworkUI() {
                     return Reflect.apply(remove, this, [key])
                 }
             }
+            ui.init(env, {})
+            ui.resolveLastRecognizedIdentity()
+            ui.injectPostBox()
+            ui.collectPeople()
+            ui.collectPosts()
+            ui.shouldDisplayWelcome().then(r => r && ui.injectWelcomeBanner())
             return
         }
 }
