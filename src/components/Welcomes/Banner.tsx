@@ -3,6 +3,10 @@ import CloseIcon from '@material-ui/icons/Close'
 import { geti18nString } from '../../utils/i18n'
 import { makeStyles } from '@material-ui/styles'
 import { AppBar, Typography, Button, IconButton, Hidden, SnackbarContent, Theme } from '@material-ui/core'
+import { useLastRecognizedIdentity } from '../DataSource/useActivatedUI'
+import { setStorage } from '../../utils/browser.storage'
+import Services from '../../extension/service'
+import { useCallback } from 'react'
 
 interface Props {
     getStarted(): void
@@ -28,7 +32,7 @@ const useStyles = makeStyles((theme: Theme) => ({
         padding: 6,
     },
 }))
-export function Banner(props: Props) {
+export function BannerUI(props: Props) {
     const classes = useStyles()
     const Title = (
         <Typography variant="subtitle1" color="inherit">
@@ -67,4 +71,17 @@ export function Banner(props: Props) {
             />
         </AppBar>
     )
+}
+
+export function Banner({ unmount, ...props }: { unmount: () => void } & Partial<Props>) {
+    const id = useLastRecognizedIdentity().identifier
+    const closeDefault = useCallback(() => {
+        setStorage({ userDismissedWelcome: true })
+        unmount()
+    }, [unmount])
+    const getStartedDefault = useCallback(() => {
+        unmount()
+        Services.Welcome.openWelcomePage(id)
+    }, [unmount])
+    return <BannerUI disabled={id.isUnknown} close={closeDefault} getStarted={getStartedDefault} {...props} />
 }

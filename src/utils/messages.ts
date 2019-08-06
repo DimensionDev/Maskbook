@@ -5,6 +5,7 @@ interface UIEvent {}
 interface KeyStoreEvent {
     newPerson: Person
     generateKeyPair: undefined
+    identityUpdated: undefined
 }
 interface TypedMessages extends UIEvent, KeyStoreEvent {}
 

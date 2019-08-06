@@ -1,10 +1,10 @@
 import React from 'react'
 import { LiveSelector, MutationObserverWatcher } from '@holoflows/kit'
-import { AdditionalPostBox } from '../../../components/InjectedComponents/AdditionalPostBox'
 import { renderInShadowRoot } from '../../../utils/jss/renderInShadowRoot'
+import { AdditionalPostBox } from '../../../components/InjectedComponents/AdditionalPostBox'
 
 let composeBox: LiveSelector<Element>
-if (location.hostname.match('m.facebook.com')) {
+if (location.hostname.includes('m.facebook.com')) {
     composeBox = new LiveSelector().querySelector('#structured_composer_form')
 } else {
     composeBox = new LiveSelector()
@@ -12,8 +12,10 @@ if (location.hostname.match('m.facebook.com')) {
         .map(x => x.lastElementChild)
         .map(x => x.firstElementChild)
 }
-const watcher = new MutationObserverWatcher(composeBox)
-    .enableSingleMode()
-    .setDomProxyOption({ afterShadowRootInit: { mode: 'closed' } })
-    .startWatch()
-renderInShadowRoot(<AdditionalPostBox />, watcher.firstVirtualNode.afterShadow)
+export function injectPostBoxFacebook() {
+    const watcher = new MutationObserverWatcher(composeBox)
+        .enableSingleMode()
+        .setDomProxyOption({ afterShadowRootInit: { mode: 'closed' } })
+        .startWatch()
+    renderInShadowRoot(<AdditionalPostBox />, watcher.firstVirtualNode.afterShadow)
+}
