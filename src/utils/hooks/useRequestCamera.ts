@@ -29,7 +29,7 @@ async function requestPermission(): Promise<unknown> {
         audio: false,
         video: {
             width: { ideal: 1920 },
-            height: { ideal: 1080 }
+            height: { ideal: 1080 },
         },
     })
     t.getTracks()[0].stop()
