@@ -7,16 +7,14 @@ import Welcome1a4v2 from '../../../components/Welcomes/1a4.v2'
 import Welcome1b1 from '../../../components/Welcomes/1b1'
 import Welcome2 from '../../../components/Welcomes/2'
 import Services from '../../service'
-import tasks from '../../content-script/tasks'
 import { RouteComponentProps, withRouter } from 'react-router'
-import { geti18nString } from '../../../utils/i18n'
 import { Dialog, withMobileDialog } from '@material-ui/core'
 import { Identifier, PersonIdentifier } from '../../../database/type'
 import { MessageCenter } from '../../../utils/messages'
 import { ValueRef } from '@holoflows/kit/es'
 import { useValueRef } from '../../../utils/hooks/useValueRef'
-import { getProfilePageUrlAtFacebook } from '../../../social-network-provider/facebook.com/parse-username'
 import { Person } from '../../../database'
+import { getCurrentNetworkWorkerService } from '../../background-script/WorkerService'
 
 enum WelcomeState {
     // Step 0
@@ -47,23 +45,11 @@ const WelcomeActions = {
             })
         }
     },
-    autoVerifyBio(user: PersonIdentifier, prove: string) {
-        tasks(getProfilePageUrlAtFacebook(user), {
-            active: true,
-            autoClose: false,
-            memorable: false,
-            pinned: false,
-            timeout: Infinity,
-        }).pasteIntoBio(prove)
+    autoVerifyBio(network: PersonIdentifier, provePost: string) {
+        getCurrentNetworkWorkerService(network).autoVerifyBio(network, provePost)
     },
-    autoVerifyPost(prove: string) {
-        tasks(`https://www.facebook.com/`, {
-            active: true,
-            autoClose: false,
-            memorable: false,
-            pinned: false,
-            timeout: Infinity,
-        }).pasteIntoPostBox(prove, geti18nString('automation_request_paste_into_post_box'))
+    autoVerifyPost(network: PersonIdentifier, provePost: string) {
+        getCurrentNetworkWorkerService(network).autoVerifyPost(network, provePost)
     },
     manualVerifyBio(user: PersonIdentifier, prove: string) {
         this.autoVerifyBio(user, prove)
@@ -135,7 +121,7 @@ function Welcome(props: Welcome) {
                     }}
                     requestAutoVerify={type => {
                         if (type === 'bio') sideEffects.autoVerifyBio(whoAmI.identifier, provePost)
-                        else if (type === 'post') sideEffects.autoVerifyPost(provePost)
+                        else if (type === 'post') sideEffects.autoVerifyPost(whoAmI.identifier, provePost)
                         onStepChange(WelcomeState.End)
                     }}
                 />

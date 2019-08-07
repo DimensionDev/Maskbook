@@ -1,7 +1,7 @@
 import { SocialNetworkWorker } from '../../social-network/worker'
 import getCurrentNetworkWorker from '../../social-network/utils/getCurrentNetworkWorker'
 import { Identifier } from '../../database/type'
-import { GetContext, AsyncCall, MessageCenter, OnlyRunInContext } from '@holoflows/kit/es'
+import { GetContext, AsyncCall, OnlyRunInContext } from '@holoflows/kit/es'
 import Serialization from '../../utils/type-transform/Serialization'
 
 type ServiceType = Required<Pick<SocialNetworkWorker, 'autoVerifyBio' | 'autoVerifyPost'>>
