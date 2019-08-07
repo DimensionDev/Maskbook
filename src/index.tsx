@@ -29,7 +29,9 @@ import NearMe from '@material-ui/icons/NearMe'
 import Assignment from '@material-ui/icons/Assignment'
 import Phonelink from '@material-ui/icons/Phonelink'
 import { ExportData } from './components/MobileImportExport/Export'
+import { uiSetup } from './setup'
 
+uiSetup()
 const drawerWidth = 240
 const empty = (
     <div
