@@ -2,6 +2,10 @@ import { getUrl } from '../utils/utils'
 export interface SocialNetworkWorkerAndUI {
     version: 1
     /**
+     * This name is used internally and should be unique
+     */
+    name: string
+    /**
      * If using Maskbook on this network is dangerous, set it to true (not supported yet)
      */
     isDangerousNetwork: false

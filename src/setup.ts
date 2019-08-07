@@ -5,7 +5,9 @@ export function backgroundSetup() {
         elliptic: require('elliptic'),
     })
 }
-import { activateSocialNetworkUI } from './social-network/ui'
+import { activateSocialNetworkUI, definedSocialNetworkUIs } from './social-network/ui'
+import { definedSocialNetworkWorkers } from './social-network/worker'
+Object.assign(window, { definedSocialNetworkWorkers, definedSocialNetworkUIs })
 export function uiSetup() {
     activateSocialNetworkUI()
 
