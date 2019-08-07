@@ -8,7 +8,8 @@ export default AutomatedTabTask(
          * Access post url
          * Get post content
          */
-        getPostContent: (postIdentifier: PostIdentifier<PersonIdentifier>) => getActivatedUI().taskGetPostContent(postIdentifier),
+        getPostContent: (postIdentifier: PostIdentifier<PersonIdentifier>) =>
+            getActivatedUI().taskGetPostContent(postIdentifier),
         /**
          * Access profile page
          * Get Profile
@@ -23,7 +24,8 @@ export default AutomatedTabTask(
          * Access main page
          * Paste text into PostBox
          */
-        pasteIntoPostBox: (text: string, warningText: string) => getActivatedUI().taskPasteIntoPostBox(text, warningText),
+        pasteIntoPostBox: (text: string, warningText: string) =>
+            getActivatedUI().taskPasteIntoPostBox(text, warningText),
     },
     { memorable: true },
 )!

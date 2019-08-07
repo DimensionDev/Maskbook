@@ -47,7 +47,7 @@ export function applyAdoptedStyleSheets(shadowOnly = true) {
         for (const shadow of shadows) {
             shadow.adoptedStyleSheets = nextAdoptedStyleSheets
         }
-        if (shadowOnly === false) document.adoptedStyleSheets = nextAdoptedStyleSheets
+        if (!shadowOnly) document.adoptedStyleSheets = nextAdoptedStyleSheets
     })
 }
 
@@ -309,12 +309,10 @@ function insertStyle(style: HTMLStyleElement, options: PriorityOptions) {
 /**
  * Read jss nonce setting from the page if the user has set it.
  */
-const getNonce = memoize(
-    (): string | null => {
-        const node = document.querySelector('meta[property="csp-nonce"]')
-        return node ? node.getAttribute('content') : null
-    },
-)
+const getNonce = memoize((): string | null => {
+    const node = document.querySelector('meta[property="csp-nonce"]')
+    return node ? node.getAttribute('content') : null
+})
 
 const insertRule = (
     container: CSSStyleSheet | CSSMediaRule | CSSKeyframesRule,
@@ -368,7 +366,7 @@ export default class ConstructableStyleSheetsRenderer {
     // ! Hook this !
     get element(): HTMLStyleElement {
         const proxy = new Proxy(this.realElement || {}, {
-            get(target, key, receiver) {
+            get(target, key) {
                 if (key === 'sheet') return getStyleSheet(target)
                 if (key === 'setAttribute')
                     return (k: string, v: string) => {
@@ -378,7 +376,7 @@ export default class ConstructableStyleSheetsRenderer {
                     }
                 return (target as any)[key]
             },
-            set(target, key, value, receiver) {
+            set(target, key, value) {
                 if (key === 'textContent')
                     getStyleSheet(target).replaceSync(value)
                     // if (!isChrome74) {
