@@ -1,7 +1,8 @@
 import React from 'react'
 import { storiesOf } from '@storybook/react'
 import Welcome0 from '../components/Welcomes/0'
-import Welcome1a1 from '../components/Welcomes/1a1'
+import Welcome1a1a from '../components/Welcomes/1a1a'
+import Welcome1a1b from '../components/Welcomes/1a1b'
 import Welcome1a2 from '../components/Welcomes/1a2'
 import Welcome1a3 from '../components/Welcomes/1a3'
 import Welcome1a4v2 from '../components/Welcomes/1a4.v2'
@@ -14,7 +15,21 @@ import { BannerUI } from '../components/Welcomes/Banner'
 import { withMobileDialog, Dialog } from '@material-ui/core'
 import QRScanner from '../components/Welcomes/QRScanner'
 import { demoPeople } from './demoPeople'
+import { defineSocialNetworkUI, definedSocialNetworkUIs } from '../social-network/ui'
 
+definedSocialNetworkUIs.clear()
+defineSocialNetworkUI({ friendlyName: 'Utopia', setupAccount: 'Setup your Utopia account in your dream' } as any)
+defineSocialNetworkUI({ friendlyName: 'Neoparia Breakfast Club', setupAccount() {} } as any)
+defineSocialNetworkUI({
+    friendlyName: 'telnet',
+    setupAccount: 'Embrace the eternal September!',
+    isDangerousNetwork: true,
+} as any)
+defineSocialNetworkUI({
+    friendlyName: 'MySpace',
+    setupAccount() {},
+    isDangerousNetwork: true,
+} as any)
 const ResponsiveDialog = withMobileDialog({ breakpoint: 'xs' })(Dialog)
 storiesOf('Welcome', module)
     .add('Banner', () => (
@@ -24,18 +39,23 @@ storiesOf('Welcome', module)
         <ResponsiveDialog open>
             <Welcome0
                 close={action('Close')}
-                create={to('Welcome', 'Step 1a-1')}
+                create={to('Welcome', 'Step 1a-1a')}
                 restore={to('Welcome', 'Step 1b-1')}
             />
         </ResponsiveDialog>
     ))
-    .add('Step 1a-1', () => (
+    .add('Step 1a-1a', () => (
         <ResponsiveDialog open>
-            <Welcome1a1
-                next={() => to('Welcome', 'Step 1a-2')}
+            <Welcome1a1a
+                next={() => to('Welcome', 'Step 1a-2')()}
                 identities={demoPeople}
-                didntFindAccount={action('didntFindAccount')}
+                didntFindAccount={to('Welcome', 'Step 1a-1b')}
             />
+        </ResponsiveDialog>
+    ))
+    .add('Step 1a-1b', () => (
+        <ResponsiveDialog open>
+            <Welcome1a1b useExistingAccounts={to('Welcome', 'Step 1a-1a')} />
         </ResponsiveDialog>
     ))
     .add('Step 1a-2', () => (

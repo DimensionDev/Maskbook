@@ -22,10 +22,14 @@ export interface SocialNetworkUI
      */
     friendlyName: string
     /**
-     * This function should open a new page,
+     * This function should jump to a new page,
      * and then shouldDisplayWelcome should return true
+     * So Maskbook will display a Welcome banner
+     *
+     * If this network is a decentralized network and you don't know which page to open
+     * leave a string like `Open the Mastodon instance you want to connect`
      */
-    setupAccount(env: Env, preference: Preference): void
+    setupAccount: string | ((env: Env, preference: Preference) => void)
     /**
      * This function should open a new page,
      * and then shouldDisplayWelcome should return true
@@ -166,7 +170,7 @@ export type PostInfo = {
 }
 //#endregion
 
-const definedSocialNetworkUIs = new Set<SocialNetworkUI>()
+export const definedSocialNetworkUIs = new Set<SocialNetworkUI>()
 let activatedSocialNetworkUI: SocialNetworkUI = undefined as any
 export const getActivatedUI = () => activatedSocialNetworkUI
 export function activateSocialNetworkUI() {
