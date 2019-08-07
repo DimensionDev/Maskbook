@@ -195,10 +195,8 @@ export default function Welcome({ back, restore }: Props) {
                 {qrError ? (
                     <div className={classes.videoError}>
                         {geti18nString('welcome_1b_qr_error_1')}
-                        There is an error occur during the scanning.
                         <br />
                         {geti18nString('welcome_1b_qr_error_2')}
-                        You may try other ways to restore your account.
                     </div>
                 ) : null}
             </>

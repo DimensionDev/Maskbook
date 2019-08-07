@@ -14,8 +14,12 @@ module.exports = function override(/** @type{import("webpack").Configuration} */
         contentscript: path.join(__dirname, './src/content-script.ts'),
         backgroundservice: path.join(__dirname, './src/background-service.ts'),
         injectedscript: path.join(__dirname, './src/extension/injected-script/index.ts'),
+        qrcode: path.join(__dirname, './src/web-workers/QRCode.ts'),
     }
     if (env !== 'development') delete config.entry.devtools
+
+    // Let bundle compatiable with web worker
+    config.output.globalObject = 'globalThis'
     config.output.filename = 'js/[name].js'
     config.output.chunkFilename = 'js/[name].chunk.js'
 

@@ -14,6 +14,13 @@ const useStyles = makeStyles({
             margin: 'auto',
         },
     },
+    code: {
+        width: 404,
+        height: 404,
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
 })
 export function ExportData(props: {}) {
     const classes = useStyles()
@@ -33,11 +40,13 @@ export function ExportData(props: {}) {
     }
     return (
         <main className={classes.root}>
-            {file ? (
-                <QrCode text={file} />
-            ) : (
-                <Typography variant="caption">{geti18nString('options_mobile_export_generating')}</Typography>
-            )}
+            <div className={classes.code}>
+                {file ? (
+                    <QrCode text={file} />
+                ) : (
+                    <Typography variant="caption">{geti18nString('options_mobile_export_generating')}</Typography>
+                )}
+            </div>
             <br />
             <br />
             <Typography variant="h4">{geti18nString('options_mobile_export_title')}</Typography>
