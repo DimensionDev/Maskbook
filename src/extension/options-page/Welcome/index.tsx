@@ -40,7 +40,7 @@ const WelcomeActions = {
         } else {
             const fr = new FileReader()
             fr.readAsText(file)
-            fr.addEventListener('loadend', async f => {
+            fr.addEventListener('loadend', async () => {
                 const json = JSON.parse(fr.result as string)
                 Services.People.restoreBackup(json, id)
             })
@@ -55,7 +55,7 @@ const WelcomeActions = {
     manualVerifyBio(user: PersonIdentifier, prove: string) {
         this.autoVerifyBio(user, prove)
     },
-    onFinish(reason: 'quit' | 'done') {
+    onFinish() {
         window.close()
     },
 }

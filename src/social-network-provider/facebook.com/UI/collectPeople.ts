@@ -41,7 +41,7 @@ function detectIfFriend() {
     })
     // TODO: finish this, store it into the database
     new MutationObserverWatcher(isFriend)
-        .useForeach((status: Status) => {
+        .useForeach(() => {
             return {
                 onTargetChanged() {},
                 onRemove() {},
