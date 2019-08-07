@@ -71,6 +71,11 @@ storiesOf('Welcome', module)
     .add('New Step 1a-4', () => (
         <ResponsiveDialog open>
             <Welcome1a4v2
+                hasManual={boolean('hasManual', true)}
+                hasBio={boolean('hasBio', true)}
+                hasPost={boolean('hasPost', true)}
+                bioDisabled={boolean('bioDisabled', false)}
+                postDisabled={boolean('postDisabled', false)}
                 provePost={text('Prove', '🔒ApfdMwLoV/URKn7grgcNWdMR2iWMGdHpQBk5LVGFxhul🔒')}
                 requestAutoVerify={action('Auto')}
                 requestManualVerify={action('Manual')}

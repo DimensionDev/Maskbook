@@ -38,6 +38,12 @@ export interface SocialNetworkWorker extends SocialNetworkWorkerAndUI {
      * If this function is not provided, autoVerifyPost in Welcome will be unavailable
      */
     autoVerifyPost?(user: PersonIdentifier, provePost: string): void
+    /**
+     * This function should open a new page, then let user add it by themself
+     *
+     * If this function is not provided, manualVerifyPost in Welcome will be unavailable
+     */
+    manualVerifyPost?(user: PersonIdentifier, provePost: string): void
 }
 
 export const definedSocialNetworkWorkers = new Set<SocialNetworkWorker>()

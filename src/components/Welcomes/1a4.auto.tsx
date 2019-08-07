@@ -25,8 +25,11 @@ function Option(props: React.PropsWithChildren<{ activated: boolean }>) {
     return <div className={classes.root} children={props.children} />
 }
 interface Props {
+    hasBio: boolean
+    hasPost: boolean
+    postDisabled: boolean
     bioDisabled: boolean
-    type: 'bio' | 'post'
+    type: 'bio' | 'post' | undefined
     setType(type: Props['type']): void
 }
 const useStyles = makeStyles(theme => ({
@@ -48,51 +51,58 @@ const useStyles = makeStyles(theme => ({
     title: { fontWeight: 'bold', '& + *': { opacity: 0.6 } },
     red: { color: 'red' },
 }))
-export default function Auto({ type, setType, bioDisabled }: Props) {
+export default function Auto({ type, setType, bioDisabled, hasBio, hasPost, postDisabled }: Props) {
     const classes = useStyles()
+    const bio = (
+        <FormControlLabel
+            disabled={bioDisabled}
+            value="bio"
+            labelPlacement="top"
+            control={<Radio classes={{ root: classes.radio, checked: classes.checked }} />}
+            label={
+                <Option activated={type === 'bio'}>
+                    <Typography variant="subtitle2" className={classes.title}>
+                        {geti18nString('welcome_1a4_auto_profile_title')}
+                    </Typography>
+                    <Typography variant="subtitle2">
+                        {geti18nString('welcome_1a4_auto_profile_description1')}
+                        <br />
+                        {geti18nString('welcome_1a4_auto_profile_description2')}
+                    </Typography>
+                </Option>
+            }
+        />
+    )
+    const post = (
+        <FormControlLabel
+            value="post"
+            disabled={postDisabled}
+            labelPlacement="top"
+            control={<Radio classes={{ root: classes.radio, checked: classes.checked }} />}
+            label={
+                <Option activated={type === 'post'}>
+                    <Typography variant="subtitle2" className={classes.title}>
+                        {geti18nString('welcome_1a4_auto_post_title')}
+                    </Typography>
+                    <Typography variant="subtitle2">
+                        {geti18nString('welcome_1a4_auto_post_description1')}
+                        <br />
+                        {geti18nString('welcome_1a4_auto_post_description2')}
+                    </Typography>
+                </Option>
+            }
+        />
+    )
     return (
         <div className={classes.root}>
             <FormControl component={'fieldset' as any} className={classes.root}>
                 <RadioGroup
                     className={classes.group}
                     aria-label={geti18nString('welcome_1a4_auto_radio_aria')}
-                    value={type}
+                    value={type === undefined ? '__' : type}
                     onChange={(e, v) => setType(v as any)}>
-                    <FormControlLabel
-                        disabled={bioDisabled}
-                        value="bio"
-                        labelPlacement="top"
-                        control={<Radio classes={{ root: classes.radio, checked: classes.checked }} />}
-                        label={
-                            <Option activated={type === 'bio'}>
-                                <Typography variant="subtitle2" className={classes.title}>
-                                    {geti18nString('welcome_1a4_auto_profile_title')}
-                                </Typography>
-                                <Typography variant="subtitle2">
-                                    {geti18nString('welcome_1a4_auto_profile_description1')}
-                                    <br />
-                                    {geti18nString('welcome_1a4_auto_profile_description2')}
-                                </Typography>
-                            </Option>
-                        }
-                    />
-                    <FormControlLabel
-                        value="post"
-                        labelPlacement="top"
-                        control={<Radio classes={{ root: classes.radio, checked: classes.checked }} />}
-                        label={
-                            <Option activated={type === 'post'}>
-                                <Typography variant="subtitle2" className={classes.title}>
-                                    {geti18nString('welcome_1a4_auto_post_title')}
-                                </Typography>
-                                <Typography variant="subtitle2">
-                                    {geti18nString('welcome_1a4_auto_post_description1')}
-                                    <br />
-                                    {geti18nString('welcome_1a4_auto_post_description2')}
-                                </Typography>
-                            </Option>
-                        }
-                    />
+                    {hasBio ? bio : null}
+                    {hasPost ? post : null}
                 </RadioGroup>
             </FormControl>
         </div>

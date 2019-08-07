@@ -4,7 +4,7 @@ import { Identifier } from '../../database/type'
 import { GetContext, AsyncCall, OnlyRunInContext } from '@holoflows/kit/es'
 import Serialization from '../../utils/type-transform/Serialization'
 
-type ServiceType = Required<Pick<SocialNetworkWorker, 'autoVerifyBio' | 'autoVerifyPost'>>
+type ServiceType = Required<Pick<SocialNetworkWorker, 'autoVerifyBio' | 'autoVerifyPost' | 'manualVerifyPost'>>
 const cache = new Map<SocialNetworkWorker, ServiceType>()
 
 export function getCurrentNetworkWorkerService(network: string | Identifier) {
@@ -26,6 +26,7 @@ export function startWorkerService(e: SocialNetworkWorker) {
     const impl: ServiceType = {
         autoVerifyBio: e.autoVerifyBio || notImplemented,
         autoVerifyPost: e.autoVerifyPost || notImplemented,
+        manualVerifyPost: e.manualVerifyPost || notImplemented,
     }
     AsyncCall(impl, { serializer: Serialization, key: e.name })
 }

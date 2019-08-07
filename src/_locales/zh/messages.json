@@ -165,8 +165,8 @@
     "welcome_1a4_title": {
         "message": "驗證賬號歸屬權"
     },
-    "welcome_1a4_bio_disabled": {
-        "message": "由於技術問題，此驗證方式暫時不可用。"
+    "welcome_1a4_disabled": {
+        "message": "由於技術問題，暫時只有一種驗證方式可用。"
     },
     "welcome_1a4_type_auto_subtitle1": {
         "message": "避免好友感到迷惑"

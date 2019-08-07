@@ -15,6 +15,7 @@ import { ValueRef } from '@holoflows/kit/es'
 import { useValueRef } from '../../../utils/hooks/useValueRef'
 import { Person } from '../../../database'
 import { getCurrentNetworkWorkerService } from '../../background-script/WorkerService'
+import getCurrentNetworkWorker from '../../../social-network/utils/getCurrentNetworkWorker'
 
 enum WelcomeState {
     // Step 0
@@ -111,8 +112,12 @@ function Welcome(props: Welcome) {
             sideEffects.backupMyKeyPair(props.whoAmI.identifier)
             return <Welcome1a3 next={() => onStepChange(WelcomeState.ProvePost)} />
         case WelcomeState.ProvePost:
+            const worker = getCurrentNetworkWorker(props.whoAmI.identifier)
             return (
                 <Welcome1a4v2
+                    hasManual={!!worker.manualVerifyPost}
+                    hasBio={!!worker.autoVerifyBio}
+                    hasPost={!!worker.autoVerifyPost}
                     bioDisabled={whoAmI.identifier.isUnknown}
                     provePost={provePost}
                     requestManualVerify={() => {

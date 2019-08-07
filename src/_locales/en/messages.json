@@ -164,8 +164,8 @@
     "welcome_1a4_title": {
         "message": "Verify Account Ownership"
     },
-    "welcome_1a4_bio_disabled": {
-        "message": "Sorry, automatically verify your account through bio is not available now."
+    "welcome_1a4_disabled": {
+        "message": "Sorry, only one automatic verification method is available."
     },
     "welcome_1a4_type_auto_subtitle1": {
         "message": "Avoid any confusion before your first encrypted post."
