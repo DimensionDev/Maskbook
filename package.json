@@ -1,7 +1,7 @@
 {
   "name": "maskbook",
   "license": "AGPL-3.0-or-later",
-  "version": "1.5.2",
+  "version": "1.5.3",
   "private": true,
   "scripts": {
     "watch": "yarn just react",

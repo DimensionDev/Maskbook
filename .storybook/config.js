@@ -13,8 +13,8 @@ addParameters({
         theme: create({
             base: 'dark',
             brandTitle: 'Maskbook',
-            brandUrl: 'https://maskbook.io/',
-            brandImage: 'https://maskbook.io/img/maskbook--logotype-white.png',
+            brandUrl: 'https://maskbook.com/',
+            brandImage: 'https://maskbook.com/img/maskbook--logotype-white.png',
         }),
         isFullscreen: false,
         panelPosition: 'right',
