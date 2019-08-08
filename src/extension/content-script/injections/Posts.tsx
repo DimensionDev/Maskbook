@@ -154,14 +154,18 @@ new MutationObserverWatcher(posts)
     .startWatch()
 
 function zipPostLinkPreview(node: DomProxy) {
+    const parentEle = node.current.parentElement!
     if (isMobile) {
-        const img = node.current.parentElement!.querySelector('a[href*="maskbook.io"]')
+        const img =
+            parentEle.querySelector('a[href*="maskbook.io"]') || parentEle.querySelector('a[href*="maskbook.com"]')
         const parent = img && img.closest('section')
         if (img && parent) {
             parent.style.display = 'none'
         }
     } else {
-        const img = node.current.parentElement!.querySelector('a[href*="maskbook.io"] img')
+        const img =
+            parentEle.querySelector('a[href*="maskbook.io"] img') ||
+            parentEle.querySelector('a[href*="maskbook.com"] img')
         const parent = img && img.closest('span')
         if (img && parent) {
             parent.style.display = 'none'
