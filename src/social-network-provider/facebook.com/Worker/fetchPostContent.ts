@@ -13,11 +13,13 @@ import tasks from '../../../extension/content-script/tasks'
 // ? we go to the old way.
 // ? Invoke a task on the current activating page.
 export async function fetchPostContentFacebook(post: PostIdentifier<PersonIdentifier>) {
+    const isDocument = (node: Node): node is Document => node.nodeType === Node.DOCUMENT_NODE
+
     // Path 1: fetch by http req
     try {
         const doc = await parseFacebookStaticHTML(getPostUrlAtFacebook(post))
         if (!doc) throw new Error("Can't parse the page")
-        const content = doc.body.innerText.match(/(🔒.+🔒)/)
+        const content = (isDocument(doc) ? doc.body : doc).innerText.match(/(🔒.+🔒)/)
         if (content && content[0].length) return content[0]
         throw new Error('Not found in post')
     } catch (e) {

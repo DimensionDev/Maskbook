@@ -1,10 +1,11 @@
 /// <reference path="./ShapeDetectionSpec.d.ts" />
 import { isNull } from 'lodash-es'
+import { getUrl } from '../../../utils/utils'
 
 const noop = () => {}
 
 class BarcodeDetectorPolyfill implements BarcodeDetector {
-    private worker: Worker = new Worker(browser.runtime.getURL('js/qrcode.js'))
+    private worker: Worker = new Worker(getUrl('js/qrcode.js'))
     private onWorkerMessage: (ev: MessageEvent) => void = noop
     private onWorkerError: (err: ErrorEvent) => void = noop
 

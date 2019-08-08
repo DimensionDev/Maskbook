@@ -12,14 +12,16 @@ const useNotSetUpYetStyles = makeStyles({
     },
 })
 export function NotSetupYetPrompt() {
-    const id = useLastRecognizedIdentity().identifier
+    const id = GetContext() !== 'options' ? useLastRecognizedIdentity().identifier : null
     const styles = useNotSetUpYetStyles()
     const button = (
         <Button
             onClick={() => {
                 if (GetContext() === 'options') {
                     location.hash = '/welcome'
-                } else Services.Welcome.openWelcomePage(id)
+                } else if (id) {
+                    Services.Welcome.openWelcomePage(id)
+                }
             }}
             color="primary"
             size="small">
