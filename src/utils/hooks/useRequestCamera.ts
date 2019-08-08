@@ -3,17 +3,17 @@ import { useEffect, useState } from 'react'
 import { useAsync } from '../components/AsyncComponent'
 import { has } from 'lodash-es'
 
-const q = <const>["query", "request", "revoke"];
+const q = <const>['query', 'request', 'revoke']
 
 export function checkPermissionApiUsability(type?: typeof q[number]) {
-    const r: Partial<{[T in typeof q[number]]: boolean}> = {}
+    const r: Partial<{ [T in typeof q[number]]: boolean }> = {}
     for (const v of q) {
-        r[v] = has(navigator, `permissions.${v}`);
+        r[v] = has(navigator, `permissions.${v}`)
     }
     if (type) {
-        return r[type];
+        return r[type]
     }
-    return r as Required<typeof r>;
+    return r as Required<typeof r>
 }
 
 export function useRequestCamera(needRequest: boolean) {
@@ -21,7 +21,7 @@ export function useRequestCamera(needRequest: boolean) {
     useEffect(() => {
         let permissionStatus: PermissionStatus | undefined = undefined
         const update = () => updatePermission(permissionStatus!.state)
-        if (checkPermissionApiUsability("query")) {
+        if (checkPermissionApiUsability('query')) {
             navigator.permissions.query({ name: 'camera' }).then(p => {
                 permissionStatus = p
                 p.onchange = update
@@ -30,10 +30,10 @@ export function useRequestCamera(needRequest: boolean) {
         } else {
             permissionStatus = {
                 onchange: null,
-                state: "granted",
+                state: 'granted',
                 addEventListener: () => {},
                 removeEventListener: () => {},
-                dispatchEvent: () => true
+                dispatchEvent: () => true,
             }
             update()
         }
@@ -48,7 +48,7 @@ export function useRequestCamera(needRequest: boolean) {
     return permission
 }
 async function requestPermission(): Promise<unknown> {
-    if (checkPermissionApiUsability("request")) {
+    if (checkPermissionApiUsability('request')) {
         // @ts-ignore
         if (navigator.permissions.request) return navigator.permissions.request({ name: 'camera' })
     } else {
@@ -56,7 +56,7 @@ async function requestPermission(): Promise<unknown> {
             audio: false,
             video: {
                 width: { ideal: 1920 },
-                height: { ideal: 1080 }
+                height: { ideal: 1080 },
             },
         })
         t.getTracks()[0].stop()

@@ -3,6 +3,9 @@ import { Chip, makeStyles } from '@material-ui/core'
 import Lock from '@material-ui/icons/Lock'
 import AsyncComponent from '../../utils/components/AsyncComponent'
 import Services from '../../extension/service'
+import { ValueRef } from '@holoflows/kit/es'
+import { useValueRef } from '../../utils/hooks/useValueRef'
+import { PayloadAlpha40 } from '../../utils/type-transform/Payload'
 
 const useStyle = makeStyles({
     root: {
@@ -27,7 +30,7 @@ interface Props {
     comment: string
     needZip(): void
 }
-export function PostComment({ comment, postContent, postIV, needZip }: Props) {
+export function PostCommentUI({ comment, postContent, postIV, needZip }: Props) {
     return (
         <AsyncComponent
             promise={() => {
@@ -42,4 +45,24 @@ export function PostComment({ comment, postContent, postIV, needZip }: Props) {
             failedComponent={null}
         />
     )
+}
+
+// TODO: Merge PostComment and PostCommentUI
+export function PostComment(props: PostCommentProps) {
+    const postContent = useValueRef(props.decryptedPostContent)
+    const comment = useValueRef(props.commentContent)
+    return (
+        <PostCommentUI
+            needZip={props.needZip}
+            comment={comment}
+            postContent={postContent}
+            postIV={props.postPayload.value ? props.postPayload.value.iv : ''}
+        />
+    )
+}
+interface PostCommentProps {
+    needZip(): void
+    decryptedPostContent: ValueRef<string>
+    commentContent: ValueRef<string>
+    postPayload: ValueRef<PayloadAlpha40 | null>
 }

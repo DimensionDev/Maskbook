@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { styled } from '@material-ui/core/styles'
 import { useCapturedInput } from '../../utils/hooks/useCapturedEvents'
 

@@ -54,7 +54,8 @@ export async function restoreBackup(json: object, whoAmI?: PersonIdentifier) {
             'encrypt',
             'decrypt',
         ])
-        await storeLocalKeyDB(new PersonIdentifier('facebook.com', '$self'), aes)
+        if ((await queryLocalKeyDB(new PersonIdentifier(person.identifier.network, '$self'))) === null)
+            await storeLocalKeyDB(new PersonIdentifier(person.identifier.network, '$self'), aes)
         await storeLocalKeyDB(person.identifier, aes)
     }
     function importKey(x: JsonWebKey) {
@@ -108,11 +109,11 @@ export async function restoreBackup(json: object, whoAmI?: PersonIdentifier) {
 }
 
 /**
- * Resolve my possible identity at facebook.com
+ * Resolve my possible identity
  */
-export async function resolveIdentityAtFacebook(identifier: PersonIdentifier) {
-    const unknown = new PersonIdentifier('facebook.com', '$unknown')
-    const self = new PersonIdentifier('facebook.com', '$self')
+export async function resolveIdentity(identifier: PersonIdentifier) {
+    const unknown = new PersonIdentifier(identifier.network, '$unknown')
+    const self = new PersonIdentifier(identifier.network, '$self')
     {
         const ids = (await getMyIdentitiesDB()).filter(x => x.identifier.equals(unknown) || x.identifier.equals(self))
         for (const id of ids) {
@@ -122,7 +123,7 @@ export async function resolveIdentityAtFacebook(identifier: PersonIdentifier) {
         removeMyIdentityAtDB(self)
     }
     {
-        const locals = await queryLocalKeyDB('facebook.com')
+        const locals = await queryLocalKeyDB(identifier.network)
         if (locals) {
             if (locals.$unknown) {
                 await storeLocalKeyDB(identifier, locals.$unknown)

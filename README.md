@@ -61,4 +61,5 @@ For general introductions, see https://Maskbook.com/
 -   ./stories - Folder for StoryBook
 -   ./protocols - Some standard definitions of protocols that used in Maskbook
 -   ./network - How does Maskbook exchange information between users
--   ./social-network/ - Maskbook's multiple network support (Work in progress)
+-   ./social-network/ - Maskbook's multiple network support
+-   ./social-network-provider/ - Maskbook's multiple network support

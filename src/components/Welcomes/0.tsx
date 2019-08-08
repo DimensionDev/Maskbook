@@ -6,7 +6,7 @@ import { styled } from '@material-ui/styles'
 import WelcomeContainer from './WelcomeContainer'
 import { IdentifierRefContext } from '../../extension/options-page/Welcome'
 import { useValueRef } from '../../utils/hooks/useValueRef'
-import { setStorage } from './WelcomeVersion'
+import { setStorage } from '../../utils/browser.storage'
 
 const VerticalCenter = styled('div')({
     display: 'flex',

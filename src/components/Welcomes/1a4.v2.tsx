@@ -3,7 +3,7 @@ import * as React from 'react'
 import Auto from './1a4.auto'
 import Manual from './1a4.manual'
 import { geti18nString } from '../../utils/i18n'
-import { makeStyles, Typography, Button, Paper } from '@material-ui/core'
+import { makeStyles, Typography, Button } from '@material-ui/core'
 import WelcomeContainer from './WelcomeContainer'
 
 interface Props {

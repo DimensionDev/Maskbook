@@ -2,10 +2,8 @@ import React from 'react'
 import Services from '../../extension/service'
 import { geti18nString } from '../../utils/i18n'
 import { SnackbarContent, Button, makeStyles } from '@material-ui/core'
-import { myUsernameRef } from '../../extension/content-script/injections/MyUsername'
-import { isMobile } from '../../social-network/facebook.com/isMobile'
-import { useValueRef } from '../../utils/hooks/useValueRef'
 import { GetContext } from '@holoflows/kit/es'
+import { useLastRecognizedIdentity } from '../DataSource/useActivatedUI'
 
 const useNotSetUpYetStyles = makeStyles({
     root: {
@@ -14,14 +12,14 @@ const useNotSetUpYetStyles = makeStyles({
     },
 })
 export function NotSetupYetPrompt() {
-    const id = useValueRef(myUsernameRef)
+    const id = useLastRecognizedIdentity().identifier
     const styles = useNotSetUpYetStyles()
     const button = (
         <Button
             onClick={() => {
                 if (GetContext() === 'options') {
                     location.hash = '/welcome'
-                } else Services.Welcome.openWelcomePage(id, isMobile)
+                } else Services.Welcome.openWelcomePage(id)
             }}
             color="primary"
             size="small">
