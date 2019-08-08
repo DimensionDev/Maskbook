@@ -79,7 +79,7 @@ export async function encryptTo(
     OthersAESKeyEncryptedMap.set(key, othersAESKeyEncrypted)
 
     return [
-        `https://Maskbook.io : ${constructAlpha40({
+        `${constructAlpha40({
             encryptedText: encryptedTextStr,
             iv: ivStr,
             ownersAESKeyEncrypted: ownersAESKeyStr,
