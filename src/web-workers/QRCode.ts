@@ -1,3 +1,4 @@
+// ! TODO:
 // ! find a easy way for using DOM context and worker context separeatly
 // ! then we can remove @ts-ignore here and make worker type safe
 import jsQR from 'jsqr'
