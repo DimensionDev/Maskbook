@@ -27,6 +27,14 @@ export abstract class Identifier {
                 return null
         }
     }
+
+    static IdentifiersToString(a: Identifier[], isOrderImportant = false) {
+        const ax = a.map(x => x.toText())
+        if (!isOrderImportant) {
+            ax.sort()
+        }
+        return ax.join(',')
+    }
 }
 
 @serializable('PersonIdentifier')

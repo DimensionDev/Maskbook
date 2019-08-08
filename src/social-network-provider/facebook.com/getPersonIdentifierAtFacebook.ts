@@ -26,7 +26,7 @@ export function getPersonIdentifierAtFacebook(
             } catch {}
             try {
                 avatar = dom!.querySelector('img')!
-                if (avatar) {
+                if (allowCollectInfo && avatar) {
                     Services.People.updatePersonInfo(result, { nickname, avatarURL: avatar.src })
                 }
             } catch {}

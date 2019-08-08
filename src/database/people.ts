@@ -23,6 +23,7 @@ import { openDB, DBSchema } from 'idb/with-async-ittr'
 import { JsonWebKeyToCryptoKey, CryptoKeyToJsonWebKey } from '../utils/type-transform/CryptoKey-JsonWebKey'
 import { MessageCenter } from '../utils/messages'
 import { personRecordToPerson } from './helpers/person'
+import { isIdentifierArrayEquals } from '../utils/equality'
 
 //#region Type and utils
 /**
@@ -165,11 +166,23 @@ export async function queryPersonDB(id: PersonIdentifier): Promise<null | Person
  */
 export async function updatePersonDB(person: Partial<PersonRecord> & Pick<PersonRecord, 'identifier'>): Promise<void> {
     const full = (await queryPersonDB(person.identifier)) || { groups: [], identifier: person.identifier }
+    if (!hasDifferent()) return
+
     const o: PersonRecordInDatabase = { ...(await toDb(full)), ...(await toDb(person as PersonRecord)) }
 
     const t = (await db).transaction('people', 'readwrite')
     await t.objectStore('people').put(o)
     sendNewPersonMessageDB(await outDb(o))
+
+    function hasDifferent() {
+        if (!isIdentifierArrayEquals(full.groups, person.groups || full.groups)) return true
+        if (full.nickname !== (person.nickname || full.nickname)) return true
+        if (!isIdentifierArrayEquals(full.previousIdentifiers, person.previousIdentifiers || full.previousIdentifiers))
+            return true
+        if (full.privateKey !== (person.privateKey || full.privateKey)) return true
+        if (full.publicKey !== (person.publicKey || full.publicKey)) return true
+        return false
+    }
 }
 /**
  * Remove people from database

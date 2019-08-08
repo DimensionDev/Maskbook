@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useState } from 'react'
 import AsyncComponent from '../../utils/components/AsyncComponent'
 import { AdditionalContent } from './AdditionalPostContent'
 import { useShareMenu } from './SelectPeopleDialog'
@@ -8,7 +8,7 @@ import { geti18nString } from '../../utils/i18n'
 import { makeStyles } from '@material-ui/styles'
 import { Link, Box, useMediaQuery, useTheme } from '@material-ui/core'
 import { Person } from '../../database'
-import { PersonIdentifier } from '../../database/type'
+import { PersonIdentifier, Identifier } from '../../database/type'
 import { NotSetupYetPrompt } from './NotSetupYetPrompt'
 
 interface DecryptPostSuccessProps {
@@ -91,17 +91,17 @@ function DecryptPost(props: DecryptPostProps) {
     )
     return (
         <AsyncComponent
-            promise={() => Services.Crypto.decryptFrom(encryptedText, postBy, whoAmI)}
+            promise={() => {
+                if (whoAmI.isUnknown) return new Promise(() => {}) as typeof result
+                const result = Services.Crypto.decryptFrom(encryptedText, postBy, whoAmI)
+                return result
+            }}
             dependencies={[
                 encryptedText,
-                people
-                    .map(x => x.identifier.toText())
-                    .sort()
-                    .join(','),
-                alreadySelectedPreviously
-                    .map(x => x.identifier.toText())
-                    .sort()
-                    .join(','),
+                postBy.toText(),
+                whoAmI.toText(),
+                Identifier.IdentifiersToString(people.map(x => x.identifier)),
+                Identifier.IdentifiersToString(alreadySelectedPreviously.map(x => x.identifier)),
             ]}
             awaitingComponent={DecryptPostAwaiting}
             completeComponent={_props =>
