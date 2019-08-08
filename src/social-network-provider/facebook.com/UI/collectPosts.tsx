@@ -11,8 +11,8 @@ const posts = new LiveSelector().querySelectorAll<HTMLDivElement>(
 
 export function collectPostsFacebook(this: SocialNetworkUI) {
     new MutationObserverWatcher(posts)
-        .useForeach(node => {
-            const root = new LiveSelector().replace(() => [node.current]).closest('.userContentWrapper')
+        .useForeach((node, key, metadata) => {
+            const root = new LiveSelector().replace(() => [node]).closest('.userContentWrapper')
             // ? inject after comments
             const commentSelector = root
                 .clone()
@@ -38,23 +38,25 @@ export function collectPostsFacebook(this: SocialNetworkUI) {
                     return root.evaluateOnce()[0]! as HTMLElement
                 },
             }
-            this.posts.set(node, info)
+            this.posts.set(metadata, info)
             function collectPostInfo() {
-                info.postContent.value = node.current.innerText
+                info.postContent.value = node.innerText
                 info.postPayload.value = deconstructPayload(info.postContent.value)
-                info.postBy.value = getPostBy(node, info.postPayload.value !== null).identifier
-                info.postID.value = getPostID(node)
+                info.postBy.value = getPostBy(metadata, info.postPayload.value !== null).identifier
+                info.postID.value = getPostID(metadata)
             }
             collectPostInfo()
             return {
                 onNodeMutation: collectPostInfo,
                 onTargetChanged: collectPostInfo,
-                onRemove: () => this.posts.delete(node),
+                onRemove: () => this.posts.delete(metadata),
             }
         })
         .setDomProxyOption({ afterShadowRootInit: { mode: 'closed' } })
         .startWatch()
 }
+
+function abc<T>(watcher: MutationObserverWatcher<T, any, any>, iterator: typeof watcher['useForeach']) {}
 
 function getPostBy(node: DomProxy, allowCollectInfo: boolean) {
     const dom = isMobileFacebook

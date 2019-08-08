@@ -9,7 +9,7 @@ function findPeopleInfo() {
         .enableSingleMode()
         .useForeach(node => {
             function tryFindBioKey() {
-                const text = node.current.innerText
+                const text = node.innerText
                 const a = document.querySelector<HTMLAnchorElement>('#fb-timeline-cover-name a')
                 const id = getPersonIdentifierAtFacebook(a, true)
                 if (!id) return

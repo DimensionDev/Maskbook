@@ -74,9 +74,9 @@
     "just-task": "^0.13.1",
     "onchange": "^6.0.0",
     "prettier": "^1.18.2",
-    "web-ext": "^3.1.1",
     "react-devtools": "^3.6.1",
-    "storybook-addon-material-ui": "^0.9.0-alpha.19"
+    "storybook-addon-material-ui": "^0.9.0-alpha.19",
+    "web-ext": "^3.1.1"
   },
   "browserslist": {
     "production": [
