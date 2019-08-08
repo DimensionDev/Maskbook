@@ -32,6 +32,10 @@ export const newPostEditorOnFocusSelector = querySelector(
     `${newPostEditorString} .DraftEditor-root .public-DraftEditorPlaceholder-hasFocus`
 )
 
+const newCommentEditorString = `[aria-labelledby="modal-header"] .DraftEditor-root`
+
+export const newCommentEditorSelector = querySelector(newCommentEditorString)
+
 export const timelineSelector = querySelector(
     '[role="main"] [data-testid="primaryColumn"] section > div > div > div > *'
 )
