@@ -19,7 +19,7 @@ module.exports = function override(/** @type{import("webpack").Configuration} */
     if (env !== 'development') delete config.entry.devtools
 
     // Let bundle compatiable with web worker
-    config.output.globalObject = 'this'
+    config.output.globalObject = 'globalThis'
     config.output.filename = 'js/[name].js'
     config.output.chunkFilename = 'js/[name].chunk.js'
 
