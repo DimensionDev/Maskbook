@@ -23,12 +23,13 @@ const avatar = /"entities":{.*?"users":{.*?"entities":{.*?"[0-9]*":{.*?"profile_
 //     return base.clone().map(x => regexMatch(x.innerText, regex, index))
 // }
 
-const newPostEditorSelectorString =
-    '[role="main"] [role="progressbar"] + div .DraftEditor-root .public-DraftEditorPlaceholder-root'
+const newPostEditorString =
+    '[role="main"] [role="progressbar"] + div'
 
-export const newPostEditorSelector = querySelector(newPostEditorSelectorString)
+export const newPostEditorContainerSelector = querySelector(newPostEditorString)
+export const newPostEditorSelector = querySelector(`${newPostEditorString} .DraftEditor-root`)
 export const newPostEditorOnFocusSelector = querySelector(
-    '[role="main"] [role="progressbar"] + div .DraftEditor-root .public-DraftEditorPlaceholder-hasFocus'
+    `${newPostEditorString} .DraftEditor-root .public-DraftEditorPlaceholder-hasFocus`
 )
 
 export const timelineSelector = querySelector(

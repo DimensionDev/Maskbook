@@ -6,6 +6,7 @@ import { InitMyIdentitiesValueRef } from '../../../social-network/defaults/MyIde
 import { ValueRef } from '@holoflows/kit/es'
 import { PersonIdentifier } from '../../../database/type'
 import { resolveLastRecognizedIdentity } from './resolveLastRecognizedIdentity'
+import { injectPostBox, injectWelcomeBanner } from './inject'
 
 defineSocialNetworkUI({
     ...sharedSettings,
@@ -21,7 +22,9 @@ defineSocialNetworkUI({
     myIdentitiesRef: new ValueRef([]),
     lastRecognizedIdentity: new ValueRef({ identifier: PersonIdentifier.unknown }),
     posts: new Map(),
-    resolveLastRecognizedIdentity: resolveLastRecognizedIdentity
+    resolveLastRecognizedIdentity,
+    injectPostBox,
+    injectWelcomeBanner
 })
 
 export {}
