@@ -2,7 +2,6 @@ import React, { useCallback } from 'react'
 import { makeStyles, Theme } from '@material-ui/core/styles'
 import ExpansionPanel from '@material-ui/core/ExpansionPanel'
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary'
-import Typography from '@material-ui/core/Typography'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import { Avatar } from '../../utils/components/Avatar'
 import { Person } from '../../database'
@@ -11,6 +10,7 @@ import { PersonInList } from './SelectPeople'
 import { getActivatedUI } from '../../social-network/ui'
 import { useCurrentIdentity, useMyIdentities } from '../DataSource/useActivatedUI'
 import { PersonIdentifier } from '../../database/type'
+import { geti18nString } from '../../utils/i18n'
 
 const useStyles = makeStyles((theme: Theme) => ({
     root: { width: '100%' },
@@ -49,11 +49,13 @@ export const ChooseIdentity: React.FC<{
                         </ListItemIcon>
                         <ListItemText
                             primary={current.nickname || current.identifier.userId}
-                            secondary="点击以切换 Maskbook 账号"
+                            secondary={geti18nString('shared_choose_identity_title')}
                         />
                     </ListItem>
                 </ExpansionPanelSummary>
-                <List subheader={<ListSubheader>切換另一個賬號</ListSubheader>} classes={{ root: classes.list }}>
+                <List
+                    subheader={<ListSubheader>{geti18nString('shared_choose_identity_subtitle')}</ListSubheader>}
+                    classes={{ root: classes.list }}>
                     {availableIdentities.map(person =>
                         person.identifier.equals(current.identifier) ? null : (
                             <PersonInList

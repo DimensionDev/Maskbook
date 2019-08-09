@@ -117,6 +117,18 @@
     "welcome_1a1_didntfind": {
         "message": "沒有找到你的賬戶？"
     },
+    "welcome_1a1b_title": {
+        "message": "Maskbook 可以在這些社交網絡上使用"
+    },
+    "welcome_1a1b_danger": {
+        "message": "受審查的站點"
+    },
+    "welcome_1a1b_connect": {
+        "message": "連結"
+    },
+    "welcome_1a1b_switch": {
+        "message": "連接現有的賬戶"
+    },
     "welcome_1a2_title": {
         "message": "使用 Maskbook 的輸入框來加密"
     },
@@ -314,5 +326,11 @@
     },
     "options_mobile_export_subtitle": {
         "message": "請不要保存或將此 QR 碼分享給他人！"
+    },
+    "shared_choose_identity_title": {
+        "message": "點擊此處切換賬號"
+    },
+    "shared_choose_identity_subtitle": {
+        "message": "你的其他 Maskbook 賬戶"
     }
 }

@@ -116,6 +116,18 @@
     "welcome_1a1_didntfind": {
         "message": "Didn't find your account?"
     },
+    "welcome_1a1b_title": {
+        "message": "Maskbook supports these social networks"
+    },
+    "welcome_1a1b_danger": {
+        "message": "Censored network"
+    },
+    "welcome_1a1b_connect": {
+        "message": "Connect"
+    },
+    "welcome_1a1b_switch": {
+        "message": "Use existing accounts"
+    },
     "welcome_1a2_title": {
         "message": "Encrypt message in a Maskbook postbox"
     },
@@ -313,5 +325,11 @@
     },
     "options_mobile_export_subtitle": {
         "message": "DO NOT save or share this image to other one!"
+    },
+    "shared_choose_identity_title": {
+        "message": "Touch to switch your Maskbook account"
+    },
+    "shared_choose_identity_subtitle": {
+        "message": "Switch to another account"
     }
 }

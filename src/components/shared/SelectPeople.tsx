@@ -106,9 +106,16 @@ export function SelectPeopleUI(props: SelectPeopleUIProps) {
     const classes = useStyles()
 
     const myself = useCurrentIdentity()
+    React.useEffect(() => {
+        if (myself && ignoreMyself) {
+            const filtered = selected.find(x => x.identifier.equals(myself.identifier))
+            if (filtered) onSetSelected(selected.filter(x => x !== filtered))
+        }
+    }, [myself && myself.identifier.toText(), ignoreMyself])
     const [search, setSearch] = useState('')
     const listBeforeSearch = people.filter(x => {
-        if (selected.find(y => y.identifier.userId === x.identifier.userId)) return false
+        if (ignoreMyself && myself && x.identifier.equals(myself.identifier)) return false
+        if (selected.find(y => x.identifier.equals(y.identifier))) return false
         return true
     })
     const listAfterSearch = listBeforeSearch.filter(x => {

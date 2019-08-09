@@ -2,9 +2,6 @@ import * as React from 'react'
 import { geti18nString } from '../../utils/i18n'
 import { Typography, Button, makeStyles } from '@material-ui/core'
 import WelcomeContainer from './WelcomeContainer'
-import { SelectPeopleUI } from '../shared/SelectPeople'
-import { useState } from 'react'
-import { Person } from '../../database'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction'
@@ -40,7 +37,7 @@ export default function Welcome({ useExistingAccounts }: Props) {
         const secondary = typeof setup === 'function' ? undefined : setup
         const secondaryWithDangerous = provider.isDangerousNetwork ? (
             <>
-                <Typography color="error">Dangerous network</Typography>
+                <Typography color="error">{geti18nString('welcome_1a1b_danger')}</Typography>
                 {secondary}
             </>
         ) : (
@@ -50,7 +47,7 @@ export default function Welcome({ useExistingAccounts }: Props) {
             typeof setup === 'function' ? (
                 <ListItemSecondaryAction>
                     <Button onClick={() => setup(env, {})} color="primary">
-                        Connect
+                        {geti18nString('welcome_1a1b_connect')}
                     </Button>
                 </ListItemSecondaryAction>
             ) : null
@@ -64,13 +61,13 @@ export default function Welcome({ useExistingAccounts }: Props) {
     return (
         <WelcomeContainer className={classes.paper}>
             <List
-                subheader={<ListSubheader>Maskbook supports these social networks</ListSubheader>}
+                subheader={<ListSubheader>{geti18nString('welcome_1a1b_title')}</ListSubheader>}
                 className={classes.list}>
                 {providers.map(normal)}
             </List>
             <br />
             <Button color="primary" onClick={useExistingAccounts}>
-                Use existing accounts
+                {geti18nString('welcome_1a1b_switch')}
             </Button>
         </WelcomeContainer>
     )
