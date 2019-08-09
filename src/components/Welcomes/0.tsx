@@ -1,9 +1,9 @@
 import * as React from 'react'
-import Close from '@material-ui/icons/Close'
 import { geti18nString } from '../../utils/i18n'
-import { makeStyles, Paper, Button, Typography, Box, Theme, useTheme } from '@material-ui/core'
+import { makeStyles, Button, Typography, Box, Theme, useTheme } from '@material-ui/core'
 import { styled } from '@material-ui/styles'
 import WelcomeContainer from './WelcomeContainer'
+import Navigation from './Navigation/Navigation'
 import { IdentifierRefContext } from '../../extension/options-page/Welcome'
 import { useValueRef } from '../../utils/hooks/useValueRef'
 import { setStorage } from '../../utils/browser.storage'
@@ -49,17 +49,6 @@ const useStyles = makeStyles(theme => ({
         maxWidth: '24rem',
         margin: 'auto',
     },
-    nav: {
-        paddingTop: theme.spacing(1),
-        paddingRight: theme.spacing(1),
-        textAlign: 'right',
-    },
-    navButton: {
-        color: theme.palette.text.hint,
-    },
-    navButtonIcon: {
-        marginLeft: theme.spacing(1),
-    },
     commonButton: {
         margin: '0 0.5rem',
     },
@@ -70,12 +59,7 @@ export default function Welcome({ create, restore, close }: Props) {
     const idContext = useValueRef(React.useContext(IdentifierRefContext))
     return (
         <WelcomeContainer>
-            <nav className={classes.nav}>
-                <Button onClick={close} disableFocusRipple disableRipple className={classes.navButton}>
-                    {geti18nString('welcome_0_close_button')}
-                    <Close className={classes.navButtonIcon} />
-                </Button>
-            </nav>
+            <Navigation close={close} />
             <article className={classes.article}>
                 <Typography variant="h5" className={classes.title}>
                     {geti18nString('welcome_0_title')}

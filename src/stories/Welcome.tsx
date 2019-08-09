@@ -46,7 +46,7 @@ storiesOf('Welcome', module)
     ))
     .add('Step 1a-2', () => (
         <ResponsiveDialog open>
-            <Welcome1a2 next={to('Welcome', 'Step 1a-3')} />
+            <Welcome1a2 next={to('Welcome', 'Step 1a-3')} back={to('Welcome', 'Step 0')} />
         </ResponsiveDialog>
     ))
     .add('Step 1a-3', () => (
