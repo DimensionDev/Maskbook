@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react'
-import { SelectPeopleUI } from './SelectPeople'
+import { SelectPeopleUI } from '../shared/SelectPeople'
 import { geti18nString } from '../../utils/i18n'
 import { makeStyles } from '@material-ui/styles'
 import {

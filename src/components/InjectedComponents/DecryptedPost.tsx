@@ -9,7 +9,7 @@ import { makeStyles } from '@material-ui/styles'
 import { Link, Box, useMediaQuery, useTheme } from '@material-ui/core'
 import { Person } from '../../database'
 import { PersonIdentifier, Identifier } from '../../database/type'
-import { NotSetupYetPrompt } from './NotSetupYetPrompt'
+import { NotSetupYetPrompt } from '../shared/NotSetupYetPrompt'
 
 interface DecryptPostSuccessProps {
     data: { signatureVerifyResult: boolean; content: string }

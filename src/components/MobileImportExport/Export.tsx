@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
-import { QrCode } from './qrcode'
+import { QrCode } from '../shared/qrcode'
 import { useAsync } from '../../utils/components/AsyncComponent'
 import Services from '../../extension/service'
 import { makeStyles, Typography } from '@material-ui/core'
-import { NotSetupYetPrompt } from '../InjectedComponents/NotSetupYetPrompt'
+import { NotSetupYetPrompt } from '../shared/NotSetupYetPrompt'
 import { geti18nString } from '../../utils/i18n'
 
 const useStyles = makeStyles({

@@ -3,7 +3,7 @@ import { getUrl } from '../../utils/utils'
 import { geti18nString } from '../../utils/i18n'
 import { Typography, Button, makeStyles } from '@material-ui/core'
 import WelcomeContainer from './WelcomeContainer'
-import { SelectPeopleUI } from '../InjectedComponents/SelectPeople'
+import { SelectPeopleUI } from '../shared/SelectPeople'
 import { useState } from 'react'
 import { Person } from '../../database'
 
