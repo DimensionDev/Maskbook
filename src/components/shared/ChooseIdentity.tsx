@@ -62,7 +62,10 @@ export const ChooseIdentity: React.FC<{
                                 listItemProps={{ dense: true }}
                                 person={person}
                                 key={person.identifier.toText()}
-                                onClick={() => props.onChangeIdentity!(person)}
+                                onClick={() => {
+                                    props.onChangeIdentity!(person)
+                                    setExpanded(false)
+                                }}
                             />
                         ),
                     )}

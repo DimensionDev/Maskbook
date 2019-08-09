@@ -115,12 +115,12 @@ export interface SocialNetworkUITasks {
      * This function should paste `text` into the paste box.
      * If failed, warning user to do it by themselves with `warningText`
      */
-    taskPasteIntoPostBox(text: string, warningText: string): Promise<void>
+    taskPasteIntoPostBox(text: string, warningText: string): void
     /**
      * This function should paste `text` into the bio box.
      * If failed, warning user to do it by themselves with automation_request_click_edit_bio_button
      */
-    taskPasteIntoBio(text: string): Promise<void>
+    taskPasteIntoBio(text: string): void
     /**
      * This function should return the given post on the current page,
      * Called by `AutomatedTabTask`

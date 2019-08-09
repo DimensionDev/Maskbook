@@ -6,10 +6,11 @@ import { definedSocialNetworkUIs, defineSocialNetworkUI, activateSocialNetworkUI
 import { demoPeople } from './demoPeople'
 import { ValueRef } from '@holoflows/kit/es'
 import { PersonIdentifier } from '../database/type'
+import { emptyDefinition } from '../social-network/defaults/emptyDefinition'
 
 definedSocialNetworkUIs.clear()
-const noop = () => () => {}
 defineSocialNetworkUI({
+    ...emptyDefinition,
     friendlyName: 'Utopia',
     setupAccount: 'Setup your Utopia account in your dream',
     shouldActivate() {
@@ -18,31 +19,18 @@ defineSocialNetworkUI({
     myIdentitiesRef: new ValueRef(demoPeople),
     lastRecognizedIdentity: new ValueRef({ identifier: PersonIdentifier.unknown }),
     currentIdentity: new ValueRef(null),
-    init() {},
-    collectPeople() {},
-    collectPosts() {},
-    ignoreSetupAccount() {},
-    injectCommentBox: noop,
-    injectPostBox: noop,
-    injectPostComments: noop,
-    injectPostInspector: noop,
-    injectWelcomeBanner: noop,
-    resolveLastRecognizedIdentity: noop,
-    async shouldDisplayWelcome() {
-        return false
-    },
-    posts: new Map(),
     friendsRef: new ValueRef(demoPeople),
-} as any)
-defineSocialNetworkUI({ friendlyName: 'Neoparia Breakfast Club', setupAccount() {} } as any)
+})
+defineSocialNetworkUI({ ...emptyDefinition, friendlyName: 'Neoparia Breakfast Club' })
 defineSocialNetworkUI({
+    ...emptyDefinition,
     friendlyName: 'telnet',
     setupAccount: 'Embrace the eternal September!',
-    isDangerousNetwork: true,
-} as any)
+    isDangerousNetwork: true as any,
+})
 defineSocialNetworkUI({
+    ...emptyDefinition,
     friendlyName: 'MySpace',
-    setupAccount() {},
-    isDangerousNetwork: true,
-} as any)
+    isDangerousNetwork: true as any,
+})
 activateSocialNetworkUI()
