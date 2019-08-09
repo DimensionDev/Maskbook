@@ -12,4 +12,7 @@ export function useLastRecognizedIdentity() {
 export function useMyIdentities() {
     return useValueRef(getActivatedUI().myIdentitiesRef)
 }
-export const CurrentUsingIdentityContext = React.createContext<Person | null>(null)
+export function useCurrentIdentity(noDefault?: boolean): Person | null {
+    const all = useMyIdentities()[0] || null
+    return useValueRef(getActivatedUI().currentIdentity) || (noDefault ? null : all)
+}

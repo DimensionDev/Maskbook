@@ -41,6 +41,7 @@ defineSocialNetworkUI({
     shouldDisplayWelcome: shouldDisplayWelcomeDefault('facebook.com'),
     friendsRef: new ValueRef([]),
     myIdentitiesRef: new ValueRef([]),
+    currentIdentity: new ValueRef(null),
     lastRecognizedIdentity: new ValueRef({ identifier: PersonIdentifier.unknown }),
     posts: new Map(),
     resolveLastRecognizedIdentity: resolveLastRecognizedIdentityFacebook,

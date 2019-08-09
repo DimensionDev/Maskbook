@@ -9,7 +9,7 @@ import { makeStyles } from '@material-ui/styles'
 import { Card, CardHeader, Typography, Divider, Paper, InputBase, Button, Box } from '@material-ui/core'
 import { Person } from '../../database'
 import { NotSetupYetPrompt } from '../shared/NotSetupYetPrompt'
-import { CurrentUsingIdentityContext, useFriendsList, useMyIdentities } from '../DataSource/useActivatedUI'
+import { useFriendsList, useMyIdentities, useCurrentIdentity } from '../DataSource/useActivatedUI'
 import { getActivatedUI } from '../../social-network/ui'
 
 interface Props {
@@ -37,7 +37,7 @@ export function AdditionalPostBoxUI(props: Props) {
     const { people } = props
     const classes = useStyles()
 
-    const myself = useContext(CurrentUsingIdentityContext)
+    const myself = useCurrentIdentity()
     const [text, setText] = useState('')
     const [selectedPeople, selectPeople] = useState<Person[]>([])
 
@@ -106,9 +106,5 @@ export function AdditionalPostBox(props: Partial<Props>) {
     // TODO: Multiple account
     if (identity.length > 1) console.warn('Multiple identity found. Let user choose one.')
 
-    return (
-        <CurrentUsingIdentityContext.Provider value={identity[0]}>
-            <AdditionalPostBoxUI people={people} onRequestPost={onRequestPost} {...props} />
-        </CurrentUsingIdentityContext.Provider>
-    )
+    return <AdditionalPostBoxUI people={people} onRequestPost={onRequestPost} {...props} />
 }

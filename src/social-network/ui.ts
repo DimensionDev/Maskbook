@@ -53,6 +53,8 @@ interface SocialNetworkUIInformationCollector {
      *      Services.People.resolveIdentity(id.identifier)
      * })
      * ```
+     *
+     * If `selectedIdentity` is null, you should try to set it to an identity in the `myIdentitiesRef`
      */
     resolveLastRecognizedIdentity(): void
     /**
@@ -153,6 +155,10 @@ export interface SocialNetworkUIDataSources {
      * The account that user is using (may not in the database)
      */
     readonly lastRecognizedIdentity: ValueRef<Pick<Person, 'identifier' | 'nickname' | 'avatar'>>
+    /**
+     * The account that user is using (MUST be in the database)
+     */
+    readonly currentIdentity: ValueRef<Person | null>
     /**
      * Posts that Maskbook detects
      */

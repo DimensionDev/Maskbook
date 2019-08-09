@@ -10,6 +10,11 @@ export function resolveLastRecognizedIdentityFacebook(this: SocialNetworkUI) {
     const ref = this.lastRecognizedIdentity
     ref.addListener(id => {
         if (id.identifier.isUnknown) return
+
+        if (this.currentIdentity.value === null) {
+            this.currentIdentity.value =
+                this.myIdentitiesRef.value.find(x => id.identifier.equals(x.identifier)) || null
+        }
         Services.People.resolveIdentity(id.identifier)
     })
     const self = myUsernameLiveSelectorPC
