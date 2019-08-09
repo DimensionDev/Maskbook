@@ -14,12 +14,16 @@ const useStyles = makeStyles(theme => ({
         },
     },
 }))
-export default function Welcome() {
+interface Welcome2Props {
+    close: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void
+}
+export default function Welcome(props: Welcome2Props) {
     const classes = useStyles()
+    const { close } = props
     return (
         <Paper elevation={2} className={classes.paper}>
             <Typography variant="h5">{geti18nString('welcome_2_title')}</Typography>
-            <Button variant="contained" onClick={() => window.close()}>
+            <Button variant="contained" onClick={close}>
                 {geti18nString('welcome_2_greeting')}
             </Button>
         </Paper>

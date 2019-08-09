@@ -56,7 +56,7 @@ const WelcomeActions = {
         this.autoVerifyBio(user, prove)
     },
     onFinish(reason: 'quit' | 'done') {
-        window.close()
+        ;((this as unknown) as { props: RouteComponentProps }).props.history.replace('/')
     },
 }
 interface Welcome {
@@ -142,7 +142,7 @@ function Welcome(props: Welcome) {
                 />
             )
         case WelcomeState.End:
-            return <Welcome2 />
+            return <Welcome2 close={() => onFinish('done')} />
     }
 }
 const ResponsiveDialog = withMobileDialog({ breakpoint: 'xs' })(Dialog)
@@ -175,7 +175,13 @@ export default withRouter(function _WelcomePortal(props: RouteComponentProps) {
     const selectedId = useValueRef(selectedIdRef)
     const ownIds = useValueRef(ownedIdsRef)
 
-    // ? Update info from search
+    const onFinish = WelcomeActions.onFinish.bind({ props })
+    const closeDialog = (e: React.MouseEvent) => {
+        if ([...e.currentTarget.children].includes(e.nativeEvent.srcElement! as Element)) {
+            onFinish('quit')
+        }
+    }
+
     useEffect(() => {
         const search = new URLSearchParams(props.location.search)
 
@@ -192,18 +198,18 @@ export default withRouter(function _WelcomePortal(props: RouteComponentProps) {
     }, [props.location.search])
 
     return (
-        <ResponsiveDialog open>
+        <ResponsiveDialog open onClick={closeDialog}>
             <IdentifierRefContext.Provider value={selectedIdRef}>
                 <Welcome
                     provePost={provePost}
                     currentStep={step}
                     sideEffects={WelcomeActions}
                     onStepChange={setStep}
-                    onFinish={WelcomeActions.onFinish}
                     whoAmI={selectedId}
                     currentIdentities={ownIds}
                     personHintFromSearch={personFromURL}
                     onSelectIdentity={p => (selectedIdRef.value = p)}
+                    onFinish={onFinish}
                 />
             </IdentifierRefContext.Provider>
         </ResponsiveDialog>

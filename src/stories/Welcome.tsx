@@ -75,7 +75,7 @@ storiesOf('Welcome', module)
     ))
     .add('Step 2', () => (
         <ResponsiveDialog open>
-            <Welcome2 />
+            <Welcome2 close={action('Close')} />
         </ResponsiveDialog>
     ))
     .add('QRCode Scanner', () => (
