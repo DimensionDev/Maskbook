@@ -171,7 +171,9 @@ export type PostInfo = {
 //#endregion
 
 export const definedSocialNetworkUIs = new Set<SocialNetworkUI>()
-let activatedSocialNetworkUI: SocialNetworkUI = undefined as any
+let activatedSocialNetworkUI: SocialNetworkUI = ({
+    lastRecognizedIdentity: new ValueRef({ identifier: PersonIdentifier.unknown }),
+} as Partial<SocialNetworkUI>) as any
 export const getActivatedUI = () => activatedSocialNetworkUI
 export function activateSocialNetworkUI() {
     for (const ui of definedSocialNetworkUIs)

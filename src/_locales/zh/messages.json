@@ -28,7 +28,7 @@
         "message": "Maskbook 公鑰驗證失敗 ❌"
     },
     "add_to_key_store_failed_text": {
-        "message": "$1\n這個公鑰不會被相信。"
+        "message": "$1\nMaskbook 不會添加此密鑰。"
     },
     "decrypted_postbox_title": {
         "message": "Maskbook 解密出的文本："

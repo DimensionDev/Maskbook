@@ -12,7 +12,8 @@ const useNotSetUpYetStyles = makeStyles({
     },
 })
 export function NotSetupYetPrompt() {
-    const id = GetContext() !== 'options' ? useLastRecognizedIdentity() : null
+    const isContent = GetContext() === 'content' || GetContext() === 'debugging'
+    const id = isContent ? useLastRecognizedIdentity() : null
     const styles = useNotSetUpYetStyles()
     const button = (
         <Button
@@ -23,6 +24,7 @@ export function NotSetupYetPrompt() {
                     Services.Welcome.openWelcomePage(id)
                 }
             }}
+            disabled={isContent ? isUnknown() : false}
             color="primary"
             size="small">
             {geti18nString('click_to_setup')}
@@ -32,8 +34,22 @@ export function NotSetupYetPrompt() {
         <SnackbarContent
             classes={styles}
             elevation={0}
-            message={geti18nString('service_not_setup_yet')}
+            message={
+                <>
+                    {geti18nString('service_not_setup_yet')}
+                    {isContent && isUnknown() ? (
+                        <>
+                            <br />
+                            {geti18nString('banner_collecting_identity')}
+                        </>
+                    ) : null}
+                </>
+            }
             action={button}
         />
     )
+
+    function isUnknown(): boolean {
+        return id!.identifier.isUnknown
+    }
 }

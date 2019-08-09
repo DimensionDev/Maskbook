@@ -15,21 +15,7 @@ import { BannerUI } from '../components/Welcomes/Banner'
 import { withMobileDialog, Dialog } from '@material-ui/core'
 import QRScanner from '../components/Welcomes/QRScanner'
 import { demoPeople } from './demoPeople'
-import { defineSocialNetworkUI, definedSocialNetworkUIs } from '../social-network/ui'
 
-definedSocialNetworkUIs.clear()
-defineSocialNetworkUI({ friendlyName: 'Utopia', setupAccount: 'Setup your Utopia account in your dream' } as any)
-defineSocialNetworkUI({ friendlyName: 'Neoparia Breakfast Club', setupAccount() {} } as any)
-defineSocialNetworkUI({
-    friendlyName: 'telnet',
-    setupAccount: 'Embrace the eternal September!',
-    isDangerousNetwork: true,
-} as any)
-defineSocialNetworkUI({
-    friendlyName: 'MySpace',
-    setupAccount() {},
-    isDangerousNetwork: true,
-} as any)
 const ResponsiveDialog = withMobileDialog({ breakpoint: 'xs' })(Dialog)
 storiesOf('Welcome', module)
     .add('Banner', () => (
