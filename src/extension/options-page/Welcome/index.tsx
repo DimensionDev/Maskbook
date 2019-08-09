@@ -55,8 +55,8 @@ const WelcomeActions = {
     manualVerifyBio(user: PersonIdentifier, prove: string) {
         this.autoVerifyBio(user, prove)
     },
-    onFinish(reason: 'quit' | 'done') {
-        ;((this as unknown) as { props: RouteComponentProps }).props.history.replace('/')
+    onFinish(this: { props: RouteComponentProps }, reason: 'quit' | 'done') {
+        this.props.history.replace('/')
     },
 }
 interface Welcome {

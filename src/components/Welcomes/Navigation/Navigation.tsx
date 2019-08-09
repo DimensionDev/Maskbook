@@ -41,17 +41,13 @@ export default function Navigation({ back, close }: Props) {
                     <ArrowBack className={classes.navBackIcon} />
                     {geti18nString('back')}
                 </Button>
-            ) : (
-                <></>
-            )}
+            ) : null}
             {close ? (
                 <Button onClick={close} disableFocusRipple disableRipple className={classes.navCloseButton}>
                     {geti18nString('welcome_0_close_button')}
                     <Close className={classes.navCloseIcon} />
                 </Button>
-            ) : (
-                <></>
-            )}
+            ) : null}
         </nav>
     )
 }
