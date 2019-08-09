@@ -92,7 +92,8 @@ function DecryptPost(props: DecryptPostProps) {
     return (
         <AsyncComponent
             promise={() => {
-                if (whoAmI.isUnknown) return new Promise(() => {}) as typeof result
+                // TODO: add another ui state?
+                if (whoAmI.isUnknown) return Promise.resolve({} as typeof result)
                 const result = Services.Crypto.decryptFrom(encryptedText, postBy, whoAmI)
                 return result
             }}

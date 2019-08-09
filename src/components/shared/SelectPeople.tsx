@@ -123,7 +123,8 @@ export function SelectPeopleUI(props: SelectPeopleUIProps) {
         if (search === '') return true
         return (
             !!x.identifier.userId.toLocaleLowerCase().match(search.toLocaleLowerCase()) ||
-            !!(x.fingerprint || '').toLocaleLowerCase().match(search.toLocaleLowerCase())
+            !!(x.fingerprint || '').toLocaleLowerCase().match(search.toLocaleLowerCase()) ||
+            !!(x.nickname || '').toLocaleLowerCase().match(search.toLocaleLowerCase())
         )
     })
     const SelectAllButton = (
@@ -167,9 +168,9 @@ export function SelectPeopleUI(props: SelectPeopleUIProps) {
             </Box>
             <Box flex={1}>
                 <List dense>
-                    {listBeforeSearch.length > 0 && listBeforeSearch.length === 0 && (
+                    {listBeforeSearch.length > 0 && listAfterSearch.length === 0 && (
                         <ListItem>
-                            <ListItemText primary={geti18nString('not_found')} />
+                            <ListItemText primary={geti18nString('no_search_result')} />
                         </ListItem>
                     )}
                     {listAfterSearch.map(PeopleListItem)}

@@ -59,8 +59,8 @@
     "select_none": {
         "message": "Select None"
     },
-    "not_found": {
-        "message": "Not found"
+    "no_search_result": {
+        "message": "No result"
     },
     "cancel": {
         "message": "Cancel"

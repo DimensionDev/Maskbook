@@ -60,8 +60,8 @@
     "select_none": {
         "message": "全部取消選取"
     },
-    "not_found": {
-        "message": "找不到"
+    "no_search_result": {
+        "message": "沒有結果"
     },
     "cancel": {
         "message": "取消"
