@@ -13,14 +13,16 @@ import {
     Box,
 } from '@material-ui/core'
 import { Person } from '../../database'
-import { useState, useContext, useCallback } from 'react'
-import { CurrentUsingIdentityContext } from '../DataSource/useActivatedUI'
+import { useState, useCallback } from 'react'
+import { useCurrentIdentity } from '../DataSource/useActivatedUI'
+import { OverridableComponent } from '@material-ui/core/OverridableComponent'
 
 interface PeopleInListProps {
     person: Person
     onClick(): void
     disabled?: boolean
     showAtNetwork?: boolean
+    listItemProps?: Partial<(typeof ListItem extends OverridableComponent<infer U> ? U : never)['props']>
 }
 const usePeopleInListStyle = makeStyles(theme => ({
     overflow: {
@@ -35,7 +37,7 @@ const usePeopleInListStyle = makeStyles(theme => ({
 /**
  * Item in the list
  */
-function PersonInList({ person, onClick, disabled, showAtNetwork }: PeopleInListProps) {
+export function PersonInList({ person, onClick, disabled, showAtNetwork, listItemProps }: PeopleInListProps) {
     const classes = usePeopleInListStyle()
     const name = person.nickname || person.identifier.userId
     const withNetwork = (
@@ -45,7 +47,7 @@ function PersonInList({ person, onClick, disabled, showAtNetwork }: PeopleInList
         </>
     )
     return (
-        <ListItem button disabled={disabled} onClick={onClick}>
+        <ListItem button disabled={disabled} onClick={onClick} {...(listItemProps || {})}>
             <ListItemAvatar>
                 <Avatar person={person} />
             </ListItemAvatar>
@@ -103,7 +105,7 @@ export function SelectPeopleUI(props: SelectPeopleUIProps) {
     const { hideSelectAll, hideSelectNone, showAtNetwork, maxSelection, classes: classesProp = {} } = props
     const classes = useStyles()
 
-    const myself = useContext(CurrentUsingIdentityContext)
+    const myself = useCurrentIdentity()
     const [search, setSearch] = useState('')
     const listBeforeSearch = people.filter(x => {
         if (selected.find(y => y.identifier.userId === x.identifier.userId)) return false
