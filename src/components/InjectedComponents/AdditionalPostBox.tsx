@@ -11,6 +11,7 @@ import { Person } from '../../database'
 import { NotSetupYetPrompt } from '../shared/NotSetupYetPrompt'
 import { useFriendsList, useMyIdentities, useCurrentIdentity } from '../DataSource/useActivatedUI'
 import { getActivatedUI } from '../../social-network/ui'
+import { ChooseIdentity } from '../shared/ChooseIdentity'
 
 interface Props {
     people: Person[]
@@ -103,8 +104,14 @@ export function AdditionalPostBox(props: Partial<Props>) {
         return <NotSetupYetPrompt />
     }
 
-    // TODO: Multiple account
-    if (identity.length > 1) console.warn('Multiple identity found. Let user choose one.')
+    const ui = <AdditionalPostBoxUI people={people} onRequestPost={onRequestPost} {...props} />
 
-    return <AdditionalPostBoxUI people={people} onRequestPost={onRequestPost} {...props} />
+    if (identity.length > 1)
+        return (
+            <>
+                <ChooseIdentity />
+                {ui}
+            </>
+        )
+    return ui
 }

@@ -49,7 +49,7 @@ export const ChooseIdentity: React.FC<{
                         </ListItemIcon>
                         <ListItemText
                             primary={current.nickname || current.identifier.userId}
-                            secondary="点击以切换账号"
+                            secondary="点击以切换 Maskbook 账号"
                         />
                     </ListItem>
                 </ExpansionPanelSummary>

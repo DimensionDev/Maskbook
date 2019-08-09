@@ -2,12 +2,7 @@ import './Welcome'
 import './OptionsPage'
 import './Injections'
 import './shared'
-import {
-    definedSocialNetworkUIs,
-    defineSocialNetworkUI,
-    SocialNetworkUI,
-    activateSocialNetworkUI,
-} from '../social-network/ui'
+import { definedSocialNetworkUIs, defineSocialNetworkUI, activateSocialNetworkUI } from '../social-network/ui'
 import { demoPeople } from './demoPeople'
 import { ValueRef } from '@holoflows/kit/es'
 import { PersonIdentifier } from '../database/type'
@@ -37,6 +32,7 @@ defineSocialNetworkUI({
         return false
     },
     posts: new Map(),
+    friendsRef: new ValueRef(demoPeople),
 } as any)
 defineSocialNetworkUI({ friendlyName: 'Neoparia Breakfast Club', setupAccount() {} } as any)
 defineSocialNetworkUI({
