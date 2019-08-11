@@ -1,5 +1,5 @@
 import { LiveSelector, MutationObserverWatcher } from '@holoflows/kit/es'
-import { getPersonIdentifierAtFacebook } from '../../../social-network-provider/facebook.com/getPersonIdentifierAtFacebook'
+import { getPersonIdentifierAtFacebook } from '../getPersonIdentifierAtFacebook'
 import Services from '../../../extension/service'
 
 function findPeopleInfo() {

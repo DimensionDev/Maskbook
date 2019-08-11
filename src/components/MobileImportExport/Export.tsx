@@ -5,8 +5,7 @@ import Services from '../../extension/service'
 import { makeStyles, Typography } from '@material-ui/core'
 import { NotSetupYetPrompt } from '../shared/NotSetupYetPrompt'
 import { geti18nString } from '../../utils/i18n'
-import { useMyIdentities, useCurrentIdentity } from '../DataSource/useActivatedUI'
-import { Person } from '../../database'
+import { useCurrentIdentity, useMyIdentities } from '../DataSource/useActivatedUI'
 import { ChooseIdentity } from '../shared/ChooseIdentity'
 
 const useStyles = makeStyles({

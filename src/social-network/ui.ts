@@ -1,7 +1,7 @@
-import { env, SocialNetworkWorkerAndUI, Profile, Env, Preference } from './shared'
-import { ValueRef, LiveSelector, DomProxy } from '@holoflows/kit/es'
-import { Person } from '../database/helpers/person'
-import { PostIdentifier, PersonIdentifier } from '../database/type'
+import { env, Env, Preference, Profile, SocialNetworkWorkerAndUI } from './shared'
+import { DomProxy, LiveSelector, ValueRef } from '@holoflows/kit/es'
+import { Person } from '../database'
+import { PersonIdentifier, PostIdentifier } from '../database/type'
 import { PayloadAlpha40 } from '../utils/type-transform/Payload'
 
 //#region SocialNetworkUI

@@ -1,10 +1,9 @@
 import * as React from 'react'
-import { getUrl } from '../../utils/utils'
+import { useState } from 'react'
 import { geti18nString } from '../../utils/i18n'
-import { Typography, Button, makeStyles } from '@material-ui/core'
+import { Button, makeStyles, Typography } from '@material-ui/core'
 import WelcomeContainer from './WelcomeContainer'
 import { SelectPeopleUI } from '../shared/SelectPeople'
-import { useState } from 'react'
 import { Person } from '../../database'
 
 interface Props {

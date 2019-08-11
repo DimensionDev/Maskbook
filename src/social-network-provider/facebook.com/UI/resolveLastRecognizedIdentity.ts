@@ -1,5 +1,5 @@
 import { LiveSelector } from '@holoflows/kit/es/DOM/LiveSelector'
-import { MutationObserverWatcher, ValueRef } from '@holoflows/kit/es'
+import { MutationObserverWatcher } from '@holoflows/kit/es'
 import { PersonIdentifier } from '../../../database/type'
 import Services from '../../../extension/service'
 import { SocialNetworkUI } from '../../../social-network/ui'

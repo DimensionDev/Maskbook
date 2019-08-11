@@ -1,18 +1,18 @@
 import React, { useCallback } from 'react'
-import { makeStyles, Theme } from '@material-ui/core/styles'
+import { makeStyles } from '@material-ui/core/styles'
 import ExpansionPanel from '@material-ui/core/ExpansionPanel'
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import { Avatar } from '../../utils/components/Avatar'
 import { Person } from '../../database'
-import { List, ListSubheader, ListItem, ListItemIcon, ListItemText } from '@material-ui/core'
+import { List, ListItem, ListItemIcon, ListItemText, ListSubheader } from '@material-ui/core'
 import { PersonInList } from './SelectPeople'
 import { getActivatedUI } from '../../social-network/ui'
 import { useCurrentIdentity, useMyIdentities } from '../DataSource/useActivatedUI'
 import { PersonIdentifier } from '../../database/type'
 import { geti18nString } from '../../utils/i18n'
 
-const useStyles = makeStyles((theme: Theme) => ({
+const useStyles = makeStyles(() => ({
     root: { width: '100%' },
     expansionRoot: { padding: '0 12px' },
     expansionContent: { margin: '6px 0' },

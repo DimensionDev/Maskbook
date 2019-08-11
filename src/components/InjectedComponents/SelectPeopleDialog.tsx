@@ -1,18 +1,19 @@
-import React, { useState, useCallback } from 'react'
+import React, { useCallback, useState } from 'react'
 import { SelectPeopleUI } from '../shared/SelectPeople'
 import { geti18nString } from '../../utils/i18n'
 import { makeStyles } from '@material-ui/styles'
 import {
-    Dialog,
-    DialogTitle,
-    DialogContent,
-    DialogActions,
     Button,
     CircularProgress,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogTitle,
     withMobileDialog,
 } from '@material-ui/core'
 import { Person } from '../../database'
 import { PortalShadowRoot } from '../../utils/jss/ShadowRootPortal'
+
 interface Props {
     open: boolean
     people: Person[]
@@ -92,7 +93,6 @@ export function useShareMenu(
 
     return {
         showShare,
-        // hideShare,
         ShareMenu: (
             <SelectPeopleDialog
                 alreadySelectedPreviously={alreadySelectedPreviously}

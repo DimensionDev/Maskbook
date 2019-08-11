@@ -18,9 +18,9 @@
  * @type {Record<string, CryptoKey>} Record of <userId, CryptoKey>
  * @keys outline, string, which means network.
  */
-import { PersonIdentifier, Identifier, GroupIdentifier } from './type'
-import { openDB, DBSchema } from 'idb/with-async-ittr'
-import { JsonWebKeyToCryptoKey, CryptoKeyToJsonWebKey } from '../utils/type-transform/CryptoKey-JsonWebKey'
+import { GroupIdentifier, Identifier, PersonIdentifier } from './type'
+import { DBSchema, openDB } from 'idb/with-async-ittr'
+import { CryptoKeyToJsonWebKey, JsonWebKeyToCryptoKey } from '../utils/type-transform/CryptoKey-JsonWebKey'
 import { MessageCenter } from '../utils/messages'
 import { personRecordToPerson } from './helpers/person'
 import { isIdentifierArrayEquals } from '../utils/equality'
@@ -128,7 +128,6 @@ export async function storeNewPersonDB(record: PersonRecord): Promise<void> {
 }
 /**
  * Query person with a identifier
- * @param id - Identifier
  */
 export async function queryPeopleDB(
     query: ((key: PersonIdentifier, record: PersonRecordInDatabase) => boolean) | { network: string },
