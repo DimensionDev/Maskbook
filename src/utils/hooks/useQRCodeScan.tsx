@@ -1,7 +1,7 @@
 /// <reference path="../../components/Welcomes/QRScanner/ShapeDetectionSpec.d.ts" />
 /** This file is published under MIT License */
-import { useRef, useEffect } from 'react'
-import { useRequestCamera, getFrontVideoDevices } from './useRequestCamera'
+import { useRef, useEffect, useState } from 'react'
+import { useRequestCamera, getBackVideoDeviceId } from './useRequestCamera'
 import { useInterval } from './useInterval'
 import '../../components/Welcomes/QRScanner/ShapeDetectionPolyfill'
 
@@ -14,33 +14,38 @@ export function useQRCodeScan(
     // ? Get video stream
     {
         const permission = useRequestCamera(isScanning)
-        const ref = useRef<MediaStream | null>(null)
-        useEffect(() => {
-            ref.current && ref.current.getTracks().forEach(x => x.stop())
-        }, [])
+        const [mediaStream, setMediaStream] = useState<MediaStream | null>(null)
+
         useEffect(() => {
             async function start() {
                 if (permission !== 'granted') return
-                const device = await getFrontVideoDevices()
-                const media = await navigator.mediaDevices.getUserMedia({
-                    audio: false,
-                    video: device === null ? { facingMode: 'environment' } : { deviceId: device },
-                })
-                ref.current = media
-                if (!video.current) return
-                video.current.srcObject = media
-                video.current.play()
+                try {
+                    const device = await getBackVideoDeviceId()
+                    const media = await navigator.mediaDevices.getUserMedia({
+                        audio: false,
+                        video: device === null ? { facingMode: 'environment' } : { deviceId: device },
+                    })
+                    setMediaStream(media)
+                    if (!video.current) return
+                    video.current.srcObject = media
+                    video.current.play()
+                } catch (e) {
+                    setMediaStream(null)
+                    if (!video.current) return
+                    video.current.srcObject = null
+                    video.current.pause()
+                }
             }
             function stop() {
-                ref.current && ref.current.getTracks().forEach(x => x.stop())
-                ref.current = null
+                mediaStream && mediaStream.getTracks().forEach(x => x.stop())
+                setMediaStream(null)
                 video.current!.pause()
             }
             if (!video.current) return
-            if (isScanning && !ref.current) start()
-            if (isScanning && ref.current) video.current.play()
-            if (!isScanning && ref.current) stop()
-            if (!isScanning && !ref.current) video.current.pause()
+            if (isScanning && !mediaStream) start()
+            if (isScanning && mediaStream) video.current.play()
+            if (!isScanning && mediaStream) stop()
+            if (!isScanning && !mediaStream) video.current.pause()
         }, [isScanning, permission, video.current])
     }
     // ? Do scan
