@@ -11,7 +11,7 @@ import {
     addPersonPublicKey,
     publishPostAESKey as publishPostAESKey_Service,
     queryPostAESKey,
-    gun,
+    gun1,
 } from '../../network/gun/version.1'
 import { queryPostDB, updatePostDB } from '../../database/post'
 
@@ -277,7 +277,7 @@ export async function getSharedListOfPost(postSalt: string, postBy: PersonIdenti
         ((await queryPostDB(new PostIdentifier(postBy, postSalt.replace(/\//g, '|')))) || { recipients: [] })
             .recipients || []
     // ! todo: gun 1
-    const post = await gun
+    const post = await gun1
         .get('posts')
         .get(postSalt)
         .once().then!()

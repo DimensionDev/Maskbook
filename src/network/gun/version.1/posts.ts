@@ -1,6 +1,7 @@
+// tslint:disable: deprecation
 import { PublishedAESKey } from '../../../crypto/crypto-alpha-40'
 import { OnlyRunInContext } from '@holoflows/kit/es'
-import { gun } from '.'
+import { gun1 } from '.'
 import { updatePostDB } from '../../../database/post'
 import { PostIdentifier, PersonIdentifier } from '../../../database/type'
 
@@ -8,9 +9,10 @@ OnlyRunInContext('background', 'gun')
 /**
  * @param salt The salt of this post
  * @param myUsername My username of this post
+ * @deprecated
  */
 export async function queryPostAESKey(salt: string, myUsername: string) {
-    const result = await gun
+    const result = await gun1
         .get('posts')
         .get(salt)
         .get(myUsername)
@@ -19,6 +21,7 @@ export async function queryPostAESKey(salt: string, myUsername: string) {
     return undefined
 }
 
+/** @deprecated */
 export async function publishPostAESKey(
     postIdentifier: string,
     whoAmI: PersonIdentifier,
@@ -42,10 +45,8 @@ export async function publishPostAESKey(
         },
         'append',
     )
-    await gun
+    await gun1
         .get('posts')
         .get(postIdentifier)
         .put(stored).then!()
 }
-
-Object.assign(window, { queryPostAESKey, publishPostAESKey })

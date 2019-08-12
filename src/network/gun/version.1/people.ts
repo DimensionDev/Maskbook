@@ -1,18 +1,22 @@
+// tslint:disable: deprecation
 import { PersonUI, PersonIdentifier, PostIdentifier } from '../../../database/type'
 import getCurrentNetworkWorker from '../../../social-network/utils/getCurrentNetworkWorker'
 import { verifyOthersProve } from '../../../extension/background-script/CryptoService'
 import { sleep } from '@holoflows/kit/es/util/sleep'
 import { queryPersonDB } from '../../../database/people'
 import { geti18nString } from '../../../utils/i18n'
-import { gun } from '.'
+import { gun1 } from '.'
 
+/** @deprecated */
 export async function queryPersonFromGun(username: string) {
-    return gun
+    return gun1
         .get('users')
         .get(username)
         .once().then!()
 }
 const fetchKeyCache = new Map<string, Promise<PersonUI>>()
+
+/** @deprecated */
 export function addPersonPublicKey(user: PersonIdentifier): Promise<PersonUI> {
     if (fetchKeyCache.has(user.toText())) {
         return fetchKeyCache.get(user.toText())!
@@ -22,6 +26,8 @@ export function addPersonPublicKey(user: PersonIdentifier): Promise<PersonUI> {
     fetchKeyCache.set(user.toText(), promise)
     return promise
 }
+
+/** @deprecated */
 async function addPersonPublicKeyImpl(user: PersonIdentifier): Promise<PersonUI> {
     const fromBio = async () => {
         const profile = await getCurrentNetworkWorker(user).fetchProfile(user)
@@ -63,11 +69,11 @@ async function addPersonPublicKeyImpl(user: PersonIdentifier): Promise<PersonUI>
     return person
 }
 
+/** @deprecated */
 export async function uploadProvePostUrl(post: PostIdentifier<PersonIdentifier>) {
     const { postId, identifier } = post
     if (!(identifier instanceof PersonIdentifier)) return
     const { userId: username } = identifier
     if (!postId) return
-    return gun.get('users').put({ [username]: { provePostId: postId } }).then!()
+    return gun1.get('users').put({ [username]: { provePostId: postId } }).then!()
 }
-Object.assign(window, { queryPersonFromGun, uploadProvePostUrl, addKey: addPersonPublicKey })

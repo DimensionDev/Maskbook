@@ -1,3 +1,4 @@
+// tslint:disable: deprecation
 import Gun from 'gun'
 import 'gun/lib/then'
 import { OnlyRunInContext } from '@holoflows/kit/es'
@@ -29,4 +30,5 @@ export interface ApplicationStateInGunVersion1 {
         }
     }
 }
-export const gun = new Gun<ApplicationStateInGunVersion1>(['http://172.104.123.119:8765/gun']).get('maskbook')
+/** @deprecated */
+export const gun1 = new Gun<ApplicationStateInGunVersion1>(['http://172.104.123.119:8765/gun']).get('maskbook')
