@@ -23,13 +23,12 @@ const avatar = /"entities":{.*?"users":{.*?"entities":{.*?"[0-9]*":{.*?"profile_
 //     return base.clone().map(x => regexMatch(x.innerText, regex, index))
 // }
 
-const newPostEditorString =
-    '[role="main"] [role="progressbar"] + div'
+const newPostEditorString = '[role="main"] [role="progressbar"] + div'
 
 export const newPostEditorContainerSelector = querySelector(newPostEditorString)
 export const newPostEditorSelector = querySelector(`${newPostEditorString} .DraftEditor-root`)
 export const newPostEditorOnFocusSelector = querySelector(
-    `${newPostEditorString} .DraftEditor-root .public-DraftEditorPlaceholder-hasFocus`
+    `${newPostEditorString} .DraftEditor-root .public-DraftEditorPlaceholder-hasFocus`,
 )
 
 const newCommentEditorString = `[aria-labelledby="modal-header"] .DraftEditor-root`
@@ -37,12 +36,11 @@ const newCommentEditorString = `[aria-labelledby="modal-header"] .DraftEditor-ro
 export const newCommentEditorSelector = querySelector(newCommentEditorString)
 
 export const timelineSelector = querySelector(
-    '[role="main"] [data-testid="primaryColumn"] section > div > div > div > *'
+    '[role="main"] [data-testid="primaryColumn"] section > div > div > div > *',
 )
 
 const personIdentifierLiveSelectorFactory = (regex: RegExp, index: number) => {
-    return base.clone()
-        .map(x => toPersonIdentifier(x, regex, index))
+    return base.clone().map(x => toPersonIdentifier(x, regex, index))
 }
 
 const toPersonIdentifier = (x: HTMLElement, regex: RegExp, index: number) => {
