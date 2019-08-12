@@ -18,6 +18,7 @@ import { injectCommentBoxDefault } from '../../social-network/defaults/injectCom
 import { selectElementContents, dispatchCustomEvents, sleep } from '../../utils/utils'
 import { collectPostsFacebook } from './UI/collectPosts'
 import { injectPostInspectorFacebook } from './UI/injectPostInspector'
+import { setStorage } from '../../utils/browser.storage'
 
 defineSocialNetworkUI({
     ...sharedProvider,
@@ -29,9 +30,18 @@ defineSocialNetworkUI({
     shouldActivate() {
         return location.hostname.endsWith('facebook.com')
     },
+    friendlyName: 'Facebook',
+    setupAccount() {
+        setStorage('facebook.com', { forceDisplayWelcome: true })
+        window.open('https://facebook.com/')
+    },
+    ignoreSetupAccount() {
+        setStorage('facebook.com', { userIgnoredWelcome: true })
+    },
     shouldDisplayWelcome: shouldDisplayWelcomeDefault('facebook.com'),
     friendsRef: new ValueRef([]),
     myIdentitiesRef: new ValueRef([]),
+    currentIdentity: new ValueRef(null),
     lastRecognizedIdentity: new ValueRef({ identifier: PersonIdentifier.unknown }),
     posts: new Map(),
     resolveLastRecognizedIdentity: resolveLastRecognizedIdentityFacebook,

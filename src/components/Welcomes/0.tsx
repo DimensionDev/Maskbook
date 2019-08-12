@@ -86,20 +86,11 @@ export default function Welcome({ create, restore, close }: Props) {
                 <LinedBox theme={theme}>
                     <Box flex={1}>
                         <Typography variant="body1">{geti18nString('welcome_0_new_user')}</Typography>
-                        <Typography variant="h6">{geti18nString('welcome_0_connect_facebook')}</Typography>
+                        <Typography variant="h6">{geti18nString('welcome_0_connect_maskbook')}</Typography>
                     </Box>
                     <VerticalCenter>
-                        <Button
-                            className={classes.commonButton}
-                            onClick={() => {
-                                if (idContext.isUnknown) {
-                                    setStorage({ userDismissedWelcome: false })
-                                    location.href = 'https://facebook.com/'
-                                } else create()
-                            }}
-                            variant="contained"
-                            color="primary">
-                            {geti18nString('welcome_0_connect_facebook')}
+                        <Button className={classes.commonButton} onClick={create} variant="contained" color="primary">
+                            {geti18nString('welcome_0_connect_maskbook')}
                         </Button>
                     </VerticalCenter>
                 </LinedBox>

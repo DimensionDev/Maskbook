@@ -9,17 +9,16 @@ task('install/holoflows', () => {
 
 const lintCommand = async (str, level = 'log') => {
     const listen = 'onchange "./src/**/*" -i --'
-    await step(
-        `${listen} prettier --${str} "./src/**/*.{ts,tsx}" --loglevel ${level}`)
+    await step(`${listen} prettier --${str} "./src/**/*.{ts,tsx}" --loglevel ${level}`)
 }
 
 task('lint', () => lintCommand('check'))
 task('lint/fix', () => lintCommand('write', 'warn'))
 
-task('storybook/serve', () => step('start-storybook -p 9009 -s public'))
+task('storybook/serve', () => step('start-storybook -p 9009 -s public --quiet', true))
 
 task('storybook', parallel('lint/fix', 'storybook/serve'))
-task('storybook/build', () => step('build-storybook -s public'))
+task('storybook/build', () => step('build-storybook -s public --quiet', true))
 
 task('react/start', () => step('react-app-rewired start'))
 task('react/build', () => step('react-app-rewired build'))

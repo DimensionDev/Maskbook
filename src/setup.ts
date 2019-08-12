@@ -1,11 +1,14 @@
 import './social-network-provider/facebook.com/ui-provider'
 import './social-network-provider/facebook.com/worker-provider'
+import './social-network-provider/options-page/index'
 export function backgroundSetup() {
     Object.assign(window, {
         elliptic: require('elliptic'),
     })
 }
-import { activateSocialNetworkUI } from './social-network/ui'
+import { activateSocialNetworkUI, definedSocialNetworkUIs } from './social-network/ui'
+import { definedSocialNetworkWorkers } from './social-network/worker'
+Object.assign(window, { definedSocialNetworkWorkers, definedSocialNetworkUIs })
 export function uiSetup() {
     activateSocialNetworkUI()
 

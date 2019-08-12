@@ -2,7 +2,7 @@ import React from 'react'
 import { storiesOf } from '@storybook/react'
 import { text, boolean } from '@storybook/addon-knobs'
 import { action } from '@storybook/addon-actions'
-import { AdditionalPostBoxUI } from '../components/InjectedComponents/AdditionalPostBox'
+import { AdditionalPostBox } from '../components/InjectedComponents/AdditionalPostBox'
 import { AdditionalContent } from '../components/InjectedComponents/AdditionalPostContent'
 import { DecryptPostUI } from '../components/InjectedComponents/DecryptedPost'
 import { AddToKeyStoreUI } from '../components/InjectedComponents/AddToKeyStore'
@@ -14,7 +14,7 @@ import { demoPeople } from './demoPeople'
 import { PostCommentDecrypted } from '../components/InjectedComponents/PostComments'
 
 storiesOf('Injections', module)
-    .add('AdditionalPostBox', () => <AdditionalPostBoxUI people={demoPeople} onRequestPost={action('onRequestPost')} />)
+    .add('AdditionalPostBox', () => <AdditionalPostBox onRequestPost={action('onRequestPost')} />)
     .add('Additional Post Content', () => (
         <Paper>
             <AdditionalContent title="Additional Content" renderText={text('Rich text', '')} />

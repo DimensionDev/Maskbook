@@ -5,7 +5,7 @@ import { demoPeople } from './demoPeople'
 import { action } from '@storybook/addon-actions'
 import Dashboard from '../components/Dashboard/Dashboard'
 import Privacy from '../extension/options-page/Privacy'
-import { QrCode } from '../components/MobileImportExport/qrcode'
+import { QrCode } from '../components/shared/qrcode'
 import { text } from '@storybook/addon-knobs'
 import { ExportData } from '../components/MobileImportExport/Export'
 

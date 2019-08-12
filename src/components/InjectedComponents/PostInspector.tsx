@@ -7,7 +7,7 @@ import Services from '../../extension/service'
 import { PersonIdentifier, PostIdentifier } from '../../database/type'
 import { Person } from '../../database'
 import { styled } from '@material-ui/core/styles'
-import { useFriendsList, useMyIdentities } from '../DataSource/useActivatedUI'
+import { useFriendsList, useCurrentIdentity } from '../DataSource/useActivatedUI'
 
 const Debug = styled('div')({ display: 'none' })
 interface PostInspectorProps {
@@ -19,9 +19,7 @@ interface PostInspectorProps {
 }
 export function PostInspector(props: PostInspectorProps) {
     const { post, postBy, postId } = props
-    // TODO:
-    const identities = useMyIdentities()
-    const whoAmI = (identities[0] && identities[0].identifier) || PersonIdentifier.unknown
+    const whoAmI = useCurrentIdentity()
     const people = useFriendsList()
     const [alreadySelectedPreviously, setAlreadySelectedPreviously] = useState<Person[]>([])
     const type = {
@@ -29,9 +27,10 @@ export function PostInspector(props: PostInspectorProps) {
         provePost: post.match(/🔒(.+)🔒/)!,
     }
     if (type.provePost) Services.People.uploadProvePostUrl(new PostIdentifier(postBy, postId))
-    useAsync(() => {
-        if (!whoAmI.equals(postBy)) return Promise.resolve([])
-        if (!type.encryptedPost) return Promise.resolve([])
+    useAsync(async () => {
+        if (!whoAmI) return []
+        if (!whoAmI.identifier.equals(postBy)) return []
+        if (!type.encryptedPost) return []
         const { iv } = type.encryptedPost
         return Services.Crypto.getSharedListOfPost(iv, postBy)
     }, [post, postBy, whoAmI]).then(p => setAlreadySelectedPreviously(p))
@@ -55,13 +54,13 @@ export function PostInspector(props: PostInspectorProps) {
                             ownersAESKeyEncrypted,
                             iv,
                             people.map(x => x.identifier),
-                            whoAmI,
+                            whoAmI!.identifier,
                         )
                     }}
                     alreadySelectedPreviously={alreadySelectedPreviously}
                     people={people}
                     encryptedText={post}
-                    whoAmI={whoAmI}
+                    whoAmI={whoAmI ? whoAmI.identifier : PersonIdentifier.unknown}
                     postBy={postBy}
                 />
             </>

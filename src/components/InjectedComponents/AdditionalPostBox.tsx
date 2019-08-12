@@ -1,16 +1,17 @@
 import * as React from 'react'
-import { SelectPeopleUI } from './SelectPeople'
-import { useRef, useContext, useState, useCallback } from 'react'
+import { useCallback, useRef, useState } from 'react'
+import { SelectPeopleUI } from '../shared/SelectPeople'
 import { useCapturedInput } from '../../utils/hooks/useCapturedEvents'
 import { Avatar } from '../../utils/components/Avatar'
 import Services from '../../extension/service'
 import { geti18nString } from '../../utils/i18n'
 import { makeStyles } from '@material-ui/styles'
-import { Card, CardHeader, Typography, Divider, Paper, InputBase, Button, Box } from '@material-ui/core'
+import { Box, Button, Card, CardHeader, Divider, InputBase, Paper, Typography } from '@material-ui/core'
 import { Person } from '../../database'
-import { NotSetupYetPrompt } from './NotSetupYetPrompt'
-import { CurrentUsingIdentityContext, useFriendsList, useMyIdentities } from '../DataSource/useActivatedUI'
+import { NotSetupYetPrompt } from '../shared/NotSetupYetPrompt'
+import { useCurrentIdentity, useFriendsList, useMyIdentities } from '../DataSource/useActivatedUI'
 import { getActivatedUI } from '../../social-network/ui'
+import { ChooseIdentity } from '../shared/ChooseIdentity'
 
 interface Props {
     people: Person[]
@@ -37,7 +38,7 @@ export function AdditionalPostBoxUI(props: Props) {
     const { people } = props
     const classes = useStyles()
 
-    const myself = useContext(CurrentUsingIdentityContext)
+    const myself = useCurrentIdentity()
     const [text, setText] = useState('')
     const [selectedPeople, selectPeople] = useState<Person[]>([])
 
@@ -103,12 +104,14 @@ export function AdditionalPostBox(props: Partial<Props>) {
         return <NotSetupYetPrompt />
     }
 
-    // TODO: Multiple account
-    if (identity.length > 1) console.warn('Multiple identity found. Let user choose one.')
+    const ui = <AdditionalPostBoxUI people={people} onRequestPost={onRequestPost} {...props} />
 
-    return (
-        <CurrentUsingIdentityContext.Provider value={identity[0]}>
-            <AdditionalPostBoxUI people={people} onRequestPost={onRequestPost} {...props} />
-        </CurrentUsingIdentityContext.Provider>
-    )
+    if (identity.length > 1)
+        return (
+            <>
+                <ChooseIdentity />
+                {ui}
+            </>
+        )
+    return ui
 }

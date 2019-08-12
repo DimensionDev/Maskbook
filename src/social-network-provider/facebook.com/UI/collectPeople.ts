@@ -1,8 +1,7 @@
 import { LiveSelector, MutationObserverWatcher } from '@holoflows/kit/es'
-import { getPersonIdentifierAtFacebook } from '../../../social-network-provider/facebook.com/getPersonIdentifierAtFacebook'
+import { getPersonIdentifierAtFacebook } from '../getPersonIdentifierAtFacebook'
 import Services from '../../../extension/service'
 
-// TODO: also collect nickname and avatar!
 function findPeopleInfo() {
     // TODO: support mobile
     const bio = new LiveSelector().querySelector<HTMLDivElement>('#profile_timeline_intro_card')
@@ -10,11 +9,11 @@ function findPeopleInfo() {
         .enableSingleMode()
         .useForeach(node => {
             function tryFindBioKey() {
-                const text = node.current.innerText
+                const text = node.innerText
                 const a = document.querySelector<HTMLAnchorElement>('#fb-timeline-cover-name a')
                 const id = getPersonIdentifierAtFacebook(a, true)
                 if (!id) return
-                Services.Crypto.verifyOthersProve(text, id)
+                Services.Crypto.verifyOthersProve(text, id.identifier)
             }
             tryFindBioKey()
             return {

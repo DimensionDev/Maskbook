@@ -16,13 +16,13 @@ export function injectPostCommentsDefault(config: injectPostCommentsDefaultConfi
     return function injectPostComments(this: SocialNetworkUI, current: PostInfo) {
         const selector = current.commentsSelector
         const commentWatcher = new MutationObserverWatcher(selector, current.rootNode)
-            .useForeach(commentNode => {
-                const commentRef = new ValueRef(commentNode.current.innerText)
+            .useForeach((commentNode, key, meta) => {
+                const commentRef = new ValueRef(commentNode.innerText)
                 const needZipDefault = () => {
-                    commentNode.current.style.whiteSpace = 'nowrap'
-                    commentNode.current.style.overflow = 'hidden'
+                    commentNode.style.whiteSpace = 'nowrap'
+                    commentNode.style.overflow = 'hidden'
                 }
-                const injectionPointDefault = () => commentNode.afterShadow
+                const injectionPointDefault = () => meta.afterShadow
                 const unmount = renderInShadowRoot(
                     <PostComment
                         needZip={needZip || needZipDefault}
@@ -30,14 +30,14 @@ export function injectPostCommentsDefault(config: injectPostCommentsDefaultConfi
                         commentContent={commentRef}
                         postPayload={current.postPayload}
                     />,
-                    (getInjectionPoint || injectionPointDefault)(commentNode),
+                    (getInjectionPoint || injectionPointDefault)(meta),
                 )
                 return {
                     onNodeMutation() {
-                        commentRef.value = commentNode.current.innerText
+                        commentRef.value = commentNode.innerText
                     },
                     onTargetChanged() {
-                        commentRef.value = commentNode.current.innerText
+                        commentRef.value = commentNode.innerText
                     },
                     onRemove() {
                         unmount()

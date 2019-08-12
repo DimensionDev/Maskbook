@@ -1,10 +1,12 @@
 import React, { useState } from 'react'
-import { QrCode } from './qrcode'
+import { QrCode } from '../shared/qrcode'
 import { useAsync } from '../../utils/components/AsyncComponent'
 import Services from '../../extension/service'
 import { makeStyles, Typography } from '@material-ui/core'
-import { NotSetupYetPrompt } from '../InjectedComponents/NotSetupYetPrompt'
+import { NotSetupYetPrompt } from '../shared/NotSetupYetPrompt'
 import { geti18nString } from '../../utils/i18n'
+import { useCurrentIdentity, useMyIdentities } from '../DataSource/useActivatedUI'
+import { ChooseIdentity } from '../shared/ChooseIdentity'
 
 const useStyles = makeStyles({
     root: {
@@ -22,16 +24,18 @@ const useStyles = makeStyles({
         alignItems: 'center',
     },
 })
-export function ExportData(props: {}) {
+export function ExportData() {
     const classes = useStyles()
     const [file, setFile] = useState('')
-    const [hasId, setHasId] = useState(false)
+
+    const id = useMyIdentities()
+    const current = useCurrentIdentity()
+
     useAsync(async () => {
-        const id = await Services.People.queryMyIdentity()
-        if (id.length !== 0) setHasId(true)
-        return Services.Welcome.backupMyKeyPair(id[0].identifier, false)
-    }, []).then(x => setFile(JSON.stringify(x)))
-    if (!hasId) {
+        if (!current) return ''
+        return Services.Welcome.backupMyKeyPair(current.identifier, false)
+    }, [current]).then(x => setFile(JSON.stringify(x)))
+    if (id.length === 0) {
         return (
             <main className={classes.root}>
                 <NotSetupYetPrompt />
@@ -40,6 +44,7 @@ export function ExportData(props: {}) {
     }
     return (
         <main className={classes.root}>
+            {id.length > 1 ? <ChooseIdentity /> : null}
             <div className={classes.code}>
                 {file ? (
                     <QrCode text={file} />

@@ -19,12 +19,12 @@ export default AutomatedTabTask(
          * Access profile page
          * Paste text into bio
          */
-        pasteIntoBio: (text: string) => getActivatedUI().taskPasteIntoBio(text),
+        pasteIntoBio: async (text: string) => getActivatedUI().taskPasteIntoBio(text),
         /**
          * Access main page
          * Paste text into PostBox
          */
-        pasteIntoPostBox: (text: string, warningText: string) =>
+        pasteIntoPostBox: async (text: string, warningText: string) =>
             getActivatedUI().taskPasteIntoPostBox(text, warningText),
     },
     { memorable: true },

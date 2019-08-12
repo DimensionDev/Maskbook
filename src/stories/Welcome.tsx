@@ -1,6 +1,8 @@
 import React from 'react'
 import { storiesOf } from '@storybook/react'
 import Welcome0 from '../components/Welcomes/0'
+import Welcome1a1a from '../components/Welcomes/1a1a'
+import Welcome1a1b from '../components/Welcomes/1a1b'
 import Welcome1a2 from '../components/Welcomes/1a2'
 import Welcome1a3 from '../components/Welcomes/1a3'
 import Welcome1a4v2 from '../components/Welcomes/1a4.v2'
@@ -12,8 +14,9 @@ import { action } from '@storybook/addon-actions'
 import { BannerUI } from '../components/Welcomes/Banner'
 import { withMobileDialog, Dialog } from '@material-ui/core'
 import QRScanner from '../components/Welcomes/QRScanner'
+import { demoPeople } from './demoPeople'
 
-const ResponsiveDialog = withMobileDialog()(Dialog)
+const ResponsiveDialog = withMobileDialog({ breakpoint: 'xs' })(Dialog)
 storiesOf('Welcome', module)
     .add('Banner', () => (
         <BannerUI disabled={boolean('disabled', false)} close={action('Close')} getStarted={to('Welcome', 'Step 0')} />
@@ -22,9 +25,23 @@ storiesOf('Welcome', module)
         <ResponsiveDialog open>
             <Welcome0
                 close={action('Close')}
-                create={to('Welcome', 'Step 1a-2')}
+                create={to('Welcome', 'Step 1a-1a')}
                 restore={to('Welcome', 'Step 1b-1')}
             />
+        </ResponsiveDialog>
+    ))
+    .add('Step 1a-1a', () => (
+        <ResponsiveDialog open>
+            <Welcome1a1a
+                next={() => to('Welcome', 'Step 1a-2')()}
+                identities={demoPeople}
+                didntFindAccount={to('Welcome', 'Step 1a-1b')}
+            />
+        </ResponsiveDialog>
+    ))
+    .add('Step 1a-1b', () => (
+        <ResponsiveDialog open>
+            <Welcome1a1b useExistingAccounts={to('Welcome', 'Step 1a-1a')} />
         </ResponsiveDialog>
     ))
     .add('Step 1a-2', () => (
@@ -40,6 +57,11 @@ storiesOf('Welcome', module)
     .add('New Step 1a-4', () => (
         <ResponsiveDialog open>
             <Welcome1a4v2
+                hasManual={boolean('hasManual', true)}
+                hasBio={boolean('hasBio', true)}
+                hasPost={boolean('hasPost', true)}
+                bioDisabled={boolean('bioDisabled', false)}
+                postDisabled={boolean('postDisabled', false)}
                 provePost={text('Prove', '🔒ApfdMwLoV/URKn7grgcNWdMR2iWMGdHpQBk5LVGFxhul🔒')}
                 requestAutoVerify={action('Auto')}
                 requestManualVerify={action('Manual')}

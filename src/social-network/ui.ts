@@ -1,7 +1,7 @@
-import { env, SocialNetworkWorkerAndUI, Profile } from './shared'
-import { ValueRef, LiveSelector, DomProxy } from '@holoflows/kit/es'
-import { Person } from '../database/helpers/person'
-import { PostIdentifier, PersonIdentifier } from '../database/type'
+import { env, Env, Preference, Profile, SocialNetworkWorkerAndUI } from './shared'
+import { DomProxy, LiveSelector, ValueRef } from '@holoflows/kit/es'
+import { Person } from '../database'
+import { PersonIdentifier, PostIdentifier } from '../database/type'
 import { PayloadAlpha40 } from '../utils/type-transform/Payload'
 
 //#region SocialNetworkUI
@@ -17,6 +17,24 @@ export interface SocialNetworkUI
      * Should Maskbook show Welcome Banner?
      */
     shouldDisplayWelcome(): Promise<boolean>
+    /**
+     * A user friendly name for this network.
+     */
+    friendlyName: string
+    /**
+     * This function should jump to a new page,
+     * and then shouldDisplayWelcome should return true
+     * So Maskbook will display a Welcome banner
+     *
+     * If this network is a decentralized network and you don't know which page to open
+     * leave a string like `Open the Mastodon instance you want to connect`
+     */
+    setupAccount: string | ((env: Env, preference: Preference) => void)
+    /**
+     * This function should open a new page,
+     * and then shouldDisplayWelcome should return true
+     */
+    ignoreSetupAccount(env: Env, preference: Preference): void
 }
 //#endregion
 //#region SocialNetworkUIInformationCollector
@@ -35,6 +53,8 @@ interface SocialNetworkUIInformationCollector {
      *      Services.People.resolveIdentity(id.identifier)
      * })
      * ```
+     *
+     * If `selectedIdentity` is null, you should try to set it to an identity in the `myIdentitiesRef`
      */
     resolveLastRecognizedIdentity(): void
     /**
@@ -95,12 +115,12 @@ export interface SocialNetworkUITasks {
      * This function should paste `text` into the paste box.
      * If failed, warning user to do it by themselves with `warningText`
      */
-    taskPasteIntoPostBox(text: string, warningText: string): Promise<void>
+    taskPasteIntoPostBox(text: string, warningText: string): void
     /**
      * This function should paste `text` into the bio box.
      * If failed, warning user to do it by themselves with automation_request_click_edit_bio_button
      */
-    taskPasteIntoBio(text: string): Promise<void>
+    taskPasteIntoBio(text: string): void
     /**
      * This function should return the given post on the current page,
      * Called by `AutomatedTabTask`
@@ -136,6 +156,10 @@ export interface SocialNetworkUIDataSources {
      */
     readonly lastRecognizedIdentity: ValueRef<Pick<Person, 'identifier' | 'nickname' | 'avatar'>>
     /**
+     * The account that user is using (MUST be in the database)
+     */
+    readonly currentIdentity: ValueRef<Person | null>
+    /**
      * Posts that Maskbook detects
      */
     readonly posts: WeakMap<DomProxy, PostInfo>
@@ -152,8 +176,12 @@ export type PostInfo = {
 }
 //#endregion
 
-const definedSocialNetworkUIs = new Set<SocialNetworkUI>()
-let activatedSocialNetworkUI: SocialNetworkUI = undefined as any
+export const definedSocialNetworkUIs = new Set<SocialNetworkUI>()
+let activatedSocialNetworkUI: SocialNetworkUI = ({
+    lastRecognizedIdentity: new ValueRef({ identifier: PersonIdentifier.unknown }),
+    currentIdentity: new ValueRef(null),
+    myIdentitiesRef: new ValueRef([]),
+} as Partial<SocialNetworkUI>) as any
 export const getActivatedUI = () => activatedSocialNetworkUI
 export function activateSocialNetworkUI() {
     for (const ui of definedSocialNetworkUIs)

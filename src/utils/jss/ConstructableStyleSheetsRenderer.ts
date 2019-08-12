@@ -2,6 +2,8 @@
  * This file is granted to [JSS](https://github.com/cssinjs/jss) with MIT Licence
  */
 import warning from 'tiny-warning'
+/// <reference path="./CSSOM.d.ts" />
+/// <reference path="./JSS-internal.d.ts" />
 /**
  * Chrome < 73, enable polyfill
  * Chrome = 73, disable polyfill

@@ -3,6 +3,7 @@ import { GetContext, OnlyRunInContext } from '@holoflows/kit/es/Extension/Contex
 import * as MockService from './mock-service'
 import Serialization from '../utils/type-transform/Serialization'
 import { PersonIdentifier, GroupIdentifier, PostIdentifier } from '../database/type'
+import { getCurrentNetworkWorkerService } from './background-script/WorkerService'
 
 interface Services {
     Crypto: typeof import('./background-script/CryptoService')
@@ -22,6 +23,7 @@ Object.assign(window, {
     PersonIdentifier,
     GroupIdentifier,
     PostIdentifier,
+    getCurrentNetworkWorkerService,
 })
 if (GetContext() === 'background') {
     Object.assign(window, { tasks: require('./content-script/tasks'), alpha40: require('../crypto/crypto-alpha-40') })

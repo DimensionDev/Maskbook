@@ -1,4 +1,3 @@
-import React from 'react'
 import { Person } from '../../database'
 import { useValueRef } from '../../utils/hooks/useValueRef'
 import { getActivatedUI } from '../../social-network/ui'
@@ -12,4 +11,7 @@ export function useLastRecognizedIdentity() {
 export function useMyIdentities() {
     return useValueRef(getActivatedUI().myIdentitiesRef)
 }
-export const CurrentUsingIdentityContext = React.createContext<Person | null>(null)
+export function useCurrentIdentity(noDefault?: boolean): Person | null {
+    const all = useMyIdentities()[0] || null
+    return useValueRef(getActivatedUI().currentIdentity) || (noDefault ? null : all)
+}

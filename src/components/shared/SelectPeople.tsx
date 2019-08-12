@@ -13,34 +13,47 @@ import {
     Box,
 } from '@material-ui/core'
 import { Person } from '../../database'
-import { useState, useContext, useCallback } from 'react'
-import { CurrentUsingIdentityContext } from '../DataSource/useActivatedUI'
+import { useState, useCallback } from 'react'
+import { useCurrentIdentity } from '../DataSource/useActivatedUI'
+import { OverridableComponent } from '@material-ui/core/OverridableComponent'
 
 interface PeopleInListProps {
     person: Person
     onClick(): void
     disabled?: boolean
+    showAtNetwork?: boolean
+    listItemProps?: Partial<(typeof ListItem extends OverridableComponent<infer U> ? U : never)['props']>
 }
-const usePeopleInListStyle = makeStyles({
+const usePeopleInListStyle = makeStyles(theme => ({
     overflow: {
         textOverflow: 'ellipsis',
         whiteSpace: 'nowrap',
         overflow: 'hidden',
     },
-})
+    networkHint: {
+        color: theme.palette.grey[500],
+    },
+}))
 /**
  * Item in the list
  */
-function PersonInList({ person, onClick, disabled }: PeopleInListProps) {
+export function PersonInList({ person, onClick, disabled, showAtNetwork, listItemProps }: PeopleInListProps) {
     const classes = usePeopleInListStyle()
+    const name = person.nickname || person.identifier.userId
+    const withNetwork = (
+        <>
+            {name}
+            <span className={classes.networkHint}> @ {person.identifier.network}</span>
+        </>
+    )
     return (
-        <ListItem button onClick={disabled ? void 0 : onClick}>
+        <ListItem button disabled={disabled} onClick={onClick} {...(listItemProps || {})}>
             <ListItemAvatar>
                 <Avatar person={person} />
             </ListItemAvatar>
             <ListItemText
                 classes={{ primary: classes.overflow, secondary: classes.overflow }}
-                primary={person.nickname || person.identifier.userId}
+                primary={showAtNetwork ? withNetwork : name}
                 secondary={person.fingerprint ? person.fingerprint.toLowerCase() : undefined}
             />
         </ListItem>
@@ -63,13 +76,18 @@ function PersonInChip({ disabled, onDelete, person }: PersonInChipProps) {
         />
     )
 }
-interface SelectPeopleUI {
+interface SelectPeopleUIProps {
     ignoreMyself?: boolean
     people: Person[]
     selected: Person[]
     frozenSelected: Person[]
     onSetSelected: (selected: Person[]) => void
     disabled?: boolean
+    hideSelectAll?: boolean
+    hideSelectNone?: boolean
+    showAtNetwork?: boolean
+    maxSelection?: number
+    classes?: Partial<Record<'root', string>>
 }
 const useStyles = makeStyles({
     paper: { maxWidth: 500 },
@@ -82,14 +100,22 @@ const useStyles = makeStyles({
     input: { flex: 1 },
     button: { marginLeft: 8, padding: '2px 6px' },
 })
-export function SelectPeopleUI(props: SelectPeopleUI) {
+export function SelectPeopleUI(props: SelectPeopleUIProps) {
     const { people, frozenSelected, onSetSelected, selected, disabled, ignoreMyself } = props
+    const { hideSelectAll, hideSelectNone, showAtNetwork, maxSelection, classes: classesProp = {} } = props
     const classes = useStyles()
 
-    const myself = useContext(CurrentUsingIdentityContext)
+    const myself = useCurrentIdentity()
+    React.useEffect(() => {
+        if (myself && ignoreMyself) {
+            const filtered = selected.find(x => x.identifier.equals(myself.identifier))
+            if (filtered) onSetSelected(selected.filter(x => x !== filtered))
+        }
+    }, [myself && myself.identifier.toText(), ignoreMyself])
     const [search, setSearch] = useState('')
     const listBeforeSearch = people.filter(x => {
-        if (selected.find(y => y.identifier.userId === x.identifier.userId)) return false
+        if (ignoreMyself && myself && x.identifier.equals(myself.identifier)) return false
+        if (selected.find(y => x.identifier.equals(y.identifier))) return false
         return true
     })
     const listAfterSearch = listBeforeSearch.filter(x => {
@@ -97,7 +123,8 @@ export function SelectPeopleUI(props: SelectPeopleUI) {
         if (search === '') return true
         return (
             !!x.identifier.userId.toLocaleLowerCase().match(search.toLocaleLowerCase()) ||
-            !!(x.fingerprint || '').toLocaleLowerCase().match(search.toLocaleLowerCase())
+            !!(x.fingerprint || '').toLocaleLowerCase().match(search.toLocaleLowerCase()) ||
+            !!(x.nickname || '').toLocaleLowerCase().match(search.toLocaleLowerCase())
         )
     })
     const SelectAllButton = (
@@ -113,8 +140,12 @@ export function SelectPeopleUI(props: SelectPeopleUI) {
             {geti18nString('select_none')}
         </Button>
     )
+
+    const showSelectAll = !hideSelectAll && listAfterSearch.length > 0 && typeof maxSelection === 'undefined'
+    const showSelectNone = !hideSelectNone && selected.length > 0
+
     return (
-        <>
+        <div className={classesProp.root}>
             <Box display="flex" className={classes.selectedArea}>
                 {frozenSelected.map(FrozenChip)}
                 {selected.map(RemovableChip)}
@@ -131,38 +162,39 @@ export function SelectPeopleUI(props: SelectPeopleUI) {
                     disabled={disabled}
                 />
             </Box>
-            {disabled ? (
-                undefined
-            ) : (
-                <>
-                    <Box display="flex">
-                        {listAfterSearch.length > 0 && SelectAllButton}
-                        {selected.length > 0 && SelectNoneButton}
-                    </Box>
-                    <Box flex={1}>
-                        <List dense>
-                            {listBeforeSearch.length > 0 && listBeforeSearch.length === 0 && (
-                                <ListItem>
-                                    <ListItemText primary={geti18nString('not_found')} />
-                                </ListItem>
-                            )}
-                            {listAfterSearch.map(PeopleListItem)}
-                        </List>
-                    </Box>
-                </>
-            )}
-        </>
+            <Box display="flex">
+                {showSelectAll && SelectAllButton}
+                {showSelectNone && SelectNoneButton}
+            </Box>
+            <Box flex={1}>
+                <List dense>
+                    {listBeforeSearch.length > 0 && listAfterSearch.length === 0 && (
+                        <ListItem>
+                            <ListItemText primary={geti18nString('no_search_result')} />
+                        </ListItem>
+                    )}
+                    {listAfterSearch.map(PeopleListItem)}
+                </List>
+            </Box>
+        </div>
     )
 
     function PeopleListItem(person: Person) {
         if (ignoreMyself && myself && person.identifier.equals(myself.identifier)) return null
         return (
             <PersonInList
+                showAtNetwork={showAtNetwork}
                 key={person.identifier.userId}
                 person={person}
-                disabled={disabled}
+                disabled={
+                    disabled ||
+                    (typeof maxSelection === 'number' &&
+                        maxSelection >= 2 &&
+                        frozenSelected.length + selected.length >= maxSelection)
+                }
                 onClick={() => {
-                    onSetSelected(selected.concat(person))
+                    if (maxSelection === 1) onSetSelected([person])
+                    else onSetSelected(selected.concat(person))
                     setSearch('')
                 }}
             />
