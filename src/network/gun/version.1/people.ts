@@ -1,10 +1,10 @@
-import { verifyOthersProve } from '../extension/background-script/CryptoService'
-import { sleep } from '../utils/utils'
-import { geti18nString } from '../utils/i18n'
-import { PersonIdentifier, PostIdentifier, PersonUI } from '../database/type'
-import { gun } from '../network/gun/version.1'
-import getCurrentNetworkWorker from '../social-network/utils/getCurrentNetworkWorker'
-import { queryPersonDB } from '../database/people'
+import { PersonUI, PersonIdentifier, PostIdentifier } from '../../../database/type'
+import getCurrentNetworkWorker from '../../../social-network/utils/getCurrentNetworkWorker'
+import { verifyOthersProve } from '../../../extension/background-script/CryptoService'
+import { sleep } from '@holoflows/kit/es/util/sleep'
+import { queryPersonDB } from '../../../database/people'
+import { geti18nString } from '../../../utils/i18n'
+import { gun } from '.'
 
 export async function queryPersonFromGun(username: string) {
     return gun

@@ -33,7 +33,6 @@ if (GetContext() === 'background') {
     require('../tests/sign&verify')
     require('../tests/friendship-discover')
     require('../tests/comment')
-    require('./background-script/Debugger')
     Object.assign(window, {
         db: {
             avatar: require('../database/avatar'),

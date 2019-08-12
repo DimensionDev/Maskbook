@@ -1,7 +1,5 @@
 import * as Alpha40 from '../../crypto/crypto-alpha-40'
 import { OnlyRunInContext } from '@holoflows/kit/es'
-import { publishPostAESKey as publishPostAESKey_Service, queryPostAESKey } from '../../key-management/posts-gun'
-
 import { decodeText, encodeArrayBuffer, decodeArrayBuffer } from '../../utils/type-transform/String-ArrayBuffer'
 import { constructAlpha40, deconstructPayload } from '../../utils/type-transform/Payload'
 import { geti18nString } from '../../utils/i18n'
@@ -9,8 +7,12 @@ import { toCompressSecp256k1Point, unCompressSecp256k1Point } from '../../utils/
 import { Person, getMyPrivateKey, queryPerson } from '../../database'
 import { queryMyIdentityAtDB, storeNewPersonDB, queryPersonDB, queryLocalKeyDB } from '../../database/people'
 import { PersonIdentifier, PostIdentifier } from '../../database/type'
-import { addPersonPublicKey } from '../../key-management/people-gun'
-import { gun } from '../../network/gun/version.1'
+import {
+    addPersonPublicKey,
+    publishPostAESKey as publishPostAESKey_Service,
+    queryPostAESKey,
+    gun,
+} from '../../network/gun/version.1'
 import { queryPostDB, updatePostDB } from '../../database/post'
 
 OnlyRunInContext('background', 'EncryptService')

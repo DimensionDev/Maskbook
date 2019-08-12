@@ -17,7 +17,7 @@ import { PersonIdentifier, GroupIdentifier, GroupType } from '../../database/typ
 
 OnlyRunInContext('background', 'FriendService')
 export { storeAvatar, getAvatarDataURL as getAvatarBlobURL, queryPerson } from '../../database'
-export { uploadProvePostUrl } from '../../key-management/people-gun'
+export { uploadProvePostUrl } from '../../network/gun/version.1/people'
 /**
  * Query all people stored
  */

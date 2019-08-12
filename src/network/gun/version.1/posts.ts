@@ -1,8 +1,8 @@
-import { PublishedAESKey } from '../crypto/crypto-alpha-40'
+import { PublishedAESKey } from '../../../crypto/crypto-alpha-40'
 import { OnlyRunInContext } from '@holoflows/kit/es'
-import { gun } from '../network/gun/version.1'
-import { updatePostDB } from '../database/post'
-import { PostIdentifier, PersonIdentifier } from '../database/type'
+import { gun } from '.'
+import { updatePostDB } from '../../../database/post'
+import { PostIdentifier, PersonIdentifier } from '../../../database/type'
 
 OnlyRunInContext('background', 'gun')
 /**

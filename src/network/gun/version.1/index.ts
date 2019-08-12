@@ -2,6 +2,9 @@ import Gun from 'gun'
 import 'gun/lib/then'
 import { OnlyRunInContext } from '@holoflows/kit/es'
 import { PublishedAESKey } from '../../../crypto/crypto-alpha-40'
+
+export * from './people'
+export * from './posts'
 OnlyRunInContext('background', 'Gun')
 
 /**
