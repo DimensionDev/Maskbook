@@ -7,6 +7,7 @@ export const host = 'twitter.com'
 
 export const sharedSettings: SocialNetworkWorkerAndUI = {
     version: 1,
+    name: 'twitter',
     isDangerousNetwork: false,
     networkIdentifier: host,
     networkURL: 'https://www.twitter.com/',

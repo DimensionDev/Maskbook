@@ -23,6 +23,6 @@ export const resolveLastRecognizedIdentity = function(this: SocialNetworkUI) {
     const assign = (i: PersonIdentifier) => {
         if (i.isUnknown) return
         if (i.equals(ref.value.identifier)) return
-        ref.value = {identifier: i}
+        ref.value = { identifier: i }
     }
 }

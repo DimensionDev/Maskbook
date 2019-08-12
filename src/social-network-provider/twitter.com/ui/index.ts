@@ -24,7 +24,7 @@ defineSocialNetworkUI({
     posts: new Map(),
     resolveLastRecognizedIdentity,
     injectPostBox,
-    injectWelcomeBanner
+    injectWelcomeBanner,
 })
 
 export {}
