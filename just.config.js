@@ -1,7 +1,5 @@
-const maxBuffer = 1048576 * 64 // MB
-
 const { task, parallel } = require('just-task')
-const { exec } = require('just-scripts-utils')
+const { spawn } = require('child_process')
 
 task('install/holoflows', () => {
     step('cd node_modules/@holoflows/kit && yarn && yarn build').then()
@@ -26,10 +24,23 @@ task('react/test', () => step('react-app-rewired test'))
 
 task('react', parallel('lint/fix', 'react/start'))
 
-const step = async (cmd, withWarn = false) => {
-    await exec(cmd, {
-        maxBuffer,
-        stdout: process.stdout,
-        stderr: withWarn ? process.stderr : undefined,
+const step = (cmd, withWarn = false) => {
+    const child = spawn(cmd, [], {
+        shell: true,
+        stdio: ['inherit', 'inherit', withWarn ? 'inherit' : 'ignore'],
+    })
+    return new Promise((resolve, reject) => {
+        child.on('error', reject)
+
+        child.on('exit', code => {
+            if (code === 0) {
+                resolve(stdout)
+            } else {
+                const err = new Error(`child exited with code ${code}`)
+                err.code = code
+                err.stderr = stderr
+                reject(err)
+            }
+        })
     })
 }
