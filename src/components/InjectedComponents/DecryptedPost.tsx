@@ -30,8 +30,7 @@ function DecryptPostSuccess({ data, people, ...props }: DecryptPostSuccessProps)
     const classes = useStyles()
     const { ShareMenu, showShare } = useShareMenu(
         people,
-        props.requestAppendRecipients || (async () => {
-        }),
+        props.requestAppendRecipients || (async () => {}),
         props.alreadySelectedPreviously,
     )
     const theme = useTheme()
@@ -46,7 +45,7 @@ function DecryptPostSuccess({ data, people, ...props }: DecryptPostSuccessProps)
                 <>
                     {ShareMenu}
                     {geti18nString('decrypted_postbox_title')}
-                    <Box flex={1}/>
+                    <Box flex={1} />
                     {props.requestAppendRecipients && (
                         <Link color="primary" onClick={showShare} className={classes.link}>
                             {geti18nString('decrypted_postbox_add_recipients')}
@@ -64,11 +63,11 @@ function DecryptPostSuccess({ data, people, ...props }: DecryptPostSuccessProps)
     )
 }
 
-const DecryptPostAwaiting = <AdditionalContent title={geti18nString('decrypted_postbox_decrypting')}/>
+const DecryptPostAwaiting = <AdditionalContent title={geti18nString('decrypted_postbox_decrypting')} />
 
 function DecryptPostFailed({ error }: { error: Error }) {
     if (error && error.message === geti18nString('service_not_setup_yet')) {
-        return <NotSetupYetPrompt/>
+        return <NotSetupYetPrompt />
     }
     return (
         <AdditionalContent title={geti18nString('decrypted_postbox_failed')}>
@@ -119,15 +118,17 @@ function DecryptPost(props: DecryptPostProps) {
             awaitingComponent={DecryptPostAwaiting}
             completeComponent={_props => {
                 if ('error' in _props.data) {
-                    return <DecryptPostFailed error={new Error(_props.data.error)}/>
+                    return <DecryptPostFailed error={new Error(_props.data.error)} />
                 }
                 props.onDecrypted(_props.data.content)
-                return <DecryptPostSuccess
-                    data={_props.data}
-                    alreadySelectedPreviously={alreadySelectedPreviously}
-                    requestAppendRecipients={postBy.equals(whoAmI) ? rAD : undefined}
-                    people={people}
-                />
+                return (
+                    <DecryptPostSuccess
+                        data={_props.data}
+                        alreadySelectedPreviously={alreadySelectedPreviously}
+                        requestAppendRecipients={postBy.equals(whoAmI) ? rAD : undefined}
+                        people={people}
+                    />
+                )
             }}
             failedComponent={DecryptPostFailed}
         />
