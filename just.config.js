@@ -29,16 +29,15 @@ const step = (cmd, withWarn = false) => {
         shell: true,
         stdio: ['inherit', 'inherit', withWarn ? 'inherit' : 'ignore'],
     })
+
     return new Promise((resolve, reject) => {
         child.on('error', reject)
 
         child.on('exit', code => {
             if (code === 0) {
-                resolve(stdout)
+                resolve()
             } else {
                 const err = new Error(`child exited with code ${code}`)
-                err.code = code
-                err.stderr = stderr
                 reject(err)
             }
         })
