@@ -13,19 +13,16 @@ import { getProfileFacebook } from './tasks/getProfile'
 import { pasteIntoBioFacebook } from './tasks/pasteIntoBio'
 import { shouldDisplayWelcomeDefault } from '../../social-network/defaults/shouldDisplayWelcome'
 import { injectWelcomeBannerFacebook } from './UI/injectWelcomeBanner'
-import { injectPostCommentsDefault } from '../../social-network/defaults/injectComments'
-import { injectCommentBoxDefault } from '../../social-network/defaults/injectCommentBox'
-import { selectElementContents, dispatchCustomEvents, sleep } from '../../utils/utils'
 import { collectPostsFacebook } from './UI/collectPosts'
 import { injectPostInspectorFacebook } from './UI/injectPostInspector'
 import { setStorage } from '../../utils/browser.storage'
 
-defineSocialNetworkUI({
+const def = defineSocialNetworkUI({
     ...sharedProvider,
-    init(env, pref) {
+    init: (env, pref) => {
         sharedProvider.init(env, pref)
-        InitFriendsValueRef(this, 'facebook.com')
-        InitMyIdentitiesValueRef(this, 'facebook.com')
+        InitFriendsValueRef(def, 'facebook.com')
+        InitMyIdentitiesValueRef(def, 'facebook.com')
     },
     shouldActivate() {
         return location.hostname.endsWith('facebook.com')
@@ -47,15 +44,6 @@ defineSocialNetworkUI({
     resolveLastRecognizedIdentity: resolveLastRecognizedIdentityFacebook,
     injectPostBox: injectPostBoxFacebook,
     injectWelcomeBanner: injectWelcomeBannerFacebook,
-    injectPostComments: injectPostCommentsDefault(),
-    injectCommentBox: injectCommentBoxDefault(async function onPasteToCommentBoxFacebook(encryptedComment, current) {
-        const root = current.rootNode
-        selectElementContents(root.querySelector('[contenteditable]')!)
-        dispatchCustomEvents('paste', encryptedComment)
-        await sleep(200)
-        if (!root.innerText.includes(encryptedComment))
-            prompt('Please paste it into the comment box!', encryptedComment)
-    }),
     injectPostInspector: injectPostInspectorFacebook,
     collectPeople: collectPeopleFacebook,
     collectPosts: collectPostsFacebook,

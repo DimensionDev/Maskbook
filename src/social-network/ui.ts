@@ -3,6 +3,10 @@ import { DomProxy, LiveSelector, ValueRef } from '@holoflows/kit/es'
 import { Person } from '../database'
 import { PersonIdentifier, PostIdentifier } from '../database/type'
 import { PayloadAlpha40 } from '../utils/type-transform/Payload'
+import { defaults } from 'lodash-es'
+import { injectPostCommentsDefault } from './defaults/injectComments'
+import { injectCommentBoxDefault } from './defaults/injectCommentBox'
+import { PartialBy } from '../utils/type'
 
 //#region SocialNetworkUI
 export interface SocialNetworkUI
@@ -221,9 +225,13 @@ function hookUIPostMap(ui: SocialNetworkUI) {
     }
 }
 
-export function defineSocialNetworkUI(UI: SocialNetworkUI): void {
-    definedSocialNetworkUIs.add(UI)
+const def = {
+    injectPostComments: injectPostCommentsDefault(),
+    injectCommentBox: injectCommentBoxDefault(),
 }
-export function defineSocialNetworkUIExtended<T extends SocialNetworkUI>(UI: T): void {
-    defineSocialNetworkUI(UI)
+
+export function defineSocialNetworkUI(UI: PartialBy<SocialNetworkUI, keyof typeof def>) {
+    const result = defaults(UI, def) as SocialNetworkUI
+    definedSocialNetworkUIs.add(result)
+    return result
 }
