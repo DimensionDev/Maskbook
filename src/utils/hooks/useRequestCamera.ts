@@ -1,14 +1,14 @@
 /** This file is published under MIT License */
 import { useEffect, useState } from 'react'
 import { useAsync } from '../components/AsyncComponent'
-import { has } from 'lodash-es'
+import { hasIn } from 'lodash-es'
 
 const q = <const>['query', 'request', 'revoke']
 
 export function checkPermissionApiUsability(type?: typeof q[number]) {
     const r: Partial<{ [T in typeof q[number]]: boolean }> = {}
     for (const v of q) {
-        r[v] = has(navigator, `permissions.${v}`)
+        r[v] = hasIn(navigator, `permissions.${v}`)
     }
     if (type) {
         return r[type]
@@ -18,51 +18,53 @@ export function checkPermissionApiUsability(type?: typeof q[number]) {
 
 export function useRequestCamera(needRequest: boolean) {
     const [permission, updatePermission] = useState<PermissionState>('prompt')
+
     useEffect(() => {
-        let permissionStatus: PermissionStatus | undefined = undefined
-        const update = () => updatePermission(permissionStatus!.state)
+        let permissionStatus: PermissionStatus
+
         if (checkPermissionApiUsability('query')) {
-            navigator.permissions.query({ name: 'camera' }).then(p => {
-                permissionStatus = p
-                p.onchange = update
-                update()
-            })
+            navigator.permissions
+                .query({ name: 'camera' })
+                .then(p => {
+                    permissionStatus = p
+                    permissionStatus.onchange = () => {
+                        updatePermission(permissionStatus.state)
+                    }
+                    updatePermission(permissionStatus.state)
+                })
+                .catch(e => {
+                    // for some user agents which implemented `query` method
+                    // but rise an error if specific permission name dose not supported
+                    updatePermission('granted')
+                })
         } else {
-            permissionStatus = {
-                onchange: null,
-                state: 'granted',
-                addEventListener: () => {},
-                removeEventListener: () => {},
-                dispatchEvent: () => true,
-            }
-            update()
+            updatePermission('granted')
         }
         return () => {
             if (permissionStatus) permissionStatus.onchange = null
         }
     }, [])
-    useAsync(() => {
-        if (needRequest && permission !== 'granted') requestPermission()
-        return Promise.resolve()
+    useAsync(async () => {
+        if (!needRequest || permission !== 'prompt') {
+            return
+        }
+        if (checkPermissionApiUsability('request')) {
+            ;(navigator.permissions as any)
+                .request({ name: 'camera' })
+                .then((p: PermissionStatus) => {
+                    updatePermission(p.state)
+                })
+                .catch((e: any) => {
+                    updatePermission('granted')
+                })
+        } else {
+            updatePermission('granted')
+        }
     }, [permission, needRequest])
     return permission
 }
-async function requestPermission(): Promise<unknown> {
-    if (checkPermissionApiUsability('request')) {
-        // @ts-ignore
-        if (navigator.permissions.request) return navigator.permissions.request({ name: 'camera' })
-    } else {
-        const t = await navigator.mediaDevices.getUserMedia({
-            audio: false,
-            video: {
-                width: { ideal: 1920 },
-                height: { ideal: 1080 },
-            },
-        })
-        t.getTracks()[0].stop()
-    }
-}
-export async function getFrontVideoDevices() {
+
+export async function getBackVideoDeviceId() {
     const devices = (await navigator.mediaDevices.enumerateDevices()).filter(devices => devices.kind === 'videoinput')
     const back = devices.find(
         device =>
