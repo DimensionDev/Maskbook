@@ -3,7 +3,7 @@ import { isMobileFacebook } from '../isMobile'
 import { PostInfo } from '../../../social-network/ui'
 import { injectPostInspectorDefault } from '../../../social-network/defaults/injectPostInspector'
 
-const defaultBehavior = injectPostInspectorDefault({
+export const defaultBehavior = injectPostInspectorDefault({
     zipPost(node) {
         zipEncryptedPostContent(node)
         zipPostLinkPreview(node)

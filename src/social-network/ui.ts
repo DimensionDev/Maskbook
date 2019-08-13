@@ -7,6 +7,7 @@ import { defaults } from 'lodash-es'
 import { injectPostCommentsDefault } from './defaults/injectComments'
 import { injectCommentBoxDefault } from './defaults/injectCommentBox'
 import { PartialBy } from '../utils/type'
+import { defaultBehavior } from '../social-network-provider/facebook.com/UI/injectPostInspector'
 
 //#region SocialNetworkUI
 export interface SocialNetworkUI
@@ -228,6 +229,7 @@ function hookUIPostMap(ui: SocialNetworkUI) {
 const def = {
     injectPostComments: injectPostCommentsDefault(),
     injectCommentBox: injectCommentBoxDefault(),
+    injectPostInspector: defaultBehavior,
 }
 
 export function defineSocialNetworkUI(UI: PartialBy<SocialNetworkUI, keyof typeof def>) {

@@ -7,9 +7,22 @@ function findPeopleInfo() {
     const bio = new LiveSelector().querySelector<HTMLDivElement>('#profile_timeline_intro_card')
     new MutationObserverWatcher(bio)
         .enableSingleMode()
+        /**
+         * @var node: bio in the side of user page
+         */
         .useForeach(node => {
             function tryFindBioKey() {
+                /**
+                 * @var text
+                 * @example
+                 * "...r Xoogler, MaskBook: A80TOj...eW9yqf
+                 * Google - Softwa..."
+                 */
                 const text = node.innerText
+
+                /**
+                 * Also collect 'identifier' | 'nickname' | 'avatar'
+                 */
                 const a = document.querySelector<HTMLAnchorElement>('#fb-timeline-cover-name a')
                 const id = getPersonIdentifierAtFacebook(a, true)
                 if (!id) return
@@ -39,7 +52,7 @@ function detectIfFriend() {
         else if (arr.length === 4) return [Status.NonFriend]
         return [Status.Unknown]
     })
-    // TODO: finish this, store it into the database
+    // TODO: finish this, store it into the database, also do this in twitter
     new MutationObserverWatcher(isFriend)
         .useForeach(() => {
             return {

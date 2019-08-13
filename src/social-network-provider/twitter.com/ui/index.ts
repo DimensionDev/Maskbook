@@ -7,12 +7,13 @@ import { ValueRef } from '@holoflows/kit/es'
 import { PersonIdentifier } from '../../../database/type'
 import { resolveLastRecognizedIdentity } from './resolveLastRecognizedIdentity'
 import { injectPostBox, injectWelcomeBanner } from './inject'
+import { collectPeople } from './fetch'
 
-defineSocialNetworkUI({
+const def = defineSocialNetworkUI({
     ...sharedSettings,
     init() {
-        InitFriendsValueRef(this, host)
-        InitMyIdentitiesValueRef(this, host)
+        InitFriendsValueRef(def, host)
+        InitMyIdentitiesValueRef(def, host)
     },
     shouldActivate() {
         return location.hostname.endsWith(host)
@@ -25,6 +26,7 @@ defineSocialNetworkUI({
     resolveLastRecognizedIdentity,
     injectPostBox,
     injectWelcomeBanner,
+    collectPeople
 })
 
 export {}
