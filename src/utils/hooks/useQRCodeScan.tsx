@@ -46,6 +46,9 @@ export function useQRCodeScan(
             if (isScanning && mediaStream) video.current.play()
             if (!isScanning && mediaStream) stop()
             if (!isScanning && !mediaStream) video.current.pause()
+            return () => {
+                stop()
+            }
         }, [isScanning, permission, video.current])
     }
     // ? Do scan
