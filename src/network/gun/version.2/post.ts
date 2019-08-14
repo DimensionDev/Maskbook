@@ -1,7 +1,7 @@
-import { PublishedAESKey } from '../../../crypto/crypto-alpha-40'
 import { OnlyRunInContext } from '@holoflows/kit/es'
 import { gun2, PostOnGun2, SharedAESKeyGun2 } from '.'
 import { hashPostSalt, hashCryptoKey } from './hash'
+import { PublishedAESKeyRecordV39 } from '../../../crypto/crypto-alpha-39'
 
 OnlyRunInContext('background', 'gun')
 
@@ -66,20 +66,14 @@ export function subscribePostKeysOnGun2(
  * @param postSalt Post iv
  * @param receiversKeys Keys needs to publish
  */
-export async function publishPostAESKeyOnGun2(
-    postSalt: string,
-    receiversKeys: {
-        key: PublishedAESKey
-        receiverKey: CryptoKey
-    }[],
-) {
+export async function publishPostAESKeyOnGun2(postSalt: string, receiversKeys: PublishedAESKeyRecordV39[]) {
     const postHash = await hashPostSalt(postSalt)
     // Store AES key to gun
-    receiversKeys.forEach(async ({ key, receiverKey }) => {
+    receiversKeys.forEach(async ({ aesKey, receiverKey }) => {
         const keyHash = await hashCryptoKey(receiverKey)
         gun2.get(postHash)
             // @ts-ignore
             .get(keyHash)
-            .set(key)
+            .set(aesKey)
     })
 }

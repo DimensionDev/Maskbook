@@ -304,7 +304,7 @@ export async function appendShareTarget(
         iv,
         (await queryLocalKeyDB(whoAmI))!,
     )
-    const othersAESKeyEncrypted = await Alpha40.generateOthersAESKeyEncrypted(
+    const othersAESKeyEncrypted = await Alpha40.generateOthersAESKeyEncryptedV40(
         -40,
         AESKey,
         (await getMyPrivateKey(whoAmI))!.privateKey,
