@@ -222,6 +222,9 @@ function hookUIPostMap(ui: SocialNetworkUI) {
 }
 
 export function defineSocialNetworkUI(UI: SocialNetworkUI): void {
+    if (UI.acceptablePayload.includes('v40') && UI.name !== 'facebook') {
+        throw new TypeError('Payload version v40 is not supported in this network. Please use v39 or newer.')
+    }
     definedSocialNetworkUIs.add(UI)
 }
 export function defineSocialNetworkUIExtended<T extends SocialNetworkUI>(UI: T): void {

@@ -7,6 +7,7 @@ const noop = () => () => {}
  * DO NOT use this in content script
  */
 export const emptyDefinition: SocialNetworkUI = {
+    acceptablePayload: ['latest'],
     friendlyName: '',
     setupAccount: '',
     shouldActivate() {

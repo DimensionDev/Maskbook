@@ -9,4 +9,5 @@ export const sharedProvider: SocialNetworkWorkerAndUI = {
     networkURL: 'https://www.facebook.com/',
     isValidUsername: v => !!regularUsername(v),
     init() {},
+    acceptablePayload: ['v40', 'v39', 'latest'],
 }

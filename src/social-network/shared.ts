@@ -2,6 +2,15 @@ import { getUrl } from '../utils/utils'
 export interface SocialNetworkWorkerAndUI {
     version: 1
     /**
+     * Declare what payload does this network supports.
+     *
+     * Latest = v39
+     *
+     * When creating new posts,
+     * Maskbook will use the latest declared version in `acceptablePayload`
+     */
+    acceptablePayload: ('latest' | 'v39' | 'v40')[]
+    /**
      * This name is used internally and should be unique
      */
     name: string
