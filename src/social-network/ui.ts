@@ -2,7 +2,7 @@ import { env, Env, Preference, Profile, SocialNetworkWorkerAndUI } from './share
 import { DomProxy, LiveSelector, ValueRef } from '@holoflows/kit/es'
 import { Person } from '../database'
 import { PersonIdentifier, PostIdentifier } from '../database/type'
-import { PayloadAlpha40 } from '../utils/type-transform/Payload'
+import { Payload } from '../utils/type-transform/Payload'
 
 //#region SocialNetworkUI
 export interface SocialNetworkUI
@@ -168,7 +168,7 @@ export type PostInfo = {
     readonly postBy: ValueRef<PersonIdentifier>
     readonly postID: ValueRef<string | null>
     readonly postContent: ValueRef<string>
-    readonly postPayload: ValueRef<PayloadAlpha40 | null>
+    readonly postPayload: ValueRef<Payload | null>
     readonly commentsSelector: LiveSelector<HTMLElement, false>
     readonly commentBoxSelector: LiveSelector<HTMLElement, true>
     readonly decryptedPostContent: ValueRef<string>

@@ -5,7 +5,7 @@ import AsyncComponent from '../../utils/components/AsyncComponent'
 import Services from '../../extension/service'
 import { ValueRef } from '@holoflows/kit/es'
 import { useValueRef } from '../../utils/hooks/useValueRef'
-import { PayloadAlpha40 } from '../../utils/type-transform/Payload'
+import { Payload } from '../../utils/type-transform/Payload'
 
 const useStyle = makeStyles({
     root: {
@@ -64,5 +64,5 @@ interface PostCommentProps {
     needZip(): void
     decryptedPostContent: ValueRef<string>
     commentContent: ValueRef<string>
-    postPayload: ValueRef<PayloadAlpha40 | null>
+    postPayload: ValueRef<Payload | null>
 }
