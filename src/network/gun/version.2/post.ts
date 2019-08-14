@@ -1,8 +1,6 @@
 import { PublishedAESKey } from '../../../crypto/crypto-alpha-40'
 import { OnlyRunInContext } from '@holoflows/kit/es'
 import { gun2, PostOnGun2, SharedAESKeyGun2 } from '.'
-import { updatePostDB } from '../../../database/post'
-import { PostIdentifier, PersonIdentifier } from '../../../database/type'
 import { hashPostSalt, hashCryptoKey } from './hash'
 
 OnlyRunInContext('background', 'gun')

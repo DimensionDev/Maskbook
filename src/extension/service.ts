@@ -41,6 +41,8 @@ if (GetContext() === 'background') {
             type: require('../database/type'),
             post: require('../database/post'),
         },
+        gun1: require('../network/gun/version.1'),
+        gun2: require('../network/gun/version.2'),
     })
 }
 //#region
