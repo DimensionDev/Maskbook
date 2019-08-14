@@ -1,7 +1,7 @@
 // tslint:disable: deprecation
 import { PersonUI, PersonIdentifier, PostIdentifier } from '../../../database/type'
 import getCurrentNetworkWorker from '../../../social-network/utils/getCurrentNetworkWorker'
-import { verifyOthersProve } from '../../../extension/background-script/CryptoService'
+import { verifyOthersProve } from '../../../extension/background-script/CryptoServices/verifyOthersProve'
 import { sleep } from '@holoflows/kit/es/util/sleep'
 import { queryPersonDB } from '../../../database/people'
 import { geti18nString } from '../../../utils/i18n'
