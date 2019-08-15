@@ -28,7 +28,7 @@ const useStyles = makeStyles(theme => ({
 }))
 export default function Welcome({ next, identities, didntFindAccount }: Props) {
     const classes = useStyles()
-    const [selected, setSelect] = useState<Person[]>([identities[0]])
+    const [selected, setSelect] = useState<Person[]>(identities[0] ? identities : [])
     return (
         <WelcomeContainer className={classes.paper}>
             <Typography variant="h5">{geti18nString('welcome_1a1_title')}</Typography>
