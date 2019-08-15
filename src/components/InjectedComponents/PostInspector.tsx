@@ -26,7 +26,7 @@ export function PostInspector(props: PostInspectorProps) {
         encryptedPost: deconstructPayload(post),
         provePost: post.match(/🔒(.+)🔒/)!,
     }
-    if (type.provePost) Services.People.uploadProvePostUrl(new PostIdentifier(postBy, postId))
+    if (type.provePost) Services.People.writePersonOnGun(postBy, { provePostId: postId })
     useAsync(async () => {
         if (!whoAmI) return []
         if (!whoAmI.identifier.equals(postBy)) return []

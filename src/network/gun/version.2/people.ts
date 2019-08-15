@@ -35,6 +35,6 @@ export function subscribePersonFromGun2(user: PersonIdentifier, callback: (data:
  * @param user Identifier
  * @param data Data needs to write
  */
-export async function writePersonOnGun2(user: PersonIdentifier, data: NonNullable<PersonOnGun2>) {
+export async function writePersonOnGun(user: PersonIdentifier, data: NonNullable<PersonOnGun2>) {
     return gun2.get(await hashPersonIdentifier(user)).put(data).then!()
 }

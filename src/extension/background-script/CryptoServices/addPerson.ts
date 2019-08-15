@@ -19,7 +19,7 @@ async function getUserPublicKeyFromProvePost(user: PersonIdentifier) {
         if (user.network === 'facebook.com') {
             // tslint:disable-next-line: deprecation
             person = await Gun1.queryPersonFromGun(user.userId)
-            if (person) Gun2.writePersonOnGun2(user, person)
+            if (person) Gun2.writePersonOnGun(user, person)
         }
         if (!person || !person.provePostId || !person.provePostId.length) {
             throw new Error('Not in gun!')
