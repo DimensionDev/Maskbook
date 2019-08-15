@@ -1,4 +1,4 @@
-import { bioCard, postsRootSelector, postsSelectors, selfInfos } from '../utils/selectors'
+import { bioCard, postsRootSelector, postsSelectors } from '../utils/selectors'
 import { MutationObserverWatcher } from '@holoflows/kit'
 import Services from '../../../extension/service'
 import { PersonIdentifier } from '../../../database/type'
@@ -6,18 +6,31 @@ import { host } from '../index'
 import { getEmptyPostInfo, SocialNetworkUI } from '../../../social-network/ui'
 import { deconstructPayload } from '../../../utils/type-transform/Payload'
 
+const resolveInfoFromBioCard = () => {
+    const userAvatarUrl = bioCard.nth(0).querySelector<HTMLImageElement>('img').evaluateOnce()[0].src
+    const userNames = bioCard.nth(1).evaluateOnce()[0].innerText.split('\n')
+    const userBio = bioCard.nth(2).evaluateOnce()[0].innerText
+    return {
+        userAvatarUrl,
+        userName: userNames[0],
+        userScreenName: userNames[1],
+        userBio
+    }
+}
+
 const registerBioCollector = () => {
     // This object will not be garbage collected
     new MutationObserverWatcher(bioCard)
         .enableSingleMode()
         .useForeach(node => {
             const refreshUserInfo = () => {
+                const r = resolveInfoFromBioCard()
                 const text = node.innerText
-                const p = new PersonIdentifier(host, selfInfos.screenName!)
+                const p = new PersonIdentifier(host, r.userScreenName)
                 Services.Crypto.verifyOthersProve(text, p).then()
                 Services.People.updatePersonInfo(p, {
-                    nickname: selfInfos.userName!,
-                    avatarURL: selfInfos.userAvatar!,
+                    nickname: r.userName,
+                    avatarURL: r.userAvatarUrl,
                 }).then()
             }
             refreshUserInfo()
