@@ -193,16 +193,20 @@ export async function decryptMessage1ToNByOther(info: {
     const AESKeyEncrypted = Array.isArray(info.AESKeyEncrypted) ? info.AESKeyEncrypted : [info.AESKeyEncrypted]
 
     let resolvedAESKey: string | null = null
-    AESKeyEncrypted.map(async key => {
-        const result = await decryptMessage1To1({
-            version: -40,
-            salt: key.salt,
-            encryptedContent: key.encryptedKey,
-            anotherPublicKeyECDH: authorsPublicKeyECDH,
-            privateKeyECDH: privateKeyECDH,
-        })
-        resolvedAESKey = decodeText(result)
-    }).forEach(x => x.catch(e => (e instanceof DOMException ? Promise.resolve() : Promise.reject(e))))
+    await Promise.all(
+        AESKeyEncrypted.map(async key => {
+            try {
+                const result = await decryptMessage1To1({
+                    version: -40,
+                    salt: key.salt,
+                    encryptedContent: key.encryptedKey,
+                    anotherPublicKeyECDH: authorsPublicKeyECDH,
+                    privateKeyECDH: privateKeyECDH,
+                })
+                resolvedAESKey = decodeText(result)
+            } catch {}
+        }),
+    )
     if (resolvedAESKey === null) throw new Error('decryptMessage1ToNByOther cannot resolve an available key')
     const aesKey = await crypto.subtle.importKey(
         'jwk',
