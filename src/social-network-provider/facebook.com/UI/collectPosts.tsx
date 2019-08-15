@@ -1,7 +1,6 @@
-import { LiveSelector, MutationObserverWatcher, ValueRef, DomProxy } from '@holoflows/kit'
+import { DomProxy, LiveSelector, MutationObserverWatcher } from '@holoflows/kit'
 import { deconstructPayload } from '../../../utils/type-transform/Payload'
-import { PersonIdentifier } from '../../../database/type'
-import { PostInfo, SocialNetworkUI } from '../../../social-network/ui'
+import { getEmptyPostInfo, SocialNetworkUI } from '../../../social-network/ui'
 import { isMobileFacebook } from '../isMobile'
 import { getPersonIdentifierAtFacebook } from '../getPersonIdentifierAtFacebook'
 
@@ -12,7 +11,7 @@ const posts = new LiveSelector().querySelectorAll<HTMLDivElement>(
 export function collectPostsFacebook(this: SocialNetworkUI) {
     new MutationObserverWatcher(posts)
         .useForeach((node, key, metadata) => {
-            const root = new LiveSelector().replace(() => [node]).closest('.userContentWrapper')
+        const root = new LiveSelector().replace(() => [node]).closest('.userContentWrapper') as LiveSelector<HTMLElement>
             // ? inject after comments
             const commentSelector = root
                 .clone()
@@ -26,17 +25,10 @@ export function collectPostsFacebook(this: SocialNetworkUI) {
                 .querySelector<HTMLFormElement>('form form')
                 .enableSingleMode()
 
-            const info: PostInfo = {
-                commentsSelector: commentSelector,
+            const info = {
                 commentBoxSelector: commentBoxSelector,
-                decryptedPostContent: new ValueRef(''),
-                postBy: new ValueRef(PersonIdentifier.unknown),
-                postContent: new ValueRef(''),
-                postID: new ValueRef(''),
-                postPayload: new ValueRef(null),
-                get rootNode() {
-                    return root.evaluateOnce()[0]! as HTMLElement
-                },
+                commentsSelector: commentSelector,
+                ...getEmptyPostInfo(root),
             }
             this.posts.set(metadata, info)
             function collectPostInfo() {
@@ -54,6 +46,7 @@ export function collectPostsFacebook(this: SocialNetworkUI) {
         })
         .setDomProxyOption({ afterShadowRootInit: { mode: 'closed' } })
         .startWatch()
+        .then()
 }
 
 function abc<T>(watcher: MutationObserverWatcher<T, any, any>, iterator: typeof watcher['useForeach']) {}

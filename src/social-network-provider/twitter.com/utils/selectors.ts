@@ -1,8 +1,12 @@
 import { LiveSelector } from '@holoflows/kit'
 import { regexMatch } from '../../../utils/utils'
 
-const querySelector = <T extends Element>(selector: string) => {
+const querySelector = <T extends HTMLElement>(selector: string) => {
     return new LiveSelector().querySelector<T>(selector)
+}
+
+const querySelectorAll = <T extends HTMLElement>(selector: string) => {
+    return new LiveSelector().querySelectorAll<T>(selector)
 }
 
 /**
@@ -19,21 +23,13 @@ const uid = /"entities":{.*?"users":{.*?"entities":{.*?"[0-9]*":{.*?"id_str":"(.
 const bio = /"entities":{.*?"users":{.*?"entities":{.*?"[0-9]*":{.*?"description":"(.*?)"/
 const avatar = /"entities":{.*?"users":{.*?"entities":{.*?"[0-9]*":{.*?"profile_image_url_https":"(.*?)"/
 
-const newPostEditorString = '[role="main"] [role="progressbar"] + div'
+export const newPostEditorSelector = querySelector<HTMLDivElement>('[role="main"] [role="progressbar"] ~ div .DraftEditor-root')
 
-export const newPostEditorContainerSelector = querySelector(newPostEditorString)
-export const newPostEditorSelector = querySelector(`${newPostEditorString} .DraftEditor-root`)
-export const newPostEditorOnFocusSelector = querySelector(
-    `${newPostEditorString} .DraftEditor-root .public-DraftEditorPlaceholder-hasFocus`,
-)
+const postContainerString = '[role="main"] [data-testid="primaryColumn"] section'
 
-const newCommentEditorString = `[aria-labelledby="modal-header"] .DraftEditor-root`
-
-export const newCommentEditorSelector = querySelector(newCommentEditorString)
-
-export const timelineSelector = querySelector(
-    '[role="main"] [data-testid="primaryColumn"] section > div > div > div > *',
-)
+// @ts-ignore
+export const postsRootSelector = querySelectorAll<Element>(postContainerString)
+export const postsSelectors = querySelectorAll(`${postContainerString} article`)
 
 const p = (regex: RegExp, index: number) => {
     return base.clone().map(x => regexMatch(x.innerText, regex, index))
@@ -42,7 +38,7 @@ const p = (regex: RegExp, index: number) => {
 const userInfoSelectors = {
     screenName: p(name, 0),
     userName: p(name, 1),
-    userId: p(uid, 0),
+    // userId: p(uid, 0),
     userBio: p(bio, 0),
     userAvatar: p(avatar, 0),
 }
@@ -50,7 +46,7 @@ const userInfoSelectors = {
 const u = userInfoSelectors;
 type t = typeof u;
 type k = keyof t;
-export const userInfos = new Proxy(userInfoSelectors, {
+export const selfInfos = new Proxy(userInfoSelectors, {
     get(target: typeof userInfoSelectors, p: keyof typeof userInfoSelectors) {
         return target[p].evaluateOnce()[0];
     }

@@ -53,3 +53,5 @@ export const regexMatch = (str: string, regexp: RegExp, index: number) => {
     if (isNull(r)) return null
     return r[index]
 }
+
+export const nop: (...args: any[]) => any = () => {};

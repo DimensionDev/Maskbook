@@ -174,12 +174,25 @@ export type PostInfo = {
     readonly postID: ValueRef<string | null>
     readonly postContent: ValueRef<string>
     readonly postPayload: ValueRef<PayloadAlpha40 | null>
-    readonly commentsSelector: LiveSelector<HTMLElement, false>
-    readonly commentBoxSelector: LiveSelector<HTMLElement, true>
+    readonly commentsSelector?: LiveSelector<HTMLElement, false>
+    readonly commentBoxSelector?: LiveSelector<HTMLElement, true>
     readonly decryptedPostContent: ValueRef<string>
     readonly rootNode: HTMLElement
 }
 //#endregion
+
+export const getEmptyPostInfo = (rootNodeSelector: LiveSelector<HTMLElement>) => {
+    return {
+        decryptedPostContent: new ValueRef(''),
+        postBy: new ValueRef(PersonIdentifier.unknown),
+        postContent: new ValueRef(''),
+        postID: new ValueRef(''),
+        postPayload: new ValueRef(null),
+        get rootNode() {
+            return rootNodeSelector.evaluateOnce()[0]
+        }
+    } as PostInfo
+}
 
 export const definedSocialNetworkUIs = new Set<SocialNetworkUI>()
 let activatedSocialNetworkUI: SocialNetworkUI = ({

@@ -8,7 +8,9 @@ import { PersonIdentifier } from '../../../database/type'
 import { resolveLastRecognizedIdentity } from './resolveLastRecognizedIdentity'
 import { injectPostBox, injectWelcomeBanner } from './inject'
 import { collectPeople } from './fetch'
+import { nop } from '../../../utils/utils'
 
+// TODO: host -> def.host
 const def = defineSocialNetworkUI({
     ...sharedSettings,
     init() {
@@ -25,8 +27,12 @@ const def = defineSocialNetworkUI({
     posts: new Map(),
     resolveLastRecognizedIdentity,
     injectPostBox,
+    injectPostComments: nop,
+    injectCommentBox: nop,
+    injectPostInspector: nop,
     injectWelcomeBanner,
-    collectPeople
+    collectPeople,
+    collectPosts
 })
 
 export {}
