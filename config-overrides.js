@@ -32,6 +32,13 @@ module.exports = function override(/** @type{import("webpack").Configuration} */
     config.module.exprContextCritical = false
     config.module.unknownContextCritical = false
 
+    // Prevent all other chunks from being injected to index.html
+    config.plugins.forEach(p => {
+        if (p.constructor.name !== 'HtmlWebpackPlugin') return
+        const {devtools, app, ...exclude} = config.entry
+        Object.keys(exclude).forEach(e => p.options.excludeChunks.push(e))
+    })
+
     config.plugins.push(
         new (require('write-file-webpack-plugin'))({
             test: /(webp|jpg|png|shim|polyfill|js\/.*|index\.html|manifest\.json|_locales)/,
