@@ -31,8 +31,8 @@ export function PostInspector(props: PostInspectorProps) {
         if (!whoAmI) return []
         if (!whoAmI.identifier.equals(postBy)) return []
         if (!type.encryptedPost) return []
-        const { iv } = type.encryptedPost
-        return Services.Crypto.getSharedListOfPost(iv, postBy)
+        const { iv, version } = type.encryptedPost
+        return Services.Crypto.getSharedListOfPost(version, iv, postBy)
     }, [post, postBy, whoAmI]).then(p => setAlreadySelectedPreviously(p))
 
     if (postBy.isUnknown) return null
