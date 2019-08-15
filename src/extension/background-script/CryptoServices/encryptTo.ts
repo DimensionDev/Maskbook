@@ -1,27 +1,19 @@
-import * as Alpha40 from '../../../crypto/crypto-alpha-40'
 import * as Alpha39 from '../../../crypto/crypto-alpha-39'
-import * as Gun1 from '../../../network/gun/version.1'
 import * as Gun2 from '../../../network/gun/version.2'
 import { encodeArrayBuffer } from '../../../utils/type-transform/String-ArrayBuffer'
-import { constructAlpha40 } from '../../../utils/type-transform/Payload'
+import { constructAlpha39 } from '../../../utils/type-transform/Payload'
 import { getMyPrivateKey } from '../../../database'
 import { queryLocalKeyDB } from '../../../database/people'
 import { PersonIdentifier } from '../../../database/type'
-import { prepareOthersKeyForEncryptionV40 } from '../prepareOthersKeyForEncryption'
+import { prepareOthersKeyForEncryptionV39 } from '../prepareOthersKeyForEncryption'
 import { geti18nString } from '../../../utils/i18n'
 
 type EncryptedText = string
 type OthersAESKeyEncryptedToken = string
 /**
- * This map stores <token, othersAESKeyEncrypted>.
+ * This map stores <iv, othersAESKeyEncrypted>.
  */
-const OthersAESKeyEncryptedMap = new Map<
-    OthersAESKeyEncryptedToken,
-    {
-        key: Alpha40.PublishedAESKey
-        name: string
-    }[]
->()
+const OthersAESKeyEncryptedMap = new Map<OthersAESKeyEncryptedToken, (Alpha39.PublishedAESKeyRecordV39)[]>()
 /**
  * Encrypt to a user
  * @param content Original text
@@ -36,7 +28,7 @@ export async function encryptTo(
     whoAmI: PersonIdentifier,
 ): Promise<[EncryptedText, OthersAESKeyEncryptedToken]> {
     if (to.length === 0) return ['', '']
-    const toKey = await prepareOthersKeyForEncryptionV40(to)
+    const toKey = await prepareOthersKeyForEncryptionV39(to)
     const mine = await getMyPrivateKey(whoAmI)
     if (!mine) throw new TypeError('Not inited yet')
     const {
@@ -45,9 +37,9 @@ export async function encryptTo(
         othersAESKeyEncrypted,
         ownersAESKeyEncrypted,
         iv,
-    } = await Alpha40.encrypt1ToN({
-        version: -40,
-        content: content,
+    } = await Alpha39.encrypt1ToN({
+        version: -39,
+        content,
         othersPublicKeyECDH: toKey,
         ownersLocalKey: (await queryLocalKeyDB(whoAmI))!,
         privateKeyECDH: mine.privateKey,
@@ -57,18 +49,18 @@ export async function encryptTo(
     const ivStr = encodeArrayBuffer(iv)
     const encryptedTextStr = encodeArrayBuffer(encryptedText)
     // ! Don't use payload.ts, this is an internal representation used for signature.
-    const str = `2/4|${ownersAESKeyStr}|${ivStr}|${encryptedTextStr}`
-    const signature = encodeArrayBuffer(await Alpha40.sign(str, mine.privateKey))
+    const str = `3/4|${ownersAESKeyStr}|${ivStr}|${encryptedTextStr}`
+    const signature = encodeArrayBuffer(await Alpha39.sign(str, mine.privateKey))
     // Store AES key to gun
     const key = encodeArrayBuffer(iv)
     OthersAESKeyEncryptedMap.set(key, othersAESKeyEncrypted)
     return [
-        `${constructAlpha40({
+        `${constructAlpha39({
             encryptedText: encryptedTextStr,
             iv: ivStr,
             ownersAESKeyEncrypted: ownersAESKeyStr,
             signature: signature,
-            version: -40,
+            version: -39,
         })}`,
         key,
     ]
@@ -76,9 +68,9 @@ export async function encryptTo(
 
 /**
  * MUST call before send post, or othersAESKeyEncrypted will not be published to the internet!
- * @param token Token that returns in the encryptTo
+ * @param iv Token that returns in the encryptTo
  */
-export async function publishPostAESKey(token: string, whoAmI: PersonIdentifier) {
-    if (!OthersAESKeyEncryptedMap.has(token)) throw new Error(geti18nString('service_publish_post_aes_key_failed'))
-    return Gun1.publishPostAESKey(token, whoAmI, OthersAESKeyEncryptedMap.get(token)!)
+export async function publishPostAESKey(iv: string, whoAmI: PersonIdentifier) {
+    if (!OthersAESKeyEncryptedMap.has(iv)) throw new Error(geti18nString('service_publish_post_aes_key_failed'))
+    return Gun2.publishPostAESKeyOnGun2(iv, OthersAESKeyEncryptedMap.get(iv)!)
 }
