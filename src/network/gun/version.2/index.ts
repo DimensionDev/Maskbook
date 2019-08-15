@@ -5,8 +5,13 @@ import { gun2Servers } from '../../gun-servers'
 export * from './people'
 export * from './post'
 
-export type PersonOnGun2 = { proofPostId?: string } | undefined
-export type SharedAESKeyGun2 = { encryptedKey: string; salt: string }
+export type PersonOnGun2 = { provePostId?: string } | undefined
+export type SharedAESKeyGun2 = {
+    encryptedKey: string
+    salt: string
+    ephemeralKey?: CryptoKey
+    ephemeralKeySign?: string
+}
 export interface PostOnGun2 {
     [cutNBitsFromFront_hash_ReceiversPublicKey: string]: SharedAESKeyGun2[]
 }
