@@ -3,7 +3,7 @@ import { PersonIdentifier } from '../../database/type'
 /**
  * @internal
  */
-export async function prepareOthersKeyForEncryption(
+export async function prepareOthersKeyForEncryptionV40(
     to: PersonIdentifier[],
 ): Promise<
     {
@@ -15,4 +15,14 @@ export async function prepareOthersKeyForEncryption(
     return data
         .filter((x): x is NonNullable<typeof x> => !!x)
         .map(x => ({ name: x.identifier.userId, key: x.publicKey! }))
+}
+/**
+ * @internal
+ */
+export async function prepareOthersKeyForEncryptionV39(to: PersonIdentifier[]): Promise<CryptoKey[]> {
+    const data = await Promise.all(to.map(x => x).map(queryPersonDB))
+    return data
+        .filter(x => x)
+        .map(x => x!.publicKey!)
+        .filter(x => x)
 }

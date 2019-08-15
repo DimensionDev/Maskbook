@@ -39,7 +39,7 @@ export function PostInspector(props: PostInspectorProps) {
 
     if (type.encryptedPost) {
         props.needZip()
-        const { iv, ownersAESKeyEncrypted } = type.encryptedPost
+        const { iv, ownersAESKeyEncrypted, version } = type.encryptedPost
         return (
             <>
                 <Debug children={post} data-id="post" />
@@ -50,6 +50,7 @@ export function PostInspector(props: PostInspectorProps) {
                     requestAppendRecipients={async people => {
                         setAlreadySelectedPreviously(alreadySelectedPreviously.concat(people))
                         return Services.Crypto.appendShareTarget(
+                            version,
                             iv,
                             ownersAESKeyEncrypted,
                             iv,

@@ -1,10 +1,13 @@
-import { generateOthersAESKeyEncryptedV40, encrypt1ToN as encrypt1ToN40 } from './crypto-alpha-40'
+import {
+    generateOthersAESKeyEncrypted as generateOthersAESKeyEncryptedV40,
+    encrypt1ToN as encrypt1ToN40,
+} from './crypto-alpha-40'
 export type PublishedAESKey = { encryptedKey: string; salt: string }
 export type PublishedAESKeyRecordV39 = {
     aesKey: PublishedAESKey
     receiverKey: CryptoKey
 }
-export async function generateOthersAESKeyEncryptedV39(
+export async function generateOthersAESKeyEncrypted(
     version: -39,
     AESKey: CryptoKey,
     privateKeyECDH: CryptoKey,

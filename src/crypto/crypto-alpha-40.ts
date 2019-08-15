@@ -90,7 +90,7 @@ export async function encrypt1To1(info: {
     const encryptedContent = await crypto.subtle.encrypt({ name: 'AES-GCM', iv }, key, content)
     return { salt, encryptedContent, version: -40 }
 }
-export async function generateOthersAESKeyEncryptedV40(
+export async function generateOthersAESKeyEncrypted(
     version: -40,
     AESKey: CryptoKey,
     privateKeyECDH: CryptoKey,
@@ -154,12 +154,7 @@ export async function encrypt1ToN(info: {
         content: exportedAESKey,
         iv,
     })).content
-    const othersAESKeyEncrypted = await generateOthersAESKeyEncryptedV40(
-        -40,
-        AESKey,
-        privateKeyECDH,
-        othersPublicKeyECDH,
-    )
+    const othersAESKeyEncrypted = await generateOthersAESKeyEncrypted(-40, AESKey, privateKeyECDH, othersPublicKeyECDH)
     return { encryptedContent, iv, version: -40, ownersAESKeyEncrypted, othersAESKeyEncrypted }
 }
 //#endregion

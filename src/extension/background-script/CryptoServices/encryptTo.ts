@@ -7,7 +7,7 @@ import { constructAlpha40 } from '../../../utils/type-transform/Payload'
 import { getMyPrivateKey } from '../../../database'
 import { queryLocalKeyDB } from '../../../database/people'
 import { PersonIdentifier } from '../../../database/type'
-import { prepareOthersKeyForEncryption } from '../prepareOthersKeyForEncryption'
+import { prepareOthersKeyForEncryptionV40 } from '../prepareOthersKeyForEncryption'
 import { geti18nString } from '../../../utils/i18n'
 
 type EncryptedText = string
@@ -36,7 +36,7 @@ export async function encryptTo(
     whoAmI: PersonIdentifier,
 ): Promise<[EncryptedText, OthersAESKeyEncryptedToken]> {
     if (to.length === 0) return ['', '']
-    const toKey = await prepareOthersKeyForEncryption(to)
+    const toKey = await prepareOthersKeyForEncryptionV40(to)
     const mine = await getMyPrivateKey(whoAmI)
     if (!mine) throw new TypeError('Not inited yet')
     const {
