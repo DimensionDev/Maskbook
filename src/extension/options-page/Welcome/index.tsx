@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import Welcome0 from '../../../components/Welcomes/0'
-import Welcome1a1 from '../../../components/Welcomes/1a1a'
+import Welcome1a1a from '../../../components/Welcomes/1a1a'
+import Welcome1a1b from '../../../components/Welcomes/1a1b'
 import Welcome1a2 from '../../../components/Welcomes/1a2'
 import Welcome1a3 from '../../../components/Welcomes/1a3'
 import Welcome1a4v2 from '../../../components/Welcomes/1a4.v2'
@@ -22,6 +23,7 @@ enum WelcomeState {
     Start,
     // Step 1
     SelectIdentity,
+    DidntFindAccount,
     Intro,
     BackupKey,
     ProvePost,
@@ -54,9 +56,6 @@ const WelcomeActions = {
     },
     manualVerifyBio(user: PersonIdentifier, prove: string) {
         this.autoVerifyBio(user, prove)
-    },
-    onFinish(reason: 'quit' | 'done') {
-        window.close()
     },
 }
 interface Welcome {
@@ -93,12 +92,13 @@ function Welcome(props: Welcome) {
             )
         case WelcomeState.SelectIdentity:
             return (
-                <Welcome1a1
+                <Welcome1a1a
+                    back={() => onStepChange(WelcomeState.Start)}
+                    didntFindAccount={() => onStepChange(WelcomeState.DidntFindAccount)}
                     next={selected => {
                         onSelectIdentity(selected)
                         onStepChange(WelcomeState.Intro)
                     }}
-                    didntFindAccount={() => onStepChange(WelcomeState.Start)}
                     identities={
                         personHintFromSearch.identifier.isUnknown
                             ? currentIdentities
@@ -106,8 +106,20 @@ function Welcome(props: Welcome) {
                     }
                 />
             )
+        case WelcomeState.DidntFindAccount:
+            return (
+                <Welcome1a1b
+                    useExistingAccounts={() => onStepChange(WelcomeState.SelectIdentity)}
+                    back={() => onStepChange(WelcomeState.Start)}
+                />
+            )
         case WelcomeState.Intro:
-            return <Welcome1a2 next={() => onStepChange(WelcomeState.BackupKey)} />
+            return (
+                <Welcome1a2
+                    back={() => onStepChange(WelcomeState.Start)}
+                    next={() => onStepChange(WelcomeState.BackupKey)}
+                />
+            )
         case WelcomeState.BackupKey:
             sideEffects.backupMyKeyPair(props.whoAmI.identifier)
             return <Welcome1a3 next={() => onStepChange(WelcomeState.ProvePost)} />
@@ -142,7 +154,7 @@ function Welcome(props: Welcome) {
                 />
             )
         case WelcomeState.End:
-            return <Welcome2 />
+            return <Welcome2 close={() => onFinish('done')} />
     }
 }
 const ResponsiveDialog = withMobileDialog({ breakpoint: 'xs' })(Dialog)
@@ -175,7 +187,6 @@ export default withRouter(function _WelcomePortal(props: RouteComponentProps) {
     const selectedId = useValueRef(selectedIdRef)
     const ownIds = useValueRef(ownedIdsRef)
 
-    // ? Update info from search
     useEffect(() => {
         const search = new URLSearchParams(props.location.search)
 
@@ -199,11 +210,11 @@ export default withRouter(function _WelcomePortal(props: RouteComponentProps) {
                     currentStep={step}
                     sideEffects={WelcomeActions}
                     onStepChange={setStep}
-                    onFinish={WelcomeActions.onFinish}
                     whoAmI={selectedId}
                     currentIdentities={ownIds}
                     personHintFromSearch={personFromURL}
                     onSelectIdentity={p => (selectedIdRef.value = p)}
+                    onFinish={() => props.history.replace('/')}
                 />
             </IdentifierRefContext.Provider>
         </ResponsiveDialog>
