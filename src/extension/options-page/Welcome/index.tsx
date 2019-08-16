@@ -55,9 +55,6 @@ const WelcomeActions = {
     manualVerifyBio(user: PersonIdentifier, prove: string) {
         this.autoVerifyBio(user, prove)
     },
-    onFinish(this: { props: RouteComponentProps }, reason: 'quit' | 'done') {
-        this.props.history.replace('/')
-    },
 }
 interface Welcome {
     whoAmI: Person
@@ -180,8 +177,6 @@ export default withRouter(function _WelcomePortal(props: RouteComponentProps) {
     const selectedId = useValueRef(selectedIdRef)
     const ownIds = useValueRef(ownedIdsRef)
 
-    const onFinish = WelcomeActions.onFinish.bind({ props })
-
     useEffect(() => {
         const search = new URLSearchParams(props.location.search)
 
@@ -209,7 +204,7 @@ export default withRouter(function _WelcomePortal(props: RouteComponentProps) {
                     currentIdentities={ownIds}
                     personHintFromSearch={personFromURL}
                     onSelectIdentity={p => (selectedIdRef.value = p)}
-                    onFinish={onFinish}
+                    onFinish={() => props.history.replace('/')}
                 />
             </IdentifierRefContext.Provider>
         </ResponsiveDialog>
