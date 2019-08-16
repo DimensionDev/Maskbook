@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import Welcome0 from '../../../components/Welcomes/0'
-import Welcome1a1 from '../../../components/Welcomes/1a1a'
+import Welcome1a1a from '../../../components/Welcomes/1a1a'
+import Welcome1a1b from '../../../components/Welcomes/1a1b'
 import Welcome1a2 from '../../../components/Welcomes/1a2'
 import Welcome1a3 from '../../../components/Welcomes/1a3'
 import Welcome1a4v2 from '../../../components/Welcomes/1a4.v2'
@@ -22,6 +23,7 @@ enum WelcomeState {
     Start,
     // Step 1
     SelectIdentity,
+    DidntFindAccount,
     Intro,
     BackupKey,
     ProvePost,
@@ -90,17 +92,25 @@ function Welcome(props: Welcome) {
             )
         case WelcomeState.SelectIdentity:
             return (
-                <Welcome1a1
+                <Welcome1a1a
+                    back={() => onStepChange(WelcomeState.Start)}
+                    didntFindAccount={() => onStepChange(WelcomeState.DidntFindAccount)}
                     next={selected => {
                         onSelectIdentity(selected)
                         onStepChange(WelcomeState.Intro)
                     }}
-                    didntFindAccount={() => onStepChange(WelcomeState.Start)}
                     identities={
                         personHintFromSearch.identifier.isUnknown
                             ? currentIdentities
                             : [personHintFromSearch, ...currentIdentities]
                     }
+                />
+            )
+        case WelcomeState.DidntFindAccount:
+            return (
+                <Welcome1a1b
+                    useExistingAccounts={() => onStepChange(WelcomeState.SelectIdentity)}
+                    back={() => onStepChange(WelcomeState.Start)}
                 />
             )
         case WelcomeState.Intro:
