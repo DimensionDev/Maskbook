@@ -46,7 +46,7 @@ export async function decryptFrom(
 
         const [cachedPostResult, setPostCache] = await decryptFromCache(data, by)
 
-        const byPerson = await addPerson(by)
+        const byPerson = await addPerson(by).catch(() => null)
         if (!byPerson || !byPerson.publicKey) {
             if (cachedPostResult) return { signatureVerifyResult: false, content: cachedPostResult }
             return { error: geti18nString('service_others_key_not_found', by.userId) }

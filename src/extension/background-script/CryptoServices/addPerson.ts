@@ -5,6 +5,7 @@ import { queryPersonDB, PersonRecord } from '../../../database/people'
 import { PersonIdentifier, PostIdentifier } from '../../../database/type'
 import getCurrentNetworkWorker from '../../../social-network/utils/getCurrentNetworkWorker'
 import { verifyOthersProve } from './verifyOthersProve'
+import { memoizePromise } from '../../../utils/memoize'
 
 async function getUserPublicKeyFromBio(user: PersonIdentifier) {
     const profile = await getCurrentNetworkWorker(user).fetchProfile(user)
@@ -52,22 +53,16 @@ async function getUserPublicKeyFromNetwork(user: PersonIdentifier) {
     }
     return person
 }
-const fetchKeyCache = new Map<string, Promise<PersonRecord>>()
+
 /**
  * Fetch a user's public key from bio or prove post
  * @param user Identifier
  */
-export function addPerson(user: PersonIdentifier): Promise<PersonRecord | null> {
-    if (fetchKeyCache.has(user.toText())) {
-        return fetchKeyCache.get(user.toText())!
-    }
-    const promise = getPerson(user)
-    promise.catch(() => setTimeout(() => fetchKeyCache.delete(user.toText()), 10000))
-    fetchKeyCache.set(user.toText(), promise)
-    return promise.catch(() => null)
-    async function getPerson(user: PersonIdentifier) {
+export const addPerson = memoizePromise(
+    async function(user: PersonIdentifier) {
         const person = await queryPersonDB(user)
         if (!person || !person.publicKey) return getUserPublicKeyFromNetwork(user)
         return person
-    }
-}
+    },
+    id => id.toText(),
+)
