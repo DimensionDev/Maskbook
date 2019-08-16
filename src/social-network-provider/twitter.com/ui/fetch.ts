@@ -1,4 +1,4 @@
-import { bioCard, postsRootSelector, postsSelectors } from '../utils/selectors'
+import { bioCard, postsRootSelector, postsSelectors, postViewMain } from '../utils/selectors'
 import { MutationObserverWatcher } from '@holoflows/kit'
 import Services from '../../../extension/service'
 import { PersonIdentifier } from '../../../database/type'
@@ -43,16 +43,33 @@ const registerBioCollector = () => {
         .then()
 }
 
-// Tinyfool\n@tinyfool\n·\n10m\n你们觉得用Xcode开发swift-ui，Xcode慢么？
+const resolveInfoFromPostView = () => {
+    const c = postViewMain.querySelectorAll<HTMLElement>('[data-testid="tweet"] > div:nth-of-type(2) > div').evaluateOnce()
+    const postBy = c[0].querySelectorAll('span')[3].innerText.replace('@', '')
+    const postContent = c[1].innerText
+    return {
+        postBy,
+        postContent
+    }
+}
+
 const registerPostCollector = (that: SocialNetworkUI) => {
     new MutationObserverWatcher(postsSelectors)
         .useForeach((node, _, proxy) => {
             const info = getEmptyPostInfo(postsRootSelector)
             that.posts.set(proxy, info)
             const collectPostInfo = () => {
-                info.postContent.value = node.innerText
+                const r = resolveInfoFromPostView()
+                info.postContent.value = r.postContent
                 info.postPayload.value = deconstructPayload(info.postContent.value)
-                info.postBy.value = new PersonIdentifier(host, )
+                info.postBy.value = new PersonIdentifier(host, r.postBy)
+                info.postID.value = ''
+            }
+            collectPostInfo()
+            return {
+                onNodeMutation: collectPostInfo,
+                onTargetChanged: collectPostInfo,
+                onRemove: () => that.posts.delete(proxy)
             }
         })
         .setDomProxyOption({ afterShadowRootInit: { mode: 'closed' } })
@@ -60,4 +77,7 @@ const registerPostCollector = (that: SocialNetworkUI) => {
         .then()
 }
 
-export { registerBioCollector as collectPeople }
+export {
+    registerBioCollector as collectPeople,
+    registerPostCollector as collectPosts
+}

@@ -7,7 +7,7 @@ import { ValueRef } from '@holoflows/kit/es'
 import { PersonIdentifier } from '../../../database/type'
 import { resolveLastRecognizedIdentity } from './resolveLastRecognizedIdentity'
 import { injectPostBox, injectWelcomeBanner } from './inject'
-import { collectPeople } from './fetch'
+import { collectPeople, collectPosts } from './fetch'
 import { nop } from '../../../utils/utils'
 
 // TODO: host -> def.host
@@ -32,7 +32,7 @@ const def = defineSocialNetworkUI({
     injectPostInspector: nop,
     injectWelcomeBanner,
     collectPeople,
-    collectPosts
+    collectPosts: () => collectPosts(def)
 })
 
 export {}
