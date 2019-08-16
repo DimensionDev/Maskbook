@@ -1,8 +1,10 @@
 const { task, parallel } = require('just-task')
 const { spawn } = require('child_process')
+const path = require('path')
 
-task('install/holoflows', () => {
-    step('cd node_modules/@holoflows/kit && yarn && yarn build').then()
+task('install/holoflows', async () => {
+    const base = path.join(process.cwd(), 'node_modules/@holoflows')
+    await step(`cd ${path.join(base, 'kit')} && yarn && yarn build`)
 })
 
 const lintCommand = async (str, level = 'log') => {
