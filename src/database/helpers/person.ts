@@ -15,7 +15,7 @@ export interface Person extends Omit<PersonRecord, 'publicKey' | 'privateKey'> {
 }
 
 export async function personRecordToPerson(record: PersonRecord): Promise<Person> {
-    const avatar = await getAvatarDataURL(record.identifier)
+    const avatar = await getAvatarDataURL(record.identifier).catch(() => '')
     const { privateKey, publicKey, ...rec } = record
     return {
         ...rec,

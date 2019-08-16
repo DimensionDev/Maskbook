@@ -9,6 +9,7 @@ import {
     decodeText,
 } from '../utils/type-transform/String-ArrayBuffer'
 import { toECDH, addUint8Array, toECDSA } from '../utils/type-transform/ECDSA-ECDH'
+import { memoizePromise } from '../utils/memoize'
 // tslint:disable: no-parameter-reassignment
 export type PublishedAESKey = { encryptedKey: string; salt: string }
 export type PublishedAESKeyRecordV40 = {
@@ -298,23 +299,23 @@ function extractCommentPayload(text: string) {
     if (content.length) return content
     return
 }
-const commentKeyCache = new Map<string, CryptoKey>()
-async function getCommentKey(postIV: string, postContent: string) {
-    if (commentKeyCache.has(postIV + postContent)) return commentKeyCache.get(postIV + postContent)!
-    const pbkdf = await crypto.subtle.importKey('raw', encodeText(postContent), 'PBKDF2', false, [
-        'deriveBits',
-        'deriveKey',
-    ])
-    const aes = await crypto.subtle.deriveKey(
-        { name: 'PBKDF2', salt: encodeText(postIV), iterations: 100000, hash: 'SHA-256' },
-        pbkdf,
-        { name: 'AES-GCM', length: 256 },
-        true,
-        ['encrypt', 'decrypt'],
-    )
-    commentKeyCache.set(postIV + postContent, aes)
-    return aes
-}
+const getCommentKey = memoizePromise(
+    async function(postIV: string, postContent: string) {
+        const pbkdf = await crypto.subtle.importKey('raw', encodeText(postContent), 'PBKDF2', false, [
+            'deriveBits',
+            'deriveKey',
+        ])
+        const aes = await crypto.subtle.deriveKey(
+            { name: 'PBKDF2', salt: encodeText(postIV), iterations: 100000, hash: 'SHA-256' },
+            pbkdf,
+            { name: 'AES-GCM', length: 256 },
+            true,
+            ['encrypt', 'decrypt'],
+        )
+        return aes
+    },
+    (a, b) => a + b,
+)
 // * Payload format: 🎶2/4|encrypted_comment:||
 export async function encryptComment(
     postIV: string | ArrayBuffer,
