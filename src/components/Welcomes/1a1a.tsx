@@ -5,11 +5,13 @@ import { Button, makeStyles, Typography } from '@material-ui/core'
 import WelcomeContainer from './WelcomeContainer'
 import { SelectPeopleUI } from '../shared/SelectPeople'
 import { Person } from '../../database'
+import Navigation from './Navigation/Navigation'
 
 interface Props {
     next(person: Person): void
     didntFindAccount(): void
     identities: Person[]
+    back(): void
 }
 const useStyles = makeStyles(theme => ({
     paper: {
@@ -26,11 +28,12 @@ const useStyles = makeStyles(theme => ({
         padding: '0 4em',
     },
 }))
-export default function Welcome({ next, identities, didntFindAccount }: Props) {
+export default function Welcome({ next, identities, didntFindAccount, back }: Props) {
     const classes = useStyles()
-    const [selected, setSelect] = useState<Person[]>([identities[0]])
+    const [selected, setSelect] = useState<Person[]>(identities[0] ? identities : [])
     return (
         <WelcomeContainer className={classes.paper}>
+            <Navigation back={back} />
             <Typography variant="h5">{geti18nString('welcome_1a1_title')}</Typography>
             <SelectPeopleUI
                 classes={{ root: classes.select }}

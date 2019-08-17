@@ -3,6 +3,7 @@ import { Person } from '../database'
 
 interface UIEvent {}
 interface KeyStoreEvent {
+    closeActiveTab: undefined
     newPerson: Person
     generateKeyPair: undefined
     identityUpdated: undefined

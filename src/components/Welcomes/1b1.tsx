@@ -1,6 +1,5 @@
 import * as React from 'react'
 
-import ArrowBack from '@material-ui/icons/ArrowBack'
 import { useDragAndDrop } from '../../utils/hooks/useDragAndDrop'
 import { geti18nString } from '../../utils/i18n'
 import { makeStyles, Button, Typography, Tabs, Tab } from '@material-ui/core'
@@ -9,6 +8,7 @@ import FolderOpen from '@material-ui/icons/FolderOpen'
 import Camera from '@material-ui/icons/CameraAlt'
 import Text from '@material-ui/icons/TextFormat'
 import WelcomeContainer from './WelcomeContainer'
+import Navigation from './Navigation/Navigation'
 import QRScanner from './QRScanner'
 import { isWKWebkit, iOSHost } from '../../utils/iOS-RPC'
 import { useAsync } from '../../utils/components/AsyncComponent'
@@ -34,16 +34,6 @@ interface Props {
 }
 const videoHeight = 360
 const useStyles = makeStyles(theme => ({
-    nav: {
-        paddingTop: theme.spacing(1),
-        paddingLeft: theme.spacing(1),
-    },
-    navButton: {
-        color: theme.palette.text.hint,
-    },
-    navButtonIcon: {
-        marginRight: theme.spacing(1),
-    },
     main: {
         padding: '2rem 2rem 1rem 2rem',
         textAlign: 'center',
@@ -96,12 +86,7 @@ export default function Welcome({ back, restore }: Props) {
 
     return (
         <WelcomeContainer {...dragEvents}>
-            <nav className={classes.nav}>
-                <Button onClick={back} disableFocusRipple disableRipple className={classes.navButton}>
-                    <ArrowBack className={classes.navButtonIcon} />
-                    {geti18nString('back')}
-                </Button>
-            </nav>
+            <Navigation back={back} />
             <Tabs
                 value={tab}
                 onChange={(e, i) => setTab(i)}

@@ -10,7 +10,8 @@
     "start": "yarn just storybook",
     "build-storybook": "yarn just storybook/build",
     "load-to-firefox": "yarn web-ext run --source-dir ./dist/ --verbose",
-    "install": "yarn just install/holoflows"
+    "install": "yarn just install/holoflows",
+    "uninstall": "yarn just install/holoflows"
   },
   "dependencies": {
     "@holoflows/kit": "https://github.com/DimensionDev/holoflows-kit",

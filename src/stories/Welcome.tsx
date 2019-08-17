@@ -33,6 +33,7 @@ storiesOf('Welcome', module)
     .add('Step 1a-1a', () => (
         <ResponsiveDialog open>
             <Welcome1a1a
+                back={to('Welcome', 'Step 0')}
                 next={() => to('Welcome', 'Step 1a-2')()}
                 identities={demoPeople}
                 didntFindAccount={to('Welcome', 'Step 1a-1b')}
@@ -41,12 +42,12 @@ storiesOf('Welcome', module)
     ))
     .add('Step 1a-1b', () => (
         <ResponsiveDialog open>
-            <Welcome1a1b useExistingAccounts={to('Welcome', 'Step 1a-1a')} />
+            <Welcome1a1b back={to('Welcome', 'Step 0')} useExistingAccounts={to('Welcome', 'Step 1a-1a')} />
         </ResponsiveDialog>
     ))
     .add('Step 1a-2', () => (
         <ResponsiveDialog open>
-            <Welcome1a2 next={to('Welcome', 'Step 1a-3')} />
+            <Welcome1a2 next={to('Welcome', 'Step 1a-3')} back={to('Welcome', 'Step 0')} />
         </ResponsiveDialog>
     ))
     .add('Step 1a-3', () => (
@@ -75,7 +76,7 @@ storiesOf('Welcome', module)
     ))
     .add('Step 2', () => (
         <ResponsiveDialog open>
-            <Welcome2 />
+            <Welcome2 close={action('Close')} />
         </ResponsiveDialog>
     ))
     .add('QRCode Scanner', () => (
