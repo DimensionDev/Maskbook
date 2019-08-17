@@ -1,11 +1,10 @@
-import { LiveSelector, MutationObserverWatcher, IntervalWatcher } from '@holoflows/kit'
-import { sleep, dispatchCustomEvents, timeout, untilDocumentReady } from '../../../utils/utils'
+import { IntervalWatcher, LiveSelector, MutationObserverWatcher } from '@holoflows/kit'
+import { dispatchCustomEvents, sleep, timeout, untilDocumentReady } from '../../../utils/utils'
 import { geti18nString } from '../../../utils/i18n'
 import { isMobileFacebook } from '../isMobile'
 
 /**
  * Access: https://(www|m).facebook.com/
- * @param text
  */
 export async function pasteIntoPostBoxFacebook(text: string, warningText: string) {
     await untilDocumentReady()

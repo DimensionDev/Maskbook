@@ -9,6 +9,7 @@ import { resolveLastRecognizedIdentity } from './resolveLastRecognizedIdentity'
 import { injectPostBox, injectWelcomeBanner } from './inject'
 import { collectPeople, collectPosts } from './fetch'
 import { nop } from '../../../utils/utils'
+import { taskPasteIntoPostBox } from './task'
 
 // TODO: host -> def.host
 const def = defineSocialNetworkUI({
@@ -32,7 +33,8 @@ const def = defineSocialNetworkUI({
     injectPostInspector: nop,
     injectWelcomeBanner,
     collectPeople,
-    collectPosts: () => collectPosts(def)
+    collectPosts: () => collectPosts(def),
+    taskPasteIntoPostBox
 })
 
 export {}

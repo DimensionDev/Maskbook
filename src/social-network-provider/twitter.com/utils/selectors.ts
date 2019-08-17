@@ -17,10 +17,11 @@ const querySelectorAll = <T extends HTMLElement>(selector: string) => {
 export const bioCard = querySelector('[href*="header_photo"] + div')
 export const postViewMain = querySelector<HTMLElement>('[role="progressbar"] + div + div > div > div > div:first-of-type')
 
-export const newPostEditorSelector = querySelector<HTMLDivElement>('[role="main"] [role="progressbar"] ~ div .DraftEditor-root')
+const newPostEditor = '[role="main"] [role="progressbar"] ~ div'
+export const newPostEditorSelector = querySelector<HTMLDivElement>(`${newPostEditor} .DraftEditor-root`)
+export const newPostEditorInnerSelector = newPostEditorSelector.querySelector<HTMLDivElement>('.DraftEditor-editorContainer > div')
 
 const postsContainerString = '[role="main"] [data-testid="primaryColumn"] section'
 
-// @ts-ignore
-export const postsRootSelector = querySelectorAll<Element>(postsContainerString)
+export const postsRootSelector = querySelectorAll<HTMLElement>(postsContainerString)
 export const postsSelectors = querySelectorAll(`${postsContainerString} article`)
