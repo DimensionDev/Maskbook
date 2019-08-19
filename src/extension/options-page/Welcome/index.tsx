@@ -113,7 +113,7 @@ function Welcome(props: Welcome) {
         case WelcomeState.Intro:
             return (
                 <Welcome1a2
-                    back={() => onStepChange(WelcomeState.Start)}
+                    back={() => onStepChange(WelcomeState.SelectIdentity)}
                     next={() => onStepChange(WelcomeState.BackupKey)}
                 />
             )
