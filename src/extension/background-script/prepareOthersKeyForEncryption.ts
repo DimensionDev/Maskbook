@@ -11,7 +11,7 @@ export async function prepareOthersKeyForEncryptionV40(
         key: CryptoKey
     }[]
 > {
-    const data = await Promise.all(to.map(x => x).map(queryPersonDB))
+    const data = await Promise.all(to.map(queryPersonDB))
     return data
         .filter((x): x is NonNullable<typeof x> => !!x)
         .map(x => ({ name: x.identifier.userId, key: x.publicKey! }))
@@ -20,7 +20,7 @@ export async function prepareOthersKeyForEncryptionV40(
  * @internal
  */
 export async function prepareOthersKeyForEncryptionV39(to: PersonIdentifier[]): Promise<CryptoKey[]> {
-    const data = await Promise.all(to.map(x => x).map(queryPersonDB))
+    const data = await Promise.all(to.map(queryPersonDB))
     return data
         .filter(x => x)
         .map(x => x!.publicKey!)

@@ -28,7 +28,7 @@ export async function getSharedListOfPost(
         delete post._
         const nameInGun = Object.keys(post)
         // ? version 40 is for old facebook only
-        nameInGun.forEach(x => new PersonIdentifier('facebook.com', x))
+        nameInGun.forEach(x => ids.add(new PersonIdentifier('facebook.com', x).toText()))
     }
     return Promise.all(
         Array.from(ids)

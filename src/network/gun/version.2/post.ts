@@ -52,8 +52,7 @@ export function subscribePostKeysOnGun2(
                 .get(keyHash)
                 .map()
                 .on((data: PostOnGun2) => {
-                    const data2 = Object.assign({}, data)
-                    delete data2._
+                    const { _, ...data2 } = Object.assign({}, data)
                     callback(data2)
                 })
         })
