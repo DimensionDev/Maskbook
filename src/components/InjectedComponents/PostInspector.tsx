@@ -26,20 +26,20 @@ export function PostInspector(props: PostInspectorProps) {
         encryptedPost: deconstructPayload(post),
         provePost: post.match(/🔒(.+)🔒/)!,
     }
-    if (type.provePost) Services.People.uploadProvePostUrl(new PostIdentifier(postBy, postId))
+    if (type.provePost) Services.People.writePersonOnGun(postBy, { provePostId: postId })
     useAsync(async () => {
         if (!whoAmI) return []
         if (!whoAmI.identifier.equals(postBy)) return []
         if (!type.encryptedPost) return []
-        const { iv } = type.encryptedPost
-        return Services.Crypto.getSharedListOfPost(iv, postBy)
+        const { iv, version } = type.encryptedPost
+        return Services.Crypto.getSharedListOfPost(version, iv, postBy)
     }, [post, postBy, whoAmI]).then(p => setAlreadySelectedPreviously(p))
 
     if (postBy.isUnknown) return null
 
     if (type.encryptedPost) {
         props.needZip()
-        const { iv, ownersAESKeyEncrypted } = type.encryptedPost
+        const { iv, ownersAESKeyEncrypted, version } = type.encryptedPost
         return (
             <>
                 <Debug children={post} data-id="post" />
@@ -50,6 +50,7 @@ export function PostInspector(props: PostInspectorProps) {
                     requestAppendRecipients={async people => {
                         setAlreadySelectedPreviously(alreadySelectedPreviously.concat(people))
                         return Services.Crypto.appendShareTarget(
+                            version,
                             iv,
                             ownersAESKeyEncrypted,
                             iv,

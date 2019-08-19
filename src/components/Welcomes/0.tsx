@@ -6,7 +6,6 @@ import WelcomeContainer from './WelcomeContainer'
 import Navigation from './Navigation/Navigation'
 import { IdentifierRefContext } from '../../extension/options-page/Welcome'
 import { useValueRef } from '../../utils/hooks/useValueRef'
-import { setStorage } from '../../utils/browser.storage'
 
 const VerticalCenter = styled('div')({
     display: 'flex',

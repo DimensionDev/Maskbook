@@ -31,14 +31,15 @@ defineSocialNetworkUI({
         return location.hostname.endsWith('facebook.com')
     },
     friendlyName: 'Facebook',
-    setupAccount() {
+    async setupAccount() {
+        await browser.permissions.request({ origins: ['https://www.facebook.com/*', 'https://m.facebook.com/*'] })
         setStorage('facebook.com', { forceDisplayWelcome: true })
         window.open('https://facebook.com/')
     },
     ignoreSetupAccount() {
-        setStorage('facebook.com', { userIgnoredWelcome: true })
+        setStorage('facebook.com', { userIgnoredWelcome: true, forceDisplayWelcome: false })
     },
-    shouldDisplayWelcome: shouldDisplayWelcomeDefault('facebook.com'),
+    shouldDisplayWelcome: shouldDisplayWelcomeDefault,
     friendsRef: new ValueRef([]),
     myIdentitiesRef: new ValueRef([]),
     currentIdentity: new ValueRef(null),

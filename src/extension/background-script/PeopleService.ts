@@ -16,8 +16,8 @@ import { UpgradeBackupJSONFile } from '../../utils/type-transform/BackupFile'
 import { PersonIdentifier, GroupIdentifier, GroupType } from '../../database/type'
 
 OnlyRunInContext('background', 'FriendService')
-export { storeAvatar, getAvatarDataURL as getAvatarBlobURL, queryPerson } from '../../database'
-export { uploadProvePostUrl } from '../../key-management/people-gun'
+export { storeAvatar, getAvatarDataURL, queryPerson } from '../../database'
+export { writePersonOnGun } from '../../network/gun/version.2/people'
 /**
  * Query all people stored
  */

@@ -1,3 +1,7 @@
+/**
+ * @deprecated This version of payload is not in use.
+ * Please goto Crypto alpha v39
+ */
 import {
     encodeText,
     encodeArrayBuffer,
@@ -5,9 +9,10 @@ import {
     decodeText,
 } from '../utils/type-transform/String-ArrayBuffer'
 import { toECDH, addUint8Array, toECDSA } from '../utils/type-transform/ECDSA-ECDH'
+import { memoizePromise } from '../utils/memoize'
 // tslint:disable: no-parameter-reassignment
 export type PublishedAESKey = { encryptedKey: string; salt: string }
-export type PublishedAESKeyRecord = {
+export type PublishedAESKeyRecordV40 = {
     key: PublishedAESKey
     name: string
 }
@@ -66,7 +71,7 @@ async function deriveAESKey(
  * Encrypt 1 to 1
  */
 export async function encrypt1To1(info: {
-    version: -40
+    version: -40 | -39
     /** Message that you want to encrypt */
     content: string | ArrayBuffer
     /** Your private key */
@@ -91,10 +96,10 @@ export async function generateOthersAESKeyEncrypted(
     AESKey: CryptoKey,
     privateKeyECDH: CryptoKey,
     othersPublicKeyECDH: { key: CryptoKey; name: string }[],
-): Promise<PublishedAESKeyRecord[]> {
+): Promise<PublishedAESKeyRecordV40[]> {
     const exportedAESKey = encodeText(JSON.stringify(await crypto.subtle.exportKey('jwk', AESKey)))
     return Promise.all(
-        othersPublicKeyECDH.map<Promise<PublishedAESKeyRecord>>(async ({ key, name }) => {
+        othersPublicKeyECDH.map<Promise<PublishedAESKeyRecordV40>>(async ({ key, name }) => {
             const encrypted = await encrypt1To1({
                 version: -40,
                 content: exportedAESKey,
@@ -134,10 +139,7 @@ export async function encrypt1ToN(info: {
     /** Your encrypted post aes key. Should be attached in the post. */
     ownersAESKeyEncrypted: ArrayBuffer
     /** All encrypted post aes key. Should be post on the gun. */
-    othersAESKeyEncrypted: {
-        key: PublishedAESKey
-        name: string
-    }[]
+    othersAESKeyEncrypted: PublishedAESKeyRecordV40[]
 }> {
     const { version, content, othersPublicKeyECDH, privateKeyECDH, ownersLocalKey, iv } = info
     const AESKey = await crypto.subtle.generateKey({ name: 'AES-GCM', length: 256 }, true, ['encrypt', 'decrypt'])
@@ -162,7 +164,7 @@ export async function encrypt1ToN(info: {
  * Decrypt 1 to 1
  */
 export async function decryptMessage1To1(info: {
-    version: -40
+    version: -40 | -39
     encryptedContent: string | ArrayBuffer
     salt: string | ArrayBuffer
     /** Your private key */
@@ -181,26 +183,35 @@ export async function decryptMessage1To1(info: {
  * Decrypt 1 to N message that send by other
  */
 export async function decryptMessage1ToNByOther(info: {
-    version: -40
+    version: -40 | -39
     encryptedContent: string | ArrayBuffer
     privateKeyECDH: CryptoKey
     authorsPublicKeyECDH: CryptoKey
-    AESKeyEncrypted: PublishedAESKey
+    AESKeyEncrypted: PublishedAESKey | PublishedAESKey[]
     iv: ArrayBuffer | string
 }): Promise<[ArrayBuffer, CryptoKey]> {
-    const { AESKeyEncrypted, version, encryptedContent, privateKeyECDH, authorsPublicKeyECDH, iv } = info
-    const aesKeyJWK = decodeText(
-        await decryptMessage1To1({
-            version: -40,
-            salt: AESKeyEncrypted.salt,
-            encryptedContent: AESKeyEncrypted.encryptedKey,
-            anotherPublicKeyECDH: authorsPublicKeyECDH,
-            privateKeyECDH: privateKeyECDH,
+    const { encryptedContent, privateKeyECDH, authorsPublicKeyECDH, iv } = info
+    const AESKeyEncrypted = Array.isArray(info.AESKeyEncrypted) ? info.AESKeyEncrypted : [info.AESKeyEncrypted]
+
+    let resolvedAESKey: string | null = null
+    await Promise.all(
+        AESKeyEncrypted.map(async key => {
+            try {
+                const result = await decryptMessage1To1({
+                    version: -40,
+                    salt: key.salt,
+                    encryptedContent: key.encryptedKey,
+                    anotherPublicKeyECDH: authorsPublicKeyECDH,
+                    privateKeyECDH: privateKeyECDH,
+                })
+                resolvedAESKey = decodeText(result)
+            } catch {}
         }),
     )
+    if (resolvedAESKey === null) throw new Error('decryptMessage1ToNByOther cannot resolve an available key')
     const aesKey = await crypto.subtle.importKey(
         'jwk',
-        JSON.parse(aesKeyJWK),
+        JSON.parse(resolvedAESKey),
         { name: 'AES-GCM', length: 256 },
         false,
         ['decrypt'],
@@ -208,7 +219,7 @@ export async function decryptMessage1ToNByOther(info: {
     return [await decryptWithAES({ aesKey, iv, encrypted: encryptedContent }), aesKey]
 }
 export async function extractAESKeyInMessage(
-    version: -40,
+    version: -40 | -39,
     encodedEncryptedKey: string | ArrayBuffer,
     _iv: string | ArrayBuffer,
     myLocalKey: CryptoKey,
@@ -225,16 +236,15 @@ export async function extractAESKeyInMessage(
  * Decrypt 1 to N message that send by myself
  */
 export async function decryptMessage1ToNByMyself(info: {
-    version: -40
+    version: -40 | -39
     encryptedContent: string | ArrayBuffer
     /** This should be included in the message */
     encryptedAESKey: string | ArrayBuffer
     myLocalKey: CryptoKey
     iv: string | ArrayBuffer
 }): Promise<[ArrayBuffer, CryptoKey]> {
-    const { encryptedContent, myLocalKey, version } = info
-    const decryptedAESKey = await extractAESKeyInMessage(-40, info.encryptedAESKey, info.iv, info.myLocalKey)
-    const iv = typeof info.iv === 'string' ? decodeArrayBuffer(info.iv) : info.iv
+    const { encryptedContent, myLocalKey, iv, encryptedAESKey } = info
+    const decryptedAESKey = await extractAESKeyInMessage(-40, encryptedAESKey, iv, myLocalKey)
     const post = await decryptWithAES({ aesKey: decryptedAESKey, encrypted: encryptedContent, iv })
     return [post, decryptedAESKey]
 }
@@ -289,23 +299,23 @@ function extractCommentPayload(text: string) {
     if (content.length) return content
     return
 }
-const commentKeyCache = new Map<string, CryptoKey>()
-async function getCommentKey(postIV: string, postContent: string) {
-    if (commentKeyCache.has(postIV + postContent)) return commentKeyCache.get(postIV + postContent)!
-    const pbkdf = await crypto.subtle.importKey('raw', encodeText(postContent), 'PBKDF2', false, [
-        'deriveBits',
-        'deriveKey',
-    ])
-    const aes = await crypto.subtle.deriveKey(
-        { name: 'PBKDF2', salt: encodeText(postIV), iterations: 100000, hash: 'SHA-256' },
-        pbkdf,
-        { name: 'AES-GCM', length: 256 },
-        true,
-        ['encrypt', 'decrypt'],
-    )
-    commentKeyCache.set(postIV + postContent, aes)
-    return aes
-}
+const getCommentKey = memoizePromise(
+    async function(postIV: string, postContent: string) {
+        const pbkdf = await crypto.subtle.importKey('raw', encodeText(postContent), 'PBKDF2', false, [
+            'deriveBits',
+            'deriveKey',
+        ])
+        const aes = await crypto.subtle.deriveKey(
+            { name: 'PBKDF2', salt: encodeText(postIV), iterations: 100000, hash: 'SHA-256' },
+            pbkdf,
+            { name: 'AES-GCM', length: 256 },
+            true,
+            ['encrypt', 'decrypt'],
+        )
+        return aes
+    },
+    (a, b) => a + b,
+)
 // * Payload format: 🎶2/4|encrypted_comment:||
 export async function encryptComment(
     postIV: string | ArrayBuffer,

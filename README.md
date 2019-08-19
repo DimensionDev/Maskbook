@@ -44,7 +44,6 @@ For general introductions, see https://Maskbook.com/
 -   ./public - Resource file
 -   ./src/components - UI Components
 -   ./src/crypto - Crypto related (Note, in "alpha" version, the bigger number means the older version, our first payload version is alpha-42, and the latest version in July 1 2019 is alpha-40)
--   ./src/key-management - **OLD Database**, deprecated, in most cases you don't need them.
 -   ./src/database - How we store data.
     -   ./type.ts - Type definition for Identifier (used everywhere!)
     -   ./{avatar,group,people,post}.ts - How we store these data in database

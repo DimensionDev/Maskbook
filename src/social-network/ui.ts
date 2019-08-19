@@ -2,7 +2,7 @@ import { env, Env, Preference, Profile, SocialNetworkWorkerAndUI } from './share
 import { DomProxy, LiveSelector, ValueRef } from '@holoflows/kit/es'
 import { Person } from '../database'
 import { PersonIdentifier, PostIdentifier } from '../database/type'
-import { PayloadAlpha40 } from '../utils/type-transform/Payload'
+import { Payload } from '../utils/type-transform/Payload'
 
 //#region SocialNetworkUI
 export interface SocialNetworkUI
@@ -22,8 +22,11 @@ export interface SocialNetworkUI
      */
     friendlyName: string
     /**
-     * This function should jump to a new page,
-     * and then shouldDisplayWelcome should return true
+     * This function should
+     * 0. Request the permission to the site by `browser.permissions.request()`
+     * 1. Jump to a new page
+     * 2. On that page, shouldDisplayWelcome should return true
+     *
      * So Maskbook will display a Welcome banner
      *
      * If this network is a decentralized network and you don't know which page to open
@@ -31,8 +34,7 @@ export interface SocialNetworkUI
      */
     setupAccount: string | ((env: Env, preference: Preference) => void)
     /**
-     * This function should open a new page,
-     * and then shouldDisplayWelcome should return true
+     * Invoked when user click the button to dismiss the setup
      */
     ignoreSetupAccount(env: Env, preference: Preference): void
 }
@@ -168,7 +170,7 @@ export type PostInfo = {
     readonly postBy: ValueRef<PersonIdentifier>
     readonly postID: ValueRef<string | null>
     readonly postContent: ValueRef<string>
-    readonly postPayload: ValueRef<PayloadAlpha40 | null>
+    readonly postPayload: ValueRef<Payload | null>
     readonly commentsSelector: LiveSelector<HTMLElement, false>
     readonly commentBoxSelector: LiveSelector<HTMLElement, true>
     readonly decryptedPostContent: ValueRef<string>
@@ -222,6 +224,9 @@ function hookUIPostMap(ui: SocialNetworkUI) {
 }
 
 export function defineSocialNetworkUI(UI: SocialNetworkUI): void {
+    if (UI.acceptablePayload.includes('v40') && UI.internalName !== 'facebook') {
+        throw new TypeError('Payload version v40 is not supported in this network. Please use v39 or newer.')
+    }
     definedSocialNetworkUIs.add(UI)
 }
 export function defineSocialNetworkUIExtended<T extends SocialNetworkUI>(UI: T): void {

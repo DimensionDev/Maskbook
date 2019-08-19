@@ -33,7 +33,6 @@ if (GetContext() === 'background') {
     require('../tests/sign&verify')
     require('../tests/friendship-discover')
     require('../tests/comment')
-    require('./background-script/Debugger')
     Object.assign(window, {
         db: {
             avatar: require('../database/avatar'),
@@ -42,6 +41,8 @@ if (GetContext() === 'background') {
             type: require('../database/type'),
             post: require('../database/post'),
         },
+        gun1: require('../network/gun/version.1'),
+        gun2: require('../network/gun/version.2'),
     })
 }
 //#region

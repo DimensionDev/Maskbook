@@ -3,19 +3,19 @@ import getCurrentNetworkWorker from '../../social-network/utils/getCurrentNetwor
 import { Identifier } from '../../database/type'
 import { GetContext, AsyncCall, OnlyRunInContext } from '@holoflows/kit/es'
 import Serialization from '../../utils/type-transform/Serialization'
+import { memoize } from 'lodash-es'
 
 type ServiceType = Required<Pick<SocialNetworkWorker, 'autoVerifyBio' | 'autoVerifyPost' | 'manualVerifyPost'>>
-const cache = new Map<SocialNetworkWorker, ServiceType>()
 
+const getServiceFromNetworkWorker = memoize((worker: SocialNetworkWorker) => {
+    return AsyncCall<ServiceType>(undefined, { serializer: Serialization, key: worker.internalName })
+})
 export function getCurrentNetworkWorkerService(network: string | Identifier) {
     if (GetContext() === 'background') {
         throw new Error('This function is not for this env')
     }
     const worker = getCurrentNetworkWorker(network)
-    if (cache.has(worker)) return cache.get(worker)!
-    const service = AsyncCall<ServiceType>(undefined, { serializer: Serialization, key: worker.name })
-    cache.set(worker, service)
-    return service
+    return getServiceFromNetworkWorker(worker)
 }
 
 const notImplemented = () => {
@@ -28,5 +28,5 @@ export function startWorkerService(e: SocialNetworkWorker) {
         autoVerifyPost: e.autoVerifyPost || notImplemented,
         manualVerifyPost: e.manualVerifyPost || notImplemented,
     }
-    AsyncCall(impl, { serializer: Serialization, key: e.name })
+    AsyncCall(impl, { serializer: Serialization, key: e.internalName })
 }

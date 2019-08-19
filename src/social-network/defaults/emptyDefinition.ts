@@ -7,6 +7,7 @@ const noop = () => () => {}
  * DO NOT use this in content script
  */
 export const emptyDefinition: SocialNetworkUI = {
+    acceptablePayload: ['latest'],
     friendlyName: '',
     setupAccount: '',
     shouldActivate() {
@@ -36,9 +37,8 @@ export const emptyDefinition: SocialNetworkUI = {
     isValidUsername() {
         return true
     },
-    name: '',
+    internalName: '',
     networkIdentifier: 'localhost',
-    networkURL: '',
     async taskGetPostContent() {
         return ''
     },
