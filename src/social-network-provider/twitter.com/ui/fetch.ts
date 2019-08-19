@@ -5,6 +5,29 @@ import { PersonIdentifier } from '../../../database/type'
 import { host } from '../index'
 import { getEmptyPostInfo, SocialNetworkUI } from '../../../social-network/ui'
 import { deconstructPayload } from '../../../utils/type-transform/Payload'
+import { MemoryLeakProbe } from '../../../utils/MemoryLeakProbe'
+
+const p = new MemoryLeakProbe()
+
+const resolveLastRecognizedIdentity = function(this: SocialNetworkUI) {
+    p.shouldOnlyRunOnce()
+    const ref = this.lastRecognizedIdentity
+    ref.addListener(id => {
+        if (id.identifier.isUnknown) return
+        Services.People.resolveIdentity(id.identifier).then()
+    })
+    new MutationObserverWatcher(bioCard)
+        .enableSingleMode()
+        .addListener('onAdd', e => assign(e.value))
+        .addListener('onChange', e => assign(e.newValue))
+        .startWatch()
+        .then()
+    const assign = (i: PersonIdentifier) => {
+        if (i.isUnknown) return
+        if (i.equals(ref.value.identifier)) return
+        ref.value = { identifier: i }
+    }
+}
 
 const resolveInfoFromBioCard = () => {
     const userAvatarUrl = bioCard.nth(0).querySelector<HTMLImageElement>('img').evaluateOnce()[0].src
@@ -79,5 +102,6 @@ const registerPostCollector = (that: SocialNetworkUI) => {
 
 export {
     registerBioCollector as collectPeople,
-    registerPostCollector as collectPosts
+    registerPostCollector as collectPosts,
+    resolveLastRecognizedIdentity
 }

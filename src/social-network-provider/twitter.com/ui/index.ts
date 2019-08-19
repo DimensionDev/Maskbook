@@ -5,11 +5,10 @@ import { InitFriendsValueRef } from '../../../social-network/defaults/FriendsVal
 import { InitMyIdentitiesValueRef } from '../../../social-network/defaults/MyIdentitiesRef'
 import { ValueRef } from '@holoflows/kit/es'
 import { PersonIdentifier } from '../../../database/type'
-import { resolveLastRecognizedIdentity } from './resolveLastRecognizedIdentity'
 import { injectPostBox, injectWelcomeBanner } from './inject'
-import { collectPeople, collectPosts } from './fetch'
+import { collectPeople, collectPosts, resolveLastRecognizedIdentity } from './fetch'
 import { nop } from '../../../utils/utils'
-import { taskPasteIntoPostBox } from './task'
+import { taskPasteIntoBio, taskPasteIntoPostBox } from './task'
 
 // TODO: host -> def.host
 const def = defineSocialNetworkUI({
@@ -34,7 +33,8 @@ const def = defineSocialNetworkUI({
     injectWelcomeBanner,
     collectPeople,
     collectPosts: () => collectPosts(def),
-    taskPasteIntoPostBox
+    taskPasteIntoPostBox,
+    taskPasteIntoBio
 })
 
 export {}

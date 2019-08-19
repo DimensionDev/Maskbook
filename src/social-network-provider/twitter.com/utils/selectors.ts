@@ -21,7 +21,11 @@ const newPostEditor = '[role="main"] [role="progressbar"] ~ div'
 export const newPostEditorSelector = querySelector<HTMLDivElement>(`${newPostEditor} .DraftEditor-root`)
 export const newPostEditorInnerSelector = newPostEditorSelector.querySelector<HTMLDivElement>('.DraftEditor-editorContainer > div')
 
-const postsContainerString = '[role="main"] [data-testid="primaryColumn"] section'
+export const editProfileButtonSelector = querySelector<HTMLAnchorElement>('[data-testid="primaryColumn"] [href="/settings/profile"]')
+export const editProfileTextareaSelector = querySelector<HTMLTextAreaElement>('textarea[placeholder*="bio"]')
 
-export const postsRootSelector = querySelectorAll<HTMLElement>(postsContainerString)
-export const postsSelectors = querySelectorAll(`${postsContainerString} article`)
+export const postsRootSelector = querySelector<HTMLElement>(`[data-testid="primaryColumn"] section`)
+
+const popupSelector = '[aria-labelledby="modal-header"]'
+export const postsSelectors = querySelectorAll(`article`)
+export const postsContentSelectors = postsSelectors.querySelectorAll(`[lang]`)
