@@ -1,6 +1,7 @@
 import { dispatchCustomEvents, sleep, untilDocumentReady } from '../../../utils/utils'
-import { editProfileButtonSelector, editProfileTextareaSelector, newPostEditorInnerSelector } from '../utils/selectors'
+import { editProfileButtonSelector, editProfileTextareaSelector, newPostEditorInnerSelector } from '../utils/selector'
 import { geti18nString } from '../../../utils/i18n'
+import { fetchBioCard, fetchPost, resolveInfoFromBioCard } from './fetch'
 
 export const taskPasteIntoPostBox = async (text: string, warningText: string) => {
     // placeholder, not working now.
@@ -32,6 +33,11 @@ export const taskPasteIntoBio = async (text: string) => {
     }
 }
 
-export const taskGetPostContent = () => {
+export const taskGetPostContent = async () => {
+    return (await fetchPost()).innerText
+}
 
+export const taskGetProfile = async () => {
+    await fetchBioCard()
+    return { bioContent: resolveInfoFromBioCard().userBio }
 }

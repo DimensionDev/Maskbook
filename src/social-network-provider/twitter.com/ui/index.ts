@@ -8,7 +8,8 @@ import { PersonIdentifier } from '../../../database/type'
 import { injectPostBox, injectWelcomeBanner } from './inject'
 import { collectPeople, collectPosts, resolveLastRecognizedIdentity } from './fetch'
 import { nop } from '../../../utils/utils'
-import { taskPasteIntoBio, taskPasteIntoPostBox } from './task'
+import { taskGetPostContent, taskGetProfile, taskPasteIntoBio, taskPasteIntoPostBox } from './task'
+import { setStorage } from '../../../utils/browser.storage'
 
 // TODO: host -> def.host
 const def = defineSocialNetworkUI({
@@ -20,9 +21,18 @@ const def = defineSocialNetworkUI({
     shouldActivate() {
         return location.hostname.endsWith(host)
     },
+    friendlyName: 'Twitter',
+    setupAccount() {
+        setStorage(host, { forceDisplayWelcome: true }).then()
+        window.open(sharedSettings.networkURL as string)
+    },
+    ignoreSetupAccount() {
+        setStorage(host, { userIgnoredWelcome: true }).then()
+    },
     shouldDisplayWelcome: shouldDisplayWelcomeDefault(host),
     friendsRef: new ValueRef([]),
     myIdentitiesRef: new ValueRef([]),
+    currentIdentity: new ValueRef(null),
     lastRecognizedIdentity: new ValueRef({ identifier: PersonIdentifier.unknown }),
     posts: new Map(),
     resolveLastRecognizedIdentity,
@@ -34,7 +44,9 @@ const def = defineSocialNetworkUI({
     collectPeople,
     collectPosts: () => collectPosts(def),
     taskPasteIntoPostBox,
-    taskPasteIntoBio
+    taskPasteIntoBio,
+    taskGetPostContent,
+    taskGetProfile
 })
 
 export {}

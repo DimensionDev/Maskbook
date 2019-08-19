@@ -3,6 +3,7 @@ import { CustomEventId } from './constants'
 import { CustomEvents } from '../extension/injected-script/addEventListener'
 
 import { sleep as _sleep, timeout as _timeout } from '@holoflows/kit/es/util/sleep'
+import { isNull } from 'lodash-es'
 
 export const sleep = _sleep
 export const timeout = _timeout
@@ -48,3 +49,9 @@ export function untilDocumentReady() {
 }
 
 export const nop: (...args: any[]) => any = () => {};
+
+export const regexMatch = (str: string, regexp: RegExp, index: number) => {
+    const r = str.match(regexp)
+    if (isNull(r)) return null
+    return r[index]
+}

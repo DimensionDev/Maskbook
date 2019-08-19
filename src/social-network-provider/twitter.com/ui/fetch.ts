@@ -1,4 +1,12 @@
-import { bioCard, postsRootSelector, postsSelectors, postViewMain } from '../utils/selectors'
+import {
+    bioCard,
+    postPopupSelector,
+    postsContentSelectors,
+    postsRootSelector,
+    postsSelectors,
+    postViewMain,
+    selfInfoSelectors,
+} from '../utils/selector'
 import { MutationObserverWatcher } from '@holoflows/kit'
 import Services from '../../../extension/service'
 import { PersonIdentifier } from '../../../database/type'
@@ -6,30 +14,34 @@ import { host } from '../index'
 import { getEmptyPostInfo, SocialNetworkUI } from '../../../social-network/ui'
 import { deconstructPayload } from '../../../utils/type-transform/Payload'
 import { MemoryLeakProbe } from '../../../utils/MemoryLeakProbe'
+import { timeout } from '../../../utils/utils'
+import { hasPostPopup } from '../utils/status'
 
 const p = new MemoryLeakProbe()
 
-const resolveLastRecognizedIdentity = function(this: SocialNetworkUI) {
+export const resolveLastRecognizedIdentity = function(this: SocialNetworkUI) {
     p.shouldOnlyRunOnce()
     const ref = this.lastRecognizedIdentity
     ref.addListener(id => {
         if (id.identifier.isUnknown) return
         Services.People.resolveIdentity(id.identifier).then()
     })
-    new MutationObserverWatcher(bioCard)
+    const self = selfInfoSelectors.screenName
+    new MutationObserverWatcher(self)
         .enableSingleMode()
-        .addListener('onAdd', e => assign(e.value))
-        .addListener('onChange', e => assign(e.newValue))
+        .addListener('onAdd', () => assign())
+        .addListener('onChange', () => assign())
         .startWatch()
         .then()
-    const assign = (i: PersonIdentifier) => {
+    const assign = () => {
+        const i = new PersonIdentifier(host, selfInfoSelectors.screenName.evaluateOnce()[0])
         if (i.isUnknown) return
         if (i.equals(ref.value.identifier)) return
         ref.value = { identifier: i }
     }
 }
 
-const resolveInfoFromBioCard = () => {
+export const resolveInfoFromBioCard = () => {
     const userAvatarUrl = bioCard.nth(0).querySelector<HTMLImageElement>('img').evaluateOnce()[0].src
     const userNames = bioCard.nth(1).evaluateOnce()[0].innerText.split('\n')
     const userBio = bioCard.nth(2).evaluateOnce()[0].innerText
@@ -100,8 +112,21 @@ const registerPostCollector = (that: SocialNetworkUI) => {
         .then()
 }
 
+/**
+ * This can be help to make sure if bioCard exists on the page.
+ * @throws exception if not exist
+ * @return bioCard element, if exists
+ */
+export const fetchBioCard = async () => {
+    return (await timeout(new MutationObserverWatcher(bioCard), 10000))[0]
+}
+
+export const fetchPost = async () => {
+    const s = hasPostPopup() ? postPopupSelector.concat(postsContentSelectors) : postsContentSelectors
+    return (await timeout(new MutationObserverWatcher(s), 10000))[0]
+}
+
 export {
     registerBioCollector as collectPeople,
-    registerPostCollector as collectPosts,
-    resolveLastRecognizedIdentity
+    registerPostCollector as collectPosts
 }

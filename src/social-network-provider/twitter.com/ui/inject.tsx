@@ -1,7 +1,7 @@
 import { AdditionalPostBox } from '../../../components/InjectedComponents/AdditionalPostBox'
 import React from 'react'
 import { LiveSelector, MutationObserverWatcher as MOW } from '@holoflows/kit'
-import { newPostEditorSelector } from '../utils/selectors'
+import { newPostEditorSelector } from '../utils/selector'
 import { renderInShadowRoot } from '../../../utils/jss/renderInShadowRoot'
 import { Banner } from '../../../components/Welcomes/Banner'
 

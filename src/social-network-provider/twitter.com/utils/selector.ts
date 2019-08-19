@@ -1,4 +1,5 @@
 import { LiveSelector } from '@holoflows/kit'
+import { regexMatch } from '../../../utils/utils'
 
 const querySelector = <T extends HTMLElement>(selector: string) => {
     return new LiveSelector().querySelector<T>(selector)
@@ -26,6 +27,21 @@ export const editProfileTextareaSelector = querySelector<HTMLTextAreaElement>('t
 
 export const postsRootSelector = querySelector<HTMLElement>(`[data-testid="primaryColumn"] section`)
 
-const popupSelector = '[aria-labelledby="modal-header"]'
-export const postsSelectors = querySelectorAll(`article`)
-export const postsContentSelectors = postsSelectors.querySelectorAll(`[lang]`)
+export const postPopupSelector = querySelector('[aria-labelledby="modal-header"]')
+export const postsSelectors = querySelectorAll('article')
+export const postsContentSelectors = postsSelectors.querySelectorAll<HTMLElement>(`[lang]`)
+
+// self infos
+const base = querySelector<HTMLScriptElement>('#react-root + script')
+const name = /"session":{.*?"user":{.*?"screen_name":"(.*?)","name":"(.*?)"}}/
+const bio = /"entities":{.*?"users":{.*?"entities":{.*?"[0-9]*":{.*?"description":"(.*?)"/
+const avatar = /"entities":{.*?"users":{.*?"entities":{.*?"[0-9]*":{.*?"profile_image_url_https":"(.*?)"/
+const p = (regex: RegExp, index: number) => {
+    return base.clone().map(x => regexMatch(x.innerText, regex, index))
+}
+export const selfInfoSelectors = {
+    screenName: p(name, 0),
+    userName: p(name, 1),
+    userBio: p(bio, 0),
+    userAvatar: p(avatar, 0),
+}
