@@ -42,6 +42,8 @@ function IgnoreError(arg: any): (reason: any) => void {
             // It's maybe okay, happened on Firefox
         } else if (e.message.includes('must request permission')) {
             // It's okay, we inject to the wrong site and browser rejected it.
+        } else if (e.message.includes('Cannot access a chrome')) {
+            // It's okay, we inject to the wrong site and browser rejected it.
         } else console.error('Inject error', e, arg)
     }
 }
