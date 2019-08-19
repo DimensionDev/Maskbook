@@ -30,6 +30,7 @@ export async function queryPostKeysOnGun2(
     // ? In this step we get all keys in this category (gun2[postHash][keyHash])
     const resultPromise = internalKeys.map(key => gun2.get(key).once().then!())
     const result = (await Promise.all(resultPromise)) as SharedAESKeyGun2[]
+    console.info(`await gun2[${postHash}][${keyHash}]\n`, result)
     return result
 }
 
