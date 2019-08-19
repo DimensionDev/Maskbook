@@ -32,7 +32,7 @@ export function collectPostsFacebook(this: SocialNetworkUI) {
                 decryptedPostContent: new ValueRef(''),
                 postBy: new ValueRef(PersonIdentifier.unknown),
                 postContent: new ValueRef(''),
-                postID: new ValueRef(''),
+                postID: new ValueRef(null),
                 postPayload: new ValueRef(null),
                 get rootNode() {
                     return root.evaluateOnce()[0]! as HTMLElement
@@ -56,15 +56,13 @@ export function collectPostsFacebook(this: SocialNetworkUI) {
         .startWatch()
 }
 
-function abc<T>(watcher: MutationObserverWatcher<T, any, any>, iterator: typeof watcher['useForeach']) {}
-
 function getPostBy(node: DomProxy, allowCollectInfo: boolean) {
     const dom = isMobileFacebook
         ? node.current.querySelectorAll('a')
         : [node.current.parentElement!.querySelectorAll('a')[1]]
     return getPersonIdentifierAtFacebook(Array.from(dom), allowCollectInfo)
 }
-function getPostID(node: DomProxy) {
+function getPostID(node: DomProxy): null | string {
     if (isMobileFacebook) {
         const abbr = node.current.querySelector('abbr')
         if (!abbr) return null
@@ -80,10 +78,12 @@ function getPostID(node: DomProxy) {
         } else {
             // In timeline
             const parent = node.current.parentElement
-            if (!parent) return ''
-            const idNode = parent.querySelector('div[id^=feed]')
-            if (!idNode) return ''
-            return idNode.id.split(';')[2]
+            if (!parent) return null
+            const idNode = Array.from(parent.querySelectorAll('[id]'))
+                .map(x => x.id.split(';'))
+                .filter(x => x.length > 1)
+            if (!idNode.length) return null
+            return idNode[0][2]
         }
     }
 }
