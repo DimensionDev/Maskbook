@@ -15,6 +15,8 @@ const querySelectorAll = <T extends HTMLElement>(selector: string) => {
  * userName   screenName
  */
 
+export const bioQueryString = '[href*="header_photo"] + div [data-testid="UserDescription"]'
+
 export const bioCard = querySelector('[href*="header_photo"] + div')
 export const postViewMain = querySelector<HTMLElement>('[role="progressbar"] + div + div > div > div > div:first-of-type')
 

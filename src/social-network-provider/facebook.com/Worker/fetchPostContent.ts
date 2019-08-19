@@ -1,7 +1,8 @@
-import { PostIdentifier, PersonIdentifier } from '../../../database/type'
+import { PersonIdentifier, PostIdentifier } from '../../../database/type'
 import { parseFacebookStaticHTML } from '../parse-html'
 import { getPostUrlAtFacebook } from '../parse-username'
 import tasks from '../../../extension/content-script/tasks'
+import { isDocument } from '../../../utils/utils'
 
 // ? Try to execute query in the extension environment
 // ? If it is the true extension environment (Chrome, Firefox, GeckoView)
@@ -13,8 +14,6 @@ import tasks from '../../../extension/content-script/tasks'
 // ? we go to the old way.
 // ? Invoke a task on the current activating page.
 export async function fetchPostContentFacebook(post: PostIdentifier<PersonIdentifier>) {
-    const isDocument = (node: Node): node is Document => node.nodeType === Node.DOCUMENT_NODE
-
     // Path 1: fetch by http req
     try {
         const doc = await parseFacebookStaticHTML(getPostUrlAtFacebook(post))

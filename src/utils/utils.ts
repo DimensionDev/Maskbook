@@ -48,10 +48,13 @@ export function untilDocumentReady() {
     })
 }
 
-export const nop: (...args: any[]) => any = () => {};
+export const nop: (...args: any[]) => any = () => {}
 
 export const regexMatch = (str: string, regexp: RegExp, index: number) => {
     const r = str.match(regexp)
     if (isNull(r)) return null
     return r[index]
 }
+
+export const isDocument = (node: Node): node is Document =>
+    node.nodeType === Node.DOCUMENT_NODE
