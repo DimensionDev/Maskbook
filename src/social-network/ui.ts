@@ -22,8 +22,11 @@ export interface SocialNetworkUI
      */
     friendlyName: string
     /**
-     * This function should jump to a new page,
-     * and then shouldDisplayWelcome should return true
+     * This function should
+     * 0. Request the permission to the site by `browser.permissions.request()`
+     * 1. Jump to a new page
+     * 2. On that page, shouldDisplayWelcome should return true
+     *
      * So Maskbook will display a Welcome banner
      *
      * If this network is a decentralized network and you don't know which page to open

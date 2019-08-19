@@ -8,15 +8,6 @@ import { startWorkerService } from '../extension/background-script/WorkerService
  */
 export interface SocialNetworkWorker extends SocialNetworkWorkerAndUI {
     /**
-     * If this worker need to inject script into the main context of the page
-     */
-    injectedScript?: {
-        /** JavaScript code */
-        code: string
-        /** Inject to which URL */
-        url: browser.events.UrlFilter[]
-    }
-    /**
      * This function should fetch the given post by `fetch`, `AutomatedTabTask` or anything
      * @param postIdentifier The post id
      */

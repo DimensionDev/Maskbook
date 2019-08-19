@@ -31,7 +31,8 @@ defineSocialNetworkUI({
         return location.hostname.endsWith('facebook.com')
     },
     friendlyName: 'Facebook',
-    setupAccount() {
+    async setupAccount() {
+        await browser.permissions.request({ origins: ['https://www.facebook.com/*', 'https://m.facebook.com/*'] })
         setStorage('facebook.com', { forceDisplayWelcome: true })
         window.open('https://facebook.com/')
     },
