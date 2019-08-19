@@ -74,18 +74,19 @@ interface Welcome {
 function Welcome(props: Welcome) {
     const { currentStep, onFinish, onStepChange, provePost, sideEffects, whoAmI, currentIdentities } = props
     const { onSelectIdentity, personHintFromSearch } = props
+    const currentIdentitiesFiltered = React.useMemo(() => {
+        return personHintFromSearch.identifier.isUnknown
+            ? currentIdentities
+            : [
+                  personHintFromSearch,
+                  ...currentIdentities.filter(x => x.identifier.equals(personHintFromSearch.identifier) === false),
+              ]
+    }, [currentIdentities, personHintFromSearch])
     switch (currentStep) {
         case WelcomeState.Start:
             return (
                 <Welcome0
-                    create={() => {
-                        if (personHintFromSearch.identifier.isUnknown) {
-                            onStepChange(WelcomeState.SelectIdentity)
-                        } else {
-                            onStepChange(WelcomeState.Intro)
-                            onSelectIdentity(personHintFromSearch)
-                        }
-                    }}
+                    create={() => onStepChange(WelcomeState.SelectIdentity)}
                     restore={() => onStepChange(WelcomeState.RestoreKeypair)}
                     close={() => onFinish('quit')}
                 />
@@ -99,11 +100,7 @@ function Welcome(props: Welcome) {
                         onSelectIdentity(selected)
                         onStepChange(WelcomeState.Intro)
                     }}
-                    identities={
-                        personHintFromSearch.identifier.isUnknown
-                            ? currentIdentities
-                            : [personHintFromSearch, ...currentIdentities]
-                    }
+                    identities={currentIdentitiesFiltered}
                 />
             )
         case WelcomeState.DidntFindAccount:
@@ -165,7 +162,7 @@ const personInferFromURLRef = new ValueRef<Person>({
 })
 const selectedIdRef = new ValueRef<Person>(personInferFromURLRef.value)
 const ownedIdsRef = new ValueRef<Person[]>([])
-const getMyProveBio = async () => {
+const fillRefs = async () => {
     if (selectedIdRef.value.identifier.isUnknown) {
         const all = await Services.People.queryMyIdentity()
         ownedIdsRef.value = all
@@ -174,9 +171,9 @@ const getMyProveBio = async () => {
     const post = await Services.Crypto.getMyProveBio(selectedIdRef.value.identifier)
     if (post) provePostRef.value = post
 }
-MessageCenter.on('generateKeyPair', getMyProveBio)
-selectedIdRef.addListener(getMyProveBio)
-getMyProveBio()
+MessageCenter.on('generateKeyPair', fillRefs)
+selectedIdRef.addListener(fillRefs)
+fillRefs()
 
 export const IdentifierRefContext = React.createContext(selectedIdRef)
 // Query { identifier: string; avatar: string; nickname: string }
@@ -198,7 +195,19 @@ export default withRouter(function _WelcomePortal(props: RouteComponentProps) {
 
         if (id instanceof PersonIdentifier) {
             if (id.isUnknown) return
-            personInferFromURLRef.value = { identifier: id, nickname, avatar, groups: [] }
+            Services.People.queryMyIdentity(id).then(([inDB = {} as Person]) => {
+                const person = (personInferFromURLRef.value = {
+                    identifier: id,
+                    nickname: nickname || inDB.nickname,
+                    avatar: avatar || inDB.avatar,
+                    groups: [],
+                })
+                Services.People.updatePersonInfo(person.identifier, {
+                    nickname: person.nickname,
+                    avatarURL: person.avatar,
+                })
+                setStep(WelcomeState.SelectIdentity)
+            })
         }
     }, [props.location.search])
 

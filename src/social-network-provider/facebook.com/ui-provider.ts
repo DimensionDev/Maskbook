@@ -37,9 +37,9 @@ defineSocialNetworkUI({
         window.open('https://facebook.com/')
     },
     ignoreSetupAccount() {
-        setStorage('facebook.com', { userIgnoredWelcome: true })
+        setStorage('facebook.com', { userIgnoredWelcome: true, forceDisplayWelcome: false })
     },
-    shouldDisplayWelcome: shouldDisplayWelcomeDefault('facebook.com'),
+    shouldDisplayWelcome: shouldDisplayWelcomeDefault,
     friendsRef: new ValueRef([]),
     myIdentitiesRef: new ValueRef([]),
     currentIdentity: new ValueRef(null),

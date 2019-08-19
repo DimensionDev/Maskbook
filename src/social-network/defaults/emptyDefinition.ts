@@ -37,9 +37,8 @@ export const emptyDefinition: SocialNetworkUI = {
     isValidUsername() {
         return true
     },
-    name: '',
+    internalName: '',
     networkIdentifier: 'localhost',
-    networkURL: '',
     async taskGetPostContent() {
         return ''
     },

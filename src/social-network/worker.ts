@@ -39,7 +39,7 @@ export interface SocialNetworkWorker extends SocialNetworkWorkerAndUI {
 
 export const definedSocialNetworkWorkers = new Set<SocialNetworkWorker>()
 export function defineSocialNetworkWorker(worker: SocialNetworkWorker) {
-    if (worker.acceptablePayload.includes('v40') && worker.name !== 'facebook') {
+    if (worker.acceptablePayload.includes('v40') && worker.internalName !== 'facebook') {
         throw new TypeError('Payload version v40 is not supported in this network. Please use v39 or newer.')
     }
     definedSocialNetworkWorkers.add(worker)

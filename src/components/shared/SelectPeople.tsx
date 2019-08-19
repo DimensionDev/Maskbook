@@ -168,7 +168,7 @@ export function SelectPeopleUI(props: SelectPeopleUIProps) {
             </Box>
             <Box flex={1}>
                 <List dense>
-                    {listBeforeSearch.length > 0 && listAfterSearch.length === 0 && (
+                    {listBeforeSearch.length > 0 && listAfterSearch.length === 0 && search && (
                         <ListItem>
                             <ListItemText primary={geti18nString('no_search_result')} />
                         </ListItem>

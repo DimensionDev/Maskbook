@@ -13,13 +13,13 @@ export interface SocialNetworkWorkerAndUI {
     /**
      * This name is used internally and should be unique
      */
-    name: string
+    internalName: string
     /**
      * If using Maskbook on this network is dangerous, set it to true (not supported yet)
      */
     isDangerousNetwork: false
     /**
-     * Detect if an Identifier belongs to this provider.
+     * Used to detect if an Identifier belongs to this provider.
      *
      * For normal network, string like 'twitter.com' is enough.
      *
@@ -35,10 +35,6 @@ export interface SocialNetworkWorkerAndUI {
      * @param preference Users settings about Maskbook
      */
     init(env: Env, preference: Preference): void
-    /**
-     * URL of the network
-     */
-    networkURL: string | ((env: Env, preference: Preference) => string)
     /**
      * Is this username valid in this network
      */

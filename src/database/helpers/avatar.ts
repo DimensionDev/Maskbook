@@ -33,6 +33,7 @@ export async function storeAvatar(identifier: PersonIdentifier | GroupIdentifier
     if (identifier instanceof PersonIdentifier && identifier.isUnknown) return
     try {
         if (typeof avatar === 'string') {
+            if (avatar.startsWith('http') === false) return
             if (await isAvatarOutdatedDB(identifier, 'lastUpdateTime')) {
                 await storeAvatarDB(identifier, await downloadAvatar(avatar))
             }

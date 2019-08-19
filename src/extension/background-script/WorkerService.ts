@@ -8,7 +8,7 @@ import { memoize } from 'lodash-es'
 type ServiceType = Required<Pick<SocialNetworkWorker, 'autoVerifyBio' | 'autoVerifyPost' | 'manualVerifyPost'>>
 
 const getServiceFromNetworkWorker = memoize((worker: SocialNetworkWorker) => {
-    return AsyncCall<ServiceType>(undefined, { serializer: Serialization, key: worker.name })
+    return AsyncCall<ServiceType>(undefined, { serializer: Serialization, key: worker.internalName })
 })
 export function getCurrentNetworkWorkerService(network: string | Identifier) {
     if (GetContext() === 'background') {
@@ -28,5 +28,5 @@ export function startWorkerService(e: SocialNetworkWorker) {
         autoVerifyPost: e.autoVerifyPost || notImplemented,
         manualVerifyPost: e.manualVerifyPost || notImplemented,
     }
-    AsyncCall(impl, { serializer: Serialization, key: e.name })
+    AsyncCall(impl, { serializer: Serialization, key: e.internalName })
 }

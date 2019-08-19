@@ -34,8 +34,7 @@ export interface SocialNetworkUI
      */
     setupAccount: string | ((env: Env, preference: Preference) => void)
     /**
-     * This function should open a new page,
-     * and then shouldDisplayWelcome should return true
+     * Invoked when user click the button to dismiss the setup
      */
     ignoreSetupAccount(env: Env, preference: Preference): void
 }
@@ -225,7 +224,7 @@ function hookUIPostMap(ui: SocialNetworkUI) {
 }
 
 export function defineSocialNetworkUI(UI: SocialNetworkUI): void {
-    if (UI.acceptablePayload.includes('v40') && UI.name !== 'facebook') {
+    if (UI.acceptablePayload.includes('v40') && UI.internalName !== 'facebook') {
         throw new TypeError('Payload version v40 is not supported in this network. Please use v39 or newer.')
     }
     definedSocialNetworkUIs.add(UI)
