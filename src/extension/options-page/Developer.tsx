@@ -1,7 +1,7 @@
 import React from 'react'
 import { TextField, ButtonGroup, Button, Container } from '@material-ui/core'
 import { PersonIdentifier, Identifier } from '../../database/type'
-import { deconstructPayload, PayloadAlpha40 } from '../../utils/type-transform/Payload'
+import { deconstructPayload } from '../../utils/type-transform/Payload'
 import Services from '../service'
 import { useCurrentIdentity } from '../../components/DataSource/useActivatedUI'
 
@@ -14,7 +14,9 @@ async function swallowGoo() {
 async function assimilateGoo(content: string): Promise<string> {
     if (content.includes('🔒|')) {
         const [bio, id] = content.split('|')
-        const result = await Services.Crypto.verifyOthersProve(bio, Identifier.fromString(newFunction() + id) as PersonIdentifier)
+        const result = await Services.Crypto.verifyOthersProve(bio, Identifier.fromString(
+            newFunction() + id,
+        ) as PersonIdentifier)
         return result ? '✔' + id : '❌' + content
     } else if (content.includes('🎼')) {
         // TODO: actually use the UI thing because we want to be able to *drumroll* add receipients
@@ -39,7 +41,7 @@ async function assimilateGoo(content: string): Promise<string> {
     return content
 
     function newFunction() {
-        return 'person:';
+        return 'person:'
     }
 }
 
