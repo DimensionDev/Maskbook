@@ -41,6 +41,11 @@ export default (
                 <li>Information you transfer from alternative implementations of Maskbook.</li>
             </ul>
 
+            <p>
+                Counterparts of such information on other social networks may also be collected, if you choose to use
+                Maskbook for those platforms.
+            </p>
+
             <h2>Intermediary Services</h2>
 
             <p>
@@ -59,7 +64,11 @@ export default (
                 <li>The URL of your Facebook account ownership proof post.</li>
                 <li>
                     Un-anonymized recipient-specific asymmetric ciphers (ECDH) which encrypt the post-encryption keys
-                    (AES). (to be anonymized)
+                    (AES). (Until v1.6.0)
+                </li>
+                <li>
+                    Anonymized recipient-specific asymmetric ciphers (ECDH) which encrypt the post-encryption keys
+                    (AES). (Since v1.6.0)
                 </li>
             </ul>
 
@@ -80,7 +89,9 @@ export default (
                 Amazon AWS, Google Cloud Engine, Microsoft Azure, CloudFlare, Fastly, GitHub, Akamai, Linode, and
                 Digital Ocean may technically be able to intercept communication and computation of online services
                 provided by the developer of Maskbook which are designed for and only for the fulfillment of the
-                functionalities of Maskbook.
+                functionalities of Maskbook. NSA, CIA, FBI and other intelligence agencies and law enforcement
+                authorities may also intercept communications. The developer of Maskbook assume no liability in such
+                cases of infringement.
             </p>
 
             <h2>Changes to this Statement / Contact Us</h2>
