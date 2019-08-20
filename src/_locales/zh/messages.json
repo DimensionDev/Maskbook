@@ -318,6 +318,9 @@
     "options_index_mobile_export": {
         "message": "設定移動版"
     },
+    "options_index_devel": {
+        "message": "開發人員選項"
+    },
     "options_index_privacy": {
         "message": "隱私政策"
     },
