@@ -17,11 +17,17 @@ export function collectPostsFacebook(this: SocialNetworkUI) {
                 .filter(x => x)
                 .closest('.userContentWrapper')
             // ? inject after comments
-            const commentSelector = root
+            const commentSelectorPC = root
                 .clone()
                 .querySelectorAll('[role=article]')
                 .querySelectorAll('a+span')
                 .closest<HTMLElement>(2)
+            const commentSelectorMobile = root
+                .clone()
+                .map(x => x.parentElement)
+                .querySelectorAll('[data-commentid]')
+
+            const commentSelector = new LiveSelector().concat(commentSelectorPC).concat(commentSelectorMobile)
 
             // ? inject comment text field
             const commentBoxSelector = root
