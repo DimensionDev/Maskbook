@@ -11,7 +11,9 @@ const posts = new LiveSelector().querySelectorAll<HTMLDivElement>(
 export function collectPostsFacebook(this: SocialNetworkUI) {
     new MutationObserverWatcher(posts)
         .useForeach((node, key, metadata) => {
-        const root = new LiveSelector().replace(() => [node]).closest('.userContentWrapper') as LiveSelector<HTMLElement>
+            const root = new LiveSelector().replace(() => [node]).closest('.userContentWrapper') as LiveSelector<
+                HTMLElement
+            >
             // ? inject after comments
             const commentSelector = root
                 .clone()
@@ -48,8 +50,6 @@ export function collectPostsFacebook(this: SocialNetworkUI) {
         .startWatch()
         .then()
 }
-
-function abc<T>(watcher: MutationObserverWatcher<T, any, any>, iterator: typeof watcher['useForeach']) {}
 
 function getPostBy(node: DomProxy, allowCollectInfo: boolean) {
     const dom = isMobileFacebook

@@ -8,8 +8,7 @@ export const fetchPostContent = async (post: PostIdentifier<PersonIdentifier>) =
         const d = await parseDocument(toPostUrl(post))
         const content = d.innerText.match(/(🔒.+🔒)/)
         if (content && content[0].length) return content[0]
-    } catch {
-    }
+    } catch {}
     return tasks(toPostUrl(post), {}).getPostContent(post)
 }
 

@@ -190,7 +190,7 @@ export const getEmptyPostInfo = (rootNodeSelector: LiveSelector<HTMLElement>) =>
         postPayload: new ValueRef(null),
         get rootNode() {
             return rootNodeSelector.evaluateOnce()[0]
-        }
+        },
     } as PostInfo
 }
 

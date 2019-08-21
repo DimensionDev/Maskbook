@@ -21,7 +21,7 @@ export function injectCommentBoxDefault(
     },
 ) {
     return function injectPostBox(current: PostInfo) {
-        if (!current.commentBoxSelector) return;
+        if (!current.commentBoxSelector) return
         const commentBoxWatcher = new MutationObserverWatcher(current.commentBoxSelector, current.rootNode)
             .setDomProxyOption({ afterShadowRootInit: { mode: 'closed' } })
             .enableSingleMode()

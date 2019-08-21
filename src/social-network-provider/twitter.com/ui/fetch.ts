@@ -42,14 +42,20 @@ export const resolveLastRecognizedIdentity = function(this: SocialNetworkUI) {
 }
 
 export const resolveInfoFromBioCard = () => {
-    const userAvatarUrl = bioCard.nth(0).querySelector<HTMLImageElement>('img').evaluateOnce()[0].src
-    const userNames = bioCard.nth(1).evaluateOnce()[0].innerText.split('\n')
+    const userAvatarUrl = bioCard
+        .nth(0)
+        .querySelector<HTMLImageElement>('img')
+        .evaluateOnce()[0].src
+    const userNames = bioCard
+        .nth(1)
+        .evaluateOnce()[0]
+        .innerText.split('\n')
     const userBio = bioCard.nth(2).evaluateOnce()[0].innerText
     return {
         userAvatarUrl,
         userName: userNames[0],
         userScreenName: userNames[1],
-        userBio
+        userBio,
     }
 }
 
@@ -79,12 +85,14 @@ const registerBioCollector = () => {
 }
 
 const resolveInfoFromPostView = () => {
-    const c = postViewMain.querySelectorAll<HTMLElement>('[data-testid="tweet"] > div:nth-of-type(2) > div').evaluateOnce()
+    const c = postViewMain
+        .querySelectorAll<HTMLElement>('[data-testid="tweet"] > div:nth-of-type(2) > div')
+        .evaluateOnce()
     const postBy = c[0].querySelectorAll('span')[3].innerText.replace('@', '')
     const postContent = c[1].innerText
     return {
         postBy,
-        postContent
+        postContent,
     }
 }
 
@@ -104,7 +112,7 @@ const registerPostCollector = (that: SocialNetworkUI) => {
             return {
                 onNodeMutation: collectPostInfo,
                 onTargetChanged: collectPostInfo,
-                onRemove: () => that.posts.delete(proxy)
+                onRemove: () => that.posts.delete(proxy),
             }
         })
         .setDomProxyOption({ afterShadowRootInit: { mode: 'closed' } })
@@ -126,7 +134,4 @@ export const fetchPost = async () => {
     return (await timeout(new MutationObserverWatcher(s), 10000))[0]
 }
 
-export {
-    registerBioCollector as collectPeople,
-    registerPostCollector as collectPosts
-}
+export { registerBioCollector as collectPeople, registerPostCollector as collectPosts }

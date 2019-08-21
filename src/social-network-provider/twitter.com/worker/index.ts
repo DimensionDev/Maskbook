@@ -8,10 +8,10 @@ defineSocialNetworkWorker({
     ...sharedSettings,
     injectedScript: {
         code: sharedInjectedScriptCode,
-        url: [{hostEquals: 'twitter.com'}, {hostEquals: 'mobile.twitter.com'}]
+        url: [{ hostEquals: 'twitter.com' }, { hostEquals: 'mobile.twitter.com' }],
     },
     fetchPostContent,
     fetchProfile,
     autoVerifyBio,
-    autoVerifyPost
+    autoVerifyPost,
 })

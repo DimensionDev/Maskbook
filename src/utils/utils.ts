@@ -56,5 +56,4 @@ export const regexMatch = (str: string, regexp: RegExp, index: number) => {
     return r[index]
 }
 
-export const isDocument = (node: Node): node is Document =>
-    node.nodeType === Node.DOCUMENT_NODE
+export const isDocument = (node: Node): node is Document => node.nodeType === Node.DOCUMENT_NODE

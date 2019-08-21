@@ -46,7 +46,7 @@ const def = defineSocialNetworkUI({
     taskPasteIntoPostBox,
     taskPasteIntoBio,
     taskGetPostContent,
-    taskGetProfile
+    taskGetProfile,
 })
 
 export {}

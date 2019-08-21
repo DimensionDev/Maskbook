@@ -18,13 +18,19 @@ const querySelectorAll = <T extends HTMLElement>(selector: string) => {
 export const bioQueryString = '[href*="header_photo"] + div [data-testid="UserDescription"]'
 
 export const bioCard = querySelector('[href*="header_photo"] + div')
-export const postViewMain = querySelector<HTMLElement>('[role="progressbar"] + div + div > div > div > div:first-of-type')
+export const postViewMain = querySelector<HTMLElement>(
+    '[role="progressbar"] + div + div > div > div > div:first-of-type',
+)
 
 const newPostEditor = '[role="main"] [role="progressbar"] ~ div'
 export const newPostEditorSelector = querySelector<HTMLDivElement>(`${newPostEditor} .DraftEditor-root`)
-export const newPostEditorInnerSelector = newPostEditorSelector.querySelector<HTMLDivElement>('.DraftEditor-editorContainer > div')
+export const newPostEditorInnerSelector = newPostEditorSelector.querySelector<HTMLDivElement>(
+    '.DraftEditor-editorContainer > div',
+)
 
-export const editProfileButtonSelector = querySelector<HTMLAnchorElement>('[data-testid="primaryColumn"] [href="/settings/profile"]')
+export const editProfileButtonSelector = querySelector<HTMLAnchorElement>(
+    '[data-testid="primaryColumn"] [href="/settings/profile"]',
+)
 export const editProfileTextareaSelector = querySelector<HTMLTextAreaElement>('textarea[placeholder*="bio"]')
 
 export const postsRootSelector = querySelector<HTMLElement>(`[data-testid="primaryColumn"] section`)
