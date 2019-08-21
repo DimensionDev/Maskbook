@@ -2,6 +2,7 @@ import './extension/service'
 import { backgroundSetup } from './setup'
 import { GetContext } from '@holoflows/kit/es'
 import { definedSocialNetworkWorkers } from './social-network/worker'
+import { getWelcomePageURL } from './extension/options-page/Welcome'
 backgroundSetup()
 
 if (GetContext() === 'background') {
@@ -32,6 +33,12 @@ if (GetContext() === 'background') {
                 file: 'js/contentscript.js',
             })
             .catch(IgnoreError(arg))
+    })
+
+    browser.runtime.onInstalled.addListener(detail => {
+        if (detail.reason === 'install') {
+            browser.tabs.create({ url: getWelcomePageURL() })
+        }
     })
 }
 function IgnoreError(arg: any): (reason: any) => void {
