@@ -25,15 +25,22 @@ export function collectPostsFacebook(this: SocialNetworkUI) {
             const commentSelectorMobile = root
                 .clone()
                 .map(x => x.parentElement)
-                .querySelectorAll('[data-commentid]')
+                .querySelectorAll<HTMLElement>('[data-commentid]')
 
-            const commentSelector = new LiveSelector().concat(commentSelectorPC).concat(commentSelectorMobile)
+            const commentSelector = isMobileFacebook ? commentSelectorMobile : commentSelectorPC
 
             // ? inject comment text field
-            const commentBoxSelector = root
+            const commentBoxSelectorPC = root
                 .clone()
                 .querySelector<HTMLFormElement>('form form')
                 .enableSingleMode()
+            const commentBoxSelectorMobile = root
+                .clone()
+                .map(x => x.parentElement)
+                .querySelector('textarea')
+                .map(x => x.parentElement)
+                .enableSingleMode()
+            const commentBoxSelector = isMobileFacebook ? commentBoxSelectorMobile : commentBoxSelectorPC
 
             const info: PostInfo = {
                 commentsSelector: commentSelector,

@@ -19,6 +19,7 @@ import { selectElementContents, dispatchCustomEvents, sleep } from '../../utils/
 import { collectPostsFacebook } from './UI/collectPosts'
 import { injectPostInspectorFacebook } from './UI/injectPostInspector'
 import { setStorage } from '../../utils/browser.storage'
+import { isMobileFacebook } from './isMobile'
 
 defineSocialNetworkUI({
     ...sharedProvider,
@@ -50,12 +51,27 @@ defineSocialNetworkUI({
     injectWelcomeBanner: injectWelcomeBannerFacebook,
     injectPostComments: injectPostCommentsDefault(),
     injectCommentBox: injectCommentBoxDefault(async function onPasteToCommentBoxFacebook(encryptedComment, current) {
-        const root = current.rootNode
-        selectElementContents(root.querySelector('[contenteditable]')!)
-        dispatchCustomEvents('paste', encryptedComment)
-        await sleep(200)
-        if (!root.innerText.includes(encryptedComment))
-            prompt('Please paste it into the comment box!', encryptedComment)
+        // TODO: i18n
+        const fail = () => prompt('Please paste it into the comment box!', encryptedComment)
+        if (isMobileFacebook) {
+            const root = current.commentBoxSelector.evaluateOnce()
+            if (!root) return fail()
+            const textarea = root.querySelector('textarea')
+            if (!textarea) return fail()
+            textarea.focus()
+            dispatchCustomEvents('input', encryptedComment)
+            await sleep(200)
+            if (!root.innerText.includes(encryptedComment)) return fail()
+        } else {
+            const root = current.rootNode
+            if (!root) return fail()
+            const input = root.querySelector('[contenteditable]')
+            if (!input) return fail()
+            selectElementContents(input)
+            dispatchCustomEvents('paste', encryptedComment)
+            await sleep(200)
+            if (!root.innerText.includes(encryptedComment)) return fail()
+        }
     }),
     injectPostInspector: injectPostInspectorFacebook,
     collectPeople: collectPeopleFacebook,
