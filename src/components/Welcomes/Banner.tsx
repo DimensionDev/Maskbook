@@ -6,8 +6,9 @@ import { makeStyles } from '@material-ui/styles'
 import { AppBar, Button, Hidden, IconButton, SnackbarContent, Theme, Typography } from '@material-ui/core'
 import { useLastRecognizedIdentity } from '../DataSource/useActivatedUI'
 import Services from '../../extension/service'
-import { getActivatedUI } from '../../social-network/ui'
+import { getActivatedUI, SocialNetworkUI } from '../../social-network/ui'
 import { env } from '../../social-network/shared'
+import { setStorage } from '../../utils/browser.storage'
 
 interface Props {
     getStarted(): void
@@ -74,13 +75,22 @@ export function BannerUI(props: Props) {
     )
 }
 
-export function Banner({ unmount, ...props }: { unmount: () => void } & Partial<Props>) {
+export function Banner({
+    unmount,
+    ...props
+}: { unmount: () => void; networkIdentifier: SocialNetworkUI['networkIdentifier'] } & Partial<Props>) {
     const lastRecognizedIdentity = useLastRecognizedIdentity()
     const closeDefault = useCallback(() => {
         getActivatedUI().ignoreSetupAccount(env, {})
         unmount()
     }, [unmount])
+    if (typeof props.networkIdentifier === 'function' && props.getStarted === undefined) {
+        throw new TypeError(
+            'You cannot use getStartedDefault when networkIdentifier is a function. Please implement this function by yourself.',
+        )
+    }
     const getStartedDefault = useCallback(() => {
+        setStorage(props.networkIdentifier as string, { forceDisplayWelcome: false })
         unmount()
         Services.Welcome.openWelcomePage(lastRecognizedIdentity)
     }, [unmount])
