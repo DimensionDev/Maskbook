@@ -1,9 +1,10 @@
-import './extension/service'
 import { backgroundSetup } from './setup'
 import { GetContext } from '@holoflows/kit/es'
-import { definedSocialNetworkWorkers } from './social-network/worker'
-import { getWelcomePageURL } from './extension/options-page/Welcome'
-backgroundSetup()
+import { getWelcomePageURL } from './extension/options-page/Welcome/getWelcomePageURL'
+
+backgroundSetup().then(() => {
+    require('./extension/service')
+})
 
 if (GetContext() === 'background') {
     const contentScript = `{

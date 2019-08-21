@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import Welcome0 from '../../../components/Welcomes/0'
 import Welcome1a1a from '../../../components/Welcomes/1a1a'
 import Welcome1a1b from '../../../components/Welcomes/1a1b'
@@ -17,7 +17,6 @@ import { useValueRef } from '../../../utils/hooks/useValueRef'
 import { Person } from '../../../database'
 import { getCurrentNetworkWorkerService } from '../../background-script/WorkerService'
 import getCurrentNetworkWorker from '../../../social-network/utils/getCurrentNetworkWorker'
-import { getUrl } from '../../../utils/utils'
 
 enum WelcomeState {
     // Step 0
@@ -32,7 +31,6 @@ enum WelcomeState {
     // End
     End,
 }
-
 const WelcomeActions = {
     backupMyKeyPair(whoAmI: PersonIdentifier) {
         return Services.Welcome.backupMyKeyPair(whoAmI)
@@ -158,7 +156,6 @@ function Welcome(props: Welcome) {
             return <Welcome2 close={() => onFinish('done')} />
     }
 }
-const ResponsiveDialog = withMobileDialog({ breakpoint: 'xs' })(Dialog)
 const provePostRef = new ValueRef('')
 const personInferFromURLRef = new ValueRef<Person>({
     identifier: PersonIdentifier.unknown,
@@ -175,28 +172,21 @@ const fillRefs = async () => {
     const post = await Services.Crypto.getMyProveBio(selectedIdRef.value.identifier)
     if (post) provePostRef.value = post
 }
-MessageCenter.on('generateKeyPair', fillRefs)
-selectedIdRef.addListener(fillRefs)
-fillRefs()
 
-type Query = {
+export type Query = {
     identifier: PersonIdentifier
     avatar?: string
     nickname?: string
 }
-export function getWelcomePageURL(query?: Query) {
-    if (query) {
-        const param = new URLSearchParams()
-        param.set('nickname', query.nickname || '')
-        param.set('avatar', query.avatar || '')
-        param.set('identifier', query.identifier.toText())
-        return getUrl(`index.html#/welcome?${param.toString()}`)
-    } else {
-        return getUrl(`index.html#/welcome`)
-    }
-}
 export const IdentifierRefContext = React.createContext(selectedIdRef)
 export default withRouter(function _WelcomePortal(props: RouteComponentProps) {
+    const ResponsiveDialog = useRef(withMobileDialog({ breakpoint: 'xs' })(Dialog)).current
+    useEffect(() => {
+        MessageCenter.on('generateKeyPair', fillRefs)
+        selectedIdRef.addListener(fillRefs)
+        fillRefs()
+    }, [])
+
     const [step, setStep] = useState(WelcomeState.Start)
     const provePost = useValueRef(provePostRef)
     const personFromURL = useValueRef(personInferFromURLRef)
