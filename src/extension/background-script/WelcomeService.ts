@@ -18,7 +18,7 @@ import { PersonIdentifier } from '../../database/type'
 import { MessageCenter } from '../../utils/messages'
 import getCurrentNetworkWorker from '../../social-network/utils/getCurrentNetworkWorker'
 import { SocialNetworkUIDataSources } from '../../social-network/ui'
-import { getWelcomePageURL } from '../options-page/Welcome'
+import { getWelcomePageURL } from '../options-page/Welcome/getWelcomePageURL'
 
 OnlyRunInContext('background', 'WelcomeService')
 async function generateBackupJSON(whoAmI: PersonIdentifier, full = false): Promise<BackupJSONFileLatest> {

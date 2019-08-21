@@ -5,12 +5,15 @@ import Serialization from '../utils/type-transform/Serialization'
 import { PersonIdentifier, GroupIdentifier, PostIdentifier } from '../database/type'
 import { getCurrentNetworkWorkerService } from './background-script/WorkerService'
 
+import tasks from './content-script/tasks'
+Object.assign(window, { tasks })
+
 interface Services {
     Crypto: typeof import('./background-script/CryptoService')
     People: typeof import('./background-script/PeopleService')
     Welcome: typeof import('./background-script/WelcomeService')
 }
-const Services: Services = {} as any
+const Services = {} as Services
 export default Services
 if (!('Services' in window)) {
     Object.assign(window, { Services })
@@ -26,33 +29,40 @@ Object.assign(window, {
     getCurrentNetworkWorkerService,
 })
 if (GetContext() === 'background') {
-    Object.assign(window, { tasks: require('./content-script/tasks'), alpha40: require('../crypto/crypto-alpha-40') })
     // Run tests
-    require('../tests/1to1')
-    require('../tests/1toN')
-    require('../tests/sign&verify')
-    require('../tests/friendship-discover')
-    require('../tests/comment')
-    Object.assign(window, {
-        db: {
-            avatar: require('../database/avatar'),
-            group: require('../database/group'),
-            people: require('../database/people'),
-            type: require('../database/type'),
-            post: require('../database/post'),
-        },
-        gun1: require('../network/gun/version.1'),
-        gun2: require('../network/gun/version.2'),
+    import('../tests/1to1')
+    import('../tests/1toN')
+    import('../tests/sign&verify')
+    import('../tests/friendship-discover')
+    import('../tests/comment')
+    Promise.all([
+        import('../database/avatar'),
+        import('../database/group'),
+        import('../database/people'),
+        import('../database/type'),
+        import('../database/post'),
+    ]).then(([avatar, group, people, type, post]) => {
+        Object.assign(window, { db: { avatar, group, people, type, post } })
     })
+    Promise.all([import('../network/gun/version.1'), import('../network/gun/version.2')]).then(([gun1, gun2]) => {
+        Object.assign(window, { gun1, gun2 })
+    })
+    Promise.all([import('../crypto/crypto-alpha-40'), import('../crypto/crypto-alpha-39')]).then(
+        ([crypto40, crypto39]) => {
+            Object.assign(window, { crypto40, crypto39 })
+        },
+    )
 }
 //#region
 type Service = Record<string, (...args: any[]) => Promise<any>>
-async function register<T extends Service>(service: () => Promise<T>, name: keyof Services, mock?: Partial<T>) {
+function register<T extends Service>(loadService: () => Promise<T>, name: keyof Services, mock?: Partial<T>) {
     if (GetContext() === 'background') {
         console.log(`Service ${name} registered in Background page`)
-        const loaded = await service()
-        Object.assign(Services, { [name]: loaded })
-        AsyncCall(loaded, { key: name, serializer: Serialization })
+        loadService().then(service => {
+            Object.assign(Services, { [name]: service })
+            Object.assign(window, { [name]: service })
+            AsyncCall(service, { key: name, serializer: Serialization })
+        })
     } else if (OnlyRunInContext(['content', 'options', 'debugging'], false)) {
         Object.assign(Services, { [name]: AsyncCall({}, { key: name, serializer: Serialization }) })
         if (GetContext() === 'debugging') {
