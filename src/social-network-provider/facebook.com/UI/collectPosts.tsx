@@ -12,7 +12,10 @@ const posts = new LiveSelector().querySelectorAll<HTMLDivElement>(
 export function collectPostsFacebook(this: SocialNetworkUI) {
     new MutationObserverWatcher(posts)
         .useForeach((node, key, metadata) => {
-            const root = new LiveSelector().replace(() => [node]).closest('.userContentWrapper')
+            const root = new LiveSelector()
+                .replace(() => [metadata.realCurrent])
+                .filter(x => x)
+                .closest('.userContentWrapper')
             // ? inject after comments
             const commentSelector = root
                 .clone()
