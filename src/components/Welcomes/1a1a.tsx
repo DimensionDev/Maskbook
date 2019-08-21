@@ -9,7 +9,7 @@ import Navigation from './Navigation/Navigation'
 
 interface Props {
     next(person: Person): void
-    didntFindAccount(): void
+    linkNewSocialNetworks(): void
     identities: Person[]
     back(): void
 }
@@ -28,7 +28,7 @@ const useStyles = makeStyles(theme => ({
         padding: '0 4em',
     },
 }))
-export default function Welcome({ next, identities, didntFindAccount, back }: Props) {
+export default function Welcome({ next, identities, linkNewSocialNetworks, back }: Props) {
     const classes = useStyles()
     const [selected, setSelect] = useState<Person[]>(identities[0] ? identities : [])
     return (
@@ -55,7 +55,7 @@ export default function Welcome({ next, identities, didntFindAccount, back }: Pr
                 {geti18nString('welcome_1a1_next')}
             </Button>
             <br />
-            <Button onClick={didntFindAccount} color="primary">
+            <Button onClick={linkNewSocialNetworks} color="primary">
                 {geti18nString('welcome_1a1_didntfind')}
             </Button>
         </WelcomeContainer>

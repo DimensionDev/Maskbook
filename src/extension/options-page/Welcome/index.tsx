@@ -17,13 +17,14 @@ import { useValueRef } from '../../../utils/hooks/useValueRef'
 import { Person } from '../../../database'
 import { getCurrentNetworkWorkerService } from '../../background-script/WorkerService'
 import getCurrentNetworkWorker from '../../../social-network/utils/getCurrentNetworkWorker'
+import { getUrl } from '../../../utils/utils'
 
 enum WelcomeState {
     // Step 0
     Start,
     // Step 1
     SelectIdentity,
-    DidntFindAccount,
+    LinkNewSocialNetworks,
     Intro,
     BackupKey,
     ProvePost,
@@ -86,7 +87,10 @@ function Welcome(props: Welcome) {
         case WelcomeState.Start:
             return (
                 <Welcome0
-                    create={() => onStepChange(WelcomeState.SelectIdentity)}
+                    create={() => {
+                        if (currentIdentitiesFiltered.length === 0) onStepChange(WelcomeState.LinkNewSocialNetworks)
+                        else onStepChange(WelcomeState.SelectIdentity)
+                    }}
                     restore={() => onStepChange(WelcomeState.RestoreKeypair)}
                     close={() => onFinish('quit')}
                 />
@@ -95,7 +99,7 @@ function Welcome(props: Welcome) {
             return (
                 <Welcome1a1a
                     back={() => onStepChange(WelcomeState.Start)}
-                    didntFindAccount={() => onStepChange(WelcomeState.DidntFindAccount)}
+                    linkNewSocialNetworks={() => onStepChange(WelcomeState.LinkNewSocialNetworks)}
                     next={selected => {
                         onSelectIdentity(selected)
                         onStepChange(WelcomeState.Intro)
@@ -103,7 +107,7 @@ function Welcome(props: Welcome) {
                     identities={currentIdentitiesFiltered}
                 />
             )
-        case WelcomeState.DidntFindAccount:
+        case WelcomeState.LinkNewSocialNetworks:
             return (
                 <Welcome1a1b
                     useExistingAccounts={() => onStepChange(WelcomeState.SelectIdentity)}
@@ -175,8 +179,23 @@ MessageCenter.on('generateKeyPair', fillRefs)
 selectedIdRef.addListener(fillRefs)
 fillRefs()
 
+type Query = {
+    identifier: PersonIdentifier
+    avatar?: string
+    nickname?: string
+}
+export function getWelcomePageURL(query?: Query) {
+    if (query) {
+        const param = new URLSearchParams()
+        param.set('nickname', query.nickname || '')
+        param.set('avatar', query.avatar || '')
+        param.set('identifier', query.identifier.toText())
+        return getUrl(`index.html#/welcome?${param.toString()}`)
+    } else {
+        return getUrl(`index.html#/welcome`)
+    }
+}
 export const IdentifierRefContext = React.createContext(selectedIdRef)
-// Query { identifier: string; avatar: string; nickname: string }
 export default withRouter(function _WelcomePortal(props: RouteComponentProps) {
     const [step, setStep] = useState(WelcomeState.Start)
     const provePost = useValueRef(provePostRef)
