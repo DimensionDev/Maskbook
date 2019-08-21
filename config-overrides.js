@@ -1,8 +1,23 @@
-const path = require('path')
+// noinspection NpmUsedModulesInstalled
 const webpack = require('webpack')
+const path = require('path')
+const ExtensionReloader = require('webpack-extension-reloader');
+
+const polyfills = [
+    'node_modules/construct-style-sheets-polyfill/adoptedStyleSheets.js',
+    'node_modules/webextension-polyfill/dist/browser-polyfill.min.js',
+    'node_modules/webextension-polyfill/dist/browser-polyfill.min.js.map',
+    'node_modules/webcrypto-liner/dist/webcrypto-liner.shim.js',
+]
+const publicDir = path.join(__dirname, './public')
+const publicPolyfill = path.join(__dirname, './public/polyfill')
+const dist = path.join(__dirname, './dist')
 
 process.env.BROWSER = 'none'
-module.exports = function override(/** @type{import("webpack").Configuration} */ config, env) {
+/**
+ * @type config {import("webpack").Configuration}
+ */
+module.exports = function override(config, env) {
     // CSP bans eval
     // And non-inline source-map not working
     if (env === 'development') config.devtool = 'inline-source-map'
@@ -18,7 +33,7 @@ module.exports = function override(/** @type{import("webpack").Configuration} */
     }
     if (env !== 'development') delete config.entry.devtools
 
-    // Let bundle compatiable with web worker
+    // Let bundle compatible with web worker
     config.output.globalObject = 'globalThis'
     config.output.filename = 'js/[name].js'
     config.output.chunkFilename = 'js/[name].chunk.js'
@@ -45,29 +60,25 @@ module.exports = function override(/** @type{import("webpack").Configuration} */
         }),
     )
     config.plugins.push(
-        new webpack.BannerPlugin(`Maskbook is a open source project under GNU AGPL 3.0 licence.
-
-More info about our project at https://github.com/DimensionDev/Maskbook
-
-Maskbook is built on CircleCI, in which all the building process is available to the public.
-
-We directly take the output to submit to the Web Store. We will integrate the automatic submission
-into the CircleCI in the near future.`),
+        new webpack.BannerPlugin("Maskbook is a open source project under GNU AGPL 3.0 licence.\n\n\n" +
+            "More info about our project at https://github.com/DimensionDev/Maskbook\n\n" +
+            "Maskbook is built on CircleCI, in which all the building process is available to the public.\n\n" +
+            "We directly take the output to submit to the Web Store. We will integrate the automatic submission\n" +
+            "into the CircleCI in the near future."),
     )
-    // Write files to /public
-    const polyfills = [
-        'node_modules/construct-style-sheets-polyfill/adoptedStyleSheets.js',
-        'node_modules/webextension-polyfill/dist/browser-polyfill.min.js',
-        'node_modules/webextension-polyfill/dist/browser-polyfill.min.js.map',
-        'node_modules/webcrypto-liner/dist/webcrypto-liner.shim.js',
-    ]
-    const public = path.join(__dirname, './public')
-    const publicPolyfill = path.join(__dirname, './public/polyfill')
-    const dist = path.join(__dirname, './dist')
+    config.plugins.push(new ExtensionReloader({
+        port: 9090,
+        reloadPage: true,
+        entries: {
+            contentScript: './src/content-script.ts',
+            background: './src/background-service.ts'
+        }
+    }))
+
     if (env === 'development') {
         config.plugins.push(
             new (require('copy-webpack-plugin'))(
-                [...polyfills.map(from => ({ from, to: publicPolyfill })), { from: public, to: dist }],
+                [...polyfills.map(from => ({ from, to: publicPolyfill })), { from: publicDir, to: dist }],
                 { ignore: ['*.html'] },
             ),
         )
