@@ -70,16 +70,19 @@ async function generateBackupJSON(whoAmI: PersonIdentifier, full = false): Promi
     //#endregion
 
     await Promise.all(promises)
+    const grantedHostPermissions = (await browser.permissions.getAll()).origins || []
     if (full)
         return {
             version: 1,
             whoami: myIdentitiesInDB,
             people: peopleInDB,
+            grantedHostPermissions,
         }
     else
         return {
             version: 1,
             whoami: myIdentitiesInDB,
+            grantedHostPermissions,
         }
     function exportKey(k: CryptoKey) {
         return crypto.subtle.exportKey('jwk', k)
