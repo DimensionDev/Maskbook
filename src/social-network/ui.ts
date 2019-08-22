@@ -3,7 +3,6 @@ import { DomProxy, LiveSelector, ValueRef } from '@holoflows/kit/es'
 import { Person } from '../database'
 import { PersonIdentifier, PostIdentifier } from '../database/type'
 import { Payload } from '../utils/type-transform/Payload'
-import { PayloadAlpha40 } from '../utils/type-transform/Payload'
 import { defaults } from 'lodash-es'
 import { injectPostCommentsDefault } from './defaults/injectComments'
 import { injectCommentBoxDefault } from './defaults/injectCommentBox'
@@ -240,10 +239,6 @@ function hookUIPostMap(ui: SocialNetworkUI) {
         f && f()
         return Reflect.apply(remove, this, [key])
     }
-}
-
-export function defineSocialNetworkUI(UI: SocialNetworkUI): void {
-    definedSocialNetworkUIs.add(UI)
 }
 
 const def = {
