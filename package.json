@@ -4,12 +4,11 @@
   "version": "1.5.3",
   "private": true,
   "scripts": {
-    "watch": "yarn just react",
+    "start": "yarn just react",
+    "firefox": "yarn just watch",
     "build": "yarn just react/build",
-    "test": "yarn just react/test",
-    "start": "yarn just storybook",
-    "build-storybook": "yarn just storybook/build",
-    "load-to-firefox": "yarn web-ext run --source-dir ./dist/ --verbose",
+    "storybook": "yarn just storybook",
+    "storybook/build": "yarn just storybook/build",
     "install": "yarn just install/holoflows",
     "uninstall": "yarn just install/holoflows"
   },
