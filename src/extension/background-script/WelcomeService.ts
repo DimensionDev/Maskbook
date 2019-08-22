@@ -18,6 +18,7 @@ import { PersonIdentifier } from '../../database/type'
 import { MessageCenter } from '../../utils/messages'
 import getCurrentNetworkWorker from '../../social-network/utils/getCurrentNetworkWorker'
 import { SocialNetworkUIDataSources } from '../../social-network/ui'
+import { getWelcomePageURL } from '../options-page/Welcome/getWelcomePageURL'
 
 OnlyRunInContext('background', 'WelcomeService')
 async function generateBackupJSON(whoAmI: PersonIdentifier, full = false): Promise<BackupJSONFileLatest> {
@@ -125,13 +126,6 @@ export async function openWelcomePage(id?: SocialNetworkUIDataSources['lastRecog
     if (id) {
         if (!getCurrentNetworkWorker(id.identifier).isValidUsername(id.identifier.userId))
             throw new TypeError(geti18nString('service_username_invalid'))
-        const param = new URLSearchParams()
-        param.set('nickname', id.nickname || '')
-        param.set('avatar', id.avatar || '')
-        param.set('identifier', id.identifier.toText())
-        const url = browser.runtime.getURL(`index.html#/welcome?${param.toString()}`)
-        return browser.tabs.create({ url })
     }
-    const url = browser.runtime.getURL('index.html#/welcome')
-    return browser.tabs.create({ url })
+    return browser.tabs.create({ url: getWelcomePageURL(id) })
 }

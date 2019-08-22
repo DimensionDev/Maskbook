@@ -36,7 +36,7 @@ storiesOf('Welcome', module)
                 back={to('Welcome', 'Step 0')}
                 next={() => to('Welcome', 'Step 1a-2')()}
                 identities={demoPeople}
-                didntFindAccount={to('Welcome', 'Step 1a-1b')}
+                linkNewSocialNetworks={to('Welcome', 'Step 1a-1b')}
             />
         </ResponsiveDialog>
     ))

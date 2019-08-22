@@ -1,18 +1,23 @@
 import { geti18nString } from '../i18n'
 
-export interface PayloadAlpha40 {
-    version: -40
+export type Payload = PayloadAlpha40_Or_Alpha39
+interface PayloadAlpha40_Or_Alpha39 {
+    version: -40 | -39
     ownersAESKeyEncrypted: string
     iv: string
     encryptedText: string
     signature?: string
 }
 /**
- * Detect if there is version -40 payload
+ * Detect if there is version -40 or -39 payload
  */
-function deconstructAlpha40(str: string, throws = false): PayloadAlpha40 | null {
-    // 🎼2/4|ownersAESKeyEncrypted|iv|encryptedText|signature:||
-    const [_, payloadStart] = str.split('🎼2/4|')
+function deconstructAlpha40_Or_Alpha39(str: string, throws = false): Payload | null {
+    // ? payload is 🎼2/4|ownersAESKeyEncrypted|iv|encryptedText|signature:||
+    // ? payload is 🎼3/4|ownersAESKeyEncrypted|iv|encryptedText|signature:||
+    const isVersion39 = str.includes('🎼3/4')
+    // tslint:disable-next-line: no-parameter-reassignment
+    str = str.replace('🎼2/4', '🎼3/4')
+    const [_, payloadStart] = str.split('🎼3/4|')
     if (!payloadStart)
         if (throws) throw new Error(geti18nString('payload_not_found'))
         else return null
@@ -30,7 +35,7 @@ function deconstructAlpha40(str: string, throws = false): PayloadAlpha40 | null 
         iv,
         encryptedText,
         signature,
-        version: -40,
+        version: isVersion39 ? -39 : -40,
     }
 }
 function deconstructAlpha41(str: string, throws = false): null | never {
@@ -41,10 +46,10 @@ function deconstructAlpha41(str: string, throws = false): null | never {
     return null
 }
 
-const versions = new Set([deconstructAlpha40, deconstructAlpha41])
-export function deconstructPayload(str: string): PayloadAlpha40 | null
-export function deconstructPayload(str: string, throws: true): PayloadAlpha40
-export function deconstructPayload(str: string, throws = false): PayloadAlpha40 | null {
+const versions = new Set([deconstructAlpha40_Or_Alpha39, deconstructAlpha41])
+export function deconstructPayload(str: string): Payload | null
+export function deconstructPayload(str: string, throws: true): Payload
+export function deconstructPayload(str: string, throws = false): Payload | null {
     for (const ver of versions) {
         const result = ver(str, false)
         if (throws === false) return result
@@ -58,6 +63,10 @@ export function deconstructPayload(str: string, throws = false): PayloadAlpha40 
     else return null
 }
 
-export function constructAlpha40(data: PayloadAlpha40) {
+export function constructAlpha40(data: Payload) {
     return `🎼2/4|${data.ownersAESKeyEncrypted}|${data.iv}|${data.encryptedText}|${data.signature}:||`
+}
+
+export function constructAlpha39(data: Payload) {
+    return `🎼3/4|${data.ownersAESKeyEncrypted}|${data.iv}|${data.encryptedText}|${data.signature}:||`
 }

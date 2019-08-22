@@ -7,7 +7,7 @@ import { Person } from '../../database'
 
 defineSocialNetworkUI({
     ...emptyDefinition,
-    name: 'Options page data source',
+    internalName: 'Options page data source',
     async init(e, p) {
         emptyDefinition.init(e, p)
         {

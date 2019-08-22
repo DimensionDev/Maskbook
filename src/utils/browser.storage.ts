@@ -4,9 +4,10 @@ interface Storage {
     forceDisplayWelcome: boolean
     userIgnoredWelcome: boolean
 }
-export function getStorage(network: string): Promise<Partial<Storage>> {
-    if (typeof browser === 'undefined' || !browser.storage) return {} as any
-    return browser.storage.local.get(network)
+export async function getStorage(network: string): Promise<Partial<Storage>> {
+    if (typeof browser === 'undefined' || !browser.storage) return {}
+    const storage = await browser.storage.local.get(network)
+    return (storage || {})[network] as any
 }
 export async function setStorage(network: string, item: Partial<Storage>) {
     if (typeof browser === 'undefined' || !browser.storage) return

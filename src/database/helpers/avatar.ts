@@ -1,21 +1,19 @@
 import { PersonIdentifier, GroupIdentifier } from '../type'
 import { queryAvatarDB, isAvatarOutdatedDB, storeAvatarDB } from '../avatar'
-
-const avatarCache = new Map<string, string>()
+import { memoizePromise } from '../../utils/memoize'
 
 /**
  * Get a (cached) blob url for an identifier.
  * ? Because of cross-origin restrictions, we cannot use blob url here. sad :(
  */
-export async function getAvatarDataURL(identifier: PersonIdentifier | GroupIdentifier): Promise<string | undefined> {
-    const id = identifier.toText()
-    if (avatarCache.has(id)) return avatarCache.get(id)!
-    const buffer = await queryAvatarDB(identifier)
-    if (!buffer) return undefined
-    const url = await ArrayBufferToBase64(buffer)
-    avatarCache.set(id, url)
-    return url
-}
+export const getAvatarDataURL = memoizePromise(
+    async function(identifier: PersonIdentifier | GroupIdentifier): Promise<string | undefined> {
+        const buffer = await queryAvatarDB(identifier)
+        if (!buffer) throw new Error('Avatar not found')
+        return ArrayBufferToBase64(buffer)
+    },
+    id => id.toText(),
+)
 function ArrayBufferToBase64(buffer: ArrayBuffer) {
     const f = new Blob([buffer], { type: 'image/png' })
     const fr = new FileReader()
@@ -35,6 +33,7 @@ export async function storeAvatar(identifier: PersonIdentifier | GroupIdentifier
     if (identifier instanceof PersonIdentifier && identifier.isUnknown) return
     try {
         if (typeof avatar === 'string') {
+            if (avatar.startsWith('http') === false) return
             if (await isAvatarOutdatedDB(identifier, 'lastUpdateTime')) {
                 await storeAvatarDB(identifier, await downloadAvatar(avatar))
             }

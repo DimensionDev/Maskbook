@@ -1,10 +1,18 @@
-import './social-network-provider/facebook.com/ui-provider'
-import './social-network-provider/facebook.com/worker-provider'
-import './social-network-provider/options-page/index'
-export function backgroundSetup() {
-    Object.assign(window, {
-        elliptic: require('elliptic'),
-    })
+import { activateSocialNetworkUI, definedSocialNetworkUIs } from './social-network/ui'
+import { definedSocialNetworkWorkers } from './social-network/worker'
+import { MessageCenter } from './utils/messages'
+
+function UIProvider() {
+    return [import('./social-network-provider/facebook.com/ui-provider')]
+}
+function WorkerProvider() {
+    return [
+        import('./social-network-provider/facebook.com/worker-provider'),
+        import('./social-network-provider/options-page/index'),
+    ]
+}
+
+export async function backgroundSetup() {
     MessageCenter.on('closeActiveTab', async () => {
         const tabs = await browser.tabs.query({
             active: true,
@@ -13,12 +21,15 @@ export function backgroundSetup() {
             await browser.tabs.remove(tabs[0].id!)
         }
     })
+    Object.assign(window, {
+        // @ts-ignore
+        elliptic: await import('elliptic'),
+    })
+    await Promise.all(WorkerProvider())
 }
-import { activateSocialNetworkUI, definedSocialNetworkUIs } from './social-network/ui'
-import { definedSocialNetworkWorkers } from './social-network/worker'
-import { MessageCenter } from './utils/messages'
 Object.assign(window, { definedSocialNetworkWorkers, definedSocialNetworkUIs })
-export function uiSetup() {
+export async function uiSetup() {
+    await Promise.all(UIProvider())
     activateSocialNetworkUI()
 
     const close = window.close
