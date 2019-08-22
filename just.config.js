@@ -10,7 +10,7 @@ const lintCommand = async (str, level = 'log') => {
 task('watch', () => parallel('react', 'watch/hot-reload-firefox'))
 task('watch/hot-reload-firefox', () => step('web-ext run --source-dir ./dist/'))
 
-task('react', () => parallel('lint/fix', 'react/start'))
+task('react', () => task('react/start'))
 task('react/start', () => step('react-app-rewired start'))
 task('react/build', () => step('react-app-rewired build'))
 task('react/test', () => step('react-app-rewired test'))
@@ -18,7 +18,7 @@ task('react/test', () => step('react-app-rewired test'))
 task('lint', () => lintCommand('check'))
 task('lint/fix', () => lintCommand('write', 'warn'))
 
-task('storybook', () => parallel('lint/fix', 'storybook/serve'))
+task('storybook', () => task('storybook/serve'))
 task('storybook/serve', () => step('start-storybook -p 9009 -s public --quiet', { withWarn: true }))
 task('storybook/build', () => step('build-storybook -s public --quiet', { withWarn: true }))
 
