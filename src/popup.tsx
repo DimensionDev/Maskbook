@@ -12,6 +12,16 @@ uiSetup()
 const useStyles = makeStyles(theme => ({
     button: {
         margin: theme.spacing(1),
+        whiteSpace: 'nowrap',
+    },
+    container: {
+        display: 'flex',
+        flexDirection: 'column',
+    },
+    logo: {
+        width: 'auto',
+        height: '54px',
+        margin: '0 1rem -10px',
     },
     input: {
         display: 'none',
@@ -26,13 +36,14 @@ function Popup() {
     return (
         <ThemeProvider theme={MaskbookLightTheme}>
             <style>{'body {overflow-x: hidden; margin: 0 auto;}'}</style>
-            <main>
+            <main className={classes.container}>
+                <img className={classes.logo} src="https://maskbook.com/img/maskbook--logotype-blue.png" />
                 <Button
                     variant="contained"
                     color="primary"
                     className={classes.button}
                     onClick={e => browser.runtime.openOptionsPage()}>
-                    Open options
+                    Options
                 </Button>
             </main>
         </ThemeProvider>
