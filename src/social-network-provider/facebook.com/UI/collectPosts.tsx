@@ -39,6 +39,7 @@ export function collectPostsFacebook(this: SocialNetworkUI) {
                 .map(x => x.parentElement)
                 .querySelector('textarea')
                 .map(x => x.parentElement)
+                .filter(x => x.innerHTML.indexOf('comment') !== -1)
                 .enableSingleMode()
             const commentBoxSelector = isMobileFacebook ? commentBoxSelectorMobile : commentBoxSelectorPC
 

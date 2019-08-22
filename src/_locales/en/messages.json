@@ -15,7 +15,7 @@
         "message": "Decrypt this post with Maskbook! $1"
     },
     "additional_post_box__encrypted_failed": {
-        "message": "Please paste the following text into the paste box."
+        "message": "Please paste the following text into the post box."
     },
     "add_to_key_store_success": {
         "message": "Maskbook public key added to keystore ✔"
