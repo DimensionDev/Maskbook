@@ -20,6 +20,7 @@ import { collectPostsFacebook } from './UI/collectPosts'
 import { injectPostInspectorFacebook } from './UI/injectPostInspector'
 import { setStorage } from '../../utils/browser.storage'
 import { isMobileFacebook } from './isMobile'
+import { geti18nString } from '../../utils/i18n'
 
 defineSocialNetworkUI({
     ...sharedProvider,
@@ -52,7 +53,7 @@ defineSocialNetworkUI({
     injectPostComments: injectPostCommentsDefault(),
     injectCommentBox: injectCommentBoxDefault(async function onPasteToCommentBoxFacebook(encryptedComment, current) {
         // TODO: i18n
-        const fail = () => prompt('Please paste it into the comment box!', encryptedComment)
+        const fail = () => prompt(geti18nString('comment_box__paste_failed'), encryptedComment)
         if (isMobileFacebook) {
             const root = current.commentBoxSelector.evaluateOnce()
             if (!root) return fail()

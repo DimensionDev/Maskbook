@@ -14,6 +14,7 @@ import {
 } from '../../database/people'
 import { UpgradeBackupJSONFile } from '../../utils/type-transform/BackupFile'
 import { PersonIdentifier, GroupIdentifier, GroupType } from '../../database/type'
+import { geti18nString } from '../../utils/i18n'
 
 OnlyRunInContext('background', 'FriendService')
 export { storeAvatar, getAvatarDataURL, queryPerson } from '../../database'
@@ -68,8 +69,7 @@ export async function restoreBackup(json: object, whoAmI?: PersonIdentifier): Pr
         return new GroupIdentifier(x.network, x.groupId, x.type)
     }
     const data = UpgradeBackupJSONFile(json, whoAmI)
-    // TODO: i18n
-    if (!data) throw new TypeError('This file is not a valid backup file')
+    if (!data) throw new TypeError(geti18nString('service_invalid_backup_file'))
 
     const myIdentitiesInBackup = Promise.all(
         data.whoami.map(async rec => {
