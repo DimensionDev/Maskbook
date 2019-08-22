@@ -11,6 +11,7 @@ public/polyfill
 
 # testing
 /coverage
+.eslintcache
 
 # production
 /build
