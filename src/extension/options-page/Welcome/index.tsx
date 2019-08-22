@@ -133,6 +133,12 @@ function Welcome(props: Welcome) {
             return <Welcome1a3 next={() => onStepChange(WelcomeState.ProvePost)} />
         case WelcomeState.ProvePost:
             const worker = getCurrentNetworkWorker(props.whoAmI.identifier)
+            const copyToClipboard = (provePost: string) => {
+                try {
+                    // This may throw on some (Safari) browsers.
+                    navigator.clipboard.writeText(provePost)
+                } catch {}
+            }
             return (
                 <Welcome1a4v2
                     hasManual={!!worker.manualVerifyPost}
@@ -141,10 +147,12 @@ function Welcome(props: Welcome) {
                     bioDisabled={whoAmI.identifier.isUnknown}
                     provePost={provePost}
                     requestManualVerify={() => {
+                        copyToClipboard(provePost)
                         sideEffects.manualVerifyBio(whoAmI.identifier, provePost)
                         onStepChange(WelcomeState.End)
                     }}
                     requestAutoVerify={type => {
+                        copyToClipboard(provePost)
                         if (type === 'bio') sideEffects.autoVerifyBio(whoAmI.identifier, provePost)
                         else if (type === 'post') sideEffects.autoVerifyPost(whoAmI.identifier, provePost)
                         onStepChange(WelcomeState.End)
