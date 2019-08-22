@@ -23,10 +23,11 @@ For general introductions, see https://Maskbook.com/
 
 #### Build and developing
 
--   `yarn watch` runs a watching mode. Output files in `./dist/`. Load it as unpacked Chrome or Firefox extension
+-   `yarn firefox` runs extension in a new firefox session.
+-   `yarn start` runs extension in other browsers, manually loading required.    
+    [This](https://chrome.google.com/webstore/detail/extensions-reloader/fimgfedafeadlieiabdeeaodndnlbhid) plugin may help you to reload extension quicker.
+-   `yarn storybook` to start StoryBook. Used for UI only developing.
 -   `yarn build` build a production version. Output files in `./build/`
--   `yarn test` to run test (we didn't have one yet)
--   `yarn start` to start StoryBook. Used for UI only developing.
 
 #### Non-famous libraries we are using
 
@@ -34,7 +35,7 @@ For general introductions, see https://Maskbook.com/
 -   `anchorme` - Use it to detect links in the text
 -   `construct-style-sheets-polyfill` - A polyfill for a web api
 -   `elliptic` - A crypto library, we use it to encrypt and decrypt
--   `gun` - A decentralized graph databasem we use it to sync user's shared crypto key
+-   `gun` - A decentralized graph database we use it to sync user's shared crypto key
 -   `pvtsutils` and `tiny-secp256k1` - A crypto library, we use it to zip and unzip SECP256k1 keys but not using it to encrypt/decrypt
 -   `serialijse` - A serialization / deserialization library
 -   `webcrypto-liner` - A wrapper library, it wrap `elliptic` into WebCrypto API

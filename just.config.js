@@ -7,22 +7,8 @@ const lintCommand = async (str, level = 'log') => {
     await step(`${listen} prettier --${str} "./src/**/*.{ts,tsx}" --loglevel ${level}`)
 }
 
-task('watch', () => parallel('react', 'watch/hot-reload'))
-task('watch/hot-reload', () => step(
-    'webpack-extension-reloader ' +
-    '--manifest ./dist/manifest.json ' +
-    '--config webpack.config.js ' +
-    '--port 9090 ' +
-    '--no-page-reload ' +
-    '--content-script ./src/content-script.ts ' +
-    '--background ./src/background-service.ts ',
-    {
-        env: {
-            'NODE_ENV': 'development'
-        }
-    }
-))
-task('watch/hot-reload-firefox', () => step('web-ext run --source-dir ./dist/ --verbose'))
+task('watch', () => parallel('react', 'watch/hot-reload-firefox'))
+task('watch/hot-reload-firefox', () => step('web-ext run --source-dir ./dist/'))
 
 task('react', () => parallel('lint/fix', 'react/start'))
 task('react/start', () => step('react-app-rewired start'))

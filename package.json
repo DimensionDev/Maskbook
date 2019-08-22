@@ -5,8 +5,8 @@
   "private": true,
   "scripts": {
     "start": "yarn just react",
+    "firefox": "yarn just watch",
     "build": "yarn just react/build",
-    "test": "yarn just react/test",
     "storybook": "yarn just storybook",
     "storybook/build": "yarn just storybook/build",
     "install": "yarn just install/holoflows",
@@ -76,8 +76,7 @@
     "prettier": "^1.18.2",
     "react-devtools": "^3.6.1",
     "storybook-addon-material-ui": "^0.9.0-alpha.19",
-    "web-ext": "^3.1.1",
-    "webpack-extension-reloader": "^1.1.0"
+    "web-ext": "^3.1.1"
   },
   "browserslist": {
     "production": [

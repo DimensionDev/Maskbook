@@ -1,7 +1,6 @@
 // noinspection NpmUsedModulesInstalled
 const webpack = require('webpack')
 const path = require('path')
-const ExtensionReloader = require('webpack-extension-reloader');
 
 const polyfills = [
     'node_modules/construct-style-sheets-polyfill/adoptedStyleSheets.js',
@@ -66,14 +65,6 @@ module.exports = function override(config, env) {
             "We directly take the output to submit to the Web Store. We will integrate the automatic submission\n" +
             "into the CircleCI in the near future."),
     )
-    config.plugins.push(new ExtensionReloader({
-        port: 9090,
-        reloadPage: true,
-        entries: {
-            contentScript: './src/content-script.ts',
-            background: './src/background-service.ts'
-        }
-    }))
 
     if (env === 'development') {
         config.plugins.push(
