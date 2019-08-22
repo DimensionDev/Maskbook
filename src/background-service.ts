@@ -1,11 +1,20 @@
 import 'webcrypto-liner/dist/webcrypto-liner.shim.js'
 import { GetContext } from '@holoflows/kit/es'
-import { getWelcomePageURL } from './extension/options-page/Welcome/getWelcomePageURL'
 import { MessageCenter } from './utils/messages'
-import { definedSocialNetworkWorkers } from './social-network/worker'
 // @ts-ignore
 import elliptic from 'elliptic'
-import './provider.worker'
+/**
+ * Load service here. sorry for the ugly pattern.
+ * But here's some strange problem with webpack.
+ *
+ * you should also add register in './extension/service.ts'
+ */
+import * as CryptoService from './extension/background-script/CryptoService'
+import * as WelcomeService from './extension/background-script/WelcomeService'
+import * as PeopleService from './extension/background-script/PeopleService'
+Object.assign(window, { CryptoService, WelcomeService, PeopleService })
+require('./extension/service')
+require('./provider.worker')
 
 if (GetContext() === 'background') {
     const injectedScript = `{
@@ -51,6 +60,9 @@ if (GetContext() === 'background') {
     })
 
     browser.runtime.onInstalled.addListener(detail => {
+        const {
+            getWelcomePageURL,
+        } = require('./extension/options-page/Welcome/getWelcomePageURL') as typeof import('./extension/options-page/Welcome/getWelcomePageURL')
         if (detail.reason === 'install') {
             browser.tabs.create({ url: getWelcomePageURL() })
         }
@@ -79,6 +91,28 @@ MessageCenter.on('closeActiveTab', async () => {
 })
 Object.assign(window, {
     elliptic,
-    definedSocialNetworkWorkers,
+    definedSocialNetworkWorkers: (require('./social-network/worker') as typeof import('./social-network/worker'))
+        .definedSocialNetworkWorkers,
 })
-require('./extension/service')
+
+// Run tests
+require('./tests/1to1')
+require('./tests/1toN')
+require('./tests/sign&verify')
+require('./tests/friendship-discover')
+require('./tests/comment')
+
+// Friendly to debug
+Object.assign(window, {
+    gun1: require('./network/gun/version.1'),
+    gun2: require('./network/gun/version.2'),
+    crypto40: require('./crypto/crypto-alpha-40'),
+    crypto39: require('./crypto/crypto-alpha-39'),
+    db: {
+        avatar: require('./database/avatar'),
+        group: require('./database/group'),
+        people: require('./database/people'),
+        type: require('./database/type'),
+        post: require('./database/post'),
+    },
+})
