@@ -86,7 +86,7 @@ export function Banner({
     }, [unmount])
     if (typeof props.networkIdentifier === 'function' && props.getStarted === undefined) {
         throw new TypeError(
-            'You cannot use getStartedDefault when networkIdentifier is a function. Please implement this function by yourself.',
+            'You cannot use getStartedDefault when networkIdentifier is a function. Please implement this function yourself.',
         )
     }
     const getStartedDefault = useCallback(() => {

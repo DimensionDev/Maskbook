@@ -47,7 +47,7 @@ async function generateBackupJSON(whoAmI: PersonIdentifier, full = false): Promi
             privateKey: await exportKey(data.privateKey),
             [JSON_HINT_FOR_POWER_USER]:
                 (await getMyProveBio(data.identifier)) ||
-                'We are sorry, but this field is not available, you setup Maskbook again may help.',
+                'We are sorry, but this field is not available. It may help to set up Maskbook again.',
         })
     }
     for (const id of myIdentity) {

@@ -35,7 +35,7 @@ defineSocialNetworkUI({
     friendlyName: 'Facebook',
     async setupAccount() {
         await browser.permissions.request({ origins: ['https://www.facebook.com/*', 'https://m.facebook.com/*'] })
-        setStorage('facebook.com', { forceDisplayWelcome: true })
+        await setStorage('facebook.com', { forceDisplayWelcome: true })
         location.href = 'https://facebook.com/'
     },
     ignoreSetupAccount() {

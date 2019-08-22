@@ -10,7 +10,7 @@ const facebookHost = ['https://m.facebook.com/*', 'https://www.facebook.com/*']
  * We should give them a hint.
  */
 export const JSON_HINT_FOR_POWER_USER =
-    'Power Users look here! You should add the value in this field to the bio to make Maskbook works! ->'
+    'Power Users look here! You should add the value in this field to the bio to make Maskbook work! ->'
 type JSON_HINT_FOR_POWER_USER = typeof JSON_HINT_FOR_POWER_USER
 export function UpgradeBackupJSONFile(json: object, identity?: PersonIdentifier): BackupJSONFileLatest | null {
     if (isVersion1(json)) {
