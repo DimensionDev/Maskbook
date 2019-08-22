@@ -1,4 +1,2 @@
-import './ui-provider'
-import './worker-provider'
-
-export {}
+export const facebookUI = [import('./ui-provider')]
+export const facebookWorker = [import('./worker-provider')]

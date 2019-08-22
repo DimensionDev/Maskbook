@@ -1,16 +1,7 @@
 import { activateSocialNetworkUI, definedSocialNetworkUIs } from './social-network/ui'
 import { definedSocialNetworkWorkers } from './social-network/worker'
 import { MessageCenter } from './utils/messages'
-
-function UIProvider() {
-    return [import('./social-network-provider/facebook.com/ui-provider')]
-}
-function WorkerProvider() {
-    return [
-        import('./social-network-provider/facebook.com/worker-provider'),
-        import('./social-network-provider/options-page/index'),
-    ]
-}
+import { uiList, workerList } from './social-network-provider'
 
 export async function backgroundSetup() {
     MessageCenter.on('closeActiveTab', async () => {
@@ -25,11 +16,11 @@ export async function backgroundSetup() {
         // @ts-ignore
         elliptic: await import('elliptic'),
     })
-    await Promise.all(WorkerProvider())
+    await Promise.all(workerList)
 }
 Object.assign(window, { definedSocialNetworkWorkers, definedSocialNetworkUIs })
 export async function uiSetup() {
-    await Promise.all(UIProvider())
+    await Promise.all(uiList)
     activateSocialNetworkUI()
 
     const close = window.close

@@ -1,13 +1,13 @@
 import * as React from 'react'
 import { geti18nString } from '../../utils/i18n'
-import { Typography, Button, makeStyles } from '@material-ui/core'
+import { Button, makeStyles, Typography } from '@material-ui/core'
 import WelcomeContainer from './WelcomeContainer'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction'
 import ListItemText from '@material-ui/core/ListItemText'
 import ListSubheader from '@material-ui/core/ListSubheader'
-import { SocialNetworkUI, definedSocialNetworkUIs } from '../../social-network/ui'
+import { definedSocialNetworkUIs, SocialNetworkUI } from '../../social-network/ui'
 import { env } from '../../social-network/shared'
 import Navigation from './Navigation/Navigation'
 
@@ -54,7 +54,7 @@ export default function Welcome({ useExistingAccounts, back }: Props) {
                 </ListItemSecondaryAction>
             ) : null
         return (
-            <ListItem>
+            <ListItem key={provider.friendlyName}>
                 <ListItemText primary={provider.friendlyName} secondary={secondaryWithDangerous} />
                 {button}
             </ListItem>

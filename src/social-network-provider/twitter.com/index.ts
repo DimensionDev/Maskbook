@@ -1,5 +1,6 @@
-import './worker'
-import './ui'
+export const twitterUI = [import('./ui')]
+export const twitterWorker = [import('./worker')]
+
 import { SocialNetworkWorkerAndUI } from '../../social-network/shared'
 import { usernameValidator } from './utils/user'
 
@@ -12,6 +13,6 @@ export const sharedSettings: SocialNetworkWorkerAndUI = {
     isDangerousNetwork: false,
     networkIdentifier: host,
     isValidUsername: usernameValidator,
-    acceptablePayload: ['v40', 'v39', 'latest'],
+    acceptablePayload: ['v39', 'latest'],
     init() {},
 }

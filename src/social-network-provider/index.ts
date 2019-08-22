@@ -1,4 +1,6 @@
-import './facebook.com'
-import './twitter.com'
+import { twitterUI, twitterWorker } from './twitter.com'
+import { facebookUI, facebookWorker } from './facebook.com'
 
-export {}
+export const uiList = [...twitterUI, ...facebookUI, import('./options-page')]
+
+export const workerList = [...twitterWorker, ...facebookWorker]
