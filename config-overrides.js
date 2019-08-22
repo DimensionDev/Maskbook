@@ -37,9 +37,9 @@ module.exports = function override(config, env) {
     config.output.filename = 'js/[name].js'
     config.output.chunkFilename = 'js/[name].chunk.js'
 
-    // Leads a loading failure in background service
+    // We cannot do runtimeChunk because extension CSP disallows inline <script>
     config.optimization.runtimeChunk = false
-    config.optimization.splitChunks = undefined
+    config.optimization.splitChunks = { chunks: 'all' }
 
     // Dismiss warning for gun.js
     config.module.wrappedContextCritical = false
@@ -49,28 +49,40 @@ module.exports = function override(config, env) {
     // Prevent all other chunks from being injected to index.html
     config.plugins.forEach(p => {
         if (p.constructor.name !== 'HtmlWebpackPlugin') return
-        const {devtools, app, ...exclude} = config.entry
+        const { devtools, app, ...exclude } = config.entry
         Object.keys(exclude).forEach(e => p.options.excludeChunks.push(e))
     })
 
     config.plugins.push(
         new (require('write-file-webpack-plugin'))({
-            test: /(webp|jpg|png|shim|polyfill|js\/.*|index\.html|manifest\.json|_locales)/,
+            test: /(webp|jpg|png|shim|polyfill|js\/.*|(index|background)\.html|manifest\.json|_locales)/,
         }),
     )
     config.plugins.push(
-        new webpack.BannerPlugin("Maskbook is a open source project under GNU AGPL 3.0 licence.\n\n\n" +
-            "More info about our project at https://github.com/DimensionDev/Maskbook\n\n" +
-            "Maskbook is built on CircleCI, in which all the building process is available to the public.\n\n" +
-            "We directly take the output to submit to the Web Store. We will integrate the automatic submission\n" +
-            "into the CircleCI in the near future."),
+        new webpack.BannerPlugin(
+            'Maskbook is a open source project under GNU AGPL 3.0 licence.\n\n\n' +
+                'More info about our project at https://github.com/DimensionDev/Maskbook\n\n' +
+                'Maskbook is built on CircleCI, in which all the building process is available to the public.\n\n' +
+                'We directly take the output to submit to the Web Store. We will integrate the automatic submission\n' +
+                'into the CircleCI in the near future.',
+        ),
     )
 
+    // Write files to /public
+    const polyfills = [
+        'node_modules/construct-style-sheets-polyfill/adoptedStyleSheets.js',
+        'node_modules/webextension-polyfill/dist/browser-polyfill.min.js',
+        'node_modules/webextension-polyfill/dist/browser-polyfill.min.js.map',
+        'node_modules/webcrypto-liner/dist/webcrypto-liner.shim.js',
+    ]
+    const public = path.join(__dirname, './public')
+    const publicPolyfill = path.join(__dirname, './public/polyfill')
+    const dist = path.join(__dirname, './dist')
     if (env === 'development') {
         config.plugins.push(
             new (require('copy-webpack-plugin'))(
-                [...polyfills.map(from => ({ from, to: publicPolyfill })), { from: publicDir, to: dist }],
-                { ignore: ['*.html'] },
+                [...polyfills.map(from => ({ from, to: publicPolyfill })), { from: public, to: dist }],
+                { ignore: ['index.html'] },
             ),
         )
     } else {
