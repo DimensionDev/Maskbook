@@ -1,6 +1,7 @@
 import { activateSocialNetworkUI, definedSocialNetworkUIs } from './social-network/ui'
 import { definedSocialNetworkWorkers } from './social-network/worker'
 import { MessageCenter } from './utils/messages'
+import { GetContext } from '@holoflows/kit/es'
 
 function UIProvider() {
     return [import('./social-network-provider/facebook.com/ui-provider')]
@@ -44,4 +45,7 @@ export async function uiSetup() {
             }
         }, 400)
     }
+    // In options page, we need all WorkerProviders to be registered,
+    // but no action will be performed.
+    if (GetContext() === 'options') await Promise.all(WorkerProvider())
 }
