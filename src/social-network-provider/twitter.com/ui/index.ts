@@ -1,5 +1,5 @@
 import { defineSocialNetworkUI } from '../../../social-network/ui'
-import { host, sharedSettings } from '../index'
+import { host, hostURL, sharedSettings } from '../index'
 import { shouldDisplayWelcomeDefault } from '../../../social-network/defaults/shouldDisplayWelcome'
 import { InitFriendsValueRef } from '../../../social-network/defaults/FriendsValueRef'
 import { InitMyIdentitiesValueRef } from '../../../social-network/defaults/MyIdentitiesRef'
@@ -11,7 +11,6 @@ import { nop } from '../../../utils/utils'
 import { taskGetPostContent, taskGetProfile, taskPasteIntoBio, taskPasteIntoPostBox } from './task'
 import { setStorage } from '../../../utils/browser.storage'
 
-// TODO: host -> def.host
 const def = defineSocialNetworkUI({
     ...sharedSettings,
     init() {
@@ -24,12 +23,12 @@ const def = defineSocialNetworkUI({
     friendlyName: 'Twitter',
     setupAccount() {
         setStorage(host, { forceDisplayWelcome: true }).then()
-        window.open(sharedSettings.networkURL as string)
+        window.open(hostURL as string)
     },
     ignoreSetupAccount() {
         setStorage(host, { userIgnoredWelcome: true }).then()
     },
-    shouldDisplayWelcome: shouldDisplayWelcomeDefault(host),
+    shouldDisplayWelcome: shouldDisplayWelcomeDefault,
     friendsRef: new ValueRef([]),
     myIdentitiesRef: new ValueRef([]),
     currentIdentity: new ValueRef(null),
