@@ -18,7 +18,6 @@
     "no-switch-case-fall-through": true,
     "prefer-const": true,
     "triple-equals": true,
-    "typeof-compare": true,
     "unnecessary-bind": true,
     "use-isnan": true
   }
