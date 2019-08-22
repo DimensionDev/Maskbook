@@ -1,11 +1,11 @@
 import 'webcrypto-liner/dist/webcrypto-liner.shim.js'
-import { backgroundSetup } from './setup'
 import { GetContext } from '@holoflows/kit/es'
 import { getWelcomePageURL } from './extension/options-page/Welcome/getWelcomePageURL'
-
-backgroundSetup().then(() => {
-    require('./extension/service')
-})
+import { MessageCenter } from './utils/messages'
+import { definedSocialNetworkWorkers } from './social-network/worker'
+// @ts-ignore
+import elliptic from 'elliptic'
+import './provider.worker'
 
 if (GetContext() === 'background') {
     const injectedScript = `{
@@ -69,3 +69,16 @@ function IgnoreError(arg: any): (reason: any) => void {
         } else console.error('Inject error', e, arg, Object.entries(e))
     }
 }
+MessageCenter.on('closeActiveTab', async () => {
+    const tabs = await browser.tabs.query({
+        active: true,
+    })
+    if (tabs[0]) {
+        await browser.tabs.remove(tabs[0].id!)
+    }
+})
+Object.assign(window, {
+    elliptic,
+    definedSocialNetworkWorkers,
+})
+require('./extension/service')
