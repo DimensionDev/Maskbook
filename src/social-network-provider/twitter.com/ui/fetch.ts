@@ -15,25 +15,16 @@ import { getEmptyPostInfo, SocialNetworkUI } from '../../../social-network/ui'
 import { deconstructPayload } from '../../../utils/type-transform/Payload'
 import { regexMatch, timeout } from '../../../utils/utils'
 import { hasPostPopup } from '../utils/status'
-import { counter } from '../../../utils/assert'
 
-const p = new counter()
-
-export const resolveLastRecognizedIdentity = function(this: SocialNetworkUI) {
-    p.shouldOnlyRunOnce()
-    const ref = this.lastRecognizedIdentity
-    ref.addListener(id => {
-        if (id.identifier.isUnknown) return
-        Services.People.resolveIdentity(id.identifier).then()
-    })
-    const self = selfInfoSelectors.screenName
+export const resolveLastRecognizedIdentity = (self: SocialNetworkUI) => {
+    const selfSelector = selfInfoSelectors.screenName
     const assign = () => {
+        const ref = self.lastRecognizedIdentity
         const i = new PersonIdentifier(host, selfInfoSelectors.screenName.evaluateOnce()[0])
-        if (i.isUnknown) return
-        if (i.equals(ref.value.identifier)) return
+        if (i.isUnknown) throw new Error('failed to recognize user id')
         ref.value = { identifier: i }
     }
-    new MutationObserverWatcher(self)
+    new MutationObserverWatcher(selfSelector)
         .enableSingleMode()
         .addListener('onAdd', () => assign())
         .addListener('onChange', () => assign())

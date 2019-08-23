@@ -10,6 +10,7 @@ import { collectPeople, collectPosts, resolveLastRecognizedIdentity } from './fe
 import { nop } from '../../../utils/utils'
 import { taskGetPostContent, taskGetProfile, taskPasteIntoBio, taskPasteIntoPostBox } from './task'
 import { setStorage } from '../../../utils/browser.storage'
+import { updaterFactory } from '../../facebook.com/ui-provider'
 
 const def = defineSocialNetworkUI({
     ...sharedSettings,
@@ -38,7 +39,7 @@ const def = defineSocialNetworkUI({
     currentIdentity: new ValueRef(null),
     lastRecognizedIdentity: new ValueRef({ identifier: PersonIdentifier.unknown }),
     posts: new Map(),
-    resolveLastRecognizedIdentity,
+    resolveLastRecognizedIdentity: () => resolveLastRecognizedIdentity(def),
     injectPostBox,
     injectPostComments: nop,
     injectCommentBox: nop,
@@ -51,3 +52,5 @@ const def = defineSocialNetworkUI({
     taskGetPostContent,
     taskGetProfile,
 })
+
+def.lastRecognizedIdentity.addListener(updaterFactory(def))

@@ -1,22 +1,11 @@
-import { LiveSelector } from '@holoflows/kit/es/DOM/LiveSelector'
-import { MutationObserverWatcher } from '@holoflows/kit/es'
+import { LiveSelector, MutationObserverWatcher } from '@holoflows/kit'
 import { PersonIdentifier } from '../../../database/type'
-import Services from '../../../extension/service'
 import { SocialNetworkUI } from '../../../social-network/ui'
 import { getPersonIdentifierAtFacebook } from '../getPersonIdentifierAtFacebook'
 import { Person } from '../../../database'
 
 export function resolveLastRecognizedIdentityFacebook(this: SocialNetworkUI) {
     const ref = this.lastRecognizedIdentity
-    ref.addListener(id => {
-        if (id.identifier.isUnknown) return
-
-        if (this.currentIdentity.value === null) {
-            this.currentIdentity.value =
-                this.myIdentitiesRef.value.find(x => id.identifier.equals(x.identifier)) || null
-        }
-        Services.People.resolveIdentity(id.identifier)
-    })
     const self = myUsernameLiveSelectorPC
         .clone()
         .map(x => getPersonIdentifierAtFacebook(x, false))
@@ -28,9 +17,9 @@ export function resolveLastRecognizedIdentityFacebook(this: SocialNetworkUI) {
         .addListener('onAdd', e => assign(e.value))
         .addListener('onChange', e => assign(e.newValue))
         .startWatch()
+        .then()
     function assign(i: part) {
-        if (i.identifier.isUnknown) return
-        if (i.identifier.equals(ref.value.identifier)) return
+        if (i.identifier.isUnknown) throw new Error('failed to recognize user id')
         ref.value = i
     }
 }

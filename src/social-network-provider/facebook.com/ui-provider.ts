@@ -1,4 +1,4 @@
-import { defineSocialNetworkUI } from '../../social-network/ui'
+import { defineSocialNetworkUI, SocialNetworkUI } from '../../social-network/ui'
 import { ValueRef } from '@holoflows/kit/es'
 import { InitFriendsValueRef } from '../../social-network/defaults/FriendsValueRef'
 import { InitMyIdentitiesValueRef } from '../../social-network/defaults/MyIdentitiesRef'
@@ -16,6 +16,8 @@ import { injectWelcomeBannerFacebook } from './UI/injectWelcomeBanner'
 import { collectPostsFacebook } from './UI/collectPosts'
 import { injectPostInspectorFacebook } from './UI/injectPostInspector'
 import { setStorage } from '../../utils/browser.storage'
+import Services from '../../extension/service'
+import { isNull } from 'lodash-es'
 
 const def = defineSocialNetworkUI({
     ...sharedProvider,
@@ -53,3 +55,17 @@ const def = defineSocialNetworkUI({
     taskGetPostContent: getPostContentFacebook,
     taskGetProfile: getProfileFacebook,
 })
+
+export const updaterFactory = (self: SocialNetworkUI) => {
+    return ((id) => {
+        if (id.identifier.isUnknown) return
+
+        if (isNull(self.currentIdentity.value)) {
+            self.currentIdentity.value =
+                self.myIdentitiesRef.value.find(x => id.identifier.equals(x.identifier)) || null
+        }
+        Services.People.resolveIdentity(id.identifier).then()
+    }) as Parameters<SocialNetworkUI['lastRecognizedIdentity']['addListener']>[0]
+}
+
+def.lastRecognizedIdentity.addListener(updaterFactory(def))
