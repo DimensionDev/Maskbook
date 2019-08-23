@@ -10,10 +10,13 @@
     "start": "yarn just react",
     "firefox": "yarn just watch",
     "build": "yarn just react/build",
-    "storybook": "yarn just storybook",
-    "storybook/build": "yarn just storybook/build",
-    "install": "yarn just install",
-    "uninstall": "yarn just install"
+    "test": "yarn just react/test",
+    "start": "yarn just storybook",
+    "build-storybook": "yarn just storybook/build",
+    "load-to-firefox": "yarn web-ext run --source-dir ./dist/ --verbose",
+    "install": "yarn just install/holoflows",
+    "uninstall": "yarn just install/holoflows",
+    "eslint": "eslint ./src/*/** --ext .ts,.tsx --cache"
   },
   "dependencies": {
     "@holoflows/kit": "https://github.com/DimensionDev/holoflows-kit",
@@ -37,6 +40,7 @@
     "copy-webpack-plugin": "^5.0.3",
     "elliptic": "^6.4.1",
     "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-react-hooks": "^2.0.1",
     "gun": "0.2019.422",
     "idb": "^4.0.3",
     "jsqr": "^1.2.0",

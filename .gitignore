@@ -9,6 +9,9 @@ public/polyfill
 /.pnp
 .pnp.js
 
+# cache
+.eslintcache
+
 # testing
 /coverage
 .eslintcache
