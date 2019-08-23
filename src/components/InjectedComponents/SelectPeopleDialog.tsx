@@ -35,12 +35,12 @@ export function SelectPeopleDialog(props: Props) {
         props.onClose()
         setCommitted(false)
         select([])
-    }, [props.onClose])
+    }, [props])
     const [rejection, onReject] = useState<Error>()
     const share = useCallback(() => {
         setCommitted(true)
         props.onSelect(people).then(onClose, onReject)
-    }, [people])
+    }, [onClose, people, props])
 
     const canClose = !rejection && committed
     const canCommit = committed || people.length === 0

@@ -24,7 +24,6 @@ export function getPersonIdentifierAtFacebook(
 ): Pick<Person, 'identifier' | 'nickname' | 'avatar'> {
     const unknown = { identifier: PersonIdentifier.unknown, avatar: undefined, nickname: undefined }
     try {
-        // tslint:disable-next-line: no-parameter-reassignment
         if (!Array.isArray(links)) links = [links]
         const result = links
             .filter(x => x)

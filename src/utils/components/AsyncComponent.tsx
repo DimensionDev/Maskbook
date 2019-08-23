@@ -13,6 +13,7 @@ export default function AsyncComponent<Return>(props: {
     failedComponent: React.ComponentType<{ error: Error }> | React.ReactNode
 }) {
     const [state, setState] = React.useState<PromiseState<Return>>({ status: 'not-started' })
+    // eslint-disable-next-line
     const promise = React.useMemo(() => props.promise(), props.dependencies)
     if (state.status === 'not-started') {
         promise.then(data => setState({ status: 'complete', data }), error => setState({ status: 'fail', error }))
@@ -40,6 +41,7 @@ export default function AsyncComponent<Return>(props: {
                     }
                 }
             }),
+        // eslint-disable-next-line
         props.dependencies,
     )
     return (
@@ -63,6 +65,7 @@ export function useAsync<T>(fn: () => Promise<T>, dep: ReadonlyArray<any>): Prom
         return () => {
             unmounted = true
         }
+        // eslint-disable-next-line
     }, dep)
     return {
         then(f, r) {

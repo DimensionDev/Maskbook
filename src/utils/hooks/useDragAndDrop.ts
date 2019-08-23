@@ -29,7 +29,7 @@ export function useDragAndDrop() {
         e.preventDefault()
         onChange(e)
         setTimeout(onLeave, 200)
-    }, [])
+    }, [onChange, onLeave])
     const onLeave = React.useCallback((e: React.DragEvent) => {
         setStatus(undefined)
     }, [])

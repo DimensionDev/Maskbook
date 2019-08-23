@@ -17,7 +17,6 @@
         "no-eval": 2,
         "@typescript-eslint/no-for-in-array": 2,
         "no-template-curly-in-string": 2,
-        "no-param-reassign": 2,
         "no-return-await": 2,
         "no-sparse-arrays": 2,
         "dot-notation": 2,

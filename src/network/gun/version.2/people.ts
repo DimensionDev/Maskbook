@@ -27,7 +27,6 @@ export function subscribePersonFromGun2(user: PersonIdentifier, callback: (data:
             callback(data2)
         }),
     )
-    // tslint:disable-next-line: no-parameter-reassignment
     return () => (callback = () => {})
 }
 /**

@@ -10,7 +10,6 @@ import {
 } from '../utils/type-transform/String-ArrayBuffer'
 import { toECDH, addUint8Array, toECDSA } from '../utils/type-transform/ECDSA-ECDH'
 import { memoizePromise } from '../utils/memoize'
-// tslint:disable: no-parameter-reassignment
 export type PublishedAESKey = { encryptedKey: string; salt: string }
 export type PublishedAESKeyRecordV40 = {
     key: PublishedAESKey
@@ -56,7 +55,7 @@ async function deriveAESKey(
     )
     const iv = new Uint8Array(16)
     for (let i = 0; i <= 16; i += 1) {
-        // tslint:disable-next-line: no-bitwise
+        // eslint-disable-next-line no-bitwise
         iv[i] = iv_pre[i] ^ iv_pre[16 + i]
     }
     const key = await crypto.subtle.importKey('raw', password, { name: 'AES-GCM', length: 256 }, true, [

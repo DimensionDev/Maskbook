@@ -44,7 +44,7 @@ export default function Welcome(props: Props) {
     const [type, setType] = React.useState<'bio' | 'post' | undefined>(undefined)
     const setManual = React.useCallback(() => setActionType('manual'), [])
     const setAuto = React.useCallback(() => setActionType('auto'), [])
-    const finish = React.useCallback(() => requestAutoVerify(type!), [type])
+    const finish = React.useCallback(() => requestAutoVerify(type!), [requestAutoVerify, type])
 
     if (!autoAvailable && !hasManual) return <>There is no way to setup Maskbook</>
     if (type === undefined) {

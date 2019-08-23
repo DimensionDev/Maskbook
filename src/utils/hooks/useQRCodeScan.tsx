@@ -49,7 +49,7 @@ export function useQRCodeScan(
             return () => {
                 stop()
             }
-        }, [isScanning, permission, video.current])
+        }, [isScanning, mediaStream, permission, video])
     }
     // ? Do scan
     {

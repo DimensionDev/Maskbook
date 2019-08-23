@@ -111,7 +111,7 @@ export function SelectPeopleUI(props: SelectPeopleUIProps) {
             const filtered = selected.find(x => x.identifier.equals(myself.identifier))
             if (filtered) onSetSelected(selected.filter(x => x !== filtered))
         }
-    }, [myself && myself.identifier.toText(), ignoreMyself])
+    }, [ignoreMyself, myself, onSetSelected, selected])
     const [search, setSearch] = useState('')
     const listBeforeSearch = people.filter(x => {
         if (ignoreMyself && myself && x.identifier.equals(myself.identifier)) return false

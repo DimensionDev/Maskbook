@@ -19,7 +19,7 @@ export async function getSharedListOfPost(
             .recipients || []
     nameInDB.forEach(x => ids.add(x.toText()))
     if (version === -40) {
-        // tslint:disable-next-line: deprecation
+        // eslint-disable-next-line deprecation
         const post = await Gun1.gun1
             .get('posts')
             .get(postSalt)

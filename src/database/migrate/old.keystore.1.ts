@@ -74,7 +74,7 @@ export default async function migrate() {
         const dbs = await indexedDB.databases()
         if (!dbs.find(x => x.name === 'maskbook-keystore-demo-v2')) return
     }
-    // tslint:disable-next-line: deprecation
+    // eslint-disable-next-line deprecation
     const wait = (await queryPeopleCryptoKey()).map(record => {
         if (record.username === '$self')
             return People.storeMyIdentityDB({

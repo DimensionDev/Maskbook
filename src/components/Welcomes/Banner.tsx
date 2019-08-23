@@ -93,7 +93,7 @@ export function Banner({
         setStorage(props.networkIdentifier as string, { forceDisplayWelcome: false })
         unmount()
         Services.Welcome.openWelcomePage(lastRecognizedIdentity)
-    }, [unmount])
+    }, [lastRecognizedIdentity, unmount])
     return (
         <BannerUI
             disabled={lastRecognizedIdentity.identifier.isUnknown}

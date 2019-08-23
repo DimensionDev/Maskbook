@@ -97,7 +97,7 @@ export function AdditionalPostBox(props: Partial<Props>) {
             getActivatedUI().taskPasteIntoPostBox(fullPost, geti18nString('additional_post_box__encrypted_failed'))
             Services.Crypto.publishPostAESKey(token, identity[0].identifier)
         },
-        [identity[0]],
+        [identity],
     )
 
     if (identity.length === 0) {
