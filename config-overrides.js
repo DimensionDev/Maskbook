@@ -9,9 +9,10 @@ const polyfills = [
     'node_modules/webextension-polyfill/dist/browser-polyfill.min.js',
     'node_modules/webextension-polyfill/dist/browser-polyfill.min.js.map',
 ]
-const public = path.join(__dirname, './public')
-const publicPolyfill = path.join(__dirname, './public/polyfill')
-const dist = path.join(__dirname, './dist')
+const src = file => path.join(__dirname, file)
+const public = src('./public')
+const publicPolyfill = src('./public/polyfill')
+const dist = src('./dist')
 
 process.env.BROWSER = 'none'
 /**
@@ -24,12 +25,11 @@ module.exports = function override(config, env) {
     else delete config.devtool
     config.optimization.minimize = false
     config.entry = {
-        devtools: 'react-devtools',
-        'options-page': path.join(__dirname, './src/index.tsx'),
-        'content-script': path.join(__dirname, './src/content-script.ts'),
-        'background-service': path.join(__dirname, './src/background-service.ts'),
-        injectedscript: path.join(__dirname, './src/extension/injected-script/index.ts'),
-        qrcode: path.join(__dirname, './src/web-workers/QRCode.ts'),
+        'options-page': src('./src/index.tsx'),
+        'content-script': src('./src/content-script.ts'),
+        'background-service': src('./src/background-service.ts'),
+        'injected-script': src('./src/extension/injected-script/index.ts'),
+        qrcode: src('./src/web-workers/QRCode.ts'),
     }
     if (env !== 'development') delete config.entry.devtools
 
@@ -53,27 +53,22 @@ module.exports = function override(config, env) {
         }),
     )
     config.plugins = config.plugins.filter(x => x.constructor.name !== 'HtmlWebpackPlugin')
-    const includeWebExtPolyfill = {
-        templateContent: `<head><script src="polyfill/browser-polyfill.min.js"></script><body>`,
-        /** @type {'body'} */
-        inject: 'body',
-    }
-    config.plugins.push(
-        new HtmlWebpackPlugin({
+    /**
+     * @param {HtmlWebpackPlugin.Options} options
+     */
+    function newPage(options = {}) {
+        return new HtmlWebpackPlugin({
             chunks: ['background-service'],
             filename: 'background.html',
-            ...includeWebExtPolyfill,
-        }),
-        new HtmlWebpackPlugin({
-            chunks: ['options-page'],
-            filename: 'index.html',
-            ...includeWebExtPolyfill,
-        }),
-        new HtmlWebpackPlugin({
-            chunks: ['content-script'],
-            filename: 'generated__content__script.html',
-            ...includeWebExtPolyfill,
-        }),
+            templateContent: `<head><script src="polyfill/browser-polyfill.min.js"></script><body>`,
+            inject: 'body',
+            ...options,
+        })
+    }
+    config.plugins.push(
+        newPage({ chunks: ['options-page'], filename: 'index.html' }),
+        newPage({ chunks: ['background-service'], filename: 'background.html' }),
+        newPage({ chunks: ['content-script'], filename: 'generated__content__script.html' }),
     )
     config.plugins.push(
         new webpack.BannerPlugin(
