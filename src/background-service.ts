@@ -1,10 +1,7 @@
 import 'webcrypto-liner/dist/webcrypto-liner.shim.js'
-// @ts-ignore
-import browser_ from 'webextension-polyfill'
 import { backgroundSetup } from './setup'
 import { GetContext } from '@holoflows/kit/es'
 import { getWelcomePageURL } from './extension/options-page/Welcome/getWelcomePageURL'
-Object.assign(window, { browser: browser_ })
 
 backgroundSetup().then(() => {
     require('./extension/service')

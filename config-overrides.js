@@ -26,7 +26,7 @@ module.exports = function override(config, env) {
     config.entry = {
         devtools: 'react-devtools',
         'options-page': path.join(__dirname, './src/index.tsx'),
-        contentscript: path.join(__dirname, './src/content-script.ts'),
+        'content-script': path.join(__dirname, './src/content-script.ts'),
         'background-service': path.join(__dirname, './src/background-service.ts'),
         injectedscript: path.join(__dirname, './src/extension/injected-script/index.ts'),
         qrcode: path.join(__dirname, './src/web-workers/QRCode.ts'),
@@ -53,14 +53,26 @@ module.exports = function override(config, env) {
         }),
     )
     config.plugins = config.plugins.filter(x => x.constructor.name !== 'HtmlWebpackPlugin')
+    const includeWebExtPolyfill = {
+        templateContent: `<head><script src="polyfill/browser-polyfill.min.js"></script><body>`,
+        /** @type {'body'} */
+        inject: 'body',
+    }
     config.plugins.push(
         new HtmlWebpackPlugin({
             chunks: ['background-service'],
             filename: 'background.html',
+            ...includeWebExtPolyfill,
         }),
         new HtmlWebpackPlugin({
             chunks: ['options-page'],
             filename: 'index.html',
+            ...includeWebExtPolyfill,
+        }),
+        new HtmlWebpackPlugin({
+            chunks: ['content-script'],
+            filename: 'generated__content__script.html',
+            ...includeWebExtPolyfill,
         }),
     )
     config.plugins.push(
@@ -73,6 +85,7 @@ module.exports = function override(config, env) {
         ),
     )
 
+    // Write files to /public
     if (env === 'development') {
         config.plugins.push(
             new (require('copy-webpack-plugin'))(
