@@ -49,7 +49,7 @@ module.exports = function override(config, env) {
 
     config.plugins.push(
         new (require('write-file-webpack-plugin'))({
-            test: /(webp|jpg|png|shim|polyfill|js\/.*|.html|manifest\.json|_locales)/,
+            test: /.*(?!hot-update)/,
         }),
     )
     config.plugins = config.plugins.filter(x => x.constructor.name !== 'HtmlWebpackPlugin')

@@ -8,33 +8,46 @@ backgroundSetup().then(() => {
 })
 
 if (GetContext() === 'background') {
-    const contentScript = `{
+    const injectedScript = `{
         const script = document.createElement('script')
         script.src = "${browser.runtime.getURL('js/injectedscript.js')}"
         document.documentElement.appendChild(script)
     }`
+    const contentScripts: Array<{ code: string } | { file: string }> = []
+    fetch('generated__content__script.html')
+        .then(x => x.text())
+        .then(html => {
+            const parser = new DOMParser()
+            const root = parser.parseFromString(html, 'text/html')
+            Promise.all(
+                Array.from(root.querySelectorAll('script')).map(script => {
+                    if (script.innerText) return Promise.resolve(script.innerText)
+                    else if (script.src) return fetch(script.src).then(x => x.text())
+                    return ''
+                }),
+            ).then(code => code.forEach(x => contentScripts.push({ code: x })))
+        })
     browser.webNavigation.onCommitted.addListener(async arg => {
+        if (arg.url === 'about:blank') return
         browser.tabs
             .executeScript(arg.tabId, {
                 runAt: 'document_start',
                 frameId: arg.frameId,
-                code: contentScript,
+                code: injectedScript,
             })
             .catch(IgnoreError(arg))
-        await browser.tabs
-            .executeScript(arg.tabId, {
+        for (const script of contentScripts) {
+            const option: browser.extensionTypes.InjectDetails = {
                 runAt: 'document_idle',
                 frameId: arg.frameId,
-                file: 'polyfill/browser-polyfill.min.js',
-            })
-            .catch(IgnoreError(arg))
-        await browser.tabs
-            .executeScript(arg.tabId, {
-                runAt: 'document_idle',
-                frameId: arg.frameId,
-                file: 'js/contentscript.js',
-            })
-            .catch(IgnoreError(arg))
+                ...script,
+            }
+            try {
+                await browser.tabs.executeScript(arg.tabId, option)
+            } catch (e) {
+                console.error('Inject failed', arg, option, e.message)
+            }
+        }
     })
 
     browser.runtime.onInstalled.addListener(detail => {
@@ -53,6 +66,6 @@ function IgnoreError(arg: any): (reason: any) => void {
             // It's okay, we inject to the wrong site and browser rejected it.
         } else if (e.message.includes('Cannot access a chrome')) {
             // It's okay, we inject to the wrong site and browser rejected it.
-        } else console.error('Inject error', e, arg)
+        } else console.error('Inject error', e, arg, Object.entries(e))
     }
 }
