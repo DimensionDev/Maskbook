@@ -1,20 +1,21 @@
 // noinspection NpmUsedModulesInstalled
 const webpack = require('webpack')
 const path = require('path')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
 
+// Write files to /public
 const polyfills = [
     'node_modules/construct-style-sheets-polyfill/adoptedStyleSheets.js',
     'node_modules/webextension-polyfill/dist/browser-polyfill.min.js',
     'node_modules/webextension-polyfill/dist/browser-polyfill.min.js.map',
-    'node_modules/webcrypto-liner/dist/webcrypto-liner.shim.js',
 ]
-const publicDir = path.join(__dirname, './public')
+const public = path.join(__dirname, './public')
 const publicPolyfill = path.join(__dirname, './public/polyfill')
 const dist = path.join(__dirname, './dist')
 
 process.env.BROWSER = 'none'
 /**
- * @type config {import("webpack").Configuration}
+ * @type {import("webpack").Configuration}
  */
 module.exports = function override(config, env) {
     // CSP bans eval
@@ -24,9 +25,9 @@ module.exports = function override(config, env) {
     config.optimization.minimize = false
     config.entry = {
         devtools: 'react-devtools',
-        app: path.join(__dirname, './src/index.tsx'),
+        'options-page': path.join(__dirname, './src/index.tsx'),
         contentscript: path.join(__dirname, './src/content-script.ts'),
-        backgroundservice: path.join(__dirname, './src/background-service.ts'),
+        'background-service': path.join(__dirname, './src/background-service.ts'),
         injectedscript: path.join(__dirname, './src/extension/injected-script/index.ts'),
         qrcode: path.join(__dirname, './src/web-workers/QRCode.ts'),
     }
@@ -46,16 +47,20 @@ module.exports = function override(config, env) {
     config.module.exprContextCritical = false
     config.module.unknownContextCritical = false
 
-    // Prevent all other chunks from being injected to index.html
-    config.plugins.forEach(p => {
-        if (p.constructor.name !== 'HtmlWebpackPlugin') return
-        const { devtools, app, ...exclude } = config.entry
-        Object.keys(exclude).forEach(e => p.options.excludeChunks.push(e))
-    })
-
     config.plugins.push(
         new (require('write-file-webpack-plugin'))({
-            test: /(webp|jpg|png|shim|polyfill|js\/.*|(index|background)\.html|manifest\.json|_locales)/,
+            test: /(webp|jpg|png|shim|polyfill|js\/.*|.html|manifest\.json|_locales)/,
+        }),
+    )
+    config.plugins = config.plugins.filter(x => x.constructor.name !== 'HtmlWebpackPlugin')
+    config.plugins.push(
+        new HtmlWebpackPlugin({
+            chunks: ['background-service'],
+            filename: 'background.html',
+        }),
+        new HtmlWebpackPlugin({
+            chunks: ['options-page'],
+            filename: 'index.html',
         }),
     )
     config.plugins.push(
@@ -68,16 +73,6 @@ module.exports = function override(config, env) {
         ),
     )
 
-    // Write files to /public
-    const polyfills = [
-        'node_modules/construct-style-sheets-polyfill/adoptedStyleSheets.js',
-        'node_modules/webextension-polyfill/dist/browser-polyfill.min.js',
-        'node_modules/webextension-polyfill/dist/browser-polyfill.min.js.map',
-        'node_modules/webcrypto-liner/dist/webcrypto-liner.shim.js',
-    ]
-    const public = path.join(__dirname, './public')
-    const publicPolyfill = path.join(__dirname, './public/polyfill')
-    const dist = path.join(__dirname, './dist')
     if (env === 'development') {
         config.plugins.push(
             new (require('copy-webpack-plugin'))(
