@@ -98,7 +98,10 @@ const useStyles = makeStyles((theme: Theme) =>
         },
     }),
 )
-ReactDOM.render(<ResponsiveDrawer />, document.getElementById('root')!)
+document.body.innerHTML = ''
+const root = document.createElement('div')
+ReactDOM.render(<ResponsiveDrawer />, root)
+document.body.appendChild(root)
 function ResponsiveDrawer() {
     const classes = useStyles()
     const theme = useTheme()
