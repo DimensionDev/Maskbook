@@ -10,7 +10,7 @@ backgroundSetup().then(() => {
 if (GetContext() === 'background') {
     const injectedScript = `{
         const script = document.createElement('script')
-        script.src = "${browser.runtime.getURL('js/injectedscript.js')}"
+        script.src = "${browser.runtime.getURL('js/injected-script.js')}"
         document.documentElement.appendChild(script)
     }`
     const contentScripts: Array<{ code: string } | { file: string }> = []
