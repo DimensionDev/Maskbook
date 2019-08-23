@@ -80,7 +80,6 @@ export async function queryAvatarOutdatedDB(
 ) {
     const t = (await db).transaction('metadata')
     const outdated: IdentityWithAvatar[] = []
-    // eslint-disable-next-line await-promise
     for await (const { value } of t.store) {
         if (deadline > value[attribute]) outdated.push(Identifier.fromString(value.identifier) as IdentityWithAvatar)
     }

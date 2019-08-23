@@ -13,6 +13,8 @@ const useNotSetUpYetStyles = makeStyles({
 })
 export function NotSetupYetPrompt() {
     const isContent = GetContext() === 'content' || GetContext() === 'debugging'
+    // isContent is always stable in a context. So it's okay.
+    // eslint-disable-next-line
     const id = isContent ? useLastRecognizedIdentity() : null
     const styles = useNotSetUpYetStyles()
     const button = (
