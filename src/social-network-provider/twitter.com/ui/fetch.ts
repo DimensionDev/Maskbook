@@ -1,10 +1,10 @@
 import {
     bioCard,
+    fromPostSelectorsSelectPostContentString,
     postPopupSelector,
     postsContentSelectors,
     postsRootSelector,
     postsSelectors,
-    postViewMain,
     selfInfoSelectors,
 } from '../utils/selector'
 import { MutationObserverWatcher } from '@holoflows/kit'
@@ -13,11 +13,11 @@ import { PersonIdentifier } from '../../../database/type'
 import { host } from '../index'
 import { getEmptyPostInfo, SocialNetworkUI } from '../../../social-network/ui'
 import { deconstructPayload } from '../../../utils/type-transform/Payload'
-import { MemoryLeakProbe } from '../../../utils/MemoryLeakProbe'
-import { timeout } from '../../../utils/utils'
+import { regexMatch, timeout } from '../../../utils/utils'
 import { hasPostPopup } from '../utils/status'
+import { counter } from '../../../utils/assert'
 
-const p = new MemoryLeakProbe()
+const p = new counter()
 
 export const resolveLastRecognizedIdentity = function(this: SocialNetworkUI) {
     p.shouldOnlyRunOnce()
@@ -27,18 +27,18 @@ export const resolveLastRecognizedIdentity = function(this: SocialNetworkUI) {
         Services.People.resolveIdentity(id.identifier).then()
     })
     const self = selfInfoSelectors.screenName
-    new MutationObserverWatcher(self)
-        .enableSingleMode()
-        .addListener('onAdd', () => assign())
-        .addListener('onChange', () => assign())
-        .startWatch()
-        .then()
     const assign = () => {
         const i = new PersonIdentifier(host, selfInfoSelectors.screenName.evaluateOnce()[0])
         if (i.isUnknown) return
         if (i.equals(ref.value.identifier)) return
         ref.value = { identifier: i }
     }
+    new MutationObserverWatcher(self)
+        .enableSingleMode()
+        .addListener('onAdd', () => assign())
+        .addListener('onChange', () => assign())
+        .startWatch()
+        .then()
 }
 
 export const resolveInfoFromBioCard = () => {
@@ -84,13 +84,15 @@ const registerBioCollector = () => {
         .then()
 }
 
-const resolveInfoFromPostView = () => {
-    const c = postViewMain
-        .querySelectorAll<HTMLElement>('[data-testid="tweet"] > div:nth-of-type(2) > div')
-        .evaluateOnce()
+const resolveInfoFromPostView = (node: HTMLElement) => {
+    const r = node.querySelector(fromPostSelectorsSelectPostContentString)
+    if (!r) return null
+    const c = r.children
+    const postId = regexMatch(c[0].querySelectorAll('a')[1].href, /(status\/)(\d*)/, 1)
     const postBy = c[0].querySelectorAll('span')[3].innerText.replace('@', '')
-    const postContent = c[1].innerText
+    const postContent = (c[1] as HTMLElement).innerText
     return {
+        postId,
         postBy,
         postContent,
     }
@@ -102,11 +104,12 @@ const registerPostCollector = (that: SocialNetworkUI) => {
             const info = getEmptyPostInfo(postsRootSelector)
             that.posts.set(proxy, info)
             const collectPostInfo = () => {
-                const r = resolveInfoFromPostView()
+                const r = resolveInfoFromPostView(node)
+                if (!r) return
                 info.postContent.value = r.postContent
                 info.postPayload.value = deconstructPayload(info.postContent.value)
                 info.postBy.value = new PersonIdentifier(host, r.postBy)
-                info.postID.value = ''
+                info.postID.value = r.postId
             }
             collectPostInfo()
             return {

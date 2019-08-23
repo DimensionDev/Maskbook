@@ -70,7 +70,7 @@ interface SocialNetworkUIInformationCollector {
      */
     collectPeople(): void
     /**
-     * This function should find the posts on the page
+     * This function should collect any possible posts on the page.
      */
     collectPosts(): void
 }

@@ -1,6 +1,3 @@
-export const twitterUI = [import('./ui')]
-export const twitterWorker = [import('./worker')]
-
 import { SocialNetworkWorkerAndUI } from '../../social-network/shared'
 import { usernameValidator } from './utils/user'
 

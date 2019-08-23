@@ -23,6 +23,7 @@ export const postViewMain = querySelector<HTMLElement>(
 )
 
 const newPostEditor = '[role="main"] [role="progressbar"] ~ div'
+export const newPostEditorBelow = querySelector<HTMLDivElement>(`${newPostEditor} > div`)
 export const newPostEditorSelector = querySelector<HTMLDivElement>(`${newPostEditor} .DraftEditor-root`)
 export const newPostEditorInnerSelector = newPostEditorSelector.querySelector<HTMLDivElement>(
     '.DraftEditor-editorContainer > div',
@@ -38,6 +39,7 @@ export const postsRootSelector = querySelector<HTMLElement>(`[data-testid="prima
 export const postPopupSelector = querySelector('[aria-labelledby="modal-header"]')
 export const postsSelectors = querySelectorAll('article')
 export const postsContentSelectors = postsSelectors.querySelectorAll<HTMLElement>(`[lang]`)
+export const fromPostSelectorsSelectPostContentString = '[data-testid="tweet"] > div:nth-of-type(2)'
 
 // self infos
 const base = querySelector<HTMLScriptElement>('#react-root + script')

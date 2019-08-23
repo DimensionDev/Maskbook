@@ -50,6 +50,9 @@ export function untilDocumentReady() {
 
 export const nop: (...args: any[]) => any = () => {}
 
+/**
+ * index starts at zero.
+ */
 export const regexMatch = (str: string, regexp: RegExp, index: number) => {
     const r = str.match(regexp)
     if (isNull(r)) return null
