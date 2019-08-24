@@ -4,11 +4,12 @@ import { geti18nString } from '../../../utils/i18n'
 import { fetchBioCard, fetchPost, resolveInfoFromBioCard } from './fetch'
 
 export const taskPasteIntoPostBox = async (text: string, warningText: string) => {
-    // placeholder, not working now.
     await untilDocumentReady()
     const [i] = newPostEditorInnerSelector.evaluateOnce()
     i.click()
     dispatchCustomEvents('input', text)
+    throw new Error("Logic not complete for now, remove this before next release")
+    // TODO: detect if things successfully paste in by something like, innerText
 }
 
 export const taskPasteIntoBio = async (text: string) => {
@@ -31,6 +32,8 @@ export const taskPasteIntoBio = async (text: string) => {
         console.warn('Text not pasted to the text area')
         prompt(geti18nString('automation_request_paste_into_bio_box'), text)
     }
+    throw new Error("Logic not complete for now, remove this before next release")
+    // TODO: detect if things successfully paste in, by something like, innerText
 }
 
 export const taskGetPostContent = async () => {
