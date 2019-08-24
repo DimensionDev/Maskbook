@@ -20,11 +20,20 @@ import { equal, notEmpty } from '../../../utils/assert'
 export const resolveLastRecognizedIdentity = (self: SocialNetworkUI) => {
     const selfSelector = selfInfoSelectors.screenName
     const assign = () => {
-        const ref = self.lastRecognizedIdentity
-        const info = selfInfoSelectors.screenName.evaluateOnce()
-        const id = new PersonIdentifier(host, notEmpty(info, 'user id not found')[0])
-        equal(id.isUnknown, false, 'user id not recognized')
-        ref.value = { identifier: id }
+        try {
+            const ref = self.lastRecognizedIdentity
+            const info = selfInfoSelectors.screenName.evaluateOnce()
+            const id = new PersonIdentifier(host, notEmpty(info, 'user id not found')[0])
+            equal(id.isUnknown, false, 'user id not recognized')
+            ref.value = { identifier: id }
+        } catch (e) {
+            /**
+             * This function expects to fail to collect info,
+             * maybe don't throw is a good idea
+             *                                  -- Jack-Works
+             */
+            console.log(e);
+        }
     }
     new MutationObserverWatcher(selfSelector)
         .enableSingleMode()

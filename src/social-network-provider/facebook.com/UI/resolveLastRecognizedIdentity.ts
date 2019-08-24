@@ -19,8 +19,7 @@ export function resolveLastRecognizedIdentityFacebook(this: SocialNetworkUI) {
         .startWatch()
         .then()
     function assign(i: part) {
-        if (i.identifier.isUnknown) throw new Error('failed to recognize user id')
-        ref.value = i
+        if (!i.identifier.isUnknown) ref.value = i
     }
 }
 
