@@ -7,20 +7,17 @@ import Services from '../../extension/service'
 import { renderInShadowRoot } from '../../utils/jss/renderInShadowRoot'
 import { dispatchCustomEvents, selectElementContents, sleep } from '../../utils/utils'
 
-export function injectCommentBoxDefault(
-    onPasteToCommentBox: (
-        encryptedComment: string,
-        current: PostInfo,
-    ) => void = async function onPasteToCommentBoxFacebook(encryptedComment, current) {
-        const root = current.rootNode
-        selectElementContents(root.querySelector('[contenteditable]')!)
-        dispatchCustomEvents('paste', encryptedComment)
-        await sleep(200)
-        if (!root.innerText.includes(encryptedComment))
-            prompt('Please paste it into the comment box!', encryptedComment)
-    },
-) {
-    return function injectPostBox(current: PostInfo) {
+const defHandler = async (encryptedComment: string, current: PostInfo) => {
+    const root = current.rootNode
+    selectElementContents(root.querySelector('[contenteditable]')!)
+    dispatchCustomEvents('paste', encryptedComment)
+    await sleep(200)
+    if (!root.innerText.includes(encryptedComment))
+        prompt('Please paste it into the comment box!', encryptedComment)
+}
+
+export const injectCommentBoxDefaultFactory = (onPasteToCommentBox = defHandler) => {
+    return (current: PostInfo) => {
         if (!current.commentBoxSelector) return
         const commentBoxWatcher = new MutationObserverWatcher(current.commentBoxSelector, current.rootNode)
             .setDomProxyOption({ afterShadowRootInit: { mode: 'closed' } })
@@ -34,7 +31,7 @@ export function injectCommentBoxDefault(
                     display={!!(payload && decrypted)}
                     onSubmit={async content => {
                         const encryptedComment = await Services.Crypto.encryptComment(payload!.iv, decrypted, content)
-                        onPasteToCommentBox(encryptedComment, current)
+                        onPasteToCommentBox(encryptedComment, current).then()
                     }}
                 />
             )

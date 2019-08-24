@@ -17,9 +17,9 @@ export class WithStateAssert {
 }
 
 export const notInclude = (val: any, things: any[], message: string) => {
-    things.forEach((value => {
+    things.forEach(value => {
         notEqual(val, value, message)
-    }))
+    })
 }
 
 /**
@@ -35,7 +35,4 @@ export const notEmpty = (val: any, message: string = 'Unexpected empty collectio
     return val
 }
 
-export {
-    equal,
-    notEqual
-}
+export { equal, notEqual }

@@ -5,7 +5,7 @@ import { PersonIdentifier, PostIdentifier } from '../database/type'
 import { Payload } from '../utils/type-transform/Payload'
 import { defaults } from 'lodash-es'
 import { injectPostCommentsDefault } from './defaults/injectComments'
-import { injectCommentBoxDefault } from './defaults/injectCommentBox'
+import { injectCommentBoxDefaultFactory } from './defaults/injectCommentBox'
 import { PartialBy } from '../utils/type'
 import { defaultBehavior } from '../social-network-provider/facebook.com/UI/injectPostInspector'
 
@@ -243,7 +243,7 @@ function hookUIPostMap(ui: SocialNetworkUI) {
 
 const def = {
     injectPostComments: injectPostCommentsDefault(),
-    injectCommentBox: injectCommentBoxDefault(),
+    injectCommentBox: injectCommentBoxDefaultFactory(),
     injectPostInspector: defaultBehavior,
 }
 

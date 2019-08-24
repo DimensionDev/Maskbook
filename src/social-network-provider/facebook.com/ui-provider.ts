@@ -57,7 +57,7 @@ const def = defineSocialNetworkUI({
 })
 
 export const updaterFactory = (self: SocialNetworkUI) => {
-    return ((id) => {
+    return (id => {
         if (id.identifier.isUnknown) return
 
         if (isNull(self.currentIdentity.value)) {
