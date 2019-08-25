@@ -32,7 +32,7 @@ export const resolveLastRecognizedIdentity = (self: SocialNetworkUI) => {
              * maybe don't throw is a good idea
              *                                  -- Jack-Works
              */
-            console.log(e);
+            console.log(e)
         }
     }
     new MutationObserverWatcher(selfSelector)
@@ -44,15 +44,22 @@ export const resolveLastRecognizedIdentity = (self: SocialNetworkUI) => {
 }
 
 export const resolveInfoFromBioCard = () => {
-    const userAvatarUrl = notNullable(bioCard()
-        .nth(0).querySelector<HTMLImageElement>('img')
-        .evaluate()).src
-    const userNames = notNullable(bioCard()
-        .nth(1).evaluate())
-        .innerText.split('\n')
-    const userBio = notNullable(bioCard()
-        .nth(2).evaluate())
-        .innerText
+    const userAvatarUrl = notNullable(
+        bioCard()
+            .nth(0)
+            .querySelector<HTMLImageElement>('img')
+            .evaluate(),
+    ).src
+    const userNames = notNullable(
+        bioCard()
+            .nth(1)
+            .evaluate(),
+    ).innerText.split('\n')
+    const userBio = notNullable(
+        bioCard()
+            .nth(2)
+            .evaluate(),
+    ).innerText
     return {
         userAvatarUrl,
         userName: userNames[0],

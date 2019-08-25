@@ -12,8 +12,7 @@ const defHandler = async (encryptedComment: string, current: PostInfo) => {
     selectElementContents(root.querySelector('[contenteditable]')!)
     dispatchCustomEvents('paste', encryptedComment)
     await sleep(200)
-    if (!root.innerText.includes(encryptedComment))
-        prompt('Please paste it into the comment box!', encryptedComment)
+    if (!root.innerText.includes(encryptedComment)) prompt('Please paste it into the comment box!', encryptedComment)
 }
 
 export const injectCommentBoxDefaultFactory = (onPasteToCommentBox = defHandler) => {

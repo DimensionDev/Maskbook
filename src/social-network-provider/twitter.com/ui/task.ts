@@ -9,7 +9,7 @@ export const taskPasteIntoPostBox = async (text: string, warningText: string) =>
     const i = newPostEditorInnerSelector().evaluate()
     notNullable(i).click()
     dispatchCustomEvents('input', text)
-    throw new Error("Logic not complete for now, remove this before next release")
+    throw new Error('Logic not complete for now, remove this before next release')
     // TODO: detect if things successfully paste in by something like, innerText
 }
 
@@ -33,7 +33,7 @@ export const taskPasteIntoBio = async (text: string) => {
         console.warn('Text not pasted to the text area')
         prompt(geti18nString('automation_request_paste_into_bio_box'), text)
     }
-    throw new Error("Logic not complete for now, remove this before next release")
+    throw new Error('Logic not complete for now, remove this before next release')
     // TODO: detect if things successfully paste in, by something like, innerText
 }
 
