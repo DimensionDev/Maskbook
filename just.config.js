@@ -37,7 +37,7 @@ task('install/holoflows', async () => {
  * @param opt.withWarn {boolean} Show warn in stdio
  * @param opt.env {NodeJS.ProcessEnv} Environment key-value pairs
  */
-const step = (cmd, opt = { withWarn: false }) => {
+const step = (cmd, opt = { withWarn: process.env.CI === 'true' }) => {
     const child = spawn(cmd, [], {
         shell: true,
         stdio: ['inherit', 'inherit', opt.withWarn ? 'inherit' : 'ignore'],
