@@ -11,6 +11,7 @@ import {
     Button,
     List,
     Box,
+    Theme,
 } from '@material-ui/core'
 import { Person } from '../../database'
 import { useState, useCallback } from 'react'
@@ -24,7 +25,7 @@ interface PeopleInListProps {
     showAtNetwork?: boolean
     listItemProps?: Partial<(typeof ListItem extends OverridableComponent<infer U> ? U : never)['props']>
 }
-const usePeopleInListStyle = makeStyles(theme => ({
+const usePeopleInListStyle = makeStyles<Theme>(theme => ({
     overflow: {
         textOverflow: 'ellipsis',
         whiteSpace: 'nowrap',

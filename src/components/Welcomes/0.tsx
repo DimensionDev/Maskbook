@@ -32,7 +32,7 @@ interface Props {
     restore(): void
     close(): void
 }
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles<Theme>(theme => ({
     article: {
         [theme.breakpoints.down('xs')]: {
             padding: '0 1rem',

@@ -12,13 +12,13 @@ import { useCurrentIdentity, useMyIdentities } from '../DataSource/useActivatedU
 import { PersonIdentifier } from '../../database/type'
 import { geti18nString } from '../../utils/i18n'
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles({
     root: { width: '100%' },
     expansionRoot: { padding: '0 12px' },
     expansionContent: { margin: '6px 0' },
     list: { width: '100%' },
     current: { padding: 0 },
-}))
+})
 
 export const ChooseIdentity: React.FC<{
     current?: Person

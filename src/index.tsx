@@ -68,7 +68,7 @@ const Links2rd = (
     </>
 )
 
-const useStyles = makeStyles((theme: Theme) =>
+const useStyles = makeStyles<Theme>(theme =>
     createStyles({
         root: {
             display: 'flex',

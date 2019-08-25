@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { geti18nString } from '../../utils/i18n'
-import { Button, makeStyles, Typography } from '@material-ui/core'
+import { Typography, Button, makeStyles, Theme } from '@material-ui/core'
 import WelcomeContainer from './WelcomeContainer'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
@@ -15,7 +15,7 @@ interface Props {
     useExistingAccounts(): void
     back(): void
 }
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles<Theme>(theme => ({
     paper: {
         padding: '2rem 1rem 1rem 1rem',
         textAlign: 'center',

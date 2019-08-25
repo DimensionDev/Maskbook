@@ -15,7 +15,7 @@ interface Props {
     close(): void
     disabled?: boolean
 }
-const useStyles = makeStyles((theme: Theme) => ({
+const useStyles = makeStyles<Theme>(theme => ({
     root: {
         border: '1px solid #ccc',
         borderRadius: 4,
