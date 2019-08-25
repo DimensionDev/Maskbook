@@ -2,11 +2,12 @@ import { dispatchCustomEvents, sleep, untilDocumentReady } from '../../../utils/
 import { editProfileButtonSelector, editProfileTextareaSelector, newPostEditorInnerSelector } from '../utils/selector'
 import { geti18nString } from '../../../utils/i18n'
 import { fetchBioCard, fetchPost, resolveInfoFromBioCard } from './fetch'
+import { notNullable } from '../../../utils/assert'
 
 export const taskPasteIntoPostBox = async (text: string, warningText: string) => {
     await untilDocumentReady()
-    const [i] = newPostEditorInnerSelector.evaluateOnce()
-    i.click()
+    const i = newPostEditorInnerSelector().evaluate()
+    notNullable(i).click()
     dispatchCustomEvents('input', text)
     throw new Error("Logic not complete for now, remove this before next release")
     // TODO: detect if things successfully paste in by something like, innerText
@@ -16,15 +17,15 @@ export const taskPasteIntoBio = async (text: string) => {
     // TODO: try to remove timeout
     await untilDocumentReady()
     try {
-        const [b] = editProfileButtonSelector.evaluateOnce()
+        const b = editProfileButtonSelector().evaluate()
         await sleep(200)
-        b.click()
+        notNullable(b).click()
     } catch {
         prompt(geti18nString('automation_request_click_edit_bio_button'))
     }
     await sleep(400)
     try {
-        const [i] = editProfileTextareaSelector.evaluateOnce()
+        const i = notNullable(editProfileTextareaSelector().evaluate())
         await sleep(200)
         i.focus()
         dispatchCustomEvents('input', i.value + text)

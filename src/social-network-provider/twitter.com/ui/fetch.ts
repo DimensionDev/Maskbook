@@ -15,14 +15,14 @@ import { getEmptyPostInfo, SocialNetworkUI } from '../../../social-network/ui'
 import { deconstructPayload } from '../../../utils/type-transform/Payload'
 import { regexMatch, timeout } from '../../../utils/utils'
 import { hasPostPopup } from '../utils/status'
-import { equal, notEmpty } from '../../../utils/assert'
+import { equal, notEmpty, notNullable } from '../../../utils/assert'
 
 export const resolveLastRecognizedIdentity = (self: SocialNetworkUI) => {
-    const selfSelector = selfInfoSelectors.screenName
+    const selfSelector = selfInfoSelectors().screenName
     const assign = () => {
         try {
             const ref = self.lastRecognizedIdentity
-            const info = selfInfoSelectors.screenName.evaluateOnce()
+            const info = selfInfoSelectors().screenName.evaluate()
             const id = new PersonIdentifier(host, notEmpty(info, 'user id not found')[0])
             equal(id.isUnknown, false, 'user id not recognized')
             ref.value = { identifier: id }
@@ -44,15 +44,15 @@ export const resolveLastRecognizedIdentity = (self: SocialNetworkUI) => {
 }
 
 export const resolveInfoFromBioCard = () => {
-    const userAvatarUrl = bioCard
-        .nth(0)
-        .querySelector<HTMLImageElement>('img')
-        .evaluateOnce()[0].src
-    const userNames = bioCard
-        .nth(1)
-        .evaluateOnce()[0]
+    const userAvatarUrl = notNullable(bioCard()
+        .nth(0).querySelector<HTMLImageElement>('img')
+        .evaluate()).src
+    const userNames = notNullable(bioCard()
+        .nth(1).evaluate())
         .innerText.split('\n')
-    const userBio = bioCard.nth(2).evaluateOnce()[0].innerText
+    const userBio = notNullable(bioCard()
+        .nth(2).evaluate())
+        .innerText
     return {
         userAvatarUrl,
         userName: userNames[0],
@@ -63,7 +63,7 @@ export const resolveInfoFromBioCard = () => {
 
 const registerBioCollector = () => {
     // This object will not be garbage collected
-    new MutationObserverWatcher(bioCard)
+    new MutationObserverWatcher(bioCard())
         .enableSingleMode()
         .useForeach(node => {
             const refreshUserInfo = () => {
@@ -101,9 +101,9 @@ const resolveInfoFromPostView = (node: HTMLElement) => {
 }
 
 const registerPostCollector = (that: SocialNetworkUI) => {
-    new MutationObserverWatcher(postsSelectors)
+    new MutationObserverWatcher(postsSelectors())
         .useForeach((node, _, proxy) => {
-            const info = getEmptyPostInfo(postsRootSelector)
+            const info = getEmptyPostInfo(postsRootSelector())
             that.posts.set(proxy, info)
             const collectPostInfo = () => {
                 const r = resolveInfoFromPostView(node)
@@ -130,13 +130,19 @@ const registerPostCollector = (that: SocialNetworkUI) => {
  * @throws exception if not exist
  * @return bioCard element, if exists
  */
-export const fetchBioCard = async () => {
-    return (await timeout(new MutationObserverWatcher(bioCard), 10000))[0]
-}
+export const fetchBioCard = () => timeout(new MutationObserverWatcher(bioCard()), 10000)
 
+/**
+ * Test if able to fetch posts.
+ */
 export const fetchPost = async () => {
-    const s = hasPostPopup() ? postPopupSelector.concat(postsContentSelectors) : postsContentSelectors
-    return (await timeout(new MutationObserverWatcher(s), 10000))[0]
+    const s = (() => {
+        if (hasPostPopup()) {
+            return postPopupSelector().concat(postsContentSelectors().enableSingleMode())
+        }
+        return postsContentSelectors().enableSingleMode()
+    })()
+    return timeout(new MutationObserverWatcher(s), 10000)
 }
 
 export { registerBioCollector as collectPeople, registerPostCollector as collectPosts }

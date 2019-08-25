@@ -189,7 +189,7 @@ export type PostInfo = {
 }
 //#endregion
 
-export const getEmptyPostInfo = (rootNodeSelector: LiveSelector<HTMLElement>) => {
+export const getEmptyPostInfo = (rootNodeSelector: LiveSelector<HTMLElement, true>) => {
     return {
         decryptedPostContent: new ValueRef(''),
         postBy: new ValueRef(PersonIdentifier.unknown),
@@ -197,7 +197,7 @@ export const getEmptyPostInfo = (rootNodeSelector: LiveSelector<HTMLElement>) =>
         postID: new ValueRef(''),
         postPayload: new ValueRef(null),
         get rootNode() {
-            return rootNodeSelector.evaluateOnce()[0]
+            return rootNodeSelector.evaluate()
         },
     } as PostInfo
 }
