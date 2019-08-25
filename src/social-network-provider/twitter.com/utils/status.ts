@@ -1,5 +1,6 @@
 import { postPopupSelector } from './selector'
+import { isNil } from 'lodash-es'
 
 export const hasPostPopup = () => {
-    return !!postPopupSelector.evaluateOnce().length
+    return !!isNil(postPopupSelector().evaluate())
 }
