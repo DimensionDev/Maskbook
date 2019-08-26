@@ -1,5 +1,5 @@
 import React from 'react'
-import { MutationObserverWatcher, LiveSelector } from '@holoflows/kit/es'
+import { LiveSelector, MutationObserverWatcher } from '@holoflows/kit/es'
 import { isMobileFacebook } from '../isMobile'
 import { renderInShadowRoot } from '../../../utils/jss/renderInShadowRoot'
 import { Banner } from '../../../components/Welcomes/Banner'
@@ -12,6 +12,7 @@ export function injectWelcomeBannerFacebook(this: SocialNetworkUI) {
         .enableSingleMode()
         .setDomProxyOption({ beforeShadowRootInit: { mode: 'closed' } })
         .startWatch()
+
     const unmount = renderInShadowRoot(
         <Banner networkIdentifier={this.networkIdentifier} unmount={() => unmount()} />,
         to.firstVirtualNode.beforeShadow,

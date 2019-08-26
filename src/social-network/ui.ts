@@ -3,7 +3,7 @@ import { DomProxy, LiveSelector, ValueRef } from '@holoflows/kit/es'
 import { Person } from '../database'
 import { PersonIdentifier, PostIdentifier } from '../database/type'
 import { Payload } from '../utils/type-transform/Payload'
-import { defaultTo, isNull } from 'lodash-es'
+import { isNull } from 'lodash-es'
 import { injectPostCommentsDefault } from './defaults/injectComments'
 import { injectCommentBoxDefaultFactory } from './defaults/injectCommentBox'
 import { defaultBehavior } from '../social-network-provider/facebook.com/UI/injectPostInspector'
@@ -217,7 +217,11 @@ export function activateSocialNetworkUI() {
             ui.injectPostBox()
             ui.collectPeople()
             ui.collectPosts()
-            ui.shouldDisplayWelcome().then(r => r && defaultTo(ui.injectWelcomeBanner, def.injectWelcomeBanner)())
+            if (!ui.injectWelcomeBanner) {
+                ui.shouldDisplayWelcome().then(r => r && def.injectWelcomeBanner())
+            } else {
+                ui.shouldDisplayWelcome().then(r => r && ui.injectWelcomeBanner!())
+            }
             ui.lastRecognizedIdentity.addListener(id => {
                 if (id.identifier.isUnknown) return
 
@@ -234,9 +238,9 @@ function hookUIPostMap(ui: SocialNetworkUI) {
     const undoMap = new WeakMap<object, () => void>()
     const setter = ui.posts.set
     ui.posts.set = function(key, value) {
-        const undo1 = defaultTo(ui.injectPostInspector, def.injectPostInspector)(value, key)
-        const undo2 = defaultTo(ui.injectCommentBox, def.injectCommentBox)(value, key)
-        const undo3 = defaultTo(ui.injectPostComments, def.injectPostComments)(value, key)
+        const undo1 = (ui.injectPostInspector || def.injectPostInspector)(value, key)
+        const undo2 = (ui.injectCommentBox || def.injectCommentBox)(value, key)
+        const undo3 = (ui.injectPostComments || def.injectPostComments)(value, key)
         undoMap.set(key, () => {
             undo1()
             undo2()
