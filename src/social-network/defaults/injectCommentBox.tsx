@@ -5,18 +5,18 @@ import { useValueRef } from '../../utils/hooks/useValueRef'
 import { CommentBox } from '../../components/InjectedComponents/CommentBox'
 import Services from '../../extension/service'
 import { renderInShadowRoot } from '../../utils/jss/renderInShadowRoot'
-import { dispatchCustomEvents, selectElementContents, sleep } from '../../utils/utils'
+import { dispatchCustomEvents, nop, selectElementContents, sleep } from '../../utils/utils'
 
 const defHandler = async (encryptedComment: string, current: PostInfo) => {
     const root = current.rootNode
-        /**
-         * TODO:
-         *  Yeah I see but I think root.querySelector('[contenteditable]')
-         *  (some website may use textarea or input) and
-         *  dispatchCustomEvents('paste', encryptedComment)
-         *  (not every website are using React and listenen from document)
-         *  is not a good default.
-         */
+    /**
+     * TODO:
+     *  Yeah I see but I think root.querySelector('[contenteditable]')
+     *  (some website may use textarea or input) and
+     *  dispatchCustomEvents('paste', encryptedComment)
+     *  (not every website are using React and listenen from document)
+     *  is not a good default.
+     */
     selectElementContents(root.querySelector('[contenteditable]')!)
     dispatchCustomEvents('paste', encryptedComment)
     await sleep(200)
@@ -25,7 +25,7 @@ const defHandler = async (encryptedComment: string, current: PostInfo) => {
 
 export const injectCommentBoxDefaultFactory = (onPasteToCommentBox = defHandler) => {
     return (current: PostInfo) => {
-        if (!current.commentBoxSelector) return
+        if (!current.commentBoxSelector) return nop
         const commentBoxWatcher = new MutationObserverWatcher(current.commentBoxSelector, current.rootNode)
             .setDomProxyOption({ afterShadowRootInit: { mode: 'closed' } })
             .enableSingleMode()

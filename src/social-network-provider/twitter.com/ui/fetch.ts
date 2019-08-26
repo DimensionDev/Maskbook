@@ -1,8 +1,6 @@
 import {
     bioCard,
     fromPostSelectorsSelectPostContentString,
-    postPopupSelector,
-    postsContentSelectors,
     postsRootSelector,
     postsSelectors,
     selfInfoSelectors,
@@ -11,13 +9,14 @@ import { MutationObserverWatcher } from '@holoflows/kit'
 import Services from '../../../extension/service'
 import { PersonIdentifier } from '../../../database/type'
 import { host } from '../index'
-import { getEmptyPostInfo, SocialNetworkUI } from '../../../social-network/ui'
+import { getEmptyPostInfo, SocialNetworkUI, SocialNetworkUIInformationCollector } from '../../../social-network/ui'
 import { deconstructPayload } from '../../../utils/type-transform/Payload'
-import { regexMatch, timeout } from '../../../utils/utils'
-import { hasPostPopup } from '../utils/status'
-import { equal, notEmpty, notNullable } from '../../../utils/assert'
+import { regexMatch } from '../../../utils/utils'
+import { equal, notEmpty } from '../../../utils/assert'
+import { instanceOfTwitterUI } from './index'
+import { resolveInfoFromBioCard } from '../utils/fetch'
 
-export const resolveLastRecognizedIdentity = (self: SocialNetworkUI) => {
+const resolveLastRecognizedIdentity = (self: SocialNetworkUI) => {
     const selfSelector = selfInfoSelectors().screenName
     const assign = () => {
         try {
@@ -42,31 +41,6 @@ export const resolveLastRecognizedIdentity = (self: SocialNetworkUI) => {
         .addListener('onChange', () => assign())
         .startWatch()
         .then()
-}
-
-export const resolveInfoFromBioCard = () => {
-    const userAvatarUrl = notNullable(
-        bioCard()
-            .nth(0)
-            .querySelector<HTMLImageElement>('img')
-            .evaluate(),
-    ).src
-    const userNames = notNullable(
-        bioCard()
-            .nth(1)
-            .evaluate(),
-    ).innerText.split('\n')
-    const userBio = notNullable(
-        bioCard()
-            .nth(2)
-            .evaluate(),
-    ).innerText
-    return {
-        userAvatarUrl,
-        userName: userNames[0],
-        userScreenName: userNames[1],
-        userBio,
-    }
 }
 
 const registerBioCollector = () => {
@@ -133,24 +107,8 @@ const registerPostCollector = (that: SocialNetworkUI) => {
         .then()
 }
 
-/**
- * This can be help to make sure if bioCard exists on the page.
- * @throws exception if not exist
- * @return bioCard element, if exists
- */
-export const fetchBioCard = () => timeout(new MutationObserverWatcher(bioCard()), 10000)
-
-/**
- * Test if able to fetch posts.
- */
-export const fetchPost = async () => {
-    const s = (() => {
-        if (hasPostPopup()) {
-            return postPopupSelector().concat(postsContentSelectors().enableSingleMode())
-        }
-        return postsContentSelectors().enableSingleMode()
-    })()
-    return timeout(new MutationObserverWatcher(s), 10000)
+export const twitterUIFetch: SocialNetworkUIInformationCollector = {
+    resolveLastRecognizedIdentity: () => resolveLastRecognizedIdentity(instanceOfTwitterUI),
+    collectPeople: registerBioCollector,
+    collectPosts: () => registerPostCollector(instanceOfTwitterUI),
 }
-
-export { registerBioCollector as collectPeople, registerPostCollector as collectPosts }

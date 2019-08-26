@@ -5,13 +5,11 @@ import { renderInShadowRoot } from '../../utils/jss/renderInShadowRoot'
 import { PersonIdentifier } from '../../database/type'
 import { useValueRef } from '../../utils/hooks/useValueRef'
 import { PostInspector } from '../../components/InjectedComponents/PostInspector'
+
 export function injectPostInspectorDefault(config: InjectPostInspectorDefaultConfig) {
     const { injectionPoint, zipPost } = config
     const zipPostDefault = () => {}
-    return function injectPostInspector(
-        current: PostInfo,
-        node: DomProxy<HTMLDivElement & Node, HTMLSpanElement, HTMLSpanElement>,
-    ) {
+    return function injectPostInspector(current: PostInfo, node: DomProxy) {
         const injectionPointDefault = () => node.afterShadow
         const onDecrypted = (val: string) => (current.decryptedPostContent.value = val)
         return renderInShadowRoot(
@@ -27,8 +25,8 @@ export function injectPostInspectorDefault(config: InjectPostInspectorDefaultCon
     }
 }
 interface InjectPostInspectorDefaultConfig {
-    injectionPoint?(node: DomProxy<HTMLDivElement & Node, HTMLSpanElement, HTMLSpanElement>): ShadowRoot
-    zipPost?(node: DomProxy<HTMLDivElement & Node, HTMLSpanElement, HTMLSpanElement>): void
+    injectionPoint?(node: DomProxy): ShadowRoot
+    zipPost?(node: DomProxy): void
 }
 function PostDecryptUI(props: {
     onDecrypted: (val: string) => string

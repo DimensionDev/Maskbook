@@ -3,21 +3,23 @@ import { host, hostMobileURL, hostURL, sharedSettings } from '../index'
 import { shouldDisplayWelcomeDefault } from '../../../social-network/defaults/shouldDisplayWelcome'
 import { InitFriendsValueRef } from '../../../social-network/defaults/FriendsValueRef'
 import { InitMyIdentitiesValueRef } from '../../../social-network/defaults/MyIdentitiesRef'
-import { ValueRef } from '@holoflows/kit/es'
-import { PersonIdentifier } from '../../../database/type'
-import { injectPostBox } from './inject'
-import { collectPeople, collectPosts, resolveLastRecognizedIdentity } from './fetch'
-import { nop } from '../../../utils/utils'
-import { taskGetPostContent, taskGetProfile, taskPasteIntoBio, taskPasteIntoPostBox } from './task'
 import { setStorage } from '../../../utils/browser.storage'
 import { updaterFactory } from '../../facebook.com/ui-provider'
+import { twitterUIDataSources } from './dataSources'
+import { twitterUITasks } from './tasks'
+import { twitterUIFetch } from './fetch'
+import { twitterUIInjections } from './inject'
 
-const def = defineSocialNetworkUI({
+export const instanceOfTwitterUI = defineSocialNetworkUI({
     ...sharedSettings,
+    ...twitterUIDataSources,
+    ...twitterUITasks,
+    ...twitterUIInjections,
+    ...twitterUIFetch,
     init: (env, pref) => {
         sharedSettings.init(env, pref)
-        InitFriendsValueRef(def, host)
-        InitMyIdentitiesValueRef(def, host)
+        InitFriendsValueRef(instanceOfTwitterUI, host)
+        InitMyIdentitiesValueRef(instanceOfTwitterUI, host)
     },
     shouldActivate() {
         return location.hostname.endsWith(host)
@@ -34,23 +36,6 @@ const def = defineSocialNetworkUI({
         setStorage(host, { userIgnoredWelcome: true }).then()
     },
     shouldDisplayWelcome: shouldDisplayWelcomeDefault,
-    friendsRef: new ValueRef([]),
-    myIdentitiesRef: new ValueRef([]),
-    currentIdentity: new ValueRef(null),
-    lastRecognizedIdentity: new ValueRef({ identifier: PersonIdentifier.unknown }),
-    posts: new Map(),
-    resolveLastRecognizedIdentity: () => resolveLastRecognizedIdentity(def),
-    injectPostBox,
-    injectPostComments: nop,
-    injectCommentBox: nop,
-    injectPostInspector: nop,
-    injectWelcomeBanner: nop,
-    collectPeople,
-    collectPosts: () => collectPosts(def),
-    taskPasteIntoPostBox,
-    taskPasteIntoBio,
-    taskGetPostContent,
-    taskGetProfile,
 })
 
-def.lastRecognizedIdentity.addListener(updaterFactory(def))
+instanceOfTwitterUI.lastRecognizedIdentity.addListener(updaterFactory(instanceOfTwitterUI))

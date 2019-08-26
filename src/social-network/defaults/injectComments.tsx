@@ -3,6 +3,7 @@ import { PostInfo, SocialNetworkUI } from '../ui'
 import { DomProxy, MutationObserverWatcher, ValueRef } from '@holoflows/kit/es'
 import { renderInShadowRoot } from '../../utils/jss/renderInShadowRoot'
 import { PostComment } from '../../components/InjectedComponents/PostComments'
+import { nop } from '../../utils/utils'
 
 interface injectPostCommentsDefaultConfig {
     needZip?(): void
@@ -15,7 +16,7 @@ export function injectPostCommentsDefault(config: injectPostCommentsDefaultConfi
     const { needZip, getInjectionPoint } = config
     return function injectPostComments(this: SocialNetworkUI, current: PostInfo) {
         const selector = current.commentsSelector
-        if (!selector) return
+        if (!selector) return nop
         const commentWatcher = new MutationObserverWatcher(selector, current.rootNode)
             .useForeach((commentNode, key, meta) => {
                 const commentRef = new ValueRef(commentNode.innerText)

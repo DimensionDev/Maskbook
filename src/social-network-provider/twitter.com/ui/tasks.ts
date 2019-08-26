@@ -1,10 +1,12 @@
 import { dispatchCustomEvents, sleep, untilDocumentReady } from '../../../utils/utils'
 import { editProfileButtonSelector, editProfileTextareaSelector, newPostEditorInnerSelector } from '../utils/selector'
 import { geti18nString } from '../../../utils/i18n'
-import { fetchBioCard, fetchPost, resolveInfoFromBioCard } from './fetch'
 import { notNullable } from '../../../utils/assert'
+import { SocialNetworkUITasks } from '../../../social-network/ui'
+import { fetchBioCard, fetchPost } from '../utils/status'
+import { resolveInfoFromBioCard } from '../utils/fetch'
 
-export const taskPasteIntoPostBox = async (text: string, warningText: string) => {
+const taskPasteIntoPostBox = async (text: string) => {
     await untilDocumentReady()
     const i = newPostEditorInnerSelector().evaluate()
     notNullable(i).click()
@@ -13,7 +15,7 @@ export const taskPasteIntoPostBox = async (text: string, warningText: string) =>
     // TODO: detect if things successfully paste in by something like, innerText
 }
 
-export const taskPasteIntoBio = async (text: string) => {
+const taskPasteIntoBio = async (text: string) => {
     // TODO: try to remove timeout
     await untilDocumentReady()
     try {
@@ -37,11 +39,18 @@ export const taskPasteIntoBio = async (text: string) => {
     // TODO: detect if things successfully paste in, by something like, innerText
 }
 
-export const taskGetPostContent = async () => {
+const taskGetPostContent = async () => {
     return (await fetchPost()).innerText
 }
 
-export const taskGetProfile = async () => {
+const taskGetProfile = async () => {
     await fetchBioCard()
     return { bioContent: resolveInfoFromBioCard().userBio }
+}
+
+export const twitterUITasks: SocialNetworkUITasks = {
+    taskPasteIntoPostBox,
+    taskPasteIntoBio,
+    taskGetPostContent,
+    taskGetProfile,
 }

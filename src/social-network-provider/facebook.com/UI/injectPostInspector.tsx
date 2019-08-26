@@ -9,10 +9,7 @@ export const defaultBehavior = injectPostInspectorDefault({
         zipPostLinkPreview(node)
     },
 })
-export function injectPostInspectorFacebook(
-    current: PostInfo,
-    node: DomProxy<HTMLDivElement & Node, HTMLSpanElement, HTMLSpanElement>,
-) {
+export function injectPostInspectorFacebook(current: PostInfo, node: DomProxy) {
     clickSeeMore(node)
     return defaultBehavior(current, node)
 }
