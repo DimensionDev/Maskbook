@@ -54,7 +54,7 @@ if (GetContext() === 'background') {
             try {
                 await browser.tabs.executeScript(arg.tabId, option)
             } catch (e) {
-                console.error('Inject failed', arg, option, e.message)
+                IgnoreError(e)
             }
         }
     })
