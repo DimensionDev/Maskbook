@@ -45,6 +45,7 @@ const resolveLastRecognizedIdentity = (self: SocialNetworkUI) => {
 
 const registerBioCollector = () => {
     // This object will not be garbage collected
+    // noinspection JSIgnoredPromiseFromCall
     new MutationObserverWatcher(bioCard())
         .enableSingleMode()
         .useForeach(node => {
@@ -65,7 +66,6 @@ const registerBioCollector = () => {
             }
         })
         .startWatch()
-        .then()
 }
 
 const resolveInfoFromPostView = (node: HTMLElement) => {
@@ -83,6 +83,7 @@ const resolveInfoFromPostView = (node: HTMLElement) => {
 }
 
 const registerPostCollector = (that: SocialNetworkUI) => {
+    // noinspection JSIgnoredPromiseFromCall
     new MutationObserverWatcher(postsSelectors())
         .useForeach((node, _, proxy) => {
             const info = getEmptyPostInfo(postsRootSelector())
@@ -104,7 +105,6 @@ const registerPostCollector = (that: SocialNetworkUI) => {
         })
         .setDomProxyOption({ afterShadowRootInit: { mode: 'closed' } })
         .startWatch()
-        .then()
 }
 
 export const twitterUIFetch: SocialNetworkUIInformationCollector = {
