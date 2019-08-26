@@ -11,10 +11,7 @@ const useOptionStyles = makeStyles<Theme, { activated: boolean }, 'root'>(theme 
         flexDirection: 'column',
         borderRadius: theme.shape.borderRadius * 2,
         transition: '0.4s',
-        // TODO: Theme
-        background: props.activated ? '#f3fcff' : 'transparent',
-        // TODO: Theme
-        borderColor: props.activated ? '#7edfff' : theme.palette.grey[300],
+        borderColor: props.activated ? theme.palette.primary.light : theme.palette.action.disabled,
         '& > *': {
             marginBottom: theme.spacing(1),
         },

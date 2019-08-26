@@ -17,9 +17,10 @@ const Services = {} as Services
 export default Services
 if (!('Services' in window)) {
     Object.assign(window, { Services })
-    register(() => import('./background-script/CryptoService'), 'Crypto', MockService.CryptoService)
-    register(() => import('./background-script/WelcomeService'), 'Welcome', MockService.WelcomeService)
-    register(() => import('./background-script/PeopleService'), 'People', MockService.PeopleService)
+    // Sorry you should add import at '../background-service.ts'
+    register(Reflect.get(window, 'CryptoService'), 'Crypto', MockService.CryptoService)
+    register(Reflect.get(window, 'WelcomeService'), 'Welcome', MockService.WelcomeService)
+    register(Reflect.get(window, 'PeopleService'), 'People', MockService.PeopleService)
 }
 
 Object.assign(window, {
@@ -28,41 +29,14 @@ Object.assign(window, {
     PostIdentifier,
     getCurrentNetworkWorkerService,
 })
-if (GetContext() === 'background') {
-    // Run tests
-    import('../tests/1to1')
-    import('../tests/1toN')
-    import('../tests/sign&verify')
-    import('../tests/friendship-discover')
-    import('../tests/comment')
-    Promise.all([
-        import('../database/avatar'),
-        import('../database/group'),
-        import('../database/people'),
-        import('../database/type'),
-        import('../database/post'),
-    ]).then(([avatar, group, people, type, post]) => {
-        Object.assign(window, { db: { avatar, group, people, type, post } })
-    })
-    Promise.all([import('../network/gun/version.1'), import('../network/gun/version.2')]).then(([gun1, gun2]) => {
-        Object.assign(window, { gun1, gun2 })
-    })
-    Promise.all([import('../crypto/crypto-alpha-40'), import('../crypto/crypto-alpha-39')]).then(
-        ([crypto40, crypto39]) => {
-            Object.assign(window, { crypto40, crypto39 })
-        },
-    )
-}
 //#region
 type Service = Record<string, (...args: any[]) => Promise<any>>
-function register<T extends Service>(loadService: () => Promise<T>, name: keyof Services, mock?: Partial<T>) {
+function register<T extends Service>(service: T, name: keyof Services, mock?: Partial<T>) {
     if (GetContext() === 'background') {
         console.log(`Service ${name} registered in Background page`)
-        loadService().then(service => {
-            Object.assign(Services, { [name]: service })
-            Object.assign(window, { [name]: service })
-            AsyncCall(service, { key: name, serializer: Serialization })
-        })
+        Object.assign(Services, { [name]: service })
+        Object.assign(window, { [name]: service })
+        AsyncCall(service, { key: name, serializer: Serialization })
     } else if (OnlyRunInContext(['content', 'options', 'debugging'], false)) {
         Object.assign(Services, { [name]: AsyncCall({}, { key: name, serializer: Serialization }) })
         if (GetContext() === 'debugging') {

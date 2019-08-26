@@ -59,5 +59,6 @@ const myUsernameLiveSelectorOnMobile = new LiveSelector()
               ]
             : [],
     )
+    .filter(x => x)
     .map(x => ({ identifier: new PersonIdentifier('facebook.com', x.toString()) } as part))
 //#endregion

@@ -1,3 +1,4 @@
+import './provider.worker'
 import React from 'react'
 import { HashRouter as Router, Route, Link } from 'react-router-dom'
 import ReactDOM from 'react-dom'
@@ -6,7 +7,7 @@ import Welcome from './extension/options-page/Welcome'
 import Privacy from './extension/options-page/Privacy'
 
 import { ThemeProvider } from '@material-ui/styles'
-import { MaskbookLightTheme } from './utils/theme'
+import { MaskbookLightTheme, MaskbookDarkTheme } from './utils/theme'
 import { geti18nString } from './utils/i18n'
 import { makeStyles, useTheme, Theme, createStyles } from '@material-ui/core/styles'
 import {
@@ -23,15 +24,15 @@ import {
     Hidden,
     Drawer,
     Link as MuiLink,
+    useMediaQuery,
 } from '@material-ui/core'
 import Menu from '@material-ui/icons/Menu'
 import NearMe from '@material-ui/icons/NearMe'
 import Assignment from '@material-ui/icons/Assignment'
 import Phonelink from '@material-ui/icons/Phonelink'
 import { ExportData } from './components/MobileImportExport/Export'
-import { uiSetup } from './setup'
+import './setup.ui'
 
-uiSetup()
 const drawerWidth = 240
 const empty = (
     <div
@@ -93,8 +94,6 @@ const useStyles = makeStyles((theme: Theme) =>
         },
         content: {
             flexGrow: 1,
-            // paddingLeft: theme.spacing(3),
-            // paddingRight: theme.spacing(3),
         },
     }),
 )
@@ -121,8 +120,10 @@ function ResponsiveDrawer() {
         </div>
     )
 
+    const isDarkTheme = useMediaQuery('(prefers-color-scheme: dark)')
+
     return (
-        <ThemeProvider theme={MaskbookLightTheme}>
+        <ThemeProvider theme={isDarkTheme ? MaskbookDarkTheme : MaskbookLightTheme}>
             <style>{'body {overflow-x: hidden;}'}</style>
             <Router>
                 <div className={classes.root}>

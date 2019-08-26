@@ -15,9 +15,9 @@ export function injectCommentBoxDefault(onPasteToCommentBox: (encryptedComment: 
         const CommentBoxUI = () => {
             const payload = useValueRef(current.postPayload)
             const decrypted = useValueRef(current.decryptedPostContent)
+            if (!(payload && decrypted)) return null
             return (
                 <CommentBox
-                    display={!!(payload && decrypted)}
                     onSubmit={async content => {
                         const encryptedComment = await Services.Crypto.encryptComment(payload!.iv, decrypted, content)
                         onPasteToCommentBox(encryptedComment, current)

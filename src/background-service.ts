@@ -1,11 +1,20 @@
 import 'webcrypto-liner/dist/webcrypto-liner.shim.js'
-import { backgroundSetup } from './setup'
 import { GetContext } from '@holoflows/kit/es'
-import { getWelcomePageURL } from './extension/options-page/Welcome/getWelcomePageURL'
-
-backgroundSetup().then(() => {
-    require('./extension/service')
-})
+import { MessageCenter } from './utils/messages'
+// @ts-ignore
+import elliptic from 'elliptic'
+/**
+ * Load service here. sorry for the ugly pattern.
+ * But here's some strange problem with webpack.
+ *
+ * you should also add register in './extension/service.ts'
+ */
+import * as CryptoService from './extension/background-script/CryptoService'
+import * as WelcomeService from './extension/background-script/WelcomeService'
+import * as PeopleService from './extension/background-script/PeopleService'
+Object.assign(window, { CryptoService, WelcomeService, PeopleService })
+require('./extension/service')
+require('./provider.worker')
 
 if (GetContext() === 'background') {
     const injectedScript = `{
@@ -45,12 +54,15 @@ if (GetContext() === 'background') {
             try {
                 await browser.tabs.executeScript(arg.tabId, option)
             } catch (e) {
-                console.error('Inject failed', arg, option, e.message)
+                IgnoreError(e)
             }
         }
     })
 
     browser.runtime.onInstalled.addListener(detail => {
+        const {
+            getWelcomePageURL,
+        } = require('./extension/options-page/Welcome/getWelcomePageURL') as typeof import('./extension/options-page/Welcome/getWelcomePageURL')
         if (detail.reason === 'install') {
             browser.tabs.create({ url: getWelcomePageURL() })
         }
@@ -69,3 +81,38 @@ function IgnoreError(arg: any): (reason: any) => void {
         } else console.error('Inject error', e, arg, Object.entries(e))
     }
 }
+MessageCenter.on('closeActiveTab', async () => {
+    const tabs = await browser.tabs.query({
+        active: true,
+    })
+    if (tabs[0]) {
+        await browser.tabs.remove(tabs[0].id!)
+    }
+})
+Object.assign(window, {
+    elliptic,
+    definedSocialNetworkWorkers: (require('./social-network/worker') as typeof import('./social-network/worker'))
+        .definedSocialNetworkWorkers,
+})
+
+// Run tests
+require('./tests/1to1')
+require('./tests/1toN')
+require('./tests/sign&verify')
+require('./tests/friendship-discover')
+require('./tests/comment')
+
+// Friendly to debug
+Object.assign(window, {
+    gun1: require('./network/gun/version.1'),
+    gun2: require('./network/gun/version.2'),
+    crypto40: require('./crypto/crypto-alpha-40'),
+    crypto39: require('./crypto/crypto-alpha-39'),
+    db: {
+        avatar: require('./database/avatar'),
+        group: require('./database/group'),
+        people: require('./database/people'),
+        type: require('./database/type'),
+        post: require('./database/post'),
+    },
+})
