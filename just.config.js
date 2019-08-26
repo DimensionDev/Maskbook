@@ -25,7 +25,9 @@ task('storybook/build', () => step('build-storybook -s public --quiet', { withWa
 task('install', () => series('install/holoflows'))
 task('install/holoflows', async () => {
     const base = path.join(process.cwd(), 'node_modules/@holoflows')
-    await step('yarn upgrade @holoflows/kit')
+    if (process.argv.includes('--upgrade')) {
+        await step('yarn upgrade @holoflows/kit')
+    }
     await step(`cd ${path.join(base, 'kit')} && yarn && yarn build`)
 })
 
