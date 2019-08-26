@@ -6,7 +6,7 @@ import { PersonIdentifier, GroupIdentifier, PostIdentifier } from '../database/t
 import { getCurrentNetworkWorkerService } from './background-script/WorkerService'
 
 import tasks from './content-script/tasks'
-Object.assign(window, { tasks })
+Object.assign(globalThis, { tasks })
 
 interface Services {
     Crypto: typeof import('./background-script/CryptoService')
@@ -15,15 +15,15 @@ interface Services {
 }
 const Services = {} as Services
 export default Services
-if (!('Services' in window)) {
-    Object.assign(window, { Services })
+if (!('Services' in globalThis)) {
+    Object.assign(globalThis, { Services })
     // Sorry you should add import at '../background-service.ts'
-    register(Reflect.get(window, 'CryptoService'), 'Crypto', MockService.CryptoService)
-    register(Reflect.get(window, 'WelcomeService'), 'Welcome', MockService.WelcomeService)
-    register(Reflect.get(window, 'PeopleService'), 'People', MockService.PeopleService)
+    register(Reflect.get(globalThis, 'CryptoService'), 'Crypto', MockService.CryptoService)
+    register(Reflect.get(globalThis, 'WelcomeService'), 'Welcome', MockService.WelcomeService)
+    register(Reflect.get(globalThis, 'PeopleService'), 'People', MockService.PeopleService)
 }
 
-Object.assign(window, {
+Object.assign(globalThis, {
     PersonIdentifier,
     GroupIdentifier,
     PostIdentifier,
@@ -35,13 +35,12 @@ function register<T extends Service>(service: T, name: keyof Services, mock?: Pa
     if (GetContext() === 'background') {
         console.log(`Service ${name} registered in Background page`)
         Object.assign(Services, { [name]: service })
-        Object.assign(window, { [name]: service })
+        Object.assign(globalThis, { [name]: service })
         AsyncCall(service, { key: name, serializer: Serialization })
     } else if (OnlyRunInContext(['content', 'options', 'debugging'], false)) {
         Object.assign(Services, { [name]: AsyncCall({}, { key: name, serializer: Serialization }) })
         if (GetContext() === 'debugging') {
             // ? -> UI developing
-            console.log(`Service ${name} mocked`)
             const mockService = new Proxy(mock || {}, {
                 get(target: any, key: string) {
                     return async function(...args: any[]) {
