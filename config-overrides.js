@@ -2,6 +2,7 @@
 const webpack = require('webpack')
 const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
+const fs = require('fs')
 
 // Write files to /public
 const polyfills = [
@@ -59,7 +60,7 @@ module.exports = function override(config, env) {
      */
     function newPage(options = {}) {
         return new HtmlWebpackPlugin({
-            templateContent: `<meta charset="utf-8" /><script src="polyfill/browser-polyfill.min.js"></script><body>`,
+            templateContent: `<meta charset="utf-8" /><script src="polyfill/browser-polyfill.min.js"></script>`,
             inject: 'body',
             ...options,
         })
@@ -70,8 +71,6 @@ module.exports = function override(config, env) {
         newPage({ chunks: ['popup'], filename: 'popup.html' }),
         newPage({ chunks: ['content-script'], filename: 'generated__content__script.html' }),
     )
-    config.plugins.push(new SSRPlugin('popup.html', src('./src/extension/popup-page/index.tsx')))
-    config.plugins.push(new SSRPlugin('index.html', src('./src/index.tsx')))
     config.plugins.push(
         new webpack.BannerPlugin(
             'Maskbook is a open source project under GNU AGPL 3.0 licence.\n\n\n' +
@@ -91,7 +90,8 @@ module.exports = function override(config, env) {
             ),
         )
     } else {
-        const fs = require('fs')
+        config.plugins.push(new SSRPlugin('popup.html', src('./src/extension/popup-page/index.tsx')))
+        config.plugins.push(new SSRPlugin('index.html', src('./src/index.tsx')))
         if (!fs.existsSync(publicPolyfill)) fs.mkdirSync(publicPolyfill)
         polyfills.map(x =>
             fs.copyFile(x, path.join(publicPolyfill, path.basename(x)), err => {
