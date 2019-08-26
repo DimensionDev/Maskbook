@@ -86,9 +86,9 @@ export interface BackupJSONFileVersion0 {
     }
     local: JsonWebKey
 }
-// eslint-disable-next-line deprecation
+// eslint-disable-next-line import/no-deprecated
 function isVersion0(obj: object): obj is BackupJSONFileVersion0 {
-    // eslint-disable-next-line deprecation
+    // eslint-disable-next-line import/no-deprecated
     const data: BackupJSONFileVersion0 = obj as any
     if (!data.local || !data.key || !data.key.key || !data.key.key.privateKey || !data.key.key.publicKey) return false
     return true

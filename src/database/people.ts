@@ -135,7 +135,7 @@ export async function queryPeopleDB(
     const t = (await db).transaction('people')
     const result: PersonRecordInDatabase[] = []
     if (typeof query === 'function') {
-        // eslint-disable-next-line await-promise
+        // eslint-disable-next-line @typescript-eslint/await-thenable
         for await (const { value, key } of t.store) {
             if (query(Identifier.fromString(key) as PersonIdentifier, value)) result.push(value)
         }
@@ -314,7 +314,7 @@ export async function deleteLocalKeyDB({ network, userId }: PersonIdentifier): P
 export async function getLocalKeysDB() {
     const t = (await db).transaction('localKeys')
     const result: Map<string, LocalKeys> = new Map()
-    // eslint-disable-next-line await-promise
+    // eslint-disable-next-line @typescript-eslint/await-thenable
     for await (const { key, value } of t.objectStore('localKeys')) {
         result.set(key, value)
     }

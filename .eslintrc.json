@@ -5,6 +5,9 @@
         "sourceType": "module",
         "project": "./tsconfig.json"
     },
+    "extends": [
+        "plugin:import/typescript"
+    ],
     "plugins": ["@typescript-eslint", "import", "react-hooks"],
     "rules": {
         "@typescript-eslint/await-thenable": 2,

@@ -47,7 +47,7 @@ export default async function migrate() {
         if (!dbs.find(x => x.name === 'maskbook-avatar-store')) return
     }
     const promises: Promise<unknown>[] = []
-    // eslint-disable-next-line deprecation
+    // eslint-disable-next-line import/no-deprecated
     for (const record of await queryAvatarData()) {
         const person = new PersonIdentifier('facebook.com', record.username)
         promises.push(

@@ -19,6 +19,7 @@ jobs:
                   name: Build Maskbook
                   command: |
                       yarn install --link-duplicates --frozen-lockfile
+                      yarn run just lint/strictonce
                       yarn build
                       sudo apt-get install zip
                       cd build

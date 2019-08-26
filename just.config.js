@@ -2,7 +2,7 @@ const { task, series, parallel } = require('just-task')
 const { spawn } = require('child_process')
 const path = require('path')
 
-const lintCommand = async (str, level = 'log') => {
+const prettierCommand = async (str, level = 'log') => {
     const listen = 'onchange "./src/**/*" -i --'
     await step(`${listen} prettier --${str} "./src/**/*.{ts,tsx}" --loglevel ${level}`)
 }
@@ -15,8 +15,12 @@ task('react/start', () => step('react-app-rewired start'))
 task('react/build', () => step('react-app-rewired build'))
 task('react/test', () => step('react-app-rewired test'))
 
-task('lint', () => lintCommand('check'))
-task('lint/fix', () => lintCommand('write', 'warn'))
+task('lint', () => prettierCommand('check'))
+task('lint/fix', () => prettierCommand('write', 'warn'))
+task('lint/strictonce', async () => {
+    await step('eslint --ext tsx,ts ./src/ --cache', { withWarn: true })
+    await step('prettier --check "./src/**/*.{ts,tsx}" --loglevel warn ', { withWarn: true })
+})
 
 task('storybook', () => parallel('lint/fix', 'storybook/serve'))
 task('storybook/serve', () => step('start-storybook -p 9009 -s public --quiet', { withWarn: true }))

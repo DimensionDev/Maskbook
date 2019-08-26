@@ -95,7 +95,7 @@ export async function decryptFrom(
                     }
                 const aesKeyEncrypted =
                     version === -40
-                        ? // eslint-disable-next-line deprecation
+                        ? // eslint-disable-next-line import/no-deprecated
                           await Gun1.queryPostAESKey(iv, whoAmI.userId)
                         : await Gun2.queryPostKeysOnGun2(iv, mine.publicKey)
 
