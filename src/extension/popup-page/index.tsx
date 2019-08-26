@@ -2,13 +2,12 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 
 import { ThemeProvider } from '@material-ui/styles'
-import { MaskbookLightTheme } from './utils/theme'
-import { geti18nString } from './utils/i18n'
-import { makeStyles, useTheme, Theme, createStyles } from '@material-ui/core/styles'
+import { MaskbookLightTheme } from '../../utils/theme'
+import { makeStyles, useTheme } from '@material-ui/core/styles'
 import { Button } from '@material-ui/core'
-import { uiSetup } from './setup'
+import '../../setup.ui'
+import { SSRRenderer } from '../../utils/SSRRenderer'
 
-uiSetup()
 const useStyles = makeStyles(theme => ({
     button: {
         margin: theme.spacing(1),
@@ -28,8 +27,8 @@ const useStyles = makeStyles(theme => ({
     },
 }))
 
-ReactDOM.render(<Popup />, document.getElementById('root')!)
-function Popup() {
+SSRRenderer(<Popup />, document.getElementById('root')!)
+export function Popup() {
     const classes = useStyles()
     const theme = useTheme()
 

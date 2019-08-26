@@ -1,6 +1,6 @@
 import './provider.worker'
 import React from 'react'
-import { HashRouter as Router, Route, Link } from 'react-router-dom'
+import { HashRouter, MemoryRouter, Route, Link } from 'react-router-dom'
 import ReactDOM from 'react-dom'
 
 import Welcome from './extension/options-page/Welcome'
@@ -34,6 +34,7 @@ import Phonelink from '@material-ui/icons/Phonelink'
 import Code from '@material-ui/icons/Code'
 import { ExportData } from './components/MobileImportExport/Export'
 import './setup.ui'
+import { SSRRenderer } from './utils/SSRRenderer'
 
 const drawerWidth = 240
 const empty = (
@@ -103,7 +104,7 @@ const useStyles = makeStyles((theme: Theme) =>
 )
 document.body.innerHTML = ''
 const root = document.createElement('div')
-ReactDOM.render(<ResponsiveDrawer />, root)
+SSRRenderer(<ResponsiveDrawer />, root)
 document.body.appendChild(root)
 function ResponsiveDrawer() {
     const classes = useStyles()
@@ -125,6 +126,8 @@ function ResponsiveDrawer() {
     )
 
     const isDarkTheme = useMediaQuery('(prefers-color-scheme: dark)')
+
+    const Router = (typeof window === 'object' ? HashRouter : MemoryRouter) as typeof HashRouter
 
     return (
         <ThemeProvider theme={isDarkTheme ? MaskbookDarkTheme : MaskbookLightTheme}>

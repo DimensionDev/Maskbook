@@ -29,6 +29,7 @@ module.exports = function override(config, env) {
         'content-script': src('./src/content-script.ts'),
         'background-service': src('./src/background-service.ts'),
         'injected-script': src('./src/extension/injected-script/index.ts'),
+        popup: src('./src/extension/popup-page/index.tsx'),
         qrcode: src('./src/web-workers/QRCode.ts'),
     }
     if (env !== 'development') delete config.entry.devtools
@@ -58,9 +59,7 @@ module.exports = function override(config, env) {
      */
     function newPage(options = {}) {
         return new HtmlWebpackPlugin({
-            chunks: ['background-service'],
-            filename: 'background.html',
-            templateContent: `<head><meta charset="utf-8" /><script src="polyfill/browser-polyfill.min.js"></script><body>`,
+            templateContent: `<meta charset="utf-8" /><script src="polyfill/browser-polyfill.min.js"></script><body>`,
             inject: 'body',
             ...options,
         })
@@ -68,8 +67,11 @@ module.exports = function override(config, env) {
     config.plugins.push(
         newPage({ chunks: ['options-page'], filename: 'index.html' }),
         newPage({ chunks: ['background-service'], filename: 'background.html' }),
+        newPage({ chunks: ['popup'], filename: 'popup.html' }),
         newPage({ chunks: ['content-script'], filename: 'generated__content__script.html' }),
     )
+    config.plugins.push(new SSRPlugin('popup.html', src('./src/extension/popup-page/index.tsx')))
+    config.plugins.push(new SSRPlugin('index.html', src('./src/index.tsx')))
     config.plugins.push(
         new webpack.BannerPlugin(
             'Maskbook is a open source project under GNU AGPL 3.0 licence.\n\n\n' +
@@ -143,4 +145,69 @@ module.exports = function override(config, env) {
     // ! Don't upgrade webpack to 5 until they fix this
     config.output.futureEmitAssets = false
     return config
+}
+
+const { exec } = require('child_process')
+const SSRPlugin = class SSRPlugin {
+    /**
+     * @param {string} htmlFileName
+     * @param {string} pathName
+     */
+    constructor(htmlFileName, pathName) {
+        this.htmlFileName = htmlFileName
+        this.pathName = pathName
+    }
+    render() {
+        return new Promise((resolve, reject) => {
+            exec(
+                'node -r esm ./node_modules/ts-node/dist/bin.js --project ./tsconfig_cjs.json -T ./src/setup.ssr.js ' +
+                    this.pathName,
+                (err, stdout) => (err ? reject(err) : resolve(stdout)),
+            )
+        })
+    }
+    /**
+     *
+     * @param {import('webpack').Compiler} compiler
+     */
+    apply(compiler) {
+        compiler.hooks.emit.tapPromise('SSRPlugin', async compilation => {
+            const ssrString = await this.render()
+            const original = compilation.assets[this.htmlFileName].source()
+            let after = original.replace('</body>', ssrString + '</body>')
+            const regex = /<script src="(.+?)"><\/script>/g
+            const allScripts = []
+            let current
+            while ((current = regex.exec(original))) {
+                allScripts.push(current[1])
+            }
+            after =
+                after.replace(/<script src="(.+?)"><\/script>/g, '') + `<script src="${this.htmlFileName}.js"></script>`
+            const deferredLoader = allScripts.reduce(
+                (prev, src) =>
+                    prev +
+                    `{const script = document.createElement('script')
+script.src = '${src}'
+document.body.appendChild(script)}`,
+                '',
+            )
+            const generated = `function untilDocumentReady() {
+    if (document.readyState === 'complete') return Promise.resolve()
+        return new Promise(resolve => {
+            document.addEventListener('readystatechange', resolve, { once: true, passive: true })
+        })
+    }
+untilDocumentReady().then(() => {
+    setTimeout(() => {${deferredLoader}}, 0)
+})`
+            compilation.assets[this.htmlFileName + '.js'] = {
+                source: () => generated,
+                size: () => generated.length,
+            }
+            compilation.assets[this.htmlFileName] = {
+                source: () => after,
+                size: () => after.length,
+            }
+        })
+    }
 }
