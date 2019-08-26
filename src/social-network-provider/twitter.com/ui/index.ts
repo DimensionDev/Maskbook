@@ -4,7 +4,6 @@ import { shouldDisplayWelcomeDefault } from '../../../social-network/defaults/sh
 import { InitFriendsValueRef } from '../../../social-network/defaults/FriendsValueRef'
 import { InitMyIdentitiesValueRef } from '../../../social-network/defaults/MyIdentitiesRef'
 import { setStorage } from '../../../utils/browser.storage'
-import { updaterFactory } from '../../facebook.com/ui-provider'
 import { twitterUIDataSources } from './dataSources'
 import { twitterUITasks } from './tasks'
 import { twitterUIFetch } from './fetch'
@@ -37,5 +36,3 @@ export const instanceOfTwitterUI = defineSocialNetworkUI({
     },
     shouldDisplayWelcome: shouldDisplayWelcomeDefault,
 })
-
-instanceOfTwitterUI.lastRecognizedIdentity.addListener(updaterFactory(instanceOfTwitterUI))

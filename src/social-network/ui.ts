@@ -3,11 +3,12 @@ import { DomProxy, LiveSelector, ValueRef } from '@holoflows/kit/es'
 import { Person } from '../database'
 import { PersonIdentifier, PostIdentifier } from '../database/type'
 import { Payload } from '../utils/type-transform/Payload'
-import { defaultTo } from 'lodash-es'
+import { defaultTo, isNull } from 'lodash-es'
 import { injectPostCommentsDefault } from './defaults/injectComments'
 import { injectCommentBoxDefaultFactory } from './defaults/injectCommentBox'
 import { defaultBehavior } from '../social-network-provider/facebook.com/UI/injectPostInspector'
 import { nop } from '../utils/utils'
+import Services from '../extension/service'
 
 //#region SocialNetworkUI
 export interface SocialNetworkUI
@@ -217,6 +218,15 @@ export function activateSocialNetworkUI() {
             ui.collectPeople()
             ui.collectPosts()
             ui.shouldDisplayWelcome().then(r => r && defaultTo(ui.injectWelcomeBanner, def.injectWelcomeBanner)())
+            ui.lastRecognizedIdentity.addListener(id => {
+                if (id.identifier.isUnknown) return
+
+                if (isNull(ui.currentIdentity.value)) {
+                    ui.currentIdentity.value =
+                        ui.myIdentitiesRef.value.find(x => id.identifier.equals(x.identifier)) || null
+                }
+                Services.People.resolveIdentity(id.identifier).then()
+            })
             return
         }
 }
