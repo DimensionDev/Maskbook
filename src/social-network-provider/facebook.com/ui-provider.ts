@@ -13,16 +13,21 @@ import { getProfileFacebook } from './tasks/getProfile'
 import { pasteIntoBioFacebook } from './tasks/pasteIntoBio'
 import { shouldDisplayWelcomeDefault } from '../../social-network/defaults/shouldDisplayWelcome'
 import { injectWelcomeBannerFacebook } from './UI/injectWelcomeBanner'
+import { injectPostCommentsDefault } from '../../social-network/defaults/injectComments'
+import { injectCommentBoxDefault } from '../../social-network/defaults/injectCommentBox'
+import { selectElementContents, dispatchCustomEvents, sleep } from '../../utils/utils'
 import { collectPostsFacebook } from './UI/collectPosts'
 import { injectPostInspectorFacebook } from './UI/injectPostInspector'
 import { setStorage } from '../../utils/browser.storage'
+import { isMobileFacebook } from './isMobile'
+import { geti18nString } from '../../utils/i18n'
 
 const def = defineSocialNetworkUI({
     ...sharedProvider,
-    init: (env, pref) => {
+    init(env, pref) {
         sharedProvider.init(env, pref)
-        InitFriendsValueRef(def, 'facebook.com')
-        InitMyIdentitiesValueRef(def, 'facebook.com')
+        InitFriendsValueRef(this, 'facebook.com')
+        InitMyIdentitiesValueRef(this, 'facebook.com')
     },
     shouldActivate() {
         return location.hostname.endsWith('facebook.com')
@@ -30,8 +35,8 @@ const def = defineSocialNetworkUI({
     friendlyName: 'Facebook',
     async setupAccount() {
         await browser.permissions.request({ origins: ['https://www.facebook.com/*', 'https://m.facebook.com/*'] })
-        setStorage('facebook.com', { forceDisplayWelcome: true })
-        window.open('https://facebook.com/')
+        await setStorage('facebook.com', { forceDisplayWelcome: true })
+        location.href = 'https://facebook.com/'
     },
     ignoreSetupAccount() {
         setStorage('facebook.com', { userIgnoredWelcome: true, forceDisplayWelcome: false })
@@ -45,6 +50,30 @@ const def = defineSocialNetworkUI({
     resolveLastRecognizedIdentity: resolveLastRecognizedIdentityFacebook,
     injectPostBox: injectPostBoxFacebook,
     injectWelcomeBanner: injectWelcomeBannerFacebook,
+    injectPostComments: injectPostCommentsDefault(),
+    injectCommentBox: injectCommentBoxDefault(async function onPasteToCommentBoxFacebook(encryptedComment, current) {
+        // TODO: i18n
+        const fail = () => prompt(geti18nString('comment_box__paste_failed'), encryptedComment)
+        if (isMobileFacebook) {
+            const root = current.commentBoxSelector.evaluateOnce()
+            if (!root) return fail()
+            const textarea = root.querySelector('textarea')
+            if (!textarea) return fail()
+            textarea.focus()
+            dispatchCustomEvents('input', encryptedComment)
+            await sleep(200)
+            if (!root.innerText.includes(encryptedComment)) return fail()
+        } else {
+            const root = current.rootNode
+            if (!root) return fail()
+            const input = root.querySelector('[contenteditable]')
+            if (!input) return fail()
+            selectElementContents(input)
+            dispatchCustomEvents('paste', encryptedComment)
+            await sleep(200)
+            if (!root.innerText.includes(encryptedComment)) return fail()
+        }
+    }),
     injectPostInspector: injectPostInspectorFacebook,
     collectPeople: collectPeopleFacebook,
     collectPosts: collectPostsFacebook,

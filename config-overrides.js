@@ -60,7 +60,7 @@ module.exports = function override(config, env) {
         return new HtmlWebpackPlugin({
             chunks: ['background-service'],
             filename: 'background.html',
-            templateContent: `<head><script src="polyfill/browser-polyfill.min.js"></script><body>`,
+            templateContent: `<head><meta charset="utf-8" /><script src="polyfill/browser-polyfill.min.js"></script><body>`,
             inject: 'body',
             ...options,
         })

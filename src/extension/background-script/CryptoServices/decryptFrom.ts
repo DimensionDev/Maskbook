@@ -86,7 +86,11 @@ export async function decryptFrom(
             } else {
                 if (cachedPostResult)
                     return {
-                        signatureVerifyResult: await cryptoProvider.verify(unverified, signature || '', mine.publicKey),
+                        signatureVerifyResult: await cryptoProvider.verify(
+                            unverified,
+                            signature || '',
+                            byPerson.publicKey,
+                        ),
                         content: cachedPostResult,
                     }
                 const aesKeyEncrypted =

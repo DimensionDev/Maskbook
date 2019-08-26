@@ -18,6 +18,9 @@
     "additional_post_box__encrypted_failed": {
         "message": "請將以下内容拷貝至發佈框。"
     },
+    "comment_box__paste_failed": {
+        "message": "請將以下内容拷貝至評論框。"
+    },
     "add_to_key_store_success": {
         "message": "Maskbook 已獲取此公鑰並添加至本地 ✔"
     },
@@ -258,6 +261,9 @@
     "banner_dismiss_aria": {
         "message": "關閉消息"
     },
+    "service_invalid_backup_file": {
+        "message": "這貌似不是 Maskbook 的備份。"
+    },
     "service_others_key_not_found": {
         "message": "$1 的公鑰無法找到！"
     },
@@ -284,9 +290,6 @@
     },
     "service_username_invalid": {
         "message": "無效用戶名"
-    },
-    "automation_request_click_post_box": {
-        "message": "請點擊發佈框"
     },
     "automation_request_click_edit_bio_button": {
         "message": "請點擊「編輯簡介」按鈕或簡介旁的鉛筆圖標"

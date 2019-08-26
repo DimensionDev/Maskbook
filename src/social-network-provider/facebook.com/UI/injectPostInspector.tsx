@@ -58,8 +58,10 @@ padding: 0px 10px;`,
     }
 }
 function clickSeeMore(node: DomProxy) {
-    const more = node.current.parentElement!.querySelector<HTMLSpanElement>('.see_more_link_inner')
-    if (!isMobileFacebook && more && node.current.innerText.match(/🎼.+|/)) {
+    const more = node.current.parentElement!.querySelector<HTMLDivElement | HTMLSpanElement>(
+        isMobileFacebook ? '[data-sigil="more"]' : '.see_more_link_inner',
+    )
+    if (more && node.current.innerText.match(/🎼.+|/)) {
         more.click()
     }
 }

@@ -12,19 +12,36 @@ const posts = new LiveSelector().querySelectorAll<HTMLDivElement>(
 export function collectPostsFacebook(this: SocialNetworkUI) {
     new MutationObserverWatcher(posts)
         .useForeach((node, key, metadata) => {
-            const root = new LiveSelector().replace(() => [node]).closest('.userContentWrapper')
+            const root = new LiveSelector()
+                .replace(() => [metadata.realCurrent])
+                .filter(x => x)
+                .closest('.userContentWrapper')
             // ? inject after comments
-            const commentSelector = root
+            const commentSelectorPC = root
                 .clone()
                 .querySelectorAll('[role=article]')
                 .querySelectorAll('a+span')
                 .closest<HTMLElement>(2)
+            const commentSelectorMobile = root
+                .clone()
+                .map(x => x.parentElement)
+                .querySelectorAll<HTMLElement>('[data-commentid]')
+
+            const commentSelector = isMobileFacebook ? commentSelectorMobile : commentSelectorPC
 
             // ? inject comment text field
-            const commentBoxSelector = root
+            const commentBoxSelectorPC = root
                 .clone()
                 .querySelector<HTMLFormElement>('form form')
                 .enableSingleMode()
+            const commentBoxSelectorMobile = root
+                .clone()
+                .map(x => x.parentElement)
+                .querySelector('textarea')
+                .map(x => x.parentElement)
+                .filter(x => x.innerHTML.indexOf('comment') !== -1)
+                .enableSingleMode()
+            const commentBoxSelector = isMobileFacebook ? commentBoxSelectorMobile : commentBoxSelectorPC
 
             const info: PostInfo = {
                 commentsSelector: commentSelector,

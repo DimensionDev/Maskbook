@@ -122,7 +122,7 @@ export interface SocialNetworkUIInjections {
  */
 export interface SocialNetworkUITasks {
     /**
-     * This function should paste `text` into the paste box.
+     * This function should paste `text` into the post box.
      * If failed, warning user to do it by themselves with `warningText`
      */
     taskPasteIntoPostBox(text: string, warningText: string): void

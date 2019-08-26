@@ -35,15 +35,24 @@ const WelcomeActions = {
     backupMyKeyPair(whoAmI: PersonIdentifier) {
         return Services.Welcome.backupMyKeyPair(whoAmI)
     },
-    restoreFromFile(file: File | string, id: PersonIdentifier) {
+    /**
+     *
+     * @param file The backup file
+     * @param id Who am I?
+     */
+    restoreFromFile(file: File | string, id: PersonIdentifier): Promise<void> {
         if (typeof file === 'string') {
-            Services.People.restoreBackup(JSON.parse(file as string), id)
+            return Services.People.restoreBackup(JSON.parse(file), id)
         } else {
-            const fr = new FileReader()
-            fr.readAsText(file)
-            fr.addEventListener('loadend', async f => {
-                const json = JSON.parse(fr.result as string)
-                Services.People.restoreBackup(json, id)
+            return new Promise<void>((resolve, reject) => {
+                const fr = new FileReader()
+                fr.readAsText(file)
+                fr.addEventListener('loadend', async () => {
+                    const json = JSON.parse(fr.result as string)
+                    Services.People.restoreBackup(json, id).then(resolve, reject)
+                })
+                fr.addEventListener('error', reject)
+                fr.addEventListener('abort', reject)
             })
         }
     },
@@ -124,6 +133,12 @@ function Welcome(props: Welcome) {
             return <Welcome1a3 next={() => onStepChange(WelcomeState.ProvePost)} />
         case WelcomeState.ProvePost:
             const worker = getCurrentNetworkWorker(props.whoAmI.identifier)
+            const copyToClipboard = (provePost: string) => {
+                try {
+                    // This may throw on some (Safari) browsers.
+                    navigator.clipboard.writeText(provePost)
+                } catch {}
+            }
             return (
                 <Welcome1a4v2
                     hasManual={!!worker.manualVerifyPost}
@@ -132,10 +147,12 @@ function Welcome(props: Welcome) {
                     bioDisabled={whoAmI.identifier.isUnknown}
                     provePost={provePost}
                     requestManualVerify={() => {
+                        copyToClipboard(provePost)
                         sideEffects.manualVerifyBio(whoAmI.identifier, provePost)
                         onStepChange(WelcomeState.End)
                     }}
                     requestAutoVerify={type => {
+                        copyToClipboard(provePost)
                         if (type === 'bio') sideEffects.autoVerifyBio(whoAmI.identifier, provePost)
                         else if (type === 'post') sideEffects.autoVerifyPost(whoAmI.identifier, provePost)
                         onStepChange(WelcomeState.End)
@@ -147,8 +164,11 @@ function Welcome(props: Welcome) {
                 <Welcome1b1
                     back={() => onStepChange(WelcomeState.Start)}
                     restore={url => {
-                        sideEffects.restoreFromFile(url, props.whoAmI.identifier)
-                        onStepChange(WelcomeState.End)
+                        sideEffects.restoreFromFile(url, props.whoAmI.identifier).then(
+                            () => onStepChange(WelcomeState.End),
+                            // TODO: use a better UI
+                            error => alert(error),
+                        )
                     }}
                 />
             )

@@ -13,12 +13,13 @@ import {
     queryLocalKeyDB,
     queryMyIdentityAtDB,
 } from '../../database/people'
-import { BackupJSONFileLatest } from '../../utils/type-transform/BackupFile'
+import { BackupJSONFileLatest, JSON_HINT_FOR_POWER_USER } from '../../utils/type-transform/BackupFile'
 import { PersonIdentifier } from '../../database/type'
 import { MessageCenter } from '../../utils/messages'
 import getCurrentNetworkWorker from '../../social-network/utils/getCurrentNetworkWorker'
 import { SocialNetworkUIDataSources } from '../../social-network/ui'
 import { getWelcomePageURL } from '../options-page/Welcome/getWelcomePageURL'
+import { getMyProveBio } from './CryptoServices/getMyProveBio'
 
 OnlyRunInContext('background', 'WelcomeService')
 async function generateBackupJSON(whoAmI: PersonIdentifier, full = false): Promise<BackupJSONFileLatest> {
@@ -44,6 +45,9 @@ async function generateBackupJSON(whoAmI: PersonIdentifier, full = false): Promi
             localKey: await exportKey(localKeys.get(data.identifier.network)![data.identifier.userId]!),
             publicKey: await exportKey(data.publicKey),
             privateKey: await exportKey(data.privateKey),
+            [JSON_HINT_FOR_POWER_USER]:
+                (await getMyProveBio(data.identifier)) ||
+                'We are sorry, but this field is not available. It may help to set up Maskbook again.',
         })
     }
     for (const id of myIdentity) {
@@ -70,16 +74,19 @@ async function generateBackupJSON(whoAmI: PersonIdentifier, full = false): Promi
     //#endregion
 
     await Promise.all(promises)
+    const grantedHostPermissions = (await browser.permissions.getAll()).origins || []
     if (full)
         return {
             version: 1,
             whoami: myIdentitiesInDB,
             people: peopleInDB,
+            grantedHostPermissions,
         }
     else
         return {
             version: 1,
             whoami: myIdentitiesInDB,
+            grantedHostPermissions,
         }
     function exportKey(k: CryptoKey) {
         return crypto.subtle.exportKey('jwk', k)

@@ -14,6 +14,7 @@ import {
 } from '../../database/people'
 import { UpgradeBackupJSONFile } from '../../utils/type-transform/BackupFile'
 import { PersonIdentifier, GroupIdentifier, GroupType } from '../../database/type'
+import { geti18nString } from '../../utils/i18n'
 
 OnlyRunInContext('background', 'FriendService')
 export { storeAvatar, getAvatarDataURL, queryPerson } from '../../database'
@@ -47,7 +48,7 @@ export async function queryMyIdentity(identifier?: PersonIdentifier | string): P
 /**
  * Restore the backup
  */
-export async function restoreBackup(json: object, whoAmI?: PersonIdentifier) {
+export async function restoreBackup(json: object, whoAmI?: PersonIdentifier): Promise<void> {
     async function storeMyIdentity(person: PersonRecordPublicPrivate, local: JsonWebKey) {
         await storeMyIdentityDB(person)
         const aes = await crypto.subtle.importKey('jwk', local, { name: 'AES-GCM', length: 256 }, true, [
@@ -68,9 +69,9 @@ export async function restoreBackup(json: object, whoAmI?: PersonIdentifier) {
         return new GroupIdentifier(x.network, x.groupId, x.type)
     }
     const data = UpgradeBackupJSONFile(json, whoAmI)
-    if (!data) return false
+    if (!data) throw new TypeError(geti18nString('service_invalid_backup_file'))
 
-    const whoami = Promise.all(
+    const myIdentitiesInBackup = Promise.all(
         data.whoami.map(async rec => {
             const IAm = mapID(rec)
             const previousIdentifiers = (rec.previousIdentifiers || []).map(mapID)
@@ -103,9 +104,12 @@ export async function restoreBackup(json: object, whoAmI?: PersonIdentifier) {
         }),
     )
 
-    await whoami
+    await myIdentitiesInBackup
     await people
-    return true
+
+    if (data.grantedHostPermissions) {
+        await browser.permissions.request({ origins: data.grantedHostPermissions })
+    }
 }
 
 /**

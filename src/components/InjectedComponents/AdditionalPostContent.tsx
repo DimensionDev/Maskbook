@@ -47,14 +47,14 @@ function parseText(string: string) {
     while (current.length) {
         const search1 = current.search('\n')
         const search2 = links[0] ? current.search(links[0].raw) : -1
-        // ? if rest is norma
+        // ? if rest is normal
         if (search1 === -1 && search2 === -1) {
             result.push(current)
             break
         }
         // ? if rest have \n but no links
         if ((search1 < search2 && search1 !== -1) || search2 === -1) {
-            result.push(current.substring(0, search1), <br />)
+            result.push(current.substring(0, search1), <br key={current} />)
             current = current.substring(search1 + 1)
         }
         // ? if rest have links but no \n
@@ -62,7 +62,7 @@ function parseText(string: string) {
             const link = links[0].protocol + links[0].encoded
             result.push(
                 current.substring(0, search2),
-                <Link target="_blank" href={link}>
+                <Link target="_blank" href={link} key={link}>
                     {links[0].raw}
                 </Link>,
             )

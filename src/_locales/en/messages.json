@@ -15,7 +15,10 @@
         "message": "Decrypt this post with Maskbook! $1"
     },
     "additional_post_box__encrypted_failed": {
-        "message": "Please paste the following text into the paste box."
+        "message": "Please paste the following text into the post box."
+    },
+    "comment_box__paste_failed": {
+        "message": "Please paste it into the comment box."
     },
     "add_to_key_store_success": {
         "message": "Maskbook public key added to keystore ✔"
@@ -257,6 +260,9 @@
     "banner_dismiss_aria": {
         "message": "Dismiss the banner"
     },
+    "service_invalid_backup_file": {
+        "message": "This does not seems like Maskbook's backup."
+    },
     "service_others_key_not_found": {
         "message": "$1's public key not found!"
     },
@@ -283,9 +289,6 @@
     },
     "service_username_invalid": {
         "message": "Username not valid"
-    },
-    "automation_request_click_post_box": {
-        "message": "Click the post box please!"
     },
     "automation_request_click_edit_bio_button": {
         "message": "Please click the \"Edit bio\" button or the pencil on the bio box."
