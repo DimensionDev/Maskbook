@@ -18,6 +18,11 @@ export async function fetchPostContentFacebook(post: PostIdentifier<PersonIdenti
     try {
         const doc = await parseFacebookStaticHTML(getPostUrlAtFacebook(post))
         if (!doc) throw new Error("Can't parse the page")
+        // TODO: You should take care about the key comes from.
+        //  If some one commented a key under a normal post,
+        //  it will be a false-positive and it is dangerous.
+        //  There is a build-in parser.
+        //  Checkout http://mdn.io/DOMParser and we're already using it.
         const content = (isDocument(doc) ? doc.body : doc).innerText.match(/(🔒.+🔒)/)
         if (content && content[0].length) return content[0]
         throw new Error('Not found in post')
