@@ -28,7 +28,7 @@ export async function personRecordToPerson(record: PersonRecord): Promise<Person
  * Query a person even it is not stored in the database.
  * @param identifier - Identifier for people want to query
  */
-export async function queryPerson(identifier: PersonIdentifier): Promise<PersonUI> {
+export async function queryPerson(identifier: PersonIdentifier): Promise<Person> {
     const person = await queryPersonDB(identifier)
     if (!person)
         return {
