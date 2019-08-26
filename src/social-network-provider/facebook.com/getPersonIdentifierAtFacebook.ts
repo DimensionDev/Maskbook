@@ -1,7 +1,23 @@
 import { PersonIdentifier } from '../../database/type'
 import Services from '../../extension/service'
 import { Person } from '../../database'
+
 type link = HTMLAnchorElement | null | undefined
+
+/**
+ *
+ * @param allowCollectInfo
+ * @param links
+ *  Could be a group of anchor element. Seems like this:
+ *  [
+ *      <a class="_2nlw _2nlv" href="https://www.facebook.com/xxx">
+ *          [USERNAME HERE]
+ *          <span class="alternate_name">
+ *              ([USER SCREEN NAME HERE])
+ *          </span>
+ *      </a>
+ *  ]
+ */
 export function getPersonIdentifierAtFacebook(
     links: link[] | link,
     allowCollectInfo: boolean,

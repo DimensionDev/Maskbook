@@ -1,4 +1,4 @@
-import { LiveSelector, MutationObserverWatcher, ValueRef, DomProxy } from '@holoflows/kit'
+import { DomProxy, LiveSelector, MutationObserverWatcher, ValueRef } from '@holoflows/kit'
 import { deconstructPayload } from '../../../utils/type-transform/Payload'
 import { PersonIdentifier } from '../../../database/type'
 import { PostInfo, SocialNetworkUI } from '../../../social-network/ui'
@@ -52,7 +52,7 @@ export function collectPostsFacebook(this: SocialNetworkUI) {
                 postID: new ValueRef(null),
                 postPayload: new ValueRef(null),
                 get rootNode() {
-                    return root.evaluateOnce()[0]! as HTMLElement
+                    return root.evaluate()[0]! as HTMLElement
                 },
             }
             this.posts.set(metadata, info)

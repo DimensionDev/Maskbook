@@ -3,6 +3,10 @@ import { DomProxy, LiveSelector, ValueRef } from '@holoflows/kit/es'
 import { Person } from '../database'
 import { PersonIdentifier, PostIdentifier } from '../database/type'
 import { Payload } from '../utils/type-transform/Payload'
+import { isNull } from 'lodash-es'
+import { injectPostCommentsDefault } from './defaults/injectComments'
+import { injectCommentBoxDefaultFactory } from './defaults/injectCommentBox'
+import Services from '../extension/service'
 
 //#region SocialNetworkUI
 export interface SocialNetworkUI
@@ -43,7 +47,7 @@ export interface SocialNetworkUI
 /**
  * SocialNetworkUIInformationCollector defines what info this UI provider should collect
  */
-interface SocialNetworkUIInformationCollector {
+export interface SocialNetworkUIInformationCollector {
     /**
      * This function should find out which account does user using currently
      * and write it to `SocialNetworkUIDataSources.lastRecognizedIdentity`
@@ -57,6 +61,8 @@ interface SocialNetworkUIInformationCollector {
      * ```
      *
      * If `selectedIdentity` is null, you should try to set it to an identity in the `myIdentitiesRef`
+     *
+     * This function expects to fail to collect info.
      */
     resolveLastRecognizedIdentity(): void
     /**
@@ -65,7 +71,7 @@ interface SocialNetworkUIInformationCollector {
      */
     collectPeople(): void
     /**
-     * This function should find the posts on the page
+     * This function should collect any possible posts on the page.
      */
     collectPosts(): void
 }
@@ -74,7 +80,7 @@ interface SocialNetworkUIInformationCollector {
 /**
  * SocialNetworkUIInjections defines what UI components this UI provider should inject.
  */
-interface SocialNetworkUIInjections {
+export interface SocialNetworkUIInjections {
     /**
      * This function should inject UI into the Post box
      */
@@ -89,21 +95,21 @@ interface SocialNetworkUIInjections {
      * @param node The post root
      * @returns unmount the injected components
      */
-    injectPostComments(current: PostInfo, node: DomProxy): () => void
+    injectPostComments?(current: PostInfo, node: DomProxy): () => void
     /**
      * This function should inject the comment box
      * @param current The current post
      * @param node The post root
      * @returns unmount the injected components
      */
-    injectCommentBox(current: PostInfo, node: DomProxy): () => void
+    injectCommentBox?(current: PostInfo, node: DomProxy): () => void
     /**
-     * This function should inject the comment box
+     * This function should inject the post box
      * @param current The current post
      * @param node The post root
      * @returns unmount the injected components
      */
-    injectPostInspector(current: PostInfo, node: DomProxy): () => void
+    injectPostInspector(current: PostInfo, node: DomProxy<HTMLElement>): () => void
 }
 //#endregion
 //#region SocialNetworkUITasks
@@ -171,12 +177,25 @@ export type PostInfo = {
     readonly postID: ValueRef<string | null>
     readonly postContent: ValueRef<string>
     readonly postPayload: ValueRef<Payload | null>
-    readonly commentsSelector: LiveSelector<HTMLElement, false>
-    readonly commentBoxSelector: LiveSelector<HTMLElement, true>
+    readonly commentsSelector?: LiveSelector<HTMLElement, false>
+    readonly commentBoxSelector?: LiveSelector<HTMLElement, true>
     readonly decryptedPostContent: ValueRef<string>
     readonly rootNode: HTMLElement
 }
 //#endregion
+
+export const getEmptyPostInfo = (rootNodeSelector: LiveSelector<HTMLElement, true>) => {
+    return {
+        decryptedPostContent: new ValueRef(''),
+        postBy: new ValueRef(PersonIdentifier.unknown),
+        postContent: new ValueRef(''),
+        postID: new ValueRef(''),
+        postPayload: new ValueRef(null),
+        get rootNode() {
+            return rootNodeSelector.evaluate()
+        },
+    } as PostInfo
+}
 
 export const definedSocialNetworkUIs = new Set<SocialNetworkUI>()
 let activatedSocialNetworkUI: SocialNetworkUI = ({
@@ -197,6 +216,15 @@ export function activateSocialNetworkUI() {
             ui.collectPeople()
             ui.collectPosts()
             ui.shouldDisplayWelcome().then(r => r && ui.injectWelcomeBanner())
+            ui.lastRecognizedIdentity.addListener(id => {
+                if (id.identifier.isUnknown) return
+
+                if (isNull(ui.currentIdentity.value)) {
+                    ui.currentIdentity.value =
+                        ui.myIdentitiesRef.value.find(x => id.identifier.equals(x.identifier)) || null
+                }
+                Services.People.resolveIdentity(id.identifier).then()
+            })
             return
         }
 }
@@ -205,8 +233,8 @@ function hookUIPostMap(ui: SocialNetworkUI) {
     const setter = ui.posts.set
     ui.posts.set = function(key, value) {
         const undo1 = ui.injectPostInspector(value, key)
-        const undo2 = ui.injectCommentBox(value, key)
-        const undo3 = ui.injectPostComments(value, key)
+        const undo2 = (ui.injectCommentBox || def.injectCommentBox)!(value, key)
+        const undo3 = (ui.injectPostComments || def.injectPostComments)!(value, key)
         undoMap.set(key, () => {
             undo1()
             undo2()
@@ -223,12 +251,18 @@ function hookUIPostMap(ui: SocialNetworkUI) {
     }
 }
 
-export function defineSocialNetworkUI(UI: SocialNetworkUI): void {
+/**
+ * default functions of UI.
+ */
+const def: Pick<SocialNetworkUI, 'injectCommentBox' | 'injectPostComments'> = {
+    injectCommentBox: injectCommentBoxDefaultFactory(),
+    injectPostComments: injectPostCommentsDefault(),
+}
+
+export function defineSocialNetworkUI(UI: SocialNetworkUI) {
     if (UI.acceptablePayload.includes('v40') && UI.internalName !== 'facebook') {
         throw new TypeError('Payload version v40 is not supported in this network. Please use v39 or newer.')
     }
     definedSocialNetworkUIs.add(UI)
-}
-export function defineSocialNetworkUIExtended<T extends SocialNetworkUI>(UI: T): void {
-    defineSocialNetworkUI(UI)
+    return UI
 }

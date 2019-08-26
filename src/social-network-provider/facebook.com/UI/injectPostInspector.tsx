@@ -3,16 +3,13 @@ import { isMobileFacebook } from '../isMobile'
 import { PostInfo } from '../../../social-network/ui'
 import { injectPostInspectorDefault } from '../../../social-network/defaults/injectPostInspector'
 
-const defaultBehavior = injectPostInspectorDefault({
+export const defaultBehavior = injectPostInspectorDefault({
     zipPost(node) {
         zipEncryptedPostContent(node)
         zipPostLinkPreview(node)
     },
 })
-export function injectPostInspectorFacebook(
-    current: PostInfo,
-    node: DomProxy<HTMLDivElement & Node, HTMLSpanElement, HTMLSpanElement>,
-) {
+export function injectPostInspectorFacebook(current: PostInfo, node: DomProxy) {
     clickSeeMore(node)
     return defaultBehavior(current, node)
 }

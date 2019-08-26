@@ -12,8 +12,8 @@
     "build": "yarn just react/build",
     "storybook": "yarn just storybook",
     "storybook/build": "yarn just storybook/build",
-    "install": "yarn just install/holoflows",
-    "uninstall": "yarn just install/holoflows"
+    "install": "yarn just install",
+    "uninstall": "yarn just install"
   },
   "dependencies": {
     "@holoflows/kit": "https://github.com/DimensionDev/holoflows-kit",

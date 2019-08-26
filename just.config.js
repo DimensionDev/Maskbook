@@ -1,4 +1,4 @@
-const { task, parallel } = require('just-task')
+const { task, series, parallel } = require('just-task')
 const { spawn } = require('child_process')
 const path = require('path')
 
@@ -22,8 +22,12 @@ task('storybook', () => parallel('lint/fix', 'storybook/serve'))
 task('storybook/serve', () => step('start-storybook -p 9009 -s public --quiet', { withWarn: true }))
 task('storybook/build', () => step('build-storybook -s public --quiet', { withWarn: true }))
 
+task('install', () => series('install/holoflows'))
 task('install/holoflows', async () => {
     const base = path.join(process.cwd(), 'node_modules/@holoflows')
+    if (process.argv.includes('--upgrade')) {
+        await step('yarn upgrade @holoflows/kit')
+    }
     await step(`cd ${path.join(base, 'kit')} && yarn && yarn build`)
 })
 

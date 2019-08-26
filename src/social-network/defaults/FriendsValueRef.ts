@@ -1,8 +1,8 @@
 import { MessageCenter } from '../../utils/messages'
 import Services from '../../extension/service'
-import { PersonIdentifier, GroupIdentifier } from '../../database/type'
+import { GroupIdentifier, PersonIdentifier } from '../../database/type'
 import { SocialNetworkUI } from '../ui'
-import { Person } from '../../database/helpers/person'
+import { Person } from '../../database'
 
 function hasFingerprint(x: Person) {
     return !!x.fingerprint
