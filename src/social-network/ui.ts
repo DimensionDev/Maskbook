@@ -63,11 +63,7 @@ interface SocialNetworkUIInformationCollector {
      *
      * If `selectedIdentity` is null, you should try to set it to an identity in the `myIdentitiesRef`
      *
-     */
-    /**
-     * This function expects to fail to collect info,
-     * maybe don't throw is a good idea
-     *                                  -- Jack-Works
+     * This function expects to fail to collect info.
      */
     resolveLastRecognizedIdentity(): void
     /**

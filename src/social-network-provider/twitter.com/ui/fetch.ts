@@ -28,8 +28,9 @@ export const resolveLastRecognizedIdentity = (self: SocialNetworkUI) => {
             ref.value = { identifier: id }
         } catch (e) {
             /**
-             * This function expects to fail to collect info,
-             * maybe don't throw is a good idea
+             * TODO:
+             *  This function expects to fail to collect info,
+             *  maybe don't throw is a good idea
              *                                  -- Jack-Works
              */
             console.log(e)
