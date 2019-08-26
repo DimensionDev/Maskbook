@@ -12,7 +12,7 @@ export interface Host {
 export interface ThisSideImplementation {}
 
 const key = 'maskbookjsonrpc'
-const _window: any = window
+const _window: any = globalThis
 export const isWKWebkit = _window.webkit && _window.webkit.messageHandlers && _window.webkit.messageHandlers[key]
 class iOSWebkitChannel {
     constructor() {

@@ -3,6 +3,9 @@
   "license": "AGPL-3.0-or-later",
   "version": "1.5.3",
   "private": true,
+  "engines": {
+    "node": ">=12.0.0"
+  },
   "scripts": {
     "start": "yarn just react",
     "firefox": "yarn just watch",
@@ -69,6 +72,7 @@
     "@types/storybook__addon-links": "^3.3.4",
     "@types/storybook__react": "^4.0.1",
     "awesome-typescript-loader": "^5.2.1",
+    "esm": "^3.2.25",
     "just-scripts": "^0.27.0",
     "just-scripts-utils": "^0.8.3",
     "just-task": "^0.13.1",
@@ -76,6 +80,7 @@
     "prettier": "^1.18.2",
     "react-devtools": "^3.6.1",
     "storybook-addon-material-ui": "^0.9.0-alpha.19",
+    "ts-node": "^8.3.0",
     "web-ext": "^3.1.1"
   },
   "browserslist": {

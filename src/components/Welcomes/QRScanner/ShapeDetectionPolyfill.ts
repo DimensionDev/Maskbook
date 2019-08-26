@@ -48,8 +48,8 @@ class DetectedBarcodePolyfill implements DetectedBarcode {
     rawValue!: string
 }
 
-if (!('BarcodeDetector' in window)) {
-    Object.assign(window, {
+if (!('BarcodeDetector' in globalThis)) {
+    Object.assign(globalThis, {
         BarcodeDetector: BarcodeDetectorPolyfill,
         DetectedBarcode: DetectedBarcodePolyfill,
     })

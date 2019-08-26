@@ -2,13 +2,13 @@ import { MessageCenter } from './utils/messages'
 import { definedSocialNetworkUIs, activateSocialNetworkUI } from './social-network/ui'
 import './provider.ui'
 
-Object.assign(window, {
+Object.assign(globalThis, {
     definedSocialNetworkUIs: definedSocialNetworkUIs,
 })
 activateSocialNetworkUI()
 
-const close = window.close
-window.close = () => {
+const close = globalThis.close
+globalThis.close = () => {
     Reflect.apply(close, window, [])
     setTimeout(async () => {
         if (typeof browser !== 'undefined' && browser.tabs && browser.tabs.query && browser.tabs.remove) {

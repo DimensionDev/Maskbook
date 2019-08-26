@@ -317,6 +317,9 @@
     "options_index_mobile_export": {
         "message": "Setup Mobile"
     },
+    "options_index_devel": {
+        "message": "Developer"
+    },
     "options_index_privacy": {
         "message": "Privacy policy"
     },
