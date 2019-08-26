@@ -14,15 +14,16 @@ import { pasteIntoBioFacebook } from './tasks/pasteIntoBio'
 import { shouldDisplayWelcomeDefault } from '../../social-network/defaults/shouldDisplayWelcome'
 import { injectWelcomeBannerFacebook } from './UI/injectWelcomeBanner'
 import { injectPostCommentsDefault } from '../../social-network/defaults/injectComments'
-import { injectCommentBoxDefault } from '../../social-network/defaults/injectCommentBox'
-import { selectElementContents, dispatchCustomEvents, sleep } from '../../utils/utils'
+import { dispatchCustomEvents, selectElementContents, sleep } from '../../utils/utils'
 import { collectPostsFacebook } from './UI/collectPosts'
 import { injectPostInspectorFacebook } from './UI/injectPostInspector'
 import { setStorage } from '../../utils/browser.storage'
 import { isMobileFacebook } from './isMobile'
 import { geti18nString } from '../../utils/i18n'
+import { injectCommentBoxDefaultFactory } from '../../social-network/defaults/injectCommentBox'
+import { notNullable } from '../../utils/assert'
 
-const def = defineSocialNetworkUI({
+defineSocialNetworkUI({
     ...sharedProvider,
     init(env, pref) {
         sharedProvider.init(env, pref)
@@ -51,11 +52,15 @@ const def = defineSocialNetworkUI({
     injectPostBox: injectPostBoxFacebook,
     injectWelcomeBanner: injectWelcomeBannerFacebook,
     injectPostComments: injectPostCommentsDefault(),
-    injectCommentBox: injectCommentBoxDefault(async function onPasteToCommentBoxFacebook(encryptedComment, current) {
-        // TODO: i18n
-        const fail = () => prompt(geti18nString('comment_box__paste_failed'), encryptedComment)
+    injectCommentBox: injectCommentBoxDefaultFactory(async function onPasteToCommentBoxFacebook(
+        encryptedComment,
+        current,
+    ) {
+        const fail = () => {
+            prompt(geti18nString('comment_box__paste_failed'), encryptedComment)
+        }
         if (isMobileFacebook) {
-            const root = current.commentBoxSelector.evaluateOnce()
+            const root = notNullable(current.commentBoxSelector).evaluate()
             if (!root) return fail()
             const textarea = root.querySelector('textarea')
             if (!textarea) return fail()
