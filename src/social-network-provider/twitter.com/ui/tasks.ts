@@ -16,7 +16,6 @@ const taskPasteIntoPostBox = async (text: string) => {
 }
 
 const taskPasteIntoBio = async (text: string) => {
-    // TODO: try to remove timeout
     await untilDocumentReady()
     try {
         const b = editProfileButtonSelector().evaluate()

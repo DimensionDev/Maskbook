@@ -6,8 +6,6 @@ import { Payload } from '../utils/type-transform/Payload'
 import { isNull } from 'lodash-es'
 import { injectPostCommentsDefault } from './defaults/injectComments'
 import { injectCommentBoxDefaultFactory } from './defaults/injectCommentBox'
-import { defaultBehavior } from '../social-network-provider/facebook.com/UI/injectPostInspector'
-import { nop } from '../utils/utils'
 import Services from '../extension/service'
 
 //#region SocialNetworkUI
@@ -90,7 +88,7 @@ export interface SocialNetworkUIInjections {
     /**
      * This function should inject the Welcome Banner
      */
-    injectWelcomeBanner?(): void
+    injectWelcomeBanner(): void
     /**
      * This function should inject the comment
      * @param current The current post
@@ -111,7 +109,7 @@ export interface SocialNetworkUIInjections {
      * @param node The post root
      * @returns unmount the injected components
      */
-    injectPostInspector?(current: PostInfo, node: DomProxy<HTMLElement>): () => void
+    injectPostInspector(current: PostInfo, node: DomProxy<HTMLElement>): () => void
 }
 //#endregion
 //#region SocialNetworkUITasks
@@ -217,11 +215,7 @@ export function activateSocialNetworkUI() {
             ui.injectPostBox()
             ui.collectPeople()
             ui.collectPosts()
-            if (!ui.injectWelcomeBanner) {
-                ui.shouldDisplayWelcome().then(r => r && def.injectWelcomeBanner())
-            } else {
-                ui.shouldDisplayWelcome().then(r => r && ui.injectWelcomeBanner!())
-            }
+            ui.shouldDisplayWelcome().then(r => r && ui.injectWelcomeBanner())
             ui.lastRecognizedIdentity.addListener(id => {
                 if (id.identifier.isUnknown) return
 
@@ -238,9 +232,9 @@ function hookUIPostMap(ui: SocialNetworkUI) {
     const undoMap = new WeakMap<object, () => void>()
     const setter = ui.posts.set
     ui.posts.set = function(key, value) {
-        const undo1 = (ui.injectPostInspector || def.injectPostInspector)(value, key)
-        const undo2 = (ui.injectCommentBox || def.injectCommentBox)(value, key)
-        const undo3 = (ui.injectPostComments || def.injectPostComments)(value, key)
+        const undo1 = ui.injectPostInspector(value, key)
+        const undo2 = (ui.injectCommentBox || def.injectCommentBox)!(value, key)
+        const undo3 = (ui.injectPostComments || def.injectPostComments)!(value, key)
         undoMap.set(key, () => {
             undo1()
             undo2()
@@ -260,11 +254,9 @@ function hookUIPostMap(ui: SocialNetworkUI) {
 /**
  * default functions of UI.
  */
-const def = {
+const def: Pick<SocialNetworkUI, 'injectCommentBox' | 'injectPostComments'> = {
     injectCommentBox: injectCommentBoxDefaultFactory(),
     injectPostComments: injectPostCommentsDefault(),
-    injectPostInspector: defaultBehavior,
-    injectWelcomeBanner: nop,
 }
 
 export function defineSocialNetworkUI(UI: SocialNetworkUI) {

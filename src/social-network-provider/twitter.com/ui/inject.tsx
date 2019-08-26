@@ -19,4 +19,5 @@ export const twitterUIInjections: SocialNetworkUIInjections = {
     injectCommentBox: nop,
     injectPostComments: nop,
     injectWelcomeBanner: nop,
+    injectPostInspector: nop, // TODO: implement this
 }
