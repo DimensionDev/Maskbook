@@ -30,7 +30,7 @@ export async function appendShareTarget(
     } else if (version === -40) {
         const toKey = await prepareOthersKeyForEncryptionV40(people)
         const othersAESKeyEncrypted = await Alpha40.generateOthersAESKeyEncrypted(-40, AESKey, myPrivateKey, toKey)
-        // tslint:disable-next-line: deprecation
+        // eslint-disable-next-line import/no-deprecated
         Gun1.publishPostAESKey(postIdentifier, whoAmI, othersAESKeyEncrypted)
     }
 }

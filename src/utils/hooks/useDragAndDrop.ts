@@ -25,14 +25,17 @@ export function useDragAndDrop() {
         e.preventDefault()
         setStatus('drag-enter')
     }, [])
-    const onCapture = React.useCallback((e: React.DragEvent) => {
-        e.preventDefault()
-        onChange(e)
-        setTimeout(onLeave, 200)
-    }, [])
     const onLeave = React.useCallback((e: React.DragEvent) => {
         setStatus(undefined)
     }, [])
+    const onCapture = React.useCallback(
+        (e: React.DragEvent) => {
+            e.preventDefault()
+            onChange(e)
+            setTimeout(onLeave, 200)
+        },
+        [onChange, onLeave],
+    )
     return {
         dragEvents: {
             onDragEnterCapture: onEnter,

@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { useState } from 'react'
 import { geti18nString } from '../../utils/i18n'
-import { Button, makeStyles, Typography } from '@material-ui/core'
+import { Button, makeStyles, Typography, Theme } from '@material-ui/core'
 import WelcomeContainer from './WelcomeContainer'
 import { SelectPeopleUI } from '../shared/SelectPeople'
 import { Person } from '../../database'
@@ -13,7 +13,7 @@ interface Props {
     identities: Person[]
     back(): void
 }
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles<Theme>(theme => ({
     paper: {
         padding: '2rem 1rem 1rem 1rem',
         textAlign: 'center',

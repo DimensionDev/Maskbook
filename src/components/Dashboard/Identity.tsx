@@ -2,8 +2,8 @@ import * as React from 'react'
 import { FixedWidthFonts } from '../../utils/theme'
 import classNames from 'classnames'
 import { Avatar } from '../../utils/components/Avatar'
-import { makeStyles, Typography, Card, CardHeader } from '@material-ui/core'
-import { styled } from '@material-ui/styles'
+import { Theme, Typography, Card, CardHeader } from '@material-ui/core'
+import { makeStyles, styled } from '@material-ui/styles'
 import { Person } from '../../database'
 
 interface Props {
@@ -11,7 +11,7 @@ interface Props {
     onClick?(): void
 }
 const FixedWidth = styled('div')({ fontFamily: FixedWidthFonts })
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles<Theme>(theme => ({
     card: {
         display: 'inline-block',
         marginBottom: theme.spacing(3),

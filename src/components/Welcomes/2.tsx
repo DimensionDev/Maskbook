@@ -1,8 +1,8 @@
 import * as React from 'react'
 import { geti18nString } from '../../utils/i18n'
-import { makeStyles, Paper, Typography, Button } from '@material-ui/core'
+import { makeStyles, Paper, Typography, Button, Theme } from '@material-ui/core'
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles<Theme>(theme => ({
     paper: {
         padding: '2rem 1rem 1rem 1rem',
         textAlign: 'center',

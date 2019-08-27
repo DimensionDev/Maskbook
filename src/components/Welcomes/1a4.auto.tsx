@@ -29,7 +29,7 @@ interface Props {
     type: 'bio' | 'post' | undefined
     setType(type: Props['type']): void
 }
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles<Theme>(theme => ({
     root: {
         display: 'flex',
         justifyContent: 'space-around',

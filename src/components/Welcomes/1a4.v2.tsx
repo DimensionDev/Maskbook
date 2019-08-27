@@ -3,7 +3,7 @@ import * as React from 'react'
 import Auto from './1a4.auto'
 import Manual from './1a4.manual'
 import { geti18nString } from '../../utils/i18n'
-import { makeStyles, Typography, Button } from '@material-ui/core'
+import { makeStyles, Typography, Button, Theme } from '@material-ui/core'
 import WelcomeContainer from './WelcomeContainer'
 
 interface Props {
@@ -16,7 +16,7 @@ interface Props {
     requestAutoVerify(type: 'bio' | 'post'): void
     requestManualVerify(): void
 }
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles<Theme>(theme => ({
     paper: {
         padding: '2rem 2rem 1rem 2rem',
         textAlign: 'center',
@@ -44,7 +44,7 @@ export default function Welcome(props: Props) {
     const [type, setType] = React.useState<'bio' | 'post' | undefined>(undefined)
     const setManual = React.useCallback(() => setActionType('manual'), [])
     const setAuto = React.useCallback(() => setActionType('auto'), [])
-    const finish = React.useCallback(() => requestAutoVerify(type!), [type])
+    const finish = React.useCallback(() => requestAutoVerify(type!), [requestAutoVerify, type])
 
     if (!autoAvailable && !hasManual) return <>There is no way to setup Maskbook</>
     if (type === undefined) {

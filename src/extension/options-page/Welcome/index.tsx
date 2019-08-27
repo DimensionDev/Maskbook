@@ -238,7 +238,7 @@ export default withRouter(function _WelcomePortal(props: RouteComponentProps) {
                 setStep(WelcomeState.SelectIdentity)
             })
         }
-    }, [props.location.search])
+    }, [props.location.search, selectedId.identifier])
 
     return (
         <ResponsiveDialog open>

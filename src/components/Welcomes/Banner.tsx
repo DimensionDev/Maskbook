@@ -15,7 +15,7 @@ interface Props {
     close(): void
     disabled?: boolean
 }
-const useStyles = makeStyles((theme: Theme) => ({
+const useStyles = makeStyles<Theme>(theme => ({
     root: {
         border: '1px solid #ccc',
         borderRadius: 4,
@@ -93,7 +93,7 @@ export function Banner({
         setStorage(props.networkIdentifier as string, { forceDisplayWelcome: false })
         unmount()
         Services.Welcome.openWelcomePage(lastRecognizedIdentity)
-    }, [unmount])
+    }, [lastRecognizedIdentity, props.networkIdentifier, unmount])
     return (
         <BannerUI
             disabled={lastRecognizedIdentity.identifier.isUnknown}

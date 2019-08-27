@@ -15,7 +15,6 @@ function deconstructAlpha40_Or_Alpha39(str: string, throws = false): Payload | n
     // ? payload is 🎼2/4|ownersAESKeyEncrypted|iv|encryptedText|signature:||
     // ? payload is 🎼3/4|ownersAESKeyEncrypted|iv|encryptedText|signature:||
     const isVersion39 = str.includes('🎼3/4')
-    // tslint:disable-next-line: no-parameter-reassignment
     str = str.replace('🎼2/4', '🎼3/4')
     const [_, payloadStart] = str.split('🎼3/4|')
     if (!payloadStart)

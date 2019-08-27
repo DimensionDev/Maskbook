@@ -57,7 +57,6 @@ export function subscribePostKeysOnGun2(
                 })
         })
     })
-    // tslint:disable-next-line: no-parameter-reassignment
     return () => (callback = () => {})
 }
 

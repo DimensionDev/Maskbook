@@ -11,6 +11,7 @@ import {
     Button,
     List,
     Box,
+    Theme,
 } from '@material-ui/core'
 import { Person } from '../../database'
 import { useState, useCallback } from 'react'
@@ -24,7 +25,7 @@ interface PeopleInListProps {
     showAtNetwork?: boolean
     listItemProps?: Partial<(typeof ListItem extends OverridableComponent<infer U> ? U : never)['props']>
 }
-const usePeopleInListStyle = makeStyles(theme => ({
+const usePeopleInListStyle = makeStyles<Theme>(theme => ({
     overflow: {
         textOverflow: 'ellipsis',
         whiteSpace: 'nowrap',
@@ -111,7 +112,7 @@ export function SelectPeopleUI(props: SelectPeopleUIProps) {
             const filtered = selected.find(x => x.identifier.equals(myself.identifier))
             if (filtered) onSetSelected(selected.filter(x => x !== filtered))
         }
-    }, [myself && myself.identifier.toText(), ignoreMyself])
+    }, [ignoreMyself, myself, onSetSelected, selected])
     const [search, setSearch] = useState('')
     const listBeforeSearch = people.filter(x => {
         if (ignoreMyself && myself && x.identifier.equals(myself.identifier)) return false

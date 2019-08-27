@@ -18,7 +18,7 @@ async function getUserPublicKeyFromProvePost(user: PersonIdentifier) {
     if (!person || !person.provePostId || !person.provePostId.length) {
         // ? The deprecated way
         if (user.network === 'facebook.com') {
-            // tslint:disable-next-line: deprecation
+            // eslint-disable-next-line import/no-deprecated
             person = await Gun1.queryPersonFromGun(user.userId)
             if (person) Gun2.writePersonOnGun(user, person)
         }

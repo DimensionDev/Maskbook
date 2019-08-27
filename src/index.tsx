@@ -51,7 +51,7 @@ const OptionsPageRouters = (
         <Route exact path="/" component={() => empty} />
         <Route path="/welcome" component={Welcome} />
         <Route path="/privacy" component={() => Privacy} />
-        <Route path="/developer" component={() => Developer} />
+        <Route path="/developer" component={Developer} />
         <Route path="/mobile-setup" component={ExportData} />
     </>
 )
@@ -68,7 +68,7 @@ const Links2rd = (
     </>
 )
 
-const useStyles = makeStyles((theme: Theme) =>
+const useStyles = makeStyles<Theme>(theme =>
     createStyles({
         root: {
             display: 'flex',

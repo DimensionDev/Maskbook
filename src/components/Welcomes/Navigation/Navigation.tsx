@@ -3,13 +3,13 @@ import * as React from 'react'
 import Close from '@material-ui/icons/Close'
 import ArrowBack from '@material-ui/icons/ArrowBack'
 import { geti18nString } from '../../../utils/i18n'
-import { makeStyles, Button } from '@material-ui/core'
+import { makeStyles, Button, Theme } from '@material-ui/core'
 
 interface Props {
     back?: () => void
     close?: () => void
 }
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles<Theme>(theme => ({
     nav: {
         paddingTop: theme.spacing(1),
         paddingLeft: theme.spacing(1),

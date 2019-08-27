@@ -1,4 +1,4 @@
-// tslint:disable: deprecation
+/* eslint import/no-deprecated: 0 */
 import Gun from 'gun'
 import 'gun/lib/then'
 import { OnlyRunInContext } from '@holoflows/kit/es'

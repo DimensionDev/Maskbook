@@ -1,13 +1,13 @@
 import * as React from 'react'
 import { getUrl } from '../../utils/utils'
 import { geti18nString } from '../../utils/i18n'
-import { Typography, Button, makeStyles } from '@material-ui/core'
+import { Typography, Button, makeStyles, Theme } from '@material-ui/core'
 import WelcomeContainer from './WelcomeContainer'
 
 interface Props {
     next(): void
 }
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles<Theme>(theme => ({
     paper: {
         padding: '2rem 1rem 1rem 1rem',
         textAlign: 'center',

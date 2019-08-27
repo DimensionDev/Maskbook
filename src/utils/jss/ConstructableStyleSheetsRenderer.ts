@@ -69,7 +69,7 @@ function adoptStylesheets(
 }
 //#endregion
 
-// tslint:disable: deprecation
+/* eslint import/no-deprecated: 0 */
 // tslint:disable: increment-decrement
 type HTMLElementWithStyleMap = HTMLElement
 type AnyCSSRule = unknown
@@ -197,6 +197,7 @@ const getHead = () => fakeHead
  * Find attached sheet with an index higher than the passed one.
  */
 function findHigherSheet(registry: Array<StyleSheet>, options: PriorityOptions): StyleSheet | null {
+    // eslint-disable-next-line
     for (let i = 0; i < registry.length; i++) {
         const sheet = registry[i]
         if (
@@ -214,6 +215,7 @@ function findHigherSheet(registry: Array<StyleSheet>, options: PriorityOptions):
  * Find attached sheet with the highest index.
  */
 function findHighestSheet(registry: Array<StyleSheet>, options: PriorityOptions): StyleSheet | null {
+    // eslint-disable-next-line
     for (let i = registry.length - 1; i >= 0; i--) {
         const sheet = registry[i]
         if (sheet.attached && sheet.options.insertionPoint === options.insertionPoint) {
@@ -228,6 +230,7 @@ function findHighestSheet(registry: Array<StyleSheet>, options: PriorityOptions)
  */
 function findCommentNode(text: string): Node | null {
     const head = getHead()
+    // eslint-disable-next-line
     for (let i = 0; i < head.childNodes.length; i++) {
         const node = head.childNodes[i]
         if (node.nodeType === 8 && node.nodeValue!.trim() === text) {
@@ -460,6 +463,7 @@ export default class ConstructableStyleSheetsRenderer {
 
     insertRules(rules: RuleList, nativeParent?: CSSStyleSheet | CSSMediaRule | CSSKeyframesRule) {
         // @ts-ignore
+        // eslint-disable-next-line
         for (let i = 0; i < rules.index.length; i++) {
             // @ts-ignore
             this.insertRule(rules.index[i], i, nativeParent)
@@ -522,6 +526,7 @@ export default class ConstructableStyleSheetsRenderer {
      */
     indexOf(cssRule: AnyCSSRule): number {
         const { cssRules } = this.element.sheet!
+        // eslint-disable-next-line
         for (let index = 0; index < cssRules.length; index++) {
             if (cssRule === cssRules[index]) return index
         }

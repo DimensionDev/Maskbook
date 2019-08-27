@@ -1,5 +1,5 @@
 import { queryPersonDB, PersonRecord, queryPeopleDB, queryMyIdentityAtDB } from '../people'
-import { PersonIdentifier } from '../type'
+import { PersonIdentifier, PersonUI } from '../type'
 import { getAvatarDataURL } from './avatar'
 import { memoize } from 'lodash-es'
 import { CryptoKeyToJsonWebKey } from '../../utils/type-transform/CryptoKey-JsonWebKey'
