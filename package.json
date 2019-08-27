@@ -11,7 +11,6 @@
     "firefox": "yarn just watch",
     "build": "yarn just react/build",
     "test": "yarn just react/test",
-    "start": "yarn just storybook",
     "build-storybook": "yarn just storybook/build",
     "load-to-firefox": "yarn web-ext run --source-dir ./dist/ --verbose",
     "install": "yarn just install/holoflows",
