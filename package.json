@@ -15,8 +15,9 @@
     "load-to-firefox": "yarn web-ext run --source-dir ./dist/ --verbose",
     "install": "yarn just install/holoflows",
     "uninstall": "yarn just install/holoflows",
-    "eslint": "eslint --ext ts,tsx ./src --cache",
-    "lint": "yarn just lint/strictonce"
+    "eslint": "yarn just eslint",
+    "lint": "yarn just lint",
+    "lint-fix": "yarn just lint/fix"
   },
   "dependencies": {
     "@holoflows/kit": "https://github.com/DimensionDev/holoflows-kit",
