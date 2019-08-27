@@ -59,7 +59,7 @@ const Links1st = (
     <>
         <LinkItem icon={<NearMe />} title={geti18nString('options_index_setup')} to="/welcome" />
         <LinkItem icon={<Phonelink />} title={geti18nString('options_index_mobile_export')} to="/mobile-setup" />
-        <LinkItem icon={<Code />} title={geti18nString('options_index_devel')} to="/developer" />
+        <LinkItem icon={<Code />} title={geti18nString('options_index_dev')} to="/developer" />
     </>
 )
 const Links2rd = (
