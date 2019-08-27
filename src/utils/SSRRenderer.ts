@@ -1,7 +1,12 @@
 import ReactDOM from 'react-dom'
 
-export function SSRRenderer(jsx: any, container: HTMLElement) {
+export function SSRRenderer(jsx: any, container?: HTMLElement) {
     if (typeof window === 'object') {
+        if (!container) container = document.getElementById('root')!
+        if (!container) {
+            container = document.createElement('div')
+            document.body.appendChild(container)
+        }
         ReactDOM.hydrate(jsx, container)
     } else {
         async function render() {
