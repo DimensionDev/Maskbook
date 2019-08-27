@@ -202,7 +202,7 @@ const SSRPlugin = class SSRPlugin {
              *          html: string
              *          outputName: string
              *          plugin: HtmlWebpackPlugin
-             *  }>}
+             *  }>}}
              */
             const htmlWebpackPluginHook = HtmlWebpackPlugin.getHooks(compilation)
             htmlWebpackPluginHook.beforeEmit.tapPromise('SSRPlugin', async args => {
@@ -250,6 +250,9 @@ function importScript(src) {
     document.body.appendChild(script)
 }
 untilDocumentReady().then(() => {
+    const head = document.head.firstElementChild
+    Array.from(document.body.querySelectorAll('body > style')).reverse().forEach(x => head.before(x))
+}).then(() => {
     setTimeout(() => {${deferredLoader}
     }, 20)
 })

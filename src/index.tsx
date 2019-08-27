@@ -102,10 +102,8 @@ const useStyles = makeStyles<Theme>(theme =>
         },
     }),
 )
-document.body.innerHTML = ''
-const root = document.createElement('div')
-SSRRenderer(<ResponsiveDrawer />, root)
-document.body.appendChild(root)
+
+SSRRenderer(<ResponsiveDrawer />)
 function ResponsiveDrawer() {
     const classes = useStyles()
     const theme = useTheme()
