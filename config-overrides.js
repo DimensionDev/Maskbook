@@ -98,7 +98,6 @@ module.exports = function override(config, env) {
         )
     } else {
         config.plugins.push(new SSRPlugin('popup.html', src('./src/extension/popup-page/index.tsx')))
-        config.plugins.push(new SSRPlugin('index.html', src('./src/index.tsx')))
         if (!fs.existsSync(publicPolyfill)) fs.mkdirSync(publicPolyfill)
         polyfills.map(x =>
             fs.copyFile(x, path.join(publicPolyfill, path.basename(x)), err => {
