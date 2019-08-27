@@ -13,7 +13,7 @@ import QRScanner from './QRScanner'
 import { isWKWebkit, iOSHost } from '../../utils/iOS-RPC'
 import { useAsync } from '../../utils/components/AsyncComponent'
 
-const RestoreBox = styled('div')(({ theme }) => ({
+const RestoreBox = styled('div')(({ theme }: { theme: Theme }) => ({
     color: theme.palette.text.hint,
     border: `2px dashed ${theme.palette.divider}`,
     whiteSpace: 'pre-line',
