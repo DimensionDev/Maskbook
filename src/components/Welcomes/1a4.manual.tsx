@@ -38,7 +38,6 @@ export default function Manual({ provePost }: Props) {
     }, [])
     return (
         <TextField
-            theme={theme}
             ref={ref}
             readOnly
             onClick={onFocus}
