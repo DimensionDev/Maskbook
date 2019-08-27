@@ -60,7 +60,14 @@ module.exports = function override(config, env) {
      */
     function newPage(options = {}) {
         return new HtmlWebpackPlugin({
-            templateContent: `<meta charset="utf-8" /><script src="polyfill/browser-polyfill.min.js"></script>`,
+            templateContent: `<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <script src="polyfill/browser-polyfill.min.js"></script>
+    </head>
+    <body></body>
+</html>`,
             inject: 'body',
             ...options,
         })
@@ -157,7 +164,10 @@ const SSRPlugin = class SSRPlugin {
         this.htmlFileName = htmlFileName
         this.pathName = pathName
     }
-    render() {
+    /**
+     * @returns {Promise<string>}
+     */
+    renderSSR() {
         return new Promise((resolve, reject) => {
             exec(
                 'node -r esm ./node_modules/ts-node/dist/bin.js --project ./tsconfig_cjs.json -T ./src/setup.ssr.js ' +
@@ -167,47 +177,87 @@ const SSRPlugin = class SSRPlugin {
         })
     }
     /**
-     *
+     * @param {string} original
+     * @param {string} string
+     */
+    appendAfterBody(original, string) {
+        return original.replace('</body>', string + '</body>')
+    }
+    /**
+     * @param {string} string
+     */
+    removeScripts(string) {
+        return string.replace(/<script src="(.+?)"><\/script>/g, '')
+    }
+    /**
      * @param {import('webpack').Compiler} compiler
      */
     apply(compiler) {
-        compiler.hooks.emit.tapPromise('SSRPlugin', async compilation => {
-            const ssrString = await this.render()
-            const original = compilation.assets[this.htmlFileName].source()
-            let after = original.replace('</body>', ssrString + '</body>')
-            const regex = /<script src="(.+?)"><\/script>/g
-            const allScripts = []
-            let current
-            while ((current = regex.exec(original))) {
-                allScripts.push(current[1])
-            }
-            after =
-                after.replace(/<script src="(.+?)"><\/script>/g, '') + `<script src="${this.htmlFileName}.js"></script>`
-            const deferredLoader = allScripts.reduce(
-                (prev, src) =>
-                    prev +
-                    `{const script = document.createElement('script')
-script.src = '${src}'
-document.body.appendChild(script)}`,
-                '',
-            )
-            const generated = `function untilDocumentReady() {
-    if (document.readyState === 'complete') return Promise.resolve()
-        return new Promise(resolve => {
-            document.addEventListener('readystatechange', resolve, { once: true, passive: true })
+        compiler.hooks.compilation.tap('SSRPlugin', compilation => {
+            /**
+             * @see https://github.com/jantimon/html-webpack-plugin#options
+             * @type {import('webpack').compilation.CompilerHooks
+             * & {
+             *      beforeEmit: import('tapable').SyncHook<{
+             *          html: string
+             *          outputName: string
+             *          plugin: HtmlWebpackPlugin
+             *  }>}
+             */
+            const htmlWebpackPluginHook = HtmlWebpackPlugin.getHooks(compilation)
+            htmlWebpackPluginHook.beforeEmit.tapPromise('SSRPlugin', async args => {
+                let { html, outputName, plugin } = args
+                if (outputName !== this.htmlFileName) return args
+                html = await this.generateSSRHTMLFile(compilation, html)
+                return { html, outputName, plugin }
+            })
         })
     }
+    /**
+     * @param {import('webpack').compilation.Compilation} compilation
+     */
+    async generateSSRHTMLFile(compilation, originalHTML) {
+        const ssrString = await this.renderSSR()
+        const allScripts = []
+        {
+            const regex = /<script src="(.+?)"><\/script>/g
+            let current
+            while ((current = regex.exec(originalHTML))) {
+                allScripts.push(current[1])
+            }
+        }
+        let regeneratedHTML = originalHTML
+        regeneratedHTML = this.removeScripts(regeneratedHTML)
+        regeneratedHTML = this.appendAfterBody(regeneratedHTML, ssrString)
+        regeneratedHTML = this.appendAfterBody(regeneratedHTML, `<script src="${this.htmlFileName}.js"></script>`)
+        // Generate scripts loader
+        const deferredLoader = allScripts.reduce(
+            (prev, src) =>
+                prev +
+                `
+        importScript('${src}')`,
+            '',
+        )
+        const generated = `function untilDocumentReady() {
+    if (document.readyState === 'complete') return Promise.resolve()
+    return new Promise(resolve => {
+        document.addEventListener('readystatechange', resolve, { once: true, passive: true })
+    })
+}
+function importScript(src) {
+    const script = document.createElement('script')
+    script.src = src
+    document.body.appendChild(script)
+}
 untilDocumentReady().then(() => {
-    setTimeout(() => {${deferredLoader}}, 0)
-})`
-            compilation.assets[this.htmlFileName + '.js'] = {
-                source: () => generated,
-                size: () => generated.length,
-            }
-            compilation.assets[this.htmlFileName] = {
-                source: () => after,
-                size: () => after.length,
-            }
-        })
+    setTimeout(() => {${deferredLoader}
+    }, 20)
+})
+`
+        compilation.assets[this.htmlFileName + '.js'] = {
+            source: () => generated,
+            size: () => generated.length,
+        }
+        return regeneratedHTML
     }
 }
