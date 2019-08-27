@@ -7,7 +7,7 @@
  * ! This database should be readonly now.
  */
 import { OnlyRunInContext } from '@holoflows/kit/es'
-// tslint:disable: deprecation
+/* eslint import/no-deprecated: 0 */
 OnlyRunInContext('background', 'Key Store')
 /** DO NOT Change the name of this class! It is used as key in the db! */
 class CryptoKeyRecord {

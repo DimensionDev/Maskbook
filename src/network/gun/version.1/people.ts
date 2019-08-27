@@ -1,4 +1,4 @@
-// tslint:disable: deprecation
+/* eslint import/no-deprecated: 0 */
 import { gun1 } from '.'
 
 /** @deprecated */

@@ -11,7 +11,7 @@ import * as People from '../people'
 import { OnlyRunInContext } from '@holoflows/kit/es'
 import { readMangledDB } from './old.mangled.helper.1'
 import { PersonIdentifier } from '../type'
-// tslint:disable: deprecation
+/* eslint import/no-deprecated: 0 */
 OnlyRunInContext('background', 'Local Key Store')
 /** DO NOT Change the name of this class! It is used as key in the db! */
 class LocalCryptoKeyRecord {

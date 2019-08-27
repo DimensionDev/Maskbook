@@ -51,7 +51,7 @@ const OptionsPageRouters = (
         <Route exact path="/" component={() => empty} />
         <Route path="/welcome" component={Welcome} />
         <Route path="/privacy" component={() => Privacy} />
-        <Route path="/developer" component={() => Developer} />
+        <Route path="/developer" component={Developer} />
         <Route path="/mobile-setup" component={ExportData} />
     </>
 )

@@ -1,4 +1,4 @@
-// tslint:disable: deprecation
+/* eslint import/no-deprecated: 0 */
 import { PublishedAESKey } from '../../../crypto/crypto-alpha-40'
 import { OnlyRunInContext } from '@holoflows/kit/es'
 import { gun1 } from '.'

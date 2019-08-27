@@ -69,7 +69,7 @@ function adoptStylesheets(
 }
 //#endregion
 
-// tslint:disable: deprecation
+/* eslint import/no-deprecated: 0 */
 // tslint:disable: increment-decrement
 type HTMLElementWithStyleMap = HTMLElement
 type AnyCSSRule = unknown

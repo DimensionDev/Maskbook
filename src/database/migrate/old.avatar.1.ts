@@ -6,7 +6,7 @@
  * ! Scheduled to remove it after Jan/1/2019
  * ! This database should be readonly now.
  */
-// tslint:disable: deprecation
+/* eslint import/no-deprecated: 0 */
 import { readMangledDB } from './old.mangled.helper.1'
 import { PersonIdentifier } from '../type'
 import { deleteDB } from 'idb/with-async-ittr'
