@@ -42,6 +42,9 @@ export function defineSocialNetworkWorker(worker: SocialNetworkWorker) {
     if (worker.acceptablePayload.includes('v40') && worker.internalName !== 'facebook') {
         throw new TypeError('Payload version v40 is not supported in this network. Please use v39 or newer.')
     }
+    if (worker.notReadyForProduction) {
+        if (process.env.NODE_ENV === 'production') return
+    }
     definedSocialNetworkWorkers.add(worker)
     if (GetContext() === 'background') {
         console.log('Activating social network provider', worker.networkIdentifier, worker)

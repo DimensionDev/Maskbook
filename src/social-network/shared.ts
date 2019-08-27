@@ -39,6 +39,10 @@ export interface SocialNetworkWorkerAndUI {
      * Is this username valid in this network
      */
     isValidUsername(username: string): boolean
+    /**
+     * This provider is not ready for production, Maskbook will not use it in production
+     */
+    notReadyForProduction?: boolean
 }
 /**
  * Users settings about Maskbook
