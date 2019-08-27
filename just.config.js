@@ -20,8 +20,14 @@ task('lint', () => prettierCommand('check'))
 task('prettier/fix', () => prettierCommand('write', 'warn'))
 task('eslint/fix', () => step(eslintCommand + ' --fix'))
 task('lint/strictonce', async () => {
-    await step(eslintCommand, { withWarn: true })
-    await step('prettier --check "./src/**/*.{ts,tsx}" --loglevel warn ', { withWarn: true })
+    const p1 = step(eslintCommand, { withWarn: true }).catch(e => e)
+    const p2 = step('prettier --check "./src/**/*.{ts,tsx}" ', { withWarn: true }).catch(e => e)
+    const eslint = await p1
+    const prettier = await p2
+    if (!eslint && !eslint) return
+    if (eslint && prettier) throw new Error('Both ESLint and Prettier failed!\n' + eslint + '\n' + prettier)
+    if (eslint) throw new Error('ESLint check failed!\n' + eslint)
+    if (prettier) throw new Error('Prettier check failed!\n' + prettier)
 })
 
 task('storybook', () => parallel('lint/fix', 'storybook/serve'))
