@@ -2481,7 +2481,7 @@ adbkit-monkey@~1.0.1:
   dependencies:
     async "~0.2.9"
 
-adbkit@2.11.1:
+adbkit@2.11.1, adbkit@^2.11.1:
   version "2.11.1"
   resolved "https://registry.yarnpkg.com/adbkit/-/adbkit-2.11.1.tgz#7da847fe561254f3121088947bc1907ef053e894"
   integrity sha512-hDTiRg9NX3HQt7WoDAPCplUpvzr4ZzQa2lq7BdTTJ/iOZ6O7YNAs6UYD8sFAiBEcYHDRIyq3cm9sZP6uZnhvXw==
