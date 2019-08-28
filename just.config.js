@@ -2,8 +2,8 @@ const { task, series, parallel } = require('just-task')
 const { spawn } = require('child_process')
 const path = require('path')
 
-const prettierCommand = async (str, level = 'log', watch = false) => {
-    await step(`prettier --${str} "./src/**/*.{ts,tsx}" --loglevel ${level}`, { watch: watch })
+const prettierCommand = async (str, level = 'log') => {
+    await step(`prettier --${str} "./src/**/*.{ts,tsx}" --loglevel ${level}`)
 }
 const eslintCommand = 'eslint --ext tsx,ts ./src/ --cache'
 
@@ -17,7 +17,6 @@ task('react/test', () => step('react-app-rewired test'))
 
 task('prettier', () => prettierCommand('check'))
 task('prettier/fix', () => prettierCommand('write', 'warn'))
-task('prettier/autofix', () => prettierCommand('write', 'warn', true))
 task('eslint', () => step(eslintCommand, { withWarn: true }))
 task('eslint/fix', () => step(eslintCommand + ' --fix'))
 task('lint', () => parallel('prettier', 'eslint'))
@@ -43,9 +42,8 @@ task('install/holoflows', async () => {
  * @param [opt.watch] {boolean} Watch continuously
  * @param [opt.env] {NodeJS.ProcessEnv} Environment key-value pairs
  */
-const step = (cmd, opt = { withWarn: process.env.CI === 'true', watch: false }) => {
-    const spawn_cmd = opt.watch ? 'onchange "./src/**/*" -i -- ' + cmd : cmd
-    const child = spawn(spawn_cmd, [], {
+const step = (cmd, opt = { withWarn: process.env.CI === 'true' }) => {
+    const child = spawn(cmd, [], {
         shell: true,
         stdio: ['inherit', 'inherit', opt.withWarn ? 'inherit' : 'ignore'],
         env: opt.env,
