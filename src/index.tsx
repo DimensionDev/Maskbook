@@ -1,7 +1,6 @@
 import './provider.worker'
 import React from 'react'
 import { HashRouter, MemoryRouter, Route, Link } from 'react-router-dom'
-import ReactDOM from 'react-dom'
 
 import Welcome from './extension/options-page/Welcome'
 import Privacy from './extension/options-page/Privacy'
