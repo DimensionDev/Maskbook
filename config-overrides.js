@@ -64,6 +64,7 @@ module.exports = function override(config, env) {
 <html>
     <head>
         <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
         <script src="/polyfill/browser-polyfill.min.js"></script>
         <script src="/firefoxFix.js"></script>
     </head>
