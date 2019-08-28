@@ -42,7 +42,7 @@ module.exports = function override(config, env) {
 
     // We cannot do runtimeChunk because extension CSP disallows inline <script>
     config.optimization.runtimeChunk = false
-    config.optimization.splitChunks = { chunks: 'all' }
+    config.optimization.splitChunks = false
 
     // Dismiss warning for gun.js
     config.module.wrappedContextCritical = false
