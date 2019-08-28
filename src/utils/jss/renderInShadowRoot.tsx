@@ -38,7 +38,8 @@ export class RenderInShadowRootWrapper extends React.PureComponent {
     }
 }
 function Maskbook(props: any) {
-    const isDarkTheme = useMediaQuery('(prefers-color-scheme: dark)')
+    // const isDarkTheme = useMediaQuery('(prefers-color-scheme: dark)')
+    const isDarkTheme = false
     return (
         <StylesProvider jss={jss} generateClassName={generateClassName}>
             <ThemeProvider theme={isDarkTheme ? MaskbookDarkTheme : MaskbookLightTheme}>

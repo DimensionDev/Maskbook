@@ -24,6 +24,9 @@ export const autoVerifyPost = (self: PersonIdentifier, prove: string) => {
         pinned: false,
         timeout: Infinity,
     })
-        .pasteIntoPostBox(prove, geti18nString('automation_request_paste_into_post_box'))
+        .pasteIntoPostBox(prove, {
+            warningText: geti18nString('automation_request_paste_into_post_box'),
+            shouldOpenPostDialog: true,
+        })
         .then()
 }
