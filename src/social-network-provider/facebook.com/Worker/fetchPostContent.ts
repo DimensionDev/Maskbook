@@ -16,7 +16,7 @@ import { isDocument } from '../../../utils/utils'
 export async function fetchPostContentFacebook(post: PostIdentifier<PersonIdentifier>) {
     // Path 1: fetch by http req
     try {
-        const doc = await parseFacebookStaticHTML(getPostUrlAtFacebook(post))
+        const doc = await parseFacebookStaticHTML(getPostUrlAtFacebook(post, 'fetch'))
         if (!doc) throw new Error("Can't parse the page")
         // TODO: You should take care about the key comes from.
         //  If some one commented a key under a normal post,
@@ -33,7 +33,7 @@ export async function fetchPostContentFacebook(post: PostIdentifier<PersonIdenti
     // Path 2: fetch by tab task
     // TODO: on iOS, this should run the Path 1 in the domain of m.facebook.com
     // const tabId = await getActiveTab()
-    return tasks(getPostUrlAtFacebook(post), {
+    return tasks(getPostUrlAtFacebook(post, 'open'), {
         // runAtTabID: tabId,
     }).getPostContent(post)
 }

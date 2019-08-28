@@ -16,7 +16,7 @@ import tasks from '../../../extension/content-script/tasks'
 export async function fetchProfileFacebook(who: PersonIdentifier): Promise<Profile> {
     // Path 1: fetch by http req
     try {
-        const url = getProfilePageUrlAtFacebook(who)
+        const url = getProfilePageUrlAtFacebook(who, 'fetch')
         const doc = await parseFacebookStaticHTML(url)
         if (!doc) throw new Error("Can't parse the page")
         const bio =
@@ -31,7 +31,7 @@ export async function fetchProfileFacebook(who: PersonIdentifier): Promise<Profi
     // Path 2: fetch by tab task
     // TODO: on iOS, this should run the Path 1 in the domain of m.facebook.com
     // const tabId = await getActiveTab()
-    return tasks(getProfilePageUrlAtFacebook(who), {
+    return tasks(getProfilePageUrlAtFacebook(who, 'open'), {
         // runAtTabID: tabId
     }).getProfile(who)
 }
