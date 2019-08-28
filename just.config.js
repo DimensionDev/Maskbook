@@ -10,6 +10,15 @@ const eslintCommand = 'eslint --ext tsx,ts ./src/ --cache'
 
 task('watch', () => parallel('react', 'watch/hot-reload-firefox'))
 task('watch/hot-reload-firefox', () => step('web-ext run --source-dir ./dist/'))
+task('watch/android-firefox', async () => {
+        const i = process.argv.findIndex(v => v === '--android-device')
+        if (i > -1) {
+            await step(`web-ext run --target=firefox-android --source-dir ./dist/ --android-device=${process.argv[i + 1]}`)
+        } else {
+            await step(`web-ext run --target=firefox-android --source-dir ./dist/`)
+        }
+    }
+)
 
 task('react', () => parallel('prettier/fix', 'eslint/fix', 'react/start'))
 task('react/start', () => step('react-app-rewired start'))
