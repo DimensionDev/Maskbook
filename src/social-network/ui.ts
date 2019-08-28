@@ -123,7 +123,13 @@ export interface SocialNetworkUITasks {
      * This function should paste `text` into the post box.
      * If failed, warning user to do it by themselves with `warningText`
      */
-    taskPasteIntoPostBox(text: string, warningText: string): void
+    taskPasteIntoPostBox(
+        text: string,
+        options: {
+            warningText: string
+            shouldOpenPostDialog: boolean
+        },
+    ): void
     /**
      * This function should paste `text` into the bio box.
      * If failed, warning user to do it by themselves with automation_request_click_edit_bio_button

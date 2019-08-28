@@ -8,5 +8,8 @@ export function autoVerifyPostFacebook(user: PersonIdentifier, prove: string) {
         memorable: false,
         pinned: false,
         timeout: Infinity,
-    }).pasteIntoPostBox(prove, geti18nString('automation_request_paste_into_post_box'))
+    }).pasteIntoPostBox(prove, {
+        warningText: geti18nString('automation_request_paste_into_post_box'),
+        shouldOpenPostDialog: true,
+    })
 }

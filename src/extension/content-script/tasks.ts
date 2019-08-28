@@ -1,5 +1,5 @@
 import { AutomatedTabTask } from '@holoflows/kit'
-import { getActivatedUI } from '../../social-network/ui'
+import { getActivatedUI, SocialNetworkUI } from '../../social-network/ui'
 import { PersonIdentifier, PostIdentifier } from '../../database/type'
 
 export default AutomatedTabTask(
@@ -24,8 +24,8 @@ export default AutomatedTabTask(
          * Access main page
          * Paste text into PostBox
          */
-        pasteIntoPostBox: async (text: string, warningText: string) =>
-            getActivatedUI().taskPasteIntoPostBox(text, warningText),
+        pasteIntoPostBox: async (text: string, options: Parameters<SocialNetworkUI['taskPasteIntoPostBox']>[1]) =>
+            getActivatedUI().taskPasteIntoPostBox(text, options),
     },
     { memorable: true },
 )!
