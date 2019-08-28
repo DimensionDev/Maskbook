@@ -30,7 +30,9 @@ const RestoreBox = styled('div')(({ theme }: { theme: Theme }) => ({
 }))
 interface Props {
     back(): void
-    restore(file: File | string): void
+    // ? We cannot send out File | string. Because Firefox will reject the permission request
+    // ? because read the file is a async procedure.
+    restore(file: string): void
 }
 const videoHeight = 360
 const useStyles = makeStyles<Theme>(theme => ({
@@ -79,7 +81,14 @@ export default function Welcome({ back, restore }: Props) {
     const classes = useStyles()
     const ref = React.useRef<HTMLInputElement>(null)
     const textAreaRef = React.useRef<HTMLTextAreaElement>(null)
-    const { dragEvents, fileReceiver, fileRef, dragStatus } = useDragAndDrop()
+    const [fileContent, setFileContent] = React.useState('')
+    const { dragEvents, fileReceiver, fileRef, dragStatus } = useDragAndDrop(file => {
+        const fr = new FileReader()
+        fr.readAsText(file)
+        fr.addEventListener('loadend', async () => {
+            setFileContent(fr.result as string)
+        })
+    })
 
     const [tab, setTab] = React.useState(0)
     const [qrError, setError] = React.useState<boolean>(false)
@@ -109,7 +118,7 @@ export default function Welcome({ back, restore }: Props) {
 
                 {tab === 0 ? (
                     <Button
-                        onClick={() => restore(fileRef.current!)}
+                        onClick={() => restore(fileContent)}
                         disabled={!fileRef.current}
                         variant="contained"
                         color="primary"

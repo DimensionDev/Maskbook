@@ -17,6 +17,8 @@ import { useValueRef } from '../../../utils/hooks/useValueRef'
 import { Person } from '../../../database'
 import { getCurrentNetworkWorkerService } from '../../background-script/WorkerService'
 import getCurrentNetworkWorker from '../../../social-network/utils/getCurrentNetworkWorker'
+import { UpgradeBackupJSONFile } from '../../../utils/type-transform/BackupFile'
+import { geti18nString } from '../../../utils/i18n'
 
 enum WelcomeState {
     // Step 0
@@ -40,21 +42,14 @@ const WelcomeActions = {
      * @param file The backup file
      * @param id Who am I?
      */
-    restoreFromFile(file: File | string, id: PersonIdentifier): Promise<void> {
-        if (typeof file === 'string') {
-            return Services.People.restoreBackup(JSON.parse(file), id)
-        } else {
-            return new Promise<void>((resolve, reject) => {
-                const fr = new FileReader()
-                fr.readAsText(file)
-                fr.addEventListener('loadend', async () => {
-                    const json = JSON.parse(fr.result as string)
-                    Services.People.restoreBackup(json, id).then(resolve, reject)
-                })
-                fr.addEventListener('error', reject)
-                fr.addEventListener('abort', reject)
-            })
-        }
+    restoreFromFile(file: string, id: PersonIdentifier): Promise<void> {
+        const json = JSON.parse(file)
+        const upgraded = UpgradeBackupJSONFile(json)
+        if (!upgraded) throw new TypeError(geti18nString('service_invalid_backup_file'))
+        // This request MUST BE sync or Firefox will reject this request
+        return browser.permissions
+            .request({ origins: upgraded.grantedHostPermissions })
+            .then(() => Services.People.restoreBackup(json, id))
     },
     autoVerifyBio(network: PersonIdentifier, provePost: string) {
         getCurrentNetworkWorkerService(network).autoVerifyBio(network, provePost)
