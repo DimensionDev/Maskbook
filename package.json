@@ -78,6 +78,7 @@
     "@types/storybook__addon-links": "^3.3.4",
     "@types/storybook__react": "^4.0.1",
     "@typescript-eslint/parser": "^2.0.0",
+    "adbkit": "^2.11.1",
     "awesome-typescript-loader": "^5.2.1",
     "chokidar": "^3.0.2",
     "eslint": "^6.2.1",
