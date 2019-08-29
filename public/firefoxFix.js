@@ -7,6 +7,7 @@
     const webAPIs = Object.getOwnPropertyDescriptors(window)
     Reflect.deleteProperty(webAPIs, 'window')
     Reflect.deleteProperty(webAPIs, 'globalThis')
+    Reflect.deleteProperty(webAPIs, 'eval')
     const FixThisBindings = () => {
         const clonedWebAPIs = { ...webAPIs }
         // ? Clone Web APIs
