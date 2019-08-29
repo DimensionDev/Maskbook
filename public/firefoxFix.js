@@ -14,16 +14,6 @@
         for (const key in webAPIs) {
             PatchThisOfDescriptorToGlobal(webAPIs[key], window)
         }
-        const proto = getPrototypeChain(window)
-            .map(Object.getOwnPropertyDescriptors)
-            .reduceRight((previous, current) => {
-                const copy = { ...current }
-                for (const key in copy) {
-                    PatchThisOfDescriptorToGlobal(copy[key], window)
-                }
-                return Object.create(previous, copy)
-            }, {})
-        Object.setPrototypeOf(window, proto)
         Object.defineProperties(window, clonedWebAPIs)
     }
     /**
@@ -38,13 +28,21 @@
      */
     const PatchThisOfDescriptorToGlobal = (desc, global) => {
         const { get, set, value } = desc
-        if (get) desc.get = () => get.apply(global)
-        if (set) desc.set = val => set.apply(global, val)
+        if (get)
+            desc.get = function() {
+                if (this === globalThis) return get.apply(window)
+                return get.apply(this)
+            }
+        if (set)
+            desc.set = function(val) {
+                if (this === globalThis) return set.apply(global, val)
+                return set.apply(this, val)
+            }
         if (value && typeof value === 'function') {
             const desc2 = Object.getOwnPropertyDescriptors(value)
             desc.value = function(...args) {
                 if (new.target) return Reflect.construct(value, args, new.target)
-                return Reflect.apply(value, global, args)
+                return Reflect.apply(value, this === globalThis ? global : this, args)
             }
             Object.defineProperties(desc.value, desc2)
             try {
@@ -55,8 +53,13 @@
     }
     // In the content script, globalThis !== window.
     // @ts-ignore
-    if (globalThis instanceof Window === false && typeof 'browser' === 'object') {
-        FixThisBindings()
+    if (globalThis !== window && typeof browser === 'object') {
+        console.warn('globalThis is not window. Fixing.')
+        try {
+            FixThisBindings()
+        } catch (e) {
+            console.error(e)
+        }
     }
     /**
      * Recursively get the prototype chain of an Object
@@ -69,3 +72,5 @@
         return getPrototypeChain(Object.getPrototypeOf(y), [..._, y])
     }
 }
+// As the return value of the executeScript
+undefined
