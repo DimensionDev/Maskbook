@@ -19,10 +19,3 @@ globalThis.close = () => {
         }
     }, 400)
 }
-// ? FIXME: code breaks on Firefox. This code can fix it.
-{
-    const old = globalThis.requestAnimationFrame
-    globalThis.requestAnimationFrame = cb => {
-        return Reflect.apply(old, window, [cb])
-    }
-}

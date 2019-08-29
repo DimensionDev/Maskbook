@@ -64,7 +64,8 @@ module.exports = function override(config, env) {
 <html>
     <head>
         <meta charset="utf-8">
-        <script src="polyfill/browser-polyfill.min.js"></script>
+        <script src="/polyfill/browser-polyfill.min.js"></script>
+        <script src="/firefoxFix.js"></script>
     </head>
     <body></body>
 </html>`,
