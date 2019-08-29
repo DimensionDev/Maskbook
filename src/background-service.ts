@@ -28,13 +28,11 @@ if (GetContext() === 'background') {
         .then(html => {
             const parser = new DOMParser()
             const root = parser.parseFromString(html, 'text/html')
-            Promise.all(
-                Array.from(root.querySelectorAll('script')).map(script => {
-                    if (script.innerText) return Promise.resolve(script.innerText)
-                    else if (script.src) return fetch(script.src).then(x => x.text())
-                    return ''
-                }),
-            ).then(code => code.forEach(x => contentScripts.push({ code: x })))
+            root.querySelectorAll('script').forEach(script => {
+                if (script.innerText) contentScripts.push({ code: script.innerText })
+                else if (script.src)
+                    contentScripts.push({ file: new URL(script.src, browser.runtime.getURL('')).pathname })
+            })
         })
     browser.webNavigation.onCommitted.addListener(async arg => {
         if (arg.url === 'about:blank') return
