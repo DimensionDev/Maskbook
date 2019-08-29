@@ -5,6 +5,7 @@ import { renderInShadowRoot } from '../../utils/jss/renderInShadowRoot'
 import { PersonIdentifier } from '../../database/type'
 import { useValueRef } from '../../utils/hooks/useValueRef'
 import { PostInspector } from '../../components/InjectedComponents/PostInspector'
+import { Payload } from '../../utils/type-transform/Payload'
 
 export function injectPostInspectorDefault(config: InjectPostInspectorDefaultConfig) {
     const { injectionPoint, zipPost } = config
@@ -14,6 +15,7 @@ export function injectPostInspectorDefault(config: InjectPostInspectorDefaultCon
         const onDecrypted = (val: string) => (current.decryptedPostContent.value = val)
         return renderInShadowRoot(
             <PostDecryptUI
+                payload={current.postPayload}
                 postID={current.postID}
                 postBy={current.postBy}
                 onDecrypted={onDecrypted}
@@ -34,10 +36,20 @@ function PostDecryptUI(props: {
     postID: ValueRef<string | null>
     postBy: ValueRef<PersonIdentifier>
     postContent: ValueRef<string>
+    payload: ValueRef<Payload | null>
 }) {
-    const { onDecrypted, zipPost, postBy, postID, postContent } = props
+    const { onDecrypted, zipPost, postBy, postID, postContent, payload } = props
     const id = useValueRef(postID)
     const by = useValueRef(postBy)
     const content = useValueRef(postContent)
-    return <PostInspector onDecrypted={onDecrypted} needZip={zipPost} postId={id || ''} post={content} postBy={by} />
+    return (
+        <PostInspector
+            payload={useValueRef(payload)}
+            onDecrypted={onDecrypted}
+            needZip={zipPost}
+            postId={id || ''}
+            post={content}
+            postBy={by}
+        />
+    )
 }

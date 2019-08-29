@@ -51,6 +51,12 @@
     "decrypted_postbox_decrypting": {
         "message": "Maskbook 解密中…"
     },
+    "decrypted_postbox_decrypting_finding_person_key": {
+        "message": "Maskbook 正在搜尋對方的公鈅..."
+    },
+    "decrypted_postbox_decrypting_finding_post_key": {
+        "message": "Maskbook 正在搜尋分享給你的密鑰以解密这篇内容..."
+    },
     "decrypted_postbox_failed": {
         "message": "Maskbook 解密失敗"
     },

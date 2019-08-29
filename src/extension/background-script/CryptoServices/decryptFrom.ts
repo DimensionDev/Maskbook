@@ -10,6 +10,7 @@ import { queryLocalKeyDB } from '../../../database/people'
 import { PersonIdentifier, PostIdentifier, PersonUI } from '../../../database/type'
 import { queryPostDB, updatePostDB } from '../../../database/post'
 import { addPerson } from './addPerson'
+import { MessageCenter } from '../../../utils/messages'
 type Success = {
     signatureVerifyResult: boolean
     content: string
@@ -40,15 +41,26 @@ export async function decryptFrom(
     }
     const version = data.version
     if (version === -40 || version === -39) {
-        const { encryptedText, iv: iv, ownersAESKeyEncrypted, signature, version } = data
+        const { encryptedText, iv, ownersAESKeyEncrypted, signature, version } = data
+        const postIdByIV = new PostIdentifier(by, iv)
         const unverified = [version === -40 ? '2/4' : '3/4', ownersAESKeyEncrypted, iv, encryptedText].join('|')
         const cryptoProvider = version === -40 ? Alpha40 : Alpha39
 
         const [cachedPostResult, setPostCache] = await decryptFromCache(data, by)
 
+        MessageCenter.emit('decryptionStatusUpdated', { post: postIdByIV, status: 'finding_person_public_key' })
         const byPerson = await addPerson(by).catch(() => null)
         if (!byPerson || !byPerson.publicKey) {
             if (cachedPostResult) return { signatureVerifyResult: false, content: cachedPostResult }
+            const undo = Gun2.subscribePersonFromGun2(by, data => {
+                if (data && (data.provePostId || '').length > 0) {
+                    MessageCenter.emit('decryptionStatusUpdated', {
+                        post: postIdByIV,
+                        status: 'found_person_public_key',
+                    })
+                }
+                undo()
+            })
             return { error: geti18nString('service_others_key_not_found', by.userId) }
         }
 

@@ -50,6 +50,12 @@
     "decrypted_postbox_decrypting": {
         "message": "Maskbook decrypting..."
     },
+    "decrypted_postbox_decrypting_finding_person_key": {
+        "message": "Maskbook is looking for the public key of the author..."
+    },
+    "decrypted_postbox_decrypting_finding_post_key": {
+        "message": "Maskbook is retrieving the post key to decrypt this post..."
+    },
     "decrypted_postbox_failed": {
         "message": "Maskbook decryption failed"
     },

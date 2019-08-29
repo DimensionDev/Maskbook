@@ -3,17 +3,19 @@ import { Person } from '../database'
 import { PostIdentifier } from '../database/type'
 import Serialization from './type-transform/Serialization'
 
-interface UIEvent {}
-interface KeyStoreEvent {
+interface UIEvent {
+    decryptionStatusUpdated: {
+        post: PostIdentifier
+        status: 'finding_person_public_key' | 'finding_post_key' | 'found_person_public_key' | 'new_post_key'
+    }
     closeActiveTab: undefined
+}
+interface KeyStoreEvent {
     newPerson: Person
     generateKeyPair: undefined
     identityUpdated: undefined
-    decryptionStatusUpdated: {
-        changedPost: PostIdentifier
-    }
 }
-interface TypedMessages extends UIEvent, KeyStoreEvent {}
+export interface TypedMessages extends UIEvent, KeyStoreEvent {}
 
 class Channel<T> extends MC<T> {
     emit<Key extends keyof T>(key: Key, data: T[Key]) {
