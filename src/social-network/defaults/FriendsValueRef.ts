@@ -11,10 +11,6 @@ export function InitFriendsValueRef(self: SocialNetworkUI, network: string) {
     const ref = self.friendsRef
     Services.People.queryPeople(network).then(p => (ref.value = p.filter(hasFingerprint)))
     MessageCenter.on('newPerson', person => {
-        person.groups.forEach(group => Object.setPrototypeOf(group, GroupIdentifier.prototype))
-        person.previousIdentifiers &&
-            person.previousIdentifiers.forEach(id => Object.setPrototypeOf(id, PersonIdentifier.prototype))
-        Object.setPrototypeOf(person.identifier, PersonIdentifier.prototype)
         const old = ref.value.filter(x => !x.identifier.equals(person.identifier))
         ref.value = [...old, person].filter(hasFingerprint)
     })
