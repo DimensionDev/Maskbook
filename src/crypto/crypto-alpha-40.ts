@@ -10,6 +10,7 @@ import {
 } from '../utils/type-transform/String-ArrayBuffer'
 import { toECDH, addUint8Array, toECDSA } from '../utils/type-transform/ECDSA-ECDH'
 import { memoizePromise } from '../utils/memoize'
+import { geti18nString } from '../utils/i18n'
 export type PublishedAESKey = { encryptedKey: string; salt: string }
 export type PublishedAESKeyRecordV40 = {
     key: PublishedAESKey
@@ -207,7 +208,7 @@ export async function decryptMessage1ToNByOther(info: {
             } catch {}
         }),
     )
-    if (resolvedAESKey === null) throw new Error('decryptMessage1ToNByOther cannot resolve an available key')
+    if (resolvedAESKey === null) throw new Error(geti18nString('service_not_share_target'))
     const aesKey = await crypto.subtle.importKey(
         'jwk',
         JSON.parse(resolvedAESKey),
