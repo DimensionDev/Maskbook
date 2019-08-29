@@ -70,6 +70,7 @@ export async function publishPostAESKeyOnGun2(postSalt: string, receiversKeys: P
     // Store AES key to gun
     receiversKeys.forEach(async ({ aesKey, receiverKey }) => {
         const keyHash = await hashCryptoKey(receiverKey)
+        console.log(`gun[${postHash}][${keyHash}].push(`, aesKey, `)`)
         gun2.get(postHash)
             // @ts-ignore
             .get(keyHash)
