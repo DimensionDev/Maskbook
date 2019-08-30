@@ -124,8 +124,18 @@ function Welcome(props: Welcome) {
                 />
             )
         case WelcomeState.BackupKey:
-            sideEffects.backupMyKeyPair(props.whoAmI.identifier)
-            return <Welcome1a3 next={() => onStepChange(WelcomeState.ProvePost)} />
+            return (
+                <Welcome1a3
+                    next={() => {
+                        sideEffects
+                            .backupMyKeyPair(props.whoAmI.identifier)
+                            .then(updateProveBio)
+                            .finally(() => {
+                                onStepChange(WelcomeState.ProvePost)
+                            })
+                    }}
+                />
+            )
         case WelcomeState.ProvePost:
             const worker = getCurrentNetworkWorker(props.whoAmI.identifier)
             const copyToClipboard = (provePost: string) => {
@@ -178,12 +188,23 @@ const personInferFromURLRef = new ValueRef<Person>({
 })
 const selectedIdRef = new ValueRef<Person>(personInferFromURLRef.value)
 const ownedIdsRef = new ValueRef<Person[]>([])
+
+provePostRef.addListener(val => console.log('New prove post:', val))
+personInferFromURLRef.addListener(val => console.log('Infer user from URL:', val))
+selectedIdRef.addListener(val => console.log('Selected id:', val))
+ownedIdsRef.addListener(val => console.log('Owned id', val))
+
+selectedIdRef.addListener(updateProveBio)
+
 const fillRefs = async () => {
     if (selectedIdRef.value.identifier.isUnknown) {
         const all = await Services.People.queryMyIdentity()
         ownedIdsRef.value = all
         if (all[0]) selectedIdRef.value = all[0]
     }
+    updateProveBio()
+}
+async function updateProveBio() {
     const post = await Services.Crypto.getMyProveBio(selectedIdRef.value.identifier)
     if (post) provePostRef.value = post
 }
@@ -198,7 +219,6 @@ export default withRouter(function _WelcomePortal(props: RouteComponentProps) {
     const ResponsiveDialog = useRef(withMobileDialog({ breakpoint: 'xs' })(Dialog)).current
     useEffect(() => {
         MessageCenter.on('generateKeyPair', fillRefs)
-        selectedIdRef.addListener(fillRefs)
         fillRefs()
     }, [])
 
