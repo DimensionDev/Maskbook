@@ -26,6 +26,12 @@ export default AutomatedTabTask(
          */
         pasteIntoPostBox: async (text: string, options: Parameters<SocialNetworkUI['taskPasteIntoPostBox']>[1]) =>
             getActivatedUI().taskPasteIntoPostBox(text, options),
+        /**
+         * Fetch a url in the current context
+         */
+        async fetch(url: string) {
+            return fetch(url).then(x => x.text())
+        },
     },
     { memorable: true },
 )!

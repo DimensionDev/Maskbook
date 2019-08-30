@@ -45,11 +45,11 @@ export function getProfilePageUrlAtFacebook(user: PersonIdentifier | GroupIdenti
     return `${host}/${username}?fref=pymk`
 }
 function getHostName(usage: 'fetch' | 'open') {
-    if (usage === 'fetch') {
-        if (GetContext() === 'background' || isMobileFacebook) return 'https://m.facebook.com'
-        return 'https://www.facebook.com'
-    } else {
-        if (isMobileFacebook) return 'https://m.facebook.com'
-        return 'https://www.facebook.com'
-    }
+    // if (usage === 'fetch') {
+    // if (GetContext() === 'background' || isMobileFacebook) return 'https://m.facebook.com'
+    // return 'https://www.facebook.com'
+    // } else {
+    if (isMobileFacebook) return 'https://m.facebook.com'
+    return 'https://www.facebook.com'
+    // }
 }

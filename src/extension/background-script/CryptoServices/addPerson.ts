@@ -53,6 +53,7 @@ async function getUserPublicKeyFromNetwork(user: PersonIdentifier) {
     }
     return person
 }
+Object.assign(globalThis, { getUserPublicKeyFromBio, getUserPublicKeyFromProvePost, getUserPublicKeyFromNetwork })
 
 /**
  * Fetch a user's public key from bio or prove post
