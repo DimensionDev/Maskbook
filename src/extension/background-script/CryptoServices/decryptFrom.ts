@@ -6,7 +6,7 @@ import { decodeText } from '../../../utils/type-transform/String-ArrayBuffer'
 import { deconstructPayload, Payload } from '../../../utils/type-transform/Payload'
 import { geti18nString } from '../../../utils/i18n'
 import { getMyPrivateKey } from '../../../database'
-import { queryLocalKeyDB } from '../../../database/people'
+import { queryLocalKeyDB, queryPersonDB } from '../../../database/people'
 import { PersonIdentifier, PostIVIdentifier } from '../../../database/type'
 import { queryPostDB, updatePostDB } from '../../../database/post'
 import { addPerson } from './addPerson'
@@ -15,6 +15,7 @@ type Success = {
     signatureVerifyResult: boolean
     content: string
 }
+export type SuccessDecryption = Success
 
 type Failure = {
     error: string
@@ -42,24 +43,37 @@ export async function decryptFrom(
     const version = data.version
     if (version === -40 || version === -39) {
         const { encryptedText, iv, ownersAESKeyEncrypted, signature, version } = data
-        const postIdByIV = new PostIVIdentifier(by.network, iv)
+        const postIVIdentifier = new PostIVIdentifier(by.network, iv)
         const unverified = [version === -40 ? '2/4' : '3/4', ownersAESKeyEncrypted, iv, encryptedText].join('|')
         const cryptoProvider = version === -40 ? Alpha40 : Alpha39
 
         const [cachedPostResult, setPostCache] = await decryptFromCache(data, by)
 
-        MessageCenter.emit('decryptionStatusUpdated', { post: postIdByIV, status: 'finding_person_public_key' })
-        const byPerson = await addPerson(by).catch(() => null)
+        let byPerson = await queryPersonDB(by)
+        if (!byPerson || !byPerson.publicKey) {
+            MessageCenter.emit('decryptionStatusUpdated', {
+                post: postIVIdentifier,
+                status: 'finding_person_public_key',
+            })
+            byPerson = await addPerson(by).catch(() => null)
+        }
         if (!byPerson || !byPerson.publicKey) {
             if (cachedPostResult) return { signatureVerifyResult: false, content: cachedPostResult }
+            let stopListening = false
             const undo = Gun2.subscribePersonFromGun2(by, data => {
+                if (stopListening) stop()
                 if (data && (data.provePostId || '').length > 0) {
-                    MessageCenter.emit('decryptionStatusUpdated', {
-                        post: postIdByIV,
-                        status: 'found_person_public_key',
-                    })
+                    publishMessagePeopleFound(postIVIdentifier)
                 }
+                stopListening = true
                 undo()
+            })
+            MessageCenter.on('newPerson', data => {
+                if (stopListening) return
+                if (data.identifier.equals(by)) {
+                    publishMessagePeopleFound(postIVIdentifier)
+                    stopListening = true
+                }
             })
             return { error: geti18nString('service_others_key_not_found', by.userId) }
         }
@@ -105,6 +119,10 @@ export async function decryptFrom(
                         ),
                         content: cachedPostResult,
                     }
+                MessageCenter.emit('decryptionStatusUpdated', {
+                    post: postIVIdentifier,
+                    status: 'finding_post_key',
+                })
                 const aesKeyEncrypted =
                     version === -40
                         ? // eslint-disable-next-line import/no-deprecated
@@ -116,6 +134,13 @@ export async function decryptFrom(
                 // What to do next: You can ask your friend to visit your profile page, so that their Maskbook extension will detect and add you to recipients.
                 // ? after the auto-share with friends is done.
                 if (aesKeyEncrypted === undefined) {
+                    const undo = Gun2.subscribePostKeysOnGun2(iv, mine.publicKey, data => {
+                        MessageCenter.emit('decryptionStatusUpdated', {
+                            post: postIVIdentifier,
+                            status: 'new_post_key',
+                        })
+                        undo()
+                    })
                     return {
                         error: geti18nString('service_not_share_target'),
                     }
@@ -148,6 +173,13 @@ export async function decryptFrom(
     }
     return { error: geti18nString('service_unknown_payload') }
 }
+function publishMessagePeopleFound(postIdByIV: PostIVIdentifier) {
+    MessageCenter.emit('decryptionStatusUpdated', {
+        post: postIdByIV,
+        status: 'found_person_public_key',
+    })
+}
+
 async function decryptFromCache(postPayload: Payload, by: PersonIdentifier) {
     const { encryptedText, iv, version } = postPayload
     const cryptoProvider = version === -40 ? Alpha40 : Alpha39
