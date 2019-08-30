@@ -1,6 +1,6 @@
 import * as Gun1 from '../../../network/gun/version.1'
 import { Person, queryPerson } from '../../../database'
-import { PersonIdentifier, PostIdentifier, Identifier } from '../../../database/type'
+import { PersonIdentifier, Identifier, PostIVIdentifier } from '../../../database/type'
 import { queryPostDB } from '../../../database/post'
 //#endregion
 //#region Append Recipients in future
@@ -15,8 +15,7 @@ export async function getSharedListOfPost(
 ): Promise<Person[]> {
     const ids = new Set<string>()
     const nameInDB =
-        ((await queryPostDB(new PostIdentifier(postBy, postSalt.replace(/\//g, '|')))) || { recipients: [] })
-            .recipients || []
+        ((await queryPostDB(new PostIVIdentifier(postBy.network, postSalt))) || { recipients: [] }).recipients || []
     nameInDB.forEach(x => ids.add(x.toText()))
     if (version === -40) {
         // eslint-disable-next-line import/no-deprecated

@@ -28,9 +28,8 @@ const Main = styled('div')(({ theme }: { theme: Theme }) => ({
     },
 }))
 export default function Dashboard(props: Props) {
-    const theme = useTheme()
     return (
-        <Main theme={theme}>
+        <Main>
             <Typography variant="h5">Maskbook Identity Management</Typography>
             <main>
                 {props.identities.map(x => (

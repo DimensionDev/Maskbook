@@ -51,6 +51,12 @@
     "decrypted_postbox_decrypting": {
         "message": "Maskbook 解密中…"
     },
+    "decrypted_postbox_decrypting_finding_person_key": {
+        "message": "Maskbook 正在搜尋對方的公鈅..."
+    },
+    "decrypted_postbox_decrypting_finding_post_key": {
+        "message": "Maskbook 正在搜尋分享給你的密鑰以解密这篇内容..."
+    },
     "decrypted_postbox_failed": {
         "message": "Maskbook 解密失敗"
     },
@@ -86,6 +92,9 @@
     },
     "finish": {
         "message": "完成"
+    },
+    "retry_decryption": {
+        "message": "再試一次"
     },
     "welcome_0_close_button": {
         "message": "我想以後再做"
@@ -318,7 +327,7 @@
     "options_index_mobile_export": {
         "message": "設定移動版"
     },
-    "options_index_devel": {
+    "options_index_dev": {
         "message": "開發人員選項"
     },
     "options_index_privacy": {

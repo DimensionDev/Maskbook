@@ -17,6 +17,8 @@ import { useValueRef } from '../../../utils/hooks/useValueRef'
 import { Person } from '../../../database'
 import { getCurrentNetworkWorkerService } from '../../background-script/WorkerService'
 import getCurrentNetworkWorker from '../../../social-network/utils/getCurrentNetworkWorker'
+import { UpgradeBackupJSONFile } from '../../../utils/type-transform/BackupFile'
+import { geti18nString } from '../../../utils/i18n'
 
 enum WelcomeState {
     // Step 0
@@ -40,21 +42,14 @@ const WelcomeActions = {
      * @param file The backup file
      * @param id Who am I?
      */
-    restoreFromFile(file: File | string, id: PersonIdentifier): Promise<void> {
-        if (typeof file === 'string') {
-            return Services.People.restoreBackup(JSON.parse(file), id)
-        } else {
-            return new Promise<void>((resolve, reject) => {
-                const fr = new FileReader()
-                fr.readAsText(file)
-                fr.addEventListener('loadend', async () => {
-                    const json = JSON.parse(fr.result as string)
-                    Services.People.restoreBackup(json, id).then(resolve, reject)
-                })
-                fr.addEventListener('error', reject)
-                fr.addEventListener('abort', reject)
-            })
-        }
+    restoreFromFile(file: string, id: PersonIdentifier): Promise<void> {
+        const json = JSON.parse(file)
+        const upgraded = UpgradeBackupJSONFile(json)
+        if (!upgraded) throw new TypeError(geti18nString('service_invalid_backup_file'))
+        // This request MUST BE sync or Firefox will reject this request
+        return browser.permissions
+            .request({ origins: upgraded.grantedHostPermissions })
+            .then(() => Services.People.restoreBackup(json, id))
     },
     autoVerifyBio(network: PersonIdentifier, provePost: string) {
         getCurrentNetworkWorkerService(network).autoVerifyBio(network, provePost)
@@ -129,8 +124,18 @@ function Welcome(props: Welcome) {
                 />
             )
         case WelcomeState.BackupKey:
-            sideEffects.backupMyKeyPair(props.whoAmI.identifier)
-            return <Welcome1a3 next={() => onStepChange(WelcomeState.ProvePost)} />
+            return (
+                <Welcome1a3
+                    next={() => {
+                        sideEffects
+                            .backupMyKeyPair(props.whoAmI.identifier)
+                            .then(updateProveBio)
+                            .finally(() => {
+                                onStepChange(WelcomeState.ProvePost)
+                            })
+                    }}
+                />
+            )
         case WelcomeState.ProvePost:
             const worker = getCurrentNetworkWorker(props.whoAmI.identifier)
             const copyToClipboard = (provePost: string) => {
@@ -183,12 +188,23 @@ const personInferFromURLRef = new ValueRef<Person>({
 })
 const selectedIdRef = new ValueRef<Person>(personInferFromURLRef.value)
 const ownedIdsRef = new ValueRef<Person[]>([])
+
+provePostRef.addListener(val => console.log('New prove post:', val))
+personInferFromURLRef.addListener(val => console.log('Infer user from URL:', val))
+selectedIdRef.addListener(val => console.log('Selected id:', val))
+ownedIdsRef.addListener(val => console.log('Owned id', val))
+
+selectedIdRef.addListener(updateProveBio)
+
 const fillRefs = async () => {
     if (selectedIdRef.value.identifier.isUnknown) {
         const all = await Services.People.queryMyIdentity()
         ownedIdsRef.value = all
         if (all[0]) selectedIdRef.value = all[0]
     }
+    updateProveBio()
+}
+async function updateProveBio() {
     const post = await Services.Crypto.getMyProveBio(selectedIdRef.value.identifier)
     if (post) provePostRef.value = post
 }
@@ -203,7 +219,6 @@ export default withRouter(function _WelcomePortal(props: RouteComponentProps) {
     const ResponsiveDialog = useRef(withMobileDialog({ breakpoint: 'xs' })(Dialog)).current
     useEffect(() => {
         MessageCenter.on('generateKeyPair', fillRefs)
-        selectedIdRef.addListener(fillRefs)
         fillRefs()
     }, [])
 

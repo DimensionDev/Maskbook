@@ -9,18 +9,23 @@ import React from 'react'
  *     <button onClick={upload(fileRef.current)}>Upload</button> // Get the file!
  * </div>
  */
-export function useDragAndDrop() {
+export function useDragAndDrop(onChangeOuter?: (file: File) => void) {
     const [status, setStatus] = React.useState<undefined | 'drag-enter' | 'selected'>(undefined)
     const fileRef = React.useRef<File | null>()
-    const onChange = React.useCallback((event: React.ChangeEvent<HTMLInputElement> | React.DragEvent) => {
-        const files = (
-            (event as React.DragEvent).dataTransfer || (event as React.ChangeEvent<HTMLInputElement>).currentTarget
-        ).files
-        if (!files) return
-        const file = files.item(0)
-        fileRef.current = file
-        setStatus('selected')
-    }, [])
+    const onChange = React.useCallback(
+        (event: React.ChangeEvent<HTMLInputElement> | React.DragEvent) => {
+            const files = (
+                (event as React.DragEvent).dataTransfer || (event as React.ChangeEvent<HTMLInputElement>).currentTarget
+            ).files
+            if (!files) return
+            const file = files.item(0)
+            if (!file) return
+            fileRef.current = file
+            if (onChangeOuter) onChangeOuter(file)
+            setStatus('selected')
+        },
+        [onChangeOuter],
+    )
     const onEnter = React.useCallback((e: React.DragEvent) => {
         e.preventDefault()
         setStatus('drag-enter')

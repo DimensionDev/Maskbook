@@ -13,4 +13,5 @@ export const sharedSettings: SocialNetworkWorkerAndUI = {
     isValidUsername: usernameValidator,
     acceptablePayload: ['v39', 'latest'],
     init() {},
+    notReadyForProduction: true,
 }

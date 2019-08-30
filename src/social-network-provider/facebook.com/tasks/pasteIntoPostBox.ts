@@ -2,59 +2,97 @@ import { IntervalWatcher, LiveSelector, MutationObserverWatcher } from '@holoflo
 import { dispatchCustomEvents, sleep, timeout, untilDocumentReady } from '../../../utils/utils'
 import { geti18nString } from '../../../utils/i18n'
 import { isMobileFacebook } from '../isMobile'
+import { SocialNetworkUI } from '../../../social-network/ui'
 
-/**
- * Access: https://(www|m).facebook.com/
- */
-export async function pasteIntoPostBoxFacebook(text: string, warningText: string) {
+export async function openPostDialogFacebook() {
     await untilDocumentReady()
-    const scrolling = document.scrollingElement || document.documentElement
-    const scroll = (top => () => scrolling.scroll({ top }))(scrolling.scrollTop)
-    const notActivated = new LiveSelector()
-        .querySelector(`[role="region"]`)
-        .querySelector('textarea, [aria-multiline="true"]')
-        .closest<HTMLDivElement>(1)
+    const notActivated = isMobileFacebook
+        ? new LiveSelector().querySelector<HTMLDivElement>('[role="textbox"]')
+        : new LiveSelector()
+              .querySelector(`[role="region"]`)
+              .querySelector('textarea, [aria-multiline="true"]')
+              .closest<HTMLDivElement>(1)
     const activated = new LiveSelector().querySelector<HTMLDivElement | HTMLTextAreaElement>(
-        isMobileFacebook ? 'form textarea' : '[contenteditable="true"]',
+        isMobileFacebook ? 'form textarea' : '.notranslate',
     )
-    await sleep(500)
-    // If page is just loaded
-    if (isMobileFacebook === false && !activated.evaluateOnce()[0]) {
-        try {
-            console.log('Awaiting to click the post box')
-            const [dom1] = await timeout(new MutationObserverWatcher(notActivated), 1000)
-            dom1.click()
-            console.log('Non-activated post box found Stage 1', dom1)
-            const [dom2] = await timeout(new IntervalWatcher(notActivated.clone().filter(x => x !== dom1)), 3000)
-            console.log('Non-activated post box found Stage 2', dom2)
-            dom2.click()
-        } catch (e) {
-            console.warn(e)
+    const dialog = new LiveSelector().querySelector<HTMLDivElement>('[role=main] [role=dialog]')
+    if (notActivated.evaluate()[0]) {
+        if (isMobileFacebook) {
+            try {
+                notActivated.evaluate()[0].click()
+                await timeout(new MutationObserverWatcher(activated), 2000)
+                await sleep(1000)
+            } catch (e) {
+                clickFailed(e)
+            }
+        } else {
+            try {
+                console.log('Awaiting to click the post box')
+                const [dom1] = await timeout(new MutationObserverWatcher(notActivated), 1000)
+                dom1.click()
+                console.log('Non-activated post box found Stage 1', dom1)
+                const [dom2] = await timeout(new IntervalWatcher(notActivated.clone().filter(x => x !== dom1)), 3000)
+                console.log('Non-activated post box found Stage 2', dom2)
+                dom2.click()
+                await timeout(new MutationObserverWatcher(activated), 1000)
+                if (!dialog.evaluateOnce()[0]) throw new Error('Click not working')
+            } catch (e) {
+                clickFailed(e)
+            }
+            console.log('Awaiting dialog')
         }
     }
     await sleep(500)
     try {
+        await timeout(new MutationObserverWatcher(isMobileFacebook ? activated : dialog), 2000)
+        console.log('Dialog appeared')
+    } catch {}
+    function clickFailed(e: any) {
+        console.warn(e)
+        if (!dialog.evaluateOnce()[0]) alert('请点击输入框')
+    }
+}
+
+/**
+ * Access: https://(www|m).facebook.com/
+ */
+export async function pasteIntoPostBoxFacebook(
+    text: string,
+    options: Parameters<SocialNetworkUI['taskPasteIntoPostBox']>[1],
+) {
+    const { shouldOpenPostDialog, warningText } = options
+    await untilDocumentReady()
+    // Save the scrolling position
+    const scrolling = document.scrollingElement || document.documentElement
+    const scrollBack = (top => () => scrolling.scroll({ top }))(scrolling.scrollTop)
+
+    const activated = new LiveSelector().querySelector<HTMLDivElement | HTMLTextAreaElement>(
+        isMobileFacebook ? 'form textarea' : '.notranslate',
+    )
+    // If page is just loaded
+    if (shouldOpenPostDialog) {
+        await openPostDialogFacebook()
+        console.log('Awaiting dialog')
+    }
+    try {
         const [element] = activated.evaluateOnce()
         element.focus()
         await sleep(100)
-        if (isMobileFacebook) {
-            dispatchCustomEvents('input', text)
-        } else {
-            dispatchCustomEvents('paste', text)
-        }
+        if ('value' in document.activeElement!) dispatchCustomEvents('input', text)
+        else dispatchCustomEvents('paste', text)
         await sleep(400)
         if (isMobileFacebook) {
             const e = document.querySelector<HTMLDivElement | HTMLTextAreaElement>('.mentions-placeholder')
             if (e) e.style.display = 'none'
         }
         // Prevent Custom Paste failed, this will cause service not available to user.
-        if (element.innerText.indexOf(text) === -1 && 'value' in element && element.value.indexOf(text) === -1) {
+        if (element.innerText.indexOf(text) === -1 && ('value' in element && element.value.indexOf(text) === -1)) {
             copyFailed()
         }
     } catch {
         copyFailed()
     }
-    scroll()
+    scrollBack()
     function copyFailed() {
         console.warn('Text not pasted to the text area')
         prompt(warningText, text)

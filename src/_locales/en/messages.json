@@ -50,6 +50,12 @@
     "decrypted_postbox_decrypting": {
         "message": "Maskbook decrypting..."
     },
+    "decrypted_postbox_decrypting_finding_person_key": {
+        "message": "Maskbook is looking for the public key of the author..."
+    },
+    "decrypted_postbox_decrypting_finding_post_key": {
+        "message": "Maskbook is retrieving the post key to decrypt this post..."
+    },
     "decrypted_postbox_failed": {
         "message": "Maskbook decryption failed"
     },
@@ -85,6 +91,9 @@
     },
     "finish": {
         "message": "Finish"
+    },
+    "retry_decryption": {
+        "message": "Try again"
     },
     "welcome_0_close_button": {
         "message": "I'll do it later"
@@ -317,8 +326,8 @@
     "options_index_mobile_export": {
         "message": "Setup Mobile"
     },
-    "options_index_devel": {
-        "message": "Developer"
+    "options_index_dev": {
+        "message": "Developer Options"
     },
     "options_index_privacy": {
         "message": "Privacy policy"

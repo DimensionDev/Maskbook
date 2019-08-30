@@ -59,7 +59,7 @@ storiesOf('Injections', module)
                 </FakePost>
                 <FakePost title="Decrypting:">{DecryptPostUI.awaiting}</FakePost>
                 <FakePost title="Failed:">
-                    <DecryptPostUI.failed error={new Error('Error message')} />
+                    <DecryptPostUI.failed retry={action('retry')} error={new Error('Error message')} />
                 </FakePost>
             </>
         )

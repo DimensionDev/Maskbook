@@ -2,9 +2,9 @@ import React, { useState } from 'react'
 import { DecryptPostUI } from './DecryptedPost'
 import { AddToKeyStore } from './AddToKeyStore'
 import { useAsync } from '../../utils/components/AsyncComponent'
-import { deconstructPayload } from '../../utils/type-transform/Payload'
+import { deconstructPayload, Payload } from '../../utils/type-transform/Payload'
 import Services from '../../extension/service'
-import { PersonIdentifier, PostIdentifier } from '../../database/type'
+import { PersonIdentifier } from '../../database/type'
 import { Person } from '../../database'
 import { styled } from '@material-ui/core/styles'
 import { useFriendsList, useCurrentIdentity } from '../DataSource/useActivatedUI'
@@ -14,6 +14,7 @@ interface PostInspectorProps {
     onDecrypted(post: string): void
     post: string
     postBy: PersonIdentifier
+    payload: Payload | null
     postId: string
     needZip(): void
 }
@@ -46,6 +47,7 @@ export function PostInspector(props: PostInspectorProps) {
                 <Debug children={postBy.toText()} data-id="post by" />
                 <Debug children={postId} data-id="post id" />
                 <DecryptPostUI.UI
+                    payload={props.payload}
                     onDecrypted={props.onDecrypted}
                     requestAppendRecipients={async people => {
                         setAlreadySelectedPreviously(alreadySelectedPreviously.concat(people))

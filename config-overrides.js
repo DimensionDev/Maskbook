@@ -42,7 +42,7 @@ module.exports = function override(config, env) {
 
     // We cannot do runtimeChunk because extension CSP disallows inline <script>
     config.optimization.runtimeChunk = false
-    config.optimization.splitChunks = { chunks: 'all' }
+    config.optimization.splitChunks = false
 
     // Dismiss warning for gun.js
     config.module.wrappedContextCritical = false
@@ -64,7 +64,9 @@ module.exports = function override(config, env) {
 <html>
     <head>
         <meta charset="utf-8">
-        <script src="polyfill/browser-polyfill.min.js"></script>
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+        <script src="/polyfill/browser-polyfill.min.js"></script>
+        <script src="/firefoxFix.js"></script>
     </head>
     <body></body>
 </html>`,
@@ -202,7 +204,7 @@ const SSRPlugin = class SSRPlugin {
              *          html: string
              *          outputName: string
              *          plugin: HtmlWebpackPlugin
-             *  }>}
+             *  }>}}
              */
             const htmlWebpackPluginHook = HtmlWebpackPlugin.getHooks(compilation)
             htmlWebpackPluginHook.beforeEmit.tapPromise('SSRPlugin', async args => {
@@ -250,6 +252,9 @@ function importScript(src) {
     document.body.appendChild(script)
 }
 untilDocumentReady().then(() => {
+    const head = document.head.firstElementChild
+    Array.from(document.body.querySelectorAll('body > style')).reverse().forEach(x => head.before(x))
+}).then(() => {
     setTimeout(() => {${deferredLoader}
     }, 20)
 })

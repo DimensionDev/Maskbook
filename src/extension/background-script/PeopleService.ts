@@ -106,10 +106,6 @@ export async function restoreBackup(json: object, whoAmI?: PersonIdentifier): Pr
 
     await myIdentitiesInBackup
     await people
-
-    if (data.grantedHostPermissions) {
-        await browser.permissions.request({ origins: data.grantedHostPermissions })
-    }
 }
 
 /**

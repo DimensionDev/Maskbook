@@ -123,7 +123,13 @@ export interface SocialNetworkUITasks {
      * This function should paste `text` into the post box.
      * If failed, warning user to do it by themselves with `warningText`
      */
-    taskPasteIntoPostBox(text: string, warningText: string): void
+    taskPasteIntoPostBox(
+        text: string,
+        options: {
+            warningText: string
+            shouldOpenPostDialog: boolean
+        },
+    ): void
     /**
      * This function should paste `text` into the bio box.
      * If failed, warning user to do it by themselves with automation_request_click_edit_bio_button
@@ -262,6 +268,9 @@ const def: Pick<SocialNetworkUI, 'injectCommentBox' | 'injectPostComments'> = {
 export function defineSocialNetworkUI(UI: SocialNetworkUI) {
     if (UI.acceptablePayload.includes('v40') && UI.internalName !== 'facebook') {
         throw new TypeError('Payload version v40 is not supported in this network. Please use v39 or newer.')
+    }
+    if (UI.notReadyForProduction) {
+        if (process.env.NODE_ENV === 'production') return UI
     }
     definedSocialNetworkUIs.add(UI)
     return UI

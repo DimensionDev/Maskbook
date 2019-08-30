@@ -94,7 +94,10 @@ export function AdditionalPostBox(props: Partial<Props>) {
                 identity[0].identifier,
             )
             const fullPost = geti18nString('additional_post_box__encrypted_post_pre', encrypted)
-            getActivatedUI().taskPasteIntoPostBox(fullPost, geti18nString('additional_post_box__encrypted_failed'))
+            getActivatedUI().taskPasteIntoPostBox(fullPost, {
+                warningText: geti18nString('additional_post_box__encrypted_failed'),
+                shouldOpenPostDialog: false,
+            })
             Services.Crypto.publishPostAESKey(token, identity[0].identifier)
         },
         [identity],

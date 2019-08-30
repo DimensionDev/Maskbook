@@ -27,7 +27,7 @@ const useStyles = makeStyles(theme => ({
     },
 }))
 
-SSRRenderer(<Popup />, document.getElementById('root')!)
+SSRRenderer(<Popup />)
 export function Popup() {
     const classes = useStyles()
     const theme = useTheme()

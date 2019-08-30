@@ -66,7 +66,7 @@ export default function Welcome({ create, restore, close }: Props) {
                 <Typography variant="subtitle1" className={classes.subtitle}>
                     {geti18nString('welcome_0_description')}
                 </Typography>
-                <LinedBox theme={theme}>
+                <LinedBox>
                     <Box flex={1}>
                         <Typography variant="body1">{geti18nString('welcome_0_new_user')}</Typography>
                         <Typography variant="h6">{geti18nString('welcome_0_connect_maskbook')}</Typography>
@@ -77,7 +77,7 @@ export default function Welcome({ create, restore, close }: Props) {
                         </Button>
                     </VerticalCenter>
                 </LinedBox>
-                <LinedBox theme={theme}>
+                <LinedBox>
                     <Box flex={1}>
                         <Typography variant="body1">{geti18nString('welcome_0_old_user')}</Typography>
                         <Typography variant="h6">{geti18nString('welcome_0_restore_key')}</Typography>
