@@ -10,7 +10,6 @@ const langs: Record<string, I18NStrings> = {
 export function geti18nString(key: keyof I18NStrings, substitutions: string | string[] = '') {
     const lang = langs[navigator.language.split('-')[0]] || langs.en
     const string = lang[key] || langs.en[key]
-    // tslint:disable-next-line: no-parameter-reassignment
     if (typeof substitutions === 'string') substitutions = [substitutions]
     if (substitutions.length > 3) console.error('Implement this please')
     return (string || { message: key }).message

@@ -12,10 +12,13 @@
         "message": "📫 Post it!"
     },
     "additional_post_box__encrypted_post_pre": {
-        "message": "Decrypt this post with $1"
+        "message": "Decrypt this post with Maskbook! $1"
     },
     "additional_post_box__encrypted_failed": {
-        "message": "Please paste the following text into the paste box."
+        "message": "Please paste the following text into the post box."
+    },
+    "comment_box__paste_failed": {
+        "message": "Please paste it into the comment box."
     },
     "add_to_key_store_success": {
         "message": "Maskbook public key added to keystore ✔"
@@ -47,6 +50,12 @@
     "decrypted_postbox_decrypting": {
         "message": "Maskbook decrypting..."
     },
+    "decrypted_postbox_decrypting_finding_person_key": {
+        "message": "Maskbook is looking for the public key of the author..."
+    },
+    "decrypted_postbox_decrypting_finding_post_key": {
+        "message": "Maskbook is retrieving the post key to decrypt this post..."
+    },
     "decrypted_postbox_failed": {
         "message": "Maskbook decryption failed"
     },
@@ -59,8 +68,8 @@
     "select_none": {
         "message": "Select None"
     },
-    "not_found": {
-        "message": "Not found"
+    "no_search_result": {
+        "message": "No result"
     },
     "cancel": {
         "message": "Cancel"
@@ -83,6 +92,9 @@
     "finish": {
         "message": "Finish"
     },
+    "retry_decryption": {
+        "message": "Try again"
+    },
     "welcome_0_close_button": {
         "message": "I'll do it later"
     },
@@ -90,13 +102,13 @@
         "message": "Welcome to Maskbook"
     },
     "welcome_0_description": {
-        "message": "You can post on Facebook without allowing Facebook to stalk, analyze, or spy on you."
+        "message": "You can post on social networks without allowing them to stalk, analyze, or spy on you."
     },
     "welcome_0_new_user": {
         "message": "New user?"
     },
-    "welcome_0_connect_facebook": {
-        "message": "Connect Facebook"
+    "welcome_0_connect_maskbook": {
+        "message": "Setup Maskbook"
     },
     "welcome_0_old_user": {
         "message": "Returning user?"
@@ -106,6 +118,27 @@
     },
     "welcome_0_caption": {
         "message": "Lost your keypair backup? No worry. Simply start as a new user."
+    },
+    "welcome_1a1_title": {
+        "message": "Setup which account?"
+    },
+    "welcome_1a1_next": {
+        "message": "Next"
+    },
+    "welcome_1a1_didntfind": {
+        "message": "Didn't find your account?"
+    },
+    "welcome_1a1b_title": {
+        "message": "Maskbook supports these social networks"
+    },
+    "welcome_1a1b_danger": {
+        "message": "Censored network"
+    },
+    "welcome_1a1b_connect": {
+        "message": "Connect"
+    },
+    "welcome_1a1b_switch": {
+        "message": "Use existing accounts"
     },
     "welcome_1a2_title": {
         "message": "Encrypt message in a Maskbook postbox"
@@ -155,14 +188,14 @@
     "welcome_1a4_title": {
         "message": "Verify Account Ownership"
     },
-    "welcome_1a4_bio_disabled": {
-        "message": "Sorry, automatically verify your account through bio is not available now."
+    "welcome_1a4_disabled": {
+        "message": "Sorry, only one automatic verification method is available."
     },
     "welcome_1a4_type_auto_subtitle1": {
         "message": "Avoid any confusion before your first encrypted post."
     },
     "welcome_1a4_type_auto_subtitle2": {
-        "message": "This allows your friends to verify the connection between your Facebook account and your keypair."
+        "message": "This allows your friends to verify the connection between your social network account and your keypair."
     },
     "welcome_1a4_type_auto_switch": {
         "message": "Prefer doing it manually?"
@@ -171,7 +204,7 @@
         "message": "Add this to bio, or post on timeline, before your first encrypted post."
     },
     "welcome_1a4_type_manual_subtitle2": {
-        "message": "This allows your friends to verify the connection between your Facebook account and your keypair."
+        "message": "This allows your friends to verify the connection between your social network account and your keypair."
     },
     "welcome_1a4_type_manual_goto": {
         "message": "Copy & Go to Profile"
@@ -236,6 +269,9 @@
     "banner_dismiss_aria": {
         "message": "Dismiss the banner"
     },
+    "service_invalid_backup_file": {
+        "message": "This does not seems like Maskbook's backup."
+    },
     "service_others_key_not_found": {
         "message": "$1's public key not found!"
     },
@@ -262,9 +298,6 @@
     },
     "service_username_invalid": {
         "message": "Username not valid"
-    },
-    "automation_request_click_post_box": {
-        "message": "Click the post box please!"
     },
     "automation_request_click_edit_bio_button": {
         "message": "Please click the \"Edit bio\" button or the pencil on the bio box."
@@ -293,6 +326,9 @@
     "options_index_mobile_export": {
         "message": "Setup Mobile"
     },
+    "options_index_dev": {
+        "message": "Developer Options"
+    },
     "options_index_privacy": {
         "message": "Privacy policy"
     },
@@ -304,5 +340,11 @@
     },
     "options_mobile_export_subtitle": {
         "message": "DO NOT save or share this image to other one!"
+    },
+    "shared_choose_identity_title": {
+        "message": "Touch to switch your Maskbook account"
+    },
+    "shared_choose_identity_subtitle": {
+        "message": "Switch to another account"
     }
 }

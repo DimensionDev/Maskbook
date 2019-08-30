@@ -7,7 +7,7 @@
  * ! This database should be readonly now.
  */
 import { OnlyRunInContext } from '@holoflows/kit/es'
-// tslint:disable: deprecation
+/* eslint import/no-deprecated: 0 */
 OnlyRunInContext('background', 'Key Store')
 /** DO NOT Change the name of this class! It is used as key in the db! */
 class CryptoKeyRecord {
@@ -74,7 +74,7 @@ export default async function migrate() {
         const dbs = await indexedDB.databases()
         if (!dbs.find(x => x.name === 'maskbook-keystore-demo-v2')) return
     }
-    // tslint:disable-next-line: deprecation
+    // eslint-disable-next-line import/no-deprecated
     const wait = (await queryPeopleCryptoKey()).map(record => {
         if (record.username === '$self')
             return People.storeMyIdentityDB({

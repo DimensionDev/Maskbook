@@ -1,18 +1,19 @@
-import React, { useState, useCallback } from 'react'
-import { SelectPeopleUI } from './SelectPeople'
+import React, { useCallback, useState } from 'react'
+import { SelectPeopleUI } from '../shared/SelectPeople'
 import { geti18nString } from '../../utils/i18n'
 import { makeStyles } from '@material-ui/styles'
 import {
-    Dialog,
-    DialogTitle,
-    DialogContent,
-    DialogActions,
     Button,
     CircularProgress,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogTitle,
     withMobileDialog,
 } from '@material-ui/core'
 import { Person } from '../../database'
 import { PortalShadowRoot } from '../../utils/jss/ShadowRootPortal'
+
 interface Props {
     open: boolean
     people: Person[]
@@ -25,7 +26,7 @@ const useStyles = makeStyles({
     content: { padding: '0 12px' },
     progress: { marginRight: 6 },
 })
-const ResponsiveDialog = withMobileDialog()(Dialog)
+const ResponsiveDialog = withMobileDialog({ breakpoint: 'xs' })(Dialog)
 export function SelectPeopleDialog(props: Props) {
     const classes = useStyles()
     const [people, select] = useState<Person[]>([] as Person[])
@@ -34,12 +35,12 @@ export function SelectPeopleDialog(props: Props) {
         props.onClose()
         setCommitted(false)
         select([])
-    }, [props.onClose])
+    }, [props])
     const [rejection, onReject] = useState<Error>()
     const share = useCallback(() => {
         setCommitted(true)
         props.onSelect(people).then(onClose, onReject)
-    }, [people])
+    }, [onClose, people, props])
 
     const canClose = !rejection && committed
     const canCommit = committed || people.length === 0
@@ -92,7 +93,6 @@ export function useShareMenu(
 
     return {
         showShare,
-        // hideShare,
         ShareMenu: (
             <SelectPeopleDialog
                 alreadySelectedPreviously={alreadySelectedPreviously}

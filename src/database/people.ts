@@ -18,11 +18,12 @@
  * @type {Record<string, CryptoKey>} Record of <userId, CryptoKey>
  * @keys outline, string, which means network.
  */
-import { PersonIdentifier, Identifier, GroupIdentifier } from './type'
-import { openDB, DBSchema } from 'idb/with-async-ittr'
-import { JsonWebKeyToCryptoKey, CryptoKeyToJsonWebKey } from '../utils/type-transform/CryptoKey-JsonWebKey'
+import { GroupIdentifier, Identifier, PersonIdentifier } from './type'
+import { DBSchema, openDB } from 'idb/with-async-ittr'
+import { CryptoKeyToJsonWebKey, JsonWebKeyToCryptoKey } from '../utils/type-transform/CryptoKey-JsonWebKey'
 import { MessageCenter } from '../utils/messages'
 import { personRecordToPerson } from './helpers/person'
+import { isIdentifierArrayEquals } from '../utils/equality'
 
 //#region Type and utils
 /**
@@ -127,7 +128,6 @@ export async function storeNewPersonDB(record: PersonRecord): Promise<void> {
 }
 /**
  * Query person with a identifier
- * @param id - Identifier
  */
 export async function queryPeopleDB(
     query: ((key: PersonIdentifier, record: PersonRecordInDatabase) => boolean) | { network: string },
@@ -135,7 +135,7 @@ export async function queryPeopleDB(
     const t = (await db).transaction('people')
     const result: PersonRecordInDatabase[] = []
     if (typeof query === 'function') {
-        // tslint:disable-next-line: await-promise
+        // eslint-disable-next-line @typescript-eslint/await-thenable
         for await (const { value, key } of t.store) {
             if (query(Identifier.fromString(key) as PersonIdentifier, value)) result.push(value)
         }
@@ -165,11 +165,23 @@ export async function queryPersonDB(id: PersonIdentifier): Promise<null | Person
  */
 export async function updatePersonDB(person: Partial<PersonRecord> & Pick<PersonRecord, 'identifier'>): Promise<void> {
     const full = (await queryPersonDB(person.identifier)) || { groups: [], identifier: person.identifier }
+    if (!hasDifferent()) return
+
     const o: PersonRecordInDatabase = { ...(await toDb(full)), ...(await toDb(person as PersonRecord)) }
 
     const t = (await db).transaction('people', 'readwrite')
     await t.objectStore('people').put(o)
     sendNewPersonMessageDB(await outDb(o))
+
+    function hasDifferent() {
+        if (!isIdentifierArrayEquals(full.groups, person.groups || full.groups)) return true
+        if (full.nickname !== (person.nickname || full.nickname)) return true
+        if (!isIdentifierArrayEquals(full.previousIdentifiers, person.previousIdentifiers || full.previousIdentifiers))
+            return true
+        if (full.privateKey !== (person.privateKey || full.privateKey)) return true
+        if (full.publicKey !== (person.publicKey || full.publicKey)) return true
+        return false
+    }
 }
 /**
  * Remove people from database
@@ -199,6 +211,7 @@ export async function queryMyIdentityAtDB(id: PersonIdentifier): Promise<null | 
 export async function removeMyIdentityAtDB(id: PersonIdentifier): Promise<void> {
     const t = (await db).transaction('myself', 'readwrite')
     await t.objectStore('myself').delete(id.toText())
+    MessageCenter.emit('identityUpdated', undefined)
 }
 /**
  * Store my record
@@ -211,6 +224,7 @@ export async function storeMyIdentityDB(record: PersonRecordPublicPrivate): Prom
 
     const t = (await db).transaction('myself', 'readwrite')
     await t.objectStore('myself').put(data)
+    MessageCenter.emit('identityUpdated', undefined)
 }
 /**
  * Get all my identities.
@@ -233,6 +247,7 @@ export async function generateMyIdentityDB(identifier: PersonIdentifier): Promis
         publicKey: key.publicKey,
         privateKey: key.privateKey,
     })
+    MessageCenter.emit('identityUpdated', undefined)
 }
 //#endregion
 //#region LocalKeys
@@ -248,6 +263,7 @@ function generateAESKey(exportable: boolean) {
 export async function generateLocalKeyDB(id: PersonIdentifier, exportable = true) {
     const key = await generateAESKey(exportable)
     await storeLocalKeyDB(id, key)
+    MessageCenter.emit('identityUpdated', undefined)
     return key
 }
 /**
@@ -279,6 +295,7 @@ export async function storeLocalKeyDB({ network, userId }: PersonIdentifier, key
     const previous = (await t.objectStore('localKeys').get(network)) || {}
     const next = { ...previous, [userId]: key }
     await t.objectStore('localKeys').put(next, network)
+    MessageCenter.emit('identityUpdated', undefined)
 }
 /**
  * Remove local key
@@ -289,6 +306,7 @@ export async function deleteLocalKeyDB({ network, userId }: PersonIdentifier): P
     if (!result) return
     delete result[userId]
     await t.objectStore('localKeys').put(result, network)
+    MessageCenter.emit('identityUpdated', undefined)
 }
 /**
  * Get all my local keys.
@@ -296,7 +314,7 @@ export async function deleteLocalKeyDB({ network, userId }: PersonIdentifier): P
 export async function getLocalKeysDB() {
     const t = (await db).transaction('localKeys')
     const result: Map<string, LocalKeys> = new Map()
-    // tslint:disable-next-line: await-promise
+    // eslint-disable-next-line @typescript-eslint/await-thenable
     for await (const { key, value } of t.objectStore('localKeys')) {
         result.set(key, value)
     }

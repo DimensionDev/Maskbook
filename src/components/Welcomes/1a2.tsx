@@ -1,15 +1,17 @@
 import * as React from 'react'
 import { getUrl } from '../../utils/utils'
 import { geti18nString } from '../../utils/i18n'
-import { Typography, Button, makeStyles } from '@material-ui/core'
+import { Typography, Button, makeStyles, Theme } from '@material-ui/core'
+import Navigation from './Navigation/Navigation'
 import WelcomeContainer from './WelcomeContainer'
 
 interface Props {
     next(): void
+    back(): void
 }
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles<Theme>(theme => ({
     paper: {
-        padding: '2rem 1rem 1rem 1rem',
+        padding: '0.5rem 1rem 1rem 1rem',
         textAlign: 'center',
         '& > *': {
             marginBottom: theme.spacing(3),
@@ -23,10 +25,11 @@ const useStyles = makeStyles(theme => ({
         borderRadius: 5,
     },
 }))
-export default function Welcome({ next }: Props) {
+export default function Welcome({ next, back }: Props) {
     const classes = useStyles()
     return (
         <WelcomeContainer className={classes.paper}>
+            <Navigation back={back} />
             <Typography variant="h5">{geti18nString('welcome_1a2_title')}</Typography>
             <img
                 alt={geti18nString('welcome_1a2_imgalt')}

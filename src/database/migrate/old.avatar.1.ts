@@ -6,7 +6,7 @@
  * ! Scheduled to remove it after Jan/1/2019
  * ! This database should be readonly now.
  */
-// tslint:disable: deprecation
+/* eslint import/no-deprecated: 0 */
 import { readMangledDB } from './old.mangled.helper.1'
 import { PersonIdentifier } from '../type'
 import { deleteDB } from 'idb/with-async-ittr'
@@ -47,7 +47,7 @@ export default async function migrate() {
         if (!dbs.find(x => x.name === 'maskbook-avatar-store')) return
     }
     const promises: Promise<unknown>[] = []
-    // tslint:disable-next-line: deprecation
+    // eslint-disable-next-line import/no-deprecated
     for (const record of await queryAvatarData()) {
         const person = new PersonIdentifier('facebook.com', record.username)
         promises.push(

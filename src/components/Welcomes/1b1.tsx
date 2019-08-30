@@ -1,19 +1,19 @@
 import * as React from 'react'
 
-import ArrowBack from '@material-ui/icons/ArrowBack'
 import { useDragAndDrop } from '../../utils/hooks/useDragAndDrop'
 import { geti18nString } from '../../utils/i18n'
-import { makeStyles, Button, Typography, Tabs, Tab } from '@material-ui/core'
+import { makeStyles, Button, Typography, Tabs, Tab, Theme } from '@material-ui/core'
 import { styled } from '@material-ui/styles'
 import FolderOpen from '@material-ui/icons/FolderOpen'
 import Camera from '@material-ui/icons/CameraAlt'
 import Text from '@material-ui/icons/TextFormat'
 import WelcomeContainer from './WelcomeContainer'
+import Navigation from './Navigation/Navigation'
 import QRScanner from './QRScanner'
 import { isWKWebkit, iOSHost } from '../../utils/iOS-RPC'
 import { useAsync } from '../../utils/components/AsyncComponent'
 
-const RestoreBox = styled('div')(({ theme }) => ({
+const RestoreBox = styled('div')(({ theme }: { theme: Theme }) => ({
     color: theme.palette.text.hint,
     border: `2px dashed ${theme.palette.divider}`,
     whiteSpace: 'pre-line',
@@ -30,20 +30,12 @@ const RestoreBox = styled('div')(({ theme }) => ({
 }))
 interface Props {
     back(): void
-    restore(file: File | string): void
+    // ? We cannot send out File | string. Because Firefox will reject the permission request
+    // ? because read the file is a async procedure.
+    restore(file: string): void
 }
 const videoHeight = 360
-const useStyles = makeStyles(theme => ({
-    nav: {
-        paddingTop: theme.spacing(1),
-        paddingLeft: theme.spacing(1),
-    },
-    navButton: {
-        color: theme.palette.text.hint,
-    },
-    navButtonIcon: {
-        marginRight: theme.spacing(1),
-    },
+const useStyles = makeStyles<Theme>(theme => ({
     main: {
         padding: '2rem 2rem 1rem 2rem',
         textAlign: 'center',
@@ -86,22 +78,25 @@ const useStyles = makeStyles(theme => ({
     },
 }))
 export default function Welcome({ back, restore }: Props) {
+    const isFirefox = navigator.userAgent.match('Firefox')
     const classes = useStyles()
     const ref = React.useRef<HTMLInputElement>(null)
     const textAreaRef = React.useRef<HTMLTextAreaElement>(null)
-    const { dragEvents, fileReceiver, fileRef, dragStatus } = useDragAndDrop()
+    const [fileContent, setFileContent] = React.useState('')
+    const { dragEvents, fileReceiver, fileRef, dragStatus } = useDragAndDrop(file => {
+        const fr = new FileReader()
+        fr.readAsText(file)
+        fr.addEventListener('loadend', async () => {
+            setFileContent(fr.result as string)
+        })
+    })
 
     const [tab, setTab] = React.useState(0)
     const [qrError, setError] = React.useState<boolean>(false)
 
     return (
         <WelcomeContainer {...dragEvents}>
-            <nav className={classes.nav}>
-                <Button onClick={back} disableFocusRipple disableRipple className={classes.navButton}>
-                    <ArrowBack className={classes.navButtonIcon} />
-                    {geti18nString('back')}
-                </Button>
-            </nav>
+            <Navigation back={back} />
             <Tabs
                 value={tab}
                 onChange={(e, i) => setTab(i)}
@@ -110,8 +105,9 @@ export default function Welcome({ back, restore }: Props) {
                 textColor="primary"
                 aria-label="icon tabs example">
                 <Tab icon={<FolderOpen />} aria-label={geti18nString('welcome_1b_tabs_backup')} />
+                {/* TODO: add support for Firefox */}
                 <Tab
-                    disabled={!('BarcodeDetector' in window || isWKWebkit)}
+                    disabled={!('BarcodeDetector' in window || isWKWebkit) || !!isFirefox}
                     icon={<Camera />}
                     aria-label={geti18nString('welcome_1b_tabs_qr')}
                 />
@@ -124,7 +120,7 @@ export default function Welcome({ back, restore }: Props) {
 
                 {tab === 0 ? (
                     <Button
-                        onClick={() => restore(fileRef.current!)}
+                        onClick={() => restore(fileContent)}
                         disabled={!fileRef.current}
                         variant="contained"
                         color="primary"
@@ -195,10 +191,8 @@ export default function Welcome({ back, restore }: Props) {
                 {qrError ? (
                     <div className={classes.videoError}>
                         {geti18nString('welcome_1b_qr_error_1')}
-                        There is an error occur during the scanning.
                         <br />
                         {geti18nString('welcome_1b_qr_error_2')}
-                        You may try other ways to restore your account.
                     </div>
                 ) : null}
             </>

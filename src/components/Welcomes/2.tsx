@@ -1,9 +1,8 @@
 import * as React from 'react'
 import { geti18nString } from '../../utils/i18n'
-import { makeStyles, Paper, Typography, Button } from '@material-ui/core'
-import { isMobile } from '../../social-network/facebook.com/isMobile'
+import { makeStyles, Paper, Typography, Button, Theme } from '@material-ui/core'
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles<Theme>(theme => ({
     paper: {
         padding: '2rem 1rem 1rem 1rem',
         textAlign: 'center',
@@ -15,17 +14,16 @@ const useStyles = makeStyles(theme => ({
         },
     },
 }))
-export default function Welcome() {
+interface Welcome2Props {
+    close: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void
+}
+export default function Welcome(props: Welcome2Props) {
     const classes = useStyles()
+    const { close } = props
     return (
         <Paper elevation={2} className={classes.paper}>
             <Typography variant="h5">{geti18nString('welcome_2_title')}</Typography>
-            <Button
-                variant="contained"
-                onClick={() => {
-                    if (isMobile) location.href = 'https://m.facebook.com/'
-                    else location.href = 'https://www.facebook.com/'
-                }}>
+            <Button variant="contained" onClick={close}>
                 {geti18nString('welcome_2_greeting')}
             </Button>
         </Paper>

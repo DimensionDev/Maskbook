@@ -14,10 +14,11 @@ import {
 } from '../../database/people'
 import { UpgradeBackupJSONFile } from '../../utils/type-transform/BackupFile'
 import { PersonIdentifier, GroupIdentifier, GroupType } from '../../database/type'
+import { geti18nString } from '../../utils/i18n'
 
 OnlyRunInContext('background', 'FriendService')
-export { storeAvatar, getAvatarDataURL as getAvatarBlobURL, queryPerson } from '../../database'
-export { uploadProvePostUrl } from '../../key-management/people-gun'
+export { storeAvatar, getAvatarDataURL, queryPerson } from '../../database'
+export { writePersonOnGun } from '../../network/gun/version.2/people'
 /**
  * Query all people stored
  */
@@ -47,14 +48,15 @@ export async function queryMyIdentity(identifier?: PersonIdentifier | string): P
 /**
  * Restore the backup
  */
-export async function restoreBackup(json: object, whoAmI?: PersonIdentifier) {
+export async function restoreBackup(json: object, whoAmI?: PersonIdentifier): Promise<void> {
     async function storeMyIdentity(person: PersonRecordPublicPrivate, local: JsonWebKey) {
         await storeMyIdentityDB(person)
         const aes = await crypto.subtle.importKey('jwk', local, { name: 'AES-GCM', length: 256 }, true, [
             'encrypt',
             'decrypt',
         ])
-        await storeLocalKeyDB(new PersonIdentifier('facebook.com', '$self'), aes)
+        if ((await queryLocalKeyDB(new PersonIdentifier(person.identifier.network, '$self'))) === null)
+            await storeLocalKeyDB(new PersonIdentifier(person.identifier.network, '$self'), aes)
         await storeLocalKeyDB(person.identifier, aes)
     }
     function importKey(x: JsonWebKey) {
@@ -67,9 +69,9 @@ export async function restoreBackup(json: object, whoAmI?: PersonIdentifier) {
         return new GroupIdentifier(x.network, x.groupId, x.type)
     }
     const data = UpgradeBackupJSONFile(json, whoAmI)
-    if (!data) return false
+    if (!data) throw new TypeError(geti18nString('service_invalid_backup_file'))
 
-    const whoami = Promise.all(
+    const myIdentitiesInBackup = Promise.all(
         data.whoami.map(async rec => {
             const IAm = mapID(rec)
             const previousIdentifiers = (rec.previousIdentifiers || []).map(mapID)
@@ -102,17 +104,16 @@ export async function restoreBackup(json: object, whoAmI?: PersonIdentifier) {
         }),
     )
 
-    await whoami
+    await myIdentitiesInBackup
     await people
-    return true
 }
 
 /**
- * Resolve my possible identity at facebook.com
+ * Resolve my possible identity
  */
-export async function resolveIdentityAtFacebook(identifier: PersonIdentifier) {
-    const unknown = new PersonIdentifier('facebook.com', '$unknown')
-    const self = new PersonIdentifier('facebook.com', '$self')
+export async function resolveIdentity(identifier: PersonIdentifier) {
+    const unknown = new PersonIdentifier(identifier.network, '$unknown')
+    const self = new PersonIdentifier(identifier.network, '$self')
     {
         const ids = (await getMyIdentitiesDB()).filter(x => x.identifier.equals(unknown) || x.identifier.equals(self))
         for (const id of ids) {
@@ -122,7 +123,7 @@ export async function resolveIdentityAtFacebook(identifier: PersonIdentifier) {
         removeMyIdentityAtDB(self)
     }
     {
-        const locals = await queryLocalKeyDB('facebook.com')
+        const locals = await queryLocalKeyDB(identifier.network)
         if (locals) {
             if (locals.$unknown) {
                 await storeLocalKeyDB(identifier, locals.$unknown)

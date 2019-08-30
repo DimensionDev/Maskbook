@@ -11,7 +11,7 @@ import * as People from '../people'
 import { OnlyRunInContext } from '@holoflows/kit/es'
 import { readMangledDB } from './old.mangled.helper.1'
 import { PersonIdentifier } from '../type'
-// tslint:disable: deprecation
+/* eslint import/no-deprecated: 0 */
 OnlyRunInContext('background', 'Local Key Store')
 /** DO NOT Change the name of this class! It is used as key in the db! */
 class LocalCryptoKeyRecord {
@@ -35,7 +35,7 @@ export default async function migrate() {
         const dbs = await indexedDB.databases()
         if (!dbs.find(x => x.name === 'maskbook-localkeystore-demo-v1')) return
     }
-    // tslint:disable-next-line: deprecation
+    // eslint-disable-next-line import/no-deprecated
     const key = await getMyLocalKey()
     if (key) People.storeLocalKeyDB(new PersonIdentifier('facebook.com', '$self'), key.key)
     await deleteDB('maskbook-localkeystore-demo-v1')

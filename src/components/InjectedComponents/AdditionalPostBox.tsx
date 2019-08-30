@@ -1,17 +1,17 @@
 import * as React from 'react'
-import { useAsync } from '../../utils/components/AsyncComponent'
-import { usePeople, MyIdentityContext } from '../DataSource/PeopleRef'
-import { SelectPeopleUI } from './SelectPeople'
-import { useRef, useContext, useState, useCallback } from 'react'
+import { useCallback, useRef, useState } from 'react'
+import { SelectPeopleUI } from '../shared/SelectPeople'
 import { useCapturedInput } from '../../utils/hooks/useCapturedEvents'
 import { Avatar } from '../../utils/components/Avatar'
 import Services from '../../extension/service'
-import { pasteIntoPostBox } from '../../extension/content-script/tasks'
 import { geti18nString } from '../../utils/i18n'
 import { makeStyles } from '@material-ui/styles'
-import { Card, CardHeader, Typography, Divider, Paper, InputBase, Button, Box } from '@material-ui/core'
+import { Box, Button, Card, CardHeader, Divider, InputBase, Paper, Typography } from '@material-ui/core'
 import { Person } from '../../database'
-import { NotSetupYetPrompt } from './NotSetupYetPrompt'
+import { NotSetupYetPrompt } from '../shared/NotSetupYetPrompt'
+import { useCurrentIdentity, useFriendsList, useMyIdentities } from '../DataSource/useActivatedUI'
+import { getActivatedUI } from '../../social-network/ui'
+import { ChooseIdentity } from '../shared/ChooseIdentity'
 
 interface Props {
     people: Person[]
@@ -38,7 +38,7 @@ export function AdditionalPostBoxUI(props: Props) {
     const { people } = props
     const classes = useStyles()
 
-    const myself = useContext(MyIdentityContext)
+    const myself = useCurrentIdentity()
     const [text, setText] = useState('')
     const [selectedPeople, selectPeople] = useState<Person[]>([])
 
@@ -82,11 +82,9 @@ export function AdditionalPostBoxUI(props: Props) {
     )
 }
 
-export function AdditionalPostBox() {
-    const people = usePeople()
-    const classes = useStyles()
-    const [identity, setIdentity] = useState<Person[]>([])
-    useAsync(() => Services.People.queryMyIdentity('facebook.com'), []).then(setIdentity)
+export function AdditionalPostBox(props: Partial<Props>) {
+    const people = useFriendsList()
+    const identity = useMyIdentities()
 
     const onRequestPost = useCallback(
         async (people: Person[], text: string) => {
@@ -96,22 +94,27 @@ export function AdditionalPostBox() {
                 identity[0].identifier,
             )
             const fullPost = geti18nString('additional_post_box__encrypted_post_pre', encrypted)
-            pasteIntoPostBox(fullPost, geti18nString('additional_post_box__encrypted_failed'))
+            getActivatedUI().taskPasteIntoPostBox(fullPost, {
+                warningText: geti18nString('additional_post_box__encrypted_failed'),
+                shouldOpenPostDialog: false,
+            })
             Services.Crypto.publishPostAESKey(token, identity[0].identifier)
         },
-        [identity[0]],
+        [identity],
     )
 
     if (identity.length === 0) {
         return <NotSetupYetPrompt />
     }
 
-    // TODO: Multiple account
-    if (identity.length > 1) console.warn('Multiple identity found. Let user choose one.')
+    const ui = <AdditionalPostBoxUI people={people} onRequestPost={onRequestPost} {...props} />
 
-    return (
-        <MyIdentityContext.Provider value={identity[0]}>
-            <AdditionalPostBoxUI people={people} onRequestPost={onRequestPost} />
-        </MyIdentityContext.Provider>
-    )
+    if (identity.length > 1)
+        return (
+            <>
+                <ChooseIdentity />
+                {ui}
+            </>
+        )
+    return ui
 }

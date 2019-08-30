@@ -2,7 +2,7 @@ import React from 'react'
 import { storiesOf } from '@storybook/react'
 import { text, boolean } from '@storybook/addon-knobs'
 import { action } from '@storybook/addon-actions'
-import { AdditionalPostBoxUI } from '../components/InjectedComponents/AdditionalPostBox'
+import { AdditionalPostBox } from '../components/InjectedComponents/AdditionalPostBox'
 import { AdditionalContent } from '../components/InjectedComponents/AdditionalPostContent'
 import { DecryptPostUI } from '../components/InjectedComponents/DecryptedPost'
 import { AddToKeyStoreUI } from '../components/InjectedComponents/AddToKeyStore'
@@ -12,9 +12,10 @@ import { Button, Paper } from '@material-ui/core'
 import { RenderInShadowRootWrapper } from '../utils/jss/renderInShadowRoot'
 import { demoPeople } from './demoPeople'
 import { PostCommentDecrypted } from '../components/InjectedComponents/PostComments'
+import { CommentBox } from '../components/InjectedComponents/CommentBox'
 
 storiesOf('Injections', module)
-    .add('AdditionalPostBox', () => <AdditionalPostBoxUI people={demoPeople} onRequestPost={action('onRequestPost')} />)
+    .add('AdditionalPostBox', () => <AdditionalPostBox onRequestPost={action('onRequestPost')} />)
     .add('Additional Post Content', () => (
         <Paper>
             <AdditionalContent title="Additional Content" renderText={text('Rich text', '')} />
@@ -58,7 +59,7 @@ storiesOf('Injections', module)
                 </FakePost>
                 <FakePost title="Decrypting:">{DecryptPostUI.awaiting}</FakePost>
                 <FakePost title="Failed:">
-                    <DecryptPostUI.failed error={new Error('Error message')} />
+                    <DecryptPostUI.failed retry={action('retry')} error={new Error('Error message')} />
                 </FakePost>
             </>
         )
@@ -75,7 +76,10 @@ storiesOf('Injections', module)
         )
     })
     .add('Decrypted comment', () => {
-        return <PostCommentDecrypted />
+        return <PostCommentDecrypted children={text('Comment', 'Post comment')} />
+    })
+    .add('Comment box', () => {
+        return <CommentBox onSubmit={action('submit')} />
     })
 
 function FakePost(props: { title: string; children: any }) {

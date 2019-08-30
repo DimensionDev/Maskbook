@@ -31,9 +31,8 @@ export interface CustomEvents {
 
     const hacks: { [key in keyof CustomEvents & keyof DocumentEventMap]: (...params: CustomEvents[key]) => Event } = {
         paste(text) {
-            const transfer = new DataTransfer()
-            transfer.setData('text/plain', text)
-            const e = new ClipboardEvent('paste', { clipboardData: transfer })
+            const e = new ClipboardEvent('paste', { clipboardData: new DataTransfer() })
+            e.clipboardData!.setData('text/plain', text)
             // ! Why?
             return getEvent(e, { defaultPrevented: false, preventDefault() {} })
         },
@@ -46,8 +45,9 @@ export interface CustomEvents {
     }
     ;(Object.keys(hacks) as (keyof DocumentEventMap)[]).concat(['keyup', 'input']).forEach(hijack)
     const invokeCustomEvent: EventListenerOrEventListenerObject = e => {
-        const ev = e as CustomEvent<[keyof CustomEvents, CustomEvents[keyof CustomEvents]]>
-        const [eventName, param] = ev.detail
+        const ev = e as CustomEvent<string>
+        const [eventName, param]: [keyof CustomEvents, CustomEvents[keyof CustomEvents]] = JSON.parse(ev.detail)
+
         for (const f of store[eventName] || []) {
             try {
                 const hack = hacks[eventName]

@@ -6,25 +6,28 @@ export const PortalShadowRoot = (div.attachShadow({ mode: 'closed' }) as unknown
 livingShadowRoots.add(PortalShadowRoot as any)
 
 Object.defineProperties(ShadowRoot.prototype, {
-    setAttribute: { value() {} },
-    removeAttribute: { value() {} },
+    setAttribute: { value() {}, configurable: true },
+    removeAttribute: { value() {}, configurable: true },
     nodeType: {
         get() {
             if (this === PortalShadowRoot) return 1
             else return Object.getOwnPropertyDescriptor(Node.prototype, 'nodeType')!.get!.call(this)
         },
+        configurable: true,
     },
     tagName: {
         get() {
             if (this === PortalShadowRoot) return 'div'
             else return undefined
         },
+        configurable: true,
     },
     style: {
         get() {
             if (this === PortalShadowRoot) return div.style
             else return undefined
         },
+        configurable: true,
     },
 })
 {

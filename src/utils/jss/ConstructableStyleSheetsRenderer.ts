@@ -2,6 +2,8 @@
  * This file is granted to [JSS](https://github.com/cssinjs/jss) with MIT Licence
  */
 import warning from 'tiny-warning'
+/// <reference path="./CSSOM.d.ts" />
+/// <reference path="./JSS-internal.d.ts" />
 /**
  * Chrome < 73, enable polyfill
  * Chrome = 73, disable polyfill
@@ -47,7 +49,7 @@ export function applyAdoptedStyleSheets(shadowOnly = true) {
         for (const shadow of shadows) {
             shadow.adoptedStyleSheets = nextAdoptedStyleSheets
         }
-        if (shadowOnly === false) document.adoptedStyleSheets = nextAdoptedStyleSheets
+        if (!shadowOnly) document.adoptedStyleSheets = nextAdoptedStyleSheets
     })
 }
 
@@ -67,7 +69,7 @@ function adoptStylesheets(
 }
 //#endregion
 
-// tslint:disable: deprecation
+/* eslint import/no-deprecated: 0 */
 // tslint:disable: increment-decrement
 type HTMLElementWithStyleMap = HTMLElement
 type AnyCSSRule = unknown
@@ -195,6 +197,7 @@ const getHead = () => fakeHead
  * Find attached sheet with an index higher than the passed one.
  */
 function findHigherSheet(registry: Array<StyleSheet>, options: PriorityOptions): StyleSheet | null {
+    // eslint-disable-next-line
     for (let i = 0; i < registry.length; i++) {
         const sheet = registry[i]
         if (
@@ -212,6 +215,7 @@ function findHigherSheet(registry: Array<StyleSheet>, options: PriorityOptions):
  * Find attached sheet with the highest index.
  */
 function findHighestSheet(registry: Array<StyleSheet>, options: PriorityOptions): StyleSheet | null {
+    // eslint-disable-next-line
     for (let i = registry.length - 1; i >= 0; i--) {
         const sheet = registry[i]
         if (sheet.attached && sheet.options.insertionPoint === options.insertionPoint) {
@@ -226,6 +230,7 @@ function findHighestSheet(registry: Array<StyleSheet>, options: PriorityOptions)
  */
 function findCommentNode(text: string): Node | null {
     const head = getHead()
+    // eslint-disable-next-line
     for (let i = 0; i < head.childNodes.length; i++) {
         const node = head.childNodes[i]
         if (node.nodeType === 8 && node.nodeValue!.trim() === text) {
@@ -309,12 +314,10 @@ function insertStyle(style: HTMLStyleElement, options: PriorityOptions) {
 /**
  * Read jss nonce setting from the page if the user has set it.
  */
-const getNonce = memoize(
-    (): string | null => {
-        const node = document.querySelector('meta[property="csp-nonce"]')
-        return node ? node.getAttribute('content') : null
-    },
-)
+const getNonce = memoize((): string | null => {
+    const node = document.querySelector('meta[property="csp-nonce"]')
+    return node ? node.getAttribute('content') : null
+})
 
 const insertRule = (
     container: CSSStyleSheet | CSSMediaRule | CSSKeyframesRule,
@@ -368,7 +371,7 @@ export default class ConstructableStyleSheetsRenderer {
     // ! Hook this !
     get element(): HTMLStyleElement {
         const proxy = new Proxy(this.realElement || {}, {
-            get(target, key, receiver) {
+            get(target, key) {
                 if (key === 'sheet') return getStyleSheet(target)
                 if (key === 'setAttribute')
                     return (k: string, v: string) => {
@@ -378,7 +381,7 @@ export default class ConstructableStyleSheetsRenderer {
                     }
                 return (target as any)[key]
             },
-            set(target, key, value, receiver) {
+            set(target, key, value) {
                 if (key === 'textContent')
                     getStyleSheet(target).replaceSync(value)
                     // if (!isChrome74) {
@@ -460,6 +463,7 @@ export default class ConstructableStyleSheetsRenderer {
 
     insertRules(rules: RuleList, nativeParent?: CSSStyleSheet | CSSMediaRule | CSSKeyframesRule) {
         // @ts-ignore
+        // eslint-disable-next-line
         for (let i = 0; i < rules.index.length; i++) {
             // @ts-ignore
             this.insertRule(rules.index[i], i, nativeParent)
@@ -522,6 +526,7 @@ export default class ConstructableStyleSheetsRenderer {
      */
     indexOf(cssRule: AnyCSSRule): number {
         const { cssRules } = this.element.sheet!
+        // eslint-disable-next-line
         for (let index = 0; index < cssRules.length; index++) {
             if (cssRule === cssRules[index]) return index
         }

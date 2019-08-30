@@ -1,15 +1,21 @@
 import * as React from 'react'
+import { useCallback } from 'react'
 import CloseIcon from '@material-ui/icons/Close'
 import { geti18nString } from '../../utils/i18n'
 import { makeStyles } from '@material-ui/styles'
-import { AppBar, Typography, Button, IconButton, Hidden, SnackbarContent, Theme } from '@material-ui/core'
+import { AppBar, Button, Hidden, IconButton, SnackbarContent, Theme, Typography } from '@material-ui/core'
+import { useLastRecognizedIdentity } from '../DataSource/useActivatedUI'
+import Services from '../../extension/service'
+import { getActivatedUI, SocialNetworkUI } from '../../social-network/ui'
+import { env } from '../../social-network/shared'
+import { setStorage } from '../../utils/browser.storage'
 
 interface Props {
     getStarted(): void
     close(): void
     disabled?: boolean
 }
-const useStyles = makeStyles((theme: Theme) => ({
+const useStyles = makeStyles<Theme>(theme => ({
     root: {
         border: '1px solid #ccc',
         borderRadius: 4,
@@ -28,7 +34,7 @@ const useStyles = makeStyles((theme: Theme) => ({
         padding: 6,
     },
 }))
-export function Banner(props: Props) {
+export function BannerUI(props: Props) {
     const classes = useStyles()
     const Title = (
         <Typography variant="subtitle1" color="inherit">
@@ -66,5 +72,34 @@ export function Banner(props: Props) {
                 }
             />
         </AppBar>
+    )
+}
+
+export function Banner({
+    unmount,
+    ...props
+}: { unmount: () => void; networkIdentifier: SocialNetworkUI['networkIdentifier'] } & Partial<Props>) {
+    const lastRecognizedIdentity = useLastRecognizedIdentity()
+    const closeDefault = useCallback(() => {
+        getActivatedUI().ignoreSetupAccount(env, {})
+        unmount()
+    }, [unmount])
+    if (typeof props.networkIdentifier === 'function' && props.getStarted === undefined) {
+        throw new TypeError(
+            'You cannot use getStartedDefault when networkIdentifier is a function. Please implement this function yourself.',
+        )
+    }
+    const getStartedDefault = useCallback(() => {
+        setStorage(props.networkIdentifier as string, { forceDisplayWelcome: false })
+        unmount()
+        Services.Welcome.openWelcomePage(lastRecognizedIdentity)
+    }, [lastRecognizedIdentity, props.networkIdentifier, unmount])
+    return (
+        <BannerUI
+            disabled={lastRecognizedIdentity.identifier.isUnknown}
+            close={closeDefault}
+            getStarted={getStartedDefault}
+            {...props}
+        />
     )
 }

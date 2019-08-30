@@ -2,11 +2,12 @@ import { create } from 'jss'
 import { jssPreset, createGenerateClassName, StylesProvider, ThemeProvider } from '@material-ui/styles'
 import ReactDOM from 'react-dom'
 import React from 'react'
-import { MaskbookLightTheme } from '../theme'
+import { MaskbookLightTheme, MaskbookDarkTheme } from '../theme'
 import ConstructableStyleSheetsRenderer, {
     livingShadowRoots,
     applyAdoptedStyleSheets,
 } from './ConstructableStyleSheetsRenderer'
+import { useMediaQuery } from '@material-ui/core'
 
 const jss = create({ ...jssPreset(), Renderer: ConstructableStyleSheetsRenderer as any })
 /**
@@ -30,15 +31,20 @@ export class RenderInShadowRootWrapper extends React.PureComponent {
     state: { error?: Error } = { error: undefined }
     render() {
         if (this.state.error) return this.state.error.message
-        return (
-            <StylesProvider jss={jss} generateClassName={generateClassName}>
-                <ThemeProvider theme={MaskbookLightTheme}>
-                    <div children={this.props.children} />
-                </ThemeProvider>
-            </StylesProvider>
-        )
+        return <Maskbook children={this.props.children} />
     }
-    componentDidCatch(error: Error, errorInfo: any) {
+    componentDidCatch(error: Error) {
         this.setState({ error })
     }
+}
+function Maskbook(props: any) {
+    // const isDarkTheme = useMediaQuery('(prefers-color-scheme: dark)')
+    const isDarkTheme = false
+    return (
+        <StylesProvider jss={jss} generateClassName={generateClassName}>
+            <ThemeProvider theme={isDarkTheme ? MaskbookDarkTheme : MaskbookLightTheme}>
+                <div {...props} />
+            </ThemeProvider>
+        </StylesProvider>
+    )
 }

@@ -1,13 +1,13 @@
-import { uiSetup } from './setup'
+import './provider.worker'
 import React from 'react'
-import { HashRouter as Router, Route, Link } from 'react-router-dom'
-import ReactDOM from 'react-dom'
+import { HashRouter, MemoryRouter, Route, Link } from 'react-router-dom'
 
 import Welcome from './extension/options-page/Welcome'
 import Privacy from './extension/options-page/Privacy'
+import Developer from './extension/options-page/Developer'
 
 import { ThemeProvider } from '@material-ui/styles'
-import { MaskbookLightTheme } from './utils/theme'
+import { MaskbookLightTheme, MaskbookDarkTheme } from './utils/theme'
 import { geti18nString } from './utils/i18n'
 import { makeStyles, useTheme, Theme, createStyles } from '@material-ui/core/styles'
 import {
@@ -24,14 +24,17 @@ import {
     Hidden,
     Drawer,
     Link as MuiLink,
+    useMediaQuery,
 } from '@material-ui/core'
 import Menu from '@material-ui/icons/Menu'
 import NearMe from '@material-ui/icons/NearMe'
 import Assignment from '@material-ui/icons/Assignment'
 import Phonelink from '@material-ui/icons/Phonelink'
+import Code from '@material-ui/icons/Code'
 import { ExportData } from './components/MobileImportExport/Export'
+import './setup.ui'
+import { SSRRenderer } from './utils/SSRRenderer'
 
-uiSetup()
 const drawerWidth = 240
 const empty = (
     <div
@@ -47,6 +50,7 @@ const OptionsPageRouters = (
         <Route exact path="/" component={() => empty} />
         <Route path="/welcome" component={Welcome} />
         <Route path="/privacy" component={() => Privacy} />
+        <Route path="/developer" component={Developer} />
         <Route path="/mobile-setup" component={ExportData} />
     </>
 )
@@ -54,6 +58,7 @@ const Links1st = (
     <>
         <LinkItem icon={<NearMe />} title={geti18nString('options_index_setup')} to="/welcome" />
         <LinkItem icon={<Phonelink />} title={geti18nString('options_index_mobile_export')} to="/mobile-setup" />
+        <LinkItem icon={<Code />} title={geti18nString('options_index_dev')} to="/developer" />
     </>
 )
 const Links2rd = (
@@ -62,7 +67,7 @@ const Links2rd = (
     </>
 )
 
-const useStyles = makeStyles((theme: Theme) =>
+const useStyles = makeStyles<Theme>(theme =>
     createStyles({
         root: {
             display: 'flex',
@@ -93,12 +98,11 @@ const useStyles = makeStyles((theme: Theme) =>
         },
         content: {
             flexGrow: 1,
-            // paddingLeft: theme.spacing(3),
-            // paddingRight: theme.spacing(3),
         },
     }),
 )
-ReactDOM.render(<ResponsiveDrawer />, document.getElementById('root')!)
+
+SSRRenderer(<ResponsiveDrawer />)
 function ResponsiveDrawer() {
     const classes = useStyles()
     const theme = useTheme()
@@ -118,8 +122,12 @@ function ResponsiveDrawer() {
         </div>
     )
 
+    const isDarkTheme = useMediaQuery('(prefers-color-scheme: dark)')
+
+    const Router = (typeof window === 'object' ? HashRouter : MemoryRouter) as typeof HashRouter
+
     return (
-        <ThemeProvider theme={MaskbookLightTheme}>
+        <ThemeProvider theme={isDarkTheme ? MaskbookDarkTheme : MaskbookLightTheme}>
             <style>{'body {overflow-x: hidden;}'}</style>
             <Router>
                 <div className={classes.root}>

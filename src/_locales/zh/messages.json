@@ -18,6 +18,9 @@
     "additional_post_box__encrypted_failed": {
         "message": "請將以下内容拷貝至發佈框。"
     },
+    "comment_box__paste_failed": {
+        "message": "請將以下内容拷貝至評論框。"
+    },
     "add_to_key_store_success": {
         "message": "Maskbook 已獲取此公鑰並添加至本地 ✔"
     },
@@ -28,7 +31,7 @@
         "message": "Maskbook 公鑰驗證失敗 ❌"
     },
     "add_to_key_store_failed_text": {
-        "message": "$1\n這個公鑰不會被相信。"
+        "message": "$1\nMaskbook 不會添加此密鑰。"
     },
     "decrypted_postbox_title": {
         "message": "Maskbook 解密出的文本："
@@ -48,6 +51,12 @@
     "decrypted_postbox_decrypting": {
         "message": "Maskbook 解密中…"
     },
+    "decrypted_postbox_decrypting_finding_person_key": {
+        "message": "Maskbook 正在搜尋對方的公鈅..."
+    },
+    "decrypted_postbox_decrypting_finding_post_key": {
+        "message": "Maskbook 正在搜尋分享給你的密鑰以解密这篇内容..."
+    },
     "decrypted_postbox_failed": {
         "message": "Maskbook 解密失敗"
     },
@@ -60,8 +69,8 @@
     "select_none": {
         "message": "全部取消選取"
     },
-    "not_found": {
-        "message": "找不到"
+    "no_search_result": {
+        "message": "沒有結果"
     },
     "cancel": {
         "message": "取消"
@@ -84,6 +93,9 @@
     "finish": {
         "message": "完成"
     },
+    "retry_decryption": {
+        "message": "再試一次"
+    },
     "welcome_0_close_button": {
         "message": "我想以後再做"
     },
@@ -91,13 +103,13 @@
         "message": "歡迎使用 Maskbook"
     },
     "welcome_0_description": {
-        "message": "從此無需擔心 Facebook 追蹤、分析、窺視你的數字生活"
+        "message": "從此無需擔心社交網路追蹤、分析、窺視你的數字生活"
     },
     "welcome_0_new_user": {
         "message": "新用戶？"
     },
-    "welcome_0_connect_facebook": {
-        "message": "連接 Facebook 賬號"
+    "welcome_0_connect_maskbook": {
+        "message": "設置 Maskbook"
     },
     "welcome_0_old_user": {
         "message": "老用戶？"
@@ -107,6 +119,27 @@
     },
     "welcome_0_caption": {
         "message": "弄丟了備份檔案？不用擔心，當作自己是新用戶即可。"
+    },
+    "welcome_1a1_title": {
+        "message": "你希望為哪個賬戶設定 Maskbook？"
+    },
+    "welcome_1a1_next": {
+        "message": "確認"
+    },
+    "welcome_1a1_didntfind": {
+        "message": "沒有找到你的賬戶？"
+    },
+    "welcome_1a1b_title": {
+        "message": "Maskbook 可以在這些社交網絡上使用"
+    },
+    "welcome_1a1b_danger": {
+        "message": "受審查的站點"
+    },
+    "welcome_1a1b_connect": {
+        "message": "連結"
+    },
+    "welcome_1a1b_switch": {
+        "message": "連接現有的賬戶"
     },
     "welcome_1a2_title": {
         "message": "使用 Maskbook 的輸入框來加密"
@@ -156,14 +189,14 @@
     "welcome_1a4_title": {
         "message": "驗證賬號歸屬權"
     },
-    "welcome_1a4_bio_disabled": {
-        "message": "由於技術問題，此驗證方式暫時不可用。"
+    "welcome_1a4_disabled": {
+        "message": "由於技術問題，暫時只有一種驗證方式可用。"
     },
     "welcome_1a4_type_auto_subtitle1": {
         "message": "避免好友感到迷惑"
     },
     "welcome_1a4_type_auto_subtitle2": {
-        "message": "這使得你的好友能夠驗證你的 Facebook 賬號與你的 Maskbook 公鑰都屬於你。"
+        "message": "這使得你的好友能夠驗證你的社交網路賬號與你的 Maskbook 公鑰都屬於你。"
     },
     "welcome_1a4_type_auto_switch": {
         "message": "更願意手動操作？"
@@ -172,7 +205,7 @@
         "message": "將這串文本添加到個人簡介或分享到時間線，在發佈第一條加密訊息之前。"
     },
     "welcome_1a4_type_manual_subtitle2": {
-        "message": "這使得你的好友能夠驗證你的 Facebook 賬號與你的 Maskbook 公鑰都屬於你。"
+        "message": "這使得你的好友能夠驗證你的社交網路賬號與你的 Maskbook 公鑰都屬於你。"
     },
     "welcome_1a4_type_manual_goto": {
         "message": "拷貝並跳轉到個人簡介"
@@ -237,6 +270,9 @@
     "banner_dismiss_aria": {
         "message": "關閉消息"
     },
+    "service_invalid_backup_file": {
+        "message": "這貌似不是 Maskbook 的備份。"
+    },
     "service_others_key_not_found": {
         "message": "$1 的公鑰無法找到！"
     },
@@ -263,9 +299,6 @@
     },
     "service_username_invalid": {
         "message": "無效用戶名"
-    },
-    "automation_request_click_post_box": {
-        "message": "請點擊發佈框"
     },
     "automation_request_click_edit_bio_button": {
         "message": "請點擊「編輯簡介」按鈕或簡介旁的鉛筆圖標"
@@ -294,6 +327,9 @@
     "options_index_mobile_export": {
         "message": "設定移動版"
     },
+    "options_index_dev": {
+        "message": "開發人員選項"
+    },
     "options_index_privacy": {
         "message": "隱私政策"
     },
@@ -305,5 +341,11 @@
     },
     "options_mobile_export_subtitle": {
         "message": "請不要保存或將此 QR 碼分享給他人！"
+    },
+    "shared_choose_identity_title": {
+        "message": "點擊此處切換賬號"
+    },
+    "shared_choose_identity_subtitle": {
+        "message": "你的其他 Maskbook 賬戶"
     }
 }
