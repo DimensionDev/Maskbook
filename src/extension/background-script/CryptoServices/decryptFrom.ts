@@ -7,7 +7,7 @@ import { deconstructPayload, Payload } from '../../../utils/type-transform/Paylo
 import { geti18nString } from '../../../utils/i18n'
 import { getMyPrivateKey } from '../../../database'
 import { queryLocalKeyDB } from '../../../database/people'
-import { PersonIdentifier, PostIdentifier, PersonUI } from '../../../database/type'
+import { PersonIdentifier, PostIVIdentifier } from '../../../database/type'
 import { queryPostDB, updatePostDB } from '../../../database/post'
 import { addPerson } from './addPerson'
 import { MessageCenter } from '../../../utils/messages'
@@ -42,7 +42,7 @@ export async function decryptFrom(
     const version = data.version
     if (version === -40 || version === -39) {
         const { encryptedText, iv, ownersAESKeyEncrypted, signature, version } = data
-        const postIdByIV = new PostIdentifier(by, iv)
+        const postIdByIV = new PostIVIdentifier(by.network, iv)
         const unverified = [version === -40 ? '2/4' : '3/4', ownersAESKeyEncrypted, iv, encryptedText].join('|')
         const cryptoProvider = version === -40 ? Alpha40 : Alpha39
 
@@ -152,7 +152,7 @@ async function decryptFromCache(postPayload: Payload, by: PersonIdentifier) {
     const { encryptedText, iv, version } = postPayload
     const cryptoProvider = version === -40 ? Alpha40 : Alpha39
 
-    const postIdentifier = new PostIdentifier(by, iv.replace(/\//g, '|'))
+    const postIdentifier = new PostIVIdentifier(by.network, iv)
     const cachedKey = await queryPostDB(postIdentifier)
     const setCache = (postAESKey: CryptoKey) => {
         updatePostDB(

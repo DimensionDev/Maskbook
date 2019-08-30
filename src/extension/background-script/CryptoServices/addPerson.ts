@@ -1,7 +1,7 @@
 import * as Gun1 from '../../../network/gun/version.1'
 import * as Gun2 from '../../../network/gun/version.2'
 import { geti18nString } from '../../../utils/i18n'
-import { queryPersonDB, PersonRecord } from '../../../database/people'
+import { queryPersonDB } from '../../../database/people'
 import { PersonIdentifier, PostIdentifier } from '../../../database/type'
 import getCurrentNetworkWorker from '../../../social-network/utils/getCurrentNetworkWorker'
 import { verifyOthersProve } from './verifyOthersProve'

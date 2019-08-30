@@ -8,10 +8,10 @@ import { geti18nString } from '../../utils/i18n'
 import { makeStyles } from '@material-ui/styles'
 import { Box, Link, useMediaQuery, useTheme } from '@material-ui/core'
 import { Person } from '../../database'
-import { Identifier, PersonIdentifier, PostIdentifier } from '../../database/type'
+import { Identifier, PersonIdentifier, PostIVIdentifier } from '../../database/type'
 import { NotSetupYetPrompt } from '../shared/NotSetupYetPrompt'
 import { MessageCenter, TypedMessages } from '../../utils/messages'
-import { deconstructPayload, Payload } from '../../utils/type-transform/Payload'
+import { Payload } from '../../utils/type-transform/Payload'
 
 interface DecryptPostSuccessProps {
     data: { signatureVerifyResult: boolean; content: string }
@@ -114,7 +114,7 @@ function DecryptPost(props: DecryptPostProps) {
     useEffect(() => {
         let listener = (data: TypedMessages['decryptionStatusUpdated']) => {
             if (!payload) return
-            const id = new PostIdentifier(postBy, payload.iv)
+            const id = new PostIVIdentifier(postBy.network, payload.iv)
             if (id.equals(data.post)) {
                 switch (data.status) {
                     case 'finding_person_public_key':
