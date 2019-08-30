@@ -1,11 +1,11 @@
-const { task, series, parallel } = require('just-task')
-const args = require('just-task').argv()
+const { task, series, parallel, argv } = require('just-task')
 const { spawn, exec } = require('child_process')
 const { watch } = require('chokidar')
 const adb = require('adbkit').createClient()
 const path = require('path')
 const fs = require('fs-extra')
 
+const args = argv()
 const profile = path.join(process.cwd(), `.firefox`)
 
 const prettierCommand = async (str, level = 'log') => {
