@@ -78,6 +78,7 @@ const useStyles = makeStyles<Theme>(theme => ({
     },
 }))
 export default function Welcome({ back, restore }: Props) {
+    const isFirefox = navigator.userAgent.match('Firefox')
     const classes = useStyles()
     const ref = React.useRef<HTMLInputElement>(null)
     const textAreaRef = React.useRef<HTMLTextAreaElement>(null)
@@ -104,8 +105,9 @@ export default function Welcome({ back, restore }: Props) {
                 textColor="primary"
                 aria-label="icon tabs example">
                 <Tab icon={<FolderOpen />} aria-label={geti18nString('welcome_1b_tabs_backup')} />
+                {/* TODO: add support for Firefox */}
                 <Tab
-                    disabled={!('BarcodeDetector' in window || isWKWebkit)}
+                    disabled={!('BarcodeDetector' in window || isWKWebkit) || !!isFirefox}
                     icon={<Camera />}
                     aria-label={geti18nString('welcome_1b_tabs_qr')}
                 />
