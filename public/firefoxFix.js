@@ -4,17 +4,26 @@
  * which published as AGPLv3.
  */
 {
+    /**
+     * @type {(keyof typeof window & keyof typeof globalThis)[]}
+     *
+     * If any API is complaining "this does not implements Window", add it here.
+     */
+    const brokenAPI = ['requestAnimationFrame']
+
     const webAPIs = Object.getOwnPropertyDescriptors(window)
     Reflect.deleteProperty(webAPIs, 'window')
     Reflect.deleteProperty(webAPIs, 'globalThis')
     Reflect.deleteProperty(webAPIs, 'eval')
     const FixThisBindings = () => {
-        const clonedWebAPIs = { ...webAPIs }
+        const patch = { ...webAPIs }
         // ? Clone Web APIs
         for (const key in webAPIs) {
-            PatchThisOfDescriptorToGlobal(webAPIs[key], window)
+            if (brokenAPI.includes(key)) PatchThisOfDescriptorToGlobal(webAPIs[key], window)
+            else delete webAPIs[key]
         }
-        Object.defineProperties(window, clonedWebAPIs)
+        console.log('Applying patch', patch)
+        Object.defineProperties(window, patch)
     }
     /**
      * Many methods on `window` requires `this` points to a Window object
