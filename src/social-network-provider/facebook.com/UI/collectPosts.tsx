@@ -58,11 +58,17 @@ export function collectPostsFacebook(this: SocialNetworkUI) {
             this.posts.set(metadata, info)
             function collectPostInfo() {
                 info.postContent.value = node.innerText
-                info.postPayload.value = deconstructPayload(info.postContent.value)
-                info.postBy.value = getPostBy(metadata, info.postPayload.value !== null).identifier
+                const postBy = getPostBy(metadata, info.postPayload.value !== null).identifier
+                if (!info.postBy.value.equals(postBy)) {
+                    info.postBy.value = postBy
+                }
                 info.postID.value = getPostID(metadata)
             }
             collectPostInfo()
+            info.postPayload.value = deconstructPayload(info.postContent.value)
+            info.postContent.addListener(newVal => {
+                info.postPayload.value = deconstructPayload(newVal)
+            })
             return {
                 onNodeMutation: collectPostInfo,
                 onTargetChanged: collectPostInfo,

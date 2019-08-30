@@ -92,11 +92,17 @@ const registerPostCollector = (that: SocialNetworkUI) => {
                 const r = resolveInfoFromPostView(node)
                 if (!r) return
                 info.postContent.value = r.postContent
-                info.postPayload.value = deconstructPayload(info.postContent.value)
-                info.postBy.value = new PersonIdentifier(host, r.postBy)
+                const postBy = new PersonIdentifier(host, r.postBy)
+                if (!info.postBy.value.equals(postBy)) {
+                    info.postBy.value = postBy
+                }
                 info.postID.value = r.postId
             }
             collectPostInfo()
+            info.postPayload.value = deconstructPayload(info.postContent.value)
+            info.postContent.addListener(newValue => {
+                info.postPayload.value = deconstructPayload(newValue)
+            })
             return {
                 onNodeMutation: collectPostInfo,
                 onTargetChanged: collectPostInfo,
