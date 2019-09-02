@@ -109,9 +109,9 @@ async function createNewIdentity(whoAmI: PersonIdentifier) {
 
 export async function backupMyKeyPair(whoAmI: PersonIdentifier, download = true) {
     // Don't make the download pop so fast
-    await sleep(1000)
     const obj = await generateBackupJSON(whoAmI)
     if (!download) return obj
+    await sleep(1000)
     const string = JSON.stringify(obj)
     const buffer = encodeText(string)
     const blob = new Blob([buffer], { type: 'application/json' })

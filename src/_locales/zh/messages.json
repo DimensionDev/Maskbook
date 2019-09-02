@@ -327,6 +327,9 @@
     "options_index_mobile_export": {
         "message": "設定移動版"
     },
+    "options_index_backup": {
+        "message": "备份"
+    },
     "options_index_dev": {
         "message": "開發人員選項"
     },

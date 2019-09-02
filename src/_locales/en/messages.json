@@ -326,6 +326,9 @@
     "options_index_mobile_export": {
         "message": "Setup Mobile"
     },
+    "options_index_backup": {
+        "message": "Backup"
+    },
     "options_index_dev": {
         "message": "Developer Options"
     },

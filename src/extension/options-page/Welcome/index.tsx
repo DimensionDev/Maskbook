@@ -44,7 +44,7 @@ const WelcomeActions = {
      */
     restoreFromFile(file: string, id: PersonIdentifier): Promise<void> {
         const json = JSON.parse(file)
-        const upgraded = UpgradeBackupJSONFile(json)
+        const upgraded = UpgradeBackupJSONFile(json, id)
         if (!upgraded) throw new TypeError(geti18nString('service_invalid_backup_file'))
         // This request MUST BE sync or Firefox will reject this request
         return browser.permissions
