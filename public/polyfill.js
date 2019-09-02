@@ -81,5 +81,21 @@
         return getPrototypeChain(Object.getPrototypeOf(y), [..._, y])
     }
 }
+
+// This block fix unimplemented api of Geckoview
+{
+    if (!browser.permissions) {
+        Reflect.defineProperty(browser, 'permissions', {
+            get() {
+                return {
+                    getAll() { return Promise.resolve({}) },
+                    request() { return Promise.resolve() }
+                }
+            },
+            configurable: false,
+            writable: false
+        })
+    }
+}
 // As the return value of the executeScript
 undefined
