@@ -18,34 +18,35 @@ export function useQRCodeScan(
 
         useEffect(() => {
             async function start() {
-                if (permission !== 'granted') return
+                if (permission !== 'granted' || !video.current) return
                 try {
-                    const device = await getBackVideoDeviceId()
-                    const media = await navigator.mediaDevices.getUserMedia({
-                        audio: false,
-                        video: device === null ? { facingMode: 'environment' } : { deviceId: device },
-                    })
-                    setMediaStream(media)
-                    if (!video.current) return
+                    let media = mediaStream
+                    if (!media) {
+                        const device = await getBackVideoDeviceId()
+                        media = await navigator.mediaDevices.getUserMedia({
+                            audio: false,
+                            video: device === null ? { facingMode: 'environment' } : { deviceId: device },
+                        })
+                        setMediaStream(media)
+                    }
                     video.current.srcObject = media
                     video.current.play()
                 } catch (e) {
+                    console.error(e)
                     setMediaStream(null)
-                    if (!video.current) return
                     video.current.srcObject = null
                     video.current.pause()
                 }
             }
             function stop() {
-                mediaStream && mediaStream.getTracks().forEach(x => x.stop())
-                setMediaStream(null)
+                if (mediaStream) {
+                    mediaStream.getTracks().forEach(x => x.stop())
+                    setMediaStream(null)
+                }
                 video.current!.pause()
             }
             if (!video.current) return
-            if (isScanning && !mediaStream) start()
-            if (isScanning && mediaStream) video.current.play()
-            if (!isScanning && mediaStream) stop()
-            if (!isScanning && !mediaStream) video.current.pause()
+            start()
             return () => {
                 stop()
             }
