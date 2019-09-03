@@ -6,12 +6,15 @@ import { renderInShadowRoot } from '../../../utils/jss/renderInShadowRoot'
 import { SocialNetworkUIInjections } from '../../../social-network/ui'
 import { nop } from '../../../utils/utils'
 
+/**
+ * using a closed shadow root can prevent access from other script.
+ */
 const newMOW = (i: LiveSelector<HTMLElement, true>) =>
     new MOW(i).setDomProxyOption({ afterShadowRootInit: { mode: 'closed' } }).startWatch()
 
 const injectPostBox = () => {
     const target = newMOW(newPostEditorBelow())
-    renderInShadowRoot(<AdditionalPostBox />, target.firstVirtualNode.afterShadow)
+    renderInShadowRoot(<AdditionalPostBox/>, target.firstVirtualNode.afterShadow)
 }
 
 export const twitterUIInjections: SocialNetworkUIInjections = {

@@ -23,7 +23,7 @@ export const instanceOfTwitterUI = defineSocialNetworkUI({
     shouldActivate() {
         return location.hostname.endsWith(host)
     },
-    friendlyName: 'Twitter (Developing...)',
+    friendlyName: 'Twitter (Insider Preview)',
     setupAccount: () => {
         browser.permissions
             .request({
