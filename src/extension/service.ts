@@ -6,6 +6,7 @@ import { PersonIdentifier, GroupIdentifier, PostIdentifier, PostIVIdentifier } f
 import { getCurrentNetworkWorkerService } from './background-script/WorkerService'
 
 import tasks from './content-script/tasks'
+import { AsyncCallOptions } from '@holoflows/kit/src/util/AsyncCall'
 Object.assign(globalThis, { tasks })
 
 interface Services {
@@ -32,14 +33,25 @@ Object.assign(globalThis, {
 })
 //#region
 type Service = Record<string, (...args: any[]) => Promise<any>>
+const logOptions: AsyncCallOptions['log'] = {
+    beCalled: true,
+    localError: false,
+    remoteError: true,
+    sendLocalStack: true,
+    type: 'pretty',
+}
 function register<T extends Service>(service: T, name: keyof Services, mock?: Partial<T>) {
-    if (GetContext() === 'background') {
-        console.log(`Service ${name} registered in Background page`)
-        Object.assign(Services, { [name]: service })
-        Object.assign(globalThis, { [name]: service })
-        AsyncCall(service, { key: name, serializer: Serialization })
-    } else if (OnlyRunInContext(['content', 'options', 'debugging'], false)) {
-        Object.assign(Services, { [name]: AsyncCall({}, { key: name, serializer: Serialization }) })
+    if (OnlyRunInContext(['content', 'options', 'debugging', 'background'], false)) {
+        console.log(`Service ${name} registered in ${GetContext()}`)
+        Object.assign(Services, {
+            [name]: AsyncCall(Object.assign({}, service), {
+                key: name,
+                serializer: Serialization,
+                log: logOptions,
+                preferLocalImplementation: true,
+            }),
+        })
+        Object.assign(globalThis, { [name]: Object.assign({}, service) })
         if (GetContext() === 'debugging') {
             // ? -> UI developing
             const mockService = new Proxy(mock || {}, {
@@ -50,7 +62,7 @@ function register<T extends Service>(service: T, name: keyof Services, mock?: Pa
                     }
                 },
             })
-            AsyncCall(mockService, { key: name, serializer: Serialization })
+            AsyncCall(mockService, { key: name, serializer: Serialization, log: logOptions })
         }
     } else {
         console.warn('Unknown environment, service not registered')
