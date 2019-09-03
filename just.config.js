@@ -51,7 +51,7 @@ task('load/firefox', async () => {
         '--source-dir',
         './dist/',
     ])
-    process.exit(0)
+    exitAll()
 })
 task('load/firefox/android', async () => {
     await fs.remove('./dist')
@@ -77,7 +77,7 @@ task('load/firefox/android', async () => {
     } else {
         throw new Error('[web-ext] no device specified, exiting')
     }
-    process.exit(0)
+    exitAll()
 })
 
 task('lint', () => parallel('lint/prettier', 'lint/eslint'))
@@ -101,8 +101,9 @@ task('install/holoflows', async () => {
     await step(['yarn', 'build'], dir)
 })
 
+const stepChild = []
 /**
- * @param cmd {string[]} The command you want to run
+ * @param cmd {string | string[]} The command you want to run
  * @param [opt] {import('child_process').SpawnOptions & { withWarn?: boolean }} Options
  */
 const step = (cmd, opt = { withWarn: process.env.CI === 'true' }) => {
@@ -114,10 +115,17 @@ const step = (cmd, opt = { withWarn: process.env.CI === 'true' }) => {
         ...opt,
     })
 
+    stepChild.push(child)
+    const off = () => pull(stepChild, [child])
+
     return new Promise((resolve, reject) => {
-        child.on('error', reject)
+        child.on('error', () => {
+            off()
+            reject()
+        })
 
         child.on('exit', code => {
+            off()
             if (code === 0) {
                 resolve()
             } else {
@@ -126,6 +134,19 @@ const step = (cmd, opt = { withWarn: process.env.CI === 'true' }) => {
             }
         })
     })
+}
+
+/**
+ * @desc this method kill all process spawned by function 'spawn'.
+ */
+const exitAll = () => {
+    /**
+     * @type stepChild {import('child_process').ChildProcess[]}
+     */
+    while(stepChild.length > 0) {
+        stepChild.pop().kill()
+    }
+    process.exit(0)
 }
 
 const untilDirChanged = (dir = '.', timeout = 4000) => {
@@ -143,4 +164,8 @@ const untilDirChanged = (dir = '.', timeout = 4000) => {
 const last = array => {
     const length = array == null ? 0 : array.length
     return length ? array[length - 1] : undefined
+}
+
+const pull = (array, element) => {
+    array.splice(array.findIndex(o => o === element), 1)
 }
