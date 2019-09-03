@@ -3,4 +3,4 @@ package.json
 package-lock.json
 build/
 public/polyfill
-src/utils/jss/
+*.js
