@@ -59,22 +59,22 @@ export async function decryptFrom(
         }
         if (!byPerson || !byPerson.publicKey) {
             if (cachedPostResult) return { signatureVerifyResult: false, content: cachedPostResult }
-            let stopListening = false
             const undo = Gun2.subscribePersonFromGun2(by, data => {
-                if (stopListening) stop()
                 if (data && (data.provePostId || '').length > 0) {
                     publishMessagePeopleFound(postIVIdentifier)
                 }
-                stopListening = true
-                undo()
+                removeListeners()
             })
-            MessageCenter.on('newPerson', data => {
-                if (stopListening) return
+            const undo2 = MessageCenter.on('newPerson', data => {
                 if (data.identifier.equals(by)) {
                     publishMessagePeopleFound(postIVIdentifier)
-                    stopListening = true
+                    removeListeners()
                 }
             })
+            const removeListeners = () => {
+                undo()
+                undo2()
+            }
             return { error: geti18nString('service_others_key_not_found', by.userId) }
         }
 

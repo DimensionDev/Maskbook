@@ -147,11 +147,7 @@ function DecryptPost(props: DecryptPostProps) {
                 }
             }
         }
-        // TODO: MessageCenter does not support removeListener currently. Will add later
-        MessageCenter.on('decryptionStatusUpdated', listener)
-        return () => {
-            listener = () => {}
-        }
+        return MessageCenter.on('decryptionStatusUpdated', listener)
     }, [postBy, payload])
     if (decryptedResult) {
         return (
