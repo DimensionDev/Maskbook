@@ -1,6 +1,6 @@
 const { task, series, parallel } = require('just-task')
 const args = require('just-task').argv()
-const { spawn } = require('child_process')
+const { spawn, exec } = require('child_process')
 const { watch } = require('chokidar')
 const adb = require('adbkit').createClient()
 const path = require('path')
@@ -109,9 +109,11 @@ const stepChild = []
 const step = (cmd, opt = { withWarn: process.env.CI === 'true' }) => {
     if (!Array.isArray(cmd)) cmd = [cmd]
     const child = spawn(cmd[0], cmd.splice(1), {
-        // TODO: without this things won't work but it said this option is dangerous
+        // This is unfortunately required for *.cmd to be ran as commands
         shell: true,
         stdio: ['inherit', 'inherit', opt.withWarn ? 'inherit' : 'ignore'],
+        // We only need a new process group on *nix; having a new console on win32 is useless
+        detached: process.platform !== 'win32',
         ...opt,
     })
 
@@ -137,6 +139,19 @@ const step = (cmd, opt = { withWarn: process.env.CI === 'true' }) => {
 }
 
 /**
+ * @param pid {number}
+ * @param [sig] {string | number}
+*/
+const killTree = (pid, sig) => {
+    if (process.platform === 'win32') {
+        return exec(`taskkill /pid ${pid} /T /F`);
+    } else {
+        // kill(2): Negative numbers are equivalent to killpg(2)
+        return process.kill(-pid, sig)
+    }
+}
+
+/**
  * @desc this method kill all process spawned by function 'spawn'.
  */
 const exitAll = () => {
@@ -144,7 +159,7 @@ const exitAll = () => {
      * @type stepChild {import('child_process').ChildProcess[]}
      */
     while(stepChild.length > 0) {
-        stepChild.pop().kill()
+        killTree(stepChild.pop().pid)
     }
     process.exit(0)
 }
