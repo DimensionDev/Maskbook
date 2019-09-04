@@ -15,7 +15,6 @@ const DevPage = () => {
     const [file, setFile] = useState('')
 
     useAsync(async () => {
-        console.log('async called')
         if (!current) return ''
         return Services.Welcome.backupMyKeyPair(current.identifier, false)
     }, [current]).then(x => setFile(JSON.stringify(x)))
