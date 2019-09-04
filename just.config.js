@@ -139,6 +139,15 @@ const step = (cmd, opt = { withWarn: process.env.CI === 'true' }) => {
 }
 
 /**
+ * Kill a process and its subprocesses. It kills the entire process group
+ * on *nix systems, and therefore can only handle non-detached subprocesses of
+ * the current process. On Linux cgroups may be able to do it better. On Windows,
+ * taskkill /T seems to only deal with one layer of subprocessing too. 
+ * {@link https://docs.microsoft.com/en-us/sysinternals/downloads/pskill|pskill} -t
+ * would be a better solution, but not everyone has pstools installed.
+ *
+ * @see {@link https://unix.stackexchange.com/questions/124127}
+ * @summary Kill a process and its subprocesses.
  * @param pid {number}
  * @param [sig] {string | number}
 */
