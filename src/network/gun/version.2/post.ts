@@ -43,7 +43,7 @@ export async function queryPostKeysOnGun2(
 export function subscribePostKeysOnGun2(
     postSalt: string,
     partitionByCryptoKey: CryptoKey,
-    callback: (data: PostOnGun2) => void,
+    callback: (data: SharedAESKeyGun2) => void,
 ) {
     hashPostSalt(postSalt).then(postHash => {
         hashCryptoKey(partitionByCryptoKey).then(keyHash => {
@@ -51,7 +51,8 @@ export function subscribePostKeysOnGun2(
                 // @ts-ignore
                 .get(keyHash)
                 .map()
-                .on((data: PostOnGun2) => {
+                .on((data: SharedAESKeyGun2) => {
+                    // @ts-ignore
                     const { _, ...data2 } = Object.assign({}, data)
                     callback(data2)
                 })

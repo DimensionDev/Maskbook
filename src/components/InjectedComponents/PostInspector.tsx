@@ -14,7 +14,6 @@ interface PostInspectorProps {
     onDecrypted(post: string): void
     post: string
     postBy: PersonIdentifier
-    payload: Payload | null
     postId: string
     needZip(): void
 }
@@ -47,7 +46,6 @@ export function PostInspector(props: PostInspectorProps) {
                 <Debug children={postBy.toText()} data-id="post by" />
                 <Debug children={postId} data-id="post id" />
                 <DecryptPostUI.UI
-                    payload={props.payload}
                     onDecrypted={props.onDecrypted}
                     requestAppendRecipients={async people => {
                         setAlreadySelectedPreviously(alreadySelectedPreviously.concat(people))

@@ -1,4 +1,4 @@
-import { AsyncCall } from '@holoflows/kit/es/util/AsyncCall'
+import { AsyncCall, AsyncGeneratorCall } from '@holoflows/kit/es/util/AsyncCall'
 import { GetContext, OnlyRunInContext } from '@holoflows/kit/es/Extension/Context'
 import * as MockService from './mock-service'
 import Serialization from '../utils/type-transform/Serialization'
@@ -23,6 +23,26 @@ if (!('Services' in globalThis)) {
     register(Reflect.get(globalThis, 'WelcomeService'), 'Welcome', MockService.WelcomeService)
     register(Reflect.get(globalThis, 'PeopleService'), 'People', MockService.PeopleService)
 }
+interface ServicesWithProgress {
+    // Sorry you should add import at '../background-service.ts'
+    decryptFrom: typeof import('./background-script/CryptoServices/decryptFrom').decryptFromMessageWithProgress
+}
+
+const logOptions: AsyncCallOptions['log'] = {
+    beCalled: true,
+    localError: false,
+    remoteError: true,
+    sendLocalStack: true,
+    type: 'pretty',
+}
+export const ServicesWithProgress = AsyncGeneratorCall<ServicesWithProgress>(
+    Reflect.get(globalThis, 'ServicesWithProgress'),
+    {
+        key: 'services+progress',
+        log: logOptions,
+        serializer: Serialization,
+    },
+)
 
 Object.assign(globalThis, {
     PersonIdentifier,
@@ -33,13 +53,6 @@ Object.assign(globalThis, {
 })
 //#region
 type Service = Record<string, (...args: any[]) => Promise<any>>
-const logOptions: AsyncCallOptions['log'] = {
-    beCalled: true,
-    localError: false,
-    remoteError: true,
-    sendLocalStack: true,
-    type: 'pretty',
-}
 function register<T extends Service>(service: T, name: keyof Services, mock?: Partial<T>) {
     if (OnlyRunInContext(['content', 'options', 'debugging', 'background'], false)) {
         console.log(`Service ${name} registered in ${GetContext()}`)
