@@ -115,10 +115,6 @@ function DecryptPost(props: DecryptPostProps) {
         undefined,
     )
     const [__, forceReDecrypt] = useState<number>()
-    const cancelTask = useRef<() => void>(() => {})
-    useEffect(() => {
-        cancelTask.current()
-    })
 
     const rAD = useCallback(
         async (people: Person[]) => {
@@ -146,9 +142,7 @@ function DecryptPost(props: DecryptPostProps) {
     return (
         <AsyncComponent
             promise={async () => {
-                cancelTask.current()
                 const iter = ServicesWithProgress.decryptFrom(encryptedText, postBy, whoAmI)
-                cancelTask.current = () => iter.throw!(new Error('Client aborted'))
                 let last = await iter.next()
                 while (!last.done) {
                     setDecryptingStatus(last.value)
