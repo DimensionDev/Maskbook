@@ -13,10 +13,10 @@
     },
     "additional_post_box__encrypted_post_pre": {
         "message": "來 Maskbook 解密這個訊息！ $1",
-        "description": "$1 must at the end of the string."
+        "description": "$1 须写在字串末。"
     },
     "additional_post_box__encrypted_failed": {
-        "message": "請將以下内容拷貝至發佈框。"
+        "message": "請將以下内容拷貝至發于佈框。"
     },
     "comment_box__paste_failed": {
         "message": "請將以下内容拷貝至評論框。"
@@ -25,13 +25,13 @@
         "message": "Maskbook 已獲取此公鑰並添加至本地 ✔"
     },
     "add_to_key_store_verifying": {
-        "message": "Maskbook 公鑰已獲取，驗證中…"
+        "message": "Maskbook 公鑰已獲取，正在驗證…"
     },
     "add_to_key_store_failed_title": {
         "message": "Maskbook 公鑰驗證失敗 ❌"
     },
     "add_to_key_store_failed_text": {
-        "message": "$1\nMaskbook 不會添加此密鑰。"
+        "message": "$1\nMaskbook 不會添加此金鑰。"
     },
     "decrypted_postbox_title": {
         "message": "此消息使用 Maskbook 加密："
@@ -49,13 +49,13 @@
         "message": "數字簽名驗證失敗，對方可能被駭了 ❌"
     },
     "decrypted_postbox_decrypting": {
-        "message": "Maskbook 解密中…"
+        "message": "Maskbook 正在解密…"
     },
     "decrypted_postbox_decrypting_finding_person_key": {
-        "message": "Maskbook 正在搜尋對方的公鈅..."
+        "message": "Maskbook 正在搜尋對方的公鈅…"
     },
     "decrypted_postbox_decrypting_finding_post_key": {
-        "message": "Maskbook 正在搜尋分享給你的密鑰以解密这篇内容..."
+        "message": "Maskbook 正在搜尋分享給你的密鑰以解密这篇内容…"
     },
     "decrypted_postbox_failed": {
         "message": "Maskbook 解密失敗"
@@ -88,10 +88,10 @@
         "message": "取消"
     },
     "share_to": {
-        "message": "分享给..."
+        "message": "分享给…"
     },
     "sharing": {
-        "message": "分享中..."
+        "message": "正在分享…"
     },
     "share": {
         "message": "分享"
@@ -253,7 +253,7 @@
         "message": "2. 點擊「選項」"
     },
     "welcome_1b_qr_3": {
-        "message": "3. 點擊「設定移動版」"
+        "message": "3. 點擊「設定行動端」"
     },
     "welcome_1b_hint_identity": {
         "message": "備份文件中包含了以下身份："
@@ -298,7 +298,7 @@
         "message": "$1 的公鑰無法找到！"
     },
     "service_not_setup_yet": {
-        "message": "您還沒有進行初始設置，在您沒有導入或生成您的密鑰之前，我們暫時無法爲您解密此消息！"
+        "message": "您還沒有進行初始設置，在您沒有導入或生成您的金鑰之前，我們暫時無法爲您解密此消息！"
     },
     "service_publish_post_aes_key_failed": {
         "message": "未能發佈 AES 密鑰。"
@@ -310,10 +310,10 @@
         "message": "解密失敗。"
     },
     "service_unknown_payload": {
-        "message": "不支持的訊息構造。或許你需要更新 Maskbook 版本了？"
+        "message": "不支援的訊息構造。或許你需要更新 Maskbook 版本了？"
     },
     "service_key_parse_failed": {
-        "message": "Key parse failed"
+        "message": "未能剖析金鑰"
     },
     "service_have_no_own_key_yet": {
         "message": "你還沒有私鑰"
@@ -340,13 +340,13 @@
         "message": "Payload 可能遭到了篡改。"
     },
     "payload_throw_in_alpha41": {
-        "message": "已經不再支持 Alpha41。請提醒對方安裝新版 Maskbook。"
+        "message": "已經不再支援 Alpha41。請提醒對方安裝新版 Maskbook。"
     },
     "options_index_setup": {
         "message": "設定您的 Maskbook"
     },
     "options_index_mobile_export": {
-        "message": "設定移動版"
+        "message": "設定行動端"
     },
     "options_index_dev": {
         "message": "開發人員選項"
@@ -355,10 +355,10 @@
         "message": "隱私政策"
     },
     "options_mobile_export_generating": {
-        "message": "正在生成 QR 碼..."
+        "message": "正在生成 QR 碼…"
     },
     "options_mobile_export_title": {
-        "message": "請在移動版 Maskbook 中掃描此 QR 碼以完成設定"
+        "message": "請在行動端 Maskbook 中掃描此 QR 碼以完成設定"
     },
     "options_mobile_export_subtitle": {
         "message": "請不要保存或將此 QR 碼分享給他人！"
