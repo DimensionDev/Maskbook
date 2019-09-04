@@ -62,6 +62,13 @@ function clickSeeMore(node: DomProxy) {
         isMobileFacebook ? '[data-sigil="more"]' : '.see_more_link_inner',
     )
     if (more && node.current.innerText.match(/🎼.+\|/)) {
+        const trap = (e: Event) => {
+            e.preventDefault()
+        }
+        more.parentNode!.addEventListener('click', trap)
         more.click()
+        setTimeout(() => {
+            if (more.parentNode) more.parentNode.removeEventListener('click', trap)
+        }, 0)
     }
 }
