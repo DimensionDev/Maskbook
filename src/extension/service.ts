@@ -16,6 +16,14 @@ interface Services {
 }
 const Services = {} as Services
 export default Services
+
+const logOptions: AsyncCallOptions['log'] = {
+    beCalled: true,
+    localError: false,
+    remoteError: true,
+    sendLocalStack: true,
+    type: 'pretty',
+}
 if (!('Services' in globalThis)) {
     Object.assign(globalThis, { Services })
     // Sorry you should add import at '../background-service.ts'
@@ -27,18 +35,10 @@ interface ServicesWithProgress {
     // Sorry you should add import at '../background-service.ts'
     decryptFrom: typeof import('./background-script/CryptoServices/decryptFrom').decryptFromMessageWithProgress
 }
-
-const logOptions: AsyncCallOptions['log'] = {
-    beCalled: true,
-    localError: false,
-    remoteError: true,
-    sendLocalStack: true,
-    type: 'pretty',
-}
 export const ServicesWithProgress = AsyncGeneratorCall<ServicesWithProgress>(
     Reflect.get(globalThis, 'ServicesWithProgress'),
     {
-        key: 'services+progress',
+        key: 'Service+',
         log: logOptions,
         serializer: Serialization,
     },
