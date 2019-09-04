@@ -60,8 +60,7 @@
     "typescript": "^3.6.2",
     "web-ext-types": "^3.1.0",
     "webcrypto-liner": "0.1.38",
-    "webextension-polyfill": "^0.4.0",
-    "write-file-webpack-plugin": "^4.5.0"
+    "webextension-polyfill": "^0.4.0"
   },
   "devDependencies": {
     "@babel/core": "^7.4.3",

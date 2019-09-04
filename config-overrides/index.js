@@ -4,22 +4,25 @@ const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const fs = require('fs')
 
+const src = file => path.join(__dirname, '../', file)
 // Write files to /public
 const polyfills = [
     'node_modules/construct-style-sheets-polyfill/adoptedStyleSheets.js',
     'node_modules/webextension-polyfill/dist/browser-polyfill.min.js',
     'node_modules/webextension-polyfill/dist/browser-polyfill.min.js.map',
-]
-const src = file => path.join(__dirname, file)
+].map(src)
 const public = src('./public')
 const publicPolyfill = src('./public/polyfill')
 const dist = src('./dist')
 
 process.env.BROWSER = 'none'
+
+const SSRPlugin = require('./SSRPlugin')
+
 /**
  * @type {import("webpack").Configuration}
  */
-module.exports = function override(config, env) {
+function override(config, env) {
     // CSP bans eval
     // And non-inline source-map not working
     if (env === 'development') config.devtool = 'inline-source-map'
@@ -49,27 +52,13 @@ module.exports = function override(config, env) {
     config.module.exprContextCritical = false
     config.module.unknownContextCritical = false
 
-    config.plugins.push(
-        new (require('write-file-webpack-plugin'))({
-            test: /.*(?!hot-update)/,
-        }),
-    )
     config.plugins = config.plugins.filter(x => x.constructor.name !== 'HtmlWebpackPlugin')
     /**
      * @param {HtmlWebpackPlugin.Options} options
      */
     function newPage(options = {}) {
         return new HtmlWebpackPlugin({
-            templateContent: `<!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-        <script src="/polyfill/browser-polyfill.min.js"></script>
-        <script src="/firefoxFix.js"></script>
-    </head>
-    <body></body>
-</html>`,
+            templateContent: fs.readFileSync(path.join(__dirname, './template.html'), 'utf8'),
             inject: 'body',
             ...options,
         })
@@ -83,10 +72,10 @@ module.exports = function override(config, env) {
     config.plugins.push(
         new webpack.BannerPlugin(
             'Maskbook is a open source project under GNU AGPL 3.0 licence.\n\n\n' +
-                'More info about our project at https://github.com/DimensionDev/Maskbook\n\n' +
-                'Maskbook is built on CircleCI, in which all the building process is available to the public.\n\n' +
-                'We directly take the output to submit to the Web Store. We will integrate the automatic submission\n' +
-                'into the CircleCI in the near future.',
+            'More info about our project at https://github.com/DimensionDev/Maskbook\n\n' +
+            'Maskbook is built on CircleCI, in which all the building process is available to the public.\n\n' +
+            'We directly take the output to submit to the Web Store. We will integrate the automatic submission\n' +
+            'into the CircleCI in the near future.',
         ),
     )
 
@@ -138,7 +127,7 @@ module.exports = function override(config, env) {
                 // our own ts-loader
                 {
                     test: /\.(js|mjs|jsx|ts|tsx)$/,
-                    include: path.resolve(__dirname, './src'),
+                    include: src('src'),
                     loader: require.resolve('ts-loader'),
                     options: {
                         transpileOnly: true,
@@ -150,119 +139,21 @@ module.exports = function override(config, env) {
             ],
         },
     ]
-    // write-file-webpack-plugin conflict with this
-    // ! Don't upgrade webpack to 5 until they fix this
+
+    // futureEmitAssets prevents webpackDevServer from writing file to disk
     config.output.futureEmitAssets = false
     return config
 }
 
-const { exec } = require('child_process')
-const SSRPlugin = class SSRPlugin {
-    /**
-     * @param {string} htmlFileName
-     * @param {string} pathName
-     */
-    constructor(htmlFileName, pathName) {
-        this.htmlFileName = htmlFileName
-        this.pathName = pathName
-    }
-    /**
-     * @returns {Promise<string>}
-     */
-    renderSSR() {
-        return new Promise((resolve, reject) => {
-            exec(
-                'node -r esm ./node_modules/ts-node/dist/bin.js --project ./tsconfig_cjs.json -T ./src/setup.ssr.js ' +
-                    this.pathName,
-                (err, stdout) => (err ? reject(err) : resolve(stdout)),
-            )
-        })
-    }
-    /**
-     * @param {string} original
-     * @param {string} string
-     */
-    appendAfterBody(original, string) {
-        return original.replace('</body>', string + '</body>')
-    }
-    /**
-     * @param {string} string
-     */
-    removeScripts(string) {
-        return string.replace(/<script src="(.+?)"><\/script>/g, '')
-    }
-    /**
-     * @param {import('webpack').Compiler} compiler
-     */
-    apply(compiler) {
-        compiler.hooks.compilation.tap('SSRPlugin', compilation => {
-            /**
-             * @see https://github.com/jantimon/html-webpack-plugin#options
-             * @type {import('webpack').compilation.CompilerHooks
-             * & {
-             *      beforeEmit: import('tapable').SyncHook<{
-             *          html: string
-             *          outputName: string
-             *          plugin: HtmlWebpackPlugin
-             *  }>}}
-             */
-            const htmlWebpackPluginHook = HtmlWebpackPlugin.getHooks(compilation)
-            htmlWebpackPluginHook.beforeEmit.tapPromise('SSRPlugin', async args => {
-                let { html, outputName, plugin } = args
-                if (outputName !== this.htmlFileName) return args
-                html = await this.generateSSRHTMLFile(compilation, html)
-                return { html, outputName, plugin }
-            })
-        })
-    }
-    /**
-     * @param {import('webpack').compilation.Compilation} compilation
-     */
-    async generateSSRHTMLFile(compilation, originalHTML) {
-        const ssrString = await this.renderSSR()
-        const allScripts = []
-        {
-            const regex = /<script src="(.+?)"><\/script>/g
-            let current
-            while ((current = regex.exec(originalHTML))) {
-                allScripts.push(current[1])
-            }
-        }
-        let regeneratedHTML = originalHTML
-        regeneratedHTML = this.removeScripts(regeneratedHTML)
-        regeneratedHTML = this.appendAfterBody(regeneratedHTML, ssrString)
-        regeneratedHTML = this.appendAfterBody(regeneratedHTML, `<script src="${this.htmlFileName}.js"></script>`)
-        // Generate scripts loader
-        const deferredLoader = allScripts.reduce(
-            (prev, src) =>
-                prev +
-                `
-        importScript('${src}')`,
-            '',
-        )
-        const generated = `function untilDocumentReady() {
-    if (document.readyState === 'complete') return Promise.resolve()
-    return new Promise(resolve => {
-        document.addEventListener('readystatechange', resolve, { once: true, passive: true })
-    })
-}
-function importScript(src) {
-    const script = document.createElement('script')
-    script.src = src
-    document.body.appendChild(script)
-}
-untilDocumentReady().then(() => {
-    const head = document.head.firstElementChild
-    Array.from(document.body.querySelectorAll('body > style')).reverse().forEach(x => head.before(x))
-}).then(() => {
-    setTimeout(() => {${deferredLoader}
-    }, 20)
-})
-`
-        compilation.assets[this.htmlFileName + '.js'] = {
-            source: () => generated,
-            size: () => generated.length,
-        }
-        return regeneratedHTML
-    }
+module.exports = {
+    webpack: override,
+    devServer: function(configFunction) {
+      return function(proxy, allowedHost) {
+        const config = configFunction(proxy, allowedHost)
+
+        config.writeToDisk = true
+
+        return config;
+      };
+    },
 }
