@@ -162,6 +162,11 @@ const killTree = (pid, sig) => {
 
 /**
  * @desc this method kill all process spawned by function 'spawn'.
+ *
+ * By tests, npm script manager actually has ability to kill
+ * all process spawned by node even detached.
+ * We recommended that do not running just tasks directly,
+ * instead, use npm scripts.
  */
 const exitAll = () => {
     /**
