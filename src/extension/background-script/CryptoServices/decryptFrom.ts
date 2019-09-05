@@ -69,11 +69,14 @@ export async function* decryptFromMessageWithProgress(
                 let rejectGun = () => {}
                 let rejectDatabase = () => {}
                 const awaitGun = new Promise((resolve, reject) => {
+                    rejectGun = () => {
+                        undo()
+                        reject()
+                    }
                     const undo = Gun2.subscribePersonFromGun2(by, data => {
                         if (data && (data.provePostId || '').length > 0) {
                             undo()
                             resolve()
-                            rejectGun = () => (undo(), reject())
                         }
                     })
                 })
@@ -82,12 +85,18 @@ export async function* decryptFromMessageWithProgress(
                         if (data.identifier.equals(by)) {
                             undo()
                             resolve()
-                            rejectDatabase = () => (undo(), reject())
                         }
                     })
+                    rejectDatabase = () => {
+                        undo()
+                        reject()
+                    }
                 })
                 await Promise.race([awaitGun, awaitDatabase])
-                    .then(() => (rejectDatabase(), rejectGun()))
+                    .then(() => {
+                        rejectDatabase()
+                        rejectGun()
+                    })
                     .catch(() => null)
             }
         }
