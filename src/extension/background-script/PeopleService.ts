@@ -65,8 +65,8 @@ export async function restoreBackup(json: object, whoAmI?: PersonIdentifier): Pr
     function mapID(x: { network: string; userId: string }): PersonIdentifier {
         return new PersonIdentifier(x.network, x.userId)
     }
-    function mapGroup(x: { network: string; groupId: string; type: GroupType }): GroupIdentifier {
-        return new GroupIdentifier(x.network, x.groupId, x.type)
+    function mapGroup(x: { network: string; groupID: string; type: GroupType; belongs?: string }): GroupIdentifier {
+        return new GroupIdentifier(x.network, x.groupID, x.type, x.belongs)
     }
     const data = UpgradeBackupJSONFile(json, whoAmI)
     if (!data) throw new TypeError(geti18nString('service_invalid_backup_file'))

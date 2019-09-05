@@ -36,7 +36,7 @@ export function getPostUrlAtFacebook(post: PostIdentifier<PersonIdentifier>, usa
  */
 export function getProfilePageUrlAtFacebook(user: PersonIdentifier | GroupIdentifier, usage: 'fetch' | 'open') {
     if (user instanceof GroupIdentifier) throw new Error('Not implemented')
-    if (user.network !== 'facebook.com') throw new Error('Not implemented')
+    if (user.network !== 'facebook.com') throw new Error('Wrong origin')
 
     const host = getHostName(usage)
     const username = user.userId

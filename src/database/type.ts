@@ -8,20 +8,6 @@ import { serializable } from '../utils/type-transform/Serialization'
  * post_iv:...
  */
 type Identifiers = 'person' | 'group' | 'post' | 'post_iv'
-/**
- * @internal symbol that used to construct this type from the Identifier
- */
-const $fromString = Symbol()
-/**
- * Because "/" is used to split parts in identifier
- * we should reject the "/"
- *
- * If you want to use it, you must first convert to something other
- */
-function noSlash(str?: string) {
-    if (!str) return
-    if (str.split('/')[1]) throw new TypeError('Cannot contain / in a part of identifier')
-}
 export abstract class Identifier {
     public equals(other: Identifier) {
         return this === other || this.toText() === other.toText()
@@ -81,18 +67,37 @@ export class PersonIdentifier extends Identifier {
 }
 
 export enum GroupType {
+    /**
+     * This type of group is user defined in Maskbook and not exists at the social network itself
+     */
     virtual = 'virtual',
+    /**
+     * This type of group is on the social network
+     */
     real = 'real',
+}
+export enum PreDefinedVirtualGroupType {
+    friends = 'friends',
 }
 @serializable('GroupIdentifier')
 export class GroupIdentifier extends Identifier {
-    constructor(public network: string, public groupId: string, public type = GroupType.real) {
+    constructor(public network: string, public groupID: string, public type: GroupType, public belongs?: string) {
         super()
         noSlash(network)
-        noSlash(groupId)
+        noSlash(groupID)
+        if (network && groupID && type) {
+            this.assert()
+        }
+    }
+    private assert() {
+        // @ts-ignore
+        if (GroupType.real !== this.type && GroupType.real !== this.type) throw new Error('Invalid group')
+        if (this.type === GroupType.real && this.belongs) throw new Error('Invalid group')
+        if (this.type === GroupType.virtual && !this.belongs) throw new Error('Invalid group')
     }
     toText() {
-        return `group:${this.network}/${this.groupId}/${this.type}`
+        this.assert()
+        return 'group:' + [this.network, this.groupID, this.type, this.belongs].join('/')
     }
     get isReal() {
         return this.type === GroupType.real
@@ -101,12 +106,13 @@ export class GroupIdentifier extends Identifier {
         return this.type === GroupType.virtual
     }
     static [$fromString](str: string) {
-        const [network, groupId, virtual] = str.split('/')
-        if (!network || !groupId || !virtual) return null
-        if (GroupType.real === virtual || GroupType.real === virtual) {
-            return new GroupIdentifier(network, groupId, virtual)
+        const [network, groupID, virtual, belongs] = str.split('/')
+        if (!network || !groupID || !virtual) return null
+        try {
+            return new GroupIdentifier(network, groupID, virtual as any, belongs)
+        } catch {
+            return null
         }
-        return null
     }
 }
 
@@ -148,12 +154,16 @@ export class PostIVIdentifier extends Identifier {
 }
 
 /**
- * Person representation in ui
+ * @internal symbol that used to construct this type from the Identifier
  */
-export interface PersonUI {
-    identifier: PersonIdentifier
-    previousIdentities?: PersonIdentifier[]
-    nickname?: string
-    avatar?: string
-    fingerprint?: string
+const $fromString = Symbol()
+/**
+ * Because "/" is used to split parts in identifier
+ * we should reject the "/"
+ *
+ * If you want to use it, you must first convert to something other
+ */
+function noSlash(str?: string) {
+    if (!str) return
+    if (str.split('/')[1]) throw new TypeError('Cannot contain / in a part of identifier')
 }
