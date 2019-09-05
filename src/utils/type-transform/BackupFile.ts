@@ -63,7 +63,7 @@ export interface BackupJSONFileVersion1 {
         publicKey: JsonWebKey
         previousIdentifiers?: { network: string; userId: string }[]
         nickname?: string
-        groups?: { network: string; groupId: string; type: GroupType }[]
+        groups?: { network: string; groupID: string; type: GroupType; belongs?: string }[]
     }>
     grantedHostPermissions: string[]
 }

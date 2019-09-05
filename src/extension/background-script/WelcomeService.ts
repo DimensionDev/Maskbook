@@ -60,7 +60,7 @@ async function generateBackupJSON(whoAmI: PersonIdentifier, full = false): Promi
         peopleInDB.push({
             network: data.identifier.network,
             userId: data.identifier.userId,
-            groups: data.groups.map(g => ({ network: g.network, groupId: g.groupId, type: g.type })),
+            groups: data.groups.map(g => ({ network: g.network, groupID: g.groupID, type: g.type })),
             nickname: data.nickname,
             previousIdentifiers: (data.previousIdentifiers || []).map(p => ({ network: p.network, userId: p.userId })),
             publicKey: await exportKey(data.publicKey),

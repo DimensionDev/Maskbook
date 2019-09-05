@@ -82,6 +82,5 @@ export async function deletePostCryptoKeyDB(record: PostIVIdentifier) {
     const t = (await db).transaction('post', 'readwrite')
     await t.objectStore('post').delete(record.toText())
 }
-export async function backupPostCryptoKeyDB() {
-    throw new Error('Not implemented')
-}
+
+declare function backupPostCryptoKeyDB(): Promise<unknown>
