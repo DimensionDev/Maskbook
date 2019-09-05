@@ -41,7 +41,7 @@ export function AdditionalPostBoxUI(props: Props) {
 
     const myself = useCurrentIdentity()
     const [text, setText] = useState('')
-    const [selectedPeople, selectPeople] = useState<Person[]>([])
+    const [selectedPeople, selectPeople] = useState<Person[]>(props.people)
 
     const inputRef = useRef<HTMLInputElement>()
     useCapturedInput(inputRef, setText)
