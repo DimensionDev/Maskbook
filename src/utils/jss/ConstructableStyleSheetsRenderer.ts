@@ -21,8 +21,8 @@ if (!isChrome74) {
 } else {
     delete Document.prototype.adoptedStyleSheets
 }
-// require('construct-style-sheets-polyfill')
-require('./polyfill')
+require('construct-style-sheets-polyfill')
+// require('./polyfill')
 const isPolyfilled = CSSStyleSheet.name !== 'CSSStyleSheet'
 if (isPolyfilled) console.warn('Browser does not support Constructable Stylesheets. Using polyfill.')
 
