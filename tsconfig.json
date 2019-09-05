@@ -14,9 +14,7 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "preserve",
-    "experimentalDecorators": true,
-    "incremental": true,
-    "tsBuildInfoFile": "./.tscache/"
+    "experimentalDecorators": true
   },
   "include": ["src"]
 }
