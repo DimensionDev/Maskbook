@@ -1,13 +1,9 @@
+/// <reference path="./global.d.ts" />
+import { openDB, DBSchema } from 'idb/with-async-ittr'
 import { GroupIdentifier, PersonIdentifier, GroupType, PreDefinedVirtualGroupType } from './type'
 
+//#region Schema
 interface GroupRecordBase {
-    /**
-     * The creator of the group.
-     * Only used for indicate **who** created this virtual group currently
-     *
-     * It does not indicates admins of the group!
-     */
-    creator?: PersonIdentifier
     members: PersonIdentifier[]
     /**
      * Ban list of this group.
@@ -27,30 +23,37 @@ interface GroupRecordInDatabase extends GroupRecordBase {
 export interface GroupRecord extends GroupRecordBase {
     identifier: GroupIdentifier
 }
+interface AvatarDB extends DBSchema {
+    /** Key is value.identifier */
+    groups: {
+        value: GroupRecordInDatabase
+        key: string
+    }
+}
+//#endregion
+
+const db = openDB<AvatarDB>('maskbook-user-groups', 1, {
+    upgrade(db, oldVersion, newVersion, transaction) {
+        // Out line keys
+        db.createObjectStore('groups', { keyPath: 'identifier' })
+    },
+})
+
 /**
  * This function create a new user group
  * It will return a GroupIdentifier
- * @param network network
- * @param type If type is real, groupID must be an ID on the network
- * If type is virtual, groupID must be a PreDefinedVirtualGroupType, or undefined (which will generate a new ID)
+ * @param group GroupIdentifier
  */
-declare function createUserGroupDatabase(
-    network: string,
-    type: GroupType.real,
-    groupID: string,
-): Promise<GroupIdentifier>
-declare function createUserGroupDatabase(
-    network: string,
-    type: GroupType.virtual,
-    groupID?: PreDefinedVirtualGroupType,
-    belongs?: PersonIdentifier,
-): Promise<GroupIdentifier>
-declare function createUserGroupDatabase(
-    network: string,
-    type: GroupType,
-    groupID?: string | PreDefinedVirtualGroupType,
-    belongs?: PersonIdentifier,
-): Promise<GroupIdentifier>
+export async function createUserGroupDatabase(group: GroupIdentifier, groupName: string): Promise<void> {
+    const t = (await db).transaction('groups', 'readwrite')
+    await t.objectStore('groups').put({
+        groupName,
+        identifier: group.toText(),
+        members: [],
+        network: group.network,
+    })
+    return
+}
 
 /**
  * Delete a user group that stored in the Maskbook
