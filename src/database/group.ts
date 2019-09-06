@@ -1,6 +1,6 @@
 /// <reference path="./global.d.ts" />
 import { openDB, DBSchema } from 'idb/with-async-ittr'
-import { GroupIdentifier, PersonIdentifier, GroupType, PreDefinedVirtualGroupType } from './type'
+import { GroupIdentifier, PersonIdentifier, GroupType, PreDefinedVirtualGroupType, Identifier } from './type'
 
 //#region Schema
 interface GroupRecordBase {
@@ -20,7 +20,7 @@ interface GroupRecordBase {
 interface GroupRecordInDatabase extends GroupRecordBase {
     identifier: string
 }
-export interface GroupRecord extends GroupRecordBase {
+export interface GroupRecord extends Omit<GroupRecordBase, 'network'> {
     identifier: GroupIdentifier
 }
 interface AvatarDB extends DBSchema {
@@ -28,6 +28,10 @@ interface AvatarDB extends DBSchema {
     groups: {
         value: GroupRecordInDatabase
         key: string
+        indexes: {
+            // Use `network` field as index
+            network: string
+        }
     }
 }
 //#endregion
@@ -36,6 +40,7 @@ const db = openDB<AvatarDB>('maskbook-user-groups', 1, {
     upgrade(db, oldVersion, newVersion, transaction) {
         // Out line keys
         db.createObjectStore('groups', { keyPath: 'identifier' })
+        transaction.objectStore('groups').createIndex('network', 'network', { unique: false })
     },
 })
 
@@ -52,14 +57,16 @@ export async function createUserGroupDatabase(group: GroupIdentifier, groupName:
         members: [],
         network: group.network,
     })
-    return
 }
 
 /**
  * Delete a user group that stored in the Maskbook
  * @param group Group ID
  */
-declare function deleteUserGroupDatabase(group: GroupIdentifier): Promise<void>
+export async function deleteUserGroupDatabase(group: GroupIdentifier): Promise<void> {
+    const t = (await db).transaction('groups', 'readwrite')
+    await t.objectStore('groups').delete(group.toText())
+}
 
 /**
  * Update a user group that stored in the Maskbook
@@ -71,12 +78,54 @@ declare function updateUserGroupDatabase(group: Partial<GroupRecord>): Promise<v
  * Query a user group that stored in the Maskbook
  * @param group Group ID
  */
-declare function queryUserGroupDatabase(group: GroupIdentifier): Promise<void>
+export async function queryUserGroupDatabase(group: GroupIdentifier): Promise<null | GroupRecord> {
+    const t = (await db).transaction('groups', 'readonly')
+    const result = await t.objectStore('groups').get(group.toText())
+    if (!result) return null
+    return GroupRecordOutDB(result)
+}
 
 /**
  * Query user groups that stored in the Maskbook
  * @param group Group ID
  */
-declare function queryUserGroupsDatabase(
+export async function queryUserGroupsDatabase(
     query: ((key: GroupIdentifier, record: GroupRecordInDatabase) => boolean) | { network: string },
-): Promise<void>
+): Promise<GroupRecord[]> {
+    const t = (await db).transaction('groups')
+    const result: GroupRecordInDatabase[] = []
+    if (typeof query === 'function') {
+        // eslint-disable-next-line @typescript-eslint/await-thenable
+        for await (const { value, key } of t.store) {
+            if (query(Identifier.fromString(key) as GroupIdentifier, value)) result.push(value)
+        }
+    } else {
+        result.push(
+            ...(await t
+                .objectStore('groups')
+                .index('network')
+                .getAll(IDBKeyRange.only(query.network))),
+        )
+    }
+    return result.map(GroupRecordOutDB)
+}
+
+function GroupRecordOutDB(x: GroupRecordInDatabase): GroupRecord {
+    // recover prototype
+    x.members.forEach(x => Object.setPrototypeOf(x, PersonIdentifier))
+    x.banned && x.banned.forEach(x => Object.setPrototypeOf(x, PersonIdentifier))
+    const id = Identifier.fromString(x.identifier)
+    if (!(id instanceof GroupIdentifier))
+        throw new TypeError('Can not cast string ' + x.identifier + ' into GroupIdentifier')
+    return {
+        ...x,
+        identifier: id,
+    }
+}
+function GroupRecordIntoDB(x: GroupRecord): GroupRecordInDatabase {
+    return {
+        ...x,
+        identifier: x.identifier.toText(),
+        network: x.identifier.network,
+    }
+}
