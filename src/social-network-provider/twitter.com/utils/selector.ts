@@ -45,12 +45,16 @@ const base = querySelector<HTMLScriptElement>('#react-root + script')
 const name = /"session":{.*?"user":{.*?"screen_name":"(.*?)","name":"(.*?)"}}/
 const bio = /"entities":{.*?"users":{.*?"entities":{.*?"[0-9]*":{.*?"description":"(.*?)"/
 const avatar = /"entities":{.*?"users":{.*?"entities":{.*?"[0-9]*":{.*?"profile_image_url_https":"(.*?)"/
+/**
+ * first matched element can be extracted by index zero, followings are all capture groups, if no 'g' specified.
+ * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/match
+ */
 const p = (regex: RegExp, index: number) => {
     return base.clone().map(x => regexMatch(x.innerText, regex, index))
 }
 export const selfInfoSelectors = () => ({
-    screenName: p(name, 0),
-    userName: p(name, 1),
-    userBio: p(bio, 0),
-    userAvatar: p(avatar, 0),
+    screenName: p(name, 1),
+    userName: p(name, 2),
+    userBio: p(bio, 1),
+    userAvatar: p(avatar, 1),
 })

@@ -12,27 +12,18 @@ import { host } from '../index'
 import { getEmptyPostInfo, SocialNetworkUI, SocialNetworkUIInformationCollector } from '../../../social-network/ui'
 import { deconstructPayload } from '../../../utils/type-transform/Payload'
 import { regexMatch } from '../../../utils/utils'
-import { equal, notEmpty } from '../../../utils/assert'
+import { notEmpty } from '../../../utils/assert'
 import { instanceOfTwitterUI } from './index'
 import { resolveInfoFromBioCard } from '../utils/fetch'
 
 const resolveLastRecognizedIdentity = (self: SocialNetworkUI) => {
     const selfSelector = selfInfoSelectors().screenName
     const assign = () => {
-        try {
-            const ref = self.lastRecognizedIdentity
-            const info = selfInfoSelectors().screenName.evaluate()
-            const id = new PersonIdentifier(host, notEmpty(info, 'user id not found')[0])
-            equal(id.isUnknown, false, 'user id not recognized')
+        const ref = self.lastRecognizedIdentity
+        const info = selfInfoSelectors().screenName.evaluate()
+        const id = new PersonIdentifier(host, notEmpty(info, 'user id not found'))
+        if (!id.isUnknown) {
             ref.value = { identifier: id }
-        } catch (e) {
-            /**
-             * TODO:
-             *  This function expects to fail to collect info,
-             *  maybe don't throw is a good idea
-             *                                  -- Jack-Works
-             */
-            console.log(e)
         }
     }
     new MutationObserverWatcher(selfSelector)
