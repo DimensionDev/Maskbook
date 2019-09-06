@@ -1,6 +1,10 @@
 import { serializable } from '../utils/type-transform/Serialization'
 
 /**
+ * @internal symbol that used to construct this type from the Identifier
+ */
+const $fromString = Symbol()
+/**
  * This type only refers to the stringified Identifier
  * person:...
  * group:...
@@ -90,10 +94,9 @@ export class GroupIdentifier extends Identifier {
         }
     }
     private assert() {
-        // @ts-ignore
-        if (GroupType.real !== this.type && GroupType.real !== this.type) throw new Error('Invalid group')
-        if (this.type === GroupType.real && this.belongs) throw new Error('Invalid group')
-        if (this.type === GroupType.virtual && !this.belongs) throw new Error('Invalid group')
+        if (!this.isReal && !this.belongs) throw new Error('Invalid group')
+        if (this.isReal && this.belongs) throw new TypeError('A real group cannot have "belongs" field')
+        if (this.isVirtual && !this.belongs) throw new TypeError('A virtual group must have "belongs" field')
     }
     toText() {
         this.assert()
@@ -153,10 +156,6 @@ export class PostIVIdentifier extends Identifier {
     }
 }
 
-/**
- * @internal symbol that used to construct this type from the Identifier
- */
-const $fromString = Symbol()
 /**
  * Because "/" is used to split parts in identifier
  * we should reject the "/"

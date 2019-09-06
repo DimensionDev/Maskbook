@@ -358,5 +358,8 @@
     },
     "shared_choose_identity_subtitle": {
         "message": "Switch to another account"
+    },
+    "database_group_friends_default_name": {
+        "message": "Friends of $1"
     }
 }
