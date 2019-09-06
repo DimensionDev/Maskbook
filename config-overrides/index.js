@@ -18,6 +18,7 @@ const dist = src('./dist')
 process.env.BROWSER = 'none'
 
 const SSRPlugin = require('./SSRPlugin')
+const WebExtPlugin = require('./WebExtPlugin')
 
 /**
  * @type {import("webpack").Configuration}
@@ -63,12 +64,22 @@ function override(config, env) {
             ...options,
         })
     }
+
+    if (process.argv.indexOf('--firefox') !== -1) {
+        config.plugins.push(new WebExtPlugin({ sourceDir: dist }))
+    }
+
+    if (process.argv.indexOf('--firefox-android') !== -1) {
+        config.plugins.push(new WebExtPlugin({ sourceDir: dist, target: 'firefox-android' }))
+    }
+
     config.plugins.push(
         newPage({ chunks: ['options-page'], filename: 'index.html' }),
         newPage({ chunks: ['background-service'], filename: 'background.html' }),
         newPage({ chunks: ['popup'], filename: 'popup.html' }),
         newPage({ chunks: ['content-script'], filename: 'generated__content__script.html' }),
     )
+
     config.plugins.push(
         new webpack.BannerPlugin(
             'Maskbook is a open source project under GNU AGPL 3.0 licence.\n\n\n' +
