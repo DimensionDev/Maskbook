@@ -20,6 +20,11 @@ class WebExtWebpackPlugin {
         if (message[0] !== 'Android devices found:') { return this.verbose && this.logger(raw) }
         shouldTimeoutReject = false
         const devices = message.slice(1).map(s => s.substr(3))
+        if (devices.length === 1) {
+          this.logger('Selecting the only device ' + devices[0])
+          this.CmdRunParams.adbDevice = devices[0]
+          return resolve()
+        }
         inquirer.prompt({ type: 'list', choices: devices, name: 'device', message: 'Select one device to continue' }).then(answer => {
           webExt.util.logger.consoleStream.write = e => this.verbose && this.logger(e)
           this.CmdRunParams.adbDevice = answer.device
