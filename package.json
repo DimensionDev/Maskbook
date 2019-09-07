@@ -20,6 +20,8 @@
     "lint:report": "node scripts/lint.js --reportOnly"
   },
   "dependencies": {
+    "@commitlint/cli": "^8.1.0",
+    "@commitlint/config-conventional": "^8.1.0",
     "@holoflows/kit": "https://github.com/DimensionDev/holoflows-kit",
     "@material-ui/core": "4.3.3",
     "@material-ui/icons": "4.2.1",
@@ -43,8 +45,10 @@
     "eslint-plugin-import": "^2.18.2",
     "eslint-plugin-react-hooks": "^2.0.1",
     "gun": "0.2019.422",
+    "husky": "^3.0.5",
     "idb": "^4.0.3",
     "jsqr": "^1.2.0",
+    "lint-staged": "^9.2.5",
     "lodash-es": "^4.17.11",
     "npm-run-all": "^4.1.5",
     "pvtsutils": "^1.0.4",
@@ -96,6 +100,18 @@
       "last 1 chrome version",
       "last 1 firefox version",
       "last 1 safari version"
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged",
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+    }
+  },
+  "lint-staged": {
+    "*.{ts, tsx, js, jsx}": [
+      "yarn lint",
+      "git add"
     ]
   }
 }
