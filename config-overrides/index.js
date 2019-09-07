@@ -11,7 +11,7 @@ const polyfills = [
     'node_modules/webextension-polyfill/dist/browser-polyfill.min.js',
     'node_modules/webextension-polyfill/dist/browser-polyfill.min.js.map',
 ].map(src)
-const public = src('./public')
+const publicDir = src('./public')
 const publicPolyfill = src('./public/polyfill')
 const dist = src('./dist')
 
@@ -94,7 +94,7 @@ function override(config, env) {
     if (env === 'development') {
         config.plugins.push(
             new (require('copy-webpack-plugin'))(
-                [...polyfills.map(from => ({ from, to: publicPolyfill })), { from: public, to: dist }],
+                [...polyfills.map(from => ({ from, to: publicPolyfill })), { from: publicDir, to: dist }],
                 { ignore: ['index.html'] },
             ),
         )
