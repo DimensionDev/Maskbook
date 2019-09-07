@@ -5,20 +5,14 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const fs = require('fs')
 
 const src = file => path.join(__dirname, '../', file)
-// Write files to /public
-const polyfills = [
-    'node_modules/construct-style-sheets-polyfill/adoptedStyleSheets.js',
-    'node_modules/webextension-polyfill/dist/browser-polyfill.min.js',
-    'node_modules/webextension-polyfill/dist/browser-polyfill.min.js.map',
-].map(src)
+
 const publicDir = src('./public')
-const publicPolyfill = src('./public/polyfill')
 const dist = src('./dist')
 
 process.env.BROWSER = 'none'
 
 const SSRPlugin = require('./SSRPlugin')
-const WebExtPlugin = require('./WebExtPlugin')
+const WebExtPlugin = require('webpack-web-ext-plugin')
 
 /**
  * @type {import("webpack").Configuration}
@@ -91,23 +85,17 @@ function override(config, env) {
     )
 
     // Write files to /public
-    if (env === 'development') {
-        config.plugins.push(
-            new (require('copy-webpack-plugin'))(
-                [...polyfills.map(from => ({ from, to: publicPolyfill })), { from: publicDir, to: dist }],
-                { ignore: ['index.html'] },
-            ),
-        )
-    } else {
+    config.plugins.push(
+        new (require('copy-webpack-plugin'))(
+            [{ from: publicDir, to: dist }],
+            { ignore: ['index.html'] },
+        ),
+    )
+    if (env !== 'development') {
         config.plugins.push(new SSRPlugin('popup.html', src('./src/extension/popup-page/index.tsx')))
         config.plugins.push(new SSRPlugin('index.html', src('./src/index.tsx')))
-        if (!fs.existsSync(publicPolyfill)) fs.mkdirSync(publicPolyfill)
-        polyfills.map(x =>
-            fs.copyFile(x, path.join(publicPolyfill, path.basename(x)), err => {
-                if (err) throw err
-            }),
-        )
     }
+
     // Let webpack build to es2017 instead of es5
     config.module.rules = [
         // from cra
