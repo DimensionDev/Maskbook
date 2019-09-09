@@ -59,6 +59,18 @@
     "decrypted_postbox_failed": {
         "message": "Maskbook decryption failed"
     },
+    "person_or_group_in_chip": {
+        "message": "$1 ($2 in the group)"
+    },
+    "person_or_group_in_list_0": {
+        "message": "This is an empty group"
+    },
+    "person_or_group_in_list_many": {
+        "message": "$1... $2 in total"
+    },
+    "person_or_group_in_list_many_no_preview": {
+        "message": "$1 in total"
+    },
     "search_box_placeholder": {
         "message": "Type here to search"
     },
