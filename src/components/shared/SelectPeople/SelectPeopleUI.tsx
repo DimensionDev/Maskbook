@@ -4,7 +4,7 @@ import { makeStyles, ListItem, ListItemText, InputBase, Button, List, Box } from
 import { Person } from '../../../database'
 import { useCurrentIdentity } from '../../DataSource/useActivatedUI'
 import { PersonInList } from './PeopleInList'
-import { PersonInChip } from './PersonInChip'
+import { PersonOrGroupInChip } from './PersonOrGroupInChip'
 interface SelectPeopleUIProps {
     ignoreMyself?: boolean
     people: Person[]
@@ -126,14 +126,15 @@ export function SelectPeopleUI(props: SelectPeopleUIProps) {
         )
     }
     function FrozenChip(person: Person) {
-        return <PersonInChip disabled key={person.identifier.userId} person={person} />
+        return <PersonOrGroupInChip disabled key={person.identifier.userId} type="person" item={person} />
     }
     function RemovableChip(person: Person) {
         return (
-            <PersonInChip
+            <PersonOrGroupInChip
                 disabled={disabled}
                 key={person.identifier.userId}
-                person={person}
+                type="person"
+                item={person}
                 onDelete={() => onSetSelected(selected.filter(x => x.identifier.userId !== person.identifier.userId))}
             />
         )
