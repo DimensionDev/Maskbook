@@ -3,7 +3,7 @@ import { geti18nString } from '../../../utils/i18n'
 import { makeStyles, ListItem, ListItemText, InputBase, Button, List, Box } from '@material-ui/core'
 import { Person } from '../../../database'
 import { useCurrentIdentity } from '../../DataSource/useActivatedUI'
-import { PersonInList } from './PeopleInList'
+import { PersonOrGroupInList } from './PersonOrGroupInList'
 import { PersonOrGroupInChip } from './PersonOrGroupInChip'
 interface SelectPeopleUIProps {
     ignoreMyself?: boolean
@@ -107,10 +107,11 @@ export function SelectPeopleUI(props: SelectPeopleUIProps) {
     function PeopleListItem(person: Person) {
         if (ignoreMyself && myself && person.identifier.equals(myself.identifier)) return null
         return (
-            <PersonInList
+            <PersonOrGroupInList
+                type="person"
                 showAtNetwork={showAtNetwork}
                 key={person.identifier.userId}
-                person={person}
+                item={person}
                 disabled={
                     disabled ||
                     (typeof maxSelection === 'number' &&
