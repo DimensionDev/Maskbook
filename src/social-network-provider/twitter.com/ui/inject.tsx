@@ -17,7 +17,7 @@ const newMOW = (i: LiveSelector<HTMLElement, true>) =>
 
 const injectPostBox = () => {
     const target = newMOW(newPostEditorBelow())
-    renderInShadowRoot(<AdditionalPostBox/>, target.firstVirtualNode.afterShadow)
+    renderInShadowRoot(<AdditionalPostBox />, target.firstVirtualNode.afterShadow)
 }
 
 export const twitterUIInjections: SocialNetworkUIInjections = {
