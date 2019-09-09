@@ -6,7 +6,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import { Avatar } from '../../utils/components/Avatar'
 import { Person } from '../../database'
 import { List, ListItem, ListItemIcon, ListItemText, ListSubheader } from '@material-ui/core'
-import { PersonInList } from './SelectPeople'
+import { PersonOrGroupInList } from './SelectPeople'
 import { getActivatedUI } from '../../social-network/ui'
 import { useCurrentIdentity, useMyIdentities } from '../DataSource/useActivatedUI'
 import { PersonIdentifier } from '../../database/type'
@@ -58,9 +58,10 @@ export const ChooseIdentity: React.FC<{
                     classes={{ root: classes.list }}>
                     {availableIdentities.map(person =>
                         person.identifier.equals(current.identifier) ? null : (
-                            <PersonInList
+                            <PersonOrGroupInList
+                                type="person"
                                 listItemProps={{ dense: true }}
-                                person={person}
+                                item={person}
                                 key={person.identifier.toText()}
                                 onClick={() => {
                                     props.onChangeIdentity!(person)
