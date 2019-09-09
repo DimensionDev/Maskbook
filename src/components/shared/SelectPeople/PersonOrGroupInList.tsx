@@ -6,6 +6,9 @@ import { makeStyles } from '@material-ui/styles'
 import { Avatar } from '../../../utils/components/Avatar'
 import MuiAvatar from '@material-ui/core/Avatar/Avatar'
 import GroupIcon from '@material-ui/icons/Group'
+import { useFriendsList } from '../../DataSource/useActivatedUI'
+import { PersonIdentifier } from '../../../database/type'
+import { geti18nString, useIntlListFormat } from '../../../utils/i18n'
 
 interface SharedProps {
     onClick(): void
@@ -36,6 +39,8 @@ const useStyle = makeStyles<Theme>(theme => ({
  */
 export function PersonOrGroupInList(props: SharedProps & (PersonProps | GroupProps)) {
     const classes = useStyle()
+    const nicknamePreviewsForGroup = useNickNamesFromList(props.type === 'group' ? props.item.members : [])
+    const listFormat = useIntlListFormat()
 
     const { disabled, listItemProps, onClick, showAtNetwork } = props
     let name = ''
@@ -49,7 +54,18 @@ export function PersonOrGroupInList(props: SharedProps & (PersonProps | GroupPro
                 <GroupIcon />
             </MuiAvatar>
         )
-        secondaryText = `共 ${group.members.length} 人`
+        const joined = listFormat(nicknamePreviewsForGroup)
+        const groupSize = group.members.length
+        if (groupSize === 0) {
+            secondaryText = geti18nString('person_or_group_in_list_0')
+        } else if (nicknamePreviewsForGroup.length === 0) {
+            secondaryText = geti18nString('person_or_group_in_list_many_no_preview', groupSize + '')
+        } else if (groupSize > nicknamePreviewsForGroup.length) {
+            secondaryText = geti18nString('person_or_group_in_list_many', [joined, groupSize + ''])
+            secondaryText = `${joined}等 共 ${groupSize} 人`
+        } else {
+            secondaryText = joined
+        }
     } else {
         const person = props.item
         name = person.nickname || person.identifier.userId
@@ -72,4 +88,15 @@ export function PersonOrGroupInList(props: SharedProps & (PersonProps | GroupPro
             />
         </ListItem>
     )
+}
+
+function useNickNamesFromList(preview: readonly PersonIdentifier[]) {
+    const people = useFriendsList()
+    const userWithNames = React.useMemo(() => people.filter(x => x.nickname), [people])
+
+    const [x, y, z] = preview
+    const [a] = React.useMemo(() => x && userWithNames.filter(w => w.identifier.equals(x)), [userWithNames, x]) || []
+    const [b] = React.useMemo(() => y && userWithNames.filter(w => w.identifier.equals(y)), [userWithNames, y]) || []
+    const [c] = React.useMemo(() => z && userWithNames.filter(w => w.identifier.equals(z)), [userWithNames, z]) || []
+    return React.useMemo(() => [a, b, c].filter(x => x).map(x => x.nickname!), [a, b, c])
 }

@@ -60,6 +60,18 @@
     "decrypted_postbox_failed": {
         "message": "Maskbook 解密失敗"
     },
+    "person_or_group_in_chip": {
+        "message": "$1 ($2 人)"
+    },
+    "person_or_group_in_list_0": {
+        "message": "這個組是空的"
+    },
+    "person_or_group_in_list_many": {
+        "message": "$1 等，共 $2 人"
+    },
+    "person_or_group_in_list_many_no_preview": {
+        "message": "共 $2 人"
+    },
     "search_box_placeholder": {
         "message": "鍵入以搜尋"
     },
