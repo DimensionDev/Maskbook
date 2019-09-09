@@ -25,8 +25,9 @@ For general introductions, see https://Maskbook.com/
 
 #### Build and developing
 
--   `yarn firefox` runs extension in a new firefox session.
--   `yarn start` runs extension in other browsers, manually loading required.    
+-   `yarn start:firefox` runs extension in a new firefox session.
+-   `yarn start:android` runs extension in a usb connected android device.
+-   `yarn start` runs extension in other browsers, manually loading required.
     [This](https://chrome.google.com/webstore/detail/extensions-reloader/fimgfedafeadlieiabdeeaodndnlbhid) plugin may help you to reload extension quicker.
 -   `yarn storybook` to start StoryBook. Used for UI only developing.
 -   `yarn build` build a production version. Output files in `./build/`
