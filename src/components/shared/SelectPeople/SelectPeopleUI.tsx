@@ -1,82 +1,10 @@
-import * as React from 'react'
-import { Avatar } from '../../utils/components/Avatar'
-import { geti18nString } from '../../utils/i18n'
-import {
-    makeStyles,
-    ListItem,
-    ListItemAvatar,
-    ListItemText,
-    Chip,
-    InputBase,
-    Button,
-    List,
-    Box,
-    Theme,
-} from '@material-ui/core'
-import { Person } from '../../database'
-import { useState, useCallback } from 'react'
-import { useCurrentIdentity } from '../DataSource/useActivatedUI'
-import { OverridableComponent } from '@material-ui/core/OverridableComponent'
-
-interface PeopleInListProps {
-    person: Person
-    onClick(): void
-    disabled?: boolean
-    showAtNetwork?: boolean
-    listItemProps?: Partial<(typeof ListItem extends OverridableComponent<infer U> ? U : never)['props']>
-}
-const usePeopleInListStyle = makeStyles<Theme>(theme => ({
-    overflow: {
-        textOverflow: 'ellipsis',
-        whiteSpace: 'nowrap',
-        overflow: 'hidden',
-    },
-    networkHint: {
-        color: theme.palette.grey[500],
-    },
-}))
-/**
- * Item in the list
- */
-export function PersonInList({ person, onClick, disabled, showAtNetwork, listItemProps }: PeopleInListProps) {
-    const classes = usePeopleInListStyle()
-    const name = person.nickname || person.identifier.userId
-    const withNetwork = (
-        <>
-            {name}
-            <span className={classes.networkHint}> @ {person.identifier.network}</span>
-        </>
-    )
-    return (
-        <ListItem button disabled={disabled} onClick={onClick} {...(listItemProps || {})}>
-            <ListItemAvatar>
-                <Avatar person={person} />
-            </ListItemAvatar>
-            <ListItemText
-                classes={{ primary: classes.overflow, secondary: classes.overflow }}
-                primary={showAtNetwork ? withNetwork : name}
-                secondary={person.fingerprint ? person.fingerprint.toLowerCase() : undefined}
-            />
-        </ListItem>
-    )
-}
-interface PersonInChipProps {
-    person: Person
-    onDelete?(): void
-    disabled?: boolean
-}
-function PersonInChip({ disabled, onDelete, person }: PersonInChipProps) {
-    const avatar = person.avatar ? <Avatar person={person} /> : undefined
-    return (
-        <Chip
-            style={{ marginRight: 6, marginBottom: 6 }}
-            color="primary"
-            onDelete={disabled ? undefined : onDelete}
-            label={person.nickname || person.identifier.userId}
-            avatar={avatar}
-        />
-    )
-}
+import React, { useState, useCallback } from 'react'
+import { geti18nString } from '../../../utils/i18n'
+import { makeStyles, ListItem, ListItemText, InputBase, Button, List, Box } from '@material-ui/core'
+import { Person } from '../../../database'
+import { useCurrentIdentity } from '../../DataSource/useActivatedUI'
+import { PersonInList } from './PeopleInList'
+import { PersonInChip } from './PersonInChip'
 interface SelectPeopleUIProps {
     ignoreMyself?: boolean
     people: Person[]
@@ -105,7 +33,6 @@ export function SelectPeopleUI(props: SelectPeopleUIProps) {
     const { people, frozenSelected, onSetSelected, selected, disabled, ignoreMyself } = props
     const { hideSelectAll, hideSelectNone, showAtNetwork, maxSelection, classes: classesProp = {} } = props
     const classes = useStyles()
-
     const myself = useCurrentIdentity()
     React.useEffect(() => {
         if (myself && ignoreMyself) {
@@ -141,10 +68,8 @@ export function SelectPeopleUI(props: SelectPeopleUIProps) {
             {geti18nString('select_none')}
         </Button>
     )
-
     const showSelectAll = !hideSelectAll && listAfterSearch.length > 0 && typeof maxSelection === 'undefined'
     const showSelectNone = !hideSelectNone && selected.length > 0
-
     return (
         <div className={classesProp.root}>
             <Box display="flex" className={classes.selectedArea}>
@@ -179,7 +104,6 @@ export function SelectPeopleUI(props: SelectPeopleUIProps) {
             </Box>
         </div>
     )
-
     function PeopleListItem(person: Person) {
         if (ignoreMyself && myself && person.identifier.equals(myself.identifier)) return null
         return (
