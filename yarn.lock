@@ -16889,10 +16889,9 @@ webpack-sources@^1.1.0, webpack-sources@^1.4.0, webpack-sources@^1.4.1:
 
 "webpack-web-ext-plugin@github:sunrisefox/webpack-web-ext-plugin":
   version "0.0.1"
-  resolved "https://codeload.github.com/sunrisefox/webpack-web-ext-plugin/tar.gz/58e0e10b748539256e1008e1912847fd8eb73b0d"
+  resolved "https://codeload.github.com/sunrisefox/webpack-web-ext-plugin/tar.gz/d8f71a4f2ed3792662b6cea423bfa0d6e6154243"
   dependencies:
     inquirer "^7.0.0"
-    web-ext "^3.1.1"
 
 webpack@4.39.1:
   version "4.39.1"

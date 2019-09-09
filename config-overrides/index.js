@@ -67,6 +67,11 @@ function override(config, env) {
         config.plugins.push(new WebExtPlugin({ sourceDir: dist, target: 'firefox-android' }))
     }
 
+    // reserved for future release of web-ext
+    if (process.argv.indexOf('--chromium') !== -1) {
+        config.plugins.push(new WebExtPlugin({ sourceDir: dist, target: 'chromium' }))
+    }
+
     config.plugins.push(
         newPage({ chunks: ['options-page'], filename: 'index.html' }),
         newPage({ chunks: ['background-service'], filename: 'background.html' }),
