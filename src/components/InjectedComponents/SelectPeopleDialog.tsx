@@ -57,7 +57,7 @@ export function SelectPeopleDialog(props: Props) {
                 <SelectPeopleUI
                     frozenSelected={props.alreadySelectedPreviously}
                     disabled={committed}
-                    people={props.people}
+                    items={props.people}
                     selected={people}
                     onSetSelected={select}
                 />

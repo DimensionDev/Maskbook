@@ -1,16 +1,18 @@
 import React, { useState, useCallback } from 'react'
 import { geti18nString } from '../../../utils/i18n'
 import { makeStyles, ListItem, ListItemText, InputBase, Button, List, Box } from '@material-ui/core'
-import { Person } from '../../../database'
+import { Person, Group } from '../../../database'
 import { useCurrentIdentity } from '../../DataSource/useActivatedUI'
 import { PersonOrGroupInList } from './PersonOrGroupInList'
 import { PersonOrGroupInChip } from './PersonOrGroupInChip'
-interface SelectPeopleUIProps {
+type PersonOrGroup = Group | Person
+interface SelectPeopleAndGroupsUIProps<ServeType extends Group | Person> {
+    /** Omit myself in the UI and the selected result */
     ignoreMyself?: boolean
-    people: Person[]
-    selected: Person[]
-    frozenSelected: Person[]
-    onSetSelected: (selected: Person[]) => void
+    items: ServeType[]
+    selected: ServeType[]
+    frozenSelected: ServeType[]
+    onSetSelected(selected: ServeType[]): void
     disabled?: boolean
     hideSelectAll?: boolean
     hideSelectNone?: boolean
@@ -29,37 +31,45 @@ const useStyles = makeStyles({
     input: { flex: 1 },
     button: { marginLeft: 8, padding: '2px 6px' },
 })
-export function SelectPeopleUI(props: SelectPeopleUIProps) {
-    const { people, frozenSelected, onSetSelected, selected, disabled, ignoreMyself } = props
+export function SelectPeopleUI<ServeType extends Group | Person = PersonOrGroup>(
+    props: SelectPeopleAndGroupsUIProps<ServeType>,
+) {
+    const items: PersonOrGroup[] = props.items
+    const selected: PersonOrGroup[] = props.selected
+    const { frozenSelected, onSetSelected, disabled, ignoreMyself } = props
     const { hideSelectAll, hideSelectNone, showAtNetwork, maxSelection, classes: classesProp = {} } = props
     const classes = useStyles()
     const myself = useCurrentIdentity()
     React.useEffect(() => {
         if (myself && ignoreMyself) {
             const filtered = selected.find(x => x.identifier.equals(myself.identifier))
-            if (filtered) onSetSelected(selected.filter(x => x !== filtered))
+            if (filtered) onSetSelected(selected.filter(x => x !== filtered) as ServeType[])
         }
     }, [ignoreMyself, myself, onSetSelected, selected])
     const [search, setSearch] = useState('')
-    const listBeforeSearch = people.filter(x => {
+    const listBeforeSearch = items.filter(x => {
         if (ignoreMyself && myself && x.identifier.equals(myself.identifier)) return false
         if (selected.find(y => x.identifier.equals(y.identifier))) return false
         return true
     })
     const listAfterSearch = listBeforeSearch.filter(x => {
-        if (frozenSelected && frozenSelected.find(y => x.identifier.userId === y.identifier.userId)) return false
+        if (frozenSelected && frozenSelected.find(y => x.identifier.equals(y.identifier))) return false
         if (search === '') return true
-        return (
-            !!x.identifier.userId.toLocaleLowerCase().match(search.toLocaleLowerCase()) ||
-            !!(x.fingerprint || '').toLocaleLowerCase().match(search.toLocaleLowerCase()) ||
-            !!(x.nickname || '').toLocaleLowerCase().match(search.toLocaleLowerCase())
-        )
+        if (isPerson(x)) {
+            return (
+                !!x.identifier.userId.toLowerCase().match(search.toLowerCase()) ||
+                !!(x.fingerprint || '').toLowerCase().match(search.toLowerCase()) ||
+                !!(x.nickname || '').toLowerCase().match(search.toLowerCase())
+            )
+        } else {
+            return x.groupName.toLowerCase().match(search.toLowerCase())
+        }
     })
     const SelectAllButton = (
         <Button
             className={classes.button}
             color="primary"
-            onClick={() => onSetSelected([...selected, ...listAfterSearch])}>
+            onClick={() => onSetSelected([...selected, ...listAfterSearch] as ServeType[])}>
             {geti18nString('select_all')}
         </Button>
     )
@@ -74,14 +84,23 @@ export function SelectPeopleUI(props: SelectPeopleUIProps) {
         <div className={classesProp.root}>
             <Box display="flex" className={classes.selectedArea}>
                 {frozenSelected.map(FrozenChip)}
-                {selected.map(RemovableChip)}
+                {selected.map(item => (
+                    <PersonOrGroupInChip
+                        disabled={disabled}
+                        key={item.identifier.toText()}
+                        item={item}
+                        onDelete={() =>
+                            onSetSelected(selected.filter(x => !x.identifier.equals(item.identifier)) as ServeType[])
+                        }
+                    />
+                ))}
                 <InputBase
                     className={classes.input}
                     value={disabled ? '' : search}
                     onChange={useCallback(e => setSearch(e.target.value), [])}
                     onKeyDown={e => {
                         if (search === '' && e.key === 'Backspace') {
-                            onSetSelected(selected.slice(0, selected.length - 1))
+                            onSetSelected(selected.slice(0, selected.length - 1) as ServeType[])
                         }
                     }}
                     placeholder={disabled ? '' : geti18nString('search_box_placeholder')}
@@ -104,14 +123,13 @@ export function SelectPeopleUI(props: SelectPeopleUIProps) {
             </Box>
         </div>
     )
-    function PeopleListItem(person: Person) {
-        if (ignoreMyself && myself && person.identifier.equals(myself.identifier)) return null
+    function PeopleListItem(item: PersonOrGroup) {
+        if (ignoreMyself && myself && item.identifier.equals(myself.identifier)) return null
         return (
             <PersonOrGroupInList
-                type="person"
                 showAtNetwork={showAtNetwork}
-                key={person.identifier.userId}
-                item={person}
+                key={item.identifier.toText()}
+                item={item}
                 disabled={
                     disabled ||
                     (typeof maxSelection === 'number' &&
@@ -119,28 +137,24 @@ export function SelectPeopleUI(props: SelectPeopleUIProps) {
                         frozenSelected.length + selected.length >= maxSelection)
                 }
                 onClick={() => {
-                    if (maxSelection === 1) onSetSelected([person])
-                    else onSetSelected(selected.concat(person))
+                    if (maxSelection === 1) onSetSelected([item as ServeType])
+                    else onSetSelected(selected.concat(item) as ServeType[])
                     setSearch('')
                 }}
-            />
-        )
-    }
-    function FrozenChip(person: Person) {
-        return <PersonOrGroupInChip disabled key={person.identifier.userId} type="person" item={person} />
-    }
-    function RemovableChip(person: Person) {
-        return (
-            <PersonOrGroupInChip
-                disabled={disabled}
-                key={person.identifier.userId}
-                type="person"
-                item={person}
-                onDelete={() => onSetSelected(selected.filter(x => x.identifier.userId !== person.identifier.userId))}
             />
         )
     }
 }
 SelectPeopleUI.defaultProps = {
     frozenSelected: [],
+}
+function FrozenChip(item: PersonOrGroup) {
+    return <PersonOrGroupInChip disabled key={item.identifier.toText()} item={item} />
+}
+
+export function isPerson(x: PersonOrGroup): x is Person {
+    return 'fingerprint' in x
+}
+export function isGroup(x: PersonOrGroup): x is Group {
+    return !isPerson(x)
 }

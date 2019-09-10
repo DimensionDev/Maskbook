@@ -59,7 +59,6 @@ export const ChooseIdentity: React.FC<{
                     {availableIdentities.map(person =>
                         person.identifier.equals(current.identifier) ? null : (
                             <PersonOrGroupInList
-                                type="person"
                                 listItemProps={{ dense: true }}
                                 item={person}
                                 key={person.identifier.toText()}

@@ -17,11 +17,11 @@ import { DecryptionProgress } from '../extension/background-script/CryptoService
 import { PersonOrGroupInChip, PersonOrGroupInList } from '../components/shared/SelectPeople'
 
 storiesOf('Injections', module)
-    .add('PersonOrGroupInChip', () => demoGroup.map(g => <PersonOrGroupInChip type="group" item={g} />))
+    .add('PersonOrGroupInChip', () => demoGroup.map(g => <PersonOrGroupInChip item={g} />))
     .add('PersonOrGroupInList', () => (
         <Paper>
             {demoGroup.map(g => (
-                <PersonOrGroupInList onClick={action('click')} type="group" item={g} />
+                <PersonOrGroupInList onClick={action('click')} item={g} />
             ))}
         </Paper>
     ))

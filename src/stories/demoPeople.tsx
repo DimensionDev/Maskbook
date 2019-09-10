@@ -55,7 +55,7 @@ export const demoGroup: Group[] = [
     },
     {
         groupName: 'Group E',
-        identifier: new GroupIdentifier('localhost', '4567', GroupType.real),
+        identifier: new GroupIdentifier('localhost', '8493', GroupType.real),
         members: [],
     },
 ]

@@ -9,20 +9,14 @@ import GroupIcon from '@material-ui/icons/Group'
 import { useFriendsList } from '../../DataSource/useActivatedUI'
 import { PersonIdentifier } from '../../../database/type'
 import { geti18nString, useIntlListFormat } from '../../../utils/i18n'
+import { isGroup } from './SelectPeopleUI'
 
-interface SharedProps {
+interface Props {
     onClick(): void
     disabled?: boolean
     showAtNetwork?: boolean
     listItemProps?: Partial<(typeof ListItem extends OverridableComponent<infer U> ? U : never)['props']>
-}
-interface GroupProps {
-    type: 'group'
-    item: Group
-}
-interface PersonProps {
-    type: 'person'
-    item: Person
+    item: Group | Person
 }
 const useStyle = makeStyles<Theme>(theme => ({
     overflow: {
@@ -37,16 +31,16 @@ const useStyle = makeStyles<Theme>(theme => ({
 /**
  * Item in the list
  */
-export function PersonOrGroupInList(props: SharedProps & (PersonProps | GroupProps)) {
+export function PersonOrGroupInList(props: Props) {
     const classes = useStyle()
-    const nicknamePreviewsForGroup = useNickNamesFromList(props.type === 'group' ? props.item.members : [])
+    const nicknamePreviewsForGroup = useNickNamesFromList(isGroup(props.item) ? props.item.members : [])
     const listFormat = useIntlListFormat()
 
     const { disabled, listItemProps, onClick, showAtNetwork } = props
     let name = ''
     let avatar: ReturnType<typeof Avatar>
     let secondaryText: string | undefined = undefined
-    if (props.type === 'group') {
+    if (isGroup(props.item)) {
         const group = props.item
         name = group.groupName
         avatar = (

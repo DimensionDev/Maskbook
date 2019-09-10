@@ -5,6 +5,7 @@ import { PersonIdentifier } from '../../../database/type'
 export const twitterUIDataSources: SocialNetworkUIDataSources = {
     friendsRef: new ValueRef([]),
     myIdentitiesRef: new ValueRef([]),
+    groupsRef: new ValueRef([]),
     currentIdentity: new ValueRef(null),
     lastRecognizedIdentity: new ValueRef({ identifier: PersonIdentifier.unknown }),
     posts: new Map(),
