@@ -3,6 +3,7 @@ const webpack = require('webpack')
 const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const fs = require('fs')
+const pkg = require('../package.json')
 
 const src = file => path.join(__dirname, '../', file)
 const argv = require('yargs').argv
@@ -14,6 +15,7 @@ process.env.BROWSER = 'none'
 
 const SSRPlugin = require('./SSRPlugin')
 const WebExtPlugin = require('webpack-web-ext-plugin')
+const ExtensionManifestPlugin = require('webpack-extension-manifest-plugin')
 
 /**
  * @type {import("webpack").Configuration}
@@ -73,6 +75,8 @@ function override(config, env) {
         )
     }
 
+    const manifest_extend = { version: pkg.version }
+
     if (argv.chromium) {
         config.plugins.push(
             new WebExtPlugin({
@@ -87,6 +91,19 @@ function override(config, env) {
     if (argv['firefox-android']) {
         config.plugins.push(new WebExtPlugin({ sourceDir: dist, target: 'firefox-android' }))
     }
+
+    if (argv['firefox-gecko']) {
+        Object.assign(manifest_extend, { permissions: ['<all_urls>'] })
+    }
+
+    config.plugins.push(
+        new ExtensionManifestPlugin({
+            config: {
+                base: require('../src/manifest'),
+                extend: manifest_extend,
+            },
+        }),
+    )
 
     config.plugins.push(
         newPage({ chunks: ['options-page'], filename: 'index.html' }),

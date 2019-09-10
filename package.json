@@ -11,7 +11,11 @@
     "start:firefox": "react-app-rewired start --firefox",
     "start:android": "react-app-rewired start --firefox-android",
     "prepare:firefox": "firefox -CreateProfile ./.firefox",
+    "start:chromium": "react-app-rewired start --chromium",
+    "start:gecko": "react-app-rewired start --firefox-gecko",
     "build": "react-app-rewired build",
+    "build:debugging": "node --inspect-brk node_modules/react-app-rewired/scripts/build.js",
+    "build:gecko": "react-app-rewired build --firefox-gecko",
     "test": "react-app-rewired test",
     "storybook": "start-storybook -p 9009 -s public --quiet",
     "storybook-build": "build-storybook -s public --quiet",
@@ -91,7 +95,8 @@
     "storybook-addon-material-ui": "^0.9.0-alpha.19",
     "ts-node": "^8.3.0",
     "web-ext": "^3.1.1",
-    "yargs": "^14.0.0"
+    "yargs": "^14.0.0",
+    "webpack-extension-manifest-plugin": "^0.5.0"
   },
   "browserslist": {
     "production": [
