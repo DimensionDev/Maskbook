@@ -55,7 +55,7 @@ Object.assign(globalThis, {
 type Service = Record<string, (...args: any[]) => Promise<any>>
 function register<T extends Service>(service: T, name: keyof Services, mock?: Partial<T>) {
     if (OnlyRunInContext(['content', 'options', 'debugging', 'background'], false)) {
-        console.log(`Service ${name} registered in ${GetContext()}`)
+        GetContext() !== 'debugging' && console.log(`Service ${name} registered in ${GetContext()}`)
         Object.assign(Services, {
             [name]: AsyncCall(Object.assign({}, service), {
                 key: name,
