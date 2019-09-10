@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { geti18nString } from '../../utils/i18n'
 import { Button, makeStyles, Typography, Theme } from '@material-ui/core'
 import WelcomeContainer from './WelcomeContainer'
-import { SelectPeopleUI } from '../shared/SelectPeople'
+import { SelectPeopleUI, isGroup } from '../shared/SelectPeople'
 import { Person } from '../../database'
 import Navigation from './Navigation/Navigation'
 
@@ -35,13 +35,13 @@ export default function Welcome({ next, identities, linkNewSocialNetworks, back 
         <WelcomeContainer className={classes.paper}>
             <Navigation back={back} />
             <Typography variant="h5">{geti18nString('welcome_1a1_title')}</Typography>
-            <SelectPeopleUI
+            <SelectPeopleUI<Person>
                 classes={{ root: classes.select }}
                 hideSelectAll
                 hideSelectNone
                 showAtNetwork
                 maxSelection={1}
-                people={identities}
+                items={identities}
                 selected={[]}
                 frozenSelected={selected}
                 onSetSelected={setSelect}

@@ -14,6 +14,7 @@ export const emptyDefinition: SocialNetworkUI = {
         return false
     },
     myIdentitiesRef: new ValueRef([]),
+    groupsRef: new ValueRef([]),
     lastRecognizedIdentity: new ValueRef({ identifier: PersonIdentifier.unknown }),
     currentIdentity: new ValueRef(null),
     init() {

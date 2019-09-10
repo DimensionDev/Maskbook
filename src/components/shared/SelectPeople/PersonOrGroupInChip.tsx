@@ -4,24 +4,18 @@ import MuiAvatar from '@material-ui/core/Avatar/Avatar'
 import { Chip } from '@material-ui/core'
 import { Person, Group } from '../../../database'
 import { geti18nString } from '../../../utils/i18n'
+import { isGroup, isPerson } from './SelectPeopleUI'
 
-interface SharedProps {
+interface Props {
     onDelete?(): void
     disabled?: boolean
+    item: Person | Group
 }
-interface PersonChipProps {
-    type: 'person'
-    item: Person
-}
-interface GroupChipProps {
-    type: 'group'
-    item: Group
-}
-export function PersonOrGroupInChip(props: SharedProps & (PersonChipProps | GroupChipProps)) {
+export function PersonOrGroupInChip(props: Props) {
     const { disabled, onDelete } = props
     let avatar: ReturnType<typeof Avatar> | undefined = undefined
     let displayName = ''
-    if (props.type === 'group') {
+    if (isGroup(props.item)) {
         const group = props.item
         displayName = geti18nString('person_or_group_in_chip', [group.groupName, group.members.length + ''])
         avatar = group.avatar ? <MuiAvatar aria-label={displayName} src={avatar} /> : undefined
@@ -34,7 +28,7 @@ export function PersonOrGroupInChip(props: SharedProps & (PersonChipProps | Grou
     return (
         <Chip
             style={{ marginRight: 6, marginBottom: 6 }}
-            color={props.type === 'person' ? 'primary' : 'secondary'}
+            color={isPerson(props.item) ? 'primary' : 'secondary'}
             onDelete={disabled ? undefined : onDelete}
             label={displayName}
             avatar={avatar}

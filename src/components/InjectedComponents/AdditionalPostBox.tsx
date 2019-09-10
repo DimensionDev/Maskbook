@@ -7,15 +7,15 @@ import Services from '../../extension/service'
 import { geti18nString } from '../../utils/i18n'
 import { makeStyles } from '@material-ui/styles'
 import { Box, Button, Card, CardHeader, Divider, InputBase, Paper, Typography } from '@material-ui/core'
-import { Person } from '../../database'
+import { Person, Group } from '../../database'
 import { NotSetupYetPrompt } from '../shared/NotSetupYetPrompt'
-import { useCurrentIdentity, useFriendsList, useMyIdentities } from '../DataSource/useActivatedUI'
+import { useCurrentIdentity, useFriendsList, useMyIdentities, useGroupsList } from '../DataSource/useActivatedUI'
 import { getActivatedUI } from '../../social-network/ui'
 import { ChooseIdentity } from '../shared/ChooseIdentity'
 
 interface Props {
-    people: Person[]
-    onRequestPost(people: Person[], text: string): void
+    availableTarget: (Person | Group)[]
+    onRequestPost(people: (Person | Group)[], text: string): void
 }
 const useStyles = makeStyles({
     root: { margin: '10px 0' },
@@ -36,12 +36,12 @@ const useStyles = makeStyles({
     button: { padding: '2px 30px', flex: 1 },
 })
 export function AdditionalPostBoxUI(props: Props) {
-    const { people } = props
+    const { availableTarget } = props
     const classes = useStyles()
 
     const myself = useCurrentIdentity()
     const [text, setText] = useState('')
-    const [selectedPeople, selectPeople] = useState<Person[]>(props.people)
+    const [selectedPeople, selectPeople] = useState(props.availableTarget)
 
     const inputRef = useRef<HTMLInputElement>()
     useCapturedInput(inputRef, setText)
@@ -68,7 +68,12 @@ export function AdditionalPostBoxUI(props: Props) {
             </Paper>
             <Divider />
             <Paper elevation={2}>
-                <SelectPeopleUI ignoreMyself people={people} onSetSelected={selectPeople} selected={selectedPeople} />
+                <SelectPeopleUI
+                    ignoreMyself
+                    items={availableTarget}
+                    onSetSelected={selectPeople}
+                    selected={selectedPeople}
+                />
             </Paper>
             <Divider />
             <Box display="flex" className={classes.grayArea}>
@@ -87,6 +92,8 @@ export function AdditionalPostBoxUI(props: Props) {
 
 export function AdditionalPostBox(props: Partial<Props>) {
     const people = useFriendsList()
+    const groups = useGroupsList()
+    const groupsAndPeople = React.useMemo(() => [...people, ...groups], [people, groups])
     const identity = useMyIdentities()
 
     const onRequestPost = useCallback(
@@ -110,7 +117,7 @@ export function AdditionalPostBox(props: Partial<Props>) {
         return <NotSetupYetPrompt />
     }
 
-    const ui = <AdditionalPostBoxUI people={people} onRequestPost={onRequestPost} {...props} />
+    const ui = <AdditionalPostBoxUI availableTarget={groupsAndPeople} onRequestPost={onRequestPost} {...props} />
 
     if (identity.length > 1)
         return (
