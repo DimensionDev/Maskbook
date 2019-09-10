@@ -60,7 +60,7 @@ function override(config, env) {
     }
 
     if (process.argv.indexOf('--firefox') !== -1) {
-        config.plugins.push(new WebExtPlugin({ sourceDir: dist }))
+        config.plugins.push(new WebExtPlugin({ sourceDir: dist, keepProfileChanges: true, firefoxProfile: src('.firefox') }))
     }
 
     if (process.argv.indexOf('--firefox-android') !== -1) {
