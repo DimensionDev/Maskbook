@@ -29,6 +29,17 @@ Object.defineProperties(ShadowRoot.prototype, {
         },
         configurable: true,
     },
+    /**
+     *  ConstructableStyleSheetRenderer will check if connected,
+     *  if not, the polyfill will not inject style.
+     *
+     */
+    isConnected: {
+        get() {
+            return true
+        },
+        configurable: true,
+    },
 })
 {
     // ? Hack for React, let event go through ShadowDom
