@@ -64,9 +64,11 @@ function override(config, env) {
         config.plugins.push(
             new WebExtPlugin({
                 sourceDir: dist,
-                target: 'firefox',
+                target: 'firefox-desktop',
                 firefoxProfile: src('.firefox'),
                 keepProfileChanges: true,
+                // --firefox=nightly
+                firefox: typeof argv.firefox === 'string' ? argv.firefox : undefined,
             }),
         )
     }
@@ -158,11 +160,6 @@ function override(config, env) {
     // futureEmitAssets prevents webpackDevServer from writing file to disk
     config.output.futureEmitAssets = false
     return config
-}
-
-const last = array => {
-    const length = array == null ? 0 : array.length
-    return length ? array[length - 1] : undefined
 }
 
 module.exports = {
