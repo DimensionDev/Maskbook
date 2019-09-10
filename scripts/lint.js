@@ -14,13 +14,13 @@ const reportOnly = argv.reportOnly
               '.prettierignore',
               '--ext',
               'tsx,ts,jsx,js',
-              './src/',
+              ...(argv._.length ? argv._ : ['./src/']),
               ...(reportOnly ? [] : ['--cache', '--fix']),
           ])
         : null
     !argv.noPrettier
         ? await spawn('prettier', [
-              './**/*.{ts,tsx,jsx,js}',
+              ...(argv._.length ? argv._ : ['./**/*.{ts,tsx,jsx,js}']),
               ...(reportOnly ? ['--check', '--loglevel', 'log'] : ['--write', '--loglevel', 'warn']),
           ])
         : null
