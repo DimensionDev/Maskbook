@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { useCallback, useRef, useState } from 'react'
-import { SelectPeopleUI } from '../shared/SelectPeople'
+import { SelectPeopleAndGroupsUI } from '../shared/SelectPeopleAndGroups'
 import { useCapturedInput } from '../../utils/hooks/useCapturedEvents'
 import { Avatar } from '../../utils/components/Avatar'
 import Services from '../../extension/service'
@@ -68,7 +68,7 @@ export function AdditionalPostBoxUI(props: Props) {
             </Paper>
             <Divider />
             <Paper elevation={2}>
-                <SelectPeopleUI
+                <SelectPeopleAndGroupsUI
                     ignoreMyself
                     items={availableTarget}
                     onSetSelected={selectPeople}

@@ -4,7 +4,7 @@ import MuiAvatar from '@material-ui/core/Avatar/Avatar'
 import { Chip } from '@material-ui/core'
 import { Person, Group } from '../../../database'
 import { geti18nString } from '../../../utils/i18n'
-import { isGroup, isPerson } from './SelectPeopleUI'
+import { isGroup, isPerson } from './SelectPeopleAndGroupsUI'
 
 interface Props {
     onDelete?(): void

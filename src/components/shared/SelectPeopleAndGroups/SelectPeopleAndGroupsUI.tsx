@@ -31,7 +31,7 @@ const useStyles = makeStyles({
     input: { flex: 1 },
     button: { marginLeft: 8, padding: '2px 6px' },
 })
-export function SelectPeopleUI<ServeType extends Group | Person = PersonOrGroup>(
+export function SelectPeopleAndGroupsUI<ServeType extends Group | Person = PersonOrGroup>(
     props: SelectPeopleAndGroupsUIProps<ServeType>,
 ) {
     const items: PersonOrGroup[] = props.items
@@ -145,7 +145,7 @@ export function SelectPeopleUI<ServeType extends Group | Person = PersonOrGroup>
         )
     }
 }
-SelectPeopleUI.defaultProps = {
+SelectPeopleAndGroupsUI.defaultProps = {
     frozenSelected: [],
 }
 function FrozenChip(item: PersonOrGroup) {

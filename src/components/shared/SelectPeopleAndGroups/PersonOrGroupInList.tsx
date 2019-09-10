@@ -9,7 +9,7 @@ import GroupIcon from '@material-ui/icons/Group'
 import { useFriendsList } from '../../DataSource/useActivatedUI'
 import { PersonIdentifier } from '../../../database/type'
 import { geti18nString, useIntlListFormat } from '../../../utils/i18n'
-import { isGroup } from './SelectPeopleUI'
+import { isGroup } from './SelectPeopleAndGroupsUI'
 
 interface Props {
     onClick(): void

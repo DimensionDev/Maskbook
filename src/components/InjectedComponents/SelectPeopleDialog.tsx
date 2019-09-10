@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react'
-import { SelectPeopleUI } from '../shared/SelectPeople'
+import { SelectPeopleAndGroupsUI } from '../shared/SelectPeopleAndGroups'
 import { geti18nString } from '../../utils/i18n'
 import { makeStyles } from '@material-ui/styles'
 import {
@@ -54,7 +54,7 @@ export function SelectPeopleDialog(props: Props) {
             maxWidth="sm">
             <DialogTitle className={classes.title}>{geti18nString('share_to')}</DialogTitle>
             <DialogContent className={classes.content}>
-                <SelectPeopleUI
+                <SelectPeopleAndGroupsUI
                     frozenSelected={props.alreadySelectedPreviously}
                     disabled={committed}
                     items={props.people}

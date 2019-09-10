@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { geti18nString } from '../../utils/i18n'
 import { Button, makeStyles, Typography, Theme } from '@material-ui/core'
 import WelcomeContainer from './WelcomeContainer'
-import { SelectPeopleUI, isGroup } from '../shared/SelectPeople'
+import { SelectPeopleAndGroupsUI, isGroup } from '../shared/SelectPeopleAndGroups'
 import { Person } from '../../database'
 import Navigation from './Navigation/Navigation'
 
@@ -35,7 +35,7 @@ export default function Welcome({ next, identities, linkNewSocialNetworks, back 
         <WelcomeContainer className={classes.paper}>
             <Navigation back={back} />
             <Typography variant="h5">{geti18nString('welcome_1a1_title')}</Typography>
-            <SelectPeopleUI<Person>
+            <SelectPeopleAndGroupsUI<Person>
                 classes={{ root: classes.select }}
                 hideSelectAll
                 hideSelectNone
