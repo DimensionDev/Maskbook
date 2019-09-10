@@ -6,8 +6,21 @@ export const PortalShadowRoot = (div.attachShadow({ mode: 'closed' }) as unknown
 livingShadowRoots.add(PortalShadowRoot as any)
 
 Object.defineProperties(ShadowRoot.prototype, {
-    setAttribute: { value() {}, configurable: true },
-    removeAttribute: { value() {}, configurable: true },
+    setAttribute: {
+        value() {},
+        configurable: true,
+    },
+    removeAttribute: {
+        value() {},
+        configurable: true,
+    },
+    /**
+     * React will try to find nodeType on this element
+     * if not 1 it thought that it was a React Component Instance
+     * @see https://github.com/facebook/react/pull/15894
+     * and we will got 11 on shadowRoot
+     * so a mock is required.
+     */
     nodeType: {
         get() {
             if (this === PortalShadowRoot) return 1
@@ -15,6 +28,10 @@ Object.defineProperties(ShadowRoot.prototype, {
         },
         configurable: true,
     },
+    /**
+     * MUI require a tag name for internal implement and thought it was a string.
+     * ShadowRoot has no tagName so that a fake tag name defined here.
+     */
     tagName: {
         get() {
             if (this === PortalShadowRoot) return 'div'
@@ -22,6 +39,10 @@ Object.defineProperties(ShadowRoot.prototype, {
         },
         configurable: true,
     },
+    /**
+     * Material model component will try write style on the shadowRoot and
+     * due to lack of style on shadowRoot, it will not work.
+     */
     style: {
         get() {
             if (this === PortalShadowRoot) return div.style
@@ -44,6 +65,7 @@ Object.defineProperties(ShadowRoot.prototype, {
 {
     // ? Hack for React, let event go through ShadowDom
     const hackingEvents = new WeakMap<Event, EventTarget[]>()
+
     function hack(eventName: string, shadowRoot: ShadowRoot) {
         shadowRoot.addEventListener(eventName, (e: Event) => {
             if (hackingEvents.has(e)) return
@@ -56,6 +78,7 @@ Object.defineProperties(ShadowRoot.prototype, {
             e.stopImmediatePropagation()
         })
     }
+
     // ? If react listen to some event, we also hack it.
     document.addEventListener = new Proxy(document.addEventListener, {
         apply(target, thisArg, args) {
