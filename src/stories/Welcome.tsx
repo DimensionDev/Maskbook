@@ -14,7 +14,7 @@ import { action } from '@storybook/addon-actions'
 import { BannerUI } from '../components/Welcomes/Banner'
 import { Dialog } from '@material-ui/core'
 import QRScanner from '../components/Welcomes/QRScanner'
-import { demoPeople } from './demoPeople'
+import { demoPeople } from './demoPeopleOrGroups'
 
 const ResponsiveDialog = Dialog
 storiesOf('Welcome', module)

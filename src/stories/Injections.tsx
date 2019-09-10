@@ -10,11 +10,11 @@ import { useShareMenu } from '../components/InjectedComponents/SelectPeopleDialo
 import { sleep } from '../utils/utils'
 import { Button, Paper } from '@material-ui/core'
 import { RenderInShadowRootWrapper } from '../utils/jss/renderInShadowRoot'
-import { demoPeople, demoGroup } from './demoPeople'
+import { demoPeople, demoGroup } from './demoPeopleOrGroups'
 import { PostCommentDecrypted } from '../components/InjectedComponents/PostComments'
 import { CommentBox } from '../components/InjectedComponents/CommentBox'
 import { DecryptionProgress } from '../extension/background-script/CryptoServices/decryptFrom'
-import { PersonOrGroupInChip, PersonOrGroupInList } from '../components/shared/SelectPeople'
+import { PersonOrGroupInChip, PersonOrGroupInList } from '../components/shared/SelectPeopleAndGroups'
 
 storiesOf('Injections', module)
     .add('PersonOrGroupInChip', () => demoGroup.map(g => <PersonOrGroupInChip item={g} />))

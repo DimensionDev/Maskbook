@@ -1,7 +1,7 @@
 import React from 'react'
 import { storiesOf } from '@storybook/react'
 import Identity from '../components/Dashboard/Identity'
-import { demoPeople } from './demoPeople'
+import { demoPeople } from './demoPeopleOrGroups'
 import { action } from '@storybook/addon-actions'
 import Dashboard from '../components/Dashboard/Dashboard'
 import Privacy from '../extension/options-page/Privacy'
