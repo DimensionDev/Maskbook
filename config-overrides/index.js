@@ -5,6 +5,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const fs = require('fs')
 
 const src = file => path.join(__dirname, '../', file)
+const argv = require('yargs').argv
 
 const publicDir = src('./public')
 const dist = src('./dist')
@@ -59,11 +60,31 @@ function override(config, env) {
         })
     }
 
-    if (process.argv.indexOf('--firefox') !== -1) {
-        config.plugins.push(new WebExtPlugin({ sourceDir: dist }))
+    if (argv.firefox) {
+        config.plugins.push(
+            new WebExtPlugin({
+                sourceDir: dist,
+                target: 'firefox-desktop',
+                firefoxProfile: src('.firefox'),
+                keepProfileChanges: true,
+                // --firefox=nightly
+                firefox: typeof argv.firefox === 'string' ? argv.firefox : undefined,
+            }),
+        )
     }
 
-    if (process.argv.indexOf('--firefox-android') !== -1) {
+    if (argv.chromium) {
+        config.plugins.push(
+            new WebExtPlugin({
+                sourceDir: dist,
+                target: 'chromium',
+                chromiumProfile: src('.chrome'),
+                keepProfileChanges: true,
+            }),
+        )
+    }
+
+    if (argv['firefox-android']) {
         config.plugins.push(new WebExtPlugin({ sourceDir: dist, target: 'firefox-android' }))
     }
 
@@ -77,19 +98,16 @@ function override(config, env) {
     config.plugins.push(
         new webpack.BannerPlugin(
             'Maskbook is a open source project under GNU AGPL 3.0 licence.\n\n\n' +
-            'More info about our project at https://github.com/DimensionDev/Maskbook\n\n' +
-            'Maskbook is built on CircleCI, in which all the building process is available to the public.\n\n' +
-            'We directly take the output to submit to the Web Store. We will integrate the automatic submission\n' +
-            'into the CircleCI in the near future.',
+                'More info about our project at https://github.com/DimensionDev/Maskbook\n\n' +
+                'Maskbook is built on CircleCI, in which all the building process is available to the public.\n\n' +
+                'We directly take the output to submit to the Web Store. We will integrate the automatic submission\n' +
+                'into the CircleCI in the near future.',
         ),
     )
 
     // Write files to /public
     config.plugins.push(
-        new (require('copy-webpack-plugin'))(
-            [{ from: publicDir, to: dist }],
-            { ignore: ['index.html'] },
-        ),
+        new (require('copy-webpack-plugin'))([{ from: publicDir, to: dist }], { ignore: ['index.html'] }),
     )
     if (env !== 'development') {
         config.plugins.push(new SSRPlugin('popup.html', src('./src/extension/popup-page/index.tsx')))
@@ -147,12 +165,10 @@ function override(config, env) {
 module.exports = {
     webpack: override,
     devServer: function(configFunction) {
-      return function(proxy, allowedHost) {
-        const config = configFunction(proxy, allowedHost)
-
-        config.writeToDisk = true
-
-        return config;
-      };
+        return function(proxy, allowedHost) {
+            const config = configFunction(proxy, allowedHost)
+            config.writeToDisk = true
+            return config
+        }
     },
 }
