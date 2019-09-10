@@ -10,6 +10,7 @@
     "start": "react-app-rewired start",
     "start:firefox": "react-app-rewired start --firefox",
     "start:android": "react-app-rewired start --firefox-android",
+    "prepare:firefox": "firefox -CreateProfile ./.firefox",
     "build": "react-app-rewired build",
     "test": "react-app-rewired test",
     "storybook": "start-storybook -p 9009 -s public --quiet",
@@ -112,7 +113,7 @@
   },
   "lint-staged": {
     "*.{ts,tsx,js,jsx}": [
-      "yarn lint",
+      "node scripts/lint.js",
       "git add"
     ]
   }
