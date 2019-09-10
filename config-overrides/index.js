@@ -3,7 +3,6 @@ const webpack = require('webpack')
 const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const fs = require('fs')
-const { spawn } = require('../scripts/spawn')
 
 const src = file => path.join(__dirname, '../', file)
 const argv = require('yargs').argv
@@ -15,12 +14,11 @@ process.env.BROWSER = 'none'
 
 const SSRPlugin = require('./SSRPlugin')
 const WebExtPlugin = require('webpack-web-ext-plugin')
-const firefoxProfile = path.join(process.cwd(), `.firefox`)
 
 /**
  * @type {import("webpack").Configuration}
  */
-async function override(config, env) {
+function override(config, env) {
     // CSP bans eval
     // And non-inline source-map not working
     if (env === 'development') config.devtool = 'inline-source-map'
@@ -63,23 +61,22 @@ async function override(config, env) {
     }
 
     if (argv.firefox) {
-        // HACK: WE SHOULD NOT DO THIS IN OVERRIDE() BUT THERE IS NOWHERE ELSE FOR IT.
-        if (!fs.existsSync(profile) || argv.fresh) {
-            try {
-                const timestamp = Date.now().toString()
-                await spawn('firefox', ['-CreateProfile', `"${timestamp} ${path.join(profile, timestamp)}"`])
-            } catch {
-                throw new Error('Cannot locate or create a profile for firefox. Add firefox to your PATH.')
-            }
-            if (argv.fresh) {
-                console.warn('new profile generated. old firefox profile can be cleaned with "firefox -P".')
-            }
-        }
         config.plugins.push(
             new WebExtPlugin({
                 sourceDir: dist,
                 target: 'firefox',
-                firefoxProfile: path.join(profile, last(await fs.readdir(profile))),
+                firefoxProfile: src('.firefox'),
+                keepProfileChanges: true,
+            }),
+        )
+    }
+
+    if (argv.chromium) {
+        config.plugins.push(
+            new WebExtPlugin({
+                sourceDir: dist,
+                target: 'chromium',
+                chromiumProfile: src('.chrome'),
                 keepProfileChanges: true,
             }),
         )
