@@ -13,10 +13,12 @@ const resolveLastRecognizedIdentity = (self: SocialNetworkUI) => {
     const selfSelector = selfInfoSelectors().screenName
     const assign = () => {
         const ref = self.lastRecognizedIdentity
-        const info = selfInfoSelectors().screenName.evaluate()
-        const id = new PersonIdentifier(host, notEmpty(info, 'user id not found'))
-        if (!id.isUnknown) {
-            ref.value = { identifier: id }
+        const screenName = selfInfoSelectors().screenName.evaluate()
+        const nickname = selfInfoSelectors().name.evaluate()
+        const avatar = selfInfoSelectors().userAvatar.evaluate()
+        const identifier = new PersonIdentifier(host, notEmpty(screenName, 'user id not found'))
+        if (!identifier.isUnknown) {
+            ref.value = { identifier, nickname, avatar }
         }
     }
     new MutationObserverWatcher(selfSelector)
