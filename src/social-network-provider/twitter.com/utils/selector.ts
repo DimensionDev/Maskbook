@@ -12,6 +12,7 @@ const querySelectorAll = <T extends HTMLElement>(selector: string) => {
 /**
  * @naming
  * 御坂       (@Misaka_xxxx)
+ * name       handle
  * userName   screenName
  */
 
@@ -37,6 +38,21 @@ export const postsRootSelector = () => querySelector<HTMLElement>(`[data-testid=
 
 export const postPopupSelector = () => querySelector('[aria-labelledby="modal-header"]')
 export const postsSelectors = () => querySelectorAll('article')
+export const postsContainerSelector = () => postsContentSelectors().querySelector<HTMLElement>('[data-testid="tweet"]')
+/**
+ * @param  node     the node that postsContainerSelector should select.
+ * @return          link to avatar.
+ */
+export const postParser = (node: HTMLElement) => {
+    const nameArea = node.children[1].querySelector<HTMLAnchorElement>('a')!.innerText.split('\n')
+    return {
+        name: nameArea[0],
+        handle: nameArea[1],
+        pid: regexMatch(node.children[1].querySelector<HTMLAnchorElement>('a[href*="status"]')!.href, /(\/)(\d+)/, 2)!,
+        avatar: node.children[0].querySelector<HTMLImageElement>('[style*="twimg.com"] + img')!.src,
+        content: node.querySelector<HTMLDivElement>('[lang]')!.innerText,
+    }
+}
 export const postsContentSelectors = () => postsSelectors().querySelectorAll<HTMLElement>(`[lang]`)
 export const fromPostSelectorsSelectPostContentString = '[data-testid="tweet"] > div:nth-of-type(2)'
 
@@ -54,7 +70,7 @@ const p = (regex: RegExp, index: number) => {
 }
 export const selfInfoSelectors = () => ({
     screenName: p(name, 1),
-    userName: p(name, 2),
-    userBio: p(bio, 1),
+    name: p(name, 2),
+    bio: p(bio, 1),
     userAvatar: p(avatar, 1),
 })

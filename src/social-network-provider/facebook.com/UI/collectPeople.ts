@@ -24,6 +24,7 @@ function findPeopleInfo(whoAmI: SocialNetworkUI['currentIdentity']) {
                  * Also collect 'identifier' | 'nickname' | 'avatar'
                  */
                 const a = document.querySelector<HTMLAnchorElement>('#fb-timeline-cover-name a')
+                // side effect: save to service
                 const id = getPersonIdentifierAtFacebook(a, true)
                 if (!id) return
                 Services.Crypto.verifyOthersProve(text, id.identifier)
