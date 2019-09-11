@@ -23,6 +23,7 @@ import { getMyProveBio } from './CryptoServices/getMyProveBio'
 
 OnlyRunInContext('background', 'WelcomeService')
 async function generateBackupJSON(whoAmI: PersonIdentifier, full = false): Promise<BackupJSONFileLatest> {
+    const manifest = browser.runtime.getManifest()
     const myIdentitiesInDB: BackupJSONFileLatest['whoami'] = []
     const peopleInDB: NonNullable<BackupJSONFileLatest['people']> = []
 
@@ -60,7 +61,11 @@ async function generateBackupJSON(whoAmI: PersonIdentifier, full = false): Promi
         peopleInDB.push({
             network: data.identifier.network,
             userId: data.identifier.userId,
-            groups: data.groups.map(g => ({ network: g.network, groupID: g.groupID, type: g.type })),
+            groups: data.groups.map(g => ({
+                network: g.network,
+                groupID: g.groupID,
+                virtualGroupOwner: g.virtualGroupOwner,
+            })),
             nickname: data.nickname,
             previousIdentifiers: (data.previousIdentifiers || []).map(p => ({ network: p.network, userId: p.userId })),
             publicKey: await exportKey(data.publicKey),
@@ -81,12 +86,14 @@ async function generateBackupJSON(whoAmI: PersonIdentifier, full = false): Promi
             whoami: myIdentitiesInDB,
             people: peopleInDB,
             grantedHostPermissions,
+            maskbookVersion: manifest.version,
         }
     else
         return {
             version: 1,
             whoami: myIdentitiesInDB,
             grantedHostPermissions,
+            maskbookVersion: manifest.version,
         }
     function exportKey(k: CryptoKey) {
         return crypto.subtle.exportKey('jwk', k)
