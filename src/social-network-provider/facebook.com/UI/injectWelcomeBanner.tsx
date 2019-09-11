@@ -7,9 +7,10 @@ import { SocialNetworkUI } from '../../../social-network/ui'
 
 export function injectWelcomeBannerFacebook(this: SocialNetworkUI) {
     const to = new MutationObserverWatcher(
-        new LiveSelector().querySelector<HTMLDivElement>(isMobileFacebook ? '#MComposer' : '#pagelet_composer'),
+        new LiveSelector()
+            .querySelector<HTMLDivElement>(isMobileFacebook ? '#MComposer' : '#pagelet_composer')
+            .enableSingleMode(),
     )
-        .enableSingleMode()
         .setDomProxyOption({ beforeShadowRootInit: { mode: 'closed' } })
         .startWatch()
 
