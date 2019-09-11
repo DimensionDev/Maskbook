@@ -16,11 +16,14 @@ export function UpgradeBackupJSONFile(json: object, identity?: PersonIdentifier)
     if (isVersion1(json)) {
         if (json.grantedHostPermissions === undefined) {
             json.grantedHostPermissions = facebookHost
+            json.maskbookVersion = '1.5.2'
         }
+        if (!json.maskbookVersion) json.maskbookVersion = '1.6.0'
         return json
     }
     if (isVersion0(json) && identity) {
         return {
+            maskbookVersion: '1.3.2',
             version: 1,
             whoami: [
                 {
@@ -46,6 +49,7 @@ export interface BackupJSONFileLatest extends BackupJSONFileVersion1 {}
  * Latest JSON backup format
  */
 export interface BackupJSONFileVersion1 {
+    maskbookVersion: string
     version: 1
     whoami: Array<{
         network: string
