@@ -72,7 +72,29 @@ export async function deleteUserGroupDatabase(group: GroupIdentifier): Promise<v
  * Update a user group that stored in the Maskbook
  * @param group Group ID
  */
-declare function updateUserGroupDatabase(group: Partial<GroupRecord>): Promise<void>
+export async function updateUserGroupDatabase(
+    group: Partial<GroupRecord> & Pick<GroupRecord, 'identifier'>,
+    type: 'append' | 'replace' | ((record: GroupRecord) => GroupRecord | void),
+): Promise<void> {
+    const orig = await queryUserGroupDatabase(group.identifier)
+    if (!orig) throw new TypeError('User group not found')
+
+    const t = (await db).transaction('groups', 'readwrite')
+    let nextRecord: GroupRecord
+    if (type === 'replace') {
+        nextRecord = { ...orig, ...group }
+    } else if (type === 'append') {
+        nextRecord = {
+            identifier: group.identifier,
+            banned: !orig.banned && !group.banned ? undefined : [...(orig.banned || []), ...(group.banned || [])],
+            groupName: group.groupName || orig.groupName,
+            members: orig.members.concat(...(group.members || [])),
+        }
+    } else {
+        nextRecord = type(orig) || orig
+    }
+    await t.objectStore('groups').put(GroupRecordIntoDB(nextRecord))
+}
 
 /**
  * Query a user group that stored in the Maskbook
