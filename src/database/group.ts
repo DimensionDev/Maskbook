@@ -1,6 +1,6 @@
 /// <reference path="./global.d.ts" />
 import { openDB, DBSchema } from 'idb/with-async-ittr'
-import { GroupIdentifier, PersonIdentifier, GroupType, PreDefinedVirtualGroupType, Identifier } from './type'
+import { GroupIdentifier, PersonIdentifier, Identifier } from './type'
 
 //#region Schema
 interface GroupRecordBase {
