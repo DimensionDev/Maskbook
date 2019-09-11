@@ -1,4 +1,4 @@
-import { PersonIdentifier, GroupType } from '../../database/type'
+import { PersonIdentifier } from '../../database/type'
 
 // Since 8/21/2019, every backup file of version 1 should have grantedHostPermissions
 // Before 8/21/2019, we only support facebook, so we can auto upgrade the backup file
@@ -63,7 +63,7 @@ export interface BackupJSONFileVersion1 {
         publicKey: JsonWebKey
         previousIdentifiers?: { network: string; userId: string }[]
         nickname?: string
-        groups?: { network: string; groupID: string; type: GroupType; belongs?: string }[]
+        groups?: { network: string; groupID: string; virtualGroupOwner: string | null }[]
     }>
     grantedHostPermissions: string[]
 }
