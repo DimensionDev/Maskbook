@@ -85,6 +85,9 @@ export enum PreDefinedVirtualGroupNames {
 }
 @serializable('GroupIdentifier')
 export class GroupIdentifier extends Identifier {
+    static getDefaultFriendsGroupIdentifier(who: PersonIdentifier) {
+        return new GroupIdentifier(who.network, PreDefinedVirtualGroupNames.friends, GroupType.virtual, who.userId)
+    }
     constructor(public network: string, public groupID: string, public type: GroupType, public belongs?: string) {
         super()
         noSlash(network)

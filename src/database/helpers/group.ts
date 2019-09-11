@@ -7,7 +7,7 @@ export interface Group extends GroupRecord {
 
 export function createDefaultFriendsGroup(who: PersonIdentifier) {
     return createUserGroupDatabase(
-        new GroupIdentifier(who.network, PreDefinedVirtualGroupNames.friends, GroupType.virtual, who.userId),
+        GroupIdentifier.getDefaultFriendsGroupIdentifier(who),
         // Put the raw special name in, then UI can display in their own language.
         PreDefinedVirtualGroupNames.friends,
     )
