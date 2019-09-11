@@ -102,7 +102,7 @@ Object.assign(window, {
 // Run tests
 require('./tests/1to1')
 require('./tests/1toN')
-require('./tests/sign&verify')
+require('./tests/sign-verify')
 require('./tests/friendship-discover')
 require('./tests/comment')
 
