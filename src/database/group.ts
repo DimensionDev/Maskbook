@@ -134,8 +134,8 @@ export async function queryUserGroupsDatabase(
 
 function GroupRecordOutDB(x: GroupRecordInDatabase): GroupRecord {
     // recover prototype
-    x.members.forEach(x => Object.setPrototypeOf(x, PersonIdentifier))
-    x.banned && x.banned.forEach(x => Object.setPrototypeOf(x, PersonIdentifier))
+    x.members.forEach(x => Object.setPrototypeOf(x, PersonIdentifier.prototype))
+    x.banned && x.banned.forEach(x => Object.setPrototypeOf(x, PersonIdentifier.prototype))
     const id = Identifier.fromString(x.identifier)
     if (!(id instanceof GroupIdentifier))
         throw new TypeError('Can not cast string ' + x.identifier + ' into GroupIdentifier')

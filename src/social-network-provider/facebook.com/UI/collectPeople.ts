@@ -31,10 +31,9 @@ function findPeopleInfo(whoAmI: SocialNetworkUI['currentIdentity']) {
             }
             function parseFriendship() {
                 const thisPerson = tryFindBioKey()
-
                 const myID = whoAmI.value
                 if (!thisPerson || !myID) return
-                const isFriendNow = isFriend.evaluate()
+                const [isFriendNow] = isFriend.evaluate()
                 const myFriends = GroupIdentifier.getDefaultFriendsGroupIdentifier(myID.identifier)
                 if (isFriendNow === Status.Friend) {
                     Services.People.addPersonToFriendsGroup(myFriends, [thisPerson.identifier])
@@ -44,6 +43,7 @@ function findPeopleInfo(whoAmI: SocialNetworkUI['currentIdentity']) {
                     console.log('Removing friend', thisPerson.identifier, 'from', myFriends)
                 }
             }
+            whoAmI.addListener(parseFriendship)
             parseFriendship()
             return {
                 onNodeMutation: parseFriendship,
@@ -59,17 +59,16 @@ enum Status {
 }
 /**
  * Ack:
- * If `#pagelet_timeline_profile_actions > * > *` have 4 children, they are not friend.
- * If have 6 children, they are friend.
+ * If `#pagelet_timeline_profile_actions button:not(.hidden_elem)` have 3 nodes, they are friend.
+ * If have 2 children, they are not friend.
  */
 const isFriend = new LiveSelector()
-    .querySelectorAll('#pagelet_timeline_profile_actions > * > *')
+    .querySelectorAll('#pagelet_timeline_profile_actions button:not(.hidden_elem)')
     .replace(arr => {
-        if (arr.length === 6) return [Status.Friend]
-        else if (arr.length === 4) return [Status.NonFriend]
+        if (arr.length === 3) return [Status.Friend]
+        else if (arr.length === 2) return [Status.NonFriend]
         return [Status.Unknown]
     })
-    .enableSingleMode()
 
 export function collectPeopleFacebook(this: SocialNetworkUI) {
     findPeopleInfo(this.currentIdentity)
