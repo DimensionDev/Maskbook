@@ -83,6 +83,7 @@ function getPostBy(node: DomProxy, allowCollectInfo: boolean) {
     const dom = isMobileFacebook
         ? node.current.querySelectorAll('a')
         : [node.current.parentElement!.querySelectorAll('a')[1]]
+    // side effect: save to service
     return getPersonIdentifierAtFacebook(Array.from(dom), allowCollectInfo)
 }
 function getPostID(node: DomProxy): null | string {
