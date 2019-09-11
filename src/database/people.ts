@@ -25,6 +25,7 @@ import { MessageCenter } from '../utils/messages'
 import { personRecordToPerson } from './helpers/person'
 import { isIdentifierArrayEquals } from '../utils/equality'
 import { createDefaultFriendsGroup } from './helpers/group'
+import { generate_ECDH_256k1_KeyPair, generate_AES_GCM_256_Key } from '../utils/crypto.subtle'
 
 //#region Type and utils
 /**
@@ -241,7 +242,7 @@ export async function getMyIdentitiesDB(): Promise<PersonRecordPublicPrivate[]> 
 export async function generateMyIdentityDB(identifier: PersonIdentifier): Promise<void> {
     const now = await getMyIdentitiesDB()
     if (now.some(id => id.identifier.equals(identifier))) return
-    const key = await crypto.subtle.generateKey({ name: 'ECDH', namedCurve: 'K-256' }, true, ['deriveKey'])
+    const key = await generate_ECDH_256k1_KeyPair()
     await storeMyIdentityDB({
         groups: [],
         identifier,
@@ -253,17 +254,14 @@ export async function generateMyIdentityDB(identifier: PersonIdentifier): Promis
 }
 //#endregion
 //#region LocalKeys
-function generateAESKey(exportable: boolean) {
-    return crypto.subtle.generateKey({ name: 'AES-GCM', length: 256 }, exportable, ['encrypt', 'decrypt'])
-}
 
 /**
  * Generate a new local key and store it
  * @param id - Identifier or 'default'
  * @param exportable - If the key is exportable
  */
-export async function generateLocalKeyDB(id: PersonIdentifier, exportable = true) {
-    const key = await generateAESKey(exportable)
+export async function generateLocalKeyDB(id: PersonIdentifier) {
+    const key = await generate_AES_GCM_256_Key()
     await storeLocalKeyDB(id, key)
     MessageCenter.emit('identityUpdated', undefined)
     return key

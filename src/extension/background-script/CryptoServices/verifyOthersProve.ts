@@ -3,6 +3,7 @@ import { geti18nString } from '../../../utils/i18n'
 import { unCompressSecp256k1Point } from '../../../utils/type-transform/SECP256k1-Compression'
 import { storeNewPersonDB } from '../../../database/people'
 import { PersonIdentifier } from '../../../database/type'
+import { import_ECDH_256k1_Key } from '../../../utils/crypto.subtle'
 export async function verifyOthersProve(bio: string, others: PersonIdentifier): Promise<boolean> {
     const [_, compressedX, _2] = bio.split('🔒')
     if (!compressedX) return false
@@ -17,9 +18,7 @@ export async function verifyOthersProve(bio: string, others: PersonIdentifier): 
     }
     let publicKey: CryptoKey
     try {
-        publicKey = await crypto.subtle.importKey('jwk', key, { name: 'ECDH', namedCurve: 'K-256' }, true, [
-            'deriveKey',
-        ])
+        publicKey = await import_ECDH_256k1_Key(key)
     } catch {
         throw new Error(geti18nString('service_key_parse_failed'))
     }
