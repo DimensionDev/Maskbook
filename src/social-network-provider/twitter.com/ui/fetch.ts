@@ -27,7 +27,6 @@ const resolveLastRecognizedIdentity = (self: SocialNetworkUI) => {
         }
     }
     new MutationObserverWatcher(selfSelector)
-        .enableSingleMode()
         .addListener('onAdd', () => assign())
         .addListener('onChange', () => assign())
         .startWatch()
@@ -38,7 +37,6 @@ const registerBioCollector = () => {
     // This object will not be garbage collected
     // noinspection JSIgnoredPromiseFromCall
     new MutationObserverWatcher(bioCard())
-        .enableSingleMode()
         .useForeach(node => {
             const refreshUserInfo = () => {
                 const r = resolveInfoFromBioCard()
