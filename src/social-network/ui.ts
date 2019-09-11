@@ -225,6 +225,9 @@ export function activateSocialNetworkUI() {
             ui.injectPostBox()
             ui.collectPeople()
             ui.collectPosts()
+            ui.myIdentitiesRef.addListener(val => {
+                if (val.length === 1) ui.currentIdentity.value = val[0]
+            })
             ui.shouldDisplayWelcome().then(r => r && ui.injectWelcomeBanner())
             ui.lastRecognizedIdentity.addListener(id => {
                 if (id.identifier.isUnknown) return
