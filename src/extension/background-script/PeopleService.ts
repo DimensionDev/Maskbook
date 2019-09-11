@@ -19,6 +19,11 @@ import { geti18nString } from '../../utils/i18n'
 OnlyRunInContext('background', 'FriendService')
 export { storeAvatar, getAvatarDataURL, queryPerson } from '../../database'
 export { writePersonOnGun } from '../../network/gun/version.2/people'
+export {
+    addPersonToFriendsGroup,
+    createDefaultFriendsGroup,
+    removePersonFromFriendsGroup,
+} from '../../database/helpers/group'
 /**
  * Query all people stored
  */
