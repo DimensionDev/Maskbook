@@ -13,7 +13,7 @@ import {
     updatePersonDB,
 } from '../../database/people'
 import { UpgradeBackupJSONFile } from '../../utils/type-transform/BackupFile'
-import { PersonIdentifier, GroupIdentifier, GroupType } from '../../database/type'
+import { PersonIdentifier, GroupIdentifier } from '../../database/type'
 import { geti18nString } from '../../utils/i18n'
 
 OnlyRunInContext('background', 'FriendService')
@@ -65,8 +65,8 @@ export async function restoreBackup(json: object, whoAmI?: PersonIdentifier): Pr
     function mapID(x: { network: string; userId: string }): PersonIdentifier {
         return new PersonIdentifier(x.network, x.userId)
     }
-    function mapGroup(x: { network: string; groupID: string; type: GroupType; belongs?: string }): GroupIdentifier {
-        return new GroupIdentifier(x.network, x.groupID, x.type, x.belongs)
+    function mapGroup(x: { network: string; groupID: string; virtualGroupOwner: string | null }): GroupIdentifier {
+        return new GroupIdentifier(x.network, x.virtualGroupOwner, x.groupID)
     }
     const data = UpgradeBackupJSONFile(json, whoAmI)
     if (!data) throw new TypeError(geti18nString('service_invalid_backup_file'))

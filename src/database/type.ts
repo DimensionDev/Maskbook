@@ -70,55 +70,33 @@ export class PersonIdentifier extends Identifier {
     }
 }
 
-export enum GroupType {
-    /**
-     * This type of group is user defined in Maskbook and not exists at the social network itself
-     */
-    virtual = 'virtual',
-    /**
-     * This type of group is on the social network
-     */
-    real = 'real',
-}
 export enum PreDefinedVirtualGroupNames {
     friends = '_default_friends_group_',
 }
 @serializable('GroupIdentifier')
 export class GroupIdentifier extends Identifier {
     static getDefaultFriendsGroupIdentifier(who: PersonIdentifier) {
-        return new GroupIdentifier(who.network, PreDefinedVirtualGroupNames.friends, GroupType.virtual, who.userId)
+        return new GroupIdentifier(who.network, who.userId, PreDefinedVirtualGroupNames.friends)
     }
-    constructor(public network: string, public groupID: string, public type: GroupType, public belongs?: string) {
+    constructor(public network: string, public virtualGroupOwner: string | null, public groupID: string) {
         super()
         noSlash(network)
         noSlash(groupID)
-        if (network && groupID && type) {
-            this.assert()
-        }
-    }
-    private assert() {
-        if (!this.isReal && !this.belongs) throw new Error('Invalid group')
-        if (this.isReal && this.belongs) throw new TypeError('A real group cannot have "belongs" field')
-        if (this.isVirtual && !this.belongs) throw new TypeError('A virtual group must have "belongs" field')
+        if (virtualGroupOwner === '') this.virtualGroupOwner = null
     }
     toText() {
-        this.assert()
-        return 'group:' + [this.network, this.groupID, this.type, this.belongs].join('/')
+        return 'group:' + [this.network, this.virtualGroupOwner, this.groupID].join('/')
     }
     get isReal() {
-        return this.type === GroupType.real
+        return !this.virtualGroupOwner
     }
     get isVirtual() {
-        return this.type === GroupType.virtual
+        return !!this.virtualGroupOwner
     }
     static [$fromString](str: string) {
-        const [network, groupID, virtual, belongs] = str.split('/')
-        if (!network || !groupID || !virtual) return null
-        try {
-            return new GroupIdentifier(network, groupID, virtual as any, belongs)
-        } catch {
-            return null
-        }
+        const [network, belongs, groupID] = str.split('/')
+        if (!network || !groupID) return null
+        return new GroupIdentifier(network, belongs, groupID)
     }
 }
 

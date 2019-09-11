@@ -18,13 +18,12 @@
  * @type {Record<string, CryptoKey>} Record of <userId, CryptoKey>
  * @keys outline, string, which means network.
  */
-import { GroupIdentifier, Identifier, PersonIdentifier, GroupType, PreDefinedVirtualGroupNames } from './type'
+import { GroupIdentifier, Identifier, PersonIdentifier } from './type'
 import { DBSchema, openDB } from 'idb/with-async-ittr'
 import { CryptoKeyToJsonWebKey, JsonWebKeyToCryptoKey } from '../utils/type-transform/CryptoKey-JsonWebKey'
 import { MessageCenter } from '../utils/messages'
 import { personRecordToPerson } from './helpers/person'
 import { isIdentifierArrayEquals } from '../utils/equality'
-import { createUserGroupDatabase } from './group'
 import { createDefaultFriendsGroup } from './helpers/group'
 
 //#region Type and utils

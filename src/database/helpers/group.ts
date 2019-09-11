@@ -1,5 +1,5 @@
 import { GroupRecord, createUserGroupDatabase } from '../group'
-import { PersonIdentifier, GroupIdentifier, PreDefinedVirtualGroupNames, GroupType } from '../type'
+import { PersonIdentifier, GroupIdentifier, PreDefinedVirtualGroupNames } from '../type'
 
 export interface Group extends GroupRecord {
     avatar?: string
