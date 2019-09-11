@@ -43,27 +43,6 @@ async function queryPeopleCryptoKey(): Promise<Exporting[]> {
 //#region Store & Read CryptoKey
 //#endregion
 
-//#region Generate a new private key
-
-/**
- * @deprecated
- */
-async function generateNewKey(whoami: PersonIdentifier): Promise<People.PersonRecordPublicPrivate> {
-    const has = await People.queryMyIdentityAtDB(whoami)
-    if (has) throw new TypeError('You already have a key-pair!')
-
-    const mine = await crypto.subtle.generateKey({ name: 'ECDH', namedCurve: 'K-256' }, true, ['deriveKey'])
-    const record: People.PersonRecordPublicPrivate = {
-        identifier: whoami,
-        groups: [],
-        publicKey: mine.publicKey,
-        privateKey: mine.privateKey,
-    }
-    await People.storeMyIdentityDB(record)
-    return record
-}
-//#endregion
-
 import { deleteDB } from 'idb/with-async-ittr'
 import * as People from '../people'
 import { PersonIdentifier } from '../type'

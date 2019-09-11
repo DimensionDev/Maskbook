@@ -5,6 +5,7 @@ import { Person, Group } from '../../../database'
 import { useCurrentIdentity } from '../../DataSource/useActivatedUI'
 import { PersonOrGroupInList } from './PersonOrGroupInList'
 import { PersonOrGroupInChip } from './PersonOrGroupInChip'
+import { PersonIdentifier, GroupIdentifier } from '../../../database/type'
 type PersonOrGroup = Group | Person
 interface SelectPeopleAndGroupsUIProps<ServeType extends Group | Person> {
     /** Omit myself in the UI and the selected result */
@@ -153,8 +154,8 @@ function FrozenChip(item: PersonOrGroup) {
 }
 
 export function isPerson(x: PersonOrGroup): x is Person {
-    return 'fingerprint' in x
+    return x.identifier instanceof PersonIdentifier
 }
 export function isGroup(x: PersonOrGroup): x is Group {
-    return !isPerson(x)
+    return x.identifier instanceof GroupIdentifier
 }

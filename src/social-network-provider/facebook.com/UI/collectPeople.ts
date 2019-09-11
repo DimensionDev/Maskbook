@@ -15,8 +15,7 @@ function findPeopleInfo() {
                 /**
                  * @var text
                  * @example
-                 * "...r Xoogler, MaskBook: A80TOj...eW9yqf
-                 * Google - Softwa..."
+                 * "...r Xoogler, MaskBook: A80TOj...eW9yqf Google - Softwa..."
                  */
                 const text = node.innerText
 
@@ -27,6 +26,7 @@ function findPeopleInfo() {
                 const id = getPersonIdentifierAtFacebook(a, true)
                 if (!id) return
                 Services.Crypto.verifyOthersProve(text, id.identifier)
+                return id
             }
             tryFindBioKey()
             return {
@@ -36,22 +36,22 @@ function findPeopleInfo() {
         })
         .startWatch()
 }
+enum Status {
+    Friend,
+    Unknown,
+    NonFriend,
+}
+/**
+ * Ack:
+ * If `#pagelet_timeline_profile_actions > * > *` have 4 children, they are not friend.
+ * If have 6 children, they are friend.
+ */
+const isFriend = new LiveSelector().querySelectorAll('#pagelet_timeline_profile_actions > * > *').replace(arr => {
+    if (arr.length === 6) return [Status.Friend]
+    else if (arr.length === 4) return [Status.NonFriend]
+    return [Status.Unknown]
+})
 function detectIfFriend() {
-    enum Status {
-        Friend,
-        Unknown,
-        NonFriend,
-    }
-    /**
-     * Ack:
-     * If `#pagelet_timeline_profile_actions > * > *` have 4 children, they are not friend.
-     * If have 6 children, they are friend.
-     */
-    const isFriend = new LiveSelector().querySelectorAll('#pagelet_timeline_profile_actions > * > *').replace(arr => {
-        if (arr.length === 6) return [Status.Friend]
-        else if (arr.length === 4) return [Status.NonFriend]
-        return [Status.Unknown]
-    })
     // TODO: finish this, store it into the database, also do this in twitter
     new MutationObserverWatcher(isFriend)
         .useForeach(() => {

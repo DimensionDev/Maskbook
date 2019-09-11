@@ -80,8 +80,8 @@ export enum GroupType {
      */
     real = 'real',
 }
-export enum PreDefinedVirtualGroupType {
-    friends = 'friends',
+export enum PreDefinedVirtualGroupNames {
+    friends = '_default_friends_group_',
 }
 @serializable('GroupIdentifier')
 export class GroupIdentifier extends Identifier {

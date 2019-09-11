@@ -32,11 +32,7 @@ export async function fetchPostContentFacebook(post: PostIdentifier<PersonIdenti
         }
     }
     // Path 2: fetch by tab task
-    // TODO: on iOS, this should run the Path 1 in the domain of m.facebook.com
-    // const tabId = await getActiveTab()
-    return tasks(getPostUrlAtFacebook(post, 'open'), {
-        // runAtTabID: tabId,
-    }).getPostContent(post)
+    return tasks(getPostUrlAtFacebook(post, 'open')).getPostContent(post)
 }
 
 async function getActiveTab() {
