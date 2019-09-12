@@ -1,7 +1,26 @@
-import { FriendshipCertificateV1, FriendshipCertificatePackedV1 } from './friendship-cert'
+import { FriendshipCertificateDecryptedV1, FriendshipCertificateEncryptedV1 } from './friendship-cert'
 import { encryptWithAES, decryptWithAES } from '../../crypto/crypto-alpha-40'
 import { encodeArrayBuffer, decodeText } from '../../utils/type-transform/String-ArrayBuffer'
 import { toECDH } from '../../utils/type-transform/ECDSA-ECDH'
+import { PersonIdentifier } from '../../database/type'
+import {
+    generate_ECDH_256k1_KeyPair as generateECDH_256k1_KeyPair,
+    import_ECDH_256k1_Key,
+    derive_AES_GCM_256_Key_From_ECDH_256k1_Keys,
+} from '../../utils/crypto.subtle'
+
+export async function issueFriendshipCertificate(
+    whoAmI: PersonIdentifier,
+    channelKey: CryptoKey,
+    channelSeed: string,
+): Promise<FriendshipCertificateDecryptedV1> {
+    return {
+        certificateIssuer: whoAmI,
+        channelCryptoKey: await crypto.subtle.exportKey('jwk', channelKey),
+        channelSeed: channelSeed,
+    }
+}
+
 /**
  * Pack steps for {@link FriendshipCertificateV1}
  * @remakrs
@@ -14,17 +33,11 @@ import { toECDH } from '../../utils/type-transform/ECDSA-ECDH'
  * 6. Send `packed` to server
  */
 export async function packFriendshipCertificate(
-    cert: FriendshipCertificateV1,
+    cert: FriendshipCertificateDecryptedV1,
     targetKey: CryptoKey,
-): Promise<FriendshipCertificatePackedV1> {
-    const key = await crypto.subtle.generateKey({ name: 'ECDH', namedCurve: 'K-256' }, true, ['deriveKey'])
-    const aes = await crypto.subtle.deriveKey(
-        { name: 'ECDH', public: targetKey },
-        key.privateKey,
-        { name: 'AES-GCM', length: 256 },
-        false,
-        ['encrypt', 'decrypt'],
-    )
+): Promise<FriendshipCertificateEncryptedV1> {
+    const key = await generateECDH_256k1_KeyPair()
+    const aes = await derive_AES_GCM_256_Key_From_ECDH_256k1_Keys(targetKey, key.privateKey)
     const { content: payload, iv } = await encryptWithAES({
         aesKey: aes,
         content: JSON.stringify(cert),
@@ -45,29 +58,20 @@ export async function packFriendshipCertificate(
  *      3. Manual or automatically verify friendship of `cert.myId` on network `cert.network`
  */
 export async function unpackFriendshipCertificate(
-    packed: FriendshipCertificatePackedV1,
+    packed: FriendshipCertificateEncryptedV1,
     privateKey: CryptoKey,
-): Promise<null | FriendshipCertificateV1> {
+): Promise<null | FriendshipCertificateDecryptedV1> {
     const ownPrivateKey = privateKey.usages.find(x => x === 'deriveKey') ? privateKey : await toECDH(privateKey)
-    const packedCryptoKey = await crypto.subtle.importKey(
-        'jwk',
-        packed.cryptoKey,
-        { name: 'ECDH', namedCurve: 'K-256' },
-        false,
-        ['deriveKey'],
-    )
-    const aes = await crypto.subtle.deriveKey(
-        { name: 'ECDH', public: packedCryptoKey },
-        ownPrivateKey,
-        { name: 'AES-GCM', length: 256 },
-        false,
-        ['encrypt', 'decrypt'],
-    )
+    const packedCryptoKey = await import_ECDH_256k1_Key(packed.cryptoKey)
+    const aes = await derive_AES_GCM_256_Key_From_ECDH_256k1_Keys(packedCryptoKey, ownPrivateKey)
     try {
         const certBuffer = await decryptWithAES({ aesKey: aes, encrypted: packed.payload, iv: packed.iv })
         const certString = decodeText(certBuffer)
-        const cert: FriendshipCertificateV1 = JSON.parse(certString)
-        if (!cert.myId || !cert.network) throw new TypeError('Not a valid cert.')
+        const cert: FriendshipCertificateDecryptedV1 = JSON.parse(certString)
+        if (!cert.certificateIssuer || !cert.channelCryptoKey || !cert.channelSeed)
+            throw new TypeError('Not a valid cert.')
+        // Recover prototype
+        Object.setPrototypeOf(cert.certificateIssuer, PersonIdentifier.prototype)
         return cert
     } catch {
         return null
