@@ -245,6 +245,12 @@
     "welcome_1b_qr_3": {
         "message": "3. click \"Setup for Mobile\""
     },
+    "welcome_1b_qr_confirm": {
+        "message": "Confirm"
+    },
+    "welcome_1b_qr_rescan": {
+        "message": "Rescan"
+    },
     "welcome_1b_qr_error_1": {
         "message": "There is an error occur during the scanning."
     },

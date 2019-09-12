@@ -246,6 +246,12 @@
     "welcome_1b_qr_3": {
         "message": "3. 點擊「設定移動版」"
     },
+    "welcome_1b_qr_confirm": {
+        "message": "確認"
+    },
+    "welcome_1b_qr_rescan": {
+        "message": "重試"
+    },
     "welcome_1b_qr_error_1": {
         "message": "掃描過程中出現錯誤"
     },
