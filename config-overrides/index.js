@@ -6,8 +6,13 @@ const fs = require('fs')
 
 const src = file => path.join(__dirname, '../', file)
 const argv = require('yargs').argv
+const polyfills = [
+    'node_modules/webextension-polyfill/dist/browser-polyfill.min.js',
+    'node_modules/webextension-polyfill/dist/browser-polyfill.min.js.map',
+].map(src)
 
 const publicDir = src('./public')
+const publicPolyfill = src('./public/polyfill')
 const dist = src('./dist')
 
 process.env.BROWSER = 'none'
@@ -109,9 +114,16 @@ function override(config, env) {
     config.plugins.push(
         new (require('copy-webpack-plugin'))([{ from: publicDir, to: dist }], { ignore: ['index.html'] }),
     )
+    if (!fs.existsSync(publicPolyfill)) {
+        fs.mkdirSync(publicPolyfill)
+        polyfills.map(x => void fs.copyFileSync(x, path.join(publicPolyfill, path.basename(x))))
+        polyfills.length = 0
+    }
+
     if (env !== 'development') {
         config.plugins.push(new SSRPlugin('popup.html', src('./src/extension/popup-page/index.tsx')))
         config.plugins.push(new SSRPlugin('index.html', src('./src/index.tsx')))
+        polyfills.map(x => fs.copyFileSync(x, path.join(publicPolyfill, path.basename(x))))
     }
 
     // Let webpack build to es2017 instead of es5
