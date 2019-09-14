@@ -218,8 +218,8 @@ export const IdentifierRefContext = React.createContext(selectedIdRef)
 export default withRouter(function _WelcomePortal(props: RouteComponentProps) {
     const ResponsiveDialog = useRef(withMobileDialog({ breakpoint: 'xs' })(Dialog)).current
     useEffect(() => {
-        MessageCenter.on('generateKeyPair', fillRefs)
         fillRefs()
+        return MessageCenter.on('generateKeyPair', fillRefs)
     }, [])
 
     const [step, setStep] = useState(WelcomeState.Start)

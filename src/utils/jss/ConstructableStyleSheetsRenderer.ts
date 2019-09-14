@@ -2,6 +2,7 @@
  * This file is granted to [JSS](https://github.com/cssinjs/jss) with MIT Licence
  */
 import warning from 'tiny-warning'
+import { InsertionPoint, JssValue, Rule, RuleList, sheets, StyleSheet, toCssValue } from 'jss'
 /// <reference path="./CSSOM.d.ts" />
 /// <reference path="./JSS-internal.d.ts" />
 /**
@@ -17,12 +18,13 @@ import warning from 'tiny-warning'
 const isChrome74 = navigator.appVersion.match(/(Chromium|Chrome)\/74/)
 const needPolyfill = 'adoptedStyleSheets' in document || isChrome74
 if (!isChrome74) {
-    // if (process.env.NODE_ENV === 'development') delete Document.prototype.adoptedStyleSheets
+    // always use polyfill in development mode;
+    if (process.env.NODE_ENV === 'development') delete Document.prototype.adoptedStyleSheets
 } else {
     delete Document.prototype.adoptedStyleSheets
 }
-// require('construct-style-sheets-polyfill')
-require('./polyfill')
+require('construct-style-sheets-polyfill')
+// require('./polyfill')
 const isPolyfilled = CSSStyleSheet.name !== 'CSSStyleSheet'
 if (isPolyfilled) console.warn('Browser does not support Constructable Stylesheets. Using polyfill.')
 
@@ -47,7 +49,9 @@ export function applyAdoptedStyleSheets(shadowOnly = true) {
         const shadows = Array.from(livingShadowRoots)
         const nextAdoptedStyleSheets = styles.map(getStyleSheet)
         for (const shadow of shadows) {
-            shadow.adoptedStyleSheets = nextAdoptedStyleSheets
+            try {
+                shadow.adoptedStyleSheets = nextAdoptedStyleSheets
+            } catch {}
         }
         if (!shadowOnly) document.adoptedStyleSheets = nextAdoptedStyleSheets
     })
@@ -73,7 +77,6 @@ function adoptStylesheets(
 // tslint:disable: increment-decrement
 type HTMLElementWithStyleMap = HTMLElement
 type AnyCSSRule = unknown
-import { toCssValue, sheets, JssValue, StyleSheet, InsertionPoint, Rule, RuleList } from 'jss'
 
 type PriorityOptions = {
     index: number

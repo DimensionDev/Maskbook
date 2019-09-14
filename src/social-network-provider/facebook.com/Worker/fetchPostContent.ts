@@ -1,31 +1,18 @@
 import { PersonIdentifier, PostIdentifier } from '../../../database/type'
 import { parseFacebookStaticHTML } from '../parse-html'
-import { getPostUrlAtFacebook, getProfilePageUrlAtFacebook } from '../parse-username'
+import { getPostUrlAtFacebook } from '../parse-username'
 import tasks from '../../../extension/content-script/tasks'
 import { isDocument, timeout } from '../../../utils/utils'
 
-// ? Try to execute query in the extension environment
-// ? If it is the true extension environment (Chrome, Firefox, GeckoView)
-// ? Will go through this path
-// ? If it it the fake extension environment (Webview on iOS)
-// ? this will fail due to cross-origin restriction.
-
-// ? if failed
-// ? we go to the old way.
-// ? Invoke a task on the current activating page.
+// ? We now always run fetch request from an active tab.
+// ? If failed, we will fallback to open a new tab to do this.
 export async function fetchPostContentFacebook(post: PostIdentifier<PersonIdentifier>) {
     const activeTabID = await getActiveTab()
     if (activeTabID) {
         // Path 1: fetch by http req
         try {
             const url = getPostUrlAtFacebook(post, 'fetch')
-            const html = await timeout(
-                tasks('', {
-                    runAtTabID: activeTabID,
-                    needRedirect: false,
-                }).fetch(url),
-                5000,
-            )
+            const html = await timeout(tasks(activeTabID).fetch(url), 5000)
             const doc = parseFacebookStaticHTML(html)
             if (!doc.length) throw new Error("Can't parse the page")
             // TODO: You should take care about the key comes from.

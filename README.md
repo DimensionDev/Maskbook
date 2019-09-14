@@ -1,11 +1,11 @@
-# Maskbook &middot; [![GitHub license](https://img.shields.io/badge/license-AGPL-blue.svg?style=flat-square)](https://github.com/DimensionDev/Maskbook/blob/master/LICENSE) [![Circle CI](https://img.shields.io/circleci/project/github/DimensionDev/Maskbook.svg?style=flat-square&logo=circleci)](https://circleci.com/gh/DimensionDev/Maskbook) [![Join the chat at https://gitter.im/Maskbook/community](https://badges.gitter.im/Maskbook/community.svg)](https://gitter.im/Maskbook/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) [![Chrome Web Store](https://img.shields.io/chrome-web-store/v/jkoeaghipilijlahjplgbfiocjhldnap.svg?logo=Maskbook&logoColor=%231c68f3&style=flat-square&label=Maskbook%20for%20Chrome)][crext] [![Mozilla Add-on](https://img.shields.io/amo/v/maskbook?label=Maskbook%20for%20Firefox&style=flat-square)][fxaddon]
+# Maskbook &middot; [![GitHub license](https://img.shields.io/badge/license-AGPL-blue.svg?style=flat-square)](https://github.com/DimensionDev/Maskbook/blob/master/LICENSE) [![Circle CI](https://img.shields.io/circleci/project/github/DimensionDev/Maskbook.svg?style=flat-square&logo=circleci)](https://circleci.com/gh/DimensionDev/Maskbook) [![Join the chat at https://gitter.im/Maskbook/community](https://badges.gitter.im/Maskbook/community.svg)](https://gitter.im/Maskbook/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) [![Chrome Web Store](https://img.shields.io/chrome-web-store/v/jkoeaghipilijlahjplgbfiocjhldnap.svg?logo=Maskbook&logoColor=%231c68f3&style=flat-square&label=Chrome%20store)][crext] [![Mozilla Add-on](https://img.shields.io/amo/v/maskbook?label=Firefox%20store&style=flat-square)][fxaddon]
 
 Encrypt your posts & chats on You-Know-Where. Allow only your friends to decrypt.
 
 For general introductions, see https://Maskbook.com/
 
-[Install Maskbook on Chrome Web Store][crext]
-[Install Maskbook on Firefox and Firefox for Android][fxaddon]
+* [Maskbook on Chrome Web Store][crext]
+* [Maskbook on Firefox Addon Store][fxaddon] (Works on Android too!)
 
   [crext]: https://chrome.google.com/webstore/detail/maskbook/jkoeaghipilijlahjplgbfiocjhldnap/
   [fxaddon]: https://addons.mozilla.org/en-US/firefox/addon/maskbook/
@@ -25,8 +25,9 @@ For general introductions, see https://Maskbook.com/
 
 #### Build and developing
 
--   `yarn firefox` runs extension in a new firefox session.
--   `yarn start` runs extension in other browsers, manually loading required.    
+-   `yarn start:firefox` runs extension in a new firefox session.
+-   `yarn start:android` runs extension in a usb connected android device.
+-   `yarn start` runs extension in other browsers, manually loading required.
     [This](https://chrome.google.com/webstore/detail/extensions-reloader/fimgfedafeadlieiabdeeaodndnlbhid) plugin may help you to reload extension quicker.
 -   `yarn storybook` to start StoryBook. Used for UI only developing.
 -   `yarn build` build a production version. Output files in `./build/`
