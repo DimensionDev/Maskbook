@@ -32,6 +32,7 @@ export const newPostEditorFocusAnchor = () =>
 
 export const newPostEditorHasFocus = () => querySelector(`.public-DraftEditorPlaceholder-hasFocus`)
 
+export const gotoProfileButtonSelector = () => querySelector('[role="navigation"] [aria-label="Profile"]')
 export const editProfileButtonSelector = () =>
     querySelector<HTMLAnchorElement>('[data-testid="primaryColumn"] [href="/settings/profile"]')
 export const editProfileTextareaSelector = () => querySelector<HTMLTextAreaElement>('textarea[placeholder*="bio"]')
