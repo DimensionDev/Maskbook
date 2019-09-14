@@ -74,7 +74,7 @@ export async function pasteIntoPostBoxFacebook(
         console.log('Awaiting dialog')
     }
     try {
-        const [element] = activated.evaluateOnce()
+        const [element] = activated.evaluate()
         element.focus()
         await sleep(100)
         if ('value' in document.activeElement!) dispatchCustomEvents('input', text)

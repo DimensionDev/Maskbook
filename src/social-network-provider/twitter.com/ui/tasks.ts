@@ -1,17 +1,18 @@
 import { dispatchCustomEvents, sleep, untilDocumentReady } from '../../../utils/utils'
-import { editProfileButtonSelector, editProfileTextareaSelector, newPostEditorInnerSelector } from '../utils/selector'
+import { editProfileButtonSelector, editProfileTextareaSelector } from '../utils/selector'
 import { geti18nString } from '../../../utils/i18n'
-import { SocialNetworkUITasks } from '../../../social-network/ui'
+import { SocialNetworkUI, SocialNetworkUITasks } from '../../../social-network/ui'
 import { fetchBioCard, fetchPost } from '../utils/status'
 import { resolveInfoFromBioCard } from '../utils/fetch'
+import { getFocus, getText } from '../utils/postBox'
 
-const taskPasteIntoPostBox = async (text: string) => {
-    await untilDocumentReady()
-    const i = newPostEditorInnerSelector().evaluate()!
-    i.click()
-    dispatchCustomEvents('input', text)
-    throw new Error('Logic not complete for now, remove this before next release')
-    // TODO: detect if things successfully paste in by something like, innerText
+const taskPasteIntoPostBox: SocialNetworkUI['taskPasteIntoPostBox'] = async (text, opt) => {
+    await getFocus() // This also waits for document loaded
+    dispatchCustomEvents('paste', text)
+    if (getText() !== text) {
+        console.warn('Text pasting failed')
+        prompt(opt.warningText, text)
+    }
 }
 
 const taskPasteIntoBio = async (text: string) => {
