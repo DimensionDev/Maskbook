@@ -1,15 +1,14 @@
 import { dispatchCustomEvents, sleep, untilDocumentReady } from '../../../utils/utils'
 import { editProfileButtonSelector, editProfileTextareaSelector, newPostEditorInnerSelector } from '../utils/selector'
 import { geti18nString } from '../../../utils/i18n'
-import { notNullable } from '../../../utils/assert'
 import { SocialNetworkUITasks } from '../../../social-network/ui'
 import { fetchBioCard, fetchPost } from '../utils/status'
 import { resolveInfoFromBioCard } from '../utils/fetch'
 
 const taskPasteIntoPostBox = async (text: string) => {
     await untilDocumentReady()
-    const i = newPostEditorInnerSelector().evaluate()
-    notNullable(i).click()
+    const i = newPostEditorInnerSelector().evaluate()!
+    i.click()
     dispatchCustomEvents('input', text)
     throw new Error('Logic not complete for now, remove this before next release')
     // TODO: detect if things successfully paste in by something like, innerText
@@ -20,13 +19,13 @@ const taskPasteIntoBio = async (text: string) => {
     try {
         const b = editProfileButtonSelector().evaluate()
         await sleep(200)
-        notNullable(b).click()
+        b!.click()
     } catch {
         prompt(geti18nString('automation_request_click_edit_bio_button'))
     }
     await sleep(400)
     try {
-        const i = notNullable(editProfileTextareaSelector().evaluate())
+        const i = editProfileTextareaSelector().evaluate()!
         await sleep(200)
         i.focus()
         dispatchCustomEvents('input', i.value + text)

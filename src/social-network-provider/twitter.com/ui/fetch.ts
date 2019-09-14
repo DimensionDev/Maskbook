@@ -31,14 +31,14 @@ const resolveLastRecognizedIdentity = (self: SocialNetworkUI) => {
 const registerUserCollector = () => {
     new MutationObserverWatcher(bioCard())
         .useForeach(() => {
-            const updateUser = () => {
+            const resolve = () => {
                 const r = resolveInfoFromBioCard()
                 uploadToService(r)
             }
-            updateUser()
+            resolve()
             return {
-                onNodeMutation: updateUser,
-                onTargetChanged: updateUser,
+                onNodeMutation: resolve,
+                onTargetChanged: resolve,
             }
         })
         .startWatch()
