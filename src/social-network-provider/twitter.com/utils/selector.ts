@@ -27,8 +27,10 @@ export const postViewMain = () =>
 const newPostEditor = '[role="main"] [role="progressbar"] ~ div'
 export const newPostEditorBelow = () => querySelector<HTMLDivElement>(`${newPostEditor} > div`)
 export const newPostEditorSelector = () => querySelector<HTMLDivElement>(`${newPostEditor} .DraftEditor-root`)
-export const newPostEditorInnerSelector = () =>
-    newPostEditorSelector().querySelector<HTMLDivElement>('.DraftEditor-editorContainer > div')
+export const newPostEditorFocusAnchor = () =>
+    querySelector<HTMLDivElement>(`${newPostEditor} .public-DraftEditor-content`)
+
+export const newPostEditorHasFocus = () => querySelector(`.public-DraftEditorPlaceholder-hasFocus`)
 
 export const editProfileButtonSelector = () =>
     querySelector<HTMLAnchorElement>('[data-testid="primaryColumn"] [href="/settings/profile"]')
