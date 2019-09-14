@@ -6,9 +6,7 @@ import { renderInShadowRoot } from '../../../utils/jss/renderInShadowRoot'
 import { SocialNetworkUIInjections } from '../../../social-network/ui'
 import { nop } from '../../../utils/utils'
 
-/**
- * using a closed shadow root can prevent access from other script.
- */
+// Closing the afterShadowRoot prevents external access to after shadow. This cannot protect before shadow.
 const newMOW = (i: LiveSelector<HTMLElement, true>) =>
     new MOW(i).setDomProxyOption({ afterShadowRootInit: { mode: 'closed' } }).startWatch()
 
