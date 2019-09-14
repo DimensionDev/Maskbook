@@ -21,7 +21,6 @@ import { setStorage } from '../../utils/browser.storage'
 import { isMobileFacebook } from './isMobile'
 import { geti18nString } from '../../utils/i18n'
 import { injectCommentBoxDefaultFactory } from '../../social-network/defaults/injectCommentBox'
-import { notNullable } from '../../utils/assert'
 
 defineSocialNetworkUI({
     ...sharedProvider,
@@ -66,7 +65,7 @@ defineSocialNetworkUI({
             prompt(geti18nString('comment_box__paste_failed'), encryptedComment)
         }
         if (isMobileFacebook) {
-            const root = notNullable(current.commentBoxSelector).evaluate()
+            const root = current.commentBoxSelector!.evaluate()
             if (!root) return fail()
             const textarea = root.querySelector('textarea')
             if (!textarea) return fail()
