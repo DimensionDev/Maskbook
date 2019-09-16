@@ -17,6 +17,7 @@ import {
 } from '../../extension/background-script/CryptoServices/decryptFrom'
 import { useValueRef } from '../../utils/hooks/useValueRef'
 import { debugModeSetting } from '../shared-settings/debugMode'
+import { DebugModeUI_PostHashDialog } from '../DebugModeUI/PostHashDialog'
 
 interface DecryptPostSuccessProps {
     data: { signatureVerifyResult: boolean; content: string }
@@ -129,7 +130,9 @@ function DecryptPost(props: DecryptPostProps) {
     )
     const debugHashJSX = (
         <ul>
-            {postBy.equals(whoAmI) ? null : (
+            {postBy.equals(whoAmI) ? (
+                <DebugModeUI_PostHashDialog network={postBy.network} post={props.encryptedText} />
+            ) : (
                 <li>
                     Hash of this post: {debugHash}
                     <br />
