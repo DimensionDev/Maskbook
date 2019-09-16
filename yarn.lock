@@ -16918,9 +16918,9 @@ webpack-sources@^1.1.0, webpack-sources@^1.4.0, webpack-sources@^1.4.1:
     source-list-map "^2.0.0"
     source-map "~0.6.1"
 
-"webpack-web-ext-plugin@github:sunrisefox/webpack-web-ext-plugin":
+"webpack-web-ext-plugin@github:DimensionDev/webpack-web-ext-plugin":
   version "0.0.1"
-  resolved "https://codeload.github.com/sunrisefox/webpack-web-ext-plugin/tar.gz/d8f71a4f2ed3792662b6cea423bfa0d6e6154243"
+  resolved "https://codeload.github.com/DimensionDev/webpack-web-ext-plugin/tar.gz/ef16c9fdf765c329d8cf397fd047a7a5772d8873"
   dependencies:
     inquirer "^7.0.0"
 
