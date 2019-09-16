@@ -1,4 +1,5 @@
 import { getUrl } from '../utils/utils'
+
 export interface SocialNetworkWorkerAndUI {
     version: 1
     /**
@@ -39,6 +40,11 @@ export interface SocialNetworkWorkerAndUI {
      * Is this username valid in this network
      */
     isValidUsername(username: string): boolean
+    /**
+     * define how to encode && decode public key.
+     */
+    publicKeyEncoder?: (text: string) => string
+    publicKeyDecoder?: (text: string) => string
     /**
      * This provider is not ready for production, Maskbook will not use it in production
      */
