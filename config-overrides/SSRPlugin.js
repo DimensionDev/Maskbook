@@ -53,9 +53,9 @@ class SSRPlugin {
              */
             const htmlWebpackPluginHook = HtmlWebpackPlugin.getHooks(compilation)
             htmlWebpackPluginHook.beforeEmit.tapPromise('SSRPlugin', async args => {
-                let { html, outputName, plugin } = args
+                const { html: originalHTML, outputName, plugin } = args
                 if (outputName !== this.htmlFileName) return args
-                html = await this.generateSSRHTMLFile(compilation, html)
+                const html = await this.generateSSRHTMLFile(compilation, originalHTML)
                 return { html, outputName, plugin }
             })
         })

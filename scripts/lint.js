@@ -1,4 +1,3 @@
-const { spawn } = require('./spawn')
 const path = require('path')
 const argv = require('yargs').argv
 
@@ -6,32 +5,26 @@ const base = path.join(__dirname, '../')
 process.chdir(base)
 
 const reportOnly = argv.reportOnly
+const { CLIEngine } = require('eslint')
 
-;(async () => {
-    if (!argv.noEslint)
-        await spawn(
-            'node',
-            [
-                // Guess what happens if you don't do this?
-                // Path resolution makes a \n, which becomes...
-                path.join(base, 'node_modules/eslint/bin/eslint.js'),
-                '--ignore-path',
-                '.prettierignore',
-                '--ext',
-                'tsx,ts,jsx,js',
-                ...(argv._.length ? argv._ : ['./src/']),
-                ...(reportOnly ? [] : ['--cache', '--fix']),
-            ],
-            { shell: false },
-        )
-    if (!argv.noPrettier)
-        await spawn(
-            'node',
-            [
-                path.join(base, 'node_modules/prettier/bin-prettier.js'),
-                ...(argv._.length ? argv._ : ['./**/*.{ts,tsx,jsx,js}']),
-                ...(reportOnly ? ['--check', '--loglevel', 'log'] : ['--write', '--loglevel', 'warn']),
-            ],
-            { shell: false },
-        )
-})()
+const cli = new CLIEngine({
+    fix: !reportOnly,
+    cache: !reportOnly && !argv._.length,
+    extensions: ['.tsx', '.ts', '.jsx', '.js'],
+})
+
+const report = cli.executeOnFiles(argv._.length ? argv._ : ['.'])
+if (!reportOnly) CLIEngine.outputFixes(report)
+
+if (report.errorCount || report.warningCount) {
+    report.results
+        .filter(o => o.errorCount)
+        .forEach(o => {
+            return o.messages.forEach(m => {
+                ;(m.severity === 2 ? console.error : console.warn)(
+                    `At ${o.filePath}:${m.line}:${m.column} (${m.ruleId})\n\t${m.message}`,
+                )
+            })
+        })
+    if (report.errorCount) throw new Error('eslint found some error(s), please correct them.')
+}
