@@ -17,7 +17,6 @@ serializable('Error')(Error)
 serializable('TypeError')(TypeError)
 serializable('ReferenceError')(ReferenceError)
 serializable('SyntaxError')(SyntaxError)
-serializable('TypeError')(TypeError)
 serializable('URIError')(URIError)
 
 export default {
