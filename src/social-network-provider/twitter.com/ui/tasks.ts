@@ -1,10 +1,11 @@
-import { dispatchCustomEvents, sleep, untilDocumentReady } from '../../../utils/utils'
-import { editProfileButtonSelector, editProfileTextareaSelector } from '../utils/selector'
+import { dispatchCustomEvents, sleep, timeout, untilDocumentReady } from '../../../utils/utils'
+import { editProfileButtonSelector, editProfileTextareaSelector, postParser, postsSelectors } from '../utils/selector'
 import { geti18nString } from '../../../utils/i18n'
 import { SocialNetworkUI, SocialNetworkUITasks } from '../../../social-network/ui'
-import { fetchBioCard, fetchPost } from '../utils/status'
+import { fetchBioCard } from '../utils/status'
 import { resolveInfoFromBioCard } from '../utils/fetch'
 import { getFocus, getText } from '../utils/postBox'
+import { MutationObserverWatcher } from '@holoflows/kit'
 
 const taskPasteIntoPostBox: SocialNetworkUI['taskPasteIntoPostBox'] = async (text, opt) => {
     await getFocus() // This also waits for document loaded
@@ -40,8 +41,8 @@ const taskPasteIntoBio = async (text: string) => {
     }
 }
 
-const taskGetPostContent = async () => {
-    return (await fetchPost()).innerText
+const taskGetPostContent: SocialNetworkUITasks['taskGetPostContent'] = async () => {
+    return postParser((await timeout(new MutationObserverWatcher(postsSelectors()), 10000))[0]).content
 }
 
 const taskGetProfile = async () => {
