@@ -22,12 +22,12 @@ import { isMobileFacebook } from './isMobile'
 import { geti18nString } from '../../utils/i18n'
 import { injectCommentBoxDefaultFactory } from '../../social-network/defaults/injectCommentBox'
 
-defineSocialNetworkUI({
+const self = defineSocialNetworkUI({
     ...sharedProvider,
     init(env, pref) {
         sharedProvider.init(env, pref)
-        InitFriendsValueRef(this, 'facebook.com')
-        InitMyIdentitiesValueRef(this, 'facebook.com')
+        InitFriendsValueRef(self, 'facebook.com')
+        InitMyIdentitiesValueRef(self, 'facebook.com')
     },
     shouldActivate() {
         return location.hostname.endsWith('facebook.com')

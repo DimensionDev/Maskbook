@@ -6,7 +6,7 @@ import { PersonIdentifier } from '../../database/type'
 import { useValueRef } from '../../utils/hooks/useValueRef'
 import { PostInspector } from '../../components/InjectedComponents/PostInspector'
 
-export function injectPostInspectorDefault(config: InjectPostInspectorDefaultConfig) {
+export function injectPostInspectorDefault(config: InjectPostInspectorDefaultConfig = {}) {
     const { injectionPoint, zipPost } = config
     const zipPostDefault = () => {}
     return function injectPostInspector(current: PostInfo, node: DomProxy) {

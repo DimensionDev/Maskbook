@@ -1,12 +1,12 @@
-import { ValueRef, GetContext } from '@holoflows/kit/es'
+import { GetContext, ValueRef } from '@holoflows/kit/es'
 import { PersonIdentifier } from '../../database/type'
-import { SocialNetworkUI } from '../ui'
+import { SocialNetworkUIDefinition } from '../ui'
+import { nop } from '../../utils/utils'
 
-const noop = () => () => {}
 /**
  * DO NOT use this in content script
  */
-export const emptyDefinition: SocialNetworkUI = {
+export const emptyDefinition: SocialNetworkUIDefinition = {
     acceptablePayload: ['latest'],
     friendlyName: '',
     setupAccount: '',
@@ -23,12 +23,12 @@ export const emptyDefinition: SocialNetworkUI = {
     collectPeople() {},
     collectPosts() {},
     ignoreSetupAccount() {},
-    injectCommentBox: noop,
-    injectPostBox: noop,
-    injectPostComments: noop,
-    injectPostInspector: noop,
-    injectWelcomeBanner: noop,
-    resolveLastRecognizedIdentity: noop,
+    injectCommentBox: nop,
+    injectPostBox: nop,
+    injectPostComments: nop,
+    injectPostInspector: nop,
+    injectWelcomeBanner: nop,
+    resolveLastRecognizedIdentity: nop,
     async shouldDisplayWelcome() {
         return false
     },

@@ -4,12 +4,12 @@ import { Person, Group } from '../database'
 import { PersonIdentifier, PostIdentifier } from '../database/type'
 import { Payload } from '../utils/type-transform/Payload'
 import { isNull } from 'lodash-es'
-import { injectPostCommentsDefault } from './defaults/injectComments'
-import { injectCommentBoxDefaultFactory } from './defaults/injectCommentBox'
 import Services from '../extension/service'
+import { defaultUIInject } from './defaults/inject'
+import { defaultSharedSettings } from './defaults/shared'
 
 //#region SocialNetworkUI
-export interface SocialNetworkUI
+export interface SocialNetworkUIDefinition
     extends SocialNetworkWorkerAndUI,
         SocialNetworkUIDataSources,
         SocialNetworkUITasks,
@@ -194,6 +194,8 @@ export type PostInfo = {
 }
 //#endregion
 
+export type SocialNetworkUI = Required<SocialNetworkUIDefinition>
+
 export const getEmptyPostInfo = (rootNodeSelector: LiveSelector<HTMLElement, true>) => {
     return {
         decryptedPostContent: new ValueRef(''),
@@ -246,8 +248,8 @@ function hookUIPostMap(ui: SocialNetworkUI) {
     const setter = ui.posts.set
     ui.posts.set = function(key, value) {
         const undo1 = ui.injectPostInspector(value, key)
-        const undo2 = (ui.injectCommentBox || def.injectCommentBox)!(value, key)
-        const undo3 = (ui.injectPostComments || def.injectPostComments)!(value, key)
+        const undo2 = ui.injectCommentBox(value, key)
+        const undo3 = ui.injectPostComments(value, key)
         undoMap.set(key, () => {
             undo1()
             undo2()
@@ -264,21 +266,18 @@ function hookUIPostMap(ui: SocialNetworkUI) {
     }
 }
 
-/**
- * default functions of UI.
- */
-const def: Pick<SocialNetworkUI, 'injectCommentBox' | 'injectPostComments'> = {
-    injectCommentBox: injectCommentBoxDefaultFactory(),
-    injectPostComments: injectPostCommentsDefault(),
-}
-
-export function defineSocialNetworkUI(UI: SocialNetworkUI) {
+export function defineSocialNetworkUI(UI: SocialNetworkUIDefinition) {
     if (UI.acceptablePayload.includes('v40') && UI.internalName !== 'facebook') {
         throw new TypeError('Payload version v40 is not supported in this network. Please use v39 or newer.')
     }
-    if (UI.notReadyForProduction) {
-        if (process.env.NODE_ENV === 'production') return UI
+    const res: SocialNetworkUI = {
+        ...defaultSharedSettings,
+        ...defaultUIInject,
+        ...UI,
     }
-    definedSocialNetworkUIs.add(UI)
-    return UI
+    if (UI.notReadyForProduction) {
+        if (process.env.NODE_ENV === 'production') return res
+    }
+    definedSocialNetworkUIs.add(res)
+    return res
 }
