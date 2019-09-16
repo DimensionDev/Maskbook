@@ -1,10 +1,18 @@
-import React from 'react'
-import { TextField, Button } from '@material-ui/core'
+import {
+    TextField,
+    Button,
+    ListItem,
+    List,
+    ListSubheader,
+    ListItemText,
+    ListItemSecondaryAction,
+} from '@material-ui/core'
 import { PersonIdentifier, Identifier } from '../../database/type'
 import { deconstructPayload } from '../../utils/type-transform/Payload'
 import Services from '../service'
 import { useCurrentIdentity } from '../../components/DataSource/useActivatedUI'
 import { Person } from '../../database'
+import React from 'react'
 
 async function swallowGoo(me: Person | null) {
     const boxElem = document.querySelector('#raw-box') as HTMLTextAreaElement
@@ -48,23 +56,28 @@ async function assimilateGoo(content: string, me: Person | null): Promise<string
 const DevPage = () => {
     const me = useCurrentIdentity(false)
     return (
-        <main className="container">
-            <TextField
-                id="raw-box"
-                label="Magic box"
-                style={{ margin: 8 }}
-                placeholder="🔒abc🔒|foo.bar/arisu or 🎼2/4|xyz:||foo.bar/arisu"
-                helperText="Enter prove/message string here"
-                fullWidth
-                margin="normal"
-                InputLabelProps={{
-                    shrink: true,
-                }}
-            />
-            <Button variant="contained" onClick={() => swallowGoo(me)}>
-                Assimilate
-            </Button>
-        </main>
+        <List subheader={<ListSubheader>Developer Settings</ListSubheader>}>
+            <ListItem>
+                <ListItemText
+                    primary={
+                        <TextField
+                            id="raw-box"
+                            label="Enter prove message or encrypted payload here"
+                            placeholder="🔒abc🔒|example.com/username or 🎼3/4|xyz:||example.com/username"
+                            fullWidth
+                            InputLabelProps={{
+                                shrink: true,
+                            }}
+                        />
+                    }
+                />
+                <ListItemSecondaryAction>
+                    <Button variant="contained" onClick={() => swallowGoo(me)}>
+                        Assimilate
+                    </Button>
+                </ListItemSecondaryAction>
+            </ListItem>
+        </List>
     )
 }
 

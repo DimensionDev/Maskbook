@@ -4,6 +4,7 @@ import Serialization from './type-transform/Serialization'
 
 interface UIEvent {
     closeActiveTab: undefined
+    settingsUpdated: undefined
 }
 interface KeyStoreEvent {
     newPerson: Person
