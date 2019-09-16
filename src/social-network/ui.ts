@@ -136,7 +136,7 @@ export interface SocialNetworkUITasks {
      */
     taskPasteIntoBio(text: string): void
     /**
-     * This function should return the given post on the current page,
+     * This function should return the given single post on the current page,
      * Called by `AutomatedTabTask`
      * @param postIdentifier The post id
      */
