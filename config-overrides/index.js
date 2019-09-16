@@ -9,6 +9,7 @@ const argv = require('yargs').argv
 const polyfills = [
     'node_modules/webextension-polyfill/dist/browser-polyfill.min.js',
     'node_modules/webextension-polyfill/dist/browser-polyfill.min.js.map',
+    'src/polyfill/asmcrypto.js',
 ].map(src)
 
 const publicDir = src('./public')
@@ -123,7 +124,7 @@ function override(config, env) {
     if (env !== 'development') {
         config.plugins.push(new SSRPlugin('popup.html', src('./src/extension/popup-page/index.tsx')))
         config.plugins.push(new SSRPlugin('index.html', src('./src/index.tsx')))
-        polyfills.map(x => fs.copyFileSync(x, path.join(publicPolyfill, path.basename(x))))
+        polyfills.map(x => void fs.copyFileSync(x, path.join(publicPolyfill, path.basename(x))))
     }
 
     // Let webpack build to es2017 instead of es5

@@ -4,3 +4,4 @@ package-lock.json
 build/
 dist/
 public/polyfill
+src/polyfill
