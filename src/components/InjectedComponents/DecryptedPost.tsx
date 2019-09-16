@@ -15,6 +15,8 @@ import {
     FailureDecryption,
     SuccessDecryption,
 } from '../../extension/background-script/CryptoServices/decryptFrom'
+import { useValueRef } from '../../utils/hooks/useValueRef'
+import { debugModeSetting } from '../shared-settings/debugMode'
 
 interface DecryptPostSuccessProps {
     data: { signatureVerifyResult: boolean; content: string }
@@ -115,6 +117,9 @@ function DecryptPost(props: DecryptPostProps) {
     )
     const [__, forceReDecrypt] = useState<number>()
 
+    const [debugHash, setDebugHash] = useState<string>('Unknown')
+    const isDebugging = useValueRef(debugModeSetting)
+
     const rAD = useCallback(
         async (people: Person[]) => {
             await requestAppendRecipients(people)
@@ -122,14 +127,30 @@ function DecryptPost(props: DecryptPostProps) {
         },
         [requestAppendRecipients],
     )
+    const debugHashJSX = (
+        <ul>
+            {postBy.equals(whoAmI) ? null : (
+                <li>
+                    Hash of this post: {debugHash}
+                    <br />
+                    It should be same on your friend's Maskbook, if it isn't the same, that means your friend does not
+                    receive your crypto key correctly or you didn't set your Maskbook correctly.
+                </li>
+            )}
+            <li>Decrypted reason: {decryptedResult ? decryptedResult.through.join(',') : 'Unknown'}</li>
+        </ul>
+    )
     if (decryptedResult) {
         return (
-            <DecryptPostSuccess
-                data={decryptedResult}
-                alreadySelectedPreviously={alreadySelectedPreviously}
-                requestAppendRecipients={postBy.equals(whoAmI) ? rAD : undefined}
-                people={people}
-            />
+            <>
+                <DecryptPostSuccess
+                    data={decryptedResult}
+                    alreadySelectedPreviously={alreadySelectedPreviously}
+                    requestAppendRecipients={postBy.equals(whoAmI) ? rAD : undefined}
+                    people={people}
+                />
+                {isDebugging ? debugHashJSX : null}
+            </>
         )
     }
     const awaitingComponent =
@@ -139,47 +160,57 @@ function DecryptPost(props: DecryptPostProps) {
             <DecryptPostAwaiting type={decryptingStatus} />
         )
     return (
-        <AsyncComponent
-            promise={async () => {
-                const iter = ServicesWithProgress.decryptFrom(encryptedText, postBy, whoAmI)
-                let last = await iter.next()
-                while (!last.done) {
-                    setDecryptingStatus(last.value)
-                    last = await iter.next()
-                }
-                return last.value
-            }}
-            dependencies={[
-                __,
-                encryptedText,
-                postBy.toText(),
-                whoAmI.toText(),
-                Identifier.IdentifiersToString(people.map(x => x.identifier)),
-                Identifier.IdentifiersToString(alreadySelectedPreviously.map(x => x.identifier)),
-            ]}
-            awaitingComponent={awaitingComponent}
-            completeComponent={result => {
-                if ('error' in result.data) {
+        <>
+            <AsyncComponent
+                promise={async () => {
+                    const iter = ServicesWithProgress.decryptFrom(encryptedText, postBy, whoAmI)
+                    let last = await iter.next()
+                    while (!last.done) {
+                        if ('debug' in last.value) {
+                            switch (last.value.debug) {
+                                case 'debug_finding_hash':
+                                    setDebugHash(last.value.hash.join('-'))
+                            }
+                        } else {
+                            setDecryptingStatus(last.value)
+                        }
+                        last = await iter.next()
+                    }
+                    return last.value
+                }}
+                dependencies={[
+                    __,
+                    encryptedText,
+                    postBy.toText(),
+                    whoAmI.toText(),
+                    Identifier.IdentifiersToString(people.map(x => x.identifier)),
+                    Identifier.IdentifiersToString(alreadySelectedPreviously.map(x => x.identifier)),
+                ]}
+                awaitingComponent={awaitingComponent}
+                completeComponent={result => {
+                    if ('error' in result.data) {
+                        return (
+                            <DecryptPostFailed
+                                retry={() => forceReDecrypt(Math.random())}
+                                error={new Error(result.data.error)}
+                            />
+                        )
+                    }
+                    setDecryptedResult(result.data)
+                    props.onDecrypted(result.data.content)
                     return (
-                        <DecryptPostFailed
-                            retry={() => forceReDecrypt(Math.random())}
-                            error={new Error(result.data.error)}
+                        <DecryptPostSuccess
+                            data={result.data}
+                            alreadySelectedPreviously={alreadySelectedPreviously}
+                            requestAppendRecipients={postBy.equals(whoAmI) ? rAD : undefined}
+                            people={people}
                         />
                     )
-                }
-                setDecryptedResult(result.data)
-                props.onDecrypted(result.data.content)
-                return (
-                    <DecryptPostSuccess
-                        data={result.data}
-                        alreadySelectedPreviously={alreadySelectedPreviously}
-                        requestAppendRecipients={postBy.equals(whoAmI) ? rAD : undefined}
-                        people={people}
-                    />
-                )
-            }}
-            failedComponent={DecryptPostFailed}
-        />
+                }}
+                failedComponent={DecryptPostFailed}
+            />
+            {isDebugging ? debugHashJSX : null}
+        </>
     )
 }
 
