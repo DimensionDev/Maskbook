@@ -18,8 +18,8 @@ const Services = {} as Services
 export default Services
 
 const logOptions: AsyncCallOptions['log'] = {
-    beCalled: true,
-    localError: false,
+    beCalled: false,
+    localError: true,
     remoteError: true,
     sendLocalStack: true,
     type: 'pretty',
