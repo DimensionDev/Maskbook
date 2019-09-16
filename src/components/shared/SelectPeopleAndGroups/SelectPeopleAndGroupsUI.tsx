@@ -85,16 +85,20 @@ export function SelectPeopleAndGroupsUI<ServeType extends Group | Person = Perso
         <div className={classesProp.root}>
             <Box display="flex" className={classes.selectedArea}>
                 {frozenSelected.map(FrozenChip)}
-                {selected.map(item => (
-                    <PersonOrGroupInChip
-                        disabled={disabled}
-                        key={item.identifier.toText()}
-                        item={item}
-                        onDelete={() =>
-                            onSetSelected(selected.filter(x => !x.identifier.equals(item.identifier)) as ServeType[])
-                        }
-                    />
-                ))}
+                {selected
+                    .filter(item => !frozenSelected.includes(item as ServeType))
+                    .map(item => (
+                        <PersonOrGroupInChip
+                            disabled={disabled}
+                            key={item.identifier.toText()}
+                            item={item}
+                            onDelete={() =>
+                                onSetSelected(selected.filter(
+                                    x => !x.identifier.equals(item.identifier),
+                                ) as ServeType[])
+                            }
+                        />
+                    ))}
                 <InputBase
                     className={classes.input}
                     value={disabled ? '' : search}
