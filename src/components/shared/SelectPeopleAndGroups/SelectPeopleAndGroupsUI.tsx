@@ -29,7 +29,7 @@ const useStyles = makeStyles({
         display: 'flex',
         padding: '12px 6px 6px 12px',
     },
-    input: { flex: 1 },
+    input: { flex: 1, minWidth: '10em' },
     button: { marginLeft: 8, padding: '2px 6px' },
 })
 export function SelectPeopleAndGroupsUI<ServeType extends Group | Person = PersonOrGroup>(
