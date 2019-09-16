@@ -6,11 +6,11 @@ import { deconstructPayload } from '../../utils/type-transform/Payload'
 import Services from '../../extension/service'
 import { PersonIdentifier } from '../../database/type'
 import { Person } from '../../database'
-import { styled } from '@material-ui/core/styles'
 import { useCurrentIdentity, useFriendsList } from '../DataSource/useActivatedUI'
 import { getActivatedUI } from '../../social-network/ui'
+import { useValueRef } from '../../utils/hooks/useValueRef'
+import { debugModeSetting } from '../shared-settings/debugMode'
 
-const Debug = styled('div')({ display: 'none' })
 interface PostInspectorProps {
     onDecrypted(post: string): void
     post: string
@@ -24,6 +24,7 @@ export function PostInspector(props: PostInspectorProps) {
     const people = useFriendsList()
     const [alreadySelectedPreviously, setAlreadySelectedPreviously] = useState<Person[]>([])
     const decodeResult = getActivatedUI().publicKeyDecoder(post)
+    const isDebugging = useValueRef(debugModeSetting)
     const type = {
         encryptedPost: deconstructPayload(post),
         provePost: decodeResult ? [decodeResult] : null,
@@ -39,14 +40,23 @@ export function PostInspector(props: PostInspectorProps) {
 
     if (postBy.isUnknown) return null
 
+    const debugInfo = isDebugging ? (
+        <ul>
+            <li>Post content: {props.post}</li>
+            <li>Post by: {props.postBy.userId}</li>
+            <li>
+                Who am I:{' '}
+                {whoAmI ? `Nickname ${whoAmI.nickname || 'unknown'}, UserID ${whoAmI.identifier.userId}` : 'Unknown'}
+            </li>
+            <li>Post ID: {props.postId || 'Unknown'}</li>
+        </ul>
+    ) : null
+
     if (type.encryptedPost) {
-        props.needZip()
+        if (!isDebugging) props.needZip()
         const { iv, ownersAESKeyEncrypted, version } = type.encryptedPost
         return (
             <>
-                <Debug children={post} data-id="post" />
-                <Debug children={postBy.toText()} data-id="post by" />
-                <Debug children={postId} data-id="post id" />
                 <DecryptPostUI.UI
                     onDecrypted={props.onDecrypted}
                     requestAppendRecipients={async people => {
@@ -66,10 +76,16 @@ export function PostInspector(props: PostInspectorProps) {
                     whoAmI={whoAmI ? whoAmI.identifier : PersonIdentifier.unknown}
                     postBy={postBy}
                 />
+                {debugInfo}
             </>
         )
     } else if (type.provePost) {
-        return <AddToKeyStore postBy={postBy} provePost={post} />
+        return (
+            <>
+                <AddToKeyStore postBy={postBy} provePost={post} />
+                {debugInfo}
+            </>
+        )
     }
-    return null
+    return debugInfo
 }

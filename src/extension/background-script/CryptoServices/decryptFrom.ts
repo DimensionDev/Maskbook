@@ -14,9 +14,14 @@ import { MessageCenter } from '../../../utils/messages'
 type Progress = {
     progress: 'finding_person_public_key' | 'finding_post_key'
 }
+type DebugInfo = {
+    debug: 'debug_finding_hash'
+    hash: [string, string]
+}
 type Success = {
     signatureVerifyResult: boolean
     content: string
+    through: ('author_key_not_found' | 'my_key_not_found' | 'post_key_cached' | 'normal_decrypted')[]
 }
 type Failure = {
     error: string
@@ -24,8 +29,8 @@ type Failure = {
 export type SuccessDecryption = Success
 export type FailureDecryption = Failure
 export type DecryptionProgress = Progress
-type ReturnOfDecryptFromMessageWithProgress = AsyncIterator<Failure | Progress, Success | Failure, void> & {
-    [Symbol.asyncIterator](): AsyncIterator<Failure | Progress, Success | Failure, void>
+type ReturnOfDecryptFromMessageWithProgress = AsyncIterator<Failure | Progress | DebugInfo, Success | Failure, void> & {
+    [Symbol.asyncIterator](): AsyncIterator<Failure | Progress | DebugInfo, Success | Failure, void>
 }
 
 /**
@@ -65,7 +70,12 @@ export async function* decryptFromMessageWithProgress(
             byPerson = await addPerson(by).catch(() => null)
 
             if (!byPerson || !byPerson.publicKey) {
-                if (cachedPostResult) return { signatureVerifyResult: false, content: cachedPostResult }
+                if (cachedPostResult)
+                    return {
+                        signatureVerifyResult: false,
+                        content: cachedPostResult,
+                        through: ['author_key_not_found', 'post_key_cached'],
+                    } as Success
                 let rejectGun = () => {}
                 let rejectDatabase = () => {}
                 const awaitGun = new Promise((resolve, reject) => {
@@ -103,7 +113,12 @@ export async function* decryptFromMessageWithProgress(
 
         const mine = await getMyPrivateKey(whoAmI)
         if (!mine) {
-            if (cachedPostResult) return { signatureVerifyResult: false, content: cachedPostResult }
+            if (cachedPostResult)
+                return {
+                    signatureVerifyResult: false,
+                    content: cachedPostResult,
+                    through: ['my_key_not_found', 'post_key_cached'],
+                } as Success
             return { error: geti18nString('service_not_setup_yet') }
         }
 
@@ -113,7 +128,8 @@ export async function* decryptFromMessageWithProgress(
                     return {
                         signatureVerifyResult: await cryptoProvider.verify(unverified, signature || '', mine.publicKey),
                         content: cachedPostResult,
-                    }
+                        through: ['post_key_cached'],
+                    } as Success
 
                 const [contentArrayBuffer, postAESKey] = await cryptoProvider.decryptMessage1ToNByMyself({
                     version,
@@ -128,12 +144,14 @@ export async function* decryptFromMessageWithProgress(
                 try {
                     if (!signature) throw new Error()
                     const signatureVerifyResult = await cryptoProvider.verify(unverified, signature, mine.publicKey)
-                    return { signatureVerifyResult, content }
+                    return { signatureVerifyResult, content, through: ['normal_decrypted'] } as Success
                 } catch {
-                    return { signatureVerifyResult: false, content }
+                    return { signatureVerifyResult: false, content, through: ['normal_decrypted'] } as Success
                 }
             } else {
-                if (cachedPostResult)
+                if (cachedPostResult) {
+                    const { keyHash, postHash } = await Gun2.queryPostKeysOnGun2(iv, mine.publicKey)
+                    yield { debug: 'debug_finding_hash', hash: [postHash, keyHash] }
                     return {
                         signatureVerifyResult: await cryptoProvider.verify(
                             unverified,
@@ -141,7 +159,9 @@ export async function* decryptFromMessageWithProgress(
                             byPerson.publicKey,
                         ),
                         content: cachedPostResult,
-                    }
+                        through: ['post_key_cached'],
+                    } as Success
+                }
                 yield { progress: 'finding_post_key' }
                 const aesKeyEncrypted: Array<Alpha40.PublishedAESKey | Gun2.SharedAESKeyGun2> = []
                 if (version === -40) {
@@ -151,7 +171,8 @@ export async function* decryptFromMessageWithProgress(
                     if (result === undefined) return { error: geti18nString('service_not_share_target') }
                     aesKeyEncrypted.push(result)
                 } else if (version === -39) {
-                    const keys = await Gun2.queryPostKeysOnGun2(iv, mine.publicKey)
+                    const { keyHash, keys, postHash } = await Gun2.queryPostKeysOnGun2(iv, mine.publicKey)
+                    yield { debug: 'debug_finding_hash', hash: [postHash, keyHash] }
                     aesKeyEncrypted.push(...keys)
                 }
 
@@ -192,7 +213,7 @@ export async function* decryptFromMessageWithProgress(
                         | Alpha39.PublishedAESKey
                         | Alpha40.PublishedAESKey
                         | Array<Alpha39.PublishedAESKey | Alpha40.PublishedAESKey>,
-                ) {
+                ): Promise<Success> {
                     const [contentArrayBuffer, postAESKey] = await cryptoProvider.decryptMessage1ToNByOther({
                         version,
                         AESKeyEncrypted: key,
@@ -212,9 +233,9 @@ export async function* decryptFromMessageWithProgress(
                             signature,
                             byPerson!.publicKey!,
                         )
-                        return { signatureVerifyResult, content }
+                        return { signatureVerifyResult, content, through: ['normal_decrypted'] }
                     } catch {
-                        return { signatureVerifyResult: false, content }
+                        return { signatureVerifyResult: false, content, through: ['normal_decrypted'] }
                     }
                 }
             }
