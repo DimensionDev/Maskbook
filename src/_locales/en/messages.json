@@ -245,8 +245,14 @@
     "welcome_1b_qr_3": {
         "message": "3. click \"Setup for Mobile\""
     },
-    "welcome_1b_qr_confirm": {
-        "message": "Confirm"
+    "welcome_1b_hint_identity": {
+        "message": "This backup file contains the following accounts:"
+    },
+    "welcome_1b_hint_network": {
+        "message": "And we're going to request permissions for these sites:"
+    },
+    "welcome_1b_confirm": {
+        "message": "Restore the backup"
     },
     "welcome_1b_qr_rescan": {
         "message": "Rescan"

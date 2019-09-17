@@ -17,8 +17,7 @@ import { useValueRef } from '../../../utils/hooks/useValueRef'
 import { Person } from '../../../database'
 import { getCurrentNetworkWorkerService } from '../../background-script/WorkerService'
 import getCurrentNetworkWorker from '../../../social-network/utils/getCurrentNetworkWorker'
-import { UpgradeBackupJSONFile } from '../../../utils/type-transform/BackupFile'
-import { geti18nString } from '../../../utils/i18n'
+import { BackupJSONFileLatest } from '../../../utils/type-transform/BackupFile'
 
 enum WelcomeState {
     // Step 0
@@ -42,13 +41,10 @@ const WelcomeActions = {
      * @param file The backup file
      * @param id Who am I?
      */
-    restoreFromFile(file: string, id: PersonIdentifier): Promise<void> {
-        const json = JSON.parse(file)
-        const upgraded = UpgradeBackupJSONFile(json)
-        if (!upgraded) throw new TypeError(geti18nString('service_invalid_backup_file'))
+    restoreFromFile(json: BackupJSONFileLatest, id: PersonIdentifier): Promise<void> {
         // This request MUST BE sync or Firefox will reject this request
         return browser.permissions
-            .request({ origins: upgraded.grantedHostPermissions })
+            .request({ origins: json.grantedHostPermissions })
             .then(() => Services.People.restoreBackup(json, id))
     },
     autoVerifyBio(network: PersonIdentifier, provePost: string) {
@@ -168,8 +164,8 @@ function Welcome(props: Welcome) {
             return (
                 <Welcome1b1
                     back={() => onStepChange(WelcomeState.Start)}
-                    restore={url => {
-                        sideEffects.restoreFromFile(url, props.whoAmI.identifier).then(
+                    restore={json => {
+                        sideEffects.restoreFromFile(json, props.whoAmI.identifier).then(
                             () => onStepChange(WelcomeState.End),
                             // TODO: use a better UI
                             error => alert(error),
