@@ -5,8 +5,8 @@ import { PersonIdentifier, PostIdentifier } from '../database/type'
 import { Payload } from '../utils/type-transform/Payload'
 import { isNull } from 'lodash-es'
 import Services from '../extension/service'
-import { defaultUIInject } from './defaults/inject'
 import { defaultSharedSettings } from './defaults/shared'
+import { defaultSocialNetworkUI } from './defaults/ui'
 
 //#region SocialNetworkUI
 export interface SocialNetworkUIDefinition
@@ -160,7 +160,7 @@ export interface SocialNetworkUIDataSources {
     /**
      * My Maskbook friends at this network
      */
-    readonly friendsRef: ValueRef<Person[]>
+    readonly friendsRef?: ValueRef<Person[]>
     /**
      * My groups at this network
      */
@@ -168,19 +168,19 @@ export interface SocialNetworkUIDataSources {
     /**
      * My identities at current network
      */
-    readonly myIdentitiesRef: ValueRef<Person[]>
+    readonly myIdentitiesRef?: ValueRef<Person[]>
     /**
      * The account that user is using (may not in the database)
      */
-    readonly lastRecognizedIdentity: ValueRef<Pick<Person, 'identifier' | 'nickname' | 'avatar'>>
+    readonly lastRecognizedIdentity?: ValueRef<Pick<Person, 'identifier' | 'nickname' | 'avatar'>>
     /**
      * The account that user is using (MUST be in the database)
      */
-    readonly currentIdentity: ValueRef<Person | null>
+    readonly currentIdentity?: ValueRef<Person | null>
     /**
      * Posts that Maskbook detects
      */
-    readonly posts: WeakMap<DomProxy, PostInfo>
+    readonly posts?: WeakMap<DomProxy, PostInfo>
 }
 export type PostInfo = {
     readonly postBy: ValueRef<PersonIdentifier>
@@ -272,7 +272,7 @@ export function defineSocialNetworkUI(UI: SocialNetworkUIDefinition) {
     }
     const res: SocialNetworkUI = {
         ...defaultSharedSettings,
-        ...defaultUIInject,
+        ...defaultSocialNetworkUI,
         ...UI,
     }
     if (UI.notReadyForProduction) {
