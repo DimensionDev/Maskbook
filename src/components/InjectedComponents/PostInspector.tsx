@@ -2,12 +2,13 @@ import React, { useState } from 'react'
 import { DecryptPostUI } from './DecryptedPost'
 import { AddToKeyStore } from './AddToKeyStore'
 import { useAsync } from '../../utils/components/AsyncComponent'
-import { deconstructPayload, Payload } from '../../utils/type-transform/Payload'
+import { deconstructPayload } from '../../utils/type-transform/Payload'
 import Services from '../../extension/service'
 import { PersonIdentifier } from '../../database/type'
 import { Person } from '../../database'
 import { styled } from '@material-ui/core/styles'
-import { useFriendsList, useCurrentIdentity } from '../DataSource/useActivatedUI'
+import { useCurrentIdentity, useFriendsList } from '../DataSource/useActivatedUI'
+import { getActivatedUI } from '../../social-network/ui'
 
 const Debug = styled('div')({ display: 'none' })
 interface PostInspectorProps {
@@ -22,9 +23,10 @@ export function PostInspector(props: PostInspectorProps) {
     const whoAmI = useCurrentIdentity()
     const people = useFriendsList()
     const [alreadySelectedPreviously, setAlreadySelectedPreviously] = useState<Person[]>([])
+    const decodeResult = getActivatedUI().publicKeyDecoder(post)
     const type = {
         encryptedPost: deconstructPayload(post),
-        provePost: post.match(/🔒(.+)🔒/)!,
+        provePost: decodeResult ? [decodeResult] : [],
     }
     if (type.provePost) Services.People.writePersonOnGun(postBy, { provePostId: postId })
     useAsync(async () => {

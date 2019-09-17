@@ -41,10 +41,14 @@ export interface SocialNetworkWorkerAndUI {
      */
     isValidUsername(username: string): boolean
     /**
-     * define how to encode && decode public key.
+     * define how to encode public key.
      */
     publicKeyEncoder?: (text: string) => string
-    publicKeyDecoder?: (text: string) => string
+    /**
+     * define how to decode public key.
+     * if null, no public key detected.
+     */
+    publicKeyDecoder?: (text: string) => string | null
     /**
      * This provider is not ready for production, Maskbook will not use it in production
      */
