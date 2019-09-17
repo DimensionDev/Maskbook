@@ -2,16 +2,16 @@ import { defineSocialNetworkUI } from '../../social-network/ui'
 import { emptyDefinition } from '../../social-network/defaults/emptyDefinition'
 import Services from '../../extension/service'
 import { MessageCenter } from '../../utils/messages'
-import { ValueRef, GetContext } from '@holoflows/kit/es'
+import { GetContext, ValueRef } from '@holoflows/kit/es'
 import { Person } from '../../database'
 
-defineSocialNetworkUI({
+const optionsPageUISelf = defineSocialNetworkUI({
     ...emptyDefinition,
     internalName: 'Options page data source',
     async init(e, p) {
         emptyDefinition.init(e, p)
         {
-            const ref = this.myIdentitiesRef
+            const ref = optionsPageUISelf.myIdentitiesRef
             query(ref)
             MessageCenter.on('identityUpdated', () => query(ref))
             function query(ref: ValueRef<Person[]>) {

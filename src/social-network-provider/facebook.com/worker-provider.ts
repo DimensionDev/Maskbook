@@ -5,7 +5,7 @@ import { fetchProfileFacebook } from './Worker/fetchProfile'
 import { autoVerifyBioFacebook } from './Worker/autoVerifyBio'
 import { autoVerifyPostFacebook } from './Worker/autoVerifyPost'
 
-defineSocialNetworkWorker({
+export const facebookWorkerSelf = defineSocialNetworkWorker({
     ...sharedProvider,
     fetchPostContent: fetchPostContentFacebook,
     fetchProfile: fetchProfileFacebook,

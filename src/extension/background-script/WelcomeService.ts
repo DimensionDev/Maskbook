@@ -3,21 +3,21 @@ import { encodeText } from '../../utils/type-transform/String-ArrayBuffer'
 import { sleep } from '../../utils/utils'
 import { geti18nString } from '../../utils/i18n'
 import {
-    getMyIdentitiesDB,
-    PersonRecordPublicPrivate,
-    getLocalKeysDB,
-    PersonRecordPublic,
-    queryPeopleDB,
     generateLocalKeyDB,
     generateMyIdentityDB,
+    getLocalKeysDB,
+    getMyIdentitiesDB,
+    PersonRecordPublic,
+    PersonRecordPublicPrivate,
     queryLocalKeyDB,
     queryMyIdentityAtDB,
+    queryPeopleDB,
 } from '../../database/people'
 import { BackupJSONFileLatest, JSON_HINT_FOR_POWER_USER } from '../../utils/type-transform/BackupFile'
 import { PersonIdentifier } from '../../database/type'
 import { MessageCenter } from '../../utils/messages'
 import getCurrentNetworkWorker from '../../social-network/utils/getCurrentNetworkWorker'
-import { SocialNetworkUIDataSources } from '../../social-network/ui'
+import { SocialNetworkUI } from '../../social-network/ui'
 import { getWelcomePageURL } from '../options-page/Welcome/getWelcomePageURL'
 import { getMyProveBio } from './CryptoServices/getMyProveBio'
 
@@ -102,8 +102,7 @@ async function generateBackupJSON(whoAmI: PersonIdentifier, full = false): Promi
 async function hasValidIdentity(whoAmI: PersonIdentifier) {
     const local = await queryLocalKeyDB(whoAmI)
     const ecdh = await queryMyIdentityAtDB(whoAmI)
-    if (!local || !ecdh || !ecdh.privateKey || !ecdh.publicKey) return false
-    return true
+    return !!local && !!ecdh && !!ecdh.privateKey && !!ecdh.publicKey
 }
 
 async function createNewIdentity(whoAmI: PersonIdentifier) {
@@ -136,7 +135,7 @@ export async function backupMyKeyPair(whoAmI: PersonIdentifier, download = true)
     return obj
 }
 
-export async function openWelcomePage(id?: SocialNetworkUIDataSources['lastRecognizedIdentity']['value']) {
+export async function openWelcomePage(id?: SocialNetworkUI['lastRecognizedIdentity']['value']) {
     if (id) {
         if (!getCurrentNetworkWorker(id.identifier).isValidUsername(id.identifier.userId))
             throw new TypeError(geti18nString('service_username_invalid'))

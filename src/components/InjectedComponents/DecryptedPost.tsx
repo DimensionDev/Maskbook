@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useEffect, useRef } from 'react'
+import React, { useCallback, useState } from 'react'
 import AsyncComponent from '../../utils/components/AsyncComponent'
 import { AdditionalContent } from './AdditionalPostContent'
 import { useShareMenu } from './SelectPeopleDialog'
@@ -6,15 +6,14 @@ import { sleep } from '../../utils/utils'
 import { ServicesWithProgress } from '../../extension/service'
 import { geti18nString } from '../../utils/i18n'
 import { makeStyles } from '@material-ui/styles'
-import { Box, Link, useMediaQuery, useTheme, Button, SnackbarContent } from '@material-ui/core'
+import { Box, Button, Link, SnackbarContent, useMediaQuery, useTheme } from '@material-ui/core'
 import { Person } from '../../database'
 import { Identifier, PersonIdentifier } from '../../database/type'
 import { NotSetupYetPrompt } from '../shared/NotSetupYetPrompt'
-import { Payload } from '../../utils/type-transform/Payload'
 import {
-    SuccessDecryption,
-    FailureDecryption,
     DecryptionProgress,
+    FailureDecryption,
+    SuccessDecryption,
 } from '../../extension/background-script/CryptoServices/decryptFrom'
 
 interface DecryptPostSuccessProps {

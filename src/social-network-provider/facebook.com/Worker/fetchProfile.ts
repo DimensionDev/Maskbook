@@ -4,6 +4,8 @@ import { parseFacebookStaticHTML } from '../parse-html'
 import { Profile } from '../../../social-network/shared'
 import tasks from '../../../extension/content-script/tasks'
 import { timeout } from '../../../utils/utils'
+import { facebookWorkerSelf } from '../worker-provider'
+import { isNil } from 'lodash-es'
 
 // ? We now always run fetch request from an active tab.
 // ? If failed, we will fallback to open a new tab to do this.
@@ -25,7 +27,7 @@ export async function fetchProfileFacebook(who: PersonIdentifier): Promise<Profi
                 )
                 .map(x => x && x.innerText)
                 .join('')
-            if (!bio.indexOf('🔒')) throw new Error("Can't find bio")
+            if (isNil(facebookWorkerSelf.publicKeyDecoder(bio))) throw new Error("Can't find bio")
             return { bioContent: bio }
         } catch (e) {
             console.log(e)
