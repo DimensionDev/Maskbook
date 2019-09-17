@@ -4,14 +4,12 @@ import { shouldDisplayWelcomeDefault } from '../../../social-network/defaults/sh
 import { InitFriendsValueRef } from '../../../social-network/defaults/FriendsValueRef'
 import { InitMyIdentitiesValueRef } from '../../../social-network/defaults/MyIdentitiesRef'
 import { setStorage } from '../../../utils/browser.storage'
-import { twitterUIDataSources } from './dataSources'
 import { twitterUITasks } from './tasks'
 import { twitterUIFetch } from './fetch'
 import { twitterUIInjections } from './inject'
 
 export const instanceOfTwitterUI = defineSocialNetworkUI({
     ...sharedSettings,
-    ...twitterUIDataSources,
     ...twitterUITasks,
     ...twitterUIInjections,
     ...twitterUIFetch,
