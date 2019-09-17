@@ -56,8 +56,17 @@ type Service = Record<string, (...args: any[]) => Promise<any>>
 function register<T extends Service>(service: T, name: keyof Services, mock?: Partial<T>) {
     if (OnlyRunInContext(['content', 'options', 'debugging', 'background'], false)) {
         GetContext() !== 'debugging' && console.log(`Service ${name} registered in ${GetContext()}`)
+        const base = service
+            ? {
+                  methods() {
+                      return Object.keys(service)
+                          .map(f => service[f].toString().split('\n')[0])
+                          .join('\n')
+                  },
+              }
+            : {}
         Object.assign(Services, {
-            [name]: AsyncCall(Object.assign({}, service), {
+            [name]: AsyncCall(Object.assign(base, service), {
                 key: name,
                 serializer: Serialization,
                 log: logOptions,
