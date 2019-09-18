@@ -4,10 +4,10 @@ import { PersonIdentifier } from '../../../database/type'
 import { host } from '../index'
 import { getEmptyPostInfo, SocialNetworkUI, SocialNetworkUIInformationCollector } from '../../../social-network/ui'
 import { deconstructPayload } from '../../../utils/type-transform/Payload'
-import { notEmpty } from '../../../utils/assert'
 import { instanceOfTwitterUI } from './index'
 import { resolveInfoFromBioCard } from '../utils/fetch'
 import { uploadToService } from '../utils/user'
+import { isNil } from 'lodash-es'
 
 const resolveLastRecognizedIdentity = (self: SocialNetworkUI) => {
     const selfSelector = selfInfoSelectors().screenName
@@ -16,9 +16,12 @@ const resolveLastRecognizedIdentity = (self: SocialNetworkUI) => {
         const screenName = selfInfoSelectors().screenName.evaluate()
         const nickname = selfInfoSelectors().name.evaluate()
         const avatar = selfInfoSelectors().userAvatar.evaluate()
-        const identifier = new PersonIdentifier(host, notEmpty(screenName, 'user id not found'))
-        if (!identifier.isUnknown) {
-            ref.value = { identifier, nickname, avatar }
+        if (!isNil(screenName)) {
+            ref.value = {
+                identifier: new PersonIdentifier(host, screenName),
+                nickname,
+                avatar,
+            }
         }
     }
     new MutationObserverWatcher(selfSelector)
