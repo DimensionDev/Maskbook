@@ -3,10 +3,11 @@ const webpack = require('webpack')
 const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const fs = require('fs')
-const pkg = require('../package.json')
 
 const src = file => path.join(__dirname, '../', file)
-const argv = require('yargs').argv
+/**
+ * Polyfills that needs to be copied to dist
+ */
 const polyfills = [
     'node_modules/webextension-polyfill/dist/browser-polyfill.min.js',
     'node_modules/webextension-polyfill/dist/browser-polyfill.min.js.map',
@@ -20,11 +21,37 @@ const dist = src('./dist')
 process.env.BROWSER = 'none'
 
 const SSRPlugin = require('./SSRPlugin')
-const WebExtPlugin = require('webpack-web-ext-plugin')
-const ExtensionManifestPlugin = require('webpack-extension-manifest-plugin')
+const WebExtensionHotLoadPlugin = require('webpack-web-ext-plugin')
+const ManifestGeneratorPlugin = require('webpack-extension-manifest-plugin')
 
 /**
- * @type {import("webpack").Configuration}
+ * All targets available:
+ * --firefox
+ * --firefox=nightly
+ * --firefox-android
+ * --firefox-gecko
+ * --chromium
+ * --wk-webview
+ */
+const target = (argv => ({
+    /** @type {'nightly' | boolean} */
+    Firefox: (argv.firefox || argv['firefox-android'] || argv['firefox-gecko']),
+    /** @type {string | boolean} */
+    FirefoxDesktop: (argv.firefox),
+    /** @type {boolean} */
+    FirefoxForAndroid: (argv['firefox-android']),
+    /** @type {boolean} */
+    StandaloneGeckoView: (argv['firefox-gecko']),
+    /** @type {boolean} */
+    Chromium: (argv.chromium),
+    /** @type {boolean} */
+    WKWebview: (argv['wk-webview']),
+}))(require('yargs').argv)
+
+/**
+ * @param config {import("webpack").Configuration}
+ * @param env {'development' | 'production'}
+ * @returns {import("webpack").Configuration}
  */
 function override(config, env) {
     // CSP bans eval
@@ -68,24 +95,22 @@ function override(config, env) {
         })
     }
 
-    if (argv.firefox) {
+    // Loading debuggers
+    if (target.FirefoxDesktop) {
         config.plugins.push(
-            new WebExtPlugin({
+            new WebExtensionHotLoadPlugin({
                 sourceDir: dist,
                 target: 'firefox-desktop',
                 firefoxProfile: src('.firefox'),
                 keepProfileChanges: true,
                 // --firefox=nightly
-                firefox: typeof argv.firefox === 'string' ? argv.firefox : undefined,
+                firefox: typeof target.FirefoxDesktop === 'string' ? target.FirefoxDesktop : undefined,
             }),
         )
     }
-
-    const manifest_extend = { version: pkg.version }
-
-    if (argv.chromium) {
+    if (target.Chromium) {
         config.plugins.push(
-            new WebExtPlugin({
+            new WebExtensionHotLoadPlugin({
                 sourceDir: dist,
                 target: 'chromium',
                 chromiumProfile: src('.chrome'),
@@ -93,23 +118,23 @@ function override(config, env) {
             }),
         )
     }
-
-    if (argv['firefox-android']) {
-        config.plugins.push(new WebExtPlugin({ sourceDir: dist, target: 'firefox-android' }))
+    if (target.FirefoxForAndroid) {
+        config.plugins.push(new WebExtensionHotLoadPlugin({ sourceDir: dist, target: 'firefox-android' }))
     }
 
-    if (argv['firefox-gecko']) {
-        Object.assign(manifest_extend, { permissions: ['<all_urls>'] })
+    // Manifest modifies
+    const manifestFile = require('../src/manifest.json')
+    if (target.StandaloneGeckoView) {
+        manifestFile.permissions.push('<all_urls>')
+    }
+    if (target.Firefox) {
+        // TODO: To make `browser.tabs.executeScript` run on Firefox,
+        // TODO: we need an extra permission "tabs".
+        // TODO: Switch to browser.userScripts (Firefox only) API can resolve the problem.
+        manifestFile.permissions.push('tabs')
     }
 
-    config.plugins.push(
-        new ExtensionManifestPlugin({
-            config: {
-                base: require('../src/manifest'),
-                extend: manifest_extend,
-            },
-        }),
-    )
+    config.plugins.push(new ManifestGeneratorPlugin({ config: { base: manifestFile } }))
 
     config.plugins.push(
         newPage({ chunks: ['options-page'], filename: 'index.html' }),
