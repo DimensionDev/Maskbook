@@ -143,19 +143,17 @@ function override(config, env) {
     }
 
     // Manifest modifies
-    const manifestFile = require('../src/manifest.json')
-    if (target.StandaloneGeckoView) {
-        manifestFile.permissions.push('<all_urls>')
-    }
-    if (target.Firefox) {
-        // TODO: To make `browser.tabs.executeScript` run on Firefox,
-        // TODO: we need an extra permission "tabs".
-        // TODO: Switch to browser.userScripts (Firefox only) API can resolve the problem.
-        manifestFile.permissions.push('tabs')
-    }
+    {
+        const manifest = require('../src/manifest.json')
+        const modifiers = require('./manifest.overrides')
+        if (target.Chromium) modifiers.chromium(manifest)
+        if (target.FirefoxDesktop) modifiers.firefoxDesktop(manifest)
+        if (target.FirefoxForAndroid) modifiers.firefoxAndroid(manifest)
+        if (target.StandaloneGeckoView) modifiers.firefoxGeckoview(manifest)
+        if (target.WKWebview) modifiers.WKWebview(manifest)
 
-    config.plugins.push(new ManifestGeneratorPlugin({ config: { base: manifestFile } }))
-
+        config.plugins.push(new ManifestGeneratorPlugin({ config: { base: manifest } }))
+    }
     config.plugins.push(
         newPage({ chunks: ['options-page'], filename: 'index.html' }),
         newPage({ chunks: ['background-service'], filename: 'background.html' }),
