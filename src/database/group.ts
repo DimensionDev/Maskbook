@@ -1,6 +1,6 @@
 /// <reference path="./global.d.ts" />
-import { openDB, DBSchema } from 'idb/with-async-ittr'
-import { GroupIdentifier, PersonIdentifier, Identifier } from './type'
+import { DBSchema, openDB } from 'idb/with-async-ittr'
+import { GroupIdentifier, Identifier, PersonIdentifier } from './type'
 
 //#region Schema
 interface GroupRecordBase {
@@ -48,6 +48,7 @@ const db = openDB<AvatarDB>('maskbook-user-groups', 1, {
  * This function create a new user group
  * It will return a GroupIdentifier
  * @param group GroupIdentifier
+ * @param groupName
  */
 export async function createUserGroupDatabase(group: GroupIdentifier, groupName: string): Promise<void> {
     const t = (await db).transaction('groups', 'readwrite')
@@ -71,6 +72,7 @@ export async function deleteUserGroupDatabase(group: GroupIdentifier): Promise<v
 /**
  * Update a user group that stored in the Maskbook
  * @param group Group ID
+ * @param type
  */
 export async function updateUserGroupDatabase(
     group: Partial<GroupRecord> & Pick<GroupRecord, 'identifier'>,
@@ -109,7 +111,7 @@ export async function queryUserGroupDatabase(group: GroupIdentifier): Promise<nu
 
 /**
  * Query user groups that stored in the Maskbook
- * @param group Group ID
+ * @param query Query ID
  */
 export async function queryUserGroupsDatabase(
     query: ((key: GroupIdentifier, record: GroupRecordInDatabase) => boolean) | { network: string },
