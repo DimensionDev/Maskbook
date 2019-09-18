@@ -25,6 +25,7 @@ jobs:
                       # Build base version
                       cd build
                       zip -r ../Maskbook.zip ./*
+                      cp manifest.json manifest.base.json
                       cd ..
                       # Build WKWebview version
                       node ./scripts/modify-manifest.js WKWebview
