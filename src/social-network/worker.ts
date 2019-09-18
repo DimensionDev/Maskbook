@@ -41,7 +41,7 @@ export interface SocialNetworkWorkerDefinition extends SocialNetworkWorkerAndUI 
 }
 
 export type SocialNetworkWorker = Required<SocialNetworkWorkerDefinition>
-export const getActivatedWorker = getCurrentNetworkWorker
+export const getWorker = getCurrentNetworkWorker
 
 export const definedSocialNetworkWorkers = new Set<SocialNetworkWorker>()
 export function defineSocialNetworkWorker(worker: SocialNetworkWorkerDefinition) {

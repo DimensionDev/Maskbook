@@ -6,9 +6,14 @@ import { renderInShadowRoot } from '../../../utils/jss/renderInShadowRoot'
 import { SocialNetworkUIInjections } from '../../../social-network/ui'
 import { nop } from '../../../utils/utils'
 
-// Closing the afterShadowRoot prevents external access to after shadow. This cannot protect before shadow.
+// Closing these shadowRoot prevents external access to them.
 const newMOW = (i: LiveSelector<HTMLElement, true>) =>
-    new MOW(i).setDomProxyOption({ afterShadowRootInit: { mode: 'closed' } }).startWatch()
+    new MOW(i)
+        .setDomProxyOption({
+            beforeShadowRootInit: { mode: 'closed' },
+            afterShadowRootInit: { mode: 'closed' },
+        })
+        .startWatch()
 
 const injectPostBox = () => {
     const target = newMOW(newPostEditorBelow())

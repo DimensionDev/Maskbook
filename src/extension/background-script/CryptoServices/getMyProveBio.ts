@@ -2,7 +2,7 @@ import { encodeArrayBuffer } from '../../../utils/type-transform/String-ArrayBuf
 import { toCompressSecp256k1Point } from '../../../utils/type-transform/SECP256k1-Compression'
 import { queryMyIdentityAtDB } from '../../../database/people'
 import { PersonIdentifier } from '../../../database/type'
-import { getActivatedWorker } from '../../../social-network/worker'
+import { getWorker } from '../../../social-network/worker'
 //#endregion
 //#region ProvePost, create & verify
 export async function getMyProveBio(whoAmI: PersonIdentifier): Promise<string | null> {
@@ -10,5 +10,5 @@ export async function getMyProveBio(whoAmI: PersonIdentifier): Promise<string | 
     if (!myIdentity) return null
     const pub = await crypto.subtle.exportKey('jwk', myIdentity.publicKey)
     const compressed = toCompressSecp256k1Point(pub.x!, pub.y!)
-    return getActivatedWorker(whoAmI.network).publicKeyEncoder(encodeArrayBuffer(compressed))
+    return getWorker(whoAmI.network).publicKeyEncoder(encodeArrayBuffer(compressed))
 }
