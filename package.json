@@ -12,17 +12,27 @@
     "start:firefox": "react-app-rewired start --firefox",
     "start:android": "react-app-rewired start --firefox-android",
     "start:chromium": "react-app-rewired start --chromium",
-    "prepare:firefox": "firefox -CreateProfile ./.firefox",
-    "start:chromium": "react-app-rewired start --chromium",
     "start:gecko": "react-app-rewired start --firefox-gecko",
+    "start:wkwebview": "react-app-rewired start --wk-webview",
+
+    "prepare:firefox": "firefox -CreateProfile ./.firefox",
+
     "build": "react-app-rewired build",
     "build:debugging": "node --inspect-brk node_modules/react-app-rewired/scripts/build.js",
     "build:gecko": "react-app-rewired build --firefox-gecko",
+    "build:firefox": "react-app-rewired build --firefox",
+    "build:android": "react-app-rewired build --firefox-android",
+    "build:chromium": "react-app-rewired build --chromium",
+    "build:wkwebview": "react-app-rewired start --wk-webview",
+
     "test": "react-app-rewired test",
+
     "storybook": "start-storybook -p 9009 -s public --quiet",
     "storybook-build": "build-storybook -s public --quiet",
+
     "install": "node scripts/postinstall.js",
     "uninstall": "node scripts/postinstall.js",
+
     "lint": "node scripts/lint.js",
     "lint:report": "node scripts/lint.js --reportOnly"
   },
