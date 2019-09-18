@@ -272,7 +272,7 @@
     "banner_title": {
         "message": "Welcome to Maskbook"
     },
-    "banner_collecting_identity": {
+    "banner_preparing_setup": {
         "message": "Maskbook is identifying how to setup your account..."
     },
     "banner_get_started": {

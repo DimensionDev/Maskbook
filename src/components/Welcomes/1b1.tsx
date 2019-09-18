@@ -11,23 +11,20 @@ import {
     Theme,
     Card,
     CardContent,
-    CardActions,
-    CardHeader,
     DialogActions,
+    Dialog,
+    DialogTitle,
+    List,
+    ListItem,
+    ListItemAvatar,
+    Avatar,
+    ListItemText,
 } from '@material-ui/core'
 import { styled } from '@material-ui/styles'
 import FolderOpen from '@material-ui/icons/FolderOpen'
 import Camera from '@material-ui/icons/CameraAlt'
 import Text from '@material-ui/icons/TextFormat'
-import Avatar from '@material-ui/core/Avatar'
-import List from '@material-ui/core/List'
-import ListItem from '@material-ui/core/ListItem'
-import ListItemAvatar from '@material-ui/core/ListItemAvatar'
-import ListItemText from '@material-ui/core/ListItemText'
-import DialogTitle from '@material-ui/core/DialogTitle'
-import Dialog from '@material-ui/core/Dialog'
 import PersonIcon from '@material-ui/icons/Person'
-import CheckIcon from '@material-ui/icons/Check'
 import LanguageIcon from '@material-ui/icons/Language'
 import WelcomeContainer from './WelcomeContainer'
 import Navigation from './Navigation/Navigation'
