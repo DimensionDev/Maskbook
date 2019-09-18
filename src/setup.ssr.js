@@ -1,5 +1,5 @@
 globalThis.location = { hostname: 'localhost' }
-globalThis.navigator = { appVersion: '', userAgent: '', language: '' }
+globalThis.navigator = { appVersion: '', userAgent: '', language: '', platform: '' }
 globalThis.document = {
     adoptedStyleSheets: {},
     getElementById() {},
