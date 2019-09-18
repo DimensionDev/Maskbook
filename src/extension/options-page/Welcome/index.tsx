@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import Welcome0 from '../../../components/Welcomes/0'
 import Welcome1a1a from '../../../components/Welcomes/1a1a'
 import Welcome1a1b from '../../../components/Welcomes/1a1b'
@@ -38,8 +38,8 @@ const WelcomeActions = {
     },
     /**
      *
-     * @param file The backup file
-     * @param id Who am I?
+     * @param json - The backup file
+     * @param id   - Who am I?
      */
     restoreFromFile(json: BackupJSONFileLatest, id: PersonIdentifier): Promise<void> {
         // This request MUST BE sync or Firefox will reject this request
