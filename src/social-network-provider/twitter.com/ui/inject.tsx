@@ -9,7 +9,7 @@ import { nop } from '../../../utils/utils'
 // Closing these shadowRoot prevents external access to them.
 const newMOW = (i: LiveSelector<HTMLElement, true>) =>
     new MOW(i)
-        .setDomProxyOption({
+        .setDOMProxyOption({
             beforeShadowRootInit: { mode: 'closed' },
             afterShadowRootInit: { mode: 'closed' },
         })
@@ -17,7 +17,7 @@ const newMOW = (i: LiveSelector<HTMLElement, true>) =>
 
 const injectPostBox = () => {
     const target = newMOW(newPostEditorBelow())
-    renderInShadowRoot(<AdditionalPostBox />, target.firstVirtualNode.afterShadow)
+    renderInShadowRoot(<AdditionalPostBox />, target.firstDOMProxy.afterShadow)
 }
 
 export const twitterUIInjections: SocialNetworkUIInjections = {

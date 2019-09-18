@@ -76,7 +76,7 @@ const registerPostCollector = (self: SocialNetworkUI) => {
                 onRemove: () => self.posts.delete(proxy),
             }
         })
-        .setDomProxyOption({ afterShadowRootInit: { mode: 'closed' } })
+        .setDOMProxyOption({ afterShadowRootInit: { mode: 'closed' } })
         .startWatch()
         .then()
 }
