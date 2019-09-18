@@ -18,6 +18,7 @@ import { Person } from '../../../database'
 import { getCurrentNetworkWorkerService } from '../../background-script/WorkerService'
 import getCurrentNetworkWorker from '../../../social-network/utils/getCurrentNetworkWorker'
 import { BackupJSONFileLatest } from '../../../utils/type-transform/BackupFile'
+import { isNil } from 'lodash-es'
 
 enum WelcomeState {
     // Step 0
@@ -52,10 +53,10 @@ const WelcomeActions = {
             )
     },
     autoVerifyBio(network: PersonIdentifier, provePost: string) {
-        getCurrentNetworkWorkerService(network).autoVerifyBio(network, provePost)
+        getCurrentNetworkWorkerService(network).autoVerifyBio!(network, provePost)
     },
     autoVerifyPost(network: PersonIdentifier, provePost: string) {
-        getCurrentNetworkWorkerService(network).autoVerifyPost(network, provePost)
+        getCurrentNetworkWorkerService(network).autoVerifyPost!(network, provePost)
     },
     manualVerifyBio(user: PersonIdentifier, prove: string) {
         this.autoVerifyBio(user, prove)
@@ -146,9 +147,9 @@ function Welcome(props: Welcome) {
             }
             return (
                 <Welcome1a4v2
-                    hasManual={!!worker.manualVerifyPost}
-                    hasBio={!!worker.autoVerifyBio}
-                    hasPost={!!worker.autoVerifyPost}
+                    hasManual={!isNil(worker.manualVerifyPost)}
+                    hasBio={!isNil(worker.autoVerifyBio)}
+                    hasPost={!isNil(worker.autoVerifyPost)}
                     bioDisabled={whoAmI.identifier.isUnknown}
                     provePost={provePost}
                     requestManualVerify={() => {
