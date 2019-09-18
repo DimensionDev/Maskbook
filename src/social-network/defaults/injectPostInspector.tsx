@@ -1,5 +1,5 @@
 import React from 'react'
-import { DomProxy, ValueRef } from '@holoflows/kit'
+import { DOMProxy, ValueRef } from '@holoflows/kit'
 import { PostInfo } from '../ui'
 import { renderInShadowRoot } from '../../utils/jss/renderInShadowRoot'
 import { PersonIdentifier } from '../../database/type'
@@ -9,7 +9,7 @@ import { PostInspector } from '../../components/InjectedComponents/PostInspector
 export function injectPostInspectorDefault(config: InjectPostInspectorDefaultConfig = {}) {
     const { injectionPoint, zipPost } = config
     const zipPostDefault = () => {}
-    return function injectPostInspector(current: PostInfo, node: DomProxy) {
+    return function injectPostInspector(current: PostInfo, node: DOMProxy) {
         const injectionPointDefault = () => node.afterShadow
         const onDecrypted = (val: string) => (current.decryptedPostContent.value = val)
         return renderInShadowRoot(
@@ -25,8 +25,8 @@ export function injectPostInspectorDefault(config: InjectPostInspectorDefaultCon
     }
 }
 interface InjectPostInspectorDefaultConfig {
-    injectionPoint?(node: DomProxy): ShadowRoot
-    zipPost?(node: DomProxy): void
+    injectionPoint?(node: DOMProxy): ShadowRoot
+    zipPost?(node: DOMProxy): void
 }
 function PostDecryptUI(props: {
     onDecrypted: (val: string) => string

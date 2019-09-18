@@ -11,11 +11,11 @@ export function injectWelcomeBannerFacebook(this: SocialNetworkUI) {
             .querySelector<HTMLDivElement>(isMobileFacebook ? '#MComposer' : '#pagelet_composer')
             .enableSingleMode(),
     )
-        .setDomProxyOption({ beforeShadowRootInit: { mode: 'closed' } })
+        .setDOMProxyOption({ beforeShadowRootInit: { mode: 'closed' } })
         .startWatch()
 
     const unmount = renderInShadowRoot(
         <Banner networkIdentifier={this.networkIdentifier} unmount={() => unmount()} />,
-        to.firstVirtualNode.beforeShadow,
+        to.firstDOMProxy.beforeShadow,
     )
 }

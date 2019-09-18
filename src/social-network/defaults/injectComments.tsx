@@ -1,13 +1,13 @@
 import React from 'react'
 import { PostInfo, SocialNetworkUI } from '../ui'
-import { DomProxy, MutationObserverWatcher, ValueRef } from '@holoflows/kit/es'
+import { DOMProxy, MutationObserverWatcher, ValueRef } from '@holoflows/kit/es'
 import { renderInShadowRoot } from '../../utils/jss/renderInShadowRoot'
 import { PostComment } from '../../components/InjectedComponents/PostComments'
 import { nop } from '../../utils/utils'
 
 interface injectPostCommentsDefaultConfig {
     needZip?(): void
-    getInjectionPoint?(node: DomProxy<HTMLElement & Node, HTMLSpanElement, HTMLSpanElement>): ShadowRoot
+    getInjectionPoint?(node: DOMProxy<HTMLElement & Node, HTMLSpanElement, HTMLSpanElement>): ShadowRoot
 }
 /**
  * Creat a default implementation of injectPostComments
@@ -46,7 +46,7 @@ export function injectPostCommentsDefault(config: injectPostCommentsDefaultConfi
                     },
                 }
             })
-            .setDomProxyOption({ afterShadowRootInit: { mode: 'closed' } })
+            .setDOMProxyOption({ afterShadowRootInit: { mode: 'closed' } })
             .startWatch()
 
         return () => commentWatcher.stopWatch()

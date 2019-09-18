@@ -1,6 +1,6 @@
 import { env, Env, Preference, Profile, SocialNetworkWorkerAndUI } from './shared'
-import { DomProxy, LiveSelector, ValueRef } from '@holoflows/kit/es'
-import { Group, Person } from '../database'
+import { DOMProxy, LiveSelector, ValueRef } from '@holoflows/kit/es'
+import { Person, Group } from '../database'
 import { PersonIdentifier, PostIdentifier } from '../database/type'
 import { Payload } from '../utils/type-transform/Payload'
 import { isNull } from 'lodash-es'
@@ -95,21 +95,21 @@ export interface SocialNetworkUIInjections {
      * @param node The post root
      * @returns unmount the injected components
      */
-    injectPostComments?(current: PostInfo, node: DomProxy): () => void
+    injectPostComments?(current: PostInfo, node: DOMProxy): () => void
     /**
      * This function should inject the comment box
      * @param current The current post
      * @param node The post root
      * @returns unmount the injected components
      */
-    injectCommentBox?(current: PostInfo, node: DomProxy): () => void
+    injectCommentBox?(current: PostInfo, node: DOMProxy): () => void
     /**
      * This function should inject the post box
      * @param current The current post
      * @param node The post root
      * @returns unmount the injected components
      */
-    injectPostInspector(current: PostInfo, node: DomProxy<HTMLElement>): () => void
+    injectPostInspector(current: PostInfo, node: DOMProxy<HTMLElement>): () => void
 }
 //#endregion
 //#region SocialNetworkUITasks
@@ -180,7 +180,7 @@ export interface SocialNetworkUIDataSources {
     /**
      * Posts that Maskbook detects
      */
-    readonly posts?: WeakMap<DomProxy, PostInfo>
+    readonly posts?: WeakMap<DOMProxy, PostInfo>
 }
 export type PostInfo = {
     readonly postBy: ValueRef<PersonIdentifier>
