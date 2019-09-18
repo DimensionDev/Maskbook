@@ -22,8 +22,5 @@ const injectPostBox = () => {
 
 export const twitterUIInjections: SocialNetworkUIInjections = {
     injectPostBox,
-    injectCommentBox: nop,
-    injectPostComments: nop,
-    injectWelcomeBanner: nop,
     injectPostInspector: nop, // TODO: implement this
 }
