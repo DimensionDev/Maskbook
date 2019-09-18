@@ -122,6 +122,26 @@ function override(config, env) {
         config.plugins.push(new WebExtensionHotLoadPlugin({ sourceDir: dist, target: 'firefox-android' }))
     }
 
+    // Setting conditional compilations
+    {
+        /** @type {'Chromium' | 'Firefox' | 'WKWebview' | undefined} */
+        let buildTarget = undefined
+        /** @type {'android' | 'desktop' | 'GeckoView' | undefined} */
+        let firefoxVariant = undefined
+        if (target.Chromium) buildTarget = 'Chromium'
+        if (target.Firefox) buildTarget = 'Firefox'
+        if (target.FirefoxDesktop) firefoxVariant = 'desktop'
+        if (target.FirefoxForAndroid) firefoxVariant = 'android'
+        if (target.StandaloneGeckoView) firefoxVariant = 'GeckoView'
+        if (target.WKWebview) buildTarget = 'WKWebview'
+        config.plugins.push(
+            new webpack.DefinePlugin({
+                'process.env.target': typeof buildTarget === 'string' ? JSON.stringify(buildTarget) : 'undefined',
+                firefoxVariant: typeof firefoxVariant === 'string' ? JSON.stringify(firefoxVariant) : 'undefined',
+            }),
+        )
+    }
+
     // Manifest modifies
     const manifestFile = require('../src/manifest.json')
     if (target.StandaloneGeckoView) {

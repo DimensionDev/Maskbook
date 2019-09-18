@@ -29,7 +29,7 @@ import LanguageIcon from '@material-ui/icons/Language'
 import WelcomeContainer from './WelcomeContainer'
 import Navigation from './Navigation/Navigation'
 import QRScanner from './QRScanner'
-import { isWKWebkit, iOSHost } from '../../utils/iOS-RPC'
+import { hasWKWebkitRPCHandlers, iOSHost } from '../../utils/iOS-RPC'
 import { useAsync } from '../../utils/components/AsyncComponent'
 import {
     BackupJSONFileVersion1,
@@ -136,7 +136,7 @@ export default function Welcome({ back, restore: originalRestore }: Props) {
                 aria-label="icon tabs example">
                 <Tab icon={<FolderOpen />} aria-label={geti18nString('welcome_1b_tabs_backup')} />
                 <Tab
-                    disabled={!('BarcodeDetector' in window || isWKWebkit)}
+                    disabled={!('BarcodeDetector' in window || hasWKWebkitRPCHandlers)}
                     icon={<Camera />}
                     aria-label={geti18nString('welcome_1b_tabs_qr')}
                 />
@@ -194,7 +194,13 @@ export default function Welcome({ back, restore: originalRestore }: Props) {
             )}
             <main className={classes.main}>
                 {tab === 0 ? FileUI() : null}
-                {tab === 1 ? isWKWebkit ? <WKWebkitQR onScan={restore} onQuit={() => setTab(0)} /> : QR() : null}
+                {tab === 1 ? (
+                    hasWKWebkitRPCHandlers ? (
+                        <WKWebkitQR onScan={restore} onQuit={() => setTab(0)} />
+                    ) : (
+                        QR()
+                    )
+                ) : null}
                 {tab === 2 ? TextArea() : null}
 
                 {tab === 2 ? (
