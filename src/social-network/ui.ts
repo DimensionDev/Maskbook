@@ -3,10 +3,11 @@ import { DomProxy, LiveSelector, ValueRef } from '@holoflows/kit/es'
 import { Group, Person } from '../database'
 import { PersonIdentifier, PostIdentifier } from '../database/type'
 import { Payload } from '../utils/type-transform/Payload'
-import { isNull } from 'lodash-es'
+import { defaultTo, isNull } from 'lodash-es'
 import Services from '../extension/service'
 import { defaultSharedSettings } from './defaults/shared'
 import { defaultSocialNetworkUI } from './defaults/ui'
+import { nop } from '../utils/utils'
 
 //#region SocialNetworkUI
 export interface SocialNetworkUIDefinition
@@ -88,21 +89,21 @@ export interface SocialNetworkUIInjections {
     /**
      * This function should inject the Welcome Banner
      */
-    injectWelcomeBanner(): void
+    injectWelcomeBanner?: (() => void) | null
     /**
      * This function should inject the comment
      * @param current The current post
      * @param node The post root
      * @returns unmount the injected components
      */
-    injectPostComments?(current: PostInfo, node: DomProxy): () => void
+    injectPostComments?: ((current: PostInfo, node: DomProxy) => () => void) | null
     /**
      * This function should inject the comment box
      * @param current The current post
      * @param node The post root
      * @returns unmount the injected components
      */
-    injectCommentBox?(current: PostInfo, node: DomProxy): () => void
+    injectCommentBox?: ((current: PostInfo, node: DomProxy) => () => void) | null
     /**
      * This function should inject the post box
      * @param current The current post
@@ -231,7 +232,7 @@ export function activateSocialNetworkUI() {
             ui.myIdentitiesRef.addListener(val => {
                 if (val.length === 1) ui.currentIdentity.value = val[0]
             })
-            ui.shouldDisplayWelcome().then(r => r && ui.injectWelcomeBanner())
+            ui.shouldDisplayWelcome().then(r => r && defaultTo(ui.injectWelcomeBanner, nop)())
             ui.lastRecognizedIdentity.addListener(id => {
                 if (id.identifier.isUnknown) return
 
@@ -248,13 +249,10 @@ function hookUIPostMap(ui: SocialNetworkUI) {
     const undoMap = new WeakMap<object, () => void>()
     const setter = ui.posts.set
     ui.posts.set = function(key, value) {
-        const undo1 = ui.injectPostInspector(value, key)
-        const undo2 = ui.injectCommentBox(value, key)
-        const undo3 = ui.injectPostComments(value, key)
         undoMap.set(key, () => {
-            undo1()
-            undo2()
-            undo3()
+            ui.injectPostInspector(value, key)()
+            defaultTo(ui.injectCommentBox, nop)(value, key)()
+            defaultTo(ui.injectPostComments, nop)(value, key)()
         })
         Reflect.apply(setter, this, [key, value])
         return this
