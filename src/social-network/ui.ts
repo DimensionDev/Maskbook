@@ -1,6 +1,6 @@
 import { env, Env, Preference, Profile, SocialNetworkWorkerAndUI } from './shared'
 import { DomProxy, LiveSelector, ValueRef } from '@holoflows/kit/es'
-import { Person, Group } from '../database'
+import { Group, Person } from '../database'
 import { PersonIdentifier, PostIdentifier } from '../database/type'
 import { Payload } from '../utils/type-transform/Payload'
 import { isNull } from 'lodash-es'
@@ -164,7 +164,7 @@ export interface SocialNetworkUIDataSources {
     /**
      * My groups at this network
      */
-    readonly groupsRef: ValueRef<Group[]>
+    readonly groupsRef?: ValueRef<Group[]>
     /**
      * My identities at current network
      */
