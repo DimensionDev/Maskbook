@@ -25,7 +25,7 @@ import { MessageCenter } from '../utils/messages'
 import { personRecordToPerson } from './helpers/person'
 import { isIdentifierArrayEquals } from '../utils/equality'
 import { createDefaultFriendsGroup } from './helpers/group'
-import { generate_ECDH_256k1_KeyPair, generate_AES_GCM_256_Key } from '../utils/crypto.subtle'
+import { generate_AES_GCM_256_Key, generate_ECDH_256k1_KeyPair } from '../utils/crypto.subtle'
 
 //#region Type and utils
 /**
@@ -258,7 +258,6 @@ export async function generateMyIdentityDB(identifier: PersonIdentifier): Promis
 /**
  * Generate a new local key and store it
  * @param id - Identifier or 'default'
- * @param exportable - If the key is exportable
  */
 export async function generateLocalKeyDB(id: PersonIdentifier) {
     const key = await generate_AES_GCM_256_Key()
@@ -284,8 +283,8 @@ export async function queryLocalKeyDB(identifier: string | PersonIdentifier): Pr
 }
 /**
  * Store my local key for a network
- * @param network - Network
- * @param keys - ! Keys MUST BE a native CryptoKey object !
+ * @param arg0 - PersonIdentifier
+ * @param key  - ! Keys MUST BE a native CryptoKey object !
  */
 export async function storeLocalKeyDB({ network, userId }: PersonIdentifier, key: CryptoKey): Promise<void> {
     if (!(key instanceof CryptoKey)) {
