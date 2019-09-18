@@ -24,12 +24,17 @@ export const instanceOfTwitterUI = defineSocialNetworkUI({
         return location.hostname.endsWith(host)
     },
     friendlyName: 'Twitter (Developing...)',
-    setupAccount: async () => {
-        await browser.permissions.request({
-            origins: [`${hostURL}/*`, `${hostMobileURL}/*`],
-        })
-        setStorage(host, { forceDisplayWelcome: true }).then()
-        window.open(hostURL as string)
+    setupAccount: () => {
+        browser.permissions
+            .request({
+                origins: [`${hostURL}/*`, `${hostMobileURL}/*`],
+            })
+            .then(granted => {
+                if (granted) {
+                    setStorage(host, { forceDisplayWelcome: true }).then()
+                    window.open(hostURL as string)
+                }
+            })
     },
     ignoreSetupAccount() {
         setStorage(host, { userIgnoredWelcome: true }).then()
