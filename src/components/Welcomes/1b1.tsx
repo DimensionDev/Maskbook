@@ -2,7 +2,19 @@ import * as React from 'react'
 
 import { useDragAndDrop } from '../../utils/hooks/useDragAndDrop'
 import { geti18nString } from '../../utils/i18n'
-import { makeStyles, Button, Typography, Tabs, Tab, Theme, Card, CardContent, CardActions } from '@material-ui/core'
+import {
+    makeStyles,
+    Button,
+    Typography,
+    Tabs,
+    Tab,
+    Theme,
+    Card,
+    CardContent,
+    CardActions,
+    CardHeader,
+    DialogActions,
+} from '@material-ui/core'
 import { styled } from '@material-ui/styles'
 import FolderOpen from '@material-ui/icons/FolderOpen'
 import Camera from '@material-ui/icons/CameraAlt'
@@ -57,9 +69,6 @@ const useStyles = makeStyles<Theme>(theme => ({
         '& > *': {
             marginBottom: theme.spacing(3),
         },
-    },
-    button: {
-        minWidth: 180,
     },
     file: {
         display: 'none',
@@ -142,25 +151,33 @@ export default function Welcome({ back, restore: originalRestore }: Props) {
             </Tabs>
             {json && (
                 <Dialog onClose={clearJson} aria-labelledby="restore-dialog" open={json !== null}>
+                    <DialogTitle id="restore-dialog">{geti18nString('welcome_1b_confirm')}</DialogTitle>
                     <Card>
                         <CardContent>
-                            <DialogTitle>{geti18nString('welcome_1b_hint_identity')}</DialogTitle>
+                            <Typography color="textSecondary" gutterBottom>
+                                {geti18nString('welcome_1b_hint_identity')}
+                            </Typography>
                             <List>
                                 {json!.whoami.map(identity => (
-                                    <ListItem button onClick={() => void 0} key={identity.userId}>
+                                    <ListItem key={identity.userId}>
                                         <ListItemAvatar>
                                             <Avatar className={classes.avatar}>
-                                                {true ? <PersonIcon /> : <CheckIcon />}
+                                                <PersonIcon />
                                             </Avatar>
                                         </ListItemAvatar>
-                                        <ListItemText primary={identity.nickname || identity.userId} />
+                                        <ListItemText
+                                            primary={identity.nickname || identity.userId}
+                                            secondary={identity.network}
+                                        />
                                     </ListItem>
                                 ))}
                             </List>
-                            <DialogTitle>{geti18nString('welcome_1b_hint_network')}</DialogTitle>
-                            <List>
+                            <Typography color="textSecondary" gutterBottom>
+                                {geti18nString('welcome_1b_hint_network')}
+                            </Typography>
+                            <List dense>
                                 {json!.grantedHostPermissions.map(host => (
-                                    <ListItem button onClick={() => void 0} key={host}>
+                                    <ListItem key={host}>
                                         <ListItemAvatar>
                                             <Avatar className={classes.avatar}>
                                                 <LanguageIcon />
@@ -175,7 +192,7 @@ export default function Welcome({ back, restore: originalRestore }: Props) {
                             <Button
                                 onClick={() => originalRestore(json)}
                                 color="primary"
-                                className={`${classes.button} ${classes.cardAction}`}>
+                                className={classes.cardAction}>
                                 {geti18nString('welcome_1b_confirm')}
                             </Button>
                         </CardActions>

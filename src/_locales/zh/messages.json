@@ -250,7 +250,7 @@
         "message": "備份文件中包含了以下身份："
     },
     "welcome_1b_hint_network": {
-        "message": "爲此，將要請求以下網站的權限："
+        "message": "爲此，Maskbook 將要請求以下網站的權限："
     },
     "welcome_1b_confirm": {
         "message": "恢復備份"
