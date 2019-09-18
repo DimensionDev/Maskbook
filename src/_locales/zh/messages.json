@@ -34,7 +34,7 @@
         "message": "$1\nMaskbook 不會添加此密鑰。"
     },
     "decrypted_postbox_title": {
-        "message": "Maskbook 解密出的文本："
+        "message": "此消息使用 Maskbook 加密："
     },
     "decrypted_postbox_add_recipients": {
         "message": "查看或添加收件人"

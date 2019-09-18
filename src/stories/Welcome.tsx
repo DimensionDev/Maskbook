@@ -12,11 +12,11 @@ import { linkTo as to, linkTo } from '@storybook/addon-links'
 import { text, boolean, number } from '@storybook/addon-knobs'
 import { action } from '@storybook/addon-actions'
 import { BannerUI } from '../components/Welcomes/Banner'
-import { withMobileDialog, Dialog } from '@material-ui/core'
+import { Dialog } from '@material-ui/core'
 import QRScanner from '../components/Welcomes/QRScanner'
 import { demoPeople } from './demoPeople'
 
-const ResponsiveDialog = withMobileDialog({ breakpoint: 'xs' })(Dialog)
+const ResponsiveDialog = Dialog
 storiesOf('Welcome', module)
     .add('Banner', () => (
         <BannerUI disabled={boolean('disabled', false)} close={action('Close')} getStarted={to('Welcome', 'Step 0')} />
