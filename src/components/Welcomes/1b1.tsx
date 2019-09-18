@@ -62,7 +62,7 @@ interface Props {
     restore(json: BackupJSONFileLatest): void
 }
 const videoHeight = 360
-const useStyles = makeStyles<Theme>(theme => ({
+const useStyles = makeStyles((theme: Theme) => ({
     main: {
         padding: '2rem 2rem 1rem 2rem',
         textAlign: 'center',
@@ -99,10 +99,6 @@ const useStyles = makeStyles<Theme>(theme => ({
     textarea: {
         width: '100%',
         height: 200,
-    },
-    cardAction: {
-        marginRight: 0,
-        marginLeft: 'auto',
     },
 }))
 export default function Welcome({ back, restore: originalRestore }: Props) {
@@ -150,7 +146,7 @@ export default function Welcome({ back, restore: originalRestore }: Props) {
                 <Tab icon={<Text />} aria-label={geti18nString('welcome_1b_tabs_text')} />
             </Tabs>
             {json && (
-                <Dialog onClose={clearJson} aria-labelledby="restore-dialog" open={json !== null}>
+                <Dialog scroll="body" onClose={clearJson} aria-labelledby="restore-dialog" open={json !== null}>
                     <DialogTitle id="restore-dialog">{geti18nString('welcome_1b_confirm')}</DialogTitle>
                     <Card>
                         <CardContent>
@@ -161,7 +157,7 @@ export default function Welcome({ back, restore: originalRestore }: Props) {
                                 {json!.whoami.map(identity => (
                                     <ListItem key={identity.userId}>
                                         <ListItemAvatar>
-                                            <Avatar className={classes.avatar}>
+                                            <Avatar>
                                                 <PersonIcon />
                                             </Avatar>
                                         </ListItemAvatar>
@@ -179,7 +175,7 @@ export default function Welcome({ back, restore: originalRestore }: Props) {
                                 {json!.grantedHostPermissions.map(host => (
                                     <ListItem key={host}>
                                         <ListItemAvatar>
-                                            <Avatar className={classes.avatar}>
+                                            <Avatar>
                                                 <LanguageIcon />
                                             </Avatar>
                                         </ListItemAvatar>
@@ -188,14 +184,14 @@ export default function Welcome({ back, restore: originalRestore }: Props) {
                                 ))}
                             </List>
                         </CardContent>
-                        <CardActions>
-                            <Button
-                                onClick={() => originalRestore(json)}
-                                color="primary"
-                                className={classes.cardAction}>
+                        <DialogActions>
+                            <Button onClick={clearJson} color="default" variant="text">
+                                {geti18nString('cancel')}
+                            </Button>
+                            <Button onClick={() => originalRestore(json)} color="primary" variant="contained">
                                 {geti18nString('welcome_1b_confirm')}
                             </Button>
-                        </CardActions>
+                        </DialogActions>
                     </Card>
                 </Dialog>
             )}
@@ -205,11 +201,7 @@ export default function Welcome({ back, restore: originalRestore }: Props) {
                 {tab === 2 ? TextArea() : null}
 
                 {tab === 2 ? (
-                    <Button
-                        onClick={() => restore(textAreaRef.current!.value)}
-                        variant="contained"
-                        color="primary"
-                        className={classes.button}>
+                    <Button onClick={() => restore(textAreaRef.current!.value)} variant="contained" color="primary">
                         {geti18nString('restore')}
                     </Button>
                 ) : null}
