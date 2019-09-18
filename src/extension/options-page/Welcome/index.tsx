@@ -45,7 +45,11 @@ const WelcomeActions = {
         // This request MUST BE sync or Firefox will reject this request
         return browser.permissions
             .request({ origins: json.grantedHostPermissions })
-            .then(() => Services.People.restoreBackup(json, id))
+            .then(granted =>
+                granted
+                    ? Services.People.restoreBackup(json, id)
+                    : Promise.reject(new Error('required permission is not granted.')),
+            )
     },
     autoVerifyBio(network: PersonIdentifier, provePost: string) {
         getCurrentNetworkWorkerService(network).autoVerifyBio(network, provePost)
