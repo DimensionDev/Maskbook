@@ -33,7 +33,7 @@
         "message": "$1\nThis public key won't be saved."
     },
     "decrypted_postbox_title": {
-        "message": "Maskbook decrypted content:"
+        "message": "Encrypted by Maskbook:"
     },
     "decrypted_postbox_add_recipients": {
         "message": "View / add recipients"

@@ -19,6 +19,7 @@ interface Props {
 }
 const useStyles = makeStyles({
     root: { margin: '10px 0' },
+    header: { padding: '8px 12px 0' },
     paper: { borderRadius: 0, display: 'flex' },
     avatar: { margin: '12px 0 0 12px' },
     input: {
@@ -46,8 +47,10 @@ export function AdditionalPostBoxUI(props: Props) {
     useCapturedInput(inputRef, setText)
     return (
         <Card className={classes.root}>
-            <CardHeader title={<Typography variant="caption">Encrypt with Maskbook</Typography>} />
-            <Divider />
+            <CardHeader
+                classes={{ root: classes.header }}
+                title={<Typography variant="caption">Maskbook</Typography>}
+            />
             <Paper elevation={0} className={classes.paper}>
                 {myself && <Avatar className={classes.avatar} person={myself} />}
                 <InputBase

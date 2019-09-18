@@ -181,7 +181,7 @@ function ResponsiveDrawer() {
 }
 function LinkItem(props: { to: string; icon: React.ReactElement; title: string }) {
     return (
-        <MuiLink component={Link} to={props.to}>
+        <MuiLink color="textPrimary" component={Link} to={props.to}>
             <ListItem button>
                 <ListItemIcon>{props.icon}</ListItemIcon>
                 <ListItemText primary={props.title} />
