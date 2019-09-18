@@ -56,7 +56,6 @@ export function PersonOrGroupInList(props: Props) {
             secondaryText = geti18nString('person_or_group_in_list_many_no_preview', groupSize + '')
         } else if (groupSize > nicknamePreviewsForGroup.length) {
             secondaryText = geti18nString('person_or_group_in_list_many', [joined, groupSize + ''])
-            secondaryText = `${joined}等 共 ${groupSize} 人`
         } else {
             secondaryText = joined
         }
