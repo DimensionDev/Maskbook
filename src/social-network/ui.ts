@@ -88,6 +88,11 @@ export interface SocialNetworkUIInjections {
     injectPostBox(): void
     /**
      * This function should inject the Welcome Banner
+     * @desc why both undefined and null
+     * undefined means undefined (at definition time),
+     * everything must be defined at runtime
+     * (for the convenient of managing config items),
+     * so the null explicit defines "not available".
      */
     injectWelcomeBanner?: (() => void) | null
     /**
