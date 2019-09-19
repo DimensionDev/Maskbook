@@ -158,8 +158,11 @@ export async function queryPeopleDB(
 export async function queryPersonDB(id: PersonIdentifier): Promise<null | PersonRecord> {
     const t = (await db).transaction('people', 'readonly')
     const result = await t.objectStore('people').get(id.toText())
-    if (!result) return null
-    return outDb(result)
+
+    const t2 = (await db).transaction('myself', 'readonly')
+    const result2 = await t2.objectStore('myself').get(id.toText())
+    if (!result && !result2) return null
+    return outDb(Object.assign({}, result, result2))
 }
 /**
  * Update Person info with a identifier
