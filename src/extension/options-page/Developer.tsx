@@ -1,14 +1,24 @@
-import { ListSubheader, Grid, Paper, makeStyles } from '@material-ui/core'
+import {
+    ListSubheader,
+    Grid,
+    makeStyles,
+    List,
+    ListItem,
+    ListItemText,
+    ListItemSecondaryAction,
+    Switch,
+} from '@material-ui/core'
 import { PersonIdentifier, Identifier } from '../../database/type'
 import { deconstructPayload } from '../../utils/type-transform/Payload'
 import Services from '../service'
-import { useCurrentIdentity } from '../../components/DataSource/useActivatedUI'
 import { Person } from '../../database'
 import React from 'react'
 import { AddProve } from './DeveloperComponents/AddProve'
 import { DecryptPostDeveloperMode } from './DeveloperComponents/DecryptPost'
 import { SeeMyProvePost } from './DeveloperComponents/SeeMyProvePost'
 import { FriendsDeveloperMode } from './DeveloperComponents/Friends'
+import { debugModeSetting, disableOpenNewTabInBackgroundSettings } from '../../components/shared-settings/settings'
+import { useSettingsUI } from '../../components/shared-settings/createSettings'
 
 async function swallowGoo(me: Person | null) {
     const boxElem = document.querySelector('#raw-box') as HTMLTextAreaElement
@@ -50,12 +60,12 @@ async function assimilateGoo(content: string, me: Person | null): Promise<string
 }
 const useStyles = makeStyles(theme => ({ root: { padding: theme.spacing(0, 2) } }))
 const DevPage = () => {
-    // const me = useCurrentIdentity(false)
     const classes = useStyles()
     return (
         <>
             <ListSubheader>Developer Settings</ListSubheader>
             <div className={classes.root}>
+                <List>{useSettingsUI(disableOpenNewTabInBackgroundSettings)}</List>
                 <Grid container spacing={2}>
                     <Grid container xs={6} item spacing={2} direction="column">
                         <Grid item>

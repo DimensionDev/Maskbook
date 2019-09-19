@@ -8,6 +8,7 @@ import '../../setup.ui'
 import { SSRRenderer } from '../../utils/SSRRenderer'
 import { useValueRef } from '../../utils/hooks/useValueRef'
 import { debugModeSetting } from '../../components/shared-settings/settings'
+import { useSettingsUI } from '../../components/shared-settings/createSettings'
 
 const useStyles = makeStyles(theme => ({
     button: {
@@ -50,23 +51,7 @@ export function Popup() {
                     onClick={e => browser.runtime.openOptionsPage()}>
                     Options
                 </Button>
-                <List>
-                    <ListItem>
-                        <ListItemText
-                            id="settings-debug"
-                            primary="Enable debug mode"
-                            secondary="Enable this will display additional information on the Maskbook UI to help debugging"
-                        />
-                        <ListItemSecondaryAction>
-                            <Switch
-                                inputProps={{ 'aria-labelledby': 'settings-debug' }}
-                                edge="end"
-                                checked={debugOn}
-                                onChange={(e, newValue) => (debugModeSetting.value = newValue)}
-                            />
-                        </ListItemSecondaryAction>
-                    </ListItem>
-                </List>
+                <List>{useSettingsUI(debugModeSetting)}</List>
             </main>
         </ThemeProvider>
     )
