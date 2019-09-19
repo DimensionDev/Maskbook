@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useState, useMemo } from 'react'
 import AsyncComponent from '../../utils/components/AsyncComponent'
 import { AdditionalContent } from './AdditionalPostContent'
 import { useShareMenu } from './SelectPeopleDialog'
@@ -18,6 +18,9 @@ import {
 import { useValueRef } from '../../utils/hooks/useValueRef'
 import { debugModeSetting } from '../shared-settings/debugMode'
 import { DebugModeUI_PostHashDialog } from '../DebugModeUI/PostHashDialog'
+import { GetContext } from '@holoflows/kit/es'
+import { deconstructPayload } from '../../utils/type-transform/Payload'
+import { DebugList } from '../DebugModeUI/DebugList'
 
 interface DecryptPostSuccessProps {
     data: { signatureVerifyResult: boolean; content: string }
@@ -86,17 +89,12 @@ const useDecryptPostFailedStyles = makeStyles({
         maxWidth: '50em',
     },
 })
-export function DecryptPostFailed({ error, retry }: { error: Error; retry?: () => void }) {
+export function DecryptPostFailed({ error }: { error: Error }) {
     const styles = useDecryptPostFailedStyles()
     if (error && error.message === geti18nString('service_not_setup_yet')) {
         return <NotSetupYetPrompt />
     }
-    const button = retry ? (
-        <Button onClick={retry} color="primary" size="small">
-            {geti18nString('retry_decryption')}
-        </Button>
-    ) : null
-    return <SnackbarContent classes={styles} elevation={0} message={error && error.message} action={button} />
+    return <SnackbarContent classes={styles} elevation={0} message={error && error.message} />
 }
 
 interface DecryptPostProps {
@@ -108,6 +106,7 @@ interface DecryptPostProps {
     people: Person[]
     alreadySelectedPreviously: Person[]
     requestAppendRecipients(to: Person[]): Promise<void>
+    disableSuccessDecryptionCache?: boolean
 }
 function DecryptPost(props: DecryptPostProps) {
     const { postBy, whoAmI, encryptedText, people, alreadySelectedPreviously, requestAppendRecipients } = props
@@ -116,10 +115,10 @@ function DecryptPost(props: DecryptPostProps) {
     const [decryptingStatus, setDecryptingStatus] = useState<DecryptionProgress | FailureDecryption | undefined>(
         undefined,
     )
-    const [__, forceReDecrypt] = useState<number>()
 
     const [debugHash, setDebugHash] = useState<string>('Unknown')
-    const isDebugging = useValueRef(debugModeSetting)
+    const setting = useValueRef(debugModeSetting)
+    const isDebugging = GetContext() === 'options' ? true : setting
 
     const rAD = useCallback(
         async (people: Person[]) => {
@@ -128,22 +127,26 @@ function DecryptPost(props: DecryptPostProps) {
         },
         [requestAppendRecipients],
     )
-    const debugHashJSX = (
-        <ul>
-            {postBy.equals(whoAmI) ? (
-                <DebugModeUI_PostHashDialog network={postBy.network} post={props.encryptedText} />
-            ) : (
-                <li>
-                    Hash of this post: {debugHash}
-                    <br />
-                    It should be same on your friend's Maskbook, if it isn't the same, that means your friend does not
-                    receive your crypto key correctly or you didn't set your Maskbook correctly.
-                </li>
-            )}
-            <li>Decrypted reason: {decryptedResult ? decryptedResult.through.join(',') : 'Unknown'}</li>
-        </ul>
-    )
-    if (decryptedResult) {
+    const debugHashJSX = useMemo(() => {
+        if (!isDebugging) return null
+        const postPayload = deconstructPayload(encryptedText)
+        if (!postPayload) return null
+        const postByMyself = <DebugModeUI_PostHashDialog network={postBy.network} post={encryptedText} />
+        return (
+            <DebugList
+                items={[
+                    postBy.equals(whoAmI) ? postByMyself : (['Hash of this post', debugHash] as const),
+                    ['Decrypt reason', decryptedResult ? decryptedResult.through.join(',') : 'Unknown'],
+                    ['Payload version', postPayload.version],
+                    ['Payload ownersAESKeyEncrypted', postPayload.ownersAESKeyEncrypted],
+                    ['Payload iv', postPayload.iv],
+                    ['Payload encryptedText', postPayload.encryptedText],
+                    ['Payload signature', postPayload.signature],
+                ]}
+            />
+        )
+    }, [debugHash, whoAmI, decryptedResult, postBy, encryptedText, isDebugging])
+    if (decryptedResult && !props.disableSuccessDecryptionCache) {
         return (
             <>
                 <DecryptPostSuccess
@@ -182,7 +185,6 @@ function DecryptPost(props: DecryptPostProps) {
                     return last.value
                 }}
                 dependencies={[
-                    __,
                     encryptedText,
                     postBy.toText(),
                     whoAmI.toText(),
@@ -192,12 +194,7 @@ function DecryptPost(props: DecryptPostProps) {
                 awaitingComponent={awaitingComponent}
                 completeComponent={result => {
                     if ('error' in result.data) {
-                        return (
-                            <DecryptPostFailed
-                                retry={() => forceReDecrypt(Math.random())}
-                                error={new Error(result.data.error)}
-                            />
-                        )
+                        return <DecryptPostFailed error={new Error(result.data.error)} />
                     }
                     setDecryptedResult(result.data)
                     props.onDecrypted(result.data.content)

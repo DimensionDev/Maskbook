@@ -105,9 +105,6 @@
     "finish": {
         "message": "完成"
     },
-    "retry_decryption": {
-        "message": "再試一次"
-    },
     "welcome_0_close_button": {
         "message": "我想以後再做"
     },

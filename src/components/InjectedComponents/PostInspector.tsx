@@ -10,6 +10,7 @@ import { useCurrentIdentity, useFriendsList } from '../DataSource/useActivatedUI
 import { getActivatedUI } from '../../social-network/ui'
 import { useValueRef } from '../../utils/hooks/useValueRef'
 import { debugModeSetting } from '../shared-settings/debugMode'
+import { DebugList } from '../DebugModeUI/DebugList'
 
 interface PostInspectorProps {
     onDecrypted(post: string): void
@@ -41,15 +42,17 @@ export function PostInspector(props: PostInspectorProps) {
     if (postBy.isUnknown) return null
 
     const debugInfo = isDebugging ? (
-        <ul>
-            <li>Post content: {props.post}</li>
-            <li>Post by: {props.postBy.userId}</li>
-            <li>
-                Who am I:{' '}
-                {whoAmI ? `Nickname ${whoAmI.nickname || 'unknown'}, UserID ${whoAmI.identifier.userId}` : 'Unknown'}
-            </li>
-            <li>Post ID: {props.postId || 'Unknown'}</li>
-        </ul>
+        <DebugList
+            items={[
+                ['Post by', props.postBy.userId],
+                [
+                    'Who am I',
+                    whoAmI ? `Nickname ${whoAmI.nickname || 'unknown'}, UserID ${whoAmI.identifier.userId}` : 'Unknown',
+                ],
+                ['Post ID', props.postId || 'Unknown'],
+                ['Post Content', props.post],
+            ]}
+        />
     ) : null
 
     if (type.encryptedPost) {
