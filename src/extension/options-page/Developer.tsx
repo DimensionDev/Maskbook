@@ -7,6 +7,7 @@ import { Person } from '../../database'
 import React from 'react'
 import { AddProve } from './DeveloperComponents/AddProve'
 import { DecryptPostDeveloperMode } from './DeveloperComponents/DecryptPost'
+import { SeeMyProvePost } from './DeveloperComponents/SeeMyProvePost'
 
 async function swallowGoo(me: Person | null) {
     const boxElem = document.querySelector('#raw-box') as HTMLTextAreaElement
@@ -55,12 +56,18 @@ const DevPage = () => {
             <ListSubheader>Developer Settings</ListSubheader>
             <div className={classes.root}>
                 <Grid container spacing={3}>
-                    <Grid item xs={4}>
-                        <AddProve />
+                    <Grid container xs={6} item spacing={2} direction="column">
+                        <Grid item>
+                            <SeeMyProvePost />
+                        </Grid>
+                        <Grid item>
+                            <AddProve />
+                        </Grid>
+                        <Grid item>
+                            <DecryptPostDeveloperMode />
+                        </Grid>
                     </Grid>
-                    <Grid item xs={6}>
-                        <DecryptPostDeveloperMode />
-                    </Grid>
+                    <Grid container xs={6} item spacing={3} direction="column"></Grid>
                 </Grid>
             </div>
         </>

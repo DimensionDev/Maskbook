@@ -105,7 +105,7 @@ interface DecryptPostProps {
     encryptedText: string
     people: Person[]
     alreadySelectedPreviously: Person[]
-    requestAppendRecipients(to: Person[]): Promise<void>
+    requestAppendRecipients?(to: Person[]): Promise<void>
     disableSuccessDecryptionCache?: boolean
 }
 function DecryptPost(props: DecryptPostProps) {
@@ -120,13 +120,14 @@ function DecryptPost(props: DecryptPostProps) {
     const setting = useValueRef(debugModeSetting)
     const isDebugging = GetContext() === 'options' ? true : setting
 
-    const rAD = useCallback(
-        async (people: Person[]) => {
-            await requestAppendRecipients(people)
+    const requestAppendRecipientsWrapped = useMemo(() => {
+        if (!postBy.equals(whoAmI)) return undefined
+        if (!requestAppendRecipients) return undefined
+        return async (people: Person[]) => {
+            await requestAppendRecipients!(people)
             await sleep(1500)
-        },
-        [requestAppendRecipients],
-    )
+        }
+    }, [requestAppendRecipients, postBy, whoAmI])
     const debugHashJSX = useMemo(() => {
         if (!isDebugging) return null
         const postPayload = deconstructPayload(encryptedText)
@@ -152,7 +153,7 @@ function DecryptPost(props: DecryptPostProps) {
                 <DecryptPostSuccess
                     data={decryptedResult}
                     alreadySelectedPreviously={alreadySelectedPreviously}
-                    requestAppendRecipients={postBy.equals(whoAmI) ? rAD : undefined}
+                    requestAppendRecipients={requestAppendRecipientsWrapped}
                     people={people}
                 />
                 {isDebugging ? debugHashJSX : null}
@@ -202,7 +203,7 @@ function DecryptPost(props: DecryptPostProps) {
                         <DecryptPostSuccess
                             data={result.data}
                             alreadySelectedPreviously={alreadySelectedPreviously}
-                            requestAppendRecipients={postBy.equals(whoAmI) ? rAD : undefined}
+                            requestAppendRecipients={requestAppendRecipientsWrapped}
                             people={people}
                         />
                     )
