@@ -1,4 +1,3 @@
-import 'reflect-metadata'
 import { CustomEventId } from './constants'
 import { CustomEvents } from '../extension/injected-script/addEventListener'
 
