@@ -34,7 +34,7 @@ export function AddProve() {
         <Card>
             <CardContent>
                 <Typography color="textSecondary" gutterBottom>
-                    Add prove post manually
+                    Add your friend manually
                 </Typography>
                 {networkInput}
                 {userIDInput}
@@ -51,10 +51,10 @@ export function AddProve() {
                             setResult,
                         )
                     }}>
-                    Verify
+                    Add person
                 </Button>
                 <Typography color="textSecondary" gutterBottom>
-                    Verify result:{' '}
+                    Result:{' '}
                     {(r => {
                         if (r === undefined) return ''
                         if (r === false) return <span className={classes.error}>❌ Failed</span>

@@ -132,7 +132,7 @@ export async function storeNewPersonDB(record: PersonRecord): Promise<void> {
  * Query person with a identifier
  */
 export async function queryPeopleDB(
-    query: ((key: PersonIdentifier, record: PersonRecordInDatabase) => boolean) | { network: string },
+    query: ((key: PersonIdentifier, record: PersonRecordInDatabase) => boolean) | { network: string } = () => true,
 ): Promise<PersonRecord[]> {
     const t = (await db).transaction('people')
     const result: PersonRecordInDatabase[] = []
@@ -192,9 +192,10 @@ export async function updatePersonDB(person: Partial<PersonRecord> & Pick<Person
  * Remove people from database
  * @param people - People to remove
  */
-export async function removePersonDB(people: PersonIdentifier[]): Promise<void> {
+export async function removePeopleDB(people: PersonIdentifier[]): Promise<void> {
     const t = (await db).transaction('people', 'readwrite')
     for (const person of people) await t.objectStore('people').delete(person.toText())
+    MessageCenter.emit('peopleChanged', undefined)
     return
 }
 //#endregion

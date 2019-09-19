@@ -25,11 +25,12 @@ export {
     createDefaultFriendsGroup,
     removePersonFromFriendsGroup,
 } from '../../database/helpers/group'
+export { removePeopleDB as removePeople } from '../../database/people'
 /**
  * Query all people stored
  */
-export async function queryPeople(network: string): Promise<Person[]> {
-    return queryPeopleWithQuery({ network })
+export async function queryPeople(network?: string): Promise<Person[]> {
+    return queryPeopleWithQuery(network ? { network } : undefined)
 }
 /**
  * Query my identity.
@@ -137,8 +138,11 @@ export async function resolveIdentity(identifier: PersonIdentifier) {
     }
 }
 
-export async function updatePersonInfo(identifier: PersonIdentifier, data: { nickname?: string; avatarURL?: string }) {
-    const { avatarURL, nickname } = data
+export async function updatePersonInfo(
+    identifier: PersonIdentifier,
+    data: { nickname?: string; avatarURL?: string; forceUpdateAvatar?: boolean },
+) {
+    const { avatarURL, nickname, forceUpdateAvatar } = data
     if (nickname) updatePersonDB({ identifier, nickname })
-    if (avatarURL) storeAvatar(identifier, avatarURL)
+    if (avatarURL) storeAvatar(identifier, avatarURL, forceUpdateAvatar)
 }

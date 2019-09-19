@@ -63,6 +63,9 @@ export class PersonIdentifier extends Identifier {
     toText() {
         return `person:${this.network}/${this.userId}`
     }
+    friendlyToText() {
+        return `${this.userId}@${this.network}`
+    }
     static [$fromString](str: string) {
         const [network, userId] = str.split('/')
         if (!network || !userId) return null

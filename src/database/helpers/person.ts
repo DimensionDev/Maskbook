@@ -44,7 +44,7 @@ export async function queryPerson(identifier: PersonIdentifier): Promise<Person>
 /**
  * Select a set of people
  */
-export async function queryPeopleWithQuery(query: Parameters<typeof queryPeopleDB>[0]): Promise<Person[]> {
+export async function queryPeopleWithQuery(query?: Parameters<typeof queryPeopleDB>[0]): Promise<Person[]> {
     const result = await queryPeopleDB(query)
     return Promise.all(result.map(personRecordToPerson))
 }
