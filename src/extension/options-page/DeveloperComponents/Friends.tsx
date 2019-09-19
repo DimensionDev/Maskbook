@@ -27,7 +27,7 @@ export function FriendsDeveloperMode() {
     return (
         <>
             <Dialog open={!!editing} onClose={closeDialog} aria-labelledby="edit-person">
-                {editing && <PersonEditDialog person={editing} onClose={closeDialog} />}
+                {editing ? <PersonEditDialog person={editing} onClose={closeDialog} /> : <></>}
             </Dialog>
             <Card>
                 <CardContent>

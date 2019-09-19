@@ -9,7 +9,7 @@ import { Person } from '../../database'
 import { useCurrentIdentity, useFriendsList } from '../DataSource/useActivatedUI'
 import { getActivatedUI } from '../../social-network/ui'
 import { useValueRef } from '../../utils/hooks/useValueRef'
-import { debugModeSetting } from '../shared-settings/debugMode'
+import { debugModeSetting } from '../shared-settings/settings'
 import { DebugList } from '../DebugModeUI/DebugList'
 
 interface PostInspectorProps {

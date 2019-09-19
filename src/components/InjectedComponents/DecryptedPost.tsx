@@ -16,7 +16,7 @@ import {
     SuccessDecryption,
 } from '../../extension/background-script/CryptoServices/decryptFrom'
 import { useValueRef } from '../../utils/hooks/useValueRef'
-import { debugModeSetting } from '../shared-settings/debugMode'
+import { debugModeSetting } from '../shared-settings/settings'
 import { DebugModeUI_PostHashDialog } from '../DebugModeUI/PostHashDialog'
 import { GetContext } from '@holoflows/kit/es'
 import { deconstructPayload } from '../../utils/type-transform/Payload'

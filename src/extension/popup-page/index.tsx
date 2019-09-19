@@ -7,7 +7,7 @@ import { Button, ListItem, ListItemText, ListItemSecondaryAction, Switch, List }
 import '../../setup.ui'
 import { SSRRenderer } from '../../utils/SSRRenderer'
 import { useValueRef } from '../../utils/hooks/useValueRef'
-import { debugModeSetting } from '../../components/shared-settings/debugMode'
+import { debugModeSetting } from '../../components/shared-settings/settings'
 
 const useStyles = makeStyles(theme => ({
     button: {
