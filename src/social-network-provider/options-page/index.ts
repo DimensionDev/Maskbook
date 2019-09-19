@@ -18,6 +18,14 @@ const optionsPageUISelf = defineSocialNetworkUI({
                 Services.People.queryMyIdentity().then(p => (ref.value = p))
             }
         }
+        {
+            const ref = this.friendsRef
+            query(ref)
+            MessageCenter.on('peopleChanged', () => query(ref))
+            function query(ref: ValueRef<Person[]>) {
+                Services.People.queryPeople().then(p => (ref.value = p))
+            }
+        }
     },
     shouldActivate() {
         return GetContext() === 'options'
