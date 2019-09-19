@@ -6,6 +6,7 @@ import { useCurrentIdentity } from '../../components/DataSource/useActivatedUI'
 import { Person } from '../../database'
 import React from 'react'
 import { AddProve } from './DeveloperComponents/AddProve'
+import { DecryptPostDeveloperMode } from './DeveloperComponents/DecryptPost'
 
 async function swallowGoo(me: Person | null) {
     const boxElem = document.querySelector('#raw-box') as HTMLTextAreaElement
@@ -56,6 +57,9 @@ const DevPage = () => {
                 <Grid container spacing={3}>
                     <Grid item xs={4}>
                         <AddProve />
+                    </Grid>
+                    <Grid item xs={6}>
+                        <DecryptPostDeveloperMode />
                     </Grid>
                 </Grid>
             </div>

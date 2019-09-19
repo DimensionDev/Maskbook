@@ -104,9 +104,6 @@
     "finish": {
         "message": "Finish"
     },
-    "retry_decryption": {
-        "message": "Try again"
-    },
     "welcome_0_close_button": {
         "message": "I'll do it later"
     },
