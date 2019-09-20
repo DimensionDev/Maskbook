@@ -1,3 +1,6 @@
+import React from 'react'
+import { Button, TextField } from '@material-ui/core'
+import { Identifier, PersonIdentifier } from '../../database/type'
 import {
     ListSubheader,
     Grid,
@@ -8,11 +11,9 @@ import {
     ListItemSecondaryAction,
     Switch,
 } from '@material-ui/core'
-import { PersonIdentifier, Identifier } from '../../database/type'
 import { deconstructPayload } from '../../utils/type-transform/Payload'
 import Services from '../service'
 import { Person } from '../../database'
-import React from 'react'
 import { AddProve } from './DeveloperComponents/AddProve'
 import { DecryptPostDeveloperMode } from './DeveloperComponents/DecryptPost'
 import { SeeMyProvePost } from './DeveloperComponents/SeeMyProvePost'
@@ -37,7 +38,7 @@ async function assimilateGoo(content: string, me: Person | null): Promise<string
         // TODO: actually use the UI thing because we want to be able to *drumroll* add receipients
         try {
             const [, by] = content.split(':||')
-            const pl = deconstructPayload(content, true)!
+            const pl = deconstructPayload(content, null, { throws: true })!
             const r = await Services.Crypto.decryptFrom(
                 pl.encryptedText,
                 Identifier.fromString('person:' + by) as PersonIdentifier,

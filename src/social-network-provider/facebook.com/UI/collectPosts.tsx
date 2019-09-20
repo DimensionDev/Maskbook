@@ -65,9 +65,9 @@ export function collectPostsFacebook(this: SocialNetworkUI) {
                 info.postID.value = getPostID(metadata)
             }
             collectPostInfo()
-            info.postPayload.value = deconstructPayload(info.postContent.value)
+            info.postPayload.value = deconstructPayload(info.postContent.value, this.payloadDecoder)
             info.postContent.addListener(newVal => {
-                info.postPayload.value = deconstructPayload(newVal)
+                info.postPayload.value = deconstructPayload(newVal, this.payloadDecoder)
             })
             return {
                 onNodeMutation: collectPostInfo,

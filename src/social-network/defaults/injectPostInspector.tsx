@@ -24,7 +24,8 @@ export function injectPostInspectorDefault(config: InjectPostInspectorDefaultCon
         )
     }
 }
-interface InjectPostInspectorDefaultConfig {
+
+export interface InjectPostInspectorDefaultConfig {
     injectionPoint?(node: DOMProxy): ShadowRoot
     zipPost?(node: DOMProxy): void
 }

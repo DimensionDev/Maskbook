@@ -1,6 +1,10 @@
 import { geti18nString } from '../i18n'
+import { SocialNetworkWorkerAndUI } from '../../social-network/shared'
+import { defaults, isNil } from 'lodash-es'
+import { definedSocialNetworkWorkers } from '../../social-network/worker'
 
 export type Payload = PayloadAlpha40_Or_Alpha39
+
 interface PayloadAlpha40_Or_Alpha39 {
     version: -40 | -39
     ownersAESKeyEncrypted: string
@@ -8,6 +12,7 @@ interface PayloadAlpha40_Or_Alpha39 {
     encryptedText: string
     signature?: string
 }
+
 /**
  * Detect if there is version -40 or -39 payload
  */
@@ -37,6 +42,7 @@ function deconstructAlpha40_Or_Alpha39(str: string, throws = false): Payload | n
         version: isVersion39 ? -39 : -40,
     }
 }
+
 function deconstructAlpha41(str: string, throws = false): null | never {
     // 🎼1/4|ownersAESKeyEncrypted|iv|encryptedText|signature:||
     if (str.includes('🎼1/4') && str.includes(':||'))
@@ -46,26 +52,55 @@ function deconstructAlpha41(str: string, throws = false): null | never {
 }
 
 const versions = new Set([deconstructAlpha40_Or_Alpha39, deconstructAlpha41])
-export function deconstructPayload(str: string): Payload | null
-export function deconstructPayload(str: string, throws: true): Payload
-export function deconstructPayload(str: string, throws = false): Payload | null {
-    for (const ver of versions) {
-        const result = ver(str, false)
-        if (throws === false) return result
-        if (result) return result
-        return ver(str, true)
+
+/**
+ * @type Decoder    defines decoder. if null, auto select decoder.
+ */
+type Decoder = SocialNetworkWorkerAndUI['payloadDecoder'] | null
+type Encoder = SocialNetworkWorkerAndUI['payloadEncoder']
+
+export function deconstructPayload(str: string, decoder: Decoder, opts?: { throws: false }): Payload | null
+export function deconstructPayload(str: string, decoder: Decoder, opts?: { throws: true }): Payload
+export function deconstructPayload(
+    str: string,
+    decoder: Decoder,
+    opts: { throws?: boolean } = { throws: false },
+): Payload | null {
+    defaults(opts, {
+        throws: false,
+    })
+
+    const decoders = (() => {
+        if (isNil(decoder)) {
+            const sto = []
+            for (const v of definedSocialNetworkWorkers) {
+                sto.push(v.payloadDecoder)
+            }
+            return sto
+        }
+        return [decoder]
+    })()
+
+    for (const versionDecoder of versions) {
+        for (const networkDecoder of decoders) {
+            if (isNil(networkDecoder(str))) continue
+            const result = versionDecoder(networkDecoder(str)!, false)
+            if (!isNil(result)) {
+                return result
+            }
+        }
     }
     if (str.includes('🎼') && str.includes(':||'))
-        if (throws) throw new TypeError(geti18nString('service_unknown_payload'))
+        if (opts.throws) throw new TypeError(geti18nString('service_unknown_payload'))
         else return null
-    if (throws) throw new TypeError(geti18nString('payload_not_found'))
+    if (opts.throws) throw new TypeError(geti18nString('payload_not_found'))
     else return null
 }
 
-export function constructAlpha40(data: Payload) {
-    return `🎼2/4|${data.ownersAESKeyEncrypted}|${data.iv}|${data.encryptedText}|${data.signature}:||`
+export function constructAlpha40(data: Payload, encoder: Encoder) {
+    return encoder(`🎼2/4|${data.ownersAESKeyEncrypted}|${data.iv}|${data.encryptedText}|${data.signature}:||`)
 }
 
-export function constructAlpha39(data: Payload) {
-    return `🎼3/4|${data.ownersAESKeyEncrypted}|${data.iv}|${data.encryptedText}|${data.signature}:||`
+export function constructAlpha39(data: Payload, encoder: Encoder) {
+    return encoder(`🎼3/4|${data.ownersAESKeyEncrypted}|${data.iv}|${data.encryptedText}|${data.signature}:||`)
 }

@@ -11,6 +11,8 @@ import { PersonIdentifier, PostIVIdentifier } from '../../../database/type'
 import { queryPostDB, updatePostDB } from '../../../database/post'
 import { addPerson } from './addPerson'
 import { MessageCenter } from '../../../utils/messages'
+import { getNetworkWorker } from '../../../social-network/worker'
+
 type Progress = {
     progress: 'finding_person_public_key' | 'finding_post_key'
 }
@@ -44,11 +46,12 @@ export async function* decryptFromMessageWithProgress(
     by: PersonIdentifier,
     whoAmI: PersonIdentifier,
 ): ReturnOfDecryptFromMessageWithProgress {
+    const decoder = getNetworkWorker(by.network).payloadDecoder
     // If any of parameters is changed, we will not handle it.
-    const data = deconstructPayload(encrypted)!
+    const data = deconstructPayload(encrypted, decoder)!
     if (!data) {
         try {
-            deconstructPayload(encrypted, true)
+            deconstructPayload(encrypted, decoder, { throws: true })
         } catch (e) {
             return { error: e.message }
         }

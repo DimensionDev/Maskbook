@@ -7,6 +7,7 @@ import { queryLocalKeyDB } from '../../../database/people'
 import { PersonIdentifier } from '../../../database/type'
 import { prepareOthersKeyForEncryptionV39 } from '../prepareOthersKeyForEncryption'
 import { geti18nString } from '../../../utils/i18n'
+import { getNetworkWorker } from '../../../social-network/worker'
 
 type EncryptedText = string
 type OthersAESKeyEncryptedToken = string
@@ -14,10 +15,12 @@ type OthersAESKeyEncryptedToken = string
  * This map stores <iv, othersAESKeyEncrypted>.
  */
 const OthersAESKeyEncryptedMap = new Map<OthersAESKeyEncryptedToken, (Alpha39.PublishedAESKeyRecordV39)[]>()
+
 /**
  * Encrypt to a user
- * @param content Original text
- * @param to Encrypt target
+ * @param content       Original text
+ * @param to            Encrypt target
+ * @param whoAmI        Encrypt source
  * @returns Will return a tuple of [encrypted: string, token: string] where
  * - `encrypted` is the encrypted string
  * - `token` is used to call `publishPostAESKey` before post the content
@@ -55,13 +58,16 @@ export async function encryptTo(
     const key = encodeArrayBuffer(iv)
     OthersAESKeyEncryptedMap.set(key, othersAESKeyEncrypted)
     return [
-        `${constructAlpha39({
-            encryptedText: encryptedTextStr,
-            iv: ivStr,
-            ownersAESKeyEncrypted: ownersAESKeyStr,
-            signature: signature,
-            version: -39,
-        })}`,
+        `${constructAlpha39(
+            {
+                encryptedText: encryptedTextStr,
+                iv: ivStr,
+                ownersAESKeyEncrypted: ownersAESKeyStr,
+                signature: signature,
+                version: -39,
+            },
+            getNetworkWorker(whoAmI.network).payloadEncoder,
+        )}`,
         key,
     ]
 }
