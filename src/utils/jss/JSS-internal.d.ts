@@ -1,3 +1,4 @@
+// MIT (Expat) License
 declare module 'warning' {
     export default function warning(...args: any[]): void
 }

@@ -1,30 +1,30 @@
 /**
- * This file is granted to [JSS](https://github.com/cssinjs/jss) with MIT Licence
+ * Copyright (c) 2019 cssinjs/js developers.
+ * Copyright (c) 2019 SujiTech.
+ * See the GitHub history of this file for full list of contributors.
+ *
+ * This file is provided AS IS under the MIT (Expat) License. You may obtain a
+ * copy of its contents from http://opensource.org/licenses/MIT.
+ *
+ * Forked from https://github.com/cssinjs/jss/blob/master/packages/jss/src/DomRenderer.js.
+ * Intended to be integrated into jss <https://github.com/cssinjs/jss>.
  */
+/* eslint-disable import/no-deprecated, no-plusplus */
 import warning from 'tiny-warning'
 import { InsertionPoint, JssValue, Rule, RuleList, sheets, StyleSheet, toCssValue } from 'jss'
 /// <reference path="./CSSOM.d.ts" />
 /// <reference path="./JSS-internal.d.ts" />
-/**
- * Chrome < 73, enable polyfill
- * Chrome = 73, disable polyfill
- * ! Due to https://bugs.chromium.org/p/chromium/issues/detail?id=967273
- * Chrome = 74, enable polyfill and modify behavior to prevent crashing
- * Chrome > 74, disable polyfill
- * Isn't Chrome, enable polyfill
- */
 
 //#region ConstructableStyleSheetsRenderer
+// Nuke Chrome 74: https://bugs.chromium.org/p/chromium/issues/detail?id=967273
 const isChrome74 = navigator.appVersion.match(/(Chromium|Chrome)\/74/)
-const needPolyfill = 'adoptedStyleSheets' in document || isChrome74
-if (!isChrome74) {
-    // always use polyfill in development mode;
-    if (process.env.NODE_ENV === 'development') delete Document.prototype.adoptedStyleSheets
-} else {
+// We want to test it in dev.
+if (isChrome74 || process.env.NODE_ENV === 'development') {
     delete Document.prototype.adoptedStyleSheets
 }
+
 require('construct-style-sheets-polyfill')
-// require('./polyfill')
+// Should be false for Chrome 73 and Chrome > 75.
 const isPolyfilled = CSSStyleSheet.name !== 'CSSStyleSheet'
 if (isPolyfilled) console.warn('Browser does not support Constructable Stylesheets. Using polyfill.')
 
@@ -32,6 +32,7 @@ const fakeHead = document.createElement('head')
 export const livingShadowRoots = new Set<ShadowRoot>()
 const livingStylesheets = new WeakMap<HTMLStyleElement, CSSStyleSheet>()
 const proxyWeakMap = new WeakMap<HTMLStyleElement, HTMLStyleElement>()
+
 function getStyleSheet(x: HTMLStyleElement) {
     const e = livingStylesheets.get(x)
     if (e) return e
@@ -39,6 +40,7 @@ function getStyleSheet(x: HTMLStyleElement) {
     livingStylesheets.set(x, y)
     return y
 }
+
 let rafAwaiting = false
 export function applyAdoptedStyleSheets(shadowOnly = true) {
     if (rafAwaiting) return
@@ -73,8 +75,6 @@ function adoptStylesheets(
 }
 //#endregion
 
-/* eslint import/no-deprecated: 0 */
-// tslint:disable: increment-decrement
 type HTMLElementWithStyleMap = HTMLElement
 type AnyCSSRule = unknown
 
@@ -177,6 +177,8 @@ function removeProperty(cssRule: HTMLElementWithStyleMap | CSSStyleRule | CSSKey
 
 /**
  * Set the selector.
+ *
+ * @returns {boolean} Whether the operation is successful.
  */
 function setSelector(cssRule: CSSStyleRule, selectorText: string): boolean {
     console.warn('Set selector', cssRule, selectorText)
@@ -185,7 +187,7 @@ function setSelector(cssRule: CSSStyleRule, selectorText: string): boolean {
     // Return false if setter was not successful.
     // Currently works in chrome only.
     // ! Hack this since it is not implemented !
-    if (needPolyfill) return false
+    if (isPolyfilled) return false
     return cssRule.selectorText === selectorText
 }
 /**
@@ -200,7 +202,6 @@ const getHead = () => fakeHead
  * Find attached sheet with an index higher than the passed one.
  */
 function findHigherSheet(registry: Array<StyleSheet>, options: PriorityOptions): StyleSheet | null {
-    // eslint-disable-next-line
     for (let i = 0; i < registry.length; i++) {
         const sheet = registry[i]
         if (
@@ -218,7 +219,6 @@ function findHigherSheet(registry: Array<StyleSheet>, options: PriorityOptions):
  * Find attached sheet with the highest index.
  */
 function findHighestSheet(registry: Array<StyleSheet>, options: PriorityOptions): StyleSheet | null {
-    // eslint-disable-next-line
     for (let i = registry.length - 1; i >= 0; i--) {
         const sheet = registry[i]
         if (sheet.attached && sheet.options.insertionPoint === options.insertionPoint) {
@@ -233,7 +233,6 @@ function findHighestSheet(registry: Array<StyleSheet>, options: PriorityOptions)
  */
 function findCommentNode(text: string): Node | null {
     const head = getHead()
-    // eslint-disable-next-line
     for (let i = 0; i < head.childNodes.length; i++) {
         const node = head.childNodes[i]
         if (node.nodeType === 8 && node.nodeValue!.trim() === text) {
@@ -302,7 +301,8 @@ function findPrevNode(options: PriorityOptions): PrevNode | false {
 function insertStyle(style: HTMLStyleElement, options: PriorityOptions) {
     const { insertionPoint } = options
     // ! Hook this !
-    if (insertionPoint) throw new TypeError('ConstructableStyleSheetsRenderer does not support insertionPoint.')
+    if (insertionPoint)
+        throw new TypeError('ConstructableStyleSheetsRenderer.insertStyle does not support insertionPoint.')
 
     const nextNode = findPrevNode(options)
 
@@ -334,19 +334,17 @@ const insertRule = (
      */
     try {
         if ('insertRule' in container) {
-            const c = container
-            c.insertRule(rule, index)
-            if (process.env.NODE_ENV === 'development')
-                if (c instanceof CSSMediaRule) throw new Error('Not implemented')
+            if (isPolyfilled && container instanceof CSSMediaRule)
+                throw new Error('CSSMediaRule insertRule not implemented')
+            container.insertRule(rule, index)
         }
         // Keyframes rule.
         else if ('appendRule' in container) {
-            const c = container
-            if (process.env.NODE_ENV === 'development') throw new Error('Not implemented')
-            c.appendRule(rule)
+            if (isPolyfilled) throw new Error('CSSKeyframesRule appendRule not implemented')
+            container.appendRule(rule)
         }
     } catch (err) {
-        console.log(err)
+        console.error(err)
         warning(false, `[JSS] Can not insert an unsupported rule \n${rule}`)
         return false
     }
@@ -378,19 +376,18 @@ export default class ConstructableStyleSheetsRenderer {
                 if (key === 'sheet') return getStyleSheet(target)
                 if (key === 'setAttribute')
                     return (k: string, v: string) => {
-                        if (k === 'media') console.warn('Not implemented')
-                        if (k === 'media') getStyleSheet(target).media.mediaText = v
-                        return target.setAttribute(k, v)
+                        // XXX: isPolyfilled?
+                        if (k === 'media') {
+                            console.warn('Not implemented')
+                            getStyleSheet(target).media.mediaText = v
+                        }
+                        if (k === 'media') return target.setAttribute(k, v)
                     }
                 return (target as any)[key]
             },
             set(target, key, value) {
-                if (key === 'textContent')
-                    getStyleSheet(target).replaceSync(value)
-                    // if (!isChrome74) {
-                    //     // ! This will cause crash on Chrome 74 !
-                ;(target as any)[key] = value
-                // }
+                if (key === 'textContent') getStyleSheet(target).replaceSync(value)
+                ;(target as any)[key] = value // Will crash on Chrome 74 without polyfill
                 return true
             },
         })
@@ -463,10 +460,8 @@ export default class ConstructableStyleSheetsRenderer {
     /**
      * Insert RuleList into an element.
      */
-
     insertRules(rules: RuleList, nativeParent?: CSSStyleSheet | CSSMediaRule | CSSKeyframesRule) {
         // @ts-ignore
-        // eslint-disable-next-line
         for (let i = 0; i < rules.index.length; i++) {
             // @ts-ignore
             this.insertRule(rules.index[i], i, nativeParent)
@@ -529,7 +524,6 @@ export default class ConstructableStyleSheetsRenderer {
      */
     indexOf(cssRule: AnyCSSRule): number {
         const { cssRules } = this.element.sheet!
-        // eslint-disable-next-line
         for (let index = 0; index < cssRules.length; index++) {
             if (cssRule === cssRules[index]) return index
         }
