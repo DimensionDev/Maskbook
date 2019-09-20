@@ -1,7 +1,7 @@
-import { SocialNetworkWorkerAndUI } from '../../social-network/shared'
+import { SocialNetworkWorkerAndUIDefinition } from '../../social-network/shared'
 import { regularUsername } from './parse-username'
 
-export const sharedProvider: SocialNetworkWorkerAndUI = {
+export const sharedProvider: SocialNetworkWorkerAndUIDefinition = {
     version: 1,
     internalName: 'facebook',
     isDangerousNetwork: false,

@@ -1,6 +1,6 @@
 import { getUrl } from '../utils/utils'
 
-export interface SocialNetworkWorkerAndUI {
+export interface SocialNetworkWorkerAndUIDefinition {
     version: 1
     /**
      * Declare what payload does this network supports.
@@ -49,11 +49,16 @@ export interface SocialNetworkWorkerAndUI {
      * if null, no public key detected.
      */
     publicKeyDecoder?: (text: string) => string | null
+    payloadEncoder?: (payload: string) => string
+    payloadDecoder?: (text: string) => string | null
     /**
      * This provider is not ready for production, Maskbook will not use it in production
      */
     notReadyForProduction?: boolean
 }
+
+export type SocialNetworkWorkerAndUI = Required<SocialNetworkWorkerAndUIDefinition>
+
 /**
  * Users settings about Maskbook
  */

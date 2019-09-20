@@ -1,4 +1,4 @@
-import { env, Env, Preference, Profile, SocialNetworkWorkerAndUI } from './shared'
+import { env, Env, Preference, Profile, SocialNetworkWorkerAndUIDefinition } from './shared'
 import { DOMProxy, LiveSelector, ValueRef } from '@holoflows/kit/es'
 import { Person, Group } from '../database'
 import { PersonIdentifier, PostIdentifier } from '../database/type'
@@ -11,7 +11,7 @@ import { nop } from '../utils/utils'
 
 //#region SocialNetworkUI
 export interface SocialNetworkUIDefinition
-    extends SocialNetworkWorkerAndUI,
+    extends SocialNetworkWorkerAndUIDefinition,
         SocialNetworkUIDataSources,
         SocialNetworkUITasks,
         SocialNetworkUIInjections,

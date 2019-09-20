@@ -27,7 +27,7 @@ export function PostInspector(props: PostInspectorProps) {
     const decodeResult = getActivatedUI().publicKeyDecoder(post)
     const isDebugging = useValueRef(debugModeSetting)
     const type = {
-        encryptedPost: deconstructPayload(post),
+        encryptedPost: deconstructPayload(post, getActivatedUI().payloadDecoder),
         provePost: decodeResult ? [decodeResult] : null,
     }
     if (type.provePost) Services.People.writePersonOnGun(postBy, { provePostId: postId })

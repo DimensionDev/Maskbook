@@ -1,4 +1,4 @@
-import { env, Profile, SocialNetworkWorkerAndUI } from './shared'
+import { env, Profile, SocialNetworkWorkerAndUIDefinition } from './shared'
 import { GetContext } from '@holoflows/kit/es'
 import { PersonIdentifier, PostIdentifier } from '../database/type'
 import { startWorkerService } from '../extension/background-script/WorkerService'
@@ -9,7 +9,7 @@ import getCurrentNetworkWorker from './utils/getCurrentNetworkWorker'
 /**
  * A SocialNetworkWorker is running in the background page
  */
-export interface SocialNetworkWorkerDefinition extends SocialNetworkWorkerAndUI {
+export interface SocialNetworkWorkerDefinition extends SocialNetworkWorkerAndUIDefinition {
     /**
      * This function should fetch the given post by `fetch`, `AutomatedTabTask` or anything
      * @param postIdentifier The post id
@@ -41,7 +41,7 @@ export interface SocialNetworkWorkerDefinition extends SocialNetworkWorkerAndUI 
 }
 
 export type SocialNetworkWorker = Required<SocialNetworkWorkerDefinition>
-export const getWorker = getCurrentNetworkWorker
+export const getNetworkWorker = getCurrentNetworkWorker
 
 export const definedSocialNetworkWorkers = new Set<SocialNetworkWorker>()
 export function defineSocialNetworkWorker(worker: SocialNetworkWorkerDefinition) {

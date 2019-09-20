@@ -20,12 +20,12 @@ import { isMobileFacebook } from './isMobile'
 import { geti18nString } from '../../utils/i18n'
 import { injectCommentBoxDefaultFactory } from '../../social-network/defaults/injectCommentBox'
 
-const self = defineSocialNetworkUI({
+export const facebookUISelf = defineSocialNetworkUI({
     ...sharedProvider,
     init(env, pref) {
         sharedProvider.init(env, pref)
-        InitFriendsValueRef(self, 'facebook.com')
-        InitMyIdentitiesValueRef(self, 'facebook.com')
+        InitFriendsValueRef(facebookUISelf, 'facebook.com')
+        InitMyIdentitiesValueRef(facebookUISelf, 'facebook.com')
     },
     shouldActivate() {
         return location.hostname.endsWith('facebook.com')

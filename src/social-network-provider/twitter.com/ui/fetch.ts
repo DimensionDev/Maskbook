@@ -66,9 +66,9 @@ const registerPostCollector = (self: SocialNetworkUI) => {
                 uploadToService(r)
             }
             collectPostInfo()
-            info.postPayload.value = deconstructPayload(info.postContent.value)
+            info.postPayload.value = deconstructPayload(info.postContent.value, self.payloadDecoder)
             info.postContent.addListener(newValue => {
-                info.postPayload.value = deconstructPayload(newValue)
+                info.postPayload.value = deconstructPayload(newValue, self.payloadDecoder)
             })
             return {
                 onNodeMutation: collectPostInfo,
