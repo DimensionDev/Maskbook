@@ -60,3 +60,11 @@ export const regexMatch = (str: string, regexp: RegExp, index: number) => {
 }
 
 export const isDocument = (node: Node): node is Document => node.nodeType === Node.DOCUMENT_NODE
+
+export const batchReplace = (source: string, group: Array<[string | RegExp, string]>) => {
+    let storage = source
+    for (const v of group) {
+        storage = storage.replace(v[0], v[1])
+    }
+    return storage
+}
