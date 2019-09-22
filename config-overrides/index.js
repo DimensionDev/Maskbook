@@ -191,6 +191,9 @@ function override(config, env) {
         polyfills.map(x => void fs.copyFileSync(x, path.join(publicPolyfill, path.basename(x))))
     }
 
+    const tsCheckerPlugin = config.plugins.filter(x => x.constructor.name === 'ForkTsCheckerWebpackPlugin')[0]
+    tsCheckerPlugin.compilerOptions.isolatedModules = false
+
     // Let webpack build to es2017 instead of es5
     config.module.rules = [
         // from cra

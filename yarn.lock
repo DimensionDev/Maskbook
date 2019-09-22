@@ -1276,11 +1276,12 @@
 
 "@holoflows/kit@https://github.com/DimensionDev/holoflows-kit":
   version "0.5.0"
-  resolved "https://github.com/DimensionDev/holoflows-kit#49311a763b8c9038772a134057db15098225e295"
+  resolved "https://github.com/DimensionDev/holoflows-kit#81efcc09b7fb838ce07c97e0a45061a0738394ff"
   dependencies:
     "@types/lodash-es" "^4.1.4"
+    async-call-rpc "^1.0.0"
     concurrent-lock "^1.0.7"
-    jsx-jsonml-devtools-renderer "^1.1.0"
+    jsx-jsonml-devtools-renderer "^1.3.0"
     lodash-es "^4.17.15"
     memorize-decorator "^0.2.2"
     mitt "^1.1.3"
@@ -3326,6 +3327,11 @@ astral-regex@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/astral-regex/-/astral-regex-1.0.0.tgz#6c8c3fb827dd43ee3918f27b82782ab7658a6fd9"
   integrity sha512-+Ryf6g3BKoRc7jfp7ad8tM4TtMiaWvbF/1/sQcZPkkS7ag3D5nMBCe2UfOTONtAkaG0tO0ij3C5Lwmf1EiyjHg==
+
+async-call-rpc@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/async-call-rpc/-/async-call-rpc-1.0.0.tgz#a2dd6a192b353b717fdf0881da9c805c58e3cb44"
+  integrity sha512-J2bj2HfUPKJCf7i/Lgxjj51+L0xg5xzENK1zkH3xZhsg2PFj2rxwwIRhqSKvGW6z3d6ukjcQWHg/0UbtsuFD2g==
 
 async-each@^1.0.1:
   version "1.0.3"
@@ -9956,7 +9962,7 @@ jsx-ast-utils@^2.1.0, jsx-ast-utils@^2.2.1:
     array-includes "^3.0.3"
     object.assign "^4.1.0"
 
-jsx-jsonml-devtools-renderer@^1.1.0:
+jsx-jsonml-devtools-renderer@^1.3.0:
   version "1.3.0"
   resolved "https://registry.yarnpkg.com/jsx-jsonml-devtools-renderer/-/jsx-jsonml-devtools-renderer-1.3.0.tgz#1af53802a49898db3bd2f9070a5f6e56d8c2ef13"
   integrity sha512-DjsZ+XvwkInWB5Cr3xfibfE5+PmIibGk/MCLR5QBRttgUWX0Uzr0g+IpPi4Rb0U0U9D+BkhbvrE9gSSm08M8Nw==
