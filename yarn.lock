@@ -1276,7 +1276,7 @@
 
 "@holoflows/kit@https://github.com/DimensionDev/holoflows-kit":
   version "0.5.0"
-  resolved "https://github.com/DimensionDev/holoflows-kit#81efcc09b7fb838ce07c97e0a45061a0738394ff"
+  resolved "https://github.com/DimensionDev/holoflows-kit#2cca36cfc03cb705c58931ebf1d308547ac584c1"
   dependencies:
     "@types/lodash-es" "^4.1.4"
     async-call-rpc "^1.0.0"
