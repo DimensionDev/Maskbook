@@ -59,12 +59,16 @@ function override(config, env) {
     if (env === 'development') config.devtool = 'inline-source-map'
     else delete config.devtool
     config.optimization.minimize = false
+    function appendReactDevtools(src) {
+        if (env === 'development') return ['react-devtools', src]
+        return src
+    }
     config.entry = {
-        'options-page': src('./src/index.tsx'),
-        'content-script': src('./src/content-script.ts'),
+        'options-page': appendReactDevtools(src('./src/index.tsx')),
+        'content-script': appendReactDevtools(src('./src/content-script.ts')),
         'background-service': src('./src/background-service.ts'),
         'injected-script': src('./src/extension/injected-script/index.ts'),
-        popup: src('./src/extension/popup-page/index.tsx'),
+        popup: appendReactDevtools(src('./src/extension/popup-page/index.tsx')),
         qrcode: src('./src/web-workers/QRCode.ts'),
     }
     if (env !== 'development') delete config.entry.devtools

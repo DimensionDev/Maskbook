@@ -1,10 +1,10 @@
+import '../../setup.ui'
 import React from 'react'
 
 import { ThemeProvider } from '@material-ui/styles'
 import { MaskbookLightTheme } from '../../utils/theme'
 import { makeStyles } from '@material-ui/core/styles'
 import { Button, ListItem, ListItemText, ListItemSecondaryAction, Switch, List } from '@material-ui/core'
-import '../../setup.ui'
 import { SSRRenderer } from '../../utils/SSRRenderer'
 import { useValueRef } from '../../utils/hooks/useValueRef'
 import { debugModeSetting } from '../../components/shared-settings/settings'
