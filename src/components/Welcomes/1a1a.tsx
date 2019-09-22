@@ -30,7 +30,7 @@ const useStyles = makeStyles<Theme>(theme => ({
 }))
 export default function Welcome({ next, identities, linkNewSocialNetworks, back }: Props) {
     const classes = useStyles()
-    const [selected, setSelect] = useState<Person[]>(identities[0] ? identities : [])
+    const [selected, setSelect] = useState<Person | null>(identities[0] || null)
     return (
         <WelcomeContainer className={classes.paper}>
             <Navigation back={back} />
@@ -43,12 +43,12 @@ export default function Welcome({ next, identities, linkNewSocialNetworks, back 
                 maxSelection={1}
                 items={identities}
                 selected={[]}
-                frozenSelected={selected}
-                onSetSelected={setSelect}
+                frozenSelected={[selected!].filter(x => x)}
+                onSetSelected={list => setSelect(list[0])}
             />
             <Button
-                disabled={selected.length === 0}
-                onClick={() => next(selected[0])}
+                disabled={selected === null}
+                onClick={() => next(selected!)}
                 variant="contained"
                 color="primary"
                 className={classes.button}>
