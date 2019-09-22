@@ -1,10 +1,11 @@
 import { MessageCenter } from './utils/messages'
 import { definedSocialNetworkUIs, activateSocialNetworkUI } from './social-network/ui'
 import './provider.ui'
-import { LiveSelector, Watcher } from '@holoflows/kit/es'
+import { LiveSelector, Watcher, DOMProxy } from '@holoflows/kit/es'
 
 LiveSelector.enhanceDebugger()
 Watcher.enhanceDebugger()
+DOMProxy.enhanceDebugger()
 Object.assign(globalThis, {
     definedSocialNetworkUIs: definedSocialNetworkUIs,
 })
