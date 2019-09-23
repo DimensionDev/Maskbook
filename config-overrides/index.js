@@ -48,16 +48,17 @@ const target = (argv => ({
     WKWebview: (argv['wk-webview']),
 }))(require('yargs').argv)
 
-if (target.Firefox) {
-    polyfills = polyfills.filter(name => !name.includes('webextension-polyfill'))
-}
-
 /**
  * @param config {import("webpack").Configuration}
  * @param env {'development' | 'production'}
  * @returns {import("webpack").Configuration}
  */
 function override(config, env) {
+    if (target.Firefox) {
+        polyfills = polyfills.filter(name => !name.includes('webextension-polyfill'))
+        polyfills.push(src('src/polyfill/permissions.js'))
+    }
+
     // CSP bans eval
     // And non-inline source-map not working
     if (env === 'development') config.devtool = 'inline-source-map'
@@ -105,7 +106,10 @@ function override(config, env) {
     function newPage(options = {}) {
         let templateContent = fs.readFileSync(path.join(__dirname, './template.html'), 'utf8')
         if (target.Firefox) {
-            templateContent = templateContent.replace('<script src="/polyfill/browser-polyfill.min.js"></script>', '')
+            templateContent = templateContent.replace(
+                '<script src="/polyfill/browser-polyfill.min.js"></script>',
+                '<script src="/polyfill/permissions.js"></script>',
+            )
         }
         return new HtmlWebpackPlugin({
             templateContent,
