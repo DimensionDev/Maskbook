@@ -20,8 +20,10 @@ process.chdir(base)
          *                     ~~~~~~~~~~~~~~~~
          */
         await spawn('yarn', ['build:tsc'])
+        await spawn('yarn', ['build:rollup'])
     } catch (e) {
         console.log('Build failed, retry one more time.')
         await spawn('yarn', ['build:tsc'])
+        await spawn('yarn', ['build:rollup'])
     }
 })()
