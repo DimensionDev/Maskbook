@@ -60,6 +60,12 @@ function override(config, env) {
     else delete config.devtool
     config.optimization.minimize = false
     function appendReactDevtools(src) {
+        /**
+         * If you are using Firefox and want to use React devtools,
+         * use Firefox nightly or start without the flag --firefox,
+         * then open about:config and switch network.websocket.allowInsecureFromHTTPS to true
+         */
+        if (target.Firefox && target.Firefox !== 'nightly') return src
         if (env === 'development') return ['react-devtools', src]
         return src
     }
