@@ -8,7 +8,7 @@ const src = file => path.join(__dirname, '../', file)
 /**
  * Polyfills that needs to be copied to dist
  */
-const polyfills = [
+let polyfills = [
     'node_modules/webextension-polyfill/dist/browser-polyfill.min.js',
     'node_modules/webextension-polyfill/dist/browser-polyfill.min.js.map',
     'src/polyfill/asmcrypto.js',
@@ -47,6 +47,10 @@ const target = (argv => ({
     /** @type {boolean} */
     WKWebview: (argv['wk-webview']),
 }))(require('yargs').argv)
+
+if (target.Firefox) {
+    polyfills = polyfills.filter(name => !name.includes('webextension-polyfill'))
+}
 
 /**
  * @param config {import("webpack").Configuration}
@@ -98,8 +102,12 @@ function override(config, env) {
      * @param {HtmlWebpackPlugin.Options} options
      */
     function newPage(options = {}) {
+        let templateContent = fs.readFileSync(path.join(__dirname, './template.html'), 'utf8')
+        if (target.Firefox) {
+            templateContent = templateContent.replace('<script src="/polyfill/browser-polyfill.min.js"></script>', '')
+        }
         return new HtmlWebpackPlugin({
-            templateContent: fs.readFileSync(path.join(__dirname, './template.html'), 'utf8'),
+            templateContent,
             inject: 'body',
             ...options,
         })
