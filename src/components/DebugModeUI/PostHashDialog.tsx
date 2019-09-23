@@ -15,8 +15,7 @@ import { Person } from '../../database'
 import { useAsync } from '../../utils/components/AsyncComponent'
 import Services from '../../extension/service'
 import { PostIVIdentifier } from '../../database/type'
-import { deconstructPayload, Payload } from '../../utils/type-transform/Payload'
-import { DialogContentText, DialogContent } from '@material-ui/core'
+import { deconstructPayload } from '../../utils/type-transform/Payload'
 
 const useStyles = makeStyles({
     avatar: {
@@ -71,7 +70,7 @@ function SimpleDialog(props: SimpleDialogProps) {
 
 export function DebugModeUI_PostHashDialog(props: { post: string; network: string }) {
     const [open, setOpen] = React.useState(false)
-    const payload = deconstructPayload(props.post)
+    const payload = deconstructPayload(props.post, null)
     const [hashMap, setHashMap] = useState<[string, string][]>([])
     const friends = useFriendsList()
     useAsync(() => {
