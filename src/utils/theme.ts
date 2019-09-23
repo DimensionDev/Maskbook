@@ -7,61 +7,15 @@ const _refTheme = createMuiTheme()
 const _refThemeDark = createMuiTheme({ palette: { type: 'dark' } })
 
 function getFontFamily(monospace?: boolean) {
-    /**
-     * The font list on every platform in CJK language is derived from
-     * https://raw.githubusercontent.com/microsoft/vscode/332aaba6ded659529a7ae91e6ae0071ff1ef6ae8/src/vs/workbench/browser/media/style.css
-     *
-     * And following MIT License
-     */
-    function getAppleFontFamily() {
-        return {
-            default: '-apple-system, BlinkMacSystemFont, sans-serif',
-            zhHans: '-apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", sans-serif',
-            zhHant: '-apple-system, BlinkMacSystemFont, "PingFang TC", sans-serif',
-            ja: '-apple-system, BlinkMacSystemFont, "Hiragino Kaku Gothic Pro", sans-serif',
-            ko: '-apple-system, BlinkMacSystemFont, "Nanum Gothic", "Apple SD Gothic Neo", "AppleGothic", sans-serif',
-            monospace: 'Monaco, Menlo, Inconsolata, "Courier New", monospace',
-        }
-    }
-    function getWindowsFontFamily() {
-        return {
-            default: '"Segoe WPC", "Segoe UI", sans-serif',
-            zhHans: '"Segoe WPC", "Segoe UI", "Microsoft YaHei", sans-serif',
-            zhHant: '"Segoe WPC", "Segoe UI", "Microsoft Jhenghei", sans-serif',
-            ja: '"Segoe WPC", "Segoe UI", "Meiryo", sans-serif',
-            ko: '"Segoe WPC", "Segoe UI", "Malgun Gothic", "Dotom", sans-serif',
-            monospace: 'Consolas, Inconsolata, "Courier New", monospace',
-        }
-    }
-    function getOtherFontFamily() {
-        return {
-            default: '"Ubuntu", "Droid Sans", sans-serif',
-            zhHans: '"Ubuntu", "Droid Sans", "Source Han Sans SC", "Source Han Sans CN", "Source Han Sans", sans-serif',
-            zhHant: '"Ubuntu", "Droid Sans", "Source Han Sans TC", "Source Han Sans TW", "Source Han Sans", sans-serif',
-            ja: ' "Ubuntu", "Droid Sans", "Source Han Sans J", "Source Han Sans JP", "Source Han Sans", sans-serif',
-            ko:
-                '"Ubuntu", "Droid Sans", "Source Han Sans K", "Source Han Sans JR", "Source Han Sans", "UnDotum", "FBaekmuk Gulim", sans-serif',
-            monospace: '"Droid Sans Mono", Inconsolata, "Courier New", monospace, "Droid Sans Fallback"',
-        }
-    }
+    // We want to look native.
 
-    const platform = navigator.platform.toLowerCase()
-    const f = platform.match('win')
-        ? getWindowsFontFamily()
-        : platform.match(/ios|apple|mac/)
-        ? getAppleFontFamily()
-        : getOtherFontFamily()
-    const language = navigator.language.toLowerCase()
-    const jp = language.match('jp') || language.match('ja')
-    const ko = language.match('ko')
-    const hansLike = language.match('zh') && language.match('cn')
-    const hantLike = language.match('zh') && (language.match('tw') || language.match('hk'))
-    if (monospace) return f.monospace
-    if (hantLike) return f.zhHant
-    if (hansLike) return f.zhHans
-    if (jp) return f.ja
-    if (ko) return f.ko
-    return f.default
+    // Windows has no CJK sans monospace. Accomendate that.
+    // We only use it for fingerprints anyway so CJK coverage aint a problem... yet.
+    const monofont = navigator.platform.startsWith('Win') ? 'Consolas, monospace' : 'monospace'
+    // https://caniuse.com/font-family-system-ui
+    // Firefox does NOT support yet it in any form on Windows, but tests indicate that it agrees with Edge in using the UI font for sans-serif:
+    // Microsoft YaHei on zh-Hans-CN.
+    return !monospace ? '-apple-system, system-ui, sans-serif' : monofont
 }
 
 const baseTheme = (theme: 'dark' | 'light') =>
@@ -86,4 +40,4 @@ const baseTheme = (theme: 'dark' | 'light') =>
 // Theme
 export const MaskbookLightTheme = createMuiTheme(baseTheme('light'))
 export const MaskbookDarkTheme = createMuiTheme(baseTheme('dark'))
-export const FixedWidthFonts = `Droid Sans Mono', Consolas, Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace, serif`
+export const FixedWidthFonts = getFontFamily(true)
