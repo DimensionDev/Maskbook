@@ -251,20 +251,23 @@ export function activateSocialNetworkUI() {
         }
 }
 function hookUIPostMap(ui: SocialNetworkUI) {
-    const undoMap = new WeakMap<object, () => void>()
+    const unmountFunctions = new WeakMap<object, () => void>()
     const setter = ui.posts.set
     ui.posts.set = function(key, value) {
-        undoMap.set(key, () => {
-            ui.injectPostInspector(value, key)()
-            defaultTo(ui.injectCommentBox, nop)(value, key)()
-            defaultTo(ui.injectPostComments, nop)(value, key)()
+        const unmountPostInspector = ui.injectPostInspector(value, key)
+        const unmountCommentBox = defaultTo(ui.injectCommentBox, nop)(value, key)
+        const unmountPostComments = defaultTo(ui.injectPostComments, nop)(value, key)
+        unmountFunctions.set(key, () => {
+            unmountPostInspector()
+            unmountCommentBox()
+            unmountPostComments()
         })
         Reflect.apply(setter, this, [key, value])
         return this
     }
     const remove = ui.posts.delete
     ui.posts.delete = function(key) {
-        const f = undoMap.get(key)
+        const f = unmountFunctions.get(key)
         f && f()
         return Reflect.apply(remove, this, [key])
     }
