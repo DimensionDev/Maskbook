@@ -3,9 +3,11 @@ import { definedSocialNetworkUIs, activateSocialNetworkUI } from './social-netwo
 import './provider.ui'
 import { LiveSelector, Watcher, DOMProxy } from '@holoflows/kit/es'
 
-LiveSelector.enhanceDebugger()
-Watcher.enhanceDebugger()
-DOMProxy.enhanceDebugger()
+if (typeof window === 'object') {
+    LiveSelector.enhanceDebugger()
+    Watcher.enhanceDebugger()
+    DOMProxy.enhanceDebugger()
+}
 Object.assign(globalThis, {
     definedSocialNetworkUIs: definedSocialNetworkUIs,
 })
