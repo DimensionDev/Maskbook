@@ -1,4 +1,4 @@
-import { AsyncCall } from '@holoflows/kit/es'
+import { AsyncCall } from 'async-call-rpc'
 
 /**
  * This describes what JSONRPC calls that Native side should implement
