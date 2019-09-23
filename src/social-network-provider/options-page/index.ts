@@ -19,7 +19,7 @@ const optionsPageUISelf = defineSocialNetworkUI({
             }
         }
         {
-            const ref = this.friendsRef
+            const ref = optionsPageUISelf.friendsRef
             query(ref)
             MessageCenter.on('peopleChanged', () => query(ref))
             function query(ref: ValueRef<Person[]>) {
