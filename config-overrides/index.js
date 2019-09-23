@@ -199,14 +199,12 @@ function override(config, env) {
     )
     if (!fs.existsSync(publicPolyfill)) {
         fs.mkdirSync(publicPolyfill)
-        polyfills.map(x => void fs.copyFileSync(x, path.join(publicPolyfill, path.basename(x))))
-        polyfills.length = 0
     }
+    polyfills.map(x => void fs.copyFileSync(x, path.join(publicPolyfill, path.basename(x))))
 
     if (env !== 'development') {
         config.plugins.push(new SSRPlugin('popup.html', src('./src/extension/popup-page/index.tsx')))
         config.plugins.push(new SSRPlugin('index.html', src('./src/index.tsx')))
-        polyfills.map(x => void fs.copyFileSync(x, path.join(publicPolyfill, path.basename(x))))
     }
     if (env === 'development') {
         const tsCheckerPlugin = config.plugins.filter(x => x.constructor.name === 'ForkTsCheckerWebpackPlugin')[0]
