@@ -1,4 +1,4 @@
-import { AsyncCall, AsyncGeneratorCall } from '@holoflows/kit/es/util/AsyncCall'
+import { AsyncCall, AsyncGeneratorCall, AsyncCallOptions } from 'async-call-rpc'
 import { GetContext, OnlyRunInContext } from '@holoflows/kit/es/Extension/Context'
 import * as MockService from './mock-service'
 import Serialization from '../utils/type-transform/Serialization'
@@ -6,7 +6,7 @@ import { PersonIdentifier, GroupIdentifier, PostIdentifier, PostIVIdentifier } f
 import { getCurrentNetworkWorkerService } from './background-script/WorkerService'
 
 import tasks from './content-script/tasks'
-import { AsyncCallOptions } from '@holoflows/kit/src/util/AsyncCall'
+import { MessageCenter } from '@holoflows/kit/es'
 Object.assign(globalThis, { tasks })
 
 interface Services {
@@ -41,6 +41,7 @@ export const ServicesWithProgress = AsyncGeneratorCall<ServicesWithProgress>(
         key: 'Service+',
         log: logOptions,
         serializer: Serialization,
+        messageChannel: new MessageCenter(),
     },
 )
 
@@ -71,6 +72,7 @@ function register<T extends Service>(service: T, name: keyof Services, mock?: Pa
                 serializer: Serialization,
                 log: logOptions,
                 preferLocalImplementation: true,
+                messageChannel: new MessageCenter(),
             }),
         })
         Object.assign(globalThis, { [name]: Object.assign({}, service) })
@@ -84,7 +86,12 @@ function register<T extends Service>(service: T, name: keyof Services, mock?: Pa
                     }
                 },
             })
-            AsyncCall(mockService, { key: name, serializer: Serialization, log: logOptions })
+            AsyncCall(mockService, {
+                key: name,
+                serializer: Serialization,
+                log: logOptions,
+                messageChannel: new MessageCenter(),
+            })
         }
     } else {
         console.warn('Unknown environment, service not registered')

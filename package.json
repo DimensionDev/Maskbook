@@ -55,6 +55,7 @@
     "@types/tiny-secp256k1": "^1.0.0",
     "@typescript-eslint/eslint-plugin": "^2.0.0",
     "anchorme": "^1.1.2",
+    "async-call-rpc": "^1.0.0",
     "classnames": "^2.2.6",
     "construct-style-sheets-polyfill": "^2.2.6",
     "copy-webpack-plugin": "^5.0.3",
