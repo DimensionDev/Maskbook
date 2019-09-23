@@ -52,6 +52,7 @@ export function useSettingsUI(settingsRef: ReturnType<typeof createNewSettings>)
                                 inputProps={{ 'aria-labelledby': text.primary }}
                                 edge="end"
                                 checked={currentValue}
+                                onClick={() => (settingsRef.value = !settingsRef.value)}
                             />
                         </ListItemSecondaryAction>
                     </ListItem>
