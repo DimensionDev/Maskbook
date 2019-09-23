@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useMemo } from 'react'
+import React, { useMemo, useState } from 'react'
 import AsyncComponent from '../../utils/components/AsyncComponent'
 import { AdditionalContent } from './AdditionalPostContent'
 import { useShareMenu } from './SelectPeopleDialog'
@@ -6,7 +6,7 @@ import { sleep } from '../../utils/utils'
 import { ServicesWithProgress } from '../../extension/service'
 import { geti18nString } from '../../utils/i18n'
 import { makeStyles } from '@material-ui/styles'
-import { Box, Button, Link, SnackbarContent, useMediaQuery, useTheme } from '@material-ui/core'
+import { Box, Link, SnackbarContent, useMediaQuery, useTheme } from '@material-ui/core'
 import { Person } from '../../database'
 import { Identifier, PersonIdentifier } from '../../database/type'
 import { NotSetupYetPrompt } from '../shared/NotSetupYetPrompt'
@@ -130,7 +130,7 @@ function DecryptPost(props: DecryptPostProps) {
     }, [requestAppendRecipients, postBy, whoAmI])
     const debugHashJSX = useMemo(() => {
         if (!isDebugging) return null
-        const postPayload = deconstructPayload(encryptedText)
+        const postPayload = deconstructPayload(encryptedText, null)
         if (!postPayload) return null
         const postByMyself = <DebugModeUI_PostHashDialog network={postBy.network} post={encryptedText} />
         return (
