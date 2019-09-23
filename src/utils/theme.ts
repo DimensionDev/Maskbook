@@ -15,7 +15,7 @@ function getFontFamily(monospace?: boolean) {
     // https://caniuse.com/font-family-system-ui
     // Firefox does NOT support yet it in any form on Windows, but tests indicate that it agrees with Edge in using the UI font for sans-serif:
     // Microsoft YaHei on zh-Hans-CN.
-    return monospace ? '-apple-system, system-ui, sans-serif' : monofont
+    return !monospace ? '-apple-system, system-ui, sans-serif' : monofont
 }
 
 const baseTheme = (theme: 'dark' | 'light') =>
