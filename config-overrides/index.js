@@ -56,7 +56,7 @@ const target = (argv => ({
 function override(config, env) {
     if (target.Firefox) {
         polyfills = polyfills.filter(name => !name.includes('webextension-polyfill'))
-        polyfills.push('src/polyfill/permissions.js')
+        if (target.StandaloneGeckoView) polyfills.push('src/polyfill/permissions.js')
     }
 
     // CSP bans eval
@@ -107,7 +107,7 @@ function override(config, env) {
         if (target.Firefox) {
             templateContent = templateContent.replace(
                 '<script src="/polyfill/browser-polyfill.min.js"></script>',
-                '<script src="/polyfill/permissions.js"></script>',
+                target.StandaloneGeckoView ? '<script src="/polyfill/permissions.js"></script>' : '',
             )
         }
         return new HtmlWebpackPlugin({
