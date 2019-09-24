@@ -1,4 +1,5 @@
 const { exec } = require('child_process')
+const { appendScript } = require('./utils')
 
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 
@@ -76,7 +77,7 @@ class SSRPlugin {
         let regeneratedHTML = originalHTML
         regeneratedHTML = this.removeScripts(regeneratedHTML)
         regeneratedHTML = this.appendAfterBody(regeneratedHTML, ssrString)
-        regeneratedHTML = this.appendAfterBody(regeneratedHTML, `<script src="${this.htmlFileName}.js"></script>`)
+        regeneratedHTML = appendScript(regeneratedHTML, '/' + this.htmlFileName + '.js', 'body', 'after')
         // Generate scripts loader
         const deferredLoader = allScripts.reduce(
             (prev, src) =>
