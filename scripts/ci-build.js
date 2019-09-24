@@ -19,8 +19,10 @@ async function main() {
     }
     const currentBranch = (await getCurrentGITBranchName()).toLowerCase()
     for (const [first, ...args] of getCommands(buildTypes(currentBranch))) {
+        console.log('executing', first, ...args)
         await spawn(first, args)
     }
+    process.exit(0)
 }
 main().catch(e => {
     console.error(e)
@@ -43,7 +45,6 @@ function buildTypes(branchName) {
 function getBuildCommand(platforms) {
     return platforms
         .sort()
-        .map(x => x.toLowerCase())
         .map(generateCommand)
         .join('\n')
     /** @param {('base' | 'iOS' | 'chromium' | 'firefox' | 'gecko')} type */
@@ -56,10 +57,9 @@ function getBuildCommand(platforms) {
             `
         }
         return `
-        yarn build:${type}
-        cd build
-        zip -r ../Maskbook.${type}.zip ./*
-        cd ..
+        echo "Building for target ${type}"
+        yarn build:${type.toLowerCase()}
+        bash -c "cd build && zip -r ../Maskbook.${type}.zip ./* && cd .."
         rm -rf build
         `
     }
