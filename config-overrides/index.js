@@ -157,8 +157,8 @@ function override(config, env) {
         const manifest = require('../src/manifest.json')
         const modifiers = require('./manifest.overrides')
         if (target.Chromium) modifiers.chromium(manifest)
-        if (target.FirefoxDesktop) modifiers.firefoxDesktop(manifest)
-        if (target.FirefoxForAndroid) modifiers.firefoxAndroid(manifest)
+        if (target.FirefoxDesktop) modifiers.firefoxDesktopAndAndroid(manifest)
+        if (target.FirefoxForAndroid) modifiers.firefoxDesktopAndAndroid(manifest)
         if (target.StandaloneGeckoView) modifiers.firefoxGeckoview(manifest)
         if (target.WKWebview) modifiers.WKWebview(manifest)
 
@@ -196,9 +196,12 @@ function override(config, env) {
         config.plugins.push(new SSRPlugin('index.html', src('./src/index.tsx')))
         polyfills.map(x => void fs.copyFileSync(x, path.join(publicPolyfill, path.basename(x))))
     }
-
-    const tsCheckerPlugin = config.plugins.filter(x => x.constructor.name === 'ForkTsCheckerWebpackPlugin')[0]
-    tsCheckerPlugin.compilerOptions.isolatedModules = false
+    if (env === 'development') {
+        const tsCheckerPlugin = config.plugins.filter(x => x.constructor.name === 'ForkTsCheckerWebpackPlugin')[0]
+        tsCheckerPlugin.compilerOptions.isolatedModules = false
+    } else {
+        config.plugins = config.plugins.filter(x => x.constructor.name !== 'ForkTsCheckerWebpackPlugin')
+    }
 
     // Let webpack build to es2017 instead of es5
     config.module.rules = [
