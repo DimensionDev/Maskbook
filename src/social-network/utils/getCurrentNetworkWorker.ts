@@ -1,11 +1,13 @@
 import { definedSocialNetworkWorkers, SocialNetworkWorker } from '../worker'
-import { Identifier, PersonIdentifier, PostIdentifier, GroupIdentifier, PostIVIdentifier } from '../../database/type'
+import { GroupIdentifier, Identifier, PersonIdentifier, PostIdentifier, PostIVIdentifier } from '../../database/type'
 import { env } from '../shared'
 
 function find(network: string) {
     return (v: SocialNetworkWorker) => {
+        // noinspection SuspiciousTypeOfGuard
         if (typeof v.networkIdentifier === 'string') return v.networkIdentifier === network
-        else return v.networkIdentifier(network, env, {})
+        // @ts-ignore   this is a robust design since sometimes non-string id may supported.
+        return v.networkIdentifier(network, env, {})
     }
 }
 export default function getCurrentNetworkWorker(network: string | Identifier): SocialNetworkWorker {
