@@ -6,12 +6,12 @@ process.chdir(base)
 async function main() {
     const prepareCommands = getCommands(`
     yarn install --link-duplicates --frozen-lockfile
-    yarn lint:report${
+    yarn lint:report
+    ${
         /**
          * Let's do a quick TypeScript check.
-         */ ''
+         */ 'yarn tsc -p tsconfig_cjs.json'
     }
-    yarn tsc -p tsconfig_cjs.json
     sudo apt-get install zip
     `)
     for (const [commands, ...args] of prepareCommands) {
@@ -42,10 +42,19 @@ function buildTypes(branchName) {
  */
 function getBuildCommand(platforms) {
     return platforms
+        .sort()
         .map(x => x.toLowerCase())
         .map(generateCommand)
         .join('\n')
+    /** @param {('base' | 'iOS' | 'chromium' | 'firefox' | 'gecko')} type */
     function generateCommand(type) {
+        if (type === 'chromium' && platforms.indexOf('base') !== -1) {
+            // chromium doesn't have it's own changes yet.
+            // just copying base version is acceptable
+            return `
+            cp Maskbook.base.zip Maskbook.chromium.zip
+            `
+        }
         return `
         yarn build:${type}
         cd build
