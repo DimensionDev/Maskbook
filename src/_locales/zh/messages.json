@@ -16,7 +16,7 @@
         "description": "$1 须写在字串末。"
     },
     "additional_post_box__encrypted_failed": {
-        "message": "請將以下内容拷貝至發于佈框。"
+        "message": "請將以下内容拷貝至發佈框。"
     },
     "comment_box__paste_failed": {
         "message": "請將以下内容拷貝至評論框。"
