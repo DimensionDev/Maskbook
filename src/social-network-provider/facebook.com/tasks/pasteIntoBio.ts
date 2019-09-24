@@ -26,6 +26,7 @@ export async function pasteIntoBioFacebook(text: string) {
         await sleep(200)
         input.focus()
         dispatchCustomEvents('input', input.value + text)
+        input.dispatchEvent(new CustomEvent('input', { bubbles: true, cancelable: false, composed: true }))
     } catch {
         console.warn('Text not pasted to the text area')
         prompt(geti18nString('automation_request_paste_into_bio_box'), text)
