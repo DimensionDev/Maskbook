@@ -12,7 +12,7 @@ let polyfills = [
     'node_modules/webextension-polyfill/dist/browser-polyfill.min.js',
     'node_modules/webextension-polyfill/dist/browser-polyfill.min.js.map',
     'src/polyfill/asmcrypto.js',
-].map(src)
+]
 
 const publicDir = src('./public')
 const publicPolyfill = src('./public/polyfill')
@@ -56,7 +56,7 @@ const target = (argv => ({
 function override(config, env) {
     if (target.Firefox) {
         polyfills = polyfills.filter(name => !name.includes('webextension-polyfill'))
-        polyfills.push(src('src/polyfill/permissions.js'))
+        polyfills.push('src/polyfill/permissions.js')
     }
 
     // CSP bans eval
@@ -201,7 +201,7 @@ function override(config, env) {
     if (!fs.existsSync(publicPolyfill)) {
         fs.mkdirSync(publicPolyfill)
     }
-    polyfills.map(x => void fs.copyFileSync(x, path.join(publicPolyfill, path.basename(x))))
+    polyfills.map(x => void fs.copyFileSync(src(x), path.join(publicPolyfill, path.basename(x))))
 
     if (env !== 'development') {
         config.plugins.push(new SSRPlugin('popup.html', src('./src/extension/popup-page/index.tsx')))
