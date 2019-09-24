@@ -15,15 +15,13 @@
     "start:gecko": "react-app-rewired start --firefox-gecko",
     "start:ios": "react-app-rewired start --wk-webview",
 
-    "prepare:firefox": "firefox -CreateProfile ./.firefox",
-
     "build": "react-app-rewired build",
     "build:base": "react-app-rewired build",
     "build:debugging": "node --inspect-brk node_modules/react-app-rewired/scripts/build.js",
     "build:gecko": "react-app-rewired build --firefox-gecko",
     "build:firefox": "react-app-rewired build --firefox",
     "build:chromium": "react-app-rewired build --chromium",
-    "build:ios": "react-app-rewired start --wk-webview",
+    "build:ios": "react-app-rewired build --wk-webview",
 
     "test": "react-app-rewired test",
 
