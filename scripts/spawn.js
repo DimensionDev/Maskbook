@@ -12,8 +12,12 @@ process.on('unhandledRejection', e => {
 function spawnAsync(command, args, options = {}) {
     const child = spawn(command, args, { stdio: 'inherit', shell: true, ...options })
     let stdout = ''
+    let stderr = ''
     if (child.stdout) {
         child.stdout.addListener('data', data => (stdout += data.toString()))
+    }
+    if (child.stderr) {
+        child.stderr.addListener('data', data => (stderr += data.toString()))
     }
     return new Promise(function(resolve, reject) {
         child.addListener('error', e => {
@@ -23,8 +27,8 @@ function spawnAsync(command, args, options = {}) {
         child.addListener('exit', code => {
             if (code === 0) return resolve(stdout)
             const error = new Error('Child exited with code: ' + code)
-            // @ts-ignore
-            error.stdout = stdout
+            console.log(stdout)
+            console.error(stderr)
             reject(error)
         })
     })
