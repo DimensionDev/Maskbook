@@ -11,12 +11,6 @@ function firefox(manifest) {
 /**
  * @param {typeof base} manifest
  */
-function firefoxAndroid(manifest) {
-    firefox(manifest)
-}
-/**
- * @param {typeof base} manifest
- */
 function firefoxGeckoview(manifest) {
     firefox(manifest)
     manifest.permissions.push('<all_urls>')
@@ -24,7 +18,7 @@ function firefoxGeckoview(manifest) {
 /**
  * @param {typeof base} manifest
  */
-function firefoxDesktop(manifest) {
+function firefoxDesktopAndAndroid(manifest) {
     firefox(manifest)
 }
 /**
@@ -35,4 +29,4 @@ function chromium(manifest) {}
  * @param {typeof base} manifest
  */
 function WKWebview(manifest) {}
-module.exports = { firefox, firefoxAndroid, firefoxDesktop, firefoxGeckoview, chromium, WKWebview }
+module.exports = { firefox, firefoxDesktopAndAndroid, firefoxGeckoview, chromium, WKWebview }
