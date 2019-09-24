@@ -63,6 +63,7 @@ const self = defineSocialNetworkUI({
             if (!textarea) return fail()
             textarea.focus()
             dispatchCustomEvents('input', encryptedComment)
+            textarea.dispatchEvent(new CustomEvent('input', { bubbles: true, cancelable: false, composed: true }))
             await sleep(200)
             if (!root.innerText.includes(encryptedComment)) return fail()
         } else {
