@@ -56,6 +56,7 @@ const target = (argv => ({
 function override(config, env) {
     if (target.Firefox) {
         polyfills = polyfills.filter(name => !name.includes('webextension-polyfill'))
+        if (target.StandaloneGeckoView) polyfills.push('src/polyfill/permissions.js')
     }
     if (target.StandaloneGeckoView || target.WKWebview) polyfills.push('src/polyfill/permissions.js')
 
