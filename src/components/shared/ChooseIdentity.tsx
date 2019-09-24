@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useState } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import ExpansionPanel from '@material-ui/core/ExpansionPanel'
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary'
@@ -6,7 +6,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import { Avatar } from '../../utils/components/Avatar'
 import { Person } from '../../database'
 import { List, ListItem, ListItemIcon, ListItemText, ListSubheader } from '@material-ui/core'
-import { PersonInList } from './SelectPeople'
+import { PersonOrGroupInList } from './SelectPeopleAndGroups'
 import { getActivatedUI } from '../../social-network/ui'
 import { useCurrentIdentity, useMyIdentities } from '../DataSource/useActivatedUI'
 import { PersonIdentifier } from '../../database/type'
@@ -19,10 +19,22 @@ const useStyles = makeStyles({
     list: { width: '100%' },
     current: { padding: 0 },
 })
-
+/**
+ * Choose the current using identity.
+ */
 export const ChooseIdentity: React.FC<{
+    /**
+     * Current selected identity
+     * @defaultValue the global selected identity
+     */
     current?: Person
+    /** All available identities
+     * @defaultValue `useMyIdentities()`
+     */
     availableIdentities?: Person[]
+    /** When user change the identity
+     *  @defaultValue will change the global selected identity
+     */
     onChangeIdentity?(person: Person): void
 }> = props => {
     const classes = useStyles()
@@ -58,9 +70,9 @@ export const ChooseIdentity: React.FC<{
                     classes={{ root: classes.list }}>
                     {availableIdentities.map(person =>
                         person.identifier.equals(current.identifier) ? null : (
-                            <PersonInList
+                            <PersonOrGroupInList
                                 listItemProps={{ dense: true }}
-                                person={person}
+                                item={person}
                                 key={person.identifier.toText()}
                                 onClick={() => {
                                     props.onChangeIdentity!(person)
@@ -79,4 +91,16 @@ ChooseIdentity.defaultProps = {
     onChangeIdentity(person) {
         getActivatedUI().currentIdentity.value = person
     },
+}
+/**
+ * This hook allows use <ChooseIdentity /> in a isolated scope without providing
+ * verbose information.
+ */
+export function useIsolatedChooseIdentity() {
+    const all = useMyIdentities()
+    const [current, set] = useState<Person>()
+    return [
+        current || all[0],
+        <ChooseIdentity current={current} availableIdentities={all} onChangeIdentity={set} />,
+    ] as const
 }

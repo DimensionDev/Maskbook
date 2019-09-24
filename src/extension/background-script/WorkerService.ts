@@ -1,14 +1,19 @@
 import { SocialNetworkWorker } from '../../social-network/worker'
 import getCurrentNetworkWorker from '../../social-network/utils/getCurrentNetworkWorker'
 import { Identifier } from '../../database/type'
-import { GetContext, AsyncCall, OnlyRunInContext } from '@holoflows/kit/es'
+import { GetContext, OnlyRunInContext, MessageCenter } from '@holoflows/kit/es'
+import { AsyncCall } from 'async-call-rpc'
 import Serialization from '../../utils/type-transform/Serialization'
 import { memoize } from 'lodash-es'
 
 type ServiceType = Required<Pick<SocialNetworkWorker, 'autoVerifyBio' | 'autoVerifyPost' | 'manualVerifyPost'>>
 
 const getServiceFromNetworkWorker = memoize((worker: SocialNetworkWorker) => {
-    return AsyncCall<ServiceType>(undefined, { serializer: Serialization, key: worker.internalName })
+    return AsyncCall<ServiceType>(undefined, {
+        serializer: Serialization,
+        key: worker.internalName,
+        messageChannel: new MessageCenter(),
+    })
 })
 export function getCurrentNetworkWorkerService(network: string | Identifier) {
     if (GetContext() === 'background') {
@@ -18,15 +23,12 @@ export function getCurrentNetworkWorkerService(network: string | Identifier) {
     return getServiceFromNetworkWorker(worker)
 }
 
-const notImplemented = () => {
-    throw new Error('Not Implemented')
-}
 export function startWorkerService(e: SocialNetworkWorker) {
     OnlyRunInContext('background', 'defineWorkerService')
     const impl: ServiceType = {
-        autoVerifyBio: e.autoVerifyBio || notImplemented,
-        autoVerifyPost: e.autoVerifyPost || notImplemented,
-        manualVerifyPost: e.manualVerifyPost || notImplemented,
+        autoVerifyBio: e.autoVerifyBio,
+        autoVerifyPost: e.autoVerifyPost,
+        manualVerifyPost: e.manualVerifyPost,
     }
-    AsyncCall(impl, { serializer: Serialization, key: e.internalName })
+    AsyncCall(impl, { serializer: Serialization, key: e.internalName, messageChannel: new MessageCenter() })
 }

@@ -1,4 +1,4 @@
-import { AsyncCall } from '@holoflows/kit/es'
+import { AsyncCall } from 'async-call-rpc'
 
 /**
  * This describes what JSONRPC calls that Native side should implement
@@ -13,7 +13,8 @@ export interface ThisSideImplementation {}
 
 const key = 'maskbookjsonrpc'
 const _window: any = globalThis
-export const isWKWebkit = _window.webkit && _window.webkit.messageHandlers && _window.webkit.messageHandlers[key]
+export const hasWKWebkitRPCHandlers =
+    _window.webkit && _window.webkit.messageHandlers && _window.webkit.messageHandlers[key]
 class iOSWebkitChannel {
     constructor() {
         document.addEventListener(key, e => {
@@ -31,7 +32,10 @@ class iOSWebkitChannel {
     }
     emit(_: string, data: any): void {
         const _window: any = window
-        if (isWKWebkit) _window.webkit.messageHandlers[key].postMessage(data)
+        if (hasWKWebkitRPCHandlers) _window.webkit.messageHandlers[key].postMessage(data)
+        else {
+            throw new TypeError('Run in the wrong environment. Excepts window.webkit.messageHandlers')
+        }
     }
 }
 const ThisSideImplementation: ThisSideImplementation = {}

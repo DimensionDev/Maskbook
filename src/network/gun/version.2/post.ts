@@ -13,7 +13,7 @@ OnlyRunInContext('background', 'gun')
 export async function queryPostKeysOnGun2(
     postSalt: string,
     partitionByCryptoKey: CryptoKey,
-): Promise<SharedAESKeyGun2[]> {
+): Promise<{ keys: SharedAESKeyGun2[]; postHash: string; keyHash: string }> {
     const postHash = await hashPostSalt(postSalt)
     const keyHash = await hashCryptoKey(partitionByCryptoKey)
 
@@ -31,7 +31,7 @@ export async function queryPostKeysOnGun2(
     const resultPromise = internalKeys.map(key => gun2.get(key).once().then!())
     const result = (await Promise.all(resultPromise)) as SharedAESKeyGun2[]
     console.info(`await gun2[${postHash}][${keyHash}]\n`, result)
-    return result
+    return { keys: result, keyHash, postHash }
 }
 
 /**
@@ -43,7 +43,7 @@ export async function queryPostKeysOnGun2(
 export function subscribePostKeysOnGun2(
     postSalt: string,
     partitionByCryptoKey: CryptoKey,
-    callback: (data: PostOnGun2) => void,
+    callback: (data: SharedAESKeyGun2) => void,
 ) {
     hashPostSalt(postSalt).then(postHash => {
         hashCryptoKey(partitionByCryptoKey).then(keyHash => {
@@ -51,7 +51,8 @@ export function subscribePostKeysOnGun2(
                 // @ts-ignore
                 .get(keyHash)
                 .map()
-                .on((data: PostOnGun2) => {
+                .on((data: SharedAESKeyGun2) => {
+                    // @ts-ignore
                     const { _, ...data2 } = Object.assign({}, data)
                     callback(data2)
                 })

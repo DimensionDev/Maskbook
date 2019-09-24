@@ -3,26 +3,27 @@ import { encodeText } from '../../utils/type-transform/String-ArrayBuffer'
 import { sleep } from '../../utils/utils'
 import { geti18nString } from '../../utils/i18n'
 import {
-    getMyIdentitiesDB,
-    PersonRecordPublicPrivate,
-    getLocalKeysDB,
-    PersonRecordPublic,
-    queryPeopleDB,
     generateLocalKeyDB,
     generateMyIdentityDB,
+    getLocalKeysDB,
+    getMyIdentitiesDB,
+    PersonRecordPublic,
+    PersonRecordPublicPrivate,
     queryLocalKeyDB,
     queryMyIdentityAtDB,
+    queryPeopleDB,
 } from '../../database/people'
 import { BackupJSONFileLatest, JSON_HINT_FOR_POWER_USER } from '../../utils/type-transform/BackupFile'
 import { PersonIdentifier } from '../../database/type'
 import { MessageCenter } from '../../utils/messages'
 import getCurrentNetworkWorker from '../../social-network/utils/getCurrentNetworkWorker'
-import { SocialNetworkUIDataSources } from '../../social-network/ui'
+import { SocialNetworkUI } from '../../social-network/ui'
 import { getWelcomePageURL } from '../options-page/Welcome/getWelcomePageURL'
 import { getMyProveBio } from './CryptoServices/getMyProveBio'
 
 OnlyRunInContext('background', 'WelcomeService')
 async function generateBackupJSON(whoAmI: PersonIdentifier, full = false): Promise<BackupJSONFileLatest> {
+    const manifest = browser.runtime.getManifest()
     const myIdentitiesInDB: BackupJSONFileLatest['whoami'] = []
     const peopleInDB: NonNullable<BackupJSONFileLatest['people']> = []
 
@@ -60,7 +61,11 @@ async function generateBackupJSON(whoAmI: PersonIdentifier, full = false): Promi
         peopleInDB.push({
             network: data.identifier.network,
             userId: data.identifier.userId,
-            groups: data.groups.map(g => ({ network: g.network, groupId: g.groupId, type: g.type })),
+            groups: data.groups.map(g => ({
+                network: g.network,
+                groupID: g.groupID,
+                virtualGroupOwner: g.virtualGroupOwner,
+            })),
             nickname: data.nickname,
             previousIdentifiers: (data.previousIdentifiers || []).map(p => ({ network: p.network, userId: p.userId })),
             publicKey: await exportKey(data.publicKey),
@@ -81,12 +86,14 @@ async function generateBackupJSON(whoAmI: PersonIdentifier, full = false): Promi
             whoami: myIdentitiesInDB,
             people: peopleInDB,
             grantedHostPermissions,
+            maskbookVersion: manifest.version,
         }
     else
         return {
             version: 1,
             whoami: myIdentitiesInDB,
             grantedHostPermissions,
+            maskbookVersion: manifest.version,
         }
     function exportKey(k: CryptoKey) {
         return crypto.subtle.exportKey('jwk', k)
@@ -95,8 +102,7 @@ async function generateBackupJSON(whoAmI: PersonIdentifier, full = false): Promi
 async function hasValidIdentity(whoAmI: PersonIdentifier) {
     const local = await queryLocalKeyDB(whoAmI)
     const ecdh = await queryMyIdentityAtDB(whoAmI)
-    if (!local || !ecdh || !ecdh.privateKey || !ecdh.publicKey) return false
-    return true
+    return !!local && !!ecdh && !!ecdh.privateKey && !!ecdh.publicKey
 }
 
 async function createNewIdentity(whoAmI: PersonIdentifier) {
@@ -129,7 +135,7 @@ export async function backupMyKeyPair(whoAmI: PersonIdentifier, download = true)
     return obj
 }
 
-export async function openWelcomePage(id?: SocialNetworkUIDataSources['lastRecognizedIdentity']['value']) {
+export async function openWelcomePage(id?: SocialNetworkUI['lastRecognizedIdentity']['value']) {
     if (id) {
         if (!getCurrentNetworkWorker(id.identifier).isValidUsername(id.identifier.userId))
             throw new TypeError(geti18nString('service_username_invalid'))

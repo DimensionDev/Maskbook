@@ -13,17 +13,24 @@ import {
     updatePersonDB,
 } from '../../database/people'
 import { UpgradeBackupJSONFile } from '../../utils/type-transform/BackupFile'
-import { PersonIdentifier, GroupIdentifier, GroupType } from '../../database/type'
+import { PersonIdentifier, GroupIdentifier } from '../../database/type'
 import { geti18nString } from '../../utils/i18n'
+import { import_AES_GCM_256_Key, import_ECDH_256k1_Key } from '../../utils/crypto.subtle'
 
 OnlyRunInContext('background', 'FriendService')
 export { storeAvatar, getAvatarDataURL, queryPerson } from '../../database'
 export { writePersonOnGun } from '../../network/gun/version.2/people'
+export {
+    addPersonToFriendsGroup,
+    createDefaultFriendsGroup,
+    removePersonFromFriendsGroup,
+} from '../../database/helpers/group'
+export { removePeopleDB as removePeople } from '../../database/people'
 /**
  * Query all people stored
  */
-export async function queryPeople(network: string): Promise<Person[]> {
-    return queryPeopleWithQuery({ network })
+export async function queryPeople(network?: string): Promise<Person[]> {
+    return queryPeopleWithQuery(network ? { network } : undefined)
 }
 /**
  * Query my identity.
@@ -51,22 +58,16 @@ export async function queryMyIdentity(identifier?: PersonIdentifier | string): P
 export async function restoreBackup(json: object, whoAmI?: PersonIdentifier): Promise<void> {
     async function storeMyIdentity(person: PersonRecordPublicPrivate, local: JsonWebKey) {
         await storeMyIdentityDB(person)
-        const aes = await crypto.subtle.importKey('jwk', local, { name: 'AES-GCM', length: 256 }, true, [
-            'encrypt',
-            'decrypt',
-        ])
+        const aes = await import_AES_GCM_256_Key(local)
         if ((await queryLocalKeyDB(new PersonIdentifier(person.identifier.network, '$self'))) === null)
             await storeLocalKeyDB(new PersonIdentifier(person.identifier.network, '$self'), aes)
         await storeLocalKeyDB(person.identifier, aes)
     }
-    function importKey(x: JsonWebKey) {
-        return crypto.subtle.importKey('jwk', x, { name: 'ECDH', namedCurve: 'K-256' }, true, ['deriveKey'])
-    }
     function mapID(x: { network: string; userId: string }): PersonIdentifier {
         return new PersonIdentifier(x.network, x.userId)
     }
-    function mapGroup(x: { network: string; groupId: string; type: GroupType }): GroupIdentifier {
-        return new GroupIdentifier(x.network, x.groupId, x.type)
+    function mapGroup(x: { network: string; groupID: string; virtualGroupOwner: string | null }): GroupIdentifier {
+        return new GroupIdentifier(x.network, x.virtualGroupOwner, x.groupID)
     }
     const data = UpgradeBackupJSONFile(json, whoAmI)
     if (!data) throw new TypeError(geti18nString('service_invalid_backup_file'))
@@ -81,8 +82,8 @@ export async function restoreBackup(json: object, whoAmI?: PersonIdentifier): Pr
                     groups: [],
                     nickname: rec.nickname,
                     previousIdentifiers: previousIdentifiers,
-                    publicKey: await importKey(rec.publicKey),
-                    privateKey: await importKey(rec.privateKey),
+                    publicKey: await import_ECDH_256k1_Key(rec.publicKey),
+                    privateKey: await import_ECDH_256k1_Key(rec.privateKey),
                 },
                 rec.localKey,
             )
@@ -99,7 +100,7 @@ export async function restoreBackup(json: object, whoAmI?: PersonIdentifier): Pr
                 groups: groups,
                 nickname: rec.nickname,
                 previousIdentifiers: prevIds,
-                publicKey: await importKey(rec.publicKey),
+                publicKey: await import_ECDH_256k1_Key(rec.publicKey),
             })
         }),
     )
@@ -137,8 +138,11 @@ export async function resolveIdentity(identifier: PersonIdentifier) {
     }
 }
 
-export async function updatePersonInfo(identifier: PersonIdentifier, data: { nickname?: string; avatarURL?: string }) {
-    const { avatarURL, nickname } = data
+export async function updatePersonInfo(
+    identifier: PersonIdentifier,
+    data: { nickname?: string; avatarURL?: string; forceUpdateAvatar?: boolean },
+) {
+    const { avatarURL, nickname, forceUpdateAvatar } = data
     if (nickname) updatePersonDB({ identifier, nickname })
-    if (avatarURL) storeAvatar(identifier, avatarURL)
+    if (avatarURL) storeAvatar(identifier, avatarURL, forceUpdateAvatar)
 }

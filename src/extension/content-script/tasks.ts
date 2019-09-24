@@ -1,8 +1,9 @@
 import { AutomatedTabTask } from '@holoflows/kit'
 import { getActivatedUI, SocialNetworkUI } from '../../social-network/ui'
 import { PersonIdentifier, PostIdentifier } from '../../database/type'
+import { disableOpenNewTabInBackgroundSettings } from '../../components/shared-settings/settings'
 
-export default AutomatedTabTask(
+const tasks = AutomatedTabTask(
     {
         /**
          * Access post url
@@ -35,3 +36,13 @@ export default AutomatedTabTask(
     },
     { memorable: true },
 )!
+export default function tasksMocked(...args: Parameters<typeof tasks>) {
+    const [, options] = args
+    if (disableOpenNewTabInBackgroundSettings.value) {
+        if (!options || !options.active)
+            throw new Error(
+                `You have disabled "Disable fetching public keys in the background" in the settings so Maskbook can not perform this action`,
+            )
+    }
+    return tasks(...args)
+}

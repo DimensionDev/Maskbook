@@ -12,7 +12,13 @@ import elliptic from 'elliptic'
 import * as CryptoService from './extension/background-script/CryptoService'
 import * as WelcomeService from './extension/background-script/WelcomeService'
 import * as PeopleService from './extension/background-script/PeopleService'
+import { decryptFromMessageWithProgress } from './extension/background-script/CryptoServices/decryptFrom'
 Object.assign(window, { CryptoService, WelcomeService, PeopleService })
+Object.assign(window, {
+    ServicesWithProgress: {
+        decryptFrom: decryptFromMessageWithProgress,
+    },
+})
 require('./extension/service')
 require('./provider.worker')
 
@@ -96,7 +102,7 @@ Object.assign(window, {
 // Run tests
 require('./tests/1to1')
 require('./tests/1toN')
-require('./tests/sign&verify')
+require('./tests/sign-verify')
 require('./tests/friendship-discover')
 require('./tests/comment')
 

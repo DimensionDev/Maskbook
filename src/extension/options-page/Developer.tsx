@@ -1,10 +1,24 @@
-import React from 'react'
-import { TextField, Button } from '@material-ui/core'
+import {
+    ListSubheader,
+    Grid,
+    makeStyles,
+    List,
+    ListItem,
+    ListItemText,
+    ListItemSecondaryAction,
+    Switch,
+} from '@material-ui/core'
 import { PersonIdentifier, Identifier } from '../../database/type'
 import { deconstructPayload } from '../../utils/type-transform/Payload'
 import Services from '../service'
-import { useCurrentIdentity } from '../../components/DataSource/useActivatedUI'
 import { Person } from '../../database'
+import React from 'react'
+import { AddProve } from './DeveloperComponents/AddProve'
+import { DecryptPostDeveloperMode } from './DeveloperComponents/DecryptPost'
+import { SeeMyProvePost } from './DeveloperComponents/SeeMyProvePost'
+import { FriendsDeveloperMode } from './DeveloperComponents/Friends'
+import { debugModeSetting, disableOpenNewTabInBackgroundSettings } from '../../components/shared-settings/settings'
+import { useSettingsUI } from '../../components/shared-settings/createSettings'
 
 async function swallowGoo(me: Person | null) {
     const boxElem = document.querySelector('#raw-box') as HTMLTextAreaElement
@@ -44,27 +58,34 @@ async function assimilateGoo(content: string, me: Person | null): Promise<string
         return 'person:'
     }
 }
-
+const useStyles = makeStyles(theme => ({ root: { padding: theme.spacing(0, 2) } }))
 const DevPage = () => {
-    const me = useCurrentIdentity(false)
+    const classes = useStyles()
     return (
-        <main className="container">
-            <TextField
-                id="raw-box"
-                label="Magic box"
-                style={{ margin: 8 }}
-                placeholder="🔒abc🔒|foo.bar/arisu or 🎼2/4|xyz:||foo.bar/arisu"
-                helperText="Enter prove/message string here"
-                fullWidth
-                margin="normal"
-                InputLabelProps={{
-                    shrink: true,
-                }}
-            />
-            <Button variant="contained" onClick={() => swallowGoo(me)}>
-                Assimilate
-            </Button>
-        </main>
+        <>
+            <ListSubheader>Developer Settings</ListSubheader>
+            <div className={classes.root}>
+                <List>{useSettingsUI(disableOpenNewTabInBackgroundSettings)}</List>
+                <Grid container spacing={2}>
+                    <Grid container xs={6} item spacing={2} direction="column">
+                        <Grid item>
+                            <SeeMyProvePost />
+                        </Grid>
+                        <Grid item>
+                            <AddProve />
+                        </Grid>
+                        <Grid item>
+                            <DecryptPostDeveloperMode />
+                        </Grid>
+                    </Grid>
+                    <Grid container xs={6} item spacing={2} direction="column">
+                        <Grid item>
+                            <FriendsDeveloperMode />
+                        </Grid>
+                    </Grid>
+                </Grid>
+            </div>
+        </>
     )
 }
 

@@ -7,7 +7,6 @@ import ConstructableStyleSheetsRenderer, {
     livingShadowRoots,
     applyAdoptedStyleSheets,
 } from './ConstructableStyleSheetsRenderer'
-import { useMediaQuery } from '@material-ui/core'
 
 const jss = create({ ...jssPreset(), Renderer: ConstructableStyleSheetsRenderer as any })
 /**

@@ -17,13 +17,7 @@ jobs:
                       - v1-maskbook-
             - run:
                   name: Build Maskbook
-                  command: |
-                      yarn install --link-duplicates --frozen-lockfile
-                      yarn just lint
-                      yarn build
-                      sudo apt-get install zip
-                      cd build
-                      zip -r ../Maskbook.zip ./*
+                  command: node ./scripts/ci-build.js
             - save_cache:
                   paths:
                       - node_modules
@@ -31,10 +25,30 @@ jobs:
             - store_artifacts:
                   path: Maskbook.zip
                   destination: /Maskbook.zip
+            - store_artifacts:
+                  path: Maskbook.WKWebview.zip
+                  destination: /Maskbook.WKWebview.zip
+            - store_artifacts:
+                  path: Maskbook.chromium.zip
+                  destination: /Maskbook.chromium.zip
+            - store_artifacts:
+                  path: Maskbook.firefoxDesktop.zip
+                  destination: /Maskbook.firefoxDesktop.zip
+            - store_artifacts:
+                  path: Maskbook.firefoxGeckoview.zip
+                  destination: /Maskbook.firefoxGeckoview.zip
+            - store_artifacts:
+                  path: Maskbook.firefoxAndroid.zip
+                  destination: /Maskbook.firefoxAndroid.zip
             - persist_to_workspace:
                   root: ~/repo/
                   paths:
                       - Maskbook.zip
+                      - Maskbook.WKWebview.zip
+                      - Maskbook.chromium.zip
+                      - Maskbook.firefoxDesktop.zip
+                      - Maskbook.firefoxGeckoview.zip
+                      - Maskbook.firefoxAndroid.zip
     publish-github-release:
         docker:
             - image: cibuilds/github:0.10

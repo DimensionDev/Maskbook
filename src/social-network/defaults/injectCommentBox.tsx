@@ -26,9 +26,11 @@ const defHandler = async (encryptedComment: string, current: PostInfo) => {
 export const injectCommentBoxDefaultFactory = (onPasteToCommentBox = defHandler) => {
     return (current: PostInfo) => {
         if (!current.commentBoxSelector) return nop
-        const commentBoxWatcher = new MutationObserverWatcher(current.commentBoxSelector, current.rootNode)
-            .setDomProxyOption({ afterShadowRootInit: { mode: 'closed' } })
-            .enableSingleMode()
+        const commentBoxWatcher = new MutationObserverWatcher(
+            current.commentBoxSelector.clone().enableSingleMode(),
+            current.rootNode,
+        )
+            .setDOMProxyOption({ afterShadowRootInit: { mode: 'closed' } })
             .startWatch()
         const CommentBoxUI = () => {
             const payload = useValueRef(current.postPayload)
@@ -43,6 +45,6 @@ export const injectCommentBoxDefaultFactory = (onPasteToCommentBox = defHandler)
                 />
             )
         }
-        return renderInShadowRoot(<CommentBoxUI />, commentBoxWatcher.firstVirtualNode.afterShadow)
+        return renderInShadowRoot(<CommentBoxUI />, commentBoxWatcher.firstDOMProxy.afterShadow)
     }
 }

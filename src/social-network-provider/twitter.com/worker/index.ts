@@ -3,7 +3,7 @@ import { sharedSettings } from '../index'
 import { fetchPostContent, fetchProfile } from './fetch'
 import { autoVerifyBio, autoVerifyPost } from './tasks'
 
-defineSocialNetworkWorker({
+export const twitterWorkerSelf = defineSocialNetworkWorker({
     ...sharedSettings,
     fetchPostContent,
     fetchProfile,

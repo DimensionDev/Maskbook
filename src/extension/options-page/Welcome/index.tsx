@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import Welcome0 from '../../../components/Welcomes/0'
 import Welcome1a1a from '../../../components/Welcomes/1a1a'
 import Welcome1a1b from '../../../components/Welcomes/1a1b'
@@ -17,8 +17,8 @@ import { useValueRef } from '../../../utils/hooks/useValueRef'
 import { Person } from '../../../database'
 import { getCurrentNetworkWorkerService } from '../../background-script/WorkerService'
 import getCurrentNetworkWorker from '../../../social-network/utils/getCurrentNetworkWorker'
-import { UpgradeBackupJSONFile } from '../../../utils/type-transform/BackupFile'
-import { geti18nString } from '../../../utils/i18n'
+import { BackupJSONFileLatest } from '../../../utils/type-transform/BackupFile'
+import { isNil } from 'lodash-es'
 
 enum WelcomeState {
     // Step 0
@@ -39,23 +39,24 @@ const WelcomeActions = {
     },
     /**
      *
-     * @param file The backup file
-     * @param id Who am I?
+     * @param json - The backup file
+     * @param id   - Who am I?
      */
-    restoreFromFile(file: string, id: PersonIdentifier): Promise<void> {
-        const json = JSON.parse(file)
-        const upgraded = UpgradeBackupJSONFile(json)
-        if (!upgraded) throw new TypeError(geti18nString('service_invalid_backup_file'))
+    restoreFromFile(json: BackupJSONFileLatest, id: PersonIdentifier): Promise<void> {
         // This request MUST BE sync or Firefox will reject this request
         return browser.permissions
-            .request({ origins: upgraded.grantedHostPermissions })
-            .then(() => Services.People.restoreBackup(json, id))
+            .request({ origins: json.grantedHostPermissions })
+            .then(granted =>
+                granted
+                    ? Services.People.restoreBackup(json, id)
+                    : Promise.reject(new Error('required permission is not granted.')),
+            )
     },
     autoVerifyBio(network: PersonIdentifier, provePost: string) {
-        getCurrentNetworkWorkerService(network).autoVerifyBio(network, provePost)
+        getCurrentNetworkWorkerService(network).autoVerifyBio!(network, provePost)
     },
     autoVerifyPost(network: PersonIdentifier, provePost: string) {
-        getCurrentNetworkWorkerService(network).autoVerifyPost(network, provePost)
+        getCurrentNetworkWorkerService(network).autoVerifyPost!(network, provePost)
     },
     manualVerifyBio(user: PersonIdentifier, prove: string) {
         this.autoVerifyBio(user, prove)
@@ -146,9 +147,9 @@ function Welcome(props: Welcome) {
             }
             return (
                 <Welcome1a4v2
-                    hasManual={!!worker.manualVerifyPost}
-                    hasBio={!!worker.autoVerifyBio}
-                    hasPost={!!worker.autoVerifyPost}
+                    hasManual={!isNil(worker.manualVerifyPost)}
+                    hasBio={!isNil(worker.autoVerifyBio)}
+                    hasPost={!isNil(worker.autoVerifyPost)}
                     bioDisabled={whoAmI.identifier.isUnknown}
                     provePost={provePost}
                     requestManualVerify={() => {
@@ -168,8 +169,8 @@ function Welcome(props: Welcome) {
             return (
                 <Welcome1b1
                     back={() => onStepChange(WelcomeState.Start)}
-                    restore={url => {
-                        sideEffects.restoreFromFile(url, props.whoAmI.identifier).then(
+                    restore={json => {
+                        sideEffects.restoreFromFile(json, props.whoAmI.identifier).then(
                             () => onStepChange(WelcomeState.End),
                             // TODO: use a better UI
                             error => alert(error),
@@ -218,8 +219,8 @@ export const IdentifierRefContext = React.createContext(selectedIdRef)
 export default withRouter(function _WelcomePortal(props: RouteComponentProps) {
     const ResponsiveDialog = useRef(withMobileDialog({ breakpoint: 'xs' })(Dialog)).current
     useEffect(() => {
-        MessageCenter.on('generateKeyPair', fillRefs)
         fillRefs()
+        return MessageCenter.on('generateKeyPair', fillRefs)
     }, [])
 
     const [step, setStep] = useState(WelcomeState.Start)

@@ -1,6 +1,6 @@
 import React from 'react'
 import { storiesOf } from '@storybook/react'
-import { text, boolean } from '@storybook/addon-knobs'
+import { text, boolean, select } from '@storybook/addon-knobs'
 import { action } from '@storybook/addon-actions'
 import { AdditionalPostBox } from '../components/InjectedComponents/AdditionalPostBox'
 import { AdditionalContent } from '../components/InjectedComponents/AdditionalPostContent'
@@ -10,15 +10,28 @@ import { useShareMenu } from '../components/InjectedComponents/SelectPeopleDialo
 import { sleep } from '../utils/utils'
 import { Button, Paper } from '@material-ui/core'
 import { RenderInShadowRootWrapper } from '../utils/jss/renderInShadowRoot'
-import { demoPeople } from './demoPeople'
+import { demoPeople, demoGroup } from './demoPeopleOrGroups'
 import { PostCommentDecrypted } from '../components/InjectedComponents/PostComments'
 import { CommentBox } from '../components/InjectedComponents/CommentBox'
+import { DecryptionProgress } from '../extension/background-script/CryptoServices/decryptFrom'
+import { PersonOrGroupInChip, PersonOrGroupInList } from '../components/shared/SelectPeopleAndGroups'
 
 storiesOf('Injections', module)
+    .add('PersonOrGroupInChip', () => demoGroup.map(g => <PersonOrGroupInChip item={g} />))
+    .add('PersonOrGroupInList', () => (
+        <Paper>
+            {demoGroup.map(g => (
+                <PersonOrGroupInList onClick={action('click')} item={g} />
+            ))}
+        </Paper>
+    ))
     .add('AdditionalPostBox', () => <AdditionalPostBox onRequestPost={action('onRequestPost')} />)
     .add('Additional Post Content', () => (
         <Paper>
-            <AdditionalContent title="Additional Content" renderText={text('Rich text', '')} />
+            <AdditionalContent
+                title={text('Title', 'Additional text')}
+                renderText={text('Rich text', 'a[text](https://g.cn/)')}
+            />
         </Paper>
     ))
     .add('Select people dialog', () => {
@@ -40,13 +53,23 @@ storiesOf('Injections', module)
     .add('Decrypted post', () => {
         const msg = text(
             'Post content',
-            `
-        This is a post
+            `This is a post
         that with multiline.
 
         Hello world!`,
         )
         const vr = boolean('Verified', true)
+        const progress0: DecryptionProgress = { progress: 'finding_person_public_key' }
+        const progress1: DecryptionProgress = { progress: 'finding_post_key' }
+        const progress = select(
+            'Decryption progress',
+            {
+                finding_person_public_key: progress0,
+                finding_post_key: progress1,
+                undefined: undefined,
+            },
+            undefined,
+        )
         return (
             <>
                 <FakePost title="Decrypted:">
@@ -57,9 +80,11 @@ storiesOf('Injections', module)
                         data={{ content: msg, signatureVerifyResult: vr }}
                     />
                 </FakePost>
-                <FakePost title="Decrypting:">{DecryptPostUI.awaiting}</FakePost>
+                <FakePost title="Decrypting:">
+                    <DecryptPostUI.awaiting type={progress}></DecryptPostUI.awaiting>
+                </FakePost>
                 <FakePost title="Failed:">
-                    <DecryptPostUI.failed retry={action('retry')} error={new Error('Error message')} />
+                    <DecryptPostUI.failed error={new Error('Error message')} />
                 </FakePost>
             </>
         )
@@ -95,11 +120,10 @@ function FakePost(props: { title: string; children: any }) {
                         borderBottom: 0,
                         borderTop: 0,
                         padding: '0 12px 6px',
-                        transform: 'translateY(-14px)',
                     }}>
                     {props.children}
                 </div>
-                <img style={{ marginTop: -20 }} width={500} src={require('./post-b.jpg')} />
+                <img width={500} src={require('./post-b.jpg')} />
             </div>
         </>
     )

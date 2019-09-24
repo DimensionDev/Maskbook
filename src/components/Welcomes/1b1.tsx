@@ -2,16 +2,40 @@ import * as React from 'react'
 
 import { useDragAndDrop } from '../../utils/hooks/useDragAndDrop'
 import { geti18nString } from '../../utils/i18n'
-import { makeStyles, Button, Typography, Tabs, Tab, Theme } from '@material-ui/core'
+import {
+    makeStyles,
+    Button,
+    Typography,
+    Tabs,
+    Tab,
+    Theme,
+    Card,
+    CardContent,
+    DialogActions,
+    Dialog,
+    DialogTitle,
+    List,
+    ListItem,
+    ListItemAvatar,
+    Avatar,
+    ListItemText,
+} from '@material-ui/core'
 import { styled } from '@material-ui/styles'
 import FolderOpen from '@material-ui/icons/FolderOpen'
 import Camera from '@material-ui/icons/CameraAlt'
 import Text from '@material-ui/icons/TextFormat'
+import PersonIcon from '@material-ui/icons/Person'
+import LanguageIcon from '@material-ui/icons/Language'
 import WelcomeContainer from './WelcomeContainer'
 import Navigation from './Navigation/Navigation'
 import QRScanner from './QRScanner'
-import { isWKWebkit, iOSHost } from '../../utils/iOS-RPC'
+import { hasWKWebkitRPCHandlers, iOSHost } from '../../utils/iOS-RPC'
 import { useAsync } from '../../utils/components/AsyncComponent'
+import {
+    BackupJSONFileVersion1,
+    UpgradeBackupJSONFile,
+    BackupJSONFileLatest,
+} from '../../utils/type-transform/BackupFile'
 
 const RestoreBox = styled('div')(({ theme }: { theme: Theme }) => ({
     color: theme.palette.text.hint,
@@ -32,19 +56,16 @@ interface Props {
     back(): void
     // ? We cannot send out File | string. Because Firefox will reject the permission request
     // ? because read the file is a async procedure.
-    restore(file: string): void
+    restore(json: BackupJSONFileLatest): void
 }
 const videoHeight = 360
-const useStyles = makeStyles<Theme>(theme => ({
+const useStyles = makeStyles((theme: Theme) => ({
     main: {
         padding: '2rem 2rem 1rem 2rem',
         textAlign: 'center',
         '& > *': {
             marginBottom: theme.spacing(3),
         },
-    },
-    button: {
-        minWidth: 180,
     },
     file: {
         display: 'none',
@@ -77,22 +98,31 @@ const useStyles = makeStyles<Theme>(theme => ({
         height: 200,
     },
 }))
-export default function Welcome({ back, restore }: Props) {
-    const isFirefox = navigator.userAgent.match('Firefox')
+export default function Welcome({ back, restore: originalRestore }: Props) {
     const classes = useStyles()
     const ref = React.useRef<HTMLInputElement>(null)
     const textAreaRef = React.useRef<HTMLTextAreaElement>(null)
-    const [fileContent, setFileContent] = React.useState('')
+    const restore = (str: string) => {
+        const json = JSON.parse(str)
+        const upgraded = UpgradeBackupJSONFile(json)
+        setJson(upgraded)
+    }
     const { dragEvents, fileReceiver, fileRef, dragStatus } = useDragAndDrop(file => {
         const fr = new FileReader()
         fr.readAsText(file)
         fr.addEventListener('loadend', async () => {
-            setFileContent(fr.result as string)
+            restore(fr.result as string)
         })
     })
 
     const [tab, setTab] = React.useState(0)
     const [qrError, setError] = React.useState<boolean>(false)
+
+    const [json, setJson] = React.useState<null | BackupJSONFileVersion1>(null)
+    const clearJson = () => {
+        setJson(null)
+        if (ref && ref.current) ref.current.value = ''
+    }
 
     return (
         <WelcomeContainer {...dragEvents}>
@@ -105,35 +135,76 @@ export default function Welcome({ back, restore }: Props) {
                 textColor="primary"
                 aria-label="icon tabs example">
                 <Tab icon={<FolderOpen />} aria-label={geti18nString('welcome_1b_tabs_backup')} />
-                {/* TODO: add support for Firefox */}
                 <Tab
-                    disabled={!('BarcodeDetector' in window || isWKWebkit) || !!isFirefox}
+                    disabled={!('BarcodeDetector' in window || hasWKWebkitRPCHandlers)}
                     icon={<Camera />}
                     aria-label={geti18nString('welcome_1b_tabs_qr')}
                 />
                 <Tab icon={<Text />} aria-label={geti18nString('welcome_1b_tabs_text')} />
             </Tabs>
+            {json && (
+                <Dialog scroll="body" onClose={clearJson} aria-labelledby="restore-dialog" open={json !== null}>
+                    <DialogTitle id="restore-dialog">{geti18nString('welcome_1b_confirm')}</DialogTitle>
+                    <Card>
+                        <CardContent>
+                            <Typography color="textSecondary" gutterBottom>
+                                {geti18nString('welcome_1b_hint_identity')}
+                            </Typography>
+                            <List>
+                                {json!.whoami.map(identity => (
+                                    <ListItem key={identity.userId}>
+                                        <ListItemAvatar>
+                                            <Avatar>
+                                                <PersonIcon />
+                                            </Avatar>
+                                        </ListItemAvatar>
+                                        <ListItemText
+                                            primary={identity.nickname || identity.userId}
+                                            secondary={identity.network}
+                                        />
+                                    </ListItem>
+                                ))}
+                            </List>
+                            <Typography color="textSecondary" gutterBottom>
+                                {geti18nString('welcome_1b_hint_network')}
+                            </Typography>
+                            <List dense>
+                                {json!.grantedHostPermissions.map(host => (
+                                    <ListItem key={host}>
+                                        <ListItemAvatar>
+                                            <Avatar>
+                                                <LanguageIcon />
+                                            </Avatar>
+                                        </ListItemAvatar>
+                                        <ListItemText primary={host} />
+                                    </ListItem>
+                                ))}
+                            </List>
+                        </CardContent>
+                        <DialogActions>
+                            <Button onClick={clearJson} color="default" variant="text">
+                                {geti18nString('cancel')}
+                            </Button>
+                            <Button onClick={() => originalRestore(json)} color="primary" variant="contained">
+                                {geti18nString('welcome_1b_confirm')}
+                            </Button>
+                        </DialogActions>
+                    </Card>
+                </Dialog>
+            )}
             <main className={classes.main}>
                 {tab === 0 ? FileUI() : null}
-                {tab === 1 ? isWKWebkit ? <WKWebkitQR onScan={restore} onQuit={() => setTab(0)} /> : QR() : null}
+                {tab === 1 ? (
+                    hasWKWebkitRPCHandlers ? (
+                        <WKWebkitQR onScan={restore} onQuit={() => setTab(0)} />
+                    ) : (
+                        QR()
+                    )
+                ) : null}
                 {tab === 2 ? TextArea() : null}
 
-                {tab === 0 ? (
-                    <Button
-                        onClick={() => restore(fileContent)}
-                        disabled={!fileRef.current}
-                        variant="contained"
-                        color="primary"
-                        className={classes.button}>
-                        {geti18nString('restore')}
-                    </Button>
-                ) : null}
                 {tab === 2 ? (
-                    <Button
-                        onClick={() => restore(textAreaRef.current!.value)}
-                        variant="contained"
-                        color="primary"
-                        className={classes.button}>
+                    <Button onClick={() => restore(textAreaRef.current!.value)} variant="contained" color="primary">
                         {geti18nString('restore')}
                     </Button>
                 ) : null}

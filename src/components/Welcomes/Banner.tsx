@@ -38,7 +38,7 @@ export function BannerUI(props: Props) {
     const classes = useStyles()
     const Title = (
         <Typography variant="subtitle1" color="inherit">
-            {props.disabled ? geti18nString('banner_collecting_identity') : geti18nString('banner_title')}
+            {props.disabled ? geti18nString('banner_preparing_setup') : geti18nString('banner_title')}
         </Typography>
     )
     const GetStarted = (

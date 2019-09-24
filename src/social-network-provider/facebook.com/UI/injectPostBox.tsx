@@ -14,9 +14,8 @@ if (isMobileFacebook) {
         .map(x => (x.getAttribute('role') === 'dialog' ? x.lastElementChild!.lastElementChild : x))
 }
 export function injectPostBoxFacebook() {
-    const watcher = new MutationObserverWatcher(composeBox)
-        .enableSingleMode()
-        .setDomProxyOption({ afterShadowRootInit: { mode: 'closed' } })
+    const watcher = new MutationObserverWatcher(composeBox.clone().enableSingleMode())
+        .setDOMProxyOption({ afterShadowRootInit: { mode: 'closed' } })
         .startWatch()
-    renderInShadowRoot(<AdditionalPostBox />, watcher.firstVirtualNode.afterShadow)
+    renderInShadowRoot(<AdditionalPostBox />, watcher.firstDOMProxy.afterShadow)
 }

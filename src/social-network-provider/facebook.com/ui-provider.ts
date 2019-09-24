@@ -1,9 +1,7 @@
 import { defineSocialNetworkUI } from '../../social-network/ui'
-import { ValueRef } from '@holoflows/kit/es'
 import { InitFriendsValueRef } from '../../social-network/defaults/FriendsValueRef'
 import { InitMyIdentitiesValueRef } from '../../social-network/defaults/MyIdentitiesRef'
 import { sharedProvider } from './shared-provider'
-import { PersonIdentifier } from '../../database/type'
 import { injectPostBoxFacebook } from './UI/injectPostBox'
 import { collectPeopleFacebook } from './UI/collectPeople'
 import { pasteIntoPostBoxFacebook } from './tasks/pasteIntoPostBox'
@@ -21,33 +19,32 @@ import { setStorage } from '../../utils/browser.storage'
 import { isMobileFacebook } from './isMobile'
 import { geti18nString } from '../../utils/i18n'
 import { injectCommentBoxDefaultFactory } from '../../social-network/defaults/injectCommentBox'
-import { notNullable } from '../../utils/assert'
 
-defineSocialNetworkUI({
+const self = defineSocialNetworkUI({
     ...sharedProvider,
     init(env, pref) {
         sharedProvider.init(env, pref)
-        InitFriendsValueRef(this, 'facebook.com')
-        InitMyIdentitiesValueRef(this, 'facebook.com')
+        InitFriendsValueRef(self, 'facebook.com')
+        InitMyIdentitiesValueRef(self, 'facebook.com')
     },
     shouldActivate() {
         return location.hostname.endsWith('facebook.com')
     },
     friendlyName: 'Facebook',
-    async setupAccount() {
-        await browser.permissions.request({ origins: ['https://www.facebook.com/*', 'https://m.facebook.com/*'] })
-        await setStorage('facebook.com', { forceDisplayWelcome: true })
-        location.href = 'https://facebook.com/'
+    setupAccount() {
+        browser.permissions
+            .request({ origins: ['https://www.facebook.com/*', 'https://m.facebook.com/*'] })
+            .then(granted => {
+                if (granted) {
+                    setStorage('facebook.com', { forceDisplayWelcome: true })
+                    location.href = 'https://facebook.com/'
+                }
+            })
     },
     ignoreSetupAccount() {
         setStorage('facebook.com', { userIgnoredWelcome: true, forceDisplayWelcome: false })
     },
     shouldDisplayWelcome: shouldDisplayWelcomeDefault,
-    friendsRef: new ValueRef([]),
-    myIdentitiesRef: new ValueRef([]),
-    currentIdentity: new ValueRef(null),
-    lastRecognizedIdentity: new ValueRef({ identifier: PersonIdentifier.unknown }),
-    posts: new Map(),
     resolveLastRecognizedIdentity: resolveLastRecognizedIdentityFacebook,
     injectPostBox: injectPostBoxFacebook,
     injectWelcomeBanner: injectWelcomeBannerFacebook,
@@ -60,7 +57,7 @@ defineSocialNetworkUI({
             prompt(geti18nString('comment_box__paste_failed'), encryptedComment)
         }
         if (isMobileFacebook) {
-            const root = notNullable(current.commentBoxSelector).evaluate()
+            const root = current.commentBoxSelector!.evaluate()
             if (!root) return fail()
             const textarea = root.querySelector('textarea')
             if (!textarea) return fail()

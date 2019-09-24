@@ -13,12 +13,21 @@ export function serializable(name: string) {
         return constructor
     }
 }
+serializable('Error')(Error)
+serializable('TypeError')(TypeError)
+serializable('ReferenceError')(ReferenceError)
+serializable('SyntaxError')(SyntaxError)
+serializable('URIError')(URIError)
 
 export default {
     async serialization(from) {
         return serialize(from)
     },
     async deserialization(to: string) {
-        return deserialize(to)
+        try {
+            return deserialize(to)
+        } catch {
+            return {}
+        }
     },
 } as Serialization

@@ -1,4 +1,3 @@
-import 'reflect-metadata'
 import { CustomEventId } from './constants'
 import { CustomEvents } from '../extension/injected-script/addEventListener'
 
@@ -48,7 +47,7 @@ export function untilDocumentReady() {
     })
 }
 
-export const nop: (...args: any[]) => any = () => {}
+export const nop: (...args: any[]) => any = () => () => {}
 
 /**
  * index starts at zero.

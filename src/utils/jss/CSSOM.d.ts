@@ -1,3 +1,4 @@
+// MIT (Expat) License
 type DOMString = string
 declare global {
     interface CSSRule {

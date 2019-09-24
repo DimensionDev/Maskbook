@@ -1,4 +1,4 @@
-import { DomProxy } from '@holoflows/kit'
+import { DOMProxy } from '@holoflows/kit'
 import { isMobileFacebook } from '../isMobile'
 import { PostInfo } from '../../../social-network/ui'
 import { injectPostInspectorDefault } from '../../../social-network/defaults/injectPostInspector'
@@ -9,11 +9,11 @@ export const defaultBehavior = injectPostInspectorDefault({
         zipPostLinkPreview(node)
     },
 })
-export function injectPostInspectorFacebook(current: PostInfo, node: DomProxy) {
+export function injectPostInspectorFacebook(current: PostInfo, node: DOMProxy) {
     clickSeeMore(node)
     return defaultBehavior(current, node)
 }
-function zipPostLinkPreview(node: DomProxy) {
+function zipPostLinkPreview(node: DOMProxy) {
     const parentEle = node.current.parentElement!
     if (isMobileFacebook) {
         const img =
@@ -32,7 +32,7 @@ function zipPostLinkPreview(node: DomProxy) {
         }
     }
 }
-function zipEncryptedPostContent(node: DomProxy) {
+function zipEncryptedPostContent(node: DOMProxy) {
     const parent = node.current.parentElement
     // Style modification for repost
     if (!node.current.className.includes('userContent') && node.current.innerText.length > 0) {
@@ -57,11 +57,18 @@ padding: 0px 10px;`,
         }
     }
 }
-function clickSeeMore(node: DomProxy) {
+function clickSeeMore(node: DOMProxy) {
     const more = node.current.parentElement!.querySelector<HTMLDivElement | HTMLSpanElement>(
         isMobileFacebook ? '[data-sigil="more"]' : '.see_more_link_inner',
     )
-    if (more && node.current.innerText.match(/🎼.+|/)) {
+    if (more && node.current.innerText.match(/🎼.+\|/)) {
+        const trap = (e: Event) => {
+            e.preventDefault()
+        }
+        more.parentNode!.addEventListener('click', trap)
         more.click()
+        setTimeout(() => {
+            if (more.parentNode) more.parentNode.removeEventListener('click', trap)
+        }, 0)
     }
 }
