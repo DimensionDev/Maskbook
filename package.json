@@ -41,7 +41,7 @@
     "@commitlint/config-conventional": "^8.1.0",
     "@holoflows/kit": "https://github.com/DimensionDev/holoflows-kit",
     "@material-ui/core": "4.3.3",
-    "@material-ui/icons": "4.2.1",
+    "@material-ui/icons": "4.4.3",
     "@material-ui/styles": "4.3.3",
     "@types/classnames": "^2.2.7",
     "@types/gun": "^0.9.1",
