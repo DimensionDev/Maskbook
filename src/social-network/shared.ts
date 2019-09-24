@@ -24,13 +24,20 @@ export interface SocialNetworkWorkerAndUIDefinition {
      *
      * For normal network, string like 'twitter.com' is enough.
      *
+     *
      * If it works across networks like mastodon,
-     * use 'mastodon@your-instance.org' and set this to a function
+     * They are not supported for now.
+     * To enable support for these, you may merge this type:
+     * ((networkIdentifier: string, env: Env, preference: Preference) => boolean)
+     * then use 'mastodon@your-instance.org' and set this to a function
+     * and resolve all type problems.
+     *
+     * At that time, we may also done this by recognize and hardcode it.
      *
      * @example 'twitter.com'
      * (networkIdentifier) => networkIdentifier.startsWith('mastodon')
      */
-    networkIdentifier: string | ((networkIdentifier: string, env: Env, preference: Preference) => boolean)
+    networkIdentifier: string
     /**
      * @param env The env that Maskbook running in
      * @param preference Users settings about Maskbook

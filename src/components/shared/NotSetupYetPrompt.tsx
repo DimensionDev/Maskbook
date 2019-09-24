@@ -1,9 +1,11 @@
 import React from 'react'
 import Services from '../../extension/service'
 import { geti18nString } from '../../utils/i18n'
-import { SnackbarContent, Button, makeStyles } from '@material-ui/core'
+import { Button, makeStyles, SnackbarContent } from '@material-ui/core'
 import { GetContext } from '@holoflows/kit/es'
 import { useLastRecognizedIdentity } from '../DataSource/useActivatedUI'
+import { getActivatedUI } from '../../social-network/ui'
+import { setStorage } from '../../utils/browser.storage'
 
 const useNotSetUpYetStyles = makeStyles({
     root: {
@@ -53,10 +55,13 @@ export function NotSetupYetPrompt() {
     return (
         <NotSetupYetPromptUI
             onSetupClick={() => {
+                if (isContent) {
+                    setStorage(getActivatedUI().networkIdentifier, { forceDisplayWelcome: false }).then()
+                }
                 if (GetContext() === 'options') {
                     location.hash = '/welcome'
                 } else if (id) {
-                    Services.Welcome.openWelcomePage(id)
+                    Services.Welcome.openWelcomePage(id).then()
                 }
             }}
             preparingSetup={isContent && isCurrentIdentityUnknown()}
