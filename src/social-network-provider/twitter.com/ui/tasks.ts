@@ -25,7 +25,7 @@ const taskPasteIntoBio = async (text: string) => {
             .evaluate()!
             .click()
     } catch {
-        prompt(geti18nString('automation_request_click_edit_bio_button'))
+        alert(geti18nString('automation_request_click_edit_bio_button'))
     }
     await sleep(800)
     try {
