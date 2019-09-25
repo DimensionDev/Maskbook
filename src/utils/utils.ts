@@ -54,10 +54,42 @@ export const bypass: <T>(args: T) => T = args => args
 /**
  * index starts at one.
  */
-export const regexMatch = (str: string, regexp: RegExp, index: number) => {
+export const regexMatch = (str: string, regexp: RegExp, index: number = 1) => {
     const r = str.match(regexp)
     if (isNull(r)) return null
     return r[index]
+}
+
+/**
+ * @return
+ *  if no matches, return null;
+ *  return target match group in each matches;
+ *
+ * @example
+ *  regexMatchAll(">target<whatever>target2<", />(.+)</)
+ *  >>> ["target", "target2"]
+ */
+export const regexMatchAll = (str: string, regexp: RegExp, index: number = 1) => {
+    const gPos = regexp.flags.indexOf('g')
+    const withoutG = gPos >= 0 ? `${regexp.flags.slice(0, gPos)}${regexp.flags.slice(gPos + 1)}` : regexp.flags
+    const o = new RegExp(regexp.source, withoutG)
+    const g = new RegExp(regexp.source, `${withoutG}g`)
+    const r = str.match(g)
+    if (isNull(r)) {
+        return null
+    }
+    const sto = []
+    for (const v of r) {
+        const retV = v.match(o)
+        if (isNull(retV)) {
+            continue
+        }
+        sto.push(retV[index])
+    }
+    if (sto.length === 0) {
+        return null
+    }
+    return sto
 }
 
 export const isDocument = (node: Node): node is Document => node.nodeType === Node.DOCUMENT_NODE
