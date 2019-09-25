@@ -31,6 +31,7 @@ import NearMe from '@material-ui/icons/NearMe'
 import Assignment from '@material-ui/icons/Assignment'
 import Phonelink from '@material-ui/icons/Phonelink'
 import Code from '@material-ui/icons/Code'
+import ArrowBack from '@material-ui/icons/ArrowBack'
 import { ExportData } from './components/MobileImportExport/Export'
 import './setup.ui'
 import { SSRRenderer } from './utils/SSRRenderer'
@@ -119,7 +120,19 @@ function ResponsiveDrawer() {
             <Divider />
             <List onClick={handleDrawerToggle}>{Links1st}</List>
             <Divider />
-            <List onClick={handleDrawerToggle}>{Links2rd}</List>
+            <List onClick={handleDrawerToggle}>
+                {Links2rd}
+                {process.env.firefoxVariant === 'GeckoView' && (
+                    <MuiLink color="textPrimary" component={Link} to="/" onClick={window.close}>
+                        <ListItem button>
+                            <ListItemIcon>
+                                <ArrowBack />
+                            </ListItemIcon>
+                            <ListItemText primary="Back" />
+                        </ListItem>
+                    </MuiLink>
+                )}
+            </List>
         </div>
     )
 
