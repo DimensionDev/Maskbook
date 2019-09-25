@@ -9,7 +9,7 @@ export const resolveInfoFromBioCard = () => {
         .map(x => (x.children[1] as HTMLElement).innerText.split('\n'))
         .evaluate()!
     const bio = bioCard()
-        .map(x => (x.children[2] as HTMLElement).innerText)
+        .map(x => (x.children[2] as HTMLElement).innerHTML)
         .evaluate()!
     return {
         avatar,
