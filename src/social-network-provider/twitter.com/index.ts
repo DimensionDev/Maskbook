@@ -1,7 +1,8 @@
 import { SocialNetworkWorkerAndUIDefinition } from '../../social-network/shared'
 import { usernameValidator } from './utils/user'
-import { batchReplace, regexMatch } from '../../utils/utils'
-import { isNil } from 'lodash-es'
+import { batchReplace, regexMatch, regexMatchAll } from '../../utils/utils'
+import { isNil, isNull } from 'lodash-es'
+import { ICAO9303Checksum } from './utils/encoding'
 
 export const host = 'twitter.com'
 export const hostURL = 'https://twitter.com'
@@ -15,8 +16,22 @@ export const sharedSettings: SocialNetworkWorkerAndUIDefinition = {
     isValidUsername: usernameValidator,
     acceptablePayload: ['v39', 'latest'],
     init() {},
-    publicKeyEncoder: (text: string) => `🎭${text}🎭`,
-    publicKeyDecoder: (text: string) => regexMatch(text, /(🎭)(.+)(🎭)/, 2),
+    publicKeyEncoder: (text: string) => `🎭${ICAO9303Checksum.encode(text)}🎭`,
+    publicKeyDecoder: (text: string) =>
+        (() => {
+            const r = regexMatchAll(text, /([\dA-Za-z+=\/]{20,60})/)
+            if (isNull(r)) {
+                return null
+            }
+            for (const v of r) {
+                const retV = ICAO9303Checksum.decode(v)
+                if (isNull(retV)) {
+                    continue
+                }
+                return retV
+            }
+            return null
+        })(),
     payloadEncoder: (text: string) =>
         `https://google.com/${batchReplace(text, [['🎼', '%20'], [':||', '%40'], ['+', '-'], ['=', '_'], ['|', '.']])}`,
     payloadDecoder: (text: string) => {
