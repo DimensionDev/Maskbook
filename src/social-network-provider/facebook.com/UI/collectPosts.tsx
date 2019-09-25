@@ -76,7 +76,10 @@ export function collectPostsFacebook(this: SocialNetworkUI) {
             }
         })
         .setDOMProxyOption({ afterShadowRootInit: { mode: 'closed' } })
-        .startWatch()
+        .startWatch({
+            childList: true,
+            subtree: true,
+        })
 }
 
 function getPostBy(node: DOMProxy, allowCollectInfo: boolean) {
