@@ -18,9 +18,14 @@ const querySelectorAll = <T extends HTMLElement>(selector: string) => {
 
 export const rootSelector = () => querySelector<HTMLElement>('body')
 
-export const bioQueryString = '[href*="header_photo"] + div [data-testid="UserDescription"]'
+export const bioQueryString = '[href*="header_photo"] + div [data-testid="UserDescription"]' // TODO: this is invalid
 
-export const bioCard = () => querySelector('[href*="header_photo"] + div')
+export const bioCard = () =>
+    querySelector('[href*="photo"]')
+        .map(x => x.parentElement!.parentElement)
+        .querySelector('[data-testid="UserDescription"]')
+        .map(x => x.parentElement!.parentElement)
+
 export const postViewMain = () =>
     querySelector<HTMLElement>('[role="progressbar"] + div + div > div > div > div:first-of-type')
 
