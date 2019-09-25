@@ -15,7 +15,10 @@ export function resolveLastRecognizedIdentityFacebook(this: SocialNetworkUI) {
         .setComparer(undefined, (a, b) => a.identifier.equals(b.identifier))
         .addListener('onAdd', e => assign(e.value))
         .addListener('onChange', e => assign(e.newValue))
-        .startWatch()
+        .startWatch({
+            childList: true,
+            subtree: true,
+        })
         .then()
     function assign(i: part) {
         if (!i.identifier.isUnknown) ref.value = i
