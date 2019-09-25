@@ -65,9 +65,10 @@ const DevPage = () => {
         <>
             <ListSubheader>Developer Settings</ListSubheader>
             <div className={classes.root}>
+                <List>{useSettingsUI(debugModeSetting)}</List>
                 <List>{useSettingsUI(disableOpenNewTabInBackgroundSettings)}</List>
                 <Grid container spacing={2}>
-                    <Grid container xs={6} item spacing={2} direction="column">
+                    <Grid container xs={12} lg={6} item spacing={2} direction="column">
                         <Grid item>
                             <SeeMyProvePost />
                         </Grid>
@@ -78,8 +79,8 @@ const DevPage = () => {
                             <DecryptPostDeveloperMode />
                         </Grid>
                     </Grid>
-                    <Grid container xs={6} item spacing={2} direction="column">
-                        <Grid item>
+                    <Grid container xs={12} lg={6} item spacing={2} direction="column">
+                        <Grid xs={12} item>
                             <FriendsDeveloperMode />
                         </Grid>
                     </Grid>

@@ -32,7 +32,6 @@ const useStyles = makeStyles(theme => ({
 SSRRenderer(<Popup />)
 export function Popup() {
     const classes = useStyles()
-    const debugOn = useValueRef(debugModeSetting)
 
     return (
         <ThemeProvider theme={MaskbookLightTheme}>
@@ -40,7 +39,8 @@ export function Popup() {
     body {
         overflow-x: hidden;
         margin: 0 auto;
-        min-width: 30em;
+        width: 30em;
+        max-width: 100%;
     }`}</style>
             <main className={classes.container}>
                 <img className={classes.logo} src="https://dimensiondev.github.io/Maskbook-VI/MB--Text--Blue.svg" />
