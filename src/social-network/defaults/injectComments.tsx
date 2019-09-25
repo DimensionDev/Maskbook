@@ -47,7 +47,12 @@ export function injectPostCommentsDefault(config: injectPostCommentsDefaultConfi
                 }
             })
             .setDOMProxyOption({ afterShadowRootInit: { mode: 'closed' } })
-            .startWatch()
+            .startWatch({
+                attributes: false,
+                characterData: false,
+                childList: true,
+                subtree: true,
+            })
 
         return () => commentWatcher.stopWatch()
     }
