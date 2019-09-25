@@ -13,7 +13,10 @@ const newMOW = (i: LiveSelector<HTMLElement, true>) =>
             beforeShadowRootInit: { mode: 'closed' },
             afterShadowRootInit: { mode: 'closed' },
         })
-        .startWatch()
+        .startWatch({
+            childList: true,
+            subtree: true,
+        })
 
 const injectPostBox = () => {
     const target = newMOW(newPostEditorBelow())
