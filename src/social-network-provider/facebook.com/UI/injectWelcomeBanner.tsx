@@ -12,7 +12,10 @@ export function injectWelcomeBannerFacebook(this: SocialNetworkUI) {
             .enableSingleMode(),
     )
         .setDOMProxyOption({ beforeShadowRootInit: { mode: 'closed' } })
-        .startWatch()
+        .startWatch({
+            childList: true,
+            subtree: true,
+        })
 
     const unmount = renderInShadowRoot(
         <Banner networkIdentifier={this.networkIdentifier} unmount={() => unmount()} />,

@@ -51,7 +51,10 @@ function findPeopleInfo(whoAmI: SocialNetworkUI['currentIdentity']) {
                 onTargetChanged: parseFriendship,
             }
         })
-        .startWatch()
+        .startWatch({
+            childList: true,
+            subtree: true,
+        })
 }
 enum Status {
     NonFriend = 1,
