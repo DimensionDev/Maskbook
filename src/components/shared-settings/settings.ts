@@ -11,7 +11,7 @@ export const debugModeSetting = createNewSettings<boolean>('debugMode', false, {
  */
 export const disableOpenNewTabInBackgroundSettings = createNewSettings<boolean>(
     'disable automated tab task open new tab',
-    false,
+    process.env.firefoxVariant === 'GeckoView' ? true : false,
     {
         primary: 'Disable open hidden tabs in the background',
         secondary:
