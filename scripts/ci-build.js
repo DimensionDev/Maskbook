@@ -17,7 +17,7 @@ async function main() {
     for (const [commands, ...args] of prepareCommands) {
         await spawn(commands, args)
     }
-    const currentBranch = (await getCurrentGITBranchName()).toLowerCase()
+    const currentBranch = (await getCurrentGitBranchName()).toLowerCase()
     for (const [first, ...args] of getCommands(buildTypes(currentBranch))) {
         console.log('executing', first, ...args)
         await spawn(first, args)
@@ -52,20 +52,18 @@ function getBuildCommand(platforms) {
         if (type === 'chromium' && platforms.indexOf('base') !== -1) {
             // chromium doesn't have it's own changes yet.
             // just copying base version is acceptable
-            return `
-            cp Maskbook.base.zip Maskbook.chromium.zip
-            `
+            return ''
         }
         return `
         echo "Building for target ${type}"
         yarn build:${type.toLowerCase()}
-        bash -c "cd build && zip -r ../Maskbook.${type}.zip ./* && cd .."
+        bash -c "cd build && zip -r ../Maskbook.${type}.zip ./*"
         rm -rf build
         `
     }
 }
 
-async function getCurrentGITBranchName() {
+async function getCurrentGitBranchName() {
     const [git, ...args] = getCommands(`git rev-parse --abbrev-ref HEAD`)[0]
     const branch = await spawn(git, args, { stdio: 'pipe' })
     return branch.split('\n')[0]
