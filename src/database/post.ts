@@ -35,6 +35,10 @@ interface PostDB extends DBSchema {
 }
 const db = openDB<PostDB>('maskbook-post-v2', 2, {
     upgrade(db, oldVersion, newVersion, transaction) {
+        if (oldVersion < 1) {
+            // inline keys
+            db.createObjectStore('post', { keyPath: 'identifier' })
+        }
         /**
          * In the version 1 we use PostIdentifier to store post that identified by post iv
          * After upgrade to version 2, we use PostIVIdentifier to store it.
@@ -55,9 +59,6 @@ const db = openDB<PostDB>('maskbook-post-v2', 2, {
                     store.add(each)
                 }
             })
-        } else {
-            // inline keys
-            db.createObjectStore('post', { keyPath: 'identifier' })
         }
     },
 })
