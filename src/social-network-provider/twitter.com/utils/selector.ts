@@ -46,25 +46,6 @@ export const postsRootSelector = () => querySelector<HTMLElement>(`[data-testid=
 
 export const postPopupSelector = () => querySelector('[aria-labelledby="modal-header"]')
 export const postsSelectors = () => querySelectorAll('article')
-/**
- * @param  node     the 'article' node
- * @return          link to avatar.
- */
-export const postParser = (node: HTMLElement) => {
-    const parseRoot = node.querySelector('[data-testid="tweet"]')!
-    const nameArea = parseRoot.children[1].querySelector<HTMLAnchorElement>('a')!.innerText.split('\n')
-    return {
-        name: nameArea[0],
-        handle: nameArea[1],
-        pid: regexMatch(
-            parseRoot.children[1].querySelector<HTMLAnchorElement>('a[href*="status"]')!.href,
-            /(\/)(\d+)/,
-            2,
-        )!,
-        avatar: parseRoot.children[0].querySelector<HTMLImageElement>('[style*="twimg.com"] + img')!.src,
-        content: parseRoot.querySelector<HTMLDivElement>('[lang]')!.innerText,
-    }
-}
 export const postsContentSelectors = () => postsSelectors().querySelectorAll<HTMLElement>(`[lang]`)
 export const fromPostSelectorsSelectPostContentString = '[data-testid="tweet"] > div:nth-of-type(2)'
 
