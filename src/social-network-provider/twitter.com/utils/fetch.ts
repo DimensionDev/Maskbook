@@ -1,6 +1,6 @@
 import { bioCard } from './selector'
 import { regexMatch } from '../../../utils/utils'
-import { defaultTo, get } from 'lodash-es'
+import { postContentParser } from '../index'
 
 export const resolveInfoFromBioCard = () => {
     const avatar = bioCard()
@@ -26,7 +26,7 @@ export const resolveInfoFromBioCard = () => {
  * @return          link to avatar.
  */
 export const postParser = (node: HTMLElement) => {
-    const parseRoot = node.querySelector('[data-testid="tweet"]')!
+    const parseRoot = node.querySelector<HTMLElement>('[data-testid="tweet"]')!
     const nameArea = parseRoot.children[1].querySelector<HTMLAnchorElement>('a')!.innerText.split('\n')
     return {
         name: nameArea[0],
@@ -37,6 +37,6 @@ export const postParser = (node: HTMLElement) => {
             2,
         )!,
         avatar: parseRoot.children[0].querySelector<HTMLImageElement>('[style*="twimg.com"] + img')!.src,
-        content: defaultTo(get(parseRoot.querySelector<HTMLDivElement>('[lang]'), 'innerText'), ''),
+        content: postContentParser(parseRoot),
     }
 }

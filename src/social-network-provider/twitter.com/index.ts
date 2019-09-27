@@ -44,3 +44,16 @@ export const sharedSettings: SocialNetworkWorkerAndUIDefinition = {
     },
     notReadyForProduction: true,
 }
+
+/**
+ * this method tries to find every anchor element inside node with title attribute.
+ * It's related to payloadDecoder.
+ */
+export const postContentParser = (node: HTMLElement) => {
+    const contentRoot = node.querySelectorAll<HTMLAnchorElement>('a')
+    let sto = ''
+    for (const v of contentRoot) {
+        sto = sto.concat(`${v.title} `)
+    }
+    return sto
+}
