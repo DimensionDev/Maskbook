@@ -4,11 +4,11 @@ Encrypt your posts & chats on You-Know-Where. Allow only your friends to decrypt
 
 For general introductions, see https://Maskbook.com/
 
-* [Maskbook on Chrome Web Store][crext]
-* [Maskbook on Firefox Addon Store][fxaddon] (Works on Android too!)
+-   [Maskbook on Chrome Web Store][crext]
+-   [Maskbook on Firefox Addon Store][fxaddon] (Works on Android too!)
 
-  [crext]: https://chrome.google.com/webstore/detail/maskbook/jkoeaghipilijlahjplgbfiocjhldnap/
-  [fxaddon]: https://addons.mozilla.org/en-US/firefox/addon/maskbook/
+    [crext]: https://chrome.google.com/webstore/detail/maskbook/jkoeaghipilijlahjplgbfiocjhldnap/
+    [fxaddon]: https://addons.mozilla.org/en-US/firefox/addon/maskbook/
 
 ## Documentation for developers
 
@@ -31,6 +31,13 @@ For general introductions, see https://Maskbook.com/
     [This](https://chrome.google.com/webstore/detail/extensions-reloader/fimgfedafeadlieiabdeeaodndnlbhid) plugin may help you to reload extension quicker.
 -   `yarn storybook` to start StoryBook. Used for UI only developing.
 -   `yarn build` build a production version. Output files in `./build/`
+
+#### Conditional compilation
+
+-   If branch name contains `full`, CI will build for all targets
+-   If branch name contains `ios`, CI will build for target `iOS`
+-   If branch name contains `android` or `gecko`, CI will build for target `firefox` `gecko`
+-   For any other branches, CI will build for target `base` `chromium` `firefox`
 
 #### Non-famous libraries we are using
 
