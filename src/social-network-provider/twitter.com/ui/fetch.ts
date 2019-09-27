@@ -1,11 +1,11 @@
-import { bioCard, postParser, postsRootSelector, postsSelectors, selfInfoSelectors } from '../utils/selector'
+import { bioCard, postsRootSelector, postsSelectors, selfInfoSelectors } from '../utils/selector'
 import { MutationObserverWatcher } from '@holoflows/kit'
 import { PersonIdentifier } from '../../../database/type'
 import { host } from '../index'
 import { getEmptyPostInfo, SocialNetworkUI, SocialNetworkUIInformationCollector } from '../../../social-network/ui'
 import { deconstructPayload } from '../../../utils/type-transform/Payload'
 import { instanceOfTwitterUI } from './index'
-import { resolveInfoFromBioCard } from '../utils/fetch'
+import { postParser, resolveInfoFromBioCard } from '../utils/fetch'
 import { uploadToService } from '../utils/user'
 import { isNil } from 'lodash-es'
 

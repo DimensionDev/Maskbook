@@ -1,9 +1,9 @@
 import { dispatchCustomEvents, sleep, timeout, untilDocumentReady } from '../../../utils/utils'
-import { editProfileButtonSelector, editProfileTextareaSelector, postParser, postsSelectors } from '../utils/selector'
+import { editProfileButtonSelector, editProfileTextareaSelector, postsSelectors } from '../utils/selector'
 import { geti18nString } from '../../../utils/i18n'
 import { SocialNetworkUI, SocialNetworkUITasks } from '../../../social-network/ui'
 import { fetchBioCard } from '../utils/status'
-import { resolveInfoFromBioCard } from '../utils/fetch'
+import { postParser, resolveInfoFromBioCard } from '../utils/fetch'
 import { getFocus, getText } from '../utils/postBox'
 import { MutationObserverWatcher } from '@holoflows/kit'
 
