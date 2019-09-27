@@ -1,6 +1,6 @@
 import { bioCard } from './selector'
 import { regexMatch } from '../../../utils/utils'
-import { postContentParser } from '../index'
+import { postContentParser } from './encoding'
 
 export const resolveInfoFromBioCard = () => {
     const avatar = bioCard()
