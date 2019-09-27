@@ -249,10 +249,10 @@
         "message": "1. right-click the icon of the Maskbook in the browser address bar"
     },
     "welcome_1b_qr_2": {
-        "message": "2. click \"Options\""
+        "message": "2. click “Options”"
     },
     "welcome_1b_qr_3": {
-        "message": "3. click \"Setup for Mobile\""
+        "message": "3. click “Setup for Mobile”"
     },
     "welcome_1b_hint_identity": {
         "message": "This backup file contains the following accounts:"
@@ -321,7 +321,7 @@
         "message": "Username not valid"
     },
     "automation_request_click_edit_bio_button": {
-        "message": "Please click the \"Edit bio\" button or the pencil on the bio box."
+        "message": "Please click the “Edit bio” button or the pencil on the bio box."
     },
     "automation_request_paste_into_bio_box": {
         "message": "Please copy your public key into the bio box and publish it."
