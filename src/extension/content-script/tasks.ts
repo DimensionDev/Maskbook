@@ -37,8 +37,8 @@ const tasks = AutomatedTabTask(
     { memorable: true },
 )!
 export default function tasksMocked(...args: Parameters<typeof tasks>) {
-    const [, options] = args
-    if (disableOpenNewTabInBackgroundSettings.value) {
+    const [tabIdOrUri, options] = args
+    if (disableOpenNewTabInBackgroundSettings.value && Number.isNaN(Number(tabIdOrUri))) {
         if (!options || !options.active)
             throw new Error(
                 `You have disabled "Disable fetching public keys in the background" in the settings so Maskbook can not perform this action`,
