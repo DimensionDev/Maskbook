@@ -15,7 +15,8 @@ export function collectPostsFacebook(this: SocialNetworkUI) {
             const root = new LiveSelector()
                 .replace(() => [metadata.realCurrent])
                 .filter(x => x)
-                .closest('.userContentWrapper')
+                .closest('.userContentWrapper, [data-store]')
+
             // ? inject after comments
             const commentSelectorPC = root
                 .clone()
