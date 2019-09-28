@@ -61,6 +61,14 @@ export const regexMatch = (str: string, regexp: RegExp, index: number) => {
 
 export const isDocument = (node: Node): node is Document => node.nodeType === Node.DOCUMENT_NODE
 
+/**
+ * batch run string.replace
+ * @param source    the source string to replace
+ * @param group     Array of find-replace pair,
+ *                  each pair same as the param of
+ *                  string.replace
+ * @return          result string
+ */
 export const batchReplace = (source: string, group: Array<[string | RegExp, string]>) => {
     let storage = source
     for (const v of group) {
