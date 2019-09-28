@@ -1,7 +1,6 @@
 import { bioCard, postsRootSelector, postsSelectors, selfInfoSelectors } from '../utils/selector'
 import { MutationObserverWatcher } from '@holoflows/kit'
 import { PersonIdentifier } from '../../../database/type'
-import { host } from '../index'
 import { getEmptyPostInfo, SocialNetworkUI, SocialNetworkUIInformationCollector } from '../../../social-network/ui'
 import { deconstructPayload } from '../../../utils/type-transform/Payload'
 import { instanceOfTwitterUI } from './index'
@@ -18,7 +17,7 @@ const resolveLastRecognizedIdentity = (self: SocialNetworkUI) => {
         const avatar = selfInfoSelectors().userAvatar.evaluate()
         if (!isNil(screenName)) {
             ref.value = {
-                identifier: new PersonIdentifier(host, screenName),
+                identifier: new PersonIdentifier(self.networkIdentifier, screenName),
                 nickname,
                 avatar,
             }
@@ -64,7 +63,7 @@ const registerPostCollector = (self: SocialNetworkUI) => {
                 const r = postParser(node)
                 if (!r) return
                 info.postContent.value = r.content
-                const postBy = new PersonIdentifier(host, r.handle)
+                const postBy = new PersonIdentifier(self.networkIdentifier, r.handle)
                 if (!info.postBy.value.equals(postBy)) {
                     info.postBy.value = postBy
                 }
