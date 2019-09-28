@@ -62,9 +62,13 @@ export const twitterEncoding = {
  * It's related to payloadDecoder.
  */
 export const postContentParser = (node: HTMLElement) => {
-    const contentRoot = node.querySelectorAll<HTMLAnchorElement>('a')
+    const anchors = node.querySelectorAll<HTMLAnchorElement>('a')
+    const spans = node.querySelectorAll<HTMLSpanElement>('[lang] > span')
     let sto = ''
-    for (const v of contentRoot) {
+    for (const v of spans) {
+        sto = sto.concat(`${v.innerText} `)
+    }
+    for (const v of anchors) {
         sto = sto.concat(`${v.title} `)
     }
     return sto
