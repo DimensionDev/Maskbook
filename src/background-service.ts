@@ -76,6 +76,13 @@ if (GetContext() === 'background') {
             browser.tabs.create({ url: getWelcomePageURL() })
         }
     })
+
+    if (process.env.target === 'WKWebview') {
+        browser.tabs.create({
+            url: 'https://m.facebook.com/',
+            active: true,
+        })
+    }
 }
 function IgnoreError(arg: unknown): (reason: Error) => void {
     return e => {
