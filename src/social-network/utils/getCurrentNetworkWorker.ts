@@ -1,7 +1,7 @@
 import { definedSocialNetworkWorkers, SocialNetworkWorker } from '../worker'
 import { GroupIdentifier, Identifier, PersonIdentifier, PostIdentifier, PostIVIdentifier } from '../../database/type'
 
-export const find = (network: string) => (v: SocialNetworkWorker) => v.networkIdentifier === network
+const find = (network: string) => (v: SocialNetworkWorker) => v.networkIdentifier === network
 
 export default function getCurrentNetworkWorker(network: string | Identifier): SocialNetworkWorker {
     if (typeof network === 'string') {
