@@ -29,6 +29,9 @@ const ICAO9303Checksum = {
 }
 
 export const twitterEncoding = {
+    /**
+     * @link https://github.com/DimensionDev/Maskbook/issues/191
+     */
     publicKeyEncoder: (text: string) => `🎭${ICAO9303Checksum.encode(text)}🎭`,
     publicKeyDecoder: (text: string) =>
         (() => {
@@ -45,6 +48,9 @@ export const twitterEncoding = {
             }
             return null
         })(),
+    /**
+     * @link https://github.com/DimensionDev/Maskbook/issues/198
+     */
     payloadEncoder: (text: string) =>
         `https://google.com/${batchReplace(text, [['🎼', '%20'], [':||', '%40'], ['+', '-'], ['=', '_'], ['|', '.']])}`,
     payloadDecoder: (text: string) => {
