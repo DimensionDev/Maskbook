@@ -1,15 +1,8 @@
 import { definedSocialNetworkWorkers, SocialNetworkWorker } from '../worker'
 import { GroupIdentifier, Identifier, PersonIdentifier, PostIdentifier, PostIVIdentifier } from '../../database/type'
-import { env } from '../shared'
 
-function find(network: string) {
-    return (v: SocialNetworkWorker) => {
-        // noinspection SuspiciousTypeOfGuard
-        if (typeof v.networkIdentifier === 'string') return v.networkIdentifier === network
-        // @ts-ignore   this is a robust design since sometimes non-string id may supported.
-        return v.networkIdentifier(network, env, {})
-    }
-}
+export const find = (network: string) => (v: SocialNetworkWorker) => v.networkIdentifier === network
+
 export default function getCurrentNetworkWorker(network: string | Identifier): SocialNetworkWorker {
     if (typeof network === 'string') {
         if (network === 'localhost') throw new TypeError('Searching a unknown provider')

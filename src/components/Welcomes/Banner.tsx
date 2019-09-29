@@ -84,11 +84,6 @@ export function Banner({
         getActivatedUI().ignoreSetupAccount(env, {})
         unmount()
     }, [unmount])
-    if (typeof props.networkIdentifier === 'function' && props.getStarted === undefined) {
-        throw new TypeError(
-            'You cannot use getStartedDefault when networkIdentifier is a function. Please implement this function yourself.',
-        )
-    }
     const getStartedDefault = useCallback(() => {
         setStorage(props.networkIdentifier, { forceDisplayWelcome: false })
         unmount()
