@@ -122,7 +122,7 @@ function ResponsiveDrawer() {
             <Divider />
             <List onClick={handleDrawerToggle}>
                 {Links2rd}
-                {(process.env.firefoxVariant === 'GeckoView' || process.env.target === 'WKWebview') && (
+                {(webpackEnv.firefoxVariant === 'GeckoView' || webpackEnv.target === 'WKWebview') && (
                     <MuiLink color="textPrimary" component={Link} to="/" onClick={window.close}>
                         <ListItem button>
                             <ListItemIcon>
