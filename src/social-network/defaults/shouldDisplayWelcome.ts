@@ -4,7 +4,7 @@ import { getActivatedUI } from '../ui'
 
 export async function shouldDisplayWelcomeDefault() {
     const netId = getActivatedUI().networkIdentifier
-    if (process.env.firefoxVariant === 'GeckoView') return true
+    if (webpackEnv.firefoxVariant === 'GeckoView') return true
     const storage = (await getStorage(netId)) || {}
     if (storage.forceDisplayWelcome) return true
 
