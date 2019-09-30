@@ -3,6 +3,10 @@ import { isUndefined } from 'lodash-es'
 import { newPostEditorFocusAnchor, newPostEditorHasFocus, newPostEditorSelector } from './selector'
 import { equal } from '../../../utils/assert'
 
+export const postBoxInPopup = () => {
+    return window.location.pathname.includes('compose')
+}
+
 export const getFocus = async () => {
     await untilDocumentReady()
     while (isUndefined(newPostEditorSelector().evaluate())) {
