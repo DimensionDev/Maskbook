@@ -1,7 +1,7 @@
 /**
  * Currently we don't have so much code that need conditional compilation.
  *
- * So let's set process.env.target in runtime and reduce the compile time.
+ * So let's set globalThis.webpackEnv in runtime and reduce the compile time.
  */
 
 if (!globalThis.webpackEnv) {
