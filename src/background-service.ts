@@ -77,7 +77,7 @@ if (GetContext() === 'background') {
         }
     })
 
-    if (process.env.target === 'WKWebview') {
+    if (webpackEnv.target === 'WKWebview') {
         browser.tabs.create({
             url: 'https://m.facebook.com/',
             active: true,
