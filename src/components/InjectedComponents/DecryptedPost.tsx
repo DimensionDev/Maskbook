@@ -48,8 +48,10 @@ function DecryptPostSuccess({ data, people, ...props }: DecryptPostSuccessProps)
     const mediaQuery = useMediaQuery(theme.breakpoints.down('sm'))
     let passString = geti18nString('decrypted_postbox_verified')
     let failString = geti18nString('decrypted_postbox_not_verified')
-    if (mediaQuery) passString = passString[passString.length - 1]
-    if (failString) failString = failString[failString.length - 1]
+    if (mediaQuery) {
+        passString = passString[passString.length - 1]
+        failString = failString[failString.length - 1]
+    }
     return (
         <AdditionalContent
             title={
