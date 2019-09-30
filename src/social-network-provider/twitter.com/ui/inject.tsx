@@ -1,7 +1,7 @@
 import { AdditionalPostBox } from '../../../components/InjectedComponents/AdditionalPostBox'
 import React from 'react'
 import { DOMProxy, LiveSelector, MutationObserverWatcher as MOW } from '@holoflows/kit'
-import { newPostEditorBelow } from '../utils/selector'
+import { newPostEditorBelow, postPopupInjectPointSelector } from '../utils/selector'
 import { renderInShadowRoot } from '../../../utils/jss/renderInShadowRoot'
 import { PostInfo, SocialNetworkUIInjections } from '../../../social-network/ui'
 import { injectPostInspectorDefault } from '../../../social-network/defaults/injectPostInspector'
@@ -21,6 +21,8 @@ const newMOW = (i: LiveSelector<HTMLElement, true>) =>
 const injectPostBox = () => {
     const target = newMOW(newPostEditorBelow())
     renderInShadowRoot(<AdditionalPostBox />, target.firstDOMProxy.afterShadow)
+    const popUpTarget = newMOW(postPopupInjectPointSelector())
+    renderInShadowRoot(<AdditionalPostBox />, popUpTarget.firstDOMProxy.afterShadow)
 }
 
 const injectPostInspector = (current: PostInfo, node: DOMProxy) => {
