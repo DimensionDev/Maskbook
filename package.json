@@ -91,7 +91,7 @@
     "@storybook/addon-links": "^5.2.1",
     "@storybook/addon-viewport": "^5.1.9",
     "@storybook/addons": "^5.1.0-rc.1",
-    "@storybook/react": "^5.1.0-rc.1",
+    "@storybook/react": "^5.2.1",
     "@types/storybook__addon-actions": "^3.4.2",
     "@types/storybook__addon-info": "^4.1.0",
     "@types/storybook__addon-knobs": "^5.0.0",
