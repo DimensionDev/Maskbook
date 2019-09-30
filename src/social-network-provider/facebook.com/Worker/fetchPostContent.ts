@@ -10,7 +10,7 @@ import { isNil } from 'lodash-es'
 // ? If failed, we will fallback to open a new tab to do this.
 export async function fetchPostContentFacebook(post: PostIdentifier<PersonIdentifier>) {
     const activeTabID = await getActiveTab()
-    if (activeTabID) {
+    if (activeTabID !== undefined) {
         // Path 1: fetch by http req
         const url = getPostUrlAtFacebook(post, 'fetch')
         const html = await timeout(tasks(activeTabID).fetch(url), 5000)
