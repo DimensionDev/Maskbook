@@ -3,7 +3,8 @@ import Welcome0 from '../../../components/Welcomes/0'
 import Welcome1a1a from '../../../components/Welcomes/1a1a'
 import Welcome1a1b from '../../../components/Welcomes/1a1b'
 import Welcome1a2 from '../../../components/Welcomes/1a2'
-import Welcome1a3 from '../../../components/Welcomes/1a3'
+import Welcome1a3a from '../../../components/Welcomes/1a3b'
+import Welcome1a3b from '../../../components/Welcomes/1a3b'
 import Welcome1a4 from '../../../components/Welcomes/1a4'
 import Welcome1b1 from '../../../components/Welcomes/1b1'
 import Welcome2 from '../../../components/Welcomes/2'
@@ -27,6 +28,7 @@ enum WelcomeState {
     SelectIdentity,
     LinkNewSocialNetworks,
     Intro,
+    GenerateKey,
     BackupKey,
     ProvePost,
     RestoreKeypair,
@@ -124,9 +126,22 @@ function Welcome(props: Welcome) {
                     next={() => onStepChange(WelcomeState.BackupKey)}
                 />
             )
+        case WelcomeState.GenerateKey:
+            return (
+                <Welcome1a3a
+                    next={() => {
+                        sideEffects
+                            .backupMyKeyPair(props.whoAmI.identifier)
+                            .then(updateProveBio)
+                            .finally(() => {
+                                onStepChange(WelcomeState.ProvePost)
+                            })
+                    }}
+                />
+            )
         case WelcomeState.BackupKey:
             return (
-                <Welcome1a3
+                <Welcome1a3b
                     next={() => {
                         sideEffects
                             .backupMyKeyPair(props.whoAmI.identifier)
