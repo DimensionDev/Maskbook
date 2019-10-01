@@ -4,7 +4,7 @@ import Welcome1a1a from '../../../components/Welcomes/1a1a'
 import Welcome1a1b from '../../../components/Welcomes/1a1b'
 import Welcome1a2 from '../../../components/Welcomes/1a2'
 import Welcome1a3 from '../../../components/Welcomes/1a3'
-import Welcome1a4v2 from '../../../components/Welcomes/1a4.v2'
+import Welcome1a4 from '../../../components/Welcomes/1a4'
 import Welcome1b1 from '../../../components/Welcomes/1b1'
 import Welcome2 from '../../../components/Welcomes/2'
 import Services from '../../service'
@@ -146,7 +146,7 @@ function Welcome(props: Welcome) {
                 } catch {}
             }
             return (
-                <Welcome1a4v2
+                <Welcome1a4
                     hasManual={!isNil(worker.manualVerifyPost)}
                     hasBio={!isNil(worker.autoVerifyBio)}
                     hasPost={!isNil(worker.autoVerifyPost)}
