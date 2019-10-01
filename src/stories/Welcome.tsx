@@ -5,7 +5,7 @@ import Welcome1a1a from '../components/Welcomes/1a1a'
 import Welcome1a1b from '../components/Welcomes/1a1b'
 import Welcome1a2 from '../components/Welcomes/1a2'
 import Welcome1a3 from '../components/Welcomes/1a3'
-import Welcome1a4v2 from '../components/Welcomes/1a4.v2'
+import Welcome1a4 from '../components/Welcomes/1a4'
 import Welcome1b1 from '../components/Welcomes/1b1'
 import Welcome2 from '../components/Welcomes/2'
 import { linkTo as to, linkTo } from '@storybook/addon-links'
@@ -55,9 +55,9 @@ storiesOf('Welcome', module)
             <Welcome1a3 next={to('Welcome', 'New Step 1a-4')} />
         </ResponsiveDialog>
     ))
-    .add('New Step 1a-4', () => (
+    .add('Step 1a-4', () => (
         <ResponsiveDialog open>
-            <Welcome1a4v2
+            <Welcome1a4
                 hasManual={boolean('hasManual', true)}
                 hasBio={boolean('hasBio', true)}
                 hasPost={boolean('hasPost', true)}
