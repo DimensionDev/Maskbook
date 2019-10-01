@@ -161,6 +161,48 @@
     "welcome_1a2_done_button": {
         "message": "Nice!"
     },
+    "welcome_1a3a_title": {
+        "message": "Which crypto key do you want for this account?"
+    },
+    "welcome_1a3a_generate_new_key_title": {
+        "message": "Create a new keypair"
+    },
+    "welcome_1a3a_generate_new_key_subtitle": {
+        "message": "please save it carefully"
+    },
+    "welcome_1a3a_generate_new_key_password_label": {
+        "message": "Password for the new key"
+    },
+    "welcome_1a3a_generate_new_key_password_help": {
+        "message": "Please remember the key, or your key will not be able to restore again."
+    },
+    "welcome_1a3a_generate_new_key": {
+        "message": "Generate"
+    },
+    "welcome_1a3a_generate_new_key_result": {
+        "message": "The mnemonic word"
+    },
+    "welcome_1a3a_generate_new_key_result_help": {
+        "message": "Mnemonic word is used to restore the key. Make sure you keep it safely."
+    },
+    "welcome_1a3a_connect_title": {
+        "message": "Connect other accounts"
+    },
+    "welcome_1a3a_connect_subtitle": {
+        "message": "will use same crypto key"
+    },
+    "welcome_1a3a_recover_title": {
+        "message": "Restore by mnemonic word"
+    },
+    "welcome_1a3a_recover_subtitle": {
+        "message": "A 12 words list you backup before"
+    },
+    "welcome_1a3a_recover_input_word": {
+        "message": "The mnemonic word"
+    },
+    "welcome_1a3a_recover_input_password": {
+        "message": "Password"
+    },
     "welcome_1a3_title": {
         "message": "Keep your backups carefully"
     },
