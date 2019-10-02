@@ -7,15 +7,18 @@ OnlyRunInContext('background', 'gun')
 
 /**
  * Query all possible keys stored on the gun
+ * @param version current payload version
  * @param postSalt Post iv
  * @param partitionByCryptoKey Public key of the current user (receiver)
  */
 export async function queryPostKeysOnGun2(
+    version: -39,
     postSalt: string,
     partitionByCryptoKey: CryptoKey,
 ): Promise<{ keys: SharedAESKeyGun2[]; postHash: string; keyHash: string }> {
     const postHash = await hashPostSalt(postSalt)
-    const keyHash = await hashCryptoKey(partitionByCryptoKey)
+    // In version > -39, we will use stable hash to prevent unstable result for key hashing
+    const keyHash = await hashCryptoKey(partitionByCryptoKey, version > -39)
 
     // ? here we get the internal node names of gun2[postHash][keyHash]
     // ? where gun2[postHash][keyHash] is a list
@@ -36,17 +39,20 @@ export async function queryPostKeysOnGun2(
 
 /**
  * Listen on the changes of all possible keys on the gun
+ * @param version current payload version
  * @param postSalt Post iv
  * @param partitionByCryptoKey Public key of the current user (receiver)
  * @param callback
  */
 export function subscribePostKeysOnGun2(
+    version: -39,
     postSalt: string,
     partitionByCryptoKey: CryptoKey,
     callback: (data: SharedAESKeyGun2) => void,
 ) {
     hashPostSalt(postSalt).then(postHash => {
-        hashCryptoKey(partitionByCryptoKey).then(keyHash => {
+        // In version > -39, we will use stable hash to prevent unstable result for key hashing
+        hashCryptoKey(partitionByCryptoKey, version > -39).then(keyHash => {
             gun2.get(postHash)
                 // @ts-ignore
                 .get(keyHash)
@@ -63,14 +69,19 @@ export function subscribePostKeysOnGun2(
 
 /**
  * Publish post keys on the gun
+ * @param version current payload
  * @param postSalt Post iv
  * @param receiversKeys Keys needs to publish
  */
-export async function publishPostAESKeyOnGun2(postSalt: string, receiversKeys: PublishedAESKeyRecordV39[]) {
+export async function publishPostAESKeyOnGun2(
+    version: -39,
+    postSalt: string,
+    receiversKeys: PublishedAESKeyRecordV39[],
+) {
     const postHash = await hashPostSalt(postSalt)
     // Store AES key to gun
     receiversKeys.forEach(async ({ aesKey, receiverKey }) => {
-        const keyHash = await hashCryptoKey(receiverKey)
+        const keyHash = await hashCryptoKey(receiverKey, version > -39)
         console.log(`gun[${postHash}][${keyHash}].push(`, aesKey, `)`)
         gun2.get(postHash)
             // @ts-ignore

@@ -5,6 +5,7 @@ import Gun from 'gun'
 import { PersonIdentifier } from '../../../database/type'
 import { memoizePromise } from '../../../utils/memoize'
 import { CryptoKeyToJsonWebKey } from '../../../utils/type-transform/CryptoKey-JsonWebKey'
+import stableJSONStringify from 'json-stable-stringify'
 
 export const hashPersonIdentifier = memoizePromise(
     async function hashPersonIdentifier(id: PersonIdentifier) {
@@ -24,11 +25,17 @@ export const hashPostSalt = memoizePromise(async function(postSalt: string) {
     return hash.substring(0, N)
 })
 
-export const hashCryptoKey = memoizePromise(async function(key: CryptoKey) {
+/**
+ * @param key - The key need to be hashed
+ * @param stableHash - Set this to true if you're writing new code.
+ * Unstable hash may cause problem but we cannot just switch to stable hash
+ * because it may breaks current data.
+ */
+export const hashCryptoKey = memoizePromise(async function(key: CryptoKey, stableHash: boolean) {
     const hashPair = `10198a2f-205f-45a6-9987-3488c80113d0`
     const N = 2
 
-    const jwk = JSON.stringify(await CryptoKeyToJsonWebKey(key))
+    const jwk = (stableHash ? stableJSONStringify : JSON.stringify)(await CryptoKeyToJsonWebKey(key))
     const hash = (await Gun.SEA.work(jwk, hashPair))!
     return hash.substring(0, N)
 })
