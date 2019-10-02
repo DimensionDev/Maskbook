@@ -242,6 +242,7 @@ export async function getMyIdentitiesDB(): Promise<PersonRecordPublicPrivate[]> 
 }
 /**
  * Generate a new identity
+ * @deprecated Use createNewIdentityByMnemonicWord
  */
 export async function generateMyIdentityDB(identifier: PersonIdentifier): Promise<void> {
     const now = await getMyIdentitiesDB()
@@ -262,6 +263,7 @@ export async function generateMyIdentityDB(identifier: PersonIdentifier): Promis
 /**
  * Generate a new local key and store it
  * @param id - Identifier or 'default'
+ * @deprecated Use createNewIdentityByMnemonicWord
  */
 export async function generateLocalKeyDB(id: PersonIdentifier) {
     const key = await generate_AES_GCM_256_Key()
