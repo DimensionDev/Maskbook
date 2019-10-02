@@ -11,7 +11,7 @@ export async function debugShowAllPossibleHashForPost(post: PostIVIdentifier) {
                 async x =>
                     [
                         x.identifier.toText(),
-                        (await hashPostSalt(post.postIV)) + '-' + (await hashCryptoKey(x.publicKey!)),
+                        (await hashPostSalt(post.postIV)) + '-' + (await hashCryptoKey(x.publicKey!, true)),
                     ] as [string, string],
             ),
     )

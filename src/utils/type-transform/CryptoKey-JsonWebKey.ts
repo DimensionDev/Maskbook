@@ -1,3 +1,4 @@
+import stableStringify from 'json-stable-stringify'
 const CryptoKeyCache = new Map<string, CryptoKey>()
 const JsonWebKeyCache = new WeakMap<CryptoKey, JsonWebKey>()
 
@@ -21,7 +22,7 @@ export async function JsonWebKeyToCryptoKey(
     usage: (Usages)[] = ['deriveKey'],
     algorithm: Algorithms = { name: 'ECDH', namedCurve: 'K-256' },
 ) {
-    const _key = JSON.stringify(key) + usage.join(',')
+    const _key = stableStringify(key) + usage.sort().join(',')
     if (CryptoKeyCache.has(_key)) return CryptoKeyCache.get(_key)
     const cryptoKey = await crypto.subtle.importKey('jwk', key, algorithm, true, usage)
     CryptoKeyCache.set(_key, cryptoKey)
@@ -37,6 +38,7 @@ export async function CryptoKeyToJsonWebKey(key: CryptoKey) {
     if (JsonWebKeyCache.has(key)) return JsonWebKeyCache.get(key)!
     const jwk = await crypto.subtle.exportKey('jwk', key)
     JsonWebKeyCache.set(key, jwk)
-    CryptoKeyCache.set(JSON.stringify(jwk) + key.usages.join(','), key)
+    const hash = stableStringify(jwk) + key.usages.sort().join(',')
+    CryptoKeyCache.set(hash, key)
     return jwk
 }
