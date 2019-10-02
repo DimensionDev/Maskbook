@@ -12,6 +12,8 @@ import {
     queryLocalKeyDB,
     queryMyIdentityAtDB,
     queryPeopleDB,
+    storeLocalKeyDB,
+    storeMyIdentityDB,
 } from '../../database/people'
 import { BackupJSONFileLatest, JSON_HINT_FOR_POWER_USER } from '../../utils/type-transform/BackupFile'
 import { PersonIdentifier } from '../../database/type'
@@ -20,6 +22,11 @@ import getCurrentNetworkWorker from '../../social-network/utils/getCurrentNetwor
 import { SocialNetworkUI } from '../../social-network/ui'
 import { getWelcomePageURL } from '../options-page/Welcome/getWelcomePageURL'
 import { getMyProveBio } from './CryptoServices/getMyProveBio'
+import { generate_ECDH_256k1_KeyPair_ByMnemonicWord } from '../../utils/mnemonic-code'
+import { derive_AES_GCM_256_Key_From_PBKDF2, import_PBKDF2_Key } from '../../utils/crypto.subtle'
+import { CryptoKeyToJsonWebKey } from '../../utils/type-transform/CryptoKey-JsonWebKey'
+import stableStringify from 'json-stable-stringify'
+import { createDefaultFriendsGroup } from '../../database'
 
 OnlyRunInContext('background', 'WelcomeService')
 async function generateBackupJSON(whoAmI: PersonIdentifier, full = false): Promise<BackupJSONFileLatest> {
@@ -105,12 +112,47 @@ async function hasValidIdentity(whoAmI: PersonIdentifier) {
     return !!local && !!ecdh && !!ecdh.privateKey && !!ecdh.publicKey
 }
 
+/**
+ * @deprecated Use createNewIdentityByMnemonicWord
+ */
 async function createNewIdentity(whoAmI: PersonIdentifier) {
     await generateLocalKeyDB(whoAmI)
     await generateMyIdentityDB(whoAmI)
     // ? New user !
     MessageCenter.emit('generateKeyPair', undefined)
     console.log('New user! Generating key pairs')
+}
+
+/**
+ *
+ * Generate new identity by a password and a mnemonic word
+ *
+ * !!! Need Security Audit !!!
+ * !!! Don't use it in prod before audit !!!
+ * @param whoAmI Who Am I
+ * @param password password used to generate mnemonic word, can be empty string
+ */
+async function createNewIdentityByMnemonicWord(whoAmI: PersonIdentifier, password: string) {
+    const { key, mnemonicWord } = await generate_ECDH_256k1_KeyPair_ByMnemonicWord(password)
+    const pub = await CryptoKeyToJsonWebKey(key.publicKey)
+    const priv = await CryptoKeyToJsonWebKey(key.privateKey)
+    // !!! Need Security Audit !!!
+    // ? Is it secure to "derive" localKey(a AES_GCM_256_Key that should never shared to others)
+    // ? Derive method: publicKey as "password" and privateKey as hash
+    const pbkdf2 = await import_PBKDF2_Key(encodeText(stableStringify(pub)))
+    const localKey = await derive_AES_GCM_256_Key_From_PBKDF2(pbkdf2, encodeText(stableStringify(priv)))
+
+    await storeLocalKeyDB(whoAmI, localKey)
+    // TODO: If there is some old key that will be overwritten, warn the user.
+    await storeMyIdentityDB({
+        groups: [],
+        identifier: whoAmI,
+        publicKey: key.publicKey,
+        privateKey: key.privateKey,
+    })
+    await createDefaultFriendsGroup(whoAmI).catch(console.error)
+    MessageCenter.emit('identityUpdated', undefined)
+    return mnemonicWord
 }
 
 export async function backupMyKeyPair(whoAmI: PersonIdentifier, download = true) {
