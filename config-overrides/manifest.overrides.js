@@ -9,17 +9,12 @@ function firefox(manifest) {
     manifest.permissions.push('tabs')
 }
 /**
+ * Geckoview is firefox with some quirks.
  * @param {typeof base} manifest
  */
-function firefoxGeckoview(manifest) {
+function geckoview(manifest) {
     firefox(manifest)
     manifest.permissions.push('<all_urls>')
-}
-/**
- * @param {typeof base} manifest
- */
-function firefoxDesktopAndAndroid(manifest) {
-    firefox(manifest)
 }
 /**
  * @param {typeof base} manifest
@@ -29,4 +24,4 @@ function chromium(manifest) {}
  * @param {typeof base} manifest
  */
 function WKWebview(manifest) {}
-module.exports = { firefox, firefoxDesktopAndAndroid, firefoxGeckoview, chromium, WKWebview }
+module.exports = { firefox, geckoview, chromium, WKWebview }
