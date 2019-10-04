@@ -3,8 +3,6 @@ import { encodeText } from '../../utils/type-transform/String-ArrayBuffer'
 import { sleep } from '../../utils/utils'
 import { geti18nString } from '../../utils/i18n'
 import {
-    generateLocalKeyDB,
-    generateMyIdentityDB,
     getLocalKeysDB,
     getMyIdentitiesDB,
     PersonRecordPublic,
@@ -22,7 +20,10 @@ import getCurrentNetworkWorker from '../../social-network/utils/getCurrentNetwor
 import { SocialNetworkUI } from '../../social-network/ui'
 import { getWelcomePageURL } from '../options-page/Welcome/getWelcomePageURL'
 import { getMyProveBio } from './CryptoServices/getMyProveBio'
-import { generate_ECDH_256k1_KeyPair_ByMnemonicWord } from '../../utils/mnemonic-code'
+import {
+    generate_ECDH_256k1_KeyPair_ByMnemonicWord,
+    recover_ECDH_256k1_KeyPair_ByMnemonicWord,
+} from '../../utils/mnemonic-code'
 import { derive_AES_GCM_256_Key_From_PBKDF2, import_PBKDF2_Key } from '../../utils/crypto.subtle'
 import { CryptoKeyToJsonWebKey } from '../../utils/type-transform/CryptoKey-JsonWebKey'
 import stableStringify from 'json-stable-stringify'
@@ -40,8 +41,7 @@ async function generateBackupJSON(whoAmI: PersonIdentifier, full = false): Promi
     const myIdentity = await getMyIdentitiesDB()
     if (!whoAmI.isUnknown) {
         if ((await hasValidIdentity(whoAmI)) === false) {
-            await createNewIdentity(whoAmI)
-            return generateBackupJSON(whoAmI, full)
+            throw new Error('Generate fail')
         }
     }
     async function addMyIdentitiesInDB(data: PersonRecordPublicPrivate) {
@@ -113,27 +113,44 @@ async function hasValidIdentity(whoAmI: PersonIdentifier) {
 }
 
 /**
- * @deprecated Use createNewIdentityByMnemonicWord
- */
-async function createNewIdentity(whoAmI: PersonIdentifier) {
-    await generateLocalKeyDB(whoAmI)
-    await generateMyIdentityDB(whoAmI)
-    // ? New user !
-    MessageCenter.emit('generateKeyPair', undefined)
-    console.log('New user! Generating key pairs')
-}
-
-/**
  *
- * Generate new identity by a password and a mnemonic word
+ * Generate new identity by a password
  *
  * !!! Need Security Audit !!!
  * !!! Don't use it in prod before audit !!!
  * @param whoAmI Who Am I
  * @param password password used to generate mnemonic word, can be empty string
  */
-async function createNewIdentityByMnemonicWord(whoAmI: PersonIdentifier, password: string) {
-    const { key, mnemonicWord } = await generate_ECDH_256k1_KeyPair_ByMnemonicWord(password)
+export async function createNewIdentityByMnemonicWord(whoAmI: PersonIdentifier, password: string) {
+    const x = await generate_ECDH_256k1_KeyPair_ByMnemonicWord(password)
+    return generateNewIdentity(whoAmI, x)
+}
+
+/**
+ *
+ * Recover new identity by a password and mnemonic words
+ *
+ * !!! Need Security Audit !!!
+ * !!! Don't use it in prod before audit !!!
+ * @param whoAmI Who Am I
+ * @param password password used to generate mnemonic word, can be empty string
+ * @param word mnemonic words
+ */
+export async function restoreNewIdentityWithMnemonicWord(whoAmI: PersonIdentifier, word: string, password: string) {
+    return generateNewIdentity(whoAmI, await recover_ECDH_256k1_KeyPair_ByMnemonicWord(word, password))
+}
+/**
+ * !!! Need Security Audit !!!
+ * !!! Don't use it in prod before audit !!!
+ */
+async function generateNewIdentity(
+    whoAmI: PersonIdentifier,
+    usingKey: {
+        key: CryptoKeyPair
+        mnemonicWord: string
+    },
+) {
+    const { key, mnemonicWord } = usingKey
     const pub = await CryptoKeyToJsonWebKey(key.publicKey)
     const priv = await CryptoKeyToJsonWebKey(key.privateKey)
     // !!! Need Security Audit !!!
@@ -153,6 +170,15 @@ async function createNewIdentityByMnemonicWord(whoAmI: PersonIdentifier, passwor
     await createDefaultFriendsGroup(whoAmI).catch(console.error)
     MessageCenter.emit('identityUpdated', undefined)
     return mnemonicWord
+}
+
+export async function attachIdentityToPersona(whoAmI: PersonIdentifier, targetIdentity: PersonIdentifier) {
+    const id = await queryMyIdentityAtDB(targetIdentity)
+    if (!id) throw new Error('Not found')
+    return generateNewIdentity(whoAmI, {
+        key: { privateKey: id.privateKey, publicKey: id.publicKey },
+        mnemonicWord: '',
+    })
 }
 
 export async function backupMyKeyPair(whoAmI: PersonIdentifier, download = true) {
