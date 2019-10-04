@@ -51,11 +51,21 @@ storiesOf('Welcome', module)
             <Welcome1a2 next={to('Welcome', 'Step 1a-3a')} back={to('Welcome', 'Step 0')} />
         </ResponsiveDialog>
     ))
-    .add('Step 1a-3a', () => (
-        <ResponsiveDialog open>
-            <Welcome1a3a next={to('Welcome', 'Step 1a-3b')} />
-        </ResponsiveDialog>
-    ))
+    .add('Step 1a-3a', () => {
+        const m = text('mnemonicWord', null)
+        return (
+            <ResponsiveDialog open>
+                <Welcome1a3a
+                    availableIdentityCount={number('id counts', 1)}
+                    onConnectOtherPerson={action('connect others')}
+                    onRestoreByMnemonicWord={action('restore')}
+                    onGenerateKey={action('generate key')}
+                    generatedMnemonicWord={m === '' ? null : m}
+                    next={to('Welcome', 'Step 1a-3b')}
+                />
+            </ResponsiveDialog>
+        )
+    })
     .add('Step 1a-3b', () => (
         <ResponsiveDialog open>
             <Welcome1a3b next={to('Welcome', 'Step 1a-4')} />

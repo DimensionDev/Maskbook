@@ -3,7 +3,7 @@ import Welcome0 from '../../../components/Welcomes/0'
 import Welcome1a1a from '../../../components/Welcomes/1a1a'
 import Welcome1a1b from '../../../components/Welcomes/1a1b'
 import Welcome1a2 from '../../../components/Welcomes/1a2'
-import Welcome1a3a from '../../../components/Welcomes/1a3b'
+import Welcome1a3a from '../../../components/Welcomes/1a3a'
 import Welcome1a3b from '../../../components/Welcomes/1a3b'
 import Welcome1a4 from '../../../components/Welcomes/1a4'
 import Welcome1b1 from '../../../components/Welcomes/1b1'
@@ -70,11 +70,15 @@ interface Welcome {
     provePost: string
     currentStep: WelcomeState
     personHintFromSearch: Person
+    mnemonicWord: string | null
     currentIdentities: Person[]
     // Actions
     onStepChange(state: WelcomeState): void
     onSelectIdentity(person: Person): void
     onFinish(reason: 'done' | 'quit'): void
+    onGenerateKey(password: string): void
+    onRestoreByMnemonicWord(words: string, password: string): void
+    onConnectOtherPerson(whoAmI: PersonIdentifier, target: PersonIdentifier): void
     sideEffects: typeof WelcomeActions
 }
 function Welcome(props: Welcome) {
@@ -123,12 +127,17 @@ function Welcome(props: Welcome) {
             return (
                 <Welcome1a2
                     back={() => onStepChange(WelcomeState.SelectIdentity)}
-                    next={() => onStepChange(WelcomeState.BackupKey)}
+                    next={() => onStepChange(WelcomeState.GenerateKey)}
                 />
             )
         case WelcomeState.GenerateKey:
             return (
                 <Welcome1a3a
+                    availableIdentityCount={props.currentIdentities.length}
+                    onConnectOtherPerson={x => props.onConnectOtherPerson(whoAmI.identifier, x)}
+                    onRestoreByMnemonicWord={props.onRestoreByMnemonicWord}
+                    generatedMnemonicWord={props.mnemonicWord}
+                    onGenerateKey={props.onGenerateKey}
                     next={() => {
                         sideEffects
                             .backupMyKeyPair(props.whoAmI.identifier)
@@ -271,10 +280,30 @@ export default withRouter(function _WelcomePortal(props: RouteComponentProps) {
         }
     }, [props.location.search, selectedId.identifier])
 
+    const [mnemonic, setMnemonic] = useState<string | null>(null)
+
     return (
         <ResponsiveDialog open>
             <IdentifierRefContext.Provider value={selectedIdRef}>
                 <Welcome
+                    onConnectOtherPerson={(w, t) => {
+                        Services.Welcome.attachIdentityToPersona(w, t).then(
+                            () => setStep(WelcomeState.BackupKey),
+                            alert,
+                        )
+                    }}
+                    onRestoreByMnemonicWord={(w, p) => {
+                        Services.Welcome.restoreNewIdentityWithMnemonicWord(selectedId.identifier, w, p).then(
+                            () => setStep(WelcomeState.BackupKey),
+                            alert,
+                        )
+                    }}
+                    mnemonicWord={mnemonic}
+                    onGenerateKey={password => {
+                        Services.Welcome.createNewIdentityByMnemonicWord(selectedId.identifier, password).then(words =>
+                            setMnemonic(words),
+                        )
+                    }}
                     provePost={provePost}
                     currentStep={step}
                     sideEffects={WelcomeActions}

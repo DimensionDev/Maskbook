@@ -96,11 +96,11 @@ ChooseIdentity.defaultProps = {
  * This hook allows use <ChooseIdentity /> in a isolated scope without providing
  * verbose information.
  */
-export function useIsolatedChooseIdentity() {
+export function useIsolatedChooseIdentity(): readonly [Person | null, React.ReactNode] {
     const all = useMyIdentities()
     const [current, set] = useState<Person>()
     return [
-        current || all[0],
+        current || all[0] || null,
         <ChooseIdentity current={current} availableIdentities={all} onChangeIdentity={set} />,
     ] as const
 }
