@@ -240,37 +240,8 @@ export async function getMyIdentitiesDB(): Promise<PersonRecordPublicPrivate[]> 
     const result = await t.objectStore('myself').getAll()
     return Promise.all(result.map(outDb)) as Promise<PersonRecordPublicPrivate[]>
 }
-/**
- * Generate a new identity
- * @deprecated Use createNewIdentityByMnemonicWord
- */
-export async function generateMyIdentityDB(identifier: PersonIdentifier): Promise<void> {
-    const now = await getMyIdentitiesDB()
-    if (now.some(id => id.identifier.equals(identifier))) return
-    const key = await generate_ECDH_256k1_KeyPair()
-    await storeMyIdentityDB({
-        groups: [],
-        identifier,
-        publicKey: key.publicKey,
-        privateKey: key.privateKey,
-    })
-    await createDefaultFriendsGroup(identifier).catch(console.error)
-    MessageCenter.emit('identityUpdated', undefined)
-}
-//#endregion
 //#region LocalKeys
 
-/**
- * Generate a new local key and store it
- * @param id - Identifier or 'default'
- * @deprecated Use createNewIdentityByMnemonicWord
- */
-export async function generateLocalKeyDB(id: PersonIdentifier) {
-    const key = await generate_AES_GCM_256_Key()
-    await storeLocalKeyDB(id, key)
-    MessageCenter.emit('identityUpdated', undefined)
-    return key
-}
 /**
  *
  * @param network
