@@ -116,50 +116,66 @@ async function hasValidIdentity(whoAmI: PersonIdentifier) {
  *
  * Generate new identity by a password
  *
- * !!! Need Security Audit !!!
- * !!! Don't use it in prod before audit !!!
  * @param whoAmI Who Am I
  * @param password password used to generate mnemonic word, can be empty string
  */
-export async function createNewIdentityByMnemonicWord(whoAmI: PersonIdentifier, password: string) {
+export async function createNewIdentityByMnemonicWord(whoAmI: PersonIdentifier, password: string): Promise<string> {
     const x = await generate_ECDH_256k1_KeyPair_ByMnemonicWord(password)
-    return generateNewIdentity(whoAmI, x)
+    await generateNewIdentity(whoAmI, x)
+    return x.mnemonicWord
 }
 
 /**
  *
  * Recover new identity by a password and mnemonic words
  *
- * !!! Need Security Audit !!!
- * !!! Don't use it in prod before audit !!!
  * @param whoAmI Who Am I
  * @param password password used to generate mnemonic word, can be empty string
  * @param word mnemonic words
  */
-export async function restoreNewIdentityWithMnemonicWord(whoAmI: PersonIdentifier, word: string, password: string) {
-    return generateNewIdentity(whoAmI, await recover_ECDH_256k1_KeyPair_ByMnemonicWord(word, password))
+export async function restoreNewIdentityWithMnemonicWord(
+    whoAmI: PersonIdentifier,
+    word: string,
+    password: string,
+): Promise<void> {
+    await generateNewIdentity(whoAmI, await recover_ECDH_256k1_KeyPair_ByMnemonicWord(word, password))
 }
 /**
- * !!! Need Security Audit !!!
- * !!! Don't use it in prod before audit !!!
+ * There are 2 types of usingKey.
+ * ECDH256k1 Keypair + MnemonicWord
+ * Or
+ * ECDH256k1 Keypair + LocalKey
+ *
+ * This is how localKey generated:
+ * ```ts
+ * const pbkdf2 = import_PBKDF2_Key(ECDH256k1.publicKey)
+ * const localKey = derive_AES_GCM_256_Key_From_PBKDF2(pbkdf2, MnemonicWord)
+ * ```
  */
 async function generateNewIdentity(
     whoAmI: PersonIdentifier,
-    usingKey: {
-        key: CryptoKeyPair
-        mnemonicWord: string
-    },
-) {
-    const { key, mnemonicWord } = usingKey
-    const pub = await CryptoKeyToJsonWebKey(key.publicKey)
-    const priv = await CryptoKeyToJsonWebKey(key.privateKey)
-    // !!! Need Security Audit !!!
-    // ? Is it secure to "derive" localKey(a AES_GCM_256_Key that should never shared to others)
-    // ? Derive method: publicKey as "password" and privateKey as hash
-    const pbkdf2 = await import_PBKDF2_Key(encodeText(stableStringify(pub)))
-    const localKey = await derive_AES_GCM_256_Key_From_PBKDF2(pbkdf2, encodeText(stableStringify(priv)))
+    usingKey:
+        | {
+              key: CryptoKeyPair
+              mnemonicWord: string
+          }
+        | {
+              key: CryptoKeyPair
+              localKey: CryptoKey
+          },
+): Promise<void> {
+    const { key } = usingKey
+    if ('localKey' in usingKey) {
+        await storeLocalKeyDB(whoAmI, usingKey.localKey)
+    } else {
+        const pub = await CryptoKeyToJsonWebKey(key.publicKey)
 
-    await storeLocalKeyDB(whoAmI, localKey)
+        // ? Derive method: publicKey as "password" and password for the mnemonicWord as hash
+        const pbkdf2 = await import_PBKDF2_Key(encodeText(stableStringify(pub)))
+        const localKey = await derive_AES_GCM_256_Key_From_PBKDF2(pbkdf2, encodeText(usingKey.mnemonicWord))
+
+        await storeLocalKeyDB(whoAmI, localKey)
+    }
     // TODO: If there is some old key that will be overwritten, warn the user.
     await storeMyIdentityDB({
         groups: [],
@@ -169,15 +185,18 @@ async function generateNewIdentity(
     })
     await createDefaultFriendsGroup(whoAmI).catch(console.error)
     MessageCenter.emit('identityUpdated', undefined)
-    return mnemonicWord
 }
 
-export async function attachIdentityToPersona(whoAmI: PersonIdentifier, targetIdentity: PersonIdentifier) {
+export async function attachIdentityToPersona(
+    whoAmI: PersonIdentifier,
+    targetIdentity: PersonIdentifier,
+): Promise<void> {
     const id = await queryMyIdentityAtDB(targetIdentity)
-    if (!id) throw new Error('Not found')
-    return generateNewIdentity(whoAmI, {
+    const localKey = await queryLocalKeyDB(whoAmI)
+    if (id === null || localKey === null) throw new Error('Not found')
+    await generateNewIdentity(whoAmI, {
         key: { privateKey: id.privateKey, publicKey: id.publicKey },
-        mnemonicWord: '',
+        localKey,
     })
 }
 
