@@ -18,6 +18,7 @@ export async function generate_ECDH_256k1_KeyPair_ByMnemonicWord(password: strin
         key,
         password,
         mnemonicWord,
+        mnemonicWordPassword: password,
     }
 }
 
@@ -34,6 +35,7 @@ export async function recover_ECDH_256k1_KeyPair_ByMnemonicWord(mnemonicWord: st
         key,
         password,
         mnemonicWord,
+        mnemonicWordPassword: password,
     }
 }
 
