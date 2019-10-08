@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2019 cssinjs/js developers.
+ * Copyright (c) 2019 cssinjs/jss developers.
  * Copyright (c) 2019 SujiTech.
  * See the GitHub history of this file for full list of contributors.
  *
@@ -426,9 +426,10 @@ export default class ConstructableStyleSheetsRenderer {
         insertStyle(this.realElement, this.sheet.options)
 
         // When rules are inserted using `insertRule` API, after `sheet.detach().attach()`
-        // browsers remove those rules.
-        // Workaround is to redeploy the sheet.
-        if (this.hasInsertedRules) {
+        // most browsers create a new CSSStyleSheet, except of all IEs.
+        // @ts-ignore
+        const deployed = Boolean(this.sheet && this.sheet.deployed)
+        if (this.hasInsertedRules && deployed) {
             this.hasInsertedRules = false
             this.deploy()
         }
@@ -490,6 +491,15 @@ export default class ConstructableStyleSheetsRenderer {
             }
             this.insertRules(parent.rules, latestNativeParent)
             return latestNativeParent
+        }
+
+        // IE keeps the CSSStyleSheet after style node has been reattached,
+        // so we need to check if the `renderable` reference the right style sheet and not
+        // rerender those rules.
+        // @ts-ignore
+        if (rule.renderable && rule.renderable.parentStyleSheet === this.element.sheet) {
+            // @ts-ignore
+            return rule.renderable
         }
 
         const ruleStr = rule.toString()
