@@ -94,6 +94,7 @@ function override(config, env) {
     config.module.unknownContextCritical = false
 
     config.plugins = config.plugins.filter(x => x.constructor.name !== 'HtmlWebpackPlugin')
+    config.plugins = config.plugins.filter(x => x.constructor.name !== 'ManifestPlugin')
     /**
      * @param {HtmlWebpackPlugin.Options} options
      */
