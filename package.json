@@ -84,7 +84,7 @@
     "webpack-web-ext-plugin": "github:DimensionDev/webpack-web-ext-plugin"
   },
   "devDependencies": {
-    "@babel/core": "^7.4.3",
+    "@babel/core": "^7.6.2",
     "@storybook/addon-actions": "^5.1.0-rc.1",
     "@storybook/addon-info": "^5.2.1",
     "@storybook/addon-knobs": "^5.1.0-rc.1",
