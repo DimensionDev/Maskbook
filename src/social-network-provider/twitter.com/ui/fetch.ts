@@ -57,8 +57,6 @@ const registerPostCollector = (self: SocialNetworkUI) => {
     new MutationObserverWatcher(postsSelectors())
         .useForeach((node, _, proxy) => {
             const info = getEmptyPostInfo(postsRootSelector())
-            // push to map
-            self.posts.set(proxy, info)
             const collectPostInfo = () => {
                 const r = postParser(node)
                 if (!r) return
@@ -75,6 +73,8 @@ const registerPostCollector = (self: SocialNetworkUI) => {
             info.postContent.addListener(newValue => {
                 info.postPayload.value = deconstructPayload(newValue, self.payloadDecoder)
             })
+            // push to map
+            self.posts.set(proxy, info)
             return {
                 onNodeMutation: collectPostInfo,
                 onTargetChanged: collectPostInfo,
