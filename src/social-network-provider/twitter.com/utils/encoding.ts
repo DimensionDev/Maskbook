@@ -33,21 +33,20 @@ export const twitterEncoding = {
      * @link https://github.com/DimensionDev/Maskbook/issues/191
      */
     publicKeyEncoder: (text: string) => `🎭${ICAO9303Checksum.encode(text)}🎭`,
-    publicKeyDecoder: (text: string) =>
-        (() => {
-            const r = regexMatchAll(text, />([\dA-Za-z+=\/]{20,60})</)
-            if (isNull(r)) {
-                return null
-            }
-            for (const v of r) {
-                const retV = ICAO9303Checksum.decode(v)
-                if (isNull(retV)) {
-                    continue
-                }
-                return retV
-            }
+    publicKeyDecoder: (text: string) => {
+        const r = regexMatchAll(text, />([\dA-Za-z+=\/]{20,60})</)
+        if (isNull(r)) {
             return null
-        })(),
+        }
+        for (const v of r) {
+            const retV = ICAO9303Checksum.decode(v)
+            if (isNull(retV)) {
+                continue
+            }
+            return retV
+        }
+        return null
+    },
     /**
      * @link https://github.com/DimensionDev/Maskbook/issues/198
      */
