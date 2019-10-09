@@ -47,7 +47,8 @@ export function untilDocumentReady() {
     })
 }
 
-export const nop: (...args: any[]) => any = () => () => {}
+export const nop = (...args: any[]) => {}
+export const nopWithUnmount = (...args: any[]) => (...args: any[]) => {}
 export const bypass: <T>(args: T) => T = args => args
 
 /**

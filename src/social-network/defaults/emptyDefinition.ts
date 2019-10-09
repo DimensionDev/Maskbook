@@ -1,7 +1,7 @@
 import { GetContext, ValueRef } from '@holoflows/kit/es'
 import { PersonIdentifier } from '../../database/type'
 import { SocialNetworkUIDefinition } from '../ui'
-import { nop } from '../../utils/utils'
+import { nop, nopWithUnmount } from '../../utils/utils'
 
 /**
  * DO NOT use this in content script
@@ -23,10 +23,10 @@ export const emptyDefinition: SocialNetworkUIDefinition = {
     collectPeople() {},
     collectPosts() {},
     ignoreSetupAccount() {},
-    injectCommentBox: nop,
+    injectCommentBox: nopWithUnmount,
     injectPostBox: nop,
-    injectPostComments: nop,
-    injectPostInspector: nop,
+    injectPostComments: nopWithUnmount,
+    injectPostInspector: nopWithUnmount,
     injectWelcomeBanner: nop,
     resolveLastRecognizedIdentity: nop,
     async shouldDisplayWelcome() {
