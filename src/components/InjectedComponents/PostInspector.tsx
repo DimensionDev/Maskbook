@@ -57,7 +57,11 @@ export function PostInspector(props: PostInspectorProps) {
 
     if (type.encryptedPost) {
         if (!isDebugging) props.needZip()
-        const { iv, ownersAESKeyEncrypted, version } = type.encryptedPost
+        const { iv, version } = type.encryptedPost
+        const ownersAESKeyEncrypted =
+            type.encryptedPost.version === -38
+                ? type.encryptedPost.AESKeyEncrypted
+                : type.encryptedPost.ownersAESKeyEncrypted
         return (
             <>
                 <DecryptPostUI.UI

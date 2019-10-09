@@ -9,7 +9,7 @@ import { queryPostDB } from '../../../database/post'
  * @param postSalt
  */
 export async function getSharedListOfPost(
-    version: -40 | -39,
+    version: -40 | -39 | -38,
     postSalt: string,
     postBy: PersonIdentifier,
 ): Promise<Person[]> {

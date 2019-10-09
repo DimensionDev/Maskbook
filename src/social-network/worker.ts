@@ -45,8 +45,11 @@ export const getNetworkWorker = getCurrentNetworkWorker
 
 export const definedSocialNetworkWorkers = new Set<SocialNetworkWorker>()
 export function defineSocialNetworkWorker(worker: SocialNetworkWorkerDefinition) {
-    if (worker.acceptablePayload.includes('v40') && worker.internalName !== 'facebook') {
-        throw new TypeError('Payload version v40 is not supported in this network. Please use v39 or newer.')
+    if (
+        (worker.acceptablePayload.includes('v40') || worker.acceptablePayload.includes('v39')) &&
+        worker.internalName !== 'facebook'
+    ) {
+        throw new TypeError('Payload version v40 or v39 is not supported in this network. Please use v38 or newer.')
     }
 
     const res: SocialNetworkWorker = {

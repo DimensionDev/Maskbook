@@ -112,7 +112,7 @@ export function AdditionalPostBox(props: Partial<Props>) {
                 warningText: geti18nString('additional_post_box__encrypted_failed'),
                 shouldOpenPostDialog: false,
             })
-            Services.Crypto.publishPostAESKey(token, identity[0].identifier)
+            Services.Crypto.publishPostAESKey(token)
         },
         [identity],
     )

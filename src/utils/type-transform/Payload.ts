@@ -3,7 +3,7 @@ import { SocialNetworkWorkerAndUI } from '../../social-network/shared'
 import { defaults, isNil } from 'lodash-es'
 import { definedSocialNetworkWorkers } from '../../social-network/worker'
 
-export type Payload = PayloadAlpha40_Or_Alpha39
+export type Payload = PayloadAlpha40_Or_Alpha39 | PayloadAlpha38
 
 interface PayloadAlpha40_Or_Alpha39 {
     version: -40 | -39
@@ -12,16 +12,29 @@ interface PayloadAlpha40_Or_Alpha39 {
     encryptedText: string
     signature?: string
 }
+interface PayloadAlpha38 {
+    version: -38
+    AESKeyEncrypted: string
+    iv: string
+    encryptedText: string
+    signature: string
+    sharedPublic?: boolean
+}
 
 /**
- * Detect if there is version -40 or -39 payload
+ * Detect if there is version -40, -39 or -38 payload
  */
-function deconstructAlpha40_Or_Alpha39(str: string, throws = false): Payload | null {
+function deconstructAlpha40_Or_Alpha39_Or_Alpha38(str: string, throws = false): Payload | null {
     // ? payload is 🎼2/4|ownersAESKeyEncrypted|iv|encryptedText|signature:||
     // ? payload is 🎼3/4|ownersAESKeyEncrypted|iv|encryptedText|signature:||
+    // ? payload is 🎼4/4|AESKeyEncrypted|iv|encryptedText|signature|publicShared:||
+    // ? if publicShared is true, that means AESKeyEncrypted is shared with public
+    const isVersion40 = str.includes('🎼2/4')
     const isVersion39 = str.includes('🎼3/4')
+    const isVersion38 = str.includes('🎼4/4')
     str = str.replace('🎼2/4', '🎼3/4')
-    const [_, payloadStart] = str.split('🎼3/4|')
+    str = str.replace('🎼3/4', '🎼4/4')
+    const [_, payloadStart] = str.split('🎼4/4|')
     if (!payloadStart)
         if (throws) throw new Error(geti18nString('payload_not_found'))
         else return null
@@ -29,13 +42,24 @@ function deconstructAlpha40_Or_Alpha39(str: string, throws = false): Payload | n
     if (rest === undefined)
         if (throws) throw new Error(geti18nString('payload_incomplete'))
         else return null
-    const [ownersAESKeyEncrypted, iv, encryptedText, signature, ...extra] = payload.split('|')
-    if (!(ownersAESKeyEncrypted && iv && encryptedText))
+    const [AESKeyEncrypted, iv, encryptedText, signature, publicShared, ...extra] = payload.split('|')
+    if (!(AESKeyEncrypted && iv && encryptedText))
         if (throws) throw new Error(geti18nString('payload_bad'))
         else return null
     if (extra.length) console.warn('Found extra payload', extra)
+    if (isVersion38) {
+        if (!signature) throw new Error(geti18nString('payload_bad'))
+        return {
+            AESKeyEncrypted,
+            iv,
+            encryptedText,
+            signature,
+            version: -38,
+            sharedPublic: !!publicShared,
+        }
+    }
     return {
-        ownersAESKeyEncrypted,
+        ownersAESKeyEncrypted: AESKeyEncrypted,
         iv,
         encryptedText,
         signature,
@@ -51,7 +75,7 @@ function deconstructAlpha41(str: string, throws = false): null | never {
     return null
 }
 
-const versions = new Set([deconstructAlpha40_Or_Alpha39, deconstructAlpha41])
+const versions = new Set([deconstructAlpha40_Or_Alpha39_Or_Alpha38, deconstructAlpha41])
 
 /**
  * @type Decoder    defines decoder. if null, auto select decoder.
@@ -97,10 +121,18 @@ export function deconstructPayload(
     else return null
 }
 
-export function constructAlpha40(data: Payload, encoder: Encoder) {
+export function constructAlpha40(data: PayloadAlpha40_Or_Alpha39, encoder: Encoder) {
     return encoder(`🎼2/4|${data.ownersAESKeyEncrypted}|${data.iv}|${data.encryptedText}|${data.signature}:||`)
 }
 
-export function constructAlpha39(data: Payload, encoder: Encoder) {
+export function constructAlpha39(data: PayloadAlpha40_Or_Alpha39, encoder: Encoder) {
     return encoder(`🎼3/4|${data.ownersAESKeyEncrypted}|${data.iv}|${data.encryptedText}|${data.signature}:||`)
+}
+
+export function constructAlpha38(data: PayloadAlpha38, encoder: Encoder) {
+    return encoder(
+        `🎼4/4|${data.AESKeyEncrypted}|${data.iv}|${data.encryptedText}|${data.signature}${
+            data.sharedPublic ? '|t' : ''
+        }:||`,
+    )
 }

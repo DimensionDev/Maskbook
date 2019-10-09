@@ -19,7 +19,7 @@ export async function prepareOthersKeyForEncryptionV40(
 /**
  * @internal
  */
-export async function prepareOthersKeyForEncryptionV39(to: PersonIdentifier[]): Promise<CryptoKey[]> {
+export async function prepareOthersKeyForEncryptionV39OrV38(to: PersonIdentifier[]): Promise<CryptoKey[]> {
     const data = await Promise.all(to.map(queryPersonDB))
     return data
         .filter(x => x)

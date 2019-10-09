@@ -9,7 +9,7 @@ async function test1to1(text: string = 'test string') {
         content: text,
         privateKeyECDH: alice.privateKey,
         othersPublicKeyECDH: bob.publicKey,
-        version: -40,
+        version: -38,
     })
     const decrypted = await crypto40.decryptMessage1To1({
         encryptedContent: encrypted.encryptedContent,

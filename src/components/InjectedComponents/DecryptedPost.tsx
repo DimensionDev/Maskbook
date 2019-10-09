@@ -133,13 +133,16 @@ function DecryptPost(props: DecryptPostProps) {
         const postPayload = deconstructPayload(encryptedText, null)
         if (!postPayload) return null
         const postByMyself = <DebugModeUI_PostHashDialog network={postBy.network} post={encryptedText} />
+
+        const ownersAESKeyEncrypted =
+            postPayload.version === -38 ? postPayload.AESKeyEncrypted : postPayload.ownersAESKeyEncrypted
         return (
             <DebugList
                 items={[
                     postBy.equals(whoAmI) ? postByMyself : (['Hash of this post', debugHash] as const),
                     ['Decrypt reason', decryptedResult ? decryptedResult.through.join(',') : 'Unknown'],
                     ['Payload version', postPayload.version],
-                    ['Payload ownersAESKeyEncrypted', postPayload.ownersAESKeyEncrypted],
+                    ['Payload ownersAESKeyEncrypted', ownersAESKeyEncrypted],
                     ['Payload iv', postPayload.iv],
                     ['Payload encryptedText', postPayload.encryptedText],
                     ['Payload signature', postPayload.signature],

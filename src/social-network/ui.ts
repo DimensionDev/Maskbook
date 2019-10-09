@@ -282,8 +282,11 @@ function hookUIPostMap(ui: SocialNetworkUI) {
 }
 
 export function defineSocialNetworkUI(UI: SocialNetworkUIDefinition) {
-    if (UI.acceptablePayload.includes('v40') && UI.internalName !== 'facebook') {
-        throw new TypeError('Payload version v40 is not supported in this network. Please use v39 or newer.')
+    if (
+        (UI.acceptablePayload.includes('v40') || UI.acceptablePayload.includes('v39')) &&
+        UI.internalName !== 'facebook'
+    ) {
+        throw new TypeError('Payload version v40 and v39 is not supported in this network. Please use v38 or newer.')
     }
     const res: SocialNetworkUI = {
         ...defaultSharedSettings,
