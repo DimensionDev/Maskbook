@@ -215,11 +215,11 @@ export const getEmptyPostInfo = (rootNodeSelector: LiveSelector<HTMLElement, tru
 export const definedSocialNetworkUIs = new Set<SocialNetworkUI>()
 export const getActivatedUI = () => activatedSocialNetworkUI
 
-let activatedSocialNetworkUI: SocialNetworkUI = ({
+let activatedSocialNetworkUI = ({
     lastRecognizedIdentity: new ValueRef({ identifier: PersonIdentifier.unknown }),
     currentIdentity: new ValueRef(null),
     myIdentitiesRef: new ValueRef([]),
-} as Partial<SocialNetworkUI>) as any
+} as Partial<SocialNetworkUI>) as SocialNetworkUI
 export function activateSocialNetworkUI() {
     for (const ui of definedSocialNetworkUIs)
         if (ui.shouldActivate()) {

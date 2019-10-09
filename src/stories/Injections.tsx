@@ -107,7 +107,7 @@ storiesOf('Injections', module)
         return <CommentBox onSubmit={action('submit')} />
     })
 
-function FakePost(props: { title: string; children: any }) {
+function FakePost(props: { title: string; children: React.ReactNode }) {
     return (
         <>
             {props.title}

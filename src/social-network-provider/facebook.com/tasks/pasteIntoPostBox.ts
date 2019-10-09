@@ -46,7 +46,7 @@ export async function openPostDialogFacebook() {
         await timeout(new MutationObserverWatcher(isMobileFacebook ? activated : dialog), 2000)
         console.log('Dialog appeared')
     } catch {}
-    function clickFailed(e: any) {
+    function clickFailed(e: unknown) {
         console.warn(e)
         if (!dialog.evaluate()[0]) alert('请点击输入框')
     }

@@ -5,7 +5,7 @@ import anchorme from 'anchorme'
 
 interface Props {
     title: React.ReactNode
-    children?: any
+    children?: React.ReactNode
     renderText?: string
 }
 const useStyles = makeStyles({
@@ -43,7 +43,7 @@ function RenderText({ text }: { text: string }) {
     return <>{content}</>
 }
 function parseText(string: string) {
-    const links: any[] = anchorme(string, { list: true })
+    const links: { raw: string; protocol: string; encoded: string }[] = anchorme(string, { list: true })
     let current = string
     const result = []
     while (current.length) {

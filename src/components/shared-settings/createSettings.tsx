@@ -8,7 +8,7 @@ interface SettingsTexts {
     primary: string
     secondary?: string
 }
-const texts = new WeakMap<ValueRef<any>, SettingsTexts>()
+const texts = new WeakMap<ValueRef<unknown>, SettingsTexts>()
 export function createNewSettings<T extends browser.storage.StorageValue>(
     key: string,
     initialValue: T,
@@ -30,7 +30,7 @@ export function createNewSettings<T extends browser.storage.StorageValue>(
         if (typeof browser === 'object') {
             const value = await browser.storage.local.get()
             const stored = value.settings
-            if (typeof stored === 'object' && stored !== null && key in (stored as any)) {
+            if (typeof stored === 'object' && stored !== null && Reflect.has(stored, key)) {
                 settings.value = Reflect.get(stored, key)
             }
         }

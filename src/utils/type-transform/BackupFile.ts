@@ -85,7 +85,7 @@ export interface BackupJSONFileVersion0 {
     key: {
         username: string
         key: { publicKey: JsonWebKey; privateKey?: JsonWebKey }
-        algor: any
+        algor: unknown
         usages: string[]
     }
     local: JsonWebKey

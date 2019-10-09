@@ -6,3 +6,7 @@ declare namespace NodeJS {
         readonly firefoxVariant: 'android' | 'desktop' | 'GeckoView' | undefined
     }
 }
+
+interface Permissions {
+    request(permission: { name: string }): Promise<PermissionStatus>
+}
