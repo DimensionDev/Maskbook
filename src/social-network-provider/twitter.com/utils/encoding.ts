@@ -34,7 +34,7 @@ export const twitterEncoding = {
      */
     publicKeyEncoder: (text: string) => `🎭${ICAO9303Checksum.encode(text)}🎭`,
     publicKeyDecoder: (text: string) => {
-        const r = regexMatchAll(text, />([\dA-Za-z+=\/]{20,60})</)
+        const r = regexMatchAll(text, /([\dA-Za-z+=\/]{20,60})/)
         if (isNull(r)) {
             return null
         }

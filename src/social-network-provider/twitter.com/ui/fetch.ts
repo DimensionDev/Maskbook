@@ -9,15 +9,15 @@ import { uploadToService } from '../utils/user'
 import { isNil } from 'lodash-es'
 
 const resolveLastRecognizedIdentity = (self: SocialNetworkUI) => {
-    const selfSelector = selfInfoSelectors().screenName
+    const selfSelector = selfInfoSelectors().handle
     const assign = () => {
         const ref = self.lastRecognizedIdentity
-        const screenName = selfInfoSelectors().screenName.evaluate()
+        const handle = selfInfoSelectors().handle.evaluate()
         const nickname = selfInfoSelectors().name.evaluate()
         const avatar = selfInfoSelectors().userAvatar.evaluate()
-        if (!isNil(screenName)) {
+        if (!isNil(handle)) {
             ref.value = {
-                identifier: new PersonIdentifier(self.networkIdentifier, screenName),
+                identifier: new PersonIdentifier(self.networkIdentifier, handle),
                 nickname,
                 avatar,
             }
@@ -53,6 +53,7 @@ const registerPostCollector = (self: SocialNetworkUI) => {
             const info = getEmptyPostInfo(postsRootSelector())
             const collectPostInfo = () => {
                 const r = postParser(node)
+                console.log(JSON.stringify(r))
                 if (!r) return
                 info.postContent.value = r.content
                 const postBy = new PersonIdentifier(self.networkIdentifier, r.handle)
