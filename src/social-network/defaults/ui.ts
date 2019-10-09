@@ -14,18 +14,11 @@ const defaultDataSources: Required<SocialNetworkUIDataSources> = cloneDeep({
     posts: new Map(),
 })
 
-/**
- * @desc why both undefined and null
- * undefined means undefined (at definition time),
- * everything must be defined at runtime
- * (for the convenient of managing config items),
- * so the null explicit defines "not available".
- */
 const defaultInjections = {
-    injectCommentBox: null,
-    injectPostComments: null,
-    injectWelcomeBanner: null,
-}
+    injectCommentBox: 'disabled',
+    injectPostComments: 'disabled',
+    injectWelcomeBanner: 'disabled',
+} as const
 
 export const defaultSocialNetworkUI = cloneDeep({
     ...defaultDataSources,

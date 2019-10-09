@@ -7,7 +7,7 @@ import { defaultTo, isNull } from 'lodash-es'
 import Services from '../extension/service'
 import { defaultSharedSettings } from './defaults/shared'
 import { defaultSocialNetworkUI } from './defaults/ui'
-import { nop } from '../utils/utils'
+import { nop, nopWithUnmount } from '../utils/utils'
 
 //#region SocialNetworkUI
 export interface SocialNetworkUIDefinition
@@ -88,27 +88,24 @@ export interface SocialNetworkUIInjections {
     injectPostBox(): void
     /**
      * This function should inject the Welcome Banner
-     * @desc why both undefined and null
-     * undefined means undefined (at definition time),
-     * everything must be defined at runtime
-     * (for the convenient of managing config items),
-     * so the null explicit defines "not available".
+     * @description leaving it undefined, there will be a default value
+     * leaving it "disabled", Maskbook will disable this feature.
      */
-    injectWelcomeBanner?: (() => void) | null
+    injectWelcomeBanner?: (() => void) | 'disabled'
     /**
      * This function should inject the comment
      * @param current The current post
      * @param node The post root
      * @returns unmount the injected components
      */
-    injectPostComments?: ((current: PostInfo, node: DOMProxy) => () => void) | null
+    injectPostComments?: ((current: PostInfo, node: DOMProxy) => () => void) | 'disabled'
     /**
      * This function should inject the comment box
      * @param current The current post
      * @param node The post root
      * @returns unmount the injected components
      */
-    injectCommentBox?: ((current: PostInfo, node: DOMProxy) => () => void) | null
+    injectCommentBox?: ((current: PostInfo, node: DOMProxy) => () => void) | 'disabled'
     /**
      * This function should inject the post box
      * @param current The current post
@@ -237,7 +234,12 @@ export function activateSocialNetworkUI() {
             ui.myIdentitiesRef.addListener(val => {
                 if (val.length === 1) ui.currentIdentity.value = val[0]
             })
-            ui.shouldDisplayWelcome().then(r => r && defaultTo(ui.injectWelcomeBanner, nop)())
+            {
+                const injectBanner = ui.injectWelcomeBanner
+                if (typeof injectBanner === 'function') {
+                    ui.shouldDisplayWelcome().then(result => result && injectBanner())
+                }
+            }
             ui.lastRecognizedIdentity.addListener(id => {
                 if (id.identifier.isUnknown) return
 
@@ -255,8 +257,14 @@ function hookUIPostMap(ui: SocialNetworkUI) {
     const setter = ui.posts.set
     ui.posts.set = function(key, value) {
         const unmountPostInspector = ui.injectPostInspector(value, key)
-        const unmountCommentBox = defaultTo(ui.injectCommentBox, nop)(value, key)
-        const unmountPostComments = defaultTo(ui.injectPostComments, nop)(value, key)
+        const unmountCommentBox: () => void =
+            ui.injectCommentBox === 'disabled'
+                ? nopWithUnmount
+                : defaultTo(ui.injectCommentBox, nopWithUnmount)(value, key)
+        const unmountPostComments: () => void =
+            ui.injectPostComments === 'disabled'
+                ? nopWithUnmount
+                : defaultTo(ui.injectPostComments, nopWithUnmount)(value, key)
         unmountFunctions.set(key, () => {
             unmountPostInspector()
             unmountCommentBox()
