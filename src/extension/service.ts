@@ -53,7 +53,7 @@ Object.assign(globalThis, {
     getCurrentNetworkWorkerService,
 })
 //#region
-type Service = Record<string, (...args: any[]) => Promise<any>>
+type Service = Record<string, (...args: unknown[]) => Promise<unknown>>
 function register<T extends Service>(service: T, name: keyof Services, mock?: Partial<T>) {
     if (OnlyRunInContext(['content', 'options', 'debugging', 'background'], false)) {
         GetContext() !== 'debugging' && console.log(`Service ${name} registered in ${GetContext()}`)
@@ -79,9 +79,10 @@ function register<T extends Service>(service: T, name: keyof Services, mock?: Pa
         if (GetContext() === 'debugging') {
             // ? -> UI developing
             const mockService = new Proxy(mock || {}, {
-                get(target: any, key: string) {
-                    return async function(...args: any[]) {
-                        if (target[key]) return target[key](...args)
+                get(target: Record<string, (...args: unknown[]) => unknown>, key: keyof typeof target) {
+                    return async function(...args: unknown[]) {
+                        const f = target[key]
+                        if (typeof f === 'function') return f(...args)
                         return void 0
                     }
                 },

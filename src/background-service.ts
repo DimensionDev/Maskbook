@@ -77,7 +77,7 @@ if (GetContext() === 'background') {
         }
     })
 }
-function IgnoreError(arg: any): (reason: any) => void {
+function IgnoreError(arg: unknown): (reason: Error) => void {
     return e => {
         if (e.message.includes('non-structured-clonable data')) {
             // It's okay we don't need the result, happened on Firefox

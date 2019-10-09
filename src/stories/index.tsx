@@ -27,11 +27,11 @@ defineSocialNetworkUI({
     ...emptyDefinition,
     friendlyName: 'telnet',
     setupAccount: 'Embrace the eternal September!',
-    isDangerousNetwork: true as any,
+    isDangerousNetwork: true as false,
 })
 defineSocialNetworkUI({
     ...emptyDefinition,
     friendlyName: 'MySpace',
-    isDangerousNetwork: true as any,
+    isDangerousNetwork: true as false,
 })
 activateSocialNetworkUI()

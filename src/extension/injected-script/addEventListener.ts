@@ -8,7 +8,7 @@ export interface CustomEvents {
     function hijack(key: string) {
         store[key as keyof DocumentEventMap] = new Set()
     }
-    function isEnabled(key: any): key is keyof typeof store {
+    function isEnabled(key: string): key is keyof typeof store {
         return key in store
     }
 
@@ -24,7 +24,7 @@ export interface CustomEvents {
         }
         return new Proxy(x, {
             get(target: T, key: keyof T) {
-                return (mockTable as any)[key] || target[key]
+                return Reflect.get(mockTable, key) || target[key]
             },
         })
     }
@@ -38,9 +38,9 @@ export interface CustomEvents {
         },
         input(text) {
             // Cause react hooks the input.value getter & setter
-            const proto: HTMLInputElement | HTMLTextAreaElement = (document.activeElement!.constructor as any).prototype
+            const proto: HTMLInputElement | HTMLTextAreaElement = document.activeElement!.constructor.prototype
             Object.getOwnPropertyDescriptor(proto, 'value')!.set!.call(document.activeElement, text)
-            return getEvent(new (window as any).InputEvent('input', { inputType: 'insertText', data: text }))
+            return getEvent(new window.InputEvent('input', { inputType: 'insertText', data: text }))
         },
     }
     ;(Object.keys(hacks) as (keyof DocumentEventMap)[]).concat(['keyup', 'input']).forEach(hijack)
@@ -51,7 +51,7 @@ export interface CustomEvents {
         for (const f of store[eventName] || []) {
             try {
                 const hack = hacks[eventName]
-                if (hack) f((hack as any)(...param))
+                if (hack) f(hack(...param))
                 else f(param as any)
             } catch (e) {
                 console.error(e)

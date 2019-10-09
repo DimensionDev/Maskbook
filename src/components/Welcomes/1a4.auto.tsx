@@ -92,12 +92,12 @@ export default function Auto({ type, setType, bioDisabled, hasBio, hasPost, post
     )
     return (
         <div className={classes.root}>
-            <FormControl component={'fieldset' as any} className={classes.root}>
+            <FormControl component="fieldset" className={classes.root}>
                 <RadioGroup
                     className={classes.group}
                     aria-label={geti18nString('welcome_1a4_auto_radio_aria')}
                     value={type === undefined ? '__' : type}
-                    onChange={(e, v) => setType(v as any)}>
+                    onChange={(e, v) => setType(v as 'bio' | 'post')}>
                     {hasBio ? bio : null}
                     {hasPost ? post : null}
                 </RadioGroup>

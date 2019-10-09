@@ -7,7 +7,7 @@ type PromiseState<T> =
     | { status: 'fail'; error: Error }
 export default function AsyncComponent<Return>(props: {
     promise: () => Promise<Return>
-    dependencies: ReadonlyArray<any>
+    dependencies: ReadonlyArray<unknown>
     completeComponent: React.ComponentType<{ data: Return }> | React.ReactNode
     awaitingComponent: React.SuspenseProps['fallback']
     failedComponent: React.ComponentType<{ error: Error }> | React.ReactNode
@@ -56,9 +56,9 @@ function isComponent<T>(f?: React.ComponentType<T> | NonNullable<React.ReactNode
 }
 
 /** React hook for not-cancelable async calculation */
-export function useAsync<T>(fn: () => Promise<T>, dep: ReadonlyArray<any>): PromiseLike<T> {
-    let res: any = () => {},
-        rej: any = () => {}
+export function useAsync<T>(fn: () => PromiseLike<T>, dep: ReadonlyArray<unknown>): PromiseLike<T> {
+    let res: Parameters<ConstructorParameters<typeof Promise>[0]>[0] = () => {},
+        rej: Parameters<ConstructorParameters<typeof Promise>[0]>[1] = () => {}
     React.useEffect(() => {
         let unmounted = false
         fn().then(x => unmounted || res(x), err => unmounted || rej(err))
@@ -66,12 +66,16 @@ export function useAsync<T>(fn: () => Promise<T>, dep: ReadonlyArray<any>): Prom
             unmounted = true
         }
         // eslint-disable-next-line
-    }, dep)
+    }, dep.concat(fn))
     return {
         then(f, r) {
-            return new Promise<any>((resolve, reject) => {
-                res = (val: any) => (f ? resolve(f(val)) : resolve(val))
-                rej = (err: any) => (r ? resolve(r(err)) : reject(err))
+            return new Promise(async (resolve, reject) => {
+                res = (val: unknown) => {
+                    f ? resolve(f(val as T)) : resolve(val as any)
+                }
+                rej = (err: unknown) => {
+                    r ? resolve(r(err)) : reject(err)
+                }
             })
         },
     }

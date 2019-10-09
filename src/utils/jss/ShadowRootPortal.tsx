@@ -3,9 +3,10 @@ import { GetContext } from '@holoflows/kit/es'
 
 const div = document.createElement('div')
 document.body.appendChild(div)
-export const PortalShadowRoot =
-    GetContext() === 'options' ? div : ((div.attachShadow({ mode: 'closed' }) as unknown) as any)
-livingShadowRoots.add(PortalShadowRoot as any)
+export const PortalShadowRoot = ((GetContext() === 'options'
+    ? div
+    : div.attachShadow({ mode: 'closed' })) as unknown) as Element
+livingShadowRoots.add((PortalShadowRoot as unknown) as ShadowRoot)
 
 Object.defineProperties(ShadowRoot.prototype, {
     setAttribute: {
@@ -68,7 +69,7 @@ Object.defineProperties(ShadowRoot.prototype, {
     // ? Hack for React, let event go through ShadowDom
     const hackingEvents = new WeakMap<Event, EventTarget[]>()
 
-    function hack(eventName: string, shadowRoot: ShadowRoot) {
+    function hack(eventName: string, shadowRoot: ShadowRoot | Element) {
         shadowRoot.addEventListener(eventName, (e: Event) => {
             if (hackingEvents.has(e)) return
             const path = e.composedPath()

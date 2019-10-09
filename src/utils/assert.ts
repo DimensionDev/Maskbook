@@ -16,7 +16,7 @@ export class WithStateAssert {
     }
 }
 
-export const notInclude = (val: any, things: any[], message: string) => {
+export const notInclude = (val: unknown, things: unknown[], message: string) => {
     things.forEach(value => {
         notEqual(val, value, message)
     })
@@ -30,7 +30,7 @@ export const notNullable = <T>(val: T, message: string = 'Unexpected nil value d
     return val as NonNullable<T>
 }
 
-export const notEmpty = (val: any, message: string = 'Unexpected empty collection detected') => {
+export const notEmpty = (val: unknown, message: string = 'Unexpected empty collection detected') => {
     equal(isEmpty(val), false, message)
     return val
 }
