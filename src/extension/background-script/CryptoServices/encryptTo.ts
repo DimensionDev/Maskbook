@@ -74,9 +74,11 @@ export async function encryptTo(
 
 /**
  * MUST call before send post, or othersAESKeyEncrypted will not be published to the internet!
+ * TODO: If we can use PostIVIdentifier to avoid this hacking way to publish PostAESKey?
  * @param iv Token that returns in the encryptTo
  */
 export async function publishPostAESKey(iv: string, whoAmI: PersonIdentifier) {
     if (!OthersAESKeyEncryptedMap.has(iv)) throw new Error(geti18nString('service_publish_post_aes_key_failed'))
-    return Gun2.publishPostAESKeyOnGun2(iv, OthersAESKeyEncryptedMap.get(iv)!)
+    // Use the latest payload version here since we do not accept new post for older version.
+    return Gun2.publishPostAESKeyOnGun2(-39, iv, OthersAESKeyEncryptedMap.get(iv)!)
 }

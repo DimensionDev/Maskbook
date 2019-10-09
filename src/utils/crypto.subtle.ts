@@ -12,6 +12,14 @@ export function generate_ECDH_256k1_KeyPair() {
 export function import_ECDH_256k1_Key(key: JsonWebKey | ArrayBuffer) {
     return crypto.subtle.importKey(getType(key), key, { name: 'ECDH', namedCurve: 'K-256' }, true, ['deriveKey'])
 }
+export async function import_ECDH_256k1_KeyPair(key: JsonWebKey): Promise<CryptoKeyPair> {
+    key = { ...key }
+    if (!key.d) throw new TypeError('import_ECDH_256k1_KeyPair requires a privkey (jwt d)')
+    const privateKey = await import_ECDH_256k1_Key(key)
+    delete key.d
+    const publicKey = await import_ECDH_256k1_Key(key)
+    return { privateKey, publicKey }
+}
 export function import_AES_GCM_256_Key(key: JsonWebKey | ArrayBuffer) {
     return crypto.subtle.importKey(getType(key), key, { name: 'AES-GCM', length: 256 }, true, ['encrypt', 'decrypt'])
 }

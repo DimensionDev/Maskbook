@@ -13,12 +13,17 @@ import * as CryptoService from './extension/background-script/CryptoService'
 import * as WelcomeService from './extension/background-script/WelcomeService'
 import * as PeopleService from './extension/background-script/PeopleService'
 import { decryptFromMessageWithProgress } from './extension/background-script/CryptoServices/decryptFrom'
+import {
+    generate_ECDH_256k1_KeyPair_ByMnemonicWord,
+    recover_ECDH_256k1_KeyPair_ByMnemonicWord,
+} from './utils/mnemonic-code'
 Object.assign(window, { CryptoService, WelcomeService, PeopleService })
 Object.assign(window, {
     ServicesWithProgress: {
         decryptFrom: decryptFromMessageWithProgress,
     },
 })
+
 require('./extension/service')
 require('./provider.worker')
 
