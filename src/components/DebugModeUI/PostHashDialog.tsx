@@ -47,6 +47,8 @@ function SimpleDialog(props: SimpleDialogProps) {
             </DialogTitle>
             <List>
                 {props.friends.map(one => {
+                    const hash = map.get(one.identifier.toText())
+                    if (!hash) return null
                     return (
                         <ListItem>
                             <ListItemAvatar>
@@ -54,11 +56,7 @@ function SimpleDialog(props: SimpleDialogProps) {
                             </ListItemAvatar>
                             <ListItemText
                                 primary={one.nickname || one.identifier.userId}
-                                secondary={
-                                    <span style={{ fontFamily: 'monospace' }}>
-                                        {map.get(one.identifier.toText()) || 'Unknown'}
-                                    </span>
-                                }
+                                secondary={<span style={{ fontFamily: 'monospace' }}>{hash}</span>}
                             />
                         </ListItem>
                     )
