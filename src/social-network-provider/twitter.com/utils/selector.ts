@@ -66,7 +66,7 @@ const p = (regex: RegExp, index: number) => {
     return base.clone().map(x => regexMatch(x.innerText, regex, index))
 }
 export const selfInfoSelectors = () => ({
-    screenName: p(name, 1),
+    handle: p(name, 1),
     name: p(name, 2),
     bio: p(bio, 1),
     userAvatar: p(avatar, 1),
