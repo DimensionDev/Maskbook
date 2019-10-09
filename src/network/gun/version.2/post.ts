@@ -1,7 +1,7 @@
 import { OnlyRunInContext } from '@holoflows/kit/es'
-import { gun2, PostOnGun2, SharedAESKeyGun2 } from '.'
+import { gun2, SharedAESKeyGun2 } from '.'
 import { hashPostSalt, hashCryptoKey } from './hash'
-import { PublishedAESKeyRecordV39 } from '../../../crypto/crypto-alpha-39'
+import { PublishedAESKeyRecordV39OrV38 } from '../../../crypto/crypto-alpha-38'
 
 OnlyRunInContext('background', 'gun')
 
@@ -12,7 +12,7 @@ OnlyRunInContext('background', 'gun')
  * @param partitionByCryptoKey Public key of the current user (receiver)
  */
 export async function queryPostKeysOnGun2(
-    version: -39,
+    version: -39 | -38,
     postSalt: string,
     partitionByCryptoKey: CryptoKey,
 ): Promise<{ keys: SharedAESKeyGun2[]; postHash: string; keyHash: string }> {
@@ -45,7 +45,7 @@ export async function queryPostKeysOnGun2(
  * @param callback
  */
 export function subscribePostKeysOnGun2(
-    version: -39,
+    version: -39 | -38,
     postSalt: string,
     partitionByCryptoKey: CryptoKey,
     callback: (data: SharedAESKeyGun2) => void,
@@ -74,9 +74,9 @@ export function subscribePostKeysOnGun2(
  * @param receiversKeys Keys needs to publish
  */
 export async function publishPostAESKeyOnGun2(
-    version: -39,
+    version: -39 | -38,
     postSalt: string,
-    receiversKeys: PublishedAESKeyRecordV39[],
+    receiversKeys: PublishedAESKeyRecordV39OrV38[],
 ) {
     const postHash = await hashPostSalt(postSalt)
     // Store AES key to gun

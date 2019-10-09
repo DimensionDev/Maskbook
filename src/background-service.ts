@@ -117,6 +117,7 @@ Object.assign(window, {
     gun2: require('./network/gun/version.2'),
     crypto40: require('./crypto/crypto-alpha-40'),
     crypto39: require('./crypto/crypto-alpha-39'),
+    crypto38: require('./crypto/crypto-alpha-38'),
     db: {
         avatar: require('./database/avatar'),
         group: require('./database/group'),

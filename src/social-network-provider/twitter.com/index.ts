@@ -13,7 +13,7 @@ export const sharedSettings: SocialNetworkWorkerAndUIDefinition = {
     isDangerousNetwork: false,
     networkIdentifier: host,
     isValidUsername: usernameValidator,
-    acceptablePayload: ['v39', 'latest'],
+    acceptablePayload: ['v38', 'latest'],
     init() {},
     publicKeyEncoder: (text: string) => `🎭${text}🎭`,
     publicKeyDecoder: (text: string) => regexMatch(text, /(🎭)(.+)(🎭)/, 2),

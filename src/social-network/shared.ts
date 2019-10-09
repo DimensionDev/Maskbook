@@ -5,12 +5,12 @@ export interface SocialNetworkWorkerAndUIDefinition {
     /**
      * Declare what payload does this network supports.
      *
-     * Latest = v39
+     * Latest = v38
      *
      * When creating new posts,
      * Maskbook will use the latest declared version in `acceptablePayload`
      */
-    acceptablePayload: ('latest' | 'v39' | 'v40')[]
+    acceptablePayload: ('latest' | 'v38' | 'v39' | 'v40')[]
     /**
      * This name is used internally and should be unique
      */

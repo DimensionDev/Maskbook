@@ -1,18 +1,22 @@
+/**
+ * @deprecated This version of payload is not in use.
+ * Please goto Crypto alpha v38
+ */
 import {
     generateOthersAESKeyEncrypted as generateOthersAESKeyEncryptedV40,
     encrypt1ToN as encrypt1ToN40,
 } from './crypto-alpha-40'
 export type PublishedAESKey = { encryptedKey: string; salt: string }
-export type PublishedAESKeyRecordV39 = {
+export type PublishedAESKeyRecordV39OrV38 = {
     aesKey: PublishedAESKey
     receiverKey: CryptoKey
 }
 export async function generateOthersAESKeyEncrypted(
-    version: -39,
+    version: -39 | -38,
     AESKey: CryptoKey,
     privateKeyECDH: CryptoKey,
     othersPublicKeyECDH: CryptoKey[],
-): Promise<PublishedAESKeyRecordV39[]> {
+): Promise<PublishedAESKeyRecordV39OrV38[]> {
     const othersPublicKeyECDH_ = othersPublicKeyECDH.map((x, index) => ({ key: x, name: index.toString() }))
     const othersAESKeyEncrypted = await generateOthersAESKeyEncryptedV40(
         -40,
@@ -20,7 +24,7 @@ export async function generateOthersAESKeyEncrypted(
         privateKeyECDH,
         othersPublicKeyECDH_,
     )
-    const othersAESKeyEncrypted_ = othersAESKeyEncrypted.map<PublishedAESKeyRecordV39>(key => ({
+    const othersAESKeyEncrypted_ = othersAESKeyEncrypted.map<PublishedAESKeyRecordV39OrV38>(key => ({
         aesKey: key.key,
         receiverKey: othersPublicKeyECDH[parseInt(key.name, 10)],
     }))
@@ -32,7 +36,7 @@ export async function generateOthersAESKeyEncrypted(
  * This function is generally based on encrypt1ToN in crypto-alpha-40
  */
 export async function encrypt1ToN(info: {
-    version: -39
+    version: -38
     /** Message to encrypt */
     content: string | ArrayBuffer
     /** Your private key */
@@ -44,13 +48,13 @@ export async function encrypt1ToN(info: {
     /** iv */
     iv: ArrayBuffer
 }): Promise<{
-    version: -39
+    version: -38
     encryptedContent: ArrayBuffer
     iv: ArrayBuffer
     /** Your encrypted post aes key. Should be attached in the post. */
     ownersAESKeyEncrypted: ArrayBuffer
     /** All encrypted post aes key. Should be post on the gun. */
-    othersAESKeyEncrypted: PublishedAESKeyRecordV39[]
+    othersAESKeyEncrypted: PublishedAESKeyRecordV39OrV38[]
 }> {
     const othersPublicKeyECDH = info.othersPublicKeyECDH.map((x, index) => ({ key: x, name: index.toString() }))
     const { encryptedContent, iv, othersAESKeyEncrypted, ownersAESKeyEncrypted } = await encrypt1ToN40({
@@ -62,7 +66,13 @@ export async function encrypt1ToN(info: {
         aesKey: key.key,
         receiverKey: othersPublicKeyECDH[parseInt(key.name, 10)].key,
     }))
-    return { encryptedContent, iv, version: -39, ownersAESKeyEncrypted, othersAESKeyEncrypted: othersAESKeyEncrypted_ }
+    return {
+        encryptedContent,
+        iv,
+        version: info.version,
+        ownersAESKeyEncrypted,
+        othersAESKeyEncrypted: othersAESKeyEncrypted_,
+    }
 }
 
 export { encrypt1To1, decryptMessage1To1 } from './crypto-alpha-40'

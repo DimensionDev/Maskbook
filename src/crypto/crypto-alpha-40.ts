@@ -1,6 +1,6 @@
 /**
  * @deprecated This version of payload is not in use.
- * Please goto Crypto alpha v39
+ * Please goto Crypto alpha v38
  */
 import {
     encodeText,
@@ -69,7 +69,7 @@ async function deriveAESKey(
  * Encrypt 1 to 1
  */
 export async function encrypt1To1(info: {
-    version: -40 | -39
+    version: -38
     /** Message that you want to encrypt */
     content: string | ArrayBuffer
     /** Your private key */
@@ -99,7 +99,8 @@ export async function generateOthersAESKeyEncrypted(
     return Promise.all(
         othersPublicKeyECDH.map<Promise<PublishedAESKeyRecordV40>>(async ({ key, name }) => {
             const encrypted = await encrypt1To1({
-                version: -40,
+                // This is the deprecated -40 code path
+                version: (-40 as unknown) as -38,
                 content: exportedAESKey,
                 othersPublicKeyECDH: key,
                 privateKeyECDH: privateKeyECDH,
@@ -162,7 +163,7 @@ export async function encrypt1ToN(info: {
  * Decrypt 1 to 1
  */
 export async function decryptMessage1To1(info: {
-    version: -40 | -39
+    version: -40 | -39 | -38
     encryptedContent: string | ArrayBuffer
     salt: string | ArrayBuffer
     /** Your private key */
@@ -181,7 +182,7 @@ export async function decryptMessage1To1(info: {
  * Decrypt 1 to N message that send by other
  */
 export async function decryptMessage1ToNByOther(info: {
-    version: -40 | -39
+    version: -40 | -39 | -38
     encryptedContent: string | ArrayBuffer
     privateKeyECDH: CryptoKey
     authorsPublicKeyECDH: CryptoKey
@@ -211,7 +212,7 @@ export async function decryptMessage1ToNByOther(info: {
     return [await decryptWithAES({ aesKey, iv, encrypted: encryptedContent }), aesKey]
 }
 export async function extractAESKeyInMessage(
-    version: -40 | -39,
+    version: -40 | -39 | -38,
     encodedEncryptedKey: string | ArrayBuffer,
     _iv: string | ArrayBuffer,
     myLocalKey: CryptoKey,
@@ -228,7 +229,7 @@ export async function extractAESKeyInMessage(
  * Decrypt 1 to N message that send by myself
  */
 export async function decryptMessage1ToNByMyself(info: {
-    version: -40 | -39
+    version: -40 | -39 | -38
     encryptedContent: string | ArrayBuffer
     /** This should be included in the message */
     encryptedAESKey: string | ArrayBuffer

@@ -8,5 +8,5 @@ export const sharedProvider: SocialNetworkWorkerAndUIDefinition = {
     networkIdentifier: 'facebook.com',
     isValidUsername: v => !!regularUsername(v),
     init() {},
-    acceptablePayload: ['v40', 'v39', 'latest'],
+    acceptablePayload: ['v40', 'v39', 'v38', 'latest'],
 }
