@@ -150,7 +150,7 @@ export async function* decryptFromMessageWithProgress(
                 }
             } else {
                 if (cachedPostResult) {
-                    const { keyHash, postHash } = await Gun2.queryPostKeysOnGun2(iv, mine.publicKey)
+                    const { keyHash, postHash } = await Gun2.queryPostKeysOnGun2(-39, iv, mine.publicKey)
                     yield { debug: 'debug_finding_hash', hash: [postHash, keyHash] }
                     return {
                         signatureVerifyResult: await cryptoProvider.verify(
@@ -171,7 +171,7 @@ export async function* decryptFromMessageWithProgress(
                     if (result === undefined) return { error: geti18nString('service_not_share_target') }
                     aesKeyEncrypted.push(result)
                 } else if (version === -39) {
-                    const { keyHash, keys, postHash } = await Gun2.queryPostKeysOnGun2(iv, mine.publicKey)
+                    const { keyHash, keys, postHash } = await Gun2.queryPostKeysOnGun2(-39, iv, mine.publicKey)
                     yield { debug: 'debug_finding_hash', hash: [postHash, keyHash] }
                     aesKeyEncrypted.push(...keys)
                 }
@@ -196,7 +196,7 @@ export async function* decryptFromMessageWithProgress(
 
                 // Failed, we have to wait for the future info from gun.
                 return new Promise<Success>((resolve, reject) => {
-                    const undo = Gun2.subscribePostKeysOnGun2(iv, mine.publicKey, async key => {
+                    const undo = Gun2.subscribePostKeysOnGun2(-39, iv, mine.publicKey, async key => {
                         console.log('New key received, trying', key)
                         try {
                             const result = await decryptWith(key)

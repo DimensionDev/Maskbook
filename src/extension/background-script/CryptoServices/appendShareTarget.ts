@@ -26,7 +26,7 @@ export async function appendShareTarget(
     if (version === -39) {
         const toKey = await prepareOthersKeyForEncryptionV39(people)
         const othersAESKeyEncrypted = await Alpha39.generateOthersAESKeyEncrypted(-39, AESKey, myPrivateKey, toKey)
-        Gun2.publishPostAESKeyOnGun2(iv, othersAESKeyEncrypted)
+        Gun2.publishPostAESKeyOnGun2(-39, iv, othersAESKeyEncrypted)
     } else if (version === -40) {
         const toKey = await prepareOthersKeyForEncryptionV40(people)
         const othersAESKeyEncrypted = await Alpha40.generateOthersAESKeyEncrypted(-40, AESKey, myPrivateKey, toKey)

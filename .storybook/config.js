@@ -24,4 +24,4 @@ addParameters({
 // Addons
 addDecorator(withKnobs)
 // Theme for MUI
-addDecorator(muiTheme([MaskbookLightTheme, MaskbookDarkTheme]))
+addDecorator(muiTheme([MaskbookDarkTheme, MaskbookLightTheme]))

@@ -162,6 +162,48 @@
     "welcome_1a2_done_button": {
         "message": "棒耶！"
     },
+    "welcome_1a3a_title": {
+        "message": "你希望這個賬戶使用什麽密鑰？"
+    },
+    "welcome_1a3a_generate_new_key_title": {
+        "message": "創建新的密鑰"
+    },
+    "welcome_1a3a_generate_new_key_subtitle": {
+        "message": "請妥善保管"
+    },
+    "welcome_1a3a_generate_new_key_password_label": {
+        "message": "新密鑰的密碼"
+    },
+    "welcome_1a3a_generate_new_key_password_help": {
+        "message": "請牢記密碼，否則只憑藉助記詞是無法恢復密鑰的"
+    },
+    "welcome_1a3a_generate_new_key": {
+        "message": "創建新密鑰"
+    },
+    "welcome_1a3a_generate_new_key_result": {
+        "message": "請抄寫助記詞"
+    },
+    "welcome_1a3a_generate_new_key_result_help": {
+        "message": "助記詞用於恢復密鑰，確定保管好后按“確認”"
+    },
+    "welcome_1a3a_connect_title": {
+        "message": "關聯其他賬戶"
+    },
+    "welcome_1a3a_connect_subtitle": {
+        "message": "這會使用相同的密鑰"
+    },
+    "welcome_1a3a_recover_title": {
+        "message": "用助記詞恢復"
+    },
+    "welcome_1a3a_recover_subtitle": {
+        "message": "輸入以前記錄的助記詞"
+    },
+    "welcome_1a3a_recover_input_word": {
+        "message": "助記詞"
+    },
+    "welcome_1a3a_recover_input_password": {
+        "message": "密碼"
+    },
     "welcome_1a3_title": {
         "message": "請妥善保管備份檔案"
     },
