@@ -5,7 +5,6 @@ import Gun from 'gun'
 import { PersonIdentifier } from '../../../database/type'
 import { memoizePromise } from '../../../utils/memoize'
 import { CryptoKeyToJsonWebKey } from '../../../utils/type-transform/CryptoKey-JsonWebKey'
-import stableJSONStringify from 'json-stable-stringify'
 
 export const hashPersonIdentifier = memoizePromise(
     async function hashPersonIdentifier(id: PersonIdentifier) {
@@ -35,7 +34,14 @@ export const hashCryptoKey = memoizePromise(async function(key: CryptoKey, stabl
     const hashPair = `10198a2f-205f-45a6-9987-3488c80113d0`
     const N = 2
 
-    const jwk = (stableHash ? stableJSONStringify : JSON.stringify)(await CryptoKeyToJsonWebKey(key))
-    const hash = (await Gun.SEA.work(jwk, hashPair))!
-    return hash.substring(0, N)
+    if (stableHash === true) {
+        const jwk = await CryptoKeyToJsonWebKey(key)
+        if (!jwk.x || !jwk.y) throw new Error('Invalid key')
+        const hash = (await Gun.SEA.work(jwk.x! + jwk.y!, hashPair))!
+        return hash.substring(0, N)
+    } else {
+        const jwk = JSON.stringify(await CryptoKeyToJsonWebKey(key))
+        const hash = (await Gun.SEA.work(jwk, hashPair))!
+        return hash.substring(0, N)
+    }
 })

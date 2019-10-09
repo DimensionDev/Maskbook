@@ -26,7 +26,6 @@ import {
 } from '../../utils/mnemonic-code'
 import { derive_AES_GCM_256_Key_From_PBKDF2, import_PBKDF2_Key } from '../../utils/crypto.subtle'
 import { CryptoKeyToJsonWebKey } from '../../utils/type-transform/CryptoKey-JsonWebKey'
-import stableStringify from 'json-stable-stringify'
 import { createDefaultFriendsGroup } from '../../database'
 
 OnlyRunInContext('background', 'WelcomeService')
@@ -171,7 +170,7 @@ async function generateNewIdentity(
         const pub = await CryptoKeyToJsonWebKey(key.publicKey)
 
         // ? Derive method: publicKey as "password" and password for the mnemonicWord as hash
-        const pbkdf2 = await import_PBKDF2_Key(encodeText(stableStringify(pub)))
+        const pbkdf2 = await import_PBKDF2_Key(encodeText(pub.x! + pub.y!))
         const localKey = await derive_AES_GCM_256_Key_From_PBKDF2(pbkdf2, encodeText(usingKey.mnemonicWord))
 
         await storeLocalKeyDB(whoAmI, localKey)
