@@ -53,7 +53,6 @@ const registerPostCollector = (self: SocialNetworkUI) => {
             const info = getEmptyPostInfo(postsRootSelector())
             const collectPostInfo = () => {
                 const r = postParser(node)
-                console.log(JSON.stringify(r))
                 if (!r) return
                 info.postContent.value = r.content
                 const postBy = new PersonIdentifier(self.networkIdentifier, r.handle)
