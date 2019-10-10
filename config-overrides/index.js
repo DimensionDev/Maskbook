@@ -81,7 +81,6 @@ function override(config, env) {
         'injected-script': src('./src/extension/injected-script/index.ts'),
         popup: appendReactDevtools(src('./src/extension/popup-page/index.tsx')),
         qrcode: src('./src/web-workers/QRCode.ts'),
-        env: src('./src/setup.env.js'),
     }
     if (env !== 'development') delete config.entry.devtools
 
@@ -158,13 +157,18 @@ function override(config, env) {
         if (target.FirefoxForAndroid) firefoxVariant = 'android'
         if (target.StandaloneGeckoView) firefoxVariant = 'GeckoView'
         if (target.WKWebview) buildTarget = 'WKWebview'
-        config.plugins.push(
-            new webpack.DefinePlugin({
-                _WEBPACK_BUILD_TARGET: typeof buildTarget === 'string' ? JSON.stringify(buildTarget) : 'undefined',
-                _WEBPACK_FIREFOX_VARIANT:
-                    typeof firefoxVariant === 'string' ? JSON.stringify(firefoxVariant) : 'undefined',
-            }),
-        )
+        if (buildTarget)
+            config.plugins.push(
+                new webpack.DefinePlugin({
+                    'webpackEnv.target': JSON.stringify(buildTarget),
+                }),
+            )
+        if (firefoxVariant)
+            config.plugins.push(
+                new webpack.DefinePlugin({
+                    'webpackEnv.firefoxVariant': JSON.stringify(firefoxVariant),
+                }),
+            )
     }
 
     // Manifest modifies
