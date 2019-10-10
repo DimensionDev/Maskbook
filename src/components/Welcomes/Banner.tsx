@@ -86,9 +86,8 @@ export function Banner({
     }, [unmount])
     const getStartedDefault = useCallback(() => {
         setStorage(props.networkIdentifier, { forceDisplayWelcome: false })
-        unmount()
         Services.Welcome.openWelcomePage(lastRecognizedIdentity)
-    }, [lastRecognizedIdentity, props.networkIdentifier, unmount])
+    }, [lastRecognizedIdentity, props.networkIdentifier])
     return (
         <BannerUI
             disabled={lastRecognizedIdentity.identifier.isUnknown}
