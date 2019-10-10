@@ -103,9 +103,14 @@ export default function Welcome({ back, restore: originalRestore }: Props) {
     const ref = React.useRef<HTMLInputElement>(null)
     const textAreaRef = React.useRef<HTMLTextAreaElement>(null)
     const restore = (str: string) => {
-        const json = JSON.parse(str)
-        const upgraded = UpgradeBackupJSONFile(json)
-        setJson(upgraded)
+        try {
+            const json = JSON.parse(str)
+            const upgraded = UpgradeBackupJSONFile(json)
+            setJson(upgraded)
+        } catch (e) {
+            alert(e)
+            setJson(null)
+        }
     }
     const { dragEvents, fileReceiver, fileRef, dragStatus } = useDragAndDrop(file => {
         const fr = new FileReader()
