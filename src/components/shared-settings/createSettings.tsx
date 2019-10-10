@@ -30,7 +30,7 @@ export function createNewSettings<T extends browser.storage.StorageValue>(
         if (typeof browser === 'object') {
             const value = await browser.storage.local.get()
             const stored = value.settings
-            if (typeof stored === 'object' && stored !== null && Reflect.has(stored, key)) {
+            if (typeof stored === 'object' && stored !== null && key in (stored as any)) {
                 settings.value = Reflect.get(stored, key)
             }
         }

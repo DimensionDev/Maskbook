@@ -66,16 +66,12 @@ export function useAsync<T>(fn: () => PromiseLike<T>, dep: ReadonlyArray<unknown
             unmounted = true
         }
         // eslint-disable-next-line
-    }, dep.concat(fn))
+    }, dep)
     return {
         then(f, r) {
-            return new Promise(async (resolve, reject) => {
-                res = (val: unknown) => {
-                    f ? resolve(f(val as T)) : resolve(val as any)
-                }
-                rej = (err: unknown) => {
-                    r ? resolve(r(err)) : reject(err)
-                }
+            return new Promise<any>((resolve, reject) => {
+                res = (val: any) => (f ? resolve(f(val)) : resolve(val))
+                rej = (err: any) => (r ? resolve(r(err)) : reject(err))
             })
         },
     }

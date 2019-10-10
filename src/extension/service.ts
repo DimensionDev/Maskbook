@@ -79,10 +79,9 @@ function register<T extends Service>(service: T, name: keyof Services, mock?: Pa
         if (GetContext() === 'debugging') {
             // ? -> UI developing
             const mockService = new Proxy(mock || {}, {
-                get(target: Record<string, (...args: unknown[]) => unknown>, key: keyof typeof target) {
-                    return async function(...args: unknown[]) {
-                        const f = target[key]
-                        if (typeof f === 'function') return f(...args)
+                get(target: any, key: string) {
+                    return async function(...args: any[]) {
+                        if (target[key]) return target[key](...args)
                         return void 0
                     }
                 },
