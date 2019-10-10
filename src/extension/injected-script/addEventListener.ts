@@ -24,7 +24,7 @@ export interface CustomEvents {
         }
         return new Proxy(x, {
             get(target: T, key: keyof T) {
-                return Reflect.get(mockTable, key) || target[key]
+                return (mockTable as any)[key] || target[key]
             },
         })
     }
