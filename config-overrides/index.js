@@ -8,11 +8,11 @@ const src = file => path.join(__dirname, '../', file)
 /**
  * Polyfills that needs to be copied to dist
  */
-const polyfills = [
+let polyfills = [
     'node_modules/webextension-polyfill/dist/browser-polyfill.min.js',
     'node_modules/webextension-polyfill/dist/browser-polyfill.min.js.map',
     'src/polyfill/asmcrypto.js',
-].map(src)
+]
 
 const publicDir = src('./public')
 const publicPolyfill = src('./public/polyfill')
@@ -54,6 +54,11 @@ const target = (argv => ({
  * @returns {import("webpack").Configuration}
  */
 function override(config, env) {
+    if (target.Firefox) {
+        polyfills = polyfills.filter(name => !name.includes('webextension-polyfill'))
+        if (target.StandaloneGeckoView) polyfills.push('src/polyfill/permissions.js')
+    }
+
     // CSP bans eval
     // And non-inline source-map not working
     if (env === 'development') config.devtool = 'inline-source-map'
@@ -76,6 +81,7 @@ function override(config, env) {
         'injected-script': src('./src/extension/injected-script/index.ts'),
         popup: appendReactDevtools(src('./src/extension/popup-page/index.tsx')),
         qrcode: src('./src/web-workers/QRCode.ts'),
+        env: src('./src/setup.env.js'),
     }
     if (env !== 'development') delete config.entry.devtools
 
@@ -98,8 +104,15 @@ function override(config, env) {
      * @param {HtmlWebpackPlugin.Options} options
      */
     function newPage(options = {}) {
+        let templateContent = fs.readFileSync(path.join(__dirname, './template.html'), 'utf8')
+        if (target.Firefox) {
+            templateContent = templateContent.replace(
+                '<script src="/polyfill/browser-polyfill.min.js"></script>',
+                target.StandaloneGeckoView ? '<script src="/polyfill/permissions.js"></script>' : '',
+            )
+        }
         return new HtmlWebpackPlugin({
-            templateContent: fs.readFileSync(path.join(__dirname, './template.html'), 'utf8'),
+            templateContent,
             inject: 'body',
             ...options,
         })
@@ -146,8 +159,9 @@ function override(config, env) {
         if (target.WKWebview) buildTarget = 'WKWebview'
         config.plugins.push(
             new webpack.DefinePlugin({
-                'process.env.target': typeof buildTarget === 'string' ? JSON.stringify(buildTarget) : 'undefined',
-                firefoxVariant: typeof firefoxVariant === 'string' ? JSON.stringify(firefoxVariant) : 'undefined',
+                _WEBPACK_BUILD_TARGET: typeof buildTarget === 'string' ? JSON.stringify(buildTarget) : 'undefined',
+                _WEBPACK_FIREFOX_VARIANT:
+                    typeof firefoxVariant === 'string' ? JSON.stringify(firefoxVariant) : 'undefined',
             }),
         )
     }
@@ -187,14 +201,12 @@ function override(config, env) {
     )
     if (!fs.existsSync(publicPolyfill)) {
         fs.mkdirSync(publicPolyfill)
-        polyfills.map(x => void fs.copyFileSync(x, path.join(publicPolyfill, path.basename(x))))
-        polyfills.length = 0
     }
+    polyfills.map(x => void fs.copyFileSync(src(x), path.join(publicPolyfill, path.basename(x))))
 
     if (env !== 'development') {
         config.plugins.push(new SSRPlugin('popup.html', src('./src/extension/popup-page/index.tsx')))
         config.plugins.push(new SSRPlugin('index.html', src('./src/index.tsx')))
-        polyfills.map(x => void fs.copyFileSync(x, path.join(publicPolyfill, path.basename(x))))
     }
     if (env === 'development') {
         const tsCheckerPlugin = config.plugins.filter(x => x.constructor.name === 'ForkTsCheckerWebpackPlugin')[0]

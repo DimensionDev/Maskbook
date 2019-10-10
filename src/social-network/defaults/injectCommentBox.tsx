@@ -31,7 +31,10 @@ export const injectCommentBoxDefaultFactory = (onPasteToCommentBox = defHandler)
             current.rootNode,
         )
             .setDOMProxyOption({ afterShadowRootInit: { mode: 'closed' } })
-            .startWatch()
+            .startWatch({
+                childList: true,
+                subtree: true,
+            })
         const CommentBoxUI = () => {
             const payload = useValueRef(current.postPayload)
             const decrypted = useValueRef(current.decryptedPostContent)

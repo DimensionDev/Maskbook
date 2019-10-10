@@ -15,7 +15,8 @@ export function collectPostsFacebook(this: SocialNetworkUI) {
             const root = new LiveSelector()
                 .replace(() => [metadata.realCurrent])
                 .filter(x => x)
-                .closest('.userContentWrapper')
+                .closest('.userContentWrapper, [data-store]')
+
             // ? inject after comments
             const commentSelectorPC = root
                 .clone()
@@ -76,7 +77,10 @@ export function collectPostsFacebook(this: SocialNetworkUI) {
             }
         })
         .setDOMProxyOption({ afterShadowRootInit: { mode: 'closed' } })
-        .startWatch()
+        .startWatch({
+            childList: true,
+            subtree: true,
+        })
 }
 
 function getPostBy(node: DOMProxy, allowCollectInfo: boolean) {
