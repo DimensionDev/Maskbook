@@ -1,7 +1,11 @@
-import { bioCard, postsRootSelector, postsSelectors, selfInfoSelectors } from '../utils/selector'
+import { bioCard, postsSelectors, selfInfoSelectors } from '../utils/selector'
 import { MutationObserverWatcher } from '@holoflows/kit'
 import { PersonIdentifier } from '../../../database/type'
-import { getEmptyPostInfo, SocialNetworkUI, SocialNetworkUIInformationCollector } from '../../../social-network/ui'
+import {
+    getEmptyPostInfoByElement,
+    SocialNetworkUI,
+    SocialNetworkUIInformationCollector,
+} from '../../../social-network/ui'
 import { deconstructPayload } from '../../../utils/type-transform/Payload'
 import { instanceOfTwitterUI } from './index'
 import { postParser, resolveInfoFromBioCard } from '../utils/fetch'
@@ -56,7 +60,7 @@ const registerUserCollector = () => {
 const registerPostCollector = (self: SocialNetworkUI) => {
     new MutationObserverWatcher(postsSelectors())
         .useForeach((node, _, proxy) => {
-            const info = getEmptyPostInfo(postsRootSelector())
+            const info = getEmptyPostInfoByElement(node)
             const collectPostInfo = () => {
                 const r = postParser(node)
                 if (!r) return
@@ -73,7 +77,7 @@ const registerPostCollector = (self: SocialNetworkUI) => {
             info.postContent.addListener(newValue => {
                 info.postPayload.value = deconstructPayload(newValue, self.payloadDecoder)
             })
-            // push to map
+            // push to map. proxy used as a pointer here.
             self.posts.set(proxy, info)
             return {
                 onNodeMutation: collectPostInfo,
