@@ -9,8 +9,8 @@ import { PostInspector } from '../../components/InjectedComponents/PostInspector
 export function injectPostInspectorDefault(config: InjectPostInspectorDefaultConfig = {}) {
     const { injectionPoint, zipPost } = config
     const zipPostDefault = () => {}
-    return function injectPostInspector(current: PostInfo, node: DOMProxy) {
-        const injectionPointDefault = () => node.afterShadow
+    return function injectPostInspector(current: PostInfo) {
+        const injectionPointDefault = () => current.rootNodeProxy.afterShadow
         const onDecrypted = (val: string) => (current.decryptedPostContent.value = val)
         return renderInShadowRoot(
             <PostDecryptUI
@@ -18,9 +18,9 @@ export function injectPostInspectorDefault(config: InjectPostInspectorDefaultCon
                 postBy={current.postBy}
                 onDecrypted={onDecrypted}
                 postContent={current.postContent}
-                zipPost={() => (zipPost || zipPostDefault)(node)}
+                zipPost={() => (zipPost || zipPostDefault)(current.rootNodeProxy)}
             />,
-            (injectionPoint || injectionPointDefault)(node),
+            (injectionPoint || injectionPointDefault)(current.rootNodeProxy),
         )
     }
 }
