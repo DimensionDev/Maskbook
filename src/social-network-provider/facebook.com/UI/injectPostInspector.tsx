@@ -3,14 +3,14 @@ import { isMobileFacebook } from '../isMobile'
 import { PostInfo } from '../../../social-network/ui'
 import { injectPostInspectorDefault } from '../../../social-network/defaults/injectPostInspector'
 
-export function injectPostInspectorFacebook(current: PostInfo, node: DOMProxy) {
-    clickSeeMore(node)
+export function injectPostInspectorFacebook(current: PostInfo) {
+    clickSeeMore(current.rootNodeProxy)
     return injectPostInspectorDefault({
         zipPost(node) {
             zipEncryptedPostContent(node)
             zipPostLinkPreview(node)
         },
-    })(current, node)
+    })(current)
 }
 function zipPostLinkPreview(node: DOMProxy) {
     const parentEle = node.current.parentElement!

@@ -110,21 +110,21 @@ export interface SocialNetworkUIInjections {
      * @param node The post root
      * @returns unmount the injected components
      */
-    injectPostComments?: ((current: PostInfo, node: DOMProxy) => () => void) | 'disabled'
+    injectPostComments?: ((current: PostInfo) => () => void) | 'disabled'
     /**
      * This function should inject the comment box
      * @param current The current post
      * @param node The post root
      * @returns unmount the injected components
      */
-    injectCommentBox?: ((current: PostInfo, node: DOMProxy) => () => void) | 'disabled'
+    injectCommentBox?: ((current: PostInfo) => () => void) | 'disabled'
     /**
      * This function should inject the post box
      * @param current The current post
      * @param node The post root
      * @returns unmount the injected components
      */
-    injectPostInspector(current: PostInfo, node: DOMProxy<HTMLElement>): () => void
+    injectPostInspector(current: PostInfo): () => void
 }
 //#endregion
 //#region SocialNetworkUITasks
@@ -195,7 +195,7 @@ export interface SocialNetworkUIDataSources {
     /**
      * Posts that Maskbook detects
      */
-    readonly posts?: WeakMap<DOMProxy, PostInfo>
+    readonly posts?: WeakMap<object, PostInfo>
 }
 export type PostInfo = {
     readonly postBy: ValueRef<PersonIdentifier>
@@ -206,6 +206,7 @@ export type PostInfo = {
     readonly commentBoxSelector?: LiveSelector<HTMLElement, true>
     readonly decryptedPostContent: ValueRef<string>
     readonly rootNode: HTMLElement
+    readonly rootNodeProxy: DOMProxy
 }
 //#endregion
 
@@ -277,15 +278,13 @@ function hookUIPostMap(ui: SocialNetworkUI) {
     const unmountFunctions = new WeakMap<object, () => void>()
     const setter = ui.posts.set
     ui.posts.set = function(key, value) {
-        const unmountPostInspector = ui.injectPostInspector(value, key)
+        const unmountPostInspector = ui.injectPostInspector(value)
         const unmountCommentBox: () => void =
-            ui.injectCommentBox === 'disabled'
-                ? nopWithUnmount
-                : defaultTo(ui.injectCommentBox, nopWithUnmount)(value, key)
+            ui.injectCommentBox === 'disabled' ? nopWithUnmount : defaultTo(ui.injectCommentBox, nopWithUnmount)(value)
         const unmountPostComments: () => void =
             ui.injectPostComments === 'disabled'
                 ? nopWithUnmount
-                : defaultTo(ui.injectPostComments, nopWithUnmount)(value, key)
+                : defaultTo(ui.injectPostComments, nopWithUnmount)(value)
         unmountFunctions.set(key, () => {
             unmountPostInspector()
             unmountCommentBox()
