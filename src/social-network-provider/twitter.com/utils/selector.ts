@@ -47,8 +47,6 @@ export const editProfileButtonSelector = () =>
     querySelector<HTMLAnchorElement>('[data-testid="primaryColumn"] [href="/settings/profile"]')
 export const editProfileTextareaSelector = () => querySelector<HTMLTextAreaElement>('textarea[placeholder*="bio"]')
 
-export const postsRootSelector = () => querySelector<HTMLElement>(`[data-testid="primaryColumn"] section`)
-
 export const postsSelectors = () => querySelectorAll('article')
 export const postsContentSelectors = () => postsSelectors().querySelectorAll<HTMLElement>(`[lang]`)
 export const fromPostSelectorsSelectPostContentString = '[data-testid="tweet"] > div:nth-of-type(2)'

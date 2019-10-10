@@ -1,6 +1,6 @@
 import { env, Env, Preference, Profile, SocialNetworkWorkerAndUIDefinition } from './shared'
 import { DOMProxy, LiveSelector, ValueRef } from '@holoflows/kit/es'
-import { Person, Group } from '../database'
+import { Group, Person } from '../database'
 import { PersonIdentifier, PostIdentifier } from '../database/type'
 import { Payload } from '../utils/type-transform/Payload'
 import { defaultTo, isNull } from 'lodash-es'
@@ -107,21 +107,18 @@ export interface SocialNetworkUIInjections {
     /**
      * This function should inject the comment
      * @param current The current post
-     * @param node The post root
      * @returns unmount the injected components
      */
     injectPostComments?: ((current: PostInfo) => () => void) | 'disabled'
     /**
      * This function should inject the comment box
      * @param current The current post
-     * @param node The post root
      * @returns unmount the injected components
      */
     injectCommentBox?: ((current: PostInfo) => () => void) | 'disabled'
     /**
      * This function should inject the post box
      * @param current The current post
-     * @param node The post root
      * @returns unmount the injected components
      */
     injectPostInspector(current: PostInfo): () => void
@@ -222,6 +219,17 @@ export const getEmptyPostInfo = (rootNodeSelector: LiveSelector<HTMLElement, tru
         get rootNode() {
             return rootNodeSelector.evaluate()
         },
+    } as PostInfo
+}
+
+export const getEmptyPostInfoByElement = (rootNode: HTMLElement) => {
+    return {
+        decryptedPostContent: new ValueRef(''),
+        postBy: new ValueRef(PersonIdentifier.unknown),
+        postContent: new ValueRef(''),
+        postID: new ValueRef(''),
+        postPayload: new ValueRef(null),
+        rootNode,
     } as PostInfo
 }
 
