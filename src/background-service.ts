@@ -69,6 +69,7 @@ if (GetContext() === 'background') {
     })
 
     browser.runtime.onInstalled.addListener(detail => {
+        if (webpackEnv.target === 'WKWebview') return
         const {
             getWelcomePageURL,
         } = require('./extension/options-page/Welcome/getWelcomePageURL') as typeof import('./extension/options-page/Welcome/getWelcomePageURL')

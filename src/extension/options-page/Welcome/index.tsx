@@ -275,7 +275,6 @@ export default withRouter(function _WelcomePortal(props: RouteComponentProps) {
                     nickname: person.nickname,
                     avatarURL: person.avatar,
                 })
-                setStep(WelcomeState.SelectIdentity)
             })
         }
     }, [props.location.search, selectedId.identifier])
@@ -312,11 +311,9 @@ export default withRouter(function _WelcomePortal(props: RouteComponentProps) {
                     currentIdentities={ownIds}
                     personHintFromSearch={personFromURL}
                     onSelectIdentity={p => (selectedIdRef.value = p)}
-                    onFinish={reason => {
-                        if (reason === 'done') {
-                            if (webpackEnv.firefoxVariant === 'GeckoView' || webpackEnv.target === 'WKWebview')
-                                window.close()
-                        }
+                    onFinish={() => {
+                        if (webpackEnv.firefoxVariant === 'GeckoView' || webpackEnv.target === 'WKWebview')
+                            window.close()
                         props.history.replace('/')
                     }}
                 />
