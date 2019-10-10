@@ -58,7 +58,7 @@
     "elliptic": "^6.4.1",
     "eslint-plugin-import": "^2.18.2",
     "eslint-plugin-react-hooks": "^2.0.1",
-    "gun": "0.2019.930",
+    "gun": "0.2019.422",
     "husky": "^3.0.5",
     "idb": "^4.0.3",
     "json-stable-stringify": "^1.0.1",
