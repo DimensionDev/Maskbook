@@ -268,7 +268,13 @@ export default withRouter(function _WelcomePortal(props: RouteComponentProps) {
                     currentIdentities={ownIds}
                     personHintFromSearch={personFromURL}
                     onSelectIdentity={p => (selectedIdRef.value = p)}
-                    onFinish={() => props.history.replace('/')}
+                    onFinish={reason => {
+                        if (reason === 'done') {
+                            if (webpackEnv.firefoxVariant === 'GeckoView' || webpackEnv.target === 'WKWebview')
+                                window.close()
+                        }
+                        props.history.replace('/')
+                    }}
                 />
             </IdentifierRefContext.Provider>
         </ResponsiveDialog>
