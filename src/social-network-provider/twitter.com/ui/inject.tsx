@@ -1,6 +1,6 @@
 import { AdditionalPostBox } from '../../../components/InjectedComponents/AdditionalPostBox'
 import React from 'react'
-import { DOMProxy, LiveSelector, MutationObserverWatcher as MOW } from '@holoflows/kit'
+import { LiveSelector, MutationObserverWatcher as MOW } from '@holoflows/kit'
 import { newPostEditorBelow, postPopupInjectPointSelector } from '../utils/selector'
 import { renderInShadowRoot } from '../../../utils/jss/renderInShadowRoot'
 import { PostInfo, SocialNetworkUIInjections } from '../../../social-network/ui'
@@ -22,8 +22,8 @@ const injectPostBox = () => {
     renderInShadowRoot(<AdditionalPostBox />, popUpTarget.firstDOMProxy.afterShadow)
 }
 
-const injectPostInspector = (current: PostInfo, node: DOMProxy) => {
-    return injectPostInspectorDefault({})(current, node)
+const injectPostInspector = (current: PostInfo) => {
+    return injectPostInspectorDefault({})(current)
 }
 
 export const twitterUIInjections: SocialNetworkUIInjections = {

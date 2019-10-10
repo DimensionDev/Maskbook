@@ -54,6 +54,7 @@ export function collectPostsFacebook(this: SocialNetworkUI) {
                 get rootNode() {
                     return root.evaluate()[0]! as HTMLElement
                 },
+                rootNodeProxy: metadata,
             }
             this.posts.set(metadata, info)
             function collectPostInfo() {
