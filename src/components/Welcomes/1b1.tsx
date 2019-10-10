@@ -196,7 +196,9 @@ export default function Welcome({ back, restore: originalRestore }: Props) {
                 {tab === 0 ? FileUI() : null}
                 {tab === 1 ? (
                     hasWKWebkitRPCHandlers ? (
-                        <WKWebkitQR onScan={restore} onQuit={() => setTab(0)} />
+                        json ? null : (
+                            <WKWebkitQR onScan={restore} onQuit={() => setTab(0)} />
+                        )
                     ) : (
                         QR()
                     )
