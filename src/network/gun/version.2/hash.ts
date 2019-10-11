@@ -26,7 +26,6 @@ export const hashPostSalt = memoizePromise(async function(postSalt: string) {
 
 /**
  * @param key - The key need to be hashed
- * @deprecated
  */
 export const hashCryptoKeyUnstable = memoizePromise(async function(key: CryptoKey) {
     const hashPair = `10198a2f-205f-45a6-9987-3488c80113d0`
