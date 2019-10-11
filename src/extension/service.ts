@@ -18,7 +18,7 @@ const Services = {} as Services
 export default Services
 
 const logOptions: AsyncCallOptions['log'] = {
-    beCalled: false,
+    beCalled: true,
     localError: true,
     remoteError: true,
     sendLocalStack: true,
@@ -27,16 +27,36 @@ const logOptions: AsyncCallOptions['log'] = {
 if (!('Services' in globalThis)) {
     Object.assign(globalThis, { Services })
     // Sorry you should add import at '../background-service.ts'
-    register(Reflect.get(globalThis, 'CryptoService'), 'Crypto', MockService.CryptoService)
-    register(Reflect.get(globalThis, 'WelcomeService'), 'Welcome', MockService.WelcomeService)
-    register(Reflect.get(globalThis, 'PeopleService'), 'People', MockService.PeopleService)
+    register(createProxyToService('CryptoService'), 'Crypto', MockService.CryptoService)
+    register(createProxyToService('WelcomeService'), 'Welcome', MockService.WelcomeService)
+    register(createProxyToService('PeopleService'), 'People', MockService.PeopleService)
 }
 interface ServicesWithProgress {
     // Sorry you should add import at '../background-service.ts'
     decryptFrom: typeof import('./background-script/CryptoServices/decryptFrom').decryptFromMessageWithProgress
 }
+function createProxyToService(name: string) {
+    return new Proxy(
+        // @ts-ignore
+        globalThis[name] || {},
+        {
+            get(_, key) {
+                // @ts-ignore
+                const service = globalThis[name] || {}
+                if (key === 'methods') {
+                    return () => {
+                        return Object.keys(service)
+                            .map(f => service[f].toString().split('\n')[0])
+                            .join('\n')
+                    }
+                }
+                return service[key]
+            },
+        },
+    )
+}
 export const ServicesWithProgress = AsyncGeneratorCall<ServicesWithProgress>(
-    Reflect.get(globalThis, 'ServicesWithProgress'),
+    createProxyToService('ServicesWithProgress'),
     {
         key: 'Service+',
         log: logOptions,
@@ -57,21 +77,11 @@ type Service = Record<string, (...args: unknown[]) => Promise<unknown>>
 function register<T extends Service>(service: T, name: keyof Services, mock?: Partial<T>) {
     if (OnlyRunInContext(['content', 'options', 'debugging', 'background'], false)) {
         GetContext() !== 'debugging' && console.log(`Service ${name} registered in ${GetContext()}`)
-        const base = service
-            ? {
-                  methods() {
-                      return Object.keys(service)
-                          .map(f => service[f].toString().split('\n')[0])
-                          .join('\n')
-                  },
-              }
-            : {}
         Object.assign(Services, {
-            [name]: AsyncCall(Object.assign(base, service), {
+            [name]: AsyncCall(service, {
                 key: name,
                 serializer: Serialization,
                 log: logOptions,
-                preferLocalImplementation: true,
                 messageChannel: new MessageCenter(),
             }),
         })
