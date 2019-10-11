@@ -22,26 +22,30 @@ export const hashPostSalt = memoizePromise(async function(postSalt: string) {
 
     const hash = (await Gun.SEA.work(postSalt, hashPair))!
     return hash.substring(0, N)
-})
+}, undefined)
 
 /**
  * @param key - The key need to be hashed
- * @param stableHash - Set this to true if you're writing new code.
- * Unstable hash may cause problem but we cannot just switch to stable hash
- * because it may breaks current data.
+ * @deprecated
  */
-export const hashCryptoKey = memoizePromise(async function(key: CryptoKey, stableHash: boolean) {
+export const hashCryptoKeyUnstable = memoizePromise(async function(key: CryptoKey) {
     const hashPair = `10198a2f-205f-45a6-9987-3488c80113d0`
     const N = 2
 
-    if (stableHash === true) {
-        const jwk = await CryptoKeyToJsonWebKey(key)
-        if (!jwk.x || !jwk.y) throw new Error('Invalid key')
-        const hash = (await Gun.SEA.work(jwk.x! + jwk.y!, hashPair))!
-        return hash.substring(0, N)
-    } else {
-        const jwk = JSON.stringify(await CryptoKeyToJsonWebKey(key))
-        const hash = (await Gun.SEA.work(jwk, hashPair))!
-        return hash.substring(0, N)
-    }
-})
+    const jwk = JSON.stringify(await CryptoKeyToJsonWebKey(key))
+    const hash = (await Gun.SEA.work(jwk, hashPair))!
+    return hash.substring(0, N)
+}, undefined)
+
+/**
+ * @param key - The key need to be hashed
+ */
+export const hashCryptoKey = memoizePromise(async function(key: CryptoKey) {
+    const hashPair = `10198a2f-205f-45a6-9987-3488c80113d0`
+    const N = 2
+
+    const jwk = await CryptoKeyToJsonWebKey(key)
+    if (!jwk.x || !jwk.y) throw new Error('Invalid key')
+    const hash = (await Gun.SEA.work(jwk.x! + jwk.y!, hashPair))!
+    return hash.substring(0, N)
+}, undefined)

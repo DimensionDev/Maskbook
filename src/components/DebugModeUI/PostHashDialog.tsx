@@ -76,7 +76,7 @@ export function DebugModeUI_PostHashDialog(props: { post: string; network: strin
     useAsync(() => {
         if (!payload) return Promise.resolve([] as typeof hashMap)
         const ivID = new PostIVIdentifier(props.network, payload.iv)
-        return Services.Crypto.debugShowAllPossibleHashForPost(ivID)
+        return Services.Crypto.debugShowAllPossibleHashForPost(ivID, payload.version)
     }, [props.post]).then(setHashMap)
     return (
         <>
