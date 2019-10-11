@@ -11,7 +11,6 @@ const src = file => path.join(__dirname, '../', file)
 let polyfills = [
     'node_modules/webextension-polyfill/dist/browser-polyfill.min.js',
     'node_modules/webextension-polyfill/dist/browser-polyfill.min.js.map',
-    'src/polyfill/asmcrypto.js',
 ]
 
 const publicDir = src('./public')
