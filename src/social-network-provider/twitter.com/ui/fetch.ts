@@ -60,9 +60,15 @@ const registerUserCollector = () => {
 const registerPostCollector = (self: SocialNetworkUI) => {
     new MutationObserverWatcher(postsSelectors())
         .useForeach((node, _, proxy) => {
-            const info = getEmptyPostInfoByElement(node)
+            const info = getEmptyPostInfoByElement({
+                get rootNode() {
+                    return proxy.current
+                },
+                rootNodeProxy: proxy,
+            })
             const collectPostInfo = () => {
                 const r = postParser(node)
+                console.log(r)
                 if (!r) return
                 info.postContent.value = r.content
                 const postBy = new PersonIdentifier(self.networkIdentifier, r.handle)
@@ -88,9 +94,7 @@ const registerPostCollector = (self: SocialNetworkUI) => {
         .setDOMProxyOption({ afterShadowRootInit: { mode: 'closed' } })
         .startWatch({
             childList: true,
-            subtree: true,
         })
-        .then()
 }
 
 export const twitterUIFetch: SocialNetworkUIInformationCollector = {
