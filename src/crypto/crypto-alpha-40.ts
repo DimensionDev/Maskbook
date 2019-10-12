@@ -1,6 +1,6 @@
 /**
  * @deprecated This version of payload is not in use.
- * Please goto Crypto alpha v39
+ * Please goto Crypto alpha v38
  */
 import {
     encodeText,
@@ -11,6 +11,13 @@ import {
 import { toECDH, addUint8Array, toECDSA } from '../utils/type-transform/ECDSA-ECDH'
 import { memoizePromise } from '../utils/memoize'
 import { geti18nString } from '../utils/i18n'
+import {
+    generate_AES_GCM_256_Key,
+    import_AES_GCM_256_Key,
+    import_PBKDF2_Key,
+    derive_AES_GCM_256_Key_From_ECDH_256k1_Keys,
+    derive_AES_GCM_256_Key_From_PBKDF2,
+} from '../utils/crypto.subtle'
 export type PublishedAESKey = { encryptedKey: string; salt: string }
 export type PublishedAESKeyRecordV40 = {
     key: PublishedAESKey
@@ -34,13 +41,7 @@ async function deriveAESKey(
 ) {
     const op = othersPublicKey.usages.find(x => x === 'deriveKey') ? othersPublicKey : await toECDH(othersPublicKey)
     const pr = privateKey.usages.find(x => x === 'deriveKey') ? privateKey : await toECDH(privateKey)
-    const derivedKey = await crypto.subtle.deriveKey(
-        { name: 'ECDH', public: op },
-        pr,
-        { name: 'AES-GCM', length: 256 },
-        true,
-        ['encrypt', 'decrypt'],
-    )
+    const derivedKey = await derive_AES_GCM_256_Key_From_ECDH_256k1_Keys(op, pr)
 
     const _salt = typeof salt === 'string' ? decodeArrayBuffer(salt) : salt
     const UntitledUint8Array = addUint8Array(new Uint8Array(await crypto.subtle.exportKey('raw', derivedKey)), _salt)
@@ -59,10 +60,7 @@ async function deriveAESKey(
         // eslint-disable-next-line no-bitwise
         iv[i] = iv_pre[i] ^ iv_pre[16 + i]
     }
-    const key = await crypto.subtle.importKey('raw', password, { name: 'AES-GCM', length: 256 }, true, [
-        'encrypt',
-        'decrypt',
-    ])
+    const key = await import_AES_GCM_256_Key(password)
     return { key, salt: _salt, iv }
 }
 //#endregion
@@ -71,7 +69,7 @@ async function deriveAESKey(
  * Encrypt 1 to 1
  */
 export async function encrypt1To1(info: {
-    version: -40 | -39
+    version: -38
     /** Message that you want to encrypt */
     content: string | ArrayBuffer
     /** Your private key */
@@ -101,7 +99,8 @@ export async function generateOthersAESKeyEncrypted(
     return Promise.all(
         othersPublicKeyECDH.map<Promise<PublishedAESKeyRecordV40>>(async ({ key, name }) => {
             const encrypted = await encrypt1To1({
-                version: -40,
+                // This is the deprecated -40 code path
+                version: (-40 as unknown) as -38,
                 content: exportedAESKey,
                 othersPublicKeyECDH: key,
                 privateKeyECDH: privateKeyECDH,
@@ -142,7 +141,7 @@ export async function encrypt1ToN(info: {
     othersAESKeyEncrypted: PublishedAESKeyRecordV40[]
 }> {
     const { version, content, othersPublicKeyECDH, privateKeyECDH, ownersLocalKey, iv } = info
-    const AESKey = await crypto.subtle.generateKey({ name: 'AES-GCM', length: 256 }, true, ['encrypt', 'decrypt'])
+    const AESKey = await generate_AES_GCM_256_Key()
     const encryptedContent = await crypto.subtle.encrypt(
         { name: 'AES-GCM', iv },
         AESKey,
@@ -164,7 +163,7 @@ export async function encrypt1ToN(info: {
  * Decrypt 1 to 1
  */
 export async function decryptMessage1To1(info: {
-    version: -40 | -39
+    version: -40 | -39 | -38
     encryptedContent: string | ArrayBuffer
     salt: string | ArrayBuffer
     /** Your private key */
@@ -183,7 +182,7 @@ export async function decryptMessage1To1(info: {
  * Decrypt 1 to N message that send by other
  */
 export async function decryptMessage1ToNByOther(info: {
-    version: -40 | -39
+    version: -40 | -39 | -38
     encryptedContent: string | ArrayBuffer
     privateKeyECDH: CryptoKey
     authorsPublicKeyECDH: CryptoKey
@@ -209,17 +208,11 @@ export async function decryptMessage1ToNByOther(info: {
         }),
     )
     if (resolvedAESKey === null) throw new Error(geti18nString('service_not_share_target'))
-    const aesKey = await crypto.subtle.importKey(
-        'jwk',
-        JSON.parse(resolvedAESKey),
-        { name: 'AES-GCM', length: 256 },
-        false,
-        ['decrypt'],
-    )
+    const aesKey = await import_AES_GCM_256_Key(JSON.parse(resolvedAESKey))
     return [await decryptWithAES({ aesKey, iv, encrypted: encryptedContent }), aesKey]
 }
 export async function extractAESKeyInMessage(
-    version: -40 | -39,
+    version: -40 | -39 | -38,
     encodedEncryptedKey: string | ArrayBuffer,
     _iv: string | ArrayBuffer,
     myLocalKey: CryptoKey,
@@ -230,13 +223,13 @@ export async function extractAESKeyInMessage(
     const decryptedAESKeyJWK = JSON.parse(
         decodeText(await decryptWithAES({ aesKey: myLocalKey, iv, encrypted: encryptedKey })),
     )
-    return crypto.subtle.importKey('jwk', decryptedAESKeyJWK, { name: 'AES-GCM', length: 256 }, true, ['decrypt'])
+    return import_AES_GCM_256_Key(decryptedAESKeyJWK)
 }
 /**
  * Decrypt 1 to N message that send by myself
  */
 export async function decryptMessage1ToNByMyself(info: {
-    version: -40 | -39
+    version: -40 | -39 | -38
     encryptedContent: string | ArrayBuffer
     /** This should be included in the message */
     encryptedAESKey: string | ArrayBuffer
@@ -301,17 +294,8 @@ function extractCommentPayload(text: string) {
 }
 const getCommentKey = memoizePromise(
     async function(postIV: string, postContent: string) {
-        const pbkdf = await crypto.subtle.importKey('raw', encodeText(postContent), 'PBKDF2', false, [
-            'deriveBits',
-            'deriveKey',
-        ])
-        const aes = await crypto.subtle.deriveKey(
-            { name: 'PBKDF2', salt: encodeText(postIV), iterations: 100000, hash: 'SHA-256' },
-            pbkdf,
-            { name: 'AES-GCM', length: 256 },
-            true,
-            ['encrypt', 'decrypt'],
-        )
+        const pbkdf = await import_PBKDF2_Key(encodeText(postContent))
+        const aes = await derive_AES_GCM_256_Key_From_PBKDF2(pbkdf, encodeText(postIV))
         return aes
     },
     (a, b) => a + b,

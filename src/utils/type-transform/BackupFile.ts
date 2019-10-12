@@ -1,4 +1,4 @@
-import { PersonIdentifier, GroupType } from '../../database/type'
+import { PersonIdentifier } from '../../database/type'
 
 // Since 8/21/2019, every backup file of version 1 should have grantedHostPermissions
 // Before 8/21/2019, we only support facebook, so we can auto upgrade the backup file
@@ -16,11 +16,14 @@ export function UpgradeBackupJSONFile(json: object, identity?: PersonIdentifier)
     if (isVersion1(json)) {
         if (json.grantedHostPermissions === undefined) {
             json.grantedHostPermissions = facebookHost
+            json.maskbookVersion = '1.5.2'
         }
+        if (!json.maskbookVersion) json.maskbookVersion = '1.6.0'
         return json
     }
     if (isVersion0(json) && identity) {
         return {
+            maskbookVersion: '1.3.2',
             version: 1,
             whoami: [
                 {
@@ -46,6 +49,7 @@ export interface BackupJSONFileLatest extends BackupJSONFileVersion1 {}
  * Latest JSON backup format
  */
 export interface BackupJSONFileVersion1 {
+    maskbookVersion: string
     version: 1
     whoami: Array<{
         network: string
@@ -63,7 +67,7 @@ export interface BackupJSONFileVersion1 {
         publicKey: JsonWebKey
         previousIdentifiers?: { network: string; userId: string }[]
         nickname?: string
-        groups?: { network: string; groupId: string; type: GroupType }[]
+        groups?: { network: string; groupID: string; virtualGroupOwner: string | null }[]
     }>
     grantedHostPermissions: string[]
 }
@@ -81,7 +85,7 @@ export interface BackupJSONFileVersion0 {
     key: {
         username: string
         key: { publicKey: JsonWebKey; privateKey?: JsonWebKey }
-        algor: any
+        algor: unknown
         usages: string[]
     }
     local: JsonWebKey

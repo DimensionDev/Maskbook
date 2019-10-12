@@ -29,7 +29,7 @@ export function getPersonIdentifierAtFacebook(
             .filter(x => x)
             .map(x => ({ nickname: x!.innerText, id: getUserID(x!.href), dom: x }))
             .filter(x => x.id)
-        const { dom, id, nickname } = result[0] || ({} as any)
+        const { dom, id, nickname } = result[0] || {}
         if (id) {
             const result = new PersonIdentifier('facebook.com', id)
             let avatar: HTMLImageElement | undefined = undefined

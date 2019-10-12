@@ -5,6 +5,9 @@ import { getActivatedUI } from '../../social-network/ui'
 export function useFriendsList() {
     return useValueRef(getActivatedUI().friendsRef)
 }
+export function useGroupsList() {
+    return useValueRef(getActivatedUI().groupsRef)
+}
 export function useLastRecognizedIdentity() {
     return useValueRef(getActivatedUI().lastRecognizedIdentity)
 }

@@ -3,7 +3,7 @@ import './OptionsPage'
 import './Injections'
 import './shared'
 import { definedSocialNetworkUIs, defineSocialNetworkUI, activateSocialNetworkUI } from '../social-network/ui'
-import { demoPeople } from './demoPeople'
+import { demoPeople, demoGroup } from './demoPeopleOrGroups'
 import { ValueRef } from '@holoflows/kit/es'
 import { PersonIdentifier } from '../database/type'
 import { emptyDefinition } from '../social-network/defaults/emptyDefinition'
@@ -17,6 +17,7 @@ defineSocialNetworkUI({
         return true
     },
     myIdentitiesRef: new ValueRef(demoPeople),
+    groupsRef: new ValueRef(demoGroup),
     lastRecognizedIdentity: new ValueRef({ identifier: PersonIdentifier.unknown }),
     currentIdentity: new ValueRef(null),
     friendsRef: new ValueRef(demoPeople),
@@ -26,11 +27,11 @@ defineSocialNetworkUI({
     ...emptyDefinition,
     friendlyName: 'telnet',
     setupAccount: 'Embrace the eternal September!',
-    isDangerousNetwork: true as any,
+    isDangerousNetwork: true as false,
 })
 defineSocialNetworkUI({
     ...emptyDefinition,
     friendlyName: 'MySpace',
-    isDangerousNetwork: true as any,
+    isDangerousNetwork: true as false,
 })
 activateSocialNetworkUI()

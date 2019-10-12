@@ -24,6 +24,8 @@ import { CryptoKeyToJsonWebKey, JsonWebKeyToCryptoKey } from '../utils/type-tran
 import { MessageCenter } from '../utils/messages'
 import { personRecordToPerson } from './helpers/person'
 import { isIdentifierArrayEquals } from '../utils/equality'
+import { createDefaultFriendsGroup } from './helpers/group'
+import { generate_AES_GCM_256_Key, generate_ECDH_256k1_KeyPair } from '../utils/crypto.subtle'
 
 //#region Type and utils
 /**
@@ -130,7 +132,7 @@ export async function storeNewPersonDB(record: PersonRecord): Promise<void> {
  * Query person with a identifier
  */
 export async function queryPeopleDB(
-    query: ((key: PersonIdentifier, record: PersonRecordInDatabase) => boolean) | { network: string },
+    query: ((key: PersonIdentifier, record: PersonRecordInDatabase) => boolean) | { network: string } = () => true,
 ): Promise<PersonRecord[]> {
     const t = (await db).transaction('people')
     const result: PersonRecordInDatabase[] = []
@@ -156,8 +158,11 @@ export async function queryPeopleDB(
 export async function queryPersonDB(id: PersonIdentifier): Promise<null | PersonRecord> {
     const t = (await db).transaction('people', 'readonly')
     const result = await t.objectStore('people').get(id.toText())
-    if (!result) return null
-    return outDb(result)
+
+    const t2 = (await db).transaction('myself', 'readonly')
+    const result2 = await t2.objectStore('myself').get(id.toText())
+    if (!result && !result2) return null
+    return outDb(Object.assign({}, result, result2))
 }
 /**
  * Update Person info with a identifier
@@ -187,9 +192,10 @@ export async function updatePersonDB(person: Partial<PersonRecord> & Pick<Person
  * Remove people from database
  * @param people - People to remove
  */
-export async function removePersonDB(people: PersonIdentifier[]): Promise<void> {
+export async function removePeopleDB(people: PersonIdentifier[]): Promise<void> {
     const t = (await db).transaction('people', 'readwrite')
     for (const person of people) await t.objectStore('people').delete(person.toText())
+    MessageCenter.emit('peopleChanged', undefined)
     return
 }
 //#endregion
@@ -234,38 +240,8 @@ export async function getMyIdentitiesDB(): Promise<PersonRecordPublicPrivate[]> 
     const result = await t.objectStore('myself').getAll()
     return Promise.all(result.map(outDb)) as Promise<PersonRecordPublicPrivate[]>
 }
-/**
- * Generate a new identity
- */
-export async function generateMyIdentityDB(identifier: PersonIdentifier): Promise<void> {
-    const now = await getMyIdentitiesDB()
-    if (now.some(id => id.identifier.equals(identifier))) return
-    const key = await crypto.subtle.generateKey({ name: 'ECDH', namedCurve: 'K-256' }, true, ['deriveKey'])
-    await storeMyIdentityDB({
-        groups: [],
-        identifier,
-        publicKey: key.publicKey,
-        privateKey: key.privateKey,
-    })
-    MessageCenter.emit('identityUpdated', undefined)
-}
-//#endregion
 //#region LocalKeys
-function generateAESKey(exportable: boolean) {
-    return crypto.subtle.generateKey({ name: 'AES-GCM', length: 256 }, exportable, ['encrypt', 'decrypt'])
-}
 
-/**
- * Generate a new local key and store it
- * @param id - Identifier or 'default'
- * @param exportable - If the key is exportable
- */
-export async function generateLocalKeyDB(id: PersonIdentifier, exportable = true) {
-    const key = await generateAESKey(exportable)
-    await storeLocalKeyDB(id, key)
-    MessageCenter.emit('identityUpdated', undefined)
-    return key
-}
 /**
  *
  * @param network
@@ -284,8 +260,8 @@ export async function queryLocalKeyDB(identifier: string | PersonIdentifier): Pr
 }
 /**
  * Store my local key for a network
- * @param network - Network
- * @param keys - ! Keys MUST BE a native CryptoKey object !
+ * @param arg0 - PersonIdentifier
+ * @param key  - ! Keys MUST BE a native CryptoKey object !
  */
 export async function storeLocalKeyDB({ network, userId }: PersonIdentifier, key: CryptoKey): Promise<void> {
     if (!(key instanceof CryptoKey)) {

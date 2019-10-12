@@ -13,7 +13,7 @@
     },
     "additional_post_box__encrypted_post_pre": {
         "message": "來 Maskbook 解密這個訊息！ $1",
-        "description": "$1 must at the end of the string."
+        "description": "$1 须写在字串末。"
     },
     "additional_post_box__encrypted_failed": {
         "message": "請將以下内容拷貝至發佈框。"
@@ -25,16 +25,16 @@
         "message": "Maskbook 已獲取此公鑰並添加至本地 ✔"
     },
     "add_to_key_store_verifying": {
-        "message": "Maskbook 公鑰已獲取，驗證中…"
+        "message": "Maskbook 公鑰已獲取，正在驗證…"
     },
     "add_to_key_store_failed_title": {
         "message": "Maskbook 公鑰驗證失敗 ❌"
     },
     "add_to_key_store_failed_text": {
-        "message": "$1\nMaskbook 不會添加此密鑰。"
+        "message": "$1\nMaskbook 不會添加此金鑰。"
     },
     "decrypted_postbox_title": {
-        "message": "Maskbook 解密出的文本："
+        "message": "此消息使用 Maskbook 加密："
     },
     "decrypted_postbox_add_recipients": {
         "message": "查看或添加收件人"
@@ -49,16 +49,28 @@
         "message": "數字簽名驗證失敗，對方可能被駭了 ❌"
     },
     "decrypted_postbox_decrypting": {
-        "message": "Maskbook 解密中…"
+        "message": "Maskbook 正在解密…"
     },
     "decrypted_postbox_decrypting_finding_person_key": {
-        "message": "Maskbook 正在搜尋對方的公鈅..."
+        "message": "Maskbook 正在搜尋對方的公鈅…"
     },
     "decrypted_postbox_decrypting_finding_post_key": {
-        "message": "Maskbook 正在搜尋分享給你的密鑰以解密这篇内容..."
+        "message": "Maskbook 正在搜尋分享給你的密鑰以解密这篇内容…"
     },
     "decrypted_postbox_failed": {
         "message": "Maskbook 解密失敗"
+    },
+    "person_or_group_in_chip": {
+        "message": "$1 ($2 人)"
+    },
+    "person_or_group_in_list_0": {
+        "message": "這個組是空的"
+    },
+    "person_or_group_in_list_many": {
+        "message": "$1 等，共 $2 人"
+    },
+    "person_or_group_in_list_many_no_preview": {
+        "message": "共 $2 人"
     },
     "search_box_placeholder": {
         "message": "鍵入以搜尋"
@@ -76,10 +88,10 @@
         "message": "取消"
     },
     "share_to": {
-        "message": "分享给..."
+        "message": "分享给…"
     },
     "sharing": {
-        "message": "分享中..."
+        "message": "正在分享…"
     },
     "share": {
         "message": "分享"
@@ -92,9 +104,6 @@
     },
     "finish": {
         "message": "完成"
-    },
-    "retry_decryption": {
-        "message": "再試一次"
     },
     "welcome_0_close_button": {
         "message": "我想以後再做"
@@ -152,6 +161,48 @@
     },
     "welcome_1a2_done_button": {
         "message": "棒耶！"
+    },
+    "welcome_1a3a_title": {
+        "message": "你希望這個賬戶使用什麽密鑰？"
+    },
+    "welcome_1a3a_generate_new_key_title": {
+        "message": "創建新的密鑰"
+    },
+    "welcome_1a3a_generate_new_key_subtitle": {
+        "message": "請妥善保管"
+    },
+    "welcome_1a3a_generate_new_key_password_label": {
+        "message": "新密鑰的密碼"
+    },
+    "welcome_1a3a_generate_new_key_password_help": {
+        "message": "請牢記密碼，否則只憑藉助記詞是無法恢復密鑰的"
+    },
+    "welcome_1a3a_generate_new_key": {
+        "message": "創建新密鑰"
+    },
+    "welcome_1a3a_generate_new_key_result": {
+        "message": "請抄寫助記詞"
+    },
+    "welcome_1a3a_generate_new_key_result_help": {
+        "message": "助記詞用於恢復密鑰，確定保管好后按“確認”"
+    },
+    "welcome_1a3a_connect_title": {
+        "message": "關聯其他賬戶"
+    },
+    "welcome_1a3a_connect_subtitle": {
+        "message": "這會使用相同的密鑰"
+    },
+    "welcome_1a3a_recover_title": {
+        "message": "用助記詞恢復"
+    },
+    "welcome_1a3a_recover_subtitle": {
+        "message": "輸入以前記錄的助記詞"
+    },
+    "welcome_1a3a_recover_input_word": {
+        "message": "助記詞"
+    },
+    "welcome_1a3a_recover_input_password": {
+        "message": "密碼"
     },
     "welcome_1a3_title": {
         "message": "請妥善保管備份檔案"
@@ -244,7 +295,19 @@
         "message": "2. 點擊「選項」"
     },
     "welcome_1b_qr_3": {
-        "message": "3. 點擊「設定移動版」"
+        "message": "3. 點擊「設定行動端」"
+    },
+    "welcome_1b_hint_identity": {
+        "message": "備份文件中包含了以下身份："
+    },
+    "welcome_1b_hint_network": {
+        "message": "爲此，Maskbook 將要請求以下網站的權限："
+    },
+    "welcome_1b_confirm": {
+        "message": "恢復備份"
+    },
+    "welcome_1b_qr_rescan": {
+        "message": "重試"
     },
     "welcome_1b_qr_error_1": {
         "message": "掃描過程中出現錯誤"
@@ -261,7 +324,7 @@
     "banner_title": {
         "message": "歡迎使用 Maskbook"
     },
-    "banner_collecting_identity": {
+    "banner_preparing_setup": {
         "message": "Maskbook 正在準備向導過程……"
     },
     "banner_get_started": {
@@ -277,7 +340,7 @@
         "message": "$1 的公鑰無法找到！"
     },
     "service_not_setup_yet": {
-        "message": "您還沒有進行初始設置，在您沒有導入或生成您的密鑰之前，我們暫時無法爲您解密此消息！"
+        "message": "您還沒有進行初始設置，在您沒有導入或生成您的金鑰之前，我們暫時無法爲您解密此消息！"
     },
     "service_publish_post_aes_key_failed": {
         "message": "未能發佈 AES 密鑰。"
@@ -289,10 +352,10 @@
         "message": "解密失敗。"
     },
     "service_unknown_payload": {
-        "message": "不支持的訊息構造。或許你需要更新 Maskbook 版本了？"
+        "message": "不支援的訊息構造。或許你需要更新 Maskbook 版本了？"
     },
     "service_key_parse_failed": {
-        "message": "Key parse failed"
+        "message": "未能剖析金鑰"
     },
     "service_have_no_own_key_yet": {
         "message": "你還沒有私鑰"
@@ -319,13 +382,13 @@
         "message": "Payload 可能遭到了篡改。"
     },
     "payload_throw_in_alpha41": {
-        "message": "已經不再支持 Alpha41。請提醒對方安裝新版 Maskbook。"
+        "message": "已經不再支援 Alpha41。請提醒對方安裝新版 Maskbook。"
     },
     "options_index_setup": {
         "message": "設定您的 Maskbook"
     },
     "options_index_mobile_export": {
-        "message": "設定移動版"
+        "message": "設定行動端"
     },
     "options_index_dev": {
         "message": "開發人員選項"
@@ -334,10 +397,10 @@
         "message": "隱私政策"
     },
     "options_mobile_export_generating": {
-        "message": "正在生成 QR 碼..."
+        "message": "正在生成 QR 碼…"
     },
     "options_mobile_export_title": {
-        "message": "請在移動版 Maskbook 中掃描此 QR 碼以完成設定"
+        "message": "請在行動端 Maskbook 中掃描此 QR 碼以完成設定"
     },
     "options_mobile_export_subtitle": {
         "message": "請不要保存或將此 QR 碼分享給他人！"
@@ -347,5 +410,8 @@
     },
     "shared_choose_identity_subtitle": {
         "message": "你的其他 Maskbook 賬戶"
+    },
+    "database_group_friends_default_name": {
+        "message": "$1 的好友"
     }
 }

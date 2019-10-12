@@ -1,6 +1,8 @@
 import { PersonIdentifier, GroupIdentifier } from '../type'
 import { queryAvatarDB, isAvatarOutdatedDB, storeAvatarDB } from '../avatar'
 import { memoizePromise } from '../../utils/memoize'
+import { MessageCenter } from '../../utils/messages'
+import { queryPerson } from './person'
 
 /**
  * Get a (cached) blob url for an identifier.
@@ -14,6 +16,7 @@ export const getAvatarDataURL = memoizePromise(
     },
     id => id.toText(),
 )
+
 function ArrayBufferToBase64(buffer: ArrayBuffer) {
     const f = new Blob([buffer], { type: 'image/png' })
     const fr = new FileReader()
@@ -25,16 +28,21 @@ function ArrayBufferToBase64(buffer: ArrayBuffer) {
 
 /**
  * Store an avatar with a url for an identifier.
- * @param avatar - Avatar to store. If it is a string, will try to fetch it.
  * @param identifier - This avatar belongs to.
+ * @param avatar - Avatar to store. If it is a string, will try to fetch it.
+ * @param force - Ignore the outdated setting. Force update.
  */
 
-export async function storeAvatar(identifier: PersonIdentifier | GroupIdentifier, avatar: ArrayBuffer | string) {
+export async function storeAvatar(
+    identifier: PersonIdentifier | GroupIdentifier,
+    avatar: ArrayBuffer | string,
+    force?: boolean,
+) {
     if (identifier instanceof PersonIdentifier && identifier.isUnknown) return
     try {
         if (typeof avatar === 'string') {
             if (avatar.startsWith('http') === false) return
-            if (await isAvatarOutdatedDB(identifier, 'lastUpdateTime')) {
+            if (force || (await isAvatarOutdatedDB(identifier, 'lastUpdateTime'))) {
                 await storeAvatarDB(identifier, await downloadAvatar(avatar))
             }
             // else do nothing
@@ -43,6 +51,11 @@ export async function storeAvatar(identifier: PersonIdentifier | GroupIdentifier
         }
     } catch (e) {
         console.error('Store avatar failed', e)
+    } finally {
+        getAvatarDataURL.cache.delete(identifier.toText())
+        if (identifier instanceof PersonIdentifier) {
+            MessageCenter.emit('newPerson', await queryPerson(identifier))
+        }
     }
 }
 /**

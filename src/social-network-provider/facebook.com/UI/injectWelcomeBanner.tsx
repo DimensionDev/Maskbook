@@ -3,18 +3,22 @@ import { LiveSelector, MutationObserverWatcher } from '@holoflows/kit/es'
 import { isMobileFacebook } from '../isMobile'
 import { renderInShadowRoot } from '../../../utils/jss/renderInShadowRoot'
 import { Banner } from '../../../components/Welcomes/Banner'
-import { SocialNetworkUI } from '../../../social-network/ui'
+import { facebookUISelf } from '../ui-provider'
 
-export function injectWelcomeBannerFacebook(this: SocialNetworkUI) {
+export function injectWelcomeBannerFacebook() {
     const to = new MutationObserverWatcher(
-        new LiveSelector().querySelector<HTMLDivElement>(isMobileFacebook ? '#MComposer' : '#pagelet_composer'),
+        new LiveSelector()
+            .querySelector<HTMLDivElement>(isMobileFacebook ? '#MComposer' : '#pagelet_composer')
+            .enableSingleMode(),
     )
-        .enableSingleMode()
-        .setDomProxyOption({ beforeShadowRootInit: { mode: 'closed' } })
-        .startWatch()
+        .setDOMProxyOption({ beforeShadowRootInit: { mode: 'closed' } })
+        .startWatch({
+            childList: true,
+            subtree: true,
+        })
 
     const unmount = renderInShadowRoot(
-        <Banner networkIdentifier={this.networkIdentifier} unmount={() => unmount()} />,
-        to.firstVirtualNode.beforeShadow,
+        <Banner networkIdentifier={facebookUISelf.networkIdentifier} unmount={() => unmount()} />,
+        to.firstDOMProxy.beforeShadow,
     )
 }

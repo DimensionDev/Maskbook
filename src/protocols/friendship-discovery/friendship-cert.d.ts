@@ -1,3 +1,5 @@
+import { PersonIdentifier } from '../../database/type'
+
 /**
  * Server guide:
  * - On receive `packed`:
@@ -9,22 +11,22 @@
  * @remarks
  * ! This object should be encrypted with a NEW RANDOM crypto key !
  */
-export interface FriendshipCertificateV1 {
+export interface FriendshipCertificateDecryptedV1 {
     /**
-     * Indicates which Social Network this certificate belongs to.
-     *
-     * @example "mastodon@example.com"
+     * Who declared they issued this certificate
+     * ! DO NOT trust this field !
      */
-    network: string
+    certificateIssuer: PersonIdentifier
     /**
-     * Who claim they signed this certificate.
-     * @remarks
-     * ! Do not trust this field !
-     * @example "alice.hamilton.2019"
+     * ? This key is used to join and decrypt the message in the private channel
      */
-    myId: string
+    channelCryptoKey: JsonWebKey
+    /**
+     * ? This seed is used to generate the deterministic channel ID
+     */
+    channelSeed: string
 }
-export interface FriendshipCertificatePackedV1 {
+export interface FriendshipCertificateEncryptedV1 {
     version: 1
     /**
      * ! A NEW RANDOM crypto key !
@@ -38,10 +40,10 @@ export interface FriendshipCertificatePackedV1 {
     /**
      * timestamp
      * ! Server should overwrite it !
+     * ? If server is some kind of decentralized instance message service,
+     * ? use the message timestamp
      */
     timestamp: number
-    /**
-     * iv
-     */
+    /** iv used to decrypt the payload */
     iv: string
 }

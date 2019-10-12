@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { geti18nString } from '../../utils/i18n'
 import { Button, makeStyles, Typography, Theme } from '@material-ui/core'
 import WelcomeContainer from './WelcomeContainer'
-import { SelectPeopleUI } from '../shared/SelectPeople'
+import { SelectPeopleAndGroupsUI, isGroup } from '../shared/SelectPeopleAndGroups'
 import { Person } from '../../database'
 import Navigation from './Navigation/Navigation'
 
@@ -30,25 +30,25 @@ const useStyles = makeStyles<Theme>(theme => ({
 }))
 export default function Welcome({ next, identities, linkNewSocialNetworks, back }: Props) {
     const classes = useStyles()
-    const [selected, setSelect] = useState<Person[]>(identities[0] ? identities : [])
+    const [selected, setSelect] = useState<Person | null>(identities[0] || null)
     return (
         <WelcomeContainer className={classes.paper}>
             <Navigation back={back} />
             <Typography variant="h5">{geti18nString('welcome_1a1_title')}</Typography>
-            <SelectPeopleUI
+            <SelectPeopleAndGroupsUI<Person>
                 classes={{ root: classes.select }}
                 hideSelectAll
                 hideSelectNone
                 showAtNetwork
                 maxSelection={1}
-                people={identities}
+                items={identities}
                 selected={[]}
-                frozenSelected={selected}
-                onSetSelected={setSelect}
+                frozenSelected={[selected!].filter(x => x)}
+                onSetSelected={list => setSelect(list[0])}
             />
             <Button
-                disabled={selected.length === 0}
-                onClick={() => next(selected[0])}
+                disabled={selected === null}
+                onClick={() => next(selected!)}
                 variant="contained"
                 color="primary"
                 className={classes.button}>

@@ -1,0 +1,17 @@
+{
+    "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+        "ecmaVersion": 7,
+        "sourceType": "module",
+        "project": "tsconfig.json"
+    },
+    "extends": ["plugin:import/typescript"],
+    "plugins": ["@typescript-eslint", "import", "react-hooks"],
+    "rules": {
+        "@typescript-eslint/await-thenable": "error",
+        "import/no-deprecated": "warn",
+        "@typescript-eslint/no-for-in-array": "error",
+        "react-hooks/rules-of-hooks": "error",
+        "react-hooks/exhaustive-deps": "warn"
+    }
+}

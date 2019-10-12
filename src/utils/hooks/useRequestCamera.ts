@@ -49,12 +49,12 @@ export function useRequestCamera(needRequest: boolean) {
             return
         }
         if (checkPermissionApiUsability('request')) {
-            ;(navigator.permissions as any)
+            navigator.permissions
                 .request({ name: 'camera' })
                 .then((p: PermissionStatus) => {
                     updatePermission(p.state)
                 })
-                .catch((e: any) => {
+                .catch(() => {
                     updatePermission('granted')
                 })
         } else {

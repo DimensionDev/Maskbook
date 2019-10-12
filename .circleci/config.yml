@@ -17,24 +17,34 @@ jobs:
                       - v1-maskbook-
             - run:
                   name: Build Maskbook
-                  command: |
-                      yarn install --link-duplicates --frozen-lockfile
-                      yarn just lint
-                      yarn build
-                      sudo apt-get install zip
-                      cd build
-                      zip -r ../Maskbook.zip ./*
+                  command: node ./scripts/ci-build.js
             - save_cache:
                   paths:
                       - node_modules
                   key: v1-maskbook-{{ .Branch }}-{{ checksum "yarn.lock" }}
             - store_artifacts:
-                  path: Maskbook.zip
-                  destination: /Maskbook.zip
+                  path: Maskbook.base.zip
+                  destination: /Maskbook.base.zip
+            - store_artifacts:
+                  path: Maskbook.iOS.zip
+                  destination: /Maskbook.iOS.zip
+            - store_artifacts:
+                  path: Maskbook.chromium.zip
+                  destination: /Maskbook.chromium.zip
+            - store_artifacts:
+                  path: Maskbook.firefox.zip
+                  destination: /Maskbook.firefox.zip
+            - store_artifacts:
+                  path: Maskbook.gecko.zip
+                  destination: /Maskbook.gecko.zip
             - persist_to_workspace:
                   root: ~/repo/
                   paths:
-                      - Maskbook.zip
+                      - Maskbook.base.zip
+                      - Maskbook.iOS.zip
+                      - Maskbook.chromium.zip
+                      - Maskbook.firefox.zip
+                      - Maskbook.gecko.zip
     publish-github-release:
         docker:
             - image: cibuilds/github:0.10
@@ -56,7 +66,7 @@ jobs:
 
                       🐛 Bug Fixes
 
-                      👩‍💻 Miscellaneous" -replace -draft -prerelease $(git describe HEAD) ~/repo/Maskbook.zip
+                      👩‍💻 Miscellaneous" -replace -draft $(git describe HEAD) ~/repo/Maskbook.base.zip
                   # -b BODY \         # Set text describing the contents of the release
                   # -delete \         # Delete release and its git tag in advance if it exists (same as -recreate)
                   # -n TITLE \        # Set release title

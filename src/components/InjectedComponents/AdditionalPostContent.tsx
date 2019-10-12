@@ -1,17 +1,17 @@
 import * as React from 'react'
 import { getUrl } from '../../utils/utils'
-import { makeStyles, Divider, Typography, Link } from '@material-ui/core'
+import { makeStyles, Divider, Typography, Link, Card, CardContent, CardActions, Button } from '@material-ui/core'
 import anchorme from 'anchorme'
 
 interface Props {
     title: React.ReactNode
-    children?: any
+    children?: React.ReactNode
     renderText?: string
 }
 const useStyles = makeStyles({
     upDivider: { marginBottom: 6 },
     title: { display: 'flex' },
-    icon: { transform: 'translate(-1px, -1px)', marginLeft: 6 },
+    icon: { transform: 'translate(-1px, 1px)' },
     content: {
         marginBottom: 6,
         marginTop: 6,
@@ -22,17 +22,19 @@ export function AdditionalContent(props: Props) {
     const classes = useStyles()
     const icon = getUrl('/maskbook-icon-padded.png')
     return (
-        <>
-            <Divider className={classes.upDivider} />
-            <Typography variant="caption" className={classes.title}>
+        <Card elevation={0}>
+            <Typography variant="caption" color="textSecondary" gutterBottom className={classes.title}>
                 <img alt="" width={16} height={16} src={icon} className={classes.icon} />
                 {props.title}
             </Typography>
-            <Typography variant="body1" className={classes.content}>
-                {props.renderText ? <RenderText text={props.renderText} /> : props.children}
-            </Typography>
-            <Divider />
-        </>
+            {props.renderText ? (
+                <Typography variant="body2" component="p">
+                    <RenderText text={props.renderText} />
+                </Typography>
+            ) : (
+                props.children
+            )}
+        </Card>
     )
 }
 
@@ -41,7 +43,7 @@ function RenderText({ text }: { text: string }) {
     return <>{content}</>
 }
 function parseText(string: string) {
-    const links: any[] = anchorme(string, { list: true })
+    const links: { raw: string; protocol: string; encoded: string }[] = anchorme(string, { list: true })
     let current = string
     const result = []
     while (current.length) {

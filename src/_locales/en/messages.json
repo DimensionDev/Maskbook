@@ -33,7 +33,7 @@
         "message": "$1\nThis public key won't be saved."
     },
     "decrypted_postbox_title": {
-        "message": "Maskbook decrypted content:"
+        "message": "Encrypted by Maskbook:"
     },
     "decrypted_postbox_add_recipients": {
         "message": "View / add recipients"
@@ -58,6 +58,18 @@
     },
     "decrypted_postbox_failed": {
         "message": "Maskbook decryption failed"
+    },
+    "person_or_group_in_chip": {
+        "message": "$1 ($2 in the group)"
+    },
+    "person_or_group_in_list_0": {
+        "message": "This is an empty group"
+    },
+    "person_or_group_in_list_many": {
+        "message": "$1... $2 in total"
+    },
+    "person_or_group_in_list_many_no_preview": {
+        "message": "$1 in total"
     },
     "search_box_placeholder": {
         "message": "Type here to search"
@@ -91,9 +103,6 @@
     },
     "finish": {
         "message": "Finish"
-    },
-    "retry_decryption": {
-        "message": "Try again"
     },
     "welcome_0_close_button": {
         "message": "I'll do it later"
@@ -151,6 +160,48 @@
     },
     "welcome_1a2_done_button": {
         "message": "Nice!"
+    },
+    "welcome_1a3a_title": {
+        "message": "Which crypto key do you want for this account?"
+    },
+    "welcome_1a3a_generate_new_key_title": {
+        "message": "Create a new keypair"
+    },
+    "welcome_1a3a_generate_new_key_subtitle": {
+        "message": "please save it carefully"
+    },
+    "welcome_1a3a_generate_new_key_password_label": {
+        "message": "Password for the new key"
+    },
+    "welcome_1a3a_generate_new_key_password_help": {
+        "message": "Please remember the key, or your key will not be able to restore again."
+    },
+    "welcome_1a3a_generate_new_key": {
+        "message": "Generate"
+    },
+    "welcome_1a3a_generate_new_key_result": {
+        "message": "The mnemonic word"
+    },
+    "welcome_1a3a_generate_new_key_result_help": {
+        "message": "Mnemonic word is used to restore the key. Make sure you keep it safely."
+    },
+    "welcome_1a3a_connect_title": {
+        "message": "Connect other accounts"
+    },
+    "welcome_1a3a_connect_subtitle": {
+        "message": "will use same crypto key"
+    },
+    "welcome_1a3a_recover_title": {
+        "message": "Restore by mnemonic word"
+    },
+    "welcome_1a3a_recover_subtitle": {
+        "message": "A 12 words list you backup before"
+    },
+    "welcome_1a3a_recover_input_word": {
+        "message": "The mnemonic word"
+    },
+    "welcome_1a3a_recover_input_password": {
+        "message": "Password"
     },
     "welcome_1a3_title": {
         "message": "Keep your backups carefully"
@@ -240,10 +291,22 @@
         "message": "1. right-click the icon of the Maskbook in the browser address bar"
     },
     "welcome_1b_qr_2": {
-        "message": "2. click \"Options\""
+        "message": "2. click “Options”"
     },
     "welcome_1b_qr_3": {
-        "message": "3. click \"Setup for Mobile\""
+        "message": "3. click “Setup for Mobile”"
+    },
+    "welcome_1b_hint_identity": {
+        "message": "This backup file contains the following accounts:"
+    },
+    "welcome_1b_hint_network": {
+        "message": "And Maskbook is going to request permissions for these sites:"
+    },
+    "welcome_1b_confirm": {
+        "message": "Restore the backup"
+    },
+    "welcome_1b_qr_rescan": {
+        "message": "Rescan"
     },
     "welcome_1b_qr_error_1": {
         "message": "There is an error occur during the scanning."
@@ -260,7 +323,7 @@
     "banner_title": {
         "message": "Welcome to Maskbook"
     },
-    "banner_collecting_identity": {
+    "banner_preparing_setup": {
         "message": "Maskbook is identifying how to setup your account..."
     },
     "banner_get_started": {
@@ -300,7 +363,7 @@
         "message": "Username not valid"
     },
     "automation_request_click_edit_bio_button": {
-        "message": "Please click the \"Edit bio\" button or the pencil on the bio box."
+        "message": "Please click the “Edit bio” button or the pencil on the bio box."
     },
     "automation_request_paste_into_bio_box": {
         "message": "Please copy your public key into the bio box and publish it."
@@ -346,5 +409,8 @@
     },
     "shared_choose_identity_subtitle": {
         "message": "Switch to another account"
+    },
+    "database_group_friends_default_name": {
+        "message": "Friends of $1"
     }
 }

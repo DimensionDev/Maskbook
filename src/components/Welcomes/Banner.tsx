@@ -38,7 +38,7 @@ export function BannerUI(props: Props) {
     const classes = useStyles()
     const Title = (
         <Typography variant="subtitle1" color="inherit">
-            {props.disabled ? geti18nString('banner_collecting_identity') : geti18nString('banner_title')}
+            {props.disabled ? geti18nString('banner_preparing_setup') : geti18nString('banner_title')}
         </Typography>
     )
     const GetStarted = (
@@ -84,16 +84,10 @@ export function Banner({
         getActivatedUI().ignoreSetupAccount(env, {})
         unmount()
     }, [unmount])
-    if (typeof props.networkIdentifier === 'function' && props.getStarted === undefined) {
-        throw new TypeError(
-            'You cannot use getStartedDefault when networkIdentifier is a function. Please implement this function yourself.',
-        )
-    }
     const getStartedDefault = useCallback(() => {
-        setStorage(props.networkIdentifier as string, { forceDisplayWelcome: false })
-        unmount()
+        setStorage(props.networkIdentifier, { forceDisplayWelcome: false })
         Services.Welcome.openWelcomePage(lastRecognizedIdentity)
-    }, [lastRecognizedIdentity, props.networkIdentifier, unmount])
+    }, [lastRecognizedIdentity, props.networkIdentifier])
     return (
         <BannerUI
             disabled={lastRecognizedIdentity.identifier.isUnknown}

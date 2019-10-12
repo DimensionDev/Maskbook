@@ -3,26 +3,34 @@ import { encodeText } from '../../utils/type-transform/String-ArrayBuffer'
 import { sleep } from '../../utils/utils'
 import { geti18nString } from '../../utils/i18n'
 import {
-    getMyIdentitiesDB,
-    PersonRecordPublicPrivate,
     getLocalKeysDB,
+    getMyIdentitiesDB,
     PersonRecordPublic,
-    queryPeopleDB,
-    generateLocalKeyDB,
-    generateMyIdentityDB,
+    PersonRecordPublicPrivate,
     queryLocalKeyDB,
     queryMyIdentityAtDB,
+    queryPeopleDB,
+    storeLocalKeyDB,
+    storeMyIdentityDB,
 } from '../../database/people'
 import { BackupJSONFileLatest, JSON_HINT_FOR_POWER_USER } from '../../utils/type-transform/BackupFile'
 import { PersonIdentifier } from '../../database/type'
 import { MessageCenter } from '../../utils/messages'
 import getCurrentNetworkWorker from '../../social-network/utils/getCurrentNetworkWorker'
-import { SocialNetworkUIDataSources } from '../../social-network/ui'
+import { SocialNetworkUI } from '../../social-network/ui'
 import { getWelcomePageURL } from '../options-page/Welcome/getWelcomePageURL'
 import { getMyProveBio } from './CryptoServices/getMyProveBio'
+import {
+    generate_ECDH_256k1_KeyPair_ByMnemonicWord,
+    recover_ECDH_256k1_KeyPair_ByMnemonicWord,
+} from '../../utils/mnemonic-code'
+import { derive_AES_GCM_256_Key_From_PBKDF2, import_PBKDF2_Key } from '../../utils/crypto.subtle'
+import { CryptoKeyToJsonWebKey } from '../../utils/type-transform/CryptoKey-JsonWebKey'
+import { createDefaultFriendsGroup } from '../../database'
 
 OnlyRunInContext('background', 'WelcomeService')
 async function generateBackupJSON(whoAmI: PersonIdentifier, full = false): Promise<BackupJSONFileLatest> {
+    const manifest = browser.runtime.getManifest()
     const myIdentitiesInDB: BackupJSONFileLatest['whoami'] = []
     const peopleInDB: NonNullable<BackupJSONFileLatest['people']> = []
 
@@ -32,8 +40,7 @@ async function generateBackupJSON(whoAmI: PersonIdentifier, full = false): Promi
     const myIdentity = await getMyIdentitiesDB()
     if (!whoAmI.isUnknown) {
         if ((await hasValidIdentity(whoAmI)) === false) {
-            await createNewIdentity(whoAmI)
-            return generateBackupJSON(whoAmI, full)
+            throw new Error('Generate fail')
         }
     }
     async function addMyIdentitiesInDB(data: PersonRecordPublicPrivate) {
@@ -60,7 +67,11 @@ async function generateBackupJSON(whoAmI: PersonIdentifier, full = false): Promi
         peopleInDB.push({
             network: data.identifier.network,
             userId: data.identifier.userId,
-            groups: data.groups.map(g => ({ network: g.network, groupId: g.groupId, type: g.type })),
+            groups: data.groups.map(g => ({
+                network: g.network,
+                groupID: g.groupID,
+                virtualGroupOwner: g.virtualGroupOwner,
+            })),
             nickname: data.nickname,
             previousIdentifiers: (data.previousIdentifiers || []).map(p => ({ network: p.network, userId: p.userId })),
             publicKey: await exportKey(data.publicKey),
@@ -81,12 +92,14 @@ async function generateBackupJSON(whoAmI: PersonIdentifier, full = false): Promi
             whoami: myIdentitiesInDB,
             people: peopleInDB,
             grantedHostPermissions,
+            maskbookVersion: manifest.version,
         }
     else
         return {
             version: 1,
             whoami: myIdentitiesInDB,
             grantedHostPermissions,
+            maskbookVersion: manifest.version,
         }
     function exportKey(k: CryptoKey) {
         return crypto.subtle.exportKey('jwk', k)
@@ -95,16 +108,95 @@ async function generateBackupJSON(whoAmI: PersonIdentifier, full = false): Promi
 async function hasValidIdentity(whoAmI: PersonIdentifier) {
     const local = await queryLocalKeyDB(whoAmI)
     const ecdh = await queryMyIdentityAtDB(whoAmI)
-    if (!local || !ecdh || !ecdh.privateKey || !ecdh.publicKey) return false
-    return true
+    return !!local && !!ecdh && !!ecdh.privateKey && !!ecdh.publicKey
 }
 
-async function createNewIdentity(whoAmI: PersonIdentifier) {
-    await generateLocalKeyDB(whoAmI)
-    await generateMyIdentityDB(whoAmI)
-    // ? New user !
-    MessageCenter.emit('generateKeyPair', undefined)
-    console.log('New user! Generating key pairs')
+/**
+ *
+ * Generate new identity by a password
+ *
+ * @param whoAmI Who Am I
+ * @param password password used to generate mnemonic word, can be empty string
+ */
+export async function createNewIdentityByMnemonicWord(whoAmI: PersonIdentifier, password: string): Promise<string> {
+    const x = await generate_ECDH_256k1_KeyPair_ByMnemonicWord(password)
+    await generateNewIdentity(whoAmI, x)
+    return x.mnemonicWord
+}
+
+/**
+ *
+ * Recover new identity by a password and mnemonic words
+ *
+ * @param whoAmI Who Am I
+ * @param password password used to generate mnemonic word, can be empty string
+ * @param word mnemonic words
+ */
+export async function restoreNewIdentityWithMnemonicWord(
+    whoAmI: PersonIdentifier,
+    word: string,
+    password: string,
+): Promise<void> {
+    await generateNewIdentity(whoAmI, await recover_ECDH_256k1_KeyPair_ByMnemonicWord(word, password))
+}
+/**
+ * There are 2 types of usingKey.
+ * ECDH256k1 Keypair + MnemonicWord
+ * Or
+ * ECDH256k1 Keypair + LocalKey
+ *
+ * This is how localKey generated:
+ * ```ts
+ * const pbkdf2 = import_PBKDF2_Key(ECDH256k1.publicKey)
+ * const localKey = derive_AES_GCM_256_Key_From_PBKDF2(pbkdf2, MnemonicWord)
+ * ```
+ */
+async function generateNewIdentity(
+    whoAmI: PersonIdentifier,
+    usingKey:
+        | {
+              key: CryptoKeyPair
+              mnemonicWord: string
+          }
+        | {
+              key: CryptoKeyPair
+              localKey: CryptoKey
+          },
+): Promise<void> {
+    const { key } = usingKey
+    if ('localKey' in usingKey) {
+        await storeLocalKeyDB(whoAmI, usingKey.localKey)
+    } else {
+        const pub = await CryptoKeyToJsonWebKey(key.publicKey)
+
+        // ? Derive method: publicKey as "password" and password for the mnemonicWord as hash
+        const pbkdf2 = await import_PBKDF2_Key(encodeText(pub.x! + pub.y!))
+        const localKey = await derive_AES_GCM_256_Key_From_PBKDF2(pbkdf2, encodeText(usingKey.mnemonicWord))
+
+        await storeLocalKeyDB(whoAmI, localKey)
+    }
+    // TODO: If there is some old key that will be overwritten, warn the user.
+    await storeMyIdentityDB({
+        groups: [],
+        identifier: whoAmI,
+        publicKey: key.publicKey,
+        privateKey: key.privateKey,
+    })
+    await createDefaultFriendsGroup(whoAmI).catch(console.error)
+    MessageCenter.emit('identityUpdated', undefined)
+}
+
+export async function attachIdentityToPersona(
+    whoAmI: PersonIdentifier,
+    targetIdentity: PersonIdentifier,
+): Promise<void> {
+    const id = await queryMyIdentityAtDB(targetIdentity)
+    const localKey = await queryLocalKeyDB(whoAmI)
+    if (id === null || localKey === null) throw new Error('Not found')
+    await generateNewIdentity(whoAmI, {
+        key: { privateKey: id.privateKey, publicKey: id.publicKey },
+        localKey,
+    })
 }
 
 export async function backupMyKeyPair(whoAmI: PersonIdentifier, download = true) {
@@ -129,7 +221,7 @@ export async function backupMyKeyPair(whoAmI: PersonIdentifier, download = true)
     return obj
 }
 
-export async function openWelcomePage(id?: SocialNetworkUIDataSources['lastRecognizedIdentity']['value']) {
+export async function openWelcomePage(id?: SocialNetworkUI['lastRecognizedIdentity']['value']) {
     if (id) {
         if (!getCurrentNetworkWorker(id.identifier).isValidUsername(id.identifier.userId))
             throw new TypeError(geti18nString('service_username_invalid'))

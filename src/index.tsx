@@ -31,6 +31,7 @@ import NearMe from '@material-ui/icons/NearMe'
 import Assignment from '@material-ui/icons/Assignment'
 import Phonelink from '@material-ui/icons/Phonelink'
 import Code from '@material-ui/icons/Code'
+import ArrowBack from '@material-ui/icons/ArrowBack'
 import { ExportData } from './components/MobileImportExport/Export'
 import './setup.ui'
 import { SSRRenderer } from './utils/SSRRenderer'
@@ -98,6 +99,7 @@ const useStyles = makeStyles<Theme>(theme =>
         },
         content: {
             flexGrow: 1,
+            width: '100%',
         },
     }),
 )
@@ -118,7 +120,19 @@ function ResponsiveDrawer() {
             <Divider />
             <List onClick={handleDrawerToggle}>{Links1st}</List>
             <Divider />
-            <List onClick={handleDrawerToggle}>{Links2rd}</List>
+            <List onClick={handleDrawerToggle}>
+                {Links2rd}
+                {(webpackEnv.firefoxVariant === 'GeckoView' || webpackEnv.target === 'WKWebview') && (
+                    <MuiLink color="textPrimary" component={Link} to="/" onClick={window.close}>
+                        <ListItem button>
+                            <ListItemIcon>
+                                <ArrowBack />
+                            </ListItemIcon>
+                            <ListItemText primary="Back" />
+                        </ListItem>
+                    </MuiLink>
+                )}
+            </List>
         </div>
     )
 
@@ -181,7 +195,7 @@ function ResponsiveDrawer() {
 }
 function LinkItem(props: { to: string; icon: React.ReactElement; title: string }) {
     return (
-        <MuiLink component={Link} to={props.to}>
+        <MuiLink color="textPrimary" component={Link} to={props.to}>
             <ListItem button>
                 <ListItemIcon>{props.icon}</ListItemIcon>
                 <ListItemText primary={props.title} />

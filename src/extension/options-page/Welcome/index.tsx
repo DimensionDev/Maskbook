@@ -1,10 +1,11 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import Welcome0 from '../../../components/Welcomes/0'
 import Welcome1a1a from '../../../components/Welcomes/1a1a'
 import Welcome1a1b from '../../../components/Welcomes/1a1b'
 import Welcome1a2 from '../../../components/Welcomes/1a2'
-import Welcome1a3 from '../../../components/Welcomes/1a3'
-import Welcome1a4v2 from '../../../components/Welcomes/1a4.v2'
+import Welcome1a3a from '../../../components/Welcomes/1a3a'
+import Welcome1a3b from '../../../components/Welcomes/1a3b'
+import Welcome1a4 from '../../../components/Welcomes/1a4'
 import Welcome1b1 from '../../../components/Welcomes/1b1'
 import Welcome2 from '../../../components/Welcomes/2'
 import Services from '../../service'
@@ -17,8 +18,8 @@ import { useValueRef } from '../../../utils/hooks/useValueRef'
 import { Person } from '../../../database'
 import { getCurrentNetworkWorkerService } from '../../background-script/WorkerService'
 import getCurrentNetworkWorker from '../../../social-network/utils/getCurrentNetworkWorker'
-import { UpgradeBackupJSONFile } from '../../../utils/type-transform/BackupFile'
-import { geti18nString } from '../../../utils/i18n'
+import { BackupJSONFileLatest } from '../../../utils/type-transform/BackupFile'
+import { isNil } from 'lodash-es'
 
 enum WelcomeState {
     // Step 0
@@ -27,6 +28,7 @@ enum WelcomeState {
     SelectIdentity,
     LinkNewSocialNetworks,
     Intro,
+    GenerateKey,
     BackupKey,
     ProvePost,
     RestoreKeypair,
@@ -39,23 +41,24 @@ const WelcomeActions = {
     },
     /**
      *
-     * @param file The backup file
-     * @param id Who am I?
+     * @param json - The backup file
+     * @param id   - Who am I?
      */
-    restoreFromFile(file: string, id: PersonIdentifier): Promise<void> {
-        const json = JSON.parse(file)
-        const upgraded = UpgradeBackupJSONFile(json)
-        if (!upgraded) throw new TypeError(geti18nString('service_invalid_backup_file'))
+    restoreFromFile(json: BackupJSONFileLatest, id: PersonIdentifier): Promise<void> {
         // This request MUST BE sync or Firefox will reject this request
         return browser.permissions
-            .request({ origins: upgraded.grantedHostPermissions })
-            .then(() => Services.People.restoreBackup(json, id))
+            .request({ origins: json.grantedHostPermissions })
+            .then(granted =>
+                granted
+                    ? Services.People.restoreBackup(json, id)
+                    : Promise.reject(new Error('required permission is not granted.')),
+            )
     },
     autoVerifyBio(network: PersonIdentifier, provePost: string) {
-        getCurrentNetworkWorkerService(network).autoVerifyBio(network, provePost)
+        getCurrentNetworkWorkerService(network).autoVerifyBio!(network, provePost)
     },
     autoVerifyPost(network: PersonIdentifier, provePost: string) {
-        getCurrentNetworkWorkerService(network).autoVerifyPost(network, provePost)
+        getCurrentNetworkWorkerService(network).autoVerifyPost!(network, provePost)
     },
     manualVerifyBio(user: PersonIdentifier, prove: string) {
         this.autoVerifyBio(user, prove)
@@ -67,11 +70,15 @@ interface Welcome {
     provePost: string
     currentStep: WelcomeState
     personHintFromSearch: Person
+    mnemonicWord: string | null
     currentIdentities: Person[]
     // Actions
     onStepChange(state: WelcomeState): void
     onSelectIdentity(person: Person): void
     onFinish(reason: 'done' | 'quit'): void
+    onGenerateKey(password: string): void
+    onRestoreByMnemonicWord(words: string, password: string): void
+    onConnectOtherPerson(whoAmI: PersonIdentifier, target: PersonIdentifier): void
     sideEffects: typeof WelcomeActions
 }
 function Welcome(props: Welcome) {
@@ -120,12 +127,30 @@ function Welcome(props: Welcome) {
             return (
                 <Welcome1a2
                     back={() => onStepChange(WelcomeState.SelectIdentity)}
-                    next={() => onStepChange(WelcomeState.BackupKey)}
+                    next={() => onStepChange(WelcomeState.GenerateKey)}
+                />
+            )
+        case WelcomeState.GenerateKey:
+            return (
+                <Welcome1a3a
+                    availableIdentityCount={props.currentIdentities.length}
+                    onConnectOtherPerson={x => props.onConnectOtherPerson(whoAmI.identifier, x)}
+                    onRestoreByMnemonicWord={props.onRestoreByMnemonicWord}
+                    generatedMnemonicWord={props.mnemonicWord}
+                    onGenerateKey={props.onGenerateKey}
+                    next={() => {
+                        sideEffects
+                            .backupMyKeyPair(props.whoAmI.identifier)
+                            .then(updateProveBio)
+                            .finally(() => {
+                                onStepChange(WelcomeState.ProvePost)
+                            })
+                    }}
                 />
             )
         case WelcomeState.BackupKey:
             return (
-                <Welcome1a3
+                <Welcome1a3b
                     next={() => {
                         sideEffects
                             .backupMyKeyPair(props.whoAmI.identifier)
@@ -145,10 +170,10 @@ function Welcome(props: Welcome) {
                 } catch {}
             }
             return (
-                <Welcome1a4v2
-                    hasManual={!!worker.manualVerifyPost}
-                    hasBio={!!worker.autoVerifyBio}
-                    hasPost={!!worker.autoVerifyPost}
+                <Welcome1a4
+                    hasManual={!isNil(worker.manualVerifyPost)}
+                    hasBio={!isNil(worker.autoVerifyBio)}
+                    hasPost={!isNil(worker.autoVerifyPost)}
                     bioDisabled={whoAmI.identifier.isUnknown}
                     provePost={provePost}
                     requestManualVerify={() => {
@@ -168,8 +193,8 @@ function Welcome(props: Welcome) {
             return (
                 <Welcome1b1
                     back={() => onStepChange(WelcomeState.Start)}
-                    restore={url => {
-                        sideEffects.restoreFromFile(url, props.whoAmI.identifier).then(
+                    restore={json => {
+                        sideEffects.restoreFromFile(json, props.whoAmI.identifier).then(
                             () => onStepChange(WelcomeState.End),
                             // TODO: use a better UI
                             error => alert(error),
@@ -218,8 +243,8 @@ export const IdentifierRefContext = React.createContext(selectedIdRef)
 export default withRouter(function _WelcomePortal(props: RouteComponentProps) {
     const ResponsiveDialog = useRef(withMobileDialog({ breakpoint: 'xs' })(Dialog)).current
     useEffect(() => {
-        MessageCenter.on('generateKeyPair', fillRefs)
         fillRefs()
+        return MessageCenter.on('generateKeyPair', fillRefs)
     }, [])
 
     const [step, setStep] = useState(WelcomeState.Start)
@@ -250,15 +275,34 @@ export default withRouter(function _WelcomePortal(props: RouteComponentProps) {
                     nickname: person.nickname,
                     avatarURL: person.avatar,
                 })
-                setStep(WelcomeState.SelectIdentity)
             })
         }
     }, [props.location.search, selectedId.identifier])
+
+    const [mnemonic, setMnemonic] = useState<string | null>(null)
 
     return (
         <ResponsiveDialog open>
             <IdentifierRefContext.Provider value={selectedIdRef}>
                 <Welcome
+                    onConnectOtherPerson={(w, t) => {
+                        Services.Welcome.attachIdentityToPersona(w, t).then(
+                            () => setStep(WelcomeState.BackupKey),
+                            alert,
+                        )
+                    }}
+                    onRestoreByMnemonicWord={(w, p) => {
+                        Services.Welcome.restoreNewIdentityWithMnemonicWord(selectedId.identifier, w, p).then(
+                            () => setStep(WelcomeState.BackupKey),
+                            alert,
+                        )
+                    }}
+                    mnemonicWord={mnemonic}
+                    onGenerateKey={password => {
+                        Services.Welcome.createNewIdentityByMnemonicWord(selectedId.identifier, password).then(words =>
+                            setMnemonic(words),
+                        )
+                    }}
                     provePost={provePost}
                     currentStep={step}
                     sideEffects={WelcomeActions}
@@ -267,7 +311,11 @@ export default withRouter(function _WelcomePortal(props: RouteComponentProps) {
                     currentIdentities={ownIds}
                     personHintFromSearch={personFromURL}
                     onSelectIdentity={p => (selectedIdRef.value = p)}
-                    onFinish={() => props.history.replace('/')}
+                    onFinish={() => {
+                        if (webpackEnv.firefoxVariant === 'GeckoView' || webpackEnv.target === 'WKWebview')
+                            window.close()
+                        props.history.replace('/')
+                    }}
                 />
             </IdentifierRefContext.Provider>
         </ResponsiveDialog>

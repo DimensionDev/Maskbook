@@ -2,5 +2,6 @@
 package.json
 package-lock.json
 build/
+dist/
 public/polyfill
-src/utils/jss/
+src/polyfill

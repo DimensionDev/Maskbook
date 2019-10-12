@@ -1,16 +1,17 @@
-import { env, Env, Preference, Profile, SocialNetworkWorkerAndUI } from './shared'
-import { DomProxy, LiveSelector, ValueRef } from '@holoflows/kit/es'
-import { Person } from '../database'
+import { env, Env, Preference, Profile, SocialNetworkWorkerAndUIDefinition } from './shared'
+import { DOMProxy, LiveSelector, ValueRef } from '@holoflows/kit/es'
+import { Person, Group } from '../database'
 import { PersonIdentifier, PostIdentifier } from '../database/type'
 import { Payload } from '../utils/type-transform/Payload'
-import { isNull } from 'lodash-es'
-import { injectPostCommentsDefault } from './defaults/injectComments'
-import { injectCommentBoxDefaultFactory } from './defaults/injectCommentBox'
+import { defaultTo, isNull } from 'lodash-es'
 import Services from '../extension/service'
+import { defaultSharedSettings } from './defaults/shared'
+import { defaultSocialNetworkUI } from './defaults/ui'
+import { nop, nopWithUnmount } from '../utils/utils'
 
 //#region SocialNetworkUI
-export interface SocialNetworkUI
-    extends SocialNetworkWorkerAndUI,
+export interface SocialNetworkUIDefinition
+    extends SocialNetworkWorkerAndUIDefinition,
         SocialNetworkUIDataSources,
         SocialNetworkUITasks,
         SocialNetworkUIInjections,
@@ -87,29 +88,31 @@ export interface SocialNetworkUIInjections {
     injectPostBox(): void
     /**
      * This function should inject the Welcome Banner
+     * @description leaving it undefined, there will be a default value
+     * leaving it "disabled", Maskbook will disable this feature.
      */
-    injectWelcomeBanner(): void
+    injectWelcomeBanner?: (() => void) | 'disabled'
     /**
      * This function should inject the comment
      * @param current The current post
      * @param node The post root
      * @returns unmount the injected components
      */
-    injectPostComments?(current: PostInfo, node: DomProxy): () => void
+    injectPostComments?: ((current: PostInfo, node: DOMProxy) => () => void) | 'disabled'
     /**
      * This function should inject the comment box
      * @param current The current post
      * @param node The post root
      * @returns unmount the injected components
      */
-    injectCommentBox?(current: PostInfo, node: DomProxy): () => void
+    injectCommentBox?: ((current: PostInfo, node: DOMProxy) => () => void) | 'disabled'
     /**
      * This function should inject the post box
      * @param current The current post
      * @param node The post root
      * @returns unmount the injected components
      */
-    injectPostInspector(current: PostInfo, node: DomProxy<HTMLElement>): () => void
+    injectPostInspector(current: PostInfo, node: DOMProxy<HTMLElement>): () => void
 }
 //#endregion
 //#region SocialNetworkUITasks
@@ -136,7 +139,7 @@ export interface SocialNetworkUITasks {
      */
     taskPasteIntoBio(text: string): void
     /**
-     * This function should return the given post on the current page,
+     * This function should return the given single post on the current page,
      * Called by `AutomatedTabTask`
      * @param postIdentifier The post id
      */
@@ -160,23 +163,27 @@ export interface SocialNetworkUIDataSources {
     /**
      * My Maskbook friends at this network
      */
-    readonly friendsRef: ValueRef<Person[]>
+    readonly friendsRef?: ValueRef<Person[]>
+    /**
+     * My groups at this network
+     */
+    readonly groupsRef?: ValueRef<Group[]>
     /**
      * My identities at current network
      */
-    readonly myIdentitiesRef: ValueRef<Person[]>
+    readonly myIdentitiesRef?: ValueRef<Person[]>
     /**
      * The account that user is using (may not in the database)
      */
-    readonly lastRecognizedIdentity: ValueRef<Pick<Person, 'identifier' | 'nickname' | 'avatar'>>
+    readonly lastRecognizedIdentity?: ValueRef<Pick<Person, 'identifier' | 'nickname' | 'avatar'>>
     /**
      * The account that user is using (MUST be in the database)
      */
-    readonly currentIdentity: ValueRef<Person | null>
+    readonly currentIdentity?: ValueRef<Person | null>
     /**
      * Posts that Maskbook detects
      */
-    readonly posts: WeakMap<DomProxy, PostInfo>
+    readonly posts?: WeakMap<DOMProxy, PostInfo>
 }
 export type PostInfo = {
     readonly postBy: ValueRef<PersonIdentifier>
@@ -189,6 +196,8 @@ export type PostInfo = {
     readonly rootNode: HTMLElement
 }
 //#endregion
+
+export type SocialNetworkUI = Required<SocialNetworkUIDefinition>
 
 export const getEmptyPostInfo = (rootNodeSelector: LiveSelector<HTMLElement, true>) => {
     return {
@@ -204,12 +213,13 @@ export const getEmptyPostInfo = (rootNodeSelector: LiveSelector<HTMLElement, tru
 }
 
 export const definedSocialNetworkUIs = new Set<SocialNetworkUI>()
-let activatedSocialNetworkUI: SocialNetworkUI = ({
+export const getActivatedUI = () => activatedSocialNetworkUI
+
+let activatedSocialNetworkUI = ({
     lastRecognizedIdentity: new ValueRef({ identifier: PersonIdentifier.unknown }),
     currentIdentity: new ValueRef(null),
     myIdentitiesRef: new ValueRef([]),
-} as Partial<SocialNetworkUI>) as any
-export const getActivatedUI = () => activatedSocialNetworkUI
+} as Partial<SocialNetworkUI>) as SocialNetworkUI
 export function activateSocialNetworkUI() {
     for (const ui of definedSocialNetworkUIs)
         if (ui.shouldActivate()) {
@@ -221,7 +231,15 @@ export function activateSocialNetworkUI() {
             ui.injectPostBox()
             ui.collectPeople()
             ui.collectPosts()
-            ui.shouldDisplayWelcome().then(r => r && ui.injectWelcomeBanner())
+            ui.myIdentitiesRef.addListener(val => {
+                if (val.length === 1) ui.currentIdentity.value = val[0]
+            })
+            {
+                const injectBanner = ui.injectWelcomeBanner
+                if (typeof injectBanner === 'function') {
+                    ui.shouldDisplayWelcome().then(result => result && injectBanner())
+                }
+            }
             ui.lastRecognizedIdentity.addListener(id => {
                 if (id.identifier.isUnknown) return
 
@@ -235,43 +253,49 @@ export function activateSocialNetworkUI() {
         }
 }
 function hookUIPostMap(ui: SocialNetworkUI) {
-    const undoMap = new WeakMap<object, () => void>()
+    const unmountFunctions = new WeakMap<object, () => void>()
     const setter = ui.posts.set
     ui.posts.set = function(key, value) {
-        const undo1 = ui.injectPostInspector(value, key)
-        const undo2 = (ui.injectCommentBox || def.injectCommentBox)!(value, key)
-        const undo3 = (ui.injectPostComments || def.injectPostComments)!(value, key)
-        undoMap.set(key, () => {
-            undo1()
-            undo2()
-            undo3()
+        const unmountPostInspector = ui.injectPostInspector(value, key)
+        const unmountCommentBox: () => void =
+            ui.injectCommentBox === 'disabled'
+                ? nopWithUnmount
+                : defaultTo(ui.injectCommentBox, nopWithUnmount)(value, key)
+        const unmountPostComments: () => void =
+            ui.injectPostComments === 'disabled'
+                ? nopWithUnmount
+                : defaultTo(ui.injectPostComments, nopWithUnmount)(value, key)
+        unmountFunctions.set(key, () => {
+            unmountPostInspector()
+            unmountCommentBox()
+            unmountPostComments()
         })
         Reflect.apply(setter, this, [key, value])
         return this
     }
     const remove = ui.posts.delete
     ui.posts.delete = function(key) {
-        const f = undoMap.get(key)
+        const f = unmountFunctions.get(key)
         f && f()
         return Reflect.apply(remove, this, [key])
     }
 }
 
-/**
- * default functions of UI.
- */
-const def: Pick<SocialNetworkUI, 'injectCommentBox' | 'injectPostComments'> = {
-    injectCommentBox: injectCommentBoxDefaultFactory(),
-    injectPostComments: injectPostCommentsDefault(),
-}
-
-export function defineSocialNetworkUI(UI: SocialNetworkUI) {
-    if (UI.acceptablePayload.includes('v40') && UI.internalName !== 'facebook') {
-        throw new TypeError('Payload version v40 is not supported in this network. Please use v39 or newer.')
+export function defineSocialNetworkUI(UI: SocialNetworkUIDefinition) {
+    if (
+        (UI.acceptablePayload.includes('v40') || UI.acceptablePayload.includes('v39')) &&
+        UI.internalName !== 'facebook'
+    ) {
+        throw new TypeError('Payload version v40 and v39 is not supported in this network. Please use v38 or newer.')
+    }
+    const res: SocialNetworkUI = {
+        ...defaultSharedSettings,
+        ...defaultSocialNetworkUI,
+        ...UI,
     }
     if (UI.notReadyForProduction) {
-        if (process.env.NODE_ENV === 'production') return UI
+        if (process.env.NODE_ENV === 'production') return res
     }
-    definedSocialNetworkUIs.add(UI)
-    return UI
+    definedSocialNetworkUIs.add(res)
+    return res
 }

@@ -1,55 +1,43 @@
 import { createMuiTheme } from '@material-ui/core'
-import { TypographyOptions } from '@material-ui/core/styles/createTypography'
 import { ThemeOptions } from '@material-ui/core/styles/createMuiTheme'
+import indigo from '@material-ui/core/colors/indigo'
+import orange from '@material-ui/core/colors/orange'
 
 const _refTheme = createMuiTheme()
 const _refThemeDark = createMuiTheme({ palette: { type: 'dark' } })
+
+function getFontFamily(monospace?: boolean) {
+    // We want to look native.
+
+    // Windows has no CJK sans monospace. Accomendate that.
+    // We only use it for fingerprints anyway so CJK coverage aint a problem... yet.
+    const monofont = navigator.platform.startsWith('Win') ? 'Consolas, monospace' : 'monospace'
+    // https://caniuse.com/font-family-system-ui
+    // Firefox does NOT support yet it in any form on Windows, but tests indicate that it agrees with Edge in using the UI font for sans-serif:
+    // Microsoft YaHei on zh-Hans-CN.
+    return !monospace ? '-apple-system, system-ui, sans-serif' : monofont
+}
+
 const baseTheme = (theme: 'dark' | 'light') =>
     ({
         palette: {
-            primary: { main: '#486db6' },
-            secondary: { main: '#486db6' },
+            primary: { main: indigo[400] },
+            secondary: { main: orange[800] },
             type: theme,
-            background: {
-                default: theme === 'light' ? '#eeeeef' : _refThemeDark.palette.background.default,
-            },
         },
-        shape: { borderRadius: 3 },
         typography: {
-            caption: {
-                color: '#4b4f56',
-                letterSpacing: 'initial',
-                fontWeight: 'normal',
-                lineHeight: '14px',
-            },
-            h6: {
-                fontWeight: 'normal',
-            },
-        } as TypographyOptions,
+            fontFamily: getFontFamily(),
+        },
+        shape: { borderRadius: 4 },
         overrides: {
             MuiButton: {
                 root: {
                     textTransform: 'none',
                 },
-                outlined: {
-                    background: theme === 'light' ? 'white' : _refThemeDark.palette.background.default,
-                },
-            },
-            MuiCard: {
-                root: {
-                    borderRadius: 3,
-                },
-            },
-            MuiCardHeader: {
-                root: {
-                    background: '#f5f6f7',
-                    width: '100%',
-                    padding: '8px 24px 8px 8px',
-                },
             },
         },
     } as ThemeOptions)
-// 主题
+// Theme
 export const MaskbookLightTheme = createMuiTheme(baseTheme('light'))
 export const MaskbookDarkTheme = createMuiTheme(baseTheme('dark'))
-export const FixedWidthFonts = `Droid Sans Mono', Consolas, Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace, serif`
+export const FixedWidthFonts = getFontFamily(true)

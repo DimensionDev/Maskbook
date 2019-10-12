@@ -1,5 +1,5 @@
 globalThis.location = { hostname: 'localhost' }
-globalThis.navigator = { appVersion: '', userAgent: '', language: '' }
+globalThis.navigator = { appVersion: '', userAgent: '', language: '', platform: '' }
 globalThis.document = {
     adoptedStyleSheets: {},
     getElementById() {},
@@ -15,4 +15,5 @@ globalThis.Event = class {
     get target() {}
 }
 globalThis.Worker = class {}
+globalThis.webpackEnv = {}
 module.exports = require(process.argv[process.argv.length - 1])

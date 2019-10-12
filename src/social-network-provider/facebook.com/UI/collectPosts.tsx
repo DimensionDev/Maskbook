@@ -1,4 +1,4 @@
-import { DomProxy, LiveSelector, MutationObserverWatcher, ValueRef } from '@holoflows/kit'
+import { DOMProxy, LiveSelector, MutationObserverWatcher, ValueRef } from '@holoflows/kit'
 import { deconstructPayload } from '../../../utils/type-transform/Payload'
 import { PersonIdentifier } from '../../../database/type'
 import { PostInfo, SocialNetworkUI } from '../../../social-network/ui'
@@ -15,7 +15,8 @@ export function collectPostsFacebook(this: SocialNetworkUI) {
             const root = new LiveSelector()
                 .replace(() => [metadata.realCurrent])
                 .filter(x => x)
-                .closest('.userContentWrapper')
+                .closest('.userContentWrapper, [data-store]')
+
             // ? inject after comments
             const commentSelectorPC = root
                 .clone()
@@ -65,9 +66,9 @@ export function collectPostsFacebook(this: SocialNetworkUI) {
                 info.postID.value = getPostID(metadata)
             }
             collectPostInfo()
-            info.postPayload.value = deconstructPayload(info.postContent.value)
+            info.postPayload.value = deconstructPayload(info.postContent.value, this.payloadDecoder)
             info.postContent.addListener(newVal => {
-                info.postPayload.value = deconstructPayload(newVal)
+                info.postPayload.value = deconstructPayload(newVal, this.payloadDecoder)
             })
             return {
                 onNodeMutation: collectPostInfo,
@@ -75,17 +76,21 @@ export function collectPostsFacebook(this: SocialNetworkUI) {
                 onRemove: () => this.posts.delete(metadata),
             }
         })
-        .setDomProxyOption({ afterShadowRootInit: { mode: 'closed' } })
-        .startWatch()
+        .setDOMProxyOption({ afterShadowRootInit: { mode: 'closed' } })
+        .startWatch({
+            childList: true,
+            subtree: true,
+        })
 }
 
-function getPostBy(node: DomProxy, allowCollectInfo: boolean) {
+function getPostBy(node: DOMProxy, allowCollectInfo: boolean) {
     const dom = isMobileFacebook
         ? node.current.querySelectorAll('a')
         : [node.current.parentElement!.querySelectorAll('a')[1]]
+    // side effect: save to service
     return getPersonIdentifierAtFacebook(Array.from(dom), allowCollectInfo)
 }
-function getPostID(node: DomProxy): null | string {
+function getPostID(node: DOMProxy): null | string {
     if (isMobileFacebook) {
         const abbr = node.current.querySelector('abbr')
         if (!abbr) return null

@@ -1,6 +1,10 @@
 import { serializable } from '../utils/type-transform/Serialization'
 
 /**
+ * @internal symbol that used to construct this type from the Identifier
+ */
+const $fromString = Symbol()
+/**
  * This type only refers to the stringified Identifier
  * person:...
  * group:...
@@ -8,20 +12,6 @@ import { serializable } from '../utils/type-transform/Serialization'
  * post_iv:...
  */
 type Identifiers = 'person' | 'group' | 'post' | 'post_iv'
-/**
- * @internal symbol that used to construct this type from the Identifier
- */
-const $fromString = Symbol()
-/**
- * Because "/" is used to split parts in identifier
- * we should reject the "/"
- *
- * If you want to use it, you must first convert to something other
- */
-function noSlash(str?: string) {
-    if (!str) return
-    if (str.split('/')[1]) throw new TypeError('Cannot contain / in a part of identifier')
-}
 export abstract class Identifier {
     public equals(other: Identifier) {
         return this === other || this.toText() === other.toText()
@@ -73,6 +63,9 @@ export class PersonIdentifier extends Identifier {
     toText() {
         return `person:${this.network}/${this.userId}`
     }
+    friendlyToText() {
+        return `${this.userId}@${this.network}`
+    }
     static [$fromString](str: string) {
         const [network, userId] = str.split('/')
         if (!network || !userId) return null
@@ -80,33 +73,33 @@ export class PersonIdentifier extends Identifier {
     }
 }
 
-export enum GroupType {
-    virtual = 'virtual',
-    real = 'real',
+export enum PreDefinedVirtualGroupNames {
+    friends = '_default_friends_group_',
 }
 @serializable('GroupIdentifier')
 export class GroupIdentifier extends Identifier {
-    constructor(public network: string, public groupId: string, public type = GroupType.real) {
+    static getDefaultFriendsGroupIdentifier(who: PersonIdentifier) {
+        return new GroupIdentifier(who.network, who.userId, PreDefinedVirtualGroupNames.friends)
+    }
+    constructor(public network: string, public virtualGroupOwner: string | null, public groupID: string) {
         super()
         noSlash(network)
-        noSlash(groupId)
+        noSlash(groupID)
+        if (virtualGroupOwner === '') this.virtualGroupOwner = null
     }
     toText() {
-        return `group:${this.network}/${this.groupId}/${this.type}`
+        return 'group:' + [this.network, this.virtualGroupOwner, this.groupID].join('/')
     }
     get isReal() {
-        return this.type === GroupType.real
+        return !this.virtualGroupOwner
     }
     get isVirtual() {
-        return this.type === GroupType.virtual
+        return !!this.virtualGroupOwner
     }
     static [$fromString](str: string) {
-        const [network, groupId, virtual] = str.split('/')
-        if (!network || !groupId || !virtual) return null
-        if (GroupType.real === virtual || GroupType.real === virtual) {
-            return new GroupIdentifier(network, groupId, virtual)
-        }
-        return null
+        const [network, belongs, groupID] = str.split('/')
+        if (!network || !groupID) return null
+        return new GroupIdentifier(network, belongs, groupID)
     }
 }
 
@@ -148,12 +141,12 @@ export class PostIVIdentifier extends Identifier {
 }
 
 /**
- * Person representation in ui
+ * Because "/" is used to split parts in identifier
+ * we should reject the "/"
+ *
+ * If you want to use it, you must first convert to something other
  */
-export interface PersonUI {
-    identifier: PersonIdentifier
-    previousIdentities?: PersonIdentifier[]
-    nickname?: string
-    avatar?: string
-    fingerprint?: string
+function noSlash(str?: string) {
+    if (!str) return
+    if (str.split('/')[1]) throw new TypeError('Cannot contain / in a part of identifier')
 }

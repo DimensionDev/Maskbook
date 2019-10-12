@@ -4,19 +4,20 @@ import Welcome0 from '../components/Welcomes/0'
 import Welcome1a1a from '../components/Welcomes/1a1a'
 import Welcome1a1b from '../components/Welcomes/1a1b'
 import Welcome1a2 from '../components/Welcomes/1a2'
-import Welcome1a3 from '../components/Welcomes/1a3'
-import Welcome1a4v2 from '../components/Welcomes/1a4.v2'
+import Welcome1a3a from '../components/Welcomes/1a3a'
+import Welcome1a3b from '../components/Welcomes/1a3b'
+import Welcome1a4 from '../components/Welcomes/1a4'
 import Welcome1b1 from '../components/Welcomes/1b1'
 import Welcome2 from '../components/Welcomes/2'
 import { linkTo as to, linkTo } from '@storybook/addon-links'
 import { text, boolean, number } from '@storybook/addon-knobs'
 import { action } from '@storybook/addon-actions'
 import { BannerUI } from '../components/Welcomes/Banner'
-import { withMobileDialog, Dialog } from '@material-ui/core'
+import { Dialog } from '@material-ui/core'
 import QRScanner from '../components/Welcomes/QRScanner'
-import { demoPeople } from './demoPeople'
+import { demoPeople } from './demoPeopleOrGroups'
 
-const ResponsiveDialog = withMobileDialog({ breakpoint: 'xs' })(Dialog)
+const ResponsiveDialog = Dialog
 storiesOf('Welcome', module)
     .add('Banner', () => (
         <BannerUI disabled={boolean('disabled', false)} close={action('Close')} getStarted={to('Welcome', 'Step 0')} />
@@ -47,17 +48,32 @@ storiesOf('Welcome', module)
     ))
     .add('Step 1a-2', () => (
         <ResponsiveDialog open>
-            <Welcome1a2 next={to('Welcome', 'Step 1a-3')} back={to('Welcome', 'Step 0')} />
+            <Welcome1a2 next={to('Welcome', 'Step 1a-3a')} back={to('Welcome', 'Step 0')} />
         </ResponsiveDialog>
     ))
-    .add('Step 1a-3', () => (
+    .add('Step 1a-3a', () => {
+        const m = text('mnemonicWord', null)
+        return (
+            <ResponsiveDialog open>
+                <Welcome1a3a
+                    availableIdentityCount={number('id counts', 1)}
+                    onConnectOtherPerson={action('connect others')}
+                    onRestoreByMnemonicWord={action('restore')}
+                    onGenerateKey={action('generate key')}
+                    generatedMnemonicWord={m === '' ? null : m}
+                    next={to('Welcome', 'Step 1a-3b')}
+                />
+            </ResponsiveDialog>
+        )
+    })
+    .add('Step 1a-3b', () => (
         <ResponsiveDialog open>
-            <Welcome1a3 next={to('Welcome', 'New Step 1a-4')} />
+            <Welcome1a3b next={to('Welcome', 'Step 1a-4')} />
         </ResponsiveDialog>
     ))
-    .add('New Step 1a-4', () => (
+    .add('Step 1a-4', () => (
         <ResponsiveDialog open>
-            <Welcome1a4v2
+            <Welcome1a4
                 hasManual={boolean('hasManual', true)}
                 hasBio={boolean('hasBio', true)}
                 hasPost={boolean('hasPost', true)}
