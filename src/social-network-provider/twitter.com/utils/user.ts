@@ -16,7 +16,7 @@ export const usernameValidator: SocialNetworkWorkerAndUI['isValidUsername'] = (n
     return true
 }
 
-export const uploadToService = (payload: { name: string; handle: string; avatar: string; bio?: string }) => {
+export const uploadToService = (payload: { name: string; handle: string; avatar?: string; bio?: string }) => {
     const id = new PersonIdentifier(host, payload.handle)
     if (payload.bio) {
         Services.Crypto.verifyOthersProve(payload.bio, id).then()

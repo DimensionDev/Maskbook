@@ -209,27 +209,16 @@ export type PostInfo = {
 
 export type SocialNetworkUI = Required<SocialNetworkUIDefinition>
 
-export const getEmptyPostInfo = (rootNodeSelector: LiveSelector<HTMLElement, true>) => {
+export const getEmptyPostInfoByElement = (
+    opt: Pick<PostInfo, 'rootNode' | 'rootNodeProxy' | 'commentsSelector' | 'commentBoxSelector'>,
+) => {
     return {
         decryptedPostContent: new ValueRef(''),
         postBy: new ValueRef(PersonIdentifier.unknown),
         postContent: new ValueRef(''),
-        postID: new ValueRef(''),
+        postID: new ValueRef(null),
         postPayload: new ValueRef(null),
-        get rootNode() {
-            return rootNodeSelector.evaluate()
-        },
-    } as PostInfo
-}
-
-export const getEmptyPostInfoByElement = (rootNode: HTMLElement) => {
-    return {
-        decryptedPostContent: new ValueRef(''),
-        postBy: new ValueRef(PersonIdentifier.unknown),
-        postContent: new ValueRef(''),
-        postID: new ValueRef(''),
-        postPayload: new ValueRef(null),
-        rootNode,
+        ...opt,
     } as PostInfo
 }
 

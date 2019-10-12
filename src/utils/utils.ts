@@ -54,13 +54,22 @@ export const bypass: <T>(args: T) => T = args => args
 /**
  * index starts at one.
  */
-export const regexMatch = (str: string, regexp: RegExp, index: number = 1) => {
+// @ts-ignore
+export const regexMatch: {
+    (str: string, regexp: RegExp, index?: number): string | null
+    (str: string, regexp: RegExp, index: null): RegExpMatchArray | null
+} = (str: string, regexp: RegExp, index: number | null = 1) => {
     const r = str.match(regexp)
     if (isNull(r)) return null
+    if (index === null) {
+        return r
+    }
     return r[index]
 }
 
 /**
+ * enables you to use match group with flag g
+ *
  * @return
  *  if no matches, return null;
  *  return target match group in each matches;

@@ -34,18 +34,21 @@ export const resolveInfoFromBioCard = () => {
  */
 export const postParser = (node: HTMLElement) => {
     const parseRoot = node.querySelector<HTMLElement>('[data-testid="tweet"]')!
-    const nameArea = notNullable(parseRoot.children[1].querySelector<HTMLAnchorElement>('a')).innerText.split('\n')
+    const nameArea = regexMatch(
+        notNullable(parseRoot.children[1].querySelector<HTMLAnchorElement>('a')).innerText,
+        /^(.+)@(.+)$/,
+        null,
+    )!
+    const avatarElement = parseRoot.children[0].querySelector<HTMLImageElement>(`img[src*="twimg.com"]`)
     return {
         name: nameArea[0],
-        handle: notNullable(regexMatch(nameArea[1], /@(.+)/)),
-        pid: notNullable(
-            regexMatch(
-                parseRoot.children[1].querySelector<HTMLAnchorElement>('a[href*="status"]')!.href,
-                /(\/)(\d+)/,
-                2,
-            ),
-        ),
-        avatar: notNullable(parseRoot.children[0].querySelector<HTMLImageElement>('[style*="twimg.com"] + img')).src,
+        handle: nameArea[1],
+        pid: regexMatch(
+            parseRoot.children[1].querySelector<HTMLAnchorElement>('a[href*="status"]')!.href,
+            /(\/)(\d+)/,
+            2,
+        )!,
+        avatar: avatarElement ? avatarElement.src : undefined,
         content: postContentParser(parseRoot),
     }
 }
