@@ -2,6 +2,8 @@ import { geti18nString } from '../i18n'
 import { SocialNetworkWorkerAndUI } from '../../social-network/shared'
 import { defaults, isNil } from 'lodash-es'
 import { definedSocialNetworkWorkers } from '../../social-network/worker'
+import { getActivatedUI } from '../../social-network/ui'
+import { GetContext } from '@holoflows/kit/es'
 
 export type Payload = PayloadAlpha40_Or_Alpha39 | PayloadAlpha38
 
@@ -96,22 +98,19 @@ export function deconstructPayload(
 
     const decoders = (() => {
         if (isNil(decoder)) {
-            const sto = []
-            for (const v of definedSocialNetworkWorkers) {
-                sto.push(v.payloadDecoder)
-            }
-            return sto
+            if (GetContext() === 'content') return [getActivatedUI().payloadDecoder]
+            return Array.from(definedSocialNetworkWorkers).map(x => x.payloadDecoder)
         }
         return [decoder]
     })()
+
+    if (decoders.length === 0) decoders.push(x => x)
 
     for (const versionDecoder of versions) {
         for (const networkDecoder of decoders) {
             if (isNil(networkDecoder(str))) continue
             const result = versionDecoder(networkDecoder(str)!, false)
-            if (!isNil(result)) {
-                return result
-            }
+            if (!isNil(result)) return result
         }
     }
     if (str.includes('🎼') && str.includes(':||'))
