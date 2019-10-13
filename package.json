@@ -8,7 +8,7 @@
   },
   "scripts": {
     "start": "react-app-rewired start",
-    "start:debug": "node --inspect-brk node_modules/react-app-rewired/scripts/start.js",
+    "start:debugging": "node --inspect-brk node_modules/react-app-rewired/scripts/start.js",
     "start:firefox": "react-app-rewired start --firefox",
     "start:android": "react-app-rewired start --firefox-android",
     "start:chromium": "react-app-rewired start --chromium",
@@ -104,7 +104,7 @@
     "react-devtools": "^4.1.0",
     "storybook-addon-material-ui": "^0.9.0-alpha.19",
     "ts-node": "^8.4.1",
-    "web-ext": "^3.1.1",
+    "web-ext": "^3.2.0",
     "webpack-extension-manifest-plugin": "^0.5.0",
     "yargs": "^14.2.0"
   },
