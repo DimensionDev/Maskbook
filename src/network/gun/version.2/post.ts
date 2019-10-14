@@ -26,12 +26,11 @@ export async function queryPostKeysOnGun2(
         (await gun2
             .get(postHash)
             // @ts-ignore
-            .get(keyHash)
-            .once().then!()) || {}
+            .get(keyHash).then!()) || {}
     // ? In this step we get something like ["jzarhbyjtexiE7aB1DvQ", "jzarhuse6xlTAtblKRx9"]
     const internalKeys = Object.keys(internalNodes).filter(x => x !== '_')
     // ? In this step we get all keys in this category (gun2[postHash][keyHash])
-    const resultPromise = internalKeys.map(key => gun2.get(key).once().then!())
+    const resultPromise = internalKeys.map(key => gun2.get(key).then!())
     const result = (await Promise.all(resultPromise)) as SharedAESKeyGun2[]
     console.info(`await gun2[${postHash}][${keyHash}]\n`, result)
     return { keys: result, keyHash, postHash }
