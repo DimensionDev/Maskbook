@@ -56,6 +56,7 @@ storiesOf('Welcome', module)
         return (
             <ResponsiveDialog open>
                 <Welcome1a3a
+                    back={to('Welcome', 'Step 1a-2')}
                     availableIdentityCount={number('id counts', 1)}
                     onConnectOtherPerson={action('connect others')}
                     onRestoreByMnemonicWord={action('restore')}
