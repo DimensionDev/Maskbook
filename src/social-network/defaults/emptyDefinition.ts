@@ -27,7 +27,7 @@ export const emptyDefinition: SocialNetworkUIDefinition = {
     injectPostBox: nop,
     injectPostComments: nopWithUnmount,
     injectPostInspector: nopWithUnmount,
-    injectWelcomeBanner: nop,
+    injectWelcomeBanner: nopWithUnmount,
     resolveLastRecognizedIdentity: nop,
     async shouldDisplayWelcome() {
         return false
