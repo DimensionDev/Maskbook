@@ -8,6 +8,7 @@ import Services from '../extension/service'
 import { defaultSharedSettings } from './defaults/shared'
 import { defaultSocialNetworkUI } from './defaults/ui'
 import { nop, nopWithUnmount } from '../utils/utils'
+import { MessageCenter } from '../utils/messages'
 
 //#region SocialNetworkUI
 export interface SocialNetworkUIDefinition
@@ -90,8 +91,11 @@ export interface SocialNetworkUIInjections {
      * This function should inject the Welcome Banner
      * @description leaving it undefined, there will be a default value
      * leaving it "disabled", Maskbook will disable this feature.
+     *
+     * If it is a function, it should mount the WelcomeBanner.
+     * And it should return a function to unmount the WelcomeBanner
      */
-    injectWelcomeBanner?: (() => void) | 'disabled'
+    injectWelcomeBanner?: (() => () => void) | 'disabled'
     /**
      * This function should inject the comment
      * @param current The current post
@@ -235,9 +239,14 @@ export function activateSocialNetworkUI() {
                 if (val.length === 1) ui.currentIdentity.value = val[0]
             })
             {
-                const injectBanner = ui.injectWelcomeBanner
-                if (typeof injectBanner === 'function') {
-                    ui.shouldDisplayWelcome().then(result => result && injectBanner())
+                const mountBanner = ui.injectWelcomeBanner
+                if (typeof mountBanner === 'function') {
+                    ui.shouldDisplayWelcome().then(shouldDisplay => {
+                        if (shouldDisplay) {
+                            const unmount = mountBanner()
+                            ui.myIdentitiesRef.addListener(next => next.length && unmount())
+                        }
+                    })
                 }
             }
             ui.lastRecognizedIdentity.addListener(id => {
