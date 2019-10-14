@@ -1,6 +1,6 @@
 import './provider.worker'
-import React from 'react'
-import { HashRouter, MemoryRouter, Route, Link } from 'react-router-dom'
+import React, { useCallback } from 'react'
+import { HashRouter, MemoryRouter, Route, Link, useRouteMatch, useHistory } from 'react-router-dom'
 
 import Empty from './extension/options-page/Empty'
 import Welcome from './extension/options-page/Welcome'
@@ -10,7 +10,7 @@ import Developer from './extension/options-page/Developer'
 import { ThemeProvider } from '@material-ui/styles'
 import { MaskbookLightTheme, MaskbookDarkTheme } from './utils/theme'
 import { geti18nString } from './utils/i18n'
-import { makeStyles, useTheme, Theme, createStyles } from '@material-ui/core/styles'
+import { makeStyles, createStyles, Theme } from '@material-ui/core/styles'
 import {
     Divider,
     List,
@@ -20,14 +20,14 @@ import {
     CssBaseline,
     AppBar,
     Toolbar,
-    IconButton,
     Typography,
     Hidden,
     Drawer,
     Link as MuiLink,
     useMediaQuery,
+    BottomNavigation,
+    BottomNavigationAction,
 } from '@material-ui/core'
-import Menu from '@material-ui/icons/Menu'
 import NearMe from '@material-ui/icons/NearMe'
 import Assignment from '@material-ui/icons/Assignment'
 import Phonelink from '@material-ui/icons/Phonelink'
@@ -49,18 +49,18 @@ const OptionsPageRouters = (
 )
 const Links1st = (
     <>
-        <LinkItem icon={<NearMe />} title={geti18nString('options_index_setup')} to="/welcome" />
-        <LinkItem icon={<Phonelink />} title={geti18nString('options_index_mobile_export')} to="/mobile-setup" />
-        <LinkItem icon={<Code />} title={geti18nString('options_index_dev')} to="/developer" />
+        <LinkItem icon={<NearMe />} label={geti18nString('options_index_setup')} to="/welcome" />
+        <LinkItem icon={<Phonelink />} label={geti18nString('options_index_mobile_export')} to="/mobile-setup" />
+        <LinkItem icon={<Code />} label={geti18nString('options_index_dev')} to="/developer" />
     </>
 )
-const Links2rd = (
+const Links2nd = (
     <>
-        <LinkItem icon={<Assignment />} title={geti18nString('options_index_privacy')} to="/privacy" />
+        <LinkItem icon={<Assignment />} label={geti18nString('options_index_privacy')} to="/privacy" />
     </>
 )
 
-const useStyles = makeStyles<Theme>(theme =>
+const useStyles = makeStyles(theme =>
     createStyles({
         root: {
             display: 'flex',
@@ -93,27 +93,28 @@ const useStyles = makeStyles<Theme>(theme =>
             flexGrow: 1,
             width: '100%',
         },
+        bottomNavigationRoot: {
+            position: 'fixed',
+            bottom: 0,
+            width: '100%',
+        },
+        bottomNavigationMargin: {
+            height: 56 + 12,
+        },
     }),
 )
 
 SSRRenderer(<ResponsiveDrawer />)
 function ResponsiveDrawer() {
     const classes = useStyles()
-    const theme = useTheme()
-    const [mobileOpen, setMobileOpen] = React.useState(false)
-
-    function handleDrawerToggle() {
-        setMobileOpen(!mobileOpen)
-    }
-
     const drawer = (
         <div>
             <div className={classes.toolbar} />
             <Divider />
-            <List onClick={handleDrawerToggle}>{Links1st}</List>
+            <List>{Links1st}</List>
             <Divider />
-            <List onClick={handleDrawerToggle}>
-                {Links2rd}
+            <List>
+                {Links2nd}
                 {(webpackEnv.firefoxVariant === 'GeckoView' || webpackEnv.target === 'WKWebview') && (
                     <MuiLink color="textPrimary" component={Link} to="/" onClick={window.close}>
                         <ListItem button>
@@ -129,26 +130,16 @@ function ResponsiveDrawer() {
     )
 
     const isDarkTheme = useMediaQuery('(prefers-color-scheme: dark)')
-
     const Router = (typeof window === 'object' ? HashRouter : MemoryRouter) as typeof HashRouter
 
     return (
         <ThemeProvider theme={isDarkTheme ? MaskbookDarkTheme : MaskbookLightTheme}>
-            <style>{'body {overflow-x: hidden;}'}</style>
+            <style>{'body {overflow-x: hidden;} a {color:unset;}'}</style>
             <Router>
                 <div className={classes.root}>
                     <CssBaseline />
                     <AppBar position="fixed" className={classes.appBar}>
                         <Toolbar>
-                            <IconButton
-                                color="inherit"
-                                // Todo: i18n
-                                aria-label="open drawer"
-                                edge="start"
-                                onClick={handleDrawerToggle}
-                                className={classes.menuButton}>
-                                <Menu />
-                            </IconButton>
                             <Typography variant="h6" noWrap>
                                 <img
                                     className={classes.logo}
@@ -159,39 +150,45 @@ function ResponsiveDrawer() {
                         </Toolbar>
                     </AppBar>
                     <nav className={classes.drawer}>
-                        <Hidden smUp>
-                            <Drawer
-                                variant="temporary"
-                                anchor={theme.direction === 'rtl' ? 'right' : 'left'}
-                                open={mobileOpen}
-                                onClose={handleDrawerToggle}
-                                classes={{ paper: classes.drawerPaper }}
-                                ModalProps={{ keepMounted: true }}>
-                                {drawer}
-                            </Drawer>
-                        </Hidden>
                         <Hidden xsDown>
                             <Drawer classes={{ paper: classes.drawerPaper }} variant="permanent" open>
                                 {drawer}
                             </Drawer>
                         </Hidden>
                     </nav>
-                    <main className={classes.content}>
+                    <main className={classes.content} style={{ display: 'relative' }}>
                         <div className={classes.toolbar} />
-                        {OptionsPageRouters}
+                        <div style={{ display: 'absolute' }}>{OptionsPageRouters}</div>
+                        <Hidden smUp>
+                            <div className={classes.bottomNavigationMargin} />
+                            <BottomNavigation classes={{ root: classes.bottomNavigationRoot }}>
+                                {Links1st}
+                                {Links2nd}
+                            </BottomNavigation>
+                        </Hidden>
                     </main>
                 </div>
             </Router>
         </ThemeProvider>
     )
 }
-function LinkItem(props: { to: string; icon: React.ReactElement; title: string }) {
-    return (
+function LinkItem(props: { to: string; icon: React.ReactElement; label: string }) {
+    const isMobile = useMediaQuery((theme: Theme) => theme.breakpoints.down('xs'))
+    const selected = useRouteMatch(props.to) !== null
+    const history = useHistory()
+    const onClick = useCallback(() => {
+        history.push(props.to)
+    }, [history, props.to])
+    const pc = (
         <MuiLink color="textPrimary" component={Link} to={props.to}>
-            <ListItem button>
+            <ListItem selected={selected} button>
                 <ListItemIcon>{props.icon}</ListItemIcon>
-                <ListItemText primary={props.title} />
+                <ListItemText primary={props.label} />
             </ListItem>
         </MuiLink>
     )
+    const mobile = (
+        <BottomNavigationAction onClick={onClick} selected={selected} showLabel label={props.label} icon={props.icon} />
+    )
+    return isMobile ? mobile : pc
 }
