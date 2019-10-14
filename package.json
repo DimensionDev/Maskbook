@@ -58,7 +58,7 @@
     "elliptic": "^6.4.1",
     "eslint-plugin-import": "^2.18.2",
     "eslint-plugin-react-hooks": "^2.0.1",
-    "gun": "0.2019.422",
+    "gun": "0.2019.930",
     "husky": "^3.0.5",
     "idb": "^4.0.3",
     "json-stable-stringify": "^1.0.1",
@@ -112,8 +112,16 @@
     "yargs": "^14.0.0"
   },
   "browserslist": {
-    "production": [">0.2%", "not dead", "not op_mini all"],
-    "development": ["last 1 chrome version", "last 1 firefox version", "last 1 safari version"]
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   },
   "husky": {
     "hooks": {
@@ -122,6 +130,9 @@
     }
   },
   "lint-staged": {
-    "*.{ts,tsx,js,jsx}": ["node scripts/lint.js", "git add"]
+    "*.{ts,tsx,js,jsx}": [
+      "node scripts/lint.js",
+      "git add"
+    ]
   }
 }
