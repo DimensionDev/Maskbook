@@ -62,7 +62,7 @@ export function ExportData() {
                     iOS
                 </Link>
                 {' and '}
-                <Link target="_blank" href="https://play.google.com/apps/testing/com.dimension.maskbook">
+                <Link target="_blank" href="https://play.google.com/store/apps/details?id=com.dimension.maskbook">
                     Android
                 </Link>
                 {' version'}

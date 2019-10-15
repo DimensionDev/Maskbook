@@ -12,7 +12,7 @@ For general introductions, see https://Maskbook.com/
     [crext]: https://chrome.google.com/webstore/detail/maskbook/jkoeaghipilijlahjplgbfiocjhldnap/
     [fxaddon]: https://addons.mozilla.org/en-US/firefox/addon/maskbook/
     [ios]: https://testflight.apple.com/join/OGmGmIg1
-    [android]: https://play.google.com/apps/testing/com.dimension.maskbook
+    [android]: https://play.google.com/store/apps/details?id=com.dimension.maskbook
 
 ## Documentation for developers
 
