@@ -2,23 +2,26 @@ import React, { useState } from 'react'
 import { QrCode } from '../shared/qrcode'
 import { useAsync } from '../../utils/components/AsyncComponent'
 import Services from '../../extension/service'
-import { makeStyles, Typography } from '@material-ui/core'
+import { makeStyles, Typography, Button } from '@material-ui/core'
 import { NotSetupYetPrompt } from '../shared/NotSetupYetPrompt'
 import { geti18nString } from '../../utils/i18n'
 import { useCurrentIdentity, useMyIdentities } from '../DataSource/useActivatedUI'
 import { ChooseIdentity } from '../shared/ChooseIdentity'
+import { compressBackupFile } from '../../utils/type-transform/BackupFileShortRepresentation'
+import { BackupJSONFileLatest } from '../../utils/type-transform/BackupFile'
 
 const useStyles = makeStyles({
     root: {
         textAlign: 'center',
         paddingTop: 24,
+        maxWidth: 600,
+        margin: 'auto',
         '& > div': {
             margin: 'auto',
         },
     },
     code: {
-        width: 404,
-        height: 404,
+        padding: '2em',
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
@@ -32,9 +35,15 @@ export function ExportData() {
     const current = useCurrentIdentity()
 
     useAsync(async () => {
-        if (!current) return ''
-        return Services.Welcome.backupMyKeyPair(current.identifier, false)
-    }, [current]).then(x => setFile(JSON.stringify(x)))
+        if (!current) return {} as BackupJSONFileLatest
+        return Services.Welcome.backupMyKeyPair(current.identifier, { download: false, onlyBackupWhoAmI: true })
+    }, [current]).then(x => {
+        try {
+            setFile(compressBackupFile(x))
+        } catch {
+            setFile('')
+        }
+    })
     if (id.length === 0) {
         return (
             <main className={classes.root}>
@@ -44,6 +53,12 @@ export function ExportData() {
     }
     return (
         <main className={classes.root}>
+            <Typography style={{ marginBottom: 24 }}>
+                <Button style={{ marginRight: 24 }} size="small" variant="outlined" color="primary" disabled>
+                    Beta
+                </Button>
+                Checkout our Beta iOS and Android version
+            </Typography>
             {id.length > 1 ? <ChooseIdentity /> : null}
             <div className={classes.code}>
                 {file ? (

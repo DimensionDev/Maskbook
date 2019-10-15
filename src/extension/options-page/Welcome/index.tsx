@@ -37,7 +37,7 @@ enum WelcomeState {
 }
 const WelcomeActions = {
     backupMyKeyPair(whoAmI: PersonIdentifier) {
-        return Services.Welcome.backupMyKeyPair(whoAmI)
+        return Services.Welcome.backupMyKeyPair(whoAmI, { download: true, onlyBackupWhoAmI: false })
     },
     /**
      *

@@ -36,6 +36,7 @@ import {
     UpgradeBackupJSONFile,
     BackupJSONFileLatest,
 } from '../../utils/type-transform/BackupFile'
+import { decompressBackupFile } from '../../utils/type-transform/BackupFileShortRepresentation'
 
 const RestoreBox = styled('div')(({ theme }: { theme: Theme }) => ({
     color: theme.palette.text.hint,
@@ -246,7 +247,10 @@ export default function Welcome({ back, restore: originalRestore }: Props) {
         )
     }
     function WKWebkitQR(props: { onScan(val: string): void; onQuit(): void }) {
-        useAsync(() => iOSHost.scanQRCode(), []).then(props.onScan, props.onQuit)
+        useAsync(() => iOSHost.scanQRCode(), []).then(
+            x => props.onScan(JSON.stringify(decompressBackupFile(x))),
+            props.onQuit,
+        )
         return null
     }
     function QR() {
