@@ -57,18 +57,18 @@ export function ExportData() {
                 <Button style={{ marginRight: 12 }} size="small" variant="outlined" color="primary" disabled>
                     Beta
                 </Button>
-                {'Checkout Maskbook '}
+                Check out Maskbook{' '}
                 <Link target="_blank" href="https://testflight.apple.com/join/OGmGmIg1">
                     iOS
                 </Link>
                 {' and '}
                 <Link target="_blank" href="https://play.google.com/store/apps/details?id=com.dimension.maskbook">
                     Android
-                </Link>
-                {' version'}
+                </Link>{' '}
+                versions
             </Typography>
             <Typography style={{ marginBottom: 24 }}>
-                {'Maskbook is also available on '}
+                Maskbook is also available on{' '}
                 <Link target="_blank" href="https://addons.mozilla.org/en-US/firefox/addon/maskbook/">
                     Firefox and Firefox for Android
                 </Link>
