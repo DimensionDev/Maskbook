@@ -27,6 +27,7 @@ import {
     useMediaQuery,
     BottomNavigation,
     BottomNavigationAction,
+    IconButton,
 } from '@material-ui/core'
 import NearMe from '@material-ui/icons/NearMe'
 import Assignment from '@material-ui/icons/Assignment'
@@ -113,19 +114,7 @@ function ResponsiveDrawer() {
             <Divider />
             <List>{Links1st}</List>
             <Divider />
-            <List>
-                {Links2nd}
-                {(webpackEnv.firefoxVariant === 'GeckoView' || webpackEnv.target === 'WKWebview') && (
-                    <MuiLink color="textPrimary" component={Link} to="/" onClick={window.close}>
-                        <ListItem button>
-                            <ListItemIcon>
-                                <ArrowBack />
-                            </ListItemIcon>
-                            <ListItemText primary="Back" />
-                        </ListItem>
-                    </MuiLink>
-                )}
-            </List>
+            <List>{Links2nd}</List>
         </div>
     )
 
@@ -140,6 +129,7 @@ function ResponsiveDrawer() {
                     <CssBaseline />
                     <AppBar position="fixed" className={classes.appBar}>
                         <Toolbar>
+                            <MobileBackButton />
                             <Typography variant="h6" noWrap>
                                 <img
                                     className={classes.logo}
@@ -162,8 +152,8 @@ function ResponsiveDrawer() {
                         <Hidden smUp>
                             <div className={classes.bottomNavigationMargin} />
                             <BottomNavigation classes={{ root: classes.bottomNavigationRoot }}>
-                                {Links1st}
-                                {Links2nd}
+                                {Links1st.props.children}
+                                {Links2nd.props.children}
                             </BottomNavigation>
                         </Hidden>
                     </main>
@@ -172,6 +162,17 @@ function ResponsiveDrawer() {
         </ThemeProvider>
     )
 }
+function MobileBackButton() {
+    if (!(webpackEnv.firefoxVariant === 'GeckoView' || webpackEnv.target === 'WKWebview')) return null
+    return (
+        <MuiLink color="textPrimary" onClick={window.close}>
+            <IconButton edge="start">
+                <ArrowBack />
+            </IconButton>
+        </MuiLink>
+    )
+}
+
 function LinkItem(props: { to: string; icon: React.ReactElement; label: string }) {
     const isMobile = useMediaQuery((theme: Theme) => theme.breakpoints.down('xs'))
     const selected = useRouteMatch(props.to) !== null
