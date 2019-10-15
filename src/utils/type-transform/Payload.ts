@@ -1,6 +1,6 @@
 import { geti18nString } from '../i18n'
 import { SocialNetworkWorkerAndUI } from '../../social-network/shared'
-import { defaults, isNil } from 'lodash-es'
+import { isNil } from 'lodash-es'
 import { definedSocialNetworkWorkers } from '../../social-network/worker'
 import { getActivatedUI } from '../../social-network/ui'
 import { GetContext } from '@holoflows/kit/es'
@@ -86,17 +86,9 @@ const versions = new Set([deconstructAlpha40_Or_Alpha39_Or_Alpha38, deconstructA
 type Decoder = SocialNetworkWorkerAndUI['payloadDecoder'] | null
 type Encoder = SocialNetworkWorkerAndUI['payloadEncoder']
 
-export function deconstructPayload(str: string, decoder: Decoder, opts?: { throws: false }): Payload | null
-export function deconstructPayload(str: string, decoder: Decoder, opts?: { throws: true }): Payload
-export function deconstructPayload(
-    str: string,
-    decoder: Decoder,
-    opts: { throws?: boolean } = { throws: false },
-): Payload | null {
-    defaults(opts, {
-        throws: false,
-    })
-
+export function deconstructPayload(str: string, decoder: Decoder, throws?: false): Payload | null
+export function deconstructPayload(str: string, decoder: Decoder, throws?: true): Payload
+export function deconstructPayload(str: string, decoder: Decoder, throws: boolean = false): Payload | null {
     const decoders = (() => {
         if (isNil(decoder)) {
             if (GetContext() === 'content') return [getActivatedUI().payloadDecoder]
@@ -115,9 +107,9 @@ export function deconstructPayload(
         }
     }
     if (str.includes('🎼') && str.includes(':||'))
-        if (opts.throws) throw new TypeError(geti18nString('service_unknown_payload'))
+        if (throws) throw new TypeError(geti18nString('service_unknown_payload'))
         else return null
-    if (opts.throws) throw new TypeError(geti18nString('payload_not_found'))
+    if (throws) throw new TypeError(geti18nString('payload_not_found'))
     else return null
 }
 

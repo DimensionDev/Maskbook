@@ -8,7 +8,7 @@ import {
 } from '../../../social-network/ui'
 import { deconstructPayload } from '../../../utils/type-transform/Payload'
 import { instanceOfTwitterUI } from './index'
-import { postParser, resolveInfoFromBioCard } from '../utils/fetch'
+import { bioCardParser, postParser } from '../utils/fetch'
 import { uploadToService } from '../utils/user'
 import { isNil } from 'lodash-es'
 
@@ -41,7 +41,7 @@ const registerUserCollector = () => {
     new MutationObserverWatcher(bioCard())
         .useForeach(() => {
             const resolve = () => {
-                const r = resolveInfoFromBioCard()
+                const r = bioCardParser()
                 uploadToService(r)
             }
             resolve()

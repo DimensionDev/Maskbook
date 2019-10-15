@@ -1,9 +1,8 @@
 import { bioCard } from './selector'
 import { regexMatch } from '../../../utils/utils'
-import { postContentParser } from './encoding'
 import { notNullable } from '../../../utils/assert'
 
-export const resolveInfoFromBioCard = () => {
+export const bioCardParser = () => {
     const avatar = notNullable(
         bioCard()
             .querySelector<HTMLImageElement>('img')
@@ -26,6 +25,19 @@ export const resolveInfoFromBioCard = () => {
         handle: notNullable(regexMatch(userNames[1], /@(.+)/)),
         bio,
     }
+}
+
+export const postContentParser = (node: HTMLElement) => {
+    const anchors = node.querySelectorAll<HTMLAnchorElement>('a')
+    const spans = node.querySelectorAll<HTMLSpanElement>('[lang] > span')
+    let sto = ''
+    for (const v of spans) {
+        sto = sto.concat(`${v.innerText} `)
+    }
+    for (const v of anchors) {
+        sto = sto.concat(`${v.title} `)
+    }
+    return sto
 }
 
 /**

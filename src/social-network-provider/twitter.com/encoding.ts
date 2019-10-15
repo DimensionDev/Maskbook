@@ -1,4 +1,4 @@
-import { batchReplace, regexMatch, regexMatchAll } from '../../../utils/utils'
+import { batchReplace, regexMatch, regexMatchAll } from '../../utils/utils'
 import { isNil, isNull } from 'lodash-es'
 
 const ICAO9303Checksum = {
@@ -60,21 +60,4 @@ export const twitterEncoding = {
         r = batchReplace(r, [['-', '+'], ['_', '='], ['.', '|']])
         return `🎼${r}:||`
     },
-}
-
-/**
- * this method tries to find every anchor element inside node with title attribute.
- * It's related to payloadDecoder.
- */
-export const postContentParser = (node: HTMLElement) => {
-    const anchors = node.querySelectorAll<HTMLAnchorElement>('a')
-    const spans = node.querySelectorAll<HTMLSpanElement>('[lang] > span')
-    let sto = ''
-    for (const v of spans) {
-        sto = sto.concat(`${v.innerText} `)
-    }
-    for (const v of anchors) {
-        sto = sto.concat(`${v.title} `)
-    }
-    return sto
 }
