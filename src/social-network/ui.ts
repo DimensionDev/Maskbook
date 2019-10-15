@@ -7,8 +7,7 @@ import { defaultTo, isNull } from 'lodash-es'
 import Services from '../extension/service'
 import { defaultSharedSettings } from './defaults/shared'
 import { defaultSocialNetworkUI } from './defaults/ui'
-import { nop, nopWithUnmount } from '../utils/utils'
-import { MessageCenter } from '../utils/messages'
+import { nopWithUnmount } from '../utils/utils'
 
 //#region SocialNetworkUI
 export interface SocialNetworkUIDefinition
@@ -96,6 +95,15 @@ export interface SocialNetworkUIInjections {
      * And it should return a function to unmount the WelcomeBanner
      */
     injectWelcomeBanner?: (() => () => void) | 'disabled'
+    /**
+     * This is an optional function.
+     *
+     * This function should inject a link to open the options page.
+     *
+     * This function should only active when the Maskbook start as a standalone app.
+     * (Mobile device).
+     */
+    injectOptionsPageLink?: (() => void) | 'disabled'
     /**
      * This function should inject the comment
      * @param current The current post
@@ -238,6 +246,10 @@ export function activateSocialNetworkUI() {
             ui.myIdentitiesRef.addListener(val => {
                 if (val.length === 1) ui.currentIdentity.value = val[0]
             })
+            {
+                const mountSettingsLink = ui.injectOptionsPageLink
+                if (typeof mountSettingsLink === 'function') mountSettingsLink()
+            }
             {
                 const mountBanner = ui.injectWelcomeBanner
                 if (typeof mountBanner === 'function') {

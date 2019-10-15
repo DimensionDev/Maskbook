@@ -7,4 +7,4 @@ export const defaultSharedSettings = cloneDeep({
     payloadEncoder: bypass,
     payloadDecoder: bypass,
     notReadyForProduction: false,
-})
+} as const)
