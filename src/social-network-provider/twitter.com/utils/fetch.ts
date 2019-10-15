@@ -36,13 +36,13 @@ export const postParser = (node: HTMLElement) => {
     const parseRoot = node.querySelector<HTMLElement>('[data-testid="tweet"]')!
     const nameArea = regexMatch(
         notNullable(parseRoot.children[1].querySelector<HTMLAnchorElement>('a')).innerText,
-        /^(.+)@(.+)$/,
+        /^(.+)\s*@(.+)$/,
         null,
     )!
     const avatarElement = parseRoot.children[0].querySelector<HTMLImageElement>(`img[src*="twimg.com"]`)
     return {
-        name: nameArea[0],
-        handle: nameArea[1],
+        name: nameArea[1],
+        handle: nameArea[2],
         pid: regexMatch(
             parseRoot.children[1].querySelector<HTMLAnchorElement>('a[href*="status"]')!.href,
             /(\/)(\d+)/,
