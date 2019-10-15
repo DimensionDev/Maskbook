@@ -29,7 +29,11 @@ import { CryptoKeyToJsonWebKey } from '../../utils/type-transform/CryptoKey-Json
 import { createDefaultFriendsGroup } from '../../database'
 
 OnlyRunInContext('background', 'WelcomeService')
-async function generateBackupJSON(whoAmI: PersonIdentifier, full = false): Promise<BackupJSONFileLatest> {
+async function generateBackupJSON(
+    whoAmI: PersonIdentifier,
+    onlyBackupWhoAmI: boolean,
+    full = false,
+): Promise<BackupJSONFileLatest> {
     const manifest = browser.runtime.getManifest()
     const myIdentitiesInDB: BackupJSONFileLatest['whoami'] = []
     const peopleInDB: NonNullable<BackupJSONFileLatest['people']> = []
@@ -58,6 +62,7 @@ async function generateBackupJSON(whoAmI: PersonIdentifier, full = false): Promi
         })
     }
     for (const id of myIdentity) {
+        if (onlyBackupWhoAmI) if (!id.identifier.equals(whoAmI)) continue
         promises.push(addMyIdentitiesInDB(id))
     }
     //#endregion
@@ -199,11 +204,14 @@ export async function attachIdentityToPersona(
     })
 }
 
-export async function backupMyKeyPair(whoAmI: PersonIdentifier, download = true) {
+export async function backupMyKeyPair(
+    whoAmI: PersonIdentifier,
+    options: { download: boolean; onlyBackupWhoAmI: boolean },
+) {
     // Don't make the download pop so fast
     await sleep(1000)
-    const obj = await generateBackupJSON(whoAmI)
-    if (!download) return obj
+    const obj = await generateBackupJSON(whoAmI, options.onlyBackupWhoAmI)
+    if (!options.download) return obj
     const string = JSON.stringify(obj)
     const buffer = encodeText(string)
     const blob = new Blob([buffer], { type: 'application/json' })
