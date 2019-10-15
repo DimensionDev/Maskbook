@@ -3,7 +3,7 @@ import { editProfileButtonSelector, editProfileTextareaSelector, postsSelectors 
 import { geti18nString } from '../../../utils/i18n'
 import { SocialNetworkUI, SocialNetworkUITasks } from '../../../social-network/ui'
 import { fetchBioCard } from '../utils/status'
-import { postParser, resolveInfoFromBioCard } from '../utils/fetch'
+import { bioCardParser, postParser } from '../utils/fetch'
 import { getFocus, getText } from '../utils/postBox'
 import { MutationObserverWatcher } from '@holoflows/kit'
 
@@ -49,7 +49,7 @@ const taskGetPostContent: SocialNetworkUITasks['taskGetPostContent'] = async () 
 
 const taskGetProfile = async () => {
     await fetchBioCard()
-    return { bioContent: resolveInfoFromBioCard().bio }
+    return { bioContent: bioCardParser().bio }
 }
 
 export const twitterUITasks: SocialNetworkUITasks = {

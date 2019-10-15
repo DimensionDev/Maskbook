@@ -52,7 +52,7 @@ export async function* decryptFromMessageWithProgress(
     const data = deconstructPayload(encrypted, decoder)!
     if (!data) {
         try {
-            deconstructPayload(encrypted, decoder, { throws: true })
+            deconstructPayload(encrypted, decoder, true)
         } catch (e) {
             return { error: e.message }
         }

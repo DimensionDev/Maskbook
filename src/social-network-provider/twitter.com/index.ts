@@ -1,6 +1,6 @@
 import { SocialNetworkWorkerAndUIDefinition } from '../../social-network/shared'
 import { usernameValidator } from './utils/user'
-import { twitterEncoding } from './utils/encoding'
+import { twitterEncoding } from './encoding'
 
 export const host = 'twitter.com'
 export const hostURL = 'https://twitter.com'
