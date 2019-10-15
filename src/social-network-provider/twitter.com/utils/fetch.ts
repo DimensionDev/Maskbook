@@ -1,6 +1,7 @@
 import { bioCard } from './selector'
 import { regexMatch } from '../../../utils/utils'
 import { notNullable } from '../../../utils/assert'
+import { trim } from 'lodash-es'
 
 export const bioCardParser = () => {
     const avatar = notNullable(
@@ -48,13 +49,13 @@ export const postParser = (node: HTMLElement) => {
     const parseRoot = node.querySelector<HTMLElement>('[data-testid="tweet"]')!
     const nameArea = regexMatch(
         notNullable(parseRoot.children[1].querySelector<HTMLAnchorElement>('a')).innerText,
-        /^(.+)\s*@(.+)$/,
+        /^((.+\s*)*)@(.+)$/,
         null,
     )!
     const avatarElement = parseRoot.children[0].querySelector<HTMLImageElement>(`img[src*="twimg.com"]`)
     return {
-        name: nameArea[1],
-        handle: nameArea[2],
+        name: trim(nameArea[1], '\n'),
+        handle: nameArea[3],
         pid: regexMatch(
             parseRoot.children[1].querySelector<HTMLAnchorElement>('a[href*="status"]')!.href,
             /(\/)(\d+)/,
