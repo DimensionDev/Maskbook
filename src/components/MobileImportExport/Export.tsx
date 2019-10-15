@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { QrCode } from '../shared/qrcode'
 import { useAsync } from '../../utils/components/AsyncComponent'
 import Services from '../../extension/service'
-import { makeStyles, Typography, Button } from '@material-ui/core'
+import { makeStyles, Typography, Button, Link } from '@material-ui/core'
 import { NotSetupYetPrompt } from '../shared/NotSetupYetPrompt'
 import { geti18nString } from '../../utils/i18n'
 import { useCurrentIdentity, useMyIdentities } from '../DataSource/useActivatedUI'
@@ -54,10 +54,24 @@ export function ExportData() {
     return (
         <main className={classes.root}>
             <Typography style={{ marginBottom: 24 }}>
-                <Button style={{ marginRight: 24 }} size="small" variant="outlined" color="primary" disabled>
+                <Button style={{ marginRight: 12 }} size="small" variant="outlined" color="primary" disabled>
                     Beta
                 </Button>
-                Checkout our Beta iOS and Android version
+                {'Checkout Maskbook '}
+                <Link target="_blank" href="https://testflight.apple.com/join/OGmGmIg1">
+                    iOS
+                </Link>
+                {' and '}
+                <Link target="_blank" href="https://play.google.com/apps/testing/com.dimension.maskbook">
+                    Android
+                </Link>
+                {' version'}
+            </Typography>
+            <Typography style={{ marginBottom: 24 }}>
+                {'Maskbook is also available on '}
+                <Link target="_blank" href="https://addons.mozilla.org/en-US/firefox/addon/maskbook/">
+                    Firefox and Firefox for Android
+                </Link>
             </Typography>
             {id.length > 1 ? <ChooseIdentity /> : null}
             <div className={classes.code}>
