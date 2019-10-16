@@ -1,12 +1,15 @@
 import { LiveSelector } from '@holoflows/kit'
 import { regexMatch } from '../../../utils/utils'
 import { postBoxInPopup } from './postBox'
+import { isNull, isUndefined } from 'lodash-es'
 
-const querySelector = <T extends HTMLElement>(selector: string) => {
+type E = HTMLElement
+
+const querySelector = <T extends E>(selector: string) => {
     return new LiveSelector().querySelector<T>(selector).enableSingleMode()
 }
 
-const querySelectorAll = <T extends HTMLElement>(selector: string) => {
+const querySelectorAll = <T extends E>(selector: string) => {
     return new LiveSelector().querySelectorAll<T>(selector)
 }
 
@@ -17,8 +20,6 @@ const querySelectorAll = <T extends HTMLElement>(selector: string) => {
  * userName   screenName
  */
 
-export const rootSelector = () => querySelector<HTMLElement>('body')
-
 export const bioQueryString = '[href*="header_photo"] + div [data-testid="UserDescription"]' // TODO: this is invalid
 
 export const bioCard = () =>
@@ -27,17 +28,15 @@ export const bioCard = () =>
         .querySelector('[data-testid="UserDescription"]')
         .map(x => x.parentElement!.parentElement)
 
-export const postViewMain = () =>
-    querySelector<HTMLElement>('[role="progressbar"] + div + div > div > div > div:first-of-type')
-
 const postEditor = () =>
     postBoxInPopup() ? '[aria-labelledby="modal-header"]' : '[role="main"] [role="progressbar"] ~ div'
 
-export const newPostEditorBelow = () => querySelector<HTMLDivElement>(`${postEditor()} > div`)
+export const newPostEditorBelow: () => LiveSelector<E, true> = () => querySelector<E>(postEditor())
 export const newPostEditorSelector = () => querySelector<HTMLDivElement>(`${postEditor()} .DraftEditor-root`)
-export const newPostEditorFocusAnchor = () =>
-    querySelector<HTMLDivElement>(`${postEditor()} .public-DraftEditor-content`)
+export const newPostEditorFocusAnchor = () => querySelector<E>(`${postEditor()} .public-DraftEditor-content`)
 export const newPostEditorHasFocus = () => querySelector(`${postEditor()} .public-DraftEditorPlaceholder-hasFocus`)
+
+export const hasDraftEditor = (x?: E) => !(isUndefined(x) || isNull(x.querySelector('.DraftEditor-root')))
 
 export const postPopupInjectPointSelector = () =>
     querySelector('[aria-labelledby="modal-header"] [role="progressbar"] ~ div ~ div')
@@ -48,7 +47,7 @@ export const editProfileButtonSelector = () =>
 export const editProfileTextareaSelector = () => querySelector<HTMLTextAreaElement>('textarea[placeholder*="bio"]')
 
 export const postsSelectors = () => querySelectorAll('article')
-export const postsContentSelectors = () => postsSelectors().querySelectorAll<HTMLElement>(`[lang]`)
+export const postsContentSelectors = () => postsSelectors().querySelectorAll<E>(`[lang]`)
 export const fromPostSelectorsSelectPostContentString = '[data-testid="tweet"] > div:nth-of-type(2)'
 
 // self infos

@@ -67,7 +67,7 @@ const registerPostCollector = (self: SocialNetworkUI) => {
                 rootNodeProxy: proxy,
             })
             const collectPostInfo = () => {
-                const r = postParser(node)
+                const r = postParser(node.querySelector<HTMLElement>('[data-testid="tweet"]')!)
                 if (!r) return
                 info.postContent.value = r.content
                 const postBy = new PersonIdentifier(self.networkIdentifier, r.handle)

@@ -46,22 +46,17 @@ export const postContentParser = (node: HTMLElement) => {
  * @return          link to avatar.
  */
 export const postParser = (node: HTMLElement) => {
-    const parseRoot = node.querySelector<HTMLElement>('[data-testid="tweet"]')!
     const nameArea = regexMatch(
-        notNullable(parseRoot.children[1].querySelector<HTMLAnchorElement>('a')).innerText,
+        notNullable(node.children[1].querySelector<HTMLAnchorElement>('a')).innerText,
         /^((.+\s*)*)@(.+)$/,
         null,
     )!
-    const avatarElement = parseRoot.children[0].querySelector<HTMLImageElement>(`img[src*="twimg.com"]`)
+    const avatarElement = node.children[0].querySelector<HTMLImageElement>(`img[src*="twimg.com"]`)
     return {
         name: trim(nameArea[1], '\n'),
         handle: nameArea[3],
-        pid: regexMatch(
-            parseRoot.children[1].querySelector<HTMLAnchorElement>('a[href*="status"]')!.href,
-            /(\/)(\d+)/,
-            2,
-        )!,
+        pid: regexMatch(node.children[1].querySelector<HTMLAnchorElement>('a[href*="status"]')!.href, /(\/)(\d+)/, 2)!,
         avatar: avatarElement ? avatarElement.src : undefined,
-        content: postContentParser(parseRoot),
+        content: postContentParser(node),
     }
 }
