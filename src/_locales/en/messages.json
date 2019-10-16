@@ -350,6 +350,9 @@
     "service_decryption_failed": {
         "message": "Decryption failed."
     },
+    "service_self_key_decryption_failed": {
+        "message": "Decryption failed. Maybe you selected a wrong identity or imported a key that was not used to encrypt this post."
+    },
     "service_unknown_payload": {
         "message": "Unknown post version, maybe you should update Maskbook?"
     },
