@@ -13,6 +13,9 @@ const $fromString = Symbol()
  */
 type Identifiers = 'person' | 'group' | 'post' | 'post_iv'
 export abstract class Identifier {
+    static equals(a: Identifier, b: Identifier) {
+        return a.equals(b)
+    }
     public equals(other: Identifier) {
         return this === other || this.toText() === other.toText()
     }
