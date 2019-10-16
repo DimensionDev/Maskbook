@@ -1,4 +1,5 @@
 import { createNewSettings } from './createSettings'
+import { PersonIdentifier } from '../../database/type'
 /**
  * Does the debug mode on
  */
@@ -18,3 +19,8 @@ export const disableOpenNewTabInBackgroundSettings = createNewSettings<boolean>(
             "Many of Maskbook features relies on this behavior. Disable this behavior will limit Maskbook's functionality",
     },
 )
+
+export const currentSelectedIdentity = createNewSettings<any>('currentSelectedIdentity', null, {
+    primary: 'Synchronized current selected identity',
+    secondary: 'Store the serialized identifier',
+})
