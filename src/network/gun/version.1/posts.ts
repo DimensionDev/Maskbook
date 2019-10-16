@@ -15,8 +15,7 @@ export async function queryPostAESKey(salt: string, myUsername: string) {
     const result = await gun1
         .get('posts')
         .get(salt)
-        .get(myUsername)
-        .once().then!()
+        .get(myUsername).then!()
     if (result && result.encryptedKey && result.salt) return result
     return undefined
 }
