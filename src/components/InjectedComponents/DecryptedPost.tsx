@@ -112,7 +112,6 @@ interface DecryptPostProps {
 }
 function DecryptPost(props: DecryptPostProps) {
     const { postBy, whoAmI, encryptedText, people, alreadySelectedPreviously, requestAppendRecipients } = props
-    debugger
 
     const [decryptedResult, setDecryptedResult] = useState<null | SuccessDecryption>(null)
     const [decryptingStatus, setDecryptingStatus] = useState<DecryptionProgress | FailureDecryption | undefined>(
