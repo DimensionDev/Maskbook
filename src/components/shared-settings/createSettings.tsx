@@ -45,22 +45,22 @@ export function useSettingsUI<T extends browser.storage.StorageValue>(settingsRe
     function ui() {
         switch (typeof currentValue) {
             case 'boolean':
-                const booleanRef = (settingsRef as ValueRef<unknown>) as ValueRef<boolean>
+                const ref = (settingsRef as ValueRef<unknown>) as ValueRef<boolean>
                 return (
-                    <ListItem button onClick={() => (booleanRef.value = !booleanRef.value)}>
+                    <ListItem button onClick={() => (ref.value = !ref.value)}>
                         <ListItemText id={text.primary} primary={text.primary} secondary={text.secondary} />
                         <ListItemSecondaryAction>
                             <Switch
                                 inputProps={{ 'aria-labelledby': text.primary }}
                                 edge="end"
                                 checked={currentValue}
-                                onClick={() => (booleanRef.value = !booleanRef.value)}
+                                onClick={() => (ref.value = !ref.value)}
                             />
                         </ListItemSecondaryAction>
                     </ListItem>
                 )
             default:
-                throw new Error('Invalid settings')
+                throw new Error('Not implemented yet')
         }
     }
     return ui()
