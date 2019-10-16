@@ -39,27 +39,28 @@ export function createNewSettings<T extends browser.storage.StorageValue>(
     return settings
 }
 
-export function useSettingsUI(settingsRef: ReturnType<typeof createNewSettings>) {
+export function useSettingsUI<T>(settingsRef: ValueRef<T>) {
     const currentValue = useValueRef(settingsRef)
     const text = texts.get(settingsRef)!
     function ui() {
         switch (typeof currentValue) {
             case 'boolean':
+                const ref = (settingsRef as ValueRef<unknown>) as ValueRef<boolean>
                 return (
-                    <ListItem button onClick={() => (settingsRef.value = !settingsRef.value)}>
+                    <ListItem button onClick={() => (ref.value = !ref.value)}>
                         <ListItemText id={text.primary} primary={text.primary} secondary={text.secondary} />
                         <ListItemSecondaryAction>
                             <Switch
                                 inputProps={{ 'aria-labelledby': text.primary }}
                                 edge="end"
                                 checked={currentValue}
-                                onClick={() => (settingsRef.value = !settingsRef.value)}
+                                onClick={() => (ref.value = !ref.value)}
                             />
                         </ListItemSecondaryAction>
                     </ListItem>
                 )
             default:
-                throw new Error('Invalid settings')
+                throw new Error('Not implemented yet')
         }
     }
     return ui()
