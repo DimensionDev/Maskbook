@@ -8,13 +8,14 @@ interface SettingsTexts {
     primary: string
     secondary?: string
 }
-const texts = new WeakMap<ValueRef<unknown>, SettingsTexts>()
+const texts = new WeakMap<ValueRef<any>, SettingsTexts>()
 export function createNewSettings<T extends browser.storage.StorageValue>(
     key: string,
     initialValue: T,
     UITexts: SettingsTexts,
+    comparer: (a: T, b: T) => boolean = (a, b) => a === b,
 ) {
-    const settings = new ValueRef(initialValue)
+    const settings = new ValueRef(initialValue, comparer)
     texts.set(settings, UITexts)
 
     update()

@@ -202,10 +202,10 @@ export type SocialNetworkUI = Required<SocialNetworkUIDefinition>
 export const getEmptyPostInfo = (rootNodeSelector: LiveSelector<HTMLElement, true>) => {
     return {
         decryptedPostContent: new ValueRef(''),
-        postBy: new ValueRef(PersonIdentifier.unknown),
+        postBy: new ValueRef(PersonIdentifier.unknown, PersonIdentifier.equals),
         postContent: new ValueRef(''),
         postID: new ValueRef(''),
-        postPayload: new ValueRef(null),
+        postPayload: new ValueRef<Payload | null>(null),
         get rootNode() {
             return rootNodeSelector.evaluate()
         },
@@ -218,7 +218,7 @@ export const getActivatedUI = () => activatedSocialNetworkUI
 let activatedSocialNetworkUI = ({
     lastRecognizedIdentity: new ValueRef({ identifier: PersonIdentifier.unknown }),
     currentIdentity: new ValueRef(null),
-    myIdentitiesRef: new ValueRef([]),
+    myIdentitiesRef: new ValueRef([] as Person[]),
 } as Partial<SocialNetworkUI>) as SocialNetworkUI
 export function activateSocialNetworkUI() {
     for (const ui of definedSocialNetworkUIs)

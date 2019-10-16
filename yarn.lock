@@ -1204,8 +1204,8 @@
     "@hapi/hoek" "8.x.x"
 
 "@holoflows/kit@https://github.com/DimensionDev/holoflows-kit":
-  version "0.5.0"
-  resolved "https://github.com/DimensionDev/holoflows-kit#a205b5a1ed51622e978ae90effff4a96708c4763"
+  version "0.6.0"
+  resolved "https://github.com/DimensionDev/holoflows-kit#716841ae898119113a3cb3d49d44deff84a4edd4"
   dependencies:
     "@types/lodash-es" "^4.1.4"
     async-call-rpc "^1.0.0"
