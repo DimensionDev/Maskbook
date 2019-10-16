@@ -8,6 +8,7 @@
         "node": true
     },
     "rules": {
+        "no-debugger": "error",
         "no-plusplus": "error",
         "no-bitwise": "error",
         "no-new-wrappers": "error",
