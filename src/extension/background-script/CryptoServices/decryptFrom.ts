@@ -138,7 +138,7 @@ export async function* decryptFromMessageWithProgress(
         }
 
         try {
-            if (by.equals(whoAmI)) {
+            try {
                 if (cachedPostResult)
                     return {
                         signatureVerifyResult: await cryptoProvider.verify(unverified, signature || '', mine.publicKey),
@@ -163,96 +163,93 @@ export async function* decryptFromMessageWithProgress(
                 } catch {
                     return { signatureVerifyResult: false, content, through: ['normal_decrypted'] } as Success
                 }
-            } else {
-                if (cachedPostResult && version !== -40) {
-                    const { keyHash, postHash } = await Gun2.queryPostKeysOnGun2(version, iv, mine.publicKey)
-                    yield { debug: 'debug_finding_hash', hash: [postHash, keyHash] }
-                    return {
-                        signatureVerifyResult: await cryptoProvider.verify(
-                            unverified,
-                            signature || '',
-                            byPerson.publicKey,
-                        ),
-                        content: cachedPostResult,
-                        through: ['post_key_cached'],
-                    } as Success
-                }
-                yield { progress: 'finding_post_key' }
-                const aesKeyEncrypted: Array<Alpha40.PublishedAESKey | Gun2.SharedAESKeyGun2> = []
-                if (version === -40) {
-                    // Deprecated payload
-                    // eslint-disable-next-line import/no-deprecated
-                    const result = await Gun1.queryPostAESKey(iv, whoAmI.userId)
-                    if (result === undefined) return { error: geti18nString('service_not_share_target') }
-                    aesKeyEncrypted.push(result)
-                } else if (version === -39 || version === -38) {
-                    const { keyHash, keys, postHash } = await Gun2.queryPostKeysOnGun2(version, iv, mine.publicKey)
-                    yield { debug: 'debug_finding_hash', hash: [postHash, keyHash] }
-                    aesKeyEncrypted.push(...keys)
-                }
+            } catch {
+                if (by.equals(whoAmI)) return { error: geti18nString('service_self_key_decryption_failed') }
+            }
+            if (cachedPostResult && version !== -40) {
+                const { keyHash, postHash } = await Gun2.queryPostKeysOnGun2(version, iv, mine.publicKey)
+                yield { debug: 'debug_finding_hash', hash: [postHash, keyHash] }
+                return {
+                    signatureVerifyResult: await cryptoProvider.verify(unverified, signature || '', byPerson.publicKey),
+                    content: cachedPostResult,
+                    through: ['post_key_cached'],
+                } as Success
+            }
+            yield { progress: 'finding_post_key' }
+            const aesKeyEncrypted: Array<Alpha40.PublishedAESKey | Gun2.SharedAESKeyGun2> = []
+            if (version === -40) {
+                // Deprecated payload
+                // eslint-disable-next-line import/no-deprecated
+                const result = await Gun1.queryPostAESKey(iv, whoAmI.userId)
+                if (result === undefined) return { error: geti18nString('service_not_share_target') }
+                aesKeyEncrypted.push(result)
+            } else if (version === -39 || version === -38) {
+                const { keyHash, keys, postHash } = await Gun2.queryPostKeysOnGun2(version, iv, mine.publicKey)
+                yield { debug: 'debug_finding_hash', hash: [postHash, keyHash] }
+                aesKeyEncrypted.push(...keys)
+            }
 
-                // If we can decrypt with current info, just do it.
-                try {
-                    // ! DO NOT remove the await here. Or the catch block will be always skipped.
-                    return await decryptWith(aesKeyEncrypted)
-                } catch (e) {
-                    if (e.message === geti18nString('service_not_share_target')) {
+            // If we can decrypt with current info, just do it.
+            try {
+                // ! DO NOT remove the await here. Or the catch block will be always skipped.
+                return await decryptWith(aesKeyEncrypted)
+            } catch (e) {
+                if (e.message === geti18nString('service_not_share_target')) {
+                    console.debug(e)
+                    // TODO: Replace this error with:
+                    // You do not have the necessary private key to decrypt this message.
+                    // What to do next: You can ask your friend to visit your profile page, so that their Maskbook extension will detect and add you to recipients.
+                    // ? after the auto-share with friends is done.
+                    yield { error: geti18nString('service_not_share_target') } as Failure
+                } else {
+                    // Unknown error
+                    throw e
+                }
+            }
+
+            // Failed, we have to wait for the future info from gun.
+            return new Promise<Success>((resolve, reject) => {
+                if (version === -40) return reject()
+                const undo = Gun2.subscribePostKeysOnGun2(version, iv, mine.publicKey, async key => {
+                    console.log('New key received, trying', key)
+                    try {
+                        const result = await decryptWith(key)
+                        undo()
+                        resolve(result)
+                    } catch (e) {
                         console.debug(e)
-                        // TODO: Replace this error with:
-                        // You do not have the necessary private key to decrypt this message.
-                        // What to do next: You can ask your friend to visit your profile page, so that their Maskbook extension will detect and add you to recipients.
-                        // ? after the auto-share with friends is done.
-                        yield { error: geti18nString('service_not_share_target') } as Failure
-                    } else {
-                        // Unknown error
-                        throw e
                     }
-                }
+                })
+            })
 
-                // Failed, we have to wait for the future info from gun.
-                return new Promise<Success>((resolve, reject) => {
-                    if (version === -40) return reject()
-                    const undo = Gun2.subscribePostKeysOnGun2(version, iv, mine.publicKey, async key => {
-                        console.log('New key received, trying', key)
-                        try {
-                            const result = await decryptWith(key)
-                            undo()
-                            resolve(result)
-                        } catch (e) {
-                            console.debug(e)
-                        }
-                    })
+            async function decryptWith(
+                key:
+                    | Alpha39.PublishedAESKey
+                    | Alpha40.PublishedAESKey
+                    | Array<Alpha39.PublishedAESKey | Alpha40.PublishedAESKey>,
+            ): Promise<Success> {
+                const [contentArrayBuffer, postAESKey] = await cryptoProvider.decryptMessage1ToNByOther({
+                    version,
+                    AESKeyEncrypted: key,
+                    authorsPublicKeyECDH: byPerson!.publicKey!,
+                    encryptedContent: encryptedText,
+                    privateKeyECDH: mine!.privateKey,
+                    iv,
                 })
 
-                async function decryptWith(
-                    key:
-                        | Alpha39.PublishedAESKey
-                        | Alpha40.PublishedAESKey
-                        | Array<Alpha39.PublishedAESKey | Alpha40.PublishedAESKey>,
-                ): Promise<Success> {
-                    const [contentArrayBuffer, postAESKey] = await cryptoProvider.decryptMessage1ToNByOther({
-                        version,
-                        AESKeyEncrypted: key,
-                        authorsPublicKeyECDH: byPerson!.publicKey!,
-                        encryptedContent: encryptedText,
-                        privateKeyECDH: mine!.privateKey,
-                        iv,
-                    })
-
-                    // Store the key to speed up next time decrypt
-                    setPostCache(postAESKey)
-                    const content = decodeText(contentArrayBuffer)
-                    try {
-                        if (!signature) throw new TypeError('No signature')
-                        const signatureVerifyResult = await cryptoProvider.verify(
-                            unverified,
-                            signature,
-                            byPerson!.publicKey!,
-                        )
-                        return { signatureVerifyResult, content, through: ['normal_decrypted'] }
-                    } catch {
-                        return { signatureVerifyResult: false, content, through: ['normal_decrypted'] }
-                    }
+                // Store the key to speed up next time decrypt
+                setPostCache(postAESKey)
+                const content = decodeText(contentArrayBuffer)
+                try {
+                    if (!signature) throw new TypeError('No signature')
+                    const signatureVerifyResult = await cryptoProvider.verify(
+                        unverified,
+                        signature,
+                        byPerson!.publicKey!,
+                    )
+                    return { signatureVerifyResult, content, through: ['normal_decrypted'] }
+                } catch {
+                    return { signatureVerifyResult: false, content, through: ['normal_decrypted'] }
                 }
             }
         } catch (e) {

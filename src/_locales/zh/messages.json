@@ -351,6 +351,9 @@
     "service_decryption_failed": {
         "message": "解密失敗。"
     },
+    "service_self_key_decryption_failed": {
+        "message": "解密失敗。 或許您選取了錯誤的檔案或導入了錯誤的金鑰。"
+    },
     "service_unknown_payload": {
         "message": "不支援的訊息構造。或許你需要更新 Maskbook 版本了？"
     },
