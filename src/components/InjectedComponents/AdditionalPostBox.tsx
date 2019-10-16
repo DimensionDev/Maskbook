@@ -98,14 +98,15 @@ export function AdditionalPostBox(props: Partial<Props>) {
     const people = useFriendsList()
     const groups = useGroupsList()
     const groupsAndPeople = React.useMemo(() => [...people, ...groups], [people, groups])
-    const identity = useMyIdentities()
+    const identities = useMyIdentities()
+    const identity = useCurrentIdentity()
 
     const onRequestPost = useCallback(
         async (people: Person[], text: string) => {
             const [encrypted, token] = await Services.Crypto.encryptTo(
                 text,
                 people.map(x => x.identifier),
-                identity[0].identifier,
+                identity!.identifier,
             )
             const fullPost = geti18nString('additional_post_box__encrypted_post_pre', encrypted)
             getActivatedUI().taskPasteIntoPostBox(fullPost, {
@@ -126,7 +127,7 @@ export function AdditionalPostBox(props: Partial<Props>) {
 
     const ui = <AdditionalPostBoxUI availableTarget={groupsAndPeople} onRequestPost={onRequestPost} {...props} />
 
-    if (identity.length > 1)
+    if (identities.length > 1)
         return (
             <>
                 <ChooseIdentity />
