@@ -56,9 +56,7 @@ export function collectPostsFacebook(this: SocialNetworkUI) {
             function collectPostInfo() {
                 info.postContent.value = node.innerText
                 const postBy = getPostBy(metadata, info.postPayload.value !== null).identifier
-                if (!info.postBy.value.equals(postBy)) {
-                    info.postBy.value = postBy
-                }
+                info.postBy.value = postBy
                 info.postID.value = getPostID(metadata)
             }
             collectPostInfo()

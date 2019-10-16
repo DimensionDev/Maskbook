@@ -214,10 +214,10 @@ export const getEmptyPostInfoByElement = (
 ) => {
     return {
         decryptedPostContent: new ValueRef(''),
-        postBy: new ValueRef(PersonIdentifier.unknown),
+        postBy: new ValueRef(PersonIdentifier.unknown, PersonIdentifier.equals),
         postContent: new ValueRef(''),
-        postID: new ValueRef(null),
-        postPayload: new ValueRef(null),
+        postID: new ValueRef<string | null>(null),
+        postPayload: new ValueRef<Payload | null>(null),
         ...opt,
     } as PostInfo
 }
@@ -228,7 +228,7 @@ export const getActivatedUI = () => activatedSocialNetworkUI
 let activatedSocialNetworkUI = ({
     lastRecognizedIdentity: new ValueRef({ identifier: PersonIdentifier.unknown }),
     currentIdentity: new ValueRef(null),
-    myIdentitiesRef: new ValueRef([]),
+    myIdentitiesRef: new ValueRef([] as Person[]),
 } as Partial<SocialNetworkUI>) as SocialNetworkUI
 export function activateSocialNetworkUI() {
     for (const ui of definedSocialNetworkUIs)

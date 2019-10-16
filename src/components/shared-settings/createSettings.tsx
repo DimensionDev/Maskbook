@@ -8,13 +8,14 @@ interface SettingsTexts {
     primary: string
     secondary?: string
 }
-const texts = new WeakMap<ValueRef<unknown>, SettingsTexts>()
+const texts = new WeakMap<ValueRef<any>, SettingsTexts>()
 export function createNewSettings<T extends browser.storage.StorageValue>(
     key: string,
     initialValue: T,
     UITexts: SettingsTexts,
+    comparer: (a: T, b: T) => boolean = (a, b) => a === b,
 ) {
-    const settings = new ValueRef(initialValue)
+    const settings = new ValueRef(initialValue, comparer)
     texts.set(settings, UITexts)
 
     update()
@@ -38,21 +39,22 @@ export function createNewSettings<T extends browser.storage.StorageValue>(
     return settings
 }
 
-export function useSettingsUI(settingsRef: ReturnType<typeof createNewSettings>) {
+export function useSettingsUI<T extends browser.storage.StorageValue>(settingsRef: ValueRef<T>) {
     const currentValue = useValueRef(settingsRef)
     const text = texts.get(settingsRef)!
     function ui() {
         switch (typeof currentValue) {
             case 'boolean':
+                const booleanRef = (settingsRef as ValueRef<unknown>) as ValueRef<boolean>
                 return (
-                    <ListItem button onClick={() => (settingsRef.value = !settingsRef.value)}>
+                    <ListItem button onClick={() => (booleanRef.value = !booleanRef.value)}>
                         <ListItemText id={text.primary} primary={text.primary} secondary={text.secondary} />
                         <ListItemSecondaryAction>
                             <Switch
                                 inputProps={{ 'aria-labelledby': text.primary }}
                                 edge="end"
                                 checked={currentValue}
-                                onClick={() => (settingsRef.value = !settingsRef.value)}
+                                onClick={() => (booleanRef.value = !booleanRef.value)}
                             />
                         </ListItemSecondaryAction>
                     </ListItem>
