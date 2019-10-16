@@ -58,7 +58,7 @@ const registerUserCollector = () => {
 }
 
 const registerPostCollector = (self: SocialNetworkUI) => {
-    new MutationObserverWatcher(postsSelectors())
+    const r = new MutationObserverWatcher(postsSelectors())
         .useForeach((node, _, proxy) => {
             const info = getEmptyPostInfoByElement({
                 get rootNode() {
@@ -94,6 +94,7 @@ const registerPostCollector = (self: SocialNetworkUI) => {
         .startWatch({
             childList: true,
         })
+    console.log(r)
 }
 
 export const twitterUIFetch: SocialNetworkUIInformationCollector = {
