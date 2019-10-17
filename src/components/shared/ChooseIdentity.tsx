@@ -100,9 +100,11 @@ ChooseIdentity.defaultProps = {
  */
 export function useIsolatedChooseIdentity(): readonly [Person | null, React.ReactNode] {
     const all = useMyIdentities()
+    const whoami = useCurrentIdentity()
     const [current, set] = useState<Person>()
+    const selected = current || whoami || undefined
     return [
-        current || all.find(i => i.identifier.toText() === currentSelectedIdentity.value) || null,
-        <ChooseIdentity current={current} availableIdentities={all} onChangeIdentity={set} />,
+        selected || null,
+        <ChooseIdentity current={selected} availableIdentities={all} onChangeIdentity={set} />,
     ] as const
 }
