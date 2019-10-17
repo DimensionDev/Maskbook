@@ -2,6 +2,7 @@ import './provider.worker'
 import React from 'react'
 import { HashRouter, MemoryRouter, Route, Link } from 'react-router-dom'
 
+import Empty from './extension/options-page/Empty'
 import Welcome from './extension/options-page/Welcome'
 import Privacy from './extension/options-page/Privacy'
 import Developer from './extension/options-page/Developer'
@@ -37,18 +38,9 @@ import './setup.ui'
 import { SSRRenderer } from './utils/SSRRenderer'
 
 const drawerWidth = 240
-const empty = (
-    <div
-        style={{
-            background: '#232D36 url(https://maskbook.com/img/bg--warai-kamen.svg) fixed repeat',
-            width: '100%',
-            height: 'calc(100vh - 64px)',
-        }}
-    />
-)
 const OptionsPageRouters = (
     <>
-        <Route exact path="/" component={() => empty} />
+        <Route exact path="/" component={() => Empty} />
         <Route path="/welcome" component={Welcome} />
         <Route path="/privacy" component={() => Privacy} />
         <Route path="/developer" component={Developer} />
