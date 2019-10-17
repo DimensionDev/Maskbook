@@ -80,11 +80,8 @@ const useStyles = makeStyles(theme =>
             marginLeft: drawerWidth,
             zIndex: theme.zIndex.drawer + 1,
         },
-        menuButton: {
+        backButton: {
             marginRight: theme.spacing(2),
-            [theme.breakpoints.up('sm')]: {
-                display: 'none',
-            },
         },
         toolbar: theme.mixins.toolbar,
         drawerPaper: {
@@ -163,9 +160,10 @@ function ResponsiveDrawer() {
     )
 }
 function MobileBackButton() {
+    const classes = useStyles()
     if (!(webpackEnv.firefoxVariant === 'GeckoView' || webpackEnv.target === 'WKWebview')) return null
     return (
-        <MuiLink color="textPrimary" onClick={window.close}>
+        <MuiLink classes={{ root: classes.backButton }} color="textPrimary" onClick={window.close}>
             <IconButton edge="start">
                 <ArrowBack />
             </IconButton>
