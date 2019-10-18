@@ -4,7 +4,8 @@ import Serialization from './type-transform/Serialization'
 
 interface UIEvent {
     closeActiveTab: undefined
-    settingsUpdated: undefined
+    settingsUpdated: string
+    settingsCreated: string
 }
 interface KeyStoreEvent {
     newGroup: Group

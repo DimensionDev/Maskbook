@@ -90,8 +90,9 @@ export const ChooseIdentity: React.FC<{
 
 ChooseIdentity.defaultProps = {
     onChangeIdentity(person) {
-        getActivatedUI().currentIdentity.value = person
-        currentSelectedIdentity.value = person.identifier.toText()
+        const ui = getActivatedUI()
+        ui.currentIdentity.value = person
+        currentSelectedIdentity[ui.networkIdentifier] = person.identifier.toText()
     },
 }
 /**
