@@ -44,7 +44,7 @@ const taskPasteIntoBio = async (text: string) => {
 }
 
 const taskGetPostContent: SocialNetworkUITasks['taskGetPostContent'] = async () => {
-    return postParser((await timeout(new MutationObserverWatcher(postsSelectors()), 10000))[0]).content
+    return (await postParser((await timeout(new MutationObserverWatcher(postsSelectors()), 10000))[0])).content
 }
 
 const taskGetProfile = async () => {

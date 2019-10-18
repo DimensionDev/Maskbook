@@ -75,9 +75,8 @@ const registerPostCollector = (self: SocialNetworkUI) => {
                 },
                 rootNodeProxy: proxy,
             })
-            const collectPostInfo = () => {
-                const r = postParser(node.querySelector<HTMLElement>('[data-testid="tweet"]')!)
-                if (!r) return
+            const collectPostInfo = async () => {
+                const r = await postParser(node.querySelector<HTMLElement>('[data-testid="tweet"]')!)
                 info.postContent.value = r.content
                 const postBy = new PersonIdentifier(self.networkIdentifier, r.handle)
                 if (!info.postBy.value.equals(postBy)) {
@@ -90,13 +89,14 @@ const registerPostCollector = (self: SocialNetworkUI) => {
                 self.posts.delete(proxy)
                 keys.splice(keys.indexOf(id))
             }
-            collectPostInfo()
-            info.postPayload.value = deconstructPayload(info.postContent.value, self.payloadDecoder)
-            info.postContent.addListener(newValue => {
-                info.postPayload.value = deconstructPayload(newValue, self.payloadDecoder)
+            collectPostInfo().then(() => {
+                info.postPayload.value = deconstructPayload(info.postContent.value, self.payloadDecoder)
+                info.postContent.addListener(newValue => {
+                    info.postPayload.value = deconstructPayload(newValue, self.payloadDecoder)
+                })
+                // push to map. proxy used as a pointer here.
+                self.posts.set(proxy, info)
             })
-            // push to map. proxy used as a pointer here.
-            self.posts.set(proxy, info)
             return {
                 onNodeMutation: collectPostInfo,
                 onTargetChanged: collectPostInfo,
