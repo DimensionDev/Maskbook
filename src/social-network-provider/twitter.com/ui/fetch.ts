@@ -64,7 +64,7 @@ const registerUserCollector = () => {
 const keys: string[] = []
 
 const registerPostCollector = (self: SocialNetworkUI) => {
-    const r = new MutationObserverWatcher(postsSelectors())
+    new MutationObserverWatcher(postsSelectors())
         .useForeach((node, _, proxy) => {
             const id = proxy.current.innerHTML
             if (keys.includes(id)) return
@@ -108,7 +108,6 @@ const registerPostCollector = (self: SocialNetworkUI) => {
             childList: true,
             subtree: true,
         })
-    console.log(r)
 }
 
 export const twitterUIFetch: SocialNetworkUIInformationCollector = {
