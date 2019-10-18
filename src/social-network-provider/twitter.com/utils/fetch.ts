@@ -1,7 +1,7 @@
 import { bioCard } from './selector'
 import { regexMatch } from '../../../utils/utils'
 import { notNullable } from '../../../utils/assert'
-import { defaultTo, trim } from 'lodash-es'
+import { defaultTo, join, trim } from 'lodash-es'
 
 export const bioCardParser = () => {
     const avatar = notNullable(
@@ -29,16 +29,13 @@ export const bioCardParser = () => {
 }
 
 export const postContentParser = (node: HTMLElement) => {
-    const anchors = node.querySelectorAll<HTMLAnchorElement>('a')
-    const spans = node.querySelectorAll<HTMLSpanElement>('[lang] > span')
-    let sto = ''
-    for (const v of spans) {
-        sto = sto.concat(`${v.innerText} `)
-    }
-    for (const v of anchors) {
-        sto = sto.concat(`${v.title} `)
-    }
-    return sto
+    const qsa = <T extends HTMLElement>(selectors: string) =>
+        Array.from(node.parentElement!.querySelectorAll<T>(selectors))
+    const sto = [
+        ...qsa<HTMLAnchorElement>('a').map(x => x.title),
+        ...qsa<HTMLSpanElement>('[lang] > span').map(x => x.innerText),
+    ]
+    return join(sto)
 }
 
 /**
