@@ -1,7 +1,7 @@
 import { bioCard } from './selector'
 import { regexMatch } from '../../../utils/utils'
 import { notNullable } from '../../../utils/assert'
-import { trim } from 'lodash-es'
+import { defaultTo, trim } from 'lodash-es'
 
 export const bioCardParser = () => {
     const avatar = notNullable(
@@ -42,20 +42,24 @@ export const postContentParser = (node: HTMLElement) => {
 }
 
 /**
- * @param  node     the 'article' node
+ * @param  node     the '[data-testid="tweet"]' node
  * @return          link to avatar.
  */
-export const postParser = (node: HTMLElement) => {
+export const postParser = async (node: HTMLElement) => {
     const nameArea = regexMatch(
         notNullable(node.children[1].querySelector<HTMLAnchorElement>('a')).innerText,
         /^((.+\s*)*)@(.+)$/,
         null,
     )!
     const avatarElement = node.children[0].querySelector<HTMLImageElement>(`img[src*="twimg.com"]`)
+    const pidLocation = defaultTo(
+        node.children[1].querySelector<HTMLAnchorElement>('a[href*="status"]'),
+        node.parentElement!.querySelector<HTMLAnchorElement>('a[href*="status"]'),
+    )
     return {
         name: trim(nameArea[1], '\n'),
         handle: nameArea[3],
-        pid: regexMatch(node.children[1].querySelector<HTMLAnchorElement>('a[href*="status"]')!.href, /(\/)(\d+)/, 2)!,
+        pid: regexMatch(pidLocation!.href, /\/(\d+)/, 1)!,
         avatar: avatarElement ? avatarElement.src : undefined,
         content: postContentParser(node),
     }
