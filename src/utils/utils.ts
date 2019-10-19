@@ -54,7 +54,6 @@ export const bypass: <T>(args: T) => T = args => args
 /**
  * index starts at one.
  */
-// @ts-ignore
 export const regexMatch: {
     (str: string, regexp: RegExp, index?: number): string | null
     (str: string, regexp: RegExp, index: null): RegExpMatchArray | null
@@ -62,9 +61,9 @@ export const regexMatch: {
     const r = str.match(regexp)
     if (isNull(r)) return null
     if (index === null) {
-        return r
+        return (r as RegExpMatchArray) as any
     }
-    return r[index]
+    return (r[index] as string) as any
 }
 
 /**
