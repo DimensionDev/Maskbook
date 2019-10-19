@@ -7,7 +7,7 @@ import { hashPersonIdentifier } from './hash'
  * @param user Identifier
  */
 export async function queryPersonFromGun2(user: PersonIdentifier): Promise<PersonOnGun2> {
-    const result = await gun2.get(await hashPersonIdentifier(user)).once().then!()
+    const result = await gun2.get(await hashPersonIdentifier(user)).then!()
     return result || {}
 }
 

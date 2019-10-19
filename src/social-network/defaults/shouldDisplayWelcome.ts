@@ -3,8 +3,8 @@ import { getStorage } from '../../utils/browser.storage'
 import { getActivatedUI } from '../ui'
 
 export async function shouldDisplayWelcomeDefault() {
-    const netId = getActivatedUI().networkIdentifier
     if (webpackEnv.firefoxVariant === 'GeckoView') return true
+    const netId = getActivatedUI().networkIdentifier
     const storage = (await getStorage(netId)) || {}
     if (storage.forceDisplayWelcome) return true
 

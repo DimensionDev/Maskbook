@@ -236,3 +236,7 @@ export async function openWelcomePage(id?: SocialNetworkUI['lastRecognizedIdenti
     }
     return browser.tabs.create({ url: getWelcomePageURL(id) })
 }
+
+export async function openOptionsPage(route: string) {
+    return browser.tabs.create({ url: browser.runtime.getURL('/index.html#' + route) })
+}

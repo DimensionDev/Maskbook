@@ -15,8 +15,10 @@ import WelcomeContainer from './WelcomeContainer'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import { useIsolatedChooseIdentity } from '../shared/ChooseIdentity'
 import { PersonIdentifier } from '../../database/type'
+import Navigation from './Navigation/Navigation'
 
 interface Props {
+    back(): void
     next(): void
     onGenerateKey(password: string): void
     onRestoreByMnemonicWord(mnemonicWord: string, password: string): void
@@ -28,9 +30,6 @@ const useStyles = makeStyles(theme => ({
     paper: {
         padding: '2rem 1rem 1rem 1rem',
         textAlign: 'center',
-        '& > *': {
-            marginBottom: theme.spacing(3),
-        },
         background: theme.palette.background.default,
     },
     button: {
@@ -162,6 +161,7 @@ export default function Welcome(props: Props) {
     )
     return (
         <WelcomeContainer className={classes.paper}>
+            <Navigation back={props.back} />
             <CardContent>
                 <Typography variant="h5">{geti18nString('welcome_1a3a_title')}</Typography>
                 <br />
