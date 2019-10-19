@@ -24,10 +24,12 @@ export function injectPostInspectorDefault(config: InjectPostInspectorDefaultCon
         )
     }
 }
+
 interface InjectPostInspectorDefaultConfig {
     injectionPoint?(node: DOMProxy): ShadowRoot
     zipPost?(node: DOMProxy): void
 }
+
 function PostDecryptUI(props: {
     onDecrypted: (val: string) => string
     zipPost: () => void

@@ -30,5 +30,5 @@ export function startWorkerService(e: SocialNetworkWorker) {
         autoVerifyPost: e.autoVerifyPost,
         manualVerifyPost: e.manualVerifyPost,
     }
-    AsyncCall(impl, { serializer: Serialization, key: e.internalName, messageChannel: new MessageCenter() })
+    AsyncCall(impl, { serializer: Serialization, key: e.internalName, messageChannel: new MessageCenter(), log: true })
 }

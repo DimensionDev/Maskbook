@@ -47,10 +47,12 @@ export function untilDocumentReady() {
     })
 }
 
-export const nop: (...args: any[]) => any = () => () => {}
+export const nop = (...args: unknown[]) => {}
+export const nopWithUnmount = (...args: unknown[]) => nop
+export const bypass: <T>(args: T) => T = args => args
 
 /**
- * index starts at zero.
+ * index starts at one.
  */
 export const regexMatch = (str: string, regexp: RegExp, index: number) => {
     const r = str.match(regexp)
@@ -59,3 +61,19 @@ export const regexMatch = (str: string, regexp: RegExp, index: number) => {
 }
 
 export const isDocument = (node: Node): node is Document => node.nodeType === Node.DOCUMENT_NODE
+
+/**
+ * batch run string.replace
+ * @param source    the source string to replace
+ * @param group     Array of find-replace pair,
+ *                  each pair same as the param of
+ *                  string.replace
+ * @return          result string
+ */
+export const batchReplace = (source: string, group: Array<[string | RegExp, string]>) => {
+    let storage = source
+    for (const v of group) {
+        storage = storage.replace(v[0], v[1])
+    }
+    return storage
+}

@@ -14,8 +14,16 @@ const defaultDataSources: Required<SocialNetworkUIDataSources> = cloneDeep({
     posts: new Map(),
 })
 
+const defaultInjections = {
+    injectCommentBox: 'disabled',
+    injectPostComments: 'disabled',
+    injectWelcomeBanner: 'disabled',
+} as const
+
 export const defaultSocialNetworkUI = cloneDeep({
     ...defaultDataSources,
+    ...defaultInjections,
     injectCommentBox: injectCommentBoxDefaultFactory(),
     injectPostComments: injectPostCommentsDefault(),
-})
+    injectOptionsPageLink: 'disabled',
+} as const)

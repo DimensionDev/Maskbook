@@ -27,7 +27,7 @@ export function PostInspector(props: PostInspectorProps) {
     const decodeResult = getActivatedUI().publicKeyDecoder(post)
     const isDebugging = useValueRef(debugModeSetting)
     const type = {
-        encryptedPost: deconstructPayload(post),
+        encryptedPost: deconstructPayload(post, getActivatedUI().payloadDecoder),
         provePost: decodeResult ? [decodeResult] : null,
     }
     if (type.provePost) Services.People.writePersonOnGun(postBy, { provePostId: postId })
@@ -49,6 +49,7 @@ export function PostInspector(props: PostInspectorProps) {
                     'Who am I',
                     whoAmI ? `Nickname ${whoAmI.nickname || 'unknown'}, UserID ${whoAmI.identifier.userId}` : 'Unknown',
                 ],
+                ['My fingerprint', whoAmI ? whoAmI.fingerprint || 'Unknown' : 'unknown'],
                 ['Post ID', props.postId || 'Unknown'],
                 ['Post Content', props.post],
             ]}
@@ -57,7 +58,11 @@ export function PostInspector(props: PostInspectorProps) {
 
     if (type.encryptedPost) {
         if (!isDebugging) props.needZip()
-        const { iv, ownersAESKeyEncrypted, version } = type.encryptedPost
+        const { iv, version } = type.encryptedPost
+        const ownersAESKeyEncrypted =
+            type.encryptedPost.version === -38
+                ? type.encryptedPost.AESKeyEncrypted
+                : type.encryptedPost.ownersAESKeyEncrypted
         return (
             <>
                 <DecryptPostUI.UI

@@ -18,7 +18,7 @@ export const hasWKWebkitRPCHandlers =
 class iOSWebkitChannel {
     constructor() {
         document.addEventListener(key, e => {
-            const detail = (e as CustomEvent<any>).detail
+            const detail = (e as CustomEvent<unknown>).detail
             for (const f of this.listener) {
                 try {
                     f(detail)
@@ -27,11 +27,10 @@ class iOSWebkitChannel {
         })
     }
     private listener: Array<(data: unknown) => void> = []
-    on(_: string, cb: (data: any) => void): void {
+    on(_: string, cb: (data: unknown) => void): void {
         this.listener.push(cb)
     }
-    emit(_: string, data: any): void {
-        const _window: any = window
+    emit(_: string, data: unknown): void {
         if (hasWKWebkitRPCHandlers) _window.webkit.messageHandlers[key].postMessage(data)
         else {
             throw new TypeError('Run in the wrong environment. Excepts window.webkit.messageHandlers')
@@ -39,7 +38,7 @@ class iOSWebkitChannel {
     }
 }
 const ThisSideImplementation: ThisSideImplementation = {}
-export const iOSHost = AsyncCall<Host>(ThisSideImplementation as any, {
+export const iOSHost = AsyncCall<Host>(ThisSideImplementation, {
     key: '',
     log: false,
     messageChannel: new iOSWebkitChannel(),

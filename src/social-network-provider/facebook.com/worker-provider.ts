@@ -9,6 +9,7 @@ export const facebookWorkerSelf = defineSocialNetworkWorker({
     ...sharedProvider,
     fetchPostContent: fetchPostContentFacebook,
     fetchProfile: fetchProfileFacebook,
-    autoVerifyBio: autoVerifyBioFacebook,
+    autoVerifyBio: webpackEnv.target === 'WKWebview' ? null : autoVerifyBioFacebook,
     autoVerifyPost: autoVerifyPostFacebook,
+    manualVerifyPost: null,
 })

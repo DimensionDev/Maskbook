@@ -46,7 +46,7 @@ export async function openPostDialogFacebook() {
         await timeout(new MutationObserverWatcher(isMobileFacebook ? activated : dialog), 2000)
         console.log('Dialog appeared')
     } catch {}
-    function clickFailed(e: any) {
+    function clickFailed(e: unknown) {
         console.warn(e)
         if (!dialog.evaluate()[0]) alert('请点击输入框')
     }
@@ -79,6 +79,7 @@ export async function pasteIntoPostBoxFacebook(
         await sleep(100)
         if ('value' in document.activeElement!) dispatchCustomEvents('input', text)
         else dispatchCustomEvents('paste', text)
+        element.dispatchEvent(new CustomEvent('input', { bubbles: true, cancelable: false, composed: true }))
         await sleep(400)
         if (isMobileFacebook) {
             const e = document.querySelector<HTMLDivElement | HTMLTextAreaElement>('.mentions-placeholder')

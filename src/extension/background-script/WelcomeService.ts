@@ -3,8 +3,6 @@ import { encodeText } from '../../utils/type-transform/String-ArrayBuffer'
 import { sleep } from '../../utils/utils'
 import { geti18nString } from '../../utils/i18n'
 import {
-    generateLocalKeyDB,
-    generateMyIdentityDB,
     getLocalKeysDB,
     getMyIdentitiesDB,
     PersonRecordPublic,
@@ -12,6 +10,8 @@ import {
     queryLocalKeyDB,
     queryMyIdentityAtDB,
     queryPeopleDB,
+    storeLocalKeyDB,
+    storeMyIdentityDB,
 } from '../../database/people'
 import { BackupJSONFileLatest, JSON_HINT_FOR_POWER_USER } from '../../utils/type-transform/BackupFile'
 import { PersonIdentifier } from '../../database/type'
@@ -20,9 +20,20 @@ import getCurrentNetworkWorker from '../../social-network/utils/getCurrentNetwor
 import { SocialNetworkUI } from '../../social-network/ui'
 import { getWelcomePageURL } from '../options-page/Welcome/getWelcomePageURL'
 import { getMyProveBio } from './CryptoServices/getMyProveBio'
+import {
+    generate_ECDH_256k1_KeyPair_ByMnemonicWord,
+    recover_ECDH_256k1_KeyPair_ByMnemonicWord,
+} from '../../utils/mnemonic-code'
+import { derive_AES_GCM_256_Key_From_PBKDF2, import_PBKDF2_Key } from '../../utils/crypto.subtle'
+import { CryptoKeyToJsonWebKey } from '../../utils/type-transform/CryptoKey-JsonWebKey'
+import { createDefaultFriendsGroup } from '../../database'
 
 OnlyRunInContext('background', 'WelcomeService')
-async function generateBackupJSON(whoAmI: PersonIdentifier, full = false): Promise<BackupJSONFileLatest> {
+async function generateBackupJSON(
+    whoAmI: PersonIdentifier,
+    onlyBackupWhoAmI: boolean,
+    full = false,
+): Promise<BackupJSONFileLatest> {
     const manifest = browser.runtime.getManifest()
     const myIdentitiesInDB: BackupJSONFileLatest['whoami'] = []
     const peopleInDB: NonNullable<BackupJSONFileLatest['people']> = []
@@ -33,8 +44,7 @@ async function generateBackupJSON(whoAmI: PersonIdentifier, full = false): Promi
     const myIdentity = await getMyIdentitiesDB()
     if (!whoAmI.isUnknown) {
         if ((await hasValidIdentity(whoAmI)) === false) {
-            await createNewIdentity(whoAmI)
-            return generateBackupJSON(whoAmI, full)
+            throw new Error('Generate fail')
         }
     }
     async function addMyIdentitiesInDB(data: PersonRecordPublicPrivate) {
@@ -52,6 +62,7 @@ async function generateBackupJSON(whoAmI: PersonIdentifier, full = false): Promi
         })
     }
     for (const id of myIdentity) {
+        if (onlyBackupWhoAmI) if (!id.identifier.equals(whoAmI)) continue
         promises.push(addMyIdentitiesInDB(id))
     }
     //#endregion
@@ -105,19 +116,102 @@ async function hasValidIdentity(whoAmI: PersonIdentifier) {
     return !!local && !!ecdh && !!ecdh.privateKey && !!ecdh.publicKey
 }
 
-async function createNewIdentity(whoAmI: PersonIdentifier) {
-    await generateLocalKeyDB(whoAmI)
-    await generateMyIdentityDB(whoAmI)
-    // ? New user !
-    MessageCenter.emit('generateKeyPair', undefined)
-    console.log('New user! Generating key pairs')
+/**
+ *
+ * Generate new identity by a password
+ *
+ * @param whoAmI Who Am I
+ * @param password password used to generate mnemonic word, can be empty string
+ */
+export async function createNewIdentityByMnemonicWord(whoAmI: PersonIdentifier, password: string): Promise<string> {
+    const x = await generate_ECDH_256k1_KeyPair_ByMnemonicWord(password)
+    await generateNewIdentity(whoAmI, x)
+    return x.mnemonicWord
 }
 
-export async function backupMyKeyPair(whoAmI: PersonIdentifier, download = true) {
+/**
+ *
+ * Recover new identity by a password and mnemonic words
+ *
+ * @param whoAmI Who Am I
+ * @param password password used to generate mnemonic word, can be empty string
+ * @param word mnemonic words
+ */
+export async function restoreNewIdentityWithMnemonicWord(
+    whoAmI: PersonIdentifier,
+    word: string,
+    password: string,
+): Promise<void> {
+    await generateNewIdentity(whoAmI, await recover_ECDH_256k1_KeyPair_ByMnemonicWord(word, password))
+}
+/**
+ * There are 2 types of usingKey.
+ * ECDH256k1 Keypair + MnemonicWord
+ * Or
+ * ECDH256k1 Keypair + LocalKey
+ *
+ * This is how localKey generated:
+ * ```ts
+ * const pbkdf2 = import_PBKDF2_Key(ECDH256k1.publicKey)
+ * const localKey = derive_AES_GCM_256_Key_From_PBKDF2(pbkdf2, MnemonicWord)
+ * ```
+ */
+async function generateNewIdentity(
+    whoAmI: PersonIdentifier,
+    usingKey:
+        | {
+              key: CryptoKeyPair
+              mnemonicWord: string
+          }
+        | {
+              key: CryptoKeyPair
+              localKey: CryptoKey
+          },
+): Promise<void> {
+    const { key } = usingKey
+    if ('localKey' in usingKey) {
+        await storeLocalKeyDB(whoAmI, usingKey.localKey)
+    } else {
+        const pub = await CryptoKeyToJsonWebKey(key.publicKey)
+
+        // ? Derive method: publicKey as "password" and password for the mnemonicWord as hash
+        const pbkdf2 = await import_PBKDF2_Key(encodeText(pub.x! + pub.y!))
+        const localKey = await derive_AES_GCM_256_Key_From_PBKDF2(pbkdf2, encodeText(usingKey.mnemonicWord))
+
+        await storeLocalKeyDB(whoAmI, localKey)
+    }
+    // TODO: If there is some old key that will be overwritten, warn the user.
+    await storeMyIdentityDB({
+        groups: [],
+        identifier: whoAmI,
+        publicKey: key.publicKey,
+        privateKey: key.privateKey,
+    })
+    await createDefaultFriendsGroup(whoAmI).catch(console.error)
+    MessageCenter.emit('identityUpdated', undefined)
+}
+
+export async function attachIdentityToPersona(
+    whoAmI: PersonIdentifier,
+    targetIdentity: PersonIdentifier,
+): Promise<void> {
+    const id = await queryMyIdentityAtDB(targetIdentity)
+    const localKey = await queryLocalKeyDB(whoAmI)
+    if (id === null || localKey === null) throw new Error('Not found')
+    await generateNewIdentity(whoAmI, {
+        key: { privateKey: id.privateKey, publicKey: id.publicKey },
+        localKey,
+    })
+}
+
+export async function backupMyKeyPair(
+    whoAmI: PersonIdentifier,
+    options: { download: boolean; onlyBackupWhoAmI: boolean },
+) {
     // Don't make the download pop so fast
     await sleep(1000)
-    const obj = await generateBackupJSON(whoAmI)
-    if (!download) return obj
+    const obj = await generateBackupJSON(whoAmI, options.onlyBackupWhoAmI)
+    if (!options.download) return obj
     const string = JSON.stringify(obj)
     const buffer = encodeText(string)
     const blob = new Blob([buffer], { type: 'application/json' })
@@ -141,4 +235,8 @@ export async function openWelcomePage(id?: SocialNetworkUI['lastRecognizedIdenti
             throw new TypeError(geti18nString('service_username_invalid'))
     }
     return browser.tabs.create({ url: getWelcomePageURL(id) })
+}
+
+export async function openOptionsPage(route: string) {
+    return browser.tabs.create({ url: browser.runtime.getURL('/index.html#' + route) })
 }

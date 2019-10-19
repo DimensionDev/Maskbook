@@ -36,7 +36,7 @@ export class RenderInShadowRootWrapper extends React.PureComponent {
         this.setState({ error })
     }
 }
-function Maskbook(props: any) {
+function Maskbook(props: React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement>) {
     // const isDarkTheme = useMediaQuery('(prefers-color-scheme: dark)')
     const isDarkTheme = false
     return (

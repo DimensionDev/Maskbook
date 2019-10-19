@@ -4,9 +4,8 @@ import React from 'react'
 import { ThemeProvider } from '@material-ui/styles'
 import { MaskbookLightTheme } from '../../utils/theme'
 import { makeStyles } from '@material-ui/core/styles'
-import { Button, ListItem, ListItemText, ListItemSecondaryAction, Switch, List } from '@material-ui/core'
+import { Button, List } from '@material-ui/core'
 import { SSRRenderer } from '../../utils/SSRRenderer'
-import { useValueRef } from '../../utils/hooks/useValueRef'
 import { debugModeSetting } from '../../components/shared-settings/settings'
 import { useSettingsUI } from '../../components/shared-settings/createSettings'
 
@@ -32,16 +31,15 @@ const useStyles = makeStyles(theme => ({
 SSRRenderer(<Popup />)
 export function Popup() {
     const classes = useStyles()
-    const debugOn = useValueRef(debugModeSetting)
 
     return (
         <ThemeProvider theme={MaskbookLightTheme}>
-            <style>{`
-    body {
-        overflow-x: hidden;
-        margin: 0 auto;
-        min-width: 30em;
-    }`}</style>
+            <style>{`body {
+                overflow-x: hidden;
+                margin: 0 auto;
+                width: 30em;
+                max-width: 100%;
+            }`}</style>
             <main className={classes.container}>
                 <img className={classes.logo} src="https://dimensiondev.github.io/Maskbook-VI/MB--Text--Blue.svg" />
                 <Button

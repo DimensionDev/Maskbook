@@ -15,4 +15,5 @@ globalThis.Event = class {
     get target() {}
 }
 globalThis.Worker = class {}
+globalThis.webpackEnv = {}
 module.exports = require(process.argv[process.argv.length - 1])

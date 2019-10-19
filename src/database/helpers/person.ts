@@ -49,7 +49,7 @@ export async function queryPeopleWithQuery(query?: Parameters<typeof queryPeople
     return Promise.all(result.map(personRecordToPerson))
 }
 
-const calculateFingerprint = memoize(async function(_key: CryptoKey) {
+export const calculateFingerprint = memoize(async function(_key: CryptoKey) {
     const key = await CryptoKeyToJsonWebKey(_key)
     if (!key) return 'Fingerprint not available'
     const hash = await crypto.subtle.digest('SHA-256', encodeText(key.x! + key.y))

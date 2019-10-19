@@ -19,6 +19,7 @@ const taskPasteIntoPostBox: SocialNetworkUI['taskPasteIntoPostBox'] = async (tex
 const taskPasteIntoBio = async (text: string) => {
     const getValue = () => editProfileTextareaSelector().evaluate()!.value
     await untilDocumentReady()
+    await sleep(800)
     try {
         editProfileButtonSelector()
             .evaluate()!
@@ -26,10 +27,11 @@ const taskPasteIntoBio = async (text: string) => {
     } catch {
         prompt(geti18nString('automation_request_click_edit_bio_button'))
     }
-    await sleep(400)
+    await sleep(800)
     try {
         const i = editProfileTextareaSelector().evaluate()!
         i.focus()
+        await sleep(200)
         dispatchCustomEvents('input', i.value + text)
     } catch {
         console.warn('Text not pasted to the text area')

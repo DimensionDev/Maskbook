@@ -1,5 +1,6 @@
 import * as Alpha40 from '../../../crypto/crypto-alpha-40'
 import * as Alpha39 from '../../../crypto/crypto-alpha-39'
+import * as Alpha38 from '../../../crypto/crypto-alpha-38'
 import * as Gun1 from '../../../network/gun/version.1'
 import * as Gun2 from '../../../network/gun/version.2'
 import { decodeText } from '../../../utils/type-transform/String-ArrayBuffer'
@@ -11,6 +12,8 @@ import { PersonIdentifier, PostIVIdentifier } from '../../../database/type'
 import { queryPostDB, updatePostDB } from '../../../database/post'
 import { addPerson } from './addPerson'
 import { MessageCenter } from '../../../utils/messages'
+import { getNetworkWorker } from '../../../social-network/worker'
+
 type Progress = {
     progress: 'finding_person_public_key' | 'finding_post_key'
 }
@@ -44,20 +47,32 @@ export async function* decryptFromMessageWithProgress(
     by: PersonIdentifier,
     whoAmI: PersonIdentifier,
 ): ReturnOfDecryptFromMessageWithProgress {
+    const decoder = getNetworkWorker(by.network).payloadDecoder
     // If any of parameters is changed, we will not handle it.
-    const data = deconstructPayload(encrypted)!
+    const data = deconstructPayload(encrypted, decoder)!
     if (!data) {
         try {
-            deconstructPayload(encrypted, true)
+            deconstructPayload(encrypted, decoder, { throws: true })
         } catch (e) {
             return { error: e.message }
         }
     }
     const version = data.version
-    if (version === -40 || version === -39) {
-        const { encryptedText, iv, ownersAESKeyEncrypted, signature, version } = data
-        const unverified = [version === -40 ? '2/4' : '3/4', ownersAESKeyEncrypted, iv, encryptedText].join('|')
-        const cryptoProvider = version === -40 ? Alpha40 : Alpha39
+    if (version === -40 || version === -39 || version === -38) {
+        const { encryptedText, iv, signature, version } = data
+        const ownersAESKeyEncrypted = data.version === -38 ? data.AESKeyEncrypted : data.ownersAESKeyEncrypted
+        const versionTable = {
+            [-40]: '2/4',
+            [-39]: '3/4',
+            [-38]: '4/4',
+        }
+        const cryptoProviderTable = {
+            [-40]: Alpha40,
+            [-39]: Alpha39,
+            [-38]: Alpha38,
+        }
+        const unverified = [versionTable[version], ownersAESKeyEncrypted, iv, encryptedText].join('|')
+        const cryptoProvider = cryptoProviderTable[version]
 
         const [cachedPostResult, setPostCache] = await decryptFromCache(data, by)
 
@@ -149,8 +164,8 @@ export async function* decryptFromMessageWithProgress(
                     return { signatureVerifyResult: false, content, through: ['normal_decrypted'] } as Success
                 }
             } else {
-                if (cachedPostResult) {
-                    const { keyHash, postHash } = await Gun2.queryPostKeysOnGun2(iv, mine.publicKey)
+                if (cachedPostResult && version !== -40) {
+                    const { keyHash, postHash } = await Gun2.queryPostKeysOnGun2(version, iv, mine.publicKey)
                     yield { debug: 'debug_finding_hash', hash: [postHash, keyHash] }
                     return {
                         signatureVerifyResult: await cryptoProvider.verify(
@@ -170,8 +185,8 @@ export async function* decryptFromMessageWithProgress(
                     const result = await Gun1.queryPostAESKey(iv, whoAmI.userId)
                     if (result === undefined) return { error: geti18nString('service_not_share_target') }
                     aesKeyEncrypted.push(result)
-                } else if (version === -39) {
-                    const { keyHash, keys, postHash } = await Gun2.queryPostKeysOnGun2(iv, mine.publicKey)
+                } else if (version === -39 || version === -38) {
+                    const { keyHash, keys, postHash } = await Gun2.queryPostKeysOnGun2(version, iv, mine.publicKey)
                     yield { debug: 'debug_finding_hash', hash: [postHash, keyHash] }
                     aesKeyEncrypted.push(...keys)
                 }
@@ -196,7 +211,8 @@ export async function* decryptFromMessageWithProgress(
 
                 // Failed, we have to wait for the future info from gun.
                 return new Promise<Success>((resolve, reject) => {
-                    const undo = Gun2.subscribePostKeysOnGun2(iv, mine.publicKey, async key => {
+                    if (version === -40) return reject()
+                    const undo = Gun2.subscribePostKeysOnGun2(version, iv, mine.publicKey, async key => {
                         console.log('New key received, trying', key)
                         try {
                             const result = await decryptWith(key)

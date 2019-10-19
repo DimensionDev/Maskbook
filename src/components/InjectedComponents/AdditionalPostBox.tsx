@@ -7,16 +7,19 @@ import Services from '../../extension/service'
 import { geti18nString } from '../../utils/i18n'
 import { makeStyles } from '@material-ui/styles'
 import { Box, Button, Card, CardHeader, Divider, InputBase, Paper, Typography } from '@material-ui/core'
-import { Person, Group } from '../../database'
+import { Group, Person } from '../../database'
 import { NotSetupYetPrompt } from '../shared/NotSetupYetPrompt'
-import { useCurrentIdentity, useFriendsList, useMyIdentities, useGroupsList } from '../DataSource/useActivatedUI'
+import { useCurrentIdentity, useFriendsList, useGroupsList, useMyIdentities } from '../DataSource/useActivatedUI'
 import { getActivatedUI } from '../../social-network/ui'
 import { ChooseIdentity } from '../shared/ChooseIdentity'
+import { useAsync } from '../../utils/components/AsyncComponent'
 
 interface Props {
     availableTarget: (Person | Group)[]
+
     onRequestPost(people: (Person | Group)[], text: string): void
 }
+
 const useStyles = makeStyles({
     root: { margin: '10px 0' },
     header: { padding: '8px 12px 0' },
@@ -35,6 +38,7 @@ const useStyles = makeStyles({
     grayArea: { background: '#f5f6f7', padding: 8, wordBreak: 'break-all' },
     button: { padding: '2px 30px', flex: 1 },
 })
+
 export function AdditionalPostBoxUI(props: Props) {
     const { availableTarget } = props
     const classes = useStyles()
@@ -108,12 +112,15 @@ export function AdditionalPostBox(props: Partial<Props>) {
                 warningText: geti18nString('additional_post_box__encrypted_failed'),
                 shouldOpenPostDialog: false,
             })
-            Services.Crypto.publishPostAESKey(token, identity[0].identifier)
+            Services.Crypto.publishPostAESKey(token)
         },
         [identity],
     )
 
-    if (identity.length === 0) {
+    const [showWelcome, setShowWelcome] = useState(false)
+    useAsync(getActivatedUI().shouldDisplayWelcome, []).then(x => setShowWelcome(x))
+
+    if (showWelcome) {
         return <NotSetupYetPrompt />
     }
 

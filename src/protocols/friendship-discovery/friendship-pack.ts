@@ -4,7 +4,7 @@ import { encodeArrayBuffer, decodeText } from '../../utils/type-transform/String
 import { toECDH } from '../../utils/type-transform/ECDSA-ECDH'
 import { PersonIdentifier } from '../../database/type'
 import {
-    generate_ECDH_256k1_KeyPair as generateECDH_256k1_KeyPair,
+    generate_ECDH_256k1_KeyPair,
     import_ECDH_256k1_Key,
     derive_AES_GCM_256_Key_From_ECDH_256k1_Keys,
 } from '../../utils/crypto.subtle'
@@ -36,7 +36,7 @@ export async function packFriendshipCertificate(
     cert: FriendshipCertificateDecryptedV1,
     targetKey: CryptoKey,
 ): Promise<FriendshipCertificateEncryptedV1> {
-    const key = await generateECDH_256k1_KeyPair()
+    const key = await generate_ECDH_256k1_KeyPair()
     const aes = await derive_AES_GCM_256_Key_From_ECDH_256k1_Keys(targetKey, key.privateKey)
     const { content: payload, iv } = await encryptWithAES({
         aesKey: aes,

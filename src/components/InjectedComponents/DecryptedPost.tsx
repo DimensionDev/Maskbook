@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useMemo } from 'react'
+import React, { useMemo, useState } from 'react'
 import AsyncComponent from '../../utils/components/AsyncComponent'
 import { AdditionalContent } from './AdditionalPostContent'
 import { useShareMenu } from './SelectPeopleDialog'
@@ -6,7 +6,7 @@ import { sleep } from '../../utils/utils'
 import { ServicesWithProgress } from '../../extension/service'
 import { geti18nString } from '../../utils/i18n'
 import { makeStyles } from '@material-ui/styles'
-import { Box, Button, Link, SnackbarContent, useMediaQuery, useTheme } from '@material-ui/core'
+import { Box, Link, SnackbarContent, useMediaQuery, useTheme } from '@material-ui/core'
 import { Person } from '../../database'
 import { Identifier, PersonIdentifier } from '../../database/type'
 import { NotSetupYetPrompt } from '../shared/NotSetupYetPrompt'
@@ -48,8 +48,10 @@ function DecryptPostSuccess({ data, people, ...props }: DecryptPostSuccessProps)
     const mediaQuery = useMediaQuery(theme.breakpoints.down('sm'))
     let passString = geti18nString('decrypted_postbox_verified')
     let failString = geti18nString('decrypted_postbox_not_verified')
-    if (mediaQuery) passString = passString[passString.length - 1]
-    if (failString) failString = failString[failString.length - 1]
+    if (mediaQuery) {
+        passString = passString[passString.length - 1]
+        failString = failString[failString.length - 1]
+    }
     return (
         <AdditionalContent
             title={
@@ -130,16 +132,19 @@ function DecryptPost(props: DecryptPostProps) {
     }, [requestAppendRecipients, postBy, whoAmI])
     const debugHashJSX = useMemo(() => {
         if (!isDebugging) return null
-        const postPayload = deconstructPayload(encryptedText)
+        const postPayload = deconstructPayload(encryptedText, null)
         if (!postPayload) return null
         const postByMyself = <DebugModeUI_PostHashDialog network={postBy.network} post={encryptedText} />
+
+        const ownersAESKeyEncrypted =
+            postPayload.version === -38 ? postPayload.AESKeyEncrypted : postPayload.ownersAESKeyEncrypted
         return (
             <DebugList
                 items={[
                     postBy.equals(whoAmI) ? postByMyself : (['Hash of this post', debugHash] as const),
                     ['Decrypt reason', decryptedResult ? decryptedResult.through.join(',') : 'Unknown'],
                     ['Payload version', postPayload.version],
-                    ['Payload ownersAESKeyEncrypted', postPayload.ownersAESKeyEncrypted],
+                    ['Payload ownersAESKeyEncrypted', ownersAESKeyEncrypted],
                     ['Payload iv', postPayload.iv],
                     ['Payload encryptedText', postPayload.encryptedText],
                     ['Payload signature', postPayload.signature],

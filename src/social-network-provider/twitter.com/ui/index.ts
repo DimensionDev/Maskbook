@@ -35,7 +35,7 @@ export const instanceOfTwitterUI = defineSocialNetworkUI({
             })
     },
     ignoreSetupAccount() {
-        setStorage(host, { userIgnoredWelcome: true }).then()
+        setStorage(host, { userIgnoredWelcome: true, forceDisplayWelcome: false }).then()
     },
     shouldDisplayWelcome: shouldDisplayWelcomeDefault,
 })

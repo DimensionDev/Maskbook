@@ -19,6 +19,7 @@ Object.assign(window, {
         decryptFrom: decryptFromMessageWithProgress,
     },
 })
+
 require('./extension/service')
 require('./provider.worker')
 
@@ -64,6 +65,7 @@ if (GetContext() === 'background') {
     })
 
     browser.runtime.onInstalled.addListener(detail => {
+        if (webpackEnv.target === 'WKWebview') return
         const {
             getWelcomePageURL,
         } = require('./extension/options-page/Welcome/getWelcomePageURL') as typeof import('./extension/options-page/Welcome/getWelcomePageURL')
@@ -71,8 +73,15 @@ if (GetContext() === 'background') {
             browser.tabs.create({ url: getWelcomePageURL() })
         }
     })
+
+    if (webpackEnv.target === 'WKWebview') {
+        browser.tabs.create({
+            url: 'https://m.facebook.com/',
+            active: true,
+        })
+    }
 }
-function IgnoreError(arg: any): (reason: any) => void {
+function IgnoreError(arg: unknown): (reason: Error) => void {
     return e => {
         if (e.message.includes('non-structured-clonable data')) {
             // It's okay we don't need the result, happened on Firefox
@@ -112,6 +121,7 @@ Object.assign(window, {
     gun2: require('./network/gun/version.2'),
     crypto40: require('./crypto/crypto-alpha-40'),
     crypto39: require('./crypto/crypto-alpha-39'),
+    crypto38: require('./crypto/crypto-alpha-38'),
     db: {
         avatar: require('./database/avatar'),
         group: require('./database/group'),

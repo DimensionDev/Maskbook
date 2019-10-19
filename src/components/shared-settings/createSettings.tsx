@@ -8,7 +8,7 @@ interface SettingsTexts {
     primary: string
     secondary?: string
 }
-const texts = new WeakMap<ValueRef<any>, SettingsTexts>()
+const texts = new WeakMap<ValueRef<unknown>, SettingsTexts>()
 export function createNewSettings<T extends browser.storage.StorageValue>(
     key: string,
     initialValue: T,

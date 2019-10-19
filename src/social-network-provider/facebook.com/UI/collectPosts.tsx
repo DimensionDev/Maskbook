@@ -15,7 +15,8 @@ export function collectPostsFacebook(this: SocialNetworkUI) {
             const root = new LiveSelector()
                 .replace(() => [metadata.realCurrent])
                 .filter(x => x)
-                .closest('.userContentWrapper')
+                .closest('.userContentWrapper, [data-store]')
+
             // ? inject after comments
             const commentSelectorPC = root
                 .clone()
@@ -65,9 +66,9 @@ export function collectPostsFacebook(this: SocialNetworkUI) {
                 info.postID.value = getPostID(metadata)
             }
             collectPostInfo()
-            info.postPayload.value = deconstructPayload(info.postContent.value)
+            info.postPayload.value = deconstructPayload(info.postContent.value, this.payloadDecoder)
             info.postContent.addListener(newVal => {
-                info.postPayload.value = deconstructPayload(newVal)
+                info.postPayload.value = deconstructPayload(newVal, this.payloadDecoder)
             })
             return {
                 onNodeMutation: collectPostInfo,
@@ -76,7 +77,10 @@ export function collectPostsFacebook(this: SocialNetworkUI) {
             }
         })
         .setDOMProxyOption({ afterShadowRootInit: { mode: 'closed' } })
-        .startWatch()
+        .startWatch({
+            childList: true,
+            subtree: true,
+        })
 }
 
 function getPostBy(node: DOMProxy, allowCollectInfo: boolean) {

@@ -15,7 +15,7 @@ import { Person } from '../../database'
 import { useAsync } from '../../utils/components/AsyncComponent'
 import Services from '../../extension/service'
 import { PostIVIdentifier } from '../../database/type'
-import { deconstructPayload, Payload } from '../../utils/type-transform/Payload'
+import { deconstructPayload } from '../../utils/type-transform/Payload'
 import { DialogContentText, DialogContent } from '@material-ui/core'
 
 const useStyles = makeStyles({
@@ -29,60 +29,75 @@ export interface SimpleDialogProps {
     open: boolean
     onClose: (value: string) => void
     friends: Person[]
-    hashMap: [string, string][]
+    hashMap: [string, string, string][]
 }
 
 function SimpleDialog(props: SimpleDialogProps) {
     const { open } = props
 
-    const map = new Map<string, string>()
-    for (const data of props.hashMap) {
-        map.set(data[0], data[1])
+    const map = new Map<string, [string, string]>()
+    for (const [id, magicCode, fingerprint] of props.hashMap) {
+        map.set(id, [magicCode, fingerprint])
     }
 
     return (
         <Dialog container={PortalShadowRoot} onClose={props.onClose} open={open}>
-            <DialogTitle>
-                Post hash for each of your friends (Appear in this list is not related to if you have shared this post
-                to someone or not.)
-            </DialogTitle>
-            <List>
-                {props.friends.map(one => {
-                    return (
-                        <ListItem>
-                            <ListItemAvatar>
-                                <Avatar person={one} />
-                            </ListItemAvatar>
-                            <ListItemText
-                                primary={one.nickname || one.identifier.userId}
-                                secondary={
-                                    <span style={{ fontFamily: 'monospace' }}>
-                                        {map.get(one.identifier.toText()) || 'Unknown'}
-                                    </span>
-                                }
-                            />
-                        </ListItem>
-                    )
-                })}
-            </List>
+            <DialogTitle>Troubleshoot</DialogTitle>
+            <DialogContent>
+                <DialogContentText>
+                    Appear in this list is not related to if you have shared this post to someone or not.
+                </DialogContentText>
+                <DialogContentText>
+                    The "Magic Code" and the Fingerprint should be the same on your friend's Maskbook and your Maskbook.
+                </DialogContentText>
+                <DialogContentText>
+                    If Fingerprint is not the same, it means at least one of Maskbook doesn't get the correct key of the
+                    receiver.
+                </DialogContentText>
+                <DialogContentText>
+                    If MagicCode is not the same, it means at least one of Maskbook calculate the post hash wrong.
+                </DialogContentText>
+                <List dense>
+                    {props.friends.map(one => {
+                        const [magicCode, fingerprint] = map.get(one.identifier.toText()) || ['Unknown', 'Unknown']
+                        return (
+                            <ListItem>
+                                <ListItemAvatar>
+                                    <Avatar person={one} />
+                                </ListItemAvatar>
+                                <ListItemText
+                                    primary={one.nickname || one.identifier.userId}
+                                    secondary={
+                                        <span>
+                                            Magic code: {magicCode || 'Unknown'}
+                                            <br />
+                                            Their fingerprint: {fingerprint}
+                                        </span>
+                                    }
+                                />
+                            </ListItem>
+                        )
+                    })}
+                </List>
+            </DialogContent>
         </Dialog>
     )
 }
 
 export function DebugModeUI_PostHashDialog(props: { post: string; network: string }) {
     const [open, setOpen] = React.useState(false)
-    const payload = deconstructPayload(props.post)
-    const [hashMap, setHashMap] = useState<[string, string][]>([])
+    const payload = deconstructPayload(props.post, null)
+    const [hashMap, setHashMap] = useState<[string, string, string][]>([])
     const friends = useFriendsList()
     useAsync(() => {
         if (!payload) return Promise.resolve([] as typeof hashMap)
         const ivID = new PostIVIdentifier(props.network, payload.iv)
-        return Services.Crypto.debugShowAllPossibleHashForPost(ivID)
+        return Services.Crypto.debugShowAllPossibleHashForPost(ivID, payload.version)
     }, [props.post]).then(setHashMap)
     return (
         <>
             <Button variant="outlined" color="primary" onClick={() => setOpen(true)}>
-                See what code my friends will see for this post
+                My friend can't see this post even I shared with them!
             </Button>
             <SimpleDialog hashMap={hashMap} friends={friends} open={open} onClose={() => setOpen(false)} />
         </>

@@ -36,6 +36,7 @@ import {
     UpgradeBackupJSONFile,
     BackupJSONFileLatest,
 } from '../../utils/type-transform/BackupFile'
+import { decompressBackupFile } from '../../utils/type-transform/BackupFileShortRepresentation'
 
 const RestoreBox = styled('div')(({ theme }: { theme: Theme }) => ({
     color: theme.palette.text.hint,
@@ -103,9 +104,14 @@ export default function Welcome({ back, restore: originalRestore }: Props) {
     const ref = React.useRef<HTMLInputElement>(null)
     const textAreaRef = React.useRef<HTMLTextAreaElement>(null)
     const restore = (str: string) => {
-        const json = JSON.parse(str)
-        const upgraded = UpgradeBackupJSONFile(json)
-        setJson(upgraded)
+        try {
+            const json = JSON.parse(str)
+            const upgraded = UpgradeBackupJSONFile(json)
+            setJson(upgraded)
+        } catch (e) {
+            alert(e)
+            setJson(null)
+        }
     }
     const { dragEvents, fileReceiver, fileRef, dragStatus } = useDragAndDrop(file => {
         const fr = new FileReader()
@@ -196,7 +202,9 @@ export default function Welcome({ back, restore: originalRestore }: Props) {
                 {tab === 0 ? FileUI() : null}
                 {tab === 1 ? (
                     hasWKWebkitRPCHandlers ? (
-                        <WKWebkitQR onScan={restore} onQuit={() => setTab(0)} />
+                        json ? null : (
+                            <WKWebkitQR onScan={restore} onQuit={() => setTab(0)} />
+                        )
                     ) : (
                         QR()
                     )
@@ -239,7 +247,10 @@ export default function Welcome({ back, restore: originalRestore }: Props) {
         )
     }
     function WKWebkitQR(props: { onScan(val: string): void; onQuit(): void }) {
-        useAsync(() => iOSHost.scanQRCode(), []).then(props.onScan, props.onQuit)
+        useAsync(() => iOSHost.scanQRCode(), []).then(
+            x => props.onScan(JSON.stringify(decompressBackupFile(x))),
+            props.onQuit,
+        )
         return null
     }
     function QR() {

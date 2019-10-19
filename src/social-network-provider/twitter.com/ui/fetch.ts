@@ -27,7 +27,10 @@ const resolveLastRecognizedIdentity = (self: SocialNetworkUI) => {
     new MutationObserverWatcher(selfSelector)
         .addListener('onAdd', () => assign())
         .addListener('onChange', () => assign())
-        .startWatch()
+        .startWatch({
+            childList: true,
+            subtree: true,
+        })
         .then()
 }
 
@@ -44,7 +47,10 @@ const registerUserCollector = () => {
                 onTargetChanged: resolve,
             }
         })
-        .startWatch()
+        .startWatch({
+            childList: true,
+            subtree: true,
+        })
         .then()
 }
 
@@ -66,9 +72,9 @@ const registerPostCollector = (self: SocialNetworkUI) => {
                 uploadToService(r)
             }
             collectPostInfo()
-            info.postPayload.value = deconstructPayload(info.postContent.value)
+            info.postPayload.value = deconstructPayload(info.postContent.value, self.payloadDecoder)
             info.postContent.addListener(newValue => {
-                info.postPayload.value = deconstructPayload(newValue)
+                info.postPayload.value = deconstructPayload(newValue, self.payloadDecoder)
             })
             return {
                 onNodeMutation: collectPostInfo,
@@ -77,7 +83,10 @@ const registerPostCollector = (self: SocialNetworkUI) => {
             }
         })
         .setDOMProxyOption({ afterShadowRootInit: { mode: 'closed' } })
-        .startWatch()
+        .startWatch({
+            childList: true,
+            subtree: true,
+        })
         .then()
 }
 

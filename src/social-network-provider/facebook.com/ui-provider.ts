@@ -19,13 +19,14 @@ import { setStorage } from '../../utils/browser.storage'
 import { isMobileFacebook } from './isMobile'
 import { geti18nString } from '../../utils/i18n'
 import { injectCommentBoxDefaultFactory } from '../../social-network/defaults/injectCommentBox'
+import { injectOptionsPageLinkAtFacebook } from './UI/injectOptionsPageLink'
 
-const self = defineSocialNetworkUI({
+export const facebookUISelf = defineSocialNetworkUI({
     ...sharedProvider,
     init(env, pref) {
         sharedProvider.init(env, pref)
-        InitFriendsValueRef(self, 'facebook.com')
-        InitMyIdentitiesValueRef(self, 'facebook.com')
+        InitFriendsValueRef(facebookUISelf, 'facebook.com')
+        InitMyIdentitiesValueRef(facebookUISelf, 'facebook.com')
     },
     shouldActivate() {
         return location.hostname.endsWith('facebook.com')
@@ -49,6 +50,7 @@ const self = defineSocialNetworkUI({
     injectPostBox: injectPostBoxFacebook,
     injectWelcomeBanner: injectWelcomeBannerFacebook,
     injectPostComments: injectPostCommentsDefault(),
+    injectOptionsPageLink: injectOptionsPageLinkAtFacebook,
     injectCommentBox: injectCommentBoxDefaultFactory(async function onPasteToCommentBoxFacebook(
         encryptedComment,
         current,
@@ -63,6 +65,7 @@ const self = defineSocialNetworkUI({
             if (!textarea) return fail()
             textarea.focus()
             dispatchCustomEvents('input', encryptedComment)
+            textarea.dispatchEvent(new CustomEvent('input', { bubbles: true, cancelable: false, composed: true }))
             await sleep(200)
             if (!root.innerText.includes(encryptedComment)) return fail()
         } else {

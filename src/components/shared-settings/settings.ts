@@ -11,7 +11,7 @@ export const debugModeSetting = createNewSettings<boolean>('debugMode', false, {
  */
 export const disableOpenNewTabInBackgroundSettings = createNewSettings<boolean>(
     'disable automated tab task open new tab',
-    false,
+    webpackEnv.firefoxVariant === 'GeckoView' || webpackEnv.target === 'WKWebview' ? true : false,
     {
         primary: 'Disable open hidden tabs in the background',
         secondary:

@@ -75,25 +75,15 @@ export function BannerUI(props: Props) {
     )
 }
 
-export function Banner({
-    unmount,
-    ...props
-}: { unmount: () => void; networkIdentifier: SocialNetworkUI['networkIdentifier'] } & Partial<Props>) {
+export function Banner(props: { networkIdentifier: SocialNetworkUI['networkIdentifier'] } & Partial<Props>) {
     const lastRecognizedIdentity = useLastRecognizedIdentity()
     const closeDefault = useCallback(() => {
         getActivatedUI().ignoreSetupAccount(env, {})
-        unmount()
-    }, [unmount])
-    if (typeof props.networkIdentifier === 'function' && props.getStarted === undefined) {
-        throw new TypeError(
-            'You cannot use getStartedDefault when networkIdentifier is a function. Please implement this function yourself.',
-        )
-    }
+    }, [])
     const getStartedDefault = useCallback(() => {
-        setStorage(props.networkIdentifier as string, { forceDisplayWelcome: false })
-        unmount()
+        setStorage(props.networkIdentifier, { forceDisplayWelcome: false })
         Services.Welcome.openWelcomePage(lastRecognizedIdentity)
-    }, [lastRecognizedIdentity, props.networkIdentifier, unmount])
+    }, [lastRecognizedIdentity, props.networkIdentifier])
     return (
         <BannerUI
             disabled={lastRecognizedIdentity.identifier.isUnknown}

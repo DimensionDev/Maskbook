@@ -9,7 +9,7 @@ import { queryPostDB } from '../../../database/post'
  * @param postSalt
  */
 export async function getSharedListOfPost(
-    version: -40 | -39,
+    version: -40 | -39 | -38,
     postSalt: string,
     postBy: PersonIdentifier,
 ): Promise<Person[]> {
@@ -19,10 +19,7 @@ export async function getSharedListOfPost(
     nameInDB.forEach(x => ids.add(x.toText()))
     if (version === -40) {
         // eslint-disable-next-line import/no-deprecated
-        const post = await Gun1.gun1
-            .get('posts')
-            .get(postSalt)
-            .once().then!()
+        const post = await Gun1.gun1.get('posts').get(postSalt).then!()
         if (!post) return []
         delete post._
         const nameInGun = Object.keys(post)
