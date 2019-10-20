@@ -27,7 +27,8 @@ export const facebookUISelf = defineSocialNetworkUI({
         InitFriendsValueRef(facebookUISelf, 'facebook.com')
         InitMyIdentitiesValueRef(facebookUISelf, 'facebook.com')
     },
-    shouldActivate() {
+    // ssr complains 'ReferenceError: window is not defined'
+    shouldActivate(location: Location | URL = globalThis.location) {
         return location.hostname.endsWith('facebook.com')
     },
     friendlyName: 'Facebook',
