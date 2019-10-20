@@ -17,7 +17,7 @@ export interface SocialNetworkUIDefinition
         SocialNetworkUIInjections,
         SocialNetworkUIInformationCollector {
     /** Should this UI content script activate? */
-    shouldActivate(): boolean
+    shouldActivate(location?: Location | URL): boolean
     /**
      * Should Maskbook show Welcome Banner?
      */
