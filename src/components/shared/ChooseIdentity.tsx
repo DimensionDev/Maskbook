@@ -92,7 +92,7 @@ ChooseIdentity.defaultProps = {
     onChangeIdentity(person) {
         const ui = getActivatedUI()
         ui.currentIdentity.value = person
-        currentSelectedIdentity[ui.networkIdentifier] = person.identifier.toText()
+        currentSelectedIdentity[ui.networkIdentifier].value = person.identifier.toText()
     },
 }
 /**
