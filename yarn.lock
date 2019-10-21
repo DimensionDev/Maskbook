@@ -2401,10 +2401,10 @@
     "@types/minimatch" "*"
     "@types/node" "*"
 
-"@types/gun@^0.9.1":
-  version "0.9.1"
-  resolved "https://registry.yarnpkg.com/@types/gun/-/gun-0.9.1.tgz#00ce80f50305e9583f807e750275547aaeb4737d"
-  integrity sha512-frQF4+FbyG70MhfNmY3jPhXA5nRA+145B5QcXk2mo+n3qpxLhO28YEET/gjH0lxxqQQrHPKjLMt1yEtaIErtgw==
+"@types/gun@^0.9.2":
+  version "0.9.2"
+  resolved "https://registry.yarnpkg.com/@types/gun/-/gun-0.9.2.tgz#72493631c5e7fb3fae9a195b1ea8bf3d727fd19d"
+  integrity sha512-s3O5tnnXtWaZqA2yjfN+Ty3OINRxV51lUevNVldAeky4lk3/6QHSc8hkfPTc0f44JrJCidILrU5bMBGN0SWz1A==
 
 "@types/history@*":
   version "4.7.3"
