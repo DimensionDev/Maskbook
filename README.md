@@ -5,10 +5,14 @@ Encrypt your posts & chats on You-Know-Where. Allow only your friends to decrypt
 For general introductions, see https://Maskbook.com/
 
 -   [Maskbook on Chrome Web Store][crext]
--   [Maskbook on Firefox Addon Store][fxaddon] (Works on Android too!)
+-   [Maskbook on Firefox Addon Store][fxaddon] (Works on Firefox for Android too!)
+-   (Beta!) [Maskbook for iOS][ios]
+-   (Beta!) [Maskbook for Android][android]
 
     [crext]: https://chrome.google.com/webstore/detail/maskbook/jkoeaghipilijlahjplgbfiocjhldnap/
     [fxaddon]: https://addons.mozilla.org/en-US/firefox/addon/maskbook/
+    [ios]: https://testflight.apple.com/join/OGmGmIg1
+    [android]: https://play.google.com/store/apps/details?id=com.dimension.maskbook
 
 ## Documentation for developers
 

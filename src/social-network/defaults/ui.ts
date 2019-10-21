@@ -25,4 +25,5 @@ export const defaultSocialNetworkUI = cloneDeep({
     ...defaultInjections,
     injectCommentBox: injectCommentBoxDefaultFactory(),
     injectPostComments: injectPostCommentsDefault(),
-})
+    injectOptionsPageLink: 'disabled',
+} as const)

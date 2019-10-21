@@ -19,6 +19,7 @@ import { setStorage } from '../../utils/browser.storage'
 import { isMobileFacebook } from './isMobile'
 import { geti18nString } from '../../utils/i18n'
 import { injectCommentBoxDefaultFactory } from '../../social-network/defaults/injectCommentBox'
+import { injectOptionsPageLinkAtFacebook } from './UI/injectOptionsPageLink'
 
 export const facebookUISelf = defineSocialNetworkUI({
     ...sharedProvider,
@@ -49,6 +50,7 @@ export const facebookUISelf = defineSocialNetworkUI({
     injectPostBox: injectPostBoxFacebook,
     injectWelcomeBanner: injectWelcomeBannerFacebook,
     injectPostComments: injectPostCommentsDefault(),
+    injectOptionsPageLink: injectOptionsPageLinkAtFacebook,
     injectCommentBox: injectCommentBoxDefaultFactory(async function onPasteToCommentBoxFacebook(
         encryptedComment,
         current,

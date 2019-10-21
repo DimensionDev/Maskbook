@@ -17,8 +17,8 @@ export function injectWelcomeBannerFacebook() {
             subtree: true,
         })
 
-    const unmount = renderInShadowRoot(
-        <Banner networkIdentifier={facebookUISelf.networkIdentifier} unmount={() => unmount()} />,
+    return renderInShadowRoot(
+        <Banner networkIdentifier={facebookUISelf.networkIdentifier} />,
         to.firstDOMProxy.beforeShadow,
     )
 }
