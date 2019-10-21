@@ -22,24 +22,24 @@ export const disableOpenNewTabInBackgroundSettings = createNewSettings<boolean>(
     },
 )
 
-const createProxiedSettings = (key: string) => {
-    const target: { [key: string]: ValueRef<string> | string } = {}
-    MessageCenter.on('settingsCreated', p => {
-        if (!(p in target)) {
-            target[p] = createNetworkSpecificSettings<string>(p, key, '')
+const createProxiedSettings = (settingsKey: string) => {
+    const target: { [key: string]: ValueRef<string> } = {}
+    MessageCenter.on('settingsCreated', updatedKey => {
+        if (!(updatedKey in target)) {
+            target[updatedKey] = createNetworkSpecificSettings<string>(updatedKey, settingsKey, '')
         }
     })
     return new Proxy(target, {
-        get(target, p: string) {
-            if (!(p in target)) {
-                MessageCenter.emit('settingsCreated', p)
-                target[p] = createNetworkSpecificSettings<string>(p, key, '')
+        get(target, gettingKey: string) {
+            if (!(gettingKey in target)) {
+                MessageCenter.emit('settingsCreated', gettingKey)
+                target[gettingKey] = createNetworkSpecificSettings<string>(gettingKey, settingsKey, '')
             }
-            return target[p]
+            return target[gettingKey]
         },
-        set(target, p: string, value: string) {
-            // @ts-ignore
-            target[p].value = value
+        set(target, settingKey: string, value: string) {
+            const obj = target[settingKey]
+            obj.value = value
             return true
         },
     })
