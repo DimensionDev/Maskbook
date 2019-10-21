@@ -17,7 +17,6 @@ export function useMyIdentities() {
 }
 export function useCurrentIdentity(noDefault?: boolean): Person | null {
     const all = useMyIdentities()
-    // @ts-ignore
     const current = useValueRef(currentSelectedIdentity[getActivatedUI().networkIdentifier])
     return all.find(i => i.identifier.toText() === current) || (noDefault ? null : all[0])
 }
