@@ -1,4 +1,4 @@
-import { GroupRecord, createUserGroupDatabase, updateUserGroupDatabase } from '../group'
+import { GroupRecord, createUserGroupDatabase, updateUserGroupDatabase, queryUserGroupsDatabase } from '../group'
 import { PersonIdentifier, GroupIdentifier, PreDefinedVirtualGroupNames } from '../type'
 import { Person } from './person'
 
@@ -23,4 +23,8 @@ export function removePersonFromFriendsGroup(group: GroupIdentifier, removedFrie
     return updateUserGroupDatabase({ identifier: group }, r => {
         r.members = r.members.filter(x => !friendList.some(y => y.equals(x)))
     })
+}
+
+export function queryUserGroups(network: string): Promise<Group[]> {
+    return queryUserGroupsDatabase(r => r.network === network)
 }
