@@ -1,7 +1,7 @@
 import { sleep, untilDocumentReady } from '../../../utils/utils'
-import { isUndefined } from 'lodash-es'
-import { newPostEditorFocusAnchor, newPostEditorHasFocus, newPostEditorSelector } from './selector'
+import { newPostEditorFocusAnchor, newPostEditorSelector } from './selector'
 import { equal } from '../../../utils/assert'
+import { untilElementAvailable } from '../../../utils/holoflowKits'
 
 export const postBoxInPopup = () => {
     return window.location.pathname.includes('compose')
@@ -9,27 +9,27 @@ export const postBoxInPopup = () => {
 
 export const getFocus = async () => {
     await untilDocumentReady()
-    while (isUndefined(newPostEditorSelector().evaluate())) {
-        await sleep(1000)
-    }
+    await untilElementAvailable(newPostEditorSelector())
 
-    if (!hasFocus()) {
+    const i = newPostEditorFocusAnchor().evaluate()!
+
+    if (!hasFocus(i)) {
         try {
-            const i = newPostEditorFocusAnchor().evaluate()!
             i.focus()
         } catch {
             await requestManualClick()
         }
     }
 
-    equal(hasFocus(), true, 'Failed to get focus')
+    equal(hasFocus(i), true, 'Failed to get focus')
 }
 
-const hasFocus = () => !isUndefined(newPostEditorHasFocus().evaluate())
+const hasFocus = (x: HTMLElement) => document.activeElement === x
 
 const requestManualClick = async () => {
+    const i = newPostEditorFocusAnchor().evaluate()!
     alert('Please manually select the post box')
-    while (!hasFocus()) {
+    while (!hasFocus(i)) {
         await sleep(1000)
     }
 }

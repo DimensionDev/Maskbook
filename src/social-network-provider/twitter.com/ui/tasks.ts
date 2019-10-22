@@ -10,7 +10,7 @@ import { MutationObserverWatcher } from '@holoflows/kit'
 const taskPasteIntoPostBox: SocialNetworkUI['taskPasteIntoPostBox'] = async (text, opt) => {
     await getFocus() // This also waits for document loaded
     dispatchCustomEvents('paste', text)
-    if (getText() !== text) {
+    if (!getText().includes(text)) {
         console.warn('Text pasting failed')
         prompt(opt.warningText, text)
     }
