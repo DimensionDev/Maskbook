@@ -24,7 +24,9 @@ export {
     addPersonToFriendsGroup,
     createDefaultFriendsGroup,
     removePersonFromFriendsGroup,
+    queryUserGroups,
 } from '../../database/helpers/group'
+export { queryUserGroupDatabase as queryUserGroup } from '../../database/group'
 export { removePeopleDB as removePeople } from '../../database/people'
 /**
  * Query all people stored

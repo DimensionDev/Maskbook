@@ -7,6 +7,7 @@ import { setStorage } from '../../../utils/browser.storage'
 import { twitterUITasks } from './tasks'
 import { twitterUIFetch } from './fetch'
 import { twitterUIInjections } from './inject'
+import { InitGroupsValueRef } from '../../../social-network/defaults/GroupsValueRef'
 
 export const instanceOfTwitterUI = defineSocialNetworkUI({
     ...sharedSettings,
@@ -16,6 +17,7 @@ export const instanceOfTwitterUI = defineSocialNetworkUI({
     init: (env, pref) => {
         sharedSettings.init(env, pref)
         InitFriendsValueRef(instanceOfTwitterUI, host)
+        InitGroupsValueRef(instanceOfTwitterUI, host)
         InitMyIdentitiesValueRef(instanceOfTwitterUI, host)
     },
     shouldActivate() {
