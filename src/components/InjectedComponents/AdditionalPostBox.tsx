@@ -13,11 +13,12 @@ import { useCurrentIdentity, useFriendsList, useGroupsList, useMyIdentities } fr
 import { getActivatedUI } from '../../social-network/ui'
 import { ChooseIdentity } from '../shared/ChooseIdentity'
 import { useAsync } from '../../utils/components/AsyncComponent'
+import { PersonIdentifier, Identifier } from '../../database/type'
 
 interface Props {
-    availableTarget: (Person | Group)[]
+    availableTarget: Array<Person | Group>
 
-    onRequestPost(people: (Person | Group)[], text: string): void
+    onRequestPost: (target: Array<Person | Group>, text: string) => void
 }
 
 const useStyles = makeStyles({
@@ -40,12 +41,11 @@ const useStyles = makeStyles({
 })
 
 export function AdditionalPostBoxUI(props: Props) {
-    const { availableTarget } = props
     const classes = useStyles()
 
     const myself = useCurrentIdentity()
     const [text, setText] = useState('')
-    const [selectedPeople, selectPeople] = useState(props.availableTarget)
+    const [shareTarget, changeShareTarget] = useState(props.availableTarget)
 
     const inputRef = useRef<HTMLInputElement>()
     useCapturedInput(inputRef, setText)
@@ -74,19 +74,19 @@ export function AdditionalPostBoxUI(props: Props) {
             <Paper elevation={2}>
                 <SelectPeopleAndGroupsUI
                     ignoreMyself
-                    items={availableTarget}
-                    onSetSelected={selectPeople}
-                    selected={selectedPeople}
+                    items={props.availableTarget}
+                    onSetSelected={changeShareTarget}
+                    selected={shareTarget}
                 />
             </Paper>
             <Divider />
             <Box display="flex" className={classes.grayArea}>
                 <Button
-                    onClick={() => props.onRequestPost(selectedPeople, text)}
+                    onClick={() => props.onRequestPost(shareTarget, text)}
                     variant="contained"
                     color="primary"
                     className={classes.button}
-                    disabled={!(selectedPeople.length && text)}>
+                    disabled={!(shareTarget.length && text)}>
                     {geti18nString('additional_post_box__post_button')}
                 </Button>
             </Box>
@@ -101,12 +101,18 @@ export function AdditionalPostBox(props: Partial<Props>) {
     const identity = useMyIdentities()
 
     const onRequestPost = useCallback(
-        async (people: Person[], text: string) => {
-            const [encrypted, token] = await Services.Crypto.encryptTo(
-                text,
-                people.map(x => x.identifier),
-                identity[0].identifier,
-            )
+        async (target: (Person | Group)[], text: string) => {
+            const shareTarget = new Set<string>()
+            for (const each of target) {
+                if (each.identifier instanceof PersonIdentifier) {
+                    shareTarget.add(each.identifier.toText())
+                } else {
+                    const group = each as Group
+                    group.members.forEach(x => shareTarget.add(x.toText()))
+                }
+            }
+            const shareTarget_ = Array.from(shareTarget).map(Identifier.fromString) as PersonIdentifier[]
+            const [encrypted, token] = await Services.Crypto.encryptTo(text, shareTarget_, identity[0].identifier)
             const fullPost = geti18nString('additional_post_box__encrypted_post_pre', encrypted)
             getActivatedUI().taskPasteIntoPostBox(fullPost, {
                 warningText: geti18nString('additional_post_box__encrypted_failed'),
