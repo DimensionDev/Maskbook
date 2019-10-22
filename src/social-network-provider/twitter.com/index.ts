@@ -15,5 +15,4 @@ export const sharedSettings: SocialNetworkWorkerAndUIDefinition = {
     acceptablePayload: ['v38', 'latest'],
     init() {},
     ...twitterEncoding,
-    notReadyForProduction: true,
 }
