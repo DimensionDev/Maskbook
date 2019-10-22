@@ -87,6 +87,10 @@ export class GroupIdentifier extends Identifier {
         noSlash(groupID)
         if (virtualGroupOwner === '') this.virtualGroupOwner = null
     }
+    get ownerIdentifier() {
+        if (this.virtualGroupOwner === null) throw new Error('Can not know the owner of this group')
+        return new PersonIdentifier(this.network, this.virtualGroupOwner)
+    }
     toText() {
         return 'group:' + [this.network, this.virtualGroupOwner, this.groupID].join('/')
     }
