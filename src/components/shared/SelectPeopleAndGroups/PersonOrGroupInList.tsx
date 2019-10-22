@@ -10,6 +10,7 @@ import { useFriendsList } from '../../DataSource/useActivatedUI'
 import { PersonIdentifier } from '../../../database/type'
 import { geti18nString, useIntlListFormat } from '../../../utils/i18n'
 import { isGroup } from './SelectPeopleAndGroupsUI'
+import { useResolveSpecialGroupName } from './resolveSpecialGroupName'
 
 interface Props {
     onClick(): void
@@ -44,9 +45,10 @@ export function PersonOrGroupInList(props: Props) {
     let name = ''
     let avatar: ReturnType<typeof Avatar>
     let secondaryText: string | undefined = undefined
+    const groupName = useResolveSpecialGroupName(props.item)
     if (isGroup(props.item)) {
         const group = props.item
-        name = group.groupName
+        name = groupName
         avatar = (
             <MuiAvatar>
                 <GroupIcon />
