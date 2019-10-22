@@ -52,7 +52,7 @@ storiesOf('Welcome', module)
         </ResponsiveDialog>
     ))
     .add('Step 1a-3a', () => {
-        const m = text('mnemonicWord', null)
+        const mnemonicWord = text('mnemonicWord', '')
         return (
             <ResponsiveDialog open>
                 <Welcome1a3a
@@ -61,7 +61,7 @@ storiesOf('Welcome', module)
                     onConnectOtherPerson={action('connect others')}
                     onRestoreByMnemonicWord={action('restore')}
                     onGenerateKey={action('generate key')}
-                    generatedMnemonicWord={m === '' ? null : m}
+                    generatedMnemonicWord={mnemonicWord === '' ? null : mnemonicWord}
                     next={to('Welcome', 'Step 1a-3b')}
                 />
             </ResponsiveDialog>
