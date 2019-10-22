@@ -57,18 +57,9 @@ const registerUserCollector = () => {
         .then()
 }
 
-/** TODO: Dirty fix.
- *   since MOW detected changes many times in post page,
- *   we set an array here to storage posts and reduce.
- */
-const keys: string[] = []
-
 const registerPostCollector = (self: SocialNetworkUI) => {
     new MutationObserverWatcher(postsSelectors())
         .useForeach((node, _, proxy) => {
-            const id = proxy.current.innerHTML
-            if (keys.includes(id)) return
-            keys.push(id)
             const info = getEmptyPostInfoByElement({
                 get rootNode() {
                     return proxy.current
@@ -85,10 +76,6 @@ const registerPostCollector = (self: SocialNetworkUI) => {
                 info.postID.value = r.pid
                 uploadToService(r)
             }
-            const onRemove = () => {
-                self.posts.delete(proxy)
-                keys.splice(keys.indexOf(id))
-            }
             collectPostInfo().then(() => {
                 info.postPayload.value = deconstructPayload(info.postContent.value, self.payloadDecoder)
                 info.postContent.addListener(newValue => {
@@ -100,10 +87,11 @@ const registerPostCollector = (self: SocialNetworkUI) => {
             return {
                 onNodeMutation: collectPostInfo,
                 onTargetChanged: collectPostInfo,
-                onRemove,
+                onRemove: () => self.posts.delete(proxy),
             }
         })
         .setDOMProxyOption({ afterShadowRootInit: { mode: 'closed' } })
+        .assignKeys(node => node.innerHTML)
         .startWatch({
             childList: true,
             subtree: true,
