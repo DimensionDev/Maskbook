@@ -97,7 +97,7 @@ export function AdditionalPostBoxUI(props: Props) {
 export function AdditionalPostBox(props: Partial<Props>) {
     const people = useFriendsList()
     const groups = useGroupsList()
-    const groupsAndPeople = React.useMemo(() => [...people, ...groups], [people, groups])
+    const groupsAndPeople = React.useMemo(() => [...groups, ...people], [people, groups])
     const identity = useMyIdentities()
 
     const onRequestPost = useCallback(
