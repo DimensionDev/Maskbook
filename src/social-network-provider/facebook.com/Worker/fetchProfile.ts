@@ -39,13 +39,8 @@ export async function fetchProfileFacebook(who: PersonIdentifier): Promise<Profi
         }).getProfile(who)
     }
 
-    // const tabID = await getActiveTab
     // Path 2: fetch by tab task
-    // TODO: on iOS, this should run the Path 1 in the domain of m.facebook.com
-    // const tabId = await getActiveTab()
-    return tasks(getProfilePageUrlAtFacebook(who, 'open'), {
-        // runAtTabID: tabId
-    }).getProfile(who)
+    return tasks(getProfilePageUrlAtFacebook(who, 'open')).getProfile(who)
 }
 
 async function getActiveTab() {
