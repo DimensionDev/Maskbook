@@ -106,6 +106,11 @@ const db = openDB<PostDB>('maskbook-post-v2', 3, {
         }
     },
 })
+export async function createPostDB(record: PostRecord) {
+    const t = (await db).transaction('post', 'readwrite')
+    const toSave = toDb(record)
+    await t.objectStore('post').add(toSave)
+}
 export async function updatePostDB(
     updateRecord: Partial<PostRecord> & Pick<PostRecord, 'identifier'>,
     mode: 'append' | 'override',
