@@ -7,7 +7,7 @@ function outDb(db: PostDBRecord): PostRecord {
     const { identifier, ...rest } = db
     for (const key in rest.recipients) {
         const detail = rest.recipients[key]
-        detail.reason.forEach(x => x.type === 'group' && restorePrototype(x.group, GroupIdentifier.prototype))
+        detail.reason.forEach(x => x.type === 'group' && restorePrototype([x.group], GroupIdentifier.prototype))
     }
     return {
         ...rest,
@@ -21,18 +21,17 @@ export interface PostRecord extends Omit<PostDBRecord, 'identifier'> {
     identifier: PostIVIdentifier
 }
 
+export type RecipientReason = ({ type: 'direct' } | { type: 'group'; group: GroupIdentifier }) & {
+    /**
+     * When we send the key to them by this reason?
+     * If the unix timestamp of this Date is 0,
+     * should display it as "unknown" or "before Nov 2019"
+     */
+    at: Date
+}
 interface RecipientDetail {
     /** Why they're able to receive this message? */
-    reason: Array<
-        ({ type: 'direct' } | { type: 'group'; group: GroupIdentifier[] }) & {
-            /**
-             * When we send the key to them by this reason?
-             * If the unix timestamp of this Date is 0,
-             * should display it as "unknown" or "before Nov 2019"
-             */
-            at: Date
-        }
-    >
+    reason: RecipientReason[]
 }
 interface PostDBRecord {
     /**
@@ -46,6 +45,12 @@ interface PostDBRecord {
      */
     postCryptoKey?: CryptoKey
     recipients: Record<string, RecipientDetail>
+    /**
+     * When does Maskbook find this post.
+     * For your own post, it is when Maskbook created this post.
+     * For others post, it is when you see it first time.
+     */
+    foundAt: Date
 }
 interface PostDB extends DBSchema {
     /** Use inline keys */
@@ -101,6 +106,7 @@ const db = openDB<PostDB>('maskbook-post-v2', 3, {
                     ...cursor.value,
                     recipients: newType,
                     postBy: PersonIdentifier.unknown,
+                    foundAt: new Date(0),
                 })
             }
         }
@@ -121,6 +127,7 @@ export async function updatePostDB(
             identifier: updateRecord.identifier,
             recipients: {},
             postBy: PersonIdentifier.unknown,
+            foundAt: new Date(),
         } as PostRecord)
     const nextRecord: PostRecord = { ...currentRecord, ...updateRecord }
     const nextRecipients: PostDBRecord['recipients'] =

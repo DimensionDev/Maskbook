@@ -2,14 +2,15 @@ import * as Alpha38 from '../../../crypto/crypto-alpha-38'
 import * as Gun2 from '../../../network/gun/version.2'
 import { encodeArrayBuffer } from '../../../utils/type-transform/String-ArrayBuffer'
 import { constructAlpha38, PayloadLatest } from '../../../utils/type-transform/Payload'
-import { getMyPrivateKey } from '../../../database'
+import { getMyPrivateKey, Group } from '../../../database'
 import { queryLocalKeyDB } from '../../../database/people'
-import { PersonIdentifier, PostIVIdentifier } from '../../../database/type'
+import { PersonIdentifier, PostIVIdentifier, GroupIdentifier, Identifier } from '../../../database/type'
 import { prepareOthersKeyForEncryptionV39OrV38 } from '../prepareOthersKeyForEncryption'
 import { geti18nString } from '../../../utils/i18n'
 import { getNetworkWorker } from '../../../social-network/worker'
 import { getSignablePayload } from './utils'
-import { updatePostDB, createPostDB, PostRecord } from '../../../database/post'
+import { updatePostDB, createPostDB, PostRecord, RecipientReason } from '../../../database/post'
+import { queryUserGroup } from '../PeopleService'
 
 type EncryptedText = string
 type OthersAESKeyEncryptedToken = string
@@ -29,11 +30,32 @@ const OthersAESKeyEncryptedMap = new Map<OthersAESKeyEncryptedToken, (Alpha38.Pu
  */
 export async function encryptTo(
     content: string,
-    to: PersonIdentifier[],
+    to: (PersonIdentifier | GroupIdentifier)[],
     whoAmI: PersonIdentifier,
 ): Promise<[EncryptedText, OthersAESKeyEncryptedToken]> {
     if (to.length === 0) return ['', '']
-    const toKey = await prepareOthersKeyForEncryptionV39OrV38(to)
+
+    const recipients: PostRecord['recipients'] = {}
+    function addRecipients(x: PersonIdentifier, reason: RecipientReason) {
+        const id = x.toText()
+        if (recipients[id]) recipients[id].reason.push(reason)
+        else recipients[id] = { reason: [reason] }
+    }
+    const sharedGroups = new Set<Group>()
+    for (const i of to) {
+        if (i instanceof PersonIdentifier) addRecipients(i, { type: 'direct', at: new Date() })
+        // TODO: Should we throw if there the group is not find?
+        else sharedGroups.add((await queryUserGroup(i))!)
+    }
+    for (const group of sharedGroups) {
+        for (const each of group.members) {
+            addRecipients(each, { at: new Date(), type: 'group', group: group.identifier })
+        }
+    }
+
+    const toKey = await prepareOthersKeyForEncryptionV39OrV38(Object.keys(recipients).map(
+        Identifier.fromString,
+    ) as PersonIdentifier[])
     const mine = await getMyPrivateKey(whoAmI)
     if (!mine) throw new TypeError('Not inited yet')
     const {
@@ -63,15 +85,12 @@ export async function encryptTo(
     const payloadWaitToSign = getSignablePayload(payload)
     payload.signature = encodeArrayBuffer(await Alpha38.sign(payloadWaitToSign, mine.privateKey))
 
-    const recipients: PostRecord['recipients'] = {}
-    for (const each of to) {
-        recipients[each.toText()] = { reason: [{ at: new Date(), type: 'direct' }] }
-    }
     await createPostDB({
         identifier: new PostIVIdentifier(whoAmI.network, payload.iv),
         postBy: whoAmI,
         postCryptoKey: postAESKey,
         recipients: recipients,
+        foundAt: new Date(),
     })
 
     const postAESKeyToken = encodeArrayBuffer(iv)
