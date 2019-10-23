@@ -1,13 +1,14 @@
 import * as Alpha38 from '../../../crypto/crypto-alpha-38'
 import * as Gun2 from '../../../network/gun/version.2'
 import { encodeArrayBuffer } from '../../../utils/type-transform/String-ArrayBuffer'
-import { constructAlpha38 } from '../../../utils/type-transform/Payload'
+import { constructAlpha38, PayloadLatest } from '../../../utils/type-transform/Payload'
 import { getMyPrivateKey } from '../../../database'
 import { queryLocalKeyDB } from '../../../database/people'
 import { PersonIdentifier } from '../../../database/type'
 import { prepareOthersKeyForEncryptionV39OrV38 } from '../prepareOthersKeyForEncryption'
 import { geti18nString } from '../../../utils/i18n'
 import { getNetworkWorker } from '../../../social-network/worker'
+import { getSignablePayload } from './utils'
 
 type EncryptedText = string
 type OthersAESKeyEncryptedToken = string
@@ -36,7 +37,6 @@ export async function encryptTo(
     if (!mine) throw new TypeError('Not inited yet')
     const {
         encryptedContent: encryptedText,
-        version,
         othersAESKeyEncrypted,
         ownersAESKeyEncrypted,
         iv,
@@ -48,29 +48,22 @@ export async function encryptTo(
         privateKeyECDH: mine.privateKey,
         iv: crypto.getRandomValues(new Uint8Array(16)),
     })
-    const ownersAESKeyStr = encodeArrayBuffer(ownersAESKeyEncrypted)
-    const ivStr = encodeArrayBuffer(iv)
-    const encryptedTextStr = encodeArrayBuffer(encryptedText)
-    // ! Don't use payload.ts, this is an internal representation used for signature.
-    const str = `4/4|${ownersAESKeyStr}|${ivStr}|${encryptedTextStr}`
-    const signature = encodeArrayBuffer(await Alpha38.sign(str, mine.privateKey))
+
+    const payload: PayloadLatest = {
+        AESKeyEncrypted: encodeArrayBuffer(ownersAESKeyEncrypted),
+        encryptedText: encodeArrayBuffer(encryptedText),
+        iv: encodeArrayBuffer(iv),
+        signature: '',
+        sharedPublic: false,
+        version: -38,
+    }
+
+    const payloadWaitToSign = getSignablePayload(payload)
+    payload.signature = encodeArrayBuffer(await Alpha38.sign(payloadWaitToSign, mine.privateKey))
     // Store AES key to gun
     const key = encodeArrayBuffer(iv)
     OthersAESKeyEncryptedMap.set(key, othersAESKeyEncrypted)
-    return [
-        `${constructAlpha38(
-            {
-                encryptedText: encryptedTextStr,
-                iv: ivStr,
-                AESKeyEncrypted: ownersAESKeyStr,
-                signature: signature,
-                version: -38,
-                sharedPublic: false,
-            },
-            getNetworkWorker(whoAmI.network).payloadEncoder,
-        )}`,
-        key,
-    ]
+    return [constructAlpha38(payload, getNetworkWorker(whoAmI.network).payloadEncoder), key]
 }
 
 /**
