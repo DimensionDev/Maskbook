@@ -102,17 +102,11 @@ export function AdditionalPostBox(props: Partial<Props>) {
 
     const onRequestPost = useCallback(
         async (target: (Person | Group)[], text: string) => {
-            const shareTarget = new Set<string>()
-            for (const each of target) {
-                if (each.identifier instanceof PersonIdentifier) {
-                    shareTarget.add(each.identifier.toText())
-                } else {
-                    const group = each as Group
-                    group.members.forEach(x => shareTarget.add(x.toText()))
-                }
-            }
-            const shareTarget_ = Array.from(shareTarget).map(Identifier.fromString) as PersonIdentifier[]
-            const [encrypted, token] = await Services.Crypto.encryptTo(text, shareTarget_, identity[0].identifier)
+            const [encrypted, token] = await Services.Crypto.encryptTo(
+                text,
+                target.map(x => x.identifier),
+                identity[0].identifier,
+            )
             const fullPost = geti18nString('additional_post_box__encrypted_post_pre', encrypted)
             getActivatedUI().taskPasteIntoPostBox(fullPost, {
                 warningText: geti18nString('additional_post_box__encrypted_failed'),
