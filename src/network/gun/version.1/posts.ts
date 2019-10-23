@@ -2,7 +2,7 @@
 import { PublishedAESKey } from '../../../crypto/crypto-alpha-40'
 import { OnlyRunInContext } from '@holoflows/kit/es'
 import { gun1 } from '.'
-import { updatePostDB } from '../../../database/post'
+import { updatePostDB, PostRecord } from '../../../database/post'
 import { PersonIdentifier, PostIVIdentifier } from '../../../database/type'
 
 OnlyRunInContext('background', 'gun')
@@ -37,10 +37,18 @@ export async function publishPostAESKey(
         stored[k.name] = k.key
     }
     console.log('Save to gun', postIV, receiversKeys)
+    const detail: PostRecord['recipients'] = {}
+    for (const each of receiversKeys) {
+        // ? This method is deprecated, it will only be used in v40 in facebook.com.
+        detail[new PersonIdentifier('facebook.com', each.name).toText()] = {
+            reason: [{ at: new Date(), type: 'direct' }],
+        }
+    }
     updatePostDB(
         {
             identifier: new PostIVIdentifier(whoAmI.network, postIV),
-            recipients: receiversKeys.map(x => new PersonIdentifier(whoAmI.network, x.name)),
+            recipients: detail,
+            postBy: whoAmI,
         },
         'append',
     )

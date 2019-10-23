@@ -285,7 +285,7 @@ async function decryptFromCache(postPayload: Payload, by: PersonIdentifier) {
             {
                 identifier: postIdentifier,
                 postCryptoKey: postAESKey,
-                version,
+                postBy: by,
             },
             'append',
         )
