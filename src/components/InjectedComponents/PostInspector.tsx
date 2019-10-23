@@ -67,17 +67,23 @@ export function PostInspector(props: PostInspectorProps) {
             <>
                 <DecryptPostUI.UI
                     onDecrypted={props.onDecrypted}
-                    requestAppendRecipients={async people => {
-                        setAlreadySelectedPreviously(alreadySelectedPreviously.concat(people))
-                        return Services.Crypto.appendShareTarget(
-                            version,
-                            iv,
-                            ownersAESKeyEncrypted,
-                            iv,
-                            people.map(x => x.identifier),
-                            whoAmI!.identifier,
-                        )
-                    }}
+                    requestAppendRecipients={
+                        // Version -40 is leaking info
+                        // So should not create new data on version -40
+                        type.encryptedPost.version === -40
+                            ? undefined
+                            : async people => {
+                                  setAlreadySelectedPreviously(alreadySelectedPreviously.concat(people))
+                                  return Services.Crypto.appendShareTarget(
+                                      version,
+                                      iv,
+                                      ownersAESKeyEncrypted,
+                                      iv,
+                                      people.map(x => x.identifier),
+                                      whoAmI!.identifier,
+                                  )
+                              }
+                    }
                     alreadySelectedPreviously={alreadySelectedPreviously}
                     people={people}
                     encryptedText={post}

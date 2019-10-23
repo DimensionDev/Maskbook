@@ -12,6 +12,8 @@ OnlyRunInContext('background', 'Gun')
 /**
  * @deprecated // ! This version will leak post targets ! //
  *
+ * This version should be readonly now.
+ *
  * Use exchange v2 instead!
  */
 export interface ApplicationStateInGunVersion1 {
