@@ -3,45 +3,59 @@ import { PostIdentifier, PersonIdentifier, Identifier, PostIVIdentifier, GroupId
 import { openDB, DBSchema } from 'idb/with-async-ittr'
 import { restorePrototype } from './utils'
 
-function outDb(db: PostDBRecordV40ToV38): PostOutDBRecordV40ToV38 {
+function outDb(db: PostDBRecord): PostRecord {
     const { identifier, ...rest } = db
-    restorePrototype(rest.recipients, PersonIdentifier.prototype)
-    restorePrototype(rest.groupRecipients, GroupIdentifier.prototype)
+    for (const key in rest.recipients) {
+        const detail = rest.recipients[key]
+        detail.reason.forEach(x => x.type === 'group' && restorePrototype(x.group, GroupIdentifier.prototype))
+    }
     return {
         ...rest,
         identifier: Identifier.fromString(identifier) as PostIVIdentifier,
     }
 }
-function toDb(out: PostOutDBRecordV40ToV38): PostDBRecordV40ToV38 {
+function toDb(out: PostRecord): PostDBRecord {
     return { ...out, identifier: out.identifier.toText() }
 }
-interface PostOutDBRecordV40ToV38 extends Omit<PostDBRecordV40ToV38, 'identifier'> {
+export interface PostRecord extends Omit<PostDBRecord, 'identifier'> {
     identifier: PostIVIdentifier
 }
-interface PostDBRecordV40ToV38 {
+
+interface RecipientDetail {
+    /** Why they're able to receive this message? */
+    reason: Array<
+        ({ type: 'direct' } | { type: 'group'; group: GroupIdentifier[] }) & {
+            /**
+             * When we send the key to them by this reason?
+             * If the unix timestamp of this Date is 0,
+             * should display it as "unknown" or "before Nov 2019"
+             */
+            at: Date
+        }
+    >
+}
+interface PostDBRecord {
+    /**
+     * For old data stored before version 3,
+     * this identifier may be PersonIdentifier.unknown
+     */
+    postBy: PersonIdentifier
     identifier: string
     /**
      * ! This MUST BE a native CryptoKey
      */
     postCryptoKey?: CryptoKey
-    version: -40 | -39 | -38
-    recipients?: PersonIdentifier[]
-    /**
-     * If user choose to share the post to a group **and it's future member**
-     * store it here. Otherwise, deconstruct the group in to a PersonIdentifier[]
-     * and store it in the **recipients** field.
-     */
-    groupRecipients?: GroupIdentifier[]
+    recipients: Record<string, RecipientDetail>
 }
 interface PostDB extends DBSchema {
     /** Use inline keys */
     post: {
-        value: PostDBRecordV40ToV38
+        value: PostDBRecord
         key: string
     }
 }
-const db = openDB<PostDB>('maskbook-post-v2', 2, {
-    upgrade(db, oldVersion, newVersion, transaction) {
+const db = openDB<PostDB>('maskbook-post-v2', 3, {
+    async upgrade(db, oldVersion, newVersion, transaction) {
         if (oldVersion < 1) {
             // inline keys
             db.createObjectStore('post', { keyPath: 'identifier' })
@@ -51,7 +65,7 @@ const db = openDB<PostDB>('maskbook-post-v2', 2, {
          * After upgrade to version 2, we use PostIVIdentifier to store it.
          * So we transform all old data into new data.
          */
-        if (oldVersion === 1) {
+        if (oldVersion <= 1) {
             const store = transaction.objectStore('post')
             store.getAll().then(values => {
                 store.clear()
@@ -67,27 +81,63 @@ const db = openDB<PostDB>('maskbook-post-v2', 2, {
                 }
             })
         }
+
+        /**
+         * In the version 2 we use `recipients?: PersonIdentifier[]`
+         * After upgrade to version 3, we use `recipients: Record<string, RecipientDetail>`
+         */
+        if (oldVersion <= 2) {
+            const store = transaction.objectStore('post')
+            for await (const cursor of store) {
+                const oldType = (cursor.value.recipients as unknown) as PersonIdentifier[] | undefined
+                restorePrototype(oldType, PersonIdentifier.prototype)
+                const newType: PostDBRecord['recipients'] = {}
+                if (oldType !== undefined)
+                    for (const each of oldType) {
+                        newType[each.toText()] = { reason: [{ type: 'direct', at: new Date(0) }] }
+                    }
+
+                cursor.update({
+                    ...cursor.value,
+                    recipients: newType,
+                    postBy: PersonIdentifier.unknown,
+                })
+            }
+        }
     },
 })
 export async function updatePostDB(
-    record: Partial<PostOutDBRecordV40ToV38> & Pick<PostOutDBRecordV40ToV38, 'identifier'>,
+    updateRecord: Partial<PostRecord> & Pick<PostRecord, 'identifier'>,
     mode: 'append' | 'override',
 ): Promise<void> {
-    const _rec = (await queryPostDB(record.identifier)) || { identifier: record.identifier, version: -40 }
-    const rec = { ...toDb(_rec), ...record }
+    const currentRecord =
+        (await queryPostDB(updateRecord.identifier)) ||
+        ({
+            identifier: updateRecord.identifier,
+            recipients: {},
+            postBy: PersonIdentifier.unknown,
+        } as PostRecord)
+    const nextRecord: PostRecord = { ...currentRecord, ...updateRecord }
+    const nextRecipients: PostDBRecord['recipients'] =
+        mode === 'override' ? toDb(nextRecord).recipients : toDb(currentRecord).recipients
     if (mode === 'append') {
-        if (record.recipients) {
-            rec.recipients = [...(toDb(_rec).recipients || []), ...record.recipients]
-        }
-        if (record.groupRecipients) {
-            rec.groupRecipients = [...(toDb(_rec).groupRecipients || []), ...record.groupRecipients]
+        if (updateRecord.recipients) {
+            for (const [id, detail] of Object.entries(updateRecord.recipients)) {
+                if (nextRecipients[id]) {
+                    const { reason, ...rest } = detail
+                    Object.assign(nextRecipients[id], rest)
+                    nextRecipients[id].reason.concat(detail.reason)
+                } else {
+                    nextRecipients[id] = detail
+                }
+            }
         }
     }
-
     const t = (await db).transaction('post', 'readwrite')
-    await t.objectStore('post').put(toDb(rec))
+    const nextRecordInDBType = toDb(nextRecord)
+    await t.objectStore('post').put(nextRecordInDBType)
 }
-export async function queryPostDB(record: PostIVIdentifier): Promise<PostOutDBRecordV40ToV38 | null> {
+export async function queryPostDB(record: PostIVIdentifier): Promise<PostRecord | null> {
     const t = (await db).transaction('post')
     const result = await t.objectStore('post').get(record.toText())
     if (result) return outDb(result)
