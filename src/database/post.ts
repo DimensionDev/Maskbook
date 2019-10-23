@@ -1,11 +1,12 @@
 /// <reference path="./global.d.ts" />
-import { PostIdentifier, PersonIdentifier, Identifier, PostIVIdentifier } from './type'
+import { PostIdentifier, PersonIdentifier, Identifier, PostIVIdentifier, GroupIdentifier } from './type'
 import { openDB, DBSchema } from 'idb/with-async-ittr'
+import { restorePrototype } from './utils'
 
 function outDb(db: PostDBRecordV40ToV38): PostOutDBRecordV40ToV38 {
     const { identifier, ...rest } = db
-        // Restore prototype
-    ;(rest.recipients || []).forEach(y => Object.setPrototypeOf(y, PersonIdentifier.prototype))
+    restorePrototype(rest.recipients, PersonIdentifier.prototype)
+    restorePrototype(rest.groupRecipients, GroupIdentifier.prototype)
     return {
         ...rest,
         identifier: Identifier.fromString(identifier) as PostIVIdentifier,
@@ -25,6 +26,12 @@ interface PostDBRecordV40ToV38 {
     postCryptoKey?: CryptoKey
     version: -40 | -39 | -38
     recipients?: PersonIdentifier[]
+    /**
+     * If user choose to share the post to a group **and it's future member**
+     * store it here. Otherwise, deconstruct the group in to a PersonIdentifier[]
+     * and store it in the **recipients** field.
+     */
+    groupRecipients?: GroupIdentifier[]
 }
 interface PostDB extends DBSchema {
     /** Use inline keys */
@@ -68,7 +75,14 @@ export async function updatePostDB(
 ): Promise<void> {
     const _rec = (await queryPostDB(record.identifier)) || { identifier: record.identifier, version: -40 }
     const rec = { ...toDb(_rec), ...record }
-    if (mode === 'append') rec.recipients = [...(toDb(_rec).recipients || []), ...(record.recipients || [])]
+    if (mode === 'append') {
+        if (record.recipients) {
+            rec.recipients = [...(toDb(_rec).recipients || []), ...record.recipients]
+        }
+        if (record.groupRecipients) {
+            rec.groupRecipients = [...(toDb(_rec).groupRecipients || []), ...record.groupRecipients]
+        }
+    }
 
     const t = (await db).transaction('post', 'readwrite')
     await t.objectStore('post').put(toDb(rec))
