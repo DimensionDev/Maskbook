@@ -1,7 +1,7 @@
 import { sleep, untilDocumentReady } from '../../../utils/utils'
 import { newPostEditorFocusAnchor, newPostEditorSelector } from './selector'
 import { equal } from '../../../utils/assert'
-import { untilElementAvailable } from '../../../utils/holoflowKits'
+import { untilElementAvailable } from '../../../utils/holoflowKits/untilElementAvailable'
 
 export const postBoxInPopup = () => {
     return window.location.pathname.includes('compose')
