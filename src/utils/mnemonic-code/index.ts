@@ -1,8 +1,9 @@
 import * as bip39 from 'bip39'
 import * as wallet from 'wallet.ts'
-import { unCompressSecp256k1Point } from '../type-transform/SECP256k1-Compression'
+import { decompressSecp256k1Key } from '../type-transform/SECP256k1-Compression'
 import { Convert } from 'pvtsutils'
 import { import_ECDH_256k1_KeyPair } from '../crypto.subtle'
+import { encodeArrayBuffer } from '../type-transform/String-ArrayBuffer'
 
 // Private key at m/44'/coinType'/account'/change/addressIndex
 // coinType = ether
@@ -40,15 +41,7 @@ export async function recover_ECDH_256k1_KeyPair_ByMnemonicWord(mnemonicWord: st
 }
 
 function HDKeyToJwk(hdk: wallet.HDKey): JsonWebKey {
-    const { x, y } = unCompressSecp256k1Point(hdk.publicKey)
-    const d = hdk.privateKey ? Convert.ToBase64Url(hdk.privateKey) : undefined
-    return {
-        crv: 'K-256',
-        ext: true,
-        key_ops: ['deriveKey'],
-        kty: 'EC',
-        x,
-        y,
-        d,
-    }
+    const jwk = decompressSecp256k1Key(encodeArrayBuffer(hdk.publicKey))
+    jwk.d = hdk.privateKey ? Convert.ToBase64Url(hdk.privateKey) : undefined
+    return jwk
 }
