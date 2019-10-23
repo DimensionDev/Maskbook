@@ -139,6 +139,8 @@ export async function encrypt1ToN(info: {
     ownersAESKeyEncrypted: ArrayBuffer
     /** All encrypted post aes key. Should be post on the gun. */
     othersAESKeyEncrypted: PublishedAESKeyRecordV40[]
+    /** The raw post AESKey. Be aware to protect it! */
+    postAESKey: CryptoKey
 }> {
     const { version, content, othersPublicKeyECDH, privateKeyECDH, ownersLocalKey, iv } = info
     const AESKey = await generate_AES_GCM_256_Key()
@@ -155,7 +157,7 @@ export async function encrypt1ToN(info: {
         iv,
     })).content
     const othersAESKeyEncrypted = await generateOthersAESKeyEncrypted(-40, AESKey, privateKeyECDH, othersPublicKeyECDH)
-    return { encryptedContent, iv, version: -40, ownersAESKeyEncrypted, othersAESKeyEncrypted }
+    return { encryptedContent, iv, version: -40, ownersAESKeyEncrypted, othersAESKeyEncrypted, postAESKey: AESKey }
 }
 //#endregion
 //#region decrypt text

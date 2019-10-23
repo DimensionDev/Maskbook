@@ -4,11 +4,12 @@ import { encodeArrayBuffer } from '../../../utils/type-transform/String-ArrayBuf
 import { constructAlpha38, PayloadLatest } from '../../../utils/type-transform/Payload'
 import { getMyPrivateKey } from '../../../database'
 import { queryLocalKeyDB } from '../../../database/people'
-import { PersonIdentifier } from '../../../database/type'
+import { PersonIdentifier, PostIVIdentifier } from '../../../database/type'
 import { prepareOthersKeyForEncryptionV39OrV38 } from '../prepareOthersKeyForEncryption'
 import { geti18nString } from '../../../utils/i18n'
 import { getNetworkWorker } from '../../../social-network/worker'
 import { getSignablePayload } from './utils'
+import { updatePostDB, createPostDB, PostRecord } from '../../../database/post'
 
 type EncryptedText = string
 type OthersAESKeyEncryptedToken = string
@@ -40,6 +41,7 @@ export async function encryptTo(
         othersAESKeyEncrypted,
         ownersAESKeyEncrypted,
         iv,
+        postAESKey,
     } = await Alpha38.encrypt1ToN({
         version: -38,
         content,
@@ -60,10 +62,21 @@ export async function encryptTo(
 
     const payloadWaitToSign = getSignablePayload(payload)
     payload.signature = encodeArrayBuffer(await Alpha38.sign(payloadWaitToSign, mine.privateKey))
-    // Store AES key to gun
-    const key = encodeArrayBuffer(iv)
-    OthersAESKeyEncryptedMap.set(key, othersAESKeyEncrypted)
-    return [constructAlpha38(payload, getNetworkWorker(whoAmI.network).payloadEncoder), key]
+
+    const recipients: PostRecord['recipients'] = {}
+    for (const each of to) {
+        recipients[each.toText()] = { reason: [{ at: new Date(), type: 'direct' }] }
+    }
+    await createPostDB({
+        identifier: new PostIVIdentifier(whoAmI.network, payload.iv),
+        postBy: whoAmI,
+        postCryptoKey: postAESKey,
+        recipients: recipients,
+    })
+
+    const postAESKeyToken = encodeArrayBuffer(iv)
+    OthersAESKeyEncryptedMap.set(postAESKeyToken, othersAESKeyEncrypted)
+    return [constructAlpha38(payload, getNetworkWorker(whoAmI.network).payloadEncoder), postAESKeyToken]
 }
 
 /**
