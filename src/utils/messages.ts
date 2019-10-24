@@ -1,5 +1,5 @@
 import { MessageCenter as MC } from '@holoflows/kit/es'
-import { Person } from '../database'
+import { Person, Group } from '../database'
 import Serialization from './type-transform/Serialization'
 
 interface UIEvent {
@@ -7,6 +7,7 @@ interface UIEvent {
     settingsUpdated: undefined
 }
 interface KeyStoreEvent {
+    newGroup: Group
     newPerson: Person
     peopleChanged: undefined
     generateKeyPair: undefined
