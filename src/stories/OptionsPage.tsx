@@ -10,7 +10,9 @@ import { text } from '@storybook/addon-knobs'
 import { ExportData } from '../components/MobileImportExport/Export'
 
 storiesOf('Options Page', module)
-    .add('Privacy', () => Privacy)
+    // FIXME:
+    // @ts-ignore
+    .add('Privacy', Privacy)
     .add('QrCode', () => <QrCode text={text('QrCode', 'QrCode')} />)
     .add('ExportData', () => <ExportData />)
 
