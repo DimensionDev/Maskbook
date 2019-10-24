@@ -9,6 +9,7 @@ function outDb(db: PostDBRecord): PostRecord {
         const detail = rest.recipients[key]
         detail.reason.forEach(x => x.type === 'group' && restorePrototype([x.group], GroupIdentifier.prototype))
     }
+    restorePrototype(rest.recipientGroups, GroupIdentifier.prototype)
     return {
         ...rest,
         identifier: Identifier.fromString(identifier) as PostIVIdentifier,
@@ -44,7 +45,14 @@ interface PostDBRecord {
      * ! This MUST BE a native CryptoKey
      */
     postCryptoKey?: CryptoKey
+    /**
+     * Receivers.
+     */
     recipients: Record<string, RecipientDetail>
+    /**
+     * This post shared with these groups.
+     */
+    recipientGroups: GroupIdentifier[]
     /**
      * When does Maskbook find this post.
      * For your own post, it is when Maskbook created this post.
