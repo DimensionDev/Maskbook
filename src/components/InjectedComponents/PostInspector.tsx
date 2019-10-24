@@ -76,7 +76,6 @@ export function PostInspector(props: PostInspectorProps) {
                                   setAlreadySelectedPreviously(alreadySelectedPreviously.concat(people))
                                   return Services.Crypto.appendShareTarget(
                                       version,
-                                      iv,
                                       ownersAESKeyEncrypted,
                                       iv,
                                       people.map(x => x.identifier),
