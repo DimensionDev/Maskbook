@@ -54,7 +54,7 @@ export async function storeAvatar(
     } finally {
         getAvatarDataURL.cache.delete(identifier.toText())
         if (identifier instanceof PersonIdentifier) {
-            MessageCenter.emit('newPerson', await queryPerson(identifier))
+            MessageCenter.emit('peopleChanged', [{ of: await queryPerson(identifier), reason: 'update' }])
         }
     }
 }
