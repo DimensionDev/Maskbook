@@ -13,6 +13,7 @@ import * as CryptoService from './extension/background-script/CryptoService'
 import * as WelcomeService from './extension/background-script/WelcomeService'
 import * as PeopleService from './extension/background-script/PeopleService'
 import { decryptFromMessageWithProgress } from './extension/background-script/CryptoServices/decryptFrom'
+import { initAutoShareToFriends } from './extension/background-script/Jobs/AutoShareToFriends'
 Object.assign(window, { CryptoService, WelcomeService, PeopleService })
 Object.assign(window, {
     ServicesWithProgress: {
@@ -130,3 +131,4 @@ Object.assign(window, {
         post: require('./database/post'),
     },
 })
+initAutoShareToFriends()

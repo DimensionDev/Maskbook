@@ -1,4 +1,5 @@
 import { serializable } from '../utils/type-transform/Serialization'
+import { RecipientDetail } from './post'
 
 /**
  * @internal symbol that used to construct this type from the Identifier
@@ -156,4 +157,12 @@ export class PostIVIdentifier extends Identifier {
 function noSlash(str?: string) {
     if (!str) return
     if (str.split('/')[1]) throw new TypeError('Cannot contain / in a part of identifier')
+}
+
+export function constructPostRecipients(data: [PersonIdentifier, RecipientDetail][]) {
+    const x: Record<string, RecipientDetail> = {}
+    for (const [id, detail] of data) {
+        x[id.toText()] = detail
+    }
+    return x
 }

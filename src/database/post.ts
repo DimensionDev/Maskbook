@@ -30,7 +30,7 @@ export type RecipientReason = ({ type: 'direct' } | { type: 'group'; group: Grou
      */
     at: Date
 }
-interface RecipientDetail {
+export interface RecipientDetail {
     /** Why they're able to receive this message? */
     reason: RecipientReason[]
 }
@@ -162,6 +162,25 @@ export async function queryPostDB(record: PostIVIdentifier): Promise<PostRecord 
     const result = await t.objectStore('post').get(record.toText())
     if (result) return outDb(result)
     return null
+}
+export async function queryPostsDB(network: string): Promise<PostRecord[]>
+export async function queryPostsDB(query: (data: PostRecord, id: PostIVIdentifier) => boolean): Promise<PostRecord[]>
+export async function queryPostsDB(
+    query: string | ((data: PostRecord, id: PostIVIdentifier) => boolean),
+): Promise<PostRecord[]> {
+    const t = (await db).transaction('post')
+    const selected: PostRecord[] = []
+    for await (const { value } of t.store) {
+        const id = Identifier.fromString(value.identifier) as PostIVIdentifier | null
+        if (!id) continue
+        if (typeof query === 'string') {
+            if (id.network === query) selected.push(outDb(value))
+        } else {
+            const v = outDb(value)
+            if (query(v, id)) selected.push(v)
+        }
+    }
+    return selected
 }
 export async function deletePostCryptoKeyDB(record: PostIVIdentifier) {
     const t = (await db).transaction('post', 'readwrite')
