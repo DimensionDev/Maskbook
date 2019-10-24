@@ -109,13 +109,14 @@ const db = openDB<PostDB>('maskbook-post-v2', 3, {
                     for (const each of oldType) {
                         newType[each.toText()] = { reason: [{ type: 'direct', at: new Date(0) }] }
                     }
-
-                cursor.update({
+                const next: PostDBRecord = {
                     ...cursor.value,
                     recipients: newType,
                     postBy: PersonIdentifier.unknown,
                     foundAt: new Date(0),
-                })
+                    recipientGroups: [],
+                }
+                cursor.update(next)
             }
         }
     },
@@ -129,14 +130,14 @@ export async function updatePostDB(
     updateRecord: Partial<PostRecord> & Pick<PostRecord, 'identifier'>,
     mode: 'append' | 'override',
 ): Promise<void> {
-    const currentRecord =
-        (await queryPostDB(updateRecord.identifier)) ||
-        ({
-            identifier: updateRecord.identifier,
-            recipients: {},
-            postBy: PersonIdentifier.unknown,
-            foundAt: new Date(),
-        } as PostRecord)
+    const emptyRecord: PostRecord = {
+        identifier: updateRecord.identifier,
+        recipients: {},
+        postBy: PersonIdentifier.unknown,
+        foundAt: new Date(),
+        recipientGroups: [],
+    }
+    const currentRecord = (await queryPostDB(updateRecord.identifier)) || emptyRecord
     const nextRecord: PostRecord = { ...currentRecord, ...updateRecord }
     const nextRecipients: PostDBRecord['recipients'] =
         mode === 'override' ? toDb(nextRecord).recipients : toDb(currentRecord).recipients

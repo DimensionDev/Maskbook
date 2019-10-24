@@ -1,6 +1,6 @@
 import { MessageCenter } from '../../../utils/messages'
 import { queryUserGroup } from '../PeopleService'
-import { PreDefinedVirtualGroupNames } from '../../../database/type'
+import { PreDefinedVirtualGroupNames, PersonIdentifier } from '../../../database/type'
 import { queryPostsDB } from '../../../database/post'
 import { appendShareTarget } from '../CryptoService'
 
@@ -31,17 +31,24 @@ export function initAutoShareToFriends() {
                 console.warn('Post ', id, ' have no CryptoKey, skipping')
                 continue
             }
+            const notSharedBefore: PersonIdentifier[] = []
+
+            data.newMembers.forEach(x => {
+                if (post.recipients[x.toText()]) {
+                    // skipping
+                } else notSharedBefore.push(x)
+            })
             appendShareTarget(
                 -38,
                 post.postCryptoKey,
                 post.identifier.postIV,
-                data.newMembers,
+                notSharedBefore,
                 data.group.ownerIdentifier,
                 group.identifier,
             ).then(() => {
                 console.log('Post ', id, ' shared')
             }, console.error)
         }
-        setTimeout(() => console.groupEnd(), 1000)
+        console.groupEnd()
     })
 }
