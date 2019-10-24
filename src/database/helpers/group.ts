@@ -18,14 +18,6 @@ export function createDefaultFriendsGroup(who: PersonIdentifier) {
 export async function addPersonToFriendsGroup(group: GroupIdentifier, newMembers: (Person | PersonIdentifier)[]) {
     const memberList = newMembers.map(x => (x instanceof PersonIdentifier ? x : x.identifier)) as PersonIdentifier[]
     await updateUserGroupDatabase({ identifier: group, members: memberList }, 'append')
-    MessageCenter.emit(
-        'joinGroup',
-        {
-            group,
-            newMembers: memberList,
-        },
-        true,
-    )
 }
 export function removePersonFromFriendsGroup(group: GroupIdentifier, removedFriend: (Person | PersonIdentifier)[]) {
     const friendList = removedFriend.map(x => (x instanceof PersonIdentifier ? x : x.identifier)) as PersonIdentifier[]
