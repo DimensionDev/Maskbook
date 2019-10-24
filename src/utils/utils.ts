@@ -40,14 +40,9 @@ export function selectElementContents(el: Node) {
     sel.addRange(range)
 }
 
-export function untilDocumentReady() {
-    if (document.readyState === 'complete') return Promise.resolve()
-    return new Promise(resolve => {
-        document.addEventListener('readystatechange', resolve, { once: true, passive: true })
-    })
-}
-
+// noinspection JSUnusedLocalSymbols
 export const nop = (...args: unknown[]) => {}
+// noinspection JSUnusedLocalSymbols
 export const nopWithUnmount = (...args: unknown[]) => nop
 export const bypass: <T>(args: T) => T = args => args
 
