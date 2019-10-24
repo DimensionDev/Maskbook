@@ -1,7 +1,7 @@
 import { MessageCenter as MC } from '@holoflows/kit/es'
 import { Group, Person } from '../database'
 import Serialization from './type-transform/Serialization'
-import { PersonIdentifier } from '../database/type'
+import { PersonIdentifier, GroupIdentifier } from '../database/type'
 
 export interface PersonUpdateEvent {
     readonly reason: 'update' | 'delete' | 'new'
@@ -28,7 +28,10 @@ interface MaskbookMessages {
      */
     peopleChanged: readonly PersonUpdateEvent[]
     newGroup: Group
-    joinGroup: PersonIdentifier
+    joinGroup: {
+        group: GroupIdentifier
+        newMembers: PersonIdentifier[]
+    }
 }
 export const MessageCenter = new MC<MaskbookMessages>('maskbook-events')
 MessageCenter.serialization = Serialization

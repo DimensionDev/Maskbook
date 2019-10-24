@@ -23,7 +23,7 @@ interface GroupRecordInDatabase extends GroupRecordBase {
 export interface GroupRecord extends Omit<GroupRecordBase, 'network'> {
     identifier: GroupIdentifier
 }
-interface AvatarDB extends DBSchema {
+interface GroupDB extends DBSchema {
     /** Key is value.identifier */
     groups: {
         value: GroupRecordInDatabase
@@ -36,7 +36,7 @@ interface AvatarDB extends DBSchema {
 }
 //#endregion
 
-const db = openDB<AvatarDB>('maskbook-user-groups', 1, {
+const db = openDB<GroupDB>('maskbook-user-groups', 1, {
     upgrade(db, oldVersion, newVersion, transaction) {
         // Out line keys
         db.createObjectStore('groups', { keyPath: 'identifier' })
