@@ -196,7 +196,7 @@ export async function attachIdentityToPersona(
     targetIdentity: PersonIdentifier,
 ): Promise<void> {
     const id = await queryMyIdentityAtDB(targetIdentity)
-    const localKey = await queryLocalKeyDB(whoAmI)
+    const localKey = await queryLocalKeyDB(targetIdentity)
     if (id === null || localKey === null) throw new Error('Not found')
     await generateNewIdentity(whoAmI, {
         key: { privateKey: id.privateKey, publicKey: id.publicKey },
