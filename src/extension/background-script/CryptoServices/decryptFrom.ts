@@ -6,7 +6,7 @@ import { decodeText } from '../../../utils/type-transform/String-ArrayBuffer'
 import { deconstructPayload, Payload } from '../../../utils/type-transform/Payload'
 import { geti18nString } from '../../../utils/i18n'
 import { getMyPrivateKey } from '../../../database'
-import { queryLocalKeyDB, queryPersonDB } from '../../../database/people'
+import { queryLocalKeyDB, queryPersonDB, PersonRecord } from '../../../database/people'
 import { PersonIdentifier, PostIVIdentifier } from '../../../database/type'
 import { queryPostDB, updatePostDB } from '../../../database/post'
 import { addPerson } from './addPerson'
@@ -32,7 +32,11 @@ type Failure = {
 export type SuccessDecryption = Success
 export type FailureDecryption = Failure
 export type DecryptionProgress = Progress
-type ReturnOfDecryptFromMessageWithProgress = AsyncIterator<Failure | Progress | DebugInfo, Success | Failure, void> & {
+type ReturnOfDecryptFromMessageWithProgress = AsyncGenerator<
+    Failure | Progress | DebugInfo,
+    Success | Failure,
+    void
+> & {
     [Symbol.asyncIterator](): AsyncIterator<Failure | Progress | DebugInfo, Success | Failure, void>
 }
 
@@ -47,17 +51,17 @@ export async function* decryptFromMessageWithProgress(
     by: PersonIdentifier,
     whoAmI: PersonIdentifier,
 ): ReturnOfDecryptFromMessageWithProgress {
-    const decoder = getNetworkWorker(by.network).payloadDecoder
     // If any of parameters is changed, we will not handle it.
-    const data = deconstructPayload(encrypted, decoder)!
-    if (!data) {
-        try {
-            deconstructPayload(encrypted, decoder, true)
-        } catch (e) {
-            return { error: e.message }
-        }
+    let _data: Payload
+    try {
+        const decoder = getNetworkWorker(by.network).payloadDecoder
+        _data = deconstructPayload(encrypted, decoder, true)
+    } catch (e) {
+        return { error: e.message }
     }
-    const version = data.version
+    const data = _data
+    const { version } = data
+
     if (version === -40 || version === -39 || version === -38) {
         const { encryptedText, iv, signature, version } = data
         const ownersAESKeyEncrypted = data.version === -38 ? data.AESKeyEncrypted : data.ownersAESKeyEncrypted
@@ -66,53 +70,18 @@ export async function* decryptFromMessageWithProgress(
 
         const [cachedPostResult, setPostCache] = await decryptFromCache(data, by)
 
-        let byPerson = await queryPersonDB(by)
-        let iterations = 0
-        while (byPerson === null || !byPerson.publicKey) {
-            iterations += 1
-            if (iterations < 10) yield { progress: 'finding_person_public_key' }
-            else return { error: geti18nString('service_others_key_not_found', by.userId) }
-            byPerson = await addPerson(by).catch(() => null)
-
-            if (!byPerson || !byPerson.publicKey) {
-                if (cachedPostResult)
+        let byPerson!: PersonRecordWithPublicKey
+        for await (const _ of iteratorHelper(findAuthorPublicKey(by, !!cachedPostResult))) {
+            if (_.done) {
+                if (_.value === 'out of chance')
+                    return { error: geti18nString('service_others_key_not_found', by.userId) }
+                else if (_.value === 'use cache')
                     return {
                         signatureVerifyResult: false,
-                        content: cachedPostResult,
+                        content: cachedPostResult!,
                         through: ['author_key_not_found', 'post_key_cached'],
                     } as Success
-                let rejectGun = () => {}
-                let rejectDatabase = () => {}
-                const awaitGun = new Promise((resolve, reject) => {
-                    rejectGun = () => {
-                        undo()
-                        reject()
-                    }
-                    const undo = Gun2.subscribePersonFromGun2(by, data => {
-                        if (data && (data.provePostId || '').length > 0) {
-                            undo()
-                            resolve()
-                        }
-                    })
-                })
-                const awaitDatabase = new Promise((resolve, reject) => {
-                    const undo = MessageCenter.on('newPerson', data => {
-                        if (data.identifier.equals(by)) {
-                            undo()
-                            resolve()
-                        }
-                    })
-                    rejectDatabase = () => {
-                        undo()
-                        reject()
-                    }
-                })
-                await Promise.race([awaitGun, awaitDatabase])
-                    .then(() => {
-                        rejectDatabase()
-                        rejectGun()
-                    })
-                    .catch(() => null)
+                else byPerson = _.value
             }
         }
 
@@ -264,15 +233,68 @@ export async function* decryptFromMessageWithProgress(
     return { error: geti18nString('service_unknown_payload') }
 }
 
+type PersonRecordWithPublicKey = PersonRecord & Required<Pick<PersonRecord, 'publicKey'>>
+async function* findAuthorPublicKey(
+    by: PersonIdentifier,
+    hasCache: boolean,
+    maxIteration = 10,
+): AsyncGenerator<Progress, 'out of chance' | 'use cache' | PersonRecordWithPublicKey, unknown> {
+    let author = await queryPersonDB(by)
+    let iterations = 0
+    while (author === null || !author.publicKey) {
+        iterations += 1
+        if (iterations < maxIteration) yield { progress: 'finding_person_public_key' } as Progress
+        else return 'out of chance' as const
+
+        author = await addPerson(by).catch(() => null)
+
+        if (!author || !author.publicKey) {
+            if (hasCache) return 'use cache' as const
+            let rejectGun = () => {}
+            let rejectDatabase = () => {}
+            const gunPromise = new Promise((resolve, reject) => {
+                rejectGun = () => {
+                    undo()
+                    reject()
+                }
+                const undo = Gun2.subscribePersonFromGun2(by, data => {
+                    if (data && (data.provePostId || '').length > 0) {
+                        undo()
+                        resolve()
+                    }
+                })
+            })
+            const databasePromise = new Promise((resolve, reject) => {
+                const undo = MessageCenter.on('newPerson', data => {
+                    if (data.identifier.equals(by)) {
+                        undo()
+                        resolve()
+                    }
+                })
+                rejectDatabase = () => {
+                    undo()
+                    reject()
+                }
+            })
+            await Promise.race([gunPromise, databasePromise])
+                .then(() => {
+                    rejectDatabase()
+                    rejectGun()
+                })
+                .catch(() => null)
+        }
+    }
+    if (author && author.publicKey) return author as PersonRecordWithPublicKey
+    return 'out of chance'
+}
+
 export async function decryptFrom(
     ...args: Parameters<typeof decryptFromMessageWithProgress>
 ): Promise<Success | Failure> {
-    const iter = decryptFromMessageWithProgress(...args)
-    let yielded = await iter.next()
-    while (!yielded.done) {
-        yielded = await iter.next()
+    for await (const _ of iteratorHelper(decryptFromMessageWithProgress(...args))) {
+        if (_.done) return _.value
     }
-    return yielded.value
+    throw new TypeError('Invalid iterator state')
 }
 
 async function decryptFromCache(postPayload: Payload, by: PersonIdentifier) {
@@ -302,4 +324,16 @@ async function decryptFromCache(postPayload: Payload, by: PersonIdentifier) {
         return [result, setCache] as const
     }
     return [undefined, setCache] as const
+}
+
+async function* iteratorHelper<T, R, N>(
+    iter: AsyncGenerator<T, R, N>,
+): AsyncGenerator<IteratorResult<T, R>, unknown, unknown> {
+    let yielded: IteratorResult<T, R>
+    do {
+        yielded = await iter.next()
+        if (yielded.done) yield yielded
+        else yield yielded
+    } while (yielded.done === false)
+    return
 }
