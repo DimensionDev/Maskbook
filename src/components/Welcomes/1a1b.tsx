@@ -9,15 +9,12 @@ import ListItemText from '@material-ui/core/ListItemText'
 import ListSubheader from '@material-ui/core/ListSubheader'
 import { definedSocialNetworkUIs, SocialNetworkUI } from '../../social-network/ui'
 import { env } from '../../social-network/shared'
-import Navigation from './Navigation/Navigation'
 
 interface Props {
     useExistingAccounts(): void
-    back(): void
 }
 const useStyles = makeStyles<Theme>(theme => ({
     paper: {
-        padding: '2rem 1rem 1rem 1rem',
         textAlign: 'center',
         minWidth: 250,
     },
@@ -26,11 +23,12 @@ const useStyles = makeStyles<Theme>(theme => ({
     },
     list: {
         width: '100%',
+        margin: 'auto',
         maxWidth: 360,
         backgroundColor: theme.palette.background.paper,
     },
 }))
-export default function Welcome({ useExistingAccounts, back }: Props) {
+export default function Welcome({ useExistingAccounts }: Props) {
     const classes = useStyles()
     const providers = Array.from(definedSocialNetworkUIs)
 
@@ -62,7 +60,6 @@ export default function Welcome({ useExistingAccounts, back }: Props) {
     }
     return (
         <WelcomeContainer className={classes.paper}>
-            <Navigation back={back} />
             <List
                 subheader={<ListSubheader>{geti18nString('welcome_1a1b_title')}</ListSubheader>}
                 className={classes.list}>

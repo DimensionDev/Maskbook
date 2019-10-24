@@ -75,7 +75,7 @@ function override(config, env) {
         return src
     }
     config.entry = {
-        'options-page': appendReactDevtools(src('./src/index.tsx')),
+        'options-page': appendReactDevtools(src('./src/index-revamp.tsx')),
         'content-script': appendReactDevtools(src('./src/content-script.ts')),
         'background-service': src('./src/background-service.ts'),
         'injected-script': src('./src/extension/injected-script/index.ts'),

@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from 'react'
-import Welcome0 from '../../../components/Welcomes/0'
 import Welcome1a1a from '../../../components/Welcomes/1a1a'
 import Welcome1a1b from '../../../components/Welcomes/1a1b'
 import Welcome1a2 from '../../../components/Welcomes/1a2'
@@ -7,7 +6,6 @@ import Welcome1a3a from '../../../components/Welcomes/1a3a'
 import Welcome1a3b from '../../../components/Welcomes/1a3b'
 import Welcome1a4 from '../../../components/Welcomes/1a4'
 import Welcome1b1 from '../../../components/Welcomes/1b1'
-import Welcome2 from '../../../components/Welcomes/2'
 import Services from '../../service'
 import { RouteComponentProps, withRouter } from 'react-router'
 import { Dialog, withMobileDialog } from '@material-ui/core'
@@ -22,18 +20,15 @@ import { BackupJSONFileLatest } from '../../../utils/type-transform/BackupFile'
 import { isNil } from 'lodash-es'
 
 enum WelcomeState {
-    // Step 0
-    Start,
-    // Step 1
+    // Create
     SelectIdentity,
     LinkNewSocialNetworks,
     Intro,
     GenerateKey,
     BackupKey,
     ProvePost,
+    // Restore
     RestoreKeypair,
-    // End
-    End,
 }
 const WelcomeActions = {
     backupMyKeyPair(whoAmI: PersonIdentifier) {
@@ -93,21 +88,9 @@ function Welcome(props: Welcome) {
               ]
     }, [currentIdentities, personHintFromSearch])
     switch (currentStep) {
-        case WelcomeState.Start:
-            return (
-                <Welcome0
-                    create={() => {
-                        if (currentIdentitiesFiltered.length === 0) onStepChange(WelcomeState.LinkNewSocialNetworks)
-                        else onStepChange(WelcomeState.SelectIdentity)
-                    }}
-                    restore={() => onStepChange(WelcomeState.RestoreKeypair)}
-                    close={() => onFinish('quit')}
-                />
-            )
         case WelcomeState.SelectIdentity:
             return (
                 <Welcome1a1a
-                    back={() => onStepChange(WelcomeState.Start)}
                     linkNewSocialNetworks={() => onStepChange(WelcomeState.LinkNewSocialNetworks)}
                     next={selected => {
                         onSelectIdentity(selected)
@@ -117,12 +100,7 @@ function Welcome(props: Welcome) {
                 />
             )
         case WelcomeState.LinkNewSocialNetworks:
-            return (
-                <Welcome1a1b
-                    useExistingAccounts={() => onStepChange(WelcomeState.SelectIdentity)}
-                    back={() => onStepChange(WelcomeState.Start)}
-                />
-            )
+            return <Welcome1a1b useExistingAccounts={() => onStepChange(WelcomeState.SelectIdentity)} />
         case WelcomeState.Intro:
             return (
                 <Welcome1a2
@@ -180,31 +158,28 @@ function Welcome(props: Welcome) {
                     requestManualVerify={() => {
                         copyToClipboard(provePost)
                         sideEffects.manualVerifyBio(whoAmI.identifier, provePost)
-                        onStepChange(WelcomeState.End)
+                        onFinish('done')
                     }}
                     requestAutoVerify={type => {
                         copyToClipboard(provePost)
                         if (type === 'bio') sideEffects.autoVerifyBio(whoAmI.identifier, provePost)
                         else if (type === 'post') sideEffects.autoVerifyPost(whoAmI.identifier, provePost)
-                        onStepChange(WelcomeState.End)
+                        onFinish('done')
                     }}
                 />
             )
         case WelcomeState.RestoreKeypair:
             return (
                 <Welcome1b1
-                    back={() => onStepChange(WelcomeState.Start)}
                     restore={json => {
                         sideEffects.restoreFromFile(json, props.whoAmI.identifier).then(
-                            () => onStepChange(WelcomeState.End),
+                            () => onFinish('done'),
                             // TODO: use a better UI
                             error => alert(error),
                         )
                     }}
                 />
             )
-        case WelcomeState.End:
-            return <Welcome2 close={() => onFinish('done')} />
     }
 }
 const provePostRef = new ValueRef('')
@@ -243,12 +218,13 @@ export type Query = {
 export const IdentifierRefContext = React.createContext(selectedIdRef)
 export default withRouter(function _WelcomePortal(props: RouteComponentProps) {
     const ResponsiveDialog = useRef(withMobileDialog({ breakpoint: 'xs' })(Dialog)).current
+    const [step, setStep] = useState(WelcomeState.LinkNewSocialNetworks)
+
     useEffect(() => {
         fillRefs()
         return MessageCenter.on('generateKeyPair', fillRefs)
     }, [])
 
-    const [step, setStep] = useState(WelcomeState.Start)
     const provePost = useValueRef(provePostRef)
     const personFromURL = useValueRef(personInferFromURLRef)
     const selectedId = useValueRef(selectedIdRef)
@@ -265,25 +241,27 @@ export default withRouter(function _WelcomePortal(props: RouteComponentProps) {
 
         if (id instanceof PersonIdentifier) {
             if (id.isUnknown) return
-            Services.People.queryMyIdentity(id).then(([inDB = {} as Person]) => {
-                const person = (personInferFromURLRef.value = {
-                    identifier: id,
-                    nickname: nickname || inDB.nickname,
-                    avatar: avatar || inDB.avatar,
-                    groups: [],
+            Services.People.queryMyIdentity(id)
+                .then(([inDB = {} as Person]) => {
+                    const person = (personInferFromURLRef.value = {
+                        identifier: id,
+                        nickname: nickname || inDB.nickname,
+                        avatar: avatar || inDB.avatar,
+                        groups: [],
+                    })
+                    Services.People.updatePersonInfo(person.identifier, {
+                        nickname: person.nickname,
+                        avatarURL: person.avatar,
+                    })
                 })
-                Services.People.updatePersonInfo(person.identifier, {
-                    nickname: person.nickname,
-                    avatarURL: person.avatar,
-                })
-            })
+                .then(() => setStep(WelcomeState.SelectIdentity))
         }
     }, [props.location.search, selectedId.identifier])
 
     const [mnemonic, setMnemonic] = useState<string | null>(null)
 
     return (
-        <ResponsiveDialog open>
+        <ResponsiveDialog open fullWidth onClose={() => props.history.replace('/')}>
             <IdentifierRefContext.Provider value={selectedIdRef}>
                 <Welcome
                     onConnectOtherPerson={(w, t) => {

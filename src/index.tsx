@@ -1,5 +1,5 @@
 import './provider.worker'
-import React, { useCallback } from 'react'
+import React, { useCallback, useEffect } from 'react'
 import { HashRouter, MemoryRouter, Route, Link, useRouteMatch, useHistory } from 'react-router-dom'
 
 import Empty from './extension/options-page/Empty'
@@ -43,7 +43,7 @@ const OptionsPageRouters = (
     <>
         <Route exact path="/" component={() => Empty} />
         <Route path="/welcome" component={Welcome} />
-        <Route path="/privacy" component={() => Privacy} />
+        <Route path="/privacy" component={Privacy} />
         <Route path="/developer" component={Developer} />
         <Route path="/mobile-setup" component={ExportData} />
     </>
