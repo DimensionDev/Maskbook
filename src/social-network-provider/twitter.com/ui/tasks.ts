@@ -1,4 +1,4 @@
-import { dispatchCustomEvents, sleep, timeout, untilDocumentReady } from '../../../utils/utils'
+import { dispatchCustomEvents, sleep, timeout } from '../../../utils/utils'
 import { editProfileButtonSelector, editProfileTextareaSelector, postsSelectors } from '../utils/selector'
 import { geti18nString } from '../../../utils/i18n'
 import { SocialNetworkUI, SocialNetworkUITasks } from '../../../social-network/ui'
@@ -6,6 +6,7 @@ import { fetchBioCard } from '../utils/status'
 import { bioCardParser, postParser } from '../utils/fetch'
 import { getFocus, getText } from '../utils/postBox'
 import { MutationObserverWatcher } from '@holoflows/kit'
+import { untilDocumentReady } from '../../../utils/dom'
 
 const taskPasteIntoPostBox: SocialNetworkUI['taskPasteIntoPostBox'] = async (text, opt) => {
     await getFocus() // This also waits for document loaded

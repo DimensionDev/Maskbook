@@ -1,7 +1,8 @@
 import { IntervalWatcher, LiveSelector, MutationObserverWatcher } from '@holoflows/kit'
-import { dispatchCustomEvents, sleep, timeout, untilDocumentReady } from '../../../utils/utils'
+import { dispatchCustomEvents, sleep, timeout } from '../../../utils/utils'
 import { isMobileFacebook } from '../isMobile'
 import { SocialNetworkUI } from '../../../social-network/ui'
+import { untilDocumentReady } from '../../../utils/dom'
 
 export async function openPostDialogFacebook() {
     await untilDocumentReady()
