@@ -29,11 +29,11 @@ export const bioCardParser = () => {
 }
 
 export const postContentParser = (node: HTMLElement) => {
-    const qsa = <T extends HTMLElement>(selectors: string) =>
+    const select = <T extends HTMLElement>(selectors: string) =>
         Array.from(node.parentElement!.querySelectorAll<T>(selectors))
     const sto = [
-        ...qsa<HTMLAnchorElement>('a').map(x => x.title),
-        ...qsa<HTMLSpanElement>('[lang] > span').map(x => x.innerText),
+        ...select<HTMLAnchorElement>('a').map(x => x.title),
+        ...select<HTMLSpanElement>('[lang] > span').map(x => x.innerText),
     ]
     return join(sto)
 }
