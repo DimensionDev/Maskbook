@@ -54,7 +54,6 @@ const RestoreBox = styled('div')(({ theme }: { theme: Theme }) => ({
     transition: '0.4s',
 }))
 interface Props {
-    back(): void
     // ? We cannot send out File | string. Because Firefox will reject the permission request
     // ? because read the file is a async procedure.
     restore(json: BackupJSONFileLatest): void
@@ -99,7 +98,7 @@ const useStyles = makeStyles((theme: Theme) => ({
         height: 200,
     },
 }))
-export default function Welcome({ back, restore: originalRestore }: Props) {
+export default function Welcome({ restore: originalRestore }: Props) {
     const classes = useStyles()
     const ref = React.useRef<HTMLInputElement>(null)
     const textAreaRef = React.useRef<HTMLTextAreaElement>(null)
@@ -132,7 +131,6 @@ export default function Welcome({ back, restore: originalRestore }: Props) {
 
     return (
         <WelcomeContainer {...dragEvents}>
-            <Navigation back={back} />
             <Tabs
                 value={tab}
                 onChange={(e, i) => setTab(i)}

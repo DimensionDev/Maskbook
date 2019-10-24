@@ -34,7 +34,6 @@ storiesOf('Welcome', module)
     .add('Step 1a-1a', () => (
         <ResponsiveDialog open>
             <Welcome1a1a
-                back={to('Welcome', 'Step 0')}
                 next={() => to('Welcome', 'Step 1a-2')()}
                 identities={demoPeople}
                 linkNewSocialNetworks={to('Welcome', 'Step 1a-1b')}
@@ -43,7 +42,7 @@ storiesOf('Welcome', module)
     ))
     .add('Step 1a-1b', () => (
         <ResponsiveDialog open>
-            <Welcome1a1b back={to('Welcome', 'Step 0')} useExistingAccounts={to('Welcome', 'Step 1a-1a')} />
+            <Welcome1a1b useExistingAccounts={to('Welcome', 'Step 1a-1a')} />
         </ResponsiveDialog>
     ))
     .add('Step 1a-2', () => (
@@ -88,7 +87,7 @@ storiesOf('Welcome', module)
     ))
     .add('Step 1b-1', () => (
         <ResponsiveDialog open>
-            <Welcome1b1 back={linkTo('Welcome', 'Step 0')} restore={action('Restore with')} />
+            <Welcome1b1 restore={action('Restore with')} />
         </ResponsiveDialog>
     ))
     .add('Step 2', () => (
