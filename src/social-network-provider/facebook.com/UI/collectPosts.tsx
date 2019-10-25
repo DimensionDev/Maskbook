@@ -1,7 +1,6 @@
-import { DOMProxy, LiveSelector, MutationObserverWatcher, ValueRef } from '@holoflows/kit'
+import { DOMProxy, LiveSelector, MutationObserverWatcher } from '@holoflows/kit'
 import { deconstructPayload } from '../../../utils/type-transform/Payload'
-import { PersonIdentifier } from '../../../database/type'
-import { PostInfo, SocialNetworkUI } from '../../../social-network/ui'
+import { getEmptyPostInfoByElement, PostInfo, SocialNetworkUI } from '../../../social-network/ui'
 import { isMobileFacebook } from '../isMobile'
 import { getPersonIdentifierAtFacebook } from '../getPersonIdentifierAtFacebook'
 
@@ -44,18 +43,15 @@ export function collectPostsFacebook(this: SocialNetworkUI) {
                 .enableSingleMode()
             const commentBoxSelector = isMobileFacebook ? commentBoxSelectorMobile : commentBoxSelectorPC
 
-            const info: PostInfo = {
+            const info: PostInfo = getEmptyPostInfoByElement({
                 commentsSelector: commentSelector,
                 commentBoxSelector: commentBoxSelector,
-                decryptedPostContent: new ValueRef(''),
-                postBy: new ValueRef(PersonIdentifier.unknown),
-                postContent: new ValueRef(''),
-                postID: new ValueRef(null),
-                postPayload: new ValueRef(null),
                 get rootNode() {
                     return root.evaluate()[0]! as HTMLElement
                 },
-            }
+                rootNodeProxy: metadata,
+            })
+
             this.posts.set(metadata, info)
             function collectPostInfo() {
                 info.postContent.value = node.innerText

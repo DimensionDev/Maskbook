@@ -7,7 +7,7 @@ const F = (props: { hint: string; content: string | number }) => (
 )
 export function DebugList(props: { items: readonly (readonly [string, string | number | undefined] | JSX.Element)[] }) {
     return (
-        <ul style={{ wordBreak: 'break-all', padding: '0 1em', margin: 0 }}>
+        <ul style={{ wordBreak: 'break-all', padding: '0 1em', margin: 0, background: 'black', color: 'white' }}>
             {props.items.map(x =>
                 Array.isArray(x) ? <F hint={x[0]} content={x[1] === undefined ? 'undefined' : x[1]} /> : x,
             )}

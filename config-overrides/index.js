@@ -176,9 +176,9 @@ function override(config, env) {
         const manifest = require('../src/manifest.json')
         const modifiers = require('./manifest.overrides')
         if (target.Chromium) modifiers.chromium(manifest)
-        if (target.FirefoxDesktop) modifiers.firefoxDesktopAndAndroid(manifest)
-        if (target.FirefoxForAndroid) modifiers.firefoxDesktopAndAndroid(manifest)
-        if (target.StandaloneGeckoView) modifiers.firefoxGeckoview(manifest)
+        if (target.FirefoxDesktop) modifiers.firefox(manifest)
+        if (target.FirefoxForAndroid) modifiers.firefox(manifest)
+        if (target.StandaloneGeckoView) modifiers.geckoview(manifest)
         if (target.WKWebview) modifiers.WKWebview(manifest)
 
         config.plugins.push(new ManifestGeneratorPlugin({ config: { base: manifest } }))
