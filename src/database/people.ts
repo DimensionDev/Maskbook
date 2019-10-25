@@ -205,10 +205,14 @@ export async function removePeopleDB(people: PersonIdentifier[]): Promise<void> 
  * @param id - Identifier
  */
 export async function queryMyIdentityAtDB(id: PersonIdentifier): Promise<null | PersonRecordPublicPrivate> {
-    const t = (await db).transaction('myself')
+    const t = (await db).transaction(['myself', 'people'])
     const result = await t.objectStore('myself').get(id.toText())
     if (!result) return null
-    return outDb(result) as Promise<PersonRecordPublicPrivate>
+    const result2 = (await t.objectStore('people').get(id.toText())) || result
+    return outDb({
+        ...result,
+        nickname: result.nickname || result2.nickname,
+    }) as Promise<PersonRecordPublicPrivate>
 }
 /**
  * Remove my record

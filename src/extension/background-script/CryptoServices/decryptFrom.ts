@@ -1,6 +1,5 @@
 import * as Alpha40 from '../../../crypto/crypto-alpha-40'
 import * as Alpha39 from '../../../crypto/crypto-alpha-39'
-import * as Alpha38 from '../../../crypto/crypto-alpha-38'
 import * as Gun1 from '../../../network/gun/version.1'
 import * as Gun2 from '../../../network/gun/version.2'
 import { decodeText } from '../../../utils/type-transform/String-ArrayBuffer'
@@ -13,6 +12,7 @@ import { queryPostDB, updatePostDB } from '../../../database/post'
 import { addPerson } from './addPerson'
 import { MessageCenter } from '../../../utils/messages'
 import { getNetworkWorker } from '../../../social-network/worker'
+import { getSignablePayload, cryptoProviderTable } from './utils'
 
 type Progress = {
     progress: 'finding_person_public_key' | 'finding_post_key'
@@ -61,17 +61,7 @@ export async function* decryptFromMessageWithProgress(
     if (version === -40 || version === -39 || version === -38) {
         const { encryptedText, iv, signature, version } = data
         const ownersAESKeyEncrypted = data.version === -38 ? data.AESKeyEncrypted : data.ownersAESKeyEncrypted
-        const versionTable = {
-            [-40]: '2/4',
-            [-39]: '3/4',
-            [-38]: '4/4',
-        }
-        const cryptoProviderTable = {
-            [-40]: Alpha40,
-            [-39]: Alpha39,
-            [-38]: Alpha38,
-        }
-        const unverified = [versionTable[version], ownersAESKeyEncrypted, iv, encryptedText].join('|')
+        const waitForVerifySignaturePayload = getSignablePayload(data)
         const cryptoProvider = cryptoProviderTable[version]
 
         const [cachedPostResult, setPostCache] = await decryptFromCache(data, by)
@@ -141,7 +131,11 @@ export async function* decryptFromMessageWithProgress(
             if (by.equals(whoAmI)) {
                 if (cachedPostResult)
                     return {
-                        signatureVerifyResult: await cryptoProvider.verify(unverified, signature || '', mine.publicKey),
+                        signatureVerifyResult: await cryptoProvider.verify(
+                            waitForVerifySignaturePayload,
+                            signature || '',
+                            mine.publicKey,
+                        ),
                         content: cachedPostResult,
                         through: ['post_key_cached'],
                     } as Success
@@ -158,7 +152,11 @@ export async function* decryptFromMessageWithProgress(
                 const content = decodeText(contentArrayBuffer)
                 try {
                     if (!signature) throw new Error()
-                    const signatureVerifyResult = await cryptoProvider.verify(unverified, signature, mine.publicKey)
+                    const signatureVerifyResult = await cryptoProvider.verify(
+                        waitForVerifySignaturePayload,
+                        signature,
+                        mine.publicKey,
+                    )
                     return { signatureVerifyResult, content, through: ['normal_decrypted'] } as Success
                 } catch {
                     return { signatureVerifyResult: false, content, through: ['normal_decrypted'] } as Success
@@ -169,7 +167,7 @@ export async function* decryptFromMessageWithProgress(
                     yield { debug: 'debug_finding_hash', hash: [postHash, keyHash] }
                     return {
                         signatureVerifyResult: await cryptoProvider.verify(
-                            unverified,
+                            waitForVerifySignaturePayload,
                             signature || '',
                             byPerson.publicKey,
                         ),
@@ -245,7 +243,7 @@ export async function* decryptFromMessageWithProgress(
                     try {
                         if (!signature) throw new TypeError('No signature')
                         const signatureVerifyResult = await cryptoProvider.verify(
-                            unverified,
+                            waitForVerifySignaturePayload,
                             signature,
                             byPerson!.publicKey!,
                         )
@@ -287,7 +285,7 @@ async function decryptFromCache(postPayload: Payload, by: PersonIdentifier) {
             {
                 identifier: postIdentifier,
                 postCryptoKey: postAESKey,
-                version,
+                postBy: by,
             },
             'append',
         )

@@ -1,6 +1,5 @@
 /**
  * Parse static result from fb
- * ! TODO: This is not work in Firefox Desktop
  */
 export function parseFacebookStaticHTML(html: string): (HTMLElement | Document)[] {
     const parser = new DOMParser()

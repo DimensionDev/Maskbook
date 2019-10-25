@@ -41,6 +41,13 @@ export interface SocialNetworkWorkerAndUIDefinition {
     /**
      * @param env The env that Maskbook running in
      * @param preference Users settings about Maskbook
+     *
+     * This function should init the provider.
+     *
+     * In the UI, it should do:
+     *      - InitFriendsValueRef
+     *      - InitGroupsValueRef
+     *      - InitMyIdentitiesValueRef
      */
     init(env: Env, preference: Preference): void
     /**

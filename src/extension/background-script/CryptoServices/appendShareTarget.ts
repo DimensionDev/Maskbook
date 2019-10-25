@@ -6,10 +6,8 @@ import * as Gun2 from '../../../network/gun/version.2'
 import { getMyPrivateKey } from '../../../database'
 import { queryLocalKeyDB } from '../../../database/people'
 import { PersonIdentifier } from '../../../database/type'
-import {
-    prepareOthersKeyForEncryptionV40,
-    prepareOthersKeyForEncryptionV39OrV38,
-} from '../prepareOthersKeyForEncryption'
+import { prepareOthersKeyForEncryptionV39OrV38 } from '../prepareOthersKeyForEncryption'
+import { cryptoProviderTable } from './utils'
 export async function appendShareTarget(
     version: -40 | -39 | -38,
     postIdentifier: string,
@@ -18,11 +16,6 @@ export async function appendShareTarget(
     people: PersonIdentifier[],
     whoAmI: PersonIdentifier,
 ): Promise<void> {
-    const cryptoProviderTable = {
-        [-40]: Alpha40,
-        [-39]: Alpha39,
-        [-38]: Alpha38,
-    }
     const cryptoProvider = cryptoProviderTable[version]
     const AESKey = await cryptoProvider.extractAESKeyInMessage(
         version,
@@ -36,9 +29,6 @@ export async function appendShareTarget(
         const othersAESKeyEncrypted = await Alpha39.generateOthersAESKeyEncrypted(version, AESKey, myPrivateKey, toKey)
         Gun2.publishPostAESKeyOnGun2(version, iv, othersAESKeyEncrypted)
     } else if (version === -40) {
-        const toKey = await prepareOthersKeyForEncryptionV40(people)
-        const othersAESKeyEncrypted = await Alpha40.generateOthersAESKeyEncrypted(-40, AESKey, myPrivateKey, toKey)
-        // eslint-disable-next-line import/no-deprecated
-        Gun1.publishPostAESKey(postIdentifier, whoAmI, othersAESKeyEncrypted)
+        throw new TypeError('Version -40 cannot create new data anymore due to leaking risks.')
     }
 }

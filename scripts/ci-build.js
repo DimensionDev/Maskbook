@@ -7,20 +7,17 @@ async function main() {
     const prepareCommands = getCommands(`
     yarn install --link-duplicates --frozen-lockfile
     yarn lint:report
-    ${
-        /**
-         * Let's do a quick TypeScript check.
-         */ 'yarn tsc -p tsconfig_cjs.json'
-    }
+    # Do a quick TypeScript check; fail fast here.
+    yarn tsc -p tsconfig_cjs.json
     sudo apt-get install zip
     `)
-    for (const [commands, ...args] of prepareCommands) {
-        await spawn(commands, args)
+    for (const command of prepareCommands) {
+        await spawn(command)
     }
     const currentBranch = (await getCurrentGitBranchName()).toLowerCase()
-    for (const [first, ...args] of getCommands(buildTypes(currentBranch))) {
-        console.log('executing', first, ...args)
-        await spawn(first, args)
+    for (const command of getCommands(buildTypes(currentBranch))) {
+        console.log('executing', command)
+        await spawn(command)
     }
     process.exit(0)
 }
@@ -52,7 +49,7 @@ function getBuildCommand(platforms) {
         if (type === 'chromium' && platforms.indexOf('base') !== -1) {
             // chromium doesn't have it's own changes yet.
             // just copying base version is acceptable
-            return ''
+            return 'cp Maskbook.base.zip Maskbook.chromium.zip'
         }
         return `
         echo "Building for target ${type}"
@@ -62,10 +59,9 @@ function getBuildCommand(platforms) {
         `
     }
 }
-
 async function getCurrentGitBranchName() {
-    const [git, ...args] = getCommands(`git rev-parse --abbrev-ref HEAD`)[0]
-    const branch = await spawn(git, args, { stdio: 'pipe' })
+    const gitcmd = getCommands(`git rev-parse --abbrev-ref HEAD`)[0]
+    const branch = await spawn(gitcmd, null, { stdio: 'pipe' })
     return branch.split('\n')[0]
 }
 
@@ -75,7 +71,6 @@ async function getCurrentGitBranchName() {
 function getCommands(string) {
     return string
         .split('\n')
-        .filter(x => x)
-        .map(x => x.split(' ').filter(x => x))
-        .filter(x => x.length)
+        .map(x => x.trimLeft())
+        .filter(x => x && !x.startsWith('#'))
 }
