@@ -38,7 +38,6 @@ export const bioCardParser = () => {
             .map(x => (x.children[2] as HTMLElement).innerHTML)
             .evaluate(),
     )
-    debugger
     return {
         avatar,
         name: nameArea.name,
