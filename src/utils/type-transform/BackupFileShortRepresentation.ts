@@ -31,7 +31,15 @@ export function compressBackupFile(file: BackupJSONFileLatest): string {
     ].join('🤔')
 }
 export function decompressBackupFile(short: string): BackupJSONFileLatest {
-    const [network, userId, nickname, localKey, publicKey, privateKey, grantedHostPermissions] = short.split(
+    let compressed: string
+    try {
+        compressed = JSON.parse(short)
+        if (typeof compressed === 'object') return compressed
+    } catch {
+        if (!short.includes('🤔')) throw new Error('This backup is not a compressed string')
+        compressed = short
+    }
+    const [network, userId, nickname, localKey, publicKey, privateKey, grantedHostPermissions] = compressed.split(
         '🤔',
     ) as BackupJSONFileLatestShort
 
