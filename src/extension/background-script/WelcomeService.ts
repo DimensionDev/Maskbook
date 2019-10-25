@@ -204,15 +204,8 @@ export async function attachIdentityToPersona(
     })
 }
 
-export async function backupMyKeyPair(
-    whoAmI: PersonIdentifier,
-    options: { download: boolean; onlyBackupWhoAmI: boolean },
-) {
-    // Don't make the download pop so fast
-    await sleep(1000)
-    const obj = await generateBackupJSON(whoAmI, options.onlyBackupWhoAmI)
-    if (!options.download) return obj
-    const string = JSON.stringify(obj)
+export async function downloadBackup<T>(obj: T) {
+    const string = typeof obj === 'string' ? obj : JSON.stringify(obj)
     const buffer = encodeText(string)
     const blob = new Blob([buffer], { type: 'application/json' })
     const url = URL.createObjectURL(blob)
@@ -227,6 +220,17 @@ export async function backupMyKeyPair(
         saveAs: true,
     })
     return obj
+}
+
+export async function backupMyKeyPair(
+    whoAmI: PersonIdentifier,
+    options: { download: boolean; onlyBackupWhoAmI: boolean },
+) {
+    const obj = await generateBackupJSON(whoAmI, options.onlyBackupWhoAmI)
+    if (!options.download) return obj
+    // Don't make the download pop so fast
+    await sleep(1000)
+    return downloadBackup(obj)
 }
 
 export async function openWelcomePage(id?: SocialNetworkUI['lastRecognizedIdentity']['value']) {
