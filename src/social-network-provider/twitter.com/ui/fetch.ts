@@ -68,6 +68,7 @@ const registerPostCollector = (self: SocialNetworkUI) => {
             })
             const collectPostInfo = async () => {
                 const r = await postParser(node.querySelector<HTMLElement>('[data-testid="tweet"]')!)
+                if (!r.pid) return false
                 info.postContent.value = r.content
                 const postBy = new PersonIdentifier(self.networkIdentifier, r.handle)
                 if (!info.postBy.value.equals(postBy)) {

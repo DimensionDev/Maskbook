@@ -56,7 +56,8 @@ export const postParser = async (node: HTMLElement) => {
     return {
         name: trim(nameArea[1], '\n'),
         handle: nameArea[3],
-        pid: regexMatch(pidLocation!.href, /\/(\d+)/, 1)!,
+        // pid may not available at promoted tweet
+        pid: pidLocation ? regexMatch(pidLocation!.href, /status\/(\d+)/, 1)! : undefined,
         avatar: avatarElement ? avatarElement.src : undefined,
         content: postContentParser(node),
     }
