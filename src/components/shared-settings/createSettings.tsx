@@ -21,7 +21,7 @@ function createInternalSettings<T extends browser.storage.StorageValue>(
     update(instanceKey)
     settings.addListener(async newVal => {
         const stored = ((await browser.storage.local.get())[storage] as object) || {}
-        browser.storage.local.set({
+        await browser.storage.local.set({
             [storage]: { ...stored, [key]: newVal },
         })
         MessageCenter.emit('settingsUpdated', instanceKey)

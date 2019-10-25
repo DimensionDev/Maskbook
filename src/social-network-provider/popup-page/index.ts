@@ -10,7 +10,8 @@ const popupPageUISelf = defineSocialNetworkUI({
     async init(e, p) {
         emptyDefinition.init(e, p)
         const activeTab = ((await browser.tabs.query({ active: true, currentWindow: true })) || [])[0]
-        const location = new URL(activeTab.url || window.location.href)
+        if (activeTab === undefined) return
+        const location = new URL(activeTab.url || globalThis.location.href)
         for (const ui of definedSocialNetworkUIs) {
             if (ui.shouldActivate(location) && ui.networkIdentifier !== 'localhost') {
                 popupPageUISelf.networkIdentifier = ui.networkIdentifier
