@@ -14,7 +14,7 @@ const defHandler = async (encryptedComment: string, current: PostInfo) => {
      *  Yeah I see but I think root.querySelector('[contenteditable]')
      *  (some website may use textarea or input) and
      *  dispatchCustomEvents('paste', encryptedComment)
-     *  (not every website are using React and listenen from document)
+     *  (not every website are using React and listened from document)
      *  is not a good default.
      */
     selectElementContents(root.querySelector('[contenteditable]')!)

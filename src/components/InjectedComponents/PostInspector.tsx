@@ -24,11 +24,11 @@ export function PostInspector(props: PostInspectorProps) {
     const whoAmI = useCurrentIdentity()
     const people = useFriendsList()
     const [alreadySelectedPreviously, setAlreadySelectedPreviously] = useState<Person[]>([])
-    const decodeResult = getActivatedUI().publicKeyDecoder(post)
+    const decodeAsPublicKey = getActivatedUI().publicKeyDecoder(post)
     const isDebugging = useValueRef(debugModeSetting)
     const type = {
         encryptedPost: deconstructPayload(post, getActivatedUI().payloadDecoder),
-        provePost: decodeResult ? [decodeResult] : null,
+        provePost: decodeAsPublicKey ? [decodeAsPublicKey] : null,
     }
     if (type.provePost) Services.People.writePersonOnGun(postBy, { provePostId: postId })
     useAsync(async () => {

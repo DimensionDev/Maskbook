@@ -11,6 +11,7 @@ export const fetchPostContent = async (post: PostIdentifier<PersonIdentifier>) =
     //  it will be a false-positive and it is dangerous.
     //  There is a build-in parser.
     //  Checkout http://mdn.io/DOMParser and we're already using it.
+    //  Legacy js-free mobile twitter may help.
     const content = twitterWorkerSelf.publicKeyDecoder(d.innerText)
     if (content && content[0].length) return content[0]
     return tasks(toPostUrl(post), {}).getPostContent(post)

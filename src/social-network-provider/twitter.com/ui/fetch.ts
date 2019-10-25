@@ -1,24 +1,27 @@
-import { bioCard, postParser, postsRootSelector, postsSelectors, selfInfoSelectors } from '../utils/selector'
+import { bioCard, postsSelectors, selfInfoSelectors } from '../utils/selector'
 import { MutationObserverWatcher } from '@holoflows/kit'
 import { PersonIdentifier } from '../../../database/type'
-import { host } from '../index'
-import { getEmptyPostInfo, SocialNetworkUI, SocialNetworkUIInformationCollector } from '../../../social-network/ui'
+import {
+    getEmptyPostInfoByElement,
+    SocialNetworkUI,
+    SocialNetworkUIInformationCollector,
+} from '../../../social-network/ui'
 import { deconstructPayload } from '../../../utils/type-transform/Payload'
 import { instanceOfTwitterUI } from './index'
-import { resolveInfoFromBioCard } from '../utils/fetch'
+import { bioCardParser, postParser } from '../utils/fetch'
 import { uploadToService } from '../utils/user'
 import { isNil } from 'lodash-es'
 
 const resolveLastRecognizedIdentity = (self: SocialNetworkUI) => {
-    const selfSelector = selfInfoSelectors().screenName
+    const selfSelector = selfInfoSelectors().handle
     const assign = () => {
         const ref = self.lastRecognizedIdentity
-        const screenName = selfInfoSelectors().screenName.evaluate()
+        const handle = selfInfoSelectors().handle.evaluate()
         const nickname = selfInfoSelectors().name.evaluate()
         const avatar = selfInfoSelectors().userAvatar.evaluate()
-        if (!isNil(screenName)) {
+        if (!isNil(handle)) {
             ref.value = {
-                identifier: new PersonIdentifier(host, screenName),
+                identifier: new PersonIdentifier(self.networkIdentifier, handle),
                 nickname,
                 avatar,
             }
@@ -38,7 +41,7 @@ const registerUserCollector = () => {
     new MutationObserverWatcher(bioCard())
         .useForeach(() => {
             const resolve = () => {
-                const r = resolveInfoFromBioCard()
+                const r = bioCardParser()
                 uploadToService(r)
             }
             resolve()
@@ -57,24 +60,29 @@ const registerUserCollector = () => {
 const registerPostCollector = (self: SocialNetworkUI) => {
     new MutationObserverWatcher(postsSelectors())
         .useForeach((node, _, proxy) => {
-            const info = getEmptyPostInfo(postsRootSelector())
-            // push to map
-            self.posts.set(proxy, info)
-            const collectPostInfo = () => {
-                const r = postParser(node)
-                if (!r) return
+            const info = getEmptyPostInfoByElement({
+                get rootNode() {
+                    return proxy.current
+                },
+                rootNodeProxy: proxy,
+            })
+            const collectPostInfo = async () => {
+                const r = await postParser(node.querySelector<HTMLElement>('[data-testid="tweet"]')!)
                 info.postContent.value = r.content
-                const postBy = new PersonIdentifier(host, r.handle)
+                const postBy = new PersonIdentifier(self.networkIdentifier, r.handle)
                 if (!info.postBy.value.equals(postBy)) {
                     info.postBy.value = postBy
                 }
                 info.postID.value = r.pid
                 uploadToService(r)
             }
-            collectPostInfo()
-            info.postPayload.value = deconstructPayload(info.postContent.value, self.payloadDecoder)
-            info.postContent.addListener(newValue => {
-                info.postPayload.value = deconstructPayload(newValue, self.payloadDecoder)
+            collectPostInfo().then(() => {
+                info.postPayload.value = deconstructPayload(info.postContent.value, self.payloadDecoder)
+                info.postContent.addListener(newValue => {
+                    info.postPayload.value = deconstructPayload(newValue, self.payloadDecoder)
+                })
+                // push to map. proxy used as a pointer here.
+                self.posts.set(proxy, info)
             })
             return {
                 onNodeMutation: collectPostInfo,
@@ -83,11 +91,11 @@ const registerPostCollector = (self: SocialNetworkUI) => {
             }
         })
         .setDOMProxyOption({ afterShadowRootInit: { mode: 'closed' } })
+        .assignKeys(node => node.innerHTML)
         .startWatch({
             childList: true,
             subtree: true,
         })
-        .then()
 }
 
 export const twitterUIFetch: SocialNetworkUIInformationCollector = {
