@@ -254,7 +254,11 @@ export function activateSocialNetworkUI() {
                     ui.shouldDisplayWelcome().then(shouldDisplay => {
                         if (shouldDisplay) {
                             const unmount = mountBanner()
-                            ui.myIdentitiesRef.addListener(next => next.length && unmount())
+                            ui.myIdentitiesRef.addListener(next => {
+                                ui.shouldDisplayWelcome().then(should => {
+                                    !should && next.length && unmount()
+                                })
+                            })
                         }
                     })
                 }
