@@ -32,7 +32,7 @@ export const instanceOfTwitterUI = defineSocialNetworkUI({
             .then(granted => {
                 if (granted) {
                     setStorage(host, { forceDisplayWelcome: true }).then()
-                    window.open(hostURL as string)
+                    location.href = hostURL
                 }
             })
     },
