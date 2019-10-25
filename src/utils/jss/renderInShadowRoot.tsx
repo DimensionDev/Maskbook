@@ -1,11 +1,11 @@
 import { create } from 'jss'
-import { jssPreset, createGenerateClassName, StylesProvider, ThemeProvider } from '@material-ui/styles'
+import { createGenerateClassName, jssPreset, StylesProvider, ThemeProvider } from '@material-ui/styles'
 import ReactDOM from 'react-dom'
 import React from 'react'
-import { MaskbookLightTheme, MaskbookDarkTheme } from '../theme'
+import { MaskbookDarkTheme, MaskbookLightTheme } from '../theme'
 import ConstructableStyleSheetsRenderer, {
-    livingShadowRoots,
     applyAdoptedStyleSheets,
+    livingShadowRoots,
 } from './ConstructableStyleSheetsRenderer'
 
 const jss = create({ ...jssPreset(), Renderer: ConstructableStyleSheetsRenderer as any })
@@ -20,6 +20,7 @@ export function renderInShadowRoot(node: React.ReactNode, shadow: ShadowRoot) {
     livingShadowRoots.add(shadow)
     applyAdoptedStyleSheets()
     return () => {
+        shadow.adoptedStyleSheets = []
         ReactDOM.unmountComponentAtNode(shadow as any)
         livingShadowRoots.delete(shadow)
     }
