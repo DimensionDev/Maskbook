@@ -12,19 +12,24 @@ interface MaskbookMessages {
      * Used to polyfill window.close in iOS and Android.
      */
     closeActiveTab: undefined
+    /**
+     * emit when a settings created.
+     * value is instanceKey
+     */
     settingsCreated: string
     newPerson: Person
     generateKeyPair: undefined
     /**
-     * broadcast the settings updating
+     * emit when the settings updated.
+     * value is instanceKey
      */
     settingsUpdated: string
     /**
-     * broadcast my identities updating
+     * emit when my identities updated
      */
     identityUpdated: undefined
     /**
-     * broadcast people changed in the database
+     * emit people changed in the database
      */
     peopleChanged: readonly PersonUpdateEvent[]
     newGroup: Group
