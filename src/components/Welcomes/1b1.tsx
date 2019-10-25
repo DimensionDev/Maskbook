@@ -105,7 +105,7 @@ export default function Welcome({ back, restore: originalRestore }: Props) {
     const textAreaRef = React.useRef<HTMLTextAreaElement>(null)
     const restore = (str: string) => {
         try {
-            const json = JSON.parse(str)
+            const json = decompressBackupFile(str)
             const upgraded = UpgradeBackupJSONFile(json)
             setJson(upgraded)
         } catch (e) {
@@ -247,10 +247,7 @@ export default function Welcome({ back, restore: originalRestore }: Props) {
         )
     }
     function WKWebkitQR(props: { onScan(val: string): void; onQuit(): void }) {
-        useAsync(() => iOSHost.scanQRCode(), []).then(
-            x => props.onScan(JSON.stringify(decompressBackupFile(x))),
-            props.onQuit,
-        )
+        useAsync(() => iOSHost.scanQRCode(), []).then(x => props.onScan(x), props.onQuit)
         return null
     }
     function QR() {
