@@ -14,15 +14,12 @@ export async function getSharedListOfPost(
     postBy: PersonIdentifier,
 ): Promise<Person[]> {
     const ids = new Set<string>()
-    const nameInDB =
-        ((await queryPostDB(new PostIVIdentifier(postBy.network, postSalt))) || { recipients: [] }).recipients || []
-    nameInDB.forEach(x => ids.add(x.toText()))
+    const nameInDB = ((await queryPostDB(new PostIVIdentifier(postBy.network, postSalt))) || { recipients: {} })
+        .recipients
+    Object.keys(nameInDB).forEach(x => ids.add(x))
     if (version === -40) {
         // eslint-disable-next-line import/no-deprecated
-        const post = await Gun1.gun1
-            .get('posts')
-            .get(postSalt)
-            .once().then!()
+        const post = await Gun1.gun1.get('posts').get(postSalt).then!()
         if (!post) return []
         delete post._
         const nameInGun = Object.keys(post)

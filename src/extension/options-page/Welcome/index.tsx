@@ -37,7 +37,7 @@ enum WelcomeState {
 }
 const WelcomeActions = {
     backupMyKeyPair(whoAmI: PersonIdentifier) {
-        return Services.Welcome.backupMyKeyPair(whoAmI)
+        return Services.Welcome.backupMyKeyPair(whoAmI, { download: true, onlyBackupWhoAmI: false })
     },
     /**
      *
@@ -133,6 +133,7 @@ function Welcome(props: Welcome) {
         case WelcomeState.GenerateKey:
             return (
                 <Welcome1a3a
+                    back={() => onStepChange(WelcomeState.Intro)}
                     availableIdentityCount={props.currentIdentities.length}
                     onConnectOtherPerson={x => props.onConnectOtherPerson(whoAmI.identifier, x)}
                     onRestoreByMnemonicWord={props.onRestoreByMnemonicWord}

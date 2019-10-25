@@ -1,16 +1,17 @@
-import { dispatchCustomEvents, sleep, timeout, untilDocumentReady } from '../../../utils/utils'
-import { editProfileButtonSelector, editProfileTextareaSelector, postParser, postsSelectors } from '../utils/selector'
+import { dispatchCustomEvents, sleep, timeout } from '../../../utils/utils'
+import { editProfileButtonSelector, editProfileTextareaSelector, postsSelectors } from '../utils/selector'
 import { geti18nString } from '../../../utils/i18n'
 import { SocialNetworkUI, SocialNetworkUITasks } from '../../../social-network/ui'
 import { fetchBioCard } from '../utils/status'
-import { resolveInfoFromBioCard } from '../utils/fetch'
+import { bioCardParser, postParser } from '../utils/fetch'
 import { getFocus, getText } from '../utils/postBox'
 import { MutationObserverWatcher } from '@holoflows/kit'
+import { untilDocumentReady } from '../../../utils/dom'
 
 const taskPasteIntoPostBox: SocialNetworkUI['taskPasteIntoPostBox'] = async (text, opt) => {
     await getFocus() // This also waits for document loaded
     dispatchCustomEvents('paste', text)
-    if (getText() !== text) {
+    if (!getText().includes(text)) {
         console.warn('Text pasting failed')
         prompt(opt.warningText, text)
     }
@@ -25,7 +26,7 @@ const taskPasteIntoBio = async (text: string) => {
             .evaluate()!
             .click()
     } catch {
-        prompt(geti18nString('automation_request_click_edit_bio_button'))
+        alert(geti18nString('automation_request_click_edit_bio_button'))
     }
     await sleep(800)
     try {
@@ -44,12 +45,12 @@ const taskPasteIntoBio = async (text: string) => {
 }
 
 const taskGetPostContent: SocialNetworkUITasks['taskGetPostContent'] = async () => {
-    return postParser((await timeout(new MutationObserverWatcher(postsSelectors()), 10000))[0]).content
+    return (await postParser((await timeout(new MutationObserverWatcher(postsSelectors()), 10000))[0])).content
 }
 
 const taskGetProfile = async () => {
     await fetchBioCard()
-    return { bioContent: resolveInfoFromBioCard().bio }
+    return { bioContent: bioCardParser().bio }
 }
 
 export const twitterUITasks: SocialNetworkUITasks = {

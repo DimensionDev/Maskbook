@@ -18,6 +18,7 @@ export function resolveLastRecognizedIdentityFacebook(this: SocialNetworkUI) {
         .startWatch({
             childList: true,
             subtree: true,
+            characterData: true,
         })
         .then()
     function assign(i: part) {

@@ -1,3 +1,4 @@
+import '../public/env'
 import { addParameters, configure, addDecorator } from '@storybook/react'
 import { withKnobs } from '@storybook/addon-knobs'
 import { muiTheme } from 'storybook-addon-material-ui'

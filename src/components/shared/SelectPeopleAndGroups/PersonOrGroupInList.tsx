@@ -10,6 +10,7 @@ import { useFriendsList } from '../../DataSource/useActivatedUI'
 import { PersonIdentifier } from '../../../database/type'
 import { geti18nString, useIntlListFormat } from '../../../utils/i18n'
 import { isGroup } from './SelectPeopleAndGroupsUI'
+import { useResolveSpecialGroupName } from './resolveSpecialGroupName'
 
 interface Props {
     onClick(): void
@@ -18,7 +19,11 @@ interface Props {
     listItemProps?: Partial<(typeof ListItem extends OverridableComponent<infer U> ? U : never)['props']>
     item: Group | Person
 }
-const useStyle = makeStyles<Theme>(theme => ({
+const useStyle = makeStyles((theme: Theme) => ({
+    // ? I want to let the children of this element have no change to
+    // ? extends the width of the parent element.
+    // ? Only `grid` or `inline-grid` works. but why??
+    root: { display: 'inline-grid' },
     overflow: {
         textOverflow: 'ellipsis',
         whiteSpace: 'nowrap',
@@ -40,9 +45,10 @@ export function PersonOrGroupInList(props: Props) {
     let name = ''
     let avatar: ReturnType<typeof Avatar>
     let secondaryText: string | undefined = undefined
+    const groupName = useResolveSpecialGroupName(props.item)
     if (isGroup(props.item)) {
         const group = props.item
-        name = group.groupName
+        name = groupName
         avatar = (
             <MuiAvatar>
                 <GroupIcon />
@@ -75,7 +81,11 @@ export function PersonOrGroupInList(props: Props) {
         <ListItem button disabled={disabled} onClick={onClick} {...(listItemProps || {})}>
             <ListItemAvatar>{avatar}</ListItemAvatar>
             <ListItemText
-                classes={{ primary: classes.overflow, secondary: classes.overflow }}
+                classes={{
+                    root: classes.root,
+                    primary: classes.overflow,
+                    secondary: classes.overflow,
+                }}
                 primary={showAtNetwork ? withNetwork : name}
                 secondary={secondaryText}
             />

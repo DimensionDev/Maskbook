@@ -75,15 +75,11 @@ export function BannerUI(props: Props) {
     )
 }
 
-export function Banner({
-    unmount,
-    ...props
-}: { unmount: () => void; networkIdentifier: SocialNetworkUI['networkIdentifier'] } & Partial<Props>) {
+export function Banner(props: { networkIdentifier: SocialNetworkUI['networkIdentifier'] } & Partial<Props>) {
     const lastRecognizedIdentity = useLastRecognizedIdentity()
     const closeDefault = useCallback(() => {
         getActivatedUI().ignoreSetupAccount(env, {})
-        unmount()
-    }, [unmount])
+    }, [])
     const getStartedDefault = useCallback(() => {
         setStorage(props.networkIdentifier, { forceDisplayWelcome: false })
         Services.Welcome.openWelcomePage(lastRecognizedIdentity)

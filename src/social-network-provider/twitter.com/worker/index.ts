@@ -9,4 +9,5 @@ export const twitterWorkerSelf = defineSocialNetworkWorker({
     fetchProfile,
     autoVerifyBio,
     autoVerifyPost,
+    manualVerifyPost: null,
 })

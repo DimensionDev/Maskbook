@@ -55,9 +55,11 @@ export async function encrypt1ToN(info: {
     ownersAESKeyEncrypted: ArrayBuffer
     /** All encrypted post aes key. Should be post on the gun. */
     othersAESKeyEncrypted: PublishedAESKeyRecordV39OrV38[]
+    /** The raw post AESKey. Be aware to protect it! */
+    postAESKey: CryptoKey
 }> {
     const othersPublicKeyECDH = info.othersPublicKeyECDH.map((x, index) => ({ key: x, name: index.toString() }))
-    const { encryptedContent, iv, othersAESKeyEncrypted, ownersAESKeyEncrypted } = await encrypt1ToN40({
+    const { encryptedContent, iv, othersAESKeyEncrypted, ownersAESKeyEncrypted, postAESKey } = await encrypt1ToN40({
         ...info,
         othersPublicKeyECDH,
         version: -40,
@@ -72,6 +74,7 @@ export async function encrypt1ToN(info: {
         version: info.version,
         ownersAESKeyEncrypted,
         othersAESKeyEncrypted: othersAESKeyEncrypted_,
+        postAESKey,
     }
 }
 

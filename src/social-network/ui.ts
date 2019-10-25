@@ -1,13 +1,13 @@
 import { env, Env, Preference, Profile, SocialNetworkWorkerAndUIDefinition } from './shared'
 import { DOMProxy, LiveSelector, ValueRef } from '@holoflows/kit/es'
-import { Person, Group } from '../database'
+import { Group, Person } from '../database'
 import { PersonIdentifier, PostIdentifier } from '../database/type'
 import { Payload } from '../utils/type-transform/Payload'
 import { defaultTo, isNull } from 'lodash-es'
 import Services from '../extension/service'
 import { defaultSharedSettings } from './defaults/shared'
 import { defaultSocialNetworkUI } from './defaults/ui'
-import { nop, nopWithUnmount } from '../utils/utils'
+import { nopWithUnmount } from '../utils/utils'
 
 //#region SocialNetworkUI
 export interface SocialNetworkUIDefinition
@@ -90,29 +90,38 @@ export interface SocialNetworkUIInjections {
      * This function should inject the Welcome Banner
      * @description leaving it undefined, there will be a default value
      * leaving it "disabled", Maskbook will disable this feature.
+     *
+     * If it is a function, it should mount the WelcomeBanner.
+     * And it should return a function to unmount the WelcomeBanner
      */
-    injectWelcomeBanner?: (() => void) | 'disabled'
+    injectWelcomeBanner?: (() => () => void) | 'disabled'
+    /**
+     * This is an optional function.
+     *
+     * This function should inject a link to open the options page.
+     *
+     * This function should only active when the Maskbook start as a standalone app.
+     * (Mobile device).
+     */
+    injectOptionsPageLink?: (() => void) | 'disabled'
     /**
      * This function should inject the comment
      * @param current The current post
-     * @param node The post root
      * @returns unmount the injected components
      */
-    injectPostComments?: ((current: PostInfo, node: DOMProxy) => () => void) | 'disabled'
+    injectPostComments?: ((current: PostInfo) => () => void) | 'disabled'
     /**
      * This function should inject the comment box
      * @param current The current post
-     * @param node The post root
      * @returns unmount the injected components
      */
-    injectCommentBox?: ((current: PostInfo, node: DOMProxy) => () => void) | 'disabled'
+    injectCommentBox?: ((current: PostInfo) => () => void) | 'disabled'
     /**
      * This function should inject the post box
      * @param current The current post
-     * @param node The post root
      * @returns unmount the injected components
      */
-    injectPostInspector(current: PostInfo, node: DOMProxy<HTMLElement>): () => void
+    injectPostInspector(current: PostInfo): () => void
 }
 //#endregion
 //#region SocialNetworkUITasks
@@ -183,7 +192,7 @@ export interface SocialNetworkUIDataSources {
     /**
      * Posts that Maskbook detects
      */
-    readonly posts?: WeakMap<DOMProxy, PostInfo>
+    readonly posts?: WeakMap<object, PostInfo>
 }
 export type PostInfo = {
     readonly postBy: ValueRef<PersonIdentifier>
@@ -194,21 +203,22 @@ export type PostInfo = {
     readonly commentBoxSelector?: LiveSelector<HTMLElement, true>
     readonly decryptedPostContent: ValueRef<string>
     readonly rootNode: HTMLElement
+    readonly rootNodeProxy: DOMProxy
 }
 //#endregion
 
 export type SocialNetworkUI = Required<SocialNetworkUIDefinition>
 
-export const getEmptyPostInfo = (rootNodeSelector: LiveSelector<HTMLElement, true>) => {
+export const getEmptyPostInfoByElement = (
+    opt: Pick<PostInfo, 'rootNode' | 'rootNodeProxy' | 'commentsSelector' | 'commentBoxSelector'>,
+) => {
     return {
         decryptedPostContent: new ValueRef(''),
         postBy: new ValueRef(PersonIdentifier.unknown),
         postContent: new ValueRef(''),
-        postID: new ValueRef(''),
+        postID: new ValueRef(null),
         postPayload: new ValueRef(null),
-        get rootNode() {
-            return rootNodeSelector.evaluate()
-        },
+        ...opt,
     } as PostInfo
 }
 
@@ -235,9 +245,18 @@ export function activateSocialNetworkUI() {
                 if (val.length === 1) ui.currentIdentity.value = val[0]
             })
             {
-                const injectBanner = ui.injectWelcomeBanner
-                if (typeof injectBanner === 'function') {
-                    ui.shouldDisplayWelcome().then(result => result && injectBanner())
+                const mountSettingsLink = ui.injectOptionsPageLink
+                if (typeof mountSettingsLink === 'function') mountSettingsLink()
+            }
+            {
+                const mountBanner = ui.injectWelcomeBanner
+                if (typeof mountBanner === 'function') {
+                    ui.shouldDisplayWelcome().then(shouldDisplay => {
+                        if (shouldDisplay) {
+                            const unmount = mountBanner()
+                            ui.myIdentitiesRef.addListener(next => next.length && unmount())
+                        }
+                    })
                 }
             }
             ui.lastRecognizedIdentity.addListener(id => {
@@ -256,15 +275,13 @@ function hookUIPostMap(ui: SocialNetworkUI) {
     const unmountFunctions = new WeakMap<object, () => void>()
     const setter = ui.posts.set
     ui.posts.set = function(key, value) {
-        const unmountPostInspector = ui.injectPostInspector(value, key)
+        const unmountPostInspector = ui.injectPostInspector(value)
         const unmountCommentBox: () => void =
-            ui.injectCommentBox === 'disabled'
-                ? nopWithUnmount
-                : defaultTo(ui.injectCommentBox, nopWithUnmount)(value, key)
+            ui.injectCommentBox === 'disabled' ? nopWithUnmount : defaultTo(ui.injectCommentBox, nopWithUnmount)(value)
         const unmountPostComments: () => void =
             ui.injectPostComments === 'disabled'
                 ? nopWithUnmount
-                : defaultTo(ui.injectPostComments, nopWithUnmount)(value, key)
+                : defaultTo(ui.injectPostComments, nopWithUnmount)(value)
         unmountFunctions.set(key, () => {
             unmountPostInspector()
             unmountCommentBox()

@@ -1,5 +1,4 @@
-import { encodeArrayBuffer } from '../../../utils/type-transform/String-ArrayBuffer'
-import { toCompressSecp256k1Point } from '../../../utils/type-transform/SECP256k1-Compression'
+import { compressSecp256k1Key } from '../../../utils/type-transform/SECP256k1-Compression'
 import { queryMyIdentityAtDB } from '../../../database/people'
 import { PersonIdentifier } from '../../../database/type'
 import { getNetworkWorker } from '../../../social-network/worker'
@@ -9,6 +8,6 @@ export async function getMyProveBio(whoAmI: PersonIdentifier): Promise<string | 
     const myIdentity = await queryMyIdentityAtDB(whoAmI)
     if (!myIdentity) return null
     const pub = await crypto.subtle.exportKey('jwk', myIdentity.publicKey)
-    const compressed = toCompressSecp256k1Point(pub.x!, pub.y!)
-    return getNetworkWorker(whoAmI.network).publicKeyEncoder(encodeArrayBuffer(compressed))
+    const compressed = compressSecp256k1Key(pub)
+    return getNetworkWorker(whoAmI.network).publicKeyEncoder(compressed)
 }

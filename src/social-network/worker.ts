@@ -25,19 +25,19 @@ export interface SocialNetworkWorkerDefinition extends SocialNetworkWorkerAndUID
      *
      * If this function is not provided, autoVerifyBio in Welcome will be unavailable
      */
-    autoVerifyBio?: ((user: PersonIdentifier, provePost: string) => void) | null
+    autoVerifyBio: ((user: PersonIdentifier, provePost: string) => void) | null
     /**
      * This function should open a new page, then automatically input provePost to the post box
      *
      * If this function is not provided, autoVerifyPost in Welcome will be unavailable
      */
-    autoVerifyPost?: ((user: PersonIdentifier, provePost: string) => void) | null
+    autoVerifyPost: ((user: PersonIdentifier, provePost: string) => void) | null
     /**
-     * This function should open a new page, then let user add it by themself
+     * This function should open a new page, then let user add it by themselves
      *
      * If this function is not provided, manualVerifyPost in Welcome will be unavailable
      */
-    manualVerifyPost?: ((user: PersonIdentifier, provePost: string) => void) | null
+    manualVerifyPost: ((user: PersonIdentifier, provePost: string) => void) | null
 }
 
 export type SocialNetworkWorker = Required<SocialNetworkWorkerDefinition>
