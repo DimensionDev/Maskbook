@@ -10,7 +10,6 @@ function resolveSpecialGroupName(group: Group, knownPeople: Person[]): string {
         for (const person of knownPeople.filter(x => x.identifier.equals(group.identifier.ownerIdentifier))) {
             owner = person.nickname || owner
         }
-        if (!Number.isNaN(parseFloat(owner))) console.log(knownPeople)
         return geti18nString('database_group_friends_default_name', owner)
     }
     return group.groupName
