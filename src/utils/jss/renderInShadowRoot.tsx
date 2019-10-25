@@ -42,7 +42,9 @@ function Maskbook(props: React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivEle
     return (
         <StylesProvider jss={jss} generateClassName={generateClassName}>
             <ThemeProvider theme={isDarkTheme ? MaskbookDarkTheme : MaskbookLightTheme}>
-                <div {...props} />
+                <React.StrictMode>
+                    <div {...props} />
+                </React.StrictMode>
             </ThemeProvider>
         </StylesProvider>
     )
