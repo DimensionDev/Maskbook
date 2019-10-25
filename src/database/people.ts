@@ -26,7 +26,9 @@ import { personRecordToPerson } from './helpers/person'
 import { isIdentifierArrayEquals } from '../utils/equality'
 import { createDefaultFriendsGroup } from './helpers/group'
 import { generate_AES_GCM_256_Key, generate_ECDH_256k1_KeyPair } from '../utils/crypto.subtle'
+import { OnlyRunInContext } from '@holoflows/kit/es'
 
+OnlyRunInContext('background', 'People db')
 //#region Type and utils
 /**
  * Transform data out of database
