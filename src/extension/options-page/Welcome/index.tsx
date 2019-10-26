@@ -17,6 +17,7 @@ import { getCurrentNetworkWorkerService } from '../../background-script/WorkerSe
 import getCurrentNetworkWorker from '../../../social-network/utils/getCurrentNetworkWorker'
 import { BackupJSONFileLatest } from '../../../utils/type-transform/BackupFile'
 import { isNil } from 'lodash-es'
+import { useSnackbar } from 'notistack'
 
 enum WelcomeState {
     // Create
@@ -264,6 +265,8 @@ export default withRouter(function _WelcomePortal(props: RouteComponentProps) {
 
     const [mnemonic, setMnemonic] = useState<string | null>(null)
 
+    const { enqueueSnackbar } = useSnackbar()
+
     return (
         <ResponsiveDialog open fullWidth onClose={() => props.history.replace('/')}>
             <IdentifierRefContext.Provider value={selectedIdRef}>
@@ -297,6 +300,7 @@ export default withRouter(function _WelcomePortal(props: RouteComponentProps) {
                     onFinish={() => {
                         if (webpackEnv.firefoxVariant === 'GeckoView' || webpackEnv.target === 'WKWebview')
                             window.close()
+                        enqueueSnackbar('Done.', { variant: 'success', autoHideDuration: 2000 })
                         props.history.replace('/')
                     }}
                 />

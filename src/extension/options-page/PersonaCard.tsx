@@ -13,6 +13,7 @@ import { Link } from 'react-router-dom'
 import CenterFocusWeakIcon from '@material-ui/icons/CenterFocusWeak'
 import { useSnackbar } from 'notistack'
 import { BackupJSONFileLatest } from '../../utils/type-transform/BackupFile'
+import { useColorProvider } from '../../utils/theme'
 
 interface Props {
     identity: Person
@@ -36,6 +37,7 @@ const useStyles = makeStyles(theme =>
             '& > .extra-item': {
                 visibility: 'hidden',
                 cursor: 'pointer',
+                fontSize: '0.8rem',
             },
             '&:hover': {
                 '& > .extra-item': {
@@ -67,6 +69,7 @@ const useStyles = makeStyles(theme =>
                 flexShrink: 0,
                 marginLeft: 'auto',
                 cursor: 'pointer',
+                fontSize: '0.8rem',
             },
             '&:hover': {
                 '& > .extra-item': {
@@ -79,6 +82,7 @@ const useStyles = makeStyles(theme =>
 
 export default function PersonaCard({ identity }: Props) {
     const classes = useStyles()
+    const color = useColorProvider()
 
     const [provePost, setProvePost] = useState<string>('')
 
@@ -170,7 +174,7 @@ export default function PersonaCard({ identity }: Props) {
                             )}
                         </>
                     }
-                    <Link color="textSecondary" to={`/backup?identity=${identity.identifier.toText()}&qr`}>
+                    <Link component={Button} to={`/backup?identity=${identity.identifier.toText()}&qr`}>
                         <CenterFocusWeakIcon fontSize="small" />
                     </Link>
                 </Typography>
@@ -193,7 +197,7 @@ export default function PersonaCard({ identity }: Props) {
                     <div className="content" title={provePost}>
                         {provePost}
                     </div>
-                    <div className="extra-item" onClick={copyPublicKey}>
+                    <div className={`extra-item ${color.info}`} onClick={copyPublicKey}>
                         Copy
                     </div>
                 </Typography>
@@ -202,11 +206,15 @@ export default function PersonaCard({ identity }: Props) {
             <CardActions>
                 {
                     // @ts-ignore
-                    <Link size="small" to={`/backup?identity=${identity.identifier.toText()}`} component={Button}>
+                    <Link
+                        size="small"
+                        className={color.info}
+                        to={`/backup?identity=${identity.identifier.toText()}`}
+                        component={Button}>
                         Create Backup
                     </Link>
                 }
-                <Button size="small" style={{ marginLeft: 'auto' }} onClick={deleteIdentity}>
+                <Button size="small" className={color.error} style={{ marginLeft: 'auto' }} onClick={deleteIdentity}>
                     Delete Persona
                 </Button>
             </CardActions>

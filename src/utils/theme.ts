@@ -1,7 +1,9 @@
 import { createMuiTheme } from '@material-ui/core'
 import { ThemeOptions } from '@material-ui/core/styles/createMuiTheme'
-import indigo from '@material-ui/core/colors/indigo'
+import { makeStyles, createStyles } from '@material-ui/core/styles'
 import orange from '@material-ui/core/colors/orange'
+import red from '@material-ui/core/colors/red'
+import green from '@material-ui/core/colors/green'
 
 const _refTheme = createMuiTheme()
 const _refThemeDark = createMuiTheme({ palette: { type: 'dark' } })
@@ -21,8 +23,11 @@ function getFontFamily(monospace?: boolean) {
 const baseTheme = (theme: 'dark' | 'light') =>
     ({
         palette: {
-            primary: { main: indigo[400] },
+            primary: { main: '#2594ff' },
             secondary: { main: orange[800] },
+            error: { main: '#f20500' },
+            success: { main: green[800] },
+            info: { main: '#2594ff' },
             type: theme,
         },
         typography: {
@@ -40,4 +45,21 @@ const baseTheme = (theme: 'dark' | 'light') =>
 // Theme
 export const MaskbookLightTheme = createMuiTheme(baseTheme('light'))
 export const MaskbookDarkTheme = createMuiTheme(baseTheme('dark'))
+
 export const FixedWidthFonts = getFontFamily(true)
+
+export const useColorProvider = makeStyles(theme =>
+    createStyles({
+        error: {
+            color: theme.palette.error.main,
+        },
+        success: {
+            // @ts-ignore
+            color: theme.palette.success.main,
+        },
+        info: {
+            // @ts-ignore
+            color: theme.palette.info.main,
+        },
+    }),
+)
