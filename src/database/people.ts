@@ -131,7 +131,7 @@ export async function storeNewPersonDB(record: PersonRecord): Promise<void> {
     return
 }
 /**
- * Query person with a identifier
+ * Query person with an identifier
  */
 export async function queryPeopleDB(
     query: ((key: PersonIdentifier, record: PersonRecordInDatabase) => boolean) | { network: string } = () => true,
@@ -167,7 +167,7 @@ export async function queryPersonDB(id: PersonIdentifier): Promise<null | Person
     return outDb(Object.assign({}, result, result2))
 }
 /**
- * Update Person info with a identifier
+ * Update Person info with an identifier
  * @param person - Partial of person record
  */
 export async function updatePersonDB(person: Partial<PersonRecord> & Pick<PersonRecord, 'identifier'>): Promise<void> {
@@ -215,6 +215,24 @@ export async function queryMyIdentityAtDB(id: PersonIdentifier): Promise<null | 
         ...result,
         nickname: result.nickname || result2.nickname,
     }) as Promise<PersonRecordPublicPrivate>
+}
+
+/**
+ * Update My identity with an identifier
+ * @param person - Partial of person record
+ */
+export async function updateMyIdentityDB(
+    person: Partial<PersonRecord> & Pick<PersonRecord, 'identifier'>,
+): Promise<void> {
+    const full = await queryMyIdentityAtDB(person.identifier)
+
+    if (full === null) return
+
+    const data = { ...(await toDb(full)), ...(await toDb(person as PersonRecord)) }
+
+    const t = (await db).transaction('myself', 'readwrite')
+    await t.objectStore('myself').put(data)
+    MessageCenter.emit('identityUpdated', undefined)
 }
 /**
  * Remove my record

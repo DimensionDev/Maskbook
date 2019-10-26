@@ -284,18 +284,6 @@
     "welcome_1b_file_selected": {
         "message": "Selected exported key backup: $1"
     },
-    "welcome_1b_qr_0": {
-        "message": "You can find QR Code by"
-    },
-    "welcome_1b_qr_1": {
-        "message": "1. right-click the icon of the Maskbook in the browser address bar"
-    },
-    "welcome_1b_qr_2": {
-        "message": "2. click “Options”"
-    },
-    "welcome_1b_qr_3": {
-        "message": "3. click “Setup for Mobile”"
-    },
     "welcome_1b_hint_identity": {
         "message": "This backup file contains the following accounts:"
     },
@@ -402,7 +390,7 @@
         "message": "Please scan this QR Code in your Maskbook for mobile"
     },
     "options_mobile_export_subtitle": {
-        "message": "DO NOT save or share this image to other one!"
+        "message": "DO NOT save or share it to others!"
     },
     "shared_choose_identity_title": {
         "message": "Touch to switch your Maskbook account"
