@@ -4,6 +4,7 @@ import Card from '@material-ui/core/Card'
 import { Link } from 'react-router-dom'
 import CardContent from '@material-ui/core/CardContent'
 import AddIcon from '@material-ui/icons/Add'
+import Button from '@material-ui/core/Button'
 const useStyles = makeStyles(theme =>
     createStyles({
         card: {
@@ -18,7 +19,7 @@ const useStyles = makeStyles(theme =>
             display: 'inline-flex',
             height: '3.5rem',
             width: '3.5rem',
-            margin: 10,
+            margin: '10px 10px 0',
             borderRadius: '50%',
             backgroundColor: 'rgb(238,238,238)',
             justifyContent: 'center',
@@ -33,7 +34,7 @@ export default function NewPersonaCard() {
     return (
         <Card className={classes.card} raised elevation={3}>
             <CardContent>
-                <Link color="textPrimary" to={'/welcome'} className={classes.container}>
+                <Link component={Button} to={'/welcome'} className={classes.container}>
                     <span className={classes.rounded}>
                         <AddIcon fontSize="large" />
                     </span>

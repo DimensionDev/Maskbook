@@ -1,8 +1,19 @@
 import './provider.worker'
 
-import { Container, CssBaseline, useMediaQuery, Tabs, Tab, Button, Link as MuiLink } from '@material-ui/core'
+import {
+    Container,
+    CssBaseline,
+    useMediaQuery,
+    Tabs,
+    Tab,
+    Button,
+    Link as MuiLink,
+    ButtonBase,
+    Paper,
+    LinearProgress,
+} from '@material-ui/core'
 import React, { useEffect } from 'react'
-import { ThemeProvider } from '@material-ui/styles'
+import { ThemeProvider, withStyles } from '@material-ui/styles'
 import { MaskbookDarkTheme, MaskbookLightTheme } from './utils/theme'
 import { HashRouter, MemoryRouter, Route, Link, useRouteMatch, useHistory, Redirect } from 'react-router-dom'
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles'
@@ -19,7 +30,9 @@ import Developer from './extension/options-page/Developer'
 import FullScreenDialog from './extension/options-page/Dialog'
 import BackupDialog from './extension/options-page/Backup'
 
-import { SnackbarProvider, VariantType, useSnackbar } from 'notistack'
+import { SnackbarProvider } from 'notistack'
+import Services from './extension/service'
+import { PersonIdentifier } from './database/type'
 
 const useStyles = makeStyles(theme =>
     createStyles({
@@ -38,17 +51,31 @@ const useStyles = makeStyles(theme =>
         actionButtons: {
             margin: theme.spacing(4),
         },
+        loaderWrapper: {
+            position: 'relative',
+            '&>MuiLinearProgress-root': {
+                width: '100%',
+                bottom: 0,
+                position: 'absolute',
+            },
+            '&:not(:last-child)': {
+                marginBottom: theme.spacing(4),
+            },
+        },
         actionButton: {},
         footerButtons: {
             display: 'inline-flex',
+            flexWrap: 'wrap',
+            justifyContent: 'center',
             marginBottom: `${theme.spacing(4)}px`,
         },
         footerButton: {
             '&:not(:last-child)': {
-                borderRight: `1px solid ${theme.palette.primary.main}`,
+                borderRight: `1px solid ${theme.palette.text.primary}`,
             },
             padding: '0 8px',
             borderRadius: '0',
+            whiteSpace: 'nowrap',
             '& > span': {
                 marginLeft: theme.spacing(1),
                 marginRight: theme.spacing(1),
@@ -81,12 +108,56 @@ const OptionsPageRouters = (
     </>
 )
 
+const ColorButton = withStyles((theme: Theme) => ({
+    root: {
+        color: theme.palette.getContrastText('#FFFFFF'),
+        padding: '0.5em 1.5rem',
+        boxShadow: '0px 0px 15px 1px rgba(0,0,0,0.1)',
+        backgroundColor: 'rgba(255,255,255,0.8)',
+        width: '100%',
+    },
+}))(Button)
+
+const BlockAElement = (props: any) => <a style={{ display: 'block', textDecoration: 'none' }} {...props}></a>
+
+const PaperButton = function(props: any) {
+    const classes = useStyles()
+    const { children, disabled, ...paperProps } = props
+    return (
+        // @ts-ignore
+        <Paper
+            component={BlockAElement}
+            href={props.href}
+            className={classes.actionButton}
+            elevation={3}
+            {...paperProps}>
+            <ColorButton disabled={disabled}> {props.children} </ColorButton>
+        </Paper>
+    )
+}
+
+const FooterLink = function(props: any) {
+    const classes = useStyles()
+    return (
+        <MuiLink
+            underline="none"
+            href={props.href}
+            component={Button}
+            className={classes.footerButton}
+            target="_blank"
+            rel="noopener noreferrer">
+            <span>{props.children}</span>
+        </MuiLink>
+    )
+}
+
 function Dashboard() {
     const isDarkTheme = useMediaQuery('(prefers-color-scheme: dark)')
     const Router = (typeof window === 'object' ? HashRouter : MemoryRouter) as typeof HashRouter
     const classes = useStyles()
 
     const [currentTab, setCurrentTab] = React.useState(0)
+    const [exportLoading, setExportLoading] = React.useState(false)
 
     const identities = useMyIdentities()
 
@@ -102,6 +173,16 @@ function Dashboard() {
             document.body.style.backgroundColor = null
         }
     }, [])
+
+    const exportData = () => {
+        setExportLoading(true)
+        Services.Welcome.backupMyKeyPair(PersonIdentifier.unknown, {
+            download: true,
+            onlyBackupWhoAmI: false,
+        })
+            .catch(alert)
+            .then(() => setExportLoading(false))
+    }
 
     return (
         <ThemeProvider theme={isDarkTheme ? MaskbookDarkTheme : MaskbookLightTheme}>
@@ -135,42 +216,27 @@ function Dashboard() {
                                 <NewPersonaCard />
                             </section>
                             <section className={classes.actionButtons}>
-                                {
-                                    // @ts-ignore
-                                    <Link
-                                        to="/welcome?restore"
-                                        component={Button}
-                                        variant="contained"
-                                        className={classes.actionButton}>
-                                        Import Data Backup
-                                    </Link>
-                                }
+                                <div className={classes.loaderWrapper}>
+                                    {
+                                        // @ts-ignore
+                                        <Link
+                                            onClick={exportData}
+                                            to=""
+                                            disabled={exportLoading}
+                                            component={PaperButton}>
+                                            Export Backup Keystore
+                                        </Link>
+                                    }
+                                    {exportLoading && <LinearProgress />}
+                                </div>
+                                <Link to="/welcome?restore" component={PaperButton}>
+                                    Import Data Backup
+                                </Link>
                             </section>
                             <section className={classes.footerButtons}>
-                                <MuiLink
-                                    href="https://maskbook.com/"
-                                    component={Button}
-                                    className={classes.footerButton}
-                                    target="_blank"
-                                    rel="noopener noreferrer">
-                                    <span>Maskbook.com</span>
-                                </MuiLink>
-                                <MuiLink
-                                    href="https://maskbook.com/privacy-policy/"
-                                    component={Button}
-                                    className={classes.footerButton}
-                                    target="_blank"
-                                    rel="noopener noreferrer">
-                                    <span>Privacy Policy</span>
-                                </MuiLink>
-                                <MuiLink
-                                    href="https://github.com/DimensionDev/Maskbook"
-                                    component={Button}
-                                    className={classes.footerButton}
-                                    target="_blank"
-                                    rel="noopener noreferrer">
-                                    <span>Source Code</span>
-                                </MuiLink>
+                                <FooterLink href="https://maskbook.com/">Maskbook.com</FooterLink>
+                                <FooterLink href="https://maskbook.com/privacy-policy/">Privacy Policy</FooterLink>
+                                <FooterLink href="https://github.com/DimensionDev/Maskbook">Source Code</FooterLink>
                                 <Link to="/developer" component={Button} className={classes.footerButton}>
                                     <span>Developer Options</span>
                                 </Link>

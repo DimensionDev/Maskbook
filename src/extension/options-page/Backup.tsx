@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useHistory } from 'react-router'
-import { Dialog, DialogTitle, DialogContent } from '@material-ui/core'
+import { Dialog, DialogTitle, DialogContent, Button } from '@material-ui/core'
 
 import CloudDownloadIcon from '@material-ui/icons/CloudDownload'
 import CenterFocusWeakIcon from '@material-ui/icons/CenterFocusWeak'
@@ -38,7 +38,7 @@ const useStyles = makeStyles({
         display: 'inline-flex',
         height: '3.5rem',
         width: '3.5rem',
-        margin: 10,
+        marginRight: 10,
         borderRadius: '50%',
         backgroundColor: 'rgb(238,238,238)',
         justifyContent: 'center',
@@ -86,22 +86,22 @@ export default function BackupDialog() {
             <DialogTitle>{currentIdentifier ? currentIdentifier.friendlyToText() : 'Unknown'}</DialogTitle>
             <DialogContent>
                 <div className={classes.container}>
-                    <div onClick={downloadAsFile}>
+                    <Button onClick={downloadAsFile}>
                         <a color="textPrimary">
                             <span className={classes.rounded}>
                                 <CloudDownloadIcon fontSize="large" />
                             </span>
                         </a>
                         <div>Download as File</div>
-                    </div>
-                    <div onClick={() => setShowQRCode(!showQRCode)}>
+                    </Button>
+                    <Button onClick={() => setShowQRCode(!showQRCode)}>
                         <a color="textPrimary">
                             <span className={classes.rounded}>
                                 <CenterFocusWeakIcon fontSize="large" />
                             </span>
                         </a>
                         <div>{`${showQRCode ? 'Hide' : 'Show'} QR Code`}</div>
-                    </div>
+                    </Button>
                 </div>
                 {showQRCode ? (
                     <>
