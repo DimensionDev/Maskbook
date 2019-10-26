@@ -231,6 +231,12 @@ export default withRouter(function _WelcomePortal(props: RouteComponentProps) {
     useEffect(() => {
         const search = new URLSearchParams(props.location.search)
 
+        const isRestore = search.get('restore')
+        if (isRestore !== null) {
+            setStep(WelcomeState.RestoreKeypair)
+            return
+        }
+
         const identifier = search.get('identifier') || ''
         const avatar = search.get('avatar') || ''
         const nickname = search.get('nickname') || ''
