@@ -1,6 +1,5 @@
 import React from 'react'
 import { storiesOf } from '@storybook/react'
-import Welcome0 from '../components/Welcomes/0'
 import Welcome1a1a from '../components/Welcomes/1a1a'
 import Welcome1a1b from '../components/Welcomes/1a1b'
 import Welcome1a2 from '../components/Welcomes/1a2'
@@ -8,7 +7,6 @@ import Welcome1a3a from '../components/Welcomes/1a3a'
 import Welcome1a3b from '../components/Welcomes/1a3b'
 import Welcome1a4 from '../components/Welcomes/1a4'
 import Welcome1b1 from '../components/Welcomes/1b1'
-import Welcome2 from '../components/Welcomes/2'
 import { linkTo as to, linkTo } from '@storybook/addon-links'
 import { text, boolean, number } from '@storybook/addon-knobs'
 import { action } from '@storybook/addon-actions'
@@ -21,15 +19,6 @@ const ResponsiveDialog = Dialog
 storiesOf('Welcome', module)
     .add('Banner', () => (
         <BannerUI disabled={boolean('disabled', false)} close={action('Close')} getStarted={to('Welcome', 'Step 0')} />
-    ))
-    .add('Step 0', () => (
-        <ResponsiveDialog open>
-            <Welcome0
-                close={action('Close')}
-                create={to('Welcome', 'Step 1a-1a')}
-                restore={to('Welcome', 'Step 1b-1')}
-            />
-        </ResponsiveDialog>
     ))
     .add('Step 1a-1a', () => (
         <ResponsiveDialog open>
@@ -88,11 +77,6 @@ storiesOf('Welcome', module)
     .add('Step 1b-1', () => (
         <ResponsiveDialog open>
             <Welcome1b1 restore={action('Restore with')} />
-        </ResponsiveDialog>
-    ))
-    .add('Step 2', () => (
-        <ResponsiveDialog open>
-            <Welcome2 close={action('Close')} />
         </ResponsiveDialog>
     ))
     .add('QRCode Scanner', () => (

@@ -1,193 +1,243 @@
 import './provider.worker'
-import React, { useCallback, useEffect } from 'react'
-import { HashRouter, MemoryRouter, Route, Link, useRouteMatch, useHistory } from 'react-router-dom'
 
-import Empty from './extension/options-page/Empty'
-import Welcome from './extension/options-page/Welcome'
-import Privacy from './extension/options-page/Privacy'
-import Developer from './extension/options-page/Developer'
-
-import { ThemeProvider } from '@material-ui/styles'
-import { MaskbookLightTheme, MaskbookDarkTheme } from './utils/theme'
-import { geti18nString } from './utils/i18n'
-import { makeStyles, createStyles, Theme } from '@material-ui/core/styles'
 import {
-    Divider,
-    List,
-    ListItem,
-    ListItemIcon,
-    ListItemText,
+    Container,
     CssBaseline,
-    AppBar,
-    Toolbar,
-    Typography,
-    Hidden,
-    Drawer,
-    Link as MuiLink,
     useMediaQuery,
-    BottomNavigation,
-    BottomNavigationAction,
-    IconButton,
+    Tabs,
+    Tab,
+    Button,
+    Link as MuiLink,
+    Paper,
+    LinearProgress,
 } from '@material-ui/core'
-import NearMe from '@material-ui/icons/NearMe'
-import Assignment from '@material-ui/icons/Assignment'
-import Phonelink from '@material-ui/icons/Phonelink'
-import Code from '@material-ui/icons/Code'
-import ArrowBack from '@material-ui/icons/ArrowBack'
-import { ExportData } from './components/MobileImportExport/Export'
+import React, { useEffect } from 'react'
+import { ThemeProvider, withStyles } from '@material-ui/styles'
+import { MaskbookDarkTheme, MaskbookLightTheme } from './utils/theme'
+import { HashRouter, MemoryRouter, Route, Link } from 'react-router-dom'
+import { makeStyles, createStyles, Theme } from '@material-ui/core/styles'
+import PersonaCard from './extension/options-page/PersonaCard'
+import NewPersonaCard from './extension/options-page/NewPersonaCard'
+import { useMyIdentities } from './components/DataSource/useActivatedUI'
+
 import './setup.ui'
 import { SSRRenderer } from './utils/SSRRenderer'
 
-const drawerWidth = 240
-const OptionsPageRouters = (
-    <>
-        <Route exact path="/" component={() => Empty} />
-        <Route path="/welcome" component={Welcome} />
-        <Route path="/privacy" component={Privacy} />
-        <Route path="/developer" component={Developer} />
-        <Route path="/mobile-setup" component={ExportData} />
-    </>
-)
-const Links1st = (
-    <>
-        <LinkItem icon={<NearMe />} label={geti18nString('options_index_setup')} to="/welcome" />
-        <LinkItem icon={<Phonelink />} label={geti18nString('options_index_mobile_export')} to="/mobile-setup" />
-        <LinkItem icon={<Code />} label={geti18nString('options_index_dev')} to="/developer" />
-    </>
-)
-const Links2nd = (
-    <>
-        <LinkItem icon={<Assignment />} label={geti18nString('options_index_privacy')} to="/privacy" />
-    </>
-)
+import Welcome from './extension/options-page/Welcome'
+import Developer from './extension/options-page/Developer'
+import FullScreenDialog from './extension/options-page/Dialog'
+import BackupDialog from './extension/options-page/Backup'
+
+import { SnackbarProvider } from 'notistack'
+import Services from './extension/service'
+import { PersonIdentifier } from './database/type'
 
 const useStyles = makeStyles(theme =>
     createStyles({
         root: {
             display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
         },
         logo: {
-            height: 54,
-            marginBottom: -10,
+            height: 100,
+            marginBottom: -theme.spacing(1),
         },
-        drawer: {
-            [theme.breakpoints.up('sm')]: {
-                width: drawerWidth,
-                flexShrink: 0,
+        cards: {
+            width: '100%',
+        },
+        actionButtons: {
+            margin: theme.spacing(4),
+        },
+        loaderWrapper: {
+            position: 'relative',
+            '&>MuiLinearProgress-root': {
+                width: '100%',
+                bottom: 0,
+                position: 'absolute',
+            },
+            '&:not(:last-child)': {
+                marginBottom: theme.spacing(4),
             },
         },
-        appBar: {
-            marginLeft: drawerWidth,
-            zIndex: theme.zIndex.drawer + 1,
+        actionButton: {},
+        footerButtons: {
+            display: 'inline-flex',
+            flexWrap: 'wrap',
+            justifyContent: 'center',
+            marginBottom: `${theme.spacing(4)}px`,
         },
-        backButton: {
-            marginRight: theme.spacing(2),
-        },
-        toolbar: theme.mixins.toolbar,
-        drawerPaper: {
-            width: drawerWidth,
-        },
-        content: {
-            flexGrow: 1,
-            width: '100%',
-        },
-        bottomNavigationRoot: {
-            position: 'fixed',
-            bottom: 0,
-            width: '100%',
-        },
-        bottomNavigationMargin: {
-            height: 56 + 12,
+        footerButton: {
+            '&:not(:last-child)': {
+                borderRight: `1px solid ${theme.palette.text.primary}`,
+            },
+            padding: '0 8px',
+            borderRadius: '0',
+            whiteSpace: 'nowrap',
+            '& > span': {
+                marginLeft: theme.spacing(1),
+                marginRight: theme.spacing(1),
+            },
         },
     }),
 )
 
-SSRRenderer(<ResponsiveDrawer />)
-function ResponsiveDrawer() {
-    const classes = useStyles()
-    const drawer = (
-        <div>
-            <div className={classes.toolbar} />
-            <Divider />
-            <List>{Links1st}</List>
-            <Divider />
-            <List>{Links2nd}</List>
-        </div>
-    )
+const OptionsPageRouters = (
+    <>
+        <Route exact path="/" component={() => null} />
+        <Route path="/welcome" component={Welcome} />
+        <Route
+            path="/developer"
+            component={() => (
+                <FullScreenDialog>
+                    <Developer />
+                </FullScreenDialog>
+            )}
+        />
+        <Route path="/backup" component={() => <BackupDialog />} />
+    </>
+)
 
+const ColorButton = withStyles((theme: Theme) => ({
+    root: {
+        color: theme.palette.getContrastText('#FFFFFF'),
+        padding: '0.5em 1.5rem',
+        boxShadow: '0px 0px 15px 1px rgba(0,0,0,0.1)',
+        backgroundColor: 'rgba(255,255,255,0.8)',
+        width: '100%',
+    },
+}))(Button)
+
+const BlockAElement = (props: any) => <a style={{ display: 'block', textDecoration: 'none' }} {...props}></a>
+
+const PaperButton = function(props: any) {
+    const classes = useStyles()
+    const { children, disabled, ...paperProps } = props
+    return (
+        // @ts-ignore
+        <Paper
+            component={BlockAElement}
+            href={props.href}
+            className={classes.actionButton}
+            elevation={3}
+            {...paperProps}>
+            <ColorButton disabled={disabled}> {props.children} </ColorButton>
+        </Paper>
+    )
+}
+
+const FooterLink = function(props: any) {
+    const classes = useStyles()
+    return (
+        <MuiLink
+            underline="none"
+            href={props.href}
+            component={Button}
+            className={classes.footerButton}
+            target="_blank"
+            rel="noopener noreferrer">
+            <span>{props.children}</span>
+        </MuiLink>
+    )
+}
+
+function Dashboard() {
     const isDarkTheme = useMediaQuery('(prefers-color-scheme: dark)')
     const Router = (typeof window === 'object' ? HashRouter : MemoryRouter) as typeof HashRouter
+    const classes = useStyles()
+
+    const [currentTab, setCurrentTab] = React.useState(0)
+    const [exportLoading, setExportLoading] = React.useState(false)
+
+    const identities = useMyIdentities()
+
+    const handleTabChange = (_: React.ChangeEvent<{}>, newValue: number) => {
+        setCurrentTab(newValue)
+    }
+
+    useEffect(() => {
+        document.body.style.overflowX = 'hidden'
+        document.body.style.backgroundColor = 'rgb(238,238,238)'
+        return () => {
+            document.body.style.overflowX = 'auto'
+            document.body.style.backgroundColor = null
+        }
+    }, [])
+
+    const exportData = () => {
+        setExportLoading(true)
+        Services.Welcome.backupMyKeyPair(PersonIdentifier.unknown, {
+            download: true,
+            onlyBackupWhoAmI: false,
+        })
+            .catch(alert)
+            .then(() => setExportLoading(false))
+    }
 
     return (
         <ThemeProvider theme={isDarkTheme ? MaskbookDarkTheme : MaskbookLightTheme}>
-            <style>{'body {overflow-x: hidden;} a {color:unset;}'}</style>
-            <Router>
-                <div className={classes.root}>
-                    <CssBaseline />
-                    <AppBar position="fixed" className={classes.appBar}>
-                        <Toolbar>
-                            <MobileBackButton />
-                            <Typography variant="h6" noWrap>
-                                <img
-                                    className={classes.logo}
-                                    src="https://maskbook.com/img/maskbook--logotype-white.png"
-                                    alt="Maskbook"
-                                />
-                            </Typography>
-                        </Toolbar>
-                    </AppBar>
-                    <nav className={classes.drawer}>
-                        <Hidden xsDown>
-                            <Drawer classes={{ paper: classes.drawerPaper }} variant="permanent" open>
-                                {drawer}
-                            </Drawer>
-                        </Hidden>
-                    </nav>
-                    <main className={classes.content} style={{ display: 'relative' }}>
-                        <div className={classes.toolbar} />
-                        <div style={{ display: 'absolute' }}>{OptionsPageRouters}</div>
-                        <Hidden smUp>
-                            <div className={classes.bottomNavigationMargin} />
-                            <BottomNavigation classes={{ root: classes.bottomNavigationRoot }}>
-                                {Links1st.props.children}
-                                {Links2nd.props.children}
-                            </BottomNavigation>
-                        </Hidden>
-                    </main>
-                </div>
-            </Router>
+            <SnackbarProvider
+                maxSnack={30}
+                anchorOrigin={{
+                    vertical: 'top',
+                    horizontal: 'right',
+                }}>
+                <Router>
+                    <Container maxWidth="sm">
+                        <CssBaseline />
+                        <main className={classes.root}>
+                            <img
+                                className={classes.logo}
+                                src="https://maskbook.com/img/maskbook--logotype-black.png"
+                                alt="Maskbook"
+                            />
+                            <Tabs
+                                value={currentTab}
+                                indicatorColor="primary"
+                                textColor="primary"
+                                onChange={handleTabChange}>
+                                <Tab label="Dashboard" />
+                                <Tab label="Synchronization" disabled />
+                            </Tabs>
+                            <section className={classes.cards}>
+                                {identities.map(i => (
+                                    <PersonaCard identity={i} key={i.identifier.toText()} />
+                                ))}
+                                <NewPersonaCard />
+                            </section>
+                            <section className={classes.actionButtons}>
+                                <div className={classes.loaderWrapper}>
+                                    {
+                                        // @ts-ignore
+                                        <Link
+                                            onClick={exportData}
+                                            to=""
+                                            disabled={exportLoading}
+                                            component={PaperButton}>
+                                            Export Backup Keystore
+                                        </Link>
+                                    }
+                                    {exportLoading && <LinearProgress />}
+                                </div>
+                                <Link to="/welcome?restore" component={PaperButton}>
+                                    Import Data Backup
+                                </Link>
+                            </section>
+                            <section className={classes.footerButtons}>
+                                <FooterLink href="https://maskbook.com/">Maskbook.com</FooterLink>
+                                <FooterLink href="https://maskbook.com/privacy-policy/">Privacy Policy</FooterLink>
+                                <FooterLink href="https://github.com/DimensionDev/Maskbook">Source Code</FooterLink>
+                                <Link to="/developer" component={Button} className={classes.footerButton}>
+                                    <span>Developer Options</span>
+                                </Link>
+                            </section>
+                            {OptionsPageRouters}
+                        </main>
+                    </Container>
+                </Router>
+            </SnackbarProvider>
         </ThemeProvider>
     )
 }
-function MobileBackButton() {
-    const classes = useStyles()
-    if (!(webpackEnv.firefoxVariant === 'GeckoView' || webpackEnv.target === 'WKWebview')) return null
-    return (
-        <MuiLink classes={{ root: classes.backButton }} color="textPrimary" onClick={window.close}>
-            <IconButton edge="start">
-                <ArrowBack />
-            </IconButton>
-        </MuiLink>
-    )
-}
 
-function LinkItem(props: { to: string; icon: React.ReactElement; label: string }) {
-    const isMobile = useMediaQuery((theme: Theme) => theme.breakpoints.down('xs'))
-    const selected = useRouteMatch(props.to) !== null
-    const history = useHistory()
-    const onClick = useCallback(() => {
-        history.push(props.to)
-    }, [history, props.to])
-    const pc = (
-        <MuiLink color="textPrimary" component={Link} to={props.to}>
-            <ListItem selected={selected} button>
-                <ListItemIcon>{props.icon}</ListItemIcon>
-                <ListItemText primary={props.label} />
-            </ListItem>
-        </MuiLink>
-    )
-    const mobile = (
-        <BottomNavigationAction onClick={onClick} selected={selected} showLabel label={props.label} icon={props.icon} />
-    )
-    return isMobile ? mobile : pc
-}
+SSRRenderer(<Dashboard />)
