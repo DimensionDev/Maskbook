@@ -252,12 +252,6 @@ export default function Welcome({ restore: originalRestore }: Props) {
         return (
             <>
                 <Typography variant="h5">{geti18nString('welcome_1b_tabs_qr')}</Typography>
-                <Typography variant="body1">
-                    {geti18nString('welcome_1b_qr_0')} <br />
-                    {geti18nString('welcome_1b_qr_1')} <br />
-                    {geti18nString('welcome_1b_qr_2')} <br />
-                    {geti18nString('welcome_1b_qr_3')}
-                </Typography>
                 <QRScanner
                     onError={() => setError(true)}
                     scanning
