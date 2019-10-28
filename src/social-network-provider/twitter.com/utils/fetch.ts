@@ -1,7 +1,8 @@
 import { bioCard } from './selector'
 import { regexMatch } from '../../../utils/utils'
 import { notNullable } from '../../../utils/assert'
-import { defaultTo, join } from 'lodash-es'
+import { defaultTo, isUndefined, join } from 'lodash-es'
+import { nthChild } from '../../../utils/dom'
 
 /**
  * @example
@@ -29,13 +30,23 @@ export const bioCardParser = () => {
     const nameArea = parseNameArea(
         notNullable(
             bioCard()
-                .map(x => (x.children[1] as HTMLElement).innerText)
+                .map(x => nthChild(x, 1)!.innerText)
                 .evaluate(),
         ),
     )
     const bio = notNullable(
         bioCard()
-            .map(x => (x.children[2] as HTMLElement).innerHTML)
+            .map(x => nthChild(x, 2)!.innerHTML)
+            .evaluate(),
+    )
+    const isFollower = !isUndefined(
+        bioCard()
+            .map(x => nthChild(x, 1, 0, 0, 1, 1, 0))
+            .evaluate(),
+    )
+    const isFollowing = !isUndefined(
+        bioCard()
+            .querySelector('[data-testid*="unfollow"]')
             .evaluate(),
     )
     return {
@@ -43,6 +54,8 @@ export const bioCardParser = () => {
         name: nameArea.name,
         handle: nameArea.handle,
         bio,
+        isFollower,
+        isFollowing,
     }
 }
 
