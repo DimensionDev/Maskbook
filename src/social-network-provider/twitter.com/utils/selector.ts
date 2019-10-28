@@ -34,7 +34,6 @@ const postEditor = () =>
 export const newPostEditorBelow: () => LiveSelector<E, true> = () => querySelector<E>(postEditor())
 export const newPostEditorSelector = () => querySelector<HTMLDivElement>(`${postEditor()} .DraftEditor-root`)
 export const newPostEditorFocusAnchor = () => querySelector<E>(`${postEditor()} .public-DraftEditor-content`)
-export const newPostEditorHasFocus = () => querySelector(`${postEditor()} .public-DraftEditorPlaceholder-hasFocus`)
 
 export const hasDraftEditor = (x?: E) => !(isUndefined(x) || isNull(x.querySelector('.DraftEditor-root')))
 
@@ -46,9 +45,8 @@ export const editProfileButtonSelector = () =>
     querySelector<HTMLAnchorElement>('[data-testid="primaryColumn"] [href="/settings/profile"]')
 export const editProfileTextareaSelector = () => querySelector<HTMLTextAreaElement>('textarea[placeholder*="bio"]')
 
-export const postsSelectors = () => querySelectorAll('article')
-export const postsContentSelectors = () => postsSelectors().querySelectorAll<E>(`[lang]`)
-export const fromPostSelectorsSelectPostContentString = '[data-testid="tweet"] > div:nth-of-type(2)'
+export const postsSelector = () => querySelectorAll('[data-testid="tweet"]')
+export const postsContentSelector = () => postsSelector().querySelectorAll<E>(`[lang]`)
 
 // self infos
 const base = querySelector<HTMLScriptElement>('#react-root + script')
