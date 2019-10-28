@@ -31,7 +31,7 @@ if (GetContext() === 'background') {
         document.documentElement.appendChild(script)
     }`
     const contentScripts: Array<{ code: string } | { file: string }> = []
-    fetch('generated__content__script.html')
+    const contentScriptReady = fetch('generated__content__script.html')
         .then(x => x.text())
         .then(html => {
             const parser = new DOMParser()
@@ -44,6 +44,7 @@ if (GetContext() === 'background') {
         })
     browser.webNavigation.onCommitted.addListener(async arg => {
         if (arg.url === 'about:blank') return
+        await contentScriptReady
         browser.tabs
             .executeScript(arg.tabId, {
                 runAt: 'document_start',
@@ -76,11 +77,21 @@ if (GetContext() === 'background') {
     })
 
     if (webpackEnv.target === 'WKWebview') {
-        browser.tabs.create({
-            url: 'https://m.facebook.com/',
+        contentScriptReady.then(() =>
+            browser.tabs.create({
+                url: 'https://m.facebook.com/',
+                active: true,
+            }),
+        )
+    }
+    MessageCenter.on('closeActiveTab', async () => {
+        const tabs = await browser.tabs.query({
             active: true,
         })
-    }
+        if (tabs[0]) {
+            await browser.tabs.remove(tabs[0].id!)
+        }
+    })
 }
 function IgnoreError(arg: unknown): (reason: Error) => void {
     return e => {
@@ -95,14 +106,6 @@ function IgnoreError(arg: unknown): (reason: Error) => void {
         } else console.error('Inject error', e, arg, Object.entries(e))
     }
 }
-MessageCenter.on('closeActiveTab', async () => {
-    const tabs = await browser.tabs.query({
-        active: true,
-    })
-    if (tabs[0]) {
-        await browser.tabs.remove(tabs[0].id!)
-    }
-})
 Object.assign(window, {
     elliptic,
     definedSocialNetworkWorkers: (require('./social-network/worker') as typeof import('./social-network/worker'))
