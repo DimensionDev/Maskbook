@@ -30,7 +30,7 @@
     "lint:report": "node scripts/lint.js --reportOnly"
   },
   "dependencies": {
-    "@commitlint/cli": "^8.1.0",
+    "@commitlint/cli": "^8.2.0",
     "@commitlint/config-conventional": "^8.1.0",
     "@holoflows/kit": "https://github.com/DimensionDev/holoflows-kit",
     "@material-ui/core": "4.5.1",
