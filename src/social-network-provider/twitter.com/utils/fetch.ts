@@ -12,7 +12,7 @@ import { defaultTo, join } from 'lodash-es'
  * }
  */
 const parseNameArea = (t: string) => {
-    const r = regexMatch(t, /^((.+\s*)*)@(.+)$/, null)!
+    const r = regexMatch(t, /((.+\s*)*)@(.+)/, null)!
     return {
         name: r[1].replace(/\n+/g, ''),
         handle: r[3],
