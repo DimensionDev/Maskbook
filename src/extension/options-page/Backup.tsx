@@ -1,50 +1,50 @@
 import React, { useState, useEffect } from 'react'
 import { useHistory } from 'react-router'
-import { Dialog, DialogTitle, DialogContent, Button } from '@material-ui/core'
+import { Dialog, DialogTitle, DialogContent, Button, Avatar } from '@material-ui/core'
 
 import CloudDownloadIcon from '@material-ui/icons/CloudDownload'
 import CenterFocusWeakIcon from '@material-ui/icons/CenterFocusWeak'
 
 import Services from '../../extension/service'
-import { makeStyles, Typography } from '@material-ui/core'
+import { makeStyles, Typography, createStyles } from '@material-ui/core'
 import { geti18nString } from '../../utils/i18n'
 import { compressBackupFile } from '../../utils/type-transform/BackupFileShortRepresentation'
 import { BackupJSONFileLatest } from '../../utils/type-transform/BackupFile'
 import { PersonIdentifier } from '../../database/type'
 import { QrCode } from '../../components/shared/qrcode'
 
-const useStyles = makeStyles({
-    root: {
-        textAlign: 'center',
-        paddingTop: 24,
-        maxWidth: 600,
-        margin: 'auto',
-        '& > div': {
+const useStyles = makeStyles(theme =>
+    createStyles({
+        root: {
+            textAlign: 'center',
+            paddingTop: 24,
+            maxWidth: 600,
             margin: 'auto',
+            '& > div': {
+                margin: 'auto',
+            },
         },
-    },
-    code: {
-        padding: '2em',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    container: {
-        display: 'flex',
-        justifyContent: 'space-evenly',
-        textAlign: 'center',
-    },
-    rounded: {
-        display: 'inline-flex',
-        height: '3.5rem',
-        width: '3.5rem',
-        marginRight: 10,
-        borderRadius: '50%',
-        backgroundColor: 'rgb(238,238,238)',
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-})
+        code: {
+            padding: '2em',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+        },
+        container: {
+            display: 'flex',
+            justifyContent: 'space-evenly',
+            textAlign: 'center',
+        },
+        avatar: {
+            height: '3.5rem',
+            width: '3.5rem',
+            marginRight: theme.spacing(1),
+            ...(theme.palette.type === 'dark'
+                ? {}
+                : { backgroundColor: 'rgb(238,238,238)', color: 'rgb(118,118,118)' }),
+        },
+    }),
+)
 
 export default function BackupDialog() {
     const history = useHistory()
@@ -88,17 +88,17 @@ export default function BackupDialog() {
                 <div className={classes.container}>
                     <Button onClick={downloadAsFile}>
                         <a color="textPrimary">
-                            <span className={classes.rounded}>
+                            <Avatar className={classes.avatar}>
                                 <CloudDownloadIcon fontSize="large" />
-                            </span>
+                            </Avatar>
                         </a>
                         <div>Download as File</div>
                     </Button>
                     <Button onClick={() => setShowQRCode(!showQRCode)}>
                         <a color="textPrimary">
-                            <span className={classes.rounded}>
+                            <Avatar className={classes.avatar}>
                                 <CenterFocusWeakIcon fontSize="large" />
-                            </span>
+                            </Avatar>
                         </a>
                         <div>{`${showQRCode ? 'Hide' : 'Show'} QR Code`}</div>
                     </Button>

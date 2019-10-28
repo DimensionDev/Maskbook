@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom'
 import CardContent from '@material-ui/core/CardContent'
 import AddIcon from '@material-ui/icons/Add'
 import Button from '@material-ui/core/Button'
+import { Avatar } from '@material-ui/core'
 const useStyles = makeStyles(theme =>
     createStyles({
         card: {
@@ -15,15 +16,12 @@ const useStyles = makeStyles(theme =>
         container: {
             marginBottom: theme.spacing(1),
         },
-        rounded: {
-            display: 'inline-flex',
+        avatar: {
             height: '3.5rem',
             width: '3.5rem',
-            margin: '10px 10px 0',
-            borderRadius: '50%',
-            backgroundColor: 'rgb(238,238,238)',
-            justifyContent: 'center',
-            alignItems: 'center',
+            ...(theme.palette.type === 'dark'
+                ? {}
+                : { backgroundColor: 'rgb(238,238,238)', color: 'rgb(118,118,118)' }),
         },
     }),
 )
@@ -35,9 +33,9 @@ export default function NewPersonaCard() {
         <Card className={classes.card} raised elevation={3}>
             <CardContent>
                 <Link component={Button} to={'/welcome'} className={classes.container}>
-                    <span className={classes.rounded}>
+                    <Avatar className={classes.avatar}>
                         <AddIcon fontSize="large" />
-                    </span>
+                    </Avatar>
                 </Link>
                 <div>Add New Persona</div>
             </CardContent>
