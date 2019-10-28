@@ -1,13 +1,13 @@
 import { livingShadowRoots } from './ConstructableStyleSheetsRenderer'
 import { GetContext } from '@holoflows/kit/es'
-import { untilDocumentReady } from '../dom'
+import { untilDocumentReady } from '../utils'
 
 const div = document.createElement('div')
-const shadow = div.attachShadow({ mode: 'closed' })
-livingShadowRoots.add(shadow)
-untilDocumentReady().then(() => {
-    document.body.appendChild(div)
-})
+untilDocumentReady().then(() => document.body.appendChild(div))
+export const PortalShadowRoot = ((GetContext() === 'options'
+    ? div
+    : div.attachShadow({ mode: 'closed' })) as unknown) as Element
+livingShadowRoots.add((PortalShadowRoot as unknown) as ShadowRoot)
 
 globalThis.getComputedStyle = new Proxy(globalThis.getComputedStyle || (() => {}), {
     apply(target, thisArg, args) {
