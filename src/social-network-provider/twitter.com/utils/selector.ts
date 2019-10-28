@@ -25,7 +25,7 @@ export const bioQueryString = '[href*="header_photo"] + div [data-testid="UserDe
 export const bioCard = () =>
     querySelector('[href*="photo"]')
         .map(x => x.parentElement!.parentElement)
-        .querySelector('[data-testid="UserDescription"]')
+        .querySelector('[data-testid="UserProfileHeader_Items"]')
         .map(x => x.parentElement!.parentElement)
 
 const postEditor = () =>
