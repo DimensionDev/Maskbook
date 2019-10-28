@@ -4,7 +4,7 @@ import { equal } from '../../../utils/assert'
 import { untilDocumentReady, untilElementAvailable } from '../../../utils/dom'
 
 export const postBoxInPopup = () => {
-    return window.location.pathname.includes('compose')
+    return globalThis.location.pathname.includes('compose')
 }
 
 export const getFocus = async () => {

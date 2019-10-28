@@ -20,7 +20,7 @@ export const instanceOfTwitterUI = defineSocialNetworkUI({
         InitGroupsValueRef(instanceOfTwitterUI, host)
         InitMyIdentitiesValueRef(instanceOfTwitterUI, host)
     },
-    shouldActivate() {
+    shouldActivate(location: Location | URL = globalThis.location) {
         return location.hostname.endsWith(host)
     },
     friendlyName: 'Twitter (Insider Preview)',

@@ -11,6 +11,7 @@ import { getActivatedUI } from '../../social-network/ui'
 import { useCurrentIdentity, useMyIdentities } from '../DataSource/useActivatedUI'
 import { PersonIdentifier } from '../../database/type'
 import { geti18nString } from '../../utils/i18n'
+import { currentSelectedIdentity } from '../../components/shared-settings/settings'
 
 const useStyles = makeStyles({
     root: { width: '100%' },
@@ -89,7 +90,9 @@ export const ChooseIdentity: React.FC<{
 
 ChooseIdentity.defaultProps = {
     onChangeIdentity(person) {
-        getActivatedUI().currentIdentity.value = person
+        const ui = getActivatedUI()
+        ui.currentIdentity.value = person
+        currentSelectedIdentity[ui.networkIdentifier].value = person.identifier.toText()
     },
 }
 /**
@@ -98,9 +101,11 @@ ChooseIdentity.defaultProps = {
  */
 export function useIsolatedChooseIdentity(): readonly [Person | null, React.ReactNode] {
     const all = useMyIdentities()
+    const whoami = useCurrentIdentity()
     const [current, set] = useState<Person>()
+    const selected = current || whoami || undefined
     return [
-        current || all[0] || null,
-        <ChooseIdentity current={current} availableIdentities={all} onChangeIdentity={set} />,
+        selected || null,
+        <ChooseIdentity current={selected} availableIdentities={all} onChangeIdentity={set} />,
     ] as const
 }

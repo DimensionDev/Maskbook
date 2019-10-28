@@ -53,7 +53,13 @@ export async function queryMyIdentity(identifier?: PersonIdentifier | string): P
         return []
     }
 }
-
+/**
+ * Remove an identity.
+ */
+export async function removeMyIdentity(identifier: PersonIdentifier): Promise<void> {
+    await deleteLocalKeyDB(identifier)
+    await removeMyIdentityAtDB(identifier)
+}
 /**
  * Restore the backup
  */
