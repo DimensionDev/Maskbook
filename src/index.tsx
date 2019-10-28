@@ -10,8 +10,9 @@ import {
     Link as MuiLink,
     Paper,
     LinearProgress,
+    Breadcrumbs,
 } from '@material-ui/core'
-import React, { useEffect } from 'react'
+import React from 'react'
 import { ThemeProvider, withStyles } from '@material-ui/styles'
 import { MaskbookDarkTheme, MaskbookLightTheme } from './utils/theme'
 import { HashRouter, MemoryRouter, Route, Link } from 'react-router-dom'
@@ -42,12 +43,13 @@ const useStyles = makeStyles(theme =>
         logo: {
             height: 100,
             marginBottom: -theme.spacing(1),
+            filter: `invert(${theme.palette.type === 'dark' ? '0.9' : '0.1'})`,
         },
         cards: {
             width: '100%',
         },
         actionButtons: {
-            margin: theme.spacing(4),
+            margin: theme.spacing(2),
         },
         loaderWrapper: {
             position: 'relative',
@@ -57,21 +59,17 @@ const useStyles = makeStyles(theme =>
                 position: 'absolute',
             },
             '&:not(:last-child)': {
-                marginBottom: theme.spacing(4),
+                marginBottom: theme.spacing(2),
             },
         },
         actionButton: {},
         footerButtons: {
-            display: 'inline-flex',
-            flexWrap: 'wrap',
-            justifyContent: 'center',
-            marginBottom: `${theme.spacing(4)}px`,
+            marginTop: `${theme.spacing(1)}px`,
+            '& ol': {
+                justifyContent: 'center',
+            },
         },
         footerButton: {
-            '&:not(:last-child)': {
-                borderRight: `1px solid ${theme.palette.text.primary}`,
-            },
-            padding: '0 8px',
             borderRadius: '0',
             whiteSpace: 'nowrap',
             '& > span': {
@@ -114,7 +112,6 @@ const PaperButton = function(props: any) {
     const classes = useStyles()
     const { children, disabled, ...paperProps } = props
     return (
-        // @ts-ignore
         <Paper
             component={BlockAElement}
             href={props.href}
@@ -131,18 +128,33 @@ const FooterLink = function(props: any) {
     return (
         <MuiLink
             underline="none"
-            href={props.href}
-            component={Button}
-            className={classes.footerButton}
-            target="_blank"
-            rel="noopener noreferrer">
+            {...(props.href
+                ? { href: props.href, target: '_blank', rel: 'noopener noreferrer' }
+                : { to: props.to, component: Link })}
+            color="inherit"
+            className={classes.footerButton}>
             <span>{props.children}</span>
         </MuiLink>
     )
 }
 
-function Dashboard() {
+function DashboardWithProvider() {
     const isDarkTheme = useMediaQuery('(prefers-color-scheme: dark)')
+    return (
+        <ThemeProvider theme={isDarkTheme ? MaskbookDarkTheme : MaskbookLightTheme}>
+            <SnackbarProvider
+                maxSnack={30}
+                anchorOrigin={{
+                    vertical: 'top',
+                    horizontal: 'right',
+                }}>
+                <Dashboard></Dashboard>
+            </SnackbarProvider>
+        </ThemeProvider>
+    )
+}
+
+function Dashboard() {
     const Router = (typeof window === 'object' ? HashRouter : MemoryRouter) as typeof HashRouter
     const classes = useStyles()
 
@@ -155,15 +167,6 @@ function Dashboard() {
         setCurrentTab(newValue)
     }
 
-    useEffect(() => {
-        document.body.style.overflowX = 'hidden'
-        document.body.style.backgroundColor = 'rgb(238,238,238)'
-        return () => {
-            document.body.style.overflowX = 'auto'
-            document.body.style.backgroundColor = null
-        }
-    }, [])
-
     const exportData = () => {
         setExportLoading(true)
         Services.Welcome.backupMyKeyPair(PersonIdentifier.unknown, {
@@ -175,69 +178,58 @@ function Dashboard() {
     }
 
     return (
-        <ThemeProvider theme={isDarkTheme ? MaskbookDarkTheme : MaskbookLightTheme}>
-            <SnackbarProvider
-                maxSnack={30}
-                anchorOrigin={{
-                    vertical: 'top',
-                    horizontal: 'right',
-                }}>
-                <Router>
-                    <Container maxWidth="sm">
-                        <CssBaseline />
-                        <main className={classes.root}>
-                            <img
-                                className={classes.logo}
-                                src="https://maskbook.com/img/maskbook--logotype-black.png"
-                                alt="Maskbook"
-                            />
-                            <Tabs
-                                value={currentTab}
-                                indicatorColor="primary"
-                                textColor="primary"
-                                onChange={handleTabChange}>
-                                <Tab label="Dashboard" />
-                                <Tab label="Synchronization" disabled />
-                            </Tabs>
-                            <section className={classes.cards}>
-                                {identities.map(i => (
-                                    <PersonaCard identity={i} key={i.identifier.toText()} />
-                                ))}
-                                <NewPersonaCard />
-                            </section>
-                            <section className={classes.actionButtons}>
-                                <div className={classes.loaderWrapper}>
-                                    {
-                                        // @ts-ignore
-                                        <Link
-                                            onClick={exportData}
-                                            to=""
-                                            disabled={exportLoading}
-                                            component={PaperButton}>
-                                            Export Backup Keystore
-                                        </Link>
-                                    }
-                                    {exportLoading && <LinearProgress />}
-                                </div>
-                                <Link to="/welcome?restore" component={PaperButton}>
-                                    Import Data Backup
-                                </Link>
-                            </section>
-                            <section className={classes.footerButtons}>
-                                <FooterLink href="https://maskbook.com/">Maskbook.com</FooterLink>
-                                <FooterLink href="https://maskbook.com/privacy-policy/">Privacy Policy</FooterLink>
-                                <FooterLink href="https://github.com/DimensionDev/Maskbook">Source Code</FooterLink>
-                                <Link to="/developer" component={Button} className={classes.footerButton}>
-                                    <span>Developer Options</span>
-                                </Link>
-                            </section>
-                            {OptionsPageRouters}
-                        </main>
-                    </Container>
-                </Router>
-            </SnackbarProvider>
-        </ThemeProvider>
+        <Router>
+            <Container maxWidth="md">
+                <CssBaseline />
+                <Container maxWidth="sm">
+                    <main className={classes.root}>
+                        <img
+                            className={classes.logo}
+                            src="https://maskbook.com/img/maskbook--logotype-black.png"
+                            alt="Maskbook"
+                        />
+                        <Tabs
+                            value={currentTab}
+                            indicatorColor="primary"
+                            textColor="primary"
+                            onChange={handleTabChange}>
+                            <Tab label="Dashboard" />
+                            <Tab label="Synchronization" disabled />
+                        </Tabs>
+                        <section className={classes.cards}>
+                            {identities.map(i => (
+                                <PersonaCard identity={i} key={i.identifier.toText()} />
+                            ))}
+                            <NewPersonaCard />
+                        </section>
+                        <section className={classes.actionButtons}>
+                            <div className={classes.loaderWrapper}>
+                                {
+                                    // @ts-ignore
+                                    <Link onClick={exportData} to="" disabled={exportLoading} component={PaperButton}>
+                                        Export Backup Keystore
+                                    </Link>
+                                }
+                                {exportLoading && <LinearProgress />}
+                            </div>
+                            <Link to="/welcome?restore" component={PaperButton}>
+                                Import Data Backup
+                            </Link>
+                        </section>
+                    </main>
+                </Container>
+                <footer>
+                    <Breadcrumbs className={classes.footerButtons} separator="|" aria-label="breadcrumb">
+                        <FooterLink href="https://maskbook.com/">Maskbook.com</FooterLink>
+                        <FooterLink href="https://maskbook.com/privacy-policy/">Privacy Policy</FooterLink>
+                        <FooterLink href="https://github.com/DimensionDev/Maskbook">Source Code</FooterLink>
+                        <FooterLink to="/developer">Developer Options</FooterLink>
+                    </Breadcrumbs>
+                </footer>
+                {OptionsPageRouters}
+            </Container>
+        </Router>
     )
 }
 
-SSRRenderer(<Dashboard />)
+SSRRenderer(<DashboardWithProvider />)

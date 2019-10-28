@@ -9,7 +9,7 @@ import { Person } from '../../database'
 import { Divider } from '@material-ui/core'
 import Services from '../service'
 import { definedSocialNetworkUIs } from '../../social-network/ui'
-import { Link } from 'react-router-dom'
+import { Link as RouterLink, LinkProps as RouterLinkProps } from 'react-router-dom'
 import CenterFocusWeakIcon from '@material-ui/icons/CenterFocusWeak'
 import { useSnackbar } from 'notistack'
 import { BackupJSONFileLatest } from '../../utils/type-transform/BackupFile'
@@ -23,7 +23,7 @@ const useStyles = makeStyles(theme =>
     createStyles({
         card: {
             minWidth: 375,
-            margin: 20,
+            margin: theme.spacing(2),
         },
         header: {
             display: 'flex',
@@ -79,6 +79,10 @@ const useStyles = makeStyles(theme =>
         },
     }),
 )
+
+const Link = React.forwardRef<HTMLAnchorElement, RouterLinkProps>((props, ref) => (
+    <RouterLink innerRef={ref} {...props} />
+))
 
 export default function PersonaCard({ identity }: Props) {
     const classes = useStyles()
@@ -136,8 +140,7 @@ export default function PersonaCard({ identity }: Props) {
 
     const renameIdentity = (event: React.FocusEvent<HTMLSpanElement> | React.KeyboardEvent<HTMLSpanElement>) => {
         event.preventDefault()
-        // @ts-ignore
-        Services.People.updatePersonInfo(identity.identifier, { nickname: event.target.innerText }).then(() => {
+        Services.People.updatePersonInfo(identity.identifier, { nickname: event.currentTarget.innerText }).then(() => {
             enqueueSnackbar('Done.', { variant: 'success', autoHideDuration: 1000 })
             setRename(false)
         })
@@ -174,9 +177,9 @@ export default function PersonaCard({ identity }: Props) {
                             )}
                         </>
                     }
-                    <Link component={Button} to={`/backup?identity=${identity.identifier.toText()}&qr`}>
+                    <RouterLink component={Button} to={`/backup?identity=${identity.identifier.toText()}&qr`}>
                         <CenterFocusWeakIcon fontSize="small" />
-                    </Link>
+                    </RouterLink>
                 </Typography>
                 <Typography className={classes.line} component="div">
                     <div className="title" title={friendlyName}>
@@ -204,16 +207,14 @@ export default function PersonaCard({ identity }: Props) {
             </CardContent>
             <Divider />
             <CardActions>
-                {
-                    // @ts-ignore
-                    <Link
-                        size="small"
-                        className={color.info}
-                        to={`/backup?identity=${identity.identifier.toText()}`}
-                        component={Button}>
-                        Create Backup
-                    </Link>
-                }
+                <Button
+                    size="small"
+                    className={color.info}
+                    color="primary"
+                    component={Link}
+                    to={`/backup?identity=${identity.identifier.toText()}`}>
+                    Create Backup
+                </Button>
                 <Button size="small" className={color.error} style={{ marginLeft: 'auto' }} onClick={deleteIdentity}>
                     Delete Persona
                 </Button>
