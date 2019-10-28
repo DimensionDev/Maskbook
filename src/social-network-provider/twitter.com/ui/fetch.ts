@@ -1,6 +1,6 @@
 import { bioCard, postsSelector, selfInfoSelectors } from '../utils/selector'
 import { MutationObserverWatcher } from '@holoflows/kit'
-import { PersonIdentifier } from '../../../database/type'
+import { GroupIdentifier, PersonIdentifier } from '../../../database/type'
 import {
     getEmptyPostInfoByElement,
     SocialNetworkUI,
@@ -11,6 +11,7 @@ import { instanceOfTwitterUI } from './index'
 import { bioCardParser, postParser } from '../utils/fetch'
 import { uploadToService } from '../utils/user'
 import { isNil } from 'lodash-es'
+import Services from '../../../extension/service'
 
 const resolveLastRecognizedIdentity = (self: SocialNetworkUI) => {
     const selfSelector = selfInfoSelectors().handle
@@ -43,6 +44,14 @@ const registerUserCollector = () => {
             const resolve = () => {
                 const r = bioCardParser()
                 uploadToService(r)
+                const theGroup = GroupIdentifier.getDefaultFriendsGroupIdentifier(
+                    instanceOfTwitterUI.lastRecognizedIdentity.value.identifier,
+                )
+                if (r.isFollowing && r.isFollower) {
+                    Services.People.addPersonToFriendsGroup(theGroup, [r.identifier]).then()
+                } else {
+                    Services.People.removePersonFromFriendsGroup(theGroup, [r.identifier]).then()
+                }
             }
             resolve()
             return {

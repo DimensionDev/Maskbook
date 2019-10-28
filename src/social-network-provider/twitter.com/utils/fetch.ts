@@ -3,6 +3,8 @@ import { regexMatch } from '../../../utils/utils'
 import { notNullable } from '../../../utils/assert'
 import { defaultTo, isUndefined, join } from 'lodash-es'
 import { nthChild } from '../../../utils/dom'
+import { PersonIdentifier } from '../../../database/type'
+import { host } from '../index'
 
 /**
  * @example
@@ -53,6 +55,7 @@ export const bioCardParser = () => {
         avatar,
         name: nameArea.name,
         handle: nameArea.handle,
+        identifier: new PersonIdentifier(host, nameArea.handle),
         bio,
         isFollower,
         isFollowing,
