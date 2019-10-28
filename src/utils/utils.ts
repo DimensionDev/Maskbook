@@ -41,6 +41,15 @@ export function selectElementContents(el: Node) {
 }
 
 // noinspection JSUnusedLocalSymbols
+export function untilDocumentReady() {
+    if (document.readyState === 'complete') return Promise.resolve()
+    return new Promise(resolve => {
+        document.addEventListener('readystatechange', () => document.readyState === 'complete' && resolve(), {
+            passive: true,
+        })
+    })
+}
+
 export const nop = (...args: unknown[]) => {}
 // noinspection JSUnusedLocalSymbols
 export const nopWithUnmount = (...args: unknown[]) => nop
