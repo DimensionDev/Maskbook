@@ -1,5 +1,5 @@
 import { dispatchCustomEvents, sleep, timeout } from '../../../utils/utils'
-import { editProfileButtonSelector, editProfileTextareaSelector, postsSelectors } from '../utils/selector'
+import { editProfileButtonSelector, editProfileTextareaSelector, postsSelector } from '../utils/selector'
 import { geti18nString } from '../../../utils/i18n'
 import { SocialNetworkUI, SocialNetworkUITasks } from '../../../social-network/ui'
 import { fetchBioCard } from '../utils/status'
@@ -45,7 +45,7 @@ const taskPasteIntoBio = async (text: string) => {
 }
 
 const taskGetPostContent: SocialNetworkUITasks['taskGetPostContent'] = async () => {
-    return (await postParser((await timeout(new MutationObserverWatcher(postsSelectors()), 10000))[0])).content
+    return (await postParser((await timeout(new MutationObserverWatcher(postsSelector()), 10000))[0])).content
 }
 
 const taskGetProfile = async () => {
