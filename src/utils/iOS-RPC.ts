@@ -3,8 +3,9 @@ import { AsyncCall } from 'async-call-rpc'
 /**
  * This describes what JSONRPC calls that Native side should implement
  */
-export interface Host {
-    'scanQRCode'(): Promise<string>
+interface iOSHost {
+    scanQRCode(): Promise<string>
+    log(...args: any[]): Promise<void>
 }
 /**
  * This describes what JSONRPC calls that JS side should implement
@@ -38,7 +39,7 @@ class iOSWebkitChannel {
     }
 }
 const ThisSideImplementation: ThisSideImplementation = {}
-export const iOSHost = AsyncCall<Host>(ThisSideImplementation, {
+export const iOSHost = AsyncCall<iOSHost>(ThisSideImplementation, {
     key: '',
     log: false,
     messageChannel: new iOSWebkitChannel(),

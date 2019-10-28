@@ -1,8 +1,9 @@
 import { livingShadowRoots } from './ConstructableStyleSheetsRenderer'
 import { GetContext } from '@holoflows/kit/es'
+import { untilDocumentReady } from '../utils'
 
 const div = document.createElement('div')
-document.body.appendChild(div)
+untilDocumentReady().then(() => document.body.appendChild(div))
 export const PortalShadowRoot = ((GetContext() === 'options'
     ? div
     : div.attachShadow({ mode: 'closed' })) as unknown) as Element

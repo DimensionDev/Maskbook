@@ -43,7 +43,9 @@ export function selectElementContents(el: Node) {
 export function untilDocumentReady() {
     if (document.readyState === 'complete') return Promise.resolve()
     return new Promise(resolve => {
-        document.addEventListener('readystatechange', resolve, { once: true, passive: true })
+        document.addEventListener('readystatechange', () => document.readyState === 'complete' && resolve(), {
+            passive: true,
+        })
     })
 }
 
