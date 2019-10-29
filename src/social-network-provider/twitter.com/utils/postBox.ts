@@ -2,20 +2,22 @@ import { sleep } from '../../../utils/utils'
 import { newPostEditorFocusAnchor, newPostEditorSelector } from './selector'
 import { equal } from '../../../utils/assert'
 import { untilDocumentReady, untilElementAvailable } from '../../../utils/dom'
+import { LiveSelector } from '@holoflows/kit'
 
 export const postBoxInPopup = () => {
     return globalThis.location.pathname.includes('compose')
 }
 
 export const getFocus = async () => {
+    await sleep(2000)
     await untilDocumentReady()
     await untilElementAvailable(newPostEditorSelector())
 
-    const i = newPostEditorFocusAnchor().evaluate()!
+    const i = newPostEditorFocusAnchor()
 
     if (!hasFocus(i)) {
         try {
-            i.focus()
+            i.evaluate()!.focus()
         } catch {
             await requestManualClick()
         }
@@ -24,10 +26,10 @@ export const getFocus = async () => {
     equal(hasFocus(i), true, 'Failed to get focus')
 }
 
-const hasFocus = (x: HTMLElement) => document.activeElement === x
+const hasFocus = (x: LiveSelector<HTMLElement, true>) => x.evaluate()! === document.activeElement
 
 const requestManualClick = async () => {
-    const i = newPostEditorFocusAnchor().evaluate()!
+    const i = newPostEditorFocusAnchor()
     alert('Please manually select the post box')
     while (!hasFocus(i)) {
         await sleep(1000)
