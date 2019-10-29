@@ -31,7 +31,7 @@ export async function fetchPostContentFacebook(post: PostIdentifier<PersonIdenti
         }
     }
     // Path 2: fetch by tab task
-    return tasks(getPostUrlAtFacebook(post, 'open')).getPostContent(post)
+    return tasks(getPostUrlAtFacebook(post, 'open')).getPostContent()
 }
 
 async function getActiveTab() {
