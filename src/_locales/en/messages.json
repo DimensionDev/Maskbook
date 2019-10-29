@@ -104,6 +104,63 @@
     "finish": {
         "message": "Finish"
     },
+    "undo": {
+        "message": "Undo"
+    },
+    "copy": {
+        "message": "Copy"
+    },
+    "public_key": {
+        "message": "Public Key"
+    },
+    "disconnect": {
+        "message": "Disconnect"
+    },
+    "dashboard": {
+        "message": "Dashboard"
+    },
+    "synchronization": {
+        "message": "Synchronization"
+    },
+    "dashboard_export_keystore": {
+        "message": "Export Backup Keystore"
+    },
+    "dashboard_import_backup": {
+        "message": "Import Data Backup"
+    },
+    "dashboard_download": {
+        "message": "Download as File"
+    },
+    "dashboard_add_new_persona": {
+        "message": "Add New Persona"
+    },
+    "dashboard_unknown_network": {
+        "message": "Unknown"
+    },
+    "dashboard_create_backup": {
+        "message": "Create Backup"
+    },
+    "dashboard_delete_persona": {
+        "message": "Delete Persona"
+    },
+    "dashboard_show_qr": {
+        "message": "Show QR Code"
+    },
+    "dashboard_hide_qr": {
+        "message": "Hide QR Code"
+    },
+    "dashboard_item_copied": {
+        "message": "Copied."
+    },
+    "dashboard_item_deleted": {
+        "message": "Deleted."
+    },
+    "dashboard_item_done": {
+        "message": "Done."
+    },
+    "dashboard_item_copy_failed": {
+        "message": "Copy failed."
+    },
     "welcome_0_close_button": {
         "message": "I'll do it later"
     },

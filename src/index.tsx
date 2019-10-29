@@ -32,6 +32,7 @@ import BackupDialog from './extension/options-page/Backup'
 import { SnackbarProvider } from 'notistack'
 import Services from './extension/service'
 import { PersonIdentifier } from './database/type'
+import { geti18nString } from './utils/i18n'
 
 const useStyles = makeStyles(theme =>
     createStyles({
@@ -193,8 +194,8 @@ function Dashboard() {
                             indicatorColor="primary"
                             textColor="primary"
                             onChange={handleTabChange}>
-                            <Tab label="Dashboard" />
-                            <Tab label="Synchronization" disabled />
+                            <Tab label={geti18nString('dashboard')} />
+                            <Tab label={geti18nString('synchronization')} disabled />
                         </Tabs>
                         <section className={classes.cards}>
                             {identities.map(i => (
@@ -207,13 +208,13 @@ function Dashboard() {
                                 {
                                     // @ts-ignore
                                     <Link onClick={exportData} to="" disabled={exportLoading} component={PaperButton}>
-                                        Export Backup Keystore
+                                        {geti18nString('dashboard_export_keystore')}
                                     </Link>
                                 }
                                 {exportLoading && <LinearProgress />}
                             </div>
                             <Link to="/welcome?restore" component={PaperButton}>
-                                Import Data Backup
+                                {geti18nString('dashboard_import_backup')}
                             </Link>
                         </section>
                     </main>
@@ -221,9 +222,11 @@ function Dashboard() {
                 <footer>
                     <Breadcrumbs className={classes.footerButtons} separator="|" aria-label="breadcrumb">
                         <FooterLink href="https://maskbook.com/">Maskbook.com</FooterLink>
-                        <FooterLink href="https://maskbook.com/privacy-policy/">Privacy Policy</FooterLink>
+                        <FooterLink href="https://maskbook.com/privacy-policy/">
+                            {geti18nString('options_index_privacy')}
+                        </FooterLink>
                         <FooterLink href="https://github.com/DimensionDev/Maskbook">Source Code</FooterLink>
-                        <FooterLink to="/developer">Developer Options</FooterLink>
+                        <FooterLink to="/developer">{geti18nString('options_index_dev')}</FooterLink>
                     </Breadcrumbs>
                 </footer>
                 {OptionsPageRouters}

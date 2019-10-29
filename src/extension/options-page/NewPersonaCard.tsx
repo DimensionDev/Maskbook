@@ -6,6 +6,7 @@ import CardContent from '@material-ui/core/CardContent'
 import AddIcon from '@material-ui/icons/Add'
 import Button from '@material-ui/core/Button'
 import { Avatar } from '@material-ui/core'
+import { geti18nString } from '../../utils/i18n'
 const useStyles = makeStyles(theme =>
     createStyles({
         card: {
@@ -37,7 +38,7 @@ export default function NewPersonaCard() {
                         <AddIcon fontSize="large" />
                     </Avatar>
                 </Link>
-                <div>Add New Persona</div>
+                <div>{geti18nString('dashboard_add_new_persona')}</div>
             </CardContent>
         </Card>
     )

@@ -92,7 +92,7 @@ export default function BackupDialog() {
                                 <CloudDownloadIcon fontSize="large" />
                             </Avatar>
                         </a>
-                        <div>Download as File</div>
+                        <div>{geti18nString('dashboard_download')}</div>
                     </Button>
                     <Button onClick={() => setShowQRCode(!showQRCode)}>
                         <a color="textPrimary">
@@ -100,7 +100,7 @@ export default function BackupDialog() {
                                 <CenterFocusWeakIcon fontSize="large" />
                             </Avatar>
                         </a>
-                        <div>{`${showQRCode ? 'Hide' : 'Show'} QR Code`}</div>
+                        <div>{geti18nString(showQRCode ? 'dashboard_hide_qr' : 'dashboard_show_qr')}</div>
                     </Button>
                 </div>
                 {showQRCode ? (

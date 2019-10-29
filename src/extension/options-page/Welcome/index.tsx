@@ -18,6 +18,7 @@ import getCurrentNetworkWorker from '../../../social-network/utils/getCurrentNet
 import { BackupJSONFileLatest } from '../../../utils/type-transform/BackupFile'
 import { isNil } from 'lodash-es'
 import { useSnackbar } from 'notistack'
+import { geti18nString } from '../../../utils/i18n'
 
 enum WelcomeState {
     // Create
@@ -300,7 +301,10 @@ export default withRouter(function _WelcomePortal(props: RouteComponentProps) {
                     onFinish={() => {
                         if (webpackEnv.firefoxVariant === 'GeckoView' || webpackEnv.target === 'WKWebview')
                             window.close()
-                        enqueueSnackbar('Done.', { variant: 'success', autoHideDuration: 2000 })
+                        enqueueSnackbar(geti18nString('dashboard_item_done'), {
+                            variant: 'success',
+                            autoHideDuration: 2000,
+                        })
                         props.history.replace('/')
                     }}
                 />
