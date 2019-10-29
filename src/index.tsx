@@ -99,10 +99,8 @@ const OptionsPageRouters = (
 
 const ColorButton = withStyles((theme: Theme) => ({
     root: {
-        color: theme.palette.getContrastText('#FFFFFF'),
         padding: '0.5em 1.5rem',
-        boxShadow: '0px 0px 15px 1px rgba(0,0,0,0.1)',
-        backgroundColor: 'rgba(255,255,255,0.8)',
+        boxShadow: theme.shadows[2],
         width: '100%',
     },
 }))(Button)
