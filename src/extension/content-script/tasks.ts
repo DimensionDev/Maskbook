@@ -1,6 +1,6 @@
 import { AutomatedTabTask } from '@holoflows/kit'
 import { getActivatedUI, SocialNetworkUI } from '../../social-network/ui'
-import { PersonIdentifier, PostIdentifier } from '../../database/type'
+import { PersonIdentifier } from '../../database/type'
 import { disableOpenNewTabInBackgroundSettings } from '../../components/shared-settings/settings'
 
 const tasks = AutomatedTabTask(
@@ -9,8 +9,8 @@ const tasks = AutomatedTabTask(
          * Access post url
          * Get post content
          */
-        getPostContent: (postIdentifier: PostIdentifier<PersonIdentifier>) =>
-            getActivatedUI().taskGetPostContent(postIdentifier),
+        getPostContent: () =>
+            getActivatedUI().taskGetPostContent(),
         /**
          * Access profile page
          * Get Profile
