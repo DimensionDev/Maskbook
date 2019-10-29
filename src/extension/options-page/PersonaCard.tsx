@@ -14,6 +14,7 @@ import CenterFocusWeakIcon from '@material-ui/icons/CenterFocusWeak'
 import { useSnackbar } from 'notistack'
 import { BackupJSONFileLatest } from '../../utils/type-transform/BackupFile'
 import { useColorProvider } from '../../utils/theme'
+import { geti18nString } from '../../utils/i18n'
 
 interface Props {
     identity: Person
@@ -98,7 +99,9 @@ export default function PersonaCard({ identity }: Props) {
 
     useMemo(() => {
         const ui = [...definedSocialNetworkUIs].find(i => i.networkIdentifier === identity.identifier.network)
-        setFriendlyName(ui ? ui.friendlyName : `Unknown(${identity.identifier.network})`)
+        setFriendlyName(
+            ui ? ui.friendlyName : `${geti18nString('dashboard_unknown_network')}(${identity.identifier.network})`,
+        )
     }, [identity.identifier.network])
 
     const { enqueueSnackbar, closeSnackbar } = useSnackbar()
@@ -107,21 +110,21 @@ export default function PersonaCard({ identity }: Props) {
         navigator.clipboard
             .writeText(provePost)
             .then(() => {
-                enqueueSnackbar('Copied.', { variant: 'success', autoHideDuration: 1000 })
+                enqueueSnackbar(geti18nString('dashboard_item_copied'), { variant: 'success', autoHideDuration: 1000 })
             })
             .catch(e => {
-                enqueueSnackbar('Copy Failed.' + provePost, { variant: 'error' })
+                enqueueSnackbar(geti18nString('dashboard_item_copy_failed') + provePost, { variant: 'error' })
             })
     }
 
     const undoDeleteIdentity = (restore: BackupJSONFileLatest) => {
-        const undo = (key: any) => {
+        const undo = (key: string) => {
             Services.People.restoreBackup(restore)
             closeSnackbar(key)
         }
-        return (key: any) => (
+        return (key: string) => (
             <Button color="secondary" onClick={() => undo(key)}>
-                Undo
+                {geti18nString('undo')}
             </Button>
         )
     }
@@ -132,7 +135,10 @@ export default function PersonaCard({ identity }: Props) {
             onlyBackupWhoAmI: true,
         })
         Services.People.removeMyIdentity(identity.identifier).then(() => {
-            enqueueSnackbar('Deleted.', { variant: 'default', action: undoDeleteIdentity(backup) })
+            enqueueSnackbar(geti18nString('dashboard_item_deleted'), {
+                variant: 'default',
+                action: undoDeleteIdentity(backup),
+            })
         })
     }
 
@@ -141,7 +147,7 @@ export default function PersonaCard({ identity }: Props) {
     const renameIdentity = (event: React.FocusEvent<HTMLSpanElement> | React.KeyboardEvent<HTMLSpanElement>) => {
         event.preventDefault()
         Services.People.updatePersonInfo(identity.identifier, { nickname: event.currentTarget.innerText }).then(() => {
-            enqueueSnackbar('Done.', { variant: 'success', autoHideDuration: 1000 })
+            enqueueSnackbar(geti18nString('dashboard_item_done'), { variant: 'success', autoHideDuration: 1000 })
             setRename(false)
         })
     }
@@ -189,19 +195,19 @@ export default function PersonaCard({ identity }: Props) {
                         {identity.identifier.userId}
                     </div>
                     <div className="extra-item" hidden>
-                        Disconnect
+                        {geti18nString('disconnect')}
                     </div>
                 </Typography>
             </CardContent>
             <Divider />
             <CardContent>
                 <Typography className={classes.line} component="div">
-                    <div className="title">Public Key</div>
+                    <div className="title">{geti18nString('public_key')}</div>
                     <div className="content" title={provePost}>
                         {provePost}
                     </div>
                     <div className={`extra-item ${color.info}`} onClick={copyPublicKey}>
-                        Copy
+                        {geti18nString('copy')}
                     </div>
                 </Typography>
             </CardContent>
@@ -213,10 +219,10 @@ export default function PersonaCard({ identity }: Props) {
                     color="primary"
                     component={Link}
                     to={`/backup?identity=${identity.identifier.toText()}`}>
-                    Create Backup
+                    {geti18nString('dashboard_create_backup')}
                 </Button>
                 <Button size="small" className={color.error} style={{ marginLeft: 'auto' }} onClick={deleteIdentity}>
-                    Delete Persona
+                    {geti18nString('dashboard_delete_persona')}
                 </Button>
             </CardActions>
         </Card>
