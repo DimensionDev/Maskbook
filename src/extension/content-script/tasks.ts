@@ -9,8 +9,7 @@ const tasks = AutomatedTabTask(
          * Access post url
          * Get post content
          */
-        getPostContent: () =>
-            getActivatedUI().taskGetPostContent(),
+        getPostContent: () => getActivatedUI().taskGetPostContent(),
         /**
          * Access profile page
          * Get Profile

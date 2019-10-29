@@ -2,7 +2,7 @@ import { SocialNetworkWorkerAndUI } from '../../../social-network/shared'
 import { isNull } from 'lodash-es'
 import { PersonIdentifier } from '../../../database/type'
 import Services from '../../../extension/service'
-import { hostIdentifier } from "./url";
+import { hostIdentifier } from './url'
 
 /**
  * @link https://help.twitter.com/en/managing-your-account/twitter-username-rules
