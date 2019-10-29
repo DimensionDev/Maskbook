@@ -8,7 +8,7 @@ import { twitterUITasks } from './tasks'
 import { twitterUIFetch } from './fetch'
 import { twitterUIInjections } from './inject'
 import { InitGroupsValueRef } from '../../../social-network/defaults/GroupsValueRef'
-import { hostIdentifier, hostLeadingUrl, hostLeadingUrlMobile } from "../utils/url";
+import { hostIdentifier, hostLeadingUrl, hostLeadingUrlMobile } from '../utils/url'
 
 export const instanceOfTwitterUI = defineSocialNetworkUI({
     ...sharedSettings,

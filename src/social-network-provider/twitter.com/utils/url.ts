@@ -8,7 +8,7 @@ export const hostLeadingUrlMobile = 'https://mobile.twitter.com'
 export const anyHostUrl = `${hostLeadingUrl}/*`
 export const anyHostUrlMobile = `${hostLeadingUrlMobile}/*`
 
-const hostLeadingUrlAuto = (isMobile: boolean) => isMobile ? hostLeadingUrlMobile : hostLeadingUrl
+const hostLeadingUrlAuto = (isMobile: boolean) => (isMobile ? hostLeadingUrlMobile : hostLeadingUrl)
 
 export const getPostUrl = (post: PostIdentifier<PersonIdentifier>, useMobile: boolean = false) => {
     if (!usernameValidator(post.identifier.userId)) {
