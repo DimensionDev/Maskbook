@@ -2,6 +2,7 @@
 
 import { OnlyRunInContext } from '@holoflows/kit/es'
 import { PersonIdentifier, CryptoIDIdentifier, Identifier, ECKeyIdentifier } from '../type'
+import { DBSchema, openDB } from 'idb/with-async-ittr'
 /**
  * Database structure:
  *
@@ -25,6 +26,18 @@ import { PersonIdentifier, CryptoIDIdentifier, Identifier, ECKeyIdentifier } fro
 
 OnlyRunInContext('background', 'CryptoID db')
 
+const db = openDB<CryptoID_DB>('maskbook-crypto-id', 1, {
+    upgrade(db, oldVersion, newVersion, transaction) {
+        function v0_v1() {
+            db.createObjectStore('self', { keyPath: 'identifier' })
+            db.createObjectStore('others', { keyPath: 'identifier' })
+            db.createObjectStore('profiles', { keyPath: 'identifier' })
+            transaction.objectStore('profiles').createIndex('network', 'network', { unique: false })
+        }
+        if (oldVersion < 1) v0_v1()
+    },
+})
+
 //#region Type
 interface ProfileRecord {
     identifier: PersonIdentifier
@@ -39,6 +52,7 @@ interface CryptoIDRecord {
     identifier: CryptoIDIdentifier
     publicKey: CryptoKey
     privateKey?: CryptoKey
+    localKey?: CryptoKey
     nickname: string
     attachedProfiles: Set<PersonIdentifier>
     createdAt: Date
@@ -46,6 +60,27 @@ interface CryptoIDRecord {
 }
 type ProfileRecordDb = Omit<ProfileRecord, 'identifier'> & { identifier: string }
 type CryptoIDRecordDb = Omit<CryptoIDRecord, 'identifier'> & { identifier: string }
+
+interface CryptoID_DB extends DBSchema {
+    /** Use inline keys */
+    self: {
+        value: CryptoIDRecordDb
+        key: string
+    }
+    /** Use inline keys */
+    others: {
+        value: CryptoIDRecordDb
+        key: string
+    }
+    profiles: {
+        value: ProfileRecord
+        key: string
+        indexes: {
+            // Use `network` field as index
+            network: string
+        }
+    }
+}
 //#endregion
 
 //#region out db & to db
