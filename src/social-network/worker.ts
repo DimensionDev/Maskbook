@@ -12,6 +12,18 @@ import getCurrentNetworkWorker from './utils/getCurrentNetworkWorker'
 export interface SocialNetworkWorkerDefinition extends SocialNetworkWorkerAndUIDefinition {
     /**
      * This function should fetch the given post by `fetch`, `AutomatedTabTask` or anything
+     * @pseudoCode
+     * fetchPostContent(post) {
+     *      let tab = get_tab_with_same_origin_and_not_pinned()
+     *      if (!isUndefined(tab)) {
+     *          // tab available, let them to fetch.
+     *          // this process should not visible to user.
+     *          return tasks(tab).fetch(url)
+     *      }
+     *
+     *      // no tab available for now, call foreground to do so.
+     *      return tasks(getPostURL(post)).getPostContent()
+     * }
      * @param postIdentifier The post id
      */
     fetchPostContent(postIdentifier: PostIdentifier<PersonIdentifier>): Promise<string>

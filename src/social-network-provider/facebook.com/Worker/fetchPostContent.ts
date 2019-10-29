@@ -21,6 +21,7 @@ export async function fetchPostContentFacebook(post: PostIdentifier<PersonIdenti
             //  it will be a false-positive and it is dangerous.
             //  There is a build-in parser.
             //  Checkout http://mdn.io/DOMParser and we're already using it.
+            // TODO: Do not decode here.
 
             let content: string | null = doc.map(x => (isDocument(x) ? x.body : x).innerText).join('')
             content = facebookWorkerSelf.publicKeyDecoder(content)
