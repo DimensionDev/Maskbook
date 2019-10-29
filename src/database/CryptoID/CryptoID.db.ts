@@ -2,7 +2,7 @@
 
 import { OnlyRunInContext } from '@holoflows/kit/es'
 import { PersonIdentifier, CryptoIDIdentifier, Identifier, ECKeyIdentifier } from '../type'
-import { DBSchema, openDB } from 'idb/with-async-ittr'
+import { DBSchema, openDB, IDBPDatabase } from 'idb/with-async-ittr'
 /**
  * Database structure:
  *
@@ -26,17 +26,79 @@ import { DBSchema, openDB } from 'idb/with-async-ittr'
 
 OnlyRunInContext('background', 'CryptoID db')
 
-const db = openDB<CryptoID_DB>('maskbook-crypto-id', 1, {
-    upgrade(db, oldVersion, newVersion, transaction) {
-        function v0_v1() {
-            db.createObjectStore('self', { keyPath: 'identifier' })
-            db.createObjectStore('others', { keyPath: 'identifier' })
-            db.createObjectStore('profiles', { keyPath: 'identifier' })
-            transaction.objectStore('profiles').createIndex('network', 'network', { unique: false })
-        }
-        if (oldVersion < 1) v0_v1()
-    },
-})
+const db = (function() {
+    let db: IDBPDatabase<CryptoID_DB> = undefined as any
+    return async () => {
+        if (typeof db === 'undefined')
+            return openDB<CryptoID_DB>('maskbook-crypto-id', 1, {
+                upgrade(db, oldVersion, newVersion, transaction) {
+                    function v0_v1() {
+                        db.createObjectStore('self', { keyPath: 'identifier' })
+                        db.createObjectStore('others', { keyPath: 'identifier' })
+                        db.createObjectStore('profiles', { keyPath: 'identifier' })
+                        transaction.objectStore('profiles').createIndex('network', 'network', { unique: false })
+                    }
+                    if (oldVersion < 1) v0_v1()
+                },
+            }).then(x => (db = x))
+        else return db
+    }
+})()
+
+//#region Plain methods
+/**
+ * Create a new CryptoID.
+ * If the record contains `privateKey`, it will be stored in the `self` store.
+ * Otherwise, it will be stored in the `others` store.
+ */
+declare function createCryptoID_DB(record: CryptoIDRecord): Promise<void>
+
+/**
+ * Query a CryptoID.
+ */
+declare function queryCryptoID_DB(
+    id: CryptoIDIdentifier | ((record: CryptoIDRecord) => boolean),
+): Promise<CryptoIDRecord>
+
+/**
+ * Update an existing CryptoID record.
+ *
+ * If the `record` contains `privateKey` but the object is stored in the `others` previously,
+ * this will move the CryptoID to the `self` store.
+ *
+ * @param record The partial record to be merged
+ */
+declare function updateCryptoID_DB(
+    record: Partial<CryptoIDRecord> & Pick<CryptoIDRecord, 'identifier'>,
+    mode: 'append' | 'overwrite',
+): Promise<void>
+
+/**
+ * Delete a CryptoID
+ */
+declare function deleteCryptoID_DB(id: CryptoIDIdentifier): Promise<void>
+
+/**
+ * Create a new profile.
+ */
+declare function createProfileDB(record: ProfileRecord): Promise<void>
+
+/**
+ * Query a profile.
+ */
+declare function queryProfileDB(id: PersonIdentifier | ((record: PersonIdentifier) => boolean)): Promise<ProfileRecord>
+
+/**
+ * Update a profile.
+ */
+declare function updateProfileDB(record: Partial<ProfileRecord> & Pick<ProfileRecord, 'identifier'>): Promise<void>
+
+/**
+ * Delete a profile
+ */
+declare function deleteProfileDB(id: PersonIdentifier): Promise<void>
+
+//#endregion
 
 //#region Type
 interface ProfileRecord {
