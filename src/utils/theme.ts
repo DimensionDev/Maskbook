@@ -1,7 +1,6 @@
 import { createMuiTheme } from '@material-ui/core'
 import { makeStyles, createStyles } from '@material-ui/core/styles'
-import orange from '@material-ui/core/colors/orange'
-import green from '@material-ui/core/colors/green'
+import { orange, green, red, blue } from '@material-ui/core/colors'
 
 function getFontFamily(monospace?: boolean) {
     // We want to look native.
@@ -20,7 +19,7 @@ const baseTheme = (theme: 'dark' | 'light') =>
         palette: {
             primary: { main: '#2594ff' },
             secondary: { main: orange[800] },
-            error: { main: '#f20500' },
+            error: { main: red[500] },
             type: theme,
         },
         typography: {
@@ -47,10 +46,10 @@ export const useColorProvider = makeStyles((theme: typeof MaskbookDarkTheme) =>
             color: theme.palette.error.main,
         },
         success: {
-            color: theme.palette.type === 'dark' ? green[800] : green[800],
+            color: theme.palette.type === 'dark' ? green[500] : green[800],
         },
         info: {
-            color: theme.palette.type === 'dark' ? '#2594ff' : '#2594ff',
+            color: theme.palette.type === 'dark' ? blue[500] : blue[800],
         },
     }),
 )
