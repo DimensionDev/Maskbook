@@ -163,9 +163,10 @@ export class PostIVIdentifier extends Identifier {
  */
 @serializable('ECKeyIdentifier')
 export class ECKeyIdentifier extends Identifier {
+    public readonly type = 'ec_key'
     constructor(public curve: 'secp256k1', private encodedCompressedKey: string) {
         super()
-        this.encodedCompressedKey = encodedCompressedKey.replace(/\//g, '|')
+        if (encodedCompressedKey !== undefined) this.encodedCompressedKey = encodedCompressedKey.replace(/\//g, '|')
     }
     // restore the / from |
     get compressedPoint() {
@@ -179,6 +180,8 @@ export class ECKeyIdentifier extends Identifier {
         return new ECKeyIdentifier('secp256k1', str)
     }
 }
+
+export type CryptoIDIdentifier = ECKeyIdentifier
 
 /**
  * Because "/" is used to split parts in identifier
