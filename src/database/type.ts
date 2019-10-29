@@ -11,8 +11,9 @@ const $fromString = Symbol()
  * group:...
  * post:...
  * post_iv:...
+ * ec_key:...
  */
-type Identifiers = 'person' | 'group' | 'post' | 'post_iv'
+type Identifiers = 'person' | 'group' | 'post' | 'post_iv' | 'ec_key'
 export abstract class Identifier {
     static equals(a: Identifier, b: Identifier) {
         return a.equals(b)
@@ -35,6 +36,8 @@ export abstract class Identifier {
                 return PostIdentifier[$fromString](rest.join(':'))
             case 'post_iv':
                 return PostIVIdentifier[$fromString](rest.join(':'))
+            case 'ec_key':
+                return ECKeyIdentifier[$fromString](rest.join(':'))
             default:
                 return null
         }
@@ -151,6 +154,29 @@ export class PostIVIdentifier extends Identifier {
         const [network, iv] = str.split('/')
         if (!network || !iv) return null
         return new PostIVIdentifier(network, iv)
+    }
+}
+
+/**
+ * This class identify the point on an EC curve.
+ * ec_key:secp256k1/CompressedPoint
+ */
+@serializable('ECKeyIdentifier')
+export class ECKeyIdentifier extends Identifier {
+    constructor(public curve: 'secp256k1', private encodedCompressedKey: string) {
+        super()
+        this.encodedCompressedKey = encodedCompressedKey.replace(/\//g, '|')
+    }
+    // restore the / from |
+    get compressedPoint() {
+        return this.encodedCompressedKey.replace(/\|/g, '/')
+    }
+    toText() {
+        return `ec_key:${this.curve}/${this.encodedCompressedKey}`
+    }
+    static [$fromString](str: string) {
+        if (!str) return null
+        return new ECKeyIdentifier('secp256k1', str)
     }
 }
 
