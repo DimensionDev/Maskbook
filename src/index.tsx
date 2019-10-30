@@ -54,14 +54,14 @@ const useStyles = makeStyles(theme =>
         },
         loaderWrapper: {
             position: 'relative',
-            '&>MuiLinearProgress-root': {
-                width: '100%',
-                bottom: 0,
-                position: 'absolute',
-            },
             '&:not(:last-child)': {
                 marginBottom: theme.spacing(2),
             },
+        },
+        loader: {
+            width: '100%',
+            bottom: 0,
+            position: 'absolute',
         },
         actionButton: {},
         footerButtons: {
@@ -203,13 +203,10 @@ function Dashboard() {
                         </section>
                         <section className={classes.actionButtons}>
                             <div className={classes.loaderWrapper}>
-                                {
-                                    // @ts-ignore
-                                    <Link onClick={exportData} to="" disabled={exportLoading} component={PaperButton}>
-                                        {geti18nString('dashboard_export_keystore')}
-                                    </Link>
-                                }
-                                {exportLoading && <LinearProgress />}
+                                <PaperButton onClick={exportData} disabled={exportLoading}>
+                                    {geti18nString('dashboard_export_keystore')}
+                                </PaperButton>
+                                {exportLoading && <LinearProgress classes={{ root: classes.loader }} />}
                             </div>
                             <Link to="/welcome?restore" component={PaperButton}>
                                 {geti18nString('dashboard_import_backup')}
