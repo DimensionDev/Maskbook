@@ -53,8 +53,8 @@ export abstract class Identifier {
 }
 
 @serializable('PersonIdentifier')
-export class PersonIdentifier extends Identifier {
-    static unknown = new PersonIdentifier('localhost', '$unknown')
+export class ProfileIdentifier extends Identifier {
+    static unknown = new ProfileIdentifier('localhost', '$unknown')
     get isUnknown() {
         return this.equals(PersonIdentifier.unknown)
     }
@@ -79,6 +79,8 @@ export class PersonIdentifier extends Identifier {
         return new PersonIdentifier(network, userId)
     }
 }
+export const PersonIdentifier = ProfileIdentifier
+export type PersonIdentifier = ProfileIdentifier
 
 export enum PreDefinedVirtualGroupNames {
     friends = '_default_friends_group_',
@@ -181,7 +183,7 @@ export class ECKeyIdentifier extends Identifier {
     }
 }
 
-export type CryptoIDIdentifier = ECKeyIdentifier
+export type PersonaIdentifier = ECKeyIdentifier
 
 /**
  * Because "/" is used to split parts in identifier
