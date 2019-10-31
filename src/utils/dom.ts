@@ -1,9 +1,21 @@
-import { LiveSelector, MutationObserverWatcher } from '@holoflows/kit'
-import { timeout } from './utils'
+import { LiveSelector } from '@holoflows/kit'
 import { isUndefined } from 'lodash-es'
 
 export const untilElementAvailable = async (ls: LiveSelector<HTMLElement, boolean>) => {
-    await timeout(new MutationObserverWatcher(ls).startWatch({ childList: true, subtree: true }).then(), 10000)
+    return new Promise<void>((resolve, reject) => {
+        let timedOut = false
+        setTimeout(() => (timedOut = true), 4000)
+        const t = setInterval(() => {
+            if (ls.evaluate()) {
+                clearInterval(t)
+                resolve()
+            }
+            if (timedOut) {
+                clearInterval(t)
+                reject()
+            }
+        }, 500)
+    })
 }
 
 export const untilDocumentReady = () => {
