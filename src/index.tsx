@@ -64,6 +64,9 @@ const useStyles = makeStyles(theme =>
             position: 'absolute',
         },
         actionButton: {},
+        footer: {
+            paddingBottom: 48,
+        },
         footerButtons: {
             marginTop: `${theme.spacing(1)}px`,
             '& ol': {
@@ -214,7 +217,7 @@ function Dashboard() {
                         </section>
                     </main>
                 </Container>
-                <footer>
+                <footer className={classes.footer}>
                     <Breadcrumbs className={classes.footerButtons} separator="|" aria-label="breadcrumb">
                         <FooterLink href="https://maskbook.com/">Maskbook.com</FooterLink>
                         <FooterLink href="https://maskbook.com/privacy-policy/">
