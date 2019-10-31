@@ -1,7 +1,7 @@
 import { LiveSelector } from '@holoflows/kit'
 import { regexMatch } from '../../../utils/utils'
 import { postBoxInPopup } from './postBox'
-import { isNull, isUndefined } from 'lodash-es'
+import { isNull } from 'lodash-es'
 
 type E = HTMLElement
 
@@ -28,6 +28,8 @@ export const bioCard = () =>
         .querySelector('[data-testid="UserProfileHeader_Items"]')
         .map(x => x.parentElement!.parentElement)
 
+export const newPostButton = () => querySelector<E>('[data-testid="SideNav_NewTweet_Button"]')
+
 const postEditor = () =>
     postBoxInPopup() ? '[aria-labelledby="modal-header"]' : '[role="main"] [role="progressbar"] ~ div'
 
@@ -35,7 +37,7 @@ export const newPostEditorBelow: () => LiveSelector<E, true> = () => querySelect
 export const newPostEditorSelector = () => querySelector<HTMLDivElement>(`${postEditor()} .DraftEditor-root`)
 export const newPostEditorFocusAnchor = () => querySelector<E>(`${postEditor()} .public-DraftEditor-content`)
 
-export const hasDraftEditor = (x?: E) => !(isUndefined(x) || isNull(x.querySelector('.DraftEditor-root')))
+export const hasDraftEditor = (x: E | Document = document) => !isNull(x.querySelector('.DraftEditor-root'))
 
 export const postPopupInjectPointSelector = () =>
     querySelector('[aria-labelledby="modal-header"] [role="progressbar"] ~ div ~ div')
