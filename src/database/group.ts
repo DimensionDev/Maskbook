@@ -1,6 +1,7 @@
 /// <reference path="./global.d.ts" />
 import { DBSchema, openDB } from 'idb/with-async-ittr'
 import { GroupIdentifier, Identifier, PersonIdentifier } from './type'
+import { MessageCenter } from '../utils/messages'
 
 //#region Schema
 interface GroupRecordBase {
@@ -23,7 +24,7 @@ interface GroupRecordInDatabase extends GroupRecordBase {
 export interface GroupRecord extends Omit<GroupRecordBase, 'network'> {
     identifier: GroupIdentifier
 }
-interface AvatarDB extends DBSchema {
+interface GroupDB extends DBSchema {
     /** Key is value.identifier */
     groups: {
         value: GroupRecordInDatabase
@@ -36,7 +37,7 @@ interface AvatarDB extends DBSchema {
 }
 //#endregion
 
-const db = openDB<AvatarDB>('maskbook-user-groups', 1, {
+const db = openDB<GroupDB>('maskbook-user-groups', 1, {
     upgrade(db, oldVersion, newVersion, transaction) {
         // Out line keys
         db.createObjectStore('groups', { keyPath: 'identifier' })
@@ -83,19 +84,39 @@ export async function updateUserGroupDatabase(
 
     const t = (await db).transaction('groups', 'readwrite')
     let nextRecord: GroupRecord
+    const nonDuplicateNewMembers: PersonIdentifier[] = []
     if (type === 'replace') {
         nextRecord = { ...orig, ...group }
     } else if (type === 'append') {
+        const nextMembers = new Set<string>()
+        for (const i of orig.members) {
+            nextMembers.add(i.toText())
+        }
+        for (const i of group.members || []) {
+            if (!nextMembers.has(i.toText())) {
+                nextMembers.add(i.toText())
+                nonDuplicateNewMembers.push(i)
+            }
+        }
         nextRecord = {
             identifier: group.identifier,
             banned: !orig.banned && !group.banned ? undefined : [...(orig.banned || []), ...(group.banned || [])],
             groupName: group.groupName || orig.groupName,
-            members: orig.members.concat(...(group.members || [])),
+            members: Array.from(nextMembers).map(x => Identifier.fromString(x) as PersonIdentifier),
         }
     } else {
         nextRecord = type(orig) || orig
     }
     await t.objectStore('groups').put(GroupRecordIntoDB(nextRecord))
+    nonDuplicateNewMembers.length &&
+        MessageCenter.emit(
+            'joinGroup',
+            {
+                group: group.identifier,
+                newMembers: nonDuplicateNewMembers,
+            },
+            true,
+        )
 }
 
 /**

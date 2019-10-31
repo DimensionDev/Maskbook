@@ -1,6 +1,7 @@
 import { GroupRecord, createUserGroupDatabase, updateUserGroupDatabase, queryUserGroupsDatabase } from '../group'
 import { PersonIdentifier, GroupIdentifier, PreDefinedVirtualGroupNames } from '../type'
 import { Person } from './person'
+import { MessageCenter } from '../../utils/messages'
 
 export interface Group extends GroupRecord {
     avatar?: string
@@ -14,9 +15,9 @@ export function createDefaultFriendsGroup(who: PersonIdentifier) {
     )
 }
 
-export function addPersonToFriendsGroup(group: GroupIdentifier, newFriend: (Person | PersonIdentifier)[]) {
-    const friendList = newFriend.map(x => (x instanceof PersonIdentifier ? x : x.identifier)) as PersonIdentifier[]
-    return updateUserGroupDatabase({ identifier: group, members: friendList }, 'append')
+export async function addPersonToFriendsGroup(group: GroupIdentifier, newMembers: (Person | PersonIdentifier)[]) {
+    const memberList = newMembers.map(x => (x instanceof PersonIdentifier ? x : x.identifier)) as PersonIdentifier[]
+    await updateUserGroupDatabase({ identifier: group, members: memberList }, 'append')
 }
 export function removePersonFromFriendsGroup(group: GroupIdentifier, removedFriend: (Person | PersonIdentifier)[]) {
     const friendList = removedFriend.map(x => (x instanceof PersonIdentifier ? x : x.identifier)) as PersonIdentifier[]

@@ -12,7 +12,6 @@ import Services from '../../service'
 import { RouteComponentProps, withRouter } from 'react-router'
 import { Dialog, withMobileDialog } from '@material-ui/core'
 import { Identifier, PersonIdentifier } from '../../../database/type'
-import { MessageCenter } from '../../../utils/messages'
 import { ValueRef } from '@holoflows/kit/es'
 import { useValueRef } from '../../../utils/hooks/useValueRef'
 import { Person } from '../../../database'
@@ -245,7 +244,6 @@ export default withRouter(function _WelcomePortal(props: RouteComponentProps) {
     const ResponsiveDialog = useRef(withMobileDialog({ breakpoint: 'xs' })(Dialog)).current
     useEffect(() => {
         fillRefs()
-        return MessageCenter.on('generateKeyPair', fillRefs)
     }, [])
 
     const [step, setStep] = useState(WelcomeState.Start)

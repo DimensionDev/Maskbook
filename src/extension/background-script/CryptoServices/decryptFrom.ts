@@ -296,11 +296,13 @@ async function* findAuthorPublicKey(
                 })
             })
             const databasePromise = new Promise((resolve, reject) => {
-                const undo = MessageCenter.on('newPerson', data => {
-                    if (data.identifier.equals(by)) {
-                        undo()
-                        resolve()
-                    }
+                const undo = MessageCenter.on('peopleChanged', data => {
+                    data.filter(x => x.reason !== 'delete').forEach(x => {
+                        if (x.of.identifier.equals(by)) {
+                            undo()
+                            resolve()
+                        }
+                    })
                 })
                 rejectDatabase = () => {
                     undo()

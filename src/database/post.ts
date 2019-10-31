@@ -9,6 +9,7 @@ function outDb(db: PostDBRecord): PostRecord {
         const detail = rest.recipients[key]
         detail.reason.forEach(x => x.type === 'group' && restorePrototype([x.group], GroupIdentifier.prototype))
     }
+    restorePrototype(rest.recipientGroups, GroupIdentifier.prototype)
     return {
         ...rest,
         identifier: Identifier.fromString(identifier) as PostIVIdentifier,
@@ -29,7 +30,7 @@ export type RecipientReason = ({ type: 'direct' } | { type: 'group'; group: Grou
      */
     at: Date
 }
-interface RecipientDetail {
+export interface RecipientDetail {
     /** Why they're able to receive this message? */
     reason: RecipientReason[]
 }
@@ -44,7 +45,14 @@ interface PostDBRecord {
      * ! This MUST BE a native CryptoKey
      */
     postCryptoKey?: CryptoKey
+    /**
+     * Receivers.
+     */
     recipients: Record<string, RecipientDetail>
+    /**
+     * This post shared with these groups.
+     */
+    recipientGroups: GroupIdentifier[]
     /**
      * When does Maskbook find this post.
      * For your own post, it is when Maskbook created this post.
@@ -101,13 +109,14 @@ const db = openDB<PostDB>('maskbook-post-v2', 3, {
                     for (const each of oldType) {
                         newType[each.toText()] = { reason: [{ type: 'direct', at: new Date(0) }] }
                     }
-
-                cursor.update({
+                const next: PostDBRecord = {
                     ...cursor.value,
                     recipients: newType,
                     postBy: PersonIdentifier.unknown,
                     foundAt: new Date(0),
-                })
+                    recipientGroups: [],
+                }
+                cursor.update(next)
             }
         }
     },
@@ -121,14 +130,14 @@ export async function updatePostDB(
     updateRecord: Partial<PostRecord> & Pick<PostRecord, 'identifier'>,
     mode: 'append' | 'override',
 ): Promise<void> {
-    const currentRecord =
-        (await queryPostDB(updateRecord.identifier)) ||
-        ({
-            identifier: updateRecord.identifier,
-            recipients: {},
-            postBy: PersonIdentifier.unknown,
-            foundAt: new Date(),
-        } as PostRecord)
+    const emptyRecord: PostRecord = {
+        identifier: updateRecord.identifier,
+        recipients: {},
+        postBy: PersonIdentifier.unknown,
+        foundAt: new Date(),
+        recipientGroups: [],
+    }
+    const currentRecord = (await queryPostDB(updateRecord.identifier)) || emptyRecord
     const nextRecord: PostRecord = { ...currentRecord, ...updateRecord }
     const nextRecipients: PostDBRecord['recipients'] =
         mode === 'override' ? toDb(nextRecord).recipients : toDb(currentRecord).recipients
@@ -154,6 +163,25 @@ export async function queryPostDB(record: PostIVIdentifier): Promise<PostRecord 
     const result = await t.objectStore('post').get(record.toText())
     if (result) return outDb(result)
     return null
+}
+export async function queryPostsDB(network: string): Promise<PostRecord[]>
+export async function queryPostsDB(query: (data: PostRecord, id: PostIVIdentifier) => boolean): Promise<PostRecord[]>
+export async function queryPostsDB(
+    query: string | ((data: PostRecord, id: PostIVIdentifier) => boolean),
+): Promise<PostRecord[]> {
+    const t = (await db).transaction('post')
+    const selected: PostRecord[] = []
+    for await (const { value } of t.store) {
+        const id = Identifier.fromString(value.identifier) as PostIVIdentifier | null
+        if (!id) continue
+        if (typeof query === 'string') {
+            if (id.network === query) selected.push(outDb(value))
+        } else {
+            const v = outDb(value)
+            if (query(v, id)) selected.push(v)
+        }
+    }
+    return selected
 }
 export async function deletePostCryptoKeyDB(record: PostIVIdentifier) {
     const t = (await db).transaction('post', 'readwrite')

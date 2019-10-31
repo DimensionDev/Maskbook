@@ -51,6 +51,7 @@ export function applyAdoptedStyleSheets(shadowOnly = true) {
         const shadows = Array.from(livingShadowRoots)
         const nextAdoptedStyleSheets = styles.map(getStyleSheet)
         for (const shadow of shadows) {
+            // Maybe we can remove this now.
             try {
                 shadow.adoptedStyleSheets = nextAdoptedStyleSheets
             } catch {}
