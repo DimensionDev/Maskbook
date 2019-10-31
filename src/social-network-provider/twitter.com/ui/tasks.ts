@@ -21,7 +21,7 @@ import { untilDocumentReady, untilElementAvailable } from '../../../utils/dom'
  */
 const taskPasteIntoPostBox: SocialNetworkUI['taskPasteIntoPostBox'] = (text, opt) => {
     const interval = 500
-    const timeout = 50000
+    const timeout = 5000
     const worker = async function(abort: AbortController) {
         const milestone = () => {
             if (abort.signal.aborted) throw new Error('Aborted')
