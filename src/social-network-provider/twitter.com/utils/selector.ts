@@ -4,11 +4,9 @@ import { postBoxInPopup } from './postBox'
 import { isNull } from 'lodash-es'
 
 type E = HTMLElement
-
 const querySelector = <T extends E>(selector: string) => {
     return new LiveSelector().querySelector<T>(selector).enableSingleMode()
 }
-
 const querySelectorAll = <T extends E>(selector: string) => {
     return new LiveSelector().querySelectorAll<T>(selector)
 }
@@ -38,7 +36,6 @@ export const hasDraftEditor = (x: E | Document = document) => !isNull(x.querySel
 export const postPopupInjectPointSelector = () =>
     querySelector('[aria-labelledby="modal-header"] [role="progressbar"] ~ div ~ div')
 
-export const gotoProfileButtonSelector = () => querySelector('[role="navigation"] [aria-label="Profile"]')
 export const editProfileButtonSelector = () =>
     querySelector<HTMLAnchorElement>('[data-testid="primaryColumn"] [href="/settings/profile"]')
 export const editProfileTextareaSelector = () => querySelector<HTMLTextAreaElement>('textarea[placeholder*="bio"]')
@@ -46,7 +43,6 @@ export const editProfileTextareaSelector = () => querySelector<HTMLTextAreaEleme
 export const postsSelector = () => querySelectorAll('#main_content .timeline .tweet, [data-testid="tweet"]')
 export const postsContentSelector = () => postsSelector().querySelectorAll<E>(`[lang]`)
 
-// self infos
 const base = querySelector<HTMLScriptElement>('#react-root + script')
 const name = /"session":{.*?"user":{.*?"screen_name":"(.*?)","name":"(.*?)"}}/
 const bio = /"entities":{.*?"users":{.*?"entities":{.*?"[0-9]*":{.*?"description":"(.*?)"/
