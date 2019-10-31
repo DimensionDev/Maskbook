@@ -46,6 +46,7 @@ export function SelectPeopleDialog(props: Props) {
     const canCommit = committed || people.length === 0
     return (
         <ResponsiveDialog
+            disableEnforceFocus
             container={PortalShadowRoot}
             onClose={canClose ? onClose : void 0}
             open={props.open}

@@ -41,7 +41,7 @@ function SimpleDialog(props: SimpleDialogProps) {
     }
 
     return (
-        <Dialog container={PortalShadowRoot} onClose={props.onClose} open={open}>
+        <Dialog disableEnforceFocus container={PortalShadowRoot} onClose={props.onClose} open={open}>
             <DialogTitle>Troubleshoot</DialogTitle>
             <DialogContent>
                 <DialogContentText>
