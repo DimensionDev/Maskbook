@@ -1,6 +1,14 @@
 import React, { useState, useEffect } from 'react'
 import { useHistory } from 'react-router'
-import { Dialog, DialogTitle, DialogContent, Button, ButtonGroup, SnackbarContent } from '@material-ui/core'
+import {
+    Dialog,
+    DialogTitle,
+    DialogContent,
+    Button,
+    ButtonGroup,
+    SnackbarContent,
+    CircularProgress,
+} from '@material-ui/core'
 
 import CloudDownloadIcon from '@material-ui/icons/CloudDownload'
 import CenterFocusWeakIcon from '@material-ui/icons/CenterFocusWeak'
@@ -16,15 +24,6 @@ import { amber } from '@material-ui/core/colors'
 
 const useStyles = makeStyles(theme =>
     createStyles({
-        root: {
-            textAlign: 'center',
-            paddingTop: 24,
-            maxWidth: 600,
-            margin: 'auto',
-            '& > div': {
-                margin: 'auto',
-            },
-        },
         code: {
             padding: '2em',
             display: 'flex',
@@ -33,14 +32,6 @@ const useStyles = makeStyles(theme =>
         },
         container: {
             textAlign: 'center',
-        },
-        avatar: {
-            height: '3.5rem',
-            width: '3.5rem',
-            marginRight: theme.spacing(1),
-            ...(theme.palette.type === 'dark'
-                ? {}
-                : { backgroundColor: 'rgb(238,238,238)', color: 'rgb(118,118,118)' }),
         },
         warning: {
             backgroundColor: amber[600],
@@ -106,6 +97,8 @@ export default function BackupDialog() {
                                 <QrCode text={QRText} />
                             ) : (
                                 <Typography variant="caption" style={{ margin: '5vh 0' }}>
+                                    <CircularProgress />
+                                    <br />
                                     {geti18nString('options_mobile_export_generating')}
                                 </Typography>
                             )}
