@@ -14,6 +14,8 @@ import { getActivatedUI } from '../../social-network/ui'
 import { ChooseIdentity } from '../shared/ChooseIdentity'
 import { useAsync } from '../../utils/components/AsyncComponent'
 import { PersonIdentifier, Identifier } from '../../database/type'
+import { steganographyModeSetting } from '../shared-settings/settings'
+import { useValueRef } from '../../utils/hooks/useValueRef'
 
 interface Props {
     availableTarget: Array<Person | Group>
@@ -100,6 +102,7 @@ export function AdditionalPostBox(props: Partial<Props>) {
     const groupsAndPeople = React.useMemo(() => [...groups, ...people], [people, groups])
     const identities = useMyIdentities()
     const identity = useCurrentIdentity()
+    const isSteganography = useValueRef(steganographyModeSetting)
 
     const onRequestPost = useCallback(
         async (target: (Person | Group)[], text: string) => {
@@ -108,14 +111,24 @@ export function AdditionalPostBox(props: Partial<Props>) {
                 target.map(x => x.identifier),
                 identity!.identifier,
             )
-            const fullPost = geti18nString('additional_post_box__encrypted_post_pre', encrypted)
-            getActivatedUI().taskPasteIntoPostBox(fullPost, {
-                warningText: geti18nString('additional_post_box__encrypted_failed'),
-                shouldOpenPostDialog: false,
-            })
+            const activeUI = getActivatedUI()
+            if (isSteganography) {
+                activeUI.taskPasteIntoPostBox(geti18nString('additional_post_box__steganography_post_pre'), {
+                    warningText: geti18nString('additional_post_box__encrypted_failed'),
+                    shouldOpenPostDialog: false,
+                })
+                activeUI.taskUploadToPostBox(encrypted, {
+                    warningText: geti18nString('additional_post_box__steganography_post_failed'),
+                })
+            } else {
+                activeUI.taskPasteIntoPostBox(geti18nString('additional_post_box__encrypted_post_pre', encrypted), {
+                    warningText: geti18nString('additional_post_box__encrypted_failed'),
+                    shouldOpenPostDialog: false,
+                })
+            }
             Services.Crypto.publishPostAESKey(token)
         },
-        [identity],
+        [identity, isSteganography],
     )
 
     const [showWelcome, setShowWelcome] = useState(false)

@@ -40,6 +40,7 @@ function PostDecryptUI(props: {
     const { onDecrypted, zipPost, postBy, postID, postContent } = props
     const id = useValueRef(postID)
     const by = useValueRef(postBy)
-    const content = useValueRef(postContent)
-    return <PostInspector onDecrypted={onDecrypted} needZip={zipPost} postId={id || ''} post={content} postBy={by} />
+    const post = useValueRef(postContent)
+
+    return <PostInspector onDecrypted={onDecrypted} needZip={zipPost} post={post} postBy={by} postId={id || ''} />
 }

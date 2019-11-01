@@ -18,6 +18,12 @@
     "additional_post_box__encrypted_failed": {
         "message": "請將以下内容拷貝至發佈框。"
     },
+    "additional_post_box__steganography_post_pre": {
+        "message": "此圖片僅分享給我的好友。請安裝 Maskbook 以解讀圖片。 ([I:b])"
+    },
+    "additional_post_box__steganography_post_failed": {
+        "message": "請將已下載的圖片上载至發佈框。"
+    },
     "comment_box__paste_failed": {
         "message": "請將以下内容拷貝至評論框。"
     },

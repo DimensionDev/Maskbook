@@ -132,6 +132,17 @@ export interface SocialNetworkUIInjections {
  */
 export interface SocialNetworkUITasks {
     /**
+     * This function should encode `text` into the base image and upload it to the post box.
+     * If failed, warning user to do it by themselves with `warningText`
+     */
+    taskUploadToPostBox(
+        text: string,
+        options: {
+            warningText: string
+        },
+    ): void
+
+    /**
      * This function should paste `text` into the post box.
      * If failed, warning user to do it by themselves with `warningText`
      */
@@ -199,6 +210,7 @@ export type PostInfo = {
     readonly postID: ValueRef<string | null>
     readonly postContent: ValueRef<string>
     readonly postPayload: ValueRef<Payload | null>
+    readonly steganographyContent: ValueRef<string>
     readonly commentsSelector?: LiveSelector<HTMLElement, false>
     readonly commentBoxSelector?: LiveSelector<HTMLElement, true>
     readonly decryptedPostContent: ValueRef<string>

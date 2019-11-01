@@ -4,7 +4,11 @@ import { AddProve } from './DeveloperComponents/AddProve'
 import { DecryptPostDeveloperMode } from './DeveloperComponents/DecryptPost'
 import { SeeMyProvePost } from './DeveloperComponents/SeeMyProvePost'
 import { FriendsDeveloperMode } from './DeveloperComponents/Friends'
-import { debugModeSetting, disableOpenNewTabInBackgroundSettings } from '../../components/shared-settings/settings'
+import {
+    debugModeSetting,
+    steganographyModeSetting,
+    disableOpenNewTabInBackgroundSettings,
+} from '../../components/shared-settings/settings'
 import { useSettingsUI } from '../../components/shared-settings/createSettings'
 
 const useStyles = makeStyles(theme => ({
@@ -19,6 +23,7 @@ const DevPage = () => {
             <ListSubheader>Developer Settings</ListSubheader>
             <div className={classes.root}>
                 <List>{useSettingsUI(debugModeSetting)}</List>
+                <List>{useSettingsUI(steganographyModeSetting)}</List>
                 <List>{useSettingsUI(disableOpenNewTabInBackgroundSettings)}</List>
                 <Grid container xs={12} lg={6} item spacing={2} direction="column">
                     <Grid item>
