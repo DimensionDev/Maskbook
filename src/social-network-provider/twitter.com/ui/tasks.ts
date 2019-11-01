@@ -64,6 +64,10 @@ const taskPasteIntoPostBox: SocialNetworkUI['taskPasteIntoPostBox'] = (text, opt
     worker(abortCtr).then(undefined, e => fail(e))
 }
 
+const taskUploadToPostBox: SocialNetworkUI['taskUploadToPostBox'] = (text, opt) => {
+    throw new Error('task is undefined')
+}
+
 const taskPasteIntoBio = async (text: string) => {
     const getValue = () => editProfileTextareaSelector().evaluate()!.value
     await untilDocumentReady()
@@ -102,6 +106,7 @@ const taskGetProfile = async () => {
 
 export const twitterUITasks: SocialNetworkUITasks = {
     taskPasteIntoPostBox,
+    taskUploadToPostBox,
     taskPasteIntoBio,
     taskGetPostContent,
     taskGetProfile,

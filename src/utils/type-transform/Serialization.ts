@@ -13,6 +13,7 @@ export function serializable(name: string) {
         return constructor
     }
 }
+
 serializable('Error')(Error)
 serializable('TypeError')(TypeError)
 serializable('ReferenceError')(ReferenceError)

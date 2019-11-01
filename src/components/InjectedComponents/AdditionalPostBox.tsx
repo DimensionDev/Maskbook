@@ -14,6 +14,14 @@ import { getActivatedUI } from '../../social-network/ui'
 import { ChooseIdentity, ChooseIdentityProps } from '../shared/ChooseIdentity'
 import { useAsync } from '../../utils/components/AsyncComponent'
 import { useStylesExtends, or } from '../custom-ui-helper'
+import { steganographyModeSetting } from '../shared-settings/settings'
+import { useValueRef } from '../../utils/hooks/useValueRef'
+
+interface Props {
+    availableTarget: Array<Person | Group>
+
+    onRequestPost: (target: Array<Person | Group>, text: string) => void
+}
 
 const useStyles = makeStyles({
     root: { margin: '10px 0' },
@@ -113,6 +121,7 @@ export function AdditionalPostBox(props: AdditionalPostBoxProps) {
     )
     const identities = or(props.identities, useMyIdentities())
     const currentIdentity = or(props.currentIdentity, useCurrentIdentity())
+    const isSteganography = useValueRef(steganographyModeSetting)
 
     const onRequestPost = or(
         props.onRequestPost,
@@ -123,11 +132,21 @@ export function AdditionalPostBox(props: AdditionalPostBoxProps) {
                     target.map(x => x.identifier),
                     currentIdentity!.identifier,
                 )
-                const fullPost = geti18nString('additional_post_box__encrypted_post_pre', encrypted)
-                getActivatedUI().taskPasteIntoPostBox(fullPost, {
-                    warningText: geti18nString('additional_post_box__encrypted_failed'),
-                    shouldOpenPostDialog: false,
-                })
+                const activeUI = getActivatedUI()
+                if (isSteganography) {
+                    activeUI.taskPasteIntoPostBox(geti18nString('additional_post_box__steganography_post_pre'), {
+                        warningText: geti18nString('additional_post_box__encrypted_failed'),
+                        shouldOpenPostDialog: false,
+                    })
+                    activeUI.taskUploadToPostBox(encrypted, {
+                        warningText: geti18nString('additional_post_box__steganography_post_failed'),
+                    })
+                } else {
+                    activeUI.taskPasteIntoPostBox(geti18nString('additional_post_box__encrypted_post_pre', encrypted), {
+                        warningText: geti18nString('additional_post_box__encrypted_failed'),
+                        shouldOpenPostDialog: false,
+                    })
+                }
                 Services.Crypto.publishPostAESKey(token)
             },
             [currentIdentity],

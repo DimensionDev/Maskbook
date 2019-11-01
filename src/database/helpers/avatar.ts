@@ -3,6 +3,7 @@ import { queryAvatarDB, isAvatarOutdatedDB, storeAvatarDB } from '../avatar'
 import { memoizePromise } from '../../utils/memoize'
 import { MessageCenter } from '../../utils/messages'
 import { queryPerson } from './person'
+import { downloadUrl } from '../../utils/utils'
 
 /**
  * Get a (cached) blob url for an identifier.
@@ -43,7 +44,7 @@ export async function storeAvatar(
         if (typeof avatar === 'string') {
             if (avatar.startsWith('http') === false) return
             if (force || (await isAvatarOutdatedDB(identifier, 'lastUpdateTime'))) {
-                await storeAvatarDB(identifier, await downloadAvatar(avatar))
+                await storeAvatarDB(identifier, await downloadUrl(avatar))
             }
             // else do nothing
         } else {
@@ -57,12 +58,4 @@ export async function storeAvatar(
             MessageCenter.emit('peopleChanged', [{ of: await queryPerson(identifier), reason: 'update' }])
         }
     }
-}
-/**
- * Download avatar from url
- */
-async function downloadAvatar(url: string): Promise<ArrayBuffer> {
-    const res = await fetch(url)
-    if (!res.ok) throw new Error('Fetch avatar failed.')
-    return res.arrayBuffer()
 }
