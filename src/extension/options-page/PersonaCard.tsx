@@ -16,7 +16,7 @@ import { BackupJSONFileLatest } from '../../utils/type-transform/BackupFile'
 import { useColorProvider } from '../../utils/theme'
 import { geti18nString } from '../../utils/i18n'
 
-import classnames from 'classnames'
+import classNames from 'classnames'
 
 interface Props {
     identity: Person
@@ -165,7 +165,7 @@ export default function PersonaCard({ identity }: Props) {
                             <span
                                 suppressContentEditableWarning
                                 ref={titleRef}
-                                className={classnames('title', { fullWidth: rename })}
+                                className={classNames('title', { fullWidth: rename })}
                                 onKeyPress={e => e.key === 'Enter' && renameIdentity(e)}
                                 {...(rename ? { onBlur: renameIdentity, contentEditable: true } : {})}>
                                 {identity.nickname || identity.identifier.userId}
@@ -208,7 +208,7 @@ export default function PersonaCard({ identity }: Props) {
                     <div className="content" title={provePost}>
                         {provePost}
                     </div>
-                    <div className={classnames('extra-item', color.info)} onClick={copyPublicKey}>
+                    <div className={classNames('extra-item', color.info)} onClick={copyPublicKey}>
                         {geti18nString('copy')}
                     </div>
                 </Typography>
