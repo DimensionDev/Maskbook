@@ -196,7 +196,7 @@ function Dashboard() {
                             textColor="primary"
                             onChange={handleTabChange}>
                             <Tab label={geti18nString('dashboard')} />
-                            <Tab label={geti18nString('synchronization')} disabled />
+                            {/* <Tab label={geti18nString('synchronization')} disabled /> */}
                         </Tabs>
                         <section className={classes.cards}>
                             {identities.map(i => (
