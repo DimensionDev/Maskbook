@@ -49,5 +49,6 @@ export const emptyDefinition: SocialNetworkUIDefinition = {
     },
     taskPasteIntoBio() {},
     taskPasteIntoPostBox() {},
+    taskUploadToPostBox() {},
     version: 1,
 }

@@ -13,6 +13,7 @@ interface Services {
     Crypto: typeof import('./background-script/CryptoService')
     People: typeof import('./background-script/PeopleService')
     Welcome: typeof import('./background-script/WelcomeService')
+    Steganography: typeof import('./background-script/SteganographyService')
 }
 const Services = {} as Services
 export default Services
@@ -30,6 +31,7 @@ if (!('Services' in globalThis)) {
     register(createProxyToService('CryptoService'), 'Crypto', MockService.CryptoService)
     register(createProxyToService('WelcomeService'), 'Welcome', MockService.WelcomeService)
     register(createProxyToService('PeopleService'), 'People', MockService.PeopleService)
+    register(createProxyToService('SteganographyService'), 'Steganography', MockService.SteganographyService)
 }
 interface ServicesWithProgress {
     // Sorry you should add import at '../background-service.ts'

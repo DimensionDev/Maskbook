@@ -18,6 +18,15 @@ export function getUrl(path: string, fallback: string = '') {
 }
 
 /**
+ * Download given url return as ArrayBuffer
+ */
+export async function downloadUrl(url: string) {
+    const res = await fetch(url)
+    if (!res.ok) throw new Error('Fetch failed.')
+    return res.arrayBuffer()
+}
+
+/**
  * Dispatch a fake event.
  * @param event Event name
  * @param x parameters

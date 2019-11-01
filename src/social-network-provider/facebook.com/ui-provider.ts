@@ -5,6 +5,7 @@ import { sharedProvider } from './shared-provider'
 import { injectPostBoxFacebook } from './UI/injectPostBox'
 import { collectPeopleFacebook } from './UI/collectPeople'
 import { pasteIntoPostBoxFacebook } from './tasks/pasteIntoPostBox'
+import { uploadToPostBoxFacebook } from './tasks/uploadToPostBox'
 import { getPostContentFacebook } from './tasks/getPostContent'
 import { resolveLastRecognizedIdentityFacebook } from './UI/resolveLastRecognizedIdentity'
 import { getProfileFacebook } from './tasks/getProfile'
@@ -87,8 +88,9 @@ export const facebookUISelf = defineSocialNetworkUI({
     injectPostInspector: injectPostInspectorFacebook,
     collectPeople: collectPeopleFacebook,
     collectPosts: collectPostsFacebook,
-    taskPasteIntoPostBox: pasteIntoPostBoxFacebook,
     taskPasteIntoBio: pasteIntoBioFacebook,
+    taskPasteIntoPostBox: pasteIntoPostBoxFacebook,
+    taskUploadToPostBox: uploadToPostBoxFacebook,
     taskGetPostContent: getPostContentFacebook,
     taskGetProfile: getProfileFacebook,
 })

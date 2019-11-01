@@ -3,6 +3,8 @@ import { deconstructPayload } from '../../../utils/type-transform/Payload'
 import { getEmptyPostInfoByElement, PostInfo, SocialNetworkUI } from '../../../social-network/ui'
 import { isMobileFacebook } from '../isMobile'
 import { getPersonIdentifierAtFacebook } from '../getPersonIdentifierAtFacebook'
+import { downloadUrl } from '../../../utils/utils'
+import Services from '../../../extension/service'
 
 const posts = new LiveSelector().querySelectorAll<HTMLDivElement>(
     isMobileFacebook ? '.story_body_container ' : '.userContent, .userContent+*+div>div>div>div>div',
@@ -55,9 +57,12 @@ export function collectPostsFacebook(this: SocialNetworkUI) {
             this.posts.set(metadata, info)
             function collectPostInfo() {
                 info.postContent.value = node.innerText
-                const postBy = getPostBy(metadata, info.postPayload.value !== null).identifier
-                info.postBy.value = postBy
+                info.postBy.value = getPostBy(metadata, info.postPayload.value !== null).identifier
                 info.postID.value = getPostID(metadata)
+                getSteganographyContent(metadata).then(content => {
+                    if (content && info.postContent.value.indexOf(content) === -1 && content.substr(0, 2) === '🎼')
+                        info.postContent.value = content
+                })
             }
             collectPostInfo()
             info.postPayload.value = deconstructPayload(info.postContent.value, this.payloadDecoder)
@@ -108,4 +113,40 @@ function getPostID(node: DOMProxy): null | string {
             return idNode[0][2]
         }
     }
+}
+async function getSteganographyContent(node: DOMProxy) {
+    const parent = node.current.parentElement
+    if (!parent) return ''
+    const imgNodes = parent.querySelectorAll<HTMLElement>(
+        isMobileFacebook ? 'div>div>div>a>div>div>i.img' : '.uiScaledImageContainer img',
+    )
+    if (!imgNodes.length) return ''
+    const imgUrls = isMobileFacebook
+        ? (getComputedStyle(imgNodes[0]).backgroundImage || '')
+              .slice(4, -1)
+              .replace(/['"]/g, '')
+              .split(',')
+              .filter(Boolean)
+        : Array.from(imgNodes)
+              .map(node => node.getAttribute('src') || '')
+              .filter(Boolean)
+    if (!imgUrls.length) return ''
+    const pass = getPostBy(node, false).identifier.toText()
+    return (
+        await Promise.all(
+            imgUrls
+                .map(async url => {
+                    try {
+                        const image = new Uint8Array(await downloadUrl(url))
+                        const content = await Services.Steganography.decodeImage(image, {
+                            pass,
+                        })
+                        return content.indexOf('🎼') === 0 ? content : ''
+                    } catch {
+                        return ''
+                    }
+                })
+                .filter(Boolean),
+        )
+    ).join('\n')
 }
