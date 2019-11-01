@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useHistory } from 'react-router'
-import { Dialog, DialogTitle, DialogContent, Button, Avatar } from '@material-ui/core'
+import { Dialog, DialogTitle, DialogContent, Button, ButtonGroup } from '@material-ui/core'
 
 import CloudDownloadIcon from '@material-ui/icons/CloudDownload'
 import CenterFocusWeakIcon from '@material-ui/icons/CenterFocusWeak'
@@ -31,8 +31,6 @@ const useStyles = makeStyles(theme =>
             alignItems: 'center',
         },
         container: {
-            display: 'flex',
-            justifyContent: 'space-evenly',
             textAlign: 'center',
         },
         avatar: {
@@ -84,25 +82,15 @@ export default function BackupDialog() {
     return (
         <Dialog open fullWidth onClose={handleClose}>
             <DialogTitle>{currentIdentifier ? currentIdentifier.friendlyToText() : 'Unknown'}</DialogTitle>
-            <DialogContent>
-                <div className={classes.container}>
-                    <Button onClick={downloadAsFile}>
-                        <a color="textPrimary">
-                            <Avatar className={classes.avatar}>
-                                <CloudDownloadIcon fontSize="large" />
-                            </Avatar>
-                        </a>
-                        <div>{geti18nString('dashboard_download')}</div>
+            <DialogContent className={classes.container}>
+                <ButtonGroup fullWidth>
+                    <Button onClick={downloadAsFile} startIcon={<CloudDownloadIcon />}>
+                        {geti18nString('dashboard_download')}
                     </Button>
-                    <Button onClick={() => setShowQRCode(!showQRCode)}>
-                        <a color="textPrimary">
-                            <Avatar className={classes.avatar}>
-                                <CenterFocusWeakIcon fontSize="large" />
-                            </Avatar>
-                        </a>
-                        <div>{geti18nString(showQRCode ? 'dashboard_hide_qr' : 'dashboard_show_qr')}</div>
+                    <Button onClick={() => setShowQRCode(!showQRCode)} startIcon={<CenterFocusWeakIcon />}>
+                        {geti18nString(showQRCode ? 'dashboard_hide_qr' : 'dashboard_show_qr')}
                     </Button>
-                </div>
+                </ButtonGroup>
                 {showQRCode ? (
                     <>
                         <div className={classes.code}>
