@@ -1,37 +1,40 @@
 import React from 'react'
-import { useHistory } from 'react-router'
+import { useHistory, useRouteMatch, RouteProps, RouteComponentProps } from 'react-router'
 import { Dialog, Toolbar, IconButton, Slide, Container } from '@material-ui/core'
 import { TransitionProps } from '@material-ui/core/transitions'
 import CloseIcon from '@material-ui/icons/Close'
 
-export default function FullScreenDialog(props: any) {
-    const { children } = props
+const Transition = React.forwardRef<unknown, TransitionProps>(function Transition(props, ref) {
+    return <Slide direction="up" ref={ref} {...props} />
+})
+export default function FullScreenDialogRouter(props: {
+    path: string | RouteProps
+    component: React.ComponentType<any>
+}) {
+    const { component: Component, path } = props
     const history = useHistory()
+    const routeMatching = !!useRouteMatch(path)
 
-    const [open, setOpen] = React.useState(true)
-
-    const handleClose = () => {
-        setOpen(false)
+    const onExit = () => {
         history.replace('/')
     }
-
-    const handleExited = () => {
-        // FIXME: never fired
-        history.replace('/')
-    }
-
-    const Transition = React.forwardRef<unknown, TransitionProps>(function Transition(props, ref) {
-        return <Slide enter exit direction="up" ref={ref} onExited={handleExited} {...props} />
-    })
 
     return (
-        <Dialog fullScreen open={open} onClose={handleClose} TransitionComponent={Transition}>
+        <Dialog
+            closeAfterTransition
+            onExited={onExit}
+            fullScreen
+            open={routeMatching}
+            onClose={onExit}
+            TransitionComponent={Transition}>
             <Toolbar>
-                <IconButton style={{ marginLeft: 'auto' }} color="inherit" onClick={handleClose} aria-label="close">
+                <IconButton style={{ marginLeft: 'auto' }} color="inherit" onClick={onExit} aria-label="close">
                     <CloseIcon />
                 </IconButton>
             </Toolbar>
-            <Container maxWidth="md">{children}</Container>
+            <Container maxWidth="md">
+                <Component></Component>
+            </Container>
         </Dialog>
     )
 }

@@ -26,7 +26,7 @@ import { SSRRenderer } from './utils/SSRRenderer'
 
 import Welcome from './extension/options-page/Welcome'
 import Developer from './extension/options-page/Developer'
-import FullScreenDialog from './extension/options-page/Dialog'
+import FullScreenDialogRouter from './extension/options-page/Dialog'
 import BackupDialog from './extension/options-page/Backup'
 
 import { SnackbarProvider } from 'notistack'
@@ -88,14 +88,7 @@ const OptionsPageRouters = (
     <>
         <Route exact path="/" component={() => null} />
         <Route path="/welcome" component={Welcome} />
-        <Route
-            path="/developer"
-            component={() => (
-                <FullScreenDialog>
-                    <Developer />
-                </FullScreenDialog>
-            )}
-        />
+        <FullScreenDialogRouter path="/developer" component={Developer}></FullScreenDialogRouter>
         <Route path="/backup" component={() => <BackupDialog />} />
     </>
 )
