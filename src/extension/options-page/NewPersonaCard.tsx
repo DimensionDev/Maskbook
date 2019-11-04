@@ -10,7 +10,7 @@ import { geti18nString } from '../../utils/i18n'
 const useStyles = makeStyles(theme =>
     createStyles({
         card: {
-            minWidth: 375,
+            width: 'auto',
             margin: theme.spacing(2),
             textAlign: 'center',
         },
