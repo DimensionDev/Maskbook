@@ -25,7 +25,7 @@ interface Props {
 const useStyles = makeStyles(theme =>
     createStyles({
         card: {
-            minWidth: 375,
+            width: 'auto',
             margin: theme.spacing(2),
         },
         header: {
