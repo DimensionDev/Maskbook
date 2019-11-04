@@ -97,13 +97,9 @@ export default function PersonaCard({ identity }: Props) {
         Services.Crypto.getMyProveBio(identity.identifier).then(p => setProvePost(p || ''))
     }, [identity.identifier])
 
-    const [friendlyName, setFriendlyName] = useState<string>('')
-
-    useMemo(() => {
+    const friendlyName = useMemo(() => {
         const ui = [...definedSocialNetworkUIs].find(i => i.networkIdentifier === identity.identifier.network)
-        setFriendlyName(
-            ui ? ui.friendlyName : `${geti18nString('dashboard_unknown_network')}(${identity.identifier.network})`,
-        )
+        return ui ? ui.friendlyName : `${geti18nString('dashboard_unknown_network')}(${identity.identifier.network})`
     }, [identity.identifier.network])
 
     const { enqueueSnackbar, closeSnackbar } = useSnackbar()
