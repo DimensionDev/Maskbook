@@ -10423,7 +10423,7 @@ memorystream@^0.3.1:
   resolved "https://registry.yarnpkg.com/memorystream/-/memorystream-0.3.1.tgz#86d7090b30ce455d63fbae12dda51a47ddcaf9b2"
   integrity sha1-htcJCzDORV1j+64S3aUaR93K+bI=
 
-meow@5.0.0:
+meow@5.0.0, meow@^5.0.0:
   version "5.0.0"
   resolved "https://registry.yarnpkg.com/meow/-/meow-5.0.0.tgz#dfc73d63a9afc714a5e371760eb5c88b91078aa4"
   integrity sha512-CbTqYU17ABaLefO8vCU153ZZlprKYWDljcndKKDCFcYQITzWCXZAVk4QMFZPgvzrnUQ3uItnIE/LoUOwrT15Ig==
@@ -11016,6 +11016,13 @@ node-releases@^1.1.29:
   integrity sha512-R5bDhzh6I+tpi/9i2hrrvGJ3yKPYzlVOORDkXhnZuwi5D3q1I5w4vYy24PJXTcLk9Q0kws9TO77T75bcK8/ysQ==
   dependencies:
     semver "^5.3.0"
+
+node-stego@^0.6.2:
+  version "0.6.2"
+  resolved "https://registry.yarnpkg.com/node-stego/-/node-stego-0.6.2.tgz#e5cce83d2e00bf41e352d169ac947f99eb256ffa"
+  integrity sha512-FNncCHgnQFN9Ij8GLtpwIBCV4LmPWiBPv0LpykQmkh10e9Qg+k5NbgtNrsi+jrbfLSwkPbu/6Dgp99UuoMjWPQ==
+  dependencies:
+    meow "^5.0.0"
 
 nomnom@1.8.1:
   version "1.8.1"
@@ -16300,7 +16307,6 @@ webpack-sources@^1.1.0, webpack-sources@^1.4.0, webpack-sources@^1.4.1:
   resolved "https://codeload.github.com/DimensionDev/webpack-web-ext-plugin/tar.gz/ef16c9fdf765c329d8cf397fd047a7a5772d8873"
   dependencies:
     inquirer "^7.0.0"
-    web-ext "^3.1.1"
 
 webpack@4.41.0, webpack@^4.33.0, webpack@^4.38.0:
   version "4.41.0"
