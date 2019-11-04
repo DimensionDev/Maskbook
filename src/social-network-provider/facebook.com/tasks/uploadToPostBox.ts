@@ -4,15 +4,15 @@ import { getUrl, downloadUrl } from '../../../utils/utils'
 import Services from '../../../extension/service'
 
 export async function uploadToPostBoxFacebook(
-    this: SocialNetworkUI,
     text: string,
     options: Parameters<SocialNetworkUI['taskPasteIntoPostBox']>[1],
 ) {
     const { warningText } = options
+    const { currentIdentity } = getActivatedUI()
     const blankImage = await downloadUrl(getUrl('/maskbook-steganography.png'))
     const secretImage = await Services.Steganography.encodeImage(new Uint8Array(blankImage), {
         text,
-        pass: this.currentIdentity.value ? this.currentIdentity.value.identifier.toText() : '',
+        pass: currentIdentity.value ? currentIdentity.value.identifier.toText() : '',
     })
 
     await untilDocumentReady()
