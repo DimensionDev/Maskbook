@@ -25,9 +25,7 @@ export async function uploadToPostBoxFacebook(
 
     async function uploadFail() {
         console.warn('Image not uploaded to the post box')
-        const confirmed = confirm(warningText)
-
-        if (confirmed) {
+        if (confirm(warningText)) {
             await Services.Steganography.downloadImage(new Uint8Array(secretImage))
         }
     }
