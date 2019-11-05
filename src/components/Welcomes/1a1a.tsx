@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { geti18nString } from '../../utils/i18n'
 import { Button, makeStyles, Typography, Theme } from '@material-ui/core'
 import WelcomeContainer from './WelcomeContainer'
-import { SelectPeopleAndGroupsUI, isGroup } from '../shared/SelectPeopleAndGroups'
+import { SelectPeopleAndGroupsUI } from '../shared/SelectPeopleAndGroups'
 import { Person } from '../../database'
 
 interface Props {
@@ -13,6 +13,7 @@ interface Props {
 }
 const useStyles = makeStyles<Theme>(theme => ({
     paper: {
+        padding: '2rem 1rem',
         '& > *:not(:last-child)': {
             marginBottom: theme.spacing(3),
         },

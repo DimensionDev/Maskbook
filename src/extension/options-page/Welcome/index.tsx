@@ -8,7 +8,7 @@ import Welcome1a4 from '../../../components/Welcomes/1a4'
 import Welcome1b1 from '../../../components/Welcomes/1b1'
 import Services from '../../service'
 import { RouteComponentProps, withRouter } from 'react-router'
-import { Dialog, withMobileDialog, useTheme, useMediaQuery, makeStyles } from '@material-ui/core'
+import { Dialog, useTheme, useMediaQuery, makeStyles } from '@material-ui/core'
 import { Identifier, PersonIdentifier } from '../../../database/type'
 import { ValueRef } from '@holoflows/kit/es'
 import { useValueRef } from '../../../utils/hooks/useValueRef'
@@ -151,6 +151,7 @@ function Welcome(props: Welcome) {
             }
             return (
                 <Welcome1a4
+                    back={() => onStepChange(WelcomeState.GenerateKey)}
                     hasManual={!isNil(worker.manualVerifyPost)}
                     hasBio={!isNil(worker.autoVerifyBio)}
                     hasPost={!isNil(worker.autoVerifyPost)}

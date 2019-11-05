@@ -63,6 +63,7 @@ storiesOf('Welcome', module)
     .add('Step 1a-4', () => (
         <ResponsiveDialog open>
             <Welcome1a4
+                back={to('Welcome', 'Step 1a-3a')}
                 hasManual={boolean('hasManual', true)}
                 hasBio={boolean('hasBio', true)}
                 hasPost={boolean('hasPost', true)}

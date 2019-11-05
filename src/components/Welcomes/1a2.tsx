@@ -29,7 +29,7 @@ export default function Welcome({ next, back }: Props) {
     const classes = useStyles()
     return (
         <WelcomeContainer className={classes.paper}>
-            <Navigation back={back} />
+            <Navigation activeStep={1} back={back} />
             <Typography variant="h5">{geti18nString('welcome_1a2_title')}</Typography>
             <img
                 alt={geti18nString('welcome_1a2_imgalt')}
