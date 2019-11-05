@@ -40,7 +40,7 @@ const myUsernameLiveSelectorOnMobile = new LiveSelector()
     .map(x => JSON.parse(x).actor_id as number)
     .filter(x => x)
     .replace(orig => {
-        if (location.hostname === 'm.facebook.com' && location.pathname.match(/^\/(?:home)?[^/]*$/)) {
+        if (orig.length && location.hostname === 'm.facebook.com' && location.pathname.match(/^\/(?:home)?[^/]*$/)) {
             if (orig.every(x => x === orig[0])) return [orig[0]]
         }
         return []
