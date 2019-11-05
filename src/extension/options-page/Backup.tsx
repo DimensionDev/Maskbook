@@ -78,9 +78,18 @@ export default function BackupDialog() {
         Services.Welcome.downloadBackup(backupObj)
     }
 
+    const friendlyIdentifier = currentIdentifier ? (
+        <>
+            {currentIdentifier.userId}
+            <wbr />@{currentIdentifier.network}
+        </>
+    ) : (
+        'Unknown'
+    )
+
     return (
         <Dialog open fullWidth onClose={handleClose}>
-            <DialogTitle>{currentIdentifier ? currentIdentifier.friendlyToText() : 'Unknown'}</DialogTitle>
+            <DialogTitle>{friendlyIdentifier}</DialogTitle>
             <DialogContent className={classes.container}>
                 <ButtonGroup fullWidth>
                     <Button onClick={downloadAsFile} startIcon={<CloudDownloadIcon />}>
