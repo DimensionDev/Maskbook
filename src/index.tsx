@@ -15,7 +15,7 @@ import {
 import React from 'react'
 import { ThemeProvider, withStyles } from '@material-ui/styles'
 import { MaskbookDarkTheme, MaskbookLightTheme } from './utils/theme'
-import { HashRouter, MemoryRouter, Route, Link } from 'react-router-dom'
+import { HashRouter as Router, Route, Link } from 'react-router-dom'
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles'
 import PersonaCard from './extension/options-page/PersonaCard'
 import NewPersonaCard from './extension/options-page/NewPersonaCard'
@@ -150,7 +150,6 @@ function DashboardWithProvider() {
 }
 
 function Dashboard() {
-    const Router = (typeof window === 'object' ? HashRouter : MemoryRouter) as typeof HashRouter
     const classes = useStyles()
 
     const [currentTab, setCurrentTab] = React.useState(0)
