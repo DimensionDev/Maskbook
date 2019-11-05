@@ -70,37 +70,37 @@ const registerPostCollector = (self: SocialNetworkUI) => {
     new MutationObserverWatcher(postsSelector())
         .useForeach((node, _, proxy) => {
             // noinspection JSUnnecessarySemicolon
-            ;(async () => {
-                const info = getEmptyPostInfoByElement({
-                    get rootNode() {
-                        return proxy.current
-                    },
-                    rootNodeProxy: proxy,
-                })
-                const collectPostInfo = async () => {
-                    const r = await postParser(node)
-                    if (!r.pid) return false
-                    info.postContent.value = r.content
-                    const postBy = new PersonIdentifier(self.networkIdentifier, r.handle)
-                    if (!info.postBy.value.equals(postBy)) {
-                        info.postBy.value = postBy
-                    }
-                    info.postID.value = r.pid
-                    uploadToService(r)
+            const info = getEmptyPostInfoByElement({
+                get rootNode() {
+                    return proxy.current
+                },
+                rootNodeProxy: proxy,
+            })
+            info.postPayload.value = deconstructPayload(info.postContent.value, self.payloadDecoder)
+            const collectPostInfo = async () => {
+                const r = await postParser(node)
+                if (!r.pid) return false
+                info.postContent.value = r.content
+                const postBy = new PersonIdentifier(self.networkIdentifier, r.handle)
+                if (!info.postBy.value.equals(postBy)) {
+                    info.postBy.value = postBy
                 }
+                info.postID.value = r.pid
+                uploadToService(r)
+            }
+            ;(async () => {
                 await collectPostInfo()
-                info.postPayload.value = deconstructPayload(info.postContent.value, self.payloadDecoder)
                 info.postContent.addListener(newValue => {
                     info.postPayload.value = deconstructPayload(newValue, self.payloadDecoder)
                 })
                 // push to map. proxy used as a pointer here.
                 self.posts.set(proxy, info)
-                return {
-                    onNodeMutation: collectPostInfo,
-                    onTargetChanged: collectPostInfo,
-                    onRemove: () => self.posts.delete(proxy),
-                }
             })()
+            return {
+                onNodeMutation: collectPostInfo,
+                onTargetChanged: collectPostInfo,
+                onRemove: () => self.posts.delete(proxy),
+            }
         })
         .setDOMProxyOption({ afterShadowRootInit: { mode: 'closed' } })
         .assignKeys(node => node.innerHTML)
