@@ -6,12 +6,6 @@ export const twitterUrl = {
     hostIdentifier: 'twitter.com',
     hostLeadingUrl: 'https://twitter.com',
     hostLeadingUrlMobile: 'https://mobile.twitter.com',
-    get anyHostUrl() {
-        return `${twitterUrl.hostLeadingUrl}/*`
-    },
-    get anyHostUrlMobile() {
-        return `${twitterUrl.hostLeadingUrlMobile}/*`
-    },
 }
 
 const hostLeadingUrlAuto = (isMobile: boolean) =>
@@ -27,3 +21,56 @@ export const getPostUrl = (post: PostIdentifier<PersonIdentifier>, useMobile: bo
 export const getProfileUrl = (self: PersonIdentifier, useMobile: boolean = false) => {
     return `${hostLeadingUrlAuto(useMobile)}/${self.userId}`
 }
+
+export const topSites = [
+    'www.google.com',
+    'www.youtube.com',
+    'www.tmall.com',
+    'www.baidu.com',
+    'www.qq.com',
+    'www.facebook.com',
+    'www.sohu.com',
+    'www.taobao.com',
+    'www.wikipedia.org',
+    'login.tmall.com',
+    'www.yahoo.com',
+    'www.jd.com',
+    'www.amazon.com',
+    'sina.com.cn',
+    'www.weibo.com',
+    'pages.tmall.com',
+    'www.reddit.com',
+    'www.live.com',
+    'www.vk.com',
+    'www.netflix.com',
+    'www.okezone.com',
+    'www.blogspot.com',
+    'www.alipay.com',
+    'www.csdn.net',
+    'www.office.com',
+    'www.instagram.com',
+    'www.yahoo.co.jp',
+    'www.bing.com',
+    'www.xinhuanet.com',
+    'www.microsoft.com',
+    'www.aliexpress.com',
+    'twitter.com',
+    'www.livejasmin.com',
+    'google.com.hk',
+    'www.stackoverflow.com',
+    'www.babytree.com',
+    'www.ebay.com',
+    'www.naver.com',
+    'www.twitch.tv',
+    'www.amazon.co.jp',
+    'www.pornhub.com',
+    'www.tribunnews.com',
+    'www.apple.com',
+    'www.amazon.in',
+    'www.google.co.in',
+    'tianya.cn',
+    'www.microsoftonline.com',
+    'msn.com',
+    'www.wordpress.com',
+    'www.whitehouse.gov',
+]
