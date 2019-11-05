@@ -2,45 +2,10 @@ import { CustomEventId } from './constants'
 import { CustomEvents } from '../extension/injected-script/addEventListener'
 
 import { sleep as _sleep, timeout as _timeout } from '@holoflows/kit/es/util/sleep'
-import { defaults, isNull } from 'lodash-es'
+import { isNull } from 'lodash-es'
 
 export const sleep = _sleep
 export const timeout = _timeout
-
-/**
- * while (expression) {
- *     do();
- *     sleep(opt.interval)
- * }
- */
-const finiteWhileDoSleepDefault = { interval: 1000, timeout: 30000 }
-interface finiteWhileDoSleep {
-    interval?: number
-    timeout?: number
-}
-export const finiteWhileDoSleep = (
-    expression: boolean,
-    callback: () => void = () => {},
-    opt: finiteWhileDoSleep = finiteWhileDoSleepDefault,
-) => {
-    defaults(opt, finiteWhileDoSleepDefault)
-    const startAt = new Date().getTime()
-    return new Promise((resolve, reject) => {
-        const t = setInterval(() => {
-            if (new Date().getTime() - startAt > opt.timeout!) {
-                clearInterval(t)
-                reject()
-                return
-            }
-            if (expression) {
-                clearInterval(t)
-                resolve(expression)
-                return
-            }
-            callback()
-        }, opt.interval)
-    })
-}
 
 /**
  * Get reference of file in both extension and storybook
