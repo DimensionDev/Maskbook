@@ -9,22 +9,30 @@ untilDocumentReady().then(() => {
     document.body.appendChild(div)
 })
 
+globalThis.getComputedStyle = new Proxy(globalThis.getComputedStyle || (() => {}), {
+    apply(target, thisArg, args) {
+        if (args[0] === proxy) args[0] = document.body
+        return Reflect.apply(target, thisArg, args)
+    },
+})
+
+const proxy = new Proxy(document.body, {
+    get(target, key, receiver) {
+        const value = Reflect.get(target, key)
+        if (typeof value === 'function')
+            return function(...args: any[]) {
+                console.log(...args)
+                return Reflect.apply(value, shadow, args)
+            }
+        return value
+    },
+    set(target, key, value, receiver) {
+        return Reflect.set(document.body, key, value, document.body)
+    },
+})
 export function PortalShadowRoot() {
     if (GetContext() === 'options') return document.body
-    return new Proxy(document.body, {
-        get(target, key, receiver) {
-            const value = Reflect.get(target, key)
-            if (typeof value === 'function')
-                return function(...args: any[]) {
-                    console.log(...args)
-                    return Reflect.apply(value, shadow, args)
-                }
-            return value
-        },
-        set(target, key, value, receiver) {
-            return Reflect.set(document.body, key, value, document.body)
-        },
-    })
+    return proxy
 }
 
 Object.defineProperties(ShadowRoot.prototype, {
