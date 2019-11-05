@@ -4,7 +4,11 @@ globalThis.document = {
     adoptedStyleSheets: {},
     getElementById() {},
     createElement() {
-        return { attachShadow() {} }
+        return {
+            attachShadow() {
+                return { addEventListener() {} }
+            },
+        }
     },
     body: { appendChild() {} },
     addEventListener() {},

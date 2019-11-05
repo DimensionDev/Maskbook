@@ -105,6 +105,63 @@
     "finish": {
         "message": "完成"
     },
+    "undo": {
+        "message": "撤消"
+    },
+    "copy": {
+        "message": "複製"
+    },
+    "public_key": {
+        "message": "公鑰"
+    },
+    "disconnect": {
+        "message": "斷開"
+    },
+    "dashboard": {
+        "message": "儀表板"
+    },
+    "synchronization": {
+        "message": "同步化"
+    },
+    "dashboard_export_keystore": {
+        "message": "導出備份密鑰"
+    },
+    "dashboard_import_backup": {
+        "message": "導入數據備份"
+    },
+    "dashboard_download": {
+        "message": "備份"
+    },
+    "dashboard_add_new_persona": {
+        "message": "創建新的身份"
+    },
+    "dashboard_unknown_network": {
+        "message": "不支援"
+    },
+    "dashboard_create_backup": {
+        "message": "創建備份"
+    },
+    "dashboard_delete_persona": {
+        "message": "刪除身份"
+    },
+    "dashboard_show_qr": {
+        "message": "顯示二維碼"
+    },
+    "dashboard_hide_qr": {
+        "message": "隱藏二維碼"
+    },
+    "dashboard_item_copied": {
+        "message": "好了。"
+    },
+    "dashboard_item_deleted": {
+        "message": "好了。"
+    },
+    "dashboard_item_done": {
+        "message": "好了。"
+    },
+    "dashboard_item_copy_failed": {
+        "message": "複製失敗。"
+    },
     "welcome_0_close_button": {
         "message": "我想以後再做"
     },
@@ -284,18 +341,6 @@
     },
     "welcome_1b_file_selected": {
         "message": "已選取備份檔案：$1"
-    },
-    "welcome_1b_qr_0": {
-        "message": "你可以以以下方式找到 QR 碼"
-    },
-    "welcome_1b_qr_1": {
-        "message": "1. 右鍵點擊瀏覽器右上方的 Maskbook 按鈕"
-    },
-    "welcome_1b_qr_2": {
-        "message": "2. 點擊「選項」"
-    },
-    "welcome_1b_qr_3": {
-        "message": "3. 點擊「設定行動端」"
     },
     "welcome_1b_hint_identity": {
         "message": "備份文件中包含了以下身份："

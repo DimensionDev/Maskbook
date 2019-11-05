@@ -1,10 +1,6 @@
 import { createMuiTheme } from '@material-ui/core'
-import { ThemeOptions } from '@material-ui/core/styles/createMuiTheme'
-import indigo from '@material-ui/core/colors/indigo'
-import orange from '@material-ui/core/colors/orange'
-
-const _refTheme = createMuiTheme()
-const _refThemeDark = createMuiTheme({ palette: { type: 'dark' } })
+import { makeStyles, createStyles } from '@material-ui/core/styles'
+import { orange, green, red, blue } from '@material-ui/core/colors'
 
 function getFontFamily(monospace?: boolean) {
     // We want to look native.
@@ -21,8 +17,9 @@ function getFontFamily(monospace?: boolean) {
 const baseTheme = (theme: 'dark' | 'light') =>
     ({
         palette: {
-            primary: { main: indigo[400] },
+            primary: { main: '#2594ff' },
             secondary: { main: orange[800] },
+            error: { main: red[500] },
             type: theme,
         },
         typography: {
@@ -36,8 +33,23 @@ const baseTheme = (theme: 'dark' | 'light') =>
                 },
             },
         },
-    } as ThemeOptions)
+    } as const)
 // Theme
 export const MaskbookLightTheme = createMuiTheme(baseTheme('light'))
 export const MaskbookDarkTheme = createMuiTheme(baseTheme('dark'))
+
 export const FixedWidthFonts = getFontFamily(true)
+
+export const useColorProvider = makeStyles((theme: typeof MaskbookDarkTheme) =>
+    createStyles({
+        error: {
+            color: theme.palette.error.main,
+        },
+        success: {
+            color: theme.palette.type === 'dark' ? green[500] : green[800],
+        },
+        info: {
+            color: theme.palette.type === 'dark' ? blue[500] : blue[800],
+        },
+    }),
+)
