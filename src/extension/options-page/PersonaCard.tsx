@@ -107,11 +107,12 @@ export default function PersonaCard({ identity }: Props) {
     const copyPublicKey = () => {
         navigator.clipboard
             .writeText(provePost)
-            .then(() => {
-                enqueueSnackbar(geti18nString('dashboard_item_copied'), { variant: 'success', autoHideDuration: 1000 })
-            })
+            .then(() =>
+                enqueueSnackbar(geti18nString('dashboard_item_copied'), { variant: 'success', autoHideDuration: 1000 }),
+            )
             .catch(e => {
-                enqueueSnackbar(geti18nString('dashboard_item_copy_failed') + provePost, { variant: 'error' })
+                enqueueSnackbar(geti18nString('dashboard_item_copy_failed'), { variant: 'error' })
+                setTimeout(() => prompt(geti18nString('automation_request_paste_into_bio_box'), provePost))
             })
     }
 
