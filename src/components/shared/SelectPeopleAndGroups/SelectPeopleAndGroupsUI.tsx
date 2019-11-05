@@ -7,7 +7,7 @@ import { PersonOrGroupInList } from './PersonOrGroupInList'
 import { PersonOrGroupInChip } from './PersonOrGroupInChip'
 import { PersonIdentifier, GroupIdentifier } from '../../../database/type'
 type PersonOrGroup = Group | Person
-interface SelectPeopleAndGroupsUIProps<ServeType extends Group | Person> {
+export interface SelectPeopleAndGroupsUIProps<ServeType extends Group | Person = Group | Person> {
     /** Omit myself in the UI and the selected result */
     ignoreMyself?: boolean
     items: ServeType[]

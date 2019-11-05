@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { useCallback, useRef, useState } from 'react'
-import { SelectPeopleAndGroupsUI } from '../shared/SelectPeopleAndGroups'
+import { SelectPeopleAndGroupsUI, SelectPeopleAndGroupsUIProps } from '../shared/SelectPeopleAndGroups'
 import { useCapturedInput } from '../../utils/hooks/useCapturedEvents'
 import { Avatar } from '../../utils/components/Avatar'
 import Services from '../../extension/service'
@@ -13,15 +13,9 @@ import { useCurrentIdentity, useFriendsList, useGroupsList, useMyIdentities } fr
 import { getActivatedUI } from '../../social-network/ui'
 import { ChooseIdentity } from '../shared/ChooseIdentity'
 import { useAsync } from '../../utils/components/AsyncComponent'
-import { useStylesExtends } from '../custom-ui-helper'
+import { useStylesExtends, or } from '../custom-ui-helper'
 
 type Keys = keyof Omit<ReturnType<typeof useStyles>, 'MUIInputRoot' | 'MUIInputInput'>
-export interface AdditionalPostBoxUIProps extends withClasses<Keys> {
-    availableTarget: Array<Person | Group>
-
-    onRequestPost: (target: Array<Person | Group>, text: string) => void
-}
-
 const useStyles = makeStyles({
     root: { margin: '10px 0' },
     header: { padding: '8px 12px 0' },
@@ -39,15 +33,23 @@ const useStyles = makeStyles({
     postButton: { padding: 6, borderTopLeftRadius: 0, borderTopRightRadius: 0, flex: 1, wordBreak: 'break-all' },
 })
 
-export function AdditionalPostBoxUI(props: AdditionalPostBoxUIProps) {
+export interface AdditionalPostBoxUIProps extends withClasses<Keys> {
+    availableShareTarget: Array<Person | Group>
+    currentShareTarget: Array<Person | Group>
+    onShareTargetChanged: SelectPeopleAndGroupsUIProps['onSetSelected']
+    currentIdentity: Person | null
+    postBoxPlaceholder: string
+    postButtonDisabled: boolean
+    onPostTextChange: (nextString: string) => void
+    onPostButtonClicked: () => void
+    SelectPeopleAndGroupsProps?: Partial<SelectPeopleAndGroupsUIProps>
+}
+
+export const AdditionalPostBoxUI = React.memo(function(props: AdditionalPostBoxUIProps) {
     const classes = useStylesExtends(useStyles(), props)
-
-    const myself = useCurrentIdentity()
-    const [text, setText] = useState('')
-    const [shareTarget, changeShareTarget] = useState(props.availableTarget)
-
     const inputRef = useRef<HTMLInputElement>()
-    useCapturedInput(inputRef, setText)
+    useCapturedInput(inputRef, props.onPostTextChange)
+
     return (
         <Card className={classes.root}>
             <CardHeader
@@ -55,76 +57,103 @@ export function AdditionalPostBoxUI(props: AdditionalPostBoxUIProps) {
                 title={<Typography variant="caption">Maskbook</Typography>}
             />
             <Paper elevation={0} className={classes.inputArea}>
-                {myself && <Avatar className={classes.avatar} person={myself} />}
+                {props.currentIdentity && <Avatar className={classes.avatar} person={props.currentIdentity} />}
                 <InputBase
                     classes={{ root: classes.MUIInputRoot, input: classes.MUIInputInput }}
                     inputRef={inputRef}
                     fullWidth
                     multiline
-                    placeholder={geti18nString(
-                        myself && myself.nickname
-                            ? 'additional_post_box__placeholder_w_name'
-                            : 'additional_post_box__placeholder_wo_name',
-                        myself ? myself.nickname : '',
-                    )}
+                    placeholder={props.postBoxPlaceholder}
                 />
             </Paper>
             <Divider />
             <Paper elevation={2}>
                 <SelectPeopleAndGroupsUI
                     ignoreMyself
-                    items={props.availableTarget}
-                    onSetSelected={changeShareTarget}
-                    selected={shareTarget}
+                    items={props.availableShareTarget}
+                    onSetSelected={props.onShareTargetChanged}
+                    selected={props.currentShareTarget}
+                    {...props.SelectPeopleAndGroupsProps}
                 />
             </Paper>
             <Divider />
             <Box display="flex">
                 <Button
-                    onClick={() => props.onRequestPost(shareTarget, text)}
+                    onClick={props.onPostButtonClicked}
                     variant="contained"
                     color="primary"
                     className={classes.postButton}
-                    disabled={!(shareTarget.length && text)}>
+                    disabled={props.postButtonDisabled}>
                     {geti18nString('additional_post_box__post_button')}
                 </Button>
             </Box>
         </Card>
     )
-}
+})
 
-export function AdditionalPostBox(props: Partial<AdditionalPostBoxUIProps>) {
+export function AdditionalPostBox(
+    props: Partial<AdditionalPostBoxUIProps> & {
+        identities?: Person[]
+        onRequestPost?: (target: (Person | Group)[], text: string) => void
+    },
+) {
     const people = useFriendsList()
     const groups = useGroupsList()
-    const groupsAndPeople = React.useMemo(() => [...groups, ...people], [people, groups])
-    const identities = useMyIdentities()
-    const identity = useCurrentIdentity()
-
-    const onRequestPost = useCallback(
-        async (target: (Person | Group)[], text: string) => {
-            const [encrypted, token] = await Services.Crypto.encryptTo(
-                text,
-                target.map(x => x.identifier),
-                identity!.identifier,
-            )
-            const fullPost = geti18nString('additional_post_box__encrypted_post_pre', encrypted)
-            getActivatedUI().taskPasteIntoPostBox(fullPost, {
-                warningText: geti18nString('additional_post_box__encrypted_failed'),
-                shouldOpenPostDialog: false,
-            })
-            Services.Crypto.publishPostAESKey(token)
-        },
-        [identity],
+    const availableShareTarget = or(
+        props.availableShareTarget,
+        React.useMemo(() => [...groups, ...people], [people, groups]),
     )
+    const identities = or(props.identities, useMyIdentities())
+    const currentIdentity = or(props.currentIdentity, useCurrentIdentity())
+
+    const onRequestPost = or(
+        props.onRequestPost,
+        useCallback(
+            async (target: (Person | Group)[], text: string) => {
+                const [encrypted, token] = await Services.Crypto.encryptTo(
+                    text,
+                    target.map(x => x.identifier),
+                    currentIdentity!.identifier,
+                )
+                const fullPost = geti18nString('additional_post_box__encrypted_post_pre', encrypted)
+                getActivatedUI().taskPasteIntoPostBox(fullPost, {
+                    warningText: geti18nString('additional_post_box__encrypted_failed'),
+                    shouldOpenPostDialog: false,
+                })
+                Services.Crypto.publishPostAESKey(token)
+            },
+            [currentIdentity],
+        ),
+    )
+
+    const [postText, setPostText] = useState('')
+    const [currentShareTarget, onShareTargetChanged] = useState(availableShareTarget)
 
     const [showWelcome, setShowWelcome] = useState(false)
     useAsync(getActivatedUI().shouldDisplayWelcome, []).then(x => setShowWelcome(x))
-
+    // TODO: ??? should we do this without including `ui` ???
     if (showWelcome) {
         return <NotSetupYetPrompt />
     }
 
-    const ui = <AdditionalPostBoxUI availableTarget={groupsAndPeople} onRequestPost={onRequestPost} {...props} />
+    const ui = (
+        <AdditionalPostBoxUI
+            currentIdentity={currentIdentity}
+            availableShareTarget={availableShareTarget}
+            currentShareTarget={currentShareTarget}
+            onShareTargetChanged={onShareTargetChanged}
+            postBoxPlaceholder={geti18nString(
+                currentIdentity && currentIdentity.nickname
+                    ? 'additional_post_box__placeholder_w_name'
+                    : 'additional_post_box__placeholder_wo_name',
+                currentIdentity ? currentIdentity.nickname : '',
+            )}
+            onPostTextChange={setPostText}
+            onPostButtonClicked={() => onRequestPost(currentShareTarget, postText)}
+            postButtonDisabled={!(currentShareTarget.length && postText)}
+            {...props}
+        />
+    )
 
     if (identities.length > 1)
         return (
