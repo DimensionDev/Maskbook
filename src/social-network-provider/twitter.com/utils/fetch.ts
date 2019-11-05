@@ -4,7 +4,7 @@ import { notNullable } from '../../../utils/assert'
 import { defaultTo, isUndefined, join } from 'lodash-es'
 import { nthChild } from '../../../utils/dom'
 import { PersonIdentifier } from '../../../database/type'
-import { hostIdentifier } from './url'
+import { twitterUrl } from './url'
 
 /**
  * @example
@@ -55,7 +55,7 @@ export const bioCardParser = () => {
         avatar,
         name: nameArea.name,
         handle: nameArea.handle,
-        identifier: new PersonIdentifier(hostIdentifier, nameArea.handle),
+        identifier: new PersonIdentifier(twitterUrl.hostIdentifier, nameArea.handle),
         bio,
         isFollower,
         isFollowing,
