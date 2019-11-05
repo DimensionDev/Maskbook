@@ -8,7 +8,7 @@ import Welcome1a4 from '../../../components/Welcomes/1a4'
 import Welcome1b1 from '../../../components/Welcomes/1b1'
 import Services from '../../service'
 import { RouteComponentProps, withRouter } from 'react-router'
-import { Dialog, withMobileDialog } from '@material-ui/core'
+import { Dialog, withMobileDialog, useTheme, useMediaQuery, makeStyles } from '@material-ui/core'
 import { Identifier, PersonIdentifier } from '../../../database/type'
 import { ValueRef } from '@holoflows/kit/es'
 import { useValueRef } from '../../../utils/hooks/useValueRef'
@@ -217,8 +217,18 @@ export type Query = {
     nickname?: string
 }
 export const IdentifierRefContext = React.createContext(selectedIdRef)
+
+const useStyles = makeStyles(theme => ({
+    fullScreenDialog: {
+        margin: 'auto 0 0',
+        height: '90%',
+    },
+    Dialog: {
+        width: '100%',
+    },
+}))
+
 export default withRouter(function _WelcomePortal(props: RouteComponentProps) {
-    const ResponsiveDialog = useRef(withMobileDialog({ breakpoint: 'xs' })(Dialog)).current
     const [step, setStep] = useState(WelcomeState.LinkNewSocialNetworks)
 
     useEffect(() => {
@@ -268,8 +278,16 @@ export default withRouter(function _WelcomePortal(props: RouteComponentProps) {
 
     const { enqueueSnackbar } = useSnackbar()
 
+    const theme = useTheme()
+    const classes = useStyles()
+    const fullScreen = useMediaQuery(theme.breakpoints.down('xs'))
+
     return (
-        <ResponsiveDialog open fullWidth onClose={() => props.history.replace('/')}>
+        <Dialog
+            classes={{ paper: classes[fullScreen ? 'fullScreenDialog' : 'Dialog'] }}
+            open
+            fullScreen={fullScreen}
+            onClose={() => props.history.replace('/')}>
             <IdentifierRefContext.Provider value={selectedIdRef}>
                 <Welcome
                     onConnectOtherPerson={(w, t) => {
@@ -309,7 +327,7 @@ export default withRouter(function _WelcomePortal(props: RouteComponentProps) {
                     }}
                 />
             </IdentifierRefContext.Provider>
-        </ResponsiveDialog>
+        </Dialog>
     )
 })
 //#endregion

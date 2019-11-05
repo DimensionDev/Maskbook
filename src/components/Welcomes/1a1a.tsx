@@ -13,7 +13,6 @@ interface Props {
 }
 const useStyles = makeStyles<Theme>(theme => ({
     paper: {
-        textAlign: 'center',
         '& > *:not(:last-child)': {
             marginBottom: theme.spacing(3),
         },
