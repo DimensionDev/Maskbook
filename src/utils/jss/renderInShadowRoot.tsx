@@ -2,11 +2,11 @@ import { create } from 'jss'
 import { createGenerateClassName, jssPreset, StylesProvider, ThemeProvider } from '@material-ui/styles'
 import ReactDOM from 'react-dom'
 import React from 'react'
-import { MaskbookDarkTheme, MaskbookLightTheme } from '../theme'
 import ConstructableStyleSheetsRenderer, {
     applyAdoptedStyleSheets,
     livingShadowRoots,
 } from './ConstructableStyleSheetsRenderer'
+import { getActivatedUI } from '../../social-network/ui'
 
 const jss = create({ ...jssPreset(), Renderer: ConstructableStyleSheetsRenderer as any })
 /**
@@ -38,11 +38,11 @@ export class RenderInShadowRootWrapper extends React.PureComponent {
     }
 }
 function Maskbook(props: React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement>) {
-    // const isDarkTheme = useMediaQuery('(prefers-color-scheme: dark)')
-    const isDarkTheme = false
+    const ui = getActivatedUI()
+    const isDarkTheme = ui.useColorScheme() === 'dark'
     return (
         <StylesProvider jss={jss} generateClassName={generateClassName}>
-            <ThemeProvider theme={isDarkTheme ? MaskbookDarkTheme : MaskbookLightTheme}>
+            <ThemeProvider theme={isDarkTheme ? ui.darkTheme : ui.lightTheme}>
                 <React.StrictMode>
                     <div {...props} />
                 </React.StrictMode>
