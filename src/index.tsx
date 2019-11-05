@@ -1,6 +1,10 @@
 import './provider.worker'
 
 import {
+    AppBar,
+    Toolbar,
+    IconButton,
+    Typography,
     Container,
     CssBaseline,
     useMediaQuery,
@@ -12,6 +16,9 @@ import {
     LinearProgress,
     Breadcrumbs,
 } from '@material-ui/core'
+
+import BackIcon from '@material-ui/icons/ArrowBack'
+
 import React from 'react'
 import { ThemeProvider, withStyles } from '@material-ui/styles'
 import { MaskbookDarkTheme, MaskbookLightTheme } from './utils/theme'
@@ -171,8 +178,20 @@ function Dashboard() {
             .then(() => setExportLoading(false))
     }
 
+    const shouldRenderBackButton = useMediaQuery('(max-width:600px)')
+
     return (
         <Router>
+            <AppBar position="sticky">
+                <Toolbar>
+                    {shouldRenderBackButton && (
+                        <IconButton onClick={() => window.close()} edge="start" color="inherit" aria-label="menu">
+                            <BackIcon />
+                        </IconButton>
+                    )}
+                    <Typography variant="h6">Maskbook</Typography>
+                </Toolbar>
+            </AppBar>
             <Container maxWidth="md">
                 <CssBaseline />
                 <Container maxWidth="sm">
