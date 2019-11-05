@@ -13,9 +13,10 @@ import { useCurrentIdentity, useFriendsList, useGroupsList, useMyIdentities } fr
 import { getActivatedUI } from '../../social-network/ui'
 import { ChooseIdentity } from '../shared/ChooseIdentity'
 import { useAsync } from '../../utils/components/AsyncComponent'
-import { PersonIdentifier, Identifier } from '../../database/type'
+import { useStylesExtends } from '../custom-ui-helper'
 
-interface Props {
+type Keys = keyof Omit<ReturnType<typeof useStyles>, 'MUIInputRoot' | 'MUIInputInput'>
+export interface AdditionalPostBoxUIProps extends withClasses<Keys> {
     availableTarget: Array<Person | Group>
 
     onRequestPost: (target: Array<Person | Group>, text: string) => void
@@ -24,24 +25,22 @@ interface Props {
 const useStyles = makeStyles({
     root: { margin: '10px 0' },
     header: { padding: '8px 12px 0' },
-    paper: { borderRadius: 0, display: 'flex' },
+    inputArea: { borderRadius: 0, display: 'flex' },
     avatar: { margin: '12px 0 0 12px' },
-    input: {
+    MUIInputRoot: {
         minHeight: 108,
         flexDirection: 'column',
         padding: 12,
         boxSizing: 'border-box',
     },
-    innerInput: {
+    MUIInputInput: {
         minHeight: '3em',
     },
-    // todo: theme
-    grayArea: { background: '#f5f6f7', padding: 8, wordBreak: 'break-all' },
-    button: { padding: '2px 30px', flex: 1 },
+    postButton: { padding: 6, borderTopLeftRadius: 0, borderTopRightRadius: 0, flex: 1, wordBreak: 'break-all' },
 })
 
-export function AdditionalPostBoxUI(props: Props) {
-    const classes = useStyles()
+export function AdditionalPostBoxUI(props: AdditionalPostBoxUIProps) {
+    const classes = useStylesExtends(useStyles(), props)
 
     const myself = useCurrentIdentity()
     const [text, setText] = useState('')
@@ -55,10 +54,10 @@ export function AdditionalPostBoxUI(props: Props) {
                 classes={{ root: classes.header }}
                 title={<Typography variant="caption">Maskbook</Typography>}
             />
-            <Paper elevation={0} className={classes.paper}>
+            <Paper elevation={0} className={classes.inputArea}>
                 {myself && <Avatar className={classes.avatar} person={myself} />}
                 <InputBase
-                    classes={{ root: classes.input, input: classes.innerInput }}
+                    classes={{ root: classes.MUIInputRoot, input: classes.MUIInputInput }}
                     inputRef={inputRef}
                     fullWidth
                     multiline
@@ -80,12 +79,12 @@ export function AdditionalPostBoxUI(props: Props) {
                 />
             </Paper>
             <Divider />
-            <Box display="flex" className={classes.grayArea}>
+            <Box display="flex">
                 <Button
                     onClick={() => props.onRequestPost(shareTarget, text)}
                     variant="contained"
                     color="primary"
-                    className={classes.button}
+                    className={classes.postButton}
                     disabled={!(shareTarget.length && text)}>
                     {geti18nString('additional_post_box__post_button')}
                 </Button>
@@ -94,7 +93,7 @@ export function AdditionalPostBoxUI(props: Props) {
     )
 }
 
-export function AdditionalPostBox(props: Partial<Props>) {
+export function AdditionalPostBox(props: Partial<AdditionalPostBoxUIProps>) {
     const people = useFriendsList()
     const groups = useGroupsList()
     const groupsAndPeople = React.useMemo(() => [...groups, ...people], [people, groups])
