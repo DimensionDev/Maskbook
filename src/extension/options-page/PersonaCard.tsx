@@ -6,10 +6,11 @@ import CardContent from '@material-ui/core/CardContent'
 import Button from '@material-ui/core/Button'
 import Typography from '@material-ui/core/Typography'
 import { Person } from '../../database'
-import { Divider } from '@material-ui/core'
+import { Divider, IconButton } from '@material-ui/core'
 import Services from '../service'
 import { definedSocialNetworkUIs } from '../../social-network/ui'
 import { Link as RouterLink, LinkProps as RouterLinkProps } from 'react-router-dom'
+import EditIcon from '@material-ui/icons/Edit'
 import CenterFocusWeakIcon from '@material-ui/icons/CenterFocusWeak'
 import { useSnackbar } from 'notistack'
 import { BackupJSONFileLatest } from '../../utils/type-transform/BackupFile'
@@ -28,11 +29,16 @@ const useStyles = makeStyles(theme =>
             width: 'auto',
             margin: theme.spacing(2),
         },
+        focus: {
+            margin: '-5px',
+        },
         header: {
             display: 'flex',
             alignItems: 'flex-end',
             '& > .title': {
                 marginRight: theme.spacing(1),
+                flexShrink: 1,
+                overflow: 'hidden',
             },
             '& > .fullWidth': {
                 flexGrow: 1,
@@ -177,12 +183,15 @@ export default function PersonaCard({ identity }: Props) {
                                         setRename(true)
                                         setTimeout(() => titleRef.current && titleRef.current!.focus())
                                     }}>
-                                    [Edit Name]
+                                    <EditIcon fontSize="small" />
                                 </Typography>
                             )}
                         </>
                     }
-                    <RouterLink component={Button} to={`/backup?identity=${identity.identifier.toText()}&qr`}>
+                    <RouterLink
+                        component={IconButton}
+                        className={classes.focus}
+                        to={`/backup?identity=${identity.identifier.toText()}&qr`}>
                         <CenterFocusWeakIcon fontSize="small" />
                     </RouterLink>
                 </Typography>
