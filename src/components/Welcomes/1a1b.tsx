@@ -15,8 +15,8 @@ interface Props {
 }
 const useStyles = makeStyles<Theme>(theme => ({
     paper: {
+        padding: '2rem 1rem',
         textAlign: 'center',
-        minWidth: 250,
     },
     button: {
         minWidth: 180,

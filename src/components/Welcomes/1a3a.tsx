@@ -156,7 +156,7 @@ export default function Welcome(props: Props) {
     )
     return (
         <WelcomeContainer>
-            <Navigation back={props.back} />
+            <Navigation activeStep={2} back={props.back} />
             <CardContent>
                 <Typography variant="h5">{geti18nString('welcome_1a3a_title')}</Typography>
                 <br />
