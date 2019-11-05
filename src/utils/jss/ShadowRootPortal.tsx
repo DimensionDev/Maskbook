@@ -1,10 +1,11 @@
-import { livingShadowRoots } from './ConstructableStyleSheetsRenderer'
+import { livingShadowRoots, applyAdoptedStyleSheets } from './ConstructableStyleSheetsRenderer'
 import { GetContext } from '@holoflows/kit/es'
 import { untilDocumentReady } from '../utils'
 
 const div = document.createElement('div')
 const shadow = div.attachShadow({ mode: 'closed' })
 untilDocumentReady().then(() => document.body.appendChild(div))
+livingShadowRoots.add(shadow)
 
 globalThis.getComputedStyle = new Proxy(globalThis.getComputedStyle || (() => {}), {
     apply(target, thisArg, args) {
