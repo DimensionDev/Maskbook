@@ -8,7 +8,7 @@ import { twitterUITasks } from './tasks'
 import { twitterUIFetch } from './fetch'
 import { twitterUIInjections } from './inject'
 import { InitGroupsValueRef } from '../../../social-network/defaults/GroupsValueRef'
-import { hostIdentifier, hostLeadingUrl, hostLeadingUrlMobile } from '../utils/url'
+import { twitterUrl } from '../utils/url'
 
 export const instanceOfTwitterUI = defineSocialNetworkUI({
     ...sharedSettings,
@@ -17,28 +17,28 @@ export const instanceOfTwitterUI = defineSocialNetworkUI({
     ...twitterUIFetch,
     init: (env, pref) => {
         sharedSettings.init(env, pref)
-        InitFriendsValueRef(instanceOfTwitterUI, hostIdentifier)
-        InitGroupsValueRef(instanceOfTwitterUI, hostIdentifier)
-        InitMyIdentitiesValueRef(instanceOfTwitterUI, hostIdentifier)
+        InitFriendsValueRef(instanceOfTwitterUI, twitterUrl.hostIdentifier)
+        InitGroupsValueRef(instanceOfTwitterUI, twitterUrl.hostIdentifier)
+        InitMyIdentitiesValueRef(instanceOfTwitterUI, twitterUrl.hostIdentifier)
     },
     shouldActivate(location: Location | URL = globalThis.location) {
-        return location.hostname.endsWith(hostIdentifier)
+        return location.hostname.endsWith(twitterUrl.hostIdentifier)
     },
     friendlyName: 'Twitter (Insider Preview)',
     setupAccount: () => {
         browser.permissions
             .request({
-                origins: [`${hostLeadingUrl}/*`, `${hostLeadingUrlMobile}/*`],
+                origins: [`${twitterUrl.hostLeadingUrl}/*`, `${twitterUrl.hostLeadingUrlMobile}/*`],
             })
             .then(granted => {
                 if (granted) {
-                    setStorage(hostIdentifier, { forceDisplayWelcome: true }).then()
-                    location.href = hostLeadingUrl
+                    setStorage(twitterUrl.hostIdentifier, { forceDisplayWelcome: true }).then()
+                    location.href = twitterUrl.hostLeadingUrl
                 }
             })
     },
     ignoreSetupAccount() {
-        setStorage(hostIdentifier, { userIgnoredWelcome: true, forceDisplayWelcome: false }).then()
+        setStorage(twitterUrl.hostIdentifier, { userIgnoredWelcome: true, forceDisplayWelcome: false }).then()
     },
     shouldDisplayWelcome: shouldDisplayWelcomeDefault,
 })

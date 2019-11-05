@@ -2,7 +2,7 @@ import { SocialNetworkWorkerAndUI } from '../../../social-network/shared'
 import { isNull } from 'lodash-es'
 import { PersonIdentifier } from '../../../database/type'
 import Services from '../../../extension/service'
-import { hostIdentifier } from './url'
+import { twitterUrl } from './url'
 
 /**
  * @link https://help.twitter.com/en/managing-your-account/twitter-username-rules
@@ -17,7 +17,7 @@ export const usernameValidator: SocialNetworkWorkerAndUI['isValidUsername'] = (n
 }
 
 export const uploadToService = (payload: { name: string; handle: string; avatar?: string; bio?: string }) => {
-    const id = new PersonIdentifier(hostIdentifier, payload.handle)
+    const id = new PersonIdentifier(twitterUrl.hostIdentifier, payload.handle)
     if (payload.bio) {
         Services.Crypto.verifyOthersProve(payload.bio, id).then()
     }

@@ -4,12 +4,12 @@
  *  delegate some tasks to foreground by background.
  *  we call foreground tabs 'worker' here.
  */
-import { anyHostUrl, anyHostUrlMobile } from './url'
+import { twitterUrl } from './url'
 import { shuffle } from 'lodash-es'
 
 export const workerAllocate = async () => {
     const tab = await browser.tabs.query({
-        url: [anyHostUrl, anyHostUrlMobile],
+        url: [twitterUrl.anyHostUrl, twitterUrl.anyHostUrlMobile],
         pinned: false,
     })
     if (tab) return shuffle(tab)[0]

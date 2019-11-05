@@ -23,7 +23,7 @@ const taskPasteIntoPostBox: SocialNetworkUI['taskPasteIntoPostBox'] = (text, opt
     const interval = 500
     const timeout = 5000
     const worker = async function(abort: AbortController) {
-        const milestone = () => {
+        const checkSignal = () => {
             if (abort.signal.aborted) throw new Error('Aborted')
         }
         if (!postBoxInPopup() && !hasDraftEditor()) {
@@ -32,22 +32,23 @@ const taskPasteIntoPostBox: SocialNetworkUI['taskPasteIntoPostBox'] = (text, opt
             newPostButton()
                 .evaluate()!
                 .click()
-            milestone()
+            checkSignal()
         }
 
         // get focus
         const i = newPostEditorFocusAnchor()
         await untilElementAvailable(i)
-        milestone()
+        checkSignal()
         while (!hasFocus(i)) {
             i.evaluate()!.focus()
-            milestone()
+            checkSignal()
             await sleep(interval)
         }
         // paste
         dispatchCustomEvents('paste', text)
         if (!getText().includes(text)) {
             prompt(opt.warningText, text)
+            throw new Error('Unable to paste text automatically')
         }
     }
 
