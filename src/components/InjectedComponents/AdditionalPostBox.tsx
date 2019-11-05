@@ -45,6 +45,9 @@ export interface AdditionalPostBoxUIProps extends withClasses<Keys> {
     SelectPeopleAndGroupsProps?: Partial<SelectPeopleAndGroupsUIProps>
 }
 
+/**
+ * This is the pure UI version of AdditionalPostBox.
+ */
 export const AdditionalPostBoxUI = React.memo(function(props: AdditionalPostBoxUIProps) {
     const classes = useStylesExtends(useStyles(), props)
     const inputRef = useRef<HTMLInputElement>()
@@ -91,6 +94,9 @@ export const AdditionalPostBoxUI = React.memo(function(props: AdditionalPostBoxU
     )
 })
 
+/**
+ * This is AdditionalPostBox with default props.
+ */
 export function AdditionalPostBox(
     props: Partial<AdditionalPostBoxUIProps> & {
         identities?: Person[]

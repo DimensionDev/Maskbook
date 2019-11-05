@@ -8,6 +8,8 @@ import Services from '../extension/service'
 import { defaultSharedSettings } from './defaults/shared'
 import { defaultSocialNetworkUI } from './defaults/ui'
 import { nopWithUnmount } from '../utils/utils'
+import { Theme } from '@material-ui/core'
+import { MaskbookLightTheme, MaskbookDarkTheme } from '../utils/theme'
 
 //#region SocialNetworkUI
 export interface SocialNetworkUIDefinition
@@ -15,7 +17,8 @@ export interface SocialNetworkUIDefinition
         SocialNetworkUIDataSources,
         SocialNetworkUITasks,
         SocialNetworkUIInjections,
-        SocialNetworkUIInformationCollector {
+        SocialNetworkUIInformationCollector,
+        SocialNetworkUICustomUI {
     /** Should this UI content script activate? */
     shouldActivate(location?: Location | URL): boolean
     /**
@@ -205,6 +208,20 @@ export type PostInfo = {
     readonly rootNodeProxy: DOMProxy
 }
 //#endregion
+//#region SocialNetworkUICustomUI
+interface SocialNetworkUICustomUI {
+    darkTheme?: Theme
+    lightTheme?: Theme
+    /**
+     * This is a React hook.
+     *
+     * Should follow the color scheme of the website.
+     *
+     * // Note: useMediaQuery('(prefers-color-scheme: dark)')
+     */
+    useColorScheme?(): 'dark' | 'light'
+}
+//#endregion
 
 export type SocialNetworkUI = Required<SocialNetworkUIDefinition>
 
@@ -228,6 +245,9 @@ let activatedSocialNetworkUI = ({
     lastRecognizedIdentity: new ValueRef({ identifier: PersonIdentifier.unknown }),
     currentIdentity: new ValueRef(null),
     myIdentitiesRef: new ValueRef([] as Person[]),
+    useColorScheme: () => 'light',
+    lightTheme: MaskbookLightTheme,
+    darkTheme: MaskbookDarkTheme,
 } as Partial<SocialNetworkUI>) as SocialNetworkUI
 export function activateSocialNetworkUI() {
     for (const ui of definedSocialNetworkUIs)
