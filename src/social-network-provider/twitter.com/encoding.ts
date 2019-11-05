@@ -1,5 +1,6 @@
-import { batchReplace, regexMatch, regexMatchAll } from '../../utils/utils'
+import { batchReplace, randomElement, regexMatch, regexMatchAll } from '../../utils/utils'
 import { isNil, isNull } from 'lodash-es'
+import { topSites } from './utils/url'
 
 const ICAO9303Checksum = {
     encode: (input: string) => {
@@ -51,7 +52,7 @@ export const twitterEncoding = {
      * @link https://github.com/DimensionDev/Maskbook/issues/198
      */
     payloadEncoder: (text: string) =>
-        `https://google.com/${batchReplace(text, [
+        `https://${randomElement(topSites)}/${batchReplace(text, [
             ['🎼', '%20'],
             [':||', '%40'],
             ['+', '-'],
@@ -59,7 +60,7 @@ export const twitterEncoding = {
             ['|', '.'],
         ])}`,
     payloadDecoder: (text: string) => {
-        let r = regexMatch(text, /https:\/\/google\.com\/%20(.+)%40/, 1)
+        let r = regexMatch(text, /https:\/\/.+\..+\/%20(.+)%40/, 1)
         if (isNil(r)) {
             return 'null'
         }

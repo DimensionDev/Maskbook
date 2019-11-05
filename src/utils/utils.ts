@@ -2,10 +2,15 @@ import { CustomEventId } from './constants'
 import { CustomEvents } from '../extension/injected-script/addEventListener'
 
 import { sleep as _sleep, timeout as _timeout } from '@holoflows/kit/es/util/sleep'
-import { isNull } from 'lodash-es'
+import { flatten, isNull, random } from 'lodash-es'
 
 export const sleep = _sleep
 export const timeout = _timeout
+
+export const randomElement = (arr: any[]) => {
+    const e = flatten(arr)
+    return e[random(0, e.length - 1)]
+}
 
 /**
  * Get reference of file in both extension and storybook
