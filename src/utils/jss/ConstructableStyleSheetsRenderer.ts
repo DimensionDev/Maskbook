@@ -41,19 +41,16 @@ function getStyleSheet(x: HTMLStyleElement) {
     return y
 }
 
-let rafAwaiting = false
 export function applyAdoptedStyleSheets(shadowOnly = true) {
-    if (rafAwaiting) return
-    rafAwaiting = true
     requestAnimationFrame(() => {
-        rafAwaiting = false
         const styles = Array.from(fakeHead.children).filter((x): x is HTMLStyleElement => x instanceof HTMLStyleElement)
         const shadows = Array.from(livingShadowRoots)
         const nextAdoptedStyleSheets = styles.map(getStyleSheet)
         for (const shadow of shadows) {
-            // Maybe we can remove this now.
             try {
-                shadow.adoptedStyleSheets = nextAdoptedStyleSheets
+                if (shadow.adoptedStyleSheets.length !== nextAdoptedStyleSheets.length) {
+                    shadow.adoptedStyleSheets = nextAdoptedStyleSheets
+                }
             } catch {}
         }
         if (!shadowOnly) document.adoptedStyleSheets = nextAdoptedStyleSheets
