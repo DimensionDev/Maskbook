@@ -5,7 +5,7 @@ import CardContent from '@material-ui/core/CardContent'
 import Typography from '@material-ui/core/Typography'
 import { PersonIdentifier } from '../../../database/type'
 import { useTextField } from '../../../utils/components/useForms'
-import { DecryptPostUI } from '../../../components/InjectedComponents/DecryptedPost'
+import { DecryptPost } from '../../../components/InjectedComponents/DecryptedPost'
 import { useIsolatedChooseIdentity } from '../../../components/shared/ChooseIdentity'
 import { FormControlLabel, Checkbox } from '@material-ui/core'
 
@@ -42,7 +42,7 @@ export function DecryptPostDeveloperMode() {
                 {authorInput}
                 {encryptedTextInput}
                 <div style={{ minHeight: 200 }}>
-                    <DecryptPostUI.UI
+                    <DecryptPost
                         disableSuccessDecryptionCache
                         alreadySelectedPreviously={[]}
                         encryptedText={encryptedText}

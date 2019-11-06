@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { DecryptPostUI } from './DecryptedPost'
+import { DecryptPost } from './DecryptedPost'
 import { AddToKeyStore } from './AddToKeyStore'
 import { useAsync } from '../../utils/components/AsyncComponent'
 import { deconstructPayload } from '../../utils/type-transform/Payload'
@@ -65,7 +65,7 @@ export function PostInspector(props: PostInspectorProps) {
                 : type.encryptedPost.ownersAESKeyEncrypted
         return (
             <>
-                <DecryptPostUI.UI
+                <DecryptPost
                     onDecrypted={props.onDecrypted}
                     requestAppendRecipients={
                         // Version -40 is leaking info
