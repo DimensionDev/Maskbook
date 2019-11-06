@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
-import { DecryptPost } from './DecryptedPost'
-import { AddToKeyStore } from './AddToKeyStore'
+import { DecryptPost, DecryptPostProps } from './DecryptedPost'
+import { AddToKeyStore, AddToKeyStoreProps } from './AddToKeyStore'
 import { useAsync } from '../../utils/components/AsyncComponent'
 import { deconstructPayload } from '../../utils/type-transform/Payload'
 import Services from '../../extension/service'
@@ -18,6 +18,10 @@ interface PostInspectorProps {
     postBy: PersonIdentifier
     postId: string
     needZip(): void
+    DecryptPostProps?: DecryptPostProps
+    DecryptPostComponent?: React.ComponentType<DecryptPostProps>
+    AddToKeyStoreProps?: AddToKeyStoreProps
+    AddToKeyStoreComponent?: React.ComponentType<AddToKeyStoreProps>
 }
 export function PostInspector(props: PostInspectorProps) {
     const { post, postBy, postId } = props
@@ -63,9 +67,10 @@ export function PostInspector(props: PostInspectorProps) {
             type.encryptedPost.version === -38
                 ? type.encryptedPost.AESKeyEncrypted
                 : type.encryptedPost.ownersAESKeyEncrypted
+        const DecryptPostX = props.DecryptPostComponent || DecryptPost
         return (
             <>
-                <DecryptPost
+                <DecryptPostX
                     onDecrypted={props.onDecrypted}
                     requestAppendRecipients={
                         // Version -40 is leaking info
@@ -88,14 +93,16 @@ export function PostInspector(props: PostInspectorProps) {
                     encryptedText={post}
                     whoAmI={whoAmI ? whoAmI.identifier : PersonIdentifier.unknown}
                     postBy={postBy}
+                    {...props.DecryptPostProps}
                 />
                 {debugInfo}
             </>
         )
     } else if (type.provePost) {
+        const AddToKeyStoreX = props.AddToKeyStoreComponent || AddToKeyStore
         return (
             <>
-                <AddToKeyStore postBy={postBy} provePost={post} />
+                <AddToKeyStoreX postBy={postBy} provePost={post} {...props.AddToKeyStoreProps} />
                 {debugInfo}
             </>
         )
