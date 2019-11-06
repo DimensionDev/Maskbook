@@ -3,14 +3,17 @@ import { getUrl } from '../../utils/utils'
 import { makeStyles, Typography, Link, Card } from '@material-ui/core'
 import anchorme from 'anchorme'
 import { useStylesExtends } from '../custom-ui-helper'
+import classNames from 'classnames'
 
 export interface AdditionalContentProps extends withClasses<KeysInferFromUseStyles<typeof useStyles>> {
     title: React.ReactNode
     children?: React.ReactNode
+    center?: boolean
     renderText?: string
 }
 const useStyles = makeStyles({
-    title: { display: 'flex' },
+    title: { display: 'flex', alignItems: 'center' },
+    center: { justifyContent: 'center' },
     icon: { transform: 'translate(-1px, 1px)' },
 })
 export const AdditionalContent = React.memo(function AdditionalContent(props: AdditionalContentProps) {
@@ -18,7 +21,11 @@ export const AdditionalContent = React.memo(function AdditionalContent(props: Ad
     const icon = getUrl('/maskbook-icon-padded.png')
     return (
         <Card elevation={0}>
-            <Typography variant="caption" color="textSecondary" gutterBottom className={classes.title}>
+            <Typography
+                variant="caption"
+                color="textSecondary"
+                gutterBottom
+                className={classNames(classes.title, { [classes.center]: props.center })}>
                 <img alt="" width={16} height={16} src={icon} className={classes.icon} />
                 {props.title}
             </Typography>

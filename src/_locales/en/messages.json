@@ -460,5 +460,8 @@
     },
     "database_group_friends_default_name": {
         "message": "Friends of $1"
+    },
+    "seen_in_maskbook_database": {
+        "message": "They are seen in the Maskbook database ✔"
     }
 }
