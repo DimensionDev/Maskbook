@@ -185,7 +185,7 @@ function Dashboard() {
             <AppBar position="sticky">
                 <Toolbar>
                     {shouldRenderBackButton && (
-                        <IconButton onClick={() => window.close()} edge="start" color="inherit" aria-label="menu">
+                        <IconButton onClick={() => window.close()} edge="start" color="inherit" aria-label="back">
                             <BackIcon />
                         </IconButton>
                     )}
