@@ -10,6 +10,7 @@ import { defaultSocialNetworkUI } from './defaults/ui'
 import { nopWithUnmount } from '../utils/utils'
 import { Theme } from '@material-ui/core'
 import { MaskbookLightTheme, MaskbookDarkTheme } from '../utils/theme'
+import { untilDomLoaded } from '../utils/dom'
 
 //#region SocialNetworkUI
 export interface SocialNetworkUIDefinition
@@ -260,48 +261,49 @@ export function activateSocialNetworkUI() {
         if (ui.shouldActivate()) {
             console.log('Activating UI provider', ui.networkIdentifier, ui)
             activatedSocialNetworkUI = ui
-            hookUIPostMap(ui)
-            ui.init(env, {})
-            ui.resolveLastRecognizedIdentity()
-            ui.injectPostBox()
-            ui.collectPeople()
-            ui.collectPosts()
-            ui.myIdentitiesRef.addListener(val => {
-                if (val.length === 1) ui.currentIdentity.value = val[0]
-            })
-            {
-                const mountSettingsLink = ui.injectOptionsPageLink
-                if (typeof mountSettingsLink === 'function') mountSettingsLink()
-            }
-            {
-                const mountKnownIdentity = ui.injectKnownIdentity
-                if (typeof mountKnownIdentity === 'function') mountKnownIdentity()
-            }
-            {
-                const mountBanner = ui.injectWelcomeBanner
-                if (typeof mountBanner === 'function') {
-                    ui.shouldDisplayWelcome().then(shouldDisplay => {
-                        if (shouldDisplay) {
-                            const unmount = mountBanner()
-                            ui.myIdentitiesRef.addListener(next => {
-                                ui.shouldDisplayWelcome().then(should => {
-                                    !should && next.length && unmount()
+            return untilDomLoaded().then(() => {
+                hookUIPostMap(ui)
+                ui.init(env, {})
+                ui.resolveLastRecognizedIdentity()
+                ui.injectPostBox()
+                ui.collectPeople()
+                ui.collectPosts()
+                ui.myIdentitiesRef.addListener(val => {
+                    if (val.length === 1) ui.currentIdentity.value = val[0]
+                })
+                {
+                    const mountSettingsLink = ui.injectOptionsPageLink
+                    if (typeof mountSettingsLink === 'function') mountSettingsLink()
+                }
+                {
+                    const mountKnownIdentity = ui.injectKnownIdentity
+                    if (typeof mountKnownIdentity === 'function') mountKnownIdentity()
+                }
+                {
+                    const mountBanner = ui.injectWelcomeBanner
+                    if (typeof mountBanner === 'function') {
+                        ui.shouldDisplayWelcome().then(shouldDisplay => {
+                            if (shouldDisplay) {
+                                const unmount = mountBanner()
+                                ui.myIdentitiesRef.addListener(next => {
+                                    ui.shouldDisplayWelcome().then(should => {
+                                        !should && next.length && unmount()
+                                    })
                                 })
-                            })
-                        }
-                    })
+                            }
+                        })
+                    }
                 }
-            }
-            ui.lastRecognizedIdentity.addListener(id => {
-                if (id.identifier.isUnknown) return
+                ui.lastRecognizedIdentity.addListener(id => {
+                    if (id.identifier.isUnknown) return
 
-                if (isNull(ui.currentIdentity.value)) {
-                    ui.currentIdentity.value =
-                        ui.myIdentitiesRef.value.find(x => id.identifier.equals(x.identifier)) || null
-                }
-                Services.People.resolveIdentity(id.identifier).then()
+                    if (isNull(ui.currentIdentity.value)) {
+                        ui.currentIdentity.value =
+                            ui.myIdentitiesRef.value.find(x => id.identifier.equals(x.identifier)) || null
+                    }
+                    Services.People.resolveIdentity(id.identifier).then()
+                })
             })
-            return
         }
 }
 function hookUIPostMap(ui: SocialNetworkUI) {

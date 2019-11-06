@@ -49,7 +49,6 @@ export function injectKnownIdentityAtFacebook(this: SocialNetworkUI) {
     const self = othersBioLiveSelectorMobile.clone().concat(othersBioLiveSelectorPC)
 
     const watcher = new MutationObserverWatcher(self)
-        .setComparer(undefined, () => false)
         .setDOMProxyOption({
             afterShadowRootInit: { mode: 'closed' },
         })

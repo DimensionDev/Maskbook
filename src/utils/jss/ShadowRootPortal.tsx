@@ -1,6 +1,6 @@
 import { livingShadowRoots, applyAdoptedStyleSheets } from './ConstructableStyleSheetsRenderer'
 import { GetContext } from '@holoflows/kit/es'
-import { untilDocumentReady } from '../utils'
+import { untilDocumentReady } from '../dom'
 
 const div = document.createElement('div')
 const shadow = div.attachShadow({ mode: 'closed' })
