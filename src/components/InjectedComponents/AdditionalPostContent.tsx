@@ -1,25 +1,20 @@
 import * as React from 'react'
 import { getUrl } from '../../utils/utils'
-import { makeStyles, Divider, Typography, Link, Card, CardContent, CardActions, Button } from '@material-ui/core'
+import { makeStyles, Typography, Link, Card } from '@material-ui/core'
 import anchorme from 'anchorme'
+import { useStylesExtends } from '../custom-ui-helper'
 
-interface Props {
+export interface AdditionalContentProps extends withClasses<KeysInferFromUseStyles<typeof useStyles>> {
     title: React.ReactNode
     children?: React.ReactNode
     renderText?: string
 }
 const useStyles = makeStyles({
-    upDivider: { marginBottom: 6 },
     title: { display: 'flex' },
     icon: { transform: 'translate(-1px, 1px)' },
-    content: {
-        marginBottom: 6,
-        marginTop: 6,
-        lineHeight: 1.2,
-    },
 })
-export function AdditionalContent(props: Props) {
-    const classes = useStyles()
+export const AdditionalContent = React.memo((props: AdditionalContentProps) => {
+    const classes = useStylesExtends(useStyles(), props)
     const icon = getUrl('/maskbook-icon-padded.png')
     return (
         <Card elevation={0}>
@@ -36,12 +31,12 @@ export function AdditionalContent(props: Props) {
             )}
         </Card>
     )
-}
+})
 
-function RenderText({ text }: { text: string }) {
-    const content = React.useMemo(() => parseText(text), [text])
-    return <>{content}</>
-}
+const RenderText = React.memo((props: { text: string }) => {
+    return <>{parseText(props.text)}</>
+})
+
 function parseText(string: string) {
     const links: { raw: string; protocol: string; encoded: string }[] = anchorme(string, { list: true })
     let current = string
