@@ -29,7 +29,7 @@ export function injectPostCommentsDefault(config: injectPostCommentsDefaultConfi
                     <PostComment
                         needZip={needZip || needZipDefault}
                         decryptedPostContent={current.decryptedPostContent}
-                        commentContent={commentRef}
+                        comment={commentRef}
                         postPayload={current.postPayload}
                     />,
                     (getInjectionPoint || injectionPointDefault)(meta),
