@@ -15,7 +15,6 @@ import { ChooseIdentity } from '../shared/ChooseIdentity'
 import { useAsync } from '../../utils/components/AsyncComponent'
 import { useStylesExtends, or } from '../custom-ui-helper'
 
-type Keys = keyof Omit<ReturnType<typeof useStyles>, 'MUIInputRoot' | 'MUIInputInput'>
 const useStyles = makeStyles({
     root: { margin: '10px 0' },
     header: { padding: '8px 12px 0' },
@@ -33,7 +32,8 @@ const useStyles = makeStyles({
     postButton: { padding: 6, borderTopLeftRadius: 0, borderTopRightRadius: 0, flex: 1, wordBreak: 'break-all' },
 })
 
-export interface AdditionalPostBoxUIProps extends withClasses<Keys> {
+export interface AdditionalPostBoxUIProps
+    extends withClasses<KeysInferFromUseStyles<typeof useStyles, 'MUIInputInput' | 'MUIInputRoot'>> {
     availableShareTarget: Array<Person | Group>
     currentShareTarget: Array<Person | Group>
     onShareTargetChanged: SelectPeopleAndGroupsUIProps['onSetSelected']
