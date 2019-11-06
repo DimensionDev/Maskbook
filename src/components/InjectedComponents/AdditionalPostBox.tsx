@@ -11,7 +11,7 @@ import { Group, Person } from '../../database'
 import { NotSetupYetPrompt } from '../shared/NotSetupYetPrompt'
 import { useCurrentIdentity, useFriendsList, useGroupsList, useMyIdentities } from '../DataSource/useActivatedUI'
 import { getActivatedUI } from '../../social-network/ui'
-import { ChooseIdentity } from '../shared/ChooseIdentity'
+import { ChooseIdentity, ChooseIdentityProps } from '../shared/ChooseIdentity'
 import { useAsync } from '../../utils/components/AsyncComponent'
 import { useStylesExtends, or } from '../custom-ui-helper'
 
@@ -43,6 +43,7 @@ export interface AdditionalPostBoxUIProps
     onPostTextChange: (nextString: string) => void
     onPostButtonClicked: () => void
     SelectPeopleAndGroupsProps?: Partial<SelectPeopleAndGroupsUIProps>
+    ChooseIdentityProps?: Partial<ChooseIdentityProps>
 }
 
 /**
@@ -164,7 +165,7 @@ export function AdditionalPostBox(
     if (identities.length > 1)
         return (
             <>
-                <ChooseIdentity />
+                <ChooseIdentity {...props.ChooseIdentityProps} />
                 {ui}
             </>
         )

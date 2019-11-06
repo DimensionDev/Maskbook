@@ -12,18 +12,17 @@ import { useCurrentIdentity, useMyIdentities } from '../DataSource/useActivatedU
 import { PersonIdentifier } from '../../database/type'
 import { geti18nString } from '../../utils/i18n'
 import { currentSelectedIdentity } from '../../components/shared-settings/settings'
+import { useStylesExtends } from '../custom-ui-helper'
 
 const useStyles = makeStyles({
     root: { width: '100%' },
     expansionRoot: { padding: '0 12px' },
     expansionContent: { margin: '6px 0' },
     list: { width: '100%' },
-    current: { padding: 0 },
+    currentSelected: { padding: 0 },
 })
-/**
- * Choose the current using identity.
- */
-export const ChooseIdentity: React.FC<{
+export interface ChooseIdentityProps
+    extends withClasses<KeysInferFromUseStyles<typeof useStyles, 'expansionContent' | 'expansionRoot'>> {
     /**
      * Current selected identity
      * @defaultValue the global selected identity
@@ -37,8 +36,12 @@ export const ChooseIdentity: React.FC<{
      *  @defaultValue will change the global selected identity
      */
     onChangeIdentity?(person: Person): void
-}> = props => {
-    const classes = useStyles()
+}
+/**
+ * Choose the current using identity.
+ */
+export const ChooseIdentity: React.FC<ChooseIdentityProps> = props => {
+    const classes = useStylesExtends(useStyles(), props)
     const [expanded, setExpanded] = React.useState<boolean>(false)
 
     const all = useMyIdentities()
@@ -56,7 +59,7 @@ export const ChooseIdentity: React.FC<{
                 <ExpansionPanelSummary
                     classes={{ root: classes.expansionRoot, content: classes.expansionContent }}
                     expandIcon={<ExpandMoreIcon />}>
-                    <ListItem dense classes={{ gutters: classes.current }}>
+                    <ListItem dense classes={{ gutters: classes.currentSelected }}>
                         <ListItemIcon>
                             <Avatar person={current} />
                         </ListItemIcon>
