@@ -5,7 +5,7 @@ import Services from '../../extension/service'
 import { geti18nString } from '../../utils/i18n'
 import { PersonIdentifier } from '../../database/type'
 
-interface Props {
+export interface AddToKeyStoreProps {
     provePost: string
     postBy: PersonIdentifier
     completeComponentProps?: Partial<SuccessProps>
@@ -15,7 +15,7 @@ interface Props {
     failedComponentProps?: Partial<FailedProps>
     failedComponent?: React.ComponentType<FailedProps>
 }
-export function AddToKeyStore({ provePost, postBy, ...props }: Props) {
+export function AddToKeyStore({ provePost, postBy, ...props }: AddToKeyStoreProps) {
     return (
         <AsyncComponent
             promise={async () => Services.Crypto.verifyOthersProve(provePost, postBy)}
@@ -37,16 +37,16 @@ type SuccessProps = Partial<AdditionalContentProps>
 type WaitingProps = Partial<AdditionalContentProps>
 type FailedProps = Partial<AdditionalContentProps> & { error: Error }
 export const AddToKeyStoreUI = {
-    success: (props: SuccessProps) => (
+    success: React.memo((props: SuccessProps) => (
         <AdditionalContent title={geti18nString('add_to_key_store_success')} {...props} />
-    ),
-    awaiting: (props: WaitingProps) => (
+    )),
+    awaiting: React.memo((props: WaitingProps) => (
         <AdditionalContent title={geti18nString('add_to_key_store_verifying')} {...props} />
-    ),
-    failed: ({ error, ...props }: FailedProps) => (
+    )),
+    failed: React.memo(({ error, ...props }: FailedProps) => (
         <AdditionalContent title={geti18nString('add_to_key_store_failed_title')} {...props}>
             {geti18nString('add_to_key_store_failed_text', error.message)}
             {console.error(error)}
         </AdditionalContent>
-    ),
+    )),
 }
