@@ -6,6 +6,8 @@ import Services from '../../extension/service'
 import { ValueRef } from '@holoflows/kit/es'
 import { useValueRef } from '../../utils/hooks/useValueRef'
 import { Payload } from '../../utils/type-transform/Payload'
+import { ChipProps } from '@material-ui/core/Chip'
+import { useStylesExtends } from '../custom-ui-helper'
 
 const useStyle = makeStyles({
     root: {
@@ -16,53 +18,45 @@ const useStyle = makeStyles({
         whiteSpace: 'initial',
     },
 })
-export function PostCommentDecrypted(props: React.PropsWithChildren<{}>) {
-    const style = useStyle()
+export type PostCommentDecryptedProps = React.PropsWithChildren<{ ChipProps?: ChipProps }>
+export function PostCommentDecrypted(props: PostCommentDecryptedProps) {
+    const chipClasses = useStylesExtends(useStyle(), props.ChipProps || {})
     return (
         <>
-            <Chip classes={style} icon={<Lock />} label={props.children} color="secondary" />
+            <Chip icon={<Lock />} label={props.children} color="secondary" {...props.ChipProps} classes={chipClasses} />
         </>
     )
 }
-interface Props {
-    postIV: string
-    postContent: string
-    comment: string
+export interface PostCommentProps {
+    decryptedPostContent: ValueRef<string>
+    postPayload: ValueRef<Payload | null>
+    comment: ValueRef<string>
     needZip(): void
+    successComponentProps?: PostCommentDecryptedProps
+    successComponent?: React.ComponentType<PostCommentDecryptedProps>
+    waitingComponent?: React.ComponentType
+    failedComponent?: React.ComponentType<{ error: Error }>
 }
-export function PostCommentUI({ comment, postContent, postIV, needZip }: Props) {
+export function PostComment(props: PostCommentProps) {
+    const decryptedPostContent = useValueRef(props.decryptedPostContent)
+    const comment = useValueRef(props.comment)
+    const postPayload = useValueRef(props.postPayload)
+    const postIV = postPayload ? postPayload.iv : ''
+
+    const Success = props.successComponent || PostCommentDecrypted
     return (
         <AsyncComponent
             promise={() => {
-                if (!postIV || !postContent) return Promise.resolve('')
-                return Services.Crypto.decryptComment(postIV, postContent, comment)
+                if (!postIV || !decryptedPostContent) return Promise.reject('')
+                return Services.Crypto.decryptComment(postIV, decryptedPostContent, comment)
             }}
-            dependencies={[postIV, postContent, comment]}
-            awaitingComponent={null}
-            completeComponent={result =>
-                result.data ? (needZip(), <PostCommentDecrypted>{result.data}</PostCommentDecrypted>) : null
-            }
-            failedComponent={null}
+            dependencies={[postIV, decryptedPostContent, comment]}
+            awaitingComponent={props.waitingComponent || null}
+            completeComponent={result => {
+                props.needZip()
+                return <Success>{result.data}</Success>
+            }}
+            failedComponent={props.failedComponent || null}
         />
     )
-}
-
-// TODO: Merge PostComment and PostCommentUI
-export function PostComment(props: PostCommentProps) {
-    const postContent = useValueRef(props.decryptedPostContent)
-    const comment = useValueRef(props.commentContent)
-    return (
-        <PostCommentUI
-            needZip={props.needZip}
-            comment={comment}
-            postContent={postContent}
-            postIV={props.postPayload.value ? props.postPayload.value.iv : ''}
-        />
-    )
-}
-interface PostCommentProps {
-    needZip(): void
-    decryptedPostContent: ValueRef<string>
-    commentContent: ValueRef<string>
-    postPayload: ValueRef<Payload | null>
 }
