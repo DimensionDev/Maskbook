@@ -45,16 +45,15 @@ function PersonKnown() {
 }
 
 export function injectKnownIdentityAtFacebook(this: SocialNetworkUI) {
-    let umount: () => void = () => {}
     const self = othersBioLiveSelectorMobile.clone().concat(othersBioLiveSelectorPC)
 
     const watcher = new MutationObserverWatcher(self)
         .setDOMProxyOption({
             afterShadowRootInit: { mode: 'closed' },
         })
-        .addListener('onAdd', () => {
-            umount()
-            umount = renderInShadowRoot(<PersonKnown />, renderPoint)
+        .useForeach(() => {
+            const umount = renderInShadowRoot(<PersonKnown />, renderPoint)
+            return umount
         })
         .startWatch({
             childList: true,
