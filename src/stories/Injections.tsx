@@ -4,7 +4,11 @@ import { text, boolean, select } from '@storybook/addon-knobs'
 import { action } from '@storybook/addon-actions'
 import { AdditionalPostBox } from '../components/InjectedComponents/AdditionalPostBox'
 import { AdditionalContent } from '../components/InjectedComponents/AdditionalPostContent'
-import { DecryptPostUI } from '../components/InjectedComponents/DecryptedPost'
+import {
+    DecryptPostSuccess,
+    DecryptPostAwaiting,
+    DecryptPostFailed,
+} from '../components/InjectedComponents/DecryptedPost'
 import { AddToKeyStoreUI } from '../components/InjectedComponents/AddToKeyStore'
 import { useShareMenu } from '../components/InjectedComponents/SelectPeopleDialog'
 import { sleep } from '../utils/utils'
@@ -94,7 +98,7 @@ storiesOf('Injections', module)
         return (
             <>
                 <FakePost title="Decrypted:">
-                    <DecryptPostUI.success
+                    <DecryptPostSuccess
                         alreadySelectedPreviously={[]}
                         requestAppendRecipients={async () => {}}
                         people={demoPeople}
@@ -102,10 +106,10 @@ storiesOf('Injections', module)
                     />
                 </FakePost>
                 <FakePost title="Decrypting:">
-                    <DecryptPostUI.awaiting type={progress}></DecryptPostUI.awaiting>
+                    <DecryptPostAwaiting type={progress} />
                 </FakePost>
                 <FakePost title="Failed:">
-                    <DecryptPostUI.failed error={new Error('Error message')} />
+                    <DecryptPostFailed error={new Error('Error message')} />
                 </FakePost>
             </>
         )
