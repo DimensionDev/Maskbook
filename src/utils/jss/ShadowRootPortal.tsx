@@ -14,22 +14,25 @@ globalThis.getComputedStyle = new Proxy(globalThis.getComputedStyle || (() => {}
     },
 })
 
-const proxy = new Proxy(document.body, {
-    get(target, key, receiver) {
-        const value = Reflect.get(target, key)
-        if (typeof value === 'function')
-            return function(...args: any[]) {
-                console.log(...args)
-                return Reflect.apply(value, shadow, args)
-            }
-        return value
-    },
-    set(target, key, value, receiver) {
-        return Reflect.set(document.body, key, value, document.body)
-    },
-})
+let proxy: HTMLElement | undefined
+
 export function PortalShadowRoot() {
     if (GetContext() === 'options') return document.body
+    if (!proxy)
+        proxy = new Proxy(document.body, {
+            get(target, key, receiver) {
+                const value = Reflect.get(target, key)
+                if (typeof value === 'function')
+                    return function(...args: any[]) {
+                        console.log(...args)
+                        return Reflect.apply(value, shadow, args)
+                    }
+                return value
+            },
+            set(target, key, value, receiver) {
+                return Reflect.set(document.body, key, value, document.body)
+            },
+        })
     return proxy
 }
 
