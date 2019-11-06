@@ -108,6 +108,12 @@ export interface SocialNetworkUIInjections {
      */
     injectOptionsPageLink?: (() => void) | 'disabled'
     /**
+     * This is an optional function.
+     *
+     * This function should inject a hint at their bio if they are known by Maskbook
+     */
+    injectKnownIdentity?: (() => void) | 'disabled'
+    /**
      * This function should inject the comment
      * @param current The current post
      * @returns unmount the injected components
@@ -266,6 +272,10 @@ export function activateSocialNetworkUI() {
             {
                 const mountSettingsLink = ui.injectOptionsPageLink
                 if (typeof mountSettingsLink === 'function') mountSettingsLink()
+            }
+            {
+                const mountKnownIdentity = ui.injectKnownIdentity
+                if (typeof mountKnownIdentity === 'function') mountKnownIdentity()
             }
             {
                 const mountBanner = ui.injectWelcomeBanner

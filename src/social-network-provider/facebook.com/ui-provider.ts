@@ -21,6 +21,7 @@ import { geti18nString } from '../../utils/i18n'
 import { injectCommentBoxDefaultFactory } from '../../social-network/defaults/injectCommentBox'
 import { injectOptionsPageLinkAtFacebook } from './UI/injectOptionsPageLink'
 import { InitGroupsValueRef } from '../../social-network/defaults/GroupsValueRef'
+import { injectKnownIdentityAtFacebook } from './UI/injectKnownIdentity'
 
 export const facebookUISelf = defineSocialNetworkUI({
     ...sharedProvider,
@@ -54,6 +55,7 @@ export const facebookUISelf = defineSocialNetworkUI({
     injectWelcomeBanner: injectWelcomeBannerFacebook,
     injectPostComments: injectPostCommentsDefault(),
     injectOptionsPageLink: injectOptionsPageLinkAtFacebook,
+    injectKnownIdentity: injectKnownIdentityAtFacebook,
     injectCommentBox: injectCommentBoxDefaultFactory(async function onPasteToCommentBoxFacebook(
         encryptedComment,
         current,
