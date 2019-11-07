@@ -6,20 +6,23 @@ import { GetContext } from '@holoflows/kit/es'
 import { useLastRecognizedIdentity } from '../DataSource/useActivatedUI'
 import { getActivatedUI } from '../../social-network/ui'
 import { setStorage } from '../../utils/browser.storage'
+import { useStylesExtends } from '../custom-ui-helper'
+import { SnackbarContentProps } from '@material-ui/core/SnackbarContent'
 
-const useNotSetUpYetStyles = makeStyles({
+const useSnackbarContentStyle = makeStyles({
     root: {
         marginBottom: '2em',
         maxWidth: '50em',
     },
 })
-interface NotSetupYetPromptUIProps {
+export interface NotSetupYetPromptUIProps {
     preparingSetup: boolean
     onSetupClick(): void
     disableSetupButton: boolean
+    SnackbarContentProps?: SnackbarContentProps
 }
-export function NotSetupYetPromptUI(props: NotSetupYetPromptUIProps) {
-    const styles = useNotSetUpYetStyles()
+export const NotSetupYetPromptUI = React.memo((props: NotSetupYetPromptUIProps) => {
+    const classes = useStylesExtends(useSnackbarContentStyle(), props.SnackbarContentProps || {})
     const button = (
         <Button onClick={props.onSetupClick} disabled={props.disableSetupButton} color="primary" size="small">
             {geti18nString('click_to_setup')}
@@ -33,7 +36,6 @@ export function NotSetupYetPromptUI(props: NotSetupYetPromptUIProps) {
     )
     return (
         <SnackbarContent
-            classes={styles}
             elevation={0}
             message={
                 <>
@@ -42,11 +44,14 @@ export function NotSetupYetPromptUI(props: NotSetupYetPromptUIProps) {
                 </>
             }
             action={button}
+            {...props.SnackbarContentProps}
+            classes={classes}
         />
     )
-}
+})
 
-export function NotSetupYetPrompt() {
+export interface NotSetupYetPromptProps extends Partial<NotSetupYetPromptUIProps> {}
+export function NotSetupYetPrompt(props: Partial<NotSetupYetPromptProps>) {
     const isContent = GetContext() === 'content' || GetContext() === 'debugging'
     // isContent is always stable in a context. So it's okay.
     // eslint-disable-next-line
@@ -66,6 +71,7 @@ export function NotSetupYetPrompt() {
             }}
             preparingSetup={isContent && isCurrentIdentityUnknown()}
             disableSetupButton={isContent ? isCurrentIdentityUnknown() : false}
+            {...props}
         />
     )
 

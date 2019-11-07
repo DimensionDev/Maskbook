@@ -9,7 +9,7 @@ import { makeStyles } from '@material-ui/styles'
 import { Box, Link, useMediaQuery, useTheme, Theme } from '@material-ui/core'
 import { Person } from '../../database'
 import { Identifier, PersonIdentifier } from '../../database/type'
-import { NotSetupYetPrompt } from '../shared/NotSetupYetPrompt'
+import { NotSetupYetPrompt, NotSetupYetPromptProps } from '../shared/NotSetupYetPrompt'
 import {
     DecryptionProgress,
     FailureDecryption,
@@ -98,10 +98,11 @@ export const DecryptPostAwaiting = React.memo((props: DecryptPostAwaitingProps) 
 export interface DecryptPostFailedProps {
     error: Error
     AdditionalContentProps?: Partial<AdditionalContentProps>
+    NotSetupYetPromptProps?: Partial<NotSetupYetPromptProps>
 }
 export const DecryptPostFailed = React.memo(({ error, ...props }: DecryptPostFailedProps) => {
     if (error && error.message === geti18nString('service_not_setup_yet')) {
-        return <NotSetupYetPrompt />
+        return <NotSetupYetPrompt {...props.NotSetupYetPromptProps} />
     }
     return (
         <AdditionalContent

@@ -8,7 +8,7 @@ import { geti18nString } from '../../utils/i18n'
 import { makeStyles } from '@material-ui/styles'
 import { Box, Button, Card, CardHeader, Divider, InputBase, Paper, Typography } from '@material-ui/core'
 import { Group, Person } from '../../database'
-import { NotSetupYetPrompt } from '../shared/NotSetupYetPrompt'
+import { NotSetupYetPrompt, NotSetupYetPromptProps } from '../shared/NotSetupYetPrompt'
 import { useCurrentIdentity, useFriendsList, useGroupsList, useMyIdentities } from '../DataSource/useActivatedUI'
 import { getActivatedUI } from '../../social-network/ui'
 import { ChooseIdentity, ChooseIdentityProps } from '../shared/ChooseIdentity'
@@ -95,15 +95,16 @@ export const AdditionalPostBoxUI = React.memo(function(props: AdditionalPostBoxU
     )
 })
 
+export interface AdditionalPostBoxProps extends Partial<AdditionalPostBoxUIProps> {
+    identities?: Person[]
+    onRequestPost?: (target: (Person | Group)[], text: string) => void
+    NotSetupYetPromptProps?: Partial<NotSetupYetPromptProps>
+}
+
 /**
  * This is AdditionalPostBox with default props.
  */
-export function AdditionalPostBox(
-    props: Partial<AdditionalPostBoxUIProps> & {
-        identities?: Person[]
-        onRequestPost?: (target: (Person | Group)[], text: string) => void
-    },
-) {
+export function AdditionalPostBox(props: AdditionalPostBoxProps) {
     const people = useFriendsList()
     const groups = useGroupsList()
     const availableShareTarget = or(
@@ -140,7 +141,7 @@ export function AdditionalPostBox(
     useAsync(getActivatedUI().shouldDisplayWelcome, []).then(x => setShowWelcome(x))
     // TODO: ??? should we do this without including `ui` ???
     if (showWelcome) {
-        return <NotSetupYetPrompt />
+        return <NotSetupYetPrompt {...props.NotSetupYetPromptProps} />
     }
 
     const ui = (
