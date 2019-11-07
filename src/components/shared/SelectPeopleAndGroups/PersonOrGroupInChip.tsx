@@ -6,13 +6,15 @@ import { Person, Group } from '../../../database'
 import { geti18nString } from '../../../utils/i18n'
 import { isGroup, isPerson } from './SelectPeopleAndGroupsUI'
 import { useResolveSpecialGroupName } from './resolveSpecialGroupName'
+import { ChipProps } from '@material-ui/core/Chip'
 
-interface Props {
+export interface PersonOrGroupInChipProps {
     onDelete?(): void
     disabled?: boolean
     item: Person | Group
+    ChipProps?: ChipProps
 }
-export function PersonOrGroupInChip(props: Props) {
+export function PersonOrGroupInChip(props: PersonOrGroupInChipProps) {
     const { disabled, onDelete } = props
     let avatar: ReturnType<typeof Avatar> | undefined = undefined
     let displayName = ''
@@ -34,6 +36,7 @@ export function PersonOrGroupInChip(props: Props) {
             onDelete={disabled ? undefined : onDelete}
             label={displayName}
             avatar={avatar}
+            {...props.ChipProps}
         />
     )
 }
