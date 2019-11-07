@@ -12,7 +12,7 @@ import { useValueRef } from '../../utils/hooks/useValueRef'
 import { debugModeSetting } from '../shared-settings/settings'
 import { DebugList } from '../DebugModeUI/DebugList'
 
-interface PostInspectorProps {
+export interface PostInspectorProps {
     onDecrypted(post: string): void
     post: string
     postBy: PersonIdentifier
