@@ -2,8 +2,7 @@
   "persistentCheckout": true,
   "icon": "https://maskbook.com/img/MB--CircleCanvas--WhiteOverBlue.svg",
   "callToAction": {
-    "default": "Cyberian Lives Matter! Please support us for better Cyber World.
-",
+    "default": "Cyberian Lives Matter! Please support us for better Cyber World.",
     "pending": "Thank you for supporting us! Welcome to the Maskbook Gang!",
     "confirmed": "Thank you for supporting us! Welcome to the Maskbook Gang!"
   },
