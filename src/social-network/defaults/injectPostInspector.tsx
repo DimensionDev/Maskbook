@@ -12,31 +12,29 @@ export function injectPostInspectorDefault<T extends string>(
     additionalPropsToPostInspector: (classes: Record<T, string>) => Partial<PostInspectorProps> = () => ({}),
     useCustomStyles: (props?: any) => Record<T, string> = makeStyles({}) as any,
 ) {
-    const PostInspectorDefault = React.memo(
-        (
-            props: PostInfo & {
-                onDecrypted: PostInspectorProps['onDecrypted']
-                zipPost: PostInspectorProps['needZip']
-            },
-        ) => {
-            const { onDecrypted, zipPost, postBy, postID, postContent } = props
-            const id = useValueRef(postID) || ''
-            const by = useValueRef(postBy)
-            const content = useValueRef(postContent)
-            const classes = useCustomStyles()
-            const additionalProps = additionalPropsToPostInspector(classes)
-            return (
-                <PostInspector
-                    onDecrypted={onDecrypted}
-                    needZip={zipPost}
-                    postId={id}
-                    post={content}
-                    postBy={by}
-                    {...additionalProps}
-                />
-            )
+    const PostInspectorDefault = React.memo(function PostInspectorDefault(
+        props: PostInfo & {
+            onDecrypted: PostInspectorProps['onDecrypted']
+            zipPost: PostInspectorProps['needZip']
         },
-    )
+    ) {
+        const { onDecrypted, zipPost, postBy, postID, postContent } = props
+        const id = useValueRef(postID) || ''
+        const by = useValueRef(postBy)
+        const content = useValueRef(postContent)
+        const classes = useCustomStyles()
+        const additionalProps = additionalPropsToPostInspector(classes)
+        return (
+            <PostInspector
+                onDecrypted={onDecrypted}
+                needZip={zipPost}
+                postId={id}
+                post={content}
+                postBy={by}
+                {...additionalProps}
+            />
+        )
+    })
 
     const { injectionPoint, zipPost } = config
     const zipPostF = zipPost || (() => {})
