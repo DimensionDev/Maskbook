@@ -42,27 +42,25 @@ function getStyleSheet(x: HTMLStyleElement) {
 }
 
 let listDirty = false
-
-const observer = new MutationObserver(_ => {
-    listDirty = true
-})
-
-observer.observe(fakeHead, { attributes: true, childList: true, subtree: true })
+let styleString: string = ''
 
 export function applyAdoptedStyleSheets(shadowOnly = true) {
     requestAnimationFrame(() => {
-        const styleString = [...fakeHead.children]
-            .filter((x): x is HTMLStyleElement => {
-                return x instanceof HTMLStyleElement && x.innerText !== ''
-            })
-            .reduce((prev, cur) => {
-                prev += cur.innerHTML
-                return prev
-            }, '')
+        styleString = listDirty
+            ? [...fakeHead.children]
+                  .filter((x): x is HTMLStyleElement => x instanceof HTMLStyleElement)
+                  .reduce((prev, cur) => {
+                      prev += cur.innerHTML
+                      const sheet = getStyleSheet(cur)
+                      const fromSheet = [...sheet.rules].map(i => i.cssText).join('\n')
+                      prev += fromSheet
+                      return prev
+                  }, '')
+            : styleString
         const styles = document.createElement('style')
         styles.setAttribute('id', 'sheets')
         styles.innerHTML = styleString
-        const shadows = Array.from(livingShadowRoots)
+        const shadows = [...livingShadowRoots]
         for (const shadow of shadows) {
             const prev = shadow.getElementById('sheets')
             if (prev) {
@@ -85,6 +83,7 @@ function adoptStylesheets(
         ...descriptor,
         value: function(...args: any[]) {
             const result = descriptor.value.apply(this, args)
+            listDirty = true
             applyAdoptedStyleSheets()
             return result
         },
