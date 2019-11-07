@@ -18,9 +18,9 @@ export interface PostInspectorProps {
     postBy: PersonIdentifier
     postId: string
     needZip(): void
-    DecryptPostProps?: DecryptPostProps
+    DecryptPostProps?: Partial<DecryptPostProps>
     DecryptPostComponent?: React.ComponentType<DecryptPostProps>
-    AddToKeyStoreProps?: AddToKeyStoreProps
+    AddToKeyStoreProps?: Partial<AddToKeyStoreProps>
     AddToKeyStoreComponent?: React.ComponentType<AddToKeyStoreProps>
 }
 export function PostInspector(props: PostInspectorProps) {

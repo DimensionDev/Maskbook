@@ -29,7 +29,7 @@ export const injectCommentBoxDefaultFactory = function<T extends string>(
     additionPropsToCommentBox: (classes: Record<T, string>) => Partial<CommentBoxProps> = () => ({}),
     useCustomStyles: (props?: any) => Record<T, string> = makeStyles({}) as any,
 ) {
-    const CommentBoxUI = React.memo((current: PostInfo) => {
+    const CommentBoxUI = React.memo(function CommentBoxUI(current: PostInfo) {
         const payload = useValueRef(current.postPayload)
         const decrypted = useValueRef(current.decryptedPostContent)
         const styles = useCustomStyles()

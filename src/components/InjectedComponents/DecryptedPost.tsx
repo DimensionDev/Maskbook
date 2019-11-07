@@ -37,7 +37,11 @@ const useSuccessStyles = makeStyles({
     signatureVerifyFailed: { color: 'red' },
 })
 
-export const DecryptPostSuccess = React.memo(({ data, people, ...props }: DecryptPostSuccessProps) => {
+export const DecryptPostSuccess = React.memo(function DecryptPostSuccess({
+    data,
+    people,
+    ...props
+}: DecryptPostSuccessProps) {
     const classes = useStylesExtends(useSuccessStyles(), props)
     const { ShareMenu, showShare } = useShareMenu(
         people,
@@ -81,7 +85,7 @@ export interface DecryptPostAwaitingProps {
     type?: DecryptionProgress
     AdditionalContentProps?: Partial<AdditionalContentProps>
 }
-export const DecryptPostAwaiting = React.memo((props: DecryptPostAwaitingProps) => {
+export const DecryptPostAwaiting = React.memo(function DecryptPostAwaiting(props: DecryptPostAwaitingProps) {
     const key = {
         finding_post_key: 'decrypted_postbox_decrypting_finding_post_key',
         finding_person_public_key: 'decrypted_postbox_decrypting_finding_person_key',
@@ -100,7 +104,7 @@ export interface DecryptPostFailedProps {
     AdditionalContentProps?: Partial<AdditionalContentProps>
     NotSetupYetPromptProps?: Partial<NotSetupYetPromptProps>
 }
-export const DecryptPostFailed = React.memo(({ error, ...props }: DecryptPostFailedProps) => {
+export const DecryptPostFailed = React.memo(function DecryptPostFailed({ error, ...props }: DecryptPostFailedProps) {
     if (error && error.message === geti18nString('service_not_setup_yet')) {
         return <NotSetupYetPrompt {...props.NotSetupYetPromptProps} />
     }

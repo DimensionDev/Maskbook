@@ -21,7 +21,7 @@ export interface NotSetupYetPromptUIProps {
     disableSetupButton: boolean
     SnackbarContentProps?: SnackbarContentProps
 }
-export const NotSetupYetPromptUI = React.memo((props: NotSetupYetPromptUIProps) => {
+export const NotSetupYetPromptUI = React.memo(function NotSetupYetPromptUI(props: NotSetupYetPromptUIProps) {
     const classes = useStylesExtends(useSnackbarContentStyle(), props.SnackbarContentProps || {})
     const button = (
         <Button onClick={props.onSetupClick} disabled={props.disableSetupButton} color="primary" size="small">

@@ -49,7 +49,7 @@ export interface AdditionalPostBoxUIProps
 /**
  * This is the pure UI version of AdditionalPostBox.
  */
-export const AdditionalPostBoxUI = React.memo(function(props: AdditionalPostBoxUIProps) {
+export const AdditionalPostBoxUI = React.memo(function AdditionalPostBoxUI(props: AdditionalPostBoxUIProps) {
     const classes = useStylesExtends(useStyles(), props)
     const inputRef = useRef<HTMLInputElement>()
     useCapturedInput(inputRef, props.onPostTextChange)

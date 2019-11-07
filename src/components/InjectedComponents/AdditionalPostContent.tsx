@@ -13,7 +13,7 @@ const useStyles = makeStyles({
     title: { display: 'flex' },
     icon: { transform: 'translate(-1px, 1px)' },
 })
-export const AdditionalContent = React.memo((props: AdditionalContentProps) => {
+export const AdditionalContent = React.memo(function AdditionalContent(props: AdditionalContentProps) {
     const classes = useStylesExtends(useStyles(), props)
     const icon = getUrl('/maskbook-icon-padded.png')
     return (
@@ -33,7 +33,7 @@ export const AdditionalContent = React.memo((props: AdditionalContentProps) => {
     )
 })
 
-const RenderText = React.memo((props: { text: string }) => {
+const RenderText = React.memo(function RenderText(props: { text: string }) {
     return <>{parseText(props.text)}</>
 })
 

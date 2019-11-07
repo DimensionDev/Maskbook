@@ -19,7 +19,9 @@ export function injectPostCommentsDefault<T extends string>(
     useCustomStyles: (props?: any) => Record<T, string> = makeStyles({}) as any,
 ) {
     const { needZip, getInjectionPoint } = config
-    const PostCommentDefault = React.memo((props: Pick<PostCommentProps, 'needZip' | 'comment'> & PostInfo) => {
+    const PostCommentDefault = React.memo(function PostCommentDefault(
+        props: Pick<PostCommentProps, 'needZip' | 'comment'> & PostInfo,
+    ) {
         const classes = useCustomStyles()
         const additional = additionalPropsToPostComment(classes)
         return (
