@@ -43,7 +43,9 @@ function getStyleSheet(x: HTMLStyleElement) {
 
 export function applyAdoptedStyleSheets(shadowOnly = true) {
     requestAnimationFrame(() => {
-        const styles = Array.from(fakeHead.children).filter((x): x is HTMLStyleElement => x instanceof HTMLStyleElement)
+        const styles = Array.from(fakeHead.children).filter(
+            (x): x is HTMLStyleElement => x instanceof HTMLStyleElement && x.innerText !== '',
+        )
         const shadows = Array.from(livingShadowRoots)
         const nextAdoptedStyleSheets = styles.map(getStyleSheet)
         for (const shadow of shadows) {
