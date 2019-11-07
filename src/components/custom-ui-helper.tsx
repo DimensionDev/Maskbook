@@ -2,17 +2,18 @@ import classNames from 'classnames'
 
 export function useStylesExtends<InternalKeys extends string, OverwrittenKeys extends string>(
     defaultStyles: Record<InternalKeys, string>,
-    nextProps: Partial<withClasses<OverwrittenKeys>>,
-) {
-    if (!nextProps.classes) return defaultStyles
-    const classes = { ...defaultStyles }
+    nextProps: withClasses<OverwrittenKeys>,
+): Partial<Record<InternalKeys | OverwrittenKeys | InternalKeys, string>> {
+    if (!nextProps.classes) return defaultStyles as any
+    const classes = { ...defaultStyles, ...nextProps.classes }
     for (const key in classes) {
         if (key in nextProps.classes) {
-            classes[key] = classNames(defaultStyles[key], Reflect.get(nextProps.classes, key))
+            ;(classes as any)[key] = classNames((defaultStyles as any)[key], Reflect.get(nextProps.classes, key))
         }
     }
-    return classes as Record<InternalKeys | OverwrittenKeys, string>
+    return classes
 }
+
 /**
  * In case of y is a react hooks call, we should always call the hooks. So we can't use x || y directly.
  */

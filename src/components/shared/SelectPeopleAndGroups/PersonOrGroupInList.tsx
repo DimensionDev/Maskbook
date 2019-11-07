@@ -11,12 +11,15 @@ import { PersonIdentifier } from '../../../database/type'
 import { geti18nString, useIntlListFormat } from '../../../utils/i18n'
 import { isGroup } from './SelectPeopleAndGroupsUI'
 import { useResolveSpecialGroupName } from './resolveSpecialGroupName'
+import { useStylesExtends } from '../../custom-ui-helper'
 
-interface Props {
-    onClick(): void
+export interface PersonOrGroupInListProps extends withClasses<KeysInferFromUseStyles<typeof useStyle>> {
+    onClick: () => void
     disabled?: boolean
     showAtNetwork?: boolean
-    listItemProps?: Partial<(typeof ListItem extends OverridableComponent<infer U> ? U : never)['props']>
+    // ? Don't import ListItemProps from @material-ui
+    // ? or a type def conflict will happen on <ListItem button onClick> attrs
+    ListItemProps?: Partial<(typeof ListItem extends OverridableComponent<infer U> ? U : never)['props']>
     item: Group | Person
 }
 const useStyle = makeStyles((theme: Theme) => ({
@@ -36,12 +39,12 @@ const useStyle = makeStyles((theme: Theme) => ({
 /**
  * Item in the list
  */
-export function PersonOrGroupInList(props: Props) {
-    const classes = useStyle()
+export function PersonOrGroupInList(props: PersonOrGroupInListProps) {
+    const classes = useStylesExtends(useStyle(), props)
     const nicknamePreviewsForGroup = useNickNamesFromList(isGroup(props.item) ? props.item.members : [])
     const listFormat = useIntlListFormat()
 
-    const { disabled, listItemProps, onClick, showAtNetwork } = props
+    const { disabled, ListItemProps: listItemProps, onClick, showAtNetwork } = props
     let name = ''
     let avatar: ReturnType<typeof Avatar>
     let secondaryText: string | undefined = undefined
@@ -78,7 +81,7 @@ export function PersonOrGroupInList(props: Props) {
         </>
     )
     return (
-        <ListItem button disabled={disabled} onClick={onClick} {...(listItemProps || {})}>
+        <ListItem button disabled={disabled} onClick={onClick} {...listItemProps}>
             <ListItemAvatar>{avatar}</ListItemAvatar>
             <ListItemText
                 classes={{

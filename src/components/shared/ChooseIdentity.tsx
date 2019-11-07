@@ -6,7 +6,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import { Avatar } from '../../utils/components/Avatar'
 import { Person } from '../../database'
 import { List, ListItem, ListItemIcon, ListItemText, ListSubheader } from '@material-ui/core'
-import { PersonOrGroupInList } from './SelectPeopleAndGroups'
+import { PersonOrGroupInList, PersonOrGroupInListProps } from './SelectPeopleAndGroups'
 import { getActivatedUI } from '../../social-network/ui'
 import { useCurrentIdentity, useMyIdentities } from '../DataSource/useActivatedUI'
 import { PersonIdentifier } from '../../database/type'
@@ -36,6 +36,7 @@ export interface ChooseIdentityProps
      *  @defaultValue will change the global selected identity
      */
     onChangeIdentity?(person: Person): void
+    PersonOrGroupInListProps?: PersonOrGroupInListProps
 }
 /**
  * Choose the current using identity.
@@ -75,13 +76,14 @@ export const ChooseIdentity: React.FC<ChooseIdentityProps> = props => {
                     {availableIdentities.map(person =>
                         person.identifier.equals(current.identifier) ? null : (
                             <PersonOrGroupInList
-                                listItemProps={{ dense: true }}
+                                ListItemProps={{ dense: true }}
                                 item={person}
                                 key={person.identifier.toText()}
                                 onClick={() => {
                                     props.onChangeIdentity!(person)
                                     setExpanded(false)
                                 }}
+                                {...props.PersonOrGroupInListProps}
                             />
                         ),
                     )}
