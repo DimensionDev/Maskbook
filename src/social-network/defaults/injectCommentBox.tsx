@@ -2,10 +2,11 @@ import React from 'react'
 import { PostInfo } from '../ui'
 import { MutationObserverWatcher } from '@holoflows/kit/es'
 import { useValueRef } from '../../utils/hooks/useValueRef'
-import { CommentBox } from '../../components/InjectedComponents/CommentBox'
+import { CommentBox, CommentBoxProps } from '../../components/InjectedComponents/CommentBox'
 import Services from '../../extension/service'
 import { renderInShadowRoot } from '../../utils/jss/renderInShadowRoot'
 import { dispatchCustomEvents, nop, selectElementContents, sleep } from '../../utils/utils'
+import { makeStyles } from '@material-ui/core'
 
 const defHandler = async (encryptedComment: string, current: PostInfo) => {
     const root = current.rootNode
@@ -23,7 +24,27 @@ const defHandler = async (encryptedComment: string, current: PostInfo) => {
     if (!root.innerText.includes(encryptedComment)) prompt('Please paste it into the comment box!', encryptedComment)
 }
 
-export const injectCommentBoxDefaultFactory = (onPasteToCommentBox = defHandler) => {
+export const injectCommentBoxDefaultFactory = function<T extends string>(
+    onPasteToCommentBox = defHandler,
+    additionPropsToCommentBox: (classes: Record<T, string>) => Partial<CommentBoxProps> = () => ({}),
+    useCustomStyles: (props?: any) => Record<T, string> = makeStyles({}) as any,
+) {
+    const CommentBoxUI = React.memo((current: PostInfo) => {
+        const payload = useValueRef(current.postPayload)
+        const decrypted = useValueRef(current.decryptedPostContent)
+        const styles = useCustomStyles()
+        const props = additionPropsToCommentBox(styles)
+        const onCallback = React.useCallback(
+            async content => {
+                const encryptedComment = await Services.Crypto.encryptComment(payload!.iv, decrypted, content)
+                onPasteToCommentBox(encryptedComment, current).then()
+            },
+            [current, decrypted, payload],
+        )
+
+        if (!(payload && decrypted)) return null
+        return <CommentBox onSubmit={onCallback} {...props} />
+    })
     return (current: PostInfo) => {
         if (!current.commentBoxSelector) return nop
         const commentBoxWatcher = new MutationObserverWatcher(
@@ -35,19 +56,6 @@ export const injectCommentBoxDefaultFactory = (onPasteToCommentBox = defHandler)
                 childList: true,
                 subtree: true,
             })
-        const CommentBoxUI = () => {
-            const payload = useValueRef(current.postPayload)
-            const decrypted = useValueRef(current.decryptedPostContent)
-            if (!(payload && decrypted)) return null
-            return (
-                <CommentBox
-                    onSubmit={async content => {
-                        const encryptedComment = await Services.Crypto.encryptComment(payload!.iv, decrypted, content)
-                        onPasteToCommentBox(encryptedComment, current).then()
-                    }}
-                />
-            )
-        }
-        return renderInShadowRoot(<CommentBoxUI />, commentBoxWatcher.firstDOMProxy.afterShadow)
+        return renderInShadowRoot(<CommentBoxUI {...current} />, commentBoxWatcher.firstDOMProxy.afterShadow)
     }
 }
