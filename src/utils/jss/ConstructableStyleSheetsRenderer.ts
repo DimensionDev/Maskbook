@@ -41,21 +41,38 @@ function getStyleSheet(x: HTMLStyleElement) {
     return y
 }
 
+let listDirty = false
+
+const observer = new MutationObserver(_ => {
+    listDirty = true
+})
+
+observer.observe(fakeHead, { attributes: true, childList: true, subtree: true })
+
 export function applyAdoptedStyleSheets(shadowOnly = true) {
     requestAnimationFrame(() => {
-        const styles = Array.from(fakeHead.children).filter(
-            (x): x is HTMLStyleElement => x instanceof HTMLStyleElement && x.innerText !== '',
-        )
+        const styleString = [...fakeHead.children]
+            .filter((x): x is HTMLStyleElement => {
+                return x instanceof HTMLStyleElement && x.innerText !== ''
+            })
+            .reduce((prev, cur) => {
+                prev += cur.innerHTML
+                return prev
+            }, '')
+        const styles = document.createElement('style')
+        styles.setAttribute('id', 'sheets')
+        styles.innerHTML = styleString
         const shadows = Array.from(livingShadowRoots)
-        const nextAdoptedStyleSheets = styles.map(getStyleSheet)
         for (const shadow of shadows) {
-            try {
-                if (shadow.adoptedStyleSheets.length !== nextAdoptedStyleSheets.length) {
-                    shadow.adoptedStyleSheets = nextAdoptedStyleSheets
-                }
-            } catch {}
+            const prev = shadow.getElementById('sheets')
+            if (prev) {
+                if (!listDirty) continue
+                prev.remove()
+            }
+            shadow.appendChild(styles.cloneNode(true))
         }
-        if (!shadowOnly) document.adoptedStyleSheets = nextAdoptedStyleSheets
+        listDirty = false
+        if (!shadowOnly) document.appendChild(styles)
     })
 }
 
