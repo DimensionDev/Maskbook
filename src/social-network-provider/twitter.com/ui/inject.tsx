@@ -1,5 +1,5 @@
-import { AdditionalPostBox } from '../../../components/InjectedComponents/AdditionalPostBox'
 import React from 'react'
+import { AdditionalPostBox } from '../../../components/InjectedComponents/AdditionalPostBox'
 import { LiveSelector, MutationObserverWatcher as MOW } from '@holoflows/kit'
 import { hasDraftEditor, newPostEditorBelow, postPopupInjectPointSelector } from '../utils/selector'
 import { renderInShadowRoot } from '../../../utils/jss/renderInShadowRoot'

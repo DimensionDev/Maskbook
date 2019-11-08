@@ -1,7 +1,26 @@
 import { bioCard } from './selector'
 import { regexMatch } from '../../../utils/utils'
 import { notNullable } from '../../../utils/assert'
-import { defaultTo, join, trim } from 'lodash-es'
+import { defaultTo, isUndefined, join } from 'lodash-es'
+import { nthChild } from '../../../utils/dom'
+import { PersonIdentifier } from '../../../database/type'
+import { twitterUrl } from './url'
+
+/**
+ * @example
+ * parseNameArea("TheMirror\n(●'◡'●)@1\n@MisakaMirror")
+ * >>> {
+ *      name: "TheMirror(●'◡'●)@1",
+ *      handle: "MisakaMirror"
+ * }
+ */
+const parseNameArea = (t: string) => {
+    const r = regexMatch(t, /((.+\s*)*)@(.+)/, null)!
+    return {
+        name: r[1].replace(/\n+/g, ''),
+        handle: r[3],
+    }
+}
 
 export const bioCardParser = () => {
     const avatar = notNullable(
@@ -10,21 +29,36 @@ export const bioCardParser = () => {
             .map(x => x.src)
             .evaluate(),
     )
-    const userNames = notNullable(
-        bioCard()
-            .map(x => (x.children[1] as HTMLElement).innerText.split('\n'))
-            .evaluate(),
+    const nameArea = parseNameArea(
+        notNullable(
+            bioCard()
+                .map(x => nthChild(x, 1)!.innerText)
+                .evaluate(),
+        ),
     )
     const bio = notNullable(
         bioCard()
-            .map(x => (x.children[2] as HTMLElement).innerHTML)
+            .map(x => nthChild(x, 2)!.innerHTML)
+            .evaluate(),
+    )
+    const isFollower = !isUndefined(
+        bioCard()
+            .map(x => nthChild(x, 1, 0, 0, 1, 1, 0))
+            .evaluate(),
+    )
+    const isFollowing = !isUndefined(
+        bioCard()
+            .querySelector('[data-testid*="unfollow"]')
             .evaluate(),
     )
     return {
         avatar,
-        name: userNames[0],
-        handle: notNullable(regexMatch(userNames[1], /@(.+)/)),
+        name: nameArea.name,
+        handle: nameArea.handle,
+        identifier: new PersonIdentifier(twitterUrl.hostIdentifier, nameArea.handle),
         bio,
+        isFollower,
+        isFollowing,
     }
 }
 
@@ -43,20 +77,17 @@ export const postContentParser = (node: HTMLElement) => {
  * @return          link to avatar.
  */
 export const postParser = async (node: HTMLElement) => {
-    const nameArea = regexMatch(
-        notNullable(node.children[1].querySelector<HTMLAnchorElement>('a')).innerText,
-        /^((.+\s*)*)@(.+)$/,
-        null,
-    )!
+    const nameArea = parseNameArea(notNullable(node.children[1].querySelector<HTMLAnchorElement>('a')).innerText)
     const avatarElement = node.children[0].querySelector<HTMLImageElement>(`img[src*="twimg.com"]`)
     const pidLocation = defaultTo(
         node.children[1].querySelector<HTMLAnchorElement>('a[href*="status"]'),
         node.parentElement!.querySelector<HTMLAnchorElement>('a[href*="status"]'),
     )
     return {
-        name: trim(nameArea[1], '\n'),
-        handle: nameArea[3],
-        pid: regexMatch(pidLocation!.href, /\/(\d+)/, 1)!,
+        name: nameArea.name,
+        handle: nameArea.handle,
+        // pid may not available at promoted tweet
+        pid: pidLocation ? regexMatch(pidLocation!.href, /status\/(\d+)/, 1)! : undefined,
         avatar: avatarElement ? avatarElement.src : undefined,
         content: postContentParser(node),
     }

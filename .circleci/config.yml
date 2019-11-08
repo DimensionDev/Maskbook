@@ -56,6 +56,8 @@ jobs:
                   name: 'Publish Release on GitHub'
                   command: |
                       set -o nounset
+                      mkdir release
+                      mv *.zip release/
                       ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} -b "✔ No breaking changes. / ⚠ Has breaking changes!
 
                       🆕 New Feature
@@ -66,7 +68,7 @@ jobs:
 
                       🐛 Bug Fixes
 
-                      👩‍💻 Miscellaneous" -replace -draft $(git describe HEAD) ~/repo/Maskbook.base.zip
+                      👩‍💻 Miscellaneous" -replace -draft $(git describe HEAD) ~/repo/release
                   # -b BODY \         # Set text describing the contents of the release
                   # -delete \         # Delete release and its git tag in advance if it exists (same as -recreate)
                   # -n TITLE \        # Set release title

@@ -1,16 +1,13 @@
 import { SocialNetworkWorkerAndUIDefinition } from '../../social-network/shared'
 import { usernameValidator } from './utils/user'
 import { twitterEncoding } from './encoding'
-
-export const host = 'twitter.com'
-export const hostURL = 'https://twitter.com'
-export const hostMobileURL = 'https://mobile.twitter.com'
+import { twitterUrl } from './utils/url'
 
 export const sharedSettings: SocialNetworkWorkerAndUIDefinition = {
     version: 1,
     internalName: 'twitter',
     isDangerousNetwork: false,
-    networkIdentifier: host,
+    networkIdentifier: twitterUrl.hostIdentifier,
     isValidUsername: usernameValidator,
     acceptablePayload: ['v38', 'latest'],
     init() {},

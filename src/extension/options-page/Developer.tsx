@@ -20,12 +20,12 @@ const DevPage = () => {
     const classes = useStyles()
     return (
         <>
-            <ListSubheader>Developer Settings</ListSubheader>
+            <ListSubheader disableSticky>Developer Settings</ListSubheader>
             <div className={classes.root}>
                 <List>{useSettingsUI(debugModeSetting)}</List>
                 <List>{useSettingsUI(steganographyModeSetting)}</List>
                 <List>{useSettingsUI(disableOpenNewTabInBackgroundSettings)}</List>
-                <Grid container xs={12} lg={6} item spacing={2} direction="column">
+                <Grid container item spacing={2} direction="column" alignItems="stretch" wrap="nowrap">
                     <Grid item>
                         <SeeMyProvePost />
                     </Grid>
@@ -35,9 +35,7 @@ const DevPage = () => {
                     <Grid item>
                         <DecryptPostDeveloperMode />
                     </Grid>
-                </Grid>
-                <Grid container xs={12} lg={6} item spacing={2} direction="column">
-                    <Grid xs={12} item>
+                    <Grid item>
                         <FriendsDeveloperMode />
                     </Grid>
                 </Grid>

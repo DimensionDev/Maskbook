@@ -11,6 +11,7 @@ import {
     queryLocalKeyDB,
     deleteLocalKeyDB,
     updatePersonDB,
+    updateMyIdentityDB,
 } from '../../database/people'
 import { UpgradeBackupJSONFile } from '../../utils/type-transform/BackupFile'
 import { PersonIdentifier, GroupIdentifier } from '../../database/type'
@@ -151,6 +152,9 @@ export async function updatePersonInfo(
     data: { nickname?: string; avatarURL?: string; forceUpdateAvatar?: boolean },
 ) {
     const { avatarURL, nickname, forceUpdateAvatar } = data
-    if (nickname) updatePersonDB({ identifier, nickname })
+    if (nickname) {
+        updatePersonDB({ identifier, nickname })
+        updateMyIdentityDB({ identifier, nickname })
+    }
     if (avatarURL) storeAvatar(identifier, avatarURL, forceUpdateAvatar)
 }

@@ -1,7 +1,7 @@
 import { env, Env, Preference, Profile, SocialNetworkWorkerAndUIDefinition } from './shared'
 import { DOMProxy, LiveSelector, ValueRef } from '@holoflows/kit/es'
 import { Group, Person } from '../database'
-import { PersonIdentifier, PostIdentifier } from '../database/type'
+import { PersonIdentifier } from '../database/type'
 import { Payload } from '../utils/type-transform/Payload'
 import { defaultTo, isNull } from 'lodash-es'
 import Services from '../extension/service'
@@ -161,9 +161,8 @@ export interface SocialNetworkUITasks {
     /**
      * This function should return the given single post on the current page,
      * Called by `AutomatedTabTask`
-     * @param postIdentifier The post id
      */
-    taskGetPostContent(postIdentifier: PostIdentifier<PersonIdentifier>): Promise<string>
+    taskGetPostContent(): Promise<string>
     /**
      * This function should return the profile info on the current page,
      * Called by `AutomatedTabTask`

@@ -1,6 +1,6 @@
-import { bioCard, postsSelectors, selfInfoSelectors } from '../utils/selector'
+import { bioCard, postsSelector, selfInfoSelectors } from '../utils/selector'
 import { MutationObserverWatcher } from '@holoflows/kit'
-import { PersonIdentifier } from '../../../database/type'
+import { GroupIdentifier, PersonIdentifier } from '../../../database/type'
 import {
     getEmptyPostInfoByElement,
     SocialNetworkUI,
@@ -11,6 +11,7 @@ import { instanceOfTwitterUI } from './index'
 import { bioCardParser, postParser } from '../utils/fetch'
 import { uploadToService } from '../utils/user'
 import { isNil } from 'lodash-es'
+import Services from '../../../extension/service'
 
 const resolveLastRecognizedIdentity = (self: SocialNetworkUI) => {
     const selfSelector = selfInfoSelectors().handle
@@ -43,6 +44,14 @@ const registerUserCollector = () => {
             const resolve = () => {
                 const r = bioCardParser()
                 uploadToService(r)
+                const theGroup = GroupIdentifier.getDefaultFriendsGroupIdentifier(
+                    instanceOfTwitterUI.lastRecognizedIdentity.value.identifier,
+                )
+                if (r.isFollowing && r.isFollower) {
+                    Services.People.addPersonToFriendsGroup(theGroup, [r.identifier]).then()
+                } else {
+                    Services.People.removePersonFromFriendsGroup(theGroup, [r.identifier]).then()
+                }
             }
             resolve()
             return {
@@ -58,16 +67,19 @@ const registerUserCollector = () => {
 }
 
 const registerPostCollector = (self: SocialNetworkUI) => {
-    new MutationObserverWatcher(postsSelectors())
+    new MutationObserverWatcher(postsSelector())
         .useForeach((node, _, proxy) => {
+            // noinspection JSUnnecessarySemicolon
             const info = getEmptyPostInfoByElement({
                 get rootNode() {
                     return proxy.current
                 },
                 rootNodeProxy: proxy,
             })
+            info.postPayload.value = deconstructPayload(info.postContent.value, self.payloadDecoder)
             const collectPostInfo = async () => {
-                const r = await postParser(node.querySelector<HTMLElement>('[data-testid="tweet"]')!)
+                const r = await postParser(node)
+                if (!r.pid) return false
                 info.postContent.value = r.content
                 const postBy = new PersonIdentifier(self.networkIdentifier, r.handle)
                 if (!info.postBy.value.equals(postBy)) {
@@ -76,14 +88,14 @@ const registerPostCollector = (self: SocialNetworkUI) => {
                 info.postID.value = r.pid
                 uploadToService(r)
             }
-            collectPostInfo().then(() => {
-                info.postPayload.value = deconstructPayload(info.postContent.value, self.payloadDecoder)
+            ;(async () => {
+                await collectPostInfo()
                 info.postContent.addListener(newValue => {
                     info.postPayload.value = deconstructPayload(newValue, self.payloadDecoder)
                 })
                 // push to map. proxy used as a pointer here.
                 self.posts.set(proxy, info)
-            })
+            })()
             return {
                 onNodeMutation: collectPostInfo,
                 onTargetChanged: collectPostInfo,
