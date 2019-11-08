@@ -41,36 +41,50 @@ function getStyleSheet(x: HTMLStyleElement) {
     return y
 }
 
-let listDirty = false
-let styleString: string = ''
+let sheetRulesDirty = false
+let constructedStyleString: string = ''
 
 export function applyAdoptedStyleSheets(shadowOnly = true) {
     requestAnimationFrame(() => {
-        styleString = listDirty
-            ? [...fakeHead.children]
-                  .filter((x): x is HTMLStyleElement => x instanceof HTMLStyleElement)
-                  .reduce((prev, cur) => {
-                      prev += cur.innerHTML
-                      const sheet = getStyleSheet(cur)
-                      const fromSheet = [...sheet.rules].map(i => i.cssText).join('\n')
-                      prev += fromSheet
-                      return prev
-                  }, '')
-            : styleString
-        const styles = document.createElement('style')
-        styles.setAttribute('id', 'sheets')
-        styles.innerHTML = styleString
-        const shadows = [...livingShadowRoots]
-        for (const shadow of shadows) {
-            const prev = shadow.getElementById('sheets')
-            if (prev) {
-                if (!listDirty) continue
-                prev.remove()
+        if (isPolyfilled) {
+            constructedStyleString = sheetRulesDirty
+                ? [...fakeHead.children]
+                      .filter((x): x is HTMLStyleElement => x instanceof HTMLStyleElement)
+                      .reduce((prev, cur) => {
+                          prev += cur.innerHTML
+                          const sheet = getStyleSheet(cur)
+                          const fromSheet = [...sheet.rules].map(i => i.cssText).join('\n')
+                          prev += fromSheet
+                          return prev
+                      }, '')
+                : constructedStyleString
+            const styles = document.createElement('style')
+            styles.setAttribute('id', 'sheets')
+            styles.innerHTML = constructedStyleString
+            const shadows: (Document | ShadowRoot)[] = [...livingShadowRoots]
+            if (!shadowOnly) shadows.push(document)
+            for (const shadow of shadows) {
+                const prev = shadow.getElementById('sheets')
+                if (prev) {
+                    if (!sheetRulesDirty) continue
+                    prev.remove()
+                }
+                shadow.appendChild(styles.cloneNode(true))
             }
-            shadow.appendChild(styles.cloneNode(true))
+            sheetRulesDirty = false
+        } else {
+            const styles = Array.from(fakeHead.children).filter(
+                (x): x is HTMLStyleElement => x instanceof HTMLStyleElement,
+            )
+            const shadows = Array.from(livingShadowRoots)
+            const nextAdoptedStyleSheets = styles.map(getStyleSheet)
+            for (const shadow of shadows) {
+                try {
+                    shadow.adoptedStyleSheets = nextAdoptedStyleSheets
+                } catch {}
+            }
+            if (!shadowOnly) document.adoptedStyleSheets = nextAdoptedStyleSheets
         }
-        listDirty = false
-        if (!shadowOnly) document.appendChild(styles)
     })
 }
 
@@ -83,7 +97,7 @@ function adoptStylesheets(
         ...descriptor,
         value: function(...args: any[]) {
             const result = descriptor.value.apply(this, args)
-            listDirty = true
+            sheetRulesDirty = true
             applyAdoptedStyleSheets()
             return result
         },
