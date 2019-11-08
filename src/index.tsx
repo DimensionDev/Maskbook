@@ -178,7 +178,7 @@ function Dashboard() {
             .then(() => setExportLoading(false))
     }
 
-    const shouldRenderBackButton = useMediaQuery('(max-width:600px)')
+    const shouldRenderBackButton = webpackEnv.firefoxVariant === 'GeckoView' || webpackEnv.target === 'WKWebview'
 
     return (
         <Router>
