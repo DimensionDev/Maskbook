@@ -2,7 +2,7 @@
 
 import { OnlyRunInContext } from '@holoflows/kit/es'
 import { ProfileIdentifier, PersonaIdentifier, Identifier, ECKeyIdentifier } from '../type'
-import { DBSchema, openDB, IDBPDatabase } from 'idb/with-async-ittr'
+import { DBSchema, openDB, IDBPDatabase, IDBPTransaction } from 'idb/with-async-ittr'
 /**
  * Database structure:
  *
@@ -48,16 +48,19 @@ const db = (function() {
  * If the record contains `privateKey`, it will be stored in the `self` store.
  * Otherwise, it will be stored in the `others` store.
  */
-async function createPersonaDB(record: PersonaRecord): Promise<void> {
-    const t = (await db()).transaction('personas', 'readwrite')
+async function createPersonaDB(record: PersonaRecord, t?: IDBPTransaction<PersonaDB, ['personas']>): Promise<void> {
+    t = t || (await db()).transaction('personas', 'readwrite')
     t.objectStore('personas').add(personaRecordToDB(record))
 }
 
 /**
  * Query a Persona.
  */
-async function queryPersonaDB(query: PersonaIdentifier): Promise<PersonaRecord | null> {
-    const t = (await db()).transaction('personas')
+async function queryPersonaDB(
+    query: PersonaIdentifier,
+    t?: IDBPTransaction<PersonaDB, ['personas']>,
+): Promise<PersonaRecord | null> {
+    t = t || (await db()).transaction('personas')
     const x = await t.objectStore('personas').get(query.toText())
     if (x) return personaRecordOutDb(x)
     return null
@@ -66,8 +69,11 @@ async function queryPersonaDB(query: PersonaIdentifier): Promise<PersonaRecord |
 /**
  * Query many Personas.
  */
-async function queryPersonasDB(query: (record: PersonaRecord) => boolean): Promise<PersonaRecord[]> {
-    const t = (await db()).transaction('personas')
+async function queryPersonasDB(
+    query: (record: PersonaRecord) => boolean,
+    t?: IDBPTransaction<PersonaDB, ['personas']>,
+): Promise<PersonaRecord[]> {
+    t = t || (await db()).transaction('personas')
     const records: PersonaRecord[] = []
     for await (const each of t.objectStore('personas').iterate()) {
         const out = personaRecordOutDb(each.value)
@@ -80,8 +86,11 @@ async function queryPersonasDB(query: (record: PersonaRecord) => boolean): Promi
  * Update an existing Persona record.
  * @param record The partial record to be merged
  */
-async function updatePersonaDB(record: Partial<PersonaRecord> & Pick<PersonaRecord, 'identifier'>): Promise<void> {
-    const t = (await db()).transaction('personas', 'readwrite')
+async function updatePersonaDB(
+    record: Partial<PersonaRecord> & Pick<PersonaRecord, 'identifier'>,
+    t?: IDBPTransaction<PersonaDB, ['personas']>,
+): Promise<void> {
+    t = t || (await db()).transaction('personas', 'readwrite')
     const old = await t.objectStore('personas').get(record.identifier.toText())
     if (!old) throw new TypeError('Update an non-exist data')
 
@@ -114,7 +123,7 @@ async function updatePersonaDB(record: Partial<PersonaRecord> & Pick<PersonaReco
  * Delete a Persona
  * Don't implement this kind of function.
  */
-function deletePersonaDB(id: never): never {
+function deletePersonaDB(id: never, t?: IDBPTransaction<PersonaDB, ['personas']>): never {
     throw new Error(
         `If you want to remove a persona, you should also detach all of the profiles connected to it. That function will remove the persona if there is 0 profiles connecting.`,
     )
@@ -123,8 +132,11 @@ function deletePersonaDB(id: never): never {
 /**
  * Create a new profile.
  */
-async function createProfileDB(record: ProfileRecord): Promise<void> {
-    const t = (await db()).transaction(['profiles', 'personas'], 'readwrite')
+async function createProfileDB(
+    record: ProfileRecord,
+    t?: IDBPTransaction<PersonaDB, ['profiles', 'personas']>,
+): Promise<void> {
+    t = t || (await db()).transaction(['profiles', 'personas'], 'readwrite')
     if (record.linkedPersona) {
         const persona = await t.objectStore('personas').get(record.linkedPersona.toText())
         if (!persona) {
@@ -140,8 +152,11 @@ async function createProfileDB(record: ProfileRecord): Promise<void> {
 /**
  * Query a profile.
  */
-async function queryProfileDB(id: ProfileIdentifier): Promise<ProfileRecord | null> {
-    const t = (await db()).transaction('profiles')
+async function queryProfileDB(
+    id: ProfileIdentifier,
+    t?: IDBPTransaction<PersonaDB, ['profiles']>,
+): Promise<ProfileRecord | null> {
+    t = t || (await db()).transaction('profiles')
     const result = await t.objectStore('profiles').get(id.toText())
     if (result) return profileOutDB(result)
     return null
@@ -150,8 +165,11 @@ async function queryProfileDB(id: ProfileIdentifier): Promise<ProfileRecord | nu
 /**
  * Query many profiles.
  */
-async function queryProfilesDB(network: string | ((record: ProfileRecord) => boolean)): Promise<ProfileRecord[]> {
-    const t = (await db()).transaction('profiles')
+async function queryProfilesDB(
+    network: string | ((record: ProfileRecord) => boolean),
+    t?: IDBPTransaction<PersonaDB, ['profiles']>,
+): Promise<ProfileRecord[]> {
+    t = t || (await db()).transaction('profiles')
     const result: ProfileRecord[] = []
     if (typeof network === 'string') {
         result.push(
@@ -172,8 +190,11 @@ async function queryProfilesDB(network: string | ((record: ProfileRecord) => boo
 /**
  * Update a profile.
  */
-async function updateProfileDB(updating: Partial<ProfileRecord> & Pick<ProfileRecord, 'identifier'>): Promise<void> {
-    const t = (await db()).transaction(['profiles', 'personas'], 'readwrite')
+async function updateProfileDB(
+    updating: Partial<ProfileRecord> & Pick<ProfileRecord, 'identifier'>,
+    t?: IDBPTransaction<PersonaDB, ('profiles' | 'personas')[]>,
+): Promise<void> {
+    t = t || (await db()).transaction(['profiles', 'personas'], 'readwrite')
     const old = await t.objectStore('profiles').get(updating.identifier.toText())
     if (!old) throw new Error('Updating a non exists record')
     let linkedPersona: PersonaRecordDb | undefined = undefined
@@ -195,8 +216,11 @@ async function updateProfileDB(updating: Partial<ProfileRecord> & Pick<ProfileRe
 /**
  * Delete a profile
  */
-async function deleteProfileDB(id: ProfileIdentifier): Promise<void> {
-    const t = (await db()).transaction(['profiles', 'personas'], 'readwrite')
+async function deleteProfileDB(
+    id: ProfileIdentifier,
+    t?: IDBPTransaction<PersonaDB, ('profiles' | 'personas')[]>,
+): Promise<void> {
+    t = t || (await db()).transaction(['profiles', 'personas'], 'readwrite')
     const rec = await t.objectStore('profiles').get(id.toText())
     if (!rec) return
     if (rec.linkedPersona) {
