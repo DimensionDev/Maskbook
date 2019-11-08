@@ -52,7 +52,7 @@ export abstract class Identifier {
 
 @serializable('PersonIdentifier')
 export class ProfileIdentifier extends Identifier {
-    static unknown = new ProfileIdentifier('localhost', '$unknown')
+    static readonly unknown = new ProfileIdentifier('localhost', '$unknown')
     get isUnknown() {
         return this.equals(PersonIdentifier.unknown)
     }
@@ -60,7 +60,7 @@ export class ProfileIdentifier extends Identifier {
      * @param network - Network belongs to
      * @param userId - User ID
      */
-    constructor(public network: string, public userId: string) {
+    constructor(public readonly network: string, public readonly userId: string) {
         super()
         noSlash(network)
         noSlash(userId)
@@ -94,7 +94,11 @@ export class GroupIdentifier extends Identifier {
     static getDefaultFriendsGroupIdentifier(who: PersonIdentifier) {
         return new GroupIdentifier(who.network, who.userId, PreDefinedVirtualGroupNames.friends)
     }
-    constructor(public network: string, public virtualGroupOwner: string | null, public groupID: string) {
+    constructor(
+        public readonly network: string,
+        public readonly virtualGroupOwner: string | null,
+        public readonly groupID: string,
+    ) {
         super()
         noSlash(network)
         noSlash(groupID)
@@ -126,7 +130,7 @@ export class PostIdentifier<T extends Identifier = Identifier> extends Identifie
      * If identifier is a PostIdentifier, that means this post is binded with other post in some kind
      * e.g. a comment.
      */
-    constructor(public identifier: T, public postId: string) {
+    constructor(public readonly identifier: T, public readonly postId: string) {
         super()
         noSlash(postId)
     }
@@ -143,7 +147,7 @@ export class PostIdentifier<T extends Identifier = Identifier> extends Identifie
 
 @serializable('PostIVIdentifier')
 export class PostIVIdentifier extends Identifier {
-    constructor(public network: string, public postIV: string) {
+    constructor(public readonly network: string, public readonly postIV: string) {
         super()
         if (postIV) this.postIV = postIV.replace(/\//g, '|')
     }
@@ -164,7 +168,7 @@ export class PostIVIdentifier extends Identifier {
 @serializable('ECKeyIdentifier')
 export class ECKeyIdentifier extends Identifier {
     public readonly type = 'ec_key'
-    constructor(public curve: 'secp256k1', private encodedCompressedKey: string) {
+    constructor(public readonly curve: 'secp256k1', private encodedCompressedKey: string) {
         super()
         if (encodedCompressedKey !== undefined) this.encodedCompressedKey = encodedCompressedKey.replace(/\//g, '|')
     }
