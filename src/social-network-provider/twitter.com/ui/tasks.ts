@@ -1,4 +1,4 @@
-import { dispatchCustomEvents, sleep, timeout } from '../../../utils/utils'
+import { dispatchCustomEvents, sleep, timeout, downloadUrl, getUrl } from '../../../utils/utils'
 import {
     editProfileButtonSelector,
     editProfileTextareaSelector,
@@ -8,12 +8,13 @@ import {
     postsSelector,
 } from '../utils/selector'
 import { geti18nString } from '../../../utils/i18n'
-import { SocialNetworkUI, SocialNetworkUITasks } from '../../../social-network/ui'
+import { SocialNetworkUI, SocialNetworkUITasks, getActivatedUI } from '../../../social-network/ui'
 import { fetchBioCard } from '../utils/status'
 import { bioCardParser, postParser } from '../utils/fetch'
 import { getText, hasFocus, postBoxInPopup } from '../utils/postBox'
 import { MutationObserverWatcher } from '@holoflows/kit'
 import { untilDocumentReady, untilElementAvailable } from '../../../utils/dom'
+import Services from '../../../extension/service'
 
 /**
  * Wait for up to 5000 ms
@@ -64,8 +65,29 @@ const taskPasteIntoPostBox: SocialNetworkUI['taskPasteIntoPostBox'] = (text, opt
     worker(abortCtr).then(undefined, e => fail(e))
 }
 
-const taskUploadToPostBox: SocialNetworkUI['taskUploadToPostBox'] = (text, opt) => {
-    throw new Error('task is undefined')
+const taskUploadToPostBox: SocialNetworkUI['taskUploadToPostBox'] = async (text, options) => {
+    const { warningText } = options
+    const { currentIdentity } = getActivatedUI()
+    const blankImage = await downloadUrl(getUrl('/maskbook-steganography.png'))
+    const secretImage = await Services.Steganography.encodeImage(new Uint8Array(blankImage), {
+        text,
+        pass: currentIdentity.value ? currentIdentity.value.identifier.toText() : '',
+    })
+
+    await untilDocumentReady()
+    try {
+        // TODO: implement auto uploading
+        throw new Error('auto uploading is undefined')
+    } catch {
+        uploadFail()
+    }
+
+    async function uploadFail() {
+        console.warn('Image not uploaded to the post box')
+        if (confirm(warningText)) {
+            await Services.Steganography.downloadImage(new Uint8Array(secretImage))
+        }
+    }
 }
 
 const taskPasteIntoBio = async (text: string) => {
