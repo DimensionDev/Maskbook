@@ -14,6 +14,7 @@ const $fromString = Symbol()
  * ec_key:...
  */
 type Identifiers = 'person' | 'group' | 'post' | 'post_iv' | 'ec_key'
+const fromStringCache = new Map<string, Identifier>()
 export abstract class Identifier {
     static equals(a: Identifier, b: Identifier) {
         return a.equals(b)
@@ -26,21 +27,18 @@ export abstract class Identifier {
     static fromString(id: string): Identifier | null
     static fromString<T extends Identifier>(id: string | T): Identifier | null {
         if (id instanceof Identifier) return id
+        if (fromStringCache.has(id)) return fromStringCache.get(id)!
         const [type, ...rest] = id.split(':') as [Identifiers, string]
-        switch (type) {
-            case 'person':
-                return PersonIdentifier[$fromString](rest.join(':'))
-            case 'group':
-                return GroupIdentifier[$fromString](rest.join(':'))
-            case 'post':
-                return PostIdentifier[$fromString](rest.join(':'))
-            case 'post_iv':
-                return PostIVIdentifier[$fromString](rest.join(':'))
-            case 'ec_key':
-                return ECKeyIdentifier[$fromString](rest.join(':'))
-            default:
-                return null
-        }
+        let result: Identifier | null = null
+        if (type === 'person') result = PersonIdentifier[$fromString](rest.join(':'))
+        else if (type === 'group') result = GroupIdentifier[$fromString](rest.join(':'))
+        else if (type === 'post') result = PostIdentifier[$fromString](rest.join(':'))
+        else if (type === 'post_iv') result = PostIVIdentifier[$fromString](rest.join(':'))
+        else if (type === 'ec_key') result = ECKeyIdentifier[$fromString](rest.join(':'))
+        else return null
+        if (result === null) return null
+        fromStringCache.set(id, result)
+        return result
     }
 
     static IdentifiersToString(a: Identifier[], isOrderImportant = false) {
