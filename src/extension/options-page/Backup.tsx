@@ -72,7 +72,9 @@ export default function BackupDialog() {
                 setBackupObj(null)
                 setQRText('')
             })
-    }, [currentIdentifier, identity])
+        // eslint will insert currentIdentifier to deps, which causes loop
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [identity])
 
     const downloadAsFile = () => {
         Services.Welcome.downloadBackup(backupObj)
