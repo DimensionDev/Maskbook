@@ -1,20 +1,14 @@
-import { LiveSelector } from '@holoflows/kit'
+import { IntervalWatcher, LiveSelector } from '@holoflows/kit'
 import { isUndefined } from 'lodash-es'
 
 export const untilElementAvailable = async (ls: LiveSelector<HTMLElement, boolean>) => {
+    const w = new IntervalWatcher(ls)
     return new Promise<void>((resolve, reject) => {
-        let timedOut = false
-        setTimeout(() => (timedOut = true), 4000)
-        const t = setInterval(() => {
-            if (ls.evaluate()) {
-                clearInterval(t)
-                resolve()
-            }
-            if (timedOut) {
-                clearInterval(t)
-                reject()
-            }
-        }, 500)
+        setTimeout(() => reject(), 5000)
+        w.useForeach(() => {
+            w.stopWatch()
+            resolve()
+        }).startWatch(500)
     })
 }
 
