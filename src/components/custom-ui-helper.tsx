@@ -3,7 +3,7 @@ import classNames from 'classnames'
 export function useStylesExtends<InternalKeys extends string, OverwrittenKeys extends string>(
     defaultStyles: Record<InternalKeys, string>,
     nextProps: withClasses<OverwrittenKeys>,
-): Partial<Record<InternalKeys | OverwrittenKeys | InternalKeys, string>> {
+): Record<InternalKeys, string> & Partial<Record<OverwrittenKeys, string>> {
     if (!nextProps.classes) return defaultStyles as any
     const classes = { ...defaultStyles, ...nextProps.classes }
     for (const key in classes) {
