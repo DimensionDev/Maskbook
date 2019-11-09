@@ -17,7 +17,7 @@ type OthersAESKeyEncryptedToken = string
 /**
  * This map stores <iv, othersAESKeyEncrypted>.
  */
-const OthersAESKeyEncryptedMap = new Map<OthersAESKeyEncryptedToken, (Alpha38.PublishedAESKeyRecordV39OrV38)[]>()
+const OthersAESKeyEncryptedMap = new Map<OthersAESKeyEncryptedToken, Alpha38.PublishedAESKeyRecordV39OrV38[]>()
 
 /**
  * Encrypt to a user
@@ -53,9 +53,9 @@ export async function encryptTo(
         }
     }
 
-    const toKey = await prepareOthersKeyForEncryptionV39OrV38(Object.keys(recipients).map(
-        Identifier.fromString,
-    ) as PersonIdentifier[])
+    const toKey = await prepareOthersKeyForEncryptionV39OrV38(
+        Object.keys(recipients).map(Identifier.fromString) as PersonIdentifier[],
+    )
     const mine = await getMyPrivateKey(whoAmI)
     if (!mine) throw new TypeError('Not inited yet')
     const {

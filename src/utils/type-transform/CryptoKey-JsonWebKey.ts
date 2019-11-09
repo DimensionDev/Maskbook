@@ -19,7 +19,7 @@ type Algorithms =
  */
 export async function JsonWebKeyToCryptoKey(
     key: JsonWebKey,
-    usage: (Usages)[] = ['deriveKey'],
+    usage: Usages[] = ['deriveKey'],
     algorithm: Algorithms = { name: 'ECDH', namedCurve: 'K-256' },
 ) {
     const _key = stableStringify(key) + usage.sort().join(',')

@@ -98,9 +98,9 @@ export function SelectPeopleAndGroupsUI<ServeType extends Group | Person = Perso
                             key={item.identifier.toText()}
                             item={item}
                             onDelete={() =>
-                                onSetSelected(selected.filter(
-                                    x => !x.identifier.equals(item.identifier),
-                                ) as ServeType[])
+                                onSetSelected(
+                                    selected.filter(x => !x.identifier.equals(item.identifier)) as ServeType[],
+                                )
                             }
                             {...props.PersonOrGroupInChipProps}
                         />
