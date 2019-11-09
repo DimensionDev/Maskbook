@@ -151,11 +151,13 @@ export async function encrypt1ToN(info: {
     )
 
     const exportedAESKey = encodeText(JSON.stringify(await crypto.subtle.exportKey('jwk', AESKey)))
-    const ownersAESKeyEncrypted = (await encryptWithAES({
-        aesKey: ownersLocalKey,
-        content: exportedAESKey,
-        iv,
-    })).content
+    const ownersAESKeyEncrypted = (
+        await encryptWithAES({
+            aesKey: ownersLocalKey,
+            content: exportedAESKey,
+            iv,
+        })
+    ).content
     const othersAESKeyEncrypted = await generateOthersAESKeyEncrypted(-40, AESKey, privateKeyECDH, othersPublicKeyECDH)
     return { encryptedContent, iv, version: -40, ownersAESKeyEncrypted, othersAESKeyEncrypted, postAESKey: AESKey }
 }

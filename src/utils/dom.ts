@@ -31,5 +31,5 @@ export const nthChild = (n: HTMLElement, ...childrenIndex: number[]) => {
         if (isUndefined(r)) break
         r = r.children[v] as HTMLElement
     }
-    return r as (HTMLElement | undefined)
+    return r as HTMLElement | undefined
 }

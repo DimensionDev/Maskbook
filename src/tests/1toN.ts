@@ -14,7 +14,10 @@ async function test1toN(msg: string = 'test string') {
         content: msg,
         iv: crypto.getRandomValues(new Uint8Array(16)),
         privateKeyECDH: alice.privateKey,
-        othersPublicKeyECDH: [{ key: bob.publicKey, name: 'bob' }, { key: david.publicKey, name: 'david' }],
+        othersPublicKeyECDH: [
+            { key: bob.publicKey, name: 'bob' },
+            { key: david.publicKey, name: 'david' },
+        ],
         ownersLocalKey: aliceLocal,
     })
 
