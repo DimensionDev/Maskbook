@@ -36,19 +36,6 @@ export function PortalShadowRoot() {
     return proxy
 }
 
-Object.defineProperties(ShadowRoot.prototype, {
-    /**
-     *  ConstructableStyleSheetRenderer will check if connected,
-     *  if not, the polyfill will not inject style.
-     *
-     */
-    isConnected: {
-        get() {
-            return true
-        },
-        configurable: true,
-    },
-})
 {
     // ? Hack for React, let event go through ShadowDom
     const hackingEvents = new WeakMap<Event, EventTarget[]>()
