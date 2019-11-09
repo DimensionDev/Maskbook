@@ -79,9 +79,7 @@ export function applyAdoptedStyleSheets(shadowOnly = true) {
             const shadows = Array.from(livingShadowRoots)
             const nextAdoptedStyleSheets = styles.map(getStyleSheet)
             for (const shadow of shadows) {
-                try {
-                    shadow.adoptedStyleSheets = nextAdoptedStyleSheets
-                } catch {}
+                shadow.adoptedStyleSheets = nextAdoptedStyleSheets
             }
             if (!shadowOnly) document.adoptedStyleSheets = nextAdoptedStyleSheets
         }
