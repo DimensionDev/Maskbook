@@ -327,7 +327,7 @@ export async function decryptComment(
     if (typeof postContent !== 'string') postContent = decodeText(postContent)
     if (typeof encryptComment !== 'string') encryptComment = decodeText(encryptComment)
     const payload = extractCommentPayload(encryptComment)
-    if (!payload) return
+    if (!payload) return null
     const key = await getCommentKey(postIV, postContent)
     try {
         const x = await decryptWithAES({
@@ -337,7 +337,7 @@ export async function decryptComment(
         })
         return decodeText(x)
     } catch {
-        return undefined
+        return null
     }
 }
 //#endregion
