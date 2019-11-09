@@ -16,7 +16,10 @@ export default function AsyncComponent<Return>(props: {
     // eslint-disable-next-line
     const promise = React.useMemo(() => props.promise(), props.dependencies)
     if (state.status === 'not-started') {
-        promise.then(data => setState({ status: 'complete', data }), error => setState({ status: 'fail', error }))
+        promise.then(
+            data => setState({ status: 'complete', data }),
+            error => setState({ status: 'fail', error }),
+        )
         setState({ status: 'await' })
     }
     const Component = React.useMemo(
@@ -61,7 +64,10 @@ export function useAsync<T>(fn: () => PromiseLike<T>, dep: ReadonlyArray<unknown
         rej: Parameters<ConstructorParameters<typeof Promise>[0]>[1] = () => {}
     React.useEffect(() => {
         let unmounted = false
-        fn().then(x => unmounted || res(x), err => unmounted || rej(err))
+        fn().then(
+            x => unmounted || res(x),
+            err => unmounted || rej(err),
+        )
         return () => {
             unmounted = true
         }

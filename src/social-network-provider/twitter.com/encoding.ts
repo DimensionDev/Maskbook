@@ -51,13 +51,23 @@ export const twitterEncoding = {
      * @link https://github.com/DimensionDev/Maskbook/issues/198
      */
     payloadEncoder: (text: string) =>
-        `https://google.com/${batchReplace(text, [['🎼', '%20'], [':||', '%40'], ['+', '-'], ['=', '_'], ['|', '.']])}`,
+        `https://google.com/${batchReplace(text, [
+            ['🎼', '%20'],
+            [':||', '%40'],
+            ['+', '-'],
+            ['=', '_'],
+            ['|', '.'],
+        ])}`,
     payloadDecoder: (text: string) => {
         let r = regexMatch(text, /https:\/\/google\.com\/%20(.+)%40/, 1)
         if (isNil(r)) {
             return 'null'
         }
-        r = batchReplace(r, [['-', '+'], ['_', '='], ['.', '|']])
+        r = batchReplace(r, [
+            ['-', '+'],
+            ['_', '='],
+            ['.', '|'],
+        ])
         return `🎼${r}:||`
     },
 }
