@@ -48,7 +48,10 @@ export function PostComment(props: PostCommentProps) {
         <AsyncComponent
             promise={() => {
                 if (!postIV || !decryptedPostContent) return Promise.reject('')
-                return Services.Crypto.decryptComment(postIV, decryptedPostContent, comment)
+                return Services.Crypto.decryptComment(postIV, decryptedPostContent, comment).then(e => {
+                    if (e === null) throw new Error('Decryption failed.')
+                    return e
+                })
             }}
             dependencies={[postIV, decryptedPostContent, comment]}
             awaitingComponent={props.waitingComponent || null}
