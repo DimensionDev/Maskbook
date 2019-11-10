@@ -1,6 +1,6 @@
 import { SocialNetworkUI, getActivatedUI } from '../../../social-network/ui'
 import { untilDocumentReady } from '../../../utils/dom'
-import { getUrl, downloadUrl } from '../../../utils/utils'
+import { getUrl, downloadUrl, pasteImageToActiveElements } from '../../../utils/utils'
 import Services from '../../../extension/service'
 
 export async function uploadToPostBoxFacebook(
@@ -15,10 +15,13 @@ export async function uploadToPostBoxFacebook(
         pass: currentIdentity.value ? currentIdentity.value.identifier.toText() : '',
     })
 
+    const image = new Uint8Array(secretImage)
+    await pasteImageToActiveElements(image)
     await untilDocumentReady()
+
     try {
-        // TODO: implement auto uploading
-        throw new Error('auto uploading is undefined')
+        // Need a better way to find whether the image is pasted into
+        // throw new Error('auto uploading is undefined')
     } catch {
         uploadFail()
     }
@@ -26,7 +29,7 @@ export async function uploadToPostBoxFacebook(
     async function uploadFail() {
         console.warn('Image not uploaded to the post box')
         if (confirm(warningText)) {
-            await Services.Steganography.downloadImage(new Uint8Array(secretImage))
+            await Services.Steganography.downloadImage(image)
         }
     }
 }

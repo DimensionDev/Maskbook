@@ -1,4 +1,11 @@
-import { dispatchCustomEvents, sleep, timeout, downloadUrl, getUrl } from '../../../utils/utils'
+import {
+    dispatchCustomEvents,
+    sleep,
+    timeout,
+    downloadUrl,
+    getUrl,
+    pasteImageToActiveElements,
+} from '../../../utils/utils'
 import {
     editProfileButtonSelector,
     editProfileTextareaSelector,
@@ -74,10 +81,14 @@ const taskUploadToPostBox: SocialNetworkUI['taskUploadToPostBox'] = async (text,
         pass: currentIdentity.value ? currentIdentity.value.identifier.toText() : '',
     })
 
+    const image = new Uint8Array(secretImage)
+
+    await pasteImageToActiveElements(image)
     await untilDocumentReady()
+
     try {
-        // TODO: implement auto uploading
-        throw new Error('auto uploading is undefined')
+        // Need a better way to find whether the image is pasted into
+        // throw new Error('auto uploading is undefined')
     } catch {
         uploadFail()
     }
@@ -85,7 +96,7 @@ const taskUploadToPostBox: SocialNetworkUI['taskUploadToPostBox'] = async (text,
     async function uploadFail() {
         console.warn('Image not uploaded to the post box')
         if (confirm(warningText)) {
-            await Services.Steganography.downloadImage(new Uint8Array(secretImage))
+            await Services.Steganography.downloadImage(image)
         }
     }
 }
