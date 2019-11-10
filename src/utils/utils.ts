@@ -35,6 +35,45 @@ export function dispatchCustomEvents<T extends keyof CustomEvents>(event: T, ...
     document.dispatchEvent(new CustomEvent(CustomEventId, { detail: JSON.stringify([event, x]) }))
 }
 
+/**
+ * paste image to activeElements
+ * @param bytes
+ */
+export async function pasteImageToActiveElements(bytes: Uint8Array) {
+    const textWrapper = document.createElement('script')
+    textWrapper.setAttribute('id', 'm-aaaaaaaa')
+    textWrapper.setAttribute('type', 'text/x-custom-script')
+    textWrapper.innerHTML = bytes.toString()
+    document.body.append(textWrapper)
+
+    const script = document.createElement('script')
+    script.setAttribute('async', 'false')
+    script.innerHTML = `
+        const s = document.body.querySelector('script#m-aaaaaaaa').innerHTML
+        const image = Uint8Array.from(s.split(','))
+        const blob = new Blob([image.buffer], { type: 'image/png' })
+        const file = new File([blob], 'image.png', { lastModified: Date.now(), type: 'image/png' })
+    
+        const e = new CustomEvent('paste', { bubbles: true, cancelable: false, composed: true })
+        const dt = new Proxy(new DataTransfer(), {
+            get(t, p) {
+                if (p === 'files') return [file]
+                if (p === 'types') return ['Files']
+                if (p === 'items') return [
+                    { kind: 'file', type: 'image/png', getAsFile() { return file } }
+                ]
+                if (p === 'getData') return () => ''
+                return t[p]
+            },
+        })
+        e.clipboardData = dt
+        document.activeElement.dispatchEvent(e)
+    `
+    document.body.append(script)
+    textWrapper.remove()
+    script.remove()
+}
+
 Object.assign(globalThis, { dispatchCustomEvents })
 
 /**

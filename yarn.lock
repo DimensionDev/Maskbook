@@ -16170,7 +16170,7 @@ web-ext-types@^3.1.0, web-ext-types@^3.2.1:
   resolved "https://registry.yarnpkg.com/web-ext-types/-/web-ext-types-3.2.1.tgz#3edc0e3c2e8fe121d7d7e4ca0b7ee0c883cea832"
   integrity sha512-oQZYDU3W8X867h8Jmt3129kRVKklz70db40Y6OzoTTuzOJpF/dB2KULJUf0txVPyUUXuyzV8GmT3nVvRHoG+Ew==
 
-web-ext@^3.1.1, web-ext@^3.2.0:
+web-ext@^3.2.0:
   version "3.2.0"
   resolved "https://registry.yarnpkg.com/web-ext/-/web-ext-3.2.0.tgz#090fe43d777acc7a4741e034e36cc116fcf13843"
   integrity sha512-UM2ucXzEKs6tD+YT6FjmfIeQtLy4t9CwdwyQl8Nthn2BbGgDLht+wBWsU8VYnNXtrObxX24Co8oaF7Id06JbgA==
