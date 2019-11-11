@@ -3,7 +3,7 @@
 import { OnlyRunInContext } from '@holoflows/kit/es'
 import { ProfileIdentifier, PersonaIdentifier, Identifier, ECKeyIdentifier } from '../type'
 import { DBSchema, openDB, IDBPDatabase, IDBPTransaction } from 'idb/with-async-ittr'
-import { ProfileIdentifierMap } from './helper'
+import { IdentifierMap } from '../IdentifierMap'
 /**
  * Database structure:
  *
@@ -43,13 +43,18 @@ const db = (function() {
     }
 })()
 
+export const PersonaDBAccess = db
+
 //#region Plain methods
 /**
  * Create a new Persona.
  * If the record contains `privateKey`, it will be stored in the `self` store.
  * Otherwise, it will be stored in the `others` store.
  */
-async function createPersonaDB(record: PersonaRecord, t?: IDBPTransaction<PersonaDB, ['personas']>): Promise<void> {
+export async function createPersonaDB(
+    record: PersonaRecord,
+    t?: IDBPTransaction<PersonaDB, ['personas']>,
+): Promise<void> {
     t = t || (await db()).transaction('personas', 'readwrite')
     t.objectStore('personas').add(personaRecordToDB(record))
 }
@@ -57,7 +62,7 @@ async function createPersonaDB(record: PersonaRecord, t?: IDBPTransaction<Person
 /**
  * Query a Persona.
  */
-async function queryPersonaDB(
+export async function queryPersonaDB(
     query: PersonaIdentifier,
     t?: IDBPTransaction<PersonaDB, ['personas']>,
 ): Promise<PersonaRecord | null> {
@@ -70,7 +75,7 @@ async function queryPersonaDB(
 /**
  * Query many Personas.
  */
-async function queryPersonasDB(
+export async function queryPersonasDB(
     query: (record: PersonaRecord) => boolean,
     t?: IDBPTransaction<PersonaDB, ['personas']>,
 ): Promise<PersonaRecord[]> {
@@ -87,7 +92,7 @@ async function queryPersonasDB(
  * Update an existing Persona record.
  * @param record The partial record to be merged
  */
-async function updatePersonaDB(
+export async function updatePersonaDB(
     record: Partial<PersonaRecord> & Pick<PersonaRecord, 'identifier'>,
     t?: IDBPTransaction<PersonaDB, ['personas']>,
 ): Promise<void> {
@@ -106,10 +111,10 @@ async function updatePersonaDB(
         for (const each of old.linkedProfiles) Object.setPrototypeOf(each, ProfileIdentifier.prototype)
         if (
             Array.from(record.linkedProfiles)
-                .map(x => x[0].toText() + x[1].confirmState)
+                .map(x => x[0].toText() + x[1].connectionConfirmState)
                 .join('\n') !==
             Array.from(old.linkedProfiles)
-                .map(x => x[0].toText() + x[1].confirmState)
+                .map(x => x[0].toText() + x[1].connectionConfirmState)
                 .join('\n')
         )
             throw new Error(msg)
@@ -125,7 +130,7 @@ async function updatePersonaDB(
  * Delete a Persona
  * Don't implement this kind of function.
  */
-function deletePersonaDB(id: never, t?: IDBPTransaction<PersonaDB, ['personas']>): never {
+export function deletePersonaDB(id: never, t?: IDBPTransaction<PersonaDB, ['personas']>): never {
     throw new Error(
         `If you want to remove a persona, you should also detach all of the profiles connected to it. That function will remove the persona if there is 0 profiles connecting.`,
     )
@@ -134,7 +139,7 @@ function deletePersonaDB(id: never, t?: IDBPTransaction<PersonaDB, ['personas']>
 /**
  * Create a new profile.
  */
-async function createProfileDB(
+export async function createProfileDB(
     record: ProfileRecord,
     t?: IDBPTransaction<PersonaDB, ['profiles', 'personas']>,
 ): Promise<void> {
@@ -145,7 +150,7 @@ async function createProfileDB(
             // TODO: should we throw or create a profile for them?
             throw new Error('Creating a new profile that connected to a not recorded persona')
         }
-        persona.linkedProfiles.set(record.identifier.toText(), { confirmState: 'pending' })
+        persona.linkedProfiles.set(record.identifier.toText(), { connectionConfirmState: 'pending' })
         await t.objectStore('personas').put(persona)
     }
     await t.objectStore('profiles').add(profileToDB(record))
@@ -154,7 +159,7 @@ async function createProfileDB(
 /**
  * Query a profile.
  */
-async function queryProfileDB(
+export async function queryProfileDB(
     id: ProfileIdentifier,
     t?: IDBPTransaction<PersonaDB, ['profiles']>,
 ): Promise<ProfileRecord | null> {
@@ -167,7 +172,7 @@ async function queryProfileDB(
 /**
  * Query many profiles.
  */
-async function queryProfilesDB(
+export async function queryProfilesDB(
     network: string | ((record: ProfileRecord) => boolean),
     t?: IDBPTransaction<PersonaDB, ['profiles']>,
 ): Promise<ProfileRecord[]> {
@@ -194,7 +199,7 @@ async function queryProfilesDB(
 /**
  * Update a profile.
  */
-async function updateProfileDB(
+export async function updateProfileDB(
     updating: Partial<ProfileRecord> & Pick<ProfileRecord, 'identifier'>,
     t?: IDBPTransaction<PersonaDB, ('profiles' | 'personas')[]>,
 ): Promise<void> {
@@ -220,7 +225,7 @@ async function updateProfileDB(
 /**
  * Delete a profile
  */
-async function deleteProfileDB(
+export async function deleteProfileDB(
     id: ProfileIdentifier,
     t?: IDBPTransaction<PersonaDB, ('profiles' | 'personas')[]>,
 ): Promise<void> {
@@ -236,7 +241,7 @@ async function deleteProfileDB(
 //#endregion
 
 //#region Type
-interface ProfileRecord {
+export interface ProfileRecord {
     identifier: ProfileIdentifier
     nickname?: string
     localKey?: CryptoKey
@@ -246,20 +251,16 @@ interface ProfileRecord {
 }
 
 interface LinedProfileDetails {
-    confirmState: 'confirmed' | 'pending' | 'denied'
+    connectionConfirmState: 'confirmed' | 'pending' | 'denied'
 }
 
-interface PersonaRecord {
+export interface PersonaRecord {
     identifier: PersonaIdentifier
-    publicKey: CryptoKey
-    privateKey?: CryptoKey
-    /**
-     * This field is used as index of the db.
-     */
-    hasPrivateKey: 'no' | 'yes'
+    publicKey: JsonWebKey
+    privateKey?: JsonWebKey
     localKey?: CryptoKey
-    nickname: string
-    linkedProfiles: ProfileIdentifierMap<LinedProfileDetails>
+    nickname?: string
+    linkedProfiles: IdentifierMap<ProfileIdentifier, LinedProfileDetails>
     createdAt: Date
     updatedAt: Date
 }
@@ -267,6 +268,10 @@ type ProfileRecordDB = Omit<ProfileRecord, 'identifier' | 'hasPrivateKey'> & { i
 type PersonaRecordDb = Omit<PersonaRecord, 'identifier' | 'linkedProfiles'> & {
     identifier: string
     linkedProfiles: Map<string, LinedProfileDetails>
+    /**
+     * This field is used as index of the db.
+     */
+    hasPrivateKey: 'no' | 'yes'
 }
 
 interface PersonaDB extends DBSchema {
@@ -313,15 +318,12 @@ function personaRecordToDB(x: PersonaRecord): PersonaRecordDb {
     }
 }
 function personaRecordOutDb(x: PersonaRecordDb): PersonaRecord {
-    for (const each of x.linkedProfiles) {
-        Object.setPrototypeOf(each, ProfileIdentifier.prototype)
-    }
+    delete x.hasPrivateKey
     const obj: PersonaRecord = {
         ...x,
         identifier: Identifier.fromString(x.identifier) as PersonaIdentifier,
-        linkedProfiles: new ProfileIdentifierMap(x.linkedProfiles),
+        linkedProfiles: new IdentifierMap(x.linkedProfiles),
     }
-    delete obj.hasPrivateKey
     return obj
 }
 //#endregion
