@@ -22,9 +22,9 @@ OnlyRunInContext('background', 'FriendService')
 export { storeAvatar, getAvatarDataURL, queryPerson } from '../../database'
 export { writePersonOnGun } from '../../network/gun/version.2/people'
 export {
-    addPersonToFriendsGroup,
+    addProfileToFriendsGroup as addPersonToFriendsGroup,
     createFriendsGroup,
-    removePersonFromFriendsGroup,
+    removeProfileFromFriendsGroup as removePersonFromFriendsGroup,
     queryUserGroups,
 } from '../../database/helpers/group'
 export { queryUserGroupDatabase as queryUserGroup } from '../../database/group'

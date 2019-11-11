@@ -3,7 +3,7 @@ import { serializable } from '../utils/type-transform/Serialization'
 
 @serializable('IdentifierMap')
 export class IdentifierMap<IdentifierType extends Identifier, T> implements Map<IdentifierType, T> {
-    constructor(public __raw_map__: Map<string, T>) {}
+    constructor(public readonly __raw_map__: Map<string, T>) {}
     get(key: IdentifierType) {
         return this.__raw_map__.get(key.toText())
     }
@@ -53,3 +53,13 @@ export class IdentifierMap<IdentifierType extends Identifier, T> implements Map<
         return this.entries()
     }
 }
+
+export type ReadonlyIdentifierMap<IdentifierType extends Identifier, T> = ReadonlyMap<IdentifierType, T> & {
+    readonly __raw_map__: ReadonlyMap<string, T>
+}
+export const ReadonlyIdentifierMap: {
+    new <IdentifierType extends Identifier, T>(__raw_map__: ReadonlyMap<string, T>): ReadonlyIdentifierMap<
+        IdentifierType,
+        T
+    >
+} = IdentifierMap as any

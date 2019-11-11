@@ -250,7 +250,7 @@ export interface ProfileRecord {
     updatedAt: Date
 }
 
-interface LinedProfileDetails {
+export interface LinkedProfileDetails {
     connectionConfirmState: 'confirmed' | 'pending' | 'denied'
 }
 
@@ -260,14 +260,14 @@ export interface PersonaRecord {
     privateKey?: JsonWebKey
     localKey?: CryptoKey
     nickname?: string
-    linkedProfiles: IdentifierMap<ProfileIdentifier, LinedProfileDetails>
+    linkedProfiles: IdentifierMap<ProfileIdentifier, LinkedProfileDetails>
     createdAt: Date
     updatedAt: Date
 }
 type ProfileRecordDB = Omit<ProfileRecord, 'identifier' | 'hasPrivateKey'> & { identifier: string }
 type PersonaRecordDb = Omit<PersonaRecord, 'identifier' | 'linkedProfiles'> & {
     identifier: string
-    linkedProfiles: Map<string, LinedProfileDetails>
+    linkedProfiles: Map<string, LinkedProfileDetails>
     /**
      * This field is used as index of the db.
      */

@@ -18,12 +18,11 @@ export function createDefaultFriendsGroup(who: PersonIdentifier) {
     return createFriendsGroup(who, PreDefinedVirtualGroupNames.friends)
 }
 
-export async function addPersonToFriendsGroup(group: GroupIdentifier, newMembers: (Person | PersonIdentifier)[]) {
+export async function addProfileToFriendsGroup(group: GroupIdentifier, newMembers: (Person | PersonIdentifier)[]) {
     const memberList = newMembers.map(x => (x instanceof PersonIdentifier ? x : x.identifier)) as PersonIdentifier[]
     await updateUserGroupDatabase({ identifier: group, members: memberList }, 'append')
 }
-
-export function removePersonFromFriendsGroup(group: GroupIdentifier, removedFriend: (Person | PersonIdentifier)[]) {
+export function removeProfileFromFriendsGroup(group: GroupIdentifier, removedFriend: (Person | PersonIdentifier)[]) {
     const friendList = removedFriend.map(x => (x instanceof PersonIdentifier ? x : x.identifier)) as PersonIdentifier[]
     return updateUserGroupDatabase({ identifier: group }, r => {
         r.members = r.members.filter(x => !friendList.some(y => y.equals(x)))
