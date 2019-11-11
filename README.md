@@ -2,7 +2,7 @@
 
 Encrypt your posts & chats on You-Know-Where. Allow only your friends to decrypt.
 
-For general introductions, see https://Maskbook.com/
+For general introductions, see Maskbook.com(https://maskbook.com/).
 
 -   [Maskbook on Chrome Web Store][crext]
 -   [Maskbook on Firefox Addon Store][fxaddon] (Works on Firefox for Android too!)
@@ -21,7 +21,7 @@ Help us by donating us by:
 
 ## Documentation for developers
 
--   License: AGPL
+-   License: GNU AGPL v3
 -   Code Style: Use [prettier](https://github.com/prettier/prettier)
 -   [Git flow](https://github.com/nvie/gitflow) enabled, `master` as the latest branch, `released` as the stable branch
 -   Use [Conventional Commits](https://www.conventionalcommits.org/) since 1.4.0
