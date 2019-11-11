@@ -94,3 +94,10 @@ Help us by donating us by:
 -   ./network - How does Maskbook exchange information between users
 -   ./social-network/ - Maskbook's multiple network support
 -   ./social-network-provider/ - Maskbook's multiple network support
+
+<p align="center">
+  <a href="https://maskbook.com/">
+      <img src="https://cdn.jsdelivr.net/gh/DimensionDev/Maskbook@v1.7.1/public/256x256.png"
+           width="100" height="100" title="([I:b])" alt="([I:b])">
+  </a>
+</p>
