@@ -1161,16 +1161,15 @@
 
 "@holoflows/kit@https://github.com/DimensionDev/holoflows-kit":
   version "0.6.1"
-  resolved "https://github.com/DimensionDev/holoflows-kit#79c7c4b4a442cd3432a76ccb9c302eec393ace8a"
+  uid "57cc8473f7b62f6a7b241f1cc1e28635af3bbb1b"
+  resolved "https://github.com/DimensionDev/holoflows-kit#57cc8473f7b62f6a7b241f1cc1e28635af3bbb1b"
   dependencies:
-    "@types/lodash-es" "^4.1.4"
     async-call-rpc "^1.0.0"
     concurrent-lock "^1.0.7"
     jsx-jsonml-devtools-renderer "^1.4.1"
     lodash-es "^4.17.15"
     memorize-decorator "^0.2.2"
     mitt "^1.1.3"
-    web-ext-types "^3.2.1"
 
 "@icons/material@^0.2.4":
   version "0.2.4"
@@ -2119,7 +2118,7 @@
   resolved "https://registry.yarnpkg.com/@types/json-stable-stringify/-/json-stable-stringify-1.0.32.tgz#121f6917c4389db3923640b2e68de5fa64dda88e"
   integrity sha512-q9Q6+eUEGwQkv4Sbst3J4PNgDOvpuVuKj79Hl/qnmBMEIPzB5QoFRUtjcgcg2xNUZyYUGXBk5wYIBKHt0A+Mxw==
 
-"@types/lodash-es@^4.1.4", "@types/lodash-es@^4.17.3":
+"@types/lodash-es@^4.17.3":
   version "4.17.3"
   resolved "https://registry.yarnpkg.com/@types/lodash-es/-/lodash-es-4.17.3.tgz#87eb0b3673b076b8ee655f1890260a136af09a2d"
   integrity sha512-iHI0i7ZAL1qepz1Y7f3EKg/zUMDwDfTzitx+AlHhJJvXwenP682ZyGbgPSc5Ej3eEAKVbNWKFuwOadCj5vBbYQ==
@@ -16348,50 +16347,10 @@ wcwidth@^1.0.0:
   dependencies:
     defaults "^1.0.3"
 
-web-ext-types@^3.1.0, web-ext-types@^3.2.1:
+web-ext-types@^3.1.0:
   version "3.2.1"
   resolved "https://registry.yarnpkg.com/web-ext-types/-/web-ext-types-3.2.1.tgz#3edc0e3c2e8fe121d7d7e4ca0b7ee0c883cea832"
   integrity sha512-oQZYDU3W8X867h8Jmt3129kRVKklz70db40Y6OzoTTuzOJpF/dB2KULJUf0txVPyUUXuyzV8GmT3nVvRHoG+Ew==
-
-web-ext@^3.1.1:
-  version "3.2.1"
-  resolved "https://registry.yarnpkg.com/web-ext/-/web-ext-3.2.1.tgz#5fa9f683d4ca804b42324593b1acedca375ab68d"
-  integrity sha512-WzZbCDIjIUshZRVaiYFbaMp/1/xPjW7qeTQ0F7Xx1MYkamZ4RN5dnhxWFz+Hzg6GzhFdny+zucNDKOwYfAV3LA==
-  dependencies:
-    "@babel/polyfill" "7.6.0"
-    "@babel/runtime" "7.6.2"
-    "@cliqz-oss/firefox-client" "0.3.1"
-    "@cliqz-oss/node-firefox-connect" "1.2.1"
-    adbkit "2.11.1"
-    addons-linter "1.14.0"
-    bunyan "1.8.12"
-    camelcase "5.3.1"
-    chrome-launcher "0.11.2"
-    debounce "1.2.0"
-    decamelize "3.2.0"
-    es6-error "4.1.1"
-    event-to-promise "0.8.0"
-    firefox-profile "1.2.0"
-    fx-runner "1.0.11"
-    git-rev-sync "1.12.0"
-    import-fresh "3.1.0"
-    mkdirp "0.5.1"
-    multimatch "4.0.0"
-    mz "2.7.0"
-    node-notifier "6.0.0"
-    open "6.4.0"
-    parse-json "5.0.0"
-    sign-addon "0.3.1"
-    source-map-support "0.5.13"
-    stream-to-promise "2.2.0"
-    strip-bom "4.0.0"
-    strip-json-comments "3.0.1"
-    tmp "0.1.0"
-    update-notifier "3.0.1"
-    watchpack "1.6.0"
-    ws "7.1.2"
-    yargs "13.3.0"
-    zip-dir "1.0.2"
 
 web-ext@^3.2.0:
   version "3.2.0"
