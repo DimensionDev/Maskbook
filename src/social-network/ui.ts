@@ -209,7 +209,7 @@ export type PostInfo = {
     readonly postContent: ValueRef<string>
     readonly postPayload: ValueRef<Payload | null>
     readonly commentsSelector?: LiveSelector<HTMLElement, false>
-    readonly commentBoxSelector?: LiveSelector<HTMLElement, true>
+    readonly commentBoxSelector?: LiveSelector<HTMLElement, false>
     readonly decryptedPostContent: ValueRef<string>
     readonly rootNode: HTMLElement
     readonly rootNodeProxy: DOMProxy
