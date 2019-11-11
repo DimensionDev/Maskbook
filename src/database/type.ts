@@ -1,5 +1,7 @@
 import { serializable } from '../utils/type-transform/Serialization'
 import { RecipientDetail } from './post'
+import { compressSecp256k1Key } from '../utils/type-transform/SECP256k1-Compression'
+import { CryptoKeyToJsonWebKey } from '../utils/type-transform/CryptoKey-JsonWebKey'
 
 /**
  * @internal symbol that used to construct this type from the Identifier
@@ -167,6 +169,13 @@ export class PostIVIdentifier extends Identifier {
  */
 @serializable('ECKeyIdentifier')
 export class ECKeyIdentifier extends Identifier {
+    static async fromCryptoKey(key: CryptoKey) {
+        return this.fromJsonWebKey(await CryptoKeyToJsonWebKey(key))
+    }
+    static fromJsonWebKey(key: JsonWebKey) {
+        const x = compressSecp256k1Key(key)
+        return new ECKeyIdentifier('secp256k1', x)
+    }
     public readonly type = 'ec_key'
     constructor(public readonly curve: 'secp256k1', private encodedCompressedKey: string) {
         super()
