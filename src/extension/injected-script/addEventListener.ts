@@ -1,6 +1,6 @@
 import { CustomEventId } from '../../utils/constants'
 export interface CustomEvents {
-    paste: [string | Uint8Array]
+    paste: [string | { type: 'image'; text: string }]
     input: [string]
 }
 {
@@ -35,8 +35,9 @@ export interface CustomEvents {
             if (typeof textOrImage === 'string') {
                 e.clipboardData!.setData('text/plain', textOrImage)
                 return getEvent(e, { defaultPrevented: false, preventDefault() {} })
-            } else {
-                const blob = new Blob([textOrImage], { type: 'image/png' })
+            } else if (textOrImage.type === 'image') {
+                const binary = Uint8Array.from(textOrImage.text.split(',').map(i => Number(i)))
+                const blob = new Blob([binary], { type: 'image/png' })
                 const file = new File([blob], 'image.png', { lastModified: Date.now(), type: 'image/png' })
                 const dt = new Proxy(new DataTransfer(), {
                     get(target, key: keyof typeof target) {
@@ -58,6 +59,9 @@ export interface CustomEvents {
                 })
                 return getEvent(e, { defaultPrevented: false, preventDefault() {}, clipboardData: dt })
             }
+            const error = new Error(`Unknown event, got ${textOrImage?.type ?? 'unknown'}`)
+            console.error(error)
+            throw error
         },
         input(text) {
             // Cause react hooks the input.value getter & setter
