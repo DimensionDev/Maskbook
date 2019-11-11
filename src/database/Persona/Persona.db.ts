@@ -3,6 +3,7 @@
 import { OnlyRunInContext } from '@holoflows/kit/es'
 import { ProfileIdentifier, PersonaIdentifier, Identifier, ECKeyIdentifier } from '../type'
 import { DBSchema, openDB, IDBPDatabase, IDBPTransaction } from 'idb/with-async-ittr'
+import { ProfileIdentifierMap } from './helper'
 /**
  * Database structure:
  *
@@ -91,8 +92,9 @@ async function updatePersonaDB(
     t?: IDBPTransaction<PersonaDB, ['personas']>,
 ): Promise<void> {
     t = t || (await db()).transaction('personas', 'readwrite')
-    const old = await t.objectStore('personas').get(record.identifier.toText())
-    if (!old) throw new TypeError('Update an non-exist data')
+    const _old = await t.objectStore('personas').get(record.identifier.toText())
+    if (!_old) throw new TypeError('Update an non-exist data')
+    const old = personaRecordOutDb(_old)
 
     /**
      * If the linkedProfiles is changed, throw.
@@ -104,10 +106,10 @@ async function updatePersonaDB(
         for (const each of old.linkedProfiles) Object.setPrototypeOf(each, ProfileIdentifier.prototype)
         if (
             Array.from(record.linkedProfiles)
-                .map(x => x.toText())
+                .map(x => x[0].toText() + x[1].confirmState)
                 .join('\n') !==
             Array.from(old.linkedProfiles)
-                .map(x => x.toText())
+                .map(x => x[0].toText() + x[1].confirmState)
                 .join('\n')
         )
             throw new Error(msg)
@@ -143,7 +145,7 @@ async function createProfileDB(
             // TODO: should we throw or create a profile for them?
             throw new Error('Creating a new profile that connected to a not recorded persona')
         }
-        persona.linkedProfiles.add(record.identifier)
+        persona.linkedProfiles.set(record.identifier.toText(), { confirmState: 'pending' })
         await t.objectStore('personas').put(persona)
     }
     await t.objectStore('profiles').add(profileToDB(record))
@@ -173,10 +175,12 @@ async function queryProfilesDB(
     const result: ProfileRecord[] = []
     if (typeof network === 'string') {
         result.push(
-            ...(await t
-                .objectStore('profiles')
-                .index('network')
-                .getAll(IDBKeyRange.only(network))).map(profileOutDB),
+            ...(
+                await t
+                    .objectStore('profiles')
+                    .index('network')
+                    .getAll(IDBKeyRange.only(network))
+            ).map(profileOutDB),
         )
     } else {
         for await (const each of t.objectStore('profiles').iterate()) {
@@ -241,6 +245,10 @@ interface ProfileRecord {
     updatedAt: Date
 }
 
+interface LinedProfileDetails {
+    confirmState: 'confirmed' | 'pending' | 'denied'
+}
+
 interface PersonaRecord {
     identifier: PersonaIdentifier
     publicKey: CryptoKey
@@ -251,12 +259,15 @@ interface PersonaRecord {
     hasPrivateKey: 'no' | 'yes'
     localKey?: CryptoKey
     nickname: string
-    linkedProfiles: Set<ProfileIdentifier>
+    linkedProfiles: ProfileIdentifierMap<LinedProfileDetails>
     createdAt: Date
     updatedAt: Date
 }
 type ProfileRecordDB = Omit<ProfileRecord, 'identifier' | 'hasPrivateKey'> & { identifier: string }
-type PersonaRecordDb = Omit<PersonaRecord, 'identifier'> & { identifier: string }
+type PersonaRecordDb = Omit<PersonaRecord, 'identifier' | 'linkedProfiles'> & {
+    identifier: string
+    linkedProfiles: Map<string, LinedProfileDetails>
+}
 
 interface PersonaDB extends DBSchema {
     /** Use inline keys */
@@ -298,13 +309,18 @@ function personaRecordToDB(x: PersonaRecord): PersonaRecordDb {
         ...x,
         identifier: x.identifier.toText(),
         hasPrivateKey: x.privateKey ? 'yes' : 'no',
+        linkedProfiles: x.linkedProfiles.__raw_map__,
     }
 }
 function personaRecordOutDb(x: PersonaRecordDb): PersonaRecord {
     for (const each of x.linkedProfiles) {
         Object.setPrototypeOf(each, ProfileIdentifier.prototype)
     }
-    const obj = { ...x, identifier: Identifier.fromString(x.identifier) as PersonaIdentifier }
+    const obj: PersonaRecord = {
+        ...x,
+        identifier: Identifier.fromString(x.identifier) as PersonaIdentifier,
+        linkedProfiles: new ProfileIdentifierMap(x.linkedProfiles),
+    }
     delete obj.hasPrivateKey
     return obj
 }
