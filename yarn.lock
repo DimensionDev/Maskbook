@@ -1161,16 +1161,15 @@
 
 "@holoflows/kit@https://github.com/DimensionDev/holoflows-kit":
   version "0.6.1"
-  resolved "https://github.com/DimensionDev/holoflows-kit#79c7c4b4a442cd3432a76ccb9c302eec393ace8a"
+  uid "1d9dbd0284d637c308774ed31898d7d20a8a173b"
+  resolved "https://github.com/DimensionDev/holoflows-kit#1d9dbd0284d637c308774ed31898d7d20a8a173b"
   dependencies:
-    "@types/lodash-es" "^4.1.4"
     async-call-rpc "^1.0.0"
     concurrent-lock "^1.0.7"
     jsx-jsonml-devtools-renderer "^1.4.1"
     lodash-es "^4.17.15"
     memorize-decorator "^0.2.2"
     mitt "^1.1.3"
-    web-ext-types "^3.2.1"
 
 "@icons/material@^0.2.4":
   version "0.2.4"
@@ -2119,7 +2118,7 @@
   resolved "https://registry.yarnpkg.com/@types/json-stable-stringify/-/json-stable-stringify-1.0.32.tgz#121f6917c4389db3923640b2e68de5fa64dda88e"
   integrity sha512-q9Q6+eUEGwQkv4Sbst3J4PNgDOvpuVuKj79Hl/qnmBMEIPzB5QoFRUtjcgcg2xNUZyYUGXBk5wYIBKHt0A+Mxw==
 
-"@types/lodash-es@^4.1.4", "@types/lodash-es@^4.17.3":
+"@types/lodash-es@^4.17.3":
   version "4.17.3"
   resolved "https://registry.yarnpkg.com/@types/lodash-es/-/lodash-es-4.17.3.tgz#87eb0b3673b076b8ee655f1890260a136af09a2d"
   integrity sha512-iHI0i7ZAL1qepz1Y7f3EKg/zUMDwDfTzitx+AlHhJJvXwenP682ZyGbgPSc5Ej3eEAKVbNWKFuwOadCj5vBbYQ==
@@ -16348,7 +16347,7 @@ wcwidth@^1.0.0:
   dependencies:
     defaults "^1.0.3"
 
-web-ext-types@^3.1.0, web-ext-types@^3.2.1:
+web-ext-types@^3.1.0:
   version "3.2.1"
   resolved "https://registry.yarnpkg.com/web-ext-types/-/web-ext-types-3.2.1.tgz#3edc0e3c2e8fe121d7d7e4ca0b7ee0c883cea832"
   integrity sha512-oQZYDU3W8X867h8Jmt3129kRVKklz70db40Y6OzoTTuzOJpF/dB2KULJUf0txVPyUUXuyzV8GmT3nVvRHoG+Ew==
