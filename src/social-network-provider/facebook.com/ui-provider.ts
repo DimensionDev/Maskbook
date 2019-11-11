@@ -59,12 +59,13 @@ export const facebookUISelf = defineSocialNetworkUI({
     injectCommentBox: injectCommentBoxDefaultFactory(async function onPasteToCommentBoxFacebook(
         encryptedComment,
         current,
+        realCurrent,
     ) {
         const fail = () => {
             prompt(geti18nString('comment_box__paste_failed'), encryptedComment)
         }
         if (isMobileFacebook) {
-            const root = current.commentBoxSelector!.evaluate()
+            const root = realCurrent || current.commentBoxSelector!.evaluate()[0]
             if (!root) return fail()
             const textarea = root.querySelector('textarea')
             if (!textarea) return fail()
@@ -74,7 +75,7 @@ export const facebookUISelf = defineSocialNetworkUI({
             await sleep(200)
             if (!root.innerText.includes(encryptedComment)) return fail()
         } else {
-            const root = current.rootNode
+            const root = realCurrent || current.rootNode
             if (!root) return fail()
             const input = root.querySelector('[contenteditable]')
             if (!input) return fail()
