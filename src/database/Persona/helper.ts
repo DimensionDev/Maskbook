@@ -1,39 +1,39 @@
 import { ProfileIdentifier, Identifier } from '../type'
 
-export class ProfileIdentifierSet implements Set<ProfileIdentifier> {
-    constructor(public __raw_set__: Set<string>) {}
-    add(data: ProfileIdentifier) {
-        this.__raw_set__.add(data.toText())
+export class ProfileIdentifierMap<T> implements Map<ProfileIdentifier, T> {
+    constructor(public __raw_map__: Map<string, T>) {}
+    get(key: ProfileIdentifier) {
+        return this.__raw_map__.get(key.toText())
+    }
+    set(key: ProfileIdentifier, data: T) {
+        this.__raw_map__.set(key.toText(), data)
         return this
     }
     clear() {
-        this.__raw_set__.clear()
+        this.__raw_map__.clear()
     }
     delete(data: ProfileIdentifier) {
-        return this.__raw_set__.delete(data.toText())
+        return this.__raw_map__.delete(data.toText())
     }
-    *entries(): Generator<[ProfileIdentifier, ProfileIdentifier], void, unknown> {
-        const iter = this.values()
-        for (const i of iter) {
-            yield [i, i] as [typeof i, typeof i]
+    *entries(): Generator<[ProfileIdentifier, T], void, unknown> {
+        const iter = this.__raw_map__.entries()
+        for (const [key, data] of iter) {
+            yield [Identifier.fromString(key) as ProfileIdentifier, data]
         }
     }
-    forEach(
-        callbackfn: (value: ProfileIdentifier, value2: ProfileIdentifier, set: Set<ProfileIdentifier>) => void,
-        thisArg?: any,
-    ) {
-        this.__raw_set__.forEach(v => {
-            const i = Identifier.fromString(v)
+    forEach(callbackfn: (value: T, key: ProfileIdentifier, map: ProfileIdentifierMap<T>) => void, thisArg?: any) {
+        this.__raw_map__.forEach((value, key) => {
+            const i = Identifier.fromString(key)
             if (i instanceof ProfileIdentifier) {
-                Reflect.apply(callbackfn, thisArg, [i, i, this])
+                callbackfn.call(thisArg, value, i, this)
             }
         })
     }
     has(key: ProfileIdentifier) {
-        return this.__raw_set__.has(key.toText())
+        return this.__raw_map__.has(key.toText())
     }
     *keys(): Generator<ProfileIdentifier, void, unknown> {
-        const iter = this.__raw_set__.keys()
+        const iter = this.__raw_map__.keys()
         for (const [key] of iter) {
             const i = Identifier.fromString(key)
             if (i instanceof ProfileIdentifier) yield i
@@ -41,13 +41,13 @@ export class ProfileIdentifierSet implements Set<ProfileIdentifier> {
         }
     }
     get size() {
-        return this.__raw_set__.size
+        return this.__raw_map__.size
     }
-    values(): Generator<ProfileIdentifier, void, unknown> {
-        return this.keys()
+    values(): IterableIterator<T> {
+        return this.__raw_map__.values()
     }
     [Symbol.toStringTag] = 'ProfileIdentifierSet';
-    [Symbol.iterator](): Generator<ProfileIdentifier, void, unknown> {
-        return this.keys()
+    [Symbol.iterator](): Generator<[ProfileIdentifier, T], void, unknown> {
+        return this.entries()
     }
 }
