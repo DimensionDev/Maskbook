@@ -118,6 +118,7 @@ const db = openDB<PeopleDB>('maskbook-people-v2', 1, {
 /**
  * Store a new person
  * @param record - PersonRecord
+ * @deprecated
  */
 export async function storeNewPersonDB(record: PersonRecord): Promise<void> {
     // ! Add await between a transaction and function end will cause the transaction closes !
@@ -129,6 +130,7 @@ export async function storeNewPersonDB(record: PersonRecord): Promise<void> {
 }
 /**
  * Query person with an identifier
+ * @deprecated
  */
 export async function queryPeopleDB(
     query: ((key: PersonIdentifier, record: PersonRecordInDatabase) => boolean) | { network: string } = () => true,
@@ -153,6 +155,7 @@ export async function queryPeopleDB(
 /**
  * Query people within a network
  * @param id - Identifier
+ * @deprecated
  */
 export async function queryPersonDB(id: PersonIdentifier): Promise<null | PersonRecord> {
     const t = (await db).transaction('people', 'readonly')
@@ -166,6 +169,7 @@ export async function queryPersonDB(id: PersonIdentifier): Promise<null | Person
 /**
  * Update Person info with an identifier
  * @param person - Partial of person record
+ * @deprecated
  */
 export async function updatePersonDB(person: Partial<PersonRecord> & Pick<PersonRecord, 'identifier'>): Promise<void> {
     const full = (await queryPersonDB(person.identifier)) || { groups: [], identifier: person.identifier }
@@ -190,6 +194,7 @@ export async function updatePersonDB(person: Partial<PersonRecord> & Pick<Person
 /**
  * Remove people from database
  * @param people - People to remove
+ * @deprecated
  */
 export async function removePeopleDB(people: PersonIdentifier[]): Promise<void> {
     const t = (await db).transaction('people', 'readwrite')
@@ -205,6 +210,7 @@ export async function removePeopleDB(people: PersonIdentifier[]): Promise<void> 
 /**
  * Get my record
  * @param id - Identifier
+ * @deprecated
  */
 export async function queryMyIdentityAtDB(id: PersonIdentifier): Promise<null | PersonRecordPublicPrivate> {
     const t = (await db).transaction(['myself', 'people'])
@@ -220,6 +226,7 @@ export async function queryMyIdentityAtDB(id: PersonIdentifier): Promise<null | 
 /**
  * Update My identity with an identifier
  * @param person - Partial of person record
+ * @deprecated
  */
 export async function updateMyIdentityDB(
     person: Partial<PersonRecord> & Pick<PersonRecord, 'identifier'>,
@@ -237,6 +244,7 @@ export async function updateMyIdentityDB(
 /**
  * Remove my record
  * @param id - Identifier
+ * @deprecated
  */
 export async function removeMyIdentityAtDB(id: PersonIdentifier): Promise<void> {
     const t = (await db).transaction('myself', 'readwrite')
@@ -246,6 +254,7 @@ export async function removeMyIdentityAtDB(id: PersonIdentifier): Promise<void> 
 /**
  * Store my record
  * @param record - Record
+ * @deprecated
  */
 export async function storeMyIdentityDB(record: PersonRecordPublicPrivate): Promise<void> {
     if (!record.publicKey || !record.privateKey)
@@ -258,6 +267,7 @@ export async function storeMyIdentityDB(record: PersonRecordPublicPrivate): Prom
 }
 /**
  * Get all my identities.
+ * @deprecated
  */
 export async function getMyIdentitiesDB(): Promise<PersonRecordPublicPrivate[]> {
     const t = (await db).transaction('myself')
@@ -269,6 +279,7 @@ export async function getMyIdentitiesDB(): Promise<PersonRecordPublicPrivate[]> 
 /**
  *
  * @param network
+ * @deprecated
  */
 export async function queryLocalKeyDB(network: string): Promise<LocalKeys>
 export async function queryLocalKeyDB(identifier: PersonIdentifier): Promise<CryptoKey | null>
@@ -286,6 +297,7 @@ export async function queryLocalKeyDB(identifier: string | PersonIdentifier): Pr
  * Store my local key for a network
  * @param arg0 - PersonIdentifier
  * @param key  - ! Keys MUST BE a native CryptoKey object !
+ * @deprecated
  */
 export async function storeLocalKeyDB({ network, userId }: PersonIdentifier, key: CryptoKey): Promise<void> {
     if (!(key instanceof CryptoKey)) {
@@ -299,6 +311,7 @@ export async function storeLocalKeyDB({ network, userId }: PersonIdentifier, key
 }
 /**
  * Remove local key
+ * @deprecated
  */
 export async function deleteLocalKeyDB({ network, userId }: PersonIdentifier): Promise<void> {
     const t = (await db).transaction('localKeys', 'readwrite')
@@ -310,6 +323,7 @@ export async function deleteLocalKeyDB({ network, userId }: PersonIdentifier): P
 }
 /**
  * Get all my local keys.
+ * @deprecated
  */
 export async function getLocalKeysDB() {
     const t = (await db).transaction('localKeys')
