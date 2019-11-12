@@ -1,3 +1,6 @@
+import { OnlyRunInContext } from '@holoflows/kit/es'
+
+OnlyRunInContext('background', 'UserGroupService')
 export {
     addProfileToFriendsGroup,
     createDefaultFriendsGroup,

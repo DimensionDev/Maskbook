@@ -11,6 +11,8 @@ Object.assign(globalThis, { tasks })
 
 interface Services {
     Crypto: typeof import('./background-script/CryptoService')
+    Identity: typeof import('./background-script/IdentityService')
+    UserGroup: typeof import('./background-script/UserGroupService')
     People: typeof import('./background-script/PeopleService')
     Welcome: typeof import('./background-script/WelcomeService')
     Steganography: typeof import('./background-script/SteganographyService')
@@ -32,6 +34,8 @@ if (!('Services' in globalThis)) {
     register(createProxyToService('WelcomeService'), 'Welcome', MockService.WelcomeService)
     register(createProxyToService('PeopleService'), 'People', MockService.PeopleService)
     register(createProxyToService('SteganographyService'), 'Steganography', MockService.SteganographyService)
+    register(createProxyToService('IdentityService'), 'Identity', {})
+    register(createProxyToService('UserGroupService'), 'UserGroup', {})
 }
 interface ServicesWithProgress {
     // Sorry you should add import at '../background-service.ts'
