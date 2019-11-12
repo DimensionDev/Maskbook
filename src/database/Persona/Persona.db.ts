@@ -120,23 +120,8 @@ export async function updatePersonaDB(
     if (!_old) throw new TypeError('Update an non-exist data')
     const old = personaRecordOutDb(_old)
 
-    /**
-     * If the linkedProfiles is changed, throw.
-     */
-    if (record.linkedProfiles) {
-        const msg = `Can not use "updatePersonaDB" to update linkedProfiles. Use "updatePersonaLinkedProfilesDB" instead`
-        if (record.linkedProfiles.size !== old.linkedProfiles.size) throw new Error(msg)
-        for (const each of record.linkedProfiles) Object.setPrototypeOf(each, ProfileIdentifier.prototype)
-        for (const each of old.linkedProfiles) Object.setPrototypeOf(each, ProfileIdentifier.prototype)
-        if (
-            Array.from(record.linkedProfiles)
-                .map(x => x[0].toText() + x[1].connectionConfirmState)
-                .join('\n') !==
-            Array.from(old.linkedProfiles)
-                .map(x => x[0].toText() + x[1].connectionConfirmState)
-                .join('\n')
-        )
-            throw new Error(msg)
+    if ('linkedProfiles' in record) {
+        throw new Error(`Can not use "updatePersonaDB" to update linkedProfiles.`)
     }
     const next: PersonaRecordDb = personaRecordToDB({
         ...old,

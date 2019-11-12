@@ -1,16 +1,64 @@
-import { getMyIdentitiesDB, queryLocalKeyDB, queryPeopleDB, PersonRecord, PersonRecordPublic } from '../people'
+import {
+    getMyIdentitiesDB,
+    queryLocalKeyDB,
+    queryPeopleDB,
+    PersonRecord,
+    PersonRecordPublic,
+    PersonRecordPublicPrivate,
+} from '../people'
 import * as persona from '../Persona/Persona.db'
 import { ECKeyIdentifier, ProfileIdentifier } from '../type'
 import { IdentifierMap } from '../IdentifierMap'
 import { IDBPTransaction } from 'idb'
 import { CryptoKeyToJsonWebKey } from '../../utils/type-transform/CryptoKey-JsonWebKey'
 
-export async function migratePeopleToPersona() {
+export default async function migratePeopleToPersona() {
     const myIDs = await getMyIdentitiesDB()
     const otherIDs = await queryPeopleDB(() => true)
+    await migrateHelper_operateDB(myIDs, otherIDs, queryLocalKeyDB)
+}
+export async function migrateHelper_operateDB(
+    myIDs: PersonRecordPublicPrivate[],
+    otherIDs: PersonRecord[],
+    getLocalKey: (identifier: ProfileIdentifier) => Promise<CryptoKey | null>,
+) {
+    const [personaMap, profilesMap, attachRelationMap] = await migrateHelper_importPersonaFromPersonRecord(
+        myIDs,
+        otherIDs,
+        getLocalKey,
+    )
 
+    const t: IDBPTransaction<any, any> = (await persona.PersonaDBAccess()).transaction(
+        ['personas', 'profiles'],
+        'readwrite',
+    )
+    for (const [v, incomingRecord] of personaMap) {
+        const currentRecord = await persona.queryPersonaDB(incomingRecord.identifier, t)
+        if (!currentRecord) {
+            await persona.createPersonaDB(incomingRecord, t)
+        }
+    }
+    for (const [v, incomingRecord] of profilesMap) {
+        const currentRecord = await persona.queryProfileDB(incomingRecord.identifier, t)
+        if (!currentRecord) {
+            await persona.createProfileDB(incomingRecord, t)
+        }
+    }
+    for (const [profileID, personaID] of attachRelationMap) {
+        const currentRecord = await persona.queryPersonaDB(personaID, t)
+        const data: persona.LinkedProfileDetails = currentRecord!.linkedProfiles.get(profileID) ?? {
+            connectionConfirmState: 'pending',
+        }
+        await persona.attachProfileDB(profileID, personaID, data, t)
+    }
+}
+async function migrateHelper_importPersonaFromPersonRecord(
+    myIDs: PersonRecordPublicPrivate[],
+    otherIDs: PersonRecord[],
+    getLocalKey: (identifier: ProfileIdentifier) => Promise<CryptoKey | null>,
+) {
     const jwkMap = new Map<CryptoKey, JsonWebKey>()
-    const EC_IDMap = new IdentifierMap<ProfileIdentifier, ECKeyIdentifier>(new Map())
+    const attachRelationMap = new IdentifierMap<ProfileIdentifier, ECKeyIdentifier>(new Map())
     const localKeysMap = new IdentifierMap<ProfileIdentifier, CryptoKey>(new Map())
     const personaMap = new IdentifierMap<ECKeyIdentifier, persona.PersonaRecord>(new Map())
     const profilesMap = new IdentifierMap<ProfileIdentifier, persona.ProfileRecord>(new Map())
@@ -21,35 +69,25 @@ export async function migratePeopleToPersona() {
             if (value.privateKey) jwkMap.set(value.privateKey, await CryptoKeyToJsonWebKey(value.privateKey))
 
             if (value.publicKey) {
-                EC_IDMap.set(value.identifier, await ECKeyIdentifier.fromCryptoKey(value.publicKey))
+                attachRelationMap.set(value.identifier, await ECKeyIdentifier.fromCryptoKey(value.publicKey))
             }
         }),
     )
     await Promise.all(
         myIDs.map(async value => {
-            const key = await queryLocalKeyDB(value.identifier)
+            const key = await getLocalKey(value.identifier)
             key && localKeysMap.set(value.identifier, key)
         }),
     )
     for (const profile of otherIDs.concat(myIDs)) {
-        const ec_id = EC_IDMap.get(profile.identifier)!
+        const ec_id = attachRelationMap.get(profile.identifier)!
         if (profile.publicKey) {
             updateOrCreatePersonaRecord(personaMap, ec_id, profile as PersonRecordPublic, jwkMap)
         }
-        updateOrCreateProfileRecord(profilesMap, EC_IDMap, localKeysMap, profile)
+        updateOrCreateProfileRecord(profilesMap, attachRelationMap, localKeysMap, profile)
     }
 
-    const t: IDBPTransaction<any, any> = (await persona.PersonaDBAccess()).transaction(
-        ['personas', 'profiles'],
-        'readwrite',
-    )
-
-    for (const [v, i] of personaMap) {
-        await persona.createPersonaDB(i, t)
-    }
-    for (const [v, i] of profilesMap) {
-        await persona.createProfileDB(i, t)
-    }
+    return [personaMap, profilesMap, attachRelationMap] as const
 }
 
 function updateOrCreatePersonaRecord(
@@ -63,7 +101,9 @@ function updateOrCreatePersonaRecord(
         if (profile.privateKey) {
             rec.privateKey = cryptoKeyMap.get(profile.privateKey)!
         }
-        rec.linkedProfiles.set(profile.identifier, { connectionConfirmState: 'pending' })
+        rec.linkedProfiles.set(profile.identifier, {
+            connectionConfirmState: 'pending',
+        })
     } else {
         map.set(ec_id, {
             privateKey: cryptoKeyMap.get(profile.privateKey!)!,
@@ -73,7 +113,9 @@ function updateOrCreatePersonaRecord(
             linkedProfiles: new IdentifierMap(new Map()),
             identifier: ec_id,
         })
-        map.get(ec_id)!.linkedProfiles.set(profile.identifier, { connectionConfirmState: 'pending' })
+        map.get(ec_id)!.linkedProfiles.set(profile.identifier, {
+            connectionConfirmState: 'pending',
+        })
     }
 }
 function updateOrCreateProfileRecord(
