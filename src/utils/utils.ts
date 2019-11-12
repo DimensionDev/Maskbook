@@ -40,7 +40,7 @@ export function dispatchCustomEvents<T extends keyof CustomEvents>(event: T, ...
  * @param bytes
  */
 export async function pasteImageToActiveElements(bytes: Uint8Array) {
-    return dispatchCustomEvents('paste', { type: 'image', text: bytes.toString() })
+    return dispatchCustomEvents('paste', { type: 'image', value: Array.from(bytes) })
 }
 
 Object.assign(globalThis, { dispatchCustomEvents })
