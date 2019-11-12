@@ -89,6 +89,25 @@ export async function queryPersonasDB(
 }
 
 /**
+ * Query many Personas.
+ */
+export async function queryPersonasWithPrivateKey(
+    t?: IDBPTransaction<PersonaDB, ['personas']>,
+): Promise<PersonaRecord[]> {
+    t = t || (await db()).transaction('personas')
+    const records: PersonaRecord[] = []
+    records.push(
+        ...(
+            await t
+                .objectStore('personas')
+                .index('hasPrivateKey')
+                .getAll(IDBKeyRange.only('yes'))
+        ).map(personaRecordOutDb),
+    )
+    return records
+}
+
+/**
  * Update an existing Persona record.
  * @param record The partial record to be merged
  */
@@ -128,12 +147,36 @@ export async function updatePersonaDB(
 
 /**
  * Delete a Persona
- * Don't implement this kind of function.
  */
-export function deletePersonaDB(id: never, t?: IDBPTransaction<PersonaDB, ['personas']>): never {
-    throw new Error(
-        `If you want to remove a persona, you should also detach all of the profiles connected to it. That function will remove the persona if there is 0 profiles connecting.`,
-    )
+export async function deletePersonaDB(
+    id: PersonaIdentifier,
+    confirm?: 'delete even with private' | "don't delete if have private key",
+    t?: IDBPTransaction<PersonaDB, ['personas']>,
+): Promise<void> {
+    t = t || (await db()).transaction('personas', 'readwrite')
+    const r = await t.objectStore('personas').get(id.toText())
+    if (!r) return
+    if (r.linkedProfiles.size !== 0)
+        throw new Error(`If you want to remove a persona, you should also detach all of the profiles connected to it.`)
+    if (confirm !== 'delete even with private' && r.privateKey)
+        throw new TypeError('Cannot delete a persona with a private key')
+    await t.objectStore('personas').delete(id.toText())
+}
+/**
+ * Delete a Persona
+ * @returns a boolean. true: the record no longer exists; false: the record is kept.
+ */
+export async function safeDeletePersonaDB(
+    id: PersonaIdentifier,
+    t?: IDBPTransaction<PersonaDB, ['personas']>,
+): Promise<boolean> {
+    t = t || (await db()).transaction('personas', 'readwrite')
+    const r = await t.objectStore('personas').get(id.toText())
+    if (!r) return true
+    if (r.linkedProfiles.size !== 0) return false
+    if (r.privateKey) return false
+    await t.objectStore('personas').delete(id.toText())
+    return true
 }
 
 /**
@@ -206,20 +249,69 @@ export async function updateProfileDB(
     t = t || (await db()).transaction(['profiles', 'personas'], 'readwrite')
     const old = await t.objectStore('profiles').get(updating.identifier.toText())
     if (!old) throw new Error('Updating a non exists record')
-    let linkedPersona: PersonaRecordDb | undefined = undefined
-    if (updating.linkedPersona) {
-        linkedPersona = await t.objectStore('personas').get(updating.linkedPersona.toText())
-        if (linkedPersona === undefined) {
-            // TODO: what to do?
-        } else {
-            // TODO: what to do?
-        }
+
+    if ('linkedPersona' in updating) {
+        throw new TypeError('Use attachProfileDB or deattachProfileDB to update the linkedPersona')
     }
     const nextRecord: ProfileRecordDB = profileToDB({
         ...profileOutDB(old),
         ...updating,
     })
     await t.objectStore('profiles').put(nextRecord)
+}
+
+/**
+ * detach a profile.
+ */
+export async function detachProfileDB(
+    identifier: ProfileIdentifier,
+    t?: IDBPTransaction<PersonaDB, ('profiles' | 'personas')[]>,
+): Promise<void> {
+    t = t || (await db()).transaction(['profiles', 'personas'], 'readwrite')
+    const profile = await t.objectStore('profiles').get(identifier.toText())
+    if (!profile?.linkedPersona) return
+
+    const ec_id = profile.linkedPersona.toText()
+    const persona = await t.objectStore('personas').get(ec_id)
+    persona?.linkedProfiles.delete(ec_id)
+
+    if (persona) {
+        if (await safeDeletePersonaDB(profile.linkedPersona, t as any)) {
+            // persona deleted
+        } else {
+            // update persona
+            await t.objectStore('personas').put(persona)
+        }
+    }
+
+    // update profile
+    delete profile.linkedPersona
+    await t.objectStore('profiles').put(profile)
+}
+
+/**
+ * attach a profile.
+ */
+export async function attachProfileDB(
+    identifier: ProfileIdentifier,
+    attachTo: PersonaIdentifier,
+    data: LinkedProfileDetails,
+    t?: IDBPTransaction<PersonaDB, ('profiles' | 'personas')[]>,
+): Promise<void> {
+    t = t || (await db()).transaction(['profiles', 'personas'], 'readwrite')
+    const profile = await queryProfileDB(identifier, t as any)
+    const persona = await queryPersonaDB(attachTo, t as any)
+    if (!profile || !persona) return
+
+    if (profile.linkedPersona !== undefined && profile.linkedPersona.equals(attachTo)) {
+        await detachProfileDB(identifier, t)
+    }
+
+    profile.linkedPersona = attachTo
+    persona.linkedProfiles.set(identifier, data)
+
+    await t.objectStore('profiles').put(profileToDB(profile))
+    await t.objectStore('personas').put(personaRecordToDB(persona))
 }
 
 /**
