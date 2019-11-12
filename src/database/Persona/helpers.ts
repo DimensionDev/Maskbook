@@ -7,6 +7,10 @@ import {
     queryProfileDB,
     queryPersonaDB,
     queryPersonasDB,
+    PersonaDBAccess,
+    detachProfileDB,
+    deletePersonaDB,
+    safeDeletePersonaDB,
 } from './Persona.db'
 import { IdentifierMap } from '../IdentifierMap'
 import { getAvatarDataURL } from '../helpers/avatar'
@@ -28,9 +32,11 @@ export function personaRecordToPersona(record: PersonaRecord): Persona {
     const rec = { ...record }
     delete rec.localKey
     delete rec.publicKey
+    const hasPrivateKey = !!rec.privateKey
     delete rec.privateKey
     return {
         ...rec,
+        hasPrivateKey,
     }
 }
 
@@ -60,6 +66,7 @@ export async function queryPersona(identifier: PersonaIdentifier): Promise<Perso
         createdAt: new Date(),
         updatedAt: new Date(),
         linkedProfiles: new IdentifierMap(new Map()),
+        hasPrivateKey: false,
     }
 }
 
@@ -77,4 +84,15 @@ export async function queryProfilesWithQuery(query?: Parameters<typeof queryProf
 export async function queryPersonasWithQuery(query?: Parameters<typeof queryPersonasDB>[0]): Promise<Persona[]> {
     const _ = await queryPersonasDB(query || (_ => true))
     return _.map(personaRecordToPersona)
+}
+
+export async function deletePersona(id: PersonaIdentifier, confirm: 'delete even with private' | 'safe delete') {
+    const t = (await PersonaDBAccess()).transaction(['profiles', 'personas'], 'readwrite')
+    const d = await queryPersonaDB(id, t as any)
+    if (!d) return
+    for (const e of d.linkedProfiles) {
+        await detachProfileDB(e[0], t as any)
+    }
+    if (confirm === 'delete even with private') await deletePersonaDB(id, 'delete even with private', t as any)
+    else if (confirm === 'safe delete') await safeDeletePersonaDB(id, t as any)
 }
