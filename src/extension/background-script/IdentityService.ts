@@ -1,4 +1,4 @@
-import { queryProfilesWithQuery, personaRecordToPersona } from '../../database'
+import { queryProfilesWithQuery, personaRecordToPersona, updateOrCreateProfile, storeAvatar } from '../../database'
 import { ProfileIdentifier, PersonaIdentifier } from '../../database/type'
 import { Profile, Persona } from '../../database/Persona/types'
 import { queryPersonaDB, deleteProfileDB, queryPersonasDB } from '../../database/Persona/Persona.db'
@@ -13,14 +13,18 @@ export { queryProfile } from '../../database'
 export function queryProfiles(network?: string): Promise<Profile[]> {
     return queryProfilesWithQuery(network)
 }
-export declare function updateProfileInfo(
+export function updateProfileInfo(
     identifier: ProfileIdentifier,
     data: {
         nickname?: string
         avatarURL?: string
         forceUpdateAvatar?: boolean
     },
-): Promise<void>
+): Promise<void> {
+    if (data.nickname) return updateOrCreateProfile({ identifier, nickname: data.nickname })
+    if (data.avatarURL) return storeAvatar(identifier, data.avatarURL, data.forceUpdateAvatar)
+    return Promise.resolve()
+}
 export function removeProfile(id: ProfileIdentifier): Promise<void> {
     return deleteProfileDB(id)
 }

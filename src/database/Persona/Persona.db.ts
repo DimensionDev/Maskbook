@@ -184,17 +184,11 @@ export async function safeDeletePersonaDB(
  */
 export async function createProfileDB(
     record: ProfileRecord,
-    t?: IDBPTransaction<PersonaDB, ['profiles', 'personas']>,
+    t?: IDBPTransaction<PersonaDB, ['profiles']>,
 ): Promise<void> {
-    t = t || (await db()).transaction(['profiles', 'personas'], 'readwrite')
+    t = t || (await db()).transaction(['profiles'], 'readwrite')
     if (record.linkedPersona) {
-        const persona = await t.objectStore('personas').get(record.linkedPersona.toText())
-        if (!persona) {
-            // TODO: should we throw or create a profile for them?
-            throw new Error('Creating a new profile that connected to a not recorded persona')
-        }
-        persona.linkedProfiles.set(record.identifier.toText(), { connectionConfirmState: 'pending' })
-        await t.objectStore('personas').put(persona)
+        throw new TypeError('Please call attachProfileDB')
     }
     await t.objectStore('profiles').add(profileToDB(record))
 }
@@ -244,9 +238,9 @@ export async function queryProfilesDB(
  */
 export async function updateProfileDB(
     updating: Partial<ProfileRecord> & Pick<ProfileRecord, 'identifier'>,
-    t?: IDBPTransaction<PersonaDB, ('profiles' | 'personas')[]>,
+    t?: IDBPTransaction<PersonaDB, ['profiles']>,
 ): Promise<void> {
-    t = t || (await db()).transaction(['profiles', 'personas'], 'readwrite')
+    t = t || (await db()).transaction('profiles', 'readwrite')
     const old = await t.objectStore('profiles').get(updating.identifier.toText())
     if (!old) throw new Error('Updating a non exists record')
 
