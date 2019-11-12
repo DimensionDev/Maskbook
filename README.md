@@ -2,7 +2,7 @@
 
 Encrypt your posts & chats on You-Know-Where. Allow only your friends to decrypt.
 
-For general introductions, see Maskbook.com(https://maskbook.com/).
+For general introductions, see [Maskbook.com](https://maskbook.com/).
 
 ## Downloads
 
@@ -20,7 +20,7 @@ For general introductions, see Maskbook.com(https://maskbook.com/).
 
 - [Twitter](https://twitter.com/ProjectMaskbook)
 - [Facebook](https://www.facebook.com/realmaskbook)
-- [Report Bug](https://github.com/DimensionDev/Maskbook-Talks/issues/new?template=bug.md&assignee=jackworks&projects=Workflow/3&title=%5BBug%5D%20)
+- [Report Bug](https://github.com/DimensionDev/Maskbook/issues/new?template=bug.md&assignees=jack-works&projects=DimensionDev/Maskbook/3&title=%5BBug%5D%20&labels=Type%3A%20Bug)
 
 ## Donation
 
