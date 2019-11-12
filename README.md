@@ -27,7 +27,7 @@ For general introductions, see Maskbook.com(https://maskbook.com/).
 Help us by donating us by:
 
 - Bitcoin: `3PRrXj1HTXDc4j9SCQZ6hovpa74iimqtgX`
-- Ethereum: `0xD71c7150962fd484a4291a193c85426Df9EaABbB`a
+- Ethereum: `0xD71c7150962fd484a4291a193c85426Df9EaABbB`
 
 ## Documentation for developers
 
