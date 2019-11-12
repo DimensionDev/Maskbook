@@ -12,9 +12,14 @@ import {
     queryPeopleDB,
     storeLocalKeyDB,
     storeMyIdentityDB,
+    PersonRecord,
 } from '../../database/people'
-import { BackupJSONFileLatest, JSON_HINT_FOR_POWER_USER } from '../../utils/type-transform/BackupFile'
-import { PersonIdentifier } from '../../database/type'
+import {
+    BackupJSONFileLatest,
+    JSON_HINT_FOR_POWER_USER,
+    UpgradeBackupJSONFile,
+} from '../../utils/type-transform/BackupFile'
+import { PersonIdentifier, ProfileIdentifier } from '../../database/type'
 import { MessageCenter } from '../../utils/messages'
 import getCurrentNetworkWorker from '../../social-network/utils/getCurrentNetworkWorker'
 import { SocialNetworkUI } from '../../social-network/ui'
@@ -24,8 +29,10 @@ import {
     generate_ECDH_256k1_KeyPair_ByMnemonicWord,
     recover_ECDH_256k1_KeyPair_ByMnemonicWord,
 } from '../../utils/mnemonic-code'
-import { derive_AES_GCM_256_Key_From_PBKDF2, import_PBKDF2_Key } from '../../utils/crypto.subtle'
-import { CryptoKeyToJsonWebKey } from '../../utils/type-transform/CryptoKey-JsonWebKey'
+import { derive_AES_GCM_256_Key_From_PBKDF2, import_PBKDF2_Key, import_ECDH_256k1_Key } from '../../utils/crypto.subtle'
+import { JsonWebKeyToCryptoKey, CryptoKeyToJsonWebKey } from '../../utils/type-transform/CryptoKey-JsonWebKey'
+import { migrateHelper_operateDB } from '../../database/migrate/people.to.persona'
+import { IdentifierMap } from '../../database/IdentifierMap'
 
 OnlyRunInContext('background', 'WelcomeService')
 async function generateBackupJSON(
@@ -241,4 +248,51 @@ export async function openWelcomePage(id?: SocialNetworkUI['lastRecognizedIdenti
 
 export async function openOptionsPage(route: string) {
     return browser.tabs.create({ url: browser.runtime.getURL('/index.html#' + route) })
+}
+
+/**
+ * Restore the backup
+ */
+export async function restoreBackup(json: object, whoAmI?: PersonIdentifier): Promise<void> {
+    function mapID(x: { network: string; userId: string }): PersonIdentifier {
+        return new PersonIdentifier(x.network, x.userId)
+    }
+    const data = UpgradeBackupJSONFile(json, whoAmI)
+    if (!data) throw new TypeError(geti18nString('service_invalid_backup_file'))
+
+    const localKeyMap = new IdentifierMap<ProfileIdentifier, CryptoKey>(new Map())
+
+    const myIdentitiesInBackup = Promise.all(
+        data.whoami.map<Promise<PersonRecordPublicPrivate>>(async rec => {
+            const profileIdentifier = mapID(rec)
+            if (rec.localKey) localKeyMap.set(profileIdentifier, (await JsonWebKeyToCryptoKey(rec.localKey))!)
+            return {
+                identifier: profileIdentifier,
+                groups: [],
+                nickname: rec.nickname,
+                previousIdentifiers: [],
+                publicKey: await import_ECDH_256k1_Key(rec.publicKey),
+                privateKey: await import_ECDH_256k1_Key(rec.privateKey),
+            }
+        }),
+    )
+
+    const people = Promise.all(
+        (data.people || []).map<Promise<PersonRecord>>(async rec => {
+            const id = new PersonIdentifier(rec.network, rec.userId)
+            return {
+                identifier: id,
+                groups: [],
+                nickname: rec.nickname,
+                previousIdentifiers: [],
+                publicKey: await import_ECDH_256k1_Key(rec.publicKey),
+            }
+        }),
+    )
+
+    await migrateHelper_operateDB(
+        await myIdentitiesInBackup,
+        await people,
+        async identifier => localKeyMap.get(identifier) ?? null,
+    )
 }

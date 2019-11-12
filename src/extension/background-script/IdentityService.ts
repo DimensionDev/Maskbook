@@ -59,10 +59,6 @@ export { attachProfileDB as attachProfile, detachProfileDB as detachProfile } fr
 //#endregion
 
 /**
- * Restore the backup
- */
-export declare function restoreBackup(json: object, whoAmI?: ProfileIdentifier): Promise<void>
-/**
  * Resolve my possible identity
  */
 export async function resolveIdentity(identifier: ProfileIdentifier): Promise<void> {

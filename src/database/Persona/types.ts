@@ -12,3 +12,7 @@ export interface Persona extends TypedOmit<PersonaRecord, 'localKey' | 'publicKe
     readonly linkedProfiles: ReadonlyIdentifierMap<ProfileIdentifier, LinkedProfileDetails>
     readonly hasPrivateKey: boolean
 }
+
+export interface PersonaWithPrivateKey
+    extends Omit<PersonaRecord, 'privateKey'>,
+        Required<Pick<PersonaRecord, 'privateKey'>> {}
