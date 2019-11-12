@@ -1,7 +1,13 @@
 import { queryProfilesWithQuery, personaRecordToPersona, updateOrCreateProfile, storeAvatar } from '../../database'
 import { ProfileIdentifier, PersonaIdentifier } from '../../database/type'
 import { Profile, Persona } from '../../database/Persona/types'
-import { queryPersonaDB, deleteProfileDB, queryPersonasDB } from '../../database/Persona/Persona.db'
+import {
+    queryPersonaDB,
+    deleteProfileDB,
+    queryPersonasDB,
+    queryProfilesDB,
+    createProfileDB,
+} from '../../database/Persona/Persona.db'
 
 export { writePersonOnGun as writeProfileOnGun } from '../../network/gun/version.2/people'
 
@@ -56,4 +62,17 @@ export declare function restoreBackup(json: object, whoAmI?: ProfileIdentifier):
 /**
  * Resolve my possible identity
  */
-export declare function resolveIdentity(identifier: ProfileIdentifier): Promise<void>
+export async function resolveIdentity(identifier: ProfileIdentifier): Promise<void> {
+    const unknown = new ProfileIdentifier(identifier.network, '$unknown')
+    const self = new ProfileIdentifier(identifier.network, '$self')
+
+    const r = await queryProfilesDB(x => x.identifier.equals(unknown) || x.identifier.equals(self))
+    const final = { ...r.reduce((p, c) => ({ ...p, ...c })), identifier }
+    try {
+        await createProfileDB(final)
+        await deleteProfileDB(unknown).catch(() => {})
+        await deleteProfileDB(self).catch(() => {})
+    } catch {
+        // the profile already exists
+    }
+}
