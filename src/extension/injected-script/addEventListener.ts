@@ -1,6 +1,6 @@
 import { CustomEventId } from '../../utils/constants'
 export interface CustomEvents {
-    paste: [string | { type: 'image'; text: string }]
+    paste: [string | { type: 'image'; value: Array<number> }]
     input: [string]
 }
 {
@@ -36,7 +36,7 @@ export interface CustomEvents {
                 e.clipboardData!.setData('text/plain', textOrImage)
                 return getEvent(e, { defaultPrevented: false, preventDefault() {} })
             } else if (textOrImage.type === 'image') {
-                const binary = Uint8Array.from(textOrImage.text.split(',').map(i => Number(i)))
+                const binary = Uint8Array.from(textOrImage.value)
                 const blob = new Blob([binary], { type: 'image/png' })
                 const file = new File([blob], 'image.png', { lastModified: Date.now(), type: 'image/png' })
                 const dt = new Proxy(new DataTransfer(), {
