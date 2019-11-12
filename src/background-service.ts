@@ -11,11 +11,20 @@ import elliptic from 'elliptic'
  */
 import * as CryptoService from './extension/background-script/CryptoService'
 import * as WelcomeService from './extension/background-script/WelcomeService'
+import * as IdentityService from './extension/background-script/IdentityService'
+import * as UserGroupService from './extension/background-script/UserGroupService'
 import * as PeopleService from './extension/background-script/PeopleService'
 import * as SteganographyService from './extension/background-script/SteganographyService'
 import { decryptFromMessageWithProgress } from './extension/background-script/CryptoServices/decryptFrom'
 import { initAutoShareToFriends } from './extension/background-script/Jobs/AutoShareToFriends'
-Object.assign(window, { CryptoService, WelcomeService, PeopleService, SteganographyService })
+Object.assign(window, {
+    CryptoService,
+    WelcomeService,
+    PeopleService,
+    SteganographyService,
+    IdentityService,
+    UserGroupService,
+})
 Object.assign(window, {
     ServicesWithProgress: {
         decryptFrom: decryptFromMessageWithProgress,
