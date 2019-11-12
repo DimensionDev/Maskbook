@@ -84,17 +84,19 @@ export const postImageParser = async (node: HTMLElement) => {
     const { currentIdentity } = getActivatedUI()
     const pass = currentIdentity.value ? currentIdentity.value.identifier.toText() : ''
 
-    return (await Promise.all(
-        imgUrls
-            .map(async url => {
-                const image = new Uint8Array(await downloadUrl(url))
-                const content = await Services.Steganography.decodeImage(image, {
-                    pass,
+    return (
+        await Promise.all(
+            imgUrls
+                .map(async url => {
+                    const image = new Uint8Array(await downloadUrl(url))
+                    const content = await Services.Steganography.decodeImage(image, {
+                        pass,
+                    })
+                    return /https:\/\/.+\..+\/%20(.+)%40/.test(content) ? content : ''
                 })
-                return /https:\/\/.+\..+\/%20(.+)%40/.test(content) ? content : ''
-            })
-            .filter(Boolean),
-    )).join('\n')
+                .filter(Boolean),
+        )
+    ).join('\n')
 }
 
 /**

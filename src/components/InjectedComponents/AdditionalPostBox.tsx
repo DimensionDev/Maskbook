@@ -149,7 +149,7 @@ export function AdditionalPostBox(props: AdditionalPostBoxProps) {
                 }
                 Services.Crypto.publishPostAESKey(token)
             },
-            [currentIdentity],
+            [currentIdentity, isSteganography],
         ),
     )
 
