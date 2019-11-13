@@ -7,7 +7,7 @@ import { ServicesWithProgress } from '../../extension/service'
 import { geti18nString } from '../../utils/i18n'
 import { makeStyles } from '@material-ui/styles'
 import { Box, Link, useMediaQuery, useTheme } from '@material-ui/core'
-import { Person } from '../../database'
+import { Profile } from '../../database'
 import { Identifier, PersonIdentifier } from '../../database/type'
 import { NotSetupYetPrompt } from '../shared/NotSetupYetPrompt'
 import {
@@ -26,9 +26,9 @@ import { BannerProps } from '../Welcomes/Banner'
 
 export interface DecryptPostSuccessProps extends withClasses<KeysInferFromUseStyles<typeof useSuccessStyles>> {
     data: { signatureVerifyResult: boolean; content: string }
-    requestAppendRecipients?(to: Person[]): Promise<void>
-    alreadySelectedPreviously: Person[]
-    people: Person[]
+    requestAppendRecipients?(to: Profile[]): Promise<void>
+    alreadySelectedPreviously: Profile[]
+    people: Profile[]
     AdditionalContentProps?: Partial<AdditionalContentProps>
 }
 
@@ -124,9 +124,9 @@ export interface DecryptPostProps {
     postBy: PersonIdentifier
     whoAmI: PersonIdentifier
     encryptedText: string
-    people: Person[]
-    alreadySelectedPreviously: Person[]
-    requestAppendRecipients?(to: Person[]): Promise<void>
+    people: Profile[]
+    alreadySelectedPreviously: Profile[]
+    requestAppendRecipients?(to: Profile[]): Promise<void>
     disableSuccessDecryptionCache?: boolean
     successComponent?: React.ComponentType<DecryptPostSuccessProps>
     successComponentProps?: Partial<DecryptPostSuccessProps>
@@ -154,7 +154,7 @@ export function DecryptPost(props: DecryptPostProps) {
     const requestAppendRecipientsWrapped = useMemo(() => {
         if (!postBy.equals(whoAmI)) return undefined
         if (!requestAppendRecipients) return undefined
-        return async (people: Person[]) => {
+        return async (people: Profile[]) => {
             await requestAppendRecipients!(people)
             await sleep(1500)
         }

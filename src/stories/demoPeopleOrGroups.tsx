@@ -1,6 +1,6 @@
-import { Person, Group } from '../database'
+import { Profile, Group } from '../database'
 import { PersonIdentifier, GroupIdentifier } from '../database/type'
-export const demoPeople: Person[] = [
+export const demoPeople: Profile[] = [
     {
         fingerprint: 'FDFE333CE20ED446AD88F3C8BA3AD1AA5ECAF521',
         avatar: 'https://avatars3.githubusercontent.com/u/5390719?s=460&v=4',

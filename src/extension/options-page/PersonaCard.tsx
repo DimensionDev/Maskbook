@@ -5,7 +5,7 @@ import CardActions from '@material-ui/core/CardActions'
 import CardContent from '@material-ui/core/CardContent'
 import Button from '@material-ui/core/Button'
 import Typography from '@material-ui/core/Typography'
-import { Person } from '../../database'
+import { Profile } from '../../database'
 import { Divider, IconButton } from '@material-ui/core'
 import Services from '../service'
 import { definedSocialNetworkUIs } from '../../social-network/ui'
@@ -20,7 +20,7 @@ import { geti18nString } from '../../utils/i18n'
 import classNames from 'classnames'
 
 interface Props {
-    identity: Person
+    identity: Profile
 }
 
 const useStyles = makeStyles(theme =>

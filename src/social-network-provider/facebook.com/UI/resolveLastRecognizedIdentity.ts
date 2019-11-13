@@ -2,7 +2,7 @@ import { LiveSelector, MutationObserverWatcher } from '@holoflows/kit'
 import { PersonIdentifier } from '../../../database/type'
 import { SocialNetworkUI } from '../../../social-network/ui'
 import { getPersonIdentifierAtFacebook } from '../getPersonIdentifierAtFacebook'
-import { Person } from '../../../database'
+import { Profile } from '../../../database'
 
 export function resolveLastRecognizedIdentityFacebook(this: SocialNetworkUI) {
     const ref = this.lastRecognizedIdentity
@@ -31,7 +31,7 @@ const myUsernameLiveSelectorPC = new LiveSelector().querySelector<HTMLAnchorElem
     `[aria-label="Facebook"][role="navigation"] [data-click="profile_icon"] a`,
 )
 
-type part = Pick<Person, 'identifier' | 'nickname' | 'avatar'>
+type part = Pick<Profile, 'identifier' | 'nickname' | 'avatar'>
 
 const myUsernameLiveSelectorOnMobile = new LiveSelector()
     .querySelectorAll('article')

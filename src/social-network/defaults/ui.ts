@@ -4,15 +4,15 @@ import { SocialNetworkUIDataSources } from '../ui'
 import { ValueRef } from '@holoflows/kit'
 import { PersonIdentifier } from '../../database/type'
 import { cloneDeep } from 'lodash-es'
-import { Person, Group } from '../../database'
+import { Profile, Group } from '../../database'
 import { MaskbookDarkTheme, MaskbookLightTheme } from '../../utils/theme'
 import { PersonArrayComparer, GroupArrayComparer } from '../../utils/comparer'
 
 const defaultDataSources: Required<SocialNetworkUIDataSources> = cloneDeep({
-    friendsRef: new ValueRef([] as Person[], PersonArrayComparer),
-    myIdentitiesRef: new ValueRef([] as Person[], PersonArrayComparer),
+    friendsRef: new ValueRef([] as Profile[], PersonArrayComparer),
+    myIdentitiesRef: new ValueRef([] as Profile[], PersonArrayComparer),
     groupsRef: new ValueRef([] as Group[], GroupArrayComparer),
-    currentIdentity: new ValueRef<Person | null>(null),
+    currentIdentity: new ValueRef<Profile | null>(null),
     lastRecognizedIdentity: new ValueRef({ identifier: PersonIdentifier.unknown }),
     posts: new Map(),
 })

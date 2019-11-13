@@ -1,9 +1,9 @@
 import { MessageCenter } from '../../utils/messages'
 import Services from '../../extension/service'
 import { SocialNetworkUI } from '../ui'
-import { Person } from '../../database'
+import { Profile } from '../../database'
 
-function hasFingerprint(x: Person) {
+function hasFingerprint(x: Profile) {
     return !!x.fingerprint
 }
 export function InitFriendsValueRef(self: SocialNetworkUI, network: string) {
