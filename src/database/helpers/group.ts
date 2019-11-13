@@ -1,6 +1,5 @@
 import { GroupRecord, createUserGroupDatabase, updateUserGroupDatabase, queryUserGroupsDatabase } from '../group'
 import { ProfileIdentifier, GroupIdentifier, PreDefinedVirtualGroupNames } from '../type'
-import { Person } from './person'
 import { Profile } from '..'
 
 export interface Group extends GroupRecord {

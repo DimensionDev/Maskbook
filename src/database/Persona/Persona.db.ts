@@ -20,11 +20,10 @@ import { IdentifierMap } from '../IdentifierMap'
  * @keys inline, {@link ProfileRecord.identifier}
  */
 
-OnlyRunInContext('background', 'Persona db')
-
 const db = (function() {
     let db: IDBPDatabase<PersonaDB> = undefined as any
     return async () => {
+        OnlyRunInContext('background', 'Persona db')
         if (typeof db === 'undefined')
             return openDB<PersonaDB>('maskbook-persona', 1, {
                 upgrade(db, oldVersion, newVersion, transaction) {
@@ -57,6 +56,16 @@ export async function createPersonaDB(
 ): Promise<void> {
     t = t || (await db()).transaction('personas', 'readwrite')
     t.objectStore('personas').add(personaRecordToDB(record))
+}
+
+export async function queryPersonaByProfileDB(
+    query: ProfileIdentifier,
+    t?: IDBPTransaction<PersonaDB, ['profiles', 'personas']>,
+): Promise<PersonaRecord | null> {
+    t = t || (await db()).transaction(['profiles', 'personas'])
+    const x = await t.objectStore('profiles').get(query.toText())
+    if (!x?.linkedPersona) return null
+    return queryPersonaDB(x.linkedPersona, t as any)
 }
 
 /**

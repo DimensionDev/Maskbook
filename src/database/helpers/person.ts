@@ -41,26 +41,9 @@ export async function queryPerson(identifier: ProfileIdentifier): Promise<Person
     return personRecordToPerson(person)
 }
 
-/**
- * Select a set of people
- */
-export async function queryPeopleWithQuery(query?: Parameters<typeof queryPeopleDB>[0]): Promise<Person[]> {
-    const result = await queryPeopleDB(query)
-    return Promise.all(result.map(personRecordToPerson))
-}
-
-export const calculateFingerprint = memoize(async function(_key: CryptoKey) {
+const calculateFingerprint = memoize(async function(_key: CryptoKey) {
     const key = await CryptoKeyToJsonWebKey(_key)
     if (!key) return 'Fingerprint not available'
     const hash = await crypto.subtle.digest('SHA-256', encodeText(key.x! + key.y))
     return encodeArrayBuffer(hash)
 })
-
-/**
- * Get your id at a network even it is unresolved
- */
-export async function getMyPrivateKey(whoAmI: ProfileIdentifier) {
-    const r1 = await queryMyIdentityAtDB(whoAmI)
-    if (r1) return r1
-    return queryMyIdentityAtDB(new ProfileIdentifier(whoAmI.network, '$self'))
-}

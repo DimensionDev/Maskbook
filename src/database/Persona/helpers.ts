@@ -13,9 +13,11 @@ import {
     safeDeletePersonaDB,
     updateProfileDB,
     createProfileDB,
+    queryPersonaByProfileDB,
 } from './Persona.db'
 import { IdentifierMap } from '../IdentifierMap'
 import { getAvatarDataURL } from '../helpers/avatar'
+import { JsonWebKeyToCryptoKey } from '../../utils/type-transform/CryptoKey-JsonWebKey'
 
 export async function profileRecordToProfile(record: ProfileRecord): Promise<Profile> {
     const rec = { ...record }
@@ -111,4 +113,23 @@ export async function updateOrCreateProfile(rec: Pick<Profile, 'identifier'> & P
     }
     if (r) await updateProfileDB({ ...r, ...rec, updatedAt: new Date() }, t)
     else await createProfileDB(e, t)
+}
+
+export async function queryPersonaByProfile(i: ProfileIdentifier) {
+    return (await queryProfile(i)).linkedPersona
+}
+
+export function queryPersonaRecord(i: ProfileIdentifier | PersonaIdentifier): Promise<PersonaRecord | null> {
+    return i instanceof ProfileIdentifier ? queryPersonaByProfileDB(i) : queryPersonaDB(i)
+}
+
+export async function queryPublicKey(i: ProfileIdentifier | PersonaIdentifier): Promise<CryptoKey | undefined> {
+    const jwk = (await queryPersonaRecord(i))?.publicKey
+    if (jwk) return JsonWebKeyToCryptoKey(jwk)
+    return undefined
+}
+export async function queryPrivateKey(i: ProfileIdentifier | PersonaIdentifier): Promise<CryptoKey | undefined> {
+    const jwk = (await queryPersonaRecord(i))?.privateKey
+    if (jwk) return JsonWebKeyToCryptoKey(jwk)
+    return undefined
 }
