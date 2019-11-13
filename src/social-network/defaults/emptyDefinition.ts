@@ -1,5 +1,5 @@
 import { GetContext, ValueRef } from '@holoflows/kit/es'
-import { PersonIdentifier } from '../../database/type'
+import { ProfileIdentifier } from '../../database/type'
 import { SocialNetworkUIDefinition } from '../ui'
 import { nop, nopWithUnmount } from '../../utils/utils'
 import { Profile, Group } from '../../database'
@@ -17,7 +17,7 @@ export const emptyDefinition: SocialNetworkUIDefinition = {
     },
     myIdentitiesRef: new ValueRef([] as Profile[], PersonArrayComparer),
     groupsRef: new ValueRef([] as Group[], GroupArrayComparer),
-    lastRecognizedIdentity: new ValueRef({ identifier: PersonIdentifier.unknown }),
+    lastRecognizedIdentity: new ValueRef({ identifier: ProfileIdentifier.unknown }),
     currentIdentity: new ValueRef<Profile | null>(null),
     init() {
         if (GetContext() === 'content') throw new Error('DO NOT use this in content script')

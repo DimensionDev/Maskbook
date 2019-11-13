@@ -2,7 +2,7 @@ import { injectCommentBoxDefaultFactory } from './injectCommentBox'
 import { injectPostCommentsDefault } from './injectComments'
 import { SocialNetworkUIDataSources } from '../ui'
 import { ValueRef } from '@holoflows/kit'
-import { PersonIdentifier } from '../../database/type'
+import { ProfileIdentifier } from '../../database/type'
 import { cloneDeep } from 'lodash-es'
 import { Profile, Group } from '../../database'
 import { MaskbookDarkTheme, MaskbookLightTheme } from '../../utils/theme'
@@ -13,7 +13,7 @@ const defaultDataSources: Required<SocialNetworkUIDataSources> = cloneDeep({
     myIdentitiesRef: new ValueRef([] as Profile[], PersonArrayComparer),
     groupsRef: new ValueRef([] as Group[], GroupArrayComparer),
     currentIdentity: new ValueRef<Profile | null>(null),
-    lastRecognizedIdentity: new ValueRef({ identifier: PersonIdentifier.unknown }),
+    lastRecognizedIdentity: new ValueRef({ identifier: ProfileIdentifier.unknown }),
     posts: new Map(),
 })
 

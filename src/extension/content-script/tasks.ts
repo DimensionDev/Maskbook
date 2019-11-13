@@ -1,6 +1,6 @@
 import { AutomatedTabTask } from '@holoflows/kit'
 import { getActivatedUI, SocialNetworkUI } from '../../social-network/ui'
-import { PersonIdentifier } from '../../database/type'
+import { ProfileIdentifier } from '../../database/type'
 import { disableOpenNewTabInBackgroundSettings } from '../../components/shared-settings/settings'
 import { memoizePromise } from '../../utils/memoize'
 
@@ -15,7 +15,7 @@ const tasks = AutomatedTabTask(
          * Access profile page
          * Get Profile
          */
-        getProfile: (identifier: PersonIdentifier) => getActivatedUI().taskGetProfile(identifier),
+        getProfile: (identifier: ProfileIdentifier) => getActivatedUI().taskGetProfile(identifier),
         /**
          * Access profile page
          * Paste text into bio

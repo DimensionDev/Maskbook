@@ -2,7 +2,7 @@ import { DOMProxy, LiveSelector, MutationObserverWatcher } from '@holoflows/kit'
 import { deconstructPayload } from '../../../utils/type-transform/Payload'
 import { getEmptyPostInfoByElement, PostInfo, SocialNetworkUI } from '../../../social-network/ui'
 import { isMobileFacebook } from '../isMobile'
-import { getPersonIdentifierAtFacebook } from '../getPersonIdentifierAtFacebook'
+import { getProfileIdentifierAtFacebook } from '../getPersonIdentifierAtFacebook'
 import { downloadUrl } from '../../../utils/utils'
 import Services from '../../../extension/service'
 
@@ -85,7 +85,7 @@ function getPostBy(node: DOMProxy, allowCollectInfo: boolean) {
         ? node.current.querySelectorAll('a')
         : [node.current.parentElement!.querySelectorAll('a')[1]]
     // side effect: save to service
-    return getPersonIdentifierAtFacebook(Array.from(dom), allowCollectInfo)
+    return getProfileIdentifierAtFacebook(Array.from(dom), allowCollectInfo)
 }
 function getPostID(node: DOMProxy): null | string {
     if (isMobileFacebook) {

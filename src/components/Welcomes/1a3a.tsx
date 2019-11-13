@@ -14,7 +14,7 @@ import {
 import WelcomeContainer from './WelcomeContainer'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import { useIsolatedChooseIdentity } from '../shared/ChooseIdentity'
-import { PersonIdentifier } from '../../database/type'
+import { ProfileIdentifier } from '../../database/type'
 import Navigation from './Navigation/Navigation'
 
 interface Props {
@@ -22,7 +22,7 @@ interface Props {
     next(): void
     onGenerateKey(password: string): void
     onRestoreByMnemonicWord(mnemonicWord: string, password: string): void
-    onConnectOtherPerson(target: PersonIdentifier): void
+    onConnectOtherPerson(target: ProfileIdentifier): void
     generatedMnemonicWord: string | null
     availableIdentityCount: number
 }

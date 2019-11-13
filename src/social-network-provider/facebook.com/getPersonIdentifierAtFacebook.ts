@@ -1,4 +1,4 @@
-import { PersonIdentifier } from '../../database/type'
+import { ProfileIdentifier } from '../../database/type'
 import Services from '../../extension/service'
 import { Profile } from '../../database'
 
@@ -18,11 +18,11 @@ type link = HTMLAnchorElement | null | undefined
  *      </a>
  *  ]
  */
-export function getPersonIdentifierAtFacebook(
+export function getProfileIdentifierAtFacebook(
     links: link[] | link,
     allowCollectInfo: boolean,
 ): Pick<Profile, 'identifier' | 'nickname' | 'avatar'> {
-    const unknown = { identifier: PersonIdentifier.unknown, avatar: undefined, nickname: undefined }
+    const unknown = { identifier: ProfileIdentifier.unknown, avatar: undefined, nickname: undefined }
     try {
         if (!Array.isArray(links)) links = [links]
         const result = links
@@ -31,7 +31,7 @@ export function getPersonIdentifierAtFacebook(
             .filter(x => x.id)
         const { dom, id, nickname } = result[0] || {}
         if (id) {
-            const result = new PersonIdentifier('facebook.com', id)
+            const result = new ProfileIdentifier('facebook.com', id)
             let avatar: HTMLImageElement | undefined = undefined
             try {
                 avatar = dom!.closest('.clearfix')!.parentElement!.querySelector('img')!

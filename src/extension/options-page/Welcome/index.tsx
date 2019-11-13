@@ -9,7 +9,7 @@ import Welcome1b1 from '../../../components/Welcomes/1b1'
 import Services from '../../service'
 import { RouteComponentProps, withRouter } from 'react-router'
 import { Dialog, useTheme, useMediaQuery, makeStyles } from '@material-ui/core'
-import { Identifier, PersonIdentifier } from '../../../database/type'
+import { Identifier, ProfileIdentifier } from '../../../database/type'
 import { ValueRef } from '@holoflows/kit/es'
 import { useValueRef } from '../../../utils/hooks/useValueRef'
 import { Profile } from '../../../database'
@@ -32,7 +32,7 @@ enum WelcomeState {
     RestoreKeypair,
 }
 const WelcomeActions = {
-    backupMyKeyPair(whoAmI: PersonIdentifier) {
+    backupMyKeyPair(whoAmI: ProfileIdentifier) {
         return Services.Welcome.backupMyKeyPair(whoAmI, { download: true, onlyBackupWhoAmI: false })
     },
     /**
@@ -40,7 +40,7 @@ const WelcomeActions = {
      * @param json - The backup file
      * @param id   - Who am I?
      */
-    restoreFromFile(json: BackupJSONFileLatest, id: PersonIdentifier): Promise<void> {
+    restoreFromFile(json: BackupJSONFileLatest, id: ProfileIdentifier): Promise<void> {
         // This request MUST BE sync or Firefox will reject this request
         return browser.permissions
             .request({ origins: json.grantedHostPermissions })
@@ -50,13 +50,13 @@ const WelcomeActions = {
                     : Promise.reject(new Error('required permission is not granted.')),
             )
     },
-    autoVerifyBio(network: PersonIdentifier, provePost: string) {
+    autoVerifyBio(network: ProfileIdentifier, provePost: string) {
         getCurrentNetworkWorkerService(network).autoVerifyBio!(network, provePost)
     },
-    autoVerifyPost(network: PersonIdentifier, provePost: string) {
+    autoVerifyPost(network: ProfileIdentifier, provePost: string) {
         getCurrentNetworkWorkerService(network).autoVerifyPost!(network, provePost)
     },
-    manualVerifyBio(user: PersonIdentifier, prove: string) {
+    manualVerifyBio(user: ProfileIdentifier, prove: string) {
         this.autoVerifyBio(user, prove)
     },
 }
@@ -74,7 +74,7 @@ interface Welcome {
     onFinish(reason: 'done' | 'quit'): void
     onGenerateKey(password: string): void
     onRestoreByMnemonicWord(words: string, password: string): void
-    onConnectOtherPerson(whoAmI: PersonIdentifier, target: PersonIdentifier): void
+    onConnectOtherPerson(whoAmI: ProfileIdentifier, target: ProfileIdentifier): void
     sideEffects: typeof WelcomeActions
 }
 function Welcome(props: Welcome) {
@@ -191,7 +191,7 @@ function Welcome(props: Welcome) {
 }
 const provePostRef = new ValueRef('')
 const personInferFromURLRef = new ValueRef<Profile>({
-    identifier: PersonIdentifier.unknown,
+    identifier: ProfileIdentifier.unknown,
     groups: [],
 })
 const selectedIdRef = new ValueRef<Profile>(personInferFromURLRef.value)
@@ -218,7 +218,7 @@ async function updateProveBio() {
 }
 
 export type Query = {
-    identifier: PersonIdentifier
+    identifier: ProfileIdentifier
     avatar?: string
     nickname?: string
 }
@@ -261,7 +261,7 @@ export default withRouter(function _WelcomePortal(props: RouteComponentProps) {
         const id = Identifier.fromString(identifier)
         if (id && id.equals(selectedId.identifier)) return
 
-        if (id instanceof PersonIdentifier) {
+        if (id instanceof ProfileIdentifier) {
             if (id.isUnknown) return
             Services.People.queryMyIdentities(id)
                 .then(([inDB = {} as Profile]) => {

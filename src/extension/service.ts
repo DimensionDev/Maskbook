@@ -2,7 +2,7 @@ import { AsyncCall, AsyncGeneratorCall, AsyncCallOptions } from 'async-call-rpc'
 import { GetContext, OnlyRunInContext } from '@holoflows/kit/es/Extension/Context'
 import * as MockService from './mock-service'
 import Serialization from '../utils/type-transform/Serialization'
-import { PersonIdentifier, GroupIdentifier, PostIdentifier, PostIVIdentifier } from '../database/type'
+import { ProfileIdentifier, GroupIdentifier, PostIdentifier, PostIVIdentifier } from '../database/type'
 import { getCurrentNetworkWorkerService } from './background-script/WorkerService'
 
 import tasks from './content-script/tasks'
@@ -72,7 +72,7 @@ export const ServicesWithProgress = AsyncGeneratorCall<ServicesWithProgress>(
 )
 
 Object.assign(globalThis, {
-    PersonIdentifier,
+    ProfileIdentifier,
     GroupIdentifier,
     PostIdentifier,
     PostIVIdentifier,

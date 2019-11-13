@@ -7,7 +7,7 @@ import { Avatar } from '../../../utils/components/Avatar'
 import MuiAvatar from '@material-ui/core/Avatar/Avatar'
 import GroupIcon from '@material-ui/icons/Group'
 import { useFriendsList } from '../../DataSource/useActivatedUI'
-import { PersonIdentifier } from '../../../database/type'
+import { ProfileIdentifier } from '../../../database/type'
 import { geti18nString, useIntlListFormat } from '../../../utils/i18n'
 import { isGroup } from './SelectPeopleAndGroupsUI'
 import { useResolveSpecialGroupName } from './resolveSpecialGroupName'
@@ -96,7 +96,7 @@ export function PersonOrGroupInList(props: PersonOrGroupInListProps) {
     )
 }
 
-function useNickNamesFromList(preview: readonly PersonIdentifier[]) {
+function useNickNamesFromList(preview: readonly ProfileIdentifier[]) {
     const people = useFriendsList()
     const userWithNames = React.useMemo(() => people.filter(x => x.nickname), [people])
 

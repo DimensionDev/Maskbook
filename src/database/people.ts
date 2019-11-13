@@ -5,20 +5,20 @@
  * # ObjectStore `people`:
  * @description Store Other people.
  * @type {PersonRecordInDatabase}
- * @keys inline, {@link PersonIdentifier.identifier}
+ * @keys inline, {@link Person.identifier}
  * @index network
  *
  * # ObjectStore `myself`:
  * @description Store my identities.
  * @type {PersonRecordInDatabase}
- * @keys inline, {@link PersonIdentifier.identifier}
+ * @keys inline, {@link Person.identifier}
  *
  * # ObjectStore `localKeys`:
  * @description Store local AES keys.
  * @type {Record<string, CryptoKey>} Record of <userId, CryptoKey>
  * @keys outline, string, which means network.
  */
-import { GroupIdentifier, Identifier, PersonIdentifier } from './type'
+import { GroupIdentifier, Identifier, ProfileIdentifier } from './type'
 import { DBSchema, openDB } from 'idb/with-async-ittr'
 import { CryptoKeyToJsonWebKey, JsonWebKeyToCryptoKey } from '../utils/type-transform/CryptoKey-JsonWebKey'
 import { MessageCenter, PersonUpdateEvent } from '../utils/messages'
@@ -34,11 +34,11 @@ OnlyRunInContext('background', 'People db')
 async function outDb({ identifier, publicKey, privateKey, ...rest }: PersonRecordInDatabase): Promise<PersonRecord> {
     // Restore prototype
     rest.previousIdentifiers &&
-        rest.previousIdentifiers.forEach(y => Object.setPrototypeOf(y, PersonIdentifier.prototype))
+        rest.previousIdentifiers.forEach(y => Object.setPrototypeOf(y, ProfileIdentifier.prototype))
     rest.groups.forEach(y => Object.setPrototypeOf(y, GroupIdentifier.prototype))
     const result: PersonRecord = {
         ...rest,
-        identifier: Identifier.fromString(identifier) as PersonIdentifier,
+        identifier: Identifier.fromString(identifier) as ProfileIdentifier,
     }
     if (publicKey) result.publicKey = await JsonWebKeyToCryptoKey(publicKey)
     if (privateKey) result.privateKey = await JsonWebKeyToCryptoKey(privateKey)
@@ -58,7 +58,7 @@ async function toDb({ publicKey, privateKey, ...rest }: PersonRecord): Promise<P
     return result
 }
 interface Base<db> {
-    identifier: IF<db, string, PersonIdentifier>
+    identifier: IF<db, string, ProfileIdentifier>
     publicKey?: IF<db, JsonWebKey, CryptoKey>
     privateKey?: IF<db, JsonWebKey, CryptoKey>
 }
@@ -73,7 +73,7 @@ export function isPersonRecordPublicPrivate(data: PersonRecord): data is PersonR
 }
 interface PersonRecordInDatabase extends Base<true> {
     network: string
-    previousIdentifiers?: PersonIdentifier[]
+    previousIdentifiers?: ProfileIdentifier[]
     nickname?: string
     groups: GroupIdentifier[]
 }
@@ -133,14 +133,14 @@ export async function storeNewPersonDB(record: PersonRecord): Promise<void> {
  * @deprecated
  */
 export async function queryPeopleDB(
-    query: ((key: PersonIdentifier, record: PersonRecordInDatabase) => boolean) | { network: string } = () => true,
+    query: ((key: ProfileIdentifier, record: PersonRecordInDatabase) => boolean) | { network: string } = () => true,
 ): Promise<PersonRecord[]> {
     const t = (await db).transaction('people')
     const result: PersonRecordInDatabase[] = []
     if (typeof query === 'function') {
         // eslint-disable-next-line @typescript-eslint/await-thenable
         for await (const { value, key } of t.store) {
-            if (query(Identifier.fromString(key) as PersonIdentifier, value)) result.push(value)
+            if (query(Identifier.fromString(key) as ProfileIdentifier, value)) result.push(value)
         }
     } else {
         result.push(
@@ -157,7 +157,7 @@ export async function queryPeopleDB(
  * @param id - Identifier
  * @deprecated
  */
-export async function queryPersonDB(id: PersonIdentifier): Promise<null | PersonRecord> {
+export async function queryPersonDB(id: ProfileIdentifier): Promise<null | PersonRecord> {
     const t = (await db).transaction('people', 'readonly')
     const result = await t.objectStore('people').get(id.toText())
 
@@ -196,7 +196,7 @@ export async function updatePersonDB(person: Partial<PersonRecord> & Pick<Person
  * @param people - People to remove
  * @deprecated
  */
-export async function removePeopleDB(people: PersonIdentifier[]): Promise<void> {
+export async function removePeopleDB(people: ProfileIdentifier[]): Promise<void> {
     const t = (await db).transaction('people', 'readwrite')
     for (const person of people) await t.objectStore('people').delete(person.toText())
     MessageCenter.emit(
@@ -212,7 +212,7 @@ export async function removePeopleDB(people: PersonIdentifier[]): Promise<void> 
  * @param id - Identifier
  * @deprecated
  */
-export async function queryMyIdentityAtDB(id: PersonIdentifier): Promise<null | PersonRecordPublicPrivate> {
+export async function queryMyIdentityAtDB(id: ProfileIdentifier): Promise<null | PersonRecordPublicPrivate> {
     const t = (await db).transaction(['myself', 'people'])
     const result = await t.objectStore('myself').get(id.toText())
     if (!result) return null
@@ -246,7 +246,7 @@ export async function updateMyIdentityDB(
  * @param id - Identifier
  * @deprecated
  */
-export async function removeMyIdentityAtDB(id: PersonIdentifier): Promise<void> {
+export async function removeMyIdentityAtDB(id: ProfileIdentifier): Promise<void> {
     const t = (await db).transaction('myself', 'readwrite')
     await t.objectStore('myself').delete(id.toText())
     MessageCenter.emit('identityUpdated', undefined)
@@ -282,8 +282,8 @@ export async function getMyIdentitiesDB(): Promise<PersonRecordPublicPrivate[]> 
  * @deprecated
  */
 export async function queryLocalKeyDB(network: string): Promise<LocalKeys>
-export async function queryLocalKeyDB(identifier: PersonIdentifier): Promise<CryptoKey | null>
-export async function queryLocalKeyDB(identifier: string | PersonIdentifier): Promise<LocalKeys | CryptoKey | null> {
+export async function queryLocalKeyDB(identifier: ProfileIdentifier): Promise<CryptoKey | null>
+export async function queryLocalKeyDB(identifier: string | ProfileIdentifier): Promise<LocalKeys | CryptoKey | null> {
     const t = (await db).transaction('localKeys')
     if (typeof identifier === 'string') {
         const result = await t.objectStore('localKeys').get(identifier)
@@ -295,11 +295,11 @@ export async function queryLocalKeyDB(identifier: string | PersonIdentifier): Pr
 }
 /**
  * Store my local key for a network
- * @param arg0 - PersonIdentifier
+ * @param arg0 - ProfileIdentifier
  * @param key  - ! Keys MUST BE a native CryptoKey object !
  * @deprecated
  */
-export async function storeLocalKeyDB({ network, userId }: PersonIdentifier, key: CryptoKey): Promise<void> {
+export async function storeLocalKeyDB({ network, userId }: ProfileIdentifier, key: CryptoKey): Promise<void> {
     if (!(key instanceof CryptoKey)) {
         throw new TypeError('It is not a real CryptoKey!')
     }
@@ -313,7 +313,7 @@ export async function storeLocalKeyDB({ network, userId }: PersonIdentifier, key
  * Remove local key
  * @deprecated
  */
-export async function deleteLocalKeyDB({ network, userId }: PersonIdentifier): Promise<void> {
+export async function deleteLocalKeyDB({ network, userId }: ProfileIdentifier): Promise<void> {
     const t = (await db).transaction('localKeys', 'readwrite')
     const result = await t.objectStore('localKeys').get(network)
     if (!result) return
@@ -336,9 +336,9 @@ export async function getLocalKeysDB() {
 }
 //#endregion
 
-async function emitPersonChangeEvent(record: PersonRecord | PersonIdentifier, reason: 'new' | 'update') {
+async function emitPersonChangeEvent(record: PersonRecord | ProfileIdentifier, reason: 'new' | 'update') {
     let person: Person
-    if (record instanceof PersonIdentifier) {
+    if (record instanceof ProfileIdentifier) {
         person = (await queryPerson(record))!
     } else {
         person = await personRecordToPerson(record)

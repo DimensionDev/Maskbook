@@ -4,7 +4,7 @@ import { encodeArrayBuffer } from '../../../utils/type-transform/String-ArrayBuf
 import { constructAlpha38, PayloadLatest } from '../../../utils/type-transform/Payload'
 import { getMyPrivateKey, Group } from '../../../database'
 import { queryLocalKeyDB } from '../../../database/people'
-import { PersonIdentifier, PostIVIdentifier, GroupIdentifier, Identifier } from '../../../database/type'
+import { ProfileIdentifier, PostIVIdentifier, GroupIdentifier, Identifier } from '../../../database/type'
 import { prepareOthersKeyForEncryptionV39OrV38 } from '../prepareOthersKeyForEncryption'
 import { geti18nString } from '../../../utils/i18n'
 import { getNetworkWorker } from '../../../social-network/worker'
@@ -33,20 +33,20 @@ const OthersAESKeyEncryptedMap = new Map<
  */
 export async function encryptTo(
     content: string,
-    to: (PersonIdentifier | GroupIdentifier)[],
-    whoAmI: PersonIdentifier,
+    to: (ProfileIdentifier | GroupIdentifier)[],
+    whoAmI: ProfileIdentifier,
 ): Promise<[EncryptedText, OthersAESKeyEncryptedToken]> {
     if (to.length === 0) return ['', '']
 
     const recipients: PostRecord['recipients'] = {}
-    function addRecipients(x: PersonIdentifier, reason: RecipientReason) {
+    function addRecipients(x: ProfileIdentifier, reason: RecipientReason) {
         const id = x.toText()
         if (recipients[id]) recipients[id].reason.push(reason)
         else recipients[id] = { reason: [reason] }
     }
     const sharedGroups = new Set<Group>()
     for (const i of to) {
-        if (i instanceof PersonIdentifier) addRecipients(i, { type: 'direct', at: new Date() })
+        if (i instanceof ProfileIdentifier) addRecipients(i, { type: 'direct', at: new Date() })
         // TODO: Should we throw if there the group is not find?
         else sharedGroups.add((await queryUserGroup(i))!)
     }
@@ -57,7 +57,7 @@ export async function encryptTo(
     }
 
     const toKey = await prepareOthersKeyForEncryptionV39OrV38(
-        Object.keys(recipients).map(Identifier.fromString) as PersonIdentifier[],
+        Object.keys(recipients).map(Identifier.fromString) as ProfileIdentifier[],
     )
     const mine = await getMyPrivateKey(whoAmI)
     if (!mine) throw new TypeError('Not inited yet')

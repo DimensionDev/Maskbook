@@ -1,5 +1,5 @@
 import { LiveSelector, MutationObserverWatcher } from '@holoflows/kit/es'
-import { getPersonIdentifierAtFacebook } from '../getPersonIdentifierAtFacebook'
+import { getProfileIdentifierAtFacebook } from '../getProfileIdentifierAtFacebook'
 import Services from '../../../extension/service'
 import { GroupIdentifier } from '../../../database/type'
 import { SocialNetworkUI } from '../../../social-network/ui'
@@ -25,7 +25,7 @@ function findPeopleInfo(whoAmI: SocialNetworkUI['currentIdentity']) {
                  */
                 const a = document.querySelector<HTMLAnchorElement>('#fb-timeline-cover-name a')
                 // side effect: save to service
-                const id = getPersonIdentifierAtFacebook(a, true)
+                const id = getProfileIdentifierAtFacebook(a, true)
                 if (!id) return
                 Services.Crypto.verifyOthersProve(text, id.identifier)
                 return id

@@ -1,4 +1,4 @@
-import { PersonIdentifier, PostIdentifier } from '../../../database/type'
+import { ProfileIdentifier, PostIdentifier } from '../../../database/type'
 import { getPostUrl, getProfileUrl } from '../utils/url'
 import tasks from '../../../extension/content-script/tasks'
 import { isMobileTwitter } from '../utils/isMobile'
@@ -10,10 +10,10 @@ import { isMobileTwitter } from '../utils/isMobile'
  *  resolve this problem when you can.
  */
 
-export const fetchPostContent = (post: PostIdentifier<PersonIdentifier>) => {
+export const fetchPostContent = (post: PostIdentifier<ProfileIdentifier>) => {
     return tasks(getPostUrl(post)).getPostContent()
 }
 
-export const fetchProfile = (self: PersonIdentifier) => {
+export const fetchProfile = (self: ProfileIdentifier) => {
     return tasks(getProfileUrl(self, isMobileTwitter as boolean), {}).getProfile(self)
 }

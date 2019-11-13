@@ -5,7 +5,7 @@ import { Profile, Group } from '../../../database'
 import { useCurrentIdentity } from '../../DataSource/useActivatedUI'
 import { PersonOrGroupInList, PersonOrGroupInListProps } from './PersonOrGroupInList'
 import { PersonOrGroupInChip, PersonOrGroupInChipProps } from './PersonOrGroupInChip'
-import { PersonIdentifier, GroupIdentifier } from '../../../database/type'
+import { ProfileIdentifier, GroupIdentifier } from '../../../database/type'
 import { useStylesExtends } from '../../custom-ui-helper'
 type PersonOrGroup = Group | Profile
 export interface SelectPeopleAndGroupsUIProps<ServeType extends Group | Profile = Group | Profile>
@@ -165,7 +165,7 @@ function FrozenChip(item: PersonOrGroup, additionalProps?: Partial<PersonOrGroup
 }
 
 export function isPerson(x: PersonOrGroup): x is Profile {
-    return x.identifier instanceof PersonIdentifier
+    return x.identifier instanceof ProfileIdentifier
 }
 export function isGroup(x: PersonOrGroup): x is Group {
     return x.identifier instanceof GroupIdentifier

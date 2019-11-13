@@ -14,7 +14,7 @@ import {
     updateMyIdentityDB,
 } from '../../database/people'
 import { UpgradeBackupJSONFile } from '../../utils/type-transform/BackupFile'
-import { PersonIdentifier, GroupIdentifier } from '../../database/type'
+import { ProfileIdentifier, GroupIdentifier } from '../../database/type'
 import { geti18nString } from '../../utils/i18n'
 import { import_AES_GCM_256_Key, import_ECDH_256k1_Key } from '../../utils/crypto.subtle'
 
@@ -39,8 +39,8 @@ export async function queryPeople(network?: string): Promise<Person[]> {
  * Query my identity.
  */
 export async function queryMyIdentities(network?: string): Promise<Person[]>
-export async function queryMyIdentities(identifier: PersonIdentifier): Promise<Person[]>
-export async function queryMyIdentities(identifier?: PersonIdentifier | string): Promise<Person[]> {
+export async function queryMyIdentities(identifier: ProfileIdentifier): Promise<Person[]>
+export async function queryMyIdentities(identifier?: ProfileIdentifier | string): Promise<Person[]> {
     if (identifier === undefined) {
         const all = await getMyIdentitiesDB()
         return Promise.all(all.map(personRecordToPerson))
@@ -57,23 +57,23 @@ export async function queryMyIdentities(identifier?: PersonIdentifier | string):
 /**
  * Remove an identity.
  */
-export async function removeMyIdentity(identifier: PersonIdentifier): Promise<void> {
+export async function removeMyIdentity(identifier: ProfileIdentifier): Promise<void> {
     await deleteLocalKeyDB(identifier)
     await removeMyIdentityAtDB(identifier)
 }
 /**
  * Restore the backup
  */
-export async function restoreBackup(json: object, whoAmI?: PersonIdentifier): Promise<void> {
+export async function restoreBackup(json: object, whoAmI?: ProfileIdentifier): Promise<void> {
     async function storeMyIdentity(person: PersonRecordPublicPrivate, local: JsonWebKey) {
         await storeMyIdentityDB(person)
         const aes = await import_AES_GCM_256_Key(local)
-        if ((await queryLocalKeyDB(new PersonIdentifier(person.identifier.network, '$self'))) === null)
-            await storeLocalKeyDB(new PersonIdentifier(person.identifier.network, '$self'), aes)
+        if ((await queryLocalKeyDB(new ProfileIdentifier(person.identifier.network, '$self'))) === null)
+            await storeLocalKeyDB(new ProfileIdentifier(person.identifier.network, '$self'), aes)
         await storeLocalKeyDB(person.identifier, aes)
     }
-    function mapID(x: { network: string; userId: string }): PersonIdentifier {
-        return new PersonIdentifier(x.network, x.userId)
+    function mapID(x: { network: string; userId: string }): ProfileIdentifier {
+        return new ProfileIdentifier(x.network, x.userId)
     }
     function mapGroup(x: { network: string; groupID: string; virtualGroupOwner: string | null }): GroupIdentifier {
         return new GroupIdentifier(x.network, x.virtualGroupOwner, x.groupID)
@@ -101,7 +101,7 @@ export async function restoreBackup(json: object, whoAmI?: PersonIdentifier): Pr
 
     const people = Promise.all(
         (data.people || []).map(async rec => {
-            const id = new PersonIdentifier(rec.network, rec.userId)
+            const id = new ProfileIdentifier(rec.network, rec.userId)
             const groups = (rec.groups || []).map(mapGroup)
             const prevIds = (rec.previousIdentifiers || []).map(mapID)
             await storeNewPersonDB({
@@ -121,9 +121,9 @@ export async function restoreBackup(json: object, whoAmI?: PersonIdentifier): Pr
 /**
  * Resolve my possible identity
  */
-export async function resolveIdentity(identifier: PersonIdentifier) {
-    const unknown = new PersonIdentifier(identifier.network, '$unknown')
-    const self = new PersonIdentifier(identifier.network, '$self')
+export async function resolveIdentity(identifier: ProfileIdentifier) {
+    const unknown = new ProfileIdentifier(identifier.network, '$unknown')
+    const self = new ProfileIdentifier(identifier.network, '$self')
     {
         const ids = (await getMyIdentitiesDB()).filter(x => x.identifier.equals(unknown) || x.identifier.equals(self))
         for (const id of ids) {
@@ -148,7 +148,7 @@ export async function resolveIdentity(identifier: PersonIdentifier) {
 }
 
 export async function updatePersonInfo(
-    identifier: PersonIdentifier,
+    identifier: ProfileIdentifier,
     data: { nickname?: string; avatarURL?: string; forceUpdateAvatar?: boolean },
 ) {
     const { avatarURL, nickname, forceUpdateAvatar } = data

@@ -4,7 +4,7 @@ import { AddToKeyStore, AddToKeyStoreProps } from './AddToKeyStore'
 import { useAsync } from '../../utils/components/AsyncComponent'
 import { deconstructPayload } from '../../utils/type-transform/Payload'
 import Services from '../../extension/service'
-import { PersonIdentifier } from '../../database/type'
+import { ProfileIdentifier } from '../../database/type'
 import { Profile } from '../../database'
 import { useCurrentIdentity, useFriendsList } from '../DataSource/useActivatedUI'
 import { getActivatedUI } from '../../social-network/ui'
@@ -15,7 +15,7 @@ import { DebugList } from '../DebugModeUI/DebugList'
 export interface PostInspectorProps {
     onDecrypted(post: string): void
     post: string
-    postBy: PersonIdentifier
+    postBy: ProfileIdentifier
     postId: string
     needZip(): void
     DecryptPostProps?: Partial<DecryptPostProps>
@@ -91,7 +91,7 @@ export function PostInspector(props: PostInspectorProps) {
                     alreadySelectedPreviously={alreadySelectedPreviously}
                     people={people}
                     encryptedText={post}
-                    whoAmI={whoAmI ? whoAmI.identifier : PersonIdentifier.unknown}
+                    whoAmI={whoAmI ? whoAmI.identifier : ProfileIdentifier.unknown}
                     postBy={postBy}
                     {...props.DecryptPostProps}
                 />

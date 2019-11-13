@@ -1,6 +1,6 @@
 import { MessageCenter } from '../../../utils/messages'
 import { queryUserGroup } from '../PeopleService'
-import { PreDefinedVirtualGroupNames, PersonIdentifier } from '../../../database/type'
+import { PreDefinedVirtualGroupNames, ProfileIdentifier } from '../../../database/type'
 import { queryPostsDB } from '../../../database/post'
 import { appendShareTarget } from '../CryptoService'
 
@@ -31,7 +31,7 @@ export function initAutoShareToFriends() {
                 console.warn('Post ', id, ' have no CryptoKey, skipping')
                 continue
             }
-            const notSharedBefore: PersonIdentifier[] = []
+            const notSharedBefore: ProfileIdentifier[] = []
 
             data.newMembers.forEach(x => {
                 if (post.recipients[x.toText()]) {

@@ -5,7 +5,7 @@ import './shared'
 import { definedSocialNetworkUIs, defineSocialNetworkUI, activateSocialNetworkUI } from '../social-network/ui'
 import { demoPeople, demoGroup } from './demoPeopleOrGroups'
 import { ValueRef } from '@holoflows/kit/es'
-import { PersonIdentifier } from '../database/type'
+import { ProfileIdentifier } from '../database/type'
 import { emptyDefinition } from '../social-network/defaults/emptyDefinition'
 import { Profile } from '../database'
 
@@ -19,7 +19,7 @@ defineSocialNetworkUI({
     },
     myIdentitiesRef: new ValueRef(demoPeople),
     groupsRef: new ValueRef(demoGroup),
-    lastRecognizedIdentity: new ValueRef({ identifier: PersonIdentifier.unknown }),
+    lastRecognizedIdentity: new ValueRef({ identifier: ProfileIdentifier.unknown }),
     currentIdentity: new ValueRef<Profile | null>(null),
     friendsRef: new ValueRef(demoPeople),
 })

@@ -2,8 +2,7 @@ import Services from '../../extension/service'
 import { SocialNetworkUI } from '../ui'
 import { ValueRef } from '@holoflows/kit/es'
 import { Group } from '../../database'
-import { GroupIdentifier, PreDefinedVirtualGroupNames, PersonIdentifier } from '../../database/type'
-import { access } from 'fs'
+import { GroupIdentifier, PreDefinedVirtualGroupNames, ProfileIdentifier } from '../../database/type'
 
 // TODO:
 // groupIDs can be a part of network definitions
@@ -20,7 +19,7 @@ async function query(network: string, ref: ValueRef<Group[]>) {
 }
 
 async function create(network: string, ref: ValueRef<Group[]>, groupIDs: string[]) {
-    type Pair = [PersonIdentifier, GroupIdentifier]
+    type Pair = [ProfileIdentifier, GroupIdentifier]
     const [identities, groups] = await Promise.all([
         Services.People.queryMyIdentities(network),
         Services.People.queryUserGroups(network),
