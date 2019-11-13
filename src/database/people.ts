@@ -21,10 +21,9 @@
 import { GroupIdentifier, Identifier, ProfileIdentifier } from './type'
 import { DBSchema, openDB } from 'idb/with-async-ittr'
 import { CryptoKeyToJsonWebKey, JsonWebKeyToCryptoKey } from '../utils/type-transform/CryptoKey-JsonWebKey'
-import { MessageCenter, PersonUpdateEvent } from '../utils/messages'
-import { isIdentifierArrayEquals } from '../utils/equality'
+import { MessageCenter } from '../utils/messages'
 import { OnlyRunInContext } from '@holoflows/kit/es'
-import { personRecordToPerson, Person, queryPerson } from './helpers/person'
+import { isIdentifierArrayEquals } from '../utils/equality'
 
 OnlyRunInContext('background', 'People db')
 //#region Type and utils
@@ -64,13 +63,7 @@ interface Base<db> {
 }
 export interface PersonRecord extends Omit<PersonRecordInDatabase, keyof Base<true> | 'network'>, Base<false> {}
 export type PersonRecordPublic = PersonRecord & Required<Pick<PersonRecord, 'publicKey'>>
-export function isPersonRecordPublic(data: PersonRecord): data is PersonRecordPublic {
-    return 'publicKey' in data
-}
 export type PersonRecordPublicPrivate = PersonRecord & Required<Pick<PersonRecord, 'publicKey' | 'privateKey'>>
-export function isPersonRecordPublicPrivate(data: PersonRecord): data is PersonRecordPublicPrivate {
-    return 'publicKey' in data && 'privateKey' in data
-}
 interface PersonRecordInDatabase extends Base<true> {
     network: string
     previousIdentifiers?: ProfileIdentifier[]
@@ -126,7 +119,6 @@ export async function storeNewPersonDB(record: PersonRecord): Promise<void> {
     const data = await toDb(record)
     const t = (await db).transaction('people', 'readwrite')
     await t.objectStore('people').put(data)
-    emitPersonChangeEvent(record, 'new').catch(console.error)
 }
 /**
  * Query person with an identifier
@@ -179,7 +171,7 @@ export async function updatePersonDB(person: Partial<PersonRecord> & Pick<Person
 
     const t = (await db).transaction('people', 'readwrite')
     await t.objectStore('people').put(o)
-    emitPersonChangeEvent(full, 'update').catch(console.error)
+    // emitPersonChangeEvent(full, 'update').catch(console.error)
 
     function hasDifferent() {
         if (!isIdentifierArrayEquals(full.groups, person.groups || full.groups)) return true
@@ -336,14 +328,3 @@ export async function getLocalKeysDB() {
     return result
 }
 //#endregion
-
-async function emitPersonChangeEvent(record: PersonRecord | ProfileIdentifier, reason: 'new' | 'update') {
-    let person: Person
-    if (record instanceof ProfileIdentifier) {
-        person = (await queryPerson(record))!
-    } else {
-        person = await personRecordToPerson(record)
-    }
-    // @ts-ignore deprecated
-    MessageCenter.emit('peopleChanged', [{ of: person, reason }])
-}
