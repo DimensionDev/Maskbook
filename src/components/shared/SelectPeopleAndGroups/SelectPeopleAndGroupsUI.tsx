@@ -64,7 +64,7 @@ export function SelectPeopleAndGroupsUI<ServeType extends Group | Profile = Pers
         if (isPerson(x)) {
             return (
                 !!x.identifier.userId.toLowerCase().match(search.toLowerCase()) ||
-                !!(x.fingerprint || '').toLowerCase().match(search.toLowerCase()) ||
+                !!x.linkedPersona?.fingerprint.toLowerCase().match(search.toLowerCase()) ||
                 !!(x.nickname || '').toLowerCase().match(search.toLowerCase())
             )
         } else {

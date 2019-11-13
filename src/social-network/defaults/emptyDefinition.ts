@@ -3,7 +3,7 @@ import { ProfileIdentifier } from '../../database/type'
 import { SocialNetworkUIDefinition } from '../ui'
 import { nop, nopWithUnmount } from '../../utils/utils'
 import { Profile, Group } from '../../database'
-import { PersonArrayComparer, GroupArrayComparer } from '../../utils/comparer'
+import { ProfileArrayComparer, GroupArrayComparer } from '../../utils/comparer'
 
 /**
  * DO NOT use this in content script
@@ -15,7 +15,7 @@ export const emptyDefinition: SocialNetworkUIDefinition = {
     shouldActivate() {
         return false
     },
-    myIdentitiesRef: new ValueRef([] as Profile[], PersonArrayComparer),
+    myIdentitiesRef: new ValueRef([] as Profile[], ProfileArrayComparer),
     groupsRef: new ValueRef([] as Group[], GroupArrayComparer),
     lastRecognizedIdentity: new ValueRef({ identifier: ProfileIdentifier.unknown }),
     currentIdentity: new ValueRef<Profile | null>(null),
@@ -35,7 +35,7 @@ export const emptyDefinition: SocialNetworkUIDefinition = {
         return false
     },
     posts: new Map(),
-    friendsRef: new ValueRef([] as Profile[], PersonArrayComparer),
+    friendsRef: new ValueRef([] as Profile[], ProfileArrayComparer),
     isDangerousNetwork: false,
     isValidUsername() {
         return true

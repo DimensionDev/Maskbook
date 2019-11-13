@@ -11,5 +11,5 @@ export function InitMyIdentitiesValueRef(self: SocialNetworkUI, network: string)
 }
 
 function query(network: string, ref: ValueRef<Profile[]>) {
-    Services.People.queryMyIdentities(network).then(p => (ref.value = p))
+    Services.Identity.queryMyProfiles(network).then(p => (ref.value = p))
 }

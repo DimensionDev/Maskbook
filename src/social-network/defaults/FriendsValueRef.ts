@@ -4,11 +4,11 @@ import { SocialNetworkUI } from '../ui'
 import { Profile } from '../../database'
 
 function hasFingerprint(x: Profile) {
-    return !!x.fingerprint
+    return !!x.linkedPersona?.fingerprint
 }
 export function InitFriendsValueRef(self: SocialNetworkUI, network: string) {
     const ref = self.friendsRef
-    Services.People.queryPeople(network).then(p => (ref.value = p.filter(hasFingerprint)))
+    Services.Identity.queryProfiles(network).then(p => (ref.value = p.filter(hasFingerprint)))
     MessageCenter.on('peopleChanged', async events => {
         let next = [...ref.value]
         for (const event of events) {

@@ -15,7 +15,7 @@ const optionsPageUISelf = defineSocialNetworkUI({
             query(ref)
             MessageCenter.on('identityUpdated', () => query(ref))
             function query(ref: ValueRef<Profile[]>) {
-                Services.People.queryMyIdentities().then(p => (ref.value = p))
+                Services.Identity.queryMyProfiles().then(p => (ref.value = p))
             }
         }
         {
@@ -23,7 +23,7 @@ const optionsPageUISelf = defineSocialNetworkUI({
             query(ref)
             MessageCenter.on('peopleChanged', () => query(ref))
             function query(ref: ValueRef<Profile[]>) {
-                Services.People.queryPeople().then(p => (ref.value = p))
+                Services.Identity.queryProfiles().then(p => (ref.value = p))
             }
         }
     },

@@ -72,7 +72,7 @@ function PersonEditDialog(props: { person: Profile; onClose(): void }) {
     })
     const [, fingerprint] = useTextField('Fingerprint', {
         disabled: true,
-        defaultValue: person.fingerprint,
+        defaultValue: person.linkedPersona?.fingerprint,
         margin: 'dense',
     })
     return (

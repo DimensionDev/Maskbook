@@ -192,7 +192,8 @@ function Welcome(props: Welcome) {
 const provePostRef = new ValueRef('')
 const personInferFromURLRef = new ValueRef<Profile>({
     identifier: ProfileIdentifier.unknown,
-    groups: [],
+    createdAt: new Date(),
+    updatedAt: new Date(),
 })
 const selectedIdRef = new ValueRef<Profile>(personInferFromURLRef.value)
 const ownedIdsRef = new ValueRef<Profile[]>([])
@@ -206,7 +207,7 @@ selectedIdRef.addListener(updateProveBio)
 
 const fillRefs = async () => {
     if (selectedIdRef.value.identifier.isUnknown) {
-        const all = await Services.People.queryMyIdentities()
+        const all = await Services.Identity.queryMyProfiles()
         ownedIdsRef.value = all
         if (all[0]) selectedIdRef.value = all[0]
     }
@@ -269,8 +270,9 @@ export default withRouter(function _WelcomePortal(props: RouteComponentProps) {
                         identifier: id,
                         nickname: nickname || inDB.nickname,
                         avatar: avatar || inDB.avatar,
-                        groups: [],
-                    })
+                        createdAt: new Date(),
+                        updatedAt: new Date(),
+                    } as Profile)
                     Services.People.updatePersonInfo(person.identifier, {
                         nickname: person.nickname,
                         avatarURL: person.avatar,

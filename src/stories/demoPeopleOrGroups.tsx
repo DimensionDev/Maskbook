@@ -1,34 +1,45 @@
-import { Profile, Group } from '../database'
-import { ProfileIdentifier, GroupIdentifier } from '../database/type'
+import { Profile, Group, Persona } from '../database'
+import { ProfileIdentifier, GroupIdentifier, ECKeyIdentifier } from '../database/type'
+import { IdentifierMap } from '../database/IdentifierMap'
+
+const emptyProfile = {
+    createdAt: new Date(),
+    updatedAt: new Date(),
+    linkedPersona: {
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        hasPrivateKey: false,
+        identifier: new ECKeyIdentifier('secp256k1', Math.random().toString()),
+        fingerprint: Math.random()
+            .toString(26)
+            .slice(2)
+            .toUpperCase(),
+        linkedProfiles: new IdentifierMap(new Map()) as Persona['linkedProfiles'],
+    },
+}
+
 export const demoPeople: Profile[] = [
     {
-        fingerprint: 'FDFE333CE20ED446AD88F3C8BA3AD1AA5ECAF521',
+        ...emptyProfile,
         avatar: 'https://avatars3.githubusercontent.com/u/5390719?s=460&v=4',
         nickname: '雨宮響也',
         identifier: new ProfileIdentifier('facebook.com', 'test'),
-        groups: [],
     },
     {
-        fingerprint: 'FDFE333CE20ED446AD88F3C8BA3AD1AA5ECAF521'
-            .split('')
-            .reverse()
-            .join(''),
+        ...emptyProfile,
         avatar: 'https://avatars1.githubusercontent.com/u/3343358?s=460&v=4',
         nickname: '赫胥黎',
         identifier: new ProfileIdentifier('twitter.com', 'test2'),
-        groups: [],
     },
     {
-        fingerprint: 'a2f7643cd1aed446ad88f3c8ba13843dfa2f321d',
+        ...emptyProfile,
         nickname: '小樱茉莉',
         identifier: new ProfileIdentifier('mastodon@example.org', 'test3'),
-        groups: [],
     },
     {
-        fingerprint: 'a2f7643cd1aed446ad88f3c8ba13843dfa2f321d',
+        ...emptyProfile,
         nickname: '温斯顿·史密斯',
         identifier: new ProfileIdentifier('gnu-social@example.org', 'test4'),
-        groups: [],
     },
 ]
 

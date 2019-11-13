@@ -22,6 +22,9 @@ export { queryProfile } from '../../database'
 export function queryProfiles(network?: string): Promise<Profile[]> {
     return queryProfilesWithQuery(network)
 }
+export function queryMyProfiles(network?: string) {
+    return queryProfilesWithQuery(network).then(x => x.filter(y => y.linkedPersona?.hasPrivateKey === true))
+}
 export function updateProfileInfo(
     identifier: ProfileIdentifier,
     data: {
@@ -47,6 +50,16 @@ export async function queryPersonas(identifier?: PersonaIdentifier, requirePriva
     const x = await queryPersonaDB(identifier)
     if (!x || (!x.privateKey && requirePrivateKey)) return []
     return [personaRecordToPersona(x)]
+}
+export function queryMyPersonas(network: string): Promise<Persona[]> {
+    return queryPersonas(undefined, true).then(x =>
+        x.filter(y => {
+            for (const z of y.linkedProfiles.keys()) {
+                if (z.network === network) return true
+            }
+            return false
+        }),
+    )
 }
 /**
  * Remove an identity.

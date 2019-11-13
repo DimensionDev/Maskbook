@@ -6,11 +6,11 @@ import { ProfileIdentifier } from '../../database/type'
 import { cloneDeep } from 'lodash-es'
 import { Profile, Group } from '../../database'
 import { MaskbookDarkTheme, MaskbookLightTheme } from '../../utils/theme'
-import { PersonArrayComparer, GroupArrayComparer } from '../../utils/comparer'
+import { ProfileArrayComparer, GroupArrayComparer } from '../../utils/comparer'
 
 const defaultDataSources: Required<SocialNetworkUIDataSources> = cloneDeep({
-    friendsRef: new ValueRef([] as Profile[], PersonArrayComparer),
-    myIdentitiesRef: new ValueRef([] as Profile[], PersonArrayComparer),
+    friendsRef: new ValueRef([] as Profile[], ProfileArrayComparer),
+    myIdentitiesRef: new ValueRef([] as Profile[], ProfileArrayComparer),
     groupsRef: new ValueRef([] as Group[], GroupArrayComparer),
     currentIdentity: new ValueRef<Profile | null>(null),
     lastRecognizedIdentity: new ValueRef({ identifier: ProfileIdentifier.unknown }),
