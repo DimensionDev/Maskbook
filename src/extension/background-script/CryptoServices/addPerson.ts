@@ -1,11 +1,12 @@
 import * as Gun1 from '../../../network/gun/version.1'
 import * as Gun2 from '../../../network/gun/version.2'
 import { geti18nString } from '../../../utils/i18n'
-import { queryPersonDB } from '../../../database/people'
 import { ProfileIdentifier, PostIdentifier } from '../../../database/type'
 import getCurrentNetworkWorker from '../../../social-network/utils/getCurrentNetworkWorker'
 import { verifyOthersProve } from './verifyOthersProve'
 import { memoizePromise } from '../../../utils/memoize'
+import { queryPersonaRecord } from '../../../database'
+import { PersonaRecord } from '../../../database/Persona/Persona.db'
 
 async function getUserPublicKeyFromBio(user: ProfileIdentifier) {
     const profile = await getCurrentNetworkWorker(user).fetchProfile(user)
@@ -47,8 +48,8 @@ async function getUserPublicKeyFromNetwork(user: ProfileIdentifier) {
         errors.push(e)
         proveRejected = true
     }
-    const person = await queryPersonDB(user)
-    if ((bioRejected && proveRejected) || !person || !person.publicKey) {
+    const person = await queryPersonaRecord(user)
+    if ((bioRejected && proveRejected) || !person?.publicKey) {
         throw new Error(geti18nString('service_others_key_not_found', user.userId))
     }
     return person
@@ -60,9 +61,9 @@ Object.assign(globalThis, { getUserPublicKeyFromBio, getUserPublicKeyFromProvePo
  * @param user Identifier
  */
 export const addPerson = memoizePromise(
-    async function(user: ProfileIdentifier) {
-        const person = await queryPersonDB(user)
-        if (!person || !person.publicKey) return getUserPublicKeyFromNetwork(user)
+    async function(user: ProfileIdentifier): Promise<PersonaRecord> {
+        const person = await queryPersonaRecord(user)
+        if (!person?.publicKey) return getUserPublicKeyFromNetwork(user)
         return person
     },
     id => id.toText(),

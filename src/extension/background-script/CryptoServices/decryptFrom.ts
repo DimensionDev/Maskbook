@@ -6,7 +6,7 @@ import { decodeText } from '../../../utils/type-transform/String-ArrayBuffer'
 import { deconstructPayload, Payload } from '../../../utils/type-transform/Payload'
 import { geti18nString } from '../../../utils/i18n'
 import { queryPrivateKey, queryPersonaRecord } from '../../../database'
-import { queryLocalKeyDB, queryPersonDB, PersonRecord } from '../../../database/people'
+import { queryLocalKeyDB } from '../../../database/people'
 import { ProfileIdentifier, PostIVIdentifier } from '../../../database/type'
 import { queryPostDB, updatePostDB } from '../../../database/post'
 import { addPerson } from './addPerson'
@@ -14,6 +14,7 @@ import { MessageCenter } from '../../../utils/messages'
 import { getNetworkWorker } from '../../../social-network/worker'
 import { getSignablePayload, cryptoProviderTable } from './utils'
 import { JsonWebKeyToCryptoKey } from '../../../utils/type-transform/CryptoKey-JsonWebKey'
+import { PersonaRecord } from '../../../database/Persona/Persona.db'
 
 type Progress = {
     progress: 'finding_person_public_key' | 'finding_post_key'
@@ -96,7 +97,7 @@ export async function* decryptFromMessageWithProgress(
         const [cachedPostResult, setPostCache] = await decryptFromCache(data, author)
 
         // ? Find author's public key.
-        let byPerson!: PersonRecordWithPublicKey
+        let byPerson!: PersonaRecord
         for await (const _ of iteratorHelper(findAuthorPublicKey(author, !!cachedPostResult))) {
             if (_.done) {
                 if (_.value === 'out of chance')
@@ -128,7 +129,11 @@ export async function* decryptFromMessageWithProgress(
             }
             return {
                 signatureVerifyResult: byPerson.publicKey
-                    ? await cryptoProvider.verify(waitForVerifySignaturePayload, signature || '', byPerson.publicKey)
+                    ? await cryptoProvider.verify(
+                          waitForVerifySignaturePayload,
+                          signature || '',
+                          await JsonWebKeyToCryptoKey(byPerson.publicKey),
+                      )
                     : false,
                 content: cachedPostResult,
                 through: ['post_key_cached'],
@@ -236,7 +241,7 @@ export async function* decryptFromMessageWithProgress(
             const [contentArrayBuffer, postAESKey] = await cryptoProvider.decryptMessage1ToNByOther({
                 version,
                 AESKeyEncrypted: key,
-                authorsPublicKeyECDH: byPerson!.publicKey!,
+                authorsPublicKeyECDH: await JsonWebKeyToCryptoKey(byPerson.publicKey),
                 encryptedContent: encryptedText,
                 privateKeyECDH: minePrivate!,
                 iv,
@@ -250,7 +255,7 @@ export async function* decryptFromMessageWithProgress(
                 const signatureVerifyResult = await cryptoProvider.verify(
                     waitForVerifySignaturePayload,
                     signature,
-                    byPerson!.publicKey!,
+                    await JsonWebKeyToCryptoKey(byPerson.publicKey),
                 )
                 return { signatureVerifyResult, content, through: ['normal_decrypted'] }
             } catch {
@@ -285,13 +290,12 @@ function handleDOMException(e: unknown) {
         return { error: geti18nString('service_decryption_failed') } as Failure
     } else throw e
 }
-type PersonRecordWithPublicKey = PersonRecord & Required<Pick<PersonRecord, 'publicKey'>>
 async function* findAuthorPublicKey(
     by: ProfileIdentifier,
     hasCache: boolean,
     maxIteration = 10,
-): AsyncGenerator<Progress, 'out of chance' | 'use cache' | PersonRecordWithPublicKey, unknown> {
-    let author = await queryPersonDB(by)
+): AsyncGenerator<Progress, 'out of chance' | 'use cache' | PersonaRecord, unknown> {
+    let author = await queryPersonaRecord(by)
     let iterations = 0
     while (author === null || !author.publicKey) {
         iterations += 1
@@ -338,7 +342,7 @@ async function* findAuthorPublicKey(
                 .catch(() => null)
         }
     }
-    if (author && author.publicKey) return author as PersonRecordWithPublicKey
+    if (author && author.publicKey) return author
     return 'out of chance'
 }
 
