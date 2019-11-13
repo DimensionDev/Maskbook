@@ -1,8 +1,8 @@
 import { MessageCenter } from '../../../utils/messages'
-import { queryUserGroup } from '../PeopleService'
 import { PreDefinedVirtualGroupNames, ProfileIdentifier } from '../../../database/type'
 import { queryPostsDB } from '../../../database/post'
 import { appendShareTarget } from '../CryptoService'
+import { queryUserGroup } from '../UserGroupService'
 
 export function initAutoShareToFriends() {
     MessageCenter.on('joinGroup', async data => {

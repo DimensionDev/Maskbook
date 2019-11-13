@@ -9,8 +9,8 @@ import { prepareOthersKeyForEncryptionV39OrV38 } from '../prepareOthersKeyForEnc
 import { geti18nString } from '../../../utils/i18n'
 import { getNetworkWorker } from '../../../social-network/worker'
 import { getSignablePayload } from './utils'
-import { updatePostDB, createPostDB, PostRecord, RecipientReason } from '../../../database/post'
-import { queryUserGroup } from '../PeopleService'
+import { createPostDB, PostRecord, RecipientReason } from '../../../database/post'
+import { queryUserGroup } from '../UserGroupService'
 
 type EncryptedText = string
 type OthersAESKeyEncryptedToken = string
