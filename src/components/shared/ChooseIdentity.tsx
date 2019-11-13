@@ -9,7 +9,7 @@ import { List, ListItem, ListItemIcon, ListItemText, ListSubheader } from '@mate
 import { PersonOrGroupInList, PersonOrGroupInListProps } from './SelectPeopleAndGroups'
 import { getActivatedUI } from '../../social-network/ui'
 import { useCurrentIdentity, useMyIdentities } from '../DataSource/useActivatedUI'
-import { PersonIdentifier } from '../../database/type'
+import { ProfileIdentifier } from '../../database/type'
 import { geti18nString } from '../../utils/i18n'
 import { currentSelectedIdentity } from '../../components/shared-settings/settings'
 import { useStylesExtends } from '../custom-ui-helper'
@@ -47,7 +47,7 @@ export const ChooseIdentity: React.FC<ChooseIdentityProps> = props => {
 
     const all = useMyIdentities()
     const currentDefault =
-        useCurrentIdentity() || ({ identifier: PersonIdentifier.unknown, nickname: 'Nothing' } as Profile)
+        useCurrentIdentity() || ({ identifier: ProfileIdentifier.unknown, nickname: 'Nothing' } as Profile)
     const { availableIdentities = all, current = currentDefault } = props
 
     const handleChange = useCallback(() => {

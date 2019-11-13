@@ -19,7 +19,7 @@ import {
     JSON_HINT_FOR_POWER_USER,
     UpgradeBackupJSONFile,
 } from '../../utils/type-transform/BackupFile'
-import { PersonIdentifier, ProfileIdentifier } from '../../database/type'
+import { ProfileIdentifier, ProfileIdentifier } from '../../database/type'
 import { MessageCenter } from '../../utils/messages'
 import getCurrentNetworkWorker from '../../social-network/utils/getCurrentNetworkWorker'
 import { SocialNetworkUI } from '../../social-network/ui'
@@ -36,7 +36,7 @@ import { IdentifierMap } from '../../database/IdentifierMap'
 
 OnlyRunInContext('background', 'WelcomeService')
 async function generateBackupJSON(
-    whoAmI: PersonIdentifier,
+    whoAmI: ProfileIdentifier,
     onlyBackupWhoAmI: boolean,
     full = false,
 ): Promise<BackupJSONFileLatest> {
@@ -116,7 +116,7 @@ async function generateBackupJSON(
         return crypto.subtle.exportKey('jwk', k)
     }
 }
-async function hasValidIdentity(whoAmI: PersonIdentifier) {
+async function hasValidIdentity(whoAmI: ProfileIdentifier) {
     const local = await queryLocalKeyDB(whoAmI)
     const ecdh = await queryMyIdentityAtDB(whoAmI)
     return !!local && !!ecdh && !!ecdh.privateKey && !!ecdh.publicKey
@@ -129,7 +129,7 @@ async function hasValidIdentity(whoAmI: PersonIdentifier) {
  * @param whoAmI Who Am I
  * @param password password used to generate mnemonic word, can be empty string
  */
-export async function createNewIdentityByMnemonicWord(whoAmI: PersonIdentifier, password: string): Promise<string> {
+export async function createNewIdentityByMnemonicWord(whoAmI: ProfileIdentifier, password: string): Promise<string> {
     const x = await generate_ECDH_256k1_KeyPair_ByMnemonicWord(password)
     await generateNewIdentity(whoAmI, x)
     return x.mnemonicWord
@@ -144,7 +144,7 @@ export async function createNewIdentityByMnemonicWord(whoAmI: PersonIdentifier, 
  * @param word mnemonic words
  */
 export async function restoreNewIdentityWithMnemonicWord(
-    whoAmI: PersonIdentifier,
+    whoAmI: ProfileIdentifier,
     word: string,
     password: string,
 ): Promise<void> {
@@ -163,7 +163,7 @@ export async function restoreNewIdentityWithMnemonicWord(
  * ```
  */
 async function generateNewIdentity(
-    whoAmI: PersonIdentifier,
+    whoAmI: ProfileIdentifier,
     usingKey:
         | {
               key: CryptoKeyPair
@@ -197,8 +197,8 @@ async function generateNewIdentity(
 }
 
 export async function attachIdentityToPersona(
-    whoAmI: PersonIdentifier,
-    targetIdentity: PersonIdentifier,
+    whoAmI: ProfileIdentifier,
+    targetIdentity: ProfileIdentifier,
 ): Promise<void> {
     const id = await queryMyIdentityAtDB(targetIdentity)
     const localKey = await queryLocalKeyDB(targetIdentity)
@@ -228,7 +228,7 @@ export async function downloadBackup<T>(obj: T) {
 }
 
 export async function backupMyKeyPair(
-    whoAmI: PersonIdentifier,
+    whoAmI: ProfileIdentifier,
     options: { download: boolean; onlyBackupWhoAmI: boolean },
 ) {
     const obj = await generateBackupJSON(whoAmI, options.onlyBackupWhoAmI)
@@ -253,9 +253,9 @@ export async function openOptionsPage(route: string) {
 /**
  * Restore the backup
  */
-export async function restoreBackup(json: object, whoAmI?: PersonIdentifier): Promise<void> {
-    function mapID(x: { network: string; userId: string }): PersonIdentifier {
-        return new PersonIdentifier(x.network, x.userId)
+export async function restoreBackup(json: object, whoAmI?: ProfileIdentifier): Promise<void> {
+    function mapID(x: { network: string; userId: string }): ProfileIdentifier {
+        return new ProfileIdentifier(x.network, x.userId)
     }
     const data = UpgradeBackupJSONFile(json, whoAmI)
     if (!data) throw new TypeError(geti18nString('service_invalid_backup_file'))
@@ -279,7 +279,7 @@ export async function restoreBackup(json: object, whoAmI?: PersonIdentifier): Pr
 
     const people = Promise.all(
         (data.people || []).map<Promise<PersonRecord>>(async rec => {
-            const id = new PersonIdentifier(rec.network, rec.userId)
+            const id = new ProfileIdentifier(rec.network, rec.userId)
             return {
                 identifier: id,
                 groups: [],

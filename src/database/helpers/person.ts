@@ -1,5 +1,5 @@
 import { queryPersonDB, PersonRecord, queryPeopleDB, queryMyIdentityAtDB } from '../people'
-import { PersonIdentifier } from '../type'
+import { ProfileIdentifier } from '../type'
 import { getAvatarDataURL } from './avatar'
 import { memoize } from 'lodash-es'
 import { CryptoKeyToJsonWebKey } from '../../utils/type-transform/CryptoKey-JsonWebKey'
@@ -28,7 +28,7 @@ export async function personRecordToPerson(record: PersonRecord): Promise<Person
  * Query a person even it is not stored in the database.
  * @param identifier - Identifier for people want to query
  */
-export async function queryPerson(identifier: PersonIdentifier): Promise<Person> {
+export async function queryPerson(identifier: ProfileIdentifier): Promise<Person> {
     const person = await queryPersonDB(identifier)
     if (!person)
         return {
@@ -59,8 +59,8 @@ export const calculateFingerprint = memoize(async function(_key: CryptoKey) {
 /**
  * Get your id at a network even it is unresolved
  */
-export async function getMyPrivateKey(whoAmI: PersonIdentifier) {
+export async function getMyPrivateKey(whoAmI: ProfileIdentifier) {
     const r1 = await queryMyIdentityAtDB(whoAmI)
     if (r1) return r1
-    return queryMyIdentityAtDB(new PersonIdentifier(whoAmI.network, '$self'))
+    return queryMyIdentityAtDB(new ProfileIdentifier(whoAmI.network, '$self'))
 }

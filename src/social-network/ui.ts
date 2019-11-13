@@ -1,7 +1,7 @@
 import { env, Env, Preference, ProfileUI, SocialNetworkWorkerAndUIDefinition } from './shared'
 import { DOMProxy, LiveSelector, ValueRef } from '@holoflows/kit/es'
 import { Group, Profile } from '../database'
-import { PersonIdentifier } from '../database/type'
+import { ProfileIdentifier } from '../database/type'
 import { Payload } from '../utils/type-transform/Payload'
 import { defaultTo, isNull } from 'lodash-es'
 import Services from '../extension/service'
@@ -178,7 +178,7 @@ export interface SocialNetworkUITasks {
      * Called by `AutomatedTabTask`
      * @param identifier The post id
      */
-    taskGetProfile(identifier: PersonIdentifier): Promise<ProfileUI>
+    taskGetProfile(identifier: ProfileIdentifier): Promise<ProfileUI>
 }
 
 //#endregion
@@ -215,7 +215,7 @@ export interface SocialNetworkUIDataSources {
     readonly posts?: WeakMap<object, PostInfo>
 }
 export type PostInfo = {
-    readonly postBy: ValueRef<PersonIdentifier>
+    readonly postBy: ValueRef<ProfileIdentifier>
     readonly postID: ValueRef<string | null>
     readonly postContent: ValueRef<string>
     readonly postPayload: ValueRef<Payload | null>
@@ -249,7 +249,7 @@ export const getEmptyPostInfoByElement = (
 ) => {
     return {
         decryptedPostContent: new ValueRef(''),
-        postBy: new ValueRef(PersonIdentifier.unknown, PersonIdentifier.equals),
+        postBy: new ValueRef(ProfileIdentifier.unknown, ProfileIdentifier.equals),
         postContent: new ValueRef(''),
         postID: new ValueRef<string | null>(null),
         postPayload: new ValueRef<Payload | null>(null),
@@ -261,7 +261,7 @@ export const definedSocialNetworkUIs = new Set<SocialNetworkUI>()
 export const getActivatedUI = () => activatedSocialNetworkUI
 
 let activatedSocialNetworkUI = ({
-    lastRecognizedIdentity: new ValueRef({ identifier: PersonIdentifier.unknown }),
+    lastRecognizedIdentity: new ValueRef({ identifier: ProfileIdentifier.unknown }),
     currentIdentity: new ValueRef(null),
     myIdentitiesRef: new ValueRef([] as Profile[]),
     useColorScheme: () => 'light',

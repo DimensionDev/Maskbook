@@ -2,7 +2,7 @@ import * as Alpha39 from '../../../crypto/crypto-alpha-39'
 import * as Gun2 from '../../../network/gun/version.2'
 import { getMyPrivateKey } from '../../../database'
 import { queryLocalKeyDB } from '../../../database/people'
-import { PersonIdentifier, PostIVIdentifier, GroupIdentifier, constructPostRecipients } from '../../../database/type'
+import { ProfileIdentifier, PostIVIdentifier, GroupIdentifier, constructPostRecipients } from '../../../database/type'
 import { prepareOthersKeyForEncryptionV39OrV38 } from '../prepareOthersKeyForEncryption'
 import { cryptoProviderTable } from './utils'
 import { updatePostDB, RecipientDetail } from '../../../database/post'
@@ -11,8 +11,8 @@ export async function appendShareTarget(
     version: -40 | -39 | -38,
     postAESKey: string | CryptoKey,
     iv: string,
-    people: PersonIdentifier[],
-    whoAmI: PersonIdentifier,
+    people: ProfileIdentifier[],
+    whoAmI: ProfileIdentifier,
     invitedBy?: GroupIdentifier,
 ): Promise<void> {
     const cryptoProvider = cryptoProviderTable[version]
@@ -35,7 +35,7 @@ export async function appendShareTarget(
             {
                 identifier: new PostIVIdentifier(whoAmI.network, iv),
                 recipients: constructPostRecipients(
-                    people.map<[PersonIdentifier, RecipientDetail]>(identifier => [
+                    people.map<[ProfileIdentifier, RecipientDetail]>(identifier => [
                         identifier,
                         {
                             reason: [

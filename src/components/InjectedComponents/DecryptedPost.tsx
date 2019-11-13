@@ -8,7 +8,7 @@ import { geti18nString } from '../../utils/i18n'
 import { makeStyles } from '@material-ui/styles'
 import { Box, Link, useMediaQuery, useTheme } from '@material-ui/core'
 import { Profile } from '../../database'
-import { Identifier, PersonIdentifier } from '../../database/type'
+import { Identifier, ProfileIdentifier } from '../../database/type'
 import { NotSetupYetPrompt } from '../shared/NotSetupYetPrompt'
 import {
     DecryptionProgress,
@@ -121,8 +121,8 @@ export const DecryptPostFailed = React.memo(function DecryptPostFailed({ error, 
 export interface DecryptPostProps {
     onDecrypted(post: string): void
 
-    postBy: PersonIdentifier
-    whoAmI: PersonIdentifier
+    postBy: ProfileIdentifier
+    whoAmI: ProfileIdentifier
     encryptedText: string
     people: Profile[]
     alreadySelectedPreviously: Profile[]

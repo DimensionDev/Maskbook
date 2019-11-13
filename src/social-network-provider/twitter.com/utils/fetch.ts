@@ -2,7 +2,7 @@ import { regexMatch, downloadUrl } from '../../../utils/utils'
 import { notNullable } from '../../../utils/assert'
 import { defaultTo } from 'lodash-es'
 import { nthChild } from '../../../utils/dom'
-import { PersonIdentifier } from '../../../database/type'
+import { ProfileIdentifier } from '../../../database/type'
 import { twitterUrl } from './url'
 import Services from '../../../extension/service'
 
@@ -48,7 +48,7 @@ export const bioCardParser = (cardNode: HTMLDivElement) => {
             avatar: avatarElement ? avatarElement.src : undefined,
             name,
             handle,
-            identifier: new PersonIdentifier(twitterUrl.hostIdentifier, handle),
+            identifier: new ProfileIdentifier(twitterUrl.hostIdentifier, handle),
             bio,
             isFollower,
             isFollowing,
@@ -63,7 +63,7 @@ export const bioCardParser = (cardNode: HTMLDivElement) => {
             avatar: avatarElement ? avatarElement.src : undefined,
             name,
             handle,
-            identifier: new PersonIdentifier(twitterUrl.hostIdentifier, handle),
+            identifier: new ProfileIdentifier(twitterUrl.hostIdentifier, handle),
             bio,
             isFollower,
             isFollowing,
@@ -142,7 +142,7 @@ export const postImageParser = async (node: HTMLElement) => {
         const imgUrls = Array.from(imgNodes).map(node => node.getAttribute('src') ?? '')
         if (!imgUrls.length) return ''
         const { handle } = postNameParser(node)
-        const posterIdentity = new PersonIdentifier(twitterUrl.hostIdentifier, handle)
+        const posterIdentity = new ProfileIdentifier(twitterUrl.hostIdentifier, handle)
         return (
             await Promise.all(
                 imgUrls

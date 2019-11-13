@@ -1,7 +1,7 @@
 import tasks from '../../../extension/content-script/tasks'
 import { geti18nString } from '../../../utils/i18n'
-import { PersonIdentifier } from '../../../database/type'
-export function autoVerifyPostFacebook(user: PersonIdentifier, prove: string) {
+import { ProfileIdentifier } from '../../../database/type'
+export function autoVerifyPostFacebook(user: ProfileIdentifier, prove: string) {
     tasks(`https://www.facebook.com/`, {
         active: true,
         autoClose: false,

@@ -32,7 +32,7 @@ export abstract class Identifier {
         if (fromStringCache.has(id)) return fromStringCache.get(id)!
         const [type, ...rest] = id.split(':') as [Identifiers, string]
         let result: Identifier | null = null
-        if (type === 'person') result = PersonIdentifier[$fromString](rest.join(':'))
+        if (type === 'person') result = ProfileIdentifier[$fromString](rest.join(':'))
         else if (type === 'group') result = GroupIdentifier[$fromString](rest.join(':'))
         else if (type === 'post') result = PostIdentifier[$fromString](rest.join(':'))
         else if (type === 'post_iv') result = PostIVIdentifier[$fromString](rest.join(':'))
@@ -52,11 +52,11 @@ export abstract class Identifier {
     }
 }
 
-@serializable('PersonIdentifier')
+@serializable('ProfileIdentifier')
 export class ProfileIdentifier extends Identifier {
     static readonly unknown = new ProfileIdentifier('localhost', '$unknown')
     get isUnknown() {
-        return this.equals(PersonIdentifier.unknown)
+        return this.equals(ProfileIdentifier.unknown)
     }
     /**
      * @param network - Network belongs to
@@ -76,12 +76,9 @@ export class ProfileIdentifier extends Identifier {
     static [$fromString](str: string) {
         const [network, userId] = str.split('/')
         if (!network || !userId) return null
-        return new PersonIdentifier(network, userId)
+        return new ProfileIdentifier(network, userId)
     }
 }
-export const PersonIdentifier = ProfileIdentifier
-export type PersonIdentifier = ProfileIdentifier
-
 export enum PreDefinedVirtualGroupNames {
     friends = '_default_friends_group_',
     followers = '_followers_group_',
@@ -90,10 +87,10 @@ export enum PreDefinedVirtualGroupNames {
 
 @serializable('GroupIdentifier')
 export class GroupIdentifier extends Identifier {
-    static getFriendsGroupIdentifier(who: PersonIdentifier, groupId: string) {
+    static getFriendsGroupIdentifier(who: ProfileIdentifier, groupId: string) {
         return new GroupIdentifier(who.network, who.userId, groupId)
     }
-    static getDefaultFriendsGroupIdentifier(who: PersonIdentifier) {
+    static getDefaultFriendsGroupIdentifier(who: ProfileIdentifier) {
         return new GroupIdentifier(who.network, who.userId, PreDefinedVirtualGroupNames.friends)
     }
     constructor(
@@ -108,7 +105,7 @@ export class GroupIdentifier extends Identifier {
     }
     get ownerIdentifier() {
         if (this.virtualGroupOwner === null) throw new Error('Can not know the owner of this group')
-        return new PersonIdentifier(this.network, this.virtualGroupOwner)
+        return new ProfileIdentifier(this.network, this.virtualGroupOwner)
     }
     toText() {
         return 'group:' + [this.network, this.virtualGroupOwner, this.groupID].join('/')
@@ -207,7 +204,7 @@ function noSlash(str?: string) {
     if (str.split('/')[1]) throw new TypeError('Cannot contain / in a part of identifier')
 }
 
-export function constructPostRecipients(data: [PersonIdentifier, RecipientDetail][]) {
+export function constructPostRecipients(data: [ProfileIdentifier, RecipientDetail][]) {
     const x: Record<string, RecipientDetail> = {}
     for (const [id, detail] of data) {
         x[id.toText()] = detail

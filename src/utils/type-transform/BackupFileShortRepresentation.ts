@@ -1,11 +1,11 @@
 import { BackupJSONFileLatest } from './BackupFile'
-import { PersonIdentifier } from '../../database/type'
+import { ProfileIdentifier } from '../../database/type'
 import { compressSecp256k1Key, decompressSecp256k1Key } from './SECP256k1-Compression'
 import { Profile } from '../../database'
 
 export type BackupJSONFileLatestShort = [
-    PersonIdentifier['network'],
-    PersonIdentifier['userId'],
+    ProfileIdentifier['network'],
+    ProfileIdentifier['userId'],
     Profile['nickname'],
     // LocalKey
     JsonWebKey['k'],

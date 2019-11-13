@@ -1,6 +1,6 @@
 import { bioCard, selfInfoSelectors, postsContentSelector, postsImageSelector } from '../utils/selector'
 import { MutationObserverWatcher } from '@holoflows/kit'
-import { GroupIdentifier, PersonIdentifier, PreDefinedVirtualGroupNames } from '../../../database/type'
+import { GroupIdentifier, ProfileIdentifier, PreDefinedVirtualGroupNames } from '../../../database/type'
 import {
     getEmptyPostInfoByElement,
     SocialNetworkUI,
@@ -23,7 +23,7 @@ const resolveLastRecognizedIdentity = (self: SocialNetworkUI) => {
         const avatar = selfInfoSelectors().userAvatar.evaluate()
         if (!isNil(handle)) {
             ref.value = {
-                identifier: new PersonIdentifier(self.networkIdentifier, handle),
+                identifier: new ProfileIdentifier(self.networkIdentifier, handle),
                 nickname,
                 avatar,
             }
@@ -48,7 +48,7 @@ const registerUserCollector = () => {
                     Services.Crypto.verifyOthersProve(bio, identifier),
                     Services.People.queryMyIdentities(twitterUrl.hostIdentifier),
                 ])
-                const myIdentity = myIdentities[0] || PersonIdentifier.unknown
+                const myIdentity = myIdentities[0] || ProfileIdentifier.unknown
                 const myFirends = GroupIdentifier.getFriendsGroupIdentifier(
                     myIdentity.identifier,
                     PreDefinedVirtualGroupNames.friends,
@@ -113,7 +113,7 @@ const registerPostCollector = (self: SocialNetworkUI) => {
                 if (!tweetNode) return
                 const { pid, content, handle, name, avatar } = postParser(tweetNode)
                 if (!pid) return
-                const postBy = new PersonIdentifier(self.networkIdentifier, handle)
+                const postBy = new ProfileIdentifier(self.networkIdentifier, handle)
                 info.postID.value = pid
                 info.postContent.value = content
                 if (!info.postBy.value.equals(postBy)) {

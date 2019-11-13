@@ -1,5 +1,5 @@
 import { GroupRecord, createUserGroupDatabase, updateUserGroupDatabase, queryUserGroupsDatabase } from '../group'
-import { PersonIdentifier, GroupIdentifier, PreDefinedVirtualGroupNames } from '../type'
+import { ProfileIdentifier, GroupIdentifier, PreDefinedVirtualGroupNames } from '../type'
 import { Person } from './person'
 import { Profile } from '..'
 
@@ -7,7 +7,7 @@ export interface Group extends GroupRecord {
     avatar?: string
 }
 
-export function createFriendsGroup(who: PersonIdentifier, groupId: string) {
+export function createFriendsGroup(who: ProfileIdentifier, groupId: string) {
     return createUserGroupDatabase(
         GroupIdentifier.getFriendsGroupIdentifier(who, groupId),
         // Put the raw special name in, then UI can display in their own language.
@@ -15,16 +15,18 @@ export function createFriendsGroup(who: PersonIdentifier, groupId: string) {
     )
 }
 
-export function createDefaultFriendsGroup(who: PersonIdentifier) {
+export function createDefaultFriendsGroup(who: ProfileIdentifier) {
     return createFriendsGroup(who, PreDefinedVirtualGroupNames.friends)
 }
 
-export async function addProfileToFriendsGroup(group: GroupIdentifier, newMembers: (Profile | PersonIdentifier)[]) {
-    const memberList = newMembers.map(x => (x instanceof PersonIdentifier ? x : x.identifier)) as PersonIdentifier[]
+export async function addProfileToFriendsGroup(group: GroupIdentifier, newMembers: (Profile | ProfileIdentifier)[]) {
+    const memberList = newMembers.map(x => (x instanceof ProfileIdentifier ? x : x.identifier)) as ProfileIdentifier[]
     await updateUserGroupDatabase({ identifier: group, members: memberList }, 'append')
 }
-export function removeProfileFromFriendsGroup(group: GroupIdentifier, removedFriend: (Profile | PersonIdentifier)[]) {
-    const friendList = removedFriend.map(x => (x instanceof PersonIdentifier ? x : x.identifier)) as PersonIdentifier[]
+export function removeProfileFromFriendsGroup(group: GroupIdentifier, removedFriend: (Profile | ProfileIdentifier)[]) {
+    const friendList = removedFriend.map(x =>
+        x instanceof ProfileIdentifier ? x : x.identifier,
+    ) as ProfileIdentifier[]
     return updateUserGroupDatabase({ identifier: group }, r => {
         r.members = r.members.filter(x => !friendList.some(y => y.equals(x)))
     })

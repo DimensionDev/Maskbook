@@ -3,7 +3,7 @@ import { makeStyles } from '@material-ui/core/styles'
 import Card from '@material-ui/core/Card'
 import CardContent from '@material-ui/core/CardContent'
 import Typography from '@material-ui/core/Typography'
-import { PersonIdentifier } from '../../../database/type'
+import { ProfileIdentifier } from '../../../database/type'
 import { useTextField } from '../../../utils/components/useForms'
 import { DecryptPost } from '../../../components/InjectedComponents/DecryptedPost'
 import { useIsolatedChooseIdentity } from '../../../components/shared/ChooseIdentity'
@@ -22,8 +22,8 @@ export function DecryptPostDeveloperMode() {
         required: true,
     })
     const network = whoAmI ? whoAmI.identifier.network : 'localhost'
-    const authorIdentifier = useMemo(() => new PersonIdentifier(network, author), [network, author])
-    const whoAmIIdentifier = whoAmI ? whoAmI.identifier : PersonIdentifier.unknown
+    const authorIdentifier = useMemo(() => new ProfileIdentifier(network, author), [network, author])
+    const whoAmIIdentifier = whoAmI ? whoAmI.identifier : ProfileIdentifier.unknown
     return (
         <Card>
             <CardContent>

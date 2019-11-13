@@ -1,5 +1,5 @@
 import { definedSocialNetworkWorkers, SocialNetworkWorker } from '../worker'
-import { GroupIdentifier, Identifier, PersonIdentifier, PostIdentifier, PostIVIdentifier } from '../../database/type'
+import { GroupIdentifier, Identifier, ProfileIdentifier, PostIdentifier, PostIVIdentifier } from '../../database/type'
 
 const find = (network: string) => (v: SocialNetworkWorker) => v.networkIdentifier === network
 
@@ -10,7 +10,7 @@ export default function getCurrentNetworkWorker(network: string | Identifier): S
         if (worker === undefined) throw new TypeError('Provider not found')
         return worker
     }
-    if (network instanceof PersonIdentifier) {
+    if (network instanceof ProfileIdentifier) {
         if (network.isUnknown) throw new TypeError('Searching a unknown provider')
         return getCurrentNetworkWorker(network.network)
     }

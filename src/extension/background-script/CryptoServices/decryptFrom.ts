@@ -7,7 +7,7 @@ import { deconstructPayload, Payload } from '../../../utils/type-transform/Paylo
 import { geti18nString } from '../../../utils/i18n'
 import { getMyPrivateKey } from '../../../database'
 import { queryLocalKeyDB, queryPersonDB, PersonRecord, PersonRecordPublicPrivate } from '../../../database/people'
-import { PersonIdentifier, PostIVIdentifier } from '../../../database/type'
+import { ProfileIdentifier, PostIVIdentifier } from '../../../database/type'
 import { queryPostDB, updatePostDB } from '../../../database/post'
 import { addPerson } from './addPerson'
 import { MessageCenter } from '../../../utils/messages'
@@ -71,8 +71,8 @@ type ReturnOfDecryptFromMessageWithProgress = AsyncGenerator<
  */
 export async function* decryptFromMessageWithProgress(
     encrypted: string,
-    author: PersonIdentifier,
-    whoAmI: PersonIdentifier,
+    author: ProfileIdentifier,
+    whoAmI: ProfileIdentifier,
 ): ReturnOfDecryptFromMessageWithProgress {
     // If any of parameters is changed, we will not handle it.
     let _data: Payload
@@ -282,7 +282,7 @@ function handleDOMException(e: unknown) {
 }
 type PersonRecordWithPublicKey = PersonRecord & Required<Pick<PersonRecord, 'publicKey'>>
 async function* findAuthorPublicKey(
-    by: PersonIdentifier,
+    by: ProfileIdentifier,
     hasCache: boolean,
     maxIteration = 10,
 ): AsyncGenerator<Progress, 'out of chance' | 'use cache' | PersonRecordWithPublicKey, unknown> {
@@ -346,7 +346,7 @@ export async function decryptFrom(
     throw new TypeError('Invalid iterator state')
 }
 
-async function decryptFromCache(postPayload: Payload, by: PersonIdentifier) {
+async function decryptFromCache(postPayload: Payload, by: ProfileIdentifier) {
     const { encryptedText, iv, version } = postPayload
     const cryptoProvider = version === -40 ? Alpha40 : Alpha39
 

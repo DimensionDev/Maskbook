@@ -1,6 +1,6 @@
 import { env, ProfileUI, SocialNetworkWorkerAndUIDefinition } from './shared'
 import { GetContext } from '@holoflows/kit/es'
-import { PersonIdentifier, PostIdentifier } from '../database/type'
+import { ProfileIdentifier, PostIdentifier } from '../database/type'
 import { startWorkerService } from '../extension/background-script/WorkerService'
 import { defaultSocialNetworkWorker } from './defaults/worker'
 import { defaultSharedSettings } from './defaults/shared'
@@ -26,30 +26,30 @@ export interface SocialNetworkWorkerDefinition extends SocialNetworkWorkerAndUID
      * }
      * @param postIdentifier The post id
      */
-    fetchPostContent(postIdentifier: PostIdentifier<PersonIdentifier>): Promise<string>
+    fetchPostContent(postIdentifier: PostIdentifier<ProfileIdentifier>): Promise<string>
     /**
      * This function should fetch the given post by `fetch`, `AutomatedTabTask` or anything
      * @param identifier The post id
      */
-    fetchProfile(identifier: PersonIdentifier): Promise<ProfileUI>
+    fetchProfile(identifier: ProfileIdentifier): Promise<ProfileUI>
     /**
      * This function should open a new page, then automatically input provePost to bio
      *
      * If this function is not provided, autoVerifyBio in Welcome will be unavailable
      */
-    autoVerifyBio: ((user: PersonIdentifier, provePost: string) => void) | null
+    autoVerifyBio: ((user: ProfileIdentifier, provePost: string) => void) | null
     /**
      * This function should open a new page, then automatically input provePost to the post box
      *
      * If this function is not provided, autoVerifyPost in Welcome will be unavailable
      */
-    autoVerifyPost: ((user: PersonIdentifier, provePost: string) => void) | null
+    autoVerifyPost: ((user: ProfileIdentifier, provePost: string) => void) | null
     /**
      * This function should open a new page, then let user add it by themselves
      *
      * If this function is not provided, manualVerifyPost in Welcome will be unavailable
      */
-    manualVerifyPost: ((user: PersonIdentifier, provePost: string) => void) | null
+    manualVerifyPost: ((user: ProfileIdentifier, provePost: string) => void) | null
 }
 
 export type SocialNetworkWorker = Required<SocialNetworkWorkerDefinition>
