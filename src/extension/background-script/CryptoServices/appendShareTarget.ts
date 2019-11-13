@@ -6,6 +6,7 @@ import { PersonIdentifier, PostIVIdentifier, GroupIdentifier, constructPostRecip
 import { prepareOthersKeyForEncryptionV39OrV38 } from '../prepareOthersKeyForEncryption'
 import { cryptoProviderTable } from './utils'
 import { updatePostDB, RecipientDetail } from '../../../database/post'
+import { getNetworkWorker } from '../../../social-network/worker'
 export async function appendShareTarget(
     version: -40 | -39 | -38,
     postAESKey: string | CryptoKey,
@@ -29,7 +30,7 @@ export async function appendShareTarget(
     if (version === -39 || version === -38) {
         const toKey = await prepareOthersKeyForEncryptionV39OrV38(people)
         const othersAESKeyEncrypted = await Alpha39.generateOthersAESKeyEncrypted(version, AESKey, myPrivateKey, toKey)
-        Gun2.publishPostAESKeyOnGun2(version, iv, othersAESKeyEncrypted)
+        Gun2.publishPostAESKeyOnGun2(version, iv, getNetworkWorker(whoAmI).gunNetworkHint, othersAESKeyEncrypted)
         updatePostDB(
             {
                 identifier: new PostIVIdentifier(whoAmI.network, iv),
