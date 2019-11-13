@@ -2,7 +2,7 @@ import * as Alpha38 from '../../../crypto/crypto-alpha-38'
 import * as Gun2 from '../../../network/gun/version.2'
 import { encodeArrayBuffer } from '../../../utils/type-transform/String-ArrayBuffer'
 import { constructAlpha38, PayloadLatest } from '../../../utils/type-transform/Payload'
-import { getMyPrivateKey, Group } from '../../../database'
+import { Group, queryPrivateKey } from '../../../database'
 import { queryLocalKeyDB } from '../../../database/people'
 import { ProfileIdentifier, PostIVIdentifier, GroupIdentifier, Identifier } from '../../../database/type'
 import { prepareOthersKeyForEncryptionV39OrV38 } from '../prepareOthersKeyForEncryption'
@@ -59,8 +59,8 @@ export async function encryptTo(
     const toKey = await prepareOthersKeyForEncryptionV39OrV38(
         Object.keys(recipients).map(Identifier.fromString) as ProfileIdentifier[],
     )
-    const mine = await getMyPrivateKey(whoAmI)
-    if (!mine) throw new TypeError('Not inited yet')
+    const minePrivateKey = await queryPrivateKey(whoAmI)
+    if (!minePrivateKey) throw new TypeError('Not inited yet')
     const {
         encryptedContent: encryptedText,
         othersAESKeyEncrypted,
@@ -72,7 +72,7 @@ export async function encryptTo(
         content,
         othersPublicKeyECDH: toKey,
         ownersLocalKey: (await queryLocalKeyDB(whoAmI))!,
-        privateKeyECDH: mine.privateKey,
+        privateKeyECDH: minePrivateKey,
         iv: crypto.getRandomValues(new Uint8Array(16)),
     })
 
@@ -86,7 +86,7 @@ export async function encryptTo(
     }
 
     const payloadWaitToSign = getSignablePayload(payload)
-    payload.signature = encodeArrayBuffer(await Alpha38.sign(payloadWaitToSign, mine.privateKey))
+    payload.signature = encodeArrayBuffer(await Alpha38.sign(payloadWaitToSign, minePrivateKey))
 
     await createPostDB({
         identifier: new PostIVIdentifier(whoAmI.network, payload.iv),
