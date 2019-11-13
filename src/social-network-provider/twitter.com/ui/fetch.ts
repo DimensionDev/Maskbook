@@ -46,7 +46,7 @@ const registerUserCollector = () => {
                 const { isFollower, isFollowing, identifier, bio } = bioCardParser(cardNode)
                 const [verified, myIdentities] = await Promise.all([
                     Services.Crypto.verifyOthersProve(bio, identifier),
-                    Services.People.queryMyIdentities(twitterUrl.hostIdentifier),
+                    Services.Identity.queryMyProfiles(twitterUrl.hostIdentifier),
                 ])
                 const myIdentity = myIdentities[0] || ProfileIdentifier.unknown
                 const myFirends = GroupIdentifier.getFriendsGroupIdentifier(
@@ -63,16 +63,16 @@ const registerUserCollector = () => {
                 )
                 if (verified && (isFollower || isFollowing)) {
                     if (isFollower) {
-                        Services.People.addPersonToFriendsGroup(myFollowers, [identifier]).then()
+                        Services.UserGroup.addProfileToFriendsGroup(myFollowers, [identifier]).then()
                     }
                     if (isFollowing) {
-                        Services.People.addPersonToFriendsGroup(myFollowing, [identifier]).then()
+                        Services.UserGroup.addProfileToFriendsGroup(myFollowing, [identifier]).then()
                     }
                     if (isFollower && isFollowing) {
-                        Services.People.addPersonToFriendsGroup(myFirends, [identifier]).then()
+                        Services.UserGroup.addProfileToFriendsGroup(myFirends, [identifier]).then()
                     }
                 } else {
-                    Services.People.removePersonFromFriendsGroup(myFirends, [identifier]).then()
+                    Services.UserGroup.removeProfileFromFriendsGroup(myFirends, [identifier]).then()
                 }
             }
             resolve()
@@ -119,7 +119,7 @@ const registerPostCollector = (self: SocialNetworkUI) => {
                 if (!info.postBy.value.equals(postBy)) {
                     info.postBy.value = postBy
                 }
-                Services.People.updatePersonInfo(postBy, {
+                Services.Identity.updateProfileInfo(postBy, {
                     nickname: name,
                     avatarURL: avatar,
                 }).then()

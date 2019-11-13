@@ -15,14 +15,14 @@ export function InitGroupsValueRef(
 }
 
 async function query(network: string, ref: ValueRef<Group[]>) {
-    ref.value = await Services.People.queryUserGroups(network)
+    ref.value = await Services.UserGroup.queryUserGroups(network)
 }
 
 async function create(network: string, ref: ValueRef<Group[]>, groupIDs: string[]) {
     type Pair = [ProfileIdentifier, GroupIdentifier]
     const [identities, groups] = await Promise.all([
-        Services.People.queryMyIdentities(network),
-        Services.People.queryUserGroups(network),
+        Services.Identity.queryMyProfiles(network),
+        Services.UserGroup.queryUserGroups(network),
     ])
     const pairs = identities.flatMap(({ identifier }) => {
         return groupIDs.map(
@@ -33,7 +33,7 @@ async function create(network: string, ref: ValueRef<Group[]>, groupIDs: string[
     await Promise.all(
         pairs.map(async ([userIdentifier, groupIdentifier]) => {
             if (!groups.some(group => group.identifier.equals(groupIdentifier))) {
-                await Services.People.createFriendsGroup(userIdentifier, groupIdentifier.groupID)
+                await Services.UserGroup.createFriendsGroup(userIdentifier, groupIdentifier.groupID)
             }
         }),
     )

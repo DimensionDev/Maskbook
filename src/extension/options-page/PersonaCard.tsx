@@ -124,7 +124,7 @@ export default function PersonaCard({ identity }: Props) {
 
     const undoDeleteIdentity = (restore: BackupJSONFileLatest) => {
         const undo = (key: string) => {
-            Services.People.restoreBackup(restore)
+            Services.Welcome.restoreBackup(restore)
             closeSnackbar(key)
         }
         return (key: string) => (
@@ -139,22 +139,26 @@ export default function PersonaCard({ identity }: Props) {
             download: false,
             onlyBackupWhoAmI: true,
         })
-        Services.People.removeMyIdentity(identity.identifier).then(() => {
-            enqueueSnackbar(geti18nString('dashboard_item_deleted'), {
-                variant: 'default',
-                action: undoDeleteIdentity(backup),
+        const ec_id = identity.linkedPersona?.identifier
+        if (ec_id)
+            Services.Identity.deletePersona(ec_id, 'delete even with private').then(() => {
+                enqueueSnackbar(geti18nString('dashboard_item_deleted'), {
+                    variant: 'default',
+                    action: undoDeleteIdentity(backup),
+                })
             })
-        })
     }
 
     const [rename, setRename] = useState(false)
 
     const renameIdentity = (event: React.FocusEvent<HTMLSpanElement> | React.KeyboardEvent<HTMLSpanElement>) => {
         event.preventDefault()
-        Services.People.updatePersonInfo(identity.identifier, { nickname: event.currentTarget.innerText }).then(() => {
-            enqueueSnackbar(geti18nString('dashboard_item_done'), { variant: 'success', autoHideDuration: 1000 })
-            setRename(false)
-        })
+        Services.Identity.updateProfileInfo(identity.identifier, { nickname: event.currentTarget.innerText }).then(
+            () => {
+                enqueueSnackbar(geti18nString('dashboard_item_done'), { variant: 'success', autoHideDuration: 1000 })
+                setRename(false)
+            },
+        )
     }
 
     const titleRef = useRef<HTMLSpanElement | null>(null)
