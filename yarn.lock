@@ -1161,7 +1161,6 @@
 
 "@holoflows/kit@https://github.com/DimensionDev/holoflows-kit":
   version "0.6.1"
-  uid "848c28a8e8ff5d0a6077bac2f6decdfabbfebe48"
   resolved "https://github.com/DimensionDev/holoflows-kit#848c28a8e8ff5d0a6077bac2f6decdfabbfebe48"
   dependencies:
     async-call-rpc "^1.0.0"
@@ -11320,10 +11319,10 @@ node-releases@^1.1.29:
   dependencies:
     semver "^5.3.0"
 
-node-stego@^0.6.2:
-  version "0.6.2"
-  resolved "https://registry.yarnpkg.com/node-stego/-/node-stego-0.6.2.tgz#e5cce83d2e00bf41e352d169ac947f99eb256ffa"
-  integrity sha512-FNncCHgnQFN9Ij8GLtpwIBCV4LmPWiBPv0LpykQmkh10e9Qg+k5NbgtNrsi+jrbfLSwkPbu/6Dgp99UuoMjWPQ==
+node-stego@^0.7.0:
+  version "0.7.0"
+  resolved "https://registry.yarnpkg.com/node-stego/-/node-stego-0.7.0.tgz#3943ce187e108371dd754ec53086b4f920113afe"
+  integrity sha512-0Vffm7AmNjcZrF7kC7rRd3QpPl0kEcfESVak+gHX9GSz14ZfI80oqyLg5NluWcTw9YZxgDIVDuFjfU/EtkfpoQ==
   dependencies:
     meow "^5.0.0"
 
