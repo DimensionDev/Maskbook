@@ -2,8 +2,8 @@ import { ProfileIdentifier, GroupIdentifier } from '../type'
 import { queryAvatarDB, isAvatarOutdatedDB, storeAvatarDB } from '../avatar'
 import { memoizePromise } from '../../utils/memoize'
 import { MessageCenter } from '../../utils/messages'
-import { queryPerson } from './person'
 import { downloadUrl } from '../../utils/utils'
+import { queryProfile } from '..'
 
 /**
  * Get a (cached) blob url for an identifier.
@@ -55,7 +55,7 @@ export async function storeAvatar(
     } finally {
         getAvatarDataURL.cache.delete(identifier.toText())
         if (identifier instanceof ProfileIdentifier) {
-            MessageCenter.emit('peopleChanged', [{ of: await queryPerson(identifier), reason: 'update' }])
+            MessageCenter.emit('peopleChanged', [{ of: await queryProfile(identifier), reason: 'update' as const }])
         }
     }
 }

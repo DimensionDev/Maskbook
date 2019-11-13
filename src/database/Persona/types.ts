@@ -11,6 +11,7 @@ export interface Profile extends Readonly<TypedOmit<ProfileRecord, 'localKey' | 
 export interface Persona extends TypedOmit<PersonaRecord, 'localKey' | 'publicKey' | 'privateKey' | 'linkedProfiles'> {
     readonly linkedProfiles: ReadonlyIdentifierMap<ProfileIdentifier, LinkedProfileDetails>
     readonly hasPrivateKey: boolean
+    readonly fingerprint: string
 }
 
 export interface PersonaWithPrivateKey

@@ -53,7 +53,7 @@ export function PostInspector(props: PostInspectorProps) {
                     'Who am I',
                     whoAmI ? `Nickname ${whoAmI.nickname || 'unknown'}, UserID ${whoAmI.identifier.userId}` : 'Unknown',
                 ],
-                ['My fingerprint', whoAmI ? whoAmI.fingerprint || 'Unknown' : 'unknown'],
+                ['My fingerprint', whoAmI?.linkedPersona?.fingerprint ?? 'Unknown'],
                 ['Post ID', props.postId || 'Unknown'],
                 ['Post Content', props.post],
             ]}

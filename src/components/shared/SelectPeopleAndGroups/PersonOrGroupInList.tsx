@@ -72,7 +72,7 @@ export function PersonOrGroupInList(props: PersonOrGroupInListProps) {
         const person = props.item
         name = person.nickname || person.identifier.userId
         avatar = <Avatar person={person} />
-        secondaryText = person.fingerprint ? person.fingerprint.toLowerCase() : undefined
+        secondaryText = person.linkedPersona?.fingerprint.toLowerCase()
     }
     const withNetwork = (
         <>

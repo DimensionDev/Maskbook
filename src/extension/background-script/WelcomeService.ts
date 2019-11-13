@@ -19,7 +19,7 @@ import {
     JSON_HINT_FOR_POWER_USER,
     UpgradeBackupJSONFile,
 } from '../../utils/type-transform/BackupFile'
-import { ProfileIdentifier, ProfileIdentifier } from '../../database/type'
+import { ProfileIdentifier } from '../../database/type'
 import { MessageCenter } from '../../utils/messages'
 import getCurrentNetworkWorker from '../../social-network/utils/getCurrentNetworkWorker'
 import { SocialNetworkUI } from '../../social-network/ui'

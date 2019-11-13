@@ -1,5 +1,5 @@
 import * as Gun1 from '../../../network/gun/version.1'
-import { Profile, queryPerson } from '../../../database'
+import { Profile, queryProfile } from '../../../database'
 import { ProfileIdentifier, Identifier, PostIVIdentifier } from '../../../database/type'
 import { queryPostDB } from '../../../database/post'
 //#endregion
@@ -29,6 +29,6 @@ export async function getSharedListOfPost(
     return Promise.all(
         Array.from(ids)
             .map(x => Identifier.fromString(x) as ProfileIdentifier)
-            .map(queryPerson),
+            .map(queryProfile),
     )
 }

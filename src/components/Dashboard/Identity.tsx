@@ -36,7 +36,8 @@ const useStyles = makeStyles<Theme>(theme => ({
     },
 }))
 export default function Identity({ person, onClick }: Props) {
-    const { avatar, fingerprint, nickname, identifier } = person
+    const { avatar, nickname, identifier } = person
+    const fingerprint = person.linkedPersona?.fingerprint
     const classes = useStyles()
     return (
         <Card onClick={onClick} className={classes.card}>

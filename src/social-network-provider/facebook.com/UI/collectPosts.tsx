@@ -3,8 +3,8 @@ import { deconstructPayload } from '../../../utils/type-transform/Payload'
 import { getEmptyPostInfoByElement, PostInfo, SocialNetworkUI } from '../../../social-network/ui'
 import { isMobileFacebook } from '../isMobile'
 import { getProfileIdentifierAtFacebook } from '../getPersonIdentifierAtFacebook'
-import { downloadUrl } from '../../../utils/utils'
 import Services from '../../../extension/service'
+import { downloadUrl } from '../../../utils/utils'
 
 const posts = new LiveSelector().querySelectorAll<HTMLDivElement>(
     isMobileFacebook ? '.story_body_container ' : '.userContent, .userContent+*+div>div>div>div>div',

@@ -201,6 +201,7 @@ export async function removePeopleDB(people: ProfileIdentifier[]): Promise<void>
     for (const person of people) await t.objectStore('people').delete(person.toText())
     MessageCenter.emit(
         'peopleChanged',
+        // @ts-ignore deprecated
         people.map<PersonUpdateEvent>(x => ({ of: { groups: [], identifier: x }, reason: 'delete' })),
     )
     return
@@ -343,5 +344,6 @@ async function emitPersonChangeEvent(record: PersonRecord | ProfileIdentifier, r
     } else {
         person = await personRecordToPerson(record)
     }
+    // @ts-ignore deprecated
     MessageCenter.emit('peopleChanged', [{ of: person, reason }])
 }
