@@ -46,7 +46,7 @@ const WelcomeActions = {
             .request({ origins: json.grantedHostPermissions })
             .then(granted =>
                 granted
-                    ? Services.People.restoreBackup(json, id)
+                    ? Services.Welcome.restoreBackup(json, id)
                     : Promise.reject(new Error('required permission is not granted.')),
             )
     },
@@ -264,7 +264,8 @@ export default withRouter(function _WelcomePortal(props: RouteComponentProps) {
 
         if (id instanceof ProfileIdentifier) {
             if (id.isUnknown) return
-            Services.People.queryMyIdentities(id)
+            Services.Identity.queryProfile(id)
+                .then(x => [x].filter(y => y.linkedPersona?.hasPrivateKey))
                 .then(([inDB = {} as Profile]) => {
                     const person = (personInferFromURLRef.value = {
                         identifier: id,
@@ -273,7 +274,7 @@ export default withRouter(function _WelcomePortal(props: RouteComponentProps) {
                         createdAt: new Date(),
                         updatedAt: new Date(),
                     } as Profile)
-                    Services.People.updatePersonInfo(person.identifier, {
+                    Services.Identity.updateProfileInfo(person.identifier, {
                         nickname: person.nickname,
                         avatarURL: person.avatar,
                     })

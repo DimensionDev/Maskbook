@@ -34,7 +34,7 @@ export function PostInspector(props: PostInspectorProps) {
         encryptedPost: deconstructPayload(post, getActivatedUI().payloadDecoder),
         provePost: decodeAsPublicKey ? [decodeAsPublicKey] : null,
     }
-    if (type.provePost) Services.People.writePersonOnGun(postBy, { provePostId: postId })
+    if (type.provePost) Services.Identity.writeProfileOnGun(postBy, { provePostId: postId })
     useAsync(async () => {
         if (!whoAmI) return []
         if (!whoAmI.identifier.equals(postBy)) return []

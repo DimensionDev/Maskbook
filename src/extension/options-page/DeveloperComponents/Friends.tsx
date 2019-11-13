@@ -95,7 +95,7 @@ function PersonEditDialog(props: { person: Profile; onClose(): void }) {
                 </Button>
                 <Button
                     onClick={() => {
-                        Services.People.removePeople([person.identifier])
+                        Services.Identity.removeProfile(person.identifier)
                         onClose()
                     }}
                     color="secondary"
@@ -104,7 +104,7 @@ function PersonEditDialog(props: { person: Profile; onClose(): void }) {
                 </Button>
                 <Button
                     onClick={() => {
-                        Services.People.updatePersonInfo(person.identifier, {
+                        Services.Identity.updateProfileInfo(person.identifier, {
                             nickname,
                             avatarURL: avatar,
                             forceUpdateAvatar: true,

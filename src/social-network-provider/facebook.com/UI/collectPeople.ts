@@ -37,10 +37,10 @@ function findPeopleInfo(whoAmI: SocialNetworkUI['currentIdentity']) {
                 const [isFriendNow] = isFriend.evaluate()
                 const myFriends = GroupIdentifier.getDefaultFriendsGroupIdentifier(myID.identifier)
                 if (isFriendNow === Status.Friend) {
-                    Services.People.addPersonToFriendsGroup(myFriends, [thisPerson.identifier])
+                    Services.UserGroup.addProfileToFriendsGroup(myFriends, [thisPerson.identifier])
                     console.log('Adding friend', thisPerson.identifier, 'to', myFriends)
                 } else if (isFriendNow === Status.NonFriend) {
-                    Services.People.removePersonFromFriendsGroup(myFriends, [thisPerson.identifier])
+                    Services.UserGroup.removeProfileFromFriendsGroup(myFriends, [thisPerson.identifier])
                     console.log('Removing friend', thisPerson.identifier, 'from', myFriends)
                 }
             }

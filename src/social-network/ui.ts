@@ -61,7 +61,7 @@ export interface SocialNetworkUIInformationCollector {
      * ```ts
      * lastRecognizedIdentity.addListener(id => {
      *      if (id.identifier.isUnknown) return
-     *      Services.People.resolveIdentity(id.identifier)
+     *      Services.Identity.resolveIdentity(id.identifier)
      * })
      * ```
      *
@@ -313,7 +313,7 @@ export function activateSocialNetworkUI() {
                         ui.currentIdentity.value =
                             ui.myIdentitiesRef.value.find(x => id.identifier.equals(x.identifier)) || null
                     }
-                    Services.People.resolveIdentity(id.identifier).then()
+                    Services.Identity.resolveIdentity(id.identifier).then()
                 })
             })
         }

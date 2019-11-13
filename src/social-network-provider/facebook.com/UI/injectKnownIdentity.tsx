@@ -32,8 +32,8 @@ function PersonKnown() {
     return (
         <AsyncComponent
             promise={() =>
-                Services.People.queryPerson(whois).then(p => {
-                    if (!p.fingerprint) throw new TypeError('public key not found')
+                Services.Identity.queryProfile(whois).then(p => {
+                    if (!p.linkedPersona?.fingerprint) throw new TypeError('public key not found')
                 })
             }
             dependencies={[]}

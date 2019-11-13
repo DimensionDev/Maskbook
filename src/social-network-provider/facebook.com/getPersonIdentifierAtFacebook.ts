@@ -36,13 +36,13 @@ export function getProfileIdentifierAtFacebook(
             try {
                 avatar = dom!.closest('.clearfix')!.parentElement!.querySelector('img')!
                 if (allowCollectInfo && avatar.getAttribute('aria-label') === nickname && nickname) {
-                    Services.People.updatePersonInfo(result, { nickname, avatarURL: avatar.src })
+                    Services.Identity.updateProfileInfo(result, { nickname, avatarURL: avatar.src })
                 }
             } catch {}
             try {
                 avatar = dom!.querySelector('img')!
                 if (allowCollectInfo && avatar) {
-                    Services.People.updatePersonInfo(result, { nickname, avatarURL: avatar.src })
+                    Services.Identity.updateProfileInfo(result, { nickname, avatarURL: avatar.src })
                 }
             } catch {}
             return {
