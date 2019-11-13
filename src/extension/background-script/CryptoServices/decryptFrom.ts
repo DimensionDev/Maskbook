@@ -114,7 +114,12 @@ export async function* decryptFromMessageWithProgress(
         const mine = await getMyPrivateKey(whoAmI)
         if (cachedPostResult) {
             if (!author.equals(whoAmI) && mine && mine.publicKey && version !== -40) {
-                const { keyHash, postHash } = await Gun2.queryPostKeysOnGun2(version, iv, mine.publicKey)
+                const { keyHash, postHash } = await Gun2.queryPostKeysOnGun2(
+                    version,
+                    iv,
+                    mine.publicKey,
+                    getNetworkWorker(whoAmI).gunNetworkHint,
+                )
                 yield { debug: 'debug_finding_hash', hash: [postHash, keyHash] }
             }
             return {
@@ -170,7 +175,12 @@ export async function* decryptFromMessageWithProgress(
             if (result === undefined) return { error: geti18nString('service_not_share_target') }
             aesKeyEncrypted.push(result)
         } else if (version === -39 || version === -38) {
-            const { keyHash, keys, postHash } = await Gun2.queryPostKeysOnGun2(version, iv, mine.publicKey)
+            const { keyHash, keys, postHash } = await Gun2.queryPostKeysOnGun2(
+                version,
+                iv,
+                mine.publicKey,
+                getNetworkWorker(author).gunNetworkHint,
+            )
             yield { debug: 'debug_finding_hash', hash: [postHash, keyHash] }
             aesKeyEncrypted.push(...keys)
         }
@@ -194,16 +204,22 @@ export async function* decryptFromMessageWithProgress(
         // Failed, we have to wait for the future info from gun.
         return new Promise<Success>((resolve, reject) => {
             if (version === -40) return reject()
-            const undo = Gun2.subscribePostKeysOnGun2(version, iv, mine.publicKey, async key => {
-                console.log('New key received, trying', key)
-                try {
-                    const result = await decryptWith(key)
-                    undo()
-                    resolve(result)
-                } catch (e) {
-                    console.debug(e)
-                }
-            })
+            const undo = Gun2.subscribePostKeysOnGun2(
+                version,
+                iv,
+                mine.publicKey,
+                getNetworkWorker(author).gunNetworkHint,
+                async key => {
+                    console.log('New key received, trying', key)
+                    try {
+                        const result = await decryptWith(key)
+                        undo()
+                        resolve(result)
+                    } catch (e) {
+                        console.debug(e)
+                    }
+                },
+            )
         })
 
         async function decryptWith(
