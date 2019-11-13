@@ -1,6 +1,6 @@
-import { env, Env, Preference, Profile, SocialNetworkWorkerAndUIDefinition } from './shared'
+import { env, Env, Preference, ProfileUI, SocialNetworkWorkerAndUIDefinition } from './shared'
 import { DOMProxy, LiveSelector, ValueRef } from '@holoflows/kit/es'
-import { Group, Person } from '../database'
+import { Group, Profile } from '../database'
 import { PersonIdentifier } from '../database/type'
 import { Payload } from '../utils/type-transform/Payload'
 import { defaultTo, isNull } from 'lodash-es'
@@ -178,7 +178,7 @@ export interface SocialNetworkUITasks {
      * Called by `AutomatedTabTask`
      * @param identifier The post id
      */
-    taskGetProfile(identifier: PersonIdentifier): Promise<Profile>
+    taskGetProfile(identifier: PersonIdentifier): Promise<ProfileUI>
 }
 
 //#endregion
@@ -192,7 +192,7 @@ export interface SocialNetworkUIDataSources {
     /**
      * My Maskbook friends at this network
      */
-    readonly friendsRef?: ValueRef<Person[]>
+    readonly friendsRef?: ValueRef<Profile[]>
     /**
      * My groups at this network
      */
@@ -200,15 +200,15 @@ export interface SocialNetworkUIDataSources {
     /**
      * My identities at current network
      */
-    readonly myIdentitiesRef?: ValueRef<Person[]>
+    readonly myIdentitiesRef?: ValueRef<Profile[]>
     /**
      * The account that user is using (may not in the database)
      */
-    readonly lastRecognizedIdentity?: ValueRef<Pick<Person, 'identifier' | 'nickname' | 'avatar'>>
+    readonly lastRecognizedIdentity?: ValueRef<Pick<Profile, 'identifier' | 'nickname' | 'avatar'>>
     /**
      * The account that user is using (MUST be in the database)
      */
-    readonly currentIdentity?: ValueRef<Person | null>
+    readonly currentIdentity?: ValueRef<Profile | null>
     /**
      * Posts that Maskbook detects
      */
@@ -263,7 +263,7 @@ export const getActivatedUI = () => activatedSocialNetworkUI
 let activatedSocialNetworkUI = ({
     lastRecognizedIdentity: new ValueRef({ identifier: PersonIdentifier.unknown }),
     currentIdentity: new ValueRef(null),
-    myIdentitiesRef: new ValueRef([] as Person[]),
+    myIdentitiesRef: new ValueRef([] as Profile[]),
     useColorScheme: () => 'light',
     lightTheme: MaskbookLightTheme,
     darkTheme: MaskbookDarkTheme,

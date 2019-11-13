@@ -106,6 +106,6 @@ export const env: Env = {
     platform: navigator.userAgent.match(/Mobile|mobile/) ? 'mobile' : 'desktop',
 }
 
-export interface Profile {
+export interface ProfileUI {
     bioContent: string
 }

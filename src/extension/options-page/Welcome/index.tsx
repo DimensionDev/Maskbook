@@ -12,7 +12,7 @@ import { Dialog, useTheme, useMediaQuery, makeStyles } from '@material-ui/core'
 import { Identifier, PersonIdentifier } from '../../../database/type'
 import { ValueRef } from '@holoflows/kit/es'
 import { useValueRef } from '../../../utils/hooks/useValueRef'
-import { Person } from '../../../database'
+import { Profile } from '../../../database'
 import { getCurrentNetworkWorkerService } from '../../background-script/WorkerService'
 import getCurrentNetworkWorker from '../../../social-network/utils/getCurrentNetworkWorker'
 import { BackupJSONFileLatest } from '../../../utils/type-transform/BackupFile'
@@ -61,16 +61,16 @@ const WelcomeActions = {
     },
 }
 interface Welcome {
-    whoAmI: Person
+    whoAmI: Profile
     // Display
     provePost: string
     currentStep: WelcomeState
-    personHintFromSearch: Person
+    personHintFromSearch: Profile
     mnemonicWord: string | null
-    currentIdentities: Person[]
+    currentIdentities: Profile[]
     // Actions
     onStepChange(state: WelcomeState): void
-    onSelectIdentity(person: Person): void
+    onSelectIdentity(person: Profile): void
     onFinish(reason: 'done' | 'quit'): void
     onGenerateKey(password: string): void
     onRestoreByMnemonicWord(words: string, password: string): void
@@ -190,12 +190,12 @@ function Welcome(props: Welcome) {
     }
 }
 const provePostRef = new ValueRef('')
-const personInferFromURLRef = new ValueRef<Person>({
+const personInferFromURLRef = new ValueRef<Profile>({
     identifier: PersonIdentifier.unknown,
     groups: [],
 })
-const selectedIdRef = new ValueRef<Person>(personInferFromURLRef.value)
-const ownedIdsRef = new ValueRef<Person[]>([])
+const selectedIdRef = new ValueRef<Profile>(personInferFromURLRef.value)
+const ownedIdsRef = new ValueRef<Profile[]>([])
 
 provePostRef.addListener(val => console.log('New prove post:', val))
 personInferFromURLRef.addListener(val => console.log('Infer user from URL:', val))
@@ -264,7 +264,7 @@ export default withRouter(function _WelcomePortal(props: RouteComponentProps) {
         if (id instanceof PersonIdentifier) {
             if (id.isUnknown) return
             Services.People.queryMyIdentities(id)
-                .then(([inDB = {} as Person]) => {
+                .then(([inDB = {} as Profile]) => {
                     const person = (personInferFromURLRef.value = {
                         identifier: id,
                         nickname: nickname || inDB.nickname,

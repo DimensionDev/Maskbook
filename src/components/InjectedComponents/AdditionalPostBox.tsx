@@ -7,7 +7,7 @@ import Services from '../../extension/service'
 import { geti18nString } from '../../utils/i18n'
 import { makeStyles } from '@material-ui/styles'
 import { Box, Button, Card, CardHeader, Divider, InputBase, Paper, Typography } from '@material-ui/core'
-import { Group, Person } from '../../database'
+import { Group, Profile } from '../../database'
 import { NotSetupYetPrompt } from '../shared/NotSetupYetPrompt'
 import { useCurrentIdentity, useFriendsList, useGroupsList, useMyIdentities } from '../DataSource/useActivatedUI'
 import { getActivatedUI } from '../../social-network/ui'
@@ -36,10 +36,10 @@ const useStyles = makeStyles({
 
 export interface AdditionalPostBoxUIProps
     extends withClasses<KeysInferFromUseStyles<typeof useStyles, 'MUIInputInput' | 'MUIInputRoot'>> {
-    availableShareTarget: Array<Person | Group>
-    currentShareTarget: Array<Person | Group>
+    availableShareTarget: Array<Profile | Group>
+    currentShareTarget: Array<Profile | Group>
     onShareTargetChanged: SelectPeopleAndGroupsUIProps['onSetSelected']
-    currentIdentity: Person | null
+    currentIdentity: Profile | null
     postBoxPlaceholder: string
     postBoxText: string
     postButtonDisabled: boolean
@@ -100,8 +100,8 @@ export const AdditionalPostBoxUI = React.memo(function AdditionalPostBoxUI(props
 })
 
 export interface AdditionalPostBoxProps extends Partial<AdditionalPostBoxUIProps> {
-    identities?: Person[]
-    onRequestPost?: (target: (Person | Group)[], text: string) => void
+    identities?: Profile[]
+    onRequestPost?: (target: (Profile | Group)[], text: string) => void
     onRequestReset?: () => void
     NotSetupYetPromptProps?: Partial<BannerProps>
 }
@@ -123,7 +123,7 @@ export function AdditionalPostBox(props: AdditionalPostBoxProps) {
     const onRequestPost = or(
         props.onRequestPost,
         useCallback(
-            async (target: (Person | Group)[], text: string) => {
+            async (target: (Profile | Group)[], text: string) => {
                 const [encrypted, token] = await Services.Crypto.encryptTo(
                     text,
                     target.map(x => x.identifier),

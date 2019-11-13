@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Person, Group } from '../../../database'
+import { Profile, Group } from '../../../database'
 import { ListItem, Theme, ListItemAvatar, ListItemText } from '@material-ui/core'
 import { OverridableComponent } from '@material-ui/core/OverridableComponent'
 import { makeStyles } from '@material-ui/styles'
@@ -20,7 +20,7 @@ export interface PersonOrGroupInListProps extends withClasses<KeysInferFromUseSt
     // ? Don't import ListItemProps from @material-ui
     // ? or a type def conflict will happen on <ListItem button onClick> attrs
     ListItemProps?: Partial<(typeof ListItem extends OverridableComponent<infer U> ? U : never)['props']>
-    item: Group | Person
+    item: Group | Profile
 }
 const useStyle = makeStyles((theme: Theme) => ({
     // ? I want to let the children of this element have no change to

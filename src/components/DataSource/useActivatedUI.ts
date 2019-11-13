@@ -1,4 +1,4 @@
-import { Person } from '../../database'
+import { Profile } from '../../database'
 import { useValueRef } from '../../utils/hooks/useValueRef'
 import { getActivatedUI } from '../../social-network/ui'
 import { currentSelectedIdentity } from '../../components/shared-settings/settings'
@@ -15,7 +15,7 @@ export function useLastRecognizedIdentity() {
 export function useMyIdentities() {
     return useValueRef(getActivatedUI().myIdentitiesRef)
 }
-export function useCurrentIdentity(noDefault?: boolean): Person | null {
+export function useCurrentIdentity(noDefault?: boolean): Profile | null {
     const all = useMyIdentities()
     const current = useValueRef(currentSelectedIdentity[getActivatedUI().networkIdentifier])
     return all.find(i => i.identifier.toText() === current) || (noDefault ? null : all[0])

@@ -1,4 +1,4 @@
-import { env, Profile, SocialNetworkWorkerAndUIDefinition } from './shared'
+import { env, ProfileUI, SocialNetworkWorkerAndUIDefinition } from './shared'
 import { GetContext } from '@holoflows/kit/es'
 import { PersonIdentifier, PostIdentifier } from '../database/type'
 import { startWorkerService } from '../extension/background-script/WorkerService'
@@ -31,7 +31,7 @@ export interface SocialNetworkWorkerDefinition extends SocialNetworkWorkerAndUID
      * This function should fetch the given post by `fetch`, `AutomatedTabTask` or anything
      * @param identifier The post id
      */
-    fetchProfile(identifier: PersonIdentifier): Promise<Profile>
+    fetchProfile(identifier: PersonIdentifier): Promise<ProfileUI>
     /**
      * This function should open a new page, then automatically input provePost to bio
      *

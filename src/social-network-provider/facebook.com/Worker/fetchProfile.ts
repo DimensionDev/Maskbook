@@ -1,7 +1,7 @@
 import { PersonIdentifier } from '../../../database/type'
 import { getProfilePageUrlAtFacebook } from '../parse-username'
 import { parseFacebookStaticHTML } from '../parse-html'
-import { Profile } from '../../../social-network/shared'
+import { ProfileUI } from '../../../social-network/shared'
 import tasks from '../../../extension/content-script/tasks'
 import { timeout } from '../../../utils/utils'
 import { facebookWorkerSelf } from '../worker-provider'
@@ -10,7 +10,7 @@ import { getActiveTabFacebook } from '../../../utils/tabs'
 
 // ? We now always run fetch request from an active tab.
 // ? If failed, we will fallback to open a new tab to do this.
-export async function fetchProfileFacebook(who: PersonIdentifier): Promise<Profile> {
+export async function fetchProfileFacebook(who: PersonIdentifier): Promise<ProfileUI> {
     const activeTabID = await getActiveTabFacebook()
     if (activeTabID) {
         const url = getProfilePageUrlAtFacebook(who, 'fetch')

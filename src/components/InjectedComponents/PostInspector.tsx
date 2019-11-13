@@ -5,7 +5,7 @@ import { useAsync } from '../../utils/components/AsyncComponent'
 import { deconstructPayload } from '../../utils/type-transform/Payload'
 import Services from '../../extension/service'
 import { PersonIdentifier } from '../../database/type'
-import { Person } from '../../database'
+import { Profile } from '../../database'
 import { useCurrentIdentity, useFriendsList } from '../DataSource/useActivatedUI'
 import { getActivatedUI } from '../../social-network/ui'
 import { useValueRef } from '../../utils/hooks/useValueRef'
@@ -27,7 +27,7 @@ export function PostInspector(props: PostInspectorProps) {
     const { post, postBy, postId } = props
     const whoAmI = useCurrentIdentity()
     const people = useFriendsList()
-    const [alreadySelectedPreviously, setAlreadySelectedPreviously] = useState<Person[]>([])
+    const [alreadySelectedPreviously, setAlreadySelectedPreviously] = useState<Profile[]>([])
     const decodeAsPublicKey = getActivatedUI().publicKeyDecoder(post)
     const isDebugging = useValueRef(debugModeSetting)
     const type = {

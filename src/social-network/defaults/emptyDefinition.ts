@@ -2,7 +2,7 @@ import { GetContext, ValueRef } from '@holoflows/kit/es'
 import { PersonIdentifier } from '../../database/type'
 import { SocialNetworkUIDefinition } from '../ui'
 import { nop, nopWithUnmount } from '../../utils/utils'
-import { Person, Group } from '../../database'
+import { Profile, Group } from '../../database'
 import { PersonArrayComparer, GroupArrayComparer } from '../../utils/comparer'
 
 /**
@@ -15,10 +15,10 @@ export const emptyDefinition: SocialNetworkUIDefinition = {
     shouldActivate() {
         return false
     },
-    myIdentitiesRef: new ValueRef([] as Person[], PersonArrayComparer),
+    myIdentitiesRef: new ValueRef([] as Profile[], PersonArrayComparer),
     groupsRef: new ValueRef([] as Group[], GroupArrayComparer),
     lastRecognizedIdentity: new ValueRef({ identifier: PersonIdentifier.unknown }),
-    currentIdentity: new ValueRef<Person | null>(null),
+    currentIdentity: new ValueRef<Profile | null>(null),
     init() {
         if (GetContext() === 'content') throw new Error('DO NOT use this in content script')
     },
@@ -35,7 +35,7 @@ export const emptyDefinition: SocialNetworkUIDefinition = {
         return false
     },
     posts: new Map(),
-    friendsRef: new ValueRef([] as Person[], PersonArrayComparer),
+    friendsRef: new ValueRef([] as Profile[], PersonArrayComparer),
     isDangerousNetwork: false,
     isValidUsername() {
         return true

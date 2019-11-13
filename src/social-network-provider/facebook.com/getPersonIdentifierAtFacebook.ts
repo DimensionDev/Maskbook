@@ -1,6 +1,6 @@
 import { PersonIdentifier } from '../../database/type'
 import Services from '../../extension/service'
-import { Person } from '../../database'
+import { Profile } from '../../database'
 
 type link = HTMLAnchorElement | null | undefined
 
@@ -21,7 +21,7 @@ type link = HTMLAnchorElement | null | undefined
 export function getPersonIdentifierAtFacebook(
     links: link[] | link,
     allowCollectInfo: boolean,
-): Pick<Person, 'identifier' | 'nickname' | 'avatar'> {
+): Pick<Profile, 'identifier' | 'nickname' | 'avatar'> {
     const unknown = { identifier: PersonIdentifier.unknown, avatar: undefined, nickname: undefined }
     try {
         if (!Array.isArray(links)) links = [links]

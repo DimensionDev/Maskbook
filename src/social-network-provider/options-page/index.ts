@@ -3,7 +3,7 @@ import { emptyDefinition } from '../../social-network/defaults/emptyDefinition'
 import Services from '../../extension/service'
 import { MessageCenter } from '../../utils/messages'
 import { GetContext, ValueRef } from '@holoflows/kit/es'
-import { Person } from '../../database'
+import { Profile } from '../../database'
 
 const optionsPageUISelf = defineSocialNetworkUI({
     ...emptyDefinition,
@@ -14,7 +14,7 @@ const optionsPageUISelf = defineSocialNetworkUI({
             const ref = optionsPageUISelf.myIdentitiesRef
             query(ref)
             MessageCenter.on('identityUpdated', () => query(ref))
-            function query(ref: ValueRef<Person[]>) {
+            function query(ref: ValueRef<Profile[]>) {
                 Services.People.queryMyIdentities().then(p => (ref.value = p))
             }
         }
@@ -22,7 +22,7 @@ const optionsPageUISelf = defineSocialNetworkUI({
             const ref = optionsPageUISelf.friendsRef
             query(ref)
             MessageCenter.on('peopleChanged', () => query(ref))
-            function query(ref: ValueRef<Person[]>) {
+            function query(ref: ValueRef<Profile[]>) {
                 Services.People.queryPeople().then(p => (ref.value = p))
             }
         }
