@@ -127,6 +127,9 @@ require('./tests/sign-verify')
 require('./tests/friendship-discover')
 require('./tests/comment')
 
+import * as PersonaDB from './database/Persona/Persona.db'
+import * as PersonaDBHelper from './database/Persona/helpers'
+
 // Friendly to debug
 Object.assign(window, {
     gun1: require('./network/gun/version.1'),
@@ -137,7 +140,9 @@ Object.assign(window, {
     db: {
         avatar: require('./database/avatar'),
         group: require('./database/group'),
-        people: require('./database/migrate/_deprecated_people_db'),
+        deprecated_people: require('./database/migrate/_deprecated_people_db'),
+        persona: PersonaDB,
+        personaHelper: PersonaDBHelper,
         type: require('./database/type'),
         post: require('./database/post'),
     },
