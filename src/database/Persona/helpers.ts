@@ -1,4 +1,4 @@
-import { ProfileIdentifier, PersonaIdentifier } from '../type'
+import { ProfileIdentifier, PersonaIdentifier, ECKeyIdentifier } from '../type'
 import { Profile, Persona } from './types'
 import {
     ProfileRecord,
@@ -14,6 +14,9 @@ import {
     updateProfileDB,
     createProfileDB,
     queryPersonaByProfileDB,
+    createPersonaDB,
+    attachProfileDB,
+    LinkedProfileDetails,
 } from './Persona.db'
 import { IdentifierMap } from '../IdentifierMap'
 import { getAvatarDataURL } from '../helpers/avatar'
@@ -132,4 +135,34 @@ export async function queryPrivateKey(i: ProfileIdentifier | PersonaIdentifier):
     const jwk = (await queryPersonaRecord(i))?.privateKey
     if (jwk) return JsonWebKeyToCryptoKey(jwk)
     return undefined
+}
+
+export async function createProfileWithPersona(
+    i: ProfileIdentifier,
+    data: LinkedProfileDetails,
+    keys: { publicKey: JsonWebKey; privateKey?: JsonWebKey; localKey?: CryptoKey },
+): Promise<void> {
+    const ec_id = ECKeyIdentifier.fromJsonWebKey(keys.publicKey)
+
+    const t = (await PersonaDBAccess()).transaction(['personas', 'profiles'], 'readwrite')
+    await createPersonaDB({
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        identifier: ec_id,
+        linkedProfiles: new IdentifierMap(new Map()),
+        publicKey: keys.publicKey,
+        privateKey: keys.privateKey,
+        localKey: keys.localKey,
+    })
+    await attachProfileDB(i, ec_id, data, t)
+}
+
+export async function queryLocalKey(i: ProfileIdentifier | PersonaIdentifier): Promise<CryptoKey | null> {
+    if (i instanceof ProfileIdentifier) {
+        const prof = await queryProfileDB(i)
+        if (!prof?.linkedPersona) return prof?.localKey ?? null
+        return queryLocalKey(prof.linkedPersona)
+    } else {
+        return (await queryPersonaDB(i))?.localKey ?? null
+    }
 }

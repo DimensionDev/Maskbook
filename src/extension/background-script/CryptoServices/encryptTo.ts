@@ -2,8 +2,7 @@ import * as Alpha38 from '../../../crypto/crypto-alpha-38'
 import * as Gun2 from '../../../network/gun/version.2'
 import { encodeArrayBuffer } from '../../../utils/type-transform/String-ArrayBuffer'
 import { constructAlpha38, PayloadLatest } from '../../../utils/type-transform/Payload'
-import { Group, queryPrivateKey } from '../../../database'
-import { queryLocalKeyDB } from '../../../database/people'
+import { Group, queryPrivateKey, queryLocalKey } from '../../../database'
 import { ProfileIdentifier, PostIVIdentifier, GroupIdentifier, Identifier } from '../../../database/type'
 import { prepareOthersKeyForEncryptionV39OrV38 } from '../prepareOthersKeyForEncryption'
 import { geti18nString } from '../../../utils/i18n'
@@ -71,7 +70,7 @@ export async function encryptTo(
         version: -38,
         content,
         othersPublicKeyECDH: toKey,
-        ownersLocalKey: (await queryLocalKeyDB(whoAmI))!,
+        ownersLocalKey: (await queryLocalKey(whoAmI))!,
         privateKeyECDH: minePrivateKey,
         iv: crypto.getRandomValues(new Uint8Array(16)),
     })

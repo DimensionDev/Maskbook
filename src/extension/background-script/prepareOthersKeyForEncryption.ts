@@ -1,13 +1,9 @@
-import { queryPersonDB } from '../../database/people'
 import { ProfileIdentifier } from '../../database/type'
+import { queryPublicKey } from '../../database'
 
 /**
  * @internal
  */
 export async function prepareOthersKeyForEncryptionV39OrV38(to: ProfileIdentifier[]): Promise<CryptoKey[]> {
-    const data = await Promise.all(to.map(queryPersonDB))
-    return data
-        .filter(x => x)
-        .map(x => x!.publicKey!)
-        .filter(x => x)
+    return Promise.all(to.map(queryPublicKey)).then(x => x.filter((y): y is CryptoKey => !!y))
 }

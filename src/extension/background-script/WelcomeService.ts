@@ -14,17 +14,12 @@ import {
     recover_ECDH_256k1_KeyPair_ByMnemonicWord,
 } from '../../utils/mnemonic-code'
 import { derive_AES_GCM_256_Key_From_PBKDF2, import_PBKDF2_Key, import_ECDH_256k1_Key } from '../../utils/crypto.subtle'
-import { JsonWebKeyToCryptoKey, CryptoKeyToJsonWebKey } from '../../utils/type-transform/CryptoKey-JsonWebKey'
+import { createProfileWithPersona } from '../../database'
 import { migrateHelper_operateDB } from '../../database/migrate/people.to.persona'
 import { IdentifierMap } from '../../database/IdentifierMap'
-import {
-    queryPersonasWithPrivateKey,
-    PersonaDBAccess,
-    queryProfileDB,
-    createPersonaDB,
-    attachProfileDB,
-} from '../../database/Persona/Persona.db'
+import { queryPersonasWithPrivateKey, PersonaDBAccess, queryProfileDB } from '../../database/Persona/Persona.db'
 import { createDefaultFriendsGroup } from '../../database'
+import { CryptoKeyToJsonWebKey, JsonWebKeyToCryptoKey } from '../../utils/type-transform/CryptoKey-JsonWebKey'
 
 OnlyRunInContext('background', 'WelcomeService')
 
@@ -137,24 +132,12 @@ async function generateNewIdentity(
 
     const pubJwk = await CryptoKeyToJsonWebKey(key.publicKey)
     const privJwk = await CryptoKeyToJsonWebKey(key.privateKey)
-    // ? transaction starts
-    {
-        const t = (await PersonaDBAccess()).transaction(['personas', 'profiles'], 'readwrite')
-        await createPersonaDB(
-            {
-                createdAt: new Date(),
-                updatedAt: new Date(),
-                identifier: ec_id,
-                publicKey: pubJwk,
-                privateKey: privJwk,
-                linkedProfiles: new IdentifierMap(new Map()),
-                localKey: localKey,
-            },
-            t as any,
-        )
-        await attachProfileDB(whoAmI, ec_id, { connectionConfirmState: 'confirmed' }, t)
-    }
-    // ? transaction ends
+
+    await createProfileWithPersona(
+        whoAmI,
+        { connectionConfirmState: 'confirmed' },
+        { publicKey: pubJwk, privateKey: privJwk, localKey: localKey },
+    )
     await createDefaultFriendsGroup(whoAmI).catch(console.error)
     MessageCenter.emit('identityUpdated', undefined)
 }
