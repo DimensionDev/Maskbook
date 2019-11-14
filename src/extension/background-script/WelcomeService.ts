@@ -2,25 +2,13 @@ import { OnlyRunInContext } from '@holoflows/kit'
 import { encodeText } from '../../utils/type-transform/String-ArrayBuffer'
 import { sleep } from '../../utils/utils'
 import { geti18nString } from '../../utils/i18n'
-import {
-    getLocalKeysDB,
-    getMyIdentitiesDB,
-    PersonRecordPublic,
-    PersonRecordPublicPrivate,
-    queryLocalKeyDB,
-    queryMyIdentityAtDB,
-    queryPeopleDB,
-    storeLocalKeyDB,
-    storeMyIdentityDB,
-    PersonRecord,
-} from '../../database/people'
+import { PersonRecordPublicPrivate, PersonRecord } from '../../database/people'
 import { BackupJSONFileLatest, UpgradeBackupJSONFile } from '../../utils/type-transform/BackupFile'
 import { ProfileIdentifier, ECKeyIdentifier } from '../../database/type'
 import { MessageCenter } from '../../utils/messages'
 import getCurrentNetworkWorker from '../../social-network/utils/getCurrentNetworkWorker'
 import { SocialNetworkUI } from '../../social-network/ui'
 import { getWelcomePageURL } from '../options-page/Welcome/getWelcomePageURL'
-import { getMyProveBio } from './CryptoServices/getMyProveBio'
 import {
     generate_ECDH_256k1_KeyPair_ByMnemonicWord,
     recover_ECDH_256k1_KeyPair_ByMnemonicWord,
@@ -29,11 +17,9 @@ import { derive_AES_GCM_256_Key_From_PBKDF2, import_PBKDF2_Key, import_ECDH_256k
 import { JsonWebKeyToCryptoKey, CryptoKeyToJsonWebKey } from '../../utils/type-transform/CryptoKey-JsonWebKey'
 import { migrateHelper_operateDB } from '../../database/migrate/people.to.persona'
 import { IdentifierMap } from '../../database/IdentifierMap'
-import { queryMyPersonas } from './IdentityService'
 import {
     queryPersonasWithPrivateKey,
     PersonaDBAccess,
-    ProfileRecord,
     queryProfileDB,
     createPersonaDB,
     attachProfileDB,
@@ -42,11 +28,7 @@ import { createDefaultFriendsGroup } from '../../database'
 
 OnlyRunInContext('background', 'WelcomeService')
 
-async function generateBackupJSON(
-    whoAmI: ProfileIdentifier,
-    onlyBackupWhoAmI: boolean,
-    full = false,
-): Promise<BackupJSONFileLatest> {
+async function generateBackupJSON(): Promise<BackupJSONFileLatest> {
     const manifest = browser.runtime.getManifest()
     const whoami: BackupJSONFileLatest['whoami'] = []
 
@@ -177,19 +159,6 @@ async function generateNewIdentity(
     MessageCenter.emit('identityUpdated', undefined)
 }
 
-export async function attachIdentityToPersona(
-    whoAmI: ProfileIdentifier,
-    targetIdentity: ProfileIdentifier,
-): Promise<void> {
-    const id = await queryMyIdentityAtDB(targetIdentity)
-    const localKey = await queryLocalKeyDB(targetIdentity)
-    if (id === null || localKey === null) throw new Error('Not found')
-    await generateNewIdentity(whoAmI, {
-        key: { privateKey: id.privateKey, publicKey: id.publicKey },
-        localKey,
-    })
-}
-
 export async function downloadBackup<T>(obj: T) {
     const string = typeof obj === 'string' ? obj : JSON.stringify(obj)
     const buffer = encodeText(string)
@@ -208,11 +177,8 @@ export async function downloadBackup<T>(obj: T) {
     return obj
 }
 
-export async function backupMyKeyPair(
-    whoAmI: ProfileIdentifier,
-    options: { download: boolean; onlyBackupWhoAmI: boolean },
-) {
-    const obj = await generateBackupJSON(whoAmI, options.onlyBackupWhoAmI)
+export async function backupMyKeyPair(options: { download: boolean; onlyBackupWhoAmI: boolean }) {
+    const obj = await generateBackupJSON()
     if (!options.download) return obj
     // Don't make the download pop so fast
     await sleep(1000)

@@ -32,8 +32,8 @@ enum WelcomeState {
     RestoreKeypair,
 }
 const WelcomeActions = {
-    backupMyKeyPair(whoAmI: ProfileIdentifier) {
-        return Services.Welcome.backupMyKeyPair(whoAmI, { download: true, onlyBackupWhoAmI: false })
+    backupMyKeyPair() {
+        return Services.Welcome.backupMyKeyPair({ download: true, onlyBackupWhoAmI: false })
     },
     /**
      *
@@ -125,7 +125,7 @@ function Welcome(props: Welcome) {
                     onGenerateKey={props.onGenerateKey}
                     next={() => {
                         sideEffects
-                            .backupMyKeyPair(props.whoAmI.identifier)
+                            .backupMyKeyPair()
                             .then(updateProveBio)
                             .finally(() => {
                                 onStepChange(WelcomeState.ProvePost)
@@ -138,7 +138,7 @@ function Welcome(props: Welcome) {
                 <Welcome1a3b
                     next={() => {
                         sideEffects
-                            .backupMyKeyPair(props.whoAmI.identifier)
+                            .backupMyKeyPair()
                             .then(updateProveBio)
                             .finally(() => {
                                 onStepChange(WelcomeState.ProvePost)
@@ -300,7 +300,7 @@ export default withRouter(function _WelcomePortal(props: RouteComponentProps) {
             <IdentifierRefContext.Provider value={selectedIdRef}>
                 <Welcome
                     onConnectOtherPerson={(w, t) => {
-                        Services.Welcome.attachIdentityToPersona(w, t).then(
+                        Services.Identity.attachProfile(w, t, { connectionConfirmState: 'confirmed' }).then(
                             () => setStep(WelcomeState.BackupKey),
                             alert,
                         )

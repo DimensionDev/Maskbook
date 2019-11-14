@@ -6,7 +6,7 @@ export const CryptoService: Partial<typeof import('./background-script/CryptoSer
     },
 }
 export const WelcomeService: Partial<typeof import('./background-script/WelcomeService')> = {
-    async backupMyKeyPair(a, b) {
+    async backupMyKeyPair(b) {
         return { version: 1, whoami: [], grantedHostPermissions: [], maskbookVersion: 'mocked' }
     },
 }

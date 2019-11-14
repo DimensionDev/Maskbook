@@ -62,10 +62,17 @@ export default function BackupDialog() {
 
     useEffect(() => {
         if (!currentIdentifier) return
-        Services.Welcome.backupMyKeyPair(currentIdentifier, { download: false, onlyBackupWhoAmI: true })
+        Services.Welcome.backupMyKeyPair({ download: false, onlyBackupWhoAmI: true })
             .then(backupObj => {
                 setBackupObj(backupObj)
-                setQRText(compressBackupFile(backupObj))
+                setQRText(
+                    compressBackupFile(
+                        backupObj,
+                        backupObj.whoami.findIndex(y =>
+                            currentIdentifier.equals(new ProfileIdentifier(y.network, y.userId)),
+                        ),
+                    ),
+                )
             })
             .catch(e => {
                 alert(e)

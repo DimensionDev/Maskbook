@@ -170,7 +170,7 @@ function Dashboard() {
 
     const exportData = () => {
         setExportLoading(true)
-        Services.Welcome.backupMyKeyPair(ProfileIdentifier.unknown, {
+        Services.Welcome.backupMyKeyPair({
             download: true,
             onlyBackupWhoAmI: false,
         })
