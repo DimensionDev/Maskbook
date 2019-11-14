@@ -15,7 +15,7 @@ import {
     PersonRecord,
 } from '../../database/people'
 import { BackupJSONFileLatest, UpgradeBackupJSONFile } from '../../utils/type-transform/BackupFile'
-import { ProfileIdentifier } from '../../database/type'
+import { ProfileIdentifier, ECKeyIdentifier } from '../../database/type'
 import { MessageCenter } from '../../utils/messages'
 import getCurrentNetworkWorker from '../../social-network/utils/getCurrentNetworkWorker'
 import { SocialNetworkUI } from '../../social-network/ui'
@@ -35,7 +35,10 @@ import {
     PersonaDBAccess,
     ProfileRecord,
     queryProfileDB,
+    createPersonaDB,
+    attachProfileDB,
 } from '../../database/Persona/Persona.db'
+import { createDefaultFriendsGroup } from '../../database'
 
 OnlyRunInContext('background', 'WelcomeService')
 
@@ -138,24 +141,39 @@ async function generateNewIdentity(
           },
 ): Promise<void> {
     const { key } = usingKey
-    if ('localKey' in usingKey) {
-        await storeLocalKeyDB(whoAmI, usingKey.localKey)
-    } else {
+    const ec_id = await ECKeyIdentifier.fromCryptoKey(key.publicKey)
+
+    let localKey: CryptoKey
+    if ('localKey' in usingKey) localKey = usingKey.localKey
+    else {
         const pub = await CryptoKeyToJsonWebKey(key.publicKey)
 
         // ? Derive method: publicKey as "password" and password for the mnemonicWord as hash
         const pbkdf2 = await import_PBKDF2_Key(encodeText(pub.x! + pub.y!))
-        const localKey = await derive_AES_GCM_256_Key_From_PBKDF2(pbkdf2, encodeText(usingKey.mnemonicWord))
-
-        await storeLocalKeyDB(whoAmI, localKey)
+        localKey = await derive_AES_GCM_256_Key_From_PBKDF2(pbkdf2, encodeText(usingKey.mnemonicWord))
     }
-    // TODO: If there is some old key that will be overwritten, warn the user.
-    await storeMyIdentityDB({
-        groups: [],
-        identifier: whoAmI,
-        publicKey: key.publicKey,
-        privateKey: key.privateKey,
-    })
+
+    const pubJwk = await CryptoKeyToJsonWebKey(key.publicKey)
+    const privJwk = await CryptoKeyToJsonWebKey(key.privateKey)
+    // ? transaction starts
+    {
+        const t = (await PersonaDBAccess()).transaction(['personas', 'profiles'], 'readwrite')
+        await createPersonaDB(
+            {
+                createdAt: new Date(),
+                updatedAt: new Date(),
+                identifier: ec_id,
+                publicKey: pubJwk,
+                privateKey: privJwk,
+                linkedProfiles: new IdentifierMap(new Map()),
+                localKey: localKey,
+            },
+            t as any,
+        )
+        await attachProfileDB(whoAmI, ec_id, { connectionConfirmState: 'confirmed' }, t)
+    }
+    // ? transaction ends
+    await createDefaultFriendsGroup(whoAmI).catch(console.error)
     MessageCenter.emit('identityUpdated', undefined)
 }
 

@@ -49,8 +49,6 @@ export function decompressBackupFile(short: string): BackupJSONFileLatest {
         version: 1,
         whoami: [
             {
-                'Power Users look here! You should add the value in this field to the bio to make Maskbook work! ->':
-                    '',
                 localKey: {
                     alg: 'A256GCM',
                     ext: true,
