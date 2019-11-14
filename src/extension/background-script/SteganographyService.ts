@@ -1,6 +1,4 @@
 import { encode, decode } from 'node-stego/es/dom'
-import { buf2Img } from 'node-stego/es/canvas/dom'
-import { createMask } from 'node-stego/es/mask'
 import { GrayscaleAlgorithm } from 'node-stego/es/grayscale'
 import { TransformAlgorithm } from 'node-stego/es/transform'
 import { OnlyRunInContext } from '@holoflows/kit/es'
@@ -17,35 +15,32 @@ const defaultOptions = {
     narrow: 0,
     copies: 3,
     tolerance: 128,
-    mask: getUrl('/maskbook-steganography_mask.png'),
 }
 
-const getDefaultMask = memoizePromise(
-    async () => createMask(await buf2Img(await downloadUrl(getUrl('/maskbook-steganography_mask.png')))),
-    undefined,
-)
+const getMaskBuf = memoizePromise(() => downloadUrl(getUrl('/maskbook-steganography-mask.png')), undefined)
 
 export async function encodeImage(
-    { buffer }: Uint8Array,
+    { buffer: imgBuf }: Uint8Array,
     options: WithPartial<Required<EncodeOptions>, 'text' | 'pass'>,
 ) {
     return new Uint8Array(
-        await encode(buffer, {
+        await encode(imgBuf, await getMaskBuf(), {
             ...defaultOptions,
             noCropEdgePixels: false,
             grayscaleAlgorithm: GrayscaleAlgorithm.LUMINANCE,
             transformAlgorithm: TransformAlgorithm.FFT1D,
-            mask: await getDefaultMask(),
             ...options,
         }),
     )
 }
 
-export async function decodeImage({ buffer }: Uint8Array, options: WithPartial<Required<DecodeOptions>, 'pass'>) {
-    return decode(buffer, {
+export async function decodeImage(
+    { buffer: imgBuf }: Uint8Array,
+    options: WithPartial<Required<DecodeOptions>, 'pass'>,
+) {
+    return decode(imgBuf, await getMaskBuf(), {
         ...defaultOptions,
         transformAlgorithm: TransformAlgorithm.FFT1D,
-        mask: await getDefaultMask(),
         ...options,
     })
 }
