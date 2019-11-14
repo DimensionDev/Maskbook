@@ -1,4 +1,11 @@
-import { queryProfilesWithQuery, personaRecordToPersona, updateOrCreateProfile, storeAvatar } from '../../database'
+import {
+    queryProfilesWithQuery,
+    personaRecordToPersona,
+    updateOrCreateProfile,
+    storeAvatar,
+    queryPersonaByProfile,
+    queryProfile,
+} from '../../database'
 import { ProfileIdentifier, PersonaIdentifier } from '../../database/type'
 import { Profile, Persona } from '../../database/Persona/types'
 import {
@@ -7,6 +14,8 @@ import {
     queryPersonasDB,
     queryProfilesDB,
     createProfileDB,
+    attachProfileDB,
+    LinkedProfileDetails,
 } from '../../database/Persona/Persona.db'
 import { OnlyRunInContext } from '@holoflows/kit/es'
 
@@ -70,7 +79,19 @@ export { deletePersona } from '../../database'
 //#endregion
 
 //#region Profile & Persona
-export { attachProfileDB as attachProfile, detachProfileDB as detachProfile } from '../../database/Persona/Persona.db'
+export async function attachProfile(
+    source: ProfileIdentifier,
+    target: ProfileIdentifier | PersonaIdentifier,
+    data: LinkedProfileDetails,
+): Promise<void> {
+    if (target instanceof ProfileIdentifier) {
+        const profile = await queryProfile(target)
+        if (!profile.linkedPersona) throw new Error('target not found')
+        target = profile.linkedPersona.identifier
+    }
+    return attachProfileDB(source, target, data)
+}
+export { detachProfileDB as detachProfile } from '../../database/Persona/Persona.db'
 //#endregion
 
 /**

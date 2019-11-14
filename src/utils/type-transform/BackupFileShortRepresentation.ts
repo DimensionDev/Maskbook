@@ -16,10 +16,10 @@ export type BackupJSONFileLatestShort = [
     // BackupJSONFileLatest['grantedHostPermissions'].join(';'),
     string,
 ]
-export function compressBackupFile(file: BackupJSONFileLatest): string {
+export function compressBackupFile(file: BackupJSONFileLatest, index: number): string {
     const { grantedHostPermissions, maskbookVersion, people, version, whoami } = file
-    if (!whoami[0]) throw new Error('Empty backup file')
-    const { localKey, network, nickname, publicKey, privateKey, userId } = whoami[0]
+    if (!whoami[index ?? 0]) throw new Error('Empty backup file')
+    const { localKey, network, nickname, publicKey, privateKey, userId } = whoami[index]
     return [
         network,
         userId,

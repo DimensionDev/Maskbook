@@ -135,7 +135,7 @@ export default function PersonaCard({ identity }: Props) {
     }
 
     const deleteIdentity = async () => {
-        const backup = await Services.Welcome.backupMyKeyPair(identity.identifier, {
+        const backup = await Services.Welcome.backupMyKeyPair({
             download: false,
             onlyBackupWhoAmI: true,
         })
