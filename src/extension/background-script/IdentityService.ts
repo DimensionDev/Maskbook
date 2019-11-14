@@ -51,14 +51,16 @@ export async function queryPersonas(identifier?: PersonaIdentifier, requirePriva
     if (!x || (!x.privateKey && requirePrivateKey)) return []
     return [personaRecordToPersona(x)]
 }
-export function queryMyPersonas(network: string): Promise<Persona[]> {
+export function queryMyPersonas(network?: string): Promise<Persona[]> {
     return queryPersonas(undefined, true).then(x =>
-        x.filter(y => {
-            for (const z of y.linkedProfiles.keys()) {
-                if (z.network === network) return true
-            }
-            return false
-        }),
+        typeof network === 'string'
+            ? x.filter(y => {
+                  for (const z of y.linkedProfiles.keys()) {
+                      if (z.network === network) return true
+                  }
+                  return false
+              })
+            : x,
     )
 }
 /**

@@ -14,11 +14,7 @@ import {
     storeMyIdentityDB,
     PersonRecord,
 } from '../../database/people'
-import {
-    BackupJSONFileLatest,
-    JSON_HINT_FOR_POWER_USER,
-    UpgradeBackupJSONFile,
-} from '../../utils/type-transform/BackupFile'
+import { BackupJSONFileLatest, UpgradeBackupJSONFile } from '../../utils/type-transform/BackupFile'
 import { ProfileIdentifier } from '../../database/type'
 import { MessageCenter } from '../../utils/messages'
 import getCurrentNetworkWorker from '../../social-network/utils/getCurrentNetworkWorker'
@@ -33,6 +29,8 @@ import { derive_AES_GCM_256_Key_From_PBKDF2, import_PBKDF2_Key, import_ECDH_256k
 import { JsonWebKeyToCryptoKey, CryptoKeyToJsonWebKey } from '../../utils/type-transform/CryptoKey-JsonWebKey'
 import { migrateHelper_operateDB } from '../../database/migrate/people.to.persona'
 import { IdentifierMap } from '../../database/IdentifierMap'
+import { queryMyPersonas } from './IdentityService'
+import { queryPersonasWithPrivateKey, PersonaDBAccess } from '../../database/Persona/Persona.db'
 
 OnlyRunInContext('background', 'WelcomeService')
 async function generateBackupJSON(
@@ -62,9 +60,6 @@ async function generateBackupJSON(
             localKey: await exportKey(localKeys.get(data.identifier.network)![data.identifier.userId]!),
             publicKey: await exportKey(data.publicKey),
             privateKey: await exportKey(data.privateKey),
-            [JSON_HINT_FOR_POWER_USER]:
-                (await getMyProveBio(data.identifier)) ||
-                'We are sorry, but this field is not available. It may help to set up Maskbook again.',
         })
     }
     for (const id of myIdentity) {
@@ -114,6 +109,25 @@ async function generateBackupJSON(
         }
     function exportKey(k: CryptoKey) {
         return crypto.subtle.exportKey('jwk', k)
+    }
+}
+async function generateBackupJSONNext(
+    whoAmI: ProfileIdentifier,
+    onlyBackupWhoAmI: boolean,
+    full = false,
+): Promise<BackupJSONFileLatest> {
+    const manifest = browser.runtime.getManifest()
+    const whoami: BackupJSONFileLatest['whoami'] = []
+
+    const t = (await PersonaDBAccess()).transaction(['personas', 'profiles'])
+    // whoami.push({})
+
+    return {
+        grantedHostPermissions: (await browser.permissions.getAll()).origins || [],
+        maskbookVersion: manifest.version,
+        version: 1,
+        whoami,
+        // people not supported yet.
     }
 }
 async function hasValidIdentity(whoAmI: ProfileIdentifier) {
