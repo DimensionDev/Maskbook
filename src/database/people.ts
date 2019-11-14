@@ -21,7 +21,6 @@
 import { GroupIdentifier, Identifier, ProfileIdentifier } from './type'
 import { DBSchema, openDB } from 'idb/with-async-ittr'
 import { CryptoKeyToJsonWebKey, JsonWebKeyToCryptoKey } from '../utils/type-transform/CryptoKey-JsonWebKey'
-import { MessageCenter } from '../utils/messages'
 import { OnlyRunInContext } from '@holoflows/kit/es'
 import { isIdentifierArrayEquals } from '../utils/equality'
 
@@ -109,18 +108,6 @@ const db = openDB<PeopleDB>('maskbook-people-v2', 1, {
 //#endregion
 //#region Other people
 /**
- * Store a new person
- * @param record - PersonRecord
- * @deprecated
- */
-export async function storeNewPersonDB(record: PersonRecord): Promise<void> {
-    // ! Add await between a transaction and function end will cause the transaction closes !
-    // ! Do ALL async works before opening an transaction
-    const data = await toDb(record)
-    const t = (await db).transaction('people', 'readwrite')
-    await t.objectStore('people').put(data)
-}
-/**
  * Query person with an identifier
  * @deprecated
  */
@@ -144,120 +131,9 @@ export async function queryPeopleDB(
     }
     return Promise.all(result.map(outDb))
 }
-/**
- * Query people within a network
- * @param id - Identifier
- * @deprecated
- */
-export async function queryPersonDB(id: ProfileIdentifier): Promise<null | PersonRecord> {
-    const t = (await db).transaction('people', 'readonly')
-    const result = await t.objectStore('people').get(id.toText())
 
-    const t2 = (await db).transaction('myself', 'readonly')
-    const result2 = await t2.objectStore('myself').get(id.toText())
-    if (!result && !result2) return null
-    return outDb(Object.assign({}, result, result2))
-}
-/**
- * Update Person info with an identifier
- * @param person - Partial of person record
- * @deprecated
- */
-export async function updatePersonDB(person: Partial<PersonRecord> & Pick<PersonRecord, 'identifier'>): Promise<void> {
-    const full = (await queryPersonDB(person.identifier)) || { groups: [], identifier: person.identifier }
-    if (!hasDifferent()) return
-
-    const o: PersonRecordInDatabase = { ...(await toDb(full)), ...(await toDb(person as PersonRecord)) }
-
-    const t = (await db).transaction('people', 'readwrite')
-    await t.objectStore('people').put(o)
-    // emitPersonChangeEvent(full, 'update').catch(console.error)
-
-    function hasDifferent() {
-        if (!isIdentifierArrayEquals(full.groups, person.groups || full.groups)) return true
-        if (full.nickname !== (person.nickname || full.nickname)) return true
-        if (!isIdentifierArrayEquals(full.previousIdentifiers, person.previousIdentifiers || full.previousIdentifiers))
-            return true
-        if (full.privateKey !== (person.privateKey || full.privateKey)) return true
-        if (full.publicKey !== (person.publicKey || full.publicKey)) return true
-        return false
-    }
-}
-/**
- * Remove people from database
- * @param people - People to remove
- * @deprecated
- */
-export async function removePeopleDB(people: ProfileIdentifier[]): Promise<void> {
-    const t = (await db).transaction('people', 'readwrite')
-    for (const person of people) await t.objectStore('people').delete(person.toText())
-    MessageCenter.emit(
-        'peopleChanged',
-        // @ts-ignore deprecated
-        people.map<PersonUpdateEvent>(x => ({ of: { groups: [], identifier: x }, reason: 'delete' })),
-    )
-    return
-}
 //#endregion
 //#region Myself
-/**
- * Get my record
- * @param id - Identifier
- * @deprecated
- */
-export async function queryMyIdentityAtDB(id: ProfileIdentifier): Promise<null | PersonRecordPublicPrivate> {
-    const t = (await db).transaction(['myself', 'people'])
-    const result = await t.objectStore('myself').get(id.toText())
-    if (!result) return null
-    const result2 = (await t.objectStore('people').get(id.toText())) || result
-    return outDb({
-        ...result,
-        nickname: result.nickname || result2.nickname,
-    }) as Promise<PersonRecordPublicPrivate>
-}
-
-/**
- * Update My identity with an identifier
- * @param person - Partial of person record
- * @deprecated
- */
-export async function updateMyIdentityDB(
-    person: Partial<PersonRecord> & Pick<PersonRecord, 'identifier'>,
-): Promise<void> {
-    const full = await queryMyIdentityAtDB(person.identifier)
-
-    if (full === null) return
-
-    const data = { ...(await toDb(full)), ...(await toDb(person as PersonRecord)) }
-
-    const t = (await db).transaction('myself', 'readwrite')
-    await t.objectStore('myself').put(data)
-    MessageCenter.emit('identityUpdated', undefined)
-}
-/**
- * Remove my record
- * @param id - Identifier
- * @deprecated
- */
-export async function removeMyIdentityAtDB(id: ProfileIdentifier): Promise<void> {
-    const t = (await db).transaction('myself', 'readwrite')
-    await t.objectStore('myself').delete(id.toText())
-    MessageCenter.emit('identityUpdated', undefined)
-}
-/**
- * Store my record
- * @param record - Record
- * @deprecated
- */
-export async function storeMyIdentityDB(record: PersonRecordPublicPrivate): Promise<void> {
-    if (!record.publicKey || !record.privateKey)
-        throw new TypeError('No public/private key pair found when store self identity')
-    const data = await toDb(record)
-
-    const t = (await db).transaction('myself', 'readwrite')
-    await t.objectStore('myself').put(data)
-    MessageCenter.emit('identityUpdated', undefined)
-}
 /**
  * Get all my identities.
  * @deprecated
@@ -286,45 +162,3 @@ export async function queryLocalKeyDB(identifier: string | ProfileIdentifier): P
         return store[identifier.userId] || null
     }
 }
-/**
- * Store my local key for a network
- * @param arg0 - ProfileIdentifier
- * @param key  - ! Keys MUST BE a native CryptoKey object !
- * @deprecated
- */
-export async function storeLocalKeyDB({ network, userId }: ProfileIdentifier, key: CryptoKey): Promise<void> {
-    if (!(key instanceof CryptoKey)) {
-        throw new TypeError('It is not a real CryptoKey!')
-    }
-    const t = (await db).transaction('localKeys', 'readwrite')
-    const previous = (await t.objectStore('localKeys').get(network)) || {}
-    const next = { ...previous, [userId]: key }
-    await t.objectStore('localKeys').put(next, network)
-    MessageCenter.emit('identityUpdated', undefined)
-}
-/**
- * Remove local key
- * @deprecated
- */
-export async function deleteLocalKeyDB({ network, userId }: ProfileIdentifier): Promise<void> {
-    const t = (await db).transaction('localKeys', 'readwrite')
-    const result = await t.objectStore('localKeys').get(network)
-    if (!result) return
-    delete result[userId]
-    await t.objectStore('localKeys').put(result, network)
-    MessageCenter.emit('identityUpdated', undefined)
-}
-/**
- * Get all my local keys.
- * @deprecated
- */
-export async function getLocalKeysDB() {
-    const t = (await db).transaction('localKeys')
-    const result: Map<string, LocalKeys> = new Map()
-    // eslint-disable-next-line @typescript-eslint/await-thenable
-    for await (const { key, value } of t.objectStore('localKeys')) {
-        result.set(key, value)
-    }
-    return result
-}
-//#endregion

@@ -5,8 +5,7 @@ import * as Gun2 from '../../../network/gun/version.2'
 import { decodeText } from '../../../utils/type-transform/String-ArrayBuffer'
 import { deconstructPayload, Payload } from '../../../utils/type-transform/Payload'
 import { geti18nString } from '../../../utils/i18n'
-import { queryPrivateKey, queryPersonaRecord } from '../../../database'
-import { queryLocalKeyDB } from '../../../database/people'
+import { queryPrivateKey, queryPersonaRecord, queryLocalKey } from '../../../database'
 import { ProfileIdentifier, PostIVIdentifier } from '../../../database/type'
 import { queryPostDB, updatePostDB } from '../../../database/post'
 import { addPerson } from './addPerson'
@@ -268,7 +267,7 @@ export async function* decryptFromMessageWithProgress(
                 version,
                 encryptedAESKey: ownersAESKeyEncrypted,
                 encryptedContent: encryptedText,
-                myLocalKey: (await queryLocalKeyDB(authorIdentifier))!,
+                myLocalKey: (await queryLocalKey(authorIdentifier))!,
                 iv,
             })
             // Store the key to speed up next time decrypt

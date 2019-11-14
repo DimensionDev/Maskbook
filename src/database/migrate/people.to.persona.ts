@@ -1,3 +1,4 @@
+/* eslint-disable import/no-deprecated, no-plusplus */
 import {
     getMyIdentitiesDB,
     queryLocalKeyDB,
