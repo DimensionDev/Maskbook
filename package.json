@@ -66,7 +66,7 @@
     "jss": "^10",
     "lint-staged": "^9.4.2",
     "lodash-es": "^4.17.11",
-    "node-stego": "^0.7.0",
+    "node-stego": "^0.8.0",
     "notistack": "^0.9.5",
     "npm-run-all": "^4.1.5",
     "pvtsutils": "^1.0.4",
