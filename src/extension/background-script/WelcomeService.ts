@@ -2,7 +2,9 @@ import { OnlyRunInContext } from '@holoflows/kit'
 import { encodeText } from '../../utils/type-transform/String-ArrayBuffer'
 import { sleep } from '../../utils/utils'
 import { geti18nString } from '../../utils/i18n'
-import { PersonRecordPublicPrivate, PersonRecord } from '../../database/people'
+// This deprecated usage is okay. it calls the migrate method to migrate the old data.
+// eslint-disable-next-line
+import { PersonRecordPublicPrivate, PersonRecord } from '../../database/migrate/_deprecated_people_db'
 import { BackupJSONFileLatest, UpgradeBackupJSONFile } from '../../utils/type-transform/BackupFile'
 import { ProfileIdentifier, ECKeyIdentifier } from '../../database/type'
 import { MessageCenter } from '../../utils/messages'
