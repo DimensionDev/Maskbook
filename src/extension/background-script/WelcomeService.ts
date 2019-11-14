@@ -30,88 +30,16 @@ import { JsonWebKeyToCryptoKey, CryptoKeyToJsonWebKey } from '../../utils/type-t
 import { migrateHelper_operateDB } from '../../database/migrate/people.to.persona'
 import { IdentifierMap } from '../../database/IdentifierMap'
 import { queryMyPersonas } from './IdentityService'
-import { queryPersonasWithPrivateKey, PersonaDBAccess } from '../../database/Persona/Persona.db'
+import {
+    queryPersonasWithPrivateKey,
+    PersonaDBAccess,
+    ProfileRecord,
+    queryProfileDB,
+} from '../../database/Persona/Persona.db'
 
 OnlyRunInContext('background', 'WelcomeService')
+
 async function generateBackupJSON(
-    whoAmI: ProfileIdentifier,
-    onlyBackupWhoAmI: boolean,
-    full = false,
-): Promise<BackupJSONFileLatest> {
-    const manifest = browser.runtime.getManifest()
-    const myIdentitiesInDB: BackupJSONFileLatest['whoami'] = []
-    const peopleInDB: NonNullable<BackupJSONFileLatest['people']> = []
-
-    const promises: Promise<void>[] = []
-    //#region data.whoami
-    const localKeys = await getLocalKeysDB()
-    const myIdentity = await getMyIdentitiesDB()
-    if (!whoAmI.isUnknown) {
-        if ((await hasValidIdentity(whoAmI)) === false) {
-            throw new Error('Generate fail')
-        }
-    }
-    async function addMyIdentitiesInDB(data: PersonRecordPublicPrivate) {
-        myIdentitiesInDB.push({
-            network: data.identifier.network,
-            userId: data.identifier.userId,
-            nickname: data.nickname,
-            previousIdentifiers: data.previousIdentifiers,
-            localKey: await exportKey(localKeys.get(data.identifier.network)![data.identifier.userId]!),
-            publicKey: await exportKey(data.publicKey),
-            privateKey: await exportKey(data.privateKey),
-        })
-    }
-    for (const id of myIdentity) {
-        if (onlyBackupWhoAmI) if (!id.identifier.equals(whoAmI)) continue
-        promises.push(addMyIdentitiesInDB(id))
-    }
-    //#endregion
-
-    //#region data.people
-    async function addPeople(data: PersonRecordPublic) {
-        peopleInDB.push({
-            network: data.identifier.network,
-            userId: data.identifier.userId,
-            groups: data.groups.map(g => ({
-                network: g.network,
-                groupID: g.groupID,
-                virtualGroupOwner: g.virtualGroupOwner,
-            })),
-            nickname: data.nickname,
-            previousIdentifiers: (data.previousIdentifiers || []).map(p => ({ network: p.network, userId: p.userId })),
-            publicKey: await exportKey(data.publicKey),
-        })
-    }
-    if (full) {
-        for (const p of await queryPeopleDB(() => true)) {
-            if (p.publicKey) promises.push(addPeople(p as PersonRecordPublic))
-        }
-    }
-    //#endregion
-
-    await Promise.all(promises)
-    const grantedHostPermissions = (await browser.permissions.getAll()).origins || []
-    if (full)
-        return {
-            version: 1,
-            whoami: myIdentitiesInDB,
-            people: peopleInDB,
-            grantedHostPermissions,
-            maskbookVersion: manifest.version,
-        }
-    else
-        return {
-            version: 1,
-            whoami: myIdentitiesInDB,
-            grantedHostPermissions,
-            maskbookVersion: manifest.version,
-        }
-    function exportKey(k: CryptoKey) {
-        return crypto.subtle.exportKey('jwk', k)
-    }
-}
-async function generateBackupJSONNext(
     whoAmI: ProfileIdentifier,
     onlyBackupWhoAmI: boolean,
     full = false,
@@ -119,21 +47,42 @@ async function generateBackupJSONNext(
     const manifest = browser.runtime.getManifest()
     const whoami: BackupJSONFileLatest['whoami'] = []
 
-    const t = (await PersonaDBAccess()).transaction(['personas', 'profiles'])
-    // whoami.push({})
+    // ? transaction start
+    {
+        const t = (await PersonaDBAccess()).transaction(['personas', 'profiles'])
+        for (const persona of await queryPersonasWithPrivateKey(t as any)) {
+            for (const profileID of persona.linkedProfiles.keys()) {
+                const profile = await queryProfileDB(profileID, t as any)
+                whoami.push({
+                    network: profileID.network,
+                    userId: profileID.userId,
+                    nickname: profile?.nickname,
+                    // @ts-ignore
+                    localKey:
+                        // Keep this line to split ts-ignore
+                        (profile?.localKey ?? persona.localKey) as CryptoKey | undefined,
+                    publicKey: persona.publicKey,
+                    privateKey: persona.privateKey,
+                })
+            }
+        }
+    }
+    // ? transaction ends
+
+    for (const each of whoami) {
+        // ? Can't do this in the transaction.
+        // ? Will cause transaction closes.
+        if (!each.localKey) continue
+        each.localKey = await CryptoKeyToJsonWebKey((each.localKey as unknown) as CryptoKey)
+    }
 
     return {
         grantedHostPermissions: (await browser.permissions.getAll()).origins || [],
         maskbookVersion: manifest.version,
         version: 1,
-        whoami,
+        whoami: whoami.filter(x => x.localKey && x.publicKey && x.privateKey && x.network && x.userId),
         // people not supported yet.
     }
-}
-async function hasValidIdentity(whoAmI: ProfileIdentifier) {
-    const local = await queryLocalKeyDB(whoAmI)
-    const ecdh = await queryMyIdentityAtDB(whoAmI)
-    return !!local && !!ecdh && !!ecdh.privateKey && !!ecdh.publicKey
 }
 
 /**

@@ -97,12 +97,13 @@ export async function queryPersonasDB(
     return records
 }
 
+export type PersonaRecordWithPrivateKey = PersonaRecord & Required<Pick<PersonaRecord, 'privateKey'>>
 /**
  * Query many Personas.
  */
 export async function queryPersonasWithPrivateKey(
     t?: IDBPTransaction<PersonaDB, ['personas']>,
-): Promise<PersonaRecord[]> {
+): Promise<PersonaRecordWithPrivateKey[]> {
     t = t || (await db()).transaction('personas')
     const records: PersonaRecord[] = []
     records.push(
@@ -113,7 +114,7 @@ export async function queryPersonasWithPrivateKey(
                 .getAll(IDBKeyRange.only('yes'))
         ).map(personaRecordOutDb),
     )
-    return records
+    return records as PersonaRecordWithPrivateKey[]
 }
 
 /**
