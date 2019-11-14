@@ -137,7 +137,7 @@ Object.assign(window, {
     db: {
         avatar: require('./database/avatar'),
         group: require('./database/group'),
-        people: require('./database/people'),
+        people: require('./database/migrate/_deprecated_people_db'),
         type: require('./database/type'),
         post: require('./database/post'),
     },

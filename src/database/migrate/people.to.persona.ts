@@ -1,4 +1,4 @@
-/* eslint-disable import/no-deprecated, no-plusplus */
+/* eslint-disable import/no-deprecated */
 import {
     getMyIdentitiesDB,
     queryLocalKeyDB,
@@ -6,7 +6,7 @@ import {
     PersonRecord,
     PersonRecordPublic,
     PersonRecordPublicPrivate,
-} from '../people'
+} from './_deprecated_people_db'
 import * as persona from '../Persona/Persona.db'
 import { ECKeyIdentifier, ProfileIdentifier } from '../type'
 import { IdentifierMap } from '../IdentifierMap'

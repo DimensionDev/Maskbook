@@ -1,4 +1,10 @@
-/// <reference path="./global.d.ts" />
+/* eslint-disable import/no-deprecated */
+/// <reference path="../global.d.ts" />
+/**
+ * @deprecated
+ * This database is deprecated since Maskbook 1.8.0
+ * Do not store new data in it.
+ */
 /**
  * Database structure:
  *
@@ -18,9 +24,9 @@
  * @type {Record<string, CryptoKey>} Record of <userId, CryptoKey>
  * @keys outline, string, which means network.
  */
-import { GroupIdentifier, Identifier, ProfileIdentifier } from './type'
+import { GroupIdentifier, Identifier, ProfileIdentifier } from '../type'
 import { DBSchema, openDB } from 'idb/with-async-ittr'
-import { CryptoKeyToJsonWebKey, JsonWebKeyToCryptoKey } from '../utils/type-transform/CryptoKey-JsonWebKey'
+import { JsonWebKeyToCryptoKey } from '../../utils/type-transform/CryptoKey-JsonWebKey'
 import { OnlyRunInContext } from '@holoflows/kit/es'
 import { isIdentifierArrayEquals } from '../utils/equality'
 
@@ -42,26 +48,22 @@ async function outDb({ identifier, publicKey, privateKey, ...rest }: PersonRecor
     if (privateKey) result.privateKey = await JsonWebKeyToCryptoKey(privateKey)
     return result
 }
-/**
- * Transform outside data into db format
- */
-async function toDb({ publicKey, privateKey, ...rest }: PersonRecord): Promise<PersonRecordInDatabase> {
-    const result: PersonRecordInDatabase = {
-        ...rest,
-        identifier: rest.identifier.toText(),
-        network: rest.identifier.network,
-    }
-    if (publicKey) result.publicKey = await CryptoKeyToJsonWebKey(publicKey)
-    if (privateKey) result.privateKey = await CryptoKeyToJsonWebKey(privateKey)
-    return result
-}
 interface Base<db> {
     identifier: IF<db, string, ProfileIdentifier>
     publicKey?: IF<db, JsonWebKey, CryptoKey>
     privateKey?: IF<db, JsonWebKey, CryptoKey>
 }
+/**
+ * @deprecated
+ */
 export interface PersonRecord extends Omit<PersonRecordInDatabase, keyof Base<true> | 'network'>, Base<false> {}
+/**
+ * @deprecated
+ */
 export type PersonRecordPublic = PersonRecord & Required<Pick<PersonRecord, 'publicKey'>>
+/**
+ * @deprecated
+ */
 export type PersonRecordPublicPrivate = PersonRecord & Required<Pick<PersonRecord, 'publicKey' | 'privateKey'>>
 interface PersonRecordInDatabase extends Base<true> {
     network: string
