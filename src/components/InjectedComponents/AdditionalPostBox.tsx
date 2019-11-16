@@ -16,7 +16,6 @@ import { useAsync } from '../../utils/components/AsyncComponent'
 import { useStylesExtends, or } from '../custom-ui-helper'
 
 const useStyles = makeStyles({
-    root: { margin: '10px 0' },
     header: { padding: '8px 12px 0' },
     inputArea: { borderRadius: 0, display: 'flex' },
     avatar: { margin: '12px 0 0 12px' },
@@ -55,7 +54,7 @@ export const AdditionalPostBoxUI = React.memo(function AdditionalPostBoxUI(props
     useCapturedInput(inputRef, props.onPostTextChange)
 
     return (
-        <Card className={classes.root}>
+        <Card>
             <CardHeader
                 classes={{ root: classes.header }}
                 title={<Typography variant="caption">Maskbook</Typography>}
