@@ -42,7 +42,9 @@ export async function migrateHelper_operateDB(
     for (const [v, incomingRecord] of profilesMap) {
         const currentRecord = await persona.queryProfileDB(incomingRecord.identifier, t)
         if (!currentRecord) {
-            await persona.createProfileDB(incomingRecord, t)
+            // remove the linkedPersona, call attachProfileDB to keep consistency
+            const { linkedPersona, ...rec } = incomingRecord
+            await persona.createProfileDB(rec, t)
         }
     }
     for (const [profileID, personaID] of attachRelationMap) {

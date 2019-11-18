@@ -186,8 +186,9 @@ export class ECKeyIdentifier extends Identifier {
         return `ec_key:${this.curve}/${this.encodedCompressedKey}`
     }
     static [$fromString](str: string) {
-        if (!str) return null
-        return new ECKeyIdentifier('secp256k1', str)
+        const [curve, point] = str.split('/')
+        if (curve !== 'secp256k1') return null
+        return new ECKeyIdentifier(curve, point)
     }
 }
 
