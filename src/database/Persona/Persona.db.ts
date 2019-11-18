@@ -4,6 +4,7 @@ import { OnlyRunInContext } from '@holoflows/kit/es'
 import { ProfileIdentifier, PersonaIdentifier, Identifier, ECKeyIdentifier } from '../type'
 import { DBSchema, openDB, IDBPDatabase, IDBPTransaction } from 'idb/with-async-ittr'
 import { IdentifierMap } from '../IdentifierMap'
+import { PrototypeLess, restorePrototype } from '../../utils/type'
 /**
  * Database structure:
  *
@@ -239,7 +240,9 @@ export async function updateProfileDB(
     const old = await t.objectStore('profiles').get(updating.identifier.toText())
     if (!old) throw new Error('Updating a non exists record')
 
-    if ('linkedPersona' in updating) {
+    const oldLinkedPersona = restorePrototype(old.linkedPersona, ECKeyIdentifier.prototype)
+
+    if (updating.linkedPersona && (!oldLinkedPersona || updating.linkedPersona.equals(oldLinkedPersona))) {
         throw new TypeError('Use attachProfileDB or deattachProfileDB to update the linkedPersona')
     }
     const nextRecord: ProfileRecordDB = profileToDB({
@@ -260,12 +263,13 @@ export async function detachProfileDB(
     const profile = await t.objectStore('profiles').get(identifier.toText())
     if (!profile?.linkedPersona) return
 
-    const ec_id = profile.linkedPersona.toText()
+    const linkedPersona = restorePrototype(profile.linkedPersona, ECKeyIdentifier.prototype)
+    const ec_id = linkedPersona.toText()
     const persona = await t.objectStore('personas').get(ec_id)
     persona?.linkedProfiles.delete(ec_id)
 
     if (persona) {
-        if (await safeDeletePersonaDB(profile.linkedPersona, t as any)) {
+        if (await safeDeletePersonaDB(linkedPersona, t as any)) {
             // persona deleted
         } else {
             // update persona
@@ -345,7 +349,11 @@ export interface PersonaRecord {
     createdAt: Date
     updatedAt: Date
 }
-type ProfileRecordDB = Omit<ProfileRecord, 'identifier' | 'hasPrivateKey'> & { identifier: string }
+type ProfileRecordDB = Omit<ProfileRecord, 'identifier' | 'hasPrivateKey' | 'linkedPersona'> & {
+    identifier: string
+    network: string
+    linkedPersona?: PrototypeLess<PersonaIdentifier>
+}
 type PersonaRecordDb = Omit<PersonaRecord, 'identifier' | 'linkedProfiles'> & {
     identifier: string
     linkedProfiles: Map<string, LinkedProfileDetails>
@@ -381,14 +389,18 @@ function profileToDB(x: ProfileRecord): ProfileRecordDB {
     return {
         ...x,
         identifier: x.identifier.toText(),
+        network: x.identifier.network,
     }
 }
-function profileOutDB(x: ProfileRecordDB): ProfileRecord {
+function profileOutDB({ network, ...x }: ProfileRecordDB): ProfileRecord {
     if (x.linkedPersona) {
-        if (x.linkedPersona.type === 'ec_key') Object.setPrototypeOf(x.linkedPersona, ECKeyIdentifier.prototype)
-        else throw new Error('Unknown type of linkedPersona')
+        if (x.linkedPersona.type !== 'ec_key') throw new Error('Unknown type of linkedPersona')
     }
-    return { ...x, identifier: Identifier.fromString(x.identifier) as ProfileIdentifier }
+    return {
+        ...x,
+        identifier: Identifier.fromString(x.identifier) as ProfileIdentifier,
+        linkedPersona: restorePrototype(x.linkedPersona, ECKeyIdentifier.prototype),
+    }
 }
 function personaRecordToDB(x: PersonaRecord): PersonaRecordDb {
     return {
