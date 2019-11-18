@@ -2,7 +2,6 @@ import { geti18nString } from '../i18n'
 import { SocialNetworkWorkerAndUI } from '../../social-network/shared'
 import { isNil } from 'lodash-es'
 import { definedSocialNetworkWorkers } from '../../social-network/worker'
-import { getActivatedUI } from '../../social-network/ui'
 import { GetContext } from '@holoflows/kit/es'
 
 export type Payload = PayloadAlpha40_Or_Alpha39 | PayloadAlpha38
@@ -91,7 +90,12 @@ export function deconstructPayload(str: string, decoder: Decoder, throws?: true)
 export function deconstructPayload(str: string, decoder: Decoder, throws: boolean = false): Payload | null {
     const decoders = (() => {
         if (isNil(decoder)) {
-            if (GetContext() === 'content') return [getActivatedUI().payloadDecoder]
+            if (GetContext() === 'content') {
+                const {
+                    getActivatedUI,
+                } = require('../../social-network/ui') as typeof import('../../social-network/ui')
+                return [getActivatedUI().payloadDecoder]
+            }
             return Array.from(definedSocialNetworkWorkers).map(x => x.payloadDecoder)
         }
         return [decoder]

@@ -1,5 +1,5 @@
 import { env, Env, Preference, ProfileUI, SocialNetworkWorkerAndUIDefinition } from './shared'
-import { DOMProxy, LiveSelector, ValueRef } from '@holoflows/kit/es'
+import { DOMProxy, LiveSelector, ValueRef, OnlyRunInContext } from '@holoflows/kit/es'
 import { Group, Profile } from '../database'
 import { ProfileIdentifier } from '../database/type'
 import { Payload } from '../utils/type-transform/Payload'
@@ -11,6 +11,8 @@ import { nopWithUnmount } from '../utils/utils'
 import { Theme } from '@material-ui/core'
 import { MaskbookLightTheme, MaskbookDarkTheme } from '../utils/theme'
 import { untilDomLoaded } from '../utils/dom'
+
+OnlyRunInContext(['content', 'debugging', 'options'], 'UI provider')
 
 //#region SocialNetworkUI
 export interface SocialNetworkUIDefinition

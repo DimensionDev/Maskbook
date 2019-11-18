@@ -28,7 +28,6 @@ import { GroupIdentifier, Identifier, ProfileIdentifier } from '../type'
 import { DBSchema, openDB } from 'idb/with-async-ittr'
 import { JsonWebKeyToCryptoKey } from '../../utils/type-transform/CryptoKey-JsonWebKey'
 import { OnlyRunInContext } from '@holoflows/kit/es'
-import { isIdentifierArrayEquals } from '../utils/equality'
 
 OnlyRunInContext('background', 'People db')
 //#region Type and utils
