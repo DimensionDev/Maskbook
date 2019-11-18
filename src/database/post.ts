@@ -1,15 +1,15 @@
 /// <reference path="./global.d.ts" />
 import { PostIdentifier, ProfileIdentifier, Identifier, PostIVIdentifier, GroupIdentifier } from './type'
 import { openDB, DBSchema } from 'idb/with-async-ittr'
-import { restorePrototype } from './utils'
+import { restorePrototype, restorePrototypeArray } from '../utils/type'
 
 function outDb(db: PostDBRecord): PostRecord {
     const { identifier, ...rest } = db
     for (const key in rest.recipients) {
         const detail = rest.recipients[key]
-        detail.reason.forEach(x => x.type === 'group' && restorePrototype([x.group], GroupIdentifier.prototype))
+        detail.reason.forEach(x => x.type === 'group' && restorePrototype(x.group, GroupIdentifier.prototype))
     }
-    restorePrototype(rest.recipientGroups, GroupIdentifier.prototype)
+    restorePrototypeArray(rest.recipientGroups, GroupIdentifier.prototype)
     return {
         ...rest,
         identifier: Identifier.fromString(identifier) as PostIVIdentifier,
@@ -103,7 +103,7 @@ const db = openDB<PostDB>('maskbook-post-v2', 3, {
             const store = transaction.objectStore('post')
             for await (const cursor of store) {
                 const oldType = (cursor.value.recipients as unknown) as ProfileIdentifier[] | undefined
-                restorePrototype(oldType, ProfileIdentifier.prototype)
+                oldType && restorePrototypeArray(oldType, ProfileIdentifier.prototype)
                 const newType: PostDBRecord['recipients'] = {}
                 if (oldType !== undefined)
                     for (const each of oldType) {

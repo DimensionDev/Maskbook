@@ -28,9 +28,9 @@ export async function profileRecordToProfile(record: ProfileRecord): Promise<Pro
     delete rec.linkedPersona
     delete rec.localKey
     const _ = persona ? queryPersona(persona) : undefined
-    const _2 = getAvatarDataURL(rec.identifier)
+    const _2 = getAvatarDataURL(rec.identifier).catch(() => undefined)
     return {
-        ...record,
+        ...rec,
         linkedPersona: await _,
         avatar: await _2,
     }
