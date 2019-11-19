@@ -9,7 +9,7 @@ Encrypt your posts & chats on You-Know-Where. Allow only your friends to decrypt
 
 For general introductions, see [Maskbook.com](https://maskbook.com/).
 
-/* I thought what I'd do was, I'd pretend I was one of those deaf-mutes. */
+/_ I thought what I'd do was, I'd pretend I was one of those deaf-mutes. _/
 
 ## Downloads
 
@@ -25,17 +25,17 @@ For general introductions, see [Maskbook.com](https://maskbook.com/).
 
 ## Useful Links
 
-- [User Forum](https://github.com/DimensionDev/Maskbook-Talks)
-- [Report Bug](https://maskbook.com/links/?report-bug)
-- [Twitter](https://twitter.com/ProjectMaskbook)
-- [Facebook](https://www.facebook.com/realmaskbook)
+-   [User Forum](https://github.com/DimensionDev/Maskbook-Talks)
+-   [Report Bug](https://maskbook.com/links/?report-bug)
+-   [Twitter](https://twitter.com/ProjectMaskbook)
+-   [Facebook](https://www.facebook.com/realmaskbook)
 
 ## Donation
 
 Help us by donating us by:
 
-- Bitcoin: `3PRrXj1HTXDc4j9SCQZ6hovpa74iimqtgX`
-- Ethereum: `0xD71c7150962fd484a4291a193c85426Df9EaABbB`
+-   Bitcoin: `3PRrXj1HTXDc4j9SCQZ6hovpa74iimqtgX`
+-   Ethereum: `0xD71c7150962fd484a4291a193c85426Df9EaABbB`
 
 ## Documentation for developers
 
@@ -74,7 +74,6 @@ Help us by donating us by:
 -   `elliptic` - A crypto library, we use it to encrypt and decrypt
 -   `gun` - A decentralized graph database we use it to sync user's shared crypto key
 -   `pvtsutils` and `tiny-secp256k1` - A crypto library, we use it to zip and unzip SECP256k1 keys but not using it to encrypt/decrypt
--   `serialijse` - A serialization / deserialization library
 -   `webcrypto-liner` - A wrapper library, it wrap `elliptic` into WebCrypto API
 
 ### Folder Structure
