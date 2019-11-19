@@ -50,7 +50,7 @@ function createProxyToService(name: string) {
                 if (key === 'methods') {
                     return () => {
                         return Object.keys(service)
-                            .map(f => service[f].toString().split('\n')[0])
+                            .map(f => f + ': ' + service[f].toString().split('\n')[0])
                             .join('\n')
                     }
                 }
