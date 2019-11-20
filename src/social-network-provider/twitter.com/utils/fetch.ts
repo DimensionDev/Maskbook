@@ -1,7 +1,6 @@
-import { bioCard } from './selector'
 import { regexMatch } from '../../../utils/utils'
 import { notNullable } from '../../../utils/assert'
-import { defaultTo, isUndefined } from 'lodash-es'
+import { defaultTo, isUndefined, nth } from 'lodash-es'
 import { nthChild } from '../../../utils/dom'
 import { PersonIdentifier } from '../../../database/type'
 import { twitterUrl } from './url'
@@ -18,7 +17,7 @@ const parseNameArea = (t: string) => {
     const r = regexMatch(t, /((.+\s*)*)@(.+)/, null)!
     return {
         name: r[1].replace(/\n+/g, ''),
-        handle: r[3],
+        handle: r[3].replace(/\n+/g, ''),
     }
 }
 
@@ -26,43 +25,44 @@ const parsePid = (t: string) => {
     return regexMatch(t, /status\/(\d+)/, 1)!
 }
 
-export const bioCardParser = () => {
-    const avatar = notNullable(
-        bioCard()
-            .querySelector<HTMLImageElement>('img')
-            .map(x => x.src)
-            .evaluate(),
-    )
-    const nameArea = parseNameArea(
-        notNullable(
-            bioCard()
-                .map(x => nthChild(x, 1)!.innerText)
-                .evaluate(),
-        ),
-    )
-    const bio = notNullable(
-        bioCard()
-            .map(x => nthChild(x, 2)!.innerHTML)
-            .evaluate(),
-    )
-    const isFollower = !isUndefined(
-        bioCard()
-            .map(x => nthChild(x, 1, 0, 0, 1, 1, 0))
-            .evaluate(),
-    )
-    const isFollowing = !isUndefined(
-        bioCard()
-            .querySelector('[data-testid*="unfollow"]')
-            .evaluate(),
-    )
-    return {
-        avatar,
-        name: nameArea.name,
-        handle: nameArea.handle,
-        identifier: new PersonIdentifier(twitterUrl.hostIdentifier, nameArea.handle),
-        bio,
-        isFollower,
-        isFollowing,
+export const bioCardParser = (cardNode: HTMLDivElement) => {
+    if (cardNode.classList.contains('profile')) {
+        const avatarElement = cardNode.querySelector<HTMLImageElement>('.avatar img')
+        const { name, handle } = parseNameArea(
+            [
+                notNullable(cardNode.querySelector<HTMLTableCellElement>('.user-info .fullname')).innerText,
+                notNullable(cardNode.querySelector<HTMLTableCellElement>('.user-info .screen-name')).innerText,
+            ].join('@'),
+        )
+        const bio = notNullable(cardNode.querySelector('.details') as HTMLTableCellElement).innerText
+        const isFollower = !isUndefined(cardNode.querySelector<HTMLSpanElement>('.follows-you'))
+        const isFollowing =
+            notNullable(cardNode.querySelector<HTMLFormElement>('.profile-actions form')).action.indexOf('unfollow') >
+            -1
+        return {
+            avatar: avatarElement ? avatarElement.src : undefined,
+            name,
+            handle,
+            identifier: new PersonIdentifier(twitterUrl.hostIdentifier, handle),
+            bio,
+            isFollower,
+            isFollowing,
+        }
+    } else {
+        const avatarElement = cardNode.querySelector<HTMLImageElement>('img')
+        const { name, handle } = parseNameArea(notNullable(cardNode.children[1] as HTMLDivElement).innerText)
+        const bio = notNullable(cardNode.children[2] as HTMLDivElement).innerHTML
+        const isFollower = !isUndefined(nthChild(cardNode, 1, 0, 0, 1, 1, 0))
+        const isFollowing = !isUndefined(cardNode.querySelector('[data-testid*="unfollow"]'))
+        return {
+            avatar: avatarElement ? avatarElement.src : undefined,
+            name,
+            handle,
+            identifier: new PersonIdentifier(twitterUrl.hostIdentifier, handle),
+            bio,
+            isFollower,
+            isFollowing,
+        }
     }
 }
 
@@ -100,26 +100,30 @@ export const postContentParser = (node: HTMLElement) => {
  */
 export const postParser = async (node: HTMLElement) => {
     if (node.classList.contains('tweet')) {
-        const nameArea = parseNameArea(notNullable(node.querySelector<HTMLAnchorElement>('.user-info a')).innerText)
+        const { name, handle } = parseNameArea(
+            notNullable(node.querySelector<HTMLAnchorElement>('.user-info a')).innerText,
+        )
         const avatarElement = node.querySelector<HTMLImageElement>('.avatar img')
         const pidLocation = node.querySelector<HTMLAnchorElement>('.timestamp a')
         return {
-            name: nameArea.name,
-            handle: nameArea.handle,
+            name,
+            handle,
             pid: pidLocation ? parsePid(pidLocation.href) : undefined,
             avatar: avatarElement ? avatarElement.src : undefined,
             content: postContentParser(node),
         }
     } else {
-        const nameArea = parseNameArea(notNullable(node.children[1].querySelector<HTMLAnchorElement>('a')).innerText)
+        const { name, handle } = parseNameArea(
+            notNullable(node.children[1].querySelector<HTMLAnchorElement>('a')).innerText,
+        )
         const avatarElement = node.children[0].querySelector<HTMLImageElement>(`img[src*="twimg.com"]`)
         const pidLocation = defaultTo(
             node.children[1].querySelector<HTMLAnchorElement>('a[href*="status"]'),
             node.parentElement!.querySelector<HTMLAnchorElement>('a[href*="status"]'),
         )
         return {
-            name: nameArea.name,
-            handle: nameArea.handle,
+            name,
+            handle,
             // pid may not available at promoted tweet
             pid: pidLocation ? parsePid(pidLocation.href) : undefined,
             avatar: avatarElement ? avatarElement.src : undefined,

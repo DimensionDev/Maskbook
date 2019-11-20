@@ -40,9 +40,9 @@ const resolveLastRecognizedIdentity = (self: SocialNetworkUI) => {
 
 const registerUserCollector = () => {
     new MutationObserverWatcher(bioCard())
-        .useForeach(() => {
+        .useForeach((cardNode: HTMLDivElement) => {
             const resolve = () => {
-                const r = bioCardParser()
+                const r = bioCardParser(cardNode)
                 uploadToService(r)
                 const theGroup = GroupIdentifier.getDefaultFriendsGroupIdentifier(
                     instanceOfTwitterUI.lastRecognizedIdentity.value.identifier,
