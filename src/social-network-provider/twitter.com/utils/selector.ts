@@ -44,7 +44,7 @@ export const editProfileButtonSelector = () =>
     querySelector<HTMLAnchorElement>('[data-testid="primaryColumn"] [href="/settings/profile"]')
 export const editProfileTextareaSelector = () => querySelector<HTMLTextAreaElement>('textarea[placeholder*="bio"]')
 
-export const postsSelector = () => querySelectorAll('[data-testid="tweet"]')
+export const postsSelector = () => querySelectorAll('#main_content .timeline .tweet, [data-testid="tweet"]')
 export const postsContentSelector = () => postsSelector().querySelectorAll<E>(`[lang]`)
 
 const base = querySelector<HTMLScriptElement>('#react-root + script')
