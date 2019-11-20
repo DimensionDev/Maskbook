@@ -1,7 +1,7 @@
 import { bioCard } from './selector'
 import { regexMatch } from '../../../utils/utils'
 import { notNullable } from '../../../utils/assert'
-import { defaultTo, isUndefined, join } from 'lodash-es'
+import { defaultTo, isUndefined } from 'lodash-es'
 import { nthChild } from '../../../utils/dom'
 import { PersonIdentifier } from '../../../database/type'
 import { twitterUrl } from './url'
@@ -20,6 +20,10 @@ const parseNameArea = (t: string) => {
         name: r[1].replace(/\n+/g, ''),
         handle: r[3],
     }
+}
+
+const parsePid = (t: string) => {
+    return regexMatch(t, /status\/(\d+)/, 1)!
 }
 
 export const bioCardParser = () => {
@@ -63,13 +67,31 @@ export const bioCardParser = () => {
 }
 
 export const postContentParser = (node: HTMLElement) => {
-    const select = <T extends HTMLElement>(selectors: string) =>
-        Array.from(node.parentElement!.querySelectorAll<T>(selectors))
-    const sto = [
-        ...select<HTMLAnchorElement>('a').map(x => x.title),
-        ...select<HTMLSpanElement>('[lang] > span').map(x => x.innerText),
-    ]
-    return join(sto)
+    if (node.classList.contains('tweet')) {
+        const containerNode = node.querySelector('.tweet-text > div')
+        if (!containerNode) {
+            return ''
+        }
+        return Array.from(containerNode.childNodes)
+            .map(node => {
+                if (node.nodeType === Node.TEXT_NODE) {
+                    return node.nodeValue
+                }
+                if (node.nodeName === 'A') {
+                    return (node as HTMLAnchorElement).getAttribute('title')
+                }
+                return ''
+            })
+            .join(',')
+    } else {
+        const select = <T extends HTMLElement>(selectors: string) =>
+            Array.from(node.parentElement!.querySelectorAll<T>(selectors))
+        const sto = [
+            ...select<HTMLAnchorElement>('a').map(x => x.title),
+            ...select<HTMLSpanElement>('[lang] > span').map(x => x.innerText),
+        ]
+        return sto.filter(Boolean).join(',')
+    }
 }
 
 /**
@@ -77,18 +99,31 @@ export const postContentParser = (node: HTMLElement) => {
  * @return          link to avatar.
  */
 export const postParser = async (node: HTMLElement) => {
-    const nameArea = parseNameArea(notNullable(node.children[1].querySelector<HTMLAnchorElement>('a')).innerText)
-    const avatarElement = node.children[0].querySelector<HTMLImageElement>(`img[src*="twimg.com"]`)
-    const pidLocation = defaultTo(
-        node.children[1].querySelector<HTMLAnchorElement>('a[href*="status"]'),
-        node.parentElement!.querySelector<HTMLAnchorElement>('a[href*="status"]'),
-    )
-    return {
-        name: nameArea.name,
-        handle: nameArea.handle,
-        // pid may not available at promoted tweet
-        pid: pidLocation ? regexMatch(pidLocation!.href, /status\/(\d+)/, 1)! : undefined,
-        avatar: avatarElement ? avatarElement.src : undefined,
-        content: postContentParser(node),
+    if (node.classList.contains('tweet')) {
+        const nameArea = parseNameArea(notNullable(node.querySelector<HTMLAnchorElement>('.user-info a')).innerText)
+        const avatarElement = node.querySelector<HTMLImageElement>('.avatar img')
+        const pidLocation = node.querySelector<HTMLAnchorElement>('.timestamp a')
+        return {
+            name: nameArea.name,
+            handle: nameArea.handle,
+            pid: pidLocation ? parsePid(pidLocation.href) : undefined,
+            avatar: avatarElement ? avatarElement.src : undefined,
+            content: postContentParser(node),
+        }
+    } else {
+        const nameArea = parseNameArea(notNullable(node.children[1].querySelector<HTMLAnchorElement>('a')).innerText)
+        const avatarElement = node.children[0].querySelector<HTMLImageElement>(`img[src*="twimg.com"]`)
+        const pidLocation = defaultTo(
+            node.children[1].querySelector<HTMLAnchorElement>('a[href*="status"]'),
+            node.parentElement!.querySelector<HTMLAnchorElement>('a[href*="status"]'),
+        )
+        return {
+            name: nameArea.name,
+            handle: nameArea.handle,
+            // pid may not available at promoted tweet
+            pid: pidLocation ? parsePid(pidLocation.href) : undefined,
+            avatar: avatarElement ? avatarElement.src : undefined,
+            content: postContentParser(node),
+        }
     }
 }

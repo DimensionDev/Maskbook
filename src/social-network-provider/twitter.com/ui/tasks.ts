@@ -10,7 +10,7 @@ import {
 import { geti18nString } from '../../../utils/i18n'
 import { SocialNetworkUI, SocialNetworkUITasks } from '../../../social-network/ui'
 import { fetchBioCard } from '../utils/status'
-import { bioCardParser, postParser } from '../utils/fetch'
+import { bioCardParser, postContentParser } from '../utils/fetch'
 import { getText, hasFocus, postBoxInPopup } from '../utils/postBox'
 import { MutationObserverWatcher } from '@holoflows/kit'
 import { untilDocumentReady, untilElementAvailable } from '../../../utils/dom'
@@ -92,7 +92,7 @@ const taskPasteIntoBio = async (text: string) => {
 }
 
 const taskGetPostContent: SocialNetworkUITasks['taskGetPostContent'] = async () => {
-    return (await postParser((await timeout(new MutationObserverWatcher(postsSelector()), 10000))[0])).content
+    return postContentParser((await timeout(new MutationObserverWatcher(postsSelector()), 10000))[0])
 }
 
 const taskGetProfile = async () => {
