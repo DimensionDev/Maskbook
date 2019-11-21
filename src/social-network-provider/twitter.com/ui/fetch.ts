@@ -14,7 +14,7 @@ import { isNil } from 'lodash-es'
 import Services from '../../../extension/service'
 import { twitterUrl } from '../utils/url'
 
-const resolveLastRecognizedIdentity = async (self: SocialNetworkUI) => {
+const resolveLastRecognizedIdentity = (self: SocialNetworkUI) => {
     const selfSelector = selfInfoSelectors().handle
     const assign = () => {
         const ref = self.lastRecognizedIdentity
