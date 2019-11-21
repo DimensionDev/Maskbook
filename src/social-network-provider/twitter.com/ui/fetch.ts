@@ -12,8 +12,9 @@ import { bioCardParser, postParser } from '../utils/fetch'
 import { uploadToService } from '../utils/user'
 import { isNil } from 'lodash-es'
 import Services from '../../../extension/service'
+import { twitterUrl } from '../utils/url'
 
-const resolveLastRecognizedIdentity = (self: SocialNetworkUI) => {
+const resolveLastRecognizedIdentity = async (self: SocialNetworkUI) => {
     const selfSelector = selfInfoSelectors().handle
     const assign = () => {
         const ref = self.lastRecognizedIdentity
@@ -41,16 +42,18 @@ const resolveLastRecognizedIdentity = (self: SocialNetworkUI) => {
 const registerUserCollector = () => {
     new MutationObserverWatcher(bioCard())
         .useForeach((cardNode: HTMLDivElement) => {
-            const resolve = () => {
-                const r = bioCardParser(cardNode)
-                uploadToService(r)
-                const theGroup = GroupIdentifier.getDefaultFriendsGroupIdentifier(
-                    instanceOfTwitterUI.lastRecognizedIdentity.value.identifier,
-                )
-                if (r.isFollowing && r.isFollower) {
-                    Services.People.addPersonToFriendsGroup(theGroup, [r.identifier]).then()
+            const resolve = async () => {
+                const bio = bioCardParser(cardNode)
+                uploadToService(bio)
+                const myIdentity =
+                    (await Services.People.queryMyIdentity()).filter(
+                        ({ identifier }) => identifier.network === twitterUrl.hostIdentifier,
+                    )[0] || PersonIdentifier.unknown
+                const theGroup = GroupIdentifier.getDefaultFriendsGroupIdentifier(myIdentity.identifier)
+                if (bio.isFollowing && bio.isFollower) {
+                    Services.People.addPersonToFriendsGroup(theGroup, [bio.identifier]).then()
                 } else {
-                    Services.People.removePersonFromFriendsGroup(theGroup, [r.identifier]).then()
+                    Services.People.removePersonFromFriendsGroup(theGroup, [bio.identifier]).then()
                 }
             }
             resolve()

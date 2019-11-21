@@ -25,5 +25,5 @@ export const getPostUrl = (post: PostIdentifier<PersonIdentifier>, useMobile: bo
 }
 
 export const getProfileUrl = (self: PersonIdentifier, useMobile: boolean = false) => {
-    return `${hostLeadingUrlAuto(useMobile)}/${self.userId}`
+    return useMobile ? `${hostLeadingUrlAuto(useMobile)}/account` : `${hostLeadingUrlAuto(useMobile)}/${self.userId}`
 }

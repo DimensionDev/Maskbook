@@ -1,7 +1,6 @@
 import { GroupRecord, createUserGroupDatabase, updateUserGroupDatabase, queryUserGroupsDatabase } from '../group'
 import { PersonIdentifier, GroupIdentifier, PreDefinedVirtualGroupNames } from '../type'
 import { Person } from './person'
-import { MessageCenter } from '../../utils/messages'
 
 export interface Group extends GroupRecord {
     avatar?: string
