@@ -23,7 +23,9 @@ export function InitFriendsValueRef(self: SocialNetworkUI, network: string) {
                 })
             } else if (event.reason === 'new') {
                 next = next.filter(x => !x.identifier.equals(event.of.identifier))
-                next.push(event.of)
+                if (event.of.identifier.network === network) {
+                    next.push(event.of)
+                }
             } else {
                 throw new Error('Invalid state')
             }
