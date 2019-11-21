@@ -8,8 +8,8 @@ import { renderInShadowRoot } from '../../utils/jss/renderInShadowRoot'
 import { dispatchCustomEvents, nop, selectElementContents, sleep } from '../../utils/utils'
 import { makeStyles } from '@material-ui/core'
 
-const defHandler = async (encryptedComment: string, current: PostInfo) => {
-    const root = current.rootNode
+const defHandler = async (encryptedComment: string, current: PostInfo, realCurrent: HTMLElement | null) => {
+    const root = realCurrent || current.rootNode
     /**
      * TODO:
      *  Yeah I see but I think root.querySelector('[contenteditable]')
@@ -29,7 +29,7 @@ export const injectCommentBoxDefaultFactory = function<T extends string>(
     additionPropsToCommentBox: (classes: Record<T, string>) => Partial<CommentBoxProps> = () => ({}),
     useCustomStyles: (props?: any) => Record<T, string> = makeStyles({}) as any,
 ) {
-    const CommentBoxUI = React.memo(function CommentBoxUI(current: PostInfo) {
+    const CommentBoxUI = React.memo(function CommentBoxUI(current: PostInfo & { realCurrent: HTMLElement | null }) {
         const payload = useValueRef(current.postPayload)
         const decrypted = useValueRef(current.decryptedPostContent)
         const styles = useCustomStyles()
@@ -37,7 +37,7 @@ export const injectCommentBoxDefaultFactory = function<T extends string>(
         const onCallback = React.useCallback(
             async content => {
                 const encryptedComment = await Services.Crypto.encryptComment(payload!.iv, decrypted, content)
-                onPasteToCommentBox(encryptedComment, current).then()
+                onPasteToCommentBox(encryptedComment, current, current.realCurrent).then()
             },
             [current, decrypted, payload],
         )
@@ -47,15 +47,18 @@ export const injectCommentBoxDefaultFactory = function<T extends string>(
     })
     return (current: PostInfo) => {
         if (!current.commentBoxSelector) return nop
-        const commentBoxWatcher = new MutationObserverWatcher(
-            current.commentBoxSelector.clone().enableSingleMode(),
-            current.rootNode,
-        )
+        const commentBoxWatcher = new MutationObserverWatcher(current.commentBoxSelector.clone(), current.rootNode)
+            .useForeach((node, key, meta) =>
+                renderInShadowRoot(
+                    <CommentBoxUI {...{ ...current, realCurrent: meta.realCurrent }} />,
+                    meta.afterShadow,
+                ),
+            )
             .setDOMProxyOption({ afterShadowRootInit: { mode: 'closed' } })
             .startWatch({
                 childList: true,
                 subtree: true,
             })
-        return renderInShadowRoot(<CommentBoxUI {...current} />, commentBoxWatcher.firstDOMProxy.afterShadow)
+        return () => commentBoxWatcher.stopWatch()
     }
 }
