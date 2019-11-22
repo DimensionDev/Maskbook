@@ -71,7 +71,7 @@ const db = openDB<PostDB>('maskbook-post-v2', 3, {
     async upgrade(db, oldVersion, newVersion, transaction) {
         if (oldVersion < 1) {
             // inline keys
-            db.createObjectStore('post', { keyPath: 'identifier' })
+            return void db.createObjectStore('post', { keyPath: 'identifier' })
         }
         /**
          * In the version 1 we use PostIdentifier to store post that identified by post iv
