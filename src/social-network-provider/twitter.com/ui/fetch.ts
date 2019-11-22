@@ -43,17 +43,23 @@ const registerUserCollector = () => {
     new MutationObserverWatcher(bioCard())
         .useForeach((cardNode: HTMLDivElement) => {
             const resolve = async () => {
-                const bio = bioCardParser(cardNode)
-                uploadToService(bio)
+                const { isFollower, isFollowing, identifier, bio, name, avatar } = bioCardParser(cardNode)
+                Services.People.updatePersonInfo(identifier, {
+                    nickname: name,
+                    avatarURL: avatar,
+                }).then()
+                const [verified, myIdentities] = await Promise.all([
+                    Services.Crypto.verifyOthersProve(bio, identifier),
+                    Services.People.queryMyIdentity(),
+                ])
                 const myIdentity =
-                    (await Services.People.queryMyIdentity()).filter(
-                        ({ identifier }) => identifier.network === twitterUrl.hostIdentifier,
-                    )[0] || PersonIdentifier.unknown
-                const theGroup = GroupIdentifier.getDefaultFriendsGroupIdentifier(myIdentity.identifier)
-                if (bio.isFollowing && bio.isFollower) {
-                    Services.People.addPersonToFriendsGroup(theGroup, [bio.identifier]).then()
+                    myIdentities.filter(({ identifier }) => identifier.network === twitterUrl.hostIdentifier)[0] ||
+                    PersonIdentifier.unknown
+                const myFirends = GroupIdentifier.getDefaultFriendsGroupIdentifier(myIdentity.identifier)
+                if (isFollowing && isFollower && verified) {
+                    Services.People.addPersonToFriendsGroup(myFirends, [identifier]).then()
                 } else {
-                    Services.People.removePersonFromFriendsGroup(theGroup, [bio.identifier]).then()
+                    Services.People.removePersonFromFriendsGroup(myFirends, [identifier]).then()
                 }
             }
             resolve()
@@ -81,15 +87,18 @@ const registerPostCollector = (self: SocialNetworkUI) => {
             })
             info.postPayload.value = deconstructPayload(info.postContent.value, self.payloadDecoder)
             const collectPostInfo = async () => {
-                const r = await postParser(node)
-                if (!r.pid) return false
-                info.postContent.value = r.content
-                const postBy = new PersonIdentifier(self.networkIdentifier, r.handle)
+                const { pid, content, handle, name, avatar } = await postParser(node)
+                if (!pid) return false
+                const postBy = new PersonIdentifier(self.networkIdentifier, handle)
+                info.postID.value = pid
+                info.postContent.value = content
                 if (!info.postBy.value.equals(postBy)) {
                     info.postBy.value = postBy
                 }
-                info.postID.value = r.pid
-                uploadToService(r)
+                Services.People.updatePersonInfo(postBy, {
+                    nickname: name,
+                    avatarURL: avatar,
+                }).then()
             }
             ;(async () => {
                 await collectPostInfo()
