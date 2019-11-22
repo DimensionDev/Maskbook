@@ -1,6 +1,6 @@
 import { regexMatch } from '../../../utils/utils'
 import { notNullable } from '../../../utils/assert'
-import { defaultTo, isUndefined, nth } from 'lodash-es'
+import { defaultTo } from 'lodash-es'
 import { nthChild } from '../../../utils/dom'
 import { PersonIdentifier } from '../../../database/type'
 import { twitterUrl } from './url'
@@ -35,7 +35,7 @@ export const bioCardParser = (cardNode: HTMLDivElement) => {
             ].join('@'),
         )
         const bio = notNullable(cardNode.querySelector('.details') as HTMLTableCellElement).innerText
-        const isFollower = !isUndefined(cardNode.querySelector<HTMLSpanElement>('.follows-you'))
+        const isFollower = !!cardNode.querySelector<HTMLSpanElement>('.follows-you')
         const isFollowing =
             notNullable(cardNode.querySelector<HTMLFormElement>('.profile-actions form')).action.indexOf('unfollow') >
             -1
@@ -52,8 +52,8 @@ export const bioCardParser = (cardNode: HTMLDivElement) => {
         const avatarElement = cardNode.querySelector<HTMLImageElement>('img')
         const { name, handle } = parseNameArea(notNullable(cardNode.children[1] as HTMLDivElement).innerText)
         const bio = notNullable(cardNode.children[2] as HTMLDivElement).innerHTML
-        const isFollower = !isUndefined(nthChild(cardNode, 1, 0, 0, 1, 1, 0))
-        const isFollowing = !isUndefined(cardNode.querySelector('[data-testid*="unfollow"]'))
+        const isFollower = !!nthChild(cardNode, 1, 0, 0, 1, 1, 0)
+        const isFollowing = !!cardNode.querySelector('[data-testid*="unfollow"]')
         return {
             avatar: avatarElement ? avatarElement.src : undefined,
             name,
