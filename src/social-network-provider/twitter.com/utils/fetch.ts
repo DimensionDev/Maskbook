@@ -66,9 +66,9 @@ export const bioCardParser = (cardNode: HTMLDivElement) => {
     }
 }
 
-export const postContentParser = (node: HTMLElement) => {
-    if (node.classList.contains('tweet')) {
-        const containerNode = node.querySelector('.tweet-text > div')
+export const postContentParser = (contentNode: HTMLElement) => {
+    if (contentNode.classList.contains('tweet')) {
+        const containerNode = contentNode.querySelector('.tweet-text > div')
         if (!containerNode) {
             return ''
         }
@@ -85,7 +85,7 @@ export const postContentParser = (node: HTMLElement) => {
             .join(',')
     } else {
         const select = <T extends HTMLElement>(selectors: string) =>
-            Array.from(node.parentElement!.querySelectorAll<T>(selectors))
+            Array.from(contentNode.parentElement!.querySelectorAll<T>(selectors))
         const sto = [
             ...select<HTMLAnchorElement>('a').map(x => x.title),
             ...select<HTMLSpanElement>('[lang] > span').map(x => x.innerText),

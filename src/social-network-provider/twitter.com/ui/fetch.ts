@@ -43,14 +43,14 @@ const registerUserCollector = () => {
     new MutationObserverWatcher(bioCard())
         .useForeach((cardNode: HTMLDivElement) => {
             const resolve = async () => {
+                if (!cardNode) return
                 const { isFollower, isFollowing, identifier, bio } = bioCardParser(cardNode)
                 const [verified, myIdentities] = await Promise.all([
                     Services.Crypto.verifyOthersProve(bio, identifier),
-                    Services.People.queryMyIdentity(),
+                    Services.People.queryMyIdentity(twitterUrl.hostIdentifier),
                 ])
-                const myIdentity =
-                    myIdentities.filter(({ identifier }) => identifier.network === twitterUrl.hostIdentifier)[0] ||
-                    PersonIdentifier.unknown
+
+                const myIdentity = myIdentities[0] || PersonIdentifier.unknown
                 const myFirends = GroupIdentifier.getDefaultFriendsGroupIdentifier(myIdentity.identifier)
                 const myFollowers = GroupIdentifier.getFriendsGroupIdentifier(
                     myIdentity.identifier,
@@ -99,6 +99,7 @@ const registerPostCollector = (self: SocialNetworkUI) => {
             })
             info.postPayload.value = deconstructPayload(info.postContent.value, self.payloadDecoder)
             const collectPostInfo = async () => {
+                if (!node) return false
                 const { pid, content, handle, name, avatar } = await postParser(node)
                 if (!pid) return false
                 const postBy = new PersonIdentifier(self.networkIdentifier, handle)
