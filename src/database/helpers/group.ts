@@ -6,18 +6,23 @@ export interface Group extends GroupRecord {
     avatar?: string
 }
 
-export function createDefaultFriendsGroup(who: PersonIdentifier) {
+export function createFriendsGroup(who: PersonIdentifier, groupId: string) {
     return createUserGroupDatabase(
-        GroupIdentifier.getDefaultFriendsGroupIdentifier(who),
+        GroupIdentifier.getFriendsGroupIdentifier(who, groupId),
         // Put the raw special name in, then UI can display in their own language.
-        PreDefinedVirtualGroupNames.friends,
+        groupId,
     )
+}
+
+export function createDefaultFriendsGroup(who: PersonIdentifier) {
+    return createFriendsGroup(who, PreDefinedVirtualGroupNames.friends)
 }
 
 export async function addPersonToFriendsGroup(group: GroupIdentifier, newMembers: (Person | PersonIdentifier)[]) {
     const memberList = newMembers.map(x => (x instanceof PersonIdentifier ? x : x.identifier)) as PersonIdentifier[]
     await updateUserGroupDatabase({ identifier: group, members: memberList }, 'append')
 }
+
 export function removePersonFromFriendsGroup(group: GroupIdentifier, removedFriend: (Person | PersonIdentifier)[]) {
     const friendList = removedFriend.map(x => (x instanceof PersonIdentifier ? x : x.identifier)) as PersonIdentifier[]
     return updateUserGroupDatabase({ identifier: group }, r => {

@@ -12,6 +12,7 @@ import { twitterUrl } from '../utils/url'
 import React from 'react'
 import { createMuiTheme } from '@material-ui/core'
 import { MaskbookDarkTheme } from '../../../utils/theme'
+import { InitTwitterGroups } from './group'
 
 export const instanceOfTwitterUI = defineSocialNetworkUI({
     ...sharedSettings,
@@ -23,6 +24,7 @@ export const instanceOfTwitterUI = defineSocialNetworkUI({
         InitFriendsValueRef(instanceOfTwitterUI, twitterUrl.hostIdentifier)
         InitGroupsValueRef(instanceOfTwitterUI, twitterUrl.hostIdentifier)
         InitMyIdentitiesValueRef(instanceOfTwitterUI, twitterUrl.hostIdentifier)
+        InitTwitterGroups(instanceOfTwitterUI)
     },
     shouldActivate(location: Location | URL = globalThis.location) {
         return location.hostname.endsWith(twitterUrl.hostIdentifier)
