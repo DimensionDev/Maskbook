@@ -18,7 +18,7 @@ export async function verifyOthersProve(bio: string, others: PersonIdentifier): 
     storeNewPersonDB({
         identifier: others,
         groups: [],
-        publicKey: publicKey,
+        publicKey,
     })
     return true
 }
