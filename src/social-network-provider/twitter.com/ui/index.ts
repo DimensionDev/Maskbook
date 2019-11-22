@@ -78,7 +78,7 @@ function getBackgroundColor(): [number, number, number] {
         // @ts-ignore CSSOM
         document.body?.computedStyleMap?.()?.get?.('background-color') ??
             // Old CSSOM
-            document.body.style.backgroundColor,
+            document?.body?.style?.backgroundColor,
     )
     const match = background.match(/rgb\((\d+?), +(\d+?), +(\d+?)\)/)
     if (match) {
