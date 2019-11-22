@@ -188,6 +188,7 @@ async function generateNewIdentity(
         privateKey: key.privateKey,
     })
     await createDefaultFriendsGroup(whoAmI).catch(console.error)
+    MessageCenter.emit('identityCreated', undefined)
     MessageCenter.emit('identityUpdated', undefined)
 }
 

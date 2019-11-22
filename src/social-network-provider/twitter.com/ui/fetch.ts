@@ -9,10 +9,10 @@ import {
 import { deconstructPayload } from '../../../utils/type-transform/Payload'
 import { instanceOfTwitterUI } from './index'
 import { bioCardParser, postParser } from '../utils/fetch'
-import { uploadToService } from '../utils/user'
 import { isNil } from 'lodash-es'
 import Services from '../../../extension/service'
 import { twitterUrl } from '../utils/url'
+import { PreDefinedTwitterGroupNames } from './group'
 
 const resolveLastRecognizedIdentity = (self: SocialNetworkUI) => {
     const selfSelector = selfInfoSelectors().handle
@@ -56,8 +56,24 @@ const registerUserCollector = () => {
                     myIdentities.filter(({ identifier }) => identifier.network === twitterUrl.hostIdentifier)[0] ||
                     PersonIdentifier.unknown
                 const myFirends = GroupIdentifier.getDefaultFriendsGroupIdentifier(myIdentity.identifier)
-                if (isFollowing && isFollower && verified) {
-                    Services.People.addPersonToFriendsGroup(myFirends, [identifier]).then()
+                const myFollowers = GroupIdentifier.getFriendsGroupIdentifier(
+                    myIdentity.identifier,
+                    PreDefinedTwitterGroupNames.followers,
+                )
+                const myFollowing = GroupIdentifier.getFriendsGroupIdentifier(
+                    myIdentity.identifier,
+                    PreDefinedTwitterGroupNames.following,
+                )
+                if (verified && (isFollower || isFollowing)) {
+                    if (isFollower) {
+                        Services.People.addPersonToFriendsGroup(myFollowers, [identifier]).then()
+                    }
+                    if (isFollowing) {
+                        Services.People.addPersonToFriendsGroup(myFollowing, [identifier]).then()
+                    }
+                    if (isFollower && isFollowing) {
+                        Services.People.addPersonToFriendsGroup(myFirends, [identifier]).then()
+                    }
                 } else {
                     Services.People.removePersonFromFriendsGroup(myFirends, [identifier]).then()
                 }

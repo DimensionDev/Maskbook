@@ -9,6 +9,7 @@ export function InitMyIdentitiesValueRef(self: SocialNetworkUI, network: string)
     query(network, ref)
     MessageCenter.on('identityUpdated', () => query(network, ref))
 }
+
 function query(network: string, ref: ValueRef<Person[]>) {
     Services.People.queryMyIdentity(network).then(p => (ref.value = p))
 }

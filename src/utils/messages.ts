@@ -25,6 +25,10 @@ interface MaskbookMessages {
      */
     settingsUpdated: string
     /**
+     * emit when my identities created
+     */
+    identityCreated: undefined
+    /**
      * emit when my identities updated
      */
     identityUpdated: undefined

@@ -23,6 +23,7 @@ export { storeAvatar, getAvatarDataURL, queryPerson } from '../../database'
 export { writePersonOnGun } from '../../network/gun/version.2/people'
 export {
     addPersonToFriendsGroup,
+    createFriendsGroup,
     createDefaultFriendsGroup,
     removePersonFromFriendsGroup,
     queryUserGroups,

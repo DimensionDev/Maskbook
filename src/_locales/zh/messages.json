@@ -462,6 +462,12 @@
     "database_group_friends_default_name": {
         "message": "$1 的好友"
     },
+    "database_group_followers_name": {
+        "message": "關注 $1 的好友"
+    },
+    "database_group_following_name": {
+        "message": "$1 關注的好友"
+    },
     "seen_in_maskbook_database": {
         "message": "Maskbook 已了解此身份 ✔"
     }

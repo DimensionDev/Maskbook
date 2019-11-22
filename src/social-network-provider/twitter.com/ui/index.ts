@@ -9,6 +9,7 @@ import { twitterUIFetch } from './fetch'
 import { twitterUIInjections } from './inject'
 import { InitGroupsValueRef } from '../../../social-network/defaults/GroupsValueRef'
 import { twitterUrl } from '../utils/url'
+import { InitTwitterGroups } from './group'
 
 export const instanceOfTwitterUI = defineSocialNetworkUI({
     ...sharedSettings,
@@ -20,6 +21,7 @@ export const instanceOfTwitterUI = defineSocialNetworkUI({
         InitFriendsValueRef(instanceOfTwitterUI, twitterUrl.hostIdentifier)
         InitGroupsValueRef(instanceOfTwitterUI, twitterUrl.hostIdentifier)
         InitMyIdentitiesValueRef(instanceOfTwitterUI, twitterUrl.hostIdentifier)
+        InitTwitterGroups(instanceOfTwitterUI)
     },
     shouldActivate(location: Location | URL = globalThis.location) {
         return location.hostname.endsWith(twitterUrl.hostIdentifier)
