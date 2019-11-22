@@ -20,7 +20,7 @@ const querySelectorAll = <T extends E>(selector: string) => {
 
 export const bioQueryString = '[href*="header_photo"] + div [data-testid="UserDescription"]' // TODO: this is invalid
 
-export const bioCard = () => querySelector<HTMLDivElement>('a[href*="photo"] ~ div, .profile')
+export const bioCard = () => querySelector<HTMLDivElement>('a[href*="header_photo"] ~ div, .profile')
 
 export const newPostButton = () => querySelector<E>('[data-testid="SideNav_NewTweet_Button"]')
 
