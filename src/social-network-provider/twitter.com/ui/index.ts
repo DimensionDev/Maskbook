@@ -73,6 +73,7 @@ function isDarkMode(): 'dark' | 'light' {
 }
 
 function getBackgroundColor(): [number, number, number] {
+    if (typeof document !== 'object') return [255, 255, 255]
     const background = String(
         // @ts-ignore CSSOM
         document.body?.computedStyleMap?.()?.get?.('background-color') ??
