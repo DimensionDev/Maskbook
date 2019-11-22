@@ -129,11 +129,15 @@ const taskPasteIntoBio = async (text: string) => {
 }
 
 const taskGetPostContent: SocialNetworkUITasks['taskGetPostContent'] = async () => {
-    return postContentParser((await timeout(new MutationObserverWatcher(postsSelector()), 10000))[0])
+    const contentNode = (await timeout(new MutationObserverWatcher(postsSelector()), 10000))[0]
+    return contentNode ? postContentParser(contentNode) : ''
 }
 
 const taskGetProfile = async () => {
-    return { bioContent: bioCardParser(await fetchBioCard()).bio }
+    const cardNode = await fetchBioCard()
+    return {
+        bioContent: cardNode ? bioCardParser(cardNode).bio : '',
+    }
 }
 
 export const twitterUITasks: SocialNetworkUITasks = {
