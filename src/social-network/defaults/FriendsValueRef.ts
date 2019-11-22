@@ -1,6 +1,5 @@
 import { MessageCenter } from '../../utils/messages'
 import Services from '../../extension/service'
-import { GroupIdentifier, PersonIdentifier } from '../../database/type'
 import { SocialNetworkUI } from '../ui'
 import { Person } from '../../database'
 
