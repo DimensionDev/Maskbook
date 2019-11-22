@@ -133,8 +133,7 @@ const taskGetPostContent: SocialNetworkUITasks['taskGetPostContent'] = async () 
 }
 
 const taskGetProfile = async () => {
-    const bioNode = await fetchBioCard()
-    return { bioContent: bioCardParser(bioNode).bio }
+    return { bioContent: bioCardParser(await fetchBioCard()).bio }
 }
 
 export const twitterUITasks: SocialNetworkUITasks = {
