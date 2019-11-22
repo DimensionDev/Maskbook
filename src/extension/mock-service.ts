@@ -57,3 +57,11 @@ export const PeopleService: Partial<typeof import('./background-script/PeopleSer
         ]
     },
 }
+export const SteganographyService: Partial<typeof import('./background-script/SteganographyService')> = {
+    async encodeImage() {
+        return new Uint8Array()
+    },
+    async decodeImage() {
+        return ''
+    },
+}

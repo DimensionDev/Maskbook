@@ -1,6 +1,6 @@
 import { CustomEventId } from '../../utils/constants'
 export interface CustomEvents {
-    paste: [string]
+    paste: [string | { type: 'image'; value: Array<number> }]
     input: [string]
 }
 {
@@ -30,11 +30,38 @@ export interface CustomEvents {
     }
 
     const hacks: { [key in keyof CustomEvents & keyof DocumentEventMap]: (...params: CustomEvents[key]) => Event } = {
-        paste(text) {
+        paste(textOrImage) {
             const e = new ClipboardEvent('paste', { clipboardData: new DataTransfer() })
-            e.clipboardData!.setData('text/plain', text)
-            // ! Why?
-            return getEvent(e, { defaultPrevented: false, preventDefault() {} })
+            if (typeof textOrImage === 'string') {
+                e.clipboardData!.setData('text/plain', textOrImage)
+                return getEvent(e, { defaultPrevented: false, preventDefault() {} })
+            } else if (textOrImage.type === 'image') {
+                const binary = Uint8Array.from(textOrImage.value)
+                const blob = new Blob([binary], { type: 'image/png' })
+                const file = new File([blob], 'image.png', { lastModified: Date.now(), type: 'image/png' })
+                const dt = new Proxy(new DataTransfer(), {
+                    get(target, key: keyof typeof target) {
+                        if (key === 'files') return [file]
+                        if (key === 'types') return ['Files']
+                        if (key === 'items')
+                            return [
+                                {
+                                    kind: 'file',
+                                    type: 'image/png',
+                                    getAsFile() {
+                                        return file
+                                    },
+                                },
+                            ]
+                        if (key === 'getData') return () => ''
+                        return target[key]
+                    },
+                })
+                return getEvent(e, { defaultPrevented: false, preventDefault() {}, clipboardData: dt })
+            }
+            const error = new Error(`Unknown event, got ${textOrImage?.type ?? 'unknown'}`)
+            console.error(error)
+            throw error
         },
         input(text) {
             // Cause react hooks the input.value getter & setter
@@ -51,7 +78,7 @@ export interface CustomEvents {
         for (const f of store[eventName] || []) {
             try {
                 const hack = hacks[eventName]
-                if (hack) f(hack(...param))
+                if (hack) f((hack as any)(...param))
                 else f(param as any)
             } catch (e) {
                 console.error(e)
