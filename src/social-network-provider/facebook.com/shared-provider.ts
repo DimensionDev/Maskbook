@@ -9,4 +9,5 @@ export const sharedProvider: SocialNetworkWorkerAndUIDefinition = {
     isValidUsername: v => !!regularUsername(v),
     init() {},
     acceptablePayload: ['v40', 'v39', 'v38', 'latest'],
+    gunNetworkHint: '',
 }

@@ -11,5 +11,6 @@ export const sharedSettings: SocialNetworkWorkerAndUIDefinition = {
     isValidUsername: usernameValidator,
     acceptablePayload: ['v38', 'latest'],
     init() {},
+    gunNetworkHint: 'twitter-',
     ...twitterEncoding,
 }

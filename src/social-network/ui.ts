@@ -352,6 +352,9 @@ export function defineSocialNetworkUI(UI: SocialNetworkUIDefinition) {
     ) {
         throw new TypeError('Payload version v40 and v39 is not supported in this network. Please use v38 or newer.')
     }
+    if (UI.gunNetworkHint === '' && UI.internalName !== 'facebook') {
+        throw new TypeError('For historical reason only Facebook provider can use an empty gunNetworkHint.')
+    }
     const res: SocialNetworkUI = {
         ...defaultSharedSettings,
         ...defaultSocialNetworkUI,
