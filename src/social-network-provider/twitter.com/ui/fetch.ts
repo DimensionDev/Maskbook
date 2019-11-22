@@ -42,11 +42,7 @@ const registerUserCollector = () => {
     new MutationObserverWatcher(bioCard())
         .useForeach((cardNode: HTMLDivElement) => {
             const resolve = async () => {
-                const { isFollower, isFollowing, identifier, bio, name, avatar } = bioCardParser(cardNode)
-                Services.People.updatePersonInfo(identifier, {
-                    nickname: name,
-                    avatarURL: avatar,
-                }).then()
+                const { isFollower, isFollowing, identifier, bio } = bioCardParser(cardNode)
                 const [verified, myIdentities] = await Promise.all([
                     Services.Crypto.verifyOthersProve(bio, identifier),
                     Services.People.queryMyIdentity(),
