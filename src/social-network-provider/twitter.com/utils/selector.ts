@@ -41,7 +41,10 @@ export const editProfileButtonSelector = () =>
 export const editProfileTextareaSelector = () => querySelector<HTMLTextAreaElement>('textarea[placeholder*="bio"]')
 
 export const postsSelector = () => querySelectorAll('#main_content .timeline .tweet, [data-testid="tweet"]')
-export const postsContentSelector = () => querySelectorAll('.tweet-text > div, [data-testid="tweet"] > div > div[lang]')
+export const postsContentSelector = () =>
+    querySelectorAll(
+        '.tweet-text > div, [data-testid="tweet"] > div > div[lang], [data-testid="tweet"] + div > div[lang]',
+    )
 
 const base = querySelector<HTMLScriptElement>('#react-root + script')
 const name = /"session":{.*?"user":{.*?"screen_name":"(.*?)","name":"(.*?)"}}/

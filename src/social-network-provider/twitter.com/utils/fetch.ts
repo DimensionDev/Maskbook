@@ -121,10 +121,6 @@ export const postImageParser = async (node: HTMLElement) => {
     ).join('\n')
 }
 
-/**
- * @param  node     the '[data-testid="tweet"]' node
- * @return          link to avatar.
- */
 export const postParser = async (node: HTMLElement) => {
     if (node.classList.contains('tweet') || node.classList.contains('main-tweet')) {
         const { name, handle } = parseNameArea(
@@ -140,10 +136,11 @@ export const postParser = async (node: HTMLElement) => {
             content: postContentParser(node),
         }
     } else {
+        const tweetElement = node.querySelector('[data-testid="tweet"]') || node
         const { name, handle } = parseNameArea(
-            notNullable(node.children[1].querySelector<HTMLAnchorElement>('a')).innerText,
+            notNullable(tweetElement.children[1].querySelector<HTMLAnchorElement>('a')).innerText,
         )
-        const avatarElement = node.children[0].querySelector<HTMLImageElement>(`img[src*="twimg.com"]`)
+        const avatarElement = tweetElement.children[0].querySelector<HTMLImageElement>(`img[src*="twimg.com"]`)
         const pidLocation = defaultTo(
             node.children[1].querySelector<HTMLAnchorElement>('a[href*="status"]'),
             node.parentElement!.querySelector<HTMLAnchorElement>('a[href*="status"]'),
