@@ -68,9 +68,9 @@ export const bioCardParser = (cardNode: HTMLDivElement) => {
     }
 }
 
-export const postContentParser = (contentNode: HTMLElement) => {
-    if (contentNode.classList.contains('tweet')) {
-        const containerNode = contentNode.querySelector('.tweet-text > div')
+export const postContentParser = (node: HTMLElement) => {
+    if (node.classList.contains('tweet') || node.classList.contains('main-tweet')) {
+        const containerNode = node.querySelector('.tweet-text > div')
         if (!containerNode) {
             return ''
         }
@@ -87,7 +87,7 @@ export const postContentParser = (contentNode: HTMLElement) => {
             .join(',')
     } else {
         const select = <T extends HTMLElement>(selectors: string) =>
-            Array.from(contentNode.parentElement!.querySelectorAll<T>(selectors))
+            Array.from(node.parentElement!.querySelectorAll<T>(selectors))
         const sto = [
             ...select<HTMLAnchorElement>('a').map(x => x.title),
             ...select<HTMLSpanElement>('[lang] > span').map(x => x.innerText),
@@ -126,16 +126,16 @@ export const postImageParser = async (node: HTMLElement) => {
  * @return          link to avatar.
  */
 export const postParser = async (node: HTMLElement) => {
-    if (node.classList.contains('tweet')) {
+    if (node.classList.contains('tweet') || node.classList.contains('main-tweet')) {
         const { name, handle } = parseNameArea(
-            notNullable(node.querySelector<HTMLAnchorElement>('.user-info a')).innerText,
+            notNullable(node.querySelector<HTMLTableCellElement>('.user-info')).innerText,
         )
         const avatarElement = node.querySelector<HTMLImageElement>('.avatar img')
-        const pidLocation = node.querySelector<HTMLAnchorElement>('.timestamp a')
+        const pidLocation = node.querySelector<HTMLAnchorElement>('.tweet-text')
         return {
             name,
             handle,
-            pid: pidLocation ? parsePid(pidLocation.href) : undefined,
+            pid: pidLocation ? pidLocation.getAttribute('data-id') : undefined,
             avatar: avatarElement ? avatarElement.src : undefined,
             content: postContentParser(node),
         }
