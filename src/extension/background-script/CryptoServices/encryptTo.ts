@@ -15,9 +15,12 @@ import { queryUserGroup } from '../PeopleService'
 type EncryptedText = string
 type OthersAESKeyEncryptedToken = string
 /**
- * This map stores <iv, othersAESKeyEncrypted>.
+ * This map stores <iv, [networkHint, othersAESKeyEncrypted]>.
  */
-const OthersAESKeyEncryptedMap = new Map<OthersAESKeyEncryptedToken, Alpha38.PublishedAESKeyRecordV39OrV38[]>()
+const OthersAESKeyEncryptedMap = new Map<
+    OthersAESKeyEncryptedToken,
+    [string, Alpha38.PublishedAESKeyRecordV39OrV38[]]
+>()
 
 /**
  * Encrypt to a user
@@ -95,7 +98,7 @@ export async function encryptTo(
     })
 
     const postAESKeyToken = encodeArrayBuffer(iv)
-    OthersAESKeyEncryptedMap.set(postAESKeyToken, othersAESKeyEncrypted)
+    OthersAESKeyEncryptedMap.set(postAESKeyToken, [getNetworkWorker(whoAmI).gunNetworkHint, othersAESKeyEncrypted])
     return [constructAlpha38(payload, getNetworkWorker(whoAmI.network).payloadEncoder), postAESKeyToken]
 }
 
@@ -107,5 +110,5 @@ export async function encryptTo(
 export async function publishPostAESKey(iv: string) {
     if (!OthersAESKeyEncryptedMap.has(iv)) throw new Error(geti18nString('service_publish_post_aes_key_failed'))
     // Use the latest payload version here since we do not accept new post for older version.
-    return Gun2.publishPostAESKeyOnGun2(-38, iv, OthersAESKeyEncryptedMap.get(iv)!)
+    return Gun2.publishPostAESKeyOnGun2(-38, iv, ...OthersAESKeyEncryptedMap.get(iv)!)
 }

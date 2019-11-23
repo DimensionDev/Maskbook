@@ -1,9 +1,11 @@
-import { regexMatch } from '../../../utils/utils'
+import { regexMatch, downloadUrl } from '../../../utils/utils'
 import { notNullable } from '../../../utils/assert'
 import { defaultTo } from 'lodash-es'
 import { nthChild } from '../../../utils/dom'
 import { PersonIdentifier } from '../../../database/type'
 import { twitterUrl } from './url'
+import Services from '../../../extension/service'
+import { getActivatedUI } from '../../../social-network/ui'
 
 /**
  * @example
@@ -94,6 +96,31 @@ export const postContentParser = (node: HTMLElement) => {
     }
 }
 
+export const postImageParser = async (node: HTMLElement) => {
+    const parent = node.parentElement
+    if (!parent) return ''
+    const imgNodes = node.parentElement!.querySelectorAll<HTMLImageElement>('img[src*="twimg.com/media"]')
+    if (!imgNodes.length) return ''
+    const imgUrls = Array.from(imgNodes).map(node => node.getAttribute('src') || '')
+    if (!imgUrls.length) return ''
+    const { currentIdentity } = getActivatedUI()
+    const pass = currentIdentity.value ? currentIdentity.value.identifier.toText() : ''
+
+    return (
+        await Promise.all(
+            imgUrls
+                .map(async url => {
+                    const image = new Uint8Array(await downloadUrl(url))
+                    const content = await Services.Steganography.decodeImage(image, {
+                        pass,
+                    })
+                    return /https:\/\/.+\..+\/%20(.+)%40/.test(content) ? content : ''
+                })
+                .filter(Boolean),
+        )
+    ).join('\n')
+}
+
 /**
  * @param  node     the '[data-testid="tweet"]' node
  * @return          link to avatar.
@@ -127,7 +154,7 @@ export const postParser = async (node: HTMLElement) => {
             // pid may not available at promoted tweet
             pid: pidLocation ? parsePid(pidLocation.href) : undefined,
             avatar: avatarElement ? avatarElement.src : undefined,
-            content: postContentParser(node),
+            content: postContentParser(node) + (await postImageParser(node)),
         }
     }
 }

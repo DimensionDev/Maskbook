@@ -10,6 +10,14 @@ export const debugModeSetting = createNewSettings<boolean>('debugMode', false, {
     secondary: 'Enable this will display additional information on the Maskbook UI to help debugging',
 })
 /**
+ * Dose steganography post mode on
+ */
+export const steganographyModeSetting = createNewSettings<boolean>('steganographyMode', false, {
+    primary: 'Enable steganography mode',
+    secondary: 'Publishing post with steganography payload instead of text playload',
+})
+
+/**
  * Never open a new tab in the background
  */
 export const disableOpenNewTabInBackgroundSettings = createNewSettings<boolean>(

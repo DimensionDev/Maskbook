@@ -142,6 +142,17 @@ export interface SocialNetworkUIInjections {
  */
 export interface SocialNetworkUITasks {
     /**
+     * This function should encode `text` into the base image and upload it to the post box.
+     * If failed, warning user to do it by themselves with `warningText`
+     */
+    taskUploadToPostBox(
+        text: string,
+        options: {
+            warningText: string
+        },
+    ): void
+
+    /**
      * This function should paste `text` into the post box.
      * If failed, warning user to do it by themselves with `warningText`
      */
@@ -208,6 +219,7 @@ export type PostInfo = {
     readonly postID: ValueRef<string | null>
     readonly postContent: ValueRef<string>
     readonly postPayload: ValueRef<Payload | null>
+    readonly steganographyContent: ValueRef<string>
     readonly commentsSelector?: LiveSelector<HTMLElement, false>
     readonly commentBoxSelector?: LiveSelector<HTMLElement, false>
     readonly decryptedPostContent: ValueRef<string>
@@ -339,6 +351,9 @@ export function defineSocialNetworkUI(UI: SocialNetworkUIDefinition) {
         UI.internalName !== 'facebook'
     ) {
         throw new TypeError('Payload version v40 and v39 is not supported in this network. Please use v38 or newer.')
+    }
+    if (UI.gunNetworkHint === '' && UI.internalName !== 'facebook') {
+        throw new TypeError('For historical reason only Facebook provider can use an empty gunNetworkHint.')
     }
     const res: SocialNetworkUI = {
         ...defaultSharedSettings,

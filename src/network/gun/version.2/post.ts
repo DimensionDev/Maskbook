@@ -15,8 +15,9 @@ export async function queryPostKeysOnGun2(
     version: -39 | -38,
     postSalt: string,
     partitionByCryptoKey: CryptoKey,
+    networkHint: string,
 ): Promise<{ keys: SharedAESKeyGun2[]; postHash: string; keyHash: string }> {
-    const postHash = await hashPostSalt(postSalt)
+    const postHash = await hashPostSalt(postSalt, networkHint)
     // In version > -39, we will use stable hash to prevent unstable result for key hashing
     const keyHash = await (version <= -39 ? hashCryptoKeyUnstable : hashCryptoKey)(partitionByCryptoKey)
 
@@ -47,9 +48,10 @@ export function subscribePostKeysOnGun2(
     version: -39 | -38,
     postSalt: string,
     partitionByCryptoKey: CryptoKey,
+    networkHint: string,
     callback: (data: SharedAESKeyGun2) => void,
 ) {
-    hashPostSalt(postSalt).then(postHash => {
+    hashPostSalt(postSalt, networkHint).then(postHash => {
         // In version > -39, we will use stable hash to prevent unstable result for key hashing
         ;(version <= -39 ? hashCryptoKeyUnstable : hashCryptoKey)(partitionByCryptoKey).then(keyHash => {
             gun2.get(postHash)
@@ -75,9 +77,10 @@ export function subscribePostKeysOnGun2(
 export async function publishPostAESKeyOnGun2(
     version: -39 | -38,
     postSalt: string,
+    networkHint: string,
     receiversKeys: PublishedAESKeyRecordV39OrV38[],
 ) {
-    const postHash = await hashPostSalt(postSalt)
+    const postHash = await hashPostSalt(postSalt, networkHint)
     // Store AES key to gun
     receiversKeys.forEach(async ({ aesKey, receiverKey }) => {
         const keyHash = await (version <= -39 ? hashCryptoKeyUnstable : hashCryptoKey)(receiverKey)

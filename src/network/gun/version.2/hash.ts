@@ -16,13 +16,16 @@ export const hashPersonIdentifier = memoizePromise(
     id => id.toText(),
 )
 
-export const hashPostSalt = memoizePromise(async function(postSalt: string) {
-    const hashPair = `9283464d-ee4e-4e8d-a7f3-cf392a88133f`
-    const N = 2
+export const hashPostSalt = memoizePromise(
+    async function(postSalt: string, networkHint: string) {
+        const hashPair = `9283464d-ee4e-4e8d-a7f3-cf392a88133f`
+        const N = 2
 
-    const hash = (await Gun.SEA.work(postSalt, hashPair))!
-    return hash.substring(0, N)
-}, undefined)
+        const hash = (await Gun.SEA.work(postSalt, hashPair))!
+        return networkHint + hash.substring(0, N)
+    },
+    (x, y) => x + y,
+)
 
 /**
  * @param key - The key need to be hashed

@@ -17,6 +17,12 @@
     "additional_post_box__encrypted_failed": {
         "message": "Please paste the following text into the post box."
     },
+    "additional_post_box__steganography_post_pre": {
+        "message": "This post is shared with my friends. You may install Maskbook to decrypt the content from the image. ([I:b])"
+    },
+    "additional_post_box__steganography_post_failed": {
+        "message": "Please upload downloaded image into the post box."
+    },
     "comment_box__paste_failed": {
         "message": "Please paste it into the comment box."
     },
