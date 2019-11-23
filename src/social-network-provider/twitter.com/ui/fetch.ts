@@ -1,4 +1,4 @@
-import { bioCard, postsSelector, selfInfoSelectors } from '../utils/selector'
+import { bioCard, selfInfoSelectors, postsContentSelector, postsSelector } from '../utils/selector'
 import { MutationObserverWatcher } from '@holoflows/kit'
 import { GroupIdentifier, PersonIdentifier } from '../../../database/type'
 import {
@@ -86,8 +86,10 @@ const registerUserCollector = () => {
 }
 
 const registerPostCollector = (self: SocialNetworkUI) => {
-    new MutationObserverWatcher(postsSelector())
+    new MutationObserverWatcher(postsContentSelector())
         .useForeach((node, _, proxy) => {
+            const postNode = node.closest<HTMLDivElement>('.tweet, [data-testid="tweet"]')
+            if (!postNode) return
             // noinspection JSUnnecessarySemicolon
             const info = getEmptyPostInfoByElement({
                 get rootNode() {
@@ -95,10 +97,10 @@ const registerPostCollector = (self: SocialNetworkUI) => {
                 },
                 rootNodeProxy: proxy,
             })
-            info.postPayload.value = deconstructPayload(info.postContent.value, self.payloadDecoder)
+
             const collectPostInfo = async () => {
-                if (!node) return false
-                const { pid, content, handle, name, avatar } = await postParser(node)
+                if (!postNode) return false
+                const { pid, content, handle, name, avatar } = await postParser(postNode)
                 if (!pid) return false
                 const postBy = new PersonIdentifier(self.networkIdentifier, handle)
                 info.postID.value = pid
@@ -113,6 +115,7 @@ const registerPostCollector = (self: SocialNetworkUI) => {
             }
             ;(async () => {
                 await collectPostInfo()
+                info.postPayload.value = deconstructPayload(info.postContent.value, self.payloadDecoder)
                 info.postContent.addListener(newValue => {
                     info.postPayload.value = deconstructPayload(newValue, self.payloadDecoder)
                 })
