@@ -90,8 +90,8 @@ const registerUserCollector = () => {
 const registerPostCollector = (self: SocialNetworkUI) => {
     new MutationObserverWatcher(postsContentSelector())
         .useForeach((node, _, proxy) => {
-            const postNode = node.closest<HTMLDivElement>('.tweet, [data-testid="tweet"]')
-            if (!postNode) return
+            const tweetNode = node.closest<HTMLDivElement>('.main-tweet, .tweet, [data-testid="tweet"]')
+            if (!tweetNode) return
             // noinspection JSUnnecessarySemicolon
             const info = getEmptyPostInfoByElement({
                 get rootNode() {
@@ -101,8 +101,8 @@ const registerPostCollector = (self: SocialNetworkUI) => {
             })
 
             const collectPostInfo = async () => {
-                if (!postNode) return false
-                const { pid, content, handle, name, avatar } = await postParser(postNode)
+                if (!tweetNode) return false
+                const { pid, content, handle, name, avatar } = await postParser(tweetNode)
                 if (!pid) return false
                 const postBy = new PersonIdentifier(self.networkIdentifier, handle)
                 info.postID.value = pid
