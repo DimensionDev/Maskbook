@@ -88,7 +88,7 @@ const registerUserCollector = () => {
 const registerPostCollector = (self: SocialNetworkUI) => {
     new MutationObserverWatcher(postsContentSelector())
         .useForeach((node, _, proxy) => {
-            const tweetNode = node.closest<HTMLDivElement>('.main-tweet, .tweet, [data-testid="tweet"]')
+            const tweetNode = node.closest<HTMLDivElement>('.main-tweet, .tweet, [data-testid="tweet"], article > div')
             if (!tweetNode) return
             // noinspection JSUnnecessarySemicolon
             const info = getEmptyPostInfoByElement({
