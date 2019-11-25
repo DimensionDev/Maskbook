@@ -5,7 +5,6 @@ import { nthChild } from '../../../utils/dom'
 import { PersonIdentifier } from '../../../database/type'
 import { twitterUrl } from './url'
 import Services from '../../../extension/service'
-import { getActivatedUI } from '../../../social-network/ui'
 
 /**
  * @example
@@ -97,31 +96,36 @@ export const postContentParser = (node: HTMLElement) => {
 }
 
 export const postImageParser = async (node: HTMLElement) => {
-    const parent = node.parentElement
-    if (!parent) return ''
-    const imgNodes = node.parentElement!.querySelectorAll<HTMLImageElement>('img[src*="twimg.com/media"]')
-    if (!imgNodes.length) return ''
-    const imgUrls = Array.from(imgNodes).map(node => node.getAttribute('src') || '')
-    if (!imgUrls.length) return ''
-    const { currentIdentity } = getActivatedUI()
-    const pass = currentIdentity.value ? currentIdentity.value.identifier.toText() : ''
-
-    return (
-        await Promise.all(
-            imgUrls
-                .map(async url => {
-                    const image = new Uint8Array(await downloadUrl(url))
-                    const content = await Services.Steganography.decodeImage(image, {
-                        pass,
-                    })
-                    return /https:\/\/.+\..+\/%20(.+)%40/.test(content) ? content : ''
-                })
-                .filter(Boolean),
+    if (node.classList.contains('tweet') || node.classList.contains('main-tweet')) {
+        // TODO: Support steganography in legacy twitter
+        return ''
+    } else {
+        const imgNodes = node.querySelectorAll<HTMLImageElement>('img[src*="twimg.com/media"]')
+        if (!imgNodes.length) return ''
+        const imgUrls = Array.from(imgNodes).map(node => node.getAttribute('src') || '')
+        if (!imgUrls.length) return ''
+        const tweetElement = node.querySelector('[data-testid="tweet"]') || node
+        const { handle } = parseNameArea(
+            notNullable(tweetElement.children[1].querySelector<HTMLAnchorElement>('a')).innerText,
         )
-    ).join('\n')
+        const posterIdentity = new PersonIdentifier(twitterUrl.hostIdentifier, handle)
+        return (
+            await Promise.all(
+                imgUrls
+                    .map(async url => {
+                        const image = new Uint8Array(await downloadUrl(url))
+                        const content = await Services.Steganography.decodeImage(image, {
+                            pass: posterIdentity.toText(),
+                        })
+                        return /https:\/\/.+\..+\/%20(.+)%40/.test(content) ? content : ''
+                    })
+                    .filter(Boolean),
+            )
+        ).join('\n')
+    }
 }
 
-export const postParser = async (node: HTMLElement) => {
+export const postParser = (node: HTMLElement) => {
     if (node.classList.contains('tweet') || node.classList.contains('main-tweet')) {
         const { name, handle } = parseNameArea(
             notNullable(node.querySelector<HTMLTableCellElement>('.user-info')).innerText,
