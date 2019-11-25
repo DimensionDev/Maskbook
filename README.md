@@ -25,9 +25,10 @@ For general introductions, see [Maskbook.com](https://maskbook.com/).
 
 ## Useful Links
 
+- [User Forum](https://github.com/DimensionDev/Maskbook-Talks)
+- [Report Bug](https://github.com/DimensionDev/Maskbook/issues/new?template=bug.md&assignees=jack-works&projects=DimensionDev/Maskbook/3&title=%5BBug%5D%20&labels=Type%3A%20Bug)
 - [Twitter](https://twitter.com/ProjectMaskbook)
 - [Facebook](https://www.facebook.com/realmaskbook)
-- [Report Bug](https://github.com/DimensionDev/Maskbook/issues/new?template=bug.md&assignees=jack-works&projects=DimensionDev/Maskbook/3&title=%5BBug%5D%20&labels=Type%3A%20Bug)
 
 ## Donation
 
