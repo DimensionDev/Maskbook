@@ -1,4 +1,4 @@
-import { bioCard, selfInfoSelectors, postsContentSelector, postsSelector } from '../utils/selector'
+import { bioCard, selfInfoSelectors, postsContentSelector, postsImageSelector } from '../utils/selector'
 import { MutationObserverWatcher } from '@holoflows/kit'
 import { GroupIdentifier, PersonIdentifier } from '../../../database/type'
 import {
@@ -8,11 +8,12 @@ import {
 } from '../../../social-network/ui'
 import { deconstructPayload } from '../../../utils/type-transform/Payload'
 import { instanceOfTwitterUI } from './index'
-import { bioCardParser, postParser } from '../utils/fetch'
+import { bioCardParser, postParser, postImageParser } from '../utils/fetch'
 import { isNil } from 'lodash-es'
 import Services from '../../../extension/service'
 import { twitterUrl } from '../utils/url'
 import { PreDefinedTwitterGroupNames } from './group'
+import { untilElementAvailable } from '../../../utils/dom'
 
 const resolveLastRecognizedIdentity = (self: SocialNetworkUI) => {
     const selfSelector = selfInfoSelectors().handle
@@ -49,7 +50,6 @@ const registerUserCollector = () => {
                     Services.Crypto.verifyOthersProve(bio, identifier),
                     Services.People.queryMyIdentity(twitterUrl.hostIdentifier),
                 ])
-
                 const myIdentity = myIdentities[0] || PersonIdentifier.unknown
                 const myFirends = GroupIdentifier.getDefaultFriendsGroupIdentifier(myIdentity.identifier)
                 const myFollowers = GroupIdentifier.getFriendsGroupIdentifier(
@@ -90,7 +90,13 @@ const registerUserCollector = () => {
 const registerPostCollector = (self: SocialNetworkUI) => {
     new MutationObserverWatcher(postsContentSelector())
         .useForeach((node, _, proxy) => {
-            const tweetNode = node.closest<HTMLDivElement>('.main-tweet, .tweet, [data-testid="tweet"], article > div')
+            const tweetNode = node.closest<HTMLDivElement>(
+                [
+                    '.tweet', // timeline page for legacy twitter
+                    '.main-tweet', // detail page for legacy twitter
+                    'article > div', // new twitter
+                ].join(),
+            )
             if (!tweetNode) return
             // noinspection JSUnnecessarySemicolon
             const info = getEmptyPostInfoByElement({
@@ -99,11 +105,10 @@ const registerPostCollector = (self: SocialNetworkUI) => {
                 },
                 rootNodeProxy: proxy,
             })
-
             const collectPostInfo = async () => {
-                if (!tweetNode) return false
-                const { pid, content, handle, name, avatar } = await postParser(tweetNode)
-                if (!pid) return false
+                if (!tweetNode) return
+                const { pid, content, handle, name, avatar } = postParser(tweetNode)
+                if (!pid) return
                 const postBy = new PersonIdentifier(self.networkIdentifier, handle)
                 info.postID.value = pid
                 info.postContent.value = content
@@ -114,6 +119,16 @@ const registerPostCollector = (self: SocialNetworkUI) => {
                     nickname: name,
                     avatarURL: avatar,
                 }).then()
+
+                // decode steganographic image
+                untilElementAvailable(postsImageSelector(tweetNode), 10000)
+                    .then(() => postImageParser(tweetNode))
+                    .then(content => {
+                        if (content && info.postContent.value.indexOf(content) < 0) {
+                            info.postContent.value = content
+                        }
+                    })
+                    .catch(() => {})
             }
             ;(async () => {
                 await collectPostInfo()
@@ -121,11 +136,9 @@ const registerPostCollector = (self: SocialNetworkUI) => {
                 info.postContent.addListener(newValue => {
                     info.postPayload.value = deconstructPayload(newValue, self.payloadDecoder)
                 })
-                // push to map. proxy used as a pointer here.
                 self.posts.set(proxy, info)
             })()
             return {
-                onNodeMutation: collectPostInfo,
                 onTargetChanged: collectPostInfo,
                 onRemove: () => self.posts.delete(proxy),
             }
