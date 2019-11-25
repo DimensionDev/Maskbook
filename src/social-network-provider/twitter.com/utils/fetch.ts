@@ -22,8 +22,12 @@ const parseNameArea = (t: string) => {
     }
 }
 
-const parsePid = (t: string) => {
+const parseId = (t: string) => {
     return regexMatch(t, /status\/(\d+)/, 1)!
+}
+
+const isMobilePost = (node: HTMLElement) => {
+    return node.classList.contains('tweet') ?? node.classList.contains('main-tweet')
 }
 
 export const bioCardParser = (cardNode: HTMLDivElement) => {
@@ -67,8 +71,41 @@ export const bioCardParser = (cardNode: HTMLDivElement) => {
     }
 }
 
+export const postIdParser = (node: HTMLElement) => {
+    if (isMobilePost(node)) {
+        const idNode = node.querySelector<HTMLAnchorElement>('.tweet-text')
+        return idNode ? idNode.getAttribute('data-id') ?? undefined : undefined
+    } else {
+        const idNode = defaultTo(
+            node.children[1].querySelector<HTMLAnchorElement>('a[href*="status"]'),
+            node.parentElement!.querySelector<HTMLAnchorElement>('a[href*="status"]'),
+        )
+        return idNode ? parseId(idNode.href) : undefined
+    }
+}
+
+export const postNameParser = (node: HTMLElement) => {
+    if (isMobilePost(node)) {
+        return parseNameArea(notNullable(node.querySelector<HTMLTableCellElement>('.user-info')).innerText)
+    } else {
+        const tweetElement = node.querySelector('[data-testid="tweet"]') ?? node
+        return parseNameArea(notNullable(tweetElement.children[1].querySelector<HTMLAnchorElement>('a')).innerText)
+    }
+}
+
+export const postAvatarParser = (node: HTMLElement) => {
+    if (isMobilePost(node)) {
+        const avatarElement = node.querySelector<HTMLImageElement>('.avatar img')
+        return avatarElement ? avatarElement.src : undefined
+    } else {
+        const tweetElement = node.querySelector('[data-testid="tweet"]') ?? node
+        const avatarElement = tweetElement.children[0].querySelector<HTMLImageElement>(`img[src*="twimg.com"]`)
+        return avatarElement ? avatarElement.src : undefined
+    }
+}
+
 export const postContentParser = (node: HTMLElement) => {
-    if (node.classList.contains('tweet') || node.classList.contains('main-tweet')) {
+    if (isMobilePost(node)) {
         const containerNode = node.querySelector('.tweet-text > div')
         if (!containerNode) {
             return ''
@@ -96,18 +133,15 @@ export const postContentParser = (node: HTMLElement) => {
 }
 
 export const postImageParser = async (node: HTMLElement) => {
-    if (node.classList.contains('tweet') || node.classList.contains('main-tweet')) {
+    if (isMobilePost(node)) {
         // TODO: Support steganography in legacy twitter
         return ''
     } else {
         const imgNodes = node.querySelectorAll<HTMLImageElement>('img[src*="twimg.com/media"]')
         if (!imgNodes.length) return ''
-        const imgUrls = Array.from(imgNodes).map(node => node.getAttribute('src') || '')
+        const imgUrls = Array.from(imgNodes).map(node => node.getAttribute('src') ?? '')
         if (!imgUrls.length) return ''
-        const tweetElement = node.querySelector('[data-testid="tweet"]') || node
-        const { handle } = parseNameArea(
-            notNullable(tweetElement.children[1].querySelector<HTMLAnchorElement>('a')).innerText,
-        )
+        const { handle } = postNameParser(node)
         const posterIdentity = new PersonIdentifier(twitterUrl.hostIdentifier, handle)
         return (
             await Promise.all(
@@ -126,36 +160,10 @@ export const postImageParser = async (node: HTMLElement) => {
 }
 
 export const postParser = (node: HTMLElement) => {
-    if (node.classList.contains('tweet') || node.classList.contains('main-tweet')) {
-        const { name, handle } = parseNameArea(
-            notNullable(node.querySelector<HTMLTableCellElement>('.user-info')).innerText,
-        )
-        const avatarElement = node.querySelector<HTMLImageElement>('.avatar img')
-        const pidLocation = node.querySelector<HTMLAnchorElement>('.tweet-text')
-        return {
-            name,
-            handle,
-            pid: pidLocation ? pidLocation.getAttribute('data-id') : undefined,
-            avatar: avatarElement ? avatarElement.src : undefined,
-            content: postContentParser(node),
-        }
-    } else {
-        const tweetElement = node.querySelector('[data-testid="tweet"]') || node
-        const { name, handle } = parseNameArea(
-            notNullable(tweetElement.children[1].querySelector<HTMLAnchorElement>('a')).innerText,
-        )
-        const avatarElement = tweetElement.children[0].querySelector<HTMLImageElement>(`img[src*="twimg.com"]`)
-        const pidLocation = defaultTo(
-            node.children[1].querySelector<HTMLAnchorElement>('a[href*="status"]'),
-            node.parentElement!.querySelector<HTMLAnchorElement>('a[href*="status"]'),
-        )
-        return {
-            name,
-            handle,
-            // pid may not available at promoted tweet
-            pid: pidLocation ? parsePid(pidLocation.href) : undefined,
-            avatar: avatarElement ? avatarElement.src : undefined,
-            content: postContentParser(node),
-        }
+    return {
+        ...postNameParser(node),
+        avatar: postAvatarParser(node),
+        pid: postIdParser(node),
+        content: postContentParser(node),
     }
 }

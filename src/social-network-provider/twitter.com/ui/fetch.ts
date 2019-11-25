@@ -8,7 +8,7 @@ import {
 } from '../../../social-network/ui'
 import { deconstructPayload } from '../../../utils/type-transform/Payload'
 import { instanceOfTwitterUI } from './index'
-import { bioCardParser, postParser, postImageParser } from '../utils/fetch'
+import { bioCardParser, postParser, postImageParser, postIdParser } from '../utils/fetch'
 import { isNil } from 'lodash-es'
 import Services from '../../../extension/service'
 import { twitterUrl } from '../utils/url'
@@ -86,15 +86,19 @@ const registerUserCollector = () => {
 }
 
 const registerPostCollector = (self: SocialNetworkUI) => {
+    const getTweetNode = (node: HTMLElement) => {
+        return node.closest<HTMLDivElement>(
+            [
+                '.tweet', // timeline page for legacy twitter
+                '.main-tweet', // detail page for legacy twitter
+                'article > div', // new twitter
+            ].join(),
+        )
+    }
+
     new MutationObserverWatcher(postsContentSelector())
         .useForeach((node, _, proxy) => {
-            const tweetNode = node.closest<HTMLDivElement>(
-                [
-                    '.tweet', // timeline page for legacy twitter
-                    '.main-tweet', // detail page for legacy twitter
-                    'article > div', // new twitter
-                ].join(),
-            )
+            const tweetNode = getTweetNode(node)
             if (!tweetNode) return
             // noinspection JSUnnecessarySemicolon
             const info = getEmptyPostInfoByElement({
@@ -142,7 +146,10 @@ const registerPostCollector = (self: SocialNetworkUI) => {
             }
         })
         .setDOMProxyOption({ afterShadowRootInit: { mode: 'closed' } })
-        .assignKeys(node => node.innerHTML)
+        .assignKeys(node => {
+            const tweetNode = getTweetNode(node)
+            return tweetNode ? `${postIdParser(tweetNode)}${node.innerHTML}` : node.innerHTML
+        })
         .startWatch({
             childList: true,
             subtree: true,
