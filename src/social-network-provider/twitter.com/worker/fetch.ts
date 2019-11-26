@@ -1,6 +1,7 @@
 import { PersonIdentifier, PostIdentifier } from '../../../database/type'
 import { getPostUrl, getProfileUrl } from '../utils/url'
 import tasks from '../../../extension/content-script/tasks'
+import { isMobileTwitter } from '../utils/isMobile'
 
 /**
  *  get things at server side with legacy twitter
@@ -9,10 +10,10 @@ import tasks from '../../../extension/content-script/tasks'
  *  resolve this problem when you can.
  */
 
-export const fetchPostContent = async (post: PostIdentifier<PersonIdentifier>) => {
+export const fetchPostContent = (post: PostIdentifier<PersonIdentifier>) => {
     return tasks(getPostUrl(post)).getPostContent()
 }
 
-export const fetchProfile = async (self: PersonIdentifier) => {
-    return tasks(getProfileUrl(self), {}).getProfile(self)
+export const fetchProfile = (self: PersonIdentifier) => {
+    return tasks(getProfileUrl(self, isMobileTwitter as boolean), {}).getProfile(self)
 }

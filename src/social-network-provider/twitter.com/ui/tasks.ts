@@ -17,7 +17,7 @@ import {
 import { geti18nString } from '../../../utils/i18n'
 import { SocialNetworkUI, SocialNetworkUITasks, getActivatedUI } from '../../../social-network/ui'
 import { fetchBioCard } from '../utils/status'
-import { bioCardParser, postParser } from '../utils/fetch'
+import { bioCardParser, postContentParser } from '../utils/fetch'
 import { getText, hasFocus, postBoxInPopup } from '../utils/postBox'
 import { MutationObserverWatcher } from '@holoflows/kit'
 import { untilDocumentReady, untilElementAvailable } from '../../../utils/dom'
@@ -129,12 +129,15 @@ const taskPasteIntoBio = async (text: string) => {
 }
 
 const taskGetPostContent: SocialNetworkUITasks['taskGetPostContent'] = async () => {
-    return (await postParser((await timeout(new MutationObserverWatcher(postsSelector()), 10000))[0])).content
+    const contentNode = (await timeout(new MutationObserverWatcher(postsSelector()), 10000))[0]
+    return contentNode ? postContentParser(contentNode) : ''
 }
 
 const taskGetProfile = async () => {
-    await fetchBioCard()
-    return { bioContent: bioCardParser().bio }
+    const cardNode = await fetchBioCard()
+    return {
+        bioContent: cardNode ? bioCardParser(cardNode).bio : '',
+    }
 }
 
 export const twitterUITasks: SocialNetworkUITasks = {
