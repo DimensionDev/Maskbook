@@ -1,23 +1,20 @@
 import React, { useState, useMemo, useRef } from 'react'
 import { makeStyles, createStyles } from '@material-ui/core/styles'
-import Card from '@material-ui/core/Card'
 import CardActions from '@material-ui/core/CardActions'
 import CardContent from '@material-ui/core/CardContent'
 import Button from '@material-ui/core/Button'
 import Typography from '@material-ui/core/Typography'
-import { Profile } from '../../database'
-import { Divider, IconButton } from '@material-ui/core'
-import Services from '../service'
-import { definedSocialNetworkUIs } from '../../social-network/ui'
+import { Divider, TextField } from '@material-ui/core'
 import { Link as RouterLink, LinkProps as RouterLinkProps } from 'react-router-dom'
 import EditIcon from '@material-ui/icons/Edit'
-import CenterFocusWeakIcon from '@material-ui/icons/CenterFocusWeak'
 import { useSnackbar } from 'notistack'
-import { useColorProvider } from '../../utils/theme'
-import { geti18nString } from '../../utils/i18n'
-
+import { useColorProvider } from '../../../utils/theme'
+import { geti18nString } from '../../../utils/i18n'
 import classNames from 'classnames'
-import { BackupJSONFileLatest } from '../../utils/type-transform/BackupFormat/JSON/latest'
+import ProviderLine from './Provider'
+import { Profile } from '../../../database'
+import Services from '../../service'
+import { BackupJSONFileLatest } from '../../../utils/type-transform/BackupFormat/JSON/latest'
 
 interface Props {
     identity: Profile
@@ -26,8 +23,7 @@ interface Props {
 const useStyles = makeStyles(theme =>
     createStyles({
         card: {
-            width: 'auto',
-            margin: theme.spacing(2),
+            width: '100%',
         },
         focus: {
             margin: '-5px',
@@ -37,11 +33,8 @@ const useStyles = makeStyles(theme =>
             alignItems: 'flex-end',
             '& > .title': {
                 marginRight: theme.spacing(1),
-                flexShrink: 1,
-                overflow: 'hidden',
-            },
-            '& > .fullWidth': {
                 flexGrow: 1,
+                overflow: 'hidden',
             },
             '& > .extra-item': {
                 visibility: 'hidden',
@@ -56,6 +49,7 @@ const useStyles = makeStyles(theme =>
         },
         line: {
             display: 'flex',
+            alignItems: 'center',
             '&:not(:first-child)': {
                 paddingTop: theme.spacing(1),
             },
@@ -104,8 +98,9 @@ export default function PersonaCard({ identity }: Props) {
     }, [identity.identifier])
 
     const friendlyName = useMemo(() => {
-        const ui = [...definedSocialNetworkUIs].find(i => i.networkIdentifier === identity.identifier.network)
-        return ui ? ui.friendlyName : `${geti18nString('dashboard_unknown_network')}(${identity.identifier.network})`
+        return identity.identifier.network
+        // const ui = [...definedSocialNetworkUIs].find(i => i.networkIdentifier === identity.identifier.network)
+        // return ui ? ui.friendlyName : `${geti18nString('dashboard_unknown_network')}(${identity.identifier.network})`
     }, [identity.identifier.network])
 
     const { enqueueSnackbar, closeSnackbar } = useSnackbar()
@@ -151,7 +146,7 @@ export default function PersonaCard({ identity }: Props) {
 
     const [rename, setRename] = useState(false)
 
-    const renameIdentity = (event: React.FocusEvent<HTMLSpanElement> | React.KeyboardEvent<HTMLSpanElement>) => {
+    const renameIdentity = (event: React.FocusEvent<HTMLInputElement>) => {
         event.preventDefault()
         Services.Identity.updateProfileInfo(identity.identifier, { nickname: event.currentTarget.innerText }).then(
             () => {
@@ -164,51 +159,40 @@ export default function PersonaCard({ identity }: Props) {
     const titleRef = useRef<HTMLSpanElement | null>(null)
 
     return (
-        <Card className={classes.card} raised elevation={3}>
+        <>
             <CardContent>
                 <Typography className={classes.header} variant="h5" component="h2" gutterBottom>
-                    {
+                    {!rename ? (
                         <>
-                            <span
-                                suppressContentEditableWarning
-                                ref={titleRef}
-                                className={classNames('title', { fullWidth: rename })}
-                                onKeyPress={e => e.key === 'Enter' && renameIdentity(e)}
-                                {...(rename ? { onBlur: renameIdentity, contentEditable: true } : {})}>
+                            <span suppressContentEditableWarning ref={titleRef} className="title">
                                 {identity.nickname || identity.identifier.userId}
                             </span>
-                            {!rename && (
-                                <Typography
-                                    className="extra-item fullWidth"
-                                    variant="body1"
-                                    component="span"
-                                    color="textSecondary"
-                                    onClick={() => {
-                                        setRename(true)
-                                        setTimeout(() => titleRef.current && titleRef.current!.focus())
-                                    }}>
-                                    <EditIcon fontSize="small" />
-                                </Typography>
-                            )}
+                            <Typography
+                                className="extra-item fullWidth"
+                                variant="body1"
+                                component="span"
+                                color="textSecondary"
+                                onClick={() => {
+                                    setRename(true)
+                                }}>
+                                <EditIcon fontSize="small" />
+                            </Typography>
                         </>
-                    }
-                    <RouterLink
-                        component={IconButton}
-                        className={classes.focus}
-                        to={`/backup?identity=${identity.identifier.toText()}&qr`}>
-                        <CenterFocusWeakIcon fontSize="small" />
-                    </RouterLink>
+                    ) : (
+                        <>
+                            <TextField
+                                style={{ width: '100%', maxWidth: '320px' }}
+                                autoFocus
+                                variant="outlined"
+                                label="Name"
+                                defaultValue={identity.nickname || identity.identifier.userId}
+                                onBlur={renameIdentity}></TextField>
+                        </>
+                    )}
                 </Typography>
                 <Typography className={classes.line} component="div">
-                    <div className="title" title={friendlyName}>
-                        {friendlyName}
-                    </div>
-                    <div className="content" title={identity.identifier.userId}>
-                        {identity.identifier.userId}
-                    </div>
-                    <div className="extra-item" hidden>
-                        {geti18nString('disconnect')}
-                    </div>
+                    <ProviderLine network={friendlyName} connected id={`@${identity.identifier.userId}`}></ProviderLine>
+                    <div className={classNames('extra-item', color.error)}>{geti18nString('disconnect')}</div>
                 </Typography>
             </CardContent>
             <Divider />
@@ -237,6 +221,6 @@ export default function PersonaCard({ identity }: Props) {
                     {geti18nString('dashboard_delete_persona')}
                 </Button>
             </CardActions>
-        </Card>
+        </>
     )
 }

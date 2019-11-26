@@ -17,7 +17,7 @@ function getFontFamily(monospace?: boolean) {
 const baseTheme = (theme: 'dark' | 'light') =>
     ({
         palette: {
-            primary: { main: '#2594ff' },
+            primary: { main: '#1C68F3' },
             secondary: { main: orange[800] },
             error: { main: red[500] },
             type: theme,
