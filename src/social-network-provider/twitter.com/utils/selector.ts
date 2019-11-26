@@ -24,7 +24,8 @@ export const newPostButton = () => querySelector<E>('[data-testid="SideNav_NewTw
 const postEditor = () =>
     postBoxInPopup() ? '[aria-labelledby="modal-header"]' : '[role="main"] [role="progressbar"] ~ div'
 
-export const newPostEditorBelow: () => LiveSelector<E, true> = () => querySelector<E>(postEditor())
+export const newPostEditorBelow: () => LiveSelector<E, true> = () =>
+    querySelector<E>('[role="main"] [role="progressbar"] ~ div')
 export const newPostEditorSelector = () => querySelector<HTMLDivElement>(`${postEditor()} .DraftEditor-root`)
 export const newPostEditorFocusAnchor = () => querySelector<E>(`${postEditor()} .public-DraftEditor-content`)
 
