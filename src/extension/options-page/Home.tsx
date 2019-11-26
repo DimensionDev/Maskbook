@@ -1,0 +1,222 @@
+import React from 'react'
+
+import { makeStyles, createStyles } from '@material-ui/styles'
+import {
+    Theme,
+    Button,
+    Typography,
+    Card,
+    Divider,
+    List,
+    ListItem,
+    ListItemText,
+    ListItemSecondaryAction,
+    Container,
+} from '@material-ui/core'
+import { Link, useHistory } from 'react-router-dom'
+import { useMyIdentities } from '../../components/DataSource/useActivatedUI'
+import Services from '../service'
+import { ProfileIdentifier } from '../../database/type'
+import { geti18nString } from '../../utils/i18n'
+import { DialogRouter } from './DashboardDialogs/DialogBase'
+
+import PersonaCard from './DashboardComponents/PersonaCard'
+import {
+    DatabaseBackupDialog,
+    DatabaseRestoreDialog,
+    DatabaseRestoreSuccessDialog,
+    DatabaseRestoreFailedDialog,
+} from './DashboardDialogs/Database'
+import {
+    PersonaCreateDialog,
+    PersonaCreatedDialog,
+    PersonaDeleteDialog,
+    PersonaBackupDialog,
+    PersonaImportDialog,
+    PersonaImportSuccessDialog,
+    PersonaImportFailedDialog,
+} from './DashboardDialogs/Persona'
+import { ProfileConnectStartDialog, ProfileConnectDialog } from './DashboardDialogs/Profile'
+
+const useStyles = makeStyles((theme: Theme) =>
+    createStyles({
+        sections: {
+            width: '100%',
+            marginTop: theme.spacing(2),
+        },
+        title: {
+            marginTop: theme.spacing(3),
+            marginBottom: theme.spacing(1),
+        },
+        button: {
+            width: 120,
+        },
+        actionButtons: {
+            margin: theme.spacing(2),
+        },
+        loaderWrapper: {
+            position: 'relative',
+            '&:not(:last-child)': {
+                marginBottom: theme.spacing(2),
+            },
+        },
+        loader: {
+            width: '100%',
+            bottom: 0,
+            position: 'absolute',
+        },
+    }),
+)
+
+export default function DashboardHomePage() {
+    const [exportLoading, setExportLoading] = React.useState(false)
+
+    const classes = useStyles()
+    const identities = useMyIdentities()
+
+    const exportData = () => {
+        setExportLoading(true)
+        Services.Welcome.backupMyKeyPair({
+            download: true,
+            onlyBackupWhoAmI: false,
+        })
+            .catch(alert)
+            .then(() => setExportLoading(false))
+    }
+
+    const history = useHistory()
+
+    const dialogs = (
+        <>
+            <DialogRouter path="/database/backup" children={<DatabaseBackupDialog />} />
+            <DialogRouter path="/database/restore" children={<DatabaseRestoreDialog />} />
+            <DialogRouter path="/database/success" children={<DatabaseRestoreSuccessDialog />} />
+            <DialogRouter path="/database/failed" children={<DatabaseRestoreFailedDialog />} />
+            <DialogRouter path="/persona/create" children={<PersonaCreateDialog />} />
+            <DialogRouter path="/persona/created" children={<PersonaCreatedDialog />} />
+            <DialogRouter path="/persona/delete" children={<PersonaDeleteDialog />} />
+            <DialogRouter path="/persona/backup" children={<PersonaBackupDialog />} />
+            <DialogRouter path="/persona/import" children={<PersonaImportDialog />} />
+            <DialogRouter path="/persona/success" children={<PersonaImportSuccessDialog />} />
+            <DialogRouter path="/persona/failed" children={<PersonaImportFailedDialog />} />
+            <DialogRouter path="/profile/start" children={<ProfileConnectStartDialog />} />
+            <DialogRouter path="/profile/connect" children={<ProfileConnectDialog />} />
+        </>
+    )
+
+    return (
+        <Container maxWidth="md">
+            <section className={classes.sections}>
+                <Card raised elevation={1}>
+                    <List>
+                        <ListItem key="backup-alert">
+                            <ListItemText
+                                primary="Backup Alert"
+                                secondary={
+                                    <span>
+                                        365 days since last backup. <br /> 999 new contacts and 999 new posts added.
+                                    </span>
+                                }
+                            />
+                            <ListItemSecondaryAction>
+                                <Button
+                                    component={Link}
+                                    to="/initialize"
+                                    variant="contained"
+                                    color="primary"
+                                    className={classes.button}>
+                                    Backup
+                                </Button>
+                            </ListItemSecondaryAction>
+                        </ListItem>
+                    </List>
+                </Card>
+                <Typography className={classes.title} variant="h5" align="left">
+                    My Personas
+                </Typography>
+                {!identities.length && (
+                    <Card raised elevation={1}>
+                        <List disablePadding>
+                            <ListItem key="initialize">
+                                <ListItemText primary="No persona was found" />
+                                <ListItemSecondaryAction>
+                                    <Button
+                                        component={Link}
+                                        to="/initialize"
+                                        variant="contained"
+                                        color="primary"
+                                        className={classes.button}>
+                                        Initialize
+                                    </Button>
+                                </ListItemSecondaryAction>
+                            </ListItem>
+                        </List>
+                    </Card>
+                )}
+                <div>
+                    {identities.map(i => (
+                        <Card raised elevation={1}>
+                            <PersonaCard identity={i} key={i.identifier.toText()} />
+                        </Card>
+                    ))}
+                </div>
+            </section>
+            <section className={classes.sections}>
+                <Typography className={classes.title} variant="h5" align="left">
+                    Add Persona
+                </Typography>
+                <Card raised elevation={1}>
+                    <List disablePadding>
+                        <ListItem key="persona-create">
+                            <ListItemText primary="Create" secondary="Create a new persona." />
+                            <ListItemSecondaryAction>
+                                <Button variant="contained" color="primary" className={classes.button}>
+                                    Create
+                                </Button>
+                            </ListItemSecondaryAction>
+                        </ListItem>
+                        <Divider></Divider>
+                        <ListItem key="persona-import">
+                            <ListItemText primary="Import" secondary="From a previous persona backup." />
+                            <ListItemSecondaryAction>
+                                <Button variant="contained" color="default" className={classes.button}>
+                                    Import
+                                </Button>
+                            </ListItemSecondaryAction>
+                        </ListItem>
+                    </List>
+                </Card>
+            </section>
+            <section className={classes.sections}>
+                <Typography className={classes.title} variant="h5" align="left">
+                    Database
+                </Typography>
+                <Card raised elevation={1}>
+                    <List disablePadding>
+                        <ListItem key="dashboard-backup">
+                            <ListItemText
+                                primary="Backup"
+                                secondary="Create a database backup file. Do it frequently."
+                            />
+                            <ListItemSecondaryAction>
+                                <Button variant="contained" color="primary" className={classes.button}>
+                                    Backup
+                                </Button>
+                            </ListItemSecondaryAction>
+                        </ListItem>
+                        <Divider></Divider>
+                        <ListItem key="dashboard-restore">
+                            <ListItemText primary="Restore" secondary="From a previous database backup." />
+                            <ListItemSecondaryAction>
+                                <Button variant="contained" color="default" className={classes.button}>
+                                    Restore
+                                </Button>
+                            </ListItemSecondaryAction>
+                        </ListItem>
+                    </List>
+                </Card>
+            </section>
+            {dialogs}
+        </Container>
+    )
+}

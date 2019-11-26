@@ -1,5 +1,5 @@
 import React from 'react'
-import { ListSubheader, Grid, makeStyles, List } from '@material-ui/core'
+import { Grid, makeStyles, List } from '@material-ui/core'
 import { AddProve } from './DeveloperComponents/AddProve'
 import { DecryptPostDeveloperMode } from './DeveloperComponents/DecryptPost'
 import { SeeMyProvePost } from './DeveloperComponents/SeeMyProvePost'
@@ -16,11 +16,10 @@ const useStyles = makeStyles(theme => ({
         padding: theme.spacing(0, 2),
     },
 }))
-const DevPage = () => {
+const DashboardDebugPage = () => {
     const classes = useStyles()
     return (
         <>
-            <ListSubheader disableSticky>Developer Settings</ListSubheader>
             <div className={classes.root}>
                 <List>{useSettingsUI(debugModeSetting)}</List>
                 <List>{useSettingsUI(steganographyModeSetting)}</List>
@@ -44,4 +43,4 @@ const DevPage = () => {
     )
 }
 
-export default DevPage
+export default DashboardDebugPage
