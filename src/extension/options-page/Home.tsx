@@ -121,7 +121,7 @@ export default function DashboardHomePage() {
                             <ListItemSecondaryAction>
                                 <Button
                                     component={Link}
-                                    to="/initialize"
+                                    to="database/backup"
                                     variant="contained"
                                     color="primary"
                                     className={classes.button}>
@@ -170,7 +170,12 @@ export default function DashboardHomePage() {
                         <ListItem key="persona-create">
                             <ListItemText primary="Create" secondary="Create a new persona." />
                             <ListItemSecondaryAction>
-                                <Button variant="contained" color="primary" className={classes.button}>
+                                <Button
+                                    variant="contained"
+                                    color="primary"
+                                    className={classes.button}
+                                    component={Link}
+                                    to="persona/create">
                                     Create
                                 </Button>
                             </ListItemSecondaryAction>
@@ -179,7 +184,12 @@ export default function DashboardHomePage() {
                         <ListItem key="persona-import">
                             <ListItemText primary="Import" secondary="From a previous persona backup." />
                             <ListItemSecondaryAction>
-                                <Button variant="contained" color="default" className={classes.button}>
+                                <Button
+                                    variant="contained"
+                                    color="default"
+                                    className={classes.button}
+                                    component={Link}
+                                    to="persona/import">
                                     Import
                                 </Button>
                             </ListItemSecondaryAction>
@@ -199,7 +209,12 @@ export default function DashboardHomePage() {
                                 secondary="Create a database backup file. Do it frequently."
                             />
                             <ListItemSecondaryAction>
-                                <Button variant="contained" color="primary" className={classes.button}>
+                                <Button
+                                    variant="contained"
+                                    color="primary"
+                                    className={classes.button}
+                                    component={Link}
+                                    to="database/backup">
                                     Backup
                                 </Button>
                             </ListItemSecondaryAction>
@@ -208,7 +223,12 @@ export default function DashboardHomePage() {
                         <ListItem key="dashboard-restore">
                             <ListItemText primary="Restore" secondary="From a previous database backup." />
                             <ListItemSecondaryAction>
-                                <Button variant="contained" color="default" className={classes.button}>
+                                <Button
+                                    variant="contained"
+                                    color="default"
+                                    className={classes.button}
+                                    component={Link}
+                                    to="database/restore">
                                     Restore
                                 </Button>
                             </ListItemSecondaryAction>

@@ -58,12 +58,12 @@ const useStyles = makeStyles(theme =>
 const OptionsPageRouters = (
     <>
         <Switch>
-            <Route path="/home" component={DashboardHomePage} />
+            <Route path="/home/" component={DashboardHomePage} />
             <Route path="/welcome" component={Welcome} />
-            <Route path="/debug" component={DashboardDebugPage}></Route>
+            <Route path="/debug/" component={DashboardDebugPage}></Route>
             <Route path="/backup" component={() => <BackupDialog />} />
             <DialogRouter path="/initialize" component={DashboardInitializeDialog} fullscreen />
-            <Redirect path="*" to="/home" />
+            <Redirect path="*" to="/home/" />
         </Switch>
     </>
 )

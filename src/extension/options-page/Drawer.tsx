@@ -101,15 +101,16 @@ function LinkItem(props: { to: string; icon: React.ReactElement; label: string }
 
 function ResponsiveDrawer(props: ResponsiveDrawerProps) {
     const classes = useStyles()
+    const match = useRouteMatch('/:param/')
 
     const { exitDashboard } = props
 
     const routers: [string, string, JSX.Element][] = [
-        ['Home', '/', <BookmarkIcon />],
-        ['Device', '/device', <CachedIcon />],
-        ['Settings', '/settings', <SettingsIcon />],
-        ['About', '/about', <InfoOutlinedIcon />],
-        ['Debug', '/debug', <LocationOnIcon />],
+        ['Home', '/home/', <BookmarkIcon />],
+        ['Device', '/device/', <CachedIcon />],
+        ['Settings', '/settings/', <SettingsIcon />],
+        ['About', '/about/', <InfoOutlinedIcon />],
+        ['Debug', '/debug/', <LocationOnIcon />],
     ]
 
     const drawer = (
@@ -131,7 +132,12 @@ function ResponsiveDrawer(props: ResponsiveDrawerProps) {
             <Divider />
             <List>
                 {routers.map((item, index) => (
-                    <ListItem component={Link} to={item[1]} button key={index}>
+                    <ListItem
+                        selected={match ? item[1].startsWith(match.url) : false}
+                        component={Link}
+                        to={item[1]}
+                        button
+                        key={index}>
                         <ListItemIcon children={item[2]}></ListItemIcon>
                         <ListItemText primary={item[0]} />
                     </ListItem>
