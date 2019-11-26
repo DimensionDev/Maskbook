@@ -214,10 +214,15 @@ export default function PersonaCard({ identity }: Props) {
                     className={color.info}
                     color="primary"
                     component={Link}
-                    to={`/backup?identity=${identity.identifier.toText()}`}>
+                    to={`persona/backup?name=${identity.identifier.toText()}`}>
                     {geti18nString('dashboard_create_backup')}
                 </Button>
-                <Button size="small" className={color.error} style={{ marginLeft: 'auto' }} onClick={deleteIdentity}>
+                <Button
+                    size="small"
+                    className={color.error}
+                    style={{ marginLeft: 'auto' }}
+                    component={Link}
+                    to={`persona/delete?name=${identity.identifier.toText()}`}>
                     {geti18nString('dashboard_delete_persona')}
                 </Button>
             </CardActions>
