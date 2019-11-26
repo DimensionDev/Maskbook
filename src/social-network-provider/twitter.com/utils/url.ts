@@ -11,15 +11,15 @@ export const twitterUrl = {
 const hostLeadingUrlAuto = (isMobile: boolean) =>
     isMobile ? twitterUrl.hostLeadingUrlMobile : twitterUrl.hostLeadingUrl
 
-export const getPostUrl = (post: PostIdentifier<PersonIdentifier>, useMobile: boolean = false) => {
+export const getPostUrl = (post: PostIdentifier<PersonIdentifier>, isMobile: boolean = false) => {
     if (!usernameValidator(post.identifier.userId)) {
         throw new Error(geti18nString('service_username_invalid'))
     }
-    return `${hostLeadingUrlAuto(useMobile)}/${post.identifier.userId}/status/${post.postId}`
+    return `${hostLeadingUrlAuto(isMobile)}/${post.identifier.userId}/status/${post.postId}`
 }
 
-export const getProfileUrl = (self: PersonIdentifier, useMobile: boolean = false) => {
-    return useMobile ? `${hostLeadingUrlAuto(useMobile)}/account` : `${hostLeadingUrlAuto(useMobile)}/${self.userId}`
+export const getProfileUrl = (self: PersonIdentifier, isMobile: boolean = false) => {
+    return isMobile ? `${hostLeadingUrlAuto(isMobile)}/account` : `${hostLeadingUrlAuto(isMobile)}/${self.userId}`
 }
 
 export const topSites = [
