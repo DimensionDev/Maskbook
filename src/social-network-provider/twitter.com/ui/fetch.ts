@@ -35,7 +35,6 @@ const resolveLastRecognizedIdentity = (self: SocialNetworkUI) => {
             childList: true,
             subtree: true,
         })
-        .then()
 }
 
 const registerUserCollector = () => {
@@ -63,7 +62,6 @@ const registerUserCollector = () => {
             childList: true,
             subtree: true,
         })
-        .then()
 }
 
 const registerPostCollector = (self: SocialNetworkUI) => {

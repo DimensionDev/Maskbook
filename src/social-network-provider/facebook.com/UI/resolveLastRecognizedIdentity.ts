@@ -20,7 +20,6 @@ export function resolveLastRecognizedIdentityFacebook(this: SocialNetworkUI) {
             subtree: true,
             characterData: true,
         })
-        .then()
     function assign(i: part) {
         if (!i.identifier.isUnknown) ref.value = i
     }
