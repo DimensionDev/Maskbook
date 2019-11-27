@@ -35,3 +35,4 @@ export interface ApplicationStateInGunVersion1 {
 }
 /** @deprecated */
 export const gun1 = new Gun<ApplicationStateInGunVersion1>(gun1Servers).get('maskbook')
+gun1.opt({ retry: Infinity })
