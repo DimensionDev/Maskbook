@@ -2,6 +2,7 @@ import { AutomatedTabTask } from '@holoflows/kit'
 import { getActivatedUI, SocialNetworkUI } from '../../social-network/ui'
 import { PersonIdentifier } from '../../database/type'
 import { disableOpenNewTabInBackgroundSettings } from '../../components/shared-settings/settings'
+import { memoizePromise } from '../../utils/memoize'
 
 const tasks = AutomatedTabTask(
     {
@@ -29,9 +30,15 @@ const tasks = AutomatedTabTask(
         /**
          * Fetch a url in the current context
          */
-        async fetch(url: string) {
-            return fetch(url).then(x => x.text())
+        async fetch(...args: Parameters<typeof fetch>) {
+            return fetch(...args).then(x => x.text())
         },
+        memoizeFetch: memoizePromise(
+            url => {
+                return fetch(url).then(x => x.text())
+            },
+            x => x,
+        ),
     },
     { memorable: true },
 )!
