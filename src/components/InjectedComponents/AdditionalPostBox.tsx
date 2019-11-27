@@ -46,6 +46,7 @@ export interface AdditionalPostBoxUIProps
     onShareTargetChanged: SelectPeopleAndGroupsUIProps['onSetSelected']
     currentIdentity: Person | null
     postBoxPlaceholder: string
+    postBoxText: string
     postButtonDisabled: boolean
     onPostTextChange: (nextString: string) => void
     onPostButtonClicked: () => void
@@ -71,6 +72,7 @@ export const AdditionalPostBoxUI = React.memo(function AdditionalPostBoxUI(props
                 {props.currentIdentity && <Avatar className={classes.avatar} person={props.currentIdentity} />}
                 <InputBase
                     classes={{ root: classes.MUIInputRoot, input: classes.MUIInputInput }}
+                    value={props.postBoxText}
                     inputRef={inputRef}
                     fullWidth
                     multiline
@@ -105,6 +107,7 @@ export const AdditionalPostBoxUI = React.memo(function AdditionalPostBoxUI(props
 export interface AdditionalPostBoxProps extends Partial<AdditionalPostBoxUIProps> {
     identities?: Person[]
     onRequestPost?: (target: (Person | Group)[], text: string) => void
+    onRequestReset?: () => void
     NotSetupYetPromptProps?: Partial<NotSetupYetPromptProps>
 }
 
@@ -151,6 +154,13 @@ export function AdditionalPostBox(props: AdditionalPostBoxProps) {
             [currentIdentity, isSteganography],
         ),
     )
+    const onRequestReset = or(
+        props.onRequestReset,
+        useCallback(() => {
+            setPostText('')
+            onShareTargetChanged([])
+        }, []),
+    )
 
     const [postText, setPostText] = useState('')
     const [currentShareTarget, onShareTargetChanged] = useState(availableShareTarget)
@@ -168,6 +178,7 @@ export function AdditionalPostBox(props: AdditionalPostBoxProps) {
             availableShareTarget={availableShareTarget}
             currentShareTarget={currentShareTarget}
             onShareTargetChanged={onShareTargetChanged}
+            postBoxText={postText}
             postBoxPlaceholder={geti18nString(
                 currentIdentity && currentIdentity.nickname
                     ? 'additional_post_box__placeholder_w_name'
@@ -175,7 +186,10 @@ export function AdditionalPostBox(props: AdditionalPostBoxProps) {
                 currentIdentity ? currentIdentity.nickname : '',
             )}
             onPostTextChange={setPostText}
-            onPostButtonClicked={() => onRequestPost(currentShareTarget, postText)}
+            onPostButtonClicked={() => {
+                onRequestPost(currentShareTarget, postText)
+                onRequestReset()
+            }}
             postButtonDisabled={!(currentShareTarget.length && postText)}
             {...props}
         />
