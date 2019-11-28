@@ -12,28 +12,27 @@ const useStyles = makeStyles({
         justifyContent: 'space-between',
         padding: '16px 12px',
     },
-    caption: {},
+    title: {},
     button: {},
 })
 
 export interface PostModalHintUIProps extends withClasses<KeysInferFromUseStyles<typeof useStyles>> {
-    hintButtonClicked: () => void
+    onHintButtonClicked: () => void
 }
 export const PostModalHintUI = React.memo(function PostModalHintUI(props: PostModalHintUIProps) {
     const classes = useStylesExtends(useStyles(), props)
-
     return (
         <Card className={classes.root} elevation={0}>
             <Box className={classes.content}>
-                <Typography className={classes.caption} variant="caption">
-                    {geti18nString('post_modal_hint_title')}
+                <Typography className={classes.title} variant="h4">
+                    {geti18nString('post_modal_hint__title')}
                 </Typography>
                 <Button
                     className={classes.button}
                     variant="contained"
                     color="primary"
-                    onClick={props.hintButtonClicked}>
-                    {geti18nString('post_modal_hint_button')}
+                    onClick={props.onHintButtonClicked}>
+                    {geti18nString('post_modal_hint__button')}
                 </Button>
             </Box>
         </Card>
@@ -44,7 +43,7 @@ export interface PostModalHintProps extends Partial<PostModalHintUIProps> {}
 export function PostModalHint(props: PostModalHintProps) {
     return (
         <>
-            <PostModalHintUI hintButtonClicked={() => alert('Clicked')} {...props} />
+            <PostModalHintUI onHintButtonClicked={() => {}} {...props} />
         </>
     )
 }

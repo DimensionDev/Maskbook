@@ -8,8 +8,6 @@ import { memoizePromise } from '../../utils/memoize'
 
 OnlyRunInContext('background', 'SteganographyService')
 
-type WithPartial<T, K extends keyof T> = { [P in Exclude<keyof T, K>]?: T[P] | undefined } & { [P in K]: T[P] }
-
 const defaultOptions = {
     size: 8,
     narrow: 0,
@@ -21,7 +19,7 @@ const getMaskBuf = memoizePromise(() => downloadUrl(getUrl('/maskbook-steganogra
 
 export async function encodeImage(
     { buffer: imgBuf }: Uint8Array,
-    options: WithPartial<Required<EncodeOptions>, 'text' | 'pass'>,
+    options: PartialRequired<Required<EncodeOptions>, 'text' | 'pass'>,
 ) {
     return new Uint8Array(
         await encode(imgBuf, await getMaskBuf(), {
@@ -36,7 +34,7 @@ export async function encodeImage(
 
 export async function decodeImage(
     { buffer: imgBuf }: Uint8Array,
-    options: WithPartial<Required<DecodeOptions>, 'pass'>,
+    options: PartialRequired<Required<DecodeOptions>, 'pass'>,
 ) {
     return decode(imgBuf, await getMaskBuf(), {
         ...defaultOptions,

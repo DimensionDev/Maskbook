@@ -19,6 +19,8 @@ export const bioCard = () =>
         ].join(),
     )
 
+export const mainSelector = () => querySelector<E>('[role="main"]')
+
 export const newPostButton = () => querySelector<E>('[data-testid="SideNav_NewTweet_Button"]')
 
 const postEditor = () =>
