@@ -9,8 +9,6 @@ import { getDimension } from '../../utils/image'
 
 OnlyRunInContext('background', 'SteganographyService')
 
-type WithPartial<T, K extends keyof T> = { [P in Exclude<keyof T, K>]?: T[P] | undefined } & { [P in K]: T[P] }
-
 const defaultOptions = {
     size: 8,
     narrow: 0,
@@ -20,7 +18,7 @@ const defaultOptions = {
 
 const getMaskBuf = memoizePromise(() => downloadUrl(getUrl('/maskbook-steganography-mask.png')), undefined)
 
-export async function encodeImage(buf: Uint8Array, options: WithPartial<Required<EncodeOptions>, 'text' | 'pass'>) {
+export async function encodeImage(buf: Uint8Array, options: PartialRequired<Required<EncodeOptions>, 'text' | 'pass'>) {
     return new Uint8Array(
         await encode(buf.buffer, await getMaskBuf(), {
             ...defaultOptions,
@@ -32,7 +30,7 @@ export async function encodeImage(buf: Uint8Array, options: WithPartial<Required
     )
 }
 
-export async function decodeImage(buf: Uint8Array, options: WithPartial<Required<DecodeOptions>, 'pass'>) {
+export async function decodeImage(buf: Uint8Array, options: PartialRequired<Required<DecodeOptions>, 'pass'>) {
     const { width, height } = getDimension(buf)
     if (width !== 1024 || height !== 1240) {
         return ''

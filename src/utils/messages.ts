@@ -39,6 +39,9 @@ interface MaskbookMessages {
         group: GroupIdentifier
         newMembers: ProfileIdentifier[]
     }
+    startCompose: undefined
+    finishCompose: undefined
+    cancelCompose: undefined
 }
 export const MessageCenter = new MC<MaskbookMessages>('maskbook-events')
 MessageCenter.serialization = Serialization

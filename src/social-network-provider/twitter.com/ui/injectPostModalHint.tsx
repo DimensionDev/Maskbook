@@ -1,13 +1,17 @@
 import { twitterUrl } from '../utils/url'
 import { MutationObserverWatcher } from '@holoflows/kit/es'
-import { postPopupInjectPointSelector } from '../utils/selector'
+import { postPopupInjectPointSelector, newPostEditorBelow, hasDraftEditor } from '../utils/selector'
 import { renderInShadowRoot } from '../../../utils/jss/renderInShadowRoot'
 import { PostModalHint } from '../../../components/InjectedComponents/PostModalHint'
 import { makeStyles } from '@material-ui/core'
+import { MessageCenter } from '../../../utils/messages'
+import { useCallback } from 'react'
+import { useTwtterComponent } from '../utils/theme'
 
 export function injectPostModalHintAtTwitter() {
     if (location.hostname.indexOf(twitterUrl.hostIdentifier) === -1) return
-    const watcher = new MutationObserverWatcher(postPopupInjectPointSelector())
+    const emptyNode = document.createElement('div')
+    const watcher = new MutationObserverWatcher(newPostEditorBelow().map(x => (hasDraftEditor(x) ? x : emptyNode)))
         .setDOMProxyOption({
             afterShadowRootInit: { mode: 'closed' },
         })
@@ -25,19 +29,21 @@ const useStyles = makeStyles({
         borderTopRightRadius: 0,
     },
     content: {
-        borderTop: '1px solid rgb(204, 214, 221)',
+        borderTop: '1px solid rgb(230, 236, 240)',
+        padding: '16px 17px 16px 15px',
     },
-    button: {
-        minHeight: 39,
-        borderRadius: 9999,
-        boxShadow: 'none',
-        backgroundColor: 'rgb(29, 161, 242)',
-        '&:hover': {
-            boxShadow: 'none',
-            backgroundColor: 'rgb(26, 145, 218)',
-        },
+    title: {
+        fontSize: 15,
+        fontWeight: 'bold',
     },
 })
 function PostModalHintAtTwitter() {
-    return <PostModalHint classes={useStyles()} />
+    const classes = {
+        ...useStyles(),
+        button: useTwtterComponent().button,
+    }
+    const onHintButtonClicked = useCallback(() => {
+        MessageCenter.emit('startCompose', undefined, true)
+    }, [])
+    return <PostModalHint classes={classes} onHintButtonClicked={onHintButtonClicked} />
 }

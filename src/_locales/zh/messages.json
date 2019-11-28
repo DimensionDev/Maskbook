@@ -21,11 +21,29 @@
     "additional_post_box__steganography_post_failed": {
         "message": "請將已下載的圖片上载至發佈框。"
     },
-    "post_modal_hint_title": {
+    "post_modal__title": {
+        "message": "Maskbook: 編輯"
+    },
+    "post_modal__placeholder": {
+        "message": "請輸入…"
+    },
+    "post_modal__select_recipients_title": {
+        "message": "选择收件人"
+    },
+    "post_modal__button": {
+        "message": "完成"
+    },
+    "post_modal_hint__title": {
         "message": "找不到 Maskbook？"
     },
-    "post_modal_hint_button": {
+    "post_modal_hint__button": {
         "message": "編輯加密訊息"
+    },
+    "recipients_modal__title": {
+        "message": "选择好友"
+    },
+    "recipients_modal__button": {
+        "message": "完成"
     },
     "comment_box__placeholder": {
         "message": "添加一條加密評論…"
