@@ -21,6 +21,12 @@
     "additional_post_box__steganography_post_failed": {
         "message": "請將已下載的圖片上载至發佈框。"
     },
+    "post_modal_hint_title": {
+        "message": "找不到 Maskbook？"
+    },
+    "post_modal_hint_button": {
+        "message": "編輯加密訊息"
+    },
     "comment_box__placeholder": {
         "message": "添加一條加密評論…"
     },
