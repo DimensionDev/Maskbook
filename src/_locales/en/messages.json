@@ -21,11 +21,29 @@
     "additional_post_box__steganography_post_failed": {
         "message": "Please upload downloaded image into the post box."
     },
-    "post_modal_hint_title": {
+    "post_modal__title": {
+        "message": "Maskbook: Compose"
+    },
+    "post_modal__placeholder": {
+        "message": "Text goes here..."
+    },
+    "post_modal__select_recipients_title": {
+        "message": "Select Recipients"
+    },
+    "post_modal__button": {
+        "message": "Finish"
+    },
+    "post_modal_hint__title": {
         "message": "Looking for Maskbook?"
     },
-    "post_modal_hint_button": {
+    "post_modal_hint__button": {
         "message": "Compose encrypted post"
+    },
+    "recipients_modal__title": {
+        "message": "Select Specific Friends"
+    },
+    "recipients_modal__button": {
+        "message": "Done"
     },
     "comment_box__placeholder": {
         "message": "Write an encrypted comment..."
