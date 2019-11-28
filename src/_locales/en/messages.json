@@ -21,6 +21,12 @@
     "additional_post_box__steganography_post_failed": {
         "message": "Please upload downloaded image into the post box."
     },
+    "post_modal_hint_title": {
+        "message": "Looking for Maskbook?"
+    },
+    "post_modal_hint_button": {
+        "message": "Compose encrypted post"
+    },
     "comment_box__paste_failed": {
         "message": "Please paste it into the comment box."
     },
