@@ -22,10 +22,10 @@ export const bioCard = () =>
 export const newPostButton = () => querySelector<E>('[data-testid="SideNav_NewTweet_Button"]')
 
 const postEditor = () =>
-    postBoxInPopup() ? '[aria-labelledby="modal-header"]' : '[role="main"] [role="progressbar"] ~ div'
+    postBoxInPopup() ? '[aria-labelledby="modal-header"]' : '[role="main"] :not(aside) > [role="progressbar"] ~ div'
 
 export const newPostEditorBelow: () => LiveSelector<E, true> = () =>
-    querySelector<E>('[role="main"] [role="progressbar"] ~ div')
+    querySelector<E>('[role="main"] :not(aside) > [role="progressbar"] ~ div')
 export const newPostEditorSelector = () => querySelector<HTMLDivElement>(`${postEditor()} .DraftEditor-root`)
 export const newPostEditorFocusAnchor = () => querySelector<E>(`${postEditor()} .public-DraftEditor-content`)
 
