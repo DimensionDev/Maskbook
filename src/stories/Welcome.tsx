@@ -48,7 +48,7 @@ storiesOf('Welcome', module)
     ))
     .add('Step 1a-1b', () => (
         <ResponsiveDialog open>
-            <Welcome1a1b useExistingAccounts={to('Welcome', 'Step 1a-1a')} />
+            <Welcome1a1b restoreBackup={to('Welcome', 'Step 1b-1')} useExistingAccounts={to('Welcome', 'Step 1a-1a')} />
         </ResponsiveDialog>
     ))
     .add('Step 1a-2', () => (

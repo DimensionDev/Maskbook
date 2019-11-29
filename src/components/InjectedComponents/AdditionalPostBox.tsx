@@ -168,8 +168,7 @@ export function AdditionalPostBox(props: AdditionalPostBoxProps) {
 
     const [showWelcome, setShowWelcome] = useState(false)
     useAsync(getActivatedUI().shouldDisplayWelcome, []).then(x => setShowWelcome(x))
-    // TODO: ??? should we do this without including `ui` ???
-    if (showWelcome) {
+    if (showWelcome || identities.length === 0) {
         return <NotSetupYetPrompt {...props.NotSetupYetPromptProps} />
     }
 

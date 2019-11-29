@@ -1,7 +1,4 @@
 {
-    "manifest_description": {
-        "message": "在臉書發佈加密訊息，只讓你的朋友閱讀。"
-    },
     "additional_post_box__placeholder_w_name": {
         "message": "Hey $1, 有何所思？用 Maskbook 加密分享。"
     },
@@ -168,26 +165,8 @@
     "welcome_0_close_button": {
         "message": "我想以後再做"
     },
-    "welcome_0_title": {
-        "message": "歡迎使用 Maskbook"
-    },
-    "welcome_0_description": {
-        "message": "從此無需擔心社交網路追蹤、分析、窺視你的數字生活"
-    },
-    "welcome_0_new_user": {
-        "message": "新用戶？"
-    },
-    "welcome_0_connect_maskbook": {
-        "message": "設置 Maskbook"
-    },
-    "welcome_0_old_user": {
-        "message": "老用戶？"
-    },
     "welcome_0_restore_key": {
         "message": "導入備份檔案"
-    },
-    "welcome_0_caption": {
-        "message": "弄丟了備份檔案？不用擔心，當作自己是新用戶即可。"
     },
     "welcome_1a1_title": {
         "message": "你希望為哪個賬戶設定 Maskbook？"
@@ -452,9 +431,6 @@
     },
     "options_mobile_export_generating": {
         "message": "正在生成 QR 碼…"
-    },
-    "options_mobile_export_title": {
-        "message": "請在行動端 Maskbook 中掃描此 QR 碼以完成設定"
     },
     "options_mobile_export_subtitle": {
         "message": "請不要保存或將此 QR 碼分享給他人！"

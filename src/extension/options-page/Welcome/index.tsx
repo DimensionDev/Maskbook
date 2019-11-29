@@ -101,7 +101,12 @@ function Welcome(props: Welcome) {
                 />
             )
         case WelcomeState.LinkNewSocialNetworks:
-            return <Welcome1a1b useExistingAccounts={() => onStepChange(WelcomeState.SelectIdentity)} />
+            return (
+                <Welcome1a1b
+                    restoreBackup={() => onStepChange(WelcomeState.RestoreKeypair)}
+                    useExistingAccounts={() => onStepChange(WelcomeState.SelectIdentity)}
+                />
+            )
         case WelcomeState.Intro:
             return (
                 <Welcome1a2

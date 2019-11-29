@@ -23,10 +23,10 @@ import { useCapturedInput } from '../../utils/hooks/useCapturedEvents'
 import { PersonIdentifier } from '../../database/type'
 
 interface Props extends withClasses<KeysInferFromUseStyles<typeof useStyles>> {
-    nextStep: { onClick(): void }
-    close: 'hidden' | { onClose(): void }
     title?: string
     description?: string
+    nextStep: 'hidden' | { onClick(): void }
+    close: 'hidden' | { onClose(): void }
     username:
         | 'hidden'
         | {
@@ -57,6 +57,7 @@ export function BannerUI(props: Props) {
 
     const { username } = props
 
+    //#region Input
     const [touched, isTouched] = React.useState(false)
     const usedValue = username === 'hidden' ? '' : touched ? username.value : username.defaultValue
     const isInvalid = username === 'hidden' ? false : touched ? !username.isValid(usedValue) : false
@@ -95,15 +96,17 @@ export function BannerUI(props: Props) {
                 variant="standard"
             />
         )
-    const GetStarted = (
-        <Button
-            disabled={username === 'hidden' ? false : !username.isValid(usedValue)}
-            onClick={props.nextStep.onClick}
-            variant="contained"
-            color="primary">
-            {geti18nString('banner_get_started')}
-        </Button>
-    )
+    //#endregion
+    const GetStarted =
+        props.nextStep === 'hidden' ? null : (
+            <Button
+                disabled={username === 'hidden' ? false : !username.isValid(usedValue)}
+                onClick={props.nextStep.onClick}
+                variant="contained"
+                color="primary">
+                {geti18nString('banner_get_started')}
+            </Button>
+        )
     const DismissButton =
         props.close !== 'hidden' ? (
             <Button onClick={props.close.onClose} color="primary">
@@ -125,48 +128,43 @@ export function BannerUI(props: Props) {
     )
 }
 
-type networkIdentifier = { networkIdentifier: SocialNetworkUI['networkIdentifier'] }
-export type BannerProps = Partial<Props> &
-    Partial<networkIdentifier> &
-    (networkIdentifier | Required<Pick<Props, 'nextStep'>>)
+export type BannerProps = Partial<Props>
 export function Banner(props: BannerProps) {
     const lastRecognizedIdentity = useLastRecognizedIdentity()
-    const closeDefault = useCallback(() => {
+    const defaultClose = useCallback(() => {
         getActivatedUI().ignoreSetupAccount(env, {})
     }, [])
+
+    const networkIdentifier = getActivatedUI()?.networkIdentifier
+
     const [value, onChange] = React.useState('')
-    const getStartDefault = useCallback(() => {
-        if (!props.networkIdentifier)
+    const defaultNextStep = useCallback(() => {
+        if (props.nextStep === 'hidden') return
+        if (!networkIdentifier)
             return (
                 props.nextStep?.onClick() ??
                 (() => console.warn('You must provide one of networkIdentifier or nextStep.onClick'))
             )
-        setStorage(props.networkIdentifier, { forceDisplayWelcome: false })
+        setStorage(networkIdentifier, { forceDisplayWelcome: false })
         const id = { ...lastRecognizedIdentity }
         id.identifier =
-            value === '' ? lastRecognizedIdentity.identifier : new PersonIdentifier(props.networkIdentifier, value)
+            value === '' ? lastRecognizedIdentity.identifier : new PersonIdentifier(networkIdentifier, value)
         Services.Welcome.openWelcomePage(id)
-    }, [lastRecognizedIdentity, props.networkIdentifier, props.nextStep, value])
-
+    }, [lastRecognizedIdentity, networkIdentifier, props.nextStep, value])
+    const defaultUserName = networkIdentifier
+        ? {
+              defaultValue: lastRecognizedIdentity.identifier.isUnknown ? '' : lastRecognizedIdentity.identifier.userId,
+              value,
+              onChange,
+              isValid: getActivatedUI().isValidUsername,
+          }
+        : ('hidden' as const)
     return (
         <BannerUI
             {...props}
-            username={
-                props.username ?? {
-                    defaultValue: lastRecognizedIdentity.identifier.isUnknown
-                        ? ''
-                        : lastRecognizedIdentity.identifier.userId,
-                    value,
-                    onChange,
-                    isValid: getActivatedUI().isValidUsername,
-                }
-            }
-            close={props.close ?? { onClose: closeDefault }}
-            nextStep={
-                props.nextStep ?? {
-                    onClick: getStartDefault,
-                }
-            }
+            username={props.username ?? defaultUserName}
+            close={props.close ?? { onClose: defaultClose }}
+            nextStep={props.nextStep ?? { onClick: defaultNextStep }}
         />
     )
 }
