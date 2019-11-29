@@ -402,6 +402,9 @@
     "automation_request_paste_into_bio_box": {
         "message": "請拷貝公鑰，然後發佈到個人簡介上。"
     },
+    "automation_pasted_into_bio_box": {
+        "message": "[Maskbook] 我們幫助您在簡介中填入了公鑰，請您審閱並發布它！"
+    },
     "automation_request_paste_into_post_box": {
         "message": "請拷貝公鑰，然後發佈到時間綫上。"
     },

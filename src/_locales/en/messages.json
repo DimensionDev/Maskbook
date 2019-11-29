@@ -401,6 +401,9 @@
     "automation_request_paste_into_bio_box": {
         "message": "Please copy your public key into the bio box and publish it."
     },
+    "automation_pasted_into_bio_box": {
+        "message": "[Maskbook] We have helped you append the public key to bio, confirm by publish it!"
+    },
     "automation_request_paste_into_post_box": {
         "message": "Please copy your public key and publish it to your timeline!"
     },

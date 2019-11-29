@@ -125,6 +125,8 @@ const taskPasteIntoBio = async (text: string) => {
     if (getValue().indexOf(text) === -1) {
         console.warn('Text pasting failed')
         prompt(geti18nString('automation_request_paste_into_bio_box'), text)
+    } else {
+        setTimeout(() => alert(geti18nString('automation_pasted_into_bio_box')))
     }
 }
 
