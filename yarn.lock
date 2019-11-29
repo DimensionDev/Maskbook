@@ -1168,7 +1168,7 @@
 
 "@holoflows/kit@https://github.com/DimensionDev/holoflows-kit":
   version "0.6.1"
-  resolved "https://github.com/DimensionDev/holoflows-kit#ec36478b7173d70d76681e3e2cddaa1c68eb332c"
+  resolved "https://github.com/DimensionDev/holoflows-kit#930254d9a9f3c8a7d5bb45c5fc81c0aee9fb3fa9"
   dependencies:
     async-call-rpc "^1.0.0"
     concurrent-lock "^1.0.7"
@@ -16654,6 +16654,7 @@ webpack-sources@^1.1.0, webpack-sources@^1.4.0, webpack-sources@^1.4.1:
   resolved "https://codeload.github.com/DimensionDev/webpack-web-ext-plugin/tar.gz/ef16c9fdf765c329d8cf397fd047a7a5772d8873"
   dependencies:
     inquirer "^7.0.0"
+    web-ext "^3.1.1"
 
 webpack@4.41.0, webpack@^4.33.0, webpack@^4.38.0:
   version "4.41.0"
