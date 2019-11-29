@@ -45,9 +45,6 @@
     "decrypted_postbox_add_recipients": {
         "message": "查看或添加收件人"
     },
-    "click_to_setup": {
-        "message": "點此開始配置"
-    },
     "decrypted_postbox_verified": {
         "message": "數字簽名驗證成功 ✔"
     },
@@ -376,13 +373,16 @@
         "message": "歡迎使用 Maskbook"
     },
     "banner_preparing_setup": {
-        "message": "Maskbook 正在準備向導過程……"
+        "message": "Maskbook 需要你的用戶名來設定你的賬號。"
     },
     "banner_get_started": {
-        "message": "開始使用"
+        "message": "繼續設定 Maskbook"
     },
-    "banner_dismiss_aria": {
-        "message": "關閉消息"
+    "banner_empty_username": {
+        "message": "如果自動探測用戶名沒有成功，請手動在此輸入"
+    },
+    "banner_invalid_username": {
+        "message": "這看起來不像正確的用戶名"
     },
     "service_invalid_backup_file": {
         "message": "這貌似不是 Maskbook 的備份。"

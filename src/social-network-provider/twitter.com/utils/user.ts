@@ -10,5 +10,6 @@ export const usernameValidator: SocialNetworkWorkerAndUI['isValidUsername'] = (n
             return false
         }
     }
+    if (name.length < 4) return false
     return true
 }

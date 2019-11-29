@@ -47,7 +47,7 @@ export function ExportData() {
     if (id.length === 0) {
         return (
             <main className={classes.root}>
-                <NotSetupYetPrompt />
+                <NotSetupYetPrompt username="hidden" close="hidden" />
             </main>
         )
     }

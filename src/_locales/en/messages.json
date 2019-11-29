@@ -44,9 +44,6 @@
     "decrypted_postbox_add_recipients": {
         "message": "View / add recipients"
     },
-    "click_to_setup": {
-        "message": "Click here to setup your Maskbook account!"
-    },
     "decrypted_postbox_verified": {
         "message": "Signature verified ✔"
     },
@@ -375,19 +372,22 @@
         "message": "Welcome to Maskbook"
     },
     "banner_preparing_setup": {
-        "message": "Maskbook is identifying how to setup your account..."
+        "message": "Maskbook needs your username to set up your account."
     },
     "banner_get_started": {
-        "message": "Get started"
+        "message": "Continue"
     },
-    "banner_dismiss_aria": {
-        "message": "Dismiss the banner"
+    "banner_empty_username": {
+        "message": "If not filled automatically, you may fill it."
+    },
+    "banner_invalid_username": {
+        "message": "This does not seem like a valid username."
     },
     "service_invalid_backup_file": {
-        "message": "This does not seems like Maskbook's backup."
+        "message": "This does not seems like a backup of Maskbook."
     },
     "service_others_key_not_found": {
-        "message": "$1's public key not found!"
+        "message": "Public key of $1 can not be found!"
     },
     "service_not_setup_yet": {
         "message": "You have not set up Maskbook yet!"

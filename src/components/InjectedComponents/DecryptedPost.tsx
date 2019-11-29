@@ -6,10 +6,10 @@ import { sleep } from '../../utils/utils'
 import { ServicesWithProgress } from '../../extension/service'
 import { geti18nString } from '../../utils/i18n'
 import { makeStyles } from '@material-ui/styles'
-import { Box, Link, useMediaQuery, useTheme, Theme } from '@material-ui/core'
+import { Box, Link, useMediaQuery, useTheme } from '@material-ui/core'
 import { Person } from '../../database'
 import { Identifier, PersonIdentifier } from '../../database/type'
-import { NotSetupYetPrompt, NotSetupYetPromptProps } from '../shared/NotSetupYetPrompt'
+import { NotSetupYetPrompt } from '../shared/NotSetupYetPrompt'
 import {
     DecryptionProgress,
     FailureDecryption,
@@ -22,6 +22,7 @@ import { GetContext } from '@holoflows/kit/es'
 import { deconstructPayload } from '../../utils/type-transform/Payload'
 import { DebugList } from '../DebugModeUI/DebugList'
 import { useStylesExtends } from '../custom-ui-helper'
+import { BannerProps } from '../Welcomes/Banner'
 
 export interface DecryptPostSuccessProps extends withClasses<KeysInferFromUseStyles<typeof useSuccessStyles>> {
     data: { signatureVerifyResult: boolean; content: string }
@@ -102,7 +103,7 @@ export const DecryptPostAwaiting = React.memo(function DecryptPostAwaiting(props
 export interface DecryptPostFailedProps {
     error: Error
     AdditionalContentProps?: Partial<AdditionalContentProps>
-    NotSetupYetPromptProps?: Partial<NotSetupYetPromptProps>
+    NotSetupYetPromptProps?: Partial<BannerProps>
 }
 export const DecryptPostFailed = React.memo(function DecryptPostFailed({ error, ...props }: DecryptPostFailedProps) {
     if (error && error.message === geti18nString('service_not_setup_yet')) {

@@ -8,7 +8,7 @@ import { geti18nString } from '../../utils/i18n'
 import { makeStyles } from '@material-ui/styles'
 import { Box, Button, Card, CardHeader, Divider, InputBase, Paper, Typography } from '@material-ui/core'
 import { Group, Person } from '../../database'
-import { NotSetupYetPrompt, NotSetupYetPromptProps } from '../shared/NotSetupYetPrompt'
+import { NotSetupYetPrompt } from '../shared/NotSetupYetPrompt'
 import { useCurrentIdentity, useFriendsList, useGroupsList, useMyIdentities } from '../DataSource/useActivatedUI'
 import { getActivatedUI } from '../../social-network/ui'
 import { ChooseIdentity, ChooseIdentityProps } from '../shared/ChooseIdentity'
@@ -16,6 +16,7 @@ import { useAsync } from '../../utils/components/AsyncComponent'
 import { useStylesExtends, or } from '../custom-ui-helper'
 import { steganographyModeSetting } from '../shared-settings/settings'
 import { useValueRef } from '../../utils/hooks/useValueRef'
+import { BannerProps } from '../Welcomes/Banner'
 
 interface Props {
     availableTarget: Array<Person | Group>
@@ -108,7 +109,7 @@ export interface AdditionalPostBoxProps extends Partial<AdditionalPostBoxUIProps
     identities?: Person[]
     onRequestPost?: (target: (Person | Group)[], text: string) => void
     onRequestReset?: () => void
-    NotSetupYetPromptProps?: Partial<NotSetupYetPromptProps>
+    NotSetupYetPromptProps?: Partial<BannerProps>
 }
 
 /**
