@@ -18,12 +18,6 @@ import { steganographyModeSetting } from '../shared-settings/settings'
 import { useValueRef } from '../../utils/hooks/useValueRef'
 import { BannerProps } from '../Welcomes/Banner'
 
-interface Props {
-    availableTarget: Array<Person | Group>
-
-    onRequestPost: (target: Array<Person | Group>, text: string) => void
-}
-
 const useStyles = makeStyles({
     header: { padding: '8px 12px 0' },
     inputArea: { borderRadius: 0, display: 'flex' },
