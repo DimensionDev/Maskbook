@@ -33,6 +33,9 @@
     "post_modal__button": {
         "message": "完成"
     },
+    "post_modal__dismiss_aria": {
+        "message": "關閉編輯框"
+    },
     "post_modal_hint__title": {
         "message": "找不到 Maskbook？"
     },
