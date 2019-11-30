@@ -20,8 +20,9 @@ export function injectWelcomeBannerFacebook() {
     const useStyle = makeStyles({ root: { borderColor: '#dddfe2' } })
     function Wrapped() {
         const classes = useStyle()
-        return <Banner classes={{ root: classes.root }} />
+        return <Banner classes={{ root: classes.root }} unmount={() => unmount()} />
     }
 
-    return renderInShadowRoot(<Wrapped />, to.firstDOMProxy.beforeShadow)
+    const unmount = renderInShadowRoot(<Wrapped />, to.firstDOMProxy.beforeShadow)
+    return unmount
 }

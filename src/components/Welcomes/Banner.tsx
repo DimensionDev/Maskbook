@@ -128,29 +128,31 @@ export function BannerUI(props: Props) {
     )
 }
 
-export type BannerProps = Partial<Props>
+export type BannerProps = Partial<Props> & { unmount?(): void }
 export function Banner(props: BannerProps) {
     const lastRecognizedIdentity = useLastRecognizedIdentity()
+    const { nextStep, unmount } = props
     const defaultClose = useCallback(() => {
         getActivatedUI().ignoreSetupAccount(env, {})
-    }, [])
+        unmount?.()
+    }, [unmount])
 
     const networkIdentifier = getActivatedUI()?.networkIdentifier
 
     const [value, onChange] = React.useState('')
     const defaultNextStep = useCallback(() => {
-        if (props.nextStep === 'hidden') return
-        if (!networkIdentifier)
-            return (
-                props.nextStep?.onClick() ??
-                (() => console.warn('You must provide one of networkIdentifier or nextStep.onClick'))
-            )
+        if (nextStep === 'hidden') return
+        if (!networkIdentifier) {
+            nextStep?.onClick()
+            nextStep ?? console.warn('You must provide one of networkIdentifier or nextStep.onClick')
+            return
+        }
         setStorage(networkIdentifier, { forceDisplayWelcome: false })
         const id = { ...lastRecognizedIdentity }
         id.identifier =
             value === '' ? lastRecognizedIdentity.identifier : new PersonIdentifier(networkIdentifier, value)
         Services.Welcome.openWelcomePage(id)
-    }, [lastRecognizedIdentity, networkIdentifier, props.nextStep, value])
+    }, [lastRecognizedIdentity, networkIdentifier, nextStep, value])
     const defaultUserName = networkIdentifier
         ? {
               defaultValue: lastRecognizedIdentity.identifier.isUnknown ? '' : lastRecognizedIdentity.identifier.userId,
