@@ -206,7 +206,7 @@ selectedIdRef.addListener(updateProveBio)
 
 const fillRefs = async () => {
     if (selectedIdRef.value.identifier.isUnknown) {
-        const all = await Services.People.queryMyIdentity()
+        const all = await Services.People.queryMyIdentities()
         ownedIdsRef.value = all
         if (all[0]) selectedIdRef.value = all[0]
     }
@@ -263,7 +263,7 @@ export default withRouter(function _WelcomePortal(props: RouteComponentProps) {
 
         if (id instanceof PersonIdentifier) {
             if (id.isUnknown) return
-            Services.People.queryMyIdentity(id)
+            Services.People.queryMyIdentities(id)
                 .then(([inDB = {} as Person]) => {
                     const person = (personInferFromURLRef.value = {
                         identifier: id,

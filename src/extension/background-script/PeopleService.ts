@@ -24,7 +24,6 @@ export { writePersonOnGun } from '../../network/gun/version.2/people'
 export {
     addPersonToFriendsGroup,
     createFriendsGroup,
-    createDefaultFriendsGroup,
     removePersonFromFriendsGroup,
     queryUserGroups,
 } from '../../database/helpers/group'
@@ -39,9 +38,9 @@ export async function queryPeople(network?: string): Promise<Person[]> {
 /**
  * Query my identity.
  */
-export async function queryMyIdentity(network?: string): Promise<Person[]>
-export async function queryMyIdentity(identifier: PersonIdentifier): Promise<Person[]>
-export async function queryMyIdentity(identifier?: PersonIdentifier | string): Promise<Person[]> {
+export async function queryMyIdentities(network?: string): Promise<Person[]>
+export async function queryMyIdentities(identifier: PersonIdentifier): Promise<Person[]>
+export async function queryMyIdentities(identifier?: PersonIdentifier | string): Promise<Person[]> {
     if (identifier === undefined) {
         const all = await getMyIdentitiesDB()
         return Promise.all(all.map(personRecordToPerson))
