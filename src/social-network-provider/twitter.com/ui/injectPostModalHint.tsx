@@ -3,7 +3,7 @@ import { MutationObserverWatcher } from '@holoflows/kit/es'
 import { postPopupInjectPointSelector, newPostEditorBelow, hasDraftEditor } from '../utils/selector'
 import { renderInShadowRoot } from '../../../utils/jss/renderInShadowRoot'
 import { PostModalHint } from '../../../components/InjectedComponents/PostModalHint'
-import { makeStyles } from '@material-ui/core'
+import { makeStyles, Theme } from '@material-ui/core'
 import { MessageCenter } from '../../../utils/messages'
 import { useCallback } from 'react'
 import { useTwtterComponent } from '../utils/theme'
@@ -23,20 +23,20 @@ export function injectPostModalHintAtTwitter() {
     renderInShadowRoot(<PostModalHintAtTwitter />, watcher.firstDOMProxy.afterShadow)
 }
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme: Theme) => ({
     root: {
         borderTopLeftRadius: 0,
         borderTopRightRadius: 0,
     },
     content: {
-        borderTop: '1px solid rgb(230, 236, 240)',
+        borderTop: `1px solid ${theme.palette.type === 'dark' ? theme.palette.grey[800] : theme.palette.grey[200]}`,
         padding: '16px 17px 16px 15px',
     },
     title: {
         fontSize: 15,
         fontWeight: 'bold',
     },
-})
+}))
 function PostModalHintAtTwitter() {
     const classes = {
         ...useStyles(),

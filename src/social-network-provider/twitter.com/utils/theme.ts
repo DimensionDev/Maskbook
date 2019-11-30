@@ -1,15 +1,20 @@
 import { makeStyles } from '@material-ui/styles'
+import { Theme } from '@material-ui/core'
 
-export const useTwtterComponent = makeStyles({
+export const useTwtterComponent = makeStyles((theme: Theme) => ({
     button: {
         fontWeight: 'bold',
         minHeight: 39,
         borderRadius: 9999,
         boxShadow: 'none',
-        backgroundColor: 'rgb(29, 161, 242)',
+        backgroundColor: theme.palette.primary.main,
         '&:hover': {
             boxShadow: 'none',
-            backgroundColor: 'rgb(26, 145, 218)',
+            backgroundColor: theme.palette.primary.dark,
+        },
+        '&[disabled]': {
+            boxShadow: 'none',
+            backgroundColor: theme.palette.primary.light,
         },
     },
-})
+}))
