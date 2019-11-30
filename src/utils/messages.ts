@@ -36,7 +36,6 @@ interface MaskbookMessages {
      * emit people changed in the database
      */
     peopleChanged: readonly PersonUpdateEvent[]
-    newGroup: Group
     joinGroup: {
         group: GroupIdentifier
         newMembers: PersonIdentifier[]

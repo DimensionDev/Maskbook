@@ -45,7 +45,7 @@ export const PeopleService: Partial<typeof import('./background-script/PeopleSer
         ]
         return demoPeople
     },
-    async queryMyIdentity() {
+    async queryMyIdentities() {
         return [
             {
                 fingerprint: 'FDFE333CE20ED446AD88F3C8BA3AD1AA5ECAF521',

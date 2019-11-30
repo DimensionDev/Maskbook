@@ -1,6 +1,6 @@
 import { bioCard, selfInfoSelectors, postsContentSelector, postsImageSelector } from '../utils/selector'
 import { MutationObserverWatcher } from '@holoflows/kit'
-import { GroupIdentifier, PersonIdentifier } from '../../../database/type'
+import { GroupIdentifier, PersonIdentifier, PreDefinedVirtualGroupNames } from '../../../database/type'
 import {
     getEmptyPostInfoByElement,
     SocialNetworkUI,
@@ -12,7 +12,6 @@ import { bioCardParser, postParser, postImageParser, postIdParser } from '../uti
 import { isNil } from 'lodash-es'
 import Services from '../../../extension/service'
 import { twitterUrl } from '../utils/url'
-import { PreDefinedTwitterGroupNames } from './group'
 import { untilElementAvailable } from '../../../utils/dom'
 
 const resolveLastRecognizedIdentity = (self: SocialNetworkUI) => {
@@ -47,17 +46,20 @@ const registerUserCollector = () => {
                 const { isFollower, isFollowing, identifier, bio } = bioCardParser(cardNode)
                 const [verified, myIdentities] = await Promise.all([
                     Services.Crypto.verifyOthersProve(bio, identifier),
-                    Services.People.queryMyIdentity(twitterUrl.hostIdentifier),
+                    Services.People.queryMyIdentities(twitterUrl.hostIdentifier),
                 ])
                 const myIdentity = myIdentities[0] || PersonIdentifier.unknown
-                const myFirends = GroupIdentifier.getDefaultFriendsGroupIdentifier(myIdentity.identifier)
+                const myFirends = GroupIdentifier.getFriendsGroupIdentifier(
+                    myIdentity.identifier,
+                    PreDefinedVirtualGroupNames.friends,
+                )
                 const myFollowers = GroupIdentifier.getFriendsGroupIdentifier(
                     myIdentity.identifier,
-                    PreDefinedTwitterGroupNames.followers,
+                    PreDefinedVirtualGroupNames.followers,
                 )
                 const myFollowing = GroupIdentifier.getFriendsGroupIdentifier(
                     myIdentity.identifier,
-                    PreDefinedTwitterGroupNames.following,
+                    PreDefinedVirtualGroupNames.following,
                 )
                 if (verified && (isFollower || isFollowing)) {
                     if (isFollower) {
