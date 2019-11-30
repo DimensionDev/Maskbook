@@ -5,14 +5,29 @@ import { mainSelector } from '../utils/selector'
 import { renderInShadowRoot } from '../../../utils/jss/renderInShadowRoot'
 import { PostModal } from '../../../components/InjectedComponents/PostModal'
 import { MessageCenter } from '../../../utils/messages'
-import { makeStyles } from '@material-ui/core'
+import { makeStyles, Theme } from '@material-ui/core'
 import { useTwtterComponent } from '../utils/theme'
 
-const useStyles = makeStyles({
-    MUIInputInput: {
-        border: '1px solid rgb(230, 236, 240)',
-        padding: '12px 8px',
-    },
+const useStyles = makeStyles((theme: Theme) => {
+    const borderColor = theme.palette.type === 'dark' ? theme.palette.grey[800] : theme.palette.grey[200]
+
+    return {
+        MUIInputInput: {
+            border: `1px solid ${borderColor}`,
+            borderRadius: 5,
+            padding: '12px 8px',
+        },
+        header: {
+            borderBottom: `1px solid ${borderColor}`,
+        },
+        root: {
+            borderRadius: 5,
+            border: theme.palette.type === 'dark' ? `1px solid ${borderColor}` : 'none',
+        },
+        close: {
+            color: theme.palette.primary.main,
+        },
+    }
 })
 
 export function injectPostModalAtTwitter() {

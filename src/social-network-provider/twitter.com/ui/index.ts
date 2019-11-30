@@ -11,7 +11,7 @@ import { InitGroupsValueRef } from '../../../social-network/defaults/GroupsValue
 import { twitterUrl } from '../utils/url'
 import React from 'react'
 import { createMuiTheme } from '@material-ui/core'
-import { MaskbookDarkTheme } from '../../../utils/theme'
+import { MaskbookDarkTheme, MaskbookLightTheme } from '../../../utils/theme'
 import { PreDefinedVirtualGroupNames } from '../../../database/type'
 
 export const instanceOfTwitterUI = defineSocialNetworkUI({
@@ -57,6 +57,24 @@ export const instanceOfTwitterUI = defineSocialNetworkUI({
         })
         return currentScheme
     },
+    lightTheme: createMuiTheme({
+        ...MaskbookLightTheme,
+        palette: {
+            ...MaskbookLightTheme.palette,
+            primary: {
+                ...MaskbookLightTheme.palette.primary,
+                get light() {
+                    return ''
+                },
+                get main() {
+                    return 'rgb(29, 161, 242)'
+                },
+                get dark() {
+                    return 'rgb(26, 145, 218)'
+                },
+            },
+        },
+    }),
     darkTheme: createMuiTheme({
         ...MaskbookDarkTheme,
         palette: {
@@ -75,6 +93,10 @@ function isDarkMode(): 'dark' | 'light' {
     const [r, g, b] = getBackgroundColor()
     if (r < 68 && g < 68 && b < 68) return 'dark'
     return 'light'
+}
+
+function getPrimaryColor() {
+    return ''
 }
 
 function getBackgroundColor(): [number, number, number] {

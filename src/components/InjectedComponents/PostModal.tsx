@@ -9,7 +9,9 @@ import {
     CardActions,
     Button,
     Typography,
+    IconButton,
 } from '@material-ui/core'
+import CloseIcon from '@material-ui/icons/Close'
 import { geti18nString } from '../../utils/i18n'
 import { useCapturedInput } from '../../utils/hooks/useCapturedEvents'
 import { useStylesExtends } from '../custom-ui-helper'
@@ -18,23 +20,28 @@ const useStyles = makeStyles(theme => ({
     MUIInputRoot: {
         minHeight: 108,
         flexDirection: 'column',
-        padding: 12,
+        padding: 10,
         boxSizing: 'border-box',
     },
     MUIInputInput: {
         minHeight: '8em',
-    },
-    root: {
-        outline: 'none',
-        width: 598,
-        backgroundColor: theme.palette.background.paper,
     },
     modal: {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
     },
-    title: {},
+    root: {
+        outline: 'none',
+        width: 598,
+        backgroundColor: theme.palette.background.paper,
+    },
+    header: {},
+    content: {},
+    close: {},
+    title: {
+        marginLeft: 6,
+    },
     button: {},
 }))
 
@@ -65,8 +72,22 @@ export const PostModalUI = React.memo(function PostModalUI(props: PostModalUIPro
                 onEscapeKeyDown={props.onCloseButtonClicked}
                 onBackdropClick={props.onCloseButtonClicked}>
                 <Card className={classes.root}>
-                    <CardHeader className={classes.title} title={geti18nString('post_modal__title')}></CardHeader>
-                    <CardContent>
+                    <CardHeader
+                        className={classes.header}
+                        title={
+                            <>
+                                <IconButton
+                                    aria-label={geti18nString('post_modal__dismiss_aria')}
+                                    onClick={props.onCloseButtonClicked}
+                                    classes={{ root: classes.close }}>
+                                    <CloseIcon />
+                                </IconButton>
+                                <Typography className={classes.title} display="inline" variant="h6">
+                                    {geti18nString('post_modal__title')}
+                                </Typography>
+                            </>
+                        }></CardHeader>
+                    <CardContent className={classes.content}>
                         <InputBase
                             classes={{
                                 root: classes.MUIInputRoot,
@@ -78,9 +99,7 @@ export const PostModalUI = React.memo(function PostModalUI(props: PostModalUIPro
                             multiline
                             placeholder={geti18nString('post_modal__placeholder')}
                         />
-                        <Typography className={classes.title}>
-                            {geti18nString('post_modal__select_recipients_title')}
-                        </Typography>
+                        <Typography>{geti18nString('post_modal__select_recipients_title')}</Typography>
                     </CardContent>
                     <CardActions>
                         <Button
