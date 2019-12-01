@@ -1,7 +1,7 @@
 import { makeStyles } from '@material-ui/styles'
 import { Theme } from '@material-ui/core'
 
-export const useTwtterComponent = makeStyles((theme: Theme) => ({
+export const useTwitterButton = makeStyles((theme: Theme) => ({
     button: {
         fontWeight: 'bold',
         minHeight: 39,
