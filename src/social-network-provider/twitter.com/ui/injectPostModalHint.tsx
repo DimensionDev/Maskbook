@@ -6,7 +6,7 @@ import { PostModalHint } from '../../../components/InjectedComponents/PostModalH
 import { makeStyles, Theme } from '@material-ui/core'
 import { MessageCenter } from '../../../utils/messages'
 import { useCallback } from 'react'
-import { useTwtterComponent } from '../utils/theme'
+import { useTwitterButton } from '../utils/theme'
 
 export function injectPostModalHintAtTwitter() {
     if (location.hostname.indexOf(twitterUrl.hostIdentifier) === -1) return
@@ -23,24 +23,27 @@ export function injectPostModalHintAtTwitter() {
     renderInShadowRoot(<PostModalHintAtTwitter />, watcher.firstDOMProxy.afterShadow)
 }
 
-const useStyles = makeStyles((theme: Theme) => ({
-    root: {
-        borderTopLeftRadius: 0,
-        borderTopRightRadius: 0,
-    },
-    content: {
-        borderTop: `1px solid ${theme.palette.type === 'dark' ? theme.palette.grey[800] : theme.palette.grey[200]}`,
-        padding: '16px 17px 16px 15px',
-    },
-    title: {
-        fontSize: 15,
-        fontWeight: 'bold',
-    },
-}))
+const useStyles = makeStyles((theme: Theme) => {
+    const { type, grey } = theme.palette
+    return {
+        root: {
+            borderTopLeftRadius: 0,
+            borderTopRightRadius: 0,
+        },
+        content: {
+            borderTop: `1px solid ${type === 'dark' ? grey[800] : grey[200]}`,
+            padding: '16px 17px 16px 15px',
+        },
+        title: {
+            fontSize: 15,
+            fontWeight: 'bold',
+        },
+    }
+})
 function PostModalHintAtTwitter() {
     const classes = {
         ...useStyles(),
-        button: useTwtterComponent().button,
+        ...useTwitterButton(),
     }
     const onHintButtonClicked = useCallback(() => {
         MessageCenter.emit('startCompose', undefined, true)

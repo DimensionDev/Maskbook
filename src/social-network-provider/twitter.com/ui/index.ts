@@ -9,16 +9,15 @@ import { twitterUIFetch } from './fetch'
 import { twitterUIInjections } from './inject'
 import { InitGroupsValueRef } from '../../../social-network/defaults/GroupsValueRef'
 import { twitterUrl } from '../utils/url'
-import React from 'react'
-import { createMuiTheme } from '@material-ui/core'
-import { MaskbookDarkTheme, MaskbookLightTheme } from '../../../utils/theme'
 import { PreDefinedVirtualGroupNames } from '../../../database/type'
+import { twitterUICustomUI } from './custom'
 
 export const instanceOfTwitterUI = defineSocialNetworkUI({
     ...sharedSettings,
     ...twitterUITasks,
     ...twitterUIInjections,
     ...twitterUIFetch,
+    ...twitterUICustomUI,
     init: (env, pref) => {
         sharedSettings.init(env, pref)
         InitFriendsValueRef(instanceOfTwitterUI, twitterUrl.hostIdentifier)
@@ -49,71 +48,4 @@ export const instanceOfTwitterUI = defineSocialNetworkUI({
         setStorage(twitterUrl.hostIdentifier, { userIgnoredWelcome: true, forceDisplayWelcome: false }).then()
     },
     shouldDisplayWelcome: shouldDisplayWelcomeDefault,
-    useColorScheme() {
-        const [currentScheme, setScheme] = React.useState<'light' | 'dark'>('light')
-        React.useLayoutEffect(() => {
-            const id = setInterval(() => setScheme(isDarkMode()), 2000)
-            return () => clearInterval(id)
-        })
-        return currentScheme
-    },
-    lightTheme: createMuiTheme({
-        ...MaskbookLightTheme,
-        palette: {
-            ...MaskbookLightTheme.palette,
-            primary: {
-                ...MaskbookLightTheme.palette.primary,
-                get light() {
-                    return ''
-                },
-                get main() {
-                    return 'rgb(29, 161, 242)'
-                },
-                get dark() {
-                    return 'rgb(26, 145, 218)'
-                },
-            },
-        },
-    }),
-    darkTheme: createMuiTheme({
-        ...MaskbookDarkTheme,
-        palette: {
-            ...MaskbookDarkTheme.palette,
-            background: {
-                ...MaskbookDarkTheme.palette.background,
-                get paper() {
-                    return `rgb(${getBackgroundColor().join(',')})`
-                },
-            },
-        },
-    }),
 })
-
-function isDarkMode(): 'dark' | 'light' {
-    const [r, g, b] = getBackgroundColor()
-    if (r < 68 && g < 68 && b < 68) return 'dark'
-    return 'light'
-}
-
-function getPrimaryColor() {
-    return ''
-}
-
-function getBackgroundColor(): [number, number, number] {
-    if (typeof document !== 'object') return [255, 255, 255]
-    const background = String(
-        // @ts-ignore CSSOM
-        document.body?.computedStyleMap?.()?.get?.('background-color') ??
-            // Old CSSOM
-            document?.body?.style?.backgroundColor,
-    )
-    const match = background.match(/rgb\((\d+?), +(\d+?), +(\d+?)\)/)
-    if (match) {
-        const [_, r, g, b] = match
-        const nr = parseInt(r)
-        const ng = parseInt(g)
-        const nb = parseInt(b)
-        return [nr, ng, nb]
-    }
-    return [255, 255, 255]
-}

@@ -230,9 +230,7 @@ export type PostInfo = {
 }
 //#endregion
 //#region SocialNetworkUICustomUI
-interface SocialNetworkUICustomUI {
-    darkTheme?: Theme
-    lightTheme?: Theme
+export interface SocialNetworkUICustomUI {
     /**
      * This is a React hook.
      *
@@ -240,7 +238,7 @@ interface SocialNetworkUICustomUI {
      *
      * // Note: useMediaQuery('(prefers-color-scheme: dark)')
      */
-    useColorScheme?(): 'dark' | 'light'
+    useTheme?(): Theme
 }
 //#endregion
 
@@ -266,9 +264,7 @@ let activatedSocialNetworkUI = ({
     lastRecognizedIdentity: new ValueRef({ identifier: ProfileIdentifier.unknown }),
     currentIdentity: new ValueRef(null),
     myIdentitiesRef: new ValueRef([] as Profile[]),
-    useColorScheme: () => 'light',
-    lightTheme: MaskbookLightTheme,
-    darkTheme: MaskbookDarkTheme,
+    useTheme: () => MaskbookLightTheme,
 } as Partial<SocialNetworkUI>) as SocialNetworkUI
 export function activateSocialNetworkUI() {
     for (const ui of definedSocialNetworkUIs)
