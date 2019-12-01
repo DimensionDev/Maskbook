@@ -31,6 +31,7 @@ const useStyles = makeStyles(theme => ({
         alignItems: 'center',
         justifyContent: 'center',
     },
+    backdrop: {},
     root: {
         outline: 'none',
         width: 598,
@@ -69,6 +70,9 @@ export const PostModalUI = React.memo(function PostModalUI(props: PostModalUIPro
                 disableAutoFocus
                 disableEnforceFocus
                 container={() => rootRef.current}
+                BackdropProps={{
+                    className: classes.backdrop,
+                }}
                 onEscapeKeyDown={props.onCloseButtonClicked}
                 onBackdropClick={props.onCloseButtonClicked}>
                 <Card className={classes.root}>
