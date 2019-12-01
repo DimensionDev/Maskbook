@@ -37,12 +37,12 @@ export class RenderInShadowRootWrapper extends React.PureComponent {
         this.setState({ error })
     }
 }
+
 function Maskbook(props: React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement>) {
-    const ui = getActivatedUI()
-    const isDarkTheme = ui.useColorScheme() === 'dark'
+    const theme = getActivatedUI().useTheme()
     return (
         <StylesProvider jss={jss} generateClassName={generateClassName}>
-            <ThemeProvider theme={isDarkTheme ? ui.darkTheme : ui.lightTheme}>
+            <ThemeProvider theme={theme}>
                 <React.StrictMode>
                     <div {...props} />
                 </React.StrictMode>
