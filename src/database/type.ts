@@ -78,7 +78,7 @@ export class PersonIdentifier extends Identifier {
 }
 
 export enum PreDefinedVirtualGroupNames {
-    friends = 'database_group_friends_default_name',
+    friends = '_default_friends_group_',
     followers = 'database_group_followers_name',
     following = 'database_group_following_name',
 }
