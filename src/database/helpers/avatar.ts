@@ -55,7 +55,7 @@ export async function storeAvatar(
     } finally {
         getAvatarDataURL.cache.delete(identifier.toText())
         if (identifier instanceof ProfileIdentifier) {
-            MessageCenter.emit('peopleChanged', [{ of: await queryProfile(identifier), reason: 'update' as const }])
+            MessageCenter.emit('profilesChanged', [{ of: await queryProfile(identifier), reason: 'update' }])
         }
     }
 }
