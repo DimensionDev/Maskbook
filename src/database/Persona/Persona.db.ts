@@ -66,7 +66,7 @@ export async function queryPersonaByProfileDB(
     t = t || (await db()).transaction(['profiles', 'personas'])
     const x = await t.objectStore('profiles').get(query.toText())
     if (!x?.linkedPersona) return null
-    return queryPersonaDB(x.linkedPersona, t as any)
+    return queryPersonaDB(restorePrototype(x.linkedPersona, ECKeyIdentifier.prototype), t as any)
 }
 
 /**

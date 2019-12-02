@@ -21,6 +21,7 @@ import {
 import { IdentifierMap } from '../IdentifierMap'
 import { getAvatarDataURL } from '../helpers/avatar'
 import { JsonWebKeyToCryptoKey } from '../../utils/type-transform/CryptoKey-JsonWebKey'
+import { MessageCenter, UpdateEvent } from '../../utils/messages'
 
 export async function profileRecordToProfile(record: ProfileRecord): Promise<Profile> {
     const rec = { ...record }
@@ -114,8 +115,18 @@ export async function updateOrCreateProfile(rec: Pick<Profile, 'identifier'> & P
         updatedAt: new Date(),
         ...rec,
     }
-    if (r) await updateProfileDB({ ...r, ...rec, updatedAt: new Date() }, t)
-    else await createProfileDB(e, t)
+    let profile: ProfileRecord
+    let reason: UpdateEvent<any>['reason']
+    if (r) {
+        profile = { ...r, ...rec, updatedAt: new Date() }
+        reason = 'update'
+        await updateProfileDB(profile, t)
+    } else {
+        profile = e
+        reason = 'new'
+        await createProfileDB(profile, t)
+    }
+    profileRecordToProfile(profile).then(x => MessageCenter.emit('profilesChanged', [{ reason, of: x }]))
 }
 
 export async function queryPersonaByProfile(i: ProfileIdentifier) {

@@ -1,11 +1,11 @@
 import { MessageCenter as MC } from '@holoflows/kit/es'
-import { Group, Profile } from '../database'
+import { Profile } from '../database'
 import Serialization from './type-transform/Serialization'
 import { ProfileIdentifier, GroupIdentifier } from '../database/type'
 
-export interface PersonUpdateEvent {
+export interface UpdateEvent<Data> {
     readonly reason: 'update' | 'delete' | 'new'
-    readonly of: Profile
+    readonly of: Data
 }
 interface MaskbookMessages {
     /**
@@ -17,8 +17,6 @@ interface MaskbookMessages {
      * value is instanceKey
      */
     settingsCreated: string
-    newPerson: Profile
-    generateKeyPair: undefined
     /**
      * emit when the settings updated.
      * value is instanceKey
@@ -35,7 +33,7 @@ interface MaskbookMessages {
     /**
      * emit people changed in the database
      */
-    peopleChanged: readonly PersonUpdateEvent[]
+    profilesChanged: readonly UpdateEvent<Profile>[]
     joinGroup: {
         group: GroupIdentifier
         newMembers: ProfileIdentifier[]
