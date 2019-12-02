@@ -3,6 +3,8 @@ import { SocialNetworkUI } from '../ui'
 import { ValueRef } from '@holoflows/kit/es'
 import { Group } from '../../database'
 import { GroupIdentifier, PreDefinedVirtualGroupNames, ProfileIdentifier } from '../../database/type'
+import { createDataWithIdentifierChangedListener } from './createDataWithIdentifierChangedListener'
+import { MessageCenter } from '../../utils/messages'
 
 // TODO:
 // groupIDs can be a part of network definitions
@@ -15,7 +17,11 @@ export function InitGroupsValueRef(
 }
 
 async function query(network: string, ref: ValueRef<Group[]>) {
-    ref.value = await Services.UserGroup.queryUserGroups(network)
+    Services.UserGroup.queryUserGroups(network).then(p => (ref.value = p))
+    MessageCenter.on(
+        'groupsChanged',
+        createDataWithIdentifierChangedListener(ref, x => x.of.identifier.network === network),
+    )
 }
 
 async function create(network: string, ref: ValueRef<Group[]>, groupIDs: string[]) {
