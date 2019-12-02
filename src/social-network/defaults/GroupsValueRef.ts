@@ -3,6 +3,7 @@ import { SocialNetworkUI } from '../ui'
 import { ValueRef } from '@holoflows/kit/es'
 import { Group } from '../../database'
 import { GroupIdentifier, PreDefinedVirtualGroupNames, PersonIdentifier } from '../../database/type'
+import { access } from 'fs'
 
 // TODO:
 // groupIDs can be a part of network definitions
@@ -24,19 +25,11 @@ async function create(network: string, ref: ValueRef<Group[]>, groupIDs: string[
         Services.People.queryMyIdentities(network),
         Services.People.queryUserGroups(network),
     ])
-    const pairs = identities.reduce<Pair[]>(
-        (acc, identity) => [
-            ...acc,
-            ...groupIDs.map(
-                groupID =>
-                    [
-                        identity.identifier,
-                        GroupIdentifier.getFriendsGroupIdentifier(identity.identifier, groupID),
-                    ] as Pair,
-            ),
-        ],
-        [],
-    )
+    const pairs = identities.flatMap(({ identifier }) => {
+        return groupIDs.map(
+            groupID => [identifier, GroupIdentifier.getFriendsGroupIdentifier(identifier, groupID)] as Pair,
+        )
+    })
 
     await Promise.all(
         pairs.map(async ([userIdentifier, groupIdentifier]) => {
