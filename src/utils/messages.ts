@@ -1,5 +1,5 @@
 import { MessageCenter as MC } from '@holoflows/kit/es'
-import { Profile } from '../database'
+import { Profile, Group } from '../database'
 import Serialization from './type-transform/Serialization'
 import { ProfileIdentifier, GroupIdentifier } from '../database/type'
 
@@ -34,6 +34,7 @@ interface MaskbookMessages {
      * emit people changed in the database
      */
     profilesChanged: readonly UpdateEvent<Profile>[]
+    groupsChanged: readonly UpdateEvent<Group>[]
     joinGroup: {
         group: GroupIdentifier
         newMembers: ProfileIdentifier[]
