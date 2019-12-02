@@ -105,6 +105,15 @@
     "finish": {
         "message": "Finish"
     },
+    "start": {
+        "message": "Start"
+    },
+    "verify": {
+        "message": "Verify"
+    },
+    "skip": {
+        "message": "Skip"
+    },
     "undo": {
         "message": "Undo"
     },
@@ -161,6 +170,9 @@
     },
     "dashboard_item_copy_failed": {
         "message": "Copy failed."
+    },
+    "dashboard_verification_failed": {
+        "message": "Verification failed! Your bio doesn't contain \"$1\""
     },
     "welcome_0_close_button": {
         "message": "I'll do it later"

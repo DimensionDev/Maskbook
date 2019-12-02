@@ -105,6 +105,15 @@
     "finish": {
         "message": "完成"
     },
+    "start": {
+        "message": "開始"
+    },
+    "verify": {
+        "message": "校驗"
+    },
+    "skip": {
+        "message": "跳過"
+    },
     "undo": {
         "message": "撤消"
     },
@@ -161,6 +170,9 @@
     },
     "dashboard_item_copy_failed": {
         "message": "複製失敗。"
+    },
+    "dashboard_verification_failed": {
+        "message": "驗證失敗！ 您的個人頁面不含 \"$1\""
     },
     "welcome_0_close_button": {
         "message": "我想以後再做"

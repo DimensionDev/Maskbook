@@ -89,12 +89,13 @@ storiesOf('Welcome', module)
                 provePost={text('Prove', '🔒ApfdMwLoV/URKn7grgcNWdMR2iWMGdHpQBk5LVGFxhul🔒')}
                 requestAutoVerify={action('Auto')}
                 requestManualVerify={action('Manual')}
+                requestVerifyBio={async () => void null}
             />
         </ResponsiveDialog>
     ))
     .add('Step 1b-1', () => (
         <ResponsiveDialog open>
-            <Welcome1b1 restore={action('Restore with')} />
+            <Welcome1b1 restore={async () => void action('Restore with')} finish={() => {}} verify={async () => {}} />
         </ResponsiveDialog>
     ))
     .add('QRCode Scanner', () => (

@@ -19,6 +19,7 @@ import {
     ListItemAvatar,
     Avatar,
     ListItemText,
+    CircularProgress,
 } from '@material-ui/core'
 import { styled } from '@material-ui/styles'
 import FolderOpen from '@material-ui/icons/FolderOpen'
@@ -56,7 +57,9 @@ const RestoreBox = styled('div')(({ theme }: { theme: Theme }) => ({
 interface Props {
     // ? We cannot send out File | string. Because Firefox will reject the permission request
     // ? because read the file is a async procedure.
-    restore(json: BackupJSONFileLatest): void
+    restore(json: BackupJSONFileLatest): Promise<void>
+    finish(): void
+    verify(): Promise<void>
 }
 const videoHeight = 360
 const useStyles = makeStyles((theme: Theme) => ({
@@ -98,7 +101,7 @@ const useStyles = makeStyles((theme: Theme) => ({
         height: 200,
     },
 }))
-export default function Welcome({ restore: originalRestore }: Props) {
+export default function Welcome({ restore: originalRestore, verify, finish }: Props) {
     const classes = useStyles()
     const ref = React.useRef<HTMLInputElement>(null)
     const textAreaRef = React.useRef<HTMLTextAreaElement>(null)
@@ -122,6 +125,8 @@ export default function Welcome({ restore: originalRestore }: Props) {
 
     const [tab, setTab] = React.useState(0)
     const [qrError, setError] = React.useState<boolean>(false)
+    const [loading, setLoading] = React.useState<boolean>(false)
+    const [restored, setRestored] = React.useState<boolean>(false)
 
     const [json, setJson] = React.useState<null | BackupJSONFileVersion1>(null)
     const clearJson = () => {
@@ -186,10 +191,24 @@ export default function Welcome({ restore: originalRestore }: Props) {
                             </List>
                         </CardContent>
                         <DialogActions>
-                            <Button onClick={clearJson} color="default" variant="text">
-                                {geti18nString('cancel')}
+                            <Button
+                                onClick={restored ? finish : clearJson}
+                                color={restored ? 'secondary' : 'default'}
+                                variant="text">
+                                {restored ? geti18nString('skip') : geti18nString('cancel')}
                             </Button>
-                            <Button onClick={() => originalRestore(json)} color="primary" variant="contained">
+                            <Button
+                                disabled={loading}
+                                startIcon={loading && <CircularProgress size={24} />}
+                                onClick={() => {
+                                    setLoading(true)
+                                    originalRestore(json)
+                                        .then(() => setRestored(true))
+                                        .then(verify)
+                                        .then(() => setLoading(false))
+                                }}
+                                color="primary"
+                                variant="contained">
                                 {geti18nString('welcome_1b_confirm')}
                             </Button>
                         </DialogActions>

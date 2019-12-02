@@ -170,20 +170,40 @@ function Welcome(props: Welcome) {
                     requestAutoVerify={type => {
                         copyToClipboard(provePost)
                         if (type === 'bio') sideEffects.autoVerifyBio(whoAmI.identifier, provePost)
-                        else if (type === 'post') sideEffects.autoVerifyPost(whoAmI.identifier, provePost)
-                        onFinish('done')
+                        else if (type === 'post') {
+                            sideEffects.autoVerifyPost(whoAmI.identifier, provePost)
+                            onFinish('done')
+                        }
+                    }}
+                    requestVerifyBio={async () => {
+                        const network = whoAmI.identifier
+                        const profile = await getCurrentNetworkWorker(network).fetchProfile(network)
+                        if (profile.bioContent.includes(provePost)) onFinish('done')
+                        else alert(geti18nString('dashboard_verification_failed', provePost))
                     }}
                 />
             )
         case WelcomeState.RestoreKeypair:
             return (
                 <Welcome1b1
+                    finish={() => onFinish('done')}
                     restore={json => {
-                        sideEffects.restoreFromFile(json, props.whoAmI.identifier).then(
-                            () => onFinish('done'),
+                        return sideEffects.restoreFromFile(json, props.whoAmI.identifier).then(
+                            () => {},
                             // TODO: use a better UI
                             error => alert(error),
                         )
+                    }}
+                    verify={async () => {
+                        const network = whoAmI.identifier
+                        let profile
+                        try {
+                            profile = await getCurrentNetworkWorker(network).fetchProfile(network)
+                        } catch {
+                            return onFinish('done')
+                        }
+                        if (profile.bioContent.includes(provePost)) onFinish('done')
+                        else alert(geti18nString('dashboard_verification_failed', provePost))
                     }}
                 />
             )
