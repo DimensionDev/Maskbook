@@ -139,7 +139,6 @@ async function getSteganographyContent(node: DOMProxy) {
                         const image = new Uint8Array(await downloadUrl(url))
                         const { width, height } = getDimension(image)
                         if (width !== 1024 || height !== 1240) {
-                            console.warn(`image with link ${url} is not steganographic payload`)
                             return ''
                         }
                         const content = await Services.Steganography.decodeImage(image, {
