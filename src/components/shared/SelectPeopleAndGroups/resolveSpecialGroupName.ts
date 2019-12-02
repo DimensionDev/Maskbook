@@ -1,4 +1,4 @@
-import { GroupIdentifier, PreDefinedVirtualGroupNames } from '../../../database/type'
+import { PreDefinedVirtualGroupNames, GroupIdentifier } from '../../../database/type'
 import { Group, Person } from '../../../database'
 import { useFriendsList, useMyIdentities } from '../../DataSource/useActivatedUI'
 import { geti18nString, I18NStrings } from '../../../utils/i18n'
