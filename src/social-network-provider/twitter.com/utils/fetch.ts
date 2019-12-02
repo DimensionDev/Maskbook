@@ -5,7 +5,6 @@ import { nthChild } from '../../../utils/dom'
 import { PersonIdentifier } from '../../../database/type'
 import { twitterUrl } from './url'
 import Services from '../../../extension/service'
-import { getDimension } from '../../../utils/image'
 
 /**
  * @example
@@ -149,10 +148,6 @@ export const postImageParser = async (node: HTMLElement) => {
                 imgUrls
                     .map(async url => {
                         const image = new Uint8Array(await downloadUrl(url))
-                        const { width, height } = getDimension(image)
-                        if (width !== 1024 || height !== 1240) {
-                            return ''
-                        }
                         const content = await Services.Steganography.decodeImage(image, {
                             pass: posterIdentity.toText(),
                         })

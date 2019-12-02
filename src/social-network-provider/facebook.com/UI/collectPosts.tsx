@@ -5,7 +5,6 @@ import { isMobileFacebook } from '../isMobile'
 import { getPersonIdentifierAtFacebook } from '../getPersonIdentifierAtFacebook'
 import { downloadUrl } from '../../../utils/utils'
 import Services from '../../../extension/service'
-import { getDimension } from '../../../utils/image'
 
 const posts = new LiveSelector().querySelectorAll<HTMLDivElement>(
     isMobileFacebook ? '.story_body_container ' : '.userContent, .userContent+*+div>div>div>div>div',
@@ -137,10 +136,6 @@ async function getSteganographyContent(node: DOMProxy) {
                 .map(async url => {
                     try {
                         const image = new Uint8Array(await downloadUrl(url))
-                        const { width, height } = getDimension(image)
-                        if (width !== 1024 || height !== 1240) {
-                            return ''
-                        }
                         const content = await Services.Steganography.decodeImage(image, {
                             pass,
                         })
