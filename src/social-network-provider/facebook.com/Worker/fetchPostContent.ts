@@ -35,10 +35,11 @@ export async function fetchPostContentFacebook(post: PostIdentifier<PersonIdenti
                 }
             } catch (e) {
                 console.warn(e)
-                memoizeFetch.cache.delete(url)
+                memoizeFetch.cache?.delete(url)
             }
         }
     }
+
     // Path 2: fetch by tab task
     return tasks(getPostUrlAtFacebook(post, 'open')).getPostContent()
 }

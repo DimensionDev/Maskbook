@@ -34,14 +34,9 @@ export async function fetchProfileFacebook(who: PersonIdentifier): Promise<Profi
                 return { bioContent: bio }
             } catch (e) {
                 console.warn(e)
-                memoizeFetch.cache.delete(url)
+                memoizeFetch.cache?.delete(url)
             }
         }
-    } else {
-        // Open a new tab in the background
-        tasks(getProfilePageUrlAtFacebook(who, 'open'), {
-            runAtTabID: activeTabID,
-        }).getProfile(who)
     }
 
     // Path 2: fetch by tab task
