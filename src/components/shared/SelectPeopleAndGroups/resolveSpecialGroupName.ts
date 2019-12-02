@@ -1,4 +1,4 @@
-import { GroupIdentifier } from '../../../database/type'
+import { GroupIdentifier, PreDefinedVirtualGroupNames } from '../../../database/type'
 import { Group, Person } from '../../../database'
 import { useFriendsList, useMyIdentities } from '../../DataSource/useActivatedUI'
 import { geti18nString, I18NStrings } from '../../../utils/i18n'
@@ -8,6 +8,9 @@ function resolveSpecialGroupName(group: Group, knownPeople: Person[]): string {
 
     for (const person of knownPeople.filter(x => x.identifier.equals(group.identifier.ownerIdentifier))) {
         owner = person.nickname || owner
+    }
+    if (group.groupName === PreDefinedVirtualGroupNames.friends) {
+        return geti18nString('database_group_friends_default_name', owner)
     }
     return geti18nString(group.groupName as keyof I18NStrings, owner)
 }
