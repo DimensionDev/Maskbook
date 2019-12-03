@@ -5,6 +5,7 @@ import { sharedProvider } from './shared-provider'
 import { injectPostBoxFacebook } from './UI/injectPostBox'
 import { collectPeopleFacebook } from './UI/collectPeople'
 import { pasteIntoPostBoxFacebook } from './tasks/pasteIntoPostBox'
+import { uploadToPostBoxFacebook } from './tasks/uploadToPostBox'
 import { getPostContentFacebook } from './tasks/getPostContent'
 import { resolveLastRecognizedIdentityFacebook } from './UI/resolveLastRecognizedIdentity'
 import { getProfileFacebook } from './tasks/getProfile'
@@ -20,15 +21,19 @@ import { isMobileFacebook } from './isMobile'
 import { geti18nString } from '../../utils/i18n'
 import { injectCommentBoxDefaultFactory } from '../../social-network/defaults/injectCommentBox'
 import { injectOptionsPageLinkAtFacebook } from './UI/injectOptionsPageLink'
+import { InitGroupsValueRef } from '../../social-network/defaults/GroupsValueRef'
+import { injectKnownIdentityAtFacebook } from './UI/injectKnownIdentity'
 
 export const facebookUISelf = defineSocialNetworkUI({
     ...sharedProvider,
     init(env, pref) {
         sharedProvider.init(env, pref)
         InitFriendsValueRef(facebookUISelf, 'facebook.com')
+        InitGroupsValueRef(facebookUISelf, 'facebook.com')
         InitMyIdentitiesValueRef(facebookUISelf, 'facebook.com')
     },
-    shouldActivate() {
+    // ssr complains 'ReferenceError: window is not defined'
+    shouldActivate(location: Location | URL = globalThis.location) {
         return location.hostname.endsWith('facebook.com')
     },
     friendlyName: 'Facebook',
@@ -51,15 +56,17 @@ export const facebookUISelf = defineSocialNetworkUI({
     injectWelcomeBanner: injectWelcomeBannerFacebook,
     injectPostComments: injectPostCommentsDefault(),
     injectOptionsPageLink: injectOptionsPageLinkAtFacebook,
+    injectKnownIdentity: injectKnownIdentityAtFacebook,
     injectCommentBox: injectCommentBoxDefaultFactory(async function onPasteToCommentBoxFacebook(
         encryptedComment,
         current,
+        realCurrent,
     ) {
         const fail = () => {
             prompt(geti18nString('comment_box__paste_failed'), encryptedComment)
         }
         if (isMobileFacebook) {
-            const root = current.commentBoxSelector!.evaluate()
+            const root = realCurrent || current.commentBoxSelector!.evaluate()[0]
             if (!root) return fail()
             const textarea = root.querySelector('textarea')
             if (!textarea) return fail()
@@ -69,7 +76,7 @@ export const facebookUISelf = defineSocialNetworkUI({
             await sleep(200)
             if (!root.innerText.includes(encryptedComment)) return fail()
         } else {
-            const root = current.rootNode
+            const root = realCurrent || current.rootNode
             if (!root) return fail()
             const input = root.querySelector('[contenteditable]')
             if (!input) return fail()
@@ -82,8 +89,9 @@ export const facebookUISelf = defineSocialNetworkUI({
     injectPostInspector: injectPostInspectorFacebook,
     collectPeople: collectPeopleFacebook,
     collectPosts: collectPostsFacebook,
-    taskPasteIntoPostBox: pasteIntoPostBoxFacebook,
     taskPasteIntoBio: pasteIntoBioFacebook,
+    taskPasteIntoPostBox: pasteIntoPostBoxFacebook,
+    taskUploadToPostBox: uploadToPostBoxFacebook,
     taskGetPostContent: getPostContentFacebook,
     taskGetProfile: getProfileFacebook,
 })

@@ -1,20 +1,21 @@
 import { geti18nString } from '../i18n'
 import { SocialNetworkWorkerAndUI } from '../../social-network/shared'
-import { defaults, isNil } from 'lodash-es'
+import { isNil } from 'lodash-es'
 import { definedSocialNetworkWorkers } from '../../social-network/worker'
 import { getActivatedUI } from '../../social-network/ui'
 import { GetContext } from '@holoflows/kit/es'
 
 export type Payload = PayloadAlpha40_Or_Alpha39 | PayloadAlpha38
+export type PayloadLatest = PayloadAlpha38
 
-interface PayloadAlpha40_Or_Alpha39 {
+export interface PayloadAlpha40_Or_Alpha39 {
     version: -40 | -39
     ownersAESKeyEncrypted: string
     iv: string
     encryptedText: string
     signature?: string
 }
-interface PayloadAlpha38 {
+export interface PayloadAlpha38 {
     version: -38
     AESKeyEncrypted: string
     iv: string
@@ -85,17 +86,9 @@ const versions = new Set([deconstructAlpha40_Or_Alpha39_Or_Alpha38, deconstructA
 type Decoder = SocialNetworkWorkerAndUI['payloadDecoder'] | null
 type Encoder = SocialNetworkWorkerAndUI['payloadEncoder']
 
-export function deconstructPayload(str: string, decoder: Decoder, opts?: { throws: false }): Payload | null
-export function deconstructPayload(str: string, decoder: Decoder, opts?: { throws: true }): Payload
-export function deconstructPayload(
-    str: string,
-    decoder: Decoder,
-    opts: { throws?: boolean } = { throws: false },
-): Payload | null {
-    defaults(opts, {
-        throws: false,
-    })
-
+export function deconstructPayload(str: string, decoder: Decoder, throws?: false): Payload | null
+export function deconstructPayload(str: string, decoder: Decoder, throws?: true): Payload
+export function deconstructPayload(str: string, decoder: Decoder, throws: boolean = false): Payload | null {
     const decoders = (() => {
         if (isNil(decoder)) {
             if (GetContext() === 'content') return [getActivatedUI().payloadDecoder]
@@ -114,18 +107,10 @@ export function deconstructPayload(
         }
     }
     if (str.includes('🎼') && str.includes(':||'))
-        if (opts.throws) throw new TypeError(geti18nString('service_unknown_payload'))
+        if (throws) throw new TypeError(geti18nString('service_unknown_payload'))
         else return null
-    if (opts.throws) throw new TypeError(geti18nString('payload_not_found'))
+    if (throws) throw new TypeError(geti18nString('payload_not_found'))
     else return null
-}
-
-export function constructAlpha40(data: PayloadAlpha40_Or_Alpha39, encoder: Encoder) {
-    return encoder(`🎼2/4|${data.ownersAESKeyEncrypted}|${data.iv}|${data.encryptedText}|${data.signature}:||`)
-}
-
-export function constructAlpha39(data: PayloadAlpha40_Or_Alpha39, encoder: Encoder) {
-    return encoder(`🎼3/4|${data.ownersAESKeyEncrypted}|${data.iv}|${data.encryptedText}|${data.signature}:||`)
 }
 
 export function constructAlpha38(data: PayloadAlpha38, encoder: Encoder) {
@@ -134,4 +119,14 @@ export function constructAlpha38(data: PayloadAlpha38, encoder: Encoder) {
             data.sharedPublic ? '|t' : ''
         }:||`,
     )
+}
+
+/**
+ * The string part is in the front of the payload.
+ * The number part is used in the database.
+ */
+export enum Versions {
+    '2/4' = -40,
+    '3/4' = -39,
+    '4/4' = -38,
 }

@@ -4,7 +4,11 @@ import { text, boolean, select } from '@storybook/addon-knobs'
 import { action } from '@storybook/addon-actions'
 import { AdditionalPostBox } from '../components/InjectedComponents/AdditionalPostBox'
 import { AdditionalContent } from '../components/InjectedComponents/AdditionalPostContent'
-import { DecryptPostUI } from '../components/InjectedComponents/DecryptedPost'
+import {
+    DecryptPostSuccess,
+    DecryptPostAwaiting,
+    DecryptPostFailed,
+} from '../components/InjectedComponents/DecryptedPost'
 import { AddToKeyStoreUI } from '../components/InjectedComponents/AddToKeyStore'
 import { useShareMenu } from '../components/InjectedComponents/SelectPeopleDialog'
 import { sleep } from '../utils/utils'
@@ -17,7 +21,13 @@ import { DecryptionProgress } from '../extension/background-script/CryptoService
 import { PersonOrGroupInChip, PersonOrGroupInList } from '../components/shared/SelectPeopleAndGroups'
 
 storiesOf('Injections', module)
-    .add('PersonOrGroupInChip', () => demoGroup.map(g => <PersonOrGroupInChip item={g} />))
+    .add('PersonOrGroupInChip', () => (
+        <>
+            {demoGroup.map(g => (
+                <PersonOrGroupInChip item={g} />
+            ))}
+        </>
+    ))
     .add('PersonOrGroupInList', () => (
         <Paper>
             {demoGroup.map(g => (
@@ -59,21 +69,36 @@ storiesOf('Injections', module)
         Hello world!`,
         )
         const vr = boolean('Verified', true)
-        const progress0: DecryptionProgress = { progress: 'finding_person_public_key' }
-        const progress1: DecryptionProgress = { progress: 'finding_post_key' }
-        const progress = select(
-            'Decryption progress',
-            {
-                finding_person_public_key: progress0,
-                finding_post_key: progress1,
-                undefined: undefined,
-            },
+        enum ProgressType {
+            finding_person_public_key,
+            finding_post_key,
             undefined,
+        }
+        function getProgress(x: ProgressType): DecryptionProgress | undefined {
+            switch (x) {
+                case ProgressType.finding_person_public_key:
+                    return { progress: 'finding_person_public_key' }
+                case ProgressType.finding_post_key:
+                    return { progress: 'finding_post_key' }
+                case ProgressType.undefined:
+                    return undefined
+            }
+        }
+        const progress = getProgress(
+            select(
+                'Decryption progress',
+                {
+                    finding_person_public_key: ProgressType.finding_person_public_key,
+                    finding_post_key: ProgressType.finding_post_key,
+                    undefined: ProgressType.undefined,
+                },
+                ProgressType.undefined,
+            ),
         )
         return (
             <>
                 <FakePost title="Decrypted:">
-                    <DecryptPostUI.success
+                    <DecryptPostSuccess
                         alreadySelectedPreviously={[]}
                         requestAppendRecipients={async () => {}}
                         people={demoPeople}
@@ -81,10 +106,10 @@ storiesOf('Injections', module)
                     />
                 </FakePost>
                 <FakePost title="Decrypting:">
-                    <DecryptPostUI.awaiting type={progress}></DecryptPostUI.awaiting>
+                    <DecryptPostAwaiting type={progress} />
                 </FakePost>
                 <FakePost title="Failed:">
-                    <DecryptPostUI.failed error={new Error('Error message')} />
+                    <DecryptPostFailed error={new Error('Error message')} />
                 </FakePost>
             </>
         )

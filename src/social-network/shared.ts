@@ -41,6 +41,13 @@ export interface SocialNetworkWorkerAndUIDefinition {
     /**
      * @param env The env that Maskbook running in
      * @param preference Users settings about Maskbook
+     *
+     * This function should init the provider.
+     *
+     * In the UI, it should do:
+     *      - InitFriendsValueRef
+     *      - InitGroupsValueRef
+     *      - InitMyIdentitiesValueRef
      */
     init(env: Env, preference: Preference): void
     /**
@@ -62,6 +69,15 @@ export interface SocialNetworkWorkerAndUIDefinition {
      * This provider is not ready for production, Maskbook will not use it in production
      */
     notReadyForProduction?: boolean
+    /**
+     * Hint for partition when finding keys on Gun
+     *
+     * For Facebook.com, use ""
+     * For network with a large number of users, use something like "twitter-"
+     * For other networks, to keep the Anti-censor of the gun v2 design,
+     * use string like "anonymous-"
+     */
+    gunNetworkHint: string
 }
 
 export type SocialNetworkWorkerAndUI = Required<SocialNetworkWorkerAndUIDefinition>

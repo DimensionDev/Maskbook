@@ -1,13 +1,16 @@
 import { env, Env, Preference, Profile, SocialNetworkWorkerAndUIDefinition } from './shared'
 import { DOMProxy, LiveSelector, ValueRef } from '@holoflows/kit/es'
-import { Person, Group } from '../database'
-import { PersonIdentifier, PostIdentifier } from '../database/type'
+import { Group, Person } from '../database'
+import { PersonIdentifier } from '../database/type'
 import { Payload } from '../utils/type-transform/Payload'
 import { defaultTo, isNull } from 'lodash-es'
 import Services from '../extension/service'
 import { defaultSharedSettings } from './defaults/shared'
 import { defaultSocialNetworkUI } from './defaults/ui'
 import { nopWithUnmount } from '../utils/utils'
+import { Theme } from '@material-ui/core'
+import { MaskbookLightTheme, MaskbookDarkTheme } from '../utils/theme'
+import { untilDomLoaded } from '../utils/dom'
 
 //#region SocialNetworkUI
 export interface SocialNetworkUIDefinition
@@ -15,9 +18,10 @@ export interface SocialNetworkUIDefinition
         SocialNetworkUIDataSources,
         SocialNetworkUITasks,
         SocialNetworkUIInjections,
-        SocialNetworkUIInformationCollector {
+        SocialNetworkUIInformationCollector,
+        SocialNetworkUICustomUI {
     /** Should this UI content script activate? */
-    shouldActivate(): boolean
+    shouldActivate(location?: Location | URL): boolean
     /**
      * Should Maskbook show Welcome Banner?
      */
@@ -105,26 +109,29 @@ export interface SocialNetworkUIInjections {
      */
     injectOptionsPageLink?: (() => void) | 'disabled'
     /**
+     * This is an optional function.
+     *
+     * This function should inject a hint at their bio if they are known by Maskbook
+     */
+    injectKnownIdentity?: (() => void) | 'disabled'
+    /**
      * This function should inject the comment
      * @param current The current post
-     * @param node The post root
      * @returns unmount the injected components
      */
-    injectPostComments?: ((current: PostInfo, node: DOMProxy) => () => void) | 'disabled'
+    injectPostComments?: ((current: PostInfo) => () => void) | 'disabled'
     /**
      * This function should inject the comment box
      * @param current The current post
-     * @param node The post root
      * @returns unmount the injected components
      */
-    injectCommentBox?: ((current: PostInfo, node: DOMProxy) => () => void) | 'disabled'
+    injectCommentBox?: ((current: PostInfo) => () => void) | 'disabled'
     /**
      * This function should inject the post box
      * @param current The current post
-     * @param node The post root
      * @returns unmount the injected components
      */
-    injectPostInspector(current: PostInfo, node: DOMProxy<HTMLElement>): () => void
+    injectPostInspector(current: PostInfo): () => void
 }
 //#endregion
 //#region SocialNetworkUITasks
@@ -134,6 +141,17 @@ export interface SocialNetworkUIInjections {
  * These tasks may be called directly or call through @holoflows/kit/AutomatedTabTask
  */
 export interface SocialNetworkUITasks {
+    /**
+     * This function should encode `text` into the base image and upload it to the post box.
+     * If failed, warning user to do it by themselves with `warningText`
+     */
+    taskUploadToPostBox(
+        text: string,
+        options: {
+            warningText: string
+        },
+    ): void
+
     /**
      * This function should paste `text` into the post box.
      * If failed, warning user to do it by themselves with `warningText`
@@ -153,9 +171,8 @@ export interface SocialNetworkUITasks {
     /**
      * This function should return the given single post on the current page,
      * Called by `AutomatedTabTask`
-     * @param postIdentifier The post id
      */
-    taskGetPostContent(postIdentifier: PostIdentifier<PersonIdentifier>): Promise<string>
+    taskGetPostContent(): Promise<string>
     /**
      * This function should return the profile info on the current page,
      * Called by `AutomatedTabTask`
@@ -195,32 +212,48 @@ export interface SocialNetworkUIDataSources {
     /**
      * Posts that Maskbook detects
      */
-    readonly posts?: WeakMap<DOMProxy, PostInfo>
+    readonly posts?: WeakMap<object, PostInfo>
 }
 export type PostInfo = {
     readonly postBy: ValueRef<PersonIdentifier>
     readonly postID: ValueRef<string | null>
     readonly postContent: ValueRef<string>
     readonly postPayload: ValueRef<Payload | null>
+    readonly steganographyContent: ValueRef<string>
     readonly commentsSelector?: LiveSelector<HTMLElement, false>
-    readonly commentBoxSelector?: LiveSelector<HTMLElement, true>
+    readonly commentBoxSelector?: LiveSelector<HTMLElement, false>
     readonly decryptedPostContent: ValueRef<string>
     readonly rootNode: HTMLElement
+    readonly rootNodeProxy: DOMProxy
+}
+//#endregion
+//#region SocialNetworkUICustomUI
+interface SocialNetworkUICustomUI {
+    darkTheme?: Theme
+    lightTheme?: Theme
+    /**
+     * This is a React hook.
+     *
+     * Should follow the color scheme of the website.
+     *
+     * // Note: useMediaQuery('(prefers-color-scheme: dark)')
+     */
+    useColorScheme?(): 'dark' | 'light'
 }
 //#endregion
 
 export type SocialNetworkUI = Required<SocialNetworkUIDefinition>
 
-export const getEmptyPostInfo = (rootNodeSelector: LiveSelector<HTMLElement, true>) => {
+export const getEmptyPostInfoByElement = (
+    opt: Pick<PostInfo, 'rootNode' | 'rootNodeProxy' | 'commentsSelector' | 'commentBoxSelector'>,
+) => {
     return {
         decryptedPostContent: new ValueRef(''),
-        postBy: new ValueRef(PersonIdentifier.unknown),
+        postBy: new ValueRef(PersonIdentifier.unknown, PersonIdentifier.equals),
         postContent: new ValueRef(''),
-        postID: new ValueRef(''),
-        postPayload: new ValueRef(null),
-        get rootNode() {
-            return rootNodeSelector.evaluate()
-        },
+        postID: new ValueRef<string | null>(null),
+        postPayload: new ValueRef<Payload | null>(null),
+        ...opt,
     } as PostInfo
 }
 
@@ -230,62 +263,72 @@ export const getActivatedUI = () => activatedSocialNetworkUI
 let activatedSocialNetworkUI = ({
     lastRecognizedIdentity: new ValueRef({ identifier: PersonIdentifier.unknown }),
     currentIdentity: new ValueRef(null),
-    myIdentitiesRef: new ValueRef([]),
+    myIdentitiesRef: new ValueRef([] as Person[]),
+    useColorScheme: () => 'light',
+    lightTheme: MaskbookLightTheme,
+    darkTheme: MaskbookDarkTheme,
 } as Partial<SocialNetworkUI>) as SocialNetworkUI
 export function activateSocialNetworkUI() {
     for (const ui of definedSocialNetworkUIs)
         if (ui.shouldActivate()) {
             console.log('Activating UI provider', ui.networkIdentifier, ui)
             activatedSocialNetworkUI = ui
-            hookUIPostMap(ui)
-            ui.init(env, {})
-            ui.resolveLastRecognizedIdentity()
-            ui.injectPostBox()
-            ui.collectPeople()
-            ui.collectPosts()
-            ui.myIdentitiesRef.addListener(val => {
-                if (val.length === 1) ui.currentIdentity.value = val[0]
-            })
-            {
-                const mountSettingsLink = ui.injectOptionsPageLink
-                if (typeof mountSettingsLink === 'function') mountSettingsLink()
-            }
-            {
-                const mountBanner = ui.injectWelcomeBanner
-                if (typeof mountBanner === 'function') {
-                    ui.shouldDisplayWelcome().then(shouldDisplay => {
-                        if (shouldDisplay) {
-                            const unmount = mountBanner()
-                            ui.myIdentitiesRef.addListener(next => next.length && unmount())
-                        }
-                    })
+            return untilDomLoaded().then(() => {
+                hookUIPostMap(ui)
+                ui.init(env, {})
+                ui.resolveLastRecognizedIdentity()
+                ui.injectPostBox()
+                ui.collectPeople()
+                ui.collectPosts()
+                ui.myIdentitiesRef.addListener(val => {
+                    if (val.length === 1) ui.currentIdentity.value = val[0]
+                })
+                {
+                    const mountSettingsLink = ui.injectOptionsPageLink
+                    if (typeof mountSettingsLink === 'function') mountSettingsLink()
                 }
-            }
-            ui.lastRecognizedIdentity.addListener(id => {
-                if (id.identifier.isUnknown) return
+                {
+                    const mountKnownIdentity = ui.injectKnownIdentity
+                    if (typeof mountKnownIdentity === 'function') mountKnownIdentity()
+                }
+                {
+                    const mountBanner = ui.injectWelcomeBanner
+                    if (typeof mountBanner === 'function') {
+                        ui.shouldDisplayWelcome().then(shouldDisplay => {
+                            if (shouldDisplay) {
+                                const unmount = mountBanner()
+                                ui.myIdentitiesRef.addListener(next => {
+                                    ui.shouldDisplayWelcome().then(should => {
+                                        !should && next.length && unmount()
+                                    })
+                                })
+                            }
+                        })
+                    }
+                }
+                ui.lastRecognizedIdentity.addListener(id => {
+                    if (id.identifier.isUnknown) return
 
-                if (isNull(ui.currentIdentity.value)) {
-                    ui.currentIdentity.value =
-                        ui.myIdentitiesRef.value.find(x => id.identifier.equals(x.identifier)) || null
-                }
-                Services.People.resolveIdentity(id.identifier).then()
+                    if (isNull(ui.currentIdentity.value)) {
+                        ui.currentIdentity.value =
+                            ui.myIdentitiesRef.value.find(x => id.identifier.equals(x.identifier)) || null
+                    }
+                    Services.People.resolveIdentity(id.identifier).then()
+                })
             })
-            return
         }
 }
 function hookUIPostMap(ui: SocialNetworkUI) {
     const unmountFunctions = new WeakMap<object, () => void>()
     const setter = ui.posts.set
     ui.posts.set = function(key, value) {
-        const unmountPostInspector = ui.injectPostInspector(value, key)
+        const unmountPostInspector = ui.injectPostInspector(value)
         const unmountCommentBox: () => void =
-            ui.injectCommentBox === 'disabled'
-                ? nopWithUnmount
-                : defaultTo(ui.injectCommentBox, nopWithUnmount)(value, key)
+            ui.injectCommentBox === 'disabled' ? nopWithUnmount : defaultTo(ui.injectCommentBox, nopWithUnmount)(value)
         const unmountPostComments: () => void =
             ui.injectPostComments === 'disabled'
                 ? nopWithUnmount
-                : defaultTo(ui.injectPostComments, nopWithUnmount)(value, key)
+                : defaultTo(ui.injectPostComments, nopWithUnmount)(value)
         unmountFunctions.set(key, () => {
             unmountPostInspector()
             unmountCommentBox()
@@ -308,6 +351,9 @@ export function defineSocialNetworkUI(UI: SocialNetworkUIDefinition) {
         UI.internalName !== 'facebook'
     ) {
         throw new TypeError('Payload version v40 and v39 is not supported in this network. Please use v38 or newer.')
+    }
+    if (UI.gunNetworkHint === '' && UI.internalName !== 'facebook') {
+        throw new TypeError('For historical reason only Facebook provider can use an empty gunNetworkHint.')
     }
     const res: SocialNetworkUI = {
         ...defaultSharedSettings,

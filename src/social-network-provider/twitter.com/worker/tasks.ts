@@ -1,11 +1,10 @@
 import { PersonIdentifier } from '../../../database/type'
 import tasks from '../../../extension/content-script/tasks'
-import { toProfileUrl } from '../utils/url'
-import { hostURL } from '../index'
+import { getProfileUrl, twitterUrl } from '../utils/url'
 import { geti18nString } from '../../../utils/i18n'
 
 export const autoVerifyBio = (self: PersonIdentifier, prove: string) => {
-    tasks(toProfileUrl(self), {
+    tasks(getProfileUrl(self), {
         active: true,
         autoClose: false,
         memorable: false,
@@ -17,7 +16,7 @@ export const autoVerifyBio = (self: PersonIdentifier, prove: string) => {
 }
 
 export const autoVerifyPost = (self: PersonIdentifier, prove: string) => {
-    tasks(hostURL, {
+    tasks(twitterUrl.hostLeadingUrl, {
         active: true,
         autoClose: false,
         memorable: false,

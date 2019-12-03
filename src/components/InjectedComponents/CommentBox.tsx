@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react'
 import { styled } from '@material-ui/core/styles'
 import { useCapturedInput } from '../../utils/hooks/useCapturedEvents'
+import { PropsOf } from '@emotion/styled-base/types/helper'
 
 const Input = styled('input')({
     background: '#f2f3f5',
@@ -12,7 +13,11 @@ const Input = styled('input')({
     boxSizing: 'border-box',
     marginTop: 6,
 })
-export function CommentBox(props: { onSubmit(newVal: string): void }) {
+export interface CommentBoxProps {
+    onSubmit: (newVal: string) => void
+    inputProps?: Partial<PropsOf<typeof Input>>
+}
+export function CommentBox(props: CommentBoxProps) {
     const inputRef = useRef<HTMLInputElement>(null)
     const binder = useCapturedInput(inputRef, () => {})
     useEffect(
@@ -24,5 +29,5 @@ export function CommentBox(props: { onSubmit(newVal: string): void }) {
             }
         }),
     )
-    return <Input ref={inputRef} placeholder="Maskbook!" />
+    return <Input placeholder="Maskbook!" {...props.inputProps} ref={inputRef} />
 }

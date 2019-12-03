@@ -1,4 +1,5 @@
 import { serializable } from '../utils/type-transform/Serialization'
+import { RecipientDetail } from './post'
 
 /**
  * @internal symbol that used to construct this type from the Identifier
@@ -13,6 +14,9 @@ const $fromString = Symbol()
  */
 type Identifiers = 'person' | 'group' | 'post' | 'post_iv'
 export abstract class Identifier {
+    static equals(a: Identifier, b: Identifier) {
+        return a.equals(b)
+    }
     public equals(other: Identifier) {
         return this === other || this.toText() === other.toText()
     }
@@ -75,9 +79,15 @@ export class PersonIdentifier extends Identifier {
 
 export enum PreDefinedVirtualGroupNames {
     friends = '_default_friends_group_',
+    followers = '_followers_group_',
+    following = '_following_group_',
 }
+
 @serializable('GroupIdentifier')
 export class GroupIdentifier extends Identifier {
+    static getFriendsGroupIdentifier(who: PersonIdentifier, groupId: string) {
+        return new GroupIdentifier(who.network, who.userId, groupId)
+    }
     static getDefaultFriendsGroupIdentifier(who: PersonIdentifier) {
         return new GroupIdentifier(who.network, who.userId, PreDefinedVirtualGroupNames.friends)
     }
@@ -86,6 +96,10 @@ export class GroupIdentifier extends Identifier {
         noSlash(network)
         noSlash(groupID)
         if (virtualGroupOwner === '') this.virtualGroupOwner = null
+    }
+    get ownerIdentifier() {
+        if (this.virtualGroupOwner === null) throw new Error('Can not know the owner of this group')
+        return new PersonIdentifier(this.network, this.virtualGroupOwner)
     }
     toText() {
         return 'group:' + [this.network, this.virtualGroupOwner, this.groupID].join('/')
@@ -149,4 +163,12 @@ export class PostIVIdentifier extends Identifier {
 function noSlash(str?: string) {
     if (!str) return
     if (str.split('/')[1]) throw new TypeError('Cannot contain / in a part of identifier')
+}
+
+export function constructPostRecipients(data: [PersonIdentifier, RecipientDetail][]) {
+    const x: Record<string, RecipientDetail> = {}
+    for (const [id, detail] of data) {
+        x[id.toText()] = detail
+    }
+    return x
 }

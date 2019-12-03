@@ -1,7 +1,4 @@
 {
-    "manifest_description": {
-        "message": "Encrypt your posts & chats on You-Know-Where. Allow only your friends to decrypt."
-    },
     "additional_post_box__placeholder_w_name": {
         "message": "Hey $1, what's your mind? Encrypt with Maskbook"
     },
@@ -12,10 +9,17 @@
         "message": "📫 Post it!"
     },
     "additional_post_box__encrypted_post_pre": {
-        "message": "Decrypt this post with Maskbook! $1"
+        "message": "Decrypt this post with #Maskbook ! $1",
+        "description": "$1 should at the end of the string."
     },
     "additional_post_box__encrypted_failed": {
         "message": "Please paste the following text into the post box."
+    },
+    "additional_post_box__steganography_post_pre": {
+        "message": "This post is shared with my friends. You may install Maskbook to decrypt the content from the image. ([I:b])"
+    },
+    "additional_post_box__steganography_post_failed": {
+        "message": "Please upload downloaded image into the post box."
     },
     "comment_box__paste_failed": {
         "message": "Please paste it into the comment box."
@@ -37,9 +41,6 @@
     },
     "decrypted_postbox_add_recipients": {
         "message": "View / add recipients"
-    },
-    "click_to_setup": {
-        "message": "Click here to setup your Maskbook account!"
     },
     "decrypted_postbox_verified": {
         "message": "Signature verified ✔"
@@ -104,29 +105,68 @@
     "finish": {
         "message": "Finish"
     },
+    "undo": {
+        "message": "Undo"
+    },
+    "copy": {
+        "message": "Copy"
+    },
+    "public_key": {
+        "message": "Public Key"
+    },
+    "disconnect": {
+        "message": "Disconnect"
+    },
+    "dashboard": {
+        "message": "Dashboard"
+    },
+    "synchronization": {
+        "message": "Synchronization"
+    },
+    "dashboard_export_keystore": {
+        "message": "Export Backup Keystore"
+    },
+    "dashboard_import_backup": {
+        "message": "Import Data Backup"
+    },
+    "dashboard_download": {
+        "message": "Download as File"
+    },
+    "dashboard_add_new_persona": {
+        "message": "Add New Persona"
+    },
+    "dashboard_unknown_network": {
+        "message": "Unknown"
+    },
+    "dashboard_create_backup": {
+        "message": "Create Backup"
+    },
+    "dashboard_delete_persona": {
+        "message": "Delete Persona"
+    },
+    "dashboard_show_qr": {
+        "message": "Show QR Code"
+    },
+    "dashboard_hide_qr": {
+        "message": "Hide QR Code"
+    },
+    "dashboard_item_copied": {
+        "message": "Copied."
+    },
+    "dashboard_item_deleted": {
+        "message": "Deleted."
+    },
+    "dashboard_item_done": {
+        "message": "Done."
+    },
+    "dashboard_item_copy_failed": {
+        "message": "Copy failed."
+    },
     "welcome_0_close_button": {
         "message": "I'll do it later"
     },
-    "welcome_0_title": {
-        "message": "Welcome to Maskbook"
-    },
-    "welcome_0_description": {
-        "message": "You can post on social networks without allowing them to stalk, analyze, or spy on you."
-    },
-    "welcome_0_new_user": {
-        "message": "New user?"
-    },
-    "welcome_0_connect_maskbook": {
-        "message": "Setup Maskbook"
-    },
-    "welcome_0_old_user": {
-        "message": "Returning user?"
-    },
     "welcome_0_restore_key": {
-        "message": "Restore Keypair"
-    },
-    "welcome_0_caption": {
-        "message": "Lost your keypair backup? No worry. Simply start as a new user."
+        "message": "I want to restore my backup"
     },
     "welcome_1a1_title": {
         "message": "Setup which account?"
@@ -284,18 +324,6 @@
     "welcome_1b_file_selected": {
         "message": "Selected exported key backup: $1"
     },
-    "welcome_1b_qr_0": {
-        "message": "You can find QR Code by"
-    },
-    "welcome_1b_qr_1": {
-        "message": "1. right-click the icon of the Maskbook in the browser address bar"
-    },
-    "welcome_1b_qr_2": {
-        "message": "2. click “Options”"
-    },
-    "welcome_1b_qr_3": {
-        "message": "3. click “Setup for Mobile”"
-    },
     "welcome_1b_hint_identity": {
         "message": "This backup file contains the following accounts:"
     },
@@ -324,19 +352,22 @@
         "message": "Welcome to Maskbook"
     },
     "banner_preparing_setup": {
-        "message": "Maskbook is identifying how to setup your account..."
+        "message": "Maskbook needs your username to set up your account."
     },
     "banner_get_started": {
-        "message": "Get started"
+        "message": "Continue"
     },
-    "banner_dismiss_aria": {
-        "message": "Dismiss the banner"
+    "banner_empty_username": {
+        "message": "If not filled automatically, you may fill it."
+    },
+    "banner_invalid_username": {
+        "message": "This does not seem like a valid username."
     },
     "service_invalid_backup_file": {
-        "message": "This does not seems like Maskbook's backup."
+        "message": "This does not seems like a backup of Maskbook."
     },
     "service_others_key_not_found": {
-        "message": "$1's public key not found!"
+        "message": "Public key of $1 can not be found!"
     },
     "service_not_setup_yet": {
         "message": "You have not set up Maskbook yet!"
@@ -349,6 +380,9 @@
     },
     "service_decryption_failed": {
         "message": "Decryption failed."
+    },
+    "service_self_key_decryption_failed": {
+        "message": "Decryption failed. Maybe you selected a wrong identity or imported a key that was not used to encrypt this post."
     },
     "service_unknown_payload": {
         "message": "Unknown post version, maybe you should update Maskbook?"
@@ -367,6 +401,9 @@
     },
     "automation_request_paste_into_bio_box": {
         "message": "Please copy your public key into the bio box and publish it."
+    },
+    "automation_pasted_into_bio_box": {
+        "message": "[Maskbook] We have helped you append the public key to bio, confirm by publish it!"
     },
     "automation_request_paste_into_post_box": {
         "message": "Please copy your public key and publish it to your timeline!"
@@ -398,11 +435,8 @@
     "options_mobile_export_generating": {
         "message": "Generating QR Code..."
     },
-    "options_mobile_export_title": {
-        "message": "Please scan this QR Code in your Maskbook for mobile"
-    },
     "options_mobile_export_subtitle": {
-        "message": "DO NOT save or share this image to other one!"
+        "message": "DO NOT save or share it to others!"
     },
     "shared_choose_identity_title": {
         "message": "Touch to switch your Maskbook account"
@@ -412,5 +446,14 @@
     },
     "database_group_friends_default_name": {
         "message": "Friends of $1"
+    },
+    "database_group_followers_name": {
+        "message": "Followers of $1"
+    },
+    "database_group_following_name": {
+        "message": "Following by $1"
+    },
+    "seen_in_maskbook_database": {
+        "message": "They are seen in the Maskbook database ✔"
     }
 }

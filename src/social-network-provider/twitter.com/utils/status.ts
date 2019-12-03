@@ -1,10 +1,10 @@
-import { bioCard, postPopupSelector, postsContentSelectors } from './selector'
+import { bioCard, postPopupInjectPointSelector, postsContentSelector } from './selector'
 import { isNil } from 'lodash-es'
 import { timeout } from '../../../utils/utils'
 import { MutationObserverWatcher } from '@holoflows/kit'
 
 export const hasPostPopup = () => {
-    return !!isNil(postPopupSelector().evaluate())
+    return !!isNil(postPopupInjectPointSelector().evaluate())
 }
 
 /**
@@ -20,9 +20,9 @@ export const fetchBioCard = () => timeout(new MutationObserverWatcher(bioCard())
 export const fetchPost = async () => {
     const s = (() => {
         if (hasPostPopup()) {
-            return postPopupSelector().concat(postsContentSelectors().enableSingleMode())
+            return postPopupInjectPointSelector().concat(postsContentSelector().enableSingleMode())
         }
-        return postsContentSelectors().enableSingleMode()
+        return postsContentSelector().enableSingleMode()
     })()
     return timeout(new MutationObserverWatcher(s), 10000)
 }

@@ -26,7 +26,6 @@ import {
 } from '../../utils/mnemonic-code'
 import { derive_AES_GCM_256_Key_From_PBKDF2, import_PBKDF2_Key } from '../../utils/crypto.subtle'
 import { CryptoKeyToJsonWebKey } from '../../utils/type-transform/CryptoKey-JsonWebKey'
-import { createDefaultFriendsGroup } from '../../database'
 
 OnlyRunInContext('background', 'WelcomeService')
 async function generateBackupJSON(
@@ -187,7 +186,6 @@ async function generateNewIdentity(
         publicKey: key.publicKey,
         privateKey: key.privateKey,
     })
-    await createDefaultFriendsGroup(whoAmI).catch(console.error)
     MessageCenter.emit('identityUpdated', undefined)
 }
 
@@ -196,7 +194,7 @@ export async function attachIdentityToPersona(
     targetIdentity: PersonIdentifier,
 ): Promise<void> {
     const id = await queryMyIdentityAtDB(targetIdentity)
-    const localKey = await queryLocalKeyDB(whoAmI)
+    const localKey = await queryLocalKeyDB(targetIdentity)
     if (id === null || localKey === null) throw new Error('Not found')
     await generateNewIdentity(whoAmI, {
         key: { privateKey: id.privateKey, publicKey: id.publicKey },
@@ -204,15 +202,8 @@ export async function attachIdentityToPersona(
     })
 }
 
-export async function backupMyKeyPair(
-    whoAmI: PersonIdentifier,
-    options: { download: boolean; onlyBackupWhoAmI: boolean },
-) {
-    // Don't make the download pop so fast
-    await sleep(1000)
-    const obj = await generateBackupJSON(whoAmI, options.onlyBackupWhoAmI)
-    if (!options.download) return obj
-    const string = JSON.stringify(obj)
+export async function downloadBackup<T>(obj: T) {
+    const string = typeof obj === 'string' ? obj : JSON.stringify(obj)
     const buffer = encodeText(string)
     const blob = new Blob([buffer], { type: 'application/json' })
     const url = URL.createObjectURL(blob)
@@ -227,6 +218,17 @@ export async function backupMyKeyPair(
         saveAs: true,
     })
     return obj
+}
+
+export async function backupMyKeyPair(
+    whoAmI: PersonIdentifier,
+    options: { download: boolean; onlyBackupWhoAmI: boolean },
+) {
+    const obj = await generateBackupJSON(whoAmI, options.onlyBackupWhoAmI)
+    if (!options.download) return obj
+    // Don't make the download pop so fast
+    await sleep(1000)
+    return downloadBackup(obj)
 }
 
 export async function openWelcomePage(id?: SocialNetworkUI['lastRecognizedIdentity']['value']) {

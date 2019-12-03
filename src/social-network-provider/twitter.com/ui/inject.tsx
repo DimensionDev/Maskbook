@@ -1,7 +1,7 @@
-import { AdditionalPostBox } from '../../../components/InjectedComponents/AdditionalPostBox'
 import React from 'react'
-import { DOMProxy, LiveSelector, MutationObserverWatcher as MOW } from '@holoflows/kit'
-import { newPostEditorBelow } from '../utils/selector'
+import { AdditionalPostBox } from '../../../components/InjectedComponents/AdditionalPostBox'
+import { LiveSelector, MutationObserverWatcher as MOW } from '@holoflows/kit'
+import { hasDraftEditor, newPostEditorBelow, postPopupInjectPointSelector } from '../utils/selector'
 import { renderInShadowRoot } from '../../../utils/jss/renderInShadowRoot'
 import { PostInfo, SocialNetworkUIInjections } from '../../../social-network/ui'
 import { injectPostInspectorDefault } from '../../../social-network/defaults/injectPostInspector'
@@ -18,13 +18,17 @@ const newMOW = (i: LiveSelector<HTMLElement, true>) =>
             subtree: true,
         })
 
+const emptyNode = document.createElement('div')
+
 const injectPostBox = () => {
-    const target = newMOW(newPostEditorBelow())
+    const target = newMOW(newPostEditorBelow().map(x => (hasDraftEditor(x) ? x : emptyNode)))
     renderInShadowRoot(<AdditionalPostBox />, target.firstDOMProxy.afterShadow)
+    const popUpTarget = newMOW(postPopupInjectPointSelector())
+    renderInShadowRoot(<AdditionalPostBox />, popUpTarget.firstDOMProxy.afterShadow)
 }
 
-const injectPostInspector = (current: PostInfo, node: DOMProxy) => {
-    return injectPostInspectorDefault({})(current, node)
+const injectPostInspector = (current: PostInfo) => {
+    return injectPostInspectorDefault({})(current)
 }
 
 export const twitterUIInjections: SocialNetworkUIInjections = {

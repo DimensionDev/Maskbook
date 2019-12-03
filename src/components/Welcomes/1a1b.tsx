@@ -9,28 +9,27 @@ import ListItemText from '@material-ui/core/ListItemText'
 import ListSubheader from '@material-ui/core/ListSubheader'
 import { definedSocialNetworkUIs, SocialNetworkUI } from '../../social-network/ui'
 import { env } from '../../social-network/shared'
-import Navigation from './Navigation/Navigation'
 
 interface Props {
     useExistingAccounts(): void
-    back(): void
+    restoreBackup(): void
 }
 const useStyles = makeStyles<Theme>(theme => ({
     paper: {
-        padding: '2rem 1rem 1rem 1rem',
+        padding: '2rem 1rem',
         textAlign: 'center',
-        minWidth: 250,
     },
     button: {
         minWidth: 180,
     },
     list: {
         width: '100%',
+        margin: 'auto',
         maxWidth: 360,
         backgroundColor: theme.palette.background.paper,
     },
 }))
-export default function Welcome({ useExistingAccounts, back }: Props) {
+export default function Welcome({ useExistingAccounts, restoreBackup }: Props) {
     const classes = useStyles()
     const providers = Array.from(definedSocialNetworkUIs)
 
@@ -62,7 +61,6 @@ export default function Welcome({ useExistingAccounts, back }: Props) {
     }
     return (
         <WelcomeContainer className={classes.paper}>
-            <Navigation back={back} />
             <List
                 subheader={<ListSubheader>{geti18nString('welcome_1a1b_title')}</ListSubheader>}
                 className={classes.list}>
@@ -71,6 +69,10 @@ export default function Welcome({ useExistingAccounts, back }: Props) {
             <br />
             <Button color="primary" onClick={useExistingAccounts}>
                 {geti18nString('welcome_1a1b_switch')}
+            </Button>
+            <br />
+            <Button color="primary" onClick={restoreBackup}>
+                {geti18nString('welcome_0_restore_key')}
             </Button>
         </WelcomeContainer>
     )

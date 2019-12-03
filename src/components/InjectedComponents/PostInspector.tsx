@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
-import { DecryptPostUI } from './DecryptedPost'
-import { AddToKeyStore } from './AddToKeyStore'
+import { DecryptPost, DecryptPostProps } from './DecryptedPost'
+import { AddToKeyStore, AddToKeyStoreProps } from './AddToKeyStore'
 import { useAsync } from '../../utils/components/AsyncComponent'
 import { deconstructPayload } from '../../utils/type-transform/Payload'
 import Services from '../../extension/service'
@@ -12,23 +12,27 @@ import { useValueRef } from '../../utils/hooks/useValueRef'
 import { debugModeSetting } from '../shared-settings/settings'
 import { DebugList } from '../DebugModeUI/DebugList'
 
-interface PostInspectorProps {
+export interface PostInspectorProps {
     onDecrypted(post: string): void
     post: string
     postBy: PersonIdentifier
     postId: string
     needZip(): void
+    DecryptPostProps?: Partial<DecryptPostProps>
+    DecryptPostComponent?: React.ComponentType<DecryptPostProps>
+    AddToKeyStoreProps?: Partial<AddToKeyStoreProps>
+    AddToKeyStoreComponent?: React.ComponentType<AddToKeyStoreProps>
 }
 export function PostInspector(props: PostInspectorProps) {
     const { post, postBy, postId } = props
     const whoAmI = useCurrentIdentity()
     const people = useFriendsList()
     const [alreadySelectedPreviously, setAlreadySelectedPreviously] = useState<Person[]>([])
-    const decodeResult = getActivatedUI().publicKeyDecoder(post)
+    const decodeAsPublicKey = getActivatedUI().publicKeyDecoder(post)
     const isDebugging = useValueRef(debugModeSetting)
     const type = {
         encryptedPost: deconstructPayload(post, getActivatedUI().payloadDecoder),
-        provePost: decodeResult ? [decodeResult] : null,
+        provePost: decodeAsPublicKey ? [decodeAsPublicKey] : null,
     }
     if (type.provePost) Services.People.writePersonOnGun(postBy, { provePostId: postId })
     useAsync(async () => {
@@ -63,34 +67,42 @@ export function PostInspector(props: PostInspectorProps) {
             type.encryptedPost.version === -38
                 ? type.encryptedPost.AESKeyEncrypted
                 : type.encryptedPost.ownersAESKeyEncrypted
+        const DecryptPostX = props.DecryptPostComponent || DecryptPost
         return (
             <>
-                <DecryptPostUI.UI
+                <DecryptPostX
                     onDecrypted={props.onDecrypted}
-                    requestAppendRecipients={async people => {
-                        setAlreadySelectedPreviously(alreadySelectedPreviously.concat(people))
-                        return Services.Crypto.appendShareTarget(
-                            version,
-                            iv,
-                            ownersAESKeyEncrypted,
-                            iv,
-                            people.map(x => x.identifier),
-                            whoAmI!.identifier,
-                        )
-                    }}
+                    requestAppendRecipients={
+                        // Version -40 is leaking info
+                        // So should not create new data on version -40
+                        type.encryptedPost.version === -40
+                            ? undefined
+                            : async people => {
+                                  setAlreadySelectedPreviously(alreadySelectedPreviously.concat(people))
+                                  return Services.Crypto.appendShareTarget(
+                                      version,
+                                      ownersAESKeyEncrypted,
+                                      iv,
+                                      people.map(x => x.identifier),
+                                      whoAmI!.identifier,
+                                  )
+                              }
+                    }
                     alreadySelectedPreviously={alreadySelectedPreviously}
                     people={people}
                     encryptedText={post}
                     whoAmI={whoAmI ? whoAmI.identifier : PersonIdentifier.unknown}
                     postBy={postBy}
+                    {...props.DecryptPostProps}
                 />
                 {debugInfo}
             </>
         )
     } else if (type.provePost) {
+        const AddToKeyStoreX = props.AddToKeyStoreComponent || AddToKeyStore
         return (
             <>
-                <AddToKeyStore postBy={postBy} provePost={post} />
+                <AddToKeyStoreX postBy={postBy} provePost={post} {...props.AddToKeyStoreProps} />
                 {debugInfo}
             </>
         )

@@ -1,70 +1,41 @@
-import { livingShadowRoots } from './ConstructableStyleSheetsRenderer'
+import { livingShadowRoots, applyAdoptedStyleSheets } from './ConstructableStyleSheetsRenderer'
 import { GetContext } from '@holoflows/kit/es'
+import { untilDocumentReady } from '../dom'
 
 const div = document.createElement('div')
-document.body.appendChild(div)
-export const PortalShadowRoot = ((GetContext() === 'options'
-    ? div
-    : div.attachShadow({ mode: 'closed' })) as unknown) as Element
-livingShadowRoots.add((PortalShadowRoot as unknown) as ShadowRoot)
+const shadow = div.attachShadow({ mode: 'closed' })
+untilDocumentReady().then(() => document.body.appendChild(div))
+livingShadowRoots.add(shadow)
 
-Object.defineProperties(ShadowRoot.prototype, {
-    setAttribute: {
-        value() {},
-        configurable: true,
-    },
-    removeAttribute: {
-        value() {},
-        configurable: true,
-    },
-    /**
-     * React will try to find nodeType on this element
-     * if not 1 it thought that it was a React Component Instance
-     * @see https://github.com/facebook/react/pull/15894
-     * and we will got 11 on shadowRoot
-     * so a mock is required.
-     */
-    nodeType: {
-        get() {
-            if (this === PortalShadowRoot) return 1
-            else return Object.getOwnPropertyDescriptor(Node.prototype, 'nodeType')!.get!.call(this)
-        },
-        configurable: true,
-    },
-    /**
-     * MUI require a tag name for internal implement and thought it was a string.
-     * ShadowRoot has no tagName so that a fake tag name defined here.
-     */
-    tagName: {
-        get() {
-            if (this === PortalShadowRoot) return 'div'
-            else return undefined
-        },
-        configurable: true,
-    },
-    /**
-     * Material model component will try write style on the shadowRoot and
-     * due to lack of style on shadowRoot, it will not work.
-     */
-    style: {
-        get() {
-            if (this === PortalShadowRoot) return div.style
-            else return undefined
-        },
-        configurable: true,
-    },
-    /**
-     *  ConstructableStyleSheetRenderer will check if connected,
-     *  if not, the polyfill will not inject style.
-     *
-     */
-    isConnected: {
-        get() {
-            return true
-        },
-        configurable: true,
+globalThis.getComputedStyle = new Proxy(globalThis.getComputedStyle || (() => {}), {
+    apply(target, thisArg, args) {
+        if (args[0] === proxy) args[0] = document.body
+        return Reflect.apply(target, thisArg, args)
     },
 })
+
+let proxy: HTMLElement | undefined
+
+export function PortalShadowRoot() {
+    if (GetContext() === 'options') return document.body
+    if (!proxy)
+        proxy = new Proxy(document.body, {
+            get(target, key, receiver) {
+                const value = Reflect.get(target, key)
+                if (typeof value === 'function')
+                    return function(...args: any[]) {
+                        console.log(...args)
+                        return Reflect.apply(value, shadow, args)
+                    }
+                return value
+            },
+            set(target, key, value, receiver) {
+                return Reflect.set(document.body, key, value, document.body)
+            },
+        })
+    return proxy
+}
+
 {
     // ? Hack for React, let event go through ShadowDom
     const hackingEvents = new WeakMap<Event, EventTarget[]>()
@@ -86,7 +57,7 @@ Object.defineProperties(ShadowRoot.prototype, {
     document.addEventListener = new Proxy(document.addEventListener, {
         apply(target, thisArg, args) {
             const [eventName, listener, options] = args
-            hack(eventName, PortalShadowRoot)
+            hack(eventName, shadow)
             return target.apply(thisArg, args)
         },
     })

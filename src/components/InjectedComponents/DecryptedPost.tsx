@@ -1,12 +1,12 @@
 import React, { useMemo, useState } from 'react'
 import AsyncComponent from '../../utils/components/AsyncComponent'
-import { AdditionalContent } from './AdditionalPostContent'
+import { AdditionalContent, AdditionalContentProps } from './AdditionalPostContent'
 import { useShareMenu } from './SelectPeopleDialog'
 import { sleep } from '../../utils/utils'
 import { ServicesWithProgress } from '../../extension/service'
 import { geti18nString } from '../../utils/i18n'
 import { makeStyles } from '@material-ui/styles'
-import { Box, Link, SnackbarContent, useMediaQuery, useTheme } from '@material-ui/core'
+import { Box, Link, useMediaQuery, useTheme } from '@material-ui/core'
 import { Person } from '../../database'
 import { Identifier, PersonIdentifier } from '../../database/type'
 import { NotSetupYetPrompt } from '../shared/NotSetupYetPrompt'
@@ -21,36 +21,41 @@ import { DebugModeUI_PostHashDialog } from '../DebugModeUI/PostHashDialog'
 import { GetContext } from '@holoflows/kit/es'
 import { deconstructPayload } from '../../utils/type-transform/Payload'
 import { DebugList } from '../DebugModeUI/DebugList'
+import { useStylesExtends } from '../custom-ui-helper'
+import { BannerProps } from '../Welcomes/Banner'
 
-interface DecryptPostSuccessProps {
+export interface DecryptPostSuccessProps extends withClasses<KeysInferFromUseStyles<typeof useSuccessStyles>> {
     data: { signatureVerifyResult: boolean; content: string }
-
     requestAppendRecipients?(to: Person[]): Promise<void>
-
     alreadySelectedPreviously: Person[]
     people: Person[]
+    AdditionalContentProps?: Partial<AdditionalContentProps>
 }
 
-const useStyles = makeStyles({
-    link: { marginRight: '1em', cursor: 'pointer' },
-    pass: { color: 'green' },
-    fail: { color: 'red' },
+const useSuccessStyles = makeStyles({
+    addRecipientsLink: { marginRight: '1em', cursor: 'pointer' },
+    signatureVerifyPassed: { color: 'green' },
+    signatureVerifyFailed: { color: 'red' },
 })
 
-function DecryptPostSuccess({ data, people, ...props }: DecryptPostSuccessProps) {
-    const classes = useStyles()
+export const DecryptPostSuccess = React.memo(function DecryptPostSuccess({
+    data,
+    people,
+    ...props
+}: DecryptPostSuccessProps) {
+    const classes = useStylesExtends(useSuccessStyles(), props)
     const { ShareMenu, showShare } = useShareMenu(
         people,
         props.requestAppendRecipients || (async () => {}),
         props.alreadySelectedPreviously,
     )
     const theme = useTheme()
-    const mediaQuery = useMediaQuery(theme.breakpoints.down('sm'))
     let passString = geti18nString('decrypted_postbox_verified')
     let failString = geti18nString('decrypted_postbox_not_verified')
-    if (mediaQuery) {
-        passString = passString[passString.length - 1]
-        failString = failString[failString.length - 1]
+
+    if (useMediaQuery(theme.breakpoints.down('sm'))) {
+        passString = '✔'
+        failString = '❌'
     }
     return (
         <AdditionalContent
@@ -60,46 +65,60 @@ function DecryptPostSuccess({ data, people, ...props }: DecryptPostSuccessProps)
                     {geti18nString('decrypted_postbox_title')}
                     <Box flex={1} />
                     {props.requestAppendRecipients && (
-                        <Link color="primary" onClick={showShare} className={classes.link}>
+                        <Link color="primary" onClick={showShare} className={classes.addRecipientsLink}>
                             {geti18nString('decrypted_postbox_add_recipients')}
                         </Link>
                     )}
                     {data.signatureVerifyResult ? (
-                        <span className={classes.pass}>{passString}</span>
+                        <span className={classes.signatureVerifyPassed}>{passString}</span>
                     ) : (
-                        <span className={classes.fail}>{failString}</span>
+                        <span className={classes.signatureVerifyFailed}>{failString}</span>
                     )}
                 </>
             }
             renderText={data.content}
+            {...props.AdditionalContentProps}
         />
     )
-}
+})
 
-function DecryptPostAwaiting(props: { type?: DecryptionProgress }) {
+export interface DecryptPostAwaitingProps {
+    type?: DecryptionProgress
+    AdditionalContentProps?: Partial<AdditionalContentProps>
+}
+export const DecryptPostAwaiting = React.memo(function DecryptPostAwaiting(props: DecryptPostAwaitingProps) {
     const key = {
         finding_post_key: 'decrypted_postbox_decrypting_finding_post_key',
         finding_person_public_key: 'decrypted_postbox_decrypting_finding_person_key',
         undefined: 'decrypted_postbox_decrypting',
     } as const
-    return <AdditionalContent title={geti18nString(key[(props.type && props.type.progress) || 'undefined'])} />
-}
-
-const useDecryptPostFailedStyles = makeStyles({
-    root: {
-        marginBottom: '2em',
-        maxWidth: '50em',
-    },
+    return (
+        <AdditionalContent
+            title={geti18nString(key[(props.type && props.type.progress) || 'undefined'])}
+            {...props.AdditionalContentProps}
+        />
+    )
 })
-export function DecryptPostFailed({ error }: { error: Error }) {
-    const styles = useDecryptPostFailedStyles()
-    if (error && error.message === geti18nString('service_not_setup_yet')) {
-        return <NotSetupYetPrompt />
-    }
-    return <SnackbarContent classes={styles} elevation={0} message={error && error.message} />
-}
 
-interface DecryptPostProps {
+export interface DecryptPostFailedProps {
+    error: Error
+    AdditionalContentProps?: Partial<AdditionalContentProps>
+    NotSetupYetPromptProps?: Partial<BannerProps>
+}
+export const DecryptPostFailed = React.memo(function DecryptPostFailed({ error, ...props }: DecryptPostFailedProps) {
+    if (error && error.message === geti18nString('service_not_setup_yet')) {
+        return <NotSetupYetPrompt {...props.NotSetupYetPromptProps} />
+    }
+    return (
+        <AdditionalContent
+            title={geti18nString('service_decryption_failed')}
+            renderText={error && error.message}
+            {...props.AdditionalContentProps}
+        />
+    )
+})
+
+export interface DecryptPostProps {
     onDecrypted(post: string): void
 
     postBy: PersonIdentifier
@@ -109,8 +128,18 @@ interface DecryptPostProps {
     alreadySelectedPreviously: Person[]
     requestAppendRecipients?(to: Person[]): Promise<void>
     disableSuccessDecryptionCache?: boolean
+    successComponent?: React.ComponentType<DecryptPostSuccessProps>
+    successComponentProps?: Partial<DecryptPostSuccessProps>
+    waitingComponent?: React.ComponentType<DecryptPostAwaitingProps>
+    waitingComponentProps?: Partial<DecryptPostAwaitingProps>
+    failedComponent?: React.ComponentType<DecryptPostFailedProps>
+    failedComponentProps?: Partial<DecryptPostFailedProps>
 }
-function DecryptPost(props: DecryptPostProps) {
+export function DecryptPost(props: DecryptPostProps) {
+    const Success = props.successComponent || DecryptPostSuccess
+    const Awaiting = props.waitingComponent || DecryptPostAwaiting
+    const Failed = props.failedComponent || DecryptPostFailed
+
     const { postBy, whoAmI, encryptedText, people, alreadySelectedPreviously, requestAppendRecipients } = props
 
     const [decryptedResult, setDecryptedResult] = useState<null | SuccessDecryption>(null)
@@ -155,11 +184,12 @@ function DecryptPost(props: DecryptPostProps) {
     if (decryptedResult && !props.disableSuccessDecryptionCache) {
         return (
             <>
-                <DecryptPostSuccess
+                <Success
                     data={decryptedResult}
                     alreadySelectedPreviously={alreadySelectedPreviously}
                     requestAppendRecipients={requestAppendRecipientsWrapped}
                     people={people}
+                    {...props.successComponentProps}
                 />
                 {isDebugging ? debugHashJSX : null}
             </>
@@ -167,9 +197,9 @@ function DecryptPost(props: DecryptPostProps) {
     }
     const awaitingComponent =
         decryptingStatus && 'error' in decryptingStatus ? (
-            <DecryptPostFailed error={new Error(decryptingStatus.error)} />
+            <Failed error={new Error(decryptingStatus.error)} {...props.failedComponentProps} />
         ) : (
-            <DecryptPostAwaiting type={decryptingStatus} />
+            <Awaiting type={decryptingStatus} {...props.waitingComponentProps} />
         )
     return (
         <>
@@ -200,16 +230,17 @@ function DecryptPost(props: DecryptPostProps) {
                 awaitingComponent={awaitingComponent}
                 completeComponent={result => {
                     if ('error' in result.data) {
-                        return <DecryptPostFailed error={new Error(result.data.error)} />
+                        return <Failed error={new Error(result.data.error)} {...props.failedComponentProps} />
                     }
                     setDecryptedResult(result.data)
                     props.onDecrypted(result.data.content)
                     return (
-                        <DecryptPostSuccess
+                        <Success
                             data={result.data}
                             alreadySelectedPreviously={alreadySelectedPreviously}
                             requestAppendRecipients={requestAppendRecipientsWrapped}
                             people={people}
+                            {...props.successComponentProps}
                         />
                     )
                 }}
@@ -218,11 +249,4 @@ function DecryptPost(props: DecryptPostProps) {
             {isDebugging ? debugHashJSX : null}
         </>
     )
-}
-
-export const DecryptPostUI = {
-    success: DecryptPostSuccess,
-    awaiting: DecryptPostAwaiting,
-    failed: DecryptPostFailed,
-    UI: DecryptPost,
 }

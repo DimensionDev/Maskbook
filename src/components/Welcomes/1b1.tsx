@@ -54,7 +54,6 @@ const RestoreBox = styled('div')(({ theme }: { theme: Theme }) => ({
     transition: '0.4s',
 }))
 interface Props {
-    back(): void
     // ? We cannot send out File | string. Because Firefox will reject the permission request
     // ? because read the file is a async procedure.
     restore(json: BackupJSONFileLatest): void
@@ -99,13 +98,13 @@ const useStyles = makeStyles((theme: Theme) => ({
         height: 200,
     },
 }))
-export default function Welcome({ back, restore: originalRestore }: Props) {
+export default function Welcome({ restore: originalRestore }: Props) {
     const classes = useStyles()
     const ref = React.useRef<HTMLInputElement>(null)
     const textAreaRef = React.useRef<HTMLTextAreaElement>(null)
     const restore = (str: string) => {
         try {
-            const json = JSON.parse(str)
+            const json = decompressBackupFile(str)
             const upgraded = UpgradeBackupJSONFile(json)
             setJson(upgraded)
         } catch (e) {
@@ -132,7 +131,6 @@ export default function Welcome({ back, restore: originalRestore }: Props) {
 
     return (
         <WelcomeContainer {...dragEvents}>
-            <Navigation back={back} />
             <Tabs
                 value={tab}
                 onChange={(e, i) => setTab(i)}
@@ -247,22 +245,13 @@ export default function Welcome({ back, restore: originalRestore }: Props) {
         )
     }
     function WKWebkitQR(props: { onScan(val: string): void; onQuit(): void }) {
-        useAsync(() => iOSHost.scanQRCode(), []).then(
-            x => props.onScan(JSON.stringify(decompressBackupFile(x))),
-            props.onQuit,
-        )
+        useAsync(() => iOSHost.scanQRCode(), []).then(x => props.onScan(x), props.onQuit)
         return null
     }
     function QR() {
         return (
             <>
                 <Typography variant="h5">{geti18nString('welcome_1b_tabs_qr')}</Typography>
-                <Typography variant="body1">
-                    {geti18nString('welcome_1b_qr_0')} <br />
-                    {geti18nString('welcome_1b_qr_1')} <br />
-                    {geti18nString('welcome_1b_qr_2')} <br />
-                    {geti18nString('welcome_1b_qr_3')}
-                </Typography>
                 <QRScanner
                     onError={() => setError(true)}
                     scanning

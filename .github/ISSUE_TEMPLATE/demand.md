@@ -1,0 +1,23 @@
+## Metadata
+
+Field | Value
+--- | ---
+Previous Stage | ...
+Figma Link | [figma.com/...](___)
+Expected UX prototype due | YYYY-MM-DD
+Actual UX prototype release | -
+Expected engineering due | YYYY-MM-DD
+
+## Catalogue
+
+- ...
+- ...
+- ...
+
+## Part 1: ...
+
+## Part 2: ...
+
+## Part 3: ...
+
+## Notes

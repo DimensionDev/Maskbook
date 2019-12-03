@@ -1,7 +1,8 @@
 import { IntervalWatcher, LiveSelector, MutationObserverWatcher } from '@holoflows/kit'
-import { dispatchCustomEvents, sleep, timeout, untilDocumentReady } from '../../../utils/utils'
+import { dispatchCustomEvents, sleep, timeout } from '../../../utils/utils'
 import { isMobileFacebook } from '../isMobile'
 import { SocialNetworkUI } from '../../../social-network/ui'
+import { untilDocumentReady } from '../../../utils/dom'
 
 export async function openPostDialogFacebook() {
     await untilDocumentReady()
@@ -86,7 +87,7 @@ export async function pasteIntoPostBoxFacebook(
             if (e) e.style.display = 'none'
         }
         // Prevent Custom Paste failed, this will cause service not available to user.
-        if (element.innerText.indexOf(text) === -1 && ('value' in element && element.value.indexOf(text) === -1)) {
+        if (element.innerText.indexOf(text) === -1 && 'value' in element && element.value.indexOf(text) === -1) {
             copyFailed()
         }
     } catch {

@@ -6,23 +6,23 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import { Avatar } from '../../utils/components/Avatar'
 import { Person } from '../../database'
 import { List, ListItem, ListItemIcon, ListItemText, ListSubheader } from '@material-ui/core'
-import { PersonOrGroupInList } from './SelectPeopleAndGroups'
+import { PersonOrGroupInList, PersonOrGroupInListProps } from './SelectPeopleAndGroups'
 import { getActivatedUI } from '../../social-network/ui'
 import { useCurrentIdentity, useMyIdentities } from '../DataSource/useActivatedUI'
 import { PersonIdentifier } from '../../database/type'
 import { geti18nString } from '../../utils/i18n'
+import { currentSelectedIdentity } from '../../components/shared-settings/settings'
+import { useStylesExtends } from '../custom-ui-helper'
 
 const useStyles = makeStyles({
     root: { width: '100%' },
     expansionRoot: { padding: '0 12px' },
     expansionContent: { margin: '6px 0' },
     list: { width: '100%' },
-    current: { padding: 0 },
+    currentSelected: { padding: 0 },
 })
-/**
- * Choose the current using identity.
- */
-export const ChooseIdentity: React.FC<{
+export interface ChooseIdentityProps
+    extends withClasses<KeysInferFromUseStyles<typeof useStyles, 'expansionContent' | 'expansionRoot'>> {
     /**
      * Current selected identity
      * @defaultValue the global selected identity
@@ -36,8 +36,13 @@ export const ChooseIdentity: React.FC<{
      *  @defaultValue will change the global selected identity
      */
     onChangeIdentity?(person: Person): void
-}> = props => {
-    const classes = useStyles()
+    PersonOrGroupInListProps?: PersonOrGroupInListProps
+}
+/**
+ * Choose the current using identity.
+ */
+export const ChooseIdentity: React.FC<ChooseIdentityProps> = props => {
+    const classes = useStylesExtends(useStyles(), props)
     const [expanded, setExpanded] = React.useState<boolean>(false)
 
     const all = useMyIdentities()
@@ -55,7 +60,7 @@ export const ChooseIdentity: React.FC<{
                 <ExpansionPanelSummary
                     classes={{ root: classes.expansionRoot, content: classes.expansionContent }}
                     expandIcon={<ExpandMoreIcon />}>
-                    <ListItem dense classes={{ gutters: classes.current }}>
+                    <ListItem dense classes={{ gutters: classes.currentSelected }}>
                         <ListItemIcon>
                             <Avatar person={current} />
                         </ListItemIcon>
@@ -71,13 +76,14 @@ export const ChooseIdentity: React.FC<{
                     {availableIdentities.map(person =>
                         person.identifier.equals(current.identifier) ? null : (
                             <PersonOrGroupInList
-                                listItemProps={{ dense: true }}
+                                ListItemProps={{ dense: true }}
                                 item={person}
                                 key={person.identifier.toText()}
                                 onClick={() => {
                                     props.onChangeIdentity!(person)
                                     setExpanded(false)
                                 }}
+                                {...props.PersonOrGroupInListProps}
                             />
                         ),
                     )}
@@ -89,7 +95,9 @@ export const ChooseIdentity: React.FC<{
 
 ChooseIdentity.defaultProps = {
     onChangeIdentity(person) {
-        getActivatedUI().currentIdentity.value = person
+        const ui = getActivatedUI()
+        ui.currentIdentity.value = person
+        currentSelectedIdentity[ui.networkIdentifier].value = person.identifier.toText()
     },
 }
 /**
@@ -98,9 +106,11 @@ ChooseIdentity.defaultProps = {
  */
 export function useIsolatedChooseIdentity(): readonly [Person | null, React.ReactNode] {
     const all = useMyIdentities()
+    const whoami = useCurrentIdentity()
     const [current, set] = useState<Person>()
+    const selected = current || whoami || undefined
     return [
-        current || all[0] || null,
-        <ChooseIdentity current={current} availableIdentities={all} onChangeIdentity={set} />,
+        selected || null,
+        <ChooseIdentity current={selected} availableIdentities={all} onChangeIdentity={set} />,
     ] as const
 }

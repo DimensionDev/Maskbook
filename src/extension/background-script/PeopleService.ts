@@ -11,6 +11,7 @@ import {
     queryLocalKeyDB,
     deleteLocalKeyDB,
     updatePersonDB,
+    updateMyIdentityDB,
 } from '../../database/people'
 import { UpgradeBackupJSONFile } from '../../utils/type-transform/BackupFile'
 import { PersonIdentifier, GroupIdentifier } from '../../database/type'
@@ -22,9 +23,11 @@ export { storeAvatar, getAvatarDataURL, queryPerson } from '../../database'
 export { writePersonOnGun } from '../../network/gun/version.2/people'
 export {
     addPersonToFriendsGroup,
-    createDefaultFriendsGroup,
+    createFriendsGroup,
     removePersonFromFriendsGroup,
+    queryUserGroups,
 } from '../../database/helpers/group'
+export { queryUserGroupDatabase as queryUserGroup } from '../../database/group'
 export { removePeopleDB as removePeople } from '../../database/people'
 /**
  * Query all people stored
@@ -35,9 +38,9 @@ export async function queryPeople(network?: string): Promise<Person[]> {
 /**
  * Query my identity.
  */
-export async function queryMyIdentity(network?: string): Promise<Person[]>
-export async function queryMyIdentity(identifier: PersonIdentifier): Promise<Person[]>
-export async function queryMyIdentity(identifier?: PersonIdentifier | string): Promise<Person[]> {
+export async function queryMyIdentities(network?: string): Promise<Person[]>
+export async function queryMyIdentities(identifier: PersonIdentifier): Promise<Person[]>
+export async function queryMyIdentities(identifier?: PersonIdentifier | string): Promise<Person[]> {
     if (identifier === undefined) {
         const all = await getMyIdentitiesDB()
         return Promise.all(all.map(personRecordToPerson))
@@ -51,7 +54,13 @@ export async function queryMyIdentity(identifier?: PersonIdentifier | string): P
         return []
     }
 }
-
+/**
+ * Remove an identity.
+ */
+export async function removeMyIdentity(identifier: PersonIdentifier): Promise<void> {
+    await deleteLocalKeyDB(identifier)
+    await removeMyIdentityAtDB(identifier)
+}
 /**
  * Restore the backup
  */
@@ -143,6 +152,9 @@ export async function updatePersonInfo(
     data: { nickname?: string; avatarURL?: string; forceUpdateAvatar?: boolean },
 ) {
     const { avatarURL, nickname, forceUpdateAvatar } = data
-    if (nickname) updatePersonDB({ identifier, nickname })
+    if (nickname) {
+        updatePersonDB({ identifier, nickname })
+        updateMyIdentityDB({ identifier, nickname })
+    }
     if (avatarURL) storeAvatar(identifier, avatarURL, forceUpdateAvatar)
 }

@@ -1,5 +1,6 @@
+import '../../social-network-provider/popup-page/index'
 import '../../setup.ui'
-import React from 'react'
+import React, { useState } from 'react'
 
 import { ThemeProvider } from '@material-ui/styles'
 import { MaskbookLightTheme } from '../../utils/theme'
@@ -8,6 +9,9 @@ import { Button, List } from '@material-ui/core'
 import { SSRRenderer } from '../../utils/SSRRenderer'
 import { debugModeSetting } from '../../components/shared-settings/settings'
 import { useSettingsUI } from '../../components/shared-settings/createSettings'
+import { ChooseIdentity } from '../../components/shared/ChooseIdentity'
+import { getActivatedUI } from '../../social-network/ui'
+import { useAsync } from '../../utils/components/AsyncComponent'
 
 const useStyles = makeStyles(theme => ({
     button: {
@@ -32,6 +36,11 @@ SSRRenderer(<Popup />)
 export function Popup() {
     const classes = useStyles()
 
+    const [showIdentitySelector, setShowIdentitySelector] = useState(false)
+    setTimeout(() => {
+        if (getActivatedUI().networkIdentifier !== 'localhost') setShowIdentitySelector(true)
+    })
+
     return (
         <ThemeProvider theme={MaskbookLightTheme}>
             <style>{`body {
@@ -42,6 +51,7 @@ export function Popup() {
             }`}</style>
             <main className={classes.container}>
                 <img className={classes.logo} src="https://dimensiondev.github.io/Maskbook-VI/MB--Text--Blue.svg" />
+                {showIdentitySelector ? <ChooseIdentity /> : null}
                 <Button
                     variant="contained"
                     color="primary"

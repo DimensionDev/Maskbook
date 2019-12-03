@@ -1,95 +1,172 @@
 import * as React from 'react'
 import { useCallback } from 'react'
-import CloseIcon from '@material-ui/icons/Close'
 import { geti18nString } from '../../utils/i18n'
 import { makeStyles } from '@material-ui/styles'
-import { AppBar, Button, Hidden, IconButton, SnackbarContent, Theme, Typography } from '@material-ui/core'
+import {
+    AppBar,
+    Button,
+    Theme,
+    TextField,
+    InputAdornment,
+    DialogTitle,
+    DialogContent,
+    DialogContentText,
+    DialogActions,
+} from '@material-ui/core'
 import { useLastRecognizedIdentity } from '../DataSource/useActivatedUI'
 import Services from '../../extension/service'
 import { getActivatedUI, SocialNetworkUI } from '../../social-network/ui'
 import { env } from '../../social-network/shared'
 import { setStorage } from '../../utils/browser.storage'
+import { useStylesExtends } from '../custom-ui-helper'
+import { useCapturedInput } from '../../utils/hooks/useCapturedEvents'
+import { PersonIdentifier } from '../../database/type'
 
-interface Props {
-    getStarted(): void
-    close(): void
-    disabled?: boolean
+interface Props extends withClasses<KeysInferFromUseStyles<typeof useStyles>> {
+    title?: string
+    description?: string
+    nextStep: 'hidden' | { onClick(): void }
+    close: 'hidden' | { onClose(): void }
+    username:
+        | 'hidden'
+        | {
+              isValid(username: string): boolean
+              value: string
+              defaultValue: string
+              onChange(nextValue: string): void
+          }
 }
-const useStyles = makeStyles<Theme>(theme => ({
+const useStyles = makeStyles((theme: Theme) => ({
     root: {
         border: '1px solid #ccc',
         borderRadius: 4,
         marginBottom: 10,
     },
-    snackbar: {
-        backgroundColor: theme.palette.background.default,
-        color: theme.palette.text.primary,
-        boxShadow: 'none',
-    },
-    button: {
-        padding: '4px 3em',
-    },
-    close: {
-        margin: 6,
-        padding: 6,
+    title: {
+        paddingBottom: 0,
     },
 }))
 export function BannerUI(props: Props) {
-    const classes = useStyles()
-    const Title = (
-        <Typography variant="subtitle1" color="inherit">
-            {props.disabled ? geti18nString('banner_preparing_setup') : geti18nString('banner_title')}
-        </Typography>
+    const classes = useStylesExtends(useStyles(), props)
+
+    const Title = props.title ?? geti18nString('banner_title')
+    const Description = props.description ?? geti18nString('banner_preparing_setup')
+
+    const emptyUsernameHelperText = geti18nString('banner_empty_username')
+    const invalidUsernameHelperText = geti18nString('banner_invalid_username')
+
+    const { username } = props
+
+    //#region Input
+    const [touched, isTouched] = React.useState(false)
+    const usedValue = username === 'hidden' ? '' : touched ? username.value : username.defaultValue
+    const isInvalid = username === 'hidden' ? false : touched ? !username.isValid(usedValue) : false
+    const helperText =
+        username === 'hidden'
+            ? ''
+            : isInvalid
+            ? (username.value + username.defaultValue).length
+                ? invalidUsernameHelperText
+                : emptyUsernameHelperText
+            : ' '
+    const ref = React.useRef<HTMLInputElement>()
+    useCapturedInput(
+        ref,
+        e => {
+            if (username === 'hidden') return
+            isTouched(true)
+            username.onChange(e)
+        },
+        [username],
     )
-    const GetStarted = (
-        <Button
-            onClick={props.getStarted}
-            classes={{ root: classes.button }}
-            variant="contained"
-            disabled={props.disabled}
-            color="primary">
-            {geti18nString('banner_get_started')}
-        </Button>
-    )
-    const DismissIcon = (
-        <IconButton
-            aria-label={geti18nString('banner_dismiss_aria')}
-            onClick={props.close}
-            classes={{ root: classes.close }}>
-            <CloseIcon />
-        </IconButton>
-    )
-    return (
-        <AppBar position="static" color="default" elevation={0} classes={{ root: classes.root }}>
-            <SnackbarContent
-                classes={{ root: classes.snackbar }}
-                message={Title}
-                action={
-                    <>
-                        {GetStarted}
-                        <Hidden smDown>{DismissIcon}</Hidden>
-                    </>
-                }
+    const UserNameInput =
+        username === 'hidden' ? null : (
+            <TextField
+                label="Username"
+                onChange={() => {}}
+                value={usedValue}
+                error={isInvalid}
+                helperText={helperText}
+                fullWidth
+                InputProps={{
+                    startAdornment: <InputAdornment position="start">@</InputAdornment>,
+                    inputRef: ref,
+                }}
+                margin="dense"
+                variant="standard"
             />
+        )
+    //#endregion
+    const GetStarted =
+        props.nextStep === 'hidden' ? null : (
+            <Button
+                disabled={username === 'hidden' ? false : !username.isValid(usedValue)}
+                onClick={props.nextStep.onClick}
+                variant="contained"
+                color="primary">
+                {geti18nString('banner_get_started')}
+            </Button>
+        )
+    const DismissButton =
+        props.close !== 'hidden' ? (
+            <Button onClick={props.close.onClose} color="primary">
+                {geti18nString('cancel')}
+            </Button>
+        ) : null
+    return (
+        <AppBar position="static" color="inherit" elevation={0} classes={{ root: classes.root }}>
+            <DialogTitle classes={{ root: classes.title }}>{Title}</DialogTitle>
+            <DialogContent>
+                <DialogContentText>{Description}</DialogContentText>
+                {UserNameInput}
+            </DialogContent>
+            <DialogActions>
+                {DismissButton}
+                {GetStarted}
+            </DialogActions>
         </AppBar>
     )
 }
 
-export function Banner(props: { networkIdentifier: SocialNetworkUI['networkIdentifier'] } & Partial<Props>) {
+export type BannerProps = Partial<Props> & { unmount?(): void }
+export function Banner(props: BannerProps) {
     const lastRecognizedIdentity = useLastRecognizedIdentity()
-    const closeDefault = useCallback(() => {
+    const { nextStep, unmount } = props
+    const defaultClose = useCallback(() => {
         getActivatedUI().ignoreSetupAccount(env, {})
-    }, [])
-    const getStartedDefault = useCallback(() => {
-        setStorage(props.networkIdentifier, { forceDisplayWelcome: false })
-        Services.Welcome.openWelcomePage(lastRecognizedIdentity)
-    }, [lastRecognizedIdentity, props.networkIdentifier])
+        unmount?.()
+    }, [unmount])
+
+    const networkIdentifier = getActivatedUI()?.networkIdentifier
+
+    const [value, onChange] = React.useState('')
+    const defaultNextStep = useCallback(() => {
+        if (nextStep === 'hidden') return
+        if (!networkIdentifier) {
+            nextStep?.onClick()
+            nextStep ?? console.warn('You must provide one of networkIdentifier or nextStep.onClick')
+            return
+        }
+        setStorage(networkIdentifier, { forceDisplayWelcome: false })
+        const id = { ...lastRecognizedIdentity }
+        id.identifier =
+            value === '' ? lastRecognizedIdentity.identifier : new PersonIdentifier(networkIdentifier, value)
+        Services.Welcome.openWelcomePage(id)
+    }, [lastRecognizedIdentity, networkIdentifier, nextStep, value])
+    const defaultUserName = networkIdentifier
+        ? {
+              defaultValue: lastRecognizedIdentity.identifier.isUnknown ? '' : lastRecognizedIdentity.identifier.userId,
+              value,
+              onChange,
+              isValid: getActivatedUI().isValidUsername,
+          }
+        : ('hidden' as const)
     return (
         <BannerUI
-            disabled={lastRecognizedIdentity.identifier.isUnknown}
-            close={closeDefault}
-            getStarted={getStartedDefault}
             {...props}
+            username={props.username ?? defaultUserName}
+            close={props.close ?? { onClose: defaultClose }}
+            nextStep={props.nextStep ?? { onClick: defaultNextStep }}
         />
     )
 }

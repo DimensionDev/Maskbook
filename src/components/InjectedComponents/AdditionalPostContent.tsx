@@ -1,29 +1,32 @@
 import * as React from 'react'
 import { getUrl } from '../../utils/utils'
-import { makeStyles, Divider, Typography, Link, Card, CardContent, CardActions, Button } from '@material-ui/core'
+import { makeStyles, Typography, Link, Card } from '@material-ui/core'
 import anchorme from 'anchorme'
+import { useStylesExtends } from '../custom-ui-helper'
+import classNames from 'classnames'
 
-interface Props {
+export interface AdditionalContentProps extends withClasses<KeysInferFromUseStyles<typeof useStyles>> {
     title: React.ReactNode
     children?: React.ReactNode
+    center?: boolean
     renderText?: string
 }
 const useStyles = makeStyles({
-    upDivider: { marginBottom: 6 },
-    title: { display: 'flex' },
+    root: { backgroundColor: 'transparent' },
+    title: { display: 'flex', alignItems: 'center' },
+    center: { justifyContent: 'center' },
     icon: { transform: 'translate(-1px, 1px)' },
-    content: {
-        marginBottom: 6,
-        marginTop: 6,
-        lineHeight: 1.2,
-    },
 })
-export function AdditionalContent(props: Props) {
-    const classes = useStyles()
+export const AdditionalContent = React.memo(function AdditionalContent(props: AdditionalContentProps) {
+    const classes = useStylesExtends(useStyles(), props)
     const icon = getUrl('/maskbook-icon-padded.png')
     return (
-        <Card elevation={0}>
-            <Typography variant="caption" color="textSecondary" gutterBottom className={classes.title}>
+        <Card elevation={0} className={classes.root}>
+            <Typography
+                variant="caption"
+                color="textSecondary"
+                gutterBottom
+                className={classNames(classes.title, { [classes.center]: props.center })}>
                 <img alt="" width={16} height={16} src={icon} className={classes.icon} />
                 {props.title}
             </Typography>
@@ -36,12 +39,12 @@ export function AdditionalContent(props: Props) {
             )}
         </Card>
     )
-}
+})
 
-function RenderText({ text }: { text: string }) {
-    const content = React.useMemo(() => parseText(text), [text])
-    return <>{content}</>
-}
+const RenderText = React.memo(function RenderText(props: { text: string }) {
+    return <>{parseText(props.text)}</>
+})
+
 function parseText(string: string) {
     const links: { raw: string; protocol: string; encoded: string }[] = anchorme(string, { list: true })
     let current = string

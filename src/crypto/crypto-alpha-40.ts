@@ -139,6 +139,8 @@ export async function encrypt1ToN(info: {
     ownersAESKeyEncrypted: ArrayBuffer
     /** All encrypted post aes key. Should be post on the gun. */
     othersAESKeyEncrypted: PublishedAESKeyRecordV40[]
+    /** The raw post AESKey. Be aware to protect it! */
+    postAESKey: CryptoKey
 }> {
     const { version, content, othersPublicKeyECDH, privateKeyECDH, ownersLocalKey, iv } = info
     const AESKey = await generate_AES_GCM_256_Key()
@@ -149,13 +151,15 @@ export async function encrypt1ToN(info: {
     )
 
     const exportedAESKey = encodeText(JSON.stringify(await crypto.subtle.exportKey('jwk', AESKey)))
-    const ownersAESKeyEncrypted = (await encryptWithAES({
-        aesKey: ownersLocalKey,
-        content: exportedAESKey,
-        iv,
-    })).content
+    const ownersAESKeyEncrypted = (
+        await encryptWithAES({
+            aesKey: ownersLocalKey,
+            content: exportedAESKey,
+            iv,
+        })
+    ).content
     const othersAESKeyEncrypted = await generateOthersAESKeyEncrypted(-40, AESKey, privateKeyECDH, othersPublicKeyECDH)
-    return { encryptedContent, iv, version: -40, ownersAESKeyEncrypted, othersAESKeyEncrypted }
+    return { encryptedContent, iv, version: -40, ownersAESKeyEncrypted, othersAESKeyEncrypted, postAESKey: AESKey }
 }
 //#endregion
 //#region decrypt text
@@ -325,7 +329,7 @@ export async function decryptComment(
     if (typeof postContent !== 'string') postContent = decodeText(postContent)
     if (typeof encryptComment !== 'string') encryptComment = decodeText(encryptComment)
     const payload = extractCommentPayload(encryptComment)
-    if (!payload) return
+    if (!payload) return null
     const key = await getCommentKey(postIV, postContent)
     try {
         const x = await decryptWithAES({
@@ -335,7 +339,7 @@ export async function decryptComment(
         })
         return decodeText(x)
     } catch {
-        return undefined
+        return null
     }
 }
 //#endregion

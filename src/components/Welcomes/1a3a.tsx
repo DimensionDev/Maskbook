@@ -27,11 +27,6 @@ interface Props {
     availableIdentityCount: number
 }
 const useStyles = makeStyles(theme => ({
-    paper: {
-        padding: '2rem 1rem 1rem 1rem',
-        textAlign: 'center',
-        background: theme.palette.background.default,
-    },
     button: {
         minWidth: 180,
     },
@@ -160,8 +155,8 @@ export default function Welcome(props: Props) {
         </ExpansionPanel>
     )
     return (
-        <WelcomeContainer className={classes.paper}>
-            <Navigation back={props.back} />
+        <WelcomeContainer>
+            <Navigation activeStep={2} back={props.back} />
             <CardContent>
                 <Typography variant="h5">{geti18nString('welcome_1a3a_title')}</Typography>
                 <br />

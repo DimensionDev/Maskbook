@@ -1,7 +1,4 @@
 {
-    "manifest_description": {
-        "message": "在臉書發佈加密訊息，只讓你的朋友閱讀。"
-    },
     "additional_post_box__placeholder_w_name": {
         "message": "Hey $1, 有何所思？用 Maskbook 加密分享。"
     },
@@ -12,11 +9,17 @@
         "message": "現在發佈！"
     },
     "additional_post_box__encrypted_post_pre": {
-        "message": "來 Maskbook 解密這個訊息！ $1",
+        "message": "來 #Maskbook 解密這個訊息！ $1",
         "description": "$1 须写在字串末。"
     },
     "additional_post_box__encrypted_failed": {
         "message": "請將以下内容拷貝至發佈框。"
+    },
+    "additional_post_box__steganography_post_pre": {
+        "message": "此圖片僅分享給我的好友。請安裝 Maskbook 以解讀圖片。 ([I:b])"
+    },
+    "additional_post_box__steganography_post_failed": {
+        "message": "請將已下載的圖片上载至發佈框。"
     },
     "comment_box__paste_failed": {
         "message": "請將以下内容拷貝至評論框。"
@@ -38,9 +41,6 @@
     },
     "decrypted_postbox_add_recipients": {
         "message": "查看或添加收件人"
-    },
-    "click_to_setup": {
-        "message": "點此開始配置"
     },
     "decrypted_postbox_verified": {
         "message": "數字簽名驗證成功 ✔"
@@ -105,29 +105,68 @@
     "finish": {
         "message": "完成"
     },
+    "undo": {
+        "message": "撤消"
+    },
+    "copy": {
+        "message": "複製"
+    },
+    "public_key": {
+        "message": "公鑰"
+    },
+    "disconnect": {
+        "message": "斷開"
+    },
+    "dashboard": {
+        "message": "儀表板"
+    },
+    "synchronization": {
+        "message": "同步化"
+    },
+    "dashboard_export_keystore": {
+        "message": "導出備份密鑰"
+    },
+    "dashboard_import_backup": {
+        "message": "導入數據備份"
+    },
+    "dashboard_download": {
+        "message": "備份"
+    },
+    "dashboard_add_new_persona": {
+        "message": "創建新的身份"
+    },
+    "dashboard_unknown_network": {
+        "message": "不支援"
+    },
+    "dashboard_create_backup": {
+        "message": "創建備份"
+    },
+    "dashboard_delete_persona": {
+        "message": "刪除身份"
+    },
+    "dashboard_show_qr": {
+        "message": "顯示二維碼"
+    },
+    "dashboard_hide_qr": {
+        "message": "隱藏二維碼"
+    },
+    "dashboard_item_copied": {
+        "message": "好了。"
+    },
+    "dashboard_item_deleted": {
+        "message": "好了。"
+    },
+    "dashboard_item_done": {
+        "message": "好了。"
+    },
+    "dashboard_item_copy_failed": {
+        "message": "複製失敗。"
+    },
     "welcome_0_close_button": {
         "message": "我想以後再做"
     },
-    "welcome_0_title": {
-        "message": "歡迎使用 Maskbook"
-    },
-    "welcome_0_description": {
-        "message": "從此無需擔心社交網路追蹤、分析、窺視你的數字生活"
-    },
-    "welcome_0_new_user": {
-        "message": "新用戶？"
-    },
-    "welcome_0_connect_maskbook": {
-        "message": "設置 Maskbook"
-    },
-    "welcome_0_old_user": {
-        "message": "老用戶？"
-    },
     "welcome_0_restore_key": {
         "message": "導入備份檔案"
-    },
-    "welcome_0_caption": {
-        "message": "弄丟了備份檔案？不用擔心，當作自己是新用戶即可。"
     },
     "welcome_1a1_title": {
         "message": "你希望為哪個賬戶設定 Maskbook？"
@@ -285,18 +324,6 @@
     "welcome_1b_file_selected": {
         "message": "已選取備份檔案：$1"
     },
-    "welcome_1b_qr_0": {
-        "message": "你可以以以下方式找到 QR 碼"
-    },
-    "welcome_1b_qr_1": {
-        "message": "1. 右鍵點擊瀏覽器右上方的 Maskbook 按鈕"
-    },
-    "welcome_1b_qr_2": {
-        "message": "2. 點擊「選項」"
-    },
-    "welcome_1b_qr_3": {
-        "message": "3. 點擊「設定行動端」"
-    },
     "welcome_1b_hint_identity": {
         "message": "備份文件中包含了以下身份："
     },
@@ -325,13 +352,16 @@
         "message": "歡迎使用 Maskbook"
     },
     "banner_preparing_setup": {
-        "message": "Maskbook 正在準備向導過程……"
+        "message": "Maskbook 需要你的用戶名來設定你的賬號。"
     },
     "banner_get_started": {
-        "message": "開始使用"
+        "message": "繼續設定 Maskbook"
     },
-    "banner_dismiss_aria": {
-        "message": "關閉消息"
+    "banner_empty_username": {
+        "message": "如果自動探測用戶名沒有成功，請手動在此輸入"
+    },
+    "banner_invalid_username": {
+        "message": "這看起來不像正確的用戶名"
     },
     "service_invalid_backup_file": {
         "message": "這貌似不是 Maskbook 的備份。"
@@ -351,6 +381,9 @@
     "service_decryption_failed": {
         "message": "解密失敗。"
     },
+    "service_self_key_decryption_failed": {
+        "message": "解密失敗。或許您選取了錯誤的檔案或導入了錯誤的金鑰。"
+    },
     "service_unknown_payload": {
         "message": "不支援的訊息構造。或許你需要更新 Maskbook 版本了？"
     },
@@ -368,6 +401,9 @@
     },
     "automation_request_paste_into_bio_box": {
         "message": "請拷貝公鑰，然後發佈到個人簡介上。"
+    },
+    "automation_pasted_into_bio_box": {
+        "message": "[Maskbook] 我們幫助您在簡介中填入了公鑰，請您審閱並發布它！"
     },
     "automation_request_paste_into_post_box": {
         "message": "請拷貝公鑰，然後發佈到時間綫上。"
@@ -399,9 +435,6 @@
     "options_mobile_export_generating": {
         "message": "正在生成 QR 碼…"
     },
-    "options_mobile_export_title": {
-        "message": "請在行動端 Maskbook 中掃描此 QR 碼以完成設定"
-    },
     "options_mobile_export_subtitle": {
         "message": "請不要保存或將此 QR 碼分享給他人！"
     },
@@ -413,5 +446,14 @@
     },
     "database_group_friends_default_name": {
         "message": "$1 的好友"
+    },
+    "database_group_followers_name": {
+        "message": "關注 $1 的好友"
+    },
+    "database_group_following_name": {
+        "message": "$1 關注的好友"
+    },
+    "seen_in_maskbook_database": {
+        "message": "Maskbook 已了解此身份 ✔"
     }
 }

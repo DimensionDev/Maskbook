@@ -21,12 +21,12 @@
 import { GroupIdentifier, Identifier, PersonIdentifier } from './type'
 import { DBSchema, openDB } from 'idb/with-async-ittr'
 import { CryptoKeyToJsonWebKey, JsonWebKeyToCryptoKey } from '../utils/type-transform/CryptoKey-JsonWebKey'
-import { MessageCenter } from '../utils/messages'
-import { personRecordToPerson } from './helpers/person'
+import { MessageCenter, PersonUpdateEvent } from '../utils/messages'
 import { isIdentifierArrayEquals } from '../utils/equality'
-import { createDefaultFriendsGroup } from './helpers/group'
-import { generate_AES_GCM_256_Key, generate_ECDH_256k1_KeyPair } from '../utils/crypto.subtle'
+import { OnlyRunInContext } from '@holoflows/kit/es'
+import { personRecordToPerson, Person, queryPerson } from './helpers/person'
 
+OnlyRunInContext('background', 'People db')
 //#region Type and utils
 /**
  * Transform data out of database
@@ -125,11 +125,10 @@ export async function storeNewPersonDB(record: PersonRecord): Promise<void> {
     const data = await toDb(record)
     const t = (await db).transaction('people', 'readwrite')
     await t.objectStore('people').put(data)
-    sendNewPersonMessageDB(record)
-    return
+    emitPersonChangeEvent(record, 'new').catch(console.error)
 }
 /**
- * Query person with a identifier
+ * Query person with an identifier
  */
 export async function queryPeopleDB(
     query: ((key: PersonIdentifier, record: PersonRecordInDatabase) => boolean) | { network: string } = () => true,
@@ -165,7 +164,7 @@ export async function queryPersonDB(id: PersonIdentifier): Promise<null | Person
     return outDb(Object.assign({}, result, result2))
 }
 /**
- * Update Person info with a identifier
+ * Update Person info with an identifier
  * @param person - Partial of person record
  */
 export async function updatePersonDB(person: Partial<PersonRecord> & Pick<PersonRecord, 'identifier'>): Promise<void> {
@@ -176,7 +175,7 @@ export async function updatePersonDB(person: Partial<PersonRecord> & Pick<Person
 
     const t = (await db).transaction('people', 'readwrite')
     await t.objectStore('people').put(o)
-    sendNewPersonMessageDB(await outDb(o))
+    emitPersonChangeEvent(full, 'update').catch(console.error)
 
     function hasDifferent() {
         if (!isIdentifierArrayEquals(full.groups, person.groups || full.groups)) return true
@@ -195,7 +194,10 @@ export async function updatePersonDB(person: Partial<PersonRecord> & Pick<Person
 export async function removePeopleDB(people: PersonIdentifier[]): Promise<void> {
     const t = (await db).transaction('people', 'readwrite')
     for (const person of people) await t.objectStore('people').delete(person.toText())
-    MessageCenter.emit('peopleChanged', undefined)
+    MessageCenter.emit(
+        'peopleChanged',
+        people.map<PersonUpdateEvent>(x => ({ of: { groups: [], identifier: x }, reason: 'delete' })),
+    )
     return
 }
 //#endregion
@@ -205,10 +207,32 @@ export async function removePeopleDB(people: PersonIdentifier[]): Promise<void> 
  * @param id - Identifier
  */
 export async function queryMyIdentityAtDB(id: PersonIdentifier): Promise<null | PersonRecordPublicPrivate> {
-    const t = (await db).transaction('myself')
+    const t = (await db).transaction(['myself', 'people'])
     const result = await t.objectStore('myself').get(id.toText())
     if (!result) return null
-    return outDb(result) as Promise<PersonRecordPublicPrivate>
+    const result2 = (await t.objectStore('people').get(id.toText())) || result
+    return outDb({
+        ...result,
+        nickname: result.nickname || result2.nickname,
+    }) as Promise<PersonRecordPublicPrivate>
+}
+
+/**
+ * Update My identity with an identifier
+ * @param person - Partial of person record
+ */
+export async function updateMyIdentityDB(
+    person: Partial<PersonRecord> & Pick<PersonRecord, 'identifier'>,
+): Promise<void> {
+    const full = await queryMyIdentityAtDB(person.identifier)
+
+    if (full === null) return
+
+    const data = { ...(await toDb(full)), ...(await toDb(person as PersonRecord)) }
+
+    const t = (await db).transaction('myself', 'readwrite')
+    await t.objectStore('myself').put(data)
+    MessageCenter.emit('identityUpdated', undefined)
 }
 /**
  * Remove my record
@@ -298,6 +322,12 @@ export async function getLocalKeysDB() {
 }
 //#endregion
 
-async function sendNewPersonMessageDB(personRecord: PersonRecord) {
-    MessageCenter.send('newPerson', await personRecordToPerson(personRecord))
+async function emitPersonChangeEvent(record: PersonRecord | PersonIdentifier, reason: 'new' | 'update') {
+    let person: Person
+    if (record instanceof PersonIdentifier) {
+        person = (await queryPerson(record))!
+    } else {
+        person = await personRecordToPerson(record)
+    }
+    MessageCenter.emit('peopleChanged', [{ of: person, reason }])
 }

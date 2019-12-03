@@ -2,10 +2,15 @@ import { CustomEventId } from './constants'
 import { CustomEvents } from '../extension/injected-script/addEventListener'
 
 import { sleep as _sleep, timeout as _timeout } from '@holoflows/kit/es/util/sleep'
-import { isNull } from 'lodash-es'
+import { flatten, isNull, random } from 'lodash-es'
 
 export const sleep = _sleep
 export const timeout = _timeout
+
+export const randomElement = (arr: any[]) => {
+    const e = flatten(arr)
+    return e[random(0, e.length - 1)]
+}
 
 /**
  * Get reference of file in both extension and storybook
@@ -18,12 +23,29 @@ export function getUrl(path: string, fallback: string = '') {
 }
 
 /**
+ * Download given url return as ArrayBuffer
+ */
+export async function downloadUrl(url: string) {
+    const res = await fetch(url)
+    if (!res.ok) throw new Error('Fetch failed.')
+    return res.arrayBuffer()
+}
+
+/**
  * Dispatch a fake event.
  * @param event Event name
  * @param x parameters
  */
 export function dispatchCustomEvents<T extends keyof CustomEvents>(event: T, ...x: CustomEvents[T]) {
     document.dispatchEvent(new CustomEvent(CustomEventId, { detail: JSON.stringify([event, x]) }))
+}
+
+/**
+ * paste image to activeElements
+ * @param bytes
+ */
+export async function pasteImageToActiveElements(bytes: Uint8Array) {
+    return dispatchCustomEvents('paste', { type: 'image', value: Array.from(bytes) })
 }
 
 Object.assign(globalThis, { dispatchCustomEvents })
@@ -40,24 +62,58 @@ export function selectElementContents(el: Node) {
     sel.addRange(range)
 }
 
-export function untilDocumentReady() {
-    if (document.readyState === 'complete') return Promise.resolve()
-    return new Promise(resolve => {
-        document.addEventListener('readystatechange', resolve, { once: true, passive: true })
-    })
-}
-
 export const nop = (...args: unknown[]) => {}
+// noinspection JSUnusedLocalSymbols
 export const nopWithUnmount = (...args: unknown[]) => nop
 export const bypass: <T>(args: T) => T = args => args
 
 /**
  * index starts at one.
  */
-export const regexMatch = (str: string, regexp: RegExp, index: number) => {
+export const regexMatch: {
+    (str: string, regexp: RegExp, index?: number): string | null
+    (str: string, regexp: RegExp, index: null): RegExpMatchArray | null
+} = (str: string, regexp: RegExp, index: number | null = 1) => {
     const r = str.match(regexp)
     if (isNull(r)) return null
-    return r[index]
+    if (index === null) {
+        return (r as RegExpMatchArray) as any
+    }
+    return (r[index] as string) as any
+}
+
+/**
+ * enables you to use match group with flag g
+ *
+ * @return
+ *  if no matches, return null;
+ *  return target match group in each matches;
+ *
+ * @example
+ *  regexMatchAll(">target<whatever>target2<", />(.+)</)
+ *  >>> ["target", "target2"]
+ */
+export const regexMatchAll = (str: string, regexp: RegExp, index: number = 1) => {
+    const gPos = regexp.flags.indexOf('g')
+    const withoutG = gPos >= 0 ? `${regexp.flags.slice(0, gPos)}${regexp.flags.slice(gPos + 1)}` : regexp.flags
+    const o = new RegExp(regexp.source, withoutG)
+    const g = new RegExp(regexp.source, `${withoutG}g`)
+    const r = str.match(g)
+    if (isNull(r)) {
+        return null
+    }
+    const sto = []
+    for (const v of r) {
+        const retV = v.match(o)
+        if (isNull(retV)) {
+            continue
+        }
+        sto.push(retV[index])
+    }
+    if (sto.length === 0) {
+        return null
+    }
+    return sto
 }
 
 export const isDocument = (node: Node): node is Document => node.nodeType === Node.DOCUMENT_NODE

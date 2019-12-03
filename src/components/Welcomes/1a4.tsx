@@ -5,8 +5,10 @@ import Manual from './1a4.manual'
 import { geti18nString } from '../../utils/i18n'
 import { makeStyles, Typography, Button, Theme } from '@material-ui/core'
 import WelcomeContainer from './WelcomeContainer'
+import Navigation from './Navigation/Navigation'
 
 interface Props {
+    back(): void
     hasBio: boolean
     hasPost: boolean
     hasManual: boolean
@@ -18,7 +20,6 @@ interface Props {
 }
 const useStyles = makeStyles<Theme>(theme => ({
     paper: {
-        padding: '2rem 2rem 1rem 2rem',
         textAlign: 'center',
         '& > *': {
             marginBottom: theme.spacing(3),
@@ -99,6 +100,7 @@ export default function Welcome(props: Props) {
     )
     return (
         <WelcomeContainer className={classes.paper}>
+            <Navigation activeStep={3} back={props.back} />
             <Typography variant="h5">{geti18nString('welcome_1a4_title')}</Typography>
             {actionType === 'auto' ? (
                 <Auto

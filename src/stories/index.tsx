@@ -7,6 +7,7 @@ import { demoPeople, demoGroup } from './demoPeopleOrGroups'
 import { ValueRef } from '@holoflows/kit/es'
 import { PersonIdentifier } from '../database/type'
 import { emptyDefinition } from '../social-network/defaults/emptyDefinition'
+import { Person } from '../database'
 
 definedSocialNetworkUIs.clear()
 defineSocialNetworkUI({
@@ -19,7 +20,7 @@ defineSocialNetworkUI({
     myIdentitiesRef: new ValueRef(demoPeople),
     groupsRef: new ValueRef(demoGroup),
     lastRecognizedIdentity: new ValueRef({ identifier: PersonIdentifier.unknown }),
-    currentIdentity: new ValueRef(null),
+    currentIdentity: new ValueRef<Person | null>(null),
     friendsRef: new ValueRef(demoPeople),
 })
 defineSocialNetworkUI({ ...emptyDefinition, friendlyName: 'Neoparia Breakfast Club' })

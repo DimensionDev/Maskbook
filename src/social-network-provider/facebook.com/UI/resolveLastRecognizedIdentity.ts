@@ -18,8 +18,8 @@ export function resolveLastRecognizedIdentityFacebook(this: SocialNetworkUI) {
         .startWatch({
             childList: true,
             subtree: true,
+            characterData: true,
         })
-        .then()
     function assign(i: part) {
         if (!i.identifier.isUnknown) ref.value = i
     }
@@ -37,18 +37,12 @@ const myUsernameLiveSelectorOnMobile = new LiveSelector()
     .querySelectorAll('article')
     .map(x => x.dataset.store)
     .map(x => JSON.parse(x).actor_id as number)
-    .replace(orig =>
-        orig.length
-            ? [
-                  orig.reduce((previous, current) => {
-                      if (location.hostname === 'm.facebook.com' && location.pathname === '/') {
-                          if (previous === current) return current
-                      }
-                      return undefined!
-                  }),
-              ]
-            : [],
-    )
     .filter(x => x)
+    .replace(orig => {
+        if (orig.length && location.hostname === 'm.facebook.com' && location.pathname.match(/^\/(?:home)?[^/]*$/)) {
+            if (orig.every(x => x === orig[0])) return [orig[0]]
+        }
+        return []
+    })
     .map(x => ({ identifier: new PersonIdentifier('facebook.com', x.toString()) } as part))
 //#endregion

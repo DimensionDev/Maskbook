@@ -12,6 +12,8 @@ OnlyRunInContext('background', 'Gun')
 /**
  * @deprecated // ! This version will leak post targets ! //
  *
+ * This version should be readonly now.
+ *
  * Use exchange v2 instead!
  */
 export interface ApplicationStateInGunVersion1 {
@@ -33,3 +35,4 @@ export interface ApplicationStateInGunVersion1 {
 }
 /** @deprecated */
 export const gun1 = new Gun<ApplicationStateInGunVersion1>(gun1Servers).get('maskbook')
+gun1.opt({ retry: Infinity })

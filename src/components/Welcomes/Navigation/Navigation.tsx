@@ -1,53 +1,50 @@
 import * as React from 'react'
 
 import Close from '@material-ui/icons/Close'
-import ArrowBack from '@material-ui/icons/ArrowBack'
 import { geti18nString } from '../../../utils/i18n'
-import { makeStyles, Button, Theme } from '@material-ui/core'
+import { Button, useTheme, MobileStepper, makeStyles } from '@material-ui/core'
+import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight'
+import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft'
+import { useHistory } from 'react-router'
 
 interface Props {
     back?: () => void
     close?: () => void
+    activeStep: number
 }
-const useStyles = makeStyles<Theme>(theme => ({
-    nav: {
-        paddingTop: theme.spacing(1),
-        paddingLeft: theme.spacing(1),
-        display: 'flex',
+const useStyles = makeStyles({
+    stepper: {
+        background: 'transparent',
     },
-    navBackButton: {
-        color: theme.palette.text.hint,
-        marginLeft: theme.spacing(1),
-        marginRight: 'auto',
-    },
-    navCloseButton: {
-        color: theme.palette.text.hint,
-        marginRight: theme.spacing(1),
-        marginLeft: 'auto',
-    },
-    navBackIcon: {
-        marginRight: theme.spacing(1),
-    },
-    navCloseIcon: {
-        marginLeft: theme.spacing(1),
-    },
-}))
-export default function Navigation({ back, close }: Props) {
+})
+export default function Navigation({ back, close, activeStep }: Props) {
+    const theme = useTheme()
     const classes = useStyles()
+    const history = useHistory()
+
     return (
-        <nav className={classes.nav}>
-            {back ? (
-                <Button onClick={back} disableFocusRipple disableRipple className={classes.navBackButton}>
-                    <ArrowBack className={classes.navBackIcon} />
+        <MobileStepper
+            variant="progress"
+            steps={4}
+            position="static"
+            activeStep={activeStep}
+            classes={{ root: classes.stepper }}
+            nextButton={
+                <Button
+                    size="small"
+                    onClick={close ? close : () => history.replace('/')}
+                    disableFocusRipple
+                    disableRipple>
+                    {geti18nString('welcome_0_close_button')}
+                    <Close />
+                </Button>
+            }
+            backButton={
+                <Button disableFocusRipple disableRipple size="small" disabled={!back} onClick={back}>
+                    {theme.direction === 'rtl' ? <KeyboardArrowRight /> : <KeyboardArrowLeft />}
                     {geti18nString('back')}
                 </Button>
-            ) : null}
-            {close ? (
-                <Button onClick={close} disableFocusRipple disableRipple className={classes.navCloseButton}>
-                    {geti18nString('welcome_0_close_button')}
-                    <Close className={classes.navCloseIcon} />
-                </Button>
-            ) : null}
-        </nav>
+            }
+        />
     )
 }

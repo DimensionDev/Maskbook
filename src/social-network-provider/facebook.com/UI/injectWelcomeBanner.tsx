@@ -4,6 +4,7 @@ import { isMobileFacebook } from '../isMobile'
 import { renderInShadowRoot } from '../../../utils/jss/renderInShadowRoot'
 import { Banner } from '../../../components/Welcomes/Banner'
 import { facebookUISelf } from '../ui-provider'
+import { makeStyles } from '@material-ui/core'
 
 export function injectWelcomeBannerFacebook() {
     const to = new MutationObserverWatcher(
@@ -16,9 +17,12 @@ export function injectWelcomeBannerFacebook() {
             childList: true,
             subtree: true,
         })
+    const useStyle = makeStyles({ root: { borderColor: '#dddfe2' } })
+    function Wrapped() {
+        const classes = useStyle()
+        return <Banner classes={{ root: classes.root }} unmount={() => unmount()} />
+    }
 
-    return renderInShadowRoot(
-        <Banner networkIdentifier={facebookUISelf.networkIdentifier} />,
-        to.firstDOMProxy.beforeShadow,
-    )
+    const unmount = renderInShadowRoot(<Wrapped />, to.firstDOMProxy.beforeShadow)
+    return unmount
 }

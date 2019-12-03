@@ -4,12 +4,15 @@ import { SocialNetworkUIDataSources } from '../ui'
 import { ValueRef } from '@holoflows/kit'
 import { PersonIdentifier } from '../../database/type'
 import { cloneDeep } from 'lodash-es'
+import { Person, Group } from '../../database'
+import { MaskbookDarkTheme, MaskbookLightTheme } from '../../utils/theme'
+import { PersonArrayComparer, GroupArrayComparer } from '../../utils/comparer'
 
 const defaultDataSources: Required<SocialNetworkUIDataSources> = cloneDeep({
-    friendsRef: new ValueRef([]),
-    myIdentitiesRef: new ValueRef([]),
-    groupsRef: new ValueRef([]),
-    currentIdentity: new ValueRef(null),
+    friendsRef: new ValueRef([] as Person[], PersonArrayComparer),
+    myIdentitiesRef: new ValueRef([] as Person[], PersonArrayComparer),
+    groupsRef: new ValueRef([] as Group[], GroupArrayComparer),
+    currentIdentity: new ValueRef<Person | null>(null),
     lastRecognizedIdentity: new ValueRef({ identifier: PersonIdentifier.unknown }),
     posts: new Map(),
 })
@@ -26,4 +29,8 @@ export const defaultSocialNetworkUI = cloneDeep({
     injectCommentBox: injectCommentBoxDefaultFactory(),
     injectPostComments: injectPostCommentsDefault(),
     injectOptionsPageLink: 'disabled',
+    darkTheme: MaskbookDarkTheme,
+    lightTheme: MaskbookLightTheme,
+    useColorScheme: () => 'light' as const,
+    injectKnownIdentity: 'disabled',
 } as const)
