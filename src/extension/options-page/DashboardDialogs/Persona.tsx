@@ -1,10 +1,11 @@
 import React, { useState } from 'react'
 import { DialogContentItem } from './DialogBase'
 
-import { Button, TextField, Typography, InputBase } from '@material-ui/core'
+import { TextField, Typography, InputBase } from '@material-ui/core'
 import { Link, useHistory } from 'react-router-dom'
 import ProviderLine from '../DashboardComponents/ProviderLine'
 import BackupRestoreTab, { BackupRestoreTabProps } from '../DashboardComponents/BackupRestoreTab'
+import Buttone from '../../../components/Dashboard/Buttone'
 
 export function PersonaCreateDialog() {
     const [name, setName] = useState('')
@@ -27,14 +28,14 @@ export function PersonaCreateDialog() {
             content={content}
             actionsAlign="center"
             actions={
-                <Button
+                <Buttone
                     className="actionButton"
                     variant="contained"
                     color="primary"
                     component={Link}
                     to={`created?name=${name}`}>
                     Ok
-                </Button>
+                </Buttone>
             }></DialogContentItem>
     )
 }
@@ -69,12 +70,12 @@ export function PersonaDeleteDialog() {
             content={`Do you really want to delete persona "${name}"? This operation cannot be reverted.`}
             actions={
                 <>
-                    <Button className="actionButton" variant="outlined" color="default" component={Link} to="../">
+                    <Buttone className="actionButton" variant="outlined" color="default" component={Link} to="../">
                         Cancel
-                    </Button>
-                    <Button className="actionButton" variant="contained" color="primary">
+                    </Buttone>
+                    <Buttone className="actionButton" variant="contained" color="primary">
                         Ok
-                    </Button>
+                    </Buttone>
                 </>
             }></DialogContentItem>
     )
@@ -169,9 +170,9 @@ export function PersonaImportDialog() {
             title="Import Persona"
             content={content}
             actions={
-                <Button className="actionButton" variant="contained" color="primary" component={Link} to="../">
+                <Buttone className="actionButton" variant="contained" color="primary" component={Link} to="../">
                     Import
-                </Button>
+                </Buttone>
             }></DialogContentItem>
     )
 }
@@ -183,9 +184,9 @@ export function PersonaImportFailedDialog() {
             title="Import Failure"
             content="Your import data is invalid. Please check again."
             actions={
-                <Button className="actionButton" variant="outlined" color="default" component={Link} to="../">
+                <Buttone className="actionButton" variant="outlined" color="default" component={Link} to="../">
                     Ok
-                </Button>
+                </Buttone>
             }></DialogContentItem>
     )
 }
@@ -196,9 +197,9 @@ export function PersonaImportSuccessDialog() {
             title="Import Successful"
             content={`Imported persona ${`Yisi Liu`} with 2 profiles.`}
             actions={
-                <Button className="actionButton" variant="outlined" color="default" component={Link} to="../">
+                <Buttone className="actionButton" variant="outlined" color="default" component={Link} to="../">
                     Ok
-                </Button>
+                </Buttone>
             }></DialogContentItem>
     )
 }
