@@ -57,7 +57,7 @@ export const twitterEncoding = {
             [':||', '%40'],
             ['+', '-'],
             ['=', '_'],
-            [/|/g, '.'],
+            [/\|/g, '.'],
         ])}`,
     payloadDecoder: (text: string) => {
         let payload = regexMatch(text, /https:\/\/.+\..+\/%20(.+)%40/, 1)
