@@ -9,7 +9,7 @@ interface Permissions {
     request(permission: { name: string }): Promise<PermissionStatus>
 }
 
-declare module 'typeson/dist/typeson-esm' {
+declare module 'typeson' {
     export type CustomRegister<Type, InternalRepresentation> = [
         (x: unknown) => boolean,
         (x: Type) => InternalRepresentation,
