@@ -1,25 +1,10 @@
 import React, { useState } from 'react'
 import { DialogContentItem } from './DialogBase'
 
-import { Button, TextField, Typography, AppBar, Tabs, Tab, Box, InputBase } from '@material-ui/core'
+import { Button, TextField, Typography, InputBase } from '@material-ui/core'
 import { Link, useHistory } from 'react-router-dom'
-import ProviderLine from '../DashboardComponents/Provider'
-
-const TabPanel = (props: any) => {
-    const { children, value, index, ...other } = props
-
-    return (
-        <Typography
-            component="div"
-            role="tabpanel"
-            hidden={value !== index}
-            id={`simple-tabpanel-${index}`}
-            aria-labelledby={`simple-tab-${index}`}
-            {...other}>
-            <Box p={3}>{children}</Box>
-        </Typography>
-    )
-}
+import ProviderLine from '../DashboardComponents/ProviderLine'
+import BackupRestoreTab, { BackupRestoreTabProps } from '../DashboardComponents/BackupRestoreTab'
 
 export function PersonaCreateDialog() {
     const [name, setName] = useState('')
@@ -96,50 +81,46 @@ export function PersonaDeleteDialog() {
 }
 
 export function PersonaBackupDialog() {
-    const [value, setValue] = React.useState(0)
-
-    const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
-        setValue(newValue)
-    }
-
     const mnemonicWordValue = 'the natural law of privacy is now enforced by tessercube and maskbook'
     const base64Value =
         'WFceyl2VOyvyeaqkTodUI1XulcXQkRVQvh3U65vvMUuRq2ln9ozlECaZYLkKq9HHWKucm9sc2e52y32I1FoikgstIsV1l/S5VwbvELkchC5Mh5eAbcSGCRotC9TfIBUlGwwwnaMZ8tNgo0jBxPgOeU2ikdoIrgkrIiMXYUe6nz/AmvbYDYBjuqNnArVpxILOuJ6ytKUZGaadrI3sct+rFHqK20YFAyjuZrBgSIkNrBcx5epysj2dKpnRd4zyLoRlJQ'
 
-    const content = (
-        <>
-            <Typography variant="body1">You can backup the persona with either way below.</Typography>
-            <div>
-                <AppBar position="static" color="default" elevation={0}>
-                    <Tabs
-                        value={value}
-                        onChange={handleChange}
-                        indicatorColor="primary"
-                        textColor="primary"
-                        variant="fullWidth">
-                        <Tab label="MNEMONIC WORDS" />
-                        <Tab label="BASE64" />
-                    </Tabs>
-                </AppBar>
-                <TabPanel value={value} index={0}>
+    const state = useState(0)
+    const tabProps: BackupRestoreTabProps = {
+        tabs: [
+            {
+                label: 'MNEMONIC WORDS',
+                component: (
                     <InputBase
                         style={{ width: '100%', minHeight: '100px' }}
                         multiline
                         defaultValue={mnemonicWordValue}
                         readOnly></InputBase>
-                </TabPanel>
-                <TabPanel value={value} index={1}>
+                ),
+            },
+            {
+                label: 'BASE64',
+                component: (
                     <InputBase
                         style={{ width: '100%', minHeight: '100px' }}
                         multiline
                         defaultValue={base64Value}
                         readOnly></InputBase>
-                </TabPanel>
-            </div>
-            <Typography variant="body2">
-                Keep the 12 words above carefully in a safe place. You will need them to restore the private key of this
-                persona.
-            </Typography>
+                ),
+            },
+        ],
+        state,
+    }
+    const content = (
+        <>
+            <Typography variant="body2">You can backup the persona with either way below.</Typography>
+            <BackupRestoreTab margin={state[0] === 0 ? true : 'top'} {...tabProps}></BackupRestoreTab>
+            {state[0] === 0 && (
+                <Typography variant="body2">
+                    Keep the 12 words above carefully in a safe place. You will need them to restore the private key of
+                    this persona.
+                </Typography>
+            )}
         </>
     )
 
@@ -147,38 +128,44 @@ export function PersonaBackupDialog() {
 }
 
 export function PersonaImportDialog() {
-    const [value, setValue] = React.useState(0)
+    const mnemonicWordValue = 'the natural law of privacy is now enforced by tessercube and maskbook'
+    const base64Value =
+        'WFceyl2VOyvyeaqkTodUI1XulcXQkRVQvh3U65vvMUuRq2ln9ozlECaZYLkKq9HHWKucm9sc2e52y32I1FoikgstIsV1l/S5VwbvELkchC5Mh5eAbcSGCRotC9TfIBUlGwwwnaMZ8tNgo0jBxPgOeU2ikdoIrgkrIiMXYUe6nz/AmvbYDYBjuqNnArVpxILOuJ6ytKUZGaadrI3sct+rFHqK20YFAyjuZrBgSIkNrBcx5epysj2dKpnRd4zyLoRlJQ'
 
-    const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
-        setValue(newValue)
+    const state = useState(0)
+    const tabProps: BackupRestoreTabProps = {
+        tabs: [
+            {
+                label: 'MNEMONIC WORDS',
+                component: (
+                    <InputBase
+                        style={{ width: '100%', minHeight: '100px' }}
+                        multiline
+                        defaultValue={mnemonicWordValue}
+                        readOnly></InputBase>
+                ),
+            },
+            {
+                label: 'BASE64',
+                component: (
+                    <InputBase
+                        style={{ width: '100%', minHeight: '100px' }}
+                        multiline
+                        defaultValue={base64Value}
+                        readOnly></InputBase>
+                ),
+            },
+        ],
+        state,
     }
     const content = (
         <>
             <Typography variant="body1">You can backup the persona with either way below.</Typography>
-            <div>
-                <AppBar position="static" color="default" elevation={0}>
-                    <Tabs
-                        value={value}
-                        onChange={handleChange}
-                        indicatorColor="primary"
-                        textColor="primary"
-                        variant="fullWidth">
-                        <Tab label="MNEMONIC WORDS" />
-                        <Tab label="BASE64" />
-                    </Tabs>
-                </AppBar>
-                <TabPanel value={value} index={0}>
-                    <InputBase style={{ width: '100%', minHeight: '100px' }} multiline></InputBase>
-                </TabPanel>
-                <TabPanel value={value} index={1}>
-                    <InputBase style={{ width: '100%', minHeight: '100px' }} multiline></InputBase>
-                </TabPanel>
-            </div>
+            <BackupRestoreTab margin="top" {...tabProps}></BackupRestoreTab>
         </>
     )
     return (
         <DialogContentItem
-            simplified
             title="Import Persona"
             content={content}
             actions={

@@ -117,7 +117,7 @@ export function DialogRouter(props: DialogRouterProps) {
         typeof onExit === 'function'
             ? onExit
             : () => {
-                  history.push(onExit || '../')
+                  history.push(onExit || '..')
               }
 
     return (

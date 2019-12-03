@@ -62,7 +62,7 @@ const OptionsPageRouters = (
             <Route path="/welcome" component={Welcome} />
             <Route path="/debug/" component={DashboardDebugPage}></Route>
             <Route path="/backup" component={() => <BackupDialog />} />
-            <DialogRouter path="/initialize" component={DashboardInitializeDialog} fullscreen />
+            <DialogRouter path="/initialize" component={DashboardInitializeDialog} onExit={'/'} fullscreen />
             <Redirect path="*" to="/home/" />
         </Switch>
     </>
