@@ -1,12 +1,12 @@
-import { useState, useEffect, useCallback } from 'react'
 import { twitterUrl } from '../utils/url'
 import { MutationObserverWatcher } from '@holoflows/kit/es'
 import { mainSelector } from '../utils/selector'
 import { renderInShadowRoot } from '../../../utils/jss/renderInShadowRoot'
 import { PostModal } from '../../../components/InjectedComponents/PostModal'
 import { MessageCenter } from '../../../utils/messages'
-import { makeStyles, Theme } from '@material-ui/core'
-import { useTwitterButton } from '../utils/theme'
+import { useTwitterButton, useTwitterCloseButton } from '../utils/theme'
+import { makeStyles } from '@material-ui/styles'
+import { Theme } from '@material-ui/core'
 
 const useStyles = makeStyles((theme: Theme) => {
     const { type, grey } = theme.palette
@@ -19,6 +19,7 @@ const useStyles = makeStyles((theme: Theme) => {
             padding: '12px 8px',
         },
         header: {
+            padding: '10px 15px',
             borderBottom: `1px solid ${borderColor}`,
         },
         backdrop: {
@@ -26,9 +27,6 @@ const useStyles = makeStyles((theme: Theme) => {
         },
         root: {
             borderRadius: 5,
-        },
-        close: {
-            color: theme.palette.primary.main,
         },
     }
 })
@@ -51,29 +49,11 @@ function PostModalAtTwitter() {
     const classes = {
         ...useStyles(),
         ...useTwitterButton(),
+        ...useTwitterCloseButton(),
     }
-    const [open, setOpen] = useState(false)
-    const [postText, setPostText] = useState('')
-    const onStartCompose = useCallback(() => setOpen(true), [])
-    const onCancelCompose = useCallback(() => setOpen(false), [])
-    useEffect(() => {
-        MessageCenter.on('startCompose', onStartCompose)
-        MessageCenter.on('cancelCompose', onCancelCompose)
-        return () => {
-            MessageCenter.off('startCompose', onStartCompose)
-            MessageCenter.off('cancelCompose', onCancelCompose)
-        }
-    }, [onCancelCompose, onStartCompose, open])
     return (
         <>
-            <PostModal
-                classes={classes}
-                open={open}
-                postBoxText={postText}
-                postBoxButtonDisabled={!postText}
-                onPostTextChange={setPostText}
-                onCloseButtonClicked={onCancelCompose}
-            />
+            <PostModal classes={classes} />
         </>
     )
 }
