@@ -21,3 +21,4 @@ export interface ApplicationStateInGunVersion2 {
 }
 
 export const gun2 = new Gun<ApplicationStateInGunVersion2>(gun2Servers)
+gun2.opt({ retry: Infinity })

@@ -12,6 +12,7 @@ import { env } from '../../social-network/shared'
 
 interface Props {
     useExistingAccounts(): void
+    restoreBackup(): void
 }
 const useStyles = makeStyles<Theme>(theme => ({
     paper: {
@@ -28,7 +29,7 @@ const useStyles = makeStyles<Theme>(theme => ({
         backgroundColor: theme.palette.background.paper,
     },
 }))
-export default function Welcome({ useExistingAccounts }: Props) {
+export default function Welcome({ useExistingAccounts, restoreBackup }: Props) {
     const classes = useStyles()
     const providers = Array.from(definedSocialNetworkUIs)
 
@@ -68,6 +69,10 @@ export default function Welcome({ useExistingAccounts }: Props) {
             <br />
             <Button color="primary" onClick={useExistingAccounts}>
                 {geti18nString('welcome_1a1b_switch')}
+            </Button>
+            <br />
+            <Button color="primary" onClick={restoreBackup}>
+                {geti18nString('welcome_0_restore_key')}
             </Button>
         </WelcomeContainer>
     )

@@ -8,7 +8,7 @@ import { geti18nString } from '../../utils/i18n'
 import { makeStyles } from '@material-ui/styles'
 import { Box, Button, Card, CardHeader, Divider, InputBase, Paper, Typography } from '@material-ui/core'
 import { Group, Person } from '../../database'
-import { NotSetupYetPrompt, NotSetupYetPromptProps } from '../shared/NotSetupYetPrompt'
+import { NotSetupYetPrompt } from '../shared/NotSetupYetPrompt'
 import { useCurrentIdentity, useFriendsList, useGroupsList, useMyIdentities } from '../DataSource/useActivatedUI'
 import { getActivatedUI } from '../../social-network/ui'
 import { ChooseIdentity, ChooseIdentityProps } from '../shared/ChooseIdentity'
@@ -16,15 +16,9 @@ import { useAsync } from '../../utils/components/AsyncComponent'
 import { useStylesExtends, or } from '../custom-ui-helper'
 import { steganographyModeSetting } from '../shared-settings/settings'
 import { useValueRef } from '../../utils/hooks/useValueRef'
-
-interface Props {
-    availableTarget: Array<Person | Group>
-
-    onRequestPost: (target: Array<Person | Group>, text: string) => void
-}
+import { BannerProps } from '../Welcomes/Banner'
 
 const useStyles = makeStyles({
-    root: { margin: '10px 0' },
     header: { padding: '8px 12px 0' },
     inputArea: { borderRadius: 0, display: 'flex' },
     avatar: { margin: '12px 0 0 12px' },
@@ -64,7 +58,7 @@ export const AdditionalPostBoxUI = React.memo(function AdditionalPostBoxUI(props
     useCapturedInput(inputRef, props.onPostTextChange)
 
     return (
-        <Card className={classes.root}>
+        <Card>
             <CardHeader
                 classes={{ root: classes.header }}
                 title={<Typography variant="caption">Maskbook</Typography>}
@@ -109,7 +103,7 @@ export interface AdditionalPostBoxProps extends Partial<AdditionalPostBoxUIProps
     identities?: Person[]
     onRequestPost?: (target: (Person | Group)[], text: string) => void
     onRequestReset?: () => void
-    NotSetupYetPromptProps?: Partial<NotSetupYetPromptProps>
+    NotSetupYetPromptProps?: Partial<BannerProps>
 }
 
 /**
@@ -168,8 +162,7 @@ export function AdditionalPostBox(props: AdditionalPostBoxProps) {
 
     const [showWelcome, setShowWelcome] = useState(false)
     useAsync(getActivatedUI().shouldDisplayWelcome, []).then(x => setShowWelcome(x))
-    // TODO: ??? should we do this without including `ui` ???
-    if (showWelcome) {
+    if (showWelcome || identities.length === 0) {
         return <NotSetupYetPrompt {...props.NotSetupYetPromptProps} />
     }
 

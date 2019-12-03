@@ -12,6 +12,7 @@ export interface AdditionalContentProps extends withClasses<KeysInferFromUseStyl
     renderText?: string
 }
 const useStyles = makeStyles({
+    root: { backgroundColor: 'transparent' },
     title: { display: 'flex', alignItems: 'center' },
     center: { justifyContent: 'center' },
     icon: { transform: 'translate(-1px, 1px)' },
@@ -20,7 +21,7 @@ export const AdditionalContent = React.memo(function AdditionalContent(props: Ad
     const classes = useStylesExtends(useStyles(), props)
     const icon = getUrl('/maskbook-icon-padded.png')
     return (
-        <Card elevation={0}>
+        <Card elevation={0} className={classes.root}>
             <Typography
                 variant="caption"
                 color="textSecondary"

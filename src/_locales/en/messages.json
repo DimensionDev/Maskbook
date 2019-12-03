@@ -1,7 +1,4 @@
 {
-    "manifest_description": {
-        "message": "Encrypt your posts & chats on You-Know-Where. Allow only your friends to decrypt."
-    },
     "additional_post_box__placeholder_w_name": {
         "message": "Hey $1, what's your mind? Encrypt with Maskbook"
     },
@@ -12,7 +9,8 @@
         "message": "📫 Post it!"
     },
     "additional_post_box__encrypted_post_pre": {
-        "message": "Decrypt this post with Maskbook! $1"
+        "message": "Decrypt this post with #Maskbook ! $1",
+        "description": "$1 should at the end of the string."
     },
     "additional_post_box__encrypted_failed": {
         "message": "Please paste the following text into the post box."
@@ -43,9 +41,6 @@
     },
     "decrypted_postbox_add_recipients": {
         "message": "View / add recipients"
-    },
-    "click_to_setup": {
-        "message": "Click here to setup your Maskbook account!"
     },
     "decrypted_postbox_verified": {
         "message": "Signature verified ✔"
@@ -170,26 +165,8 @@
     "welcome_0_close_button": {
         "message": "I'll do it later"
     },
-    "welcome_0_title": {
-        "message": "Welcome to Maskbook"
-    },
-    "welcome_0_description": {
-        "message": "You can post on social networks without allowing them to stalk, analyze, or spy on you."
-    },
-    "welcome_0_new_user": {
-        "message": "New user?"
-    },
-    "welcome_0_connect_maskbook": {
-        "message": "Setup Maskbook"
-    },
-    "welcome_0_old_user": {
-        "message": "Returning user?"
-    },
     "welcome_0_restore_key": {
-        "message": "Restore Keypair"
-    },
-    "welcome_0_caption": {
-        "message": "Lost your keypair backup? No worry. Simply start as a new user."
+        "message": "I want to restore my backup"
     },
     "welcome_1a1_title": {
         "message": "Setup which account?"
@@ -375,19 +352,22 @@
         "message": "Welcome to Maskbook"
     },
     "banner_preparing_setup": {
-        "message": "Maskbook is identifying how to setup your account..."
+        "message": "Maskbook needs your username to set up your account."
     },
     "banner_get_started": {
-        "message": "Get started"
+        "message": "Continue"
     },
-    "banner_dismiss_aria": {
-        "message": "Dismiss the banner"
+    "banner_empty_username": {
+        "message": "If not filled automatically, you may fill it."
+    },
+    "banner_invalid_username": {
+        "message": "This does not seem like a valid username."
     },
     "service_invalid_backup_file": {
-        "message": "This does not seems like Maskbook's backup."
+        "message": "This does not seems like a backup of Maskbook."
     },
     "service_others_key_not_found": {
-        "message": "$1's public key not found!"
+        "message": "Public key of $1 can not be found!"
     },
     "service_not_setup_yet": {
         "message": "You have not set up Maskbook yet!"
@@ -422,6 +402,9 @@
     "automation_request_paste_into_bio_box": {
         "message": "Please copy your public key into the bio box and publish it."
     },
+    "automation_pasted_into_bio_box": {
+        "message": "[Maskbook] We have helped you append the public key to bio, confirm by publish it!"
+    },
     "automation_request_paste_into_post_box": {
         "message": "Please copy your public key and publish it to your timeline!"
     },
@@ -452,9 +435,6 @@
     "options_mobile_export_generating": {
         "message": "Generating QR Code..."
     },
-    "options_mobile_export_title": {
-        "message": "Please scan this QR Code in your Maskbook for mobile"
-    },
     "options_mobile_export_subtitle": {
         "message": "DO NOT save or share it to others!"
     },
@@ -466,6 +446,12 @@
     },
     "database_group_friends_default_name": {
         "message": "Friends of $1"
+    },
+    "database_group_followers_name": {
+        "message": "Followers of $1"
+    },
+    "database_group_following_name": {
+        "message": "Following by $1"
     },
     "seen_in_maskbook_database": {
         "message": "They are seen in the Maskbook database ✔"

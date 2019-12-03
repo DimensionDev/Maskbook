@@ -9,6 +9,10 @@ import { twitterUIFetch } from './fetch'
 import { twitterUIInjections } from './inject'
 import { InitGroupsValueRef } from '../../../social-network/defaults/GroupsValueRef'
 import { twitterUrl } from '../utils/url'
+import React from 'react'
+import { createMuiTheme } from '@material-ui/core'
+import { MaskbookDarkTheme } from '../../../utils/theme'
+import { PreDefinedVirtualGroupNames } from '../../../database/type'
 
 export const instanceOfTwitterUI = defineSocialNetworkUI({
     ...sharedSettings,
@@ -18,7 +22,11 @@ export const instanceOfTwitterUI = defineSocialNetworkUI({
     init: (env, pref) => {
         sharedSettings.init(env, pref)
         InitFriendsValueRef(instanceOfTwitterUI, twitterUrl.hostIdentifier)
-        InitGroupsValueRef(instanceOfTwitterUI, twitterUrl.hostIdentifier)
+        InitGroupsValueRef(instanceOfTwitterUI, twitterUrl.hostIdentifier, [
+            PreDefinedVirtualGroupNames.friends,
+            PreDefinedVirtualGroupNames.followers,
+            PreDefinedVirtualGroupNames.following,
+        ])
         InitMyIdentitiesValueRef(instanceOfTwitterUI, twitterUrl.hostIdentifier)
     },
     shouldActivate(location: Location | URL = globalThis.location) {
@@ -41,4 +49,49 @@ export const instanceOfTwitterUI = defineSocialNetworkUI({
         setStorage(twitterUrl.hostIdentifier, { userIgnoredWelcome: true, forceDisplayWelcome: false }).then()
     },
     shouldDisplayWelcome: shouldDisplayWelcomeDefault,
+    useColorScheme() {
+        const [currentScheme, setScheme] = React.useState<'light' | 'dark'>('light')
+        React.useLayoutEffect(() => {
+            const id = setInterval(() => setScheme(isDarkMode()), 2000)
+            return () => clearInterval(id)
+        })
+        return currentScheme
+    },
+    darkTheme: createMuiTheme({
+        ...MaskbookDarkTheme,
+        palette: {
+            ...MaskbookDarkTheme.palette,
+            background: {
+                ...MaskbookDarkTheme.palette.background,
+                get paper() {
+                    return `rgb(${getBackgroundColor().join(',')})`
+                },
+            },
+        },
+    }),
 })
+
+function isDarkMode(): 'dark' | 'light' {
+    const [r, g, b] = getBackgroundColor()
+    if (r < 68 && g < 68 && b < 68) return 'dark'
+    return 'light'
+}
+
+function getBackgroundColor(): [number, number, number] {
+    if (typeof document !== 'object') return [255, 255, 255]
+    const background = String(
+        // @ts-ignore CSSOM
+        document.body?.computedStyleMap?.()?.get?.('background-color') ??
+            // Old CSSOM
+            document?.body?.style?.backgroundColor,
+    )
+    const match = background.match(/rgb\((\d+?), +(\d+?), +(\d+?)\)/)
+    if (match) {
+        const [_, r, g, b] = match
+        const nr = parseInt(r)
+        const ng = parseInt(g)
+        const nb = parseInt(b)
+        return [nr, ng, nb]
+    }
+    return [255, 255, 255]
+}

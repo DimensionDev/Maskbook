@@ -25,6 +25,10 @@ interface MaskbookMessages {
      */
     settingsUpdated: string
     /**
+     * emit when my identities created
+     */
+    identityCreated: undefined
+    /**
      * emit when my identities updated
      */
     identityUpdated: undefined
@@ -32,7 +36,6 @@ interface MaskbookMessages {
      * emit people changed in the database
      */
     peopleChanged: readonly PersonUpdateEvent[]
-    newGroup: Group
     joinGroup: {
         group: GroupIdentifier
         newMembers: PersonIdentifier[]

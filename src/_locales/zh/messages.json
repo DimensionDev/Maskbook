@@ -1,7 +1,4 @@
 {
-    "manifest_description": {
-        "message": "在臉書發佈加密訊息，只讓你的朋友閱讀。"
-    },
     "additional_post_box__placeholder_w_name": {
         "message": "Hey $1, 有何所思？用 Maskbook 加密分享。"
     },
@@ -12,7 +9,7 @@
         "message": "現在發佈！"
     },
     "additional_post_box__encrypted_post_pre": {
-        "message": "來 Maskbook 解密這個訊息！ $1",
+        "message": "來 #Maskbook 解密這個訊息！ $1",
         "description": "$1 须写在字串末。"
     },
     "additional_post_box__encrypted_failed": {
@@ -44,9 +41,6 @@
     },
     "decrypted_postbox_add_recipients": {
         "message": "查看或添加收件人"
-    },
-    "click_to_setup": {
-        "message": "點此開始配置"
     },
     "decrypted_postbox_verified": {
         "message": "數字簽名驗證成功 ✔"
@@ -171,26 +165,8 @@
     "welcome_0_close_button": {
         "message": "我想以後再做"
     },
-    "welcome_0_title": {
-        "message": "歡迎使用 Maskbook"
-    },
-    "welcome_0_description": {
-        "message": "從此無需擔心社交網路追蹤、分析、窺視你的數字生活"
-    },
-    "welcome_0_new_user": {
-        "message": "新用戶？"
-    },
-    "welcome_0_connect_maskbook": {
-        "message": "設置 Maskbook"
-    },
-    "welcome_0_old_user": {
-        "message": "老用戶？"
-    },
     "welcome_0_restore_key": {
         "message": "導入備份檔案"
-    },
-    "welcome_0_caption": {
-        "message": "弄丟了備份檔案？不用擔心，當作自己是新用戶即可。"
     },
     "welcome_1a1_title": {
         "message": "你希望為哪個賬戶設定 Maskbook？"
@@ -376,13 +352,16 @@
         "message": "歡迎使用 Maskbook"
     },
     "banner_preparing_setup": {
-        "message": "Maskbook 正在準備向導過程……"
+        "message": "Maskbook 需要你的用戶名來設定你的賬號。"
     },
     "banner_get_started": {
-        "message": "開始使用"
+        "message": "繼續設定 Maskbook"
     },
-    "banner_dismiss_aria": {
-        "message": "關閉消息"
+    "banner_empty_username": {
+        "message": "如果自動探測用戶名沒有成功，請手動在此輸入"
+    },
+    "banner_invalid_username": {
+        "message": "這看起來不像正確的用戶名"
     },
     "service_invalid_backup_file": {
         "message": "這貌似不是 Maskbook 的備份。"
@@ -423,6 +402,9 @@
     "automation_request_paste_into_bio_box": {
         "message": "請拷貝公鑰，然後發佈到個人簡介上。"
     },
+    "automation_pasted_into_bio_box": {
+        "message": "[Maskbook] 我們幫助您在簡介中填入了公鑰，請您審閱並發布它！"
+    },
     "automation_request_paste_into_post_box": {
         "message": "請拷貝公鑰，然後發佈到時間綫上。"
     },
@@ -453,9 +435,6 @@
     "options_mobile_export_generating": {
         "message": "正在生成 QR 碼…"
     },
-    "options_mobile_export_title": {
-        "message": "請在行動端 Maskbook 中掃描此 QR 碼以完成設定"
-    },
     "options_mobile_export_subtitle": {
         "message": "請不要保存或將此 QR 碼分享給他人！"
     },
@@ -467,6 +446,12 @@
     },
     "database_group_friends_default_name": {
         "message": "$1 的好友"
+    },
+    "database_group_followers_name": {
+        "message": "關注 $1 的好友"
+    },
+    "database_group_following_name": {
+        "message": "$1 關注的好友"
     },
     "seen_in_maskbook_database": {
         "message": "Maskbook 已了解此身份 ✔"

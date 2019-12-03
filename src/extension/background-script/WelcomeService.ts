@@ -26,7 +26,6 @@ import {
 } from '../../utils/mnemonic-code'
 import { derive_AES_GCM_256_Key_From_PBKDF2, import_PBKDF2_Key } from '../../utils/crypto.subtle'
 import { CryptoKeyToJsonWebKey } from '../../utils/type-transform/CryptoKey-JsonWebKey'
-import { createDefaultFriendsGroup } from '../../database'
 
 OnlyRunInContext('background', 'WelcomeService')
 async function generateBackupJSON(
@@ -187,7 +186,6 @@ async function generateNewIdentity(
         publicKey: key.publicKey,
         privateKey: key.privateKey,
     })
-    await createDefaultFriendsGroup(whoAmI).catch(console.error)
     MessageCenter.emit('identityUpdated', undefined)
 }
 

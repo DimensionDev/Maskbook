@@ -17,9 +17,26 @@ import { demoPeople } from './demoPeopleOrGroups'
 
 const ResponsiveDialog = Dialog
 storiesOf('Welcome', module)
-    .add('Banner', () => (
-        <BannerUI disabled={boolean('disabled', false)} close={action('Close')} getStarted={to('Welcome', 'Step 0')} />
-    ))
+    .add('Banner', () => {
+        const hiddenClose = boolean('Hidden close button', false)
+        const desc = text('description', '')
+        const title = text('title', '')
+        const isValid = boolean('is username valid', true)
+        return (
+            <BannerUI
+                close={hiddenClose ? 'hidden' : { onClose: action('Close') }}
+                nextStep={{ onClick: to('Welcome', 'Step 0') }}
+                username={{
+                    defaultValue: text('default value', ''),
+                    value: text('current value', ''),
+                    isValid: () => isValid,
+                    onChange: action('on username change'),
+                }}
+                description={desc === '' ? undefined : desc}
+                title={title === '' ? undefined : title}
+            />
+        )
+    })
     .add('Step 1a-1a', () => (
         <ResponsiveDialog open>
             <Welcome1a1a
@@ -31,7 +48,7 @@ storiesOf('Welcome', module)
     ))
     .add('Step 1a-1b', () => (
         <ResponsiveDialog open>
-            <Welcome1a1b useExistingAccounts={to('Welcome', 'Step 1a-1a')} />
+            <Welcome1a1b restoreBackup={to('Welcome', 'Step 1b-1')} useExistingAccounts={to('Welcome', 'Step 1a-1a')} />
         </ResponsiveDialog>
     ))
     .add('Step 1a-2', () => (

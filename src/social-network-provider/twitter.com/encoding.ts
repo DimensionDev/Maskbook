@@ -57,18 +57,18 @@ export const twitterEncoding = {
             [':||', '%40'],
             ['+', '-'],
             ['=', '_'],
-            ['|', '.'],
+            [/|/g, '.'],
         ])}`,
     payloadDecoder: (text: string) => {
-        let r = regexMatch(text, /https:\/\/.+\..+\/%20(.+)%40/, 1)
-        if (isNil(r)) {
+        let payload = regexMatch(text, /https:\/\/.+\..+\/%20(.+)%40/, 1)
+        if (isNil(payload)) {
             return 'null'
         }
-        r = batchReplace(r, [
+        payload = batchReplace(payload, [
             ['-', '+'],
             ['_', '='],
-            ['.', '|'],
+            [/\./g, '|'],
         ])
-        return `🎼${r}:||`
+        return `🎼${payload}:||`
     },
 }

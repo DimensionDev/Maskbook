@@ -101,7 +101,12 @@ function Welcome(props: Welcome) {
                 />
             )
         case WelcomeState.LinkNewSocialNetworks:
-            return <Welcome1a1b useExistingAccounts={() => onStepChange(WelcomeState.SelectIdentity)} />
+            return (
+                <Welcome1a1b
+                    restoreBackup={() => onStepChange(WelcomeState.RestoreKeypair)}
+                    useExistingAccounts={() => onStepChange(WelcomeState.SelectIdentity)}
+                />
+            )
         case WelcomeState.Intro:
             return (
                 <Welcome1a2
@@ -201,7 +206,7 @@ selectedIdRef.addListener(updateProveBio)
 
 const fillRefs = async () => {
     if (selectedIdRef.value.identifier.isUnknown) {
-        const all = await Services.People.queryMyIdentity()
+        const all = await Services.People.queryMyIdentities()
         ownedIdsRef.value = all
         if (all[0]) selectedIdRef.value = all[0]
     }
@@ -258,7 +263,7 @@ export default withRouter(function _WelcomePortal(props: RouteComponentProps) {
 
         if (id instanceof PersonIdentifier) {
             if (id.isUnknown) return
-            Services.People.queryMyIdentity(id)
+            Services.People.queryMyIdentities(id)
                 .then(([inDB = {} as Person]) => {
                     const person = (personInferFromURLRef.value = {
                         identifier: id,
