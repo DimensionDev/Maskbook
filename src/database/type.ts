@@ -79,8 +79,8 @@ export class PersonIdentifier extends Identifier {
 
 export enum PreDefinedVirtualGroupNames {
     friends = '_default_friends_group_',
-    followers = 'database_group_followers_name',
-    following = 'database_group_following_name',
+    followers = '_followers_group_',
+    following = '_following_group_',
 }
 
 @serializable('GroupIdentifier')
