@@ -1,8 +1,10 @@
 import React, { useState } from 'react'
 import { DialogContentItem } from './DialogBase'
 
-import { Button, TextField, Typography, makeStyles, createStyles, Dialog } from '@material-ui/core'
+import { TextField, Typography, makeStyles, createStyles, Dialog } from '@material-ui/core'
 import { Link, useHistory } from 'react-router-dom'
+
+import Buttone from '../../../components/Dashboard/Buttone'
 
 import classNames from 'classnames'
 
@@ -35,9 +37,9 @@ function ProfileConnectTestSuccessDialog(props: ProfileConnectTestSuccessDialogP
                 title="Setup Successful"
                 content={`You have seccessfully connected ${id} on ${network} to persona "${persona}".`}
                 actions={
-                    <Button className="actionButton" variant="outlined" color="default" onClick={onClose}>
+                    <Buttone className="actionButton" variant="outlined" color="default" onClick={onClose}>
                         Ok
-                    </Button>
+                    </Buttone>
                 }></DialogContentItem>
         </Dialog>
     )
@@ -58,9 +60,9 @@ function ProfileConnectTestFailedDialog(props: ProfileConnectTestFailedDialog) {
                 title="Setup Failure"
                 content={`The profile bio seems to be "${bio}"; it does not include public key of "${persona}".`}
                 actions={
-                    <Button className="actionButton" variant="outlined" color="default" onClick={onClose}>
+                    <Buttone className="actionButton" variant="outlined" color="default" onClick={onClose}>
                         Ok
-                    </Button>
+                    </Buttone>
                 }></DialogContentItem>
         </Dialog>
     )
@@ -87,14 +89,14 @@ export function ProfileConnectStartDialog() {
             content={content}
             actionsAlign="center"
             actions={
-                <Button
+                <Buttone
                     className="actionButton"
                     variant="contained"
                     color="primary"
                     component={Link}
                     to={`connect?name=${name}`}>
                     Ok
-                </Button>
+                </Buttone>
             }></DialogContentItem>
     )
 }
@@ -109,29 +111,29 @@ export function ProfileConnectDialog() {
             <section>
                 <Typography variant="h6">Step 1: Copy the public key below</Typography>
                 <Typography variant="body2">🔒45e56041ddd9491e91643dabd067cefe🔒</Typography>
-                <Button className={classes.button} variant="outlined" color="primary">
+                <Buttone className={classes.button} variant="outlined" color="primary">
                     Copy
-                </Button>
+                </Buttone>
             </section>
             <section>
                 <Typography variant="h6">Step 2: Paste it into your profile biography</Typography>
                 <Typography variant="body2">Hand-by-hand guides will show up after you move to the webpage.</Typography>
-                <Button className={classNames(classes.button, classes.buttonLarge)} variant="outlined" color="primary">
+                <Buttone className={classNames(classes.button, classes.buttonLarge)} variant="outlined" color="primary">
                     Go to twitter.com
-                </Button>
+                </Buttone>
             </section>
             <section>
                 <Typography variant="h6">Step 3: Test and finish</Typography>
                 <Typography variant="body2">
                     Come back here and finish the procedure. Test if your setup is successful.
                 </Typography>
-                <Button
+                <Buttone
                     onClick={() => setState('success')}
                     className={classNames(classes.button, classes.buttonLarge)}
                     variant="contained"
                     color="primary">
                     Test
-                </Button>
+                </Buttone>
             </section>
             {state === 'failed' && (
                 <ProfileConnectTestFailedDialog bio="Bio" persona="Persona" onClose={() => setState('')} />

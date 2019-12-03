@@ -1,16 +1,17 @@
 import React, { useRef, useState } from 'react'
 import StepBase from './StepBase'
-import { Button, Table, TableBody, TableRow, TableCell, styled } from '@material-ui/core'
+import { Table, TableBody, TableRow, TableCell, styled } from '@material-ui/core'
 import { geti18nString } from '../../../utils/i18n'
+import Buttone from '../../../components/Dashboard/Buttone'
 
 const header = 'Restoration Successful'
 const subheader = 'Restored from a backup at 2020-01-01 09:41 (UTC+0).'
 
 const actions = (
     <div>
-        <Button className="actionButton" variant="contained" color="primary">
+        <Buttone className="actionButton" variant="contained" color="primary">
             Done
-        </Button>
+        </Buttone>
     </div>
 )
 

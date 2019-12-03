@@ -3,7 +3,6 @@ import React from 'react'
 import { makeStyles, createStyles } from '@material-ui/styles'
 import {
     Theme,
-    Button,
     Typography,
     Card,
     Divider,
@@ -37,6 +36,7 @@ import {
     PersonaImportFailedDialog,
 } from './DashboardDialogs/Persona'
 import { ProfileConnectStartDialog, ProfileConnectDialog } from './DashboardDialogs/Profile'
+import Buttone from '../../components/Dashboard/Buttone'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -119,14 +119,14 @@ export default function DashboardHomePage() {
                                 }
                             />
                             <ListItemSecondaryAction>
-                                <Button
+                                <Buttone
                                     component={Link}
                                     to="database/backup"
                                     variant="contained"
                                     color="primary"
                                     className={classes.button}>
                                     Backup
-                                </Button>
+                                </Buttone>
                             </ListItemSecondaryAction>
                         </ListItem>
                     </List>
@@ -140,14 +140,14 @@ export default function DashboardHomePage() {
                             <ListItem key="initialize">
                                 <ListItemText primary="No persona was found" />
                                 <ListItemSecondaryAction>
-                                    <Button
+                                    <Buttone
                                         component={Link}
                                         to="/initialize"
                                         variant="contained"
                                         color="primary"
                                         className={classes.button}>
                                         Initialize
-                                    </Button>
+                                    </Buttone>
                                 </ListItemSecondaryAction>
                             </ListItem>
                         </List>
@@ -170,28 +170,28 @@ export default function DashboardHomePage() {
                         <ListItem key="persona-create">
                             <ListItemText primary="Create" secondary="Create a new persona." />
                             <ListItemSecondaryAction>
-                                <Button
+                                <Buttone
                                     variant="contained"
                                     color="primary"
                                     className={classes.button}
                                     component={Link}
                                     to="persona/create">
                                     Create
-                                </Button>
+                                </Buttone>
                             </ListItemSecondaryAction>
                         </ListItem>
                         <Divider></Divider>
                         <ListItem key="persona-import">
                             <ListItemText primary="Import" secondary="From a previous persona backup." />
                             <ListItemSecondaryAction>
-                                <Button
-                                    variant="contained"
+                                <Buttone
+                                    variant="outlined"
                                     color="default"
                                     className={classes.button}
                                     component={Link}
                                     to="persona/import">
                                     Import
-                                </Button>
+                                </Buttone>
                             </ListItemSecondaryAction>
                         </ListItem>
                     </List>
@@ -209,28 +209,28 @@ export default function DashboardHomePage() {
                                 secondary="Create a database backup file. Do it frequently."
                             />
                             <ListItemSecondaryAction>
-                                <Button
+                                <Buttone
                                     variant="contained"
                                     color="primary"
                                     className={classes.button}
                                     component={Link}
                                     to="database/backup">
                                     Backup
-                                </Button>
+                                </Buttone>
                             </ListItemSecondaryAction>
                         </ListItem>
                         <Divider></Divider>
                         <ListItem key="dashboard-restore">
                             <ListItemText primary="Restore" secondary="From a previous database backup." />
                             <ListItemSecondaryAction>
-                                <Button
-                                    variant="contained"
+                                <Buttone
+                                    variant="outlined"
                                     color="default"
                                     className={classes.button}
                                     component={Link}
                                     to="database/restore">
                                     Restore
-                                </Button>
+                                </Buttone>
                             </ListItemSecondaryAction>
                         </ListItem>
                     </List>

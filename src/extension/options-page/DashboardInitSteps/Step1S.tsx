@@ -1,8 +1,9 @@
 import React, { useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import StepBase from './StepBase'
-import { Button, TextField, makeStyles, createStyles } from '@material-ui/core'
+import { TextField, makeStyles, createStyles } from '@material-ui/core'
 import { geti18nString } from '../../../utils/i18n'
+import Buttone from '../../../components/Dashboard/Buttone'
 
 const header = 'Step 1: What is your name?'
 const subheader = 'You may connect social network profiles to your persona in the next step.'
@@ -33,17 +34,17 @@ export default function InitStep1S() {
 
     const actions = (
         <>
-            <Button className="actionButton" variant="outlined" color="default" component={Link} to="start">
+            <Buttone className="actionButton" variant="outlined" color="default" component={Link} to="start">
                 Back
-            </Button>
-            <Button
+            </Buttone>
+            <Buttone
                 className="actionButton"
                 variant="contained"
                 color="primary"
                 component={Link}
                 to={`2s?name=${name}`}>
                 Next
-            </Button>
+            </Buttone>
         </>
     )
     const content = (

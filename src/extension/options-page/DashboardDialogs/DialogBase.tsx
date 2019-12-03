@@ -36,13 +36,13 @@ const useStyles = makeStyles(theme =>
             lineHeight: 2,
         },
         dialogActions: {
+            padding: `0 ${theme.spacing(4)}px ${theme.spacing(2)}px`,
             '& .actionButton': {
                 width: 140,
             },
         },
         dialogActionsCenter: {
             justifyContent: 'center',
-            marginBottom: theme.spacing(2),
         },
         closeButton: {
             marginRight: theme.spacing(2),

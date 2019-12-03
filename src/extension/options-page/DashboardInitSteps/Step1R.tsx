@@ -1,20 +1,11 @@
-import React, { useRef, useState } from 'react'
+import React, { useState } from 'react'
 import StepBase from './StepBase'
-import {
-    Button,
-    Box,
-    Typography,
-    styled,
-    Theme,
-    TextField,
-    makeStyles,
-    createStyles,
-    InputBase,
-} from '@material-ui/core'
+import { Typography, styled, Theme, makeStyles, createStyles, InputBase } from '@material-ui/core'
 import { geti18nString } from '../../../utils/i18n'
 import { useDragAndDrop } from '../../../utils/hooks/useDragAndDrop'
 import { Link } from 'react-router-dom'
 import BackupRestoreTab, { BackupRestoreTabProps } from '../DashboardComponents/BackupRestoreTab'
+import Buttone from '../../../components/Dashboard/Buttone'
 
 const header = 'Restore Database'
 
@@ -42,12 +33,12 @@ const useStyles = makeStyles(theme =>
 
 const actions = (
     <>
-        <Button className="actionButton" variant="outlined" color="default" component={Link} to="start">
+        <Buttone className="actionButton" variant="outlined" color="default" component={Link} to="start">
             Back
-        </Button>
-        <Button className="actionButton" variant="outlined" color="primary" component={Link} to="1ra">
+        </Buttone>
+        <Buttone className="actionButton" variant="outlined" color="primary" component={Link} to="1ra">
             Advanced...
-        </Button>
+        </Buttone>
     </>
 )
 
@@ -128,9 +119,9 @@ export default function InitStep1R() {
                         geti18nString('welcome_1b_file_selected', fileRef.current.name)
                     ) : (
                         <>
-                            <Button variant="contained" color="primary" className={classes.restoreBoxButton}>
+                            <Buttone variant="contained" color="primary" className={classes.restoreBoxButton}>
                                 Select File
-                            </Button>
+                            </Buttone>
                             <Typography variant="body2">Or drop a file here...</Typography>
                         </>
                     )}
