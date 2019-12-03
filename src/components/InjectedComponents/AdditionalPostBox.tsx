@@ -169,8 +169,8 @@ export function AdditionalPostBox(props: AdditionalPostBoxProps) {
     const ui = (
         <AdditionalPostBoxUI
             currentIdentity={currentIdentity}
-            availableShareTarget={availableShareTarget}
             currentShareTarget={currentShareTarget}
+            availableShareTarget={availableShareTarget}
             onShareTargetChanged={onShareTargetChanged}
             postBoxText={postText}
             postBoxPlaceholder={geti18nString(

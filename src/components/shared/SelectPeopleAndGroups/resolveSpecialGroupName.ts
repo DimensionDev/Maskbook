@@ -27,6 +27,7 @@ export function useResolveSpecialGroupName(group: Group | Person) {
     if (!isGroup(group)) return ''
     return resolveSpecialGroupName(group, [...x, ...y])
 }
+
 function isGroup(group: Group | Person): group is Group {
     return group.identifier instanceof GroupIdentifier
 }
