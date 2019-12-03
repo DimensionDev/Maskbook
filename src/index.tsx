@@ -33,7 +33,8 @@ const useStyles = makeStyles(theme =>
             display: 'flex',
         },
         container: {
-            flex: '1 0 auto',
+            width: '100%',
+            flex: '1 1 auto',
             paddingBottom: 80,
         },
         root: {
