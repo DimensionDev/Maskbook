@@ -48,7 +48,7 @@
     "@types/react-dom": "^16.9.4",
     "@types/react-router-dom": "^5.1.2",
     "@types/tiny-secp256k1": "^1.0.0",
-    "@typescript-eslint/eslint-plugin": "^2.6.1",
+    "@typescript-eslint/eslint-plugin": "^2.10.0",
     "anchorme": "^1.1.2",
     "async-call-rpc": "^1.0.0",
     "bip39": "^3.0.2",
