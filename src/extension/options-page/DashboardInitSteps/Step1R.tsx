@@ -1,9 +1,20 @@
 import React, { useRef, useState } from 'react'
 import StepBase from './StepBase'
-import { Button, Box, Typography, styled, Theme, TextField, makeStyles, createStyles } from '@material-ui/core'
+import {
+    Button,
+    Box,
+    Typography,
+    styled,
+    Theme,
+    TextField,
+    makeStyles,
+    createStyles,
+    InputBase,
+} from '@material-ui/core'
 import { geti18nString } from '../../../utils/i18n'
 import { useDragAndDrop } from '../../../utils/hooks/useDragAndDrop'
 import { Link } from 'react-router-dom'
+import BackupRestoreTab, { BackupRestoreTabProps } from '../DashboardComponents/BackupRestoreTab'
 
 const header = 'Restore Database'
 
@@ -34,19 +45,18 @@ const actions = (
         <Button className="actionButton" variant="outlined" color="default" component={Link} to="start">
             Back
         </Button>
-        <Button className="actionButton" variant="outlined" color="primary">
-            Import Persona
+        <Button className="actionButton" variant="outlined" color="primary" component={Link} to="1ra">
+            Advanced...
         </Button>
     </>
 )
 
 const RestoreBox = styled('div')(({ theme }: { theme: Theme }) => ({
     color: theme.palette.text.hint,
-    border: `1px solid ${theme.palette.divider}`,
     whiteSpace: 'pre-line',
     width: '100%',
     height: '100%',
-    borderRadius: theme.shape.borderRadius,
+    minHeight: 180,
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
@@ -67,9 +77,34 @@ export default function InitStep1R() {
         })
     })
 
+    const textValue =
+        'WFceyl2VOyvyeaqkTodUI1XulcXQkRVQvh3U65vvMUuRq2ln9ozlECaZYLkKq9HHWKucm9sc2e52y32I1FoikgstIsV1l/S5VwbvELkchC5Mh5eAbcSGCRotC9TfIBUlGwwwnaMZ8tNgo0jBxPgOeU2ikdoIrgkrIiMXYUe6nz/AmvbYDYBjuqNnArVpxILOuJ6ytKUZGaadrI3sct+rFHqK20YFAyjuZrBgSIkNrBcx5epysj2dKpnRd4zyLoRlJQ'
+
+    const state = useState(0)
+    const tabProps: BackupRestoreTabProps = {
+        tabs: [
+            {
+                label: 'File',
+                component: <FileUI></FileUI>,
+                p: 0,
+            },
+            {
+                label: 'TEXT',
+                component: (
+                    <InputBase
+                        style={{ width: '100%', minHeight: '100px' }}
+                        multiline
+                        defaultValue={textValue}
+                        readOnly></InputBase>
+                ),
+            },
+        ],
+        state,
+    }
+
     const content = (
         <div style={{ alignSelf: 'stretch', textAlign: 'center', width: '100%' }}>
-            <FileUI></FileUI>
+            <BackupRestoreTab {...tabProps}></BackupRestoreTab>
         </div>
     )
 

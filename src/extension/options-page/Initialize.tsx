@@ -6,6 +6,7 @@ import InitStep0 from './DashboardInitSteps/Step0'
 import InitStep1S from './DashboardInitSteps/Step1S'
 import InitStep2S from './DashboardInitSteps/Step2S'
 import InitStep1R from './DashboardInitSteps/Step1R'
+import InitStep1Ra from './DashboardInitSteps/Step1Ra'
 import InitStep2R from './DashboardInitSteps/Step2R'
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -69,6 +70,8 @@ const InitializeSteps = () => {
             return <InitStep2S />
         case '1r':
             return <InitStep1R />
+        case '1ra':
+            return <InitStep1Ra />
         case '2r':
             return <InitStep2R />
     }

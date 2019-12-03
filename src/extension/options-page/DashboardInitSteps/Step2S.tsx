@@ -2,7 +2,7 @@ import React, { useRef, useState } from 'react'
 import StepBase from './StepBase'
 import { Button, Typography } from '@material-ui/core'
 import { geti18nString } from '../../../utils/i18n'
-import ProviderLine from '../DashboardComponents/Provider'
+import ProviderLine from '../DashboardComponents/ProviderLine'
 import { Link, useHistory } from 'react-router-dom'
 
 const header = 'Step 2: Connect a social network profile'

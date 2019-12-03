@@ -8,6 +8,7 @@ const useStyles = makeStyles((theme: Theme) =>
         text: {
             width: '200px',
             display: 'block',
+            color: theme.palette.primary.main,
         },
         control: {
             display: 'flex',
@@ -18,6 +19,9 @@ const useStyles = makeStyles((theme: Theme) =>
             paddingTop: theme.spacing(1),
             paddingBottom: theme.spacing(1),
             borderBottom: `1px solid ${theme.palette.divider}`,
+        },
+        connected: {
+            color: theme.palette.text.primary,
         },
     }),
 )
@@ -37,7 +41,10 @@ export default function ProviderLine(props: ProviderLineProps) {
     return (
         <FormControl className={classNames(classes.control, { [classes.controlBorder]: border })}>
             <Typography variant="caption">{network}</Typography>
-            <Typography variant="body1" className={classes.text}>
+            <Typography
+                variant="body1"
+                component="a"
+                className={classNames(classes.text, { [classes.connected]: connected })}>
                 {connected ? `Connected: ${id}` : `Connect ${network}`}
             </Typography>
         </FormControl>

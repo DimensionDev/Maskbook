@@ -1,37 +1,40 @@
 import React from 'react'
-import { makeStyles } from '@material-ui/styles'
-import { CardContent, CardActions, CardHeader } from '@material-ui/core'
+import { makeStyles, createStyles } from '@material-ui/styles'
+import { CardContent, CardActions, CardHeader, Theme } from '@material-ui/core'
 
-const useStyles = makeStyles({
-    cardHeader: {
-        flex: '0 0 auto',
-        height: 92,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        '&>*': {
-            textAlign: 'center',
+const useStyles = makeStyles((theme: Theme) =>
+    createStyles({
+        cardHeader: {
+            flex: '0 0 auto',
+            height: 92,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            '&>*': {
+                textAlign: 'center',
+            },
         },
-    },
-    cardContent: {
-        flex: '1 1 auto',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    cardActions: {
-        flex: '0 0 auto',
-        height: 84,
-        display: 'flex',
-        justifyContent: 'space-between',
-        '& .actionButton': {
-            width: 140,
+        cardContent: {
+            flex: '1 1 auto',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: `0 ${theme.spacing(1)}px`,
         },
-        '& > div': {
-            margin: 'auto',
+        cardActions: {
+            flex: '0 0 auto',
+            height: 84,
+            display: 'flex',
+            justifyContent: 'space-between',
+            '& .actionButton': {
+                width: 140,
+            },
+            '& > div': {
+                margin: 'auto',
+            },
         },
-    },
-})
+    }),
+)
 
 interface StepBaseProps {
     header?: string
