@@ -40,7 +40,7 @@ export default function ProviderLine(props: ProviderLineProps) {
 
     return (
         <FormControl className={classNames(classes.control, { [classes.controlBorder]: border })}>
-            <Typography variant="caption">{network}</Typography>
+            <Typography variant="overline">{network}</Typography>
             <Typography
                 variant="body1"
                 component="a"
