@@ -1,7 +1,7 @@
 {
   "name": "maskbook",
   "license": "AGPL-3.0-or-later",
-  "version": "1.8.3",
+  "version": "1.8.4",
   "private": true,
   "engines": {
     "node": ">=12.0.0"
