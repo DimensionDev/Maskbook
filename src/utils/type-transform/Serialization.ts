@@ -1,10 +1,6 @@
 /// <reference path="../../env.d.ts" />
 import { Serialization } from '@holoflows/kit'
-import Typeson from 'typeson/dist/typeson-esm'
-
-const typeson = new Typeson().register([require('typeson-registry/dist/presets/builtin')])
-typeson.register({})
-require('../../database/IdentifierMap')
+import Typeson from 'typeson'
 
 export function serializable(name: string) {
     return <T extends NewableFunction>(constructor: T) => {
@@ -18,6 +14,11 @@ export function serializable(name: string) {
         return constructor
     }
 }
+
+const typeson = new Typeson().register([require('typeson-registry/dist/presets/builtin')])
+typeson.register({})
+// To register this type in the typeson
+require('../../database/IdentifierMap')
 
 export default {
     async serialization(from) {

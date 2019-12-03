@@ -1,5 +1,5 @@
 import { AsyncCall, AsyncGeneratorCall, AsyncCallOptions } from 'async-call-rpc'
-import { GetContext, OnlyRunInContext } from '@holoflows/kit/es/Extension/Context'
+import { GetContext, OnlyRunInContext } from '@holoflows/kit/es'
 import * as MockService from './mock-service'
 import Serialization from '../utils/type-transform/Serialization'
 import { ProfileIdentifier, GroupIdentifier, PostIdentifier, PostIVIdentifier } from '../database/type'

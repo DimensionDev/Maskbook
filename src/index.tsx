@@ -38,7 +38,6 @@ import BackupDialog from './extension/options-page/Backup'
 
 import { SnackbarProvider } from 'notistack'
 import Services from './extension/service'
-import { ProfileIdentifier } from './database/type'
 import { geti18nString } from './utils/i18n'
 
 const useStyles = makeStyles(theme =>
