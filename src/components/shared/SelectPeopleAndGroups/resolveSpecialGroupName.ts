@@ -9,10 +9,16 @@ function resolveSpecialGroupName(group: Group, knownPeople: Person[]): string {
     for (const person of knownPeople.filter(x => x.identifier.equals(group.identifier.ownerIdentifier))) {
         owner = person.nickname || owner
     }
-    if (group.groupName === PreDefinedVirtualGroupNames.friends) {
-        return geti18nString('database_group_friends_default_name', owner)
+    switch (group.groupName) {
+        case PreDefinedVirtualGroupNames.friends:
+            return geti18nString('database_group_friends_default_name', owner)
+        case PreDefinedVirtualGroupNames.followers:
+            return geti18nString('database_group_followers_name', owner)
+        case PreDefinedVirtualGroupNames.following:
+            return geti18nString('database_group_following_name', owner)
+        default:
+            return geti18nString(group.groupName as keyof I18NStrings, owner)
     }
-    return geti18nString(group.groupName as keyof I18NStrings, owner)
 }
 
 export function useResolveSpecialGroupName(group: Group | Person) {
