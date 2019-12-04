@@ -1,24 +1,41 @@
 import React, { useEffect, useRef } from 'react'
-import { styled } from '@material-ui/core/styles'
 import { useCapturedInput } from '../../utils/hooks/useCapturedEvents'
 import { PropsOf } from '@emotion/styled-base/types/helper'
 import { geti18nString } from '../../utils/i18n'
+import { makeStyles } from '@material-ui/styles'
+import { InputBase } from '@material-ui/core'
 
-const Input = styled('input')({
-    background: '#f2f3f5',
-    border: '1px solid #ccd0d5',
-    width: '100%',
-    height: 34,
-    borderRadius: 20,
-    padding: '2px 1em',
-    boxSizing: 'border-box',
-    marginTop: 6,
+const useStyles = makeStyles(() => {
+    return {
+        root: {
+            fontSize: 13,
+            background: '#f2f3f5',
+            border: '1px solid #ccd0d5',
+            width: '100%',
+            height: 34,
+            borderRadius: 20,
+            padding: '2px 1em',
+            boxSizing: 'border-box',
+            marginTop: 6,
+        },
+        input: {
+            '&::placeholder': {
+                color: '#8d949e',
+                opacity: 1,
+            },
+            '&:focus::placeholder': {
+                color: '#bec3c9',
+            },
+        },
+    }
 })
+
 export interface CommentBoxProps {
     onSubmit: (newVal: string) => void
-    inputProps?: Partial<PropsOf<typeof Input>>
+    inputProps?: Partial<PropsOf<typeof InputBase>>
 }
 export function CommentBox(props: CommentBoxProps) {
+    const classes = useStyles()
     const inputRef = useRef<HTMLInputElement>(null)
     const binder = useCapturedInput(inputRef, () => {})
     useEffect(
@@ -30,5 +47,13 @@ export function CommentBox(props: CommentBoxProps) {
             }
         }),
     )
-    return <Input placeholder={geti18nString('comment_box__placeholder')} {...props.inputProps} ref={inputRef} />
+    return (
+        <InputBase
+            className={classes.root}
+            inputProps={{ className: classes.input }}
+            placeholder={geti18nString('comment_box__placeholder')}
+            {...props.inputProps}
+            ref={inputRef}
+        />
+    )
 }
