@@ -179,7 +179,10 @@ function Welcome(props: Welcome) {
                         const network = whoAmI.identifier
                         const profile = await getCurrentNetworkWorker(network).fetchProfile(network)
                         if (profile.bioContent.includes(provePost)) onFinish('done')
-                        else alert(geti18nString('dashboard_verification_failed', provePost))
+                        else {
+                            alert(geti18nString('dashboard_verification_failed', provePost))
+                            console.warn('[debug] We got', profile)
+                        }
                     }}
                 />
             )
@@ -204,7 +207,10 @@ function Welcome(props: Welcome) {
                             return onFinish('done')
                         }
                         if (profile.bioContent.includes(provePost)) onFinish('done')
-                        else alert(geti18nString('dashboard_verification_failed', provePost))
+                        else {
+                            alert(geti18nString('dashboard_verification_failed', provePost))
+                            console.warn('[debug] We got', profile)
+                        }
                     }}
                 />
             )
