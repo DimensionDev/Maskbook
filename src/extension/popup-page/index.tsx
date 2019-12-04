@@ -12,6 +12,7 @@ import { useSettingsUI } from '../../components/shared-settings/createSettings'
 import { ChooseIdentity } from '../../components/shared/ChooseIdentity'
 import { getActivatedUI } from '../../social-network/ui'
 import { useAsync } from '../../utils/components/AsyncComponent'
+import { getUrl } from '../../utils/utils'
 
 const useStyles = makeStyles(theme => ({
     button: {
@@ -50,7 +51,7 @@ export function Popup() {
                 max-width: 100%;
             }`}</style>
             <main className={classes.container}>
-                <img className={classes.logo} src="https://dimensiondev.github.io/Maskbook-VI/MB--Text--Blue.svg" />
+                <img className={classes.logo} src={getUrl('/maskbook.svg')} />
                 {showIdentitySelector ? <ChooseIdentity /> : null}
                 <Button
                     variant="contained"
