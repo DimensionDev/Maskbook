@@ -16,6 +16,7 @@ export const bioCard = () =>
         [
             '.profile', // legacy twitter
             'a[href*="header_photo"] ~ div', // new twitter
+            'div[data-testid="primaryColumn"] > div > div:last-child > div > div > div > div ~ div', // new twitter without header photo
         ].join(),
     )
 
