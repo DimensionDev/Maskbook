@@ -20,11 +20,9 @@ const useStyles = makeStyles({
 export const AdditionalContent = React.memo(function AdditionalContent(props: AdditionalContentProps) {
     const classes = useStylesExtends(useStyles(), props)
     const icon = getUrl('/maskbook-icon-padded.png')
+    const stop = React.useCallback((ev: React.MouseEvent<HTMLDivElement, MouseEvent>) => ev.stopPropagation(), [])
     return (
-        <Card
-            className={classes.root}
-            elevation={0}
-            onClick={(ev: React.MouseEvent<HTMLDivElement, MouseEvent>) => ev.stopPropagation()}>
+        <Card className={classes.root} elevation={0} onClick={stop}>
             <Typography
                 variant="caption"
                 color="textSecondary"
