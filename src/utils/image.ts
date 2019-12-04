@@ -24,14 +24,19 @@ function getDimensionAsPNG(buf: Uint8Array) {
     }
 }
 
+/**
+ * Get dimension of a JPEG image
+ *
+ * @see http://vip.sugovica.hu/Sardi/kepnezo/JPEG%20File%20Layout%20and%20Format.htm
+ */
 function getDimensionAsJPEG(buf: Uint8Array) {
     const dataView = new DataView(buf.buffer)
     let i = 0
     if (
         dataView.getUint8(i) === 0xff &&
-        dataView.getUint8(i + 1) === 0xd8 &&
+        dataView.getUint8(i + 1) === 0xd8 && // SOI marker
         dataView.getUint8(i + 2) === 0xff &&
-        dataView.getUint8(i + 3) === 0xe0
+        dataView.getUint8(i + 3) === 0xe0 // APP0 marker
     ) {
         i += 4
         if (
@@ -46,7 +51,10 @@ function getDimensionAsJPEG(buf: Uint8Array) {
                 i += block_length
                 if (i >= buf.length) return
                 if (dataView.getUint8(i) !== 0xff) return
-                if (dataView.getUint8(i + 1) === 0xc0 || dataView.getUint8(i + 1) === 0xc2) {
+                if (
+                    dataView.getUint8(i + 1) === 0xc0 || // SOF0 marker
+                    dataView.getUint8(i + 1) === 0xc2 // SOF2 marker
+                ) {
                     return {
                         height: dataView.getUint8(i + 5) * 256 + dataView.getUint8(i + 6),
                         width: dataView.getUint8(i + 7) * 256 + dataView.getUint8(i + 8),
