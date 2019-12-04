@@ -194,11 +194,12 @@ function Welcome(props: Welcome) {
                             error => alert(error),
                         )
                     }}
-                    verify={async () => {
-                        const network = whoAmI.identifier
+                    verify={async json => {
                         let profile
                         try {
-                            profile = await getCurrentNetworkWorker(network).fetchProfile(network)
+                            const { network, userId } = json.whoami[0]
+                            const whoami = new PersonIdentifier(network, userId)
+                            profile = await getCurrentNetworkWorker(whoami).fetchProfile(whoami)
                         } catch {
                             return onFinish('done')
                         }

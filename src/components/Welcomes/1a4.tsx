@@ -76,8 +76,8 @@ export default function Welcome(props: Props) {
             </Typography>
             <div>
                 {(bioAvailable || postAvailable) && (
-                    <Button onClick={start} variant="contained" color="primary" className={classes.button}>
-                        {geti18nString('start')}
+                    <Button onClick={start} variant="contained" color="default" className={classes.button}>
+                        {geti18nString(startClicked ? 'retry' : 'start')}
                     </Button>
                 )}
                 {type === 'bio' && startClicked && (
@@ -89,9 +89,9 @@ export default function Welcome(props: Props) {
                             requestVerifyBio().then(() => setLoading(false))
                         }}
                         variant="contained"
-                        color="secondary"
+                        color="primary"
                         className={classes.button}>
-                        {geti18nString('verify')}
+                        {geti18nString(loading ? 'verifying' : 'welcome_1a1_next')}
                     </Button>
                 )}
             </div>

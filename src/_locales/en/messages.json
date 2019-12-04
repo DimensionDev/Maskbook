@@ -108,8 +108,11 @@
     "start": {
         "message": "Start"
     },
-    "verify": {
-        "message": "Verify"
+    "retry": {
+        "message": "Retry"
+    },
+    "verifying": {
+        "message": "Verifying..."
     },
     "skip": {
         "message": "Skip"

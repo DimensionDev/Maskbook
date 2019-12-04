@@ -59,7 +59,7 @@ interface Props {
     // ? because read the file is a async procedure.
     restore(json: BackupJSONFileLatest): Promise<void>
     finish(): void
-    verify(): Promise<void>
+    verify(json: BackupJSONFileLatest): Promise<void>
 }
 const videoHeight = 360
 const useStyles = makeStyles((theme: Theme) => ({
@@ -204,7 +204,7 @@ export default function Welcome({ restore: originalRestore, verify, finish }: Pr
                                     setLoading(true)
                                     originalRestore(json)
                                         .then(() => setRestored(true))
-                                        .then(verify)
+                                        .then(() => verify(json))
                                         .then(() => setLoading(false))
                                 }}
                                 color="primary"

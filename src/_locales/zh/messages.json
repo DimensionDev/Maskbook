@@ -108,8 +108,11 @@
     "start": {
         "message": "開始"
     },
-    "verify": {
-        "message": "校驗"
+    "retry": {
+        "message": "重試"
+    },
+    "verifying": {
+        "message": "驗證中..."
     },
     "skip": {
         "message": "跳過"
