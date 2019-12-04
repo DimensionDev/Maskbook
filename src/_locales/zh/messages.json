@@ -21,6 +21,9 @@
     "additional_post_box__steganography_post_failed": {
         "message": "請將已下載的圖片上载至發佈框。"
     },
+    "comment_box__placeholder": {
+        "message": "添加一條加密評論…"
+    },
     "comment_box__paste_failed": {
         "message": "請將以下内容拷貝至評論框。"
     },

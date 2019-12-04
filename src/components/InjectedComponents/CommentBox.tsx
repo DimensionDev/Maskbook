@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react'
 import { styled } from '@material-ui/core/styles'
 import { useCapturedInput } from '../../utils/hooks/useCapturedEvents'
 import { PropsOf } from '@emotion/styled-base/types/helper'
+import { geti18nString } from '../../utils/i18n'
 
 const Input = styled('input')({
     background: '#f2f3f5',
@@ -29,5 +30,5 @@ export function CommentBox(props: CommentBoxProps) {
             }
         }),
     )
-    return <Input placeholder="Maskbook!" {...props.inputProps} ref={inputRef} />
+    return <Input placeholder={geti18nString('comment_box__placeholder')} {...props.inputProps} ref={inputRef} />
 }
