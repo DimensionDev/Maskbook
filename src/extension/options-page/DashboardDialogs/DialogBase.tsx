@@ -103,7 +103,7 @@ interface DialogRouterProps {
     component?: React.ComponentType<any>
     children?: JSX.Element
     fullscreen?: boolean
-    onExit?: string | (() => undefined)
+    onExit?: string | (() => void)
 }
 
 export function DialogRouter(props: DialogRouterProps) {

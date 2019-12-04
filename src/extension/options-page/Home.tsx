@@ -19,16 +19,10 @@ import Services from '../service'
 import { DialogRouter } from './DashboardDialogs/DialogBase'
 
 import PersonaCard from './DashboardComponents/PersonaCard'
-import {
-    DatabaseBackupDialog,
-    DatabaseRestoreDialog,
-    DatabaseRestoreSuccessDialog,
-    DatabaseRestoreFailedDialog,
-} from './DashboardDialogs/Database'
+import { DatabaseRestoreDialog } from './DashboardDialogs/Database'
 import {
     PersonaCreateDialog,
     PersonaCreatedDialog,
-    PersonaDeleteDialog,
     PersonaBackupDialog,
     PersonaImportDialog,
     PersonaImportSuccessDialog,
@@ -101,7 +95,6 @@ export default function DashboardHomePage() {
 
     const dialogs = (
         <>
-            <DialogRouter path="/database/backup" children={<DatabaseBackupDialog />} />
             <DialogRouter path="/database/restore" children={<DatabaseRestoreDialog />} />
             <DialogRouter path="/persona/create" children={<PersonaCreateDialog />} />
             <DialogRouter path="/persona/created" children={<PersonaCreatedDialog />} />
@@ -109,8 +102,6 @@ export default function DashboardHomePage() {
             <DialogRouter path="/persona/import" children={<PersonaImportDialog />} />
             <DialogRouter path="/persona/success" children={<PersonaImportSuccessDialog />} />
             <DialogRouter path="/persona/failed" children={<PersonaImportFailedDialog />} />
-            <DialogRouter path="/profile/start" children={<ProfileConnectStartDialog />} />
-            <DialogRouter path="/profile/connect" children={<ProfileConnectDialog />} />
         </>
     )
 
@@ -130,11 +121,12 @@ export default function DashboardHomePage() {
                             />
                             <ListItemSecondaryAction>
                                 <ActionButton
-                                    component={Link}
-                                    to={'database/backup'}
                                     variant="contained"
                                     color="primary"
-                                    className={classes.button}>
+                                    className={classes.button}
+                                    component={'a'}
+                                    loading={exportLoading}
+                                    onClick={exportData}>
                                     Backup
                                 </ActionButton>
                             </ListItemSecondaryAction>
