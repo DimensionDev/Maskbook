@@ -10,6 +10,7 @@ import classNames from 'classnames'
 import { useColorProvider } from '../../../utils/theme'
 import { ProfileIdentifier } from '../../../database/type'
 import Services from '../../service'
+import { getNetworkWorker } from '../../../social-network/worker'
 
 const useStyles = makeStyles(theme =>
     createStyles({
@@ -25,20 +26,19 @@ const useStyles = makeStyles(theme =>
 )
 
 interface ProfileConnectTestSuccessDialogProps {
-    id: string
-    network: string
-    persona: string
+    identifier: ProfileIdentifier
+    nickname: string
     onClose: () => void
 }
 
 function ProfileConnectTestSuccessDialog(props: ProfileConnectTestSuccessDialogProps) {
-    const { id, network, persona, onClose } = props
+    const { identifier, nickname, onClose } = props
     return (
         <Dialog open onClose={onClose}>
             <DialogContentItem
                 simplified
                 title="Setup Successful"
-                content={`You have seccessfully connected ${id} on ${network} to persona "${persona}".`}
+                content={`You have seccessfully connected @${identifier.userId} on ${identifier.network} to persona "${nickname}".`}
                 actions={
                     <ActionButton variant="outlined" color="default" onClick={onClose}>
                         Ok
@@ -49,19 +49,19 @@ function ProfileConnectTestSuccessDialog(props: ProfileConnectTestSuccessDialogP
 }
 
 interface ProfileConnectTestFailedDialog {
-    bio: string
-    persona: string
+    provePost: string
+    userId: string
     onClose: () => void
 }
 
 function ProfileConnectTestFailedDialog(props: ProfileConnectTestFailedDialog) {
-    const { bio, persona, onClose } = props
+    const { provePost, userId, onClose } = props
     return (
         <Dialog open onClose={onClose}>
             <DialogContentItem
                 simplified
                 title="Setup Failure"
-                content={`The profile bio seems to be "${bio}"; it does not include public key of "${persona}".`}
+                content={`The profile bio should include "${provePost}". Please make sure you updated the profile bio of @${userId} successfully.`}
                 actions={
                     <ActionButton variant="outlined" color="default" onClick={onClose}>
                         Ok
@@ -71,7 +71,14 @@ function ProfileConnectTestFailedDialog(props: ProfileConnectTestFailedDialog) {
     )
 }
 
-export function ProfileConnectStartDialog() {
+interface ProfileConnectStartDialogProps {
+    nickname?: string
+    network?: string
+    confirmed(name: string): void
+}
+
+export function ProfileConnectStartDialog(props: ProfileConnectStartDialogProps) {
+    const { nickname, network, confirmed } = props
     const [name, setName] = useState('')
 
     const content = (
@@ -82,34 +89,68 @@ export function ProfileConnectStartDialog() {
                 variant="outlined"
                 value={name}
                 onChange={e => setName(e.target.value)}
-                label="Name"></TextField>
+                label={`Username on ${network}`}></TextField>
         </div>
     )
 
     return (
         <DialogContentItem
-            title="Create Persona"
+            title={`Connect Profile for "${nickname}"`}
             content={content}
             actionsAlign="center"
             actions={
-                <ActionButton variant="contained" color="primary" component={Link} to={`connect?name=${name}`}>
-                    Ok
+                <ActionButton variant="contained" color="primary" onClick={() => confirmed(name)}>
+                    Next
                 </ActionButton>
             }></DialogContentItem>
     )
 }
 
-export function ProfileConnectDialog() {
-    const [state, setState] = useState('' as '' | 'success' | 'failed')
+interface ProfileConnectDialogProps {
+    identifier: ProfileIdentifier
+    nickname: string
+    onClose(): void
+}
+
+export function ProfileConnectDialog(props: ProfileConnectDialogProps) {
+    const { identifier, nickname, onClose } = props
+    const [state, setState] = useState('' as '' | 'loading' | 'success' | 'failed')
     const classes = useStyles()
-    const history = useHistory()
+
+    const [provePost, setProvePost] = React.useState<string | null>(null)
+    React.useEffect(() => void Services.Crypto.getMyProveBio(identifier).then(setProvePost), [identifier])
+
+    const copyPublicKey = () => {
+        if (provePost) navigator.clipboard.writeText(provePost).then()
+    }
+
+    const navToProvider = () => {
+        if (provePost) getNetworkWorker(identifier).autoVerifyBio?.(identifier, provePost)
+    }
+
+    const testIfSet = async () => {
+        if (!provePost) return
+        setState('loading')
+        const profile = await getNetworkWorker(identifier)
+            .fetchProfile(identifier)
+            .then(p => p.bioContent)
+            .catch(e => {
+                console.error(e)
+                return ''
+            })
+        if (profile.includes(provePost)) setState('success')
+        else {
+            setState('failed')
+            console.warn('[debug] We got', profile)
+        }
+    }
 
     const content = (
         <>
             <section>
                 <Typography variant="h6">Step 1: Copy the public key below</Typography>
-                <Typography variant="body2">🔒45e56041ddd9491e91643dabd067cefe🔒</Typography>
-                <ActionButton className={classes.button} variant="outlined" color="primary">
+                <Typography variant="body2">{provePost}</Typography>
+                <ActionButton onClick={copyPublicKey} className={classes.button} variant="outlined" color="primary">
                     Copy
                 </ActionButton>
             </section>
@@ -117,6 +158,7 @@ export function ProfileConnectDialog() {
                 <Typography variant="h6">Step 2: Paste it into your profile biography</Typography>
                 <Typography variant="body2">Hand-by-hand guides will show up after you move to the webpage.</Typography>
                 <ActionButton
+                    onClick={navToProvider}
                     className={classNames(classes.button, classes.buttonLarge)}
                     variant="outlined"
                     color="primary">
@@ -129,28 +171,28 @@ export function ProfileConnectDialog() {
                     Come back here and finish the procedure. Test if your setup is successful.
                 </Typography>
                 <ActionButton
-                    onClick={() => setState('success')}
+                    onClick={testIfSet}
                     className={classNames(classes.button, classes.buttonLarge)}
                     variant="contained"
-                    color="primary">
+                    color="primary"
+                    loading={state === 'loading'}>
                     Test
                 </ActionButton>
             </section>
             {state === 'failed' && (
-                <ProfileConnectTestFailedDialog bio="Bio" persona="Persona" onClose={() => setState('')} />
+                <ProfileConnectTestFailedDialog
+                    userId={identifier.userId}
+                    provePost={provePost!}
+                    onClose={() => setState('')}
+                />
             )}
             {state === 'success' && (
-                <ProfileConnectTestSuccessDialog
-                    id="userId"
-                    network="Network"
-                    persona="Persona"
-                    onClose={() => history.push('../')}
-                />
+                <ProfileConnectTestSuccessDialog identifier={identifier} nickname={nickname} onClose={onClose} />
             )}
         </>
     )
 
-    return <DialogContentItem title="Create Persona" content={content} actionsAlign="center"></DialogContentItem>
+    return <DialogContentItem title="Connect Profile" content={content}></DialogContentItem>
 }
 interface ProfileDisconnectDialogProps {
     onDecline(): void

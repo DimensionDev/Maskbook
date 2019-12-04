@@ -47,7 +47,7 @@ export default function ProviderLine(props: ProviderLineProps) {
             <Typography
                 variant="body1"
                 component="a"
-                onClick={onConnect}
+                onClick={connected ? undefined : onConnect}
                 className={classNames(
                     classes.text,
                     { [classes.connected]: connected },
