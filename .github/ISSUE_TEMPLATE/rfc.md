@@ -6,6 +6,7 @@ Manifest | [Meta/Article-3](https://github.com/DimensionDev/Meta/blob/master/art
 Purpose | ...
 Feedback deadline | YYYY-MM-DD 12:00:00 UTC
 Explicitly designated reviewers | ...
+Later Updated By | N/A
 
 ## Abstract
 

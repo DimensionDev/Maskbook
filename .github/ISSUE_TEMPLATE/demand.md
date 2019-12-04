@@ -7,6 +7,8 @@ Figma Link | [figma.com/...](___)
 Expected UX prototype due | YYYY-MM-DD
 Actual UX prototype release | -
 Expected engineering due | YYYY-MM-DD
+Corresponding Pull Request | -
+Completion Version | -
 
 ## Catalogue
 
