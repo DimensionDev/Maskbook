@@ -8,6 +8,6 @@ export async function getMyProveBio(whoAmI: PersonIdentifier): Promise<string | 
     const myIdentity = await queryMyIdentityAtDB(whoAmI)
     if (!myIdentity) return null
     const pub = await crypto.subtle.exportKey('jwk', myIdentity.publicKey)
-    const compressed = compressSecp256k1Key(pub)
+    const compressed = compressSecp256k1Key(pub, 'public')
     return getNetworkWorker(whoAmI.network).publicKeyEncoder(compressed)
 }
