@@ -51,6 +51,7 @@ export default function InitStep1S() {
         <div className={classes.container}>
             <TextField
                 autoFocus
+                required
                 className={classes.input}
                 InputLabelProps={{ shrink: true }}
                 variant="outlined"
@@ -59,11 +60,12 @@ export default function InitStep1S() {
                 label="Name"
                 helperText=" "></TextField>
             <TextField
+                required
                 className={classes.input}
                 InputLabelProps={{ shrink: true }}
                 variant="outlined"
                 value={password}
-                placeholder="Optional"
+                placeholder="At least 8 characters"
                 type="password"
                 onChange={e => setPassword(e.target.value)}
                 label="Password"
