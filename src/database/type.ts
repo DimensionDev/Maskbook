@@ -170,7 +170,7 @@ export class ECKeyIdentifier extends Identifier {
         return this.fromJsonWebKey(await CryptoKeyToJsonWebKey(key))
     }
     static fromJsonWebKey(key: JsonWebKey) {
-        const x = compressSecp256k1Key(key)
+        const x = compressSecp256k1Key(key, 'public')
         return new ECKeyIdentifier('secp256k1', x)
     }
     public readonly type = 'ec_key'

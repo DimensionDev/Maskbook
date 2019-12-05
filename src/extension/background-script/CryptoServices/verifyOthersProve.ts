@@ -8,7 +8,16 @@ import { createProfileWithPersona } from '../../../database'
 export async function verifyOthersProve(bio: string, others: ProfileIdentifier): Promise<boolean> {
     const compressedX = getNetworkWorker(others.network).publicKeyDecoder(bio)
     if (!compressedX) return false
-    const key = decompressSecp256k1Key(compressedX)
+    const key = compressedX
+        .map(x => {
+            try {
+                return decompressSecp256k1Key(x, 'public')
+            } catch {
+                return null
+            }
+        })
+        .filter(x => x)[0]
+    if (!key) throw new Error('No key was found')
     try {
         // verify if this key is a valid key
         await import_ECDH_256k1_Key(key)

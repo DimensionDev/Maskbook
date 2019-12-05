@@ -19,20 +19,7 @@ export async function fetchPostContentFacebook(post: PostIdentifier<ProfileIdent
         if (html !== null) {
             try {
                 const doc = parseFacebookStaticHTML(html)
-                if (doc.length) {
-                    // TODO: You should take care about the key comes from.
-                    //  If some one commented a key under a normal post,
-                    //  it will be a false-positive and it is dangerous.
-                    //  There is a build-in parser.
-                    //  Checkout http://mdn.io/DOMParser and we're already using it.
-                    // TODO: Do not decode here.
-
-                    let content: string | null = doc.map(x => (isDocument(x) ? x.body : x).innerText).join('')
-                    content = facebookWorkerSelf.publicKeyDecoder(content)
-                    if (!isNil(content)) {
-                        return content[0]
-                    }
-                }
+                if (doc.length) return doc.map(x => (isDocument(x) ? x.body : x).innerText).join('')
             } catch (e) {
                 console.warn(e)
                 memoizeFetch.cache?.delete(url)

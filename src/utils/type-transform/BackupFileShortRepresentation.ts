@@ -25,8 +25,8 @@ export function compressBackupFile(file: BackupJSONFileLatest, index: number): s
         userId,
         nickname,
         localKey.k,
-        compressSecp256k1Key(publicKey),
-        compressSecp256k1Key(privateKey),
+        compressSecp256k1Key(publicKey, 'public'),
+        compressSecp256k1Key(privateKey, 'private'),
         grantedHostPermissions.join(';'),
     ].join('🤔')
 }
@@ -58,8 +58,8 @@ export function decompressBackupFile(short: string): BackupJSONFileLatest {
                 },
                 network,
                 nickname,
-                privateKey: decompressSecp256k1Key(privateKey),
-                publicKey: decompressSecp256k1Key(publicKey),
+                privateKey: decompressSecp256k1Key(privateKey, 'private'),
+                publicKey: decompressSecp256k1Key(publicKey, 'public'),
                 userId,
             },
         ],
