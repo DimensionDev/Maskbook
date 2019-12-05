@@ -11,11 +11,6 @@ import { IconButton, Typography, BottomNavigation, BottomNavigationAction } from
 import classNames from 'classnames'
 
 import CloseIcon from '@material-ui/icons/Close'
-import BookmarkIcon from '@material-ui/icons/Bookmark'
-import CachedIcon from '@material-ui/icons/Cached'
-import SettingsIcon from '@material-ui/icons/Settings'
-import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined'
-import LocationOnIcon from '@material-ui/icons/LocationOn'
 import { Link, useRouteMatch, useHistory } from 'react-router-dom'
 
 const drawerWidth = 240
@@ -38,9 +33,6 @@ const useStyles = makeStyles(theme => ({
     },
     exitButton: {
         marginRight: theme.spacing(2),
-        [theme.breakpoints.down('md')]: {
-            display: 'none',
-        },
     },
     padded: {
         paddingLeft: theme.spacing(2),
@@ -74,17 +66,10 @@ const useStyles = makeStyles(theme => ({
         width: 120,
         height: 60,
     },
-    bottomNavigationRoot: {
-        position: 'fixed',
-        bottom: 0,
-        width: '100%',
-    },
-    bottomNavigationMargin: {
-        height: 56 + 12,
-    },
 }))
 
 interface ResponsiveDrawerProps {
+    routers: [string, string, JSX.Element][]
     exitDashboard: null | (() => void)
 }
 
@@ -103,26 +88,18 @@ function ResponsiveDrawer(props: ResponsiveDrawerProps) {
     const classes = useStyles()
     const match = useRouteMatch('/:param/')
 
-    const { exitDashboard } = props
-
-    const routers: [string, string, JSX.Element][] = [
-        ['Home', '/home/', <BookmarkIcon />],
-        ['Device', '/device/', <CachedIcon />],
-        ['Settings', '/settings/', <SettingsIcon />],
-        ['About', '/about/', <InfoOutlinedIcon />],
-        ['Debug', '/debug/', <LocationOnIcon />],
-    ]
+    const { routers, exitDashboard } = props
 
     const drawer = (
         <div>
-            <div className={classNames(classes.toolbar, classes.padded)}>
-                {exitDashboard && (
+            {exitDashboard && (
+                <div className={classNames(classes.toolbar, classes.padded)}>
                     <IconButton color="inherit" edge="start" onClick={exitDashboard} className={classes.exitButton}>
                         <CloseIcon />
                     </IconButton>
-                )}
-                <Typography variant="h6">Dashboard</Typography>
-            </div>
+                    <Typography variant="h6">Dashboard</Typography>
+                </div>
+            )}
             <Divider />
             <section className={classNames(classes.padded)}>
                 <img className={classes.maskicon} src="https://maskbook.com/img/MB--CircleCanvas--WhiteOverBlue.svg" />
@@ -157,14 +134,6 @@ function ResponsiveDrawer(props: ResponsiveDrawerProps) {
                     open>
                     {drawer}
                 </Drawer>
-            </Hidden>
-            <Hidden mdUp implementation="css">
-                <div className={classes.bottomNavigationMargin} />
-                <BottomNavigation classes={{ root: classes.bottomNavigationRoot }}>
-                    {routers.map((item, index) => (
-                        <LinkItem to={item[1]} icon={item[2]} label={item[0]} key={index}></LinkItem>
-                    ))}
-                </BottomNavigation>
             </Hidden>
         </nav>
     )
