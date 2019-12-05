@@ -128,19 +128,6 @@ export function DialogRouter(props: DialogRouterProps) {
             open={routeMatching}
             classes={{ paper: classes.dialog }}
             TransitionComponent={Transition}>
-            {fullscreen && (
-                <Toolbar>
-                    <Button
-                        style={{ marginLeft: 'auto' }}
-                        variant="text"
-                        color="inherit"
-                        onClick={onExitAction}
-                        endIcon={<CloseIcon />}
-                        aria-label="close">
-                        Skip
-                    </Button>
-                </Toolbar>
-            )}
             <Route path={matchPattern?.path}>
                 {Component && <Component></Component>}
                 {children || null}

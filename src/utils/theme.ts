@@ -33,6 +33,9 @@ const baseTheme = (theme: 'dark' | 'light') =>
                 },
             },
         },
+        breakpoints: {
+            values: { xs: 0, sm: 600, md: 1024, lg: 1280, xl: 1920 },
+        },
     } as const)
 // Theme
 export const MaskbookLightTheme = createMuiTheme(baseTheme('light'))
