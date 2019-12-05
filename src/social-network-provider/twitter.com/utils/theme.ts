@@ -31,3 +31,25 @@ export const useTwitterCloseButton = makeStyles((theme: Theme) => ({
         },
     },
 }))
+
+export const useTwitterModal = makeStyles((theme: Theme) => {
+    const { type, grey } = theme.palette
+    const borderColor = type === 'dark' ? grey[800] : grey[200]
+    return {
+        root: {
+            borderRadius: 5,
+        },
+        header: {
+            padding: '10px 15px',
+            borderBottom: `1px solid ${borderColor}`,
+        },
+        backdrop: {
+            backgroundColor: `${type === 'dark' ? 'rgba(110, 118, 125, 0.3)' : 'rgba(0, 0, 0, 0.3)'} !important`,
+        },
+        modal: {
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+        },
+    }
+})

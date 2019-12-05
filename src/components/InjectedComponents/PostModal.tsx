@@ -24,6 +24,7 @@ import { getActivatedUI } from '../../social-network/ui'
 import { ChooseIdentity, ChooseIdentityProps } from '../shared/ChooseIdentity'
 import Services from '../../extension/service'
 import { SelectRecipientsUI, SelectRecipientsProps } from '../shared/SelectRecipients/SelectRecipients'
+import { SelectRecipientsModalProps, SelectRecipientsModal } from '../shared/SelectRecipients/SelectRecipientsModal'
 
 const useStyles = makeStyles(theme => ({
     MUIInputRoot: {
@@ -35,11 +36,7 @@ const useStyles = makeStyles(theme => ({
     MUIInputInput: {
         minHeight: '8em',
     },
-    modal: {
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
+    modal: {},
     backdrop: {},
     root: {
         outline: 'none',
@@ -48,6 +45,7 @@ const useStyles = makeStyles(theme => ({
     },
     header: {},
     content: {},
+    actions: {},
     close: {},
     title: {
         marginLeft: 6,
@@ -80,8 +78,8 @@ export const PostModalUI = memo(function PostModalUI(props: PostModalUIProps) {
             <Modal
                 className={classes.modal}
                 open={props.open}
-                aria-labelledby="modal-title"
-                aria-describedby="modal-description"
+                aria-labelledby="modal-title" // TODO
+                aria-describedby="modal-description" // TODO
                 disablePortal
                 disableAutoFocus
                 disableEnforceFocus
@@ -151,6 +149,7 @@ export interface PostModalProps extends Partial<PostModalUIProps> {
     identities?: Person[]
     onRequestPost?: (target: (Person | Group)[], text: string) => void
     onRequestReset?: () => void
+    SelectRecipientModalProps?: SelectRecipientsModalProps
 }
 export function PostModal(props: PostModalProps) {
     const people = useFriendsList()
@@ -224,19 +223,22 @@ export function PostModal(props: PostModalProps) {
     }, [])
 
     const ui = (
-        <PostModalUI
-            open={open}
-            availableShareTarget={availableShareTarget}
-            currentIdentity={currentIdentity}
-            currentShareTarget={currentShareTarget}
-            postBoxText={postBoxText}
-            postBoxButtonDisabled={!(currentShareTarget.length && postBoxText)}
-            onPostTextChange={setPostBoxText}
-            onFinishButtonClicked={onFinishButtonClicked}
-            onCloseButtonClicked={onCloseButtonClicked}
-            onShareTargetChanged={onShareTargetChanged}
-            {...props}
-        />
+        <>
+            <PostModalUI
+                open={open}
+                availableShareTarget={availableShareTarget}
+                currentIdentity={currentIdentity}
+                currentShareTarget={currentShareTarget}
+                postBoxText={postBoxText}
+                postBoxButtonDisabled={!(currentShareTarget.length && postBoxText)}
+                onPostTextChange={setPostBoxText}
+                onFinishButtonClicked={onFinishButtonClicked}
+                onCloseButtonClicked={onCloseButtonClicked}
+                onShareTargetChanged={onShareTargetChanged}
+                {...props}
+            />
+            <SelectRecipientsModal open={true} {...props.SelectRecipientModalProps} />
+        </>
     )
 
     if (identities.length > 1)
