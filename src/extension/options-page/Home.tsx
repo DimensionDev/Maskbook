@@ -70,6 +70,11 @@ const useStyles = makeStyles((theme: Theme) =>
             bottom: 0,
             position: 'absolute',
         },
+        identity: {
+            '&:not(:first-child)': {
+                marginTop: theme.spacing(2),
+            },
+        },
     }),
 )
 
@@ -141,6 +146,8 @@ export default function DashboardHomePage() {
                         </ListItemWithAction>
                     </List>
                 </Card>
+            </section>
+            <section className={classes.sections}>
                 <Typography className={classes.title} variant="h5" align="left">
                     My Personas
                 </Typography>
@@ -165,7 +172,7 @@ export default function DashboardHomePage() {
                 )}
                 <div>
                     {identities.map(i => (
-                        <Card raised elevation={1}>
+                        <Card className={classes.identity} raised elevation={1}>
                             <PersonaCard identity={i} key={i.identifier.toText()} />
                         </Card>
                     ))}
