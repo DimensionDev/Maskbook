@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import { makeStyles } from '@material-ui/styles'
 import { Theme, createStyles, AppBar, Tabs, Tab, Typography, Box } from '@material-ui/core'
 import classNames from 'classnames'
@@ -60,6 +60,7 @@ export default function BackupRestoreTab(props: BackupRestoreTabProps) {
                 color="primary"
                 elevation={0}>
                 <Tabs
+                    TabIndicatorProps={{ style: { width: `${100 / tabs.length}%` } }}
                     value={value}
                     onChange={handleChange}
                     indicatorColor="primary"
