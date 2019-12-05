@@ -4,12 +4,12 @@ import { geti18nString } from '../../utils/i18n'
 import { Button, makeStyles, Typography, Theme } from '@material-ui/core'
 import WelcomeContainer from './WelcomeContainer'
 import { SelectPeopleAndGroupsUI } from '../shared/SelectPeopleAndGroups'
-import { Person } from '../../database'
+import { Profile } from '../../database'
 
 interface Props {
-    next(person: Person): void
+    next(person: Profile): void
     linkNewSocialNetworks(): void
-    identities: Person[]
+    identities: Profile[]
 }
 const useStyles = makeStyles<Theme>(theme => ({
     paper: {
@@ -27,11 +27,11 @@ const useStyles = makeStyles<Theme>(theme => ({
 }))
 export default function Welcome({ next, identities, linkNewSocialNetworks }: Props) {
     const classes = useStyles()
-    const [selected, setSelect] = useState<Person | null>(identities[0] || null)
+    const [selected, setSelect] = useState<Profile | null>(identities[0] || null)
     return (
         <WelcomeContainer className={classes.paper}>
             <Typography variant="h5">{geti18nString('welcome_1a1_title')}</Typography>
-            <SelectPeopleAndGroupsUI<Person>
+            <SelectPeopleAndGroupsUI<Profile>
                 classes={{ root: classes.select }}
                 hideSelectAll
                 hideSelectNone

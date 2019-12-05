@@ -8,7 +8,7 @@ export async function shouldDisplayWelcomeDefault() {
     const storage = (await getStorage(netId)) || {}
     if (storage.forceDisplayWelcome) return true
 
-    const ids = await Services.People.queryMyIdentity(netId)
+    const ids = await Services.Identity.queryMyProfiles(netId)
     if (ids.length) return false
 
     if (storage.userIgnoredWelcome) return false

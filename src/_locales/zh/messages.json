@@ -9,7 +9,7 @@
         "message": "現在發佈！"
     },
     "additional_post_box__encrypted_post_pre": {
-        "message": "來 Maskbook 解密這個訊息！ $1",
+        "message": "來 #Maskbook 解密這個訊息！ $1",
         "description": "$1 须写在字串末。"
     },
     "additional_post_box__encrypted_failed": {
@@ -20,6 +20,9 @@
     },
     "additional_post_box__steganography_post_failed": {
         "message": "請將已下載的圖片上载至發佈框。"
+    },
+    "comment_box__placeholder": {
+        "message": "添加一條加密評論…"
     },
     "comment_box__paste_failed": {
         "message": "請將以下内容拷貝至評論框。"

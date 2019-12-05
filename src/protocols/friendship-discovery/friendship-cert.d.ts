@@ -1,4 +1,4 @@
-import { PersonIdentifier } from '../../database/type'
+import { ProfileIdentifier } from '../../database/type'
 
 /**
  * Server guide:
@@ -16,7 +16,7 @@ export interface FriendshipCertificateDecryptedV1 {
      * Who declared they issued this certificate
      * ! DO NOT trust this field !
      */
-    certificateIssuer: PersonIdentifier
+    certificateIssuer: ProfileIdentifier
     /**
      * ? This key is used to join and decrypt the message in the private channel
      */

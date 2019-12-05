@@ -1,32 +1,34 @@
+/// <reference path="../../env.d.ts" />
 import { Serialization } from '@holoflows/kit'
-import { declarePersistable, deserialize, serialize } from 'serialijse'
+import Typeson from 'typeson'
 
 export function serializable(name: string) {
-    return <T>(constructor: T) => {
-        declarePersistable(constructor, name)
+    return <T extends NewableFunction>(constructor: T) => {
         Object.defineProperty(constructor, 'name', {
             configurable: true,
             enumerable: false,
             writable: false,
             value: name,
         })
+        typeson.register({ [name]: constructor })
         return constructor
     }
 }
-serializable('Error')(Error)
-serializable('TypeError')(TypeError)
-serializable('ReferenceError')(ReferenceError)
-serializable('SyntaxError')(SyntaxError)
-serializable('URIError')(URIError)
+
+const typeson = new Typeson().register([require('typeson-registry/dist/presets/builtin')])
+typeson.register({})
+// To register this type in the typeson
+require('../../database/IdentifierMap')
 
 export default {
     async serialization(from) {
-        return serialize(from)
+        return typeson.encapsulate(from)
     },
     async deserialization(to: string) {
         try {
-            return deserialize(to)
-        } catch {
+            return typeson.revive(to)
+        } catch (e) {
+            console.error(e)
             return {}
         }
     },

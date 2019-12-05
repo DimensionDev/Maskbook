@@ -38,7 +38,6 @@ import BackupDialog from './extension/options-page/Backup'
 
 import { SnackbarProvider } from 'notistack'
 import Services from './extension/service'
-import { PersonIdentifier } from './database/type'
 import { geti18nString } from './utils/i18n'
 
 const useStyles = makeStyles(theme =>
@@ -170,7 +169,7 @@ function Dashboard() {
 
     const exportData = () => {
         setExportLoading(true)
-        Services.Welcome.backupMyKeyPair(PersonIdentifier.unknown, {
+        Services.Welcome.backupMyKeyPair({
             download: true,
             onlyBackupWhoAmI: false,
         })

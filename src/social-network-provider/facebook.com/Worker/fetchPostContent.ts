@@ -1,4 +1,4 @@
-import { PersonIdentifier, PostIdentifier } from '../../../database/type'
+import { ProfileIdentifier, PostIdentifier } from '../../../database/type'
 import { parseFacebookStaticHTML } from '../parse-html'
 import { getPostUrlAtFacebook } from '../parse-username'
 import tasks from '../../../extension/content-script/tasks'
@@ -9,7 +9,7 @@ import { getActiveTabFacebook } from '../../../utils/tabs'
 
 // ? We now always run fetch request from an active tab.
 // ? If failed, we will fallback to open a new tab to do this.
-export async function fetchPostContentFacebook(post: PostIdentifier<PersonIdentifier>) {
+export async function fetchPostContentFacebook(post: PostIdentifier<ProfileIdentifier>) {
     const activeTabID = await getActiveTabFacebook()
     if (activeTabID !== undefined) {
         // Path 1: fetch by http req
@@ -35,10 +35,11 @@ export async function fetchPostContentFacebook(post: PostIdentifier<PersonIdenti
                 }
             } catch (e) {
                 console.warn(e)
-                memoizeFetch.cache.delete(url)
+                memoizeFetch.cache?.delete(url)
             }
         }
     }
+
     // Path 2: fetch by tab task
     return tasks(getPostUrlAtFacebook(post, 'open')).getPostContent()
 }

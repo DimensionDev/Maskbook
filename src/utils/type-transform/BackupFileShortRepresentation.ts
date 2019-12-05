@@ -1,12 +1,12 @@
 import { BackupJSONFileLatest } from './BackupFile'
-import { PersonIdentifier } from '../../database/type'
+import { ProfileIdentifier } from '../../database/type'
 import { compressSecp256k1Key, decompressSecp256k1Key } from './SECP256k1-Compression'
-import { Person } from '../../database'
+import { Profile } from '../../database'
 
 export type BackupJSONFileLatestShort = [
-    PersonIdentifier['network'],
-    PersonIdentifier['userId'],
-    Person['nickname'],
+    ProfileIdentifier['network'],
+    ProfileIdentifier['userId'],
+    Profile['nickname'],
     // LocalKey
     JsonWebKey['k'],
     // Compressed publicKey
@@ -16,10 +16,10 @@ export type BackupJSONFileLatestShort = [
     // BackupJSONFileLatest['grantedHostPermissions'].join(';'),
     string,
 ]
-export function compressBackupFile(file: BackupJSONFileLatest): string {
+export function compressBackupFile(file: BackupJSONFileLatest, index: number): string {
     const { grantedHostPermissions, maskbookVersion, people, version, whoami } = file
-    if (!whoami[0]) throw new Error('Empty backup file')
-    const { localKey, network, nickname, publicKey, privateKey, userId } = whoami[0]
+    if (!whoami[index ?? 0]) throw new Error('Empty backup file')
+    const { localKey, network, nickname, publicKey, privateKey, userId } = whoami[index]
     return [
         network,
         userId,
@@ -49,8 +49,6 @@ export function decompressBackupFile(short: string): BackupJSONFileLatest {
         version: 1,
         whoami: [
             {
-                'Power Users look here! You should add the value in this field to the bio to make Maskbook work! ->':
-                    '',
                 localKey: {
                     alg: 'A256GCM',
                     ext: true,

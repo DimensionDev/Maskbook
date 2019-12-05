@@ -1,6 +1,6 @@
 import { bioCard, selfInfoSelectors, postsContentSelector, postsImageSelector } from '../utils/selector'
 import { MutationObserverWatcher } from '@holoflows/kit'
-import { GroupIdentifier, PersonIdentifier } from '../../../database/type'
+import { GroupIdentifier, ProfileIdentifier, PreDefinedVirtualGroupNames } from '../../../database/type'
 import {
     getEmptyPostInfoByElement,
     SocialNetworkUI,
@@ -12,7 +12,6 @@ import { bioCardParser, postParser, postImageParser, postIdParser } from '../uti
 import { isNil } from 'lodash-es'
 import Services from '../../../extension/service'
 import { twitterUrl } from '../utils/url'
-import { PreDefinedTwitterGroupNames } from './group'
 import { untilElementAvailable } from '../../../utils/dom'
 
 const resolveLastRecognizedIdentity = (self: SocialNetworkUI) => {
@@ -24,7 +23,7 @@ const resolveLastRecognizedIdentity = (self: SocialNetworkUI) => {
         const avatar = selfInfoSelectors().userAvatar.evaluate()
         if (!isNil(handle)) {
             ref.value = {
-                identifier: new PersonIdentifier(self.networkIdentifier, handle),
+                identifier: new ProfileIdentifier(self.networkIdentifier, handle),
                 nickname,
                 avatar,
             }
@@ -47,30 +46,33 @@ const registerUserCollector = () => {
                 const { isFollower, isFollowing, identifier, bio } = bioCardParser(cardNode)
                 const [verified, myIdentities] = await Promise.all([
                     Services.Crypto.verifyOthersProve(bio, identifier),
-                    Services.People.queryMyIdentity(twitterUrl.hostIdentifier),
+                    Services.Identity.queryMyProfiles(twitterUrl.hostIdentifier),
                 ])
-                const myIdentity = myIdentities[0] || PersonIdentifier.unknown
-                const myFirends = GroupIdentifier.getDefaultFriendsGroupIdentifier(myIdentity.identifier)
+                const myIdentity = myIdentities[0] || ProfileIdentifier.unknown
+                const myFirends = GroupIdentifier.getFriendsGroupIdentifier(
+                    myIdentity.identifier,
+                    PreDefinedVirtualGroupNames.friends,
+                )
                 const myFollowers = GroupIdentifier.getFriendsGroupIdentifier(
                     myIdentity.identifier,
-                    PreDefinedTwitterGroupNames.followers,
+                    PreDefinedVirtualGroupNames.followers,
                 )
                 const myFollowing = GroupIdentifier.getFriendsGroupIdentifier(
                     myIdentity.identifier,
-                    PreDefinedTwitterGroupNames.following,
+                    PreDefinedVirtualGroupNames.following,
                 )
                 if (verified && (isFollower || isFollowing)) {
                     if (isFollower) {
-                        Services.People.addPersonToFriendsGroup(myFollowers, [identifier]).then()
+                        Services.UserGroup.addProfileToFriendsGroup(myFollowers, [identifier]).then()
                     }
                     if (isFollowing) {
-                        Services.People.addPersonToFriendsGroup(myFollowing, [identifier]).then()
+                        Services.UserGroup.addProfileToFriendsGroup(myFollowing, [identifier]).then()
                     }
                     if (isFollower && isFollowing) {
-                        Services.People.addPersonToFriendsGroup(myFirends, [identifier]).then()
+                        Services.UserGroup.addProfileToFriendsGroup(myFirends, [identifier]).then()
                     }
                 } else {
-                    Services.People.removePersonFromFriendsGroup(myFirends, [identifier]).then()
+                    Services.UserGroup.removeProfileFromFriendsGroup(myFirends, [identifier]).then()
                 }
             }
             resolve()
@@ -111,13 +113,13 @@ const registerPostCollector = (self: SocialNetworkUI) => {
                 if (!tweetNode) return
                 const { pid, content, handle, name, avatar } = postParser(tweetNode)
                 if (!pid) return
-                const postBy = new PersonIdentifier(self.networkIdentifier, handle)
+                const postBy = new ProfileIdentifier(self.networkIdentifier, handle)
                 info.postID.value = pid
                 info.postContent.value = content
                 if (!info.postBy.value.equals(postBy)) {
                     info.postBy.value = postBy
                 }
-                Services.People.updatePersonInfo(postBy, {
+                Services.Identity.updateProfileInfo(postBy, {
                     nickname: name,
                     avatarURL: avatar,
                 }).then()

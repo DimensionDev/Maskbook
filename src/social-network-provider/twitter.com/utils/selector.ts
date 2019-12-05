@@ -16,6 +16,7 @@ export const bioCard = () =>
         [
             '.profile', // legacy twitter
             'a[href*="header_photo"] ~ div', // new twitter
+            'div[data-testid="primaryColumn"] > div > div:last-child > div > div > div > div ~ div', // new twitter without header photo
         ].join(),
     )
 
@@ -58,6 +59,7 @@ export const postsContentSelector = () =>
         [
             '.tweet-text > div', // both timeline and detail page for legacy twitter
             '[data-testid="tweet"] > div > div[lang]', // timeline page for new twitter
+            '[data-testid="tweet"] + div[lang]', // detail page for new twitter
             '[data-testid="tweet"] + div > div[lang]', // detail page for new twitter
         ].join(),
     )

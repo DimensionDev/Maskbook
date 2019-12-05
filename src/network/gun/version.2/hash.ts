@@ -2,12 +2,12 @@
  * @see https://github.com/DimensionDev/Maskbook/wiki/Data-structure-on-Gun-version-2
  */
 import Gun from 'gun'
-import { PersonIdentifier } from '../../../database/type'
+import { ProfileIdentifier } from '../../../database/type'
 import { memoizePromise } from '../../../utils/memoize'
 import { CryptoKeyToJsonWebKey } from '../../../utils/type-transform/CryptoKey-JsonWebKey'
 
-export const hashPersonIdentifier = memoizePromise(
-    async function hashPersonIdentifier(id: PersonIdentifier) {
+export const hashProfileIdentifier = memoizePromise(
+    async function hashProfileIdentifier(id: ProfileIdentifier) {
         const hashPair = `f67a6a2c-fe66-4f47-bd1f-00a5603d1010`
 
         const hash = await Gun.SEA.work(id.toText(), hashPair)!

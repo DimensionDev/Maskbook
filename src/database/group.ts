@@ -1,11 +1,18 @@
 /// <reference path="./global.d.ts" />
 import { DBSchema, openDB } from 'idb/with-async-ittr'
-import { GroupIdentifier, Identifier, PersonIdentifier } from './type'
+import { GroupIdentifier, Identifier, ProfileIdentifier } from './type'
 import { MessageCenter } from '../utils/messages'
+import { PrototypeLess, restorePrototypeArray } from '../utils/type'
 
 //#region Schema
 interface GroupRecordBase {
-    members: PersonIdentifier[]
+    groupName: string
+}
+interface GroupRecordInDatabase extends GroupRecordBase {
+    /** Index */
+    network: string
+    identifier: string
+    members: PrototypeLess<ProfileIdentifier>[]
     /**
      * Ban list of this group.
      * Only used for virtual group currently
@@ -13,16 +20,12 @@ interface GroupRecordBase {
      * Used to remember if user clicks
      * > they is not my friend, don't add them to my auto-share list again!
      */
-    banned?: PersonIdentifier[]
-    /** Index */
-    network: string
-    groupName: string
+    banned?: PrototypeLess<ProfileIdentifier>[]
 }
-interface GroupRecordInDatabase extends GroupRecordBase {
-    identifier: string
-}
-export interface GroupRecord extends Omit<GroupRecordBase, 'network'> {
+export interface GroupRecord extends GroupRecordBase {
     identifier: GroupIdentifier
+    members: ProfileIdentifier[]
+    banned?: ProfileIdentifier[]
 }
 interface GroupDB extends DBSchema {
     /** Key is value.identifier */
@@ -84,7 +87,7 @@ export async function updateUserGroupDatabase(
 
     const t = (await db).transaction('groups', 'readwrite')
     let nextRecord: GroupRecord
-    const nonDuplicateNewMembers: PersonIdentifier[] = []
+    const nonDuplicateNewMembers: ProfileIdentifier[] = []
     if (type === 'replace') {
         nextRecord = { ...orig, ...group }
     } else if (type === 'append') {
@@ -102,7 +105,7 @@ export async function updateUserGroupDatabase(
             identifier: group.identifier,
             banned: !orig.banned && !group.banned ? undefined : [...(orig.banned || []), ...(group.banned || [])],
             groupName: group.groupName || orig.groupName,
-            members: Array.from(nextMembers).map(x => Identifier.fromString(x) as PersonIdentifier),
+            members: Array.from(nextMembers).map(x => Identifier.fromString(x) as ProfileIdentifier),
         }
     } else {
         nextRecord = type(orig) || orig
@@ -156,15 +159,14 @@ export async function queryUserGroupsDatabase(
 }
 
 function GroupRecordOutDB(x: GroupRecordInDatabase): GroupRecord {
-    // recover prototype
-    x.members.forEach(x => Object.setPrototypeOf(x, PersonIdentifier.prototype))
-    x.banned && x.banned.forEach(x => Object.setPrototypeOf(x, PersonIdentifier.prototype))
     const id = Identifier.fromString(x.identifier)
     if (!(id instanceof GroupIdentifier))
         throw new TypeError('Can not cast string ' + x.identifier + ' into GroupIdentifier')
     return {
         ...x,
         identifier: id,
+        members: restorePrototypeArray(x.members, ProfileIdentifier.prototype),
+        banned: restorePrototypeArray(x.banned, ProfileIdentifier.prototype),
     }
 }
 function GroupRecordIntoDB(x: GroupRecord): GroupRecordInDatabase {

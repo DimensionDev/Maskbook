@@ -9,7 +9,8 @@
         "message": "📫 Post it!"
     },
     "additional_post_box__encrypted_post_pre": {
-        "message": "Decrypt this post with Maskbook! $1"
+        "message": "Decrypt this post with #Maskbook ! $1",
+        "description": "$1 should at the end of the string."
     },
     "additional_post_box__encrypted_failed": {
         "message": "Please paste the following text into the post box."
@@ -19,6 +20,9 @@
     },
     "additional_post_box__steganography_post_failed": {
         "message": "Please upload downloaded image into the post box."
+    },
+    "comment_box__placeholder": {
+        "message": "Write an encrypted comment..."
     },
     "comment_box__paste_failed": {
         "message": "Please paste it into the comment box."

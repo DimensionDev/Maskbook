@@ -2,7 +2,7 @@ import { FriendshipCertificateDecryptedV1, FriendshipCertificateEncryptedV1 } fr
 import { encryptWithAES, decryptWithAES } from '../../crypto/crypto-alpha-40'
 import { encodeArrayBuffer, decodeText } from '../../utils/type-transform/String-ArrayBuffer'
 import { toECDH } from '../../utils/type-transform/ECDSA-ECDH'
-import { PersonIdentifier } from '../../database/type'
+import { ProfileIdentifier } from '../../database/type'
 import {
     generate_ECDH_256k1_KeyPair,
     import_ECDH_256k1_Key,
@@ -10,7 +10,7 @@ import {
 } from '../../utils/crypto.subtle'
 
 export async function issueFriendshipCertificate(
-    whoAmI: PersonIdentifier,
+    whoAmI: ProfileIdentifier,
     channelKey: CryptoKey,
     channelSeed: string,
 ): Promise<FriendshipCertificateDecryptedV1> {
@@ -71,7 +71,7 @@ export async function unpackFriendshipCertificate(
         if (!cert.certificateIssuer || !cert.channelCryptoKey || !cert.channelSeed)
             throw new TypeError('Not a valid cert.')
         // Recover prototype
-        Object.setPrototypeOf(cert.certificateIssuer, PersonIdentifier.prototype)
+        Object.setPrototypeOf(cert.certificateIssuer, ProfileIdentifier.prototype)
         return cert
     } catch {
         return null
