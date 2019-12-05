@@ -175,10 +175,10 @@
         "message": "不支援"
     },
     "dashboard_create_backup": {
-        "message": "創建備份"
+        "message": "備份"
     },
     "dashboard_delete_persona": {
-        "message": "刪除身份"
+        "message": "刪除"
     },
     "dashboard_show_qr": {
         "message": "顯示二維碼"

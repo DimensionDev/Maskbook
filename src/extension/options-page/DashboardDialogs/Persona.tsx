@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { DialogContentItem } from './DialogBase'
 
-import { TextField, Typography, InputBase } from '@material-ui/core'
+import { TextField, Typography, InputBase, makeStyles } from '@material-ui/core'
 import { Link, useHistory } from 'react-router-dom'
 import ProviderLine from '../DashboardComponents/ProviderLine'
 import BackupRestoreTab, { BackupRestoreTabProps } from '../DashboardComponents/BackupRestoreTab'
@@ -128,10 +128,18 @@ export function PersonaBackupDialog() {
     return <DialogContentItem title="Backup Persona" content={content}></DialogContentItem>
 }
 
+const useImportDialogStyles = makeStyles({
+    input: {
+        width: '100%',
+    },
+})
+
 export function PersonaImportDialog() {
     const mnemonicWordValue = 'the natural law of privacy is now enforced by tessercube and maskbook'
     const base64Value =
         'WFceyl2VOyvyeaqkTodUI1XulcXQkRVQvh3U65vvMUuRq2ln9ozlECaZYLkKq9HHWKucm9sc2e52y32I1FoikgstIsV1l/S5VwbvELkchC5Mh5eAbcSGCRotC9TfIBUlGwwwnaMZ8tNgo0jBxPgOeU2ikdoIrgkrIiMXYUe6nz/AmvbYDYBjuqNnArVpxILOuJ6ytKUZGaadrI3sct+rFHqK20YFAyjuZrBgSIkNrBcx5epysj2dKpnRd4zyLoRlJQ'
+
+    const classes = useImportDialogStyles()
 
     const state = useState(0)
     const tabProps: BackupRestoreTabProps = {
@@ -139,12 +147,24 @@ export function PersonaImportDialog() {
             {
                 label: 'MNEMONIC WORDS',
                 component: (
-                    <InputBase
-                        style={{ width: '100%', minHeight: '100px' }}
-                        multiline
-                        defaultValue={mnemonicWordValue}
-                        readOnly></InputBase>
+                    <>
+                        <TextField className={classes.input} required label="Name" margin="dense" />
+                        <TextField
+                            className={classes.input}
+                            required
+                            defaultValue={mnemonicWordValue}
+                            label="Mnemonic Words"
+                            margin="dense"
+                        />
+                        <TextField
+                            className={classes.input}
+                            label="Password"
+                            placeholder="Leave empty if not set"
+                            margin="dense"
+                        />
+                    </>
                 ),
+                p: 2,
             },
             {
                 label: 'BASE64',
@@ -152,8 +172,7 @@ export function PersonaImportDialog() {
                     <InputBase
                         style={{ width: '100%', minHeight: '100px' }}
                         multiline
-                        defaultValue={base64Value}
-                        readOnly></InputBase>
+                        defaultValue={base64Value}></InputBase>
                 ),
             },
         ],
@@ -161,7 +180,7 @@ export function PersonaImportDialog() {
     }
     const content = (
         <>
-            <Typography variant="body1">You can backup the persona with either way below.</Typography>
+            <Typography variant="body1">You can import a persona backup with either way below.</Typography>
             <BackupRestoreTab margin="top" {...tabProps}></BackupRestoreTab>
         </>
     )
