@@ -5,7 +5,6 @@ import { ProfileUI } from '../../../social-network/shared'
 import tasks from '../../../extension/content-script/tasks'
 import { timeout } from '../../../utils/utils'
 import { facebookWorkerSelf } from '../worker-provider'
-import { isNil } from 'lodash-es'
 import { getActiveTabFacebook } from '../../../utils/tabs'
 
 // ? We now always run fetch request from an active tab.
@@ -30,7 +29,6 @@ export async function fetchProfileFacebook(who: ProfileIdentifier): Promise<Prof
                     )
                     .map(x => x && x.innerText)
                     .join('')
-                if (isNil(facebookWorkerSelf.publicKeyDecoder(bio))) throw new Error("Can't find bio")
                 return { bioContent: bio }
             } catch (e) {
                 console.warn(e)
