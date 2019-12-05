@@ -11,7 +11,7 @@ export async function verifyOthersProve(bio: string, others: PersonIdentifier): 
     const key = compressedX
         .map(x => {
             try {
-                decompressSecp256k1Key(x, 'public')
+                return decompressSecp256k1Key(x, 'public')
             } catch {
                 return null
             }
