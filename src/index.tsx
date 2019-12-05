@@ -144,7 +144,8 @@ function Dashboard() {
 
     const history = useHistory()
     const currentRouter = useLocation()
-    const value = routers.findIndex(i => currentRouter.pathname.startsWith(i[1]))
+    const index = routers.findIndex(i => currentRouter.pathname.startsWith(i[1]))
+    const value = index < 0 ? 0 : index
 
     const tabBar = (
         <AppBar position="sticky" color="default" elevation={0}>
