@@ -18,7 +18,13 @@ export function PersonaCreateDialog() {
                 variant="outlined"
                 value={name}
                 onChange={e => setName(e.target.value)}
-                label="Name"></TextField>
+                label="Name"
+            />
+            <TextField
+                style={{ width: '100%', maxWidth: '320px' }}
+                label="Password"
+                placeholder="At least 8 characters"
+            />
         </div>
     )
 
