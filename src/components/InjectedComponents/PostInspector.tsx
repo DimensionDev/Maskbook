@@ -32,7 +32,7 @@ export function PostInspector(props: PostInspectorProps) {
     const isDebugging = useValueRef(debugModeSetting)
     const type = {
         encryptedPost: deconstructPayload(post, getActivatedUI().payloadDecoder),
-        provePost: decodeAsPublicKey ? [decodeAsPublicKey] : null,
+        provePost: decodeAsPublicKey,
     }
     if (type.provePost && postId) Services.People.writePersonOnGun(postBy, { provePostId: postId })
     useAsync(async () => {
@@ -98,7 +98,7 @@ export function PostInspector(props: PostInspectorProps) {
                 {debugInfo}
             </>
         )
-    } else if (type.provePost) {
+    } else if (type.provePost.length) {
         const AddToKeyStoreX = props.AddToKeyStoreComponent || AddToKeyStore
         return (
             <>
