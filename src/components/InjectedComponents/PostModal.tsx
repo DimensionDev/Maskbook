@@ -16,13 +16,10 @@ import { geti18nString } from '../../utils/i18n'
 import { MessageCenter } from '../../utils/messages'
 import { useCapturedInput } from '../../utils/hooks/useCapturedEvents'
 import { useStylesExtends, or } from '../custom-ui-helper'
-import { SelectPeopleAndGroupsUIProps } from '../shared/SelectPeopleAndGroups'
 import { Person, Group } from '../../database'
 import { useFriendsList, useGroupsList, useMyIdentities, useCurrentIdentity } from '../DataSource/useActivatedUI'
-import { NotSetupYetPromptProps, NotSetupYetPrompt } from '../shared/NotSetupYetPrompt'
 import { steganographyModeSetting } from '../shared-settings/settings'
 import { useValueRef } from '../../utils/hooks/useValueRef'
-import { useAsync } from '../../utils/components/AsyncComponent'
 import { getActivatedUI } from '../../social-network/ui'
 import { ChooseIdentity, ChooseIdentityProps } from '../shared/ChooseIdentity'
 import Services from '../../extension/service'
@@ -154,7 +151,6 @@ export interface PostModalProps extends Partial<PostModalUIProps> {
     identities?: Person[]
     onRequestPost?: (target: (Person | Group)[], text: string) => void
     onRequestReset?: () => void
-    NotSetupYetPromptProps?: Partial<NotSetupYetPromptProps>
 }
 export function PostModal(props: PostModalProps) {
     const people = useFriendsList()
@@ -226,13 +222,6 @@ export function PostModal(props: PostModalProps) {
     const onCloseButtonClicked = useCallback(() => {
         setOpen(false)
     }, [])
-
-    const [showWelcome, setShowWelcome] = useState(false)
-    useAsync(getActivatedUI().shouldDisplayWelcome, []).then(x => setShowWelcome(x))
-    // TODO: ??? should we do this without including `ui` ???
-    if (showWelcome) {
-        return <NotSetupYetPrompt {...props.NotSetupYetPromptProps} />
-    }
 
     const ui = (
         <PostModalUI
