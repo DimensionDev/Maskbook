@@ -75,7 +75,7 @@ const useStyles = makeStyles(theme =>
         },
         tabBar: {},
         tabItem: {
-            minWidth: 120,
+            minWidth: 110,
         },
         tabSelected: {
             background: 'rgba(237, 243, 254, 0.8)',
