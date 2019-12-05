@@ -40,11 +40,9 @@ async function create(network: string, ref: ValueRef<Group[]>, groupIDs: string[
         Services.Identity.queryMyProfiles(network),
         Services.UserGroup.queryUserGroups(network),
     ])
-    const pairs = identities.flatMap(({ identifier }) => {
-        return groupIDs.map(
-            groupID => [identifier, GroupIdentifier.getFriendsGroupIdentifier(identifier, groupID)] as Pair,
-        )
-    })
+    const pairs = identities.flatMap(({ identifier }) =>
+        groupIDs.map(groupID => [identifier, GroupIdentifier.getFriendsGroupIdentifier(identifier, groupID)] as Pair),
+    )
 
     await Promise.all(
         pairs.map(async ([userIdentifier, groupIdentifier]) => {
