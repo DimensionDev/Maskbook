@@ -24,6 +24,7 @@ const useStyles = makeStyles(theme =>
         dialog: {
             backgroundColor: '#F7F8FA',
             width: '100%',
+            justifyContent: 'center',
         },
         dialogTitle: {
             padding: `${theme.spacing(1)}px ${theme.spacing(4)}px ${theme.spacing(1)}px ${theme.spacing(1)}px`,
