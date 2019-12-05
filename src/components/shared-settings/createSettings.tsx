@@ -1,5 +1,5 @@
 import React from 'react'
-import { ValueRef } from '@holoflows/kit/es/util/ValueRef'
+import { ValueRef } from '@holoflows/kit/es'
 import { MessageCenter } from '../../utils/messages'
 import { ListItem, ListItemText, ListItemSecondaryAction, Switch } from '@material-ui/core'
 import { useValueRef } from '../../utils/hooks/useValueRef'

@@ -1,8 +1,8 @@
 import React from 'react'
 import MuiAvatar, { AvatarProps } from '@material-ui/core/Avatar/Avatar'
-import { Person } from '../../database'
+import { Profile } from '../../database'
 interface Props extends AvatarProps {
-    person: Person
+    person: Profile
 }
 export function Avatar({ person, ...props }: Props) {
     const { avatar, nickname, identifier } = person

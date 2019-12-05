@@ -1,5 +1,5 @@
 import { geti18nString } from '../../utils/i18n'
-import { PersonIdentifier, GroupIdentifier, PostIdentifier } from '../../database/type'
+import { ProfileIdentifier, GroupIdentifier, PostIdentifier } from '../../database/type'
 import { GetContext } from '@holoflows/kit/es'
 import { isMobileFacebook } from './isMobile'
 
@@ -21,7 +21,7 @@ export function regularUsername(name: string) {
 /**
  * Normalize post url
  */
-export function getPostUrlAtFacebook(post: PostIdentifier<PersonIdentifier>, usage: 'fetch' | 'open') {
+export function getPostUrlAtFacebook(post: PostIdentifier<ProfileIdentifier>, usage: 'fetch' | 'open') {
     const id = post.identifier
     const { postId } = post
     const { userId } = id
@@ -34,7 +34,7 @@ export function getPostUrlAtFacebook(post: PostIdentifier<PersonIdentifier>, usa
 /**
  * Normalize profile url
  */
-export function getProfilePageUrlAtFacebook(user: PersonIdentifier | GroupIdentifier, usage: 'fetch' | 'open') {
+export function getProfilePageUrlAtFacebook(user: ProfileIdentifier | GroupIdentifier, usage: 'fetch' | 'open') {
     if (user instanceof GroupIdentifier) throw new Error('Not implemented')
     if (user.network !== 'facebook.com') throw new Error('Wrong origin')
 

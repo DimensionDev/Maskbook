@@ -2,14 +2,14 @@ import * as React from 'react'
 import Identity from './Identity'
 import { Typography, Button, Theme, useTheme } from '@material-ui/core'
 import { styled } from '@material-ui/styles'
-import { Person } from '../../database'
-import { PersonIdentifier } from '../../database/type'
+import { Profile } from '../../database'
+import { ProfileIdentifier } from '../../database/type'
 
 interface Props {
-    identities: Person[]
+    identities: Profile[]
     addAccount(): void
     exportBackup(): void
-    onProfileClick(identifier: PersonIdentifier): void
+    onProfileClick(identifier: ProfileIdentifier): void
 }
 
 const Main = styled('div')(({ theme }: { theme: Theme }) => ({

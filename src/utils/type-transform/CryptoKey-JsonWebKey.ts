@@ -21,9 +21,9 @@ export async function JsonWebKeyToCryptoKey(
     key: JsonWebKey,
     usage: Usages[] = ['deriveKey'],
     algorithm: Algorithms = { name: 'ECDH', namedCurve: 'K-256' },
-) {
+): Promise<CryptoKey> {
     const _key = stableStringify(key) + usage.sort().join(',')
-    if (CryptoKeyCache.has(_key)) return CryptoKeyCache.get(_key)
+    if (CryptoKeyCache.has(_key)) return CryptoKeyCache.get(_key)!
     const cryptoKey = await crypto.subtle.importKey('jwk', key, algorithm, true, usage)
     CryptoKeyCache.set(_key, cryptoKey)
     JsonWebKeyCache.set(cryptoKey, key)
@@ -34,7 +34,7 @@ export async function JsonWebKeyToCryptoKey(
  * Get a (cached) JsonWebKey from CryptoKey
  * @param key - The CryptoKey
  */
-export async function CryptoKeyToJsonWebKey(key: CryptoKey) {
+export async function CryptoKeyToJsonWebKey(key: CryptoKey): Promise<JsonWebKey> {
     if (JsonWebKeyCache.has(key)) return JsonWebKeyCache.get(key)!
     const jwk = await crypto.subtle.exportKey('jwk', key)
     JsonWebKeyCache.set(key, jwk)

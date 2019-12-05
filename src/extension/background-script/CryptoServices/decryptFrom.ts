@@ -5,14 +5,15 @@ import * as Gun2 from '../../../network/gun/version.2'
 import { decodeText } from '../../../utils/type-transform/String-ArrayBuffer'
 import { deconstructPayload, Payload } from '../../../utils/type-transform/Payload'
 import { geti18nString } from '../../../utils/i18n'
-import { getMyPrivateKey } from '../../../database'
-import { queryLocalKeyDB, queryPersonDB, PersonRecord, PersonRecordPublicPrivate } from '../../../database/people'
-import { PersonIdentifier, PostIVIdentifier } from '../../../database/type'
+import { queryPrivateKey, queryPersonaRecord, queryLocalKey } from '../../../database'
+import { ProfileIdentifier, PostIVIdentifier } from '../../../database/type'
 import { queryPostDB, updatePostDB } from '../../../database/post'
 import { addPerson } from './addPerson'
 import { MessageCenter } from '../../../utils/messages'
 import { getNetworkWorker } from '../../../social-network/worker'
 import { getSignablePayload, cryptoProviderTable } from './utils'
+import { JsonWebKeyToCryptoKey } from '../../../utils/type-transform/CryptoKey-JsonWebKey'
+import { PersonaRecord } from '../../../database/Persona/Persona.db'
 
 type Progress = {
     progress: 'finding_person_public_key' | 'finding_post_key'
@@ -71,8 +72,8 @@ type ReturnOfDecryptFromMessageWithProgress = AsyncGenerator<
  */
 export async function* decryptFromMessageWithProgress(
     encrypted: string,
-    author: PersonIdentifier,
-    whoAmI: PersonIdentifier,
+    author: ProfileIdentifier,
+    whoAmI: ProfileIdentifier,
 ): ReturnOfDecryptFromMessageWithProgress {
     // If any of parameters is changed, we will not handle it.
     let _data: Payload
@@ -95,7 +96,7 @@ export async function* decryptFromMessageWithProgress(
         const [cachedPostResult, setPostCache] = await decryptFromCache(data, author)
 
         // ? Find author's public key.
-        let byPerson!: PersonRecordWithPublicKey
+        let byPerson!: PersonaRecord
         for await (const _ of iteratorHelper(findAuthorPublicKey(author, !!cachedPostResult))) {
             if (_.done) {
                 if (_.value === 'out of chance')
@@ -111,20 +112,27 @@ export async function* decryptFromMessageWithProgress(
         }
 
         // ? Get my public & private key.
-        const mine = await getMyPrivateKey(whoAmI)
+        const mine = await queryPersonaRecord(whoAmI)
+        if (!mine?.privateKey) throw new Error('My key not found')
+        const minePublic = await JsonWebKeyToCryptoKey(mine.publicKey)
+        const minePrivate = mine.privateKey ? await JsonWebKeyToCryptoKey(mine.privateKey) : undefined
         if (cachedPostResult) {
-            if (!author.equals(whoAmI) && mine && mine.publicKey && version !== -40) {
+            if (!author.equals(whoAmI) && minePrivate && version !== -40) {
                 const { keyHash, postHash } = await Gun2.queryPostKeysOnGun2(
                     version,
                     iv,
-                    mine.publicKey,
+                    minePublic,
                     getNetworkWorker(whoAmI).gunNetworkHint,
                 )
                 yield { debug: 'debug_finding_hash', hash: [postHash, keyHash] }
             }
             return {
                 signatureVerifyResult: byPerson.publicKey
-                    ? await cryptoProvider.verify(waitForVerifySignaturePayload, signature || '', byPerson.publicKey)
+                    ? await cryptoProvider.verify(
+                          waitForVerifySignaturePayload,
+                          signature || '',
+                          await JsonWebKeyToCryptoKey(byPerson.publicKey),
+                      )
                     : false,
                 content: cachedPostResult,
                 through: ['post_key_cached'],
@@ -139,9 +147,9 @@ export async function* decryptFromMessageWithProgress(
          */
         try {
             // ? try to decrypt the post as I am the author
-            const authorsPrivate = await getMyPrivateKey(author)
+            const authorsPrivate = await queryPrivateKey(author)
             // ! Don't remove the await
-            if (authorsPrivate) return await decryptAsAuthor(authorsPrivate)
+            if (authorsPrivate) return await decryptAsAuthor(author, authorsPrivate)
         } catch (e) {
             lastError = e
         }
@@ -149,7 +157,7 @@ export async function* decryptFromMessageWithProgress(
         try {
             // ? try to decrypt the post as the whoAmI hint
             // ! Don't remove the await
-            if (mine) return await decryptAsAuthor(mine)
+            if (mine) return await decryptAsAuthor(whoAmI, minePublic)
         } catch (e) {
             lastError = e
         }
@@ -178,7 +186,8 @@ export async function* decryptFromMessageWithProgress(
             const { keyHash, keys, postHash } = await Gun2.queryPostKeysOnGun2(
                 version,
                 iv,
-                mine.publicKey,
+                minePublic,
+
                 getNetworkWorker(author).gunNetworkHint,
             )
             yield { debug: 'debug_finding_hash', hash: [postHash, keyHash] }
@@ -207,7 +216,7 @@ export async function* decryptFromMessageWithProgress(
             const undo = Gun2.subscribePostKeysOnGun2(
                 version,
                 iv,
-                mine.publicKey,
+                minePublic,
                 getNetworkWorker(author).gunNetworkHint,
                 async key => {
                     console.log('New key received, trying', key)
@@ -231,9 +240,9 @@ export async function* decryptFromMessageWithProgress(
             const [contentArrayBuffer, postAESKey] = await cryptoProvider.decryptMessage1ToNByOther({
                 version,
                 AESKeyEncrypted: key,
-                authorsPublicKeyECDH: byPerson!.publicKey!,
+                authorsPublicKeyECDH: await JsonWebKeyToCryptoKey(byPerson.publicKey),
                 encryptedContent: encryptedText,
-                privateKeyECDH: mine!.privateKey,
+                privateKeyECDH: minePrivate!,
                 iv,
             })
 
@@ -245,7 +254,7 @@ export async function* decryptFromMessageWithProgress(
                 const signatureVerifyResult = await cryptoProvider.verify(
                     waitForVerifySignaturePayload,
                     signature,
-                    byPerson!.publicKey!,
+                    await JsonWebKeyToCryptoKey(byPerson.publicKey),
                 )
                 return { signatureVerifyResult, content, through: ['normal_decrypted'] }
             } catch {
@@ -253,12 +262,12 @@ export async function* decryptFromMessageWithProgress(
             }
         }
 
-        async function decryptAsAuthor(author: PersonRecordPublicPrivate) {
+        async function decryptAsAuthor(authorIdentifier: ProfileIdentifier, authorPublic: CryptoKey) {
             const [contentArrayBuffer, postAESKey] = await cryptoProvider.decryptMessage1ToNByMyself({
                 version,
                 encryptedAESKey: ownersAESKeyEncrypted,
                 encryptedContent: encryptedText,
-                myLocalKey: (await queryLocalKeyDB(author.identifier))!,
+                myLocalKey: (await queryLocalKey(authorIdentifier))!,
                 iv,
             })
             // Store the key to speed up next time decrypt
@@ -267,7 +276,7 @@ export async function* decryptFromMessageWithProgress(
             const signatureVerifyResult = await cryptoProvider.verify(
                 waitForVerifySignaturePayload,
                 signature || '',
-                author.publicKey,
+                authorPublic,
             )
             return { signatureVerifyResult, content, through: ['normal_decrypted'] } as Success
         }
@@ -280,13 +289,12 @@ function handleDOMException(e: unknown) {
         return { error: geti18nString('service_decryption_failed') } as Failure
     } else throw e
 }
-type PersonRecordWithPublicKey = PersonRecord & Required<Pick<PersonRecord, 'publicKey'>>
 async function* findAuthorPublicKey(
-    by: PersonIdentifier,
+    by: ProfileIdentifier,
     hasCache: boolean,
     maxIteration = 10,
-): AsyncGenerator<Progress, 'out of chance' | 'use cache' | PersonRecordWithPublicKey, unknown> {
-    let author = await queryPersonDB(by)
+): AsyncGenerator<Progress, 'out of chance' | 'use cache' | PersonaRecord, unknown> {
+    let author = await queryPersonaRecord(by)
     let iterations = 0
     while (author === null || !author.publicKey) {
         iterations += 1
@@ -312,7 +320,7 @@ async function* findAuthorPublicKey(
                 })
             })
             const databasePromise = new Promise((resolve, reject) => {
-                const undo = MessageCenter.on('peopleChanged', data => {
+                const undo = MessageCenter.on('profilesChanged', data => {
                     data.filter(x => x.reason !== 'delete').forEach(x => {
                         if (x.of.identifier.equals(by)) {
                             undo()
@@ -333,7 +341,7 @@ async function* findAuthorPublicKey(
                 .catch(() => null)
         }
     }
-    if (author && author.publicKey) return author as PersonRecordWithPublicKey
+    if (author && author.publicKey) return author
     return 'out of chance'
 }
 
@@ -346,7 +354,7 @@ export async function decryptFrom(
     throw new TypeError('Invalid iterator state')
 }
 
-async function decryptFromCache(postPayload: Payload, by: PersonIdentifier) {
+async function decryptFromCache(postPayload: Payload, by: ProfileIdentifier) {
     const { encryptedText, iv, version } = postPayload
     const cryptoProvider = version === -40 ? Alpha40 : Alpha39
 

@@ -1,13 +1,13 @@
-import { PersonIdentifier } from '../../../database/type'
+import { ProfileIdentifier } from '../../../database/type'
 import { gun2, PersonOnGun2 } from '.'
-import { hashPersonIdentifier } from './hash'
+import { hashProfileIdentifier } from './hash'
 
 /**
  * Query person from gun by once.
  * @param user Identifier
  */
-export async function queryPersonFromGun2(user: PersonIdentifier): Promise<PersonOnGun2> {
-    const result = await gun2.get(await hashPersonIdentifier(user)).then!()
+export async function queryPersonFromGun2(user: ProfileIdentifier): Promise<PersonOnGun2> {
+    const result = await gun2.get(await hashProfileIdentifier(user)).then!()
     return result || {}
 }
 
@@ -18,8 +18,8 @@ export async function queryPersonFromGun2(user: PersonIdentifier): Promise<Perso
  * @param user Identifier
  * @param callback Callback
  */
-export function subscribePersonFromGun2(user: PersonIdentifier, callback: (data: PersonOnGun2) => void) {
-    hashPersonIdentifier(user).then(hash =>
+export function subscribePersonFromGun2(user: ProfileIdentifier, callback: (data: PersonOnGun2) => void) {
+    hashProfileIdentifier(user).then(hash =>
         gun2.get(hash).on((data: PersonOnGun2) => {
             const data2 = Object.assign({}, data)
             // @ts-ignore
@@ -34,6 +34,6 @@ export function subscribePersonFromGun2(user: PersonIdentifier, callback: (data:
  * @param user Identifier
  * @param data Data needs to write
  */
-export async function writePersonOnGun(user: PersonIdentifier, data: NonNullable<PersonOnGun2>) {
-    return gun2.get(await hashPersonIdentifier(user)).put(data).then!()
+export async function writePersonOnGun(user: ProfileIdentifier, data: NonNullable<PersonOnGun2>) {
+    return gun2.get(await hashProfileIdentifier(user)).put(data).then!()
 }

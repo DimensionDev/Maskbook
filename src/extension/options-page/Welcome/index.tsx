@@ -9,10 +9,10 @@ import Welcome1b1 from '../../../components/Welcomes/1b1'
 import Services from '../../service'
 import { RouteComponentProps, withRouter } from 'react-router'
 import { Dialog, useTheme, useMediaQuery, makeStyles } from '@material-ui/core'
-import { Identifier, PersonIdentifier } from '../../../database/type'
+import { Identifier, ProfileIdentifier } from '../../../database/type'
 import { ValueRef } from '@holoflows/kit/es'
 import { useValueRef } from '../../../utils/hooks/useValueRef'
-import { Person } from '../../../database'
+import { Profile } from '../../../database'
 import { getCurrentNetworkWorkerService } from '../../background-script/WorkerService'
 import getCurrentNetworkWorker from '../../../social-network/utils/getCurrentNetworkWorker'
 import { BackupJSONFileLatest } from '../../../utils/type-transform/BackupFile'
@@ -32,49 +32,49 @@ enum WelcomeState {
     RestoreKeypair,
 }
 const WelcomeActions = {
-    backupMyKeyPair(whoAmI: PersonIdentifier) {
-        return Services.Welcome.backupMyKeyPair(whoAmI, { download: true, onlyBackupWhoAmI: false })
+    backupMyKeyPair() {
+        return Services.Welcome.backupMyKeyPair({ download: true, onlyBackupWhoAmI: false })
     },
     /**
      *
      * @param json - The backup file
      * @param id   - Who am I?
      */
-    restoreFromFile(json: BackupJSONFileLatest, id: PersonIdentifier): Promise<void> {
+    restoreFromFile(json: BackupJSONFileLatest, id: ProfileIdentifier): Promise<void> {
         // This request MUST BE sync or Firefox will reject this request
         return browser.permissions
             .request({ origins: json.grantedHostPermissions })
             .then(granted =>
                 granted
-                    ? Services.People.restoreBackup(json, id)
+                    ? Services.Welcome.restoreBackup(json, id)
                     : Promise.reject(new Error('required permission is not granted.')),
             )
     },
-    autoVerifyBio(network: PersonIdentifier, provePost: string) {
+    autoVerifyBio(network: ProfileIdentifier, provePost: string) {
         getCurrentNetworkWorkerService(network).autoVerifyBio!(network, provePost)
     },
-    autoVerifyPost(network: PersonIdentifier, provePost: string) {
+    autoVerifyPost(network: ProfileIdentifier, provePost: string) {
         getCurrentNetworkWorkerService(network).autoVerifyPost!(network, provePost)
     },
-    manualVerifyBio(user: PersonIdentifier, prove: string) {
+    manualVerifyBio(user: ProfileIdentifier, prove: string) {
         this.autoVerifyBio(user, prove)
     },
 }
 interface Welcome {
-    whoAmI: Person
+    whoAmI: Profile
     // Display
     provePost: string
     currentStep: WelcomeState
-    personHintFromSearch: Person
+    personHintFromSearch: Profile
     mnemonicWord: string | null
-    currentIdentities: Person[]
+    currentIdentities: Profile[]
     // Actions
     onStepChange(state: WelcomeState): void
-    onSelectIdentity(person: Person): void
+    onSelectIdentity(person: Profile): void
     onFinish(reason: 'done' | 'quit'): void
     onGenerateKey(password: string): void
     onRestoreByMnemonicWord(words: string, password: string): void
-    onConnectOtherPerson(whoAmI: PersonIdentifier, target: PersonIdentifier): void
+    onConnectOtherPerson(whoAmI: ProfileIdentifier, target: ProfileIdentifier): void
     sideEffects: typeof WelcomeActions
 }
 function Welcome(props: Welcome) {
@@ -125,7 +125,7 @@ function Welcome(props: Welcome) {
                     onGenerateKey={props.onGenerateKey}
                     next={() => {
                         sideEffects
-                            .backupMyKeyPair(props.whoAmI.identifier)
+                            .backupMyKeyPair()
                             .then(updateProveBio)
                             .finally(() => {
                                 onStepChange(WelcomeState.ProvePost)
@@ -138,7 +138,7 @@ function Welcome(props: Welcome) {
                 <Welcome1a3b
                     next={() => {
                         sideEffects
-                            .backupMyKeyPair(props.whoAmI.identifier)
+                            .backupMyKeyPair()
                             .then(updateProveBio)
                             .finally(() => {
                                 onStepChange(WelcomeState.ProvePost)
@@ -190,12 +190,13 @@ function Welcome(props: Welcome) {
     }
 }
 const provePostRef = new ValueRef('')
-const personInferFromURLRef = new ValueRef<Person>({
-    identifier: PersonIdentifier.unknown,
-    groups: [],
+const personInferFromURLRef = new ValueRef<Profile>({
+    identifier: ProfileIdentifier.unknown,
+    createdAt: new Date(),
+    updatedAt: new Date(),
 })
-const selectedIdRef = new ValueRef<Person>(personInferFromURLRef.value)
-const ownedIdsRef = new ValueRef<Person[]>([])
+const selectedIdRef = new ValueRef<Profile>(personInferFromURLRef.value)
+const ownedIdsRef = new ValueRef<Profile[]>([])
 
 provePostRef.addListener(val => console.log('New prove post:', val))
 personInferFromURLRef.addListener(val => console.log('Infer user from URL:', val))
@@ -206,7 +207,7 @@ selectedIdRef.addListener(updateProveBio)
 
 const fillRefs = async () => {
     if (selectedIdRef.value.identifier.isUnknown) {
-        const all = await Services.People.queryMyIdentities()
+        const all = await Services.Identity.queryMyProfiles()
         ownedIdsRef.value = all
         if (all[0]) selectedIdRef.value = all[0]
     }
@@ -218,7 +219,7 @@ async function updateProveBio() {
 }
 
 export type Query = {
-    identifier: PersonIdentifier
+    identifier: ProfileIdentifier
     avatar?: string
     nickname?: string
 }
@@ -261,17 +262,19 @@ export default withRouter(function _WelcomePortal(props: RouteComponentProps) {
         const id = Identifier.fromString(identifier)
         if (id && id.equals(selectedId.identifier)) return
 
-        if (id instanceof PersonIdentifier) {
+        if (id instanceof ProfileIdentifier) {
             if (id.isUnknown) return
-            Services.People.queryMyIdentities(id)
-                .then(([inDB = {} as Person]) => {
+            Services.Identity.queryProfile(id)
+                .then(x => [x].filter(y => y.linkedPersona?.hasPrivateKey))
+                .then(([inDB = {} as Profile]) => {
                     const person = (personInferFromURLRef.value = {
                         identifier: id,
                         nickname: nickname || inDB.nickname,
                         avatar: avatar || inDB.avatar,
-                        groups: [],
-                    })
-                    Services.People.updatePersonInfo(person.identifier, {
+                        createdAt: new Date(),
+                        updatedAt: new Date(),
+                    } as Profile)
+                    Services.Identity.updateProfileInfo(person.identifier, {
                         nickname: person.nickname,
                         avatarURL: person.avatar,
                     })
@@ -297,7 +300,7 @@ export default withRouter(function _WelcomePortal(props: RouteComponentProps) {
             <IdentifierRefContext.Provider value={selectedIdRef}>
                 <Welcome
                     onConnectOtherPerson={(w, t) => {
-                        Services.Welcome.attachIdentityToPersona(w, t).then(
+                        Services.Identity.attachProfile(w, t, { connectionConfirmState: 'confirmed' }).then(
                             () => setStep(WelcomeState.BackupKey),
                             alert,
                         )

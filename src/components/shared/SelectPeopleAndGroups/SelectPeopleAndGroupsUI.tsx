@@ -1,14 +1,14 @@
 import React, { useState, useCallback } from 'react'
 import { geti18nString } from '../../../utils/i18n'
 import { makeStyles, ListItem, ListItemText, InputBase, Button, List, Box } from '@material-ui/core'
-import { Person, Group } from '../../../database'
+import { Profile, Group } from '../../../database'
 import { useCurrentIdentity } from '../../DataSource/useActivatedUI'
 import { PersonOrGroupInList, PersonOrGroupInListProps } from './PersonOrGroupInList'
 import { PersonOrGroupInChip, PersonOrGroupInChipProps } from './PersonOrGroupInChip'
-import { PersonIdentifier, GroupIdentifier } from '../../../database/type'
+import { ProfileIdentifier, GroupIdentifier } from '../../../database/type'
 import { useStylesExtends } from '../../custom-ui-helper'
-type PersonOrGroup = Group | Person
-export interface SelectPeopleAndGroupsUIProps<ServeType extends Group | Person = Group | Person>
+type PersonOrGroup = Group | Profile
+export interface SelectPeopleAndGroupsUIProps<ServeType extends Group | Profile = Group | Profile>
     extends withClasses<KeysInferFromUseStyles<typeof useStyles> | 'root'> {
     /** Omit myself in the UI and the selected result */
     ignoreMyself?: boolean
@@ -34,7 +34,7 @@ const useStyles = makeStyles({
     input: { flex: 1, minWidth: '10em' },
     buttons: { marginLeft: 8, padding: '2px 6px' },
 })
-export function SelectPeopleAndGroupsUI<ServeType extends Group | Person = PersonOrGroup>(
+export function SelectPeopleAndGroupsUI<ServeType extends Group | Profile = PersonOrGroup>(
     props: SelectPeopleAndGroupsUIProps<ServeType>,
 ) {
     const classes = useStylesExtends(useStyles(), props)
@@ -64,7 +64,7 @@ export function SelectPeopleAndGroupsUI<ServeType extends Group | Person = Perso
         if (isPerson(x)) {
             return (
                 !!x.identifier.userId.toLowerCase().match(search.toLowerCase()) ||
-                !!(x.fingerprint || '').toLowerCase().match(search.toLowerCase()) ||
+                !!x.linkedPersona?.fingerprint.toLowerCase().match(search.toLowerCase()) ||
                 !!(x.nickname || '').toLowerCase().match(search.toLowerCase())
             )
         } else {
@@ -164,8 +164,8 @@ function FrozenChip(item: PersonOrGroup, additionalProps?: Partial<PersonOrGroup
     return <PersonOrGroupInChip disabled key={item.identifier.toText()} item={item} {...additionalProps} />
 }
 
-export function isPerson(x: PersonOrGroup): x is Person {
-    return x.identifier instanceof PersonIdentifier
+export function isPerson(x: PersonOrGroup): x is Profile {
+    return x.identifier instanceof ProfileIdentifier
 }
 export function isGroup(x: PersonOrGroup): x is Group {
     return x.identifier instanceof GroupIdentifier

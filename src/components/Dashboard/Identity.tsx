@@ -4,10 +4,10 @@ import classNames from 'classnames'
 import { Avatar } from '../../utils/components/Avatar'
 import { Theme, Typography, Card, CardHeader } from '@material-ui/core'
 import { makeStyles, styled } from '@material-ui/styles'
-import { Person } from '../../database'
+import { Profile } from '../../database'
 
 interface Props {
-    person: Person
+    person: Profile
     onClick?(): void
 }
 const FixedWidth = styled('div')({ fontFamily: FixedWidthFonts })
@@ -36,7 +36,8 @@ const useStyles = makeStyles<Theme>(theme => ({
     },
 }))
 export default function Identity({ person, onClick }: Props) {
-    const { avatar, fingerprint, nickname, identifier } = person
+    const { avatar, nickname, identifier } = person
+    const fingerprint = person.linkedPersona?.fingerprint
     const classes = useStyles()
     return (
         <Card onClick={onClick} className={classes.card}>

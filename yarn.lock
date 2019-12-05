@@ -1161,7 +1161,7 @@
 
 "@holoflows/kit@https://github.com/DimensionDev/holoflows-kit":
   version "0.6.1"
-  resolved "https://github.com/DimensionDev/holoflows-kit#930254d9a9f3c8a7d5bb45c5fc81c0aee9fb3fa9"
+  resolved "https://github.com/DimensionDev/holoflows-kit#848c28a8e8ff5d0a6077bac2f6decdfabbfebe48"
   dependencies:
     async-call-rpc "^1.0.0"
     concurrent-lock "^1.0.7"
@@ -3955,6 +3955,11 @@ base62@^1.1.0:
   version "1.2.8"
   resolved "https://registry.yarnpkg.com/base62/-/base62-1.2.8.tgz#1264cb0fb848d875792877479dbe8bae6bae3428"
   integrity sha512-V6YHUbjLxN1ymqNLb1DPHoU1CpfdL7d2YTIp5W3U4hhoG4hhxNmsFDs66M9EXxBiSEke5Bt5dwdfMwwZF70iLA==
+
+base64-arraybuffer-es6@0.5.0:
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/base64-arraybuffer-es6/-/base64-arraybuffer-es6-0.5.0.tgz#27877d01148bcfb3919c17ecf64ea163d9bdba62"
+  integrity sha512-UCIPaDJrNNj5jG2ZL+nzJ7czvZV/ZYX6LaIRgfVU1k1edJOQg7dkbiSKzwHkNp6aHEHER/PhlFBrMYnlvJJQEw==
 
 base64-js@^1.0.2:
   version "1.3.1"
@@ -6827,11 +6832,6 @@ eslint@^6.6.0:
     table "^5.2.3"
     text-table "^0.2.0"
     v8-compile-cache "^2.0.3"
-
-esm@^3.2.25:
-  version "3.2.25"
-  resolved "https://registry.yarnpkg.com/esm/-/esm-3.2.25.tgz#342c18c29d56157688ba5ce31f8431fbb795cc10"
-  integrity sha512-U1suiZ2oDVWv4zPO56S0NcR5QriEahGtdN2OR6FiOG4WJvcjBVFB0qI4+eKoWFH483PKGuLuu6V8Z4T5g63UVA==
 
 espree@6.1.1, espree@^6.1.1:
   version "6.1.1"
@@ -14698,14 +14698,6 @@ send@0.17.1:
     range-parser "~1.2.1"
     statuses "~1.5.0"
 
-serialijse@^0.1.3:
-  version "0.1.3"
-  resolved "https://registry.yarnpkg.com/serialijse/-/serialijse-0.1.3.tgz#2293f115f87391f44bad13c44c074e5f9e24cd1f"
-  integrity sha512-Ra9NpfBmQqfefQjte6fjk3KXOvkK8oiCfRhui9wIehkAwAu+sVYymQzwJ1xkSpWjqey4a3pcCa/ugB3vMWoEmw==
-  optionalDependencies:
-    object-assign "^4.1.1"
-    zlib "1.0.5"
-
 serialize-javascript@^1.7.0:
   version "1.9.1"
   resolved "https://registry.yarnpkg.com/serialize-javascript/-/serialize-javascript-1.9.1.tgz#cfc200aef77b600c47da9bb8149c943e798c2fdb"
@@ -16109,6 +16101,20 @@ typescript@^3.7.2:
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.7.2.tgz#27e489b95fa5909445e9fef5ee48d81697ad18fb"
   integrity sha512-ml7V7JfiN2Xwvcer+XAf2csGO1bPBdRbFCkYBczNZggrBZ9c7G3riSUeJmqEU5uOtXNPMhE3n+R4FA/3YOAWOQ==
 
+typeson-registry@^1.0.0-alpha.30:
+  version "1.0.0-alpha.30"
+  resolved "https://registry.yarnpkg.com/typeson-registry/-/typeson-registry-1.0.0-alpha.30.tgz#685d4173ddff365a8ef5309744a9d8a391a64fd1"
+  integrity sha512-EDGEK/HTxKm5zNF20r4BM3lMvoTJgTuA8FIuh38pLSZlWdu7LondBlS1x7iDSInUW6A2HjTeZiA2d2XDxN0OyQ==
+  dependencies:
+    base64-arraybuffer-es6 "0.5.0"
+    typeson "5.14.1"
+    whatwg-url "7.1.0"
+
+typeson@5.14.1, typeson@^5.14.1:
+  version "5.14.1"
+  resolved "https://registry.yarnpkg.com/typeson/-/typeson-5.14.1.tgz#d3ce3abecf4c05e03d6fb6419a9a6cad42340820"
+  integrity sha512-A6YPkcPd2Eu/vmWjX1Xp69r03UHPzU0M80lGbBMJHPkkLQSbjOGzQs6S6qYs4x/fZ3sm8KC0c2susQ6EHpzgyw==
+
 ua-parser-js@^0.7.18, ua-parser-js@^0.7.9:
   version "0.7.20"
   resolved "https://registry.yarnpkg.com/ua-parser-js/-/ua-parser-js-0.7.20.tgz#7527178b82f6a62a0f243d1f94fd30e3e3c21098"
@@ -16804,6 +16810,15 @@ whatwg-url@7.0.0, whatwg-url@^7.0.0:
     tr46 "^1.0.1"
     webidl-conversions "^4.0.2"
 
+whatwg-url@7.1.0:
+  version "7.1.0"
+  resolved "https://registry.yarnpkg.com/whatwg-url/-/whatwg-url-7.1.0.tgz#c2c492f1eca612988efd3d2266be1b9fc6170d06"
+  integrity sha512-WUu7Rg1DroM7oQvGWfOiAK21n74Gg+T4elXEQYkOhtyLeWiJFoOGLXPKI/9gzIie9CtwVLm8wtw6YJdKyxSjeg==
+  dependencies:
+    lodash.sortby "^4.7.0"
+    tr46 "^1.0.1"
+    webidl-conversions "^4.0.2"
+
 whatwg-url@^6.4.1:
   version "6.5.0"
   resolved "https://registry.yarnpkg.com/whatwg-url/-/whatwg-url-6.5.0.tgz#f2df02bff176fd65070df74ad5ccbb5a199965a8"
@@ -17295,8 +17310,3 @@ zip-stream@^1.2.0:
     compress-commons "^1.2.0"
     lodash "^4.8.0"
     readable-stream "^2.0.0"
-
-zlib@1.0.5:
-  version "1.0.5"
-  resolved "https://registry.yarnpkg.com/zlib/-/zlib-1.0.5.tgz#6e7c972fc371c645a6afb03ab14769def114fcc0"
-  integrity sha1-bnyXL8NxxkWmr7A6sUdp3vEU/MA=
