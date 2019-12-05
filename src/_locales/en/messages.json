@@ -175,10 +175,10 @@
         "message": "Unknown"
     },
     "dashboard_create_backup": {
-        "message": "Create Backup"
+        "message": "Backup"
     },
     "dashboard_delete_persona": {
-        "message": "Delete Persona"
+        "message": "Delete"
     },
     "dashboard_show_qr": {
         "message": "Show QR Code"

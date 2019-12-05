@@ -5,10 +5,10 @@ import CardContent from '@material-ui/core/CardContent'
 import Button from '@material-ui/core/Button'
 import Typography from '@material-ui/core/Typography'
 import { Profile } from '../../../database'
-import { Divider, IconButton, TextField } from '@material-ui/core'
+import { Divider, IconButton, TextField, Menu, MenuItem } from '@material-ui/core'
 import Services from '../../service'
 import { Link as RouterLink, LinkProps as RouterLinkProps } from 'react-router-dom'
-import EditIcon from '@material-ui/icons/Edit'
+import SettingsIcon from '@material-ui/icons/Settings'
 import { useSnackbar } from 'notistack'
 import { useColorProvider } from '../../../utils/theme'
 import { geti18nString } from '../../../utils/i18n'
@@ -158,6 +158,15 @@ export default function PersonaCard({ identity }: Props) {
 
     const titleRef = useRef<HTMLSpanElement | null>(null)
 
+    const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
+    const handleClick = (event: React.MouseEvent<any>) => {
+        setAnchorEl(event.currentTarget)
+    }
+
+    const handleClose = () => {
+        setAnchorEl(null)
+    }
+
     return (
         <>
             <CardContent>
@@ -167,15 +176,23 @@ export default function PersonaCard({ identity }: Props) {
                             <span suppressContentEditableWarning ref={titleRef} className="title">
                                 {identity.nickname || identity.identifier.userId}
                             </span>
-                            <Typography
-                                className="extra-item fullWidth"
-                                variant="body1"
-                                component="span"
-                                color="textSecondary"
-                                onClick={() => {
-                                    setRename(true)
-                                }}>
-                                <EditIcon fontSize="small" />
+                            <Typography className="fullWidth" variant="body1" component="span" color="textSecondary">
+                                <SettingsIcon fontSize="small" onClick={handleClick} />
+                                <Menu
+                                    anchorEl={anchorEl}
+                                    keepMounted
+                                    open={Boolean(anchorEl)}
+                                    onClick={handleClose}
+                                    onClose={handleClose}>
+                                    <MenuItem onClick={() => setRename(true)}>Rename</MenuItem>
+                                    <MenuItem onClick={copyPublicKey}>Copy Public Key</MenuItem>
+                                    <MenuItem onClick={handleClose}>
+                                        {geti18nString('dashboard_create_backup')}
+                                    </MenuItem>
+                                    <MenuItem onClick={handleClose} className={color.error}>
+                                        {geti18nString('dashboard_delete_persona')}
+                                    </MenuItem>
+                                </Menu>
                             </Typography>
                         </>
                     ) : (
@@ -196,36 +213,6 @@ export default function PersonaCard({ identity }: Props) {
                 </Typography>
             </CardContent>
             <Divider />
-            <CardContent>
-                <Typography className={classes.line} component="div">
-                    <div className="title">{geti18nString('public_key')}</div>
-                    <div className="content" title={provePost}>
-                        {provePost}
-                    </div>
-                    <div className={classNames('extra-item', color.info)} onClick={copyPublicKey}>
-                        {geti18nString('copy')}
-                    </div>
-                </Typography>
-            </CardContent>
-            <Divider />
-            <CardActions>
-                <Button
-                    size="small"
-                    className={color.info}
-                    color="primary"
-                    component={Link}
-                    to={`persona/backup?name=${identity.identifier.toText()}`}>
-                    {geti18nString('dashboard_create_backup')}
-                </Button>
-                <Button
-                    size="small"
-                    className={color.error}
-                    style={{ marginLeft: 'auto' }}
-                    component={Link}
-                    to={`persona/delete?name=${identity.identifier.toText()}`}>
-                    {geti18nString('dashboard_delete_persona')}
-                </Button>
-            </CardActions>
         </>
     )
 }
