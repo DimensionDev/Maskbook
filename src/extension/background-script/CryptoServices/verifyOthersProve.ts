@@ -8,7 +8,7 @@ import { import_ECDH_256k1_Key } from '../../../utils/crypto.subtle'
 export async function verifyOthersProve(bio: string, others: PersonIdentifier): Promise<boolean> {
     const compressedX = getNetworkWorker(others.network).publicKeyDecoder(bio)
     if (!compressedX) return false
-    const key = decompressSecp256k1Key(compressedX)
+    const key = decompressSecp256k1Key(compressedX, 'public')
     let publicKey: CryptoKey
     try {
         publicKey = await import_ECDH_256k1_Key(key)
