@@ -42,10 +42,13 @@ function PostModalAtTwitter() {
                 ...useTwitterButton(),
                 ...useTwitterCloseButton(),
             }}
-            SelectRecipientModalProps={{
-                classes: {
-                    ...useTwitterModal(),
-                    ...useTwitterButton(),
+            SelectRecipientsUIProps={{
+                SelectRecipientsModalUIProps: {
+                    classes: {
+                        ...useTwitterModal(),
+                        ...useTwitterButton(),
+                        ...useTwitterCloseButton(),
+                    },
                 },
             }}
         />

@@ -23,8 +23,7 @@ import { useValueRef } from '../../utils/hooks/useValueRef'
 import { getActivatedUI } from '../../social-network/ui'
 import { ChooseIdentity, ChooseIdentityProps } from '../shared/ChooseIdentity'
 import Services from '../../extension/service'
-import { SelectRecipientsUI, SelectRecipientsProps } from '../shared/SelectRecipients/SelectRecipients'
-import { SelectRecipientsModalProps, SelectRecipientsModal } from '../shared/SelectRecipients/SelectRecipientsModal'
+import { SelectRecipientsUI, SelectRecipientsUIProps } from '../shared/SelectRecipients/SelectRecipients'
 
 const useStyles = makeStyles(theme => ({
     MUIInputRoot: {
@@ -63,16 +62,15 @@ export interface PostModalUIProps extends withClasses<KeysInferFromUseStyles<typ
     onPostTextChange: (nextString: string) => void
     onCloseButtonClicked: () => void
     onFinishButtonClicked: () => void
-    onShareTargetChanged: SelectRecipientsProps['onSetSelected']
+    onShareTargetChanged: SelectRecipientsUIProps['onSetSelected']
     ChooseIdentityProps?: Partial<ChooseIdentityProps>
-    SelectPeopleAndGroupsProps?: Partial<SelectRecipientsProps>
+    SelectRecipientsUIProps?: Partial<SelectRecipientsUIProps>
 }
 export const PostModalUI = memo(function PostModalUI(props: PostModalUIProps) {
     const classes = useStylesExtends(useStyles(), props)
     const rootRef = useRef<HTMLDivElement>(null)
     const inputRef = useRef<HTMLInputElement>(null)
     useCapturedInput(inputRef, props.onPostTextChange)
-
     return (
         <div ref={rootRef}>
             <Modal
@@ -125,7 +123,7 @@ export const PostModalUI = memo(function PostModalUI(props: PostModalUIProps) {
                             items={props.availableShareTarget}
                             selected={props.currentShareTarget}
                             onSetSelected={props.onShareTargetChanged}
-                            {...props.SelectPeopleAndGroupsProps}
+                            {...props.SelectRecipientsUIProps}
                         />
                     </CardContent>
                     <CardActions>
@@ -149,7 +147,6 @@ export interface PostModalProps extends Partial<PostModalUIProps> {
     identities?: Person[]
     onRequestPost?: (target: (Person | Group)[], text: string) => void
     onRequestReset?: () => void
-    SelectRecipientModalProps?: SelectRecipientsModalProps
 }
 export function PostModal(props: PostModalProps) {
     const people = useFriendsList()
@@ -223,22 +220,19 @@ export function PostModal(props: PostModalProps) {
     }, [])
 
     const ui = (
-        <>
-            <PostModalUI
-                open={open}
-                availableShareTarget={availableShareTarget}
-                currentIdentity={currentIdentity}
-                currentShareTarget={currentShareTarget}
-                postBoxText={postBoxText}
-                postBoxButtonDisabled={!(currentShareTarget.length && postBoxText)}
-                onPostTextChange={setPostBoxText}
-                onFinishButtonClicked={onFinishButtonClicked}
-                onCloseButtonClicked={onCloseButtonClicked}
-                onShareTargetChanged={onShareTargetChanged}
-                {...props}
-            />
-            <SelectRecipientsModal open={true} {...props.SelectRecipientModalProps} />
-        </>
+        <PostModalUI
+            open={open}
+            availableShareTarget={availableShareTarget}
+            currentIdentity={currentIdentity}
+            currentShareTarget={currentShareTarget}
+            postBoxText={postBoxText}
+            postBoxButtonDisabled={!(currentShareTarget.length && postBoxText)}
+            onPostTextChange={setPostBoxText}
+            onFinishButtonClicked={onFinishButtonClicked}
+            onCloseButtonClicked={onCloseButtonClicked}
+            onShareTargetChanged={onShareTargetChanged}
+            {...props}
+        />
     )
 
     if (identities.length > 1)
