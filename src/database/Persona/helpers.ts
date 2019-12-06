@@ -170,9 +170,11 @@ export async function createProfileWithPersona(
 
 export async function queryLocalKey(i: ProfileIdentifier | PersonaIdentifier): Promise<CryptoKey | null> {
     if (i instanceof ProfileIdentifier) {
-        const prof = await queryProfileDB(i)
-        if (!prof?.linkedPersona) return prof?.localKey ?? null
-        return queryLocalKey(prof.linkedPersona)
+        const profile = await queryProfileDB(i)
+        if (!profile) return null
+        if (profile.localKey) return profile.localKey
+        if (!profile.linkedPersona) return null
+        return queryLocalKey(profile.linkedPersona)
     } else {
         return (await queryPersonaDB(i))?.localKey ?? null
     }

@@ -168,6 +168,7 @@ export async function* decryptFromMessageWithProgress(
             // By removing this if block, Maskbook will search the key
             // for the post even that post by myself.
             if (lastError instanceof DOMException) return handleDOMException(lastError)
+            console.error(lastError)
             return { error: geti18nString('service_self_key_decryption_failed') } as Failure
         }
         // The following process need a ECDH key to do.
@@ -263,11 +264,13 @@ export async function* decryptFromMessageWithProgress(
         }
 
         async function decryptAsAuthor(authorIdentifier: ProfileIdentifier, authorPublic: CryptoKey) {
+            const localKey = await queryLocalKey(authorIdentifier)
+            if (!localKey) throw new Error(`Local key for identity ${authorIdentifier.toText()} not found`)
             const [contentArrayBuffer, postAESKey] = await cryptoProvider.decryptMessage1ToNByMyself({
                 version,
                 encryptedAESKey: ownersAESKeyEncrypted,
                 encryptedContent: encryptedText,
-                myLocalKey: (await queryLocalKey(authorIdentifier))!,
+                myLocalKey: localKey,
                 iv,
             })
             // Store the key to speed up next time decrypt
