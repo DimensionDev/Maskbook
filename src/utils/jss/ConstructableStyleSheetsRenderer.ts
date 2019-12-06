@@ -51,6 +51,9 @@ export function applyAdoptedStyleSheets(shadowOnly = true) {
                 ? [...fakeHead.children]
                       .filter((x): x is HTMLStyleElement => x instanceof HTMLStyleElement)
                       .reduce((prev, cur) => {
+                          if (prev.indexOf(cur.innerHTML) > -1) {
+                              return prev
+                          }
                           prev += cur.innerHTML
                           const sheet = getStyleSheet(cur)
                           const fromSheet = [...sheet.rules].map(i => i.cssText).join('\n')
