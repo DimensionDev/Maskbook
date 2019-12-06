@@ -14,12 +14,18 @@ import { getWelcomePageURL } from '../options-page/Welcome/getWelcomePageURL'
 import {
     generate_ECDH_256k1_KeyPair_ByMnemonicWord,
     recover_ECDH_256k1_KeyPair_ByMnemonicWord,
+    generate_ECDH_256k1_KeyPair_ByMnemonicWord_Path,
 } from '../../utils/mnemonic-code'
 import { derive_AES_GCM_256_Key_From_PBKDF2, import_PBKDF2_Key, import_ECDH_256k1_Key } from '../../utils/crypto.subtle'
 import { createProfileWithPersona } from '../../database'
 import { migrateHelper_operateDB } from '../../database/migrate/people.to.persona'
 import { IdentifierMap } from '../../database/IdentifierMap'
-import { queryPersonasWithPrivateKey, PersonaDBAccess, queryProfileDB } from '../../database/Persona/Persona.db'
+import {
+    queryPersonasWithPrivateKey,
+    PersonaDBAccess,
+    queryProfileDB,
+    PersonaRecord,
+} from '../../database/Persona/Persona.db'
 import { createDefaultFriendsGroup } from '../../database'
 import { CryptoKeyToJsonWebKey, JsonWebKeyToCryptoKey } from '../../utils/type-transform/CryptoKey-JsonWebKey'
 
@@ -113,6 +119,7 @@ async function generateNewIdentity(
         | {
               key: CryptoKeyPair
               mnemonicWord: string
+              withPassword: boolean
           }
         | {
               key: CryptoKeyPair
@@ -120,7 +127,6 @@ async function generateNewIdentity(
           },
 ): Promise<void> {
     const { key } = usingKey
-    const ec_id = await ECKeyIdentifier.fromCryptoKey(key.publicKey)
 
     let localKey: CryptoKey
     if ('localKey' in usingKey) localKey = usingKey.localKey
@@ -138,7 +144,21 @@ async function generateNewIdentity(
     await createProfileWithPersona(
         whoAmI,
         { connectionConfirmState: 'confirmed' },
-        { publicKey: pubJwk, privateKey: privJwk, localKey: localKey },
+        {
+            publicKey: pubJwk,
+            privateKey: privJwk,
+            localKey: localKey,
+            mnemonic:
+                'mnemonicWord' in usingKey
+                    ? ({
+                          word: usingKey.mnemonicWord,
+                          parameter: {
+                              path: generate_ECDH_256k1_KeyPair_ByMnemonicWord_Path,
+                              withPassword: usingKey.withPassword,
+                          },
+                      } as PersonaRecord['mnemonic'])
+                    : undefined,
+        },
     )
     await createDefaultFriendsGroup(whoAmI).catch(console.error)
     MessageCenter.emit('identityUpdated', undefined)
