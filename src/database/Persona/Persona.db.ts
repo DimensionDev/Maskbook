@@ -242,7 +242,7 @@ export async function updateProfileDB(
 
     const oldLinkedPersona = restorePrototype(old.linkedPersona, ECKeyIdentifier.prototype)
 
-    if (updating.linkedPersona && (!oldLinkedPersona || updating.linkedPersona.equals(oldLinkedPersona))) {
+    if (updating.linkedPersona && (!oldLinkedPersona || !updating.linkedPersona.equals(oldLinkedPersona))) {
         throw new TypeError('Use attachProfileDB or deattachProfileDB to update the linkedPersona')
     }
     const nextRecord: ProfileRecordDB = profileToDB({

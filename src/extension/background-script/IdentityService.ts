@@ -16,6 +16,7 @@ import {
     createProfileDB,
     attachProfileDB,
     LinkedProfileDetails,
+    ProfileRecord,
 } from '../../database/Persona/Persona.db'
 import { OnlyRunInContext } from '@holoflows/kit/es'
 
@@ -102,7 +103,11 @@ export async function resolveIdentity(identifier: ProfileIdentifier): Promise<vo
     const self = new ProfileIdentifier(identifier.network, '$self')
 
     const r = await queryProfilesDB(x => x.identifier.equals(unknown) || x.identifier.equals(self))
-    const final = { ...r.reduce((p, c) => ({ ...p, ...c })), identifier }
+    if (!r.length) return
+    const final = {
+        ...r.reduce((p, c) => ({ ...p, ...c })),
+        identifier,
+    }
     try {
         await createProfileDB(final)
         await deleteProfileDB(unknown).catch(() => {})
