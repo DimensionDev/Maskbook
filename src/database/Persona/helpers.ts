@@ -151,7 +151,12 @@ export async function queryPrivateKey(i: ProfileIdentifier | PersonaIdentifier):
 export async function createProfileWithPersona(
     i: ProfileIdentifier,
     data: LinkedProfileDetails,
-    keys: { publicKey: JsonWebKey; privateKey?: JsonWebKey; localKey?: CryptoKey },
+    keys: {
+        publicKey: JsonWebKey
+        privateKey?: JsonWebKey
+        localKey?: CryptoKey
+        mnemonic?: PersonaRecord['mnemonic']
+    },
 ): Promise<void> {
     const ec_id = ECKeyIdentifier.fromJsonWebKey(keys.publicKey)
 
@@ -164,6 +169,7 @@ export async function createProfileWithPersona(
         publicKey: keys.publicKey,
         privateKey: keys.privateKey,
         localKey: keys.localKey,
+        mnemonic: keys.mnemonic,
     })
     await attachProfileDB(i, ec_id, data, t)
 }
