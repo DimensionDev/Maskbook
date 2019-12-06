@@ -1,8 +1,10 @@
-import 'webcrypto-liner/dist/webcrypto-liner.shim.js'
 import { GetContext } from '@holoflows/kit/es'
 import { MessageCenter } from './utils/messages'
 // @ts-ignore
 import elliptic from 'elliptic'
+
+Object.assign(window, { elliptic })
+require('webcrypto-liner')
 /**
  * Load service here. sorry for the ugly pattern.
  * But here's some strange problem with webpack.
@@ -115,7 +117,6 @@ function IgnoreError(arg: unknown): (reason: Error) => void {
     }
 }
 Object.assign(window, {
-    elliptic,
     definedSocialNetworkWorkers: (require('./social-network/worker') as typeof import('./social-network/worker'))
         .definedSocialNetworkWorkers,
 })
