@@ -26,8 +26,8 @@ const emptyNode = document.createElement('div')
 const injectPostBox = () => {
     // const target = newMOW(newPostEditorBelow().map(x => (hasDraftEditor(x) ? x : emptyNode)))
     // renderInShadowRoot(<AdditionalPostBox />, target.firstDOMProxy.afterShadow)
-    const popUpTarget = newMOW(postPopupInjectPointSelector())
-    renderInShadowRoot(<AdditionalPostBox />, popUpTarget.firstDOMProxy.afterShadow)
+    // const popUpTarget = newMOW(postPopupInjectPointSelector())
+    // renderInShadowRoot(<AdditionalPostBox />, popUpTarget.firstDOMProxy.afterShadow)
 }
 
 const injectPostInspector = (current: PostInfo) => {
