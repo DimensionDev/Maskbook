@@ -20,8 +20,10 @@ import {
 } from './Persona.db'
 import { IdentifierMap } from '../IdentifierMap'
 import { getAvatarDataURL } from '../helpers/avatar'
-import { JsonWebKeyToCryptoKey } from '../../utils/type-transform/CryptoKey-JsonWebKey'
+import { JsonWebKeyToCryptoKey, CryptoKeyToJsonWebKey } from '../../utils/type-transform/CryptoKey-JsonWebKey'
 import { MessageCenter, UpdateEvent } from '../../utils/messages'
+import { generate_ECDH_256k1_KeyPair_ByMnemonicWord } from '../../utils/mnemonic-code'
+import { deriveLocalKeyFromECDHKey } from '../../utils/mnemonic-code/localKeyGenerate'
 
 export async function profileRecordToProfile(record: ProfileRecord): Promise<Profile> {
     const rec = { ...record }
@@ -148,6 +150,46 @@ export async function queryPrivateKey(i: ProfileIdentifier | PersonaIdentifier):
     return undefined
 }
 
+export async function createPersonaByMnemonic(
+    nickname: string | undefined,
+    password: string,
+): Promise<PersonaIdentifier> {
+    const key = await generate_ECDH_256k1_KeyPair_ByMnemonicWord(password)
+    const jwkPub = await CryptoKeyToJsonWebKey(key.key.publicKey)
+    const jwkPriv = await CryptoKeyToJsonWebKey(key.key.privateKey)
+    const localKey = await deriveLocalKeyFromECDHKey(key.key.publicKey, key.mnemonicRecord.word)
+    const jwkLocalKey = await CryptoKeyToJsonWebKey(localKey)
+
+    return createPersonaByJsonWebKey({
+        privateKey: jwkPriv,
+        publicKey: jwkPub,
+        localKey: jwkLocalKey,
+        mnemonic: key.mnemonicRecord,
+        nickname: nickname,
+    })
+}
+
+export async function createPersonaByJsonWebKey(options: {
+    publicKey: JsonWebKey
+    privateKey: JsonWebKey
+    localKey?: JsonWebKey
+    nickname?: string
+    mnemonic?: PersonaRecord['mnemonic']
+}): Promise<PersonaIdentifier> {
+    const identifier = ECKeyIdentifier.fromJsonWebKey(options.publicKey)
+    await createPersonaDB({
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        identifier: identifier,
+        linkedProfiles: new IdentifierMap(new Map()),
+        publicKey: options.publicKey,
+        privateKey: options.privateKey,
+        nickname: options.nickname,
+        mnemonic: options.mnemonic,
+        localKey: options.localKey ? await JsonWebKeyToCryptoKey(options.localKey) : undefined,
+    })
+    return identifier
+}
 export async function createProfileWithPersona(
     i: ProfileIdentifier,
     data: LinkedProfileDetails,

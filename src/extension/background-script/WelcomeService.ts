@@ -14,7 +14,7 @@ import { getWelcomePageURL } from '../options-page/Welcome/getWelcomePageURL'
 import {
     generate_ECDH_256k1_KeyPair_ByMnemonicWord,
     recover_ECDH_256k1_KeyPair_ByMnemonicWord,
-    generate_ECDH_256k1_KeyPair_ByMnemonicWord_Path,
+    MnemonicGenerationInformation,
 } from '../../utils/mnemonic-code'
 import { derive_AES_GCM_256_Key_From_PBKDF2, import_PBKDF2_Key, import_ECDH_256k1_Key } from '../../utils/crypto.subtle'
 import { createProfileWithPersona } from '../../database'
@@ -28,6 +28,7 @@ import {
 } from '../../database/Persona/Persona.db'
 import { createDefaultFriendsGroup } from '../../database'
 import { CryptoKeyToJsonWebKey, JsonWebKeyToCryptoKey } from '../../utils/type-transform/CryptoKey-JsonWebKey'
+import { deriveLocalKeyFromECDHKey } from '../../utils/mnemonic-code/localKeyGenerate'
 
 OnlyRunInContext('background', 'WelcomeService')
 
@@ -83,7 +84,7 @@ async function generateBackupJSON(): Promise<BackupJSONFileLatest> {
 export async function createNewIdentityByMnemonicWord(whoAmI: ProfileIdentifier, password: string): Promise<string> {
     const x = await generate_ECDH_256k1_KeyPair_ByMnemonicWord(password)
     await generateNewIdentity(whoAmI, x)
-    return x.mnemonicWord
+    return x.mnemonicRecord.word
 }
 
 /**
@@ -116,11 +117,7 @@ export async function restoreNewIdentityWithMnemonicWord(
 async function generateNewIdentity(
     whoAmI: ProfileIdentifier,
     usingKey:
-        | {
-              key: CryptoKeyPair
-              mnemonicWord: string
-              withPassword: boolean
-          }
+        | MnemonicGenerationInformation
         | {
               key: CryptoKeyPair
               localKey: CryptoKey
@@ -128,16 +125,10 @@ async function generateNewIdentity(
 ): Promise<void> {
     const { key } = usingKey
 
-    let localKey: CryptoKey
-    if ('localKey' in usingKey) localKey = usingKey.localKey
-    else {
-        const pub = await CryptoKeyToJsonWebKey(key.publicKey)
-
-        // ? Derive method: publicKey as "password" and password for the mnemonicWord as hash
-        const pbkdf2 = await import_PBKDF2_Key(encodeText(pub.x! + pub.y!))
-        localKey = await derive_AES_GCM_256_Key_From_PBKDF2(pbkdf2, encodeText(usingKey.mnemonicWord))
-    }
-
+    const localKey: CryptoKey =
+        'localKey' in usingKey
+            ? usingKey.localKey
+            : await deriveLocalKeyFromECDHKey(key.publicKey, usingKey.mnemonicRecord.word)
     const pubJwk = await CryptoKeyToJsonWebKey(key.publicKey)
     const privJwk = await CryptoKeyToJsonWebKey(key.privateKey)
 
@@ -148,16 +139,7 @@ async function generateNewIdentity(
             publicKey: pubJwk,
             privateKey: privJwk,
             localKey: localKey,
-            mnemonic:
-                'mnemonicWord' in usingKey
-                    ? ({
-                          word: usingKey.mnemonicWord,
-                          parameter: {
-                              path: generate_ECDH_256k1_KeyPair_ByMnemonicWord_Path,
-                              withPassword: usingKey.withPassword,
-                          },
-                      } as PersonaRecord['mnemonic'])
-                    : undefined,
+            mnemonic: 'mnemonicRecord' in usingKey ? usingKey.mnemonicRecord : undefined,
         },
     )
     await createDefaultFriendsGroup(whoAmI).catch(console.error)
