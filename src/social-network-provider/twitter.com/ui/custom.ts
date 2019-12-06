@@ -3,6 +3,8 @@ import { Theme, createMuiTheme } from '@material-ui/core'
 import { MaskbookDarkTheme, MaskbookLightTheme } from '../../../utils/theme'
 import { SocialNetworkUICustomUI } from '../../../social-network/ui'
 
+type RGB = [number, number, number]
+
 export function useTheme() {
     const [theme, setTheme] = useState<Theme>(MaskbookLightTheme)
     const primaryColor = usePrimaryColor()
@@ -10,6 +12,7 @@ export function useTheme() {
 
     useEffect(() => {
         const MaskbookTheme = isDark(fromRGB(backgroundColor)!) ? MaskbookDarkTheme : MaskbookLightTheme
+        const primaryColorRGB = fromRGB(primaryColor)!
         setTheme(
             createMuiTheme({
                 ...MaskbookTheme,
@@ -21,9 +24,9 @@ export function useTheme() {
                     },
                     primary: {
                         ...MaskbookTheme.palette.primary,
-                        light: shade(fromRGB(primaryColor)!, 10),
-                        main: primaryColor,
-                        dark: shade(fromRGB(primaryColor)!, -10),
+                        light: toRGB(shade(primaryColorRGB, 10)),
+                        main: toRGB(primaryColorRGB),
+                        dark: toRGB(shade(primaryColorRGB, -10)),
                     },
                 },
             }),
@@ -60,15 +63,19 @@ function useBackgroundColor() {
     return backgroundColor
 }
 
-function isDark([r, g, b]: [number, number, number]) {
+function isDark([r, g, b]: RGB) {
     return r < 68 && g < 68 && b < 68
 }
 
-function toRGB(channels: [number, number, number]) {
+function toRGB(channels: RGB) {
     return `rgb(${channels.join()})`
 }
 
-function fromRGB(rgb: string): [number, number, number] | undefined {
+function toHex(channels: RGB) {
+    return `#${channels.map(c => c.toString(16).toLowerCase()).join('')}`
+}
+
+function fromRGB(rgb: string): RGB | undefined {
     const matched = rgb.match(/rgb\(\s*(\d+?)\s*,\s*(\d+?)\s*,\s*(\d+?)\s*\)/)
     if (matched) {
         const [_, r, g, b] = matched
@@ -82,8 +89,8 @@ function clamp(num: number, min: number, max: number) {
     return num
 }
 
-function shade(channels: [number, number, number], percentage: number) {
-    return `rgb(${channels.map(c => clamp(Math.floor((c * (100 + percentage)) / 100), 0, 255)).join()})`
+function shade(channels: RGB, percentage: number): RGB {
+    return channels.map(c => clamp(Math.floor((c * (100 + percentage)) / 100), 0, 255)) as RGB
 }
 
 function getBackgroundColor<T extends HTMLElement>(selector: string) {

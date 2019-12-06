@@ -5,8 +5,10 @@ import { GroupInChipProps, GroupInChip } from './GroupInChip'
 import { PersonIdentifier, GroupIdentifier } from '../../../database/type'
 import AddIcon from '@material-ui/icons/Add'
 import { ClickableChip } from './ClickableChip'
+import { useState } from 'react'
+import { SelectRecipientsModalUIProps, SelectRecipientsModalUI } from './SelectRecipientsModal'
 
-export interface SelectRecipientsProps<T extends Group | Person = Group | Person>
+export interface SelectRecipientsUIProps<T extends Group | Person = Group | Person>
     extends withClasses<KeysInferFromUseStyles<typeof useStyles> | 'root'> {
     /** Omit myself in the UI and the selected result */
     ignoreMyself?: boolean
@@ -21,6 +23,7 @@ export interface SelectRecipientsProps<T extends Group | Person = Group | Person
     onSetSelected(selected: T[]): void
     GroupInChipProps?: Partial<GroupInChipProps>
     PersonOrGroupInListProps?: Partial<PersonOrGroupInListProps>
+    SelectRecipientsModalUIProps?: Partial<SelectRecipientsModalUIProps>
 }
 const useStyles = makeStyles({
     root: {},
@@ -29,10 +32,13 @@ const useStyles = makeStyles({
         flexWrap: 'wrap',
     },
 })
-export function SelectRecipientsUI<T extends Group | Person = Group | Person>(props: SelectRecipientsProps) {
+export function SelectRecipientsUI<T extends Group | Person = Group | Person>(props: SelectRecipientsUIProps) {
     const classes = useStyles()
     const { items, onSetSelected } = props
     const groupItems = items.filter(item => isGroup(item)) as Group[]
+
+    const [open, setOpen] = useState(false)
+
     return (
         <div className={classes.root}>
             <Box className={classes.selectArea} display="flex">
@@ -49,8 +55,17 @@ export function SelectRecipientsUI<T extends Group | Person = Group | Person>(pr
                     ChipProps={{
                         label: 'Specific Friends (12 selected)',
                         avatar: <AddIcon />,
-                        onClick() {},
+                        onClick() {
+                            setOpen(true)
+                        },
                     }}
+                />
+                <SelectRecipientsModalUI
+                    open={open}
+                    onSubmit={() => {}}
+                    onClose={() => setOpen(false)}
+                    submitDisabled={false}
+                    {...props.SelectRecipientsModalUIProps}
                 />
             </Box>
         </div>

@@ -1,22 +1,34 @@
 import { useRef, useState, useCallback } from 'react'
-import { Modal, makeStyles, Card, CardHeader, Typography, CardContent, CardActions, Button } from '@material-ui/core'
+import {
+    Modal,
+    makeStyles,
+    Card,
+    CardHeader,
+    Typography,
+    CardContent,
+    CardActions,
+    Button,
+    IconButton,
+} from '@material-ui/core'
 import { useStylesExtends, or } from '../../custom-ui-helper'
 import { geti18nString } from '../../../utils/i18n'
+import CloseIcon from '@material-ui/icons/Close'
 
 const useStyles = makeStyles(theme => ({
     modal: {},
-    backdrop: {
-        backgroundColor: 'transparent',
-    },
+    backdrop: {},
     root: {
         outline: 'none',
-        width: 350,
+        width: 420,
         backgroundColor: theme.palette.background.paper,
     },
     header: {},
     content: {},
     actions: {},
-    title: {},
+    title: {
+        marginLeft: 6,
+    },
+    close: {},
     button: {},
 }))
 
@@ -50,9 +62,17 @@ export function SelectRecipientsModalUI(props: SelectRecipientsModalUIProps) {
                     <CardHeader
                         className={classes.header}
                         title={
-                            <Typography className={classes.title} display="inline" variant="h6">
-                                {geti18nString('recipients_modal__title')}
-                            </Typography>
+                            <>
+                                <IconButton
+                                    classes={{ root: classes.close }}
+                                    aria-label={geti18nString('post_modal__dismiss_aria')}
+                                    onClick={props.onClose}>
+                                    <CloseIcon />
+                                </IconButton>
+                                <Typography className={classes.title} display="inline" variant="h6">
+                                    {geti18nString('recipients_modal__title')}
+                                </Typography>
+                            </>
                         }></CardHeader>
                     <CardContent className={classes.content}></CardContent>
                     <CardActions className={classes.actions}>
@@ -84,5 +104,13 @@ export function SelectRecipientsModal(props: SelectRecipientsModalProps) {
         useCallback(() => setOpen(false), []),
     )
 
-    return <SelectRecipientsModalUI open={open} onSubmit={onSubmit} onClose={onClose} submitDisabled={false} />
+    return (
+        <SelectRecipientsModalUI
+            classes={props.classes}
+            open={open}
+            onSubmit={onSubmit}
+            onClose={onClose}
+            submitDisabled={false}
+        />
+    )
 }
