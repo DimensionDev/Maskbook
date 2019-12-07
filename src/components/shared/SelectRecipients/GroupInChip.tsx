@@ -18,6 +18,9 @@ const useStyles = makeStyles({
         marginBottom: 6,
         cursor: 'pointer',
     },
+    icon: {
+        backgroundColor: 'transparent',
+    },
 })
 
 export function GroupInChip(props: GroupInChipProps) {
@@ -28,7 +31,7 @@ export function GroupInChip(props: GroupInChipProps) {
     return (
         <Chip
             className={classes.root}
-            avatar={selected ? <DoneIcon /> : undefined}
+            avatar={selected ? <DoneIcon className={classes.icon} /> : undefined}
             color={selected ? 'primary' : 'default'}
             onClick={onClick}
             label={useResolveSpecialGroupName(group)}

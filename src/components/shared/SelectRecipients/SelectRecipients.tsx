@@ -32,12 +32,13 @@ const useStyles = makeStyles({
         flexWrap: 'wrap',
     },
 })
-export function SelectRecipientsUI(props: SelectRecipientsUIProps) {
+export function SelectRecipientsUI<T extends Group | Person = Group | Person>(props: SelectRecipientsUIProps) {
     const classes = useStyles()
-    const { items, onSetSelected } = props
+    const { items, maxSelection, selected, onSetSelected } = props
     const groupItems = items.filter(item => isGroup(item)) as Group[]
     const personItems = items.filter(item => isPerson(item)) as Person[]
 
+    const [search, setSearch] = useState('')
     const [open, setOpen] = useState(false)
 
     return (
@@ -47,8 +48,17 @@ export function SelectRecipientsUI(props: SelectRecipientsUIProps) {
                     <GroupInChip
                         key={item.identifier.toText()}
                         item={item}
+                        selected={selected.some(x => x.identifier.equals(item.identifier))}
                         disabled={false}
-                        onClick={() => {}}
+                        onClick={() => {
+                            if (selected.some(x => x.identifier.equals(item.identifier))) {
+                                onSetSelected(selected.filter(x => !x.identifier.equals(item.identifier)) as T[])
+                            } else {
+                                if (maxSelection === 1) onSetSelected([item as T])
+                                else onSetSelected(selected.concat(item) as T[])
+                            }
+                            setSearch('')
+                        }}
                         {...props.GroupInChipProps}
                     />
                 ))}
