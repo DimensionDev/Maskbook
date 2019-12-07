@@ -87,8 +87,7 @@ export const PostModalUI = memo(function PostModalUI(props: PostModalUIProps) {
                 BackdropProps={{
                     className: classes.backdrop,
                 }}
-                onEscapeKeyDown={props.onCloseButtonClicked}
-                onBackdropClick={props.onCloseButtonClicked}>
+                onEscapeKeyDown={props.onCloseButtonClicked}>
                 <Card className={classes.root}>
                     <CardHeader
                         className={classes.header}

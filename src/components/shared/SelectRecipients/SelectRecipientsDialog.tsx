@@ -63,8 +63,7 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
                 BackdropProps={{
                     className: classes.backdrop,
                 }}
-                onEscapeKeyDown={props.onClose}
-                onBackdropClick={props.onClose}>
+                onEscapeKeyDown={props.onClose}>
                 <DialogTitle className={classes.header}>
                     <IconButton
                         classes={{ root: classes.close }}
