@@ -10,6 +10,7 @@ import {
     Button,
     Typography,
     IconButton,
+    withMobileDialog,
 } from '@material-ui/core'
 import CloseIcon from '@material-ui/icons/Close'
 import { geti18nString } from '../../utils/i18n'
@@ -39,7 +40,7 @@ const useStyles = makeStyles(theme => ({
     backdrop: {},
     root: {
         outline: 'none',
-        width: 598,
+        maxWidth: 650,
         backgroundColor: theme.palette.background.paper,
     },
     header: {},
@@ -51,6 +52,7 @@ const useStyles = makeStyles(theme => ({
     },
     button: {},
 }))
+const ResponsiveModal = withMobileDialog({ breakpoint: 'xs' })(Modal)
 
 export interface PostModalUIProps extends withClasses<KeysInferFromUseStyles<typeof useStyles>> {
     open: boolean
@@ -73,7 +75,7 @@ export const PostModalUI = memo(function PostModalUI(props: PostModalUIProps) {
     useCapturedInput(inputRef, props.onPostTextChange)
     return (
         <div ref={rootRef}>
-            <Modal
+            <ResponsiveModal
                 className={classes.modal}
                 open={props.open}
                 aria-labelledby="modal-title" // TODO
@@ -138,7 +140,7 @@ export const PostModalUI = memo(function PostModalUI(props: PostModalUIProps) {
                         </Button>
                     </CardActions>
                 </Card>
-            </Modal>
+            </ResponsiveModal>
         </div>
     )
 })

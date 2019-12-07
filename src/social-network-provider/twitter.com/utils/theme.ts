@@ -40,6 +40,8 @@ export const useTwitterModal = makeStyles((theme: Theme) => {
             borderRadius: 5,
         },
         header: {
+            display: 'flex',
+            alignItems: 'center',
             padding: '10px 15px',
             borderBottom: `1px solid ${borderColor}`,
         },

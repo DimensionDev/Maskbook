@@ -6,7 +6,7 @@ import { PersonIdentifier, GroupIdentifier } from '../../../database/type'
 import AddIcon from '@material-ui/icons/Add'
 import { ClickableChip } from './ClickableChip'
 import { useState } from 'react'
-import { SelectRecipientsModalUIProps, SelectRecipientsModalUI } from './SelectRecipientsModal'
+import { SelectRecipientsDialogUIProps, SelectRecipientsDialogUI } from './SelectRecipientsDialog'
 
 export interface SelectRecipientsUIProps<T extends Group | Person = Group | Person>
     extends withClasses<KeysInferFromUseStyles<typeof useStyles> | 'root'> {
@@ -23,7 +23,7 @@ export interface SelectRecipientsUIProps<T extends Group | Person = Group | Pers
     onSetSelected(selected: T[]): void
     GroupInChipProps?: Partial<GroupInChipProps>
     PersonOrGroupInListProps?: Partial<PersonOrGroupInListProps>
-    SelectRecipientsModalUIProps?: Partial<SelectRecipientsModalUIProps>
+    SelectRecipientsDialogUIProps?: Partial<SelectRecipientsDialogUIProps>
 }
 const useStyles = makeStyles({
     root: {},
@@ -36,6 +36,7 @@ export function SelectRecipientsUI<T extends Group | Person = Group | Person>(pr
     const classes = useStyles()
     const { items, onSetSelected } = props
     const groupItems = items.filter(item => isGroup(item)) as Group[]
+    const personItems = items.filter(item => isPerson(item)) as Person[]
 
     const [open, setOpen] = useState(false)
 
@@ -60,12 +61,14 @@ export function SelectRecipientsUI<T extends Group | Person = Group | Person>(pr
                         },
                     }}
                 />
-                <SelectRecipientsModalUI
+                <SelectRecipientsDialogUI
+                    items={personItems}
                     open={open}
-                    onSubmit={() => {}}
-                    onClose={() => setOpen(false)}
+                    disabled={false}
                     submitDisabled={false}
-                    {...props.SelectRecipientsModalUIProps}
+                    onSubmit={() => setOpen(false)}
+                    onClose={() => setOpen(false)}
+                    {...props.SelectRecipientsDialogUIProps}
                 />
             </Box>
         </div>
