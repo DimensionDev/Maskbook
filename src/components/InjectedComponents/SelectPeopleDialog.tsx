@@ -27,6 +27,7 @@ const useStyles = makeStyles({
     title: { paddingBottom: 0 },
     content: { padding: '0 12px' },
     progress: { marginRight: 6 },
+    button: {},
 })
 const ResponsiveDialog = withMobileDialog({ breakpoint: 'xs' })(Dialog)
 export function SelectPeopleDialog(props: SelectPeopleDialogProps) {
@@ -72,10 +73,10 @@ export function SelectPeopleDialog(props: SelectPeopleDialogProps) {
                 </DialogContent>
             )}
             <DialogActions>
-                <Button size="large" disabled={canClose} onClick={onClose}>
+                <Button className={classes.button} size="large" disabled={canClose} onClick={onClose}>
                     {geti18nString('cancel')}
                 </Button>
-                <Button size="large" disabled={canCommit} color="primary" onClick={share}>
+                <Button className={classes.button} size="large" disabled={canCommit} color="primary" onClick={share}>
                     {committed && (
                         <CircularProgress aria-busy className={classes.progress} size={16} variant="indeterminate" />
                     )}
