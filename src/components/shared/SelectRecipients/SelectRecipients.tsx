@@ -14,7 +14,7 @@ export interface SelectRecipientsUIProps<T extends Group | Person = Group | Pers
     ignoreMyself?: boolean
     items: T[]
     selected: T[]
-    // frozenSelected: T[]
+    frozenSelected: T[]
     disabled?: boolean
     hideSelectAll?: boolean
     hideSelectNone?: boolean
@@ -32,7 +32,7 @@ const useStyles = makeStyles({
         flexWrap: 'wrap',
     },
 })
-export function SelectRecipientsUI<T extends Group | Person = Group | Person>(props: SelectRecipientsUIProps) {
+export function SelectRecipientsUI(props: SelectRecipientsUIProps) {
     const classes = useStyles()
     const { items, onSetSelected } = props
     const groupItems = items.filter(item => isGroup(item)) as Group[]
@@ -73,6 +73,10 @@ export function SelectRecipientsUI<T extends Group | Person = Group | Person>(pr
             </Box>
         </div>
     )
+}
+
+SelectRecipientsUI.defaultProps = {
+    frozenSelected: [],
 }
 
 export function isPerson(x: Person | Group): x is Person {
