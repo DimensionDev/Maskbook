@@ -5,8 +5,8 @@ import { hasDraftEditor, newPostEditorBelow, postPopupInjectPointSelector } from
 import { renderInShadowRoot } from '../../../utils/jss/renderInShadowRoot'
 import { PostInfo, SocialNetworkUIInjections } from '../../../social-network/ui'
 import { injectPostInspectorDefault } from '../../../social-network/defaults/injectPostInspector'
-import { injectPostModalHintAtTwitter } from './injectPostModalHint'
-import { injectPostModalAtTwitter } from './injectPostModal'
+import { injectPostDialogHintAtTwitter } from './injectPostDialogHint'
+import { injectPostDialogAtTwitter } from './injectPostDialog'
 
 // Closing these shadowRoot prevents external access to them.
 const newMOW = (i: LiveSelector<HTMLElement, true>) =>
@@ -36,8 +36,8 @@ const injectPostInspector = (current: PostInfo) => {
 export const twitterUIInjections: SocialNetworkUIInjections = {
     injectPostBox() {
         injectPostBox()
-        injectPostModalAtTwitter()
-        injectPostModalHintAtTwitter()
+        injectPostDialogAtTwitter()
+        injectPostDialogHintAtTwitter()
     },
     injectPostInspector,
 }

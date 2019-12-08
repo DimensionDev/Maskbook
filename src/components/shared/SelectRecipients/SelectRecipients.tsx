@@ -92,7 +92,10 @@ export function SelectRecipientsUI<T extends Group | Person = Group | Person>(pr
                 ))}
                 <ClickableChip
                     ChipProps={{
-                        label: geti18nString('post_modal__specific_friends', String(selectedIdentifiers.length)),
+                        label: geti18nString(
+                            'post_dialog__select_specific_friends_title',
+                            String(selectedIdentifiers.length),
+                        ),
                         avatar: <AddIcon />,
                         onClick() {
                             setOpen(true)

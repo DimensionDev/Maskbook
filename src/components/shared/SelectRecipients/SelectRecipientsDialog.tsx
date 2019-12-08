@@ -19,12 +19,9 @@ import { Person, Group } from '../../../database'
 import { useCurrentIdentity } from '../../DataSource/useActivatedUI'
 
 const useStyles = makeStyles(theme => ({
-    modal: {},
+    dialog: {},
     backdrop: {},
-    root: {
-        outline: 'none',
-        backgroundColor: theme.palette.background.paper,
-    },
+    paper: {},
     header: {},
     content: {
         padding: 0,
@@ -32,7 +29,6 @@ const useStyles = makeStyles(theme => ({
     actions: {},
     title: {
         marginLeft: 6,
-        verticalAlign: 'middle',
     },
     close: {},
     button: {},
@@ -63,25 +59,29 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
     return (
         <div ref={rootRef}>
             <ResponsiveDialog
-                className={classes.modal}
+                className={classes.dialog}
                 open={props.open}
                 scroll="paper"
                 fullWidth
                 maxWidth="sm"
                 container={() => rootRef.current}
+                disablePortal
+                onEscapeKeyDown={props.onClose}
                 BackdropProps={{
                     className: classes.backdrop,
                 }}
-                onEscapeKeyDown={props.onClose}>
+                PaperProps={{
+                    className: classes.paper,
+                }}>
                 <DialogTitle className={classes.header}>
                     <IconButton
                         classes={{ root: classes.close }}
-                        aria-label={geti18nString('post_modal__dismiss_aria')}
+                        aria-label={geti18nString('select_specific_friends_dialog__dismiss_aria')}
                         onClick={props.onClose}>
                         <CloseIcon />
                     </IconButton>
                     <Typography className={classes.title} display="inline" variant="inherit">
-                        {geti18nString('recipients_modal__title')}
+                        {geti18nString('select_specific_friends_dialog__title')}
                     </Typography>
                 </DialogTitle>
                 <DialogContent className={classes.content}>
@@ -111,7 +111,7 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
                         variant="contained"
                         disabled={props.submitDisabled}
                         onClick={props.onSubmit}>
-                        {geti18nString('recipients_modal__button')}
+                        {geti18nString('select_specific_friends_dialog__button')}
                     </Button>
                 </DialogActions>
             </ResponsiveDialog>

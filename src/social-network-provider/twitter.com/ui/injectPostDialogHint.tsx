@@ -2,13 +2,13 @@ import { twitterUrl } from '../utils/url'
 import { MutationObserverWatcher } from '@holoflows/kit/es'
 import { postPopupInjectPointSelector, newPostEditorBelow, hasDraftEditor } from '../utils/selector'
 import { renderInShadowRoot } from '../../../utils/jss/renderInShadowRoot'
-import { PostModalHint } from '../../../components/InjectedComponents/PostModalHint'
+import { PostDialogHint } from '../../../components/InjectedComponents/PostDialogHint'
 import { makeStyles, Theme } from '@material-ui/core'
 import { MessageCenter } from '../../../utils/messages'
 import { useCallback } from 'react'
 import { useTwitterButton } from '../utils/theme'
 
-export function injectPostModalHintAtTwitter() {
+export function injectPostDialogHintAtTwitter() {
     if (location.hostname.indexOf(twitterUrl.hostIdentifier) === -1) return
     const emptyNode = document.createElement('div')
     const watcher = new MutationObserverWatcher(newPostEditorBelow().map(x => (hasDraftEditor(x) ? x : emptyNode)))
@@ -20,7 +20,7 @@ export function injectPostModalHintAtTwitter() {
             subtree: true,
         })
 
-    renderInShadowRoot(<PostModalHintAtTwitter />, watcher.firstDOMProxy.afterShadow)
+    renderInShadowRoot(<PostDialogHintAtTwitter />, watcher.firstDOMProxy.afterShadow)
 }
 
 const useStyles = makeStyles((theme: Theme) => {
@@ -40,7 +40,7 @@ const useStyles = makeStyles((theme: Theme) => {
         },
     }
 })
-function PostModalHintAtTwitter() {
+function PostDialogHintAtTwitter() {
     const classes = {
         ...useStyles(),
         ...useTwitterButton(),
@@ -48,5 +48,5 @@ function PostModalHintAtTwitter() {
     const onHintButtonClicked = useCallback(() => {
         MessageCenter.emit('startCompose', undefined, true)
     }, [])
-    return <PostModalHint classes={classes} onHintButtonClicked={onHintButtonClicked} />
+    return <PostDialogHint classes={classes} onHintButtonClicked={onHintButtonClicked} />
 }

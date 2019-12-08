@@ -1,16 +1,15 @@
-import { memo, useState, useMemo, useCallback, useEffect, useRef } from 'react'
+import { useState, useMemo, useCallback, useEffect, useRef } from 'react'
 import {
-    Card,
-    Modal,
-    CardHeader,
-    CardContent,
     makeStyles,
     InputBase,
-    CardActions,
     Button,
     Typography,
     IconButton,
     withMobileDialog,
+    Dialog,
+    DialogTitle,
+    DialogContent,
+    DialogActions,
 } from '@material-ui/core'
 import CloseIcon from '@material-ui/icons/Close'
 import { geti18nString } from '../../utils/i18n'
@@ -25,6 +24,7 @@ import { getActivatedUI } from '../../social-network/ui'
 import { ChooseIdentity, ChooseIdentityProps } from '../shared/ChooseIdentity'
 import Services from '../../extension/service'
 import { SelectRecipientsUI, SelectRecipientsUIProps } from '../shared/SelectRecipients/SelectRecipients'
+import { PortalShadowRoot } from '../../utils/jss/ShadowRootPortal'
 
 const useStyles = makeStyles(theme => ({
     MUIInputRoot: {
@@ -36,13 +36,9 @@ const useStyles = makeStyles(theme => ({
     MUIInputInput: {
         minHeight: '8em',
     },
-    modal: {},
+    dialog: {},
     backdrop: {},
-    root: {
-        outline: 'none',
-        maxWidth: 650,
-        backgroundColor: theme.palette.background.paper,
-    },
+    paper: {},
     header: {},
     content: {},
     actions: {},
@@ -52,9 +48,9 @@ const useStyles = makeStyles(theme => ({
     },
     button: {},
 }))
-const ResponsiveModal = withMobileDialog({ breakpoint: 'xs' })(Modal)
+const ResponsiveDialog = withMobileDialog({ breakpoint: 'xs' })(Dialog)
 
-export interface PostModalUIProps extends withClasses<KeysInferFromUseStyles<typeof useStyles>> {
+export interface PostDialogUIProps extends withClasses<KeysInferFromUseStyles<typeof useStyles>> {
     open: boolean
     availableShareTarget: Array<Person | Group>
     currentShareTarget: Array<Person | Group>
@@ -62,93 +58,89 @@ export interface PostModalUIProps extends withClasses<KeysInferFromUseStyles<typ
     postBoxText: string
     postBoxButtonDisabled: boolean
     onPostTextChange: (nextString: string) => void
-    onCloseButtonClicked: () => void
     onFinishButtonClicked: () => void
+    onCloseButtonClicked: () => void
     onShareTargetChanged: SelectRecipientsUIProps['onSetSelected']
     ChooseIdentityProps?: Partial<ChooseIdentityProps>
     SelectRecipientsUIProps?: Partial<SelectRecipientsUIProps>
 }
-export const PostModalUI = memo(function PostModalUI(props: PostModalUIProps) {
+export function PostDialogUI(props: PostDialogUIProps) {
     const classes = useStylesExtends(useStyles(), props)
     const rootRef = useRef<HTMLDivElement>(null)
     const inputRef = useRef<HTMLInputElement>(null)
     useCapturedInput(inputRef, props.onPostTextChange)
     return (
         <div ref={rootRef}>
-            <ResponsiveModal
-                className={classes.modal}
+            <ResponsiveDialog
+                className={classes.dialog}
                 open={props.open}
-                aria-labelledby="modal-title" // TODO
-                aria-describedby="modal-description" // TODO
-                disablePortal
-                disableAutoFocus
-                disableEnforceFocus
+                scroll="paper"
+                fullWidth
+                maxWidth="sm"
                 container={() => rootRef.current}
+                disablePortal
+                onEscapeKeyDown={props.onCloseButtonClicked}
                 BackdropProps={{
                     className: classes.backdrop,
                 }}
-                onEscapeKeyDown={props.onCloseButtonClicked}>
-                <Card className={classes.root}>
-                    <CardHeader
-                        className={classes.header}
-                        title={
-                            <>
-                                <IconButton
-                                    classes={{ root: classes.close }}
-                                    aria-label={geti18nString('post_modal__dismiss_aria')}
-                                    onClick={props.onCloseButtonClicked}>
-                                    <CloseIcon />
-                                </IconButton>
-                                <Typography className={classes.title} display="inline" variant="h6">
-                                    {geti18nString('post_modal__title')}
-                                </Typography>
-                            </>
-                        }></CardHeader>
-                    <CardContent className={classes.content}>
-                        <InputBase
-                            classes={{
-                                root: classes.MUIInputRoot,
-                                input: classes.MUIInputInput,
-                            }}
-                            value={props.postBoxText}
-                            inputRef={inputRef}
-                            fullWidth
-                            multiline
-                            placeholder={geti18nString('post_modal__placeholder')}
-                        />
-                        <Typography style={{ marginBottom: 10 }}>
-                            {geti18nString('post_modal__select_recipients_title')}
-                        </Typography>
-                        <SelectRecipientsUI
-                            items={props.availableShareTarget}
-                            selected={props.currentShareTarget}
-                            onSetSelected={props.onShareTargetChanged}
-                            {...props.SelectRecipientsUIProps}
-                        />
-                    </CardContent>
-                    <CardActions>
-                        <Button
-                            className={classes.button}
-                            style={{ marginLeft: 'auto' }}
-                            color="primary"
-                            variant="contained"
-                            disabled={props.postBoxButtonDisabled}
-                            onClick={props.onFinishButtonClicked}>
-                            {geti18nString('post_modal__button')}
-                        </Button>
-                    </CardActions>
-                </Card>
-            </ResponsiveModal>
+                PaperProps={{
+                    className: classes.paper,
+                }}>
+                <DialogTitle className={classes.header}>
+                    <IconButton
+                        classes={{ root: classes.close }}
+                        aria-label={geti18nString('post_dialog__dismiss_aria')}
+                        onClick={props.onCloseButtonClicked}>
+                        <CloseIcon />
+                    </IconButton>
+                    <Typography className={classes.title} display="inline" variant="inherit">
+                        {geti18nString('post_dialog__title')}
+                    </Typography>
+                </DialogTitle>
+                <DialogContent className={classes.content}>
+                    <InputBase
+                        classes={{
+                            root: classes.MUIInputRoot,
+                            input: classes.MUIInputInput,
+                        }}
+                        value={props.postBoxText}
+                        inputRef={inputRef}
+                        fullWidth
+                        multiline
+                        placeholder={geti18nString('post_dialog__placeholder')}
+                    />
+                    <Typography style={{ marginBottom: 10 }}>
+                        {geti18nString('post_dialog__select_recipients_title')}
+                    </Typography>
+                    <SelectRecipientsUI
+                        items={props.availableShareTarget}
+                        selected={props.currentShareTarget}
+                        onSetSelected={props.onShareTargetChanged}
+                        {...props.SelectRecipientsUIProps}
+                    />
+                </DialogContent>
+                <DialogActions className={classes.actions}>
+                    <Button
+                        className={classes.button}
+                        style={{ marginLeft: 'auto' }}
+                        color="primary"
+                        variant="contained"
+                        disabled={props.postBoxButtonDisabled}
+                        onClick={props.onFinishButtonClicked}>
+                        {geti18nString('post_dialog__button')}
+                    </Button>
+                </DialogActions>
+            </ResponsiveDialog>
         </div>
     )
-})
+}
 
-export interface PostModalProps extends Partial<PostModalUIProps> {
+export interface PostDialogProps extends Partial<PostDialogUIProps> {
     identities?: Person[]
     onRequestPost?: (target: (Person | Group)[], text: string) => void
     onRequestReset?: () => void
 }
-export function PostModal(props: PostModalProps) {
+export function PostDialog(props: PostDialogProps) {
     const people = useFriendsList()
     const groups = useGroupsList()
     const availableShareTarget = or(
@@ -215,12 +207,10 @@ export function PostModal(props: PostModalProps) {
         onRequestPost(currentShareTarget, postBoxText)
         onRequestReset()
     }, [currentShareTarget, onRequestPost, onRequestReset, postBoxText])
-    const onCloseButtonClicked = useCallback(() => {
-        setOpen(false)
-    }, [])
+    const onCloseButtonClicked = useCallback(() => setOpen(false), [])
 
     const ui = (
-        <PostModalUI
+        <PostDialogUI
             open={open}
             availableShareTarget={availableShareTarget}
             currentIdentity={currentIdentity}
@@ -229,7 +219,7 @@ export function PostModal(props: PostModalProps) {
             postBoxButtonDisabled={!(currentShareTarget.length && postBoxText)}
             onPostTextChange={setPostBoxText}
             onFinishButtonClicked={onFinishButtonClicked}
-            onCloseButtonClicked={onCloseButtonClicked}
+            onCloseButtonClicked={() => setOpen(false)}
             onShareTargetChanged={onShareTargetChanged}
             {...props}
         />
