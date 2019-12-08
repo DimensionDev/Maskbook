@@ -77,7 +77,7 @@ export function SelectRecipientsUI<T extends Group | Person = Group | Person>(pr
                         key={item.identifier.toText()}
                         item={item}
                         checked={selectedAsGroups.some(x => x.identifier.equals(item.identifier))}
-                        disabled={false}
+                        disabled={item.members.length === 0}
                         onChange={(_, checked) => {
                             const identifiers = item.members.map(x => x.toText())
                             if (checked) {
@@ -97,6 +97,7 @@ export function SelectRecipientsUI<T extends Group | Person = Group | Person>(pr
                             String(selectedIdentifiers.length),
                         ),
                         avatar: <AddIcon />,
+                        disabled: selectedIdentifiers.length === 0,
                         onClick() {
                             setOpen(true)
                         },
