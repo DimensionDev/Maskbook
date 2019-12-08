@@ -53,13 +53,18 @@ export function SelectRecipientsUI<T extends Group | Person = Group | Person>(pr
         const selectedGroups: Group[] = groupItems.filter(x => {
             const groupIdentifiers = x.members.map(y => y.toText())
             return (
+                groupIdentifiers.length > 0 &&
+                selectedIdentifiers.length > 0 &&
                 groupIdentifiers.length <= selectedIdentifiers.length &&
                 difference(groupIdentifiers, selectedIdentifiers).length === 0
             )
         })
         const next = [...selectedGroups, ...selectedProfiles]
 
-        if ((next.length === 0 && selected.length !== 0) || difference(next as T[], selected).length !== 0) {
+        if (
+            (next.length === 0 && selected.length !== 0) ||
+            (next.length > 0 && difference(next as T[], selected).length !== 0)
+        ) {
             onSetSelected(next)
         }
     }, [groupItems, onSetSelected, selected, selectedIdentifiers])
