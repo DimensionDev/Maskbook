@@ -21,13 +21,9 @@ const newMOW = (i: LiveSelector<HTMLElement, true>) =>
             subtree: true,
         })
 
-const emptyNode = document.createElement('div')
-
 const injectPostBox = () => {
-    // const target = newMOW(newPostEditorBelow().map(x => (hasDraftEditor(x) ? x : emptyNode)))
-    // renderInShadowRoot(<AdditionalPostBox />, target.firstDOMProxy.afterShadow)
-    const popUpTarget = newMOW(postPopupInjectPointSelector())
-    renderInShadowRoot(<AdditionalPostBox />, popUpTarget.firstDOMProxy.afterShadow)
+    injectPostDialogAtTwitter()
+    injectPostDialogHintAtTwitter()
 }
 
 const injectPostInspector = (current: PostInfo) => {
@@ -35,11 +31,7 @@ const injectPostInspector = (current: PostInfo) => {
 }
 
 export const twitterUIInjections: SocialNetworkUIInjections = {
-    injectPostBox() {
-        injectPostBox()
-        injectPostDialogAtTwitter()
-        injectPostDialogHintAtTwitter()
-    },
+    injectPostBox,
     injectPostInspector,
     injectKnownIdentity: injectKnownIdentityAtTwitter,
 }
