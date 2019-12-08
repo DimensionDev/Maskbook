@@ -2,7 +2,6 @@ import { useRef } from 'react'
 import {
     List,
     makeStyles,
-    Card,
     Typography,
     Button,
     IconButton,
@@ -17,6 +16,7 @@ import { geti18nString } from '../../../utils/i18n'
 import CloseIcon from '@material-ui/icons/Close'
 import { ProfileInList } from './ProfileInList'
 import { Person, Group } from '../../../database'
+import { useCurrentIdentity } from '../../DataSource/useActivatedUI'
 
 const useStyles = makeStyles(theme => ({
     modal: {},
@@ -40,6 +40,7 @@ const useStyles = makeStyles(theme => ({
 const ResponsiveDialog = withMobileDialog({ breakpoint: 'xs' })(Dialog)
 
 export interface SelectRecipientsDialogUIProps extends withClasses<KeysInferFromUseStyles<typeof useStyles>> {
+    ignoreMyself?: boolean
     open: boolean
     items: Person[]
     selected: Person[]
@@ -53,6 +54,11 @@ export interface SelectRecipientsDialogUIProps extends withClasses<KeysInferFrom
 export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
     const classes = useStylesExtends(useStyles(), props)
     const rootRef = useRef<HTMLDivElement>(null)
+
+    const myself = useCurrentIdentity()
+    const itemsForRender = props.ignoreMyself
+        ? props.items.filter(x => !x.identifier.equals(myself?.identifier!))
+        : props.items
 
     return (
         <div ref={rootRef}>
@@ -80,7 +86,7 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
                 </DialogTitle>
                 <DialogContent className={classes.content}>
                     <List dense>
-                        {props.items.map(item => (
+                        {itemsForRender.map(item => (
                             <ProfileInList
                                 key={item.identifier.toText()}
                                 item={item}

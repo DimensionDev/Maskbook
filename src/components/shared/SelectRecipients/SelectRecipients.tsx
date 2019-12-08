@@ -12,8 +12,6 @@ import { difference } from 'lodash-es'
 
 export interface SelectRecipientsUIProps<T extends Group | Person = Group | Person>
     extends withClasses<KeysInferFromUseStyles<typeof useStyles> | 'root'> {
-    /** Omit myself in the UI and the selected result */
-    ignoreMyself?: boolean
     items: T[]
     selected: T[]
     frozenSelected: T[]
@@ -97,6 +95,7 @@ export function SelectRecipientsUI<T extends Group | Person = Group | Person>(pr
                     }}
                 />
                 <SelectRecipientsDialogUI
+                    ignoreMyself
                     open={open}
                     items={profileItems}
                     selected={profileItems.filter(x => selectedIdentifiers.indexOf(x.identifier.toText()) > -1)}
