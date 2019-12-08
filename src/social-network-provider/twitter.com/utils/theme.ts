@@ -45,7 +45,7 @@ export const useTwitterDialog = makeStyles((theme: Theme) => {
             backgroundColor: `${type === 'dark' ? 'rgba(110, 118, 125, 0.3)' : 'rgba(0, 0, 0, 0.3)'} !important`,
         },
         paper: {
-            borderRadius: 6,
+            borderRadius: 14,
         },
         header: {
             display: 'flex',
