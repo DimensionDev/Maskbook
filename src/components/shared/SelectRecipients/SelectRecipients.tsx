@@ -5,8 +5,10 @@ import { GroupInChipProps, GroupInChip } from './GroupInChip'
 import { PersonIdentifier, GroupIdentifier } from '../../../database/type'
 import AddIcon from '@material-ui/icons/Add'
 import { ClickableChip } from './ClickableChip'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { SelectRecipientsDialogUIProps, SelectRecipientsDialogUI } from './SelectRecipientsDialog'
+import { geti18nString } from '../../../utils/i18n'
+import { difference } from 'lodash-es'
 
 export interface SelectRecipientsUIProps<T extends Group | Person = Group | Person>
     extends withClasses<KeysInferFromUseStyles<typeof useStyles> | 'root'> {
@@ -35,11 +37,34 @@ const useStyles = makeStyles({
 export function SelectRecipientsUI<T extends Group | Person = Group | Person>(props: SelectRecipientsUIProps) {
     const classes = useStyles()
     const { items, maxSelection, selected, onSetSelected } = props
-    const groupItems = items.filter(item => isGroup(item)) as Group[]
-    const personItems = items.filter(item => isPerson(item)) as Person[]
+    const groupItems = items.filter(x => isGroup(x)) as Group[]
+    const profileItems = items.filter(x => isPerson(x)) as Person[]
 
-    const [search, setSearch] = useState('')
+    const selectedAsProfiles = selected.filter(x => isPerson(x)) as Person[]
+    const selectedAsGroups = selected.filter(x => isGroup(x)) as Group[]
+
     const [open, setOpen] = useState(false)
+    const [search, setSearch] = useState('')
+    const [selectedIdentifiers, setSelectedIdentifiers] = useState<string[]>(
+        selected.flatMap(x => (isGroup(x) ? x.members.map(y => y.toText()) : x.identifier.toText())),
+    )
+
+    useEffect(() => {
+        const selectedIdentifiersSet = new Set(selectedIdentifiers)
+        const selectedProfiles = selected.filter(x => isPerson(x) && selectedIdentifiersSet.has(x.identifier.toText()))
+        const selectedGroups: Group[] = groupItems.filter(x => {
+            const groupIdentifiers = x.members.map(y => y.toText())
+            return (
+                groupIdentifiers.length <= selectedIdentifiers.length &&
+                difference(groupIdentifiers, selectedIdentifiers).length === 0
+            )
+        })
+        const next = [...selectedGroups, ...selectedProfiles]
+
+        if ((next.length === 0 && selected.length !== 0) || difference(next as T[], selected).length !== 0) {
+            onSetSelected(next)
+        }
+    }, [groupItems, onSetSelected, selected, selectedIdentifiers])
 
     return (
         <div className={classes.root}>
@@ -48,14 +73,14 @@ export function SelectRecipientsUI<T extends Group | Person = Group | Person>(pr
                     <GroupInChip
                         key={item.identifier.toText()}
                         item={item}
-                        selected={selected.some(x => x.identifier.equals(item.identifier))}
+                        checked={selectedAsGroups.some(x => x.identifier.equals(item.identifier))}
                         disabled={false}
-                        onClick={() => {
-                            if (selected.some(x => x.identifier.equals(item.identifier))) {
-                                onSetSelected(selected.filter(x => !x.identifier.equals(item.identifier)) as T[])
+                        onChange={(_, checked) => {
+                            const identifiers = item.members.map(x => x.toText())
+                            if (checked) {
+                                setSelectedIdentifiers(Array.from(new Set([...selectedIdentifiers, ...identifiers])))
                             } else {
-                                if (maxSelection === 1) onSetSelected([item as T])
-                                else onSetSelected(selected.concat(item) as T[])
+                                setSelectedIdentifiers(difference(selectedIdentifiers, identifiers))
                             }
                             setSearch('')
                         }}
@@ -64,7 +89,7 @@ export function SelectRecipientsUI<T extends Group | Person = Group | Person>(pr
                 ))}
                 <ClickableChip
                     ChipProps={{
-                        label: 'Specific Friends (12 selected)',
+                        label: geti18nString('post_modal__specific_friends', String(selectedIdentifiers.length)),
                         avatar: <AddIcon />,
                         onClick() {
                             setOpen(true)
@@ -72,12 +97,17 @@ export function SelectRecipientsUI<T extends Group | Person = Group | Person>(pr
                     }}
                 />
                 <SelectRecipientsDialogUI
-                    items={personItems}
                     open={open}
+                    items={profileItems}
+                    selected={profileItems.filter(x => selectedIdentifiers.indexOf(x.identifier.toText()) > -1)}
                     disabled={false}
                     submitDisabled={false}
                     onSubmit={() => setOpen(false)}
                     onClose={() => setOpen(false)}
+                    onSelect={item => setSelectedIdentifiers([...selectedIdentifiers, item.identifier.toText()])}
+                    onDeselect={item =>
+                        setSelectedIdentifiers(selectedIdentifiers.filter(x => x !== item.identifier.toText()))
+                    }
                     {...props.SelectRecipientsDialogUIProps}
                 />
             </Box>

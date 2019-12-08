@@ -16,7 +16,7 @@ import { useStylesExtends, or } from '../../custom-ui-helper'
 import { geti18nString } from '../../../utils/i18n'
 import CloseIcon from '@material-ui/icons/Close'
 import { ProfileInList } from './ProfileInList'
-import { Person } from '../../../database'
+import { Person, Group } from '../../../database'
 
 const useStyles = makeStyles(theme => ({
     modal: {},
@@ -42,10 +42,13 @@ const ResponsiveDialog = withMobileDialog({ breakpoint: 'xs' })(Dialog)
 export interface SelectRecipientsDialogUIProps extends withClasses<KeysInferFromUseStyles<typeof useStyles>> {
     open: boolean
     items: Person[]
+    selected: Person[]
     disabled: boolean
     submitDisabled: boolean
     onSubmit: () => void
     onClose: () => void
+    onSelect: (item: Person) => void
+    onDeselect: (item: Person) => void
 }
 export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
     const classes = useStylesExtends(useStyles(), props)
@@ -71,7 +74,7 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
                         onClick={props.onClose}>
                         <CloseIcon />
                     </IconButton>
-                    <Typography className={classes.title} display="inline" variant="h6">
+                    <Typography className={classes.title} display="inline" variant="inherit">
                         {geti18nString('recipients_modal__title')}
                     </Typography>
                 </DialogTitle>
@@ -79,12 +82,17 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
                     <List dense>
                         {props.items.map(item => (
                             <ProfileInList
-                                checked={true}
-                                item={item}
                                 key={item.identifier.toText()}
+                                item={item}
+                                checked={props.selected.some(x => x.identifier.equals(item.identifier))}
                                 disabled={props.disabled}
-                                onChange={() => {}}
-                                onClick={() => {}}
+                                onChange={(_, checked) => {
+                                    if (checked) {
+                                        props.onSelect(item)
+                                    } else {
+                                        props.onDeselect(item)
+                                    }
+                                }}
                             />
                         ))}
                     </List>
