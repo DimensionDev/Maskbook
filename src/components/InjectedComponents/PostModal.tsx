@@ -120,7 +120,6 @@ export const PostModalUI = memo(function PostModalUI(props: PostModalUIProps) {
                             {geti18nString('post_modal__select_recipients_title')}
                         </Typography>
                         <SelectRecipientsUI
-                            ignoreMyself
                             items={props.availableShareTarget}
                             selected={props.currentShareTarget}
                             onSetSelected={props.onShareTargetChanged}

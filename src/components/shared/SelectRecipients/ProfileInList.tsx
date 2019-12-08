@@ -7,6 +7,7 @@ import { Avatar } from '../../../utils/components/Avatar'
 
 const useStyle = makeStyles((theme: Theme) => ({
     root: {
+        cursor: 'pointer',
         paddingLeft: 8,
     },
     overflow: {
