@@ -21,23 +21,23 @@
     "additional_post_box__steganography_post_failed": {
         "message": "Please upload downloaded image into the post box."
     },
-    "post_modal__title": {
+    "post_dialog__title": {
         "message": "Maskbook: Compose"
     },
-    "post_modal__placeholder": {
+    "post_dialog__placeholder": {
         "message": "Text goes here..."
     },
-    "post_modal__select_recipients_title": {
+    "post_dialog__select_recipients_title": {
         "message": "Select Recipients"
     },
-    "post_modal__specific_friends": {
+    "post_dialog__select_specific_friends_title": {
         "message": "Specific Friends ($1 selected)"
     },
-    "post_modal__button": {
+    "post_dialog__button": {
         "message": "Finish"
     },
-    "post_modal__dismiss_aria": {
-        "message": "Dismiss the modal"
+    "post_dialog__dismiss_aria": {
+        "message": "Dismiss the compose dialog"
     },
     "post_modal_hint__title": {
         "message": "Looking for Maskbook?"
@@ -45,11 +45,14 @@
     "post_modal_hint__button": {
         "message": "Compose encrypted post"
     },
-    "recipients_modal__title": {
+    "select_specific_friends_dialog__title": {
         "message": "Select Specific Friends"
     },
-    "recipients_modal__button": {
+    "select_specific_friends_dialog__button": {
         "message": "Done"
+    },
+    "select_specific_friends_dialog__dismiss_aria": {
+        "message": "Dismiss the select recipients dialog"
     },
     "comment_box__placeholder": {
         "message": "Write an encrypted comment..."

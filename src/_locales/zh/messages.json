@@ -21,22 +21,22 @@
     "additional_post_box__steganography_post_failed": {
         "message": "請將已下載的圖片上载至發佈框。"
     },
-    "post_modal__title": {
+    "post_dialog__title": {
         "message": "Maskbook: 編輯"
     },
-    "post_modal__placeholder": {
+    "post_dialog__placeholder": {
         "message": "請輸入…"
     },
-    "post_modal__select_recipients_title": {
+    "post_dialog__select_recipients_title": {
         "message": "選擇收件人"
     },
-    "post_modal__specific_friends": {
+    "post_dialog__select_specific_friends_title": {
         "message": "選擇好友 (已選 $1)"
     },
-    "post_modal__button": {
+    "post_dialog__button": {
         "message": "完成"
     },
-    "post_modal__dismiss_aria": {
+    "post_dialog__dismiss_aria": {
         "message": "關閉編輯框"
     },
     "post_modal_hint__title": {
@@ -45,11 +45,14 @@
     "post_modal_hint__button": {
         "message": "編輯加密訊息"
     },
-    "recipients_modal__title": {
+    "select_specific_friends_dialog__title": {
         "message": "選擇好友"
     },
-    "recipients_modal__button": {
+    "select_specific_friends_dialog__button": {
         "message": "完成"
+    },
+    "select_specific_friends_dialog__dismiss_aria": {
+        "message": "關閉選擇好友對話框"
     },
     "comment_box__placeholder": {
         "message": "添加一條加密評論…"

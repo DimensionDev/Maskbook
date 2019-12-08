@@ -16,10 +16,10 @@ const useStyles = makeStyles({
     button: {},
 })
 
-export interface PostModalHintUIProps extends withClasses<KeysInferFromUseStyles<typeof useStyles>> {
+export interface PostDialogHintUIProps extends withClasses<KeysInferFromUseStyles<typeof useStyles>> {
     onHintButtonClicked: () => void
 }
-export const PostModalHintUI = React.memo(function PostModalHintUI(props: PostModalHintUIProps) {
+export const PostDialogHintUI = React.memo(function PostDialogHintUI(props: PostDialogHintUIProps) {
     const classes = useStylesExtends(useStyles(), props)
     return (
         <Card className={classes.root} elevation={0}>
@@ -39,11 +39,11 @@ export const PostModalHintUI = React.memo(function PostModalHintUI(props: PostMo
     )
 })
 
-export interface PostModalHintProps extends Partial<PostModalHintUIProps> {}
-export function PostModalHint(props: PostModalHintProps) {
+export interface PostDialogHintProps extends Partial<PostDialogHintUIProps> {}
+export function PostDialogHint(props: PostDialogHintProps) {
     return (
         <>
-            <PostModalHintUI onHintButtonClicked={() => {}} {...props} />
+            <PostDialogHintUI onHintButtonClicked={() => {}} {...props} />
         </>
     )
 }
