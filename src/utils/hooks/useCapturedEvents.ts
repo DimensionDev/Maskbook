@@ -15,12 +15,18 @@ export function useCapturedInput(
         [onChange].concat(deps),
     )
     function binder<T extends keyof HTMLElementEventMap>(keys: T[], fn: (e: HTMLElementEventMap[T]) => void) {
+        let current: HTMLInputElement | null
+        const bind = (input: HTMLInputElement) => keys.forEach(k => input.addEventListener(k, fn, true))
+        const unbind = (input: HTMLInputElement) => keys.forEach(k => input.removeEventListener(k, fn, true))
+
         return () => {
             if (!ref.current) return
-            keys.forEach(k => ref.current!.addEventListener(k, fn, true))
+            current = ref.current
+            bind(current)
             return () => {
-                if (!ref.current) return
-                keys.forEach(k => ref.current!.removeEventListener(k, fn, true))
+                if (!current) return
+                unbind(current)
+                current = null
             }
         }
     }
