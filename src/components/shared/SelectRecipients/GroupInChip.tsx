@@ -26,23 +26,23 @@ const useStyles = makeStyles({
 
 export function GroupInChip(props: GroupInChipProps) {
     const classes = useStyles()
-    const { item, checked, onChange } = props
     const onClick = useCallback(
         ev => {
-            if (onChange) {
-                onChange(ev, !checked)
+            if (props.onChange) {
+                props.onChange(ev, !props.checked)
             }
         },
-        [checked, onChange],
+        [props],
     )
 
     return (
         <Chip
             className={classes.root}
-            avatar={checked ? <DoneIcon className={classes.icon} /> : undefined}
-            color={checked ? 'primary' : 'default'}
+            avatar={props.checked ? <DoneIcon className={classes.icon} /> : undefined}
+            color={props.checked ? 'primary' : 'default'}
+            disabled={props.disabled ?? false}
             onClick={onClick}
-            label={useResolveSpecialGroupName(item)}
+            label={useResolveSpecialGroupName(props.item)}
             {...props.ChipProps}
         />
     )
