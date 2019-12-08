@@ -30,6 +30,9 @@
     "post_modal__select_recipients_title": {
         "message": "Select Recipients"
     },
+    "post_modal__specific_friends": {
+        "message": "Specific Friends ($1 selected)"
+    },
     "post_modal__button": {
         "message": "Finish"
     },

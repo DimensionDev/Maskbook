@@ -28,7 +28,10 @@
         "message": "請輸入…"
     },
     "post_modal__select_recipients_title": {
-        "message": "选择收件人"
+        "message": "選擇收件人"
+    },
+    "post_modal__specific_friends": {
+        "message": "選擇好友 (已選 $1)"
     },
     "post_modal__button": {
         "message": "完成"
@@ -43,7 +46,7 @@
         "message": "編輯加密訊息"
     },
     "recipients_modal__title": {
-        "message": "选择好友"
+        "message": "選擇好友"
     },
     "recipients_modal__button": {
         "message": "完成"

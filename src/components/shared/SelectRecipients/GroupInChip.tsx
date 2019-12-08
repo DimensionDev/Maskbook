@@ -3,12 +3,13 @@ import { Group } from '../../../database'
 import DoneIcon from '@material-ui/icons/Done'
 import { useResolveSpecialGroupName } from '../SelectPeopleAndGroups/resolveSpecialGroupName'
 import { makeStyles } from '@material-ui/styles'
+import { useCallback, ChangeEvent } from 'react'
 
 export interface GroupInChipProps {
     item: Group
-    selected?: boolean
+    checked?: boolean
     disabled?: boolean
-    onClick?(): void
+    onChange?(ev: ChangeEvent<HTMLInputElement>, checked: boolean): void
     ChipProps?: ChipProps
 }
 
@@ -25,16 +26,23 @@ const useStyles = makeStyles({
 
 export function GroupInChip(props: GroupInChipProps) {
     const classes = useStyles()
-    const { selected, onClick } = props
-    const group = props.item
+    const { item, checked, onChange } = props
+    const onClick = useCallback(
+        ev => {
+            if (onChange) {
+                onChange(ev, !checked)
+            }
+        },
+        [checked, onChange],
+    )
 
     return (
         <Chip
             className={classes.root}
-            avatar={selected ? <DoneIcon className={classes.icon} /> : undefined}
-            color={selected ? 'primary' : 'default'}
+            avatar={checked ? <DoneIcon className={classes.icon} /> : undefined}
+            color={checked ? 'primary' : 'default'}
             onClick={onClick}
-            label={useResolveSpecialGroupName(group)}
+            label={useResolveSpecialGroupName(item)}
             {...props.ChipProps}
         />
     )
