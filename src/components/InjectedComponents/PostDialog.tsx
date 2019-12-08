@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback, useEffect, useRef } from 'react'
+import { useState, useMemo, useCallback, useEffect, useRef, ChangeEvent } from 'react'
 import {
     makeStyles,
     InputBase,
@@ -24,7 +24,6 @@ import { getActivatedUI } from '../../social-network/ui'
 import { ChooseIdentity, ChooseIdentityProps } from '../shared/ChooseIdentity'
 import Services from '../../extension/service'
 import { SelectRecipientsUI, SelectRecipientsUIProps } from '../shared/SelectRecipients/SelectRecipients'
-import { PortalShadowRoot } from '../../utils/jss/ShadowRootPortal'
 
 const useStyles = makeStyles(theme => ({
     MUIInputRoot: {
@@ -68,7 +67,7 @@ export function PostDialogUI(props: PostDialogUIProps) {
     const classes = useStylesExtends(useStyles(), props)
     const rootRef = useRef<HTMLDivElement>(null)
     const inputRef = useRef<HTMLInputElement>(null)
-    useCapturedInput(inputRef, props.onPostTextChange)
+    useCapturedInput(inputRef, props.onPostTextChange, [props.open])
     return (
         <div ref={rootRef}>
             <ResponsiveDialog
@@ -79,6 +78,8 @@ export function PostDialogUI(props: PostDialogUIProps) {
                 maxWidth="sm"
                 container={() => rootRef.current}
                 disablePortal
+                disableAutoFocus
+                disableEnforceFocus
                 onEscapeKeyDown={props.onCloseButtonClicked}
                 BackdropProps={{
                     className: classes.backdrop,
@@ -203,11 +204,6 @@ export function PostDialog(props: PostDialogProps) {
 
     const [postBoxText, setPostBoxText] = useState('')
     const [currentShareTarget, onShareTargetChanged] = useState(availableShareTarget)
-    const onFinishButtonClicked = useCallback(() => {
-        onRequestPost(currentShareTarget, postBoxText)
-        onRequestReset()
-    }, [currentShareTarget, onRequestPost, onRequestReset, postBoxText])
-    const onCloseButtonClicked = useCallback(() => setOpen(false), [])
 
     const ui = (
         <PostDialogUI
@@ -218,7 +214,10 @@ export function PostDialog(props: PostDialogProps) {
             postBoxText={postBoxText}
             postBoxButtonDisabled={!(currentShareTarget.length && postBoxText)}
             onPostTextChange={setPostBoxText}
-            onFinishButtonClicked={onFinishButtonClicked}
+            onFinishButtonClicked={() => {
+                onRequestPost(currentShareTarget, postBoxText)
+                onRequestReset()
+            }}
             onCloseButtonClicked={() => setOpen(false)}
             onShareTargetChanged={onShareTargetChanged}
             {...props}
