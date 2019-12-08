@@ -104,6 +104,7 @@ export function PostDialogUI(props: PostDialogUIProps) {
                             root: classes.MUIInputRoot,
                             input: classes.MUIInputInput,
                         }}
+                        autoFocus
                         value={props.postBoxText}
                         inputRef={inputRef}
                         fullWidth

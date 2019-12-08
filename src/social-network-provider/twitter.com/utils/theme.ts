@@ -36,6 +36,9 @@ export const useTwitterDialog = makeStyles((theme: Theme) => {
     const { type, grey } = theme.palette
     const borderColor = type === 'dark' ? grey[800] : grey[200]
     return {
+        MUIInputInput: {
+            borderStyle: 'none',
+        },
         dialog: {
             display: 'flex',
             alignItems: 'center',
