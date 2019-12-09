@@ -16,7 +16,7 @@ import { geti18nString } from '../../utils/i18n'
 import { MessageCenter } from '../../utils/messages'
 import { useCapturedInput } from '../../utils/hooks/useCapturedEvents'
 import { useStylesExtends, or } from '../custom-ui-helper'
-import { Person, Group } from '../../database'
+import { Profile, Group } from '../../database'
 import { useFriendsList, useGroupsList, useMyIdentities, useCurrentIdentity } from '../DataSource/useActivatedUI'
 import { steganographyModeSetting } from '../shared-settings/settings'
 import { useValueRef } from '../../utils/hooks/useValueRef'
@@ -51,9 +51,9 @@ const ResponsiveDialog = withMobileDialog({ breakpoint: 'xs' })(Dialog)
 
 export interface PostDialogUIProps extends withClasses<KeysInferFromUseStyles<typeof useStyles>> {
     open: boolean
-    availableShareTarget: Array<Person | Group>
-    currentShareTarget: Array<Person | Group>
-    currentIdentity: Person | null
+    availableShareTarget: Array<Profile | Group>
+    currentShareTarget: Array<Profile | Group>
+    currentIdentity: Profile | null
     postBoxText: string
     postBoxButtonDisabled: boolean
     onPostTextChange: (nextString: string) => void
@@ -138,8 +138,8 @@ export function PostDialogUI(props: PostDialogUIProps) {
 }
 
 export interface PostDialogProps extends Partial<PostDialogUIProps> {
-    identities?: Person[]
-    onRequestPost?: (target: (Person | Group)[], text: string) => void
+    identities?: Profile[]
+    onRequestPost?: (target: (Profile | Group)[], text: string) => void
     onRequestReset?: () => void
 }
 export function PostDialog(props: PostDialogProps) {
@@ -156,7 +156,7 @@ export function PostDialog(props: PostDialogProps) {
     const onRequestPost = or(
         props.onRequestPost,
         useCallback(
-            async (target: (Person | Group)[], text: string) => {
+            async (target: (Profile | Group)[], text: string) => {
                 const [encrypted, token] = await Services.Crypto.encryptTo(
                     text,
                     target.map(x => x.identifier),

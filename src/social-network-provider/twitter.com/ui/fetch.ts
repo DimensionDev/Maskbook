@@ -1,4 +1,4 @@
-import { bioCard, selfInfoSelectors, postsContentSelector, postsImageSelector } from '../utils/selector'
+import { bioCardSelector, selfInfoSelectors, postsContentSelector, postsImageSelector } from '../utils/selector'
 import { MutationObserverWatcher } from '@holoflows/kit'
 import { GroupIdentifier, ProfileIdentifier, PreDefinedVirtualGroupNames } from '../../../database/type'
 import {
@@ -39,7 +39,7 @@ const resolveLastRecognizedIdentity = (self: SocialNetworkUI) => {
 }
 
 const registerUserCollector = () => {
-    new MutationObserverWatcher(bioCard())
+    new MutationObserverWatcher(bioCardSelector())
         .useForeach((cardNode: HTMLDivElement) => {
             const resolve = async () => {
                 if (!cardNode) return

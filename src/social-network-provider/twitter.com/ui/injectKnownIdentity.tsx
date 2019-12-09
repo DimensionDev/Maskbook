@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { MutationObserverWatcher, ValueRef } from '@holoflows/kit'
 import { PersonKnown, PersonKnownProps } from '../../../components/InjectedComponents/PersonKnown'
-import { bioCard } from '../utils/selector'
+import { bioCardSelector } from '../utils/selector'
 import { renderInShadowRoot } from '../../../utils/jss/renderInShadowRoot'
 import { twitterUrl } from '../utils/url'
 import { makeStyles } from '@material-ui/styles'
@@ -34,7 +34,7 @@ export function PersonKnownAtTwitter(props: PersonKnownProps) {
 }
 
 export function injectKnownIdentityAtTwitter() {
-    const watcher = new MutationObserverWatcher(bioCard<false>(false))
+    const watcher = new MutationObserverWatcher(bioCardSelector<false>(false))
         .setDOMProxyOption({
             afterShadowRootInit: { mode: 'closed' },
         })
