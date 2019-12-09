@@ -23,6 +23,9 @@ const useStyles = makeStyles((theme: Theme) =>
         connected: {
             color: theme.palette.text.primary,
         },
+        pointer: {
+            cursor: 'pointer',
+        },
     }),
 )
 
@@ -35,7 +38,7 @@ interface ProviderLineProps {
 }
 
 export default function ProviderLine(props: ProviderLineProps) {
-    const { network, connected, id, border } = props
+    const { network, connected, id, border, onConnect } = props
     const classes = useStyles()
 
     return (
@@ -44,7 +47,12 @@ export default function ProviderLine(props: ProviderLineProps) {
             <Typography
                 variant="body1"
                 component="a"
-                className={classNames(classes.text, { [classes.connected]: connected })}>
+                onClick={onConnect}
+                className={classNames(
+                    classes.text,
+                    { [classes.connected]: connected },
+                    { [classes.pointer]: !connected },
+                )}>
                 {connected ? `Connected: ${id}` : `Connect ${network}`}
             </Typography>
         </FormControl>

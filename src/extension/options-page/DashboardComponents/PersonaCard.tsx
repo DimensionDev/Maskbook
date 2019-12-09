@@ -1,6 +1,5 @@
 import React, { useState, useMemo, useRef } from 'react'
 import { makeStyles, createStyles } from '@material-ui/core/styles'
-import CardActions from '@material-ui/core/CardActions'
 import CardContent from '@material-ui/core/CardContent'
 import Button from '@material-ui/core/Button'
 import Typography from '@material-ui/core/Typography'
@@ -16,6 +15,8 @@ import classNames from 'classnames'
 import ProviderLine from './ProviderLine'
 import { BackupJSONFileLatest } from '../../../utils/type-transform/BackupFormat/JSON/latest'
 import { definedSocialNetworkWorkers } from '../../../social-network/worker'
+import { PersonaDeleteDialog } from '../DashboardDialogs/Persona'
+import { DialogRouter } from '../DashboardDialogs/DialogBase'
 
 interface Props {
     persona: Persona
@@ -99,7 +100,7 @@ export default function PersonaCard({ persona }: Props) {
     }, [persona.identifier])
 
     // FIXME:
-    const profiles: any[] = [] || [...persona.linkedProfiles]
+    const profiles = [...persona.linkedProfiles]
 
     const providers = [...definedSocialNetworkWorkers].map(i => {
         const profile = profiles.find(([key, value]) => key.network === i.networkIdentifier)
@@ -136,23 +137,7 @@ export default function PersonaCard({ persona }: Props) {
         )
     }
 
-    const deleteIdentity = async () => {
-        const backup = await Services.Welcome.backupMyKeyPair({
-            download: false,
-            onlyBackupWhoAmI: true,
-        })
-        const ec_id = persona.identifier
-
-        Services.Identity.deletePersona(ec_id, 'delete even with private').then(() => {
-            enqueueSnackbar(geti18nString('dashboard_item_deleted'), {
-                variant: 'default',
-                action: undoDeleteIdentity(backup),
-            })
-        })
-    }
-
     const [rename, setRename] = useState(false)
-
     const renameIdentity = (event: React.FocusEvent<HTMLInputElement>) => {
         event.preventDefault()
         // Services.Identity.updateProfileInfo(persona.identifier, { nickname: event.currentTarget.innerText }).then(
@@ -161,6 +146,13 @@ export default function PersonaCard({ persona }: Props) {
         //         setRename(false)
         //     },
         // )
+    }
+
+    const [deletePersona, setDeletePersona] = useState(false)
+    const confirmDeletePersona = () => {
+        enqueueSnackbar(geti18nString('dashboard_item_deleted'), {
+            variant: 'default',
+        })
     }
 
     const titleRef = useRef<HTMLSpanElement | null>(null)
@@ -196,7 +188,7 @@ export default function PersonaCard({ persona }: Props) {
                                     <MenuItem onClick={handleClose}>
                                         {geti18nString('dashboard_create_backup')}
                                     </MenuItem>
-                                    <MenuItem onClick={handleClose} className={color.error}>
+                                    <MenuItem onClick={() => setDeletePersona(true)} className={color.error}>
                                         {geti18nString('dashboard_delete_persona')}
                                     </MenuItem>
                                 </Menu>
@@ -216,7 +208,7 @@ export default function PersonaCard({ persona }: Props) {
                 </Typography>
                 {providers.map(provider => (
                     <Typography className={classes.line} component="div">
-                        <ProviderLine {...provider}></ProviderLine>
+                        <ProviderLine {...provider} border></ProviderLine>
                         {provider.connected && (
                             <div className={classNames('extra-item', color.error)}>{geti18nString('disconnect')}</div>
                         )}
@@ -224,6 +216,17 @@ export default function PersonaCard({ persona }: Props) {
                 ))}
             </CardContent>
             <Divider />
+            {deletePersona && (
+                <DialogRouter
+                    children={
+                        <PersonaDeleteDialog
+                            declined={() => setDeletePersona(false)}
+                            confirmed={confirmDeletePersona}
+                            persona={persona}
+                        />
+                    }
+                />
+            )}
         </>
     )
 }

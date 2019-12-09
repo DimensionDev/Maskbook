@@ -6,6 +6,9 @@ import { Link, useHistory } from 'react-router-dom'
 import ProviderLine from '../DashboardComponents/ProviderLine'
 import BackupRestoreTab, { BackupRestoreTabProps } from '../DashboardComponents/BackupRestoreTab'
 import ActionButton from '../../../components/Dashboard/ActionButton'
+import { PersonaIdentifier } from '../../../database/type'
+import Services from '../../service'
+import { Persona } from '../../../database'
 
 export function PersonaCreateDialog() {
     const [name, setName] = useState('')
@@ -61,22 +64,29 @@ export function PersonaCreatedDialog() {
             }></DialogContentItem>
     )
 }
+interface PersonaDeleteDialogProps {
+    declined(): void
+    confirmed(): void
+    persona: Persona
+}
+export function PersonaDeleteDialog(props: PersonaDeleteDialogProps) {
+    const { confirmed, declined, persona } = props
 
-export function PersonaDeleteDialog() {
-    const history = useHistory()
-    const search = new URLSearchParams(history.location.search)
-    const name = search.get('name')
+    const deletePersona = () => {
+        Services.Identity.deletePersona(persona.identifier, 'delete even with private').then(confirmed)
+    }
+
     return (
         <DialogContentItem
             simplified
             title="Delete Persona"
-            content={`Do you really want to delete persona "${name}"? This operation cannot be reverted.`}
+            content={`Do you really want to delete persona "${persona?.nickname}"? This operation cannot be reverted.`}
             actions={
                 <>
-                    <ActionButton variant="outlined" color="default" component={Link} to="../">
+                    <ActionButton variant="outlined" color="default" onClick={declined}>
                         Cancel
                     </ActionButton>
-                    <ActionButton variant="contained" color="primary">
+                    <ActionButton variant="contained" color="primary" onClick={deletePersona}>
                         Ok
                     </ActionButton>
                 </>

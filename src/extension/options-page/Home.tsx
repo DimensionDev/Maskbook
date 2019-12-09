@@ -108,7 +108,6 @@ export default function DashboardHomePage() {
             <DialogRouter path="/database/failed" children={<DatabaseRestoreFailedDialog />} />
             <DialogRouter path="/persona/create" children={<PersonaCreateDialog />} />
             <DialogRouter path="/persona/created" children={<PersonaCreatedDialog />} />
-            <DialogRouter path="/persona/delete" children={<PersonaDeleteDialog />} />
             <DialogRouter path="/persona/backup" children={<PersonaBackupDialog />} />
             <DialogRouter path="/persona/import" children={<PersonaImportDialog />} />
             <DialogRouter path="/persona/success" children={<PersonaImportSuccessDialog />} />
