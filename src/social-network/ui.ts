@@ -1,6 +1,6 @@
 import { env, Env, Preference, ProfileUI, SocialNetworkWorkerAndUIDefinition } from './shared'
 import { DOMProxy, LiveSelector, ValueRef, OnlyRunInContext } from '@holoflows/kit/es'
-import { Group, Profile } from '../database'
+import { Group, Profile, Persona } from '../database'
 import { ProfileIdentifier } from '../database/type'
 import { Payload } from '../utils/type-transform/Payload'
 import { defaultTo, isNull } from 'lodash-es'
@@ -204,6 +204,10 @@ export interface SocialNetworkUIDataSources {
      * My identities at current network
      */
     readonly myIdentitiesRef?: ValueRef<Profile[]>
+    /**
+     * My personas at current network
+     */
+    readonly myPersonasRef?: ValueRef<Persona[]>
     /**
      * The account that user is using (may not in the database)
      */

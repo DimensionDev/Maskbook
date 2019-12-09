@@ -5,6 +5,7 @@ import { ProfileIdentifier, PersonaIdentifier, Identifier, ECKeyIdentifier } fro
 import { DBSchema, openDB, IDBPDatabase, IDBPTransaction } from 'idb/with-async-ittr'
 import { IdentifierMap } from '../IdentifierMap'
 import { PrototypeLess, restorePrototype } from '../../utils/type'
+import { MessageCenter } from '../../utils/messages'
 /**
  * Database structure:
  *
@@ -57,6 +58,8 @@ export async function createPersonaDB(
 ): Promise<void> {
     t = t || (await db()).transaction('personas', 'readwrite')
     t.objectStore('personas').add(personaRecordToDB(record))
+    MessageCenter.emit('personaCreated', undefined)
+    MessageCenter.emit('personaUpdated', undefined)
 }
 
 export async function queryPersonaByProfileDB(
@@ -139,6 +142,7 @@ export async function updatePersonaDB(
         ...record,
     })
     await t.objectStore('personas').put(next)
+    MessageCenter.emit('personaUpdated', undefined)
 }
 
 /**
@@ -157,6 +161,7 @@ export async function deletePersonaDB(
     if (confirm !== 'delete even with private' && r.privateKey)
         throw new TypeError('Cannot delete a persona with a private key')
     await t.objectStore('personas').delete(id.toText())
+    MessageCenter.emit('personaUpdated', undefined)
 }
 /**
  * Delete a Persona
@@ -172,6 +177,7 @@ export async function safeDeletePersonaDB(
     if (r.linkedProfiles.size !== 0) return false
     if (r.privateKey) return false
     await t.objectStore('personas').delete(id.toText())
+    MessageCenter.emit('personaUpdated', undefined)
     return true
 }
 
