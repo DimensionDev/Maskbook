@@ -230,9 +230,6 @@ function Dashboard() {
                 <footer className={classes.footer}>
                     <Breadcrumbs className={classes.footerButtons} separator="|" aria-label="breadcrumb">
                         <FooterLink href="https://maskbook.com/">Maskbook.com</FooterLink>
-                        <FooterLink href="https://maskbook.com/download-links/#mobile">
-                            {geti18nString('dashboard_mobile_test')}
-                        </FooterLink>
                         <FooterLink href="https://maskbook.com/privacy-policy/">
                             {geti18nString('options_index_privacy')}
                         </FooterLink>
