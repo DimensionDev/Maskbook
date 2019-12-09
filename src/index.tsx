@@ -236,9 +236,7 @@ function Dashboard() {
                         <FooterLink href="https://maskbook.com/privacy-policy/">
                             {geti18nString('options_index_privacy')}
                         </FooterLink>
-                        <FooterLink href="https://github.com/DimensionDev/Maskbook">
-                            {geti18nString('dashboard_source_code')}
-                        </FooterLink>
+                        <FooterLink href="https://github.com/DimensionDev/Maskbook">Source Code</FooterLink>
                         <FooterLink to="/developer">{geti18nString('options_index_dev')}</FooterLink>
                     </Breadcrumbs>
                 </footer>
