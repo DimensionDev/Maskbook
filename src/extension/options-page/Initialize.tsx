@@ -1,13 +1,14 @@
 import React from 'react'
-import { Link, Switch, useRouteMatch, Route, useParams, Redirect } from 'react-router-dom'
+import { Switch, useRouteMatch, Route, useParams, Redirect } from 'react-router-dom'
 import { makeStyles } from '@material-ui/styles'
-import { Theme, Typography, Card, Breadcrumbs, Link as MuiLink, Container } from '@material-ui/core'
+import { Theme, Typography, Card, Container } from '@material-ui/core'
 import InitStep0 from './DashboardInitSteps/Step0'
 import InitStep1S from './DashboardInitSteps/Step1S'
 import InitStep2S from './DashboardInitSteps/Step2S'
 import InitStep1R from './DashboardInitSteps/Step1R'
 import InitStep1Ra from './DashboardInitSteps/Step1Ra'
 import InitStep2R from './DashboardInitSteps/Step2R'
+import FooterLine from './DashboardComponents/FooterLine'
 
 const useStyles = makeStyles((theme: Theme) => ({
     wrapper: {
@@ -45,20 +46,6 @@ const useStyles = makeStyles((theme: Theme) => ({
     footer: {
         paddingBottom: 48,
     },
-    footerButtons: {
-        marginTop: theme.spacing(1),
-        '& ol': {
-            justifyContent: 'center',
-        },
-    },
-    footerButton: {
-        borderRadius: '0',
-        whiteSpace: 'nowrap',
-        '& > span': {
-            marginLeft: theme.spacing(1),
-            marginRight: theme.spacing(1),
-        },
-    },
 }))
 
 const InitializeSteps = () => {
@@ -83,21 +70,6 @@ function DashboardInitializePageInternal() {
 
     const classes = useStyles()
 
-    const FooterLink = function(props: any) {
-        const classes = useStyles()
-        return (
-            <MuiLink
-                underline="none"
-                {...(props.href
-                    ? { href: props.href, target: '_blank', rel: 'noopener noreferrer' }
-                    : { to: props.to, component: Link })}
-                color="inherit"
-                className={classes.footerButton}>
-                <Typography variant="body2">{props.children}</Typography>
-            </MuiLink>
-        )
-    }
-
     const RouterItem = () => (
         <Switch>
             <Route path={`${path}/:step`}>
@@ -119,12 +91,7 @@ function DashboardInitializePageInternal() {
                 <RouterItem />
             </Card>
             <footer className={classes.footer}>
-                <Breadcrumbs className={classes.footerButtons} separator="|" aria-label="breadcrumb">
-                    <FooterLink href="https://github.com/DimensionDev/Maskbook/releases">Version 1.8.0</FooterLink>
-                    <FooterLink href="https://maskbook.com/">Maskbook.com</FooterLink>
-                    <FooterLink href="https://github.com/DimensionDev/Maskbook">Source Code</FooterLink>
-                    <FooterLink href="https://maskbook.com/privacy-policy/">Privacy Policy</FooterLink>
-                </Breadcrumbs>
+                <FooterLine />
             </footer>
         </section>
     )

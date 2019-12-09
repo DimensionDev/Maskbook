@@ -36,6 +36,8 @@ import {
 } from './DashboardDialogs/Persona'
 import { ProfileConnectStartDialog, ProfileConnectDialog } from './DashboardDialogs/Profile'
 import ActionButton from '../../components/Dashboard/ActionButton'
+import { ListItemProps } from '@material-ui/core/ListItem'
+import FooterLine from './DashboardComponents/FooterLine'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -262,6 +264,9 @@ export default function DashboardHomePage() {
                 <Button color="secondary" component={Link} to="/initialize">
                     initialize
                 </Button>
+            </section>
+            <section className={classes.sections}>
+                <FooterLine />
             </section>
             {dialogs}
         </Container>
