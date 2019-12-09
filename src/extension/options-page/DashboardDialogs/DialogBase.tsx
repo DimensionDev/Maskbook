@@ -99,7 +99,7 @@ export function DialogContentItem(props: DialogContentItemProps) {
 }
 
 interface DialogRouterProps {
-    path: string | RouteProps
+    path?: string | RouteProps
     component?: React.ComponentType<any>
     children?: JSX.Element
     fullscreen?: boolean
@@ -111,7 +111,7 @@ export function DialogRouter(props: DialogRouterProps) {
     const history = useHistory()
     const prevMatch = useRouteMatch()
     const matchPattern = useRouteMatch((prevMatch?.path ?? '/').replace(/\/$/, '') + path)
-    const routeMatching = !!matchPattern
+    const routeMatching = !path ? true : !!matchPattern
     const classes = useStyles()
 
     const onExitAction =
