@@ -69,6 +69,8 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
                 maxWidth="sm"
                 container={() => rootRef.current}
                 disablePortal
+                disableAutoFocus
+                disableEnforceFocus
                 onEscapeKeyDown={props.onClose}
                 BackdropProps={{
                     className: classes.backdrop,
