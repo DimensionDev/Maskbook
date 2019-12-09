@@ -14,6 +14,8 @@ const querySelectorAll = <T extends E>(selector: string) => {
 const createPostEditorSelector = () =>
     postBoxInPopup() ? '[aria-labelledby="modal-header"]' : '[role="main"] :not(aside) > [role="progressbar"] ~ div'
 
+export const rootSelector: () => LiveSelector<E, true> = () => querySelector<E>('#react-root')
+
 export const postEditorSelector: () => LiveSelector<E, true> = () => querySelector<E>(createPostEditorSelector())
 export const postEditorInPopupSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('[aria-labelledby="modal-header"]')
