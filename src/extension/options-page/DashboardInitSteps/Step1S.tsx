@@ -1,13 +1,10 @@
-import React, { useRef, useState } from 'react'
+import React, { useState } from 'react'
 import { Link, useHistory } from 'react-router-dom'
 import StepBase from './StepBase'
 import { TextField, makeStyles, createStyles } from '@material-ui/core'
 import { geti18nString } from '../../../utils/i18n'
 import ActionButton from '../../../components/Dashboard/ActionButton'
 import Services from '../../service'
-import tasks from '../../content-script/tasks'
-import { getProfilePageUrlAtFacebook } from '../../../social-network-provider/facebook.com/parse-username'
-import { ProfileIdentifier } from '../../../database/type'
 
 const header = 'Step 1: What is your name?'
 const subheader = 'You may connect social network profiles to your persona in the next step.'
@@ -38,8 +35,8 @@ export default function InitStep1S() {
     const history = useHistory()
 
     const createPersonaAndNext = async () => {
-        // const persona = await Services.Identity.createPersonaByMnemonic(name, password)
-        history.replace(`2s?name=${name}`)
+        const persona = await Services.Identity.createPersonaByMnemonic(name, password)
+        history.replace(`2s?identifier=${persona.toText()}`)
     }
 
     const actions = (
