@@ -7,11 +7,13 @@ import { makeStyles, Theme } from '@material-ui/core'
 import { MessageCenter } from '../../../utils/messages'
 import { useCallback } from 'react'
 import { useTwitterButton } from '../utils/theme'
+import { hasDraftEditor } from '../utils/postBox'
 
 export function injectPostDialogHintAtTwitter() {
     if (location.hostname.indexOf(twitterUrl.hostIdentifier) === -1) return
-    const emptyNode = document.createElement('div')
-    const watcher = new MutationObserverWatcher(postEditorInTimelineSelector())
+    const watcher = new MutationObserverWatcher(
+        postEditorInTimelineSelector().map(x => (hasDraftEditor(x) ? x : document.createElement('div'))),
+    )
         .setDOMProxyOption({
             afterShadowRootInit: { mode: 'closed' },
         })
