@@ -15,9 +15,9 @@ import { useStylesExtends, or } from '../../custom-ui-helper'
 import { geti18nString } from '../../../utils/i18n'
 import CloseIcon from '@material-ui/icons/Close'
 import { ProfileInList } from './ProfileInList'
-import { Person } from '../../../database'
+import { Profile } from '../../../database'
 import { useCurrentIdentity } from '../../DataSource/useActivatedUI'
-import { PersonIdentifier } from '../../../database/type'
+import { ProfileIdentifier } from '../../../database/type'
 
 const useStyles = makeStyles(theme => ({
     dialog: {},
@@ -39,14 +39,14 @@ const ResponsiveDialog = withMobileDialog({ breakpoint: 'xs' })(Dialog)
 export interface SelectRecipientsDialogUIProps extends withClasses<KeysInferFromUseStyles<typeof useStyles>> {
     ignoreMyself?: boolean
     open: boolean
-    items: Person[]
-    selected: Person[]
+    items: Profile[]
+    selected: Profile[]
     disabled: boolean
     submitDisabled: boolean
     onSubmit: () => void
     onClose: () => void
-    onSelect: (item: Person) => void
-    onDeselect: (item: Person) => void
+    onSelect: (item: Profile) => void
+    onDeselect: (item: Profile) => void
 }
 export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
     const classes = useStylesExtends(useStyles(), props)
@@ -55,7 +55,7 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
     const currentIdentity = useCurrentIdentity()
     const itemsForRender = props.ignoreMyself
         ? props.items.filter(
-              x => !x.identifier.equals(currentIdentity ? currentIdentity.identifier : PersonIdentifier.unknown),
+              x => !x.identifier.equals(currentIdentity ? currentIdentity.identifier : ProfileIdentifier.unknown),
           )
         : props.items
 

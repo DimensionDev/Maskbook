@@ -1,11 +1,11 @@
 import { twitterUrl } from '../utils/url'
 import { MutationObserverWatcher } from '@holoflows/kit/es'
-import { rootSelector } from '../utils/selector'
 import { renderInShadowRoot } from '../../../utils/jss/renderInShadowRoot'
 import { PostDialog } from '../../../components/InjectedComponents/PostDialog'
 import { useTwitterButton, useTwitterCloseButton, useTwitterDialog } from '../utils/theme'
 import { makeStyles } from '@material-ui/styles'
 import { Theme } from '@material-ui/core'
+import { postEditorInPopupSelector } from '../utils/selector'
 
 const useStyles = makeStyles((theme: Theme) => {
     const { type, grey } = theme.palette
@@ -21,7 +21,7 @@ const useStyles = makeStyles((theme: Theme) => {
 
 export function injectPostDialogAtTwitter() {
     if (location.hostname.indexOf(twitterUrl.hostIdentifier) === -1) return
-    const watcher = new MutationObserverWatcher(rootSelector())
+    const watcher = new MutationObserverWatcher(postEditorInPopupSelector())
         .setDOMProxyOption({
             afterShadowRootInit: { mode: 'closed' },
         })
@@ -30,7 +30,7 @@ export function injectPostDialogAtTwitter() {
             subtree: true,
         })
 
-    renderInShadowRoot(<PostDialogAtTwitter />, watcher.firstDOMProxy.beforeShadow)
+    renderInShadowRoot(<PostDialogAtTwitter />, watcher.firstDOMProxy.afterShadow)
 }
 
 function PostDialogAtTwitter() {

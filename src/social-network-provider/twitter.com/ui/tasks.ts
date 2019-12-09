@@ -7,18 +7,17 @@ import {
     pasteImageToActiveElements,
 } from '../../../utils/utils'
 import {
-    editProfileButtonSelector,
-    editProfileTextareaSelector,
-    hasDraftEditor,
-    newPostButton,
-    newPostEditorFocusAnchor,
+    profileEditorButtonSelector,
+    profileEditorTextareaSelector,
+    newPostButtonSelector,
+    postEditorDraftContentSelector,
     postsSelector,
 } from '../utils/selector'
 import { geti18nString } from '../../../utils/i18n'
 import { SocialNetworkUI, SocialNetworkUITasks, getActivatedUI } from '../../../social-network/ui'
 import { fetchBioCard } from '../utils/status'
 import { bioCardParser, postContentParser } from '../utils/fetch'
-import { getText, hasFocus, postBoxInPopup } from '../utils/postBox'
+import { getText, hasFocus, postBoxInPopup, hasDraftEditor } from '../utils/postBox'
 import { MutationObserverWatcher } from '@holoflows/kit'
 import { untilDocumentReady, untilElementAvailable } from '../../../utils/dom'
 import Services from '../../../extension/service'
@@ -36,15 +35,15 @@ const taskPasteIntoPostBox: SocialNetworkUI['taskPasteIntoPostBox'] = (text, opt
         }
         if (!postBoxInPopup() && !hasDraftEditor()) {
             // open tweet window
-            await untilElementAvailable(newPostButton())
-            newPostButton()
+            await untilElementAvailable(newPostButtonSelector())
+            newPostButtonSelector()
                 .evaluate()!
                 .click()
             checkSignal()
         }
 
         // get focus
-        const i = newPostEditorFocusAnchor()
+        const i = postEditorDraftContentSelector()
         await untilElementAvailable(i)
         checkSignal()
         while (!hasFocus(i)) {
@@ -102,11 +101,11 @@ const taskUploadToPostBox: SocialNetworkUI['taskUploadToPostBox'] = async (text,
 }
 
 const taskPasteIntoBio = async (text: string) => {
-    const getValue = () => editProfileTextareaSelector().evaluate()!.value
+    const getValue = () => profileEditorTextareaSelector().evaluate()!.value
     await untilDocumentReady()
     await sleep(800)
     try {
-        editProfileButtonSelector()
+        profileEditorButtonSelector()
             .evaluate()!
             .click()
     } catch {
@@ -114,7 +113,7 @@ const taskPasteIntoBio = async (text: string) => {
     }
     await sleep(800)
     try {
-        const i = editProfileTextareaSelector().evaluate()!
+        const i = profileEditorTextareaSelector().evaluate()!
         i.focus()
         await sleep(200)
         dispatchCustomEvents('input', i.value + text)

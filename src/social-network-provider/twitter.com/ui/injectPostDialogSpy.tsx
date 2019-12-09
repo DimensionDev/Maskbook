@@ -1,12 +1,12 @@
 import { twitterUrl } from '../utils/url'
 import { MutationObserverWatcher } from '@holoflows/kit/es'
-import { postPopupInjectPointSelector } from '../utils/selector'
+import { postEditorInPopupSelector } from '../utils/selector'
 import { renderInShadowRoot } from '../../../utils/jss/renderInShadowRoot'
 import { MessageCenter } from '../../../utils/messages'
 
 export function injectPostDialogSpyAtTwitter() {
     if (location.hostname.indexOf(twitterUrl.hostIdentifier) === -1) return
-    const watcher = new MutationObserverWatcher(postPopupInjectPointSelector())
+    const watcher = new MutationObserverWatcher(postEditorInPopupSelector())
         .setDOMProxyOption({
             afterShadowRootInit: { mode: 'closed' },
         })
