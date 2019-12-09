@@ -1,6 +1,6 @@
 import { twitterUrl } from '../utils/url'
 import { MutationObserverWatcher } from '@holoflows/kit/es'
-import { mainSelector } from '../utils/selector'
+import { rootSelector } from '../utils/selector'
 import { renderInShadowRoot } from '../../../utils/jss/renderInShadowRoot'
 import { PostDialog } from '../../../components/InjectedComponents/PostDialog'
 import { useTwitterButton, useTwitterCloseButton, useTwitterDialog } from '../utils/theme'
@@ -21,7 +21,7 @@ const useStyles = makeStyles((theme: Theme) => {
 
 export function injectPostDialogAtTwitter() {
     if (location.hostname.indexOf(twitterUrl.hostIdentifier) === -1) return
-    const watcher = new MutationObserverWatcher(mainSelector())
+    const watcher = new MutationObserverWatcher(rootSelector())
         .setDOMProxyOption({
             afterShadowRootInit: { mode: 'closed' },
         })
