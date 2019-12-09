@@ -6,18 +6,29 @@ import { Link, useHistory } from 'react-router-dom'
 import ProviderLine from '../DashboardComponents/ProviderLine'
 import BackupRestoreTab, { BackupRestoreTabProps } from '../DashboardComponents/BackupRestoreTab'
 import ActionButton from '../../../components/Dashboard/ActionButton'
-import { PersonaIdentifier } from '../../../database/type'
+import { PersonaIdentifier, ECKeyIdentifier } from '../../../database/type'
 import Services from '../../service'
 import { Persona } from '../../../database'
+import useQueryParams from '../../../utils/hooks/useQueryParams'
+import { useAsync } from '../../../utils/components/AsyncComponent'
 
 export function PersonaCreateDialog() {
     const [name, setName] = useState('')
+    const [password, setPassword] = useState('')
+    const history = useHistory()
+
+    const createPersona = () => {
+        Services.Identity.createPersonaByMnemonic(name, password).then(persona => {
+            history.replace(`created?identifier=${persona.toText()}`)
+        })
+    }
 
     const content = (
         <div style={{ alignSelf: 'stretch', textAlign: 'center', width: '100%' }}>
             <TextField
                 style={{ width: '100%', maxWidth: '320px' }}
                 autoFocus
+                required
                 variant="outlined"
                 value={name}
                 onChange={e => setName(e.target.value)}
@@ -25,10 +36,15 @@ export function PersonaCreateDialog() {
                 label="Name"
             />
             <TextField
+                required
+                type="password"
                 style={{ width: '100%', maxWidth: '320px' }}
                 variant="outlined"
                 label="Password"
+                helperText="Set a password to improve security level"
                 placeholder="At least 8 characters"
+                value={password}
+                onChange={e => setPassword(e.target.value)}
             />
         </div>
     )
@@ -39,23 +55,26 @@ export function PersonaCreateDialog() {
             content={content}
             actionsAlign="center"
             actions={
-                <ActionButton variant="contained" color="primary" component={Link} to={`created?name=${name}`}>
-                    Ok
+                <ActionButton variant="contained" color="primary" component={'a'} onClick={createPersona}>
+                    Create
                 </ActionButton>
             }></DialogContentItem>
     )
 }
 
 export function PersonaCreatedDialog() {
-    const history = useHistory()
-    const search = new URLSearchParams(history.location.search)
-    const name = search.get('name')
+    const { identifier } = useQueryParams(['identifier'])
+    const [persona, setPersona] = useState<Persona | null>(null)
+    useAsync(async () => {
+        if (identifier)
+            Services.Identity.queryPersona(ECKeyIdentifier.fromString(identifier!)! as ECKeyIdentifier).then(setPersona)
+    }, [identifier])
     return (
         <DialogContentItem
             title="Persona Created"
             content={
                 <>
-                    {`New persona «${name}» has been created. Connect a profile now! ([I:b])`}
+                    {`New persona «${persona?.nickname}» has been created. Connect a profile now! ([I:b])`}
                     <section style={{ marginTop: 12 }}>
                         <ProviderLine network="facebook" border></ProviderLine>
                         <ProviderLine network="twitter" border></ProviderLine>

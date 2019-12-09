@@ -118,19 +118,6 @@ function DashboardWithProvider() {
 function Dashboard() {
     const classes = useStyles()
 
-    const [exportLoading, setExportLoading] = React.useState(false)
-
-    const identities = useMyIdentities()
-
-    const exportData = () => {
-        setExportLoading(true)
-        Services.Welcome.backupMyKeyPair({
-            download: true,
-            onlyBackupWhoAmI: false,
-        })
-            .catch(alert)
-            .then(() => setExportLoading(false))
-    }
     const shouldRenderAppbar = webpackEnv.firefoxVariant === 'GeckoView' || webpackEnv.target === 'WKWebview'
     const shouldNotRenderAppbar = useMediaQuery('(min-width:1024px)')
 
