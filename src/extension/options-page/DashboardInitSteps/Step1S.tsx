@@ -1,9 +1,13 @@
 import React, { useRef, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 import StepBase from './StepBase'
 import { TextField, makeStyles, createStyles } from '@material-ui/core'
 import { geti18nString } from '../../../utils/i18n'
-import Buttone from '../../../components/Dashboard/Buttone'
+import ActionButton from '../../../components/Dashboard/ActionButton'
+import Services from '../../service'
+import tasks from '../../content-script/tasks'
+import { getProfilePageUrlAtFacebook } from '../../../social-network-provider/facebook.com/parse-username'
+import { ProfileIdentifier } from '../../../database/type'
 
 const header = 'Step 1: What is your name?'
 const subheader = 'You may connect social network profiles to your persona in the next step.'
@@ -31,20 +35,21 @@ export default function InitStep1S() {
     const [password, setPassword] = useState('')
 
     const classes = useStyles()
+    const history = useHistory()
+
+    const createPersonaAndNext = async () => {
+        // const persona = await Services.Identity.createPersonaByMnemonic(name, password)
+        history.replace(`2s?name=${name}`)
+    }
 
     const actions = (
         <>
-            <Buttone className="actionButton" variant="outlined" color="default" component={Link} to="start">
+            <ActionButton variant="outlined" color="default" component={Link} to="start">
                 Back
-            </Buttone>
-            <Buttone
-                className="actionButton"
-                variant="contained"
-                color="primary"
-                component={Link}
-                to={`2s?name=${name}`}>
+            </ActionButton>
+            <ActionButton variant="contained" color="primary" onClick={createPersonaAndNext} component={'a'}>
                 Next
-            </Buttone>
+            </ActionButton>
         </>
     )
     const content = (

@@ -5,7 +5,7 @@ import { geti18nString } from '../../../utils/i18n'
 import { useDragAndDrop } from '../../../utils/hooks/useDragAndDrop'
 import { Link } from 'react-router-dom'
 import BackupRestoreTab, { BackupRestoreTabProps } from '../DashboardComponents/BackupRestoreTab'
-import Buttone from '../../../components/Dashboard/Buttone'
+import ActionButton from '../../../components/Dashboard/ActionButton'
 
 const header = 'Restore Database'
 
@@ -33,12 +33,12 @@ const useStyles = makeStyles(theme =>
 
 const actions = (
     <>
-        <Buttone className="actionButton" variant="outlined" color="default" component={Link} to="start">
+        <ActionButton variant="outlined" color="default" component={Link} to="start">
             Back
-        </Buttone>
-        <Buttone className="actionButton" variant="outlined" color="primary" component={Link} to="1ra">
+        </ActionButton>
+        <ActionButton variant="outlined" color="primary" component={Link} to="1ra">
             Advanced...
-        </Buttone>
+        </ActionButton>
     </>
 )
 
@@ -119,9 +119,9 @@ export default function InitStep1R() {
                         geti18nString('welcome_1b_file_selected', fileRef.current.name)
                     ) : (
                         <>
-                            <Buttone variant="contained" color="primary" className={classes.restoreBoxButton}>
+                            <ActionButton variant="contained" color="primary" className={classes.restoreBoxButton}>
                                 Select File
-                            </Buttone>
+                            </ActionButton>
                             <Typography variant="body2">Or drop a file here...</Typography>
                         </>
                     )}

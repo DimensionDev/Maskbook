@@ -8,10 +8,10 @@ interface ButtoneProps extends ButtonProps {
     [key: string]: any
 }
 
-export default function Buttone(props: ButtoneProps) {
-    const { width, children, ...p } = props
+export default function ActionButton(props: ButtoneProps) {
+    const { width, children, className, ...p } = props
     return (
-        <Button style={{ width }} {...p}>
+        <Button className={'actionButton ' + className} style={{ width }} {...p}>
             <Typography variant="button" children={children}></Typography>
         </Button>
     )

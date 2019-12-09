@@ -3,7 +3,7 @@ import StepBase from './StepBase'
 import { Button, Box, Typography, styled, Theme } from '@material-ui/core'
 import { geti18nString } from '../../../utils/i18n'
 import { useHistory, Link } from 'react-router-dom'
-import Buttone from '../../../components/Dashboard/Buttone'
+import ActionButton from '../../../components/Dashboard/ActionButton'
 
 const VerticalCenter = styled('div')({
     display: 'flex',
@@ -39,9 +39,9 @@ export default function InitStep0() {
                     <Typography variant="body1">Set up and start using.</Typography>
                 </Box>
                 <VerticalCenter>
-                    <Buttone variant="contained" color="primary" component={Link} to="1s">
+                    <ActionButton variant="contained" color="primary" component={Link} to="1s">
                         Set up
-                    </Buttone>
+                    </ActionButton>
                 </VerticalCenter>
             </LinedBox>
             <LinedBox>
@@ -50,9 +50,9 @@ export default function InitStep0() {
                     <Typography variant="body1">Import database backup.</Typography>
                 </Box>
                 <VerticalCenter>
-                    <Buttone variant="outlined" component={Link} to="1r">
+                    <ActionButton variant="outlined" component={Link} to="1r">
                         {geti18nString('restore')}
-                    </Buttone>
+                    </ActionButton>
                 </VerticalCenter>
             </LinedBox>
         </div>

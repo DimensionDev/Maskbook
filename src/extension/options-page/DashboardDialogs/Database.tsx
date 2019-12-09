@@ -1,7 +1,7 @@
 import React from 'react'
 import { DialogContentItem } from './DialogBase'
 
-import Buttone from '../../../components/Dashboard/Buttone'
+import ActionButton from '../../../components/Dashboard/ActionButton'
 
 export function DatabaseBackupDialog() {
     return (
@@ -10,9 +10,9 @@ export function DatabaseBackupDialog() {
             content="A file <Maskbook-Backup-2019.11.13.db> should appear in your downloads folder. Please keep the backup file carefully."
             actionsAlign="center"
             actions={
-                <Buttone variant="contained" color="primary" className="actionButton">
+                <ActionButton variant="contained" color="primary">
                     Ok
-                </Buttone>
+                </ActionButton>
             }></DialogContentItem>
     )
 }
@@ -24,9 +24,9 @@ export function DatabaseRestoreDialog() {
             content="Choose a backup file to restore your database."
             actionsAlign="center"
             actions={
-                <Buttone variant="contained" color="primary" className="actionButton">
+                <ActionButton variant="contained" color="primary">
                     Choose File
-                </Buttone>
+                </ActionButton>
             }></DialogContentItem>
     )
 }
@@ -38,9 +38,9 @@ export function DatabaseRestoreSuccessDialog() {
             title="Import Successful"
             content="Your database has been restored. Existing data will be merged."
             actions={
-                <Buttone variant="contained" color="primary" className="actionButton">
+                <ActionButton variant="contained" color="primary">
                     Choose File
-                </Buttone>
+                </ActionButton>
             }></DialogContentItem>
     )
 }
@@ -52,9 +52,9 @@ export function DatabaseRestoreFailedDialog() {
             title="Import Failed"
             content="Choose a backup file to restore your database."
             actions={
-                <Buttone variant="contained" color="primary" className="actionButton">
+                <ActionButton variant="contained" color="primary">
                     Choose File
-                </Buttone>
+                </ActionButton>
             }></DialogContentItem>
     )
 }
