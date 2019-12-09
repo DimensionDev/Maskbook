@@ -48,7 +48,7 @@ export class IdentifierMap<IdentifierType extends Identifier, T> implements Map<
     values(): IterableIterator<T> {
         return this.__raw_map__.values()
     }
-    [Symbol.toStringTag] = 'ProfileIdentifierSet';
+    [Symbol.toStringTag] = 'IdentifierMap';
     [Symbol.iterator](): Generator<[IdentifierType, T], void, unknown> {
         return this.entries()
     }

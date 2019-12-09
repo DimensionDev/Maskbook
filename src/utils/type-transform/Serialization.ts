@@ -2,7 +2,7 @@
 import { Serialization } from '@holoflows/kit'
 import Typeson from 'typeson'
 
-export function serializable(name: string) {
+export function serializable<T, Q>(name: string, ser?: (x: T) => Q, des?: (x: Q) => T) {
     return <T extends NewableFunction>(constructor: T) => {
         Object.defineProperty(constructor, 'name', {
             configurable: true,
@@ -10,15 +10,29 @@ export function serializable(name: string) {
             writable: false,
             value: name,
         })
-        typeson.register({ [name]: constructor })
+        typeson.register({
+            [name]:
+                ser && des
+                    ? [x => x instanceof constructor, ser, des]
+                    : [
+                          x => x instanceof constructor,
+                          x => {
+                              const y = Object.assign({}, x)
+                              Object.getOwnPropertySymbols(y).forEach(x => delete y[x])
+                              return typeson.encapsulate(y)
+                          },
+                          x => {
+                              const y = typeson.revive(x)
+                              Object.setPrototypeOf(y, constructor.prototype)
+                              return y
+                          },
+                      ],
+        })
         return constructor
     }
 }
 
 const typeson = new Typeson().register([require('typeson-registry/dist/presets/builtin')])
-typeson.register({})
-// To register this type in the typeson
-require('../../database/IdentifierMap')
 
 export default {
     async serialization(from) {

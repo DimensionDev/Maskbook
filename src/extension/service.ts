@@ -7,6 +7,7 @@ import { getCurrentNetworkWorkerService } from './background-script/WorkerServic
 
 import tasks from './content-script/tasks'
 import { MessageCenter } from '@holoflows/kit/es'
+import { IdentifierMap } from '../database/IdentifierMap'
 Object.assign(globalThis, { tasks })
 
 interface Services {
@@ -75,18 +76,22 @@ Object.assign(globalThis, {
     PostIdentifier,
     PostIVIdentifier,
     getCurrentNetworkWorkerService,
+    IdentifierMap,
 })
 //#region
+console.log(Serialization)
 type Service = Record<string, (...args: unknown[]) => Promise<unknown>>
 function register<T extends Service>(service: T, name: keyof Services, mock?: Partial<T>) {
     if (OnlyRunInContext(['content', 'options', 'debugging', 'background'], false)) {
         GetContext() !== 'debugging' && console.log(`Service ${name} registered in ${GetContext()}`)
+        const mc = new MessageCenter()
+        // mc.writeToConsole = true
         Object.assign(Services, {
             [name]: AsyncCall(service, {
                 key: name,
                 serializer: Serialization,
                 log: logOptions,
-                messageChannel: new MessageCenter(),
+                messageChannel: mc,
             }),
         })
         Object.assign(globalThis, { [name]: Object.assign({}, service) })
