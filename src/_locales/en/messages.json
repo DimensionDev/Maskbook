@@ -198,6 +198,12 @@
     "dashboard_item_copy_failed": {
         "message": "Copy failed."
     },
+    "dashboard_mobile_test": {
+        "message": "Join Tests for Mobile"
+    },
+    "dashboard_source_code": {
+        "message": "Source Code"
+    },
     "welcome_0_close_button": {
         "message": "I'll do it later"
     },
