@@ -4,8 +4,8 @@ import CardActions from '@material-ui/core/CardActions'
 import CardContent from '@material-ui/core/CardContent'
 import Button from '@material-ui/core/Button'
 import Typography from '@material-ui/core/Typography'
-import { Profile } from '../../../database'
-import { Divider, IconButton, TextField, Menu, MenuItem } from '@material-ui/core'
+import { Persona } from '../../../database'
+import { Divider, TextField, Menu, MenuItem } from '@material-ui/core'
 import Services from '../../service'
 import { Link as RouterLink, LinkProps as RouterLinkProps } from 'react-router-dom'
 import SettingsIcon from '@material-ui/icons/Settings'
@@ -15,9 +15,10 @@ import { geti18nString } from '../../../utils/i18n'
 import classNames from 'classnames'
 import ProviderLine from './ProviderLine'
 import { BackupJSONFileLatest } from '../../../utils/type-transform/BackupFormat/JSON/latest'
+import { definedSocialNetworkWorkers } from '../../../social-network/worker'
 
 interface Props {
-    identity: Profile
+    persona: Persona
 }
 
 const useStyles = makeStyles(theme =>
@@ -87,21 +88,27 @@ const Link = React.forwardRef<HTMLAnchorElement, RouterLinkProps>((props, ref) =
     <RouterLink innerRef={ref} {...props} />
 ))
 
-export default function PersonaCard({ identity }: Props) {
+export default function PersonaCard({ persona }: Props) {
     const classes = useStyles()
     const color = useColorProvider()
 
     const [provePost, setProvePost] = useState<string>('')
 
     useMemo(() => {
-        Services.Crypto.getMyProveBio(identity.identifier).then(p => setProvePost(p || ''))
-    }, [identity.identifier])
+        Services.Crypto.getMyProveBio(persona.identifier).then(p => setProvePost(p || ''))
+    }, [persona.identifier])
 
-    const friendlyName = useMemo(() => {
-        return identity.identifier.network
-        // const ui = [...definedSocialNetworkUIs].find(i => i.networkIdentifier === identity.identifier.network)
-        // return ui ? ui.friendlyName : `${geti18nString('dashboard_unknown_network')}(${identity.identifier.network})`
-    }, [identity.identifier.network])
+    // FIXME:
+    const profiles: any[] = [] || [...persona.linkedProfiles]
+
+    const providers = [...definedSocialNetworkWorkers].map(i => {
+        const profile = profiles.find(([key, value]) => key.network === i.networkIdentifier)
+        return {
+            network: i.networkIdentifier,
+            connected: !!profile,
+            id: profile?.[0].userId,
+        }
+    })
 
     const { enqueueSnackbar, closeSnackbar } = useSnackbar()
 
@@ -134,26 +141,26 @@ export default function PersonaCard({ identity }: Props) {
             download: false,
             onlyBackupWhoAmI: true,
         })
-        const ec_id = identity.linkedPersona?.identifier
-        if (ec_id)
-            Services.Identity.deletePersona(ec_id, 'delete even with private').then(() => {
-                enqueueSnackbar(geti18nString('dashboard_item_deleted'), {
-                    variant: 'default',
-                    action: undoDeleteIdentity(backup),
-                })
+        const ec_id = persona.identifier
+
+        Services.Identity.deletePersona(ec_id, 'delete even with private').then(() => {
+            enqueueSnackbar(geti18nString('dashboard_item_deleted'), {
+                variant: 'default',
+                action: undoDeleteIdentity(backup),
             })
+        })
     }
 
     const [rename, setRename] = useState(false)
 
     const renameIdentity = (event: React.FocusEvent<HTMLInputElement>) => {
         event.preventDefault()
-        Services.Identity.updateProfileInfo(identity.identifier, { nickname: event.currentTarget.innerText }).then(
-            () => {
-                enqueueSnackbar(geti18nString('dashboard_item_done'), { variant: 'success', autoHideDuration: 1000 })
-                setRename(false)
-            },
-        )
+        // Services.Identity.updateProfileInfo(persona.identifier, { nickname: event.currentTarget.innerText }).then(
+        //     () => {
+        //         enqueueSnackbar(geti18nString('dashboard_item_done'), { variant: 'success', autoHideDuration: 1000 })
+        //         setRename(false)
+        //     },
+        // )
     }
 
     const titleRef = useRef<HTMLSpanElement | null>(null)
@@ -173,8 +180,8 @@ export default function PersonaCard({ identity }: Props) {
                 <Typography className={classes.header} variant="h5" component="h2" gutterBottom>
                     {!rename ? (
                         <>
-                            <span suppressContentEditableWarning ref={titleRef} className="title">
-                                {identity.nickname || identity.identifier.userId}
+                            <span ref={titleRef} className="title">
+                                {persona.nickname}
                             </span>
                             <Typography className="fullWidth" variant="body1" component="span" color="textSecondary">
                                 <SettingsIcon fontSize="small" onClick={handleClick} />
@@ -202,15 +209,19 @@ export default function PersonaCard({ identity }: Props) {
                                 autoFocus
                                 variant="outlined"
                                 label="Name"
-                                defaultValue={identity.nickname || identity.identifier.userId}
+                                defaultValue={persona.nickname}
                                 onBlur={renameIdentity}></TextField>
                         </>
                     )}
                 </Typography>
-                <Typography className={classes.line} component="div">
-                    <ProviderLine network={friendlyName} connected id={`@${identity.identifier.userId}`}></ProviderLine>
-                    <div className={classNames('extra-item', color.error)}>{geti18nString('disconnect')}</div>
-                </Typography>
+                {providers.map(provider => (
+                    <Typography className={classes.line} component="div">
+                        <ProviderLine {...provider}></ProviderLine>
+                        {provider.connected && (
+                            <div className={classNames('extra-item', color.error)}>{geti18nString('disconnect')}</div>
+                        )}
+                    </Typography>
+                ))}
             </CardContent>
             <Divider />
         </>
