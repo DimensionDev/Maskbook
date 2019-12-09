@@ -3,7 +3,7 @@ import { emptyDefinition } from '../../social-network/defaults/emptyDefinition'
 import Services from '../../extension/service'
 import { MessageCenter } from '../../utils/messages'
 import { GetContext, ValueRef } from '@holoflows/kit/es'
-import { Profile } from '../../database'
+import { Profile, Persona } from '../../database'
 import { createDataWithIdentifierChangedListener } from '../../social-network/defaults/createDataWithIdentifierChangedListener'
 
 const optionsPageUISelf = defineSocialNetworkUI({
@@ -26,6 +26,14 @@ const optionsPageUISelf = defineSocialNetworkUI({
                 createDataWithIdentifierChangedListener(ref, () => true),
             )
             Services.Identity.queryProfiles().then(p => (ref.value = p))
+        }
+        {
+            const ref = optionsPageUISelf.myPersonasRef
+            query(ref)
+            MessageCenter.on('personaUpdated', () => query(ref))
+            function query(ref: ValueRef<Persona[]>) {
+                Services.Identity.queryPersonas().then(p => (ref.value = p))
+            }
         }
     },
     shouldActivate() {

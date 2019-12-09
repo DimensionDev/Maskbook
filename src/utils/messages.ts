@@ -38,6 +38,15 @@ interface MaskbookMessages {
     identityUpdated: undefined
     /**
      * emit people changed in the database.
+     * emit when my personas created
+     */
+    personaCreated: undefined
+    /**
+     * emit when my personas updated
+     */
+    personaUpdated: undefined
+    /**
+     * emit people changed in the database
      */
     profilesChanged: readonly UpdateEvent<Profile>[]
     groupsChanged: readonly UpdateEvent<Group>[]

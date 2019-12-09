@@ -12,6 +12,11 @@ export function PersonaComparer(a: Persona, b: Persona): boolean {
     return true
 }
 
+export function PersonaArrayComparer(a: Persona[], b: Persona[]) {
+    if (a.length !== b.length) return false
+    return a.every((persona, index) => PersonaComparer(persona, b[index]))
+}
+
 export function ProfileArrayComparer(a: Profile[], b: Profile[]) {
     if (a.length !== b.length) return false
     return a.every((person, index) => {
