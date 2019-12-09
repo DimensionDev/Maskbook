@@ -4,15 +4,15 @@ import { Button, Switch } from '@material-ui/core'
 import { Link, Route, Redirect, useRouteMatch } from 'react-router-dom'
 import { DialogRouter } from '../DashboardDialogs/DialogBase'
 import { PersonaImportDialog } from '../DashboardDialogs/Persona'
-import Buttone from '../../../components/Dashboard/Buttone'
+import ActionButton from '../../../components/Dashboard/ActionButton'
 
 const header = 'Advanced Restoration Options'
 
 const actions = (
     <>
-        <Buttone className="actionButton" variant="outlined" color="default" component={Link} to="../1r">
+        <ActionButton variant="outlined" color="default" component={Link} to="../1r">
             Back
-        </Buttone>
+        </ActionButton>
         <span></span>
     </>
 )
@@ -20,9 +20,9 @@ const actions = (
 export default function InitStep1Ra() {
     const content = (
         <div style={{ alignSelf: 'stretch', textAlign: 'center', width: '100%' }}>
-            <Buttone width={240} variant="outlined" color="primary" component={Link} to="persona/import">
+            <ActionButton width={240} variant="outlined" color="primary" component={Link} to="persona/import">
                 Import Persona
-            </Buttone>
+            </ActionButton>
         </div>
     )
 
