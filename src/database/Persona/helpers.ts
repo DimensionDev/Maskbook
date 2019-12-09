@@ -18,6 +18,7 @@ import {
     attachProfileDB,
     LinkedProfileDetails,
     PersonaDB,
+    updatePersonaDB,
 } from './Persona.db'
 import { IdentifierMap } from '../IdentifierMap'
 import { getAvatarDataURL } from '../helpers/avatar'
@@ -115,11 +116,12 @@ export async function deletePersona(id: PersonaIdentifier, confirm: 'delete even
     else if (confirm === 'safe delete') await safeDeletePersonaDB(id, t as any)
 }
 
-export async function updateOrCreateProfile(
-    rec: Pick<Profile, 'identifier'> & Partial<ProfileRecord>,
-    t?: IDBPTransaction<PersonaDB, ['profiles']>,
-) {
-    t = t || (await PersonaDBAccess()).transaction('profiles', 'readwrite')
+export async function renamePersona(identifier: PersonaIdentifier, nickname: string) {
+    return updatePersonaDB({ identifier, nickname })
+}
+
+export async function updateOrCreateProfile(rec: Pick<Profile, 'identifier'> & Partial<ProfileRecord>) {
+    const t = (await PersonaDBAccess()).transaction('profiles', 'readwrite')
     const r = await queryProfileDB(rec.identifier, t)
     const e: ProfileRecord = {
         createdAt: new Date(),
