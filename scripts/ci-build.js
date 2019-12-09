@@ -9,6 +9,7 @@ async function main() {
     yarn lint:report
     # Do a quick TypeScript check; fail fast here.
     yarn tsc -p tsconfig_cjs.json
+    yarn ts-node -T ./scripts/import-linter.ts
     sudo apt-get install zip
     `)
     for (const command of prepareCommands) {
