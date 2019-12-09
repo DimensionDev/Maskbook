@@ -53,7 +53,7 @@ export function removeProfile(id: ProfileIdentifier): Promise<void> {
 //#endregion
 
 //#region Persona
-export { queryPersona } from '../../database'
+export { queryPersona, createPersonaByMnemonic } from '../../database'
 export async function queryPersonas(identifier?: PersonaIdentifier, requirePrivateKey = false): Promise<Persona[]> {
     if (typeof identifier === 'undefined')
         return (await queryPersonasDB(k => (requirePrivateKey ? !!k.privateKey : true))).map(personaRecordToPersona)
