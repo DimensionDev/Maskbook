@@ -1,9 +1,9 @@
 import { LiveSelector } from '@holoflows/kit'
 import { regexMatch } from '../../../utils/utils'
 import { postBoxInPopup } from './postBox'
-import { isNull } from 'lodash-es'
 
 type E = HTMLElement
+
 const querySelector = <T extends E>(selector: string) => {
     return new LiveSelector().querySelector<T>(selector).enableSingleMode()
 }
@@ -11,35 +11,32 @@ const querySelectorAll = <T extends E>(selector: string) => {
     return new LiveSelector().querySelectorAll<T>(selector)
 }
 
-export const bioCard = () =>
+const createPostEditorSelector = () =>
+    postBoxInPopup() ? '[aria-labelledby="modal-header"]' : '[role="main"] :not(aside) > [role="progressbar"] ~ div'
+
+export const postEditorSelector: () => LiveSelector<E, true> = () => querySelector<E>(createPostEditorSelector())
+export const postEditorInPopupSelector: () => LiveSelector<E, true> = () =>
+    querySelector<E>('[aria-labelledby="modal-header"]')
+export const postEditorInTimelineSelector: () => LiveSelector<E, true> = () =>
+    querySelector<E>('[role="main"] :not(aside) > [role="progressbar"] ~ div')
+export const postEditorDraftSelector = () =>
+    querySelector<HTMLDivElement>(`${createPostEditorSelector()} .DraftEditor-root`)
+export const postEditorDraftContentSelector = () =>
+    querySelector<E>(`${createPostEditorSelector()} .public-DraftEditor-content`)
+
+export const newPostButtonSelector = () => querySelector<E>('[data-testid="SideNav_NewTweet_Button"]')
+
+export const profileEditorButtonSelector = () =>
+    querySelector<HTMLAnchorElement>('[data-testid="primaryColumn"] [href="/settings/profile"]')
+export const profileEditorTextareaSelector = () => querySelector<HTMLTextAreaElement>('textarea[placeholder*="bio"]')
+
+export const bioCardSelector = () =>
     querySelector<HTMLDivElement>(
         [
             '.profile', // legacy twitter
             'a[href*="header_photo"] ~ div', // new twitter
         ].join(),
     )
-
-export const rootSelector = () => querySelector<E>('#react-root')
-export const mainSelector = () => querySelector<E>('[role="main"]')
-
-export const newPostButton = () => querySelector<E>('[data-testid="SideNav_NewTweet_Button"]')
-
-const postEditor = () =>
-    postBoxInPopup() ? '[aria-labelledby="modal-header"]' : '[role="main"] :not(aside) > [role="progressbar"] ~ div'
-
-export const newPostEditorBelow: () => LiveSelector<E, true> = () =>
-    querySelector<E>('[role="main"] :not(aside) > [role="progressbar"] ~ div')
-export const newPostEditorSelector = () => querySelector<HTMLDivElement>(`${postEditor()} .DraftEditor-root`)
-export const newPostEditorFocusAnchor = () => querySelector<E>(`${postEditor()} .public-DraftEditor-content`)
-
-export const hasDraftEditor = (x: E | Document = document) => !isNull(x.querySelector('.DraftEditor-root'))
-
-export const postPopupInjectPointSelector = () =>
-    querySelector('[aria-labelledby="modal-header"] [role="progressbar"] ~ div ~ div')
-
-export const editProfileButtonSelector = () =>
-    querySelector<HTMLAnchorElement>('[data-testid="primaryColumn"] [href="/settings/profile"]')
-export const editProfileTextareaSelector = () => querySelector<HTMLTextAreaElement>('textarea[placeholder*="bio"]')
 
 export const postsSelector = () =>
     querySelectorAll(

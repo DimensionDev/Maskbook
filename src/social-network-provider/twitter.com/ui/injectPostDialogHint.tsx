@@ -1,6 +1,6 @@
 import { twitterUrl } from '../utils/url'
 import { MutationObserverWatcher } from '@holoflows/kit/es'
-import { postPopupInjectPointSelector, newPostEditorBelow, hasDraftEditor } from '../utils/selector'
+import { postEditorInTimelineSelector } from '../utils/selector'
 import { renderInShadowRoot } from '../../../utils/jss/renderInShadowRoot'
 import { PostDialogHint } from '../../../components/InjectedComponents/PostDialogHint'
 import { makeStyles, Theme } from '@material-ui/core'
@@ -11,7 +11,7 @@ import { useTwitterButton } from '../utils/theme'
 export function injectPostDialogHintAtTwitter() {
     if (location.hostname.indexOf(twitterUrl.hostIdentifier) === -1) return
     const emptyNode = document.createElement('div')
-    const watcher = new MutationObserverWatcher(newPostEditorBelow().map(x => (hasDraftEditor(x) ? x : emptyNode)))
+    const watcher = new MutationObserverWatcher(postEditorInTimelineSelector())
         .setDOMProxyOption({
             afterShadowRootInit: { mode: 'closed' },
         })
