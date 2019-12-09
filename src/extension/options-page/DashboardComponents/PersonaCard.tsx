@@ -140,12 +140,10 @@ export default function PersonaCard({ persona }: Props) {
     const [rename, setRename] = useState(false)
     const renameIdentity = (event: React.FocusEvent<HTMLInputElement>) => {
         event.preventDefault()
-        // Services.Identity.updateProfileInfo(persona.identifier, { nickname: event.currentTarget.innerText }).then(
-        //     () => {
-        //         enqueueSnackbar(geti18nString('dashboard_item_done'), { variant: 'success', autoHideDuration: 1000 })
-        //         setRename(false)
-        //     },
-        // )
+        Services.Identity.renamePersona(persona.identifier, event.currentTarget.value).then(() => {
+            enqueueSnackbar(geti18nString('dashboard_item_done'), { variant: 'success', autoHideDuration: 1000 })
+            setRename(false)
+        })
     }
 
     const [deletePersona, setDeletePersona] = useState(false)
