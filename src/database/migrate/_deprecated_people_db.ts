@@ -26,7 +26,7 @@
  */
 import { GroupIdentifier, Identifier, ProfileIdentifier } from '../type'
 import { DBSchema, openDB } from 'idb/with-async-ittr'
-import { JsonWebKeyToCryptoKey } from '../../utils/type-transform/CryptoKey-JsonWebKey'
+import { JsonWebKeyToCryptoKey, getKeyParameter } from '../../utils/type-transform/CryptoKey-JsonWebKey'
 import { OnlyRunInContext } from '@holoflows/kit/es'
 
 OnlyRunInContext('background', 'People db')
@@ -43,8 +43,8 @@ async function outDb({ identifier, publicKey, privateKey, ...rest }: PersonRecor
         ...rest,
         identifier: Identifier.fromString(identifier) as ProfileIdentifier,
     }
-    if (publicKey) result.publicKey = await JsonWebKeyToCryptoKey(publicKey)
-    if (privateKey) result.privateKey = await JsonWebKeyToCryptoKey(privateKey)
+    if (publicKey) result.publicKey = await JsonWebKeyToCryptoKey(publicKey, ...getKeyParameter('ecdh'))
+    if (privateKey) result.privateKey = await JsonWebKeyToCryptoKey(privateKey, ...getKeyParameter('ecdh'))
     return result
 }
 interface Base<db> {

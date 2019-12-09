@@ -27,7 +27,11 @@ import {
     PersonaRecord,
 } from '../../database/Persona/Persona.db'
 import { createDefaultFriendsGroup } from '../../database'
-import { CryptoKeyToJsonWebKey, JsonWebKeyToCryptoKey } from '../../utils/type-transform/CryptoKey-JsonWebKey'
+import {
+    CryptoKeyToJsonWebKey,
+    JsonWebKeyToCryptoKey,
+    getKeyParameter,
+} from '../../utils/type-transform/CryptoKey-JsonWebKey'
 import { deriveLocalKeyFromECDHKey } from '../../utils/mnemonic-code/localKeyGenerate'
 
 OnlyRunInContext('background', 'WelcomeService')
@@ -199,7 +203,11 @@ export async function restoreBackup(json: object, whoAmI?: ProfileIdentifier): P
     const myIdentitiesInBackup = Promise.all(
         data.whoami.map<Promise<PersonRecordPublicPrivate>>(async rec => {
             const profileIdentifier = mapID(rec)
-            if (rec.localKey) localKeyMap.set(profileIdentifier, (await JsonWebKeyToCryptoKey(rec.localKey))!)
+            if (rec.localKey)
+                localKeyMap.set(
+                    profileIdentifier,
+                    (await JsonWebKeyToCryptoKey(rec.localKey, ...getKeyParameter('aes')))!,
+                )
             return {
                 identifier: profileIdentifier,
                 groups: [],
@@ -230,3 +238,5 @@ export async function restoreBackup(json: object, whoAmI?: ProfileIdentifier): P
         async identifier => localKeyMap.get(identifier) ?? null,
     )
 }
+
+export { createPersonaByMnemonic } from '../../database'

@@ -12,7 +12,7 @@ import { addPerson } from './addPerson'
 import { MessageCenter } from '../../../utils/messages'
 import { getNetworkWorker } from '../../../social-network/worker'
 import { getSignablePayload, cryptoProviderTable } from './utils'
-import { JsonWebKeyToCryptoKey } from '../../../utils/type-transform/CryptoKey-JsonWebKey'
+import { JsonWebKeyToCryptoKey, getKeyParameter } from '../../../utils/type-transform/CryptoKey-JsonWebKey'
 import { PersonaRecord } from '../../../database/Persona/Persona.db'
 
 type Progress = {
@@ -114,8 +114,9 @@ export async function* decryptFromMessageWithProgress(
         // ? Get my public & private key.
         const mine = await queryPersonaRecord(whoAmI)
         if (!mine?.privateKey) throw new Error('My key not found')
-        const minePublic = await JsonWebKeyToCryptoKey(mine.publicKey)
-        const minePrivate = mine.privateKey ? await JsonWebKeyToCryptoKey(mine.privateKey) : undefined
+        const ecdhParams = getKeyParameter('ecdh')
+        const minePublic = await JsonWebKeyToCryptoKey(mine.publicKey, ...ecdhParams)
+        const minePrivate = mine.privateKey ? await JsonWebKeyToCryptoKey(mine.privateKey, ...ecdhParams) : undefined
         if (cachedPostResult) {
             if (!author.equals(whoAmI) && minePrivate && version !== -40) {
                 const { keyHash, postHash } = await Gun2.queryPostKeysOnGun2(
@@ -131,7 +132,7 @@ export async function* decryptFromMessageWithProgress(
                     ? await cryptoProvider.verify(
                           waitForVerifySignaturePayload,
                           signature || '',
-                          await JsonWebKeyToCryptoKey(byPerson.publicKey),
+                          await JsonWebKeyToCryptoKey(byPerson.publicKey, ...ecdhParams),
                       )
                     : false,
                 content: cachedPostResult,
@@ -241,7 +242,7 @@ export async function* decryptFromMessageWithProgress(
             const [contentArrayBuffer, postAESKey] = await cryptoProvider.decryptMessage1ToNByOther({
                 version,
                 AESKeyEncrypted: key,
-                authorsPublicKeyECDH: await JsonWebKeyToCryptoKey(byPerson.publicKey),
+                authorsPublicKeyECDH: await JsonWebKeyToCryptoKey(byPerson.publicKey, ...getKeyParameter('ecdh')),
                 encryptedContent: encryptedText,
                 privateKeyECDH: minePrivate!,
                 iv,
@@ -255,7 +256,7 @@ export async function* decryptFromMessageWithProgress(
                 const signatureVerifyResult = await cryptoProvider.verify(
                     waitForVerifySignaturePayload,
                     signature,
-                    await JsonWebKeyToCryptoKey(byPerson.publicKey),
+                    await JsonWebKeyToCryptoKey(byPerson.publicKey, ...getKeyParameter('ecdh')),
                 )
                 return { signatureVerifyResult, content, through: ['normal_decrypted'] }
             } catch {

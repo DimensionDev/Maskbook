@@ -11,20 +11,30 @@ type Algorithms =
     | DhImportKeyParams
     | AesKeyAlgorithm
 
+export function getKeyParameter(type: 'ecdh' | 'ecdsa' | 'aes'): [readonly Usages[], Readonly<Algorithms>] {
+    if (type === 'ecdh') return [['deriveKey', 'deriveBits'], { name: 'ECDH', namedCurve: 'K-256' }]
+    if (type === 'aes') return [['encrypt', 'decrypt'], { name: 'AES-GCM', length: 256 }]
+    if (type === 'ecdsa') return [['sign', 'verify'], { name: 'ecdsa', namedCurve: 'K-256' }]
+    throw new TypeError('Invalid key type')
+}
+
 /**
  * Get a (cached) CryptoKey from JsonWebKey
+ *
+ * JsonWebKeyToCryptoKey(key, ...getKeyParameter('aes'))
+ *
  * @param algorithm - use which algorithm to import this key, defaults to ECDH K-256
  * @param key - The JsonWebKey
  * @param usage - Usage
  */
 export async function JsonWebKeyToCryptoKey(
     key: JsonWebKey,
-    usage: Usages[] = ['deriveKey', 'deriveBits'],
-    algorithm: Algorithms = { name: 'ECDH', namedCurve: 'K-256' },
+    usage: readonly Usages[],
+    algorithm: Algorithms,
 ): Promise<CryptoKey> {
-    const _key = stableStringify(key) + usage.sort().join(',')
+    const _key = stableStringify(key) + [...usage].sort().join(',')
     if (CryptoKeyCache.has(_key)) return CryptoKeyCache.get(_key)!
-    const cryptoKey = await crypto.subtle.importKey('jwk', key, algorithm, true, usage)
+    const cryptoKey = await crypto.subtle.importKey('jwk', key, algorithm, true, usage as string[])
     CryptoKeyCache.set(_key, cryptoKey)
     JsonWebKeyCache.set(cryptoKey, key)
     return cryptoKey

@@ -20,7 +20,11 @@ import {
 } from './Persona.db'
 import { IdentifierMap } from '../IdentifierMap'
 import { getAvatarDataURL } from '../helpers/avatar'
-import { JsonWebKeyToCryptoKey, CryptoKeyToJsonWebKey } from '../../utils/type-transform/CryptoKey-JsonWebKey'
+import {
+    JsonWebKeyToCryptoKey,
+    CryptoKeyToJsonWebKey,
+    getKeyParameter,
+} from '../../utils/type-transform/CryptoKey-JsonWebKey'
 import { MessageCenter, UpdateEvent } from '../../utils/messages'
 import { generate_ECDH_256k1_KeyPair_ByMnemonicWord } from '../../utils/mnemonic-code'
 import { deriveLocalKeyFromECDHKey } from '../../utils/mnemonic-code/localKeyGenerate'
@@ -141,12 +145,12 @@ export function queryPersonaRecord(i: ProfileIdentifier | PersonaIdentifier): Pr
 
 export async function queryPublicKey(i: ProfileIdentifier | PersonaIdentifier): Promise<CryptoKey | undefined> {
     const jwk = (await queryPersonaRecord(i))?.publicKey
-    if (jwk) return JsonWebKeyToCryptoKey(jwk)
+    if (jwk) return JsonWebKeyToCryptoKey(jwk, ...getKeyParameter('ecdh'))
     return undefined
 }
 export async function queryPrivateKey(i: ProfileIdentifier | PersonaIdentifier): Promise<CryptoKey | undefined> {
     const jwk = (await queryPersonaRecord(i))?.privateKey
-    if (jwk) return JsonWebKeyToCryptoKey(jwk)
+    if (jwk) return JsonWebKeyToCryptoKey(jwk, ...getKeyParameter('ecdh'))
     return undefined
 }
 
@@ -186,7 +190,9 @@ export async function createPersonaByJsonWebKey(options: {
         privateKey: options.privateKey,
         nickname: options.nickname,
         mnemonic: options.mnemonic,
-        localKey: options.localKey ? await JsonWebKeyToCryptoKey(options.localKey) : undefined,
+        localKey: options.localKey
+            ? await JsonWebKeyToCryptoKey(options.localKey, ...getKeyParameter('aes'))
+            : undefined,
     })
     return identifier
 }
