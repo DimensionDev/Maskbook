@@ -49,6 +49,7 @@ export const useTwitterDialog = makeStyles((theme: Theme) => {
         },
         paper: {
             borderRadius: 14,
+            boxShadow: 'none',
         },
         header: {
             display: 'flex',
