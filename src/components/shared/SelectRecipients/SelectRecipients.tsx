@@ -44,7 +44,9 @@ export function SelectRecipientsUI<T extends Group | Profile = Group | Profile>(
     const [open, setOpen] = useState(false)
     const [search, setSearch] = useState('')
     const [selectedIdentifiers, setSelectedIdentifiers] = useState<string[]>(
-        selected.flatMap(x => (isGroup(x) ? x.members.map(y => y.toText()) : x.identifier.toText())),
+        Array.from(
+            new Set(selected.flatMap(x => (isGroup(x) ? x.members.map(y => y.toText()) : x.identifier.toText()))),
+        ),
     )
 
     useEffect(() => {
@@ -73,7 +75,6 @@ export function SelectRecipientsUI<T extends Group | Profile = Group | Profile>(
             onSetSelected(next)
         }
     }, [groupItems, onSetSelected, selected, selectedIdentifiers])
-
     return (
         <div className={classes.root}>
             <Box className={classes.selectArea} display="flex">
