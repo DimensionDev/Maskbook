@@ -15,8 +15,9 @@ import { useStylesExtends, or } from '../../custom-ui-helper'
 import { geti18nString } from '../../../utils/i18n'
 import CloseIcon from '@material-ui/icons/Close'
 import { ProfileInList } from './ProfileInList'
-import { Person, Group } from '../../../database'
+import { Person } from '../../../database'
 import { useCurrentIdentity } from '../../DataSource/useActivatedUI'
+import { PersonIdentifier } from '../../../database/type'
 
 const useStyles = makeStyles(theme => ({
     dialog: {},
@@ -51,9 +52,11 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
     const classes = useStylesExtends(useStyles(), props)
     const rootRef = useRef<HTMLDivElement>(null)
 
-    const myself = useCurrentIdentity()
+    const currentIdentity = useCurrentIdentity()
     const itemsForRender = props.ignoreMyself
-        ? props.items.filter(x => !x.identifier.equals(myself?.identifier!))
+        ? props.items.filter(
+              x => !x.identifier.equals(currentIdentity ? currentIdentity.identifier : PersonIdentifier.unknown),
+          )
         : props.items
 
     return (
