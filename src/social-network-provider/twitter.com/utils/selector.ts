@@ -27,6 +27,7 @@ export const bioCard = <SingleMode extends boolean = true>(singleMode = true) =>
         singleMode,
     )
 
+export const rootSelector = () => querySelector<E>('#react-root')
 export const mainSelector = () => querySelector<E>('[role="main"]')
 
 export const newPostButton = () => querySelector<E>('[data-testid="SideNav_NewTweet_Button"]')
