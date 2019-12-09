@@ -97,7 +97,7 @@ export function SelectRecipientsUI<T extends Group | Person = Group | Person>(pr
                             String(selectedIdentifiers.length),
                         ),
                         avatar: <AddIcon />,
-                        disabled: selectedIdentifiers.length === 0,
+                        disabled: profileItems.length === 0,
                         onClick() {
                             setOpen(true)
                         },
