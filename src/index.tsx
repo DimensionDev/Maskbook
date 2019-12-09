@@ -152,7 +152,7 @@ function Dashboard() {
             <Tabs
                 value={value}
                 variant="scrollable"
-                scrollButtons="desktop"
+                scrollButtons="on"
                 onChange={(e, v) => history.push(routers[v][1])}
                 indicatorColor="primary"
                 textColor="primary">
