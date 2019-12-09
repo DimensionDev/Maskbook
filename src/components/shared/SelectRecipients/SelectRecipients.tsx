@@ -48,6 +48,11 @@ export function SelectRecipientsUI<T extends Group | Person = Group | Person>(pr
     )
 
     useEffect(() => {
+        if (selected.length === 0) {
+            setSelectedIdentifiers([])
+        }
+    }, [selected])
+    useEffect(() => {
         const selectedIdentifiersSet = new Set(selectedIdentifiers)
         const selectedProfiles = selected.filter(x => isPerson(x) && selectedIdentifiersSet.has(x.identifier.toText()))
         const selectedGroups: Group[] = groupItems.filter(x => {
