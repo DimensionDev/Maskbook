@@ -21,11 +21,11 @@ const useStyles = makeStyles((theme: Theme) => {
 
 export function injectPostDialogAtTwitter() {
     if (location.hostname.indexOf(twitterUrl.hostIdentifier) === -1) return
-    renderPostDialogTo(postEditorInPopupSelector())
-    renderPostDialogTo(rootSelector())
+    renderPostDialogTo('popup', postEditorInPopupSelector())
+    renderPostDialogTo('timeline', rootSelector())
 }
 
-function renderPostDialogTo<T>(ls: LiveSelector<T, true>) {
+function renderPostDialogTo<T>(reason: 'timeline' | 'popup', ls: LiveSelector<T, true>) {
     const watcher = new MutationObserverWatcher(ls)
         .setDOMProxyOption({
             afterShadowRootInit: { mode: 'closed' },
@@ -35,10 +35,10 @@ function renderPostDialogTo<T>(ls: LiveSelector<T, true>) {
             subtree: true,
         })
 
-    renderInShadowRoot(<PostDialogAtTwitter />, watcher.firstDOMProxy.afterShadow)
+    renderInShadowRoot(<PostDialogAtTwitter reason={reason} />, watcher.firstDOMProxy.afterShadow)
 }
 
-function PostDialogAtTwitter() {
+function PostDialogAtTwitter(props: { reason: 'timeline' | 'popup' }) {
     return (
         <PostDialog
             classes={{
@@ -56,6 +56,7 @@ function PostDialogAtTwitter() {
                     },
                 },
             }}
+            {...props}
         />
     )
 }
