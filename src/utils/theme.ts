@@ -19,7 +19,7 @@ const baseTheme = (theme: 'dark' | 'light') =>
         palette: {
             primary: { main: '#1C68F3' },
             secondary: { main: orange[800] },
-            error: { main: red[500] },
+            error: { main: red[900] },
             type: theme,
         },
         typography: {

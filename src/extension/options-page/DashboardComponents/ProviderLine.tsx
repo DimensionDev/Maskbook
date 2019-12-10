@@ -15,11 +15,6 @@ const useStyles = makeStyles((theme: Theme) =>
             textAlign: 'left',
             width: '100%',
         },
-        controlBorder: {
-            paddingTop: theme.spacing(1),
-            paddingBottom: theme.spacing(1),
-            borderBottom: `1px solid ${theme.palette.divider}`,
-        },
         connected: {
             color: theme.palette.text.primary,
         },
@@ -33,16 +28,15 @@ interface ProviderLineProps {
     network: string
     connected?: boolean
     userId?: string
-    border?: boolean
     onConnect?: () => any
 }
 
 export default function ProviderLine(props: ProviderLineProps) {
-    const { network, connected, userId, border, onConnect } = props
+    const { network, connected, userId, onConnect } = props
     const classes = useStyles()
 
     return (
-        <FormControl className={classNames(classes.control, { [classes.controlBorder]: border })}>
+        <FormControl className={classes.control}>
             <Typography variant="overline">{network}</Typography>
             <Typography
                 variant="body1"
