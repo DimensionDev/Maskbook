@@ -6,8 +6,8 @@ export function getWelcomePageURL(query?: Query) {
         param.set('nickname', query.nickname || '')
         param.set('avatar', query.avatar || '')
         param.set('identifier', query.identifier.toText())
-        return getUrl(`index.html#/welcome?${param.toString()}`)
+        return getUrl(`index.html#/home?${param.toString()}`)
     } else {
-        return getUrl(`index.html#/welcome`)
+        return getUrl(`index.html#/initialize`)
     }
 }
