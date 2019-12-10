@@ -19,7 +19,7 @@ export function PersonaCreateDialog() {
 
     const createPersona = () => {
         Services.Identity.createPersonaByMnemonic(name, password).then(persona => {
-            history.replace(`created?identifier=${persona.toText()}`)
+            history.replace(`created?identifier=${encodeURIComponent(persona.toText())}`)
         })
     }
 

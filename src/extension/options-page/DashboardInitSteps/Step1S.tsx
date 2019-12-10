@@ -36,7 +36,7 @@ export default function InitStep1S() {
 
     const createPersonaAndNext = async () => {
         const persona = await Services.Identity.createPersonaByMnemonic(name, password)
-        history.replace(`2s?identifier=${persona.toText()}`)
+        history.replace(`2s?identifier=${encodeURIComponent(persona.toText())}`)
     }
 
     const actions = (
