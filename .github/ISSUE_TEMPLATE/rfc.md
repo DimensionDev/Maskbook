@@ -2,7 +2,7 @@
 name: RFC
 about: "Requests For Comments"
 title: "[RFC] "
-labels: RFC: Draft'
+labels: 'RFC: Draft'
 assignees: neruthes
 
 ---
