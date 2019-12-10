@@ -1,3 +1,4 @@
+import * as React from 'react'
 import Chip, { ChipProps } from '@material-ui/core/Chip'
 import { Group } from '../../../database'
 import DoneIcon from '@material-ui/icons/Done'
