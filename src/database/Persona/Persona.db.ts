@@ -272,7 +272,7 @@ export async function detachProfileDB(
     const linkedPersona = restorePrototype(profile.linkedPersona, ECKeyIdentifier.prototype)
     const ec_id = linkedPersona.toText()
     const persona = await t.objectStore('personas').get(ec_id)
-    persona?.linkedProfiles.delete(ec_id)
+    persona?.linkedProfiles.delete(identifier.toText())
 
     if (persona) {
         if (await safeDeletePersonaDB(linkedPersona, t as any)) {
