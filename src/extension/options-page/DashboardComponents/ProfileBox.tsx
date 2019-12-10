@@ -35,7 +35,6 @@ const useStyles = makeStyles((theme: Theme) =>
                 width: '5rem',
             },
             '& > .extra-item': {
-                visibility: 'hidden',
                 marginRight: '0',
                 flexShrink: 0,
                 marginLeft: 'auto',
@@ -47,6 +46,11 @@ const useStyles = makeStyles((theme: Theme) =>
                     visibility: 'visible',
                 },
             },
+        },
+        controlBorder: {
+            paddingTop: theme.spacing(1),
+            paddingBottom: theme.spacing(1),
+            borderBottom: `1px solid ${theme.palette.divider}`,
         },
     }),
 )
@@ -90,11 +94,11 @@ export default function ProfileBox({ persona, border }: Props) {
     return (
         <>
             {providers.map(provider => (
-                <Typography key={`profile-line-${provider.network}`} className={classes.line} component="div">
-                    <ProviderLine
-                        onConnect={() => setConnectProfile(provider)}
-                        {...provider}
-                        border={border ?? false}></ProviderLine>
+                <Typography
+                    key={`profile-line-${provider.network}`}
+                    className={classNames(classes.line, { [classes.controlBorder]: border ?? true })}
+                    component="div">
+                    <ProviderLine onConnect={() => setConnectProfile(provider)} {...provider}></ProviderLine>
                     {provider.connected && (
                         <div
                             className={classNames('extra-item', color.error)}

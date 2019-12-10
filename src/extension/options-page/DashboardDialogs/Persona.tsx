@@ -154,12 +154,11 @@ export function PersonaBackupDialog(props: PersonaBackupDialogProps) {
         <>
             <Typography variant="body2">You can backup the persona with either way below.</Typography>
             <BackupRestoreTab margin={state[0] === 0 ? true : 'top'} {...tabProps}></BackupRestoreTab>
-            {state[0] === 0 && (
-                <Typography variant="body2">
-                    Keep the 12 words above carefully in a safe place. You will need them to restore the private key of
-                    this persona.
-                </Typography>
-            )}
+            <Typography variant="body2">
+                {state[0] === 0
+                    ? 'Keep the 12 words above carefully in a safe place. You will need them to restore the private key of this persona.'
+                    : 'Keep the text above carefully in a safe place. You will need them to restore the private key of this persona.'}
+            </Typography>
         </>
     )
 
