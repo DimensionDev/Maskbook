@@ -36,7 +36,6 @@ import {
 } from './DashboardDialogs/Persona'
 import { ProfileConnectStartDialog, ProfileConnectDialog } from './DashboardDialogs/Profile'
 import ActionButton from '../../components/Dashboard/ActionButton'
-import { ListItemProps } from '@material-ui/core/ListItem'
 import FooterLine from './DashboardComponents/FooterLine'
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -104,8 +103,6 @@ export default function DashboardHomePage() {
         <>
             <DialogRouter path="/database/backup" children={<DatabaseBackupDialog />} />
             <DialogRouter path="/database/restore" children={<DatabaseRestoreDialog />} />
-            <DialogRouter path="/database/success" children={<DatabaseRestoreSuccessDialog />} />
-            <DialogRouter path="/database/failed" children={<DatabaseRestoreFailedDialog />} />
             <DialogRouter path="/persona/create" children={<PersonaCreateDialog />} />
             <DialogRouter path="/persona/created" children={<PersonaCreatedDialog />} />
             <DialogRouter path="/persona/backup" children={<PersonaBackupDialog />} />
