@@ -32,13 +32,13 @@ const useStyles = makeStyles((theme: Theme) =>
 interface ProviderLineProps {
     network: string
     connected?: boolean
-    id?: string
+    userId?: string
     border?: boolean
     onConnect?: () => any
 }
 
 export default function ProviderLine(props: ProviderLineProps) {
-    const { network, connected, id, border, onConnect } = props
+    const { network, connected, userId, border, onConnect } = props
     const classes = useStyles()
 
     return (
@@ -53,7 +53,7 @@ export default function ProviderLine(props: ProviderLineProps) {
                     { [classes.connected]: connected },
                     { [classes.pointer]: !connected },
                 )}>
-                {connected ? `Connected: ${id}` : `Connect ${network}`}
+                {connected ? `Connected: @${userId}` : `Connect ${network}`}
             </Typography>
         </FormControl>
     )

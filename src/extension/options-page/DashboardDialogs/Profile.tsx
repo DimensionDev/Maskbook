@@ -7,6 +7,9 @@ import { Link, useHistory } from 'react-router-dom'
 import ActionButton from '../../../components/Dashboard/ActionButton'
 
 import classNames from 'classnames'
+import { useColorProvider } from '../../../utils/theme'
+import { ProfileIdentifier } from '../../../database/type'
+import Services from '../../service'
 
 const useStyles = makeStyles(theme =>
     createStyles({
@@ -148,4 +151,35 @@ export function ProfileConnectDialog() {
     )
 
     return <DialogContentItem title="Create Persona" content={content} actionsAlign="center"></DialogContentItem>
+}
+interface ProfileDisconnectDialogProps {
+    onDecline(): void
+    onConfirm(): void
+    nickname?: string
+    identifier: ProfileIdentifier
+}
+export function ProfileDisconnectDialog(props: ProfileDisconnectDialogProps) {
+    const { onDecline, onConfirm, nickname, identifier } = props
+    const color = useColorProvider()
+
+    const deletePersona = () => {
+        Services.Identity.detachProfile(identifier).then(onConfirm)
+    }
+
+    return (
+        <DialogContentItem
+            simplified
+            title="Disconnect Profile"
+            content={`Do you really want to disconnect @${identifier.userId} on ${identifier.network} from persona "${nickname}"? This operation cannot be reverted.`}
+            actions={
+                <>
+                    <ActionButton variant="outlined" color="default" onClick={onDecline}>
+                        Cancel
+                    </ActionButton>
+                    <ActionButton classes={{ root: color.errorButton }} onClick={deletePersona}>
+                        Ok
+                    </ActionButton>
+                </>
+            }></DialogContentItem>
+    )
 }

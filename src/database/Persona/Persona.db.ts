@@ -286,6 +286,7 @@ export async function detachProfileDB(
     // update profile
     delete profile.linkedPersona
     await t.objectStore('profiles').put(profile)
+    MessageCenter.emit('personaUpdated', undefined)
 }
 
 /**
