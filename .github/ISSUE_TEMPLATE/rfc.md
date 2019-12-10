@@ -1,3 +1,12 @@
+---
+name: RFC
+about: "Requests For Comments"
+title: "[RFC] "
+labels: RFC: Draft'
+assignees: neruthes
+
+---
+
 ## Metadata
 
 Field | Value
