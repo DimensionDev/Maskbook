@@ -10,28 +10,35 @@ import { ECKeyIdentifier } from '../../../database/type'
 import { Persona } from '../../../database'
 import { useAsync } from '../../../utils/components/AsyncComponent'
 import ProfileBox from '../DashboardComponents/ProfileBox'
+import { useMyPersonas } from '../../../components/DataSource/useActivatedUI'
 
 const header = 'Step 2: Connect a social network profile'
 const subheader = 'Now we support Facebook and Twitter.'
 
-const actions = (
-    <>
-        <ActionButton variant="outlined" color="default" component={Link} to="1s">
-            Back
-        </ActionButton>
-        <ActionButton variant="contained" color="primary" disabled component={Link} to="start">
-            Finish
-        </ActionButton>
-    </>
-)
-
 export default function InitStep2S() {
     const { identifier } = useQueryParams(['identifier'])
+    const personas = useMyPersonas()
     const [persona, setPersona] = useState<Persona | null>(null)
     useAsync(async () => {
         if (identifier)
             Services.Identity.queryPersona(ECKeyIdentifier.fromString(identifier!)! as ECKeyIdentifier).then(setPersona)
-    }, [identifier])
+    }, [identifier, personas])
+
+    const actions = (
+        <>
+            <ActionButton variant="outlined" color="default" component={Link} to="1s">
+                Back
+            </ActionButton>
+            <ActionButton
+                variant="contained"
+                color="primary"
+                disabled={persona?.linkedProfiles.size === 0}
+                component={Link}
+                to="../">
+                Finish
+            </ActionButton>
+        </>
+    )
 
     const content = (
         <div style={{ alignSelf: 'stretch', width: '100%' }}>

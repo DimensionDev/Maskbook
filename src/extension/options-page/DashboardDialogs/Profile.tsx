@@ -74,11 +74,12 @@ function ProfileConnectTestFailedDialog(props: ProfileConnectTestFailedDialog) {
 interface ProfileConnectStartDialogProps {
     nickname?: string
     network?: string
-    confirmed(name: string): void
+    onConfirm(name: string): void
+    onDecline(): void
 }
 
 export function ProfileConnectStartDialog(props: ProfileConnectStartDialogProps) {
-    const { nickname, network, confirmed } = props
+    const { nickname, network, onConfirm, onDecline } = props
     const [name, setName] = useState('')
 
     const content = (
@@ -95,11 +96,12 @@ export function ProfileConnectStartDialog(props: ProfileConnectStartDialogProps)
 
     return (
         <DialogContentItem
+            onExit={onDecline}
             title={`Connect Profile for "${nickname}"`}
             content={content}
             actionsAlign="center"
             actions={
-                <ActionButton variant="contained" color="primary" onClick={() => confirmed(name)}>
+                <ActionButton variant="contained" color="primary" onClick={() => onConfirm(name)}>
                     Next
                 </ActionButton>
             }></DialogContentItem>
@@ -162,7 +164,7 @@ export function ProfileConnectDialog(props: ProfileConnectDialogProps) {
                     className={classNames(classes.button, classes.buttonLarge)}
                     variant="outlined"
                     color="primary">
-                    Go to twitter.com
+                    Go to {identifier.network}
                 </ActionButton>
             </section>
             <section>
@@ -192,7 +194,7 @@ export function ProfileConnectDialog(props: ProfileConnectDialogProps) {
         </>
     )
 
-    return <DialogContentItem title="Connect Profile" content={content}></DialogContentItem>
+    return <DialogContentItem onExit={onClose} title="Connect Profile" content={content}></DialogContentItem>
 }
 interface ProfileDisconnectDialogProps {
     onDecline(): void
@@ -210,6 +212,7 @@ export function ProfileDisconnectDialog(props: ProfileDisconnectDialogProps) {
 
     return (
         <DialogContentItem
+            onExit={onDecline}
             simplified
             title="Disconnect Profile"
             content={`Do you really want to disconnect @${identifier.userId} on ${identifier.network} from persona "${nickname}"? This operation cannot be reverted.`}

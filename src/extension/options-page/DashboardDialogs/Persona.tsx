@@ -5,7 +5,7 @@ import { TextField, Typography, InputBase, makeStyles } from '@material-ui/core'
 import { Link, useHistory } from 'react-router-dom'
 import BackupRestoreTab, { BackupRestoreTabProps } from '../DashboardComponents/BackupRestoreTab'
 import ActionButton from '../../../components/Dashboard/ActionButton'
-import { ECKeyIdentifier } from '../../../database/type'
+import { ECKeyIdentifier, ProfileIdentifier } from '../../../database/type'
 import Services from '../../service'
 import { Persona } from '../../../database'
 import useQueryParams from '../../../utils/hooks/useQueryParams'
@@ -84,16 +84,16 @@ export function PersonaCreatedDialog() {
     )
 }
 interface PersonaDeleteDialogProps {
-    declined(): void
-    confirmed(): void
+    onDecline(): void
+    onConfirm(): void
     persona: Persona
 }
 export function PersonaDeleteDialog(props: PersonaDeleteDialogProps) {
-    const { confirmed, declined, persona } = props
+    const { onConfirm, onDecline, persona } = props
     const color = useColorProvider()
 
     const deletePersona = () => {
-        Services.Identity.deletePersona(persona.identifier, 'delete even with private').then(confirmed)
+        Services.Identity.deletePersona(persona.identifier, 'delete even with private').then(onConfirm)
     }
 
     return (
@@ -103,7 +103,7 @@ export function PersonaDeleteDialog(props: PersonaDeleteDialogProps) {
             content={`Do you really want to delete persona "${persona?.nickname}"? This operation cannot be reverted.`}
             actions={
                 <>
-                    <ActionButton variant="outlined" color="default" onClick={declined}>
+                    <ActionButton variant="outlined" color="default" onClick={onDecline}>
                         Cancel
                     </ActionButton>
                     <ActionButton classes={{ root: color.errorButton }} onClick={deletePersona}>
@@ -114,10 +114,15 @@ export function PersonaDeleteDialog(props: PersonaDeleteDialogProps) {
     )
 }
 
-export function PersonaBackupDialog() {
-    const mnemonicWordValue = 'the natural law of privacy is now enforced by tessercube and maskbook'
-    const base64Value =
-        'WFceyl2VOyvyeaqkTodUI1XulcXQkRVQvh3U65vvMUuRq2ln9ozlECaZYLkKq9HHWKucm9sc2e52y32I1FoikgstIsV1l/S5VwbvELkchC5Mh5eAbcSGCRotC9TfIBUlGwwwnaMZ8tNgo0jBxPgOeU2ikdoIrgkrIiMXYUe6nz/AmvbYDYBjuqNnArVpxILOuJ6ytKUZGaadrI3sct+rFHqK20YFAyjuZrBgSIkNrBcx5epysj2dKpnRd4zyLoRlJQ'
+interface PersonaBackupDialogProps {
+    onClose(): void
+    persona: Persona
+}
+
+export function PersonaBackupDialog(props: PersonaBackupDialogProps) {
+    const { onClose, persona } = props
+    const mnemonicWordValue = persona.mnemonic?.words ?? 'not available'
+    const base64Value = 'not available'
 
     const state = useState(0)
     const tabProps: BackupRestoreTabProps = {
@@ -158,7 +163,7 @@ export function PersonaBackupDialog() {
         </>
     )
 
-    return <DialogContentItem title="Backup Persona" content={content}></DialogContentItem>
+    return <DialogContentItem onExit={onClose} title="Backup Persona" content={content}></DialogContentItem>
 }
 
 const useImportDialogStyles = makeStyles({
@@ -168,11 +173,23 @@ const useImportDialogStyles = makeStyles({
 })
 
 export function PersonaImportDialog() {
-    const mnemonicWordValue = 'the natural law of privacy is now enforced by tessercube and maskbook'
-    const base64Value =
-        'WFceyl2VOyvyeaqkTodUI1XulcXQkRVQvh3U65vvMUuRq2ln9ozlECaZYLkKq9HHWKucm9sc2e52y32I1FoikgstIsV1l/S5VwbvELkchC5Mh5eAbcSGCRotC9TfIBUlGwwwnaMZ8tNgo0jBxPgOeU2ikdoIrgkrIiMXYUe6nz/AmvbYDYBjuqNnArVpxILOuJ6ytKUZGaadrI3sct+rFHqK20YFAyjuZrBgSIkNrBcx5epysj2dKpnRd4zyLoRlJQ'
+    const [name, setName] = useState('')
+    const [mnemonicWordValue, setMnemonicWordValue] = useState('')
+    const [password, setPassword] = useState('')
+    const base64Value = 'not available'
 
     const classes = useImportDialogStyles()
+
+    const history = useHistory()
+
+    const importPersona = () => {
+        // FIXME:
+        alert('dummy method')
+        // const persona = ProfileIdentifier.fromString(name) as ProfileIdentifier | null
+        // Services.Welcome.restoreNewIdentityWithMnemonicWord(persona, mnemonicWordValue, password).then(() =>
+        //     history.push('../'),
+        // )
+    }
 
     const state = useState(0)
     const tabProps: BackupRestoreTabProps = {
@@ -181,16 +198,26 @@ export function PersonaImportDialog() {
                 label: 'MNEMONIC WORDS',
                 component: (
                     <>
-                        <TextField className={classes.input} required label="Name" margin="dense" />
+                        <TextField
+                            className={classes.input}
+                            onChange={e => setName(e.target.value)}
+                            value={name}
+                            required
+                            label="Name"
+                            margin="dense"
+                        />
                         <TextField
                             className={classes.input}
                             required
-                            defaultValue={mnemonicWordValue}
+                            value={mnemonicWordValue}
+                            onChange={e => setMnemonicWordValue(e.target.value)}
                             label="Mnemonic Words"
                             margin="dense"
                         />
                         <TextField
                             className={classes.input}
+                            onChange={e => setPassword(e.target.value)}
+                            value={password}
                             label="Password"
                             placeholder="Leave empty if not set"
                             margin="dense"
@@ -222,7 +249,7 @@ export function PersonaImportDialog() {
             title="Import Persona"
             content={content}
             actions={
-                <ActionButton variant="contained" color="primary" component={Link} to="../">
+                <ActionButton variant="contained" color="primary" onClick={importPersona}>
                     Import
                 </ActionButton>
             }></DialogContentItem>
