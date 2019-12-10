@@ -2,7 +2,14 @@ import * as React from 'react'
 import { Box, Card, Typography, Button } from '@material-ui/core'
 import { geti18nString } from '../../utils/i18n'
 import { makeStyles } from '@material-ui/styles'
-import { useStylesExtends } from '../custom-ui-helper'
+import { useStylesExtends, or } from '../custom-ui-helper'
+import { useMyIdentities } from '../DataSource/useActivatedUI'
+import { Profile } from '../../database'
+import { ChooseIdentity, ChooseIdentityProps } from '../shared/ChooseIdentity'
+import { getActivatedUI } from '../../social-network/ui'
+import { useAsync } from '../../utils/components/AsyncComponent'
+import { BannerProps } from '../Welcomes/Banner'
+import { NotSetupYetPrompt } from '../shared/NotSetupYetPrompt'
 
 const useStyles = makeStyles({
     root: {},
@@ -39,11 +46,28 @@ export const PostDialogHintUI = React.memo(function PostDialogHintUI(props: Post
     )
 })
 
-export interface PostDialogHintProps extends Partial<PostDialogHintUIProps> {}
+export interface PostDialogHintProps extends Partial<PostDialogHintUIProps> {
+    identities?: Profile[]
+    ChooseIdentityProps?: Partial<ChooseIdentityProps>
+    NotSetupYetPromptProps?: Partial<BannerProps>
+}
 export function PostDialogHint(props: PostDialogHintProps) {
-    return (
-        <>
-            <PostDialogHintUI onHintButtonClicked={() => {}} {...props} />
-        </>
-    )
+    const identities = or(props.identities, useMyIdentities())
+    const ui = <PostDialogHintUI onHintButtonClicked={() => {}} {...props} />
+
+    const [showWelcome, setShowWelcome] = React.useState(false)
+    useAsync(getActivatedUI().shouldDisplayWelcome, []).then(x => setShowWelcome(x))
+    if (showWelcome || identities.length === 0) {
+        return <NotSetupYetPrompt {...props.NotSetupYetPromptProps} />
+    }
+
+    if (identities.length > 1) {
+        return (
+            <>
+                <ChooseIdentity {...props.ChooseIdentityProps} />
+                {ui}
+            </>
+        )
+    }
+    return ui
 }
