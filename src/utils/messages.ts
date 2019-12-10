@@ -7,6 +7,12 @@ export interface UpdateEvent<Data> {
     readonly reason: 'update' | 'delete' | 'new'
     readonly of: Data
 }
+
+export interface CompositionEvent {
+    readonly reason: 'timeline' | 'popup'
+    readonly open: boolean
+}
+
 interface MaskbookMessages {
     /**
      * Used to polyfill window.close in iOS and Android.
@@ -23,15 +29,15 @@ interface MaskbookMessages {
      */
     settingsUpdated: string
     /**
-     * emit when my identities created
+     * emit when my identities created.
      */
     identityCreated: undefined
     /**
-     * emit when my identities updated
+     * emit when my identities updated.
      */
     identityUpdated: undefined
     /**
-     * emit people changed in the database
+     * emit people changed in the database.
      */
     profilesChanged: readonly UpdateEvent<Profile>[]
     groupsChanged: readonly UpdateEvent<Group>[]
@@ -39,9 +45,10 @@ interface MaskbookMessages {
         group: GroupIdentifier
         newMembers: ProfileIdentifier[]
     }
-    startCompose: undefined
-    finishCompose: undefined
-    cancelCompose: undefined
+    /**
+     * emit when compose status updated.
+     */
+    compositionUpdated: CompositionEvent
 }
 export const MessageCenter = new MC<MaskbookMessages>('maskbook-events')
 MessageCenter.serialization = Serialization

@@ -13,7 +13,7 @@ import {
 } from '@material-ui/core'
 import CloseIcon from '@material-ui/icons/Close'
 import { geti18nString } from '../../utils/i18n'
-import { MessageCenter } from '../../utils/messages'
+import { MessageCenter, CompositionEvent } from '../../utils/messages'
 import { useCapturedInput } from '../../utils/hooks/useCapturedEvents'
 import { useStylesExtends, or } from '../custom-ui-helper'
 import { Profile, Group } from '../../database'
@@ -56,10 +56,10 @@ export interface PostDialogUIProps extends withClasses<KeysInferFromUseStyles<ty
     currentIdentity: Profile | null
     postBoxText: string
     postBoxButtonDisabled: boolean
-    onPostTextChange: (nextString: string) => void
+    onPostTextChanged: (nextString: string) => void
     onFinishButtonClicked: () => void
     onCloseButtonClicked: () => void
-    onShareTargetChanged: SelectRecipientsUIProps['onSetSelected']
+    onSetSelected: SelectRecipientsUIProps['onSetSelected']
     ChooseIdentityProps?: Partial<ChooseIdentityProps>
     SelectRecipientsUIProps?: Partial<SelectRecipientsUIProps>
 }
@@ -67,7 +67,7 @@ export function PostDialogUI(props: PostDialogUIProps) {
     const classes = useStylesExtends(useStyles(), props)
     const rootRef = useRef<HTMLDivElement>(null)
     const inputRef = useRef<HTMLInputElement>(null)
-    useCapturedInput(inputRef, props.onPostTextChange, [props.open])
+    useCapturedInput(inputRef, props.onPostTextChanged, [props.open])
     return (
         <div ref={rootRef}>
             <ResponsiveDialog
@@ -117,7 +117,7 @@ export function PostDialogUI(props: PostDialogUIProps) {
                     <SelectRecipientsUI
                         items={props.availableShareTarget}
                         selected={props.currentShareTarget}
-                        onSetSelected={props.onShareTargetChanged}
+                        onSetSelected={props.onSetSelected}
                         {...props.SelectRecipientsUIProps}
                     />
                 </DialogContent>
@@ -138,6 +138,7 @@ export function PostDialogUI(props: PostDialogUIProps) {
 }
 
 export interface PostDialogProps extends Partial<PostDialogUIProps> {
+    reason?: 'timeline' | 'popup'
     identities?: Profile[]
     onRequestPost?: (target: (Profile | Group)[], text: string) => void
     onRequestReset?: () => void
@@ -187,24 +188,32 @@ export function PostDialog(props: PostDialogProps) {
         useCallback(() => {
             setOpen(false)
             setPostBoxText('')
-            onShareTargetChanged([])
+            setCurrentShareTarget([])
         }, []),
     )
 
     const [open, setOpen] = useState(false)
-    const onStartCompose = useCallback(() => setOpen(true), [])
-    const onCancelCompose = useCallback(() => setOpen(false), [])
     useEffect(() => {
-        MessageCenter.on('startCompose', onStartCompose)
-        MessageCenter.on('cancelCompose', onCancelCompose)
-        return () => {
-            MessageCenter.off('startCompose', onStartCompose)
-            MessageCenter.off('cancelCompose', onCancelCompose)
+        const onChange = ({ reason, open }: CompositionEvent) => {
+            if (reason === props.reason) {
+                setOpen(open)
+            }
         }
-    }, [onStartCompose, onCancelCompose])
+        MessageCenter.on('compositionUpdated', onChange)
+        return () => {
+            MessageCenter.off('compositionUpdated', onChange)
+        }
+    }, [props.reason])
 
     const [postBoxText, setPostBoxText] = useState('')
-    const [currentShareTarget, onShareTargetChanged] = useState(availableShareTarget)
+    const [currentShareTarget, setCurrentShareTarget] = useState(availableShareTarget)
+    const onFinishButtonClicked = useCallback(() => {
+        onRequestPost(currentShareTarget, postBoxText)
+        onRequestReset()
+    }, [currentShareTarget, onRequestPost, onRequestReset, postBoxText])
+    const onCloseButtonClicked = useCallback(() => {
+        setOpen(false)
+    }, [])
 
     const ui = (
         <PostDialogUI
@@ -214,13 +223,10 @@ export function PostDialog(props: PostDialogProps) {
             currentShareTarget={currentShareTarget}
             postBoxText={postBoxText}
             postBoxButtonDisabled={!(currentShareTarget.length && postBoxText)}
-            onPostTextChange={setPostBoxText}
-            onFinishButtonClicked={() => {
-                onRequestPost(currentShareTarget, postBoxText)
-                onRequestReset()
-            }}
-            onCloseButtonClicked={() => setOpen(false)}
-            onShareTargetChanged={onShareTargetChanged}
+            onSetSelected={setCurrentShareTarget}
+            onPostTextChanged={setPostBoxText}
+            onFinishButtonClicked={onFinishButtonClicked}
+            onCloseButtonClicked={onCloseButtonClicked}
             {...props}
         />
     )
@@ -233,4 +239,8 @@ export function PostDialog(props: PostDialogProps) {
             </>
         )
     return ui
+}
+
+PostDialog.defaultProps = {
+    reason: 'timeline',
 }
