@@ -31,8 +31,7 @@ import {
     getKeyParameter,
 } from '../../utils/type-transform/CryptoKey-JsonWebKey'
 import { deriveLocalKeyFromECDHKey } from '../../utils/mnemonic-code/localKeyGenerate'
-import { BackupJSONFileLatest } from '../../utils/type-transform/BackupFormat/JSON/latest'
-import { UpgradeBackupJSONFile } from '../../utils/type-transform/BackupFile'
+import { BackupJSONFileLatest, UpgradeBackupJSONFile } from '../../utils/type-transform/BackupFormat/JSON/latest'
 
 OnlyRunInContext('background', 'WelcomeService')
 

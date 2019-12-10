@@ -31,9 +31,8 @@ import Navigation from './Navigation/Navigation'
 import QRScanner from './QRScanner'
 import { hasWKWebkitRPCHandlers, iOSHost } from '../../utils/iOS-RPC'
 import { useAsync } from '../../utils/components/AsyncComponent'
-import { BackupJSONFileLatest } from '../../utils/type-transform/BackupFormat/JSON/latest'
+import { BackupJSONFileLatest, UpgradeBackupJSONFile } from '../../utils/type-transform/BackupFormat/JSON/latest'
 import { decompressBackupFile } from '../../utils/type-transform/BackupFileShortRepresentation'
-import { UpgradeBackupJSONFile } from '../../utils/type-transform/BackupFile'
 
 const RestoreBox = styled('div')(({ theme }: { theme: Theme }) => ({
     color: theme.palette.text.hint,
