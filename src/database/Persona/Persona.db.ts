@@ -299,9 +299,15 @@ export async function attachProfileDB(
     t?: IDBPTransaction<PersonaDB, ('profiles' | 'personas')[]>,
 ): Promise<void> {
     t = t || (await db()).transaction(['profiles', 'personas'], 'readwrite')
-    const profile = await queryProfileDB(identifier, t as any)
+    const profile =
+        (await queryProfileDB(identifier, t as any)) ||
+        (await createProfileDB(
+            { identifier, createdAt: new Date(), updatedAt: new Date() },
+            t as IDBPTransaction<PersonaDB, any>,
+        )) ||
+        (await queryProfileDB(identifier, t as any))
     const persona = await queryPersonaDB(attachTo, t as any)
-    if (!profile || !persona) return
+    if (!persona || !profile) return
 
     if (profile.linkedPersona !== undefined && profile.linkedPersona.equals(attachTo)) {
         await detachProfileDB(identifier, t)
@@ -312,6 +318,7 @@ export async function attachProfileDB(
 
     await t.objectStore('profiles').put(profileToDB(profile))
     await t.objectStore('personas').put(personaRecordToDB(persona))
+    MessageCenter.emit('personaUpdated', undefined)
 }
 
 /**
