@@ -90,7 +90,7 @@ export default function ProfileBox({ persona, border }: Props) {
     return (
         <>
             {providers.map(provider => (
-                <Typography className={classes.line} component="div">
+                <Typography key={`profile-line-${provider.network}`} className={classes.line} component="div">
                     <ProviderLine
                         onConnect={() => setConnectProfile(provider)}
                         {...provider}
@@ -111,7 +111,8 @@ export default function ProfileBox({ persona, border }: Props) {
                         <ProfileConnectStartDialog
                             nickname={persona?.nickname}
                             network={connectProfile.network}
-                            confirmed={doConnect}
+                            onConfirm={doConnect}
+                            onDecline={dismissConnect}
                         />
                     }></DialogRouter>
             )}

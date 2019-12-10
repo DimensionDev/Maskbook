@@ -90,6 +90,7 @@ export default function InitStep1R() {
                 p: 0,
             },
             {
+                // FIXME:
                 label: 'TEXT',
                 component: (
                     <InputBase

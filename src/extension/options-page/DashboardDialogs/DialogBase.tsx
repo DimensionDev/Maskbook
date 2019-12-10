@@ -61,7 +61,7 @@ interface DialogContentItemProps {
     actions?: JSX.Element | null
     actionsAlign?: 'center'
     simplified?: boolean
-    onExit?: string | (() => undefined)
+    onExit?: string | (() => void)
 }
 
 export function DialogContentItem(props: DialogContentItemProps) {

@@ -120,8 +120,11 @@ export async function renamePersona(identifier: PersonaIdentifier, nickname: str
     return updatePersonaDB({ identifier, nickname })
 }
 
-export async function updateOrCreateProfile(rec: Pick<Profile, 'identifier'> & Partial<ProfileRecord>) {
-    const t = (await PersonaDBAccess()).transaction('profiles', 'readwrite')
+export async function updateOrCreateProfile(
+    rec: Pick<Profile, 'identifier'> & Partial<ProfileRecord>,
+    t?: IDBPTransaction<PersonaDB, ['profiles']>,
+) {
+    t = t || (await PersonaDBAccess()).transaction('profiles', 'readwrite')
     const r = await queryProfileDB(rec.identifier, t)
     const e: ProfileRecord = {
         createdAt: new Date(),

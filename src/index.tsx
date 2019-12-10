@@ -145,7 +145,12 @@ function Dashboard() {
                 textColor="primary">
                 className={classes.tabBar}
                 {routers.map(tab => (
-                    <Tab className={classes.tabItem} classes={{ selected: classes.tabSelected }} label={tab[0]} />
+                    <Tab
+                        key={`dashboard-tab-${tab[0]}`}
+                        className={classes.tabItem}
+                        classes={{ selected: classes.tabSelected }}
+                        label={tab[0]}
+                    />
                 ))}
             </Tabs>
         </AppBar>
