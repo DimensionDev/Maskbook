@@ -3,9 +3,13 @@ import StepBase from './StepBase'
 import { Typography, styled, Theme, makeStyles, createStyles, InputBase } from '@material-ui/core'
 import { geti18nString } from '../../../utils/i18n'
 import { useDragAndDrop } from '../../../utils/hooks/useDragAndDrop'
-import { Link } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 import BackupRestoreTab, { BackupRestoreTabProps } from '../DashboardComponents/BackupRestoreTab'
 import ActionButton from '../../../components/Dashboard/ActionButton'
+import { decompressBackupFile } from '../../../utils/type-transform/BackupFileShortRepresentation'
+import Services from '../../service'
+import { DialogRouter } from '../DashboardDialogs/DialogBase'
+import { DatabaseRestoreSuccessDialog, DatabaseRestoreFailedDialog } from '../DashboardDialogs/Database'
 
 const header = 'Restore Database'
 
@@ -56,20 +60,26 @@ const RestoreBox = styled('div')(({ theme }: { theme: Theme }) => ({
 }))
 
 export default function InitStep1R() {
-    const [name, setName] = useState('')
     const ref = React.useRef<HTMLInputElement>(null)
     const classes = useStyles()
-    const [fileContent, setFileContent] = React.useState('')
+    const [textValue, setTextValue] = React.useState('')
+    const [restoreState, setRestoreState] = React.useState<'success' | Error | null>(null)
+    const history = useHistory()
     const { dragEvents, fileReceiver, fileRef, dragStatus } = useDragAndDrop(file => {
         const fr = new FileReader()
         fr.readAsText(file)
         fr.addEventListener('loadend', async () => {
-            setFileContent(fr.result as string)
+            const str = fr.result as string
+            try {
+                const json = decompressBackupFile(str)
+                await Services.Welcome.restoreBackup(json)
+                setRestoreState('success')
+            } catch (e) {
+                console.error(e)
+                setRestoreState(e)
+            }
         })
     })
-
-    const textValue =
-        'WFceyl2VOyvyeaqkTodUI1XulcXQkRVQvh3U65vvMUuRq2ln9ozlECaZYLkKq9HHWKucm9sc2e52y32I1FoikgstIsV1l/S5VwbvELkchC5Mh5eAbcSGCRotC9TfIBUlGwwwnaMZ8tNgo0jBxPgOeU2ikdoIrgkrIiMXYUe6nz/AmvbYDYBjuqNnArVpxILOuJ6ytKUZGaadrI3sct+rFHqK20YFAyjuZrBgSIkNrBcx5epysj2dKpnRd4zyLoRlJQ'
 
     const state = useState(0)
     const tabProps: BackupRestoreTabProps = {
@@ -83,10 +93,10 @@ export default function InitStep1R() {
                 label: 'TEXT',
                 component: (
                     <InputBase
-                        style={{ width: '100%', minHeight: '100px' }}
+                        style={{ width: '100%', height: '100%', display: 'flex', overflow: 'auto' }}
                         multiline
-                        defaultValue={textValue}
-                        readOnly></InputBase>
+                        value={textValue}
+                        onChange={e => setTextValue(e.target.value)}></InputBase>
                 ),
             },
         ],
@@ -95,7 +105,7 @@ export default function InitStep1R() {
 
     const content = (
         <div style={{ alignSelf: 'stretch', textAlign: 'center', width: '100%' }}>
-            <BackupRestoreTab {...tabProps}></BackupRestoreTab>
+            <BackupRestoreTab height={200} {...tabProps}></BackupRestoreTab>
         </div>
     )
 
@@ -126,6 +136,20 @@ export default function InitStep1R() {
                         </>
                     )}
                 </RestoreBox>
+
+                {restoreState === 'success' && (
+                    <DialogRouter
+                        onExit="/home"
+                        children={<DatabaseRestoreSuccessDialog onConfirm={() => history.replace('/home')} />}
+                    />
+                )}
+                {restoreState && restoreState !== 'success' && (
+                    <DialogRouter
+                        children={
+                            <DatabaseRestoreFailedDialog onConfirm={() => setRestoreState(null)} error={restoreState} />
+                        }
+                    />
+                )}
             </>
         )
     }

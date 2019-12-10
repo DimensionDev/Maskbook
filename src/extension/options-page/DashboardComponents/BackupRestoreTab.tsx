@@ -25,11 +25,13 @@ const useStyles = makeStyles((theme: Theme) =>
 )
 
 const TabPanel = (props: any) => {
-    const { children, value, index, p, ...other } = props
+    const { children, value, index, p, height, ...other } = props
 
     return (
         <Typography component="div" role="tabpanel" hidden={value !== index} {...other}>
-            <Box p={p ?? 3}>{children}</Box>
+            <Box {...(height ? { style: { height } } : {})} p={p ?? 3}>
+                {children}
+            </Box>
         </Typography>
     )
 }
@@ -38,10 +40,11 @@ export interface BackupRestoreTabProps {
     tabs: { label: string; component: JSX.Element; p?: number }[]
     state: [number, React.Dispatch<React.SetStateAction<number>>]
     margin?: true | 'top'
+    height?: number
 }
 
 export default function BackupRestoreTab(props: BackupRestoreTabProps) {
-    const { tabs, state, margin } = props
+    const { tabs, state, margin, height } = props
 
     const classes = useStyles()
     const [value, setValue] = state
@@ -72,7 +75,7 @@ export default function BackupRestoreTab(props: BackupRestoreTabProps) {
                 </Tabs>
             </AppBar>
             {tabs.map((tab, index) => (
-                <TabPanel value={value} index={index} p={tab.p}>
+                <TabPanel height={height} value={value} index={index} p={tab.p}>
                     {tab.component}
                 </TabPanel>
             ))}
