@@ -1,3 +1,4 @@
+import * as React from 'react'
 import { Group, Profile } from '../../../database'
 import { makeStyles, Box } from '@material-ui/core'
 import { PersonOrGroupInListProps } from '../SelectPeopleAndGroups'

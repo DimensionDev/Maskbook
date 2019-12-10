@@ -1,3 +1,5 @@
+import * as React from 'react'
+import { useCallback } from 'react'
 import { twitterUrl } from '../utils/url'
 import { MutationObserverWatcher } from '@holoflows/kit/es'
 import { postEditorInTimelineSelector } from '../utils/selector'
@@ -5,7 +7,6 @@ import { renderInShadowRoot } from '../../../utils/jss/renderInShadowRoot'
 import { PostDialogHint } from '../../../components/InjectedComponents/PostDialogHint'
 import { makeStyles, Theme } from '@material-ui/core'
 import { MessageCenter } from '../../../utils/messages'
-import { useCallback } from 'react'
 import { useTwitterButton } from '../utils/theme'
 import { hasDraftEditor } from '../utils/postBox'
 
