@@ -5,8 +5,7 @@ import { geti18nString } from '../../utils/i18n'
 // This deprecated usage is okay. it calls the migrate method to migrate the old data.
 // eslint-disable-next-line
 import { PersonRecordPublicPrivate, PersonRecord } from '../../database/migrate/_deprecated_people_db'
-import { BackupJSONFileLatest, UpgradeBackupJSONFile } from '../../utils/type-transform/BackupFile'
-import { ProfileIdentifier, ECKeyIdentifier } from '../../database/type'
+import { ProfileIdentifier } from '../../database/type'
 import { MessageCenter } from '../../utils/messages'
 import getCurrentNetworkWorker from '../../social-network/utils/getCurrentNetworkWorker'
 import { SocialNetworkUI } from '../../social-network/ui'
@@ -17,7 +16,6 @@ import {
     MnemonicGenerationInformation,
 } from '../../utils/mnemonic-code'
 import { derive_AES_GCM_256_Key_From_PBKDF2, import_PBKDF2_Key, import_ECDH_256k1_Key } from '../../utils/crypto.subtle'
-import { createProfileWithPersona } from '../../database'
 import { migrateHelper_operateDB } from '../../database/migrate/people.to.persona'
 import { IdentifierMap } from '../../database/IdentifierMap'
 import {
@@ -26,13 +24,15 @@ import {
     queryProfileDB,
     PersonaRecord,
 } from '../../database/Persona/Persona.db'
-import { createDefaultFriendsGroup } from '../../database'
+import { createDefaultFriendsGroup, createProfileWithPersona } from '../../database'
 import {
     CryptoKeyToJsonWebKey,
     JsonWebKeyToCryptoKey,
     getKeyParameter,
 } from '../../utils/type-transform/CryptoKey-JsonWebKey'
 import { deriveLocalKeyFromECDHKey } from '../../utils/mnemonic-code/localKeyGenerate'
+import { BackupJSONFileLatest } from '../../utils/type-transform/BackupFormat/JSON/latest'
+import { UpgradeBackupJSONFile } from '../../utils/type-transform/BackupFile'
 
 OnlyRunInContext('background', 'WelcomeService')
 

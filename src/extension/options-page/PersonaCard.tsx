@@ -13,11 +13,11 @@ import { Link as RouterLink, LinkProps as RouterLinkProps } from 'react-router-d
 import EditIcon from '@material-ui/icons/Edit'
 import CenterFocusWeakIcon from '@material-ui/icons/CenterFocusWeak'
 import { useSnackbar } from 'notistack'
-import { BackupJSONFileLatest } from '../../utils/type-transform/BackupFile'
 import { useColorProvider } from '../../utils/theme'
 import { geti18nString } from '../../utils/i18n'
 
 import classNames from 'classnames'
+import { BackupJSONFileLatest } from '../../utils/type-transform/BackupFormat/JSON/latest'
 
 interface Props {
     identity: Profile

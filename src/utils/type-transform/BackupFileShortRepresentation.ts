@@ -1,7 +1,7 @@
-import { BackupJSONFileLatest } from './BackupFile'
 import { ProfileIdentifier } from '../../database/type'
 import { compressSecp256k1Key, decompressSecp256k1Key } from './SECP256k1-Compression'
 import { Profile } from '../../database'
+import { BackupJSONFileLatest } from './BackupFormat/JSON/latest'
 
 export type BackupJSONFileLatestShort = [
     ProfileIdentifier['network'],

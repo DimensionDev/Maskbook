@@ -31,12 +31,9 @@ import Navigation from './Navigation/Navigation'
 import QRScanner from './QRScanner'
 import { hasWKWebkitRPCHandlers, iOSHost } from '../../utils/iOS-RPC'
 import { useAsync } from '../../utils/components/AsyncComponent'
-import {
-    BackupJSONFileVersion1,
-    UpgradeBackupJSONFile,
-    BackupJSONFileLatest,
-} from '../../utils/type-transform/BackupFile'
+import { BackupJSONFileLatest } from '../../utils/type-transform/BackupFormat/JSON/latest'
 import { decompressBackupFile } from '../../utils/type-transform/BackupFileShortRepresentation'
+import { UpgradeBackupJSONFile } from '../../utils/type-transform/BackupFile'
 
 const RestoreBox = styled('div')(({ theme }: { theme: Theme }) => ({
     color: theme.palette.text.hint,
@@ -123,7 +120,7 @@ export default function Welcome({ restore: originalRestore }: Props) {
     const [tab, setTab] = React.useState(0)
     const [qrError, setError] = React.useState<boolean>(false)
 
-    const [json, setJson] = React.useState<null | BackupJSONFileVersion1>(null)
+    const [json, setJson] = React.useState<null | BackupJSONFileLatest>(null)
     const clearJson = () => {
         setJson(null)
         if (ref && ref.current) ref.current.value = ''
