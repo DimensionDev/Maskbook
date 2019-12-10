@@ -29,11 +29,8 @@ import { makeStyles, createStyles } from '@material-ui/core/styles'
 import './setup.ui'
 import { SSRRenderer } from './utils/SSRRenderer'
 
-import Welcome from './extension/options-page/Welcome'
-import BackupDialog from './extension/options-page/Backup'
-
 import { SnackbarProvider } from 'notistack'
-import Services from './extension/service'
+
 import { geti18nString } from './utils/i18n'
 import ResponsiveDrawer from './extension/options-page/Drawer'
 
@@ -87,9 +84,7 @@ const OptionsPageRouters = (
     <>
         <Switch>
             <Route path="/home/" component={DashboardHomePage} />
-            <Route path="/welcome" component={Welcome} />
             <Route path="/debug/" component={DashboardDebugPage}></Route>
-            <Route path="/backup" component={() => <BackupDialog />} />
             <DialogRouter path="/initialize" component={DashboardInitializeDialog} onExit={'/'} fullscreen />
             <Redirect path="*" to="/home/" />
         </Switch>
