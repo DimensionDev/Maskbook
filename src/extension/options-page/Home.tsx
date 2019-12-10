@@ -108,33 +108,6 @@ export default function DashboardHomePage() {
     return (
         <Container maxWidth="md">
             <section className={classes.sections}>
-                <Card raised elevation={1}>
-                    <List>
-                        <ListItemWithAction key="backup-alert">
-                            <ListItemText
-                                primary="Backup Alert"
-                                secondary={
-                                    <span>
-                                        365 days since last backup. <br /> 999 new contacts and 999 new posts added.
-                                    </span>
-                                }
-                            />
-                            <ListItemSecondaryAction>
-                                <ActionButton
-                                    variant="contained"
-                                    color="primary"
-                                    className={classes.button}
-                                    component={'a'}
-                                    loading={exportLoading}
-                                    onClick={exportData}>
-                                    Backup
-                                </ActionButton>
-                            </ListItemSecondaryAction>
-                        </ListItemWithAction>
-                    </List>
-                </Card>
-            </section>
-            <section className={classes.sections}>
                 <Typography className={classes.title} variant="h5" align="left">
                     My Personas
                 </Typography>
