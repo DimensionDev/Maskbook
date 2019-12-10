@@ -18,7 +18,7 @@ import { MessageCenter, CompositionEvent } from '../../utils/messages'
 import { useCapturedInput } from '../../utils/hooks/useCapturedEvents'
 import { useStylesExtends, or } from '../custom-ui-helper'
 import { Profile, Group } from '../../database'
-import { useFriendsList, useGroupsList, useCurrentIdentity } from '../DataSource/useActivatedUI'
+import { useFriendsList, useGroupsList, useCurrentIdentity, useMyIdentities } from '../DataSource/useActivatedUI'
 import { steganographyModeSetting } from '../shared-settings/settings'
 import { useValueRef } from '../../utils/hooks/useValueRef'
 import { getActivatedUI } from '../../social-network/ui'
@@ -190,10 +190,11 @@ export function PostDialog(props: PostDialogProps) {
         }, []),
     )
 
+    const identities = useMyIdentities()
     const [open, setOpen] = useState(false)
     useEffect(() => {
         const onChange = ({ reason, open }: CompositionEvent) => {
-            if (reason === props.reason) {
+            if (reason === props.reason && identities.length > 0) {
                 setOpen(open)
             }
         }
@@ -201,7 +202,7 @@ export function PostDialog(props: PostDialogProps) {
         return () => {
             MessageCenter.off('compositionUpdated', onChange)
         }
-    }, [props.reason])
+    }, [identities.length, props.reason])
 
     const [postBoxText, setPostBoxText] = useState('')
     const [currentShareTarget, setCurrentShareTarget] = useState(availableShareTarget)
