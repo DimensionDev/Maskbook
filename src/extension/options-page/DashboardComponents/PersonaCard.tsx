@@ -102,13 +102,13 @@ export default function PersonaCard({ persona }: Props) {
 
     React.useEffect(() => {
         if (persona.nickname) return
-        const profile = persona.linkedProfiles.__raw_map__.keys().next().value as string | undefined
+        const profile = persona.linkedProfiles.keys().next().value as ProfileIdentifier | undefined
         if (!profile) Services.Identity.renamePersona(persona.identifier, persona.identifier.compressedPoint)
         else
-            Services.Identity.queryProfile(ProfileIdentifier.fromString(profile)! as ProfileIdentifier)
+            Services.Identity.queryProfile(profile)
                 .then(profile => profile.nickname || profile.identifier.userId)
                 .then(newName => Services.Identity.renamePersona(persona.identifier, newName))
-    }, [persona.identifier, persona.linkedProfiles.__raw_map__, persona.nickname])
+    }, [persona.identifier, persona.linkedProfiles, persona.linkedProfiles.__raw_map__, persona.nickname])
 
     return (
         <>
