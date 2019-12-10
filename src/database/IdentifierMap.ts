@@ -36,7 +36,7 @@ export class IdentifierMap<IdentifierType extends Identifier, T> implements Map<
     }
     *keys(): Generator<IdentifierType, void, unknown> {
         const iter = this.__raw_map__.keys()
-        for (const [key] of iter) {
+        for (const key of iter) {
             const i = Identifier.fromString(key)
             if (i !== null) yield i as IdentifierType
             else continue
