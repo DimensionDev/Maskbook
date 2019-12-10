@@ -29,6 +29,9 @@ export { storeAvatar, getAvatarDataURL as queryAvatarDataURL } from '../../datab
 
 //#region Profile
 export { queryProfile } from '../../database'
+export function createProfile(identifier: ProfileIdentifier) {
+    return createProfileDB({ identifier, createdAt: new Date(), updatedAt: new Date() })
+}
 export function queryProfiles(network?: string): Promise<Profile[]> {
     return queryProfilesWithQuery(network)
 }
