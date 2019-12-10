@@ -3,10 +3,10 @@ import {
     unpackFriendshipCertificate,
     issueFriendshipCertificate,
 } from '../protocols/friendship-discovery/friendship-pack'
-import { PersonIdentifier } from '../database/type'
+import { ProfileIdentifier } from '../database/type'
 import { generate_ECDH_256k1_KeyPair, generate_AES_GCM_256_Key } from '../utils/crypto.subtle'
 
-const aliceID = new PersonIdentifier('localhost', 'alice.test')
+const aliceID = new ProfileIdentifier('localhost', 'alice.test')
 async function testFriendshipDiscover() {
     // Alice don't need a keypair during the process
     const bob = await generate_ECDH_256k1_KeyPair()

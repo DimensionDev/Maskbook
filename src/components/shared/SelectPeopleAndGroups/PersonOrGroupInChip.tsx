@@ -2,16 +2,16 @@ import * as React from 'react'
 import { Avatar } from '../../../utils/components/Avatar'
 import MuiAvatar from '@material-ui/core/Avatar/Avatar'
 import { Chip } from '@material-ui/core'
-import { Person, Group } from '../../../database'
+import { Profile, Group } from '../../../database'
 import { geti18nString } from '../../../utils/i18n'
-import { isGroup, isPerson } from './SelectPeopleAndGroupsUI'
+import { isGroup, isProfile } from './SelectPeopleAndGroupsUI'
 import { useResolveSpecialGroupName } from './resolveSpecialGroupName'
 import { ChipProps } from '@material-ui/core/Chip'
 
 export interface PersonOrGroupInChipProps {
     onDelete?(): void
     disabled?: boolean
-    item: Person | Group
+    item: Profile | Group
     ChipProps?: ChipProps
 }
 export function PersonOrGroupInChip(props: PersonOrGroupInChipProps) {
@@ -32,7 +32,7 @@ export function PersonOrGroupInChip(props: PersonOrGroupInChipProps) {
     return (
         <Chip
             style={{ marginRight: 6, marginBottom: 6 }}
-            color={isPerson(props.item) ? 'primary' : 'secondary'}
+            color={isProfile(props.item) ? 'primary' : 'secondary'}
             onDelete={disabled ? undefined : onDelete}
             label={displayName}
             avatar={avatar}

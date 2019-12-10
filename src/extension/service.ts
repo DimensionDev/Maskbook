@@ -1,17 +1,19 @@
 import { AsyncCall, AsyncGeneratorCall, AsyncCallOptions } from 'async-call-rpc'
-import { GetContext, OnlyRunInContext } from '@holoflows/kit/es/Extension/Context'
+import { GetContext, OnlyRunInContext } from '@holoflows/kit/es'
 import * as MockService from './mock-service'
 import Serialization from '../utils/type-transform/Serialization'
-import { PersonIdentifier, GroupIdentifier, PostIdentifier, PostIVIdentifier } from '../database/type'
+import { ProfileIdentifier, GroupIdentifier, PostIdentifier, PostIVIdentifier } from '../database/type'
 import { getCurrentNetworkWorkerService } from './background-script/WorkerService'
 
 import tasks from './content-script/tasks'
 import { MessageCenter } from '@holoflows/kit/es'
+import { IdentifierMap } from '../database/IdentifierMap'
 Object.assign(globalThis, { tasks })
 
 interface Services {
     Crypto: typeof import('./background-script/CryptoService')
-    People: typeof import('./background-script/PeopleService')
+    Identity: typeof import('./background-script/IdentityService')
+    UserGroup: typeof import('./background-script/UserGroupService')
     Welcome: typeof import('./background-script/WelcomeService')
     Steganography: typeof import('./background-script/SteganographyService')
 }
@@ -30,8 +32,9 @@ if (!('Services' in globalThis)) {
     // Sorry you should add import at '../background-service.ts'
     register(createProxyToService('CryptoService'), 'Crypto', MockService.CryptoService)
     register(createProxyToService('WelcomeService'), 'Welcome', MockService.WelcomeService)
-    register(createProxyToService('PeopleService'), 'People', MockService.PeopleService)
     register(createProxyToService('SteganographyService'), 'Steganography', MockService.SteganographyService)
+    register(createProxyToService('IdentityService'), 'Identity', {})
+    register(createProxyToService('UserGroupService'), 'UserGroup', {})
 }
 interface ServicesWithProgress {
     // Sorry you should add import at '../background-service.ts'
@@ -48,7 +51,7 @@ function createProxyToService(name: string) {
                 if (key === 'methods') {
                     return () => {
                         return Object.keys(service)
-                            .map(f => service[f].toString().split('\n')[0])
+                            .map(f => f + ': ' + service[f].toString().split('\n')[0])
                             .join('\n')
                     }
                 }
@@ -68,23 +71,27 @@ export const ServicesWithProgress = AsyncGeneratorCall<ServicesWithProgress>(
 )
 
 Object.assign(globalThis, {
-    PersonIdentifier,
+    ProfileIdentifier,
     GroupIdentifier,
     PostIdentifier,
     PostIVIdentifier,
     getCurrentNetworkWorkerService,
+    IdentifierMap,
 })
 //#region
+console.log(Serialization)
 type Service = Record<string, (...args: unknown[]) => Promise<unknown>>
 function register<T extends Service>(service: T, name: keyof Services, mock?: Partial<T>) {
     if (OnlyRunInContext(['content', 'options', 'debugging', 'background'], false)) {
         GetContext() !== 'debugging' && console.log(`Service ${name} registered in ${GetContext()}`)
+        const mc = new MessageCenter()
+        // mc.writeToConsole = true
         Object.assign(Services, {
             [name]: AsyncCall(service, {
                 key: name,
                 serializer: Serialization,
                 log: logOptions,
-                messageChannel: new MessageCenter(),
+                messageChannel: mc,
             }),
         })
         Object.assign(globalThis, { [name]: Object.assign({}, service) })

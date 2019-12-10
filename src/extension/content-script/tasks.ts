@@ -1,8 +1,14 @@
-import { AutomatedTabTask } from '@holoflows/kit'
-import { getActivatedUI, SocialNetworkUI } from '../../social-network/ui'
-import { PersonIdentifier } from '../../database/type'
+import { AutomatedTabTask, GetContext } from '@holoflows/kit'
+import { ProfileIdentifier } from '../../database/type'
 import { disableOpenNewTabInBackgroundSettings } from '../../components/shared-settings/settings'
+import { SocialNetworkUI } from '../../social-network/ui'
 import { memoizePromise } from '../../utils/memoize'
+
+function getActivatedUI() {
+    if (GetContext() !== 'background')
+        return (require('../../social-network/ui') as typeof import('../../social-network/ui')).getActivatedUI()
+    else throw new TypeError('Run in wrong context')
+}
 
 const tasks = AutomatedTabTask(
     {
@@ -15,7 +21,7 @@ const tasks = AutomatedTabTask(
          * Access profile page
          * Get Profile
          */
-        getProfile: (identifier: PersonIdentifier) => getActivatedUI().taskGetProfile(identifier),
+        getProfile: (identifier: ProfileIdentifier) => getActivatedUI().taskGetProfile(identifier),
         /**
          * Access profile page
          * Paste text into bio

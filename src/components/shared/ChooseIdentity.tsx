@@ -4,12 +4,12 @@ import ExpansionPanel from '@material-ui/core/ExpansionPanel'
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import { Avatar } from '../../utils/components/Avatar'
-import { Person } from '../../database'
+import { Profile } from '../../database'
 import { List, ListItem, ListItemIcon, ListItemText, ListSubheader } from '@material-ui/core'
 import { PersonOrGroupInList, PersonOrGroupInListProps } from './SelectPeopleAndGroups'
 import { getActivatedUI } from '../../social-network/ui'
 import { useCurrentIdentity, useMyIdentities } from '../DataSource/useActivatedUI'
-import { PersonIdentifier } from '../../database/type'
+import { ProfileIdentifier } from '../../database/type'
 import { geti18nString } from '../../utils/i18n'
 import { currentSelectedIdentity } from '../../components/shared-settings/settings'
 import { useStylesExtends } from '../custom-ui-helper'
@@ -27,15 +27,15 @@ export interface ChooseIdentityProps
      * Current selected identity
      * @defaultValue the global selected identity
      */
-    current?: Person
+    current?: Profile
     /** All available identities
      * @defaultValue `useMyIdentities()`
      */
-    availableIdentities?: Person[]
+    availableIdentities?: Profile[]
     /** When user change the identity
      *  @defaultValue will change the global selected identity
      */
-    onChangeIdentity?(person: Person): void
+    onChangeIdentity?(person: Profile): void
     PersonOrGroupInListProps?: PersonOrGroupInListProps
 }
 /**
@@ -47,7 +47,7 @@ export const ChooseIdentity: React.FC<ChooseIdentityProps> = props => {
 
     const all = useMyIdentities()
     const currentDefault =
-        useCurrentIdentity() || ({ identifier: PersonIdentifier.unknown, nickname: 'Nothing' } as Person)
+        useCurrentIdentity() || ({ identifier: ProfileIdentifier.unknown, nickname: 'Nothing' } as Profile)
     const { availableIdentities = all, current = currentDefault } = props
 
     const handleChange = useCallback(() => {
@@ -104,10 +104,10 @@ ChooseIdentity.defaultProps = {
  * This hook allows use <ChooseIdentity /> in a isolated scope without providing
  * verbose information.
  */
-export function useIsolatedChooseIdentity(): readonly [Person | null, React.ReactNode] {
+export function useIsolatedChooseIdentity(): readonly [Profile | null, React.ReactNode] {
     const all = useMyIdentities()
     const whoami = useCurrentIdentity()
-    const [current, set] = useState<Person>()
+    const [current, set] = useState<Profile>()
     const selected = current || whoami || undefined
     return [
         selected || null,

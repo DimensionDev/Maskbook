@@ -60,9 +60,9 @@ export interface SocialNetworkWorkerAndUIDefinition {
     publicKeyEncoder?: (text: string) => string
     /**
      * define how to decode public key.
-     * if null, no public key detected.
+     * the result is candidates
      */
-    publicKeyDecoder?: (text: string) => string | null
+    publicKeyDecoder?: (text: string) => string[]
     payloadEncoder?: (payload: string) => string
     payloadDecoder?: (text: string) => string | null
     /**
@@ -106,6 +106,6 @@ export const env: Env = {
     platform: navigator.userAgent.match(/Mobile|mobile/) ? 'mobile' : 'desktop',
 }
 
-export interface Profile {
+export interface ProfileUI {
     bioContent: string
 }

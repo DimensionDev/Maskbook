@@ -54,6 +54,9 @@
     "select_specific_friends_dialog__dismiss_aria": {
         "message": "關閉選擇好友對話框"
     },
+    "comment_box__placeholder": {
+        "message": "添加一條加密評論…"
+    },
     "comment_box__paste_failed": {
         "message": "請將以下内容拷貝至評論框。"
     },
@@ -194,6 +197,12 @@
     },
     "dashboard_item_copy_failed": {
         "message": "複製失敗。"
+    },
+    "dashboard_mobile_test": {
+        "message": "加入移動端測試"
+    },
+    "dashboard_source_code": {
+        "message": "程式源代碼"
     },
     "welcome_0_close_button": {
         "message": "我想以後再做"

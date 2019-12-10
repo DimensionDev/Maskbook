@@ -2,7 +2,7 @@ import React from 'react'
 import { LiveSelector, MutationObserverWatcher } from '@holoflows/kit'
 import { renderInShadowRoot } from '../../../utils/jss/renderInShadowRoot'
 import Services from '../../../extension/service'
-import { PersonIdentifier } from '../../../database/type'
+import { ProfileIdentifier } from '../../../database/type'
 import AsyncComponent from '../../../utils/components/AsyncComponent'
 import { SocialNetworkUI } from '../../../social-network/ui'
 import { geti18nString } from '../../../utils/i18n'
@@ -13,12 +13,12 @@ function whoisCurrentPage() {
         try {
             const id = new URLSearchParams(location.search).get('id')
             if (!id) return null
-            return new PersonIdentifier('facebook.com', id)
+            return new ProfileIdentifier('facebook.com', id)
         } catch {}
     }
     try {
         const id = location.pathname.substr(1)
-        return new PersonIdentifier('facebook.com', id)
+        return new ProfileIdentifier('facebook.com', id)
     } catch {}
     return null
 }
@@ -32,8 +32,8 @@ function PersonKnown() {
     return (
         <AsyncComponent
             promise={() =>
-                Services.People.queryPerson(whois).then(p => {
-                    if (!p.fingerprint) throw new TypeError('public key not found')
+                Services.Identity.queryProfile(whois).then(p => {
+                    if (!p.linkedPersona?.fingerprint) throw new TypeError('public key not found')
                 })
             }
             dependencies={[]}

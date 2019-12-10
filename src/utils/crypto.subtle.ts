@@ -7,10 +7,13 @@ export function generate_AES_GCM_256_Key() {
     return crypto.subtle.generateKey({ name: 'AES-GCM', length: 256 }, true, ['encrypt', 'decrypt'])
 }
 export function generate_ECDH_256k1_KeyPair() {
-    return crypto.subtle.generateKey({ name: 'ECDH', namedCurve: 'K-256' }, true, ['deriveKey'])
+    return crypto.subtle.generateKey({ name: 'ECDH', namedCurve: 'K-256' }, true, ['deriveKey', 'deriveBits'])
 }
 export function import_ECDH_256k1_Key(key: JsonWebKey | ArrayBuffer) {
-    return crypto.subtle.importKey(getType(key), key, { name: 'ECDH', namedCurve: 'K-256' }, true, ['deriveKey'])
+    return crypto.subtle.importKey(getType(key), key, { name: 'ECDH', namedCurve: 'K-256' }, true, [
+        'deriveKey',
+        'deriveBits',
+    ])
 }
 export async function import_ECDH_256k1_KeyPair(key: JsonWebKey): Promise<CryptoKeyPair> {
     key = { ...key }

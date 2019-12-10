@@ -1,15 +1,15 @@
 /// <reference path="./global.d.ts" />
-import { PostIdentifier, PersonIdentifier, Identifier, PostIVIdentifier, GroupIdentifier } from './type'
+import { PostIdentifier, ProfileIdentifier, Identifier, PostIVIdentifier, GroupIdentifier } from './type'
 import { openDB, DBSchema } from 'idb/with-async-ittr'
-import { restorePrototype } from './utils'
+import { restorePrototype, restorePrototypeArray } from '../utils/type'
 
 function outDb(db: PostDBRecord): PostRecord {
     const { identifier, ...rest } = db
     for (const key in rest.recipients) {
         const detail = rest.recipients[key]
-        detail.reason.forEach(x => x.type === 'group' && restorePrototype([x.group], GroupIdentifier.prototype))
+        detail.reason.forEach(x => x.type === 'group' && restorePrototype(x.group, GroupIdentifier.prototype))
     }
-    restorePrototype(rest.recipientGroups, GroupIdentifier.prototype)
+    restorePrototypeArray(rest.recipientGroups, GroupIdentifier.prototype)
     return {
         ...rest,
         identifier: Identifier.fromString(identifier) as PostIVIdentifier,
@@ -37,9 +37,9 @@ export interface RecipientDetail {
 interface PostDBRecord {
     /**
      * For old data stored before version 3,
-     * this identifier may be PersonIdentifier.unknown
+     * this identifier may be ProfileIdentifier.unknown
      */
-    postBy: PersonIdentifier
+    postBy: ProfileIdentifier
     identifier: string
     /**
      * ! This MUST BE a native CryptoKey
@@ -86,7 +86,7 @@ const db = openDB<PostDB>('maskbook-post-v2', 3, {
                     const id = Identifier.fromString(each.identifier)
                     if (id instanceof PostIdentifier) {
                         each.identifier = new PostIVIdentifier(
-                            (id.identifier as PersonIdentifier).network,
+                            (id.identifier as ProfileIdentifier).network,
                             id.postId,
                         ).toText()
                     }
@@ -96,14 +96,14 @@ const db = openDB<PostDB>('maskbook-post-v2', 3, {
         }
 
         /**
-         * In the version 2 we use `recipients?: PersonIdentifier[]`
+         * In the version 2 we use `recipients?: ProfileIdentifier[]`
          * After upgrade to version 3, we use `recipients: Record<string, RecipientDetail>`
          */
         if (oldVersion <= 2) {
             const store = transaction.objectStore('post')
             for await (const cursor of store) {
-                const oldType = (cursor.value.recipients as unknown) as PersonIdentifier[] | undefined
-                restorePrototype(oldType, PersonIdentifier.prototype)
+                const oldType = (cursor.value.recipients as unknown) as ProfileIdentifier[] | undefined
+                oldType && restorePrototypeArray(oldType, ProfileIdentifier.prototype)
                 const newType: PostDBRecord['recipients'] = {}
                 if (oldType !== undefined)
                     for (const each of oldType) {
@@ -112,7 +112,7 @@ const db = openDB<PostDB>('maskbook-post-v2', 3, {
                 const next: PostDBRecord = {
                     ...cursor.value,
                     recipients: newType,
-                    postBy: PersonIdentifier.unknown,
+                    postBy: ProfileIdentifier.unknown,
                     foundAt: new Date(0),
                     recipientGroups: [],
                 }
@@ -133,7 +133,7 @@ export async function updatePostDB(
     const emptyRecord: PostRecord = {
         identifier: updateRecord.identifier,
         recipients: {},
-        postBy: PersonIdentifier.unknown,
+        postBy: ProfileIdentifier.unknown,
         foundAt: new Date(),
         recipientGroups: [],
     }

@@ -20,7 +20,7 @@ import { env } from '../../social-network/shared'
 import { setStorage } from '../../utils/browser.storage'
 import { useStylesExtends } from '../custom-ui-helper'
 import { useCapturedInput } from '../../utils/hooks/useCapturedEvents'
-import { PersonIdentifier } from '../../database/type'
+import { ProfileIdentifier } from '../../database/type'
 
 interface Props extends withClasses<KeysInferFromUseStyles<typeof useStyles>> {
     title?: string
@@ -150,7 +150,7 @@ export function Banner(props: BannerProps) {
         setStorage(networkIdentifier, { forceDisplayWelcome: false })
         const id = { ...lastRecognizedIdentity }
         id.identifier =
-            value === '' ? lastRecognizedIdentity.identifier : new PersonIdentifier(networkIdentifier, value)
+            value === '' ? lastRecognizedIdentity.identifier : new ProfileIdentifier(networkIdentifier, value)
         Services.Welcome.openWelcomePage(id)
     }, [lastRecognizedIdentity, networkIdentifier, nextStep, value])
     const defaultUserName = networkIdentifier

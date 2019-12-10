@@ -1,3 +1,12 @@
+---
+name: Task
+about: "Non-coding task"
+title: "[Task] "
+labels: 'Non-Coding Task'
+assignees:
+
+---
+
 ## Metadata
 
 Field | Value

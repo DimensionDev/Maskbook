@@ -1,7 +1,7 @@
-import { env, Env, Preference, Profile, SocialNetworkWorkerAndUIDefinition } from './shared'
-import { DOMProxy, LiveSelector, ValueRef } from '@holoflows/kit/es'
-import { Group, Person } from '../database'
-import { PersonIdentifier } from '../database/type'
+import { env, Env, Preference, ProfileUI, SocialNetworkWorkerAndUIDefinition } from './shared'
+import { DOMProxy, LiveSelector, ValueRef, OnlyRunInContext } from '@holoflows/kit/es'
+import { Group, Profile } from '../database'
+import { ProfileIdentifier } from '../database/type'
 import { Payload } from '../utils/type-transform/Payload'
 import { defaultTo, isNull } from 'lodash-es'
 import Services from '../extension/service'
@@ -9,8 +9,10 @@ import { defaultSharedSettings } from './defaults/shared'
 import { defaultSocialNetworkUI } from './defaults/ui'
 import { nopWithUnmount } from '../utils/utils'
 import { Theme } from '@material-ui/core'
-import { MaskbookLightTheme, MaskbookDarkTheme } from '../utils/theme'
+import { MaskbookLightTheme } from '../utils/theme'
 import { untilDomLoaded } from '../utils/dom'
+
+OnlyRunInContext(['content', 'debugging', 'options'], 'UI provider')
 
 //#region SocialNetworkUI
 export interface SocialNetworkUIDefinition
@@ -61,7 +63,7 @@ export interface SocialNetworkUIInformationCollector {
      * ```ts
      * lastRecognizedIdentity.addListener(id => {
      *      if (id.identifier.isUnknown) return
-     *      Services.People.resolveIdentity(id.identifier)
+     *      Services.Identity.resolveIdentity(id.identifier)
      * })
      * ```
      *
@@ -178,7 +180,7 @@ export interface SocialNetworkUITasks {
      * Called by `AutomatedTabTask`
      * @param identifier The post id
      */
-    taskGetProfile(identifier: PersonIdentifier): Promise<Profile>
+    taskGetProfile(identifier: ProfileIdentifier): Promise<ProfileUI>
 }
 
 //#endregion
@@ -192,7 +194,7 @@ export interface SocialNetworkUIDataSources {
     /**
      * My Maskbook friends at this network
      */
-    readonly friendsRef?: ValueRef<Person[]>
+    readonly friendsRef?: ValueRef<Profile[]>
     /**
      * My groups at this network
      */
@@ -200,22 +202,22 @@ export interface SocialNetworkUIDataSources {
     /**
      * My identities at current network
      */
-    readonly myIdentitiesRef?: ValueRef<Person[]>
+    readonly myIdentitiesRef?: ValueRef<Profile[]>
     /**
      * The account that user is using (may not in the database)
      */
-    readonly lastRecognizedIdentity?: ValueRef<Pick<Person, 'identifier' | 'nickname' | 'avatar'>>
+    readonly lastRecognizedIdentity?: ValueRef<Pick<Profile, 'identifier' | 'nickname' | 'avatar'>>
     /**
      * The account that user is using (MUST be in the database)
      */
-    readonly currentIdentity?: ValueRef<Person | null>
+    readonly currentIdentity?: ValueRef<Profile | null>
     /**
      * Posts that Maskbook detects
      */
     readonly posts?: WeakMap<object, PostInfo>
 }
 export type PostInfo = {
-    readonly postBy: ValueRef<PersonIdentifier>
+    readonly postBy: ValueRef<ProfileIdentifier>
     readonly postID: ValueRef<string | null>
     readonly postContent: ValueRef<string>
     readonly postPayload: ValueRef<Payload | null>
@@ -247,7 +249,7 @@ export const getEmptyPostInfoByElement = (
 ) => {
     return {
         decryptedPostContent: new ValueRef(''),
-        postBy: new ValueRef(PersonIdentifier.unknown, PersonIdentifier.equals),
+        postBy: new ValueRef(ProfileIdentifier.unknown, ProfileIdentifier.equals),
         postContent: new ValueRef(''),
         postID: new ValueRef<string | null>(null),
         postPayload: new ValueRef<Payload | null>(null),
@@ -259,9 +261,9 @@ export const definedSocialNetworkUIs = new Set<SocialNetworkUI>()
 export const getActivatedUI = () => activatedSocialNetworkUI
 
 let activatedSocialNetworkUI = ({
-    lastRecognizedIdentity: new ValueRef({ identifier: PersonIdentifier.unknown }),
+    lastRecognizedIdentity: new ValueRef({ identifier: ProfileIdentifier.unknown }),
     currentIdentity: new ValueRef(null),
-    myIdentitiesRef: new ValueRef([] as Person[]),
+    myIdentitiesRef: new ValueRef([] as Profile[]),
     useTheme: () => MaskbookLightTheme,
 } as Partial<SocialNetworkUI>) as SocialNetworkUI
 export function activateSocialNetworkUI() {
@@ -309,7 +311,7 @@ export function activateSocialNetworkUI() {
                         ui.currentIdentity.value =
                             ui.myIdentitiesRef.value.find(x => id.identifier.equals(x.identifier)) || null
                     }
-                    Services.People.resolveIdentity(id.identifier).then()
+                    Services.Identity.resolveIdentity(id.identifier).then()
                 })
             })
         }

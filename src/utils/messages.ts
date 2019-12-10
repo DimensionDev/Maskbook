@@ -1,11 +1,11 @@
 import { MessageCenter as MC } from '@holoflows/kit/es'
-import { Group, Person } from '../database'
+import { Profile, Group } from '../database'
 import Serialization from './type-transform/Serialization'
-import { PersonIdentifier, GroupIdentifier } from '../database/type'
+import { ProfileIdentifier, GroupIdentifier } from '../database/type'
 
-export interface PersonUpdateEvent {
+export interface UpdateEvent<Data> {
     readonly reason: 'update' | 'delete' | 'new'
-    readonly of: Person
+    readonly of: Data
 }
 
 export interface CompositionEvent {
@@ -23,8 +23,6 @@ interface MaskbookMessages {
      * value is instanceKey
      */
     settingsCreated: string
-    newPerson: Person
-    generateKeyPair: undefined
     /**
      * emit when the settings updated.
      * value is instanceKey
@@ -41,10 +39,11 @@ interface MaskbookMessages {
     /**
      * emit people changed in the database.
      */
-    peopleChanged: readonly PersonUpdateEvent[]
+    profilesChanged: readonly UpdateEvent<Profile>[]
+    groupsChanged: readonly UpdateEvent<Group>[]
     joinGroup: {
         group: GroupIdentifier
-        newMembers: PersonIdentifier[]
+        newMembers: ProfileIdentifier[]
     }
     /**
      * emit when compose status updated.

@@ -17,11 +17,7 @@ class SSRPlugin {
      */
     renderSSR() {
         return new Promise((resolve, reject) => {
-            exec(
-                'node -r esm ./node_modules/ts-node/dist/bin.js --project ./tsconfig_cjs.json -T ./src/setup.ssr.js ' +
-                    this.pathName,
-                (err, stdout) => (err ? reject(err) : resolve(stdout)),
-            )
+            exec('node ./src/setup.ssr.js ' + this.pathName, (err, stdout) => (err ? reject(err) : resolve(stdout)))
         })
     }
     /**

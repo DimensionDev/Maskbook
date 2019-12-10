@@ -1,9 +1,9 @@
 import { PreDefinedVirtualGroupNames, GroupIdentifier } from '../../../database/type'
-import { Group, Person } from '../../../database'
+import { Group, Profile } from '../../../database'
 import { useFriendsList, useMyIdentities } from '../../DataSource/useActivatedUI'
 import { geti18nString, I18NStrings } from '../../../utils/i18n'
 
-function resolveSpecialGroupName(group: Group, knownPeople: Person[]): string {
+function resolveSpecialGroupName(group: Group, knownPeople: Profile[]): string {
     let owner: string = group.identifier.virtualGroupOwner || 'Unknown'
 
     for (const person of knownPeople.filter(x => x.identifier.equals(group.identifier.ownerIdentifier))) {
@@ -21,13 +21,12 @@ function resolveSpecialGroupName(group: Group, knownPeople: Person[]): string {
     }
 }
 
-export function useResolveSpecialGroupName(group: Group | Person) {
+export function useResolveSpecialGroupName(group: Group | Profile) {
     const x = useFriendsList()
     const y = useMyIdentities()
     if (!isGroup(group)) return ''
     return resolveSpecialGroupName(group, [...x, ...y])
 }
-
-function isGroup(group: Group | Person): group is Group {
+function isGroup(group: Group | Profile): group is Group {
     return group.identifier instanceof GroupIdentifier
 }

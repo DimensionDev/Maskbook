@@ -1,5 +1,7 @@
 import { serializable } from '../utils/type-transform/Serialization'
 import { RecipientDetail } from './post'
+import { compressSecp256k1Key } from '../utils/type-transform/SECP256k1-Compression'
+import { CryptoKeyToJsonWebKey } from '../utils/type-transform/CryptoKey-JsonWebKey'
 
 /**
  * @internal symbol that used to construct this type from the Identifier
@@ -11,8 +13,10 @@ const $fromString = Symbol()
  * group:...
  * post:...
  * post_iv:...
+ * ec_key:...
  */
-type Identifiers = 'person' | 'group' | 'post' | 'post_iv'
+type Identifiers = 'person' | 'group' | 'post' | 'post_iv' | 'ec_key'
+const fromStringCache = new Map<string, Identifier>()
 export abstract class Identifier {
     static equals(a: Identifier, b: Identifier) {
         return a.equals(b)
@@ -25,19 +29,18 @@ export abstract class Identifier {
     static fromString(id: string): Identifier | null
     static fromString<T extends Identifier>(id: string | T): Identifier | null {
         if (id instanceof Identifier) return id
+        if (fromStringCache.has(id)) return fromStringCache.get(id)!
         const [type, ...rest] = id.split(':') as [Identifiers, string]
-        switch (type) {
-            case 'person':
-                return PersonIdentifier[$fromString](rest.join(':'))
-            case 'group':
-                return GroupIdentifier[$fromString](rest.join(':'))
-            case 'post':
-                return PostIdentifier[$fromString](rest.join(':'))
-            case 'post_iv':
-                return PostIVIdentifier[$fromString](rest.join(':'))
-            default:
-                return null
-        }
+        let result: Identifier | null = null
+        if (type === 'person') result = ProfileIdentifier[$fromString](rest.join(':'))
+        else if (type === 'group') result = GroupIdentifier[$fromString](rest.join(':'))
+        else if (type === 'post') result = PostIdentifier[$fromString](rest.join(':'))
+        else if (type === 'post_iv') result = PostIVIdentifier[$fromString](rest.join(':'))
+        else if (type === 'ec_key') result = ECKeyIdentifier[$fromString](rest.join(':'))
+        else return null
+        if (result === null) return null
+        fromStringCache.set(id, result)
+        return result
     }
 
     static IdentifiersToString(a: Identifier[], isOrderImportant = false) {
@@ -49,17 +52,17 @@ export abstract class Identifier {
     }
 }
 
-@serializable('PersonIdentifier')
-export class PersonIdentifier extends Identifier {
-    static unknown = new PersonIdentifier('localhost', '$unknown')
+@serializable('ProfileIdentifier')
+export class ProfileIdentifier extends Identifier {
+    static readonly unknown = new ProfileIdentifier('localhost', '$unknown')
     get isUnknown() {
-        return this.equals(PersonIdentifier.unknown)
+        return this.equals(ProfileIdentifier.unknown)
     }
     /**
      * @param network - Network belongs to
      * @param userId - User ID
      */
-    constructor(public network: string, public userId: string) {
+    constructor(public readonly network: string, public readonly userId: string) {
         super()
         noSlash(network)
         noSlash(userId)
@@ -73,10 +76,9 @@ export class PersonIdentifier extends Identifier {
     static [$fromString](str: string) {
         const [network, userId] = str.split('/')
         if (!network || !userId) return null
-        return new PersonIdentifier(network, userId)
+        return new ProfileIdentifier(network, userId)
     }
 }
-
 export enum PreDefinedVirtualGroupNames {
     friends = '_default_friends_group_',
     followers = '_followers_group_',
@@ -85,13 +87,17 @@ export enum PreDefinedVirtualGroupNames {
 
 @serializable('GroupIdentifier')
 export class GroupIdentifier extends Identifier {
-    static getFriendsGroupIdentifier(who: PersonIdentifier, groupId: string) {
+    static getFriendsGroupIdentifier(who: ProfileIdentifier, groupId: string) {
         return new GroupIdentifier(who.network, who.userId, groupId)
     }
-    static getDefaultFriendsGroupIdentifier(who: PersonIdentifier) {
+    static getDefaultFriendsGroupIdentifier(who: ProfileIdentifier) {
         return new GroupIdentifier(who.network, who.userId, PreDefinedVirtualGroupNames.friends)
     }
-    constructor(public network: string, public virtualGroupOwner: string | null, public groupID: string) {
+    constructor(
+        public readonly network: string,
+        public readonly virtualGroupOwner: string | null,
+        public readonly groupID: string,
+    ) {
         super()
         noSlash(network)
         noSlash(groupID)
@@ -99,7 +105,7 @@ export class GroupIdentifier extends Identifier {
     }
     get ownerIdentifier() {
         if (this.virtualGroupOwner === null) throw new Error('Can not know the owner of this group')
-        return new PersonIdentifier(this.network, this.virtualGroupOwner)
+        return new ProfileIdentifier(this.network, this.virtualGroupOwner)
     }
     toText() {
         return 'group:' + [this.network, this.virtualGroupOwner, this.groupID].join('/')
@@ -123,7 +129,7 @@ export class PostIdentifier<T extends Identifier = Identifier> extends Identifie
      * If identifier is a PostIdentifier, that means this post is binded with other post in some kind
      * e.g. a comment.
      */
-    constructor(public identifier: T, public postId: string) {
+    constructor(public readonly identifier: T, public readonly postId: string) {
         super()
         noSlash(postId)
     }
@@ -140,7 +146,7 @@ export class PostIdentifier<T extends Identifier = Identifier> extends Identifie
 
 @serializable('PostIVIdentifier')
 export class PostIVIdentifier extends Identifier {
-    constructor(public network: string, public postIV: string) {
+    constructor(public readonly network: string, public readonly postIV: string) {
         super()
         if (postIV) this.postIV = postIV.replace(/\//g, '|')
     }
@@ -155,6 +161,40 @@ export class PostIVIdentifier extends Identifier {
 }
 
 /**
+ * This class identify the point on an EC curve.
+ * ec_key:secp256k1/CompressedPoint
+ */
+@serializable('ECKeyIdentifier')
+export class ECKeyIdentifier extends Identifier {
+    static async fromCryptoKey(key: CryptoKey) {
+        return this.fromJsonWebKey(await CryptoKeyToJsonWebKey(key))
+    }
+    static fromJsonWebKey(key: JsonWebKey) {
+        const x = compressSecp256k1Key(key, 'public')
+        return new ECKeyIdentifier('secp256k1', x)
+    }
+    public readonly type = 'ec_key'
+    constructor(public readonly curve: 'secp256k1', private encodedCompressedKey: string) {
+        super()
+        if (encodedCompressedKey !== undefined) this.encodedCompressedKey = encodedCompressedKey.replace(/\//g, '|')
+    }
+    // restore the / from |
+    get compressedPoint() {
+        return this.encodedCompressedKey.replace(/\|/g, '/')
+    }
+    toText() {
+        return `ec_key:${this.curve}/${this.encodedCompressedKey}`
+    }
+    static [$fromString](str: string) {
+        const [curve, point] = str.split('/')
+        if (curve !== 'secp256k1') return null
+        return new ECKeyIdentifier(curve, point)
+    }
+}
+
+export type PersonaIdentifier = ECKeyIdentifier
+
+/**
  * Because "/" is used to split parts in identifier
  * we should reject the "/"
  *
@@ -165,7 +205,7 @@ function noSlash(str?: string) {
     if (str.split('/')[1]) throw new TypeError('Cannot contain / in a part of identifier')
 }
 
-export function constructPostRecipients(data: [PersonIdentifier, RecipientDetail][]) {
+export function constructPostRecipients(data: [ProfileIdentifier, RecipientDetail][]) {
     const x: Record<string, RecipientDetail> = {}
     for (const [id, detail] of data) {
         x[id.toText()] = detail

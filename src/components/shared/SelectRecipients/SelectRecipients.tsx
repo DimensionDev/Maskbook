@@ -1,8 +1,8 @@
-import { Group, Person } from '../../../database'
+import { Group, Profile } from '../../../database'
 import { makeStyles, Box } from '@material-ui/core'
 import { PersonOrGroupInListProps } from '../SelectPeopleAndGroups'
 import { GroupInChipProps, GroupInChip } from './GroupInChip'
-import { PersonIdentifier, GroupIdentifier } from '../../../database/type'
+import { ProfileIdentifier, GroupIdentifier } from '../../../database/type'
 import AddIcon from '@material-ui/icons/Add'
 import { ClickableChip } from './ClickableChip'
 import { useState, useEffect } from 'react'
@@ -10,7 +10,7 @@ import { SelectRecipientsDialogUIProps, SelectRecipientsDialogUI } from './Selec
 import { geti18nString } from '../../../utils/i18n'
 import { difference } from 'lodash-es'
 
-export interface SelectRecipientsUIProps<T extends Group | Person = Group | Person>
+export interface SelectRecipientsUIProps<T extends Group | Profile = Group | Profile>
     extends withClasses<KeysInferFromUseStyles<typeof useStyles> | 'root'> {
     items: T[]
     selected: T[]
@@ -32,13 +32,13 @@ const useStyles = makeStyles({
         flexWrap: 'wrap',
     },
 })
-export function SelectRecipientsUI<T extends Group | Person = Group | Person>(props: SelectRecipientsUIProps) {
+export function SelectRecipientsUI<T extends Group | Profile = Group | Profile>(props: SelectRecipientsUIProps) {
     const classes = useStyles()
     const { items, maxSelection, selected, onSetSelected } = props
     const groupItems = items.filter(x => isGroup(x)) as Group[]
-    const profileItems = items.filter(x => isPerson(x)) as Person[]
+    const profileItems = items.filter(x => isProfile(x)) as Profile[]
 
-    const selectedAsProfiles = selected.filter(x => isPerson(x)) as Person[]
+    const selectedAsProfiles = selected.filter(x => isProfile(x)) as Profile[]
     const selectedAsGroups = selected.filter(x => isGroup(x)) as Group[]
 
     const [open, setOpen] = useState(false)
@@ -56,7 +56,7 @@ export function SelectRecipientsUI<T extends Group | Person = Group | Person>(pr
     }, [selected])
     useEffect(() => {
         const selectedIdentifiersSet = new Set(selectedIdentifiers)
-        const selectedProfiles = selected.filter(x => isPerson(x) && selectedIdentifiersSet.has(x.identifier.toText()))
+        const selectedProfiles = selected.filter(x => isProfile(x) && selectedIdentifiersSet.has(x.identifier.toText()))
         const selectedGroups: Group[] = groupItems.filter(x => {
             const groupIdentifiers = x.members.map(y => y.toText())
             return (
@@ -133,9 +133,9 @@ SelectRecipientsUI.defaultProps = {
     frozenSelected: [],
 }
 
-export function isPerson(x: Person | Group): x is Person {
-    return x.identifier instanceof PersonIdentifier
+export function isProfile(x: Profile | Group): x is Profile {
+    return x.identifier instanceof ProfileIdentifier
 }
-export function isGroup(x: Person | Group): x is Group {
+export function isGroup(x: Profile | Group): x is Group {
     return x.identifier instanceof GroupIdentifier
 }

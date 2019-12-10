@@ -27,19 +27,23 @@ function decompressSecp256k1Point(point: ArrayBuffer): { x: string; y: string } 
     return { x: Convert.ToBase64Url(x), y: Convert.ToBase64Url(y) }
 }
 
-export function compressSecp256k1Key(key: JsonWebKey): string {
+export function compressSecp256k1Key(key: JsonWebKey, type: 'public' | 'private'): string {
+    if (type === 'private' && !key.d) throw new Error('Private key does not contain secret')
     const arr = compressSecp256k1Point(key.x!, key.y!)
-    return encodeArrayBuffer(arr)
+    return encodeArrayBuffer(arr) + (type === 'private' ? '🙈' + key.d! : '')
 }
-export function decompressSecp256k1Key(compressed: string): JsonWebKey {
-    const arr = decodeArrayBuffer(compressed)
+export function decompressSecp256k1Key(compressed: string, type: 'public' | 'private'): JsonWebKey {
+    const [compressedPublic, privateKey] = compressed.split('🙈')
+    if (type === 'private' && privateKey.length < 1) throw new Error('Private key does not contain secret')
+    const arr = decodeArrayBuffer(compressedPublic)
     const key = decompressSecp256k1Point(arr)
     return {
         crv: 'K-256',
         ext: true,
         x: key.x,
         y: key.y,
-        key_ops: ['deriveKey'],
+        key_ops: ['deriveKey', 'deriveBits'],
         kty: 'EC',
+        d: type === 'private' ? privateKey : undefined,
     }
 }
