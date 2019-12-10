@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 import StepBase from './StepBase'
 import { Typography } from '@material-ui/core'
 import { geti18nString } from '../../../utils/i18n'
-import ProviderLine from '../DashboardComponents/ProviderLine'
 import { Link } from 'react-router-dom'
 import ActionButton from '../../../components/Dashboard/ActionButton'
 import useQueryParams from '../../../utils/hooks/useQueryParams'
@@ -10,6 +9,7 @@ import Services from '../../service'
 import { ECKeyIdentifier } from '../../../database/type'
 import { Persona } from '../../../database'
 import { useAsync } from '../../../utils/components/AsyncComponent'
+import ProfileBox from '../DashboardComponents/ProfileBox'
 
 const header = 'Step 2: Connect a social network profile'
 const subheader = 'Now we support Facebook and Twitter.'
@@ -38,8 +38,7 @@ export default function InitStep2S() {
             <Typography style={{ paddingBottom: '0.5rem' }} variant="h5">
                 {persona?.nickname ?? 'Unknown Persona'}
             </Typography>
-            <ProviderLine border network="facebook" connected id="@yisiliu"></ProviderLine>
-            <ProviderLine border network="twitter"></ProviderLine>
+            <ProfileBox persona={persona} />
         </div>
     )
 
