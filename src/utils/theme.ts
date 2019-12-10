@@ -54,5 +54,12 @@ export const useColorProvider = makeStyles((theme: typeof MaskbookDarkTheme) =>
         info: {
             color: theme.palette.type === 'dark' ? blue[500] : blue[800],
         },
+        errorButton: {
+            color: theme.palette.getContrastText(red[900]),
+            '&:hover': {
+                background: red[700],
+            },
+            background: red[900],
+        },
     }),
 )

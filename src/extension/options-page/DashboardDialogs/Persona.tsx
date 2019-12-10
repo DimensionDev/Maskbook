@@ -11,6 +11,7 @@ import { Persona } from '../../../database'
 import useQueryParams from '../../../utils/hooks/useQueryParams'
 import { useAsync } from '../../../utils/components/AsyncComponent'
 import ProfileBox from '../DashboardComponents/ProfileBox'
+import { useColorProvider } from '../../../utils/theme'
 
 export function PersonaCreateDialog() {
     const [name, setName] = useState('')
@@ -89,6 +90,7 @@ interface PersonaDeleteDialogProps {
 }
 export function PersonaDeleteDialog(props: PersonaDeleteDialogProps) {
     const { confirmed, declined, persona } = props
+    const color = useColorProvider()
 
     const deletePersona = () => {
         Services.Identity.deletePersona(persona.identifier, 'delete even with private').then(confirmed)
@@ -104,7 +106,7 @@ export function PersonaDeleteDialog(props: PersonaDeleteDialogProps) {
                     <ActionButton variant="outlined" color="default" onClick={declined}>
                         Cancel
                     </ActionButton>
-                    <ActionButton variant="contained" color="primary" onClick={deletePersona}>
+                    <ActionButton classes={{ root: color.errorButton }} onClick={deletePersona}>
                         Ok
                     </ActionButton>
                 </>
