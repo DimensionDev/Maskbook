@@ -17,11 +17,10 @@ import { MessageCenter, CompositionEvent } from '../../utils/messages'
 import { useCapturedInput } from '../../utils/hooks/useCapturedEvents'
 import { useStylesExtends, or } from '../custom-ui-helper'
 import { Profile, Group } from '../../database'
-import { useFriendsList, useGroupsList, useMyIdentities, useCurrentIdentity } from '../DataSource/useActivatedUI'
+import { useFriendsList, useGroupsList, useCurrentIdentity } from '../DataSource/useActivatedUI'
 import { steganographyModeSetting } from '../shared-settings/settings'
 import { useValueRef } from '../../utils/hooks/useValueRef'
 import { getActivatedUI } from '../../social-network/ui'
-import { ChooseIdentity, ChooseIdentityProps } from '../shared/ChooseIdentity'
 import Services from '../../extension/service'
 import { SelectRecipientsUI, SelectRecipientsUIProps } from '../shared/SelectRecipients/SelectRecipients'
 
@@ -60,7 +59,6 @@ export interface PostDialogUIProps extends withClasses<KeysInferFromUseStyles<ty
     onFinishButtonClicked: () => void
     onCloseButtonClicked: () => void
     onSetSelected: SelectRecipientsUIProps['onSetSelected']
-    ChooseIdentityProps?: Partial<ChooseIdentityProps>
     SelectRecipientsUIProps?: Partial<SelectRecipientsUIProps>
 }
 export function PostDialogUI(props: PostDialogUIProps) {
@@ -150,7 +148,6 @@ export function PostDialog(props: PostDialogProps) {
         props.availableShareTarget,
         useMemo(() => [...groups, ...people], [people, groups]),
     )
-    const identities = or(props.identities, useMyIdentities())
     const currentIdentity = or(props.currentIdentity, useCurrentIdentity())
     const isSteganography = useValueRef(steganographyModeSetting)
 
@@ -215,7 +212,7 @@ export function PostDialog(props: PostDialogProps) {
         setOpen(false)
     }, [])
 
-    const ui = (
+    return (
         <PostDialogUI
             open={open}
             availableShareTarget={availableShareTarget}
@@ -230,15 +227,6 @@ export function PostDialog(props: PostDialogProps) {
             {...props}
         />
     )
-
-    if (identities.length > 1)
-        return (
-            <>
-                <ChooseIdentity {...props.ChooseIdentityProps} />
-                {ui}
-            </>
-        )
-    return ui
 }
 
 PostDialog.defaultProps = {
