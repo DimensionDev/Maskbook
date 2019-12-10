@@ -3,14 +3,14 @@ import { DialogContentItem } from './DialogBase'
 
 import { TextField, Typography, InputBase, makeStyles } from '@material-ui/core'
 import { Link, useHistory } from 'react-router-dom'
-import ProviderLine from '../DashboardComponents/ProviderLine'
 import BackupRestoreTab, { BackupRestoreTabProps } from '../DashboardComponents/BackupRestoreTab'
 import ActionButton from '../../../components/Dashboard/ActionButton'
-import { PersonaIdentifier, ECKeyIdentifier } from '../../../database/type'
+import { ECKeyIdentifier } from '../../../database/type'
 import Services from '../../service'
 import { Persona } from '../../../database'
 import useQueryParams from '../../../utils/hooks/useQueryParams'
 import { useAsync } from '../../../utils/components/AsyncComponent'
+import ProfileBox from '../DashboardComponents/ProfileBox'
 
 export function PersonaCreateDialog() {
     const [name, setName] = useState('')
@@ -76,8 +76,7 @@ export function PersonaCreatedDialog() {
                 <>
                     {`New persona «${persona?.nickname}» has been created. Connect a profile now! ([I:b])`}
                     <section style={{ marginTop: 12 }}>
-                        <ProviderLine network="facebook" border></ProviderLine>
-                        <ProviderLine network="twitter" border></ProviderLine>
+                        <ProfileBox persona={persona} />
                     </section>
                 </>
             }></DialogContentItem>

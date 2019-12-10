@@ -6,7 +6,6 @@ import Typography from '@material-ui/core/Typography'
 import { Persona } from '../../../database'
 import { Divider, TextField, Menu, MenuItem } from '@material-ui/core'
 import Services from '../../service'
-import { Link as RouterLink, LinkProps as RouterLinkProps } from 'react-router-dom'
 import SettingsIcon from '@material-ui/icons/Settings'
 import { useSnackbar } from 'notistack'
 import { useColorProvider } from '../../../utils/theme'
@@ -17,6 +16,7 @@ import { BackupJSONFileLatest } from '../../../utils/type-transform/BackupFormat
 import { definedSocialNetworkWorkers } from '../../../social-network/worker'
 import { PersonaDeleteDialog } from '../DashboardDialogs/Persona'
 import { DialogRouter } from '../DashboardDialogs/DialogBase'
+import ProfileBox from './ProfileBox'
 
 interface Props {
     persona: Persona
@@ -49,45 +49,8 @@ const useStyles = makeStyles(theme =>
                 },
             },
         },
-        line: {
-            display: 'flex',
-            alignItems: 'center',
-            '&:not(:first-child)': {
-                paddingTop: theme.spacing(1),
-            },
-            '& > div': {
-                overflow: 'hidden',
-                textOverflow: 'ellipsis',
-                flexShrink: 1,
-                whiteSpace: 'nowrap',
-            },
-            '& > .content': {
-                margin: '0 1em',
-            },
-            '& > .title': {
-                flexShrink: 0,
-                width: '5rem',
-            },
-            '& > .extra-item': {
-                visibility: 'hidden',
-                marginRight: '0',
-                flexShrink: 0,
-                marginLeft: 'auto',
-                cursor: 'pointer',
-                fontSize: '0.8rem',
-            },
-            '&:hover': {
-                '& > .extra-item': {
-                    visibility: 'visible',
-                },
-            },
-        },
     }),
 )
-
-const Link = React.forwardRef<HTMLAnchorElement, RouterLinkProps>((props, ref) => (
-    <RouterLink innerRef={ref} {...props} />
-))
 
 export default function PersonaCard({ persona }: Props) {
     const classes = useStyles()
@@ -98,18 +61,6 @@ export default function PersonaCard({ persona }: Props) {
     useMemo(() => {
         Services.Crypto.getMyProveBio(persona.identifier).then(p => setProvePost(p || ''))
     }, [persona.identifier])
-
-    // FIXME:
-    const profiles = [...persona.linkedProfiles]
-
-    const providers = [...definedSocialNetworkWorkers].map(i => {
-        const profile = profiles.find(([key, value]) => key.network === i.networkIdentifier)
-        return {
-            network: i.networkIdentifier,
-            connected: !!profile,
-            id: profile?.[0].userId,
-        }
-    })
 
     const { enqueueSnackbar, closeSnackbar } = useSnackbar()
 
@@ -204,14 +155,7 @@ export default function PersonaCard({ persona }: Props) {
                         </>
                     )}
                 </Typography>
-                {providers.map(provider => (
-                    <Typography className={classes.line} component="div">
-                        <ProviderLine {...provider} border></ProviderLine>
-                        {provider.connected && (
-                            <div className={classNames('extra-item', color.error)}>{geti18nString('disconnect')}</div>
-                        )}
-                    </Typography>
-                ))}
+                <ProfileBox persona={persona} />
             </CardContent>
             <Divider />
             {deletePersona && (
