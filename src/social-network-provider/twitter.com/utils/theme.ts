@@ -62,3 +62,18 @@ export const useTwitterDialog = makeStyles((theme: Theme) => {
         },
     }
 })
+
+export const useTwitterBanner = makeStyles((theme: Theme) => {
+    const { type, grey } = theme.palette
+    const borderColor = type === 'dark' ? grey[800] : grey[200]
+    return {
+        root: {
+            border: `1px none ${borderColor}`,
+            borderRadius: 0,
+            borderTopStyle: 'solid',
+        },
+        actions: {
+            padding: '0 17px',
+        },
+    }
+})
