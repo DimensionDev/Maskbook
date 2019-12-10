@@ -162,6 +162,12 @@
     "dashboard_item_copy_failed": {
         "message": "複製失敗。"
     },
+    "dashboard_mobile_test": {
+        "message": "加入移動端測試"
+    },
+    "dashboard_source_code": {
+        "message": "程式源代碼"
+    },
     "welcome_0_close_button": {
         "message": "我想以後再做"
     },
