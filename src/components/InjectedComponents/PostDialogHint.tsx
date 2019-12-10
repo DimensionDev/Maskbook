@@ -60,7 +60,6 @@ export function PostDialogHint(props: PostDialogHintProps) {
     if (showWelcome || identities.length === 0) {
         return <NotSetupYetPrompt {...props.NotSetupYetPromptProps} />
     }
-
     if (identities.length > 1) {
         return (
             <>

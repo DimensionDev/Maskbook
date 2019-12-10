@@ -15,14 +15,14 @@ import {
 } from '@material-ui/core'
 import { useLastRecognizedIdentity } from '../DataSource/useActivatedUI'
 import Services from '../../extension/service'
-import { getActivatedUI, SocialNetworkUI } from '../../social-network/ui'
+import { getActivatedUI } from '../../social-network/ui'
 import { env } from '../../social-network/shared'
 import { setStorage } from '../../utils/browser.storage'
 import { useStylesExtends } from '../custom-ui-helper'
 import { useCapturedInput } from '../../utils/hooks/useCapturedEvents'
 import { ProfileIdentifier } from '../../database/type'
 
-interface Props extends withClasses<KeysInferFromUseStyles<typeof useStyles>> {
+interface BannerUIProps extends withClasses<KeysInferFromUseStyles<typeof useStyles>> {
     title?: string
     description?: string
     nextStep: 'hidden' | { onClick(): void }
@@ -42,11 +42,15 @@ const useStyles = makeStyles((theme: Theme) => ({
         borderRadius: 4,
         marginBottom: 10,
     },
+    header: {},
+    content: {},
+    actions: {},
     title: {
         paddingBottom: 0,
     },
+    button: {},
 }))
-export function BannerUI(props: Props) {
+export function BannerUI(props: BannerUIProps) {
     const classes = useStylesExtends(useStyles(), props)
 
     const Title = props.title ?? geti18nString('banner_title')
@@ -100,6 +104,7 @@ export function BannerUI(props: Props) {
     const GetStarted =
         props.nextStep === 'hidden' ? null : (
             <Button
+                className={classes.button}
                 disabled={username === 'hidden' ? false : !username.isValid(usedValue)}
                 onClick={props.nextStep.onClick}
                 variant="contained"
@@ -109,18 +114,20 @@ export function BannerUI(props: Props) {
         )
     const DismissButton =
         props.close !== 'hidden' ? (
-            <Button onClick={props.close.onClose} color="primary">
+            <Button className={classes.button} color="primary" onClick={props.close.onClose}>
                 {geti18nString('cancel')}
             </Button>
         ) : null
     return (
         <AppBar position="static" color="inherit" elevation={0} classes={{ root: classes.root }}>
-            <DialogTitle classes={{ root: classes.title }}>{Title}</DialogTitle>
-            <DialogContent>
+            <DialogTitle classes={{ root: classes.title }} className={classes.header}>
+                {Title}
+            </DialogTitle>
+            <DialogContent className={classes.content}>
                 <DialogContentText>{Description}</DialogContentText>
                 {UserNameInput}
             </DialogContent>
-            <DialogActions>
+            <DialogActions className={classes.actions}>
                 {DismissButton}
                 {GetStarted}
             </DialogActions>
@@ -128,7 +135,9 @@ export function BannerUI(props: Props) {
     )
 }
 
-export type BannerProps = Partial<Props> & { unmount?(): void }
+export interface BannerProps extends Partial<BannerUIProps> {
+    unmount?(): void
+}
 export function Banner(props: BannerProps) {
     const lastRecognizedIdentity = useLastRecognizedIdentity()
     const { nextStep, unmount } = props
