@@ -1,7 +1,6 @@
-import React, { useState, useMemo, useRef } from 'react'
+import React, { useState, useMemo, useRef, useEffect } from 'react'
 import { makeStyles, createStyles } from '@material-ui/core/styles'
 import CardContent from '@material-ui/core/CardContent'
-import Button from '@material-ui/core/Button'
 import Typography from '@material-ui/core/Typography'
 import { Persona } from '../../../database'
 import { Divider, TextField, Menu, MenuItem } from '@material-ui/core'
@@ -56,9 +55,9 @@ export default function PersonaCard({ persona }: Props) {
 
     const [provePost, setProvePost] = useState<string>('')
 
-    useMemo(() => {
+    useEffect(() => {
         Services.Crypto.getMyProveBio(persona.identifier).then(p => setProvePost(p || ''))
-    }, [persona.identifier])
+    }, [persona])
 
     const { enqueueSnackbar, closeSnackbar } = useSnackbar()
 
@@ -72,18 +71,6 @@ export default function PersonaCard({ persona }: Props) {
                 enqueueSnackbar(geti18nString('dashboard_item_copy_failed'), { variant: 'error' })
                 setTimeout(() => prompt(geti18nString('automation_request_paste_into_bio_box'), provePost))
             })
-    }
-
-    const undoDeleteIdentity = (restore: BackupJSONFileLatest) => {
-        const undo = (key: string) => {
-            Services.Welcome.restoreBackup(restore)
-            closeSnackbar(key)
-        }
-        return (key: string) => (
-            <Button color="secondary" onClick={() => undo(key)}>
-                {geti18nString('undo')}
-            </Button>
-        )
     }
 
     const [rename, setRename] = useState(false)
