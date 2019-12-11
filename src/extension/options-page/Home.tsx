@@ -29,7 +29,7 @@ import {
     PersonaImportFailedDialog,
 } from './DashboardDialogs/Persona'
 import { ProfileConnectStartDialog, ProfileConnectDialog } from './DashboardDialogs/Profile'
-import ActionButton from '../../components/Dashboard/ActionButton'
+import ActionButton from './DashboardComponents/ActionButton'
 import FooterLine from './DashboardComponents/FooterLine'
 
 const useStyles = makeStyles((theme: Theme) =>

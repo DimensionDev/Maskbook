@@ -3,7 +3,7 @@ import { Link, useHistory } from 'react-router-dom'
 import StepBase from './StepBase'
 import { TextField, makeStyles, createStyles } from '@material-ui/core'
 import { geti18nString } from '../../../utils/i18n'
-import ActionButton from '../../../components/Dashboard/ActionButton'
+import ActionButton from '../DashboardComponents/ActionButton'
 import Services from '../../service'
 
 const header = 'Step 1: What is your name?'

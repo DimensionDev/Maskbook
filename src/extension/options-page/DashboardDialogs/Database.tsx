@@ -1,7 +1,7 @@
 import React from 'react'
 import { DialogContentItem, DialogRouter } from './DialogBase'
 
-import ActionButton from '../../../components/Dashboard/ActionButton'
+import ActionButton from '../DashboardComponents/ActionButton'
 import Services from '../../service'
 import { decompressBackupFile } from '../../../utils/type-transform/BackupFileShortRepresentation'
 

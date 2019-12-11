@@ -3,7 +3,7 @@ import StepBase from './StepBase'
 import { Button, Box, Typography, styled, Theme } from '@material-ui/core'
 import { geti18nString } from '../../../utils/i18n'
 import { useHistory, Link } from 'react-router-dom'
-import ActionButton from '../../../components/Dashboard/ActionButton'
+import ActionButton from '../DashboardComponents/ActionButton'
 
 const VerticalCenter = styled('div')({
     display: 'flex',
