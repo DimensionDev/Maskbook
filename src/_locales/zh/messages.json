@@ -21,6 +21,9 @@
     "additional_post_box__steganography_post_failed": {
         "message": "請將已下載的圖片上载至發佈框。"
     },
+    "comment_box__placeholder": {
+        "message": "添加一條加密評論…"
+    },
     "comment_box__paste_failed": {
         "message": "請將以下内容拷貝至評論框。"
     },
@@ -461,5 +464,8 @@
     },
     "seen_in_maskbook_database": {
         "message": "Maskbook 已了解此身份 ✔"
+    },
+    "please_include_proof_your_bio": {
+        "message": "請在您的個人簡介中包含引号内的内容 \"$1\"，否則您可能沒法正常使用 Maskbook"
     }
 }

@@ -1,20 +1,17 @@
 import * as React from 'react'
-import { MutationObserverWatcher } from '@holoflows/kit'
-import { PersonKnown } from '../../../components/InjectedComponents/PersonKnown'
-import { bioSelector, bioCard } from '../utils/selector'
+import { MutationObserverWatcher, ValueRef } from '@holoflows/kit'
+import { PersonKnown, PersonKnownProps } from '../../../components/InjectedComponents/PersonKnown'
+import { bioCard } from '../utils/selector'
 import { renderInShadowRoot } from '../../../utils/jss/renderInShadowRoot'
 import { PersonIdentifier } from '../../../database/type'
 import { twitterUrl } from '../utils/url'
 import { makeStyles } from '@material-ui/styles'
-import { timeout } from '../../../utils/utils'
-import AsyncComponent from '../../../utils/components/AsyncComponent'
-import { useState } from 'react'
 import { bioCardParser } from '../utils/fetch'
+import { twitterEncoding } from '../encoding'
 
 const useStyles = makeStyles({
     root: {
-        marginTop: -10,
-        marginBottom: 10,
+        padding: '0 15px',
     },
     center: {
         color: '#657786', // TODO: use color in theme
@@ -23,42 +20,54 @@ const useStyles = makeStyles({
     },
 })
 
-function PersonKnownAtTwitter() {
-    const [userId, setUserId] = useState(PersonIdentifier.unknown.userId)
+export function PersonKnownAtTwitter(props: PersonKnownProps) {
     return (
-        <AsyncComponent
-            promise={async () => {
-                const [bioCardNode] = await timeout(new MutationObserverWatcher(bioCard<false>(false)), 10000)
-                setUserId(bioCardParser(bioCardNode).handle)
+        <PersonKnown
+            AdditionalContentProps={{
+                classes: {
+                    ...useStyles(),
+                },
             }}
-            dependencies={[userId]}
-            awaitingComponent={null}
-            completeComponent={
-                <PersonKnown
-                    whois={new PersonIdentifier(twitterUrl.hostIdentifier, userId)}
-                    AdditionalContentProps={{
-                        classes: {
-                            ...useStyles(),
-                        },
-                    }}
-                />
-            }
-            failedComponent={null}
+            {...props}
         />
     )
 }
 
 export function injectKnownIdentityAtTwitter() {
-    const target = new MutationObserverWatcher(bioSelector())
+    const watcher = new MutationObserverWatcher(bioCard<false>(false))
         .setDOMProxyOption({
-            beforeShadowRootInit: { mode: 'closed' },
             afterShadowRootInit: { mode: 'closed' },
+        })
+        .useForeach(content => {
+            const bioRef = new ValueRef('')
+            const userIdRef = new ValueRef('')
+            const update = () => {
+                const { publicKeyEncoder, publicKeyDecoder } = twitterEncoding
+                const { bio: bioText, handle } = bioCardParser(content)
+
+                userIdRef.value = handle
+                bioRef.value = publicKeyEncoder(publicKeyDecoder(bioText)[0] || '')
+            }
+
+            update()
+
+            const unmount = renderInShadowRoot(
+                <PersonKnownAtTwitter
+                    pageOwner={new PersonIdentifier(twitterUrl.hostIdentifier, userIdRef.value)}
+                    bioContent={bioRef}
+                />,
+                renderPoint,
+            )
+            return {
+                onNodeMutation: update,
+                onRemove: unmount,
+                onTargetChanged: update,
+            }
         })
         .startWatch({
             childList: true,
             subtree: true,
             characterData: true,
         })
-
-    renderInShadowRoot(<PersonKnownAtTwitter />, target.firstDOMProxy.beforeShadow)
+    const renderPoint = watcher.firstDOMProxy.afterShadow
 }

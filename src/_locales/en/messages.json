@@ -21,6 +21,9 @@
     "additional_post_box__steganography_post_failed": {
         "message": "Please upload downloaded image into the post box."
     },
+    "comment_box__placeholder": {
+        "message": "Write an encrypted comment..."
+    },
     "comment_box__paste_failed": {
         "message": "Please paste it into the comment box."
     },
@@ -461,5 +464,8 @@
     },
     "seen_in_maskbook_database": {
         "message": "They are seen in the Maskbook database ✔"
+    },
+    "please_include_proof_your_bio": {
+        "message": "Please include the content in the quote \"$1\" in your bio to use Maskbook"
     }
 }
