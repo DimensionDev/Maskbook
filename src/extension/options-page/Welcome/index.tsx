@@ -306,10 +306,9 @@ export default withRouter(function _WelcomePortal(props: RouteComponentProps) {
                         )
                     }}
                     onRestoreByMnemonicWord={(w, p) => {
-                        Services.Welcome.restoreNewIdentityWithMnemonicWord(selectedId.identifier, w, p).then(
-                            () => setStep(WelcomeState.BackupKey),
-                            alert,
-                        )
+                        Services.Welcome.restoreNewIdentityWithMnemonicWord(w, p, {
+                            whoAmI: selectedId.identifier,
+                        }).then(() => setStep(WelcomeState.BackupKey), alert)
                     }}
                     mnemonicWord={mnemonic}
                     onGenerateKey={password => {
