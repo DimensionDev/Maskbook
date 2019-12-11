@@ -161,7 +161,7 @@ export async function createPersonaByMnemonic(
     const key = await generate_ECDH_256k1_KeyPair_ByMnemonicWord(password)
     const jwkPub = await CryptoKeyToJsonWebKey(key.key.publicKey)
     const jwkPriv = await CryptoKeyToJsonWebKey(key.key.privateKey)
-    const localKey = await deriveLocalKeyFromECDHKey(key.key.publicKey, key.mnemonicRecord.word)
+    const localKey = await deriveLocalKeyFromECDHKey(key.key.publicKey, key.mnemonicRecord.words)
     const jwkLocalKey = await CryptoKeyToJsonWebKey(localKey)
 
     return createPersonaByJsonWebKey({

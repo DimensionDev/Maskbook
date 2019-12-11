@@ -87,7 +87,7 @@ async function generateBackupJSON(): Promise<BackupJSONFileLatest> {
 export async function createNewIdentityByMnemonicWord(whoAmI: ProfileIdentifier, password: string): Promise<string> {
     const x = await generate_ECDH_256k1_KeyPair_ByMnemonicWord(password)
     await generateNewIdentity(whoAmI, x)
-    return x.mnemonicRecord.word
+    return x.mnemonicRecord.words
 }
 
 /**
@@ -131,7 +131,7 @@ async function generateNewIdentity(
     const localKey: CryptoKey =
         'localKey' in usingKey
             ? usingKey.localKey
-            : await deriveLocalKeyFromECDHKey(key.publicKey, usingKey.mnemonicRecord.word)
+            : await deriveLocalKeyFromECDHKey(key.publicKey, usingKey.mnemonicRecord.words)
     const pubJwk = await CryptoKeyToJsonWebKey(key.publicKey)
     const privJwk = await CryptoKeyToJsonWebKey(key.privateKey)
 
