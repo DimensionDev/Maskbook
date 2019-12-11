@@ -1,4 +1,5 @@
 import { ProfileIdentifier } from '../../database/type'
+import * as React from 'react'
 import { AdditionalContent, AdditionalContentProps } from './AdditionalPostContent'
 import { geti18nString } from '../../utils/i18n'
 import AsyncComponent from '../../utils/components/AsyncComponent'
