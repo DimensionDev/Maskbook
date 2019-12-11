@@ -29,25 +29,54 @@ function PersonKnown() {
 
     const complete = <AdditionalContent center title={geti18nString('seen_in_maskbook_database')} />
 
+    type Type = { type: 'self'; provePost: string } | { type: 'others' } | null
     return (
         <AsyncComponent
-            promise={() =>
-                Services.Identity.queryProfile(whois).then(p => {
-                    if (!p.linkedPersona?.fingerprint) throw new TypeError('public key not found')
-                })
-            }
+            promise={async (): Promise<Type> => {
+                const profiles = await Services.Identity.queryMyProfiles('facebook.com')
+                const myProfile = profiles.find(x => x.identifier.equals(whois))
+                if (myProfile) {
+                    const prove = await Services.Crypto.getMyProveBio(myProfile.identifier)
+                    if (!prove) return null
+                    if (
+                        othersBioLiveSelector
+                            .evaluate()
+                            .map(x => x.innerText)
+                            .join('')
+                            .includes(prove)
+                    )
+                        return null
+                    return { type: 'self', provePost: prove }
+                } else {
+                    const profile = await Services.Identity.queryProfile(whois)
+                    if (!profile.linkedPersona?.fingerprint) return null
+                    return { type: 'others' }
+                }
+            }}
             dependencies={[]}
             awaitingComponent={null}
-            completeComponent={complete}
+            completeComponent={({ data }) => {
+                if (data === null) return null
+                switch (data.type) {
+                    case 'self':
+                        return (
+                            <AdditionalContent
+                                hideIcon
+                                center
+                                title={geti18nString('please_include_proof_your_bio', data.provePost)}
+                            />
+                        )
+                    case 'others':
+                        return complete
+                }
+            }}
             failedComponent={null}
         />
     )
 }
 
 export function injectKnownIdentityAtFacebook(this: SocialNetworkUI) {
-    const self = othersBioLiveSelectorMobile.clone().concat(othersBioLiveSelectorPC)
-
-    const watcher = new MutationObserverWatcher(self)
+    const watcher = new MutationObserverWatcher(othersBioLiveSelector)
         .setDOMProxyOption({
             afterShadowRootInit: { mode: 'closed' },
         })
@@ -70,3 +99,4 @@ const othersBioLiveSelectorMobile = new LiveSelector().querySelector<HTMLDivElem
 const othersBioLiveSelectorPC = new LiveSelector().querySelector<HTMLDivElement>(
     '#intro_container_id > div:first-child',
 )
+const othersBioLiveSelector = othersBioLiveSelectorMobile.clone().concat(othersBioLiveSelectorPC)
