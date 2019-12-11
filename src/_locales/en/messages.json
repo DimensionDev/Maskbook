@@ -713,5 +713,11 @@
     },
     "dashboard_disconnect_profile_hint": {
         "message": "Do you really want to disconnect $1 on $2 from persona $3? This operation cannot be reverted."
+    },
+    "dashboard_no_persona_found": {
+        "message": "No persona was found"
+    },
+    "initialize": {
+        "message": "Initialize"
     }
 }
