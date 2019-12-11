@@ -1,17 +1,17 @@
 import React from 'react'
 import StepBase from './StepBase'
-import { Button, Switch } from '@material-ui/core'
-import { Link, Route, Redirect, useRouteMatch } from 'react-router-dom'
+import { Link, Redirect, useRouteMatch } from 'react-router-dom'
 import { DialogRouter } from '../DashboardDialogs/DialogBase'
 import { PersonaImportDialog } from '../DashboardDialogs/Persona'
 import ActionButton from '../DashboardComponents/ActionButton'
+import { geti18nString } from '../../../utils/i18n'
 
-const header = 'Advanced Restoration Options'
+const header = geti18nString('dashboard_advanced_restoration')
 
 const actions = (
     <>
         <ActionButton variant="outlined" color="default" component={Link} to="../1r">
-            Back
+            {geti18nString('back')}
         </ActionButton>
         <span></span>
     </>
@@ -21,7 +21,7 @@ export default function InitStep1Ra() {
     const content = (
         <div style={{ alignSelf: 'stretch', textAlign: 'center', width: '100%' }}>
             <ActionButton width={240} variant="outlined" color="primary" component={Link} to="persona/import">
-                Import Persona
+                {geti18nString('import_persona')}
             </ActionButton>
         </div>
     )

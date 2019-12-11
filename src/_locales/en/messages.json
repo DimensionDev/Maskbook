@@ -138,6 +138,9 @@
     "back": {
         "message": "Back"
     },
+    "next": {
+        "message": "Next"
+    },
     "finish": {
         "message": "Finish"
     },
@@ -212,9 +215,6 @@
     },
     "welcome_1a1_title": {
         "message": "Setup which account?"
-    },
-    "welcome_1a1_next": {
-        "message": "Next"
     },
     "welcome_1a1_didntfind": {
         "message": "Didn't find your account?"
@@ -500,5 +500,218 @@
     },
     "please_include_proof_your_bio": {
         "message": "Please include the content in the quote \"$1\" in your bio to use Maskbook"
+    },
+    "dashboard_welcome_to_maskbook": {
+        "message": "Welcome to Maskbook"
+    },
+    "dashboard_init_header": {
+        "message": "Post on social networks without allowing the corporations to stalk you."
+    },
+    "dashboard_new_user": {
+        "message": "New User"
+    },
+    "dashboard_new_user_hint": {
+        "message": "Set up and start using."
+    },
+    "dashboard_returning_user": {
+        "message": "Returning User"
+    },
+    "dashboard_returning_user_hint": {
+        "message": "Import database backup."
+    },
+    "set_up": {
+        "message": "Set up"
+    },
+    "dashboard_init_step_1": {
+        "message": "Step 1: What is your name?"
+    },
+    "dashboard_init_step_1_hint": {
+        "message": "You may connect social network profiles to your persona in the next step."
+    },
+    "dashboard_password_hint": {
+        "message": "At least 8 characters"
+    },
+    "dashboard_password_helper_text": {
+        "message": "Set a password to upgrade security level"
+    },
+    "dashboard_init_step_2": {
+        "message": "Step 2: Connect a social network profile"
+    },
+    "dashboard_init_step_2_hint": {
+        "message": "Now we support Facebook and Twitter."
+    },
+    "restore_database": {
+        "message": "Restore Database"
+    },
+    "select_file": {
+        "message": "Select File"
+    },
+    "select_file_hint": {
+        "message": "Or drop a file here..."
+    },
+    "advanced": {
+        "message": "Advanced..."
+    },
+    "dashboard_advanced_restoration": {
+        "message": "Advanced Restoration Options"
+    },
+    "import_persona": {
+        "message": "Import Persona"
+    },
+    "privacy_policy": {
+        "message": "Privacy Policy"
+    },
+    "version": {
+        "message": "Version"
+    },
+    "home": {
+        "message": "Home"
+    },
+    "debug": {
+        "message": "Debug"
+    },
+    "dashboard_my_personas": {
+        "message": "My Personas"
+    },
+    "rename": {
+        "message": "Rename"
+    },
+    "connect": {
+        "message": "Connect"
+    },
+    "dashboard_connected": {
+        "message": "Connected"
+    },
+    "add_persona": {
+        "message": "Add Persona"
+    },
+    "create": {
+        "message": "Create"
+    },
+    "dashboard_create_persona_hint": {
+        "message": "Create a new persona."
+    },
+    "import": {
+        "message": "Import"
+    },
+    "dashboard_import_persona_hint": {
+        "message": "From a previous persona backup."
+    },
+    "database": {
+        "message": "Database"
+    },
+    "backup": {
+        "message": "Backup"
+    },
+    "dashboard_backup_database_hint": {
+        "message": "Create a database backup file. Do it frequently."
+    },
+    "dashboard_import_database_hint": {
+        "message": "From a previous database backup."
+    },
+    "create_persona": {
+        "message": "Create Persona"
+    },
+    "dashboard_persona_import_dialog_hint": {
+        "message": "You can import a persona backup with either way below."
+    },
+    "not_available": {
+        "message": "not available"
+    },
+    "dashboard_restore_database_hint": {
+        "message": "Choose a backup file to restore your database."
+    },
+    "dashboard_persona_created": {
+        "message": "Persona Created"
+    },
+    "dashboard_new_persona_created": {
+        "message": "New persona «$1» has been created. Connect a profile now! ([I:b])"
+    },
+    "import_successful": {
+        "message": "Import Successful"
+    },
+    "dashboard_database_import_successful_hint": {
+        "message": "Your database has been restored. Existing data will be merged."
+    },
+    "import_failed": {
+        "message": "Import Failed"
+    },
+    "ok": {
+        "message": "Ok"
+    },
+    "dashboard_backup_persona_hint": {
+        "message": "You can backup the persona with either way below."
+    },
+    "dashboard_backup_persona_mnemonic_hint": {
+        "message": "Keep the 12 words above carefully in a safe place. You will need them to restore the private key of this persona."
+    },
+    "dashboard_backup_persona_text_hint": {
+        "message": "Keep the text above carefully in a safe place. You will need them to restore the private key of this persona."
+    },
+    "backup_persona": {
+        "message": "Backup Persona"
+    },
+    "delete_persona": {
+        "message": "Delete Persona"
+    },
+    "dashboard_delete_persona_confirm_hint": {
+        "message": "Do you really want to delete persona $1? This operation cannot be reverted."
+    },
+    "dashboard_import_persona_failed": {
+        "message": "Your import data is invalid. Please check again."
+    },
+    "dashboard_imported_persona": {
+        "message": "Imported persona `$1` with $2 profiles."
+    },
+    "dashboard_password_optional_hint": {
+        "message": "Leave empty if not set"
+    },
+    "unknown_persona": {
+        "message": "Unknown Persona"
+    },
+    "setup_successful": {
+        "message": "Setup Successful"
+    },
+    "dashboard_bio_test_succeeful": {
+        "message": "You have successfully connected @$1 on $2 to persona $3."
+    },
+    "setup_failure": {
+        "message": "Setup Failure"
+    },
+    "dashboard_bio_test_failed": {
+        "message": "The profile bio should include $1. Please make sure you updated the profile bio of @$2 successfully."
+    },
+    "dashboard_connect_profile_for": {
+        "message": "Connect Profile for $1"
+    },
+    "dashboard_attach_profile_step1": {
+        "message": "Step 1: Copy the public key below"
+    },
+    "dashboard_attach_profile_step2": {
+        "message": "Step 2: Paste it into your profile biography"
+    },
+    "dashboard_attach_profile_step2_hint": {
+        "message": "Hand-by-hand guides will show up after you move to the webpage."
+    },
+    "go_to": {
+        "message": "Go to"
+    },
+    "dashboard_attach_profile_step3": {
+        "message": "Step 3: Test and finish"
+    },
+    "dashboard_attach_profile_step3_hint": {
+        "message": "Come back here and finish the procedure. Test if your setup is successful."
+    },
+    "test": {
+        "message": "Test"
+    },
+    "connect_profile": {
+        "message": "Connect Profile"
+    },
+    "disconnect_profile": {
+        "message": "Disconnect Profile"
+    },
+    "dashboard_disconnect_profile_hint": {
+        "message": "Do you really want to disconnect $1 on $2 from persona $3? This operation cannot be reverted."
     }
 }

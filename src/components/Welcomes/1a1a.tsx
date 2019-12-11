@@ -48,7 +48,7 @@ export default function Welcome({ next, identities, linkNewSocialNetworks }: Pro
                 variant="contained"
                 color="primary"
                 className={classes.button}>
-                {geti18nString('welcome_1a1_next')}
+                {geti18nString('next')}
             </Button>
             <br />
             <Button onClick={linkNewSocialNetworks} color="primary">

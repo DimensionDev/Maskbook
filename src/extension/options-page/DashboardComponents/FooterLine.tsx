@@ -42,7 +42,7 @@ export default function FooterLine() {
         <Breadcrumbs className={classes.footerButtons} separator="|" aria-label="breadcrumb">
             <FooterLink href="https://maskbook.com/">Maskbook.com</FooterLink>
             <FooterLink href="https://github.com/DimensionDev/Maskbook/releases">
-                Version {webpackEnv.version}
+                {geti18nString('version')} {webpackEnv.version}
             </FooterLink>
             <FooterLink href="https://maskbook.com/download-links/#mobile">
                 {geti18nString('dashboard_mobile_test')}
@@ -50,7 +50,7 @@ export default function FooterLine() {
             <FooterLink href="https://github.com/DimensionDev/Maskbook">
                 {geti18nString('dashboard_source_code')}
             </FooterLink>
-            <FooterLink href="https://maskbook.com/privacy-policy/">Privacy Policy</FooterLink>
+            <FooterLink href="https://maskbook.com/privacy-policy/">{geti18nString('privacy_policy')}</FooterLink>
         </Breadcrumbs>
     )
 }

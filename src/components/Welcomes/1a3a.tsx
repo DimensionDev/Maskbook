@@ -183,7 +183,7 @@ export default function Welcome(props: Props) {
                     variant="contained"
                     color="primary"
                     className={classes.button}>
-                    {geti18nString('welcome_1a1_next')}
+                    {geti18nString('next')}
                 </Button>
             </CardContent>
         </WelcomeContainer>

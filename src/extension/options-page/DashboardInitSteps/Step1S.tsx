@@ -6,8 +6,8 @@ import { geti18nString } from '../../../utils/i18n'
 import ActionButton from '../DashboardComponents/ActionButton'
 import Services from '../../service'
 
-const header = 'Step 1: What is your name?'
-const subheader = 'You may connect social network profiles to your persona in the next step.'
+const header = geti18nString('dashboard_init_step_1')
+const subheader = geti18nString('dashboard_init_step_1_hint')
 
 const useStyles = makeStyles(theme =>
     createStyles({
@@ -42,10 +42,10 @@ export default function InitStep1S() {
     const actions = (
         <>
             <ActionButton variant="outlined" color="default" component={Link} to="start">
-                Back
+                {geti18nString('back')}
             </ActionButton>
             <ActionButton variant="contained" color="primary" onClick={createPersonaAndNext} component={'a'}>
-                Next
+                {geti18nString('next')}
             </ActionButton>
         </>
     )
@@ -67,11 +67,11 @@ export default function InitStep1S() {
                 InputLabelProps={{ shrink: true }}
                 variant="outlined"
                 value={password}
-                placeholder="At least 8 characters"
+                placeholder={geti18nString('dashboard_password_hint')}
                 type="password"
                 onChange={e => setPassword(e.target.value)}
                 label="Password"
-                helperText="Set a password to upgrade security level"></TextField>
+                helperText={geti18nString('dashboard_password_helper_text')}></TextField>
         </div>
     )
 

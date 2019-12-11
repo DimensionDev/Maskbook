@@ -1,8 +1,8 @@
 import React from 'react'
 import StepBase from './StepBase'
-import { Button, Box, Typography, styled, Theme } from '@material-ui/core'
+import { Box, Typography, styled, Theme } from '@material-ui/core'
 import { geti18nString } from '../../../utils/i18n'
-import { useHistory, Link } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import ActionButton from '../DashboardComponents/ActionButton'
 
 const VerticalCenter = styled('div')({
@@ -29,25 +29,25 @@ const LinedBox = styled('div')(({ theme }: { theme: Theme }) => ({
 }))
 
 export default function InitStep0() {
-    const header = 'Post on social networks without allowing the corporations to stalk you.'
+    const header = geti18nString('dashboard_init_header')
 
     const content = (
         <div style={{ width: '100%' }}>
             <LinedBox>
                 <Box flex={1}>
-                    <Typography variant="h6">New User</Typography>
-                    <Typography variant="body1">Set up and start using.</Typography>
+                    <Typography variant="h6">{geti18nString('dashboard_new_user')}</Typography>
+                    <Typography variant="body1">{geti18nString('dashboard_new_user_hint')}</Typography>
                 </Box>
                 <VerticalCenter>
                     <ActionButton variant="contained" color="primary" component={Link} to="1s">
-                        Set up
+                        {geti18nString('set_up')}
                     </ActionButton>
                 </VerticalCenter>
             </LinedBox>
             <LinedBox>
                 <Box flex={1}>
-                    <Typography variant="h6">Returning User</Typography>
-                    <Typography variant="body1">Import database backup.</Typography>
+                    <Typography variant="h6">{geti18nString('dashboard_returning_user')}</Typography>
+                    <Typography variant="body1">{geti18nString('dashboard_returning_user_hint')}</Typography>
                 </Box>
                 <VerticalCenter>
                     <ActionButton variant="outlined" component={Link} to="1r">
