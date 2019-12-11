@@ -4,20 +4,27 @@ import { postBoxInPopup } from './postBox'
 import { isNull } from 'lodash-es'
 
 type E = HTMLElement
-const querySelector = <T extends E>(selector: string) => {
-    return new LiveSelector().querySelector<T>(selector).enableSingleMode()
+const querySelector = <T extends E, SingleMode extends boolean = true>(
+    selector: string,
+    singleMode: boolean = true,
+) => {
+    const ls = new LiveSelector<T, SingleMode>().querySelector<T>(selector)
+    return (singleMode ? ls.enableSingleMode() : ls) as LiveSelector<T, SingleMode>
 }
 const querySelectorAll = <T extends E>(selector: string) => {
     return new LiveSelector().querySelectorAll<T>(selector)
 }
 
-export const bioCard = () =>
-    querySelector<HTMLDivElement>(
+export const bioSelector = () => querySelector<HTMLDivElement>(['[data-testid="UserProfileHeader_Items"]'].join())
+
+export const bioCard = <SingleMode extends boolean = true>(singleMode = true) =>
+    querySelector<HTMLDivElement, SingleMode>(
         [
             '.profile', // legacy twitter
             'a[href*="header_photo"] ~ div', // new twitter
             'div[data-testid="primaryColumn"] > div > div:last-child > div > div > div > div ~ div', // new twitter without header photo
         ].join(),
+        singleMode,
     )
 
 export const newPostButton = () => querySelector<E>('[data-testid="SideNav_NewTweet_Button"]')
@@ -25,8 +32,7 @@ export const newPostButton = () => querySelector<E>('[data-testid="SideNav_NewTw
 const postEditor = () =>
     postBoxInPopup() ? '[aria-labelledby="modal-header"]' : '[role="main"] :not(aside) > [role="progressbar"] ~ div'
 
-export const newPostEditorBelow: () => LiveSelector<E, true> = () =>
-    querySelector<E>('[role="main"] :not(aside) > [role="progressbar"] ~ div')
+export const newPostEditorBelow = () => querySelector<E>('[role="main"] :not(aside) > [role="progressbar"] ~ div')
 export const newPostEditorSelector = () => querySelector<HTMLDivElement>(`${postEditor()} .DraftEditor-root`)
 export const newPostEditorFocusAnchor = () => querySelector<E>(`${postEditor()} .public-DraftEditor-content`)
 
