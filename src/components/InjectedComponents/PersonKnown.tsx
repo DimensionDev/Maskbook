@@ -1,3 +1,4 @@
+import * as React from 'react'
 import { PersonIdentifier } from '../../database/type'
 import { AdditionalContent, AdditionalContentProps } from './AdditionalPostContent'
 import { geti18nString } from '../../utils/i18n'

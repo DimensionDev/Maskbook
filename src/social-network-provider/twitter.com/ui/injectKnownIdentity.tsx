@@ -1,3 +1,4 @@
+import * as React from 'react'
 import { MutationObserverWatcher } from '@holoflows/kit'
 import { PersonKnown } from '../../../components/InjectedComponents/PersonKnown'
 import { bioSelector, bioCard } from '../utils/selector'
