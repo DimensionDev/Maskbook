@@ -2,7 +2,6 @@ import React from 'react'
 
 import { makeStyles, createStyles } from '@material-ui/styles'
 import {
-    Button,
     Theme,
     Typography,
     Card,
@@ -23,14 +22,13 @@ import { DatabaseRestoreDialog } from './DashboardDialogs/Database'
 import {
     PersonaCreateDialog,
     PersonaCreatedDialog,
-    PersonaBackupDialog,
-    PersonaImportDialog,
     PersonaImportSuccessDialog,
     PersonaImportFailedDialog,
+    PersonaImportDialog,
 } from './DashboardDialogs/Persona'
-import { ProfileConnectStartDialog, ProfileConnectDialog } from './DashboardDialogs/Profile'
 import ActionButton from './DashboardComponents/ActionButton'
 import FooterLine from './DashboardComponents/FooterLine'
+import { geti18nString } from '../../utils/i18n'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -83,7 +81,6 @@ export default function DashboardHomePage() {
 
     const exportData = () => {
         // FIXME:
-        alert('dummy method')
         setExportLoading(true)
         Services.Welcome.backupMyKeyPair({
             download: true,
@@ -114,7 +111,7 @@ export default function DashboardHomePage() {
         <Container maxWidth="md">
             <section className={classes.sections}>
                 <Typography className={classes.title} variant="h5" align="left">
-                    My Personas
+                    {geti18nString('dashboard_my_personas')}
                 </Typography>
                 {!personas.length && (
                     <Card raised elevation={1}>
@@ -145,12 +142,15 @@ export default function DashboardHomePage() {
             </section>
             <section className={classes.sections}>
                 <Typography className={classes.title} variant="h5" align="left">
-                    Add Persona
+                    {geti18nString('add_persona')}
                 </Typography>
                 <Card raised elevation={1}>
                     <List disablePadding>
                         <ListItemWithAction key="persona-create">
-                            <ListItemText primary="Create" secondary="Create a new persona." />
+                            <ListItemText
+                                primary={geti18nString('create')}
+                                secondary={geti18nString('dashboard_create_persona_hint')}
+                            />
                             <ListItemSecondaryAction>
                                 <ActionButton
                                     variant="contained"
@@ -158,13 +158,16 @@ export default function DashboardHomePage() {
                                     className={classes.button}
                                     component={Link}
                                     to="persona/create">
-                                    Create
+                                    {geti18nString('create')}
                                 </ActionButton>
                             </ListItemSecondaryAction>
                         </ListItemWithAction>
                         <Divider></Divider>
                         <ListItemWithAction key="persona-import">
-                            <ListItemText primary="Import" secondary="From a previous persona backup." />
+                            <ListItemText
+                                primary={geti18nString('import')}
+                                secondary={geti18nString('dashboard_import_persona_hint')}
+                            />
                             <ListItemSecondaryAction>
                                 <ActionButton
                                     variant="outlined"
@@ -172,7 +175,7 @@ export default function DashboardHomePage() {
                                     className={classes.button}
                                     component={Link}
                                     to="persona/import">
-                                    Import
+                                    {geti18nString('import')}
                                 </ActionButton>
                             </ListItemSecondaryAction>
                         </ListItemWithAction>
@@ -181,14 +184,14 @@ export default function DashboardHomePage() {
             </section>
             <section className={classes.sections}>
                 <Typography className={classes.title} variant="h5" align="left">
-                    Database
+                    {geti18nString('database')}
                 </Typography>
                 <Card raised elevation={1}>
                     <List disablePadding>
                         <ListItemWithAction key="dashboard-backup">
                             <ListItemText
-                                primary="Backup"
-                                secondary="Create a database backup file. Do it frequently."
+                                primary={geti18nString('backup')}
+                                secondary={geti18nString('dashboard_backup_database_hint')}
                             />
                             <ListItemSecondaryAction>
                                 <ActionButton
@@ -198,13 +201,16 @@ export default function DashboardHomePage() {
                                     component={'a'}
                                     loading={exportLoading}
                                     onClick={exportData}>
-                                    Backup
+                                    {geti18nString('backup')}
                                 </ActionButton>
                             </ListItemSecondaryAction>
                         </ListItemWithAction>
                         <Divider></Divider>
                         <ListItemWithAction key="dashboard-restore">
-                            <ListItemText primary="Restore" secondary="From a previous database backup." />
+                            <ListItemText
+                                primary={geti18nString('restore')}
+                                secondary={geti18nString('dashboard_import_database_hint')}
+                            />
                             <ListItemSecondaryAction>
                                 <ActionButton
                                     variant="outlined"
@@ -212,7 +218,7 @@ export default function DashboardHomePage() {
                                     className={classes.button}
                                     component={Link}
                                     to="database/restore">
-                                    Restore
+                                    {geti18nString('restore')}
                                 </ActionButton>
                             </ListItemSecondaryAction>
                         </ListItemWithAction>

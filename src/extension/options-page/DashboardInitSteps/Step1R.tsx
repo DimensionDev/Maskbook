@@ -11,7 +11,7 @@ import Services from '../../service'
 import { DialogRouter } from '../DashboardDialogs/DialogBase'
 import { DatabaseRestoreSuccessDialog, DatabaseRestoreFailedDialog } from '../DashboardDialogs/Database'
 
-const header = 'Restore Database'
+const header = geti18nString('restore_database')
 
 const useStyles = makeStyles(theme =>
     createStyles({
@@ -38,10 +38,10 @@ const useStyles = makeStyles(theme =>
 const actions = (
     <>
         <ActionButton variant="outlined" color="default" component={Link} to="start">
-            Back
+            {geti18nString('back')}
         </ActionButton>
         <ActionButton variant="outlined" color="primary" component={Link} to="1ra">
-            Advanced...
+            {geti18nString('advanced')}
         </ActionButton>
     </>
 )
@@ -131,9 +131,9 @@ export default function InitStep1R() {
                     ) : (
                         <>
                             <ActionButton variant="contained" color="primary" className={classes.restoreBoxButton}>
-                                Select File
+                                {geti18nString('select_file')}
                             </ActionButton>
-                            <Typography variant="body2">Or drop a file here...</Typography>
+                            <Typography variant="body2">{geti18nString('select_file_hint')}</Typography>
                         </>
                     )}
                 </RestoreBox>

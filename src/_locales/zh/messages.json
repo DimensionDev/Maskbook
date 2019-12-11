@@ -138,6 +138,9 @@
     "back": {
         "message": "返回"
     },
+    "next": {
+        "message": "繼續"
+    },
     "finish": {
         "message": "完成"
     },
@@ -212,9 +215,6 @@
     },
     "welcome_1a1_title": {
         "message": "你希望為哪個賬戶設定 Maskbook？"
-    },
-    "welcome_1a1_next": {
-        "message": "確認"
     },
     "welcome_1a1_didntfind": {
         "message": "沒有找到你的賬戶？"
@@ -500,5 +500,218 @@
     },
     "please_include_proof_your_bio": {
         "message": "請在您的個人簡介中包含引号内的内容 \"$1\"，否則您可能沒法正常使用 Maskbook"
+    },
+    "dashboard_welcome_to_maskbook": {
+        "message": "歡迎使用 Maskbook"
+    },
+    "dashboard_init_header": {
+        "message": "在社交網絡上發布信息，但不允許他們跟踪您。"
+    },
+    "dashboard_new_user": {
+        "message": "新用戶"
+    },
+    "dashboard_new_user_hint": {
+        "message": "設置並開始使用。"
+    },
+    "dashboard_returning_user": {
+        "message": "老用戶"
+    },
+    "dashboard_returning_user_hint": {
+        "message": "導入數據庫備份。"
+    },
+    "set_up": {
+        "message": "開始"
+    },
+    "dashboard_init_step_1": {
+        "message": "第1步：您叫什麼名字？"
+    },
+    "dashboard_init_step_1_hint": {
+        "message": "您可以在下一步中將社交網絡個人資料連接到您的角色。"
+    },
+    "dashboard_password_hint": {
+        "message": "至少8個字符"
+    },
+    "dashboard_password_helper_text": {
+        "message": "設置密碼以升級安全級別"
+    },
+    "dashboard_init_step_2": {
+        "message": "第2步：連接社交網絡個人資料"
+    },
+    "dashboard_init_step_2_hint": {
+        "message": "現在我們支持Facebook和Twitter。"
+    },
+    "restore_database": {
+        "message": "恢復數據庫"
+    },
+    "select_file": {
+        "message": "選擇文件"
+    },
+    "select_file_hint": {
+        "message": "或拖放文件至此..."
+    },
+    "advanced": {
+        "message": "高級..."
+    },
+    "dashboard_advanced_restoration": {
+        "message": "高級還原選項"
+    },
+    "import_persona": {
+        "message": "導入角色"
+    },
+    "privacy_policy": {
+        "message": "隱私政策"
+    },
+    "version": {
+        "message": "版本"
+    },
+    "home": {
+        "message": "主頁"
+    },
+    "debug": {
+        "message": "調試"
+    },
+    "dashboard_my_personas": {
+        "message": "我的角色"
+    },
+    "rename": {
+        "message": "改名"
+    },
+    "connect": {
+        "message": "連接"
+    },
+    "dashboard_connected": {
+        "message": "已連接"
+    },
+    "add_persona": {
+        "message": "添加角色"
+    },
+    "create": {
+        "message": "創建"
+    },
+    "dashboard_create_persona_hint": {
+        "message": "創建一個新的角色。"
+    },
+    "import": {
+        "message": "導入"
+    },
+    "dashboard_import_persona_hint": {
+        "message": "導入以前的角色備份。"
+    },
+    "database": {
+        "message": "數據庫"
+    },
+    "backup": {
+        "message": "備份"
+    },
+    "dashboard_backup_database_hint": {
+        "message": "創建數據庫備份文件。要經常做。"
+    },
+    "dashboard_import_database_hint": {
+        "message": "導入以前的數據庫備份。"
+    },
+    "create_persona": {
+        "message": "創建角色"
+    },
+    "dashboard_persona_import_dialog_hint": {
+        "message": "您可以通過以下任一方式導入角色備份。"
+    },
+    "not_available": {
+        "message": "不可用"
+    },
+    "dashboard_restore_database_hint": {
+        "message": "選擇備份文件來還原數據庫。"
+    },
+    "dashboard_persona_created": {
+        "message": "角色已創建"
+    },
+    "dashboard_new_persona_created": {
+        "message": "新角色 «$1» 已創建。 立即連接個人資料！([I:b])"
+    },
+    "import_successful": {
+        "message": "導入成功"
+    },
+    "dashboard_database_import_successful_hint": {
+        "message": "您的數據庫已還原。 現有數據將被合併。"
+    },
+    "import_failed": {
+        "message": "導入失敗"
+    },
+    "ok": {
+        "message": "好的"
+    },
+    "dashboard_backup_persona_hint": {
+        "message": "您可以通過以下任一方式備份角色。"
+    },
+    "dashboard_backup_persona_mnemonic_hint": {
+        "message": "將上面12個字詞小心存放。 您需要它們來還原此角色的私鑰。"
+    },
+    "dashboard_backup_persona_text_hint": {
+        "message": "將上面的文本小心存放。 您需要它們來還原此角色的私鑰。"
+    },
+    "backup_persona": {
+        "message": "備份角色"
+    },
+    "delete_persona": {
+        "message": "刪除角色"
+    },
+    "dashboard_delete_persona_confirm_hint": {
+        "message": "您是否真的要刪除角色 $1 ？ 此操作無法還原。"
+    },
+    "dashboard_import_persona_failed": {
+        "message": "您導入的數據無效。請再次檢查。"
+    },
+    "dashboard_imported_persona": {
+        "message": "導入了角色 `$1`，包含 $2 個資料."
+    },
+    "dashboard_password_optional_hint": {
+        "message": "如未設置，請留空"
+    },
+    "unknown_persona": {
+        "message": "未知角色"
+    },
+    "setup_successful": {
+        "message": "設置成功"
+    },
+    "dashboard_bio_test_succeeful": {
+        "message": "您已成功將 @$2 上的 $1 連接到角色 $3."
+    },
+    "setup_failure": {
+        "message": "設置失敗"
+    },
+    "dashboard_bio_test_failed": {
+        "message": "個人簡介种應包含 $1。 請確保您成功更新了 @$2 的個人簡介。"
+    },
+    "dashboard_connect_profile_for": {
+        "message": "為 $1 連接個人資料"
+    },
+    "dashboard_attach_profile_step1": {
+        "message": "步驟1：複製下方的公鑰"
+    },
+    "dashboard_attach_profile_step2": {
+        "message": "步驟2：將其粘貼到個人資料中"
+    },
+    "dashboard_attach_profile_step2_hint": {
+        "message": "當您移至網頁後，將顯示手工指南。"
+    },
+    "go_to": {
+        "message": "前往"
+    },
+    "dashboard_attach_profile_step3": {
+        "message": "步驟3：測試並完成"
+    },
+    "dashboard_attach_profile_step3_hint": {
+        "message": "回到這裡完成程序。 測試您是否設置成功。"
+    },
+    "test": {
+        "message": "測試"
+    },
+    "connect_profile": {
+        "message": "連接個人資料"
+    },
+    "disconnect_profile": {
+        "message": "斷開個人資料"
+    },
+    "dashboard_disconnect_profile_hint": {
+        "message": "您是否真的要从角色 $3 上斷開 $2 的 $1？ 此操作無法撤銷。"
     }
 }

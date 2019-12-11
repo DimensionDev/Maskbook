@@ -4,6 +4,7 @@ import { DialogContentItem, DialogRouter } from './DialogBase'
 import ActionButton from '../DashboardComponents/ActionButton'
 import Services from '../../service'
 import { decompressBackupFile } from '../../../utils/type-transform/BackupFileShortRepresentation'
+import { geti18nString } from '../../../utils/i18n'
 
 export function DatabaseBackupDialog() {
     return (
@@ -13,7 +14,7 @@ export function DatabaseBackupDialog() {
             actionsAlign="center"
             actions={
                 <ActionButton variant="contained" color="primary">
-                    Ok
+                    {geti18nString('ok')}
                 </ActionButton>
             }></DialogContentItem>
     )
@@ -40,14 +41,14 @@ export function DatabaseRestoreDialog() {
     return (
         <>
             <DialogContentItem
-                title="Restore Database"
-                content="Choose a backup file to restore your database."
+                title={geti18nString('restore_database')}
+                content={geti18nString('dashboard_restore_database_hint')}
                 actionsAlign="center"
                 actions={
                     <>
                         <input type="file" accept="application/json" ref={ref} onChange={fileReceiver} hidden />
                         <ActionButton variant="contained" color="primary" onClick={() => ref.current!.click()}>
-                            Choose File
+                            {geti18nString('select_file')}
                         </ActionButton>
                     </>
                 }></DialogContentItem>
@@ -73,11 +74,11 @@ export function DatabaseRestoreSuccessDialog({ onConfirm }: DatabaseRestoreSucce
     return (
         <DialogContentItem
             simplified
-            title="Import Successful"
-            content="Your database has been restored. Existing data will be merged."
+            title={geti18nString('import_successful')}
+            content={geti18nString('dashboard_database_import_successful_hint')}
             actions={
                 <ActionButton variant="outlined" color="default" onClick={onConfirm}>
-                    Ok
+                    {geti18nString('ok')}
                 </ActionButton>
             }></DialogContentItem>
     )
@@ -92,11 +93,11 @@ export function DatabaseRestoreFailedDialog({ error, onConfirm }: DatabaseRestor
     return (
         <DialogContentItem
             simplified
-            title="Import Failed"
+            title={geti18nString('import_failed')}
             content={typeof error === 'string' ? error : error?.message ?? 'Unknown Error'}
             actions={
                 <ActionButton variant="outlined" color="default" onClick={onConfirm}>
-                    Ok
+                    {geti18nString('ok')}
                 </ActionButton>
             }></DialogContentItem>
     )

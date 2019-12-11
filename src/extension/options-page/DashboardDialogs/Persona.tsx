@@ -5,13 +5,14 @@ import { TextField, Typography, InputBase, makeStyles } from '@material-ui/core'
 import { Link, useHistory } from 'react-router-dom'
 import BackupRestoreTab, { BackupRestoreTabProps } from '../DashboardComponents/BackupRestoreTab'
 import ActionButton from '../DashboardComponents/ActionButton'
-import { ECKeyIdentifier, ProfileIdentifier } from '../../../database/type'
+import { ECKeyIdentifier } from '../../../database/type'
 import Services from '../../service'
 import { Persona } from '../../../database'
 import useQueryParams from '../../../utils/hooks/useQueryParams'
 import { useAsync } from '../../../utils/components/AsyncComponent'
 import ProfileBox from '../DashboardComponents/ProfileBox'
 import { useColorProvider } from '../../../utils/theme'
+import { geti18nString } from '../../../utils/i18n'
 
 export function PersonaCreateDialog() {
     const [name, setName] = useState('')
@@ -42,8 +43,8 @@ export function PersonaCreateDialog() {
                 style={{ width: '100%', maxWidth: '320px' }}
                 variant="outlined"
                 label="Password"
-                helperText="Set a password to improve security level"
-                placeholder="At least 8 characters"
+                helperText={geti18nString('dashboard_password_helper_text')}
+                placeholder={geti18nString('dashboard_password_hint')}
                 value={password}
                 onChange={e => setPassword(e.target.value)}
             />
@@ -52,12 +53,12 @@ export function PersonaCreateDialog() {
 
     return (
         <DialogContentItem
-            title="Create Persona"
+            title={geti18nString('create_persona')}
             content={content}
             actionsAlign="center"
             actions={
                 <ActionButton variant="contained" color="primary" component={'a'} onClick={createPersona}>
-                    Create
+                    {geti18nString('create')}
                 </ActionButton>
             }></DialogContentItem>
     )
@@ -72,10 +73,10 @@ export function PersonaCreatedDialog() {
     }, [identifier])
     return (
         <DialogContentItem
-            title="Persona Created"
+            title={geti18nString('dashboard_persona_created')}
             content={
                 <>
-                    {`New persona «${persona?.nickname}» has been created. Connect a profile now! ([I:b])`}
+                    {geti18nString('dashboard_new_persona_created', persona?.nickname)}
                     <section style={{ marginTop: 12 }}>
                         <ProfileBox persona={persona} />
                     </section>
@@ -99,15 +100,15 @@ export function PersonaDeleteDialog(props: PersonaDeleteDialogProps) {
     return (
         <DialogContentItem
             simplified
-            title="Delete Persona"
-            content={`Do you really want to delete persona "${persona?.nickname}"? This operation cannot be reverted.`}
+            title={geti18nString('delete_persona')}
+            content={geti18nString('dashboard_delete_persona_confirm_hint', persona?.nickname)}
             actions={
                 <>
                     <ActionButton variant="outlined" color="default" onClick={onDecline}>
-                        Cancel
+                        {geti18nString('cancel')}
                     </ActionButton>
                     <ActionButton classes={{ root: color.errorButton }} onClick={deletePersona}>
-                        Ok
+                        {geti18nString('ok')}
                     </ActionButton>
                 </>
             }></DialogContentItem>
@@ -121,8 +122,8 @@ interface PersonaBackupDialogProps {
 
 export function PersonaBackupDialog(props: PersonaBackupDialogProps) {
     const { onClose, persona } = props
-    const mnemonicWordValue = persona.mnemonic?.words ?? 'not available'
-    const base64Value = 'not available'
+    const mnemonicWordValue = persona.mnemonic?.words ?? geti18nString('not_available')
+    const base64Value = geti18nString('not_available')
 
     const state = useState(0)
     const tabProps: BackupRestoreTabProps = {
@@ -152,17 +153,22 @@ export function PersonaBackupDialog(props: PersonaBackupDialogProps) {
     }
     const content = (
         <>
-            <Typography variant="body2">You can backup the persona with either way below.</Typography>
+            <Typography variant="body2">{geti18nString('dashboard_backup_persona_hint')}</Typography>
             <BackupRestoreTab margin {...tabProps}></BackupRestoreTab>
             <Typography variant="body2">
-                {state[0] === 0
-                    ? 'Keep the 12 words above carefully in a safe place. You will need them to restore the private key of this persona.'
-                    : 'Keep the text above carefully in a safe place. You will need them to restore the private key of this persona.'}
+                {geti18nString(
+                    state[0] === 0 ? 'dashboard_backup_persona_mnemonic_hint' : 'dashboard_backup_persona_text_hint',
+                )}
             </Typography>
         </>
     )
 
-    return <DialogContentItem onExit={onClose} title="Backup Persona" content={content}></DialogContentItem>
+    return (
+        <DialogContentItem
+            onExit={onClose}
+            title={geti18nString('backup_persona')}
+            content={content}></DialogContentItem>
+    )
 }
 
 const useImportDialogStyles = makeStyles({
@@ -175,7 +181,7 @@ export function PersonaImportDialog() {
     const [name, setName] = useState('')
     const [mnemonicWordValue, setMnemonicWordValue] = useState('')
     const [password, setPassword] = useState('')
-    const base64Value = 'not available'
+    const base64Value = geti18nString('not_available')
 
     const classes = useImportDialogStyles()
 
@@ -218,7 +224,7 @@ export function PersonaImportDialog() {
                             onChange={e => setPassword(e.target.value)}
                             value={password}
                             label="Password"
-                            placeholder="Leave empty if not set"
+                            placeholder={geti18nString('dashboard_password_optional_hint')}
                             margin="dense"
                         />
                     </>
@@ -239,17 +245,17 @@ export function PersonaImportDialog() {
     }
     const content = (
         <>
-            <Typography variant="body1">You can import a persona backup with either way below.</Typography>
+            <Typography variant="body1">{geti18nString('dashboard_persona_import_dialog_hint')}</Typography>
             <BackupRestoreTab margin="top" {...tabProps}></BackupRestoreTab>
         </>
     )
     return (
         <DialogContentItem
-            title="Import Persona"
+            title={geti18nString('import_persona')}
             content={content}
             actions={
                 <ActionButton variant="contained" color="primary" onClick={importPersona}>
-                    Import
+                    {geti18nString('import')}
                 </ActionButton>
             }></DialogContentItem>
     )
@@ -259,11 +265,11 @@ export function PersonaImportFailedDialog() {
     return (
         <DialogContentItem
             simplified
-            title="Import Failure"
-            content="Your import data is invalid. Please check again."
+            title={geti18nString('import_failed')}
+            content={geti18nString('dashboard_import_persona_failed')}
             actions={
                 <ActionButton variant="outlined" color="default" component={Link} to="../">
-                    Ok
+                    {geti18nString('ok')}
                 </ActionButton>
             }></DialogContentItem>
     )
@@ -272,11 +278,11 @@ export function PersonaImportSuccessDialog() {
     return (
         <DialogContentItem
             simplified
-            title="Import Successful"
-            content={`Imported persona ${`Yisi Liu`} with 2 profiles.`}
+            title={geti18nString('import_successful')}
+            content={geti18nString('dashboard_imported_persona', ['Yisi Liu', '2'])}
             actions={
                 <ActionButton variant="outlined" color="default" component={Link} to="../">
-                    Ok
+                    {geti18nString('ok')}
                 </ActionButton>
             }></DialogContentItem>
     )

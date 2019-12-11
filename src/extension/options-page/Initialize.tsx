@@ -9,6 +9,7 @@ import InitStep1R from './DashboardInitSteps/Step1R'
 import InitStep1Ra from './DashboardInitSteps/Step1Ra'
 import InitStep2R from './DashboardInitSteps/Step2R'
 import FooterLine from './DashboardComponents/FooterLine'
+import { geti18nString } from '../../utils/i18n'
 
 const useStyles = makeStyles((theme: Theme) => ({
     wrapper: {
@@ -85,7 +86,7 @@ function DashboardInitializePageInternal() {
         <section className={classes.section}>
             <header className={classes.header}>
                 <img className={classes.maskicon} src="https://maskbook.com/img/MB--CircleCanvas--WhiteOverBlue.svg" />
-                <Typography variant="h6">Welcome to Maskbook</Typography>
+                <Typography variant="h6">{geti18nString('dashboard_welcome_to_maskbook')}</Typography>
             </header>
             <Card className={classes.card}>
                 <RouterItem />

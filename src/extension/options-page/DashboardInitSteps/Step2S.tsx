@@ -12,8 +12,8 @@ import { useAsync } from '../../../utils/components/AsyncComponent'
 import ProfileBox from '../DashboardComponents/ProfileBox'
 import { useMyPersonas } from '../../../components/DataSource/useActivatedUI'
 
-const header = 'Step 2: Connect a social network profile'
-const subheader = 'Now we support Facebook and Twitter.'
+const header = geti18nString('dashboard_init_step_2')
+const subheader = geti18nString('dashboard_init_step_2_hint')
 
 export default function InitStep2S() {
     const { identifier } = useQueryParams(['identifier'])
@@ -27,7 +27,7 @@ export default function InitStep2S() {
     const actions = (
         <>
             <ActionButton variant="outlined" color="default" component={Link} to="1s">
-                Back
+                {geti18nString('back')}
             </ActionButton>
             <ActionButton
                 variant="contained"
@@ -35,7 +35,7 @@ export default function InitStep2S() {
                 disabled={persona?.linkedProfiles.size === 0}
                 component={Link}
                 to="../">
-                Finish
+                {geti18nString('finish')}
             </ActionButton>
         </>
     )
@@ -43,7 +43,7 @@ export default function InitStep2S() {
     const content = (
         <div style={{ alignSelf: 'stretch', width: '100%' }}>
             <Typography style={{ paddingBottom: '0.5rem' }} variant="h5">
-                {persona?.nickname ?? 'Unknown Persona'}
+                {persona?.nickname ?? geti18nString('unknown_persona')}
             </Typography>
             <ProfileBox persona={persona} />
         </div>

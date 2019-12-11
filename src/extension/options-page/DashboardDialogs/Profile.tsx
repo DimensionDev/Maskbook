@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 import { DialogContentItem } from './DialogBase'
 
 import { TextField, Typography, makeStyles, createStyles, Dialog } from '@material-ui/core'
-import { Link, useHistory } from 'react-router-dom'
 
 import ActionButton from '../DashboardComponents/ActionButton'
 
@@ -11,6 +10,7 @@ import { useColorProvider } from '../../../utils/theme'
 import { ProfileIdentifier } from '../../../database/type'
 import Services from '../../service'
 import { getNetworkWorker } from '../../../social-network/worker'
+import { geti18nString } from '../../../utils/i18n'
 
 const useStyles = makeStyles(theme =>
     createStyles({
@@ -37,11 +37,15 @@ function ProfileConnectTestSuccessDialog(props: ProfileConnectTestSuccessDialogP
         <Dialog open onClose={onClose}>
             <DialogContentItem
                 simplified
-                title="Setup Successful"
-                content={`You have seccessfully connected @${identifier.userId} on ${identifier.network} to persona "${nickname}".`}
+                title={geti18nString('setup_successful')}
+                content={geti18nString('dashboard_bio_test_succeeful', [
+                    identifier.userId,
+                    identifier.network,
+                    nickname,
+                ])}
                 actions={
                     <ActionButton variant="outlined" color="default" onClick={onClose}>
-                        Ok
+                        {geti18nString('ok')}
                     </ActionButton>
                 }></DialogContentItem>
         </Dialog>
@@ -60,11 +64,11 @@ function ProfileConnectTestFailedDialog(props: ProfileConnectTestFailedDialog) {
         <Dialog open onClose={onClose}>
             <DialogContentItem
                 simplified
-                title="Setup Failure"
-                content={`The profile bio should include "${provePost}". Please make sure you updated the profile bio of @${userId} successfully.`}
+                title={geti18nString('setup_failure')}
+                content={geti18nString('dashboard_bio_test_failed', [provePost, userId])}
                 actions={
                     <ActionButton variant="outlined" color="default" onClick={onClose}>
-                        Ok
+                        {geti18nString('ok')}
                     </ActionButton>
                 }></DialogContentItem>
         </Dialog>
@@ -97,12 +101,12 @@ export function ProfileConnectStartDialog(props: ProfileConnectStartDialogProps)
     return (
         <DialogContentItem
             onExit={onDecline}
-            title={`Connect Profile for "${nickname}"`}
+            title={geti18nString('dashboard_connect_profile_for', nickname)}
             content={content}
             actionsAlign="center"
             actions={
                 <ActionButton variant="contained" color="primary" onClick={() => onConfirm(name)}>
-                    Next
+                    {geti18nString('next')}
                 </ActionButton>
             }></DialogContentItem>
     )
@@ -150,35 +154,33 @@ export function ProfileConnectDialog(props: ProfileConnectDialogProps) {
     const content = (
         <>
             <section>
-                <Typography variant="h6">Step 1: Copy the public key below</Typography>
+                <Typography variant="h6">{geti18nString('dashboard_attach_profile_step1')}</Typography>
                 <Typography variant="body2">{provePost}</Typography>
                 <ActionButton onClick={copyPublicKey} className={classes.button} variant="outlined" color="primary">
-                    Copy
+                    {geti18nString('copy')}
                 </ActionButton>
             </section>
             <section>
-                <Typography variant="h6">Step 2: Paste it into your profile biography</Typography>
-                <Typography variant="body2">Hand-by-hand guides will show up after you move to the webpage.</Typography>
+                <Typography variant="h6">{geti18nString('dashboard_attach_profile_step2')}</Typography>
+                <Typography variant="body2">{geti18nString('dashboard_attach_profile_step2_hint')}</Typography>
                 <ActionButton
                     onClick={navToProvider}
                     className={classNames(classes.button, classes.buttonLarge)}
                     variant="outlined"
                     color="primary">
-                    Go to {identifier.network}
+                    {geti18nString('go_to')} {identifier.network}
                 </ActionButton>
             </section>
             <section>
-                <Typography variant="h6">Step 3: Test and finish</Typography>
-                <Typography variant="body2">
-                    Come back here and finish the procedure. Test if your setup is successful.
-                </Typography>
+                <Typography variant="h6">{geti18nString('dashboard_attach_profile_step3')}</Typography>
+                <Typography variant="body2">{geti18nString('dashboard_attach_profile_step3_hint')}</Typography>
                 <ActionButton
                     onClick={testIfSet}
                     className={classNames(classes.button, classes.buttonLarge)}
                     variant="contained"
                     color="primary"
                     loading={state === 'loading'}>
-                    Test
+                    {geti18nString('test')}
                 </ActionButton>
             </section>
             {state === 'failed' && (
@@ -194,7 +196,12 @@ export function ProfileConnectDialog(props: ProfileConnectDialogProps) {
         </>
     )
 
-    return <DialogContentItem onExit={onClose} title="Connect Profile" content={content}></DialogContentItem>
+    return (
+        <DialogContentItem
+            onExit={onClose}
+            title={geti18nString('connect_profile')}
+            content={content}></DialogContentItem>
+    )
 }
 interface ProfileDisconnectDialogProps {
     onDecline(): void
@@ -214,15 +221,19 @@ export function ProfileDisconnectDialog(props: ProfileDisconnectDialogProps) {
         <DialogContentItem
             onExit={onDecline}
             simplified
-            title="Disconnect Profile"
-            content={`Do you really want to disconnect @${identifier.userId} on ${identifier.network} from persona "${nickname}"? This operation cannot be reverted.`}
+            title={geti18nString('disconnect_profile')}
+            content={geti18nString('dashboard_disconnect_profile_hint', [
+                identifier.userId,
+                identifier.network,
+                nickname!,
+            ])}
             actions={
                 <>
                     <ActionButton variant="outlined" color="default" onClick={onDecline}>
-                        Cancel
+                        {geti18nString('cancel')}
                     </ActionButton>
                     <ActionButton classes={{ root: color.errorButton }} onClick={deletePersona}>
-                        Ok
+                        {geti18nString('ok')}
                     </ActionButton>
                 </>
             }></DialogContentItem>

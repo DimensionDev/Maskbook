@@ -8,7 +8,6 @@ import {
     Container,
     CssBaseline,
     useMediaQuery,
-    Box,
     Tabs,
     Tab,
 } from '@material-ui/core'
@@ -117,11 +116,11 @@ function Dashboard() {
     const shouldNotRenderAppbar = useMediaQuery('(min-width:1024px)')
 
     const routers: [string, string, JSX.Element][] = [
-        ['Home', '/home/', <BookmarkIcon />],
+        [geti18nString('home'), '/home/', <BookmarkIcon />],
         // ['Device', '/device/', <CachedIcon />],
         // ['Settings', '/settings/', <SettingsIcon />],
         // ['About', '/about/', <InfoOutlinedIcon />],
-        ['Debug', '/debug/', <LocationOnIcon />],
+        [geti18nString('debug'), '/debug/', <LocationOnIcon />],
     ]
 
     const history = useHistory()
