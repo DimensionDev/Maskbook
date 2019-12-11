@@ -106,6 +106,10 @@ export default function DashboardHomePage() {
         </>
     )
 
+    React.useEffect(() => {
+        Services.Identity.queryMyPersonas().then(personas => !personas.length && history.replace('/initialize'))
+    }, [history])
+
     return (
         <Container maxWidth="md">
             <section className={classes.sections}>
@@ -214,15 +218,6 @@ export default function DashboardHomePage() {
                         </ListItemWithAction>
                     </List>
                 </Card>
-            </section>
-            <section className={classes.sections}>
-                {
-                    // FIXME:
-                }
-                DEBUG:
-                <Button color="secondary" component={Link} to="/initialize">
-                    initialize
-                </Button>
             </section>
             <section className={classes.sections}>
                 <FooterLine />

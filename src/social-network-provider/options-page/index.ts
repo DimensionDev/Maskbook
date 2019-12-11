@@ -32,7 +32,7 @@ const optionsPageUISelf = defineSocialNetworkUI({
             query(ref)
             MessageCenter.on('personaUpdated', () => query(ref))
             function query(ref: ValueRef<Persona[]>) {
-                Services.Identity.queryPersonas().then(p => (ref.value = p))
+                Services.Identity.queryMyPersonas().then(p => (ref.value = p))
             }
         }
     },
