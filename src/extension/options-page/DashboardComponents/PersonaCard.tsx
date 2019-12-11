@@ -154,6 +154,7 @@ export default function PersonaCard({ persona }: Props) {
                         <>
                             <TextField
                                 style={{ width: '100%', maxWidth: '320px' }}
+                                inputProps={{ onKeyPress: e => e.key === 'Enter' && renameIdentity(e as any) }}
                                 autoFocus
                                 variant="outlined"
                                 label="Name"
