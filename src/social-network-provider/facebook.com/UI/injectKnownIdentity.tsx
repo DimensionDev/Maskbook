@@ -2,8 +2,8 @@ import * as React from 'react'
 import { LiveSelector, MutationObserverWatcher } from '@holoflows/kit'
 import { renderInShadowRoot } from '../../../utils/jss/renderInShadowRoot'
 import { SocialNetworkUI } from '../../../social-network/ui'
-import { PersonKnown } from '../../../components/InjectedComponents/PersonKnown'
 import { ProfileIdentifier } from '../../../database/type'
+import { PersonKnown } from '../../../components/InjectedComponents/PersonKnown'
 
 const othersBioLiveSelectorMobile = new LiveSelector().querySelector<HTMLDivElement>(
     '[data-sigil=timeline-cover]:not(:first-child)',
@@ -35,8 +35,17 @@ export function injectKnownIdentityAtFacebook(this: SocialNetworkUI) {
             afterShadowRootInit: { mode: 'closed' },
         })
         .useForeach(() => {
-            const umount = renderInShadowRoot(<PersonKnown whois={getCurrentIdentity()} />, renderPoint)
-            return umount
+            const unmount = renderInShadowRoot(
+                <PersonKnown
+                    bioContent={othersBioLiveSelectorMobile
+                        .evaluate()
+                        .map(x => x.innerText)
+                        .join()}
+                    pageOwner={getCurrentIdentity()}
+                />,
+                renderPoint,
+            )
+            return unmount
         })
         .startWatch({
             childList: true,

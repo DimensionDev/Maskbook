@@ -35,12 +35,12 @@ function PersonKnownAtTwitter() {
             awaitingComponent={null}
             completeComponent={
                 <PersonKnown
-                    whois={new ProfileIdentifier(twitterUrl.hostIdentifier, userId)}
-                    AdditionalContentProps={{
-                        classes: {
-                            ...useStyles(),
-                        },
-                    }}
+                    pageOwner={new ProfileIdentifier(twitterUrl.hostIdentifier, userId)}
+                    AdditionalContentProps={{ classes: useStyles() }}
+                    bioContent={bioCard<false>(false)
+                        .evaluate()
+                        .map(x => x.innerText)
+                        .join('')}
                 />
             }
             failedComponent={null}

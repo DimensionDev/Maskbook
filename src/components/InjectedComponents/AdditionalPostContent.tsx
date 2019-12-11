@@ -10,6 +10,7 @@ export interface AdditionalContentProps extends withClasses<KeysInferFromUseStyl
     children?: React.ReactNode
     center?: boolean
     renderText?: string
+    hideIcon?: boolean
 }
 const useStyles = makeStyles({
     root: { backgroundColor: 'transparent' },
@@ -22,13 +23,17 @@ export const AdditionalContent = React.memo(function AdditionalContent(props: Ad
     const icon = getUrl('/maskbook-icon-padded.png')
     const stop = React.useCallback((ev: React.MouseEvent<HTMLDivElement, MouseEvent>) => ev.stopPropagation(), [])
     return (
-        <Card className={classes.root} elevation={0} onClick={stop}>
+        <Card
+            className={classes.root}
+            elevation={0}
+            onClick={stop}
+            style={props.hideIcon ? { paddingLeft: 16 } : void 0}>
             <Typography
                 variant="caption"
                 color="textSecondary"
                 gutterBottom
                 className={classNames(classes.title, { [classes.center]: props.center })}>
-                <img alt="" width={16} height={16} src={icon} className={classes.icon} />
+                {props.hideIcon ? null : <img alt="" width={16} height={16} src={icon} className={classes.icon} />}
                 <span>{props.title}</span>
             </Typography>
             {props.renderText ? (
