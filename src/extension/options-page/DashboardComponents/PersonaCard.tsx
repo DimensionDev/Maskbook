@@ -138,7 +138,9 @@ export default function PersonaCard({ persona }: Props) {
                                     onClick={handleClose}
                                     onClose={handleClose}>
                                     <MenuItem onClick={() => setRename(true)}>Rename</MenuItem>
-                                    <MenuItem onClick={copyPublicKey}>Copy Public Key</MenuItem>
+                                    {
+                                        // <MenuItem onClick={copyPublicKey}>Copy Public Key</MenuItem>
+                                    }
                                     <MenuItem onClick={() => setBackupPersona(true)}>
                                         {geti18nString('dashboard_create_backup')}
                                     </MenuItem>

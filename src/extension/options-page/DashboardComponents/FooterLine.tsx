@@ -7,7 +7,7 @@ import { geti18nString } from '../../../utils/i18n'
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         footerButtons: {
-            marginTop: theme.spacing(1),
+            marginTop: theme.spacing(3),
             '& ol': {
                 justifyContent: 'center',
             },
