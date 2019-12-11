@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useRef, useEffect } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import { makeStyles, createStyles } from '@material-ui/core/styles'
 import CardContent from '@material-ui/core/CardContent'
 import Typography from '@material-ui/core/Typography'

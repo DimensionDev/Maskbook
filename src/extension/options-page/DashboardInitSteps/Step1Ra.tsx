@@ -4,7 +4,7 @@ import { Button, Switch } from '@material-ui/core'
 import { Link, Route, Redirect, useRouteMatch } from 'react-router-dom'
 import { DialogRouter } from '../DashboardDialogs/DialogBase'
 import { PersonaImportDialog } from '../DashboardDialogs/Persona'
-import ActionButton from '../../../components/Dashboard/ActionButton'
+import ActionButton from '../DashboardComponents/ActionButton'
 
 const header = 'Advanced Restoration Options'
 

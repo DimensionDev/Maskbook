@@ -4,7 +4,7 @@ import { DialogContentItem } from './DialogBase'
 import { TextField, Typography, makeStyles, createStyles, Dialog } from '@material-ui/core'
 import { Link, useHistory } from 'react-router-dom'
 
-import ActionButton from '../../../components/Dashboard/ActionButton'
+import ActionButton from '../DashboardComponents/ActionButton'
 
 import classNames from 'classnames'
 import { useColorProvider } from '../../../utils/theme'
