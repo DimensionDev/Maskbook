@@ -93,7 +93,7 @@
     "@storybook/addon-info": "^5.2.6",
     "@storybook/addon-knobs": "^5.2.6",
     "@storybook/addon-links": "^5.2.8",
-    "@storybook/addon-viewport": "^5.2.6",
+    "@storybook/addon-viewport": "^5.2.8",
     "@storybook/addons": "^5.2.6",
     "@storybook/react": "^5.2.5",
     "@storybook/theming": "^5.2.4",
