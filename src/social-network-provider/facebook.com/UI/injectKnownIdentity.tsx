@@ -1,9 +1,11 @@
 import * as React from 'react'
-import { LiveSelector, MutationObserverWatcher } from '@holoflows/kit'
+import { useState } from 'react'
+import { LiveSelector, MutationObserverWatcher, ValueRef } from '@holoflows/kit'
 import { renderInShadowRoot } from '../../../utils/jss/renderInShadowRoot'
 import { SocialNetworkUI } from '../../../social-network/ui'
-import { PersonKnown } from '../../../components/InjectedComponents/PersonKnown'
 import { PersonIdentifier } from '../../../database/type'
+import { PersonKnown, PersonKnownProps } from '../../../components/InjectedComponents/PersonKnown'
+import { makeStyles } from '@material-ui/core'
 
 const othersBioLiveSelectorMobile = new LiveSelector().querySelector<HTMLDivElement>(
     '[data-sigil=timeline-cover]:not(:first-child)',
@@ -28,15 +30,46 @@ function getCurrentIdentity() {
     return null
 }
 
+const useStyles = makeStyles({
+    root: {
+        wordBreak: 'break-word',
+        textAlign: 'center',
+        marginLeft: 12,
+        marginRight: 12,
+    },
+})
+
+export function PersonKnownAtFacebook(props: PersonKnownProps) {
+    return (
+        <PersonKnown
+            AdditionalContentProps={{
+                classes: {
+                    ...useStyles(),
+                },
+            }}
+            {...props}
+        />
+    )
+}
+
 export function injectKnownIdentityAtFacebook(this: SocialNetworkUI) {
     const self = othersBioLiveSelectorMobile.clone().concat(othersBioLiveSelectorPC)
     const watcher = new MutationObserverWatcher(self)
         .setDOMProxyOption({
             afterShadowRootInit: { mode: 'closed' },
         })
-        .useForeach(() => {
-            const umount = renderInShadowRoot(<PersonKnown whois={getCurrentIdentity()} />, renderPoint)
-            return umount
+        .useForeach(content => {
+            const ref = new ValueRef(content.innerText)
+            const unmount = renderInShadowRoot(
+                <PersonKnownAtFacebook pageOwner={getCurrentIdentity()} bioContent={ref} />,
+                renderPoint,
+            )
+            const update = () => (ref.value = content.innerText)
+            return {
+                onNodeMutation: update,
+                onRemove: unmount,
+                onTargetChanged: update,
+            }
         })
         .startWatch({
             childList: true,
