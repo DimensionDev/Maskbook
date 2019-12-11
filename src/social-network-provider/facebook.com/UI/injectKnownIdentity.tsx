@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { LiveSelector, MutationObserverWatcher } from '@holoflows/kit'
+import { LiveSelector, MutationObserverWatcher, ValueRef } from '@holoflows/kit'
 import { renderInShadowRoot } from '../../../utils/jss/renderInShadowRoot'
 import { SocialNetworkUI } from '../../../social-network/ui'
 import { ProfileIdentifier } from '../../../database/type'
@@ -34,18 +34,18 @@ export function injectKnownIdentityAtFacebook(this: SocialNetworkUI) {
         .setDOMProxyOption({
             afterShadowRootInit: { mode: 'closed' },
         })
-        .useForeach(() => {
+        .useForeach(content => {
+            const ref = new ValueRef(content.innerText)
             const unmount = renderInShadowRoot(
-                <PersonKnown
-                    bioContent={othersBioLiveSelectorMobile
-                        .evaluate()
-                        .map(x => x.innerText)
-                        .join()}
-                    pageOwner={getCurrentIdentity()}
-                />,
+                <PersonKnown bioContent={ref} pageOwner={getCurrentIdentity()} />,
                 renderPoint,
             )
-            return unmount
+            const update = () => (ref.value = content.innerText)
+            return {
+                onNodeMutation: update,
+                onRemove: unmount,
+                onTargetChanged: update,
+            }
         })
         .startWatch({
             childList: true,

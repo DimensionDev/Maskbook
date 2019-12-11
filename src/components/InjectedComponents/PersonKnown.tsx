@@ -4,9 +4,11 @@ import { AdditionalContent, AdditionalContentProps } from './AdditionalPostConte
 import { geti18nString } from '../../utils/i18n'
 import AsyncComponent from '../../utils/components/AsyncComponent'
 import Services from '../../extension/service'
+import { ValueRef } from '@holoflows/kit/es'
+import { useValueRef } from '../../utils/hooks/useValueRef'
 
 export interface PersonKnownProps {
-    bioContent?: string
+    bioContent: ValueRef<string>
     pageOwner?: ProfileIdentifier | null
     AdditionalContentProps?: Partial<AdditionalContentProps>
 }
@@ -14,17 +16,17 @@ export interface PersonKnownProps {
 type Type = { type: 'self'; provePost: string } | { type: 'others' } | null
 export function PersonKnown(props: PersonKnownProps) {
     const { pageOwner, bioContent } = props
+    const bio = useValueRef(bioContent)
     if (!pageOwner) return null
     return (
         <AsyncComponent
             promise={async (): Promise<Type> => {
-                const profiles = await Services.Identity.queryMyProfiles('facebook.com')
+                const profiles = await Services.Identity.queryMyProfiles(pageOwner.network)
                 const myProfile = profiles.find(x => x.identifier.equals(pageOwner))
                 if (myProfile) {
                     const prove = await Services.Crypto.getMyProveBio(myProfile.identifier)
                     if (!prove) return null
-                    if (bioContent === undefined) return null
-                    if (bioContent.includes(prove)) return null
+                    if (bio.includes(prove)) return null
                     return { type: 'self', provePost: prove }
                 } else {
                     const profile = await Services.Identity.queryProfile(pageOwner)
@@ -32,7 +34,7 @@ export function PersonKnown(props: PersonKnownProps) {
                     return { type: 'others' }
                 }
             }}
-            dependencies={[]}
+            dependencies={[pageOwner.toText(), bio]}
             awaitingComponent={null}
             completeComponent={({ data }) => {
                 if (data === null) return null

@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { MutationObserverWatcher } from '@holoflows/kit'
+import { MutationObserverWatcher, ValueRef } from '@holoflows/kit'
 import { PersonKnown } from '../../../components/InjectedComponents/PersonKnown'
 import { bioSelector, bioCard } from '../utils/selector'
 import { renderInShadowRoot } from '../../../utils/jss/renderInShadowRoot'
@@ -13,7 +13,6 @@ import { bioCardParser } from '../utils/fetch'
 
 const useStyles = makeStyles({
     root: {
-        marginTop: -10,
         marginBottom: 10,
     },
     center: {
@@ -23,7 +22,7 @@ const useStyles = makeStyles({
     },
 })
 
-function PersonKnownAtTwitter() {
+function PersonKnownAtTwitter(props: { bio: ValueRef<string> }) {
     const [userId, setUserId] = useState(ProfileIdentifier.unknown.userId)
     return (
         <AsyncComponent
@@ -37,10 +36,7 @@ function PersonKnownAtTwitter() {
                 <PersonKnown
                     pageOwner={new ProfileIdentifier(twitterUrl.hostIdentifier, userId)}
                     AdditionalContentProps={{ classes: useStyles() }}
-                    bioContent={bioCard<false>(false)
-                        .evaluate()
-                        .map(x => x.innerText)
-                        .join('')}
+                    bioContent={props.bio}
                 />
             }
             failedComponent={null}
@@ -54,11 +50,20 @@ export function injectKnownIdentityAtTwitter() {
             beforeShadowRootInit: { mode: 'closed' },
             afterShadowRootInit: { mode: 'closed' },
         })
+        .useForeach(content => {
+            const ref = new ValueRef(content.innerText)
+            const unmount = renderInShadowRoot(<PersonKnownAtTwitter bio={ref} />, renderPoint)
+            const update = () => (ref.value = content.innerText)
+            return {
+                onNodeMutation: update,
+                onRemove: unmount,
+                onTargetChanged: update,
+            }
+        })
         .startWatch({
             childList: true,
             subtree: true,
             characterData: true,
         })
-
-    renderInShadowRoot(<PersonKnownAtTwitter />, target.firstDOMProxy.beforeShadow)
+    const renderPoint = target.firstDOMProxy.afterShadow
 }
