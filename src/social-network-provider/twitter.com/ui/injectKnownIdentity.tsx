@@ -1,8 +1,9 @@
+import * as React from 'react'
 import { MutationObserverWatcher } from '@holoflows/kit'
 import { PersonKnown } from '../../../components/InjectedComponents/PersonKnown'
 import { bioSelector, bioCard } from '../utils/selector'
 import { renderInShadowRoot } from '../../../utils/jss/renderInShadowRoot'
-import { PersonIdentifier } from '../../../database/type'
+import { ProfileIdentifier } from '../../../database/type'
 import { twitterUrl } from '../utils/url'
 import { makeStyles } from '@material-ui/styles'
 import { timeout } from '../../../utils/utils'
@@ -23,7 +24,7 @@ const useStyles = makeStyles({
 })
 
 function PersonKnownAtTwitter() {
-    const [userId, setUserId] = useState(PersonIdentifier.unknown.userId)
+    const [userId, setUserId] = useState(ProfileIdentifier.unknown.userId)
     return (
         <AsyncComponent
             promise={async () => {
@@ -34,7 +35,7 @@ function PersonKnownAtTwitter() {
             awaitingComponent={null}
             completeComponent={
                 <PersonKnown
-                    whois={new PersonIdentifier(twitterUrl.hostIdentifier, userId)}
+                    whois={new ProfileIdentifier(twitterUrl.hostIdentifier, userId)}
                     AdditionalContentProps={{
                         classes: {
                             ...useStyles(),
