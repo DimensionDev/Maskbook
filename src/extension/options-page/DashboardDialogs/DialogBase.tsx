@@ -123,6 +123,7 @@ export function DialogRouter(props: DialogRouterProps) {
 
     return (
         <Dialog
+            disableEscapeKeyDown
             closeAfterTransition
             onClose={onExitAction}
             fullScreen={fullscreen || false}

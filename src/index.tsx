@@ -118,9 +118,9 @@ function Dashboard() {
 
     const routers: [string, string, JSX.Element][] = [
         ['Home', '/home/', <BookmarkIcon />],
-        ['Device', '/device/', <CachedIcon />],
-        ['Settings', '/settings/', <SettingsIcon />],
-        ['About', '/about/', <InfoOutlinedIcon />],
+        // ['Device', '/device/', <CachedIcon />],
+        // ['Settings', '/settings/', <SettingsIcon />],
+        // ['About', '/about/', <InfoOutlinedIcon />],
         ['Debug', '/debug/', <LocationOnIcon />],
     ]
 

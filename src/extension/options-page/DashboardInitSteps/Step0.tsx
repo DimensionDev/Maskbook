@@ -29,7 +29,7 @@ const LinedBox = styled('div')(({ theme }: { theme: Theme }) => ({
 }))
 
 export default function InitStep0() {
-    const header = 'You can post on Facebook without allowing Facebook to stalk or watch you.'
+    const header = 'Post on social networks without allowing the corporations to stalk you.'
 
     const content = (
         <div style={{ width: '100%' }}>
