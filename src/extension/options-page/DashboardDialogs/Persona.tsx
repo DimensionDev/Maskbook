@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { DialogContentItem } from './DialogBase'
+import { DialogContentItem, DialogRouter } from './DialogBase'
 
 import { TextField, Typography, InputBase, makeStyles } from '@material-ui/core'
 import { Link, useHistory } from 'react-router-dom'
@@ -178,7 +178,7 @@ const useImportDialogStyles = makeStyles({
 })
 
 export function PersonaImportDialog() {
-    const [name, setName] = useState('')
+    const [nickname, setNickname] = useState('')
     const [mnemonicWordValue, setMnemonicWordValue] = useState('')
     const [password, setPassword] = useState('')
     const base64Value = geti18nString('not_available')
@@ -187,16 +187,17 @@ export function PersonaImportDialog() {
 
     const history = useHistory()
 
-    const importPersona = () => {
-        // FIXME:
-        alert('dummy method')
-        // const persona = ProfileIdentifier.fromString(name) as ProfileIdentifier | null
-        // Services.Welcome.restoreNewIdentityWithMnemonicWord(persona, mnemonicWordValue, password).then(() =>
-        //     history.push('../'),
-        // )
-    }
+    const [restoreState, setRestoreState] = React.useState<'success' | 'failed' | null>(null)
 
     const state = useState(0)
+
+    const importPersona = () => {
+        if (state[0] !== 0) return false
+        Services.Welcome.restoreNewIdentityWithMnemonicWord(mnemonicWordValue, password, { nickname })
+            .then(() => setRestoreState('success'))
+            .catch(() => setRestoreState('failed'))
+    }
+
     const tabProps: BackupRestoreTabProps = {
         tabs: [
             {
@@ -205,8 +206,8 @@ export function PersonaImportDialog() {
                     <>
                         <TextField
                             className={classes.input}
-                            onChange={e => setName(e.target.value)}
-                            value={name}
+                            onChange={e => setNickname(e.target.value)}
+                            value={nickname}
                             required
                             label="Name"
                             margin="dense"
@@ -247,6 +248,20 @@ export function PersonaImportDialog() {
         <>
             <Typography variant="body1">{geti18nString('dashboard_persona_import_dialog_hint')}</Typography>
             <BackupRestoreTab margin="top" {...tabProps}></BackupRestoreTab>
+            {restoreState === 'success' && (
+                <DialogRouter
+                    onExit="/home"
+                    children={
+                        <PersonaImportSuccessDialog onConfirm={() => history.push('/home')} nickname={nickname} />
+                    }
+                />
+            )}
+            {restoreState === 'failed' && (
+                <DialogRouter
+                    onExit={() => setRestoreState(null)}
+                    children={<PersonaImportFailedDialog onConfirm={() => setRestoreState(null)} />}
+                />
+            )}
         </>
     )
     return (
@@ -254,34 +269,47 @@ export function PersonaImportDialog() {
             title={geti18nString('import_persona')}
             content={content}
             actions={
-                <ActionButton variant="contained" color="primary" onClick={importPersona}>
+                <ActionButton variant="contained" color="primary" onClick={importPersona} disabled={state[0] !== 0}>
                     {geti18nString('import')}
                 </ActionButton>
             }></DialogContentItem>
     )
 }
 
-export function PersonaImportFailedDialog() {
+interface PersonaImportFailedDialogProps {
+    onConfirm(): void
+}
+
+export function PersonaImportFailedDialog(props: PersonaImportFailedDialogProps) {
+    const { onConfirm } = props
     return (
         <DialogContentItem
             simplified
             title={geti18nString('import_failed')}
             content={geti18nString('dashboard_import_persona_failed')}
             actions={
-                <ActionButton variant="outlined" color="default" component={Link} to="../">
+                <ActionButton variant="outlined" color="default" onClick={onConfirm}>
                     {geti18nString('ok')}
                 </ActionButton>
             }></DialogContentItem>
     )
 }
-export function PersonaImportSuccessDialog() {
+
+interface PersonaImportSuccessDialogProps {
+    nickname: string
+    profiles?: number | null
+    onConfirm(): void
+}
+
+export function PersonaImportSuccessDialog(props: PersonaImportSuccessDialogProps) {
+    const { nickname, profiles, onConfirm } = props
     return (
         <DialogContentItem
             simplified
             title={geti18nString('import_successful')}
-            content={geti18nString('dashboard_imported_persona', ['Yisi Liu', '2'])}
+            content={geti18nString('dashboard_imported_persona', [nickname, '' + (profiles ?? 0)])}
             actions={
-                <ActionButton variant="outlined" color="default" component={Link} to="../">
+                <ActionButton variant="outlined" color="default" onClick={onConfirm}>
                     {geti18nString('ok')}
                 </ActionButton>
             }></DialogContentItem>

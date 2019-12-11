@@ -19,13 +19,7 @@ import { DialogRouter } from './DashboardDialogs/DialogBase'
 
 import PersonaCard from './DashboardComponents/PersonaCard'
 import { DatabaseRestoreDialog } from './DashboardDialogs/Database'
-import {
-    PersonaCreateDialog,
-    PersonaCreatedDialog,
-    PersonaImportSuccessDialog,
-    PersonaImportFailedDialog,
-    PersonaImportDialog,
-} from './DashboardDialogs/Persona'
+import { PersonaCreateDialog, PersonaCreatedDialog, PersonaImportDialog } from './DashboardDialogs/Persona'
 import ActionButton from './DashboardComponents/ActionButton'
 import FooterLine from './DashboardComponents/FooterLine'
 import { geti18nString } from '../../utils/i18n'
@@ -99,8 +93,6 @@ export default function DashboardHomePage() {
             <DialogRouter path="/persona/create" children={<PersonaCreateDialog />} />
             <DialogRouter path="/persona/created" children={<PersonaCreatedDialog />} />
             <DialogRouter path="/persona/import" children={<PersonaImportDialog />} />
-            <DialogRouter path="/persona/success" children={<PersonaImportSuccessDialog />} />
-            <DialogRouter path="/persona/failed" children={<PersonaImportFailedDialog />} />
         </>
     )
 
@@ -118,7 +110,7 @@ export default function DashboardHomePage() {
                     <Card raised elevation={1}>
                         <List disablePadding>
                             <ListItemWithAction key="initialize">
-                                <ListItemText primary="No persona was found" />
+                                <ListItemText primary={geti18nString('dashboard_no_persona_found')} />
                                 <ListItemSecondaryAction>
                                     <ActionButton
                                         component={Link}
@@ -126,7 +118,7 @@ export default function DashboardHomePage() {
                                         variant="contained"
                                         color="primary"
                                         className={classes.button}>
-                                        Initialize
+                                        {geti18nString('initialize')}
                                     </ActionButton>
                                 </ListItemSecondaryAction>
                             </ListItemWithAction>

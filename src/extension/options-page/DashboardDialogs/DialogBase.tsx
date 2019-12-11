@@ -28,6 +28,10 @@ const useStyles = makeStyles(theme =>
         },
         dialogTitle: {
             padding: `${theme.spacing(1)}px ${theme.spacing(4)}px ${theme.spacing(1)}px ${theme.spacing(1)}px`,
+            whiteSpace: 'nowrap',
+            textOverflow: 'ellipsis',
+            wordBreak: 'break-all',
+            overflow: 'hidden',
         },
         dialogTitleSimplified: {
             padding: `${theme.spacing(2)}px ${theme.spacing(4)}px 0`,

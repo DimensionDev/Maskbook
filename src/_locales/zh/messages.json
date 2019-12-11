@@ -713,5 +713,11 @@
     },
     "dashboard_disconnect_profile_hint": {
         "message": "您是否真的要从角色 $3 上斷開 $2 的 $1？ 此操作無法撤銷。"
+    },
+    "dashboard_no_persona_found": {
+        "message": "找不到角色"
+    },
+    "initialize": {
+        "message": "初始化"
     }
 }
