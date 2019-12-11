@@ -2,7 +2,6 @@ import { OnlyRunInContext } from '@holoflows/kit'
 import { encodeText } from '../../utils/type-transform/String-ArrayBuffer'
 import { sleep } from '../../utils/utils'
 import { geti18nString } from '../../utils/i18n'
-import { ProfileIdentifier, Identifier, ECKeyIdentifier } from '../../database/type'
 import { MessageCenter } from '../../utils/messages'
 import getCurrentNetworkWorker from '../../social-network/utils/getCurrentNetworkWorker'
 import { SocialNetworkUI } from '../../social-network/ui'
@@ -12,6 +11,12 @@ import {
     recover_ECDH_256k1_KeyPair_ByMnemonicWord,
     MnemonicGenerationInformation,
 } from '../../utils/mnemonic-code'
+import {
+    createProfileWithPersona,
+    createPersonaByJsonWebKey,
+    createDefaultFriendsGroup,
+    updateOrCreateProfile,
+} from '../../database'
 import { IdentifierMap } from '../../database/IdentifierMap'
 import {
     queryPersonasWithPrivateKey,
@@ -19,8 +24,9 @@ import {
     queryProfileDB,
     createPersonaDB,
     attachProfileDB,
+    PersonaRecord,
+    LinkedProfileDetails,
 } from '../../database/Persona/Persona.db'
-import { createDefaultFriendsGroup, createProfileWithPersona, updateOrCreateProfile } from '../../database'
 import {
     CryptoKeyToJsonWebKey,
     JsonWebKeyToCryptoKey,
@@ -28,7 +34,9 @@ import {
 } from '../../utils/type-transform/CryptoKey-JsonWebKey'
 import { deriveLocalKeyFromECDHKey } from '../../utils/mnemonic-code/localKeyGenerate'
 import { BackupJSONFileLatest, UpgradeBackupJSONFile } from '../../utils/type-transform/BackupFormat/JSON/latest'
+import { attachProfile } from './IdentityService'
 import { BackupJSONFileVersion1 } from '../../utils/type-transform/BackupFormat/JSON/version-1'
+import { ProfileIdentifier, PersonaIdentifier, Identifier, ECKeyIdentifier } from '../../database/type'
 import { upgradeFromBackupJSONFileVersion1 } from '../../utils/type-transform/BackupFormat/JSON/version-2'
 
 OnlyRunInContext('background', 'WelcomeService')
@@ -89,19 +97,40 @@ export async function createNewIdentityByMnemonicWord(whoAmI: ProfileIdentifier,
 }
 
 /**
- *
  * Recover new identity by a password and mnemonic words
  *
- * @param whoAmI Who Am I
  * @param password password used to generate mnemonic word, can be empty string
  * @param word mnemonic words
+ * @param info additional information
  */
 export async function restoreNewIdentityWithMnemonicWord(
-    whoAmI: ProfileIdentifier,
     word: string,
     password: string,
-): Promise<void> {
-    await generateNewIdentity(whoAmI, await recover_ECDH_256k1_KeyPair_ByMnemonicWord(word, password))
+    info: {
+        whoAmI?: ProfileIdentifier
+        nickname?: string
+        localKey?: JsonWebKey
+        details?: LinkedProfileDetails
+    },
+): Promise<PersonaIdentifier> {
+    const key = await recover_ECDH_256k1_KeyPair_ByMnemonicWord(word, password)
+    const pubJwk = await CryptoKeyToJsonWebKey(key.key.publicKey)
+    const privJwk = await CryptoKeyToJsonWebKey(key.key.privateKey)
+    const localKeyJwk = await deriveLocalKeyFromECDHKey(key.key.publicKey, key.mnemonicRecord.words).then(
+        CryptoKeyToJsonWebKey,
+    )
+
+    const ecKeyID = await createPersonaByJsonWebKey({
+        publicKey: pubJwk,
+        privateKey: privJwk,
+        localKey: info.localKey || localKeyJwk,
+        mnemonic: key.mnemonicRecord,
+        nickname: info.nickname,
+    })
+    if (info.whoAmI) {
+        await attachProfileDB(info.whoAmI, ecKeyID, info.details || { connectionConfirmState: 'pending' })
+    }
+    return ecKeyID
 }
 /**
  * There are 2 types of usingKey.
