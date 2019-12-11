@@ -18,7 +18,7 @@ export interface BackupJSONFileVersion2 {
     personas: Array<{
         identifier: string // PersonaIdentifier.toText()
         mnemonic?: {
-            word: string
+            words: string
             parameter: { path: string; withPassword: boolean }
         }
         publicKey: JsonWebKey
