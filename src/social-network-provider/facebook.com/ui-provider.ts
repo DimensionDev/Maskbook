@@ -37,15 +37,16 @@ export const facebookUISelf = defineSocialNetworkUI({
         return location.hostname.endsWith('facebook.com')
     },
     friendlyName: 'Facebook',
+    requestPermission() {
+        return browser.permissions.request({ origins: ['https://www.facebook.com/*', 'https://m.facebook.com/*'] })
+    },
     setupAccount() {
-        browser.permissions
-            .request({ origins: ['https://www.facebook.com/*', 'https://m.facebook.com/*'] })
-            .then(granted => {
-                if (granted) {
-                    setStorage('facebook.com', { forceDisplayWelcome: true })
-                    location.href = 'https://facebook.com/'
-                }
-            })
+        facebookUISelf.requestPermission().then(granted => {
+            if (granted) {
+                setStorage('facebook.com', { forceDisplayWelcome: true })
+                location.href = 'https://facebook.com/'
+            }
+        })
     },
     ignoreSetupAccount() {
         setStorage('facebook.com', { userIgnoredWelcome: true, forceDisplayWelcome: false })

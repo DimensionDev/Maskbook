@@ -12,6 +12,7 @@ import { ProfileIdentifier } from '../../../database/type'
 import { DialogRouter } from '../DashboardDialogs/DialogBase'
 import { ProfileDisconnectDialog, ProfileConnectStartDialog, ProfileConnectDialog } from '../DashboardDialogs/Profile'
 import Services from '../../service'
+import getCurrentNetworkUI from '../../../social-network/utils/getCurrentNetworkUI'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -85,6 +86,11 @@ export default function ProfileBox({ persona, border }: Props) {
         setConnectProfile(null)
     }
 
+    const onConnect = async (provider: typeof providers[0]) => {
+        if (!(await getCurrentNetworkUI(provider.network).requestPermission())) return
+        setConnectProfile(provider)
+    }
+
     const doConnect = async (userId: string) => {
         const identifier = new ProfileIdentifier(connectProfile!.network, userId)
         await Services.Identity.attachProfile(identifier, persona!.identifier, { connectionConfirmState: 'pending' })
@@ -98,7 +104,7 @@ export default function ProfileBox({ persona, border }: Props) {
                     key={`profile-line-${provider.network}`}
                     className={classNames(classes.line, { [classes.controlBorder]: border ?? true })}
                     component="div">
-                    <ProviderLine onConnect={() => setConnectProfile(provider)} {...provider}></ProviderLine>
+                    <ProviderLine onConnect={() => onConnect(provider)} {...provider}></ProviderLine>
                     {provider.connected && (
                         <div
                             className={classNames('extra-item', color.error)}

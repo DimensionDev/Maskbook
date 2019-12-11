@@ -44,17 +44,18 @@ export const instanceOfTwitterUI = defineSocialNetworkUI({
         return location.hostname.endsWith(twitterUrl.hostIdentifier)
     },
     friendlyName: 'Twitter (Insider Preview)',
+    requestPermission() {
+        return browser.permissions.request({
+            origins: [`${twitterUrl.hostLeadingUrl}/*`, `${twitterUrl.hostLeadingUrlMobile}/*`],
+        })
+    },
     setupAccount: () => {
-        browser.permissions
-            .request({
-                origins: [`${twitterUrl.hostLeadingUrl}/*`, `${twitterUrl.hostLeadingUrlMobile}/*`],
-            })
-            .then(granted => {
-                if (granted) {
-                    setStorage(twitterUrl.hostIdentifier, { forceDisplayWelcome: true }).then()
-                    location.href = twitterUrl.hostLeadingUrl
-                }
-            })
+        instanceOfTwitterUI.requestPermission().then(granted => {
+            if (granted) {
+                setStorage(twitterUrl.hostIdentifier, { forceDisplayWelcome: true }).then()
+                location.href = twitterUrl.hostLeadingUrl
+            }
+        })
     },
     ignoreSetupAccount() {
         setStorage(twitterUrl.hostIdentifier, { userIgnoredWelcome: true, forceDisplayWelcome: false }).then()
