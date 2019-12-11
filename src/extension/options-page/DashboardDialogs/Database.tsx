@@ -53,7 +53,10 @@ export function DatabaseRestoreDialog() {
                     </>
                 }></DialogContentItem>
             {restoreState === 'success' && (
-                <DialogRouter children={<DatabaseRestoreSuccessDialog onConfirm={() => setRestoreState(null)} />} />
+                <DialogRouter
+                    onExit={() => false}
+                    children={<DatabaseRestoreSuccessDialog onConfirm={() => setRestoreState(null)} />}
+                />
             )}
             {restoreState && restoreState !== 'success' && (
                 <DialogRouter

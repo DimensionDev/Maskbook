@@ -11,6 +11,7 @@ import { ProfileArrayComparer, GroupArrayComparer } from '../../utils/comparer'
 export const emptyDefinition: SocialNetworkUIDefinition = {
     acceptablePayload: ['latest'],
     friendlyName: '',
+    requestPermission: () => Promise.resolve(true),
     setupAccount: '',
     shouldActivate() {
         return false

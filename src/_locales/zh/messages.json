@@ -631,7 +631,7 @@
         "message": "導入成功"
     },
     "dashboard_database_import_successful_hint": {
-        "message": "您的數據庫已還原。 現有數據將被合併。"
+        "message": "您的數據庫已還原。現有數據將被合併。"
     },
     "import_failed": {
         "message": "導入失敗"
@@ -643,7 +643,7 @@
         "message": "您可以通過以下任一方式備份角色。"
     },
     "dashboard_backup_persona_mnemonic_hint": {
-        "message": "將上面12個字詞小心存放。 您需要它們來還原此角色的私鑰。"
+        "message": "將上面12個字詞小心存放。您需要它們來還原此角色的私鑰。"
     },
     "dashboard_backup_persona_text_hint": {
         "message": "將上面的文本小心存放。 您需要它們來還原此角色的私鑰。"
@@ -655,7 +655,7 @@
         "message": "刪除角色"
     },
     "dashboard_delete_persona_confirm_hint": {
-        "message": "您是否真的要刪除角色 $1 ？ 此操作無法還原。"
+        "message": "您是否真的要刪除角色 $1 ？此操作無法還原。"
     },
     "dashboard_import_persona_failed": {
         "message": "您導入的數據無效。請再次檢查。"
@@ -673,13 +673,13 @@
         "message": "設置成功"
     },
     "dashboard_bio_test_succeeful": {
-        "message": "您已成功將 @$2 上的 $1 連接到角色 $3."
+        "message": "您已成功將 @$2 上的 $1 連接到角色 $3。"
     },
     "setup_failure": {
         "message": "設置失敗"
     },
     "dashboard_bio_test_failed": {
-        "message": "個人簡介种應包含 $1。 請確保您成功更新了 @$2 的個人簡介。"
+        "message": "個人簡介种應包含 $1。請確保您成功更新了 @$2 的個人簡介。"
     },
     "dashboard_connect_profile_for": {
         "message": "為 $1 連接個人資料"
@@ -700,7 +700,7 @@
         "message": "步驟3：測試並完成"
     },
     "dashboard_attach_profile_step3_hint": {
-        "message": "回到這裡完成程序。 測試您是否設置成功。"
+        "message": "回到這裡完成程序。測試您是否設置成功。"
     },
     "test": {
         "message": "測試"

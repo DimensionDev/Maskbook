@@ -140,8 +140,8 @@ export default function InitStep1R() {
 
                 {restoreState === 'success' && (
                     <DialogRouter
-                        onExit="/home"
-                        children={<DatabaseRestoreSuccessDialog onConfirm={() => history.replace('/home')} />}
+                        onExit={() => false}
+                        children={<DatabaseRestoreSuccessDialog onConfirm={() => history.replace('/home/')} />}
                     />
                 )}
                 {restoreState && restoreState !== 'success' && (
