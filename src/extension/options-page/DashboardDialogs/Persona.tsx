@@ -1,8 +1,9 @@
 import React, { useState } from 'react'
+import * as bip39 from 'bip39'
 import { DialogContentItem, DialogRouter } from './DialogBase'
 
 import { TextField, Typography, InputBase, makeStyles } from '@material-ui/core'
-import { Link, useHistory } from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 import BackupRestoreTab, { BackupRestoreTabProps } from '../DashboardComponents/BackupRestoreTab'
 import ActionButton from '../DashboardComponents/ActionButton'
 import { ECKeyIdentifier } from '../../../database/type'
@@ -193,6 +194,7 @@ export function PersonaImportDialog() {
 
     const importPersona = () => {
         if (state[0] !== 0) return false
+        if (!bip39.validateMnemonic(mnemonicWordValue)) return setRestoreState('failed')
         Services.Welcome.restoreNewIdentityWithMnemonicWord(mnemonicWordValue, password, { nickname })
             .then(() => setRestoreState('success'))
             .catch(() => setRestoreState('failed'))
