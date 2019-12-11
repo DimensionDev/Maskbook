@@ -182,6 +182,12 @@ function override(config, env) {
         if (target.WKWebview) modifiers.WKWebview(manifest)
 
         config.plugins.push(new ManifestGeneratorPlugin({ config: { base: manifest } }))
+
+        config.plugins.push(
+            new webpack.DefinePlugin({
+                'webpackEnv.version': JSON.stringify(manifest.version),
+            }),
+        )
     }
     config.plugins.push(
         newPage({ chunks: ['options-page'], filename: 'index.html' }),
