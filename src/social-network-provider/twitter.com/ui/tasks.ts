@@ -9,7 +9,7 @@ import {
 import {
     profileEditorButtonSelector,
     profileEditorTextareaSelector,
-    newPostButtonSelector,
+    composeButtonSelector,
     postEditorDraftContentSelector,
     postsSelector,
 } from '../utils/selector'
@@ -35,8 +35,8 @@ const taskPasteIntoPostBox: SocialNetworkUI['taskPasteIntoPostBox'] = (text, opt
         }
         if (!postBoxInPopup() && !hasDraftEditor()) {
             // open tweet window
-            await untilElementAvailable(newPostButtonSelector())
-            newPostButtonSelector()
+            await untilElementAvailable(composeButtonSelector())
+            composeButtonSelector()
                 .evaluate()!
                 .click()
             checkSignal()

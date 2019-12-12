@@ -3,14 +3,16 @@ import { regexMatch } from '../../../utils/utils'
 import { postBoxInPopup } from './postBox'
 
 type E = HTMLElement
-
-const querySelector = <T extends E>(selector: string) => {
-    return new LiveSelector().querySelector<T>(selector).enableSingleMode()
+const querySelector = <T extends E, SingleMode extends boolean = true>(
+    selector: string,
+    singleMode: boolean = true,
+) => {
+    const ls = new LiveSelector<T, SingleMode>().querySelector<T>(selector)
+    return (singleMode ? ls.enableSingleMode() : ls) as LiveSelector<T, SingleMode>
 }
 const querySelectorAll = <T extends E>(selector: string) => {
     return new LiveSelector().querySelectorAll<T>(selector)
 }
-
 const createPostEditorSelector = () =>
     postBoxInPopup() ? '[aria-labelledby="modal-header"]' : '[role="main"] :not(aside) > [role="progressbar"] ~ div'
 
@@ -26,19 +28,20 @@ export const postEditorDraftSelector = () =>
 export const postEditorDraftContentSelector = () =>
     querySelector<E>(`${createPostEditorSelector()} .public-DraftEditor-content`)
 
-export const newPostButtonSelector = () => querySelector<E>('[data-testid="SideNav_NewTweet_Button"]')
+export const composeButtonSelector = () => querySelector<E>('[data-testid="SideNav_NewTweet_Button"]')
 
 export const profileEditorButtonSelector = () =>
     querySelector<HTMLAnchorElement>('[data-testid="primaryColumn"] [href="/settings/profile"]')
 export const profileEditorTextareaSelector = () => querySelector<HTMLTextAreaElement>('textarea[placeholder*="bio"]')
 
-export const bioCardSelector = () =>
-    querySelector<HTMLDivElement>(
+export const bioCardSelector = <SingleMode extends boolean = true>(singleMode = true) =>
+    querySelector<HTMLDivElement, SingleMode>(
         [
             '.profile', // legacy twitter
             'a[href*="header_photo"] ~ div', // new twitter
             'div[data-testid="primaryColumn"] > div > div:last-child > div > div > div > div ~ div', // new twitter without header photo
         ].join(),
+        singleMode,
     )
 
 export const postsSelector = () =>

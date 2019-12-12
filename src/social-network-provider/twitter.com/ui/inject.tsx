@@ -1,9 +1,10 @@
 import { LiveSelector, MutationObserverWatcher as MOW } from '@holoflows/kit'
 import { PostInfo, SocialNetworkUIInjections } from '../../../social-network/ui'
 import { injectPostInspectorDefault } from '../../../social-network/defaults/injectPostInspector'
-import { injectPostDialogHintAtTwitter } from './injectPostDialogHint'
 import { injectPostDialogAtTwitter } from './injectPostDialog'
 import { injectPostDialogSpyAtTwitter } from './injectPostDialogSpy'
+import { injectPostDialogHintAtTwitter } from './injectPostDialogHint'
+import { injectKnownIdentityAtTwitter } from './injectKnownIdentity'
 
 // Closing these shadowRoot prevents external access to them.
 const newMOW = (i: LiveSelector<HTMLElement, true>) =>
@@ -30,4 +31,5 @@ const injectPostInspector = (current: PostInfo) => {
 export const twitterUIInjections: SocialNetworkUIInjections = {
     injectPostBox,
     injectPostInspector,
+    injectKnownIdentity: injectKnownIdentityAtTwitter,
 }
