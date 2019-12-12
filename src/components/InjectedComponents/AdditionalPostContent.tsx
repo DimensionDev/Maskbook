@@ -10,12 +10,13 @@ export interface AdditionalContentProps extends withClasses<KeysInferFromUseStyl
     children?: React.ReactNode
     center?: boolean
     renderText?: string
+    hideIcon?: boolean
 }
 const useStyles = makeStyles({
     root: { backgroundColor: 'transparent' },
     title: { display: 'flex', alignItems: 'center' },
     center: { justifyContent: 'center' },
-    icon: { transform: 'translate(-1px, 1px)' },
+    icon: { transform: 'translate(-1px, 0)' },
 })
 export const AdditionalContent = React.memo(function AdditionalContent(props: AdditionalContentProps) {
     const classes = useStylesExtends(useStyles(), props)
@@ -28,7 +29,7 @@ export const AdditionalContent = React.memo(function AdditionalContent(props: Ad
                 color="textSecondary"
                 gutterBottom
                 className={classNames(classes.title, { [classes.center]: props.center })}>
-                <img alt="" width={16} height={16} src={icon} className={classes.icon} />
+                {props.hideIcon ? null : <img alt="" width={16} height={16} src={icon} className={classes.icon} />}
                 {props.title}
             </Typography>
             {props.renderText ? (
