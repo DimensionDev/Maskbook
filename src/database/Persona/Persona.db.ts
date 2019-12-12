@@ -370,7 +370,7 @@ type PersonaRecordDb = Omit<PersonaRecord, 'identifier' | 'linkedProfiles'> & {
     hasPrivateKey: 'no' | 'yes'
 }
 
-interface PersonaDB extends DBSchema {
+export interface PersonaDB extends DBSchema {
     /** Use inline keys */
     personas: {
         value: PersonaRecordDb

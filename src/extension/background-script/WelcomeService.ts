@@ -2,10 +2,7 @@ import { OnlyRunInContext } from '@holoflows/kit'
 import { encodeText } from '../../utils/type-transform/String-ArrayBuffer'
 import { sleep } from '../../utils/utils'
 import { geti18nString } from '../../utils/i18n'
-// This deprecated usage is okay. it calls the migrate method to migrate the old data.
-// eslint-disable-next-line
-import { PersonRecordPublicPrivate, PersonRecord } from '../../database/migrate/_deprecated_people_db'
-import { ProfileIdentifier } from '../../database/type'
+import { ProfileIdentifier, Identifier, ECKeyIdentifier } from '../../database/type'
 import { MessageCenter } from '../../utils/messages'
 import getCurrentNetworkWorker from '../../social-network/utils/getCurrentNetworkWorker'
 import { SocialNetworkUI } from '../../social-network/ui'
@@ -15,16 +12,15 @@ import {
     recover_ECDH_256k1_KeyPair_ByMnemonicWord,
     MnemonicGenerationInformation,
 } from '../../utils/mnemonic-code'
-import { derive_AES_GCM_256_Key_From_PBKDF2, import_PBKDF2_Key, import_ECDH_256k1_Key } from '../../utils/crypto.subtle'
-import { migrateHelper_operateDB } from '../../database/migrate/people.to.persona'
 import { IdentifierMap } from '../../database/IdentifierMap'
 import {
     queryPersonasWithPrivateKey,
     PersonaDBAccess,
     queryProfileDB,
-    PersonaRecord,
+    createPersonaDB,
+    attachProfileDB,
 } from '../../database/Persona/Persona.db'
-import { createDefaultFriendsGroup, createProfileWithPersona } from '../../database'
+import { createDefaultFriendsGroup, createProfileWithPersona, updateOrCreateProfile } from '../../database'
 import {
     CryptoKeyToJsonWebKey,
     JsonWebKeyToCryptoKey,
@@ -32,12 +28,14 @@ import {
 } from '../../utils/type-transform/CryptoKey-JsonWebKey'
 import { deriveLocalKeyFromECDHKey } from '../../utils/mnemonic-code/localKeyGenerate'
 import { BackupJSONFileLatest, UpgradeBackupJSONFile } from '../../utils/type-transform/BackupFormat/JSON/latest'
+import { BackupJSONFileVersion1 } from '../../utils/type-transform/BackupFormat/JSON/version-1'
+import { upgradeFromBackupJSONFileVersion1 } from '../../utils/type-transform/BackupFormat/JSON/version-2'
 
 OnlyRunInContext('background', 'WelcomeService')
 
 async function generateBackupJSON(): Promise<BackupJSONFileLatest> {
     const manifest = browser.runtime.getManifest()
-    const whoami: BackupJSONFileLatest['whoami'] = []
+    const whoami: BackupJSONFileVersion1['whoami'] = []
 
     // ? transaction start
     {
@@ -68,13 +66,13 @@ async function generateBackupJSON(): Promise<BackupJSONFileLatest> {
         each.localKey = await CryptoKeyToJsonWebKey((each.localKey as unknown) as CryptoKey)
     }
 
-    return {
+    return upgradeFromBackupJSONFileVersion1({
         grantedHostPermissions: (await browser.permissions.getAll()).origins || [],
         maskbookVersion: manifest.version,
         version: 1,
         whoami: whoami.filter(x => x.localKey && x.publicKey && x.privateKey && x.network && x.userId),
         // people not supported yet.
-    }
+    })
 }
 
 /**
@@ -191,51 +189,72 @@ export async function openOptionsPage(route: string) {
  * Restore the backup
  */
 export async function restoreBackup(json: object, whoAmI?: ProfileIdentifier): Promise<void> {
-    function mapID(x: { network: string; userId: string }): ProfileIdentifier {
-        return new ProfileIdentifier(x.network, x.userId)
-    }
+    // function mapID(x: { network: string; userId: string }): ProfileIdentifier {
+    //     return new ProfileIdentifier(x.network, x.userId)
+    // }
     const data = UpgradeBackupJSONFile(json, whoAmI)
     if (!data) throw new TypeError(geti18nString('service_invalid_backup_file'))
 
-    const localKeyMap = new IdentifierMap<ProfileIdentifier, CryptoKey>(new Map())
+    const keyCache = new Map<JsonWebKey, CryptoKey>()
+    const aes = getKeyParameter('aes')
 
-    const myIdentitiesInBackup = Promise.all(
-        data.whoami.map<Promise<PersonRecordPublicPrivate>>(async rec => {
-            const profileIdentifier = mapID(rec)
-            if (rec.localKey)
-                localKeyMap.set(
-                    profileIdentifier,
-                    (await JsonWebKeyToCryptoKey(rec.localKey, ...getKeyParameter('aes')))!,
-                )
-            return {
-                identifier: profileIdentifier,
-                groups: [],
-                nickname: rec.nickname,
-                previousIdentifiers: [],
-                publicKey: await import_ECDH_256k1_Key(rec.publicKey),
-                privateKey: await import_ECDH_256k1_Key(rec.privateKey),
+    // Transform all JsonWebKey to CryptoKey
+    await Promise.all([
+        ...[...data.personas, ...data.profiles]
+            .filter(x => x.localKey)
+            .map(x => JsonWebKeyToCryptoKey(x.localKey!, ...aes).then(k => keyCache.set(x.localKey!, k))),
+    ])
+    {
+        const t: any = (await PersonaDBAccess()).transaction(['personas', 'profiles'], 'readwrite')
+        for (const x of data.personas) {
+            const id = Identifier.fromString(x.identifier)
+            if (!(id instanceof ECKeyIdentifier)) throw new Error('Not a valid identifier at persona.identifier')
+            if (x.privateKey && !x.privateKey.d) throw new Error('Invalid private key')
+            await createPersonaDB(
+                {
+                    createdAt: new Date(x.createdAt),
+                    updatedAt: new Date(x.updatedAt),
+                    identifier: id,
+                    linkedProfiles: new IdentifierMap(new Map()),
+                    publicKey: x.publicKey,
+                    localKey: keyCache.get(x.localKey!),
+                    mnemonic: x.mnemonic,
+                    nickname: x.nickname,
+                    privateKey: x.privateKey,
+                },
+                t,
+            )
+        }
+
+        for (const x of data.profiles) {
+            const id = Identifier.fromString(x.identifier)
+            if (!(id instanceof ProfileIdentifier)) throw new Error('Not a valid identifier at profile.identifier')
+            await updateOrCreateProfile(
+                {
+                    identifier: id,
+                    createdAt: new Date(x.createdAt),
+                    updatedAt: new Date(x.updatedAt),
+                    nickname: x.nickname,
+                    localKey: keyCache.get(x.localKey!),
+                },
+                t,
+            )
+            if (x.linkedPersona) {
+                const cid = Identifier.fromString(x.linkedPersona)
+                if (!(cid instanceof ECKeyIdentifier)) throw new Error('Not a valid identifier at linkedPersona')
+                await attachProfileDB(id, cid, { connectionConfirmState: 'confirmed' }, t)
             }
-        }),
-    )
+        }
+        // ! transaction t ends here.
+    }
 
-    const people = Promise.all(
-        (data.people || []).map<Promise<PersonRecord>>(async rec => {
-            const id = new ProfileIdentifier(rec.network, rec.userId)
-            return {
-                identifier: id,
-                groups: [],
-                nickname: rec.nickname,
-                previousIdentifiers: [],
-                publicKey: await import_ECDH_256k1_Key(rec.publicKey),
-            }
-        }),
-    )
+    for (const x of data.posts) {
+        // TODO:
+    }
 
-    await migrateHelper_operateDB(
-        await myIdentitiesInBackup,
-        await people,
-        async identifier => localKeyMap.get(identifier) ?? null,
-    )
+    for (const x of data.userGroups) {
+        // TODO:
+    }
 }
 
 export { createPersonaByMnemonic } from '../../database'
