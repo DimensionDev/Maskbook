@@ -50,10 +50,9 @@ export function CommentBox(props: CommentBoxProps) {
     return (
         <InputBase
             className={classes.root}
-            inputProps={{ className: classes.input }}
+            inputProps={{ className: classes.input, ref: inputRef }}
             placeholder={geti18nString('comment_box__placeholder')}
             {...props.inputProps}
-            ref={inputRef}
         />
     )
 }
