@@ -8527,10 +8527,10 @@ icss-utils@^4.0.0, icss-utils@^4.1.0, icss-utils@^4.1.1:
   dependencies:
     postcss "^7.0.14"
 
-idb@^4.0.3:
-  version "4.0.4"
-  resolved "https://registry.yarnpkg.com/idb/-/idb-4.0.4.tgz#f0c06f58bd78fe557e4de944fd6ba6a3240faa8e"
-  integrity sha512-ZYsaBSNub2yAnjvmRKudQlMIPqZQIefAOwNIPeXC+RLIeXYFc0UNQqONKNuQeBNf8oBOV5L75yJ9zFISjHVj4g==
+idb@^4.0.5:
+  version "4.0.5"
+  resolved "https://registry.yarnpkg.com/idb/-/idb-4.0.5.tgz#23b930fbb0abce391e939c35b7b31a669e74041f"
+  integrity sha512-P+Fk9HT2h1DhXoE1YNK183SY+CRh2GHNh28de94sGwhe0bUA75JJeVJWt3SenE5p0BXK7maflIq29dl6UZHrFw==
 
 identity-obj-proxy@3.0.0:
   version "3.0.0"
