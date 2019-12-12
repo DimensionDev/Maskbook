@@ -33,6 +33,7 @@ import { hasWKWebkitRPCHandlers, iOSHost } from '../../utils/iOS-RPC'
 import { useAsync } from '../../utils/components/AsyncComponent'
 import { BackupJSONFileLatest, UpgradeBackupJSONFile } from '../../utils/type-transform/BackupFormat/JSON/latest'
 import { decompressBackupFile } from '../../utils/type-transform/BackupFileShortRepresentation'
+import { Identifier, ProfileIdentifier } from '../../database/type'
 
 const RestoreBox = styled('div')(({ theme }: { theme: Theme }) => ({
     color: theme.palette.text.hint,
@@ -151,19 +152,23 @@ export default function Welcome({ restore: originalRestore }: Props) {
                                 {geti18nString('welcome_1b_hint_identity')}
                             </Typography>
                             <List>
-                                {json!.whoami.map(identity => (
-                                    <ListItem key={identity.userId}>
-                                        <ListItemAvatar>
-                                            <Avatar>
-                                                <PersonIcon />
-                                            </Avatar>
-                                        </ListItemAvatar>
-                                        <ListItemText
-                                            primary={identity.nickname || identity.userId}
-                                            secondary={identity.network}
-                                        />
-                                    </ListItem>
-                                ))}
+                                {json!.profiles.map(identity => {
+                                    const id = Identifier.fromString(identity.identifier) as ProfileIdentifier
+                                    if (!(id instanceof ProfileIdentifier)) return null
+                                    return (
+                                        <ListItem key={identity.identifier}>
+                                            <ListItemAvatar>
+                                                <Avatar>
+                                                    <PersonIcon />
+                                                </Avatar>
+                                            </ListItemAvatar>
+                                            <ListItemText
+                                                primary={identity.nickname || id.userId}
+                                                secondary={id.network}
+                                            />
+                                        </ListItem>
+                                    )
+                                })}
                             </List>
                             <Typography color="textSecondary" gutterBottom>
                                 {geti18nString('welcome_1b_hint_network')}

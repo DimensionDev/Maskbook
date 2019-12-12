@@ -18,6 +18,7 @@ export interface BackupJSONFileVersion2 {
         createdAt: number // Unix timestamp
     }
     personas: Array<{
+        // ? PersonaIdentifier can be infer from the publicKey
         identifier: string // PersonaIdentifier.toText()
         mnemonic?: {
             words: string
@@ -63,7 +64,7 @@ export function isBackupJSONFileVersion2(obj: object): obj is BackupJSONFileVers
     )
 }
 
-export function upgradeFromBackupJSONFileVersion1(json: BackupJSONFileVersion1): BackupJSONFileVersion2 | null {
+export function upgradeFromBackupJSONFileVersion1(json: BackupJSONFileVersion1): BackupJSONFileVersion2 {
     const personas: BackupJSONFileVersion2['personas'] = []
     const profiles: BackupJSONFileVersion2['profiles'] = []
     const userGroups: BackupJSONFileVersion2['userGroups'] = []
