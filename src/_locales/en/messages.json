@@ -9,7 +9,7 @@
         "message": "📫 Post it!"
     },
     "additional_post_box__encrypted_post_pre": {
-        "message": "Decrypt this post with #Maskbook ! $1",
+        "message": "#Maskbook ([I:b])\nDecrypt this tweet with maskbook.com @ProjectMaskbook.\n—§— /* {$1} */",
         "description": "$1 should at the end of the string."
     },
     "additional_post_box__encrypted_failed": {

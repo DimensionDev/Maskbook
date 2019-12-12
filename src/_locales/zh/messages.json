@@ -9,7 +9,7 @@
         "message": "現在發佈！"
     },
     "additional_post_box__encrypted_post_pre": {
-        "message": "來 #Maskbook 解密這個訊息！ $1",
+        "message": "#Maskbook ([I:b])\n使用 maskbook.com @ProjectMaskbook 解密这条推文。\n—§— /* {$1} */",
         "description": "$1 须写在字串末。"
     },
     "additional_post_box__encrypted_failed": {
