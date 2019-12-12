@@ -1,7 +1,9 @@
+/* eslint-disable import/no-deprecated */
 import { LinkedProfileDetails } from '../../../../database/Persona/Persona.db'
 import { RecipientDetail } from '../../../../database/post'
+import { BackupJSONFileVersion1 } from './version-1'
+import { ProfileIdentifier, ECKeyIdentifier, GroupIdentifier } from '../../../../database/type'
 
-/* eslint-disable import/no-deprecated */
 /**
  * @see https://github.com/DimensionDev/Maskbook/issues/194
  *
@@ -51,4 +53,108 @@ export interface BackupJSONFileVersion2 {
         recipientGroups: string[] // Array<GroupIdentifier.toText()>
         foundAt: number // Unix timestamp
     }>
+    grantedHostPermissions: string[]
+}
+
+export function isBackupJSONFileVersion2(obj: object): obj is BackupJSONFileVersion2 {
+    return (
+        (obj as BackupJSONFileVersion2)?._meta_?.version === 2 &&
+        (obj as BackupJSONFileVersion2)?._meta_?.type === 'maskbook-backup'
+    )
+}
+
+export function upgradeFromBackupJSONFileVersion1(json: BackupJSONFileVersion1): BackupJSONFileVersion2 | null {
+    const personas: BackupJSONFileVersion2['personas'] = []
+    const profiles: BackupJSONFileVersion2['profiles'] = []
+    const userGroups: BackupJSONFileVersion2['userGroups'] = []
+
+    function addPersona(record: Omit<typeof personas[0], 'createdAt' | 'updatedAt'>) {
+        const prev = personas.find(x => x.identifier === record.identifier)
+        if (prev) {
+            Object.assign(prev, record)
+            Object.assign(prev.linkedProfiles, record.linkedProfiles)
+        } else personas.push({ ...record, updatedAt: 0, createdAt: 0 })
+    }
+
+    function addProfile(record: Omit<typeof profiles[0], 'createdAt' | 'updatedAt'>) {
+        const prev = profiles.find(x => x.identifier === record.identifier)
+        if (prev) {
+            Object.assign(prev, record)
+        } else profiles.push({ ...record, updatedAt: 0, createdAt: 0 })
+    }
+
+    function addProfileToGroup(
+        member: ProfileIdentifier,
+        detail: NonNullable<NonNullable<BackupJSONFileVersion1['people']>[0]['groups']>[0],
+    ) {
+        const groupId = new GroupIdentifier(detail.network, detail.virtualGroupOwner, detail.groupID).toText()
+        const prev = userGroups.find(x => x.identifier === groupId)
+        if (prev) {
+            prev.members.push(member.toText())
+        } else {
+            userGroups.push({ groupName: '', identifier: groupId, members: [] })
+        }
+    }
+
+    for (const x of json.whoami) {
+        const profile = new ProfileIdentifier(x.network, x.userId).toText()
+        const persona = ECKeyIdentifier.fromJsonWebKey(x.publicKey).toText()
+        addProfile({
+            identifier: profile,
+            linkedPersona: persona,
+            localKey: x.localKey,
+            nickname: x.nickname,
+        })
+        addPersona({
+            identifier: persona,
+            linkedProfiles: {
+                [profile]: {
+                    connectionConfirmState: 'confirmed',
+                },
+            },
+            publicKey: x.publicKey,
+            privateKey: x.privateKey,
+            localKey: x.localKey,
+            nickname: x.nickname,
+        })
+    }
+
+    for (const x of json.people || []) {
+        const profile = new ProfileIdentifier(x.network, x.userId)
+        const persona = ECKeyIdentifier.fromJsonWebKey(x.publicKey).toText()
+        addProfile({
+            identifier: profile.toText(),
+            linkedPersona: persona,
+            nickname: x.nickname,
+        })
+        addPersona({
+            identifier: persona,
+            linkedProfiles: {
+                [profile.toText()]: {
+                    connectionConfirmState: 'confirmed',
+                },
+            },
+            publicKey: x.publicKey,
+            nickname: x.nickname,
+        })
+        x.groups?.forEach(y => addProfileToGroup(profile, y))
+    }
+
+    userGroups.forEach(x => {
+        x.members = Array.from(new Set(x.members))
+    })
+
+    return {
+        _meta_: {
+            version: 2,
+            type: 'maskbook-backup',
+            maskbookVersion: json.maskbookVersion,
+            createdAt: 0,
+        },
+        posts: [],
+        personas,
+        profiles,
+        userGroups,
+        grantedHostPermissions: json.grantedHostPermissions,
+    }
 }
