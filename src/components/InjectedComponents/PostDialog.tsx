@@ -13,7 +13,7 @@ import {
     DialogActions,
 } from '@material-ui/core'
 import CloseIcon from '@material-ui/icons/Close'
-import { geti18nString } from '../../utils/i18n'
+import { geti18nString, I18NStrings } from '../../utils/i18n'
 import { MessageCenter, CompositionEvent } from '../../utils/messages'
 import { useCapturedInput } from '../../utils/hooks/useCapturedEvents'
 import { useStylesExtends, or } from '../custom-ui-helper'
@@ -137,6 +137,8 @@ export function PostDialogUI(props: PostDialogUIProps) {
 }
 
 export interface PostDialogProps extends Partial<PostDialogUIProps> {
+    textPayloadKey?: keyof I18NStrings
+    imagePayloadKey?: keyof I18NStrings
     reason?: 'timeline' | 'popup'
     identities?: Profile[]
     onRequestPost?: (target: (Profile | Group)[], text: string) => void
@@ -163,22 +165,28 @@ export function PostDialog(props: PostDialogProps) {
                 )
                 const activeUI = getActivatedUI()
                 if (isSteganography) {
-                    activeUI.taskPasteIntoPostBox(geti18nString('additional_post_box__steganography_post_pre'), {
-                        warningText: geti18nString('additional_post_box__encrypted_failed'),
-                        shouldOpenPostDialog: false,
-                    })
+                    activeUI.taskPasteIntoPostBox(
+                        geti18nString(props.imagePayloadKey ?? 'additional_post_box__steganography_post_pre'),
+                        {
+                            warningText: geti18nString('additional_post_box__encrypted_failed'),
+                            shouldOpenPostDialog: false,
+                        },
+                    )
                     activeUI.taskUploadToPostBox(encrypted, {
                         warningText: geti18nString('additional_post_box__steganography_post_failed'),
                     })
                 } else {
-                    activeUI.taskPasteIntoPostBox(geti18nString('additional_post_box__encrypted_post_pre', encrypted), {
-                        warningText: geti18nString('additional_post_box__encrypted_failed'),
-                        shouldOpenPostDialog: false,
-                    })
+                    activeUI.taskPasteIntoPostBox(
+                        geti18nString(props.textPayloadKey ?? 'additional_post_box__encrypted_post_pre', encrypted),
+                        {
+                            warningText: geti18nString('additional_post_box__encrypted_failed'),
+                            shouldOpenPostDialog: false,
+                        },
+                    )
                 }
                 Services.Crypto.publishPostAESKey(token)
             },
-            [currentIdentity, isSteganography],
+            [currentIdentity, isSteganography, props.imagePayloadKey, props.textPayloadKey],
         ),
     )
     const onRequestReset = or(

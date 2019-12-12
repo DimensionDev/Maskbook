@@ -12,6 +12,9 @@
         "message": "Decrypt this post with #Maskbook ! $1",
         "description": "$1 should at the end of the string."
     },
+    "additional_post_box__encrypted_post_pre__twitter": {
+        "message": "#Maskbook ([I:b])\nDecrypt this tweet with maskbook.com @ProjectMaskbook.\n—§— /* {$1} */"
+    },
     "additional_post_box__encrypted_failed": {
         "message": "Please paste the following text into the post box."
     },
