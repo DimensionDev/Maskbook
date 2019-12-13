@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { Profile, Group } from '../../../database'
 import { ListItem, Theme, ListItemAvatar, ListItemText } from '@material-ui/core'
-import { OverridableComponent } from '@material-ui/core/OverridableComponent'
+import { DefaultComponentProps } from '@material-ui/core/OverridableComponent'
 import { makeStyles } from '@material-ui/styles'
 import { Avatar } from '../../../utils/components/Avatar'
 import MuiAvatar from '@material-ui/core/Avatar/Avatar'
@@ -12,14 +12,13 @@ import { geti18nString, useIntlListFormat } from '../../../utils/i18n'
 import { isGroup } from './SelectPeopleAndGroupsUI'
 import { useResolveSpecialGroupName } from './resolveSpecialGroupName'
 import { useStylesExtends } from '../../custom-ui-helper'
+import { ListItemTypeMap } from '@material-ui/core/ListItem'
 
 export interface PersonOrGroupInListProps extends withClasses<KeysInferFromUseStyles<typeof useStyle>> {
     onClick: () => void
     disabled?: boolean
     showAtNetwork?: boolean
-    // ? Don't import ListItemProps from @material-ui
-    // ? or a type def conflict will happen on <ListItem button onClick> attrs
-    ListItemProps?: Partial<(typeof ListItem extends OverridableComponent<infer U> ? U : never)['props']>
+    ListItemProps?: Partial<DefaultComponentProps<ListItemTypeMap<{ button: true }, 'div'>>>
     item: Group | Profile
 }
 const useStyle = makeStyles((theme: Theme) => ({
