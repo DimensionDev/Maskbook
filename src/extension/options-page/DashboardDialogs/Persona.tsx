@@ -1,8 +1,8 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect, Children } from 'react'
 import * as bip39 from 'bip39'
 import { DialogContentItem, DialogRouter } from './DialogBase'
 
-import { TextField, Typography, InputBase, makeStyles } from '@material-ui/core'
+import { TextField, Typography, InputBase, makeStyles, TypographyProps } from '@material-ui/core'
 import { useHistory } from 'react-router-dom'
 import BackupRestoreTab, { BackupRestoreTabProps } from '../DashboardComponents/BackupRestoreTab'
 import ActionButton from '../DashboardComponents/ActionButton'
@@ -14,6 +14,8 @@ import { useAsync } from '../../../utils/components/AsyncComponent'
 import ProfileBox from '../DashboardComponents/ProfileBox'
 import { useColorProvider } from '../../../utils/theme'
 import { geti18nString } from '../../../utils/i18n'
+import { QrCode } from '../../../components/shared/qrcode'
+import { compressBackupFile } from '../../../utils/type-transform/BackupFileShortRepresentation'
 
 export function PersonaCreateDialog() {
     const [name, setName] = useState('')
@@ -121,33 +123,69 @@ interface PersonaBackupDialogProps {
     persona: Persona
 }
 
+const ShowcaseBox = (props: TypographyProps) => {
+    const { children, ...other } = props
+    const ref = React.useRef<HTMLElement>(null)
+    const copyText = () => {
+        window.getSelection()!.selectAllChildren(ref.current!)
+    }
+    return (
+        <Typography
+            variant="body1"
+            onClick={copyText}
+            ref={ref}
+            style={{
+                height: '100%',
+                overflow: 'auto',
+                wordBreak: 'break-all',
+                display: 'flex',
+            }}
+            {...other}>
+            <div style={{ margin: 'auto' }}>{children}</div>
+        </Typography>
+    )
+}
+
 export function PersonaBackupDialog(props: PersonaBackupDialogProps) {
     const { onClose, persona } = props
     const mnemonicWordValue = persona.mnemonic?.words ?? geti18nString('not_available')
-    const base64Value = geti18nString('not_available')
+    const [base64Value, setBase64Value] = useState(geti18nString('not_available'))
+    const [compressedQRString, setCompressedQRString] = useState<string | null>(null)
+    useEffect(() => {
+        Services.Welcome.backupMyKeyPair({ download: false, onlyBackupWhoAmI: false }).then(file => {
+            const target = file.personas.find(p => p.identifier === persona.identifier.toText())!
+            const value = {
+                ...file,
+                posts: [],
+                profiles: file.profiles.filter(p => p.linkedPersona === persona.identifier.toText()),
+                userGroups: [],
+                personas: [target],
+            }
+            setBase64Value(btoa(JSON.stringify(value)))
+            setCompressedQRString(compressBackupFile(value, 0))
+        })
+    }, [persona.identifier])
 
     const state = useState(0)
     const tabProps: BackupRestoreTabProps = {
         tabs: [
             {
                 label: 'MNEMONIC WORDS',
-                component: (
-                    <InputBase
-                        style={{ width: '100%', minHeight: '100px' }}
-                        multiline
-                        defaultValue={mnemonicWordValue}
-                        readOnly></InputBase>
-                ),
+                component: <ShowcaseBox>{mnemonicWordValue}</ShowcaseBox>,
             },
             {
                 label: 'BASE64',
-                component: (
-                    <InputBase
-                        style={{ width: '100%', minHeight: '100px' }}
-                        multiline
-                        defaultValue={base64Value}
-                        readOnly></InputBase>
-                ),
+                component: <ShowcaseBox>{base64Value}</ShowcaseBox>,
+            },
+            {
+                label: 'QR',
+                component: compressedQRString ? (
+                    <QrCode
+                        text={compressedQRString}
+                        canvasProps={{ style: { height: 260, width: 260, display: 'block', margin: 'auto' } }}
+                    />
+                ) : null,
+                p: 2,
             },
         ],
         state,
@@ -155,10 +193,14 @@ export function PersonaBackupDialog(props: PersonaBackupDialogProps) {
     const content = (
         <>
             <Typography variant="body2">{geti18nString('dashboard_backup_persona_hint')}</Typography>
-            <BackupRestoreTab margin {...tabProps}></BackupRestoreTab>
+            <BackupRestoreTab height={292} margin {...tabProps}></BackupRestoreTab>
             <Typography variant="body2">
                 {geti18nString(
-                    state[0] === 0 ? 'dashboard_backup_persona_mnemonic_hint' : 'dashboard_backup_persona_text_hint',
+                    state[0] === 0
+                        ? 'dashboard_backup_persona_mnemonic_hint'
+                        : state[0] === 1
+                        ? 'dashboard_backup_persona_text_hint'
+                        : 'dashboard_backup_persona_qr_hint',
                 )}
             </Typography>
         </>
@@ -182,7 +224,7 @@ export function PersonaImportDialog() {
     const [nickname, setNickname] = useState('')
     const [mnemonicWordValue, setMnemonicWordValue] = useState('')
     const [password, setPassword] = useState('')
-    const base64Value = geti18nString('not_available')
+    const [base64Value, setBase64Value] = useState('')
 
     const classes = useImportDialogStyles()
 
@@ -193,11 +235,18 @@ export function PersonaImportDialog() {
     const state = useState(0)
 
     const importPersona = () => {
-        if (state[0] !== 0) return false
-        if (!bip39.validateMnemonic(mnemonicWordValue)) return setRestoreState('failed')
-        Services.Welcome.restoreNewIdentityWithMnemonicWord(mnemonicWordValue, password, { nickname })
-            .then(() => setRestoreState('success'))
-            .catch(() => setRestoreState('failed'))
+        if (state[0] === 0) {
+            if (!bip39.validateMnemonic(mnemonicWordValue)) return setRestoreState('failed')
+            Services.Welcome.restoreNewIdentityWithMnemonicWord(mnemonicWordValue, password, { nickname })
+                .then(() => setRestoreState('success'))
+                .catch(() => setRestoreState('failed'))
+        } else if (state[0] === 1) {
+            Promise.resolve()
+                .then(() => JSON.parse(atob(base64Value)))
+                .then(object => Services.Welcome.restoreBackup(object))
+                .then(() => setRestoreState('success'))
+                .catch(() => setRestoreState('failed'))
+        }
     }
 
     const tabProps: BackupRestoreTabProps = {
@@ -240,7 +289,8 @@ export function PersonaImportDialog() {
                     <InputBase
                         style={{ width: '100%', minHeight: '100px' }}
                         multiline
-                        defaultValue={base64Value}></InputBase>
+                        onChange={e => setBase64Value(e.target.value)}
+                        value={base64Value}></InputBase>
                 ),
             },
         ],
@@ -254,7 +304,10 @@ export function PersonaImportDialog() {
                 <DialogRouter
                     onExit="/home"
                     children={
-                        <PersonaImportSuccessDialog onConfirm={() => history.push('/home')} nickname={nickname} />
+                        <PersonaImportSuccessDialog
+                            onConfirm={() => history.push('/home')}
+                            nickname={state[0] === 0 ? nickname : null}
+                        />
                     }
                 />
             )}
@@ -271,7 +324,7 @@ export function PersonaImportDialog() {
             title={geti18nString('import_persona')}
             content={content}
             actions={
-                <ActionButton variant="contained" color="primary" onClick={importPersona} disabled={state[0] !== 0}>
+                <ActionButton variant="contained" color="primary" onClick={importPersona}>
                     {geti18nString('import')}
                 </ActionButton>
             }></DialogContentItem>
@@ -298,7 +351,7 @@ export function PersonaImportFailedDialog(props: PersonaImportFailedDialogProps)
 }
 
 interface PersonaImportSuccessDialogProps {
-    nickname: string
+    nickname: string | null
     profiles?: number | null
     onConfirm(): void
 }
@@ -309,7 +362,11 @@ export function PersonaImportSuccessDialog(props: PersonaImportSuccessDialogProp
         <DialogContentItem
             simplified
             title={geti18nString('import_successful')}
-            content={geti18nString('dashboard_imported_persona', [nickname, '' + (profiles ?? 0)])}
+            content={
+                nickname
+                    ? geti18nString('dashboard_imported_persona', [nickname, '' + (profiles ?? 0)])
+                    : geti18nString('dashboard_database_import_successful_hint')
+            }
             actions={
                 <ActionButton variant="outlined" color="default" onClick={onConfirm}>
                     {geti18nString('ok')}

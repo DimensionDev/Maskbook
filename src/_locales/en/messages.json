@@ -648,6 +648,9 @@
     "dashboard_backup_persona_text_hint": {
         "message": "Keep the text above carefully in a safe place. You will need them to restore the private key of this persona."
     },
+    "dashboard_backup_persona_qr_hint": {
+        "message": "Keep the QR code carefully in a safe place. You will need them to restore the private key of this persona."
+    },
     "backup_persona": {
         "message": "Backup Persona"
     },

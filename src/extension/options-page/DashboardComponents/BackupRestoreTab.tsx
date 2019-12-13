@@ -37,7 +37,7 @@ const TabPanel = (props: any) => {
 }
 
 export interface BackupRestoreTabProps {
-    tabs: { label: string; component: JSX.Element; p?: number }[]
+    tabs: { label: string; component: JSX.Element | null; p?: number }[]
     state: [number, React.Dispatch<React.SetStateAction<number>>]
     margin?: true | 'top'
     height?: number
