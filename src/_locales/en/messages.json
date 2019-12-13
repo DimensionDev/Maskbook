@@ -498,9 +498,6 @@
     "seen_in_maskbook_database": {
         "message": "They are seen in the Maskbook database ✔"
     },
-    "please_include_proof_your_bio": {
-        "message": "Please include the content in the quote \"$1\" in your bio to use Maskbook"
-    },
     "dashboard_welcome_to_maskbook": {
         "message": "Welcome to Maskbook"
     },
@@ -722,5 +719,23 @@
     },
     "initialize": {
         "message": "Initialize"
+    },
+    "dashboard_restoration_successful": {
+        "message": "Restoration Successful"
+    },
+    "dashboard_restoration_successful_hint": {
+        "message": "Restored from a backup at $1"
+    },
+    "dashboard_ready_to_import": {
+        "message": "Ready to Import..."
+    },
+    "dashboard_ready_to_import_hint": {
+        "message": "Maskbook needs access to certain websites, before you can import this backup."
+    },
+    "proceed": {
+        "message": "Proceed"
+    },
+    "please_include_proof_your_bio": {
+        "message": "Please include the content in the quote \"$1\" in your bio to use Maskbook"
     }
 }

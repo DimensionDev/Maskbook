@@ -498,9 +498,6 @@
     "seen_in_maskbook_database": {
         "message": "Maskbook 已了解此身份 ✔"
     },
-    "please_include_proof_your_bio": {
-        "message": "請在您的個人簡介中包含引号内的内容 \"$1\"，否則您可能沒法正常使用 Maskbook"
-    },
     "dashboard_welcome_to_maskbook": {
         "message": "歡迎使用 Maskbook"
     },
@@ -722,5 +719,23 @@
     },
     "initialize": {
         "message": "初始化"
+    },
+    "dashboard_restoration_successful": {
+        "message": "恢復成功"
+    },
+    "dashboard_restoration_successful_hint": {
+        "message": "恢復了 $1 的備份"
+    },
+    "dashboard_ready_to_import": {
+        "message": "準備導入..."
+    },
+    "dashboard_ready_to_import_hint": {
+        "message": "在您導入此備份之前，Maskbook 需要某些網站的訪問許可。"
+    },
+    "proceed": {
+        "message": "繼續"
+    },
+    "please_include_proof_your_bio": {
+        "message": "請在您的個人簡介中包含引号内的内容 \"$1\"，否則您可能沒法正常使用 Maskbook"
     }
 }
