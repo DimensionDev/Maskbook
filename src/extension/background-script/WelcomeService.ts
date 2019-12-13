@@ -245,7 +245,7 @@ export async function restoreBackup(json: object, whoAmI?: ProfileIdentifier): P
                     createdAt: new Date(x.createdAt),
                     updatedAt: new Date(x.updatedAt),
                     identifier: id,
-                    linkedProfiles: new IdentifierMap(new Map()),
+                    linkedProfiles: new IdentifierMap(new Map(), ProfileIdentifier),
                     publicKey: x.publicKey,
                     localKey: keyCache.get(x.localKey!),
                     mnemonic: x.mnemonic,

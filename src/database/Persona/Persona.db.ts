@@ -440,7 +440,7 @@ function personaRecordOutDb(x: PersonaRecordDb): PersonaRecord {
         identifier: Identifier.fromString(x.identifier, ECKeyIdentifier).unwrap(
             `This record has an invalid identifier, wanted ECKeyIdentifier, ${x.identifier}`,
         ),
-        linkedProfiles: new IdentifierMap(x.linkedProfiles),
+        linkedProfiles: new IdentifierMap(x.linkedProfiles, ProfileIdentifier),
     }
     return obj
 }

@@ -14,16 +14,25 @@ export class IdentifierMap<IdentifierType extends Identifier, T> implements Map<
      * @param __raw_map__ The origin data.
      * @param constructor The Identifier constructor. If provided, IdentifierMap will try to do a runtime check to make sure the identifier type is correct.
      */
-    constructor(public readonly __raw_map__: Map<string, T>, constructor?: new (...args: any) => IdentifierType) {
+    constructor(public readonly __raw_map__: Map<string, T>, ...constructor: (new (...args: any) => IdentifierType)[]) {
         if (constructor) {
-            this.constructorName = constructor.name
+            this.constructorName = constructor.map(x => x.name)
         }
     }
-    private constructorName: string | undefined
+    private constructorName: string[] = []
     get(key: IdentifierType) {
         return this.__raw_map__.get(key.toText())
     }
     set(key: IdentifierType, data: T) {
+        if (this.constructorName.length) {
+            if (!this.constructorName.includes(key.constructor.name)) {
+                console.warn(
+                    `IdentifierMap found a invalid write try which violates the constraint ${this.constructorName}`,
+                    key,
+                )
+                return this
+            }
+        }
         this.__raw_map__.set(key.toText(), data)
         return this
     }
@@ -33,23 +42,32 @@ export class IdentifierMap<IdentifierType extends Identifier, T> implements Map<
     delete(data: IdentifierType) {
         return this.__raw_map__.delete(data.toText())
     }
+    private _identifierFromString(key: string) {
+        const identifier = Identifier.fromString(key).value
+        if (!identifier) {
+            console.warn('IdentifierMap found a key which cannot be converted into Identifier: ', key)
+        } else {
+            if (this.constructorName.length === 0) return identifier as IdentifierType
+            if (this.constructorName.includes(identifier.constructor.name)) return identifier as IdentifierType
+            console.warn(
+                `IdentifierMap found a key which is not compatible with it constraint(${this.constructorName}), ${key}`,
+            )
+        }
+        return null
+    }
     *entries(): Generator<[IdentifierType, T], void, unknown> {
         const iter = this.__raw_map__.entries()
         for (const [key, data] of iter) {
-            const identifier = Identifier.fromString(key).value
-            if (!identifier) {
-                console.warn('IdentifierMap found a key which cannot be converted into Identifier', key)
-            } else {
-                yield [identifier as IdentifierType, data]
-            }
+            const identifier = this._identifierFromString(key)
+            if (!identifier) continue
+            yield [identifier, data]
         }
     }
     forEach(callbackfn: (value: T, key: IdentifierType, map: IdentifierMap<IdentifierType, T>) => void, thisArg?: any) {
         this.__raw_map__.forEach((value, key) => {
-            const i = Identifier.fromString(key).value
-            if (i) {
-                callbackfn.call(thisArg, value, i as IdentifierType, this)
-            }
+            const i = this._identifierFromString(key)
+            if (!i) return
+            callbackfn.call(thisArg, value, i, this)
         })
     }
     has(key: IdentifierType) {
@@ -58,8 +76,8 @@ export class IdentifierMap<IdentifierType extends Identifier, T> implements Map<
     *keys(): Generator<IdentifierType, void, unknown> {
         const iter = this.__raw_map__.keys()
         for (const key of iter) {
-            const i = Identifier.fromString(key).value
-            if (i) yield i as IdentifierType
+            const i = this._identifierFromString(key)
+            if (i) yield i
             else continue
         }
     }
@@ -69,18 +87,19 @@ export class IdentifierMap<IdentifierType extends Identifier, T> implements Map<
     values(): IterableIterator<T> {
         return this.__raw_map__.values()
     }
-    [Symbol.toStringTag] = 'IdentifierMap';
+    public [Symbol.toStringTag]: string;
     [Symbol.iterator](): Generator<[IdentifierType, T], void, unknown> {
         return this.entries()
     }
 }
+IdentifierMap.prototype[Symbol.toStringTag] = 'IdentifierMap'
 
 export type ReadonlyIdentifierMap<IdentifierType extends Identifier, T> = ReadonlyMap<IdentifierType, T> & {
     readonly __raw_map__: ReadonlyMap<string, T>
 }
 export const ReadonlyIdentifierMap: {
-    new <IdentifierType extends Identifier, T>(__raw_map__: ReadonlyMap<string, T>): ReadonlyIdentifierMap<
-        IdentifierType,
-        T
-    >
+    new <IdentifierType extends Identifier, T>(
+        __raw_map__: ReadonlyMap<string, T>,
+        ...constructor: (new (...args: any) => IdentifierType)[]
+    ): ReadonlyIdentifierMap<IdentifierType, T>
 } = IdentifierMap as any

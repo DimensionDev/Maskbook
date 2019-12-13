@@ -61,10 +61,10 @@ async function migrateHelper_importPersonaFromPersonRecord(
     getLocalKey: (identifier: ProfileIdentifier) => Promise<CryptoKey | null>,
 ) {
     const jwkMap = new Map<CryptoKey, JsonWebKey>()
-    const attachRelationMap = new IdentifierMap<ProfileIdentifier, ECKeyIdentifier>(new Map())
-    const localKeysMap = new IdentifierMap<ProfileIdentifier, CryptoKey>(new Map())
-    const personaMap = new IdentifierMap<ECKeyIdentifier, persona.PersonaRecord>(new Map())
-    const profilesMap = new IdentifierMap<ProfileIdentifier, persona.ProfileRecord>(new Map())
+    const attachRelationMap = new IdentifierMap<ProfileIdentifier, ECKeyIdentifier>(new Map(), ProfileIdentifier)
+    const localKeysMap = new IdentifierMap<ProfileIdentifier, CryptoKey>(new Map(), ProfileIdentifier)
+    const personaMap = new IdentifierMap<ECKeyIdentifier, persona.PersonaRecord>(new Map(), ECKeyIdentifier)
+    const profilesMap = new IdentifierMap<ProfileIdentifier, persona.ProfileRecord>(new Map(), ProfileIdentifier)
 
     await Promise.all(
         otherIDs.concat(myIDs).map(async value => {
@@ -113,7 +113,7 @@ function updateOrCreatePersonaRecord(
             publicKey: cryptoKeyMap.get(profile.publicKey)!,
             createdAt: new Date(0),
             updatedAt: new Date(),
-            linkedProfiles: new IdentifierMap(new Map()),
+            linkedProfiles: new IdentifierMap(new Map(), ProfileIdentifier),
             identifier: ec_id,
         })
         map.get(ec_id)!.linkedProfiles.set(profile.identifier, {
