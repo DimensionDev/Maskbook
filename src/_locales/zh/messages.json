@@ -643,10 +643,13 @@
         "message": "您可以通過以下任一方式備份角色。"
     },
     "dashboard_backup_persona_mnemonic_hint": {
-        "message": "將上面12個字詞小心存放。您需要它們來還原此角色的私鑰。"
+        "message": "小心存放上面的12個字詞。您需要它們來還原此角色的私鑰。"
     },
     "dashboard_backup_persona_text_hint": {
-        "message": "將上面的文本小心存放。 您需要它們來還原此角色的私鑰。"
+        "message": "小心存放上面的文本。您需要它們來還原此角色的私鑰。"
+    },
+    "dashboard_backup_persona_qr_hint": {
+        "message": "小心存放上面的二維碼。您需要它們來還原此角色的私鑰。"
     },
     "backup_persona": {
         "message": "備份角色"
