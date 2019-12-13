@@ -1,10 +1,13 @@
 import * as React from 'react'
+import className from 'classnames'
 import { makeStyles, Theme, ListItem, ListItemText, Checkbox, ListItemAvatar } from '@material-ui/core'
 import { useStylesExtends } from '../../custom-ui-helper'
-import { OverridableComponent } from '@material-ui/core/OverridableComponent'
+import { DefaultComponentProps } from '@material-ui/core/OverridableComponent'
 import { Profile } from '../../../database'
 import { ChangeEvent, useCallback } from 'react'
 import { Avatar } from '../../../utils/components/Avatar'
+import { CheckboxProps } from '@material-ui/core/Checkbox'
+import { ListItemTypeMap } from '@material-ui/core/ListItem'
 
 const useStyle = makeStyles((theme: Theme) => ({
     root: {
@@ -23,8 +26,8 @@ export interface ProfileInListProps extends withClasses<KeysInferFromUseStyles<t
     checked?: boolean
     disabled?: boolean
     onChange: (ev: ChangeEvent<HTMLInputElement>, checked: boolean) => void
-    CheckboxProps?: Partial<(typeof Checkbox extends OverridableComponent<infer U> ? U : never)['props']>
-    ListItemProps?: Partial<(typeof ListItem extends OverridableComponent<infer U> ? U : never)['props']>
+    CheckboxProps?: Partial<CheckboxProps>
+    ListItemProps?: Partial<DefaultComponentProps<ListItemTypeMap<{ button: true }, 'div'>>>
 }
 export function ProfileInList(props: ProfileInListProps) {
     const classes = useStylesExtends(useStyle(), props)
@@ -34,7 +37,12 @@ export function ProfileInList(props: ProfileInListProps) {
     const onClick = useCallback(ev => props.onChange(ev, !props.checked), [props])
 
     return (
-        <ListItem className={classes.root} button disabled={props.disabled} onClick={onClick} {...props.ListItemProps}>
+        <ListItem
+            button
+            onClick={onClick}
+            disabled={props.disabled}
+            {...props.ListItemProps}
+            className={className(classes.root, props.ListItemProps?.className)}>
             <Checkbox checked={props.checked} color="primary" {...props.CheckboxProps} />
             <ListItemAvatar>
                 <Avatar person={profile} />
