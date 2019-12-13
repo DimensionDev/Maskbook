@@ -35,21 +35,24 @@ const useStyles = makeStyles(theme => ({
     MUIInputInput: {
         minHeight: '8em',
     },
-    dialog: {},
-    backdrop: {},
-    paper: {},
-    header: {},
-    content: {},
-    actions: {},
-    close: {},
     title: {
         marginLeft: 6,
     },
-    button: {},
 }))
 const ResponsiveDialog = withMobileDialog({ breakpoint: 'xs' })(Dialog)
 
-export interface PostDialogUIProps extends withClasses<KeysInferFromUseStyles<typeof useStyles>> {
+export interface PostDialogUIProps
+    extends withClasses<
+        | KeysInferFromUseStyles<typeof useStyles>
+        | 'dialog'
+        | 'backdrop'
+        | 'paper'
+        | 'header'
+        | 'content'
+        | 'actions'
+        | 'close'
+        | 'button'
+    > {
     open: boolean
     availableShareTarget: Array<Profile | Group>
     currentShareTarget: Array<Profile | Group>

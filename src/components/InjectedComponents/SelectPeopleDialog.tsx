@@ -15,7 +15,8 @@ import { Profile } from '../../database'
 import { PortalShadowRoot } from '../../utils/jss/ShadowRootPortal'
 import { useStylesExtends } from '../custom-ui-helper'
 
-export interface SelectPeopleDialogProps extends withClasses<KeysInferFromUseStyles<typeof useStyles, 'content'>> {
+export interface SelectPeopleDialogProps
+    extends withClasses<KeysInferFromUseStyles<typeof useStyles, 'content'> | 'button'> {
     open: boolean
     people: Profile[]
     alreadySelectedPreviously: Profile[]
@@ -27,7 +28,6 @@ const useStyles = makeStyles({
     title: { paddingBottom: 0 },
     content: { padding: '0 12px' },
     progress: { marginRight: 6 },
-    button: {},
 })
 const ResponsiveDialog = withMobileDialog({ breakpoint: 'xs' })(Dialog)
 export function SelectPeopleDialog(props: SelectPeopleDialogProps) {
