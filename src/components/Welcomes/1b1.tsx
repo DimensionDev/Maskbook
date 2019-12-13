@@ -152,9 +152,9 @@ export default function Welcome({ restore: originalRestore }: Props) {
                                 {geti18nString('welcome_1b_hint_identity')}
                             </Typography>
                             <List>
-                                {json!.profiles.map(identity => {
-                                    const id = Identifier.fromString(identity.identifier) as ProfileIdentifier
-                                    if (!(id instanceof ProfileIdentifier)) return null
+                                {json.profiles.map(identity => {
+                                    const id = Identifier.fromString(identity.identifier, ProfileIdentifier).value
+                                    if (!id) return null
                                     return (
                                         <ListItem key={identity.identifier}>
                                             <ListItemAvatar>

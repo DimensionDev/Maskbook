@@ -259,28 +259,24 @@ export default withRouter(function _WelcomePortal(props: RouteComponentProps) {
         const identifier = search.get('identifier') || ''
         const avatar = search.get('avatar') || ''
         const nickname = search.get('nickname') || ''
-        const id = Identifier.fromString(identifier)
-        if (id && id.equals(selectedId.identifier)) return
-
-        if (id instanceof ProfileIdentifier) {
-            if (id.isUnknown) return
-            Services.Identity.queryProfile(id)
-                .then(x => [x].filter(y => y.linkedPersona?.hasPrivateKey))
-                .then(([inDB = {} as Profile]) => {
-                    const person = (personInferFromURLRef.value = {
-                        identifier: id,
-                        nickname: nickname || inDB.nickname,
-                        avatar: avatar || inDB.avatar,
-                        createdAt: new Date(),
-                        updatedAt: new Date(),
-                    } as Profile)
-                    Services.Identity.updateProfileInfo(person.identifier, {
-                        nickname: person.nickname,
-                        avatarURL: person.avatar,
-                    })
+        const id = Identifier.fromString(identifier, ProfileIdentifier).value
+        if (!id || id.equals(selectedId.identifier) || id.isUnknown) return
+        Services.Identity.queryProfile(id)
+            .then(x => [x].filter(y => y.linkedPersona?.hasPrivateKey))
+            .then(([inDB = {} as Profile]) => {
+                const person = (personInferFromURLRef.value = {
+                    identifier: id,
+                    nickname: nickname || inDB.nickname,
+                    avatar: avatar || inDB.avatar,
+                    createdAt: new Date(),
+                    updatedAt: new Date(),
+                } as Profile)
+                Services.Identity.updateProfileInfo(person.identifier, {
+                    nickname: person.nickname,
+                    avatarURL: person.avatar,
                 })
-                .then(() => setStep(WelcomeState.SelectIdentity))
-        }
+            })
+            .then(() => setStep(WelcomeState.SelectIdentity))
     }, [props.location.search, selectedId.identifier])
 
     const [mnemonic, setMnemonic] = useState<string | null>(null)

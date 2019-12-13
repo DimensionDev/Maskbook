@@ -12,7 +12,9 @@ function outDb(db: PostDBRecord): PostRecord {
     restorePrototypeArray(rest.recipientGroups, GroupIdentifier.prototype)
     return {
         ...rest,
-        identifier: Identifier.fromString(identifier) as PostIVIdentifier,
+        identifier: Identifier.fromString(identifier, PostIVIdentifier).unwrap(
+            `Invalid identifier, expected PostIVIdentifier, actual ${identifier}`,
+        ),
     }
 }
 function toDb(out: PostRecord): PostDBRecord {
@@ -83,8 +85,8 @@ const db = openDB<PostDB>('maskbook-post-v2', 3, {
             store.getAll().then(values => {
                 store.clear()
                 for (const each of values) {
-                    const id = Identifier.fromString(each.identifier)
-                    if (id instanceof PostIdentifier) {
+                    const id = Identifier.fromString(each.identifier, PostIdentifier).value
+                    if (id) {
                         each.identifier = new PostIVIdentifier(
                             (id.identifier as ProfileIdentifier).network,
                             id.postId,
@@ -172,8 +174,11 @@ export async function queryPostsDB(
     const t = (await db).transaction('post')
     const selected: PostRecord[] = []
     for await (const { value } of t.store) {
-        const id = Identifier.fromString(value.identifier) as PostIVIdentifier | null
-        if (!id) continue
+        const id = Identifier.fromString(value.identifier, PostIVIdentifier).value
+        if (!id) {
+            console.warn(`Found invalid identifier, expected ${PostIVIdentifier}, found ${value.identifier}`)
+            continue
+        }
         if (typeof query === 'string') {
             if (id.network === query) selected.push(outDb(value))
         } else {

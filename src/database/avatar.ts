@@ -81,7 +81,11 @@ export async function queryAvatarOutdatedDB(
     const t = (await db).transaction('metadata')
     const outdated: IdentityWithAvatar[] = []
     for await (const { value } of t.store) {
-        if (deadline > value[attribute]) outdated.push(Identifier.fromString(value.identifier) as IdentityWithAvatar)
+        if (deadline > value[attribute]) {
+            const identifier = Identifier.fromString(value.identifier).value
+            if (!identifier) continue
+            outdated.push(identifier as IdentityWithAvatar)
+        }
     }
     return outdated
 }

@@ -236,8 +236,9 @@ export async function restoreBackup(json: object, whoAmI?: ProfileIdentifier): P
     {
         const t: any = (await PersonaDBAccess()).transaction(['personas', 'profiles'], 'readwrite')
         for (const x of data.personas) {
-            const id = Identifier.fromString(x.identifier)
-            if (!(id instanceof ECKeyIdentifier)) throw new Error('Not a valid identifier at persona.identifier')
+            const id = Identifier.fromString(x.identifier, ECKeyIdentifier).unwrap(
+                `Not a valid identifier at persona.identifier`,
+            )
             if (x.privateKey && !x.privateKey.d) throw new Error('Invalid private key')
             await createPersonaDB(
                 {
@@ -256,8 +257,9 @@ export async function restoreBackup(json: object, whoAmI?: ProfileIdentifier): P
         }
 
         for (const x of data.profiles) {
-            const id = Identifier.fromString(x.identifier)
-            if (!(id instanceof ProfileIdentifier)) throw new Error('Not a valid identifier at profile.identifier')
+            const id = Identifier.fromString(x.identifier, ProfileIdentifier).unwrap(
+                `Not a valid identifier at profile.identifier`,
+            )
             await updateOrCreateProfile(
                 {
                     identifier: id,
@@ -269,8 +271,9 @@ export async function restoreBackup(json: object, whoAmI?: ProfileIdentifier): P
                 t,
             )
             if (x.linkedPersona) {
-                const cid = Identifier.fromString(x.linkedPersona)
-                if (!(cid instanceof ECKeyIdentifier)) throw new Error('Not a valid identifier at linkedPersona')
+                const cid = Identifier.fromString(x.linkedPersona, ECKeyIdentifier).unwrap(
+                    'Not a valid identifier at linkedPersona',
+                )
                 await attachProfileDB(id, cid, { connectionConfirmState: 'confirmed' }, t)
             }
         }

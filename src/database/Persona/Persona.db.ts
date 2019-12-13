@@ -419,7 +419,9 @@ function profileOutDB({ network, ...x }: ProfileRecordDB): ProfileRecord {
     }
     return {
         ...x,
-        identifier: Identifier.fromString(x.identifier) as ProfileIdentifier,
+        identifier: Identifier.fromString(x.identifier, ProfileIdentifier).unwrap(
+            `Invalid identifier found, expected ProfileIdentifier, actual ${x.identifier}`,
+        ),
         linkedPersona: restorePrototype(x.linkedPersona, ECKeyIdentifier.prototype),
     }
 }
@@ -435,7 +437,9 @@ function personaRecordOutDb(x: PersonaRecordDb): PersonaRecord {
     delete x.hasPrivateKey
     const obj: PersonaRecord = {
         ...x,
-        identifier: Identifier.fromString(x.identifier) as PersonaIdentifier,
+        identifier: Identifier.fromString(x.identifier, ECKeyIdentifier).unwrap(
+            `This record has an invalid identifier, wanted ECKeyIdentifier, ${x.identifier}`,
+        ),
         linkedProfiles: new IdentifierMap(x.linkedProfiles),
     }
     return obj

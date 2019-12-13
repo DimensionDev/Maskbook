@@ -105,7 +105,9 @@ export async function updateUserGroupDatabase(
             identifier: group.identifier,
             banned: !orig.banned && !group.banned ? undefined : [...(orig.banned || []), ...(group.banned || [])],
             groupName: group.groupName || orig.groupName,
-            members: Array.from(nextMembers).map(x => Identifier.fromString(x) as ProfileIdentifier),
+            members: Array.from(nextMembers)
+                .map(x => Identifier.fromString(x, ProfileIdentifier).value!)
+                .filter(x => x),
         }
     } else {
         nextRecord = type(orig) || orig
@@ -145,7 +147,12 @@ export async function queryUserGroupsDatabase(
     if (typeof query === 'function') {
         // eslint-disable-next-line @typescript-eslint/await-thenable
         for await (const { value, key } of t.store) {
-            if (query(Identifier.fromString(key) as GroupIdentifier, value)) result.push(value)
+            const identifier = Identifier.fromString(key, GroupIdentifier).value
+            if (!identifier) {
+                console.warn('Invalid identifier', key)
+                continue
+            }
+            if (query(identifier, value)) result.push(value)
         }
     } else {
         result.push(
@@ -159,12 +166,11 @@ export async function queryUserGroupsDatabase(
 }
 
 function GroupRecordOutDB(x: GroupRecordInDatabase): GroupRecord {
-    const id = Identifier.fromString(x.identifier)
-    if (!(id instanceof GroupIdentifier))
-        throw new TypeError('Can not cast string ' + x.identifier + ' into GroupIdentifier')
     return {
         ...x,
-        identifier: id,
+        identifier: Identifier.fromString(x.identifier, GroupIdentifier).unwrap(
+            `'Can not cast string ${x.identifier} into GroupIdentifier'`,
+        ),
         members: restorePrototypeArray(x.members, ProfileIdentifier.prototype),
         banned: restorePrototypeArray(x.banned, ProfileIdentifier.prototype),
     }
