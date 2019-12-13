@@ -1,4 +1,5 @@
 import * as React from 'react'
+import classNames from 'classnames'
 import { makeStyles } from '@material-ui/core'
 import Chip, { ChipProps } from '@material-ui/core/Chip'
 
@@ -16,6 +17,5 @@ const useStyles = makeStyles({
 
 export function ClickableChip(props: ClickableChipProps) {
     const classes = useStyles()
-
-    return <Chip className={classes.root} {...props.ChipProps} />
+    return <Chip {...props.ChipProps} className={classNames(classes.root, props.ChipProps?.className)} />
 }

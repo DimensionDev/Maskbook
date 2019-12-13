@@ -1,4 +1,5 @@
 import * as React from 'react'
+import classNames from 'classnames'
 import Chip, { ChipProps } from '@material-ui/core/Chip'
 import { Group } from '../../../database'
 import DoneIcon from '@material-ui/icons/Done'
@@ -38,13 +39,13 @@ export function GroupInChip(props: GroupInChipProps) {
 
     return (
         <Chip
-            className={classes.root}
             avatar={props.checked ? <DoneIcon className={classes.icon} /> : undefined}
             color={props.checked ? 'primary' : 'default'}
             disabled={props.disabled ?? false}
             onClick={onClick}
             label={useResolveSpecialGroupName(props.item)}
             {...props.ChipProps}
+            className={classNames(classes.root, props.ChipProps?.className)}
         />
     )
 }
