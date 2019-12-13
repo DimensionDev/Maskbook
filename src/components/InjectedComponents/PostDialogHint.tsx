@@ -19,11 +19,10 @@ const useStyles = makeStyles({
         justifyContent: 'space-between',
         padding: '16px 12px',
     },
-    title: {},
-    button: {},
 })
 
-export interface PostDialogHintUIProps extends withClasses<KeysInferFromUseStyles<typeof useStyles>> {
+export interface PostDialogHintUIProps
+    extends withClasses<KeysInferFromUseStyles<typeof useStyles> | 'title' | 'button'> {
     onHintButtonClicked: () => void
 }
 export const PostDialogHintUI = React.memo(function PostDialogHintUI(props: PostDialogHintUIProps) {

@@ -21,23 +21,26 @@ import { useCurrentIdentity } from '../../DataSource/useActivatedUI'
 import { ProfileIdentifier } from '../../../database/type'
 
 const useStyles = makeStyles(theme => ({
-    dialog: {},
-    backdrop: {},
-    paper: {},
-    header: {},
     content: {
         padding: 0,
     },
-    actions: {},
     title: {
         marginLeft: 6,
     },
-    close: {},
-    button: {},
 }))
 const ResponsiveDialog = withMobileDialog({ breakpoint: 'xs' })(Dialog)
 
-export interface SelectRecipientsDialogUIProps extends withClasses<KeysInferFromUseStyles<typeof useStyles>> {
+export interface SelectRecipientsDialogUIProps
+    extends withClasses<
+        | KeysInferFromUseStyles<typeof useStyles>
+        | 'dialog'
+        | 'backdrop'
+        | 'paper'
+        | 'header'
+        | 'actions'
+        | 'close'
+        | 'button'
+    > {
     ignoreMyself?: boolean
     open: boolean
     items: Profile[]
