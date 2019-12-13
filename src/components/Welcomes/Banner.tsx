@@ -22,7 +22,8 @@ import { useStylesExtends } from '../custom-ui-helper'
 import { useCapturedInput } from '../../utils/hooks/useCapturedEvents'
 import { ProfileIdentifier } from '../../database/type'
 
-interface BannerUIProps extends withClasses<KeysInferFromUseStyles<typeof useStyles>> {
+interface BannerUIProps
+    extends withClasses<KeysInferFromUseStyles<typeof useStyles> | 'header' | 'content' | 'actions' | 'button'> {
     title?: string
     description?: string
     nextStep: 'hidden' | { onClick(): void }
@@ -42,13 +43,9 @@ const useStyles = makeStyles((theme: Theme) => ({
         borderRadius: 4,
         marginBottom: 10,
     },
-    header: {},
-    content: {},
-    actions: {},
     title: {
         paddingBottom: 0,
     },
-    button: {},
 }))
 export function BannerUI(props: BannerUIProps) {
     const classes = useStylesExtends(useStyles(), props)
