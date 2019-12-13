@@ -73,17 +73,6 @@ interface ResponsiveDrawerProps {
     exitDashboard: null | (() => void)
 }
 
-function LinkItem(props: { to: string; icon: React.ReactElement; label: string }) {
-    const selected = useRouteMatch(props.to) !== null
-    const history = useHistory()
-    const onClick = useCallback(() => {
-        history.push(props.to)
-    }, [history, props.to])
-    return (
-        <BottomNavigationAction onClick={onClick} selected={selected} showLabel label={props.label} icon={props.icon} />
-    )
-}
-
 function ResponsiveDrawer(props: ResponsiveDrawerProps) {
     const classes = useStyles()
     const match = useRouteMatch('/:param/')

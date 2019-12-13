@@ -1,30 +1,43 @@
-import React, { useRef, useState } from 'react'
+import React from 'react'
 import StepBase from './StepBase'
 import { Table, TableBody, TableRow, TableCell, styled } from '@material-ui/core'
 import { geti18nString } from '../../../utils/i18n'
 import ActionButton from '../DashboardComponents/ActionButton'
-
-const header = 'Restoration Successful'
-const subheader = 'Restored from a backup at 2020-01-01 09:41 (UTC+0).'
-
-const actions = (
-    <div>
-        <ActionButton variant="contained" color="primary">
-            Done
-        </ActionButton>
-    </div>
-)
+import useQueryParams from '../../../utils/hooks/useQueryParams'
+import { Link } from 'react-router-dom'
 
 const TableCellNoBorder = styled(TableCell)({
     borderBottom: 'none',
 })
 
 export default function InitStep2R() {
+    const { personas, profiles, posts, contacts, date } = useQueryParams([
+        'personas',
+        'profiles',
+        'posts',
+        'contacts',
+        'date',
+    ])
+
+    const header = geti18nString('dashboard_restoration_successful')
+    const subheader = geti18nString(
+        'dashboard_restoration_successful_hint',
+        new Date(date ? Number(date) : 0).toLocaleString(),
+    )
+
+    const actions = (
+        <div>
+            <ActionButton variant="contained" color="primary" component={Link} to="/">
+                {geti18nString('finish')}
+            </ActionButton>
+        </div>
+    )
+
     const rows = [
-        { name: 'Personas', value: '1' },
-        { name: 'Profiles', value: '1' },
-        { name: 'Posts', value: '1' },
-        { name: 'Contacts', value: '1' },
+        { name: 'Personas', value: personas ?? 0 },
+        { name: 'Profiles', value: profiles ?? 0 },
+        { name: 'Posts', value: posts ?? 0 },
+        { name: 'Contacts', value: contacts ?? 0 },
     ]
     const content = (
         <div style={{ alignSelf: 'stretch', textAlign: 'center', width: '100%' }}>
