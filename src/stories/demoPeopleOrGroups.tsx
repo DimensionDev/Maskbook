@@ -14,7 +14,7 @@ const emptyProfile = {
             .toString(26)
             .slice(2)
             .toUpperCase(),
-        linkedProfiles: new IdentifierMap(new Map()) as Persona['linkedProfiles'],
+        linkedProfiles: new IdentifierMap(new Map(), ProfileIdentifier) as Persona['linkedProfiles'],
     },
 }
 

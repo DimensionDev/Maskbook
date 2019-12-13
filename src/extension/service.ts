@@ -2,7 +2,7 @@ import { AsyncCall, AsyncGeneratorCall, AsyncCallOptions } from 'async-call-rpc'
 import { GetContext, OnlyRunInContext } from '@holoflows/kit/es'
 import * as MockService from './mock-service'
 import Serialization from '../utils/type-transform/Serialization'
-import { ProfileIdentifier, GroupIdentifier, PostIdentifier, PostIVIdentifier } from '../database/type'
+import { ProfileIdentifier, GroupIdentifier, PostIdentifier, PostIVIdentifier, ECKeyIdentifier } from '../database/type'
 import { getCurrentNetworkWorkerService } from './background-script/WorkerService'
 
 import tasks from './content-script/tasks'
@@ -76,6 +76,7 @@ Object.assign(globalThis, {
     PostIdentifier,
     PostIVIdentifier,
     getCurrentNetworkWorkerService,
+    ECKeyIdentifier,
     IdentifierMap,
 })
 //#region
