@@ -1,9 +1,11 @@
 /* eslint-disable import/no-deprecated */
 import { LinkedProfileDetails } from '../../../../database/Persona/Persona.db'
-import { RecipientDetail } from '../../../../database/post'
 import { BackupJSONFileVersion1 } from './version-1'
 import { ProfileIdentifier, ECKeyIdentifier, GroupIdentifier } from '../../../../database/type'
 
+export type RecipientReasonJSON = ({ type: 'direct' } | { type: 'group'; group: string /** GroupIdentifier */ }) & {
+    at: number
+}
 /**
  * @see https://github.com/DimensionDev/Maskbook/issues/194
  *
@@ -50,7 +52,7 @@ export interface BackupJSONFileVersion2 {
         postBy: string // ProfileIdentifier.toText()
         identifier: string // PostIVIdentifier.toText()
         postCryptoKey?: JsonWebKey
-        recipients: Record</** ProfileIdentifier.toText() */ string, RecipientDetail>
+        recipients: Record</** ProfileIdentifier.toText() */ string, { reason: RecipientReasonJSON[] }>
         recipientGroups: string[] // Array<GroupIdentifier.toText()>
         foundAt: number // Unix timestamp
     }>

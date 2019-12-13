@@ -24,6 +24,9 @@ export interface PostRecord extends Omit<PostDBRecord, 'identifier'> {
     identifier: PostIVIdentifier
 }
 
+/**
+ * When you change this, change RecipientReasonJSON as well!
+ */
 export type RecipientReason = ({ type: 'direct' } | { type: 'group'; group: GroupIdentifier }) & {
     /**
      * When we send the key to them by this reason?
