@@ -2,6 +2,7 @@ import { serializable } from '../utils/type-transform/Serialization'
 import { RecipientDetail } from './post'
 import { compressSecp256k1Key } from '../utils/type-transform/SECP256k1-Compression'
 import { CryptoKeyToJsonWebKey } from '../utils/type-transform/CryptoKey-JsonWebKey'
+import { Nullable } from '../utils/type-transform/Nullable'
 
 /**
  * @internal symbol that used to construct this type from the Identifier
@@ -17,6 +18,22 @@ const $fromString = Symbol()
  */
 type Identifiers = 'person' | 'group' | 'post' | 'post_iv' | 'ec_key'
 const fromStringCache = new Map<string, Identifier>()
+
+interface IdentifierFromString {
+    /**
+     * fromString("some string", ProfileIdentifier) // ProfileIdentifier | null
+     * fromString("some string", ECKeyIdentifier) // ECKeyIdentifier | null
+     */
+    <T extends Identifier>(id: string, c: new (...args: any) => T): Nullable<T>
+    /**
+     * fromString("some string") // Identifier | null
+     */
+    (id: string): Nullable<Identifier>
+    /**
+     * fromString(identifier) // typeof identifier
+     */
+    // <T extends Identifier>(id: T): T
+}
 export abstract class Identifier {
     static equals(a: Identifier, b: Identifier) {
         return a.equals(b)
@@ -25,11 +42,14 @@ export abstract class Identifier {
         return this === other || this.toText() === other.toText()
     }
     abstract toText(): string
-    static fromString<T extends Identifier>(id: T): T
-    static fromString(id: string): Identifier | null
-    static fromString<T extends Identifier>(id: string | T): Identifier | null {
-        if (id instanceof Identifier) return id
-        if (fromStringCache.has(id)) return fromStringCache.get(id)!
+    static fromString: IdentifierFromString = ((
+        id: string | Identifier,
+        constructor?: typeof Identifier,
+    ): Nullable<Identifier> => {
+        // the third overload
+        if (id instanceof Identifier) return Nullable(id)
+        // the second overload
+        if (fromStringCache.has(id)) return Nullable(fromStringCache.get(id))
         const [type, ...rest] = id.split(':') as [Identifiers, string]
         let result: Identifier | null = null
         if (type === 'person') result = ProfileIdentifier[$fromString](rest.join(':'))
@@ -37,11 +57,19 @@ export abstract class Identifier {
         else if (type === 'post') result = PostIdentifier[$fromString](rest.join(':'))
         else if (type === 'post_iv') result = PostIVIdentifier[$fromString](rest.join(':'))
         else if (type === 'ec_key') result = ECKeyIdentifier[$fromString](rest.join(':'))
-        else return null
-        if (result === null) return null
+        else {
+            // ? if we add new value to Identifiers, this line will be a TypeError
+            const _: never = type
+            return Nullable(null)
+        }
+        if (result === null) return Nullable(null)
         fromStringCache.set(id, result)
-        return result
-    }
+
+        if (!constructor) return Nullable(result)
+        // the first overload
+        else if (result instanceof constructor) return Nullable(result)
+        else return Nullable(null)
+    }) as any
 
     static IdentifiersToString(a: Identifier[], isOrderImportant = false) {
         const ax = a.map(x => x.toText())
@@ -138,7 +166,7 @@ export class PostIdentifier<T extends Identifier = Identifier> extends Identifie
     }
     static [$fromString](str: string) {
         const [postId, ...identifier] = str.split('/')
-        const id = Identifier.fromString(identifier.join('/'))
+        const id = Identifier.fromString(identifier.join('/')).value
         if (!id || !postId) return null
         return new PostIdentifier(id, postId)
     }

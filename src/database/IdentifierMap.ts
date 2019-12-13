@@ -1,9 +1,25 @@
 import { Identifier } from './type'
 import { serializable } from '../utils/type-transform/Serialization'
 
+/**
+ * The IdentifierMap is like a built-in Map<Identifier, T>.
+ *
+ * Because Identifier is not a value-type record so to make it behave like a value-type,
+ * please use this class instead of Map<Identifier, T>.
+ */
 @serializable('IdentifierMap')
 export class IdentifierMap<IdentifierType extends Identifier, T> implements Map<IdentifierType, T> {
-    constructor(public readonly __raw_map__: Map<string, T>) {}
+    /**
+     *
+     * @param __raw_map__ The origin data.
+     * @param constructor The Identifier constructor. If provided, IdentifierMap will try to do a runtime check to make sure the identifier type is correct.
+     */
+    constructor(public readonly __raw_map__: Map<string, T>, constructor?: new (...args: any) => IdentifierType) {
+        if (constructor) {
+            this.constructorName = constructor.name
+        }
+    }
+    private constructorName: string | undefined
     get(key: IdentifierType) {
         return this.__raw_map__.get(key.toText())
     }
@@ -20,13 +36,18 @@ export class IdentifierMap<IdentifierType extends Identifier, T> implements Map<
     *entries(): Generator<[IdentifierType, T], void, unknown> {
         const iter = this.__raw_map__.entries()
         for (const [key, data] of iter) {
-            yield [Identifier.fromString(key) as IdentifierType, data]
+            const identifier = Identifier.fromString(key).value
+            if (!identifier) {
+                console.warn('IdentifierMap found a key which cannot be converted into Identifier', key)
+            } else {
+                yield [identifier as IdentifierType, data]
+            }
         }
     }
     forEach(callbackfn: (value: T, key: IdentifierType, map: IdentifierMap<IdentifierType, T>) => void, thisArg?: any) {
         this.__raw_map__.forEach((value, key) => {
-            const i = Identifier.fromString(key)
-            if (i !== null) {
+            const i = Identifier.fromString(key).value
+            if (i) {
                 callbackfn.call(thisArg, value, i as IdentifierType, this)
             }
         })
@@ -37,8 +58,8 @@ export class IdentifierMap<IdentifierType extends Identifier, T> implements Map<
     *keys(): Generator<IdentifierType, void, unknown> {
         const iter = this.__raw_map__.keys()
         for (const key of iter) {
-            const i = Identifier.fromString(key)
-            if (i !== null) yield i as IdentifierType
+            const i = Identifier.fromString(key).value
+            if (i) yield i as IdentifierType
             else continue
         }
     }

@@ -58,7 +58,7 @@ export default function BackupDialog() {
     const [showQRCode, setShowQRCode] = useState(search.get('qr') === null ? false : true)
 
     const identity = search.get('identity') || ''
-    const currentIdentifier = ProfileIdentifier.fromString(identity) as ProfileIdentifier
+    const currentIdentifier = ProfileIdentifier.fromString(identity, ProfileIdentifier).value
 
     useEffect(() => {
         if (!currentIdentifier) return
@@ -69,7 +69,9 @@ export default function BackupDialog() {
                     compressBackupFile(
                         backupObj,
                         backupObj.profiles.findIndex(y =>
-                            currentIdentifier.equals(Identifier.fromString(y.identifier)!),
+                            currentIdentifier.equals(
+                                Identifier.fromString(y.identifier).unwrap('Invalid identifier in backup file'),
+                            ),
                         ),
                     ),
                 )

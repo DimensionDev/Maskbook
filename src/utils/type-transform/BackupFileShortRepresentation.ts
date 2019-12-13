@@ -22,7 +22,7 @@ export function compressBackupFile(file: BackupJSONFileLatest, index: number): s
     if (!personas[index ?? 0]) throw new Error('Empty backup file')
     const { localKey, nickname, privateKey, identifier } = personas[index]
     if (!privateKey) throw new Error('Invalid private key')
-    const id = Identifier.fromString(identifier) as ProfileIdentifier
+    const id = Identifier.fromString(identifier, ProfileIdentifier).unwrap('Invalid identifier')
     return ([
         '2',
         id.network,
