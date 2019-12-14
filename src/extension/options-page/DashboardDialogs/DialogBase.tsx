@@ -27,21 +27,21 @@ const useStyles = makeStyles(theme =>
             justifyContent: 'center',
         },
         dialogTitle: {
-            padding: `${theme.spacing(1)}px ${theme.spacing(4)}px ${theme.spacing(1)}px ${theme.spacing(1)}px`,
+            padding: theme.spacing(1, 4, 1, 1),
             whiteSpace: 'nowrap',
             textOverflow: 'ellipsis',
             wordBreak: 'break-all',
             overflow: 'hidden',
         },
         dialogTitleSimplified: {
-            padding: `${theme.spacing(2)}px ${theme.spacing(4)}px 0`,
+            padding: theme.spacing(2, 4, 0),
         },
         dialogContent: {
-            padding: `${theme.spacing(2)}px ${theme.spacing(4)}px`,
+            padding: theme.spacing(2, 4),
             lineHeight: 2,
         },
         dialogActions: {
-            padding: `0 ${theme.spacing(4)}px ${theme.spacing(2)}px`,
+            padding: theme.spacing(0, 4, 2),
             '& .actionButton': {
                 width: 140,
             },

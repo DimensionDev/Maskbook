@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme: Theme) =>
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            padding: `0 ${theme.spacing(1)}px`,
+            padding: theme.spacing(0, 1),
         },
         cardActions: {
             flex: '0 0 auto',

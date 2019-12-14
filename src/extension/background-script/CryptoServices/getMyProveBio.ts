@@ -10,5 +10,7 @@ export async function getMyProveBio(whoAmI: ProfileIdentifier | PersonaIdentifie
     const pub = await crypto.subtle.exportKey('jwk', myIdentity)
     const compressed = compressSecp256k1Key(pub, 'public')
     // FIXME: wait for #191
-    return 'network' in whoAmI ? getNetworkWorker(whoAmI.network).publicKeyEncoder(compressed) : compressed
+    return whoAmI instanceof ProfileIdentifier
+        ? getNetworkWorker(whoAmI.network).publicKeyEncoder(compressed)
+        : compressed
 }

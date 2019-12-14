@@ -23,21 +23,23 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 )
 
+const FooterLink = function(props: any) {
+    const classes = useStyles()
+    return (
+        <MuiLink
+            underline="none"
+            {...(props.href
+                ? { href: props.href, target: '_blank', rel: 'noopener noreferrer' }
+                : { to: props.to, component: Link })}
+            color="inherit"
+            className={classes.footerButton}>
+            <Typography variant="body2">{props.children}</Typography>
+        </MuiLink>
+    )
+}
+
 export default function FooterLine() {
     const classes = useStyles()
-    const FooterLink = function(props: any) {
-        return (
-            <MuiLink
-                underline="none"
-                {...(props.href
-                    ? { href: props.href, target: '_blank', rel: 'noopener noreferrer' }
-                    : { to: props.to, component: Link })}
-                color="inherit"
-                className={classes.footerButton}>
-                <Typography variant="body2">{props.children}</Typography>
-            </MuiLink>
-        )
-    }
     return (
         <Breadcrumbs className={classes.footerButtons} separator="|" aria-label="breadcrumb">
             <FooterLink href="https://maskbook.com/">Maskbook.com</FooterLink>

@@ -673,13 +673,13 @@
         "message": "設置成功"
     },
     "dashboard_bio_test_succeeful": {
-        "message": "您已成功將 @$2 上的 $1 連接到角色 $3。"
+        "message": "您已成功將 $2 上的 @$1 連接到角色 $3。"
     },
     "setup_failure": {
         "message": "設置失敗"
     },
     "dashboard_bio_test_failed": {
-        "message": "個人簡介种應包含 $1。請確保您成功更新了 @$2 的個人簡介。"
+        "message": "個人簡介中應包含 $1。請確保您成功更新了 @$2 的個人簡介。"
     },
     "dashboard_connect_profile_for": {
         "message": "為 $1 連接個人資料"

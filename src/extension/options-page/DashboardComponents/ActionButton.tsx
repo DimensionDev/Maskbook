@@ -10,13 +10,13 @@ interface ActionButtonProps extends ButtonProps {
 }
 
 export default function ActionButton(props: ActionButtonProps) {
-    const { width, loading, children, className, ...p } = props
+    const { width, loading, children, className, style, ...p } = props
     return (
         <Button
             disabled={loading}
             startIcon={loading && <CircularProgress size={24} />}
             className={'actionButton ' + className}
-            style={{ width }}
+            style={{ width, ...style }}
             {...p}>
             <Typography variant="button" children={children}></Typography>
         </Button>
