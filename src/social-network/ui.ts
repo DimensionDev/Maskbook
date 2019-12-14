@@ -11,6 +11,7 @@ import { nopWithUnmount } from '../utils/utils'
 import { Theme } from '@material-ui/core'
 import { MaskbookLightTheme } from '../utils/theme'
 import { untilDomLoaded } from '../utils/dom'
+import { I18NStrings } from '../utils/i18n'
 
 OnlyRunInContext(['content', 'debugging', 'options'], 'UI provider')
 
@@ -239,6 +240,9 @@ export interface SocialNetworkUICustomUI {
      * // Note: useMediaQuery('(prefers-color-scheme: dark)')
      */
     useTheme?(): Theme
+    i18nOverwrite?: {
+        [key: string]: Partial<I18NStrings>
+    }
 }
 //#endregion
 

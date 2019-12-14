@@ -30,5 +30,6 @@ export const defaultSocialNetworkUI = cloneDeep({
     injectPostComments: injectPostCommentsDefault(),
     injectOptionsPageLink: 'disabled',
     useTheme: () => MaskbookLightTheme,
+    i18nOverwrite: { zh: {}, en: {} },
     injectKnownIdentity: 'disabled',
 } as const)
