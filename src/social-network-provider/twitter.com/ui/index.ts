@@ -18,6 +18,18 @@ export const instanceOfTwitterUI = defineSocialNetworkUI({
     ...twitterUIInjections,
     ...twitterUIFetch,
     ...twitterUICustomUI,
+    i18nOverwrite: {
+        en: {
+            additional_post_box__encrypted_post_pre: {
+                message: '#Maskbook ([I:b])\nDecrypt this tweet with maskbook.com @ProjectMaskbook.\n—§— /* {$1} */',
+            },
+        },
+        zh: {
+            additional_post_box__encrypted_post_pre: {
+                message: '#Maskbook ([I:b])\n使用 maskbook.com @ProjectMaskbook 解密这条推文。\n—§— /* {$1} */',
+            },
+        },
+    },
     init: (env, pref) => {
         sharedSettings.init(env, pref)
         InitFriendsValueRef(instanceOfTwitterUI, twitterUrl.hostIdentifier)
