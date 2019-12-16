@@ -1,10 +1,12 @@
 /// <reference path="./global.d.ts" />
 import { PostIdentifier, ProfileIdentifier, Identifier, PostIVIdentifier, GroupIdentifier } from './type'
-import { openDB, DBSchema } from 'idb/with-async-ittr'
+import { openDB, DBSchema, IDBPTransaction, IDBPDatabase } from 'idb/with-async-ittr'
 import { restorePrototype, restorePrototypeArray } from '../utils/type'
 import { IdentifierMap } from './IdentifierMap'
+import { OnlyRunInContext } from '@holoflows/kit/es'
+import { createDBAccess } from './helpers/openDB'
 
-function outDb(db: PostDBRecord): PostRecord {
+function postOutDB(db: PostDBRecord): PostRecord {
     const { identifier, ...rest } = db
     for (const key in rest.recipients) {
         const detail = rest.recipients[key]
@@ -18,7 +20,7 @@ function outDb(db: PostDBRecord): PostRecord {
         ),
     }
 }
-function toDb(out: PostRecord): PostDBRecord {
+function postToDB(out: PostRecord): PostDBRecord {
     return { ...out, identifier: out.identifier.toText() }
 }
 export interface PostRecord extends Omit<PostDBRecord, 'identifier'> {
@@ -98,69 +100,77 @@ interface PostDB extends DBSchema {
         key: string
     }
 }
-const db = openDB<PostDB>('maskbook-post-v2', 3, {
-    async upgrade(db, oldVersion, newVersion, transaction) {
-        if (oldVersion < 1) {
-            // inline keys
-            return void db.createObjectStore('post', { keyPath: 'identifier' })
-        }
-        /**
-         * In the version 1 we use PostIdentifier to store post that identified by post iv
-         * After upgrade to version 2, we use PostIVIdentifier to store it.
-         * So we transform all old data into new data.
-         */
-        if (oldVersion <= 1) {
-            const store = transaction.objectStore('post')
-            store.getAll().then(values => {
-                store.clear()
-                for (const each of values) {
-                    const id = Identifier.fromString(each.identifier, PostIdentifier).value
-                    if (id) {
-                        each.identifier = new PostIVIdentifier(
-                            (id.identifier as ProfileIdentifier).network,
-                            id.postId,
-                        ).toText()
-                    }
-                    store.add(each)
-                }
-            })
-        }
-
-        /**
-         * In the version 2 we use `recipients?: ProfileIdentifier[]`
-         * After upgrade to version 3, we use `recipients: Record<string, RecipientDetail>`
-         */
-        if (oldVersion <= 2) {
-            const store = transaction.objectStore('post')
-            for await (const cursor of store) {
-                const oldType = (cursor.value.recipients as unknown) as ProfileIdentifier[] | undefined
-                oldType && restorePrototypeArray(oldType, ProfileIdentifier.prototype)
-                const newType: PostDBRecord['recipients'] = {}
-                if (oldType !== undefined)
-                    for (const each of oldType) {
-                        newType[each.toText()] = { reason: [{ type: 'direct', at: new Date(0) }] }
-                    }
-                const next: PostDBRecord = {
-                    ...cursor.value,
-                    recipients: newType,
-                    postBy: ProfileIdentifier.unknown,
-                    foundAt: new Date(0),
-                    recipientGroups: [],
-                }
-                cursor.update(next)
+const db = createDBAccess(() => {
+    OnlyRunInContext('background', 'Post db')
+    return openDB<PostDB>('maskbook-post-v2', 3, {
+        async upgrade(db, oldVersion, newVersion, transaction) {
+            if (oldVersion < 1) {
+                // inline keys
+                return void db.createObjectStore('post', { keyPath: 'identifier' })
             }
-        }
-    },
+            /**
+             * In the version 1 we use PostIdentifier to store post that identified by post iv
+             * After upgrade to version 2, we use PostIVIdentifier to store it.
+             * So we transform all old data into new data.
+             */
+            if (oldVersion <= 1) {
+                const store = transaction.objectStore('post')
+                store.getAll().then(values => {
+                    store.clear()
+                    for (const each of values) {
+                        const id = Identifier.fromString(each.identifier, PostIdentifier).value
+                        if (id) {
+                            each.identifier = new PostIVIdentifier(
+                                (id.identifier as ProfileIdentifier).network,
+                                id.postId,
+                            ).toText()
+                            store.add(each)
+                        }
+                    }
+                })
+            }
+
+            /**
+             * In the version 2 we use `recipients?: ProfileIdentifier[]`
+             * After upgrade to version 3, we use `recipients: Record<string, RecipientDetail>`
+             */
+            if (oldVersion <= 2) {
+                const store = transaction.objectStore('post')
+                for await (const cursor of store) {
+                    const oldType = (cursor.value.recipients as unknown) as ProfileIdentifier[] | undefined
+                    oldType && restorePrototypeArray(oldType, ProfileIdentifier.prototype)
+                    const newType: PostDBRecord['recipients'] = {}
+                    if (oldType !== undefined)
+                        for (const each of oldType) {
+                            newType[each.toText()] = { reason: [{ type: 'direct', at: new Date(0) }] }
+                        }
+                    const next: PostDBRecord = {
+                        ...cursor.value,
+                        recipients: newType,
+                        postBy: ProfileIdentifier.unknown,
+                        foundAt: new Date(0),
+                        recipientGroups: [],
+                    }
+                    cursor.update(next)
+                }
+            }
+        },
+    })
 })
-export async function createPostDB(record: PostRecord) {
-    const t = (await db).transaction('post', 'readwrite')
-    const toSave = toDb(record)
+export const PostDBAccess = db
+
+type PostTransaction = IDBPTransaction<PostDB, ['post']>
+export async function createPostDB(record: PostRecord, t?: PostTransaction) {
+    t = t || (await db()).transaction('post', 'readwrite')
+    const toSave = postToDB(record)
     await t.objectStore('post').add(toSave)
 }
 export async function updatePostDB(
     updateRecord: Partial<PostRecord> & Pick<PostRecord, 'identifier'>,
     mode: 'append' | 'override',
+    t?: PostTransaction,
 ): Promise<void> {
+    t = t || (await db()).transaction('post', 'readwrite')
     const emptyRecord: PostRecord = {
         identifier: updateRecord.identifier,
         recipients: {},
@@ -168,10 +178,10 @@ export async function updatePostDB(
         foundAt: new Date(),
         recipientGroups: [],
     }
-    const currentRecord = (await queryPostDB(updateRecord.identifier)) || emptyRecord
+    const currentRecord = (await queryPostDB(updateRecord.identifier, t)) || emptyRecord
     const nextRecord: PostRecord = { ...currentRecord, ...updateRecord }
     const nextRecipients: PostDBRecord['recipients'] =
-        mode === 'override' ? toDb(nextRecord).recipients : toDb(currentRecord).recipients
+        mode === 'override' ? postToDB(nextRecord).recipients : postToDB(currentRecord).recipients
     if (mode === 'append') {
         if (updateRecord.recipients) {
             for (const [id, detail] of Object.entries(updateRecord.recipients)) {
@@ -185,22 +195,20 @@ export async function updatePostDB(
             }
         }
     }
-    const t = (await db).transaction('post', 'readwrite')
-    const nextRecordInDBType = toDb(nextRecord)
+    const nextRecordInDBType = postToDB(nextRecord)
     await t.objectStore('post').put(nextRecordInDBType)
 }
-export async function queryPostDB(record: PostIVIdentifier): Promise<PostRecord | null> {
-    const t = (await db).transaction('post')
+export async function queryPostDB(record: PostIVIdentifier, t?: PostTransaction): Promise<PostRecord | null> {
+    t = t || (await db()).transaction('post')
     const result = await t.objectStore('post').get(record.toText())
-    if (result) return outDb(result)
+    if (result) return postOutDB(result)
     return null
 }
-export async function queryPostsDB(network: string): Promise<PostRecord[]>
-export async function queryPostsDB(query: (data: PostRecord, id: PostIVIdentifier) => boolean): Promise<PostRecord[]>
 export async function queryPostsDB(
     query: string | ((data: PostRecord, id: PostIVIdentifier) => boolean),
+    t?: PostTransaction,
 ): Promise<PostRecord[]> {
-    const t = (await db).transaction('post')
+    t = t || (await db()).transaction('post')
     const selected: PostRecord[] = []
     for await (const { value } of t.store) {
         const id = Identifier.fromString(value.identifier, PostIVIdentifier).value
@@ -209,16 +217,16 @@ export async function queryPostsDB(
             continue
         }
         if (typeof query === 'string') {
-            if (id.network === query) selected.push(outDb(value))
+            if (id.network === query) selected.push(postOutDB(value))
         } else {
-            const v = outDb(value)
+            const v = postOutDB(value)
             if (query(v, id)) selected.push(v)
         }
     }
     return selected
 }
-export async function deletePostCryptoKeyDB(record: PostIVIdentifier) {
-    const t = (await db).transaction('post', 'readwrite')
+export async function deletePostCryptoKeyDB(record: PostIVIdentifier, t?: PostTransaction) {
+    t = t || (await db()).transaction('post', 'readwrite')
     await t.objectStore('post').delete(record.toText())
 }
 
