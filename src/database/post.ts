@@ -2,6 +2,7 @@
 import { PostIdentifier, ProfileIdentifier, Identifier, PostIVIdentifier, GroupIdentifier } from './type'
 import { openDB, DBSchema } from 'idb/with-async-ittr'
 import { restorePrototype, restorePrototypeArray } from '../utils/type'
+import { IdentifierMap } from './IdentifierMap'
 
 function outDb(db: PostDBRecord): PostRecord {
     const { identifier, ...rest } = db
@@ -38,6 +39,31 @@ export type RecipientReason = ({ type: 'direct' } | { type: 'group'; group: Grou
 export interface RecipientDetail {
     /** Why they're able to receive this message? */
     reason: RecipientReason[]
+}
+/**
+ * Next time you upgrade the posts database, use this to replace RecipientDetail
+ */
+export interface RecipientDetailNext {
+    /** Why they're able to receive this message? */
+    reason: Set<RecipientReason>
+}
+export type RecipientNext = IdentifierMap<ProfileIdentifier, RecipientDetailNext>
+export function recipientsToNext(x: PostDBRecord['recipients']): RecipientNext {
+    const map = new IdentifierMap<ProfileIdentifier, RecipientDetailNext>(new Map(), ProfileIdentifier)
+    for (const key in x) {
+        const next: RecipientDetailNext = {
+            reason: new Set(x[key].reason),
+        }
+        map.set(Identifier.fromString(key, ProfileIdentifier).value, next)
+    }
+    return map
+}
+export function recipientsFromNext(x: RecipientNext): PostDBRecord['recipients'] {
+    const y: PostDBRecord['recipients'] = {}
+    for (const [key, value] of x.entries()) {
+        y[key.toText()] = { reason: Array.from(value.reason) }
+    }
+    return y
 }
 interface PostDBRecord {
     /**
