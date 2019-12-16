@@ -140,8 +140,6 @@ export function PostDialogUI(props: PostDialogUIProps) {
 }
 
 export interface PostDialogProps extends Partial<PostDialogUIProps> {
-    textPayloadKey?: keyof I18NStrings
-    imagePayloadKey?: keyof I18NStrings
     reason?: 'timeline' | 'popup'
     identities?: Profile[]
     onRequestPost?: (target: (Profile | Group)[], text: string) => void
@@ -168,28 +166,22 @@ export function PostDialog(props: PostDialogProps) {
                 )
                 const activeUI = getActivatedUI()
                 if (isSteganography) {
-                    activeUI.taskPasteIntoPostBox(
-                        geti18nString(props.imagePayloadKey ?? 'additional_post_box__steganography_post_pre'),
-                        {
-                            warningText: geti18nString('additional_post_box__encrypted_failed'),
-                            shouldOpenPostDialog: false,
-                        },
-                    )
+                    activeUI.taskPasteIntoPostBox(geti18nString('additional_post_box__steganography_post_pre'), {
+                        warningText: geti18nString('additional_post_box__encrypted_failed'),
+                        shouldOpenPostDialog: false,
+                    })
                     activeUI.taskUploadToPostBox(encrypted, {
                         warningText: geti18nString('additional_post_box__steganography_post_failed'),
                     })
                 } else {
-                    activeUI.taskPasteIntoPostBox(
-                        geti18nString(props.textPayloadKey ?? 'additional_post_box__encrypted_post_pre', encrypted),
-                        {
-                            warningText: geti18nString('additional_post_box__encrypted_failed'),
-                            shouldOpenPostDialog: false,
-                        },
-                    )
+                    activeUI.taskPasteIntoPostBox(geti18nString('additional_post_box__encrypted_post_pre', encrypted), {
+                        warningText: geti18nString('additional_post_box__encrypted_failed'),
+                        shouldOpenPostDialog: false,
+                    })
                 }
                 Services.Crypto.publishPostAESKey(token)
             },
-            [currentIdentity, isSteganography, props.imagePayloadKey, props.textPayloadKey],
+            [currentIdentity, isSteganography],
         ),
     )
     const onRequestReset = or(

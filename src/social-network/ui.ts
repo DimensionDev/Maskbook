@@ -241,7 +241,14 @@ export interface SocialNetworkUICustomUI {
      */
     useTheme?(): Theme
     i18nOverwrite?: {
-        [key: string]: Partial<I18NStrings>
+        [key: string]: Partial<
+            {
+                [P in keyof I18NStrings]: {
+                    message: string
+                    description?: string
+                }
+            }
+        >
     }
 }
 //#endregion
