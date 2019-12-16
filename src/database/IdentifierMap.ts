@@ -23,7 +23,8 @@ export class IdentifierMap<IdentifierType extends Identifier, T> implements Map<
     get(key: IdentifierType) {
         return this.__raw_map__.get(key.toText())
     }
-    set(key: IdentifierType, data: T) {
+    set(key: IdentifierType | null | undefined, data: T) {
+        if (!key) return this
         if (this.constructorName.length) {
             if (!this.constructorName.includes(key.constructor.name)) {
                 console.warn(
