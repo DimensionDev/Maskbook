@@ -6,6 +6,7 @@ import { DBSchema, openDB, IDBPDatabase, IDBPTransaction } from 'idb/with-async-
 import { IdentifierMap } from '../IdentifierMap'
 import { PrototypeLess, restorePrototype } from '../../utils/type'
 import { MessageCenter } from '../../utils/messages'
+import { createDBAccess } from '../helpers/openDB'
 /**
  * Database structure:
  *
@@ -22,27 +23,20 @@ import { MessageCenter } from '../../utils/messages'
  * @keys inline, {@link ProfileRecord.identifier}
  */
 
-const db = (function() {
-    let db: IDBPDatabase<PersonaDB> = undefined as any
-    return async () => {
-        OnlyRunInContext('background', 'Persona db')
-        if (typeof db === 'undefined')
-            return openDB<PersonaDB>('maskbook-persona', 1, {
-                upgrade(db, oldVersion, newVersion, transaction) {
-                    function v0_v1() {
-                        db.createObjectStore('personas', { keyPath: 'identifier' })
-                        db.createObjectStore('profiles', { keyPath: 'identifier' })
-                        transaction.objectStore('profiles').createIndex('network', 'network', { unique: false })
-                        transaction
-                            .objectStore('personas')
-                            .createIndex('hasPrivateKey', 'hasPrivateKey', { unique: false })
-                    }
-                    if (oldVersion < 1) v0_v1()
-                },
-            }).then(x => (db = x))
-        else return db
-    }
-})()
+const db = createDBAccess(() => {
+    OnlyRunInContext('background', 'Persona db')
+    return openDB<PersonaDB>('maskbook-persona', 1, {
+        upgrade(db, oldVersion, newVersion, transaction) {
+            function v0_v1() {
+                db.createObjectStore('personas', { keyPath: 'identifier' })
+                db.createObjectStore('profiles', { keyPath: 'identifier' })
+                transaction.objectStore('profiles').createIndex('network', 'network', { unique: false })
+                transaction.objectStore('personas').createIndex('hasPrivateKey', 'hasPrivateKey', { unique: false })
+            }
+            if (oldVersion < 1) v0_v1()
+        },
+    })
+})
 
 export const PersonaDBAccess = db
 
