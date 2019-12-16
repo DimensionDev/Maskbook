@@ -64,7 +64,7 @@
     "json-stable-stringify": "^1.0.1",
     "jsqr": "^1.2.0",
     "jss": "^10",
-    "lint-staged": "^9.4.3",
+    "lint-staged": "^9.5.0",
     "lodash-es": "^4.17.11",
     "node-stego": "^0.8.0",
     "notistack": "^0.9.7",
