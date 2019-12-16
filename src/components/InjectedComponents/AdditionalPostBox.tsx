@@ -9,7 +9,7 @@ import { makeStyles } from '@material-ui/styles'
 import { Box, Button, Card, CardHeader, Divider, InputBase, Paper, Typography } from '@material-ui/core'
 import { Group, Profile } from '../../database'
 import { NotSetupYetPrompt } from '../shared/NotSetupYetPrompt'
-import { useCurrentIdentity, useFriendsList, useGroupsList, useMyIdentities } from '../DataSource/useActivatedUI'
+import { useCurrentIdentity, useFriendsList, useMyIdentities, useCurrentGroupsList } from '../DataSource/useActivatedUI'
 import { getActivatedUI } from '../../social-network/ui'
 import { ChooseIdentity, ChooseIdentityProps } from '../shared/ChooseIdentity'
 import { useAsync } from '../../utils/components/AsyncComponent'
@@ -111,7 +111,7 @@ export interface AdditionalPostBoxProps extends Partial<AdditionalPostBoxUIProps
  */
 export function AdditionalPostBox(props: AdditionalPostBoxProps) {
     const people = useFriendsList()
-    const groups = useGroupsList()
+    const groups = useCurrentGroupsList()
     const availableShareTarget = or(
         props.availableShareTarget,
         React.useMemo(() => [...groups, ...people], [people, groups]),

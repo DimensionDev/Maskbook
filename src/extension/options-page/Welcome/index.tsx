@@ -15,10 +15,10 @@ import { useValueRef } from '../../../utils/hooks/useValueRef'
 import { Profile } from '../../../database'
 import { getCurrentNetworkWorkerService } from '../../background-script/WorkerService'
 import getCurrentNetworkWorker from '../../../social-network/utils/getCurrentNetworkWorker'
-import { BackupJSONFileLatest } from '../../../utils/type-transform/BackupFile'
 import { isNil } from 'lodash-es'
 import { useSnackbar } from 'notistack'
 import { geti18nString } from '../../../utils/i18n'
+import { BackupJSONFileLatest } from '../../../utils/type-transform/BackupFormat/JSON/latest'
 
 enum WelcomeState {
     // Create

@@ -1,31 +1,32 @@
-import { BackupJSONFileLatest } from './BackupFile'
-import { ProfileIdentifier } from '../../database/type'
+import { ProfileIdentifier, Identifier } from '../../database/type'
 import { compressSecp256k1Key, decompressSecp256k1Key } from './SECP256k1-Compression'
 import { Profile } from '../../database'
+import { BackupJSONFileLatest } from './BackupFormat/JSON/latest'
+import { upgradeFromBackupJSONFileVersion1 } from './BackupFormat/JSON/version-2'
 
 export type BackupJSONFileLatestShort = [
-    ProfileIdentifier['network'],
-    ProfileIdentifier['userId'],
+    string, // ProfileIdentifier,
     Profile['nickname'],
-    // LocalKey
+    // LocalKey, this field may be empty!
     JsonWebKey['k'],
-    // Compressed publicKey
-    string,
     // Compressed privateKey
+    // ! We can recover pub from priv on ec, but if you want to support other type
+    // ! Please change this back to pub/priv pattern
     string,
     // BackupJSONFileLatest['grantedHostPermissions'].join(';'),
     string,
 ]
 export function compressBackupFile(file: BackupJSONFileLatest, index: number): string {
-    const { grantedHostPermissions, maskbookVersion, people, version, whoami } = file
-    if (!whoami[index ?? 0]) throw new Error('Empty backup file')
-    const { localKey, network, nickname, publicKey, privateKey, userId } = whoami[index]
+    const { grantedHostPermissions, profiles, personas } = file
+    if (!personas[index ?? 0]) throw new Error('Empty backup file')
+    const { localKey, nickname, privateKey, identifier } = personas[index]
+    if (!privateKey) throw new Error('Invalid private key')
     return [
-        network,
-        userId,
+        identifier,
         nickname,
-        localKey.k,
-        compressSecp256k1Key(publicKey, 'public'),
+        localKey?.k ||
+            profiles.filter(x => x.linkedPersona === identifier).filter(x => x.localKey)[0]?.localKey?.k ||
+            '',
         compressSecp256k1Key(privateKey, 'private'),
         grantedHostPermissions.join(';'),
     ].join('🤔')
@@ -39,11 +40,12 @@ export function decompressBackupFile(short: string): BackupJSONFileLatest {
         if (!short.includes('🤔')) throw new Error('This backup is not a compressed string')
         compressed = short
     }
-    const [network, userId, nickname, localKey, publicKey, privateKey, grantedHostPermissions] = compressed.split(
+    const [identifier, nickname, localKey, privateKey, grantedHostPermissions] = compressed.split(
         '🤔',
     ) as BackupJSONFileLatestShort
+    const id = Identifier.fromString(identifier) as ProfileIdentifier
 
-    return {
+    return upgradeFromBackupJSONFileVersion1({
         grantedHostPermissions: grantedHostPermissions.split(';'),
         maskbookVersion: browser.runtime.getManifest().version,
         version: 1,
@@ -56,12 +58,12 @@ export function decompressBackupFile(short: string): BackupJSONFileLatest {
                     key_ops: ['encrypt', 'decrypt'],
                     kty: 'oct',
                 },
-                network,
+                network: id.network,
                 nickname,
                 privateKey: decompressSecp256k1Key(privateKey, 'private'),
-                publicKey: decompressSecp256k1Key(publicKey, 'public'),
-                userId,
+                publicKey: decompressSecp256k1Key(privateKey, 'public'),
+                userId: id.userId,
             },
         ],
-    }
+    })
 }

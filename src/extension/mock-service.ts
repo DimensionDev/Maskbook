@@ -7,7 +7,14 @@ export const CryptoService: Partial<typeof import('./background-script/CryptoSer
 }
 export const WelcomeService: Partial<typeof import('./background-script/WelcomeService')> = {
     async backupMyKeyPair(b) {
-        return { version: 1, whoami: [], grantedHostPermissions: [], maskbookVersion: 'mocked' }
+        return {
+            _meta_: { createdAt: 0, maskbookVersion: 'mocked', type: 'maskbook-backup', version: 2 },
+            grantedHostPermissions: [],
+            personas: [],
+            posts: [],
+            profiles: [],
+            userGroups: [],
+        }
     },
 }
 export const SteganographyService: Partial<typeof import('./background-script/SteganographyService')> = {

@@ -16,11 +16,11 @@ import CenterFocusWeakIcon from '@material-ui/icons/CenterFocusWeak'
 import Services from '../../extension/service'
 import { makeStyles, Typography, createStyles } from '@material-ui/core'
 import { geti18nString } from '../../utils/i18n'
-import { compressBackupFile } from '../../utils/type-transform/BackupFileShortRepresentation'
-import { BackupJSONFileLatest } from '../../utils/type-transform/BackupFile'
-import { ProfileIdentifier } from '../../database/type'
+import { ProfileIdentifier, Identifier } from '../../database/type'
 import { QrCode } from '../../components/shared/qrcode'
 import { amber } from '@material-ui/core/colors'
+import { BackupJSONFileLatest } from '../../utils/type-transform/BackupFormat/JSON/latest'
+import { compressBackupFile } from '../../utils/type-transform/BackupFileShortRepresentation'
 
 const useStyles = makeStyles(theme =>
     createStyles({
@@ -68,8 +68,8 @@ export default function BackupDialog() {
                 setQRText(
                     compressBackupFile(
                         backupObj,
-                        backupObj.whoami.findIndex(y =>
-                            currentIdentifier.equals(new ProfileIdentifier(y.network, y.userId)),
+                        backupObj.profiles.findIndex(y =>
+                            currentIdentifier.equals(Identifier.fromString(y.identifier)!),
                         ),
                     ),
                 )
