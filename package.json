@@ -97,7 +97,7 @@
     "@storybook/addons": "^5.2.6",
     "@storybook/react": "^5.2.5",
     "@storybook/theming": "^5.2.4",
-    "@types/storybook__addon-info": "^4.1.0",
+    "@types/storybook__addon-info": "^5.2.1",
     "@types/storybook__react": "^4.0.1",
     "@typescript-eslint/parser": "^2.6.1",
     "awesome-typescript-loader": "^5.2.1",
