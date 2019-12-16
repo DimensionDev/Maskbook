@@ -11,77 +11,16 @@ import {
     recover_ECDH_256k1_KeyPair_ByMnemonicWord,
     MnemonicGenerationInformation,
 } from '../../utils/mnemonic-code'
-import {
-    createProfileWithPersona,
-    createPersonaByJsonWebKey,
-    createDefaultFriendsGroup,
-    updateOrCreateProfile,
-} from '../../database'
-import { IdentifierMap } from '../../database/IdentifierMap'
-import {
-    queryPersonasWithPrivateKey,
-    PersonaDBAccess,
-    queryProfileDB,
-    createPersonaDB,
-    attachProfileDB,
-    PersonaRecord,
-    LinkedProfileDetails,
-} from '../../database/Persona/Persona.db'
-import {
-    CryptoKeyToJsonWebKey,
-    JsonWebKeyToCryptoKey,
-    getKeyParameter,
-} from '../../utils/type-transform/CryptoKey-JsonWebKey'
+import { createProfileWithPersona, createPersonaByJsonWebKey, createDefaultFriendsGroup } from '../../database'
+import { attachProfileDB, LinkedProfileDetails } from '../../database/Persona/Persona.db'
+import { CryptoKeyToJsonWebKey } from '../../utils/type-transform/CryptoKey-JsonWebKey'
 import { deriveLocalKeyFromECDHKey } from '../../utils/mnemonic-code/localKeyGenerate'
-import { BackupJSONFileLatest, UpgradeBackupJSONFile } from '../../utils/type-transform/BackupFormat/JSON/latest'
-import { attachProfile } from './IdentityService'
-import { BackupJSONFileVersion1 } from '../../utils/type-transform/BackupFormat/JSON/version-1'
-import { ProfileIdentifier, PersonaIdentifier, Identifier, ECKeyIdentifier } from '../../database/type'
-import { upgradeFromBackupJSONFileVersion1 } from '../../utils/type-transform/BackupFormat/JSON/version-2'
+import { ProfileIdentifier, PersonaIdentifier } from '../../database/type'
+import { generateBackupJSON } from './WelcomeServices/generateBackupJSON'
 
 OnlyRunInContext('background', 'WelcomeService')
-
-async function generateBackupJSON(): Promise<BackupJSONFileLatest> {
-    const manifest = browser.runtime.getManifest()
-    const whoami: BackupJSONFileVersion1['whoami'] = []
-
-    // ? transaction start
-    {
-        const t = (await PersonaDBAccess()).transaction(['personas', 'profiles'])
-        for (const persona of await queryPersonasWithPrivateKey(t as any)) {
-            for (const profileID of persona.linkedProfiles.keys()) {
-                const profile = await queryProfileDB(profileID, t as any)
-                whoami.push({
-                    network: profileID.network,
-                    userId: profileID.userId,
-                    nickname: profile?.nickname,
-                    // @ts-ignore
-                    localKey:
-                        // Keep this line to split ts-ignore
-                        (profile?.localKey ?? persona.localKey) as CryptoKey | undefined,
-                    publicKey: persona.publicKey,
-                    privateKey: persona.privateKey,
-                })
-            }
-        }
-    }
-    // ? transaction ends
-
-    for (const each of whoami) {
-        // ? Can't do this in the transaction.
-        // ? Will cause transaction closes.
-        if (!each.localKey) continue
-        each.localKey = await CryptoKeyToJsonWebKey((each.localKey as unknown) as CryptoKey)
-    }
-
-    return upgradeFromBackupJSONFileVersion1({
-        grantedHostPermissions: (await browser.permissions.getAll()).origins || [],
-        maskbookVersion: manifest.version,
-        version: 1,
-        whoami: whoami.filter(x => x.localKey && x.publicKey && x.privateKey && x.network && x.userId),
-        // people not supported yet.
-    })
-}
+export { generateBackupJSON } from './WelcomeServices/generateBackupJSON'
+export { restoreBackup } from './WelcomeServices/restoreBackup'
 
 /**
  *
@@ -212,81 +151,6 @@ export async function openWelcomePage(id?: SocialNetworkUI['lastRecognizedIdenti
 
 export async function openOptionsPage(route: string) {
     return browser.tabs.create({ url: browser.runtime.getURL('/index.html#' + route) })
-}
-
-/**
- * Restore the backup
- */
-export async function restoreBackup(json: object, whoAmI?: ProfileIdentifier): Promise<void> {
-    // function mapID(x: { network: string; userId: string }): ProfileIdentifier {
-    //     return new ProfileIdentifier(x.network, x.userId)
-    // }
-    const data = UpgradeBackupJSONFile(json, whoAmI)
-    if (!data) throw new TypeError(geti18nString('service_invalid_backup_file'))
-
-    const keyCache = new Map<JsonWebKey, CryptoKey>()
-    const aes = getKeyParameter('aes')
-
-    // Transform all JsonWebKey to CryptoKey
-    await Promise.all([
-        ...[...data.personas, ...data.profiles]
-            .filter(x => x.localKey)
-            .map(x => JsonWebKeyToCryptoKey(x.localKey!, ...aes).then(k => keyCache.set(x.localKey!, k))),
-    ])
-    {
-        const t: any = (await PersonaDBAccess()).transaction(['personas', 'profiles'], 'readwrite')
-        for (const x of data.personas) {
-            const id = Identifier.fromString(x.identifier, ECKeyIdentifier).unwrap(
-                `Not a valid identifier at persona.identifier`,
-            )
-            if (x.privateKey && !x.privateKey.d) throw new Error('Invalid private key')
-            await createPersonaDB(
-                {
-                    createdAt: new Date(x.createdAt),
-                    updatedAt: new Date(x.updatedAt),
-                    identifier: id,
-                    linkedProfiles: new IdentifierMap(new Map(), ProfileIdentifier),
-                    publicKey: x.publicKey,
-                    localKey: keyCache.get(x.localKey!),
-                    mnemonic: x.mnemonic,
-                    nickname: x.nickname,
-                    privateKey: x.privateKey,
-                },
-                t,
-            )
-        }
-
-        for (const x of data.profiles) {
-            const id = Identifier.fromString(x.identifier, ProfileIdentifier).unwrap(
-                `Not a valid identifier at profile.identifier`,
-            )
-            await updateOrCreateProfile(
-                {
-                    identifier: id,
-                    createdAt: new Date(x.createdAt),
-                    updatedAt: new Date(x.updatedAt),
-                    nickname: x.nickname,
-                    localKey: keyCache.get(x.localKey!),
-                },
-                t,
-            )
-            if (x.linkedPersona) {
-                const cid = Identifier.fromString(x.linkedPersona, ECKeyIdentifier).unwrap(
-                    'Not a valid identifier at linkedPersona',
-                )
-                await attachProfileDB(id, cid, { connectionConfirmState: 'confirmed' }, t)
-            }
-        }
-        // ! transaction t ends here.
-    }
-
-    for (const x of data.posts) {
-        // TODO:
-    }
-
-    for (const x of data.userGroups) {
-        // TODO:
-    }
 }
 
 export { createPersonaByMnemonic } from '../../database'
