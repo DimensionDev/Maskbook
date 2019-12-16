@@ -30,7 +30,7 @@ export interface BackupJSONFileVersion2 {
         privateKey?: JsonWebKey
         localKey?: JsonWebKey
         nickname?: string
-        linkedProfiles: Record</** ProfileIdentifier.toText() */ string, LinkedProfileDetails>
+        linkedProfiles: [/** ProfileIdentifier.toText() */ string, LinkedProfileDetails][]
         createdAt: number // Unix timestamp
         updatedAt: number // Unix timestamp
     }>
@@ -52,7 +52,7 @@ export interface BackupJSONFileVersion2 {
         postBy: string // ProfileIdentifier.toText()
         identifier: string // PostIVIdentifier.toText()
         postCryptoKey?: JsonWebKey
-        recipients: Record</** ProfileIdentifier.toText() */ string, { reason: RecipientReasonJSON[] }>
+        recipients: [/** ProfileIdentifier.toText() */ string, { reason: RecipientReasonJSON[] }][]
         recipientGroups: string[] // Array<GroupIdentifier.toText()>
         foundAt: number // Unix timestamp
     }>
@@ -75,7 +75,7 @@ export function upgradeFromBackupJSONFileVersion1(json: BackupJSONFileVersion1):
         const prev = personas.find(x => x.identifier === record.identifier)
         if (prev) {
             Object.assign(prev, record)
-            Object.assign(prev.linkedProfiles, record.linkedProfiles)
+            prev.linkedProfiles.push(...record.linkedProfiles)
         } else personas.push({ ...record, updatedAt: 0, createdAt: 0 })
     }
 
@@ -110,11 +110,7 @@ export function upgradeFromBackupJSONFileVersion1(json: BackupJSONFileVersion1):
         })
         addPersona({
             identifier: persona,
-            linkedProfiles: {
-                [profile]: {
-                    connectionConfirmState: 'confirmed',
-                },
-            },
+            linkedProfiles: [[profile, { connectionConfirmState: 'confirmed' }]],
             publicKey: x.publicKey,
             privateKey: x.privateKey,
             localKey: x.localKey,
@@ -132,11 +128,7 @@ export function upgradeFromBackupJSONFileVersion1(json: BackupJSONFileVersion1):
         })
         addPersona({
             identifier: persona,
-            linkedProfiles: {
-                [profile.toText()]: {
-                    connectionConfirmState: 'confirmed',
-                },
-            },
+            linkedProfiles: [[profile.toText(), { connectionConfirmState: 'confirmed' }]],
             publicKey: x.publicKey,
             nickname: x.nickname,
         })
