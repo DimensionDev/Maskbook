@@ -57,7 +57,6 @@ function PostDialogAtTwitter(props: { reason: 'timeline' | 'popup' }) {
                     },
                 },
             }}
-            textPayloadKey="additional_post_box__encrypted_post_pre__twitter"
             {...props}
         />
     )
