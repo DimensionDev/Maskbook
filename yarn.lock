@@ -16137,10 +16137,15 @@ typeson-registry@^1.0.0-alpha.30:
     typeson "5.14.1"
     whatwg-url "7.1.0"
 
-typeson@5.14.1, typeson@^5.14.1:
+typeson@5.14.1:
   version "5.14.1"
   resolved "https://registry.yarnpkg.com/typeson/-/typeson-5.14.1.tgz#d3ce3abecf4c05e03d6fb6419a9a6cad42340820"
   integrity sha512-A6YPkcPd2Eu/vmWjX1Xp69r03UHPzU0M80lGbBMJHPkkLQSbjOGzQs6S6qYs4x/fZ3sm8KC0c2susQ6EHpzgyw==
+
+typeson@^5.17.0:
+  version "5.17.0"
+  resolved "https://registry.yarnpkg.com/typeson/-/typeson-5.17.0.tgz#104a290e1863cb1b0e473e44a89df5425c0536f1"
+  integrity sha512-ZCSRs5nYxsD0xV0Krr3QlMutI4mlsCEOJEfnUuzZzDOB5uqUoc4Bb6PUWWpvRih54YhbQyn9mk8qent8ZBC91g==
 
 ua-parser-js@^0.7.18, ua-parser-js@^0.7.9:
   version "0.7.20"
