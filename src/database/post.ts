@@ -6,111 +6,6 @@ import { IdentifierMap } from './IdentifierMap'
 import { OnlyRunInContext } from '@holoflows/kit/es'
 import { createDBAccess } from './helpers/openDB'
 
-function postOutDB(db: PostDBRecord): PostRecord {
-    const { identifier, foundAt, postBy, recipientGroups, recipients, postCryptoKey } = db
-    for (const key in recipients) {
-        const detail = recipients[key]
-        detail.reason.forEach(x => x.type === 'group' && restorePrototype(x.group, GroupIdentifier.prototype))
-    }
-    return {
-        identifier: Identifier.fromString(identifier, PostIVIdentifier).unwrap(
-            `Invalid identifier, expected PostIVIdentifier, actual ${identifier}`,
-        ),
-        recipientGroups: restorePrototypeArray(recipientGroups, GroupIdentifier.prototype),
-        postBy: restorePrototype(postBy, ProfileIdentifier.prototype),
-        recipients: recipients as PostRecord['recipients'],
-        foundAt: foundAt,
-        postCryptoKey: postCryptoKey,
-    }
-}
-function postToDB(out: PostRecord): PostDBRecord {
-    return { ...out, identifier: out.identifier.toText() }
-}
-/**
- * When you change this, change RecipientReasonJSON as well!
- */
-export type RecipientReason = ({ type: 'direct' } | { type: 'group'; group: GroupIdentifier }) & {
-    /**
-     * When we send the key to them by this reason?
-     * If the unix timestamp of this Date is 0,
-     * should display it as "unknown" or "before Nov 2019"
-     */
-    at: Date
-}
-export interface RecipientDetail {
-    /** Why they're able to receive this message? */
-    reason: RecipientReason[]
-}
-/**
- * Next time you upgrade the posts database, use this to replace RecipientDetail
- */
-export interface RecipientDetailNext {
-    /** Why they're able to receive this message? */
-    reason: Set<RecipientReason>
-}
-export type RecipientNext = IdentifierMap<ProfileIdentifier, RecipientDetailNext>
-export function recipientsToNext(x: PostRecord['recipients']): RecipientNext {
-    const map = new IdentifierMap<ProfileIdentifier, RecipientDetailNext>(new Map(), ProfileIdentifier)
-    for (const key in x) {
-        const next: RecipientDetailNext = {
-            reason: new Set(x[key].reason),
-        }
-        map.set(Identifier.fromString(key, ProfileIdentifier).value, next)
-    }
-    return map
-}
-export function recipientsFromNext(x: RecipientNext): PostRecord['recipients'] {
-    const y: PostRecord['recipients'] = {}
-    for (const [key, value] of x.entries()) {
-        y[key.toText()] = { reason: Array.from(value.reason) }
-    }
-    return y
-}
-export interface PostRecord {
-    /**
-     * For old data stored before version 3,
-     * this identifier may be ProfileIdentifier.unknown
-     */
-    postBy: ProfileIdentifier
-    identifier: PostIVIdentifier
-
-    /**
-     * ! This MUST BE a native CryptoKey
-     */
-    postCryptoKey?: CryptoKey
-    /**
-     * Receivers.
-     */
-    recipients: Record<string, RecipientDetail>
-    /**
-     * This post shared with these groups.
-     */
-    recipientGroups: GroupIdentifier[]
-    /**
-     * When does Maskbook find this post.
-     * For your own post, it is when Maskbook created this post.
-     * For others post, it is when you see it first time.
-     */
-    foundAt: Date
-}
-
-interface PostDBRecord extends Omit<PostRecord, 'postBy' | 'identifier' | 'recipients' | 'recipientGroups'> {
-    postBy: PrototypeLess<ProfileIdentifier>
-    identifier: string
-    // In the next version should be IdentifierMap<ProfileIdentifier, RecipientDetail>
-    recipients: PrototypeLess<Record<string, RecipientDetail>>
-    // In the next version should be IdentifierMap<GroupIdentifier, true>
-    recipientGroups: PrototypeLess<GroupIdentifier>[]
-}
-
-interface PostDB extends DBSchema {
-    /** Use inline keys */
-    post: {
-        value: PostDBRecord
-        key: string
-    }
-}
-
 const db = createDBAccess(() => {
     OnlyRunInContext('background', 'Post db')
     return openDB<PostDB>('maskbook-post-v2', 3, {
@@ -245,3 +140,113 @@ export async function deletePostCryptoKeyDB(record: PostIVIdentifier, t?: PostTr
     t = t || (await db()).transaction('post', 'readwrite')
     await t.objectStore('post').delete(record.toText())
 }
+
+//#region db in and out
+function postOutDB(db: PostDBRecord): PostRecord {
+    const { identifier, foundAt, postBy, recipientGroups, recipients, postCryptoKey } = db
+    for (const key in recipients) {
+        const detail = recipients[key]
+        detail.reason.forEach(x => x.type === 'group' && restorePrototype(x.group, GroupIdentifier.prototype))
+    }
+    return {
+        identifier: Identifier.fromString(identifier, PostIVIdentifier).unwrap(
+            `Invalid identifier, expected PostIVIdentifier, actual ${identifier}`,
+        ),
+        recipientGroups: restorePrototypeArray(recipientGroups, GroupIdentifier.prototype),
+        postBy: restorePrototype(postBy, ProfileIdentifier.prototype),
+        recipients: recipients as PostRecord['recipients'],
+        foundAt: foundAt,
+        postCryptoKey: postCryptoKey,
+    }
+}
+function postToDB(out: PostRecord): PostDBRecord {
+    return { ...out, identifier: out.identifier.toText() }
+}
+//#endregion
+
+//#region types
+/**
+ * When you change this, change RecipientReasonJSON as well!
+ */
+export type RecipientReason = ({ type: 'direct' } | { type: 'group'; group: GroupIdentifier }) & {
+    /**
+     * When we send the key to them by this reason?
+     * If the unix timestamp of this Date is 0,
+     * should display it as "unknown" or "before Nov 2019"
+     */
+    at: Date
+}
+export interface RecipientDetail {
+    /** Why they're able to receive this message? */
+    reason: RecipientReason[]
+}
+/**
+ * Next time you upgrade the posts database, use this to replace RecipientDetail
+ */
+export interface RecipientDetailNext {
+    /** Why they're able to receive this message? */
+    reason: Set<RecipientReason>
+}
+export type RecipientNext = IdentifierMap<ProfileIdentifier, RecipientDetailNext>
+export function recipientsToNext(x: PostRecord['recipients']): RecipientNext {
+    const map = new IdentifierMap<ProfileIdentifier, RecipientDetailNext>(new Map(), ProfileIdentifier)
+    for (const key in x) {
+        const next: RecipientDetailNext = {
+            reason: new Set(x[key].reason),
+        }
+        map.set(Identifier.fromString(key, ProfileIdentifier).value, next)
+    }
+    return map
+}
+export function recipientsFromNext(x: RecipientNext): PostRecord['recipients'] {
+    const y: PostRecord['recipients'] = {}
+    for (const [key, value] of x.entries()) {
+        y[key.toText()] = { reason: Array.from(value.reason) }
+    }
+    return y
+}
+export interface PostRecord {
+    /**
+     * For old data stored before version 3,
+     * this identifier may be ProfileIdentifier.unknown
+     */
+    postBy: ProfileIdentifier
+    identifier: PostIVIdentifier
+
+    /**
+     * ! This MUST BE a native CryptoKey
+     */
+    postCryptoKey?: CryptoKey
+    /**
+     * Receivers.
+     */
+    recipients: Record<string, RecipientDetail>
+    /**
+     * This post shared with these groups.
+     */
+    recipientGroups: GroupIdentifier[]
+    /**
+     * When does Maskbook find this post.
+     * For your own post, it is when Maskbook created this post.
+     * For others post, it is when you see it first time.
+     */
+    foundAt: Date
+}
+
+interface PostDBRecord extends Omit<PostRecord, 'postBy' | 'identifier' | 'recipients' | 'recipientGroups'> {
+    postBy: PrototypeLess<ProfileIdentifier>
+    identifier: string
+    // In the next version should be IdentifierMap<ProfileIdentifier, RecipientDetail>
+    recipients: PrototypeLess<Record<string, RecipientDetail>>
+    // In the next version should be IdentifierMap<GroupIdentifier, true>
+    recipientGroups: PrototypeLess<GroupIdentifier>[]
+}
+
+interface PostDB extends DBSchema {
+    /** Use inline keys */
+    post: {
+        value: PostDBRecord
+        key: string
+    }
+}
+//#endregion
