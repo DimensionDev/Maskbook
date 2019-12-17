@@ -1,8 +1,10 @@
 /// <reference path="./global.d.ts" />
-import { DBSchema, openDB } from 'idb/with-async-ittr'
+import { DBSchema, openDB, IDBPTransaction } from 'idb/with-async-ittr'
 import { GroupIdentifier, Identifier, ProfileIdentifier } from './type'
 import { MessageCenter } from '../utils/messages'
 import { PrototypeLess, restorePrototypeArray } from '../utils/type'
+import { createDBAccess } from './helpers/openDB'
+import { OnlyRunInContext } from '@holoflows/kit/es'
 
 //#region Schema
 interface GroupRecordBase {
@@ -40,13 +42,18 @@ interface GroupDB extends DBSchema {
 }
 //#endregion
 
-const db = openDB<GroupDB>('maskbook-user-groups', 1, {
-    upgrade(db, oldVersion, newVersion, transaction) {
-        // Out line keys
-        db.createObjectStore('groups', { keyPath: 'identifier' })
-        transaction.objectStore('groups').createIndex('network', 'network', { unique: false })
-    },
+const db = createDBAccess(() => {
+    OnlyRunInContext('background', 'Group database')
+    return openDB<GroupDB>('maskbook-user-groups', 1, {
+        upgrade(db, oldVersion, newVersion, transaction) {
+            // Out line keys
+            db.createObjectStore('groups', { keyPath: 'identifier' })
+            transaction.objectStore('groups').createIndex('network', 'network', { unique: false })
+        },
+    })
 })
+export const GroupDBAccess = db
+type GroupTransaction = IDBPTransaction<GroupDB, ['groups']>
 
 /**
  * This function create a new user group
@@ -54,8 +61,12 @@ const db = openDB<GroupDB>('maskbook-user-groups', 1, {
  * @param group GroupIdentifier
  * @param groupName
  */
-export async function createUserGroupDatabase(group: GroupIdentifier, groupName: string): Promise<void> {
-    const t = (await db).transaction('groups', 'readwrite')
+export async function createUserGroupDatabase(
+    group: GroupIdentifier,
+    groupName: string,
+    t?: GroupTransaction,
+): Promise<void> {
+    t = t || (await db()).transaction('groups', 'readwrite')
     await t.objectStore('groups').put({
         groupName,
         identifier: group.toText(),
@@ -68,8 +79,8 @@ export async function createUserGroupDatabase(group: GroupIdentifier, groupName:
  * Delete a user group that stored in the Maskbook
  * @param group Group ID
  */
-export async function deleteUserGroupDatabase(group: GroupIdentifier): Promise<void> {
-    const t = (await db).transaction('groups', 'readwrite')
+export async function deleteUserGroupDatabase(group: GroupIdentifier, t?: GroupTransaction): Promise<void> {
+    t = t || (await db()).transaction('groups', 'readwrite')
     await t.objectStore('groups').delete(group.toText())
 }
 
@@ -81,11 +92,13 @@ export async function deleteUserGroupDatabase(group: GroupIdentifier): Promise<v
 export async function updateUserGroupDatabase(
     group: Partial<GroupRecord> & Pick<GroupRecord, 'identifier'>,
     type: 'append' | 'replace' | ((record: GroupRecord) => GroupRecord | void),
+    t?: GroupTransaction,
 ): Promise<void> {
-    const orig = await queryUserGroupDatabase(group.identifier)
+    t = t || (await db()).transaction('groups', 'readwrite')
+
+    const orig = await queryUserGroupDatabase(group.identifier, t)
     if (!orig) throw new TypeError('User group not found')
 
-    const t = (await db).transaction('groups', 'readwrite')
     let nextRecord: GroupRecord
     const nonDuplicateNewMembers: ProfileIdentifier[] = []
     if (type === 'replace') {
@@ -128,8 +141,11 @@ export async function updateUserGroupDatabase(
  * Query a user group that stored in the Maskbook
  * @param group Group ID
  */
-export async function queryUserGroupDatabase(group: GroupIdentifier): Promise<null | GroupRecord> {
-    const t = (await db).transaction('groups', 'readonly')
+export async function queryUserGroupDatabase(
+    group: GroupIdentifier,
+    t?: GroupTransaction,
+): Promise<null | GroupRecord> {
+    t = t || (await db()).transaction('groups', 'readonly')
     const result = await t.objectStore('groups').get(group.toText())
     if (!result) return null
     return GroupRecordOutDB(result)
@@ -141,11 +157,11 @@ export async function queryUserGroupDatabase(group: GroupIdentifier): Promise<nu
  */
 export async function queryUserGroupsDatabase(
     query: ((key: GroupIdentifier, record: GroupRecordInDatabase) => boolean) | { network: string },
+    t?: GroupTransaction,
 ): Promise<GroupRecord[]> {
-    const t = (await db).transaction('groups')
+    t = t || (await db()).transaction('groups')
     const result: GroupRecordInDatabase[] = []
     if (typeof query === 'function') {
-        // eslint-disable-next-line @typescript-eslint/await-thenable
         for await (const { value, key } of t.store) {
             const identifier = Identifier.fromString(key, GroupIdentifier).value
             if (!identifier) {
