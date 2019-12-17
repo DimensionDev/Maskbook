@@ -14,15 +14,12 @@ import {
 
 import CloseIcon from '@material-ui/icons/Close'
 import BookmarkIcon from '@material-ui/icons/Bookmark'
-import CachedIcon from '@material-ui/icons/Cached'
-import SettingsIcon from '@material-ui/icons/Settings'
-import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined'
 import LocationOnIcon from '@material-ui/icons/LocationOn'
 
 import React from 'react'
 import { ThemeProvider } from '@material-ui/styles'
 import { MaskbookDarkTheme, MaskbookLightTheme } from './utils/theme'
-import { HashRouter as Router, Route, Switch, Redirect, useRouteMatch, useLocation, useHistory } from 'react-router-dom'
+import { HashRouter as Router, Route, Switch, Redirect, useLocation, useHistory } from 'react-router-dom'
 import { makeStyles, createStyles } from '@material-ui/core/styles'
 
 import './setup.ui'
@@ -37,8 +34,6 @@ import { DialogRouter } from './extension/options-page/DashboardDialogs/DialogBa
 import DashboardHomePage from './extension/options-page/Home'
 import DashboardDebugPage from './extension/options-page/Debug'
 import DashboardInitializeDialog from './extension/options-page/Initialize'
-import { useMyIdentities } from './components/DataSource/useActivatedUI'
-import classNames from 'classnames'
 
 const useStyles = makeStyles(theme =>
     createStyles({
@@ -69,7 +64,6 @@ const useStyles = makeStyles(theme =>
         close: {
             marginLeft: 'auto',
         },
-        tabBar: {},
         tabItem: {
             minWidth: 110,
         },
@@ -112,8 +106,8 @@ function DashboardWithProvider() {
 function Dashboard() {
     const classes = useStyles()
 
-    const shouldRenderAppbar = webpackEnv.firefoxVariant === 'GeckoView' || webpackEnv.target === 'WKWebview'
-    const shouldNotRenderAppbar = useMediaQuery('(min-width:1024px)')
+    const shouldRenderAppBar = webpackEnv.firefoxVariant === 'GeckoView' || webpackEnv.target === 'WKWebview'
+    const shouldNotRenderAppBar = useMediaQuery('(min-width:1024px)')
 
     const routers: [string, string, JSX.Element][] = [
         [geti18nString('home'), '/home/', <BookmarkIcon />],
@@ -137,7 +131,6 @@ function Dashboard() {
                 onChange={(e, v) => history.push(routers[v][1])}
                 indicatorColor="primary"
                 textColor="primary">
-                className={classes.tabBar}
                 {routers.map(tab => (
                     <Tab
                         key={`dashboard-tab-${tab[0]}`}
@@ -152,13 +145,13 @@ function Dashboard() {
 
     return (
         <div className={classes.wrapper}>
-            <ResponsiveDrawer routers={routers} exitDashboard={shouldRenderAppbar ? () => window.close() : null} />
+            <ResponsiveDrawer routers={routers} exitDashboard={shouldRenderAppBar ? () => window.close() : null} />
             <section className={classes.container}>
-                {(shouldRenderAppbar ? true : !shouldNotRenderAppbar) && (
+                {(shouldRenderAppBar ? true : !shouldNotRenderAppBar) && (
                     <AppBar position="static">
                         <Toolbar>
                             <Typography variant="h6">Maskbook</Typography>
-                            {shouldRenderAppbar && (
+                            {shouldRenderAppBar && (
                                 <IconButton
                                     className={classes.close}
                                     onClick={() => window.close()}
@@ -170,7 +163,7 @@ function Dashboard() {
                         </Toolbar>
                     </AppBar>
                 )}
-                {!shouldNotRenderAppbar && tabBar}
+                {!shouldNotRenderAppBar && tabBar}
                 <Container>
                     <main className={classes.root}>{OptionsPageRouters}</main>
                 </Container>
