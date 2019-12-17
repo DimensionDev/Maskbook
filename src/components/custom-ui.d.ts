@@ -4,3 +4,5 @@ interface withClasses<ClassKeys extends string> {
 
 type PartialRequired<T, RequiredKeys extends keyof T> = Partial<T> & Pick<T, RequiredKeys>
 type KeysInferFromUseStyles<T, OmitKeys extends keyof ReturnType<T> = ''> = keyof Omit<ReturnType<T>, OmitKeys>
+
+type PropsOf<T> = T extends React.ComponentType<infer U> ? U : never

@@ -24,7 +24,6 @@ export function PortalShadowRoot() {
                 const value = Reflect.get(target, key)
                 if (typeof value === 'function')
                     return function(...args: any[]) {
-                        console.log(...args)
                         return Reflect.apply(value, shadow, args)
                     }
                 return value

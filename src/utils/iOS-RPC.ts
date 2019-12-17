@@ -14,8 +14,7 @@ export interface ThisSideImplementation {}
 
 const key = 'maskbookjsonrpc'
 const _window: any = globalThis
-export const hasWKWebkitRPCHandlers =
-    _window.webkit && _window.webkit.messageHandlers && _window.webkit.messageHandlers[key]
+export const hasWKWebkitRPCHandlers = _window?.webkit?.messageHandlers?.[key]
 class iOSWebkitChannel {
     constructor() {
         document.addEventListener(key, e => {

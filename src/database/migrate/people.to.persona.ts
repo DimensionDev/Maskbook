@@ -29,7 +29,7 @@ export async function migrateHelper_operateDB(
         getLocalKey,
     )
 
-    const t: IDBPTransaction<any, any> = (await persona.PersonaDBAccess()).transaction(
+    const t: IDBPTransaction<persona.PersonaDB, any> = (await persona.PersonaDBAccess()).transaction(
         ['personas', 'profiles'],
         'readwrite',
     )

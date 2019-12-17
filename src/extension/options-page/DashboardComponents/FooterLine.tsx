@@ -23,12 +23,12 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 )
 
-const FooterLink = function(props: any) {
+const FooterLink = function(props: React.PropsWithChildren<{ href: string } | { to: string }>) {
     const classes = useStyles()
     return (
         <MuiLink
             underline="none"
-            {...(props.href
+            {...('href' in props
                 ? { href: props.href, target: '_blank', rel: 'noopener noreferrer' }
                 : { to: props.to, component: Link })}
             color="inherit"

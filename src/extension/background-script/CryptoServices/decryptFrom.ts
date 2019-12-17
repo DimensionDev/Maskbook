@@ -140,7 +140,7 @@ export async function* decryptFromMessageWithProgress(
             } as Success
         }
 
-        let lastError: any
+        let lastError: unknown
         /**
          * ? try to decrypt as I am the author
          * ? then try to decrypt as whoAmI

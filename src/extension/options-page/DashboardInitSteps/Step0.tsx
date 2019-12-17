@@ -39,7 +39,7 @@ export default function InitStep0() {
                     <Typography variant="body1">{geti18nString('dashboard_new_user_hint')}</Typography>
                 </Box>
                 <VerticalCenter>
-                    <ActionButton variant="contained" color="primary" component={Link} to="1s">
+                    <ActionButton<typeof Link> variant="contained" color="primary" component={Link} to="1s">
                         {geti18nString('set_up')}
                     </ActionButton>
                 </VerticalCenter>
@@ -50,7 +50,7 @@ export default function InitStep0() {
                     <Typography variant="body1">{geti18nString('dashboard_returning_user_hint')}</Typography>
                 </Box>
                 <VerticalCenter>
-                    <ActionButton variant="outlined" component={Link} to="1r">
+                    <ActionButton<typeof Link> variant="outlined" component={Link} to="1r">
                         {geti18nString('restore')}
                     </ActionButton>
                 </VerticalCenter>

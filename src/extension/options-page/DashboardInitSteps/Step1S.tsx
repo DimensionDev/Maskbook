@@ -41,10 +41,10 @@ export default function InitStep1S() {
 
     const actions = (
         <>
-            <ActionButton variant="outlined" color="default" component={Link} to="start">
+            <ActionButton<typeof Link> variant="outlined" color="default" component={Link} to="start">
                 {geti18nString('back')}
             </ActionButton>
-            <ActionButton variant="contained" color="primary" onClick={createPersonaAndNext} component={'a'}>
+            <ActionButton variant="contained" color="primary" onClick={createPersonaAndNext} component="a">
                 {geti18nString('next')}
             </ActionButton>
         </>
