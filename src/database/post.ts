@@ -1,32 +1,31 @@
 /// <reference path="./global.d.ts" />
 import { PostIdentifier, ProfileIdentifier, Identifier, PostIVIdentifier, GroupIdentifier } from './type'
 import { openDB, DBSchema, IDBPTransaction, IDBPDatabase } from 'idb/with-async-ittr'
-import { restorePrototype, restorePrototypeArray } from '../utils/type'
+import { restorePrototype, restorePrototypeArray, PrototypeLess } from '../utils/type'
 import { IdentifierMap } from './IdentifierMap'
 import { OnlyRunInContext } from '@holoflows/kit/es'
 import { createDBAccess } from './helpers/openDB'
 
 function postOutDB(db: PostDBRecord): PostRecord {
-    const { identifier, ...rest } = db
-    for (const key in rest.recipients) {
-        const detail = rest.recipients[key]
+    const { identifier, foundAt, postBy, recipientGroups, recipients, postCryptoKey } = db
+    for (const key in recipients) {
+        const detail = recipients[key]
         detail.reason.forEach(x => x.type === 'group' && restorePrototype(x.group, GroupIdentifier.prototype))
     }
-    restorePrototypeArray(rest.recipientGroups, GroupIdentifier.prototype)
     return {
-        ...rest,
         identifier: Identifier.fromString(identifier, PostIVIdentifier).unwrap(
             `Invalid identifier, expected PostIVIdentifier, actual ${identifier}`,
         ),
+        recipientGroups: restorePrototypeArray(recipientGroups, GroupIdentifier.prototype),
+        postBy: restorePrototype(postBy, ProfileIdentifier.prototype),
+        recipients: recipients as PostRecord['recipients'],
+        foundAt: foundAt,
+        postCryptoKey: postCryptoKey,
     }
 }
 function postToDB(out: PostRecord): PostDBRecord {
     return { ...out, identifier: out.identifier.toText() }
 }
-export interface PostRecord extends Omit<PostDBRecord, 'identifier'> {
-    identifier: PostIVIdentifier
-}
-
 /**
  * When you change this, change RecipientReasonJSON as well!
  */
@@ -50,7 +49,7 @@ export interface RecipientDetailNext {
     reason: Set<RecipientReason>
 }
 export type RecipientNext = IdentifierMap<ProfileIdentifier, RecipientDetailNext>
-export function recipientsToNext(x: PostDBRecord['recipients']): RecipientNext {
+export function recipientsToNext(x: PostRecord['recipients']): RecipientNext {
     const map = new IdentifierMap<ProfileIdentifier, RecipientDetailNext>(new Map(), ProfileIdentifier)
     for (const key in x) {
         const next: RecipientDetailNext = {
@@ -60,20 +59,21 @@ export function recipientsToNext(x: PostDBRecord['recipients']): RecipientNext {
     }
     return map
 }
-export function recipientsFromNext(x: RecipientNext): PostDBRecord['recipients'] {
-    const y: PostDBRecord['recipients'] = {}
+export function recipientsFromNext(x: RecipientNext): PostRecord['recipients'] {
+    const y: PostRecord['recipients'] = {}
     for (const [key, value] of x.entries()) {
         y[key.toText()] = { reason: Array.from(value.reason) }
     }
     return y
 }
-interface PostDBRecord {
+export interface PostRecord {
     /**
      * For old data stored before version 3,
      * this identifier may be ProfileIdentifier.unknown
      */
     postBy: ProfileIdentifier
-    identifier: string
+    identifier: PostIVIdentifier
+
     /**
      * ! This MUST BE a native CryptoKey
      */
@@ -93,6 +93,16 @@ interface PostDBRecord {
      */
     foundAt: Date
 }
+
+interface PostDBRecord extends Omit<PostRecord, 'postBy' | 'identifier' | 'recipients' | 'recipientGroups'> {
+    postBy: PrototypeLess<ProfileIdentifier>
+    identifier: string
+    // In the next version should be IdentifierMap<ProfileIdentifier, RecipientDetail>
+    recipients: PrototypeLess<Record<string, RecipientDetail>>
+    // In the next version should be IdentifierMap<GroupIdentifier, true>
+    recipientGroups: PrototypeLess<GroupIdentifier>[]
+}
+
 interface PostDB extends DBSchema {
     /** Use inline keys */
     post: {
@@ -100,6 +110,7 @@ interface PostDB extends DBSchema {
         key: string
     }
 }
+
 const db = createDBAccess(() => {
     OnlyRunInContext('background', 'Post db')
     return openDB<PostDB>('maskbook-post-v2', 3, {

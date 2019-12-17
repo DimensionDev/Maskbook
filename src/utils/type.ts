@@ -1,6 +1,6 @@
 export type PartialBy<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>
 export type PrototypeLess<T> = {
-    readonly [key in keyof T]: T[key] extends (...args: any) => any ? unknown : T[key]
+    [key in keyof T]: T[key] extends (...args: any) => any ? unknown : PrototypeLess<T[key]>
 }
 
 export function restorePrototype<ActualType extends undefined | PrototypeLess<WantedType>, WantedType extends object>(
