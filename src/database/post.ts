@@ -1,6 +1,6 @@
 /// <reference path="./global.d.ts" />
 import { PostIdentifier, ProfileIdentifier, Identifier, PostIVIdentifier, GroupIdentifier } from './type'
-import { openDB, DBSchema, IDBPTransaction, IDBPDatabase } from 'idb/with-async-ittr'
+import { openDB, DBSchema, IDBPTransaction } from 'idb/with-async-ittr'
 import { restorePrototype, restorePrototypeArray, PrototypeLess } from '../utils/type'
 import { IdentifierMap } from './IdentifierMap'
 import { OnlyRunInContext } from '@holoflows/kit/es'
@@ -209,6 +209,11 @@ export async function updatePostDB(
     const nextRecordInDBType = postToDB(nextRecord)
     await t.objectStore('post').put(nextRecordInDBType)
 }
+export async function createOrUpdatePostDB(record: PostRecord, mode: 'append' | 'override', t?: PostTransaction) {
+    t = t || (await db()).transaction('post', 'readwrite')
+    if (await t.objectStore('post').get(record.identifier.toText())) return updatePostDB(record, mode, t)
+    else return createPostDB(record, t)
+}
 export async function queryPostDB(record: PostIVIdentifier, t?: PostTransaction): Promise<PostRecord | null> {
     t = t || (await db()).transaction('post')
     const result = await t.objectStore('post').get(record.toText())
@@ -240,5 +245,3 @@ export async function deletePostCryptoKeyDB(record: PostIVIdentifier, t?: PostTr
     t = t || (await db()).transaction('post', 'readwrite')
     await t.objectStore('post').delete(record.toText())
 }
-
-declare function backupPostCryptoKeyDB(): Promise<unknown>
