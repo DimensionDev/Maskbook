@@ -2,8 +2,6 @@ import React from 'react'
 import { useHistory, useRouteMatch, RouteProps } from 'react-router'
 import {
     Dialog,
-    Toolbar,
-    Button,
     Grow,
     makeStyles,
     createStyles,
@@ -55,9 +53,9 @@ const useStyles = makeStyles(theme =>
     }),
 )
 
-const Transition = React.forwardRef<unknown, TransitionProps>(function Transition(props, ref) {
-    return <Grow style={{ transformOrigin: '0 0 0' }} ref={ref} {...props} />
-})
+// const Transition = React.forwardRef<unknown, TransitionProps>(function Transition(props, ref) {
+//     return <Grow style={{ transformOrigin: '0 0 0' }} ref={ref} {...props} />
+// })
 
 interface DialogContentItemProps {
     title: JSX.Element | string
@@ -132,8 +130,7 @@ export function DialogRouter(props: DialogRouterProps) {
             onClose={onExitAction}
             fullScreen={fullscreen || false}
             open={routeMatching}
-            classes={{ paper: classes.dialog }}
-            TransitionComponent={Transition}>
+            classes={{ paper: classes.dialog }}>
             <Route path={matchPattern?.path}>
                 {Component && <Component></Component>}
                 {children || null}
