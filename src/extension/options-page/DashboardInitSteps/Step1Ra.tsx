@@ -5,7 +5,6 @@ import { DialogRouter } from '../DashboardDialogs/DialogBase'
 import { PersonaImportDialog } from '../DashboardDialogs/Persona'
 import ActionButton from '../DashboardComponents/ActionButton'
 import { geti18nString } from '../../../utils/i18n'
-import { Box } from '@material-ui/core'
 
 const header = geti18nString('dashboard_advanced_restoration')
 
@@ -20,7 +19,7 @@ const actions = (
 
 export default function InitStep1Ra() {
     const content = (
-        <Box display="flex" style={{ width: '100%', justifyContent: 'center' }}>
+        <div style={{ alignSelf: 'stretch', textAlign: 'center', width: '100%' }}>
             <ActionButton<typeof Link>
                 width={240}
                 variant="outlined"
@@ -29,7 +28,7 @@ export default function InitStep1Ra() {
                 to="persona/import">
                 {geti18nString('import_persona')}
             </ActionButton>
-        </Box>
+        </div>
     )
 
     const match = useRouteMatch()
