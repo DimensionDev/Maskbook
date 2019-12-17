@@ -182,7 +182,10 @@ export function PersonaBackupDialog(props: PersonaBackupDialogProps) {
                 component: compressedQRString ? (
                     <QrCode
                         text={compressedQRString}
-                        canvasProps={{ style: { height: 260, width: 260, display: 'block', margin: 'auto' } }}
+                        options={{ width: 260 }}
+                        canvasProps={{
+                            style: { display: 'block', margin: 'auto' },
+                        }}
                     />
                 ) : null,
                 p: 2,
