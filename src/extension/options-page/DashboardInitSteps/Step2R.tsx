@@ -1,6 +1,6 @@
 import React from 'react'
 import StepBase from './StepBase'
-import { Table, TableBody, TableRow, TableCell, styled, Box } from '@material-ui/core'
+import { Table, TableBody, TableRow, TableCell, styled } from '@material-ui/core'
 import { geti18nString } from '../../../utils/i18n'
 import ActionButton from '../DashboardComponents/ActionButton'
 import useQueryParams from '../../../utils/hooks/useQueryParams'
@@ -40,7 +40,7 @@ export default function InitStep2R() {
         { name: 'Contacts', value: contacts ?? 0 },
     ]
     const content = (
-        <Box display="flex" style={{ width: '100%' }}>
+        <div style={{ alignSelf: 'stretch', textAlign: 'center', width: '100%' }}>
             <Table size="small" style={{ maxWidth: 250, margin: 'auto' }}>
                 <TableBody>
                     {rows.map(row => (
@@ -53,7 +53,7 @@ export default function InitStep2R() {
                     ))}
                 </TableBody>
             </Table>
-        </Box>
+        </div>
     )
 
     return (
