@@ -74,7 +74,7 @@ const useStyles = makeStyles(theme =>
             minWidth: 110,
         },
         tabSelected: {
-            background: 'rgba(237, 243, 254, 0.8)',
+            background: theme.palette.type === 'dark' ? 'rgba(18, 12, 20, 0.6)' : 'rgba(237, 243, 254, 0.8)',
         },
     }),
 )

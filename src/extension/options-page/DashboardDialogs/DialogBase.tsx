@@ -22,7 +22,7 @@ import { Route } from 'react-router-dom'
 const useStyles = makeStyles(theme =>
     createStyles({
         dialog: {
-            backgroundColor: '#F7F8FA',
+            backgroundColor: theme.palette.type === 'light' ? '#F7F8FA' : '#343434',
             width: '100%',
             justifyContent: 'center',
         },
