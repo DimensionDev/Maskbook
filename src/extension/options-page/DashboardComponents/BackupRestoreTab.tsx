@@ -8,12 +8,11 @@ const useStyles = makeStyles((theme: Theme) =>
         panelBorder: {
             border: `1px solid ${theme.palette.type === 'dark' ? 'rgba(1, 1, 1, 0.3)' : 'rgba(33, 33, 33, 0.08)'}`,
         },
-        panelBorderMargin: {
-            marginTop: theme.spacing(2),
-            marginBottom: theme.spacing(2),
-        },
         panelBorderMarginTop: {
             marginTop: theme.spacing(2),
+        },
+        panelBorderMarginBottom: {
+            marginBottom: theme.spacing(2),
         },
         appbarBackground: {
             background: theme.palette.type === 'dark' ? 'rgba(1, 1, 1, 0.2)' : 'rgba(33, 33, 33, 0.08)',
@@ -39,7 +38,7 @@ const TabPanel = (props: TypographyProps & Pick<BoxProps, 'p' | 'height'> & { va
 export interface BackupRestoreTabProps {
     tabs: { label: string; component: JSX.Element | null; p?: number }[]
     state: [number, React.Dispatch<React.SetStateAction<number>>]
-    margin?: true | 'top'
+    margin?: true | 'top' | 'bottom'
     height?: number
 }
 
@@ -53,10 +52,13 @@ export default function BackupRestoreTab(props: BackupRestoreTabProps) {
         setValue(newValue)
     }
 
-    const marginClass = margin === 'top' ? classes.panelBorderMarginTop : margin && classes.panelBorderMargin
-
     return (
-        <div className={classNames(classes.panelBorder, marginClass)}>
+        <div
+            className={classNames(
+                classes.panelBorder,
+                { [classes.panelBorderMarginTop]: margin === true || margin === 'top' },
+                { [classes.panelBorderMarginBottom]: margin === true || margin === 'bottom' },
+            )}>
             <AppBar
                 classes={{ colorPrimary: classes.appbarBackground }}
                 position="static"
