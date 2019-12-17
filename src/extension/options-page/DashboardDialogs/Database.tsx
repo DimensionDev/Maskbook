@@ -28,7 +28,7 @@ export function DatabaseRestoreDialog() {
     const history = useHistory()
     const [json, setJson] = React.useState<BackupJSONFileLatest | null>(null)
     const [restoreState, setRestoreState] = React.useState<'success' | Error | null>(null)
-    const [requiredPermissions, setRequiredPermssions] = React.useState<string[] | null>(null)
+    const [requiredPermissions, setRequiredPermissions] = React.useState<string[] | null>(null)
     const fileReceiver = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const fr = new FileReader()
         fr.readAsText(e.currentTarget.files![0])
@@ -42,7 +42,7 @@ export function DatabaseRestoreDialog() {
                 if (!permissions) await Services.Welcome.restoreBackup(json)
                 else {
                     setJson(json)
-                    setRequiredPermssions(permissions)
+                    setRequiredPermissions(permissions)
                 }
                 setRestoreState('success')
             } catch (e) {

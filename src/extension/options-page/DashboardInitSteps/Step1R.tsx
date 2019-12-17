@@ -67,7 +67,7 @@ export default function InitStep1R() {
     const [json, setJson] = React.useState<BackupJSONFileLatest | null>(null)
     const [textValue, setTextValue] = React.useState('')
     const [restoreState, setRestoreState] = React.useState<'success' | Error | null>(null)
-    const [requiredPermissions, setRequiredPermssions] = React.useState<string[] | null>(null)
+    const [requiredPermissions, setRequiredPermissions] = React.useState<string[] | null>(null)
     const history = useHistory()
     const { dragEvents, fileReceiver, fileRef, dragStatus } = useDragAndDrop(file => {
         const fr = new FileReader()
@@ -85,7 +85,7 @@ export default function InitStep1R() {
                             `2r?personas=${json.personas?.length}&profiles=${json.profiles?.length}&posts=${json.posts?.length}&contacts=${json.userGroups?.length}&date=${json._meta_?.createdAt}`,
                         ),
                     )
-                setRequiredPermssions(permissions)
+                setRequiredPermissions(permissions)
                 setRestoreState('success')
             } catch (e) {
                 console.error(e)
