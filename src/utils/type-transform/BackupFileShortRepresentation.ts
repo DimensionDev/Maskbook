@@ -79,9 +79,7 @@ export function decompressBackupFile(short: string): BackupJSONFileLatest {
                 privateKey: privateJWK,
                 publicKey: publicJWK,
                 identifier: ECID.toText(),
-                linkedProfiles: {
-                    [profileID.toText()]: { connectionConfirmState: 'confirmed' },
-                },
+                linkedProfiles: [[profileID.toText(), { connectionConfirmState: 'confirmed' }]],
                 nickname,
                 localKey: localKeyJWK,
             },
