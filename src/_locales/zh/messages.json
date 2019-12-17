@@ -681,6 +681,9 @@
     "dashboard_bio_test_failed": {
         "message": "個人簡介中應包含 $1。請確保您成功更新了 @$2 的個人簡介。"
     },
+    "dashboard_username_on": {
+        "message": "$1 上的用戶名"
+    },
     "dashboard_connect_profile_for": {
         "message": "為 $1 連接個人資料"
     },
