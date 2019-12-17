@@ -79,7 +79,6 @@ Object.assign(globalThis, {
     IdentifierMap,
 })
 //#region
-console.log(Serialization)
 type Service = Record<string, (...args: unknown[]) => Promise<unknown>>
 function register<T extends Service>(service: T, name: keyof Services, mock?: Partial<T>) {
     if (OnlyRunInContext(['content', 'options', 'debugging', 'background'], false)) {
