@@ -529,7 +529,7 @@
         "message": "At least 8 characters"
     },
     "dashboard_password_helper_text": {
-        "message": "Set a password to upgrade security level"
+        "message": "Set a password to improve security level"
     },
     "dashboard_init_step_2": {
         "message": "Step 2: Connect a social network profile"
@@ -622,7 +622,7 @@
         "message": "Persona Created"
     },
     "dashboard_new_persona_created": {
-        "message": "New persona «$1» has been created. Connect a profile now! ([I:b])"
+        "message": "New persona \"$1\" has been created. Connect a profile now! ([I:b])"
     },
     "import_successful": {
         "message": "Import Successful"
