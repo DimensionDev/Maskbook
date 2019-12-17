@@ -2,7 +2,7 @@
 
 import { OnlyRunInContext } from '@holoflows/kit/es'
 import { ProfileIdentifier, PersonaIdentifier, Identifier, ECKeyIdentifier } from '../type'
-import { DBSchema, openDB, IDBPDatabase, IDBPTransaction } from 'idb/with-async-ittr'
+import { DBSchema, openDB, IDBPTransaction } from 'idb/with-async-ittr'
 import { IdentifierMap } from '../IdentifierMap'
 import { PrototypeLess, restorePrototype } from '../../utils/type'
 import { MessageCenter } from '../../utils/messages'
@@ -137,6 +137,12 @@ export async function updatePersonaDB(
     })
     await t.objectStore('personas').put(next)
     MessageCenter.emit('personaUpdated', undefined)
+}
+
+export async function createOrUpdatePersonaDB(record: PersonaRecord, t?: IDBPTransaction<PersonaDB, ['personas']>) {
+    t = t || (await db()).transaction('personas', 'readwrite')
+    if (await t.objectStore('personas').get(record.identifier.toText())) return updatePersonaDB(record, t)
+    else return createPersonaDB(record, t)
 }
 
 /**
