@@ -681,6 +681,9 @@
     "dashboard_bio_test_failed": {
         "message": "The profile bio should include $1. Please make sure you updated the profile bio of @$2 successfully."
     },
+    "dashboard_username_on": {
+        "message": "Username on $1"
+    },
     "dashboard_connect_profile_for": {
         "message": "Connect Profile for $1"
     },

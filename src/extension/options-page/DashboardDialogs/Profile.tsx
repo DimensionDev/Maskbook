@@ -94,7 +94,7 @@ export function ProfileConnectStartDialog(props: ProfileConnectStartDialogProps)
                 variant="outlined"
                 value={name}
                 onChange={e => setName(e.target.value)}
-                label={`Username on ${network}`}></TextField>
+                label={geti18nString('dashboard_username_on', network)}></TextField>
         </div>
     )
 
