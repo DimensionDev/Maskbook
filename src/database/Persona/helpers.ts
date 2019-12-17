@@ -106,14 +106,17 @@ export async function queryPersonasWithQuery(query?: Parameters<typeof queryPers
 }
 
 export async function deletePersona(id: PersonaIdentifier, confirm: 'delete even with private' | 'safe delete') {
-    const t = (await PersonaDBAccess()).transaction(['profiles', 'personas'], 'readwrite')
-    const d = await queryPersonaDB(id, t as any)
+    const t: IDBPTransaction<PersonaDB, any> = (await PersonaDBAccess()).transaction(
+        ['profiles', 'personas'],
+        'readwrite',
+    )
+    const d = await queryPersonaDB(id, t)
     if (!d) return
     for (const e of d.linkedProfiles) {
-        await detachProfileDB(e[0], t as any)
+        await detachProfileDB(e[0], t)
     }
-    if (confirm === 'delete even with private') await deletePersonaDB(id, 'delete even with private', t as any)
-    else if (confirm === 'safe delete') await safeDeletePersonaDB(id, t as any)
+    if (confirm === 'delete even with private') await deletePersonaDB(id, 'delete even with private', t)
+    else if (confirm === 'safe delete') await safeDeletePersonaDB(id, t)
 }
 
 export async function renamePersona(identifier: PersonaIdentifier, nickname: string) {
@@ -132,7 +135,7 @@ export async function updateOrCreateProfile(
         ...rec,
     }
     let profile: ProfileRecord
-    let reason: UpdateEvent<any>['reason']
+    let reason: UpdateEvent<ProfileRecord>['reason']
     if (r) {
         profile = { ...r, ...rec, updatedAt: new Date() }
         reason = 'update'

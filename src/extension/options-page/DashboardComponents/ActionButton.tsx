@@ -2,14 +2,15 @@ import React from 'react'
 import { Button, Typography, CircularProgress } from '@material-ui/core'
 import { ButtonProps } from '@material-ui/core/Button'
 
-interface ActionButtonProps extends ButtonProps {
+interface ActionButtonProps extends ButtonProps, PropsOf<typeof Button> {
     width?: number | string
     loading?: boolean
-    // TODO: figure out type
-    [key: string]: any
+    component?: keyof JSX.IntrinsicElements | React.ComponentClass<any>
 }
 
-export default function ActionButton(props: ActionButtonProps) {
+export default function ActionButton<T extends React.ComponentClass<any> = React.ComponentClass<{}>>(
+    props: ActionButtonProps & PropsOf<T>,
+) {
     const { width, loading, children, className, style, ...p } = props
     return (
         <Button

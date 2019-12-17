@@ -27,7 +27,7 @@ export default function InitStep2R() {
 
     const actions = (
         <div>
-            <ActionButton variant="contained" color="primary" component={Link} to="/">
+            <ActionButton<typeof Link> variant="contained" color="primary" component={Link} to="/">
                 {geti18nString('finish')}
             </ActionButton>
         </div>

@@ -1,6 +1,6 @@
-import React, { useCallback } from 'react'
+import React from 'react'
 import { makeStyles } from '@material-ui/styles'
-import { Theme, createStyles, AppBar, Tabs, Tab, Typography, Box } from '@material-ui/core'
+import { Theme, createStyles, AppBar, Tabs, Tab, Typography, Box, TypographyProps, BoxProps } from '@material-ui/core'
 import classNames from 'classnames'
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 )
 
-const TabPanel = (props: any) => {
+const TabPanel = (props: TypographyProps & Pick<BoxProps, 'p' | 'height'> & { value: number; index: number }) => {
     const { children, value, index, p, height, ...other } = props
 
     return (

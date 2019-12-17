@@ -10,7 +10,7 @@ const header = geti18nString('dashboard_advanced_restoration')
 
 const actions = (
     <>
-        <ActionButton variant="outlined" color="default" component={Link} to="../1r">
+        <ActionButton<typeof Link> variant="outlined" color="default" component={Link} to="../1r">
             {geti18nString('back')}
         </ActionButton>
         <span></span>
@@ -20,7 +20,12 @@ const actions = (
 export default function InitStep1Ra() {
     const content = (
         <div style={{ alignSelf: 'stretch', textAlign: 'center', width: '100%' }}>
-            <ActionButton width={240} variant="outlined" color="primary" component={Link} to="persona/import">
+            <ActionButton<typeof Link>
+                width={240}
+                variant="outlined"
+                color="primary"
+                component={Link}
+                to="persona/import">
                 {geti18nString('import_persona')}
             </ActionButton>
         </div>

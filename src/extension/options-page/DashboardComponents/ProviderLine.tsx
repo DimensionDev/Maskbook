@@ -29,7 +29,7 @@ interface ProviderLineProps {
     network: string
     connected?: boolean
     userId?: string
-    onConnect?: () => any
+    onConnect?: () => void
 }
 
 export default function ProviderLine(props: ProviderLineProps) {

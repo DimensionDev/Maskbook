@@ -26,10 +26,10 @@ export default function InitStep2S() {
 
     const actions = (
         <>
-            <ActionButton variant="outlined" color="default" component={Link} to="1s">
+            <ActionButton<typeof Link> variant="outlined" color="default" component={Link} to="1s">
                 {geti18nString('back')}
             </ActionButton>
-            <ActionButton
+            <ActionButton<typeof Link>
                 variant="contained"
                 color="primary"
                 disabled={persona?.linkedProfiles.size === 0}

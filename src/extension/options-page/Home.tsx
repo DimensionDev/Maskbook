@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { makeStyles, createStyles } from '@material-ui/styles'
+import { makeStyles, createStyles, styled } from '@material-ui/styles'
 import {
     Theme,
     Typography,
@@ -62,9 +62,10 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 )
 
-const ListItemWithAction = (props: any) => {
+const ListItemWithAction: typeof ListItem = (props: any) => {
+    const { classes, ...p } = props
     const { secondaryAction } = useStyles()
-    return <ListItem classes={{ secondaryAction }} {...props} />
+    return <ListItem classes={{ secondaryAction, ...classes }} {...p} />
 }
 
 export default function DashboardHomePage() {
@@ -112,7 +113,7 @@ export default function DashboardHomePage() {
                             <ListItemWithAction key="initialize">
                                 <ListItemText primary={geti18nString('dashboard_no_persona_found')} />
                                 <ListItemSecondaryAction>
-                                    <ActionButton
+                                    <ActionButton<typeof Link>
                                         component={Link}
                                         to="/initialize"
                                         variant="contained"
@@ -145,7 +146,7 @@ export default function DashboardHomePage() {
                                 secondary={geti18nString('dashboard_create_persona_hint')}
                             />
                             <ListItemSecondaryAction>
-                                <ActionButton
+                                <ActionButton<typeof Link>
                                     variant="contained"
                                     color="primary"
                                     className={classes.button}
@@ -162,7 +163,7 @@ export default function DashboardHomePage() {
                                 secondary={geti18nString('dashboard_import_persona_hint')}
                             />
                             <ListItemSecondaryAction>
-                                <ActionButton
+                                <ActionButton<typeof Link>
                                     variant="outlined"
                                     color="default"
                                     className={classes.button}
@@ -205,7 +206,7 @@ export default function DashboardHomePage() {
                                 secondary={geti18nString('dashboard_import_database_hint')}
                             />
                             <ListItemSecondaryAction>
-                                <ActionButton
+                                <ActionButton<typeof Link>
                                     variant="outlined"
                                     color="default"
                                     className={classes.button}

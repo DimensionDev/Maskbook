@@ -77,7 +77,8 @@ export default function PersonaCard({ persona }: Props) {
     }
 
     const [rename, setRename] = useState(false)
-    const renameIdentity = (event: React.FocusEvent<HTMLInputElement>) => {
+    type Inputable = HTMLInputElement | HTMLTextAreaElement
+    const renameIdentity = (event: React.FocusEvent<Inputable> | React.KeyboardEvent<Inputable>) => {
         event.preventDefault()
         Services.Identity.renamePersona(persona.identifier, event.currentTarget.value).then(() => {
             enqueueSnackbar(geti18nString('dashboard_item_done'), { variant: 'success', autoHideDuration: 1000 })
@@ -96,8 +97,8 @@ export default function PersonaCard({ persona }: Props) {
 
     const titleRef = useRef<HTMLSpanElement | null>(null)
 
-    const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
-    const handleClick = (event: React.MouseEvent<any>) => {
+    const [anchorEl, setAnchorEl] = React.useState<null | Element>(null)
+    const handleClick = (event: React.MouseEvent) => {
         setAnchorEl(event.currentTarget)
     }
 
@@ -155,12 +156,12 @@ export default function PersonaCard({ persona }: Props) {
                         <>
                             <TextField
                                 style={{ width: '100%', maxWidth: '320px' }}
-                                inputProps={{ onKeyPress: e => e.key === 'Enter' && renameIdentity(e as any) }}
+                                inputProps={{ onKeyPress: e => e.key === 'Enter' && renameIdentity(e) }}
                                 autoFocus
                                 variant="outlined"
                                 label="Name"
                                 defaultValue={persona.nickname}
-                                onBlur={renameIdentity}></TextField>
+                                onBlur={e => renameIdentity(e)}></TextField>
                         </>
                     )}
                 </Typography>

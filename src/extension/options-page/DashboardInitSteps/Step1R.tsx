@@ -39,10 +39,10 @@ const useStyles = makeStyles(theme =>
 
 const actions = (
     <>
-        <ActionButton variant="outlined" color="default" component={Link} to="start">
+        <ActionButton<typeof Link> variant="outlined" color="default" component={Link} to="start">
             {geti18nString('back')}
         </ActionButton>
-        <ActionButton variant="outlined" color="primary" component={Link} to="1ra">
+        <ActionButton<typeof Link> variant="outlined" color="primary" component={Link} to="1ra">
             {geti18nString('advanced')}
         </ActionButton>
     </>
