@@ -44,7 +44,7 @@ export default function FooterLine() {
         <Breadcrumbs className={classes.footerButtons} separator="|" aria-label="breadcrumb">
             <FooterLink href="https://maskbook.com/">Maskbook.com</FooterLink>
             <FooterLink href="https://github.com/DimensionDev/Maskbook/releases">
-                {geti18nString('version')} {webpackEnv.version}
+                {geti18nString('version')} {globalThis?.browser.runtime.getManifest().version}
             </FooterLink>
             <FooterLink href="https://maskbook.com/download-links/#mobile">
                 {geti18nString('dashboard_mobile_test')}
