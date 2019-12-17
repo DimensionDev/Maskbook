@@ -5,6 +5,7 @@ import { TextField, makeStyles, createStyles } from '@material-ui/core'
 import { geti18nString } from '../../../utils/i18n'
 import ActionButton from '../DashboardComponents/ActionButton'
 import Services from '../../service'
+import { InitStep } from '../InitStep'
 
 const header = geti18nString('dashboard_init_step_1')
 const subheader = geti18nString('dashboard_init_step_1_hint')
@@ -36,7 +37,7 @@ export default function InitStep1S() {
 
     const createPersonaAndNext = async () => {
         const persona = await Services.Identity.createPersonaByMnemonic(name, password)
-        history.replace(`2s?identifier=${encodeURIComponent(persona.toText())}`)
+        history.replace(`${InitStep.Setup2}?identifier=${encodeURIComponent(persona.toText())}`)
     }
 
     const actions = (

@@ -29,7 +29,7 @@ const TabPanel = (props: TypographyProps & Pick<BoxProps, 'p' | 'height'> & { va
 
     return (
         <Typography component="div" role="tabpanel" hidden={value !== index} {...other}>
-            <Box {...(height ? { style: { height } } : {})} p={p ?? 3}>
+            <Box height={height} p={p ?? 3}>
                 {children}
             </Box>
         </Typography>
