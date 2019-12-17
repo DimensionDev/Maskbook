@@ -5,12 +5,13 @@ import { DialogRouter } from '../DashboardDialogs/DialogBase'
 import { PersonaImportDialog } from '../DashboardDialogs/Persona'
 import ActionButton from '../DashboardComponents/ActionButton'
 import { geti18nString } from '../../../utils/i18n'
+import { InitStep } from '../InitStep'
 
 const header = geti18nString('dashboard_advanced_restoration')
 
 const actions = (
     <>
-        <ActionButton<typeof Link> variant="outlined" color="default" component={Link} to="../1r">
+        <ActionButton<typeof Link> variant="outlined" color="default" component={Link} to={`../${InitStep.Restore1}`}>
             {geti18nString('back')}
         </ActionButton>
         <span></span>

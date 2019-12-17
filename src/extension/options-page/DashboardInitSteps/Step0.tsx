@@ -4,6 +4,7 @@ import { Box, Typography, styled, Theme } from '@material-ui/core'
 import { geti18nString } from '../../../utils/i18n'
 import { Link } from 'react-router-dom'
 import ActionButton from '../DashboardComponents/ActionButton'
+import { InitStep } from '../InitStep'
 
 const VerticalCenter = styled('div')({
     display: 'flex',
@@ -39,7 +40,11 @@ export default function InitStep0() {
                     <Typography variant="body1">{geti18nString('dashboard_new_user_hint')}</Typography>
                 </Box>
                 <VerticalCenter>
-                    <ActionButton<typeof Link> variant="contained" color="primary" component={Link} to="1s">
+                    <ActionButton<typeof Link>
+                        variant="contained"
+                        color="primary"
+                        component={Link}
+                        to={InitStep.Setup1}>
                         {geti18nString('set_up')}
                     </ActionButton>
                 </VerticalCenter>
@@ -50,7 +55,7 @@ export default function InitStep0() {
                     <Typography variant="body1">{geti18nString('dashboard_returning_user_hint')}</Typography>
                 </Box>
                 <VerticalCenter>
-                    <ActionButton<typeof Link> variant="outlined" component={Link} to="1r">
+                    <ActionButton<typeof Link> variant="outlined" component={Link} to={InitStep.Restore1}>
                         {geti18nString('restore')}
                     </ActionButton>
                 </VerticalCenter>
