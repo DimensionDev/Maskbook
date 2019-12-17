@@ -75,6 +75,16 @@ export async function createUserGroupDatabase(
     })
 }
 
+export async function createOrUpdateUserGroupDatabase(
+    group: Partial<GroupRecord> & Pick<GroupRecord, 'identifier' | 'groupName'>,
+    type: 'append' | 'replace' | ((record: GroupRecord) => GroupRecord | void),
+    t?: GroupTransaction,
+) {
+    t = t || (await db()).transaction('groups', 'readwrite')
+    if (await queryUserGroupDatabase(group.identifier, t)) return updateUserGroupDatabase(group, type, t)
+    else return createUserGroupDatabase(group.identifier, group.groupName, t)
+}
+
 /**
  * Delete a user group that stored in the Maskbook
  * @param group Group ID
