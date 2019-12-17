@@ -106,15 +106,16 @@ export default function PersonaCard({ persona }: Props) {
         setAnchorEl(null)
     }
 
+    const id = persona.linkedProfiles.keys().next().value as ProfileIdentifier | undefined
     React.useEffect(() => {
         if (persona.nickname) return
-        const profile = persona.linkedProfiles.keys().next().value as ProfileIdentifier | undefined
+        const profile = id
         if (!profile) Services.Identity.renamePersona(persona.identifier, persona.identifier.compressedPoint)
         else
             Services.Identity.queryProfile(profile)
                 .then(profile => profile.nickname || profile.identifier.userId)
                 .then(newName => Services.Identity.renamePersona(persona.identifier, newName))
-    }, [persona.identifier, persona.linkedProfiles, persona.linkedProfiles.__raw_map__, persona.nickname])
+    }, [persona.identifier, id, persona.nickname])
 
     const dismissDialog = () => {
         setBackupPersona(false)

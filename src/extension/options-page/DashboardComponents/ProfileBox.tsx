@@ -93,7 +93,7 @@ export default function ProfileBox({ persona, border }: Props) {
 
     const doConnect = async (userId: string) => {
         const identifier = new ProfileIdentifier(connectProfile!.network, userId)
-        await Services.Identity.attachProfile(identifier, persona!.identifier, { connectionConfirmState: 'pending' })
+        await Services.Identity.attachProfile(identifier, persona!.identifier, { connectionConfirmState: 'confirmed' })
         setConnectIdentifier(identifier)
     }
 
