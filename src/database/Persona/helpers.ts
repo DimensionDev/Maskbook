@@ -123,31 +123,6 @@ export async function renamePersona(identifier: PersonaIdentifier, nickname: str
     return updatePersonaDB({ identifier, nickname })
 }
 
-export async function updateOrCreateProfile(
-    rec: Pick<Profile, 'identifier'> & Partial<ProfileRecord>,
-    t?: IDBPTransaction<PersonaDB, ['profiles']>,
-) {
-    t = t || (await PersonaDBAccess()).transaction('profiles', 'readwrite')
-    const r = await queryProfileDB(rec.identifier, t)
-    const e: ProfileRecord = {
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        ...rec,
-    }
-    let profile: ProfileRecord
-    let reason: UpdateEvent<ProfileRecord>['reason']
-    if (r) {
-        profile = { ...r, ...rec, updatedAt: new Date() }
-        reason = 'update'
-        await updateProfileDB(profile, t)
-    } else {
-        profile = e
-        reason = 'new'
-        await createProfileDB(profile, t)
-    }
-    profileRecordToProfile(profile).then(x => MessageCenter.emit('profilesChanged', [{ reason, of: x }]))
-}
-
 export async function queryPersonaByProfile(i: ProfileIdentifier) {
     return (await queryProfile(i)).linkedPersona
 }

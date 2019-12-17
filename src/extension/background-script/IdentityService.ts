@@ -1,11 +1,4 @@
-import {
-    queryProfilesWithQuery,
-    personaRecordToPersona,
-    updateOrCreateProfile,
-    storeAvatar,
-    queryPersonaByProfile,
-    queryProfile,
-} from '../../database'
+import { queryProfilesWithQuery, personaRecordToPersona, storeAvatar, queryProfile } from '../../database'
 import { ProfileIdentifier, PersonaIdentifier } from '../../database/type'
 import { Profile, Persona } from '../../database/Persona/types'
 import {
@@ -17,6 +10,7 @@ import {
     attachProfileDB,
     LinkedProfileDetails,
     ProfileRecord,
+    createOrUpdateProfile,
 } from '../../database/Persona/Persona.db'
 import { OnlyRunInContext } from '@holoflows/kit/es'
 
@@ -46,7 +40,13 @@ export function updateProfileInfo(
         forceUpdateAvatar?: boolean
     },
 ): Promise<void> {
-    if (data.nickname) return updateOrCreateProfile({ identifier, nickname: data.nickname })
+    if (data.nickname)
+        return createOrUpdateProfile({
+            identifier,
+            nickname: data.nickname,
+            createdAt: new Date(),
+            updatedAt: new Date(),
+        })
     if (data.avatarURL) return storeAvatar(identifier, data.avatarURL, data.forceUpdateAvatar)
     return Promise.resolve()
 }

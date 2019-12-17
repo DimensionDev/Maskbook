@@ -1,15 +1,23 @@
-import { ProfileIdentifier, Identifier, ECKeyIdentifier } from '../../../database/type'
+import { ProfileIdentifier } from '../../../database/type'
 import { UpgradeBackupJSONFile } from '../../../utils/type-transform/BackupFormat/JSON/latest'
 import { geti18nString } from '../../../utils/i18n'
 import { getKeyParameter, JsonWebKeyToCryptoKey } from '../../../utils/type-transform/CryptoKey-JsonWebKey'
-import { PersonaDBAccess, createPersonaDB, attachProfileDB } from '../../../database/Persona/Persona.db'
-import { updateOrCreateProfile } from '../../../database'
+import {
+    PersonaDBAccess,
+    attachProfileDB,
+    createOrUpdatePersonaDB,
+    createOrUpdateProfile,
+} from '../../../database/Persona/Persona.db'
 import { PersonaRecordFromJSONFormat } from '../../../utils/type-transform/BackupFormat/JSON/DBRecord-JSON/PersonaRecord'
 import { ProfileRecordFromJSONFormat } from '../../../utils/type-transform/BackupFormat/JSON/DBRecord-JSON/ProfileRecord'
 import { PostRecordFromJSONFormat } from '../../../utils/type-transform/BackupFormat/JSON/DBRecord-JSON/PostRecord'
-import { createPostDB } from '../../../database/post'
+import { createPostDB, createOrUpdatePostDB } from '../../../database/post'
 import { GroupRecordFromJSONFormat } from '../../../utils/type-transform/BackupFormat/JSON/DBRecord-JSON/GroupRecord'
-import { createUserGroupDatabase, updateUserGroupDatabase } from '../../../database/group'
+import {
+    createUserGroupDatabase,
+    updateUserGroupDatabase,
+    createOrUpdateUserGroupDatabase,
+} from '../../../database/group'
 
 /**
  * Restore the backup
@@ -30,12 +38,12 @@ export async function restoreBackup(json: object, whoAmI?: ProfileIdentifier): P
     {
         const t: any = (await PersonaDBAccess()).transaction(['personas', 'profiles'], 'readwrite')
         for (const x of data.personas) {
-            await createPersonaDB(PersonaRecordFromJSONFormat(x, keyCache), t)
+            await createOrUpdatePersonaDB(PersonaRecordFromJSONFormat(x, keyCache), t)
         }
 
         for (const x of data.profiles) {
             const { linkedPersona, ...record } = ProfileRecordFromJSONFormat(x, keyCache)
-            await updateOrCreateProfile(record, t)
+            await createOrUpdateProfile(record, t)
             if (linkedPersona) {
                 await attachProfileDB(record.identifier, linkedPersona, { connectionConfirmState: 'confirmed' }, t)
             }
@@ -48,12 +56,11 @@ export async function restoreBackup(json: object, whoAmI?: ProfileIdentifier): P
             const c = await JsonWebKeyToCryptoKey(x.postCryptoKey, ...aes)
             keyCache.set(x.postCryptoKey, c)
         }
-        await createPostDB(PostRecordFromJSONFormat(x, keyCache))
+        await createOrUpdatePostDB(PostRecordFromJSONFormat(x, keyCache), 'append')
     }
 
     for (const x of data.userGroups) {
         const rec = GroupRecordFromJSONFormat(x)
-        await createUserGroupDatabase(rec.identifier, rec.groupName)
-        await updateUserGroupDatabase(rec, 'append')
+        await createOrUpdateUserGroupDatabase(rec, 'append')
     }
 }
