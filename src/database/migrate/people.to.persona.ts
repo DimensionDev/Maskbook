@@ -54,6 +54,7 @@ export async function migrateHelper_operateDB(
         }
         await persona.attachProfileDB(profileID, personaID, data, t)
     }
+    indexedDB.deleteDatabase('maskbook-people-v2')
 }
 async function migrateHelper_importPersonaFromPersonRecord(
     myIDs: PersonRecordPublicPrivate[],

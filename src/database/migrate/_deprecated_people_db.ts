@@ -2,7 +2,7 @@
 /// <reference path="../global.d.ts" />
 /**
  * @deprecated
- * This database is deprecated since Maskbook 1.8.0
+ * This database is deprecated since Maskbook 1.8.10
  * Do not store new data in it.
  */
 /**
@@ -108,6 +108,7 @@ const db = openDB<PeopleDB>('maskbook-people-v2', 1, {
         if (oldVersion < 1) v0_v1()
     },
 })
+export const deprecated_people_db = db
 //#endregion
 //#region Other people
 /**
