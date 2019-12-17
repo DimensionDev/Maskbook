@@ -41,16 +41,16 @@ if (!Intl.ListFormat) {
 }
 export function geti18nString(key: keyof I18NStrings, substitutions: string | string[] = '') {
     const uiOverwrite =
-        GetContext() === 'content' || GetContext() === 'options'
+        (GetContext() === 'content' || GetContext() === 'options'
             ? (require('../social-network/ui') as typeof import('../social-network/ui')).getActivatedUI().i18nOverwrite
-            : {}
+            : {}) ?? {}
 
-    const uiLang = uiOverwrite[getCurrentScript()]
-    const origLang = langs[getCurrentScript()]
-    const uiFallback = uiOverwrite.en
-    const fallback = langs.en
+    const uiLang = uiOverwrite?.[getCurrentScript()]
+    const origLang = langs?.[getCurrentScript()]
+    const uiFallback = uiOverwrite?.en
+    const fallback = langs?.en
 
-    const string = uiLang[key] || origLang[key] || uiFallback[key] || fallback[key]
+    const string = uiLang?.[key] || origLang?.[key] || uiFallback?.[key] || fallback?.[key]
     if (typeof substitutions === 'string') substitutions = [substitutions]
     if (substitutions.length > 4) console.error('Implement this please')
     return (string || { message: key }).message
