@@ -2,7 +2,7 @@ import { Profile } from '../../database'
 import { useValueRef } from '../../utils/hooks/useValueRef'
 import { getActivatedUI } from '../../social-network/ui'
 import { currentSelectedIdentity } from '../../components/shared-settings/settings'
-import { GetContext } from '@holoflows/kit/es'
+import { GetContext, OnlyRunInContext } from '@holoflows/kit/es'
 
 export function useFriendsList() {
     return useValueRef(getActivatedUI().friendsRef)
@@ -17,9 +17,9 @@ export function useMyIdentities() {
     return useValueRef(getActivatedUI().myIdentitiesRef)
 }
 export function useMyPersonas() {
+    OnlyRunInContext('options', 'useMyPersonas')
     const personasRef = useValueRef(getActivatedUI().myPersonasRef)
-    if (GetContext() === 'options') return personasRef
-    return []
+    return personasRef
 }
 export function useCurrentIdentity(noDefault?: boolean): Profile | null {
     const all = useMyIdentities()
