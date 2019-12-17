@@ -108,7 +108,7 @@ export default function InitStep1R() {
                 component: (
                     <InputBase
                         style={{ width: '100%', height: '100%', display: 'flex', overflow: 'auto' }}
-                        autoFocus
+                        inputRef={(input: HTMLInputElement) => input && input.focus()}
                         multiline
                         value={textValue}
                         onChange={e => setTextValue(e.target.value)}></InputBase>

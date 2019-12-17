@@ -288,6 +288,7 @@ export function PersonaImportDialog() {
                 component: (
                     <InputBase
                         style={{ width: '100%', minHeight: '100px' }}
+                        inputRef={(input: HTMLInputElement) => input && input.focus()}
                         multiline
                         onChange={e => setBase64Value(e.target.value)}
                         value={base64Value}></InputBase>
