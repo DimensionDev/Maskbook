@@ -6,7 +6,7 @@ import classNames from 'classnames'
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         panelBorder: {
-            border: `1px solid rgba(33, 33, 33, 0.08)`,
+            border: `1px solid ${theme.palette.type === 'dark' ? 'rgba(1, 1, 1, 0.3)' : 'rgba(33, 33, 33, 0.08)'}`,
         },
         panelBorderMargin: {
             marginTop: theme.spacing(2),
@@ -16,10 +16,10 @@ const useStyles = makeStyles((theme: Theme) =>
             marginTop: theme.spacing(2),
         },
         appbarBackground: {
-            background: 'rgba(33, 33, 33, 0.08)',
+            background: theme.palette.type === 'dark' ? 'rgba(1, 1, 1, 0.2)' : 'rgba(33, 33, 33, 0.08)',
         },
         tabSelected: {
-            background: 'rgba(237, 243, 254, 0.8)',
+            background: theme.palette.type === 'dark' ? 'rgba(18, 12, 40, 0.2)' : 'rgba(237, 243, 254, 0.8)',
         },
     }),
 )

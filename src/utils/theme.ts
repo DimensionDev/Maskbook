@@ -19,7 +19,6 @@ const baseTheme = (theme: 'dark' | 'light') =>
         palette: {
             primary: { main: '#1C68F3' },
             secondary: { main: orange[800] },
-            error: { main: red[900] },
             type: theme,
         },
         typography: {
@@ -46,7 +45,7 @@ export const FixedWidthFonts = getFontFamily(true)
 export const useColorProvider = makeStyles((theme: typeof MaskbookDarkTheme) =>
     createStyles({
         error: {
-            color: theme.palette.error.main,
+            color: theme.palette.type === 'dark' ? red[700] : red[900],
         },
         success: {
             color: theme.palette.type === 'dark' ? green[500] : green[800],
@@ -57,9 +56,9 @@ export const useColorProvider = makeStyles((theme: typeof MaskbookDarkTheme) =>
         errorButton: {
             color: theme.palette.getContrastText(red[900]),
             '&:hover': {
-                background: red[700],
+                background: theme.palette.type === 'dark' ? red[900] : red[700],
             },
-            background: red[900],
+            background: theme.palette.type === 'dark' ? red[700] : red[900],
         },
     }),
 )
