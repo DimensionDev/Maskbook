@@ -7,6 +7,8 @@ import { IdentifierMap } from '../IdentifierMap'
 import { PrototypeLess, restorePrototype } from '../../utils/type'
 import { MessageCenter } from '../../utils/messages'
 import { createDBAccess } from '../helpers/openDB'
+import { MessageCenter } from '../../utils/messages'
+import { queryProfile } from './helpers'
 /**
  * Database structure:
  *
@@ -256,6 +258,17 @@ export async function updateProfileDB(
         ...updating,
     })
     await t.objectStore('profiles').put(nextRecord)
+    queryProfile(updating.identifier).then(x =>
+        MessageCenter.emit('profilesChanged', [{ reason: 'update', of: x } as const]),
+    )
+}
+export async function createOrUpdateProfile(rec: ProfileRecord, t?: IDBPTransaction<PersonaDB, ['profiles']>) {
+    t = t || (await PersonaDBAccess()).transaction('profiles', 'readwrite')
+    if (await queryProfileDB(rec.identifier, t)) {
+        return updateProfileDB(rec, t)
+    } else {
+        return createProfileDB(rec, t)
+    }
 }
 
 /**
