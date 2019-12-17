@@ -10,6 +10,7 @@ import InitStep1Ra from './DashboardInitSteps/Step1Ra'
 import InitStep2R from './DashboardInitSteps/Step2R'
 import FooterLine from './DashboardComponents/FooterLine'
 import { geti18nString } from '../../utils/i18n'
+import { InitStep } from './InitStep'
 
 const useStyles = makeStyles((theme: Theme) => ({
     wrapper: {
@@ -51,16 +52,16 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 const InitializeSteps = () => {
     const { step } = useParams()
-    switch (step) {
-        case '1s':
+    switch (step as InitStep) {
+        case InitStep.Setup1:
             return <InitStep1S />
-        case '2s':
+        case InitStep.Setup2:
             return <InitStep2S />
-        case '1r':
+        case InitStep.Restore1:
             return <InitStep1R />
-        case '1ra':
+        case InitStep.RestoreAdvanced1:
             return <InitStep1Ra />
-        case '2r':
+        case InitStep.Restore2:
             return <InitStep2R />
     }
     return <InitStep0 />

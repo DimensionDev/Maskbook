@@ -12,6 +12,7 @@ import { DialogRouter } from '../DashboardDialogs/DialogBase'
 import { DatabaseRestoreSuccessDialog, DatabaseRestoreFailedDialog } from '../DashboardDialogs/Database'
 import { BackupJSONFileLatest, UpgradeBackupJSONFile } from '../../../utils/type-transform/BackupFormat/JSON/latest'
 import { extraPermissions } from '../../../utils/permissions'
+import { InitStep } from '../InitStep'
 
 const header = geti18nString('restore_database')
 
@@ -42,7 +43,7 @@ const actions = (
         <ActionButton<typeof Link> variant="outlined" color="default" component={Link} to="start">
             {geti18nString('back')}
         </ActionButton>
-        <ActionButton<typeof Link> variant="outlined" color="primary" component={Link} to="1ra">
+        <ActionButton<typeof Link> variant="outlined" color="primary" component={Link} to={InitStep.RestoreAdvanced1}>
             {geti18nString('advanced')}
         </ActionButton>
     </>
@@ -82,7 +83,7 @@ export default function InitStep1R() {
                 if (!permissions)
                     return await Services.Welcome.restoreBackup(json).then(() =>
                         history.push(
-                            `2r?personas=${json.personas?.length}&profiles=${json.profiles?.length}&posts=${json.posts?.length}&contacts=${json.userGroups?.length}&date=${json._meta_?.createdAt}`,
+                            `${InitStep.Restore2}?personas=${json.personas?.length}&profiles=${json.profiles?.length}&posts=${json.posts?.length}&contacts=${json.userGroups?.length}&date=${json._meta_?.createdAt}`,
                         ),
                     )
                 setRequiredPermissions(permissions)
@@ -167,7 +168,7 @@ export default function InitStep1R() {
                                         )
                                         .then(() =>
                                             history.push(
-                                                `2r?personas=${json?.personas?.length}&profiles=${json?.profiles?.length}&posts=${json?.posts?.length}&contacts=${json?.userGroups?.length}&date=${json?._meta_?.createdAt}`,
+                                                `${InitStep.Restore2}?personas=${json?.personas?.length}&profiles=${json?.profiles?.length}&posts=${json?.posts?.length}&contacts=${json?.userGroups?.length}&date=${json?._meta_?.createdAt}`,
                                             ),
                                         )
                                         .catch(setRestoreState)

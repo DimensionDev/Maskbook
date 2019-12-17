@@ -11,6 +11,7 @@ import { Persona } from '../../../database'
 import { useAsync } from '../../../utils/components/AsyncComponent'
 import ProfileBox from '../DashboardComponents/ProfileBox'
 import { useMyPersonas } from '../../../components/DataSource/useActivatedUI'
+import { InitStep } from '../InitStep'
 
 const header = geti18nString('dashboard_init_step_2')
 const subheader = geti18nString('dashboard_init_step_2_hint')
@@ -26,7 +27,7 @@ export default function InitStep2S() {
 
     const actions = (
         <>
-            <ActionButton<typeof Link> variant="outlined" color="default" component={Link} to="1s">
+            <ActionButton<typeof Link> variant="outlined" color="default" component={Link} to={InitStep.Setup1}>
                 {geti18nString('back')}
             </ActionButton>
             <ActionButton<typeof Link>
