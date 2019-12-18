@@ -306,6 +306,7 @@ export function PersonaImportDialog() {
             <BackupRestoreTab margin="top" {...tabProps}></BackupRestoreTab>
             {restoreState === 'success' && (
                 <DialogRouter
+                    fullscreen={false}
                     onExit="/home"
                     children={
                         <PersonaImportSuccessDialog
@@ -317,6 +318,7 @@ export function PersonaImportDialog() {
             )}
             {restoreState === 'failed' && (
                 <DialogRouter
+                    fullscreen={false}
                     onExit={() => setRestoreState(null)}
                     children={<PersonaImportFailedDialog onConfirm={() => setRestoreState(null)} />}
                 />

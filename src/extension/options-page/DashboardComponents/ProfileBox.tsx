@@ -116,6 +116,7 @@ export default function ProfileBox({ persona, border }: Props) {
             ))}
             {connectProfile && (
                 <DialogRouter
+                    fullscreen={false}
                     onExit={dismissConnect}
                     children={
                         <ProfileConnectStartDialog
