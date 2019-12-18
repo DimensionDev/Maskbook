@@ -10,6 +10,7 @@ import {
     DialogContent,
     DialogActions,
     IconButton,
+    useMediaQuery,
 } from '@material-ui/core'
 import { TransitionProps } from '@material-ui/core/transitions'
 import CloseIcon from '@material-ui/icons/Close'
@@ -116,6 +117,8 @@ export function DialogRouter(props: DialogRouterProps) {
     const routeMatching = !path ? true : !!matchPattern
     const classes = useStyles()
 
+    const mobile = useMediaQuery('(max-width: 600px)')
+
     const onExitAction =
         typeof onExit === 'function'
             ? onExit
@@ -128,7 +131,7 @@ export function DialogRouter(props: DialogRouterProps) {
             disableEscapeKeyDown
             closeAfterTransition
             onClose={onExitAction}
-            fullScreen={fullscreen || false}
+            fullScreen={fullscreen ?? mobile}
             open={routeMatching}
             classes={{ paper: classes.dialog }}
             TransitionComponent={Transition}>

@@ -155,6 +155,7 @@ export default function InitStep1R() {
 
                 {restoreState === 'success' && (
                     <DialogRouter
+                        fullscreen={false}
                         onExit={() => false}
                         children={
                             <DatabaseRestoreSuccessDialog
@@ -179,6 +180,7 @@ export default function InitStep1R() {
                 )}
                 {restoreState && restoreState !== 'success' && (
                     <DialogRouter
+                        fullscreen={false}
                         children={
                             <DatabaseRestoreFailedDialog onConfirm={() => setRestoreState(null)} error={restoreState} />
                         }

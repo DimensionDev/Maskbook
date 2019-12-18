@@ -67,6 +67,7 @@ export function DatabaseRestoreDialog() {
                 }></DialogContentItem>
             {restoreState === 'success' && (
                 <DialogRouter
+                    fullscreen={false}
                     onExit={() => false}
                     children={
                         <DatabaseRestoreSuccessDialog
@@ -90,6 +91,7 @@ export function DatabaseRestoreDialog() {
             )}
             {restoreState && restoreState !== 'success' && (
                 <DialogRouter
+                    fullscreen={false}
                     children={
                         <DatabaseRestoreFailedDialog onConfirm={() => setRestoreState(null)} error={restoreState} />
                     }
