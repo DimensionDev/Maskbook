@@ -3,21 +3,20 @@ import { UpgradeBackupJSONFile } from '../../../utils/type-transform/BackupForma
 import { geti18nString } from '../../../utils/i18n'
 import { getKeyParameter, JsonWebKeyToCryptoKey } from '../../../utils/type-transform/CryptoKey-JsonWebKey'
 import {
-    PersonaDBAccess,
     attachProfileDB,
     createOrUpdatePersonaDB,
     createOrUpdateProfile,
+    consistentPersonaDBWriteAccess,
+    PersonaDB,
 } from '../../../database/Persona/Persona.db'
 import { PersonaRecordFromJSONFormat } from '../../../utils/type-transform/BackupFormat/JSON/DBRecord-JSON/PersonaRecord'
 import { ProfileRecordFromJSONFormat } from '../../../utils/type-transform/BackupFormat/JSON/DBRecord-JSON/ProfileRecord'
 import { PostRecordFromJSONFormat } from '../../../utils/type-transform/BackupFormat/JSON/DBRecord-JSON/PostRecord'
-import { createPostDB, createOrUpdatePostDB } from '../../../database/post'
+import { createOrUpdatePostDB } from '../../../database/post'
 import { GroupRecordFromJSONFormat } from '../../../utils/type-transform/BackupFormat/JSON/DBRecord-JSON/GroupRecord'
-import {
-    createUserGroupDatabase,
-    updateUserGroupDatabase,
-    createOrUpdateUserGroupDatabase,
-} from '../../../database/group'
+import { createOrUpdateUserGroupDatabase } from '../../../database/group'
+import { assertPersonaDBConsistency } from '../../../database/Persona/consistency'
+import { IDBPTransaction } from 'idb'
 
 /**
  * Restore the backup
@@ -36,19 +35,19 @@ export async function restoreBackup(json: object, whoAmI?: ProfileIdentifier): P
             .map(x => JsonWebKeyToCryptoKey(x.localKey!, ...aes).then(k => keyCache.set(x.localKey!, k))),
     ])
     {
-        const t: any = (await PersonaDBAccess()).transaction(['personas', 'profiles'], 'readwrite')
-        for (const x of data.personas) {
-            await createOrUpdatePersonaDB(PersonaRecordFromJSONFormat(x, keyCache), t)
-        }
-
-        for (const x of data.profiles) {
-            const { linkedPersona, ...record } = ProfileRecordFromJSONFormat(x, keyCache)
-            await createOrUpdateProfile(record, t)
-            if (linkedPersona) {
-                await attachProfileDB(record.identifier, linkedPersona, { connectionConfirmState: 'confirmed' }, t)
+        await consistentPersonaDBWriteAccess(async (t: IDBPTransaction<PersonaDB, any>) => {
+            for (const x of data.personas) {
+                await createOrUpdatePersonaDB(PersonaRecordFromJSONFormat(x, keyCache), t)
             }
-        }
-        // ! transaction t ends here.
+
+            for (const x of data.profiles) {
+                const { linkedPersona, ...record } = ProfileRecordFromJSONFormat(x, keyCache)
+                await createOrUpdateProfile(record, t)
+                if (linkedPersona) {
+                    await attachProfileDB(record.identifier, linkedPersona, { connectionConfirmState: 'confirmed' }, t)
+                }
+            }
+        })
     }
 
     for (const x of data.posts) {

@@ -29,31 +29,29 @@ export async function migrateHelper_operateDB(
         getLocalKey,
     )
 
-    const t: IDBPTransaction<persona.PersonaDB, any> = (await persona.PersonaDBAccess()).transaction(
-        ['personas', 'profiles'],
-        'readwrite',
-    )
-    for (const [v, incomingRecord] of personaMap) {
-        const currentRecord = await persona.queryPersonaDB(incomingRecord.identifier, t)
-        if (!currentRecord) {
-            await persona.createPersonaDB(incomingRecord, t)
+    await persona.consistentPersonaDBWriteAccess(async (t: IDBPTransaction<persona.PersonaDB, any>) => {
+        for (const [v, incomingRecord] of personaMap) {
+            const currentRecord = await persona.queryPersonaDB(incomingRecord.identifier, t)
+            if (!currentRecord) {
+                await persona.createPersonaDB(incomingRecord, t)
+            }
         }
-    }
-    for (const [v, incomingRecord] of profilesMap) {
-        const currentRecord = await persona.queryProfileDB(incomingRecord.identifier, t)
-        if (!currentRecord) {
-            // remove the linkedPersona, call attachProfileDB to keep consistency
-            const { linkedPersona, ...rec } = incomingRecord
-            await persona.createProfileDB(rec, t)
+        for (const [v, incomingRecord] of profilesMap) {
+            const currentRecord = await persona.queryProfileDB(incomingRecord.identifier, t)
+            if (!currentRecord) {
+                // remove the linkedPersona, call attachProfileDB to keep consistency
+                const { linkedPersona, ...rec } = incomingRecord
+                await persona.createProfileDB(rec, t)
+            }
         }
-    }
-    for (const [profileID, personaID] of attachRelationMap) {
-        const currentRecord = await persona.queryPersonaDB(personaID, t)
-        const data: persona.LinkedProfileDetails = currentRecord!.linkedProfiles.get(profileID) ?? {
-            connectionConfirmState: 'pending',
+        for (const [profileID, personaID] of attachRelationMap) {
+            const currentRecord = await persona.queryPersonaDB(personaID, t)
+            const data: persona.LinkedProfileDetails = currentRecord!.linkedProfiles.get(profileID) ?? {
+                connectionConfirmState: 'pending',
+            }
+            await persona.attachProfileDB(profileID, personaID, data, t)
         }
-        await persona.attachProfileDB(profileID, personaID, data, t)
-    }
+    })
     indexedDB.deleteDatabase('maskbook-people-v2')
 }
 async function migrateHelper_importPersonaFromPersonRecord(
