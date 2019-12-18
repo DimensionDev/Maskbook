@@ -43,6 +43,7 @@ const db = createDBAccess(() => {
 export async function consistentPersonaDBWriteAccess(
     action: (t: IDBPTransaction<PersonaDB, ('personas' | 'profiles')[]>) => Promise<void>,
 ) {
+    // TODO: collect all changes on this transaction then only perform consistency check on those records.
     const t = (await db()).transaction(['personas', 'profiles'], 'readwrite')
     await action(t)
     await assertPersonaDBConsistency('throw', 'full check', t as any)
