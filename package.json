@@ -79,7 +79,7 @@
     "tiny-secp256k1": "^1.1.2",
     "ts-loader": "^6.2.1",
     "typescript": "^3.7.2",
-    "typeson": "^5.14.1",
+    "typeson": "^5.18.1",
     "typeson-registry": "^1.0.0-alpha.30",
     "wallet.ts": "^0.2.8",
     "web-ext-types": "^3.1.0",
