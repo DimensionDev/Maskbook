@@ -16712,10 +16712,15 @@ typeson-registry@^1.0.0-alpha.30:
     typeson "5.14.1"
     whatwg-url "7.1.0"
 
-typeson@5.14.1, typeson@^5.14.1:
+typeson@5.14.1:
   version "5.14.1"
   resolved "https://registry.yarnpkg.com/typeson/-/typeson-5.14.1.tgz#d3ce3abecf4c05e03d6fb6419a9a6cad42340820"
   integrity sha512-A6YPkcPd2Eu/vmWjX1Xp69r03UHPzU0M80lGbBMJHPkkLQSbjOGzQs6S6qYs4x/fZ3sm8KC0c2susQ6EHpzgyw==
+
+typeson@^5.18.1:
+  version "5.18.1"
+  resolved "https://registry.yarnpkg.com/typeson/-/typeson-5.18.1.tgz#fafa2dfd6ef26448ff635a3c97dd39a4bd3cf742"
+  integrity sha512-4cVDwf4tT+9hpeQk22/ioQJXL8lN3AYlzJfJLBpB0MDPG7CGpbvxR0HBkQ6qp9T72/yzryP6k2HSVdxd3jF5qg==
 
 ua-parser-js@^0.7.18, ua-parser-js@^0.7.9:
   version "0.7.20"
@@ -17115,7 +17120,7 @@ web-ext-types@^3.1.0:
   resolved "https://registry.yarnpkg.com/web-ext-types/-/web-ext-types-3.2.1.tgz#3edc0e3c2e8fe121d7d7e4ca0b7ee0c883cea832"
   integrity sha512-oQZYDU3W8X867h8Jmt3129kRVKklz70db40Y6OzoTTuzOJpF/dB2KULJUf0txVPyUUXuyzV8GmT3nVvRHoG+Ew==
 
-web-ext@^3.2.1:
+web-ext@^3.1.1, web-ext@^3.2.1:
   version "3.2.1"
   resolved "https://registry.yarnpkg.com/web-ext/-/web-ext-3.2.1.tgz#5fa9f683d4ca804b42324593b1acedca375ab68d"
   integrity sha512-WzZbCDIjIUshZRVaiYFbaMp/1/xPjW7qeTQ0F7Xx1MYkamZ4RN5dnhxWFz+Hzg6GzhFdny+zucNDKOwYfAV3LA==
