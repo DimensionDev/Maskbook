@@ -11,6 +11,7 @@ import {
     LinkedProfileDetails,
     ProfileRecord,
     createOrUpdateProfile,
+    consistentPersonaDBWriteAccess,
 } from '../../database/Persona/Persona.db'
 import { OnlyRunInContext } from '@holoflows/kit/es'
 
@@ -24,7 +25,9 @@ export { storeAvatar, getAvatarDataURL as queryAvatarDataURL } from '../../datab
 //#region Profile
 export { queryProfile } from '../../database'
 export function createProfile(identifier: ProfileIdentifier) {
-    return createProfileDB({ identifier, createdAt: new Date(), updatedAt: new Date() })
+    return consistentPersonaDBWriteAccess(t =>
+        createProfileDB({ identifier, createdAt: new Date(), updatedAt: new Date() }, t as any),
+    )
 }
 export function queryProfiles(network?: string): Promise<Profile[]> {
     return queryProfilesWithQuery(network)
@@ -40,18 +43,20 @@ export function updateProfileInfo(
         forceUpdateAvatar?: boolean
     },
 ): Promise<void> {
-    if (data.nickname)
-        return createOrUpdateProfile({
+    if (data.nickname) {
+        const rec: ProfileRecord = {
             identifier,
             nickname: data.nickname,
             createdAt: new Date(),
             updatedAt: new Date(),
-        })
+        }
+        return consistentPersonaDBWriteAccess(t => createOrUpdateProfile(rec, t as any))
+    }
     if (data.avatarURL) return storeAvatar(identifier, data.avatarURL, data.forceUpdateAvatar)
     return Promise.resolve()
 }
 export function removeProfile(id: ProfileIdentifier): Promise<void> {
-    return deleteProfileDB(id)
+    return consistentPersonaDBWriteAccess(t => deleteProfileDB(id, t))
 }
 //#endregion
 
@@ -112,9 +117,11 @@ export async function resolveIdentity(identifier: ProfileIdentifier): Promise<vo
         identifier,
     }
     try {
-        await createProfileDB(final)
-        await deleteProfileDB(unknown).catch(() => {})
-        await deleteProfileDB(self).catch(() => {})
+        consistentPersonaDBWriteAccess(async t => {
+            await createProfileDB(final, t as any)
+            await deleteProfileDB(unknown, t).catch(() => {})
+            await deleteProfileDB(self, t).catch(() => {})
+        })
     } catch {
         // the profile already exists
     }

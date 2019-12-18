@@ -7,17 +7,14 @@ import {
     queryProfileDB,
     queryPersonaDB,
     queryPersonasDB,
-    PersonaDBAccess,
     detachProfileDB,
     deletePersonaDB,
     safeDeletePersonaDB,
-    updateProfileDB,
-    createProfileDB,
     queryPersonaByProfileDB,
     createPersonaDB,
     attachProfileDB,
     LinkedProfileDetails,
-    PersonaDB,
+    consistentPersonaDBWriteAccess,
     updatePersonaDB,
 } from './Persona.db'
 import { IdentifierMap } from '../IdentifierMap'
@@ -27,10 +24,8 @@ import {
     CryptoKeyToJsonWebKey,
     getKeyParameter,
 } from '../../utils/type-transform/CryptoKey-JsonWebKey'
-import { MessageCenter, UpdateEvent } from '../../utils/messages'
 import { generate_ECDH_256k1_KeyPair_ByMnemonicWord } from '../../utils/mnemonic-code'
 import { deriveLocalKeyFromECDHKey } from '../../utils/mnemonic-code/localKeyGenerate'
-import { IDBPTransaction } from 'idb'
 
 export async function profileRecordToProfile(record: ProfileRecord): Promise<Profile> {
     const rec = { ...record }
@@ -106,23 +101,20 @@ export async function queryPersonasWithQuery(query?: Parameters<typeof queryPers
 }
 
 export async function deletePersona(id: PersonaIdentifier, confirm: 'delete even with private' | 'safe delete') {
-    const t: IDBPTransaction<PersonaDB, any> = (await PersonaDBAccess()).transaction(
-        ['profiles', 'personas'],
-        'readwrite',
-    )
-    const d = await queryPersonaDB(id, t)
-    if (!d) return
-    for (const e of d.linkedProfiles) {
-        await detachProfileDB(e[0], t)
-    }
-    if (confirm === 'delete even with private') await deletePersonaDB(id, 'delete even with private', t)
-    else if (confirm === 'safe delete') await safeDeletePersonaDB(id, t)
+    return consistentPersonaDBWriteAccess(async t => {
+        const d = await queryPersonaDB(id, t as any)
+        if (!d) return
+        for (const e of d.linkedProfiles) {
+            await detachProfileDB(e[0], t as any)
+        }
+        if (confirm === 'delete even with private') await deletePersonaDB(id, 'delete even with private', t as any)
+        else if (confirm === 'safe delete') await safeDeletePersonaDB(id, t as any)
+    })
 }
 
 export async function renamePersona(identifier: PersonaIdentifier, nickname: string) {
-    return updatePersonaDB({ identifier, nickname })
+    return consistentPersonaDBWriteAccess(t => updatePersonaDB({ identifier, nickname }, t as any))
 }
-
 export async function queryPersonaByProfile(i: ProfileIdentifier) {
     return (await queryProfile(i)).linkedPersona
 }
@@ -169,7 +161,10 @@ export async function createPersonaByJsonWebKey(options: {
     mnemonic?: PersonaRecord['mnemonic']
 }): Promise<PersonaIdentifier> {
     const identifier = ECKeyIdentifier.fromJsonWebKey(options.publicKey)
-    await createPersonaDB({
+    const localKeyCryptoKey = options.localKey
+        ? await JsonWebKeyToCryptoKey(options.localKey, ...getKeyParameter('aes'))
+        : undefined
+    const record: PersonaRecord = {
         createdAt: new Date(),
         updatedAt: new Date(),
         identifier: identifier,
@@ -178,14 +173,13 @@ export async function createPersonaByJsonWebKey(options: {
         privateKey: options.privateKey,
         nickname: options.nickname,
         mnemonic: options.mnemonic,
-        localKey: options.localKey
-            ? await JsonWebKeyToCryptoKey(options.localKey, ...getKeyParameter('aes'))
-            : undefined,
-    })
+        localKey: options.localKey ? localKeyCryptoKey : undefined,
+    }
+    await consistentPersonaDBWriteAccess(t => createPersonaDB(record, t as any))
     return identifier
 }
 export async function createProfileWithPersona(
-    i: ProfileIdentifier,
+    profileID: ProfileIdentifier,
     data: LinkedProfileDetails,
     keys: {
         publicKey: JsonWebKey
@@ -195,9 +189,7 @@ export async function createProfileWithPersona(
     },
 ): Promise<void> {
     const ec_id = ECKeyIdentifier.fromJsonWebKey(keys.publicKey)
-
-    const t = (await PersonaDBAccess()).transaction(['personas', 'profiles'], 'readwrite')
-    await createPersonaDB({
+    const rec: PersonaRecord = {
         createdAt: new Date(),
         updatedAt: new Date(),
         identifier: ec_id,
@@ -206,8 +198,11 @@ export async function createProfileWithPersona(
         privateKey: keys.privateKey,
         localKey: keys.localKey,
         mnemonic: keys.mnemonic,
+    }
+    await consistentPersonaDBWriteAccess(async t => {
+        await createPersonaDB(rec, t as any)
+        await attachProfileDB(profileID, ec_id, data, t)
     })
-    await attachProfileDB(i, ec_id, data, t)
 }
 
 export async function queryLocalKey(i: ProfileIdentifier | PersonaIdentifier): Promise<CryptoKey | null> {
