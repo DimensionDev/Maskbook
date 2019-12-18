@@ -62,7 +62,7 @@ export default function BackupDialog() {
 
     useEffect(() => {
         if (!currentIdentifier) return
-        Services.Welcome.backupMyKeyPair({ download: false, onlyBackupWhoAmI: true })
+        Services.Welcome.createBackupFile({ download: false, onlyBackupWhoAmI: true })
             .then(backupObj => {
                 setBackupObj(backupObj)
                 setQRText(

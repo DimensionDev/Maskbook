@@ -16,7 +16,7 @@ import { attachProfileDB, LinkedProfileDetails } from '../../database/Persona/Pe
 import { CryptoKeyToJsonWebKey } from '../../utils/type-transform/CryptoKey-JsonWebKey'
 import { deriveLocalKeyFromECDHKey } from '../../utils/mnemonic-code/localKeyGenerate'
 import { ProfileIdentifier, PersonaIdentifier } from '../../database/type'
-import { generateBackupJSON } from './WelcomeServices/generateBackupJSON'
+import { generateBackupJSON, BackupOptions } from './WelcomeServices/generateBackupJSON'
 
 OnlyRunInContext('background', 'WelcomeService')
 export { generateBackupJSON } from './WelcomeServices/generateBackupJSON'
@@ -133,8 +133,10 @@ export async function downloadBackup<T>(obj: T) {
     return obj
 }
 
-export async function backupMyKeyPair(options: { download: boolean; onlyBackupWhoAmI: boolean }) {
-    const obj = await generateBackupJSON()
+export async function createBackupFile(
+    options: { download: boolean; onlyBackupWhoAmI: boolean } & Partial<BackupOptions>,
+) {
+    const obj = await generateBackupJSON(options)
     if (!options.download) return obj
     // Don't make the download pop so fast
     await sleep(1000)

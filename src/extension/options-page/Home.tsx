@@ -78,7 +78,7 @@ export default function DashboardHomePage() {
     const exportData = () => {
         // FIXME:
         setExportLoading(true)
-        Services.Welcome.backupMyKeyPair({
+        Services.Welcome.createBackupFile({
             download: true,
             onlyBackupWhoAmI: false,
         })

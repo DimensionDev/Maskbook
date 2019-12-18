@@ -6,7 +6,7 @@ import { TextField, Typography, InputBase, makeStyles, TypographyProps } from '@
 import { useHistory } from 'react-router-dom'
 import BackupRestoreTab, { BackupRestoreTabProps } from '../DashboardComponents/BackupRestoreTab'
 import ActionButton from '../DashboardComponents/ActionButton'
-import { ECKeyIdentifier } from '../../../database/type'
+import { ECKeyIdentifier, Identifier } from '../../../database/type'
 import Services from '../../service'
 import { Persona } from '../../../database'
 import useQueryParams from '../../../utils/hooks/useQueryParams'
@@ -72,7 +72,9 @@ export function PersonaCreatedDialog() {
     const [persona, setPersona] = useState<Persona | null>(null)
     useAsync(async () => {
         if (identifier)
-            Services.Identity.queryPersona(ECKeyIdentifier.fromString(identifier!)! as ECKeyIdentifier).then(setPersona)
+            Services.Identity.queryPersona(
+                Identifier.fromString(identifier, ECKeyIdentifier).unwrap('Cast failed'),
+            ).then(setPersona)
     }, [identifier])
     return (
         <DialogContentItem
@@ -152,7 +154,7 @@ export function PersonaBackupDialog(props: PersonaBackupDialogProps) {
     const [base64Value, setBase64Value] = useState(geti18nString('not_available'))
     const [compressedQRString, setCompressedQRString] = useState<string | null>(null)
     useEffect(() => {
-        Services.Welcome.backupMyKeyPair({ download: false, onlyBackupWhoAmI: false }).then(file => {
+        Services.Welcome.createBackupFile({ download: false, onlyBackupWhoAmI: false }).then(file => {
             const target = file.personas.find(p => p.identifier === persona.identifier.toText())!
             const value = {
                 ...file,
