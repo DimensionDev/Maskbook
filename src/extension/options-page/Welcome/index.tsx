@@ -32,8 +32,8 @@ enum WelcomeState {
     RestoreKeypair,
 }
 const WelcomeActions = {
-    backupMyKeyPair() {
-        return Services.Welcome.backupMyKeyPair({ download: true, onlyBackupWhoAmI: false })
+    createBackupFile() {
+        return Services.Welcome.createBackupFile({ download: true, onlyBackupWhoAmI: false })
     },
     /**
      *
@@ -125,7 +125,7 @@ function Welcome(props: Welcome) {
                     onGenerateKey={props.onGenerateKey}
                     next={() => {
                         sideEffects
-                            .backupMyKeyPair()
+                            .createBackupFile()
                             .then(updateProveBio)
                             .finally(() => {
                                 onStepChange(WelcomeState.ProvePost)
@@ -138,7 +138,7 @@ function Welcome(props: Welcome) {
                 <Welcome1a3b
                     next={() => {
                         sideEffects
-                            .backupMyKeyPair()
+                            .createBackupFile()
                             .then(updateProveBio)
                             .finally(() => {
                                 onStepChange(WelcomeState.ProvePost)

@@ -7,7 +7,6 @@ import { IdentifierMap } from '../IdentifierMap'
 import { PrototypeLess, restorePrototype } from '../../utils/type'
 import { MessageCenter } from '../../utils/messages'
 import { createDBAccess } from '../helpers/openDB'
-import { MessageCenter } from '../../utils/messages'
 import { queryProfile } from './helpers'
 /**
  * Database structure:

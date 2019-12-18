@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom'
 import ActionButton from '../DashboardComponents/ActionButton'
 import useQueryParams from '../../../utils/hooks/useQueryParams'
 import Services from '../../service'
-import { ECKeyIdentifier } from '../../../database/type'
+import { ECKeyIdentifier, Identifier } from '../../../database/type'
 import { Persona } from '../../../database'
 import { useAsync } from '../../../utils/components/AsyncComponent'
 import ProfileBox from '../DashboardComponents/ProfileBox'
@@ -22,7 +22,9 @@ export default function InitStep2S() {
     const [persona, setPersona] = useState<Persona | null>(null)
     useAsync(async () => {
         if (identifier)
-            Services.Identity.queryPersona(ECKeyIdentifier.fromString(identifier!)! as ECKeyIdentifier).then(setPersona)
+            Services.Identity.queryPersona(
+                Identifier.fromString(identifier, ECKeyIdentifier).unwrap('Cast failed'),
+            ).then(setPersona)
     }, [identifier, personas])
 
     const actions = (
