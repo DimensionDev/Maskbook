@@ -8,6 +8,7 @@ export async function assertPersonaDBConsistency(
     behavior: 'fix' | 'throw',
     ...[checkRange, t]: Parameters<typeof checkFullPersonaDBConsistency>
 ): Promise<Diagnosis[]> {
+    // TODO: implement this
     if (behavior === 'fix') throw new Error('Not implemented')
     const diag: Diagnosis[] = []
     for await (const w of checkFullPersonaDBConsistency(checkRange, t)) {
