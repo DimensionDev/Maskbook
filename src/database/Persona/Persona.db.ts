@@ -2,7 +2,7 @@
 
 import { OnlyRunInContext } from '@holoflows/kit/es'
 import { ProfileIdentifier, PersonaIdentifier, Identifier, ECKeyIdentifier } from '../type'
-import { DBSchema, openDB, IDBPTransaction, IDBPObjectStore } from 'idb/with-async-ittr'
+import { DBSchema, openDB, IDBPTransaction } from 'idb/with-async-ittr'
 import { IdentifierMap } from '../IdentifierMap'
 import { PrototypeLess, restorePrototype } from '../../utils/type'
 import { MessageCenter } from '../../utils/messages'
@@ -172,11 +172,11 @@ export async function deletePersonaDB(
  */
 export async function safeDeletePersonaDB(id: PersonaIdentifier, t?: PersonaTransaction): Promise<boolean> {
     t = t || (await db()).transaction('personas', 'readwrite')
-    const r = await t.objectStore('personas').get(id.toText())
+    const r = await queryPersonaDB(id, t)
     if (!r) return true
     if (r.linkedProfiles.size !== 0) return false
     if (r.privateKey) return false
-    await t.objectStore('personas').delete(id.toText())
+    await deletePersonaDB(id, "don't delete if have private key", t)
     MessageCenter.emit('personaUpdated', undefined)
     return true
 }
@@ -186,7 +186,9 @@ export async function safeDeletePersonaDB(id: PersonaIdentifier, t?: PersonaTran
  */
 export async function createProfileDB(record: ProfileRecord, t: ProfileTransaction): Promise<void> {
     await t.objectStore('profiles').add(profileToDB(record))
-    queryProfile(record.identifier).then(r => MessageCenter.emit('profilesChanged', [{ reason: 'new', of: r }]))
+    setTimeout(async () => {
+        MessageCenter.emit('profilesChanged', [{ reason: 'new', of: await queryProfile(record.identifier) }])
+    }, 0)
 }
 
 /**
@@ -241,11 +243,15 @@ export async function updateProfileDB(
         ...updating,
     })
     await t.objectStore('profiles').put(nextRecord)
-    queryProfile(updating.identifier).then(x =>
-        MessageCenter.emit('profilesChanged', [{ reason: 'update', of: x } as const]),
+    setTimeout(
+        async () =>
+            MessageCenter.emit('profilesChanged', [
+                { reason: 'update', of: await queryProfile(updating.identifier) } as const,
+            ]),
+        0,
     )
 }
-export async function createOrUpdateProfile(rec: ProfileRecord, t: ProfileTransaction) {
+export async function createOrUpdateProfileDB(rec: ProfileRecord, t: ProfileTransaction) {
     if (await queryProfileDB(rec.identifier, t)) return updateProfileDB(rec, t)
     else return createProfileDB(rec, t)
 }
@@ -255,11 +261,11 @@ export async function createOrUpdateProfile(rec: ProfileRecord, t: ProfileTransa
  */
 export async function detachProfileDB(identifier: ProfileIdentifier, t?: FullTransaction): Promise<void> {
     t = t || (await db()).transaction(['profiles', 'personas'], 'readwrite')
-    const profile = await queryProfileDB(identifier)
+    const profile = await queryProfileDB(identifier, t as any)
     if (!profile?.linkedPersona) return
 
     const linkedPersona = profile.linkedPersona
-    const persona = await queryPersonaDB(linkedPersona)
+    const persona = await queryPersonaDB(linkedPersona, t as any)
     persona?.linkedProfiles.delete(identifier)
 
     if (persona) {

@@ -1,5 +1,12 @@
 import { definedSocialNetworkWorkers, SocialNetworkWorker } from '../worker'
-import { GroupIdentifier, Identifier, ProfileIdentifier, PostIdentifier, PostIVIdentifier } from '../../database/type'
+import {
+    GroupIdentifier,
+    Identifier,
+    ProfileIdentifier,
+    PostIdentifier,
+    PostIVIdentifier,
+    ECKeyIdentifier,
+} from '../../database/type'
 
 const find = (network: string) => (v: SocialNetworkWorker) => v.networkIdentifier === network
 
@@ -17,5 +24,6 @@ export default function getCurrentNetworkWorker(network: string | Identifier): S
     if (network instanceof GroupIdentifier) return getCurrentNetworkWorker(network.network)
     if (network instanceof PostIdentifier) return getCurrentNetworkWorker(network.identifier)
     if (network instanceof PostIVIdentifier) return getCurrentNetworkWorker(network.network)
+    if (network instanceof ECKeyIdentifier) throw new Error('Cannot get network from a PersonaIdentifier')
     throw new TypeError('unknown subclass of Identifier')
 }

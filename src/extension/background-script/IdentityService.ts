@@ -10,7 +10,7 @@ import {
     attachProfileDB,
     LinkedProfileDetails,
     ProfileRecord,
-    createOrUpdateProfile,
+    createOrUpdateProfileDB,
     consistentPersonaDBWriteAccess,
 } from '../../database/Persona/Persona.db'
 import { OnlyRunInContext } from '@holoflows/kit/es'
@@ -50,7 +50,7 @@ export function updateProfileInfo(
             createdAt: new Date(),
             updatedAt: new Date(),
         }
-        return consistentPersonaDBWriteAccess(t => createOrUpdateProfile(rec, t as any))
+        return consistentPersonaDBWriteAccess(t => createOrUpdateProfileDB(rec, t as any))
     }
     if (data.avatarURL) return storeAvatar(identifier, data.avatarURL, data.forceUpdateAvatar)
     return Promise.resolve()
