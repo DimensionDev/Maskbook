@@ -65,16 +65,7 @@ export default function BackupDialog() {
         Services.Welcome.createBackupFile({ download: false, onlyBackupWhoAmI: true })
             .then(backupObj => {
                 setBackupObj(backupObj)
-                setQRText(
-                    compressBackupFile(
-                        backupObj,
-                        backupObj.profiles.findIndex(y =>
-                            currentIdentifier.equals(
-                                Identifier.fromString(y.identifier).unwrap('Invalid identifier in backup file'),
-                            ),
-                        ),
-                    ),
-                )
+                setQRText(compressBackupFile(backupObj, currentIdentifier))
             })
             .catch(e => {
                 alert(e)

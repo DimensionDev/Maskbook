@@ -164,7 +164,7 @@ export function PersonaBackupDialog(props: PersonaBackupDialogProps) {
                 personas: [target],
             }
             setBase64Value(btoa(JSON.stringify(value)))
-            setCompressedQRString(compressBackupFile(value, 0))
+            setCompressedQRString(compressBackupFile(value))
         })
     }, [persona.identifier])
 

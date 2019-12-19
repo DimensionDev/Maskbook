@@ -1,4 +1,4 @@
-import { ProfileIdentifier, Identifier, ECKeyIdentifier } from '../../database/type'
+import { ProfileIdentifier, Identifier, ECKeyIdentifier, PersonaIdentifier } from '../../database/type'
 import { compressSecp256k1Key, decompressSecp256k1Key } from './SECP256k1-Compression'
 import { BackupJSONFileLatest } from './BackupFormat/JSON/latest'
 import { ProfileRecord } from '../../database/Persona/Persona.db'
@@ -17,19 +17,23 @@ export type BackupJSONFileLatestShort = [
     // BackupJSONFileLatest['grantedHostPermissions'].join(';'),
     string,
 ]
-export function compressBackupFile(file: BackupJSONFileLatest, index: number): string {
+export function compressBackupFile(file: BackupJSONFileLatest, profileIdentifier?: ProfileIdentifier): string {
     const { grantedHostPermissions, profiles, personas } = file
-    if (!personas[index ?? 0]) throw new Error('Empty backup file')
-    const { localKey, nickname, privateKey, identifier } = personas[index]
-    if (!privateKey) throw new Error('Invalid private key')
-    const id = Identifier.fromString(identifier, ProfileIdentifier).unwrap('Invalid identifier')
+    if (!profileIdentifier)
+        profileIdentifier = Identifier.fromString(profiles[0].identifier, ProfileIdentifier).unwrap('Cast error')
+    const profile = profiles.find(x => x.identifier === profileIdentifier!.toText())
+    if (!profile?.linkedPersona) throw new Error('Target profile/persona not found')
+    const persona = personas.find(x => x.identifier === profile.linkedPersona)
+    if (!persona?.privateKey) throw new Error('Target persona not found')
+    const { localKey, nickname, privateKey, linkedProfiles } = persona
     return ([
-        '2',
-        id.network,
-        id.userId,
+        '1',
+        profileIdentifier.network,
+        profileIdentifier.userId,
         nickname,
         localKey?.k ||
-            profiles.filter(x => x.linkedPersona === identifier).filter(x => x.localKey)[0]?.localKey?.k ||
+            profiles.filter(x => x.linkedPersona === profileIdentifier!.toText()).filter(x => x.localKey)[0]?.localKey
+                ?.k ||
             '',
         compressSecp256k1Key(privateKey, 'private'),
         grantedHostPermissions.join(';'),
@@ -48,7 +52,7 @@ export function decompressBackupFile(short: string): BackupJSONFileLatest {
         '🤔',
     ) as BackupJSONFileLatestShort
 
-    if (version !== '2') throw new Error(`QR Code cannot be shared between different version of Maskbook`)
+    if (version !== '1') throw new Error(`QR Code cannot be shared between different version of Maskbook`)
 
     const localKeyJWK: JsonWebKey = {
         alg: 'A256GCM',
