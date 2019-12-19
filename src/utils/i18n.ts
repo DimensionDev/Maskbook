@@ -1,6 +1,5 @@
 import en from '../_locales/en/messages.json'
 import zh from '../_locales/zh/messages.json'
-import React from 'react'
 import { GetContext } from '@holoflows/kit/es'
 
 export type I18NStrings = typeof en
@@ -10,6 +9,8 @@ const langs: Record<string, I18NStrings> = {
     zh,
 }
 export function useIntlListFormat() {
+    if (GetContext() === 'background') throw new Error('')
+    const React = require('react') as typeof import('react')
     const formatter = React.useMemo(() => {
         return new Intl.ListFormat({ type: 'conjunction' })
     }, [])
