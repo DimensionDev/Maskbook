@@ -1,6 +1,7 @@
 import en from '../_locales/en/messages.json'
 import zh from '../_locales/zh/messages.json'
 import { GetContext } from '@holoflows/kit/es'
+import { safeReact, safeGetActiveUI } from './safeRequire.js'
 
 export type I18NStrings = typeof en
 
@@ -9,8 +10,7 @@ const langs: Record<string, I18NStrings> = {
     zh,
 }
 export function useIntlListFormat() {
-    if (GetContext() === 'background') throw new Error('')
-    const React = require('react') as typeof import('react')
+    const React = safeReact()
     const formatter = React.useMemo(() => {
         return new Intl.ListFormat({ type: 'conjunction' })
     }, [])
@@ -41,10 +41,7 @@ if (!Intl.ListFormat) {
     }
 }
 export function geti18nString(key: keyof I18NStrings, substitutions: string | string[] = '') {
-    const uiOverwrite =
-        (GetContext() === 'content' || GetContext() === 'options'
-            ? (require('../social-network/ui') as typeof import('../social-network/ui')).getActivatedUI().i18nOverwrite
-            : {}) ?? {}
+    const uiOverwrite = GetContext() === 'background' ? {} : safeGetActiveUI().i18nOverwrite
 
     const uiLang = uiOverwrite?.[getCurrentScript()]
     const origLang = langs?.[getCurrentScript()]

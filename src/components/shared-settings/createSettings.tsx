@@ -1,11 +1,7 @@
-import { GetContext, ValueRef } from '@holoflows/kit/es'
+import { ValueRef } from '@holoflows/kit/es'
 import { useValueRef } from '../../utils/hooks/useValueRef'
 import { MessageCenter } from '../../utils/messages'
-
-// This file is share between context. prevent loading in the background.
-const { ListItem, ListItemText, ListItemSecondaryAction, Switch } = (GetContext() === 'background'
-    ? {}
-    : require('@material-ui/core')) as typeof import('@material-ui/core')
+import { safeReact, safeMUI } from '../../utils/safeRequire'
 
 interface SettingsTexts {
     primary: string
@@ -64,8 +60,9 @@ export function createNetworkSpecificSettings<T extends browser.storage.StorageV
 }
 
 export function useSettingsUI<T>(settingsRef: ValueRef<T>) {
-    if (GetContext() === 'background') throw new TypeError('No render in background page')
-    const React = require('react') as typeof import('react')
+    // This file is share between context. prevent loading in the background.
+    const { ListItem, ListItemText, ListItemSecondaryAction, Switch } = safeMUI()
+    const React = safeReact()
     const currentValue = useValueRef(settingsRef)
     const text = texts.get(settingsRef)!
     function ui() {
