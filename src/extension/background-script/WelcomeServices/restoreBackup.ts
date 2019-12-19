@@ -5,7 +5,7 @@ import { getKeyParameter, JsonWebKeyToCryptoKey } from '../../../utils/type-tran
 import {
     attachProfileDB,
     createOrUpdatePersonaDB,
-    createOrUpdateProfile,
+    createOrUpdateProfileDB,
     consistentPersonaDBWriteAccess,
     PersonaDB,
 } from '../../../database/Persona/Persona.db'
@@ -41,7 +41,7 @@ export async function restoreBackup(json: object, whoAmI?: ProfileIdentifier): P
 
             for (const x of data.profiles) {
                 const { linkedPersona, ...record } = ProfileRecordFromJSONFormat(x, keyCache)
-                await createOrUpdateProfile(record, t)
+                await createOrUpdateProfileDB(record, t)
                 if (linkedPersona) {
                     await attachProfileDB(record.identifier, linkedPersona, { connectionConfirmState: 'confirmed' }, t)
                 }
