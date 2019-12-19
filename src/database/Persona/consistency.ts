@@ -26,7 +26,7 @@ export async function assertPersonaDBConsistency(
 
 async function* checkFullPersonaDBConsistency(
     checkRange: 'full check' | IdentifierMap<ProfileIdentifier | PersonaIdentifier, any>,
-    t: IDBPTransaction<PersonaDB, ['personas', 'profiles']>,
+    t: IDBPTransaction<PersonaDB, ('personas' | 'profiles')[]>,
 ): AsyncGenerator<Diagnosis, void, unknown> {
     for await (const persona of t.objectStore('personas')) {
         const personaID = Identifier.fromString(persona.key, ECKeyIdentifier)
@@ -50,7 +50,7 @@ async function* checkFullPersonaDBConsistency(
 }
 async function* checkPersonaLink(
     personaID: PersonaIdentifier,
-    t: IDBPTransaction<PersonaDB, ['personas', 'profiles']>,
+    t: IDBPTransaction<PersonaDB, ('personas' | 'profiles')[]>,
 ): AsyncGenerator<Diagnosis, void, unknown> {
     const rec = await t.objectStore('personas').get(personaID.toText())
     const linkedProfiles = rec?.linkedProfiles
@@ -74,7 +74,7 @@ async function* checkPersonaLink(
 }
 async function* checkProfileLink(
     profile: ProfileIdentifier,
-    t: IDBPTransaction<PersonaDB, ['personas', 'profiles']>,
+    t: IDBPTransaction<PersonaDB, ('personas' | 'profiles')[]>,
 ): AsyncGenerator<Diagnosis, void, unknown> {
     const rec = await t.objectStore('profiles').get(profile.toText())
     const linkedPersona = rec?.linkedPersona
