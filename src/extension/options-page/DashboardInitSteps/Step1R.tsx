@@ -35,6 +35,25 @@ const useStyles = makeStyles(theme =>
             boxShadow: 'none',
             marginBottom: theme.spacing(1),
         },
+        restoreTextWrapper: {
+            display: 'flex',
+            flexDirection: 'column',
+            height: '100%',
+        },
+        restoreInputBase: {
+            width: '100%',
+            flex: 1,
+            display: 'flex',
+            overflow: 'auto',
+            border: `1px solid ${theme.palette.divider}`,
+            '& > textarea': {
+                height: '100% !important',
+            },
+        },
+        restoreActionButton: {
+            alignSelf: 'flex-end',
+            marginTop: theme.spacing(1),
+        },
     }),
 )
 
@@ -70,28 +89,33 @@ export default function InitStep1R() {
     const [restoreState, setRestoreState] = React.useState<'success' | Error | null>(null)
     const [requiredPermissions, setRequiredPermissions] = React.useState<string[] | null>(null)
     const history = useHistory()
+
+    const resolveFileInput = async (str: string) => {
+        try {
+            const json = UpgradeBackupJSONFile(decompressBackupFile(str))
+            if (!json) throw new Error('UpgradeBackupJSONFile failed')
+            setJson(json)
+            const permissions = await extraPermissions(json.grantedHostPermissions)
+            if (!permissions)
+                return await Services.Welcome.restoreBackup(json).then(() =>
+                    history.push(
+                        `${InitStep.Restore2}?personas=${json.personas?.length}&profiles=${json.profiles?.length}&posts=${json.posts?.length}&contacts=${json.userGroups?.length}&date=${json._meta_?.createdAt}`,
+                    ),
+                )
+            setRequiredPermissions(permissions)
+            setRestoreState('success')
+        } catch (e) {
+            console.error(e)
+            setRestoreState(e)
+        }
+    }
+
     const { dragEvents, fileReceiver, fileRef, dragStatus } = useDragAndDrop(file => {
         const fr = new FileReader()
         fr.readAsText(file)
         fr.addEventListener('loadend', async () => {
             const str = fr.result as string
-            try {
-                const json = UpgradeBackupJSONFile(decompressBackupFile(str))
-                if (!json) throw new Error('UpgradeBackupJSONFile failed')
-                setJson(json)
-                const permissions = await extraPermissions(json.grantedHostPermissions)
-                if (!permissions)
-                    return await Services.Welcome.restoreBackup(json).then(() =>
-                        history.push(
-                            `${InitStep.Restore2}?personas=${json.personas?.length}&profiles=${json.profiles?.length}&posts=${json.posts?.length}&contacts=${json.userGroups?.length}&date=${json._meta_?.createdAt}`,
-                        ),
-                    )
-                setRequiredPermissions(permissions)
-                setRestoreState('success')
-            } catch (e) {
-                console.error(e)
-                setRestoreState(e)
-            }
+            resolveFileInput(str)
         })
     })
 
@@ -104,16 +128,27 @@ export default function InitStep1R() {
                 p: 0,
             },
             {
-                // FIXME:
                 label: 'TEXT',
                 component: (
-                    <InputBase
-                        style={{ width: '100%', height: '100%', display: 'flex', overflow: 'auto' }}
-                        inputRef={(input: HTMLInputElement) => input && input.focus()}
-                        multiline
-                        value={textValue}
-                        onChange={e => setTextValue(e.target.value)}></InputBase>
+                    <div className={classes.restoreTextWrapper}>
+                        <InputBase
+                            placeholder={geti18nString('dashboard_paste_database_backup_hint')}
+                            className={classes.restoreInputBase}
+                            inputRef={(input: HTMLInputElement) => input && input.focus()}
+                            multiline
+                            value={textValue}
+                            onChange={e => setTextValue(e.target.value)}></InputBase>
+                        <ActionButton
+                            className={classes.restoreActionButton}
+                            width={140}
+                            variant="contained"
+                            onClick={() => resolveFileInput(textValue)}
+                            color="primary">
+                            {geti18nString('restore')}
+                        </ActionButton>
+                    </div>
                 ),
+                p: 1,
             },
         ],
         state,
