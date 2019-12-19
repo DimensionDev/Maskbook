@@ -64,10 +64,11 @@ export function createNetworkSpecificSettings<T extends browser.storage.StorageV
 }
 
 export function useSettingsUI<T>(settingsRef: ValueRef<T>) {
+    if (GetContext() === 'background') throw new TypeError('No render in background page')
+    const React = require('react') as typeof import('react')
     const currentValue = useValueRef(settingsRef)
     const text = texts.get(settingsRef)!
     function ui() {
-        if (GetContext() === 'background') throw new TypeError('No render in background page')
         switch (typeof currentValue) {
             case 'boolean':
                 const ref = (settingsRef as ValueRef<unknown>) as ValueRef<boolean>
