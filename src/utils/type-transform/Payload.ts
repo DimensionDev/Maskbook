@@ -3,6 +3,7 @@ import { SocialNetworkWorkerAndUI } from '../../social-network/shared'
 import { isNil } from 'lodash-es'
 import { definedSocialNetworkWorkers } from '../../social-network/worker'
 import { GetContext } from '@holoflows/kit/es'
+import { safeGetActiveUI } from '../safeRequire'
 
 export type Payload = PayloadAlpha40_Or_Alpha39 | PayloadAlpha38
 export type PayloadLatest = PayloadAlpha38
@@ -91,10 +92,7 @@ export function deconstructPayload(str: string, decoder: Decoder, throws: boolea
     const decoders = (() => {
         if (isNil(decoder)) {
             if (GetContext() === 'content') {
-                const {
-                    getActivatedUI,
-                } = require('../../social-network/ui') as typeof import('../../social-network/ui')
-                return [getActivatedUI().payloadDecoder]
+                return [safeGetActiveUI().payloadDecoder]
             }
             return Array.from(definedSocialNetworkWorkers).map(x => x.payloadDecoder)
         }

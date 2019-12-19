@@ -1,13 +1,12 @@
-import { AutomatedTabTask, GetContext } from '@holoflows/kit'
+import { AutomatedTabTask } from '@holoflows/kit'
 import { ProfileIdentifier } from '../../database/type'
 import { disableOpenNewTabInBackgroundSettings } from '../../components/shared-settings/settings'
 import { SocialNetworkUI } from '../../social-network/ui'
 import { memoizePromise } from '../../utils/memoize'
+import { safeGetActiveUI } from '../../utils/safeRequire'
 
 function getActivatedUI() {
-    if (GetContext() !== 'background')
-        return (require('../../social-network/ui') as typeof import('../../social-network/ui')).getActivatedUI()
-    else throw new TypeError('Run in wrong context')
+    return safeGetActiveUI()
 }
 
 const tasks = AutomatedTabTask(

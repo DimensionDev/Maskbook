@@ -1,7 +1,8 @@
 import { ValueRef } from '@holoflows/kit/es'
+import { safeReact } from '../safeRequire'
 
 export function useValueRef<T>(ref: ValueRef<T>) {
-    const { useState, useEffect } = require('react') as typeof import('react')
+    const { useState, useEffect } = safeReact()
 
     const [value, setValue] = useState<T>(ref.value)
     useEffect(() => {
