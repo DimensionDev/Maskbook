@@ -113,7 +113,7 @@ export async function deletePersona(id: PersonaIdentifier, confirm: 'delete even
 }
 
 export async function renamePersona(identifier: PersonaIdentifier, nickname: string) {
-    return consistentPersonaDBWriteAccess(t => updatePersonaDB({ identifier, nickname }, t as any))
+    return consistentPersonaDBWriteAccess(t => updatePersonaDB({ identifier, nickname }, 'merge', t as any))
 }
 export async function queryPersonaByProfile(i: ProfileIdentifier) {
     return (await queryProfile(i)).linkedPersona
