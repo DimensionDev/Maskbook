@@ -15,7 +15,6 @@ import { PostRecordFromJSONFormat } from '../../../utils/type-transform/BackupFo
 import { createOrUpdatePostDB } from '../../../database/post'
 import { GroupRecordFromJSONFormat } from '../../../utils/type-transform/BackupFormat/JSON/DBRecord-JSON/GroupRecord'
 import { createOrUpdateUserGroupDatabase } from '../../../database/group'
-import { assertPersonaDBConsistency } from '../../../database/Persona/consistency'
 import { IDBPTransaction } from 'idb'
 
 /**

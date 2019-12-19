@@ -8,20 +8,53 @@ export async function assertPersonaDBConsistency(
     behavior: 'fix' | 'throw',
     ...[checkRange, t]: Parameters<typeof checkFullPersonaDBConsistency>
 ): Promise<Diagnosis[]> {
-    // TODO: implement this
-    if (behavior === 'fix') throw new Error('Not implemented')
     const diag: Diagnosis[] = []
     for await (const w of checkFullPersonaDBConsistency(checkRange, t)) {
         diag.push(w)
     }
     if (diag.length) {
+        const warn = `PersonaDB is in the inconsistency state`
+        console.warn(warn)
         console.info(await t.objectStore('personas').getAll())
         console.info(await t.objectStore('profiles').getAll())
         console.error(...diag)
-        t.abort()
-        throw new Error(`PersonaDB is in the inconsistency state`)
+        if (behavior === 'throw') {
+            t.abort()
+            throw new Error(warn)
+        } else if (t.mode === 'readwrite') {
+            console.warn('Try to fix the inconsistent db')
+            for (const each of diag) await fixDBInconsistency(each, t).catch(() => {})
+        }
     }
     return diag
+}
+async function fixDBInconsistency(diagnosis: Diagnosis, t: IDBPTransaction<PersonaDB, ('personas' | 'profiles')[]>) {
+    const personas = t.objectStore('personas')
+    const profiles = t.objectStore('profiles')
+    switch (diagnosis.type) {
+        case Type.Invalid_Persona:
+            return personas.delete(diagnosis.invalidPersonaKey)
+        case Type.Invalid_Profile:
+            return profiles.delete(diagnosis.invalidProfileKey)
+        case Type.One_Way_Link_In_Persona:
+        case Type.Invalid_Persona_LinkedProfiles: {
+            const rec = await personas.get(diagnosis.persona.toText())
+            const profileWantToUnlink =
+                diagnosis.type === Type.One_Way_Link_In_Persona
+                    ? diagnosis.designatedProfile.toText()
+                    : diagnosis.invalidProfile
+            rec!.linkedProfiles.delete(profileWantToUnlink)
+            return personas.put(rec!)
+        }
+        case Type.One_Way_Link_In_Profile:
+        case Type.Invalid_Profile_LinkedPersona: {
+            const rec = await profiles.get(diagnosis.profile.toText())
+            delete rec!.linkedPersona
+            return profiles.put(rec!)
+        }
+        default:
+            const _never: never = diagnosis
+    }
 }
 
 async function* checkFullPersonaDBConsistency(
@@ -31,7 +64,7 @@ async function* checkFullPersonaDBConsistency(
     for await (const persona of t.objectStore('personas')) {
         const personaID = Identifier.fromString(persona.key, ECKeyIdentifier)
         if (!personaID.value) {
-            yield { type: Type.Invalid_Persona, key: persona.key, value: persona.value }
+            yield { type: Type.Invalid_Persona, invalidPersonaKey: persona.key, _record: persona.value }
             continue
         }
         if (checkRange === 'full check' || checkRange.has(personaID.value)) {
@@ -42,7 +75,7 @@ async function* checkFullPersonaDBConsistency(
     for await (const profile of t.objectStore('profiles')) {
         const profileID = Identifier.fromString(profile.key, ProfileIdentifier)
         if (!profileID.value) {
-            yield { type: Type.Invalid_Profile, key: profile.key, value: profile.value }
+            yield { type: Type.Invalid_Profile, invalidProfileKey: profile.key, _record: profile.value }
         } else if (checkRange === 'full check' || checkRange.has(profileID.value)) {
             yield* checkProfileLink(profileID.value, t)
         }
@@ -58,7 +91,7 @@ async function* checkPersonaLink(
     for (const each of linkedProfiles) {
         const profileID = Identifier.fromString(each[0], ProfileIdentifier)
         if (!profileID.value) {
-            yield { type: Type.Invalid_Persona_LinkedProfiles, key: each[0], of: personaID }
+            yield { type: Type.Invalid_Persona_LinkedProfiles, invalidProfile: each[0], persona: personaID }
             continue
         }
         const profile = await t.objectStore('profiles').get(profileID.value.toText())
@@ -66,8 +99,8 @@ async function* checkPersonaLink(
             yield {
                 type: Type.One_Way_Link_In_Persona,
                 persona: personaID,
-                profile: profileID.value,
-                profileLined: profile?.linkedPersona,
+                designatedProfile: profileID.value,
+                profileActuallyLinkedPersona: profile?.linkedPersona,
             }
         }
     }
@@ -77,16 +110,16 @@ async function* checkProfileLink(
     t: IDBPTransaction<PersonaDB, ('personas' | 'profiles')[]>,
 ): AsyncGenerator<Diagnosis, void, unknown> {
     const rec = await t.objectStore('profiles').get(profile.toText())
-    const linkedPersona = rec?.linkedPersona
-    if (!linkedPersona) return
-    if (linkedPersona.type !== 'ec_key') {
-        yield { type: Type.Invalid_Profile_LinkedPersona, key: linkedPersona }
+    const invalidLinkedPersona = rec?.linkedPersona
+    if (!invalidLinkedPersona) return
+    if (invalidLinkedPersona.type !== 'ec_key') {
+        yield { type: Type.Invalid_Profile_LinkedPersona, invalidLinkedPersona, profile }
         return
     }
-    const personaID = restorePrototype(linkedPersona, ECKeyIdentifier.prototype)
-    const persona = await t.objectStore('personas').get(personaID.toText())
+    const designatedPersona = restorePrototype(invalidLinkedPersona, ECKeyIdentifier.prototype)
+    const persona = await t.objectStore('personas').get(designatedPersona.toText())
     if (!persona) {
-        yield { type: Type.One_Way_Link_In_Profile, profileLinked: personaID }
+        yield { type: Type.One_Way_Link_In_Profile, profile: profile, designatedPersona }
     }
 }
 
@@ -101,30 +134,32 @@ const enum Type {
 type Diagnosis =
     | {
           type: Type.Invalid_Persona
-          key: string
-          value: unknown
+          invalidPersonaKey: string
+          _record: unknown
       }
     | {
           type: Type.Invalid_Persona_LinkedProfiles
-          of: PersonaIdentifier
-          key: string
+          persona: PersonaIdentifier
+          invalidProfile: string
       }
     | {
           type: Type.Invalid_Profile
-          key: string
-          value: unknown
+          invalidProfileKey: string
+          _record: unknown
       }
     | {
           type: Type.Invalid_Profile_LinkedPersona
-          key: unknown
+          profile: ProfileIdentifier
+          invalidLinkedPersona: unknown
       }
     | {
           type: Type.One_Way_Link_In_Persona
           persona: PersonaIdentifier
-          profile: ProfileIdentifier
-          profileLined?: unknown
+          designatedProfile: ProfileIdentifier
+          profileActuallyLinkedPersona?: unknown
       }
     | {
           type: Type.One_Way_Link_In_Profile
-          profileLinked: PersonaIdentifier
+          profile: ProfileIdentifier
+          designatedPersona: PersonaIdentifier
       }

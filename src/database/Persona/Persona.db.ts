@@ -2,7 +2,7 @@
 
 import { OnlyRunInContext } from '@holoflows/kit/es'
 import { ProfileIdentifier, PersonaIdentifier, Identifier, ECKeyIdentifier } from '../type'
-import { DBSchema, openDB, IDBPTransaction } from 'idb/with-async-ittr'
+import { DBSchema, openDB, IDBPTransaction, IDBPObjectStore } from 'idb/with-async-ittr'
 import { IdentifierMap } from '../IdentifierMap'
 import { PrototypeLess, restorePrototype } from '../../utils/type'
 import { MessageCenter } from '../../utils/messages'
@@ -43,11 +43,14 @@ const db = createDBAccess(() => {
 type FullTransaction = IDBPTransaction<PersonaDB, ('personas' | 'profiles')[]>
 type ProfileTransaction = IDBPTransaction<PersonaDB, ['profiles']>
 type PersonaTransaction = IDBPTransaction<PersonaDB, ['personas']>
-export async function consistentPersonaDBWriteAccess(action: (t: FullTransaction) => Promise<void>) {
+export async function consistentPersonaDBWriteAccess(
+    action: (t: FullTransaction) => Promise<void>,
+    tryToAutoFix = true,
+) {
     // TODO: collect all changes on this transaction then only perform consistency check on those records.
     const t = (await db()).transaction(['personas', 'profiles'], 'readwrite')
     await action(t)
-    await assertPersonaDBConsistency('throw', 'full check', t)
+    await assertPersonaDBConsistency(tryToAutoFix ? 'fix' : 'throw', 'full check', t)
 }
 
 //#region Plain methods
