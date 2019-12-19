@@ -1,8 +1,11 @@
-import React from 'react'
-import { ValueRef } from '@holoflows/kit/es'
-import { MessageCenter } from '../../utils/messages'
-import { ListItem, ListItemText, ListItemSecondaryAction, Switch } from '@material-ui/core'
+import { GetContext, ValueRef } from '@holoflows/kit/es'
 import { useValueRef } from '../../utils/hooks/useValueRef'
+import { MessageCenter } from '../../utils/messages'
+
+// This file is share between context. prevent loading in the background.
+const { ListItem, ListItemText, ListItemSecondaryAction, Switch } = (GetContext() === 'background'
+    ? {}
+    : require('@material-ui/core')) as typeof import('@material-ui/core')
 
 interface SettingsTexts {
     primary: string
@@ -64,6 +67,7 @@ export function useSettingsUI<T>(settingsRef: ValueRef<T>) {
     const currentValue = useValueRef(settingsRef)
     const text = texts.get(settingsRef)!
     function ui() {
+        if (GetContext() === 'background') throw new TypeError('No render in background page')
         switch (typeof currentValue) {
             case 'boolean':
                 const ref = (settingsRef as ValueRef<unknown>) as ValueRef<boolean>
