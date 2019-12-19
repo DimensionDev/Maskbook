@@ -298,7 +298,7 @@ export async function attachProfileDB(
     const persona = await queryPersonaDB(attachTo, t as any)
     if (!persona || !profile) return
 
-    if (profile.linkedPersona !== undefined && profile.linkedPersona.equals(attachTo)) {
+    if (profile.linkedPersona !== undefined && !profile.linkedPersona.equals(attachTo)) {
         await detachProfileDB(identifier, t)
     }
 
