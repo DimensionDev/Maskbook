@@ -20,6 +20,7 @@ globalThis.Event = class {
 }
 globalThis.Worker = class {}
 globalThis.webpackEnv = {}
+globalThis.localStorage = {}
 
 const { join } = require('path')
 const { writeFileSync, readFileSync } = require('fs')
