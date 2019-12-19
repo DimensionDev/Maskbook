@@ -2,7 +2,18 @@ import React from 'react'
 import qr from 'qrcode'
 import { useRef, useEffect } from 'react'
 
-const cache = new Map()
+const cache = new Proxy(localStorage, {
+    get(t, p: 'get' | 'set') {
+        return {
+            get(key: string) {
+                return t.getItem(`qrcode:${key}`)
+            },
+            set(key: string, value: string) {
+                return t.setItem(`qrcode:${key}`, value)
+            },
+        }[p]
+    },
+})
 
 export function QrCode(props: {
     text: string
