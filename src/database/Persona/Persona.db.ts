@@ -269,12 +269,12 @@ export async function detachProfileDB(identifier: ProfileIdentifier, t?: FullTra
     persona?.linkedProfiles.delete(identifier)
 
     if (persona) {
-        if (await safeDeletePersonaDB(linkedPersona, t as any)) {
-            // persona deleted
-        } else {
-            // update persona
-            await updatePersonaDB(persona, 'replace', t as any)
-        }
+        // if (await safeDeletePersonaDB(linkedPersona, t as any)) {
+        // persona deleted
+        // } else {
+        // update persona
+        await updatePersonaDB(persona, 'replace', t as any)
+        // }
     }
     // update profile
     delete profile.linkedPersona
