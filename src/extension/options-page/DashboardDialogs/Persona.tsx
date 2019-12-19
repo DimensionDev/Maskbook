@@ -154,17 +154,13 @@ export function PersonaBackupDialog(props: PersonaBackupDialogProps) {
     const [base64Value, setBase64Value] = useState(geti18nString('not_available'))
     const [compressedQRString, setCompressedQRString] = useState<string | null>(null)
     useEffect(() => {
-        Services.Welcome.createBackupFile({ download: false, onlyBackupWhoAmI: false }).then(file => {
-            const target = file.personas.find(p => p.identifier === persona.identifier.toText())!
-            const value = {
-                ...file,
-                posts: [],
-                profiles: file.profiles.filter(p => p.linkedPersona === persona.identifier.toText()),
-                userGroups: [],
-                personas: [target],
-            }
-            setBase64Value(btoa(JSON.stringify(value)))
-            setCompressedQRString(compressBackupFile(value))
+        Services.Welcome.generateBackupJSON({
+            noPosts: true,
+            noUserGroups: true,
+            filter: { type: 'persona', wanted: [persona.identifier] },
+        }).then(file => {
+            setBase64Value(btoa(JSON.stringify(file)))
+            setCompressedQRString(compressBackupFile(file))
         })
     }, [persona.identifier])
 
