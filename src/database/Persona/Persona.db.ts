@@ -134,7 +134,9 @@ export async function updatePersonaDB(
     let nextLinkedProfiles = old.linkedProfiles
     if (record.linkedProfiles) {
         if (linkedProfilesMerge === 'merge')
-            new IdentifierMap(new Map([...nextLinkedProfiles.__raw_map__, ...record.linkedProfiles.__raw_map__]))
+            nextLinkedProfiles = new IdentifierMap(
+                new Map([...nextLinkedProfiles.__raw_map__, ...record.linkedProfiles.__raw_map__]),
+            )
         else nextLinkedProfiles = record.linkedProfiles
     }
     const next: PersonaRecordDb = personaRecordToDB({
