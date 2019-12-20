@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { Box, Card, Typography, Button } from '@material-ui/core'
 import { geti18nString } from '../../utils/i18n'
-import { makeStyles } from '@material-ui/styles'
+import { makeStyles } from '@material-ui/core/styles'
 import { useStylesExtends, or } from '../custom-ui-helper'
 import { useMyIdentities } from '../DataSource/useActivatedUI'
 import { Profile } from '../../database'
@@ -11,15 +11,24 @@ import { useAsync } from '../../utils/components/AsyncComponent'
 import { BannerProps } from '../Welcomes/Banner'
 import { NotSetupYetPrompt } from '../shared/NotSetupYetPrompt'
 
-const useStyles = makeStyles({
+const useStyles = makeStyles(theme => ({
     root: {},
     content: {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
         padding: '16px 12px',
+        [theme.breakpoints.down('sm')]: {
+            '&': {
+                lineHeight: 21,
+                padding: '10px 14px !important',
+            },
+        },
     },
-})
+    button: {
+        whiteSpace: 'nowrap',
+    },
+}))
 
 export interface PostDialogHintUIProps
     extends withClasses<KeysInferFromUseStyles<typeof useStyles> | 'title' | 'button'> {
