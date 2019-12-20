@@ -22,7 +22,7 @@ const useStyles = makeStyles({
         cursor: 'pointer',
     },
     icon: {
-        backgroundColor: 'transparent',
+        backgroundColor: 'transparent !important',
     },
 })
 
