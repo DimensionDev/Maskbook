@@ -1,6 +1,6 @@
 import { LiveSelector } from '@holoflows/kit'
 import { regexMatch } from '../../../utils/utils'
-import { postBoxInPopup } from './postBox'
+import { isCompose, isMobile } from './postBox'
 
 type E = HTMLElement
 
@@ -15,8 +15,11 @@ const querySelectorAll = <T extends E>(selector: string) => {
     return new LiveSelector().querySelectorAll<T>(selector)
 }
 
-const createPostEditorSelector = () =>
-    postBoxInPopup() ? '[aria-labelledby="modal-header"]' : '[role="main"] :not(aside) > [role="progressbar"] ~ div'
+const createPostEditorSelector = (selector: string = '') =>
+    [
+        `[aria-labelledby="modal-header"] ${selector}`.trim(), // for popup
+        `[role="main"] :not(aside) > [role="progressbar"] ~ div ${selector}`.trim(), // for timeline
+    ].join()
 
 export const rootSelector: () => LiveSelector<E, true> = () => querySelector<E>('#react-root')
 
@@ -26,10 +29,12 @@ export const postEditorInPopupSelector: () => LiveSelector<E, true> = () =>
 export const postEditorInTimelineSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('[role="main"] :not(aside) > [role="progressbar"] ~ div')
 export const postEditorDraftSelector = () =>
-    querySelector<HTMLDivElement>(`${createPostEditorSelector()} .DraftEditor-root`)
-export const postEditorDraftContentSelector = () =>
-    querySelector<E>(`${createPostEditorSelector()} .public-DraftEditor-content`)
-
+    querySelector<HTMLDivElement>(
+        [
+            createPostEditorSelector('.DraftEditor-root'), // for desktop version
+            createPostEditorSelector('textarea[aria-label="Tweet text"]'), // for mobile version
+        ].join(),
+    )
 export const newPostButtonSelector = () => querySelector<E>('[data-testid="SideNav_NewTweet_Button"]')
 
 export const profileEditorButtonSelector = () =>
