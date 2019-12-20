@@ -59,9 +59,11 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
     const currentIdentity = useCurrentIdentity()
     const itemsForRender = props.ignoreMyself
         ? props.items.filter(
-              x => !x.identifier.equals(currentIdentity ? currentIdentity.identifier : ProfileIdentifier.unknown),
+              x =>
+                  x?.linkedPersona?.fingerprint &&
+                  !x.identifier.equals(currentIdentity ? currentIdentity.identifier : ProfileIdentifier.unknown),
           )
-        : props.items
+        : props.items.filter(x => x.linkedPersona?.fingerprint)
 
     return (
         <div ref={rootRef}>

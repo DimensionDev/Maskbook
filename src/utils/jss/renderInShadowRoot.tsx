@@ -30,7 +30,7 @@ const generateClassName = createGenerateClassName()
 export class RenderInShadowRootWrapper extends React.PureComponent {
     state: { error?: Error } = { error: undefined }
     render() {
-        if (this.state.error) return this.state.error.message
+        if (this.state.error) return <pre style={{ whiteSpace: 'break-spaces' }}>{this.state.error.message}</pre>
         return <Maskbook children={this.props.children} />
     }
     componentDidCatch(error: Error) {

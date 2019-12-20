@@ -9,7 +9,7 @@ export interface AddToKeyStoreProps {
     provePost: string
     postBy: ProfileIdentifier
     completeComponentProps?: Partial<SuccessProps>
-    completeComponent?: React.ComponentType
+    completeComponent?: React.ComponentType<{ data: boolean }>
     waitingComponentProps?: Partial<WaitingProps>
     waitingComponent?: React.ComponentType
     failedComponentProps?: Partial<FailedProps>
