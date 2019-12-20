@@ -13,7 +13,7 @@ import {
     DialogActions,
 } from '@material-ui/core'
 import CloseIcon from '@material-ui/icons/Close'
-import { geti18nString, I18NStrings } from '../../utils/i18n'
+import { geti18nString } from '../../utils/i18n'
 import { MessageCenter, CompositionEvent } from '../../utils/messages'
 import { useCapturedInput } from '../../utils/hooks/useCapturedEvents'
 import { useStylesExtends, or } from '../custom-ui-helper'
@@ -25,7 +25,7 @@ import { getActivatedUI } from '../../social-network/ui'
 import Services from '../../extension/service'
 import { SelectRecipientsUI, SelectRecipientsUIProps } from '../shared/SelectRecipients/SelectRecipients'
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles({
     MUIInputRoot: {
         minHeight: 108,
         flexDirection: 'column',
@@ -33,12 +33,13 @@ const useStyles = makeStyles(theme => ({
         boxSizing: 'border-box',
     },
     MUIInputInput: {
+        fontSize: 18,
         minHeight: '8em',
     },
     title: {
         marginLeft: 6,
     },
-}))
+})
 const ResponsiveDialog = withMobileDialog({ breakpoint: 'xs' })(Dialog)
 
 export interface PostDialogUIProps
@@ -47,6 +48,7 @@ export interface PostDialogUIProps
         | 'dialog'
         | 'backdrop'
         | 'paper'
+        | 'input'
         | 'header'
         | 'content'
         | 'actions'
@@ -106,6 +108,7 @@ export function PostDialogUI(props: PostDialogUIProps) {
                             root: classes.MUIInputRoot,
                             input: classes.MUIInputInput,
                         }}
+                        inputProps={{ className: classes.input }}
                         autoFocus
                         value={props.postBoxText}
                         inputRef={inputRef}

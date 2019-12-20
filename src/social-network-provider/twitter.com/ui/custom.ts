@@ -29,6 +29,9 @@ export function useTheme() {
                         dark: toRGB(shade(primaryColorRGB, -10)),
                     },
                 },
+                breakpoints: {
+                    values: { xs: 0, sm: 688, md: 1024, lg: 1280, xl: 1920 },
+                },
             }),
         )
     }, [primaryColor, backgroundColor])
