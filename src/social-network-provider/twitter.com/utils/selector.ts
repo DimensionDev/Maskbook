@@ -29,7 +29,7 @@ export const postEditorInPopupSelector: () => LiveSelector<E, true> = () =>
 export const postEditorInTimelineSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('[role="main"] :not(aside) > [role="progressbar"] ~ div')
 export const postEditorDraftSelector = () =>
-    querySelector<HTMLDivElement>(
+    querySelector<HTMLDivElement | HTMLTextAreaElement>(
         [
             createPostEditorSelector('.DraftEditor-root'), // for desktop version
             createPostEditorSelector('textarea[aria-label="Tweet text"]'), // for mobile version
