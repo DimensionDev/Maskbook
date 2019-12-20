@@ -12,13 +12,13 @@ import {
     DialogContent,
     DialogActions,
 } from '@material-ui/core'
-import { useStylesExtends, or } from '../../custom-ui-helper'
+import { useStylesExtends } from '../../custom-ui-helper'
 import { geti18nString } from '../../../utils/i18n'
-import CloseIcon from '@material-ui/icons/Close'
 import { ProfileInList } from './ProfileInList'
 import { Profile } from '../../../database'
 import { useCurrentIdentity } from '../../DataSource/useActivatedUI'
 import { ProfileIdentifier } from '../../../database/type'
+import { DialogDismissIconUI } from '../../InjectedComponents/DialogDismissIcon'
 
 const useStyles = makeStyles(theme => ({
     content: {
@@ -89,7 +89,7 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
                         classes={{ root: classes.close }}
                         aria-label={geti18nString('select_specific_friends_dialog__dismiss_aria')}
                         onClick={props.onClose}>
-                        <CloseIcon />
+                        <DialogDismissIconUI />
                     </IconButton>
                     <Typography className={classes.title} display="inline" variant="inherit">
                         {geti18nString('select_specific_friends_dialog__title')}

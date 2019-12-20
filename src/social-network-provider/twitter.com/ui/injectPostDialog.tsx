@@ -6,8 +6,9 @@ import { PostDialog } from '../../../components/InjectedComponents/PostDialog'
 import { useTwitterButton, useTwitterCloseButton, useTwitterDialog } from '../utils/theme'
 import { makeStyles } from '@material-ui/styles'
 import { postEditorInPopupSelector, rootSelector } from '../utils/selector'
+import { Theme } from '@material-ui/core'
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme: Theme) => ({
     MUIInputInput: {
         border: 'none',
         borderRadius: 5,
@@ -21,8 +22,13 @@ const useStyles = makeStyles({
         '&:focus::placeholder': {
             color: '#bdc1c9',
         },
+        [`@media (max-width: ${theme.breakpoints.width('sm')}px)`]: {
+            '&::placeholder': {
+                color: '#657786 !important',
+            },
+        },
     },
-})
+}))
 
 export function injectPostDialogAtTwitter() {
     if (location.hostname.indexOf(twitterUrl.hostIdentifier) === -1) return
