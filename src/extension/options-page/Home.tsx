@@ -76,7 +76,6 @@ export default function DashboardHomePage() {
     const match = useRouteMatch()!
 
     const exportData = () => {
-        // FIXME:
         setExportLoading(true)
         Services.Welcome.createBackupFile({
             download: true,
