@@ -26,23 +26,33 @@ export function injectPostDialogHintAtTwitter() {
     renderInShadowRoot(<PostDialogHintAtTwitter />, watcher.firstDOMProxy.afterShadow)
 }
 
-const useStyles = makeStyles((theme: Theme) => {
-    const { type, grey } = theme.palette
-    return {
-        root: {
-            borderTopLeftRadius: 0,
-            borderTopRightRadius: 0,
+const useStyles = makeStyles((theme: Theme) => ({
+    root: {
+        borderTopLeftRadius: 0,
+        borderTopRightRadius: 0,
+        [`@media (max-width: ${theme.breakpoints.width('sm')}px)`]: {
+            borderRadius: '0 !important',
         },
-        content: {
-            borderTop: `1px solid ${type === 'dark' ? grey[800] : grey[200]}`,
-            padding: '16px 17px 16px 15px',
+    },
+    content: {
+        borderTop: `1px solid ${theme.palette.type === 'dark' ? '#2f3336' : '#e6ecf0'}`,
+        padding: '16px 17px 16px 15px',
+        [`@media (max-width: ${theme.breakpoints.width('sm')}px)`]: {
+            '&': {
+                maxWidth: 600,
+                margin: '0 auto',
+                borderTop: 'none',
+                lineHeight: 21,
+                padding: '10px 14px !important',
+            },
         },
-        title: {
-            fontSize: 15,
-            fontWeight: 'bold',
-        },
-    }
-})
+    },
+    title: {
+        fontSize: 15,
+        fontWeight: 'bold',
+    },
+}))
+
 function PostDialogHintAtTwitter() {
     const classes = {
         ...useStyles(),

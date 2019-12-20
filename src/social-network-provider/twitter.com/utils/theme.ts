@@ -1,6 +1,5 @@
 import { makeStyles } from '@material-ui/styles'
 import { Theme } from '@material-ui/core'
-import { lighten } from '@material-ui/core/styles'
 
 export const useTwitterButton = makeStyles((theme: Theme) => ({
     button: {
@@ -19,6 +18,13 @@ export const useTwitterButton = makeStyles((theme: Theme) => ({
             color: 'rgb(255, 255, 255)',
             backgroundColor: theme.palette.primary.light,
         },
+        [`@media (max-width: ${theme.breakpoints.width('sm')}px)`]: {
+            '&': {
+                height: '28px !important',
+                minHeight: 'auto !important',
+                padding: '0 14px !important',
+            },
+        },
     },
 }))
 
@@ -27,14 +33,12 @@ export const useTwitterCloseButton = makeStyles((theme: Theme) => ({
         color: theme.palette.primary.main,
         padding: 7,
         '&:hover': {
-            backgroundColor: lighten(theme.palette.primary.main, 0.9),
+            backgroundColor: 'rgba(29, 161, 242, 0.1)',
         },
     },
 }))
 
 export const useTwitterDialog = makeStyles((theme: Theme) => {
-    const { type, grey } = theme.palette
-    const borderColor = type === 'dark' ? grey[800] : grey[200]
     return {
         MUIInputInput: {
             borderStyle: 'none',
@@ -43,19 +47,60 @@ export const useTwitterDialog = makeStyles((theme: Theme) => {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-        },
-        backdrop: {
-            backgroundColor: `${type === 'dark' ? 'rgba(110, 118, 125, 0.3)' : 'rgba(0, 0, 0, 0.3)'} !important`,
+            [`@media (max-width: ${theme.breakpoints.width('sm')}px)`]: {
+                display: 'block !important',
+            },
         },
         paper: {
             borderRadius: 14,
             boxShadow: 'none',
+            [`@media (max-width: ${theme.breakpoints.width('sm')}px)`]: {
+                '&': {
+                    display: 'block !important',
+                    borderRadius: '0 !important',
+                },
+            },
+        },
+        backdrop: {
+            backgroundColor: `${
+                theme.palette.type === 'dark' ? 'rgba(110, 118, 125, 0.3)' : 'rgba(0, 0, 0, 0.3)'
+            } !important`,
         },
         header: {
             display: 'flex',
             alignItems: 'center',
             padding: '10px 15px',
-            borderBottom: `1px solid ${borderColor}`,
+            borderBottom: `1px solid ${theme.palette.type === 'dark' ? '#2f3336' : '#ccd6dd'}`,
+            [`@media (max-width: ${theme.breakpoints.width('sm')}px)`]: {
+                '&': {
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    maxWidth: 600,
+                    margin: '0 auto',
+                    padding: '7px 14px 6px !important',
+                },
+            },
+        },
+        content: {
+            [`@media (max-width: ${theme.breakpoints.width('sm')}px)`]: {
+                '&': {
+                    display: 'flex',
+                    flexDirection: 'column',
+                    maxWidth: 600,
+                    margin: '0 auto',
+                    padding: '7px 14px 6px !important',
+                },
+            },
+        },
+        actions: {
+            [`@media (max-width: ${theme.breakpoints.width('sm')}px)`]: {
+                '&': {
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    maxWidth: 600,
+                    margin: '0 auto',
+                },
+            },
         },
         title: {
             verticalAlign: 'middle',
@@ -63,17 +108,13 @@ export const useTwitterDialog = makeStyles((theme: Theme) => {
     }
 })
 
-export const useTwitterBanner = makeStyles((theme: Theme) => {
-    const { type, grey } = theme.palette
-    const borderColor = type === 'dark' ? grey[800] : grey[200]
-    return {
-        root: {
-            border: `1px none ${borderColor}`,
-            borderRadius: 0,
-            borderTopStyle: 'solid',
-        },
-        actions: {
-            padding: '0 17px',
-        },
-    }
-})
+export const useTwitterBanner = makeStyles((theme: Theme) => ({
+    root: {
+        border: 'none',
+        borderRadius: 0,
+        borderTopStyle: 'solid',
+    },
+    actions: {
+        padding: '0 17px',
+    },
+}))

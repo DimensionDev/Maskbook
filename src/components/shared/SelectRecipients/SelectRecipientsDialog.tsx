@@ -22,7 +22,7 @@ import { ProfileIdentifier } from '../../../database/type'
 
 const useStyles = makeStyles(theme => ({
     content: {
-        padding: 0,
+        padding: '0 !important',
     },
     title: {
         marginLeft: 6,

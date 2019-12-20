@@ -18,12 +18,6 @@ const useStyles = makeStyles(theme => ({
         alignItems: 'center',
         justifyContent: 'space-between',
         padding: '16px 12px',
-        [theme.breakpoints.down('sm')]: {
-            '&': {
-                lineHeight: 21,
-                padding: '10px 14px !important',
-            },
-        },
     },
     button: {
         whiteSpace: 'nowrap',
