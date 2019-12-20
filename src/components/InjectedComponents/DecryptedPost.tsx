@@ -112,7 +112,7 @@ export const DecryptPostFailed = React.memo(function DecryptPostFailed({ error, 
     return (
         <AdditionalContent
             title={geti18nString('service_decryption_failed')}
-            renderText={error && error.message}
+            renderText={error?.message}
             {...props.AdditionalContentProps}
         />
     )
