@@ -1,7 +1,7 @@
 import en from '../_locales/en/messages.json'
 import zh from '../_locales/zh/messages.json'
 import { GetContext } from '@holoflows/kit/es'
-import { safeReact, safeGetActiveUI } from './safeRequire.js'
+import { safeReact, safeGetActiveUI } from './safeRequire'
 
 export type I18NStrings = typeof en
 

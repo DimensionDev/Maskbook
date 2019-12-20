@@ -16,6 +16,6 @@ export function safeGetActiveUI() {
 }
 
 export function safeOptionsPageWorker() {
-    if (GetContext() !== 'options') throw new Error('Illegal context')
+    if (GetContext() !== 'options') return
     return require('../social-network-provider/options-page/index') as typeof import('../social-network-provider/options-page/index')
 }
