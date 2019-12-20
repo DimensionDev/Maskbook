@@ -12,7 +12,6 @@ import {
     DialogContent,
     DialogActions,
 } from '@material-ui/core'
-import CloseIcon from '@material-ui/icons/Close'
 import { geti18nString } from '../../utils/i18n'
 import { MessageCenter, CompositionEvent } from '../../utils/messages'
 import { useCapturedInput } from '../../utils/hooks/useCapturedEvents'
@@ -24,6 +23,7 @@ import { useValueRef } from '../../utils/hooks/useValueRef'
 import { getActivatedUI } from '../../social-network/ui'
 import Services from '../../extension/service'
 import { SelectRecipientsUI, SelectRecipientsUIProps } from '../shared/SelectRecipients/SelectRecipients'
+import { DialogDismissIconUI } from './DialogDismissIcon'
 
 const useStyles = makeStyles({
     MUIInputRoot: {
@@ -96,7 +96,7 @@ export function PostDialogUI(props: PostDialogUIProps) {
                         classes={{ root: classes.close }}
                         aria-label={geti18nString('post_dialog__dismiss_aria')}
                         onClick={props.onCloseButtonClicked}>
-                        <CloseIcon />
+                        <DialogDismissIconUI />
                     </IconButton>
                     <Typography className={classes.title} display="inline" variant="inherit">
                         {geti18nString('post_dialog__title')}
