@@ -2,7 +2,7 @@ import React from 'react'
 import qr from 'qrcode'
 import { useRef, useEffect } from 'react'
 
-const cache = new Proxy(localStorage, {
+const cache = new Proxy(sessionStorage, {
     get(t, p: 'get' | 'set') {
         return {
             get(key: string) {
@@ -33,5 +33,5 @@ export function QrCode(props: {
             cache.set(props.text, ref.current?.toDataURL())
         }
     }, [props.options, props.text])
-    return image ? <img src={image} {...props.canvasProps}></img> : <canvas {...props.canvasProps} ref={ref} />
+    return image ? <img src={image} {...props.canvasProps} /> : <canvas {...props.canvasProps} ref={ref} />
 }
