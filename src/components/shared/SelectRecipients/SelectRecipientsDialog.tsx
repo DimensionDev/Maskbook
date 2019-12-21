@@ -35,6 +35,7 @@ export interface SelectRecipientsDialogUIProps
         | KeysInferFromUseStyles<typeof useStyles>
         | 'dialog'
         | 'backdrop'
+        | 'container'
         | 'paper'
         | 'header'
         | 'actions'
@@ -69,6 +70,10 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
         <div ref={rootRef}>
             <ResponsiveDialog
                 className={classes.dialog}
+                classes={{
+                    container: classes.container,
+                    paper: classes.paper,
+                }}
                 open={props.open}
                 scroll="paper"
                 fullWidth
@@ -80,9 +85,6 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
                 onEscapeKeyDown={props.onClose}
                 BackdropProps={{
                     className: classes.backdrop,
-                }}
-                PaperProps={{
-                    className: classes.paper,
                 }}>
                 <DialogTitle className={classes.header}>
                     <IconButton

@@ -51,7 +51,11 @@ export const useTwitterDialog = makeStyles((theme: Theme) => {
                 display: 'block !important',
             },
         },
+        container: {
+            alignItems: 'center',
+        },
         paper: {
+            maxWidth: '600px !important', // Follow twitter dialog width constraint
             borderRadius: 14,
             boxShadow: 'none',
             [`@media (max-width: ${theme.breakpoints.width('sm')}px)`]: {

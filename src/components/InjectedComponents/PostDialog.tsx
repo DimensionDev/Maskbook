@@ -47,6 +47,7 @@ export interface PostDialogUIProps
         | KeysInferFromUseStyles<typeof useStyles>
         | 'dialog'
         | 'backdrop'
+        | 'container'
         | 'paper'
         | 'input'
         | 'header'
@@ -76,6 +77,10 @@ export function PostDialogUI(props: PostDialogUIProps) {
         <div ref={rootRef}>
             <ResponsiveDialog
                 className={classes.dialog}
+                classes={{
+                    container: classes.container,
+                    paper: classes.paper,
+                }}
                 open={props.open}
                 scroll="paper"
                 fullWidth
@@ -87,9 +92,6 @@ export function PostDialogUI(props: PostDialogUIProps) {
                 onEscapeKeyDown={props.onCloseButtonClicked}
                 BackdropProps={{
                     className: classes.backdrop,
-                }}
-                PaperProps={{
-                    className: classes.paper,
                 }}>
                 <DialogTitle className={classes.header}>
                     <IconButton
