@@ -12,15 +12,16 @@ import {
     newPostButtonSelector,
     postEditorDraftContentSelector,
     postsSelector,
+    bioCardSelector,
 } from '../utils/selector'
 import { geti18nString } from '../../../utils/i18n'
 import { SocialNetworkUI, SocialNetworkUITasks, getActivatedUI } from '../../../social-network/ui'
-import { fetchBioCard } from '../utils/status'
 import { bioCardParser, postContentParser } from '../utils/fetch'
 import { getText, hasFocus, postBoxInPopup, hasDraftEditor } from '../utils/postBox'
 import { MutationObserverWatcher } from '@holoflows/kit'
 import { untilDocumentReady, untilElementAvailable } from '../../../utils/dom'
 import Services from '../../../extension/service'
+import { twitterEncoding } from '../encoding'
 
 /**
  * Wait for up to 5000 ms
@@ -135,9 +136,11 @@ const taskGetPostContent: SocialNetworkUITasks['taskGetPostContent'] = async () 
 }
 
 const taskGetProfile = async () => {
-    const cardNode = await fetchBioCard()
+    const { publicKeyEncoder, publicKeyDecoder } = twitterEncoding
+    const cardNode = (await timeout(new MutationObserverWatcher(bioCardSelector<false>(false)), 10000))[0]
+    const bio = cardNode ? bioCardParser(cardNode).bio : ''
     return {
-        bioContent: cardNode ? bioCardParser(cardNode).bio : '',
+        bioContent: publicKeyEncoder(publicKeyDecoder(bio)[0] || ''),
     }
 }
 
