@@ -735,6 +735,9 @@
     "dashboard_ready_to_import_hint": {
         "message": "在您導入此備份之前，Maskbook 需要某些網站的訪問許可。"
     },
+    "dashboard_paste_database_backup_hint": {
+        "message": "在此處粘貼數據庫備份文本..."
+    },
     "proceed": {
         "message": "繼續"
     },

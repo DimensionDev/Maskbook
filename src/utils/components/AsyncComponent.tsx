@@ -8,9 +8,9 @@ type PromiseState<T> =
 export default function AsyncComponent<Return>(props: {
     promise: () => Promise<Return>
     dependencies: ReadonlyArray<unknown>
-    completeComponent: React.ComponentType<{ data: Return }> | React.ReactNode
+    completeComponent: React.ComponentType<{ data: Return }>
     awaitingComponent: React.SuspenseProps['fallback']
-    failedComponent: React.ComponentType<{ error: Error }> | React.ReactNode
+    failedComponent: React.ComponentType<{ error: Error }> | null
 }) {
     const [state, setState] = React.useState<PromiseState<Return>>({ status: 'not-started' })
     // eslint-disable-next-line
@@ -30,16 +30,15 @@ export default function AsyncComponent<Return>(props: {
                     return {
                         default: () => {
                             const CompleteComponent = props.completeComponent
-                            if (isComponent(CompleteComponent)) return <CompleteComponent data={data} />
-                            else return (CompleteComponent as React.ReactElement) || null
+                            return <CompleteComponent data={data} />
                         },
                     }
                 } catch (e) {
                     return {
                         default: () => {
                             const FailedComponent = props.failedComponent
-                            if (isComponent(FailedComponent)) return <FailedComponent error={e} />
-                            else return (FailedComponent as React.ReactElement) || null
+                            if (FailedComponent === null) return null
+                            return <FailedComponent error={e} />
                         },
                     }
                 }
@@ -52,10 +51,6 @@ export default function AsyncComponent<Return>(props: {
             <Component />
         </React.Suspense>
     )
-}
-
-function isComponent<T>(f?: React.ComponentType<T> | NonNullable<React.ReactNode> | null): f is React.ComponentType<T> {
-    return typeof f === 'function'
 }
 
 /** React hook for not-cancelable async calculation */

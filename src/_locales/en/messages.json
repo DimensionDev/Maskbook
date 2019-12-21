@@ -735,6 +735,9 @@
     "dashboard_ready_to_import_hint": {
         "message": "Maskbook needs access to certain websites, before you can import this backup."
     },
+    "dashboard_paste_database_backup_hint": {
+        "message": "Paste the database backup as text here..."
+    },
     "proceed": {
         "message": "Proceed"
     },
