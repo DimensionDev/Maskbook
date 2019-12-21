@@ -1,3 +1,4 @@
+import * as React from 'react'
 import { useTheme, useMediaQuery } from '@material-ui/core'
 import CloseIcon from '@material-ui/icons/Close'
 import ArrowBackRoundedIcon from '@material-ui/icons/ArrowBackRounded'
