@@ -23,7 +23,6 @@ const createPostEditorSelector = (selector: string = '') =>
 
 export const rootSelector: () => LiveSelector<E, true> = () => querySelector<E>('#react-root')
 
-export const postEditorSelector: () => LiveSelector<E, true> = () => querySelector<E>(createPostEditorSelector())
 export const postEditorInPopupSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('[aria-labelledby="modal-header"]')
 export const postEditorInTimelineSelector: () => LiveSelector<E, true> = () =>
@@ -35,6 +34,11 @@ export const postEditorDraftSelector = () =>
             createPostEditorSelector('textarea[aria-label="Tweet text"]'), // for mobile version
         ].join(),
     )
+export const postEditorDraftContentSelector = () =>
+    (isCompose() ? postEditorInPopupSelector() : postEditorInTimelineSelector()).querySelector<HTMLElement>(
+        '.public-DraftEditor-content, textarea[aria-label="Tweet text"]',
+    )
+
 export const newPostButtonSelector = () => querySelector<E>('[data-testid="SideNav_NewTweet_Button"]')
 
 export const profileEditorButtonSelector = () =>
