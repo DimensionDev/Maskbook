@@ -12,7 +12,6 @@ import { BannerProps } from '../Welcomes/Banner'
 import { NotSetupYetPrompt } from '../shared/NotSetupYetPrompt'
 
 const useStyles = makeStyles(theme => ({
-    root: {},
     content: {
         display: 'flex',
         alignItems: 'center',
@@ -25,7 +24,7 @@ const useStyles = makeStyles(theme => ({
 }))
 
 export interface PostDialogHintUIProps
-    extends withClasses<KeysInferFromUseStyles<typeof useStyles> | 'title' | 'button'> {
+    extends withClasses<KeysInferFromUseStyles<typeof useStyles> | 'root' | 'title' | 'button'> {
     onHintButtonClicked: () => void
 }
 export const PostDialogHintUI = React.memo(function PostDialogHintUI(props: PostDialogHintUIProps) {
