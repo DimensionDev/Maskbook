@@ -8,12 +8,12 @@ import { PostDialogHint } from '../../../components/InjectedComponents/PostDialo
 import { makeStyles, Theme } from '@material-ui/core'
 import { MessageCenter } from '../../../utils/messages'
 import { useTwitterButton, useTwitterBanner } from '../utils/theme'
-import { hasDraftEditor } from '../utils/postBox'
+import { hasEditor } from '../utils/postBox'
 
 export function injectPostDialogHintAtTwitter() {
     if (location.hostname.indexOf(twitterUrl.hostIdentifier) === -1) return
     const watcher = new MutationObserverWatcher(
-        postEditorInTimelineSelector().map(x => (hasDraftEditor(x) ? x : document.createElement('div'))),
+        postEditorInTimelineSelector().map(x => (hasEditor(x) ? x : document.createElement('div'))),
     )
         .setDOMProxyOption({
             afterShadowRootInit: { mode: 'closed' },

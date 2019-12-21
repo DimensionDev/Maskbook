@@ -4,7 +4,7 @@ import { MutationObserverWatcher, LiveSelector } from '@holoflows/kit/es'
 import { postEditorInPopupSelector } from '../utils/selector'
 import { renderInShadowRoot } from '../../../utils/jss/renderInShadowRoot'
 import { MessageCenter } from '../../../utils/messages'
-import { hasDraftEditor, isCompose } from '../utils/postBox'
+import { hasEditor, isCompose } from '../utils/postBox'
 import { sleep } from '../../../utils/utils'
 
 export function injectPostDialogSpyAtTwitter() {
@@ -26,7 +26,7 @@ function injectPostDialogPopupSpy<T>(ls: LiveSelector<T, true>) {
 
     watcher.addListener('onAdd', async () => {
         await sleep(500)
-        if (hasDraftEditor() && isCompose()) {
+        if (isCompose() && hasEditor()) {
             MessageCenter.emit('compositionUpdated', { reason: 'popup', open: true }, true)
         }
     })

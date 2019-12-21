@@ -9,7 +9,7 @@ import {
 import {
     profileEditorButtonSelector,
     profileEditorTextareaSelector,
-    postEditorDraftSelector,
+    postEditorDraftContentSelector,
     newPostButtonSelector,
     postsSelector,
     bioCardSelector,
@@ -17,7 +17,7 @@ import {
 import { geti18nString } from '../../../utils/i18n'
 import { SocialNetworkUI, SocialNetworkUITasks, getActivatedUI } from '../../../social-network/ui'
 import { bioCardParser, postContentParser } from '../utils/fetch'
-import { getEditorContent, hasFocus, isCompose, hasDraftEditor } from '../utils/postBox'
+import { getEditorContent, hasFocus, isCompose, hasEditor } from '../utils/postBox'
 import { MutationObserverWatcher } from '@holoflows/kit'
 import { untilDocumentReady, untilElementAvailable } from '../../../utils/dom'
 import Services from '../../../extension/service'
@@ -34,7 +34,7 @@ const taskPasteIntoPostBox: SocialNetworkUI['taskPasteIntoPostBox'] = (text, opt
         const checkSignal = () => {
             if (abort.signal.aborted) throw new Error('Aborted')
         }
-        if (!isCompose() && !hasDraftEditor()) {
+        if (!isCompose() && !hasEditor()) {
             // open tweet window
             await untilElementAvailable(newPostButtonSelector())
             newPostButtonSelector()
@@ -44,7 +44,7 @@ const taskPasteIntoPostBox: SocialNetworkUI['taskPasteIntoPostBox'] = (text, opt
         }
 
         // get focus
-        const i = postEditorDraftSelector()
+        const i = postEditorDraftContentSelector()
         await untilElementAvailable(i)
         checkSignal()
         while (!hasFocus(i)) {
@@ -54,6 +54,7 @@ const taskPasteIntoPostBox: SocialNetworkUI['taskPasteIntoPostBox'] = (text, opt
         }
         // paste
         dispatchCustomEvents('paste', text)
+        await sleep(interval)
         if (!getEditorContent().includes(text)) {
             prompt(opt.warningText, text)
             throw new Error('Unable to paste text automatically')
