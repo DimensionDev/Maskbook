@@ -1,5 +1,5 @@
 import { makeStyles } from '@material-ui/styles'
-import { Theme } from '@material-ui/core'
+import { Theme, fade } from '@material-ui/core'
 
 export const useTwitterButton = makeStyles((theme: Theme) => ({
     button: {
@@ -33,7 +33,7 @@ export const useTwitterCloseButton = makeStyles((theme: Theme) => ({
         color: theme.palette.primary.main,
         padding: 7,
         '&:hover': {
-            backgroundColor: 'rgba(29, 161, 242, 0.1)',
+            backgroundColor: fade(theme.palette.primary.main, 0.1),
         },
     },
 }))
