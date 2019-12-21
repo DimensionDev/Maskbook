@@ -39,9 +39,9 @@ export function SelectRecipientsUI<T extends Group | Profile = Group | Profile>(
     const classes = useStylesExtends(useStyles(), props)
     const { items, maxSelection, selected, onSetSelected } = props // TODO: support maxSelection constraint
     const groupItems = items.filter(x => isGroup(x)) as Group[]
-    const profileItems = items.filter(x => isPerson(x)) as Profile[]
+    const profileItems = items.filter(x => isProfile(x)) as Profile[]
 
-    const selectedAsProfiles = selected.filter(x => isPerson(x)) as Profile[]
+    const selectedAsProfiles = selected.filter(x => isProfile(x)) as Profile[]
     const selectedAsGroups = selected.filter(x => isGroup(x)) as Group[]
 
     const [open, setOpen] = useState(false)
@@ -73,7 +73,7 @@ export function SelectRecipientsUI<T extends Group | Profile = Group | Profile>(
     }, [currentIdentifier, selectedIdentifiers])
     useEffect(() => {
         const selectedIdentifiersSet = new Set(selectedIdentifiers)
-        const selectedProfiles = selected.filter(x => isPerson(x) && selectedIdentifiersSet.has(x.identifier.toText()))
+        const selectedProfiles = profileItems.filter(x => selectedIdentifiersSet.has(x.identifier.toText()))
         const selectedGroups: Group[] = groupItems.filter(x => {
             const groupIdentifiers = x.members.map(y => y.toText())
             return (
@@ -147,7 +147,7 @@ SelectRecipientsUI.defaultProps = {
     frozenSelected: [],
 }
 
-export function isPerson(x: Profile | Group): x is Profile {
+export function isProfile(x: Profile | Group): x is Profile {
     return x.identifier instanceof ProfileIdentifier
 }
 export function isGroup(x: Profile | Group): x is Group {
