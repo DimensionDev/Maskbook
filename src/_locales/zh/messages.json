@@ -16,7 +16,7 @@
         "message": "請將以下内容拷貝至發佈框。"
     },
     "additional_post_box__steganography_post_pre": {
-        "message": "此圖片僅分享給我的好友。請安裝 Maskbook 以解讀圖片。 ([I:b])"
+        "message": "此圖片僅分享給我的好友。請安裝 Maskbook 以解讀圖片。 ([I:b]) $1"
     },
     "additional_post_box__steganography_post_failed": {
         "message": "請將已下載的圖片上载至發佈框。"
