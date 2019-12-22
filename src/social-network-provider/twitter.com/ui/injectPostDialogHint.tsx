@@ -13,7 +13,7 @@ import { hasEditor } from '../utils/postBox'
 export function injectPostDialogHintAtTwitter() {
     if (location.hostname.indexOf(twitterUrl.hostIdentifier) === -1) return
     const watcher = new MutationObserverWatcher(
-        postEditorInTimelineSelector().map(x => (hasEditor(x) ? x : document.createElement('div'))),
+        postEditorInTimelineSelector().map(x => (hasEditor() ? x : document.createElement('div'))),
     )
         .setDOMProxyOption({
             afterShadowRootInit: { mode: 'closed' },

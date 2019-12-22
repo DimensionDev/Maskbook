@@ -11,7 +11,7 @@ import { useAsync } from '../../utils/components/AsyncComponent'
 import { BannerProps } from '../Welcomes/Banner'
 import { NotSetupYetPrompt } from '../shared/NotSetupYetPrompt'
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles({
     content: {
         display: 'flex',
         alignItems: 'center',
@@ -21,7 +21,7 @@ const useStyles = makeStyles(theme => ({
     button: {
         whiteSpace: 'nowrap',
     },
-}))
+})
 
 export interface PostDialogHintUIProps
     extends withClasses<KeysInferFromUseStyles<typeof useStyles> | 'root' | 'title' | 'button'> {
