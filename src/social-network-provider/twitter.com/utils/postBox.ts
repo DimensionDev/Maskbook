@@ -1,6 +1,5 @@
 import { postEditorDraftContentSelector } from './selector'
 import { LiveSelector } from '@holoflows/kit'
-import { isNull } from 'lodash-es'
 
 export const getEditorContent = () => {
     const editorNode = postEditorDraftContentSelector().evaluate()
@@ -15,4 +14,4 @@ export const isCompose = () => globalThis.location.pathname.includes('compose')
 
 export const hasFocus = (x: LiveSelector<HTMLElement, true>) => x.evaluate()! === document.activeElement
 
-export const hasEditor = (x: HTMLElement | Document = document) => !isNull(postEditorDraftContentSelector())
+export const hasEditor = () => !!postEditorDraftContentSelector().evaluate()
