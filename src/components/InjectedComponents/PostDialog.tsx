@@ -166,10 +166,13 @@ export function PostDialog(props: PostDialogProps) {
                 )
                 const activeUI = getActivatedUI()
                 if (isSteganography) {
-                    activeUI.taskPasteIntoPostBox(geti18nString('additional_post_box__steganography_post_pre'), {
-                        warningText: geti18nString('additional_post_box__encrypted_failed'),
-                        shouldOpenPostDialog: false,
-                    })
+                    activeUI.taskPasteIntoPostBox(
+                        geti18nString('additional_post_box__steganography_post_pre', String(Date.now())),
+                        {
+                            warningText: geti18nString('additional_post_box__encrypted_failed'),
+                            shouldOpenPostDialog: false,
+                        },
+                    )
                     activeUI.taskUploadToPostBox(encrypted, {
                         warningText: geti18nString('additional_post_box__steganography_post_failed'),
                     })
