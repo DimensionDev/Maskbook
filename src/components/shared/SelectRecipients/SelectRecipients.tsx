@@ -10,6 +10,15 @@ import { useState, useEffect } from 'react'
 import { SelectRecipientsDialogUIProps, SelectRecipientsDialogUI } from './SelectRecipientsDialog'
 import { geti18nString } from '../../../utils/i18n'
 import { difference } from 'lodash-es'
+import { useCurrentIdentity } from '../../DataSource/useActivatedUI'
+import { useStylesExtends } from '../../custom-ui-helper'
+
+const useStyles = makeStyles({
+    selectArea: {
+        display: 'flex',
+        flexWrap: 'wrap',
+    },
+})
 
 export interface SelectRecipientsUIProps<T extends Group | Profile = Group | Profile>
     extends withClasses<KeysInferFromUseStyles<typeof useStyles> | 'root'> {
@@ -26,15 +35,9 @@ export interface SelectRecipientsUIProps<T extends Group | Profile = Group | Pro
     PersonOrGroupInListProps?: Partial<PersonOrGroupInListProps>
     SelectRecipientsDialogUIProps?: Partial<SelectRecipientsDialogUIProps>
 }
-const useStyles = makeStyles({
-    root: {},
-    selectArea: {
-        display: 'flex',
-        flexWrap: 'wrap',
-    },
-})
+
 export function SelectRecipientsUI<T extends Group | Profile = Group | Profile>(props: SelectRecipientsUIProps) {
-    const classes = useStyles()
+    const classes = useStylesExtends(useStyles(), props)
     const { items, maxSelection, selected, onSetSelected } = props
     const groupItems = items.filter(x => isGroup(x)) as Group[]
     const profileItems = items.filter(x => isPerson(x)) as Profile[]
@@ -43,18 +46,32 @@ export function SelectRecipientsUI<T extends Group | Profile = Group | Profile>(
     const selectedAsGroups = selected.filter(x => isGroup(x)) as Group[]
 
     const [open, setOpen] = useState(false)
-    const [search, setSearch] = useState('')
+    const [search, setSearch] = useState('') // TODO: Filter profiles with keywords
+    const currentIdentity = useCurrentIdentity()
+    const currentIdentifier = currentIdentity ? currentIdentity.identifier.toText() : ''
     const [selectedIdentifiers, setSelectedIdentifiers] = useState<string[]>(
-        Array.from(
-            new Set(selected.flatMap(x => (isGroup(x) ? x.members.map(y => y.toText()) : x.identifier.toText()))),
+        difference(
+            Array.from(
+                new Set(selected.flatMap(x => (isGroup(x) ? x.members.map(y => y.toText()) : x.identifier.toText()))),
+            ),
+            [currentIdentifier],
         ),
     )
 
+    // clear selected identifiers
     useEffect(() => {
         if (selected.length === 0) {
             setSelectedIdentifiers([])
         }
     }, [selected])
+
+    // prevent from selecting current identity as recipient
+    useEffect(() => {
+        const next = difference(selectedIdentifiers, [currentIdentifier])
+        if (difference(selectedIdentifiers, next).length) {
+            setSelectedIdentifiers(next)
+        }
+    }, [currentIdentifier, selectedIdentifiers])
     useEffect(() => {
         const selectedIdentifiersSet = new Set(selectedIdentifiers)
         const selectedProfiles = selected.filter(x => isPerson(x) && selectedIdentifiersSet.has(x.identifier.toText()))
