@@ -1,4 +1,5 @@
 import './Welcome'
+import './Dashboard'
 import './OptionsPage'
 import './Injections'
 import './shared'
