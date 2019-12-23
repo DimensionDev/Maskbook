@@ -30,7 +30,5 @@ export function useCurrentGroupsList() {
     const groups = useGroupsList()
     const currentIdentity = useCurrentIdentity()
     if (!currentIdentity) return []
-    return groups.filter(x =>
-        x.identifier.isVirtual ? x.identifier.ownerIdentifier.equals(currentIdentity.identifier) : false,
-    )
+    return groups.filter(x => x.identifier.ownerIdentifier?.equals(currentIdentity.identifier))
 }

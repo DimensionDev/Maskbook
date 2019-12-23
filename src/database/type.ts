@@ -38,7 +38,8 @@ export abstract class Identifier {
     static equals(a: Identifier, b: Identifier) {
         return a.equals(b)
     }
-    public equals(other: Identifier) {
+    public equals(other: Identifier | null | undefined) {
+        if (!other) return false
         return this === other || this.toText() === other.toText()
     }
     abstract toText(): string
@@ -131,8 +132,8 @@ export class GroupIdentifier extends Identifier {
         noSlash(groupID)
         if (virtualGroupOwner === '') this.virtualGroupOwner = null
     }
-    get ownerIdentifier() {
-        if (this.virtualGroupOwner === null) throw new Error('Can not know the owner of this group')
+    get ownerIdentifier(): ProfileIdentifier | null {
+        if (this.virtualGroupOwner === null) return null
         return new ProfileIdentifier(this.network, this.virtualGroupOwner)
     }
     toText() {

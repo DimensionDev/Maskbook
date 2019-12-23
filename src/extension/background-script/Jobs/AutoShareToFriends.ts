@@ -38,12 +38,14 @@ export function initAutoShareToFriends() {
                     // skipping
                 } else notSharedBefore.push(x)
             })
+            const groupOwner = data.group.ownerIdentifier
+            if (!groupOwner) return
             appendShareTarget(
                 -38,
                 post.postCryptoKey,
                 post.identifier.postIV,
                 notSharedBefore,
-                data.group.ownerIdentifier,
+                groupOwner,
                 group.identifier,
             ).then(() => {
                 console.log('Post ', id, ' shared')
