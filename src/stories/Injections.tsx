@@ -20,6 +20,8 @@ import { CommentBox } from '../components/InjectedComponents/CommentBox'
 import { DecryptionProgress } from '../extension/background-script/CryptoServices/decryptFrom'
 import { PersonOrGroupInChip, PersonOrGroupInList } from '../components/shared/SelectPeopleAndGroups'
 import { MaskbookLightTheme } from '../utils/theme'
+import { PostDialog } from '../components/InjectedComponents/PostDialog'
+import { PostDialogHint } from '../components/InjectedComponents/PostDialogHint'
 
 storiesOf('Injections', module)
     .add('PersonOrGroupInChip', () => (
@@ -133,6 +135,12 @@ storiesOf('Injections', module)
     })
     .add('Comment box', () => {
         return <CommentBox onSubmit={action('submit')} />
+    })
+    .add('Post Dialog', () => {
+        return <PostDialog open />
+    })
+    .add('Post Dialog Hint', () => {
+        return <PostDialogHint onHintButtonClicked={action('clicked')} />
     })
 
 function FakePost(props: React.PropsWithChildren<{ title: string }>) {
