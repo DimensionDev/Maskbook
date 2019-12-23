@@ -18,6 +18,7 @@ let proxy: HTMLElement | undefined
 
 export function PortalShadowRoot() {
     if (GetContext() === 'options') return document.body
+    if (globalThis.location.hostname === 'localhost') return document.body
     if (!proxy)
         proxy = new Proxy(document.body, {
             get(target, key, receiver) {
