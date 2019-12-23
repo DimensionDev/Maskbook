@@ -68,14 +68,11 @@ export function SelectRecipientsUI<T extends Group | Profile = Group | Profile>(
             )
         })
         const next = [...selectedGroups, ...selectedProfiles]
-
-        if (
-            (next.length === 0 && selected.length !== 0) ||
-            (next.length > 0 && difference(next as T[], selected).length !== 0)
-        ) {
-            onSetSelected(next)
+        if (next.length === selected.length && (next.length === 0 || difference(next, selected).length === 0)) {
+            return
         }
-    }, [groupItems, onSetSelected, selected, selectedIdentifiers])
+        onSetSelected(next)
+    }, [groupItems, onSetSelected, profileItems, selected, selectedIdentifiers])
     return (
         <div className={classes.root}>
             <Box className={classes.selectArea} display="flex">
