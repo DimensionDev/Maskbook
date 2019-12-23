@@ -69,7 +69,7 @@
     "node-stego": "^0.8.0",
     "notistack": "^0.9.7",
     "npm-run-all": "^4.1.5",
-    "pvtsutils": "^1.0.4",
+    "pvtsutils": "^1.0.9",
     "qrcode": "^1.4.4",
     "react": "^16.12.0",
     "react-app-rewired": "^2.1.5",
