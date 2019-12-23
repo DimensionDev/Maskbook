@@ -2108,10 +2108,23 @@
     "@nodelib/fs.stat" "2.0.2"
     run-parallel "^1.1.9"
 
+"@nodelib/fs.scandir@2.1.3":
+  version "2.1.3"
+  resolved "https://registry.yarnpkg.com/@nodelib/fs.scandir/-/fs.scandir-2.1.3.tgz#3a582bdb53804c6ba6d146579c46e52130cf4a3b"
+  integrity sha512-eGmwYQn3gxo4r7jdQnkrrN6bY478C3P+a/y72IJukF8LjB6ZHeB3c+Ehacj3sYeSmUXGlnA67/PmbM9CVwL7Dw==
+  dependencies:
+    "@nodelib/fs.stat" "2.0.3"
+    run-parallel "^1.1.9"
+
 "@nodelib/fs.stat@2.0.2", "@nodelib/fs.stat@^2.0.1":
   version "2.0.2"
   resolved "https://registry.yarnpkg.com/@nodelib/fs.stat/-/fs.stat-2.0.2.tgz#2762aea8fe78ea256860182dcb52d61ee4b8fda6"
   integrity sha512-z8+wGWV2dgUhLqrtRYa03yDx4HWMvXKi1z8g3m2JyxAx8F7xk74asqPk5LAETjqDSGLFML/6CDl0+yFunSYicw==
+
+"@nodelib/fs.stat@2.0.3", "@nodelib/fs.stat@^2.0.2":
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/@nodelib/fs.stat/-/fs.stat-2.0.3.tgz#34dc5f4cabbc720f4e60f75a747e7ecd6c175bd3"
+  integrity sha512-bQBFruR2TAwoevBEd/NWMoAAtNGzTRgdrqnYCc7dhzfoNvqPzLyqlEQnzZ3kVnNrSp25iyxE00/3h2fqGAGArA==
 
 "@nodelib/fs.stat@^1.1.2":
   version "1.1.3"
@@ -2124,6 +2137,14 @@
   integrity sha512-l6t8xEhfK9Sa4YO5mIRdau7XSOADfmh3jCr0evNHdY+HNkW6xuQhgMH7D73VV6WpZOagrW0UludvMTiifiwTfA==
   dependencies:
     "@nodelib/fs.scandir" "2.1.2"
+    fastq "^1.6.0"
+
+"@nodelib/fs.walk@^1.2.3":
+  version "1.2.4"
+  resolved "https://registry.yarnpkg.com/@nodelib/fs.walk/-/fs.walk-1.2.4.tgz#011b9202a70a6366e436ca5c065844528ab04976"
+  integrity sha512-1V9XOY4rDW0rehzbrcqAmHnz8e7SKvX27gh8Gt2WgB0+pdzdiLV83p72kZPU+jvMbS1qU5mauP2iOvO8rhmurQ==
+  dependencies:
+    "@nodelib/fs.scandir" "2.1.3"
     fastq "^1.6.0"
 
 "@peculiar/asn1-schema@^1.0.3":
@@ -2826,15 +2847,14 @@
   dependencies:
     defer-to-connect "^1.0.1"
 
-"@ts-morph/common@~0.1.0":
-  version "0.1.1"
-  resolved "https://registry.yarnpkg.com/@ts-morph/common/-/common-0.1.1.tgz#e92ed855d416ff9dcd61f35e5020d156ff48b352"
-  integrity sha512-8TLlC85CXgKNoTeqoXtrscPmKDbQCBfwZJ4hqli/QI4STa7sD2H6UqI9LSg8uBV5FYaD0QSdj/mtrCDrELvF+Q==
+"@ts-morph/common@~0.2.2":
+  version "0.2.2"
+  resolved "https://registry.yarnpkg.com/@ts-morph/common/-/common-0.2.2.tgz#75803343bd1d3f96d68dddbbc9a9c666165a2b99"
+  integrity sha512-cMUlKTWvrfE5RYJn2VvM67iwIPl3aXm4xfm8oHzCCi2YaWp+NlSuiqj5cUMh+Lse2y84BqjAVOxAv1AY1Ncf+w==
   dependencies:
     "@dsherret/to-absolute-glob" "^2.0.2"
+    fast-glob "^3.1.0"
     fs-extra "^8.1.0"
-    glob-parent "^5.1.0"
-    globby "^10.0.1"
     is-negated-glob "^1.0.0"
     multimatch "^4.0.0"
     typescript "~3.7.2"
@@ -5393,7 +5413,7 @@ coa@^2.0.2:
     chalk "^2.4.1"
     q "^1.1.2"
 
-code-block-writer@^10.0.0:
+code-block-writer@^10.1.0:
   version "10.1.0"
   resolved "https://registry.yarnpkg.com/code-block-writer/-/code-block-writer-10.1.0.tgz#54fc410ebef2af836d9c2314ac40af7d7b37eee9"
   integrity sha512-RG9hpXtWFeUWhuUav1YuP/vGcyncW+t90yJLk9fNZs1De2OuHTHKAKThVCokt29PYq5RoJ0QSZaIZ+rvPO23hA==
@@ -7753,6 +7773,17 @@ fast-glob@^3.0.3:
     glob-parent "^5.0.0"
     is-glob "^4.0.1"
     merge2 "^1.2.3"
+    micromatch "^4.0.2"
+
+fast-glob@^3.1.0:
+  version "3.1.1"
+  resolved "https://registry.yarnpkg.com/fast-glob/-/fast-glob-3.1.1.tgz#87ee30e9e9f3eb40d6f254a7997655da753d7c82"
+  integrity sha512-nTCREpBY8w8r+boyFYAx21iL6faSsQynliPHM4Uf56SbkyohCNxpVPEH9xrF5TXKy+IsjkPUHDKiUkzBVRXn9g==
+  dependencies:
+    "@nodelib/fs.stat" "^2.0.2"
+    "@nodelib/fs.walk" "^1.2.3"
+    glob-parent "^5.1.0"
+    merge2 "^1.3.0"
     micromatch "^4.0.2"
 
 fast-json-patch@^2.0.6:
@@ -11469,6 +11500,11 @@ merge2@^1.2.3:
   version "1.2.4"
   resolved "https://registry.yarnpkg.com/merge2/-/merge2-1.2.4.tgz#c9269589e6885a60cf80605d9522d4b67ca646e3"
   integrity sha512-FYE8xI+6pjFOhokZu0We3S5NKCirLbCzSh2Usf3qEyr4X8U+0jNg9P8RZ4qz+V2UoECLVwSyzU3LxXBaLGtD3A==
+
+merge2@^1.3.0:
+  version "1.3.0"
+  resolved "https://registry.yarnpkg.com/merge2/-/merge2-1.3.0.tgz#5b366ee83b2f1582c48f87e47cf1a9352103ca81"
+  integrity sha512-2j4DAdlBOkiSZIsaXk4mTE3sRS02yBHAtfy127xRV3bQUFqXkjHCHLW6Scv7DwNRbIWNHH8zpnz9zMaKXIdvYw==
 
 methods@~1.1.2:
   version "1.1.2"
@@ -16647,14 +16683,14 @@ ts-loader@^6.2.1:
     micromatch "^4.0.0"
     semver "^6.0.0"
 
-ts-morph@^5.0.0:
-  version "5.0.0"
-  resolved "https://registry.yarnpkg.com/ts-morph/-/ts-morph-5.0.0.tgz#1f0992580be3bff2aaa948d3d76d508972e57a89"
-  integrity sha512-VP5dFnOzmlsDkSyuGczgVNtyJdYXMxFqMO2Rb0pIeni0o0Cy/nDljETBWhJs4FI4DIWv7Ftq69kgZO8p8w6LCw==
+ts-morph@^6.0.2:
+  version "6.0.2"
+  resolved "https://registry.yarnpkg.com/ts-morph/-/ts-morph-6.0.2.tgz#706ea79d1e604837150a885098287bd9d65c4660"
+  integrity sha512-o7FPVY0jMSKlJHfyfEkiCWTq7vqdmNLQaQd4jXY7lxCELgh+h7zI+frvSe7S0o/TJAAKViy9wM/FzRXW+9LnZQ==
   dependencies:
     "@dsherret/to-absolute-glob" "^2.0.2"
-    "@ts-morph/common" "~0.1.0"
-    code-block-writer "^10.0.0"
+    "@ts-morph/common" "~0.2.2"
+    code-block-writer "^10.1.0"
 
 ts-node@^8.5.0:
   version "8.5.0"
