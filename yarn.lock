@@ -8618,10 +8618,10 @@ gud@^1.0.0:
   resolved "https://registry.yarnpkg.com/gud/-/gud-1.0.0.tgz#a489581b17e6a70beca9abe3ae57de7a499852c0"
   integrity sha512-zGEOVKFM5sVPPrYs7J5/hYEw2Pof8KCyOwyhG8sAF26mCAeUFAcYPu1mwB7hhpIP29zOIBaDqwuHdLp0jvZXjw==
 
-gun@0.2019.930:
-  version "0.2019.930"
-  resolved "https://registry.yarnpkg.com/gun/-/gun-0.2019.930.tgz#9251c064d4408958626af3707f7ce0623e0c19b0"
-  integrity sha512-JZunmIcZqwq9MgrMHBRVAB7HbgNWUnwnHSJZPq0QCCbJwJ4rRctBcBWZF3BgS3AGpOUM9S+ecSQDacQHYJkujg==
+gun@0.2019.1211:
+  version "0.2019.1211"
+  resolved "https://registry.yarnpkg.com/gun/-/gun-0.2019.1211.tgz#37aa58217f86256b5d6f126450c8860f7bca384e"
+  integrity sha512-wueemUJBtNfVcZDeXK7wYbth+eu7tNFo5T54gAbA3N0VAN3zoPNE12saeekzrkVeMiKVxG8/kiR35BhykQ+CJg==
   dependencies:
     ws "~>7.1.0"
   optionalDependencies:
