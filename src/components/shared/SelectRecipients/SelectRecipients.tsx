@@ -35,9 +35,10 @@ export interface SelectRecipientsUIProps<T extends Group | Profile = Group | Pro
     PersonOrGroupInListProps?: Partial<PersonOrGroupInListProps>
     SelectRecipientsDialogUIProps?: Partial<SelectRecipientsDialogUIProps>
 }
+
 export function SelectRecipientsUI<T extends Group | Profile = Group | Profile>(props: SelectRecipientsUIProps) {
     const classes = useStylesExtends(useStyles(), props)
-    const { items, maxSelection, selected, onSetSelected } = props // TODO: support maxSelection constraint
+    const { items, maxSelection, selected, onSetSelected } = props
     const groupItems = items.filter(x => isGroup(x)) as Group[]
     const profileItems = items.filter(x => isProfile(x)) as Profile[]
 
