@@ -8,7 +8,10 @@ import ConstructableStyleSheetsRenderer, {
 } from './ConstructableStyleSheetsRenderer'
 import { getActivatedUI } from '../../social-network/ui'
 
-const jss = create({ ...jssPreset(), Renderer: ConstructableStyleSheetsRenderer as any })
+const jss = create({
+    ...jssPreset(),
+    Renderer: globalThis.location.hostname === 'localhost' ? undefined : (ConstructableStyleSheetsRenderer as any),
+})
 /**
  * Render the Node in the ShadowRoot
  * @param node React Node
