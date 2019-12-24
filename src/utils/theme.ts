@@ -1,5 +1,5 @@
 import { createMuiTheme } from '@material-ui/core'
-import { makeStyles, createStyles } from '@material-ui/core/styles'
+import { makeStyles, createStyles, Theme } from '@material-ui/core/styles'
 import { orange, green, red, blue } from '@material-ui/core/colors'
 
 function getFontFamily(monospace?: boolean) {
@@ -25,17 +25,10 @@ const baseTheme = (theme: 'dark' | 'light') =>
             fontFamily: getFontFamily(),
         },
         shape: { borderRadius: 4 },
-        overrides: {
-            MuiButton: {
-                root: {
-                    textTransform: 'none',
-                },
-            },
-        },
         breakpoints: {
             values: { xs: 0, sm: 600, md: 1024, lg: 1280, xl: 1920 },
         },
-    } as const)
+    } as Partial<Theme>)
 // Theme
 export const MaskbookLightTheme = createMuiTheme(baseTheme('light'))
 export const MaskbookDarkTheme = createMuiTheme(baseTheme('dark'))
