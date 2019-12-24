@@ -1,20 +1,24 @@
 import * as React from 'react'
 import { useCallback } from 'react'
 import { twitterUrl } from '../utils/url'
-import { MutationObserverWatcher } from '@holoflows/kit/es'
-import { postEditorInTimelineSelector } from '../utils/selector'
+import { MutationObserverWatcher, LiveSelector } from '@holoflows/kit/es'
+import { postEditorInTimelineSelector, postEditorInPopupSelector } from '../utils/selector'
 import { renderInShadowRoot } from '../../../utils/jss/renderInShadowRoot'
 import { PostDialogHint } from '../../../components/InjectedComponents/PostDialogHint'
 import { makeStyles, Theme } from '@material-ui/core'
 import { MessageCenter } from '../../../utils/messages'
 import { useTwitterButton, useTwitterBanner } from '../utils/theme'
-import { hasEditor } from '../utils/postBox'
+import { hasEditor, isCompose } from '../utils/postBox'
 
 export function injectPostDialogHintAtTwitter() {
     if (location.hostname.indexOf(twitterUrl.hostIdentifier) === -1) return
-    const watcher = new MutationObserverWatcher(
-        postEditorInTimelineSelector().map(x => (hasEditor() ? x : document.createElement('div'))),
-    )
+    const emptyNode = document.createElement('div')
+    renderPostDialogHintTo(postEditorInTimelineSelector().map(x => (hasEditor() ? x : emptyNode)))
+    renderPostDialogHintTo(postEditorInPopupSelector().map(x => (isCompose() && hasEditor() ? x : emptyNode)))
+}
+
+function renderPostDialogHintTo<T>(ls: LiveSelector<T, true>) {
+    const watcher = new MutationObserverWatcher(ls)
         .setDOMProxyOption({
             afterShadowRootInit: { mode: 'closed' },
         })

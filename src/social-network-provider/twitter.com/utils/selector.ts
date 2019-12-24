@@ -18,7 +18,7 @@ const querySelectorAll = <T extends E>(selector: string) => {
 export const rootSelector: () => LiveSelector<E, true> = () => querySelector<E>('#react-root')
 
 export const postEditorInPopupSelector: () => LiveSelector<E, true> = () =>
-    querySelector<E>('[aria-labelledby="modal-header"]')
+    querySelector<E>('[aria-labelledby="modal-header"] > div:first-child > div:nth-child(3)')
 export const postEditorInTimelineSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('[role="main"] :not(aside) > [role="progressbar"] ~ div')
 export const postEditorDraftContentSelector = () =>
