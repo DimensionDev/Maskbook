@@ -39,16 +39,19 @@ export interface SelectRecipientsUIProps<T extends Group | Profile = Group | Pro
 export function SelectRecipientsUI<T extends Group | Profile = Group | Profile>(props: SelectRecipientsUIProps) {
     const classes = useStylesExtends(useStyles(), props)
     const { items, maxSelection, selected, onSetSelected } = props
+
+    const currentIdentity = useCurrentIdentity()
+    const currentIdentifier = currentIdentity ? currentIdentity.identifier.toText() : ''
     const groupItems = items.filter(x => isGroup(x)) as Group[]
-    const profileItems = items.filter(x => isProfile(x)) as Profile[]
+    const profileItems = items.filter(
+        x => isProfile(x) && !x.identifier.equals(currentIdentity?.identifier) && x.linkedPersona?.fingerprint,
+    ) as Profile[]
 
     const selectedAsProfiles = selected.filter(x => isProfile(x)) as Profile[]
     const selectedAsGroups = selected.filter(x => isGroup(x)) as Group[]
 
     const [open, setOpen] = useState(false)
     const [search, setSearch] = useState('') // TODO: Filter profiles with keywords
-    const currentIdentity = useCurrentIdentity()
-    const currentIdentifier = currentIdentity ? currentIdentity.identifier.toText() : ''
     const [selectedIdentifiers, setSelectedIdentifiers] = useState<string[]>(
         difference(
             Array.from(
@@ -125,7 +128,6 @@ export function SelectRecipientsUI<T extends Group | Profile = Group | Profile>(
                     }}
                 />
                 <SelectRecipientsDialogUI
-                    ignoreMyself
                     open={open}
                     items={profileItems}
                     selected={profileItems.filter(x => selectedIdentifiers.indexOf(x.identifier.toText()) > -1)}
