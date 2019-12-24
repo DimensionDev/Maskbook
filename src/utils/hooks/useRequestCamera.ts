@@ -20,6 +20,7 @@ export function useRequestCamera(needRequest: boolean) {
     const [permission, updatePermission] = useState<PermissionState>('prompt')
 
     useEffect(() => {
+        if (!needRequest || permission !== 'prompt') return
         let permissionStatus: PermissionStatus
 
         if (checkPermissionApiUsability('query')) {
@@ -43,7 +44,7 @@ export function useRequestCamera(needRequest: boolean) {
         return () => {
             if (permissionStatus) permissionStatus.onchange = null
         }
-    }, [])
+    }, [needRequest, permission])
     useAsync(async () => {
         if (!needRequest || permission !== 'prompt') {
             return
