@@ -22,6 +22,7 @@ import { MutationObserverWatcher } from '@holoflows/kit'
 import { untilDocumentReady, untilElementAvailable } from '../../../utils/dom'
 import Services from '../../../extension/service'
 import { twitterEncoding } from '../encoding'
+import { createTaskStartImmersiveSetupDefault } from '../../../social-network/defaults/taskStartImmersiveSetupDefault'
 
 /**
  * Wait for up to 5000 ms
@@ -151,4 +152,5 @@ export const twitterUITasks: SocialNetworkUITasks = {
     taskPasteIntoBio,
     taskGetPostContent,
     taskGetProfile,
+    taskStartImmersiveSetup: createTaskStartImmersiveSetupDefault(),
 }

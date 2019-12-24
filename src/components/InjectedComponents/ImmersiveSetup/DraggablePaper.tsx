@@ -4,8 +4,19 @@ import Draggable from 'react-draggable'
 
 export function DraggablePaper(props: PaperProps) {
     return (
-        <Draggable cancel={'[class*="MuiDialogContent-root"]'}>
-            <Paper {...props} elevation={5} style={{ border: '1px solid white' }} />
+        <Draggable bounds="parent">
+            <Paper
+                {...props}
+                elevation={5}
+                style={{
+                    border: '1px solid white',
+                    maxWidth: 350,
+                    position: 'fixed',
+                    top: '2em',
+                    right: '2em',
+                    zIndex: 9999999,
+                }}
+            />
         </Draggable>
     )
 }

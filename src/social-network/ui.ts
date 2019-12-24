@@ -1,7 +1,7 @@
 import { env, Env, Preference, ProfileUI, SocialNetworkWorkerAndUIDefinition } from './shared'
 import { DOMProxy, LiveSelector, ValueRef, OnlyRunInContext } from '@holoflows/kit/es'
 import { Group, Profile, Persona } from '../database'
-import { ProfileIdentifier } from '../database/type'
+import { ProfileIdentifier, PersonaIdentifier } from '../database/type'
 import { Payload } from '../utils/type-transform/Payload'
 import { defaultTo, isNull } from 'lodash-es'
 import Services from '../extension/service'
@@ -186,6 +186,10 @@ export interface SocialNetworkUITasks {
      * @param identifier The post id
      */
     taskGetProfile(identifier: ProfileIdentifier): Promise<ProfileUI>
+    /**
+     * For a PersonaIdentifier setup a new account
+     */
+    taskStartImmersiveSetup(for_: PersonaIdentifier): void
 }
 
 //#endregion
