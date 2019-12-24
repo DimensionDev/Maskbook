@@ -162,7 +162,7 @@ export default function InitStep1R() {
 
     function FileUI() {
         return (
-            <>
+            <div {...dragEvents}>
                 <input
                     className={classes.file}
                     type="file"
@@ -221,7 +221,7 @@ export default function InitStep1R() {
                         }
                     />
                 )}
-            </>
+            </div>
         )
     }
 
