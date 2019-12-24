@@ -14,8 +14,7 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "preserve",
-    "experimentalDecorators": true,
-    "allowUmdGlobalAccess": true
+    "experimentalDecorators": true
   },
   "include": ["src"]
 }

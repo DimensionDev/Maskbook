@@ -12,8 +12,7 @@ import {
 import { AddToKeyStoreUI } from '../components/InjectedComponents/AddToKeyStore'
 import { useShareMenu } from '../components/InjectedComponents/SelectPeopleDialog'
 import { sleep } from '../utils/utils'
-import { Button, Paper, MuiThemeProvider } from '@material-ui/core'
-import { RenderInShadowRootWrapper } from '../utils/jss/renderInShadowRoot'
+import { Paper, MuiThemeProvider } from '@material-ui/core'
 import { demoPeople, demoGroup } from './demoPeopleOrGroups'
 import { PostCommentDecrypted } from '../components/InjectedComponents/PostComments'
 import { CommentBox } from '../components/InjectedComponents/CommentBox'
@@ -51,7 +50,7 @@ storiesOf('Injections', module)
         function SelectPeople() {
             const { ShareMenu, showShare } = useShareMenu(
                 demoPeople,
-                async people => sleep(3000),
+                async () => sleep(3000),
                 boolean('Has frozen item?', true) ? [demoPeople[0]] : [],
             )
             React.useEffect(() => {
