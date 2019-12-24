@@ -15,7 +15,9 @@ import ProfileBox from '../DashboardComponents/ProfileBox'
 import { useColorProvider } from '../../../utils/theme'
 import { geti18nString } from '../../../utils/i18n'
 import { QrCode } from '../../../components/shared/qrcode'
-import { compressBackupFile } from '../../../utils/type-transform/BackupFileShortRepresentation'
+import { compressBackupFile, decompressBackupFile } from '../../../utils/type-transform/BackupFileShortRepresentation'
+import QRScanner from '../../../components/Welcomes/QRScanner'
+import { UpgradeBackupJSONFile } from '../../../utils/type-transform/BackupFormat/JSON/latest'
 
 export function PersonaCreateDialog() {
     const [name, setName] = useState('')
@@ -250,6 +252,21 @@ export function PersonaImportDialog() {
         }
     }
 
+    const importFromQR = (str: string) => {
+        Promise.resolve()
+            .then(() => UpgradeBackupJSONFile(decompressBackupFile(str)))
+            .then(object => Services.Welcome.restoreBackup(object!))
+            .then(() => setRestoreState('success'))
+            .catch(() => setRestoreState('failed'))
+    }
+
+    function QR() {
+        const shouldRenderQRComponent = state[0] === 2 && !restoreState
+        return shouldRenderQRComponent ? (
+            <QRScanner onError={() => setRestoreState('failed')} scanning width="100%" onResult={importFromQR} />
+        ) : null
+    }
+
     const tabProps: BackupRestoreTabProps = {
         tabs: [
             {
@@ -295,6 +312,11 @@ export function PersonaImportDialog() {
                         value={base64Value}></InputBase>
                 ),
             },
+            {
+                label: 'QR',
+                component: <QR />,
+                p: 0,
+            },
         ],
         state,
     }
@@ -328,9 +350,11 @@ export function PersonaImportDialog() {
             title={geti18nString('import_persona')}
             content={content}
             actions={
-                <ActionButton variant="contained" color="primary" onClick={importPersona}>
-                    {geti18nString('import')}
-                </ActionButton>
+                state[0] === 2 ? null : (
+                    <ActionButton variant="contained" color="primary" onClick={importPersona}>
+                        {geti18nString('import')}
+                    </ActionButton>
+                )
             }></DialogContentItem>
     )
 }

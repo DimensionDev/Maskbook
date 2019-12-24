@@ -13,6 +13,7 @@ import { DatabaseRestoreSuccessDialog, DatabaseRestoreFailedDialog } from '../Da
 import { BackupJSONFileLatest, UpgradeBackupJSONFile } from '../../../utils/type-transform/BackupFormat/JSON/latest'
 import { extraPermissions } from '../../../utils/permissions'
 import { InitStep } from '../InitStep'
+import QRScanner from '../../../components/Welcomes/QRScanner'
 
 const header = geti18nString('restore_database')
 
@@ -90,6 +91,11 @@ export default function InitStep1R() {
     const [requiredPermissions, setRequiredPermissions] = React.useState<string[] | null>(null)
     const history = useHistory()
 
+    const setErrorState = (e: Error | null) => {
+        setJson(null)
+        setRestoreState(e)
+    }
+
     const resolveFileInput = async (str: string) => {
         try {
             const json = UpgradeBackupJSONFile(decompressBackupFile(str))
@@ -106,7 +112,7 @@ export default function InitStep1R() {
             setRestoreState('success')
         } catch (e) {
             console.error(e)
-            setRestoreState(e)
+            setErrorState(e)
         }
     }
 
@@ -120,6 +126,22 @@ export default function InitStep1R() {
     })
 
     const state = useState(0)
+
+    function QR() {
+        const shouldRenderQRComponent = state[0] === 2 && !json
+
+        return shouldRenderQRComponent ? (
+            <DialogRouter onExit={() => state[1](0)}>
+                <QRScanner
+                    onError={() => setErrorState(new Error('QR Error'))}
+                    scanning
+                    width="100%"
+                    onResult={resolveFileInput}
+                />
+            </DialogRouter>
+        ) : null
+    }
+
     const tabProps: BackupRestoreTabProps = {
         tabs: [
             {
@@ -149,6 +171,11 @@ export default function InitStep1R() {
                     </div>
                 ),
                 p: 1,
+            },
+            {
+                label: 'QR',
+                component: <QR />,
+                p: 0,
             },
         ],
         state,
@@ -195,7 +222,7 @@ export default function InitStep1R() {
                         children={
                             <DatabaseRestoreSuccessDialog
                                 permissions={!!requiredPermissions}
-                                onDecline={() => setRestoreState(null)}
+                                onDecline={() => setErrorState(null)}
                                 onConfirm={() => {
                                     browser.permissions
                                         .request({ origins: requiredPermissions ?? [] })
@@ -207,7 +234,7 @@ export default function InitStep1R() {
                                                 `${InitStep.Restore2}?personas=${json?.personas?.length}&profiles=${json?.profiles?.length}&posts=${json?.posts?.length}&contacts=${json?.userGroups?.length}&date=${json?._meta_?.createdAt}`,
                                             ),
                                         )
-                                        .catch(setRestoreState)
+                                        .catch(setErrorState)
                                 }}
                             />
                         }
