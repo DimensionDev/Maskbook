@@ -316,6 +316,7 @@ export async function attachProfileDB(
  */
 export async function deleteProfileDB(id: ProfileIdentifier, t: FullTransaction): Promise<void> {
     await t.objectStore('profiles').delete(id.toText())
+    queryProfile(id).then(of => MessageCenter.emit('profilesChanged', [{ reason: 'delete', of } as const]))
 }
 
 //#endregion
