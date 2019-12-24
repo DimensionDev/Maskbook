@@ -15,12 +15,6 @@ const querySelectorAll = <T extends E>(selector: string) => {
     return new LiveSelector().querySelectorAll<T>(selector)
 }
 
-const createPostEditorSelector = (selector: string = '') =>
-    [
-        `[aria-labelledby="modal-header"] ${selector}`.trim(), // for popup
-        `[role="main"] :not(aside) > [role="progressbar"] ~ div ${selector}`.trim(), // for timeline
-    ].join()
-
 export const rootSelector: () => LiveSelector<E, true> = () => querySelector<E>('#react-root')
 
 export const postEditorInPopupSelector: () => LiveSelector<E, true> = () =>
