@@ -23,6 +23,7 @@ import { injectCommentBoxDefaultFactory } from '../../social-network/defaults/in
 import { injectOptionsPageLinkAtFacebook } from './UI/injectOptionsPageLink'
 import { InitGroupsValueRef } from '../../social-network/defaults/GroupsValueRef'
 import { injectKnownIdentityAtFacebook } from './UI/injectKnownIdentity'
+import { createTaskStartImmersiveSetupDefault } from '../../social-network/defaults/taskStartImmersiveSetupDefault'
 
 export const facebookUISelf = defineSocialNetworkUI({
     ...sharedProvider,
@@ -95,4 +96,5 @@ export const facebookUISelf = defineSocialNetworkUI({
     taskUploadToPostBox: uploadToPostBoxFacebook,
     taskGetPostContent: getPostContentFacebook,
     taskGetProfile: getProfileFacebook,
+    taskStartImmersiveSetup: createTaskStartImmersiveSetupDefault(),
 })
