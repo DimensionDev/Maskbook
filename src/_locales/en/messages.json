@@ -30,6 +30,9 @@
     "post_dialog__select_recipients_title": {
         "message": "Select Recipients"
     },
+    "post_dialog__select_recipients_only_myself": {
+        "message": "Only Myself"
+    },
     "post_dialog__select_specific_friends_title": {
         "message": "Specific Friends ($1 selected)"
     },

@@ -39,16 +39,19 @@ export interface SelectRecipientsUIProps<T extends Group | Profile = Group | Pro
 export function SelectRecipientsUI<T extends Group | Profile = Group | Profile>(props: SelectRecipientsUIProps) {
     const classes = useStylesExtends(useStyles(), props)
     const { items, maxSelection, selected, onSetSelected } = props
+
+    const currentIdentity = useCurrentIdentity()
+    const currentIdentifier = currentIdentity ? currentIdentity.identifier.toText() : ''
     const groupItems = items.filter(x => isGroup(x)) as Group[]
-    const profileItems = items.filter(x => isProfile(x)) as Profile[]
+    const profileItems = items.filter(
+        x => isProfile(x) && !x.identifier.equals(currentIdentity?.identifier) && x.linkedPersona?.fingerprint,
+    ) as Profile[]
 
     const selectedAsProfiles = selected.filter(x => isProfile(x)) as Profile[]
     const selectedAsGroups = selected.filter(x => isGroup(x)) as Group[]
 
     const [open, setOpen] = useState(false)
     const [search, setSearch] = useState('') // TODO: Filter profiles with keywords
-    const currentIdentity = useCurrentIdentity()
-    const currentIdentifier = currentIdentity ? currentIdentity.identifier.toText() : ''
     const [selectedIdentifiers, setSelectedIdentifiers] = useState<string[]>(
         difference(
             Array.from(
@@ -98,7 +101,7 @@ export function SelectRecipientsUI<T extends Group | Profile = Group | Profile>(
                         key={item.identifier.toText()}
                         item={item}
                         checked={selectedAsGroups.some(x => x.identifier.equals(item.identifier))}
-                        disabled={item.members.length === 0}
+                        disabled={props.disabled || item.members.length === 0}
                         onChange={(_, checked) => {
                             const identifiers = item.members.map(x => x.toText())
                             if (checked) {
@@ -118,14 +121,13 @@ export function SelectRecipientsUI<T extends Group | Profile = Group | Profile>(
                             String(selectedIdentifiers.length),
                         ),
                         avatar: <AddIcon />,
-                        disabled: profileItems.length === 0,
+                        disabled: props.disabled || profileItems.length === 0,
                         onClick() {
                             setOpen(true)
                         },
                     }}
                 />
                 <SelectRecipientsDialogUI
-                    ignoreMyself
                     open={open}
                     items={profileItems}
                     selected={profileItems.filter(x => selectedIdentifiers.indexOf(x.identifier.toText()) > -1)}

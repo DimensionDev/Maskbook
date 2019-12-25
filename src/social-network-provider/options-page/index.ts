@@ -6,6 +6,10 @@ import { GetContext, ValueRef } from '@holoflows/kit/es'
 import { Profile, Persona } from '../../database'
 import { createDataWithIdentifierChangedListener } from '../../social-network/defaults/createDataWithIdentifierChangedListener'
 
+function hasFingerprint(x: Profile) {
+    return !!x.linkedPersona?.fingerprint
+}
+
 const optionsPageUISelf = defineSocialNetworkUI({
     ...emptyDefinition,
     internalName: 'Options page data source',
@@ -23,9 +27,9 @@ const optionsPageUISelf = defineSocialNetworkUI({
             const ref = optionsPageUISelf.friendsRef
             MessageCenter.on(
                 'profilesChanged',
-                createDataWithIdentifierChangedListener(ref, () => true),
+                createDataWithIdentifierChangedListener(ref, e => hasFingerprint(e.of)),
             )
-            Services.Identity.queryProfiles().then(p => (ref.value = p))
+            Services.Identity.queryProfiles().then(p => (ref.value = p.filter(hasFingerprint)))
         }
         {
             const ref = optionsPageUISelf.myPersonasRef

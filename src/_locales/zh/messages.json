@@ -30,6 +30,9 @@
     "post_dialog__select_recipients_title": {
         "message": "選擇收件人"
     },
+    "post_dialog__select_recipients_only_myself": {
+        "message": "僅自己"
+    },
     "post_dialog__select_specific_friends_title": {
         "message": "選擇好友 (已選 $1)"
     },

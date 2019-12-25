@@ -125,3 +125,9 @@ export const useTwitterBanner = makeStyles((theme: Theme) => ({
         padding: '0 17px',
     },
 }))
+
+export const useTwitterLabel = makeStyles({
+    label: {
+        fontSize: 12,
+    },
+})

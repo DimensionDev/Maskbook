@@ -42,7 +42,6 @@ export interface SelectRecipientsDialogUIProps
         | 'close'
         | 'button'
     > {
-    ignoreMyself?: boolean
     open: boolean
     items: Profile[]
     selected: Profile[]
@@ -56,15 +55,7 @@ export interface SelectRecipientsDialogUIProps
 export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
     const classes = useStylesExtends(useStyles(), props)
     const rootRef = useRef<HTMLDivElement>(null)
-
-    const currentIdentity = useCurrentIdentity()
-    const itemsForRender = props.ignoreMyself
-        ? props.items.filter(
-              x =>
-                  x?.linkedPersona?.fingerprint &&
-                  !x.identifier.equals(currentIdentity ? currentIdentity.identifier : ProfileIdentifier.unknown),
-          )
-        : props.items.filter(x => x.linkedPersona?.fingerprint)
+    const { items } = props
 
     return (
         <div ref={rootRef}>
@@ -99,7 +90,7 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
                 </DialogTitle>
                 <DialogContent className={classes.content}>
                     <List dense>
-                        {itemsForRender.map(item => (
+                        {items.map(item => (
                             <ProfileInList
                                 key={item.identifier.toText()}
                                 item={item}
