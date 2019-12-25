@@ -1,6 +1,8 @@
 import React from 'react'
 import qr from 'qrcode'
 import { useRef, useEffect } from 'react'
+import { useAsync } from '../../utils/components/AsyncComponent'
+import { iOSHost } from '../../utils/iOS-RPC'
 
 const cache = new Proxy(sessionStorage, {
     get(t, p: 'get' | 'set') {
@@ -34,4 +36,9 @@ export function QrCode(props: {
         }
     }, [props.options, props.text])
     return image ? <img src={image} {...props.canvasProps} /> : <canvas {...props.canvasProps} ref={ref} />
+}
+
+export function WKWebkitQRScanner(props: { onScan(val: string): void; onQuit(): void }) {
+    useAsync(() => iOSHost.scanQRCode(), []).then(x => props.onScan(x), props.onQuit)
+    return null
 }
