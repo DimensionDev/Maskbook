@@ -126,6 +126,18 @@ export function DialogRouter(props: DialogRouterProps) {
                   history.push(onExit || '..')
               }
 
+    const ChildrenComponent = React.memo(
+        function ChildrenComponent() {
+            return (
+                <>
+                    {Component && <Component />}
+                    {children || null}
+                </>
+            )
+        },
+        () => !routeMatching,
+    )
+
     return (
         <Dialog
             disableEscapeKeyDown
@@ -136,8 +148,7 @@ export function DialogRouter(props: DialogRouterProps) {
             classes={{ paper: classes.dialog }}
             TransitionComponent={Transition}>
             <Route path={matchPattern?.path}>
-                {Component && <Component></Component>}
-                {children || null}
+                <ChildrenComponent />
             </Route>
         </Dialog>
     )
