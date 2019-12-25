@@ -14,6 +14,8 @@ import { BackupJSONFileLatest, UpgradeBackupJSONFile } from '../../../utils/type
 import { extraPermissions } from '../../../utils/permissions'
 import { InitStep } from '../InitStep'
 import QRScanner from '../../../components/Welcomes/QRScanner'
+import { hasWKWebkitRPCHandlers } from '../../../utils/iOS-RPC'
+import { WKWebkitQRScanner } from '../../../components/shared/qrcode'
 
 const header = geti18nString('restore_database')
 
@@ -126,19 +128,24 @@ export default function InitStep1R() {
     })
 
     const state = useState(0)
+    const [tabState, setTabState] = state
 
     function QR() {
-        const shouldRenderQRComponent = state[0] === 2 && !json
+        const shouldRenderQRComponent = tabState === 2 && !json
 
         return shouldRenderQRComponent ? (
-            <DialogRouter onExit={() => state[1](0)}>
-                <QRScanner
-                    onError={() => setErrorState(new Error('QR Error'))}
-                    scanning
-                    width="100%"
-                    onResult={resolveFileInput}
-                />
-            </DialogRouter>
+            hasWKWebkitRPCHandlers ? (
+                <WKWebkitQRScanner onScan={resolveFileInput} onQuit={() => setTabState(0)} />
+            ) : (
+                <DialogRouter onExit={() => setTabState(0)}>
+                    <QRScanner
+                        onError={() => setErrorState(new Error('QR Error'))}
+                        scanning
+                        width="100%"
+                        onResult={resolveFileInput}
+                    />
+                </DialogRouter>
+            )
         ) : null
     }
 

@@ -14,10 +14,11 @@ import { useAsync } from '../../../utils/components/AsyncComponent'
 import ProfileBox from '../DashboardComponents/ProfileBox'
 import { useColorProvider } from '../../../utils/theme'
 import { geti18nString } from '../../../utils/i18n'
-import { QrCode } from '../../../components/shared/qrcode'
+import { QrCode, WKWebkitQRScanner } from '../../../components/shared/qrcode'
 import { compressBackupFile, decompressBackupFile } from '../../../utils/type-transform/BackupFileShortRepresentation'
 import QRScanner from '../../../components/Welcomes/QRScanner'
 import { UpgradeBackupJSONFile } from '../../../utils/type-transform/BackupFormat/JSON/latest'
+import { hasWKWebkitRPCHandlers } from '../../../utils/iOS-RPC'
 
 export function PersonaCreateDialog() {
     const [name, setName] = useState('')
@@ -236,14 +237,15 @@ export function PersonaImportDialog() {
     const [restoreState, setRestoreState] = React.useState<'success' | 'failed' | null>(null)
 
     const state = useState(0)
+    const [tabState, setTabState] = state
 
     const importPersona = () => {
-        if (state[0] === 0) {
+        if (tabState === 0) {
             if (!bip39.validateMnemonic(mnemonicWordValue)) return setRestoreState('failed')
             Services.Welcome.restoreNewIdentityWithMnemonicWord(mnemonicWordValue, password, { nickname })
                 .then(() => setRestoreState('success'))
                 .catch(() => setRestoreState('failed'))
-        } else if (state[0] === 1) {
+        } else if (tabState === 1) {
             Promise.resolve()
                 .then(() => JSON.parse(atob(base64Value)))
                 .then(object => Services.Welcome.restoreBackup(object))
@@ -261,9 +263,19 @@ export function PersonaImportDialog() {
     }
 
     function QR() {
-        const shouldRenderQRComponent = state[0] === 2 && !restoreState
+        const shouldRenderQRComponent = tabState === 2 && !restoreState
+
         return shouldRenderQRComponent ? (
-            <QRScanner onError={() => setRestoreState('failed')} scanning width="100%" onResult={importFromQR} />
+            hasWKWebkitRPCHandlers ? (
+                <WKWebkitQRScanner onScan={importFromQR} onQuit={() => setTabState(0)} />
+            ) : (
+                <QRScanner
+                    onError={() => setRestoreState('failed')}
+                    scanning={shouldRenderQRComponent}
+                    width="100%"
+                    onResult={importFromQR}
+                />
+            )
         ) : null
     }
 
@@ -331,7 +343,7 @@ export function PersonaImportDialog() {
                     children={
                         <PersonaImportSuccessDialog
                             onConfirm={() => history.push('/home')}
-                            nickname={state[0] === 0 ? nickname : null}
+                            nickname={tabState === 0 ? nickname : null}
                         />
                     }
                 />
@@ -350,7 +362,7 @@ export function PersonaImportDialog() {
             title={geti18nString('import_persona')}
             content={content}
             actions={
-                state[0] === 2 ? null : (
+                tabState === 2 ? null : (
                     <ActionButton variant="contained" color="primary" onClick={importPersona}>
                         {geti18nString('import')}
                     </ActionButton>
