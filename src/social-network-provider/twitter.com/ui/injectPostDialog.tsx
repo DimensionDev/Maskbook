@@ -3,7 +3,7 @@ import { twitterUrl } from '../utils/url'
 import { MutationObserverWatcher, LiveSelector } from '@holoflows/kit/es'
 import { renderInShadowRoot } from '../../../utils/jss/renderInShadowRoot'
 import { PostDialog } from '../../../components/InjectedComponents/PostDialog'
-import { useTwitterButton, useTwitterCloseButton, useTwitterDialog } from '../utils/theme'
+import { useTwitterButton, useTwitterCloseButton, useTwitterLabel, useTwitterDialog } from '../utils/theme'
 import { makeStyles } from '@material-ui/styles'
 import { postEditorInPopupSelector, rootSelector } from '../utils/selector'
 import { Theme } from '@material-ui/core'
@@ -54,6 +54,7 @@ function PostDialogAtTwitter(props: { reason: 'timeline' | 'popup' }) {
         <PostDialog
             classes={{
                 ...useStyles(),
+                ...useTwitterLabel(),
                 ...useTwitterDialog(),
                 ...useTwitterButton(),
                 ...useTwitterCloseButton(),

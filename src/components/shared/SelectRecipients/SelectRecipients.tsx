@@ -101,7 +101,7 @@ export function SelectRecipientsUI<T extends Group | Profile = Group | Profile>(
                         key={item.identifier.toText()}
                         item={item}
                         checked={selectedAsGroups.some(x => x.identifier.equals(item.identifier))}
-                        disabled={item.members.length === 0}
+                        disabled={props.disabled || item.members.length === 0}
                         onChange={(_, checked) => {
                             const identifiers = item.members.map(x => x.toText())
                             if (checked) {
@@ -121,7 +121,7 @@ export function SelectRecipientsUI<T extends Group | Profile = Group | Profile>(
                             String(selectedIdentifiers.length),
                         ),
                         avatar: <AddIcon />,
-                        disabled: profileItems.length === 0,
+                        disabled: props.disabled || profileItems.length === 0,
                         onClick() {
                             setOpen(true)
                         },

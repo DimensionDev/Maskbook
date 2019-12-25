@@ -11,6 +11,8 @@ import {
     DialogTitle,
     DialogContent,
     DialogActions,
+    Switch,
+    FormControlLabel,
 } from '@material-ui/core'
 import { geti18nString } from '../../utils/i18n'
 import { MessageCenter, CompositionEvent } from '../../utils/messages'
@@ -39,6 +41,9 @@ const useStyles = makeStyles({
     title: {
         marginLeft: 6,
     },
+    actions: {
+        paddingLeft: 26,
+    },
 })
 const ResponsiveDialog = withMobileDialog({ breakpoint: 'xs' })(Dialog)
 
@@ -55,14 +60,18 @@ export interface PostDialogUIProps
         | 'actions'
         | 'close'
         | 'button'
+        | 'label'
+        | 'switch'
     > {
     open: boolean
+    onlyMyself: boolean
     availableShareTarget: Array<Profile | Group>
     currentShareTarget: Array<Profile | Group>
     currentIdentity: Profile | null
     postBoxText: string
     postBoxButtonDisabled: boolean
     onPostTextChanged: (nextString: string) => void
+    onOnlyMyselfSwitchChanged: (checked: boolean) => void
     onFinishButtonClicked: () => void
     onCloseButtonClicked: () => void
     onSetSelected: SelectRecipientsUIProps['onSetSelected']
@@ -122,6 +131,7 @@ export function PostDialogUI(props: PostDialogUIProps) {
                         {geti18nString('post_dialog__select_recipients_title')}
                     </Typography>
                     <SelectRecipientsUI
+                        disabled={props.onlyMyself}
                         items={props.availableShareTarget}
                         selected={props.currentShareTarget}
                         onSetSelected={props.onSetSelected}
@@ -129,6 +139,14 @@ export function PostDialogUI(props: PostDialogUIProps) {
                     />
                 </DialogContent>
                 <DialogActions className={classes.actions}>
+                    <FormControlLabel
+                        classes={{ label: classes.label }}
+                        label={geti18nString('post_dialog__select_recipients_only_myself')}
+                        control={<Switch className={classes.switch} color="primary" checked={props.onlyMyself} />}
+                        onChange={(_: React.ChangeEvent<{}>, checked: boolean) =>
+                            props.onOnlyMyselfSwitchChanged(checked)
+                        }
+                    />
                     <Button
                         className={classes.button}
                         style={{ marginLeft: 'auto' }}
@@ -215,12 +233,15 @@ export function PostDialog(props: PostDialogProps) {
         }
     }, [identities.length, props.reason])
 
+    const [onlyMyself, setOnlyMyself] = useState(false)
+    const onOnlyMyselfSwitchChanged = useCallback((checked: boolean) => setOnlyMyself(checked), [])
+
     const [postBoxText, setPostBoxText] = useState('')
     const [currentShareTarget, setCurrentShareTarget] = useState(availableShareTarget)
     const onFinishButtonClicked = useCallback(() => {
-        onRequestPost(currentShareTarget, postBoxText)
+        onRequestPost(onlyMyself ? [currentIdentity!] : currentShareTarget, postBoxText)
         onRequestReset()
-    }, [currentShareTarget, onRequestPost, onRequestReset, postBoxText])
+    }, [currentIdentity, currentShareTarget, onRequestPost, onRequestReset, onlyMyself, postBoxText])
     const onCloseButtonClicked = useCallback(() => {
         setOpen(false)
     }, [])
@@ -228,13 +249,15 @@ export function PostDialog(props: PostDialogProps) {
     return (
         <PostDialogUI
             open={open}
+            onlyMyself={onlyMyself}
             availableShareTarget={availableShareTarget}
             currentIdentity={currentIdentity}
             currentShareTarget={currentShareTarget}
             postBoxText={postBoxText}
-            postBoxButtonDisabled={!(currentShareTarget.length && postBoxText)}
+            postBoxButtonDisabled={!(onlyMyself ? postBoxText : currentShareTarget.length && postBoxText)}
             onSetSelected={setCurrentShareTarget}
             onPostTextChanged={setPostBoxText}
+            onOnlyMyselfSwitchChanged={onOnlyMyselfSwitchChanged}
             onFinishButtonClicked={onFinishButtonClicked}
             onCloseButtonClicked={onCloseButtonClicked}
             {...props}
