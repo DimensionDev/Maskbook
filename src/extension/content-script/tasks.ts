@@ -1,6 +1,10 @@
-import { AutomatedTabTask } from '@holoflows/kit'
-import { ProfileIdentifier, ECKeyIdentifier } from '../../database/type'
-import { disableOpenNewTabInBackgroundSettings } from '../../components/shared-settings/settings'
+import { AutomatedTabTask, GetContext } from '@holoflows/kit'
+import { ProfileIdentifier, ECKeyIdentifier, Identifier } from '../../database/type'
+import {
+    disableOpenNewTabInBackgroundSettings,
+    currentImmersiveSetupStatus,
+    ImmersiveSetupCrossContextStatus,
+} from '../../components/shared-settings/settings'
 import { SocialNetworkUI } from '../../social-network/ui'
 import { memoizePromise } from '../../utils/memoize'
 import { safeGetActiveUI } from '../../utils/safeRequire'
@@ -57,3 +61,17 @@ export default function tasksMocked(...args: Parameters<typeof tasks>) {
     // for debug purpose
     return _tasks
 }
+setTimeout(() => {
+    if (GetContext() !== 'content') return
+    const x = getActivatedUI().networkIdentifier
+    let id = currentImmersiveSetupStatus[x].value
+    currentImmersiveSetupStatus[x].addListener(n => {
+        id = n
+        const status: ImmersiveSetupCrossContextStatus = JSON.parse(id || '{}')
+        if (status.persona && status.status === 'during' && status.username) {
+            _tasks.immersiveSetup(
+                Identifier.fromString(status.persona, ECKeyIdentifier).unwrap('Cant cast to ECKeyIdentifier'),
+            )
+        }
+    })
+}, 200)

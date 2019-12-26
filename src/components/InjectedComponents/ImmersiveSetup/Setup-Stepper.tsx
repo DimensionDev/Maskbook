@@ -11,9 +11,10 @@ import { ActionButtonPromise } from '../../../extension/options-page/DashboardCo
 import { sleep } from '@holoflows/kit/es/util/sleep'
 import { getActivatedUI } from '../../../social-network/ui'
 import { useValueRef } from '../../../utils/hooks/useValueRef'
-import { ProfileIdentifier } from '../../../database/type'
+import { ProfileIdentifier, PersonaIdentifier } from '../../../database/type'
 import { useCapturedInput } from '../../../utils/hooks/useCapturedEvents'
 import CloseIcon from '@material-ui/icons/Close'
+import { currentImmersiveSetupStatus, ImmersiveSetupCrossContextStatus } from '../../shared-settings/settings'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -197,9 +198,26 @@ function getUserID(x: ProfileIdentifier) {
     return x.userId
 }
 export function ImmersiveSetupStepper(
-    props: Partial<ImmersiveSetupStepperUIProps> & Pick<ImmersiveSetupStepperUIProps, 'onClose'>,
+    props: Partial<ImmersiveSetupStepperUIProps> &
+        Pick<ImmersiveSetupStepperUIProps, 'onClose'> & { persona: PersonaIdentifier },
 ) {
     const [step, setStep] = React.useState(ImmersiveSetupState.ConfirmUsername)
+
+    const ui = getActivatedUI()
+    const lastStateRef = currentImmersiveSetupStatus[ui.networkIdentifier]
+    const lastState_ = useValueRef(lastStateRef)
+    const lastState = React.useMemo<ImmersiveSetupCrossContextStatus>(() => {
+        try {
+            return JSON.parse(lastState_)
+        } catch {
+            return {}
+        }
+    }, [lastState_])
+    React.useEffect(() => {
+        if (step === ImmersiveSetupState.ConfirmUsername && lastState.status === 'during') {
+            setStep(ImmersiveSetupState.PasteBio)
+        }
+    }, [step, setStep, lastState])
 
     const lastRecognized = useValueRef(getActivatedUI().lastRecognizedIdentity)
     const touched = React.useRef(false)
@@ -227,9 +245,23 @@ export function ImmersiveSetupStepper(
             autoPasteProvePost={() => navigator.clipboard.writeText(provePost).then(() => sleep(400))}
             bioSet="detecting"
             {...props}
-            // TODO: default impl: call ui
-            loadProfile={() => (props.loadProfile?.() || Promise.resolve()).finally(next)}
+            onClose={() => {
+                props.onClose()
+                lastStateRef.value = ''
+            }}
+            loadProfile={() => (props.loadProfile?.() || defaultLoadProfile?.(props, username)).finally(next)}
             provePost={provePost}
         />
     )
+}
+async function defaultLoadProfile(props: { username?: string; persona: PersonaIdentifier }, username: string) {
+    const ui = getActivatedUI()
+    const finalUsername = props.username || username
+    currentImmersiveSetupStatus[ui.networkIdentifier].value = JSON.stringify({
+        status: 'during',
+        username: finalUsername,
+        persona: props.persona.toText(),
+    } as ImmersiveSetupCrossContextStatus)
+    ui.taskGotoProfilePage(new ProfileIdentifier(ui.networkIdentifier, finalUsername))
+    await sleep(400)
 }

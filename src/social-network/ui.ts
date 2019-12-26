@@ -176,6 +176,11 @@ export interface SocialNetworkUITasks {
      */
     taskPasteIntoBio(text: string): void
     /**
+     * Jump to profile page
+     * This task should go to the profile page. The PWA way (no page refreshing) is preferred.
+     */
+    taskGotoProfilePage(profile: ProfileIdentifier): void
+    /**
      * This function should return the given single post on the current page,
      * Called by `AutomatedTabTask`
      */

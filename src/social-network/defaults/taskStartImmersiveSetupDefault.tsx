@@ -11,11 +11,22 @@ import { ValueRef } from '@holoflows/kit/es'
 import { useValueRef } from '../../utils/hooks/useValueRef'
 import { SocialNetworkUI } from '../ui'
 
-function UI({ unmount, post }: { unmount: () => void; post: ValueRef<string> }) {
+function UI({
+    post,
+    unmount,
+    persona,
+    ...rest
+}: { unmount: () => void; post: ValueRef<string>; persona: PersonaIdentifier } & Partial<
+    ImmersiveSetupStepperUIProps
+>) {
     const provePost = useValueRef(post)
     return (
         <DraggablePaper>
-            <ImmersiveSetupStepper provePost={provePost} onClose={unmount}></ImmersiveSetupStepper>
+            <ImmersiveSetupStepper
+                persona={persona}
+                provePost={provePost}
+                onClose={unmount}
+                {...rest}></ImmersiveSetupStepper>
         </DraggablePaper>
     )
 }
@@ -28,7 +39,7 @@ export function createTaskStartImmersiveSetupDefault(
         const shadow = dom.attachShadow({ mode: 'closed' })
         document.body.appendChild(dom)
         const provePost = new ValueRef('')
-        const unmount = renderInShadowRoot(<UI post={provePost} unmount={() => unmount()} />, shadow)
+        const unmount = renderInShadowRoot(<UI persona={for_} post={provePost} unmount={() => unmount()} />, shadow)
         Services.Crypto.getMyProveBio(for_, _().networkIdentifier)
             .then(x => x || '')
             .then(x => (provePost.value = x))

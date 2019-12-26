@@ -24,6 +24,7 @@ import { injectOptionsPageLinkAtFacebook } from './UI/injectOptionsPageLink'
 import { InitGroupsValueRef } from '../../social-network/defaults/GroupsValueRef'
 import { injectKnownIdentityAtFacebook } from './UI/injectKnownIdentity'
 import { createTaskStartImmersiveSetupDefault } from '../../social-network/defaults/taskStartImmersiveSetupDefault'
+import { getProfilePageUrlAtFacebook } from './parse-username'
 
 export const facebookUISelf = defineSocialNetworkUI({
     ...sharedProvider,
@@ -97,4 +98,9 @@ export const facebookUISelf = defineSocialNetworkUI({
     taskGetPostContent: getPostContentFacebook,
     taskGetProfile: getProfileFacebook,
     taskStartImmersiveSetup: createTaskStartImmersiveSetupDefault(() => facebookUISelf),
+    taskGotoProfilePage(profilePage) {
+        // there is no PWA way on Facebook desktop.
+        // mobile not tested
+        location.href = getProfilePageUrlAtFacebook(profilePage, 'open')
+    },
 })

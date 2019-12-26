@@ -55,4 +55,5 @@ export const emptyDefinition: SocialNetworkUIDefinition = {
     version: 1,
     gunNetworkHint: 'invalid-',
     taskStartImmersiveSetup() {},
+    taskGotoProfilePage() {},
 }

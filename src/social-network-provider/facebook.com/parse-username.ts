@@ -42,7 +42,7 @@ export function getProfilePageUrlAtFacebook(user: ProfileIdentifier | GroupIdent
     const username = user.userId
     if (!regularUsername(username)) throw new TypeError(geti18nString('service_username_invalid'))
     if (parseFloat(username)) return `${host}/profile.php?id=${username}`
-    return `${host}/${username}?fref=pymk`
+    return `${host}/${username}`
 }
 function getHostName(usage: 'fetch' | 'open') {
     // if (usage === 'fetch') {
