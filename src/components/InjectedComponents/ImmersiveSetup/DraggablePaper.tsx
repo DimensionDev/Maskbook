@@ -26,7 +26,7 @@ export function DraggablePaper(props: PaperProps) {
     const classes = useStyle()
     return (
         <div className={classes.root}>
-            <Draggable bounds="parent" cancel="input, button" handle="aside">
+            <Draggable bounds="parent" cancel="input, button, address" handle="nav">
                 <Paper {...props} elevation={10} className={classes.paper} />
             </Draggable>
         </div>
