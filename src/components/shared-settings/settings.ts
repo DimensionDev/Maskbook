@@ -30,14 +30,14 @@ export const disableOpenNewTabInBackgroundSettings = createNewSettings<boolean>(
     },
 )
 
-const createProxiedSettings = (settingsKey: string) => {
+const createProxiedSettings = <T extends string = string>(settingsKey: string) => {
     const target: { [key: string]: ValueRef<string> } = {}
     MessageCenter.on('settingsCreated', updatedKey => {
         if (!(updatedKey in target)) {
             target[updatedKey] = createNetworkSpecificSettings<string>(updatedKey, settingsKey, '')
         }
     })
-    return new Proxy(target, {
+    return ((new Proxy(target, {
         get(target, gettingKey: string) {
             if (!(gettingKey in target)) {
                 MessageCenter.emit('settingsCreated', gettingKey)
@@ -50,7 +50,13 @@ const createProxiedSettings = (settingsKey: string) => {
             obj.value = value
             return true
         },
-    })
+    }) as typeof target) as unknown) as { [key: string]: ValueRef<T> }
 }
 
 export const currentSelectedIdentity = createProxiedSettings('currentSelectedIdentity')
+export type ImmersiveSetupCrossContextStatus = {
+    status?: false | 'during'
+    persona?: string
+    username?: string
+}
+export const currentImmersiveSetupStatus = createProxiedSettings('currentImmersiveSetupStatus')

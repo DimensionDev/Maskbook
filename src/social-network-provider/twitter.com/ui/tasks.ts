@@ -24,6 +24,7 @@ import Services from '../../../extension/service'
 import { twitterEncoding } from '../encoding'
 import { createTaskStartImmersiveSetupDefault } from '../../../social-network/defaults/taskStartImmersiveSetupDefault'
 import { instanceOfTwitterUI } from '.'
+import { ProfileIdentifier } from '../../../database/type'
 
 /**
  * Wait for up to 5000 ms
@@ -147,6 +148,16 @@ const taskGetProfile = async () => {
     }
 }
 
+function taskGotoProfilePage(profile: ProfileIdentifier) {
+    const path = `/${profile.userId}`
+        // The PWA way
+    ;(document.querySelector(`[href="${path}"]`) as HTMLElement | undefined)?.click()
+    setTimeout(() => {
+        // The classic way
+        if (!location.pathname.startsWith(path)) location.pathname = path
+    }, 400)
+}
+
 export const twitterUITasks: SocialNetworkUITasks = {
     taskPasteIntoPostBox,
     taskUploadToPostBox,
@@ -154,4 +165,5 @@ export const twitterUITasks: SocialNetworkUITasks = {
     taskGetPostContent,
     taskGetProfile,
     taskStartImmersiveSetup: createTaskStartImmersiveSetupDefault(() => instanceOfTwitterUI),
+    taskGotoProfilePage: taskGotoProfilePage,
 }
