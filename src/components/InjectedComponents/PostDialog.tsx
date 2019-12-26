@@ -80,8 +80,7 @@ export interface PostDialogUIProps
 export function PostDialogUI(props: PostDialogUIProps) {
     const classes = useStylesExtends(useStyles(), props)
     const rootRef = useRef<HTMLDivElement>(null)
-    const inputRef = useRef<HTMLInputElement>(null)
-    useCapturedInput(inputRef, props.onPostTextChanged, [props.open])
+    const [, inputRef] = useCapturedInput(props.onPostTextChanged, [props.open])
     return (
         <div ref={rootRef}>
             <ResponsiveDialog

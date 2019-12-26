@@ -5,11 +5,15 @@ import Step from '@material-ui/core/Step'
 import StepLabel from '@material-ui/core/StepLabel'
 import StepContent from '@material-ui/core/StepContent'
 import Button from '@material-ui/core/Button'
-import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
-import { TextField, Link } from '@material-ui/core'
+import { TextField, Link, AppBar, Toolbar, IconButton } from '@material-ui/core'
 import { ActionButtonPromise } from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { sleep } from '@holoflows/kit/es/util/sleep'
+import { getActivatedUI } from '../../../social-network/ui'
+import { useValueRef } from '../../../utils/hooks/useValueRef'
+import { ProfileIdentifier } from '../../../database/type'
+import { useCapturedInput } from '../../../utils/hooks/useCapturedEvents'
+import CloseIcon from '@material-ui/icons/Close'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -21,9 +25,14 @@ const useStyles = makeStyles((theme: Theme) =>
             marginTop: theme.spacing(1),
             marginRight: theme.spacing(1),
         },
-        resetContainer: {
-            marginTop: theme.spacing(-1),
-            padding: theme.spacing(0, 3, 2),
+        provePost: {
+            wordBreak: 'break-all',
+            padding: 6,
+            border: `1px solid ${theme.palette.divider}`,
+        },
+        emptyProvePost: {
+            padding: 6,
+            border: `1px solid ${theme.palette.error.main}`,
         },
     }),
 )
@@ -35,7 +44,7 @@ export enum ImmersiveSetupState {
 }
 export interface ImmersiveSetupStepperUIProps {
     loadProfile(): Promise<void>
-    copyProvePost(): Promise<void>
+    autoPasteProvePost(): Promise<void>
     bioSet: 'detecting' | boolean
     currentStep: ImmersiveSetupState
     back(): void
@@ -49,20 +58,31 @@ export function ImmersiveSetupStepperUI(props: ImmersiveSetupStepperUIProps) {
     const classes = useStyles()
     const steps = getSteps()
     const activeStep = props.currentStep
+    const [, inputRef] = useCapturedInput(props.onUsernameChange)
 
-    const backButton = (
-        <Button onClick={props.back} className={classes.button}>
-            Back
-        </Button>
-    )
+    // const backButton = (
+    //     <Button onClick={props.back} className={classes.button}>
+    //         Back
+    //     </Button>
+    // )
     const actions = (
         <div>
-            {activeStep === 0 ? null : backButton}
+            {/* TODO: Implement back(including side effects rollback) for step 1  */}
+            {/* {activeStep <= 1 ? null : backButton} */}
             {getNextButton(activeStep)}
         </div>
     )
     return (
-        <div className={classes.root}>
+        <aside className={classes.root}>
+            <AppBar position="static">
+                <Toolbar variant="dense">
+                    <Typography variant="h6">Setup Maskbook</Typography>
+                    <div style={{ flex: 1 }} />
+                    <IconButton color="inherit" onClick={props.onClose}>
+                        <CloseIcon />
+                    </IconButton>
+                </Toolbar>
+            </AppBar>
             <Stepper activeStep={activeStep} orientation="vertical">
                 {steps.map((label, index) => (
                     <Step key={index}>
@@ -74,18 +94,13 @@ export function ImmersiveSetupStepperUI(props: ImmersiveSetupStepperUIProps) {
                     </Step>
                 ))}
             </Stepper>
-            <Paper square elevation={0} className={classes.resetContainer}>
-                {activeStep === steps.length && <Typography>{getBioStatus()}</Typography>}
-                <Button className={classes.button} onClick={props.onClose}>
-                    Quit the setup
-                </Button>
-            </Paper>
-        </div>
+            {activeStep === steps.length && <Typography>{getBioStatus()}</Typography>}
+        </aside>
     )
     function getBioStatus() {
         switch (props.bioSet) {
             case 'detecting':
-                return 'Checking...'
+                return `Checking if Maskbook has setup correctly`
             case true:
                 return "You're done!"
             case false:
@@ -105,19 +120,20 @@ export function ImmersiveSetupStepperUI(props: ImmersiveSetupStepperUIProps) {
                         color="primary"
                         className={classes.button}
                         executor={props.loadProfile}
-                        init="Go to profile"
-                        waiting="Going to profile"
+                        init="Yes, I'm sure"
+                        waiting="Go to profile"
                         complete="Next"
                         failed="Next"
                         disabled={props.username.length === 0}
                     />
                 )
             case ImmersiveSetupState.PasteBio:
-                return (
-                    <Button variant="contained" color="primary" onClick={props.next} className={classes.button}>
-                        Finish
-                    </Button>
-                )
+                return null
+            // return (
+            //     <Button variant="contained" color="primary" onClick={props.onClose} className={classes.button}>
+            //         Finish
+            //     </Button>
+            // )
             default:
                 return (
                     <Button variant="contained" color="primary" onClick={props.next} className={classes.button}>
@@ -136,38 +152,36 @@ export function ImmersiveSetupStepperUI(props: ImmersiveSetupStepperUIProps) {
                             label="User Name"
                             value={props.username}
                             onChange={e => props.onUsernameChange(e.currentTarget.value)}
+                            innerRef={inputRef}
                         />
                         <br />
                         <Typography>Maskbook needs your username to connect your account. Does it correct? </Typography>
                         <Typography>
-                            <Link href="/" variant="body2">
+                            <Link color="textSecondary" href="/" variant="body2">
                                 But I don't know what my username is!
                             </Link>
                         </Typography>
                     </>
                 )
             case ImmersiveSetupState.PasteBio:
+                const provePostError = props.provePost === ERROR_TEXT
+                if (provePostError) return <Typography className={classes.emptyProvePost}>{props.provePost}</Typography>
                 return (
                     <>
-                        <Typography
-                            style={{
-                                wordBreak: 'break-all',
-                                padding: '6px 0px',
-                            }}>
-                            {props.provePost}
-                        </Typography>
+                        <Typography className={classes.provePost}>{props.provePost}</Typography>
+                        <Typography>Please add this text to your bio. Don't remove or change any of it!</Typography>
                         <ActionButtonPromise
                             variant="contained"
                             color="secondary"
                             className={classes.button}
-                            executor={props.copyProvePost}
-                            init="Copy to clipboard"
-                            waiting="Copying to clipboard"
-                            complete="Copied!"
-                            failed="Copy failed"
+                            executor={props.autoPasteProvePost}
+                            init="Add it for me!"
+                            waiting="Adding..."
+                            complete="Done!"
+                            failed="Failed... Please add it to your bio manually!"
                             completeOnClick="use executor"
+                            failedOnClick="use executor"
                         />
-                        <Typography>This text can help your friend get your crypto key. Don't remove it!</Typography>
                     </>
                 )
             default:
@@ -176,21 +190,39 @@ export function ImmersiveSetupStepperUI(props: ImmersiveSetupStepperUIProps) {
     }
 }
 
+const ERROR_TEXT = 'Maskbook have some problems when setting up! Please report this to Maskbook developer!'
+
+function getUserID(x: ProfileIdentifier) {
+    if (x.isUnknown) return ''
+    return x.userId
+}
 export function ImmersiveSetupStepper(props: Partial<ImmersiveSetupStepperUIProps>) {
     const [step, setStep] = React.useState(ImmersiveSetupState.ConfirmUsername)
-    // TODO: default impl: auto detect
-    const [username, setUsername] = React.useState('')
+
+    const lastRecognized = useValueRef(getActivatedUI().lastRecognizedIdentity)
+    const touched = React.useRef(false)
+    const [username, setUsername] = React.useState(getUserID(lastRecognized.identifier))
+    if (username === '' && touched.current === false) {
+        const uid = getUserID(lastRecognized.identifier)
+        uid !== '' && setUsername(uid)
+    }
+
     const back = () => setStep(step - 1)
     const next = () => setStep(step + 1)
-    const provePost = props.provePost || '🎭A81Kg7HVsITcftN/0IBp2q6+IyfZCYHntkVsMTRl741L0🎭'
+    const provePost = props.provePost || ERROR_TEXT
     return (
         <ImmersiveSetupStepperUI
+            // ? currentStep back next is a self managed group
             currentStep={step}
             back={back}
             next={next}
+            // ? username & onUsernameChange is a self managed group
             username={username}
-            onUsernameChange={setUsername}
-            copyProvePost={() => navigator.clipboard.writeText(provePost).then(q => sleep(400))}
+            onUsernameChange={v => {
+                setUsername(v)
+                touched.current = true
+            }}
+            autoPasteProvePost={() => navigator.clipboard.writeText(provePost).then(() => sleep(400))}
             bioSet="detecting"
             // TODO: default impl: call ui
             onClose={() => {}}

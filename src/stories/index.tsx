@@ -21,7 +21,7 @@ defineSocialNetworkUI({
     },
     myIdentitiesRef: new ValueRef(demoPeople),
     groupsRef: new ValueRef(demoGroup),
-    lastRecognizedIdentity: new ValueRef({ identifier: ProfileIdentifier.unknown }),
+    lastRecognizedIdentity: new ValueRef({ identifier: new ProfileIdentifier('example.com', 'example-user-name') }),
     currentIdentity: new ValueRef<Profile | null>(null),
     friendsRef: new ValueRef(demoPeople),
 })

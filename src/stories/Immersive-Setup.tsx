@@ -8,10 +8,14 @@ import { action } from '@storybook/addon-actions'
 storiesOf('Immersive Setup', module).add('Stepper', () => (
     <ImmersiveSetupStepper
         loadProfile={async () => {
-            action('onGoToProfileClicked')()
-            await sleep(1200)
+            action('loadProfile')()
+            await sleep(700)
         }}
         provePost={text('Prove post', '🎭A81Kg7HVsITcftN/0IBp2q6+IyfZCYHntkVsMTRl741L0🎭')}
         onClose={action('close')}
+        autoPasteProvePost={async () => {
+            action('autoPasteProvePost')()
+            await sleep(700)
+        }}
     />
 ))

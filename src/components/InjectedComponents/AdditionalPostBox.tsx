@@ -54,8 +54,7 @@ export interface AdditionalPostBoxUIProps
  */
 export const AdditionalPostBoxUI = React.memo(function AdditionalPostBoxUI(props: AdditionalPostBoxUIProps) {
     const classes = useStylesExtends(useStyles(), props)
-    const inputRef = useRef<HTMLInputElement>()
-    useCapturedInput(inputRef, props.onPostTextChange)
+    const [, inputRef] = useCapturedInput(props.onPostTextChange)
 
     return (
         <Card>
