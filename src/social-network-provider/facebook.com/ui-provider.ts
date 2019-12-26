@@ -96,5 +96,5 @@ export const facebookUISelf = defineSocialNetworkUI({
     taskUploadToPostBox: uploadToPostBoxFacebook,
     taskGetPostContent: getPostContentFacebook,
     taskGetProfile: getProfileFacebook,
-    taskStartImmersiveSetup: createTaskStartImmersiveSetupDefault(),
+    taskStartImmersiveSetup: createTaskStartImmersiveSetupDefault(() => facebookUISelf),
 })

@@ -78,7 +78,7 @@ export function ImmersiveSetupStepperUI(props: ImmersiveSetupStepperUIProps) {
                 <Toolbar variant="dense">
                     <Typography variant="h6">Setup Maskbook</Typography>
                     <div style={{ flex: 1 }} />
-                    <IconButton color="inherit" onClick={props.onClose}>
+                    <IconButton edge="end" color="inherit" onClick={props.onClose}>
                         <CloseIcon />
                     </IconButton>
                 </Toolbar>
@@ -196,7 +196,9 @@ function getUserID(x: ProfileIdentifier) {
     if (x.isUnknown) return ''
     return x.userId
 }
-export function ImmersiveSetupStepper(props: Partial<ImmersiveSetupStepperUIProps>) {
+export function ImmersiveSetupStepper(
+    props: Partial<ImmersiveSetupStepperUIProps> & Pick<ImmersiveSetupStepperUIProps, 'onClose'>,
+) {
     const [step, setStep] = React.useState(ImmersiveSetupState.ConfirmUsername)
 
     const lastRecognized = useValueRef(getActivatedUI().lastRecognizedIdentity)
@@ -224,8 +226,6 @@ export function ImmersiveSetupStepper(props: Partial<ImmersiveSetupStepperUIProp
             }}
             autoPasteProvePost={() => navigator.clipboard.writeText(provePost).then(() => sleep(400))}
             bioSet="detecting"
-            // TODO: default impl: call ui
-            onClose={() => {}}
             {...props}
             // TODO: default impl: call ui
             loadProfile={() => (props.loadProfile?.() || Promise.resolve()).finally(next)}
