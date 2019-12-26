@@ -36,6 +36,7 @@ const useStyles = makeStyles((theme: Theme) =>
             padding: 6,
             border: `1px solid ${theme.palette.error.main}`,
         },
+        header: { cursor: 'move' },
     }),
 )
 
@@ -76,7 +77,7 @@ export function ImmersiveSetupStepperUI(props: ImmersiveSetupStepperUIProps) {
     )
     return (
         <aside className={classes.root}>
-            <AppBar position="static">
+            <AppBar component="nav" position="static" className={classes.header}>
                 <Toolbar variant="dense">
                     <Typography variant="h6">Setup Maskbook</Typography>
                     <div style={{ flex: 1 }} />
@@ -170,7 +171,9 @@ export function ImmersiveSetupStepperUI(props: ImmersiveSetupStepperUIProps) {
                 if (provePostError) return <Typography className={classes.emptyProvePost}>{props.provePost}</Typography>
                 return (
                     <>
-                        <Typography className={classes.provePost}>{props.provePost}</Typography>
+                        <Typography component="address" className={classes.provePost}>
+                            {props.provePost}
+                        </Typography>
                         <Typography>Please add this text to your bio. Don't remove or change any of it!</Typography>
                         <ActionButtonPromise
                             variant="contained"
@@ -181,7 +184,7 @@ export function ImmersiveSetupStepperUI(props: ImmersiveSetupStepperUIProps) {
                             waiting="Adding..."
                             complete="Done!"
                             failed="Failed... Please add it to your bio manually!"
-                            completeOnClick="use executor"
+                            completeOnClick={props.onClose}
                             failedOnClick="use executor"
                         />
                     </>
