@@ -13,6 +13,8 @@ import { DialogRouter } from '../DashboardDialogs/DialogBase'
 import { ProfileDisconnectDialog, ProfileConnectStartDialog, ProfileConnectDialog } from '../DashboardDialogs/Profile'
 import Services from '../../service'
 import getCurrentNetworkUI from '../../../social-network/utils/getCurrentNetworkUI'
+import tasks from '../../content-script/tasks'
+import { currentImmersiveSetupStatus } from '../../../components/shared-settings/settings'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -76,25 +78,25 @@ export default function ProfileBox({ persona, border }: Props) {
         }
     })
 
-    const [connectProfile, setConnectProfile] = React.useState<typeof providers[0] | null>(null)
     const [connectIdentifier, setConnectIdentifier] = React.useState<ProfileIdentifier | null>(null)
     const [detachProfile, setDetachProfile] = React.useState<ProfileIdentifier | null>(null)
 
     const deletedOrNot = () => setDetachProfile(null)
     const dismissConnect = () => {
         setConnectIdentifier(null)
-        setConnectProfile(null)
     }
 
     const onConnect = async (provider: typeof providers[0]) => {
+        if (!persona) return
         if (!(await getCurrentNetworkUI(provider.network).requestPermission())) return
-        setConnectProfile(provider)
-    }
-
-    const doConnect = async (userId: string) => {
-        const identifier = new ProfileIdentifier(connectProfile!.network, userId)
-        await Services.Identity.attachProfile(identifier, persona!.identifier, { connectionConfirmState: 'confirmed' })
-        setConnectIdentifier(identifier)
+        currentImmersiveSetupStatus[provider.network].value = ''
+        tasks(getCurrentNetworkUI(provider.network).getHomePage(), {
+            active: true,
+            autoClose: false,
+            important: true,
+            memorable: false,
+            pinned: false,
+        }).immersiveSetup(persona.identifier)
     }
 
     return (
@@ -114,19 +116,6 @@ export default function ProfileBox({ persona, border }: Props) {
                     )}
                 </Typography>
             ))}
-            {connectProfile && (
-                <DialogRouter
-                    fullscreen={false}
-                    onExit={dismissConnect}
-                    children={
-                        <ProfileConnectStartDialog
-                            nickname={persona?.nickname}
-                            network={connectProfile.network}
-                            onConfirm={doConnect}
-                            onDecline={dismissConnect}
-                        />
-                    }></DialogRouter>
-            )}
             {connectIdentifier && (
                 <DialogRouter
                     onExit={dismissConnect}

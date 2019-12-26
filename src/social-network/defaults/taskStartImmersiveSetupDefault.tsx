@@ -1,5 +1,5 @@
 import React from 'react'
-import { PersonaIdentifier } from '../../database/type'
+import { PersonaIdentifier, ECKeyIdentifier } from '../../database/type'
 import { renderInShadowRoot } from '../../utils/jss/renderInShadowRoot'
 import {
     ImmersiveSetupStepper,
@@ -10,6 +10,7 @@ import Services from '../../extension/service'
 import { ValueRef } from '@holoflows/kit/es'
 import { useValueRef } from '../../utils/hooks/useValueRef'
 import { SocialNetworkUI } from '../ui'
+import { restorePrototype } from '../../utils/type'
 
 function UI({
     post,
@@ -19,6 +20,8 @@ function UI({
 }: { unmount: () => void; post: ValueRef<string>; persona: PersonaIdentifier } & Partial<
     ImmersiveSetupStepperUIProps
 >) {
+    // TODO: workaround. add serialization support for tasks
+    restorePrototype(persona, ECKeyIdentifier.prototype)
     const provePost = useValueRef(post)
     return (
         <DraggablePaper>
@@ -30,16 +33,29 @@ function UI({
         </DraggablePaper>
     )
 }
+let mounted = false
 export function createTaskStartImmersiveSetupDefault(
     _: () => SocialNetworkUI,
     props: Partial<ImmersiveSetupStepperUIProps> = {},
 ) {
     return (for_: PersonaIdentifier) => {
+        if (mounted) return
+        mounted = true
         const dom = document.createElement('span')
         const shadow = dom.attachShadow({ mode: 'closed' })
         document.body.appendChild(dom)
         const provePost = new ValueRef('')
-        const unmount = renderInShadowRoot(<UI persona={for_} post={provePost} unmount={() => unmount()} />, shadow)
+        const unmount = renderInShadowRoot(
+            <UI
+                persona={for_}
+                post={provePost}
+                unmount={() => {
+                    unmount()
+                    mounted = false
+                }}
+            />,
+            shadow,
+        )
         Services.Crypto.getMyProveBio(for_, _().networkIdentifier)
             .then(x => x || '')
             .then(x => (provePost.value = x))

@@ -1,5 +1,5 @@
 import { SocialNetworkWorkerAndUIDefinition } from '../../social-network/shared'
-import { regularUsername } from './parse-username'
+import { regularUsername, getFacebookHostName } from './parse-username'
 
 export const sharedProvider: SocialNetworkWorkerAndUIDefinition = {
     version: 1,
@@ -10,4 +10,5 @@ export const sharedProvider: SocialNetworkWorkerAndUIDefinition = {
     init() {},
     acceptablePayload: ['v40', 'v39', 'v38', 'latest'],
     gunNetworkHint: '',
+    getHomePage: () => getFacebookHostName('open'),
 }

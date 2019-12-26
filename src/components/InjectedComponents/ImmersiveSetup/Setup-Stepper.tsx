@@ -15,6 +15,7 @@ import { ProfileIdentifier, PersonaIdentifier } from '../../../database/type'
 import { useCapturedInput } from '../../../utils/hooks/useCapturedEvents'
 import CloseIcon from '@material-ui/icons/Close'
 import { currentImmersiveSetupStatus, ImmersiveSetupCrossContextStatus } from '../../shared-settings/settings'
+import Services from '../../../extension/service'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -242,7 +243,11 @@ export function ImmersiveSetupStepper(
                 setUsername(v)
                 touched.current = true
             }}
-            autoPasteProvePost={() => navigator.clipboard.writeText(provePost).then(() => sleep(400))}
+            autoPasteProvePost={async () => {
+                navigator.clipboard.writeText(provePost).then(() => sleep(400))
+                if (provePost === ERROR_TEXT) throw new Error('')
+                ui.taskPasteIntoBio(provePost)
+            }}
             bioSet="detecting"
             {...props}
             onClose={() => {
@@ -262,6 +267,8 @@ async function defaultLoadProfile(props: { username?: string; persona: PersonaId
         username: finalUsername,
         persona: props.persona.toText(),
     } as ImmersiveSetupCrossContextStatus)
-    ui.taskGotoProfilePage(new ProfileIdentifier(ui.networkIdentifier, finalUsername))
+    const connecting = new ProfileIdentifier(ui.networkIdentifier, finalUsername)
+    Services.Identity.attachProfile(connecting, props.persona, { connectionConfirmState: 'confirmed' })
+    ui.taskGotoProfilePage(connecting)
     await sleep(400)
 }
