@@ -13,11 +13,9 @@ export function createTaskStartImmersiveSetupDefault(props: Partial<ImmersiveSet
         const shadow = dom.attachShadow({ mode: 'closed' })
         document.body.appendChild(dom)
         renderInShadowRoot(
-            <div style={{ display: 'fixed', width: '100vw', height: '100vh', top: 0, left: 0 }}>
-                <DraggablePaper>
-                    <ImmersiveSetupStepper></ImmersiveSetupStepper>
-                </DraggablePaper>
-            </div>,
+            <DraggablePaper>
+                <ImmersiveSetupStepper></ImmersiveSetupStepper>
+            </DraggablePaper>,
             shadow,
         )
     }

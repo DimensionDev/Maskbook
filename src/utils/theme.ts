@@ -5,8 +5,8 @@ import { orange, green, red, blue } from '@material-ui/core/colors'
 function getFontFamily(monospace?: boolean) {
     // We want to look native.
 
-    // Windows has no CJK sans monospace. Accomendate that.
-    // We only use it for fingerprints anyway so CJK coverage aint a problem... yet.
+    // Windows has no CJK sans monospace. Accommodate that.
+    // We only use it for fingerprints anyway so CJK coverage ain't a problem... yet.
     const monofont = navigator.platform.startsWith('Win') ? 'Consolas, monospace' : 'monospace'
     // https://caniuse.com/font-family-system-ui
     // Firefox does NOT support yet it in any form on Windows, but tests indicate that it agrees with Edge in using the UI font for sans-serif:
@@ -33,7 +33,7 @@ const baseTheme = (theme: 'dark' | 'light') =>
 export const MaskbookLightTheme = createMuiTheme(baseTheme('light'))
 export const MaskbookDarkTheme = createMuiTheme(baseTheme('dark'))
 
-export const FixedWidthFonts = getFontFamily(true)
+const FixedWidthFonts = getFontFamily(true)
 
 export const useColorProvider = makeStyles((theme: typeof MaskbookDarkTheme) =>
     createStyles({

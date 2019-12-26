@@ -70,9 +70,7 @@ export function BannerUI(props: BannerUIProps) {
                 ? invalidUsernameHelperText
                 : emptyUsernameHelperText
             : ' '
-    const ref = React.useRef<HTMLInputElement>()
-    useCapturedInput(
-        ref,
+    const [, ref] = useCapturedInput(
         e => {
             if (username === 'hidden') return
             isTouched(true)
