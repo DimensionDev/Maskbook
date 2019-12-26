@@ -87,6 +87,7 @@ export const AdditionalPostBoxUI = React.memo(function AdditionalPostBoxUI(props
             <Divider />
             <Box display="flex">
                 <Button
+                    fullWidth
                     onClick={props.onPostButtonClicked}
                     variant="contained"
                     color="primary"
