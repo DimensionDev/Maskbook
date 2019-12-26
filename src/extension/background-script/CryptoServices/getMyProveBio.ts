@@ -4,7 +4,10 @@ import { getNetworkWorker } from '../../../social-network/worker'
 import { queryPublicKey } from '../../../database'
 //#endregion
 //#region ProvePost, create & verify
-export async function getMyProveBio(whoAmI: ProfileIdentifier | PersonaIdentifier): Promise<string | null> {
+export async function getMyProveBio(
+    whoAmI: ProfileIdentifier | PersonaIdentifier,
+    networkHint?: string,
+): Promise<string | null> {
     const myIdentity = await queryPublicKey(whoAmI)
     if (!myIdentity) return null
     const pub = await crypto.subtle.exportKey('jwk', myIdentity)
@@ -12,5 +15,7 @@ export async function getMyProveBio(whoAmI: ProfileIdentifier | PersonaIdentifie
     // FIXME: wait for #191
     return whoAmI instanceof ProfileIdentifier
         ? getNetworkWorker(whoAmI.network).publicKeyEncoder(compressed)
+        : networkHint
+        ? getNetworkWorker(networkHint).publicKeyEncoder(compressed)
         : compressed
 }
