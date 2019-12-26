@@ -47,8 +47,8 @@ const _tasks = {
         getActivatedUI().taskStartImmersiveSetup(for_)
     },
 }
-const tasks = AutomatedTabTask(_tasks, { memorable: true })!
-export default function tasksMocked(...args: Parameters<typeof tasks>) {
+const realTasks = AutomatedTabTask(_tasks, { memorable: true })!
+export default function tasks(...args: Parameters<typeof realTasks>) {
     const [tabIdOrUri, options] = args
     if (disableOpenNewTabInBackgroundSettings.value && Number.isNaN(Number(tabIdOrUri))) {
         if (!options || !options.active)
@@ -57,7 +57,7 @@ export default function tasksMocked(...args: Parameters<typeof tasks>) {
             )
     }
     // in the background
-    if (tasks) return tasks(...args)
+    if (realTasks) return realTasks(...args)
     // for debug purpose
     return _tasks
 }

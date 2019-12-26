@@ -8,18 +8,20 @@ export const twitterUrl = {
     hostLeadingUrlMobile: 'https://mobile.twitter.com',
 }
 
-const hostLeadingUrlAuto = (isMobile: boolean) =>
+export const hostLeadingUrlAutoTwitter = (isMobile: boolean) =>
     isMobile ? twitterUrl.hostLeadingUrlMobile : twitterUrl.hostLeadingUrl
 
 export const getPostUrl = (post: PostIdentifier<ProfileIdentifier>, isMobile: boolean = false) => {
     if (!usernameValidator(post.identifier.userId)) {
         throw new Error(geti18nString('service_username_invalid'))
     }
-    return `${hostLeadingUrlAuto(isMobile)}/${post.identifier.userId}/status/${post.postId}`
+    return `${hostLeadingUrlAutoTwitter(isMobile)}/${post.identifier.userId}/status/${post.postId}`
 }
 
 export const getProfileUrl = (self: ProfileIdentifier, isMobile: boolean = false) => {
-    return isMobile ? `${hostLeadingUrlAuto(isMobile)}/account` : `${hostLeadingUrlAuto(isMobile)}/${self.userId}`
+    return isMobile
+        ? `${hostLeadingUrlAutoTwitter(isMobile)}/account`
+        : `${hostLeadingUrlAutoTwitter(isMobile)}/${self.userId}`
 }
 
 export const topSites = [

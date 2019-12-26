@@ -1,6 +1,5 @@
 import { geti18nString } from '../../utils/i18n'
 import { ProfileIdentifier, GroupIdentifier, PostIdentifier } from '../../database/type'
-import { GetContext } from '@holoflows/kit/es'
 import { isMobileFacebook } from './isMobile'
 
 /**
@@ -26,7 +25,7 @@ export function getPostUrlAtFacebook(post: PostIdentifier<ProfileIdentifier>, us
     const { postId } = post
     const { userId } = id
 
-    const host = getHostName(usage)
+    const host = getFacebookHostName(usage)
     if (!regularUsername(userId)) throw new TypeError(geti18nString('service_username_invalid'))
     if (parseFloat(userId)) return `${host}/permalink.php?story_fbid=${postId}&id=${userId}`
     return `${host}/${userId}/posts/${postId}`
@@ -38,13 +37,13 @@ export function getProfilePageUrlAtFacebook(user: ProfileIdentifier | GroupIdent
     if (user instanceof GroupIdentifier) throw new Error('Not implemented')
     if (user.network !== 'facebook.com') throw new Error('Wrong origin')
 
-    const host = getHostName(usage)
+    const host = getFacebookHostName(usage)
     const username = user.userId
     if (!regularUsername(username)) throw new TypeError(geti18nString('service_username_invalid'))
     if (parseFloat(username)) return `${host}/profile.php?id=${username}`
     return `${host}/${username}`
 }
-function getHostName(usage: 'fetch' | 'open') {
+export function getFacebookHostName(usage: 'fetch' | 'open') {
     // if (usage === 'fetch') {
     // if (GetContext() === 'background' || isMobileFacebook) return 'https://m.facebook.com'
     // return 'https://www.facebook.com'

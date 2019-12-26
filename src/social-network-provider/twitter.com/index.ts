@@ -1,7 +1,7 @@
 import { SocialNetworkWorkerAndUIDefinition } from '../../social-network/shared'
 import { usernameValidator } from './utils/user'
 import { twitterEncoding } from './encoding'
-import { twitterUrl } from './utils/url'
+import { twitterUrl, hostLeadingUrlAutoTwitter } from './utils/url'
 
 export const sharedSettings: SocialNetworkWorkerAndUIDefinition = {
     version: 1,
@@ -12,5 +12,6 @@ export const sharedSettings: SocialNetworkWorkerAndUIDefinition = {
     acceptablePayload: ['v38', 'latest'],
     init() {},
     gunNetworkHint: 'twitter-',
+    getHomePage: () => hostLeadingUrlAutoTwitter(false),
     ...twitterEncoding,
 }
