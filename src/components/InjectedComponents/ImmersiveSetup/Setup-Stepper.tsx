@@ -16,6 +16,7 @@ import { useCapturedInput } from '../../../utils/hooks/useCapturedEvents'
 import CloseIcon from '@material-ui/icons/Close'
 import { currentImmersiveSetupStatus, ImmersiveSetupCrossContextStatus } from '../../shared-settings/settings'
 import Services from '../../../extension/service'
+import { geti18nString } from '../../../utils/i18n'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -79,7 +80,7 @@ export function ImmersiveSetupStepperUI(props: ImmersiveSetupStepperUIProps) {
         <aside className={classes.root}>
             <AppBar component="nav" position="static" className={classes.header}>
                 <Toolbar variant="dense">
-                    <Typography variant="h6">Setup Maskbook</Typography>
+                    <Typography variant="h6">{geti18nString('immersive_setup_title')}</Typography>
                     <div style={{ flex: 1 }} />
                     <IconButton edge="end" color="inherit" onClick={props.onClose}>
                         <CloseIcon />
@@ -97,9 +98,10 @@ export function ImmersiveSetupStepperUI(props: ImmersiveSetupStepperUIProps) {
                     </Step>
                 ))}
             </Stepper>
-            {activeStep === steps.length && <Typography>{getBioStatus()}</Typography>}
+            {/* {activeStep === steps.length && <Typography>{getBioStatus()}</Typography>} */}
         </aside>
     )
+    /** TODO: this UI is unused currently. */
     function getBioStatus() {
         switch (props.bioSet) {
             case 'detecting':
@@ -111,7 +113,12 @@ export function ImmersiveSetupStepperUI(props: ImmersiveSetupStepperUIProps) {
         }
     }
     function getSteps() {
-        return [`Connect as ${props.username || 'who'}?`, 'Paste your key to your bio']
+        return [
+            props.username
+                ? geti18nString('immersive_setup_connect_as', props.username)
+                : geti18nString('immersive_setup_connect_as_unknown'),
+            geti18nString('immersive_setup_paste_into_bio'),
+        ]
     }
 
     function getNextButton(step: number): React.ReactNode {
@@ -123,10 +130,10 @@ export function ImmersiveSetupStepperUI(props: ImmersiveSetupStepperUIProps) {
                         color="primary"
                         className={classes.button}
                         executor={props.loadProfile}
-                        init="Yes, I'm sure"
-                        waiting="Go to profile"
-                        complete="Next"
-                        failed="Next"
+                        init={geti18nString('immersive_setup_connect_profile')}
+                        waiting={geti18nString('connecting')}
+                        complete={geti18nString('next')}
+                        failed={geti18nString('next')}
                         disabled={props.username.length === 0}
                     />
                 )
@@ -140,7 +147,7 @@ export function ImmersiveSetupStepperUI(props: ImmersiveSetupStepperUIProps) {
             default:
                 return (
                     <Button variant="contained" color="primary" onClick={props.next} className={classes.button}>
-                        Next
+                        {geti18nString('next')}
                     </Button>
                 )
         }
@@ -152,17 +159,18 @@ export function ImmersiveSetupStepperUI(props: ImmersiveSetupStepperUIProps) {
                     <>
                         <TextField
                             required
-                            label="User Name"
+                            label={geti18nString('username')}
                             value={props.username}
                             onChange={e => props.onUsernameChange(e.currentTarget.value)}
                             innerRef={inputRef}
                         />
                         <br />
-                        <Typography>Maskbook needs your username to connect your account. Does it correct? </Typography>
+                        <Typography>{geti18nString('immersive_setup_username_confirm')}</Typography>
                         <Typography>
-                            <Link color="textSecondary" href="/" variant="body2">
-                                But I don't know what my username is!
-                            </Link>
+                            {/* TODO: Hide until there is a tutorial for this. */}
+                            {/* <Link color="textSecondary" href="/" variant="body2">
+                                {geti18nString('immersive_setup_help_dont_know_what_is_username')}
+                            </Link> */}
                         </Typography>
                     </>
                 )
@@ -174,16 +182,16 @@ export function ImmersiveSetupStepperUI(props: ImmersiveSetupStepperUIProps) {
                         <Typography component="address" className={classes.provePost}>
                             {props.provePost}
                         </Typography>
-                        <Typography>Please add this text to your bio. Don't remove or change any of it!</Typography>
+                        <Typography>{geti18nString('immersive_setup_add_bio_text')}</Typography>
                         <ActionButtonPromise
                             variant="contained"
                             color="secondary"
                             className={classes.button}
                             executor={props.autoPasteProvePost}
-                            init="Add it for me!"
-                            waiting="Adding..."
-                            complete="Done!"
-                            failed="Failed... Please add it to your bio manually!"
+                            init={geti18nString('immersive_setup_paste_into_bio_auto')}
+                            waiting={geti18nString('adding')}
+                            complete={geti18nString('done')}
+                            failed={geti18nString('immersive_setup_paste_into_bio_failed')}
                             completeOnClick={props.onClose}
                             failedOnClick="use executor"
                         />
@@ -195,7 +203,7 @@ export function ImmersiveSetupStepperUI(props: ImmersiveSetupStepperUIProps) {
     }
 }
 
-const ERROR_TEXT = 'Maskbook have some problems when setting up! Please report this to Maskbook developer!'
+const ERROR_TEXT = geti18nString('immersive_setup_no_bio_got')
 
 function getUserID(x: ProfileIdentifier) {
     if (x.isUnknown) return ''
