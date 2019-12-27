@@ -1,6 +1,6 @@
 import React from 'react'
 import { storiesOf } from '@storybook/react'
-import { ImmersiveSetupStepper } from '../components/InjectedComponents/ImmersiveSetup/Setup-Stepper'
+import { ImmersiveSetupStepper } from '../components/InjectedComponents/ImmersiveSetup/SetupStepper'
 import { text } from '@storybook/addon-knobs'
 import { sleep } from '@holoflows/kit/es/util/sleep'
 import { action } from '@storybook/addon-actions'
