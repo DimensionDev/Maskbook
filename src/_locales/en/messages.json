@@ -754,12 +754,12 @@
     "connecting": "Connecting...",
     "immersive_setup_connect_profile": "Yes, I'm sure",
     "username": "Username",
-    "immersive_setup_username_confirm": "Maskbook needs your username to connect your account. Does it correct? ",
+    "immersive_setup_username_confirm": "Maskbook needs your username to connect your account. Does it correct?",
     "immersive_setup_help_dont_know_what_is_username": "But I don't know what my username is!",
-    "immersive_setup_add_bio_text": "Please add this text to your bio. Don't                             remove or change any of it!",
+    "immersive_setup_add_bio_text": "Please add this text to your bio. Don't remove or change any of it!",
     "immersive_setup_paste_into_bio_auto": "Add it for me!",
     "adding": "Adding...",
     "done": "Done!",
     "immersive_setup_paste_into_bio_failed": "Failed... Please add it to your bio manually!",
-    "immersive_setup_no_bio_got": "Maskbook have some problems when setting up! Please report this to Maskbook developer!"
+    "immersive_setup_no_bio_got": "Maskbook have some problems when setting up! Please report this to Maskbook developer! Our Telegram group: https://t.me/maskbook_group"
 }

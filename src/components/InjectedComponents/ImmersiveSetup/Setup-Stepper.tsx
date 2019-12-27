@@ -101,7 +101,10 @@ export function ImmersiveSetupStepperUI(props: ImmersiveSetupStepperUIProps) {
             {/* {activeStep === steps.length && <Typography>{getBioStatus()}</Typography>} */}
         </aside>
     )
-    /** TODO: this UI is unused currently. */
+    /**
+     * TODO: this UI is unused currently.
+     * TODO: consider to use enum instead of boolean | 'detecting'
+     */
     function getBioStatus() {
         switch (props.bioSet) {
             case 'detecting':
@@ -121,7 +124,7 @@ export function ImmersiveSetupStepperUI(props: ImmersiveSetupStepperUIProps) {
         ]
     }
 
-    function getNextButton(step: number): React.ReactNode {
+    function getNextButton(step: ImmersiveSetupState): React.ReactNode {
         switch (step) {
             case ImmersiveSetupState.ConfirmUsername:
                 return (
@@ -152,7 +155,7 @@ export function ImmersiveSetupStepperUI(props: ImmersiveSetupStepperUIProps) {
                 )
         }
     }
-    function getStepContent(step: number): React.ReactNode {
+    function getStepContent(step: ImmersiveSetupState): React.ReactNode {
         switch (step) {
             case ImmersiveSetupState.ConfirmUsername:
                 return (
@@ -255,8 +258,9 @@ export function ImmersiveSetupStepper(
                 touched.current = true
             }}
             autoPasteProvePost={async () => {
-                navigator.clipboard.writeText(provePost).then(() => sleep(400))
                 if (provePost === ERROR_TEXT) throw new Error('')
+                await navigator.clipboard.writeText(provePost)
+                await sleep(400)
                 ui.taskPasteIntoBio(provePost)
             }}
             bioSet="detecting"
