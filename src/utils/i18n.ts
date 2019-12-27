@@ -48,10 +48,11 @@ export function geti18nString(key: keyof I18NStrings, substitutions: string | st
     const uiFallback = uiOverwrite?.en
     const fallback = langs?.en
 
-    const string = uiLang?.[key] || origLang?.[key] || uiFallback?.[key] || fallback?.[key]
+    type I18NStringsValue = string | undefined | { message: string }
+    const string = (uiLang?.[key] || origLang?.[key] || uiFallback?.[key] || fallback?.[key]) as I18NStringsValue
     if (typeof substitutions === 'string') substitutions = [substitutions]
     if (substitutions.length > 4) console.error('Implement this please')
-    return (string || { message: key }).message
+    return ((typeof string === 'string' ? string : string?.message) ?? key)
         .replace('$1', substitutions[0])
         .replace('$2', substitutions[1])
         .replace('$3', substitutions[2])
