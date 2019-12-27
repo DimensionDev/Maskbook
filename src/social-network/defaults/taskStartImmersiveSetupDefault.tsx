@@ -4,7 +4,7 @@ import { renderInShadowRoot } from '../../utils/jss/renderInShadowRoot'
 import {
     ImmersiveSetupStepper,
     ImmersiveSetupStepperUIProps,
-} from '../../components/InjectedComponents/ImmersiveSetup/Setup-Stepper'
+} from '../../components/InjectedComponents/ImmersiveSetup/SetupStepper'
 import { DraggablePaper } from '../../components/InjectedComponents/ImmersiveSetup/DraggablePaper'
 import Services from '../../extension/service'
 import { ValueRef } from '@holoflows/kit/es'
