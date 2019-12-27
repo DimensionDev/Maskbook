@@ -17,7 +17,7 @@ const $fromString = Symbol()
  * ec_key:...
  */
 type Identifiers = 'person' | 'group' | 'post' | 'post_iv' | 'ec_key'
-const fromStringCache = new Map<string, Identifier>()
+const fromStringCache = new Map<string, Identifier | undefined | null>()
 
 interface IdentifierFromString {
     /**
@@ -47,25 +47,25 @@ export abstract class Identifier {
         id: string | Identifier,
         constructor?: typeof Identifier,
     ): Nullable<Identifier> => {
+        let result: Identifier | undefined | null = null
         // the third overload
-        if (id instanceof Identifier) return Nullable(id)
-        // the second overload
-        if (fromStringCache.has(id)) return Nullable(fromStringCache.get(id))
-        const [type, ...rest] = id.split(':') as [Identifiers, string]
-        let result: Identifier | null = null
-        if (type === 'person') result = ProfileIdentifier[$fromString](rest.join(':'))
-        else if (type === 'group') result = GroupIdentifier[$fromString](rest.join(':'))
-        else if (type === 'post') result = PostIdentifier[$fromString](rest.join(':'))
-        else if (type === 'post_iv') result = PostIVIdentifier[$fromString](rest.join(':'))
-        else if (type === 'ec_key') result = ECKeyIdentifier[$fromString](rest.join(':'))
+        if (id instanceof Identifier) result = id
         else {
-            // ? if we add new value to Identifiers, this line will be a TypeError
-            const _: never = type
-            return Nullable(null)
+            const [type, ...rest] = id.split(':') as [Identifiers, string]
+            // the second overload
+            if (fromStringCache.has(id)) result = fromStringCache.get(id)
+            else if (type === 'person') result = ProfileIdentifier[$fromString](rest.join(':'))
+            else if (type === 'group') result = GroupIdentifier[$fromString](rest.join(':'))
+            else if (type === 'post') result = PostIdentifier[$fromString](rest.join(':'))
+            else if (type === 'post_iv') result = PostIVIdentifier[$fromString](rest.join(':'))
+            else if (type === 'ec_key') result = ECKeyIdentifier[$fromString](rest.join(':'))
+            else {
+                // ? if we add new value to Identifiers, this line will be a TypeError
+                const _: never = type
+                return Nullable(null)
+            }
+            fromStringCache.set(id, result)
         }
-        if (result === null) return Nullable(null)
-        fromStringCache.set(id, result)
-
         if (!constructor) return Nullable(result)
         // the first overload
         else if (result instanceof constructor) return Nullable(result)
@@ -231,7 +231,7 @@ export type PersonaIdentifier = ECKeyIdentifier
  */
 function noSlash(str?: string) {
     if (!str) return
-    if (str.split('/')[1]) throw new TypeError('Cannot contain / in a part of identifier')
+    if (str.includes('/')) throw new TypeError('Cannot contain / in a part of identifier')
 }
 
 export function constructPostRecipients(data: [ProfileIdentifier, RecipientDetail][]) {
