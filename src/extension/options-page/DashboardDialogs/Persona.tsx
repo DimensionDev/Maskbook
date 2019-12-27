@@ -19,6 +19,12 @@ import { compressBackupFile, decompressBackupFile } from '../../../utils/type-tr
 import QRScanner from '../../../components/Welcomes/QRScanner'
 import { UpgradeBackupJSONFile } from '../../../utils/type-transform/BackupFormat/JSON/latest'
 import { hasWKWebkitRPCHandlers } from '../../../utils/iOS-RPC'
+import {
+    encodeText,
+    decodeText,
+    encodeArrayBuffer,
+    decodeArrayBuffer,
+} from '../../../utils/type-transform/String-ArrayBuffer'
 
 export function PersonaCreateDialog() {
     const [name, setName] = useState('')
@@ -162,7 +168,7 @@ export function PersonaBackupDialog(props: PersonaBackupDialogProps) {
             noUserGroups: true,
             filter: { type: 'persona', wanted: [persona.identifier] },
         }).then(file => {
-            setBase64Value(btoa(JSON.stringify(file)))
+            setBase64Value(encodeArrayBuffer(encodeText(JSON.stringify(file))))
             setCompressedQRString(compressBackupFile(file))
         })
     }, [persona.identifier])
@@ -247,7 +253,7 @@ export function PersonaImportDialog() {
                 .catch(() => setRestoreState('failed'))
         } else if (tabState === 1) {
             Promise.resolve()
-                .then(() => JSON.parse(atob(base64Value)))
+                .then(() => JSON.parse(decodeText(decodeArrayBuffer(base64Value))))
                 .then(object => Services.Welcome.restoreBackup(object))
                 .then(() => setRestoreState('success'))
                 .catch(() => setRestoreState('failed'))
