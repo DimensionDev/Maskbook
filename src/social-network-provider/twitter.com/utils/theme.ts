@@ -7,6 +7,7 @@ export const useTwitterButton = makeStyles((theme: Theme) => ({
         minHeight: 39,
         borderRadius: 9999,
         boxShadow: 'none',
+        textTransform: 'initial',
         backgroundColor: theme.palette.primary.main,
         '&:hover': {
             boxShadow: 'none',
