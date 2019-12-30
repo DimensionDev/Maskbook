@@ -7,6 +7,7 @@ import {
     ProfileIdentifier,
     PreDefinedVirtualGroupNames,
 } from '../type'
+import { generate_ECDH_256k1_KeyPair, import_ECDH_256k1_Key } from '../../utils/crypto.subtle'
 
 test('ProfileIdentifier', () => {
     const normal = new ProfileIdentifier('facebook.com', 'user_id')
@@ -40,7 +41,7 @@ test('PostIVIdentifier', () => {
     expect(post.toText()).toBe('post_iv:facebook.com/akmfkmekfmew')
 })
 
-test('ECKeyIdentifier', () => {
+test('ECKeyIdentifier', async () => {
     const ec_id = new ECKeyIdentifier('secp256k1', 'ApDhiWBPBjMDMbUzP0JdI0WnXwo/a2kctSnMkkJz9mPm')
 
     expect(ec_id.toText()).toBe('ec_key:secp256k1/ApDhiWBPBjMDMbUzP0JdI0WnXwo|a2kctSnMkkJz9mPm')
@@ -48,17 +49,18 @@ test('ECKeyIdentifier', () => {
     expect(ec_id.curve).toBe('secp256k1')
     expect(ec_id.type).toBe('ec_key')
 
-    // TODO: test ECKeyIdentifier.fromCryptoKey()
-    expect(
-        ECKeyIdentifier.fromJsonWebKey({
-            crv: 'K-256',
-            ext: true,
-            x: '7seqxT72nd8UhC8tIWKqux0LWT-de7sDVSYqO4vLJnI',
-            y: 'oNRjB320h3p4TUbjZmHk5iZByPp0Q6aT4MX9BpA2mmM',
-            key_ops: ['deriveKey'],
-            kty: 'EC',
-        }).toText(),
-    ).toBe('ec_key:secp256k1/A+7HqsU+9p3fFIQvLSFiqrsdC1k|nXu7A1UmKjuLyyZy')
+    const jwk = {
+        crv: 'K-256',
+        ext: true,
+        x: '7seqxT72nd8UhC8tIWKqux0LWT-de7sDVSYqO4vLJnI',
+        y: 'oNRjB320h3p4TUbjZmHk5iZByPp0Q6aT4MX9BpA2mmM',
+        key_ops: ['deriveKey'],
+        kty: 'EC',
+    }
+    const ecKeyID = 'ec_key:secp256k1/A+7HqsU+9p3fFIQvLSFiqrsdC1k|nXu7A1UmKjuLyyZy'
+    const cryptoKey = await import_ECDH_256k1_Key(jwk)
+    expect((await ECKeyIdentifier.fromCryptoKey(cryptoKey)).toText()).toBe(ecKeyID)
+    expect(ECKeyIdentifier.fromJsonWebKey(jwk).toText()).toBe(ecKeyID)
 })
 
 test('GroupIdentifier', () => {
