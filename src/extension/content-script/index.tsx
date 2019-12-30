@@ -4,4 +4,3 @@ import * as HoloflowsKit from '@holoflows/kit'
 import React from 'react'
 Object.assign(window, { React })
 Object.assign(window, HoloflowsKit)
-

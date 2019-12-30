@@ -32,6 +32,7 @@ export function QrCode(props: {
         qr.toCanvas(ref.current, props.text, props.options)
         return () => {
             // if already rendered canvas, do not re-render img
+            // eslint-disable-next-line react-hooks/exhaustive-deps
             cache.set(props.text, ref.current?.toDataURL())
         }
     }, [props.options, props.text])
