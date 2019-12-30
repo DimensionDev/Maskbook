@@ -1,10 +1,6 @@
-import {
-    packFriendshipCertificate,
-    unpackFriendshipCertificate,
-    issueFriendshipCertificate,
-} from '../protocols/friendship-discovery/friendship-pack'
-import { ProfileIdentifier } from '../database/type'
-import { generate_ECDH_256k1_KeyPair, generate_AES_GCM_256_Key } from '../utils/crypto.subtle'
+import { packFriendshipCertificate, unpackFriendshipCertificate, issueFriendshipCertificate } from '../friendship-pack'
+import { ProfileIdentifier } from '../../../database/type'
+import { generate_ECDH_256k1_KeyPair, generate_AES_GCM_256_Key } from '../../../utils/crypto.subtle'
 
 const aliceID = new ProfileIdentifier('localhost', 'alice.test')
 async function testFriendshipDiscover() {
@@ -18,7 +14,6 @@ async function testFriendshipDiscover() {
     )
     // Alice to bob
     const encryptedCert = await packFriendshipCertificate(rawCert, bob.publicKey)
-    console.log('Friendship discover test: Issuer: Alice, to: Bob', rawCert, encryptedCert)
 
     // Bob verify the cert
     const unpacked = await unpackFriendshipCertificate(encryptedCert, bob.privateKey)
@@ -28,5 +23,5 @@ async function testFriendshipDiscover() {
     // Bob should verify their friendship by other channel.
     return true
 }
-testFriendshipDiscover()
-Object.assign(window, { testFriendshipDiscover })
+
+test('Friendship certificate', () => testFriendshipDiscover())

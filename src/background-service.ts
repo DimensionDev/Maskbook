@@ -121,9 +121,6 @@ Object.assign(window, {
         .definedSocialNetworkWorkers,
 })
 
-// Run tests
-require('./tests/friendship-discover')
-
 import * as PersonaDB from './database/Persona/Persona.db'
 import * as PersonaDBHelper from './database/Persona/helpers'
 

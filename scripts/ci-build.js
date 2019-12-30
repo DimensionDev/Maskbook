@@ -5,12 +5,6 @@ const base = path.join(__dirname, '../')
 process.chdir(base)
 async function main() {
     const prepareCommands = getCommands(`
-    yarn install --link-duplicates --frozen-lockfile
-    yarn lint:report
-    # Do a quick TypeScript check; fail fast here.
-    yarn tsc -p tsconfig_cjs.json
-    yarn ts-node -T ./scripts/import-linter.ts
-    sudo apt-get install zip
     `)
     for (const command of prepareCommands) {
         await spawn(command)
