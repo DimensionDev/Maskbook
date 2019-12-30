@@ -7,6 +7,7 @@ module.exports = {
             isolatedModules: true,
         },
     },
+    globalSetup: path.join(__dirname, './scripts/jest-global-setup'),
     setupFiles: [
         require.resolve('react-app-polyfill/jsdom'),
         require.resolve('fake-indexeddb/auto'),
