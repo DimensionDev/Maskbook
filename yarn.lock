@@ -12129,10 +12129,10 @@ node-releases@^1.1.42:
   dependencies:
     semver "^6.3.0"
 
-node-stego@^0.8.0:
-  version "0.8.0"
-  resolved "https://registry.yarnpkg.com/node-stego/-/node-stego-0.8.0.tgz#08499d926d4fcd5822bdfc76d72cba4fe9d54ef8"
-  integrity sha512-8nzN4oboI72rwm2zlgmNCt1j5qoHHQSKOmhet5RBvijl38twMmYk+tQj007/vD/riFwXQEjeSLq2zVDXw/DxJg==
+node-stego@^0.8.1:
+  version "0.8.1"
+  resolved "https://registry.yarnpkg.com/node-stego/-/node-stego-0.8.1.tgz#edf624b271e825127614801e904f2cc4204def2c"
+  integrity sha512-n8h1FGowvxrv8I/fqyJPjFWenKGy47qyWOpKRrEwDcz0F7kuLllgVhhB3SHmpEDDszjiqGRXayzYsCBzrs2M7g==
   dependencies:
     meow "^5.0.0"
 
