@@ -10,7 +10,7 @@ import {
 import { generate_ECDH_256k1_KeyPair, import_ECDH_256k1_Key } from '../../utils/crypto.subtle'
 
 test('ProfileIdentifier', () => {
-    const normal = new ProfileIdentifier('facebook.com', 'user_id')
+    const normal = new ProfileIdentifier('facebook.com!', 'user_id')
     expect(normal.toText()).toBe('person:facebook.com/user_id')
     expect(normal.friendlyToText()).toBe('user_id@facebook.com')
     expect(normal.network).toBe('facebook.com')

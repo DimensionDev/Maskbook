@@ -49,6 +49,10 @@ jobs:
             - run:
                   name: 'ESLint'
                   command: 'yarn lint:report'
+            - store_test_results:
+                  path: reports/junit
+            - store_artifacts:
+                  path: reports/junit
     custom_linter:
         executor: maskbook_node
         steps:
@@ -62,7 +66,13 @@ jobs:
             - restore_workspace
             - run:
                   name: 'Jest'
-                  command: yarn jest --collectCoverage=true
+                  command: yarn test:ci
+                  environment:
+                      JEST_JUNIT_OUTPUT_DIR: 'reports/junit/js-test-results.xml'
+            - store_test_results:
+                  path: reports/junit
+            - store_artifacts:
+                  path: reports/junit
             - store_artifacts:
                   path: coverage
     build:
