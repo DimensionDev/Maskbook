@@ -22,13 +22,13 @@
     "build:chromium": "react-app-rewired build --chromium",
     "build:ios": "react-app-rewired build --wk-webview",
     "test": "jest --watch",
-    "test:ci": "jest",
+    "test:ci": "jest --ci --collectCoverage=true --reporters=default --reporters=jest-junit",
     "storybook": "start-storybook -p 9009 -s public --quiet",
     "storybook-build": "build-storybook -s public --quiet",
     "install": "node scripts/postinstall.js",
     "uninstall": "node scripts/postinstall.js",
-    "lint": "node scripts/lint.js",
-    "lint:report": "node scripts/lint.js --reportOnly"
+    "lint": "eslint src/ --ext .ts,.tsx --fix",
+    "lint:report": "eslint src/ --ext .ts,.tsx --format junit -o reports/junit/eslint-results.xml"
   },
   "dependencies": {
     "@commitlint/cli": "^8.2.0",
@@ -112,6 +112,7 @@
     "esm": "^3.2.25",
     "fake-indexeddb": "^3.0.0",
     "jest": "^24.9.0",
+    "jest-junit": "^10.0.0",
     "prettier": "^1.19.1",
     "puppeteer-core": "^2.0.0",
     "react-devtools": "^4.2.1",
