@@ -12,3 +12,8 @@ Object.assign(global, {
 })
 require('webcrypto-liner/build/webcrypto-liner.shim')
 crypto.subtle.generateKey({ name: 'ECDH', namedCurve: 'K-256' }, true, ['deriveKey', 'deriveBits']).then(console.log)
+process.on('unhandledRejection', (reason, p) => {
+    // Error in webcrypto
+    if (reason.message.includes(`Not implemented yet`)) return
+    console.log('Unhandled Rejection at:', p, 'reason:', reason)
+})
