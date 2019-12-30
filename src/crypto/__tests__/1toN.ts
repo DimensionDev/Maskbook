@@ -1,8 +1,8 @@
-import { encrypt1ToN, decryptMessage1ToNByMyself, decryptMessage1ToNByOther } from '../crypto/crypto-alpha-40'
-import { decodeText } from '../utils/type-transform/String-ArrayBuffer'
-import { generate_ECDH_256k1_KeyPair, generate_AES_GCM_256_Key } from '../utils/crypto.subtle'
+import { encrypt1ToN, decryptMessage1ToNByMyself, decryptMessage1ToNByOther } from '../crypto-alpha-40'
+import { decodeText } from '../../utils/type-transform/String-ArrayBuffer'
+import { generate_ECDH_256k1_KeyPair, generate_AES_GCM_256_Key } from '../../utils/crypto.subtle'
 
-async function test1toN(msg: string = 'test string') {
+async function test1toN(msg: string = Math.random().toString()) {
     const alice = await generate_ECDH_256k1_KeyPair()
     const aliceLocal = await generate_AES_GCM_256_Key()
     const bob = await generate_ECDH_256k1_KeyPair()
@@ -52,5 +52,4 @@ async function test1toN(msg: string = 'test string') {
         throw new Error('Zoe decrypted success')
     } catch {}
 }
-test1toN()
-Object.assign(window, { test1toN })
+test('1 to N encryption test', () => test1toN())

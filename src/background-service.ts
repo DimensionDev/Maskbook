@@ -122,10 +122,7 @@ Object.assign(window, {
 })
 
 // Run tests
-require('./tests/1toN')
-require('./tests/sign-verify')
 require('./tests/friendship-discover')
-require('./tests/comment')
 
 import * as PersonaDB from './database/Persona/Persona.db'
 import * as PersonaDBHelper from './database/Persona/helpers'
