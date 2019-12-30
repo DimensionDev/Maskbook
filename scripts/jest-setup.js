@@ -1,19 +1,24 @@
+//#region WebCrypto
 const WebCrypto = require('@trust/webcrypto')
+delete globalThis.self
+delete globalThis.window
+// If don't delete those, elliptic will not work well
 const elliptic = require('elliptic/lib/elliptic')
-Object.assign(global, {
+require = require('esm')(module)
+Object.assign(globalThis, {
     crypto: WebCrypto,
-    self: global,
-    window: globalThis,
     elliptic,
+    self: globalThis,
+    window: globalThis,
     navigator: {
         // Pretend to be IE11 so webcrypto-liner will apply all the polyfills for node.
         userAgent: 'Mozilla/5.0 (Windows NT 6.1; WOW64; Trident/7.0; AS; rv:11.0) like Gecko',
     },
+    asmCrypto: require(require('path').join(__dirname, '../npm-debug.log.asmcrypto.js'))
 })
+
 require('webcrypto-liner/build/webcrypto-liner.shim')
-crypto.subtle.generateKey({ name: 'ECDH', namedCurve: 'K-256' }, true, ['deriveKey', 'deriveBits']).then(console.log)
-process.on('unhandledRejection', (reason, p) => {
-    // Error in webcrypto
-    if (reason.message.includes(`Not implemented yet`)) return
-    console.log('Unhandled Rejection at:', p, 'reason:', reason)
-})
+//#endregion
+
+/* global TextEncoder, TextDecoder */
+Object.assign(globalThis, require('@sinonjs/text-encoding/index'))
