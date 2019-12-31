@@ -17277,21 +17277,16 @@ typescript@^3.7.4, typescript@~3.7.2:
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.7.4.tgz#1743a5ec5fef6a1fa9f3e4708e33c81c73876c19"
   integrity sha512-A25xv5XCtarLwXpcDNZzCGvW2D1S3/bACratYBx2sax8PefsFhlYmkQicKHvpYflFS8if4zne5zT5kpJ7pzuvw==
 
-typeson-registry@^1.0.0-alpha.30:
-  version "1.0.0-alpha.30"
-  resolved "https://registry.yarnpkg.com/typeson-registry/-/typeson-registry-1.0.0-alpha.30.tgz#685d4173ddff365a8ef5309744a9d8a391a64fd1"
-  integrity sha512-EDGEK/HTxKm5zNF20r4BM3lMvoTJgTuA8FIuh38pLSZlWdu7LondBlS1x7iDSInUW6A2HjTeZiA2d2XDxN0OyQ==
+typeson-registry@^1.0.0-alpha.33:
+  version "1.0.0-alpha.33"
+  resolved "https://registry.yarnpkg.com/typeson-registry/-/typeson-registry-1.0.0-alpha.33.tgz#4742511d81a04e1ba9c0f5a71a0f4278beaa4949"
+  integrity sha512-q0jMkVizN10rzPtPcwkUC+pAOlA4iq4tl/GJ0iHDuMCnK3HxaN26bR/SczedswPBt0Pd+c0GjXZDDK+Cn2pgwg==
   dependencies:
     base64-arraybuffer-es6 "0.5.0"
-    typeson "5.14.1"
+    typeson "5.18.1"
     whatwg-url "7.1.0"
 
-typeson@5.14.1:
-  version "5.14.1"
-  resolved "https://registry.yarnpkg.com/typeson/-/typeson-5.14.1.tgz#d3ce3abecf4c05e03d6fb6419a9a6cad42340820"
-  integrity sha512-A6YPkcPd2Eu/vmWjX1Xp69r03UHPzU0M80lGbBMJHPkkLQSbjOGzQs6S6qYs4x/fZ3sm8KC0c2susQ6EHpzgyw==
-
-typeson@^5.18.1:
+typeson@5.18.1, typeson@^5.18.1:
   version "5.18.1"
   resolved "https://registry.yarnpkg.com/typeson/-/typeson-5.18.1.tgz#fafa2dfd6ef26448ff635a3c97dd39a4bd3cf742"
   integrity sha512-4cVDwf4tT+9hpeQk22/ioQJXL8lN3AYlzJfJLBpB0MDPG7CGpbvxR0HBkQ6qp9T72/yzryP6k2HSVdxd3jF5qg==
@@ -18011,7 +18006,7 @@ whatwg-mimetype@^2.1.0, whatwg-mimetype@^2.2.0, whatwg-mimetype@^2.3.0:
   resolved "https://registry.yarnpkg.com/whatwg-mimetype/-/whatwg-mimetype-2.3.0.tgz#3d4b1e0312d2079879f826aff18dbeeca5960fbf"
   integrity sha512-M4yMwr6mAnQz76TbJm914+gPpB/nCwvZbJU28cUD6dR004SAxDLOOSUaB1JDRqLtaOV/vi0IC5lEAGFgrjGv/g==
 
-whatwg-url@7.0.0, whatwg-url@^7.0.0:
+whatwg-url@7.0.0:
   version "7.0.0"
   resolved "https://registry.yarnpkg.com/whatwg-url/-/whatwg-url-7.0.0.tgz#fde926fa54a599f3adf82dff25a9f7be02dc6edd"
   integrity sha512-37GeVSIJ3kn1JgKyjiYNmSLP1yzbpb29jdmwBSgkD9h40/hyrR/OifpVUndji3tmwGgD8qpw7iQu3RSbCrBpsQ==
@@ -18020,7 +18015,7 @@ whatwg-url@7.0.0, whatwg-url@^7.0.0:
     tr46 "^1.0.1"
     webidl-conversions "^4.0.2"
 
-whatwg-url@7.1.0:
+whatwg-url@7.1.0, whatwg-url@^7.0.0:
   version "7.1.0"
   resolved "https://registry.yarnpkg.com/whatwg-url/-/whatwg-url-7.1.0.tgz#c2c492f1eca612988efd3d2266be1b9fc6170d06"
   integrity sha512-WUu7Rg1DroM7oQvGWfOiAK21n74Gg+T4elXEQYkOhtyLeWiJFoOGLXPKI/9gzIie9CtwVLm8wtw6YJdKyxSjeg==
