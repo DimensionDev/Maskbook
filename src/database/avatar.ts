@@ -12,7 +12,7 @@ interface AvatarMetadataRecord {
     lastUpdateTime: Date
     lastAccessTime: Date
 }
-interface AvatarDB extends DBSchema {
+export interface AvatarDBSchema extends DBSchema {
     /** Use out-of-line keys */
     avatars: {
         value: AvatarRecord
@@ -27,8 +27,7 @@ interface AvatarDB extends DBSchema {
 //#endregion
 
 const db = createDBAccess(() => {
-    OnlyRunInContext('background', 'Avatar database')
-    return openDB<AvatarDB>('maskbook-avatar-cache', 1, {
+    return openDB<AvatarDBSchema>('maskbook-avatar-cache', 1, {
         upgrade(db, oldVersion, newVersion, transaction) {
             // Out line keys
             const avatarStore = db.createObjectStore('avatars')
@@ -36,6 +35,7 @@ const db = createDBAccess(() => {
         },
     })
 })
+export const createAvatarDBAccess = db
 /**
  * Store avatar into database
  */

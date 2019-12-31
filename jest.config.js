@@ -16,5 +16,6 @@ module.exports = {
     moduleNameMapper: {
         '^@holoflows/kit.+$': require.resolve('@holoflows/kit/umd/index.js'),
         'lodash-es': require.resolve('lodash'),
+        'idb/with-async-ittr': require.resolve('idb/build/cjs/index.js'),
     },
 }

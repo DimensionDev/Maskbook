@@ -144,7 +144,7 @@
   },
   "lint-staged": {
     "*.{ts,tsx,js,jsx}": [
-      "node scripts/lint.js",
+      "npm run lint",
       "git add"
     ]
   }

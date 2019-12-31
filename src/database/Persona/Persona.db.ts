@@ -26,7 +26,6 @@ import { assertPersonaDBConsistency } from './consistency'
  */
 
 const db = createDBAccess(() => {
-    OnlyRunInContext('background', 'Persona db')
     return openDB<PersonaDB>('maskbook-persona', 1, {
         upgrade(db, oldVersion, newVersion, transaction) {
             function v0_v1() {

@@ -43,7 +43,6 @@ interface GroupDB extends DBSchema {
 //#endregion
 
 const db = createDBAccess(() => {
-    OnlyRunInContext('background', 'Group database')
     return openDB<GroupDB>('maskbook-user-groups', 1, {
         upgrade(db, oldVersion, newVersion, transaction) {
             // Out line keys
