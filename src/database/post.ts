@@ -7,7 +7,6 @@ import { OnlyRunInContext } from '@holoflows/kit/es'
 import { createDBAccess } from './helpers/openDB'
 
 const db = createDBAccess(() => {
-    OnlyRunInContext('background', 'Post db')
     return openDB<PostDB>('maskbook-post-v2', 3, {
         async upgrade(db, oldVersion, newVersion, transaction) {
             if (oldVersion < 1) {
