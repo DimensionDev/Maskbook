@@ -16,6 +16,7 @@ import {
     LinkedProfileDetails,
     consistentPersonaDBWriteAccess,
     updatePersonaDB,
+    createOrUpdatePersonaDB,
 } from './Persona.db'
 import { IdentifierMap } from '../IdentifierMap'
 import { getAvatarDataURL } from '../helpers/avatar'
@@ -200,7 +201,7 @@ export async function createProfileWithPersona(
         mnemonic: keys.mnemonic,
     }
     await consistentPersonaDBWriteAccess(async t => {
-        await createPersonaDB(rec, t as any)
+        await createOrUpdatePersonaDB(rec, t as any)
         await attachProfileDB(profileID, ec_id, data, t)
     })
 }
