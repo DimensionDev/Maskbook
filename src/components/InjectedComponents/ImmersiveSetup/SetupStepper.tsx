@@ -236,7 +236,7 @@ export function ImmersiveSetupStepper(
 
     const lastRecognized = useValueRef(getActivatedUI().lastRecognizedIdentity)
     const touched = React.useRef(false)
-    const [username, setUsername] = React.useState(getUserID(lastRecognized.identifier))
+    const [username, setUsername] = React.useState(lastState.username || '')
     if (username === '' && touched.current === false) {
         const uid = getUserID(lastRecognized.identifier)
         uid !== '' && setUsername(uid)
