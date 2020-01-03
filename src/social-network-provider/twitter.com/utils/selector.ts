@@ -62,9 +62,8 @@ export const postsContentSelector = () =>
     querySelectorAll(
         [
             '.tweet-text > div', // both timeline and detail page for legacy twitter
-            '[data-testid="tweet"] > div > div[lang]', // timeline page for new twitter
-            '[data-testid="tweet"] + div[lang]', // detail page for new twitter
-            '[data-testid="tweet"] + div > div[lang]', // detail page for new twitter
+            '[data-testid="tweet"] > div > div[lang]', // timeline page and tread page for new twitter
+            '[data-testid="tweet"] ~ div[lang]', // detail page for new twitter
         ].join(),
     )
 
