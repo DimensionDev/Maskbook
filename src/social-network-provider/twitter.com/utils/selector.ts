@@ -61,9 +61,13 @@ export const postsImageSelector = (node: HTMLElement) =>
 export const postsContentSelector = () =>
     querySelectorAll(
         [
+            // 'article > div[lang]', // TODO: this selector maybe works in new twitter test is required
             '.tweet-text > div', // both timeline and detail page for legacy twitter
             '[data-testid="tweet"] > div > div[lang]', // timeline page and tread page for new twitter
+            '[data-testid="tweet"] + div > div[lang]', // detail page for new twitter
             '[data-testid="tweet"] ~ div[lang]', // detail page for new twitter
+            '[data-testid="tweet"] [role="blockquote"] div[lang]', // timeline page retweet quote block for new twitter
+            '[data-testid="tweet"] ~ div [role="blockquote"] div[lang]', // detail page retweet quote block for new twitter
         ].join(),
     )
 
