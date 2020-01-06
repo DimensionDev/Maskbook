@@ -1,7 +1,7 @@
 {
     "$schema": "http://json.schemastore.org/chrome-manifest",
     "name": "Maskbook",
-    "version": "1.8.10",
+    "version": "1.9.0",
     "manifest_version": 2,
     "web_accessible_resources": ["*.css", "*.js", "*.jpg", "*.png"],
     "permissions": ["storage", "downloads", "webNavigation", "activeTab"],
