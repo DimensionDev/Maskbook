@@ -10,6 +10,7 @@ import { getActivatedUI } from '../../social-network/ui'
 import { useAsync } from '../../utils/components/AsyncComponent'
 import { BannerProps } from '../Welcomes/Banner'
 import { NotSetupYetPrompt } from '../shared/NotSetupYetPrompt'
+import useConnectingStatus from '../../utils/hooks/useConnectingStatus'
 
 const useStyles = makeStyles({
     content: {
@@ -58,9 +59,14 @@ export function PostDialogHint(props: PostDialogHintProps) {
 
     const [showWelcome, setShowWelcome] = React.useState(false)
     useAsync(getActivatedUI().shouldDisplayWelcome, []).then(x => setShowWelcome(x))
+    const connecting = useConnectingStatus()
+
+    if (connecting) return null
+
     if (showWelcome || identities.length === 0) {
         return <NotSetupYetPrompt {...props.NotSetupYetPromptProps} />
     }
+
     if (identities.length > 1) {
         return (
             <>
@@ -69,5 +75,6 @@ export function PostDialogHint(props: PostDialogHintProps) {
             </>
         )
     }
+
     return ui
 }

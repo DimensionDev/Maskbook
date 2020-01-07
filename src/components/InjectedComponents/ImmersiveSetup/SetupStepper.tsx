@@ -229,7 +229,7 @@ export function ImmersiveSetupStepper(
         }
     }, [lastState_])
     React.useEffect(() => {
-        if (step === ImmersiveSetupState.ConfirmUsername && lastState.status === 'during') {
+        if (step === ImmersiveSetupState.ConfirmUsername && lastState.username && lastState.status === 'during') {
             setStep(ImmersiveSetupState.PasteBio)
         }
     }, [step, setStep, lastState])

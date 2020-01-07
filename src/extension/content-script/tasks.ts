@@ -64,14 +64,15 @@ export default function tasks(...args: Parameters<typeof realTasks>) {
 setTimeout(() => {
     if (GetContext() !== 'content') return
     const x = getActivatedUI().networkIdentifier
-    let id = currentImmersiveSetupStatus[x].value
-    currentImmersiveSetupStatus[x].addListener(n => {
-        id = n
+    const id = currentImmersiveSetupStatus[x].value
+    const onStatusUpdate = (id: string) => {
         const status: ImmersiveSetupCrossContextStatus = JSON.parse(id || '{}')
-        if (status.persona && status.status === 'during' && status.username) {
+        if (status.persona && status.status === 'during') {
             _tasks.immersiveSetup(
                 Identifier.fromString(status.persona, ECKeyIdentifier).unwrap('Cant cast to ECKeyIdentifier'),
             )
         }
-    })
+    }
+    currentImmersiveSetupStatus[x].addListener(onStatusUpdate)
+    onStatusUpdate(id)
 }, 200)
