@@ -48,7 +48,7 @@ export async function CryptoKeyToJsonWebKey(key: CryptoKey): Promise<JsonWebKey>
     if (JsonWebKeyCache.has(key)) return JsonWebKeyCache.get(key)!
     const jwk = await crypto.subtle.exportKey('jwk', key)
     JsonWebKeyCache.set(key, jwk)
-    const hash = stableStringify(jwk) + key.usages.sort().join(',')
+    const hash = stableStringify(jwk) + [...key.usages].sort().join(',')
     CryptoKeyCache.set(hash, key)
     return jwk
 }
