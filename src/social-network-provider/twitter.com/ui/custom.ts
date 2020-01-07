@@ -70,8 +70,8 @@ function isDark([r, g, b]: RGB) {
     return r < 68 && g < 68 && b < 68
 }
 
-function toRGB(channels: RGB) {
-    return `rgb(${channels.join()})`
+function toRGB(channels?: RGB) {
+    return channels ? `rgb(${channels.join()})` : ''
 }
 
 function toHex(channels: RGB) {
@@ -100,9 +100,13 @@ function getBackgroundColor<T extends HTMLElement>(selector: string) {
     if (!document) return ''
     const element = document.querySelector<T>(selector)
     if (!element) return ''
-    // @ts-ignore CSSOM
-    const color = String(element.computedStyleMap?.()?.get?.('background-color') ?? element?.style?.backgroundColor)
-    return toRGB(fromRGB(color)!)
+    const color = String(
+        // @ts-ignore CSSOM
+        element.computedStyleMap?.()?.get?.('background-color') ||
+            element?.style?.backgroundColor ||
+            getComputedStyle?.(element, null).getPropertyValue('background-color'),
+    )
+    return toRGB(fromRGB(color))
 }
 
 export const twitterUICustomUI: SocialNetworkUICustomUI = {
