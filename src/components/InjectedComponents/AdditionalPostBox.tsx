@@ -17,6 +17,7 @@ import { useStylesExtends, or } from '../custom-ui-helper'
 import { steganographyModeSetting } from '../shared-settings/settings'
 import { useValueRef } from '../../utils/hooks/useValueRef'
 import { BannerProps } from '../Welcomes/Banner'
+import useConnectingStatus from '../../utils/hooks/useConnectingStatus'
 
 const useStyles = makeStyles({
     header: { padding: '8px 12px 0' },
@@ -165,6 +166,10 @@ export function AdditionalPostBox(props: AdditionalPostBoxProps) {
 
     const [showWelcome, setShowWelcome] = useState(false)
     useAsync(getActivatedUI().shouldDisplayWelcome, []).then(x => setShowWelcome(x))
+    const connecting = useConnectingStatus()
+
+    if (connecting) return null
+
     if (showWelcome || identities.length === 0) {
         return <NotSetupYetPrompt {...props.NotSetupYetPromptProps} />
     }

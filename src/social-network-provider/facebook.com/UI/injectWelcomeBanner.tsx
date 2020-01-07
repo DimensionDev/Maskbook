@@ -5,6 +5,7 @@ import { renderInShadowRoot } from '../../../utils/jss/renderInShadowRoot'
 import { Banner } from '../../../components/Welcomes/Banner'
 import { facebookUISelf } from '../ui-provider'
 import { makeStyles } from '@material-ui/core'
+import useConnectingStatus from '../../../utils/hooks/useConnectingStatus'
 
 export function injectWelcomeBannerFacebook() {
     const to = new MutationObserverWatcher(
@@ -20,6 +21,10 @@ export function injectWelcomeBannerFacebook() {
     const useStyle = makeStyles({ root: { borderColor: '#dddfe2' } })
     function Wrapped() {
         const classes = useStyle()
+
+        const connecting = useConnectingStatus()
+        if (connecting) return null
+
         return <Banner classes={{ root: classes.root }} unmount={() => unmount()} />
     }
 

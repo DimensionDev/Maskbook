@@ -14,7 +14,10 @@ import { ProfileDisconnectDialog, ProfileConnectStartDialog, ProfileConnectDialo
 import Services from '../../service'
 import getCurrentNetworkUI from '../../../social-network/utils/getCurrentNetworkUI'
 import tasks from '../../content-script/tasks'
-import { currentImmersiveSetupStatus } from '../../../components/shared-settings/settings'
+import {
+    currentImmersiveSetupStatus,
+    ImmersiveSetupCrossContextStatus,
+} from '../../../components/shared-settings/settings'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -89,7 +92,10 @@ export default function ProfileBox({ persona, border }: Props) {
     const onConnect = async (provider: typeof providers[0]) => {
         if (!persona) return
         if (!(await getCurrentNetworkUI(provider.network).requestPermission())) return
-        currentImmersiveSetupStatus[provider.network].value = ''
+        currentImmersiveSetupStatus[provider.network].value = JSON.stringify({
+            status: 'during',
+            persona: persona.identifier.toText(),
+        } as ImmersiveSetupCrossContextStatus)
         tasks(getCurrentNetworkUI(provider.network).getHomePage(), {
             active: true,
             autoClose: false,
