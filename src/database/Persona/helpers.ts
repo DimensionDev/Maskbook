@@ -114,7 +114,13 @@ export async function deletePersona(id: PersonaIdentifier, confirm: 'delete even
 }
 
 export async function renamePersona(identifier: PersonaIdentifier, nickname: string) {
-    return consistentPersonaDBWriteAccess(t => updatePersonaDB({ identifier, nickname }, 'merge', t as any))
+    return consistentPersonaDBWriteAccess(t =>
+        updatePersonaDB(
+            { identifier, nickname },
+            { linkedProfiles: 'merge', explicitUndefinedField: 'ignore' },
+            t as any,
+        ),
+    )
 }
 export async function queryPersonaByProfile(i: ProfileIdentifier) {
     return (await queryProfile(i)).linkedPersona
@@ -201,7 +207,7 @@ export async function createProfileWithPersona(
         mnemonic: keys.mnemonic,
     }
     await consistentPersonaDBWriteAccess(async t => {
-        await createOrUpdatePersonaDB(rec, t as any)
+        await createOrUpdatePersonaDB(rec, { explicitUndefinedField: 'ignore', linkedProfiles: 'merge' }, t as any)
         await attachProfileDB(profileID, ec_id, data, t)
     })
 }

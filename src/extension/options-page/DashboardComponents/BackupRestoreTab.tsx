@@ -1,17 +1,6 @@
 import React from 'react'
 import { makeStyles } from '@material-ui/styles'
-import {
-    Theme,
-    createStyles,
-    AppBar,
-    Tabs,
-    Tab,
-    Typography,
-    Box,
-    TypographyProps,
-    BoxProps,
-    TypographyTypeMap,
-} from '@material-ui/core'
+import { Theme, createStyles, AppBar, Tabs, Tab, Typography, Box, TypographyProps, BoxProps } from '@material-ui/core'
 import classNames from 'classnames'
 
 const useStyles = makeStyles((theme: Theme) =>
