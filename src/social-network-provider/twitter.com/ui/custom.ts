@@ -104,10 +104,9 @@ function getBackgroundColor<T extends HTMLElement>(selector: string) {
         // @ts-ignore CSSOM
         element.computedStyleMap?.()?.get?.('background-color') ||
             element?.style?.backgroundColor ||
-            getComputedStyle?.(element, null).getPropertyValue('background-color') ||
-            'rgb(255, 255, 255)',
+            getComputedStyle?.(element, null).getPropertyValue('background-color'),
     )
-    return toRGB(fromRGB(color)!)
+    return color ? toRGB(fromRGB(color)!) : ''
 }
 
 export const twitterUICustomUI: SocialNetworkUICustomUI = {
