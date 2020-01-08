@@ -80,7 +80,7 @@ export const postIdParser = (node: HTMLElement) => {
             node.children[1].querySelector<HTMLAnchorElement>('a[href*="status"]'),
             node.parentElement!.querySelector<HTMLAnchorElement>('a[href*="status"]'),
         )
-        return idNode ? parseId(idNode.href) : undefined
+        return idNode ? parseId(idNode.href) : parseId(location.href)
     }
 }
 

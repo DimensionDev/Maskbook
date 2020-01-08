@@ -100,9 +100,13 @@ function getBackgroundColor<T extends HTMLElement>(selector: string) {
     if (!document) return ''
     const element = document.querySelector<T>(selector)
     if (!element) return ''
-    // @ts-ignore CSSOM
-    const color = String(element.computedStyleMap?.()?.get?.('background-color') ?? element?.style?.backgroundColor)
-    return toRGB(fromRGB(color)!)
+    const color = String(
+        // @ts-ignore CSSOM
+        element.computedStyleMap?.()?.get?.('background-color') ||
+            element?.style?.backgroundColor ||
+            getComputedStyle?.(element, null).getPropertyValue('background-color'),
+    )
+    return color ? toRGB(fromRGB(color)!) : ''
 }
 
 export const twitterUICustomUI: SocialNetworkUICustomUI = {

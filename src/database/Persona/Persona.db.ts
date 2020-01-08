@@ -47,9 +47,24 @@ export async function consistentPersonaDBWriteAccess(
     tryToAutoFix = true,
 ) {
     // TODO: collect all changes on this transaction then only perform consistency check on those records.
-    const t = (await db()).transaction(['personas', 'profiles'], 'readwrite')
-    await action(t)
-    await assertPersonaDBConsistency(tryToAutoFix ? 'fix' : 'throw', 'full check', t)
+    let t = (await db()).transaction(['personas', 'profiles'], 'readwrite')
+    let finished = false
+    const finish = () => (finished = true)
+    t.addEventListener('abort', finish)
+    t.addEventListener('complete', finish)
+    t.addEventListener('error', finish)
+
+    try {
+        await action(t)
+    } finally {
+        if (finished) {
+            console.warn('The transaction ends too early! There MUST be a bug in the program!')
+            console.trace()
+            // start a new transaction to check consistency
+            t = (await db()).transaction(['personas', 'profiles'], 'readwrite')
+        }
+        await assertPersonaDBConsistency(tryToAutoFix ? 'fix' : 'throw', 'full check', t)
+    }
 }
 
 //#region Plain methods
@@ -120,36 +135,64 @@ export async function queryPersonasWithPrivateKey(t?: PersonaTransaction): Promi
 
 /**
  * Update an existing Persona record.
- * @param record The partial record to be merged
+ * @param nextRecord The partial record to be merged
+ * @param howToMerge How to merge linkedProfiles and `field: undefined`
+ * @param t transaction
  */
 export async function updatePersonaDB(
-    record: Partial<PersonaRecord> & Pick<PersonaRecord, 'identifier'>,
-    linkedProfilesMerge: 'replace' | 'merge',
+    // Do a copy here. We need to delete keys from it.
+    { ...nextRecord }: Readonly<Partial<PersonaRecord> & Pick<PersonaRecord, 'identifier'>>,
+    howToMerge: {
+        linkedProfiles: 'replace' | 'merge'
+        explicitUndefinedField: 'ignore' | 'delete field'
+    },
     t: PersonaTransaction,
 ): Promise<void> {
-    const _old = await t.objectStore('personas').get(record.identifier.toText())
+    const _old = await t.objectStore('personas').get(nextRecord.identifier.toText())
     if (!_old) throw new TypeError('Update an non-exist data')
     const old = personaRecordOutDb(_old)
     let nextLinkedProfiles = old.linkedProfiles
-    if (record.linkedProfiles) {
-        if (linkedProfilesMerge === 'merge')
+    if (nextRecord.linkedProfiles) {
+        if (howToMerge.linkedProfiles === 'merge')
             nextLinkedProfiles = new IdentifierMap(
-                new Map([...nextLinkedProfiles.__raw_map__, ...record.linkedProfiles.__raw_map__]),
+                new Map([...nextLinkedProfiles.__raw_map__, ...nextRecord.linkedProfiles.__raw_map__]),
             )
-        else nextLinkedProfiles = record.linkedProfiles
+        else nextLinkedProfiles = nextRecord.linkedProfiles
+    }
+    if (howToMerge.explicitUndefinedField === 'ignore') {
+        for (const _key in nextRecord) {
+            const key = _key as keyof typeof nextRecord
+            if (nextRecord[key] === undefined) {
+                delete nextRecord[key as keyof typeof nextRecord]
+            }
+        }
     }
     const next: PersonaRecordDb = personaRecordToDB({
         ...old,
-        ...record,
+        ...nextRecord,
         linkedProfiles: nextLinkedProfiles,
+        updatedAt: new Date(),
     })
     await t.objectStore('personas').put(next)
     MessageCenter.emit('personaUpdated', undefined)
 }
 
-export async function createOrUpdatePersonaDB(record: PersonaRecord, t: PersonaTransaction) {
-    if (await t.objectStore('personas').get(record.identifier.toText())) return updatePersonaDB(record, 'merge', t)
-    else return createPersonaDB(record, t)
+export async function createOrUpdatePersonaDB(
+    record: Partial<PersonaRecord> & Pick<PersonaRecord, 'identifier' | 'publicKey'>,
+    howToMerge: Parameters<typeof updatePersonaDB>[1],
+    t: PersonaTransaction,
+) {
+    if (await t.objectStore('personas').get(record.identifier.toText())) return updatePersonaDB(record, howToMerge, t)
+    else
+        return createPersonaDB(
+            {
+                ...record,
+                createdAt: new Date(),
+                updatedAt: new Date(),
+                linkedProfiles: new IdentifierMap(new Map()),
+            },
+            t,
+        )
 }
 
 /**
@@ -274,7 +317,7 @@ export async function detachProfileDB(identifier: ProfileIdentifier, t?: FullTra
         // persona deleted
         // } else {
         // update persona
-        await updatePersonaDB(persona, 'replace', t as any)
+        await updatePersonaDB(persona, { linkedProfiles: 'replace', explicitUndefinedField: 'delete field' }, t as any)
         // }
     }
     // update profile
@@ -306,7 +349,7 @@ export async function attachProfileDB(
     profile.linkedPersona = attachTo
     persona.linkedProfiles.set(identifier, data)
 
-    await updatePersonaDB(persona, 'merge', t as any)
+    await updatePersonaDB(persona, { linkedProfiles: 'merge', explicitUndefinedField: 'ignore' }, t as any)
     await updateProfileDB(profile, t as any)
 }
 
