@@ -1,7 +1,9 @@
 import { ValueRef } from '@holoflows/kit/es'
-import { useState, useEffect } from 'react'
+import { safeReact } from '../safeRequire'
 
 export function useValueRef<T>(ref: ValueRef<T>) {
+    const { useState, useEffect } = safeReact()
+
     const [value, setValue] = useState<T>(ref.value)
     useEffect(() => {
         if (ref.isEqual(value, ref.value) === false) {

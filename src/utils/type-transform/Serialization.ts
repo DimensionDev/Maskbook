@@ -1,32 +1,48 @@
+/// <reference path="../../env.d.ts" />
 import { Serialization } from '@holoflows/kit'
-import { declarePersistable, deserialize, serialize } from 'serialijse'
+import Typeson from 'typeson'
 
-export function serializable(name: string) {
-    return <T>(constructor: T) => {
-        declarePersistable(constructor, name)
+export function serializable<T, Q>(name: string, ser?: (x: T) => Q, des?: (x: Q) => T) {
+    return <T extends NewableFunction>(constructor: T) => {
         Object.defineProperty(constructor, 'name', {
             configurable: true,
             enumerable: false,
             writable: false,
             value: name,
         })
+        typeson.register({
+            [name]:
+                ser && des
+                    ? [x => x instanceof constructor, ser, des]
+                    : [
+                          x => x instanceof constructor,
+                          x => {
+                              const y = Object.assign({}, x)
+                              Object.getOwnPropertySymbols(y).forEach(x => delete y[x])
+                              return typeson.encapsulate(y)
+                          },
+                          x => {
+                              const y = typeson.revive(x)
+                              Object.setPrototypeOf(y, constructor.prototype)
+                              return y
+                          },
+                      ],
+        })
         return constructor
     }
 }
-serializable('Error')(Error)
-serializable('TypeError')(TypeError)
-serializable('ReferenceError')(ReferenceError)
-serializable('SyntaxError')(SyntaxError)
-serializable('URIError')(URIError)
+
+const typeson = new Typeson().register([require('typeson-registry/dist/presets/builtin')])
 
 export default {
     async serialization(from) {
-        return serialize(from)
+        return typeson.encapsulate(from)
     },
     async deserialization(to: string) {
         try {
-            return deserialize(to)
-        } catch {
+            return typeson.revive(to)
+        } catch (e) {
+            console.error(e)
             return {}
         }
     },

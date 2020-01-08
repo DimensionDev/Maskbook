@@ -27,16 +27,12 @@ import Text from '@material-ui/icons/TextFormat'
 import PersonIcon from '@material-ui/icons/Person'
 import LanguageIcon from '@material-ui/icons/Language'
 import WelcomeContainer from './WelcomeContainer'
-import Navigation from './Navigation/Navigation'
 import QRScanner from './QRScanner'
 import { hasWKWebkitRPCHandlers, iOSHost } from '../../utils/iOS-RPC'
 import { useAsync } from '../../utils/components/AsyncComponent'
-import {
-    BackupJSONFileVersion1,
-    UpgradeBackupJSONFile,
-    BackupJSONFileLatest,
-} from '../../utils/type-transform/BackupFile'
+import { BackupJSONFileLatest, UpgradeBackupJSONFile } from '../../utils/type-transform/BackupFormat/JSON/latest'
 import { decompressBackupFile } from '../../utils/type-transform/BackupFileShortRepresentation'
+import { Identifier, ProfileIdentifier } from '../../database/type'
 
 const RestoreBox = styled('div')(({ theme }: { theme: Theme }) => ({
     color: theme.palette.text.hint,
@@ -123,7 +119,7 @@ export default function Welcome({ restore: originalRestore }: Props) {
     const [tab, setTab] = React.useState(0)
     const [qrError, setError] = React.useState<boolean>(false)
 
-    const [json, setJson] = React.useState<null | BackupJSONFileVersion1>(null)
+    const [json, setJson] = React.useState<null | BackupJSONFileLatest>(null)
     const clearJson = () => {
         setJson(null)
         if (ref && ref.current) ref.current.value = ''
@@ -155,19 +151,23 @@ export default function Welcome({ restore: originalRestore }: Props) {
                                 {geti18nString('welcome_1b_hint_identity')}
                             </Typography>
                             <List>
-                                {json!.whoami.map(identity => (
-                                    <ListItem key={identity.userId}>
-                                        <ListItemAvatar>
-                                            <Avatar>
-                                                <PersonIcon />
-                                            </Avatar>
-                                        </ListItemAvatar>
-                                        <ListItemText
-                                            primary={identity.nickname || identity.userId}
-                                            secondary={identity.network}
-                                        />
-                                    </ListItem>
-                                ))}
+                                {json.profiles.map(identity => {
+                                    const id = Identifier.fromString(identity.identifier, ProfileIdentifier).value
+                                    if (!id) return null
+                                    return (
+                                        <ListItem key={identity.identifier}>
+                                            <ListItemAvatar>
+                                                <Avatar>
+                                                    <PersonIcon />
+                                                </Avatar>
+                                            </ListItemAvatar>
+                                            <ListItemText
+                                                primary={identity.nickname || id.userId}
+                                                secondary={id.network}
+                                            />
+                                        </ListItem>
+                                    )
+                                })}
                             </List>
                             <Typography color="textSecondary" gutterBottom>
                                 {geti18nString('welcome_1b_hint_network')}

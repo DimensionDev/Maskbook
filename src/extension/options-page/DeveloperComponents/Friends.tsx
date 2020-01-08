@@ -15,14 +15,14 @@ import {
     makeStyles,
 } from '@material-ui/core'
 import React, { useState } from 'react'
-import { Person } from '../../../database'
+import { Profile } from '../../../database'
 import { Avatar } from '../../../utils/components/Avatar'
 import { useTextField } from '../../../utils/components/useForms'
 import Services from '../../service'
 
 export function FriendsDeveloperMode() {
     const friends = useFriendsList()
-    const [editing, setEditing] = useState<Person>()
+    const [editing, setEditing] = useState<Profile>()
     const closeDialog = () => setEditing(undefined)
     return (
         <>
@@ -35,7 +35,7 @@ export function FriendsDeveloperMode() {
                         All people recorded in the Maskbook database, touch to edit person from database.
                     </Typography>
 
-                    <SelectPeopleAndGroupsUI<Person>
+                    <SelectPeopleAndGroupsUI<Profile>
                         hideSelectAll
                         hideSelectNone
                         items={friends}
@@ -53,7 +53,7 @@ export function FriendsDeveloperMode() {
 const useStyles = makeStyles({
     title: { '& > *': { display: 'flex' } },
 })
-function PersonEditDialog(props: { person: Person; onClose(): void }) {
+function PersonEditDialog(props: { person: Profile; onClose(): void }) {
     const classes = useStyles()
     const { onClose, person } = props
     const [, identifier] = useTextField('Internal ID', {
@@ -72,7 +72,7 @@ function PersonEditDialog(props: { person: Person; onClose(): void }) {
     })
     const [, fingerprint] = useTextField('Fingerprint', {
         disabled: true,
-        defaultValue: person.fingerprint,
+        defaultValue: person.linkedPersona?.fingerprint,
         margin: 'dense',
     })
     return (
@@ -95,7 +95,7 @@ function PersonEditDialog(props: { person: Person; onClose(): void }) {
                 </Button>
                 <Button
                     onClick={() => {
-                        Services.People.removePeople([person.identifier])
+                        Services.Identity.removeProfile(person.identifier)
                         onClose()
                     }}
                     color="secondary"
@@ -104,7 +104,7 @@ function PersonEditDialog(props: { person: Person; onClose(): void }) {
                 </Button>
                 <Button
                     onClick={() => {
-                        Services.People.updatePersonInfo(person.identifier, {
+                        Services.Identity.updateProfileInfo(person.identifier, {
                             nickname,
                             avatarURL: avatar,
                             forceUpdateAvatar: true,

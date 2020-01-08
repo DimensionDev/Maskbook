@@ -17,10 +17,20 @@ const useStyles = makeStyles({
         background: 'transparent',
     },
 })
+/**
+ * useHistory will throw in the Storybook
+ */
+function _useSafeHistory() {
+    try {
+        return useHistory()
+    } catch {
+        return { replace() {} }
+    }
+}
 export default function Navigation({ back, close, activeStep }: Props) {
     const theme = useTheme()
     const classes = useStyles()
-    const history = useHistory()
+    const history = _useSafeHistory()
 
     return (
         <MobileStepper

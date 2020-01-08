@@ -10,39 +10,41 @@ import {
     useMediaQuery,
     Tabs,
     Tab,
-    Button,
-    Link as MuiLink,
-    Paper,
-    LinearProgress,
-    Breadcrumbs,
 } from '@material-ui/core'
 
-import BackIcon from '@material-ui/icons/ArrowBack'
+import CloseIcon from '@material-ui/icons/Close'
+import BookmarkIcon from '@material-ui/icons/Bookmark'
+import LocationOnIcon from '@material-ui/icons/LocationOn'
 
 import React from 'react'
-import { ThemeProvider, withStyles } from '@material-ui/styles'
+import { ThemeProvider } from '@material-ui/styles'
 import { MaskbookDarkTheme, MaskbookLightTheme } from './utils/theme'
-import { HashRouter as Router, Route, Link } from 'react-router-dom'
-import { makeStyles, createStyles, Theme } from '@material-ui/core/styles'
-import PersonaCard from './extension/options-page/PersonaCard'
-import NewPersonaCard from './extension/options-page/NewPersonaCard'
-import { useMyIdentities } from './components/DataSource/useActivatedUI'
+import { HashRouter as Router, Route, Switch, Redirect, useLocation, useHistory } from 'react-router-dom'
+import { makeStyles, createStyles } from '@material-ui/core/styles'
 
 import './setup.ui'
 import { SSRRenderer } from './utils/SSRRenderer'
 
-import Welcome from './extension/options-page/Welcome'
-import Developer from './extension/options-page/Developer'
-import FullScreenDialogRouter from './extension/options-page/Dialog'
-import BackupDialog from './extension/options-page/Backup'
-
 import { SnackbarProvider } from 'notistack'
-import Services from './extension/service'
-import { PersonIdentifier } from './database/type'
+
 import { geti18nString } from './utils/i18n'
+import ResponsiveDrawer from './extension/options-page/Drawer'
+
+import { DialogRouter } from './extension/options-page/DashboardDialogs/DialogBase'
+import DashboardHomePage from './extension/options-page/Home'
+import DashboardDebugPage from './extension/options-page/Debug'
+import DashboardInitializeDialog from './extension/options-page/Initialize'
 
 const useStyles = makeStyles(theme =>
     createStyles({
+        wrapper: {
+            display: 'flex',
+        },
+        container: {
+            width: '100%',
+            flex: '1 1 auto',
+            paddingBottom: 80,
+        },
         root: {
             display: 'flex',
             flexDirection: 'column',
@@ -59,86 +61,28 @@ const useStyles = makeStyles(theme =>
         actionButtons: {
             margin: theme.spacing(2),
         },
-        loaderWrapper: {
-            position: 'relative',
-            '&:not(:last-child)': {
-                marginBottom: theme.spacing(2),
-            },
+        close: {
+            marginLeft: 'auto',
         },
-        loader: {
-            width: '100%',
-            bottom: 0,
-            position: 'absolute',
+        tabItem: {
+            minWidth: 110,
         },
-        actionButton: {},
-        footer: {
-            paddingBottom: 48,
-        },
-        footerButtons: {
-            marginTop: `${theme.spacing(1)}px`,
-            '& ol': {
-                justifyContent: 'center',
-            },
-        },
-        footerButton: {
-            borderRadius: '0',
-            whiteSpace: 'nowrap',
-            '& > span': {
-                marginLeft: theme.spacing(1),
-                marginRight: theme.spacing(1),
-            },
+        tabSelected: {
+            background: theme.palette.type === 'dark' ? 'rgba(18, 12, 20, 0.6)' : 'rgba(237, 243, 254, 0.8)',
         },
     }),
 )
 
 const OptionsPageRouters = (
     <>
-        <Route exact path="/" component={() => null} />
-        <Route path="/welcome" component={Welcome} />
-        <FullScreenDialogRouter path="/developer" component={Developer}></FullScreenDialogRouter>
-        <Route path="/backup" component={() => <BackupDialog />} />
+        <Switch>
+            <Route path="/home/" component={DashboardHomePage} />
+            <Route path="/debug/" component={DashboardDebugPage}></Route>
+            <DialogRouter path="/initialize" component={DashboardInitializeDialog} onExit={'/'} fullscreen />
+            <Redirect path="*" to="/home/" />
+        </Switch>
     </>
 )
-
-const ColorButton = withStyles((theme: Theme) => ({
-    root: {
-        padding: '0.5em 1.5rem',
-        boxShadow: theme.shadows[2],
-        width: '100%',
-    },
-}))(Button)
-
-const BlockAElement = (props: any) => <a style={{ display: 'block', textDecoration: 'none' }} {...props}></a>
-
-const PaperButton = function(props: any) {
-    const classes = useStyles()
-    const { children, disabled, ...paperProps } = props
-    return (
-        <Paper
-            component={BlockAElement}
-            href={props.href}
-            className={classes.actionButton}
-            elevation={3}
-            {...paperProps}>
-            <ColorButton disabled={disabled}> {props.children} </ColorButton>
-        </Paper>
-    )
-}
-
-const FooterLink = function(props: any) {
-    const classes = useStyles()
-    return (
-        <MuiLink
-            underline="none"
-            {...(props.href
-                ? { href: props.href, target: '_blank', rel: 'noopener noreferrer' }
-                : { to: props.to, component: Link })}
-            color="inherit"
-            className={classes.footerButton}>
-            <span>{props.children}</span>
-        </MuiLink>
-    )
-}
 
 function DashboardWithProvider() {
     const isDarkTheme = useMediaQuery('(prefers-color-scheme: dark)')
@@ -150,7 +94,10 @@ function DashboardWithProvider() {
                     vertical: 'top',
                     horizontal: 'right',
                 }}>
-                <Dashboard></Dashboard>
+                <Router>
+                    <CssBaseline />
+                    <Dashboard></Dashboard>
+                </Router>
             </SnackbarProvider>
         </ThemeProvider>
     )
@@ -159,93 +106,69 @@ function DashboardWithProvider() {
 function Dashboard() {
     const classes = useStyles()
 
-    const [currentTab, setCurrentTab] = React.useState(0)
-    const [exportLoading, setExportLoading] = React.useState(false)
+    const shouldRenderAppBar = webpackEnv.firefoxVariant === 'GeckoView' || webpackEnv.target === 'WKWebview'
+    const shouldNotRenderAppBar = useMediaQuery('(min-width:1024px)')
 
-    const identities = useMyIdentities()
+    const routers: [string, string, JSX.Element][] = [
+        [geti18nString('home'), '/home/', <BookmarkIcon />],
+        // ['Device', '/device/', <CachedIcon />],
+        // ['Settings', '/settings/', <SettingsIcon />],
+        // ['About', '/about/', <InfoOutlinedIcon />],
+        [geti18nString('debug'), '/debug/', <LocationOnIcon />],
+    ]
 
-    const handleTabChange = (_: React.ChangeEvent<{}>, newValue: number) => {
-        setCurrentTab(newValue)
-    }
+    const history = useHistory()
+    const currentRouter = useLocation()
+    const index = routers.findIndex(i => currentRouter.pathname.startsWith(i[1]))
+    const value = index < 0 ? 0 : index
 
-    const exportData = () => {
-        setExportLoading(true)
-        Services.Welcome.backupMyKeyPair(PersonIdentifier.unknown, {
-            download: true,
-            onlyBackupWhoAmI: false,
-        })
-            .catch(alert)
-            .then(() => setExportLoading(false))
-    }
-
-    const shouldRenderBackButton = webpackEnv.firefoxVariant === 'GeckoView' || webpackEnv.target === 'WKWebview'
+    const tabBar = (
+        <AppBar position="sticky" color="default" elevation={0}>
+            <Tabs
+                value={value}
+                variant="scrollable"
+                scrollButtons="on"
+                onChange={(e, v) => history.push(routers[v][1])}
+                indicatorColor="primary"
+                textColor="primary">
+                {routers.map(tab => (
+                    <Tab
+                        key={`dashboard-tab-${tab[0]}`}
+                        className={classes.tabItem}
+                        classes={{ selected: classes.tabSelected }}
+                        label={tab[0]}
+                    />
+                ))}
+            </Tabs>
+        </AppBar>
+    )
 
     return (
-        <Router>
-            <AppBar position="sticky">
-                <Toolbar>
-                    {shouldRenderBackButton && (
-                        <IconButton onClick={() => window.close()} edge="start" color="inherit" aria-label="back">
-                            <BackIcon />
-                        </IconButton>
-                    )}
-                    <Typography variant="h6">Maskbook</Typography>
-                </Toolbar>
-            </AppBar>
-            <Container maxWidth="md">
-                <CssBaseline />
-                <Container maxWidth="sm">
-                    <main className={classes.root}>
-                        <img
-                            className={classes.logo}
-                            src="https://maskbook.com/img/maskbook--logotype-black.png"
-                            alt="Maskbook"
-                        />
-                        <Tabs
-                            value={currentTab}
-                            indicatorColor="primary"
-                            textColor="primary"
-                            onChange={handleTabChange}>
-                            <Tab label={geti18nString('dashboard')} />
-                            {/* <Tab label={geti18nString('synchronization')} disabled /> */}
-                        </Tabs>
-                        <section className={classes.cards}>
-                            {identities.map(i => (
-                                <PersonaCard identity={i} key={i.identifier.toText()} />
-                            ))}
-                            <NewPersonaCard />
-                        </section>
-                        <section className={classes.actionButtons}>
-                            <div className={classes.loaderWrapper}>
-                                <PaperButton onClick={exportData} disabled={exportLoading}>
-                                    {geti18nString('dashboard_export_keystore')}
-                                </PaperButton>
-                                {exportLoading && <LinearProgress classes={{ root: classes.loader }} />}
-                            </div>
-                            <Link to="/welcome?restore" component={PaperButton}>
-                                {geti18nString('dashboard_import_backup')}
-                            </Link>
-                        </section>
-                    </main>
+        <div className={classes.wrapper}>
+            <ResponsiveDrawer routers={routers} exitDashboard={shouldRenderAppBar ? () => window.close() : null} />
+            <section className={classes.container}>
+                {(shouldRenderAppBar ? true : !shouldNotRenderAppBar) && (
+                    <AppBar position="static">
+                        <Toolbar>
+                            <Typography variant="h6">Maskbook</Typography>
+                            {shouldRenderAppBar && (
+                                <IconButton
+                                    className={classes.close}
+                                    onClick={() => window.close()}
+                                    edge="end"
+                                    color="inherit">
+                                    <CloseIcon />
+                                </IconButton>
+                            )}
+                        </Toolbar>
+                    </AppBar>
+                )}
+                {!shouldNotRenderAppBar && tabBar}
+                <Container>
+                    <main className={classes.root}>{OptionsPageRouters}</main>
                 </Container>
-                <footer className={classes.footer}>
-                    <Breadcrumbs className={classes.footerButtons} separator="|" aria-label="breadcrumb">
-                        <FooterLink href="https://maskbook.com/">Maskbook.com</FooterLink>
-                        <FooterLink href="https://maskbook.com/download-links/#mobile">
-                            {geti18nString('dashboard_mobile_test')}
-                        </FooterLink>
-                        <FooterLink href="https://maskbook.com/privacy-policy/">
-                            {geti18nString('options_index_privacy')}
-                        </FooterLink>
-                        <FooterLink href="https://github.com/DimensionDev/Maskbook">
-                            {geti18nString('dashboard_source_code')}
-                        </FooterLink>
-                        <FooterLink to="/developer">{geti18nString('options_index_dev')}</FooterLink>
-                    </Breadcrumbs>
-                </footer>
-                {OptionsPageRouters}
-            </Container>
-        </Router>
+            </section>
+        </div>
     )
 }
 

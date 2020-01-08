@@ -1,7 +1,7 @@
-import { env, Env, Preference, Profile, SocialNetworkWorkerAndUIDefinition } from './shared'
-import { DOMProxy, LiveSelector, ValueRef } from '@holoflows/kit/es'
-import { Group, Person } from '../database'
-import { PersonIdentifier } from '../database/type'
+import { env, Env, Preference, ProfileUI, SocialNetworkWorkerAndUIDefinition } from './shared'
+import { DOMProxy, LiveSelector, ValueRef, OnlyRunInContext } from '@holoflows/kit/es'
+import { Group, Profile, Persona } from '../database'
+import { ProfileIdentifier, PersonaIdentifier } from '../database/type'
 import { Payload } from '../utils/type-transform/Payload'
 import { defaultTo, isNull } from 'lodash-es'
 import Services from '../extension/service'
@@ -11,6 +11,9 @@ import { nopWithUnmount } from '../utils/utils'
 import { Theme } from '@material-ui/core'
 import { MaskbookLightTheme, MaskbookDarkTheme } from '../utils/theme'
 import { untilDomLoaded } from '../utils/dom'
+import { I18NStrings } from '../utils/i18n'
+
+OnlyRunInContext(['content', 'debugging', 'options'], 'UI provider')
 
 //#region SocialNetworkUI
 export interface SocialNetworkUIDefinition
@@ -33,6 +36,10 @@ export interface SocialNetworkUIDefinition
     /**
      * This function should
      * 0. Request the permission to the site by `browser.permissions.request()`
+     */
+    requestPermission(): Promise<boolean>
+    /**
+     * This function should
      * 1. Jump to a new page
      * 2. On that page, shouldDisplayWelcome should return true
      *
@@ -61,7 +68,7 @@ export interface SocialNetworkUIInformationCollector {
      * ```ts
      * lastRecognizedIdentity.addListener(id => {
      *      if (id.identifier.isUnknown) return
-     *      Services.People.resolveIdentity(id.identifier)
+     *      Services.Identity.resolveIdentity(id.identifier)
      * })
      * ```
      *
@@ -169,6 +176,11 @@ export interface SocialNetworkUITasks {
      */
     taskPasteIntoBio(text: string): void
     /**
+     * Jump to profile page
+     * This task should go to the profile page. The PWA way (no page refreshing) is preferred.
+     */
+    taskGotoProfilePage(profile: ProfileIdentifier): void
+    /**
      * This function should return the given single post on the current page,
      * Called by `AutomatedTabTask`
      */
@@ -178,7 +190,11 @@ export interface SocialNetworkUITasks {
      * Called by `AutomatedTabTask`
      * @param identifier The post id
      */
-    taskGetProfile(identifier: PersonIdentifier): Promise<Profile>
+    taskGetProfile(identifier: ProfileIdentifier): Promise<ProfileUI>
+    /**
+     * For a PersonaIdentifier setup a new account
+     */
+    taskStartImmersiveSetup(for_: PersonaIdentifier): void
 }
 
 //#endregion
@@ -192,7 +208,7 @@ export interface SocialNetworkUIDataSources {
     /**
      * My Maskbook friends at this network
      */
-    readonly friendsRef?: ValueRef<Person[]>
+    readonly friendsRef?: ValueRef<Profile[]>
     /**
      * My groups at this network
      */
@@ -200,22 +216,26 @@ export interface SocialNetworkUIDataSources {
     /**
      * My identities at current network
      */
-    readonly myIdentitiesRef?: ValueRef<Person[]>
+    readonly myIdentitiesRef?: ValueRef<Profile[]>
+    /**
+     * My personas at current network
+     */
+    readonly myPersonasRef?: ValueRef<Persona[]>
     /**
      * The account that user is using (may not in the database)
      */
-    readonly lastRecognizedIdentity?: ValueRef<Pick<Person, 'identifier' | 'nickname' | 'avatar'>>
+    readonly lastRecognizedIdentity?: ValueRef<Pick<Profile, 'identifier' | 'nickname' | 'avatar'>>
     /**
      * The account that user is using (MUST be in the database)
      */
-    readonly currentIdentity?: ValueRef<Person | null>
+    readonly currentIdentity?: ValueRef<Profile | null>
     /**
      * Posts that Maskbook detects
      */
     readonly posts?: WeakMap<object, PostInfo>
 }
 export type PostInfo = {
-    readonly postBy: ValueRef<PersonIdentifier>
+    readonly postBy: ValueRef<ProfileIdentifier>
     readonly postID: ValueRef<string | null>
     readonly postContent: ValueRef<string>
     readonly postPayload: ValueRef<Payload | null>
@@ -228,9 +248,7 @@ export type PostInfo = {
 }
 //#endregion
 //#region SocialNetworkUICustomUI
-interface SocialNetworkUICustomUI {
-    darkTheme?: Theme
-    lightTheme?: Theme
+export interface SocialNetworkUICustomUI {
     /**
      * This is a React hook.
      *
@@ -238,7 +256,17 @@ interface SocialNetworkUICustomUI {
      *
      * // Note: useMediaQuery('(prefers-color-scheme: dark)')
      */
-    useColorScheme?(): 'dark' | 'light'
+    useTheme?(): Theme
+    i18nOverwrite?: {
+        [key: string]: Partial<
+            {
+                [P in keyof I18NStrings]: {
+                    message: string
+                    description?: string
+                }
+            }
+        >
+    }
 }
 //#endregion
 
@@ -249,7 +277,7 @@ export const getEmptyPostInfoByElement = (
 ) => {
     return {
         decryptedPostContent: new ValueRef(''),
-        postBy: new ValueRef(PersonIdentifier.unknown, PersonIdentifier.equals),
+        postBy: new ValueRef(ProfileIdentifier.unknown, ProfileIdentifier.equals),
         postContent: new ValueRef(''),
         postID: new ValueRef<string | null>(null),
         postPayload: new ValueRef<Payload | null>(null),
@@ -261,12 +289,10 @@ export const definedSocialNetworkUIs = new Set<SocialNetworkUI>()
 export const getActivatedUI = () => activatedSocialNetworkUI
 
 let activatedSocialNetworkUI = ({
-    lastRecognizedIdentity: new ValueRef({ identifier: PersonIdentifier.unknown }),
+    lastRecognizedIdentity: new ValueRef({ identifier: ProfileIdentifier.unknown }),
     currentIdentity: new ValueRef(null),
-    myIdentitiesRef: new ValueRef([] as Person[]),
-    useColorScheme: () => 'light',
-    lightTheme: MaskbookLightTheme,
-    darkTheme: MaskbookDarkTheme,
+    myIdentitiesRef: new ValueRef([] as Profile[]),
+    useTheme: () => MaskbookLightTheme,
 } as Partial<SocialNetworkUI>) as SocialNetworkUI
 export function activateSocialNetworkUI() {
     for (const ui of definedSocialNetworkUIs)
@@ -313,7 +339,7 @@ export function activateSocialNetworkUI() {
                         ui.currentIdentity.value =
                             ui.myIdentitiesRef.value.find(x => id.identifier.equals(x.identifier)) || null
                     }
-                    Services.People.resolveIdentity(id.identifier).then()
+                    Services.Identity.resolveIdentity(id.identifier).then()
                 })
             })
         }

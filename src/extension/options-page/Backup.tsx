@@ -16,11 +16,11 @@ import CenterFocusWeakIcon from '@material-ui/icons/CenterFocusWeak'
 import Services from '../../extension/service'
 import { makeStyles, Typography, createStyles } from '@material-ui/core'
 import { geti18nString } from '../../utils/i18n'
-import { compressBackupFile } from '../../utils/type-transform/BackupFileShortRepresentation'
-import { BackupJSONFileLatest } from '../../utils/type-transform/BackupFile'
-import { PersonIdentifier } from '../../database/type'
+import { ProfileIdentifier, Identifier } from '../../database/type'
 import { QrCode } from '../../components/shared/qrcode'
 import { amber } from '@material-ui/core/colors'
+import { BackupJSONFileLatest } from '../../utils/type-transform/BackupFormat/JSON/latest'
+import { compressBackupFile } from '../../utils/type-transform/BackupFileShortRepresentation'
 
 const useStyles = makeStyles(theme =>
     createStyles({
@@ -58,14 +58,14 @@ export default function BackupDialog() {
     const [showQRCode, setShowQRCode] = useState(search.get('qr') === null ? false : true)
 
     const identity = search.get('identity') || ''
-    const currentIdentifier = PersonIdentifier.fromString(identity) as PersonIdentifier
+    const currentIdentifier = ProfileIdentifier.fromString(identity, ProfileIdentifier).value
 
     useEffect(() => {
         if (!currentIdentifier) return
-        Services.Welcome.backupMyKeyPair(currentIdentifier, { download: false, onlyBackupWhoAmI: true })
+        Services.Welcome.createBackupFile({ download: false, onlyBackupWhoAmI: true })
             .then(backupObj => {
                 setBackupObj(backupObj)
-                setQRText(compressBackupFile(backupObj))
+                setQRText(compressBackupFile(backupObj, currentIdentifier))
             })
             .catch(e => {
                 alert(e)

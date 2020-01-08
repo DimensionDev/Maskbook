@@ -39,6 +39,10 @@ export interface SocialNetworkWorkerAndUIDefinition {
      */
     networkIdentifier: string
     /**
+     * Return the homepage url. e.g.: https://www.twitter.com/
+     */
+    getHomePage(): string
+    /**
      * @param env The env that Maskbook running in
      * @param preference Users settings about Maskbook
      *
@@ -106,6 +110,6 @@ export const env: Env = {
     platform: navigator.userAgent.match(/Mobile|mobile/) ? 'mobile' : 'desktop',
 }
 
-export interface Profile {
+export interface ProfileUI {
     bioContent: string
 }

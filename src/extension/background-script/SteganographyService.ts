@@ -5,10 +5,9 @@ import { OnlyRunInContext } from '@holoflows/kit/es'
 import { EncodeOptions, DecodeOptions } from 'node-stego/es/stego'
 import { getUrl, downloadUrl } from '../../utils/utils'
 import { memoizePromise } from '../../utils/memoize'
+import { getDimension } from '../../utils/image'
 
 OnlyRunInContext('background', 'SteganographyService')
-
-type WithPartial<T, K extends keyof T> = { [P in Exclude<keyof T, K>]?: T[P] | undefined } & { [P in K]: T[P] }
 
 const defaultOptions = {
     size: 8,
@@ -19,12 +18,9 @@ const defaultOptions = {
 
 const getMaskBuf = memoizePromise(() => downloadUrl(getUrl('/maskbook-steganography-mask.png')), undefined)
 
-export async function encodeImage(
-    { buffer: imgBuf }: Uint8Array,
-    options: WithPartial<Required<EncodeOptions>, 'text' | 'pass'>,
-) {
+export async function encodeImage(buf: Uint8Array, options: PartialRequired<Required<EncodeOptions>, 'text' | 'pass'>) {
     return new Uint8Array(
-        await encode(imgBuf, await getMaskBuf(), {
+        await encode(buf.buffer, await getMaskBuf(), {
             ...defaultOptions,
             noCropEdgePixels: false,
             grayscaleAlgorithm: GrayscaleAlgorithm.LUMINANCE,
@@ -34,11 +30,12 @@ export async function encodeImage(
     )
 }
 
-export async function decodeImage(
-    { buffer: imgBuf }: Uint8Array,
-    options: WithPartial<Required<DecodeOptions>, 'pass'>,
-) {
-    return decode(imgBuf, await getMaskBuf(), {
+export async function decodeImage(buf: Uint8Array, options: PartialRequired<Required<DecodeOptions>, 'pass'>) {
+    const { width, height } = getDimension(buf)
+    if (width !== 1024 || height !== 1240) {
+        return ''
+    }
+    return decode(buf.buffer, await getMaskBuf(), {
         ...defaultOptions,
         transformAlgorithm: TransformAlgorithm.FFT1D,
         ...options,

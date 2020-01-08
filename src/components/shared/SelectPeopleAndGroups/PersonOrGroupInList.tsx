@@ -1,26 +1,25 @@
 import * as React from 'react'
-import { Person, Group } from '../../../database'
+import { Profile, Group } from '../../../database'
 import { ListItem, Theme, ListItemAvatar, ListItemText } from '@material-ui/core'
-import { OverridableComponent } from '@material-ui/core/OverridableComponent'
+import { DefaultComponentProps } from '@material-ui/core/OverridableComponent'
 import { makeStyles } from '@material-ui/styles'
 import { Avatar } from '../../../utils/components/Avatar'
 import MuiAvatar from '@material-ui/core/Avatar/Avatar'
 import GroupIcon from '@material-ui/icons/Group'
 import { useFriendsList } from '../../DataSource/useActivatedUI'
-import { PersonIdentifier } from '../../../database/type'
+import { ProfileIdentifier } from '../../../database/type'
 import { geti18nString, useIntlListFormat } from '../../../utils/i18n'
 import { isGroup } from './SelectPeopleAndGroupsUI'
 import { useResolveSpecialGroupName } from './resolveSpecialGroupName'
 import { useStylesExtends } from '../../custom-ui-helper'
+import { ListItemTypeMap } from '@material-ui/core/ListItem'
 
 export interface PersonOrGroupInListProps extends withClasses<KeysInferFromUseStyles<typeof useStyle>> {
     onClick: () => void
     disabled?: boolean
     showAtNetwork?: boolean
-    // ? Don't import ListItemProps from @material-ui
-    // ? or a type def conflict will happen on <ListItem button onClick> attrs
-    ListItemProps?: Partial<(typeof ListItem extends OverridableComponent<infer U> ? U : never)['props']>
-    item: Group | Person
+    ListItemProps?: Partial<DefaultComponentProps<ListItemTypeMap<{ button: true }, 'div'>>>
+    item: Group | Profile
 }
 const useStyle = makeStyles((theme: Theme) => ({
     // ? I want to let the children of this element have no change to
@@ -72,7 +71,7 @@ export function PersonOrGroupInList(props: PersonOrGroupInListProps) {
         const person = props.item
         name = person.nickname || person.identifier.userId
         avatar = <Avatar person={person} />
-        secondaryText = person.fingerprint ? person.fingerprint.toLowerCase() : undefined
+        secondaryText = person.linkedPersona?.fingerprint.toLowerCase()
     }
     const withNetwork = (
         <>
@@ -96,7 +95,7 @@ export function PersonOrGroupInList(props: PersonOrGroupInListProps) {
     )
 }
 
-function useNickNamesFromList(preview: readonly PersonIdentifier[]) {
+function useNickNamesFromList(preview: readonly ProfileIdentifier[]) {
     const people = useFriendsList()
     const userWithNames = React.useMemo(() => people.filter(x => x.nickname), [people])
 

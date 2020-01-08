@@ -3,13 +3,13 @@ import AsyncComponent from '../../utils/components/AsyncComponent'
 import { AdditionalContent, AdditionalContentProps } from './AdditionalPostContent'
 import Services from '../../extension/service'
 import { geti18nString } from '../../utils/i18n'
-import { PersonIdentifier } from '../../database/type'
+import { ProfileIdentifier } from '../../database/type'
 
 export interface AddToKeyStoreProps {
     provePost: string
-    postBy: PersonIdentifier
+    postBy: ProfileIdentifier
     completeComponentProps?: Partial<SuccessProps>
-    completeComponent?: React.ComponentType
+    completeComponent?: React.ComponentType<{ data: boolean }>
     waitingComponentProps?: Partial<WaitingProps>
     waitingComponent?: React.ComponentType
     failedComponentProps?: Partial<FailedProps>

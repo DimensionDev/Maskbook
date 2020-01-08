@@ -1,13 +1,13 @@
 import * as React from 'react'
 import { MutationObserverWatcher, ValueRef } from '@holoflows/kit'
 import { PersonKnown, PersonKnownProps } from '../../../components/InjectedComponents/PersonKnown'
-import { bioCard } from '../utils/selector'
+import { bioCardSelector } from '../utils/selector'
 import { renderInShadowRoot } from '../../../utils/jss/renderInShadowRoot'
-import { PersonIdentifier } from '../../../database/type'
 import { twitterUrl } from '../utils/url'
 import { makeStyles } from '@material-ui/styles'
 import { bioCardParser } from '../utils/fetch'
 import { twitterEncoding } from '../encoding'
+import { ProfileIdentifier } from '../../../database/type'
 
 const useStyles = makeStyles({
     root: {
@@ -34,7 +34,7 @@ export function PersonKnownAtTwitter(props: PersonKnownProps) {
 }
 
 export function injectKnownIdentityAtTwitter() {
-    const watcher = new MutationObserverWatcher(bioCard<false>(false))
+    const watcher = new MutationObserverWatcher(bioCardSelector<false>(false))
         .setDOMProxyOption({
             afterShadowRootInit: { mode: 'closed' },
         })
@@ -53,7 +53,7 @@ export function injectKnownIdentityAtTwitter() {
 
             const unmount = renderInShadowRoot(
                 <PersonKnownAtTwitter
-                    pageOwner={new PersonIdentifier(twitterUrl.hostIdentifier, userIdRef.value)}
+                    pageOwner={new ProfileIdentifier(twitterUrl.hostIdentifier, userIdRef.value)}
                     bioContent={bioRef}
                 />,
                 renderPoint,

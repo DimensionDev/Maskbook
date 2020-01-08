@@ -1,6 +1,7 @@
 import en from '../_locales/en/messages.json'
 import zh from '../_locales/zh/messages.json'
-import React from 'react'
+import { GetContext } from '@holoflows/kit/es'
+import { safeReact, safeGetActiveUI } from './safeRequire'
 
 export type I18NStrings = typeof en
 
@@ -9,6 +10,7 @@ const langs: Record<string, I18NStrings> = {
     zh,
 }
 export function useIntlListFormat() {
+    const React = safeReact()
     const formatter = React.useMemo(() => {
         return new Intl.ListFormat({ type: 'conjunction' })
     }, [])
@@ -39,14 +41,22 @@ if (!Intl.ListFormat) {
     }
 }
 export function geti18nString(key: keyof I18NStrings, substitutions: string | string[] = '') {
-    const lang = langs[getCurrentScript()] || langs.en
-    const string = lang[key] || langs.en[key]
+    const uiOverwrite = GetContext() === 'background' ? {} : safeGetActiveUI().i18nOverwrite
+
+    const uiLang = uiOverwrite?.[getCurrentScript()]
+    const origLang = langs?.[getCurrentScript()]
+    const uiFallback = uiOverwrite?.en
+    const fallback = langs?.en
+
+    type I18NStringsValue = string | undefined | { message: string }
+    const string = (uiLang?.[key] || origLang?.[key] || uiFallback?.[key] || fallback?.[key]) as I18NStringsValue
     if (typeof substitutions === 'string') substitutions = [substitutions]
-    if (substitutions.length > 3) console.error('Implement this please')
-    return (string || { message: key }).message
+    if (substitutions.length > 4) console.error('Implement this please')
+    return ((typeof string === 'string' ? string : string?.message) ?? key)
         .replace('$1', substitutions[0])
         .replace('$2', substitutions[1])
         .replace('$3', substitutions[2])
+        .replace('$4', substitutions[3])
 }
 function getCurrentScript() {
     return navigator.language.split('-')[0]

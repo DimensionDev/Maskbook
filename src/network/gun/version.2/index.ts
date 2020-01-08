@@ -17,7 +17,7 @@ export interface PostOnGun2 {
 }
 
 export interface ApplicationStateInGunVersion2 {
-    [sha512_base64_PersonIdentifier_OR_sha512_base64_PostSalt: string]: PersonOnGun2 | PostOnGun2
+    [sha512_base64_ProfileIdentifier_OR_sha512_base64_PostSalt: string]: PersonOnGun2 | PostOnGun2
 }
 
 export const gun2 = new Gun<ApplicationStateInGunVersion2>(gun2Servers)

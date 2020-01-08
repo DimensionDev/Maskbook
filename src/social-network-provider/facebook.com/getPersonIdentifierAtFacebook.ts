@@ -1,6 +1,6 @@
-import { PersonIdentifier } from '../../database/type'
+import { ProfileIdentifier } from '../../database/type'
 import Services from '../../extension/service'
-import { Person } from '../../database'
+import { Profile } from '../../database'
 
 type link = HTMLAnchorElement | null | undefined
 
@@ -18,11 +18,11 @@ type link = HTMLAnchorElement | null | undefined
  *      </a>
  *  ]
  */
-export function getPersonIdentifierAtFacebook(
+export function getProfileIdentifierAtFacebook(
     links: link[] | link,
     allowCollectInfo: boolean,
-): Pick<Person, 'identifier' | 'nickname' | 'avatar'> {
-    const unknown = { identifier: PersonIdentifier.unknown, avatar: undefined, nickname: undefined }
+): Pick<Profile, 'identifier' | 'nickname' | 'avatar'> {
+    const unknown = { identifier: ProfileIdentifier.unknown, avatar: undefined, nickname: undefined }
     try {
         if (!Array.isArray(links)) links = [links]
         const result = links
@@ -31,18 +31,18 @@ export function getPersonIdentifierAtFacebook(
             .filter(x => x.id)
         const { dom, id, nickname } = result[0] || {}
         if (id) {
-            const result = new PersonIdentifier('facebook.com', id)
+            const result = new ProfileIdentifier('facebook.com', id)
             let avatar: HTMLImageElement | undefined = undefined
             try {
                 avatar = dom!.closest('.clearfix')!.parentElement!.querySelector('img')!
                 if (allowCollectInfo && avatar.getAttribute('aria-label') === nickname && nickname) {
-                    Services.People.updatePersonInfo(result, { nickname, avatarURL: avatar.src })
+                    Services.Identity.updateProfileInfo(result, { nickname, avatarURL: avatar.src })
                 }
             } catch {}
             try {
                 avatar = dom!.querySelector('img')!
                 if (allowCollectInfo && avatar) {
-                    Services.People.updatePersonInfo(result, { nickname, avatarURL: avatar.src })
+                    Services.Identity.updateProfileInfo(result, { nickname, avatarURL: avatar.src })
                 }
             } catch {}
             return {

@@ -180,6 +180,8 @@ function override(config, env) {
         if (target.FirefoxForAndroid) modifiers.firefox(manifest)
         if (target.StandaloneGeckoView) modifiers.geckoview(manifest)
         if (target.WKWebview) modifiers.WKWebview(manifest)
+        if (env === 'development') modifiers.development(manifest, target)
+        else modifiers.production(manifest, target)
 
         config.plugins.push(new ManifestGeneratorPlugin({ config: { base: manifest } }))
     }

@@ -23,6 +23,8 @@ import { injectCommentBoxDefaultFactory } from '../../social-network/defaults/in
 import { injectOptionsPageLinkAtFacebook } from './UI/injectOptionsPageLink'
 import { InitGroupsValueRef } from '../../social-network/defaults/GroupsValueRef'
 import { injectKnownIdentityAtFacebook } from './UI/injectKnownIdentity'
+import { createTaskStartImmersiveSetupDefault } from '../../social-network/defaults/taskStartImmersiveSetupDefault'
+import { getProfilePageUrlAtFacebook } from './parse-username'
 
 export const facebookUISelf = defineSocialNetworkUI({
     ...sharedProvider,
@@ -37,15 +39,16 @@ export const facebookUISelf = defineSocialNetworkUI({
         return location.hostname.endsWith('facebook.com')
     },
     friendlyName: 'Facebook',
+    requestPermission() {
+        return browser.permissions.request({ origins: ['https://www.facebook.com/*', 'https://m.facebook.com/*'] })
+    },
     setupAccount() {
-        browser.permissions
-            .request({ origins: ['https://www.facebook.com/*', 'https://m.facebook.com/*'] })
-            .then(granted => {
-                if (granted) {
-                    setStorage('facebook.com', { forceDisplayWelcome: true })
-                    location.href = 'https://facebook.com/'
-                }
-            })
+        facebookUISelf.requestPermission().then(granted => {
+            if (granted) {
+                setStorage('facebook.com', { forceDisplayWelcome: true })
+                location.href = 'https://facebook.com/'
+            }
+        })
     },
     ignoreSetupAccount() {
         setStorage('facebook.com', { userIgnoredWelcome: true, forceDisplayWelcome: false })
@@ -94,4 +97,10 @@ export const facebookUISelf = defineSocialNetworkUI({
     taskUploadToPostBox: uploadToPostBoxFacebook,
     taskGetPostContent: getPostContentFacebook,
     taskGetProfile: getProfileFacebook,
+    taskStartImmersiveSetup: createTaskStartImmersiveSetupDefault(() => facebookUISelf),
+    taskGotoProfilePage(profilePage) {
+        // there is no PWA way on Facebook desktop.
+        // mobile not tested
+        location.href = getProfilePageUrlAtFacebook(profilePage, 'open')
+    },
 })

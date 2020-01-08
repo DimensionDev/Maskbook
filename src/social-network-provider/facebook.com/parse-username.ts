@@ -1,6 +1,5 @@
 import { geti18nString } from '../../utils/i18n'
-import { PersonIdentifier, GroupIdentifier, PostIdentifier } from '../../database/type'
-import { GetContext } from '@holoflows/kit/es'
+import { ProfileIdentifier, GroupIdentifier, PostIdentifier } from '../../database/type'
 import { isMobileFacebook } from './isMobile'
 
 /**
@@ -21,12 +20,12 @@ export function regularUsername(name: string) {
 /**
  * Normalize post url
  */
-export function getPostUrlAtFacebook(post: PostIdentifier<PersonIdentifier>, usage: 'fetch' | 'open') {
+export function getPostUrlAtFacebook(post: PostIdentifier<ProfileIdentifier>, usage: 'fetch' | 'open') {
     const id = post.identifier
     const { postId } = post
     const { userId } = id
 
-    const host = getHostName(usage)
+    const host = getFacebookHostName(usage)
     if (!regularUsername(userId)) throw new TypeError(geti18nString('service_username_invalid'))
     if (parseFloat(userId)) return `${host}/permalink.php?story_fbid=${postId}&id=${userId}`
     return `${host}/${userId}/posts/${postId}`
@@ -34,17 +33,17 @@ export function getPostUrlAtFacebook(post: PostIdentifier<PersonIdentifier>, usa
 /**
  * Normalize profile url
  */
-export function getProfilePageUrlAtFacebook(user: PersonIdentifier | GroupIdentifier, usage: 'fetch' | 'open') {
+export function getProfilePageUrlAtFacebook(user: ProfileIdentifier | GroupIdentifier, usage: 'fetch' | 'open') {
     if (user instanceof GroupIdentifier) throw new Error('Not implemented')
     if (user.network !== 'facebook.com') throw new Error('Wrong origin')
 
-    const host = getHostName(usage)
+    const host = getFacebookHostName(usage)
     const username = user.userId
     if (!regularUsername(username)) throw new TypeError(geti18nString('service_username_invalid'))
     if (parseFloat(username)) return `${host}/profile.php?id=${username}`
-    return `${host}/${username}?fref=pymk`
+    return `${host}/${username}`
 }
-function getHostName(usage: 'fetch' | 'open') {
+export function getFacebookHostName(usage: 'fetch' | 'open') {
     // if (usage === 'fetch') {
     // if (GetContext() === 'background' || isMobileFacebook) return 'https://m.facebook.com'
     // return 'https://www.facebook.com'

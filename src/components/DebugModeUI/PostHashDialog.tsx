@@ -11,7 +11,7 @@ import { blue } from '@material-ui/core/colors'
 import { PortalShadowRoot } from '../../utils/jss/ShadowRootPortal'
 import { useFriendsList } from '../DataSource/useActivatedUI'
 import { Avatar } from '../../utils/components/Avatar'
-import { Person } from '../../database'
+import { Profile } from '../../database'
 import { useAsync } from '../../utils/components/AsyncComponent'
 import Services from '../../extension/service'
 import { PostIVIdentifier } from '../../database/type'
@@ -28,7 +28,7 @@ const useStyles = makeStyles({
 export interface SimpleDialogProps {
     open: boolean
     onClose: (value: string) => void
-    friends: Person[]
+    friends: Profile[]
     hashMap: [string, string, string][]
 }
 

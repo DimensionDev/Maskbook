@@ -1,9 +1,9 @@
 import { GetContext, ValueRef } from '@holoflows/kit/es'
-import { PersonIdentifier } from '../../database/type'
+import { ProfileIdentifier } from '../../database/type'
 import { SocialNetworkUIDefinition } from '../ui'
 import { nop, nopWithUnmount } from '../../utils/utils'
-import { Person, Group } from '../../database'
-import { PersonArrayComparer, GroupArrayComparer } from '../../utils/comparer'
+import { Profile, Group } from '../../database'
+import { ProfileArrayComparer, GroupArrayComparer } from '../../utils/comparer'
 
 /**
  * DO NOT use this in content script
@@ -11,14 +11,15 @@ import { PersonArrayComparer, GroupArrayComparer } from '../../utils/comparer'
 export const emptyDefinition: SocialNetworkUIDefinition = {
     acceptablePayload: ['latest'],
     friendlyName: '',
+    requestPermission: () => Promise.resolve(true),
     setupAccount: '',
     shouldActivate() {
         return false
     },
-    myIdentitiesRef: new ValueRef([] as Person[], PersonArrayComparer),
+    myIdentitiesRef: new ValueRef([] as Profile[], ProfileArrayComparer),
     groupsRef: new ValueRef([] as Group[], GroupArrayComparer),
-    lastRecognizedIdentity: new ValueRef({ identifier: PersonIdentifier.unknown }),
-    currentIdentity: new ValueRef<Person | null>(null),
+    lastRecognizedIdentity: new ValueRef({ identifier: ProfileIdentifier.unknown }),
+    currentIdentity: new ValueRef<Profile | null>(null),
     init() {
         if (GetContext() === 'content') throw new Error('DO NOT use this in content script')
     },
@@ -35,7 +36,7 @@ export const emptyDefinition: SocialNetworkUIDefinition = {
         return false
     },
     posts: new Map(),
-    friendsRef: new ValueRef([] as Person[], PersonArrayComparer),
+    friendsRef: new ValueRef([] as Profile[], ProfileArrayComparer),
     isDangerousNetwork: false,
     isValidUsername() {
         return true
@@ -53,4 +54,9 @@ export const emptyDefinition: SocialNetworkUIDefinition = {
     taskUploadToPostBox() {},
     version: 1,
     gunNetworkHint: 'invalid-',
+    taskStartImmersiveSetup() {},
+    taskGotoProfilePage() {},
+    getHomePage() {
+        return ''
+    },
 }

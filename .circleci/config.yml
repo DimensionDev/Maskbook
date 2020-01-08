@@ -3,25 +3,88 @@
 # Check https://circleci.com/docs/2.0/language-javascript/ for more details
 #
 version: 2.1
-jobs:
-    build:
+executors:
+    maskbook_node:
         docker:
-            - image: circleci/node:current
+            - image: circleci/node:13.2.0
         working_directory: ~/repo
+commands:
+    restore_workspace:
+        description: 'Restore the workspace'
+        steps:
+            - attach_workspace:
+                  at: ~/
+jobs:
+    install_dependencies:
+        executor: maskbook_node
         steps:
             - checkout
             - restore_cache:
+                  name: Restore Yarn Package Cache
                   keys:
-                      - v1-maskbook-{{ .Branch }}-{{ checksum "yarn.lock" }}
-                      - v1-maskbook-{{ .Branch }}-
-                      - v1-maskbook-
+                      - v1-maskbook-cache
+            - run:
+                  name: Install Dependencies
+                  command: yarn install --link-duplicates --frozen-lockfile
+            - save_cache:
+                  name: Save Yarn Package Cache
+                  key: v1-maskbook-cache
+                  paths:
+                      - ~/.cache/yarn
+            - persist_to_workspace:
+                  root: ~/
+                  paths:
+                      - repo
+    typescript:
+        executor: maskbook_node
+        steps:
+            - restore_workspace
+            - run:
+                  name: 'TypeScript type check'
+                  command: yarn tsc -p tsconfig_cjs.json --noEmit
+    eslint:
+        executor: maskbook_node
+        steps:
+            - restore_workspace
+            - run:
+                  name: 'ESLint'
+                  command: 'yarn lint:report'
+            - store_test_results:
+                  path: reports/junit
+            - store_artifacts:
+                  path: reports/junit
+    custom_linter:
+        executor: maskbook_node
+        steps:
+            - restore_workspace
+            - run:
+                  name: 'Import linter'
+                  command: 'yarn ts-node -T ./scripts/import-linter.ts'
+    jest:
+        executor: maskbook_node
+        steps:
+            - restore_workspace
+            - run:
+                  name: 'Jest'
+                  command: yarn test:ci
+                  environment:
+                      JEST_JUNIT_OUTPUT_DIR: 'reports/junit/js-test-results.xml'
+            - store_test_results:
+                  path: reports/junit
+            - store_artifacts:
+                  path: reports/junit
+            - store_artifacts:
+                  path: coverage
+    build:
+        executor: maskbook_node
+        steps:
+            - restore_workspace
+            - run:
+                  name: Install zip
+                  command: sudo apt-get install zip
             - run:
                   name: Build Maskbook
                   command: node ./scripts/ci-build.js
-            - save_cache:
-                  paths:
-                      - node_modules
-                  key: v1-maskbook-{{ .Branch }}-{{ checksum "yarn.lock" }}
             - store_artifacts:
                   path: Maskbook.base.zip
                   destination: /Maskbook.base.zip
@@ -49,9 +112,7 @@ jobs:
         docker:
             - image: cibuilds/github:0.10
         steps:
-            - checkout
-            - attach_workspace:
-                  at: ~/repo/
+            - restore_workspace
             - run:
                   name: 'Publish Release on GitHub'
                   command: |
@@ -76,11 +137,26 @@ workflows:
     version: 2
     main:
         jobs:
-            - build
+            - install_dependencies
+            - typescript:
+                  requires:
+                      - install_dependencies
+            - eslint:
+                  requires:
+                      - install_dependencies
+            - custom_linter:
+                  requires:
+                      - install_dependencies
+            - jest:
+                  requires:
+                      - install_dependencies
+            - build:
+                  requires:
+                      # Fail quick with type error.
+                      - typescript
             - publish-github-release:
                   requires:
                       - build
                   filters:
                       branches:
                           only: released
-# test

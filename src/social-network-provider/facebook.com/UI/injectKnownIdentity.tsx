@@ -3,8 +3,8 @@ import { useState } from 'react'
 import { LiveSelector, MutationObserverWatcher, ValueRef } from '@holoflows/kit'
 import { renderInShadowRoot } from '../../../utils/jss/renderInShadowRoot'
 import { SocialNetworkUI } from '../../../social-network/ui'
-import { PersonIdentifier } from '../../../database/type'
 import { PersonKnown, PersonKnownProps } from '../../../components/InjectedComponents/PersonKnown'
+import { ProfileIdentifier } from '../../../database/type'
 import { makeStyles } from '@material-ui/core'
 
 const othersBioLiveSelectorMobile = new LiveSelector().querySelector<HTMLDivElement>(
@@ -20,12 +20,12 @@ function getCurrentIdentity() {
         try {
             const id = new URLSearchParams(location.search).get('id')
             if (!id) return null
-            return new PersonIdentifier('facebook.com', id)
+            return new ProfileIdentifier('facebook.com', id)
         } catch {}
     }
     try {
         const id = location.pathname.substr(1)
-        return new PersonIdentifier('facebook.com', id)
+        return new ProfileIdentifier('facebook.com', id)
     } catch {}
     return null
 }

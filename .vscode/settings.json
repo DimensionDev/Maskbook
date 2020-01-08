@@ -1,3 +1,10 @@
 {
-    "typescript.tsdk": "node_modules/typescript/lib"
+    "typescript.tsdk": "node_modules/typescript/lib",
+    "i18n-ally.sourceLanguage": "en",
+    "i18n-ally.displayLanguage": "zh",
+    "i18n-ally.localesPaths": "src/_locales",
+    "i18n-ally.sortKeys": false,
+    "i18n-ally.keystyle": "flat",
+    "i18n-ally.annotations": true,
+    "i18n-ally.indent": 4
 }

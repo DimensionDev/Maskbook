@@ -1,11 +1,20 @@
 /// <reference path="./global.d.ts" />
-import { DBSchema, openDB } from 'idb/with-async-ittr'
-import { GroupIdentifier, Identifier, PersonIdentifier } from './type'
+import { DBSchema, openDB, IDBPTransaction } from 'idb/with-async-ittr'
+import { GroupIdentifier, Identifier, ProfileIdentifier } from './type'
 import { MessageCenter } from '../utils/messages'
+import { PrototypeLess, restorePrototypeArray } from '../utils/type'
+import { createDBAccess } from './helpers/openDB'
+import { OnlyRunInContext } from '@holoflows/kit/es'
 
 //#region Schema
 interface GroupRecordBase {
-    members: PersonIdentifier[]
+    groupName: string
+}
+interface GroupRecordInDatabase extends GroupRecordBase {
+    /** Index */
+    network: string
+    identifier: string
+    members: PrototypeLess<ProfileIdentifier>[]
     /**
      * Ban list of this group.
      * Only used for virtual group currently
@@ -13,16 +22,12 @@ interface GroupRecordBase {
      * Used to remember if user clicks
      * > they is not my friend, don't add them to my auto-share list again!
      */
-    banned?: PersonIdentifier[]
-    /** Index */
-    network: string
-    groupName: string
+    banned?: PrototypeLess<ProfileIdentifier>[]
 }
-interface GroupRecordInDatabase extends GroupRecordBase {
-    identifier: string
-}
-export interface GroupRecord extends Omit<GroupRecordBase, 'network'> {
+export interface GroupRecord extends GroupRecordBase {
     identifier: GroupIdentifier
+    members: ProfileIdentifier[]
+    banned?: ProfileIdentifier[]
 }
 interface GroupDB extends DBSchema {
     /** Key is value.identifier */
@@ -37,13 +42,17 @@ interface GroupDB extends DBSchema {
 }
 //#endregion
 
-const db = openDB<GroupDB>('maskbook-user-groups', 1, {
-    upgrade(db, oldVersion, newVersion, transaction) {
-        // Out line keys
-        db.createObjectStore('groups', { keyPath: 'identifier' })
-        transaction.objectStore('groups').createIndex('network', 'network', { unique: false })
-    },
+const db = createDBAccess(() => {
+    return openDB<GroupDB>('maskbook-user-groups', 1, {
+        upgrade(db, oldVersion, newVersion, transaction) {
+            // Out line keys
+            db.createObjectStore('groups', { keyPath: 'identifier' })
+            transaction.objectStore('groups').createIndex('network', 'network', { unique: false })
+        },
+    })
 })
+export const GroupDBAccess = db
+type GroupTransaction = IDBPTransaction<GroupDB, ['groups']>
 
 /**
  * This function create a new user group
@@ -51,8 +60,12 @@ const db = openDB<GroupDB>('maskbook-user-groups', 1, {
  * @param group GroupIdentifier
  * @param groupName
  */
-export async function createUserGroupDatabase(group: GroupIdentifier, groupName: string): Promise<void> {
-    const t = (await db).transaction('groups', 'readwrite')
+export async function createUserGroupDatabase(
+    group: GroupIdentifier,
+    groupName: string,
+    t?: GroupTransaction,
+): Promise<void> {
+    t = t || (await db()).transaction('groups', 'readwrite')
     await t.objectStore('groups').put({
         groupName,
         identifier: group.toText(),
@@ -61,12 +74,22 @@ export async function createUserGroupDatabase(group: GroupIdentifier, groupName:
     })
 }
 
+export async function createOrUpdateUserGroupDatabase(
+    group: Partial<GroupRecord> & Pick<GroupRecord, 'identifier' | 'groupName'>,
+    type: 'append' | 'replace' | ((record: GroupRecord) => GroupRecord | void),
+    t?: GroupTransaction,
+) {
+    t = t || (await db()).transaction('groups', 'readwrite')
+    if (await queryUserGroupDatabase(group.identifier, t)) return updateUserGroupDatabase(group, type, t)
+    else return createUserGroupDatabase(group.identifier, group.groupName, t)
+}
+
 /**
  * Delete a user group that stored in the Maskbook
  * @param group Group ID
  */
-export async function deleteUserGroupDatabase(group: GroupIdentifier): Promise<void> {
-    const t = (await db).transaction('groups', 'readwrite')
+export async function deleteUserGroupDatabase(group: GroupIdentifier, t?: GroupTransaction): Promise<void> {
+    t = t || (await db()).transaction('groups', 'readwrite')
     await t.objectStore('groups').delete(group.toText())
 }
 
@@ -78,13 +101,15 @@ export async function deleteUserGroupDatabase(group: GroupIdentifier): Promise<v
 export async function updateUserGroupDatabase(
     group: Partial<GroupRecord> & Pick<GroupRecord, 'identifier'>,
     type: 'append' | 'replace' | ((record: GroupRecord) => GroupRecord | void),
+    t?: GroupTransaction,
 ): Promise<void> {
-    const orig = await queryUserGroupDatabase(group.identifier)
+    t = t || (await db()).transaction('groups', 'readwrite')
+
+    const orig = await queryUserGroupDatabase(group.identifier, t)
     if (!orig) throw new TypeError('User group not found')
 
-    const t = (await db).transaction('groups', 'readwrite')
     let nextRecord: GroupRecord
-    const nonDuplicateNewMembers: PersonIdentifier[] = []
+    const nonDuplicateNewMembers: ProfileIdentifier[] = []
     if (type === 'replace') {
         nextRecord = { ...orig, ...group }
     } else if (type === 'append') {
@@ -102,7 +127,9 @@ export async function updateUserGroupDatabase(
             identifier: group.identifier,
             banned: !orig.banned && !group.banned ? undefined : [...(orig.banned || []), ...(group.banned || [])],
             groupName: group.groupName || orig.groupName,
-            members: Array.from(nextMembers).map(x => Identifier.fromString(x) as PersonIdentifier),
+            members: Array.from(nextMembers)
+                .map(x => Identifier.fromString(x, ProfileIdentifier).value!)
+                .filter(x => x),
         }
     } else {
         nextRecord = type(orig) || orig
@@ -123,8 +150,11 @@ export async function updateUserGroupDatabase(
  * Query a user group that stored in the Maskbook
  * @param group Group ID
  */
-export async function queryUserGroupDatabase(group: GroupIdentifier): Promise<null | GroupRecord> {
-    const t = (await db).transaction('groups', 'readonly')
+export async function queryUserGroupDatabase(
+    group: GroupIdentifier,
+    t?: GroupTransaction,
+): Promise<null | GroupRecord> {
+    t = t || (await db()).transaction('groups', 'readonly')
     const result = await t.objectStore('groups').get(group.toText())
     if (!result) return null
     return GroupRecordOutDB(result)
@@ -136,13 +166,18 @@ export async function queryUserGroupDatabase(group: GroupIdentifier): Promise<nu
  */
 export async function queryUserGroupsDatabase(
     query: ((key: GroupIdentifier, record: GroupRecordInDatabase) => boolean) | { network: string },
+    t?: GroupTransaction,
 ): Promise<GroupRecord[]> {
-    const t = (await db).transaction('groups')
+    t = t || (await db()).transaction('groups')
     const result: GroupRecordInDatabase[] = []
     if (typeof query === 'function') {
-        // eslint-disable-next-line @typescript-eslint/await-thenable
         for await (const { value, key } of t.store) {
-            if (query(Identifier.fromString(key) as GroupIdentifier, value)) result.push(value)
+            const identifier = Identifier.fromString(key, GroupIdentifier).value
+            if (!identifier) {
+                console.warn('Invalid identifier', key)
+                continue
+            }
+            if (query(identifier, value)) result.push(value)
         }
     } else {
         result.push(
@@ -156,15 +191,13 @@ export async function queryUserGroupsDatabase(
 }
 
 function GroupRecordOutDB(x: GroupRecordInDatabase): GroupRecord {
-    // recover prototype
-    x.members.forEach(x => Object.setPrototypeOf(x, PersonIdentifier.prototype))
-    x.banned && x.banned.forEach(x => Object.setPrototypeOf(x, PersonIdentifier.prototype))
-    const id = Identifier.fromString(x.identifier)
-    if (!(id instanceof GroupIdentifier))
-        throw new TypeError('Can not cast string ' + x.identifier + ' into GroupIdentifier')
     return {
         ...x,
-        identifier: id,
+        identifier: Identifier.fromString(x.identifier, GroupIdentifier).unwrap(
+            `'Can not cast string ${x.identifier} into GroupIdentifier'`,
+        ),
+        members: restorePrototypeArray(x.members, ProfileIdentifier.prototype),
+        banned: restorePrototypeArray(x.banned, ProfileIdentifier.prototype),
     }
 }
 function GroupRecordIntoDB(x: GroupRecord): GroupRecordInDatabase {

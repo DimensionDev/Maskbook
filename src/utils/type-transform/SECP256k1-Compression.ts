@@ -42,7 +42,7 @@ export function decompressSecp256k1Key(compressed: string, type: 'public' | 'pri
         ext: true,
         x: key.x,
         y: key.y,
-        key_ops: ['deriveKey'],
+        key_ops: ['deriveKey', 'deriveBits'],
         kty: 'EC',
         d: type === 'private' ? privateKey : undefined,
     }

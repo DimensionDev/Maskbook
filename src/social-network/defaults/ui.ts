@@ -2,18 +2,19 @@ import { injectCommentBoxDefaultFactory } from './injectCommentBox'
 import { injectPostCommentsDefault } from './injectComments'
 import { SocialNetworkUIDataSources } from '../ui'
 import { ValueRef } from '@holoflows/kit'
-import { PersonIdentifier } from '../../database/type'
+import { ProfileIdentifier } from '../../database/type'
 import { cloneDeep } from 'lodash-es'
-import { Person, Group } from '../../database'
+import { Profile, Group, Persona } from '../../database'
 import { MaskbookDarkTheme, MaskbookLightTheme } from '../../utils/theme'
-import { PersonArrayComparer, GroupArrayComparer } from '../../utils/comparer'
+import { ProfileArrayComparer, GroupArrayComparer, PersonaArrayComparer } from '../../utils/comparer'
 
 const defaultDataSources: Required<SocialNetworkUIDataSources> = cloneDeep({
-    friendsRef: new ValueRef([] as Person[], PersonArrayComparer),
-    myIdentitiesRef: new ValueRef([] as Person[], PersonArrayComparer),
+    friendsRef: new ValueRef([] as Profile[], ProfileArrayComparer),
+    myIdentitiesRef: new ValueRef([] as Profile[], ProfileArrayComparer),
+    myPersonasRef: new ValueRef([] as Persona[], PersonaArrayComparer),
     groupsRef: new ValueRef([] as Group[], GroupArrayComparer),
-    currentIdentity: new ValueRef<Person | null>(null),
-    lastRecognizedIdentity: new ValueRef({ identifier: PersonIdentifier.unknown }),
+    currentIdentity: new ValueRef<Profile | null>(null),
+    lastRecognizedIdentity: new ValueRef({ identifier: ProfileIdentifier.unknown }),
     posts: new Map(),
 })
 
@@ -29,8 +30,7 @@ export const defaultSocialNetworkUI = cloneDeep({
     injectCommentBox: injectCommentBoxDefaultFactory(),
     injectPostComments: injectPostCommentsDefault(),
     injectOptionsPageLink: 'disabled',
-    darkTheme: MaskbookDarkTheme,
-    lightTheme: MaskbookLightTheme,
-    useColorScheme: () => 'light' as const,
+    useTheme: () => MaskbookLightTheme,
+    i18nOverwrite: { zh: {}, en: {} },
     injectKnownIdentity: 'disabled',
 } as const)

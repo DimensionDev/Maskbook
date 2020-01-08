@@ -1,5 +1,5 @@
 import { LiveSelector, MutationObserverWatcher } from '@holoflows/kit/es'
-import { getPersonIdentifierAtFacebook } from '../getPersonIdentifierAtFacebook'
+import { getProfileIdentifierAtFacebook } from '../getPersonIdentifierAtFacebook'
 import Services from '../../../extension/service'
 import { GroupIdentifier } from '../../../database/type'
 import { SocialNetworkUI } from '../../../social-network/ui'
@@ -25,7 +25,7 @@ function findPeopleInfo(whoAmI: SocialNetworkUI['currentIdentity']) {
                  */
                 const a = document.querySelector<HTMLAnchorElement>('#fb-timeline-cover-name a')
                 // side effect: save to service
-                const id = getPersonIdentifierAtFacebook(a, true)
+                const id = getProfileIdentifierAtFacebook(a, true)
                 if (!id) return
                 Services.Crypto.verifyOthersProve(text, id.identifier)
                 return id
@@ -37,10 +37,10 @@ function findPeopleInfo(whoAmI: SocialNetworkUI['currentIdentity']) {
                 const [isFriendNow] = isFriend.evaluate()
                 const myFriends = GroupIdentifier.getDefaultFriendsGroupIdentifier(myID.identifier)
                 if (isFriendNow === Status.Friend) {
-                    Services.People.addPersonToFriendsGroup(myFriends, [thisPerson.identifier])
+                    Services.UserGroup.addProfileToFriendsGroup(myFriends, [thisPerson.identifier])
                     console.log('Adding friend', thisPerson.identifier, 'to', myFriends)
                 } else if (isFriendNow === Status.NonFriend) {
-                    Services.People.removePersonFromFriendsGroup(myFriends, [thisPerson.identifier])
+                    Services.UserGroup.removeProfileFromFriendsGroup(myFriends, [thisPerson.identifier])
                     console.log('Removing friend', thisPerson.identifier, 'from', myFriends)
                 }
             }

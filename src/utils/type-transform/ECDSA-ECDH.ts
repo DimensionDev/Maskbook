@@ -4,7 +4,10 @@ export async function toECDSA(key: CryptoKey) {
 }
 export async function toECDH(key: CryptoKey) {
     const exported = await crypto.subtle.exportKey('jwk', key)
-    return crypto.subtle.importKey('jwk', exported, { name: 'ECDH', namedCurve: 'K-256' }, true, ['deriveKey'])
+    return crypto.subtle.importKey('jwk', exported, { name: 'ECDH', namedCurve: 'K-256' }, true, [
+        'deriveKey',
+        'deriveBits',
+    ])
 }
 export function addUint8Array(a: ArrayBuffer, b: ArrayBuffer) {
     const x = new Uint8Array(a)

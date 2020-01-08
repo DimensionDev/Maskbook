@@ -16,10 +16,46 @@
         "message": "請將以下内容拷貝至發佈框。"
     },
     "additional_post_box__steganography_post_pre": {
-        "message": "此圖片僅分享給我的好友。請安裝 Maskbook 以解讀圖片。 ([I:b])"
+        "message": "此圖片僅分享給我的好友。請安裝 Maskbook 以解讀圖片。 ([I:b]) $1"
     },
     "additional_post_box__steganography_post_failed": {
         "message": "請將已下載的圖片上载至發佈框。"
+    },
+    "post_dialog__title": {
+        "message": "Maskbook: 編輯"
+    },
+    "post_dialog__placeholder": {
+        "message": "請輸入…"
+    },
+    "post_dialog__select_recipients_title": {
+        "message": "選擇收件人"
+    },
+    "post_dialog__select_recipients_only_myself": {
+        "message": "僅自己"
+    },
+    "post_dialog__select_specific_friends_title": {
+        "message": "選擇好友 (已選 $1)"
+    },
+    "post_dialog__button": {
+        "message": "完成"
+    },
+    "post_dialog__dismiss_aria": {
+        "message": "關閉編輯框"
+    },
+    "post_modal_hint__title": {
+        "message": "在找 Maskbook 嗎？"
+    },
+    "post_modal_hint__button": {
+        "message": "編輯加密訊息"
+    },
+    "select_specific_friends_dialog__title": {
+        "message": "選擇好友"
+    },
+    "select_specific_friends_dialog__button": {
+        "message": "完成"
+    },
+    "select_specific_friends_dialog__dismiss_aria": {
+        "message": "關閉選擇好友對話框"
     },
     "comment_box__placeholder": {
         "message": "添加一條加密評論…"
@@ -105,6 +141,9 @@
     "back": {
         "message": "返回"
     },
+    "next": {
+        "message": "繼續"
+    },
     "finish": {
         "message": "完成"
     },
@@ -142,10 +181,10 @@
         "message": "不支援"
     },
     "dashboard_create_backup": {
-        "message": "創建備份"
+        "message": "備份"
     },
     "dashboard_delete_persona": {
-        "message": "刪除身份"
+        "message": "刪除"
     },
     "dashboard_show_qr": {
         "message": "顯示二維碼"
@@ -179,9 +218,6 @@
     },
     "welcome_1a1_title": {
         "message": "你希望為哪個賬戶設定 Maskbook？"
-    },
-    "welcome_1a1_next": {
-        "message": "確認"
     },
     "welcome_1a1_didntfind": {
         "message": "沒有找到你的賬戶？"
@@ -465,7 +501,265 @@
     "seen_in_maskbook_database": {
         "message": "Maskbook 已了解此身份 ✔"
     },
+    "dashboard_welcome_to_maskbook": {
+        "message": "歡迎使用 Maskbook"
+    },
+    "dashboard_init_header": {
+        "message": "在社交網絡上發布信息，但不允許他們跟踪您。"
+    },
+    "dashboard_new_user": {
+        "message": "新用戶"
+    },
+    "dashboard_new_user_hint": {
+        "message": "設置並開始使用。"
+    },
+    "dashboard_returning_user": {
+        "message": "老用戶"
+    },
+    "dashboard_returning_user_hint": {
+        "message": "導入數據庫備份。"
+    },
+    "set_up": {
+        "message": "開始"
+    },
+    "dashboard_init_step_1": {
+        "message": "第1步：您叫什麼名字？"
+    },
+    "dashboard_init_step_1_hint": {
+        "message": "您可以在下一步中將社交網絡個人資料連接到您的角色。"
+    },
+    "dashboard_password_hint": {
+        "message": "至少8個字符"
+    },
+    "dashboard_password_helper_text": {
+        "message": "設置密碼以升級安全級別"
+    },
+    "dashboard_init_step_2": {
+        "message": "第2步：連接社交網絡個人資料"
+    },
+    "dashboard_init_step_2_hint": {
+        "message": "現在我們支持Facebook和Twitter。"
+    },
+    "restore_database": {
+        "message": "恢復數據庫"
+    },
+    "select_file": {
+        "message": "選擇文件"
+    },
+    "select_file_hint": {
+        "message": "或拖放文件至此..."
+    },
+    "advanced": {
+        "message": "高級..."
+    },
+    "dashboard_advanced_restoration": {
+        "message": "高級還原選項"
+    },
+    "import_persona": {
+        "message": "導入角色"
+    },
+    "privacy_policy": {
+        "message": "隱私政策"
+    },
+    "version": {
+        "message": "版本"
+    },
+    "home": {
+        "message": "主頁"
+    },
+    "debug": {
+        "message": "調試"
+    },
+    "dashboard_my_personas": {
+        "message": "我的角色"
+    },
+    "rename": {
+        "message": "改名"
+    },
+    "connect": {
+        "message": "連接"
+    },
+    "dashboard_connected": {
+        "message": "已連接"
+    },
+    "add_persona": {
+        "message": "添加角色"
+    },
+    "create": {
+        "message": "創建"
+    },
+    "dashboard_create_persona_hint": {
+        "message": "創建一個新的角色。"
+    },
+    "import": {
+        "message": "導入"
+    },
+    "dashboard_import_persona_hint": {
+        "message": "導入以前的角色備份。"
+    },
+    "database": {
+        "message": "數據庫"
+    },
+    "backup": {
+        "message": "備份"
+    },
+    "dashboard_backup_database_hint": {
+        "message": "創建數據庫備份文件。要經常做。"
+    },
+    "dashboard_import_database_hint": {
+        "message": "導入以前的數據庫備份。"
+    },
+    "create_persona": {
+        "message": "創建角色"
+    },
+    "dashboard_persona_import_dialog_hint": {
+        "message": "您可以通過以下任一方式導入角色備份。"
+    },
+    "not_available": {
+        "message": "不可用"
+    },
+    "dashboard_restore_database_hint": {
+        "message": "選擇備份文件來還原數據庫。"
+    },
+    "dashboard_persona_created": {
+        "message": "角色已創建"
+    },
+    "dashboard_new_persona_created": {
+        "message": "新角色 «$1» 已創建。 立即連接個人資料！([I:b])"
+    },
+    "import_successful": {
+        "message": "導入成功"
+    },
+    "dashboard_database_import_successful_hint": {
+        "message": "您的數據庫已還原。現有數據將被合併。"
+    },
+    "import_failed": {
+        "message": "導入失敗"
+    },
+    "ok": {
+        "message": "好的"
+    },
+    "dashboard_backup_persona_hint": {
+        "message": "您可以通過以下任一方式備份角色。"
+    },
+    "dashboard_backup_persona_mnemonic_hint": {
+        "message": "小心存放上面的12個字詞。您需要它們來還原此角色的私鑰。"
+    },
+    "dashboard_backup_persona_text_hint": {
+        "message": "小心存放上面的文本。您需要它們來還原此角色的私鑰。"
+    },
+    "dashboard_backup_persona_qr_hint": {
+        "message": "小心存放上面的二維碼。您需要它們來還原此角色的私鑰。"
+    },
+    "backup_persona": {
+        "message": "備份角色"
+    },
+    "delete_persona": {
+        "message": "刪除角色"
+    },
+    "dashboard_delete_persona_confirm_hint": {
+        "message": "您是否真的要刪除角色 $1 ？此操作無法還原。"
+    },
+    "dashboard_import_persona_failed": {
+        "message": "您導入的數據無效。請再次檢查。"
+    },
+    "dashboard_imported_persona": {
+        "message": "導入了角色 `$1`，包含 $2 個資料."
+    },
+    "dashboard_password_optional_hint": {
+        "message": "如未設置，請留空"
+    },
+    "unknown_persona": {
+        "message": "未知角色"
+    },
+    "setup_successful": {
+        "message": "設置成功"
+    },
+    "dashboard_bio_test_succeeful": {
+        "message": "您已成功將 $2 上的 @$1 連接到角色 $3。"
+    },
+    "setup_failure": {
+        "message": "設置失敗"
+    },
+    "dashboard_bio_test_failed": {
+        "message": "個人簡介中應包含 $1。請確保您成功更新了 @$2 的個人簡介。"
+    },
+    "dashboard_username_on": {
+        "message": "$1 上的用戶名"
+    },
+    "dashboard_connect_profile_for": {
+        "message": "為 $1 連接個人資料"
+    },
+    "dashboard_attach_profile_step1": {
+        "message": "步驟1：複製下方的公鑰"
+    },
+    "dashboard_attach_profile_step2": {
+        "message": "步驟2：將其粘貼到個人資料中"
+    },
+    "dashboard_attach_profile_step2_hint": {
+        "message": "當您移至網頁後，將顯示手工指南。"
+    },
+    "go_to": {
+        "message": "前往"
+    },
+    "dashboard_attach_profile_step3": {
+        "message": "步驟3：測試並完成"
+    },
+    "dashboard_attach_profile_step3_hint": {
+        "message": "回到這裡完成程序。測試您是否設置成功。"
+    },
+    "test": {
+        "message": "測試"
+    },
+    "connect_profile": {
+        "message": "連接個人資料"
+    },
+    "disconnect_profile": {
+        "message": "斷開個人資料"
+    },
+    "dashboard_disconnect_profile_hint": {
+        "message": "您是否真的要从角色 $3 上斷開 $2 的 $1？ 此操作無法撤銷。"
+    },
+    "dashboard_no_persona_found": {
+        "message": "找不到角色"
+    },
+    "initialize": {
+        "message": "初始化"
+    },
+    "dashboard_restoration_successful": {
+        "message": "恢復成功"
+    },
+    "dashboard_restoration_successful_hint": {
+        "message": "恢復了 $1 的備份"
+    },
+    "dashboard_ready_to_import": {
+        "message": "準備導入..."
+    },
+    "dashboard_ready_to_import_hint": {
+        "message": "在您導入此備份之前，Maskbook 需要某些網站的訪問許可。"
+    },
+    "dashboard_paste_database_backup_hint": {
+        "message": "在此處粘貼數據庫備份文本..."
+    },
+    "proceed": {
+        "message": "繼續"
+    },
     "please_include_proof_your_bio": {
         "message": "請在您的個人簡介中包含引号内的内容 \"$1\"，否則您可能沒法正常使用 Maskbook"
-    }
+    },
+    "immersive_setup_title": "設定 Maskbook",
+    "immersive_setup_connect_as": "要連接 $1 嗎？",
+    "immersive_setup_connect_as_unknown": "你希望以什么身份連接？",
+    "immersive_setup_paste_into_bio": "將密鑰粘入個人簡介",
+    "connecting": "連接中……",
+    "immersive_setup_connect_profile": "我確認這是我的賬號",
+    "username": "用戶名",
+    "immersive_setup_username_confirm": "Maskbook 需要瞭解你的用戶名才能繼續。這是正確的用戶名嗎？",
+    "immersive_setup_help_dont_know_what_is_username": "但我不知道我的用戶名是什么！",
+    "immersive_setup_add_bio_text": "請將此文本添加到您的個人簡介。請勿刪除或更改任何部分！",
+    "immersive_setup_paste_into_bio_auto": "幫我加上！",
+    "adding": "添加中……",
+    "done": "搞定！",
+    "immersive_setup_paste_into_bio_failed": "失敗了……請手動將其添加到您的個人簡介中！",
+    "immersive_setup_no_bio_got": "Maskbook 出現了一些問題！請報告給 Maskbook 的開發者(https://t.me/maskbook_group)，謝謝！"
 }

@@ -7,7 +7,7 @@ import { flatten, isNull, random } from 'lodash-es'
 export const sleep = _sleep
 export const timeout = _timeout
 
-export const randomElement = (arr: any[]) => {
+export const randomElement = (arr: unknown[]) => {
     const e = flatten(arr)
     return e[random(0, e.length - 1)]
 }

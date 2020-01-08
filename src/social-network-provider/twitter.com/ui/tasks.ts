@@ -7,21 +7,24 @@ import {
     pasteImageToActiveElements,
 } from '../../../utils/utils'
 import {
-    editProfileButtonSelector,
-    editProfileTextareaSelector,
-    hasDraftEditor,
-    newPostButton,
-    newPostEditorFocusAnchor,
+    profileEditorButtonSelector,
+    profileEditorTextareaSelector,
+    postEditorDraftContentSelector,
+    newPostButtonSelector,
     postsSelector,
+    bioCardSelector,
 } from '../utils/selector'
 import { geti18nString } from '../../../utils/i18n'
 import { SocialNetworkUI, SocialNetworkUITasks, getActivatedUI } from '../../../social-network/ui'
-import { fetchBioCard } from '../utils/status'
 import { bioCardParser, postContentParser } from '../utils/fetch'
-import { getText, hasFocus, postBoxInPopup } from '../utils/postBox'
+import { getEditorContent, hasFocus, isCompose, hasEditor } from '../utils/postBox'
 import { MutationObserverWatcher } from '@holoflows/kit'
 import { untilDocumentReady, untilElementAvailable } from '../../../utils/dom'
 import Services from '../../../extension/service'
+import { twitterEncoding } from '../encoding'
+import { createTaskStartImmersiveSetupDefault } from '../../../social-network/defaults/taskStartImmersiveSetupDefault'
+import { instanceOfTwitterUI } from '.'
+import { ProfileIdentifier } from '../../../database/type'
 
 /**
  * Wait for up to 5000 ms
@@ -34,17 +37,17 @@ const taskPasteIntoPostBox: SocialNetworkUI['taskPasteIntoPostBox'] = (text, opt
         const checkSignal = () => {
             if (abort.signal.aborted) throw new Error('Aborted')
         }
-        if (!postBoxInPopup() && !hasDraftEditor()) {
+        if (!isCompose() && !hasEditor()) {
             // open tweet window
-            await untilElementAvailable(newPostButton())
-            newPostButton()
+            await untilElementAvailable(newPostButtonSelector())
+            newPostButtonSelector()
                 .evaluate()!
                 .click()
             checkSignal()
         }
 
         // get focus
-        const i = newPostEditorFocusAnchor()
+        const i = postEditorDraftContentSelector()
         await untilElementAvailable(i)
         checkSignal()
         while (!hasFocus(i)) {
@@ -54,7 +57,8 @@ const taskPasteIntoPostBox: SocialNetworkUI['taskPasteIntoPostBox'] = (text, opt
         }
         // paste
         dispatchCustomEvents('paste', text)
-        if (!getText().includes(text)) {
+        await sleep(interval)
+        if (!getEditorContent().includes(text)) {
             prompt(opt.warningText, text)
             throw new Error('Unable to paste text automatically')
         }
@@ -102,11 +106,11 @@ const taskUploadToPostBox: SocialNetworkUI['taskUploadToPostBox'] = async (text,
 }
 
 const taskPasteIntoBio = async (text: string) => {
-    const getValue = () => editProfileTextareaSelector().evaluate()!.value
+    const getValue = () => profileEditorTextareaSelector().evaluate()!.value
     await untilDocumentReady()
     await sleep(800)
     try {
-        editProfileButtonSelector()
+        profileEditorButtonSelector()
             .evaluate()!
             .click()
     } catch {
@@ -114,7 +118,7 @@ const taskPasteIntoBio = async (text: string) => {
     }
     await sleep(800)
     try {
-        const i = editProfileTextareaSelector().evaluate()!
+        const i = profileEditorTextareaSelector().evaluate()!
         i.focus()
         await sleep(200)
         dispatchCustomEvents('input', i.value + text)
@@ -136,10 +140,22 @@ const taskGetPostContent: SocialNetworkUITasks['taskGetPostContent'] = async () 
 }
 
 const taskGetProfile = async () => {
-    const cardNode = await fetchBioCard()
+    const { publicKeyEncoder, publicKeyDecoder } = twitterEncoding
+    const cardNode = (await timeout(new MutationObserverWatcher(bioCardSelector<false>(false)), 10000))[0]
+    const bio = cardNode ? bioCardParser(cardNode).bio : ''
     return {
-        bioContent: cardNode ? bioCardParser(cardNode).bio : '',
+        bioContent: publicKeyEncoder(publicKeyDecoder(bio)[0] || ''),
     }
+}
+
+function taskGotoProfilePage(profile: ProfileIdentifier) {
+    const path = `/${profile.userId}`
+        // The PWA way
+    ;(document.querySelector(`[href="${path}"]`) as HTMLElement | undefined)?.click()
+    setTimeout(() => {
+        // The classic way
+        if (!location.pathname.startsWith(path)) location.pathname = path
+    }, 400)
 }
 
 export const twitterUITasks: SocialNetworkUITasks = {
@@ -148,4 +164,6 @@ export const twitterUITasks: SocialNetworkUITasks = {
     taskPasteIntoBio,
     taskGetPostContent,
     taskGetProfile,
+    taskStartImmersiveSetup: createTaskStartImmersiveSetupDefault(() => instanceOfTwitterUI),
+    taskGotoProfilePage: taskGotoProfilePage,
 }

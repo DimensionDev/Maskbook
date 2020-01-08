@@ -7,9 +7,9 @@ import Services from '../../extension/service'
 import { geti18nString } from '../../utils/i18n'
 import { makeStyles } from '@material-ui/styles'
 import { Box, Button, Card, CardHeader, Divider, InputBase, Paper, Typography } from '@material-ui/core'
-import { Group, Person } from '../../database'
+import { Group, Profile } from '../../database'
 import { NotSetupYetPrompt } from '../shared/NotSetupYetPrompt'
-import { useCurrentIdentity, useFriendsList, useGroupsList, useMyIdentities } from '../DataSource/useActivatedUI'
+import { useCurrentIdentity, useFriendsList, useMyIdentities, useCurrentGroupsList } from '../DataSource/useActivatedUI'
 import { getActivatedUI } from '../../social-network/ui'
 import { ChooseIdentity, ChooseIdentityProps } from '../shared/ChooseIdentity'
 import { useAsync } from '../../utils/components/AsyncComponent'
@@ -17,6 +17,7 @@ import { useStylesExtends, or } from '../custom-ui-helper'
 import { steganographyModeSetting } from '../shared-settings/settings'
 import { useValueRef } from '../../utils/hooks/useValueRef'
 import { BannerProps } from '../Welcomes/Banner'
+import useConnectingStatus from '../../utils/hooks/useConnectingStatus'
 
 const useStyles = makeStyles({
     header: { padding: '8px 12px 0' },
@@ -36,10 +37,10 @@ const useStyles = makeStyles({
 
 export interface AdditionalPostBoxUIProps
     extends withClasses<KeysInferFromUseStyles<typeof useStyles, 'MUIInputInput' | 'MUIInputRoot'>> {
-    availableShareTarget: Array<Person | Group>
-    currentShareTarget: Array<Person | Group>
+    availableShareTarget: Array<Profile | Group>
+    currentShareTarget: Array<Profile | Group>
     onShareTargetChanged: SelectPeopleAndGroupsUIProps['onSetSelected']
-    currentIdentity: Person | null
+    currentIdentity: Profile | null
     postBoxPlaceholder: string
     postBoxText: string
     postButtonDisabled: boolean
@@ -54,8 +55,7 @@ export interface AdditionalPostBoxUIProps
  */
 export const AdditionalPostBoxUI = React.memo(function AdditionalPostBoxUI(props: AdditionalPostBoxUIProps) {
     const classes = useStylesExtends(useStyles(), props)
-    const inputRef = useRef<HTMLInputElement>()
-    useCapturedInput(inputRef, props.onPostTextChange)
+    const [, inputRef] = useCapturedInput(props.onPostTextChange)
 
     return (
         <Card>
@@ -87,6 +87,7 @@ export const AdditionalPostBoxUI = React.memo(function AdditionalPostBoxUI(props
             <Divider />
             <Box display="flex">
                 <Button
+                    fullWidth
                     onClick={props.onPostButtonClicked}
                     variant="contained"
                     color="primary"
@@ -100,8 +101,8 @@ export const AdditionalPostBoxUI = React.memo(function AdditionalPostBoxUI(props
 })
 
 export interface AdditionalPostBoxProps extends Partial<AdditionalPostBoxUIProps> {
-    identities?: Person[]
-    onRequestPost?: (target: (Person | Group)[], text: string) => void
+    identities?: Profile[]
+    onRequestPost?: (target: (Profile | Group)[], text: string) => void
     onRequestReset?: () => void
     NotSetupYetPromptProps?: Partial<BannerProps>
 }
@@ -111,7 +112,7 @@ export interface AdditionalPostBoxProps extends Partial<AdditionalPostBoxUIProps
  */
 export function AdditionalPostBox(props: AdditionalPostBoxProps) {
     const people = useFriendsList()
-    const groups = useGroupsList()
+    const groups = useCurrentGroupsList()
     const availableShareTarget = or(
         props.availableShareTarget,
         React.useMemo(() => [...groups, ...people], [people, groups]),
@@ -123,7 +124,7 @@ export function AdditionalPostBox(props: AdditionalPostBoxProps) {
     const onRequestPost = or(
         props.onRequestPost,
         useCallback(
-            async (target: (Person | Group)[], text: string) => {
+            async (target: (Profile | Group)[], text: string) => {
                 const [encrypted, token] = await Services.Crypto.encryptTo(
                     text,
                     target.map(x => x.identifier),
@@ -131,10 +132,13 @@ export function AdditionalPostBox(props: AdditionalPostBoxProps) {
                 )
                 const activeUI = getActivatedUI()
                 if (isSteganography) {
-                    activeUI.taskPasteIntoPostBox(geti18nString('additional_post_box__steganography_post_pre'), {
-                        warningText: geti18nString('additional_post_box__encrypted_failed'),
-                        shouldOpenPostDialog: false,
-                    })
+                    activeUI.taskPasteIntoPostBox(
+                        geti18nString('additional_post_box__steganography_post_pre', String(Date.now())),
+                        {
+                            warningText: geti18nString('additional_post_box__encrypted_failed'),
+                            shouldOpenPostDialog: false,
+                        },
+                    )
                     activeUI.taskUploadToPostBox(encrypted, {
                         warningText: geti18nString('additional_post_box__steganography_post_failed'),
                     })
@@ -162,6 +166,10 @@ export function AdditionalPostBox(props: AdditionalPostBoxProps) {
 
     const [showWelcome, setShowWelcome] = useState(false)
     useAsync(getActivatedUI().shouldDisplayWelcome, []).then(x => setShowWelcome(x))
+    const connecting = useConnectingStatus()
+
+    if (connecting) return null
+
     if (showWelcome || identities.length === 0) {
         return <NotSetupYetPrompt {...props.NotSetupYetPromptProps} />
     }
@@ -169,8 +177,8 @@ export function AdditionalPostBox(props: AdditionalPostBoxProps) {
     const ui = (
         <AdditionalPostBoxUI
             currentIdentity={currentIdentity}
-            availableShareTarget={availableShareTarget}
             currentShareTarget={currentShareTarget}
+            availableShareTarget={availableShareTarget}
             onShareTargetChanged={onShareTargetChanged}
             postBoxText={postText}
             postBoxPlaceholder={geti18nString(

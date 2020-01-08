@@ -1,6 +1,6 @@
-import { getMyIdentitiesDB, removeMyIdentityAtDB } from '../people'
-import { CryptoKeyToJsonWebKey } from '../../utils/type-transform/CryptoKey-JsonWebKey'
 import { setStorage } from '../../utils/browser.storage'
+import { queryPersonasWithPrivateKey } from '../Persona/Persona.db'
+import { deletePersona } from '../Persona/helpers'
 
 /**
  * There is a bug that when use QR to import key, the private ket lost its secret.
@@ -9,13 +9,13 @@ import { setStorage } from '../../utils/browser.storage'
  * remove this after Mar 1 2020
  */
 export default async function() {
-    const ids = await getMyIdentitiesDB()
+    const ids = await queryPersonasWithPrivateKey()
     let hasBug = false
     for (const id of ids) {
-        const key = await CryptoKeyToJsonWebKey(id.privateKey)
+        const key = id.privateKey
         if (!key.d) {
             console.log('Key is broken')
-            removeMyIdentityAtDB(id.identifier).catch(() => {})
+            deletePersona(id.identifier, 'delete even with private').catch(() => {})
             hasBug = true
         }
     }

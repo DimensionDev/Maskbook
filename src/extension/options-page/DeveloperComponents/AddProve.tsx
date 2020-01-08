@@ -6,7 +6,7 @@ import CardContent from '@material-ui/core/CardContent'
 import Button from '@material-ui/core/Button'
 import Typography from '@material-ui/core/Typography'
 import Services from '../../service'
-import { PersonIdentifier } from '../../../database/type'
+import { ProfileIdentifier } from '../../../database/type'
 import { useTextField } from '../../../utils/components/useForms'
 
 const useStyles = makeStyles(theme => ({
@@ -46,7 +46,7 @@ export function AddProve() {
                     size="small"
                     onClick={() => {
                         setResult('Verifying...')
-                        Services.Crypto.verifyOthersProve(provePost, new PersonIdentifier(network, userID)).then(
+                        Services.Crypto.verifyOthersProve(provePost, new ProfileIdentifier(network, userID)).then(
                             setResult,
                             setResult,
                         )

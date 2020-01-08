@@ -1,9 +1,9 @@
 import { LiveSelector } from '@holoflows/kit'
 import { regexMatch } from '../../../utils/utils'
-import { postBoxInPopup } from './postBox'
-import { isNull } from 'lodash-es'
+import { isCompose, isMobile } from './postBox'
 
 type E = HTMLElement
+
 const querySelector = <T extends E, SingleMode extends boolean = true>(
     selector: string,
     singleMode: boolean = true,
@@ -15,9 +15,25 @@ const querySelectorAll = <T extends E>(selector: string) => {
     return new LiveSelector().querySelectorAll<T>(selector)
 }
 
-export const bioSelector = () => querySelector<HTMLDivElement>(['[data-testid="UserProfileHeader_Items"]'].join())
+export const rootSelector: () => LiveSelector<E, true> = () => querySelector<E>('#react-root')
 
-export const bioCard = <SingleMode extends boolean = true>(singleMode = true) =>
+export const postEditorInPopupSelector: () => LiveSelector<E, true> = () =>
+    querySelector<E>('[aria-labelledby="modal-header"] > div:first-child > div:nth-child(3)')
+export const postEditorInTimelineSelector: () => LiveSelector<E, true> = () =>
+    querySelector<E>('[role="main"] :not(aside) > [role="progressbar"] ~ div')
+export const postEditorDraftContentSelector = () =>
+    (isCompose() ? postEditorInPopupSelector() : postEditorInTimelineSelector()).querySelector<HTMLElement>(
+        '.public-DraftEditor-content, textarea[aria-label="Tweet text"]',
+    )
+
+export const newPostButtonSelector = () => querySelector<E>('[data-testid="SideNav_NewTweet_Button"]')
+
+export const profileEditorButtonSelector = () =>
+    querySelector<HTMLAnchorElement>('[data-testid="primaryColumn"] [href="/settings/profile"]')
+export const profileEditorTextareaSelector = () => querySelector<HTMLTextAreaElement>('textarea[placeholder*="bio"]')
+
+export const bioSelector = () => querySelector<HTMLDivElement>(['[data-testid="UserProfileHeader_Items"]'].join())
+export const bioCardSelector = <SingleMode extends boolean = true>(singleMode = true) =>
     querySelector<HTMLDivElement, SingleMode>(
         [
             '.profile', // legacy twitter
@@ -26,24 +42,6 @@ export const bioCard = <SingleMode extends boolean = true>(singleMode = true) =>
         ].join(),
         singleMode,
     )
-
-export const newPostButton = () => querySelector<E>('[data-testid="SideNav_NewTweet_Button"]')
-
-const postEditor = () =>
-    postBoxInPopup() ? '[aria-labelledby="modal-header"]' : '[role="main"] :not(aside) > [role="progressbar"] ~ div'
-
-export const newPostEditorBelow = () => querySelector<E>('[role="main"] :not(aside) > [role="progressbar"] ~ div')
-export const newPostEditorSelector = () => querySelector<HTMLDivElement>(`${postEditor()} .DraftEditor-root`)
-export const newPostEditorFocusAnchor = () => querySelector<E>(`${postEditor()} .public-DraftEditor-content`)
-
-export const hasDraftEditor = (x: E | Document = document) => !isNull(x.querySelector('.DraftEditor-root'))
-
-export const postPopupInjectPointSelector = () =>
-    querySelector('[aria-labelledby="modal-header"] [role="progressbar"] ~ div ~ div')
-
-export const editProfileButtonSelector = () =>
-    querySelector<HTMLAnchorElement>('[data-testid="primaryColumn"] [href="/settings/profile"]')
-export const editProfileTextareaSelector = () => querySelector<HTMLTextAreaElement>('textarea[placeholder*="bio"]')
 
 export const postsSelector = () =>
     querySelectorAll(
@@ -63,10 +61,13 @@ export const postsImageSelector = (node: HTMLElement) =>
 export const postsContentSelector = () =>
     querySelectorAll(
         [
+            // 'article > div[lang]', // TODO: this selector maybe works in new twitter test is required
             '.tweet-text > div', // both timeline and detail page for legacy twitter
-            '[data-testid="tweet"] > div > div[lang]', // timeline page for new twitter
-            '[data-testid="tweet"] + div[lang]', // detail page for new twitter
+            '[data-testid="tweet"] > div > div[lang]', // timeline page and tread page for new twitter
             '[data-testid="tweet"] + div > div[lang]', // detail page for new twitter
+            '[data-testid="tweet"] ~ div[lang]', // detail page for new twitter
+            '[data-testid="tweet"] [role="blockquote"] div[lang]', // timeline page retweet quote block for new twitter
+            '[data-testid="tweet"] ~ div [role="blockquote"] div[lang]', // detail page retweet quote block for new twitter
         ].join(),
     )
 

@@ -1,12 +1,18 @@
 import { MessageCenter as MC } from '@holoflows/kit/es'
-import { Group, Person } from '../database'
+import { Profile, Group } from '../database'
 import Serialization from './type-transform/Serialization'
-import { PersonIdentifier, GroupIdentifier } from '../database/type'
+import { ProfileIdentifier, GroupIdentifier } from '../database/type'
 
-export interface PersonUpdateEvent {
+export interface UpdateEvent<Data> {
     readonly reason: 'update' | 'delete' | 'new'
-    readonly of: Person
+    readonly of: Data
 }
+
+export interface CompositionEvent {
+    readonly reason: 'timeline' | 'popup'
+    readonly open: boolean
+}
+
 interface MaskbookMessages {
     /**
      * Used to polyfill window.close in iOS and Android.
@@ -17,29 +23,42 @@ interface MaskbookMessages {
      * value is instanceKey
      */
     settingsCreated: string
-    newPerson: Person
-    generateKeyPair: undefined
     /**
      * emit when the settings updated.
      * value is instanceKey
      */
     settingsUpdated: string
     /**
-     * emit when my identities created
+     * emit when my identities created.
      */
     identityCreated: undefined
     /**
-     * emit when my identities updated
+     * emit when my identities updated.
      */
     identityUpdated: undefined
     /**
+     * emit people changed in the database.
+     * emit when my personas created
+     */
+    personaCreated: undefined
+    /**
+     * emit when my personas updated
+     */
+    personaUpdated: undefined
+    /**
      * emit people changed in the database
      */
-    peopleChanged: readonly PersonUpdateEvent[]
+    profilesChanged: readonly UpdateEvent<Profile>[]
+    groupsChanged: readonly UpdateEvent<Group>[]
     joinGroup: {
         group: GroupIdentifier
-        newMembers: PersonIdentifier[]
+        newMembers: ProfileIdentifier[]
     }
+    /**
+     * emit when compose status updated.
+     */
+    compositionUpdated: CompositionEvent
 }
 export const MessageCenter = new MC<MaskbookMessages>('maskbook-events')
+
 MessageCenter.serialization = Serialization

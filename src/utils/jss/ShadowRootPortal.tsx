@@ -18,13 +18,13 @@ let proxy: HTMLElement | undefined
 
 export function PortalShadowRoot() {
     if (GetContext() === 'options') return document.body
+    if (globalThis.location.hostname === 'localhost') return document.body
     if (!proxy)
         proxy = new Proxy(document.body, {
             get(target, key, receiver) {
                 const value = Reflect.get(target, key)
                 if (typeof value === 'function')
                     return function(...args: any[]) {
-                        console.log(...args)
                         return Reflect.apply(value, shadow, args)
                     }
                 return value

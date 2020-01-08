@@ -1,8 +1,7 @@
-import React from 'react'
-import { ValueRef } from '@holoflows/kit/es/util/ValueRef'
-import { MessageCenter } from '../../utils/messages'
-import { ListItem, ListItemText, ListItemSecondaryAction, Switch } from '@material-ui/core'
+import { ValueRef } from '@holoflows/kit/es'
 import { useValueRef } from '../../utils/hooks/useValueRef'
+import { MessageCenter } from '../../utils/messages'
+import { safeReact, safeMUI } from '../../utils/safeRequire'
 
 interface SettingsTexts {
     primary: string
@@ -61,6 +60,9 @@ export function createNetworkSpecificSettings<T extends browser.storage.StorageV
 }
 
 export function useSettingsUI<T>(settingsRef: ValueRef<T>) {
+    // This file is share between context. prevent loading in the background.
+    const { ListItem, ListItemText, ListItemSecondaryAction, Switch } = safeMUI()
+    const React = safeReact()
     const currentValue = useValueRef(settingsRef)
     const text = texts.get(settingsRef)!
     function ui() {

@@ -4,8 +4,8 @@ import { AddToKeyStore, AddToKeyStoreProps } from './AddToKeyStore'
 import { useAsync } from '../../utils/components/AsyncComponent'
 import { deconstructPayload } from '../../utils/type-transform/Payload'
 import Services from '../../extension/service'
-import { PersonIdentifier } from '../../database/type'
-import { Person } from '../../database'
+import { ProfileIdentifier } from '../../database/type'
+import { Profile } from '../../database'
 import { useCurrentIdentity, useFriendsList } from '../DataSource/useActivatedUI'
 import { getActivatedUI } from '../../social-network/ui'
 import { useValueRef } from '../../utils/hooks/useValueRef'
@@ -15,7 +15,7 @@ import { DebugList } from '../DebugModeUI/DebugList'
 export interface PostInspectorProps {
     onDecrypted(post: string): void
     post: string
-    postBy: PersonIdentifier
+    postBy: ProfileIdentifier
     postId: string
     needZip(): void
     DecryptPostProps?: Partial<DecryptPostProps>
@@ -27,14 +27,14 @@ export function PostInspector(props: PostInspectorProps) {
     const { post, postBy, postId } = props
     const whoAmI = useCurrentIdentity()
     const people = useFriendsList()
-    const [alreadySelectedPreviously, setAlreadySelectedPreviously] = useState<Person[]>([])
+    const [alreadySelectedPreviously, setAlreadySelectedPreviously] = useState<Profile[]>([])
     const decodeAsPublicKey = getActivatedUI().publicKeyDecoder(post)
     const isDebugging = useValueRef(debugModeSetting)
     const type = {
         encryptedPost: deconstructPayload(post, getActivatedUI().payloadDecoder),
         provePost: decodeAsPublicKey,
     }
-    if (type.provePost && postId) Services.People.writePersonOnGun(postBy, { provePostId: postId })
+    if (type.provePost.length && postId) Services.Identity.writeProfileOnGun(postBy, { provePostId: postId })
     useAsync(async () => {
         if (!whoAmI) return []
         if (!whoAmI.identifier.equals(postBy)) return []
@@ -53,7 +53,7 @@ export function PostInspector(props: PostInspectorProps) {
                     'Who am I',
                     whoAmI ? `Nickname ${whoAmI.nickname || 'unknown'}, UserID ${whoAmI.identifier.userId}` : 'Unknown',
                 ],
-                ['My fingerprint', whoAmI ? whoAmI.fingerprint || 'Unknown' : 'unknown'],
+                ['My fingerprint', whoAmI?.linkedPersona?.fingerprint ?? 'Unknown'],
                 ['Post ID', props.postId || 'Unknown'],
                 ['Post Content', props.post],
             ]}
@@ -91,7 +91,7 @@ export function PostInspector(props: PostInspectorProps) {
                     alreadySelectedPreviously={alreadySelectedPreviously}
                     people={people}
                     encryptedText={post}
-                    whoAmI={whoAmI ? whoAmI.identifier : PersonIdentifier.unknown}
+                    whoAmI={whoAmI ? whoAmI.identifier : ProfileIdentifier.unknown}
                     postBy={postBy}
                     {...props.DecryptPostProps}
                 />

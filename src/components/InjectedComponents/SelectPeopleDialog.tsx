@@ -11,17 +11,18 @@ import {
     DialogTitle,
     withMobileDialog,
 } from '@material-ui/core'
-import { Person } from '../../database'
+import { Profile } from '../../database'
 import { PortalShadowRoot } from '../../utils/jss/ShadowRootPortal'
 import { useStylesExtends } from '../custom-ui-helper'
 
-export interface SelectPeopleDialogProps extends withClasses<KeysInferFromUseStyles<typeof useStyles, 'content'>> {
+export interface SelectPeopleDialogProps
+    extends withClasses<KeysInferFromUseStyles<typeof useStyles, 'content'> | 'button'> {
     open: boolean
-    people: Person[]
-    alreadySelectedPreviously: Person[]
+    people: Profile[]
+    alreadySelectedPreviously: Profile[]
     onClose: () => void
-    onSelect: (people: Person[]) => Promise<void>
-    SelectPeopleAndGroupsUIProps?: SelectPeopleAndGroupsUIProps<Person>
+    onSelect: (people: Profile[]) => Promise<void>
+    SelectPeopleAndGroupsUIProps?: SelectPeopleAndGroupsUIProps<Profile>
 }
 const useStyles = makeStyles({
     title: { paddingBottom: 0 },
@@ -31,7 +32,7 @@ const useStyles = makeStyles({
 const ResponsiveDialog = withMobileDialog({ breakpoint: 'xs' })(Dialog)
 export function SelectPeopleDialog(props: SelectPeopleDialogProps) {
     const classes = useStylesExtends(useStyles(), props)
-    const [people, select] = useState<Person[]>([] as Person[])
+    const [people, select] = useState<Profile[]>([] as Profile[])
     const [committed, setCommitted] = useState(false)
     const onClose = useCallback(() => {
         props.onClose()
@@ -57,7 +58,7 @@ export function SelectPeopleDialog(props: SelectPeopleDialogProps) {
             maxWidth="sm">
             <DialogTitle className={classes.title}>{geti18nString('share_to')}</DialogTitle>
             <DialogContent className={classes.content}>
-                <SelectPeopleAndGroupsUI<Person>
+                <SelectPeopleAndGroupsUI<Profile>
                     frozenSelected={props.alreadySelectedPreviously}
                     disabled={committed}
                     items={props.people}
@@ -72,10 +73,10 @@ export function SelectPeopleDialog(props: SelectPeopleDialogProps) {
                 </DialogContent>
             )}
             <DialogActions>
-                <Button size="large" disabled={canClose} onClick={onClose}>
+                <Button className={classes.button} size="large" disabled={canClose} onClick={onClose}>
                     {geti18nString('cancel')}
                 </Button>
-                <Button size="large" disabled={canCommit} color="primary" onClick={share}>
+                <Button className={classes.button} size="large" disabled={canCommit} color="primary" onClick={share}>
                     {committed && (
                         <CircularProgress aria-busy className={classes.progress} size={16} variant="indeterminate" />
                     )}
@@ -87,9 +88,9 @@ export function SelectPeopleDialog(props: SelectPeopleDialogProps) {
 }
 
 export function useShareMenu(
-    people: Person[],
-    onSelect: (people: Person[]) => Promise<void>,
-    alreadySelectedPreviously: Person[],
+    people: Profile[],
+    onSelect: (people: Profile[]) => Promise<void>,
+    alreadySelectedPreviously: Profile[],
     SelectPeopleDialogProps?: Partial<SelectPeopleDialogProps>,
 ) {
     const [show, setShow] = useState(false)

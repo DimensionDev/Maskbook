@@ -17,6 +17,12 @@ export function useQRCodeScan(
         const [mediaStream, setMediaStream] = useState<MediaStream | null>(null)
 
         useEffect(() => {
+            function stop() {
+                if (mediaStream) {
+                    mediaStream.getTracks().forEach(x => x.stop())
+                }
+                video.current!.pause()
+            }
             async function start() {
                 if (permission !== 'granted' || !video.current) return
                 try {
@@ -27,25 +33,18 @@ export function useQRCodeScan(
                             audio: false,
                             video: device === null ? { facingMode: 'environment' } : { deviceId: device },
                         })
-                        setMediaStream(media)
+                        return setMediaStream(media)
                     }
                     video.current.srcObject = media
                     video.current.play()
                 } catch (e) {
                     console.error(e)
-                    setMediaStream(null)
-                    video.current.srcObject = null
-                    video.current.pause()
+                    stop()
                 }
-            }
-            function stop() {
-                if (mediaStream) {
-                    mediaStream.getTracks().forEach(x => x.stop())
-                    setMediaStream(null)
-                }
-                video.current!.pause()
             }
             if (!video.current) return
+            if (!isScanning) return stop()
+
             start()
             return () => {
                 stop()

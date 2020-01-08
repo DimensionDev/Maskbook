@@ -1,8 +1,10 @@
-import 'webcrypto-liner/dist/webcrypto-liner.shim.js'
 import { GetContext } from '@holoflows/kit/es'
 import { MessageCenter } from './utils/messages'
 // @ts-ignore
 import elliptic from 'elliptic'
+
+Object.assign(window, { elliptic })
+require('webcrypto-liner')
 /**
  * Load service here. sorry for the ugly pattern.
  * But here's some strange problem with webpack.
@@ -11,11 +13,18 @@ import elliptic from 'elliptic'
  */
 import * as CryptoService from './extension/background-script/CryptoService'
 import * as WelcomeService from './extension/background-script/WelcomeService'
-import * as PeopleService from './extension/background-script/PeopleService'
+import * as IdentityService from './extension/background-script/IdentityService'
+import * as UserGroupService from './extension/background-script/UserGroupService'
 import * as SteganographyService from './extension/background-script/SteganographyService'
 import { decryptFromMessageWithProgress } from './extension/background-script/CryptoServices/decryptFrom'
 import { initAutoShareToFriends } from './extension/background-script/Jobs/AutoShareToFriends'
-Object.assign(window, { CryptoService, WelcomeService, PeopleService, SteganographyService })
+Object.assign(window, {
+    CryptoService,
+    WelcomeService,
+    SteganographyService,
+    IdentityService,
+    UserGroupService,
+})
 Object.assign(window, {
     ServicesWithProgress: {
         decryptFrom: decryptFromMessageWithProgress,
@@ -108,17 +117,12 @@ function IgnoreError(arg: unknown): (reason: Error) => void {
     }
 }
 Object.assign(window, {
-    elliptic,
     definedSocialNetworkWorkers: (require('./social-network/worker') as typeof import('./social-network/worker'))
         .definedSocialNetworkWorkers,
 })
 
-// Run tests
-require('./tests/1to1')
-require('./tests/1toN')
-require('./tests/sign-verify')
-require('./tests/friendship-discover')
-require('./tests/comment')
+import * as PersonaDB from './database/Persona/Persona.db'
+import * as PersonaDBHelper from './database/Persona/helpers'
 
 // Friendly to debug
 Object.assign(window, {
@@ -130,7 +134,9 @@ Object.assign(window, {
     db: {
         avatar: require('./database/avatar'),
         group: require('./database/group'),
-        people: require('./database/people'),
+        deprecated_people: require('./database/migrate/_deprecated_people_db'),
+        persona: PersonaDB,
+        personaHelper: PersonaDBHelper,
         type: require('./database/type'),
         post: require('./database/post'),
     },

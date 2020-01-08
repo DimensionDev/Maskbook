@@ -1,3 +1,12 @@
+---
+name: Bug
+about: "Report a bug"
+title: "[Bug] "
+labels: 'Type: Bug'
+assignees: neruthes, jack-works
+
+---
+
 # Bug Report
 
 ## Environment

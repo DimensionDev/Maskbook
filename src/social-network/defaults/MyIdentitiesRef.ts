@@ -2,7 +2,7 @@ import { MessageCenter } from '../../utils/messages'
 import Services from '../../extension/service'
 import { SocialNetworkUI } from '../ui'
 import { ValueRef } from '@holoflows/kit/es'
-import { Person } from '../../database'
+import { Profile } from '../../database'
 
 export function InitMyIdentitiesValueRef(self: SocialNetworkUI, network: string) {
     const ref = self.myIdentitiesRef
@@ -10,6 +10,6 @@ export function InitMyIdentitiesValueRef(self: SocialNetworkUI, network: string)
     MessageCenter.on('identityUpdated', () => query(network, ref))
 }
 
-function query(network: string, ref: ValueRef<Person[]>) {
-    Services.People.queryMyIdentities(network).then(p => (ref.value = p))
+function query(network: string, ref: ValueRef<Profile[]>) {
+    Services.Identity.queryMyProfiles(network).then(p => (ref.value = p))
 }
