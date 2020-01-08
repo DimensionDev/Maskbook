@@ -14,6 +14,7 @@ import { getNetworkWorker } from '../../../social-network/worker'
 import { getSignablePayload, cryptoProviderTable } from './utils'
 import { JsonWebKeyToCryptoKey, getKeyParameter } from '../../../utils/type-transform/CryptoKey-JsonWebKey'
 import { PersonaRecord } from '../../../database/Persona/Persona.db'
+import { verifyOthersProve } from './verifyOthersProve'
 
 type Progress = {
     progress: 'finding_person_public_key' | 'finding_post_key'
@@ -57,8 +58,9 @@ type ReturnOfDecryptFromMessageWithProgress = AsyncGenerator<
  * ## Decrypt for version -38, -39 and -40
  * a. read the cache `cachedPostResult`
  * b. find author's public key (See: `findAuthorPublicKey` function)
- *      0. if there is cache, return the cache
- *      1. if try N times but not finding the key, throw
+ *      0. if it is in the payload, use the key in the payload.
+ *      1. if there is cache, return the cache
+ *      2. if try N times but not finding the key, throw
  * c. if there is cache, return the cache
  * d. try to decrypt by `author` with `decryptAsAuthor`
  * e. try to decrypt by `whoAmI` with `decryptAsAuthor`
@@ -95,6 +97,13 @@ export async function* decryptFromMessageWithProgress(
         // ? First, read the cache.
         const [cachedPostResult, setPostCache] = await decryptFromCache(data, author)
 
+        // ? If the author's key is in the payload, store it.
+        if (data.version === -38 && data.authorPublicKey) {
+            await verifyOthersProve(
+                getNetworkWorker(author.network).publicKeyEncoder(data.authorPublicKey),
+                author,
+            ).catch(console.error)
+        }
         // ? Find author's public key.
         let byPerson!: PersonaRecord
         for await (const _ of iteratorHelper(findAuthorPublicKey(author, !!cachedPostResult))) {

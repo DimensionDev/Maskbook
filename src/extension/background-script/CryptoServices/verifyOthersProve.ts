@@ -25,9 +25,10 @@ export async function verifyOthersProve(bio: string, others: ProfileIdentifier):
         throw new Error(geti18nString('service_key_parse_failed'))
     }
     // if privateKey, we should possibly not recreate it
-    const jwk =
+    const hasPrivate =
         (await queryPersonaRecord(ECKeyIdentifier.fromJsonWebKey(key)))?.privateKey ||
         (await queryPersonaRecord(others))?.privateKey
-    if (!jwk) await createProfileWithPersona(others, { connectionConfirmState: 'pending' }, { publicKey: key })
+    if (!hasPrivate) await createProfileWithPersona(others, { connectionConfirmState: 'pending' }, { publicKey: key })
+    // TODO: unhandled case: if the profile is connected but a different key.
     return true
 }

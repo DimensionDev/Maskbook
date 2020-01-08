@@ -2,7 +2,7 @@ import * as Alpha38 from '../../../crypto/crypto-alpha-38'
 import * as Gun2 from '../../../network/gun/version.2'
 import { encodeArrayBuffer } from '../../../utils/type-transform/String-ArrayBuffer'
 import { constructAlpha38, PayloadLatest } from '../../../utils/type-transform/Payload'
-import { Group, queryPrivateKey, queryLocalKey } from '../../../database'
+import { Group, queryPrivateKey, queryLocalKey, queryPersonaByProfile } from '../../../database'
 import { ProfileIdentifier, PostIVIdentifier, GroupIdentifier, Identifier } from '../../../database/type'
 import { prepareOthersKeyForEncryptionV39OrV38 } from '../prepareOthersKeyForEncryption'
 import { geti18nString } from '../../../utils/i18n'
@@ -10,6 +10,9 @@ import { getNetworkWorker } from '../../../social-network/worker'
 import { getSignablePayload } from './utils'
 import { createPostDB, PostRecord, RecipientReason } from '../../../database/post'
 import { queryUserGroup } from '../UserGroupService'
+import { getMyProveBio } from './getMyProveBio'
+import { queryPersonaByProfileDB } from '../../../database/Persona/Persona.db'
+import { compressSecp256k1Key } from '../../../utils/type-transform/SECP256k1-Compression'
 
 type EncryptedText = string
 type OthersAESKeyEncryptedToken = string
@@ -85,6 +88,10 @@ export async function encryptTo(
         sharedPublic: false,
         version: -38,
     }
+    try {
+        const publicKey = (await queryPersonaByProfileDB(whoAmI))?.publicKey
+        if (publicKey) payload.authorPublicKey = compressSecp256k1Key(publicKey, 'public')
+    } catch (e) {}
 
     const payloadWaitToSign = getSignablePayload(payload)
     payload.signature = encodeArrayBuffer(await Alpha38.sign(payloadWaitToSign, minePrivateKey))

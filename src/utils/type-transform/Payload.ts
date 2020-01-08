@@ -21,6 +21,7 @@ export interface PayloadAlpha38 {
     iv: string
     encryptedText: string
     signature: string
+    authorPublicKey?: string
     sharedPublic?: boolean
 }
 
@@ -30,7 +31,7 @@ export interface PayloadAlpha38 {
 function deconstructAlpha40_Or_Alpha39_Or_Alpha38(str: string, throws = false): Payload | null {
     // ? payload is 🎼2/4|ownersAESKeyEncrypted|iv|encryptedText|signature:||
     // ? payload is 🎼3/4|ownersAESKeyEncrypted|iv|encryptedText|signature:||
-    // ? payload is 🎼4/4|AESKeyEncrypted|iv|encryptedText|signature|publicShared:||
+    // ? payload is 🎼4/4|AESKeyEncrypted|iv|encryptedText|signature|authorPublicKey?|publicShared?:||
     // ? if publicShared is true, that means AESKeyEncrypted is shared with public
     const isVersion40 = str.includes('🎼2/4')
     const isVersion39 = str.includes('🎼3/4')
@@ -45,7 +46,7 @@ function deconstructAlpha40_Or_Alpha39_Or_Alpha38(str: string, throws = false): 
     if (rest === undefined)
         if (throws) throw new Error(geti18nString('payload_incomplete'))
         else return null
-    const [AESKeyEncrypted, iv, encryptedText, signature, publicShared, ...extra] = payload.split('|')
+    const [AESKeyEncrypted, iv, encryptedText, signature, authorPublicKey, publicShared, ...extra] = payload.split('|')
     if (!(AESKeyEncrypted && iv && encryptedText))
         if (throws) throw new Error(geti18nString('payload_bad'))
         else return null
@@ -53,11 +54,12 @@ function deconstructAlpha40_Or_Alpha39_Or_Alpha38(str: string, throws = false): 
     if (isVersion38) {
         if (!signature) throw new Error(geti18nString('payload_bad'))
         return {
+            version: -38,
             AESKeyEncrypted,
             iv,
             encryptedText,
             signature,
-            version: -38,
+            authorPublicKey,
             sharedPublic: !!publicShared,
         }
     }
@@ -116,11 +118,12 @@ export function deconstructPayload(str: string, decoder: Decoder, throws: boolea
 }
 
 export function constructAlpha38(data: PayloadAlpha38, encoder: Encoder) {
-    return encoder(
-        `🎼4/4|${data.AESKeyEncrypted}|${data.iv}|${data.encryptedText}|${data.signature}${
-            data.sharedPublic ? '|t' : ''
-        }:||`,
-    )
+    const fields = [data.AESKeyEncrypted, data.iv, data.encryptedText, data.signature]
+    if (data.authorPublicKey) {
+        fields.push(data.authorPublicKey)
+        if (data.sharedPublic) fields.push('t')
+    }
+    return encoder(`🎼4/4|${fields.join('|')}:||`)
 }
 
 /**
