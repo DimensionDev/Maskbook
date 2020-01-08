@@ -118,7 +118,7 @@ jobs:
                   command: |
                       set -o nounset
                       mkdir ~/repo/release
-                      mv ~/repo/*.zip ~/repo/release/
+                      mv ~/*.zip ~/repo/release/
                       ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} -b "✔ No breaking changes. / ⚠ Has breaking changes!
 
                       🆕 New Feature
