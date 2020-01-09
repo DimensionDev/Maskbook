@@ -56,10 +56,16 @@ export async function generateBackupJSON(opts: Partial<BackupOptions> = {}): Pro
         const data = await queryPostsDB(() => true)
         await Promise.all(
             data.map(
-                async x => x.postCryptoKey && map.set(x.postCryptoKey, await CryptoKeyToJsonWebKey(x.postCryptoKey)),
+                async x =>
+                    x.postCryptoKey &&
+                    // ? Some old post key is not exportable. Skip them if export failed.
+                    CryptoKeyToJsonWebKey(x.postCryptoKey).then(
+                        y => map.set(x.postCryptoKey!, y),
+                        () => {},
+                    ),
             ),
         )
-        data.forEach(x => posts.push(PostRecordToJSONFormat(x, map)))
+        data.filter(x => !!map.get(x.postCryptoKey!)).forEach(x => posts.push(PostRecordToJSONFormat(x, map)))
     }
 
     async function backupAllUserGroups() {
