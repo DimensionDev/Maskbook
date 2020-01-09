@@ -82,7 +82,7 @@ export async function generateBackupJSON(opts: Partial<BackupOptions> = {}): Pro
         await Promise.all(
             data.map(async x => x.localKey && map.set(x.localKey, await CryptoKeyToJsonWebKey(x.localKey))),
         )
-        data.forEach(x => profiles.push(ProfileRecordToJSONFormat(x, map)))
+        data.filter(x => !!x.linkedPersona).forEach(x => profiles.push(ProfileRecordToJSONFormat(x, map)))
     }
 
     async function backupPersona(of?: PersonaIdentifier[]) {
