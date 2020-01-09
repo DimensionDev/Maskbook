@@ -321,7 +321,7 @@ export async function detachProfileDB(identifier: ProfileIdentifier, t?: FullTra
         // }
     }
     // update profile
-    delete profile.linkedPersona
+    profile.linkedPersona = undefined
     await updateProfileDB(profile, t as any)
 }
 
