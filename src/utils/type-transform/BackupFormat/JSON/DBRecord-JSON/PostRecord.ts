@@ -14,7 +14,6 @@ export function PostRecordToJSONFormat(
     post: PostRecord,
     keyMap: WeakMap<CryptoKey, JsonWebKey>,
 ): BackupJSONFileLatest['posts'][0] {
-    type R = BackupJSONFileLatest['posts'][0]['recipients']
     return {
         postCryptoKey: post.postCryptoKey ? keyMap.get(post.postCryptoKey) : undefined,
         foundAt: post.foundAt.getTime(),
