@@ -36,8 +36,7 @@ export interface CommentBoxProps {
 }
 export function CommentBox(props: CommentBoxProps) {
     const classes = useStyles()
-    const inputRef = useRef<HTMLInputElement>(null)
-    const [binder] = useCapturedInput(() => {})
+    const [binder, inputRef] = useCapturedInput(() => {})
     useEffect(
         binder(['keypress'], e => {
             if (!inputRef.current) return
