@@ -4029,10 +4029,10 @@ astral-regex@^1.0.0:
   resolved "https://registry.yarnpkg.com/astral-regex/-/astral-regex-1.0.0.tgz#6c8c3fb827dd43ee3918f27b82782ab7658a6fd9"
   integrity sha512-+Ryf6g3BKoRc7jfp7ad8tM4TtMiaWvbF/1/sQcZPkkS7ag3D5nMBCe2UfOTONtAkaG0tO0ij3C5Lwmf1EiyjHg==
 
-async-call-rpc@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/async-call-rpc/-/async-call-rpc-1.0.0.tgz#a2dd6a192b353b717fdf0881da9c805c58e3cb44"
-  integrity sha512-J2bj2HfUPKJCf7i/Lgxjj51+L0xg5xzENK1zkH3xZhsg2PFj2rxwwIRhqSKvGW6z3d6ukjcQWHg/0UbtsuFD2g==
+async-call-rpc@^1.0.0, async-call-rpc@^1.0.4:
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/async-call-rpc/-/async-call-rpc-1.0.4.tgz#ded3ef0fac75d0ae90e0ac574adda1ffae4a5cc9"
+  integrity sha512-dsLSfuF+n1GmgsL5Y+uGCkd+/wYZtHObKPxUncEoJ05bb1Lk3wUlU4ppTXL5sBsRuIXPEUxEdb6w86d0u59udg==
 
 async-each@^1.0.1:
   version "1.0.3"
