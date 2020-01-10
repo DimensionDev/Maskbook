@@ -16079,10 +16079,10 @@ store2@^2.7.1:
   resolved "https://registry.yarnpkg.com/store2/-/store2-2.9.0.tgz#9987e3cf491b8163fd6197c42bab7d71c58c179b"
   integrity sha512-JmK+95jLX2zAP75DVAJ1HAziQ6f+f495h4P9ez2qbmxazN6fE7doWlitqx9hj2YohH3kOi6RVksJe1UH0sJfPw==
 
-storybook-addon-material-ui@^0.9.0-alpha.19:
-  version "0.9.0-alpha.20"
-  resolved "https://registry.yarnpkg.com/storybook-addon-material-ui/-/storybook-addon-material-ui-0.9.0-alpha.20.tgz#fef5b2c3062bc2036321c4254814f8d84d49796e"
-  integrity sha512-1pUKZ5Y6Xrz73V2KmjsnayfHDdjrUJLpljQnd7B843lwSluBKatdTkjn9aBooPXC91+TViK+WGmAGlNEKoxDcQ==
+storybook-addon-material-ui@^0.9.0-alpha.21:
+  version "0.9.0-alpha.21"
+  resolved "https://registry.yarnpkg.com/storybook-addon-material-ui/-/storybook-addon-material-ui-0.9.0-alpha.21.tgz#31c8805756456fd536dad4d08f013697068646a7"
+  integrity sha512-IsD6lvtlFr8mLJUIvyusrJsaMa6C/30bjCDafqO8gzh3qiJ+3vFBkYwtPuWFnEADgfuoWwQpeGFfWDOV6ZS5fw==
   dependencies:
     "@emotion/core" "^10.0.4"
     "@emotion/styled" "^10.0.4"
