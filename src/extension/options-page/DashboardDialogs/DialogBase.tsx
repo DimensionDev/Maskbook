@@ -61,6 +61,7 @@ const Transition = React.forwardRef<unknown, TransitionProps>(function Transitio
 interface DialogContentItemProps {
     title: JSX.Element | string
     content: JSX.Element | string
+    icon?: JSX.Element
     actions?: JSX.Element | null
     actionsAlign?: 'center'
     simplified?: boolean
@@ -68,7 +69,7 @@ interface DialogContentItemProps {
 }
 
 export function DialogContentItem(props: DialogContentItemProps) {
-    const { title, content, actions, onExit, actionsAlign, simplified } = props
+    const { title, content, actions, onExit, actionsAlign, simplified, icon } = props
     const classes = useStyles()
     const history = useHistory()
 
@@ -84,7 +85,7 @@ export function DialogContentItem(props: DialogContentItemProps) {
             <DialogTitle className={classNames(classes.dialogTitle, { [classes.dialogTitleSimplified]: simplified })}>
                 {!simplified && (
                     <IconButton aria-label="close" className={classes.closeButton} onClick={onExitAction}>
-                        <CloseIcon />
+                        {icon ?? <CloseIcon />}
                     </IconButton>
                 )}
                 {title}

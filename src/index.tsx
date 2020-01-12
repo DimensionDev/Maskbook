@@ -12,6 +12,7 @@ import {
     Tab,
 } from '@material-ui/core'
 
+import CachedIcon from '@material-ui/icons/Cached'
 import CloseIcon from '@material-ui/icons/Close'
 import BookmarkIcon from '@material-ui/icons/Bookmark'
 import LocationOnIcon from '@material-ui/icons/LocationOn'
@@ -34,6 +35,7 @@ import { DialogRouter } from './extension/options-page/DashboardDialogs/DialogBa
 import DashboardHomePage from './extension/options-page/Home'
 import DashboardDebugPage from './extension/options-page/Debug'
 import DashboardInitializeDialog from './extension/options-page/Initialize'
+import DashboardWalletsPage from './extension/options-page/Wallets'
 
 const useStyles = makeStyles(theme =>
     createStyles({
@@ -77,7 +79,8 @@ const OptionsPageRouters = (
     <>
         <Switch>
             <Route path="/home/" component={DashboardHomePage} />
-            <Route path="/debug/" component={DashboardDebugPage}></Route>
+            <Route path="/wallets/" component={DashboardWalletsPage} />
+            <Route path="/debug/" component={DashboardDebugPage} />
             <DialogRouter path="/initialize" component={DashboardInitializeDialog} onExit={'/'} fullscreen />
             <Redirect path="*" to="/home/" />
         </Switch>
@@ -111,7 +114,7 @@ function Dashboard() {
 
     const routers: [string, string, JSX.Element][] = [
         [geti18nString('home'), '/home/', <BookmarkIcon />],
-        // ['Device', '/device/', <CachedIcon />],
+        ['Wallets', '/wallets/', <CachedIcon />],
         // ['Settings', '/settings/', <SettingsIcon />],
         // ['About', '/about/', <InfoOutlinedIcon />],
         [geti18nString('debug'), '/debug/', <LocationOnIcon />],
