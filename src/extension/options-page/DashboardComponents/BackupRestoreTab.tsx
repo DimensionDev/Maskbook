@@ -77,7 +77,7 @@ export default function BackupRestoreTab(props: BackupRestoreTabProps) {
                 </Tabs>
             </AppBar>
             {tabs.map((tab, index) => (
-                <TabPanel height={height} value={value} index={index} p={tab.p}>
+                <TabPanel style={{ height, overflow: 'auto' }} height={height} value={value} index={index} p={tab.p}>
                     {tab.component}
                 </TabPanel>
             ))}

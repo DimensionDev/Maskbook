@@ -25,17 +25,18 @@ interface WalletLineProps {
     line1?: JSX.Element | string
     line2?: JSX.Element | string
     invert?: boolean
+    onClick?(): void
     action?: JSX.Element | string
 }
 
 // TODO: abstract common line
 export default function WalletLine(props: WalletLineProps) {
     const classes = useStyles()
-    const { line1, line2, invert, action } = props
+    const { line1, line2, invert, action, onClick } = props
 
     return (
         <>
-            <div className={classes.wrapper}>
+            <div className={classes.wrapper} onClick={onClick}>
                 <FormControl className={classes.control}>
                     <Typography variant={invert ? 'body1' : 'overline'}>{line1}</Typography>
                     <Typography

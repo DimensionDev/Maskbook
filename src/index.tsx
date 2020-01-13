@@ -12,7 +12,7 @@ import {
     Tab,
 } from '@material-ui/core'
 
-import CachedIcon from '@material-ui/icons/Cached'
+import AccountBalanceWalletIcon from '@material-ui/icons/AccountBalanceWallet'
 import CloseIcon from '@material-ui/icons/Close'
 import BookmarkIcon from '@material-ui/icons/Bookmark'
 import LocationOnIcon from '@material-ui/icons/LocationOn'
@@ -114,7 +114,7 @@ function Dashboard() {
 
     const routers: [string, string, JSX.Element][] = [
         [geti18nString('home'), '/home/', <BookmarkIcon />],
-        ['Wallets', '/wallets/', <CachedIcon />],
+        ['Wallets', '/wallets/', <AccountBalanceWalletIcon />],
         // ['Settings', '/settings/', <SettingsIcon />],
         // ['About', '/about/', <InfoOutlinedIcon />],
         [geti18nString('debug'), '/debug/', <LocationOnIcon />],

@@ -13,6 +13,7 @@ import {
     DialogActions,
     Switch,
     FormControlLabel,
+    Box,
 } from '@material-ui/core'
 import { geti18nString } from '../../utils/i18n'
 import { MessageCenter, CompositionEvent } from '../../utils/messages'
@@ -26,6 +27,8 @@ import { getActivatedUI } from '../../social-network/ui'
 import Services from '../../extension/service'
 import { SelectRecipientsUI, SelectRecipientsUIProps } from '../shared/SelectRecipients/SelectRecipients'
 import { DialogDismissIconUI } from './DialogDismissIcon'
+import { ClickableChip } from '../shared/SelectRecipients/ClickableChip'
+import RedPacketDialog from './RedPacketDialog'
 
 const useStyles = makeStyles({
     MUIInputRoot: {
@@ -81,6 +84,7 @@ export function PostDialogUI(props: PostDialogUIProps) {
     const classes = useStylesExtends(useStyles(), props)
     const rootRef = useRef<HTMLDivElement>(null)
     const [, inputRef] = useCapturedInput(props.onPostTextChanged, [props.open])
+    const [redPacketDialogOpen, setRedPacketDialogOpen] = useState(false)
     return (
         <div ref={rootRef}>
             <ResponsiveDialog
@@ -126,6 +130,15 @@ export function PostDialogUI(props: PostDialogUIProps) {
                         multiline
                         placeholder={geti18nString('post_dialog__placeholder')}
                     />
+                    <Typography style={{ marginBottom: 10 }}>Plugins (Experimental)</Typography>
+                    <Box style={{ marginBottom: 10 }} display="flex" flexWrap="wrap">
+                        <ClickableChip
+                            ChipProps={{
+                                label: 'Red Packet',
+                                onClick: () => setRedPacketDialogOpen(true),
+                            }}
+                        />
+                    </Box>
                     <Typography style={{ marginBottom: 10 }}>
                         {geti18nString('post_dialog__select_recipients_title')}
                     </Typography>
@@ -155,6 +168,12 @@ export function PostDialogUI(props: PostDialogUIProps) {
                     </Button>
                 </DialogActions>
             </ResponsiveDialog>
+            <RedPacketDialog
+                classes={classes}
+                open={props.open && redPacketDialogOpen}
+                onConfirm={() => setRedPacketDialogOpen(false)}
+                onDecline={() => setRedPacketDialogOpen(false)}
+            />
         </div>
     )
 }

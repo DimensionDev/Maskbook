@@ -1,5 +1,5 @@
 import React from 'react'
-import { TextField, makeStyles, createStyles, Typography, Divider } from '@material-ui/core'
+import { TextField, makeStyles, createStyles, Typography, Divider, Chip, Box } from '@material-ui/core'
 import ArrowBack from '@material-ui/icons/ArrowBack'
 import ActionButton from '../DashboardComponents/ActionButton'
 import { DialogContentItem } from './DialogBase'
@@ -96,9 +96,27 @@ export function WalletRedPacketHistoryDialog(props: WalletRedPacketHistoryDialog
             title="Red Packets History"
             content={
                 <>
-                    <RedPacket onClick={onClick} />
-                    <RedPacket onClick={onClick} />
-                    <RedPacket onClick={onClick} />
+                    <WalletLine
+                        line1='"Best Wishes!"'
+                        line2="2 hr ago from CMK"
+                        onClick={onClick}
+                        invert
+                        action={<Typography variant="h6">5.3 USDT</Typography>}
+                    />
+                    <WalletLine
+                        line1='"Hallo Welt!"'
+                        line2="20 hr ago from CMK"
+                        onClick={onClick}
+                        invert
+                        action={<Typography variant="h6">0.12 ETH</Typography>}
+                    />
+                    <WalletLine
+                        line1='"RAmen!"'
+                        line2="200 hr ago from CMK"
+                        onClick={onClick}
+                        invert
+                        action={<Typography variant="h6">12 USDT</Typography>}
+                    />
                 </>
             }></DialogContentItem>
     )
@@ -131,6 +149,14 @@ export function WalletRedPacketDetailDialog(props: WalletRedPacketHistoryDialogP
                         line1="Source"
                         line2={<Typography color="primary">twitter.com/status/668163...</Typography>}
                     />
+                    <WalletLine
+                        line1="From"
+                        line2={
+                            <>
+                                CMK <Chip label="Me" variant="outlined" color="secondary" size="small"></Chip>
+                            </>
+                        }
+                    />
                     <WalletLine line1="Message" line2="Best Wishes!" />
                     <Typography className={classes.openBy} variant="subtitle1">
                         Opened By
@@ -143,11 +169,16 @@ export function WalletRedPacketDetailDialog(props: WalletRedPacketHistoryDialogP
                         action={<Typography variant="h6">5.28714</Typography>}
                     />
                     <WalletLine
-                        line1="Neruthes"
-                        line2="0x1191467182361282137761"
+                        line1="CCCP"
+                        line2="0x1191467182361282137744"
                         invert
                         action={<Typography variant="h6">5.28714</Typography>}
                     />
+                    <Box p={1} display="flex" justifyContent="center">
+                        <Typography variant="caption" color="textSecondary">
+                            2 hr ago created, 2 hr ago received.
+                        </Typography>
+                    </Box>
                 </>
             }></DialogContentItem>
     )
