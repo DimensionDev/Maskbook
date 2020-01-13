@@ -77,6 +77,7 @@
     "jsqr": "^1.2.0",
     "lodash-es": "^4.17.11",
     "node-stego": "^0.10.1",
+    "matrix-bot-sdk": "^0.4.0",
     "matrix-js-sdk": "^2.4.6",
     "matrix-js-sdk-type": "https://github.com/DimensionDev/matrix-js-sdk-type",
     "notistack": "^0.9.7",
