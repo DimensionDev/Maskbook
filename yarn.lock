@@ -1943,7 +1943,8 @@
 
 "@holoflows/kit@https://github.com/DimensionDev/holoflows-kit":
   version "0.6.1"
-  resolved "https://github.com/DimensionDev/holoflows-kit#3c15110bb1c4e800533fd3c4e3e0f670097baa9c"
+  uid a3dcd4951ef966e068ea6082a64ebfdb18cfe907
+  resolved "https://github.com/DimensionDev/holoflows-kit#a3dcd4951ef966e068ea6082a64ebfdb18cfe907"
   dependencies:
     async-call-rpc "^1.0.0"
     concurrent-lock "^1.0.7"
