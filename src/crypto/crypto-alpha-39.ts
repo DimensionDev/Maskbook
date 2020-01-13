@@ -83,3 +83,4 @@ export { decryptMessage1ToNByOther, decryptMessage1ToNByMyself, extractAESKeyInM
 export { encryptWithAES, decryptWithAES } from './crypto-alpha-40'
 export { sign, verify } from './crypto-alpha-40'
 export { encryptComment, decryptComment } from './crypto-alpha-40'
+export { typedMessageStringify, typedMessageParse } from './crypto-alpha-40'

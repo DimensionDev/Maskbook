@@ -2,15 +2,14 @@ import * as Alpha38 from '../../../crypto/crypto-alpha-38'
 import * as Gun2 from '../../../network/gun/version.2'
 import { encodeArrayBuffer } from '../../../utils/type-transform/String-ArrayBuffer'
 import { constructAlpha38, PayloadLatest } from '../../../utils/type-transform/Payload'
-import { Group, queryPrivateKey, queryLocalKey, queryPersonaByProfile } from '../../../database'
+import { Group, queryPrivateKey, queryLocalKey } from '../../../database'
 import { ProfileIdentifier, PostIVIdentifier, GroupIdentifier, Identifier } from '../../../database/type'
 import { prepareOthersKeyForEncryptionV39OrV38 } from '../prepareOthersKeyForEncryption'
 import { geti18nString } from '../../../utils/i18n'
 import { getNetworkWorker } from '../../../social-network/worker'
-import { getSignablePayload } from './utils'
+import { getSignablePayload, TypedMessage, cryptoProviderTable } from './utils'
 import { createPostDB, PostRecord, RecipientReason } from '../../../database/post'
 import { queryUserGroup } from '../UserGroupService'
-import { getMyProveBio } from './getMyProveBio'
 import { queryPersonaByProfileDB } from '../../../database/Persona/Persona.db'
 import { compressSecp256k1Key } from '../../../utils/type-transform/SECP256k1-Compression'
 
@@ -34,7 +33,7 @@ const OthersAESKeyEncryptedMap = new Map<
  * - `token` is used to call `publishPostAESKey` before post the content
  */
 export async function encryptTo(
-    content: string,
+    content: TypedMessage,
     to: (ProfileIdentifier | GroupIdentifier)[],
     whoAmI: ProfileIdentifier,
 ): Promise<[EncryptedText, OthersAESKeyEncryptedToken]> {
@@ -65,6 +64,7 @@ export async function encryptTo(
     )
     const minePrivateKey = await queryPrivateKey(whoAmI)
     if (!minePrivateKey) throw new TypeError('Not inited yet')
+    const stringifiedContent = Alpha38.typedMessageStringify(content)
     const {
         encryptedContent: encryptedText,
         othersAESKeyEncrypted,
@@ -73,7 +73,7 @@ export async function encryptTo(
         postAESKey,
     } = await Alpha38.encrypt1ToN({
         version: -38,
-        content,
+        content: stringifiedContent,
         othersPublicKeyECDH: toKey,
         ownersLocalKey: (await queryLocalKey(whoAmI))!,
         privateKeyECDH: minePrivateKey,

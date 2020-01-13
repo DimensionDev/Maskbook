@@ -21,6 +21,7 @@ import { PersonOrGroupInChip, PersonOrGroupInList } from '../components/shared/S
 import { MaskbookLightTheme } from '../utils/theme'
 import { PostDialog } from '../components/InjectedComponents/PostDialog'
 import { PostDialogHint } from '../components/InjectedComponents/PostDialogHint'
+import { makeTypedMessage } from '../extension/background-script/CryptoServices/utils'
 
 storiesOf('Injections', module)
     .add('PersonOrGroupInChip', () => (
@@ -102,7 +103,7 @@ storiesOf('Injections', module)
                         alreadySelectedPreviously={[]}
                         requestAppendRecipients={async () => {}}
                         people={demoPeople}
-                        data={{ content: msg, signatureVerifyResult: vr }}
+                        data={{ content: makeTypedMessage(msg), signatureVerifyResult: vr }}
                     />
                 </FakePost>
                 <FakePost title="Decrypting:">
