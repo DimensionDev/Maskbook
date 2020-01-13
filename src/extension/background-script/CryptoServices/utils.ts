@@ -25,3 +25,29 @@ export const cryptoProviderTable = {
     [-39]: Alpha39,
     [-38]: Alpha38,
 } as const
+
+export interface TypedMessageMetadata {
+    meta?: object
+    version: 1
+}
+export interface TypedMessageText extends TypedMessageMetadata {
+    type: 'text'
+    content: string
+}
+export interface TypedMessageComplex extends TypedMessageMetadata {
+    type: 'complex'
+    items: TypedMessage[]
+}
+export interface TypedMessageUnknown extends TypedMessageMetadata {
+    type: 'unknown'
+}
+export type TypedMessage = TypedMessageText | TypedMessageComplex | TypedMessageUnknown
+export function makeTypedMessage(text: string, meta?: object): TypedMessageText
+export function makeTypedMessage(content: string, meta?: object): TypedMessage {
+    if (typeof content === 'string') {
+        const text: TypedMessageText = { type: 'text', content, version: 1, meta }
+        return text
+    }
+    const msg: TypedMessageUnknown = { type: 'unknown', version: 1, meta }
+    return msg
+}

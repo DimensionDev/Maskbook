@@ -26,6 +26,7 @@ import { getActivatedUI } from '../../social-network/ui'
 import Services from '../../extension/service'
 import { SelectRecipientsUI, SelectRecipientsUIProps } from '../shared/SelectRecipients/SelectRecipients'
 import { DialogDismissIconUI } from './DialogDismissIcon'
+import { makeTypedMessage } from '../../extension/background-script/CryptoServices/utils'
 
 const useStyles = makeStyles({
     MUIInputRoot: {
@@ -180,7 +181,7 @@ export function PostDialog(props: PostDialogProps) {
         useCallback(
             async (target: (Profile | Group)[], text: string) => {
                 const [encrypted, token] = await Services.Crypto.encryptTo(
-                    text,
+                    makeTypedMessage(text),
                     target.map(x => x.identifier),
                     currentIdentity!.identifier,
                 )

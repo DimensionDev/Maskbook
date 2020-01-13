@@ -6,6 +6,7 @@ import { ProfileIdentifier } from '../../database/type'
 import { useValueRef } from '../../utils/hooks/useValueRef'
 import { PostInspector, PostInspectorProps } from '../../components/InjectedComponents/PostInspector'
 import { makeStyles } from '@material-ui/core'
+import { TypedMessage } from '../../extension/background-script/CryptoServices/utils'
 
 export function injectPostInspectorDefault<T extends string>(
     config: InjectPostInspectorDefaultConfig = {},
@@ -40,7 +41,9 @@ export function injectPostInspectorDefault<T extends string>(
     const zipPostF = zipPost || (() => {})
     return function injectPostInspector(current: PostInfo) {
         const injectionPointDefault = () => current.rootNodeProxy.afterShadow
-        const onDecrypted = (val: string) => (current.decryptedPostContent.value = val)
+        const onDecrypted = (val: TypedMessage) => {
+            if (val.type === 'text') current.decryptedPostContent.value = val.content
+        }
         return renderInShadowRoot(
             <PostInspectorDefault
                 onDecrypted={onDecrypted}

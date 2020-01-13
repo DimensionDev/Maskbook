@@ -11,7 +11,7 @@ import { queryPostDB, updatePostDB } from '../../../database/post'
 import { addPerson } from './addPerson'
 import { MessageCenter } from '../../../utils/messages'
 import { getNetworkWorker } from '../../../social-network/worker'
-import { getSignablePayload, cryptoProviderTable } from './utils'
+import { getSignablePayload, cryptoProviderTable, TypedMessage } from './utils'
 import { JsonWebKeyToCryptoKey, getKeyParameter } from '../../../utils/type-transform/CryptoKey-JsonWebKey'
 import { PersonaRecord } from '../../../database/Persona/Persona.db'
 import { verifyOthersProve } from './verifyOthersProve'
@@ -25,7 +25,7 @@ type DebugInfo = {
 }
 type Success = {
     signatureVerifyResult: boolean
-    content: string
+    content: TypedMessage
     through: ('author_key_not_found' | 'post_key_cached' | 'normal_decrypted')[]
 }
 type Failure = {
@@ -113,7 +113,7 @@ export async function* decryptFromMessageWithProgress(
                 else if (_.value === 'use cache')
                     return {
                         signatureVerifyResult: false,
-                        content: cachedPostResult!,
+                        content: cryptoProvider.typedMessageParse(cachedPostResult!),
                         through: ['author_key_not_found', 'post_key_cached'],
                     } as Success
                 else byPerson = _.value
@@ -144,7 +144,7 @@ export async function* decryptFromMessageWithProgress(
                           await JsonWebKeyToCryptoKey(byPerson.publicKey, ...ecdhParams),
                       )
                     : false,
-                content: cachedPostResult,
+                content: cryptoProvider.typedMessageParse(cachedPostResult),
                 through: ['post_key_cached'],
             } as Success
         }
@@ -267,9 +267,17 @@ export async function* decryptFromMessageWithProgress(
                     signature,
                     await JsonWebKeyToCryptoKey(byPerson.publicKey, ...getKeyParameter('ecdh')),
                 )
-                return { signatureVerifyResult, content, through: ['normal_decrypted'] }
+                return {
+                    signatureVerifyResult,
+                    content: cryptoProvider.typedMessageParse(content),
+                    through: ['normal_decrypted'],
+                }
             } catch {
-                return { signatureVerifyResult: false, content, through: ['normal_decrypted'] }
+                return {
+                    signatureVerifyResult: false,
+                    content: cryptoProvider.typedMessageParse(content),
+                    through: ['normal_decrypted'],
+                }
             }
         }
 
@@ -291,7 +299,11 @@ export async function* decryptFromMessageWithProgress(
                 signature || '',
                 authorPublic,
             )
-            return { signatureVerifyResult, content, through: ['normal_decrypted'] } as Success
+            return {
+                signatureVerifyResult,
+                content: cryptoProvider.typedMessageParse(content),
+                through: ['normal_decrypted'],
+            } as Success
         }
     }
     return { error: geti18nString('service_unknown_payload') }

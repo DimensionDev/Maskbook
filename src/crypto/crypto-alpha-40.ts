@@ -343,3 +343,12 @@ export async function decryptComment(
     }
 }
 //#endregion
+
+import { makeTypedMessage } from '../extension/background-script/CryptoServices/utils'
+
+export function typedMessageStringify(x: any) {
+    throw new Error('Not supported typed message in version older than v39.')
+}
+export function typedMessageParse(x: string) {
+    return makeTypedMessage(x)
+}
