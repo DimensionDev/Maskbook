@@ -1,5 +1,5 @@
 import React from 'react'
-import { makeStyles, createStyles, Card, CardHeader, CardContent, Typography, Box } from '@material-ui/core'
+import { makeStyles, createStyles, Card, Typography } from '@material-ui/core'
 
 import classNames from 'classnames'
 
@@ -49,28 +49,39 @@ const useStyles = makeStyles(theme =>
     }),
 )
 
-export function RedPacket(props: { onClick?(): void }) {
+interface RedPacketProps {
+    onClick?(): void
+    simplified?: boolean
+}
+
+export function RedPacket(props: RedPacketProps) {
     const classes = useStyles()
-    const { onClick } = props
+    const { onClick, simplified } = props
     return (
         <Card elevation={0} className={classes.box} component="article" onClick={onClick}>
-            <div className={classNames(classes.card, classes.header)}>
-                <Typography variant="body1">From: CMK</Typography>
-                <Typography variant="body1">Sent 35.01 USDT</Typography>
-            </div>
+            {!simplified && (
+                <div className={classNames(classes.card, classes.header)}>
+                    <Typography variant="body1">From: CMK</Typography>
+                    <Typography variant="body1">Sent 35.01 USDT</Typography>
+                </div>
+            )}
             <div className={classNames(classes.card, classes.content)}>
                 <div style={{ display: 'flex' }}>
                     <div className={classes.packet}></div>
                     <div className={classes.text}>
                         <Typography variant="h6">"Best Wishes!"</Typography>
-                        <Typography variant="body1">35.01 USDT / 7 shares</Typography>
+                        <Typography variant="body1">
+                            {simplified ? '35.01 USDT / 7 shares' : 'Ready to open'}
+                        </Typography>
                     </div>
                 </div>
             </div>
-            <div className={classNames(classes.card, classes.action)}>
-                <Typography variant="body1">2 hr ago created</Typography>
-                <Typography variant="body1">5/7 collected</Typography>
-            </div>
+            {!simplified && (
+                <div className={classNames(classes.card, classes.action)}>
+                    <Typography variant="body1">2 hr ago created</Typography>
+                    <Typography variant="body1">5/7 collected</Typography>
+                </div>
+            )}
         </Card>
     )
 }

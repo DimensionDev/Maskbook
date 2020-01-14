@@ -11,6 +11,8 @@ import { PersonaCreateDialog, PersonaCreatedDialog, PersonaImportDialog } from '
 import FooterLine from './DashboardComponents/FooterLine'
 import { geti18nString } from '../../utils/i18n'
 import WalletCard from './DashboardComponents/WalletCard'
+import PluginRedPacket from '../../components/InjectedComponents/StructuredMessage/RedPacket'
+import StructuredPluginWrapper from '../../components/InjectedComponents/StructuredMessage/StructuredPluginWrapper'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -81,6 +83,9 @@ export default function DashboardWalletsPage() {
                 </div>
             </section>
             <section className={classes.sections}>
+                <StructuredPluginWrapper pluginName="Red Packet">
+                    <PluginRedPacket></PluginRedPacket>
+                </StructuredPluginWrapper>
                 <Typography variant="body2">
                     Every wallet belongs to its corresponding persona. More operations (e.g. delete & export) are
                     available in the persona card at the Home page.
