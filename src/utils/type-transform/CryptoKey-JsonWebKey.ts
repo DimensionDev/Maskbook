@@ -32,7 +32,14 @@ export async function JsonWebKeyToCryptoKey(
     usage: readonly Usages[],
     algorithm: Algorithms,
 ): Promise<CryptoKey> {
-    const _key = stableStringify(key) + [...usage].sort().join(',')
+    key = { ...key }
+    const usages = [...usage].sort().join(',')
+    if (key.key_ops) {
+        if (key.key_ops.sort().join('.') !== usages) {
+            key.key_ops = [...usage]
+        }
+    }
+    const _key = stableStringify(key) + usages
     if (CryptoKeyCache.has(_key)) return CryptoKeyCache.get(_key)!
     const cryptoKey = await crypto.subtle.importKey('jwk', key, algorithm, true, usage as string[])
     CryptoKeyCache.set(_key, cryptoKey)
