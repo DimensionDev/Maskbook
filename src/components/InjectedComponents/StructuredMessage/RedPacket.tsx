@@ -1,12 +1,12 @@
 import React from 'react'
 
-import { RedPacket } from '../../../extension/options-page/DashboardComponents/RedPacket'
 import { Button } from '@material-ui/core'
+import { RedPacketSimplified } from '../../../extension/options-page/DashboardComponents/RedPacket'
 
 export default function PluginRedPacket() {
     return (
         <div>
-            <RedPacket simplified />
+            <RedPacketSimplified />
             <Button variant="contained" color="primary" style={{ width: 190, marginLeft: 'auto', display: 'block' }}>
                 Open Red Packet
             </Button>

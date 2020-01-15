@@ -3,7 +3,7 @@ import { TextField, makeStyles, createStyles, Typography, Divider, Chip, Box } f
 import ArrowBack from '@material-ui/icons/ArrowBack'
 import ActionButton from '../DashboardComponents/ActionButton'
 import { DialogContentItem } from './DialogBase'
-import { RedPacket } from '../DashboardComponents/RedPacket2'
+import { RedPacket } from '../DashboardComponents/RedPacket'
 import WalletLine from '../DashboardComponents/WalletLine'
 
 interface WalletSendRedPacketDialogProps {

@@ -124,12 +124,12 @@ const useExistingPacketStyles = makeStyles(theme =>
             flexDirection: 'column',
             overflow: 'auto',
             margin: `${theme.spacing(1)}px auto`,
-            textAlign: 'center',
         },
         hint: {
             padding: theme.spacing(0.5, 1),
             border: `1px solid ${theme.palette.background.default}`,
             borderRadius: theme.spacing(1),
+            textAlign: 'center',
         },
     }),
 )
