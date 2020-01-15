@@ -29,7 +29,7 @@ export async function migrateHelper_operateDB(
         getLocalKey,
     )
 
-    await persona.consistentPersonaDBWriteAccess(async (t: IDBPTransaction<persona.PersonaDB, any>) => {
+    await persona.consistentPersonaDBWriteAccess(async t => {
         for (const [v, incomingRecord] of personaMap) {
             const currentRecord = await persona.queryPersonaDB(incomingRecord.identifier, t)
             if (!currentRecord) {

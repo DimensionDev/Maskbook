@@ -34,7 +34,7 @@ export async function restoreBackup(json: object, whoAmI?: ProfileIdentifier): P
             .map(x => JsonWebKeyToCryptoKey(x.localKey!, ...aes).then(k => keyCache.set(x.localKey!, k))),
     ])
     {
-        await consistentPersonaDBWriteAccess(async (t: IDBPTransaction<PersonaDB, any>) => {
+        await consistentPersonaDBWriteAccess(async t => {
             for (const x of data.personas) {
                 await createOrUpdatePersonaDB(
                     PersonaRecordFromJSONFormat(x, keyCache),
