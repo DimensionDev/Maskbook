@@ -16,6 +16,7 @@ import ActionButton from '../DashboardComponents/ActionButton'
 import { DialogContentItem } from './DialogBase'
 import { RedPacket } from '../DashboardComponents/RedPacket'
 import WalletLine from '../DashboardComponents/WalletLine'
+import ProviderIcon from '../DashboardComponents/ProviderIcon'
 
 interface WalletSendRedPacketDialogProps {
     onDecline(): void
@@ -188,13 +189,13 @@ export function WalletRedPacketDetailDialog(props: WalletRedPacketHistoryDialogP
                     </Typography>
                     <Divider />
                     <WalletLine
-                        line1="Neruthes"
+                        line1={<ProviderIcon network="twitter.com">PPPC</ProviderIcon>}
                         line2="0x1191467182361282137761"
                         invert
                         action={<Typography variant="h6">5.28714</Typography>}
                     />
                     <WalletLine
-                        line1="CCCP"
+                        line1={<ProviderIcon network="facebook.com">CCCP</ProviderIcon>}
                         line2="0x1191467182361282137744"
                         invert
                         action={<Typography variant="h6">5.28714</Typography>}
