@@ -1,5 +1,16 @@
 import React from 'react'
-import { TextField, makeStyles, createStyles, Typography, Divider, Chip, Box } from '@material-ui/core'
+import {
+    TextField,
+    makeStyles,
+    createStyles,
+    Typography,
+    Divider,
+    Chip,
+    Box,
+    Paper,
+    Tabs,
+    Tab,
+} from '@material-ui/core'
 import ArrowBack from '@material-ui/icons/ArrowBack'
 import ActionButton from '../DashboardComponents/ActionButton'
 import { DialogContentItem } from './DialogBase'
@@ -89,11 +100,25 @@ interface WalletRedPacketHistoryDialogProps {
 
 export function WalletRedPacketHistoryDialog(props: WalletRedPacketHistoryDialogProps) {
     const { onClick, onDecline } = props
+    const [tabState, setTabState] = React.useState(0)
 
     return (
         <DialogContentItem
             onExit={onDecline}
             title="Red Packets History"
+            tabs={
+                <Paper square>
+                    <Tabs
+                        value={tabState}
+                        variant="fullWidth"
+                        indicatorColor="primary"
+                        textColor="primary"
+                        onChange={(_, s) => setTabState(s)}>
+                        <Tab label="Inbound" />
+                        <Tab label="Outbound" />
+                    </Tabs>
+                </Paper>
+            }
             content={
                 <>
                     <WalletLine

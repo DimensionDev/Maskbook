@@ -65,11 +65,12 @@ interface DialogContentItemProps {
     actions?: JSX.Element | null
     actionsAlign?: 'center'
     simplified?: boolean
+    tabs?: JSX.Element
     onExit?: string | (() => void)
 }
 
 export function DialogContentItem(props: DialogContentItemProps) {
-    const { title, content, actions, onExit, actionsAlign, simplified, icon } = props
+    const { title, content, actions, onExit, actionsAlign, simplified, tabs, icon } = props
     const classes = useStyles()
     const history = useHistory()
 
@@ -91,6 +92,7 @@ export function DialogContentItem(props: DialogContentItemProps) {
                 {title}
             </DialogTitle>
             {!simplified && <Divider />}
+            {tabs}
             <DialogContent className={classes.dialogContent}>{content}</DialogContent>
             <DialogActions
                 className={classNames(classes.dialogActions, {
