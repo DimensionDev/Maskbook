@@ -5,7 +5,7 @@ import { createDBAccess } from '../../helpers/openDB'
 import { RedPacketRecord, WalletRecord, ERC20TokenRecord, WalletTokenRecord } from './types'
 
 export const createWalletDBAccess = createDBAccess(() => {
-    return openDB<RedPacketDB>('maskbook-plugin-wallet', 1, {
+    return openDB<WalletDB>('maskbook-plugin-wallet', 1, {
         upgrade(db, oldVersion) {
             function v0_v1() {
                 db.createObjectStore('RedPacket', { keyPath: 'id' })
@@ -18,7 +18,7 @@ export const createWalletDBAccess = createDBAccess(() => {
     })
 })
 
-export interface RedPacketDB extends DBSchema {
+export interface WalletDB extends DBSchema {
     RedPacket: {
         value: RedPacketRecord
         key: string
@@ -29,6 +29,9 @@ export interface RedPacketDB extends DBSchema {
     Wallet: {
         value: WalletRecord
         key: string
+        indexes: {
+            address: string
+        }
     }
     ERC20Token: {
         value: ERC20TokenRecord

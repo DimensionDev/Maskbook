@@ -31,3 +31,7 @@ export interface RedPacketAPI {
     }>
     claim(id: string | number[], password: string, _recipient: string, validation: string | number[]): Promise<string>
 }
+
+export interface WalletAPI {
+    watchWalletBalance(address: string): void
+}

@@ -1,6 +1,7 @@
-import { RedPacketAPI } from './types'
+import { RedPacketAPI, WalletAPI } from './types'
 import { sleep } from '@holoflows/kit/es/util/sleep'
 import { onClaimResult, onCreationResult, onExpired } from './red-packet-fsm'
+import { onWalletBalanceUpdated } from './wallet'
 
 export const mockRedPacketAPI: RedPacketAPI = {
     async create_red_packet(...args) {
@@ -30,5 +31,13 @@ export const mockRedPacketAPI: RedPacketAPI = {
     async watchExpired(id: string) {
         await sleep(10000)
         onExpired(id)
+    },
+}
+
+export const mockWalletAPI: WalletAPI = {
+    watchWalletBalance(address) {
+        setInterval(() => {
+            onWalletBalanceUpdated(address, BigInt(Math.floor(Math.random() * 1000)))
+        }, 4000)
     },
 }

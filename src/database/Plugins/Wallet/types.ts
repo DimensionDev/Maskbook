@@ -26,7 +26,7 @@ export interface RedPacketRecord {
     /** Read from create transaction result */
     red_packet_id?: string
     /** JSON payload. See raw_payload below */
-    raw_payload?: string
+    raw_payload?: RedPacketJSONPayload
     enc_payload?: string
     /** Red packet sender address */
     sender_address: string
