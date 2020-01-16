@@ -5,7 +5,7 @@
     "manifest_version": 2,
     "web_accessible_resources": ["*.css", "*.js", "*.jpg", "*.png"],
     "permissions": ["storage", "downloads", "webNavigation", "activeTab"],
-    "optional_permissions": ["<all_urls>"],
+    "optional_permissions": ["<all_urls>", "notifications"],
     "background": { "page": "background.html" },
     "options_ui": { "page": "index.html", "open_in_tab": true },
     "icons": { "16": "16x16.png", "48": "48x48.png", "128": "128x128.png", "256": "256x256.png" },
