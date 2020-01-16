@@ -57,7 +57,7 @@ export async function consistentPersonaDBWriteAccess(
     tryToAutoFix = true,
 ) {
     // TODO: collect all changes on this transaction then only perform consistency check on those records.
-    let t = createTransaction(await db(), 'readwrite', 'profiles', 'personas')
+    let t = createTransaction(await db(), 'readwrite')('profiles', 'personas')
     let finished = false
     const finish = () => (finished = true)
     t.addEventListener('abort', finish)
@@ -71,7 +71,7 @@ export async function consistentPersonaDBWriteAccess(
             console.warn('The transaction ends too early! There MUST be a bug in the program!')
             console.trace()
             // start a new transaction to check consistency
-            t = createTransaction(await db(), 'readwrite', 'profiles', 'personas')
+            t = createTransaction(await db(), 'readwrite')('profiles', 'personas')
         }
         await assertPersonaDBConsistency(tryToAutoFix ? 'fix' : 'throw', 'full check', t)
     }
@@ -93,7 +93,7 @@ export async function queryPersonaByProfileDB(
     query: ProfileIdentifier,
     t?: FullPersonaDBTransaction<'readonly'>,
 ): Promise<PersonaRecord | null> {
-    t = t || createTransaction(await db(), 'readonly', 'personas', 'profiles')
+    t = t || createTransaction(await db(), 'readonly')('personas', 'profiles')
     const x = await t.objectStore('profiles').get(query.toText())
     if (!x?.linkedPersona) return null
     return queryPersonaDB(restorePrototype(x.linkedPersona, ECKeyIdentifier.prototype), t)
@@ -106,7 +106,7 @@ export async function queryPersonaDB(
     query: PersonaIdentifier,
     t?: PersonasTransaction<'readonly'>,
 ): Promise<PersonaRecord | null> {
-    t = t || createTransaction(await db(), 'readonly', 'personas')
+    t = t || createTransaction(await db(), 'readonly')('personas')
     const x = await t.objectStore('personas').get(query.toText())
     if (x) return personaRecordOutDb(x)
     return null
@@ -119,7 +119,7 @@ export async function queryPersonasDB(
     query: (record: PersonaRecord) => boolean,
     t?: PersonasTransaction<'readonly'>,
 ): Promise<PersonaRecord[]> {
-    t = t || createTransaction(await db(), 'readonly', 'personas')
+    t = t || createTransaction(await db(), 'readonly')('personas')
     const records: PersonaRecord[] = []
     for await (const each of t.objectStore('personas')) {
         const out = personaRecordOutDb(each.value)
@@ -135,7 +135,7 @@ export type PersonaRecordWithPrivateKey = PersonaRecord & Required<Pick<PersonaR
 export async function queryPersonasWithPrivateKey(
     t?: FullPersonaDBTransaction<'readonly'>,
 ): Promise<PersonaRecordWithPrivateKey[]> {
-    t = t || createTransaction(await db(), 'readonly', 'personas', 'profiles')
+    t = t || createTransaction(await db(), 'readonly')('personas', 'profiles')
     const records: PersonaRecord[] = []
     records.push(
         ...(
@@ -233,7 +233,7 @@ export async function safeDeletePersonaDB(
     id: PersonaIdentifier,
     t?: FullPersonaDBTransaction<'readwrite'>,
 ): Promise<boolean> {
-    t = t || createTransaction(await db(), 'readwrite', 'personas', 'profiles')
+    t = t || createTransaction(await db(), 'readwrite')('personas', 'profiles')
     const r = await queryPersonaDB(id, t)
     if (!r) return true
     if (r.linkedProfiles.size !== 0) return false
@@ -260,7 +260,7 @@ export async function queryProfileDB(
     id: ProfileIdentifier,
     t?: ProfileTransaction<'readonly'>,
 ): Promise<ProfileRecord | null> {
-    t = t || createTransaction(await db(), 'readonly', 'profiles')
+    t = t || createTransaction(await db(), 'readonly')('profiles')
     const result = await t.objectStore('profiles').get(id.toText())
     if (result) return profileOutDB(result)
     return null
@@ -273,7 +273,7 @@ export async function queryProfilesDB(
     network: string | ((record: ProfileRecord) => boolean),
     t?: ProfileTransaction<'readonly'>,
 ): Promise<ProfileRecord[]> {
-    t = t || createTransaction(await db(), 'readonly', 'profiles')
+    t = t || createTransaction(await db(), 'readonly')('profiles')
     const result: ProfileRecord[] = []
     if (typeof network === 'string') {
         result.push(
@@ -328,7 +328,7 @@ export async function detachProfileDB(
     identifier: ProfileIdentifier,
     t?: FullPersonaDBTransaction<'readwrite'>,
 ): Promise<void> {
-    t = t || createTransaction(await db(), 'readwrite', 'personas', 'profiles')
+    t = t || createTransaction(await db(), 'readwrite')('personas', 'profiles')
     const profile = await queryProfileDB(identifier, t)
     if (!profile?.linkedPersona) return
 
@@ -358,7 +358,7 @@ export async function attachProfileDB(
     data: LinkedProfileDetails,
     t?: FullPersonaDBTransaction<'readwrite'>,
 ): Promise<void> {
-    t = t || createTransaction(await db(), 'readwrite', 'personas', 'profiles')
+    t = t || createTransaction(await db(), 'readwrite')('personas', 'profiles')
     const profile =
         (await queryProfileDB(identifier, t)) ||
         (await createProfileDB({ identifier, createdAt: new Date(), updatedAt: new Date() }, t)) ||

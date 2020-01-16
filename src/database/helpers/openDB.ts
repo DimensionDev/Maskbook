@@ -51,14 +51,14 @@ export type IDBPSafeTransaction<
     ): IDBPSafeObjectStore<DBTypes, StoreName[], StoreName>
 }
 
-export function createTransaction<
-    DBType extends DBSchema,
-    Mode extends 'readonly' | 'readwrite',
-    UsedStoreName extends StoreNames<DBType>[] = []
->(
+export function createTransaction<DBType extends DBSchema, Mode extends 'readonly' | 'readwrite'>(
     db: IDBPDatabase<DBType>,
     mode: Mode,
-    ...storeNames: UsedStoreName
-): IDBPSafeTransaction<DBType, UsedStoreName, Mode> {
-    return db.transaction(storeNames, mode) as any
+) {
+    // It must be a high order function to infer the type of UsedStoreName correctly.
+    return <UsedStoreName extends StoreNames<DBType>[] = []>(
+        ...storeNames: UsedStoreName
+    ): IDBPSafeTransaction<DBType, UsedStoreName, Mode> => {
+        return db.transaction(storeNames, mode) as any
+    }
 }
