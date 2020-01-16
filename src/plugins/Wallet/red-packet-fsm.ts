@@ -10,6 +10,7 @@ import { createTransaction, IDBPSafeTransaction } from '../../database/helpers/o
 import { createWalletDBAccess, WalletDB } from '../../database/Plugins/Wallet/Wallet.db'
 import uuid from 'uuid/v4'
 import { mockRedPacketAPI } from './mock'
+import { RedPacketCreationResult, RedPacketClaimResult } from './types'
 
 function getProvider() {
     return mockRedPacketAPI
@@ -76,7 +77,7 @@ export async function createRedPacket(
         // @ts-ignore TODO:
         await some_special_handling()
     }
-    const { create_transaction_hash, create_nonce } = await getProvider().create_red_packet(
+    const { create_transaction_hash, create_nonce } = await getProvider().create(
         passwords,
         packet.is_random,
         packet.duration,
@@ -112,16 +113,7 @@ export async function createRedPacket(
     return { passwords }
 }
 
-export async function onCreationResult(
-    recordUUID: string,
-    details:
-        | {
-              type: 'success'
-              block_creation_time: Date
-              red_packet_id: string
-          }
-        | { type: 'failed'; reason?: string },
-) {
+export async function onCreationResult(recordUUID: string, details: RedPacketCreationResult) {
     const t = createTransaction(await createWalletDBAccess(), 'readwrite')('RedPacket')
     const rec = await t.objectStore('RedPacket').get(recordUUID)
     if (!rec) return
@@ -148,7 +140,7 @@ export async function claimRedPacket(redPacketID: string, passwords: string[]) {
     getProvider().watchClaimResult(redPacketID)
 }
 
-export async function onClaimResult(redPacketID: string, details: { type: 'success' } | { type: 'failed' }) {
+export async function onClaimResult(redPacketID: string, details: RedPacketClaimResult) {
     {
         const t = createTransaction(await createWalletDBAccess(), 'readwrite')('RedPacket')
         const rec = await getRedPacketByID(t, redPacketID)
@@ -166,6 +158,8 @@ export async function onExpired(redPacketID: string) {
         t.objectStore('RedPacket').put(rec)
     }
 }
+
+export async function onRefundResult(id: string, details: { remaining_balance: string }) {}
 
 export async function redPacketSyncInit() {
     const t = createTransaction(await createWalletDBAccess(), 'readonly')('RedPacket')
