@@ -100,7 +100,16 @@ interface WalletRedPacketHistoryDialogProps {
     onDecline(): void
 }
 
+const usePacketHistoryStyles = makeStyles(theme =>
+    createStyles({
+        paper: {
+            backgroundColor: theme.palette.type === 'light' ? '#F7F8FA' : '#343434',
+        },
+    }),
+)
+
 export function WalletRedPacketHistoryDialog(props: WalletRedPacketHistoryDialogProps) {
+    const classes = usePacketHistoryStyles()
     const { onClick, onDecline } = props
     const [tabState, setTabState] = React.useState(0)
 
@@ -109,7 +118,7 @@ export function WalletRedPacketHistoryDialog(props: WalletRedPacketHistoryDialog
             onExit={onDecline}
             title="Red Packets History"
             tabs={
-                <Paper square>
+                <Paper className={classes.paper} square>
                     <Tabs
                         value={tabState}
                         variant="fullWidth"
@@ -161,7 +170,7 @@ interface WalletRedPacketDetailDialogProps {
     onDecline(): void
 }
 
-export function WalletRedPacketDetailDialog(props: WalletRedPacketHistoryDialogProps) {
+export function WalletRedPacketDetailDialog(props: WalletRedPacketDetailDialogProps) {
     const { onDecline } = props
     const classes = useRedPacketDetailStyles()
     return (
