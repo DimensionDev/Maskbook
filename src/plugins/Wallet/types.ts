@@ -1,4 +1,5 @@
 export interface RedPacketAPI {
+    dataSource: 'real' | 'mock'
     /**
      * This function should watch the red packet status on the chain
      *
@@ -33,5 +34,6 @@ export interface RedPacketAPI {
 }
 
 export interface WalletAPI {
+    dataSource: 'real' | 'mock'
     watchWalletBalance(address: string): void
 }

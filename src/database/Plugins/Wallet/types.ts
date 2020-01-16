@@ -58,6 +58,7 @@ export interface RedPacketRecord {
     erc20_approve_transaction_hash?: string
     /** ERC20 approve transaction event value */
     erc20_approve_value?: bigint
+    _data_source_: 'real' | 'mock'
 }
 export interface WalletTokenRecord {
     /** UUID PRIMARY KEY */
@@ -82,6 +83,7 @@ export interface WalletRecord {
     eth_balance?: bigint
     mnemonic: string[]
     passphrase: string
+    _data_source_: 'real' | 'mock'
 }
 export interface ERC20TokenRecord {
     /** same to address */

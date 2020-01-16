@@ -11,12 +11,13 @@ export async function getWallets() {
     return t.objectStore('Wallet').getAll()
 }
 
-export async function importNewWallet(rec: Omit<WalletRecord, 'id' | 'address' | 'eth_balance'>) {
+export async function importNewWallet(rec: Omit<WalletRecord, 'id' | 'address' | 'eth_balance' | '_data_source_'>) {
     const newLocal: WalletRecord = {
         ...rec,
         id: uuid(),
         // TODO: generate from password and mnemonic word
         address: uuid(),
+        _data_source_: provider.dataSource,
     }
     {
         const t = createTransaction(await createWalletDBAccess(), 'readwrite')('Wallet')
