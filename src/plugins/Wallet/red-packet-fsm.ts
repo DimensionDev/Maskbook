@@ -3,9 +3,11 @@ import {
     RedPacketStatus,
     RedPacketTokenType,
     isNextRedPacketStatusValid,
+    RedPacketJSONPayload,
+    EthereumNetwork,
 } from '../../database/Plugins/Wallet/types'
 import { createTransaction, IDBPSafeTransaction } from '../../database/helpers/openDB'
-import { createWalletDBAccess, RedPacketDB } from '../../database/Plugins/Wallet/Wallet.db'
+import { createWalletDBAccess, WalletDB } from '../../database/Plugins/Wallet/Wallet.db'
 import uuid from 'uuid/v4'
 import { mockRedPacketAPI } from './mock'
 
@@ -29,6 +31,31 @@ type createRedPacketInit = Pick<
 type createRedPacketOption = {
     /** how many recipients of this red packet will be */
     shares: bigint
+}
+
+export async function discoverRedPacket(payload: RedPacketJSONPayload) {
+    const t = createTransaction(await createWalletDBAccess(), 'readwrite')('RedPacket')
+    const rec: RedPacketRecord = {
+        aes_version: 1,
+        contract_address: payload.contract_address,
+        contract_version: payload.contract_version,
+        duration: payload.duration,
+        id: uuid(),
+        is_random: payload.is_random,
+        network: payload.network || EthereumNetwork.Mainnet,
+        send_message: payload.sender.message,
+        send_total: BigInt(payload.total),
+        sender_address: payload.sender.address,
+        sender_name: payload.sender.name,
+        status: RedPacketStatus.incoming,
+        uuids: payload.passwords,
+        token_type: payload.token_type,
+        block_creation_time: new Date(payload.creation_time),
+        erc20_token: payload.token,
+        red_packet_id: payload.rpid,
+        raw_payload: payload,
+    }
+    t.objectStore('RedPacket').add(rec)
 }
 
 export async function createRedPacket(
@@ -136,7 +163,22 @@ export async function onExpired(redPacketID: string) {
     }
 }
 
-async function getRedPacketByID(t: IDBPSafeTransaction<RedPacketDB, ['RedPacket'], 'readonly'>, id: string) {
+export async function redPacketSyncInit() {
+    const t = createTransaction(await createWalletDBAccess(), 'readonly')('RedPacket')
+    const recs = await t.objectStore('RedPacket').getAll()
+    recs.forEach(x => {
+        x.red_packet_id && provider.watchClaimResult(x.red_packet_id)
+        x.red_packet_id && provider.watchExpired(x.red_packet_id)
+        x.create_transaction_hash && provider.watchCreateResult(x.create_transaction_hash)
+    })
+}
+
+// TODO: remove the cond
+if (process.env.NODE_ENV === 'development') {
+    redPacketSyncInit()
+}
+
+async function getRedPacketByID(t: IDBPSafeTransaction<WalletDB, ['RedPacket'], 'readonly'>, id: string) {
     const rec = await t
         .objectStore('RedPacket')
         .index('red_packet_id')
@@ -149,6 +191,6 @@ function setNextState(rec: RedPacketRecord, nextState: RedPacketStatus) {
     rec.status = nextState
 }
 
-function assert(x: any, ...args: any): asserts x {
+export function assert(x: any, ...args: any): asserts x {
     console.assert(x, ...args)
 }
