@@ -4,6 +4,7 @@ import { onClaimResult, onCreationResult, onExpired } from './red-packet-fsm'
 import { onWalletBalanceUpdated } from './wallet'
 
 export const mockRedPacketAPI: RedPacketAPI = {
+    dataSource: 'mock',
     async create_red_packet(...args) {
         console.log('create_red_packet', ...args)
         await sleep(1000)
@@ -35,6 +36,7 @@ export const mockRedPacketAPI: RedPacketAPI = {
 }
 
 export const mockWalletAPI: WalletAPI = {
+    dataSource: 'mock',
     watchWalletBalance(address) {
         setInterval(() => {
             onWalletBalanceUpdated(address, BigInt(Math.floor(Math.random() * 1000)))
