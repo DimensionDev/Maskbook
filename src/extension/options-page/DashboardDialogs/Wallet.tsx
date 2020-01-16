@@ -29,6 +29,8 @@ const useSendRedPacketStyles = makeStyles(theme =>
         },
         provider: {
             padding: theme.spacing(0.3, 0),
+            marginTop: theme.spacing(1),
+            marginBottom: theme.spacing(1),
         },
     }),
 )
@@ -42,16 +44,15 @@ export function WalletSendRedPacketDialog(props: WalletSendRedPacketDialogProps)
             title="Send Red Packet"
             content={
                 <>
-                    <Typography className={classes.body}>
-                        You may create a Red Packet when creating a Post. Simply select "Red Packet" in the "Plugins
-                        (Experimental)" section.
-                    </Typography>
-                    <Typography color="primary" className={classes.provider}>
-                        Open facebook.com
-                    </Typography>
-                    <Typography color="primary" className={classes.provider}>
-                        Open twitter.com
-                    </Typography>
+                    <Typography className={classes.body}>Select the social network to post...</Typography>
+                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                        <ActionButton variant="outlined" color="primary" className={classes.provider} width={240}>
+                            Open facebook.com
+                        </ActionButton>
+                        <ActionButton variant="outlined" color="primary" className={classes.provider} width={240}>
+                            Open twitter.com
+                        </ActionButton>
+                    </div>
                 </>
             }></DialogContentItem>
     )
