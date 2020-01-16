@@ -62,6 +62,9 @@ const useStyles = makeStyles(theme =>
         opened: {
             filter: 'opacity(0.5)',
         },
+        cursor: {
+            cursor: 'pointer',
+        },
     }),
 )
 
@@ -76,7 +79,7 @@ export function RedPacketSimplified(props: RedPacketProps) {
     return (
         <Card
             elevation={0}
-            className={classNames(classes.box, { [classes.opened]: state === 'opened' })}
+            className={classNames(classes.box, { [classes.opened]: state === 'opened', [classes.cursor]: onClick })}
             component="article"
             onClick={onClick}>
             <div className={classNames(classes.header, { [classes.flex1]: state === 'opened' })}>
@@ -112,7 +115,11 @@ export function RedPacket(props: RedPacketProps) {
     const classes = useStyles()
     const { onClick } = props
     return (
-        <Card elevation={0} className={classes.box} component="article" onClick={onClick}>
+        <Card
+            elevation={0}
+            className={classNames(classes.box, { [classes.cursor]: onClick })}
+            component="article"
+            onClick={onClick}>
             <div className={classes.header}>
                 <Typography variant="h5">5 USDT</Typography>
                 <Typography className={classes.label} variant="body2">

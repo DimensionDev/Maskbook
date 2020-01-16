@@ -18,6 +18,9 @@ const useStyles = makeStyles((theme: Theme) =>
             display: 'flex',
             alignItems: 'center',
         },
+        cursor: {
+            cursor: 'pointer',
+        },
     }),
 )
 
@@ -36,7 +39,7 @@ export default function WalletLine(props: WalletLineProps) {
 
     return (
         <>
-            <div className={classes.wrapper} onClick={onClick}>
+            <div className={classNames(classes.wrapper, { [classes.cursor]: !!onClick })} onClick={onClick}>
                 <FormControl className={classes.control}>
                     <Typography variant={invert ? 'body1' : 'overline'}>{line1}</Typography>
                     <Typography

@@ -129,7 +129,8 @@ const useExistingPacketStyles = makeStyles(theme =>
             padding: theme.spacing(0.5, 1),
             border: `1px solid ${theme.palette.background.default}`,
             borderRadius: theme.spacing(1),
-            textAlign: 'center',
+            margin: 'auto',
+            cursor: 'pointer',
         },
     }),
 )
@@ -138,7 +139,7 @@ function ExistingPacket(props: RedPacketDialogProps) {
     const classes = useStylesExtends(useExistingPacketStyles(), props)
     return (
         <div className={classes.wrapper}>
-            <Typography component="div" color="primary" className={classes.hint}>
+            <Typography component="a" color="primary" className={classes.hint}>
                 Remove Red Packet from this post
             </Typography>
             <RedPacket />
