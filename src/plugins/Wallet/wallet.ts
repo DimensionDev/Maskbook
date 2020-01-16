@@ -4,8 +4,11 @@ import { WalletRecord } from '../../database/Plugins/Wallet/types'
 import uuid from 'uuid/v4'
 import { mockWalletAPI } from './mock'
 import { assert } from './red-packet-fsm'
+import { PluginMessageCenter } from '../PluginMessages'
 
-const provider = mockWalletAPI
+function getProvider() {
+    return mockWalletAPI
+}
 export async function getWallets() {
     const t = createTransaction(await createWalletDBAccess(), 'readonly')('Wallet')
     return t.objectStore('Wallet').getAll()
@@ -15,15 +18,16 @@ export async function importNewWallet(rec: Omit<WalletRecord, 'id' | 'address' |
     const newLocal: WalletRecord = {
         ...rec,
         id: uuid(),
-        // TODO: generate from password and mnemonic word
+        // TODO: generate address from password and mnemonic word
         address: uuid(),
-        _data_source_: provider.dataSource,
+        _data_source_: getProvider().dataSource,
     }
     {
         const t = createTransaction(await createWalletDBAccess(), 'readwrite')('Wallet')
         t.objectStore('Wallet').add(newLocal)
     }
-    provider.watchWalletBalance(newLocal.address)
+    getProvider().watchWalletBalance(newLocal.address)
+    PluginMessageCenter.emit('maskbook.wallets.update', undefined)
 }
 
 export async function onWalletBalanceUpdated(address: string, newBalance: bigint) {
@@ -31,6 +35,7 @@ export async function onWalletBalanceUpdated(address: string, newBalance: bigint
     const wallet = await getWalletByAddress(t, address)
     wallet.eth_balance = newBalance
     t.objectStore('Wallet').put(wallet)
+    PluginMessageCenter.emit('maskbook.wallets.update', undefined)
 }
 
 export async function removeWallet(id: string) {
@@ -41,13 +46,15 @@ export async function walletSyncInit() {
     const t = createTransaction(await createWalletDBAccess(), 'readonly')('Wallet')
     const wallets = t.objectStore('Wallet').getAll()
     ;(await wallets).forEach(x => {
-        provider.watchWalletBalance(x.address)
+        getProvider().watchWalletBalance(x.address)
     })
 }
 
 // TODO: remove cond
 if (process.env.NODE_ENV === 'development') {
-    walletSyncInit()
+    setTimeout(() => {
+        walletSyncInit()
+    }, 1000)
 }
 
 async function getWalletByAddress(t: IDBPSafeTransaction<WalletDB, ['Wallet'], 'readonly'>, address: string) {

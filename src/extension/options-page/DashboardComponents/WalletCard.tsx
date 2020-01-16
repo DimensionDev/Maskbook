@@ -15,9 +15,10 @@ import {
 } from '../DashboardDialogs/Wallet'
 import { DialogRouter } from '../DashboardDialogs/DialogBase'
 import { useColorProvider } from '../../../utils/theme'
+import { WalletRecord } from '../../../database/Plugins/Wallet/types'
 
 interface Props {
-    persona: Persona
+    wallet: WalletRecord
 }
 
 const useStyles = makeStyles(theme =>
@@ -62,7 +63,7 @@ const useStyles = makeStyles(theme =>
     }),
 )
 
-export default function WalletCard({ persona }: Props) {
+export default function WalletCard({ wallet }: Props) {
     const classes = useStyles()
     const color = useColorProvider()
 
@@ -77,7 +78,7 @@ export default function WalletCard({ persona }: Props) {
             <CardContent>
                 <Typography className={classes.header} variant="h5" component="h2">
                     <>
-                        <span className="title">{persona.nickname}</span>
+                        <span className="title">{wallet.name}</span>
                         <Typography
                             className="fullWidth"
                             variant="body1"
@@ -87,7 +88,7 @@ export default function WalletCard({ persona }: Props) {
                 </Typography>
                 <WalletLine
                     line1="Wallet Address"
-                    line2="0x5201283972828738912738912738123"
+                    line2={wallet.address}
                     action={
                         <Typography color="primary" variant="body1">
                             Copy
@@ -110,7 +111,11 @@ export default function WalletCard({ persona }: Props) {
                     invert
                     line1="ETH"
                     line2="Ethereym"
-                    action={<Typography variant="h5">0.20001</Typography>}
+                    action={
+                        <Typography variant="h5">
+                            {wallet.eth_balance ? wallet.eth_balance.toString() : 'Syncing...'}
+                        </Typography>
+                    }
                 />
                 <WalletLine
                     invert

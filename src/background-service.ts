@@ -16,6 +16,7 @@ import * as WelcomeService from './extension/background-script/WelcomeService'
 import * as IdentityService from './extension/background-script/IdentityService'
 import * as UserGroupService from './extension/background-script/UserGroupService'
 import * as SteganographyService from './extension/background-script/SteganographyService'
+import * as PluginService from './extension/background-script/PluginService'
 import { decryptFromMessageWithProgress } from './extension/background-script/CryptoServices/decryptFrom'
 import { initAutoShareToFriends } from './extension/background-script/Jobs/AutoShareToFriends'
 Object.assign(window, {
@@ -24,6 +25,7 @@ Object.assign(window, {
     SteganographyService,
     IdentityService,
     UserGroupService,
+    PluginService,
 })
 Object.assign(window, {
     ServicesWithProgress: {

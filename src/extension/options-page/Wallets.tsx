@@ -1,18 +1,20 @@
 import React from 'react'
 
 import { makeStyles, createStyles } from '@material-ui/styles'
-import { Theme, Typography, Card, ListItem, Container } from '@material-ui/core'
-import { Link, useHistory, useRouteMatch, Redirect } from 'react-router-dom'
-import { useMyPersonas } from '../../components/DataSource/useActivatedUI'
+import { Theme, Typography, Card, Container } from '@material-ui/core'
+import { useHistory, useRouteMatch, Redirect } from 'react-router-dom'
 import { DialogRouter } from './DashboardDialogs/DialogBase'
 
 import { DatabaseRestoreDialog } from './DashboardDialogs/Database'
 import { PersonaCreateDialog, PersonaCreatedDialog, PersonaImportDialog } from './DashboardDialogs/Persona'
 import FooterLine from './DashboardComponents/FooterLine'
-import { geti18nString } from '../../utils/i18n'
 import WalletCard from './DashboardComponents/WalletCard'
 import PluginRedPacket from '../../components/InjectedComponents/StructuredMessage/RedPacket'
 import StructuredPluginWrapper from '../../components/InjectedComponents/StructuredMessage/StructuredPluginWrapper'
+import Services from '../service'
+import { WalletRecord } from '../../database/Plugins/Wallet/types'
+import { useState, useEffect } from 'react'
+import { PluginMessageCenter } from '../../plugins/PluginMessages'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -53,11 +55,15 @@ const useStyles = makeStyles((theme: Theme) =>
 )
 
 export default function DashboardWalletsPage() {
+    const [wallets, setWallets] = useState<WalletRecord[]>([])
+    useEffect(() =>
+        PluginMessageCenter.on('maskbook.wallets.update', async () => {
+            setWallets(await Services.Plugin.invokePlugin('maskbook.wallet', 'getWallets'))
+        }),
+    )
     const classes = useStyles()
-    const personas = useMyPersonas()
+    // const personas = useMyPersonas()
     const match = useRouteMatch()!
-
-    const history = useHistory()
 
     const dialogs = (
         <>
@@ -74,10 +80,20 @@ export default function DashboardWalletsPage() {
                 <Typography className={classes.title} variant="h5" align="left">
                     My Wallets
                 </Typography>
+                <button
+                    onClick={() => {
+                        Services.Plugin.invokePlugin('maskbook.wallet', 'importNewWallet', {
+                            mnemonic: ['random', 'word'],
+                            name: 'Wallet ' + Math.random(),
+                            passphrase: 'password',
+                        } as Pick<WalletRecord, 'name' | 'mnemonic' | 'passphrase'>)
+                    }}>
+                    Add new random wallet
+                </button>
                 <div>
-                    {personas.map((i, index) => (
+                    {wallets.map((i, index) => (
                         <Card key={`cardIdentity-${index}`} className={classes.identity} raised elevation={1}>
-                            <WalletCard persona={i} key={i.identifier.toText()} />
+                            <WalletCard wallet={i} key={i.id} />
                         </Card>
                     ))}
                 </div>
