@@ -219,9 +219,10 @@ async function updateProveBio() {
 }
 
 export type Query = {
-    identifier: ProfileIdentifier
+    identifier?: ProfileIdentifier
     avatar?: string
     nickname?: string
+    plugin?: string
 }
 export const IdentifierRefContext = React.createContext(selectedIdRef)
 

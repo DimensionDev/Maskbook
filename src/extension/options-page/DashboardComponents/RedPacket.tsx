@@ -1,6 +1,7 @@
 import React from 'react'
 import { makeStyles, createStyles, Card, Typography } from '@material-ui/core'
 import classNames from 'classnames'
+import { getWelcomePageURL } from '../Welcome/getWelcomePageURL'
 
 const useStyles = makeStyles(theme =>
     createStyles({
@@ -73,6 +74,26 @@ interface RedPacketProps {
     state?: 'pending' | 'opening' | 'opened'
 }
 
+const requestNotification = () => {
+    browser.permissions.request({ permissions: ['notifications'] }).then(granted => {
+        if (!granted) return
+        const rand = Math.random()
+        const notification = new Notification('Maskbook', {
+            icon: '128x128.png',
+            body: `Red Packet (${rand})`,
+        })
+        notification.onclick = () => {
+            browser.tabs.create({ url: getWelcomePageURL({ plugin: `redpacket:${rand}` }) })
+        }
+        // browser.notifications.create(null, {
+        //     type: 'basic',
+        //     title: 'Maskbook',
+        //     message: '...',
+        //     requireInteraction: true,
+        // } as any)
+    })
+}
+
 export function RedPacketSimplified(props: RedPacketProps) {
     const classes = useStyles()
     const { onClick, state } = props
@@ -81,7 +102,10 @@ export function RedPacketSimplified(props: RedPacketProps) {
             elevation={0}
             className={classNames(classes.box, { [classes.opened]: state === 'opened', [classes.cursor]: onClick })}
             component="article"
-            onClick={onClick}>
+            onClick={() => {
+                requestNotification()
+                onClick?.()
+            }}>
             <div className={classNames(classes.header, { [classes.flex1]: state === 'opened' })}>
                 {state === 'opened' ? (
                     <Typography variant="h5" color="inherit">
