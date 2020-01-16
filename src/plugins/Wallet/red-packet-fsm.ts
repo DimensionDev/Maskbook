@@ -36,6 +36,7 @@ type createRedPacketOption = {
 export async function discoverRedPacket(payload: RedPacketJSONPayload) {
     const t = createTransaction(await createWalletDBAccess(), 'readwrite')('RedPacket')
     const rec: RedPacketRecord = {
+        _data_source_: provider.dataSource,
         aes_version: 1,
         contract_address: payload.contract_address,
         contract_version: payload.contract_version,
@@ -82,6 +83,7 @@ export async function createRedPacket(
         packet.sender_name,
     )
     const record: RedPacketRecord = {
+        _data_source_: provider.dataSource,
         aes_version: 1,
         contract_version: 1,
         contract_address,
