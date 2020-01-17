@@ -12,6 +12,7 @@ import uuid from 'uuid/v4'
 import { mockRedPacketAPI } from './mock'
 import { RedPacketCreationResult, RedPacketClaimResult } from './types'
 import { getWalletProvider } from './wallet'
+import { PluginMessageCenter } from '../PluginMessages'
 
 function getProvider() {
     return mockRedPacketAPI
@@ -61,6 +62,7 @@ export async function discoverRedPacket(payload: RedPacketJSONPayload) {
         raw_payload: payload,
     }
     t.objectStore('RedPacket').add(rec)
+    PluginMessageCenter.emit('maskbook.red_packets.update', undefined)
 }
 
 export async function getRedPackets(owned: boolean) {
@@ -134,6 +136,7 @@ export async function createRedPacket(
         transaction.objectStore('RedPacket').add(record)
     }
     getProvider().watchCreateResult(create_transaction_hash)
+    PluginMessageCenter.emit('maskbook.red_packets.update', undefined)
     return { passwords }
 }
 
@@ -150,11 +153,18 @@ export async function onCreationResult(recordUUID: string, details: RedPacketCre
         rec.red_packet_id = details.red_packet_id
     }
     t.objectStore('RedPacket').put(rec)
+    PluginMessageCenter.emit('maskbook.red_packets.update', undefined)
 }
 
-export async function claimRedPacket(redPacketID: string, passwords: string[]) {
-    // TODO: what args should i use?
-    const claimReturn = await getProvider().claim(redPacketID, passwords[0], '_recipient???', '_validation???')
+export async function claimRedPacket(redPacketID: string, claimWithWallet: string, passwords: string[]) {
+    const status = await getProvider().checkAvailability(redPacketID)
+    const claimReturn = await getProvider().claim(
+        redPacketID,
+        passwords[status.claimedCount],
+        claimWithWallet,
+        // TODO: what args should i use?
+        '_validation???',
+    )
     {
         const t = createTransaction(await createWalletDBAccess(), 'readwrite')('RedPacket')
         const rec = await getRedPacketByID(t, redPacketID)
@@ -162,6 +172,7 @@ export async function claimRedPacket(redPacketID: string, passwords: string[]) {
         t.objectStore('RedPacket').put(rec)
     }
     getProvider().watchClaimResult(redPacketID)
+    PluginMessageCenter.emit('maskbook.red_packets.update', undefined)
 }
 
 export async function onClaimResult(redPacketID: string, details: RedPacketClaimResult) {
@@ -172,6 +183,7 @@ export async function onClaimResult(redPacketID: string, details: RedPacketClaim
         t.objectStore('RedPacket').put(rec)
     }
     getProvider().watchExpired(redPacketID)
+    PluginMessageCenter.emit('maskbook.red_packets.update', undefined)
 }
 
 export async function onExpired(redPacketID: string) {
@@ -180,9 +192,12 @@ export async function onExpired(redPacketID: string) {
         const rec = await getRedPacketByID(t, redPacketID)
         setNextState(rec, RedPacketStatus.expired)
         t.objectStore('RedPacket').put(rec)
+
+        if (rec.create_transaction_hash) requestRefund(redPacketID)
     }
+    PluginMessageCenter.emit('maskbook.red_packets.update', undefined)
 }
-// TODO: this should be called automatically when the red_packet is outdated
+
 export async function requestRefund(id: string) {
     const { refund_transaction_hash } = await getProvider().refund(id)
     {
@@ -191,6 +206,7 @@ export async function requestRefund(id: string) {
         setNextState(rec, RedPacketStatus.refund_pending)
         rec.refund_transaction_hash = refund_transaction_hash
     }
+    PluginMessageCenter.emit('maskbook.red_packets.update', undefined)
 }
 export async function onRefundResult(id: string, details: { remaining_balance: bigint }) {
     {
@@ -199,6 +215,7 @@ export async function onRefundResult(id: string, details: { remaining_balance: b
         setNextState(rec, RedPacketStatus.refunded)
         t.objectStore('RedPacket').put(rec)
     }
+    PluginMessageCenter.emit('maskbook.red_packets.update', undefined)
 }
 
 export async function redPacketSyncInit() {
