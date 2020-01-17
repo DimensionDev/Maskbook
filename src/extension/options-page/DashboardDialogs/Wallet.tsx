@@ -199,13 +199,13 @@ export function WalletRedPacketDetailDialog(props: WalletRedPacketDetailDialogPr
                     </Typography>
                     <Divider />
                     <WalletLine
-                        line1={<ProviderIcon network="twitter.com">PPPC</ProviderIcon>}
+                        line1="PPPC"
                         line2="0x1191467182361282137761"
                         invert
                         action={<Typography variant="h6">5.28714</Typography>}
                     />
                     <WalletLine
-                        line1={<ProviderIcon network="facebook.com">CCCP</ProviderIcon>}
+                        line1="CCCP"
                         line2="0x1191467182361282137744"
                         invert
                         action={<Typography variant="h6">5.28714</Typography>}
