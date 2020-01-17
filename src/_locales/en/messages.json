@@ -747,6 +747,9 @@
     "please_include_proof_your_bio": {
         "message": "Please include the content in the quote \"$1\" in your bio to use Maskbook"
     },
+    "popup_enter_dashboard": {
+        "message": "Enter Dashboard"
+    },
     "immersive_setup_title": "Setup Maskbook",
     "immersive_setup_connect_as": "Connect as $1?",
     "immersive_setup_connect_as_unknown": "Connect as who?",
