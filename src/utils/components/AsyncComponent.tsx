@@ -8,7 +8,7 @@ type PromiseState<T> =
 export default function AsyncComponent<Return>(props: {
     promise: () => Promise<Return>
     dependencies: ReadonlyArray<unknown>
-    completeComponent: React.ComponentType<{ data: Return }>
+    completeComponent: React.ComponentType<{ data: Return }> | null
     awaitingComponent: React.SuspenseProps['fallback']
     failedComponent: React.ComponentType<{ error: Error }> | null
 }) {
@@ -30,15 +30,14 @@ export default function AsyncComponent<Return>(props: {
                     return {
                         default: () => {
                             const CompleteComponent = props.completeComponent
-                            return <CompleteComponent data={data} />
+                            return CompleteComponent ? <CompleteComponent data={data} /> : null
                         },
                     }
                 } catch (e) {
                     return {
                         default: () => {
                             const FailedComponent = props.failedComponent
-                            if (FailedComponent === null) return null
-                            return <FailedComponent error={e} />
+                            return FailedComponent ? <FailedComponent error={e} /> : null
                         },
                     }
                 }
