@@ -6,7 +6,7 @@ import { mockWalletAPI } from './mock'
 import { assert } from './red-packet-fsm'
 import { PluginMessageCenter } from '../PluginMessages'
 
-function getProvider() {
+export function getWalletProvider() {
     return mockWalletAPI
 }
 export async function getWallets() {
@@ -20,13 +20,13 @@ export async function importNewWallet(rec: Omit<WalletRecord, 'id' | 'address' |
         id: uuid(),
         // TODO: generate address from password and mnemonic word
         address: uuid(),
-        _data_source_: getProvider().dataSource,
+        _data_source_: getWalletProvider().dataSource,
     }
     {
         const t = createTransaction(await createWalletDBAccess(), 'readwrite')('Wallet')
         t.objectStore('Wallet').add(newLocal)
     }
-    getProvider().watchWalletBalance(newLocal.address)
+    getWalletProvider().watchWalletBalance(newLocal.address)
     PluginMessageCenter.emit('maskbook.wallets.update', undefined)
 }
 
@@ -46,7 +46,7 @@ export async function walletSyncInit() {
     const t = createTransaction(await createWalletDBAccess(), 'readonly')('Wallet')
     const wallets = t.objectStore('Wallet').getAll()
     ;(await wallets).forEach(x => {
-        getProvider().watchWalletBalance(x.address)
+        getWalletProvider().watchWalletBalance(x.address)
     })
 }
 

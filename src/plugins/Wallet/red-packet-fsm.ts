@@ -11,6 +11,7 @@ import { createWalletDBAccess, WalletDB } from '../../database/Plugins/Wallet/Wa
 import uuid from 'uuid/v4'
 import { mockRedPacketAPI } from './mock'
 import { RedPacketCreationResult, RedPacketClaimResult } from './types'
+import { getWalletProvider } from './wallet'
 
 function getProvider() {
     return mockRedPacketAPI
@@ -69,13 +70,26 @@ export async function createRedPacket(
     if (packet.send_total < otherOptions.shares) {
         throw new Error('At least [number of red packets] tokens to your red packet.')
     } else if (otherOptions.shares < 0) {
-        throw new Error('At least 1 person can claim the red packet.')
+        throw new Error('At least 1 person should be able to claim the red packet.')
     }
-    const passwords: string[] = Array(Number(otherOptions.shares)).map(uuid)
+    const passwords: string[] = Array(Number(otherOptions.shares))
+        .fill('')
+        .map(uuid)
+    let erc20_approve_transaction_hash: string | undefined = undefined
+    let erc20_approve_value: bigint | undefined = undefined
+    let erc20_token: string | undefined = undefined
     if (packet.token_type === RedPacketTokenType.erc20) {
-        throw new Error('Not implemented')
-        // @ts-ignore TODO:
-        await some_special_handling()
+        if (!packet.erc20_token?.address) throw new Error('ERC20 token should have erc20_token field')
+        const res = await getWalletProvider().approveERC20Token({
+            redPacketAddress: contract_address,
+            amount: packet.send_total,
+            erc20TokenAddress: packet.erc20_token.address,
+        })
+        TODO: erc20_token = ''
+        erc20_approve_transaction_hash = res.erc20_approve_transaction_hash
+        erc20_approve_value = res.erc20_approve_value
+    } else if (packet.token_type === RedPacketTokenType.erc721) {
+        throw new Error('Not supported')
     }
     const { create_transaction_hash, create_nonce } = await getProvider().create(
         passwords,
@@ -104,6 +118,9 @@ export async function createRedPacket(
         block_creation_time: new Date(),
         create_nonce,
         create_transaction_hash,
+        erc20_approve_transaction_hash,
+        erc20_approve_value,
+        erc20_token: undefined,
     }
     {
         const transaction = createTransaction(await createWalletDBAccess(), 'readwrite')(...everything)
@@ -158,8 +175,24 @@ export async function onExpired(redPacketID: string) {
         t.objectStore('RedPacket').put(rec)
     }
 }
-
-export async function onRefundResult(id: string, details: { remaining_balance: string }) {}
+// TODO: this should be called automatically when the red_packet is outdated
+export async function requestRefund(id: string) {
+    const { refund_transaction_hash } = await getProvider().refund(id)
+    {
+        const t = createTransaction(await createWalletDBAccess(), 'readwrite')('RedPacket')
+        const rec = await getRedPacketByID(t, id)
+        setNextState(rec, RedPacketStatus.refund_pending)
+        rec.refund_transaction_hash = refund_transaction_hash
+    }
+}
+export async function onRefundResult(id: string, details: { remaining_balance: bigint }) {
+    {
+        const t = createTransaction(await createWalletDBAccess(), 'readwrite')('RedPacket')
+        const rec = await getRedPacketByID(t, id)
+        setNextState(rec, RedPacketStatus.refunded)
+        t.objectStore('RedPacket').put(rec)
+    }
+}
 
 export async function redPacketSyncInit() {
     const t = createTransaction(await createWalletDBAccess(), 'readonly')('RedPacket')
