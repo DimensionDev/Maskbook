@@ -18,7 +18,7 @@ function getProvider() {
 // TODO
 const contract_address = 'unknown'
 const everything = ['ERC20Token', 'RedPacket', 'Wallet', 'WalletToken'] as const
-type createRedPacketInit = Pick<
+export type createRedPacketInit = Pick<
     RedPacketRecord,
     | 'is_random'
     | 'duration'
@@ -28,10 +28,10 @@ type createRedPacketInit = Pick<
     | 'send_message'
     | 'network'
     | 'token_type'
-    // | 'erc20_token'
+    | 'erc20_token'
 >
 
-type createRedPacketOption = {
+export type createRedPacketOption = {
     /** how many recipients of this red packet will be */
     shares: bigint
 }

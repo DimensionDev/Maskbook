@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useRef, useState, useCallback } from 'react'
 import {
     makeStyles,
     withMobileDialog,
@@ -16,10 +16,15 @@ import {
     MenuItem,
 } from '@material-ui/core'
 import { useStylesExtends } from '../custom-ui-helper'
-import { geti18nString } from '../../utils/i18n'
 import { DialogDismissIconUI } from './DialogDismissIcon'
 import BackupRestoreTab from '../../extension/options-page/DashboardComponents/BackupRestoreTab'
 import { RedPacket } from '../../extension/options-page/DashboardComponents/RedPacket'
+import Services from '../../extension/service'
+import { createRedPacketInit, createRedPacketOption } from '../../plugins/Wallet/red-packet-fsm'
+import { EthereumNetwork, RedPacketTokenType } from '../../database/Plugins/Wallet/types'
+import { useLastRecognizedIdentity, useCurrentIdentity } from '../DataSource/useActivatedUI'
+import { PortalShadowRoot } from '../../utils/jss/ShadowRootPortal'
+import { useCapturedInput } from '../../utils/hooks/useCapturedEvents'
 
 interface RedPacketDialogProps
     extends withClasses<
@@ -38,7 +43,7 @@ interface RedPacketDialogProps
         | 'switch'
     > {
     open: boolean
-    onConfirm: () => void
+    onConfirm: (opt: createRedPacketInit & createRedPacketOption) => void
     onDecline: () => void
 }
 
@@ -57,12 +62,43 @@ const useNewPacketStyles = makeStyles(theme =>
 
 function NewPacket(props: RedPacketDialogProps) {
     const classes = useStylesExtends(useNewPacketStyles(), props)
+    const id = useCurrentIdentity()
+    const [is_random, setIsRandom] = useState(true)
+
+    const [send_message, setMsg] = useState('Best Wishes!')
+    const [, msgRef] = useCapturedInput(setMsg)
+
+    const [send_pre_share, setTotal] = useState(5)
+    const [, totalRef] = useCapturedInput(x => setTotal(parseInt(x)))
+
+    const [shares, setShares] = useState(5)
+    const [, sharesRef] = useCapturedInput(x => setShares(parseInt(x)))
+
+    const send_total = shares * send_pre_share
+    const isSendTotalLegal = Number.isNaN(send_total) || send_total <= 0
+
+    const createRedPacket = () =>
+        props.onConfirm({
+            duration: 60 /** seconds */ * 60 /** mins */ * 24 /** hours */,
+            is_random,
+            // TODO: Select network in debug mode?
+            network: EthereumNetwork.Rinkeby,
+            send_message,
+            send_total: BigInt(send_total),
+            // TODO: fill with wallet address
+            sender_address: '0x???',
+            // TODO: a better default?
+            sender_name: id?.nickname ?? 'A maskbook user',
+            shares: BigInt(shares),
+            // TODO: support erc20
+            token_type: RedPacketTokenType.eth,
+        })
     return (
         <div>
             <div className={classes.line}>
                 <FormControl variant="filled" className={classes.input}>
                     <InputLabel>Token</InputLabel>
-                    <Select value={10}>
+                    <Select MenuProps={{ container: PortalShadowRoot }} value={10}>
                         <MenuItem key={10} value={10}>
                             USDT
                         </MenuItem>
@@ -73,23 +109,39 @@ function NewPacket(props: RedPacketDialogProps) {
                 </FormControl>
                 <FormControl variant="filled" className={classes.input}>
                     <InputLabel>Split Mode</InputLabel>
-                    <Select value={10}>
-                        <MenuItem key={10} value={10}>
-                            Average
-                        </MenuItem>
-                        <MenuItem key={20} value={20}>
-                            Random
-                        </MenuItem>
+                    <Select
+                        MenuProps={{ container: PortalShadowRoot }}
+                        value={is_random ? 1 : 0}
+                        onChange={e => setIsRandom(!!e.currentTarget.value)}>
+                        <MenuItem value="0">Average</MenuItem>
+                        <MenuItem value="1">Random</MenuItem>
                     </Select>
                 </FormControl>
             </div>
             <div className={classes.line}>
-                <TextField className={classes.input} label="Amount per Share" variant="filled" defaultValue="0.5" />
-                <TextField className={classes.input} label="Shares" variant="filled" defaultValue="5" />
+                <TextField
+                    className={classes.input}
+                    InputProps={{ inputRef: totalRef }}
+                    inputProps={{ min: 1 }}
+                    label="Amount per Share"
+                    variant="filled"
+                    type="number"
+                    defaultValue={send_pre_share}
+                />
+                <TextField
+                    className={classes.input}
+                    InputProps={{ inputRef: sharesRef }}
+                    inputProps={{ min: 1 }}
+                    label="Shares"
+                    variant="filled"
+                    type="number"
+                    defaultValue={shares}
+                />
             </div>
             <div className={classes.line}>
                 <TextField
                     className={classes.input}
+                    InputProps={{ inputRef: msgRef }}
                     label="Attached Message"
                     variant="filled"
                     defaultValue="Best Wishes!"
@@ -105,8 +157,9 @@ function NewPacket(props: RedPacketDialogProps) {
                     style={{ marginLeft: 'auto', width: 140 }}
                     color="primary"
                     variant="contained"
-                    onClick={props.onConfirm}>
-                    Send 2.5 USDT
+                    disabled={isSendTotalLegal}
+                    onClick={createRedPacket}>
+                    Send {isSendTotalLegal ? '?' : send_total} USDT
                 </Button>
             </div>
         </div>
@@ -172,18 +225,30 @@ const ResponsiveDialog = withMobileDialog({ breakpoint: 'xs' })(Dialog)
 export default function RedPacketDialog(props: RedPacketDialogProps) {
     const classes = useStylesExtends(useStyles(), props)
     const rootRef = useRef<HTMLDivElement>(null)
+    const [currentTab, setCurrentTab] = useState(0)
+
+    const createRedPacket = useCallback((opt: createRedPacketInit & createRedPacketOption) => {
+        const { shares, ...rest } = opt
+        Services.Plugin.invokePlugin(
+            'maskbook.red_packet',
+            'createRedPacket',
+            rest,
+            { shares },
+            // TODO: UI switch to another board
+        ).then(console.log, console.error)
+        setCurrentTab(1)
+    }, [])
 
     const tabs = [
         {
             label: 'Create New',
-            component: <NewPacket {...props} />,
+            component: <NewPacket {...props} onConfirm={createRedPacket} />,
         },
         {
             label: 'Select Existing',
             component: <ExistingPacket {...props} />,
         },
     ]
-    const currentTab = useState(0)
 
     return (
         <div ref={rootRef}>
@@ -213,7 +278,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                     </Typography>
                 </DialogTitle>
                 <DialogContent className={classes.content}>
-                    <BackupRestoreTab height={292} state={currentTab} tabs={tabs}></BackupRestoreTab>
+                    <BackupRestoreTab height={292} state={[currentTab, setCurrentTab]} tabs={tabs}></BackupRestoreTab>
                 </DialogContent>
             </ResponsiveDialog>
         </div>
