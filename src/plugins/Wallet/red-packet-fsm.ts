@@ -63,6 +63,13 @@ export async function discoverRedPacket(payload: RedPacketJSONPayload) {
     t.objectStore('RedPacket').add(rec)
 }
 
+export async function getRedPackets(owned: boolean) {
+    const t = createTransaction(await createWalletDBAccess(), 'readonly')('RedPacket')
+    const all = await t.objectStore('RedPacket').getAll()
+    if (owned) return all.filter(x => x.create_transaction_hash)
+    return all
+}
+
 export async function createRedPacket(
     packet: createRedPacketInit,
     otherOptions: createRedPacketOption,
