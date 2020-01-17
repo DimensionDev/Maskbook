@@ -32,6 +32,7 @@ export function injectPostInspectorDefault<T extends string>(
                 postId={id}
                 post={content}
                 postBy={by}
+                AddToKeyStoreProps={{ failedComponent: null }}
                 {...additionalProps}
             />
         )
