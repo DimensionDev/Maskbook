@@ -35,7 +35,7 @@ interface CheckRedPacketAvailabilityResult {
 
 export interface RedPacketAPI {
     dataSource: 'real' | 'mock'
-    watchCreateResult(transaction: string): void
+    watchCreateResult(transaction: string, related_uuid: string): void
     watchClaimResult(transaction: string): void
     watchExpired(red_packet_id: string): void
     watchRefundResult(transaction: string): void
@@ -84,9 +84,9 @@ export interface RedPacketAPI {
     ): Promise<{ claim_transaction_hash: string }>
     /**
      * Refund transaction hash
-     * @param id Red packet ID
+     * @param red_packet_id Red packet ID
      */
-    refund(id: string): Promise<{ refund_transaction_hash: string }>
+    refund(red_packet_id: string): Promise<{ refund_transaction_hash: string }>
     /**
      * Check who has claimed the red packet.
      * @returns A Map<wallet_address, claimed_amount>

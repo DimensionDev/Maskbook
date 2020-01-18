@@ -11,6 +11,7 @@ import { TransactionObject } from '../../contracts/types'
 import { RedPacketTokenType } from '../../database/Plugins/Wallet/types'
 import { asyncTimes, pollingTask } from '../../utils/utils'
 
+// TODO: should not be a constant. should respect the value in the red packet record
 const RED_PACKET_CONTRACT_ADDRESS = '0x19D0b6091D37Bc262ecC460ee4Bd57DBBD68754C'
 
 function createRedPacketContract(address: string) {
@@ -132,7 +133,7 @@ export const redPacketAPI: RedPacketAPI = {
                 })
             })
     },
-    async watchCreateResult(transactionHash: string) {
+    async watchCreateResult(transactionHash: string, related_uuid: string) {
         const contract = createRedPacketContract(RED_PACKET_CONTRACT_ADDRESS)
         const { blockNumber } = await web3.eth.getTransaction(transactionHash)
 
@@ -154,7 +155,7 @@ export const redPacketAPI: RedPacketAPI = {
                     creation_time: string
                     token_address: string
                 }
-                onCreationResult(transactionHash, {
+                onCreationResult(related_uuid, {
                     type: 'success',
                     block_creation_time: new Date(parseInt(creation_time) * 1000),
                     red_packet_id: id,
