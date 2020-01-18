@@ -192,9 +192,6 @@ function ExistingPacket(props: RedPacketDialogProps) {
             <Typography component="a" color="primary" className={classes.hint}>
                 Remove Red Packet from this post
             </Typography>
-            <RedPacket />
-            <RedPacket />
-            <RedPacket />
         </div>
     )
 }

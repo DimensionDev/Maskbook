@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { Button, Typography, makeStyles, createStyles } from '@material-ui/core'
-import { RedPacketSimplified } from '../../../extension/options-page/DashboardComponents/RedPacket'
+import { RedPacketWithState } from '../../../extension/options-page/DashboardComponents/RedPacket'
 
 const useStyles = makeStyles(theme =>
     createStyles({
@@ -21,9 +21,6 @@ export default function PluginRedPacket() {
     const classes = useStyles()
     return (
         <div>
-            <RedPacketSimplified state="pending" />
-            <RedPacketSimplified state="opening" />
-            <RedPacketSimplified state="opened" />
             <Button variant="contained" color="primary" className={classes.button}>
                 Open Red Packet
             </Button>

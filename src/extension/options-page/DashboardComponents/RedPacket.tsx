@@ -2,6 +2,7 @@ import React from 'react'
 import { makeStyles, createStyles, Card, Typography } from '@material-ui/core'
 import classNames from 'classnames'
 import { getWelcomePageURL } from '../Welcome/getWelcomePageURL'
+import { RedPacketRecord } from '../../../database/Plugins/Wallet/types'
 
 const useStyles = makeStyles(theme =>
     createStyles({
@@ -72,6 +73,7 @@ const useStyles = makeStyles(theme =>
 interface RedPacketProps {
     onClick?(): void
     state?: 'pending' | 'opening' | 'opened'
+    redPacket: RedPacketRecord
 }
 
 const requestNotification = () => {
@@ -94,9 +96,9 @@ const requestNotification = () => {
     })
 }
 
-export function RedPacketSimplified(props: RedPacketProps) {
+export function RedPacketWithState(props: RedPacketProps) {
     const classes = useStyles()
-    const { onClick, state } = props
+    const { onClick, state, redPacket } = props
     return (
         <Card
             elevation={0}
@@ -109,11 +111,11 @@ export function RedPacketSimplified(props: RedPacketProps) {
             <div className={classNames(classes.header, { [classes.flex1]: state === 'opened' })}>
                 {state === 'opened' ? (
                     <Typography variant="h5" color="inherit">
-                        5 USDT
+                        {redPacket.claim_amount} USDT
                     </Typography>
                 ) : (
                     <Typography variant="body1" color="inherit">
-                        From Jackworks
+                        From {redPacket.sender_name}
                     </Typography>
                 )}
                 {state !== 'pending' && (
@@ -124,10 +126,10 @@ export function RedPacketSimplified(props: RedPacketProps) {
             </div>
             <div className={classNames(classes.content)}>
                 <Typography className={classes.words} variant="h6">
-                    Best Wishes!
+                    {redPacket.send_message}
                 </Typography>
                 <Typography variant="body2">
-                    {state === 'pending' ? 'Ready to open' : '35.01 USDT / 5 Shares'}
+                    {state === 'pending' ? 'Ready to open' : `${redPacket.send_total} USDT / Unknown Shares`}
                 </Typography>
             </div>
             <div className={classes.packet}></div>
@@ -137,7 +139,7 @@ export function RedPacketSimplified(props: RedPacketProps) {
 
 export function RedPacket(props: RedPacketProps) {
     const classes = useStyles()
-    const { onClick } = props
+    const { onClick, redPacket } = props
     return (
         <Card
             elevation={0}
@@ -145,16 +147,18 @@ export function RedPacket(props: RedPacketProps) {
             component="article"
             onClick={onClick}>
             <div className={classes.header}>
-                <Typography variant="h5">5 USDT</Typography>
+                <Typography variant="h5">
+                    {redPacket.claim_amount ? redPacket.claim_amount.toLocaleString() : 'Unknown'} USDT
+                </Typography>
                 <Typography className={classes.label} variant="body2">
                     Received
                 </Typography>
             </div>
             <div className={classes.content}>
                 <Typography className={classes.words} variant="h6">
-                    Best Wishes!
+                    {redPacket.send_message}
                 </Typography>
-                <Typography variant="body1">35.01 USDT / 7 shares</Typography>
+                <Typography variant="body1">{redPacket.send_total.toLocaleString()} USDT / Unknown shares</Typography>
             </div>
             <div className={classes.packet}></div>
         </Card>

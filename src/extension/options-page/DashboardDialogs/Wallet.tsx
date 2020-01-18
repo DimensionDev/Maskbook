@@ -99,7 +99,7 @@ export function WalletAddTokenDialog(props: WalletAddTokenDialogProps) {
 }
 
 interface WalletRedPacketHistoryDialogProps {
-    onClick?(packet: RedPacketRecord['id']): void
+    onClick?(packet: RedPacketRecord): void
     onDecline(): void
 }
 
@@ -122,6 +122,7 @@ export function WalletRedPacketHistoryDialog(props: WalletRedPacketHistoryDialog
             Services.Plugin.invokePlugin('maskbook.red_packet', 'getRedPackets', tabState === 1).then(
                 setRedPacketRecords,
             )
+
         PluginMessageCenter.on('maskbook.red_packets.update', updateHandler)
         updateHandler()
         return () => {
@@ -150,9 +151,10 @@ export function WalletRedPacketHistoryDialog(props: WalletRedPacketHistoryDialog
                 <>
                     {redPacketRecords.map(record => (
                         <WalletLine
+                            key={record.id}
                             line1={record.send_message}
                             line2={`${record.block_creation_time} hr ago from ${record.sender_name}`}
-                            onClick={() => onClick?.(record.id)}
+                            onClick={() => onClick?.(record)}
                             invert
                             action={
                                 <Typography variant="h6">
@@ -175,11 +177,13 @@ const useRedPacketDetailStyles = makeStyles(theme =>
 )
 
 interface WalletRedPacketDetailDialogProps {
+    redPacket: RedPacketRecord
     onDecline(): void
 }
 
 export function WalletRedPacketDetailDialog(props: WalletRedPacketDetailDialogProps) {
-    const { onDecline } = props
+    const { redPacket, onDecline } = props
+
     const classes = useRedPacketDetailStyles()
     return (
         <DialogContentItem
@@ -188,20 +192,23 @@ export function WalletRedPacketDetailDialog(props: WalletRedPacketDetailDialogPr
             title="Red Packet Detail"
             content={
                 <>
-                    <RedPacket />
+                    <RedPacket redPacket={redPacket} />
                     <WalletLine
                         line1="Source"
-                        line2={<Typography color="primary">twitter.com/status/668163...</Typography>}
+                        line2={<Typography color="primary">{redPacket.sender_address}</Typography>}
                     />
                     <WalletLine
                         line1="From"
                         line2={
                             <>
-                                CMK <Chip label="Me" variant="outlined" color="secondary" size="small"></Chip>
+                                {redPacket.sender_name}{' '}
+                                {redPacket.create_transaction_hash && (
+                                    <Chip label="Me" variant="outlined" color="secondary" size="small"></Chip>
+                                )}
                             </>
                         }
                     />
-                    <WalletLine line1="Message" line2="Best Wishes!" />
+                    <WalletLine line1="Message" line2={redPacket.send_message} />
                     <Typography className={classes.openBy} variant="subtitle1">
                         Opened By
                     </Typography>
@@ -220,7 +227,7 @@ export function WalletRedPacketDetailDialog(props: WalletRedPacketDetailDialogPr
                     />
                     <Box p={1} display="flex" justifyContent="center">
                         <Typography variant="caption" color="textSecondary">
-                            2 hr ago created, 2 hr ago received.
+                            {redPacket.block_creation_time?.toLocaleString()} hr ago created, 2 hr ago received.
                         </Typography>
                     </Box>
                 </>

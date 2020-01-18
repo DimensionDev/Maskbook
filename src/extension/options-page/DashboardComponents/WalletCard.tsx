@@ -15,7 +15,7 @@ import {
 } from '../DashboardDialogs/Wallet'
 import { DialogRouter } from '../DashboardDialogs/DialogBase'
 import { useColorProvider } from '../../../utils/theme'
-import { WalletRecord } from '../../../database/Plugins/Wallet/types'
+import { WalletRecord, RedPacketRecord } from '../../../database/Plugins/Wallet/types'
 
 interface Props {
     wallet: WalletRecord
@@ -71,7 +71,7 @@ export default function WalletCard({ wallet }: Props) {
     const [showAddToken, setShowAddToken] = React.useState(false)
     const [showSendPacket, setShowSendPacket] = React.useState(false)
     const [showRedPacketHistory, setShowRedPacketHistory] = React.useState(false)
-    const [showRedPacketDetail, setShowRedPacketDetail] = React.useState(false)
+    const [showRedPacketDetail, setShowRedPacketDetail] = React.useState<RedPacketRecord | null>(null)
 
     return (
         <>
@@ -164,7 +164,7 @@ export default function WalletCard({ wallet }: Props) {
                     onExit={() => setShowRedPacketHistory(false)}
                     children={
                         <WalletRedPacketHistoryDialog
-                            onClick={() => setShowRedPacketDetail(true)}
+                            onClick={setShowRedPacketDetail}
                             onDecline={() => setShowRedPacketHistory(false)}
                         />
                     }
@@ -172,8 +172,13 @@ export default function WalletCard({ wallet }: Props) {
             )}
             {showRedPacketDetail && (
                 <DialogRouter
-                    onExit={() => setShowRedPacketDetail(false)}
-                    children={<WalletRedPacketDetailDialog onDecline={() => setShowRedPacketDetail(false)} />}
+                    onExit={() => setShowRedPacketDetail(null)}
+                    children={
+                        <WalletRedPacketDetailDialog
+                            redPacket={showRedPacketDetail}
+                            onDecline={() => setShowRedPacketDetail(null)}
+                        />
+                    }
                 />
             )}
         </>
