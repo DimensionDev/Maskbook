@@ -133,3 +133,23 @@ export const batchReplace = (source: string, group: Array<[string | RegExp, stri
     }
     return storage
 }
+
+export const asyncTimes = async <T>(
+    times: number,
+    iteratee: () => Promise<T | void>,
+    {
+        earlyStop = true,
+    }: {
+        earlyStop?: boolean // stop for first value
+    } = {},
+) => {
+    const result: (T | void)[] = []
+
+    for await (const i of Array.from(Array(times).keys())) {
+        result.push(await iteratee())
+        if (typeof result[i] !== 'undefined' && earlyStop) {
+            break
+        }
+    }
+    return result
+}

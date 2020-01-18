@@ -10,6 +10,7 @@ import { HappyRedPacket } from '../../contracts/HappyRedPacket'
 import { IERC20 } from '../../contracts/IERC20'
 import { TransactionObject } from '../../contracts/types'
 import { RedPacketTokenType } from '../../database/Plugins/Wallet/types'
+import { asyncTimes } from '../../utils/utils'
 
 function createRedPacketContract(address: string) {
     return (new web3.eth.Contract(HappyRedPacketABI as AbiItem[], address) as unknown) as HappyRedPacket
@@ -82,34 +83,97 @@ export const redPacketAPI: RedPacketAPI = {
         return BigInt(await tx.send(await createTxPayload(tx)))
     },
 
-    async watchClaimResult(id: string) {
-        console.log('Mock: Watching calming result', id)
-        await sleep(10000)
-        const r: RedPacketClaimResult =
-            Math.random() > 0.5
-                ? {
-                      type: 'success',
-                      claimed_value: Math.random(),
-                      claimer: 'claimer address',
-                      red_packet_id: 'red packed id',
-                  }
-                : { type: 'failed' }
-        onClaimResult(id, r)
+    async watchClaimResult(transactionHash: string) {
+        const contract = createRedPacketContract('0x0')
+        const { blockNumber } = await web3.eth.getTransaction(transactionHash)
+
+        if (!blockNumber) {
+            return
+        }
+        asyncTimes(10, async () => {
+            const evs = await contract.getPastEvents('ClaimSuccess', {
+                fromBlock: blockNumber,
+                toBlock: blockNumber,
+            })
+            const claimSuccessEv = evs.find(ev => ev.transactionHash === transactionHash)
+
+            if (claimSuccessEv) {
+                const { id, claimer, claimed_value } = claimSuccessEv.returnValues as {
+                    id: string
+                    claimer: string
+                    claimed_value: string
+                    token_address: string
+                }
+                onClaimResult(transactionHash, {
+                    type: 'success',
+                    claimed_value: BigInt(claimed_value),
+                    claimer,
+                    red_packet_id: id,
+                })
+                return true
+            }
+        })
+            .then(results => {
+                if (!results.some(r => r)) {
+                    onClaimResult(transactionHash, {
+                        type: 'failed',
+                        reason: 'timeout',
+                    })
+                }
+            })
+            .catch(e => {
+                onClaimResult(transactionHash, {
+                    type: 'failed',
+                    reason: e.message,
+                })
+            })
     },
     async watchCreateResult(transactionHash: string) {
-        console.log('Mock: Watching creation...', transactionHash)
-        await sleep(10000)
-        const f: RedPacketCreationResult =
-            Math.random() > 0.5
-                ? {
-                      type: 'success',
-                      block_creation_time: new Date(),
-                      red_packet_id: 'red packet id',
-                      creator: 'creator address',
-                      total: 23,
-                  }
-                : { type: 'failed', reason: 'uh.chuchuc' }
-        onCreationResult(transactionHash, f)
+        const contract = createRedPacketContract('0x0')
+        const { blockNumber } = await web3.eth.getTransaction(transactionHash)
+
+        if (!blockNumber) {
+            return
+        }
+        asyncTimes(10, async () => {
+            const evs = await contract.getPastEvents('CreationSuccess', {
+                fromBlock: blockNumber,
+                toBlock: blockNumber,
+            })
+            const creationSuccessEv = evs.find(ev => ev.transactionHash === transactionHash)
+
+            if (creationSuccessEv) {
+                const { total, id, creator, creation_time, token_address } = creationSuccessEv.returnValues as {
+                    total: string
+                    id: string
+                    creator: string
+                    creation_time: string
+                    token_address: string
+                }
+                onCreationResult(transactionHash, {
+                    type: 'success',
+                    block_creation_time: new Date(parseInt(creation_time) * 1000),
+                    red_packet_id: id,
+                    creator,
+                    total: BigInt(total),
+                })
+                return true
+            }
+        })
+            .then(results => {
+                if (!results.some(r => r)) {
+                    onCreationResult(transactionHash, {
+                        type: 'failed',
+                        reason: 'timeout',
+                    })
+                }
+            })
+            .catch(e => {
+                onCreationResult(transactionHash, {
+                    type: 'failed',
+                    reason: e.message,
+                })
+            })
     },
     async watchExpired(id: string) {
         console.log('Mock: watching expired', id)
@@ -142,9 +206,32 @@ export const redPacketAPI: RedPacketAPI = {
                 .on('error', (error: Error) => reject(error))
         })
     },
-    watchRefundResult(transactionHash: string) {
-        console.log('Mock: Watching refund result...')
-        onRefundResult(id, { remaining_balance: BigInt(10) })
+    async watchRefundResult(transactionHash: string) {
+        const contract = createRedPacketContract('0x0')
+        const { blockNumber } = await web3.eth.getTransaction(transactionHash)
+
+        if (!blockNumber) {
+            return
+        }
+        asyncTimes(10, async () => {
+            const evs = await contract.getPastEvents('RefundSuccess', {
+                fromBlock: blockNumber,
+                toBlock: blockNumber,
+            })
+            const refundSuccessEv = evs.find(ev => ev.transactionHash === transactionHash)
+
+            if (refundSuccessEv) {
+                const { id, remaining_balance } = refundSuccessEv.returnValues as {
+                    id: string
+                    token_address: string
+                    remaining_balance: string
+                }
+
+                onRefundResult(id, {
+                    remaining_balance: BigInt(remaining_balance),
+                })
+            }
+        })
     },
     async checkClaimedList(id: string) {
         const contract = createRedPacketContract('0x0')
