@@ -10,6 +10,7 @@ import { IERC20 } from '../../contracts/IERC20'
 import { TransactionObject } from '../../contracts/types'
 import { RedPacketTokenType } from '../../database/Plugins/Wallet/types'
 import { asyncTimes, pollingTask } from '../../utils/utils'
+import { zip } from 'lodash-es'
 
 const RED_PACKET_CONTRACT_ADDRESS = '0x0'
 
@@ -246,10 +247,13 @@ export const redPacketAPI: RedPacketAPI = {
     async checkClaimedList(id: string) {
         const contract = createRedPacketContract(RED_PACKET_CONTRACT_ADDRESS)
         const tx = contract.methods.check_claimed_list(id)
-        const map = new Map<string, bigint>()
-        const result = await tx.call(await createTxPayload(tx))
-        result.claimer_addrs.forEach((addr, index) => map.set(addr, BigInt(result.claimed_list[index])))
-        return map
+        const { claimed_list, claimer_addrs } = await tx.call(await createTxPayload(tx))
+        return new Map<string, bigint>(
+            zip(
+                claimer_addrs,
+                claimed_list.map(n => BigInt(n)),
+            ) as [string, bigint][],
+        )
     },
 }
 
