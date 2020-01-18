@@ -27,19 +27,19 @@ export const cryptoProviderTable = {
 } as const
 
 export interface TypedMessageMetadata {
-    meta?: object
-    version: 1
+    readonly meta?: object
+    readonly version: 1
 }
 export interface TypedMessageText extends TypedMessageMetadata {
-    type: 'text'
-    content: string
+    readonly type: 'text'
+    readonly content: string
 }
 export interface TypedMessageComplex extends TypedMessageMetadata {
-    type: 'complex'
-    items: TypedMessage[]
+    readonly type: 'complex'
+    readonly items: readonly TypedMessage[]
 }
 export interface TypedMessageUnknown extends TypedMessageMetadata {
-    type: 'unknown'
+    readonly type: 'unknown'
 }
 export type TypedMessage = TypedMessageText | TypedMessageComplex | TypedMessageUnknown
 export function makeTypedMessage(text: string, meta?: object): TypedMessageText

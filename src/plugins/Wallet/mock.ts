@@ -70,7 +70,10 @@ export const mockRedPacketAPI: RedPacketAPI = {
         onRefundResult(id, { remaining_balance: BigInt(10) })
     },
     async checkClaimedList(id) {
-        return { claimed_list: ['123', '234'], claimer_addrs: ['0x1234'] }
+        return new Map([
+            ['0x123', BigInt(123)],
+            ['0x234', BigInt(234)],
+        ])
     },
 }
 

@@ -14,6 +14,7 @@ import {
     Switch,
     FormControlLabel,
     Box,
+    Chip,
 } from '@material-ui/core'
 import { geti18nString } from '../../utils/i18n'
 import { MessageCenter, CompositionEvent } from '../../utils/messages'
@@ -29,7 +30,7 @@ import { SelectRecipientsUI, SelectRecipientsUIProps } from '../shared/SelectRec
 import { DialogDismissIconUI } from './DialogDismissIcon'
 import { ClickableChip } from '../shared/SelectRecipients/ClickableChip'
 import RedPacketDialog from './RedPacketDialog'
-import { makeTypedMessage } from '../../extension/background-script/CryptoServices/utils'
+import { makeTypedMessage, TypedMessage } from '../../extension/background-script/CryptoServices/utils'
 
 const useStyles = makeStyles({
     MUIInputRoot: {
@@ -72,9 +73,9 @@ export interface PostDialogUIProps
     availableShareTarget: Array<Profile | Group>
     currentShareTarget: Array<Profile | Group>
     currentIdentity: Profile | null
-    postBoxText: string
+    postContent: TypedMessage
     postBoxButtonDisabled: boolean
-    onPostTextChanged: (nextString: string) => void
+    onPostContentChanged: (nextMessage: TypedMessage) => void
     onOnlyMyselfChanged: (checked: boolean) => void
     onFinishButtonClicked: () => void
     onCloseButtonClicked: () => void
@@ -84,8 +85,16 @@ export interface PostDialogUIProps
 export function PostDialogUI(props: PostDialogUIProps) {
     const classes = useStylesExtends(useStyles(), props)
     const rootRef = useRef<HTMLDivElement>(null)
-    const [, inputRef] = useCapturedInput(props.onPostTextChanged, [props.open])
+    const [, inputRef] = useCapturedInput(
+        newText => {
+            const msg = props.postContent
+            if (msg.type === 'text') props.onPostContentChanged(makeTypedMessage(newText, msg.meta))
+            else throw new Error('Not impled yet')
+        },
+        [props.open, props.postContent],
+    )
     const [redPacketDialogOpen, setRedPacketDialogOpen] = useState(false)
+    if (props.postContent.type !== 'text') return <>Unsupported type to edit</>
     return (
         <div ref={rootRef}>
             <ResponsiveDialog
@@ -118,6 +127,7 @@ export function PostDialogUI(props: PostDialogUIProps) {
                     </Typography>
                 </DialogTitle>
                 <DialogContent className={classes.content}>
+                    {/* <Chip label="Content" /> */}
                     <InputBase
                         classes={{
                             root: classes.MUIInputRoot,
@@ -125,7 +135,7 @@ export function PostDialogUI(props: PostDialogUIProps) {
                         }}
                         inputProps={{ className: classes.input }}
                         autoFocus
-                        value={props.postBoxText}
+                        value={props.postContent.content}
                         inputRef={inputRef}
                         fullWidth
                         multiline
@@ -182,7 +192,7 @@ export function PostDialogUI(props: PostDialogUIProps) {
 export interface PostDialogProps extends Partial<PostDialogUIProps> {
     reason?: 'timeline' | 'popup'
     identities?: Profile[]
-    onRequestPost?: (target: (Profile | Group)[], text: string) => void
+    onRequestPost?: (target: (Profile | Group)[], content: TypedMessage) => void
     onRequestReset?: () => void
 }
 export function PostDialog(props: PostDialogProps) {
@@ -198,9 +208,9 @@ export function PostDialog(props: PostDialogProps) {
     const onRequestPost = or(
         props.onRequestPost,
         useCallback(
-            async (target: (Profile | Group)[], text: string) => {
+            async (target: (Profile | Group)[], content: TypedMessage) => {
                 const [encrypted, token] = await Services.Crypto.encryptTo(
-                    makeTypedMessage(text),
+                    content,
                     target.map(x => x.identifier),
                     currentIdentity!.identifier,
                 )
@@ -231,7 +241,7 @@ export function PostDialog(props: PostDialogProps) {
         props.onRequestReset,
         useCallback(() => {
             setOpen(false)
-            setPostBoxText('')
+            setPostBoxContent(makeTypedMessage(''))
             setCurrentShareTarget([])
         }, []),
     )
@@ -253,12 +263,12 @@ export function PostDialog(props: PostDialogProps) {
     const [onlyMyself, setOnlyMyself] = useState(false)
     const onOnlyMyselfChanged = useCallback((checked: boolean) => setOnlyMyself(checked), [])
 
-    const [postBoxText, setPostBoxText] = useState('')
+    const [postBoxContent, setPostBoxContent] = useState<TypedMessage>(makeTypedMessage(''))
     const [currentShareTarget, setCurrentShareTarget] = useState(availableShareTarget)
     const onFinishButtonClicked = useCallback(() => {
-        onRequestPost(onlyMyself ? [currentIdentity!] : currentShareTarget, postBoxText)
+        onRequestPost(onlyMyself ? [currentIdentity!] : currentShareTarget, postBoxContent)
         onRequestReset()
-    }, [currentIdentity, currentShareTarget, onRequestPost, onRequestReset, onlyMyself, postBoxText])
+    }, [currentIdentity, currentShareTarget, onRequestPost, onRequestReset, onlyMyself, postBoxContent])
     const onCloseButtonClicked = useCallback(() => {
         setOpen(false)
     }, [])
@@ -270,10 +280,10 @@ export function PostDialog(props: PostDialogProps) {
             availableShareTarget={availableShareTarget}
             currentIdentity={currentIdentity}
             currentShareTarget={currentShareTarget}
-            postBoxText={postBoxText}
-            postBoxButtonDisabled={!(onlyMyself ? postBoxText : currentShareTarget.length && postBoxText)}
+            postContent={postBoxContent}
+            postBoxButtonDisabled={!(onlyMyself ? postBoxContent : currentShareTarget.length && postBoxContent)}
             onSetSelected={setCurrentShareTarget}
-            onPostTextChanged={setPostBoxText}
+            onPostContentChanged={setPostBoxContent}
             onOnlyMyselfChanged={onOnlyMyselfChanged}
             onFinishButtonClicked={onFinishButtonClicked}
             onCloseButtonClicked={onCloseButtonClicked}

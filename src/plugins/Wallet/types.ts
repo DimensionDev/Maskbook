@@ -76,13 +76,9 @@ export interface RedPacketAPI {
     refund(id: string): Promise<{ refund_transaction_hash: string }>
     /**
      * Check who has claimed the red packet.
+     * @returns A Map<wallet_address, claimed_amount>
      */
-    checkClaimedList(
-        id: string,
-    ): Promise<{
-        claimed_list: string[]
-        claimer_addrs: string[]
-    }>
+    checkClaimedList(id: string): Promise<Map<string, bigint>>
 }
 
 export interface WalletAPI {
