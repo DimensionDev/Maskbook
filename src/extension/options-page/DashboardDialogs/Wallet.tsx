@@ -17,6 +17,9 @@ import { DialogContentItem } from './DialogBase'
 import { RedPacket } from '../DashboardComponents/RedPacket'
 import WalletLine from '../DashboardComponents/WalletLine'
 import ProviderIcon from '../DashboardComponents/ProviderIcon'
+import Services from '../../service'
+import { PluginMessageCenter } from '../../../plugins/PluginMessages'
+import { RedPacketRecord } from '../../../database/Plugins/Wallet/types'
 
 interface WalletSendRedPacketDialogProps {
     onDecline(): void
@@ -96,7 +99,7 @@ export function WalletAddTokenDialog(props: WalletAddTokenDialogProps) {
 }
 
 interface WalletRedPacketHistoryDialogProps {
-    onClick?(): void
+    onClick?(packet: RedPacketRecord['id']): void
     onDecline(): void
 }
 
@@ -112,6 +115,19 @@ export function WalletRedPacketHistoryDialog(props: WalletRedPacketHistoryDialog
     const classes = usePacketHistoryStyles()
     const { onClick, onDecline } = props
     const [tabState, setTabState] = React.useState(0)
+    const [redPacketRecords, setRedPacketRecords] = React.useState<RedPacketRecord[]>([])
+
+    React.useEffect(() => {
+        const updateHandler = () =>
+            Services.Plugin.invokePlugin('maskbook.red_packet', 'getRedPackets', tabState === 1).then(
+                setRedPacketRecords,
+            )
+        PluginMessageCenter.on('maskbook.red_packets.update', updateHandler)
+        updateHandler()
+        return () => {
+            PluginMessageCenter.off('maskbook.red_packets.update', updateHandler)
+        }
+    }, [tabState])
 
     return (
         <DialogContentItem
@@ -132,27 +148,19 @@ export function WalletRedPacketHistoryDialog(props: WalletRedPacketHistoryDialog
             }
             content={
                 <>
-                    <WalletLine
-                        line1='"Best Wishes!"'
-                        line2="2 hr ago from CMK"
-                        onClick={onClick}
-                        invert
-                        action={<Typography variant="h6">5.3 USDT</Typography>}
-                    />
-                    <WalletLine
-                        line1='"Hallo Welt!"'
-                        line2="20 hr ago from CMK"
-                        onClick={onClick}
-                        invert
-                        action={<Typography variant="h6">0.12 ETH</Typography>}
-                    />
-                    <WalletLine
-                        line1='"RAmen!"'
-                        line2="200 hr ago from CMK"
-                        onClick={onClick}
-                        invert
-                        action={<Typography variant="h6">12 USDT</Typography>}
-                    />
+                    {redPacketRecords.map(record => (
+                        <WalletLine
+                            line1={record.send_message}
+                            line2={`${record.block_creation_time} hr ago from ${record.sender_name}`}
+                            onClick={() => onClick?.(record.id)}
+                            invert
+                            action={
+                                <Typography variant="h6">
+                                    {record.send_total} {record.token_type}
+                                </Typography>
+                            }
+                        />
+                    ))}
                 </>
             }></DialogContentItem>
     )
