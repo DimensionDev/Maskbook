@@ -1,6 +1,5 @@
 import { AbiItem } from 'web3-utils'
-import { RedPacketAPI, WalletAPI, RedPacketClaimResult, RedPacketCreationResult } from './types'
-import { sleep } from '@holoflows/kit/es/util/sleep'
+import { RedPacketAPI, WalletAPI } from './types'
 import { onClaimResult, onCreationResult, onExpired, onRefundResult } from './red-packet-fsm'
 import { onWalletBalanceUpdated } from './wallet'
 import { web3 } from './web3'
@@ -10,7 +9,7 @@ import { HappyRedPacket } from '../../contracts/HappyRedPacket'
 import { IERC20 } from '../../contracts/IERC20'
 import { TransactionObject } from '../../contracts/types'
 import { RedPacketTokenType } from '../../database/Plugins/Wallet/types'
-import { asyncTimes } from '../../utils/utils'
+import { asyncTimes, pollingTask } from '../../utils/utils'
 
 function createRedPacketContract(address: string) {
     return (new web3.eth.Contract(HappyRedPacketABI as AbiItem[], address) as unknown) as HappyRedPacket
@@ -82,7 +81,6 @@ export const redPacketAPI: RedPacketAPI = {
         const tx = contract.methods.claim(id, password, recipient, validation)
         return BigInt(await tx.send(await createTxPayload(tx)))
     },
-
     async watchClaimResult(transactionHash: string) {
         const contract = createRedPacketContract('0x0')
         const { blockNumber } = await web3.eth.getTransaction(transactionHash)
@@ -176,9 +174,15 @@ export const redPacketAPI: RedPacketAPI = {
             })
     },
     async watchExpired(id: string) {
-        console.log('Mock: watching expired', id)
-        await sleep(10000)
-        onExpired(id)
+        pollingTask(async () => {
+            const { expired } = await this.checkAvailability(id)
+
+            if (expired) {
+                onExpired(id)
+                return true
+            }
+            return false
+        })
     },
     async checkAvailability(id: string) {
         const contract = createRedPacketContract('0x0')
@@ -243,16 +247,15 @@ export const redPacketAPI: RedPacketAPI = {
 export const walletAPI: WalletAPI = {
     dataSource: 'real',
     watchWalletBalance(address) {
-        setInterval(() => {
-            onWalletBalanceUpdated(address, BigInt(Math.floor(Math.random() * 1000)))
-        }, 4000)
+        pollingTask(async () => {
+            onWalletBalanceUpdated(address, BigInt(await web3.eth.getBalance(address)))
+            return false
+        })
     },
     async approveERC20Token(address: string, amount: bigint) {
         const contract = createRedPacketContract('0x0')
         const erc20Contract = createERC20Contract(address)
-
         const tx = erc20Contract.methods.approve(contract.options.address, amount.toString())
-
         return new Promise<{ erc20_approve_transaction_hash: string; erc20_approve_value: bigint }>(
             async (resolve, reject) => {
                 tx.send(await createTxPayload(tx))
