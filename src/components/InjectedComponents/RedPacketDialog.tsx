@@ -18,13 +18,14 @@ import {
 import { useStylesExtends } from '../custom-ui-helper'
 import { DialogDismissIconUI } from './DialogDismissIcon'
 import BackupRestoreTab from '../../extension/options-page/DashboardComponents/BackupRestoreTab'
-import { RedPacket } from '../../extension/options-page/DashboardComponents/RedPacket'
+import { RedPacket, RedPacketWithState } from '../../extension/options-page/DashboardComponents/RedPacket'
 import Services from '../../extension/service'
 import { createRedPacketInit, createRedPacketOption } from '../../plugins/Wallet/red-packet-fsm'
-import { EthereumNetwork, RedPacketTokenType } from '../../database/Plugins/Wallet/types'
+import { EthereumNetwork, RedPacketTokenType, RedPacketRecord } from '../../database/Plugins/Wallet/types'
 import { useLastRecognizedIdentity, useCurrentIdentity } from '../DataSource/useActivatedUI'
 import { PortalShadowRoot } from '../../utils/jss/ShadowRootPortal'
 import { useCapturedInput } from '../../utils/hooks/useCapturedEvents'
+import { PluginMessageCenter } from '../../plugins/PluginMessages'
 
 interface RedPacketDialogProps
     extends withClasses<
@@ -187,11 +188,26 @@ const useExistingPacketStyles = makeStyles(theme =>
 
 function ExistingPacket(props: RedPacketDialogProps) {
     const classes = useStylesExtends(useExistingPacketStyles(), props)
+    const [redPacketRecords, setRedPacketRecords] = React.useState<RedPacketRecord[]>([])
+
+    React.useEffect(() => {
+        const updateHandler = () =>
+            Services.Plugin.invokePlugin('maskbook.red_packet', 'getRedPackets')
+                .then(packets => packets.filter(p => true))
+                .then(setRedPacketRecords)
+
+        updateHandler()
+        return PluginMessageCenter.on('maskbook.red_packets.update', updateHandler)
+    }, [])
+
     return (
         <div className={classes.wrapper}>
             <Typography component="a" color="primary" className={classes.hint}>
                 Remove Red Packet from this post
             </Typography>
+            {redPacketRecords.map(p => (
+                <RedPacketWithState key={p.id} redPacket={p} />
+            ))}
         </div>
     )
 }

@@ -98,7 +98,9 @@ const requestNotification = () => {
 
 export function RedPacketWithState(props: RedPacketProps) {
     const classes = useStyles()
-    const { onClick, state, redPacket } = props
+    const { onClick, state: _state, redPacket } = props
+    const state =
+        _state ?? (redPacket.claim_transaction_hash ? (redPacket.claim_amount ? 'opened' : 'opening') : 'pending')
     return (
         <Card
             elevation={0}
@@ -129,7 +131,9 @@ export function RedPacketWithState(props: RedPacketProps) {
                     {redPacket.send_message}
                 </Typography>
                 <Typography variant="body2">
-                    {state === 'pending' ? 'Ready to open' : `${redPacket.send_total} USDT / Unknown Shares`}
+                    {state === 'pending'
+                        ? 'Ready to open'
+                        : `${redPacket.send_total} USDT / ${redPacket.uuids.length} Shares`}
                 </Typography>
             </div>
             <div className={classes.packet}></div>
@@ -148,17 +152,19 @@ export function RedPacket(props: RedPacketProps) {
             onClick={onClick}>
             <div className={classes.header}>
                 <Typography variant="h5">
-                    {redPacket.claim_amount ? redPacket.claim_amount.toLocaleString() : 'Unknown'} USDT
+                    {redPacket.claim_amount ? `${redPacket.claim_amount.toLocaleString()} USDT` : `Not Claimed`}
                 </Typography>
                 <Typography className={classes.label} variant="body2">
-                    Received
+                    {redPacket.claim_transaction_hash ? 'Received' : 'Not Opened'}
                 </Typography>
             </div>
             <div className={classes.content}>
                 <Typography className={classes.words} variant="h6">
                     {redPacket.send_message}
                 </Typography>
-                <Typography variant="body1">{redPacket.send_total.toLocaleString()} USDT / Unknown shares</Typography>
+                <Typography variant="body1">
+                    {redPacket.send_total.toLocaleString()} USDT / {redPacket.uuids.length} shares
+                </Typography>
             </div>
             <div className={classes.packet}></div>
         </Card>

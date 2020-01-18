@@ -155,7 +155,7 @@ export function WalletRedPacketHistoryDialog(props: WalletRedPacketHistoryDialog
                             invert
                             action={
                                 <Typography variant="h6">
-                                    {record.send_total} {record.token_type}
+                                    {record.send_total.toLocaleString()} {'USDT' || record.token_type}
                                 </Typography>
                             }
                         />
