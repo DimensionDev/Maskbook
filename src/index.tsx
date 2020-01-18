@@ -14,8 +14,9 @@ import {
 
 import AccountBalanceWalletIcon from '@material-ui/icons/AccountBalanceWallet'
 import CloseIcon from '@material-ui/icons/Close'
-import BookmarkIcon from '@material-ui/icons/Bookmark'
-import LocationOnIcon from '@material-ui/icons/LocationOn'
+import HomeIcon from '@material-ui/icons/Home'
+import CreditCardIcon from '@material-ui/icons/CreditCard'
+import BugReportIcon from '@material-ui/icons/BugReport'
 
 import React from 'react'
 import { ThemeProvider } from '@material-ui/styles'
@@ -113,11 +114,11 @@ function Dashboard() {
     const shouldNotRenderAppBar = useMediaQuery('(min-width:1024px)')
 
     const routers: [string, string, JSX.Element][] = [
-        [geti18nString('home'), '/home/', <BookmarkIcon />],
-        ['Wallets', '/wallets/', <AccountBalanceWalletIcon />],
+        [geti18nString('home'), '/home/', <HomeIcon />],
+        ['Wallets', '/wallets/', <CreditCardIcon />],
         // ['Settings', '/settings/', <SettingsIcon />],
         // ['About', '/about/', <InfoOutlinedIcon />],
-        [geti18nString('debug'), '/debug/', <LocationOnIcon />],
+        [geti18nString('debug'), '/debug/', <BugReportIcon />],
     ]
 
     const history = useHistory()
