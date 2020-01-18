@@ -76,7 +76,12 @@ export interface RedPacketAPI {
      * @param validation hash of the request sender
      * @returns Claimed money
      */
-    claim(id: string, password: string, recipient: string, validation: string): Promise<bigint>
+    claim(
+        id: string,
+        password: string,
+        recipient: string,
+        validation: string,
+    ): Promise<{ claim_transaction_hash: string }>
     /**
      * Refund transaction hash
      * @param id Red packet ID
