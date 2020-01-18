@@ -150,9 +150,7 @@ export function DialogRouter(props: DialogRouterProps) {
             open={routeMatching}
             classes={{ paper: classes.dialog }}
             TransitionComponent={Transition}>
-            <Route path={matchPattern?.path}>
-                <ChildrenComponent />
-            </Route>
+            {path ? <Route path={matchPattern?.path} children={<ChildrenComponent />} /> : children}
         </Dialog>
     )
 }

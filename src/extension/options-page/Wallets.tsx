@@ -93,7 +93,7 @@ export default function DashboardWalletsPage() {
                 <div>
                     {wallets.map((i, index) => (
                         <Card key={i.id} className={classes.identity} raised elevation={1}>
-                            <WalletCard wallet={i} key={i.id} />
+                            <WalletCard wallet={i} />
                         </Card>
                     ))}
                 </div>

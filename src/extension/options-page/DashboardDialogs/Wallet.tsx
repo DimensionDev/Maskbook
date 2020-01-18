@@ -123,11 +123,8 @@ export function WalletRedPacketHistoryDialog(props: WalletRedPacketHistoryDialog
                 setRedPacketRecords,
             )
 
-        PluginMessageCenter.on('maskbook.red_packets.update', updateHandler)
         updateHandler()
-        return () => {
-            PluginMessageCenter.off('maskbook.red_packets.update', updateHandler)
-        }
+        return PluginMessageCenter.on('maskbook.red_packets.update', updateHandler)
     }, [tabState])
 
     return (
