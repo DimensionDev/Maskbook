@@ -69,6 +69,9 @@ export const mockRedPacketAPI: RedPacketAPI = {
         console.log('Mock: Watching refund result...')
         onRefundResult(id, { remaining_balance: BigInt(10) })
     },
+    async checkClaimedList(id) {
+        return { claimed_list: ['123', '234'], claimer_addrs: ['0x1234'] }
+    },
 }
 
 export const mockWalletAPI: WalletAPI = {

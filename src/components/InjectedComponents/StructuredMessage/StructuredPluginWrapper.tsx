@@ -12,7 +12,8 @@ const useStyles = makeStyles(theme =>
             border: `1px solid ${theme.palette.divider}`,
         },
         header: {
-            backgroundColor: '#F5F5F5',
+            backgroundColor: theme.palette.background.paper,
+            color: theme.palette.text.primary,
             display: 'flex',
             alignItems: 'center',
             padding: theme.spacing(1, 2),
