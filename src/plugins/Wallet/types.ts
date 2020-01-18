@@ -1,3 +1,5 @@
+import { RedPacketTokenType } from '../../database/Plugins/Wallet/types'
+
 export type RedPacketCreationResult =
     | {
           type: 'success'
@@ -57,9 +59,9 @@ export interface RedPacketAPI {
         seed: string,
         message: string,
         name: string,
-        token_type: 0 | 1,
+        token_type: RedPacketTokenType,
         token_addr: string,
-        total_tokens: string,
+        total_tokens: bigint,
     ): Promise<CreateRedPacketResult>
     /**
      * Check if the card is availability
@@ -96,6 +98,6 @@ export interface WalletAPI {
     watchWalletBalance(address: string): void
     approveERC20Token(
         erc20TokenAddress: string,
-        amount: string,
+        amount: bigint,
     ): Promise<{ erc20_approve_transaction_hash: string; erc20_approve_value: bigint }>
 }

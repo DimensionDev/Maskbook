@@ -9,6 +9,7 @@ import IERC20ABI from '../../contracts/IERC20.json'
 import { HappyRedPacket } from '../../contracts/HappyRedPacket'
 import { IERC20 } from '../../contracts/IERC20'
 import { TransactionObject } from '../../contracts/types'
+import { RedPacketTokenType } from '../../database/Plugins/Wallet/types'
 
 function createRedPacketContract(address: string) {
     return (new web3.eth.Contract(HappyRedPacketABI as AbiItem[], address) as unknown) as HappyRedPacket
@@ -27,7 +28,6 @@ async function createTxPayload<T>(tx: TransactionObject<T>, value?: string) {
         }),
         web3.eth.getGasPrice(),
     ])
-
     return {
         from,
         gas,
@@ -45,9 +45,9 @@ export const redPacketAPI: RedPacketAPI = {
         seed: string,
         message: string,
         name: string,
-        token_type: 0 | 1,
+        token_type: RedPacketTokenType,
         token_addr: string,
-        total_tokens: string,
+        total_tokens: bigint,
     ) {
         const contract = createRedPacketContract('0x0')
         const tx = contract.methods.create_red_packet(
@@ -59,14 +59,14 @@ export const redPacketAPI: RedPacketAPI = {
             name,
             token_type,
             token_addr,
-            total_tokens,
+            total_tokens.toString(),
         )
 
         return new Promise<{
             create_transaction_hash: string
             create_nonce: number
         }>(async (resolve, reject) => {
-            tx.send(await createTxPayload(tx, total_tokens))
+            tx.send(await createTxPayload(tx, total_tokens.toString()))
                 .on('transactionHash', async (hash: string) =>
                     resolve({
                         create_nonce: (await web3.eth.getTransaction(hash)).nonce,
@@ -142,7 +142,7 @@ export const redPacketAPI: RedPacketAPI = {
                 .on('error', (error: Error) => reject(error))
         })
     },
-    watchRefundResult(id: string) {
+    watchRefundResult(transactionHash: string) {
         console.log('Mock: Watching refund result...')
         onRefundResult(id, { remaining_balance: BigInt(10) })
     },
@@ -160,11 +160,11 @@ export const walletAPI: WalletAPI = {
             onWalletBalanceUpdated(address, BigInt(Math.floor(Math.random() * 1000)))
         }, 4000)
     },
-    async approveERC20Token(address: string, amount: string) {
+    async approveERC20Token(address: string, amount: bigint) {
         const contract = createRedPacketContract('0x0')
         const erc20Contract = createERC20Contract(address)
 
-        const tx = erc20Contract.methods.approve(contract.options.address, amount)
+        const tx = erc20Contract.methods.approve(contract.options.address, amount.toString())
 
         return new Promise<{ erc20_approve_transaction_hash: string; erc20_approve_value: bigint }>(
             async (resolve, reject) => {
@@ -172,7 +172,7 @@ export const walletAPI: WalletAPI = {
                     .on('transactionHash', (hash: string) =>
                         resolve({
                             erc20_approve_transaction_hash: hash,
-                            erc20_approve_value: BigInt(amount),
+                            erc20_approve_value: amount,
                         }),
                     )
                     .on('error', (error: Error) => reject(error))
