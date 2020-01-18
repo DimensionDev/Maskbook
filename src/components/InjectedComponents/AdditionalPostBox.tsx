@@ -18,6 +18,7 @@ import { steganographyModeSetting } from '../shared-settings/settings'
 import { useValueRef } from '../../utils/hooks/useValueRef'
 import { BannerProps } from '../Welcomes/Banner'
 import useConnectingStatus from '../../utils/hooks/useConnectingStatus'
+import { makeTypedMessage } from '../../extension/background-script/CryptoServices/utils'
 
 const useStyles = makeStyles({
     header: { padding: '8px 12px 0' },
@@ -126,7 +127,7 @@ export function AdditionalPostBox(props: AdditionalPostBoxProps) {
         useCallback(
             async (target: (Profile | Group)[], text: string) => {
                 const [encrypted, token] = await Services.Crypto.encryptTo(
-                    text,
+                    makeTypedMessage(text),
                     target.map(x => x.identifier),
                     currentIdentity!.identifier,
                 )

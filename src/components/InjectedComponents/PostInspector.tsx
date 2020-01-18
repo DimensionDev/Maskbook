@@ -11,9 +11,10 @@ import { getActivatedUI } from '../../social-network/ui'
 import { useValueRef } from '../../utils/hooks/useValueRef'
 import { debugModeSetting } from '../shared-settings/settings'
 import { DebugList } from '../DebugModeUI/DebugList'
+import { TypedMessage } from '../../extension/background-script/CryptoServices/utils'
 
 export interface PostInspectorProps {
-    onDecrypted(post: string): void
+    onDecrypted(post: TypedMessage): void
     post: string
     postBy: ProfileIdentifier
     postId: string

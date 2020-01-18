@@ -9,11 +9,11 @@ export interface AddToKeyStoreProps {
     provePost: string
     postBy: ProfileIdentifier
     completeComponentProps?: Partial<SuccessProps>
-    completeComponent?: React.ComponentType<{ data: boolean }>
+    completeComponent?: React.ComponentType<{ data: boolean }> | null
     waitingComponentProps?: Partial<WaitingProps>
-    waitingComponent?: React.ComponentType
+    waitingComponent?: React.ComponentType | null
     failedComponentProps?: Partial<FailedProps>
-    failedComponent?: React.ComponentType<FailedProps>
+    failedComponent?: React.ComponentType<FailedProps> | null
 }
 export function AddToKeyStore({ provePost, postBy, ...props }: AddToKeyStoreProps) {
     return (
@@ -21,14 +21,19 @@ export function AddToKeyStore({ provePost, postBy, ...props }: AddToKeyStoreProp
             promise={async () => Services.Crypto.verifyOthersProve(provePost, postBy)}
             dependencies={[provePost, postBy]}
             awaitingComponent={
-                props.waitingComponent || (() => <AddToKeyStoreUI.awaiting {...props.waitingComponentProps} />)
+                props.waitingComponent === undefined
+                    ? () => <AddToKeyStoreUI.awaiting {...props.waitingComponentProps} />
+                    : props.waitingComponent
             }
             completeComponent={
-                props.completeComponent || (() => <AddToKeyStoreUI.success {...props.completeComponentProps} />)
+                props.completeComponent === undefined
+                    ? () => <AddToKeyStoreUI.success {...props.completeComponentProps} />
+                    : props.completeComponent
             }
             failedComponent={
-                props.failedComponent ||
-                (inner => <AddToKeyStoreUI.failed error={inner.error} {...props.failedComponentProps} />)
+                props.failedComponent === undefined
+                    ? inner => <AddToKeyStoreUI.failed error={inner.error} {...props.failedComponentProps} />
+                    : props.failedComponent
             }
         />
     )

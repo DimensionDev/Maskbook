@@ -23,9 +23,10 @@ import { deconstructPayload } from '../../utils/type-transform/Payload'
 import { DebugList } from '../DebugModeUI/DebugList'
 import { useStylesExtends } from '../custom-ui-helper'
 import { BannerProps } from '../Welcomes/Banner'
+import { TypedMessage } from '../../extension/background-script/CryptoServices/utils'
 
 export interface DecryptPostSuccessProps extends withClasses<KeysInferFromUseStyles<typeof useSuccessStyles>> {
-    data: { signatureVerifyResult: boolean; content: string }
+    data: { signatureVerifyResult: boolean; content: TypedMessage }
     requestAppendRecipients?(to: Profile[]): Promise<void>
     alreadySelectedPreviously: Profile[]
     people: Profile[]
@@ -57,6 +58,16 @@ export const DecryptPostSuccess = React.memo(function DecryptPostSuccess({
         passString = '✔'
         failString = '❌'
     }
+    const msg = data.content
+    if (msg.type === 'unknown')
+        return <AdditionalContent title="Unknown type of Maskbook message" {...props.AdditionalContentProps} />
+    else if (msg.type === 'complex')
+        return (
+            <AdditionalContent
+                title="Complex Maskbook message is not renderable currently"
+                {...props.AdditionalContentProps}
+            />
+        )
     return (
         <AdditionalContent
             title={
@@ -76,7 +87,7 @@ export const DecryptPostSuccess = React.memo(function DecryptPostSuccess({
                     )}
                 </>
             }
-            renderText={data.content}
+            renderText={data.content.type}
             {...props.AdditionalContentProps}
         />
     )
@@ -119,8 +130,7 @@ export const DecryptPostFailed = React.memo(function DecryptPostFailed({ error, 
 })
 
 export interface DecryptPostProps {
-    onDecrypted(post: string): void
-
+    onDecrypted(post: TypedMessage): void
     postBy: ProfileIdentifier
     whoAmI: ProfileIdentifier
     encryptedText: string
