@@ -65,10 +65,11 @@ export async function discoverRedPacket(payload: RedPacketJSONPayload) {
     PluginMessageCenter.emit('maskbook.red_packets.update', undefined)
 }
 
-export async function getRedPackets(owned: boolean) {
+export async function getRedPackets(owned?: boolean) {
     const t = createTransaction(await createWalletDBAccess(), 'readonly')('RedPacket')
     const all = await t.objectStore('RedPacket').getAll()
-    if (owned) return all.filter(x => x.create_transaction_hash)
+    if (owned === true) return all.filter(x => x.create_transaction_hash)
+    if (owned === false) return all.filter(x => !x.create_transaction_hash)
     return all
 }
 
