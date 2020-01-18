@@ -28,6 +28,9 @@ public/polyfill
 .env.test.local
 .env.production.local
 
+# contracts
+/contracts
+
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*

@@ -28,7 +28,8 @@
     "install": "node scripts/postinstall.js",
     "uninstall": "node scripts/postinstall.js",
     "lint": "eslint src/ --ext .ts,.tsx --fix",
-    "lint:report": "eslint src/ --ext .ts,.tsx --format junit -o reports/junit/eslint-results.xml"
+    "lint:report": "eslint src/ --ext .ts,.tsx --format junit -o reports/junit/eslint-results.xml",
+    "compile:contracts": "./scripts/contracts.sh"
   },
   "dependencies": {
     "@commitlint/cli": "^8.2.0",
@@ -70,6 +71,7 @@
     "node-stego": "^0.8.1",
     "notistack": "^0.9.7",
     "npm-run-all": "^4.1.5",
+    "openzeppelin-solidity": "^2.4.0",
     "pvtsutils": "^1.0.9",
     "qrcode": "^1.4.4",
     "react": "^16.12.0",
@@ -85,6 +87,7 @@
     "uuid": "^3.3.3",
     "wallet.ts": "^0.2.8",
     "web-ext-types": "^3.1.0",
+    "web3": "^1.2.5-rc.0",
     "webcrypto-liner": "1.0.2",
     "webextension-polyfill": "^0.4.0",
     "webpack-web-ext-plugin": "github:DimensionDev/webpack-web-ext-plugin"
@@ -121,6 +124,8 @@
     "ts-jest": "^24.2.0",
     "ts-morph": "^6.0.2",
     "ts-node": "^8.5.4",
+    "typechain": "^1.0.3",
+    "typechain-target-web3-v1": "^1.0.4",
     "web-ext": "^4.0.0",
     "webpack-extension-manifest-plugin": "^0.5.0",
     "yargs": "^15.0.2"
