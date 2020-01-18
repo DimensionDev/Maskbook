@@ -12,7 +12,7 @@ export function Nullable<T>(x: T | null | undefined) {
             return x
         },
         unwrap(message: string): NonNullable<T> {
-            if (this.hasValue) throw new Error(message)
+            if (!this.hasValue) throw new Error(message)
             return x as NonNullable<T>
         },
     }
