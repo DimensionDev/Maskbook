@@ -38,7 +38,10 @@ export type createRedPacketOption = {
     shares: bigint
 }
 
-export async function discoverRedPacket(payload: RedPacketJSONPayload) {
+/**
+ * Note: Only call this for other one's redpacket or it will duplicate in the database!
+ */
+export async function discoverRedPacket(payload: RedPacketJSONPayload, foundInURL: string) {
     const t = createTransaction(await createWalletDBAccess(), 'readwrite')('RedPacket')
     const rec: RedPacketRecord = {
         _data_source_: getProvider().dataSource,
@@ -60,6 +63,7 @@ export async function discoverRedPacket(payload: RedPacketJSONPayload) {
         erc20_token: payload.token,
         red_packet_id: payload.rpid,
         raw_payload: payload,
+        _found_in_url_: foundInURL,
     }
     t.objectStore('RedPacket').add(rec)
     PluginMessageCenter.emit('maskbook.red_packets.update', undefined)
@@ -151,8 +155,27 @@ export async function onCreationResult(recordUUID: string, details: RedPacketCre
     } else {
         rec.block_creation_time = details.block_creation_time
         rec.red_packet_id = details.red_packet_id
+        rec.raw_payload = {
+            contract_address: rec.contract_address,
+            contract_version: rec.contract_version,
+            creation_time: details.block_creation_time.getTime(),
+            duration: rec.duration,
+            is_random: rec.is_random,
+            passwords: rec.uuids,
+            rpid: details.red_packet_id,
+            sender: {
+                address: rec.sender_address,
+                message: rec.send_message,
+                name: rec.sender_name,
+            },
+            token_type: rec.token_type,
+            total: String(rec.send_total),
+            network: rec.network,
+            token: rec.erc20_token,
+        }
     }
     t.objectStore('RedPacket').put(rec)
+    // TODO: send a notification here.
     PluginMessageCenter.emit('maskbook.red_packets.update', undefined)
 }
 
@@ -183,6 +206,7 @@ export async function onClaimResult(redPacketID: string, details: RedPacketClaim
         t.objectStore('RedPacket').put(rec)
     }
     getProvider().watchExpired(redPacketID)
+    // TODO: send a notification here
     PluginMessageCenter.emit('maskbook.red_packets.update', undefined)
 }
 

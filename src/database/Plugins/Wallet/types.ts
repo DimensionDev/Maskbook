@@ -58,6 +58,7 @@ export interface RedPacketRecord {
     erc20_approve_transaction_hash?: string
     /** ERC20 approve transaction event value */
     erc20_approve_value?: bigint
+    _found_in_url_?: string
     _data_source_: 'real' | 'mock'
 }
 export interface WalletTokenRecord {
