@@ -51,7 +51,7 @@ export const redPacketAPI: RedPacketAPI = {
         token_addr: string,
         total_tokens: bigint,
     ) {
-        const contract = createRedPacketContract('0x0')
+        const contract = createRedPacketContract(RED_PACKET_CONTRACT_ADDRESS)
         const tx = contract.methods.create_red_packet(
             hashes,
             isRandom,
@@ -75,9 +75,17 @@ export const redPacketAPI: RedPacketAPI = {
         })
     },
     async claim(id: string, password: string, recipient: string, validation: string) {
-        const contract = createRedPacketContract('0x0')
+        const contract = createRedPacketContract(RED_PACKET_CONTRACT_ADDRESS)
         const tx = contract.methods.claim(id, password, recipient, validation)
-        return BigInt(await tx.send(await createTxPayload(tx)))
+        return new Promise(async (resolve, reject) => {
+            tx.send(await createTxPayload(tx))
+                .on('transactionHash', async (hash: string) =>
+                    resolve({
+                        claim_transaction_hash: hash,
+                    }),
+                )
+                .on('error', (err: Error) => reject(err))
+        })
     },
     async watchClaimResult(transactionHash: string) {
         const contract = createRedPacketContract(RED_PACKET_CONTRACT_ADDRESS)
