@@ -87,7 +87,7 @@ export const DecryptPostSuccess = React.memo(function DecryptPostSuccess({
                     )}
                 </>
             }
-            renderText={data.content.type}
+            renderText={msg.content}
             {...props.AdditionalContentProps}
         />
     )
