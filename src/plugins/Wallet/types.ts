@@ -45,15 +45,21 @@ export interface RedPacketAPI {
      * @param seed Random seed 32bit byte
      * @param message Message in the red packet
      * @param name Name of the red packet sender
+     * @param token_type 0 - ETH, 1 - ERC20
+     * @param token_addr Addr of ERC20 token
+     * @param total_tokens Amount of tokens
      * @returns The transaction hash
      */
     create(
         hashes_of_password: string[],
         is_random: boolean,
         duration: number,
-        seed: string | number[],
+        seed: string,
         message: string,
         name: string,
+        token_type: 0 | 1,
+        token_addr: string,
+        total_tokens: string,
     ): Promise<CreateRedPacketResult>
     /**
      * Check if the card is availability
@@ -64,11 +70,11 @@ export interface RedPacketAPI {
      * Claim a red packet
      * @param id Red packet ID
      * @param password Password, index from check_availability
-     * @param _recipient address of the receiver
+     * @param recipient address of the receiver
      * @param validation hash of the request sender
      * @returns Claimed money
      */
-    claim(id: string, password: string, _recipient: string, validation: string): Promise<bigint>
+    claim(id: string, password: string, recipient: string, validation: string): Promise<bigint>
     /**
      * Refund transaction hash
      * @param id Red packet ID

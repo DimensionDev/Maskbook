@@ -1,19 +1,85 @@
+import { AbiItem } from 'web3-utils'
 import { RedPacketAPI, WalletAPI, RedPacketClaimResult, RedPacketCreationResult } from './types'
 import { sleep } from '@holoflows/kit/es/util/sleep'
 import { onClaimResult, onCreationResult, onExpired, onRefundResult } from './red-packet-fsm'
 import { onWalletBalanceUpdated } from './wallet'
+import { web3 } from './web3'
+import HappyRedPacketABI from '../../contracts/HappyRedPacket.json'
+import IERC20ABI from '../../contracts/IERC20.json'
+import { HappyRedPacket } from '../../contracts/HappyRedPacket'
+import { IERC20 } from '../../contracts/IERC20'
+import { TransactionObject } from '../../contracts/types'
+
+function createRedPacketContract(address: string) {
+    return (new web3.eth.Contract(HappyRedPacketABI as AbiItem[], address) as unknown) as HappyRedPacket
+}
+
+function createERC20Contract(address: string) {
+    return (new web3.eth.Contract(IERC20ABI as AbiItem[], address) as unknown) as IERC20
+}
+
+async function createTxPayload<T>(tx: TransactionObject<T>, value?: string) {
+    const from = await web3.eth.getCoinbase()
+    const [gas, gasPrice] = await Promise.all([
+        tx.estimateGas({
+            value,
+            from,
+        }),
+        web3.eth.getGasPrice(),
+    ])
+
+    return {
+        from,
+        gas,
+        gasPrice,
+        value,
+    }
+}
 
 export const mockRedPacketAPI: RedPacketAPI = {
     dataSource: 'mock',
-    async create(...args) {
-        console.log('Mock: Calling create_red_packet', ...args)
-        await sleep(1000)
-        return { create_transaction_hash: 'create_transaction_hash', create_nonce: 123 }
+    async create(
+        hashes: string[],
+        isRandom: boolean,
+        duration: number,
+        seed: string,
+        message: string,
+        name: string,
+        token_type: 0 | 1,
+        token_addr: string,
+        total_tokens: string,
+    ) {
+        const contract = createRedPacketContract('0x0')
+        const tx = contract.methods.create_red_packet(
+            hashes,
+            isRandom,
+            duration,
+            seed,
+            message,
+            name,
+            token_type,
+            token_addr,
+            total_tokens,
+        )
+
+        return new Promise<{
+            create_transaction_hash: string
+            create_nonce: number
+        }>(async (resolve, reject) => {
+            tx.send(await createTxPayload(tx, total_tokens))
+                .on('transactionHash', async (hash: string) =>
+                    resolve({
+                        create_nonce: (await web3.eth.getTransaction(hash)).nonce,
+                        create_transaction_hash: hash,
+                    }),
+                )
+                .on('error', (err: Error) => reject(err))
+        })
     },
-    async claim(...args) {
-        console.log('Mock: Calling claiming', ...args)
-        await sleep(1000)
-        return BigInt(Math.floor(Math.random() * 10000))
+    async claim(id: string, password: string, recipient: string, validation: string) {
+        const contract = createRedPacketContract('0x0')
+        const tx = contract.methods.claim(id, password, recipient, validation)
+        return BigInt(await tx.send(await createTxPayload(tx)))
     },
 
     async watchClaimResult(id: string) {
@@ -51,19 +117,30 @@ export const mockRedPacketAPI: RedPacketAPI = {
         onExpired(id)
     },
     async checkAvailability(id: string) {
-        console.log('Mock: checking availibity of the red packet')
-        await sleep(2000)
+        const contract = createRedPacketContract('0x0')
+        const tx = contract.methods.check_availability(id)
+        const { balance, claimed, expired, token_address, total } = await tx.call(await createTxPayload(tx))
         return {
-            balance: BigInt(233),
-            claimedCount: 5,
-            expired: false,
-            token_address: 'token address',
-            totalCount: 10,
+            balance: BigInt(balance),
+            claimedCount: parseInt(claimed),
+            expired,
+            token_address,
+            totalCount: parseInt(total),
         }
     },
     async refund(id: string) {
-        console.log('Mock: calling refund', id)
-        return { refund_transaction_hash: 'transaction hash' }
+        const contract = createRedPacketContract('0x0')
+        const tx = contract.methods.refund(id)
+
+        return new Promise<{ refund_transaction_hash: string }>(async (resolve, reject) => {
+            tx.send(await createTxPayload(tx))
+                .on('transactionHash', (hash: string) =>
+                    resolve({
+                        refund_transaction_hash: hash,
+                    }),
+                )
+                .on('error', (error: Error) => reject(error))
+        })
     },
     watchRefundResult(id: string) {
         console.log('Mock: Watching refund result...')
