@@ -181,7 +181,7 @@ export async function onCreationResult(recordUUID: string, details: RedPacketCre
 
 export async function claimRedPacket(redPacketID: string, claimWithWallet: string, passwords: string[]) {
     const status = await getProvider().checkAvailability(redPacketID)
-    const claimReturn = await getProvider().claim(
+    const { claim_transaction_hash } = await getProvider().claim(
         redPacketID,
         passwords[status.claimedCount],
         claimWithWallet,
@@ -192,9 +192,10 @@ export async function claimRedPacket(redPacketID: string, claimWithWallet: strin
         const t = createTransaction(await createWalletDBAccess(), 'readwrite')('RedPacket')
         const rec = await getRedPacketByID(t, redPacketID)
         setNextState(rec, RedPacketStatus.claim_pending)
+        rec.claim_transaction_hash = claim_transaction_hash
         t.objectStore('RedPacket').put(rec)
     }
-    getProvider().watchClaimResult(redPacketID)
+    getProvider().watchClaimResult(claim_transaction_hash)
     PluginMessageCenter.emit('maskbook.red_packets.update', undefined)
 }
 
@@ -203,6 +204,10 @@ export async function onClaimResult(redPacketID: string, details: RedPacketClaim
         const t = createTransaction(await createWalletDBAccess(), 'readwrite')('RedPacket')
         const rec = await getRedPacketByID(t, redPacketID)
         setNextState(rec, details.type === 'success' ? RedPacketStatus.claimed : RedPacketStatus.normal)
+        if (details.type === 'success') {
+            rec.claim_address = details.claimer
+            rec.claim_amount = details.claimed_value
+        }
         t.objectStore('RedPacket').put(rec)
     }
     getProvider().watchExpired(redPacketID)
@@ -230,6 +235,8 @@ export async function requestRefund(id: string) {
         setNextState(rec, RedPacketStatus.refund_pending)
         rec.refund_transaction_hash = refund_transaction_hash
     }
+    getProvider().watchRefundResult(refund_transaction_hash)
+    // TODO: send a notification here maybe?
     PluginMessageCenter.emit('maskbook.red_packets.update', undefined)
 }
 export async function onRefundResult(id: string, details: { remaining_balance: bigint }) {
@@ -237,8 +244,10 @@ export async function onRefundResult(id: string, details: { remaining_balance: b
         const t = createTransaction(await createWalletDBAccess(), 'readwrite')('RedPacket')
         const rec = await getRedPacketByID(t, id)
         setNextState(rec, RedPacketStatus.refunded)
+        rec.refund_amount = details.remaining_balance
         t.objectStore('RedPacket').put(rec)
     }
+    // TODO: send a notification here.
     PluginMessageCenter.emit('maskbook.red_packets.update', undefined)
 }
 
