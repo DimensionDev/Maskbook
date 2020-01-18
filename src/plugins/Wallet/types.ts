@@ -5,7 +5,7 @@ export type RedPacketCreationResult =
           type: 'success'
           block_creation_time: Date
           red_packet_id: string
-          total: number
+          total: bigint
           creator: string
       }
     | { type: 'failed'; reason?: string }
@@ -16,9 +16,9 @@ export type RedPacketClaimResult =
           /** receiver's address */
           claimer: string
           /** claimed money amount */
-          claimed_value: number
+          claimed_value: bigint
       }
-    | { type: 'failed' }
+    | { type: 'failed'; reason?: string }
 interface CreateRedPacketResult {
     /** The transaction hash */
     create_transaction_hash: string
