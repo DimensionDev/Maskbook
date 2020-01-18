@@ -64,7 +64,7 @@ const useNewPacketStyles = makeStyles(theme =>
 function NewPacket(props: RedPacketDialogProps) {
     const classes = useStylesExtends(useNewPacketStyles(), props)
     const id = useCurrentIdentity()
-    const [is_random, setIsRandom] = useState(true)
+    const [is_random, setIsRandom] = useState(0)
 
     const [send_message, setMsg] = useState('Best Wishes!')
     const [, msgRef] = useCapturedInput(setMsg)
@@ -81,7 +81,7 @@ function NewPacket(props: RedPacketDialogProps) {
     const createRedPacket = () =>
         props.onConfirm({
             duration: 60 /** seconds */ * 60 /** mins */ * 24 /** hours */,
-            is_random,
+            is_random: Boolean(is_random),
             // TODO: Select network in debug mode?
             network: EthereumNetwork.Rinkeby,
             send_message,
@@ -113,9 +113,9 @@ function NewPacket(props: RedPacketDialogProps) {
                     <Select
                         MenuProps={{ container: PortalShadowRoot }}
                         value={is_random ? 1 : 0}
-                        onChange={e => setIsRandom(!!e.currentTarget.value)}>
-                        <MenuItem value="0">Average</MenuItem>
-                        <MenuItem value="1">Random</MenuItem>
+                        onChange={e => setIsRandom(e.target.value as number)}>
+                        <MenuItem value={0}>Average</MenuItem>
+                        <MenuItem value={1}>Random</MenuItem>
                     </Select>
                 </FormControl>
             </div>
