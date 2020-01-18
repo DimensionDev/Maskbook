@@ -146,6 +146,11 @@ export const redPacketAPI: RedPacketAPI = {
         console.log('Mock: Watching refund result...')
         onRefundResult(id, { remaining_balance: BigInt(10) })
     },
+    async checkClaimedList(id: string) {
+        const contract = createRedPacketContract('0x0')
+        const tx = contract.methods.check_claimed_list(id)
+        return tx.call(await createTxPayload(tx))
+    },
 }
 
 export const walletAPI: WalletAPI = {
