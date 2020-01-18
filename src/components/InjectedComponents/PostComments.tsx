@@ -28,7 +28,7 @@ export function PostCommentDecrypted(props: PostCommentDecryptedProps) {
     )
 }
 export interface PostCommentProps {
-    decryptedPostContent: ValueRef<string>
+    decryptedPostContentRaw: ValueRef<string>
     postPayload: ValueRef<Payload | null>
     comment: ValueRef<string>
     needZip(): void
@@ -38,7 +38,7 @@ export interface PostCommentProps {
     failedComponent?: React.ComponentType<{ error: Error }>
 }
 export function PostComment(props: PostCommentProps) {
-    const decryptedPostContent = useValueRef(props.decryptedPostContent)
+    const decryptedPostContent = useValueRef(props.decryptedPostContentRaw)
     const comment = useValueRef(props.comment)
     const postPayload = useValueRef(props.postPayload)
     const postIV = postPayload ? postPayload.iv : ''

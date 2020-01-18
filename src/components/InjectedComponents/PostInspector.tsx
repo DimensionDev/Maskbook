@@ -15,6 +15,7 @@ import { TypedMessage } from '../../extension/background-script/CryptoServices/u
 
 export interface PostInspectorProps {
     onDecrypted(post: TypedMessage): void
+    onDecryptedRaw(post: string): void
     post: string
     postBy: ProfileIdentifier
     postId: string

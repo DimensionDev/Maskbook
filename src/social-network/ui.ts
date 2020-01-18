@@ -12,6 +12,7 @@ import { Theme } from '@material-ui/core'
 import { MaskbookLightTheme, MaskbookDarkTheme } from '../utils/theme'
 import { untilDomLoaded } from '../utils/dom'
 import { I18NStrings } from '../utils/i18n'
+import { TypedMessage } from '../extension/background-script/CryptoServices/utils'
 
 OnlyRunInContext(['content', 'debugging', 'options'], 'UI provider')
 
@@ -246,7 +247,8 @@ export type PostInfo = {
     readonly steganographyContent: ValueRef<string>
     readonly commentsSelector?: LiveSelector<HTMLElement, false>
     readonly commentBoxSelector?: LiveSelector<HTMLElement, false>
-    readonly decryptedPostContent: ValueRef<string>
+    readonly decryptedPostContent: ValueRef<TypedMessage | null>
+    readonly decryptedPostContentRaw: ValueRef<string>
     readonly rootNode: HTMLElement
     readonly rootNodeProxy: DOMProxy
 }
@@ -280,7 +282,8 @@ export const getEmptyPostInfoByElement = (
     opt: Pick<PostInfo, 'rootNode' | 'rootNodeProxy' | 'commentsSelector' | 'commentBoxSelector'>,
 ) => {
     return {
-        decryptedPostContent: new ValueRef(''),
+        decryptedPostContent: new ValueRef(null),
+        decryptedPostContentRaw: new ValueRef(''),
         postBy: new ValueRef(ProfileIdentifier.unknown, ProfileIdentifier.equals),
         postContent: new ValueRef(''),
         postID: new ValueRef<string | null>(null),

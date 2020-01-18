@@ -16,10 +16,11 @@ export function injectPostInspectorDefault<T extends string>(
     const PostInspectorDefault = React.memo(function PostInspectorDefault(
         props: PostInfo & {
             onDecrypted: PostInspectorProps['onDecrypted']
+            onDecryptedRaw: PostInspectorProps['onDecryptedRaw']
             zipPost: PostInspectorProps['needZip']
         },
     ) {
-        const { onDecrypted, zipPost, postBy, postID, postContent } = props
+        const { onDecrypted, zipPost, postBy, postID, postContent, onDecryptedRaw } = props
         const id = useValueRef(postID) || ''
         const by = useValueRef(postBy)
         const content = useValueRef(postContent)
@@ -27,6 +28,7 @@ export function injectPostInspectorDefault<T extends string>(
         const additionalProps = additionalPropsToPostInspector(classes)
         return (
             <PostInspector
+                onDecryptedRaw={onDecryptedRaw}
                 onDecrypted={onDecrypted}
                 needZip={zipPost}
                 postId={id}
@@ -42,12 +44,10 @@ export function injectPostInspectorDefault<T extends string>(
     const zipPostF = zipPost || (() => {})
     return function injectPostInspector(current: PostInfo) {
         const injectionPointDefault = () => current.rootNodeProxy.afterShadow
-        const onDecrypted = (val: TypedMessage) => {
-            if (val.type === 'text') current.decryptedPostContent.value = val.content
-        }
         return renderInShadowRoot(
             <PostInspectorDefault
-                onDecrypted={onDecrypted}
+                onDecrypted={val => (current.decryptedPostContent.value = val)}
+                onDecryptedRaw={val => (current.decryptedPostContentRaw.value = val)}
                 zipPost={() => zipPostF(current.rootNodeProxy)}
                 {...current}
             />,

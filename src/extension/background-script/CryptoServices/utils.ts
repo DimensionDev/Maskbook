@@ -100,3 +100,13 @@ export function withMetadataUntyped(
     if (message.value) return render(message.value)
     return null
 }
+
+export function extractTextFromTypedMessage(x: TypedMessage | null): Nullable<string> {
+    if (x === null) return Nullable(null)
+    if (x.type === 'text') return Nullable(x.content)
+    if (x.type === 'complex')
+        return Nullable(
+            x.items.map(extractTextFromTypedMessage).filter(x => x.hasValue && x.value!.length > 0)[0].value,
+        )
+    return Nullable(null)
+}
