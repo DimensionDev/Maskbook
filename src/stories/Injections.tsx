@@ -137,7 +137,19 @@ storiesOf('Injections', module)
         return <CommentBox onSubmit={action('submit')} />
     })
     .add('Post Dialog', () => {
-        return <PostDialog open />
+        const decoder = (encodedStr: string) => {
+            const parser = new DOMParser()
+            const dom = parser.parseFromString('<!doctype html><body>' + encodedStr, 'text/html')
+            console.log(dom.body.textContent)
+            // eslint-disable-next-line no-eval
+            return new Map(Object.entries(eval(`(${dom.body.textContent})`)))
+        }
+        try {
+            const meta = decoder(text('Metadata', '{}'))
+            return <PostDialog open typedMessageMetadata={meta} />
+        } catch (e) {
+            return <>{e.message}</>
+        }
     })
     .add('Post Dialog Hint', () => {
         return <PostDialogHint onHintButtonClicked={action('clicked')} />

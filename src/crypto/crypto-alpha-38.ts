@@ -6,9 +6,12 @@ export * from './crypto-alpha-39'
  */
 export function typedMessageStringify(x: TypedMessage) {
     if (x.type !== 'text') throw new Error('Not supported typed message.')
-    let msg = x.content
-    if (x.meta) msg = JSON.stringify(x.meta) + '🧩' + msg
-    return msg
+    if (!x.meta) return x.content
+
+    const obj: Record<string, any> = {}
+    for (const [a, b] of x.meta) obj[a] = b
+
+    return JSON.stringify(obj) + '🧩' + x.content
 }
 export function typedMessageParse(x: string) {
     const [maybeMetadata, ...end] = x.split('🧩')
@@ -16,7 +19,7 @@ export function typedMessageParse(x: string) {
         const json: unknown = JSON.parse(maybeMetadata)
         if (typeof json !== 'object' || json === null || Object.keys(json).length === 0)
             throw new Error('Not a metadata')
-        return makeTypedMessage(end.join('🧩'), json)
+        return makeTypedMessage(end.join('🧩'), new Map(Object.entries(json)))
     } catch {}
     return makeTypedMessage(x)
 }

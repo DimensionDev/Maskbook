@@ -27,7 +27,7 @@ export const cryptoProviderTable = {
 } as const
 
 export interface TypedMessageMetadata {
-    readonly meta?: object
+    readonly meta?: ReadonlyMap<string, any>
     readonly version: 1
 }
 export interface TypedMessageText extends TypedMessageMetadata {
@@ -42,8 +42,8 @@ export interface TypedMessageUnknown extends TypedMessageMetadata {
     readonly type: 'unknown'
 }
 export type TypedMessage = TypedMessageText | TypedMessageComplex | TypedMessageUnknown
-export function makeTypedMessage(text: string, meta?: object): TypedMessageText
-export function makeTypedMessage(content: string, meta?: object): TypedMessage {
+export function makeTypedMessage(text: string, meta?: ReadonlyMap<string, any>): TypedMessageText
+export function makeTypedMessage(content: string, meta?: ReadonlyMap<string, any>): TypedMessage {
     if (typeof content === 'string') {
         const text: TypedMessageText = { type: 'text', content, version: 1, meta }
         return text

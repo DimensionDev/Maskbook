@@ -16,6 +16,7 @@ const defaultDataSources: Required<SocialNetworkUIDataSources> = cloneDeep({
     currentIdentity: new ValueRef<Profile | null>(null),
     lastRecognizedIdentity: new ValueRef({ identifier: ProfileIdentifier.unknown }),
     posts: new Map(),
+    typedMessageMetadata: new ValueRef<ReadonlyMap<string, any>>(new Map<string, any>()),
 })
 
 const defaultInjections = {

@@ -233,6 +233,10 @@ export interface SocialNetworkUIDataSources {
      * Posts that Maskbook detects
      */
     readonly posts?: WeakMap<object, PostInfo>
+    /**
+     * Typed message metadata
+     */
+    readonly typedMessageMetadata?: ValueRef<ReadonlyMap<string, any>>
 }
 export type PostInfo = {
     readonly postBy: ValueRef<ProfileIdentifier>

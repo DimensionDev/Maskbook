@@ -31,6 +31,7 @@ import { DialogDismissIconUI } from './DialogDismissIcon'
 import { ClickableChip } from '../shared/SelectRecipients/ClickableChip'
 import RedPacketDialog from './RedPacketDialog'
 import { makeTypedMessage, TypedMessage } from '../../extension/background-script/CryptoServices/utils'
+import { RedPacketJSONPayload } from '../../database/Plugins/Wallet/types'
 
 const useStyles = makeStyles({
     MUIInputRoot: {
@@ -127,7 +128,17 @@ export function PostDialogUI(props: PostDialogUIProps) {
                     </Typography>
                 </DialogTitle>
                 <DialogContent className={classes.content}>
-                    {/* <Chip label="Content" /> */}
+                    {readRedPacketMetadata(props.postContent.meta, r => (
+                        <Chip
+                            onDelete={() => {
+                                const ref = getActivatedUI().typedMessageMetadata
+                                const next = new Map(ref.value.entries())
+                                next.delete('com.maskbook.red_packet:1')
+                                ref.value = next
+                            }}
+                            label={`A Red Packet with $${r.total} from ${r.sender.name}`}
+                        />
+                    ))}
                     <InputBase
                         classes={{
                             root: classes.MUIInputRoot,
@@ -194,8 +205,21 @@ export interface PostDialogProps extends Partial<PostDialogUIProps> {
     identities?: Profile[]
     onRequestPost?: (target: (Profile | Group)[], content: TypedMessage) => void
     onRequestReset?: () => void
+    typedMessageMetadata: ReadonlyMap<string, any>
 }
 export function PostDialog(props: PostDialogProps) {
+    const [onlyMyself, setOnlyMyself] = useState(false)
+    const isSteganography = useValueRef(steganographyModeSetting)
+    //#region TypedMessage
+    const [postBoxContent, setPostBoxContent] = useState<TypedMessage>(makeTypedMessage('', props.typedMessageMetadata))
+    console.log(props.typedMessageMetadata, postBoxContent)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    useEffect(() => {
+        if (props.typedMessageMetadata !== postBoxContent.meta)
+            setPostBoxContent({ ...postBoxContent, meta: props.typedMessageMetadata })
+    })
+    //#endregion
+    //#region Share target
     const people = useFriendsList()
     const groups = useGroupsList()
     const availableShareTarget = or(
@@ -203,8 +227,9 @@ export function PostDialog(props: PostDialogProps) {
         useMemo(() => [...groups, ...people], [people, groups]),
     )
     const currentIdentity = or(props.currentIdentity, useCurrentIdentity())
-    const isSteganography = useValueRef(steganographyModeSetting)
-
+    const [currentShareTarget, setCurrentShareTarget] = useState(availableShareTarget)
+    //#endregion
+    //#region callbacks
     const onRequestPost = or(
         props.onRequestPost,
         useCallback(
@@ -243,9 +268,18 @@ export function PostDialog(props: PostDialogProps) {
             setOpen(false)
             setPostBoxContent(makeTypedMessage(''))
             setCurrentShareTarget([])
+            getActivatedUI().typedMessageMetadata.value = new Map()
         }, []),
     )
-
+    const onFinishButtonClicked = useCallback(() => {
+        onRequestPost(onlyMyself ? [currentIdentity!] : currentShareTarget, postBoxContent)
+        onRequestReset()
+    }, [currentIdentity, currentShareTarget, onRequestPost, onRequestReset, onlyMyself, postBoxContent])
+    const onCloseButtonClicked = useCallback(() => {
+        setOpen(false)
+    }, [])
+    //#endregion
+    //#region My Identity
     const identities = useMyIdentities()
     const [open, setOpen] = useState(false)
     useEffect(() => {
@@ -260,18 +294,8 @@ export function PostDialog(props: PostDialogProps) {
         }
     }, [identities.length, props.reason])
 
-    const [onlyMyself, setOnlyMyself] = useState(false)
     const onOnlyMyselfChanged = useCallback((checked: boolean) => setOnlyMyself(checked), [])
-
-    const [postBoxContent, setPostBoxContent] = useState<TypedMessage>(makeTypedMessage(''))
-    const [currentShareTarget, setCurrentShareTarget] = useState(availableShareTarget)
-    const onFinishButtonClicked = useCallback(() => {
-        onRequestPost(onlyMyself ? [currentIdentity!] : currentShareTarget, postBoxContent)
-        onRequestReset()
-    }, [currentIdentity, currentShareTarget, onRequestPost, onRequestReset, onlyMyself, postBoxContent])
-    const onCloseButtonClicked = useCallback(() => {
-        setOpen(false)
-    }, [])
+    //#endregion
 
     return (
         <PostDialogUI
@@ -294,4 +318,14 @@ export function PostDialog(props: PostDialogProps) {
 
 PostDialog.defaultProps = {
     reason: 'timeline',
+}
+
+function readRedPacketMetadata(
+    meta: ReadonlyMap<string, any> | undefined,
+    f: (rp: RedPacketJSONPayload) => React.ReactNode,
+): React.ReactNode {
+    if (!meta) return null
+    if (!meta.has('com.maskbook.red_packet:1')) return null
+    // TODO: validate the schema.
+    return f(meta.get('com.maskbook.red_packet:1')!)
 }
