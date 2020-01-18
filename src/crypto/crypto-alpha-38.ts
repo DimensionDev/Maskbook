@@ -6,7 +6,7 @@ export * from './crypto-alpha-39'
  */
 export function typedMessageStringify(x: TypedMessage) {
     if (x.type !== 'text') throw new Error('Not supported typed message.')
-    if (!x.meta) return x.content
+    if (!x.meta || x.meta.size === 0) return x.content
 
     const obj: Record<string, any> = {}
     for (const [a, b] of x.meta) obj[a] = b
