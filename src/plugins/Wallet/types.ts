@@ -90,9 +90,8 @@ export interface RedPacketAPI {
 export interface WalletAPI {
     dataSource: 'real' | 'mock'
     watchWalletBalance(address: string): void
-    approveERC20Token(opts: {
-        redPacketAddress: string
-        erc20TokenAddress: string
-        amount: bigint
-    }): Promise<{ erc20_approve_transaction_hash: string; erc20_approve_value: bigint }>
+    approveERC20Token(
+        erc20TokenAddress: string,
+        amount: string,
+    ): Promise<{ erc20_approve_transaction_hash: string; erc20_approve_value: bigint }>
 }
