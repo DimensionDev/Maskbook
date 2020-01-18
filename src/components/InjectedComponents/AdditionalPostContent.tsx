@@ -4,12 +4,16 @@ import { makeStyles, Typography, Link, Card } from '@material-ui/core'
 import anchorme from 'anchorme'
 import { useStylesExtends } from '../custom-ui-helper'
 import classNames from 'classnames'
+import { TypedMessageText, withMetadata } from '../../extension/background-script/CryptoServices/utils'
+import StructuredPluginWrapper from './StructuredMessage/StructuredPluginWrapper'
+import { RedPacketWithState } from '../../extension/options-page/DashboardComponents/RedPacket'
 
 export interface AdditionalContentProps extends withClasses<KeysInferFromUseStyles<typeof useStyles>> {
     title: React.ReactNode
     children?: React.ReactNode
     center?: boolean
     renderText?: string
+    renderItem?: TypedMessageText
     hideIcon?: boolean
 }
 const useStyles = makeStyles({
@@ -32,9 +36,15 @@ export const AdditionalContent = React.memo(function AdditionalContent(props: Ad
                 {props.hideIcon ? null : <img alt="" width={16} height={16} src={icon} className={classes.icon} />}
                 {props.title}
             </Typography>
-            {props.renderText ? (
+            {props.renderItem || props.renderText ? (
                 <Typography variant="body2" component="p">
-                    <RenderText text={props.renderText} />
+                    <RenderText text={props.renderText || props.renderItem!.content} />
+                    {props.renderItem &&
+                        withMetadata(props.renderItem.meta, 'com.maskbook.red_packet:1', r => (
+                            <StructuredPluginWrapper width={400} pluginName="Red Packet">
+                                <RedPacketWithState unknownRedPacket={r} />
+                            </StructuredPluginWrapper>
+                        ))}
                 </Typography>
             ) : (
                 props.children

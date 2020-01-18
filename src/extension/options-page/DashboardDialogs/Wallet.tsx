@@ -49,9 +49,11 @@ export function WalletSendRedPacketDialog(props: WalletSendRedPacketDialogProps)
                 <>
                     <Typography className={classes.body}>Select the social network to post...</Typography>
                     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                        <ActionButton variant="outlined" color="primary" className={classes.provider} width={240}>
-                            Open facebook.com
-                        </ActionButton>
+                        {
+                            // <ActionButton variant="outlined" color="primary" className={classes.provider} width={240}>
+                            //  Open facebook.com
+                            // </ActionButton>
+                        }
                         <ActionButton variant="outlined" color="primary" className={classes.provider} width={240}>
                             Open twitter.com
                         </ActionButton>

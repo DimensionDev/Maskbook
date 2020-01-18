@@ -101,10 +101,10 @@ function NewPacket(props: RedPacketDialogProps) {
                     <InputLabel>Token</InputLabel>
                     <Select MenuProps={{ container: PortalShadowRoot }} value={10}>
                         <MenuItem key={10} value={10}>
-                            USDT
+                            ETH
                         </MenuItem>
                         <MenuItem key={20} value={20}>
-                            SDTU
+                            USDT
                         </MenuItem>
                     </Select>
                 </FormControl>
@@ -194,6 +194,10 @@ function ExistingPacket(props: RedPacketDialogProps) {
         const updateHandler = () =>
             Services.Plugin.invokePlugin('maskbook.red_packet', 'getRedPackets')
                 .then(packets => packets.filter(p => true))
+                .then(_ => {
+                    console.log(_)
+                    return _
+                })
                 .then(setRedPacketRecords)
 
         updateHandler()

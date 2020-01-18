@@ -42,6 +42,11 @@ export type createRedPacketOption = {
  */
 export async function discoverRedPacket(payload: RedPacketJSONPayload, foundInURL: string) {
     const t = createTransaction(await createWalletDBAccess(), 'readwrite')('RedPacket')
+    const original = await t
+        .objectStore('RedPacket')
+        .index('red_packet_id')
+        .get(payload.rpid)
+    if (original) return original
     const rec: RedPacketRecord = {
         _data_source_: getProvider().dataSource,
         aes_version: 1,
@@ -66,6 +71,7 @@ export async function discoverRedPacket(payload: RedPacketJSONPayload, foundInUR
     }
     t.objectStore('RedPacket').add(rec)
     PluginMessageCenter.emit('maskbook.red_packets.update', undefined)
+    return rec
 }
 
 export async function getRedPackets(owned?: boolean) {

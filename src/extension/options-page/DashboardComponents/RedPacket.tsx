@@ -2,7 +2,8 @@ import React from 'react'
 import { makeStyles, createStyles, Card, Typography } from '@material-ui/core'
 import classNames from 'classnames'
 import { getWelcomePageURL } from '../Welcome/getWelcomePageURL'
-import { RedPacketRecord } from '../../../database/Plugins/Wallet/types'
+import { RedPacketRecord, RedPacketJSONPayload } from '../../../database/Plugins/Wallet/types'
+import Services from '../../service'
 
 const useStyles = makeStyles(theme =>
     createStyles({
@@ -73,7 +74,8 @@ const useStyles = makeStyles(theme =>
 interface RedPacketProps {
     onClick?(): void
     state?: 'pending' | 'opening' | 'opened'
-    redPacket: RedPacketRecord
+    redPacket?: RedPacketRecord
+    unknownRedPacket?: RedPacketJSONPayload
 }
 
 const requestNotification = () => {
@@ -98,7 +100,16 @@ const requestNotification = () => {
 
 export function RedPacketWithState(props: RedPacketProps) {
     const classes = useStyles()
-    const { onClick, state: _state, redPacket } = props
+    const { onClick, state: _state, redPacket: knownRedPacket, unknownRedPacket } = props
+    const [redPacket, setRedPacket] = React.useState(knownRedPacket || ({} as Partial<RedPacketRecord>))
+
+    React.useEffect(() => {
+        if (unknownRedPacket)
+            Services.Plugin.invokePlugin('maskbook.red_packet', 'discoverRedPacket', unknownRedPacket, '').then(
+                setRedPacket,
+            )
+    }, [unknownRedPacket])
+
     const state =
         _state ?? (redPacket.claim_transaction_hash ? (redPacket.claim_amount ? 'opened' : 'opening') : 'pending')
     return (
@@ -107,8 +118,10 @@ export function RedPacketWithState(props: RedPacketProps) {
             className={classNames(classes.box, { [classes.opened]: state === 'opened', [classes.cursor]: onClick })}
             component="article"
             onClick={() => {
-                requestNotification()
-                onClick?.()
+                if (onClick) {
+                    requestNotification()
+                    onClick()
+                }
             }}>
             <div className={classNames(classes.header, { [classes.flex1]: state === 'opened' })}>
                 {state === 'opened' ? (
@@ -117,7 +130,7 @@ export function RedPacketWithState(props: RedPacketProps) {
                     </Typography>
                 ) : (
                     <Typography variant="body1" color="inherit">
-                        From {redPacket.sender_name}
+                        From: {redPacket.sender_name}
                     </Typography>
                 )}
                 {state !== 'pending' && (
@@ -133,7 +146,9 @@ export function RedPacketWithState(props: RedPacketProps) {
                 <Typography variant="body2">
                     {state === 'pending'
                         ? 'Ready to open'
-                        : `${redPacket.send_total} USDT / ${redPacket.uuids.length} Shares`}
+                        : `${redPacket.send_total?.toLocaleString()} USDT / ${
+                              redPacket.uuids ? redPacket.uuids.length : 'Unknown'
+                          } Shares`}
                 </Typography>
             </div>
             <div className={classes.packet}></div>
@@ -143,7 +158,16 @@ export function RedPacketWithState(props: RedPacketProps) {
 
 export function RedPacket(props: RedPacketProps) {
     const classes = useStyles()
-    const { onClick, redPacket } = props
+    const { onClick, redPacket: knownRedPacket, unknownRedPacket } = props
+    const [redPacket, setRedPacket] = React.useState(knownRedPacket || ({} as Partial<RedPacketRecord>))
+
+    React.useEffect(() => {
+        if (unknownRedPacket)
+            Services.Plugin.invokePlugin('maskbook.red_packet', 'discoverRedPacket', unknownRedPacket, '').then(
+                setRedPacket,
+            )
+    }, [unknownRedPacket])
+
     return (
         <Card
             elevation={0}
@@ -163,7 +187,8 @@ export function RedPacket(props: RedPacketProps) {
                     {redPacket.send_message}
                 </Typography>
                 <Typography variant="body1">
-                    {redPacket.send_total.toLocaleString()} USDT / {redPacket.uuids.length} shares
+                    {redPacket.send_total?.toLocaleString()} USDT /{' '}
+                    {redPacket.uuids ? redPacket.uuids.length : 'Unknown'} shares
                 </Typography>
             </div>
             <div className={classes.packet}></div>
