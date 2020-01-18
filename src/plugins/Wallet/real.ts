@@ -11,7 +11,7 @@ import { TransactionObject } from '../../contracts/types'
 import { RedPacketTokenType } from '../../database/Plugins/Wallet/types'
 import { asyncTimes, pollingTask } from '../../utils/utils'
 
-const RED_PACKET_CONTRACT_ADDRESS = '0x0'
+const RED_PACKET_CONTRACT_ADDRESS = '0x19D0b6091D37Bc262ecC460ee4Bd57DBBD68754C'
 
 function createRedPacketContract(address: string) {
     return (new web3.eth.Contract(HappyRedPacketABI as AbiItem[], address) as unknown) as HappyRedPacket
