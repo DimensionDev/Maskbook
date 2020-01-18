@@ -153,3 +153,25 @@ export const asyncTimes = async <T>(
     }
     return result
 }
+
+export const pollingTask = (
+    task: () => Promise<boolean>,
+    {
+        delay = 4000,
+    }: {
+        delay?: number
+    } = {},
+) => {
+    const runTask = async () => {
+        let stop = false
+        try {
+            stop = await task()
+        } catch (e) {
+            console.error(e)
+        }
+        if (!stop) {
+            setTimeout(runTask, delay)
+        }
+    }
+    runTask()
+}
