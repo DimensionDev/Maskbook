@@ -90,11 +90,7 @@ export async function createRedPacket(
     let erc20_token: string | undefined = undefined
     if (packet.token_type === RedPacketTokenType.erc20) {
         if (!packet.erc20_token?.address) throw new Error('ERC20 token should have erc20_token field')
-        const res = await getWalletProvider().approveERC20Token({
-            redPacketAddress: contract_address,
-            amount: packet.send_total,
-            erc20TokenAddress: packet.erc20_token.address,
-        })
+        const res = await getWalletProvider().approveERC20Token(packet.erc20_token.address, packet.send_total)
         TODO: erc20_token = ''
         erc20_approve_transaction_hash = res.erc20_approve_transaction_hash
         erc20_approve_value = res.erc20_approve_value
@@ -108,6 +104,9 @@ export async function createRedPacket(
         Array.from(crypto.getRandomValues(new Uint32Array(8))),
         packet.send_message,
         packet.sender_name,
+        packet.token_type,
+        packet.erc20_token?.address || '',
+        packet.send_total,
     )
     const record: RedPacketRecord = {
         _data_source_: getProvider().dataSource,

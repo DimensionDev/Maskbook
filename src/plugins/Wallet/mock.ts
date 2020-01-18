@@ -13,7 +13,7 @@ export const mockRedPacketAPI: RedPacketAPI = {
     async claim(...args) {
         console.log('Mock: Calling claiming', ...args)
         await sleep(1000)
-        return BigInt(Math.floor(Math.random() * 10000))
+        return { claim_transaction_hash: 'txhash' }
     },
 
     async watchClaimResult(id: string) {
@@ -23,7 +23,7 @@ export const mockRedPacketAPI: RedPacketAPI = {
             Math.random() > 0.5
                 ? {
                       type: 'success',
-                      claimed_value: Math.random(),
+                      claimed_value: BigInt(Math.random() * 1000),
                       claimer: 'claimer address',
                       red_packet_id: 'red packed id',
                   }
@@ -40,7 +40,7 @@ export const mockRedPacketAPI: RedPacketAPI = {
                       block_creation_time: new Date(),
                       red_packet_id: 'red packet id',
                       creator: 'creator address',
-                      total: 23,
+                      total: BigInt(23),
                   }
                 : { type: 'failed', reason: 'uh.chuchuc' }
         onCreationResult(transactionHash, f)
@@ -84,8 +84,8 @@ export const mockWalletAPI: WalletAPI = {
             onWalletBalanceUpdated(address, BigInt(Math.floor(Math.random() * 1000)))
         }, 4000)
     },
-    async approveERC20Token(address: string, amount: string) {
-        console.log('Mocking: Approving erc20token...', address)
+    async approveERC20Token(...args) {
+        console.log('Mocking: Approving erc20token...', ...args)
         await sleep(2000)
         return { erc20_approve_transaction_hash: 'a hash', erc20_approve_value: BigInt(233) }
     },

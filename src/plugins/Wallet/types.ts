@@ -56,7 +56,7 @@ export interface RedPacketAPI {
         hashes_of_password: string[],
         is_random: boolean,
         duration: number,
-        seed: string,
+        seed: number[],
         message: string,
         name: string,
         token_type: RedPacketTokenType,

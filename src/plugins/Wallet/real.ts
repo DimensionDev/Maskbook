@@ -44,7 +44,7 @@ export const redPacketAPI: RedPacketAPI = {
         hashes: string[],
         isRandom: boolean,
         duration: number,
-        seed: string,
+        seed: number[],
         message: string,
         name: string,
         token_type: RedPacketTokenType,
@@ -246,7 +246,10 @@ export const redPacketAPI: RedPacketAPI = {
     async checkClaimedList(id: string) {
         const contract = createRedPacketContract(RED_PACKET_CONTRACT_ADDRESS)
         const tx = contract.methods.check_claimed_list(id)
-        return tx.call(await createTxPayload(tx))
+        const map = new Map<string, bigint>()
+        const result = await tx.call(await createTxPayload(tx))
+        result.claimer_addrs.forEach((addr, index) => map.set(addr, BigInt(result.claimed_list[index])))
+        return map
     },
 }
 
