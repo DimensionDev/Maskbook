@@ -158,9 +158,23 @@ export const mockWalletAPI: WalletAPI = {
             onWalletBalanceUpdated(address, BigInt(Math.floor(Math.random() * 1000)))
         }, 4000)
     },
-    async approveERC20Token(opts) {
-        console.log('Mocking: Approving erc20token...', opts)
-        await sleep(2000)
-        return { erc20_approve_transaction_hash: 'a hash', erc20_approve_value: BigInt(233) }
+    async approveERC20Token(address: string, amount: string) {
+        const contract = createRedPacketContract('0x0')
+        const erc20Contract = createERC20Contract(address)
+
+        const tx = erc20Contract.methods.approve(contract.options.address, amount)
+
+        return new Promise<{ erc20_approve_transaction_hash: string; erc20_approve_value: bigint }>(
+            async (resolve, reject) => {
+                tx.send(await createTxPayload(tx))
+                    .on('transactionHash', (hash: string) =>
+                        resolve({
+                            erc20_approve_transaction_hash: hash,
+                            erc20_approve_value: BigInt(amount),
+                        }),
+                    )
+                    .on('error', (error: Error) => reject(error))
+            },
+        )
     },
 }
