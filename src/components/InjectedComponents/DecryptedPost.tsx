@@ -252,6 +252,7 @@ export function DecryptPost(props: DecryptPostProps) {
                     return (
                         <Success
                             data={result.data}
+                            postIdentifier={new PostIdentifier(postBy, postId || 'unknown')}
                             alreadySelectedPreviously={alreadySelectedPreviously}
                             requestAppendRecipients={requestAppendRecipientsWrapped}
                             people={people}
