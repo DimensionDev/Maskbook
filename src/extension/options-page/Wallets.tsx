@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { makeStyles, createStyles } from '@material-ui/styles'
-import { Theme, Typography, Card, Container } from '@material-ui/core'
+import { Theme, Typography, Card, Container, Button } from '@material-ui/core'
 import { useHistory, useRouteMatch, Redirect } from 'react-router-dom'
 import { DialogRouter } from './DashboardDialogs/DialogBase'
 
@@ -72,16 +72,6 @@ export default function DashboardWalletsPage() {
                 <Typography className={classes.title} variant="h5" align="left">
                     My Wallets
                 </Typography>
-                <button
-                    onClick={() => {
-                        Services.Plugin.invokePlugin('maskbook.wallet', 'importNewWallet', {
-                            mnemonic: ['random', 'word'],
-                            name: 'Wallet ' + Math.random(),
-                            passphrase: 'password',
-                        } as Pick<WalletRecord, 'name' | 'mnemonic' | 'passphrase'>)
-                    }}>
-                    Add new random wallet
-                </button>
                 <div>
                     {wallets.map((i, index) => (
                         <Card key={i.id} className={classes.identity} raised elevation={1}>
@@ -91,10 +81,19 @@ export default function DashboardWalletsPage() {
                 </div>
             </section>
             <section className={classes.sections}>
-                <Typography variant="body2">
-                    Every wallet belongs to its corresponding persona. More operations (e.g. delete & export) are
-                    available in the persona card at the Home page.
-                </Typography>
+                <Button
+                    onClick={() => {
+                        Services.Plugin.invokePlugin('maskbook.wallet', 'importNewWallet', {
+                            mnemonic: prompt(
+                                "What's your wallet mnemonic word? Paste it here, split by space",
+                                'flag wave term illness equal airport hint item dinosaur opinion special kick',
+                            )!.split(' '),
+                            passphrase: prompt('What is password of this wallet?', '12345678'),
+                            name: prompt('What is the name of this wallet?', 'Demo wallet'),
+                        } as Pick<WalletRecord, 'name' | 'mnemonic' | 'passphrase'>)
+                    }}>
+                    Import a wallet
+                </Button>
             </section>
             <section className={classes.sections}>
                 <FooterLine />

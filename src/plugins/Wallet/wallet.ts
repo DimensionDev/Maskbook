@@ -5,7 +5,12 @@ import uuid from 'uuid/v4'
 import { mockWalletAPI } from './mock'
 import { assert } from './red-packet-fsm'
 import { PluginMessageCenter } from '../PluginMessages'
+import { HDKey, EthereumAddress } from 'wallet.ts'
+import * as bip39 from 'bip39'
 
+// Private key at m/44'/coinType'/account'/change/addressIndex
+// coinType = ether
+const path = "m/44'/60'/0'/0/0"
 export function getWalletProvider() {
     return mockWalletAPI
 }
@@ -15,11 +20,21 @@ export async function getWallets() {
 }
 
 export async function importNewWallet(rec: Omit<WalletRecord, 'id' | 'address' | 'eth_balance' | '_data_source_'>) {
+    const mnemonicWord = rec.mnemonic
+    const seed = await bip39.mnemonicToSeed(mnemonicWord.join(' '), rec.passphrase)
+    const masterKey = HDKey.parseMasterSeed(seed)
+    const extendedPrivateKey = masterKey.derive(path).extendedPrivateKey!
+    const childKey = HDKey.parseExtendedKey(extendedPrivateKey)
+
+    const wallet = childKey.derive('0')
+    const walletPrivateKey = wallet.privateKey
+    const walletPublicKey = wallet.publicKey
+    const address = EthereumAddress.from(walletPublicKey).address
+
     const newLocal: WalletRecord = {
         ...rec,
         id: uuid(),
-        // TODO: generate address from password and mnemonic word
-        address: uuid(),
+        address,
         _data_source_: getWalletProvider().dataSource,
     }
     {

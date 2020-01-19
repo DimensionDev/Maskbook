@@ -228,7 +228,6 @@ function ExistingPacket(props: RedPacketDialogProps & ExistingPacketProps) {
                     ),
                 )
                 .then(setRedPacketRecords)
-            debugger
         }
 
         updateHandler()
