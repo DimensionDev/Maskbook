@@ -2,6 +2,9 @@ import { RedPacketAPI, WalletAPI, RedPacketClaimResult, RedPacketCreationResult 
 import { sleep } from '@holoflows/kit/es/util/sleep'
 import { onClaimResult, onCreationResult, onExpired, onRefundResult } from './red-packet-fsm'
 import { onWalletBalanceUpdated } from './wallet'
+import { createTransaction } from '../../database/helpers/openDB'
+import { createWalletDBAccess } from '../../database/Plugins/Wallet/Wallet.db'
+import uuid from 'uuid/v4'
 
 export const mockRedPacketAPI: RedPacketAPI = {
     dataSource: 'mock',
@@ -18,6 +21,12 @@ export const mockRedPacketAPI: RedPacketAPI = {
 
     async watchClaimResult(id) {
         console.log('Mock: Watching calming result', id, 'Call globalThis.next(true / false) to approve / reject claim')
+        const tx = await createTransaction(
+            await createWalletDBAccess(),
+            'readonly',
+        )('RedPacket')
+            .objectStore('RedPacket')
+            .get(id.databaseID)
         Object.assign(globalThis, {
             next: (x: boolean) => {
                 const r: RedPacketClaimResult = x
@@ -25,7 +34,7 @@ export const mockRedPacketAPI: RedPacketAPI = {
                           type: 'success',
                           claimed_value: BigInt(Math.ceil(Math.random() * 1000)),
                           claimer: 'claimer address',
-                          red_packet_id: 'red packed id',
+                          red_packet_id: tx?.red_packet_id!,
                       }
                     : { type: 'failed' }
                 onClaimResult(id, r)
@@ -40,7 +49,7 @@ export const mockRedPacketAPI: RedPacketAPI = {
                     ? {
                           type: 'success',
                           block_creation_time: new Date(),
-                          red_packet_id: 'red packet id',
+                          red_packet_id: uuid(),
                           creator: 'creator address',
                           total: BigInt(23),
                       }
