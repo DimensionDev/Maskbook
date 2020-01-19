@@ -119,7 +119,7 @@ export function RedPacketWithState(props: RedPacketProps) {
             })}
             component="article"
             onClick={() => !loading && onClick?.(status, redPacket.red_packet_id)}>
-            <div className={classNames(classes.header, { [classes.flex1]: status === 'pending' })}>
+            <div className={classNames(classes.header, { [classes.flex1]: status === 'incoming' })}>
                 {status === 'claimed' ? (
                     <Typography variant="h5" color="inherit">
                         {redPacket.claim_amount?.toLocaleString()} USDT
@@ -152,7 +152,7 @@ export function RedPacketWithState(props: RedPacketProps) {
                 className={classNames(classes.loader, {
                     [classes.dimmer]: status === 'refunded' || status === 'expired' || loading,
                 })}>
-                {loading && <CircularProgress color="secondary" />}
+                {(loading || status === 'pending') && <CircularProgress color="secondary" />}
             </div>
         </Card>
     )

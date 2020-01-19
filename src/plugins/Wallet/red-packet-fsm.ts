@@ -289,7 +289,10 @@ if (process.env.NODE_ENV === 'development') {
     }, 1000)
 }
 
-async function getRedPacketByID(t: undefined | IDBPSafeTransaction<WalletDB, ['RedPacket'], 'readonly'>, id: string) {
+export async function getRedPacketByID(
+    t: undefined | IDBPSafeTransaction<WalletDB, ['RedPacket'], 'readonly'>,
+    id: string,
+) {
     if (!t) t = createTransaction(await createWalletDBAccess(), 'readonly')('RedPacket')
     const rec = await t
         .objectStore('RedPacket')
