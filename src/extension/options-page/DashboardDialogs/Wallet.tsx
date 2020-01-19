@@ -178,7 +178,7 @@ const useRedPacketDetailStyles = makeStyles(theme =>
 
 interface WalletRedPacketDetailDialogProps {
     redPacket: RedPacketRecord
-    onDecline?(): void
+    onDecline: (() => void) | string
 }
 
 export function WalletRedPacketDetailDialog(props: WalletRedPacketDetailDialogProps) {

@@ -99,7 +99,11 @@ export default function DashboardWalletsPage() {
             <section className={classes.sections}>
                 <FooterLine />
             </section>
-            <DialogRouter path="/redpacket" children={<WalletRedPacketDetailDialogWithRouter />} />
+            <DialogRouter
+                path="/redpacket"
+                onExit="/wallets/"
+                children={<WalletRedPacketDetailDialogWithRouter onDecline="/wallets/" />}
+            />
             {!match?.url.endsWith('/') && match?.isExact && <Redirect to={match?.url + '/'} />}
         </Container>
     )
