@@ -229,6 +229,14 @@ const useRedPacketDetailStyles = makeStyles(theme =>
         openBy: {
             margin: theme.spacing(2, 0, 0.5),
         },
+        link: {
+            display: 'block',
+            width: '100%',
+            wordBreak: 'break-all',
+            textOverflow: 'ellipsis',
+            whiteSpace: 'nowrap',
+            overflow: 'hidden',
+        },
     }),
 )
 
@@ -250,8 +258,16 @@ export function WalletRedPacketDetailDialog(props: WalletRedPacketDetailDialogPr
                 <>
                     <RedPacket redPacket={redPacket} />
                     <WalletLine
+                        onClick={() =>
+                            redPacket._found_in_url_ &&
+                            window.open(redPacket._found_in_url_, '_blank', 'noopener noreferrer')
+                        }
                         line1="Source"
-                        line2={<Typography color="primary">{redPacket._found_in_url_ || 'Unknown'}</Typography>}
+                        line2={
+                            <Typography className={classes.link} color="primary">
+                                {redPacket._found_in_url_ || 'Unknown'}
+                            </Typography>
+                        }
                     />
                     <WalletLine
                         line1="From"

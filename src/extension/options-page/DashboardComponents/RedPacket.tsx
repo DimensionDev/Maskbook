@@ -181,7 +181,7 @@ export function RedPacket(props: RedPacketProps) {
                     {redPacket.claim_amount ? `${redPacket.claim_amount.toLocaleString()} USDT` : `Not Claimed`}
                 </Typography>
                 <Typography className={classes.label} variant="body2">
-                    {redPacket.claim_transaction_hash ? 'Received' : 'Not Opened'}
+                    {redPacket.status}
                 </Typography>
             </div>
             <div className={classes.content}>
