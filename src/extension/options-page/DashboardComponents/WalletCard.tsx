@@ -2,8 +2,8 @@ import React from 'react'
 import { makeStyles, createStyles } from '@material-ui/core/styles'
 import CardContent from '@material-ui/core/CardContent'
 import Typography from '@material-ui/core/Typography'
-import { Persona } from '../../../database'
-import { Divider } from '@material-ui/core'
+import SettingsIcon from '@material-ui/icons/Settings'
+import { Divider, Menu, MenuItem } from '@material-ui/core'
 import { geti18nString } from '../../../utils/i18n'
 import WalletLine from './WalletLine'
 import ActionButton from './ActionButton'
@@ -16,6 +16,7 @@ import {
 import { DialogRouter } from '../DashboardDialogs/DialogBase'
 import { useColorProvider } from '../../../utils/theme'
 import { WalletRecord, RedPacketRecord } from '../../../database/Plugins/Wallet/types'
+import { useSnackbar } from 'notistack'
 
 interface Props {
     wallet: WalletRecord
@@ -66,6 +67,7 @@ const useStyles = makeStyles(theme =>
 export default function WalletCard({ wallet }: Props) {
     const classes = useStyles()
     const color = useColorProvider()
+    const { enqueueSnackbar, closeSnackbar } = useSnackbar()
 
     const [editing, setEditing] = React.useState(false)
     const [showAddToken, setShowAddToken] = React.useState(false)
@@ -85,17 +87,54 @@ export default function WalletCard({ wallet }: Props) {
         }
     }
 
+    const [anchorEl, setAnchorEl] = React.useState<null | Element>(null)
+    const handleClick = (event: React.MouseEvent) => {
+        setAnchorEl(event.currentTarget)
+    }
+
+    const handleClose = () => {
+        setAnchorEl(null)
+    }
+
+    const [renameWallet, setRenameWallet] = React.useState(false)
+    type Inputable = HTMLInputElement | HTMLTextAreaElement
+    const doRenameWallet = (event: React.FocusEvent<Inputable> | React.KeyboardEvent<Inputable>) => {
+        event.preventDefault()
+    }
+
+    const [deleteWallet, setDeleteWallet] = React.useState(false)
+    const confirmDeletePersona = () => {
+        enqueueSnackbar(geti18nString('dashboard_item_deleted'), {
+            variant: 'default',
+        })
+    }
+
+    const [backupWallet, setBackupWallet] = React.useState(false)
+
     return (
         <>
             <CardContent>
                 <Typography className={classes.header} variant="h5" component="h2">
                     <>
                         <span className="title">{wallet.name}</span>
-                        <Typography
-                            className="fullWidth"
-                            variant="body1"
-                            component="span"
-                            color="textSecondary"></Typography>
+                        <Typography className="fullWidth" variant="body1" component="span" color="textSecondary">
+                            <SettingsIcon className={classes.cursor} fontSize="small" onClick={handleClick} />
+                            <Menu
+                                anchorEl={anchorEl}
+                                keepMounted
+                                open={Boolean(anchorEl)}
+                                onClick={handleClose}
+                                PaperProps={{ style: { minWidth: 100 } }}
+                                onClose={handleClose}>
+                                <MenuItem onClick={() => setRenameWallet(true)}>{geti18nString('rename')}</MenuItem>
+                                <MenuItem onClick={() => setBackupWallet(true)}>
+                                    {geti18nString('dashboard_create_backup')}
+                                </MenuItem>
+                                <MenuItem onClick={() => setDeleteWallet(true)} className={color.error}>
+                                    {geti18nString('dashboard_delete_persona')}
+                                </MenuItem>
+                            </Menu>
+                        </Typography>
                     </>
                 </Typography>
                 <WalletLine
