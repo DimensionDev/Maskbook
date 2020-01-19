@@ -45,7 +45,8 @@ export interface RedPacketAPI {
     watchRefundResult(id: TxHashID & DatabaseID): void
     /**
      *
-     * @param hashes_of_password Passwords
+     * @param hash_of_password Password
+     * @param quantity Quantity of red packets
      * @param is_random Is the random valid
      * @param duration Red packet valid duration (default(0): 24h), unit: second
      * @param seed Random seed 32bit byte
@@ -57,7 +58,8 @@ export interface RedPacketAPI {
      * @returns The transaction hash
      */
     create(
-        hashes_of_password: string[],
+        hash_of_password: string,
+        quantity: number,
         is_random: boolean,
         duration: number,
         seed: number[],
@@ -91,11 +93,6 @@ export interface RedPacketAPI {
      * @param red_packet_id Red packet ID
      */
     refund(id: RedPacketID): Promise<{ refund_transaction_hash: string }>
-    /**
-     * Check who has claimed the red packet.
-     * @returns A Map<wallet_address, claimed_amount>
-     */
-    checkClaimedList(id: RedPacketID): Promise<Map<string, bigint>>
 }
 
 export interface WalletAPI {
