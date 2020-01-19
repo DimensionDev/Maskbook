@@ -10,6 +10,8 @@ import {
     Paper,
     Tabs,
     Tab,
+    FormControlLabel,
+    Switch,
 } from '@material-ui/core'
 import ArrowBack from '@material-ui/icons/ArrowBack'
 import ActionButton from '../DashboardComponents/ActionButton'
@@ -18,7 +20,7 @@ import { RedPacket } from '../DashboardComponents/RedPacket'
 import WalletLine from '../DashboardComponents/WalletLine'
 import Services from '../../service'
 import { PluginMessageCenter } from '../../../plugins/PluginMessages'
-import { RedPacketRecord, WalletRecord } from '../../../database/Plugins/Wallet/types'
+import { RedPacketRecord, WalletRecord, EthereumNetwork } from '../../../database/Plugins/Wallet/types'
 import useQueryParams from '../../../utils/hooks/useQueryParams'
 import { ERC20TokenPredefinedData } from '../../../plugins/Wallet/erc20'
 import { ERC20WellKnownTokenSelector } from './WalletAddTokenDialogContent'
@@ -72,7 +74,7 @@ export function WalletSendRedPacketDialog(props: WalletSendRedPacketDialogProps)
 }
 
 interface WalletAddTokenDialogProps {
-    onConfirm(token: string): void
+    onConfirm(token: ERC20TokenPredefinedData[0], userDefined: boolean, network: EthereumNetwork): void
     onDecline(): void
 }
 
@@ -93,13 +95,15 @@ interface TabPanelProps {
 
 export function WalletAddTokenDialog(props: WalletAddTokenDialogProps) {
     const { onConfirm, onDecline } = props
+
     const classes = useAddTokenStyles()
     const [tabID, setTabID] = React.useState<0 | 1>(0)
 
     const [wellknown, setWellknown] = React.useState<undefined | ERC20TokenPredefinedData[0]>()
+    const [useRinkeby, setRinkeby] = React.useState(false)
 
     const [address, setTokenAddress] = React.useState('')
-    const [decimal, setDecimal] = React.useState('')
+    const [decimals, setDecimal] = React.useState(0)
     const [tokenName, setTokenName] = React.useState('')
     const [symbol, setSymbol] = React.useState('')
 
@@ -112,12 +116,7 @@ export function WalletAddTokenDialog(props: WalletAddTokenDialogProps) {
             title={'Add Token'}
             tabs={
                 <Paper square>
-                    <Tabs
-                        value={tabID}
-                        onChange={(e, n) => {
-                            setTabID(n as any)
-                        }}
-                        aria-label="simple tabs example">
+                    <Tabs value={tabID} onChange={(e, n) => setTabID(n as any)} aria-label="simple tabs example">
                         <Tab label="Well-known token" />
                         <Tab label="Add your own token" />
                     </Tabs>
@@ -126,9 +125,22 @@ export function WalletAddTokenDialog(props: WalletAddTokenDialogProps) {
             content={
                 <>
                     {tabID === 0 ? (
-                        <ERC20WellKnownTokenSelector currentItem={wellknown} onChange={n => setWellknown(n)} />
+                        <ERC20WellKnownTokenSelector
+                            selectedItem={[wellknown, setWellknown]}
+                            useRinkebyNetwork={[useRinkeby, setRinkeby]}
+                        />
                     ) : (
                         <>
+                            <FormControlLabel
+                                control={
+                                    <Switch
+                                        checked={useRinkeby}
+                                        onChange={e => setRinkeby(e.currentTarget.checked)}
+                                        color="primary"
+                                    />
+                                }
+                                label="Use Rinkeby Network"
+                            />
                             <TextField
                                 required
                                 error={isInvalidAddr && !!address.length}
@@ -140,10 +152,10 @@ export function WalletAddTokenDialog(props: WalletAddTokenDialogProps) {
                                 required
                                 className={classes.textfield}
                                 label="Decimal"
-                                value={decimal}
+                                value={decimals}
                                 type="number"
                                 inputProps={{ min: 0 }}
-                                onChange={e => setDecimal(e.target.value)}></TextField>
+                                onChange={e => setDecimal(parseInt(e.target.value))}></TextField>
                             <TextField
                                 required
                                 className={classes.textfield}
@@ -165,7 +177,13 @@ export function WalletAddTokenDialog(props: WalletAddTokenDialogProps) {
                     disabled={isValidInput}
                     variant="contained"
                     color="primary"
-                    onClick={() => onConfirm(address)}>
+                    onClick={() =>
+                        onConfirm(
+                            tabID === 0 ? wellknown! : { address, symbol, decimals, name: tokenName },
+                            tabID === 0,
+                            useRinkeby ? EthereumNetwork.Rinkeby : EthereumNetwork.Mainnet,
+                        )
+                    }>
                     Add Token
                 </ActionButton>
             }></DialogContentItem>

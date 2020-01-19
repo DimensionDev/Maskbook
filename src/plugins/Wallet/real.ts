@@ -257,7 +257,7 @@ export const walletAPI: WalletAPI = {
         })
     },
     watchERC20TokenBalance(walletAddress, token) {
-        const erc20Contract = createERC20Contract(token.address)
+        const erc20Contract = createERC20Contract(token)
         pollingTask(async () => {
             onWalletERC20TokenBalanceUpdated(
                 walletAddress,

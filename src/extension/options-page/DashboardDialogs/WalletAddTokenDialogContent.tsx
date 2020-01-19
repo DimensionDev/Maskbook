@@ -96,11 +96,12 @@ const renderGroup = (params: RenderGroupParams) => [
 ]
 
 export function ERC20WellKnownTokenSelector(props: {
-    currentItem: ERC20TokenPredefinedData[0] | undefined
-    onChange(next: ERC20TokenPredefinedData[0] | undefined): void
+    selectedItem: [ERC20TokenPredefinedData[0] | undefined, (next: ERC20TokenPredefinedData[0] | undefined) => void]
+    useRinkebyNetwork: [boolean, (x: boolean) => void]
 }) {
     const classes = useStyles()
-    const [useRinkeby, setRinkeby] = React.useState(false)
+    const [selected, setSelected] = props.selectedItem
+    const [useRinkeby, setRinkeby] = props.useRinkebyNetwork
 
     return (
         <>
@@ -110,7 +111,7 @@ export function ERC20WellKnownTokenSelector(props: {
                         checked={useRinkeby}
                         onChange={e => {
                             setRinkeby(e.currentTarget.checked)
-                            props.onChange(undefined)
+                            setSelected(undefined)
                         }}
                         color="primary"
                     />
@@ -127,16 +128,16 @@ export function ERC20WellKnownTokenSelector(props: {
                 groupBy={(option: typeof mainnet[0]) => getNameOfToken(option)[0].toUpperCase()}
                 renderInput={params => <TextField {...params} variant="outlined" label="Well-known tokens" fullWidth />}
                 renderOption={(option: typeof mainnet[0]) => <Typography noWrap>{getNameOfToken(option)}</Typography>}
-                value={props.currentItem}
+                value={selected}
                 onChange={(event: any, newValue: typeof mainnet[0] | null) => {
-                    props.onChange(newValue || undefined)
+                    setSelected(newValue || undefined)
                 }}
             />
             <Typography style={{ marginTop: 24 }} variant="caption">
-                Address: {props.currentItem?.address}
+                Address: {selected?.address}
             </Typography>
             <br />
-            <Typography variant="caption">Decimals: {props.currentItem?.decimals}</Typography>
+            <Typography variant="caption">Decimals: {selected?.decimals}</Typography>
         </>
     )
 }

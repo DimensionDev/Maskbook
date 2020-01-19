@@ -17,6 +17,7 @@ import { DialogRouter } from '../DashboardDialogs/DialogBase'
 import { useColorProvider } from '../../../utils/theme'
 import { WalletRecord, RedPacketRecord } from '../../../database/Plugins/Wallet/types'
 import { useSnackbar } from 'notistack'
+import Services from '../../service'
 
 interface Props {
     wallet: WalletRecord
@@ -197,7 +198,21 @@ export default function WalletCard({ wallet }: Props) {
             {showAddToken && (
                 <DialogRouter
                     onExit={() => setShowAddToken(false)}
-                    children={<WalletAddTokenDialog onConfirm={console.log} onDecline={() => setShowAddToken(false)} />}
+                    children={
+                        <WalletAddTokenDialog
+                            onConfirm={(token, user, network) => {
+                                Services.Plugin.invokePlugin(
+                                    'maskbook.wallet',
+                                    'walletAddERC20Token',
+                                    wallet.address,
+                                    network,
+                                    token,
+                                    user,
+                                )
+                            }}
+                            onDecline={() => setShowAddToken(false)}
+                        />
+                    }
                 />
             )}
             {showSendPacket && (

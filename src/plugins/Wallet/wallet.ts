@@ -69,6 +69,9 @@ export async function walletSyncInit() {
     const wallets = t.objectStore('Wallet').getAll()
     ;(await wallets).forEach(x => {
         getWalletProvider().watchWalletBalance(x.address)
+        for (const tokenAddr of x.erc20_token_balance.keys()) {
+            getWalletProvider().watchERC20TokenBalance(x.address, tokenAddr)
+        }
     })
 }
 
@@ -94,16 +97,13 @@ export async function walletAddERC20Token(
     }
     wallet.erc20_token_balance.set(token.address, undefined)
     await t.objectStore('Wallet').put(wallet)
+    getWalletProvider().watchERC20TokenBalance(wallet.address, token.address)
 }
 
-export async function onWalletERC20TokenBalanceUpdated(
-    address: string,
-    token: ERC20TokenPredefinedData[0],
-    newBalance: bigint,
-) {
+export async function onWalletERC20TokenBalanceUpdated(address: string, tokenAddress: string, newBalance: bigint) {
     const t = createTransaction(await createWalletDBAccess(), 'readwrite')('Wallet')
     const wallet = await getWalletByAddress(t, address)
-    wallet.erc20_token_balance.set(token.address, newBalance)
+    wallet.erc20_token_balance.set(tokenAddress, newBalance)
     t.objectStore('Wallet').put(wallet)
     PluginMessageCenter.emit('maskbook.wallets.update', undefined)
 }
