@@ -33,12 +33,16 @@ interface CheckRedPacketAvailabilityResult {
     expired: boolean
 }
 
+type TxHashID = { transactionHash: string }
+type RedPacketID = { redPacketID: string }
+type DatabaseID = { databaseID: string }
+
 export interface RedPacketAPI {
     dataSource: 'real' | 'mock'
-    watchCreateResult(transaction: string, related_uuid: string): void
-    watchClaimResult(transaction: string): void
-    watchExpired(red_packet_id: string): void
-    watchRefundResult(transaction: string): void
+    watchCreateResult(id: TxHashID & DatabaseID): void
+    watchClaimResult(id: TxHashID & DatabaseID): void
+    watchExpired(id: RedPacketID): void
+    watchRefundResult(id: TxHashID & DatabaseID): void
     /**
      *
      * @param hashes_of_password Passwords
@@ -67,7 +71,7 @@ export interface RedPacketAPI {
      * Check if the card is availability
      * @param id Red packet ID
      */
-    checkAvailability(id: string): Promise<CheckRedPacketAvailabilityResult>
+    checkAvailability(id: RedPacketID): Promise<CheckRedPacketAvailabilityResult>
     /**
      * Claim a red packet
      * @param id Red packet ID
@@ -77,7 +81,7 @@ export interface RedPacketAPI {
      * @returns Claimed money
      */
     claim(
-        id: string,
+        id: RedPacketID,
         password: string,
         recipient: string,
         validation: string,
@@ -86,12 +90,12 @@ export interface RedPacketAPI {
      * Refund transaction hash
      * @param red_packet_id Red packet ID
      */
-    refund(red_packet_id: string): Promise<{ refund_transaction_hash: string }>
+    refund(id: RedPacketID): Promise<{ refund_transaction_hash: string }>
     /**
      * Check who has claimed the red packet.
      * @returns A Map<wallet_address, claimed_amount>
      */
-    checkClaimedList(id: string): Promise<Map<string, bigint>>
+    checkClaimedList(id: RedPacketID): Promise<Map<string, bigint>>
 }
 
 export interface WalletAPI {

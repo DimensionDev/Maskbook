@@ -16,41 +16,48 @@ export const mockRedPacketAPI: RedPacketAPI = {
         return { claim_transaction_hash: 'txhash' }
     },
 
-    async watchClaimResult(id: string) {
-        console.log('Mock: Watching calming result', id)
-        await sleep(10000)
-        const r: RedPacketClaimResult =
-            Math.random() > 0.5
-                ? {
-                      type: 'success',
-                      claimed_value: BigInt(Math.ceil(Math.random() * 1000)),
-                      claimer: 'claimer address',
-                      red_packet_id: 'red packed id',
-                  }
-                : { type: 'failed' }
-        onClaimResult(id, r)
+    async watchClaimResult(id) {
+        console.log('Mock: Watching calming result', id, 'Call globalThis.next(true / false) to approve / reject claim')
+        Object.assign(globalThis, {
+            next: (x: boolean) => {
+                const r: RedPacketClaimResult = x
+                    ? {
+                          type: 'success',
+                          claimed_value: BigInt(Math.ceil(Math.random() * 1000)),
+                          claimer: 'claimer address',
+                          red_packet_id: 'red packed id',
+                      }
+                    : { type: 'failed' }
+                onClaimResult(id, r)
+            },
+        })
     },
-    async watchCreateResult(transactionHash: string) {
-        console.log('Mock: Watching creation...', transactionHash)
-        await sleep(10000)
-        const f: RedPacketCreationResult =
-            Math.random() > 0.5
-                ? {
-                      type: 'success',
-                      block_creation_time: new Date(),
-                      red_packet_id: 'red packet id',
-                      creator: 'creator address',
-                      total: BigInt(23),
-                  }
-                : { type: 'failed', reason: 'uh.chuchuc' }
-        onCreationResult(transactionHash, f)
+    async watchCreateResult(id) {
+        console.log('Mock: Watching creation...', id, 'Call globalThis.next(true / false) to approve / reject create')
+        Object.assign(globalThis, {
+            next(x: boolean) {
+                const f: RedPacketCreationResult = x
+                    ? {
+                          type: 'success',
+                          block_creation_time: new Date(),
+                          red_packet_id: 'red packet id',
+                          creator: 'creator address',
+                          total: BigInt(23),
+                      }
+                    : { type: 'failed', reason: 'uh.chuchuc' }
+                onCreationResult(id, f)
+            },
+        })
     },
-    async watchExpired(id: string) {
-        console.log('Mock: watching expired', id)
-        await sleep(10000)
-        onExpired(id)
+    async watchExpired(id) {
+        console.log('Mock: watching expired', id, 'Call globalThis.next() to expire this red packet')
+        Object.assign(globalThis, {
+            next() {
+                onExpired(id)
+            },
+        })
     },
-    async checkAvailability(id: string) {
+    async checkAvailability(id) {
         console.log('Mock: checking availibity of the red packet')
         await sleep(2000)
         return {
@@ -61,13 +68,17 @@ export const mockRedPacketAPI: RedPacketAPI = {
             totalCount: 10,
         }
     },
-    async refund(id: string) {
+    async refund(id) {
         console.log('Mock: calling refund', id)
         return { refund_transaction_hash: 'transaction hash' }
     },
-    watchRefundResult(id: string) {
-        console.log('Mock: Watching refund result...')
-        onRefundResult(id, { remaining_balance: BigInt(10) })
+    watchRefundResult(id) {
+        console.log('Mock: Watching refund result...', id, 'Call globalThis.next() to refund.')
+        Object.assign(globalThis, {
+            next() {
+                onRefundResult(id, { remaining_balance: BigInt(10) })
+            },
+        })
     },
     async checkClaimedList(id) {
         return new Map([

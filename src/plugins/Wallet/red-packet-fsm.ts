@@ -146,14 +146,14 @@ export async function createRedPacket(
         const transaction = createTransaction(await createWalletDBAccess(), 'readwrite')(...everything)
         transaction.objectStore('RedPacket').add(record)
     }
-    getProvider().watchCreateResult(create_transaction_hash, record.id)
+    getProvider().watchCreateResult({ databaseID: record.id, transactionHash: create_transaction_hash })
     PluginMessageCenter.emit('maskbook.red_packets.update', undefined)
     return { passwords }
 }
 
-export async function onCreationResult(uuid: string, details: RedPacketCreationResult) {
+export async function onCreationResult(id: { databaseID: string }, details: RedPacketCreationResult) {
     const t = createTransaction(await createWalletDBAccess(), 'readwrite')('RedPacket')
-    const rec = await t.objectStore('RedPacket').get(uuid)
+    const rec = await t.objectStore('RedPacket').get(id.databaseID)
     if (!rec) return
 
     setNextState(rec, details.type === 'success' ? RedPacketStatus.normal : RedPacketStatus.fail)
@@ -186,35 +186,38 @@ export async function onCreationResult(uuid: string, details: RedPacketCreationR
     PluginMessageCenter.emit('maskbook.red_packets.update', undefined)
 }
 
-export async function claimRedPacket(redPacketID: string, claimWithWallet: string) {
-    const rec = await getRedPacketByID(undefined, redPacketID)
+export async function claimRedPacket(id: { redPacketID: string }, claimWithWallet: string) {
+    const rec = await getRedPacketByID(undefined, id.redPacketID)
     if (!rec) throw new Error('You should call discover first')
 
     const passwords = rec.uuids
-    const status = await getProvider().checkAvailability(redPacketID)
+    const status = await getProvider().checkAvailability(id)
     const { claim_transaction_hash } = await getProvider().claim(
-        redPacketID,
+        id,
         passwords[status.claimedCount],
         claimWithWallet,
         // TODO: what args should i use?
         '_validation???',
     )
+    let dbID = ''
     {
         const t = createTransaction(await createWalletDBAccess(), 'readwrite')('RedPacket')
-        const rec = await getRedPacketByID(t, redPacketID)
+        const rec = await getRedPacketByID(t, id.redPacketID)
+        dbID = rec.id
         setNextState(rec, RedPacketStatus.claim_pending)
         rec.claim_transaction_hash = claim_transaction_hash
         t.objectStore('RedPacket').put(rec)
     }
-    getProvider().watchClaimResult(claim_transaction_hash)
+    getProvider().watchClaimResult({ transactionHash: claim_transaction_hash, databaseID: dbID })
     requestNotification({ body: 'We will notify you when claiming process is ready.' })
     PluginMessageCenter.emit('maskbook.red_packets.update', undefined)
 }
 
-export async function onClaimResult(redPacketID: string, details: RedPacketClaimResult) {
+export async function onClaimResult(id: { databaseID: string }, details: RedPacketClaimResult) {
     {
         const t = createTransaction(await createWalletDBAccess(), 'readwrite')('RedPacket')
-        const rec = await getRedPacketByID(t, redPacketID)
+        const rec = await t.objectStore('RedPacket').get(id.databaseID)
+        if (!rec) throw new Error('Claim result of unknown id')
         setNextState(rec, details.type === 'success' ? RedPacketStatus.claimed : RedPacketStatus.normal)
         if (details.type === 'success') {
             rec.claim_address = details.claimer
@@ -222,39 +225,43 @@ export async function onClaimResult(redPacketID: string, details: RedPacketClaim
         }
         t.objectStore('RedPacket').put(rec)
     }
-    getProvider().watchExpired(redPacketID)
+    if (details.type === 'success') {
+        getProvider().watchExpired({ redPacketID: details.red_packet_id })
+    }
     // TODO: send a notification here
     PluginMessageCenter.emit('maskbook.red_packets.update', undefined)
 }
 
-export async function onExpired(redPacketID: string) {
+export async function onExpired(id: { redPacketID: string }) {
     {
         const t = createTransaction(await createWalletDBAccess(), 'readwrite')('RedPacket')
-        const rec = await getRedPacketByID(t, redPacketID)
+        const rec = await getRedPacketByID(t, id.redPacketID)
         setNextState(rec, RedPacketStatus.expired)
         t.objectStore('RedPacket').put(rec)
 
-        if (rec.create_transaction_hash) requestRefund(redPacketID)
+        if (rec.create_transaction_hash) requestRefund(id)
     }
     PluginMessageCenter.emit('maskbook.red_packets.update', undefined)
 }
 
-export async function requestRefund(red_packet_id: string) {
-    const { refund_transaction_hash } = await getProvider().refund(red_packet_id)
+export async function requestRefund(id: { redPacketID: string }) {
+    const { refund_transaction_hash } = await getProvider().refund(id)
+    let dbID = ''
     {
         const t = createTransaction(await createWalletDBAccess(), 'readwrite')('RedPacket')
-        const rec = await getRedPacketByID(t, red_packet_id)
+        const rec = await getRedPacketByID(t, id.redPacketID)
+        dbID = rec.id
         setNextState(rec, RedPacketStatus.refund_pending)
         rec.refund_transaction_hash = refund_transaction_hash
     }
-    getProvider().watchRefundResult(refund_transaction_hash)
+    getProvider().watchRefundResult({ databaseID: dbID, transactionHash: refund_transaction_hash })
     // TODO: send a notification here maybe?
     PluginMessageCenter.emit('maskbook.red_packets.update', undefined)
 }
-export async function onRefundResult(red_packet_id: string, details: { remaining_balance: bigint }) {
+export async function onRefundResult(id: { databaseID: string }, details: { remaining_balance: bigint }) {
     {
         const t = createTransaction(await createWalletDBAccess(), 'readwrite')('RedPacket')
-        const rec = await getRedPacketByID(t, red_packet_id)
+        const rec = await getRedPacketByID(t, id.databaseID)
         setNextState(rec, RedPacketStatus.refunded)
         rec.refund_amount = details.remaining_balance
         t.objectStore('RedPacket').put(rec)
@@ -267,9 +274,11 @@ export async function redPacketSyncInit() {
     const t = createTransaction(await createWalletDBAccess(), 'readonly')('RedPacket')
     const recs = await t.objectStore('RedPacket').getAll()
     recs.forEach(x => {
-        x.red_packet_id && getProvider().watchClaimResult(x.red_packet_id)
-        x.red_packet_id && getProvider().watchExpired(x.red_packet_id)
-        x.create_transaction_hash && getProvider().watchCreateResult(x.create_transaction_hash, x.id)
+        x.claim_transaction_hash &&
+            getProvider().watchClaimResult({ databaseID: x.id, transactionHash: x.claim_transaction_hash })
+        x.red_packet_id && getProvider().watchExpired({ redPacketID: x.red_packet_id })
+        x.create_transaction_hash &&
+            getProvider().watchCreateResult({ databaseID: x.id, transactionHash: x.create_transaction_hash })
     })
 }
 
@@ -290,7 +299,14 @@ async function getRedPacketByID(t: undefined | IDBPSafeTransaction<WalletDB, ['R
     return rec
 }
 function setNextState(rec: RedPacketRecord, nextState: RedPacketStatus) {
-    assert(isNextRedPacketStatusValid(rec.status, nextState), 'Invalid state')
+    assert(
+        isNextRedPacketStatusValid(rec.status, nextState),
+        'Invalid state',
+        'Current state',
+        rec.status,
+        'Next state',
+        nextState,
+    )
     rec.status = nextState
 }
 

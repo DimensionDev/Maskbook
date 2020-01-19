@@ -75,9 +75,9 @@ export const redPacketAPI: RedPacketAPI = {
                 .on('error', (err: Error) => reject(err))
         })
     },
-    async claim(id: string, password: string, recipient: string, validation: string) {
+    async claim(id, password: string, recipient: string, validation: string) {
         const contract = createRedPacketContract(RED_PACKET_CONTRACT_ADDRESS)
-        const tx = contract.methods.claim(id, password, recipient, validation)
+        const tx = contract.methods.claim(id.redPacketID, password, recipient, validation)
         return new Promise(async (resolve, reject) => {
             tx.send(await createTxPayload(tx))
                 .on('transactionHash', async (hash: string) =>
@@ -88,9 +88,9 @@ export const redPacketAPI: RedPacketAPI = {
                 .on('error', (err: Error) => reject(err))
         })
     },
-    async watchClaimResult(transactionHash: string) {
+    async watchClaimResult(id) {
         const contract = createRedPacketContract(RED_PACKET_CONTRACT_ADDRESS)
-        const { blockNumber } = await web3.eth.getTransaction(transactionHash)
+        const { blockNumber } = await web3.eth.getTransaction(id.transactionHash)
 
         if (!blockNumber) {
             return
@@ -100,42 +100,42 @@ export const redPacketAPI: RedPacketAPI = {
                 fromBlock: blockNumber,
                 toBlock: blockNumber,
             })
-            const claimSuccessEv = evs.find(ev => ev.transactionHash === transactionHash)
+            const claimSuccessEv = evs.find(ev => ev.transactionHash === id.transactionHash)
 
             if (claimSuccessEv) {
-                const { id, claimer, claimed_value } = claimSuccessEv.returnValues as {
+                const { id: return_id, claimer, claimed_value } = claimSuccessEv.returnValues as {
                     id: string
                     claimer: string
                     claimed_value: string
                     token_address: string
                 }
-                onClaimResult(transactionHash, {
+                onClaimResult(id, {
                     type: 'success',
                     claimed_value: BigInt(claimed_value),
                     claimer,
-                    red_packet_id: id,
+                    red_packet_id: return_id,
                 })
                 return true
             }
         })
             .then(results => {
                 if (!results.some(r => r)) {
-                    onClaimResult(transactionHash, {
+                    onClaimResult(id, {
                         type: 'failed',
                         reason: 'timeout',
                     })
                 }
             })
             .catch(e => {
-                onClaimResult(transactionHash, {
+                onClaimResult(id, {
                     type: 'failed',
                     reason: e.message,
                 })
             })
     },
-    async watchCreateResult(transactionHash: string, related_uuid: string) {
+    async watchCreateResult(id) {
         const contract = createRedPacketContract(RED_PACKET_CONTRACT_ADDRESS)
-        const { blockNumber } = await web3.eth.getTransaction(transactionHash)
+        const { blockNumber } = await web3.eth.getTransaction(id.transactionHash)
 
         if (!blockNumber) {
             return
@@ -145,20 +145,20 @@ export const redPacketAPI: RedPacketAPI = {
                 fromBlock: blockNumber,
                 toBlock: blockNumber,
             })
-            const creationSuccessEv = evs.find(ev => ev.transactionHash === transactionHash)
+            const creationSuccessEv = evs.find(ev => ev.transactionHash === id.transactionHash)
 
             if (creationSuccessEv) {
-                const { total, id, creator, creation_time } = creationSuccessEv.returnValues as {
+                const { total, id: return_id, creator, creation_time } = creationSuccessEv.returnValues as {
                     total: string
                     id: string
                     creator: string
                     creation_time: string
                     token_address: string
                 }
-                onCreationResult(related_uuid, {
+                onCreationResult(id, {
                     type: 'success',
                     block_creation_time: new Date(parseInt(creation_time) * 1000),
-                    red_packet_id: id,
+                    red_packet_id: return_id,
                     creator,
                     total: BigInt(total),
                 })
@@ -167,20 +167,20 @@ export const redPacketAPI: RedPacketAPI = {
         })
             .then(results => {
                 if (!results.some(r => r)) {
-                    onCreationResult(transactionHash, {
+                    onCreationResult(id, {
                         type: 'failed',
                         reason: 'timeout',
                     })
                 }
             })
             .catch(e => {
-                onCreationResult(transactionHash, {
+                onCreationResult(id, {
                     type: 'failed',
                     reason: e.message,
                 })
             })
     },
-    async watchExpired(id: string) {
+    async watchExpired(id) {
         pollingTask(async () => {
             const { expired } = await this.checkAvailability(id)
 
@@ -191,9 +191,9 @@ export const redPacketAPI: RedPacketAPI = {
             return false
         })
     },
-    async checkAvailability(id: string) {
+    async checkAvailability(id) {
         const contract = createRedPacketContract(RED_PACKET_CONTRACT_ADDRESS)
-        const tx = contract.methods.check_availability(id)
+        const tx = contract.methods.check_availability(id.redPacketID)
         const { balance, claimed, expired, token_address, total } = await tx.call(await createTxPayload(tx))
         return {
             balance: BigInt(balance),
@@ -203,9 +203,9 @@ export const redPacketAPI: RedPacketAPI = {
             totalCount: parseInt(total),
         }
     },
-    async refund(id: string) {
+    async refund(id) {
         const contract = createRedPacketContract(RED_PACKET_CONTRACT_ADDRESS)
-        const tx = contract.methods.refund(id)
+        const tx = contract.methods.refund(id.redPacketID)
 
         return new Promise<{ refund_transaction_hash: string }>(async (resolve, reject) => {
             tx.send(await createTxPayload(tx))
@@ -217,9 +217,9 @@ export const redPacketAPI: RedPacketAPI = {
                 .on('error', (error: Error) => reject(error))
         })
     },
-    async watchRefundResult(transactionHash: string) {
+    async watchRefundResult(id) {
         const contract = createRedPacketContract(RED_PACKET_CONTRACT_ADDRESS)
-        const { blockNumber } = await web3.eth.getTransaction(transactionHash)
+        const { blockNumber } = await web3.eth.getTransaction(id.transactionHash)
 
         if (!blockNumber) {
             return
@@ -229,10 +229,10 @@ export const redPacketAPI: RedPacketAPI = {
                 fromBlock: blockNumber,
                 toBlock: blockNumber,
             })
-            const refundSuccessEv = evs.find(ev => ev.transactionHash === transactionHash)
+            const refundSuccessEv = evs.find(ev => ev.transactionHash === id.transactionHash)
 
             if (refundSuccessEv) {
-                const { id, remaining_balance } = refundSuccessEv.returnValues as {
+                const { id: return_id, remaining_balance } = refundSuccessEv.returnValues as {
                     id: string
                     token_address: string
                     remaining_balance: string
@@ -244,9 +244,9 @@ export const redPacketAPI: RedPacketAPI = {
             }
         })
     },
-    async checkClaimedList(id: string) {
+    async checkClaimedList(id) {
         const contract = createRedPacketContract(RED_PACKET_CONTRACT_ADDRESS)
-        const tx = contract.methods.check_claimed_list(id)
+        const tx = contract.methods.check_claimed_list(id.redPacketID)
         const map = new Map<string, bigint>()
         const result = await tx.call(await createTxPayload(tx))
         result.claimer_addrs.forEach((addr, index) => map.set(addr, BigInt(result.claimed_list[index])))
