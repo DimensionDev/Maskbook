@@ -1,7 +1,7 @@
 import { AbiItem } from 'web3-utils'
 import { RedPacketAPI, WalletAPI } from './types'
 import { onClaimResult, onCreationResult, onExpired, onRefundResult } from './red-packet-fsm'
-import { onWalletBalanceUpdated } from './wallet'
+import { onWalletBalanceUpdated, onWalletERC20TokenBalanceUpdated } from './wallet'
 import { web3 } from './web3'
 import HappyRedPacketABI from '../../contracts/HappyRedPacket.json'
 import IERC20ABI from '../../contracts/IERC20.json'
@@ -253,6 +253,12 @@ export const walletAPI: WalletAPI = {
     watchWalletBalance(address) {
         pollingTask(async () => {
             onWalletBalanceUpdated(address, BigInt(await web3.eth.getBalance(address)))
+            return false
+        })
+    },
+    watchERC20TokenBalance(walletAddress, network, token) {
+        pollingTask(async () => {
+            // onWalletERC20TokenBalanceUpdated(walletAddress, token, BigInt(await web3.eth.getBalance(walletAddress)))
             return false
         })
     },

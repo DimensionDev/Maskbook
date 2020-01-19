@@ -98,6 +98,9 @@ export const mockWalletAPI: WalletAPI = {
             onWalletBalanceUpdated(address, BigInt(Math.floor(Math.random() * 1000)))
         }, 4000)
     },
+    watchERC20TokenBalance(...args) {
+        console.log('Mocking: Watching erc20token balance (not implemented)', ...args)
+    },
     async approveERC20Token(...args) {
         console.log('Mocking: Approving erc20token...', ...args)
         await sleep(2000)

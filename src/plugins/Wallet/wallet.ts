@@ -1,6 +1,6 @@
 import { createTransaction, IDBPSafeTransaction, createDBAccess } from '../../database/helpers/openDB'
 import { createWalletDBAccess, WalletDB } from '../../database/Plugins/Wallet/Wallet.db'
-import { WalletRecord } from '../../database/Plugins/Wallet/types'
+import { WalletRecord, ERC20TokenRecord, EthereumNetwork } from '../../database/Plugins/Wallet/types'
 import uuid from 'uuid/v4'
 import { mockWalletAPI } from './mock'
 import { assert } from './red-packet-fsm'
@@ -9,6 +9,7 @@ import { HDKey, EthereumAddress } from 'wallet.ts'
 import * as bip39 from 'bip39'
 import { encodeArrayBuffer } from '../../utils/type-transform/String-ArrayBuffer'
 import { walletAPI } from './real'
+import { ERC20TokenPredefinedData } from './erc20'
 
 // Private key at m/44'/coinType'/account'/change/addressIndex
 // coinType = ether
@@ -69,6 +70,42 @@ export async function walletSyncInit() {
     ;(await wallets).forEach(x => {
         getWalletProvider().watchWalletBalance(x.address)
     })
+}
+
+export async function walletAddERC20Token(
+    walletAddress: string,
+    network: EthereumNetwork,
+    token: ERC20TokenPredefinedData[0],
+    user_defined: boolean,
+) {
+    const t = createTransaction(await createWalletDBAccess(), 'readwrite')('ERC20Token', 'Wallet')
+    const wallet = await getWalletByAddress(t, walletAddress)
+    const erc20 = await t.objectStore('ERC20Token').get(token.address)
+    if (!erc20) {
+        const rec: ERC20TokenRecord = {
+            address: token.address,
+            decimals: token.decimals,
+            is_user_defined: user_defined,
+            name: token.name,
+            network: network,
+            symbol: token.symbol,
+        }
+        await t.objectStore('ERC20Token').add(rec)
+    }
+    wallet.erc20_token_balance.set(token.address, undefined)
+    await t.objectStore('Wallet').put(wallet)
+}
+
+export async function onWalletERC20TokenBalanceUpdated(
+    address: string,
+    token: ERC20TokenPredefinedData[0],
+    newBalance: bigint,
+) {
+    const t = createTransaction(await createWalletDBAccess(), 'readwrite')('Wallet')
+    const wallet = await getWalletByAddress(t, address)
+    wallet.erc20_token_balance.set(token.address, newBalance)
+    t.objectStore('Wallet').put(wallet)
+    PluginMessageCenter.emit('maskbook.wallets.update', undefined)
 }
 
 setTimeout(() => {

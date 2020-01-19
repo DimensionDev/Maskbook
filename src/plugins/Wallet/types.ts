@@ -1,4 +1,5 @@
-import { RedPacketTokenType } from '../../database/Plugins/Wallet/types'
+import { RedPacketTokenType, EthereumNetwork } from '../../database/Plugins/Wallet/types'
+import { ERC20TokenPredefinedData } from './erc20'
 
 export type RedPacketCreationResult =
     | {
@@ -98,6 +99,7 @@ export interface RedPacketAPI {
 export interface WalletAPI {
     dataSource: 'real' | 'mock'
     watchWalletBalance(address: string): void
+    watchERC20TokenBalance(walletAddress: string, network: EthereumNetwork, token: ERC20TokenPredefinedData[0]): void
     approveERC20Token(
         erc20TokenAddress: string,
         amount: bigint,

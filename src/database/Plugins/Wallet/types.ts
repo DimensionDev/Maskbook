@@ -86,7 +86,7 @@ export interface WalletRecord {
     name: string
     /** Wallet ethereum balance */
     eth_balance?: bigint
-    erc20_token_balance: Map</** address of the erc20 token */ string, bigint>
+    erc20_token_balance: Map</** address of the erc20 token */ string, bigint | undefined>
     mnemonic: string[]
     passphrase: string
     _data_source_: 'real' | 'mock'
