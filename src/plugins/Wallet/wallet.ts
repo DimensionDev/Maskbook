@@ -7,12 +7,14 @@ import { assert } from './red-packet-fsm'
 import { PluginMessageCenter } from '../PluginMessages'
 import { HDKey, EthereumAddress } from 'wallet.ts'
 import * as bip39 from 'bip39'
+import { encodeArrayBuffer } from '../../utils/type-transform/String-ArrayBuffer'
+import { walletAPI } from './real'
 
 // Private key at m/44'/coinType'/account'/change/addressIndex
 // coinType = ether
 const path = "m/44'/60'/0'/0/0"
 export function getWalletProvider() {
-    return mockWalletAPI
+    return walletAPI
 }
 export async function getWallets() {
     const t = createTransaction(await createWalletDBAccess(), 'readonly')('Wallet')
@@ -30,6 +32,8 @@ export async function importNewWallet(rec: Omit<WalletRecord, 'id' | 'address' |
     const walletPrivateKey = wallet.privateKey
     const walletPublicKey = wallet.publicKey
     const address = EthereumAddress.from(walletPublicKey).address
+
+    console.log(encodeArrayBuffer(walletPrivateKey!))
 
     const newLocal: WalletRecord = {
         ...rec,

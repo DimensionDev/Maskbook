@@ -2,14 +2,11 @@ import React from 'react'
 
 import { makeStyles, createStyles } from '@material-ui/styles'
 import { Theme, Typography, Card, Container, Button } from '@material-ui/core'
-import { useHistory, useRouteMatch, Redirect } from 'react-router-dom'
+import { useRouteMatch, Redirect } from 'react-router-dom'
 import { DialogRouter } from './DashboardDialogs/DialogBase'
 
-import { DatabaseRestoreDialog } from './DashboardDialogs/Database'
-import { PersonaCreateDialog, PersonaCreatedDialog, PersonaImportDialog } from './DashboardDialogs/Persona'
 import FooterLine from './DashboardComponents/FooterLine'
 import WalletCard from './DashboardComponents/WalletCard'
-import PluginRedPacket from '../../components/InjectedComponents/PluginRedPacket/RedPacket'
 import Services from '../service'
 import { WalletRecord } from '../../database/Plugins/Wallet/types'
 import { useState, useEffect } from 'react'
@@ -73,7 +70,7 @@ export default function DashboardWalletsPage() {
                     My Wallets
                 </Typography>
                 <div>
-                    {wallets.map((i, index) => (
+                    {wallets.map(i => (
                         <Card key={i.id} className={classes.identity} raised elevation={1}>
                             <WalletCard wallet={i} />
                         </Card>
@@ -83,6 +80,7 @@ export default function DashboardWalletsPage() {
             <section className={classes.sections}>
                 <Button
                     onClick={() => {
+                        // TODO: private key is E989CF09DD7A1BE2BBEDDBEE1FDCCD55A3E0BBCA938AA9E241F86B8177D6664C
                         Services.Plugin.invokePlugin('maskbook.wallet', 'importNewWallet', {
                             mnemonic: prompt(
                                 "What's your wallet mnemonic word? Paste it here, split by space",

@@ -73,6 +73,18 @@ export default function WalletCard({ wallet }: Props) {
     const [showRedPacketHistory, setShowRedPacketHistory] = React.useState(false)
     const [showRedPacketDetail, setShowRedPacketDetail] = React.useState<RedPacketRecord | null>(null)
 
+    let eth_balance = ''
+    {
+        if (!wallet.eth_balance) eth_balance = 'Syncing...'
+        else {
+            const unit = BigInt('1000000000000000000')
+            const main = wallet.eth_balance / unit
+            const rest = wallet.eth_balance - main * unit
+            eth_balance = `${main}.${rest}`
+            eth_balance = eth_balance.replace(/0+^/, '')
+        }
+    }
+
     return (
         <>
             <CardContent>
@@ -111,11 +123,7 @@ export default function WalletCard({ wallet }: Props) {
                     invert
                     line1="ETH"
                     line2="Ethereym"
-                    action={
-                        <Typography variant="h5">
-                            {wallet.eth_balance ? wallet.eth_balance.toString() : 'Syncing...'}
-                        </Typography>
-                    }
+                    action={<Typography variant="h5">{eth_balance}</Typography>}
                 />
                 <WalletLine
                     invert
