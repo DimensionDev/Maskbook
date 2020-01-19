@@ -16,7 +16,8 @@ export default function WithRedPacket(props: WithRedPacketProps) {
     const { renderItem, postIdentifier } = props
     const [loading, setLoading] = React.useState(false)
     const onClick = async (state: RedPacketStatus, rpid: RedPacketRecord['red_packet_id']) => {
-        if ((state === 'incoming' || state === 'normal') && rpid) {
+        if (!rpid) return
+        if (state === 'incoming' || state === 'normal') {
             setLoading(true)
             Services.Plugin.invokePlugin('maskbook.wallet', 'getWallets')
                 .then(wallets => wallets[0]?.id || '')
@@ -29,6 +30,8 @@ export default function WithRedPacket(props: WithRedPacketProps) {
                     ),
                 )
                 .finally(() => setLoading(false))
+        } else {
+            Services.Welcome.openOptionsPage(`/wallets/redpacket?id=${rpid}`)
         }
     }
     const Component = renderItem
