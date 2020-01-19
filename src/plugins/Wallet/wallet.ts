@@ -17,9 +17,9 @@ const path = "m/44'/60'/0'/0/0"
 export function getWalletProvider() {
     return walletAPI
 }
-export async function getWallets() {
-    const t = createTransaction(await createWalletDBAccess(), 'readonly')('Wallet')
-    return t.objectStore('Wallet').getAll()
+export async function getWallets(): Promise<[WalletRecord[], ERC20TokenRecord[]]> {
+    const t = createTransaction(await createWalletDBAccess(), 'readonly')('Wallet', 'ERC20Token')
+    return [await t.objectStore('Wallet').getAll(), await t.objectStore('ERC20Token').getAll()]
 }
 
 export async function importNewWallet(

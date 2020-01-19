@@ -19,7 +19,7 @@ import { DialogRouter } from './DashboardDialogs/DialogBase'
 import FooterLine from './DashboardComponents/FooterLine'
 import WalletCard from './DashboardComponents/WalletCard'
 import Services from '../service'
-import { WalletRecord } from '../../database/Plugins/Wallet/types'
+import { WalletRecord, ERC20TokenRecord } from '../../database/Plugins/Wallet/types'
 import { useState, useEffect } from 'react'
 import { PluginMessageCenter } from '../../plugins/PluginMessages'
 import {
@@ -88,11 +88,15 @@ const dialogs = (
 
 export default function DashboardWalletsPage() {
     const [wallets, setWallets] = useState<WalletRecord[]>([])
+    const [tokens, setTokens] = useState<ERC20TokenRecord[]>([])
     useEffect(() => {
-        PluginMessageCenter.on('maskbook.wallets.update', async () => {
-            setWallets(await Services.Plugin.invokePlugin('maskbook.wallet', 'getWallets'))
-        })
-        Services.Plugin.invokePlugin('maskbook.wallet', 'getWallets').then(setWallets)
+        PluginMessageCenter.on('maskbook.wallets.update', () => query)
+        const query = () =>
+            Services.Plugin.invokePlugin('maskbook.wallet', 'getWallets').then(x => {
+                setWallets(x[0])
+                setTokens(x[1])
+            })
+        query()
     }, [])
     const classes = useStyles()
     // const personas = useMyPersonas()
@@ -107,7 +111,7 @@ export default function DashboardWalletsPage() {
                 <div>
                     {wallets.map(i => (
                         <Card key={i.address} className={classes.identity} raised elevation={1}>
-                            <WalletCard wallet={i} />
+                            <WalletCard tokens={tokens} wallet={i} />
                         </Card>
                     ))}
                 </div>

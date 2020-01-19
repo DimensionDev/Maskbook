@@ -15,12 +15,13 @@ import {
 } from '../DashboardDialogs/Wallet'
 import { DialogRouter } from '../DashboardDialogs/DialogBase'
 import { useColorProvider } from '../../../utils/theme'
-import { WalletRecord, RedPacketRecord } from '../../../database/Plugins/Wallet/types'
+import { WalletRecord, RedPacketRecord, ERC20TokenRecord } from '../../../database/Plugins/Wallet/types'
 import { useSnackbar } from 'notistack'
 import Services from '../../service'
 
 interface Props {
     wallet: WalletRecord
+    tokens: ERC20TokenRecord[]
 }
 
 const useStyles = makeStyles(theme =>
@@ -65,7 +66,7 @@ const useStyles = makeStyles(theme =>
     }),
 )
 
-export default function WalletCard({ wallet }: Props) {
+export default function WalletCard({ wallet, tokens }: Props) {
     const classes = useStyles()
     const color = useColorProvider()
     const { enqueueSnackbar, closeSnackbar } = useSnackbar()
@@ -165,18 +166,23 @@ export default function WalletCard({ wallet }: Props) {
                     line2="Ethereym"
                     action={<Typography variant="h5">{eth_balance}</Typography>}
                 />
-                <WalletLine
-                    invert
-                    line1="USDT"
-                    line2="Tether USD"
-                    action={
-                        editing ? (
-                            <Typography className={color.error}>Delete</Typography>
-                        ) : (
-                            <Typography variant="h5">25.1</Typography>
-                        )
-                    }
-                />
+                {Array.from(wallet.erc20_token_balance).map(([addr, amount]) => {
+                    const t = tokens.find(y => y.address === addr)
+                    return (
+                        <WalletLine
+                            invert
+                            line1={t?.symbol || '???'}
+                            line2={t?.name || 'Unknown Token'}
+                            action={
+                                editing ? (
+                                    <Typography className={color.error}>Delete</Typography>
+                                ) : (
+                                    <Typography variant="h5">{Number(amount) ?? 'Syncing...'}</Typography>
+                                )
+                            }
+                        />
+                    )
+                })}
                 <div className={classes.actions}>
                     <Typography
                         className={classes.cursor}

@@ -20,7 +20,7 @@ export default function WithRedPacket(props: WithRedPacketProps) {
         if (state === 'incoming' || state === 'normal') {
             setLoading(true)
             try {
-                const wallets = await Services.Plugin.invokePlugin('maskbook.wallet', 'getWallets')
+                const [wallets] = await Services.Plugin.invokePlugin('maskbook.wallet', 'getWallets')
                 // TODO: Let user select wallet
                 if (!wallets[0]) throw new Error('Claim failed')
                 await Services.Plugin.invokePlugin(
