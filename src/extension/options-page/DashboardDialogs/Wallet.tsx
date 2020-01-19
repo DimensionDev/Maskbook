@@ -20,6 +20,7 @@ import ProviderIcon from '../DashboardComponents/ProviderIcon'
 import Services from '../../service'
 import { PluginMessageCenter } from '../../../plugins/PluginMessages'
 import { RedPacketRecord } from '../../../database/Plugins/Wallet/types'
+import useQueryParams from '../../../utils/hooks/useQueryParams'
 
 interface WalletSendRedPacketDialogProps {
     onDecline(): void
@@ -177,7 +178,7 @@ const useRedPacketDetailStyles = makeStyles(theme =>
 
 interface WalletRedPacketDetailDialogProps {
     redPacket: RedPacketRecord
-    onDecline(): void
+    onDecline?(): void
 }
 
 export function WalletRedPacketDetailDialog(props: WalletRedPacketDetailDialogProps) {
@@ -232,4 +233,14 @@ export function WalletRedPacketDetailDialog(props: WalletRedPacketDetailDialogPr
                 </>
             }></DialogContentItem>
     )
+}
+
+export function WalletRedPacketDetailDialogWithRouter(props: Pick<WalletRedPacketDetailDialogProps, 'onDecline'>) {
+    const { id } = useQueryParams(['id'])
+    const [redPacket, setRedPacket] = React.useState<RedPacketRecord | null>(null)
+    React.useEffect(() => {
+        if (id)
+            Services.Plugin.invokePlugin('maskbook.red_packet', 'getRedPacketByID', undefined, id).then(setRedPacket)
+    }, [id])
+    return redPacket ? <WalletRedPacketDetailDialog redPacket={redPacket} onDecline={props.onDecline} /> : null
 }

@@ -14,6 +14,7 @@ import Services from '../service'
 import { WalletRecord } from '../../database/Plugins/Wallet/types'
 import { useState, useEffect } from 'react'
 import { PluginMessageCenter } from '../../plugins/PluginMessages'
+import { WalletRedPacketDetailDialogWithRouter } from './DashboardDialogs/Wallet'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -55,23 +56,15 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export default function DashboardWalletsPage() {
     const [wallets, setWallets] = useState<WalletRecord[]>([])
-    useEffect(() =>
+    useEffect(() => {
         PluginMessageCenter.on('maskbook.wallets.update', async () => {
             setWallets(await Services.Plugin.invokePlugin('maskbook.wallet', 'getWallets'))
-        }),
-    )
+        })
+        Services.Plugin.invokePlugin('maskbook.wallet', 'getWallets').then(setWallets)
+    }, [])
     const classes = useStyles()
     // const personas = useMyPersonas()
     const match = useRouteMatch()!
-
-    const dialogs = (
-        <>
-            <DialogRouter path="/database/restore" children={<DatabaseRestoreDialog />} />
-            <DialogRouter path="/persona/create" children={<PersonaCreateDialog />} />
-            <DialogRouter path="/persona/created" children={<PersonaCreatedDialog />} />
-            <DialogRouter path="/persona/import" children={<PersonaImportDialog />} />
-        </>
-    )
 
     return (
         <Container maxWidth="md">
@@ -106,7 +99,7 @@ export default function DashboardWalletsPage() {
             <section className={classes.sections}>
                 <FooterLine />
             </section>
-            {dialogs}
+            <DialogRouter path="/redpacket" children={<WalletRedPacketDetailDialogWithRouter />} />
             {!match?.url.endsWith('/') && match?.isExact && <Redirect to={match?.url + '/'} />}
         </Container>
     )
