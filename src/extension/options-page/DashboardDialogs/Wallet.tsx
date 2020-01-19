@@ -10,17 +10,23 @@ import {
     Paper,
     Tabs,
     Tab,
+    AppBar,
 } from '@material-ui/core'
+import Autocomplete from '@material-ui/lab/Autocomplete'
 import ArrowBack from '@material-ui/icons/ArrowBack'
 import ActionButton from '../DashboardComponents/ActionButton'
 import { DialogContentItem } from './DialogBase'
 import { RedPacket } from '../DashboardComponents/RedPacket'
 import WalletLine from '../DashboardComponents/WalletLine'
-import ProviderIcon from '../DashboardComponents/ProviderIcon'
 import Services from '../../service'
 import { PluginMessageCenter } from '../../../plugins/PluginMessages'
 import { RedPacketRecord } from '../../../database/Plugins/Wallet/types'
 import useQueryParams from '../../../utils/hooks/useQueryParams'
+import { ERC20TokenPredefinedData } from '../../../plugins/Wallet/erc20'
+import { VirtualizedList } from './WalletAddTokenDialogContent'
+
+const mainnet: ERC20TokenPredefinedData = require('../../../plugins/Wallet/mainnet_erc20.json')
+const rinkeby: ERC20TokenPredefinedData = require('../../../plugins/Wallet/rinkeby_erc20.json')
 
 interface WalletSendRedPacketDialogProps {
     onDecline(): void
@@ -78,23 +84,73 @@ const useAddTokenStyles = makeStyles(theme =>
     }),
 )
 
+interface TabPanelProps {
+    children?: React.ReactNode
+    index: any
+    value: any
+}
+
 export function WalletAddTokenDialog(props: WalletAddTokenDialogProps) {
     const { onConfirm, onDecline } = props
-    const [token, setToken] = React.useState('')
     const classes = useAddTokenStyles()
+    const [tabID, setTabID] = React.useState<0 | 1>(1)
+
+    const [address, setTokenAddress] = React.useState('')
+    const [decimal, setDecimal] = React.useState('')
+    const [tokenName, setTokenName] = React.useState('')
+    const [symbol, setSymbol] = React.useState('')
+
     return (
         <DialogContentItem
             onExit={onDecline}
             title={'Add Token'}
+            tabs={
+                <Paper square>
+                    <Tabs
+                        value={tabID}
+                        onChange={(e, n) => {
+                            setTabID(n as any)
+                        }}
+                        aria-label="simple tabs example">
+                        <Tab label="Well-known token" />
+                        <Tab label="Add your own token" />
+                    </Tabs>
+                </Paper>
+            }
             content={
-                <TextField
-                    className={classes.textfield}
-                    label="Token Contract"
-                    value={token}
-                    onChange={e => setToken(e.target.value)}></TextField>
+                <>
+                    {tabID === 0 ? (
+                        <VirtualizedList />
+                    ) : (
+                        <>
+                            <TextField
+                                className={classes.textfield}
+                                label="Contract Address"
+                                value={address}
+                                onChange={e => setTokenAddress(e.target.value)}></TextField>
+                            <TextField
+                                className={classes.textfield}
+                                label="Decimal"
+                                value={decimal}
+                                type="number"
+                                inputProps={{ min: 0 }}
+                                onChange={e => setDecimal(e.target.value)}></TextField>
+                            <TextField
+                                className={classes.textfield}
+                                label="Name"
+                                value={tokenName}
+                                onChange={e => setTokenName(e.target.value)}></TextField>
+                            <TextField
+                                className={classes.textfield}
+                                label="Symbol"
+                                value={symbol}
+                                onChange={e => setSymbol(e.target.value)}></TextField>
+                        </>
+                    )}
+                </>
             }
             actions={
-                <ActionButton variant="contained" color="primary" onClick={() => onConfirm(token)}>
+                <ActionButton variant="contained" color="primary" onClick={() => onConfirm(address)}>
                     Add Token
                 </ActionButton>
             }></DialogContentItem>

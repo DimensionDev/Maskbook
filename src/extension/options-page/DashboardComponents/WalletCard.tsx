@@ -81,7 +81,7 @@ export default function WalletCard({ wallet }: Props) {
             const main = wallet.eth_balance / unit
             const rest = wallet.eth_balance - main * unit
             eth_balance = `${main}.${rest}`
-            eth_balance = eth_balance.replace(/0+^/, '')
+            eth_balance = eth_balance.replace(/0+$/, '') + '0'
         }
     }
 
