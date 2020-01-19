@@ -89,11 +89,12 @@ interface RedPacketProps {
     loading?: boolean
     redPacket?: RedPacketRecord
     unknownRedPacket?: RedPacketJSONPayload
+    from?: string
 }
 
 export function RedPacketWithState(props: RedPacketProps) {
     const classes = useStyles()
-    const { onClick, state: _state, redPacket: knownRedPacket, unknownRedPacket, loading } = props
+    const { onClick, state: _state, redPacket: knownRedPacket, unknownRedPacket, loading, from } = props
     const [redPacket, setRedPacket] = React.useState(knownRedPacket || ({} as Partial<RedPacketRecord>))
 
     React.useEffect(() => {
@@ -103,13 +104,12 @@ export function RedPacketWithState(props: RedPacketProps) {
                     'maskbook.red_packet',
                     'discoverRedPacket',
                     unknownRedPacket,
-                    // TODO: found uri
-                    '',
+                    from ?? '',
                 ).then(setRedPacket)
             updateRedPacket()
             return PluginMessageCenter.on('maskbook.red_packets.update', updateRedPacket)
         }
-    }, [unknownRedPacket])
+    }, [from, unknownRedPacket])
 
     let state: RedPacketState
     if (!redPacket.red_packet_id) state = 'unknown'

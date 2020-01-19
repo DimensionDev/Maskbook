@@ -8,7 +8,7 @@ import { geti18nString } from '../../utils/i18n'
 import { makeStyles } from '@material-ui/styles'
 import { Box, Link, useMediaQuery, useTheme } from '@material-ui/core'
 import { Profile } from '../../database'
-import { Identifier, ProfileIdentifier } from '../../database/type'
+import { Identifier, ProfileIdentifier, PostIdentifier } from '../../database/type'
 import { NotSetupYetPrompt } from '../shared/NotSetupYetPrompt'
 import {
     DecryptionProgress,
@@ -27,6 +27,7 @@ import { TypedMessage } from '../../extension/background-script/CryptoServices/u
 
 export interface DecryptPostSuccessProps extends withClasses<KeysInferFromUseStyles<typeof useSuccessStyles>> {
     data: { signatureVerifyResult: boolean; content: TypedMessage }
+    postIdentifier?: PostIdentifier<ProfileIdentifier>
     requestAppendRecipients?(to: Profile[]): Promise<void>
     alreadySelectedPreviously: Profile[]
     people: Profile[]
@@ -42,6 +43,7 @@ const useSuccessStyles = makeStyles({
 export const DecryptPostSuccess = React.memo(function DecryptPostSuccess({
     data,
     people,
+    postIdentifier,
     ...props
 }: DecryptPostSuccessProps) {
     const classes = useStylesExtends(useSuccessStyles(), props)
@@ -70,6 +72,7 @@ export const DecryptPostSuccess = React.memo(function DecryptPostSuccess({
         )
     return (
         <AdditionalContent
+            postIdentifier={postIdentifier}
             title={
                 <>
                     {ShareMenu}
@@ -132,6 +135,7 @@ export const DecryptPostFailed = React.memo(function DecryptPostFailed({ error, 
 export interface DecryptPostProps {
     onDecrypted(post: TypedMessage): void
     postBy: ProfileIdentifier
+    postId?: string
     whoAmI: ProfileIdentifier
     encryptedText: string
     people: Profile[]
@@ -150,7 +154,7 @@ export function DecryptPost(props: DecryptPostProps) {
     const Awaiting = props.waitingComponent || DecryptPostAwaiting
     const Failed = props.failedComponent || DecryptPostFailed
 
-    const { postBy, whoAmI, encryptedText, people, alreadySelectedPreviously, requestAppendRecipients } = props
+    const { postBy, postId, whoAmI, encryptedText, people, alreadySelectedPreviously, requestAppendRecipients } = props
 
     const [decryptedResult, setDecryptedResult] = useState<null | SuccessDecryption>(null)
     const [decryptingStatus, setDecryptingStatus] = useState<DecryptionProgress | FailureDecryption | undefined>(
@@ -196,6 +200,7 @@ export function DecryptPost(props: DecryptPostProps) {
             <>
                 <Success
                     data={decryptedResult}
+                    postIdentifier={new PostIdentifier(postBy, postId || 'unknown')}
                     alreadySelectedPreviously={alreadySelectedPreviously}
                     requestAppendRecipients={requestAppendRecipientsWrapped}
                     people={people}

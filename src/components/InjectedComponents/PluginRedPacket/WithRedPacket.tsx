@@ -4,9 +4,16 @@ import StructuredPluginWrapper from '../StructuredMessage/StructuredPluginWrappe
 import { RedPacketWithState, RedPacketState } from '../../../extension/options-page/DashboardComponents/RedPacket'
 import { RedPacketRecord } from '../../../database/Plugins/Wallet/types'
 import Services from '../../../extension/service'
+import { PostIdentifier, ProfileIdentifier } from '../../../database/type'
+import { getPostUrl } from '../../../social-network-provider/twitter.com/utils/url'
 
-export default function WithRedPacket(props: { renderItem?: TypedMessageText | null }) {
-    const { renderItem } = props
+interface WithRedPacketProps {
+    renderItem?: TypedMessageText | null
+    postIdentifier?: PostIdentifier<ProfileIdentifier>
+}
+
+export default function WithRedPacket(props: WithRedPacketProps) {
+    const { renderItem, postIdentifier } = props
     const [loading, setLoading] = React.useState(false)
     const onClick = async (state: RedPacketState, rpid: RedPacketRecord['red_packet_id']) => {
         if (state === 'pending' && rpid) {
@@ -27,7 +34,12 @@ export default function WithRedPacket(props: { renderItem?: TypedMessageText | n
     const Component = renderItem
         ? withMetadata(renderItem.meta, 'com.maskbook.red_packet:1', r => (
               <StructuredPluginWrapper width={400} pluginName="Red Packet">
-                  <RedPacketWithState loading={loading} onClick={onClick} unknownRedPacket={r} />
+                  <RedPacketWithState
+                      loading={loading}
+                      onClick={onClick}
+                      unknownRedPacket={r}
+                      from={postIdentifier ? getPostUrl(postIdentifier) : ''}
+                  />
               </StructuredPluginWrapper>
           ))
         : null

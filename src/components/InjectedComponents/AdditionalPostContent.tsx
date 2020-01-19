@@ -4,10 +4,9 @@ import { makeStyles, Typography, Link, Card } from '@material-ui/core'
 import anchorme from 'anchorme'
 import { useStylesExtends } from '../custom-ui-helper'
 import classNames from 'classnames'
-import { TypedMessageText, withMetadata } from '../../extension/background-script/CryptoServices/utils'
-import StructuredPluginWrapper from './StructuredMessage/StructuredPluginWrapper'
-import { RedPacketWithState } from '../../extension/options-page/DashboardComponents/RedPacket'
+import { TypedMessageText } from '../../extension/background-script/CryptoServices/utils'
 import WithRedPacket from './PluginRedPacket/WithRedPacket'
+import { PostIdentifier, ProfileIdentifier } from '../../database/type'
 
 export interface AdditionalContentProps extends withClasses<KeysInferFromUseStyles<typeof useStyles>> {
     title: React.ReactNode
@@ -16,6 +15,7 @@ export interface AdditionalContentProps extends withClasses<KeysInferFromUseStyl
     renderText?: string
     renderItem?: TypedMessageText
     hideIcon?: boolean
+    postIdentifier?: PostIdentifier<ProfileIdentifier>
 }
 const useStyles = makeStyles({
     root: { backgroundColor: 'transparent' },
@@ -40,7 +40,7 @@ export const AdditionalContent = React.memo(function AdditionalContent(props: Ad
             {props.renderItem || props.renderText ? (
                 <Typography variant="body2" component="p">
                     <RenderText text={props.renderText || props.renderItem!.content} />
-                    <WithRedPacket renderItem={props.renderItem} />
+                    <WithRedPacket renderItem={props.renderItem} postIdentifier={props.postIdentifier} />
                 </Typography>
             ) : (
                 props.children
