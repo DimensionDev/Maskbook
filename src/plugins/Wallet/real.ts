@@ -42,7 +42,8 @@ async function createTxPayload<T>(tx: TransactionObject<T>, value?: string) {
 export const redPacketAPI: RedPacketAPI = {
     dataSource: 'real',
     async create(
-        hashes: string[],
+        hash_of_password: string,
+        quantity: number,
         isRandom: boolean,
         duration: number,
         seed: number[],
@@ -54,7 +55,8 @@ export const redPacketAPI: RedPacketAPI = {
     ) {
         const contract = createRedPacketContract(RED_PACKET_CONTRACT_ADDRESS)
         const tx = contract.methods.create_red_packet(
-            hashes,
+            hash_of_password,
+            quantity,
             isRandom,
             duration,
             seed,
@@ -243,14 +245,6 @@ export const redPacketAPI: RedPacketAPI = {
                 })
             }
         })
-    },
-    async checkClaimedList(id) {
-        const contract = createRedPacketContract(RED_PACKET_CONTRACT_ADDRESS)
-        const tx = contract.methods.check_claimed_list(id.redPacketID)
-        const map = new Map<string, bigint>()
-        const result = await tx.call(await createTxPayload(tx))
-        result.claimer_addrs.forEach((addr, index) => map.set(addr, BigInt(result.claimed_list[index])))
-        return map
     },
 }
 

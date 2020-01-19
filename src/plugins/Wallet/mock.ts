@@ -89,12 +89,6 @@ export const mockRedPacketAPI: RedPacketAPI = {
             },
         })
     },
-    async checkClaimedList(id) {
-        return new Map([
-            ['0x123', BigInt(123)],
-            ['0x234', BigInt(234)],
-        ])
-    },
 }
 
 export const mockWalletAPI: WalletAPI = {
