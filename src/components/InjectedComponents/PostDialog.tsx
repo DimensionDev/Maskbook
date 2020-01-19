@@ -30,7 +30,7 @@ import { SelectRecipientsUI, SelectRecipientsUIProps } from '../shared/SelectRec
 import { DialogDismissIconUI } from './DialogDismissIcon'
 import { ClickableChip } from '../shared/SelectRecipients/ClickableChip'
 import RedPacketDialog from './RedPacketDialog'
-import { makeTypedMessage, TypedMessage } from '../../extension/background-script/CryptoServices/utils'
+import { makeTypedMessage, TypedMessage, withMetadata } from '../../extension/background-script/CryptoServices/utils'
 import { RedPacketJSONPayload } from '../../database/Plugins/Wallet/types'
 
 const useStyles = makeStyles({
@@ -128,7 +128,7 @@ export function PostDialogUI(props: PostDialogUIProps) {
                     </Typography>
                 </DialogTitle>
                 <DialogContent className={classes.content}>
-                    {readRedPacketMetadata(props.postContent.meta, r => (
+                    {withMetadata(props.postContent.meta, 'com.maskbook.red_packet:1', r => (
                         <Chip
                             onDelete={() => {
                                 const ref = getActivatedUI().typedMessageMetadata
@@ -318,14 +318,4 @@ export function PostDialog(props: PostDialogProps) {
 
 PostDialog.defaultProps = {
     reason: 'timeline',
-}
-
-function readRedPacketMetadata(
-    meta: ReadonlyMap<string, any> | undefined,
-    f: (rp: RedPacketJSONPayload) => React.ReactNode,
-): React.ReactNode {
-    if (!meta) return null
-    if (!meta.has('com.maskbook.red_packet:1')) return null
-    // TODO: validate the schema.
-    return f(meta.get('com.maskbook.red_packet:1')!)
 }

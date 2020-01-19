@@ -14,6 +14,7 @@ import { RedPacketCreationResult, RedPacketClaimResult } from './types'
 import { getWalletProvider } from './wallet'
 import { PluginMessageCenter } from '../PluginMessages'
 import { requestNotification } from '../../utils/notification'
+import Web3Utils from 'web3-utils'
 
 function getProvider() {
     return mockRedPacketAPI
@@ -108,7 +109,7 @@ export async function createRedPacket(
         throw new Error('Not supported')
     }
     const { create_transaction_hash, create_nonce } = await getProvider().create(
-        passwords,
+        passwords.map(Web3Utils.sha3),
         packet.is_random,
         packet.duration,
         Array.from(crypto.getRandomValues(new Uint32Array(8))),
@@ -133,7 +134,6 @@ export async function createRedPacket(
         sender_name: packet.sender_name,
         status: RedPacketStatus.pending,
         token_type: packet.token_type,
-        // TODO: This should be hashed.
         uuids: passwords,
         block_creation_time: new Date(),
         create_nonce,
@@ -196,8 +196,7 @@ export async function claimRedPacket(id: { redPacketID: string }, claimWithWalle
         id,
         passwords[status.claimedCount],
         claimWithWallet,
-        // TODO: what args should i use?
-        '_validation???',
+        Web3Utils.sha3(claimWithWallet),
     )
     let dbID = ''
     {
@@ -282,12 +281,9 @@ export async function redPacketSyncInit() {
     })
 }
 
-// TODO: remove the cond
-if (process.env.NODE_ENV === 'development') {
-    setTimeout(() => {
-        redPacketSyncInit()
-    }, 1000)
-}
+setTimeout(() => {
+    redPacketSyncInit()
+}, 1000)
 
 export async function getRedPacketByID(
     t: undefined | IDBPSafeTransaction<WalletDB, ['RedPacket'], 'readonly'>,

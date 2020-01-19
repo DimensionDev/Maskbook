@@ -277,13 +277,10 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
 
     const createRedPacket = useCallback((opt: createRedPacketInit & createRedPacketOption) => {
         const { shares, ...rest } = opt
-        Services.Plugin.invokePlugin(
-            'maskbook.red_packet',
-            'createRedPacket',
-            rest,
-            { shares },
-            // TODO: UI switch to another board
-        ).then(console.log, console.error)
+        Services.Plugin.invokePlugin('maskbook.red_packet', 'createRedPacket', rest, { shares }).then(
+            console.log,
+            console.error,
+        )
         setCurrentTab(1)
     }, [])
 

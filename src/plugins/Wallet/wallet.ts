@@ -50,12 +50,9 @@ export async function walletSyncInit() {
     })
 }
 
-// TODO: remove cond
-if (process.env.NODE_ENV === 'development') {
-    setTimeout(() => {
-        walletSyncInit()
-    }, 1000)
-}
+setTimeout(() => {
+    walletSyncInit()
+}, 1000)
 
 async function getWalletByAddress(t: IDBPSafeTransaction<WalletDB, ['Wallet'], 'readonly'>, address: string) {
     const rec = await t
