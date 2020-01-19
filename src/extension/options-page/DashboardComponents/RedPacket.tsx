@@ -109,6 +109,10 @@ export function RedPacketWithState(props: RedPacketProps) {
         }
     }, [from, unknownRedPacket])
 
+    React.useEffect(() => {
+        if (knownRedPacket) setRedPacket(knownRedPacket)
+    }, [knownRedPacket])
+
     const status = redPacket.status
 
     return (
@@ -150,7 +154,7 @@ export function RedPacketWithState(props: RedPacketProps) {
             <div className={classes.packet}></div>
             <div
                 className={classNames(classes.loader, {
-                    [classes.dimmer]: status === 'refunded' || status === 'expired' || loading,
+                    [classes.dimmer]: status === 'refunded' || status === 'expired' || status === 'pending' || loading,
                 })}>
                 {(loading || status === 'pending') && <CircularProgress color="secondary" />}
             </div>

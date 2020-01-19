@@ -210,7 +210,7 @@ function ExistingPacket(props: RedPacketDialogProps & ExistingPacketProps) {
     const [redPacketRecords, setRedPacketRecords] = React.useState<RedPacketRecord[]>([])
 
     React.useEffect(() => {
-        const updateHandler = () =>
+        const updateHandler = () => {
             Services.Plugin.invokePlugin('maskbook.red_packet', 'getRedPackets')
                 .then(packets =>
                     packets.filter(
@@ -223,12 +223,15 @@ function ExistingPacket(props: RedPacketDialogProps & ExistingPacketProps) {
                     ),
                 )
                 .then(setRedPacketRecords)
+            debugger
+        }
 
         updateHandler()
         return PluginMessageCenter.on('maskbook.red_packets.update', updateHandler)
     }, [])
 
-    const insertRedPacket = (status: RedPacketStatus, rpid: RedPacketRecord['red_packet_id']) => {
+    const insertRedPacket = (status?: RedPacketStatus | null, rpid?: RedPacketRecord['red_packet_id']) => {
+        if (status === null) return onSelectExistingPacket(null)
         if (status === 'pending' || !rpid) return
         Services.Plugin.invokePlugin('maskbook.red_packet', 'getRedPacketByID', undefined, rpid).then(p =>
             onSelectExistingPacket(p.raw_payload),
@@ -237,7 +240,7 @@ function ExistingPacket(props: RedPacketDialogProps & ExistingPacketProps) {
 
     return (
         <div className={classes.wrapper}>
-            <Typography component="a" color="primary" className={classes.hint}>
+            <Typography component="a" color="primary" className={classes.hint} onClick={() => insertRedPacket(null)}>
                 Remove Red Packet from this post
             </Typography>
             {redPacketRecords.map(p => (
