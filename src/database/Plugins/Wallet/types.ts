@@ -65,34 +65,35 @@ export interface RedPacketRecord {
     _found_in_url_?: string
     _data_source_: 'real' | 'mock'
 }
-export interface WalletTokenRecord {
-    /** UUID PRIMARY KEY */
-    id: string
-    /** Wallet id */
-    wallet_id: string
-    /** ERC20Token id */
-    token_id: string
-    /** token order index on wallet_id. From 0 to N */
-    index: number
-    /** Wallet token balance */
-    token_balance?: bigint
-}
+// export interface WalletTokenRecord {
+//     /** UUID PRIMARY KEY */
+//     id: string
+//     /** Wallet id */
+//     wallet_id: string
+//     /** ERC20Token id */
+//     token_id: string
+//     /** token order index on wallet_id. From 0 to N */
+//     index: number
+//     /** Wallet token balance */
+//     token_balance?: bigint
+// }
 export interface WalletRecord {
     /** UUID PRIMARY KEY */
-    id: string
+    // id: string
     /** ethereum hex address */
     address: string
     /** User define wallet name. Default address.prefix(6) */
     name: string
     /** Wallet ethereum balance */
     eth_balance?: bigint
+    erc20_token_balance: Map</** address of the erc20 token */ string, bigint>
     mnemonic: string[]
     passphrase: string
     _data_source_: 'real' | 'mock'
 }
 export interface ERC20TokenRecord {
     /** same to address */
-    id: string
+    // id: string
     /** token address */
     address: string
     /** token name */

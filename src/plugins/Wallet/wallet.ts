@@ -21,7 +21,9 @@ export async function getWallets() {
     return t.objectStore('Wallet').getAll()
 }
 
-export async function importNewWallet(rec: Omit<WalletRecord, 'id' | 'address' | 'eth_balance' | '_data_source_'>) {
+export async function importNewWallet(
+    rec: Omit<WalletRecord, 'id' | 'address' | 'eth_balance' | '_data_source_' | 'erc20_token_balance'>,
+) {
     const mnemonicWord = rec.mnemonic
     const seed = await bip39.mnemonicToSeed(mnemonicWord.join(' '), rec.passphrase)
     const masterKey = HDKey.parseMasterSeed(seed)
@@ -37,8 +39,8 @@ export async function importNewWallet(rec: Omit<WalletRecord, 'id' | 'address' |
 
     const newLocal: WalletRecord = {
         ...rec,
-        id: uuid(),
         address,
+        erc20_token_balance: new Map(),
         _data_source_: getWalletProvider().dataSource,
     }
     {
@@ -74,10 +76,7 @@ setTimeout(() => {
 }, 1000)
 
 async function getWalletByAddress(t: IDBPSafeTransaction<WalletDB, ['Wallet'], 'readonly'>, address: string) {
-    const rec = await t
-        .objectStore('Wallet')
-        .index('address')
-        .get(address)
+    const rec = await t.objectStore('Wallet').get(address)
     assert(rec)
     return rec
 }

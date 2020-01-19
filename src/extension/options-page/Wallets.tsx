@@ -71,7 +71,7 @@ export default function DashboardWalletsPage() {
                 </Typography>
                 <div>
                     {wallets.map(i => (
-                        <Card key={i.id} className={classes.identity} raised elevation={1}>
+                        <Card key={i.address} className={classes.identity} raised elevation={1}>
                             <WalletCard wallet={i} />
                         </Card>
                     ))}

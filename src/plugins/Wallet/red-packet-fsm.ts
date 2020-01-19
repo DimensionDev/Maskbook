@@ -20,7 +20,7 @@ function getProvider() {
     return mockRedPacketAPI
 }
 const contract_address = '0x19D0b6091D37Bc262ecC460ee4Bd57DBBD68754C'
-const everything = ['ERC20Token', 'RedPacket', 'Wallet', 'WalletToken'] as const
+const everything = ['ERC20Token', 'RedPacket', 'Wallet'] as const
 export type createRedPacketInit = Pick<
     RedPacketRecord,
     | 'is_random'
@@ -158,10 +158,7 @@ export async function onCreationResult(id: { databaseID: string }, details: RedP
     } else {
         let token: RedPacketJSONPayload['token'] | undefined = undefined
         if (rec.erc20_token) {
-            const tokenRec = await t
-                .objectStore('ERC20Token')
-                .index('address')
-                .get(rec.erc20_token)
+            const tokenRec = await t.objectStore('ERC20Token').get(rec.erc20_token)
             if (!tokenRec) throw new Error('Unknown token')
             token = {
                 address: rec.erc20_token,

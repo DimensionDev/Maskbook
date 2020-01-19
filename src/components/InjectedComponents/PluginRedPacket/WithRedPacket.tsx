@@ -19,17 +19,19 @@ export default function WithRedPacket(props: WithRedPacketProps) {
         if (!rpid) return
         if (state === 'incoming' || state === 'normal') {
             setLoading(true)
-            Services.Plugin.invokePlugin('maskbook.wallet', 'getWallets')
-                .then(wallets => wallets[0]?.id || '')
-                .then(wallet =>
-                    Services.Plugin.invokePlugin(
-                        'maskbook.red_packet',
-                        'claimRedPacket',
-                        { redPacketID: rpid },
-                        wallet,
-                    ),
+            try {
+                const wallets = await Services.Plugin.invokePlugin('maskbook.wallet', 'getWallets')
+                // TODO: Let user select wallet
+                if (!wallets[0]) throw new Error('Claim failed')
+                await Services.Plugin.invokePlugin(
+                    'maskbook.red_packet',
+                    'claimRedPacket',
+                    { redPacketID: rpid },
+                    wallets[0].address,
                 )
-                .finally(() => setLoading(false))
+            } finally {
+                setLoading(false)
+            }
         } else {
             Services.Welcome.openOptionsPage(`/wallets/redpacket?id=${rpid}`)
         }
