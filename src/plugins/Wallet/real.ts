@@ -234,7 +234,7 @@ export const redPacketAPI: RedPacketAPI = {
             const refundSuccessEv = evs.find(ev => ev.transactionHash === id.transactionHash)
 
             if (refundSuccessEv) {
-                const { id: return_id, remaining_balance } = refundSuccessEv.returnValues as {
+                const { remaining_balance } = refundSuccessEv.returnValues as {
                     id: string
                     token_address: string
                     remaining_balance: string
@@ -256,16 +256,20 @@ export const walletAPI: WalletAPI = {
             return false
         })
     },
-    watchERC20TokenBalance(walletAddress, network, token) {
+    watchERC20TokenBalance(walletAddress, token) {
+        const erc20Contract = createERC20Contract(token.address)
         pollingTask(async () => {
-            // onWalletERC20TokenBalanceUpdated(walletAddress, token, BigInt(await web3.eth.getBalance(walletAddress)))
+            onWalletERC20TokenBalanceUpdated(
+                walletAddress,
+                token,
+                BigInt(await erc20Contract.methods.balanceOf(walletAddress).call()),
+            )
             return false
         })
     },
     async approveERC20Token(address: string, amount: bigint) {
-        const contract = createRedPacketContract(RED_PACKET_CONTRACT_ADDRESS)
         const erc20Contract = createERC20Contract(address)
-        const tx = erc20Contract.methods.approve(contract.options.address, amount.toString())
+        const tx = erc20Contract.methods.approve(RED_PACKET_CONTRACT_ADDRESS, amount.toString())
 
         return new Promise<{ erc20_approve_transaction_hash: string; erc20_approve_value: bigint }>(
             async (resolve, reject) => {

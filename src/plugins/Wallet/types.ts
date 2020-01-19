@@ -99,7 +99,7 @@ export interface RedPacketAPI {
 export interface WalletAPI {
     dataSource: 'real' | 'mock'
     watchWalletBalance(address: string): void
-    watchERC20TokenBalance(walletAddress: string, network: EthereumNetwork, token: ERC20TokenPredefinedData[0]): void
+    watchERC20TokenBalance(walletAddress: string, token: ERC20TokenPredefinedData[0]): void
     approveERC20Token(
         erc20TokenAddress: string,
         amount: bigint,
