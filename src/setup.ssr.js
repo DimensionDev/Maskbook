@@ -27,11 +27,11 @@ const { writeFileSync, readFileSync } = require('fs')
 
 const restoreLodash = modifyPackage('lodash-es', x => (x.main = '../lodash'))
 const restoreAsyncCall = modifyPackage('async-call-rpc', x => {
-    x.main = './_maskbook_ssr.js'
+    x.main = './_maskbook_ssr.cjs'
     x.types = './out/'
 })
 writeFileSync(
-    join(__dirname, '../node_modules/async-call-rpc/_maskbook_ssr.js'),
+    join(__dirname, '../node_modules/async-call-rpc/_maskbook_ssr.cjs'),
     `exports.AsyncCall = () => new Proxy({}, {get(_target, method) {return (...params) => new Promise(x => {})}})
 exports.AsyncGeneratorCall = () => new Proxy({}, {get(_target, method) {return async function* (...params) { await new Promise(x => {})}}})`,
 )
