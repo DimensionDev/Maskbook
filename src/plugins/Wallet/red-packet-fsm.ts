@@ -32,12 +32,8 @@ export type createRedPacketInit = Pick<
     | 'network'
     | 'token_type'
     | 'erc20_token'
+    | 'shares'
 >
-
-export type createRedPacketOption = {
-    /** how many recipients of this red packet will be */
-    shares: bigint
-}
 
 /**
  * Note: Only call this for other one's redpacket or it will duplicate in the database!
@@ -63,13 +59,15 @@ export async function discoverRedPacket(payload: RedPacketJSONPayload, foundInUR
         sender_address: payload.sender.address,
         sender_name: payload.sender.name,
         status: RedPacketStatus.incoming,
-        uuids: payload.passwords,
+        password: payload.password,
         token_type: payload.token_type,
         block_creation_time: new Date(payload.creation_time),
         erc20_token: payload.token?.address,
         red_packet_id: payload.rpid,
         raw_payload: payload,
         _found_in_url_: foundInURL,
+        received_time: new Date(),
+        shares: BigInt(payload.shares),
     }
     t.objectStore('RedPacket').add(rec)
     PluginMessageCenter.emit('maskbook.red_packets.update', undefined)
@@ -84,18 +82,13 @@ export async function getRedPackets(owned?: boolean) {
     return all
 }
 
-export async function createRedPacket(
-    packet: createRedPacketInit,
-    otherOptions: createRedPacketOption,
-): Promise<{ passwords: string[] }> {
-    if (packet.send_total < otherOptions.shares) {
+export async function createRedPacket(packet: createRedPacketInit): Promise<{ password: string }> {
+    if (packet.send_total < packet.shares) {
         throw new Error('At least [number of red packets] tokens to your red packet.')
-    } else if (otherOptions.shares < 0) {
+    } else if (packet.shares < 0) {
         throw new Error('At least 1 person should be able to claim the red packet.')
     }
-    const passwords: string[] = Array(Number(otherOptions.shares))
-        .fill('')
-        .map(uuid)
+    const password = uuid()
     let erc20_approve_transaction_hash: string | undefined = undefined
     let erc20_approve_value: bigint | undefined = undefined
     let erc20_token_address: string | undefined = undefined
@@ -109,7 +102,8 @@ export async function createRedPacket(
         throw new Error('Not supported')
     }
     const { create_transaction_hash, create_nonce } = await getProvider().create(
-        passwords.map(Web3Utils.sha3),
+        Web3Utils.sha3(password),
+        Number(packet.shares),
         packet.is_random,
         packet.duration,
         Array.from(crypto.getRandomValues(new Uint32Array(8))),
@@ -134,13 +128,15 @@ export async function createRedPacket(
         sender_name: packet.sender_name,
         status: RedPacketStatus.pending,
         token_type: packet.token_type,
-        uuids: passwords,
+        password: password,
         block_creation_time: new Date(),
         create_nonce,
         create_transaction_hash,
         erc20_approve_transaction_hash,
         erc20_approve_value,
         erc20_token: erc20_token_address,
+        received_time: new Date(),
+        shares: packet.shares,
     }
     {
         const transaction = createTransaction(await createWalletDBAccess(), 'readwrite')(...everything)
@@ -148,7 +144,7 @@ export async function createRedPacket(
     }
     getProvider().watchCreateResult({ databaseID: record.id, transactionHash: create_transaction_hash })
     PluginMessageCenter.emit('maskbook.red_packets.update', undefined)
-    return { passwords }
+    return { password }
 }
 
 export async function onCreationResult(id: { databaseID: string }, details: RedPacketCreationResult) {
@@ -182,7 +178,7 @@ export async function onCreationResult(id: { databaseID: string }, details: RedP
             creation_time: details.block_creation_time.getTime(),
             duration: rec.duration,
             is_random: rec.is_random,
-            passwords: rec.uuids,
+            password: rec.password,
             rpid: details.red_packet_id,
             sender: {
                 address: rec.sender_address,
@@ -193,6 +189,7 @@ export async function onCreationResult(id: { databaseID: string }, details: RedP
             total: String(rec.send_total),
             network: rec.network,
             token,
+            shares: Number(rec.shares),
         }
     }
     t.objectStore('RedPacket').put(rec)
@@ -204,11 +201,11 @@ export async function claimRedPacket(id: { redPacketID: string }, claimWithWalle
     const rec = await getRedPacketByID(undefined, id.redPacketID)
     if (!rec) throw new Error('You should call discover first')
 
-    const passwords = rec.uuids
+    const passwords = rec.password
     const status = await getProvider().checkAvailability(id)
     const { claim_transaction_hash } = await getProvider().claim(
         id,
-        passwords[status.claimedCount],
+        passwords,
         claimWithWallet,
         Web3Utils.sha3(claimWithWallet),
     )

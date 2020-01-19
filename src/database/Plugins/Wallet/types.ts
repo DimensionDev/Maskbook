@@ -9,8 +9,8 @@ export interface RedPacketRecord {
     /** Start from 1 */
     contract_version: number
     contract_address: string
-    /** UUID is the passwords that used to receive the red packet */
-    uuids: string[]
+    /** password that used to receive the red packet */
+    password: string
     /**
      * true if 'Random Mode'. false if 'Average Mode'
      */
@@ -21,7 +21,7 @@ export interface RedPacketRecord {
     create_transaction_hash?: string
     /** Read from create transaction result */
     block_creation_time?: Date
-    /** Available time after block_creation_time. In seconds */
+    /** Available time after block_creation_time. In seconds. Default 86400 (24hrs) */
     duration: number
     /** Read from create transaction result */
     red_packet_id?: string
@@ -32,7 +32,7 @@ export interface RedPacketRecord {
     sender_address: string
     /** Trimmed not empty single line string. Max 30 chars */
     sender_name: string
-    /** Red packet total value in Wei */
+    /** Red packet total value in Wei if ETH. In minimal unit if ERC20 token */
     send_total: bigint
     /** Trimmed single line string. Allow empty input. Max 140 chars. Replace inline break with space */
     send_message: string
@@ -58,6 +58,10 @@ export interface RedPacketRecord {
     erc20_approve_transaction_hash?: string
     /** ERC20 approve transaction event value */
     erc20_approve_value?: bigint
+    /** incoming red packet time */
+    received_time: Date
+    /** Number of red packet shares */
+    shares: bigint
     _found_in_url_?: string
     _data_source_: 'real' | 'mock'
 }
@@ -162,7 +166,8 @@ export interface RedPacketJSONPayload {
     contract_version: number
     contract_address: string
     rpid: string
-    passwords: string[]
+    password: string
+    shares: number
     sender: {
         address: string
         name: string

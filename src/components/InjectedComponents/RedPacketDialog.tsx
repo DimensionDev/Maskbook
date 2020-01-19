@@ -20,7 +20,7 @@ import { DialogDismissIconUI } from './DialogDismissIcon'
 import BackupRestoreTab from '../../extension/options-page/DashboardComponents/BackupRestoreTab'
 import { RedPacket, RedPacketWithState } from '../../extension/options-page/DashboardComponents/RedPacket'
 import Services from '../../extension/service'
-import { createRedPacketInit, createRedPacketOption } from '../../plugins/Wallet/red-packet-fsm'
+import { createRedPacketInit } from '../../plugins/Wallet/red-packet-fsm'
 import {
     EthereumNetwork,
     RedPacketTokenType,
@@ -71,7 +71,7 @@ const useNewPacketStyles = makeStyles(theme =>
 )
 
 interface NewPacketProps {
-    onCreateNewPacket: (opt: createRedPacketInit & createRedPacketOption) => void
+    onCreateNewPacket: (opt: createRedPacketInit) => void
 }
 
 function NewPacket(props: RedPacketDialogProps & NewPacketProps) {
@@ -282,12 +282,8 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
     const rootRef = useRef<HTMLDivElement>(null)
     const [currentTab, setCurrentTab] = useState(0)
 
-    const createRedPacket = useCallback((opt: createRedPacketInit & createRedPacketOption) => {
-        const { shares, ...rest } = opt
-        Services.Plugin.invokePlugin('maskbook.red_packet', 'createRedPacket', rest, { shares }).then(
-            console.log,
-            console.error,
-        )
+    const createRedPacket = useCallback((opt: createRedPacketInit) => {
+        Services.Plugin.invokePlugin('maskbook.red_packet', 'createRedPacket', opt).then(console.log, console.error)
         setCurrentTab(1)
     }, [])
 

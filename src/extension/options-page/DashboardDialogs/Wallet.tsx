@@ -92,7 +92,7 @@ interface TabPanelProps {
 export function WalletAddTokenDialog(props: WalletAddTokenDialogProps) {
     const { onConfirm, onDecline } = props
     const classes = useAddTokenStyles()
-    const [tabID, setTabID] = React.useState<0 | 1>(1)
+    const [tabID, setTabID] = React.useState<0 | 1>(0)
 
     const [wellknown, setWellknown] = React.useState<undefined | ERC20TokenPredefinedData[0]>()
 
