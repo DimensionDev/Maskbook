@@ -13,9 +13,7 @@ export default function WithRedPacket(props: { renderItem?: TypedMessageText | n
             setLoading(true)
             Services.Plugin.invokePlugin('maskbook.wallet', 'getWallets')
                 .then(wallets => wallets[0]?.id || '')
-                .then(wallet =>
-                    Services.Plugin.invokePlugin('maskbook.red_packet', 'claimRedPacket', rpid, wallet, ['']),
-                )
+                .then(wallet => Services.Plugin.invokePlugin('maskbook.red_packet', 'claimRedPacket', rpid, wallet))
                 .finally(() => setLoading(false))
         }
     }
