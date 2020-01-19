@@ -1,8 +1,8 @@
 import React from 'react'
 import { TypedMessageText, withMetadata } from '../../../extension/background-script/CryptoServices/utils'
 import StructuredPluginWrapper from '../StructuredMessage/StructuredPluginWrapper'
-import { RedPacketWithState, RedPacketState } from '../../../extension/options-page/DashboardComponents/RedPacket'
-import { RedPacketRecord } from '../../../database/Plugins/Wallet/types'
+import { RedPacketWithState } from '../../../extension/options-page/DashboardComponents/RedPacket'
+import { RedPacketRecord, RedPacketStatus } from '../../../database/Plugins/Wallet/types'
 import Services from '../../../extension/service'
 import { PostIdentifier, ProfileIdentifier } from '../../../database/type'
 import { getPostUrl } from '../../../social-network-provider/twitter.com/utils/url'
@@ -15,8 +15,8 @@ interface WithRedPacketProps {
 export default function WithRedPacket(props: WithRedPacketProps) {
     const { renderItem, postIdentifier } = props
     const [loading, setLoading] = React.useState(false)
-    const onClick = async (state: RedPacketState, rpid: RedPacketRecord['red_packet_id']) => {
-        if (state === 'pending' && rpid) {
+    const onClick = async (state: RedPacketStatus, rpid: RedPacketRecord['red_packet_id']) => {
+        if ((state === 'incoming' || state === 'normal') && rpid) {
             setLoading(true)
             Services.Plugin.invokePlugin('maskbook.wallet', 'getWallets')
                 .then(wallets => wallets[0]?.id || '')

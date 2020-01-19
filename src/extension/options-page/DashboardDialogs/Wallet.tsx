@@ -194,7 +194,7 @@ export function WalletRedPacketDetailDialog(props: WalletRedPacketDetailDialogPr
                     <RedPacket redPacket={redPacket} />
                     <WalletLine
                         line1="Source"
-                        line2={<Typography color="primary">{redPacket.sender_address}</Typography>}
+                        line2={<Typography color="primary">{redPacket._found_in_url_ || 'Unknown'}</Typography>}
                     />
                     <WalletLine
                         line1="From"

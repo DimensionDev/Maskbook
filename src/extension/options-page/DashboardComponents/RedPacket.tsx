@@ -1,7 +1,7 @@
 import React from 'react'
 import { makeStyles, createStyles, Card, Typography, CircularProgress } from '@material-ui/core'
 import classNames from 'classnames'
-import { RedPacketRecord, RedPacketJSONPayload } from '../../../database/Plugins/Wallet/types'
+import { RedPacketRecord, RedPacketJSONPayload, RedPacketStatus } from '../../../database/Plugins/Wallet/types'
 import Services from '../../service'
 import { PluginMessageCenter } from '../../../plugins/PluginMessages'
 
@@ -81,11 +81,9 @@ const useStyles = makeStyles(theme =>
     }),
 )
 
-export type RedPacketState = 'pending' | 'opening' | 'opened' | 'unknown'
-
 interface RedPacketProps {
-    onClick?(state: RedPacketState, red_packet_id: RedPacketRecord['red_packet_id']): void
-    state?: RedPacketState
+    onClick?(state: RedPacketStatus | undefined, red_packet_id: RedPacketRecord['red_packet_id']): void
+    state?: RedPacketStatus
     loading?: boolean
     redPacket?: RedPacketRecord
     unknownRedPacket?: RedPacketJSONPayload
@@ -94,7 +92,7 @@ interface RedPacketProps {
 
 export function RedPacketWithState(props: RedPacketProps) {
     const classes = useStyles()
-    const { onClick, state: _state, redPacket: knownRedPacket, unknownRedPacket, loading, from } = props
+    const { onClick, redPacket: knownRedPacket, unknownRedPacket, loading, from } = props
     const [redPacket, setRedPacket] = React.useState(knownRedPacket || ({} as Partial<RedPacketRecord>))
 
     React.useEffect(() => {
@@ -111,13 +109,7 @@ export function RedPacketWithState(props: RedPacketProps) {
         }
     }, [from, unknownRedPacket])
 
-    let state: RedPacketState
-    if (!redPacket.red_packet_id) state = 'unknown'
-    else if (!redPacket.claim_transaction_hash) state = 'pending'
-    else if (!redPacket.claim_amount) state = 'opening'
-    else state = 'opened'
-
-    state = _state ?? state
+    const status = redPacket.status
 
     return (
         <Card
@@ -126,20 +118,20 @@ export function RedPacketWithState(props: RedPacketProps) {
                 [classes.cursor]: onClick,
             })}
             component="article"
-            onClick={() => !loading && onClick?.(state, redPacket.red_packet_id)}>
-            <div className={classNames(classes.header, { [classes.flex1]: state === 'opened' })}>
-                {state === 'opened' ? (
+            onClick={() => !loading && onClick?.(status, redPacket.red_packet_id)}>
+            <div className={classNames(classes.header, { [classes.flex1]: status === 'pending' })}>
+                {status === 'claimed' ? (
                     <Typography variant="h5" color="inherit">
-                        {redPacket.claim_amount} USDT
+                        {redPacket.claim_amount?.toLocaleString()} USDT
                     </Typography>
                 ) : (
                     <Typography variant="body1" color="inherit">
                         From: {redPacket.sender_name}
                     </Typography>
                 )}
-                {state !== 'pending' && (
+                {status !== 'incoming' && status !== 'normal' && (
                     <Typography className={classes.label} variant="body2">
-                        {state === 'opening' ? 'Opening...' : 'Received'}
+                        {status === 'claim_pending' ? 'Opening...' : status}
                     </Typography>
                 )}
             </div>
@@ -148,7 +140,7 @@ export function RedPacketWithState(props: RedPacketProps) {
                     {redPacket.send_message}
                 </Typography>
                 <Typography variant="body2">
-                    {state === 'pending'
+                    {status === 'incoming'
                         ? 'Ready to open'
                         : `${redPacket.send_total?.toLocaleString()} USDT / ${
                               redPacket.uuids ? redPacket.uuids.length : 'Unknown'
@@ -156,7 +148,10 @@ export function RedPacketWithState(props: RedPacketProps) {
                 </Typography>
             </div>
             <div className={classes.packet}></div>
-            <div className={classNames(classes.loader, { [classes.dimmer]: state === 'opened' || loading })}>
+            <div
+                className={classNames(classes.loader, {
+                    [classes.dimmer]: status === 'refunded' || status === 'expired' || loading,
+                })}>
                 {loading && <CircularProgress color="secondary" />}
             </div>
         </Card>
