@@ -133,6 +133,7 @@ export async function createRedPacket(
         sender_name: packet.sender_name,
         status: RedPacketStatus.pending,
         token_type: packet.token_type,
+        // TODO: This should be hashed.
         uuids: passwords,
         block_creation_time: new Date(),
         create_nonce,
@@ -185,7 +186,11 @@ export async function onCreationResult(uuid: string, details: RedPacketCreationR
     PluginMessageCenter.emit('maskbook.red_packets.update', undefined)
 }
 
-export async function claimRedPacket(redPacketID: string, claimWithWallet: string, passwords: string[]) {
+export async function claimRedPacket(redPacketID: string, claimWithWallet: string) {
+    const rec = await getRedPacketByID(undefined, redPacketID)
+    if (!rec) throw new Error('You should call discover first')
+
+    const passwords = rec.uuids
     const status = await getProvider().checkAvailability(redPacketID)
     const { claim_transaction_hash } = await getProvider().claim(
         redPacketID,
@@ -275,7 +280,8 @@ if (process.env.NODE_ENV === 'development') {
     }, 1000)
 }
 
-async function getRedPacketByID(t: IDBPSafeTransaction<WalletDB, ['RedPacket'], 'readonly'>, id: string) {
+async function getRedPacketByID(t: undefined | IDBPSafeTransaction<WalletDB, ['RedPacket'], 'readonly'>, id: string) {
+    if (!t) t = createTransaction(await createWalletDBAccess(), 'readonly')('RedPacket')
     const rec = await t
         .objectStore('RedPacket')
         .index('red_packet_id')
