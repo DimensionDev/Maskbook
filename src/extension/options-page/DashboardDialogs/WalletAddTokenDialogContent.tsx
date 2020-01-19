@@ -95,10 +95,12 @@ const renderGroup = (params: RenderGroupParams) => [
     params.children,
 ]
 
-export function VirtualizedList() {
+export function ERC20WellKnownTokenSelector(props: {
+    currentItem: ERC20TokenPredefinedData[0] | undefined
+    onChange(next: ERC20TokenPredefinedData[0] | undefined): void
+}) {
     const classes = useStyles()
     const [useRinkeby, setRinkeby] = React.useState(false)
-    const [selectedToken, setToken] = React.useState<undefined | ERC20TokenPredefinedData[0]>(undefined)
 
     return (
         <>
@@ -108,7 +110,7 @@ export function VirtualizedList() {
                         checked={useRinkeby}
                         onChange={e => {
                             setRinkeby(e.currentTarget.checked)
-                            setToken(undefined)
+                            props.onChange(undefined)
                         }}
                         color="primary"
                     />
@@ -125,13 +127,16 @@ export function VirtualizedList() {
                 groupBy={(option: typeof mainnet[0]) => getNameOfToken(option)[0].toUpperCase()}
                 renderInput={params => <TextField {...params} variant="outlined" label="Well-known tokens" fullWidth />}
                 renderOption={(option: typeof mainnet[0]) => <Typography noWrap>{getNameOfToken(option)}</Typography>}
-                value={selectedToken}
+                value={props.currentItem}
                 onChange={(event: any, newValue: typeof mainnet[0] | null) => {
-                    setToken(newValue || undefined)
+                    props.onChange(newValue || undefined)
                 }}
             />
-            <Typography>Address: {selectedToken?.address}</Typography>
-            <Typography>Decimals: {selectedToken?.decimals}</Typography>
+            <Typography style={{ marginTop: 24 }} variant="caption">
+                Address: {props.currentItem?.address}
+            </Typography>
+            <br />
+            <Typography variant="caption">Decimals: {props.currentItem?.decimals}</Typography>
         </>
     )
 }

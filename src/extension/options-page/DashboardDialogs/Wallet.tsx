@@ -10,9 +10,7 @@ import {
     Paper,
     Tabs,
     Tab,
-    AppBar,
 } from '@material-ui/core'
-import Autocomplete from '@material-ui/lab/Autocomplete'
 import ArrowBack from '@material-ui/icons/ArrowBack'
 import ActionButton from '../DashboardComponents/ActionButton'
 import { DialogContentItem } from './DialogBase'
@@ -23,7 +21,8 @@ import { PluginMessageCenter } from '../../../plugins/PluginMessages'
 import { RedPacketRecord } from '../../../database/Plugins/Wallet/types'
 import useQueryParams from '../../../utils/hooks/useQueryParams'
 import { ERC20TokenPredefinedData } from '../../../plugins/Wallet/erc20'
-import { VirtualizedList } from './WalletAddTokenDialogContent'
+import { ERC20WellKnownTokenSelector } from './WalletAddTokenDialogContent'
+import wallet from 'wallet.ts'
 
 const mainnet: ERC20TokenPredefinedData = require('../../../plugins/Wallet/mainnet_erc20.json')
 const rinkeby: ERC20TokenPredefinedData = require('../../../plugins/Wallet/rinkeby_erc20.json')
@@ -95,11 +94,16 @@ export function WalletAddTokenDialog(props: WalletAddTokenDialogProps) {
     const classes = useAddTokenStyles()
     const [tabID, setTabID] = React.useState<0 | 1>(1)
 
+    const [wellknown, setWellknown] = React.useState<undefined | ERC20TokenPredefinedData[0]>()
+
     const [address, setTokenAddress] = React.useState('')
     const [decimal, setDecimal] = React.useState('')
     const [tokenName, setTokenName] = React.useState('')
     const [symbol, setSymbol] = React.useState('')
 
+    const isInvalidAddr = !wallet.EthereumAddress.isValid(address)
+    const isValidInput =
+        tabID === 0 ? wellknown === undefined : isInvalidAddr || tokenName.length === 0 || symbol.length === 0
     return (
         <DialogContentItem
             onExit={onDecline}
@@ -120,15 +124,18 @@ export function WalletAddTokenDialog(props: WalletAddTokenDialogProps) {
             content={
                 <>
                     {tabID === 0 ? (
-                        <VirtualizedList />
+                        <ERC20WellKnownTokenSelector currentItem={wellknown} onChange={n => setWellknown(n)} />
                     ) : (
                         <>
                             <TextField
+                                required
+                                error={isInvalidAddr && !!address.length}
                                 className={classes.textfield}
                                 label="Contract Address"
                                 value={address}
                                 onChange={e => setTokenAddress(e.target.value)}></TextField>
                             <TextField
+                                required
                                 className={classes.textfield}
                                 label="Decimal"
                                 value={decimal}
@@ -136,11 +143,13 @@ export function WalletAddTokenDialog(props: WalletAddTokenDialogProps) {
                                 inputProps={{ min: 0 }}
                                 onChange={e => setDecimal(e.target.value)}></TextField>
                             <TextField
+                                required
                                 className={classes.textfield}
                                 label="Name"
                                 value={tokenName}
                                 onChange={e => setTokenName(e.target.value)}></TextField>
                             <TextField
+                                required
                                 className={classes.textfield}
                                 label="Symbol"
                                 value={symbol}
@@ -150,7 +159,11 @@ export function WalletAddTokenDialog(props: WalletAddTokenDialogProps) {
                 </>
             }
             actions={
-                <ActionButton variant="contained" color="primary" onClick={() => onConfirm(address)}>
+                <ActionButton
+                    disabled={isValidInput}
+                    variant="contained"
+                    color="primary"
+                    onClick={() => onConfirm(address)}>
                     Add Token
                 </ActionButton>
             }></DialogContentItem>
