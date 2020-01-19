@@ -18,11 +18,13 @@ import { RedPacket } from '../DashboardComponents/RedPacket'
 import WalletLine from '../DashboardComponents/WalletLine'
 import Services from '../../service'
 import { PluginMessageCenter } from '../../../plugins/PluginMessages'
-import { RedPacketRecord } from '../../../database/Plugins/Wallet/types'
+import { RedPacketRecord, WalletRecord } from '../../../database/Plugins/Wallet/types'
 import useQueryParams from '../../../utils/hooks/useQueryParams'
 import { ERC20TokenPredefinedData } from '../../../plugins/Wallet/erc20'
 import { ERC20WellKnownTokenSelector } from './WalletAddTokenDialogContent'
 import wallet from 'wallet.ts'
+import { useHistory } from 'react-router-dom'
+import { geti18nString } from '../../../utils/i18n'
 
 const mainnet: ERC20TokenPredefinedData = require('../../../plugins/Wallet/mainnet_erc20.json')
 const rinkeby: ERC20TokenPredefinedData = require('../../../plugins/Wallet/rinkeby_erc20.json')
@@ -328,4 +330,117 @@ export function WalletRedPacketDetailDialogWithRouter(props: Pick<WalletRedPacke
             Services.Plugin.invokePlugin('maskbook.red_packet', 'getRedPacketByID', undefined, id).then(setRedPacket)
     }, [id])
     return redPacket ? <WalletRedPacketDetailDialog redPacket={redPacket} onDecline={props.onDecline} /> : null
+}
+
+export function WalletCreateDialog() {
+    const [name, setName] = React.useState('')
+    const [password, setPassword] = React.useState('')
+    const history = useHistory()
+
+    const createWallet = () => {
+        // TODO:
+        alert('dummy!')
+    }
+
+    const content = (
+        <div style={{ alignSelf: 'stretch', textAlign: 'center', width: '100%' }}>
+            <TextField
+                style={{ width: '100%', maxWidth: '320px' }}
+                autoFocus
+                required
+                variant="outlined"
+                value={name}
+                onChange={e => setName(e.target.value)}
+                helperText=" "
+                label="Wallet Name"
+            />
+            <TextField
+                required
+                type="password"
+                style={{ width: '100%', maxWidth: '320px' }}
+                variant="outlined"
+                label="Password"
+                helperText={geti18nString('dashboard_password_helper_text')}
+                placeholder={geti18nString('dashboard_password_hint')}
+                value={password}
+                onChange={e => setPassword(e.target.value)}
+            />
+        </div>
+    )
+
+    return (
+        <DialogContentItem
+            title={'Create Wallet'}
+            content={content}
+            actionsAlign="center"
+            actions={
+                <ActionButton variant="contained" color="primary" component={'a'} onClick={createWallet}>
+                    {geti18nString('create')}
+                </ActionButton>
+            }></DialogContentItem>
+    )
+}
+
+const useWalletImportStyles = makeStyles(theme =>
+    createStyles({
+        box: {
+            border: `1px solid ${theme.palette.divider}`,
+            marginTop: theme.spacing(2),
+        },
+    }),
+)
+
+export function WalletImportDialog() {
+    const [mnemonic, setMnemonic] = React.useState(
+        'flag wave term illness equal airport hint item dinosaur opinion special kick',
+    )
+    const [passphrase, setPassphrase] = React.useState('12345678')
+    const [name, setName] = React.useState('Demo wallet')
+    const history = useHistory()
+    const classes = useWalletImportStyles()
+
+    const importWallet = () => {
+        Services.Plugin.invokePlugin('maskbook.wallet', 'importNewWallet', {
+            mnemonic: mnemonic.split(' '),
+            passphrase,
+            name,
+        } as Pick<WalletRecord, 'name' | 'mnemonic' | 'passphrase'>).then(() => history.replace('../'))
+    }
+
+    const content = (
+        <Box alignSelf="stretch" width="100%">
+            <Typography variant="body1">Import a wallet with mnemonic words and password.</Typography>
+            <Box display="flex" flexDirection="column" p={1} className={classes.box}>
+                <TextField
+                    required
+                    value={mnemonic}
+                    onChange={e => setMnemonic(e.target.value)}
+                    label="Mnemonic Words"
+                    helperText=" "
+                />
+                <TextField
+                    required
+                    value={passphrase}
+                    onChange={e => setPassphrase(e.target.value)}
+                    label="Passphrase"
+                    helperText=" "
+                />
+                <TextField required value={name} onChange={e => setName(e.target.value)} label="Name" />
+            </Box>
+        </Box>
+    )
+
+    return (
+        <DialogContentItem
+            title={'Import Wallet'}
+            content={content}
+            actions={
+                <>
+                    <span />
+                    <ActionButton variant="contained" color="primary" component={'a'} onClick={importWallet}>
+                        {geti18nString('import')}
+                    </ActionButton>
+                </>
+            }></DialogContentItem>
+    )
 }

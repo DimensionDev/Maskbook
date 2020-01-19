@@ -1,8 +1,19 @@
 import React from 'react'
 
 import { makeStyles, createStyles } from '@material-ui/styles'
-import { Theme, Typography, Card, Container, Button } from '@material-ui/core'
-import { useRouteMatch, Redirect } from 'react-router-dom'
+import {
+    Theme,
+    Typography,
+    Card,
+    Container,
+    Button,
+    List,
+    ListItemText,
+    ListItemSecondaryAction,
+    ListItem,
+    Divider,
+} from '@material-ui/core'
+import { useRouteMatch, Redirect, Link } from 'react-router-dom'
 import { DialogRouter } from './DashboardDialogs/DialogBase'
 
 import FooterLine from './DashboardComponents/FooterLine'
@@ -11,7 +22,13 @@ import Services from '../service'
 import { WalletRecord } from '../../database/Plugins/Wallet/types'
 import { useState, useEffect } from 'react'
 import { PluginMessageCenter } from '../../plugins/PluginMessages'
-import { WalletRedPacketDetailDialogWithRouter } from './DashboardDialogs/Wallet'
+import {
+    WalletRedPacketDetailDialogWithRouter,
+    WalletCreateDialog,
+    WalletImportDialog,
+} from './DashboardDialogs/Wallet'
+import { geti18nString } from '../../utils/i18n'
+import ActionButton from './DashboardComponents/ActionButton'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -51,6 +68,24 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 )
 
+const ListItemWithAction: typeof ListItem = (props: any) => {
+    const { classes, ...p } = props
+    const { secondaryAction } = useStyles()
+    return <ListItem classes={{ secondaryAction, ...classes }} {...p} />
+}
+
+const dialogs = (
+    <>
+        <DialogRouter path="/create" children={<WalletCreateDialog />} />
+        <DialogRouter path="/import" children={<WalletImportDialog />} />
+        <DialogRouter
+            path="/redpacket"
+            onExit="/wallets/"
+            children={<WalletRedPacketDetailDialogWithRouter onDecline="/wallets/" />}
+        />
+    </>
+)
+
 export default function DashboardWalletsPage() {
     const [wallets, setWallets] = useState<WalletRecord[]>([])
     useEffect(() => {
@@ -78,29 +113,48 @@ export default function DashboardWalletsPage() {
                 </div>
             </section>
             <section className={classes.sections}>
-                <Button
-                    onClick={() => {
-                        // TODO: private key is E989CF09DD7A1BE2BBEDDBEE1FDCCD55A3E0BBCA938AA9E241F86B8177D6664C
-                        Services.Plugin.invokePlugin('maskbook.wallet', 'importNewWallet', {
-                            mnemonic: prompt(
-                                "What's your wallet mnemonic word? Paste it here, split by space",
-                                'flag wave term illness equal airport hint item dinosaur opinion special kick',
-                            )!.split(' '),
-                            passphrase: prompt('What is password of this wallet?', '12345678'),
-                            name: prompt('What is the name of this wallet?', 'Demo wallet'),
-                        } as Pick<WalletRecord, 'name' | 'mnemonic' | 'passphrase'>)
-                    }}>
-                    Import a wallet
-                </Button>
+                <Typography className={classes.title} variant="h5" align="left">
+                    Add Wallet
+                </Typography>
+                <Card raised elevation={1}>
+                    <List disablePadding>
+                        <ListItemWithAction key="wallet-create">
+                            <ListItemText primary={geti18nString('create')} secondary={'Creae a new wallet.'} />
+                            <ListItemSecondaryAction>
+                                <ActionButton<typeof Link>
+                                    variant="contained"
+                                    color="primary"
+                                    className={classes.button}
+                                    component={Link}
+                                    to="create/">
+                                    {geti18nString('create')}
+                                </ActionButton>
+                            </ListItemSecondaryAction>
+                        </ListItemWithAction>
+                        <Divider></Divider>
+                        <ListItemWithAction key="dashboard-restore">
+                            <ListItemText
+                                primary={geti18nString('import')}
+                                secondary={'From a previous wallet backup.'}
+                            />
+                            <ListItemSecondaryAction>
+                                <ActionButton<typeof Link>
+                                    variant="outlined"
+                                    color="default"
+                                    className={classes.button}
+                                    component={Link}
+                                    to="import/">
+                                    {geti18nString('import')}
+                                </ActionButton>
+                            </ListItemSecondaryAction>
+                        </ListItemWithAction>
+                    </List>
+                </Card>
             </section>
             <section className={classes.sections}>
                 <FooterLine />
             </section>
-            <DialogRouter
-                path="/redpacket"
-                onExit="/wallets/"
-                children={<WalletRedPacketDetailDialogWithRouter onDecline="/wallets/" />}
-            />
+            {dialogs}
             {!match?.url.endsWith('/') && match?.isExact && <Redirect to={match?.url + '/'} />}
         </Container>
     )
