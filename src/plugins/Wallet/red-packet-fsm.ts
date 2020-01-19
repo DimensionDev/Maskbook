@@ -13,6 +13,7 @@ import { mockRedPacketAPI } from './mock'
 import { RedPacketCreationResult, RedPacketClaimResult } from './types'
 import { getWalletProvider } from './wallet'
 import { PluginMessageCenter } from '../PluginMessages'
+import { requestNotification } from '../../utils/notification'
 
 function getProvider() {
     return mockRedPacketAPI
@@ -201,6 +202,7 @@ export async function claimRedPacket(redPacketID: string, claimWithWallet: strin
         t.objectStore('RedPacket').put(rec)
     }
     getProvider().watchClaimResult(claim_transaction_hash)
+    requestNotification({ body: 'We will notify you when claiming process is ready.' })
     PluginMessageCenter.emit('maskbook.red_packets.update', undefined)
 }
 

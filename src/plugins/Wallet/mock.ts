@@ -23,7 +23,7 @@ export const mockRedPacketAPI: RedPacketAPI = {
             Math.random() > 0.5
                 ? {
                       type: 'success',
-                      claimed_value: BigInt(Math.random() * 1000),
+                      claimed_value: BigInt(Math.ceil(Math.random() * 1000)),
                       claimer: 'claimer address',
                       red_packet_id: 'red packed id',
                   }

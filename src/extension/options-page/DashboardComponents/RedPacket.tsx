@@ -1,9 +1,9 @@
 import React from 'react'
-import { makeStyles, createStyles, Card, Typography } from '@material-ui/core'
+import { makeStyles, createStyles, Card, Typography, CircularProgress } from '@material-ui/core'
 import classNames from 'classnames'
-import { getWelcomePageURL } from '../Welcome/getWelcomePageURL'
 import { RedPacketRecord, RedPacketJSONPayload } from '../../../database/Plugins/Wallet/types'
 import Services from '../../service'
+import { PluginMessageCenter } from '../../../plugins/PluginMessages'
 
 const useStyles = makeStyles(theme =>
     createStyles({
@@ -62,67 +62,71 @@ const useStyles = makeStyles(theme =>
             justifyContent: 'space-between',
             boxSizing: 'border-box',
         },
-        opened: {
-            filter: 'opacity(0.5)',
+        dimmer: {
+            backgroundColor: 'rgba(0, 0, 0, 0.6)',
         },
         cursor: {
             cursor: 'pointer',
         },
+        loader: {
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            position: 'absolute',
+            left: 0,
+            right: 0,
+            top: 0,
+            bottom: 0,
+        },
     }),
 )
 
+export type RedPacketState = 'pending' | 'opening' | 'opened' | 'unknown'
+
 interface RedPacketProps {
-    onClick?(): void
-    state?: 'pending' | 'opening' | 'opened'
+    onClick?(state: RedPacketState, red_packet_id: RedPacketRecord['red_packet_id']): void
+    state?: RedPacketState
+    loading?: boolean
     redPacket?: RedPacketRecord
     unknownRedPacket?: RedPacketJSONPayload
 }
 
-const requestNotification = () => {
-    browser.permissions.request({ permissions: ['notifications'] }).then(granted => {
-        if (!granted) return
-        const rand = Math.random()
-        const notification = new Notification('Maskbook', {
-            icon: '128x128.png',
-            body: `Red Packet (${rand})`,
-        })
-        notification.onclick = () => {
-            browser.tabs.create({ url: getWelcomePageURL({ plugin: `redpacket:${rand}` }) })
-        }
-        // browser.notifications.create(null, {
-        //     type: 'basic',
-        //     title: 'Maskbook',
-        //     message: '...',
-        //     requireInteraction: true,
-        // } as any)
-    })
-}
-
 export function RedPacketWithState(props: RedPacketProps) {
     const classes = useStyles()
-    const { onClick, state: _state, redPacket: knownRedPacket, unknownRedPacket } = props
+    const { onClick, state: _state, redPacket: knownRedPacket, unknownRedPacket, loading } = props
     const [redPacket, setRedPacket] = React.useState(knownRedPacket || ({} as Partial<RedPacketRecord>))
 
     React.useEffect(() => {
-        if (unknownRedPacket)
-            Services.Plugin.invokePlugin('maskbook.red_packet', 'discoverRedPacket', unknownRedPacket, '').then(
-                setRedPacket,
-            )
+        if (unknownRedPacket) {
+            const updateRedPacket = () =>
+                Services.Plugin.invokePlugin(
+                    'maskbook.red_packet',
+                    'discoverRedPacket',
+                    unknownRedPacket,
+                    // TODO: found uri
+                    '',
+                ).then(setRedPacket)
+            updateRedPacket()
+            return PluginMessageCenter.on('maskbook.red_packets.update', updateRedPacket)
+        }
     }, [unknownRedPacket])
 
-    const state =
-        _state ?? (redPacket.claim_transaction_hash ? (redPacket.claim_amount ? 'opened' : 'opening') : 'pending')
+    let state: RedPacketState
+    if (!redPacket.red_packet_id) state = 'unknown'
+    else if (!redPacket.claim_transaction_hash) state = 'pending'
+    else if (!redPacket.claim_amount) state = 'opening'
+    else state = 'opened'
+
+    state = _state ?? state
+
     return (
         <Card
             elevation={0}
-            className={classNames(classes.box, { [classes.opened]: state === 'opened', [classes.cursor]: onClick })}
+            className={classNames(classes.box, {
+                [classes.cursor]: onClick,
+            })}
             component="article"
-            onClick={() => {
-                if (onClick) {
-                    requestNotification()
-                    onClick()
-                }
-            }}>
+            onClick={() => !loading && onClick?.(state, redPacket.red_packet_id)}>
             <div className={classNames(classes.header, { [classes.flex1]: state === 'opened' })}>
                 {state === 'opened' ? (
                     <Typography variant="h5" color="inherit">
@@ -152,13 +156,16 @@ export function RedPacketWithState(props: RedPacketProps) {
                 </Typography>
             </div>
             <div className={classes.packet}></div>
+            <div className={classNames(classes.loader, { [classes.dimmer]: state === 'opened' || loading })}>
+                {loading && <CircularProgress color="secondary" />}
+            </div>
         </Card>
     )
 }
 
 export function RedPacket(props: RedPacketProps) {
     const classes = useStyles()
-    const { onClick, redPacket: knownRedPacket, unknownRedPacket } = props
+    const { redPacket: knownRedPacket, unknownRedPacket } = props
     const [redPacket, setRedPacket] = React.useState(knownRedPacket || ({} as Partial<RedPacketRecord>))
 
     React.useEffect(() => {
@@ -169,11 +176,7 @@ export function RedPacket(props: RedPacketProps) {
     }, [unknownRedPacket])
 
     return (
-        <Card
-            elevation={0}
-            className={classNames(classes.box, { [classes.cursor]: onClick })}
-            component="article"
-            onClick={onClick}>
+        <Card elevation={0} className={classNames(classes.box)} component="article">
             <div className={classes.header}>
                 <Typography variant="h5">
                     {redPacket.claim_amount ? `${redPacket.claim_amount.toLocaleString()} USDT` : `Not Claimed`}

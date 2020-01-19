@@ -7,6 +7,7 @@ import classNames from 'classnames'
 import { TypedMessageText, withMetadata } from '../../extension/background-script/CryptoServices/utils'
 import StructuredPluginWrapper from './StructuredMessage/StructuredPluginWrapper'
 import { RedPacketWithState } from '../../extension/options-page/DashboardComponents/RedPacket'
+import WithRedPacket from './PluginRedPacket/WithRedPacket'
 
 export interface AdditionalContentProps extends withClasses<KeysInferFromUseStyles<typeof useStyles>> {
     title: React.ReactNode
@@ -39,12 +40,7 @@ export const AdditionalContent = React.memo(function AdditionalContent(props: Ad
             {props.renderItem || props.renderText ? (
                 <Typography variant="body2" component="p">
                     <RenderText text={props.renderText || props.renderItem!.content} />
-                    {props.renderItem &&
-                        withMetadata(props.renderItem.meta, 'com.maskbook.red_packet:1', r => (
-                            <StructuredPluginWrapper width={400} pluginName="Red Packet">
-                                <RedPacketWithState unknownRedPacket={r} />
-                            </StructuredPluginWrapper>
-                        ))}
+                    <WithRedPacket renderItem={props.renderItem} />
                 </Typography>
             ) : (
                 props.children
