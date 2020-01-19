@@ -32,15 +32,6 @@ export class HappyRedPacket extends Contract {
             4: boolean
         }>
 
-        check_claimed_list(
-            id: string | number[],
-        ): TransactionObject<{
-            claimed_list: string[]
-            claimer_addrs: string[]
-            0: string[]
-            1: string[]
-        }>
-
         claim(
             id: string | number[],
             password: string,
@@ -49,7 +40,8 @@ export class HappyRedPacket extends Contract {
         ): TransactionObject<string>
 
         create_red_packet(
-            _hashes: (string | number[])[],
+            _hash: string | number[],
+            _number: number | string,
             _ifrandom: boolean,
             _duration: number | string,
             _seed: string | number[],
