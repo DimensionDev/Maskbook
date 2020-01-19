@@ -33,6 +33,8 @@ import { PortalShadowRoot } from '../../utils/jss/ShadowRootPortal'
 import { useCapturedInput } from '../../utils/hooks/useCapturedEvents'
 import { PluginMessageCenter } from '../../plugins/PluginMessages'
 import { getActivatedUI } from '../../social-network/ui'
+import { useValueRef } from '../../utils/hooks/useValueRef'
+import { debugModeSetting } from '../shared-settings/settings'
 
 interface RedPacketDialogProps
     extends withClasses<
@@ -89,12 +91,13 @@ function NewPacket(props: RedPacketDialogProps & NewPacketProps) {
     const send_total = shares * send_pre_share
     const isSendTotalLegal = Number.isNaN(send_total) || send_total <= 0
 
+    const rinkebyNetwork = useValueRef(debugModeSetting)
+
     const createRedPacket = () =>
         props.onCreateNewPacket({
             duration: 60 /** seconds */ * 60 /** mins */ * 24 /** hours */,
             is_random: Boolean(is_random),
-            // TODO: Select network in debug mode?
-            network: EthereumNetwork.Rinkeby,
+            network: rinkebyNetwork ? EthereumNetwork.Rinkeby : EthereumNetwork.Mainnet,
             send_message,
             send_total: BigInt(send_total),
             // TODO: fill with wallet address
@@ -107,6 +110,8 @@ function NewPacket(props: RedPacketDialogProps & NewPacketProps) {
         })
     return (
         <div>
+            {rinkebyNetwork ? <div>Debug mode, will use test rinkeby to send your red packet</div> : null}
+            <br />
             <div className={classes.line}>
                 <FormControl variant="filled" className={classes.input}>
                     <InputLabel>Token</InputLabel>

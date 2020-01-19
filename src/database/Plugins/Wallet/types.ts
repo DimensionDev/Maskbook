@@ -52,8 +52,8 @@ export interface RedPacketRecord {
     network: EthereumNetwork
     /** token type tag for red packet */
     token_type: RedPacketTokenType
-    /** ERC20Token object if erc20 token type */
-    erc20_token?: ERC20TokenRecord
+    /** ERC20Token contract address if erc20 token type */
+    erc20_token?: string
     /** ERC20 approve transaction hash */
     erc20_approve_transaction_hash?: string
     /** ERC20 approve transaction event value */
@@ -174,5 +174,5 @@ export interface RedPacketJSONPayload {
     duration: number
     network?: EthereumNetwork
     token_type: RedPacketTokenType
-    token?: ERC20TokenRecord
+    token?: Pick<ERC20TokenRecord, 'address' | 'name' | 'decimals' | 'symbol'>
 }

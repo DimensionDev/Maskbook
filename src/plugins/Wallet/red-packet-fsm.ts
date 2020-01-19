@@ -66,7 +66,7 @@ export async function discoverRedPacket(payload: RedPacketJSONPayload, foundInUR
         uuids: payload.passwords,
         token_type: payload.token_type,
         block_creation_time: new Date(payload.creation_time),
-        erc20_token: payload.token,
+        erc20_token: payload.token?.address,
         red_packet_id: payload.rpid,
         raw_payload: payload,
         _found_in_url_: foundInURL,
@@ -98,11 +98,11 @@ export async function createRedPacket(
         .map(uuid)
     let erc20_approve_transaction_hash: string | undefined = undefined
     let erc20_approve_value: bigint | undefined = undefined
-    let erc20_token: string | undefined = undefined
+    let erc20_token_address: string | undefined = undefined
     if (packet.token_type === RedPacketTokenType.erc20) {
-        if (!packet.erc20_token?.address) throw new Error('ERC20 token should have erc20_token field')
-        const res = await getWalletProvider().approveERC20Token(packet.erc20_token.address, packet.send_total)
-        TODO: erc20_token = ''
+        if (!packet.erc20_token) throw new Error('ERC20 token should have erc20_token field')
+        const res = await getWalletProvider().approveERC20Token(packet.erc20_token, packet.send_total)
+        erc20_token_address = packet.erc20_token
         erc20_approve_transaction_hash = res.erc20_approve_transaction_hash
         erc20_approve_value = res.erc20_approve_value
     } else if (packet.token_type === RedPacketTokenType.erc721) {
@@ -116,7 +116,7 @@ export async function createRedPacket(
         packet.send_message,
         packet.sender_name,
         packet.token_type,
-        packet.erc20_token?.address || '',
+        erc20_token_address || '',
         packet.send_total,
     )
     const record: RedPacketRecord = {
@@ -140,7 +140,7 @@ export async function createRedPacket(
         create_transaction_hash,
         erc20_approve_transaction_hash,
         erc20_approve_value,
-        erc20_token: undefined,
+        erc20_token: erc20_token_address,
     }
     {
         const transaction = createTransaction(await createWalletDBAccess(), 'readwrite')(...everything)
@@ -152,7 +152,7 @@ export async function createRedPacket(
 }
 
 export async function onCreationResult(id: { databaseID: string }, details: RedPacketCreationResult) {
-    const t = createTransaction(await createWalletDBAccess(), 'readwrite')('RedPacket')
+    const t = createTransaction(await createWalletDBAccess(), 'readwrite')('RedPacket', 'ERC20Token')
     const rec = await t.objectStore('RedPacket').get(id.databaseID)
     if (!rec) return
 
@@ -160,6 +160,20 @@ export async function onCreationResult(id: { databaseID: string }, details: RedP
 
     if (details.type === 'failed') {
     } else {
+        let token: RedPacketJSONPayload['token'] | undefined = undefined
+        if (rec.erc20_token) {
+            const tokenRec = await t
+                .objectStore('ERC20Token')
+                .index('address')
+                .get(rec.erc20_token)
+            if (!tokenRec) throw new Error('Unknown token')
+            token = {
+                address: rec.erc20_token,
+                decimals: tokenRec.decimals,
+                name: tokenRec.name,
+                symbol: tokenRec.symbol,
+            }
+        }
         rec.block_creation_time = details.block_creation_time
         rec.red_packet_id = details.red_packet_id
         rec.raw_payload = {
@@ -178,7 +192,7 @@ export async function onCreationResult(id: { databaseID: string }, details: RedP
             token_type: rec.token_type,
             total: String(rec.send_total),
             network: rec.network,
-            token: rec.erc20_token,
+            token,
         }
     }
     t.objectStore('RedPacket').put(rec)

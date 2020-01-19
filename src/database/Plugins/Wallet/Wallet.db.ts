@@ -14,6 +14,7 @@ export const createWalletDBAccess = createDBAccess(() => {
                 db.createObjectStore('WalletToken', { keyPath: 'id' })
                 tx.objectStore('Wallet').createIndex('address', 'address', { unique: true })
                 tx.objectStore('RedPacket').createIndex('red_packet_id', 'red_packet_id', { unique: true })
+                tx.objectStore('ERC20Token').createIndex('address', 'address', { unique: true })
             }
             if (oldVersion < 1) v0_v1()
         },
@@ -38,6 +39,9 @@ export interface WalletDB extends DBSchema {
     ERC20Token: {
         value: ERC20TokenRecord
         key: string
+        indexes: {
+            address: string
+        }
     }
     WalletToken: {
         value: WalletTokenRecord
