@@ -38,7 +38,7 @@ export const AdditionalContent = React.memo(function AdditionalContent(props: Ad
                 {props.title}
             </Typography>
             {props.renderItem || props.renderText ? (
-                <Typography variant="body2" component="p">
+                <Typography variant="body2" component="div">
                     <RenderText text={props.renderText || props.renderItem!.content} />
                     <WithRedPacket renderItem={props.renderItem} postIdentifier={props.postIdentifier} />
                 </Typography>
