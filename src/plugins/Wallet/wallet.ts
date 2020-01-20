@@ -25,20 +25,9 @@ export async function getWallets(): Promise<[WalletRecord[], ERC20TokenRecord[]]
 export async function importNewWallet(
     rec: Omit<WalletRecord, 'id' | 'address' | 'eth_balance' | '_data_source_' | 'erc20_token_balance'>,
 ) {
-    const mnemonicWord = rec.mnemonic
-    const seed = await bip39.mnemonicToSeed(mnemonicWord.join(' '), rec.passphrase)
-    const masterKey = HDKey.parseMasterSeed(seed)
-    const extendedPrivateKey = masterKey.derive(path).extendedPrivateKey!
-    const childKey = HDKey.parseExtendedKey(extendedPrivateKey)
-
-    const wallet = childKey.derive('0')
-    const walletPrivateKey = wallet.privateKey
-    const walletPublicKey = wallet.publicKey
-    const address = EthereumAddress.from(walletPublicKey).address
-
-    console.log(encodeArrayBuffer(walletPrivateKey!))
-
-    const newLocal: WalletRecord = {
+    const { address, privateKey } = await recoverWallet(rec.mnemonic, rec.passphrase)
+    getWalletProvider().addWalletPrivateKey(address, buf2hex(privateKey))
+    const record: WalletRecord = {
         ...rec,
         address,
         erc20_token_balance: new Map(),
@@ -46,9 +35,9 @@ export async function importNewWallet(
     }
     {
         const t = createTransaction(await createWalletDBAccess(), 'readwrite')('Wallet')
-        t.objectStore('Wallet').add(newLocal)
+        t.objectStore('Wallet').add(record)
     }
-    getWalletProvider().watchWalletBalance(newLocal.address)
+    getWalletProvider().watchWalletBalance(record.address)
     PluginMessageCenter.emit('maskbook.wallets.update', undefined)
 }
 
@@ -67,12 +56,29 @@ export async function removeWallet(id: string) {
 export async function walletSyncInit() {
     const t = createTransaction(await createWalletDBAccess(), 'readonly')('Wallet')
     const wallets = t.objectStore('Wallet').getAll()
-    ;(await wallets).forEach(x => {
-        getWalletProvider().watchWalletBalance(x.address)
+    ;(await wallets).forEach(async x => {
+        const p = getWalletProvider()
+
+        p.addWalletPrivateKey(x.address, buf2hex((await recoverWallet(x.mnemonic, x.passphrase)).privateKey))
+        p.watchWalletBalance(x.address)
         for (const tokenAddr of x.erc20_token_balance.keys()) {
-            getWalletProvider().watchERC20TokenBalance(x.address, tokenAddr)
+            p.watchERC20TokenBalance(x.address, tokenAddr)
         }
     })
+}
+
+async function recoverWallet(words: string[], password: string) {
+    const mnemonicWord = words
+    const seed = await bip39.mnemonicToSeed(mnemonicWord.join(' '), password)
+    const masterKey = HDKey.parseMasterSeed(seed)
+    const extendedPrivateKey = masterKey.derive(path).extendedPrivateKey!
+    const childKey = HDKey.parseExtendedKey(extendedPrivateKey)
+
+    const wallet = childKey.derive('0')
+    const walletPublicKey = wallet.publicKey
+    const walletPrivateKey = wallet.privateKey!
+    const address = EthereumAddress.from(walletPublicKey).address
+    return { address, privateKey: walletPrivateKey }
 }
 
 export async function walletAddERC20Token(
@@ -116,4 +122,7 @@ async function getWalletByAddress(t: IDBPSafeTransaction<WalletDB, ['Wallet'], '
     const rec = await t.objectStore('Wallet').get(address)
     assert(rec)
     return rec
+}
+function buf2hex(buffer: ArrayBuffer) {
+    return Array.prototype.map.call(new Uint8Array(buffer), x => ('00' + x.toString(16)).slice(-2)).join('')
 }

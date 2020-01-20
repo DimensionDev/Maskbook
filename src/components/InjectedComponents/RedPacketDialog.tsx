@@ -91,11 +91,6 @@ function NewPacket(props: RedPacketDialogProps & NewPacketProps) {
     const [shares, setShares] = useState(5)
     const [, sharesRef] = useCapturedInput(x => setShares(parseInt(x)))
 
-    const send_total = shares * send_pre_share
-    React.useDebugValue(
-        [is_random, send_pre_share, shares] as const,
-        x => `IsRand ${x[0]}; PreShare ${x[1]}; Shares ${x[2]}`,
-    )
     const rinkebyNetwork = useValueRef(debugModeSetting)
 
     const [selectedWalletAddress, setSelectedWallet] = React.useState<undefined | string>(undefined)
@@ -108,11 +103,35 @@ function NewPacket(props: RedPacketDialogProps & NewPacketProps) {
     const [tokens, setTokens] = React.useState<ERC20TokenRecord[]>([])
 
     const selectedWallet = wallets.find(x => x.address === selectedWalletAddress)
-    const availableTokens = Array.from(selectedWallet?.erc20_token_balance || [])
-        .filter(([address]) => !tokens.find(x => x.address === address))
-        .map(([address, amount]) => ({ amount, ...tokens.find(x => x.address === address)! }))
 
-    const isDisabled = [Number.isNaN(send_total), send_total <= 0, selectedWallet === undefined]
+    const availableTokens = Array.from(selectedWallet?.erc20_token_balance || [])
+        .filter(([address]) => tokens.find(x => x.address === address))
+        .map(([address, amount]) => ({ amount, ...tokens.find(x => x.address === address)! }))
+    const selectedToken =
+        selectedTokenType.type === 'eth'
+            ? undefined
+            : availableTokens.find(x => x.address === selectedTokenType.address)!
+    const amountPreShareMaxBigint = selectedWallet
+        ? selectedTokenType.type === 'eth'
+            ? selectedWallet.eth_balance
+            : selectedToken?.amount
+        : undefined
+    const amountPreShareMaxNumber =
+        typeof amountPreShareMaxBigint === 'bigint'
+            ? selectedTokenType.type === 'eth'
+                ? formatBalance(amountPreShareMaxBigint, 18)
+                : selectedToken
+                ? formatBalance(amountPreShareMaxBigint, selectedToken.decimals)
+                : undefined
+            : undefined
+
+    const send_total = shares * send_pre_share
+    const isDisabled = [
+        Number.isNaN(send_total),
+        send_total <= 0,
+        selectedWallet === undefined,
+        send_pre_share > (amountPreShareMaxNumber || 0),
+    ]
     const isSendButtonDisabled = isDisabled.some(x => x)
 
     React.useEffect(() => {
@@ -134,16 +153,16 @@ function NewPacket(props: RedPacketDialogProps & NewPacketProps) {
             is_random: Boolean(is_random),
             network: rinkebyNetwork ? EthereumNetwork.Rinkeby : EthereumNetwork.Mainnet,
             send_message,
-            send_total: BigInt(send_total),
+            send_total:
+                BigInt(send_total) *
+                BigInt(10) ** BigInt(selectedTokenType.type === 'eth' ? 18 : selectedToken!.decimals),
             sender_address: selectedWalletAddress!,
-            // TODO: a better default?
             sender_name: id?.nickname ?? 'A maskbook user',
             shares: BigInt(shares),
             token_type: selectedTokenType.type === 'eth' ? RedPacketTokenType.eth : RedPacketTokenType.erc20,
             erc20_token: selectedTokenType.type === 'eth' ? undefined : selectedTokenType.address,
         })
     }
-    console.log(isDisabled)
     return (
         <div>
             {rinkebyNetwork ? <div>Debug mode, will use test rinkeby to send your red packet</div> : null}
@@ -178,8 +197,12 @@ function NewPacket(props: RedPacketDialogProps & NewPacketProps) {
                             ETH
                         </MenuItem>
                         {availableTokens.map(x => (
-                            <MenuItem key={x.address} value={x.address}>
-                                {x.name} ({x.symbol})
+                            <MenuItem disabled={typeof x.amount !== 'bigint'} key={x.address} value={x.address}>
+                                {x.name} ({x.symbol}) (Balance:
+                                {` ${
+                                    typeof x.amount === 'bigint' ? formatBalance(x.amount, x.decimals) : 'Syncing...'
+                                }`}
+                                )
                             </MenuItem>
                         ))}
                     </Select>
@@ -199,7 +222,10 @@ function NewPacket(props: RedPacketDialogProps & NewPacketProps) {
                 <TextField
                     className={classes.input}
                     InputProps={{ inputRef: totalRef }}
-                    inputProps={{ min: 1 }}
+                    inputProps={{
+                        min: 0,
+                        max: amountPreShareMaxNumber,
+                    }}
                     label="Amount per Share"
                     variant="filled"
                     type="number"
@@ -230,15 +256,8 @@ function NewPacket(props: RedPacketDialogProps & NewPacketProps) {
                         ? `Balance: ${
                               typeof selectedWallet.eth_balance === 'bigint'
                                   ? formatBalance(selectedWallet.eth_balance, 18)
-                                  : '???'
-                          } ETH, ${availableTokens
-                              .map(
-                                  x =>
-                                      `${typeof x.amount === 'bigint' ? formatBalance(x.amount, x.decimals) : '???'} ${
-                                          x.symbol
-                                      }`,
-                              )
-                              .join(', ')}`
+                                  : '(Syncing...)'
+                          } ETH`
                         : null}
                     <br />
                     Notice: A small gas fee will occur for publishing.

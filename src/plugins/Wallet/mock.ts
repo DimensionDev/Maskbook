@@ -98,6 +98,9 @@ export const mockWalletAPI: WalletAPI = {
             onWalletBalanceUpdated(address, BigInt(Math.floor(Math.random() * 1000)))
         }, 4000)
     },
+    addWalletPrivateKey(priv: string) {
+        console.log('Adding privkey')
+    },
     watchERC20TokenBalance(...args) {
         console.log('Mocking: Watching erc20token balance (not implemented)', ...args)
     },

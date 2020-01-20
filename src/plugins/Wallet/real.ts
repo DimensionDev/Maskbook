@@ -250,6 +250,11 @@ export const redPacketAPI: RedPacketAPI = {
 
 export const walletAPI: WalletAPI = {
     dataSource: 'real',
+    addWalletPrivateKey(address: string, privateKey: string) {
+        const acc = web3.eth.accounts.privateKeyToAccount(privateKey)
+        acc.address = address
+        web3.eth.accounts.wallet.add(acc)
+    },
     watchWalletBalance(address) {
         pollingTask(async () => {
             onWalletBalanceUpdated(address, BigInt(await web3.eth.getBalance(address)))
