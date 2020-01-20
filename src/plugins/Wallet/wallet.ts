@@ -22,6 +22,24 @@ export async function getWallets(): Promise<[WalletRecord[], ERC20TokenRecord[]]
     return [await t.objectStore('Wallet').getAll(), await t.objectStore('ERC20Token').getAll()]
 }
 
+export async function createNewWallet(
+    rec: Omit<WalletRecord, 'id' | 'address' | 'mnemonic' | 'eth_balance' | '_data_source_' | 'erc20_token_balance'>,
+) {
+    const { name, passphrase } = rec
+    const record: WalletRecord = {
+        ...rec,
+        ...(await createWallet(passphrase)),
+        erc20_token_balance: new Map(),
+        _data_source_: getWalletProvider().dataSource,
+    }
+    {
+        const t = createTransaction(await createWalletDBAccess(), 'readwrite')('Wallet')
+        t.objectStore('Wallet').add(record)
+    }
+    getWalletProvider().watchWalletBalance(record.address)
+    PluginMessageCenter.emit('maskbook.wallets.update', undefined)
+}
+
 export async function importNewWallet(
     rec: Omit<WalletRecord, 'id' | 'address' | 'eth_balance' | '_data_source_' | 'erc20_token_balance'>,
 ) {
@@ -65,6 +83,20 @@ export async function walletSyncInit() {
             p.watchERC20TokenBalance(x.address, tokenAddr)
         }
     })
+}
+
+export async function createWallet(password: string) {
+    const mnemonic = bip39.generateMnemonic()
+    const seed = await bip39.mnemonicToSeed(mnemonic, password)
+    const masterKey = HDKey.parseMasterSeed(seed)
+    const extendedPrivateKey = masterKey.derive(path).extendedPrivateKey!
+    const childKey = HDKey.parseExtendedKey(extendedPrivateKey)
+
+    const wallet = childKey.derive('0')
+    const walletPublicKey = wallet.publicKey
+    const walletPrivateKey = wallet.privateKey!
+    const address = EthereumAddress.from(walletPublicKey).address
+    return { address, privateKey: walletPrivateKey, mnemonic: mnemonic.split(' ') }
 }
 
 async function recoverWallet(words: string[], password: string) {

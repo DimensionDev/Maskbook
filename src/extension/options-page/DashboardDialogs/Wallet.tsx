@@ -353,12 +353,14 @@ export function WalletRedPacketDetailDialogWithRouter(props: Pick<WalletRedPacke
 
 export function WalletCreateDialog() {
     const [name, setName] = React.useState('')
-    const [password, setPassword] = React.useState('')
+    const [passphrase, setPassphrase] = React.useState('')
     const history = useHistory()
 
     const createWallet = () => {
-        // TODO:
-        alert('dummy!')
+        Services.Plugin.invokePlugin('maskbook.wallet', 'createNewWallet', {
+            name,
+            passphrase,
+        } as Pick<WalletRecord, 'name' | 'passphrase'>).then(() => history.replace('../'))
     }
 
     const content = (
@@ -381,8 +383,8 @@ export function WalletCreateDialog() {
                 label="Password"
                 helperText={geti18nString('dashboard_password_helper_text')}
                 placeholder={geti18nString('dashboard_password_hint')}
-                value={password}
-                onChange={e => setPassword(e.target.value)}
+                value={passphrase}
+                onChange={e => setPassphrase(e.target.value)}
             />
         </div>
     )
