@@ -20,6 +20,7 @@ export default function ActionButton<T extends React.ComponentClass<any> = React
     const { width, loading, children, className, style, ...p } = props
     return (
         <Button
+            disableElevation
             disabled={loading}
             startIcon={loading && circle}
             className={'actionButton ' + className}

@@ -124,7 +124,7 @@ export default function DashboardWalletsPage() {
                 <Card raised elevation={1}>
                     <List disablePadding>
                         <ListItemWithAction key="wallet-create">
-                            <ListItemText primary={geti18nString('create')} secondary={'Creae a new wallet.'} />
+                            <ListItemText primary={geti18nString('create')} secondary={'Create a new wallet.'} />
                             <ListItemSecondaryAction>
                                 <ActionButton<typeof Link>
                                     variant="contained"
