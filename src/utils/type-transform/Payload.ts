@@ -33,6 +33,7 @@ function deconstructAlpha40_Or_Alpha39_Or_Alpha38(str: string, throws = false): 
     // ? payload is 🎼3/4|ownersAESKeyEncrypted|iv|encryptedText|signature:||
     // ? payload is 🎼4/4|AESKeyEncrypted|iv|encryptedText|signature|authorPublicKey?|publicShared?:||
     // ? if publicShared is true, that means AESKeyEncrypted is shared with public
+    // ? "1" treated as true, "0" or not defined treated as false
     const isVersion40 = str.includes('🎼2/4')
     const isVersion39 = str.includes('🎼3/4')
     const isVersion38 = str.includes('🎼4/4')
@@ -60,7 +61,7 @@ function deconstructAlpha40_Or_Alpha39_Or_Alpha38(str: string, throws = false): 
             encryptedText,
             signature,
             authorPublicKey,
-            sharedPublic: !!publicShared,
+            sharedPublic: publicShared === '1',
         }
     }
     return {
@@ -121,7 +122,8 @@ export function constructAlpha38(data: PayloadAlpha38, encoder: Encoder) {
     const fields = [data.AESKeyEncrypted, data.iv, data.encryptedText, data.signature]
     if (data.authorPublicKey) {
         fields.push(data.authorPublicKey)
-        if (data.sharedPublic) fields.push('t')
+        if (data.sharedPublic) fields.push('1')
+        else fields.push('0')
     }
     return encoder(`🎼4/4|${fields.join('|')}:||`)
 }

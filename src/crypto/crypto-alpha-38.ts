@@ -1,5 +1,13 @@
 import { TypedMessage, makeTypedMessage } from '../extension/background-script/CryptoServices/utils'
 export * from './crypto-alpha-39'
+
+export const publicSharedAESKey: JsonWebKey = {
+    alg: 'A256GCM',
+    ext: true,
+    k: '3Bf8BJ3ZPSMUM2jg2ThODeLuRRD_-_iwQEaeLdcQXpg',
+    key_ops: ['encrypt', 'decrypt'],
+    kty: 'oct',
+}
 /**
  * With plugin: {"payload": "data"}🧩My message
  * Without plugin: My message

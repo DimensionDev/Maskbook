@@ -130,6 +130,8 @@ export function AdditionalPostBox(props: AdditionalPostBoxProps) {
                     makeTypedMessage(text),
                     target.map(x => x.identifier),
                     currentIdentity!.identifier,
+                    // TODO: Public Share UI
+                    false,
                 )
                 const activeUI = getActivatedUI()
                 if (isSteganography) {

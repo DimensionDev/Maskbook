@@ -12,6 +12,7 @@ import { createPostDB, PostRecord, RecipientReason } from '../../../database/pos
 import { queryUserGroup } from '../UserGroupService'
 import { queryPersonaByProfileDB } from '../../../database/Persona/Persona.db'
 import { compressSecp256k1Key } from '../../../utils/type-transform/SECP256k1-Compression'
+import { import_AES_GCM_256_Key } from '../../../utils/crypto.subtle'
 
 type EncryptedText = string
 type OthersAESKeyEncryptedToken = string
@@ -36,8 +37,10 @@ export async function encryptTo(
     content: TypedMessage,
     to: (ProfileIdentifier | GroupIdentifier)[],
     whoAmI: ProfileIdentifier,
+    publicShared: boolean,
 ): Promise<[EncryptedText, OthersAESKeyEncryptedToken]> {
-    if (to.length === 0) return ['', '']
+    if (to.length === 0 && publicShared === false) return ['', '']
+    if (publicShared) to = []
 
     const recipients: PostRecord['recipients'] = {}
     function addRecipients(x: ProfileIdentifier, reason: RecipientReason) {
@@ -65,6 +68,9 @@ export async function encryptTo(
     const minePrivateKey = await queryPrivateKey(whoAmI)
     if (!minePrivateKey) throw new TypeError('Not inited yet')
     const stringifiedContent = Alpha38.typedMessageStringify(content)
+    const localKey = publicShared
+        ? await import_AES_GCM_256_Key(Alpha38.publicSharedAESKey)
+        : (await queryLocalKey(whoAmI))!
     const {
         encryptedContent: encryptedText,
         othersAESKeyEncrypted,
@@ -75,7 +81,7 @@ export async function encryptTo(
         version: -38,
         content: stringifiedContent,
         othersPublicKeyECDH: toKey,
-        ownersLocalKey: (await queryLocalKey(whoAmI))!,
+        ownersLocalKey: localKey,
         privateKeyECDH: minePrivateKey,
         iv: crypto.getRandomValues(new Uint8Array(16)),
     })
@@ -85,7 +91,7 @@ export async function encryptTo(
         encryptedText: encodeArrayBuffer(encryptedText),
         iv: encodeArrayBuffer(iv),
         signature: '',
-        sharedPublic: false,
+        sharedPublic: publicShared,
         version: -38,
     }
     try {

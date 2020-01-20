@@ -15,6 +15,8 @@ import { getSignablePayload, cryptoProviderTable, TypedMessage } from './utils'
 import { JsonWebKeyToCryptoKey, getKeyParameter } from '../../../utils/type-transform/CryptoKey-JsonWebKey'
 import { PersonaRecord } from '../../../database/Persona/Persona.db'
 import { verifyOthersProve } from './verifyOthersProve'
+import { import_AES_GCM_256_Key } from '../../../utils/crypto.subtle'
+import { publicSharedAESKey } from '../../../crypto/crypto-alpha-38'
 
 type Progress = {
     progress: 'finding_person_public_key' | 'finding_post_key'
@@ -76,6 +78,7 @@ export async function* decryptFromMessageWithProgress(
     encrypted: string,
     author: ProfileIdentifier,
     whoAmI: ProfileIdentifier,
+    publicShared: boolean,
 ): ReturnOfDecryptFromMessageWithProgress {
     // If any of parameters is changed, we will not handle it.
     let _data: Payload
@@ -282,7 +285,9 @@ export async function* decryptFromMessageWithProgress(
         }
 
         async function decryptAsAuthor(authorIdentifier: ProfileIdentifier, authorPublic: CryptoKey) {
-            const localKey = await queryLocalKey(authorIdentifier)
+            const localKey = publicShared
+                ? await import_AES_GCM_256_Key(publicSharedAESKey)
+                : await queryLocalKey(authorIdentifier)
             if (!localKey) throw new Error(`Local key for identity ${authorIdentifier.toText()} not found`)
             const [contentArrayBuffer, postAESKey] = await cryptoProvider.decryptMessage1ToNByMyself({
                 version,

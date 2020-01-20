@@ -220,7 +220,13 @@ export function DecryptPost(props: DecryptPostProps) {
         <>
             <AsyncComponent
                 promise={async () => {
-                    const iter = ServicesWithProgress.decryptFrom(encryptedText, postBy, whoAmI)
+                    const postPayload = deconstructPayload(encryptedText, null)
+                    const iter = ServicesWithProgress.decryptFrom(
+                        encryptedText,
+                        postBy,
+                        whoAmI,
+                        (postPayload?.version === -38 ? postPayload.sharedPublic : false) ?? false,
+                    )
                     let last = await iter.next()
                     while (!last.done) {
                         if ('debug' in last.value) {
