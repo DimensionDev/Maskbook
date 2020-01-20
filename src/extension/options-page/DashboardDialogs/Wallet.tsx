@@ -499,11 +499,8 @@ export function WalletDeleteDialog(props: WalletDeleteDialogProps) {
     const { onConfirm, onDecline, wallet } = props
     const color = useColorProvider()
 
-    const deleteWallet = () => {
-        // TODO:
-        alert('not implemented')
-        onConfirm()
-    }
+    const deleteWallet = () =>
+        Services.Plugin.invokePlugin('maskbook.wallet', 'removeWallet', wallet.address).then(() => onConfirm())
 
     return (
         <DialogContentItem
