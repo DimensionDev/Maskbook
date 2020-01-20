@@ -111,11 +111,11 @@ export async function createRedPacket(packet: createRedPacketInit): Promise<{ pa
         Number(packet.shares),
         packet.is_random,
         packet.duration,
-        Web3Utils.sha3(Date.now().toString()),
+        Web3Utils.sha3(Math.random().toString()),
         packet.send_message,
         packet.sender_name,
         packet.token_type,
-        erc20_token_address || '',
+        erc20_token_address || /** this param must be a valid address */ packet.sender_address,
         packet.send_total,
     )
     const record: RedPacketRecord = {

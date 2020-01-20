@@ -86,7 +86,7 @@ function NewPacket(props: RedPacketDialogProps & NewPacketProps) {
     const [, msgRef] = useCapturedInput(setMsg)
 
     const [send_pre_share, setTotal] = useState(5)
-    const [, totalRef] = useCapturedInput(x => setTotal(parseInt(x)))
+    const [, totalRef] = useCapturedInput(x => setTotal(parseFloat(x)))
 
     const [shares, setShares] = useState(5)
     const [, sharesRef] = useCapturedInput(x => setShares(parseInt(x)))
@@ -153,9 +153,7 @@ function NewPacket(props: RedPacketDialogProps & NewPacketProps) {
             is_random: Boolean(is_random),
             network: rinkebyNetwork ? EthereumNetwork.Rinkeby : EthereumNetwork.Mainnet,
             send_message,
-            send_total:
-                BigInt(send_total) *
-                BigInt(10) ** BigInt(selectedTokenType.type === 'eth' ? 18 : selectedToken!.decimals),
+            send_total: BigInt(send_total * 10 ** (selectedTokenType.type === 'eth' ? 18 : selectedToken!.decimals)),
             sender_address: selectedWalletAddress!,
             sender_name: id?.nickname ?? 'A maskbook user',
             shares: BigInt(shares),
@@ -269,7 +267,8 @@ function NewPacket(props: RedPacketDialogProps & NewPacketProps) {
                     variant="contained"
                     disabled={isSendButtonDisabled}
                     onClick={createRedPacket}>
-                    Send {isSendButtonDisabled ? '?' : send_total} USDT
+                    Send {isSendButtonDisabled ? '?' : send_total}{' '}
+                    {selectedTokenType.type === 'eth' ? 'ETH' : selectedToken?.symbol}
                 </Button>
             </div>
         </div>
