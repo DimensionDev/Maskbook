@@ -405,12 +405,14 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
         {
             label: 'Create New',
             component: <NewPacket {...props} onCreateNewPacket={createRedPacket} />,
+            p: 0,
         },
         {
             label: 'Select Existing',
             component: (
                 <ExistingPacket {...props} fakeRedPacket={fakeRedPacket} onSelectExistingPacket={insertRedPacket} />
             ),
+            p: 0,
         },
     ]
 
