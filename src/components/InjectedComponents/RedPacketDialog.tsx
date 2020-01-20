@@ -37,6 +37,7 @@ import { PluginMessageCenter } from '../../plugins/PluginMessages'
 import { getActivatedUI } from '../../social-network/ui'
 import { useValueRef } from '../../utils/hooks/useValueRef'
 import { debugModeSetting } from '../shared-settings/settings'
+import { formatBalance } from '../../plugins/Wallet/formatter'
 
 interface RedPacketDialogProps
     extends withClasses<
@@ -226,8 +227,17 @@ function NewPacket(props: RedPacketDialogProps & NewPacketProps) {
             <div className={classes.line}>
                 <Typography variant="body2">
                     {selectedWallet
-                        ? `Balance: ${selectedWallet.eth_balance} ETH, ${availableTokens
-                              .map(x => `${x.amount} ${x.symbol}`)
+                        ? `Balance: ${
+                              typeof selectedWallet.eth_balance === 'bigint'
+                                  ? formatBalance(selectedWallet.eth_balance, 18)
+                                  : '???'
+                          } ETH, ${availableTokens
+                              .map(
+                                  x =>
+                                      `${typeof x.amount === 'bigint' ? formatBalance(x.amount, x.decimals) : '???'} ${
+                                          x.symbol
+                                      }`,
+                              )
                               .join(', ')}`
                         : null}
                     <br />

@@ -21,6 +21,7 @@ import { WalletRecord, RedPacketRecord, ERC20TokenRecord } from '../../../databa
 import { useSnackbar } from 'notistack'
 import Services from '../../service'
 import classNames from 'classnames'
+import { formatBalance } from '../../../plugins/Wallet/formatter'
 
 interface Props {
     wallet: WalletRecord
@@ -79,18 +80,6 @@ export default function WalletCard({ wallet, tokens }: Props) {
     const [showSendPacket, setShowSendPacket] = React.useState(false)
     const [showRedPacketHistory, setShowRedPacketHistory] = React.useState(false)
     const [showRedPacketDetail, setShowRedPacketDetail] = React.useState<RedPacketRecord | null>(null)
-
-    let eth_balance = ''
-    {
-        if (!wallet.eth_balance) eth_balance = 'Syncing...'
-        else {
-            const unit = BigInt('1000000000000000000')
-            const main = wallet.eth_balance / unit
-            const rest = wallet.eth_balance - main * unit
-            eth_balance = `${main}.${rest}`
-            eth_balance = eth_balance.replace(/0+$/, '') + '0'
-        }
-    }
 
     const [anchorEl, setAnchorEl] = React.useState<null | Element>(null)
     const handleClick = (event: React.MouseEvent) => {
@@ -198,7 +187,11 @@ export default function WalletCard({ wallet, tokens }: Props) {
                     invert
                     line1="ETH"
                     line2="Ethereym"
-                    action={<Typography variant="h5">{eth_balance}</Typography>}
+                    action={
+                        <Typography variant="h5">
+                            {wallet.eth_balance ? formatBalance(wallet.eth_balance, 18) : 'Syncing...'}
+                        </Typography>
+                    }
                 />
                 {Array.from(wallet.erc20_token_balance).map(([addr, amount]) => {
                     const t = tokens.find(y => y.address === addr)
@@ -215,7 +208,13 @@ export default function WalletCard({ wallet, tokens }: Props) {
                                         Delete
                                     </Typography>
                                 ) : (
-                                    <Typography variant="h5">{Number(amount) ?? 'Syncing...'}</Typography>
+                                    <Typography variant="h5">
+                                        {typeof amount === 'bigint'
+                                            ? t
+                                                ? formatBalance(amount, t.decimals ?? 18)
+                                                : 'Unknown'
+                                            : 'Syncing...'}
+                                    </Typography>
                                 )
                             }
                         />
