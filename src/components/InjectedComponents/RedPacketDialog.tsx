@@ -28,6 +28,7 @@ import {
     RedPacketStatus,
     RedPacketJSONPayload,
     WalletRecord,
+    ERC20TokenRecord,
 } from '../../database/Plugins/Wallet/types'
 import { useLastRecognizedIdentity, useCurrentIdentity } from '../DataSource/useActivatedUI'
 import { PortalShadowRoot } from '../../utils/jss/ShadowRootPortal'
@@ -93,34 +94,58 @@ function NewPacket(props: RedPacketDialogProps & NewPacketProps) {
     const [wallets, setWallets] = useState<WalletRecord[]>([])
 
     const send_total = shares * send_pre_share
-    const isSendTotalLegal = Number.isNaN(send_total) || send_total <= 0
-
+    React.useDebugValue(
+        [is_random, send_pre_share, shares] as const,
+        x => `IsRand ${x[0]}; PreShare ${x[1]}; Shares ${x[2]}`,
+    )
     const rinkebyNetwork = useValueRef(debugModeSetting)
 
+    const [selectedWalletAddress, setSelectedWallet] = React.useState<undefined | string>(undefined)
+    const [selectedTokenType, setSelectedTokenType] = React.useState<
+        { type: 'eth' } | { type: 'erc20'; address: string }
+    >({
+        type: 'eth',
+    })
+    const [wallets, setWallets] = React.useState<WalletRecord[]>([])
+    const [tokens, setTokens] = React.useState<ERC20TokenRecord[]>([])
+
+    const selectedWallet = wallets.find(x => x.address === selectedWalletAddress)
+    const availableTokens = Array.from(selectedWallet?.erc20_token_balance || [])
+        .filter(([address]) => !tokens.find(x => x.address === address))
+        .map(([address, amount]) => ({ amount, ...tokens.find(x => x.address === address)! }))
+
+    const isDisabled = [Number.isNaN(send_total), send_total <= 0, selectedWallet === undefined]
+    const isSendButtonDisabled = isDisabled.some(x => x)
+
     React.useEffect(() => {
-        Services.Plugin.invokePlugin('maskbook.wallet', 'getWallets').then(wallets => {
-            setWallets(wallets[0])
-            if (!selectedWallet) setSelectedWallet(wallets[0][0])
-        })
-    }, [selectedWallet])
+        const update = () =>
+            Services.Plugin.invokePlugin('maskbook.wallet', 'getWallets').then(([x, y]) => {
+                setWallets(x)
+                setTokens(y)
+                if (selectedWalletAddress === undefined) setSelectedWallet(x[0].address)
+            })
+        update()
+        return PluginMessageCenter.on('maskbook.wallets.update', update)
+    }, [selectedWalletAddress])
 
     const createRedPacket = async () => {
-        if (!selectedWallet) Services.Welcome.openOptionsPage('/wallets/error?reason=nowallet')
+        // TODO: this case can't happen now
+        // if (wallets.length === 0) return Services.Welcome.openOptionsPage('/wallets/error?reason=nowallet')
         props.onCreateNewPacket({
             duration: 60 /** seconds */ * 60 /** mins */ * 24 /** hours */,
             is_random: Boolean(is_random),
             network: rinkebyNetwork ? EthereumNetwork.Rinkeby : EthereumNetwork.Mainnet,
             send_message,
             send_total: BigInt(send_total),
-            // TODO: fill with wallet address
-            sender_address: selectedWallet!.address,
+            sender_address: selectedWalletAddress!,
             // TODO: a better default?
             sender_name: id?.nickname ?? 'A maskbook user',
             shares: BigInt(shares),
-            // TODO: support erc20
-            token_type: RedPacketTokenType.eth,
+            token_type: selectedTokenType.type === 'eth' ? RedPacketTokenType.eth : RedPacketTokenType.erc20,
+            erc20_token: selectedTokenType.type === 'eth' ? undefined : selectedTokenType.address,
         })
     }
+    console.log(isDisabled)
     return (
         <div>
             {rinkebyNetwork ? <div>Debug mode, will use test rinkeby to send your red packet</div> : null}
@@ -129,12 +154,12 @@ function NewPacket(props: RedPacketDialogProps & NewPacketProps) {
                 <FormControl variant="filled" className={classes.input}>
                     <InputLabel>Wallet</InputLabel>
                     <Select
-                        onChange={e => setSelectedWallet(wallets.find(i => i.address === e.target.value)!)}
+                        onChange={e => setSelectedWallet(e.currentTarget.value as string)}
                         MenuProps={{ container: PortalShadowRoot }}
-                        value={selectedWallet?.address || ''}>
-                        {wallets.map(wallet => (
-                            <MenuItem key={wallet.address} value={wallet.address}>
-                                {wallet.name}({wallet.address})
+                        value={selectedWalletAddress || ''}>
+                        {wallets.map(x => (
+                            <MenuItem key={x.address} value={x.address}>
+                                {x.name} ({x.address})
                             </MenuItem>
                         ))}
                     </Select>
@@ -143,13 +168,22 @@ function NewPacket(props: RedPacketDialogProps & NewPacketProps) {
             <div className={classes.line}>
                 <FormControl variant="filled" className={classes.input}>
                     <InputLabel>Token</InputLabel>
-                    <Select MenuProps={{ container: PortalShadowRoot }} value={10}>
-                        <MenuItem key={10} value={10}>
+                    <Select
+                        onChange={e => {
+                            const v = e.target.value as string
+                            if (v === 'eth') setSelectedTokenType({ type: 'eth' })
+                            else setSelectedTokenType({ type: 'erc20', address: v })
+                        }}
+                        MenuProps={{ container: PortalShadowRoot }}
+                        value={selectedTokenType.type === 'eth' ? 'eth' : selectedTokenType.address}>
+                        <MenuItem key="eth" value="eth">
                             ETH
                         </MenuItem>
-                        <MenuItem key={20} value={20}>
-                            USDT
-                        </MenuItem>
+                        {availableTokens.map(x => (
+                            <MenuItem key={x.address} value={x.address}>
+                                {x.name} ({x.symbol})
+                            </MenuItem>
+                        ))}
                     </Select>
                 </FormControl>
                 <FormControl variant="filled" className={classes.input}>
@@ -194,10 +228,12 @@ function NewPacket(props: RedPacketDialogProps & NewPacketProps) {
             </div>
             <div className={classes.line}>
                 <Typography variant="body2">
-                    {
-                        // TODO: balance
-                    }
-                    Balance: 2.5 USDT (with 0.01 ETH) <br />
+                    {selectedWallet
+                        ? `Balance: ${selectedWallet.eth_balance} ETH, ${availableTokens
+                              .map(x => `${x.amount} ${x.symbol}`)
+                              .join(', ')}`
+                        : null}
+                    <br />
                     Notice: A small gas fee will occur for publishing.
                 </Typography>
                 <Button
@@ -205,9 +241,9 @@ function NewPacket(props: RedPacketDialogProps & NewPacketProps) {
                     style={{ marginLeft: 'auto', width: 140 }}
                     color="primary"
                     variant="contained"
-                    disabled={isSendTotalLegal}
+                    disabled={isSendButtonDisabled}
                     onClick={createRedPacket}>
-                    Send {isSendTotalLegal ? '?' : send_total} USDT
+                    Send {isSendButtonDisabled ? '?' : send_total} USDT
                 </Button>
             </div>
         </div>
@@ -362,7 +398,11 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                     </Typography>
                 </DialogTitle>
                 <DialogContent className={classes.content}>
-                    <BackupRestoreTab height={400} state={[currentTab, setCurrentTab]} tabs={tabs}></BackupRestoreTab>
+                    <BackupRestoreTab
+                        minHeight={350}
+                        height="auto"
+                        state={[currentTab, setCurrentTab]}
+                        tabs={tabs}></BackupRestoreTab>
                 </DialogContent>
             </ResponsiveDialog>
         </div>

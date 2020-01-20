@@ -39,11 +39,12 @@ export interface BackupRestoreTabProps {
     tabs: { label: string; component: JSX.Element | null; p?: number }[]
     state: [number, React.Dispatch<React.SetStateAction<number>>]
     margin?: true | 'top' | 'bottom'
-    height?: number
+    height?: number | string
+    minHeight?: number
 }
 
 export default function BackupRestoreTab(props: BackupRestoreTabProps) {
-    const { tabs, state, margin, height } = props
+    const { tabs, state, margin, height, minHeight } = props
 
     const classes = useStyles()
     const [value, setValue] = state
@@ -77,7 +78,12 @@ export default function BackupRestoreTab(props: BackupRestoreTabProps) {
                 </Tabs>
             </AppBar>
             {tabs.map((tab, index) => (
-                <TabPanel style={{ height, overflow: 'auto' }} height={height} value={value} index={index} p={tab.p}>
+                <TabPanel
+                    style={{ minHeight, height, overflow: 'auto' }}
+                    height={height}
+                    value={value}
+                    index={index}
+                    p={tab.p}>
                     {tab.component}
                 </TabPanel>
             ))}
