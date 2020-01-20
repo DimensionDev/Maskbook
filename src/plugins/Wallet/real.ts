@@ -14,7 +14,7 @@ import { createWalletDBAccess } from '../../database/Plugins/Wallet/Wallet.db'
 import { createTransaction } from '../../database/helpers/openDB'
 
 // TODO: should not be a constant. should respect the value in the red packet record
-const RED_PACKET_CONTRACT_ADDRESS = '0x19D0b6091D37Bc262ecC460ee4Bd57DBBD68754C'
+const RED_PACKET_CONTRACT_ADDRESS = '0x4280fC3851CBaC3160e537850bD02bA78e11F6bf'
 
 function createRedPacketContract(address: string) {
     return (new web3.eth.Contract(HappyRedPacketABI as AbiItem[], address) as unknown) as HappyRedPacket
