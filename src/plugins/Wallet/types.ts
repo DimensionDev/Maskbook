@@ -64,7 +64,7 @@ export interface RedPacketAPI {
         quantity: number,
         is_random: boolean,
         duration: number,
-        seed: number[],
+        seed: string,
         message: string,
         name: string,
         token_type: RedPacketTokenType,

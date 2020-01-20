@@ -111,7 +111,7 @@ export async function createRedPacket(packet: createRedPacketInit): Promise<{ pa
         Number(packet.shares),
         packet.is_random,
         packet.duration,
-        Array.from(crypto.getRandomValues(new Uint32Array(8))),
+        Web3Utils.sha3(Date.now().toString()),
         packet.send_message,
         packet.sender_name,
         packet.token_type,
