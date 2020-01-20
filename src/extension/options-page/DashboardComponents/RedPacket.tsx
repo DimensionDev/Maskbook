@@ -146,9 +146,8 @@ export function RedPacketWithState(props: RedPacketProps) {
                 <Typography variant="body2">
                     {status === 'incoming'
                         ? 'Ready to open'
-                        : `${redPacket.send_total?.toLocaleString()} USDT / ${
-                              redPacket.password ? redPacket.password.length : 'Unknown'
-                          } Shares`}
+                        : `${redPacket.send_total?.toLocaleString()} USDT / ${redPacket.shares?.toString() ??
+                              'Unknown'} Shares`}
                 </Typography>
             </div>
             <div className={classes.packet}></div>
@@ -189,8 +188,7 @@ export function RedPacket(props: RedPacketProps) {
                     {redPacket.send_message}
                 </Typography>
                 <Typography variant="body1">
-                    {redPacket.send_total?.toLocaleString()} USDT /{' '}
-                    {redPacket.password ? redPacket.password.length : 'Unknown'} shares
+                    {redPacket.send_total?.toLocaleString()} USDT / {redPacket.shares?.toString() ?? 'Unknown'} shares
                 </Typography>
             </div>
             <div className={classes.packet}></div>
