@@ -92,16 +92,15 @@ export default function DashboardWalletsPage() {
     const [wallets, setWallets] = useState<WalletRecord[]>([])
     const [tokens, setTokens] = useState<ERC20TokenRecord[]>([])
     useEffect(() => {
-        PluginMessageCenter.on('maskbook.wallets.update', () => query)
         const query = () =>
             Services.Plugin.invokePlugin('maskbook.wallet', 'getWallets').then(x => {
                 setWallets(x[0])
                 setTokens(x[1])
             })
         query()
+        return PluginMessageCenter.on('maskbook.wallets.update', query)
     }, [])
     const classes = useStyles()
-    // const personas = useMyPersonas()
     const match = useRouteMatch()!
 
     return (
