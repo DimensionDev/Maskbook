@@ -296,32 +296,36 @@ const useExistingPacketStyles = makeStyles(theme =>
 
 interface ExistingPacketProps {
     onSelectExistingPacket(opt?: RedPacketJSONPayload | null): void
+    fakeRedPacket?: Partial<RedPacketRecord> | null
 }
 
 function ExistingPacket(props: RedPacketDialogProps & ExistingPacketProps) {
-    const { onSelectExistingPacket } = props
+    const { onSelectExistingPacket, fakeRedPacket } = props
     const classes = useStylesExtends(useExistingPacketStyles(), props)
     const [redPacketRecords, setRedPacketRecords] = React.useState<RedPacketRecord[]>([])
+    const [foundedRedPacket, setFoundedRedPacket] = React.useState<RedPacketRecord | undefined>(undefined)
 
     React.useEffect(() => {
         const updateHandler = () => {
             Services.Plugin.invokePlugin('maskbook.red_packet', 'getRedPackets')
-                .then(packets =>
-                    packets.filter(
+                .then(packets => {
+                    setFoundedRedPacket(packets.find(p => p.id === fakeRedPacket?.id))
+                    return packets.filter(
                         p =>
-                            p.status === 'normal' ||
-                            p.status === 'incoming' ||
-                            p.status === 'claimed' ||
-                            p.status === 'pending' ||
-                            p.status === 'claim_pending',
-                    ),
-                )
+                            p.id !== fakeRedPacket?.id &&
+                            (p.status === 'normal' ||
+                                p.status === 'incoming' ||
+                                p.status === 'claimed' ||
+                                p.status === 'pending' ||
+                                p.status === 'claim_pending'),
+                    )
+                })
                 .then(setRedPacketRecords)
         }
 
         updateHandler()
         return PluginMessageCenter.on('maskbook.red_packets.update', updateHandler)
-    }, [])
+    }, [fakeRedPacket])
 
     const insertRedPacket = (status?: RedPacketStatus | null, rpid?: RedPacketRecord['red_packet_id']) => {
         if (status === null) return onSelectExistingPacket(null)
@@ -333,9 +337,13 @@ function ExistingPacket(props: RedPacketDialogProps & ExistingPacketProps) {
 
     return (
         <div className={classes.wrapper}>
-            <Typography component="a" color="primary" className={classes.hint} onClick={() => insertRedPacket(null)}>
+            {/*<Typography component="a" color="primary" className={classes.hint} onClick={() => insertRedPacket(null)}>
                 Remove Red Packet from this post
-            </Typography>
+    </Typography>*/}
+            {!foundedRedPacket && fakeRedPacket && <RedPacketWithState redPacket={fakeRedPacket as RedPacketRecord} />}
+            {foundedRedPacket && (
+                <RedPacketWithState onClick={insertRedPacket} redPacket={foundedRedPacket as RedPacketRecord} />
+            )}
             {redPacketRecords.map(p => (
                 <RedPacketWithState onClick={insertRedPacket} key={p.id} redPacket={p} />
             ))}
@@ -370,9 +378,18 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
     const classes = useStylesExtends(useStyles(), props)
     const rootRef = useRef<HTMLDivElement>(null)
     const [currentTab, setCurrentTab] = useState(0)
+    const [fakeRedPacket, setFakeRedPacket] = useState<Partial<RedPacketRecord> | null>(null)
 
     const createRedPacket = useCallback((opt: createRedPacketInit) => {
-        Services.Plugin.invokePlugin('maskbook.red_packet', 'createRedPacket', opt).then(console.log, console.error)
+        Services.Plugin.invokePlugin('maskbook.red_packet', 'createRedPacket', opt).then(
+            setFakeRedPacket,
+            console.error,
+        )
+        setFakeRedPacket({
+            send_message: opt.send_message,
+            sender_name: opt.sender_name,
+            status: 'pending' as RedPacketStatus,
+        } as RedPacketRecord)
         setCurrentTab(1)
     }, [])
 
@@ -391,7 +408,9 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
         },
         {
             label: 'Select Existing',
-            component: <ExistingPacket {...props} onSelectExistingPacket={insertRedPacket} />,
+            component: (
+                <ExistingPacket {...props} fakeRedPacket={fakeRedPacket} onSelectExistingPacket={insertRedPacket} />
+            ),
         },
     ]
 
@@ -423,11 +442,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                     </Typography>
                 </DialogTitle>
                 <DialogContent className={classes.content}>
-                    <BackupRestoreTab
-                        minHeight={350}
-                        height="auto"
-                        state={[currentTab, setCurrentTab]}
-                        tabs={tabs}></BackupRestoreTab>
+                    <BackupRestoreTab height={400} state={[currentTab, setCurrentTab]} tabs={tabs}></BackupRestoreTab>
                 </DialogContent>
             </ResponsiveDialog>
         </div>

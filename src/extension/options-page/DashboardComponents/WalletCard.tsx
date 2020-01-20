@@ -186,7 +186,7 @@ export default function WalletCard({ wallet, tokens }: Props) {
                 <WalletLine
                     invert
                     line1="ETH"
-                    line2="Ethereym"
+                    line2="Ethereum"
                     action={
                         <Typography variant="h5">
                             {wallet.eth_balance ? formatBalance(wallet.eth_balance, 18) : 'Syncing...'}

@@ -149,7 +149,7 @@ export async function createRedPacket(packet: createRedPacketInit): Promise<{ pa
     }
     getProvider().watchCreateResult({ databaseID: record.id, transactionHash: create_transaction_hash })
     PluginMessageCenter.emit('maskbook.red_packets.update', undefined)
-    return { password }
+    return record
 }
 
 export async function onCreationResult(id: { databaseID: string }, details: RedPacketCreationResult) {
