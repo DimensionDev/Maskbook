@@ -1,4 +1,5 @@
 import { AbiItem } from 'web3-utils'
+import { EventData } from 'web3-eth-contract'
 import { RedPacketAPI, WalletAPI } from './types'
 import { onClaimResult, onCreationResult, onExpired, onRefundResult } from './red-packet-fsm'
 import { onWalletBalanceUpdated, onWalletERC20TokenBalanceUpdated } from './wallet'
@@ -7,7 +8,7 @@ import HappyRedPacketABI from '../../contracts/HappyRedPacket.json'
 import IERC20ABI from '../../contracts/IERC20.json'
 import { HappyRedPacket } from '../../contracts/HappyRedPacket'
 import { IERC20 } from '../../contracts/IERC20'
-import { TransactionObject } from '../../contracts/types'
+import { TransactionObject, Tx } from '../../contracts/types'
 import { RedPacketTokenType } from '../../database/Plugins/Wallet/types'
 import { asyncTimes, pollingTask } from '../../utils/utils'
 import { createWalletDBAccess } from '../../database/Plugins/Wallet/Wallet.db'
@@ -24,20 +25,34 @@ function createERC20Contract(address: string) {
     return (new web3.eth.Contract(IERC20ABI as AbiItem[], address) as unknown) as IERC20
 }
 
-async function createTxPayload<T>(address: string, tx: TransactionObject<T>, value?: string) {
-    const [gas, gasPrice] = await Promise.all([
-        tx.estimateGas({
-            value,
-            from: address,
-        }),
-        web3.eth.getGasPrice(),
-    ])
-    return {
-        from: address,
-        gas,
-        gasPrice,
-        value,
-    }
+interface TxReceipt {
+    blockHash: string
+    blockNumber: number
+    transactionHash: string
+    events: Record<string, EventData>
+}
+
+interface TxListeners {
+    onTransactionHash?: (hash: string) => void
+    onReceipt?: (receipt: TxReceipt) => void
+    onTransactionError?: (error: Error) => void
+    onEstimateError?: (error: Error) => void
+}
+
+async function sendTx<R, T extends TransactionObject<R>>(txObject: T, tx: Tx = {}, listeners: TxListeners = {}) {
+    return Promise.all([txObject.estimateGas(tx), web3.eth.getGasPrice()])
+        .then(([gas, gasPrice]) =>
+            txObject
+                .send({
+                    ...tx,
+                    gas,
+                    gasPrice,
+                })
+                .on('transactionHash', (hash: string) => listeners?.onTransactionHash?.(hash))
+                .on('receipt', (receipt: TxReceipt) => listeners?.onReceipt?.(receipt))
+                .on('error', (err: Error) => listeners?.onTransactionError?.(err)),
+        )
+        .catch((err: Error) => listeners?.onEstimateError?.(err))
 }
 
 export const redPacketAPI: RedPacketAPI = {
@@ -68,44 +83,65 @@ export const redPacketAPI: RedPacketAPI = {
             token_addr,
             total_tokens.toString(),
         )
-        return new Promise(async (resolve, reject) => {
+
+        return new Promise((resolve, reject) => {
             let txHash = ''
 
-            tx.send(
-                await createTxPayload(
-                    ____sender__addr,
-                    tx,
-                    token_type === RedPacketTokenType.eth ? total_tokens.toString() : undefined,
-                ),
+            sendTx(
+                tx,
+                {
+                    from: ____sender__addr,
+                    value: token_type === RedPacketTokenType.eth ? total_tokens.toString() : undefined,
+                },
+                {
+                    onTransactionHash(hash) {
+                        txHash = hash
+                    },
+                    async onReceipt() {
+                        resolve({
+                            create_nonce: (await web3.eth.getTransaction(txHash)).nonce,
+                            create_transaction_hash: txHash,
+                        })
+                    },
+                    onTransactionError(err) {
+                        reject(err)
+                    },
+                    onEstimateError(err) {
+                        reject(err)
+                    },
+                },
             )
-                .on('transactionHash', (hash: string) => {
-                    txHash = hash
-                })
-                .on('receipt', async () => {
-                    resolve({
-                        create_nonce: (await web3.eth.getTransaction(txHash)).nonce,
-                        create_transaction_hash: txHash,
-                    })
-                })
-                .on('error', (err: Error) => reject(err))
         })
     },
     async claim(id, password: string, recipient: string, validation: string) {
         const contract = createRedPacketContract(RED_PACKET_CONTRACT_ADDRESS)
         const tx = contract.methods.claim(id.redPacketID, password, recipient, validation)
-        return new Promise(async (resolve, reject) => {
+
+        return new Promise((resolve, reject) => {
             let txHash = ''
 
-            tx.send(await createTxPayload(recipient, tx))
-                .on('transactionHash', async (hash: string) => {
-                    txHash = hash
-                })
-                .on('receipt', () => {
-                    resolve({
-                        claim_transaction_hash: txHash,
-                    })
-                })
-                .on('error', (err: Error) => reject(err))
+            sendTx(
+                tx,
+                {
+                    from: recipient,
+                },
+                {
+                    onTransactionHash(hash) {
+                        txHash = hash
+                    },
+                    onReceipt() {
+                        resolve({
+                            claim_transaction_hash: txHash,
+                        })
+                    },
+                    onTransactionError(err) {
+                        reject(err)
+                    },
+                    onEstimateError(err) {
+                        reject(err)
+                    },
+                },
+            )
         })
     },
     async watchClaimResult(id) {
@@ -213,8 +249,10 @@ export const redPacketAPI: RedPacketAPI = {
     },
     async checkAvailability(id) {
         const contract = createRedPacketContract(RED_PACKET_CONTRACT_ADDRESS)
-        const tx = contract.methods.check_availability(id.redPacketID)
-        const { balance, claimed, expired, token_address, total } = await tx.call(await createTxPayload('', tx))
+        const { balance, claimed, expired, token_address, total } = await contract.methods
+            .check_availability(id.redPacketID)
+            .call()
+
         return {
             balance: BigInt(balance),
             claimedCount: parseInt(claimed),
@@ -234,18 +272,31 @@ export const redPacketAPI: RedPacketAPI = {
         const contract = createRedPacketContract(RED_PACKET_CONTRACT_ADDRESS)
         const tx = contract.methods.refund(id.redPacketID)
 
-        return new Promise<{ refund_transaction_hash: string }>(async (resolve, reject) => {
+        return new Promise((resolve, reject) => {
             let txHash = ''
-            tx.send(await createTxPayload(sender!.sender_address!, tx))
-                .on('transactionHash', (hash: string) => {
-                    txHash = hash
-                })
-                .on('receipt', () => {
-                    resolve({
-                        refund_transaction_hash: txHash,
-                    })
-                })
-                .on('error', (error: Error) => reject(error))
+
+            sendTx(
+                tx,
+                {
+                    from: sender!.sender_address!,
+                },
+                {
+                    onTransactionHash(hash: string) {
+                        txHash = hash
+                    },
+                    onReceipt() {
+                        resolve({
+                            refund_transaction_hash: txHash,
+                        })
+                    },
+                    onTransactionError(err) {
+                        reject(err)
+                    },
+                    onEstimateError(err) {
+                        reject(err)
+                    },
+                },
+            )
         })
     },
     async watchRefundResult(id) {
@@ -303,22 +354,31 @@ export const walletAPI: WalletAPI = {
         const erc20Contract = createERC20Contract(address)
         const tx = erc20Contract.methods.approve(RED_PACKET_CONTRACT_ADDRESS, amount.toString())
 
-        return new Promise<{ erc20_approve_transaction_hash: string; erc20_approve_value: bigint }>(
-            async (resolve, reject) => {
-                let txHash: string = ''
-
-                tx.send(await createTxPayload(sender_address, tx))
-                    .on('transactionHash', (hash: string) => {
+        return new Promise((resolve, reject) => {
+            let txHash = ''
+            sendTx(
+                tx,
+                {
+                    from: sender_address,
+                },
+                {
+                    onTransactionHash(hash) {
                         txHash = hash
-                    })
-                    .on('receipt', () => {
+                    },
+                    onReceipt() {
                         resolve({
                             erc20_approve_transaction_hash: txHash,
                             erc20_approve_value: amount,
                         })
-                    })
-                    .on('error', (error: Error) => reject(error))
-            },
-        )
+                    },
+                    onTransactionError(err) {
+                        reject(err)
+                    },
+                    onEstimateError(err) {
+                        reject(err)
+                    },
+                },
+            )
+        })
     },
 }
