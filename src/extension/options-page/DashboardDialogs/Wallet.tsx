@@ -501,7 +501,7 @@ export function WalletDeleteDialog(props: WalletDeleteDialogProps) {
 
     const deleteWallet = () => {
         // TODO:
-        alert('dummy!')
+        alert('not implemented')
         onConfirm()
     }
 

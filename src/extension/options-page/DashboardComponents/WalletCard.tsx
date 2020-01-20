@@ -95,7 +95,7 @@ export default function WalletCard({ wallet, tokens }: Props) {
     const doRenameWallet = (event: React.FocusEvent<Inputable> | React.KeyboardEvent<Inputable>) => {
         event.preventDefault()
         // TODO:
-        alert('dummy!')
+        alert('not implemented')
         setRenameWallet(false)
     }
 
@@ -116,7 +116,7 @@ export default function WalletCard({ wallet, tokens }: Props) {
 
     const deleteToken = (t?: ERC20TokenRecord | null) => {
         // TODO:
-        alert('dummy!')
+        alert('not implemented')
     }
 
     return (
