@@ -791,5 +791,8 @@
     },
     "immersive_setup_no_bio_got": {
         "message": "Maskbook have some problems when setting up! Please report this to Maskbook developer! Our Telegram group: https://t.me/maskbook_group"
+    },
+    "post_dialog__select_recipients_share_to_everyone": {
+        "message": "Share to Everyone"
     }
 }

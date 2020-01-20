@@ -71,6 +71,7 @@ export interface PostDialogUIProps
     > {
     open: boolean
     onlyMyself: boolean
+    shareToEveryone: boolean
     availableShareTarget: Array<Profile | Group>
     currentShareTarget: Array<Profile | Group>
     currentIdentity: Profile | null
@@ -78,6 +79,7 @@ export interface PostDialogUIProps
     postBoxButtonDisabled: boolean
     onPostContentChanged: (nextMessage: TypedMessage) => void
     onOnlyMyselfChanged: (checked: boolean) => void
+    onShareToEveryoneChanged: (checked: boolean) => void
     onFinishButtonClicked: () => void
     onCloseButtonClicked: () => void
     onSetSelected: SelectRecipientsUIProps['onSetSelected']
@@ -166,7 +168,7 @@ export function PostDialogUI(props: PostDialogUIProps) {
                         {geti18nString('post_dialog__select_recipients_title')}
                     </Typography>
                     <SelectRecipientsUI
-                        disabled={props.onlyMyself}
+                        disabled={props.onlyMyself || props.shareToEveryone}
                         items={props.availableShareTarget}
                         selected={props.currentShareTarget}
                         onSetSelected={props.onSetSelected}
@@ -178,7 +180,13 @@ export function PostDialogUI(props: PostDialogUIProps) {
                         classes={{ label: classes.label }}
                         label={geti18nString('post_dialog__select_recipients_only_myself')}
                         control={<Switch className={classes.switch} color="primary" checked={props.onlyMyself} />}
-                        onChange={(_: React.ChangeEvent<{}>, checked: boolean) => props.onOnlyMyselfChanged(checked)}
+                        onChange={(_, checked) => props.onOnlyMyselfChanged(checked)}
+                    />
+                    <FormControlLabel
+                        classes={{ label: classes.label }}
+                        label={geti18nString('post_dialog__select_recipients_share_to_everyone')}
+                        control={<Switch className={classes.switch} color="primary" checked={props.shareToEveryone} />}
+                        onChange={(_, checked) => props.onShareToEveryoneChanged(checked)}
                     />
                     <Button
                         className={classes.button}
@@ -209,11 +217,14 @@ export interface PostDialogProps extends Partial<PostDialogUIProps> {
     typedMessageMetadata: ReadonlyMap<string, any>
 }
 export function PostDialog(props: PostDialogProps) {
-    const [onlyMyself, setOnlyMyself] = useState(false)
+    const [onlyMyselfLocal, setOnlyMyself] = useState(false)
+    const onlyMyself = props.onlyMyself ?? onlyMyselfLocal
+    const [shareToEveryoneLocal, setShareToEveryone] = useState(false)
+    const shareToEveryone = props.shareToEveryone ?? shareToEveryoneLocal
+
     const isSteganography = useValueRef(steganographyModeSetting)
     //#region TypedMessage
     const [postBoxContent, setPostBoxContent] = useState<TypedMessage>(makeTypedMessage('', props.typedMessageMetadata))
-    console.log(props.typedMessageMetadata, postBoxContent)
     // eslint-disable-next-line react-hooks/exhaustive-deps
     useEffect(() => {
         if (props.typedMessageMetadata !== postBoxContent.meta)
@@ -239,8 +250,7 @@ export function PostDialog(props: PostDialogProps) {
                     content,
                     target.map(x => x.identifier),
                     currentIdentity!.identifier,
-                    // TODO: Public Share UI
-                    false,
+                    !!shareToEveryone,
                 )
                 const activeUI = getActivatedUI()
                 if (isSteganography) {
@@ -260,9 +270,11 @@ export function PostDialog(props: PostDialogProps) {
                         shouldOpenPostDialog: false,
                     })
                 }
-                Services.Crypto.publishPostAESKey(token)
+                // This step write data on gun.
+                // there is nothing to write if it shared with public
+                if (!shareToEveryone) Services.Crypto.publishPostAESKey(token)
             },
-            [currentIdentity, isSteganography],
+            [currentIdentity, isSteganography, shareToEveryone],
         ),
     )
     const onRequestReset = or(
@@ -297,20 +309,37 @@ export function PostDialog(props: PostDialogProps) {
         }
     }, [identities.length, props.reason])
 
-    const onOnlyMyselfChanged = useCallback((checked: boolean) => setOnlyMyself(checked), [])
+    const onOnlyMyselfChanged = or(
+        props.onOnlyMyselfChanged,
+        useCallback((checked: boolean) => {
+            setOnlyMyself(checked)
+            checked && setShareToEveryone(false)
+        }, []),
+    )
+    const onShareToEveryoneChanged = or(
+        props.onShareToEveryoneChanged,
+        useCallback((checked: boolean) => {
+            setShareToEveryone(checked)
+            checked && setOnlyMyself(false)
+        }, []),
+    )
     //#endregion
 
     return (
         <PostDialogUI
             open={open}
+            shareToEveryone={shareToEveryoneLocal}
             onlyMyself={onlyMyself}
             availableShareTarget={availableShareTarget}
             currentIdentity={currentIdentity}
             currentShareTarget={currentShareTarget}
             postContent={postBoxContent}
-            postBoxButtonDisabled={!(onlyMyself ? postBoxContent : currentShareTarget.length && postBoxContent)}
+            postBoxButtonDisabled={
+                !(onlyMyself || shareToEveryoneLocal ? postBoxContent : currentShareTarget.length && postBoxContent)
+            }
             onSetSelected={setCurrentShareTarget}
             onPostContentChanged={setPostBoxContent}
+            onShareToEveryoneChanged={onShareToEveryoneChanged}
             onOnlyMyselfChanged={onOnlyMyselfChanged}
             onFinishButtonClicked={onFinishButtonClicked}
             onCloseButtonClicked={onCloseButtonClicked}
