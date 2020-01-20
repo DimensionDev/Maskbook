@@ -1,9 +1,15 @@
 import React from 'react'
 import { makeStyles, createStyles, Card, Typography, CircularProgress } from '@material-ui/core'
 import classNames from 'classnames'
-import { RedPacketRecord, RedPacketJSONPayload, RedPacketStatus } from '../../../database/Plugins/Wallet/types'
+import {
+    RedPacketRecord,
+    RedPacketJSONPayload,
+    RedPacketStatus,
+    ERC20TokenRecord,
+} from '../../../database/Plugins/Wallet/types'
 import Services from '../../service'
 import { PluginMessageCenter } from '../../../plugins/PluginMessages'
+import { formatBalance } from '../../../plugins/Wallet/formatter'
 
 const useStyles = makeStyles(theme =>
     createStyles({
@@ -94,6 +100,9 @@ export function RedPacketWithState(props: RedPacketProps) {
     const classes = useStyles()
     const { onClick, redPacket: knownRedPacket, unknownRedPacket, loading, from } = props
     const [redPacket, setRedPacket] = React.useState(knownRedPacket || ({} as Partial<RedPacketRecord>))
+    const [info, setInfo] = React.useState<Partial<ERC20TokenRecord>>({})
+
+    console.log(info, redPacket)
 
     React.useEffect(() => {
         if (unknownRedPacket) {
@@ -103,7 +112,9 @@ export function RedPacketWithState(props: RedPacketProps) {
                     'discoverRedPacket',
                     unknownRedPacket,
                     from ?? '',
-                ).then(setRedPacket)
+                ).then(packet => {
+                    setRedPacket(packet)
+                })
             updateRedPacket()
             return PluginMessageCenter.on('maskbook.red_packets.update', updateRedPacket)
         }
@@ -112,6 +123,12 @@ export function RedPacketWithState(props: RedPacketProps) {
     React.useEffect(() => {
         if (knownRedPacket) setRedPacket(knownRedPacket)
     }, [knownRedPacket])
+
+    React.useEffect(() => {
+        if (!redPacket) return
+        if (!redPacket.erc20_token) setInfo({ name: 'ETH', decimals: 18 })
+        else setInfo(redPacket.raw_payload?.token ?? {})
+    }, [redPacket])
 
     const status = redPacket.status
 
@@ -126,7 +143,10 @@ export function RedPacketWithState(props: RedPacketProps) {
             <div className={classNames(classes.header, { [classes.flex1]: status === 'incoming' })}>
                 {status === 'claimed' ? (
                     <Typography variant="h5" color="inherit">
-                        {redPacket.claim_amount?.toLocaleString()} USDT
+                        {redPacket.claim_amount
+                            ? formatBalance(redPacket.claim_amount, info?.decimals ?? 0)
+                            : 'Unknown'}{' '}
+                        {info?.name ?? '(unknown)'}
                     </Typography>
                 ) : (
                     <Typography variant="body1" color="inherit">
@@ -146,8 +166,11 @@ export function RedPacketWithState(props: RedPacketProps) {
                 <Typography variant="body2">
                     {status === 'incoming'
                         ? 'Ready to open'
-                        : `${redPacket.send_total?.toLocaleString()} USDT / ${redPacket.shares?.toString() ??
-                              'Unknown'} Shares`}
+                        : `${
+                              redPacket.send_total
+                                  ? formatBalance(redPacket.send_total, info?.decimals ?? 0)
+                                  : 'Unknown'
+                          } ${info?.name ?? '(unknown)'} / ${redPacket.shares?.toString() ?? 'Unknown'} Shares`}
                 </Typography>
             </div>
             <div className={classes.packet}></div>
@@ -163,32 +186,39 @@ export function RedPacketWithState(props: RedPacketProps) {
 
 export function RedPacket(props: RedPacketProps) {
     const classes = useStyles()
-    const { redPacket: knownRedPacket, unknownRedPacket } = props
-    const [redPacket, setRedPacket] = React.useState(knownRedPacket || ({} as Partial<RedPacketRecord>))
+    const { redPacket } = props
+    const [info, setInfo] = React.useState<Partial<ERC20TokenRecord>>({})
 
     React.useEffect(() => {
-        if (unknownRedPacket)
-            Services.Plugin.invokePlugin('maskbook.red_packet', 'discoverRedPacket', unknownRedPacket, '').then(
-                setRedPacket,
-            )
-    }, [unknownRedPacket])
+        if (!redPacket) return
+        if (!redPacket.erc20_token) setInfo({ name: 'ETH', decimals: 18 })
+        else setInfo(redPacket.raw_payload?.token ?? {})
+    }, [redPacket])
+
+    const formatted = {
+        claim_amount: '',
+        send_total: redPacket?.send_total ? formatBalance(redPacket?.send_total, info?.decimals ?? 0) : 'Unknown',
+        name: info.name ?? '(unknown)',
+    }
+
+    formatted.claim_amount = redPacket?.claim_amount
+        ? `${formatBalance(redPacket.claim_amount, info?.decimals ?? 0)} ${formatted.name}`
+        : 'Not Claimed'
 
     return (
         <Card elevation={0} className={classNames(classes.box)} component="article">
             <div className={classes.header}>
-                <Typography variant="h5">
-                    {redPacket.claim_amount ? `${redPacket.claim_amount.toLocaleString()} USDT` : `Not Claimed`}
-                </Typography>
+                <Typography variant="h5">{formatted.claim_amount}</Typography>
                 <Typography className={classes.label} variant="body2">
-                    {redPacket.status}
+                    {redPacket?.status}
                 </Typography>
             </div>
             <div className={classes.content}>
                 <Typography className={classes.words} variant="h6">
-                    {redPacket.send_message}
+                    {redPacket?.send_message}
                 </Typography>
                 <Typography variant="body1">
-                    {redPacket.send_total?.toLocaleString()} USDT / {redPacket.shares?.toString() ?? 'Unknown'} shares
+                    {formatted.send_total} {formatted.name} / {redPacket?.shares?.toString() ?? 'Unknown'} shares
                 </Typography>
             </div>
             <div className={classes.packet}></div>

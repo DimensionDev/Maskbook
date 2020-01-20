@@ -28,6 +28,7 @@ import wallet from 'wallet.ts'
 import { useHistory, Link } from 'react-router-dom'
 import { geti18nString } from '../../../utils/i18n'
 import { useColorProvider } from '../../../utils/theme'
+import { formatBalance } from '../../../plugins/Wallet/formatter'
 
 const mainnet: ERC20TokenPredefinedData = require('../../../plugins/Wallet/mainnet_erc20.json')
 const rinkeby: ERC20TokenPredefinedData = require('../../../plugins/Wallet/rinkeby_erc20.json')
@@ -65,9 +66,19 @@ export function WalletSendRedPacketDialog(props: WalletSendRedPacketDialogProps)
                             //  Open facebook.com
                             // </ActionButton>
                         }
-                        <ActionButton variant="outlined" color="primary" className={classes.provider} width={240}>
-                            Open twitter.com
-                        </ActionButton>
+                        {
+                            <ActionButton
+                                component="a"
+                                href="https://twitter.com"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                variant="outlined"
+                                color="primary"
+                                className={classes.provider}
+                                width={240}>
+                                Open twitter.com
+                            </ActionButton>
+                        }
                     </div>
                 </>
             }></DialogContentItem>
@@ -243,12 +254,15 @@ export function WalletRedPacketHistoryDialog(props: WalletRedPacketHistoryDialog
                         <WalletLine
                             key={record.id}
                             line1={record.send_message}
-                            line2={`${record.block_creation_time} hr ago from ${record.sender_name}`}
+                            line2={`${record.block_creation_time?.toLocaleString()} from ${record.sender_name}`}
                             onClick={() => onClick?.(record)}
                             invert
                             action={
                                 <Typography variant="h6">
-                                    {record.send_total.toLocaleString()} {'USDT' || record.token_type}
+                                    {record.claim_amount
+                                        ? formatBalance(record.claim_amount, record.raw_payload?.token?.decimals ?? 18)
+                                        : '-'}{' '}
+                                    {record.raw_payload?.token?.name || 'ETH'}
                                 </Typography>
                             }
                         />
@@ -291,18 +305,17 @@ export function WalletRedPacketDetailDialog(props: WalletRedPacketDetailDialogPr
             content={
                 <>
                     <RedPacket redPacket={redPacket} />
-                    <WalletLine
-                        onClick={() =>
-                            redPacket._found_in_url_ &&
-                            window.open(redPacket._found_in_url_, '_blank', 'noopener noreferrer')
-                        }
-                        line1="Source"
-                        line2={
-                            <Typography className={classes.link} color="primary">
-                                {redPacket._found_in_url_ || 'Unknown'}
-                            </Typography>
-                        }
-                    />
+                    {redPacket._found_in_url_ && (
+                        <WalletLine
+                            onClick={() => window.open(redPacket._found_in_url_, '_blank', 'noopener noreferrer')}
+                            line1="Source"
+                            line2={
+                                <Typography className={classes.link} color="primary">
+                                    {redPacket._found_in_url_ || 'Unknown'}
+                                </Typography>
+                            }
+                        />
+                    )}
                     <WalletLine
                         line1="From"
                         line2={
@@ -315,25 +328,9 @@ export function WalletRedPacketDetailDialog(props: WalletRedPacketDetailDialogPr
                         }
                     />
                     <WalletLine line1="Message" line2={redPacket.send_message} />
-                    <Typography className={classes.openBy} variant="subtitle1">
-                        Opened By
-                    </Typography>
-                    <Divider />
-                    <WalletLine
-                        line1="PPPC"
-                        line2="0x1191467182361282137761"
-                        invert
-                        action={<Typography variant="h6">5.28714</Typography>}
-                    />
-                    <WalletLine
-                        line1="CCCP"
-                        line2="0x1191467182361282137744"
-                        invert
-                        action={<Typography variant="h6">5.28714</Typography>}
-                    />
                     <Box p={1} display="flex" justifyContent="center">
                         <Typography variant="caption" color="textSecondary">
-                            {redPacket.block_creation_time?.toLocaleString()} hr ago created, 2 hr ago received.
+                            created at {redPacket.block_creation_time?.toLocaleString()}
                         </Typography>
                     </Box>
                 </>
