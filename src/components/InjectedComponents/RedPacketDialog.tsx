@@ -90,9 +90,6 @@ function NewPacket(props: RedPacketDialogProps & NewPacketProps) {
     const [shares, setShares] = useState(5)
     const [, sharesRef] = useCapturedInput(x => setShares(parseInt(x)))
 
-    const [selectedWallet, setSelectedWallet] = useState<WalletRecord | null>(null)
-    const [wallets, setWallets] = useState<WalletRecord[]>([])
-
     const send_total = shares * send_pre_share
     React.useDebugValue(
         [is_random, send_pre_share, shares] as const,
