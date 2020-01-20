@@ -48,7 +48,7 @@ export const redPacketAPI: RedPacketAPI = {
         quantity: number,
         isRandom: boolean,
         duration: number,
-        seed: number[],
+        seed: string,
         message: string,
         name: string,
         token_type: RedPacketTokenType,
@@ -69,13 +69,24 @@ export const redPacketAPI: RedPacketAPI = {
             total_tokens.toString(),
         )
         return new Promise(async (resolve, reject) => {
-            tx.send(await createTxPayload(____sender__addr, tx, total_tokens.toString()))
-                .on('transactionHash', async (hash: string) =>
+            let txHash = ''
+
+            tx.send(
+                await createTxPayload(
+                    ____sender__addr,
+                    tx,
+                    token_type === RedPacketTokenType.eth ? total_tokens.toString() : undefined,
+                ),
+            )
+                .on('transactionHash', (hash: string) => {
+                    txHash = hash
+                })
+                .on('receipt', async () => {
                     resolve({
-                        create_nonce: (await web3.eth.getTransaction(hash)).nonce,
-                        create_transaction_hash: hash,
-                    }),
-                )
+                        create_nonce: (await web3.eth.getTransaction(txHash)).nonce,
+                        create_transaction_hash: txHash,
+                    })
+                })
                 .on('error', (err: Error) => reject(err))
         })
     },
@@ -83,12 +94,17 @@ export const redPacketAPI: RedPacketAPI = {
         const contract = createRedPacketContract(RED_PACKET_CONTRACT_ADDRESS)
         const tx = contract.methods.claim(id.redPacketID, password, recipient, validation)
         return new Promise(async (resolve, reject) => {
+            let txHash = ''
+
             tx.send(await createTxPayload(recipient, tx))
-                .on('transactionHash', async (hash: string) =>
+                .on('transactionHash', async (hash: string) => {
+                    txHash = hash
+                })
+                .on('receipt', () => {
                     resolve({
-                        claim_transaction_hash: hash,
-                    }),
-                )
+                        claim_transaction_hash: txHash,
+                    })
+                })
                 .on('error', (err: Error) => reject(err))
         })
     },
@@ -219,12 +235,16 @@ export const redPacketAPI: RedPacketAPI = {
         const tx = contract.methods.refund(id.redPacketID)
 
         return new Promise<{ refund_transaction_hash: string }>(async (resolve, reject) => {
+            let txHash = ''
             tx.send(await createTxPayload(sender!.sender_address!, tx))
-                .on('transactionHash', (hash: string) =>
+                .on('transactionHash', (hash: string) => {
+                    txHash = hash
+                })
+                .on('receipt', () => {
                     resolve({
-                        refund_transaction_hash: hash,
-                    }),
-                )
+                        refund_transaction_hash: txHash,
+                    })
+                })
                 .on('error', (error: Error) => reject(error))
         })
     },
@@ -285,13 +305,18 @@ export const walletAPI: WalletAPI = {
 
         return new Promise<{ erc20_approve_transaction_hash: string; erc20_approve_value: bigint }>(
             async (resolve, reject) => {
+                let txHash: string = ''
+
                 tx.send(await createTxPayload(sender_address, tx))
-                    .on('transactionHash', (hash: string) =>
+                    .on('transactionHash', (hash: string) => {
+                        txHash = hash
+                    })
+                    .on('receipt', () => {
                         resolve({
-                            erc20_approve_transaction_hash: hash,
+                            erc20_approve_transaction_hash: txHash,
                             erc20_approve_value: amount,
-                        }),
-                    )
+                        })
+                    })
                     .on('error', (error: Error) => reject(error))
             },
         )
