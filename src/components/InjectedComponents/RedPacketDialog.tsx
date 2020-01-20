@@ -171,7 +171,7 @@ function NewPacket(props: RedPacketDialogProps & NewPacketProps) {
                 <FormControl variant="filled" className={classes.input}>
                     <InputLabel>Wallet</InputLabel>
                     <Select
-                        onChange={e => setSelectedWallet(e.currentTarget.value as string)}
+                        onChange={e => setSelectedWallet(e.target.value as string)}
                         MenuProps={{ container: PortalShadowRoot }}
                         value={selectedWalletAddress || ''}>
                         {wallets.map(x => (
