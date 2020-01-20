@@ -27,6 +27,7 @@ import { ERC20WellKnownTokenSelector } from './WalletAddTokenDialogContent'
 import wallet from 'wallet.ts'
 import { useHistory, Link } from 'react-router-dom'
 import { geti18nString } from '../../../utils/i18n'
+import { useColorProvider } from '../../../utils/theme'
 
 const mainnet: ERC20TokenPredefinedData = require('../../../plugins/Wallet/mainnet_erc20.json')
 const rinkeby: ERC20TokenPredefinedData = require('../../../plugins/Wallet/rinkeby_erc20.json')
@@ -488,4 +489,63 @@ export function WalletErrorDialog() {
                 </>
             }></DialogContentItem>
     )
+}
+
+interface WalletDeleteDialogProps {
+    onDecline(): void
+    onConfirm(): void
+    wallet: WalletRecord
+}
+export function WalletDeleteDialog(props: WalletDeleteDialogProps) {
+    const { onConfirm, onDecline, wallet } = props
+    const color = useColorProvider()
+
+    const deleteWallet = () => {
+        // TODO:
+        alert('dummy!')
+        onConfirm()
+    }
+
+    return (
+        <DialogContentItem
+            simplified
+            title={'Delete Wallet'}
+            content={'Are you sure? If you do not have backup, you will lose ALL YOUR MONEY of it.'}
+            actions={
+                <>
+                    <ActionButton variant="outlined" color="default" onClick={onDecline}>
+                        {geti18nString('cancel')}
+                    </ActionButton>
+                    <ActionButton classes={{ root: color.errorButton }} onClick={deleteWallet}>
+                        {geti18nString('ok')}
+                    </ActionButton>
+                </>
+            }></DialogContentItem>
+    )
+}
+
+interface WalletBackupDialogProps {
+    wallet: WalletRecord
+    onDecline(): void
+}
+
+export function WalletBackupDialog(props: WalletBackupDialogProps) {
+    const history = useHistory()
+    const { onDecline } = props
+    const classes = useWalletImportStyles()
+    // TODO:
+
+    const content = (
+        <Box alignSelf="stretch" width="100%">
+            <Typography variant="body1">
+                Keep the 12 words below carefully in a safe place. You will need them to restore the private key of this
+                wallet.
+            </Typography>
+            <Box display="flex" flexDirection="column" p={1} className={classes.box} height={152}>
+                <Typography variant="body1">not available</Typography>
+            </Box>
+        </Box>
+    )
+
+    return <DialogContentItem onExit={onDecline} title={'Backup Wallet'} content={content}></DialogContentItem>
 }

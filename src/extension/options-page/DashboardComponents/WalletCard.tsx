@@ -3,7 +3,7 @@ import { makeStyles, createStyles } from '@material-ui/core/styles'
 import CardContent from '@material-ui/core/CardContent'
 import Typography from '@material-ui/core/Typography'
 import SettingsIcon from '@material-ui/icons/Settings'
-import { Divider, Menu, MenuItem } from '@material-ui/core'
+import { Divider, Menu, MenuItem, TextField } from '@material-ui/core'
 import { geti18nString } from '../../../utils/i18n'
 import WalletLine from './WalletLine'
 import ActionButton from './ActionButton'
@@ -12,6 +12,8 @@ import {
     WalletSendRedPacketDialog,
     WalletRedPacketHistoryDialog,
     WalletRedPacketDetailDialog,
+    WalletDeleteDialog,
+    WalletBackupDialog,
 } from '../DashboardDialogs/Wallet'
 import { DialogRouter } from '../DashboardDialogs/DialogBase'
 import { useColorProvider } from '../../../utils/theme'
@@ -102,13 +104,22 @@ export default function WalletCard({ wallet, tokens }: Props) {
     type Inputable = HTMLInputElement | HTMLTextAreaElement
     const doRenameWallet = (event: React.FocusEvent<Inputable> | React.KeyboardEvent<Inputable>) => {
         event.preventDefault()
+        // TODO:
+        alert('dummy!')
+        setRenameWallet(false)
     }
 
     const [deleteWallet, setDeleteWallet] = React.useState(false)
-    const confirmDeletePersona = () => {
-        enqueueSnackbar(geti18nString('dashboard_item_deleted'), {
-            variant: 'default',
-        })
+
+    const copyWalletAddress = () => {
+        navigator.clipboard
+            .writeText(wallet.address)
+            .then(() =>
+                enqueueSnackbar(geti18nString('dashboard_item_copied'), { variant: 'success', autoHideDuration: 1000 }),
+            )
+            .catch(e => {
+                enqueueSnackbar(geti18nString('dashboard_item_copy_failed'), { variant: 'error' })
+            })
     }
 
     const [backupWallet, setBackupWallet] = React.useState(false)
@@ -117,33 +128,46 @@ export default function WalletCard({ wallet, tokens }: Props) {
         <>
             <CardContent>
                 <Typography className={classes.header} variant="h5" component="h2">
-                    <>
-                        <span className="title">{wallet.name}</span>
-                        <Typography className="fullWidth" variant="body1" component="span" color="textSecondary">
-                            <SettingsIcon className={classes.cursor} fontSize="small" onClick={handleClick} />
-                            <Menu
-                                anchorEl={anchorEl}
-                                keepMounted
-                                open={Boolean(anchorEl)}
-                                onClick={handleClose}
-                                PaperProps={{ style: { minWidth: 100 } }}
-                                onClose={handleClose}>
-                                <MenuItem onClick={() => setRenameWallet(true)}>{geti18nString('rename')}</MenuItem>
-                                <MenuItem onClick={() => setBackupWallet(true)}>
-                                    {geti18nString('dashboard_create_backup')}
-                                </MenuItem>
-                                <MenuItem onClick={() => setDeleteWallet(true)} className={color.error}>
-                                    {geti18nString('dashboard_delete_persona')}
-                                </MenuItem>
-                            </Menu>
-                        </Typography>
-                    </>
+                    {!renameWallet ? (
+                        <>
+                            <span className="title">{wallet.name}</span>
+                            <Typography className="fullWidth" variant="body1" component="span" color="textSecondary">
+                                <SettingsIcon className={classes.cursor} fontSize="small" onClick={handleClick} />
+                                <Menu
+                                    anchorEl={anchorEl}
+                                    keepMounted
+                                    open={Boolean(anchorEl)}
+                                    onClick={handleClose}
+                                    PaperProps={{ style: { minWidth: 100 } }}
+                                    onClose={handleClose}>
+                                    <MenuItem onClick={() => setRenameWallet(true)}>{geti18nString('rename')}</MenuItem>
+                                    <MenuItem onClick={() => setBackupWallet(true)}>
+                                        {geti18nString('dashboard_create_backup')}
+                                    </MenuItem>
+                                    <MenuItem onClick={() => setDeleteWallet(true)} className={color.error}>
+                                        {geti18nString('dashboard_delete_persona')}
+                                    </MenuItem>
+                                </Menu>
+                            </Typography>
+                        </>
+                    ) : (
+                        <>
+                            <TextField
+                                style={{ width: '100%', maxWidth: '320px' }}
+                                inputProps={{ onKeyPress: e => e.key === 'Enter' && doRenameWallet(e) }}
+                                autoFocus
+                                variant="outlined"
+                                label="Name"
+                                defaultValue={wallet.name}
+                                onBlur={e => doRenameWallet(e)}></TextField>
+                        </>
+                    )}
                 </Typography>
                 <WalletLine
                     line1="Wallet Address"
                     line2={wallet.address}
                     action={
-                        <Typography color="primary" variant="body1">
+                        <Typography color="primary" variant="body1" onClick={copyWalletAddress}>
                             Copy
                         </Typography>
                     }
@@ -245,6 +269,24 @@ export default function WalletCard({ wallet, tokens }: Props) {
                         <WalletRedPacketDetailDialog
                             redPacket={showRedPacketDetail}
                             onDecline={() => setShowRedPacketDetail(null)}
+                        />
+                    }
+                />
+            )}
+            {backupWallet && (
+                <DialogRouter
+                    onExit={() => setBackupWallet(false)}
+                    children={<WalletBackupDialog wallet={wallet} onDecline={() => setBackupWallet(false)} />}
+                />
+            )}
+            {deleteWallet && (
+                <DialogRouter
+                    onExit={() => setDeleteWallet(false)}
+                    children={
+                        <WalletDeleteDialog
+                            wallet={wallet}
+                            onConfirm={() => setDeleteWallet(false)}
+                            onDecline={() => setDeleteWallet(false)}
                         />
                     }
                 />
