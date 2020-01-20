@@ -67,6 +67,15 @@ export async function onWalletBalanceUpdated(address: string, newBalance: bigint
     PluginMessageCenter.emit('maskbook.wallets.update', undefined)
 }
 
+export async function renameWallet(address: string, name: string) {
+    const t = createTransaction(await createWalletDBAccess(), 'readwrite')('Wallet')
+    const wallet = await getWalletByAddress(t, address)
+
+    wallet.name = name
+    t.objectStore('Wallet').put(wallet)
+    PluginMessageCenter.emit('maskbook.wallets.update', undefined)
+}
+
 export async function removeWallet(address: string) {
     const t = createTransaction(await createWalletDBAccess(), 'readwrite')('Wallet')
     const wallet = await getWalletByAddress(t, address)
