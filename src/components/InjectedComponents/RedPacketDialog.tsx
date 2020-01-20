@@ -93,7 +93,9 @@ function NewPacket(props: RedPacketDialogProps & NewPacketProps) {
 
     const rinkebyNetwork = useValueRef(debugModeSetting)
 
-    const createRedPacket = () =>
+    const createRedPacket = async () => {
+        const wallets = await Services.Plugin.invokePlugin('maskbook.wallet', 'getWallets')
+        if (wallets[0].length === 0) return Services.Welcome.openOptionsPage('/wallets/error?reason=nowallet')
         props.onCreateNewPacket({
             duration: 60 /** seconds */ * 60 /** mins */ * 24 /** hours */,
             is_random: Boolean(is_random),
@@ -101,13 +103,14 @@ function NewPacket(props: RedPacketDialogProps & NewPacketProps) {
             send_message,
             send_total: BigInt(send_total),
             // TODO: fill with wallet address
-            sender_address: '0x???',
+            sender_address: wallets[0][0]!.address,
             // TODO: a better default?
             sender_name: id?.nickname ?? 'A maskbook user',
             shares: BigInt(shares),
             // TODO: support erc20
             token_type: RedPacketTokenType.eth,
         })
+    }
     return (
         <div>
             {rinkebyNetwork ? <div>Debug mode, will use test rinkeby to send your red packet</div> : null}

@@ -26,6 +26,7 @@ import {
     WalletRedPacketDetailDialogWithRouter,
     WalletCreateDialog,
     WalletImportDialog,
+    WalletErrorDialog,
 } from './DashboardDialogs/Wallet'
 import { geti18nString } from '../../utils/i18n'
 import ActionButton from './DashboardComponents/ActionButton'
@@ -78,6 +79,7 @@ const dialogs = (
     <>
         <DialogRouter path="/create" children={<WalletCreateDialog />} />
         <DialogRouter path="/import" children={<WalletImportDialog />} />
+        <DialogRouter path="/error" children={<WalletErrorDialog />} />
         <DialogRouter
             path="/redpacket"
             onExit="/wallets/"

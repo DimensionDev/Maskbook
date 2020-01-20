@@ -25,7 +25,7 @@ import useQueryParams from '../../../utils/hooks/useQueryParams'
 import { ERC20TokenPredefinedData } from '../../../plugins/Wallet/erc20'
 import { ERC20WellKnownTokenSelector } from './WalletAddTokenDialogContent'
 import wallet from 'wallet.ts'
-import { useHistory } from 'react-router-dom'
+import { useHistory, Link } from 'react-router-dom'
 import { geti18nString } from '../../../utils/i18n'
 
 const mainnet: ERC20TokenPredefinedData = require('../../../plugins/Wallet/mainnet_erc20.json')
@@ -457,6 +457,33 @@ export function WalletImportDialog() {
                     <span />
                     <ActionButton variant="contained" color="primary" component={'a'} onClick={importWallet}>
                         {geti18nString('import')}
+                    </ActionButton>
+                </>
+            }></DialogContentItem>
+    )
+}
+
+export function WalletErrorDialog() {
+    const { reason } = useQueryParams(['reason'])
+    let content
+    switch (reason) {
+        case 'nowallet':
+            content = 'You have no wallet currently. Create or Import one before doing that.'
+            break
+        default:
+            content = 'Unknown Error.'
+            break
+    }
+    return (
+        <DialogContentItem
+            simplified
+            title={'Error'}
+            content={`${content}(${reason})`}
+            actions={
+                <>
+                    <span />
+                    <ActionButton<typeof Link> variant="contained" color="primary" component={Link} to="/wallets/">
+                        {geti18nString('ok')}
                     </ActionButton>
                 </>
             }></DialogContentItem>
