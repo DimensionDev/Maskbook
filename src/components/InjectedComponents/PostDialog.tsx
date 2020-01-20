@@ -31,7 +31,7 @@ import { DialogDismissIconUI } from './DialogDismissIcon'
 import { ClickableChip } from '../shared/SelectRecipients/ClickableChip'
 import RedPacketDialog from './RedPacketDialog'
 import { makeTypedMessage, TypedMessage, withMetadata } from '../../extension/background-script/CryptoServices/utils'
-import { RedPacketJSONPayload } from '../../database/Plugins/Wallet/types'
+import { formatBalance } from '../../plugins/Wallet/formatter'
 
 const useStyles = makeStyles({
     MUIInputRoot: {
@@ -136,7 +136,8 @@ export function PostDialogUI(props: PostDialogUIProps) {
                                 next.delete('com.maskbook.red_packet:1')
                                 ref.value = next
                             }}
-                            label={`A Red Packet with $${r.total} from ${r.sender.name}`}
+                            label={`A Red Packet with $${formatBalance(BigInt(r.total), r.token?.decimals || 18)} ${r
+                                .token?.name || 'ETH'} from ${r.sender.name}`}
                         />
                     ))}
                     <InputBase
