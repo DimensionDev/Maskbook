@@ -85,8 +85,8 @@ function NewPacket(props: RedPacketDialogProps & NewPacketProps) {
     const [send_message, setMsg] = useState('Best Wishes!')
     const [, msgRef] = useCapturedInput(setMsg)
 
-    const [send_pre_share, setTotal] = useState(5)
-    const [, totalRef] = useCapturedInput(x => setTotal(parseFloat(x)))
+    const [send_per_share, setSendPerShare] = useState(5)
+    const [, perShareRef] = useCapturedInput(x => setSendPerShare(parseFloat(x)))
 
     const [shares, setShares] = useState(5)
     const [, sharesRef] = useCapturedInput(x => setShares(parseInt(x)))
@@ -125,12 +125,12 @@ function NewPacket(props: RedPacketDialogProps & NewPacketProps) {
                 : undefined
             : undefined
 
-    const send_total = shares * send_pre_share
+    const send_total = (is_random ? 1 : shares) * send_per_share
     const isDisabled = [
         Number.isNaN(send_total),
         send_total <= 0,
         selectedWallet === undefined,
-        send_pre_share > (amountPreShareMaxNumber || 0),
+        send_total > (amountPreShareMaxNumber || 0),
     ]
     const isSendButtonDisabled = isDisabled.some(x => x)
 
@@ -219,15 +219,15 @@ function NewPacket(props: RedPacketDialogProps & NewPacketProps) {
             <div className={classes.line}>
                 <TextField
                     className={classes.input}
-                    InputProps={{ inputRef: totalRef }}
+                    InputProps={{ inputRef: perShareRef }}
                     inputProps={{
                         min: 0,
                         max: amountPreShareMaxNumber,
                     }}
-                    label="Amount per Share"
+                    label={is_random ? 'Total Amount' : 'Amount per Share'}
                     variant="filled"
                     type="number"
-                    defaultValue={send_pre_share}
+                    defaultValue={send_per_share}
                 />
                 <TextField
                     className={classes.input}
@@ -262,7 +262,7 @@ function NewPacket(props: RedPacketDialogProps & NewPacketProps) {
                 </Typography>
                 <Button
                     className={classes.button}
-                    style={{ marginLeft: 'auto', width: 140 }}
+                    style={{ marginLeft: 'auto', minWidth: 140, whiteSpace: 'nowrap' }}
                     color="primary"
                     variant="contained"
                     disabled={isSendButtonDisabled}
