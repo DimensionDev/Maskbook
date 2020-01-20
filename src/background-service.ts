@@ -19,46 +19,6 @@ import * as SteganographyService from './extension/background-script/Steganograp
 import { decryptFromMessageWithProgress } from './extension/background-script/CryptoServices/decryptFrom'
 import { initAutoShareToFriends } from './extension/background-script/Jobs/AutoShareToFriends'
 
-const oldWebSocket = WebSocket
-// @ts-ignore
-class AutoRetryWebSocket implements WebSocket {
-    constructor(url: string, protocols?: string | string[]) {
-        const ws = new oldWebSocket(url, protocols)
-        let current: WebSocket = ws
-        const onMsg = new Set<any>()
-        const onError = () => {
-            const { onclose, onerror, onmessage, onopen } = current
-            console.log('Error happened. WebSocket retrying')
-            current = new oldWebSocket(url, protocols)
-            Object.assign(current, { onclose, onerror, onmessage, onopen })
-            onMsg.forEach(f => current.addEventListener('message', f))
-            current.addEventListener('error', onError)
-        }
-        ws.addEventListener('error', onError)
-        return new Proxy(ws, {
-            get(target, key) {
-                const v = (current as any)[key]
-                if (typeof v === 'function') {
-                    if (key === 'addEventListener') {
-                        return (...args: any) => {
-                            if (args[0] === 'message') onMsg.add(args[1])
-                            return (current as any)[key](...args)
-                        }
-                    }
-                    return (...args: any) => (current as any)[key](...args)
-                }
-                return v
-            },
-            set(target, key, value) {
-                // @ts-ignore
-                current[key] = value
-                return true
-            },
-        })
-    }
-}
-// @ts-ignore
-globalThis.WebSocket = AutoRetryWebSocket
 const PluginService = require('./extension/background-script/PluginService')
 
 Object.assign(window, {
