@@ -40,7 +40,11 @@ export const AdditionalContent = React.memo(function AdditionalContent(props: Ad
             {props.renderItem || props.renderText ? (
                 <Typography variant="body2" component="div">
                     <RenderText text={props.renderText || props.renderItem!.content} />
-                    <WithRedPacket renderItem={props.renderItem} postIdentifier={props.postIdentifier} />
+                    <WithRedPacket
+                        classes={classes}
+                        renderItem={props.renderItem}
+                        postIdentifier={props.postIdentifier}
+                    />
                 </Typography>
             ) : (
                 props.children
