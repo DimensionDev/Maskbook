@@ -27,6 +27,7 @@ import {
     RedPacketRecord,
     RedPacketStatus,
     RedPacketJSONPayload,
+    WalletRecord,
 } from '../../database/Plugins/Wallet/types'
 import { useLastRecognizedIdentity, useCurrentIdentity } from '../DataSource/useActivatedUI'
 import { PortalShadowRoot } from '../../utils/jss/ShadowRootPortal'
@@ -88,14 +89,23 @@ function NewPacket(props: RedPacketDialogProps & NewPacketProps) {
     const [shares, setShares] = useState(5)
     const [, sharesRef] = useCapturedInput(x => setShares(parseInt(x)))
 
+    const [selectedWallet, setSelectedWallet] = useState<WalletRecord | null>(null)
+    const [wallets, setWallets] = useState<WalletRecord[]>([])
+
     const send_total = shares * send_pre_share
     const isSendTotalLegal = Number.isNaN(send_total) || send_total <= 0
 
     const rinkebyNetwork = useValueRef(debugModeSetting)
 
+    React.useEffect(() => {
+        Services.Plugin.invokePlugin('maskbook.wallet', 'getWallets').then(wallets => {
+            setWallets(wallets[0])
+            if (!selectedWallet) setSelectedWallet(wallets[0][0])
+        })
+    }, [selectedWallet])
+
     const createRedPacket = async () => {
-        const wallets = await Services.Plugin.invokePlugin('maskbook.wallet', 'getWallets')
-        if (wallets[0].length === 0) return Services.Welcome.openOptionsPage('/wallets/error?reason=nowallet')
+        if (!selectedWallet) Services.Welcome.openOptionsPage('/wallets/error?reason=nowallet')
         props.onCreateNewPacket({
             duration: 60 /** seconds */ * 60 /** mins */ * 24 /** hours */,
             is_random: Boolean(is_random),
@@ -103,7 +113,7 @@ function NewPacket(props: RedPacketDialogProps & NewPacketProps) {
             send_message,
             send_total: BigInt(send_total),
             // TODO: fill with wallet address
-            sender_address: wallets[0][0]!.address,
+            sender_address: selectedWallet!.address,
             // TODO: a better default?
             sender_name: id?.nickname ?? 'A maskbook user',
             shares: BigInt(shares),
@@ -115,6 +125,21 @@ function NewPacket(props: RedPacketDialogProps & NewPacketProps) {
         <div>
             {rinkebyNetwork ? <div>Debug mode, will use test rinkeby to send your red packet</div> : null}
             <br />
+            <div className={classes.line}>
+                <FormControl variant="filled" className={classes.input}>
+                    <InputLabel>Wallet</InputLabel>
+                    <Select
+                        onChange={e => setSelectedWallet(wallets.find(i => i.address === e.target.value)!)}
+                        MenuProps={{ container: PortalShadowRoot }}
+                        value={selectedWallet?.address || ''}>
+                        {wallets.map(wallet => (
+                            <MenuItem key={wallet.address} value={wallet.address}>
+                                {wallet.name}({wallet.address})
+                            </MenuItem>
+                        ))}
+                    </Select>
+                </FormControl>
+            </div>
             <div className={classes.line}>
                 <FormControl variant="filled" className={classes.input}>
                     <InputLabel>Token</InputLabel>
@@ -337,7 +362,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                     </Typography>
                 </DialogTitle>
                 <DialogContent className={classes.content}>
-                    <BackupRestoreTab height={292} state={[currentTab, setCurrentTab]} tabs={tabs}></BackupRestoreTab>
+                    <BackupRestoreTab height={400} state={[currentTab, setCurrentTab]} tabs={tabs}></BackupRestoreTab>
                 </DialogContent>
             </ResponsiveDialog>
         </div>
