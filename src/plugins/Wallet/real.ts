@@ -282,6 +282,9 @@ export const walletAPI: WalletAPI = {
     addWalletPrivateKey(address: string, privateKey: string) {
         web3.eth.accounts.wallet.add('0x' + privateKey)
     },
+    removeWalletPrivateKey(address: string, privateKey: string) {
+        web3.eth.accounts.wallet.remove('0x' + privateKey)
+    },
     watchWalletBalance(address) {
         pollingTask(async () => {
             onWalletBalanceUpdated(address, BigInt(await web3.eth.getBalance(address)))

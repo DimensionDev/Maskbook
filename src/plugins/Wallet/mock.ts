@@ -101,6 +101,9 @@ export const mockWalletAPI: WalletAPI = {
     addWalletPrivateKey(priv: string) {
         console.log('Adding privkey')
     },
+    removeWalletPrivateKey(priv: string) {
+        console.log('Removing privkey')
+    },
     watchERC20TokenBalance(...args) {
         console.log('Mocking: Watching erc20token balance (not implemented)', ...args)
     },

@@ -67,8 +67,19 @@ export async function onWalletBalanceUpdated(address: string, newBalance: bigint
     PluginMessageCenter.emit('maskbook.wallets.update', undefined)
 }
 
-export async function removeWallet(id: string) {
-    throw new Error('Not implemented')
+export async function removeWallet(address: string) {
+    const t = createTransaction(await createWalletDBAccess(), 'readwrite')('Wallet')
+    const wallet = await getWalletByAddress(t, address)
+
+    getWalletProvider().removeWalletPrivateKey(
+        wallet.address,
+        buf2hex((await recoverWallet(wallet.mnemonic, wallet.passphrase)).privateKey),
+    )
+    {
+        const t = createTransaction(await createWalletDBAccess(), 'readwrite')('Wallet')
+        t.objectStore('Wallet').delete(wallet.address)
+    }
+    PluginMessageCenter.emit('maskbook.wallets.update', undefined)
 }
 
 export async function walletSyncInit() {
@@ -85,7 +96,7 @@ export async function walletSyncInit() {
     })
 }
 
-export async function createWallet(password: string) {
+async function createWallet(password: string) {
     const mnemonic = bip39.generateMnemonic()
     const seed = await bip39.mnemonicToSeed(mnemonic, password)
     const masterKey = HDKey.parseMasterSeed(seed)
