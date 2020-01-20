@@ -94,9 +94,15 @@ export default function WalletCard({ wallet, tokens }: Props) {
     type Inputable = HTMLInputElement | HTMLTextAreaElement
     const doRenameWallet = (event: React.FocusEvent<Inputable> | React.KeyboardEvent<Inputable>) => {
         event.preventDefault()
-        // TODO:
-        alert('not implemented')
-        setRenameWallet(false)
+        const name = event.currentTarget.value.trim()
+
+        if (!name) {
+            setRenameWallet(false)
+            return
+        }
+        Services.Plugin.invokePlugin('maskbook.wallet', 'renameWallet', wallet.address, name).then(() =>
+            setRenameWallet(false),
+        )
     }
 
     const [deleteWallet, setDeleteWallet] = React.useState(false)
