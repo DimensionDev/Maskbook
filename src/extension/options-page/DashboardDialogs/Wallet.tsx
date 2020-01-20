@@ -117,7 +117,7 @@ export function WalletAddTokenDialog(props: WalletAddTokenDialogProps) {
             title={'Add Token'}
             tabs={
                 <Paper square>
-                    <Tabs value={tabID} onChange={(e, n) => setTabID(n as any)} aria-label="simple tabs example">
+                    <Tabs value={tabID} onChange={(e, n) => setTabID(n as any)}>
                         <Tab label="Well-known token" />
                         <Tab label="Add your own token" />
                     </Tabs>

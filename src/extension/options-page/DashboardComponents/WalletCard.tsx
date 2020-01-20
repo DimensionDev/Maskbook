@@ -20,6 +20,7 @@ import { useColorProvider } from '../../../utils/theme'
 import { WalletRecord, RedPacketRecord, ERC20TokenRecord } from '../../../database/Plugins/Wallet/types'
 import { useSnackbar } from 'notistack'
 import Services from '../../service'
+import classNames from 'classnames'
 
 interface Props {
     wallet: WalletRecord
@@ -124,6 +125,11 @@ export default function WalletCard({ wallet, tokens }: Props) {
 
     const [backupWallet, setBackupWallet] = React.useState(false)
 
+    const deleteToken = (t?: ERC20TokenRecord | null) => {
+        // TODO:
+        alert('dummy!')
+    }
+
     return (
         <>
             <CardContent>
@@ -167,7 +173,11 @@ export default function WalletCard({ wallet, tokens }: Props) {
                     line1="Wallet Address"
                     line2={wallet.address}
                     action={
-                        <Typography color="primary" variant="body1" onClick={copyWalletAddress}>
+                        <Typography
+                            className={classes.cursor}
+                            color="primary"
+                            variant="body1"
+                            onClick={copyWalletAddress}>
                             Copy
                         </Typography>
                     }
@@ -199,7 +209,11 @@ export default function WalletCard({ wallet, tokens }: Props) {
                             line2={t?.name || 'Unknown Token'}
                             action={
                                 editing ? (
-                                    <Typography className={color.error}>Delete</Typography>
+                                    <Typography
+                                        onClick={() => deleteToken(t)}
+                                        className={classNames(classes.cursor, color.error)}>
+                                        Delete
+                                    </Typography>
                                 ) : (
                                     <Typography variant="h5">{Number(amount) ?? 'Syncing...'}</Typography>
                                 )
