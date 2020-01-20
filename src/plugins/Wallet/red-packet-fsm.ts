@@ -9,15 +9,15 @@ import {
 import { createTransaction, IDBPSafeTransaction } from '../../database/helpers/openDB'
 import { createWalletDBAccess, WalletDB } from '../../database/Plugins/Wallet/Wallet.db'
 import uuid from 'uuid/v4'
-import { mockRedPacketAPI } from './mock'
 import { RedPacketCreationResult, RedPacketClaimResult } from './types'
 import { getWalletProvider } from './wallet'
 import { PluginMessageCenter } from '../PluginMessages'
 import { requestNotification } from '../../utils/notification'
 import Web3Utils from 'web3-utils'
+import { redPacketAPI } from './real'
 
 function getProvider() {
-    return mockRedPacketAPI
+    return redPacketAPI
 }
 const contract_address = '0x19D0b6091D37Bc262ecC460ee4Bd57DBBD68754C'
 const everything = ['ERC20Token', 'RedPacket', 'Wallet'] as const
@@ -94,7 +94,11 @@ export async function createRedPacket(packet: createRedPacketInit): Promise<{ pa
     let erc20_token_address: string | undefined = undefined
     if (packet.token_type === RedPacketTokenType.erc20) {
         if (!packet.erc20_token) throw new Error('ERC20 token should have erc20_token field')
-        const res = await getWalletProvider().approveERC20Token(packet.erc20_token, packet.send_total)
+        const res = await getWalletProvider().approveERC20Token(
+            packet.sender_address,
+            packet.erc20_token,
+            packet.send_total,
+        )
         erc20_token_address = packet.erc20_token
         erc20_approve_transaction_hash = res.erc20_approve_transaction_hash
         erc20_approve_value = res.erc20_approve_value
@@ -102,6 +106,7 @@ export async function createRedPacket(packet: createRedPacketInit): Promise<{ pa
         throw new Error('Not supported')
     }
     const { create_transaction_hash, create_nonce } = await getProvider().create(
+        packet.sender_address,
         Web3Utils.sha3(password),
         Number(packet.shares),
         packet.is_random,

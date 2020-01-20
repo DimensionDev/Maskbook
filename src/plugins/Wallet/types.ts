@@ -59,6 +59,7 @@ export interface RedPacketAPI {
      * @returns The transaction hash
      */
     create(
+        ____sender___addr: string,
         hash_of_password: string,
         quantity: number,
         is_random: boolean,
@@ -102,6 +103,7 @@ export interface WalletAPI {
     watchWalletBalance(address: string): void
     watchERC20TokenBalance(walletAddress: string, tokenAddress: string): void
     approveERC20Token(
+        senderAddress: string,
         erc20TokenAddress: string,
         amount: bigint,
     ): Promise<{ erc20_approve_transaction_hash: string; erc20_approve_value: bigint }>
