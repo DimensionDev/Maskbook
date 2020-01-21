@@ -2,7 +2,7 @@ import { FormControl, Typography, Theme, Divider } from '@material-ui/core'
 import React from 'react'
 import { makeStyles, createStyles } from '@material-ui/styles'
 import classNames from 'classnames'
-import { geti18nString } from '../../../utils/i18n'
+import { geti18nString } from '../../../../../utils/i18n'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({

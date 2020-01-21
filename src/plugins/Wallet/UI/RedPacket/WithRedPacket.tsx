@@ -1,7 +1,7 @@
 import React, { useRef } from 'react'
 import { TypedMessageText, withMetadata } from '../../../../extension/background-script/CryptoServices/utils'
 import StructuredPluginWrapper from '../../../../components/InjectedComponents/StructuredMessage/StructuredPluginWrapper'
-import { RedPacketWithState } from '../../../../extension/options-page/DashboardComponents/RedPacket'
+import { RedPacketWithState } from '../Dashboard/Components/RedPacket'
 import { RedPacketRecord, RedPacketStatus, WalletRecord } from '../../database/types'
 import Services from '../../../../extension/service'
 import { PostIdentifier, ProfileIdentifier } from '../../../../database/type'

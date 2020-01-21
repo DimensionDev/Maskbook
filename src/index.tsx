@@ -36,7 +36,7 @@ import { DialogRouter } from './extension/options-page/DashboardDialogs/DialogBa
 import DashboardHomePage from './extension/options-page/Home'
 import DashboardDebugPage from './extension/options-page/Debug'
 import DashboardInitializeDialog from './extension/options-page/Initialize'
-import DashboardWalletsPage from './extension/options-page/Wallets'
+import DashboardWalletsPage from './plugins/Wallet/UI/Dashboard/Wallets'
 
 const useStyles = makeStyles(theme =>
     createStyles({

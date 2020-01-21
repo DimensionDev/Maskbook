@@ -14,22 +14,22 @@ import {
     Divider,
 } from '@material-ui/core'
 import { useRouteMatch, Redirect, Link } from 'react-router-dom'
-import { DialogRouter } from './DashboardDialogs/DialogBase'
+import { DialogRouter } from '../../../../extension/options-page/DashboardDialogs/DialogBase'
 
-import FooterLine from './DashboardComponents/FooterLine'
-import WalletCard from './DashboardComponents/WalletCard'
-import Services from '../service'
-import { WalletRecord, ERC20TokenRecord } from '../../plugins/Wallet/database/types'
+import FooterLine from '../../../../extension/options-page/DashboardComponents/FooterLine'
+import WalletCard from './Components/WalletCard'
+import Services from '../../../../extension/service'
+import { WalletRecord, ERC20TokenRecord } from '../../database/types'
 import { useState, useEffect } from 'react'
-import { PluginMessageCenter } from '../../plugins/PluginMessages'
+import { PluginMessageCenter } from '../../../PluginMessages'
 import {
     WalletRedPacketDetailDialogWithRouter,
     WalletCreateDialog,
     WalletImportDialog,
     WalletErrorDialog,
-} from './DashboardDialogs/Wallet'
-import { geti18nString } from '../../utils/i18n'
-import ActionButton from './DashboardComponents/ActionButton'
+} from './Dialogs/Wallet'
+import { geti18nString } from '../../../../utils/i18n'
+import ActionButton from '../../../../extension/options-page/DashboardComponents/ActionButton'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({

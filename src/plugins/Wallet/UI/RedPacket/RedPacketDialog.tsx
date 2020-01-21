@@ -18,7 +18,7 @@ import {
 import { useStylesExtends } from '../../../../components/custom-ui-helper'
 import { DialogDismissIconUI } from '../../../../components/InjectedComponents/DialogDismissIcon'
 import BackupRestoreTab from '../../../../extension/options-page/DashboardComponents/BackupRestoreTab'
-import { RedPacket, RedPacketWithState } from '../../../../extension/options-page/DashboardComponents/RedPacket'
+import { RedPacket, RedPacketWithState } from '../Dashboard/Components/RedPacket'
 import Services from '../../../../extension/service'
 import { createRedPacketInit } from '../../red-packet-fsm'
 import {

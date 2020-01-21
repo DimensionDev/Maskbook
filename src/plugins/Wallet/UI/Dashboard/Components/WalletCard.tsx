@@ -4,9 +4,9 @@ import CardContent from '@material-ui/core/CardContent'
 import Typography from '@material-ui/core/Typography'
 import SettingsIcon from '@material-ui/icons/Settings'
 import { Divider, Menu, MenuItem, TextField } from '@material-ui/core'
-import { geti18nString } from '../../../utils/i18n'
+import { geti18nString } from '../../../../../utils/i18n'
 import WalletLine from './WalletLine'
-import ActionButton from './ActionButton'
+import ActionButton from '../../../../../extension/options-page/DashboardComponents/ActionButton'
 import {
     WalletAddTokenDialog,
     WalletSendRedPacketDialog,
@@ -14,14 +14,14 @@ import {
     WalletRedPacketDetailDialog,
     WalletDeleteDialog,
     WalletBackupDialog,
-} from '../DashboardDialogs/Wallet'
-import { DialogRouter } from '../DashboardDialogs/DialogBase'
-import { useColorProvider } from '../../../utils/theme'
-import { WalletRecord, RedPacketRecord, ERC20TokenRecord } from '../../../plugins/Wallet/database/types'
+} from '../Dialogs/Wallet'
+import { DialogRouter } from '../../../../../extension/options-page/DashboardDialogs/DialogBase'
+import { useColorProvider } from '../../../../../utils/theme'
+import { WalletRecord, RedPacketRecord, ERC20TokenRecord } from '../../../database/types'
 import { useSnackbar } from 'notistack'
-import Services from '../../service'
+import Services from '../../../../../extension/service'
 import classNames from 'classnames'
-import { formatBalance } from '../../../plugins/Wallet/formatter'
+import { formatBalance } from '../../../formatter'
 
 interface Props {
     wallet: WalletRecord
