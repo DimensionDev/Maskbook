@@ -250,6 +250,7 @@ export default function WalletCard({ wallet, tokens }: Props) {
                     children={
                         <WalletAddTokenDialog
                             onConfirm={(token, user, network) => {
+                                setShowAddToken(false)
                                 Services.Plugin.invokePlugin(
                                     'maskbook.wallet',
                                     'walletAddERC20Token',
