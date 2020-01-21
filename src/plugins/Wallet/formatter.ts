@@ -1,13 +1,19 @@
-import { web3 } from './web3'
+export function formatBalance(balance: bigint, decimals: number, precision: number = 6) {
+    const negative = balance < 0
+    const base = BigInt(10) ** BigInt(decimals)
 
-export function formatBalance(_balance: bigint, decimals: number, precision: number = 6) {
-    const balance = String(_balance)
-    const divisor = web3.utils.toBN(10).pow(web3.utils.toBN(decimals))
+    if (negative) {
+        balance = balance * BigInt(-1)
+    }
 
-    return `${web3.utils.toBN(balance).div(divisor)}.${web3.utils
-        .toBN(balance)
-        .mod(divisor)
-        .toString()
-        .substr(0, precision)
-        .replace(/0+$/, '')}`.replace(/\.$/, '')
+    let fraction = (balance % base).toString(10)
+
+    while (fraction.length < decimals) {
+        fraction = `0${fraction}`
+    }
+
+    const whole = (balance / base).toString(10)
+    const value = `${whole}${fraction == '0' ? '' : `.${fraction.substr(0, precision)}`}` // eslint-disable-line
+
+    return (negative ? `-${value}` : value).replace(/0+$/, '').replace(/\.$/, '')
 }
