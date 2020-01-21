@@ -286,10 +286,10 @@ export async function requestRefund(id: { redPacketID: string }) {
     // TODO: send a notification here maybe?
     PluginMessageCenter.emit('maskbook.red_packets.update', undefined)
 }
-export async function onRefundResult(id: { databaseID: string }, details: { remaining_balance: bigint }) {
+export async function onRefundResult(id: { redPacketID: string }, details: { remaining_balance: bigint }) {
     {
         const t = createTransaction(await createWalletDBAccess(), 'readwrite')('RedPacket')
-        const rec = await getRedPacketByID(t, id.databaseID)
+        const rec = await getRedPacketByID(t, id.redPacketID)
         setNextState(rec, RedPacketStatus.refunded)
         rec.refund_amount = details.remaining_balance
         t.objectStore('RedPacket').put(rec)

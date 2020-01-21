@@ -339,15 +339,20 @@ export const redPacketAPI: RedPacketAPI = {
             const refundSuccessEv = evs.find(ev => ev.transactionHash === id.transactionHash)
 
             if (refundSuccessEv) {
-                const { remaining_balance } = refundSuccessEv.returnValues as {
+                const { id, remaining_balance } = refundSuccessEv.returnValues as {
                     id: string
                     token_address: string
                     remaining_balance: string
                 }
 
-                onRefundResult(id, {
-                    remaining_balance: BigInt(remaining_balance),
-                })
+                onRefundResult(
+                    {
+                        redPacketID: id,
+                    },
+                    {
+                        remaining_balance: BigInt(remaining_balance),
+                    },
+                )
             }
         })
     },
