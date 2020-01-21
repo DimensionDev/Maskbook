@@ -13,7 +13,7 @@ import { DatabaseRestoreSuccessDialog, DatabaseRestoreFailedDialog } from '../Da
 import { BackupJSONFileLatest, UpgradeBackupJSONFile } from '../../../utils/type-transform/BackupFormat/JSON/latest'
 import { extraPermissions } from '../../../utils/permissions'
 import { InitStep } from '../InitStep'
-import QRScanner from '../../../components/Welcomes/QRScanner'
+import QRScanner from '../../../components/QRScanner'
 import { hasWKWebkitRPCHandlers } from '../../../utils/iOS-RPC'
 import { WKWebkitQRScanner } from '../../../components/shared/qrcode'
 

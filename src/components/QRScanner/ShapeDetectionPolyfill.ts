@@ -1,6 +1,6 @@
 /// <reference path="./ShapeDetectionSpec.d.ts" />
 import { isNull } from 'lodash-es'
-import { getUrl } from '../../../utils/utils'
+import { getUrl } from '../../utils/utils'
 
 const noop = () => {}
 const worker = new Worker(getUrl('js/qrcode.js'))

@@ -1,5 +1,11 @@
 import { getUrl } from '../../../utils/utils'
-import { Query } from './index'
+import { ProfileIdentifier } from '../../../database/type'
+type Query = {
+    identifier?: ProfileIdentifier
+    avatar?: string
+    nickname?: string
+    plugin?: string
+}
 export function getWelcomePageURL(query?: Query) {
     if (query) {
         const { identifier, ...params } = query
