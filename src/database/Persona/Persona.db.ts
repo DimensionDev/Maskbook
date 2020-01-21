@@ -249,6 +249,7 @@ export async function safeDeletePersonaDB(
 export async function createProfileDB(record: ProfileRecord, t: ProfileTransaction<'readwrite'>): Promise<void> {
     await t.objectStore('profiles').add(profileToDB(record))
     setTimeout(async () => {
+        MessageCenter.emit('identityCreated', undefined)
         MessageCenter.emit('profilesChanged', [{ reason: 'new', of: await queryProfile(record.identifier) }])
     }, 0)
 }
@@ -375,6 +376,7 @@ export async function attachProfileDB(
 
     await updatePersonaDB(persona, { linkedProfiles: 'merge', explicitUndefinedField: 'ignore' }, t)
     await updateProfileDB(profile, t)
+    MessageCenter.emit('identityUpdated', undefined)
 }
 
 /**
