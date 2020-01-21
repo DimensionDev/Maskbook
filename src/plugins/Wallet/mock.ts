@@ -75,7 +75,13 @@ export const mockRedPacketAPI: RedPacketAPI = {
             expired: false,
             token_address: 'token address',
             totalCount: 10,
+            is_claimed: false,
         }
+    },
+    async checkClaimedList(id) {
+        console.log('Mock: checking availibity of the red packet')
+        await sleep(2000)
+        return []
     },
     async refund(id) {
         console.log('Mock: calling refund', id)
