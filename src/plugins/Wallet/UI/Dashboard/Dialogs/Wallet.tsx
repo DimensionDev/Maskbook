@@ -30,8 +30,8 @@ import { geti18nString } from '../../../../../utils/i18n'
 import { useColorProvider } from '../../../../../utils/theme'
 import { formatBalance } from '../../../formatter'
 
-const mainnet: ERC20TokenPredefinedData = require('../../../plugins/Wallet/mainnet_erc20.json')
-const rinkeby: ERC20TokenPredefinedData = require('../../../plugins/Wallet/rinkeby_erc20.json')
+const mainnet: ERC20TokenPredefinedData = require('../../../mainnet_erc20.json')
+const rinkeby: ERC20TokenPredefinedData = require('../../../rinkeby_erc20.json')
 
 interface WalletSendRedPacketDialogProps {
     onDecline(): void

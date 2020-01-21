@@ -80,11 +80,11 @@ const useStyles = makeStyles({
     },
 })
 
-const mainnet: ERC20TokenPredefinedData = require('../../../plugins/Wallet/mainnet_erc20.json')
+const mainnet: ERC20TokenPredefinedData = require('../../../mainnet_erc20.json')
 const sort = (x: ERC20TokenPredefinedData[0], y: ERC20TokenPredefinedData[0]): 1 | -1 => {
     return [x.name, y.name].sort()[0] === x.name ? -1 : 1
 }
-const rinkeby: ERC20TokenPredefinedData = require('../../../plugins/Wallet/rinkeby_erc20.json')
+const rinkeby: ERC20TokenPredefinedData = require('../../../rinkeby_erc20.json')
 mainnet.sort(sort)
 rinkeby.sort(sort)
 
