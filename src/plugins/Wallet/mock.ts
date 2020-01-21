@@ -91,7 +91,12 @@ export const mockRedPacketAPI: RedPacketAPI = {
         console.log('Mock: Watching refund result...', id, 'Call globalThis.next() to refund.')
         Object.assign(globalThis, {
             next() {
-                onRefundResult(id, { remaining_balance: BigInt(10) })
+                onRefundResult(
+                    {
+                        redPacketID: '',
+                    },
+                    { remaining_balance: BigInt(10) },
+                )
             },
         })
     },
