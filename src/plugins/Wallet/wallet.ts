@@ -98,7 +98,7 @@ async function recoverWallet(mnemonic: string[], password: string) {
     const extendedPrivateKey = masterKey.derive(path).extendedPrivateKey!
     const childKey = HDKey.parseExtendedKey(extendedPrivateKey)
 
-    const wallet = childKey.derive('0')
+    const wallet = childKey.derive('')
     const walletPublicKey = wallet.publicKey
     const walletPrivateKey = wallet.privateKey!
     const address = EthereumAddress.from(walletPublicKey).address
