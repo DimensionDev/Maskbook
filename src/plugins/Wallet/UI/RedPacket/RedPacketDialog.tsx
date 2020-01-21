@@ -15,12 +15,12 @@ import {
     Select,
     MenuItem,
 } from '@material-ui/core'
-import { useStylesExtends } from '../custom-ui-helper'
-import { DialogDismissIconUI } from './DialogDismissIcon'
-import BackupRestoreTab from '../../extension/options-page/DashboardComponents/BackupRestoreTab'
-import { RedPacket, RedPacketWithState } from '../../extension/options-page/DashboardComponents/RedPacket'
-import Services from '../../extension/service'
-import { createRedPacketInit } from '../../plugins/Wallet/red-packet-fsm'
+import { useStylesExtends } from '../../../../components/custom-ui-helper'
+import { DialogDismissIconUI } from '../../../../components/InjectedComponents/DialogDismissIcon'
+import BackupRestoreTab from '../../../../extension/options-page/DashboardComponents/BackupRestoreTab'
+import { RedPacket, RedPacketWithState } from '../../../../extension/options-page/DashboardComponents/RedPacket'
+import Services from '../../../../extension/service'
+import { createRedPacketInit } from '../../red-packet-fsm'
 import {
     EthereumNetwork,
     RedPacketTokenType,
@@ -29,15 +29,15 @@ import {
     RedPacketJSONPayload,
     WalletRecord,
     ERC20TokenRecord,
-} from '../../database/Plugins/Wallet/types'
-import { useLastRecognizedIdentity, useCurrentIdentity } from '../DataSource/useActivatedUI'
-import { PortalShadowRoot } from '../../utils/jss/ShadowRootPortal'
-import { useCapturedInput } from '../../utils/hooks/useCapturedEvents'
-import { PluginMessageCenter } from '../../plugins/PluginMessages'
-import { getActivatedUI } from '../../social-network/ui'
-import { useValueRef } from '../../utils/hooks/useValueRef'
-import { debugModeSetting } from '../shared-settings/settings'
-import { formatBalance } from '../../plugins/Wallet/formatter'
+} from '../../../../database/Plugins/Wallet/types'
+import { useLastRecognizedIdentity, useCurrentIdentity } from '../../../../components/DataSource/useActivatedUI'
+import { PortalShadowRoot } from '../../../../utils/jss/ShadowRootPortal'
+import { useCapturedInput } from '../../../../utils/hooks/useCapturedEvents'
+import { PluginMessageCenter } from '../../../PluginMessages'
+import { getActivatedUI } from '../../../../social-network/ui'
+import { useValueRef } from '../../../../utils/hooks/useValueRef'
+import { debugModeSetting } from '../../../../components/shared-settings/settings'
+import { formatBalance } from '../../formatter'
 
 interface RedPacketDialogProps
     extends withClasses<

@@ -5,7 +5,7 @@ import anchorme from 'anchorme'
 import { useStylesExtends } from '../custom-ui-helper'
 import classNames from 'classnames'
 import { TypedMessageText } from '../../extension/background-script/CryptoServices/utils'
-import WithRedPacket from './PluginRedPacket/WithRedPacket'
+import WithRedPacket from '../../plugins/Wallet/UI/RedPacket/WithRedPacket'
 import { PostIdentifier, ProfileIdentifier } from '../../database/type'
 
 export interface AdditionalContentProps extends withClasses<KeysInferFromUseStyles<typeof useStyles>> {

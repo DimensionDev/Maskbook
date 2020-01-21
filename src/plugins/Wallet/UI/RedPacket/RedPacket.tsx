@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { Button, Typography, makeStyles, createStyles } from '@material-ui/core'
-import { RedPacketWithState } from '../../../extension/options-page/DashboardComponents/RedPacket'
+import { RedPacketWithState } from '../../../../extension/options-page/DashboardComponents/RedPacket'
 
 const useStyles = makeStyles(theme =>
     createStyles({

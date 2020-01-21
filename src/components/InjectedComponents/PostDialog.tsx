@@ -29,7 +29,7 @@ import Services from '../../extension/service'
 import { SelectRecipientsUI, SelectRecipientsUIProps } from '../shared/SelectRecipients/SelectRecipients'
 import { DialogDismissIconUI } from './DialogDismissIcon'
 import { ClickableChip } from '../shared/SelectRecipients/ClickableChip'
-import RedPacketDialog from './RedPacketDialog'
+import RedPacketDialog from '../../plugins/Wallet/UI/RedPacket/RedPacketDialog'
 import {
     makeTypedMessage,
     TypedMessage,

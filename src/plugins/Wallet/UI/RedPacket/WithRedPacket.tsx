@@ -1,11 +1,11 @@
 import React, { useRef } from 'react'
-import { TypedMessageText, withMetadata } from '../../../extension/background-script/CryptoServices/utils'
-import StructuredPluginWrapper from '../StructuredMessage/StructuredPluginWrapper'
-import { RedPacketWithState } from '../../../extension/options-page/DashboardComponents/RedPacket'
-import { RedPacketRecord, RedPacketStatus, WalletRecord } from '../../../database/Plugins/Wallet/types'
-import Services from '../../../extension/service'
-import { PostIdentifier, ProfileIdentifier } from '../../../database/type'
-import { getPostUrl } from '../../../social-network-provider/twitter.com/utils/url'
+import { TypedMessageText, withMetadata } from '../../../../extension/background-script/CryptoServices/utils'
+import StructuredPluginWrapper from '../../../../components/InjectedComponents/StructuredMessage/StructuredPluginWrapper'
+import { RedPacketWithState } from '../../../../extension/options-page/DashboardComponents/RedPacket'
+import { RedPacketRecord, RedPacketStatus, WalletRecord } from '../../../../database/Plugins/Wallet/types'
+import Services from '../../../../extension/service'
+import { PostIdentifier, ProfileIdentifier } from '../../../../database/type'
+import { getPostUrl } from '../../../../social-network-provider/twitter.com/utils/url'
 import {
     withMobileDialog,
     Dialog,
@@ -22,10 +22,10 @@ import {
     Select,
     MenuItem,
 } from '@material-ui/core'
-import { useStylesExtends } from '../../custom-ui-helper'
-import { DialogDismissIconUI } from '../DialogDismissIcon'
-import { PortalShadowRoot } from '../../../utils/jss/ShadowRootPortal'
-import { geti18nString } from '../../../utils/i18n'
+import { useStylesExtends } from '../../../../components/custom-ui-helper'
+import { DialogDismissIconUI } from '../../../../components/InjectedComponents/DialogDismissIcon'
+import { PortalShadowRoot } from '../../../../utils/jss/ShadowRootPortal'
+import { geti18nString } from '../../../../utils/i18n'
 
 const useStyles = makeStyles(theme =>
     createStyles({
