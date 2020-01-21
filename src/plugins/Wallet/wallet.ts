@@ -22,19 +22,8 @@ export async function getWallets(): Promise<[WalletRecord[], ERC20TokenRecord[]]
 export async function createNewWallet(
     rec: Omit<WalletRecord, 'id' | 'address' | 'mnemonic' | 'eth_balance' | '_data_source_' | 'erc20_token_balance'>,
 ) {
-    const { passphrase } = rec
-    const record: WalletRecord = {
-        ...rec,
-        ...(await createWallet(passphrase)),
-        erc20_token_balance: new Map(),
-        _data_source_: getWalletProvider().dataSource,
-    }
-    {
-        const t = createTransaction(await createWalletDBAccess(), 'readwrite')('Wallet')
-        t.objectStore('Wallet').add(record)
-    }
-    getWalletProvider().watchWalletBalance(record.address)
-    PluginMessageCenter.emit('maskbook.wallets.update', undefined)
+    const mnemonic = bip39.generateMnemonic().split(' ')
+    importNewWallet({ mnemonic, ...rec })
 }
 
 export async function importNewWallet(
@@ -101,11 +90,6 @@ export async function walletSyncInit() {
             p.watchERC20TokenBalance(x.address, tokenAddr)
         }
     })
-}
-
-async function createWallet(password: string) {
-    const mnemonic = bip39.generateMnemonic()
-    return recoverWallet(mnemonic.split(' '), password)
 }
 
 async function recoverWallet(mnemonic: string[], password: string) {
