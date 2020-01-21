@@ -93,19 +93,23 @@ export const redPacketAPI: RedPacketAPI = {
     async claim(id, password: string, recipient: string, validation: string) {
         const contract = createRedPacketContract(RED_PACKET_CONTRACT_ADDRESS)
         const tx = contract.methods.claim(id.redPacketID, password, recipient, validation)
-        return new Promise(async (resolve, reject) => {
+        return new Promise((resolve, reject) => {
             let txHash = ''
-
-            tx.send(await createTxPayload(recipient, tx))
-                .on('transactionHash', async (hash: string) => {
-                    txHash = hash
-                })
-                .on('receipt', () => {
-                    resolve({
-                        claim_transaction_hash: txHash,
-                    })
-                })
-                .on('error', (err: Error) => reject(err))
+            createTxPayload(recipient, tx)
+                .then(payload =>
+                    tx
+                        .send(payload)
+                        .on('transactionHash', async (hash: string) => {
+                            txHash = hash
+                        })
+                        .on('receipt', () => {
+                            resolve({
+                                claim_transaction_hash: txHash,
+                            })
+                        })
+                        .on('error', (err: Error) => reject(err)),
+                )
+                .catch(reject)
         })
     },
     async watchClaimResult(id) {
