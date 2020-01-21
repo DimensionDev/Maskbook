@@ -249,9 +249,14 @@ export const redPacketAPI: RedPacketAPI = {
     },
     async checkAvailability(id) {
         const contract = createRedPacketContract(RED_PACKET_CONTRACT_ADDRESS)
-        const { balance, claimed, expired, token_address, total } = await contract.methods
-            .check_availability(id.redPacketID)
-            .call()
+        const {
+            balance,
+            claimed,
+            expired,
+            token_address,
+            total,
+            ifclaimed,
+        } = await contract.methods.check_availability(id.redPacketID).call()
 
         return {
             balance: BigInt(balance),
@@ -259,8 +264,10 @@ export const redPacketAPI: RedPacketAPI = {
             expired,
             token_address,
             totalCount: parseInt(total),
+            is_claimed: ifclaimed,
         }
     },
+    check_claimed_list
     async refund(id) {
         const sender = await createTransaction(
             await createWalletDBAccess(),
