@@ -25,12 +25,16 @@ export class HappyRedPacket extends Contract {
             total: string
             claimed: string
             expired: boolean
+            ifclaimed: boolean
             0: string
             1: string
             2: string
             3: string
             4: boolean
+            5: boolean
         }>
+
+        check_claimed_list(id: string | number[]): TransactionObject<string[]>
 
         claim(
             id: string | number[],
@@ -38,6 +42,8 @@ export class HappyRedPacket extends Contract {
             _recipient: string,
             validation: string | number[],
         ): TransactionObject<string>
+
+        contract_creator(): TransactionObject<string>
 
         create_red_packet(
             _hash: string | number[],
@@ -86,14 +92,6 @@ export class HappyRedPacket extends Contract {
             2: string
             3: string
             4: string
-        }>
-        Failure: ContractEvent<{
-            id: string
-            hash1: string
-            hash2: string
-            0: string
-            1: string
-            2: string
         }>
         RefundSuccess: ContractEvent<{
             id: string
