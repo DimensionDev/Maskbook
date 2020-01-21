@@ -280,9 +280,18 @@ export const redPacketAPI: RedPacketAPI = {
             .objectStore('RedPacket')
             .index('red_packet_id')
             .get(id.redPacketID)
+        const wallets = await createTransaction(
+            await createWalletDBAccess(),
+            'readonly',
+        )('Wallet')
+            .objectStore('Wallet')
+            .getAll()
 
         if (!packet) {
             throw new Error(`can not find red packet with id: ${id}`)
+        }
+        if (wallets.every(wallet => wallet.address !== packet.sender_address)) {
+            throw new Error('can not find available wallet')
         }
 
         const contract = createRedPacketContract(RED_PACKET_CONTRACT_ADDRESS)
