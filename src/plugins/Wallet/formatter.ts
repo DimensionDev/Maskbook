@@ -1,7 +1,13 @@
-export function formatBalance(balance: bigint, decimals: number, precision: number = 6) {
-    const divisor = BigInt(10) ** BigInt(decimals)
+import { web3 } from './web3'
 
-    const a = balance / divisor
-    const b = balance % divisor
-    return `${a}.${b.toString().substr(0, precision)}`.replace(/0+$/, '').replace(/\.$/, '')
+export function formatBalance(_balance: bigint, decimals: number, precision: number = 6) {
+    const balance = String(_balance)
+    const divisor = web3.utils.toBN(10).pow(web3.utils.toBN(decimals))
+
+    return `${web3.utils.toBN(balance).div(divisor)}.${web3.utils
+        .toBN(balance)
+        .mod(divisor)
+        .toString()
+        .substr(0, precision)
+        .replace(/0+$/, '')}`.replace(/\.$/, '')
 }
