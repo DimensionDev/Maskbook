@@ -230,9 +230,7 @@ export function WalletRedPacketHistoryDialog(props: WalletRedPacketHistoryDialog
 
     React.useEffect(() => {
         const updateHandler = () =>
-            Services.Plugin.invokePlugin('maskbook.red_packet', 'getRedPackets', undefined).then(
-                setRedPacketRecords,
-            )
+            Services.Plugin.invokePlugin('maskbook.red_packet', 'getRedPackets', undefined).then(setRedPacketRecords)
 
         updateHandler()
         return PluginMessageCenter.on('maskbook.red_packets.update', updateHandler)

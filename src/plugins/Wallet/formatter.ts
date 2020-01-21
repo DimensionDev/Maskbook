@@ -1,5 +1,5 @@
 export function formatBalance(balance: bigint, decimals: number, precision: number = 6) {
-    const negative = balance < 0
+    const negative = balance < BigInt(0)
     const base = BigInt(10) ** BigInt(decimals)
 
     if (negative) {
