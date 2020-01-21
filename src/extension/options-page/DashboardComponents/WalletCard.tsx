@@ -229,13 +229,17 @@ export default function WalletCard({ wallet, tokens }: Props) {
                     )
                 })}
                 <div className={classes.actions}>
-                    <Typography
-                        className={classes.cursor}
-                        color="primary"
-                        variant="body1"
-                        onClick={() => setEditing(!editing)}>
-                        {editing ? 'Done' : 'Edit List'}
-                    </Typography>
+                    {false ? (
+                        <Typography
+                            className={classes.cursor}
+                            color="primary"
+                            variant="body1"
+                            onClick={() => setEditing(!editing)}>
+                            {editing ? 'Done' : 'Edit List'}
+                        </Typography>
+                    ) : (
+                        <span />
+                    )}
                     <Typography
                         className={classes.cursor}
                         color="primary"
