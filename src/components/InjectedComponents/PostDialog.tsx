@@ -30,7 +30,12 @@ import { SelectRecipientsUI, SelectRecipientsUIProps } from '../shared/SelectRec
 import { DialogDismissIconUI } from './DialogDismissIcon'
 import { ClickableChip } from '../shared/SelectRecipients/ClickableChip'
 import RedPacketDialog from './RedPacketDialog'
-import { makeTypedMessage, TypedMessage, withMetadata } from '../../extension/background-script/CryptoServices/utils'
+import {
+    makeTypedMessage,
+    TypedMessage,
+    withMetadata,
+    readTypedMessageMetadata,
+} from '../../extension/background-script/CryptoServices/utils'
 import { formatBalance } from '../../plugins/Wallet/formatter'
 
 const useStyles = makeStyles({
@@ -323,6 +328,13 @@ export function PostDialog(props: PostDialogProps) {
             checked && setOnlyMyself(false)
         }, []),
     )
+
+    const mustSelectShareToEveryone =
+        readTypedMessageMetadata(postBoxContent.meta || new Map(), 'com.maskbook.red_packet:1').hasValue &&
+        !shareToEveryone
+    React.useEffect(() => {
+        if (mustSelectShareToEveryone) onShareToEveryoneChanged(true)
+    }, [mustSelectShareToEveryone, onShareToEveryoneChanged])
     //#endregion
 
     return (
