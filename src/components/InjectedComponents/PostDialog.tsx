@@ -164,7 +164,7 @@ export function PostDialogUI(props: PostDialogUIProps) {
                     <Box style={{ marginBottom: 10 }} display="flex" flexWrap="wrap">
                         <ClickableChip
                             ChipProps={{
-                                label: 'Red Packet',
+                                label: '💰 Red Packet',
                                 onClick: () => setRedPacketDialogOpen(true),
                             }}
                         />

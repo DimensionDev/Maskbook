@@ -202,6 +202,7 @@ export function WalletAddTokenDialog(props: WalletAddTokenDialogProps) {
 interface WalletRedPacketHistoryDialogProps {
     onClick?(packet: RedPacketRecord): void
     onDecline(): void
+    walletAddress: string
 }
 
 const usePacketHistoryStyles = makeStyles(theme =>
@@ -214,13 +215,22 @@ const usePacketHistoryStyles = makeStyles(theme =>
 
 export function WalletRedPacketHistoryDialog(props: WalletRedPacketHistoryDialogProps) {
     const classes = usePacketHistoryStyles()
-    const { onClick, onDecline } = props
+    const { onClick, onDecline, walletAddress } = props
     const [tabState, setTabState] = React.useState(0)
     const [redPacketRecords, setRedPacketRecords] = React.useState<RedPacketRecord[]>([])
 
+    const filteredRecords = redPacketRecords.filter(record => {
+        if (tabState === 0) {
+            return record.claim_address === walletAddress
+        } else if (tabState === 1) {
+            return record.sender_address === walletAddress
+        }
+        return false
+    })
+
     React.useEffect(() => {
         const updateHandler = () =>
-            Services.Plugin.invokePlugin('maskbook.red_packet', 'getRedPackets', tabState === 1).then(
+            Services.Plugin.invokePlugin('maskbook.red_packet', 'getRedPackets', undefined).then(
                 setRedPacketRecords,
             )
 
@@ -247,7 +257,7 @@ export function WalletRedPacketHistoryDialog(props: WalletRedPacketHistoryDialog
             }
             content={
                 <>
-                    {redPacketRecords.map(record => (
+                    {filteredRecords.map(record => (
                         <WalletLine
                             key={record.id}
                             line1={record.send_message}
@@ -256,9 +266,9 @@ export function WalletRedPacketHistoryDialog(props: WalletRedPacketHistoryDialog
                             invert
                             action={
                                 <Typography variant="h6">
-                                    {record.claim_amount && record.send_total
+                                    {(tabState === 0 && record.claim_amount) || (tabState === 1 && record.send_total)
                                         ? formatBalance(
-                                              tabState === 0 ? record.claim_amount : record.send_total,
+                                              tabState === 0 ? record.claim_amount! : record.send_total!,
                                               record.raw_payload?.token?.decimals ?? 18,
                                           )
                                         : '0'}{' '}
@@ -440,7 +450,7 @@ export function WalletImportDialog() {
                     required
                     value={passphrase}
                     onChange={e => setPassphrase(e.target.value)}
-                    label="Passphrase"
+                    label="Password"
                     helperText=" "
                 />
                 <TextField required value={name} onChange={e => setName(e.target.value)} label="Name" />

@@ -282,6 +282,7 @@ export default function WalletCard({ wallet, tokens }: Props) {
                     onExit={() => setShowRedPacketHistory(false)}
                     children={
                         <WalletRedPacketHistoryDialog
+                            walletAddress={wallet.address}
                             onClick={setShowRedPacketDetail}
                             onDecline={() => setShowRedPacketHistory(false)}
                         />

@@ -322,6 +322,7 @@ function ExistingPacket(props: RedPacketDialogProps & ExistingPacketProps) {
                     return packets.filter(
                         p =>
                             p.id !== fakeRedPacket?.id &&
+                            p.create_transaction_hash &&
                             (p.status === 'normal' ||
                                 p.status === 'incoming' ||
                                 p.status === 'claimed' ||
@@ -394,11 +395,18 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
             setFakeRedPacket,
             console.error,
         )
-        setFakeRedPacket({
+        setFakeRedPacket(({
             send_message: opt.send_message,
             sender_name: opt.sender_name,
             status: 'pending' as RedPacketStatus,
-        } as RedPacketRecord)
+            erc20_token: opt.erc20_token,
+            raw_payload: {
+                shares: opt.shares,
+                token: {
+                    name: ' ',
+                },
+            },
+        } as any) as Partial<RedPacketRecord>)
         setCurrentTab(1)
     }, [])
 
