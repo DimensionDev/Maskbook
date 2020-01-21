@@ -130,7 +130,7 @@ export function AdditionalPostBox(props: AdditionalPostBoxProps) {
                     makeTypedMessage(text),
                     target.map(x => x.identifier),
                     currentIdentity!.identifier,
-                    // TODO: Public Share UI
+                    // Note: AdditionalPostBox is deprecated. Will switch to new UI. No need to support.
                     false,
                 )
                 const activeUI = getActivatedUI()

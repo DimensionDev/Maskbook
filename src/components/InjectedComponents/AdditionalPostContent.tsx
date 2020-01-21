@@ -37,6 +37,10 @@ export const AdditionalContent = React.memo(function AdditionalContent(props: Ad
                 {props.hideIcon ? null : <img alt="" width={16} height={16} src={icon} className={classes.icon} />}
                 {props.title}
             </Typography>
+            {/* TODO:
+             * 1. It's not good to put plugin UI here.
+             * 2. This component does not support Typed Message
+             */}
             {props.renderItem || props.renderText ? (
                 <Typography variant="body2" component="div">
                     <RenderText text={props.renderText || props.renderItem!.content} />
