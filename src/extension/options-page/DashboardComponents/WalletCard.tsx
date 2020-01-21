@@ -195,7 +195,9 @@ export default function WalletCard({ wallet, tokens }: Props) {
                     line2="Ethereum"
                     action={
                         <Typography variant="h5">
-                            {wallet.eth_balance ? formatBalance(wallet.eth_balance, 18) : 'Syncing...'}
+                            {typeof wallet.eth_balance === 'bigint'
+                                ? formatBalance(wallet.eth_balance, 18)
+                                : 'Syncing...'}
                         </Typography>
                     }
                 />
