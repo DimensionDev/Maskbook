@@ -139,15 +139,16 @@ function NewPacket(props: RedPacketDialogProps & NewPacketProps) {
             Services.Plugin.invokePlugin('maskbook.wallet', 'getWallets').then(([x, y]) => {
                 setWallets(x)
                 setTokens(y)
-                if (selectedWalletAddress === undefined) setSelectedWallet(x[0].address)
+                if (selectedWalletAddress === undefined) {
+                    if (x.length === 0) Services.Welcome.openOptionsPage('/wallets/error?reason=nowallet')
+                    else setSelectedWallet(x[0].address)
+                }
             })
         update()
         return PluginMessageCenter.on('maskbook.wallets.update', update)
     }, [selectedWalletAddress])
 
     const createRedPacket = async () => {
-        // TODO: this case can't happen now
-        // if (wallets.length === 0) return Services.Welcome.openOptionsPage('/wallets/error?reason=nowallet')
         props.onCreateNewPacket({
             duration: 60 /** seconds */ * 60 /** mins */ * 24 /** hours */,
             is_random: Boolean(is_random),
