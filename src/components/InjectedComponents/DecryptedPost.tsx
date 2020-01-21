@@ -200,7 +200,7 @@ export function DecryptPost(props: DecryptPostProps) {
             <>
                 <Success
                     data={decryptedResult}
-                    postIdentifier={new PostIdentifier(postBy, postId || 'unknown')}
+                    postIdentifier={postId ? new PostIdentifier(postBy, postId) : PostIdentifier.unknown}
                     alreadySelectedPreviously={alreadySelectedPreviously}
                     requestAppendRecipients={requestAppendRecipientsWrapped}
                     people={people}
@@ -258,7 +258,7 @@ export function DecryptPost(props: DecryptPostProps) {
                     return (
                         <Success
                             data={result.data}
-                            postIdentifier={new PostIdentifier(postBy, postId || 'unknown')}
+                            postIdentifier={postId ? new PostIdentifier(postBy, postId) : PostIdentifier.unknown}
                             alreadySelectedPreviously={alreadySelectedPreviously}
                             requestAppendRecipients={requestAppendRecipientsWrapped}
                             people={people}

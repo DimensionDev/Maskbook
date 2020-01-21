@@ -111,7 +111,7 @@ export default function WithRedPacket(props: WithRedPacketProps) {
                       loading={loading || !!claiming}
                       onClick={onClick}
                       unknownRedPacket={r}
-                      from={postIdentifier ? getPostUrl(postIdentifier) : ''}
+                      from={postIdentifier && !postIdentifier.isUnknown ? getPostUrl(postIdentifier) : undefined}
                   />
               </StructuredPluginWrapper>
           ))
