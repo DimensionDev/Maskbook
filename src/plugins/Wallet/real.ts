@@ -267,7 +267,11 @@ export const redPacketAPI: RedPacketAPI = {
             is_claimed: ifclaimed,
         }
     },
-    check_claimed_list
+    async checkClaimedList(id) {
+        return createRedPacketContract(RED_PACKET_CONTRACT_ADDRESS)
+            .methods.check_claimed_list(id.redPacketID)
+            .call()
+    },
     async refund(id) {
         const sender = await createTransaction(
             await createWalletDBAccess(),
