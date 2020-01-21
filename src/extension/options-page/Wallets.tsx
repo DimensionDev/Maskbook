@@ -19,7 +19,7 @@ import { DialogRouter } from './DashboardDialogs/DialogBase'
 import FooterLine from './DashboardComponents/FooterLine'
 import WalletCard from './DashboardComponents/WalletCard'
 import Services from '../service'
-import { WalletRecord, ERC20TokenRecord } from '../../database/Plugins/Wallet/types'
+import { WalletRecord, ERC20TokenRecord } from '../../plugins/Wallet/database/types'
 import { useState, useEffect } from 'react'
 import { PluginMessageCenter } from '../../plugins/PluginMessages'
 import {

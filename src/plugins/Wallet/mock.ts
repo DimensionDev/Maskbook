@@ -3,7 +3,7 @@ import { sleep } from '@holoflows/kit/es/util/sleep'
 import { onClaimResult, onCreationResult, onExpired, onRefundResult } from './red-packet-fsm'
 import { onWalletBalanceUpdated } from './wallet'
 import { createTransaction } from '../../database/helpers/openDB'
-import { createWalletDBAccess } from '../../database/Plugins/Wallet/Wallet.db'
+import { createWalletDBAccess } from './database/Wallet.db'
 import uuid from 'uuid/v4'
 
 export const mockRedPacketAPI: RedPacketAPI = {

@@ -19,7 +19,7 @@ export function getSignablePayload(payload: Payload) {
 import * as Alpha40 from '../../../crypto/crypto-alpha-40'
 import * as Alpha39 from '../../../crypto/crypto-alpha-39'
 import * as Alpha38 from '../../../crypto/crypto-alpha-38'
-import { RedPacketJSONPayload } from '../../../database/Plugins/Wallet/types'
+import { RedPacketJSONPayload } from '../../../plugins/Wallet/database/types'
 import { Nullable } from '../../../utils/type-transform/Nullable'
 
 export const cryptoProviderTable = {

@@ -5,9 +5,9 @@ import {
     isNextRedPacketStatusValid,
     RedPacketJSONPayload,
     EthereumNetwork,
-} from '../../database/Plugins/Wallet/types'
+} from './database/types'
 import { createTransaction, IDBPSafeTransaction } from '../../database/helpers/openDB'
-import { createWalletDBAccess, WalletDB } from '../../database/Plugins/Wallet/Wallet.db'
+import { createWalletDBAccess, WalletDB } from './database/Wallet.db'
 import uuid from 'uuid/v4'
 import { RedPacketCreationResult, RedPacketClaimResult } from './types'
 import { getWalletProvider } from './wallet'

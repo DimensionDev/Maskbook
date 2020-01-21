@@ -29,7 +29,7 @@ import {
     RedPacketJSONPayload,
     WalletRecord,
     ERC20TokenRecord,
-} from '../../../../database/Plugins/Wallet/types'
+} from '../../database/types'
 import { useLastRecognizedIdentity, useCurrentIdentity } from '../../../../components/DataSource/useActivatedUI'
 import { PortalShadowRoot } from '../../../../utils/jss/ShadowRootPortal'
 import { useCapturedInput } from '../../../../utils/hooks/useCapturedEvents'

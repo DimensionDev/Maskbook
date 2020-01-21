@@ -1,6 +1,6 @@
 import * as RedPacket from '../../plugins/Wallet/red-packet-fsm'
 import * as Wallet from '../../plugins/Wallet/wallet'
-import { WalletRecord } from '../../database/Plugins/Wallet/types'
+import { WalletRecord } from '../../plugins/Wallet/database/types'
 
 const Plugins = {
     'maskbook.red_packet': RedPacket,

@@ -9,9 +9,9 @@ import IERC20ABI from './contract/IERC20.json'
 import { HappyRedPacket } from './contract/HappyRedPacket'
 import { IERC20 } from './contract/IERC20'
 import { TransactionObject, Tx } from './contract/types'
-import { RedPacketTokenType } from '../../database/Plugins/Wallet/types'
+import { RedPacketTokenType } from './database/types'
 import { asyncTimes, pollingTask } from '../../utils/utils'
-import { createWalletDBAccess } from '../../database/Plugins/Wallet/Wallet.db'
+import { createWalletDBAccess } from './database/Wallet.db'
 import { createTransaction } from '../../database/helpers/openDB'
 
 // TODO: should not be a constant. should respect the value in the red packet record

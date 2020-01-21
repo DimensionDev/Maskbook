@@ -1,6 +1,6 @@
 import { createTransaction, IDBPSafeTransaction } from '../../database/helpers/openDB'
-import { createWalletDBAccess, WalletDB } from '../../database/Plugins/Wallet/Wallet.db'
-import { WalletRecord, ERC20TokenRecord, EthereumNetwork } from '../../database/Plugins/Wallet/types'
+import { createWalletDBAccess, WalletDB } from './database/Wallet.db'
+import { WalletRecord, ERC20TokenRecord, EthereumNetwork } from './database/types'
 import { assert } from './red-packet-fsm'
 import { PluginMessageCenter } from '../PluginMessages'
 import { HDKey, EthereumAddress } from 'wallet.ts'

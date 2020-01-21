@@ -1,4 +1,4 @@
-import { RedPacketTokenType, EthereumNetwork } from '../../database/Plugins/Wallet/types'
+import { RedPacketTokenType, EthereumNetwork } from './database/types'
 import { ERC20TokenPredefinedData } from './erc20'
 
 export type RedPacketCreationResult =

@@ -6,7 +6,7 @@ import {
     RedPacketJSONPayload,
     RedPacketStatus,
     ERC20TokenRecord,
-} from '../../../database/Plugins/Wallet/types'
+} from '../../../plugins/Wallet/database/types'
 import Services from '../../service'
 import { PluginMessageCenter } from '../../../plugins/PluginMessages'
 import { formatBalance } from '../../../plugins/Wallet/formatter'

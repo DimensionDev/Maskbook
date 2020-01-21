@@ -17,7 +17,7 @@ import {
 } from '../DashboardDialogs/Wallet'
 import { DialogRouter } from '../DashboardDialogs/DialogBase'
 import { useColorProvider } from '../../../utils/theme'
-import { WalletRecord, RedPacketRecord, ERC20TokenRecord } from '../../../database/Plugins/Wallet/types'
+import { WalletRecord, RedPacketRecord, ERC20TokenRecord } from '../../../plugins/Wallet/database/types'
 import { useSnackbar } from 'notistack'
 import Services from '../../service'
 import classNames from 'classnames'

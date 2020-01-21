@@ -1,5 +1,5 @@
 import Web3 from 'web3'
-import { EthereumNetwork } from '../../database/Plugins/Wallet/types'
+import { EthereumNetwork } from './database/types'
 
 // export const web3 = new Web3(
 //     new Web3.providers.WebsocketProvider('wss://mainnet.infura.io/ws/v3/11f8b6b36f4a408e85d8a4e52d31edc5'),

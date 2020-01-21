@@ -1,7 +1,5 @@
-/// <reference path="../../global.d.ts" />
-
 import { DBSchema, openDB } from 'idb/with-async-ittr'
-import { createDBAccess } from '../../helpers/openDB'
+import { createDBAccess } from '../../../database/helpers/openDB'
 import { RedPacketRecord, WalletRecord, ERC20TokenRecord } from './types'
 
 function path<T>(x: T) {
