@@ -92,7 +92,7 @@ function NewPacket(props: RedPacketDialogProps & NewPacketProps) {
     const [send_message, setMsg] = useState('Best Wishes!')
     const [, msgRef] = useCapturedInput(setMsg)
 
-    const [send_per_share, setSendPerShare] = useState(0.5)
+    const [send_per_share, setSendPerShare] = useState(0.01)
     const [, perShareRef] = useCapturedInput(x => setSendPerShare(parseFloat(x)))
 
     const [shares, setShares] = useState(5)
@@ -163,7 +163,7 @@ function NewPacket(props: RedPacketDialogProps & NewPacketProps) {
             send_message,
             send_total: BigInt(send_total * 10 ** (selectedTokenType.type === 'eth' ? 18 : selectedToken!.decimals)),
             sender_address: selectedWalletAddress!,
-            sender_name: id?.nickname ?? 'A maskbook user',
+            sender_name: id?.linkedPersona?.nickname ?? 'Unknown User',
             shares: BigInt(shares),
             token_type: selectedTokenType.type === 'eth' ? RedPacketTokenType.eth : RedPacketTokenType.erc20,
             erc20_token: selectedTokenType.type === 'eth' ? undefined : selectedTokenType.address,
