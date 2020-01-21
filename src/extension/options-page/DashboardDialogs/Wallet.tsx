@@ -470,6 +470,12 @@ export function WalletErrorDialog() {
         case 'nowallet':
             content = 'You have no wallet currently. Create or Import one before doing that.'
             break
+        case 'Returned error: gas required exceeds allowance (10000000) or always failing transaction':
+            content = 'This Red Packet is not claimable. It may have been claimed or refunded.'
+            break
+        case 'Returned error: insufficient funds for gas * price   value':
+            content = 'Your allowance in this wallet is not sufficient to do that.'
+            break
         default:
             content = 'Unknown Error.'
             break
@@ -478,7 +484,14 @@ export function WalletErrorDialog() {
         <DialogContentItem
             simplified
             title={'Error'}
-            content={`${content}(${reason})`}
+            content={
+                <>
+                    <Typography variant="body1">{content}</Typography>
+                    <Typography variant="body2" color="textSecondary">
+                        {reason}
+                    </Typography>
+                </>
+            }
             actions={
                 <>
                     <span />
