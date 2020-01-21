@@ -78,7 +78,7 @@ export interface RedPacketAPI {
      */
     checkAvailability(id: RedPacketID): Promise<CheckRedPacketAvailabilityResult>
     /**
-     * Check claimed addresses
+     * Check claimed address list
      * @param id Red packet ID
      */
     checkClaimedList(id: RedPacketID): Promise<string[]>

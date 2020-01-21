@@ -79,7 +79,7 @@ export const mockRedPacketAPI: RedPacketAPI = {
         }
     },
     async checkClaimedList(id) {
-        console.log('Mock: checking availibity of the red packet')
+        console.log('Mock: checking claimed address list of the red packet')
         await sleep(2000)
         return []
     },
