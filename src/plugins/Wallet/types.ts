@@ -32,6 +32,7 @@ interface CheckRedPacketAvailabilityResult {
     totalCount: number
     claimedCount: number
     expired: boolean
+    is_claimed: boolean
 }
 
 type TxHashID = { transactionHash: string }
