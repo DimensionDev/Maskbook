@@ -199,12 +199,27 @@ export async function onCreationResult(id: { databaseID: string }, details: RedP
     PluginMessageCenter.emit('maskbook.red_packets.update', undefined)
 }
 
-export async function claimRedPacket(id: { redPacketID: string }, claimWithWallet: string) {
+export async function claimRedPacket(
+    id: { redPacketID: string },
+    claimWithWallet: string,
+): Promise<'claiming' | 'expired' | 'empty'> {
     const rec = await getRedPacketByID(undefined, id.redPacketID)
     if (!rec) throw new Error('You should call discover first')
 
     const passwords = rec.password
     const status = await getProvider().checkAvailability(id)
+    if (status.expired) {
+        await onExpired(id)
+        return 'expired'
+    } else if (status.claimedCount === status.totalCount || status.balance === BigInt(0)) {
+        {
+            const t = createTransaction(await createWalletDBAccess(), 'readwrite')('RedPacket')
+            const rec = await getRedPacketByID(t, id.redPacketID)
+            setNextState(rec, RedPacketStatus.empty)
+            t.objectStore('RedPacket').put(rec)
+        }
+        return 'empty'
+    }
     const { claim_transaction_hash } = await getProvider().claim(
         id,
         passwords,
@@ -223,6 +238,7 @@ export async function claimRedPacket(id: { redPacketID: string }, claimWithWalle
     getProvider().watchClaimResult({ transactionHash: claim_transaction_hash, databaseID: dbID })
     requestNotification({ body: 'We will notify you when claiming process is ready.' })
     PluginMessageCenter.emit('maskbook.red_packets.update', undefined)
+    return 'claiming'
 }
 
 export async function onClaimResult(id: { databaseID: string }, details: RedPacketClaimResult) {
