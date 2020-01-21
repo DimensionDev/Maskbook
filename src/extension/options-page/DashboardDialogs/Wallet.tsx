@@ -24,7 +24,7 @@ import { RedPacketRecord, WalletRecord, EthereumNetwork } from '../../../databas
 import useQueryParams from '../../../utils/hooks/useQueryParams'
 import { ERC20TokenPredefinedData } from '../../../plugins/Wallet/erc20'
 import { ERC20WellKnownTokenSelector } from './WalletAddTokenDialogContent'
-import wallet from 'wallet.ts'
+import Wallet from 'wallet.ts'
 import { useHistory, Link } from 'react-router-dom'
 import { geti18nString } from '../../../utils/i18n'
 import { useColorProvider } from '../../../utils/theme'
@@ -119,7 +119,7 @@ export function WalletAddTokenDialog(props: WalletAddTokenDialogProps) {
     const [tokenName, setTokenName] = React.useState('')
     const [symbol, setSymbol] = React.useState('')
 
-    const isInvalidAddr = !wallet.EthereumAddress.isValid(address)
+    const isInvalidAddr = !Wallet.EthereumAddress.isValid(address)
     const isValidInput =
         tabID === 0 ? wellknown === undefined : isInvalidAddr || tokenName.length === 0 || symbol.length === 0
     return (
@@ -526,10 +526,8 @@ interface WalletBackupDialogProps {
 }
 
 export function WalletBackupDialog(props: WalletBackupDialogProps) {
-    const history = useHistory()
-    const { onDecline } = props
+    const { onDecline, wallet } = props
     const classes = useWalletImportStyles()
-    // TODO:
 
     const content = (
         <Box alignSelf="stretch" width="100%">
@@ -538,7 +536,7 @@ export function WalletBackupDialog(props: WalletBackupDialogProps) {
                 wallet.
             </Typography>
             <Box display="flex" flexDirection="column" p={1} className={classes.box} height={152}>
-                <Typography variant="body1">not available</Typography>
+                <Typography variant="body1">{wallet.mnemonic.join(' ')}</Typography>
             </Box>
         </Box>
     )
