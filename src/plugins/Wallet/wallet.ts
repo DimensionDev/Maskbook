@@ -107,21 +107,11 @@ export async function walletSyncInit() {
 
 async function createWallet(password: string) {
     const mnemonic = bip39.generateMnemonic()
-    const seed = await bip39.mnemonicToSeed(mnemonic, password)
-    const masterKey = HDKey.parseMasterSeed(seed)
-    const extendedPrivateKey = masterKey.derive(path).extendedPrivateKey!
-    const childKey = HDKey.parseExtendedKey(extendedPrivateKey)
-
-    const wallet = childKey.derive('0')
-    const walletPublicKey = wallet.publicKey
-    const walletPrivateKey = wallet.privateKey!
-    const address = EthereumAddress.from(walletPublicKey).address
-    return { address, privateKey: walletPrivateKey, mnemonic: mnemonic.split(' ') }
+    return recoverWallet(mnemonic.split(' '), password)
 }
 
-async function recoverWallet(words: string[], password: string) {
-    const mnemonicWord = words
-    const seed = await bip39.mnemonicToSeed(mnemonicWord.join(' '), password)
+async function recoverWallet(mnemonic: string[], password: string) {
+    const seed = await bip39.mnemonicToSeed(mnemonic.join(' '), password)
     const masterKey = HDKey.parseMasterSeed(seed)
     const extendedPrivateKey = masterKey.derive(path).extendedPrivateKey!
     const childKey = HDKey.parseExtendedKey(extendedPrivateKey)
@@ -130,7 +120,7 @@ async function recoverWallet(words: string[], password: string) {
     const walletPublicKey = wallet.publicKey
     const walletPrivateKey = wallet.privateKey!
     const address = EthereumAddress.from(walletPublicKey).address
-    return { address, privateKey: walletPrivateKey }
+    return { address, privateKey: walletPrivateKey, mnemonic }
 }
 
 export async function walletAddERC20Token(
