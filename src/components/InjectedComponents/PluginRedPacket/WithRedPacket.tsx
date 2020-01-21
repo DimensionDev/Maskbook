@@ -69,7 +69,6 @@ export default function WithRedPacket(props: WithRedPacketProps) {
     const [selectedWalletAddress, setSelectedWalletAddress] = React.useState<undefined | string>(undefined)
 
     const abortClaiming = () => {
-        debugger
         setLoading(false)
         setClaiming(null)
     }
