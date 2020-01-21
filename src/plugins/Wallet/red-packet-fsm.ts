@@ -303,9 +303,11 @@ export async function redPacketSyncInit() {
     const recs = await t.objectStore('RedPacket').getAll()
     recs.forEach(x => {
         x.claim_transaction_hash &&
+            x.status === RedPacketStatus.claim_pending &&
             getProvider().watchClaimResult({ databaseID: x.id, transactionHash: x.claim_transaction_hash })
         x.red_packet_id && getProvider().watchExpired({ redPacketID: x.red_packet_id })
         x.create_transaction_hash &&
+            x.status === RedPacketStatus.pending &&
             getProvider().watchCreateResult({ databaseID: x.id, transactionHash: x.create_transaction_hash })
     })
 }
@@ -329,10 +331,10 @@ export async function getRedPacketByID(
 function setNextState(rec: RedPacketRecord, nextState: RedPacketStatus) {
     assert(
         isNextRedPacketStatusValid(rec.status, nextState),
-        'Invalid state',
-        'Current state',
+        'Invalid Red Packet FSM State',
+        'Current state:',
         rec.status,
-        'Next state',
+        'Next state:',
         nextState,
     )
     rec.status = nextState
@@ -340,4 +342,5 @@ function setNextState(rec: RedPacketRecord, nextState: RedPacketStatus) {
 
 export function assert(x: any, ...args: any): asserts x {
     console.assert(x, ...args)
+    if (!x) throw new Error('Assert failed!')
 }

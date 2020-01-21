@@ -1,13 +1,10 @@
-import { createTransaction, IDBPSafeTransaction, createDBAccess } from '../../database/helpers/openDB'
+import { createTransaction, IDBPSafeTransaction } from '../../database/helpers/openDB'
 import { createWalletDBAccess, WalletDB } from '../../database/Plugins/Wallet/Wallet.db'
 import { WalletRecord, ERC20TokenRecord, EthereumNetwork } from '../../database/Plugins/Wallet/types'
-import uuid from 'uuid/v4'
-import { mockWalletAPI } from './mock'
 import { assert } from './red-packet-fsm'
 import { PluginMessageCenter } from '../PluginMessages'
 import { HDKey, EthereumAddress } from 'wallet.ts'
 import * as bip39 from 'bip39'
-import { encodeArrayBuffer } from '../../utils/type-transform/String-ArrayBuffer'
 import { walletAPI } from './real'
 import { ERC20TokenPredefinedData } from './erc20'
 
@@ -25,7 +22,7 @@ export async function getWallets(): Promise<[WalletRecord[], ERC20TokenRecord[]]
 export async function createNewWallet(
     rec: Omit<WalletRecord, 'id' | 'address' | 'mnemonic' | 'eth_balance' | '_data_source_' | 'erc20_token_balance'>,
 ) {
-    const { name, passphrase } = rec
+    const { passphrase } = rec
     const record: WalletRecord = {
         ...rec,
         ...(await createWallet(passphrase)),
@@ -62,6 +59,7 @@ export async function importNewWallet(
 export async function onWalletBalanceUpdated(address: string, newBalance: bigint) {
     const t = createTransaction(await createWalletDBAccess(), 'readwrite')('Wallet')
     const wallet = await getWalletByAddress(t, address)
+    if (wallet.eth_balance === newBalance) return
     wallet.eth_balance = newBalance
     t.objectStore('Wallet').put(wallet)
     PluginMessageCenter.emit('maskbook.wallets.update', undefined)
@@ -151,6 +149,7 @@ export async function walletAddERC20Token(
 export async function onWalletERC20TokenBalanceUpdated(address: string, tokenAddress: string, newBalance: bigint) {
     const t = createTransaction(await createWalletDBAccess(), 'readwrite')('Wallet')
     const wallet = await getWalletByAddress(t, address)
+    if (wallet.erc20_token_balance.get(tokenAddress) === newBalance) return
     wallet.erc20_token_balance.set(tokenAddress, newBalance)
     t.objectStore('Wallet').put(wallet)
     PluginMessageCenter.emit('maskbook.wallets.update', undefined)
