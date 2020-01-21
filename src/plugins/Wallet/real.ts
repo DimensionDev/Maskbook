@@ -273,12 +273,17 @@ export const redPacketAPI: RedPacketAPI = {
             .call()
     },
     async refund(id) {
-        const sender = await createTransaction(
+        const packet = await createTransaction(
             await createWalletDBAccess(),
             'readonly',
         )('RedPacket')
             .objectStore('RedPacket')
+            .index('red_packet_id')
             .get(id.redPacketID)
+
+        if (!packet) {
+            throw new Error(`can not find red packet with id: ${id}`)
+        }
 
         const contract = createRedPacketContract(RED_PACKET_CONTRACT_ADDRESS)
         const tx = contract.methods.refund(id.redPacketID)
@@ -289,7 +294,7 @@ export const redPacketAPI: RedPacketAPI = {
             sendTx(
                 tx,
                 {
-                    from: sender!.sender_address!,
+                    from: packet!.sender_address,
                 },
                 {
                     onTransactionHash(hash: string) {
