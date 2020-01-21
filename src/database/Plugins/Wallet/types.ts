@@ -157,7 +157,7 @@ export function isNextRedPacketStatusValid(current: RedPacketStatus, next: RedPa
         case RedPacketStatus.expired:
             return RedPacketStatus.refund_pending === next
         case RedPacketStatus.refund_pending:
-            return RedPacketStatus.expired === next
+            return RedPacketStatus.refunded === next
         default:
             const _x: never = current
             return false
