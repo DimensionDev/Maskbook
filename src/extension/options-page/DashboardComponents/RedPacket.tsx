@@ -102,8 +102,6 @@ export function RedPacketWithState(props: RedPacketProps) {
     const [redPacket, setRedPacket] = React.useState(knownRedPacket || ({} as Partial<RedPacketRecord>))
     const [info, setInfo] = React.useState<Partial<ERC20TokenRecord>>({})
 
-    console.log(info, redPacket)
-
     React.useEffect(() => {
         if (unknownRedPacket) {
             const updateRedPacket = () =>
