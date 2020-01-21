@@ -281,6 +281,7 @@ export async function requestRefund(id: { redPacketID: string }) {
         dbID = rec.id
         setNextState(rec, RedPacketStatus.refund_pending)
         rec.refund_transaction_hash = refund_transaction_hash
+        t.objectStore('RedPacket').put(rec)
     }
     getProvider().watchRefundResult({ databaseID: dbID, transactionHash: refund_transaction_hash })
     // TODO: send a notification here maybe?
