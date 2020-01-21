@@ -70,6 +70,13 @@ const useNewPacketStyles = makeStyles(theme =>
             flex: 1,
             padding: theme.spacing(1),
         },
+        nativeInput: {
+            '&::-webkit-outer-spin-button, &::-webkit-inner-spin-button': {
+                '-webkit-appearance': 'none',
+                margin: 0,
+            },
+            '-moz-appearance': 'textfield',
+        },
     }),
 )
 
@@ -85,7 +92,7 @@ function NewPacket(props: RedPacketDialogProps & NewPacketProps) {
     const [send_message, setMsg] = useState('Best Wishes!')
     const [, msgRef] = useCapturedInput(setMsg)
 
-    const [send_per_share, setSendPerShare] = useState(5)
+    const [send_per_share, setSendPerShare] = useState(0.5)
     const [, perShareRef] = useCapturedInput(x => setSendPerShare(parseFloat(x)))
 
     const [shares, setShares] = useState(5)
@@ -224,6 +231,7 @@ function NewPacket(props: RedPacketDialogProps & NewPacketProps) {
                     inputProps={{
                         min: 0,
                         max: amountPreShareMaxNumber,
+                        className: classes.nativeInput,
                     }}
                     label={is_random ? 'Total Amount' : 'Amount per Share'}
                     variant="filled"

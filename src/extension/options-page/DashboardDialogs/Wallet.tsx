@@ -259,9 +259,12 @@ export function WalletRedPacketHistoryDialog(props: WalletRedPacketHistoryDialog
                             invert
                             action={
                                 <Typography variant="h6">
-                                    {record.claim_amount
-                                        ? formatBalance(record.claim_amount, record.raw_payload?.token?.decimals ?? 18)
-                                        : '-'}{' '}
+                                    {record.claim_amount && record.send_total
+                                        ? formatBalance(
+                                              tabState === 0 ? record.claim_amount : record.send_total,
+                                              record.raw_payload?.token?.decimals ?? 18,
+                                          )
+                                        : '0'}{' '}
                                     {record.raw_payload?.token?.name || 'ETH'}
                                 </Typography>
                             }
