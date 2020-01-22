@@ -126,7 +126,9 @@ export function ERC20WellKnownTokenSelector(props: {
                 options={useRinkeby ? rinkeby : mainnet}
                 getOptionLabel={(option: typeof mainnet[0]) => option.name + ` (${option.symbol})`}
                 groupBy={(option: typeof mainnet[0]) => getNameOfToken(option)[0].toUpperCase()}
-                renderInput={params => <TextField {...params} variant="outlined" label="Well-known tokens" fullWidth />}
+                renderInput={params => (
+                    <TextField {...params} variant="outlined" label="Predefined ERC20 Tokens" fullWidth />
+                )}
                 renderOption={(option: typeof mainnet[0]) => <Typography noWrap>{getNameOfToken(option)}</Typography>}
                 value={selected}
                 onChange={(event: any, newValue: typeof mainnet[0] | null) => {
