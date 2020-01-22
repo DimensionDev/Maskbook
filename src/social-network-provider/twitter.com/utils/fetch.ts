@@ -77,8 +77,8 @@ export const postIdParser = (node: HTMLElement) => {
         return idNode ? idNode.getAttribute('data-id') ?? undefined : undefined
     } else {
         const idNode = defaultTo(
-            node.children[1].querySelector<HTMLAnchorElement>('a[href*="status"]'),
-            node.parentElement!.querySelector<HTMLAnchorElement>('a[href*="status"]'),
+            node.children[1]?.querySelector<HTMLAnchorElement>('a[href*="status"]'),
+            node.closest('article > div')?.querySelector<HTMLAnchorElement>('a[href*="status"]'), // use the pid of parent tweet
         )
         return idNode ? parseId(idNode.href) : parseId(location.href)
     }
@@ -89,7 +89,10 @@ export const postNameParser = (node: HTMLElement) => {
         return parseNameArea(notNullable(node.querySelector<HTMLTableCellElement>('.user-info')).innerText)
     } else {
         const tweetElement = node.querySelector('[data-testid="tweet"]') ?? node
-        return parseNameArea(notNullable(tweetElement.children[1].querySelector<HTMLAnchorElement>('a')).innerText)
+        const nameInNoramlTweet = tweetElement.children[1]?.querySelector<HTMLAnchorElement>('a')?.innerText
+        const nameInQuoteTweet = tweetElement.children[0]?.querySelector<HTMLDivElement>('[aria-haspopup="false"]')
+            ?.innerText
+        return parseNameArea(notNullable(nameInNoramlTweet || nameInQuoteTweet))
     }
 }
 
