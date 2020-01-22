@@ -276,8 +276,11 @@ function NewPacket(props: RedPacketDialogProps & NewPacketProps) {
                     variant="contained"
                     disabled={isSendButtonDisabled}
                     onClick={createRedPacket}>
-                    Send {isSendButtonDisabled ? '?' : send_total}{' '}
-                    {selectedTokenType.type === 'eth' ? 'ETH' : selectedToken?.symbol}
+                    {isSendButtonDisabled
+                        ? 'Not valid'
+                        : `Send ${+send_total.toFixed(3) === +send_total.toFixed(9) ? '' : '~'}${+send_total.toFixed(
+                              3,
+                          )} ${selectedTokenType.type === 'eth' ? 'ETH' : selectedToken?.symbol}`}
                 </Button>
             </div>
         </div>
