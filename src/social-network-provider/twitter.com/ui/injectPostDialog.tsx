@@ -83,6 +83,7 @@ function PostDialogAtTwitter(props: {
                     },
                 },
             }}
+            reason={props.reason}
         />
     )
 }
