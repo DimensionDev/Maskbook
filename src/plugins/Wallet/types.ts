@@ -1,4 +1,4 @@
-import { RedPacketTokenType, EthereumNetwork } from './database/types'
+import { RedPacketTokenType, EthereumNetwork, RedPacketJSONPayload } from './database/types'
 import { ERC20TokenPredefinedData } from './erc20'
 
 export type RedPacketCreationResult =
@@ -41,6 +41,11 @@ type DatabaseID = { databaseID: string }
 
 export interface RedPacketAPI {
     dataSource: 'real' | 'mock'
+    claimByServer(
+        requestSenderAddress: string,
+        privateKey: Buffer,
+        payload: RedPacketJSONPayload,
+    ): Promise<{ claim_transaction_hash: string }>
     watchCreateResult(id: TxHashID & DatabaseID): void
     watchClaimResult(id: TxHashID & DatabaseID): void
     watchExpired(id: RedPacketID): void

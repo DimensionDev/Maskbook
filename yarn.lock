@@ -2988,6 +2988,13 @@
   resolved "https://registry.yarnpkg.com/@types/json-stable-stringify/-/json-stable-stringify-1.0.32.tgz#121f6917c4389db3923640b2e68de5fa64dda88e"
   integrity sha512-q9Q6+eUEGwQkv4Sbst3J4PNgDOvpuVuKj79Hl/qnmBMEIPzB5QoFRUtjcgcg2xNUZyYUGXBk5wYIBKHt0A+Mxw==
 
+"@types/jsonwebtoken@^8.3.6":
+  version "8.3.6"
+  resolved "https://registry.yarnpkg.com/@types/jsonwebtoken/-/jsonwebtoken-8.3.6.tgz#e6515e8d857572ac8ed594baabf4e17571a20f0b"
+  integrity sha512-v55iKItGvKw5AD1tMn9/W257GbvNQhUskozvaD4EWPyc61qZ7ri2Fgm4/8ra7OR+pq8EEialVPYkyofX1b8alQ==
+  dependencies:
+    "@types/node" "*"
+
 "@types/lodash-es@^4.17.3":
   version "4.17.3"
   resolved "https://registry.yarnpkg.com/@types/lodash-es/-/lodash-es-4.17.3.tgz#87eb0b3673b076b8ee655f1890260a136af09a2d"
@@ -11212,7 +11219,7 @@ jsonpointer@^4.0.0:
   resolved "https://registry.yarnpkg.com/jsonpointer/-/jsonpointer-4.0.1.tgz#4fd92cb34e0e9db3c89c8622ecf51f9b978c6cb9"
   integrity sha1-T9kss04OnbPInIYi7PUfm5eMbLk=
 
-jsonwebtoken@8.5.1:
+jsonwebtoken@8.5.1, jsonwebtoken@^8.5.1:
   version "8.5.1"
   resolved "https://registry.yarnpkg.com/jsonwebtoken/-/jsonwebtoken-8.5.1.tgz#00e71e0b8df54c2121a1f26137df2280673bcc0d"
   integrity sha512-XjwVfRS6jTMsqYs0EsuJ4LGxXV14zQybNd4L2r0UvbVnSF9Af8x7p5MzbJ90Ioz/9TI41/hTCvznF/loiSzn8w==

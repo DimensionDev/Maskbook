@@ -10,7 +10,7 @@ import { createTransaction, IDBPSafeTransaction } from '../../database/helpers/o
 import { createWalletDBAccess, WalletDB } from './database/Wallet.db'
 import uuid from 'uuid/v4'
 import { RedPacketCreationResult, RedPacketClaimResult } from './types'
-import { getWalletProvider } from './wallet'
+import { getWalletProvider, getWallets, recoverWallet } from './wallet'
 import { PluginMessageCenter } from '../PluginMessages'
 import { requestNotification } from '../../utils/notification'
 import Web3Utils from 'web3-utils'
@@ -220,12 +220,18 @@ export async function claimRedPacket(
         }
         return 'empty'
     }
-    const { claim_transaction_hash } = await getProvider().claim(
-        id,
-        passwords,
-        claimWithWallet,
-        Web3Utils.sha3(claimWithWallet),
-    )
+
+    const { claim_transaction_hash } = await getProvider()
+        .claim(id, passwords, claimWithWallet, Web3Utils.sha3(claimWithWallet))
+        .catch(async e => {
+            console.log(e.message)
+            if ((e.message as string).includes('insufficient funds for gas')) {
+                const wallet = (await getWallets())[0].find(x => x.address === claimWithWallet)!
+                const { privateKey } = await recoverWallet(wallet.mnemonic, wallet.passphrase)
+                return getProvider().claimByServer(claimWithWallet, privateKey, rec.raw_payload!)
+            }
+            throw e
+        })
     let dbID = ''
     {
         const t = createTransaction(await createWalletDBAccess(), 'readwrite')('RedPacket')

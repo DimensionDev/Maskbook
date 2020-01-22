@@ -92,7 +92,7 @@ export async function walletSyncInit() {
     })
 }
 
-async function recoverWallet(mnemonic: string[], password: string) {
+export async function recoverWallet(mnemonic: string[], password: string) {
     const seed = await bip39.mnemonicToSeed(mnemonic.join(' '), password)
     const masterKey = HDKey.parseMasterSeed(seed)
     const extendedPrivateKey = masterKey.derive(path).extendedPrivateKey!

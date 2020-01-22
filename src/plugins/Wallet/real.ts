@@ -13,6 +13,7 @@ import { RedPacketTokenType } from './database/types'
 import { asyncTimes, pollingTask } from '../../utils/utils'
 import { createWalletDBAccess } from './database/Wallet.db'
 import { createTransaction } from '../../database/helpers/openDB'
+import * as jwt from 'jsonwebtoken'
 
 // TODO: should not be a constant. should respect the value in the red packet record
 const RED_PACKET_CONTRACT_ADDRESS = '0xC21F17f4f2E04ae718f1e65a29C833627eaA0b6f'
@@ -57,6 +58,30 @@ async function sendTx<R, T extends TransactionObject<R>>(txObject: T, tx: Tx = {
 
 export const redPacketAPI: RedPacketAPI = {
     dataSource: 'real',
+    async claimByServer(addr, privateKey, payload) {
+        const host = 'http://139.162.106.52'
+        const x = 'a3323cd1-fa42-44cd-b053-e474365ab3da'
+        const auth = await fetch(`${host}/auth?id=${addr}`)
+        if (!auth.ok) throw new Error('Auth failed')
+        const verify = await auth.text()
+
+        const jwt_encoded: {
+            password: string
+            recipient: string
+            redpacket_id: string
+            validation: string
+            signature: string
+        } = {
+            password: payload.password,
+            recipient: addr,
+            redpacket_id: payload.rpid,
+            validation: web3.utils.sha3(addr)!,
+            signature: web3.eth.accounts.sign(verify, privateKey as any).signature,
+        }
+        const pay = await fetch(`${host}/auth_pay?payload=${jwt.sign(jwt_encoded, x, { algorithm: 'HS256' })}`)
+        if (!pay.ok) throw new Error('Pay failed')
+        return { claim_transaction_hash: 'unknown' }
+    },
     async create(
         ____sender__addr: string,
         hash_of_password: string,
