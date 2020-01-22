@@ -264,8 +264,10 @@ export async function onExpired(id: { redPacketID: string }) {
     {
         const t = createTransaction(await createWalletDBAccess(), 'readwrite')('RedPacket')
         const rec = await getRedPacketByID(t, id.redPacketID)
-        setNextState(rec, RedPacketStatus.expired)
-        t.objectStore('RedPacket').put(rec)
+        if (rec.status !== RedPacketStatus.expired) {
+            setNextState(rec, RedPacketStatus.expired)
+            t.objectStore('RedPacket').put(rec)
+        }
 
         if (rec.create_transaction_hash) requestRefund(id)
     }
@@ -303,13 +305,15 @@ export async function redPacketSyncInit() {
     const t = createTransaction(await createWalletDBAccess(), 'readonly')('RedPacket')
     const recs = await t.objectStore('RedPacket').getAll()
     recs.forEach(x => {
-        x.claim_transaction_hash &&
-            x.status === RedPacketStatus.claim_pending &&
+        if (x.claim_transaction_hash && x.status === RedPacketStatus.claim_pending) {
             getProvider().watchClaimResult({ databaseID: x.id, transactionHash: x.claim_transaction_hash })
-        x.red_packet_id && getProvider().watchExpired({ redPacketID: x.red_packet_id })
-        x.create_transaction_hash &&
-            x.status === RedPacketStatus.pending &&
+        }
+        if (x.red_packet_id && x.status !== RedPacketStatus.refunded && x.status !== RedPacketStatus.empty) {
+            getProvider().watchExpired({ redPacketID: x.red_packet_id })
+        }
+        if (x.create_transaction_hash && x.status === RedPacketStatus.pending) {
             getProvider().watchCreateResult({ databaseID: x.id, transactionHash: x.create_transaction_hash })
+        }
     })
 }
 
