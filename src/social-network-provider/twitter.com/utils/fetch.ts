@@ -78,7 +78,7 @@ export const postIdParser = (node: HTMLElement) => {
     } else {
         const idNode = defaultTo(
             node.children[1]?.querySelector<HTMLAnchorElement>('a[href*="status"]'),
-            node.parentElement!.querySelector<HTMLAnchorElement>('a[href*="status"]'),
+            node.closest('article > div')?.querySelector<HTMLAnchorElement>('a[href*="status"]'), // use the pid of parent tweet
         )
         return idNode ? parseId(idNode.href) : parseId(location.href)
     }
