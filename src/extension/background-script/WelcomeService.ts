@@ -2,16 +2,11 @@ import { OnlyRunInContext } from '@holoflows/kit'
 import { encodeText } from '../../utils/type-transform/String-ArrayBuffer'
 import { sleep } from '../../utils/utils'
 import { geti18nString } from '../../utils/i18n'
-import { MessageCenter } from '../../utils/messages'
 import getCurrentNetworkWorker from '../../social-network/utils/getCurrentNetworkWorker'
 import { SocialNetworkUI } from '../../social-network/ui'
 import { getWelcomePageURL } from '../options-page/Welcome/getWelcomePageURL'
-import {
-    generate_ECDH_256k1_KeyPair_ByMnemonicWord,
-    recover_ECDH_256k1_KeyPair_ByMnemonicWord,
-    MnemonicGenerationInformation,
-} from '../../utils/mnemonic-code'
-import { createProfileWithPersona, createPersonaByJsonWebKey, createDefaultFriendsGroup } from '../../database'
+import { recover_ECDH_256k1_KeyPair_ByMnemonicWord } from '../../utils/mnemonic-code'
+import { createPersonaByJsonWebKey } from '../../database'
 import { attachProfileDB, LinkedProfileDetails } from '../../database/Persona/Persona.db'
 import { CryptoKeyToJsonWebKey } from '../../utils/type-transform/CryptoKey-JsonWebKey'
 import { deriveLocalKeyFromECDHKey } from '../../utils/mnemonic-code/localKeyGenerate'
@@ -21,19 +16,6 @@ import { generateBackupJSON, BackupOptions } from './WelcomeServices/generateBac
 OnlyRunInContext('background', 'WelcomeService')
 export { generateBackupJSON } from './WelcomeServices/generateBackupJSON'
 export { restoreBackup } from './WelcomeServices/restoreBackup'
-
-/**
- *
- * Generate new identity by a password
- *
- * @param whoAmI Who Am I
- * @param password password used to generate mnemonic word, can be empty string
- */
-export async function createNewIdentityByMnemonicWord(whoAmI: ProfileIdentifier, password: string): Promise<string> {
-    const x = await generate_ECDH_256k1_KeyPair_ByMnemonicWord(password)
-    await generateNewIdentity(whoAmI, x)
-    return x.mnemonicRecord.words
-}
 
 /**
  * Recover new identity by a password and mnemonic words
@@ -70,49 +52,6 @@ export async function restoreNewIdentityWithMnemonicWord(
         await attachProfileDB(info.whoAmI, ecKeyID, info.details || { connectionConfirmState: 'pending' })
     }
     return ecKeyID
-}
-/**
- * There are 2 types of usingKey.
- * ECDH256k1 Keypair + MnemonicWord
- * Or
- * ECDH256k1 Keypair + LocalKey
- *
- * This is how localKey generated:
- * ```ts
- * const pbkdf2 = import_PBKDF2_Key(ECDH256k1.publicKey)
- * const localKey = derive_AES_GCM_256_Key_From_PBKDF2(pbkdf2, MnemonicWord)
- * ```
- */
-async function generateNewIdentity(
-    whoAmI: ProfileIdentifier,
-    usingKey:
-        | MnemonicGenerationInformation
-        | {
-              key: CryptoKeyPair
-              localKey: CryptoKey
-          },
-): Promise<void> {
-    const { key } = usingKey
-
-    const localKey: CryptoKey =
-        'localKey' in usingKey
-            ? usingKey.localKey
-            : await deriveLocalKeyFromECDHKey(key.publicKey, usingKey.mnemonicRecord.words)
-    const pubJwk = await CryptoKeyToJsonWebKey(key.publicKey)
-    const privJwk = await CryptoKeyToJsonWebKey(key.privateKey)
-
-    await createProfileWithPersona(
-        whoAmI,
-        { connectionConfirmState: 'confirmed' },
-        {
-            publicKey: pubJwk,
-            privateKey: privJwk,
-            localKey: localKey,
-            mnemonic: 'mnemonicRecord' in usingKey ? usingKey.mnemonicRecord : undefined,
-        },
-    )
-    await createDefaultFriendsGroup(whoAmI).catch(console.error)
-    MessageCenter.emit('identityUpdated', undefined)
 }
 
 export async function downloadBackup<T>(obj: T) {
