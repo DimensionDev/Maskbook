@@ -14,6 +14,7 @@ export function formatBalance(balance: bigint, decimals: number, precision: numb
 
     const whole = (balance / base).toString(10)
     const value = `${whole}${fraction == '0' ? '' : `.${fraction.substr(0, precision)}`}` // eslint-disable-line
+    const raw = negative ? `-${value}` : value
 
-    return (negative ? `-${value}` : value).replace(/0+$/, '').replace(/\.$/, '')
+    return raw.indexOf('.') > -1 ? raw.replace(/0+$/, '').replace(/\.$/, '') : raw
 }
