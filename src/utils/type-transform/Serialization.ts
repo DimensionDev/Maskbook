@@ -32,8 +32,8 @@ export function serializable<T, Q>(name: string, ser?: (x: T) => Q, des?: (x: Q)
     }
 }
 
-const typeson = new Typeson().register([require('typeson-registry/dist/presets/builtin')])
-
+// See: https://github.com/dfahlander/typeson-registry/issues/15
+const typeson = new Typeson({ cyclic: false }).register([require('typeson-registry/dist/presets/builtin')])
 export default {
     async serialization(from) {
         return typeson.encapsulate(from)

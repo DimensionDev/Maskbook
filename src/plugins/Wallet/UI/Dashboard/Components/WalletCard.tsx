@@ -205,6 +205,7 @@ export default function WalletCard({ wallet, tokens }: Props) {
                     const t = tokens.find(y => y.address === addr)
                     return (
                         <WalletLine
+                            key={addr}
                             invert
                             line1={t?.symbol || '???'}
                             line2={t?.name || 'Unknown Token'}
