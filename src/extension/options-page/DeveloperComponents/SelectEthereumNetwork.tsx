@@ -3,9 +3,10 @@ import { makeStyles } from '@material-ui/core/styles'
 import Card from '@material-ui/core/Card'
 import CardContent from '@material-ui/core/CardContent'
 import Typography from '@material-ui/core/Typography'
-import { getNetworkSettings, NetworkType, setNetworkType, getNetworkType } from '../../../plugins/Wallet/network'
+import { getNetworkSettings, setNetworkType, getNetworkType } from '../../../plugins/Wallet/network'
 import { Box, Select, MenuItem } from '@material-ui/core'
 import { resetProvider } from '../../../plugins/Wallet/web3'
+import { EthereumNetwork } from '../../../plugins/Wallet/database/types'
 
 const useStyles = makeStyles({
     select: {
@@ -13,11 +14,11 @@ const useStyles = makeStyles({
     },
 })
 
-export function EthereumNetwork() {
+export function SelectEthereumNetwork() {
     const classes = useStyles()
-    const [network, setNetwork] = useState<NetworkType>(getNetworkSettings().networkType)
+    const [network, setNetwork] = useState<EthereumNetwork>(getNetworkSettings().networkType)
     const onChange = useCallback((event: React.ChangeEvent<any>) => {
-        setNetworkType(event.target.value as NetworkType)
+        setNetworkType(event.target.value as EthereumNetwork)
         setNetwork(getNetworkType())
         resetProvider()
     }, [])
@@ -28,7 +29,7 @@ export function EthereumNetwork() {
                 <Box display="flex" alignItems="center">
                     <Typography color="textSecondary">Select ethereum network</Typography>
                     <Select className={classes.select} value={network} onChange={onChange}>
-                        {Object.values(NetworkType).map(type => (
+                        {Object.values(EthereumNetwork).map(type => (
                             <MenuItem value={type}>{type}</MenuItem>
                         ))}
                     </Select>
