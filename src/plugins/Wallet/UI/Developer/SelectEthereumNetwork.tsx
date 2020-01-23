@@ -3,10 +3,10 @@ import { makeStyles } from '@material-ui/core/styles'
 import Card from '@material-ui/core/Card'
 import CardContent from '@material-ui/core/CardContent'
 import Typography from '@material-ui/core/Typography'
-import { getNetworkSettings, setNetworkType, getNetworkType } from '../../../plugins/Wallet/network'
+import { getNetworkSettings, setNetworkType, getNetworkType } from '../../network'
 import { Box, Select, MenuItem } from '@material-ui/core'
-import { resetProvider } from '../../../plugins/Wallet/web3'
-import { EthereumNetwork } from '../../../plugins/Wallet/database/types'
+import { resetProvider } from '../../web3'
+import { EthereumNetwork } from '../../database/types'
 
 const useStyles = makeStyles({
     select: {
