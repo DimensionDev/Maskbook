@@ -1,7 +1,7 @@
 /// <reference path="./global.d.ts" />
 import { openDB, DBSchema } from 'idb/with-async-ittr'
 import { Identifier, ProfileIdentifier, GroupIdentifier } from './type'
-import { createDBAccess } from './helpers/openDB'
+import { createDBAccess, IDBPSafeTransaction, createTransaction } from './helpers/openDB'
 import { OnlyRunInContext } from '@holoflows/kit/es'
 
 //#region Schema
@@ -76,16 +76,17 @@ export async function updateAvatarMetaDB(id: IdentityWithAvatar, newMeta: Partia
  * Find avatar lastUpdateTime or lastAccessTime out-of-date
  * @param attribute - Which attribute want to query
  * @param deadline - Select all identifiers before a date
- * defaults to 30 days for lastAccessTime
+ * defaults to 14 days for lastAccessTime
  * defaults to 7 days for lastUpdateTime
  */
 export async function queryAvatarOutdatedDB(
     attribute: 'lastUpdateTime' | 'lastAccessTime',
-    deadline: Date = new Date(Date.now() - 1000 * 60 * 60 * 24 * (attribute === 'lastAccessTime' ? 30 : 7)),
+    t?: IDBPSafeTransaction<AvatarDBSchema, ['metadata'], 'readonly'>,
+    deadline: Date = new Date(Date.now() - 1000 * 60 * 60 * 24 * (attribute === 'lastAccessTime' ? 14 : 7)),
 ) {
-    const t = (await db()).transaction('metadata')
+    t = createTransaction(await db(), 'readonly')('metadata')
     const outdated: IdentityWithAvatar[] = []
-    for await (const { value } of t.store) {
+    for await (const { value } of t.objectStore('metadata')) {
         if (deadline > value[attribute]) {
             const identifier = Identifier.fromString(value.identifier).value
             if (!identifier) continue
@@ -115,8 +116,11 @@ export async function isAvatarOutdatedDB(
 /**
  * Batch delete avatars
  */
-export async function deleteAvatarsDB(ids: IdentityWithAvatar[]) {
-    const t = (await db()).transaction(['avatars', 'metadata'], 'readwrite')
+export async function deleteAvatarsDB(
+    ids: IdentityWithAvatar[],
+    t?: IDBPSafeTransaction<AvatarDBSchema, ['metadata', 'avatars'], 'readwrite'>,
+) {
+    t = createTransaction(await db(), 'readwrite')('avatars', 'metadata')
     for (const id of ids) {
         t.objectStore('avatars').delete(id.toText())
         t.objectStore('metadata').delete(id.toText())

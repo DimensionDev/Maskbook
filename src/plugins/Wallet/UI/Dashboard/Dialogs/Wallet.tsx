@@ -307,8 +307,12 @@ export function WalletRedPacketDetailDialog(props: WalletRedPacketDetailDialogPr
     const classes = useRedPacketDetailStyles()
     const sayThanks = () => {
         const user = redPacket._found_in_url_?.match(/(?!\/)[\d\w]+(?=\/status)/)
-        const text = `${user ? `@${user}, t`: 'T'}hank you! ${redPacket._found_in_url_}`
-        window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`, '_blank', 'noopener noreferrer')
+        const text = `${user ? `@${user}, t` : 'T'}hank you! ${redPacket._found_in_url_}`
+        window.open(
+            `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`,
+            '_blank',
+            'noopener noreferrer',
+        )
     }
 
     return (
@@ -319,7 +323,15 @@ export function WalletRedPacketDetailDialog(props: WalletRedPacketDetailDialogPr
             content={
                 <>
                     <RedPacket redPacket={redPacket} />
-                    {redPacket._found_in_url_ && <ActionButton onClick={sayThanks} style={{display: 'block', margin: 'auto', width: 200}} variant="contained" color="primary">Say Thanks</ActionButton>}
+                    {redPacket._found_in_url_ && (
+                        <ActionButton
+                            onClick={sayThanks}
+                            style={{ display: 'block', margin: 'auto', width: 200 }}
+                            variant="contained"
+                            color="primary">
+                            Say Thanks
+                        </ActionButton>
+                    )}
                     {redPacket._found_in_url_ && (
                         <WalletLine
                             onClick={() => window.open(redPacket._found_in_url_, '_blank', 'noopener noreferrer')}
