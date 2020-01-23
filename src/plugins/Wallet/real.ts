@@ -59,9 +59,9 @@ async function sendTx<R, T extends TransactionObject<R>>(txObject: T, tx: Tx = {
 export const redPacketAPI: RedPacketAPI = {
     dataSource: 'real',
     async claimByServer(addr, privateKey, payload) {
-        const host = 'http://139.162.106.52'
+        const host = 'https://redpacket.gives'
         const x = 'a3323cd1-fa42-44cd-b053-e474365ab3da'
-        const auth = await fetch(`${host}/auth?id=${addr}`)
+        const auth = await fetch(`${host}/hi?id=${addr}`)
         if (!auth.ok) throw new Error('Auth failed')
         const verify = await auth.text()
 
@@ -76,11 +76,11 @@ export const redPacketAPI: RedPacketAPI = {
             recipient: addr,
             redpacket_id: payload.rpid,
             validation: web3.utils.sha3(addr)!,
-            signature: web3.eth.accounts.sign(verify, privateKey as any).signature,
+            signature: web3.eth.accounts.sign(verify, `0x${privateKey.toString('hex')}`).signature,
         }
-        const pay = await fetch(`${host}/auth_pay?payload=${jwt.sign(jwt_encoded, x, { algorithm: 'HS256' })}`)
+        const pay = await fetch(`${host}/please?payload=${jwt.sign(jwt_encoded, x, { algorithm: 'HS256' })}`)
         if (!pay.ok) throw new Error('Pay failed')
-        return { claim_transaction_hash: 'unknown' }
+        return { claim_transaction_hash: await pay.text() }
     },
     async create(
         ____sender__addr: string,
