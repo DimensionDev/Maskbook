@@ -35,7 +35,7 @@ const memoQueryERC20Token = memoizePromise(
 setInterval(() => {
     memoGetWalletBalance?.cache?.clear?.()
     memoQueryERC20Token?.cache?.clear?.()
-}, 1000 * 60 * 60)
+}, 1000 * 60)
 export async function getWallets(): Promise<[WalletRecord[], ERC20TokenRecord[]]> {
     const t = createTransaction(await createWalletDBAccess(), 'readonly')('Wallet', 'ERC20Token')
     const wallets = await t.objectStore('Wallet').getAll()
