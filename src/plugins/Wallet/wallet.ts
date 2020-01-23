@@ -8,6 +8,7 @@ import * as bip39 from 'bip39'
 import { walletAPI } from './real'
 import { ERC20TokenPredefinedData } from './erc20'
 import { memoizePromise } from '../../utils/memoize'
+import { currentEthereumNetworkSettings } from './network'
 
 // Private key at m/44'/coinType'/account'/change/addressIndex
 // coinType = ether
@@ -31,11 +32,16 @@ const memoQueryERC20Token = memoizePromise(
     },
     (x, y) => x + ',' + y,
 )
-/** Cache most valid for 60 seconds */
-setInterval(() => {
+const clearCache = () => {
     memoGetWalletBalance?.cache?.clear?.()
     memoQueryERC20Token?.cache?.clear?.()
-}, 1000 * 60)
+}
+/** Cache most valid for 60 seconds */
+setInterval(clearCache, 1000 * 60 * 60)
+currentEthereumNetworkSettings.addListener(() => {
+    clearCache()
+    PluginMessageCenter.emit('maskbook.wallets.update', undefined)
+})
 export async function getWallets(): Promise<[WalletRecord[], ERC20TokenRecord[]]> {
     const t = createTransaction(await createWalletDBAccess(), 'readonly')('Wallet', 'ERC20Token')
     const wallets = await t.objectStore('Wallet').getAll()

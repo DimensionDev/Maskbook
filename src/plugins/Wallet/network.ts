@@ -1,4 +1,5 @@
 import { EthereumNetwork } from './database/types'
+import { createNewSettings } from '../../components/shared-settings/createSettings'
 
 const settings = {
     contractAddress: {
@@ -17,7 +18,7 @@ const settings = {
 }
 
 export function getNetworkSettings() {
-    const networkType = getNetworkType()
+    const networkType = currentEthereumNetworkSettings.value
 
     return {
         networkType,
@@ -26,10 +27,11 @@ export function getNetworkSettings() {
     }
 }
 
-export function getNetworkType() {
-    return (localStorage.getItem('red_packet_plugin_network_type') as EthereumNetwork) || EthereumNetwork.Rinkeby
-}
-
-export function setNetworkType(networkType: EthereumNetwork) {
-    localStorage.setItem('red_packet_plugin_network_type', networkType)
-}
+export const currentEthereumNetworkSettings = createNewSettings<EthereumNetwork>(
+    'eth network',
+    EthereumNetwork.Mainnet,
+    {
+        primary: 'Choose ETH network',
+        secondary: `You can choose ${EthereumNetwork.Mainnet}, ${EthereumNetwork.Rinkeby} or ${EthereumNetwork.Reopsten}`,
+    },
+)

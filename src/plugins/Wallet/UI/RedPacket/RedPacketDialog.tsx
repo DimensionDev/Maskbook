@@ -38,6 +38,7 @@ import { getActivatedUI } from '../../../../social-network/ui'
 import { useValueRef } from '../../../../utils/hooks/useValueRef'
 import { debugModeSetting } from '../../../../components/shared-settings/settings'
 import { formatBalance } from '../../formatter'
+import { currentEthereumNetworkSettings } from '../../network'
 
 interface RedPacketDialogProps
     extends withClasses<
@@ -152,6 +153,7 @@ function NewPacket(props: RedPacketDialogProps & NewPacketProps) {
                 }
             })
         update()
+        currentEthereumNetworkSettings.addListener(update)
         return PluginMessageCenter.on('maskbook.wallets.update', update)
     }, [selectedWalletAddress])
 
