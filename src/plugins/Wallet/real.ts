@@ -16,7 +16,7 @@ import { createTransaction } from '../../database/helpers/openDB'
 import * as jwt from 'jsonwebtoken'
 
 // TODO: should not be a constant. should respect the value in the red packet record
-const RED_PACKET_CONTRACT_ADDRESS = '0xC21F17f4f2E04ae718f1e65a29C833627eaA0b6f'
+const RED_PACKET_CONTRACT_ADDRESS = '0x9ab3edd567fa8B28f6AbC1fb14b1fB7a30140575'
 
 function createRedPacketContract(address: string) {
     return (new web3.eth.Contract(HappyRedPacketABI as AbiItem[], address) as unknown) as HappyRedPacket
