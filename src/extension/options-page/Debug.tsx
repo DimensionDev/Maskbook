@@ -3,7 +3,7 @@ import { Grid, makeStyles, List } from '@material-ui/core'
 import { AddProve } from './DeveloperComponents/AddProve'
 import { DecryptPostDeveloperMode } from './DeveloperComponents/DecryptPost'
 import { SeeMyProvePost } from './DeveloperComponents/SeeMyProvePost'
-import { SelectEthereumNetwork } from './DeveloperComponents/SelectEthereumNetwork'
+import { SelectEthereumNetwork } from '../../plugins/Wallet/UI/Developer/SelectEthereumNetwork'
 import { FriendsDeveloperMode } from './DeveloperComponents/Friends'
 import {
     debugModeSetting,
