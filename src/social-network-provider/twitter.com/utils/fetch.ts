@@ -128,8 +128,10 @@ export const postContentParser = (node: HTMLElement) => {
             })
             .join(',')
     } else {
-        const select = <T extends HTMLElement>(selectors: string) =>
-            Array.from(node.parentElement!.querySelector('[lang]')!.querySelectorAll<T>(selectors))
+        const select = <T extends HTMLElement>(selectors: string) => {
+            const lang = node.parentElement!.querySelector<HTMLDivElement>('[lang]')
+            return lang ? Array.from(lang.querySelectorAll<T>(selectors)) : []
+        }
         const sto = [
             ...select<HTMLAnchorElement>('a').map(x => x.title),
             ...select<HTMLSpanElement>('span').map(x => x.innerText),
