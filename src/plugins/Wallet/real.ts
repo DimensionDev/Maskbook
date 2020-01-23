@@ -9,7 +9,7 @@ import IERC20ABI from './contract/IERC20.json'
 import { HappyRedPacket } from './contract/HappyRedPacket'
 import { IERC20 } from './contract/IERC20'
 import { TransactionObject, Tx } from './contract/types'
-import { RedPacketTokenType } from './database/types'
+import { RedPacketTokenType, EthereumNetwork } from './database/types'
 import { asyncTimes, pollingTask } from '../../utils/utils'
 import { createWalletDBAccess } from './database/Wallet.db'
 import { createTransaction } from '../../database/helpers/openDB'
@@ -59,7 +59,13 @@ export const redPacketAPI: RedPacketAPI = {
     async claimByServer(addr, privateKey, payload) {
         const host = 'https://redpacket.gives'
         const x = 'a3323cd1-fa42-44cd-b053-e474365ab3da'
-        const auth = await fetch(`${host}/hi?id=${addr}`)
+
+        let network
+        if (getNetworkSettings().networkType === EthereumNetwork.Rinkeby) network = 'rinkeby'
+        else if (getNetworkSettings().networkType === EthereumNetwork.Mainnet) network = 'mainnet'
+        else if (getNetworkSettings().networkType === EthereumNetwork.Reopsten) network = 'reopsten'
+
+        const auth = await fetch(`${host}/hi?id=${addr}&network=${network}`)
         if (!auth.ok) throw new Error('Auth failed')
         const verify = await auth.text()
 
@@ -76,7 +82,9 @@ export const redPacketAPI: RedPacketAPI = {
             validation: web3.utils.sha3(addr)!,
             signature: web3.eth.accounts.sign(verify, `0x${privateKey.toString('hex')}`).signature,
         }
-        const pay = await fetch(`${host}/please?payload=${jwt.sign(jwt_encoded, x, { algorithm: 'HS256' })}`)
+        const pay = await fetch(
+            `${host}/please?payload=${jwt.sign(jwt_encoded, x, { algorithm: 'HS256' })}&network=${network}`,
+        )
         if (!pay.ok) throw new Error('Pay failed')
         return { claim_transaction_hash: await pay.text() }
     },
