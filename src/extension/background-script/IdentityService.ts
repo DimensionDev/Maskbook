@@ -32,8 +32,8 @@ export function queryMyProfiles(network?: string) {
 export function updateProfileInfo(
     identifier: ProfileIdentifier,
     data: {
-        nickname?: string
-        avatarURL?: string
+        nickname?: string | null
+        avatarURL?: string | null
         forceUpdateAvatar?: boolean
     },
 ): Promise<void> {

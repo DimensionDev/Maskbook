@@ -240,6 +240,8 @@ export interface SocialNetworkUIDataSources {
     readonly typedMessageMetadata?: ValueRef<ReadonlyMap<string, any>>
 }
 export type PostInfo = {
+    readonly nickname: ValueRef<string | null>
+    readonly avatarURL: ValueRef<string | null>
     readonly postBy: ValueRef<ProfileIdentifier>
     readonly postID: ValueRef<string | null>
     readonly postContent: ValueRef<string>
@@ -281,15 +283,19 @@ export type SocialNetworkUI = Required<SocialNetworkUIDefinition>
 export const getEmptyPostInfoByElement = (
     opt: Pick<PostInfo, 'rootNode' | 'rootNodeProxy' | 'commentsSelector' | 'commentBoxSelector'>,
 ) => {
-    return {
-        decryptedPostContent: new ValueRef(null),
+    const x: PostInfo = {
+        decryptedPostContent: new ValueRef<TypedMessage | null>(null),
         decryptedPostContentRaw: new ValueRef(''),
         postBy: new ValueRef(ProfileIdentifier.unknown, ProfileIdentifier.equals),
         postContent: new ValueRef(''),
         postID: new ValueRef<string | null>(null),
         postPayload: new ValueRef<Payload | null>(null),
+        avatarURL: new ValueRef<string | null>(null),
+        nickname: new ValueRef<string | null>(null),
+        steganographyContent: new ValueRef<string>(''),
         ...opt,
-    } as PostInfo
+    }
+    return x
 }
 
 export const definedSocialNetworkUIs = new Set<SocialNetworkUI>()

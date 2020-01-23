@@ -120,10 +120,8 @@ const registerPostCollector = (self: SocialNetworkUI) => {
                 if (!info.postBy.value.equals(postBy)) {
                     info.postBy.value = postBy
                 }
-                Services.Identity.updateProfileInfo(postBy, {
-                    nickname: name,
-                    avatarURL: avatar,
-                }).then()
+                info.nickname.value = name
+                info.avatarURL.value = avatar || null
 
                 // decode steganographic image
                 untilElementAvailable(postsImageSelector(tweetNode), 10000)
@@ -137,6 +135,13 @@ const registerPostCollector = (self: SocialNetworkUI) => {
             }
             ;(async () => {
                 await collectPostInfo()
+                info.postPayload.addListener(payload => {
+                    if (!payload) return
+                    Services.Identity.updateProfileInfo(info.postBy.value, {
+                        nickname: info.nickname.value,
+                        avatarURL: info.avatarURL.value,
+                    }).then()
+                })
                 info.postPayload.value = deconstructPayload(info.postContent.value, self.payloadDecoder)
                 info.postContent.addListener(newValue => {
                     info.postPayload.value = deconstructPayload(newValue, self.payloadDecoder)
