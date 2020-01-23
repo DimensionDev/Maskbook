@@ -34,7 +34,8 @@ export async function importNewWallet(
     const record: WalletRecord = {
         ...rec,
         address,
-        erc20_token_balance: new Map(),
+        /** Builtin Dai Stablecoin */
+        erc20_token_balance: new Map([['0x6B175474E89094C44Da98b954EedeAC495271d0F', undefined]]),
         _data_source_: getWalletProvider().dataSource,
     }
     {
