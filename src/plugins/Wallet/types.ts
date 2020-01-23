@@ -112,8 +112,8 @@ export interface WalletAPI {
     dataSource: 'real' | 'mock'
     addWalletPrivateKey(wallet: string, key: string): void
     removeWalletPrivateKey(wallet: string, key: string): void
-    watchWalletBalance(address: string): void
-    watchERC20TokenBalance(walletAddress: string, tokenAddress: string): void
+    queryBalance(address: string): Promise<bigint>
+    queryERC20TokenBalance(walletAddress: string, tokenAddress: string): Promise<bigint>
     approveERC20Token(
         senderAddress: string,
         erc20TokenAddress: string,

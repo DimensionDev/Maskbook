@@ -391,22 +391,15 @@ export const walletAPI: WalletAPI = {
     removeWalletPrivateKey(address: string, privateKey: string) {
         web3.eth.accounts.wallet.remove('0x' + privateKey)
     },
-    watchWalletBalance(address) {
-        pollingTask(async () => {
-            onWalletBalanceUpdated(address, BigInt(await web3.eth.getBalance(address)))
-            return false
-        })
+    queryBalance(address) {
+        return web3.eth.getBalance(address).then(BigInt)
     },
-    watchERC20TokenBalance(walletAddress, token) {
+    queryERC20TokenBalance(walletAddress, token) {
         const erc20Contract = createERC20Contract(token)
-        pollingTask(async () => {
-            onWalletERC20TokenBalanceUpdated(
-                walletAddress,
-                token,
-                BigInt(await erc20Contract.methods.balanceOf(walletAddress).call()),
-            )
-            return false
-        })
+        return erc20Contract.methods
+            .balanceOf(walletAddress)
+            .call()
+            .then(BigInt)
     },
     async approveERC20Token(sender_address: string, address: string, amount: bigint) {
         const erc20Contract = createERC20Contract(address)
