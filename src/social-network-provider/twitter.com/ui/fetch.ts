@@ -156,7 +156,10 @@ const registerPostCollector = (self: SocialNetworkUI) => {
         .setDOMProxyOption({ afterShadowRootInit: { mode: 'closed' } })
         .assignKeys(node => {
             const tweetNode = getTweetNode(node)
-            return tweetNode ? `${postIdParser(tweetNode)}${node.innerHTML}` : node.innerHTML
+            const isQuotedTweet = tweetNode?.getAttribute('role') === 'blockquote'
+            return tweetNode
+                ? `${isQuotedTweet ? 'QUOTED' : ''}${postIdParser(tweetNode)}${node.innerHTML}`
+                : node.innerHTML
         })
         .startWatch({
             childList: true,
