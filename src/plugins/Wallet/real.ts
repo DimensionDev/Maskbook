@@ -14,9 +14,7 @@ import { asyncTimes, pollingTask } from '../../utils/utils'
 import { createWalletDBAccess } from './database/Wallet.db'
 import { createTransaction } from '../../database/helpers/openDB'
 import * as jwt from 'jsonwebtoken'
-
-// TODO: should not be a constant. should respect the value in the red packet record
-const RED_PACKET_CONTRACT_ADDRESS = '0x9ab3edd567fa8B28f6AbC1fb14b1fB7a30140575'
+import { getNetworkSettings } from './network'
 
 function createRedPacketContract(address: string) {
     return (new web3.eth.Contract(HappyRedPacketABI as AbiItem[], address) as unknown) as HappyRedPacket
@@ -95,7 +93,7 @@ export const redPacketAPI: RedPacketAPI = {
         token_addr: string,
         total_tokens: bigint,
     ) {
-        const contract = createRedPacketContract(RED_PACKET_CONTRACT_ADDRESS)
+        const contract = createRedPacketContract(getNetworkSettings().contractAddress)
         const tx = contract.methods.create_red_packet(
             hash_of_password,
             quantity,
@@ -139,7 +137,7 @@ export const redPacketAPI: RedPacketAPI = {
         })
     },
     async claim(id, password: string, recipient: string, validation: string) {
-        const contract = createRedPacketContract(RED_PACKET_CONTRACT_ADDRESS)
+        const contract = createRedPacketContract(getNetworkSettings().contractAddress)
         const tx = contract.methods.claim(id.redPacketID, password, recipient, validation)
 
         return new Promise((resolve, reject) => {
@@ -170,7 +168,7 @@ export const redPacketAPI: RedPacketAPI = {
         })
     },
     async watchClaimResult(id) {
-        const contract = createRedPacketContract(RED_PACKET_CONTRACT_ADDRESS)
+        const contract = createRedPacketContract(getNetworkSettings().contractAddress)
         const { blockNumber } = await web3.eth.getTransaction(id.transactionHash)
 
         if (!blockNumber) {
@@ -215,7 +213,7 @@ export const redPacketAPI: RedPacketAPI = {
             })
     },
     async watchCreateResult(id) {
-        const contract = createRedPacketContract(RED_PACKET_CONTRACT_ADDRESS)
+        const contract = createRedPacketContract(getNetworkSettings().contractAddress)
         const { blockNumber } = await web3.eth.getTransaction(id.transactionHash)
 
         if (!blockNumber) {
@@ -273,7 +271,7 @@ export const redPacketAPI: RedPacketAPI = {
         })
     },
     async checkAvailability(id) {
-        const contract = createRedPacketContract(RED_PACKET_CONTRACT_ADDRESS)
+        const contract = createRedPacketContract(getNetworkSettings().contractAddress)
         const {
             balance,
             claimed,
@@ -293,7 +291,7 @@ export const redPacketAPI: RedPacketAPI = {
         }
     },
     async checkClaimedList(id) {
-        return createRedPacketContract(RED_PACKET_CONTRACT_ADDRESS)
+        return createRedPacketContract(getNetworkSettings().contractAddress)
             .methods.check_claimed_list(id.redPacketID)
             .call()
     },
@@ -319,7 +317,7 @@ export const redPacketAPI: RedPacketAPI = {
             throw new Error('can not find available wallet')
         }
 
-        const contract = createRedPacketContract(RED_PACKET_CONTRACT_ADDRESS)
+        const contract = createRedPacketContract(getNetworkSettings().contractAddress)
         const tx = contract.methods.refund(id.redPacketID)
 
         return new Promise((resolve, reject) => {
@@ -350,7 +348,7 @@ export const redPacketAPI: RedPacketAPI = {
         })
     },
     async watchRefundResult(id) {
-        const contract = createRedPacketContract(RED_PACKET_CONTRACT_ADDRESS)
+        const contract = createRedPacketContract(getNetworkSettings().contractAddress)
         const { blockNumber } = await web3.eth.getTransaction(id.transactionHash)
 
         if (!blockNumber) {
@@ -403,7 +401,7 @@ export const walletAPI: WalletAPI = {
     },
     async approveERC20Token(sender_address: string, address: string, amount: bigint) {
         const erc20Contract = createERC20Contract(address)
-        const tx = erc20Contract.methods.approve(RED_PACKET_CONTRACT_ADDRESS, amount.toString())
+        const tx = erc20Contract.methods.approve(getNetworkSettings().contractAddress, amount.toString())
 
         return new Promise((resolve, reject) => {
             let txHash = ''
