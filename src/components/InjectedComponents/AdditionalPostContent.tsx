@@ -42,7 +42,7 @@ export const AdditionalContent = React.memo(function AdditionalContent(props: Ad
              * 2. This component does not support Typed Message
              */}
             {props.renderItem || props.renderText ? (
-                <Typography variant="body2" component="div">
+                <Typography variant="body1" component="div">
                     <RenderText text={props.renderText || props.renderItem!.content} />
                     <WithRedPacket
                         classes={classes}
