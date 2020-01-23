@@ -143,9 +143,12 @@ export const postImageParser = async (node: HTMLElement) => {
         // TODO: Support steganography in legacy twitter
         return ''
     } else {
+        const isQuotedTweet = !!node.closest('[role="blockquote"]')
         const imgNodes = node.querySelectorAll<HTMLImageElement>('img[src*="twimg.com/media"]')
         if (!imgNodes.length) return ''
-        const imgUrls = Array.from(imgNodes).map(node => node.getAttribute('src') ?? '')
+        const imgUrls = Array.from(imgNodes)
+            .filter(node => (!isQuotedTweet ? !node.closest('[role="blockquote"]') : true))
+            .map(node => node.getAttribute('src') ?? '')
         if (!imgUrls.length) return ''
         const { handle } = postNameParser(node)
         const posterIdentity = new ProfileIdentifier(twitterUrl.hostIdentifier, handle)
