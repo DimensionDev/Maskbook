@@ -30,6 +30,7 @@ import {
 } from './Dialogs/Wallet'
 import { geti18nString } from '../../../../utils/i18n'
 import ActionButton from '../../../../extension/options-page/DashboardComponents/ActionButton'
+import { currentEthereumNetworkSettings } from '../../network'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -98,6 +99,7 @@ export default function DashboardWalletsPage() {
                 setTokens(x[1])
             })
         query()
+        currentEthereumNetworkSettings.addListener(query)
         return PluginMessageCenter.on('maskbook.wallets.update', query)
     }, [])
     const classes = useStyles()
