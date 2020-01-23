@@ -5,7 +5,12 @@ import { gun2Servers } from '../../gun-servers'
 export * from './people'
 export * from './post'
 
-export type PersonOnGun2 = { provePostId?: string } | undefined
+export type PersonOnGun2 =
+    | {
+          /** @deprecated if you want to use it, cast it to string. */
+          provePostId?: unknown
+      }
+    | undefined
 export type SharedAESKeyGun2 = {
     encryptedKey: string
     salt: string

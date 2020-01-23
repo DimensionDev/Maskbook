@@ -343,7 +343,8 @@ async function* findAuthorPublicKey(
                     reject()
                 }
                 const undo = Gun2.subscribePersonFromGun2(by, data => {
-                    if (data && (data.provePostId || '').length > 0) {
+                    const provePostID = data?.provePostId as string | '' | undefined
+                    if (provePostID && provePostID.length > 0) {
                         undo()
                         resolve()
                     }

@@ -17,8 +17,6 @@ import { OnlyRunInContext } from '@holoflows/kit/es'
 
 OnlyRunInContext('background', 'IdentityService')
 
-export { writePersonOnGun as writeProfileOnGun } from '../../network/gun/version.2/people'
-
 // region Avatars
 export { storeAvatar, getAvatarDataURL as queryAvatarDataURL } from '../../database'
 

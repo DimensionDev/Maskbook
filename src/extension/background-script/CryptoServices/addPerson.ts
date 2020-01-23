@@ -15,19 +15,12 @@ async function getUserPublicKeyFromBio(user: ProfileIdentifier) {
     }
 }
 async function getUserPublicKeyFromProvePost(user: ProfileIdentifier) {
-    let person = await Gun2.queryPersonFromGun2(user)
-    if (!person || !person.provePostId || !person.provePostId.length) {
-        // ? The deprecated way
-        if (user.network === 'facebook.com') {
-            // eslint-disable-next-line import/no-deprecated
-            person = await Gun1.queryPersonFromGun(user.userId)
-            if (person) Gun2.writePersonOnGun(user, person)
-        }
-        if (!person || !person.provePostId || !person.provePostId.length) {
-            throw new Error('Not in gun!')
-        }
+    const profile = await Gun2.queryPersonFromGun2(user)
+    const proverPostID = profile?.provePostId as string | '' | undefined
+    if (!proverPostID?.length) {
+        throw new Error('Not in gun!')
     }
-    const postId = new PostIdentifier(user, person.provePostId)
+    const postId = new PostIdentifier(user, proverPostID)
     const post = await getCurrentNetworkWorker(postId).fetchPostContent(postId)
     if ((await verifyOthersProve(post, user)) === false) throw new Error('Not in prove post!')
 }
