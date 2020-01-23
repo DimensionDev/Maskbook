@@ -72,8 +72,16 @@ export async function importNewWallet(
         _data_source_: getWalletProvider().dataSource,
     }
     {
-        const t = createTransaction(await createWalletDBAccess(), 'readwrite')('Wallet')
+        const t = createTransaction(await createWalletDBAccess(), 'readwrite')('Wallet', 'ERC20Token')
         t.objectStore('Wallet').add(record)
+        t.objectStore('ERC20Token').put({
+            decimals: 18,
+            symbol: 'DAI',
+            name: 'Dai Stablecoin',
+            address: '0x6B175474E89094C44Da98b954EedeAC495271d0F',
+            network: EthereumNetwork.Mainnet,
+            is_user_defined: false,
+        })
     }
     PluginMessageCenter.emit('maskbook.wallets.update', undefined)
 }
