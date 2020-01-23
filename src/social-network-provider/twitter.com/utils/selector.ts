@@ -61,8 +61,8 @@ export const postsImageSelector = (node: HTMLElement) =>
 export const postsContentSelector = () =>
     querySelectorAll(
         [
-            'article div[lang]', // both timeline and detail page for new twitter
             '.tweet-text > div', // both timeline and detail page for legacy twitter
+            'article div[lang]', // both timeline and detail page for new twitter
         ].join(),
     )
 

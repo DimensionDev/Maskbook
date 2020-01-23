@@ -78,7 +78,10 @@ export const postIdParser = (node: HTMLElement) => {
     } else {
         const idNode = defaultTo(
             node.children[1]?.querySelector<HTMLAnchorElement>('a[href*="status"]'),
-            node.parentElement!.querySelector<HTMLAnchorElement>('a[href*="status"]'),
+            defaultTo(
+                node.parentElement!.querySelector<HTMLAnchorElement>('a[href*="status"]'),
+                node.closest('article > div')?.querySelector<HTMLAnchorElement>('a[href*="status"]'),
+            ),
         )
         return idNode ? parseId(idNode.href) : parseId(location.href)
     }
@@ -126,10 +129,10 @@ export const postContentParser = (node: HTMLElement) => {
             .join(',')
     } else {
         const select = <T extends HTMLElement>(selectors: string) =>
-            Array.from(node.parentElement!.querySelectorAll<T>(selectors))
+            Array.from(node.parentElement!.querySelector('[lang]')!.querySelectorAll<T>(selectors))
         const sto = [
             ...select<HTMLAnchorElement>('a').map(x => x.title),
-            ...select<HTMLSpanElement>('[lang] > span').map(x => x.innerText),
+            ...select<HTMLSpanElement>('span').map(x => x.innerText),
         ]
         return sto.filter(Boolean).join(',')
     }
