@@ -46,7 +46,7 @@
         "message": "Looking for Maskbook?"
     },
     "post_modal_hint__button": {
-        "message": "Compose encrypted post"
+        "message": "🔒Compose encrypted post🔒"
     },
     "select_specific_friends_dialog__title": {
         "message": "Select Specific Friends"
