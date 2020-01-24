@@ -7,12 +7,21 @@ const shadow = div.attachShadow({ mode: 'closed' })
 untilDocumentReady().then(() => document.body.appendChild(div))
 livingShadowRoots.add(shadow)
 
-globalThis.getComputedStyle = new Proxy(globalThis.getComputedStyle || (() => {}), {
-    apply(target, thisArg, args) {
-        if (args[0] === proxy) args[0] = document.body
-        return Reflect.apply(target, thisArg, args)
+/**
+ * In Firefox content script, globalThis !== window
+ * so hack on globalThis is not working.
+ * We need to use globalThis insteadof window because this script will also run in SSR.
+ */
+globalThis.getComputedStyle = new Proxy(
+    globalThis?.window?.getComputedStyle || globalThis.getComputedStyle || (() => {}),
+    {
+        apply(target, thisArg, args) {
+            if (args[0] === proxy) args[0] = document.body
+            return Reflect.apply(target, thisArg, args)
+        },
     },
-})
+)
+Object.assign(globalThis.window, { getComputedStyle })
 
 let proxy: HTMLElement | undefined
 
