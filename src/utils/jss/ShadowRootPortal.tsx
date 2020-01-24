@@ -21,7 +21,7 @@ globalThis.getComputedStyle = new Proxy(
         },
     },
 )
-Object.assign(globalThis.window, { getComputedStyle })
+Object.assign(globalThis.window || {}, { getComputedStyle })
 
 let proxy: HTMLElement | undefined
 
