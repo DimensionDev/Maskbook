@@ -760,7 +760,7 @@
         "message": "你希望以哪個推特賬戶連接？"
     },
     "immersive_setup_paste_into_bio": {
-        "message": "將密鑰粘入個人簡介（可選的）"
+        "message": "「可選的」將密鑰粘入個人簡介"
     },
     "connecting": {
         "message": "連接中……"
@@ -778,7 +778,7 @@
         "message": "但我不知道我的用戶名是什么！"
     },
     "immersive_setup_add_bio_text": {
-        "message": "我們建議你把你的公鑰添加到個人簡介中，不要更改或刪除任何一部分。"
+        "message": "我們建議你把你的公鑰添加到個人簡介中，若如此做，請不要更改或刪除任何一部分。"
     },
     "immersive_setup_paste_into_bio_auto": {
         "message": "幫我加上它"
