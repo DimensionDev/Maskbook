@@ -757,10 +757,10 @@
         "message": "要連接 $1 嗎？"
     },
     "immersive_setup_connect_as_unknown": {
-        "message": "你希望以什么身份連接？"
+        "message": "你希望以哪個推特賬戶連接？"
     },
     "immersive_setup_paste_into_bio": {
-        "message": "將密鑰粘入個人簡介"
+        "message": "將密鑰粘入個人簡介（可選的）"
     },
     "connecting": {
         "message": "連接中……"
@@ -778,10 +778,10 @@
         "message": "但我不知道我的用戶名是什么！"
     },
     "immersive_setup_add_bio_text": {
-        "message": "請將此文本添加到您的個人簡介。請勿刪除或更改任何部分！"
+        "message": "我們建議你把你的公鑰添加到個人簡介中，不要更改或刪除任何一部分。"
     },
     "immersive_setup_paste_into_bio_auto": {
-        "message": "幫我加上！"
+        "message": "幫我加上它"
     },
     "adding": {
         "message": "添加中……"
@@ -790,7 +790,7 @@
         "message": "搞定！"
     },
     "immersive_setup_paste_into_bio_failed": {
-        "message": "失敗了……請手動將其添加到您的個人簡介中！"
+        "message": "失敗了……請手動將其添加到您的個人簡介中"
     },
     "immersive_setup_no_bio_got": {
         "message": "Maskbook 出現了一些問題！請報告給 Maskbook 的開發者(https://t.me/maskbook_group)，謝謝！"

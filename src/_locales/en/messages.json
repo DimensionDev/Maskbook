@@ -760,7 +760,7 @@
         "message": "Connect as who?"
     },
     "immersive_setup_paste_into_bio": {
-        "message": "Paste this key to your bio"
+        "message": "Paste this key to your bio (Optional)"
     },
     "connecting": {
         "message": "Connecting..."
@@ -778,10 +778,10 @@
         "message": "But I don't know what my username is!"
     },
     "immersive_setup_add_bio_text": {
-        "message": "Please add this text to your bio. Don't remove or change any of it!"
+        "message": "We suggest you add the text above in your bio. Please don't delete or change it."
     },
     "immersive_setup_paste_into_bio_auto": {
-        "message": "Add it for me!"
+        "message": "Add it for me"
     },
     "adding": {
         "message": "Adding..."
@@ -790,7 +790,7 @@
         "message": "Done!"
     },
     "immersive_setup_paste_into_bio_failed": {
-        "message": "Failed... Please add it to your bio manually!"
+        "message": "Failed... Please add it to your bio manually"
     },
     "immersive_setup_no_bio_got": {
         "message": "Maskbook have some problems when setting up! Please report this to Maskbook developer! Our Telegram group: https://t.me/maskbook_group"

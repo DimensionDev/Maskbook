@@ -211,12 +211,12 @@ export default function WalletCard({ wallet, tokens }: Props) {
                             line2={t?.name || 'Unknown Token'}
                             action={
                                 editing ? (
-                                    <Typography
-                                        onClick={() => deleteToken(t)}
-                                        className={classNames(classes.cursor, color.error)}>
-                                        Delete
-                                    </Typography>
+                                    <></> // <Typography
                                 ) : (
+                                    //     onClick={() => deleteToken(t)}
+                                    //     className={classNames(classes.cursor, color.error)}>
+                                    //     Delete
+                                    // </Typography>
                                     <Typography variant="h5">
                                         {typeof amount === 'bigint'
                                             ? t

@@ -188,7 +188,7 @@ export function ImmersiveSetupStepperUI(props: ImmersiveSetupStepperUIProps) {
                         <Typography>{geti18nString('immersive_setup_add_bio_text')}</Typography>
                         <ActionButtonPromise
                             variant="contained"
-                            color="secondary"
+                            color="primary"
                             className={classes.button}
                             executor={props.autoPasteProvePost}
                             init={geti18nString('immersive_setup_paste_into_bio_auto')}
