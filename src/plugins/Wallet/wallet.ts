@@ -40,8 +40,8 @@ PluginMessageCenter.on('maskbook.red_packets.update', () => {
     clearCache()
     PluginMessageCenter.emit('maskbook.wallets.update', undefined)
 })
-/** Cache most valid for 60 seconds */
-setInterval(clearCache, 1000 * 60 * 60)
+/** Cache most valid for 15 seconds */
+setInterval(clearCache, 1000 * 15)
 currentEthereumNetworkSettings.addListener(() => {
     clearCache()
     PluginMessageCenter.emit('maskbook.wallets.update', undefined)
