@@ -439,11 +439,9 @@ const useWalletImportStyles = makeStyles(theme =>
 )
 
 export function WalletImportDialog() {
-    const [mnemonic, setMnemonic] = React.useState(
-        'flag wave term illness equal airport hint item dinosaur opinion special kick',
-    )
-    const [passphrase, setPassphrase] = React.useState('12345678')
-    const [name, setName] = React.useState('Demo wallet')
+    const [mnemonic, setMnemonic] = React.useState('')
+    const [passphrase, setPassphrase] = React.useState('')
+    const [name, setName] = React.useState('New wallet')
     const history = useHistory()
     const classes = useWalletImportStyles()
 
@@ -462,6 +460,7 @@ export function WalletImportDialog() {
                 <TextField
                     required
                     value={mnemonic}
+                    placeholder="flag wave term illness equal airport hint item dinosaur opinion special kick"
                     onChange={e => setMnemonic(e.target.value)}
                     label="Mnemonic Words"
                     helperText=" "
@@ -473,7 +472,7 @@ export function WalletImportDialog() {
                     label="Password"
                     helperText=" "
                 />
-                <TextField required value={name} onChange={e => setName(e.target.value)} label="Name" />
+                <TextField required value={name} onChange={e => setName(e.target.value)} label="Wallet name" />
             </Box>
         </Box>
     )
