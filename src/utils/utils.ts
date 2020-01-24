@@ -138,8 +138,10 @@ export const asyncTimes = async <T>(
     times: number,
     iteratee: () => Promise<T | void>,
     {
+        delay = 4000,
         earlyStop = true,
     }: {
+        delay?: number
         earlyStop?: boolean // stop for first value
     } = {},
 ) => {
@@ -149,6 +151,9 @@ export const asyncTimes = async <T>(
         result.push(await iteratee())
         if (typeof result[i] !== 'undefined' && earlyStop) {
             break
+        }
+        if (delay) {
+            await sleep(delay)
         }
     }
     return result
