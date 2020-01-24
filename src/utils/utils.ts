@@ -162,7 +162,7 @@ export const asyncTimes = async <T>(
 export const pollingTask = (
     task: () => Promise<boolean>,
     {
-        delay = 4000,
+        delay = 30 * 1000,
     }: {
         delay?: number
     } = {},
