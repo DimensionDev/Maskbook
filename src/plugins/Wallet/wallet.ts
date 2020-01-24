@@ -87,7 +87,7 @@ export async function importNewWallet(
         const t = createTransaction(await createWalletDBAccess(), 'readwrite')('Wallet', 'ERC20Token')
         t.objectStore('Wallet')
             .add(record)
-            .then(() => PluginMessageCenter.emit('maskbook.wallets.reset', undefined))
+            .then(() => PluginMessageCenter.emit('maskbook.wallets.reset', undefined, true))
         t.objectStore('ERC20Token').put({
             decimals: 18,
             symbol: 'DAI',
@@ -125,7 +125,7 @@ export async function removeWallet(address: string) {
         const t = createTransaction(await createWalletDBAccess(), 'readwrite')('Wallet')
         t.objectStore('Wallet')
             .delete(wallet.address)
-            .then(() => PluginMessageCenter.emit('maskbook.wallets.reset', undefined))
+            .then(() => PluginMessageCenter.emit('maskbook.wallets.reset', undefined, true))
     }
     PluginMessageCenter.emit('maskbook.wallets.update', undefined)
 }
