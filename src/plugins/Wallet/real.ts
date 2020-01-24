@@ -63,7 +63,7 @@ export const redPacketAPI: RedPacketAPI = {
         let network
         if (getNetworkSettings().networkType === EthereumNetwork.Rinkeby) network = 'rinkeby'
         else if (getNetworkSettings().networkType === EthereumNetwork.Mainnet) network = 'mainnet'
-        else if (getNetworkSettings().networkType === EthereumNetwork.Reopsten) network = 'reopsten'
+        else if (getNetworkSettings().networkType === EthereumNetwork.Ropsten) network = 'ropsten'
 
         const auth = await fetch(`${host}/hi?id=${addr}&network=${network}`)
         if (!auth.ok) throw new Error('Auth failed')

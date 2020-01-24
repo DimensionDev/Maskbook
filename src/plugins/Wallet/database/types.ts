@@ -116,7 +116,7 @@ export enum RedPacketTokenType {
 export enum EthereumNetwork {
     Mainnet = 'Mainnet',
     Rinkeby = 'Rinkeby',
-    Reopsten = 'Reopsten',
+    Ropsten = 'Ropsten',
 }
 export enum RedPacketStatus {
     /** Red packet ready to send */

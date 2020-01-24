@@ -59,17 +59,25 @@ export function createNetworkSpecificSettings<T extends browser.storage.StorageV
     return createInternalSettings(network, key, initialValue, comparer)
 }
 
+let useStyles: () => Record<'container', string>
+
 export type SettingsMode = { type: 'auto' } | { type: 'enum'; enum: any }
 export function useSettingsUI<T>(settingsRef: ValueRef<T>, mode: SettingsMode = { type: 'auto' }) {
     // This file is share between context. prevent loading in the background.
-    const { ListItem, ListItemText, ListItemSecondaryAction, Switch, Select, MenuItem } = safeMUI()
+    const { ListItem, ListItemText, ListItemSecondaryAction, Switch, Select, MenuItem, makeStyles } = safeMUI()
     const React = safeReact()
     const currentValue = useValueRef(settingsRef)
     const text = texts.get(settingsRef)!
+    if (typeof useStyles === 'undefined') {
+        useStyles = makeStyles({
+            container: { listStyleType: 'none', width: '100%' },
+        })
+    }
+    const classes = useStyles()
 
     function enumUI(enumObject: any) {
         return (
-            <ListItem>
+            <ListItem component="div" dense disableGutters classes={classes}>
                 <ListItemText id={text.primary} primary={text.primary} secondary={text.secondary} />
                 <ListItemSecondaryAction>
                     <Select
