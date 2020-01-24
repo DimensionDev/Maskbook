@@ -218,6 +218,7 @@ export async function claimRedPacket(
             setNextState(rec, RedPacketStatus.empty)
             t.objectStore('RedPacket').put(rec)
         }
+        PluginMessageCenter.emit('maskbook.red_packets.update', undefined)
         return 'empty'
     }
 
@@ -242,7 +243,6 @@ export async function claimRedPacket(
         t.objectStore('RedPacket').put(rec)
     }
     getProvider().watchClaimResult({ transactionHash: claim_transaction_hash, databaseID: dbID })
-    requestNotification({ body: 'We will notify you when claiming process is ready.' })
     PluginMessageCenter.emit('maskbook.red_packets.update', undefined)
     return 'claiming'
 }
