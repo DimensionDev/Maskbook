@@ -391,12 +391,6 @@ export const redPacketAPI: RedPacketAPI = {
 
 export const walletAPI: WalletAPI = {
     dataSource: 'real',
-    addWalletPrivateKey(address: string, privateKey: string) {
-        web3.eth.accounts.wallet.add('0x' + privateKey)
-    },
-    removeWalletPrivateKey(address: string, privateKey: string) {
-        web3.eth.accounts.wallet.remove('0x' + privateKey)
-    },
     queryBalance(address) {
         return web3.eth.getBalance(address).then(BigInt)
     },

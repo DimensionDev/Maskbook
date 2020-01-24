@@ -110,8 +110,6 @@ export interface RedPacketAPI {
 
 export interface WalletAPI {
     dataSource: 'real' | 'mock'
-    addWalletPrivateKey(wallet: string, key: string): void
-    removeWalletPrivateKey(wallet: string, key: string): void
     queryBalance(address: string): Promise<bigint>
     queryERC20TokenBalance(walletAddress: string, tokenAddress: string): Promise<bigint>
     approveERC20Token(

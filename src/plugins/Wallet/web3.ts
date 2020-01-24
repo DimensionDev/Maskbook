@@ -1,9 +1,8 @@
 import Web3 from 'web3'
+import { WebsocketProvider } from 'web3-core'
 import { getNetworkSettings, currentEthereumNetworkSettings } from './network'
-
-// export const web3 = new Web3(
-//     new Web3.providers.WebsocketProvider('wss://mainnet.infura.io/ws/v3/11f8b6b36f4a408e85d8a4e52d31edc5'),
-// )
+import { getWallets, recoverWallet } from './wallet'
+import { PluginMessageCenter } from '../PluginMessages'
 
 interface Window {
     CloseEvent: any
@@ -11,34 +10,37 @@ interface Window {
 
 export const web3 = new Web3()
 
-let provider: any
-let retries = 0
+let provider: WebsocketProvider
 
-export const resetProvider = (e?: Event) => {
-    const isFatal = e instanceof globalThis.CloseEvent || retries > 2
-    if (e && !isFatal) retries += 1
-    else {
-        if (e) console.warn('resetting web3 websocket provider', e)
-        provider = new Web3.providers.WebsocketProvider(getNetworkSettings().middlewareAddress)
-        provider.on('end', resetProvider)
-        provider.on('error', resetProvider)
-        web3.setProvider(provider)
-        retries = 0
+export const resetProvider = () => {
+    if (provider) {
+        provider.removeListener('end', resetProvider) // prevent from circular reseting
+        provider.disconnect(-1, 'change provider')
+    }
+    const newProvider = new Web3.providers.WebsocketProvider(getNetworkSettings().middlewareAddress)
+
+    newProvider.on('end', resetProvider)
+    provider = newProvider
+    web3.setProvider(newProvider)
+}
+
+export const resetWallet = async () => {
+    web3.eth.accounts.wallet.clear()
+
+    const [wallets] = await getWallets()
+
+    for await (const { mnemonic, passphrase } of wallets) {
+        const { privateKey } = await recoverWallet(mnemonic, passphrase)
+        web3.eth.accounts.wallet.add(`0x${buf2hex(privateKey)}`)
     }
 }
-currentEthereumNetworkSettings.addListener(() => resetProvider())
+
+currentEthereumNetworkSettings.addListener(resetProvider)
+PluginMessageCenter.on('maskbook.wallets.reset', resetWallet)
+
+resetWallet()
 resetProvider()
 
-console.log(web3)
-
-// export function switchToNetwork(x: EthereumNetwork) {
-//     if (x === EthereumNetwork.Mainnet) {
-//         web3.setProvider(
-//             new Web3.providers.WebsocketProvider('wss://rinkeby.infura.io/ws/v3/11f8b6b36f4a408e85d8a4e52d31edc5'),
-//         )
-//     } else if (x === EthereumNetwork.Rinkeby) {
-//         web3.setProvider(
-//             new Web3.providers.WebsocketProvider('wss://mainnet.infura.io/ws/v3/11f8b6b36f4a408e85d8a4e52d31edc5'),
-//         )
-//     }
-// }
+function buf2hex(buffer: ArrayBuffer) {
+    return Array.prototype.map.call(new Uint8Array(buffer), x => ('00' + x.toString(16)).slice(-2)).join('')
+}
