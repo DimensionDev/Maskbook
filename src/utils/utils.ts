@@ -138,7 +138,7 @@ export const asyncTimes = async <T>(
     times: number,
     iteratee: () => Promise<T | void>,
     {
-        delay = 4000,
+        delay = 30 * 1000,
         earlyStop = true,
     }: {
         delay?: number
