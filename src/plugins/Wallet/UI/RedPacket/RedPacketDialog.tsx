@@ -171,6 +171,20 @@ function NewPacket(props: RedPacketDialogProps & NewPacketProps) {
             erc20_token: selectedTokenType.type === 'eth' ? undefined : selectedTokenType.address,
         })
     }
+    const ethBalance = selectedWallet
+        ? `${
+              typeof selectedWallet.eth_balance === 'bigint'
+                  ? formatBalance(selectedWallet.eth_balance, 18)
+                  : '(Syncing...)'
+          } ETH`
+        : undefined
+    const erc20Balance = selectedToken
+        ? `${
+              typeof selectedToken.amount === 'bigint'
+                  ? formatBalance(selectedToken.amount, selectedToken.decimals)
+                  : '(Syncing...)'
+          } ${selectedToken.symbol}`
+        : undefined
     return (
         <div>
             {rinkebyNetwork ? <div>Debug mode, will use test rinkeby to send your red packet</div> : null}
@@ -206,11 +220,7 @@ function NewPacket(props: RedPacketDialogProps & NewPacketProps) {
                         </MenuItem>
                         {availableTokens.map(x => (
                             <MenuItem disabled={typeof x.amount !== 'bigint'} key={x.address} value={x.address}>
-                                {x.name} ({x.symbol}) (Balance:
-                                {` ${
-                                    typeof x.amount === 'bigint' ? formatBalance(x.amount, x.decimals) : 'Syncing...'
-                                }`}
-                                )
+                                {x.name} ({x.symbol})
                             </MenuItem>
                         ))}
                     </Select>
@@ -262,11 +272,9 @@ function NewPacket(props: RedPacketDialogProps & NewPacketProps) {
             <div className={classes.line}>
                 <Typography variant="body2">
                     {selectedWallet
-                        ? `Balance: ${
-                              typeof selectedWallet.eth_balance === 'bigint'
-                                  ? formatBalance(selectedWallet.eth_balance, 18)
-                                  : '(Syncing...)'
-                          } ETH`
+                        ? erc20Balance
+                            ? `Balance: ${erc20Balance} (${ethBalance})`
+                            : `Balance: ${ethBalance}`
                         : null}
                     <br />
                     Notice: A small gas fee will occur for publishing.
