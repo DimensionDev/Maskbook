@@ -174,7 +174,7 @@ export function ImmersiveSetupStepperUI(props: ImmersiveSetupStepperUIProps) {
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 color="textSecondary"
-                                href="https://github.com/DimensionDev/Maskbook/wiki/FAQ#why-maskbook-recommend-users-publish-their-public-keys-in-their-bio"
+                                href="https://maskbook.com/faq/?2"
                                 variant="body2">
                                 {geti18nString('immersive_setup_help_dont_know_what_is_username')}
                             </Link>
