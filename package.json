@@ -41,7 +41,7 @@
     "@types/bip39": "^3.0.0",
     "@types/classnames": "^2.2.7",
     "@types/gun": "^0.9.1",
-    "@types/jest": "^24.0.25",
+    "@types/jest": "^24.9.1",
     "@types/json-stable-stringify": "^1.0.32",
     "@types/jsonwebtoken": "^8.3.6",
     "@types/lodash-es": "^4.17.3",
