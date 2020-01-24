@@ -177,12 +177,13 @@ export const redPacketAPI: RedPacketAPI = {
     },
     async watchClaimResult(id) {
         const contract = createRedPacketContract(getNetworkSettings().contractAddress)
-        const { blockNumber } = await web3.eth.getTransaction(id.transactionHash)
-
-        if (!blockNumber) {
-            return
-        }
         asyncTimes(10, async () => {
+            const { blockNumber } = await web3.eth.getTransaction(id.transactionHash)
+
+            if (!blockNumber) {
+                return
+            }
+
             const evs = await contract.getPastEvents('ClaimSuccess', {
                 fromBlock: blockNumber,
                 toBlock: blockNumber,
@@ -222,12 +223,12 @@ export const redPacketAPI: RedPacketAPI = {
     },
     async watchCreateResult(id) {
         const contract = createRedPacketContract(getNetworkSettings().contractAddress)
-        const { blockNumber } = await web3.eth.getTransaction(id.transactionHash)
-
-        if (!blockNumber) {
-            return
-        }
         asyncTimes(10, async () => {
+            const { blockNumber } = await web3.eth.getTransaction(id.transactionHash)
+
+            if (!blockNumber) {
+                return
+            }
             const evs = await contract.getPastEvents('CreationSuccess', {
                 fromBlock: blockNumber,
                 toBlock: blockNumber,
@@ -357,12 +358,12 @@ export const redPacketAPI: RedPacketAPI = {
     },
     async watchRefundResult(id) {
         const contract = createRedPacketContract(getNetworkSettings().contractAddress)
-        const { blockNumber } = await web3.eth.getTransaction(id.transactionHash)
-
-        if (!blockNumber) {
-            return
-        }
         asyncTimes(10, async () => {
+            const { blockNumber } = await web3.eth.getTransaction(id.transactionHash)
+
+            if (!blockNumber) {
+                return
+            }
             const evs = await contract.getPastEvents('RefundSuccess', {
                 fromBlock: blockNumber,
                 toBlock: blockNumber,
