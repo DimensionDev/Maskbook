@@ -337,10 +337,12 @@ export function PostDialog(props: PostDialogProps) {
                     if (readTypedMessageMetadata(props.typedMessageMetadata, 'com.maskbook.red_packet:1').hasValue) {
                         if (getCurrentLanguage() === 'zh') {
                             text =
-                                '春節快樂，用 Maskbook 開啟 Twitter 上第一個紅包！ （僅限 Twitter web 版）#MakerDAO #Maskbook 用@realMaskbook 解密 $1'
+                                '春節快樂，用 Maskbook 開啟 Twitter 上第一個紅包！ （僅限 Twitter web 版）#MakerDAO #Maskbook 用@realMaskbook 解密 ' +
+                                encrypted
                         } else {
                             text =
-                                'Happy Chinese New Year and use Maskbook to receive the first Twitter Red Packet. (Only available on Twitter for web） #MakerDAO #Maskbook Decrypt with @realMaskbook $1'
+                                'Happy Chinese New Year and use Maskbook to receive the first Twitter Red Packet. (Only available on Twitter for web） #MakerDAO #Maskbook Decrypt with @realMaskbook ' +
+                                encrypted
                         }
                     }
                     activeUI.taskPasteIntoPostBox(text, {
