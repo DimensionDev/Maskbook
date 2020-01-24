@@ -29,7 +29,9 @@ const memoQueryERC20Token = memoizePromise(
         return getWalletProvider()
             .queryERC20TokenBalance(addr, erc20Addr)
             .then(x => onWalletERC20TokenBalanceUpdated(addr, erc20Addr, x))
-            .catch(() => onWalletERC20TokenBalanceUpdated(addr, erc20Addr, BigInt(0)))
+            .catch(() => {
+                // do nothing
+            })
     },
     (x, y) => x + ',' + y,
 )
@@ -69,11 +71,10 @@ export async function createNewWallet(
 export async function importNewWallet(
     rec: Omit<WalletRecord, 'id' | 'address' | 'eth_balance' | '_data_source_' | 'erc20_token_balance'>,
 ) {
-    const { address, privateKey } = await recoverWallet(rec.mnemonic, rec.passphrase)
+    const { address } = await recoverWallet(rec.mnemonic, rec.passphrase)
     const bal = await getWalletProvider()
         .queryBalance(address)
         .catch(x => undefined)
-    getWalletProvider().addWalletPrivateKey(address, buf2hex(privateKey))
     const record: WalletRecord = {
         ...rec,
         address,
@@ -84,7 +85,9 @@ export async function importNewWallet(
     }
     {
         const t = createTransaction(await createWalletDBAccess(), 'readwrite')('Wallet', 'ERC20Token')
-        t.objectStore('Wallet').add(record)
+        t.objectStore('Wallet')
+            .add(record)
+            .then(() => PluginMessageCenter.emit('maskbook.wallets.reset', undefined))
         t.objectStore('ERC20Token').put({
             decimals: 18,
             symbol: 'DAI',
@@ -118,14 +121,11 @@ export async function renameWallet(address: string, name: string) {
 export async function removeWallet(address: string) {
     const t = createTransaction(await createWalletDBAccess(), 'readwrite')('Wallet')
     const wallet = await getWalletByAddress(t, address)
-
-    getWalletProvider().removeWalletPrivateKey(
-        wallet.address,
-        buf2hex((await recoverWallet(wallet.mnemonic, wallet.passphrase)).privateKey),
-    )
     {
         const t = createTransaction(await createWalletDBAccess(), 'readwrite')('Wallet')
-        t.objectStore('Wallet').delete(wallet.address)
+        t.objectStore('Wallet')
+            .delete(wallet.address)
+            .then(() => PluginMessageCenter.emit('maskbook.wallets.reset', undefined))
     }
     PluginMessageCenter.emit('maskbook.wallets.update', undefined)
 }
@@ -184,7 +184,4 @@ async function getWalletByAddress(t: IDBPSafeTransaction<WalletDB, ['Wallet'], '
     const rec = await t.objectStore('Wallet').get(address)
     assert(rec)
     return rec
-}
-function buf2hex(buffer: ArrayBuffer) {
-    return Array.prototype.map.call(new Uint8Array(buffer), x => ('00' + x.toString(16)).slice(-2)).join('')
 }
