@@ -83,7 +83,7 @@ function parseText(string: string) {
             const link = links[0].protocol + links[0].encoded
             result.push(
                 current.substring(0, search2),
-                <Link target="_blank" href={link} key={link}>
+                <Link target="_blank" rel="noopener noreferrer" href={link} key={link}>
                     {links[0].raw}
                 </Link>,
             )

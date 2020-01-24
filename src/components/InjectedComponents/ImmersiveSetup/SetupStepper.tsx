@@ -170,10 +170,14 @@ export function ImmersiveSetupStepperUI(props: ImmersiveSetupStepperUIProps) {
                         <br />
                         <Typography>{geti18nString('immersive_setup_username_confirm')}</Typography>
                         <Typography>
-                            {/* TODO: Hide until there is a tutorial for this. */}
-                            {/* <Link color="textSecondary" href="/" variant="body2">
+                            <Link
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                color="textSecondary"
+                                href="https://github.com/DimensionDev/Maskbook/wiki/FAQ#why-maskbook-recommend-users-publish-their-public-keys-in-their-bio"
+                                variant="body2">
                                 {geti18nString('immersive_setup_help_dont_know_what_is_username')}
-                            </Link> */}
+                            </Link>
                         </Typography>
                     </>
                 )
@@ -186,6 +190,10 @@ export function ImmersiveSetupStepperUI(props: ImmersiveSetupStepperUIProps) {
                             {props.provePost}
                         </Typography>
                         <Typography>{geti18nString('immersive_setup_add_bio_text')}</Typography>
+                        {/* <Link style={{ textDecoration: 'underline' }} color="textSecondary" href="/" variant="body2">
+                            Link text here, Link text here
+                        </Link> */}
+                        <br />
                         <ActionButtonPromise
                             variant="contained"
                             color="primary"
