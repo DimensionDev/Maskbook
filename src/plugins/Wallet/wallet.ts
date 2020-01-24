@@ -36,6 +36,10 @@ const clearCache = () => {
     memoGetWalletBalance?.cache?.clear?.()
     memoQueryERC20Token?.cache?.clear?.()
 }
+PluginMessageCenter.on('maskbook.red_packets.update', () => {
+    clearCache()
+    PluginMessageCenter.emit('maskbook.wallets.update', undefined)
+})
 /** Cache most valid for 60 seconds */
 setInterval(clearCache, 1000 * 60 * 60)
 currentEthereumNetworkSettings.addListener(() => {
