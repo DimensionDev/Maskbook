@@ -5,13 +5,17 @@ import { getNetworkSettings, currentEthereumNetworkSettings } from './network'
 //     new Web3.providers.WebsocketProvider('wss://mainnet.infura.io/ws/v3/11f8b6b36f4a408e85d8a4e52d31edc5'),
 // )
 
+interface Window {
+    CloseEvent: any
+}
+
 export const web3 = new Web3()
 
 let provider: any
 let retries = 0
 
-export const resetProvider = (e?: CloseEvent | Event) => {
-    const isFatal = e instanceof CloseEvent || retries > 2
+export const resetProvider = (e?: Event) => {
+    const isFatal = e instanceof globalThis.CloseEvent || retries > 2
     if (e && !isFatal) retries += 1
     else {
         if (e) console.warn('resetting web3 websocket provider', e)
