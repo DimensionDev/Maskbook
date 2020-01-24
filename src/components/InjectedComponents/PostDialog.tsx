@@ -16,7 +16,7 @@ import {
     Box,
     Chip,
 } from '@material-ui/core'
-import { geti18nString } from '../../utils/i18n'
+import { geti18nString, getCurrentLanguage } from '../../utils/i18n'
 import { MessageCenter, CompositionEvent } from '../../utils/messages'
 import { useCapturedInput } from '../../utils/hooks/useCapturedEvents'
 import { useStylesExtends, or } from '../custom-ui-helper'
@@ -333,7 +333,17 @@ export function PostDialog(props: PostDialogProps) {
                         warningText: geti18nString('additional_post_box__steganography_post_failed'),
                     })
                 } else {
-                    activeUI.taskPasteIntoPostBox(geti18nString('additional_post_box__encrypted_post_pre', encrypted), {
+                    let text = geti18nString('additional_post_box__encrypted_post_pre', encrypted)
+                    if (readTypedMessageMetadata(props.typedMessageMetadata, 'com.maskbook.red_packet:1').hasValue) {
+                        if (getCurrentLanguage() === 'zh') {
+                            text =
+                                '春節快樂，用 Maskbook 開啟 Twitter 上第一個紅包！ （僅限 Twitter web 版）#MakerDAO #Maskbook 用@realMaskbook 解密 $1'
+                        } else {
+                            text =
+                                'Happy Chinese New Year and use Maskbook to receive the first Twitter Red Packet. (Only available on Twitter for web） #MakerDAO #Maskbook Decrypt with @realMaskbook $1'
+                        }
+                    }
+                    activeUI.taskPasteIntoPostBox(text, {
                         warningText: geti18nString('additional_post_box__encrypted_failed'),
                         shouldOpenPostDialog: false,
                     })
@@ -342,7 +352,7 @@ export function PostDialog(props: PostDialogProps) {
                 // there is nothing to write if it shared with public
                 if (!shareToEveryone) Services.Crypto.publishPostAESKey(token)
             },
-            [currentIdentity, isSteganography, shareToEveryone],
+            [currentIdentity, isSteganography, props.typedMessageMetadata, shareToEveryone],
         ),
     )
     const onRequestReset = or(
