@@ -29,6 +29,7 @@ const memoQueryERC20Token = memoizePromise(
         return getWalletProvider()
             .queryERC20TokenBalance(addr, erc20Addr)
             .then(x => onWalletERC20TokenBalanceUpdated(addr, erc20Addr, x))
+            .catch(() => onWalletERC20TokenBalanceUpdated(addr, erc20Addr, BigInt(0)))
     },
     (x, y) => x + ',' + y,
 )
