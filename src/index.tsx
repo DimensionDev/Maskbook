@@ -12,9 +12,11 @@ import {
     Tab,
 } from '@material-ui/core'
 
+import AccountBalanceWalletIcon from '@material-ui/icons/AccountBalanceWallet'
 import CloseIcon from '@material-ui/icons/Close'
-import BookmarkIcon from '@material-ui/icons/Bookmark'
-import LocationOnIcon from '@material-ui/icons/LocationOn'
+import HomeIcon from '@material-ui/icons/Home'
+import CreditCardIcon from '@material-ui/icons/CreditCard'
+import BugReportIcon from '@material-ui/icons/BugReport'
 
 import React from 'react'
 import { ThemeProvider } from '@material-ui/styles'
@@ -34,6 +36,7 @@ import { DialogRouter } from './extension/options-page/DashboardDialogs/DialogBa
 import DashboardHomePage from './extension/options-page/Home'
 import DashboardDebugPage from './extension/options-page/Debug'
 import DashboardInitializeDialog from './extension/options-page/Initialize'
+import DashboardWalletsPage from './plugins/Wallet/UI/Dashboard/Wallets'
 
 const useStyles = makeStyles(theme =>
     createStyles({
@@ -77,7 +80,8 @@ const OptionsPageRouters = (
     <>
         <Switch>
             <Route path="/home/" component={DashboardHomePage} />
-            <Route path="/debug/" component={DashboardDebugPage}></Route>
+            <Route path="/wallets/" component={DashboardWalletsPage} />
+            <Route path="/debug/" component={DashboardDebugPage} />
             <DialogRouter path="/initialize" component={DashboardInitializeDialog} onExit={'/'} fullscreen />
             <Redirect path="*" to="/home/" />
         </Switch>
@@ -110,11 +114,11 @@ function Dashboard() {
     const shouldNotRenderAppBar = useMediaQuery('(min-width:1024px)')
 
     const routers: [string, string, JSX.Element][] = [
-        [geti18nString('home'), '/home/', <BookmarkIcon />],
-        // ['Device', '/device/', <CachedIcon />],
+        [geti18nString('home'), '/home/', <HomeIcon />],
+        ['Wallets', '/wallets/', <CreditCardIcon />],
         // ['Settings', '/settings/', <SettingsIcon />],
         // ['About', '/about/', <InfoOutlinedIcon />],
-        [geti18nString('debug'), '/debug/', <LocationOnIcon />],
+        [geti18nString('debug'), '/debug/', <BugReportIcon />],
     ]
 
     const history = useHistory()

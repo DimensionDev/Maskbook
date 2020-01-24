@@ -27,7 +27,7 @@ export function injectPostCommentsDefault<T extends string>(
         return (
             <PostComment
                 needZip={props.needZip}
-                decryptedPostContent={props.decryptedPostContent}
+                decryptedPostContentRaw={props.decryptedPostContentRaw}
                 comment={props.comment}
                 postPayload={props.postPayload}
                 {...additional}

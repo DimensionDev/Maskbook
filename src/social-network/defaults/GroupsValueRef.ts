@@ -14,6 +14,7 @@ export function InitGroupsValueRef(
     groupIDs: string[] = [PreDefinedVirtualGroupNames.friends],
 ) {
     create(network, self.groupsRef, groupIDs)
+    MessageCenter.on('identityCreated', () => create(network, self.groupsRef, groupIDs))
     MessageCenter.on('joinGroup', ({ group, newMembers }) => join(group, self.groupsRef, newMembers))
     MessageCenter.on(
         'groupsChanged',

@@ -18,12 +18,16 @@ import * as UserGroupService from './extension/background-script/UserGroupServic
 import * as SteganographyService from './extension/background-script/SteganographyService'
 import { decryptFromMessageWithProgress } from './extension/background-script/CryptoServices/decryptFrom'
 import { initAutoShareToFriends } from './extension/background-script/Jobs/AutoShareToFriends'
+
+const PluginService = require('./extension/background-script/PluginService')
+
 Object.assign(window, {
     CryptoService,
     WelcomeService,
     SteganographyService,
     IdentityService,
     UserGroupService,
+    PluginService,
 })
 Object.assign(window, {
     ServicesWithProgress: {

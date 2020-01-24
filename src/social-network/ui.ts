@@ -12,6 +12,7 @@ import { Theme } from '@material-ui/core'
 import { MaskbookLightTheme, MaskbookDarkTheme } from '../utils/theme'
 import { untilDomLoaded } from '../utils/dom'
 import { I18NStrings } from '../utils/i18n'
+import { TypedMessage } from '../extension/background-script/CryptoServices/utils'
 
 OnlyRunInContext(['content', 'debugging', 'options'], 'UI provider')
 
@@ -233,8 +234,14 @@ export interface SocialNetworkUIDataSources {
      * Posts that Maskbook detects
      */
     readonly posts?: WeakMap<object, PostInfo>
+    /**
+     * Typed message metadata
+     */
+    readonly typedMessageMetadata?: ValueRef<ReadonlyMap<string, any>>
 }
 export type PostInfo = {
+    readonly nickname: ValueRef<string | null>
+    readonly avatarURL: ValueRef<string | null>
     readonly postBy: ValueRef<ProfileIdentifier>
     readonly postID: ValueRef<string | null>
     readonly postContent: ValueRef<string>
@@ -242,7 +249,8 @@ export type PostInfo = {
     readonly steganographyContent: ValueRef<string>
     readonly commentsSelector?: LiveSelector<HTMLElement, false>
     readonly commentBoxSelector?: LiveSelector<HTMLElement, false>
-    readonly decryptedPostContent: ValueRef<string>
+    readonly decryptedPostContent: ValueRef<TypedMessage | null>
+    readonly decryptedPostContentRaw: ValueRef<string>
     readonly rootNode: HTMLElement
     readonly rootNodeProxy: DOMProxy
 }
@@ -275,14 +283,19 @@ export type SocialNetworkUI = Required<SocialNetworkUIDefinition>
 export const getEmptyPostInfoByElement = (
     opt: Pick<PostInfo, 'rootNode' | 'rootNodeProxy' | 'commentsSelector' | 'commentBoxSelector'>,
 ) => {
-    return {
-        decryptedPostContent: new ValueRef(''),
+    const x: PostInfo = {
+        decryptedPostContent: new ValueRef<TypedMessage | null>(null),
+        decryptedPostContentRaw: new ValueRef(''),
         postBy: new ValueRef(ProfileIdentifier.unknown, ProfileIdentifier.equals),
         postContent: new ValueRef(''),
         postID: new ValueRef<string | null>(null),
         postPayload: new ValueRef<Payload | null>(null),
+        avatarURL: new ValueRef<string | null>(null),
+        nickname: new ValueRef<string | null>(null),
+        steganographyContent: new ValueRef<string>(''),
         ...opt,
-    } as PostInfo
+    }
+    return x
 }
 
 export const definedSocialNetworkUIs = new Set<SocialNetworkUI>()

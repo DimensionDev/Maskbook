@@ -16,7 +16,7 @@ import { useColorProvider } from '../../../utils/theme'
 import { geti18nString } from '../../../utils/i18n'
 import { QrCode, WKWebkitQRScanner } from '../../../components/shared/qrcode'
 import { compressBackupFile, decompressBackupFile } from '../../../utils/type-transform/BackupFileShortRepresentation'
-import QRScanner from '../../../components/Welcomes/QRScanner'
+import QRScanner from '../../../components/QRScanner'
 import { UpgradeBackupJSONFile } from '../../../utils/type-transform/BackupFormat/JSON/latest'
 import { hasWKWebkitRPCHandlers } from '../../../utils/iOS-RPC'
 import {

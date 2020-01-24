@@ -1,6 +1,9 @@
 import React from 'react'
 import { storiesOf } from '@storybook/react'
-import { ImmersiveSetupStepper } from '../components/InjectedComponents/ImmersiveSetup/SetupStepper'
+import {
+    ImmersiveSetupStepper,
+    ImmersiveSetupState,
+} from '../components/InjectedComponents/ImmersiveSetup/SetupStepper'
 import { text } from '@storybook/addon-knobs'
 import { sleep } from '@holoflows/kit/es/util/sleep'
 import { action } from '@storybook/addon-actions'
@@ -8,6 +11,7 @@ import { ECKeyIdentifier } from '../database/type'
 
 storiesOf('Immersive Setup', module).add('Stepper', () => (
     <ImmersiveSetupStepper
+        // currentStep={ImmersiveSetupState.PasteBio}
         persona={new ECKeyIdentifier('secp256k1', 'test_key')}
         loadProfile={async () => {
             action('loadProfile')()

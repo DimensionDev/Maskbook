@@ -46,7 +46,7 @@
         "message": "在找 Maskbook 嗎？"
     },
     "post_modal_hint__button": {
-        "message": "編輯加密訊息"
+        "message": "🔒編輯加密訊息🔒"
     },
     "select_specific_friends_dialog__title": {
         "message": "選擇好友"
@@ -747,19 +747,55 @@
     "please_include_proof_your_bio": {
         "message": "請在您的個人簡介中包含引号内的内容 \"$1\"，否則您可能沒法正常使用 Maskbook"
     },
-    "immersive_setup_title": "設定 Maskbook",
-    "immersive_setup_connect_as": "要連接 $1 嗎？",
-    "immersive_setup_connect_as_unknown": "你希望以什么身份連接？",
-    "immersive_setup_paste_into_bio": "將密鑰粘入個人簡介",
-    "connecting": "連接中……",
-    "immersive_setup_connect_profile": "我確認這是我的賬號",
-    "username": "用戶名",
-    "immersive_setup_username_confirm": "Maskbook 需要瞭解你的用戶名才能繼續。這是正確的用戶名嗎？",
-    "immersive_setup_help_dont_know_what_is_username": "但我不知道我的用戶名是什么！",
-    "immersive_setup_add_bio_text": "請將此文本添加到您的個人簡介。請勿刪除或更改任何部分！",
-    "immersive_setup_paste_into_bio_auto": "幫我加上！",
-    "adding": "添加中……",
-    "done": "搞定！",
-    "immersive_setup_paste_into_bio_failed": "失敗了……請手動將其添加到您的個人簡介中！",
-    "immersive_setup_no_bio_got": "Maskbook 出現了一些問題！請報告給 Maskbook 的開發者(https://t.me/maskbook_group)，謝謝！"
+    "popup_enter_dashboard": {
+        "message": "進入儀表盘"
+    },
+    "immersive_setup_title": {
+        "message": "設定 Maskbook"
+    },
+    "immersive_setup_connect_as": {
+        "message": "要連接 $1 嗎？"
+    },
+    "immersive_setup_connect_as_unknown": {
+        "message": "你希望以哪個推特賬戶連接？"
+    },
+    "immersive_setup_paste_into_bio": {
+        "message": "「可選的」將密鑰粘入個人簡介"
+    },
+    "connecting": {
+        "message": "連接中……"
+    },
+    "immersive_setup_connect_profile": {
+        "message": "我確認這是我的賬號"
+    },
+    "username": {
+        "message": "用戶名"
+    },
+    "immersive_setup_username_confirm": {
+        "message": "Maskbook 需要瞭解你的用戶名才能繼續。這是正確的用戶名嗎？"
+    },
+    "immersive_setup_help_dont_know_what_is_username": {
+        "message": "但我不知道我的用戶名是什么！"
+    },
+    "immersive_setup_add_bio_text": {
+        "message": "我們建議你把你的公鑰添加到個人簡介中，若如此做，請不要更改或刪除任何一部分。"
+    },
+    "immersive_setup_paste_into_bio_auto": {
+        "message": "幫我加上它"
+    },
+    "adding": {
+        "message": "添加中……"
+    },
+    "done": {
+        "message": "搞定！"
+    },
+    "immersive_setup_paste_into_bio_failed": {
+        "message": "失敗了……請手動將其添加到您的個人簡介中"
+    },
+    "immersive_setup_no_bio_got": {
+        "message": "Maskbook 出現了一些問題！請報告給 Maskbook 的開發者(https://t.me/maskbook_group)，謝謝！"
+    },
+    "post_dialog__select_recipients_share_to_everyone": {
+        "message": "分享給所有人"
+    }
 }

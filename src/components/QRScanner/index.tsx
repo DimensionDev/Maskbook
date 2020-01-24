@@ -1,7 +1,7 @@
 /// <reference path="./ShapeDetectionPolyfill.ts" />
 import * as React from 'react'
 import { useRef } from 'react'
-import { useQRCodeScan } from '../../../utils/hooks/useQRCodeScan'
+import { useQRCodeScan } from '../../utils/hooks/useQRCodeScan'
 
 interface Props {
     scanning: boolean

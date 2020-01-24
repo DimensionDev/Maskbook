@@ -3,6 +3,7 @@ import { Grid, makeStyles, List } from '@material-ui/core'
 import { AddProve } from './DeveloperComponents/AddProve'
 import { DecryptPostDeveloperMode } from './DeveloperComponents/DecryptPost'
 import { SeeMyProvePost } from './DeveloperComponents/SeeMyProvePost'
+import { SelectEthereumNetwork } from '../../plugins/Wallet/UI/Developer/SelectEthereumNetwork'
 import { FriendsDeveloperMode } from './DeveloperComponents/Friends'
 import {
     debugModeSetting,
@@ -25,6 +26,9 @@ const DashboardDebugPage = () => {
                 <List>{useSettingsUI(steganographyModeSetting)}</List>
                 <List>{useSettingsUI(disableOpenNewTabInBackgroundSettings)}</List>
                 <Grid container item spacing={2} direction="column" alignItems="stretch" wrap="nowrap">
+                    <Grid item>
+                        <SelectEthereumNetwork />
+                    </Grid>
                     <Grid item>
                         <SeeMyProvePost />
                     </Grid>

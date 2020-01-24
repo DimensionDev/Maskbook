@@ -6,6 +6,7 @@ import { AsyncCall } from 'async-call-rpc'
 import Serialization from '../../utils/type-transform/Serialization'
 import { memoize } from 'lodash-es'
 
+type Required<T> = { [P in keyof T]-?: NonNullable<T[P]> }
 type ServiceType = Required<Pick<SocialNetworkWorker, 'autoVerifyBio' | 'autoVerifyPost' | 'manualVerifyPost'>>
 
 const getServiceFromNetworkWorker = memoize((worker: SocialNetworkWorker) => {
@@ -26,9 +27,15 @@ export function getCurrentNetworkWorkerService(network: string | Identifier) {
 export function startWorkerService(e: SocialNetworkWorker) {
     OnlyRunInContext('background', 'defineWorkerService')
     const impl: ServiceType = {
-        autoVerifyBio: e.autoVerifyBio,
-        autoVerifyPost: e.autoVerifyPost,
-        manualVerifyPost: e.manualVerifyPost,
+        autoVerifyBio: e.autoVerifyBio!,
+        autoVerifyPost: e.autoVerifyPost!,
+        manualVerifyPost: e.manualVerifyPost!,
     }
-    AsyncCall(impl, { serializer: Serialization, key: e.internalName, messageChannel: new MessageCenter(), log: true })
+    AsyncCall(impl, {
+        serializer: Serialization,
+        key: e.internalName,
+        messageChannel: new MessageCenter(),
+        log: true,
+        strict: { methodNotFound: true, noUndefined: false, unknownMessage: false },
+    })
 }

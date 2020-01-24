@@ -1,9 +1,9 @@
-/// <reference path="../../components/Welcomes/QRScanner/ShapeDetectionSpec.d.ts" />
+/// <reference path="../../components/QRScanner/ShapeDetectionSpec.d.ts" />
 /** This file is published under MIT License */
 import { useRef, useEffect, useState } from 'react'
 import { useRequestCamera, getBackVideoDeviceId } from './useRequestCamera'
 import { useInterval } from './useInterval'
-import '../../components/Welcomes/QRScanner/ShapeDetectionPolyfill'
+import '../../components/QRScanner/ShapeDetectionPolyfill'
 
 export function useQRCodeScan(
     video: React.MutableRefObject<HTMLVideoElement | null>,

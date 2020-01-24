@@ -154,6 +154,10 @@ export class GroupIdentifier extends Identifier {
 
 @serializable('PostIdentifier')
 export class PostIdentifier<T extends Identifier = Identifier> extends Identifier {
+    static readonly unknown = new PostIdentifier(ProfileIdentifier.unknown, '$unknown')
+    get isUnknown() {
+        return this.equals(PostIdentifier.unknown)
+    }
     /**
      * If identifier is a PostIdentifier, that means this post is binded with other post in some kind
      * e.g. a comment.

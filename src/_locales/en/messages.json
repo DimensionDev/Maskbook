@@ -46,7 +46,7 @@
         "message": "Looking for Maskbook?"
     },
     "post_modal_hint__button": {
-        "message": "Compose encrypted post"
+        "message": "🔒Compose encrypted post🔒"
     },
     "select_specific_friends_dialog__title": {
         "message": "Select Specific Friends"
@@ -747,19 +747,55 @@
     "please_include_proof_your_bio": {
         "message": "Please include the content in the quote \"$1\" in your bio to use Maskbook"
     },
-    "immersive_setup_title": "Setup Maskbook",
-    "immersive_setup_connect_as": "Connect as $1?",
-    "immersive_setup_connect_as_unknown": "Connect as who?",
-    "immersive_setup_paste_into_bio": "Paste this key to your bio",
-    "connecting": "Connecting...",
-    "immersive_setup_connect_profile": "Yes, I'm sure",
-    "username": "Username",
-    "immersive_setup_username_confirm": "Maskbook needs your username to connect your account. Does it correct?",
-    "immersive_setup_help_dont_know_what_is_username": "But I don't know what my username is!",
-    "immersive_setup_add_bio_text": "Please add this text to your bio. Don't remove or change any of it!",
-    "immersive_setup_paste_into_bio_auto": "Add it for me!",
-    "adding": "Adding...",
-    "done": "Done!",
-    "immersive_setup_paste_into_bio_failed": "Failed... Please add it to your bio manually!",
-    "immersive_setup_no_bio_got": "Maskbook have some problems when setting up! Please report this to Maskbook developer! Our Telegram group: https://t.me/maskbook_group"
+    "popup_enter_dashboard": {
+        "message": "Enter Dashboard"
+    },
+    "immersive_setup_title": {
+        "message": "Setup Maskbook"
+    },
+    "immersive_setup_connect_as": {
+        "message": "Connect as $1?"
+    },
+    "immersive_setup_connect_as_unknown": {
+        "message": "Connect as who?"
+    },
+    "immersive_setup_paste_into_bio": {
+        "message": "[Optional] Paste this key to your bio"
+    },
+    "connecting": {
+        "message": "Connecting..."
+    },
+    "immersive_setup_connect_profile": {
+        "message": "Yes, I'm sure"
+    },
+    "username": {
+        "message": "Username"
+    },
+    "immersive_setup_username_confirm": {
+        "message": "Maskbook needs your username to connect your account. Does it correct?"
+    },
+    "immersive_setup_help_dont_know_what_is_username": {
+        "message": "But I don't know what my username is!"
+    },
+    "immersive_setup_add_bio_text": {
+        "message": "Add the text above in your bio to access advanced features. Please don't delete or change it."
+    },
+    "immersive_setup_paste_into_bio_auto": {
+        "message": "Add it for me"
+    },
+    "adding": {
+        "message": "Adding..."
+    },
+    "done": {
+        "message": "Done!"
+    },
+    "immersive_setup_paste_into_bio_failed": {
+        "message": "Failed... Please add it to your bio manually"
+    },
+    "immersive_setup_no_bio_got": {
+        "message": "Maskbook have some problems when setting up! Please report this to Maskbook developer! Our Telegram group: https://t.me/maskbook_group"
+    },
+    "post_dialog__select_recipients_share_to_everyone": {
+        "message": "Share to Everyone"
+    }
 }

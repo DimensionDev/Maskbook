@@ -48,6 +48,9 @@ export const useColorProvider = makeStyles((theme: typeof MaskbookDarkTheme) =>
         },
         errorButton: {
             color: theme.palette.getContrastText(red[900]),
+            '&>.MuiButton-label': {
+                color: theme.palette.getContrastText(red[900]),
+            },
             '&:hover': {
                 background: theme.palette.type === 'dark' ? red[900] : red[700],
             },

@@ -61,14 +61,16 @@ const Transition = React.forwardRef<unknown, TransitionProps>(function Transitio
 interface DialogContentItemProps {
     title: JSX.Element | string
     content: JSX.Element | string
+    icon?: JSX.Element
     actions?: JSX.Element | null
     actionsAlign?: 'center'
     simplified?: boolean
+    tabs?: JSX.Element
     onExit?: string | (() => void)
 }
 
 export function DialogContentItem(props: DialogContentItemProps) {
-    const { title, content, actions, onExit, actionsAlign, simplified } = props
+    const { title, content, actions, onExit, actionsAlign, simplified, tabs, icon } = props
     const classes = useStyles()
     const history = useHistory()
 
@@ -84,12 +86,13 @@ export function DialogContentItem(props: DialogContentItemProps) {
             <DialogTitle className={classNames(classes.dialogTitle, { [classes.dialogTitleSimplified]: simplified })}>
                 {!simplified && (
                     <IconButton aria-label="close" className={classes.closeButton} onClick={onExitAction}>
-                        <CloseIcon />
+                        {icon ?? <CloseIcon />}
                     </IconButton>
                 )}
                 {title}
             </DialogTitle>
             {!simplified && <Divider />}
+            {tabs}
             <DialogContent className={classes.dialogContent}>{content}</DialogContent>
             <DialogActions
                 className={classNames(classes.dialogActions, {
@@ -110,7 +113,7 @@ interface DialogRouterProps {
 }
 
 export function DialogRouter(props: DialogRouterProps) {
-    const { component: Component, children, path, fullscreen, onExit } = props
+    const { component, children, path, fullscreen, onExit } = props
     const history = useHistory()
     const prevMatch = useRouteMatch()
     const matchPattern = useRouteMatch((prevMatch?.path ?? '/').replace(/\/$/, '') + path)
@@ -126,18 +129,6 @@ export function DialogRouter(props: DialogRouterProps) {
                   history.push(onExit || '..')
               }
 
-    const ChildrenComponent = React.memo(
-        function ChildrenComponent() {
-            return (
-                <>
-                    {Component && <Component />}
-                    {children || null}
-                </>
-            )
-        },
-        () => !routeMatching,
-    )
-
     return (
         <Dialog
             disableEscapeKeyDown
@@ -147,9 +138,11 @@ export function DialogRouter(props: DialogRouterProps) {
             open={routeMatching}
             classes={{ paper: classes.dialog }}
             TransitionComponent={Transition}>
-            <Route path={matchPattern?.path}>
-                <ChildrenComponent />
-            </Route>
+            {routeMatching && (
+                <Route path={matchPattern?.path} component={component}>
+                    {children}
+                </Route>
+            )}
         </Dialog>
     )
 }

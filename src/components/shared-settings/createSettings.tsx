@@ -59,32 +59,63 @@ export function createNetworkSpecificSettings<T extends browser.storage.StorageV
     return createInternalSettings(network, key, initialValue, comparer)
 }
 
-export function useSettingsUI<T>(settingsRef: ValueRef<T>) {
+let useStyles: () => Record<'container', string>
+
+export type SettingsMode = { type: 'auto' } | { type: 'enum'; enum: any }
+export function useSettingsUI<T>(settingsRef: ValueRef<T>, mode: SettingsMode = { type: 'auto' }) {
     // This file is share between context. prevent loading in the background.
-    const { ListItem, ListItemText, ListItemSecondaryAction, Switch } = safeMUI()
+    const { ListItem, ListItemText, ListItemSecondaryAction, Switch, Select, MenuItem, makeStyles } = safeMUI()
     const React = safeReact()
     const currentValue = useValueRef(settingsRef)
     const text = texts.get(settingsRef)!
-    function ui() {
-        switch (typeof currentValue) {
-            case 'boolean':
-                const ref = (settingsRef as ValueRef<unknown>) as ValueRef<boolean>
-                return (
-                    <ListItem button onClick={() => (ref.value = !ref.value)}>
-                        <ListItemText id={text.primary} primary={text.primary} secondary={text.secondary} />
-                        <ListItemSecondaryAction>
-                            <Switch
-                                inputProps={{ 'aria-labelledby': text.primary }}
-                                edge="end"
-                                checked={currentValue}
-                                onClick={() => (ref.value = !ref.value)}
-                            />
-                        </ListItemSecondaryAction>
-                    </ListItem>
-                )
-            default:
-                throw new Error('Not implemented yet')
-        }
+    if (typeof useStyles === 'undefined') {
+        useStyles = makeStyles({
+            container: { listStyleType: 'none', width: '100%' },
+        })
     }
-    return ui()
+    const classes = useStyles()
+
+    function enumUI(enumObject: any) {
+        return (
+            <ListItem component="div" dense disableGutters classes={classes}>
+                <ListItemText id={text.primary} primary={text.primary} secondary={text.secondary} />
+                <ListItemSecondaryAction>
+                    <Select
+                        value={settingsRef.value}
+                        onChange={(event: React.ChangeEvent<any>) => {
+                            const value = event.target.value
+                            if (!(enumObject as any)[value]) throw new Error('Invalid state')
+                            settingsRef.value = value
+                        }}>
+                        {Object.values(enumObject).map(type => (
+                            <MenuItem value={String(type)} key={String(type)}>
+                                {String(type)}
+                            </MenuItem>
+                        ))}
+                    </Select>
+                </ListItemSecondaryAction>
+            </ListItem>
+        )
+    }
+    if (mode.type === 'enum') return enumUI(mode.enum)
+    // Auto UI
+    switch (typeof currentValue) {
+        case 'boolean':
+            const ref = (settingsRef as ValueRef<unknown>) as ValueRef<boolean>
+            return (
+                <ListItem button onClick={() => (ref.value = !ref.value)}>
+                    <ListItemText id={text.primary} primary={text.primary} secondary={text.secondary} />
+                    <ListItemSecondaryAction>
+                        <Switch
+                            inputProps={{ 'aria-labelledby': text.primary }}
+                            edge="end"
+                            checked={currentValue}
+                            onClick={() => (ref.value = !ref.value)}
+                        />
+                    </ListItemSecondaryAction>
+                </ListItem>
+            )
+        default:
+            throw new Error('Not implemented yet')
+    }
 }

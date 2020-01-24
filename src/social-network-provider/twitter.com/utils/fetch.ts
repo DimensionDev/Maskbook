@@ -78,7 +78,10 @@ export const postIdParser = (node: HTMLElement) => {
     } else {
         const idNode = defaultTo(
             node.children[1]?.querySelector<HTMLAnchorElement>('a[href*="status"]'),
-            node.closest('article > div')?.querySelector<HTMLAnchorElement>('a[href*="status"]'), // use the pid of parent tweet
+            defaultTo(
+                node.parentElement!.querySelector<HTMLAnchorElement>('a[href*="status"]'),
+                node.closest('article > div')?.querySelector<HTMLAnchorElement>('a[href*="status"]'),
+            ),
         )
         return idNode ? parseId(idNode.href) : parseId(location.href)
     }
@@ -125,11 +128,13 @@ export const postContentParser = (node: HTMLElement) => {
             })
             .join(',')
     } else {
-        const select = <T extends HTMLElement>(selectors: string) =>
-            Array.from(node.parentElement!.querySelectorAll<T>(selectors))
+        const select = <T extends HTMLElement>(selectors: string) => {
+            const lang = node.parentElement!.querySelector<HTMLDivElement>('[lang]')
+            return lang ? Array.from(lang.querySelectorAll<T>(selectors)) : []
+        }
         const sto = [
             ...select<HTMLAnchorElement>('a').map(x => x.title),
-            ...select<HTMLSpanElement>('[lang] > span').map(x => x.innerText),
+            ...select<HTMLSpanElement>('span').map(x => x.innerText),
         ]
         return sto.filter(Boolean).join(',')
     }
@@ -140,9 +145,12 @@ export const postImageParser = async (node: HTMLElement) => {
         // TODO: Support steganography in legacy twitter
         return ''
     } else {
+        const isQuotedTweet = !!node.closest('[role="blockquote"]')
         const imgNodes = node.querySelectorAll<HTMLImageElement>('img[src*="twimg.com/media"]')
         if (!imgNodes.length) return ''
-        const imgUrls = Array.from(imgNodes).map(node => node.getAttribute('src') ?? '')
+        const imgUrls = Array.from(imgNodes)
+            .filter(node => (!isQuotedTweet ? !node.closest('[role="blockquote"]') : true))
+            .map(node => node.getAttribute('src') ?? '')
         if (!imgUrls.length) return ''
         const { handle } = postNameParser(node)
         const posterIdentity = new ProfileIdentifier(twitterUrl.hostIdentifier, handle)

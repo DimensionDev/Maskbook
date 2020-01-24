@@ -4,13 +4,18 @@ import { makeStyles, Typography, Link, Card } from '@material-ui/core'
 import anchorme from 'anchorme'
 import { useStylesExtends } from '../custom-ui-helper'
 import classNames from 'classnames'
+import { TypedMessageText } from '../../extension/background-script/CryptoServices/utils'
+import WithRedPacket from '../../plugins/Wallet/UI/RedPacket/WithRedPacket'
+import { PostIdentifier, ProfileIdentifier } from '../../database/type'
 
 export interface AdditionalContentProps extends withClasses<KeysInferFromUseStyles<typeof useStyles>> {
     title: React.ReactNode
     children?: React.ReactNode
     center?: boolean
     renderText?: string
+    renderItem?: TypedMessageText
     hideIcon?: boolean
+    postIdentifier?: PostIdentifier<ProfileIdentifier>
 }
 const useStyles = makeStyles({
     root: { backgroundColor: 'transparent' },
@@ -32,9 +37,18 @@ export const AdditionalContent = React.memo(function AdditionalContent(props: Ad
                 {props.hideIcon ? null : <img alt="" width={16} height={16} src={icon} className={classes.icon} />}
                 {props.title}
             </Typography>
-            {props.renderText ? (
-                <Typography variant="body2" component="p">
-                    <RenderText text={props.renderText} />
+            {/* TODO:
+             * 1. It's not good to put plugin UI here.
+             * 2. This component does not support Typed Message
+             */}
+            {props.renderItem || props.renderText ? (
+                <Typography variant="body1" component="div">
+                    <RenderText text={props.renderText || props.renderItem!.content} />
+                    <WithRedPacket
+                        classes={classes}
+                        renderItem={props.renderItem}
+                        postIdentifier={props.postIdentifier}
+                    />
                 </Typography>
             ) : (
                 props.children
@@ -69,7 +83,7 @@ function parseText(string: string) {
             const link = links[0].protocol + links[0].encoded
             result.push(
                 current.substring(0, search2),
-                <Link target="_blank" href={link} key={link}>
+                <Link target="_blank" rel="noopener noreferrer" href={link} key={link}>
                     {links[0].raw}
                 </Link>,
             )

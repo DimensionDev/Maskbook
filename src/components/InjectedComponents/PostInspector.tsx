@@ -4,16 +4,18 @@ import { AddToKeyStore, AddToKeyStoreProps } from './AddToKeyStore'
 import { useAsync } from '../../utils/components/AsyncComponent'
 import { deconstructPayload } from '../../utils/type-transform/Payload'
 import Services from '../../extension/service'
-import { ProfileIdentifier } from '../../database/type'
+import { ProfileIdentifier, PostIdentifier } from '../../database/type'
 import { Profile } from '../../database'
 import { useCurrentIdentity, useFriendsList } from '../DataSource/useActivatedUI'
 import { getActivatedUI } from '../../social-network/ui'
 import { useValueRef } from '../../utils/hooks/useValueRef'
 import { debugModeSetting } from '../shared-settings/settings'
 import { DebugList } from '../DebugModeUI/DebugList'
+import { TypedMessage } from '../../extension/background-script/CryptoServices/utils'
 
 export interface PostInspectorProps {
-    onDecrypted(post: string): void
+    onDecrypted(post: TypedMessage): void
+    onDecryptedRaw(post: string): void
     post: string
     postBy: ProfileIdentifier
     postId: string
@@ -34,7 +36,6 @@ export function PostInspector(props: PostInspectorProps) {
         encryptedPost: deconstructPayload(post, getActivatedUI().payloadDecoder),
         provePost: decodeAsPublicKey,
     }
-    if (type.provePost.length && postId) Services.Identity.writeProfileOnGun(postBy, { provePostId: postId })
     useAsync(async () => {
         if (!whoAmI) return []
         if (!whoAmI.identifier.equals(postBy)) return []
@@ -90,6 +91,7 @@ export function PostInspector(props: PostInspectorProps) {
                     }
                     alreadySelectedPreviously={alreadySelectedPreviously}
                     people={people}
+                    postId={postId}
                     encryptedText={post}
                     whoAmI={whoAmI ? whoAmI.identifier : ProfileIdentifier.unknown}
                     postBy={postBy}

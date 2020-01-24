@@ -5,7 +5,6 @@ import { OnlyRunInContext } from '@holoflows/kit/es'
 import { PublishedAESKey } from '../../../crypto/crypto-alpha-40'
 import { gun2 } from '../version.2'
 
-export * from './people'
 export * from './posts'
 OnlyRunInContext('background', 'Gun')
 
@@ -21,7 +20,8 @@ export interface ApplicationStateInGunVersion1 {
         users: {
             // User ID
             [userID: string]: {
-                provePostId: string
+                /** @deprecated if you want to read it, cast it to string */
+                provePostId: never
             }
         }
         posts: {

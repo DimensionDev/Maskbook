@@ -17,18 +17,12 @@ import { OnlyRunInContext } from '@holoflows/kit/es'
 
 OnlyRunInContext('background', 'IdentityService')
 
-export { writePersonOnGun as writeProfileOnGun } from '../../network/gun/version.2/people'
-
 // region Avatars
 export { storeAvatar, getAvatarDataURL as queryAvatarDataURL } from '../../database'
 
 //#region Profile
 export { queryProfile } from '../../database'
-export function createProfile(identifier: ProfileIdentifier) {
-    return consistentPersonaDBWriteAccess(t =>
-        createProfileDB({ identifier, createdAt: new Date(), updatedAt: new Date() }, t as any),
-    )
-}
+
 export function queryProfiles(network?: string): Promise<Profile[]> {
     return queryProfilesWithQuery(network)
 }
@@ -38,8 +32,8 @@ export function queryMyProfiles(network?: string) {
 export function updateProfileInfo(
     identifier: ProfileIdentifier,
     data: {
-        nickname?: string
-        avatarURL?: string
+        nickname?: string | null
+        avatarURL?: string | null
         forceUpdateAvatar?: boolean
     },
 ): Promise<void> {

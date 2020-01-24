@@ -6,6 +6,7 @@ import { ProfileIdentifier } from '../../database/type'
 import { useValueRef } from '../../utils/hooks/useValueRef'
 import { PostInspector, PostInspectorProps } from '../../components/InjectedComponents/PostInspector'
 import { makeStyles } from '@material-ui/core'
+import { TypedMessage } from '../../extension/background-script/CryptoServices/utils'
 
 export function injectPostInspectorDefault<T extends string>(
     config: InjectPostInspectorDefaultConfig = {},
@@ -15,10 +16,11 @@ export function injectPostInspectorDefault<T extends string>(
     const PostInspectorDefault = React.memo(function PostInspectorDefault(
         props: PostInfo & {
             onDecrypted: PostInspectorProps['onDecrypted']
+            onDecryptedRaw: PostInspectorProps['onDecryptedRaw']
             zipPost: PostInspectorProps['needZip']
         },
     ) {
-        const { onDecrypted, zipPost, postBy, postID, postContent } = props
+        const { onDecrypted, zipPost, postBy, postID, postContent, onDecryptedRaw } = props
         const id = useValueRef(postID) || ''
         const by = useValueRef(postBy)
         const content = useValueRef(postContent)
@@ -26,11 +28,13 @@ export function injectPostInspectorDefault<T extends string>(
         const additionalProps = additionalPropsToPostInspector(classes)
         return (
             <PostInspector
+                onDecryptedRaw={onDecryptedRaw}
                 onDecrypted={onDecrypted}
                 needZip={zipPost}
                 postId={id}
                 post={content}
                 postBy={by}
+                AddToKeyStoreProps={{ failedComponent: null }}
                 {...additionalProps}
             />
         )
@@ -40,10 +44,10 @@ export function injectPostInspectorDefault<T extends string>(
     const zipPostF = zipPost || (() => {})
     return function injectPostInspector(current: PostInfo) {
         const injectionPointDefault = () => current.rootNodeProxy.afterShadow
-        const onDecrypted = (val: string) => (current.decryptedPostContent.value = val)
         return renderInShadowRoot(
             <PostInspectorDefault
-                onDecrypted={onDecrypted}
+                onDecrypted={val => (current.decryptedPostContent.value = val)}
+                onDecryptedRaw={val => (current.decryptedPostContentRaw.value = val)}
                 zipPost={() => zipPostF(current.rootNodeProxy)}
                 {...current}
             />,

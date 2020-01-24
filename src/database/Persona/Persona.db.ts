@@ -1,12 +1,11 @@
 /// <reference path="../global.d.ts" />
 
-import { OnlyRunInContext } from '@holoflows/kit/es'
 import { ProfileIdentifier, PersonaIdentifier, Identifier, ECKeyIdentifier } from '../type'
-import { DBSchema, openDB, IDBPTransaction } from 'idb/with-async-ittr'
+import { DBSchema, openDB } from 'idb/with-async-ittr'
 import { IdentifierMap } from '../IdentifierMap'
 import { PrototypeLess, restorePrototype } from '../../utils/type'
 import { MessageCenter } from '../../utils/messages'
-import { createDBAccess } from '../helpers/openDB'
+import { createDBAccess, IDBPSafeTransaction, createTransaction } from '../helpers/openDB'
 import { queryProfile } from './helpers'
 import { assertPersonaDBConsistency } from './consistency'
 /**
@@ -38,16 +37,27 @@ const db = createDBAccess(() => {
         },
     })
 })
-
-type FullTransaction = IDBPTransaction<PersonaDB, ('personas' | 'profiles')[]>
-type ProfileTransaction = IDBPTransaction<PersonaDB, ['profiles']>
-type PersonaTransaction = IDBPTransaction<PersonaDB, ['personas']>
+export type FullPersonaDBTransaction<Mode extends 'readonly' | 'readwrite'> = IDBPSafeTransaction<
+    PersonaDB,
+    ['personas', 'profiles'],
+    Mode
+>
+export type ProfileTransaction<Mode extends 'readonly' | 'readwrite'> = IDBPSafeTransaction<
+    PersonaDB,
+    ['profiles'],
+    Mode
+>
+export type PersonasTransaction<Mode extends 'readonly' | 'readwrite'> = IDBPSafeTransaction<
+    PersonaDB,
+    ['personas'],
+    Mode
+>
 export async function consistentPersonaDBWriteAccess(
-    action: (t: FullTransaction) => Promise<void>,
+    action: (t: FullPersonaDBTransaction<'readwrite'>) => Promise<void>,
     tryToAutoFix = true,
 ) {
     // TODO: collect all changes on this transaction then only perform consistency check on those records.
-    let t = (await db()).transaction(['personas', 'profiles'], 'readwrite')
+    let t = createTransaction(await db(), 'readwrite')('profiles', 'personas')
     let finished = false
     const finish = () => (finished = true)
     t.addEventListener('abort', finish)
@@ -61,7 +71,7 @@ export async function consistentPersonaDBWriteAccess(
             console.warn('The transaction ends too early! There MUST be a bug in the program!')
             console.trace()
             // start a new transaction to check consistency
-            t = (await db()).transaction(['personas', 'profiles'], 'readwrite')
+            t = createTransaction(await db(), 'readwrite')('profiles', 'personas')
         }
         await assertPersonaDBConsistency(tryToAutoFix ? 'fix' : 'throw', 'full check', t)
     }
@@ -73,7 +83,7 @@ export async function consistentPersonaDBWriteAccess(
  * If the record contains `privateKey`, it will be stored in the `self` store.
  * Otherwise, it will be stored in the `others` store.
  */
-export async function createPersonaDB(record: PersonaRecord, t: PersonaTransaction): Promise<void> {
+export async function createPersonaDB(record: PersonaRecord, t: PersonasTransaction<'readwrite'>): Promise<void> {
     await t.objectStore('personas').add(personaRecordToDB(record))
     MessageCenter.emit('personaCreated', undefined)
     MessageCenter.emit('personaUpdated', undefined)
@@ -81,19 +91,22 @@ export async function createPersonaDB(record: PersonaRecord, t: PersonaTransacti
 
 export async function queryPersonaByProfileDB(
     query: ProfileIdentifier,
-    t?: FullTransaction,
+    t?: FullPersonaDBTransaction<'readonly'>,
 ): Promise<PersonaRecord | null> {
-    t = t || (await db()).transaction(['profiles', 'personas'])
+    t = t || createTransaction(await db(), 'readonly')('personas', 'profiles')
     const x = await t.objectStore('profiles').get(query.toText())
     if (!x?.linkedPersona) return null
-    return queryPersonaDB(restorePrototype(x.linkedPersona, ECKeyIdentifier.prototype), t as any)
+    return queryPersonaDB(restorePrototype(x.linkedPersona, ECKeyIdentifier.prototype), t)
 }
 
 /**
  * Query a Persona.
  */
-export async function queryPersonaDB(query: PersonaIdentifier, t?: PersonaTransaction): Promise<PersonaRecord | null> {
-    t = t || (await db()).transaction('personas')
+export async function queryPersonaDB(
+    query: PersonaIdentifier,
+    t?: PersonasTransaction<'readonly'>,
+): Promise<PersonaRecord | null> {
+    t = t || createTransaction(await db(), 'readonly')('personas')
     const x = await t.objectStore('personas').get(query.toText())
     if (x) return personaRecordOutDb(x)
     return null
@@ -104,9 +117,9 @@ export async function queryPersonaDB(query: PersonaIdentifier, t?: PersonaTransa
  */
 export async function queryPersonasDB(
     query: (record: PersonaRecord) => boolean,
-    t?: PersonaTransaction,
+    t?: PersonasTransaction<'readonly'>,
 ): Promise<PersonaRecord[]> {
-    t = t || (await db()).transaction('personas')
+    t = t || createTransaction(await db(), 'readonly')('personas')
     const records: PersonaRecord[] = []
     for await (const each of t.objectStore('personas')) {
         const out = personaRecordOutDb(each.value)
@@ -119,8 +132,10 @@ export type PersonaRecordWithPrivateKey = PersonaRecord & Required<Pick<PersonaR
 /**
  * Query many Personas.
  */
-export async function queryPersonasWithPrivateKey(t?: PersonaTransaction): Promise<PersonaRecordWithPrivateKey[]> {
-    t = t || (await db()).transaction('personas')
+export async function queryPersonasWithPrivateKey(
+    t?: FullPersonaDBTransaction<'readonly'>,
+): Promise<PersonaRecordWithPrivateKey[]> {
+    t = t || createTransaction(await db(), 'readonly')('personas', 'profiles')
     const records: PersonaRecord[] = []
     records.push(
         ...(
@@ -146,7 +161,7 @@ export async function updatePersonaDB(
         linkedProfiles: 'replace' | 'merge'
         explicitUndefinedField: 'ignore' | 'delete field'
     },
-    t: PersonaTransaction,
+    t: PersonasTransaction<'readwrite'>,
 ): Promise<void> {
     const _old = await t.objectStore('personas').get(nextRecord.identifier.toText())
     if (!_old) throw new TypeError('Update an non-exist data')
@@ -180,7 +195,7 @@ export async function updatePersonaDB(
 export async function createOrUpdatePersonaDB(
     record: Partial<PersonaRecord> & Pick<PersonaRecord, 'identifier' | 'publicKey'>,
     howToMerge: Parameters<typeof updatePersonaDB>[1],
-    t: PersonaTransaction,
+    t: PersonasTransaction<'readwrite'>,
 ) {
     if (await t.objectStore('personas').get(record.identifier.toText())) return updatePersonaDB(record, howToMerge, t)
     else
@@ -201,7 +216,7 @@ export async function createOrUpdatePersonaDB(
 export async function deletePersonaDB(
     id: PersonaIdentifier,
     confirm: 'delete even with private' | "don't delete if have private key",
-    t: PersonaTransaction,
+    t: PersonasTransaction<'readwrite'>,
 ): Promise<void> {
     const r = await t.objectStore('personas').get(id.toText())
     if (!r) return
@@ -214,8 +229,11 @@ export async function deletePersonaDB(
  * Delete a Persona
  * @returns a boolean. true: the record no longer exists; false: the record is kept.
  */
-export async function safeDeletePersonaDB(id: PersonaIdentifier, t?: PersonaTransaction): Promise<boolean> {
-    t = t || (await db()).transaction('personas', 'readwrite')
+export async function safeDeletePersonaDB(
+    id: PersonaIdentifier,
+    t?: FullPersonaDBTransaction<'readwrite'>,
+): Promise<boolean> {
+    t = t || createTransaction(await db(), 'readwrite')('personas', 'profiles')
     const r = await queryPersonaDB(id, t)
     if (!r) return true
     if (r.linkedProfiles.size !== 0) return false
@@ -228,9 +246,10 @@ export async function safeDeletePersonaDB(id: PersonaIdentifier, t?: PersonaTran
 /**
  * Create a new profile.
  */
-export async function createProfileDB(record: ProfileRecord, t: ProfileTransaction): Promise<void> {
+export async function createProfileDB(record: ProfileRecord, t: ProfileTransaction<'readwrite'>): Promise<void> {
     await t.objectStore('profiles').add(profileToDB(record))
     setTimeout(async () => {
+        MessageCenter.emit('identityCreated', undefined)
         MessageCenter.emit('profilesChanged', [{ reason: 'new', of: await queryProfile(record.identifier) }])
     }, 0)
 }
@@ -238,8 +257,11 @@ export async function createProfileDB(record: ProfileRecord, t: ProfileTransacti
 /**
  * Query a profile.
  */
-export async function queryProfileDB(id: ProfileIdentifier, t?: ProfileTransaction): Promise<ProfileRecord | null> {
-    t = t || (await db()).transaction('profiles')
+export async function queryProfileDB(
+    id: ProfileIdentifier,
+    t?: ProfileTransaction<'readonly'>,
+): Promise<ProfileRecord | null> {
+    t = t || createTransaction(await db(), 'readonly')('profiles')
     const result = await t.objectStore('profiles').get(id.toText())
     if (result) return profileOutDB(result)
     return null
@@ -250,9 +272,9 @@ export async function queryProfileDB(id: ProfileIdentifier, t?: ProfileTransacti
  */
 export async function queryProfilesDB(
     network: string | ((record: ProfileRecord) => boolean),
-    t?: ProfileTransaction,
+    t?: ProfileTransaction<'readonly'>,
 ): Promise<ProfileRecord[]> {
-    t = t || (await db()).transaction('profiles')
+    t = t || createTransaction(await db(), 'readonly')('profiles')
     const result: ProfileRecord[] = []
     if (typeof network === 'string') {
         result.push(
@@ -277,7 +299,7 @@ export async function queryProfilesDB(
  */
 export async function updateProfileDB(
     updating: Partial<ProfileRecord> & Pick<ProfileRecord, 'identifier'>,
-    t: ProfileTransaction,
+    t: ProfileTransaction<'readwrite'>,
 ): Promise<void> {
     const old = await t.objectStore('profiles').get(updating.identifier.toText())
     if (!old) throw new Error('Updating a non exists record')
@@ -295,7 +317,7 @@ export async function updateProfileDB(
         0,
     )
 }
-export async function createOrUpdateProfileDB(rec: ProfileRecord, t: ProfileTransaction) {
+export async function createOrUpdateProfileDB(rec: ProfileRecord, t: ProfileTransaction<'readwrite'>) {
     if (await queryProfileDB(rec.identifier, t)) return updateProfileDB(rec, t)
     else return createProfileDB(rec, t)
 }
@@ -303,26 +325,29 @@ export async function createOrUpdateProfileDB(rec: ProfileRecord, t: ProfileTran
 /**
  * detach a profile.
  */
-export async function detachProfileDB(identifier: ProfileIdentifier, t?: FullTransaction): Promise<void> {
-    t = t || (await db()).transaction(['profiles', 'personas'], 'readwrite')
-    const profile = await queryProfileDB(identifier, t as any)
+export async function detachProfileDB(
+    identifier: ProfileIdentifier,
+    t?: FullPersonaDBTransaction<'readwrite'>,
+): Promise<void> {
+    t = t || createTransaction(await db(), 'readwrite')('personas', 'profiles')
+    const profile = await queryProfileDB(identifier, t)
     if (!profile?.linkedPersona) return
 
     const linkedPersona = profile.linkedPersona
-    const persona = await queryPersonaDB(linkedPersona, t as any)
+    const persona = await queryPersonaDB(linkedPersona, t)
     persona?.linkedProfiles.delete(identifier)
 
     if (persona) {
-        // if (await safeDeletePersonaDB(linkedPersona, t as any)) {
+        // if (await safeDeletePersonaDB(linkedPersona, t)) {
         // persona deleted
         // } else {
         // update persona
-        await updatePersonaDB(persona, { linkedProfiles: 'replace', explicitUndefinedField: 'delete field' }, t as any)
+        await updatePersonaDB(persona, { linkedProfiles: 'replace', explicitUndefinedField: 'delete field' }, t)
         // }
     }
     // update profile
     profile.linkedPersona = undefined
-    await updateProfileDB(profile, t as any)
+    await updateProfileDB(profile, t)
 }
 
 /**
@@ -332,14 +357,14 @@ export async function attachProfileDB(
     identifier: ProfileIdentifier,
     attachTo: PersonaIdentifier,
     data: LinkedProfileDetails,
-    t?: FullTransaction,
+    t?: FullPersonaDBTransaction<'readwrite'>,
 ): Promise<void> {
-    t = t || (await db()).transaction(['profiles', 'personas'], 'readwrite')
+    t = t || createTransaction(await db(), 'readwrite')('personas', 'profiles')
     const profile =
-        (await queryProfileDB(identifier, t as any)) ||
-        (await createProfileDB({ identifier, createdAt: new Date(), updatedAt: new Date() }, t as any)) ||
-        (await queryProfileDB(identifier, t as any))
-    const persona = await queryPersonaDB(attachTo, t as any)
+        (await queryProfileDB(identifier, t)) ||
+        (await createProfileDB({ identifier, createdAt: new Date(), updatedAt: new Date() }, t)) ||
+        (await queryProfileDB(identifier, t))
+    const persona = await queryPersonaDB(attachTo, t)
     if (!persona || !profile) return
 
     if (profile.linkedPersona !== undefined && !profile.linkedPersona.equals(attachTo)) {
@@ -349,14 +374,15 @@ export async function attachProfileDB(
     profile.linkedPersona = attachTo
     persona.linkedProfiles.set(identifier, data)
 
-    await updatePersonaDB(persona, { linkedProfiles: 'merge', explicitUndefinedField: 'ignore' }, t as any)
-    await updateProfileDB(profile, t as any)
+    await updatePersonaDB(persona, { linkedProfiles: 'merge', explicitUndefinedField: 'ignore' }, t)
+    await updateProfileDB(profile, t)
+    MessageCenter.emit('identityUpdated', undefined)
 }
 
 /**
  * Delete a profile
  */
-export async function deleteProfileDB(id: ProfileIdentifier, t: FullTransaction): Promise<void> {
+export async function deleteProfileDB(id: ProfileIdentifier, t: ProfileTransaction<'readwrite'>): Promise<void> {
     await t.objectStore('profiles').delete(id.toText())
     queryProfile(id).then(of => MessageCenter.emit('profilesChanged', [{ reason: 'delete', of } as const]))
 }

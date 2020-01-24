@@ -133,3 +133,50 @@ export const batchReplace = (source: string, group: Array<[string | RegExp, stri
     }
     return storage
 }
+
+export const asyncTimes = async <T>(
+    times: number,
+    iteratee: () => Promise<T | void>,
+    {
+        delay = 30 * 1000,
+        earlyStop = true,
+    }: {
+        delay?: number
+        earlyStop?: boolean // stop for first value
+    } = {},
+) => {
+    const result: (T | void)[] = []
+
+    for await (const i of Array.from(Array(times).keys())) {
+        result.push(await iteratee())
+        if (typeof result[i] !== 'undefined' && earlyStop) {
+            break
+        }
+        if (delay) {
+            await sleep(delay)
+        }
+    }
+    return result
+}
+
+export const pollingTask = (
+    task: () => Promise<boolean>,
+    {
+        delay = 30 * 1000,
+    }: {
+        delay?: number
+    } = {},
+) => {
+    const runTask = async () => {
+        let stop = false
+        try {
+            stop = await task()
+        } catch (e) {
+            console.error(e)
+        }
+        if (!stop) {
+            setTimeout(runTask, delay)
+        }
+    }
+    runTask()
+}

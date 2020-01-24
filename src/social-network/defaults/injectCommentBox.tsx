@@ -31,7 +31,7 @@ export const injectCommentBoxDefaultFactory = function<T extends string>(
 ) {
     const CommentBoxUI = React.memo(function CommentBoxUI(current: PostInfo & { realCurrent: HTMLElement | null }) {
         const payload = useValueRef(current.postPayload)
-        const decrypted = useValueRef(current.decryptedPostContent)
+        const decrypted = useValueRef(current.decryptedPostContentRaw)
         const styles = useCustomStyles()
         const props = additionPropsToCommentBox(styles)
         const onCallback = React.useCallback(

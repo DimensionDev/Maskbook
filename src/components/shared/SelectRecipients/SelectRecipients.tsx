@@ -47,11 +47,11 @@ export function SelectRecipientsUI<T extends Group | Profile = Group | Profile>(
         x => isProfile(x) && !x.identifier.equals(currentIdentity?.identifier) && x.linkedPersona?.fingerprint,
     ) as Profile[]
 
-    const selectedAsProfiles = selected.filter(x => isProfile(x)) as Profile[]
+    // const selectedAsProfiles = selected.filter(x => isProfile(x)) as Profile[]
     const selectedAsGroups = selected.filter(x => isGroup(x)) as Group[]
 
     const [open, setOpen] = useState(false)
-    const [search, setSearch] = useState('') // TODO: Filter profiles with keywords
+    const [_search, setSearch] = useState('') // TODO: Filter profiles with keywords
     const [selectedIdentifiers, setSelectedIdentifiers] = useState<string[]>(
         difference(
             Array.from(

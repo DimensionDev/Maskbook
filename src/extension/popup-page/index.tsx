@@ -13,6 +13,7 @@ import { ChooseIdentity } from '../../components/shared/ChooseIdentity'
 import { getActivatedUI } from '../../social-network/ui'
 import { useAsync } from '../../utils/components/AsyncComponent'
 import { getUrl } from '../../utils/utils'
+import { geti18nString } from '../../utils/i18n'
 
 const useStyles = makeStyles(theme => ({
     button: {
@@ -58,7 +59,7 @@ export function Popup() {
                     color="primary"
                     className={classes.button}
                     onClick={e => browser.runtime.openOptionsPage()}>
-                    Options
+                    {geti18nString('popup_enter_dashboard')}
                 </Button>
                 <List>{useSettingsUI(debugModeSetting)}</List>
             </main>

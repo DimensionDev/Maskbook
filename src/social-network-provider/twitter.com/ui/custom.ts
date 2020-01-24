@@ -70,7 +70,8 @@ function isDark([r, g, b]: RGB) {
     return r < 68 && g < 68 && b < 68
 }
 
-function toRGB(channels: RGB) {
+function toRGB(channels: RGB | undefined) {
+    if (!channels) return ''
     return `rgb(${channels.join()})`
 }
 
@@ -106,7 +107,7 @@ function getBackgroundColor<T extends HTMLElement>(selector: string) {
             element?.style?.backgroundColor ||
             getComputedStyle?.(element, null).getPropertyValue('background-color'),
     )
-    return color ? toRGB(fromRGB(color)!) : ''
+    return color ? toRGB(fromRGB(color)) : ''
 }
 
 export const twitterUICustomUI: SocialNetworkUICustomUI = {

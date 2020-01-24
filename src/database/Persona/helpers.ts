@@ -27,6 +27,7 @@ import {
 } from '../../utils/type-transform/CryptoKey-JsonWebKey'
 import { generate_ECDH_256k1_KeyPair_ByMnemonicWord } from '../../utils/mnemonic-code'
 import { deriveLocalKeyFromECDHKey } from '../../utils/mnemonic-code/localKeyGenerate'
+import { createNewWallet, importNewWallet } from '../../plugins/Wallet/wallet'
 
 export async function profileRecordToProfile(record: ProfileRecord): Promise<Profile> {
     const rec = { ...record }
@@ -150,6 +151,9 @@ export async function createPersonaByMnemonic(
     const jwkPriv = await CryptoKeyToJsonWebKey(key.key.privateKey)
     const localKey = await deriveLocalKeyFromECDHKey(key.key.publicKey, key.mnemonicRecord.words)
     const jwkLocalKey = await CryptoKeyToJsonWebKey(localKey)
+
+    // TODO: move to plugin logic
+    importNewWallet({ mnemonic: key.mnemonicRecord.words.split(' '), name: nickname || 'Wallet', passphrase: password })
 
     return createPersonaByJsonWebKey({
         privateKey: jwkPriv,

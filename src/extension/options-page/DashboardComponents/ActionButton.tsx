@@ -14,12 +14,12 @@ interface ActionButtonProps extends ButtonProps, PropsOf<typeof Button> {
     component?: keyof JSX.IntrinsicElements | React.ComponentClass<any>
 }
 
-export default function ActionButton<T extends React.ComponentClass<any> = React.ComponentClass<{}>>(
-    props: ActionButtonProps & PropsOf<T>,
-) {
+// TODO:
+export default function ActionButton<T extends React.ComponentClass<any> = React.ComponentClass<{}>>(props: any) {
     const { width, loading, children, className, style, ...p } = props
     return (
         <Button
+            disableElevation
             disabled={loading}
             startIcon={loading && circle}
             className={'actionButton ' + className}

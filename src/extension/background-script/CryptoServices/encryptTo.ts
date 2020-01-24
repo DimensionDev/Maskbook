@@ -2,17 +2,17 @@ import * as Alpha38 from '../../../crypto/crypto-alpha-38'
 import * as Gun2 from '../../../network/gun/version.2'
 import { encodeArrayBuffer } from '../../../utils/type-transform/String-ArrayBuffer'
 import { constructAlpha38, PayloadLatest } from '../../../utils/type-transform/Payload'
-import { Group, queryPrivateKey, queryLocalKey, queryPersonaByProfile } from '../../../database'
+import { Group, queryPrivateKey, queryLocalKey } from '../../../database'
 import { ProfileIdentifier, PostIVIdentifier, GroupIdentifier, Identifier } from '../../../database/type'
 import { prepareOthersKeyForEncryptionV39OrV38 } from '../prepareOthersKeyForEncryption'
 import { geti18nString } from '../../../utils/i18n'
 import { getNetworkWorker } from '../../../social-network/worker'
-import { getSignablePayload } from './utils'
+import { getSignablePayload, TypedMessage, cryptoProviderTable } from './utils'
 import { createPostDB, PostRecord, RecipientReason } from '../../../database/post'
 import { queryUserGroup } from '../UserGroupService'
-import { getMyProveBio } from './getMyProveBio'
 import { queryPersonaByProfileDB } from '../../../database/Persona/Persona.db'
 import { compressSecp256k1Key } from '../../../utils/type-transform/SECP256k1-Compression'
+import { import_AES_GCM_256_Key } from '../../../utils/crypto.subtle'
 
 type EncryptedText = string
 type OthersAESKeyEncryptedToken = string
@@ -34,11 +34,13 @@ const OthersAESKeyEncryptedMap = new Map<
  * - `token` is used to call `publishPostAESKey` before post the content
  */
 export async function encryptTo(
-    content: string,
+    content: TypedMessage,
     to: (ProfileIdentifier | GroupIdentifier)[],
     whoAmI: ProfileIdentifier,
+    publicShared: boolean,
 ): Promise<[EncryptedText, OthersAESKeyEncryptedToken]> {
-    if (to.length === 0) return ['', '']
+    if (to.length === 0 && publicShared === false) return ['', '']
+    if (publicShared) to = []
 
     const recipients: PostRecord['recipients'] = {}
     function addRecipients(x: ProfileIdentifier, reason: RecipientReason) {
@@ -65,6 +67,10 @@ export async function encryptTo(
     )
     const minePrivateKey = await queryPrivateKey(whoAmI)
     if (!minePrivateKey) throw new TypeError('Not inited yet')
+    const stringifiedContent = Alpha38.typedMessageStringify(content)
+    const localKey = publicShared
+        ? await import_AES_GCM_256_Key(Alpha38.publicSharedAESKey)
+        : (await queryLocalKey(whoAmI))!
     const {
         encryptedContent: encryptedText,
         othersAESKeyEncrypted,
@@ -73,9 +79,9 @@ export async function encryptTo(
         postAESKey,
     } = await Alpha38.encrypt1ToN({
         version: -38,
-        content,
+        content: stringifiedContent,
         othersPublicKeyECDH: toKey,
-        ownersLocalKey: (await queryLocalKey(whoAmI))!,
+        ownersLocalKey: localKey,
         privateKeyECDH: minePrivateKey,
         iv: crypto.getRandomValues(new Uint8Array(16)),
     })
@@ -85,7 +91,7 @@ export async function encryptTo(
         encryptedText: encodeArrayBuffer(encryptedText),
         iv: encodeArrayBuffer(iv),
         signature: '',
-        sharedPublic: false,
+        sharedPublic: publicShared,
         version: -38,
     }
     try {

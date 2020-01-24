@@ -11,10 +11,12 @@ import { queryPostDB, updatePostDB } from '../../../database/post'
 import { addPerson } from './addPerson'
 import { MessageCenter } from '../../../utils/messages'
 import { getNetworkWorker } from '../../../social-network/worker'
-import { getSignablePayload, cryptoProviderTable } from './utils'
+import { getSignablePayload, cryptoProviderTable, TypedMessage } from './utils'
 import { JsonWebKeyToCryptoKey, getKeyParameter } from '../../../utils/type-transform/CryptoKey-JsonWebKey'
 import { PersonaRecord } from '../../../database/Persona/Persona.db'
 import { verifyOthersProve } from './verifyOthersProve'
+import { import_AES_GCM_256_Key } from '../../../utils/crypto.subtle'
+import { publicSharedAESKey } from '../../../crypto/crypto-alpha-38'
 
 type Progress = {
     progress: 'finding_person_public_key' | 'finding_post_key'
@@ -25,7 +27,7 @@ type DebugInfo = {
 }
 type Success = {
     signatureVerifyResult: boolean
-    content: string
+    content: TypedMessage
     through: ('author_key_not_found' | 'post_key_cached' | 'normal_decrypted')[]
 }
 type Failure = {
@@ -76,6 +78,7 @@ export async function* decryptFromMessageWithProgress(
     encrypted: string,
     author: ProfileIdentifier,
     whoAmI: ProfileIdentifier,
+    publicShared: boolean,
 ): ReturnOfDecryptFromMessageWithProgress {
     // If any of parameters is changed, we will not handle it.
     let _data: Payload
@@ -113,7 +116,7 @@ export async function* decryptFromMessageWithProgress(
                 else if (_.value === 'use cache')
                     return {
                         signatureVerifyResult: false,
-                        content: cachedPostResult!,
+                        content: cryptoProvider.typedMessageParse(cachedPostResult!),
                         through: ['author_key_not_found', 'post_key_cached'],
                     } as Success
                 else byPerson = _.value
@@ -144,7 +147,7 @@ export async function* decryptFromMessageWithProgress(
                           await JsonWebKeyToCryptoKey(byPerson.publicKey, ...ecdhParams),
                       )
                     : false,
-                content: cachedPostResult,
+                content: cryptoProvider.typedMessageParse(cachedPostResult),
                 through: ['post_key_cached'],
             } as Success
         }
@@ -267,14 +270,24 @@ export async function* decryptFromMessageWithProgress(
                     signature,
                     await JsonWebKeyToCryptoKey(byPerson.publicKey, ...getKeyParameter('ecdh')),
                 )
-                return { signatureVerifyResult, content, through: ['normal_decrypted'] }
+                return {
+                    signatureVerifyResult,
+                    content: cryptoProvider.typedMessageParse(content),
+                    through: ['normal_decrypted'],
+                }
             } catch {
-                return { signatureVerifyResult: false, content, through: ['normal_decrypted'] }
+                return {
+                    signatureVerifyResult: false,
+                    content: cryptoProvider.typedMessageParse(content),
+                    through: ['normal_decrypted'],
+                }
             }
         }
 
         async function decryptAsAuthor(authorIdentifier: ProfileIdentifier, authorPublic: CryptoKey) {
-            const localKey = await queryLocalKey(authorIdentifier)
+            const localKey = publicShared
+                ? await import_AES_GCM_256_Key(publicSharedAESKey)
+                : await queryLocalKey(authorIdentifier)
             if (!localKey) throw new Error(`Local key for identity ${authorIdentifier.toText()} not found`)
             const [contentArrayBuffer, postAESKey] = await cryptoProvider.decryptMessage1ToNByMyself({
                 version,
@@ -291,7 +304,11 @@ export async function* decryptFromMessageWithProgress(
                 signature || '',
                 authorPublic,
             )
-            return { signatureVerifyResult, content, through: ['normal_decrypted'] } as Success
+            return {
+                signatureVerifyResult,
+                content: cryptoProvider.typedMessageParse(content),
+                through: ['normal_decrypted'],
+            } as Success
         }
     }
     return { error: geti18nString('service_unknown_payload') }
@@ -326,7 +343,8 @@ async function* findAuthorPublicKey(
                     reject()
                 }
                 const undo = Gun2.subscribePersonFromGun2(by, data => {
-                    if (data && (data.provePostId || '').length > 0) {
+                    const provePostID = data?.provePostId as string | '' | undefined
+                    if (provePostID && provePostID.length > 0) {
                         undo()
                         resolve()
                     }

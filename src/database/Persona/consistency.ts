@@ -1,8 +1,9 @@
-import { IDBPTransaction } from 'idb'
-import { PersonaDB } from './Persona.db'
+import { FullPersonaDBTransaction } from './Persona.db'
 import { ProfileIdentifier, PersonaIdentifier, Identifier, ECKeyIdentifier } from '../type'
 import { IdentifierMap } from '../IdentifierMap'
 import { restorePrototype } from '../../utils/type'
+
+type ReadwriteFullPersonaDBTransaction = FullPersonaDBTransaction<'readwrite'>
 
 export async function assertPersonaDBConsistency(
     behavior: 'fix' | 'throw',
@@ -28,7 +29,7 @@ export async function assertPersonaDBConsistency(
     }
     return diag
 }
-async function fixDBInconsistency(diagnosis: Diagnosis, t: IDBPTransaction<PersonaDB, ('personas' | 'profiles')[]>) {
+async function fixDBInconsistency(diagnosis: Diagnosis, t: ReadwriteFullPersonaDBTransaction) {
     const personas = t.objectStore('personas')
     const profiles = t.objectStore('profiles')
     switch (diagnosis.type) {
@@ -54,12 +55,13 @@ async function fixDBInconsistency(diagnosis: Diagnosis, t: IDBPTransaction<Perso
         }
         default:
             const _never: never = diagnosis
+            throw new Error('Unreachable case' + _never)
     }
 }
 
 async function* checkFullPersonaDBConsistency(
     checkRange: 'full check' | IdentifierMap<ProfileIdentifier | PersonaIdentifier, any>,
-    t: IDBPTransaction<PersonaDB, ('personas' | 'profiles')[]>,
+    t: ReadwriteFullPersonaDBTransaction,
 ): AsyncGenerator<Diagnosis, void, unknown> {
     for await (const persona of t.objectStore('personas')) {
         const personaID = Identifier.fromString(persona.key, ECKeyIdentifier)
@@ -83,7 +85,7 @@ async function* checkFullPersonaDBConsistency(
 }
 async function* checkPersonaLink(
     personaID: PersonaIdentifier,
-    t: IDBPTransaction<PersonaDB, ('personas' | 'profiles')[]>,
+    t: ReadwriteFullPersonaDBTransaction,
 ): AsyncGenerator<Diagnosis, void, unknown> {
     const rec = await t.objectStore('personas').get(personaID.toText())
     const linkedProfiles = rec?.linkedProfiles
@@ -107,7 +109,7 @@ async function* checkPersonaLink(
 }
 async function* checkProfileLink(
     profile: ProfileIdentifier,
-    t: IDBPTransaction<PersonaDB, ('personas' | 'profiles')[]>,
+    t: ReadwriteFullPersonaDBTransaction,
 ): AsyncGenerator<Diagnosis, void, unknown> {
     const rec = await t.objectStore('profiles').get(profile.toText())
     const invalidLinkedPersona = rec?.linkedPersona

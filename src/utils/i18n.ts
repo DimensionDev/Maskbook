@@ -43,8 +43,8 @@ if (!Intl.ListFormat) {
 export function geti18nString(key: keyof I18NStrings, substitutions: string | string[] = '') {
     const uiOverwrite = GetContext() === 'background' ? {} : safeGetActiveUI().i18nOverwrite
 
-    const uiLang = uiOverwrite?.[getCurrentScript()]
-    const origLang = langs?.[getCurrentScript()]
+    const uiLang = uiOverwrite?.[getCurrentLanguage()]
+    const origLang = langs?.[getCurrentLanguage()]
     const uiFallback = uiOverwrite?.en
     const fallback = langs?.en
 
@@ -58,7 +58,7 @@ export function geti18nString(key: keyof I18NStrings, substitutions: string | st
         .replace('$3', substitutions[2])
         .replace('$4', substitutions[3])
 }
-function getCurrentScript() {
+export function getCurrentLanguage() {
     return navigator.language.split('-')[0]
 }
 

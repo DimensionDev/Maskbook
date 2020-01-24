@@ -8,6 +8,7 @@ import {
 import { SocialNetworkUI } from '../../social-network/ui'
 import { memoizePromise } from '../../utils/memoize'
 import { safeGetActiveUI } from '../../utils/safeRequire'
+import Serialization from '../../utils/type-transform/Serialization'
 
 function getActivatedUI() {
     return safeGetActiveUI()
@@ -47,7 +48,10 @@ const _tasks = {
         getActivatedUI().taskStartImmersiveSetup(for_)
     },
 }
-const realTasks = AutomatedTabTask(_tasks, { memorable: true })!
+const realTasks = AutomatedTabTask(_tasks, {
+    memorable: true,
+    AsyncCallOptions: { serializer: Serialization },
+})!
 export default function tasks(...args: Parameters<typeof realTasks>) {
     const [tabIdOrUri, options] = args
     if (disableOpenNewTabInBackgroundSettings.value && Number.isNaN(Number(tabIdOrUri))) {
