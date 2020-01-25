@@ -12743,10 +12743,10 @@ node-rsa@^0.4.0:
   dependencies:
     asn1 "0.2.3"
 
-node-stego@^0.8.1:
-  version "0.8.1"
-  resolved "https://registry.yarnpkg.com/node-stego/-/node-stego-0.8.1.tgz#edf624b271e825127614801e904f2cc4204def2c"
-  integrity sha512-n8h1FGowvxrv8I/fqyJPjFWenKGy47qyWOpKRrEwDcz0F7kuLllgVhhB3SHmpEDDszjiqGRXayzYsCBzrs2M7g==
+node-stego@^0.9.1:
+  version "0.9.1"
+  resolved "https://registry.yarnpkg.com/node-stego/-/node-stego-0.9.1.tgz#532c6caab690d6bf553f852acbbb83566cfb890e"
+  integrity sha512-RouNu0Q9atwwRwOuushTIXVJoAhUxGz2CbWietC0h2iQVSyODJRH8GhlCF2vHW7GJPZK/toPa7Wn4HTEc9UF1A==
   dependencies:
     meow "^5.0.0"
 
