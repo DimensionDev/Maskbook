@@ -23,6 +23,7 @@ export async function encodeImage(buf: Uint8Array, options: PartialRequired<Requ
         await encode(buf.buffer, await getMaskBuf(), {
             ...defaultOptions,
             noCropEdgePixels: false,
+            noExhaustPixels: false,
             grayscaleAlgorithm: GrayscaleAlgorithm.LUMINANCE,
             transformAlgorithm: TransformAlgorithm.FFT1D,
             ...options,
