@@ -1,6 +1,7 @@
 import { batchReplace, randomElement, regexMatch, regexMatchAll } from '../../utils/utils'
 import { isNil, isNull } from 'lodash-es'
 import { topSites } from './utils/url'
+import anchorme from 'anchorme'
 
 const ICAO9303Checksum = {
     encode: (input: string) => {
@@ -58,15 +59,22 @@ export const twitterEncoding = {
             [/\|/g, '.'],
         ])}`,
     payloadDecoder: (text: string) => {
-        let payload = regexMatch(text, /https:\/\/.+\..+\/%20(.+)%40/, 1)
-        if (isNil(payload)) {
+        const links: { raw: string; protocol: string; encoded: string }[] = anchorme(text, { list: true })
+        let links_ = links.filter(x => x.raw.endsWith('%40'))[0]?.raw
+        try {
+            links_ = new URL(links_).pathname
+                .slice(1)
+                .replace(/^%20/, '')
+                .replace(/%40$/, '')
+            if (!links_) return 'null'
+        } catch {
             return 'null'
         }
-        payload = batchReplace(payload, [
+        links_ = batchReplace(links_, [
             ['-', '+'],
             ['_', '='],
             [/\./g, '|'],
         ])
-        return `🎼${payload}:||`
+        return `🎼${links_}:||`
     },
 }

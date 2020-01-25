@@ -1,7 +1,7 @@
 {
   "name": "maskbook",
   "license": "AGPL-3.0-or-later",
-  "version": "1.10.0",
+  "version": "1.10.1",
   "private": true,
   "engines": {
     "node": ">=13.2.0"
@@ -72,7 +72,7 @@
     "jss": "^10",
     "lint-staged": "^9.5.0",
     "lodash-es": "^4.17.11",
-    "node-stego": "^0.8.1",
+    "node-stego": "^0.9.1",
     "notistack": "^0.9.7",
     "npm-run-all": "^4.1.5",
     "openzeppelin-solidity": "^2.4.0",
@@ -98,12 +98,12 @@
     "webpack-web-ext-plugin": "github:DimensionDev/webpack-web-ext-plugin"
   },
   "devDependencies": {
-    "@babel/core": "^7.4.3",
+    "@babel/core": "^7.8.3",
     "@sinonjs/text-encoding": "^0.7.1",
     "@storybook/addon-actions": "^5.2.8",
     "@storybook/addon-info": "^5.2.8",
     "@storybook/addon-knobs": "^5.2.8",
-    "@storybook/addon-links": "^5.2.8",
+    "@storybook/addon-links": "^5.3.9",
     "@storybook/addon-viewport": "^5.2.8",
     "@storybook/addons": "^5.2.6",
     "@storybook/react": "^5.2.5",
@@ -111,7 +111,7 @@
     "@trust/webcrypto": "^0.9.2",
     "@types/storybook__addon-info": "^5.2.1",
     "@types/storybook__react": "^4.0.1",
-    "@typescript-eslint/parser": "^2.12.0",
+    "@typescript-eslint/parser": "^2.16.0",
     "asmcrypto.js": "^2.3.2",
     "awesome-typescript-loader": "^5.2.1",
     "chrome-launcher": "^0.12.0",
@@ -124,7 +124,7 @@
     "jest-junit": "^10.0.0",
     "prettier": "^1.19.1",
     "puppeteer-core": "^2.0.0",
-    "react-devtools": "^4.2.1",
+    "react-devtools": "^4.4.0",
     "storybook-addon-material-ui": "^0.9.0-alpha.21",
     "ts-jest": "^24.2.0",
     "ts-morph": "^6.0.2",
