@@ -118,6 +118,10 @@ function override(config, env) {
         })
     }
 
+    if (target.Firefox) {
+        const TerserPlugin = require('terser-webpack-plugin')
+        config.plugins.push(new TerserPlugin())
+    }
     // Loading debuggers
     if (target.FirefoxDesktop) {
         config.plugins.push(
