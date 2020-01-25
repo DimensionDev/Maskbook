@@ -136,7 +136,7 @@ export const postContentParser = (node: HTMLElement) => {
             ...select<HTMLAnchorElement>('a').map(x => x.title),
             ...select<HTMLSpanElement>('span').map(x => x.innerText),
         ]
-        return sto.filter(Boolean).join(',')
+        return sto.filter(Boolean).join(' ')
     }
 }
 
