@@ -255,6 +255,13 @@ export function DecryptPost(props: DecryptPostProps) {
                     }
                     setDecryptedResult(result.data)
                     props.onDecrypted(result.data.content)
+
+                    // HACK: the is patch, hidden NOT VERIFIED in everyone
+                    const postPayload = deconstructPayload(encryptedText, null)
+                    if (postPayload?.version === -38 && postPayload.sharedPublic) {
+                        result.data.signatureVerifyResult = true
+                    }
+
                     return (
                         <Success
                             data={result.data}
