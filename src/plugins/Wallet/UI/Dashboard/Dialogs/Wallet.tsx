@@ -435,6 +435,7 @@ const useWalletImportStyles = makeStyles(theme =>
             border: `1px solid ${theme.palette.divider}`,
             marginTop: theme.spacing(2),
             lineBreak: 'anywhere',
+            wordBreak: 'break-all',
         },
     }),
 )
