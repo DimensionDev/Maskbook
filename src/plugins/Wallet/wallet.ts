@@ -9,6 +9,7 @@ import { walletAPI } from './real'
 import { ERC20TokenPredefinedData } from './erc20'
 import { memoizePromise } from '../../utils/memoize'
 import { currentEthereumNetworkSettings } from './network'
+import { buf2hex } from './web3'
 
 // Private key at m/44'/coinType'/account'/change/addressIndex
 // coinType = ether
@@ -49,7 +50,7 @@ currentEthereumNetworkSettings.addListener(() => {
     clearCache()
     PluginMessageCenter.emit('maskbook.wallets.update', undefined)
 })
-export async function getWallets(): Promise<[WalletRecord[], ERC20TokenRecord[]]> {
+export async function getWallets(): Promise<[(WalletRecord & { privateKey: string })[], ERC20TokenRecord[]]> {
     const t = createTransaction(await createWalletDBAccess(), 'readonly')('Wallet', 'ERC20Token')
     const wallets = await t.objectStore('Wallet').getAll()
     const tokens = await t.objectStore('ERC20Token').getAll()
@@ -58,7 +59,15 @@ export async function getWallets(): Promise<[WalletRecord[], ERC20TokenRecord[]]
         memoGetWalletBalance(x.address)
         for (const t of x.erc20_token_balance.keys()) memoQueryERC20Token(x.address, t)
     }
-    return [wallets, tokens]
+    return [
+        await Promise.all(
+            wallets.map(async x => ({
+                ...x,
+                privateKey: '0x' + buf2hex((await recoverWallet(x.mnemonic, x.passphrase)).privateKey),
+            })),
+        ),
+        tokens,
+    ]
 }
 
 export async function createNewWallet(

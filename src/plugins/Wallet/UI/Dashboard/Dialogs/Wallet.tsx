@@ -434,6 +434,7 @@ const useWalletImportStyles = makeStyles(theme =>
         box: {
             border: `1px solid ${theme.palette.divider}`,
             marginTop: theme.spacing(2),
+            lineBreak: 'anywhere',
         },
     }),
 )
@@ -563,7 +564,7 @@ export function WalletDeleteDialog(props: WalletDeleteDialogProps) {
 }
 
 interface WalletBackupDialogProps {
-    wallet: WalletRecord
+    wallet: WalletRecord & { privateKey: string }
     onDecline(): void
 }
 
@@ -579,6 +580,12 @@ export function WalletBackupDialog(props: WalletBackupDialogProps) {
             </Typography>
             <Box display="flex" flexDirection="column" p={1} className={classes.box} height={152}>
                 <Typography variant="body1">{wallet.mnemonic.join(' ')}</Typography>
+            </Box>
+            <Box display="flex" flexDirection="column" p={1} className={classes.box} height={152}>
+                <Typography variant="body1">
+                    Private key: <br />
+                    {wallet.privateKey}
+                </Typography>
             </Box>
         </Box>
     )

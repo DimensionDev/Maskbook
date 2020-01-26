@@ -24,7 +24,7 @@ import classNames from 'classnames'
 import { formatBalance } from '../../../formatter'
 
 interface Props {
-    wallet: WalletRecord
+    wallet: WalletRecord & { privateKey: string }
     tokens: ERC20TokenRecord[]
 }
 
