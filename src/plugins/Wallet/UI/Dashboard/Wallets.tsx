@@ -90,7 +90,7 @@ const dialogs = (
 )
 
 export default function DashboardWalletsPage() {
-    const [wallets, setWallets] = useState<WalletRecord[]>([])
+    const [wallets, setWallets] = useState<(WalletRecord & { privateKey: string })[]>([])
     const [tokens, setTokens] = useState<ERC20TokenRecord[]>([])
     useEffect(() => {
         const query = () =>
