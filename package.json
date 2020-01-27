@@ -107,7 +107,7 @@
     "@storybook/addon-viewport": "^5.2.8",
     "@storybook/addons": "^5.2.6",
     "@storybook/react": "^5.2.5",
-    "@storybook/theming": "^5.2.4",
+    "@storybook/theming": "^5.3.9",
     "@trust/webcrypto": "^0.9.2",
     "@types/storybook__addon-info": "^5.2.1",
     "@types/storybook__react": "^4.0.1",
