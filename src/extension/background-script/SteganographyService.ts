@@ -9,6 +9,20 @@ import { getDimension } from '../../utils/image'
 
 OnlyRunInContext('background', 'SteganographyService')
 
+type Template = 'default' | 'eth' | 'dai'
+
+type Dimension = {
+    width: number
+    height: number
+}
+
+const dimensions: Dimension[] = [
+    {
+        width: 1024,
+        height: 1240,
+    },
+]
+
 const defaultOptions = {
     size: 8,
     narrow: 0,
@@ -16,31 +30,65 @@ const defaultOptions = {
     tolerance: 128,
 }
 
-const getMaskBuf = memoizePromise(() => downloadUrl(getUrl('/maskbook-steganography-mask.png')), undefined)
+const isSameDimension = (dimension: Dimension, otherDimension: Dimension) =>
+    dimension.width === otherDimension.width && dimension.height === otherDimension.height
 
-export async function encodeImage(buf: Uint8Array, options: PartialRequired<Required<EncodeOptions>, 'text' | 'pass'>) {
+const getDefaultMask = memoizePromise(() => downloadUrl(getUrl('/maskbook-mask-default.png')), undefined)
+const getTransparentMask = memoizePromise(() => downloadUrl(getUrl('/maskbook-mask-transparent.png')), undefined)
+const getMask = (template: Template) => {
+    switch (template) {
+        case 'eth':
+        case 'dai':
+            return getTransparentMask()
+        default:
+            return getDefaultMask()
+    }
+}
+
+const getGrayscaleAlgorithm = (template: Template) => {
+    switch (template) {
+        case 'eth':
+        case 'dai':
+            return GrayscaleAlgorithm.NONE
+        default:
+            return GrayscaleAlgorithm.LUMINANCE
+    }
+}
+
+type EncodeImageOptions = {
+    template?: Template
+} & PartialRequired<Required<EncodeOptions>, 'text' | 'pass'>
+
+export async function encodeImage(buf: Uint8Array, options: EncodeImageOptions) {
     return new Uint8Array(
-        await encode(buf.buffer, await getMaskBuf(), {
+        await encode(buf.buffer, await getMask(options.template ?? 'default'), {
             ...defaultOptions,
             noCropEdgePixels: false,
             noExhaustPixels: false,
-            grayscaleAlgorithm: GrayscaleAlgorithm.LUMINANCE,
+            grayscaleAlgorithm: getGrayscaleAlgorithm(options.template ?? 'default'),
             transformAlgorithm: TransformAlgorithm.FFT1D,
             ...options,
         }),
     )
 }
 
-export async function decodeImage(buf: Uint8Array, options: PartialRequired<Required<DecodeOptions>, 'pass'>) {
-    const { width, height } = getDimension(buf)
-    if (width !== 1024 || height !== 1240) {
-        return ''
+type DecodeImageOptions = PartialRequired<Required<DecodeOptions>, 'pass'>
+
+export async function decodeImage(buf: Uint8Array, options: DecodeImageOptions) {
+    const dimension = getDimension(buf)
+    if (!dimensions.some(otherDimension => isSameDimension(dimension, otherDimension))) {
+        return []
     }
-    return decode(buf.buffer, await getMaskBuf(), {
-        ...defaultOptions,
-        transformAlgorithm: TransformAlgorithm.FFT1D,
-        ...options,
-    })
+    const masks = await Promise.all([getDefaultMask(), getTransparentMask()])
+    return Promise.all(
+        masks.map(mask =>
+            decode(buf.buffer, mask, {
+                ...defaultOptions,
+                transformAlgorithm: TransformAlgorithm.FFT1D,
+                ...options,
+            }),
+        ),
+    )
 }
 
 export function downloadImage({ buffer }: Uint8Array) {
