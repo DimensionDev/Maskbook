@@ -63,7 +63,7 @@
     "elliptic": "^6.4.1",
     "eslint-plugin-import": "^2.19.1",
     "eslint-plugin-react-hooks": "^2.3.0",
-    "gun": "0.2019.1211",
+    "gun": "0.2020.116",
     "husky": "^3.1.0",
     "idb": "^5.0.0",
     "json-stable-stringify": "^1.0.1",
