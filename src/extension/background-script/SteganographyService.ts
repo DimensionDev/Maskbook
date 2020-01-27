@@ -33,30 +33,21 @@ const defaultOptions = {
 const isSameDimension = (dimension: Dimension, otherDimension: Dimension) =>
     dimension.width === otherDimension.width && dimension.height === otherDimension.height
 
-const getDefaultMask = memoizePromise(() => downloadUrl(getUrl('/maskbook-mask-default.png')), undefined)
-const getTransparentMask = memoizePromise(() => downloadUrl(getUrl('/maskbook-mask-transparent.png')), undefined)
-
-const getGrayscaleAlgorithm = (template: Template) => {
-    switch (template) {
-        case 'eth':
-        case 'dai':
-            return GrayscaleAlgorithm.NONE
-        default:
-            return GrayscaleAlgorithm.LUMINANCE
-    }
-}
+const getMaskBuf = memoizePromise(() => downloadUrl(getUrl('/maskbook-mask-default.png')), undefined)
 
 type EncodeImageOptions = {
     template?: Template
 } & PartialRequired<Required<EncodeOptions>, 'text' | 'pass'>
 
 export async function encodeImage(buf: Uint8Array, options: EncodeImageOptions) {
+    const { template } = options
     return new Uint8Array(
-        await encode(buf.buffer, await getDefaultMask(), {
+        await encode(buf.buffer, await getMaskBuf(), {
             ...defaultOptions,
-            noCropEdgePixels: false,
-            noExhaustPixels: false,
-            grayscaleAlgorithm: getGrayscaleAlgorithm(options.template ?? 'default'),
+            fakeMaskPixels: template !== 'default',
+            cropEdgePixels: true,
+            exhaustPixels: true,
+            grayscaleAlgorithm: template === 'default' ? GrayscaleAlgorithm.LUMINANCE : GrayscaleAlgorithm.NONE,
             transformAlgorithm: TransformAlgorithm.FFT1D,
             ...options,
         }),
@@ -70,7 +61,7 @@ export async function decodeImage(buf: Uint8Array, options: DecodeImageOptions) 
     if (!dimensions.some(otherDimension => isSameDimension(dimension, otherDimension))) {
         return ''
     }
-    return decode(buf.buffer, await getDefaultMask(), {
+    return decode(buf.buffer, await getMaskBuf(), {
         ...defaultOptions,
         transformAlgorithm: TransformAlgorithm.FFT1D,
         ...options,
