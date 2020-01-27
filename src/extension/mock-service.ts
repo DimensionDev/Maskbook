@@ -22,6 +22,6 @@ export const SteganographyService: Partial<typeof import('./background-script/St
         return new Uint8Array()
     },
     async decodeImage() {
-        return []
+        return ''
     },
 }

@@ -35,15 +35,6 @@ const isSameDimension = (dimension: Dimension, otherDimension: Dimension) =>
 
 const getDefaultMask = memoizePromise(() => downloadUrl(getUrl('/maskbook-mask-default.png')), undefined)
 const getTransparentMask = memoizePromise(() => downloadUrl(getUrl('/maskbook-mask-transparent.png')), undefined)
-const getMask = (template: Template) => {
-    switch (template) {
-        case 'eth':
-        case 'dai':
-            return getTransparentMask()
-        default:
-            return getDefaultMask()
-    }
-}
 
 const getGrayscaleAlgorithm = (template: Template) => {
     switch (template) {
@@ -61,7 +52,7 @@ type EncodeImageOptions = {
 
 export async function encodeImage(buf: Uint8Array, options: EncodeImageOptions) {
     return new Uint8Array(
-        await encode(buf.buffer, await getMask(options.template ?? 'default'), {
+        await encode(buf.buffer, await getDefaultMask(), {
             ...defaultOptions,
             noCropEdgePixels: false,
             noExhaustPixels: false,
@@ -77,18 +68,13 @@ type DecodeImageOptions = PartialRequired<Required<DecodeOptions>, 'pass'>
 export async function decodeImage(buf: Uint8Array, options: DecodeImageOptions) {
     const dimension = getDimension(buf)
     if (!dimensions.some(otherDimension => isSameDimension(dimension, otherDimension))) {
-        return []
+        return ''
     }
-    const masks = await Promise.all([getDefaultMask(), getTransparentMask()])
-    return Promise.all(
-        masks.map(mask =>
-            decode(buf.buffer, mask, {
-                ...defaultOptions,
-                transformAlgorithm: TransformAlgorithm.FFT1D,
-                ...options,
-            }),
-        ),
-    )
+    return decode(buf.buffer, await getDefaultMask(), {
+        ...defaultOptions,
+        transformAlgorithm: TransformAlgorithm.FFT1D,
+        ...options,
+    })
 }
 
 export function downloadImage({ buffer }: Uint8Array) {
