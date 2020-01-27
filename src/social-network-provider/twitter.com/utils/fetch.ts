@@ -157,13 +157,14 @@ export const postImageParser = async (node: HTMLElement) => {
         return (
             await Promise.all(
                 imgUrls
-                    .map(async url => {
-                        const image = new Uint8Array(await downloadUrl(url))
-                        const content = await Services.Steganography.decodeImage(image, {
-                            pass: posterIdentity.toText(),
-                        })
-                        return /https:\/\/.+\..+\/%20(.+)%40/.test(content) ? content : ''
-                    })
+                    .map(
+                        async url =>
+                            (
+                                await Services.Steganography.decodeImage(new Uint8Array(await downloadUrl(url)), {
+                                    pass: posterIdentity.toText(),
+                                })
+                            ).find(content => /https:\/\/.+\..+\/%20(.+)%40/.test(content)) ?? '',
+                    )
                     .filter(Boolean),
             )
         ).join('\n')
