@@ -341,7 +341,7 @@ export function PostDialog(props: PostDialogProps) {
                                 encrypted
                         } else {
                             text =
-                                'Happy Chinese New Year and use Maskbook to receive the first Twitter Red Packet. (Only available on Twitter for web） #MakerDAO #Maskbook Decrypt with @realMaskbook ' +
+                                'Happy Chinese New Year and use Maskbook to receive the first Twitter Red Packet. (Only available on Twitter for web) #MakerDAO #Maskbook Decrypt with @realMaskbook ' +
                                 encrypted
                         }
                     }
