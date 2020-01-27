@@ -38,6 +38,8 @@ import {
 } from '../../extension/background-script/CryptoServices/utils'
 import { formatBalance } from '../../plugins/Wallet/formatter'
 import classNames from 'classnames'
+import { RedPacketTokenType } from '../../plugins/Wallet/database/types'
+import { isDAI } from '../../plugins/Wallet/erc20'
 
 const useStyles = makeStyles({
     MUIInputRoot: {
@@ -321,7 +323,13 @@ export function PostDialog(props: PostDialogProps) {
                     !!shareToEveryone,
                 )
                 const activeUI = getActivatedUI()
+                const metadata = readTypedMessageMetadata(props.typedMessageMetadata, 'com.maskbook.red_packet:1')
                 if (isSteganography) {
+                    const isEth = metadata?.value?.token_type === RedPacketTokenType.eth
+                    const isDai =
+                        metadata?.value?.token_type === RedPacketTokenType.erc20 &&
+                        metadata?.value?.token &&
+                        isDAI(metadata?.value?.token)
                     activeUI.taskPasteIntoPostBox(
                         geti18nString('additional_post_box__steganography_post_pre', String(Date.now())),
                         {
@@ -330,11 +338,12 @@ export function PostDialog(props: PostDialogProps) {
                         },
                     )
                     activeUI.taskUploadToPostBox(encrypted, {
+                        template: isEth ? 'eth' : isDai ? 'dai' : 'default',
                         warningText: geti18nString('additional_post_box__steganography_post_failed'),
                     })
                 } else {
                     let text = geti18nString('additional_post_box__encrypted_post_pre', encrypted)
-                    if (readTypedMessageMetadata(props.typedMessageMetadata, 'com.maskbook.red_packet:1').hasValue) {
+                    if (metadata.hasValue) {
                         if (getCurrentLanguage() === 'zh') {
                             text =
                                 '春節快樂，用 Maskbook 開啟 Twitter 上第一個紅包！ （僅限 Twitter web 版）#MakerDAO #Maskbook 用@realMaskbook 解密 ' +
