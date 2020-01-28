@@ -40,22 +40,19 @@ export function injectKnownIdentityAtTwitter() {
         })
         .useForeach(content => {
             const bioRef = new ValueRef('')
-            const userIdRef = new ValueRef('')
+            const pageOwnerRef = new ValueRef<ProfileIdentifier | null>(null)
             const update = () => {
                 const { publicKeyEncoder, publicKeyDecoder } = twitterEncoding
                 const { bio: bioText, handle } = bioCardParser(content)
 
-                userIdRef.value = handle
                 bioRef.value = publicKeyEncoder(publicKeyDecoder(bioText)[0] || '')
+                pageOwnerRef.value = new ProfileIdentifier(twitterUrl.hostIdentifier, handle)
             }
 
             update()
 
             const unmount = renderInShadowRoot(
-                <PersonKnownAtTwitter
-                    pageOwner={new ProfileIdentifier(twitterUrl.hostIdentifier, userIdRef.value)}
-                    bioContent={bioRef}
-                />,
+                <PersonKnownAtTwitter pageOwner={pageOwnerRef} bioContent={bioRef} />,
                 renderPoint,
             )
             return {
