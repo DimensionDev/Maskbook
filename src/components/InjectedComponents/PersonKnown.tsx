@@ -8,7 +8,7 @@ import { ValueRef } from '@holoflows/kit/es'
 import { useValueRef } from '../../utils/hooks/useValueRef'
 
 export interface PersonKnownProps {
-    pageOwner?: ProfileIdentifier | null
+    pageOwner: ValueRef<ProfileIdentifier | null>
     bioContent: ValueRef<string>
     AdditionalContentProps?: Partial<AdditionalContentProps>
 }
@@ -16,25 +16,26 @@ export interface PersonKnownProps {
 export function PersonKnown(props: PersonKnownProps) {
     const { pageOwner, bioContent } = props
     const bio = useValueRef(bioContent)
+    const owner = useValueRef(pageOwner)
 
-    if (!pageOwner) return null
+    if (!owner) return null
     return (
         <AsyncComponent
             promise={async () => {
-                const profiles = await Services.Identity.queryMyProfiles(pageOwner.network)
-                const myProfile = profiles.find(x => x.identifier.equals(pageOwner))
+                const profiles = await Services.Identity.queryMyProfiles(owner.network)
+                const myProfile = profiles.find(x => x.identifier.equals(owner))
 
                 if (bio && myProfile) {
                     const prove = await Services.Crypto.getMyProveBio(myProfile.identifier)
                     if (prove && bio.includes(prove)) return null
                     return { type: 'self', prove }
                 } else {
-                    const otherProfile = await Services.Identity.queryProfile(pageOwner)
+                    const otherProfile = await Services.Identity.queryProfile(owner)
                     if (!otherProfile.linkedPersona?.fingerprint) return null
                     return { type: 'others' }
                 }
             }}
-            dependencies={[pageOwner.toText(), bio]}
+            dependencies={[owner.toText(), bio]}
             awaitingComponent={null}
             completeComponent={({ data }) => {
                 if (data === null) return null
