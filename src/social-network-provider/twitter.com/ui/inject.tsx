@@ -7,7 +7,7 @@ import { injectPostDialogHintAtTwitter } from './injectPostDialogHint'
 
 const injectPostBox = () => {
     injectPostDialogAtTwitter()
-    injectPostDialogSpyAtTwitter()
+    // injectPostDialogSpyAtTwitter()
     injectPostDialogHintAtTwitter()
 }
 

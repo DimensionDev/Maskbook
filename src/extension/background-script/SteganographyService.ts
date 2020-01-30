@@ -9,6 +9,20 @@ import { getDimension } from '../../utils/image'
 
 OnlyRunInContext('background', 'SteganographyService')
 
+type Template = 'default' | 'eth' | 'dai'
+
+type Dimension = {
+    width: number
+    height: number
+}
+
+const dimensions: Dimension[] = [
+    {
+        width: 1024,
+        height: 1240,
+    },
+]
+
 const defaultOptions = {
     size: 8,
     narrow: 0,
@@ -16,24 +30,35 @@ const defaultOptions = {
     tolerance: 128,
 }
 
-const getMaskBuf = memoizePromise(() => downloadUrl(getUrl('/maskbook-steganography-mask.png')), undefined)
+const isSameDimension = (dimension: Dimension, otherDimension: Dimension) =>
+    dimension.width === otherDimension.width && dimension.height === otherDimension.height
 
-export async function encodeImage(buf: Uint8Array, options: PartialRequired<Required<EncodeOptions>, 'text' | 'pass'>) {
+const getMaskBuf = memoizePromise(() => downloadUrl(getUrl('/maskbook-mask-default.png')), undefined)
+
+type EncodeImageOptions = {
+    template?: Template
+} & PartialRequired<Required<EncodeOptions>, 'text' | 'pass'>
+
+export async function encodeImage(buf: Uint8Array, options: EncodeImageOptions) {
+    const { template } = options
     return new Uint8Array(
         await encode(buf.buffer, await getMaskBuf(), {
             ...defaultOptions,
-            noCropEdgePixels: false,
-            noExhaustPixels: false,
-            grayscaleAlgorithm: GrayscaleAlgorithm.LUMINANCE,
+            fakeMaskPixels: template !== 'default',
+            cropEdgePixels: true,
+            exhaustPixels: true,
+            grayscaleAlgorithm: template === 'default' ? GrayscaleAlgorithm.LUMINANCE : GrayscaleAlgorithm.NONE,
             transformAlgorithm: TransformAlgorithm.FFT1D,
             ...options,
         }),
     )
 }
 
-export async function decodeImage(buf: Uint8Array, options: PartialRequired<Required<DecodeOptions>, 'pass'>) {
-    const { width, height } = getDimension(buf)
-    if (width !== 1024 || height !== 1240) {
+type DecodeImageOptions = PartialRequired<Required<DecodeOptions>, 'pass'>
+
+export async function decodeImage(buf: Uint8Array, options: DecodeImageOptions) {
+    const dimension = getDimension(buf)
+    if (!dimensions.some(otherDimension => isSameDimension(dimension, otherDimension))) {
         return ''
     }
     return decode(buf.buffer, await getMaskBuf(), {

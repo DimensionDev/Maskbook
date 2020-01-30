@@ -135,10 +135,12 @@ async function getSteganographyContent(node: DOMProxy) {
             imgUrls
                 .map(async url => {
                     try {
-                        const image = new Uint8Array(await downloadUrl(url))
-                        const content = await Services.Steganography.decodeImage(image, {
-                            pass,
-                        })
+                        const content = await Services.Steganography.decodeImage(
+                            new Uint8Array(await downloadUrl(url)),
+                            {
+                                pass,
+                            },
+                        )
                         return content.indexOf('🎼') === 0 ? content : ''
                     } catch {
                         return ''

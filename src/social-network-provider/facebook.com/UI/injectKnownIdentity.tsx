@@ -59,12 +59,16 @@ export function injectKnownIdentityAtFacebook(this: SocialNetworkUI) {
             afterShadowRootInit: { mode: 'closed' },
         })
         .useForeach(content => {
-            const ref = new ValueRef(content.innerText)
+            const bioRef = new ValueRef(content.innerText)
+            const pageOwnerRef = new ValueRef<ProfileIdentifier | null>(getCurrentIdentity())
             const unmount = renderInShadowRoot(
-                <PersonKnownAtFacebook pageOwner={getCurrentIdentity()} bioContent={ref} />,
+                <PersonKnownAtFacebook pageOwner={pageOwnerRef} bioContent={bioRef} />,
                 renderPoint,
             )
-            const update = () => (ref.value = content.innerText)
+            const update = () => {
+                bioRef.value = content.innerText
+                pageOwnerRef.value = getCurrentIdentity()
+            }
             return {
                 onNodeMutation: update,
                 onRemove: unmount,
