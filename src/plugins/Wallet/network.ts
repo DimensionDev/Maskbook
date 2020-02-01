@@ -3,9 +3,9 @@ import { createNewSettings } from '../../components/shared-settings/createSettin
 
 const settings = {
     contractAddress: {
-        [EthereumNetwork.Mainnet]: '0x9ab3edd567fa8B28f6AbC1fb14b1fB7a30140575',
-        [EthereumNetwork.Rinkeby]: '0xC21F17f4f2E04ae718f1e65a29C833627eaA0b6f',
-        [EthereumNetwork.Ropsten]: '0x9ab3edd567fa8B28f6AbC1fb14b1fB7a30140575',
+        [EthereumNetwork.Mainnet]: '0x26760783c12181efa3c435aee4ae686c53bdddbb',
+        [EthereumNetwork.Rinkeby]: '0x575f906db24154977c7361c2319e2b25e897e3b6',
+        [EthereumNetwork.Ropsten]: '0x26760783c12181efa3c435aee4ae686c53bdddbb',
     },
     middlewareAddress: {
         [EthereumNetwork.Mainnet]: 'wss://mainnet.infura.io/ws/v3/11f8b6b36f4a408e85d8a4e52d31edc5',
