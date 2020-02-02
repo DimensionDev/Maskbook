@@ -14,11 +14,18 @@ import Services from '../../../extension/service'
  *      handle: "MisakaMirror"
  * }
  */
-const parseNameArea = (t: string) => {
-    const r = regexMatch(t, /((.+\s*)*)@(.+)/, null)!
+const parseNameArea = (nameArea: string) => {
+    const result = regexMatch(nameArea, /([^@]*)@(.+)/, null)
+
+    if (!result) {
+        return {
+            name: '',
+            handle: '',
+        }
+    }
     return {
-        name: r[1].replace(/\n+/g, ''),
-        handle: r[3].replace(/\n+/g, ''),
+        name: result[1].replace(/\n+/g, ''),
+        handle: result[2].replace(/\n+/g, ''),
     }
 }
 
@@ -92,10 +99,25 @@ export const postNameParser = (node: HTMLElement) => {
         return parseNameArea(notNullable(node.querySelector<HTMLTableCellElement>('.user-info')).innerText)
     } else {
         const tweetElement = node.querySelector('[data-testid="tweet"]') ?? node
-        const nameInNoramlTweet = tweetElement.children[1]?.querySelector<HTMLAnchorElement>('a')?.innerText
+        const nameInUniqueAnchorTweet =
+            tweetElement.children[1]?.querySelector<HTMLAnchorElement>('a[aria-haspopup="false"]')?.innerText ?? ''
+        const nameInDoubleAnchorsTweet = Array.from(
+            tweetElement.children[1]?.querySelectorAll<HTMLAnchorElement>('a[aria-haspopup="false"]') ?? [],
+        )
+            .map(a => a.textContent)
+            .join('')
         const nameInQuoteTweet = tweetElement.children[0]?.querySelector<HTMLDivElement>('[aria-haspopup="false"]')
             ?.innerText
-        return parseNameArea(notNullable(nameInNoramlTweet || nameInQuoteTweet))
+
+        return (
+            [nameInUniqueAnchorTweet, nameInDoubleAnchorsTweet, nameInQuoteTweet]
+                .filter(Boolean)
+                .map(n => parseNameArea(n!))
+                .find(r => r.name && r.handle) ?? {
+                name: '',
+                handle: '',
+            }
+        )
     }
 }
 
