@@ -15,8 +15,7 @@ import Services from '../../../extension/service'
  * }
  */
 const parseNameArea = (nameArea: string) => {
-    const nameArea_ = nameArea.replace(/\n+/g, '')
-    const result = regexMatch(nameArea_, /([^@]*)@(.+)/, null)
+    const result = regexMatch(nameArea, /([^@]*)@(.+)/, null)
 
     if (!result) {
         return {
@@ -102,8 +101,8 @@ export const postNameParser = (node: HTMLElement) => {
         const tweetElement = node.querySelector('[data-testid="tweet"]') ?? node
         const nameInUniqueAnchorTweet =
             tweetElement.children[1]?.querySelector<HTMLAnchorElement>('a[aria-haspopup="false"]')?.innerText ?? ''
-        const nameInDoubleAnchorTweet = Array.from(
-            tweetElement.children[1]?.querySelectorAll<HTMLAnchorElement>('a[aria-haspopup="false"]'),
+        const nameInDoubleAnchorsTweet = Array.from(
+            tweetElement.children[1]?.querySelectorAll<HTMLAnchorElement>('a[aria-haspopup="false"]') ?? [],
         )
             .map(a => a.textContent)
             .join('')
@@ -111,7 +110,7 @@ export const postNameParser = (node: HTMLElement) => {
             ?.innerText
 
         return (
-            [nameInUniqueAnchorTweet, nameInDoubleAnchorTweet, nameInQuoteTweet]
+            [nameInUniqueAnchorTweet, nameInDoubleAnchorsTweet, nameInQuoteTweet]
                 .filter(Boolean)
                 .map(n => parseNameArea(n!))
                 .find(r => r.name && r.handle) ?? {

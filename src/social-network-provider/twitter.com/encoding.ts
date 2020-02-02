@@ -60,7 +60,12 @@ export const twitterEncoding = {
         ])}`,
     payloadDecoder: (text: string) => {
         const links: { raw: string; protocol: string; encoded: string }[] = anchorme(text, { list: true })
-        let links_ = links.filter(x => x.raw.endsWith('%40'))[0]?.raw
+        let links_ = links
+            .map(l => ({
+                ...l,
+                raw: l.raw.replace(/…$/, ''),
+            }))
+            .filter(x => x.raw.endsWith('%40'))[0]?.raw
         try {
             links_ = new URL(links_).pathname
                 .slice(1)
