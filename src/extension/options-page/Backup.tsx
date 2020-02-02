@@ -58,14 +58,14 @@ export default function BackupDialog() {
     const [showQRCode, setShowQRCode] = useState(search.get('qr') === null ? false : true)
 
     const identity = search.get('identity') || ''
-    const currentIdentifier = ProfileIdentifier.fromString(identity, ProfileIdentifier).value
+    const currentIdentifier = ProfileIdentifier.fromString(identity, ProfileIdentifier)
 
     useEffect(() => {
-        if (!currentIdentifier) return
+        if (currentIdentifier.err) return
         Services.Welcome.createBackupFile({ download: false, onlyBackupWhoAmI: true })
             .then(backupObj => {
                 setBackupObj(backupObj)
-                setQRText(compressBackupFile(backupObj, currentIdentifier))
+                setQRText(compressBackupFile(backupObj, currentIdentifier.val))
             })
             .catch(e => {
                 alert(e)
@@ -80,10 +80,10 @@ export default function BackupDialog() {
         Services.Welcome.downloadBackup(backupObj)
     }
 
-    const friendlyIdentifier = currentIdentifier ? (
+    const friendlyIdentifier = currentIdentifier.ok ? (
         <>
-            {currentIdentifier.userId}
-            <wbr />@{currentIdentifier.network}
+            {currentIdentifier.val.userId}
+            <wbr />@{currentIdentifier.val.network}
         </>
     ) : (
         'Unknown'

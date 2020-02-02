@@ -20,7 +20,7 @@ import * as Alpha40 from '../../../crypto/crypto-alpha-40'
 import * as Alpha39 from '../../../crypto/crypto-alpha-39'
 import * as Alpha38 from '../../../crypto/crypto-alpha-38'
 import { RedPacketJSONPayload } from '../../../plugins/Wallet/database/types'
-import { Nullable } from '../../../utils/type-transform/Nullable'
+import { Result, Err, Ok } from 'ts-results'
 
 export const cryptoProviderTable = {
     [-40]: Alpha40,
@@ -62,16 +62,16 @@ export function readTypedMessageMetadata<T extends keyof KnownMetadata>(
     meta: ReadonlyMap<string, any> | undefined,
     key: T,
     jsonSchema?: object,
-): Nullable<KnownMetadata[T]> {
+): Result<KnownMetadata[T], void> {
     return readTypedMessageMetadataUntyped(meta, key, jsonSchema)
 }
 export function readTypedMessageMetadataUntyped<T>(
     meta: ReadonlyMap<string, any> | undefined,
     key: string,
     jsonSchema?: object,
-): Nullable<T> {
-    if (!meta) return Nullable(null)
-    if (!meta.has(key)) return Nullable(null)
+): Result<T, void> {
+    if (!meta) return Err.EMPTY
+    if (!meta.has(key)) return Err.EMPTY
     if (!jsonSchema) {
         console.warn('You should add a JSON Schema to verify the metadata')
     } else {
@@ -79,7 +79,7 @@ export function readTypedMessageMetadataUntyped<T>(
             jsonSchema = builtinMetadataSchema[key]
         // TODO: validate the schema.
     }
-    return Nullable(meta.get(key))
+    return new Ok(meta.get(key))
 }
 
 export function withMetadata<T extends keyof KnownMetadata>(
@@ -97,16 +97,14 @@ export function withMetadataUntyped(
     jsonSchema?: object,
 ): React.ReactNode | null {
     const message = readTypedMessageMetadataUntyped(meta, key, jsonSchema)
-    if (message.value) return render(message.value)
+    if (message.ok) return render(message.val)
     return null
 }
 
-export function extractTextFromTypedMessage(x: TypedMessage | null): Nullable<string> {
-    if (x === null) return Nullable(null)
-    if (x.type === 'text') return Nullable(x.content)
+export function extractTextFromTypedMessage(x: TypedMessage | null): Result<string, void> {
+    if (x === null) return Err.EMPTY
+    if (x.type === 'text') return new Ok(x.content)
     if (x.type === 'complex')
-        return Nullable(
-            x.items.map(extractTextFromTypedMessage).filter(x => x.hasValue && x.value!.length > 0)[0].value,
-        )
-    return Nullable(null)
+        return new Ok(x.items.map(extractTextFromTypedMessage).filter(x => x.ok && x.val.length > 0)[0].val as string)
+    return Err.EMPTY
 }

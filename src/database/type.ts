@@ -2,7 +2,7 @@ import { serializable } from '../utils/type-transform/Serialization'
 import { RecipientDetail } from './post'
 import { compressSecp256k1Key } from '../utils/type-transform/SECP256k1-Compression'
 import { CryptoKeyToJsonWebKey } from '../utils/type-transform/CryptoKey-JsonWebKey'
-import { Nullable } from '../utils/type-transform/Nullable'
+import { Result, Ok, Err } from 'ts-results'
 
 /**
  * @internal symbol that used to construct this type from the Identifier
@@ -21,14 +21,14 @@ const fromStringCache = new Map<string, Identifier | undefined | null>()
 
 interface IdentifierFromString {
     /**
-     * fromString("some string", ProfileIdentifier) // ProfileIdentifier | null
-     * fromString("some string", ECKeyIdentifier) // ECKeyIdentifier | null
+     * fromString("some string", ProfileIdentifier)
+     * fromString("some string", ECKeyIdentifier)
      */
-    <T extends Identifier>(id: string, c: new (...args: any) => T): Nullable<T>
+    <T extends Identifier>(id: string, c: new (...args: any) => T): Result<T, TypeError>
     /**
-     * fromString("some string") // Identifier | null
+     * fromString("some string")
      */
-    (id: string): Nullable<Identifier>
+    (id: string): Result<Identifier, TypeError>
     /**
      * fromString(identifier) // typeof identifier
      */
@@ -46,7 +46,7 @@ export abstract class Identifier {
     static fromString: IdentifierFromString = ((
         id: string | Identifier,
         constructor?: typeof Identifier,
-    ): Nullable<Identifier> => {
+    ): Result<Identifier, TypeError> => {
         let result: Identifier | undefined | null = null
         // the third overload
         if (id instanceof Identifier) result = id
@@ -62,14 +62,20 @@ export abstract class Identifier {
             else {
                 // ? if we add new value to Identifiers, this line will be a TypeError
                 const _: never = type
-                return Nullable(null)
+                return new Err(new TypeError('Unreachable case'))
             }
             fromStringCache.set(id, result)
         }
-        if (!constructor) return Nullable(result)
+        const err = new Err(
+            new TypeError(
+                `Can't cast to Identifier. Expected: ${constructor?.name ||
+                    'Any Identifier'}, Try to convert from string: ${id}`,
+            ),
+        )
+        if (!constructor) return result ? new Ok(result) : err
         // the first overload
-        else if (result instanceof constructor) return Nullable(result)
-        else return Nullable(null)
+        else if (result instanceof constructor) return new Ok(result)
+        else return err
     }) as any
 
     static IdentifiersToString(a: Identifier[], isOrderImportant = false) {
@@ -171,9 +177,9 @@ export class PostIdentifier<T extends Identifier = Identifier> extends Identifie
     }
     static [$fromString](str: string) {
         const [postId, ...identifier] = str.split('/')
-        const id = Identifier.fromString(identifier.join('/')).value
-        if (!id || !postId) return null
-        return new PostIdentifier(id, postId)
+        const id = Identifier.fromString(identifier.join('/'))
+        if (id.err || !postId) return null
+        return new PostIdentifier(id.val, postId)
     }
 }
 

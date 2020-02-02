@@ -22,9 +22,7 @@ export default function InitStep2S() {
     const [persona, setPersona] = useState<Persona | null>(null)
     useAsync(async () => {
         if (identifier)
-            Services.Identity.queryPersona(
-                Identifier.fromString(identifier, ECKeyIdentifier).unwrap('Cast failed'),
-            ).then(setPersona)
+            Services.Identity.queryPersona(Identifier.fromString(identifier, ECKeyIdentifier).unwrap()).then(setPersona)
     }, [identifier, personas])
 
     const actions = (

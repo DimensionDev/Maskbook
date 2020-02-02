@@ -62,8 +62,9 @@ export async function encryptTo(
 
     const toKey = await prepareOthersKeyForEncryptionV39OrV38(
         Object.keys(recipients)
-            .map(x => Identifier.fromString(x, ProfileIdentifier).value!)
-            .filter(x => x),
+            .map(x => Identifier.fromString(x, ProfileIdentifier))
+            .filter(x => x.ok)
+            .map(x => x.val as ProfileIdentifier),
     )
     const minePrivateKey = await queryPrivateKey(whoAmI)
     if (!minePrivateKey) throw new TypeError('Not inited yet')
