@@ -27,7 +27,7 @@ export function PersonaRecordFromJSONFormat(
     return {
         createdAt: new Date(persona.createdAt),
         updatedAt: new Date(persona.updatedAt),
-        identifier: Identifier.fromString(persona.identifier, ECKeyIdentifier).unwrap('Cast failed'),
+        identifier: Identifier.fromString(persona.identifier, ECKeyIdentifier).unwrap(),
         publicKey: persona.publicKey,
         privateKey: persona.privateKey,
         nickname: persona.nickname,

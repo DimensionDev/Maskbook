@@ -23,11 +23,11 @@ export function ProfileRecordFromJSONFormat(
     return {
         createdAt: new Date(profile.createdAt),
         updatedAt: new Date(profile.updatedAt),
-        identifier: Identifier.fromString(profile.identifier, ProfileIdentifier).unwrap('Cast failed'),
+        identifier: Identifier.fromString(profile.identifier, ProfileIdentifier).unwrap(),
         nickname: profile.nickname,
         localKey: profile.localKey ? localKeyMap.get(profile.localKey) : undefined,
         linkedPersona: profile.linkedPersona
-            ? Identifier.fromString(profile.linkedPersona, ECKeyIdentifier).unwrap('Cast failed')
+            ? Identifier.fromString(profile.linkedPersona, ECKeyIdentifier).unwrap()
             : undefined,
     }
 }

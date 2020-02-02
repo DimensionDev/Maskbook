@@ -39,9 +39,9 @@ export function PostRecordFromJSONFormat(
     return {
         postCryptoKey: post.postCryptoKey ? keyMap.get(post.postCryptoKey) : undefined,
         foundAt: new Date(post.foundAt),
-        identifier: Identifier.fromString(post.identifier, PostIVIdentifier).unwrap('Cast failed'),
-        postBy: Identifier.fromString(post.postBy, ProfileIdentifier).unwrap('Cast failed'),
-        recipientGroups: post.recipientGroups.map(x => Identifier.fromString(x, GroupIdentifier).unwrap('Cast failed')),
+        identifier: Identifier.fromString(post.identifier, PostIVIdentifier).unwrap(),
+        postBy: Identifier.fromString(post.postBy, ProfileIdentifier).unwrap(),
+        recipientGroups: post.recipientGroups.map(x => Identifier.fromString(x, GroupIdentifier).unwrap()),
         recipients: recipientsFromNext(
             new IdentifierMap<ProfileIdentifier, RecipientDetailNext>(
                 new Map<string, RecipientDetailNext>(
@@ -67,7 +67,7 @@ function RecipientReasonFromJSON(y: RecipientReasonJSON): RecipientReason {
         return {
             type: 'group',
             at: new Date(y.at),
-            group: Identifier.fromString(y.group, GroupIdentifier).unwrap('Cast failed'),
+            group: Identifier.fromString(y.group, GroupIdentifier).unwrap(),
         }
     const x: never = y
     throw new Error('Unreachable case')

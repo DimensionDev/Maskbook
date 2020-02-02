@@ -28,8 +28,9 @@ export async function getSharedListOfPost(
     }
     return Promise.all(
         Array.from(ids)
-            .map(x => Identifier.fromString(x, ProfileIdentifier).value!)
-            .filter(x => x)
+            .map(x => Identifier.fromString(x, ProfileIdentifier))
+            .filter(x => x.ok)
+            .map(x => x.val as ProfileIdentifier)
             .map(queryProfile),
     )
 }

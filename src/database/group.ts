@@ -128,8 +128,9 @@ export async function updateUserGroupDatabase(
             banned: !orig.banned && !group.banned ? undefined : [...(orig.banned || []), ...(group.banned || [])],
             groupName: group.groupName || orig.groupName,
             members: Array.from(nextMembers)
-                .map(x => Identifier.fromString(x, ProfileIdentifier).value!)
-                .filter(x => x),
+                .map(x => Identifier.fromString(x, ProfileIdentifier))
+                .filter(x => x.ok)
+                .map(x => x.val as ProfileIdentifier),
         }
     } else {
         nextRecord = type(orig) || orig
@@ -172,12 +173,12 @@ export async function queryUserGroupsDatabase(
     const result: GroupRecordInDatabase[] = []
     if (typeof query === 'function') {
         for await (const { value, key } of t.store) {
-            const identifier = Identifier.fromString(key, GroupIdentifier).value
-            if (!identifier) {
+            const identifier = Identifier.fromString(key, GroupIdentifier)
+            if (identifier.err) {
                 console.warn('Invalid identifier', key)
                 continue
             }
-            if (query(identifier, value)) result.push(value)
+            if (query(identifier.val, value)) result.push(value)
         }
     } else {
         result.push(
@@ -193,9 +194,7 @@ export async function queryUserGroupsDatabase(
 function GroupRecordOutDB(x: GroupRecordInDatabase): GroupRecord {
     return {
         ...x,
-        identifier: Identifier.fromString(x.identifier, GroupIdentifier).unwrap(
-            `'Can not cast string ${x.identifier} into GroupIdentifier'`,
-        ),
+        identifier: Identifier.fromString(x.identifier, GroupIdentifier).unwrap(),
         members: restorePrototypeArray(x.members, ProfileIdentifier.prototype),
         banned: restorePrototypeArray(x.banned, ProfileIdentifier.prototype),
     }

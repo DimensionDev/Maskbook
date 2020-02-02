@@ -13,6 +13,11 @@ module.exports = {
         require.resolve('fake-indexeddb/auto'),
         path.join(__dirname, './scripts/jest-setup.js'),
     ],
+    // skip packages other than 'ts-results'
+    transformIgnorePatterns: ['node_modules/[a-su-z0-0@]'],
+    transform: {
+        '[/\\\\]node_modules[/\\\\].+\\.m?js$': 'jest-esm-transformer',
+    },
     moduleNameMapper: {
         '^@holoflows/kit.+$': require.resolve('@holoflows/kit/umd/index.js'),
         'lodash-es': require.resolve('lodash'),

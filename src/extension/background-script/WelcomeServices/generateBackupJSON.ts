@@ -31,7 +31,10 @@ export async function generateBackupJSON(opts: Partial<BackupOptions> = {}): Pro
         if (opts.noPersonas) throw new TypeError('Invalid opts')
         await backupPersona(opts.filter.wanted)
         const wantedProfiles: ProfileIdentifier[] = personas.flatMap(q =>
-            q.linkedProfiles.map(y => Identifier.fromString(y[0], ProfileIdentifier).value!).filter(k => k),
+            q.linkedProfiles
+                .map(y => Identifier.fromString(y[0], ProfileIdentifier))
+                .filter(k => k.ok)
+                .map(x => x.val as ProfileIdentifier),
         )
         if (!opts.noProfiles) await backProfiles(wantedProfiles)
     }

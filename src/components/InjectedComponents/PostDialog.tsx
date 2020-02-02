@@ -325,11 +325,13 @@ export function PostDialog(props: PostDialogProps) {
                 const activeUI = getActivatedUI()
                 const metadata = readTypedMessageMetadata(props.typedMessageMetadata, 'com.maskbook.red_packet:1')
                 if (isSteganography) {
-                    const isEth = metadata?.value?.token_type === RedPacketTokenType.eth
+                    const isEth = metadata.ok && metadata.val.token_type === RedPacketTokenType.eth
                     const isDai =
-                        metadata?.value?.token_type === RedPacketTokenType.erc20 &&
-                        metadata?.value?.token &&
-                        isDAI(metadata?.value?.token)
+                        metadata.ok &&
+                        metadata.val.token_type === RedPacketTokenType.erc20 &&
+                        metadata.val.token_type &&
+                        metadata.val.token &&
+                        isDAI(metadata.val.token)
                     activeUI.taskPasteIntoPostBox(
                         geti18nString('additional_post_box__steganography_post_pre', String(Date.now())),
                         {
@@ -343,7 +345,7 @@ export function PostDialog(props: PostDialogProps) {
                     })
                 } else {
                     let text = geti18nString('additional_post_box__encrypted_post_pre', encrypted)
-                    if (metadata.hasValue) {
+                    if (metadata.ok) {
                         if (getCurrentLanguage() === 'zh') {
                             text =
                                 '春節快樂，用 Maskbook 開啟 Twitter 上第一個紅包！ （僅限 Twitter web 版）#MakerDAO #Maskbook 用@realMaskbook 解密 ' +
@@ -413,8 +415,7 @@ export function PostDialog(props: PostDialogProps) {
         }, []),
     )
 
-    const hasRedPacket = readTypedMessageMetadata(postBoxContent.meta || new Map(), 'com.maskbook.red_packet:1')
-        .hasValue
+    const hasRedPacket = readTypedMessageMetadata(postBoxContent.meta || new Map(), 'com.maskbook.red_packet:1').ok
 
     const mustSelectShareToEveryone = hasRedPacket && !shareToEveryone
     React.useEffect(() => {

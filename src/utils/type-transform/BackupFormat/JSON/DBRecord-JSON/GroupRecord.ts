@@ -14,8 +14,8 @@ export function GroupRecordToJSONFormat(group: GroupRecord): BackupJSONFileLates
 export function GroupRecordFromJSONFormat(group: BackupJSONFileLatest['userGroups'][0]): GroupRecord {
     return {
         groupName: group.groupName,
-        identifier: Identifier.fromString(group.identifier, GroupIdentifier).unwrap('Cast failed'),
-        members: group.members.map(x => Identifier.fromString(x, ProfileIdentifier).unwrap('Cast failed')),
-        banned: group.banned?.map(x => Identifier.fromString(x, ProfileIdentifier).unwrap('Cast failed')),
+        identifier: Identifier.fromString(group.identifier, GroupIdentifier).unwrap(),
+        members: group.members.map(x => Identifier.fromString(x, ProfileIdentifier).unwrap()),
+        banned: group.banned?.map(x => Identifier.fromString(x, ProfileIdentifier).unwrap()),
     }
 }
