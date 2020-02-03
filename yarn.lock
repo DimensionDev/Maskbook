@@ -2891,7 +2891,7 @@
     pretty-hrtime "^1.0.3"
     regenerator-runtime "^0.13.3"
 
-"@storybook/react@^5.2.0", "@storybook/react@^5.3.10":
+"@storybook/react@*", "@storybook/react@^5.2.0", "@storybook/react@^5.3.10":
   version "5.3.10"
   resolved "https://registry.yarnpkg.com/@storybook/react/-/react-5.3.10.tgz#86e7746ee7a59245ccbd81635409232e52ca17ca"
   integrity sha512-EPGPs6ZCsHfSec18LTdOymxOZPjRp0Lmm4Q27mRNyaiH91sc43KndnT9ajq+/9VvsC8KrNWc6trTZjceLd3auw==
@@ -3543,13 +3543,12 @@
     "@storybook/react" "^5.2.0"
     "@types/react" "*"
 
-"@types/storybook__react@^4.0.1":
-  version "4.0.2"
-  resolved "https://registry.yarnpkg.com/@types/storybook__react/-/storybook__react-4.0.2.tgz#f36fb399574c662e79c1a0cf6e429b6ff730da40"
-  integrity sha512-U/+J5qccRdKFryvHkk1a0IeZaSIZLCmTwAQhTSDGeC3SPNIYPus+EtunBqP49r870l8czbfxtjeC3IL9P66ngQ==
+"@types/storybook__react@^5.2.1":
+  version "5.2.1"
+  resolved "https://registry.yarnpkg.com/@types/storybook__react/-/storybook__react-5.2.1.tgz#b5fd1612f2e5846b2f441725ea946bafd7ab9edb"
+  integrity sha512-p4QGO+VjEO3YxyWVHpPylNheA0JhStzoCg6RBTmdobrC0ZqLPEIIWu0pFkHlNkmGIiEKW2yDGFJooBe8M4Df0Q==
   dependencies:
-    "@types/react" "*"
-    "@types/webpack-env" "*"
+    "@storybook/react" "*"
 
 "@types/tiny-secp256k1@^1.0.0":
   version "1.0.0"
@@ -3565,7 +3564,7 @@
   dependencies:
     "@types/node" "*"
 
-"@types/webpack-env@*", "@types/webpack-env@^1.15.0":
+"@types/webpack-env@^1.15.0":
   version "1.15.0"
   resolved "https://registry.yarnpkg.com/@types/webpack-env/-/webpack-env-1.15.0.tgz#bd9956d5044b1fb43e869a9ba9148862ff98d9fd"
   integrity sha512-TfcyNecCz8Z9/s90gBOBniyzZrTru8u2Vp0VZODq4KEBaQu8bfXvu7o/KUOecMpzjbFPUA7aqgSq628Iue5BQg==
