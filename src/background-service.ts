@@ -1,42 +1,25 @@
 import { GetContext } from '@holoflows/kit/es'
 import { MessageCenter } from './utils/messages'
-// @ts-ignore
-import elliptic from 'elliptic'
+import './_background_loader.0'
+import 'webcrypto-liner'
+import './_background_loader.1'
+import './extension/service'
+import './provider.worker'
 
-Object.assign(window, { elliptic })
-require('webcrypto-liner')
-/**
- * Load service here. sorry for the ugly pattern.
- * But here's some strange problem with webpack.
- *
- * you should also add register in './extension/service.ts'
- */
-import * as CryptoService from './extension/background-script/CryptoService'
-import * as WelcomeService from './extension/background-script/WelcomeService'
-import * as IdentityService from './extension/background-script/IdentityService'
-import * as UserGroupService from './extension/background-script/UserGroupService'
-import * as SteganographyService from './extension/background-script/SteganographyService'
-import { decryptFromMessageWithProgress } from './extension/background-script/CryptoServices/decryptFrom'
+import * as PersonaDB from './database/Persona/Persona.db'
+import * as PersonaDBHelper from './database/Persona/helpers'
 import { initAutoShareToFriends } from './extension/background-script/Jobs/AutoShareToFriends'
 
-const PluginService = require('./extension/background-script/PluginService')
-
-Object.assign(window, {
-    CryptoService,
-    WelcomeService,
-    SteganographyService,
-    IdentityService,
-    UserGroupService,
-    PluginService,
-})
-Object.assign(window, {
-    ServicesWithProgress: {
-        decryptFrom: decryptFromMessageWithProgress,
-    },
-})
-
-require('./extension/service')
-require('./provider.worker')
+import { gun2 } from './network/gun/version.2'
+import * as crypto40 from './crypto/crypto-alpha-40'
+import * as crypto39 from './crypto/crypto-alpha-39'
+import * as crypto38 from './crypto/crypto-alpha-38'
+import * as avatar from './database/avatar'
+import * as group from './database/group'
+import * as type from './database/type'
+import * as post from './database/post'
+import { definedSocialNetworkWorkers } from './social-network/worker'
+import { getWelcomePageURL } from './extension/options-page/Welcome/getWelcomePageURL'
 
 if (GetContext() === 'background') {
     const injectedScript = `{
@@ -82,9 +65,6 @@ if (GetContext() === 'background') {
 
     browser.runtime.onInstalled.addListener(detail => {
         if (webpackEnv.target === 'WKWebview') return
-        const {
-            getWelcomePageURL,
-        } = require('./extension/options-page/Welcome/getWelcomePageURL') as typeof import('./extension/options-page/Welcome/getWelcomePageURL')
         if (detail.reason === 'install') {
             browser.tabs.create({ url: getWelcomePageURL() })
         }
@@ -120,29 +100,21 @@ function IgnoreError(arg: unknown): (reason: Error) => void {
         } else console.error('Inject error', e, arg, Object.entries(e))
     }
 }
-Object.assign(window, {
-    definedSocialNetworkWorkers: (require('./social-network/worker') as typeof import('./social-network/worker'))
-        .definedSocialNetworkWorkers,
-})
-
-import * as PersonaDB from './database/Persona/Persona.db'
-import * as PersonaDBHelper from './database/Persona/helpers'
 
 // Friendly to debug
 Object.assign(window, {
-    gun1: require('./network/gun/version.1'),
-    gun2: require('./network/gun/version.2'),
-    crypto40: require('./crypto/crypto-alpha-40'),
-    crypto39: require('./crypto/crypto-alpha-39'),
-    crypto38: require('./crypto/crypto-alpha-38'),
+    definedSocialNetworkWorkers,
+    gun2: gun2,
+    crypto40: crypto40,
+    crypto39: crypto39,
+    crypto38: crypto38,
     db: {
-        avatar: require('./database/avatar'),
-        group: require('./database/group'),
-        deprecated_people: require('./database/migrate/_deprecated_people_db'),
+        avatar: avatar,
+        group: group,
         persona: PersonaDB,
         personaHelper: PersonaDBHelper,
-        type: require('./database/type'),
-        post: require('./database/post'),
+        type: type,
+        post: post,
     },
 })
 initAutoShareToFriends()
