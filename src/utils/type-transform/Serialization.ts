@@ -1,6 +1,7 @@
 /// <reference path="../../env.d.ts" />
 import { Serialization } from '@holoflows/kit'
 import Typeson from 'typeson'
+import { Ok, Err } from 'ts-results'
 
 export function serializable<T, Q>(name: string, ser?: (x: T) => Q, des?: (x: Q) => T) {
     return <T extends NewableFunction>(constructor: T) => {
@@ -31,6 +32,8 @@ export function serializable<T, Q>(name: string, ser?: (x: T) => Q, des?: (x: Q)
         return constructor
     }
 }
+serializable('Ok')(Ok)
+serializable('Err')(Err)
 
 // See: https://github.com/dfahlander/typeson-registry/issues/15
 const typeson = new Typeson({ cyclic: false }).register([require('typeson-registry/dist/presets/builtin')])

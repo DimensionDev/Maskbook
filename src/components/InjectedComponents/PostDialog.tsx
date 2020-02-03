@@ -295,7 +295,6 @@ export function PostDialog(props: PostDialogProps) {
     const isSteganography = useValueRef(steganographyModeSetting)
     //#region TypedMessage
     const [postBoxContent, setPostBoxContent] = useState<TypedMessage>(makeTypedMessage('', props.typedMessageMetadata))
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     useEffect(() => {
         if (props.typedMessageMetadata !== postBoxContent.meta)
             setPostBoxContent({ ...postBoxContent, meta: props.typedMessageMetadata })
