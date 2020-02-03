@@ -20,9 +20,6 @@ function UI({
 }: { unmount: () => void; post: ValueRef<string>; persona: PersonaIdentifier } & Partial<
     ImmersiveSetupStepperUIProps
 >) {
-    // TODO: This should working now. Please verify if it works
-    // TODO: <del>workaround. add serialization support for tasks</del>
-    restorePrototype(persona, ECKeyIdentifier.prototype)
     const provePost = useValueRef(post)
     return (
         <DraggablePaper>
