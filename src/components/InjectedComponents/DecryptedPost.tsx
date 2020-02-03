@@ -134,7 +134,7 @@ export const DecryptPostFailed = React.memo(function DecryptPostFailed({ error, 
 export interface DecryptPostProps {
     onDecrypted(post: TypedMessage): void
     postBy: ProfileIdentifier
-    postId?: string
+    postId?: PostIdentifier<ProfileIdentifier>
     whoAmI: ProfileIdentifier
     encryptedText: string
     people: Profile[]
@@ -199,7 +199,7 @@ export function DecryptPost(props: DecryptPostProps) {
             <>
                 <Success
                     data={decryptedResult}
-                    postIdentifier={postId ? new PostIdentifier(postBy, postId) : PostIdentifier.unknown}
+                    postIdentifier={postId}
                     alreadySelectedPreviously={alreadySelectedPreviously}
                     requestAppendRecipients={requestAppendRecipientsWrapped}
                     people={people}
@@ -264,7 +264,7 @@ export function DecryptPost(props: DecryptPostProps) {
                     return (
                         <Success
                             data={result.data}
-                            postIdentifier={postId ? new PostIdentifier(postBy, postId) : PostIdentifier.unknown}
+                            postIdentifier={postId}
                             alreadySelectedPreviously={alreadySelectedPreviously}
                             requestAppendRecipients={requestAppendRecipientsWrapped}
                             people={people}
