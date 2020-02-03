@@ -18468,10 +18468,10 @@ typechain-target-web3-v1@^1.0.4:
     lodash "^4.17.15"
     web3 "^1.2.4"
 
-typechain@^1.0.3:
-  version "1.0.3"
-  resolved "https://registry.yarnpkg.com/typechain/-/typechain-1.0.3.tgz#c4465cdc27526989c735774ad96fadbb908bfe01"
-  integrity sha512-GG/isuyXy0vtm4fwfboMqnApU3hUF+XdrpQMMVUIhlHgm1kXxxf+w8+v8shn4gfhRoiATCZGDOt9fbE+/hMhjQ==
+typechain@^1.0.4:
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/typechain/-/typechain-1.0.4.tgz#8e35ed1a3189b28c8ffdd31ab51b97c58490c7b1"
+  integrity sha512-jZoxGWTlGXf9n95lIb9R0i3SzHP2jMxJDpVgePMQq93FaLYa8pHKe8DRmCmVkWXP2SGZpo4/jUPYMc0+vf/4XA==
   dependencies:
     command-line-args "^4.0.7"
     debug "^3.0.1"

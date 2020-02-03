@@ -131,7 +131,7 @@
     "ts-jest": "^24.2.0",
     "ts-morph": "^6.0.2",
     "ts-node": "^8.5.4",
-    "typechain": "^1.0.3",
+    "typechain": "^1.0.4",
     "typechain-target-web3-v1": "^1.0.4",
     "web-ext": "^4.0.0",
     "webpack-extension-manifest-plugin": "^0.5.0",
