@@ -11,11 +11,12 @@ const circle = <CircularProgress size={24} />
 interface ActionButtonProps extends ButtonProps, PropsOf<typeof Button> {
     width?: number | string
     loading?: boolean
-    component?: keyof JSX.IntrinsicElements | React.ComponentClass<any>
+    component?: keyof JSX.IntrinsicElements | React.ComponentType<any>
 }
 
-// TODO:
-export default function ActionButton<T extends React.ComponentClass<any> = React.ComponentClass<{}>>(props: any) {
+export default function ActionButton<T extends React.ComponentType<any> = React.ComponentType<{}>>(
+    props: ActionButtonProps & PropsOf<T>,
+) {
     const { width, loading, children, className, style, ...p } = props
     return (
         <Button
