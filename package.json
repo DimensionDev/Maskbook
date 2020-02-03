@@ -87,7 +87,7 @@
     "tiny-secp256k1": "^1.1.2",
     "ts-loader": "^6.2.1",
     "ts-results": "^2.0.1",
-    "typescript": "^3.7.4",
+    "typescript": "^3.7.5",
     "typeson": "^5.18.1",
     "typeson-registry": "^1.0.0-alpha.33",
     "uuid": "^3.3.3",
