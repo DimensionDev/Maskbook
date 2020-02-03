@@ -124,6 +124,7 @@ const ResponsiveDialog = withMobileDialog({ breakpoint: 'xs' })(Dialog)
 export interface PostDialogUIProps
     extends withClasses<
         | KeysInferFromUseStyles<typeof useStyles>
+        | 'root'
         | 'dialog'
         | 'backdrop'
         | 'container'
@@ -152,7 +153,6 @@ export interface PostDialogUIProps
     onCloseButtonClicked: () => void
     onSetSelected: SelectRecipientsUIProps['onSetSelected']
     SelectRecipientsUIProps?: Partial<SelectRecipientsUIProps>
-    rootStyleOverrides?: string
 }
 export function PostDialogUI(props: PostDialogUIProps) {
     const classes = useStylesExtends(useStyles(), props)
@@ -168,7 +168,7 @@ export function PostDialogUI(props: PostDialogUIProps) {
     const [redPacketDialogOpen, setRedPacketDialogOpen] = useState(false)
     if (props.postContent.type !== 'text') return <>Unsupported type to edit</>
     return (
-        <div ref={rootRef} className={props.rootStyleOverrides}>
+        <div ref={rootRef} className={classes.root}>
             <ResponsiveDialog
                 className={classes.dialog}
                 classes={{
@@ -441,8 +441,8 @@ export function PostDialog(props: PostDialogProps) {
             onOnlyMyselfChanged={onOnlyMyselfChanged}
             onFinishButtonClicked={onFinishButtonClicked}
             onCloseButtonClicked={onCloseButtonClicked}
-            rootStyleOverrides={classNames({ [classes.hasRedPacket]: hasRedPacket })}
             {...props}
+            classes={{ root: classNames({ [classes.hasRedPacket]: hasRedPacket }), ...props.classes }}
         />
     )
 }
