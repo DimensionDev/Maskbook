@@ -12,7 +12,7 @@ import {
 import { AddToKeyStoreUI } from '../components/InjectedComponents/AddToKeyStore'
 import { useShareMenu } from '../components/InjectedComponents/SelectPeopleDialog'
 import { sleep } from '../utils/utils'
-import { Paper, MuiThemeProvider } from '@material-ui/core'
+import { Paper, MuiThemeProvider, Typography, Divider } from '@material-ui/core'
 import { demoPeople, demoGroup } from './demoPeopleOrGroups'
 import { PostCommentDecrypted } from '../components/InjectedComponents/PostComments'
 import { CommentBox } from '../components/InjectedComponents/CommentBox'
@@ -21,7 +21,17 @@ import { PersonOrGroupInChip, PersonOrGroupInList } from '../components/shared/S
 import { MaskbookLightTheme } from '../utils/theme'
 import { PostDialog } from '../components/InjectedComponents/PostDialog'
 import { PostDialogHint } from '../components/InjectedComponents/PostDialogHint'
-import { makeTypedMessage } from '../extension/background-script/CryptoServices/utils'
+import {
+    makeTypedMessage,
+    TypedMessageText,
+    TypedMessageUnknown,
+    TypedMessageComplex,
+} from '../extension/background-script/CryptoServices/utils'
+import {
+    DefaultTypedMessageTextRenderer,
+    DefaultTypedMessageComplexRenderer,
+    DefaultTypedMessageUnknownRenderer,
+} from '../components/InjectedComponents/TypedMessageRenderer'
 
 storiesOf('Injections', module)
     .add('PersonOrGroupInChip', () => (
@@ -40,13 +50,43 @@ storiesOf('Injections', module)
     ))
     .add('AdditionalPostBox', () => <AdditionalPostBox onRequestPost={action('onRequestPost')} />)
     .add('Additional Post Content', () => (
-        <Paper>
-            <AdditionalContent
-                title={text('Title', 'Additional text')}
-                renderText={text('Rich text', 'a[text](https://g.cn/)')}
-            />
-        </Paper>
+        <>
+            <Paper>
+                <AdditionalContent
+                    header={text('Title', 'Additional text')}
+                    message={text('Rich text', 'a[text](https://g.cn/)')}
+                />
+            </Paper>
+        </>
     ))
+    .add('Typed Message Renderer', () => {
+        const _text: TypedMessageText = {
+            type: 'text',
+            version: 1,
+            content: text('DefaultTypedMessageTextRenderer', 'text'),
+        }
+        const unknown: TypedMessageUnknown = { type: 'unknown', version: 1 }
+        const complex: TypedMessageComplex = {
+            type: 'complex',
+            version: 1,
+            items: [_text, unknown],
+        }
+        const divider = <Divider style={{ marginTop: 24 }} />
+        return (
+            <>
+                <Paper>
+                    <Typography>DefaultTypedMessageTextRenderer</Typography>
+                    <DefaultTypedMessageTextRenderer message={_text} />
+                    {divider}
+                    <Typography>DefaultTypedMessageComplexRenderer</Typography>
+                    <DefaultTypedMessageComplexRenderer message={complex} />
+                    {divider}
+                    <Typography>DefaultTypedMessageUnknownRenderer</Typography>
+                    <DefaultTypedMessageUnknownRenderer message={unknown} />
+                </Paper>
+            </>
+        )
+    })
     .add('Select people dialog', () => {
         function SelectPeople() {
             const { ShareMenu, showShare } = useShareMenu(

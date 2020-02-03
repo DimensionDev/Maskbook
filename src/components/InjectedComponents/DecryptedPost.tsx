@@ -2,11 +2,11 @@ import React, { useMemo, useState } from 'react'
 import AsyncComponent from '../../utils/components/AsyncComponent'
 import { AdditionalContent, AdditionalContentProps } from './AdditionalPostContent'
 import { useShareMenu } from './SelectPeopleDialog'
-import { sleep } from '../../utils/utils'
+import { sleep, getUrl } from '../../utils/utils'
 import { ServicesWithProgress } from '../../extension/service'
 import { geti18nString } from '../../utils/i18n'
 import { makeStyles } from '@material-ui/styles'
-import { Box, Link, useMediaQuery, useTheme } from '@material-ui/core'
+import { Box, Link, useMediaQuery, useTheme, Typography } from '@material-ui/core'
 import { Profile } from '../../database'
 import { Identifier, ProfileIdentifier, PostIdentifier } from '../../database/type'
 import { NotSetupYetPrompt } from '../shared/NotSetupYetPrompt'
@@ -24,6 +24,7 @@ import { DebugList } from '../DebugModeUI/DebugList'
 import { useStylesExtends } from '../custom-ui-helper'
 import { BannerProps } from '../Welcomes/Banner'
 import { TypedMessage } from '../../extension/background-script/CryptoServices/utils'
+import WithRedPacket from '../../plugins/Wallet/UI/RedPacket/WithRedPacket'
 
 export interface DecryptPostSuccessProps extends withClasses<KeysInferFromUseStyles<typeof useSuccessStyles>> {
     data: { signatureVerifyResult: boolean; content: TypedMessage }
@@ -35,24 +36,38 @@ export interface DecryptPostSuccessProps extends withClasses<KeysInferFromUseSty
 }
 
 const useSuccessStyles = makeStyles({
+    header: { display: 'flex', alignItems: 'center' },
     addRecipientsLink: { marginRight: '1em', cursor: 'pointer' },
     signatureVerifyPassed: { color: 'green' },
     signatureVerifyFailed: { color: 'red' },
 })
 
-export const DecryptPostSuccess = React.memo(function DecryptPostSuccess({
-    data,
-    people,
-    postIdentifier,
-    ...props
-}: DecryptPostSuccessProps) {
-    const classes = useStylesExtends(useSuccessStyles(), props)
-    const { ShareMenu, showShare } = useShareMenu(
+export const DecryptPostSuccess = React.memo(function DecryptPostSuccess(props: DecryptPostSuccessProps) {
+    const { data, people, postIdentifier } = props
+    const shareMenu = useShareMenu(
         people,
         props.requestAppendRecipients || (async () => {}),
         props.alreadySelectedPreviously,
     )
+    return (
+        <AdditionalContent
+            metadataRenderer={{
+                after: props => <WithRedPacket message={props.message} postIdentifier={postIdentifier}></WithRedPacket>,
+            }}
+            header={<DecryptPostSuccessHeader {...props} shareMenu={shareMenu} />}
+            message={data.content}
+            {...props.AdditionalContentProps}
+        />
+    )
+})
+
+function DecryptPostSuccessHeader(props: { shareMenu: ReturnType<typeof useShareMenu> } & DecryptPostSuccessProps) {
     const theme = useTheme()
+    const classes = useStylesExtends(useSuccessStyles(), props)
+    const {
+        shareMenu: { ShareMenu, showShare },
+        data,
+    } = props
     let passString = geti18nString('decrypted_postbox_verified')
     let failString = geti18nString('decrypted_postbox_not_verified')
 
@@ -60,41 +75,25 @@ export const DecryptPostSuccess = React.memo(function DecryptPostSuccess({
         passString = '✔'
         failString = '❌'
     }
-    const msg = data.content
-    if (msg.type === 'unknown')
-        return <AdditionalContent title="Unknown type of Maskbook message" {...props.AdditionalContentProps} />
-    else if (msg.type === 'complex')
-        return (
-            <AdditionalContent
-                title="Complex Maskbook message is not renderable currently"
-                {...props.AdditionalContentProps}
-            />
-        )
     return (
-        <AdditionalContent
-            postIdentifier={postIdentifier}
-            title={
-                <>
-                    {ShareMenu}
-                    {geti18nString('decrypted_postbox_title')}
-                    <Box flex={1} />
-                    {props.requestAppendRecipients && (
-                        <Link color="primary" onClick={showShare} className={classes.addRecipientsLink}>
-                            {geti18nString('decrypted_postbox_add_recipients')}
-                        </Link>
-                    )}
-                    {data.signatureVerifyResult ? (
-                        <span className={classes.signatureVerifyPassed}>{passString}</span>
-                    ) : (
-                        <span className={classes.signatureVerifyFailed}>{failString}</span>
-                    )}
-                </>
-            }
-            renderItem={msg}
-            {...props.AdditionalContentProps}
-        />
+        <Typography variant="caption" color="textSecondary" gutterBottom className={classes.header}>
+            <img alt="" width={16} height={16} src={getUrl('/maskbook-icon-padded.png')} />
+            {ShareMenu}
+            {geti18nString('decrypted_postbox_title')}
+            <Box flex={1} />
+            {props.requestAppendRecipients && (
+                <Link color="primary" onClick={showShare} className={classes.addRecipientsLink}>
+                    {geti18nString('decrypted_postbox_add_recipients')}
+                </Link>
+            )}
+            {data.signatureVerifyResult ? (
+                <span className={classes.signatureVerifyPassed}>{passString}</span>
+            ) : (
+                <span className={classes.signatureVerifyFailed}>{failString}</span>
+            )}
+        </Typography>
     )
-})
+}
 
 export interface DecryptPostAwaitingProps {
     type?: DecryptionProgress
@@ -108,7 +107,7 @@ export const DecryptPostAwaiting = React.memo(function DecryptPostAwaiting(props
     } as const
     return (
         <AdditionalContent
-            title={geti18nString(key[(props.type && props.type.progress) || 'undefined'])}
+            header={geti18nString(key[(props.type && props.type.progress) || 'undefined'])}
             {...props.AdditionalContentProps}
         />
     )
@@ -125,8 +124,8 @@ export const DecryptPostFailed = React.memo(function DecryptPostFailed({ error, 
     }
     return (
         <AdditionalContent
-            title={geti18nString('service_decryption_failed')}
-            renderText={error?.message}
+            header={geti18nString('service_decryption_failed')}
+            message={error?.message}
             {...props.AdditionalContentProps}
         />
     )
