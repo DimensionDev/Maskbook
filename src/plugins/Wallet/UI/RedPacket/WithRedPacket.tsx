@@ -1,5 +1,5 @@
 import React, { useRef } from 'react'
-import { TypedMessageText, withMetadata } from '../../../../extension/background-script/CryptoServices/utils'
+import { TypedMessage, withMetadata } from '../../../../extension/background-script/CryptoServices/utils'
 import StructuredPluginWrapper from '../../../../components/InjectedComponents/StructuredMessage/StructuredPluginWrapper'
 import { RedPacketWithState } from '../Dashboard/Components/RedPacket'
 import { RedPacketRecord, RedPacketStatus, WalletRecord } from '../../database/types'
@@ -51,14 +51,14 @@ interface WithRedPacketProps
         | 'label'
         | 'title'
     > {
-    renderItem?: TypedMessageText | null
+    message: TypedMessage
     postIdentifier?: PostIdentifier<ProfileIdentifier>
 }
 
 const ResponsiveDialog = withMobileDialog({ breakpoint: 'xs' })(Dialog)
 
 export default function WithRedPacket(props: WithRedPacketProps) {
-    const { renderItem, postIdentifier } = props
+    const { message, postIdentifier } = props
     const classes = useStylesExtends(useStyles(), props)
     const [loading, setLoading] = React.useState(false)
     const rootRef = useRef<HTMLDivElement>(null)
@@ -104,8 +104,8 @@ export default function WithRedPacket(props: WithRedPacketProps) {
             Services.Welcome.openOptionsPage(`/wallets/redpacket?id=${rpid}`)
         }
     }
-    const Component = renderItem
-        ? withMetadata(renderItem.meta, 'com.maskbook.red_packet:1', r => (
+    const Component = message
+        ? withMetadata(message.meta, 'com.maskbook.red_packet:1', r => (
               <StructuredPluginWrapper width={400} pluginName="Red Packet">
                   <RedPacketWithState
                       loading={loading || !!claiming}
