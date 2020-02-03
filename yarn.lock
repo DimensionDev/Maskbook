@@ -1987,7 +1987,8 @@
 
 "@holoflows/kit@https://github.com/DimensionDev/holoflows-kit":
   version "0.6.1"
-  resolved "https://github.com/DimensionDev/holoflows-kit#fd9899bd72a80a4f48b87411018880051a264e6c"
+  uid "46b73ba5047f4b8de52e2c39727a32a9516855a7"
+  resolved "https://github.com/DimensionDev/holoflows-kit#46b73ba5047f4b8de52e2c39727a32a9516855a7"
   dependencies:
     async-call-rpc "^1.0.4"
     concurrent-lock "^1.0.7"
