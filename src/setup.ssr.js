@@ -23,13 +23,17 @@ globalThis.webpackEnv = {}
 globalThis.sessionStorage = {}
 
 const { join } = require('path')
-const { writeFileSync, readFileSync } = require('fs')
+const { writeFileSync, readFileSync, unlinkSync } = require('fs')
 
 const restoreLodash = modifyPackage('lodash-es', x => (x.main = '../lodash'))
 const restoreAsyncCall = modifyPackage('async-call-rpc', x => {
     x.main = './_maskbook_ssr.cjs'
     x.types = './out/'
 })
+const restoreTSResult = modifyPackage('ts-results', x => {
+    x.main = './cjs.cjs'
+})
+const undoTSResult = compileToCJS('../node_modules/ts-results/index.js', '../node_modules/ts-results/cjs.cjs')
 writeFileSync(
     join(__dirname, '../node_modules/async-call-rpc/_maskbook_ssr.cjs'),
     `exports.AsyncCall = () => new Proxy({}, {get(_target, method) {return (...params) => new Promise(x => {})}})
@@ -52,6 +56,8 @@ function cleanup() {
     restoreLodash()
     restoreAsyncCall()
     restoreKit()
+    undoTSResult()
+    restoreTSResult()
 }
 try {
     require('ts-node').register({ ...require(__dirname + '/../tsconfig_cjs.json'), transpileOnly: true })
@@ -75,5 +81,20 @@ function modifyPackage(packageName, modifier) {
 
     function writeJSON(path, object) {
         return writeFileSync(path, JSON.stringify(object, undefined, 4))
+    }
+}
+
+function compileToCJS(filePath, outPath) {
+    const ts = require('typescript')
+    const options = {
+        compilerOptions: { target: ts.ScriptTarget.ES2017, module: ts.ModuleKind.CommonJS },
+    }
+
+    const cjs = join(__dirname, outPath)
+    writeFileSync(cjs, ts.transpileModule(readFileSync(join(__dirname, filePath), 'utf-8'), options).outputText)
+    return () => {
+        try {
+            unlinkSync(cjs)
+        } catch {}
     }
 }
