@@ -18,7 +18,7 @@ export interface PostInspectorProps {
     onDecryptedRaw(post: string): void
     post: string
     postBy: ProfileIdentifier
-    postId: string
+    postId: PostIdentifier<ProfileIdentifier>
     needZip(): void
     DecryptPostProps?: Partial<DecryptPostProps>
     DecryptPostComponent?: React.ComponentType<DecryptPostProps>
@@ -55,7 +55,7 @@ export function PostInspector(props: PostInspectorProps) {
                     whoAmI ? `Nickname ${whoAmI.nickname || 'unknown'}, UserID ${whoAmI.identifier.userId}` : 'Unknown',
                 ],
                 ['My fingerprint', whoAmI?.linkedPersona?.fingerprint ?? 'Unknown'],
-                ['Post ID', props.postId || 'Unknown'],
+                ['Post ID', props.postId.toText() || 'Unknown'],
                 ['Post Content', props.post],
             ]}
         />

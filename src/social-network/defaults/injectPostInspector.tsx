@@ -1,12 +1,11 @@
 import React from 'react'
-import { DOMProxy, ValueRef } from '@holoflows/kit'
+import { DOMProxy } from '@holoflows/kit'
 import { PostInfo } from '../ui'
 import { renderInShadowRoot } from '../../utils/jss/renderInShadowRoot'
-import { ProfileIdentifier } from '../../database/type'
 import { useValueRef } from '../../utils/hooks/useValueRef'
 import { PostInspector, PostInspectorProps } from '../../components/InjectedComponents/PostInspector'
 import { makeStyles } from '@material-ui/core'
-import { TypedMessage } from '../../extension/background-script/CryptoServices/utils'
+import { PostIdentifier } from '../../database/type'
 
 export function injectPostInspectorDefault<T extends string>(
     config: InjectPostInspectorDefaultConfig = {},
@@ -21,8 +20,9 @@ export function injectPostInspectorDefault<T extends string>(
         },
     ) {
         const { onDecrypted, zipPost, postBy, postID, postContent, onDecryptedRaw } = props
-        const id = useValueRef(postID) || ''
+        const _id = useValueRef(postID)
         const by = useValueRef(postBy)
+        const id = _id ? new PostIdentifier(by, _id) : PostIdentifier.unknown
         const content = useValueRef(postContent)
         const classes = useCustomStyles()
         const additionalProps = additionalPropsToPostInspector(classes)
