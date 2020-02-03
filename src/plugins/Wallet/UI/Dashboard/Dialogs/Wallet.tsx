@@ -64,7 +64,7 @@ export function WalletSendRedPacketDialog(props: WalletSendRedPacketDialogProps)
                             // </ActionButton>
                         }
                         {
-                            <ActionButton
+                            <ActionButton<React.ComponentType<JSX.IntrinsicElements['a']>>
                                 component="a"
                                 href="https://twitter.com"
                                 target="_blank"
