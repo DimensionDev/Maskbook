@@ -118,6 +118,8 @@ function override(config, env) {
         })
     }
 
+    // The background.js is too big to analyzed by the Firefox Addon's linter.
+    // After https://github.com/DimensionDev/Maskbook/pull/372 is shipped this can be removed.
     if (target.Firefox) {
         const TerserPlugin = require('terser-webpack-plugin')
         config.plugins.push(new TerserPlugin())
