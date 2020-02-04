@@ -29,7 +29,6 @@ export interface SelectRecipientsUIProps<T extends Group | Profile = Group | Pro
     hideSelectAll?: boolean
     hideSelectNone?: boolean
     showAtNetwork?: boolean
-    maxSelection?: number
     onSetSelected(selected: T[]): void
     GroupInChipProps?: Partial<GroupInChipProps>
     PersonOrGroupInListProps?: Partial<PersonOrGroupInListProps>
@@ -38,7 +37,7 @@ export interface SelectRecipientsUIProps<T extends Group | Profile = Group | Pro
 
 export function SelectRecipientsUI<T extends Group | Profile = Group | Profile>(props: SelectRecipientsUIProps) {
     const classes = useStylesExtends(useStyles(), props)
-    const { items, maxSelection, selected, onSetSelected } = props
+    const { items, selected, onSetSelected } = props
 
     const currentIdentity = useCurrentIdentity()
     const currentIdentifier = currentIdentity ? currentIdentity.identifier.toText() : ''
@@ -47,11 +46,9 @@ export function SelectRecipientsUI<T extends Group | Profile = Group | Profile>(
         x => isProfile(x) && !x.identifier.equals(currentIdentity?.identifier) && x.linkedPersona?.fingerprint,
     ) as Profile[]
 
-    // const selectedAsProfiles = selected.filter(x => isProfile(x)) as Profile[]
     const selectedAsGroups = selected.filter(x => isGroup(x)) as Group[]
 
     const [open, setOpen] = useState(false)
-    const [_search, setSearch] = useState('') // TODO: Filter profiles with keywords
     const [selectedIdentifiers, setSelectedIdentifiers] = useState<string[]>(
         difference(
             Array.from(
@@ -109,7 +106,6 @@ export function SelectRecipientsUI<T extends Group | Profile = Group | Profile>(
                             } else {
                                 setSelectedIdentifiers(difference(selectedIdentifiers, identifiers))
                             }
-                            setSearch('')
                         }}
                         {...props.GroupInChipProps}
                     />

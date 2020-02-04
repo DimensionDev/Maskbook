@@ -16,8 +16,6 @@ import { useStylesExtends } from '../../custom-ui-helper'
 import { geti18nString } from '../../../utils/i18n'
 import { ProfileInList } from './ProfileInList'
 import { Profile } from '../../../database'
-import { useCurrentIdentity } from '../../DataSource/useActivatedUI'
-import { ProfileIdentifier } from '../../../database/type'
 import { DialogDismissIconUI } from '../../InjectedComponents/DialogDismissIcon'
 
 const useStyles = makeStyles(theme => ({
