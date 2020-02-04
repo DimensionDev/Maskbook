@@ -28,6 +28,7 @@ type DebugInfo = {
 type Success = {
     signatureVerifyResult: boolean
     content: TypedMessage
+    rawContent: string
     through: ('author_key_not_found' | 'post_key_cached' | 'normal_decrypted')[]
 }
 type Failure = {
@@ -42,6 +43,20 @@ type ReturnOfDecryptFromMessageWithProgress = AsyncGenerator<
     void
 > & {
     [Symbol.asyncIterator](): AsyncIterator<Failure | Progress | DebugInfo, Success | Failure, void>
+}
+
+function makeSuccessResult(
+    cryptoProvider: typeof cryptoProviderTable[keyof typeof cryptoProviderTable],
+    rawContent: string,
+    through: Success['through'],
+    signatureVerifyResult: boolean = true,
+): Success {
+    return {
+        signatureVerifyResult,
+        rawContent,
+        through,
+        content: cryptoProvider.typedMessageParse(rawContent),
+    }
 }
 
 /**
@@ -114,11 +129,12 @@ export async function* decryptFromMessageWithProgress(
                 if (_.value === 'out of chance')
                     return { error: geti18nString('service_others_key_not_found', author.userId) }
                 else if (_.value === 'use cache')
-                    return {
-                        signatureVerifyResult: false,
-                        content: cryptoProvider.typedMessageParse(cachedPostResult!),
-                        through: ['author_key_not_found', 'post_key_cached'],
-                    } as Success
+                    return makeSuccessResult(
+                        cryptoProvider,
+                        cachedPostResult!,
+                        ['author_key_not_found', 'post_key_cached'],
+                        false,
+                    )
                 else byPerson = _.value
             }
         }
@@ -139,17 +155,14 @@ export async function* decryptFromMessageWithProgress(
                 )
                 yield { debug: 'debug_finding_hash', hash: [postHash, keyHash] }
             }
-            return {
-                signatureVerifyResult: byPerson.publicKey
-                    ? await cryptoProvider.verify(
-                          waitForVerifySignaturePayload,
-                          signature || '',
-                          await JsonWebKeyToCryptoKey(byPerson.publicKey, ...ecdhParams),
-                      )
-                    : false,
-                content: cryptoProvider.typedMessageParse(cachedPostResult),
-                through: ['post_key_cached'],
-            } as Success
+            const signatureVerifyResult = byPerson.publicKey
+                ? await cryptoProvider.verify(
+                      waitForVerifySignaturePayload,
+                      signature || '',
+                      await JsonWebKeyToCryptoKey(byPerson.publicKey, ...ecdhParams),
+                  )
+                : false
+            return makeSuccessResult(cryptoProvider, cachedPostResult, ['post_key_cached'], signatureVerifyResult)
         }
 
         let lastError: unknown
@@ -270,17 +283,9 @@ export async function* decryptFromMessageWithProgress(
                     signature,
                     await JsonWebKeyToCryptoKey(byPerson.publicKey, ...getKeyParameter('ecdh')),
                 )
-                return {
-                    signatureVerifyResult,
-                    content: cryptoProvider.typedMessageParse(content),
-                    through: ['normal_decrypted'],
-                }
+                return makeSuccessResult(cryptoProvider, content, ['normal_decrypted'], signatureVerifyResult)
             } catch {
-                return {
-                    signatureVerifyResult: false,
-                    content: cryptoProvider.typedMessageParse(content),
-                    through: ['normal_decrypted'],
-                }
+                return makeSuccessResult(cryptoProvider, content, ['normal_decrypted'], false)
             }
         }
 
