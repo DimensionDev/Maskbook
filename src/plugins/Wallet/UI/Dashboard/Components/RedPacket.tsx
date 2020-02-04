@@ -99,10 +99,8 @@ interface RedPacketProps {
 }
 
 export function RedPacketWithState(props: RedPacketProps) {
-    const classes = useStyles()
     const { onClick, redPacket: knownRedPacket, unknownRedPacket, loading, from } = props
     const [redPacket, setRedPacket] = React.useState(knownRedPacket || ({} as Partial<RedPacketRecord>))
-    const [info, setInfo] = React.useState<Partial<ERC20TokenRecord>>({})
 
     React.useEffect(() => {
         if (unknownRedPacket) {
@@ -124,14 +122,24 @@ export function RedPacketWithState(props: RedPacketProps) {
         if (knownRedPacket) setRedPacket(knownRedPacket)
     }, [knownRedPacket])
 
-    React.useEffect(() => {
-        if (!redPacket) return
-        if (!redPacket.erc20_token) setInfo({ name: 'ETH', decimals: 18 })
-        else setInfo(redPacket.raw_payload?.token ?? {})
-    }, [redPacket])
+    return (
+        <RedPacketWithStateUI
+            onClick={() => !loading && onClick?.(redPacket.status, redPacket.red_packet_id)}
+            loading={loading}
+            redPacket={redPacket!}
+        />
+    )
+}
 
-    const status = redPacket.status
-
+export function RedPacketWithStateUI(props: {
+    onClick?(): void
+    redPacket: Partial<RedPacketRecord>
+    loading?: boolean
+}) {
+    const classes = useStyles()
+    const { onClick, redPacket, loading } = props
+    const info = getInfo(redPacket)
+    const status = redPacket?.status
     return (
         <Card
             elevation={0}
@@ -139,7 +147,7 @@ export function RedPacketWithState(props: RedPacketProps) {
                 [classes.cursor]: onClick,
             })}
             component="article"
-            onClick={() => !loading && onClick?.(status, redPacket.red_packet_id)}>
+            onClick={() => onClick?.()}>
             <div className={classNames(classes.header, { [classes.flex1]: status === 'incoming' })}>
                 {status === 'claimed' ? (
                     <Typography variant="h5" color="inherit">
@@ -200,12 +208,7 @@ export function RedPacket(props: { redPacket?: RedPacketRecord }) {
     const classes = useStyles()
     const { redPacket } = props
 
-    const info = getInfo()
-    function getInfo() {
-        if (!redPacket) return { name: undefined }
-        if (!redPacket.erc20_token) return { name: 'ETH', decimals: 18 }
-        else return redPacket.raw_payload?.token ?? {}
-    }
+    const info = getInfo(redPacket)
 
     const formatted = {
         claim_amount: '',
@@ -235,4 +238,12 @@ export function RedPacket(props: { redPacket?: RedPacketRecord }) {
             <div className={classes.packet}></div>
         </Card>
     )
+}
+
+function getInfo(
+    redPacket?: Partial<RedPacketRecord>,
+): { name?: string; decimals?: number; address?: string; symbol?: string } {
+    if (!redPacket) return { name: undefined }
+    if (!redPacket.erc20_token) return { name: 'ETH', decimals: 18 }
+    else return redPacket.raw_payload?.token ?? {}
 }
