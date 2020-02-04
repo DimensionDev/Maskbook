@@ -1,19 +1,18 @@
+import * as jwt from 'jsonwebtoken'
 import { AbiItem } from 'web3-utils'
 import { EventData } from 'web3-eth-contract'
-import { RedPacketAPI, WalletAPI } from './types'
-import { onClaimResult, onCreationResult, onExpired, onRefundResult } from './red-packet-fsm'
-import { onWalletBalanceUpdated, onWalletERC20TokenBalanceUpdated } from './wallet'
 import { web3 } from './web3'
+import { onClaimResult, onCreationResult, onExpired, onRefundResult } from './red-packet-fsm'
 import HappyRedPacketABI from './contract/HappyRedPacket.json'
 import IERC20ABI from './contract/IERC20.json'
-import { HappyRedPacket } from './contract/HappyRedPacket'
 import { IERC20 } from './contract/IERC20'
+import { HappyRedPacket } from './contract/HappyRedPacket'
 import { TransactionObject, Tx } from './contract/types'
-import { RedPacketTokenType, EthereumNetwork } from './database/types'
+import { CheckRedPacketAvailabilityResult, CreateRedPacketResult } from './types'
+import { RedPacketTokenType, EthereumNetwork, RedPacketJSONPayload } from './database/types'
 import { asyncTimes, pollingTask } from '../../utils/utils'
 import { createWalletDBAccess } from './database/Wallet.db'
 import { createTransaction } from '../../database/helpers/openDB'
-import * as jwt from 'jsonwebtoken'
 import { getNetworkSettings } from './network'
 
 function createRedPacketContract(address: string) {
@@ -54,9 +53,13 @@ async function sendTx<R, T extends TransactionObject<R>>(txObject: T, tx: Tx = {
         .catch((err: Error) => listeners?.onEstimateError?.(err))
 }
 
-export const redPacketAPI: RedPacketAPI = {
-    dataSource: 'real',
-    async claimByServer(addr, privateKey, payload) {
+export const redPacketAPI = {
+    dataSource: 'real' as const,
+    async claimByServer(
+        requestSenderAddress: string,
+        privateKey: Buffer,
+        payload: RedPacketJSONPayload,
+    ): Promise<{ claim_transaction_hash: string }> {
         const host = 'https://redpacket.gives'
         const x = 'a3323cd1-fa42-44cd-b053-e474365ab3da'
 
@@ -65,7 +68,7 @@ export const redPacketAPI: RedPacketAPI = {
         else if (getNetworkSettings().networkType === EthereumNetwork.Mainnet) network = 'mainnet'
         else if (getNetworkSettings().networkType === EthereumNetwork.Ropsten) network = 'ropsten'
 
-        const auth = await fetch(`${host}/hi?id=${addr}&network=${network}`)
+        const auth = await fetch(`${host}/hi?id=${requestSenderAddress}&network=${network}`)
         if (!auth.ok) throw new Error('Auth failed')
         const verify = await auth.text()
 
@@ -77,9 +80,9 @@ export const redPacketAPI: RedPacketAPI = {
             signature: string
         } = {
             password: payload.password,
-            recipient: addr,
+            recipient: requestSenderAddress,
             redpacket_id: payload.rpid,
-            validation: web3.utils.sha3(addr)!,
+            validation: web3.utils.sha3(requestSenderAddress)!,
             signature: web3.eth.accounts.sign(verify, `0x${privateKey.toString('hex')}`).signature,
         }
         const pay = await fetch(
@@ -88,6 +91,20 @@ export const redPacketAPI: RedPacketAPI = {
         if (!pay.ok) throw new Error('Pay failed')
         return { claim_transaction_hash: await pay.text() }
     },
+    /**
+     *
+     * @param hash_of_password Password
+     * @param quantity Quantity of red packets
+     * @param is_random Is the random valid
+     * @param duration Red packet valid duration (default(0): 24h), unit: second
+     * @param seed Random seed 32bit byte
+     * @param message Message in the red packet
+     * @param name Name of the red packet sender
+     * @param token_type 0 - ETH, 1 - ERC20
+     * @param token_addr Addr of ERC20 token
+     * @param total_tokens Amount of tokens
+     * @returns The transaction hash
+     */
     async create(
         ____sender__addr: string,
         hash_of_password: string,
@@ -100,7 +117,7 @@ export const redPacketAPI: RedPacketAPI = {
         token_type: RedPacketTokenType,
         token_addr: string,
         total_tokens: bigint,
-    ) {
+    ): Promise<CreateRedPacketResult> {
         const contract = createRedPacketContract(getNetworkSettings().contractAddress)
         const tx = contract.methods.create_red_packet(
             hash_of_password,
@@ -144,7 +161,12 @@ export const redPacketAPI: RedPacketAPI = {
             )
         })
     },
-    async claim(id, password: string, recipient: string, validation: string) {
+    async claim(
+        id: RedPacketID,
+        password: string,
+        recipient: string,
+        validation: string,
+    ): Promise<{ claim_transaction_hash: string }> {
         const contract = createRedPacketContract(getNetworkSettings().contractAddress)
         const tx = contract.methods.claim(id.redPacketID, password, recipient, validation)
 
@@ -175,7 +197,15 @@ export const redPacketAPI: RedPacketAPI = {
             )
         })
     },
-    async watchClaimResult(id) {
+    /**
+     * Claim a red packet
+     * @param id Red packet ID
+     * @param password Password, index from check_availability
+     * @param recipient address of the receiver
+     * @param validation hash of the request sender
+     * @returns Claimed money
+     */
+    async watchClaimResult(id: TxHashID & DatabaseID) {
         const contract = createRedPacketContract(getNetworkSettings().contractAddress)
         asyncTimes(10, async () => {
             const { blockNumber } = await web3.eth.getTransaction(id.transactionHash)
@@ -221,7 +251,7 @@ export const redPacketAPI: RedPacketAPI = {
                 })
             })
     },
-    async watchCreateResult(id) {
+    async watchCreateResult(id: TxHashID & DatabaseID) {
         const contract = createRedPacketContract(getNetworkSettings().contractAddress)
         asyncTimes(10, async () => {
             const { blockNumber } = await web3.eth.getTransaction(id.transactionHash)
@@ -268,7 +298,7 @@ export const redPacketAPI: RedPacketAPI = {
                 })
             })
     },
-    async watchExpired(id) {
+    async watchExpired(id: RedPacketID) {
         pollingTask(async () => {
             const { expired } = await this.checkAvailability(id)
 
@@ -279,7 +309,7 @@ export const redPacketAPI: RedPacketAPI = {
             return false
         })
     },
-    async checkAvailability(id) {
+    async checkAvailability(id: RedPacketID): Promise<CheckRedPacketAvailabilityResult> {
         const contract = createRedPacketContract(getNetworkSettings().contractAddress)
         const {
             balance,
@@ -299,12 +329,20 @@ export const redPacketAPI: RedPacketAPI = {
             is_claimed: ifclaimed,
         }
     },
-    async checkClaimedList(id) {
+    /**
+     * Check claimed address list
+     * @param id Red packet ID
+     */
+    async checkClaimedList(id: RedPacketID): Promise<string[]> {
         return createRedPacketContract(getNetworkSettings().contractAddress)
             .methods.check_claimed_list(id.redPacketID)
             .call()
     },
-    async refund(id) {
+    /**
+     * Refund transaction hash
+     * @param red_packet_id Red packet ID
+     */
+    async refund(id: RedPacketID): Promise<{ refund_transaction_hash: string }> {
         const packet = await createTransaction(
             await createWalletDBAccess(),
             'readonly',
@@ -356,7 +394,7 @@ export const redPacketAPI: RedPacketAPI = {
             )
         })
     },
-    async watchRefundResult(id) {
+    async watchRefundResult(id: TxHashID & DatabaseID) {
         const contract = createRedPacketContract(getNetworkSettings().contractAddress)
         asyncTimes(10, async () => {
             const { blockNumber } = await web3.eth.getTransaction(id.transactionHash)
@@ -390,29 +428,31 @@ export const redPacketAPI: RedPacketAPI = {
     },
 }
 
-export const walletAPI: WalletAPI = {
-    dataSource: 'real',
-    queryBalance(address) {
+export const walletAPI = {
+    dataSource: 'real' as const,
+    queryBalance(address: string): Promise<bigint> {
         return web3.eth.getBalance(address).then(BigInt)
     },
-    queryERC20TokenBalance(walletAddress, token) {
-        const erc20Contract = createERC20Contract(token)
+    queryERC20TokenBalance(walletAddress: string, tokenAddress: string): Promise<bigint> {
+        const erc20Contract = createERC20Contract(tokenAddress)
         return erc20Contract.methods
             .balanceOf(walletAddress)
             .call()
             .then(BigInt)
     },
-    async approveERC20Token(sender_address: string, address: string, amount: bigint) {
-        const erc20Contract = createERC20Contract(address)
+    async approveERC20Token(
+        senderAddress: string,
+        erc20TokenAddress: string,
+        amount: bigint,
+    ): Promise<{ erc20_approve_transaction_hash: string; erc20_approve_value: bigint }> {
+        const erc20Contract = createERC20Contract(erc20TokenAddress)
         const tx = erc20Contract.methods.approve(getNetworkSettings().contractAddress, amount.toString())
 
         return new Promise((resolve, reject) => {
             let txHash = ''
             sendTx(
                 tx,
-                {
-                    from: sender_address,
-                },
+                { from: senderAddress },
                 {
                     onTransactionHash(hash) {
                         txHash = hash
@@ -434,3 +474,7 @@ export const walletAPI: WalletAPI = {
         })
     },
 }
+
+type TxHashID = { transactionHash: string }
+type RedPacketID = { redPacketID: string }
+type DatabaseID = { databaseID: string }
