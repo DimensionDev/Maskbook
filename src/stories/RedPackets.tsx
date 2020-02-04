@@ -1,11 +1,19 @@
 import React from 'react'
 import { storiesOf } from '@storybook/react'
 import { RedPacketWithStateUI, RedPacket } from '../plugins/Wallet/UI/Dashboard/Components/RedPacket'
-import { RedPacketRecord, EthereumNetwork, RedPacketStatus, RedPacketTokenType } from '../plugins/Wallet/database/types'
+import {
+    RedPacketRecord,
+    EthereumNetwork,
+    RedPacketStatus,
+    RedPacketTokenType,
+    RedPacketJSONPayload,
+} from '../plugins/Wallet/database/types'
 import { number, text, select, boolean } from '@storybook/addon-knobs'
 import { Typography } from '@material-ui/core'
 import { action } from '@storybook/addon-actions'
 import { RedPacketDialogUI } from '../plugins/Wallet/UI/RedPacket/RedPacketDialog'
+import { DecryptPostSuccess } from '../components/InjectedComponents/DecryptedPost'
+import { makeTypedMessage, TypedMessageMetadata } from '../extension/background-script/CryptoServices/utils'
 
 storiesOf('Plugin: Red Packets', module)
     .add('RedPacketWithStateUI', () => {
@@ -107,6 +115,28 @@ storiesOf('Plugin: Red Packets', module)
                 ]}
                 justCreatedRedPacket={undefined}
                 redPackets={[createRecord(_), createRecord(_)]}
+            />
+        )
+    })
+    .add('Decrypted post with Red Packet', () => {
+        const knobs = createRedPacketKnobs()
+        // @ts-ignore
+        const payload: RedPacketJSONPayload = {
+            ...createRecord({ ...knobs, type: RedPacketTokenType.eth }),
+            rpid: 'rpid',
+            sender: { address: 'address', message: knobs.message, name: knobs.senderName },
+            total: (knobs.total * 10 ** 18).toString(),
+            creation_time: Date.now(),
+        }
+        const meta = new Map<string, any>([
+            ['com.maskbook.red_packet:1', payload],
+            ['storybook.no-side-effect', true],
+        ])
+        return (
+            <DecryptPostSuccess
+                alreadySelectedPreviously={[]}
+                data={{ signatureVerifyResult: true, content: makeTypedMessage('decrypted message!', meta) }}
+                profiles={[]}
             />
         )
     })

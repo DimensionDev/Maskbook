@@ -1,5 +1,9 @@
 import React, { useRef } from 'react'
-import { TypedMessage, withMetadata } from '../../../../extension/background-script/CryptoServices/utils'
+import {
+    TypedMessage,
+    withMetadata,
+    readTypedMessageMetadataUntyped,
+} from '../../../../extension/background-script/CryptoServices/utils'
 import StructuredPluginWrapper from '../../../../components/InjectedComponents/StructuredMessage/StructuredPluginWrapper'
 import { RedPacketWithState } from '../Dashboard/Components/RedPacket'
 import { RedPacketRecord, RedPacketStatus, WalletRecord } from '../../database/types'
@@ -104,13 +108,19 @@ export default function WithRedPacket(props: WithRedPacketProps) {
             Services.Welcome.openOptionsPage(`/wallets/redpacket?id=${rpid}`)
         }
     }
+    const storybookDebugging: boolean = readTypedMessageMetadataUntyped<boolean>(
+        message.meta,
+        'storybook.no-side-effect',
+        // @ts-ignore
+    ).else(false)
     const Component = message
         ? withMetadata(message.meta, 'com.maskbook.red_packet:1', r => (
               <StructuredPluginWrapper width={400} pluginName="Red Packet">
                   <RedPacketWithState
                       loading={loading || !!claiming}
                       onClick={onClick}
-                      unknownRedPacket={r}
+                      unknownRedPacket={storybookDebugging ? undefined : r}
+                      redPacket={storybookDebugging ? (r as any) : undefined}
                       from={postIdentifier && !postIdentifier.isUnknown ? getPostUrl(postIdentifier) : undefined}
                   />
               </StructuredPluginWrapper>

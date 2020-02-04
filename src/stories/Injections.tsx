@@ -13,7 +13,7 @@ import { AddToKeyStoreUI } from '../components/InjectedComponents/AddToKeyStore'
 import { useShareMenu } from '../components/InjectedComponents/SelectPeopleDialog'
 import { sleep } from '../utils/utils'
 import { Paper, MuiThemeProvider, Typography, Divider } from '@material-ui/core'
-import { demoPeople, demoGroup } from './demoPeopleOrGroups'
+import { demoPeople as demoProfiles, demoGroup } from './demoPeopleOrGroups'
 import { PostCommentDecrypted } from '../components/InjectedComponents/PostComments'
 import { CommentBox } from '../components/InjectedComponents/CommentBox'
 import { DecryptionProgress } from '../extension/background-script/CryptoServices/decryptFrom'
@@ -90,9 +90,9 @@ storiesOf('Injections', module)
     .add('Select people dialog', () => {
         function SelectPeople() {
             const { ShareMenu, showShare } = useShareMenu(
-                demoPeople,
+                demoProfiles,
                 async () => sleep(3000),
-                boolean('Has frozen item?', true) ? [demoPeople[0]] : [],
+                boolean('Has frozen item?', true) ? [demoProfiles[0]] : [],
             )
             React.useEffect(() => {
                 showShare()
@@ -142,7 +142,7 @@ storiesOf('Injections', module)
                     <DecryptPostSuccess
                         alreadySelectedPreviously={[]}
                         requestAppendRecipients={async () => {}}
-                        people={demoPeople}
+                        profiles={demoProfiles}
                         data={{ content: makeTypedMessage(msg), signatureVerifyResult: vr }}
                     />
                 </FakePost>
