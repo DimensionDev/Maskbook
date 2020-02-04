@@ -1,6 +1,7 @@
 import { createMuiTheme } from '@material-ui/core'
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles'
 import { orange, green, red, blue } from '@material-ui/core/colors'
+import { ThemeOptions } from '@material-ui/core/styles/createMuiTheme'
 
 function getFontFamily(monospace?: boolean) {
     // We want to look native.
@@ -28,7 +29,7 @@ const baseTheme = (theme: 'dark' | 'light') =>
         breakpoints: {
             values: { xs: 0, sm: 600, md: 1024, lg: 1280, xl: 1920 },
         },
-    } as Partial<Theme>)
+    } as ThemeOptions)
 // Theme
 export const MaskbookLightTheme = createMuiTheme(baseTheme('light'))
 export const MaskbookDarkTheme = createMuiTheme(baseTheme('dark'))
