@@ -31,7 +31,7 @@ export interface DecryptPostSuccessProps extends withClasses<KeysInferFromUseSty
     postIdentifier?: PostIdentifier<ProfileIdentifier>
     requestAppendRecipients?(to: Profile[]): Promise<void>
     alreadySelectedPreviously: Profile[]
-    people: Profile[]
+    profiles: Profile[]
     AdditionalContentProps?: Partial<AdditionalContentProps>
 }
 
@@ -43,7 +43,7 @@ const useSuccessStyles = makeStyles({
 })
 
 export const DecryptPostSuccess = React.memo(function DecryptPostSuccess(props: DecryptPostSuccessProps) {
-    const { data, people, postIdentifier } = props
+    const { data, profiles: people, postIdentifier } = props
     const shareMenu = useShareMenu(
         people,
         props.requestAppendRecipients || (async () => {}),
@@ -202,7 +202,7 @@ export function DecryptPost(props: DecryptPostProps) {
                     postIdentifier={postId}
                     alreadySelectedPreviously={alreadySelectedPreviously}
                     requestAppendRecipients={requestAppendRecipientsWrapped}
-                    people={people}
+                    profiles={people}
                     {...props.successComponentProps}
                 />
                 {isDebugging ? debugHashJSX : null}
@@ -267,7 +267,7 @@ export function DecryptPost(props: DecryptPostProps) {
                             postIdentifier={postId}
                             alreadySelectedPreviously={alreadySelectedPreviously}
                             requestAppendRecipients={requestAppendRecipientsWrapped}
-                            people={people}
+                            profiles={people}
                             {...props.successComponentProps}
                         />
                     )
