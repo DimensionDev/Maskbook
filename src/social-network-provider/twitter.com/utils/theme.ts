@@ -56,7 +56,7 @@ export const useTwitterDialog = makeStyles((theme: Theme) => {
             alignItems: 'center',
         },
         paper: {
-            maxWidth: '600px !important',
+            width: '600px !important',
             borderRadius: 14,
             boxShadow: 'none',
             [`@media (max-width: ${theme.breakpoints.width('sm')}px)`]: {

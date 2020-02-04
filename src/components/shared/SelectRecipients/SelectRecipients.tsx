@@ -12,6 +12,8 @@ import { geti18nString } from '../../../utils/i18n'
 import { difference } from 'lodash-es'
 import { useCurrentIdentity } from '../../DataSource/useActivatedUI'
 import { useStylesExtends } from '../../custom-ui-helper'
+import { useValueRef } from '../../../utils/hooks/useValueRef'
+import { debugModeSetting } from '../../shared-settings/settings'
 
 const useStyles = makeStyles({
     selectArea: {
@@ -38,17 +40,15 @@ export interface SelectRecipientsUIProps<T extends Group | Profile = Group | Pro
 export function SelectRecipientsUI<T extends Group | Profile = Group | Profile>(props: SelectRecipientsUIProps) {
     const classes = useStylesExtends(useStyles(), props)
     const { items, selected, onSetSelected } = props
-
+    const isDebugging = useValueRef(debugModeSetting)
     const currentIdentity = useCurrentIdentity()
     const currentIdentifier = currentIdentity ? currentIdentity.identifier.toText() : ''
     const groupItems = items.filter(x => isGroup(x)) as Group[]
     const profileItems = items.filter(
         x => isProfile(x) && !x.identifier.equals(currentIdentity?.identifier) && x.linkedPersona?.fingerprint,
     ) as Profile[]
-
-    const selectedAsGroups = selected.filter(x => isGroup(x)) as Group[]
-
     const [open, setOpen] = useState(false)
+    const selectedAsGroups = selected.filter(x => isGroup(x)) as Group[]
     const [selectedIdentifiers, setSelectedIdentifiers] = useState<string[]>(
         difference(
             Array.from(
@@ -110,19 +110,22 @@ export function SelectRecipientsUI<T extends Group | Profile = Group | Profile>(
                         {...props.GroupInChipProps}
                     />
                 ))}
-                <ClickableChip
-                    ChipProps={{
-                        label: geti18nString(
-                            'post_dialog__select_specific_friends_title',
-                            String(selectedIdentifiers.length),
-                        ),
-                        avatar: <AddIcon />,
-                        disabled: props.disabled || profileItems.length === 0,
-                        onClick() {
-                            setOpen(true)
-                        },
-                    }}
-                />
+                {isDebugging ? (
+                    <ClickableChip
+                        ChipProps={{
+                            label: geti18nString(
+                                'post_dialog__select_specific_friends_title',
+                                String(selectedIdentifiers.length),
+                            ),
+                            avatar: <AddIcon />,
+                            disabled: props.disabled || profileItems.length === 0,
+                            onClick() {
+                                setOpen(true)
+                            },
+                        }}
+                    />
+                ) : null}
+
                 <SelectRecipientsDialogUI
                     open={open}
                     items={profileItems}
