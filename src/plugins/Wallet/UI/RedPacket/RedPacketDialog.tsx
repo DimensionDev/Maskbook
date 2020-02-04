@@ -17,7 +17,7 @@ import {
 } from '@material-ui/core'
 import { useStylesExtends, or } from '../../../../components/custom-ui-helper'
 import { DialogDismissIconUI } from '../../../../components/InjectedComponents/DialogDismissIcon'
-import BackupRestoreTab from '../../../../extension/options-page/DashboardComponents/BackupRestoreTab'
+import AbstractTab from '../../../../extension/options-page/DashboardComponents/AbstractTab'
 import { RedPacketWithState } from '../Dashboard/Components/RedPacket'
 import Services from '../../../../extension/service'
 import { createRedPacketInit } from '../../red-packet-fsm'
@@ -490,7 +490,7 @@ export function RedPacketDialogUI(
                     </Typography>
                 </DialogTitle>
                 <DialogContent className={classes.content}>
-                    <BackupRestoreTab height={400} state={[currentTab, setCurrentTab]} tabs={tabs}></BackupRestoreTab>
+                    <AbstractTab height={400} state={[currentTab, setCurrentTab]} tabs={tabs}></AbstractTab>
                 </DialogContent>
             </ResponsiveDialog>
         </div>
