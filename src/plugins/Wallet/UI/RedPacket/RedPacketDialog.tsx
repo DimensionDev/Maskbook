@@ -360,9 +360,6 @@ function ExistingPacket(props: RedPacketDialogProps & ExistingPacketProps) {
 
     return (
         <div className={classes.wrapper}>
-            {/*<Typography component="a" color="primary" className={classes.hint} onClick={() => insertRedPacket(null)}>
-                Remove Red Packet from this post
-    </Typography>*/}
             {!foundedRedPacket && fakeRedPacket && <RedPacketWithState redPacket={fakeRedPacket as RedPacketRecord} />}
             {foundedRedPacket && (
                 <RedPacketWithState onClick={insertRedPacket} redPacket={foundedRedPacket as RedPacketRecord} />

@@ -4,10 +4,6 @@ import { getNetworkSettings, currentEthereumNetworkSettings } from './network'
 import { getWallets, recoverWallet } from './wallet'
 import { PluginMessageCenter } from '../PluginMessages'
 
-interface Window {
-    CloseEvent: any
-}
-
 export const web3 = new Web3()
 
 let provider: WebsocketProvider

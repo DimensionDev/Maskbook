@@ -120,11 +120,6 @@ export default function WalletCard({ wallet, tokens }: Props) {
 
     const [backupWallet, setBackupWallet] = React.useState(false)
 
-    const deleteToken = (t?: ERC20TokenRecord | null) => {
-        // TODO:
-        alert('not implemented')
-    }
-
     return (
         <>
             <CardContent>
@@ -211,12 +206,8 @@ export default function WalletCard({ wallet, tokens }: Props) {
                             line2={t?.name || 'Unknown Token'}
                             action={
                                 editing ? (
-                                    <></> // <Typography
+                                    <></>
                                 ) : (
-                                    //     onClick={() => deleteToken(t)}
-                                    //     className={classNames(classes.cursor, color.error)}>
-                                    //     Delete
-                                    // </Typography>
                                     <Typography variant="h5">
                                         {typeof amount === 'bigint'
                                             ? t
