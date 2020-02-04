@@ -192,16 +192,20 @@ export function RedPacketWithState(props: RedPacketProps) {
     )
 }
 
-export function RedPacket(props: RedPacketProps) {
+/**
+ * A red packet card.
+ * Pure component.
+ */
+export function RedPacket(props: { redPacket?: RedPacketRecord }) {
     const classes = useStyles()
     const { redPacket } = props
-    const [info, setInfo] = React.useState<Partial<ERC20TokenRecord>>({})
 
-    React.useEffect(() => {
-        if (!redPacket) return
-        if (!redPacket.erc20_token) setInfo({ name: 'ETH', decimals: 18 })
-        else setInfo(redPacket.raw_payload?.token ?? {})
-    }, [redPacket])
+    const info = getInfo()
+    function getInfo() {
+        if (!redPacket) return { name: undefined }
+        if (!redPacket.erc20_token) return { name: 'ETH', decimals: 18 }
+        else return redPacket.raw_payload?.token ?? {}
+    }
 
     const formatted = {
         claim_amount: '',
@@ -209,16 +213,15 @@ export function RedPacket(props: RedPacketProps) {
         name: info.name ?? '(unknown)',
     }
 
-    formatted.claim_amount = redPacket?.claim_amount
-        ? `${formatBalance(redPacket.claim_amount, info?.decimals ?? 0)} ${formatted.name}`
-        : 'Not Claimed'
+    const amount = redPacket?.claim_amount
+    formatted.claim_amount = amount ? `${formatBalance(amount, info.decimals ?? 0)} ${formatted.name}` : 'Not Claimed'
 
     return (
-        <Card elevation={0} className={classNames(classes.box)} component="article">
+        <Card elevation={0} className={classes.box} component="article">
             <div className={classes.header}>
                 <Typography variant="h5">{formatted.claim_amount}</Typography>
                 <Typography className={classes.label} variant="body2">
-                    {redPacket?.status}
+                    {redPacket?.status ?? 'Unknown'}
                 </Typography>
             </div>
             <div className={classes.content}>
