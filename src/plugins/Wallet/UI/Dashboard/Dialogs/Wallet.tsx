@@ -91,12 +91,6 @@ const useAddTokenStyles = makeStyles(theme =>
     }),
 )
 
-interface TabPanelProps {
-    children?: React.ReactNode
-    index: any
-    value: any
-}
-
 export function WalletAddTokenDialog(props: WalletAddTokenDialogProps) {
     const { onConfirm, onDecline } = props
 
