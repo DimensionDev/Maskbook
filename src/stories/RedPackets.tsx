@@ -9,11 +9,12 @@ import {
     RedPacketJSONPayload,
 } from '../plugins/Wallet/database/types'
 import { number, text, select, boolean } from '@storybook/addon-knobs'
-import { Typography } from '@material-ui/core'
+import { Typography, Paper } from '@material-ui/core'
 import { action } from '@storybook/addon-actions'
 import { RedPacketDialogUI } from '../plugins/Wallet/UI/RedPacket/RedPacketDialog'
 import { DecryptPostSuccess } from '../components/InjectedComponents/DecryptedPost'
 import { makeTypedMessage, TypedMessageMetadata } from '../extension/background-script/CryptoServices/utils'
+import { AdditionalContent } from '../components/InjectedComponents/AdditionalPostContent'
 
 storiesOf('Plugin: Red Packets', module)
     .add('RedPacketWithStateUI', () => {
@@ -133,11 +134,15 @@ storiesOf('Plugin: Red Packets', module)
             ['storybook.no-side-effect', true],
         ])
         return (
-            <DecryptPostSuccess
-                alreadySelectedPreviously={[]}
-                data={{ signatureVerifyResult: true, content: makeTypedMessage('decrypted message!', meta) }}
-                profiles={[]}
-            />
+            <Paper style={{ maxWidth: 400 }}>
+                <div>
+                    <DecryptPostSuccess
+                        alreadySelectedPreviously={[]}
+                        data={{ signatureVerifyResult: true, content: makeTypedMessage('decrypted message!', meta) }}
+                        profiles={[]}
+                    />
+                </div>
+            </Paper>
         )
     })
 function createRedPacketKnobs() {
