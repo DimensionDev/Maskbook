@@ -79,8 +79,8 @@ const useStyles = makeStyles({
         },
     },
 })
-import mainnet from '../../../mainnet_erc20.json'
-import rinkeby from '../../../rinkeby_erc20.json'
+import mainnet from '../../../erc20/mainnet.json'
+import rinkeby from '../../../erc20/rinkeby.json'
 const sort = (x: ERC20TokenPredefinedData[0], y: ERC20TokenPredefinedData[0]): 1 | -1 => {
     return [x.name, y.name].sort()[0] === x.name ? -1 : 1
 }
