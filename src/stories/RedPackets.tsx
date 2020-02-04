@@ -5,6 +5,7 @@ import { RedPacketRecord, EthereumNetwork, RedPacketStatus, RedPacketTokenType }
 import { number, text, select, boolean } from '@storybook/addon-knobs'
 import { Typography } from '@material-ui/core'
 import { action } from '@storybook/addon-actions'
+import { RedPacketDialogUI } from '../plugins/Wallet/UI/RedPacket/RedPacketDialog'
 
 storiesOf('Plugin: Red Packets', module)
     .add('RedPacketWithStateUI', () => {
@@ -78,6 +79,17 @@ storiesOf('Plugin: Red Packets', module)
                     })}
                 />
             </>
+        )
+    })
+    .add('RedPacketDialog', () => {
+        return (
+            <RedPacketDialogUI
+                open
+                onCreateNewPacket={action('onCreateNewPacket')}
+                onSelectExistingPacket={action('onSelectExistingPacket')}
+                onConfirm={action('onConfirm')}
+                onDecline={action('onDecline')}
+            />
         )
     })
 function createRedPacketKnobs() {

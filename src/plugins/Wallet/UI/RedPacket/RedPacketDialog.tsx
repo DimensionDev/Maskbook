@@ -15,7 +15,7 @@ import {
     Select,
     MenuItem,
 } from '@material-ui/core'
-import { useStylesExtends } from '../../../../components/custom-ui-helper'
+import { useStylesExtends, or } from '../../../../components/custom-ui-helper'
 import { DialogDismissIconUI } from '../../../../components/InjectedComponents/DialogDismissIcon'
 import BackupRestoreTab from '../../../../extension/options-page/DashboardComponents/BackupRestoreTab'
 import { RedPacketWithState } from '../Dashboard/Components/RedPacket'
@@ -318,11 +318,11 @@ const useExistingPacketStyles = makeStyles(theme =>
 
 interface ExistingPacketProps {
     onSelectExistingPacket(opt?: RedPacketJSONPayload | null): void
-    fakeRedPacket?: Partial<RedPacketRecord> | null
+    preInitialRedPacket?: Partial<RedPacketRecord> | null
 }
 
 function ExistingPacket(props: RedPacketDialogProps & ExistingPacketProps) {
-    const { onSelectExistingPacket, fakeRedPacket } = props
+    const { onSelectExistingPacket, preInitialRedPacket: fakeRedPacket } = props
     const classes = useStylesExtends(useExistingPacketStyles(), props)
     const [redPacketRecords, setRedPacketRecords] = React.useState<RedPacketRecord[]>([])
     const [foundedRedPacket, setFoundedRedPacket] = React.useState<RedPacketRecord | undefined>(undefined)
@@ -395,30 +395,31 @@ const useStyles = makeStyles({
 const ResponsiveDialog = withMobileDialog({ breakpoint: 'xs' })(Dialog)
 
 export default function RedPacketDialog(props: RedPacketDialogProps) {
-    const classes = useStylesExtends(useStyles(), props)
-    const rootRef = useRef<HTMLDivElement>(null)
-    const [currentTab, setCurrentTab] = useState(0)
-    const [fakeRedPacket, setFakeRedPacket] = useState<Partial<RedPacketRecord> | null>(null)
+    const tabs = useState<0 | 1>(0)
+    const [preInitialRedPacket, setPreInitialRedPacket] = useState<Partial<RedPacketRecord> | null>(null)
 
-    const createRedPacket = useCallback((opt: createRedPacketInit) => {
-        Services.Plugin.invokePlugin('maskbook.red_packet', 'createRedPacket', opt).then(
-            setFakeRedPacket,
-            console.error,
-        )
-        setFakeRedPacket(({
-            send_message: opt.send_message,
-            sender_name: opt.sender_name,
-            status: 'pending' as RedPacketStatus,
-            erc20_token: opt.erc20_token,
-            raw_payload: {
-                shares: opt.shares,
-                token: {
-                    name: ' ',
+    const createRedPacket = useCallback(
+        (opt: createRedPacketInit) => {
+            Services.Plugin.invokePlugin('maskbook.red_packet', 'createRedPacket', opt).then(
+                setPreInitialRedPacket,
+                console.error,
+            )
+            setPreInitialRedPacket(({
+                send_message: opt.send_message,
+                sender_name: opt.sender_name,
+                status: 'pending' as RedPacketStatus,
+                erc20_token: opt.erc20_token,
+                raw_payload: {
+                    shares: opt.shares,
+                    token: {
+                        name: ' ',
+                    },
                 },
-            },
-        } as any) as Partial<RedPacketRecord>)
-        setCurrentTab(1)
-    }, [])
+            } as any) as Partial<RedPacketRecord>)
+            tabs[1](1)
+        },
+        [tabs],
+    )
 
     const insertRedPacket = (payload?: RedPacketJSONPayload | null) => {
         const ref = getActivatedUI().typedMessageMetadata
@@ -428,21 +429,39 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
         props.onConfirm(payload)
     }
 
+    return (
+        <RedPacketDialogUI
+            {...props}
+            tab={tabs}
+            onCreateNewPacket={createRedPacket}
+            onSelectExistingPacket={insertRedPacket}
+            preInitialRedPacket={preInitialRedPacket}
+        />
+    )
+}
+
+export function RedPacketDialogUI(
+    props: RedPacketDialogProps & NewPacketProps & ExistingPacketProps & { tab?: [0 | 1, (next: 0 | 1) => void] },
+) {
+    const classes = useStylesExtends(useStyles(), props)
+    const rootRef = useRef<HTMLDivElement>(null)
+    const [currentTab, setCurrentTab] = or(props.tab, useState<0 | 1>(0)) as [
+        number,
+        React.Dispatch<React.SetStateAction<number>>,
+    ]
+
     const tabs = [
         {
             label: 'Create New',
-            component: <NewPacket {...props} onCreateNewPacket={createRedPacket} />,
+            component: <NewPacket {...props} />,
             p: 0,
         },
         {
             label: 'Select Existing',
-            component: (
-                <ExistingPacket {...props} fakeRedPacket={fakeRedPacket} onSelectExistingPacket={insertRedPacket} />
-            ),
+            component: <ExistingPacket {...props} />,
             p: 0,
         },
     ]
-
     return (
         <div ref={rootRef}>
             <ResponsiveDialog
