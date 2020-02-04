@@ -82,6 +82,8 @@ storiesOf('Plugin: Red Packets', module)
         )
     })
     .add('RedPacketDialog', () => {
+        const _ = { ...createRedPacketKnobs(), type: RedPacketTokenType.eth }
+        _.total *= 10 ** 18
         return (
             <RedPacketDialogUI
                 open
@@ -89,6 +91,22 @@ storiesOf('Plugin: Red Packets', module)
                 onSelectExistingPacket={action('onSelectExistingPacket')}
                 onConfirm={action('onConfirm')}
                 onDecline={action('onDecline')}
+                onRequireNewWallet={action('onRequireNewWallet')}
+                newRedPacketCreatorName="Story book user"
+                tokens={[]}
+                wallets={[
+                    {
+                        _data_source_: 'mock',
+                        address: '0x23333',
+                        erc20_token_balance: new Map(),
+                        mnemonic: ['mem'],
+                        name: 'Wallet Name',
+                        passphrase: 'password',
+                        eth_balance: BigInt(2 * 10 ** 18),
+                    },
+                ]}
+                justCreatedRedPacket={undefined}
+                redPackets={[createRecord(_), createRecord(_)]}
             />
         )
     })
