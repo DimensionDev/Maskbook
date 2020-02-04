@@ -133,6 +133,7 @@ export const DecryptPostFailed = React.memo(function DecryptPostFailed({ error, 
 
 export interface DecryptPostProps {
     onDecrypted(post: TypedMessage): void
+    onDecryptedRaw?(post: string): void
     postBy: ProfileIdentifier
     postId?: PostIdentifier<ProfileIdentifier>
     whoAmI: ProfileIdentifier
@@ -254,6 +255,7 @@ export function DecryptPost(props: DecryptPostProps) {
                     }
                     setDecryptedResult(result.data)
                     props.onDecrypted(result.data.content)
+                    props.onDecryptedRaw?.(result.data.rawContent)
 
                     // HACK: the is patch, hidden NOT VERIFIED in everyone
                     const postPayload = deconstructPayload(encryptedText, null)

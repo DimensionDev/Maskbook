@@ -73,6 +73,7 @@ export function PostInspector(props: PostInspectorProps) {
             <>
                 <DecryptPostX
                     onDecrypted={props.onDecrypted}
+                    onDecryptedRaw={props.onDecryptedRaw}
                     requestAppendRecipients={
                         // Version -40 is leaking info
                         // So should not create new data on version -40
