@@ -52,7 +52,7 @@ export class IdentifierMap<IdentifierType extends Identifier, T> implements Map<
             )
         } else {
             if (this.constructorName.length === 0) return identifier.val as IdentifierType
-            if (this.constructorName.includes(identifier.constructor.name)) return identifier.val as IdentifierType
+            if (this.constructorName.includes(identifier.val.constructor.name)) return identifier.val as IdentifierType
             console.warn(
                 `IdentifierMap found a key which is not compatible with it constraint(${this.constructorName}), ${key}`,
             )
