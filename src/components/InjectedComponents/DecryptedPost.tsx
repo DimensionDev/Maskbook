@@ -24,7 +24,7 @@ import { DebugList } from '../DebugModeUI/DebugList'
 import { useStylesExtends } from '../custom-ui-helper'
 import { BannerProps } from '../Welcomes/Banner'
 import { TypedMessage } from '../../extension/background-script/CryptoServices/utils'
-import WithRedPacket from '../../plugins/Wallet/UI/RedPacket/WithRedPacket'
+import RedPacketInDecryptedPost from '../../plugins/Wallet/UI/RedPacket/RedPacketInDecryptedPost'
 
 export interface DecryptPostSuccessProps extends withClasses<KeysInferFromUseStyles<typeof useSuccessStyles>> {
     data: { signatureVerifyResult: boolean; content: TypedMessage }
@@ -52,7 +52,11 @@ export const DecryptPostSuccess = React.memo(function DecryptPostSuccess(props: 
     return (
         <AdditionalContent
             metadataRenderer={{
-                after: props => <WithRedPacket message={props.message} postIdentifier={postIdentifier}></WithRedPacket>,
+                after: props => (
+                    <RedPacketInDecryptedPost
+                        message={props.message}
+                        postIdentifier={postIdentifier}></RedPacketInDecryptedPost>
+                ),
             }}
             header={<DecryptPostSuccessHeader {...props} shareMenu={shareMenu} />}
             message={data.content}

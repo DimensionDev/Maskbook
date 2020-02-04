@@ -39,7 +39,7 @@ const useStyles = makeStyles(theme =>
     }),
 )
 
-interface WithRedPacketProps
+interface RedPacketInDecryptedPostProps
     extends withClasses<
         | KeysInferFromUseStyles<typeof useStyles>
         | 'dialog'
@@ -61,7 +61,8 @@ interface WithRedPacketProps
 
 const ResponsiveDialog = withMobileDialog({ breakpoint: 'xs' })(Dialog)
 
-export default function WithRedPacket(props: WithRedPacketProps) {
+// TODO: split ui and logic
+export default function RedPacketInDecryptedPost(props: RedPacketInDecryptedPostProps) {
     const { message, postIdentifier } = props
     const classes = useStylesExtends(useStyles(), props)
     const [loading, setLoading] = React.useState(false)
@@ -111,7 +112,7 @@ export default function WithRedPacket(props: WithRedPacketProps) {
     const storybookDebugging: boolean = readTypedMessageMetadataUntyped<boolean>(
         message.meta,
         'storybook.no-side-effect',
-        // @ts-ignore
+        // @ts-ignore https://github.com/vultix/ts-results/issues/4
     ).else(false)
     const Component = message
         ? withMetadata(message.meta, 'com.maskbook.red_packet:1', r => (
