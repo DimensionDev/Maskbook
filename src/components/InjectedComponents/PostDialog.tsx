@@ -11,8 +11,6 @@ import {
     DialogTitle,
     DialogContent,
     DialogActions,
-    Switch,
-    FormControlLabel,
     Box,
     Chip,
     ThemeProvider,
@@ -183,29 +181,31 @@ export function PostDialogUI(props: PostDialogUIProps) {
                         <Typography style={{ marginBottom: 10 }}>
                             {geti18nString('post_dialog__select_recipients_title')}
                         </Typography>
-                        <SelectRecipientsUI
-                            disabled={props.onlyMyself || props.shareToEveryone}
-                            items={props.availableShareTarget}
-                            selected={props.currentShareTarget}
-                            onSetSelected={props.onSetSelected}
-                            {...props.SelectRecipientsUIProps}
-                        />
+                        <Box>
+                            <SelectRecipientsUI
+                                disabled={props.onlyMyself || props.shareToEveryone}
+                                items={props.availableShareTarget}
+                                selected={props.currentShareTarget}
+                                onSetSelected={props.onSetSelected}
+                                {...props.SelectRecipientsUIProps}
+                            />
+                            <ClickableChip
+                                checked={props.onlyMyself}
+                                ChipProps={{
+                                    label: geti18nString('post_dialog__select_recipients_only_myself'),
+                                    onClick: () => props.onOnlyMyselfChanged(!props.onlyMyself),
+                                }}
+                            />
+                            <ClickableChip
+                                checked={props.shareToEveryone}
+                                ChipProps={{
+                                    label: geti18nString('post_dialog__select_recipients_share_to_everyone'),
+                                    onClick: () => props.onShareToEveryoneChanged(!props.shareToEveryone),
+                                }}
+                            />
+                        </Box>
                     </DialogContent>
                     <DialogActions className={classes.actions}>
-                        <FormControlLabel
-                            classes={{ label: classes.label }}
-                            label={geti18nString('post_dialog__select_recipients_only_myself')}
-                            control={<Switch className={classes.switch} color="primary" checked={props.onlyMyself} />}
-                            onChange={(_, checked) => props.onOnlyMyselfChanged(checked)}
-                        />
-                        <FormControlLabel
-                            classes={{ label: classes.label }}
-                            label={geti18nString('post_dialog__select_recipients_share_to_everyone')}
-                            control={
-                                <Switch className={classes.switch} color="primary" checked={props.shareToEveryone} />
-                            }
-                            onChange={(_, checked) => props.onShareToEveryoneChanged(checked)}
-                        />
                         <Button
                             className={classes.button}
                             style={{ marginLeft: 'auto' }}

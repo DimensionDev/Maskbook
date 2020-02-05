@@ -16,14 +16,14 @@ import { useValueRef } from '../../../utils/hooks/useValueRef'
 import { debugModeSetting } from '../../shared-settings/settings'
 
 const useStyles = makeStyles({
-    selectArea: {
-        display: 'flex',
+    root: {
+        display: 'inline-flex',
         flexWrap: 'wrap',
     },
 })
 
 export interface SelectRecipientsUIProps<T extends Group | Profile = Group | Profile>
-    extends withClasses<KeysInferFromUseStyles<typeof useStyles> | 'root'> {
+    extends withClasses<KeysInferFromUseStyles<typeof useStyles>> {
     items: T[]
     selected: T[]
     frozenSelected: T[]
@@ -91,57 +91,55 @@ export function SelectRecipientsUI<T extends Group | Profile = Group | Profile>(
         onSetSelected(next)
     }, [groupItems, onSetSelected, profileItems, selected, selectedIdentifiers])
     return (
-        <div className={classes.root}>
-            <Box className={classes.selectArea} display="flex">
-                {groupItems.map(item => (
-                    <GroupInChip
-                        key={item.identifier.toText()}
-                        item={item}
-                        checked={selectedAsGroups.some(x => x.identifier.equals(item.identifier))}
-                        disabled={props.disabled || item.members.length === 0}
-                        onChange={(_, checked) => {
-                            const identifiers = item.members.map(x => x.toText())
-                            if (checked) {
-                                setSelectedIdentifiers(Array.from(new Set([...selectedIdentifiers, ...identifiers])))
-                            } else {
-                                setSelectedIdentifiers(difference(selectedIdentifiers, identifiers))
-                            }
-                        }}
-                        {...props.GroupInChipProps}
-                    />
-                ))}
-                {isDebugging ? (
-                    <ClickableChip
-                        ChipProps={{
-                            label: geti18nString(
-                                'post_dialog__select_specific_friends_title',
-                                String(selectedIdentifiers.length),
-                            ),
-                            avatar: <AddIcon />,
-                            disabled: props.disabled || profileItems.length === 0,
-                            onClick() {
-                                setOpen(true)
-                            },
-                        }}
-                    />
-                ) : null}
-
-                <SelectRecipientsDialogUI
-                    open={open}
-                    items={profileItems}
-                    selected={profileItems.filter(x => selectedIdentifiers.indexOf(x.identifier.toText()) > -1)}
-                    disabled={false}
-                    submitDisabled={false}
-                    onSubmit={() => setOpen(false)}
-                    onClose={() => setOpen(false)}
-                    onSelect={item => setSelectedIdentifiers([...selectedIdentifiers, item.identifier.toText()])}
-                    onDeselect={item =>
-                        setSelectedIdentifiers(selectedIdentifiers.filter(x => x !== item.identifier.toText()))
-                    }
-                    {...props.SelectRecipientsDialogUIProps}
+        <Box className={classes.root}>
+            {groupItems.map(item => (
+                <GroupInChip
+                    key={item.identifier.toText()}
+                    item={item}
+                    checked={selectedAsGroups.some(x => x.identifier.equals(item.identifier))}
+                    disabled={props.disabled || item.members.length === 0}
+                    onChange={(_, checked) => {
+                        const identifiers = item.members.map(x => x.toText())
+                        if (checked) {
+                            setSelectedIdentifiers(Array.from(new Set([...selectedIdentifiers, ...identifiers])))
+                        } else {
+                            setSelectedIdentifiers(difference(selectedIdentifiers, identifiers))
+                        }
+                    }}
+                    {...props.GroupInChipProps}
                 />
-            </Box>
-        </div>
+            ))}
+            {isDebugging ? (
+                <ClickableChip
+                    ChipProps={{
+                        label: geti18nString(
+                            'post_dialog__select_specific_friends_title',
+                            String(selectedIdentifiers.length),
+                        ),
+                        avatar: <AddIcon />,
+                        disabled: props.disabled || profileItems.length === 0,
+                        onClick() {
+                            setOpen(true)
+                        },
+                    }}
+                />
+            ) : null}
+
+            <SelectRecipientsDialogUI
+                open={open}
+                items={profileItems}
+                selected={profileItems.filter(x => selectedIdentifiers.indexOf(x.identifier.toText()) > -1)}
+                disabled={false}
+                submitDisabled={false}
+                onSubmit={() => setOpen(false)}
+                onClose={() => setOpen(false)}
+                onSelect={item => setSelectedIdentifiers([...selectedIdentifiers, item.identifier.toText()])}
+                onDeselect={item =>
+                    setSelectedIdentifiers(selectedIdentifiers.filter(x => x !== item.identifier.toText()))
+                }
+                {...props.SelectRecipientsDialogUIProps}
+            />
+        </Box>
     )
 }
 
