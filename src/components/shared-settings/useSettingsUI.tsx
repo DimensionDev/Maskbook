@@ -15,6 +15,10 @@ import React from 'react'
 const useStyles = makeStyles({
     container: { listStyleType: 'none', width: '100%' },
 })
+interface SettingsTextsDisplay {
+    primary?: React.ReactNode | string
+    secondary?: React.ReactNode | string
+}
 export type SettingsMode = (
     | {
           type: 'auto'
@@ -24,12 +28,12 @@ export type SettingsMode = (
           enum: any
       }
 ) &
-    Partial<SettingsTexts>
+    SettingsTextsDisplay
 export function SettingsUI<T>(props: { value: ValueRef<T>; mode?: SettingsMode }) {
     const { value: valueRef, mode = { type: 'auto' } as SettingsMode } = props
     // This file is share between context. prevent loading in the background.
     const currentValue = useValueRef(valueRef)
-    const text: Partial<SettingsTexts> = mode || texts.get(valueRef) || {}
+    const text: SettingsTextsDisplay = mode || texts.get(valueRef) || {}
 
     const _props: Props = {
         primaryText: text.primary ?? '_unknown_setting_',

@@ -4,7 +4,7 @@ import {
     withMetadata,
     readTypedMessageMetadataUntyped,
 } from '../../../../extension/background-script/CryptoServices/utils'
-import StructuredPluginWrapper from '../../../../components/InjectedComponents/StructuredMessage/StructuredPluginWrapper'
+import MaskbookPluginWrapper from '../../../MaskbookPluginWrapper'
 import { RedPacketWithState } from '../Dashboard/Components/RedPacket'
 import { RedPacketRecord, RedPacketStatus, WalletRecord } from '../../database/types'
 import Services from '../../../../extension/service'
@@ -135,7 +135,7 @@ export function RedPacketInDecryptedPostCard(
     ).else(false)
     const jsx = message
         ? withMetadata(message.meta, 'com.maskbook.red_packet:1', r => (
-              <StructuredPluginWrapper width={400} pluginName="Red Packet">
+              <MaskbookPluginWrapper width={400} pluginName="Red Packet">
                   <RedPacketWithState
                       loading={loading || !!claiming}
                       onClick={onClick}
@@ -143,7 +143,7 @@ export function RedPacketInDecryptedPostCard(
                       redPacket={storybookDebugging ? (r as any) : undefined}
                       from={postIdentifier && !postIdentifier.isUnknown ? getPostUrl(postIdentifier) : undefined}
                   />
-              </StructuredPluginWrapper>
+              </MaskbookPluginWrapper>
           ))
         : null
     return <>{jsx}</>

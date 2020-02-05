@@ -10,24 +10,44 @@ storiesOf('Shared Components', module)
     .add('ChooseIdentity', () => {
         return <ChooseIdentity />
     })
-    .add('useSettingsUI', () => {
+    .add('SettingsUI', () => {
         function D(props: { x: ValueRef<any> }) {
             const x = useValueRef(props.x)
             return (
                 <div>
-                    {String(x)} (type: {typeof x})
+                    Current value: {String(x)} (type: {typeof x})
                 </div>
             )
         }
+        const b = <SettingsUI value={bool} mode={{ type: 'auto', primary: 'boolean', secondary: <D x={bool} /> }} />
+        const enum__ = (
+            <SettingsUI
+                value={syntaxKind}
+                mode={{
+                    type: 'enum',
+                    enum: SyntaxKind,
+                    primary: 'String enum',
+                    secondary: <D x={syntaxKind} />,
+                }}
+            />
+        )
+        const enum_ = (
+            <SettingsUI
+                value={numberKind}
+                mode={{
+                    type: 'enum',
+                    enum: NumberKind,
+                    primary: 'Number enum',
+                    secondary: <D x={numberKind} />,
+                }}
+            />
+        )
         return (
             <Paper>
-                <D x={booleanRef} />
-                <D x={syntaxKind} />
-                <D x={numberKind} />
                 <List>
-                    <SettingsUI value={booleanRef} mode={{ type: 'auto', primary: 'boolean setting' }} />
-                    <SettingsUI value={syntaxKind} mode={{ type: 'enum', enum: SyntaxKind, primary: 'String enum' }} />
-                    <SettingsUI value={numberKind} mode={{ type: 'enum', enum: NumberKind, primary: 'Number enum' }} />
+                    {b}
+                    {enum__}
+                    {enum_}
                 </List>
             </Paper>
         )
@@ -43,4 +63,4 @@ enum NumberKind {
 }
 const syntaxKind = new ValueRef<SyntaxKind>(SyntaxKind.ImportDeclaration)
 const numberKind = new ValueRef<NumberKind>(NumberKind.Zero)
-const booleanRef = new ValueRef<boolean>(false)
+const bool = new ValueRef<boolean>(false)
