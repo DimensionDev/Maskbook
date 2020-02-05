@@ -195,6 +195,7 @@ export function PostDialogUI(props: PostDialogUIProps) {
                             <ClickableChip
                                 checked={props.onlyMyself}
                                 ChipProps={{
+                                    disabled: props.shareToEveryone,
                                     label: geti18nString('post_dialog__select_recipients_only_myself'),
                                     onClick: () => props.onOnlyMyselfChanged(!props.onlyMyself),
                                 }}
@@ -202,6 +203,7 @@ export function PostDialogUI(props: PostDialogUIProps) {
                             <ClickableChip
                                 checked={props.shareToEveryone}
                                 ChipProps={{
+                                    disabled: props.onlyMyself,
                                     label: geti18nString('post_dialog__select_recipients_share_to_everyone'),
                                     onClick: () => props.onShareToEveryoneChanged(!props.shareToEveryone),
                                 }}
@@ -366,11 +368,12 @@ export function PostDialog(props: PostDialogProps) {
             checked && setOnlyMyself(false)
         }, []),
     )
-
+    //#endregion
+    //#region Red Packet
     const hasRedPacket = readTypedMessageMetadata(postBoxContent.meta || new Map(), 'com.maskbook.red_packet:1').ok
     const theme = hasRedPacket ? PluginRedPacketTheme : undefined
-
     const mustSelectShareToEveryone = hasRedPacket && !shareToEveryone
+
     React.useEffect(() => {
         if (mustSelectShareToEveryone) onShareToEveryoneChanged(true)
     }, [mustSelectShareToEveryone, onShareToEveryoneChanged])
