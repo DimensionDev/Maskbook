@@ -35,6 +35,7 @@ import {
     TypedMessage,
     withMetadata,
     readTypedMessageMetadata,
+    extractTextFromTypedMessage,
 } from '../../extension/background-script/CryptoServices/utils'
 import { formatBalance } from '../../plugins/Wallet/formatter'
 import classNames from 'classnames'
@@ -386,7 +387,9 @@ export function PostDialog(props: PostDialogProps) {
             currentShareTarget={currentShareTarget}
             postContent={postBoxContent}
             postBoxButtonDisabled={
-                !(onlyMyself || shareToEveryoneLocal ? postBoxContent : currentShareTarget.length && postBoxContent)
+                !(onlyMyself || shareToEveryoneLocal
+                    ? extractTextFromTypedMessage(postBoxContent).val
+                    : currentShareTarget.length && extractTextFromTypedMessage(postBoxContent).val)
             }
             onSetSelected={setCurrentShareTarget}
             onPostContentChanged={setPostBoxContent}
