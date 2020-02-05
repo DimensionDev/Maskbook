@@ -36,7 +36,7 @@ const useStyles = makeStyles(theme =>
     }),
 )
 
-export default function StructuredPluginWrapper(props: PluginWrapperProps) {
+export default function MaskbookPluginWrapper(props: PluginWrapperProps) {
     const classes = useStyles()
     const { pluginName, children, width } = props
     return (
