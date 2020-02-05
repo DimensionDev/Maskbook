@@ -42,6 +42,8 @@ import { RedPacketTokenType } from '../../plugins/Wallet/database/types'
 import { isDAI } from '../../plugins/Wallet/erc20'
 import { PluginRedPacketTheme } from '../../plugins/Wallet/theme'
 
+const defaultTheme = {}
+
 const useStyles = makeStyles({
     MUIInputRoot: {
         minHeight: 108,
@@ -111,7 +113,7 @@ export function PostDialogUI(props: PostDialogUIProps) {
     if (props.postContent.type !== 'text') return <>Unsupported type to edit</>
     return (
         <div ref={rootRef} className={classes.root}>
-            <ThemeProvider theme={props.theme ?? {}}>
+            <ThemeProvider theme={props.theme ?? defaultTheme}>
                 <ResponsiveDialog
                     className={classes.dialog}
                     classes={{
