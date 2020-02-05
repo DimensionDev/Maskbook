@@ -38,10 +38,10 @@ import {
     extractTextFromTypedMessage,
 } from '../../extension/background-script/CryptoServices/utils'
 import { formatBalance } from '../../plugins/Wallet/formatter'
-import classNames from 'classnames'
 import { RedPacketTokenType } from '../../plugins/Wallet/database/types'
 import { isDAI } from '../../plugins/Wallet/erc20'
 import { PluginRedPacketTheme } from '../../plugins/Wallet/theme'
+import { sleep } from '../../utils/utils'
 
 const defaultTheme = {}
 
@@ -147,11 +147,15 @@ export function PostDialogUI(props: PostDialogUIProps) {
                     <DialogContent className={classes.content}>
                         {withMetadata(props.postContent.meta, 'com.maskbook.red_packet:1', r => (
                             <Chip
-                                onDelete={() => {
+                                onDelete={async () => {
                                     const ref = getActivatedUI().typedMessageMetadata
                                     const next = new Map(ref.value.entries())
                                     next.delete('com.maskbook.red_packet:1')
                                     ref.value = next
+                                    if (props.onShareToEveryoneChanged) {
+                                        await sleep(300)
+                                        props.onShareToEveryoneChanged(false)
+                                    }
                                 }}
                                 label={`A Red Packet with $${formatBalance(
                                     BigInt(r.total),
@@ -241,7 +245,6 @@ export interface PostDialogProps extends Partial<PostDialogUIProps> {
     typedMessageMetadata: ReadonlyMap<string, any>
 }
 export function PostDialog(props: PostDialogProps) {
-    const classes = useStyles()
     const [onlyMyselfLocal, setOnlyMyself] = useState(false)
     const onlyMyself = props.onlyMyself ?? onlyMyselfLocal
     const [shareToEveryoneLocal, setShareToEveryone] = useState(false)
@@ -326,6 +329,8 @@ export function PostDialog(props: PostDialogProps) {
         props.onRequestReset,
         useCallback(() => {
             setOpen(false)
+            setOnlyMyself(false)
+            setShareToEveryone(false)
             setPostBoxContent(makeTypedMessage(''))
             setCurrentShareTarget([])
             getActivatedUI().typedMessageMetadata.value = new Map()
@@ -374,7 +379,7 @@ export function PostDialog(props: PostDialogProps) {
     const theme = hasRedPacket ? PluginRedPacketTheme : undefined
     const mustSelectShareToEveryone = hasRedPacket && !shareToEveryone
 
-    React.useEffect(() => {
+    useEffect(() => {
         if (mustSelectShareToEveryone) onShareToEveryoneChanged(true)
     }, [mustSelectShareToEveryone, onShareToEveryoneChanged])
     //#endregion
