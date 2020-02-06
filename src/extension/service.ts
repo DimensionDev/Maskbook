@@ -68,7 +68,7 @@ export const ServicesWithProgress = AsyncGeneratorCall<ServicesWithProgress>(
         key: 'Service+',
         log: logOptions,
         serializer: Serialization,
-        messageChannel: new MessageCenter(),
+        messageChannel: new MessageCenter(false),
     },
 )
 
@@ -86,7 +86,7 @@ type Service = Record<string, (...args: unknown[]) => Promise<unknown>>
 function register<T extends Service>(service: T, name: keyof Services, mock?: Partial<T>) {
     if (OnlyRunInContext(['content', 'options', 'debugging', 'background'], false)) {
         GetContext() !== 'debugging' && console.log(`Service ${name} registered in ${GetContext()}`)
-        const mc = new MessageCenter()
+        const mc = new MessageCenter(false)
         // mc.writeToConsole = true
         Object.assign(Services, {
             [name]: AsyncCall(service, {
@@ -111,7 +111,7 @@ function register<T extends Service>(service: T, name: keyof Services, mock?: Pa
                 key: name,
                 serializer: Serialization,
                 log: logOptions,
-                messageChannel: new MessageCenter(),
+                messageChannel: new MessageCenter(true),
             })
         }
     } else {

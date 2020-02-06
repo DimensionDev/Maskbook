@@ -292,7 +292,7 @@ export const getActivatedUI = () => activatedSocialNetworkUI
 let activatedSocialNetworkUI = ({
     lastRecognizedIdentity: new ValueRef({ identifier: ProfileIdentifier.unknown }),
     currentIdentity: new ValueRef(null),
-    myIdentitiesRef: new ValueRef([] as Profile[]),
+    myIdentitiesRef: new ValueRef([]),
     useTheme: () => MaskbookLightTheme,
 } as Partial<SocialNetworkUI>) as SocialNetworkUI
 export function activateSocialNetworkUI() {

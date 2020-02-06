@@ -90,7 +90,7 @@ export function DebugModeUI_PostHashDialog(props: { post: string; network: strin
     const [hashMap, setHashMap] = useState<[string, string, string][]>([])
     const friends = useFriendsList()
     useAsync(() => {
-        if (!payload) return Promise.resolve([] as typeof hashMap)
+        if (!payload) return Promise.resolve([])
         const ivID = new PostIVIdentifier(props.network, payload.iv)
         return Services.Crypto.debugShowAllPossibleHashForPost(ivID, payload.version)
     }, [props.post]).then(setHashMap)
