@@ -11,7 +11,7 @@ export function SelectEthereumNetwork() {
         <Card>
             <CardContent>
                 <Box display="flex" alignItems="center">
-                    <SettingsUI value={currentEthereumNetworkSettings} type={{ type: 'enum', enum: EthereumNetwork }} />
+                    <SettingsUI value={currentEthereumNetworkSettings} mode={{ type: 'enum', enum: EthereumNetwork }} />
                 </Box>
             </CardContent>
         </Card>
