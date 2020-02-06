@@ -45,8 +45,8 @@ export function SettingsUI<T>(props: { value: ValueRef<T>; mode?: SettingsMode }
     else return <AutoUI {..._props} currentValue={currentValue} />
 }
 interface Props {
-    primaryText: string
-    secondaryText?: string
+    primaryText: React.ReactNode
+    secondaryText?: React.ReactNode
     settingsRef: ValueRef<any>
 }
 function EnumUI(props: Props & { enumObject: any }) {
@@ -57,7 +57,7 @@ function EnumUI(props: Props & { enumObject: any }) {
         .map(key => ({ key, value: enumObject[key] }))
     return (
         <ListItem component="div" classes={classes}>
-            <ListItemText id={primaryText} primary={primaryText} secondary={secondaryText} />
+            <ListItemText primary={primaryText} secondary={secondaryText} />
             <ListItemSecondaryAction>
                 <Select
                     value={settingsRef.value}
@@ -88,12 +88,13 @@ function AutoUI(props: Props & { currentValue: unknown }) {
     switch (typeof currentValue) {
         case 'boolean':
             const ref = (settingsRef as ValueRef<unknown>) as ValueRef<boolean>
+            const aria_id = Math.random().toString()
             return (
                 <ListItem button onClick={() => (ref.value = !ref.value)}>
-                    <ListItemText id={primaryText} primary={primaryText} secondary={secondaryText} />
+                    <ListItemText id={aria_id} primary={primaryText} secondary={secondaryText} />
                     <ListItemSecondaryAction>
                         <Switch
-                            inputProps={{ 'aria-labelledby': primaryText }}
+                            inputProps={{ 'aria-labelledby': aria_id }}
                             edge="end"
                             checked={currentValue}
                             onClick={() => (ref.value = !ref.value)}
