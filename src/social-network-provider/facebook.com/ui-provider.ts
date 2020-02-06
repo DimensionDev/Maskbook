@@ -10,8 +10,6 @@ import { getPostContentFacebook } from './tasks/getPostContent'
 import { resolveLastRecognizedIdentityFacebook } from './UI/resolveLastRecognizedIdentity'
 import { getProfileFacebook } from './tasks/getProfile'
 import { pasteIntoBioFacebook } from './tasks/pasteIntoBio'
-import { shouldDisplayWelcomeDefault } from '../../social-network/defaults/shouldDisplayWelcome'
-import { injectWelcomeBannerFacebook } from './UI/injectWelcomeBanner'
 import { injectPostCommentsDefault } from '../../social-network/defaults/injectComments'
 import { dispatchCustomEvents, selectElementContents, sleep } from '../../utils/utils'
 import { collectPostsFacebook } from './UI/collectPosts'
@@ -53,10 +51,8 @@ export const facebookUISelf = defineSocialNetworkUI({
     ignoreSetupAccount() {
         setStorage('facebook.com', { userIgnoredWelcome: true, forceDisplayWelcome: false })
     },
-    shouldDisplayWelcome: shouldDisplayWelcomeDefault,
     resolveLastRecognizedIdentity: resolveLastRecognizedIdentityFacebook,
     injectPostBox: injectPostBoxFacebook,
-    injectWelcomeBanner: injectWelcomeBannerFacebook,
     injectPostComments: injectPostCommentsDefault(),
     injectOptionsPageLink: injectOptionsPageLinkAtFacebook,
     injectKnownIdentity: injectKnownIdentityAtFacebook,

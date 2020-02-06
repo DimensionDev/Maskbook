@@ -57,13 +57,11 @@ export function PostDialogHint(props: PostDialogHintProps) {
     const identities = or(props.identities, useMyIdentities())
     const ui = <PostDialogHintUI onHintButtonClicked={() => {}} {...props} />
 
-    const [showWelcome, setShowWelcome] = React.useState(false)
-    useAsync(getActivatedUI().shouldDisplayWelcome, []).then(x => setShowWelcome(x))
     const connecting = useConnectingStatus()
 
     if (connecting) return null
 
-    if (showWelcome || identities.length === 0) {
+    if (identities.length === 0) {
         return <NotSetupYetPrompt {...props.NotSetupYetPromptProps} />
     }
 

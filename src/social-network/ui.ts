@@ -27,10 +27,6 @@ export interface SocialNetworkUIDefinition
     /** Should this UI content script activate? */
     shouldActivate(location?: Location | URL): boolean
     /**
-     * Should Maskbook show Welcome Banner?
-     */
-    shouldDisplayWelcome(): Promise<boolean>
-    /**
      * A user friendly name for this network.
      */
     friendlyName: string
@@ -98,15 +94,6 @@ export interface SocialNetworkUIInjections {
      * This function should inject UI into the Post box
      */
     injectPostBox(): void
-    /**
-     * This function should inject the Welcome Banner
-     * @description leaving it undefined, there will be a default value
-     * leaving it "disabled", Maskbook will disable this feature.
-     *
-     * If it is a function, it should mount the WelcomeBanner.
-     * And it should return a function to unmount the WelcomeBanner
-     */
-    injectWelcomeBanner?: (() => () => void) | 'disabled'
     /**
      * This is an optional function.
      *
@@ -330,21 +317,6 @@ export function activateSocialNetworkUI() {
                 {
                     const mountKnownIdentity = ui.injectKnownIdentity
                     if (typeof mountKnownIdentity === 'function') mountKnownIdentity()
-                }
-                {
-                    const mountBanner = ui.injectWelcomeBanner
-                    if (typeof mountBanner === 'function') {
-                        ui.shouldDisplayWelcome().then(shouldDisplay => {
-                            if (shouldDisplay) {
-                                const unmount = mountBanner()
-                                ui.myIdentitiesRef.addListener(next => {
-                                    ui.shouldDisplayWelcome().then(should => {
-                                        !should && next.length && unmount()
-                                    })
-                                })
-                            }
-                        })
-                    }
                 }
                 ui.lastRecognizedIdentity.addListener(id => {
                     if (id.identifier.isUnknown) return
