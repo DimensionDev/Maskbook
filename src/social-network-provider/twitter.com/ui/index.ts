@@ -1,6 +1,5 @@
 import { defineSocialNetworkUI } from '../../../social-network/ui'
 import { sharedSettings } from '../index'
-import { shouldDisplayWelcomeDefault } from '../../../social-network/defaults/shouldDisplayWelcome'
 import { InitFriendsValueRef } from '../../../social-network/defaults/FriendsValueRef'
 import { InitMyIdentitiesValueRef } from '../../../social-network/defaults/MyIdentitiesRef'
 import { setStorage } from '../../../utils/browser.storage'
@@ -60,5 +59,4 @@ export const instanceOfTwitterUI = defineSocialNetworkUI({
     ignoreSetupAccount() {
         setStorage(twitterUrl.hostIdentifier, { userIgnoredWelcome: true, forceDisplayWelcome: false }).then()
     },
-    shouldDisplayWelcome: shouldDisplayWelcomeDefault,
 })

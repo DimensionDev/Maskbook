@@ -30,11 +30,7 @@ export const emptyDefinition: SocialNetworkUIDefinition = {
     injectPostBox: nop,
     injectPostComments: nopWithUnmount,
     injectPostInspector: nopWithUnmount,
-    injectWelcomeBanner: nopWithUnmount,
     resolveLastRecognizedIdentity: nop,
-    async shouldDisplayWelcome() {
-        return false
-    },
     posts: new Map(),
     friendsRef: new ValueRef([] as Profile[], ProfileArrayComparer),
     isDangerousNetwork: false,

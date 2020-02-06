@@ -167,13 +167,11 @@ export function AdditionalPostBox(props: AdditionalPostBoxProps) {
     const [postText, setPostText] = useState('')
     const [currentShareTarget, onShareTargetChanged] = useState(availableShareTarget)
 
-    const [showWelcome, setShowWelcome] = useState(false)
-    useAsync(getActivatedUI().shouldDisplayWelcome, []).then(x => setShowWelcome(x))
     const connecting = useConnectingStatus()
 
     if (connecting) return null
 
-    if (showWelcome || identities.length === 0) {
+    if (identities.length === 0) {
         return <NotSetupYetPrompt {...props.NotSetupYetPromptProps} />
     }
 
