@@ -32,7 +32,7 @@ const useStyles = makeStyles({
 const ResponsiveDialog = withMobileDialog({ breakpoint: 'xs' })(Dialog)
 export function SelectPeopleDialog(props: SelectPeopleDialogProps) {
     const classes = useStylesExtends(useStyles(), props)
-    const [people, select] = useState<Profile[]>([] as Profile[])
+    const [people, select] = useState<Profile[]>([])
     const [committed, setCommitted] = useState(false)
     const onClose = useCallback(() => {
         props.onClose()

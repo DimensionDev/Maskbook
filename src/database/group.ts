@@ -137,14 +137,10 @@ export async function updateUserGroupDatabase(
     }
     await t.objectStore('groups').put(GroupRecordIntoDB(nextRecord))
     nonDuplicateNewMembers.length &&
-        MessageCenter.emit(
-            'joinGroup',
-            {
-                group: group.identifier,
-                newMembers: nonDuplicateNewMembers,
-            },
-            true,
-        )
+        MessageCenter.emit('joinGroup', {
+            group: group.identifier,
+            newMembers: nonDuplicateNewMembers,
+        })
 }
 
 /**
