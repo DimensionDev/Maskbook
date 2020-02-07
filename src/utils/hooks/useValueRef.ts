@@ -7,12 +7,11 @@ export function useValueRef<T>(ref: ValueRef<T>) {
     const { useSubscription } = require('use-subscription') as typeof import('use-subscription')
     const { useMemo } = safeReact()
 
-    const subscription = useMemo(
-        () =>
-            ({
-                getCurrentValue: () => ref.value,
-                subscribe: callback => ref.addListener(callback),
-            } as Subscription<T>),
+    const subscription = useMemo<Subscription<T>>(
+        () => ({
+            getCurrentValue: () => ref.value,
+            subscribe: callback => ref.addListener(callback),
+        }),
         [ref],
     )
 
