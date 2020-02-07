@@ -197,19 +197,19 @@ export function PostDialogUI(props: PostDialogUIProps) {
                                 {...props.SelectRecipientsUIProps}
                             />
                             <ClickableChip
-                                checked={props.onlyMyself}
-                                ChipProps={{
-                                    disabled: props.shareToEveryone,
-                                    label: geti18nString('post_dialog__select_recipients_only_myself'),
-                                    onClick: () => props.onOnlyMyselfChanged(!props.onlyMyself),
-                                }}
-                            />
-                            <ClickableChip
                                 checked={props.shareToEveryone}
                                 ChipProps={{
                                     disabled: props.onlyMyself,
                                     label: geti18nString('post_dialog__select_recipients_share_to_everyone'),
                                     onClick: () => props.onShareToEveryoneChanged(!props.shareToEveryone),
+                                }}
+                            />
+                            <ClickableChip
+                                checked={props.onlyMyself}
+                                ChipProps={{
+                                    disabled: props.shareToEveryone,
+                                    label: geti18nString('post_dialog__select_recipients_only_myself'),
+                                    onClick: () => props.onOnlyMyselfChanged(!props.onlyMyself),
                                 }}
                             />
                         </Box>
