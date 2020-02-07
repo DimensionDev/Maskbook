@@ -33,12 +33,12 @@ export function SettingsUI<T>(props: { value: ValueRef<T>; mode?: SettingsMode }
     const { value: valueRef, mode = { type: 'auto' } as SettingsMode } = props
     // This file is share between context. prevent loading in the background.
     const currentValue = useValueRef(valueRef)
-    const text: SettingsTextsDisplay = mode || texts.get(valueRef) || {}
+    const text = texts.get(valueRef)
 
     const _props: Props = {
-        primaryText: text.primary ?? '_unknown_setting_',
+        primaryText: mode.primary ?? text?.primary ?? '_unknown_setting_',
         settingsRef: valueRef,
-        secondaryText: text.secondary,
+        secondaryText: mode.secondary ?? text?.secondary,
     }
 
     if (mode.type === 'enum') return <EnumUI {..._props} enumObject={mode.enum} />
