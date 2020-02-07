@@ -37,6 +37,7 @@ export interface DecryptPostSuccessProps extends withClasses<KeysInferFromUseSty
 
 const useSuccessStyles = makeStyles({
     header: { display: 'flex', alignItems: 'center' },
+    addRecipientsTitle: { marginLeft: '0.25em', marginRight: '0.25em' },
     addRecipientsLink: { marginRight: '1em', cursor: 'pointer' },
     signatureVerifyPassed: { color: 'green' },
     signatureVerifyFailed: { color: 'red' },
@@ -79,7 +80,7 @@ function DecryptPostSuccessHeader(props: { shareMenu: ReturnType<typeof useShare
         <Typography variant="caption" color="textSecondary" gutterBottom className={classes.header}>
             <img alt="" width={16} height={16} src={getUrl('/maskbook-icon-padded.png')} />
             {ShareMenu}
-            {geti18nString('decrypted_postbox_title')}
+            <span className={classes.addRecipientsTitle}>{geti18nString('decrypted_postbox_title')}</span>
             <Box flex={1} />
             {props.requestAppendRecipients && (
                 <Link color="primary" onClick={showShare} className={classes.addRecipientsLink}>
