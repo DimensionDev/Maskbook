@@ -55,7 +55,7 @@
     "async-call-rpc": "^1.0.4",
     "bip39": "^3.0.2",
     "classnames": "^2.2.6",
-    "construct-style-sheets-polyfill": "^2.3.0",
+    "construct-style-sheets-polyfill": "^2.3.5",
     "elliptic": "^6.4.1",
     "gun": "0.2020.116",
     "husky": "^4.2.1",
