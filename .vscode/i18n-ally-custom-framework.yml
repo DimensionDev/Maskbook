@@ -6,7 +6,7 @@ languageIds:
     - javascriptreact
     - typescriptreact
 keyMatchReg:
-    - "geti18nString\\(['\"`]([a-zA-Z0-9_]+)['\"`]"
+    - "geti18nString\\s{0,}\\(\\s{0,}['\"`]([a-zA-Z0-9_]+)['\"`]"
 monopoly: false
 refactorTemplates:
     - geti18nString('$1')
