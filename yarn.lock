@@ -18715,10 +18715,10 @@ typechain-target-web3-v1@^1.0.4:
     lodash "^4.17.15"
     web3 "^1.2.4"
 
-typechain@^1.0.4:
-  version "1.0.4"
-  resolved "https://registry.yarnpkg.com/typechain/-/typechain-1.0.4.tgz#8e35ed1a3189b28c8ffdd31ab51b97c58490c7b1"
-  integrity sha512-jZoxGWTlGXf9n95lIb9R0i3SzHP2jMxJDpVgePMQq93FaLYa8pHKe8DRmCmVkWXP2SGZpo4/jUPYMc0+vf/4XA==
+typechain@^1.0.5:
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/typechain/-/typechain-1.0.5.tgz#797899d9dbce54a83b3aef04ce1727ddf07d2138"
+  integrity sha512-gbQmJXPKuYQ0p3tK+dMhpdQql/UPtSnkPQXw2QM/aqwCengI86z2vEM2e5rVQpmk/blFx1PYNdApSDxE12rR1Q==
   dependencies:
     command-line-args "^4.0.7"
     debug "^3.0.1"
