@@ -89,8 +89,8 @@ function ResponsiveDrawer(props: ResponsiveDrawerProps) {
             )}
             <Divider />
             <section className={classNames(classes.padded)}>
-                <img className={classes.maskicon} src="https://maskbook.com/img/MB--CircleCanvas--WhiteOverBlue.svg" />
-                <img className={classes.masktext} src="https://maskbook.com/img/maskbook--logotype-blue.png" />
+                <img className={classes.maskicon} src="/MB--CircleCanvas--WhiteOverBlue.svg" />
+                <img className={classes.masktext} src="/maskbook--logotype-blue.png" />
                 <Typography variant="caption">Make Privacy Protected Again</Typography>
             </section>
             <Divider />
