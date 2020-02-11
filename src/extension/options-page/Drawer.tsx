@@ -61,10 +61,8 @@ const useStyles = makeStyles(theme => ({
     },
     masktext: {
         display: 'block',
-        marginTop: -20,
-        marginBottom: -20,
         width: 120,
-        height: 60,
+        height: 'auto',
     },
 }))
 
