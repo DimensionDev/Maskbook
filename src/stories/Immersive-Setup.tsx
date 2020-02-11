@@ -11,7 +11,6 @@ import { ECKeyIdentifier } from '../database/type'
 
 storiesOf('Immersive Setup', module).add('Stepper', () => (
     <ImmersiveSetupStepper
-        // currentStep={ImmersiveSetupState.PasteBio}
         persona={new ECKeyIdentifier('secp256k1', 'test_key')}
         loadProfile={async () => {
             action('loadProfile')()

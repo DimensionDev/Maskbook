@@ -33,6 +33,7 @@ export async function JsonWebKeyToCryptoKey(
     algorithm: Algorithms,
 ): Promise<CryptoKey> {
     key = { ...key }
+    // ? In some cases the raw JWK stores the usage of "decrypt" only so our full usage will throw an error
     const usages = [...usage].sort().join(',')
     if (key.key_ops) {
         if (key.key_ops.sort().join('.') !== usages) {

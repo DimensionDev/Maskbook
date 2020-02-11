@@ -65,21 +65,21 @@ async function* checkFullPersonaDBConsistency(
 ): AsyncGenerator<Diagnosis, void, unknown> {
     for await (const persona of t.objectStore('personas')) {
         const personaID = Identifier.fromString(persona.key, ECKeyIdentifier)
-        if (!personaID.value) {
+        if (personaID.err) {
             yield { type: Type.Invalid_Persona, invalidPersonaKey: persona.key, _record: persona.value }
             continue
         }
-        if (checkRange === 'full check' || checkRange.has(personaID.value)) {
-            yield* checkPersonaLink(personaID.value, t)
+        if (checkRange === 'full check' || checkRange.has(personaID.val)) {
+            yield* checkPersonaLink(personaID.val, t)
         }
     }
 
     for await (const profile of t.objectStore('profiles')) {
         const profileID = Identifier.fromString(profile.key, ProfileIdentifier)
-        if (!profileID.value) {
+        if (profileID.err) {
             yield { type: Type.Invalid_Profile, invalidProfileKey: profile.key, _record: profile.value }
-        } else if (checkRange === 'full check' || checkRange.has(profileID.value)) {
-            yield* checkProfileLink(profileID.value, t)
+        } else if (checkRange === 'full check' || checkRange.has(profileID.val)) {
+            yield* checkProfileLink(profileID.val, t)
         }
     }
 }
@@ -92,16 +92,16 @@ async function* checkPersonaLink(
     if (!linkedProfiles) return
     for (const each of linkedProfiles) {
         const profileID = Identifier.fromString(each[0], ProfileIdentifier)
-        if (!profileID.value) {
+        if (profileID.err) {
             yield { type: Type.Invalid_Persona_LinkedProfiles, invalidProfile: each[0], persona: personaID }
             continue
         }
-        const profile = await t.objectStore('profiles').get(profileID.value.toText())
+        const profile = await t.objectStore('profiles').get(profileID.val.toText())
         if (!profile?.linkedPersona) {
             yield {
                 type: Type.One_Way_Link_In_Persona,
                 persona: personaID,
-                designatedProfile: profileID.value,
+                designatedProfile: profileID.val,
                 profileActuallyLinkedPersona: profile?.linkedPersona,
             }
         }

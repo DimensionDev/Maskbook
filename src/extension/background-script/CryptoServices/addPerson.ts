@@ -27,7 +27,7 @@ async function getUserPublicKeyFromProvePost(user: ProfileIdentifier) {
 async function getUserPublicKeyFromNetwork(user: ProfileIdentifier) {
     let bioRejected = false
     let proveRejected = false
-    const errors = [] as Error[]
+    const errors: Error[] = []
     const [bio, post] = [getUserPublicKeyFromBio(user), getUserPublicKeyFromProvePost(user)]
     try {
         await bio

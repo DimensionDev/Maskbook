@@ -59,6 +59,6 @@ interface MaskbookMessages {
      */
     compositionUpdated: CompositionEvent
 }
-export const MessageCenter = new MC<MaskbookMessages>('maskbook-events')
+export const MessageCenter = new MC<MaskbookMessages>(true, 'maskbook-events')
 
 MessageCenter.serialization = Serialization

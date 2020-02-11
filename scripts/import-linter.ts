@@ -121,7 +121,7 @@ function checkReferenceRecursive(
                 project.getSourceFile(targetSFPath + '/index.ts') ||
                 project.getSourceFile(targetSFPath + '/index.tsx'))
 
-        const nextRefChain: string[] = ([] as string[]).concat(referenceChain, [sf ? sf.getFilePath() : path])
+        const nextRefChain: string[] = referenceChain.concat([sf ? sf.getFilePath() : path])
         if (diag) {
             console.error(`${diag}
 Import chain:

@@ -16,8 +16,8 @@ export const emptyDefinition: SocialNetworkUIDefinition = {
     shouldActivate() {
         return false
     },
-    myIdentitiesRef: new ValueRef([] as Profile[], ProfileArrayComparer),
-    groupsRef: new ValueRef([] as Group[], GroupArrayComparer),
+    myIdentitiesRef: new ValueRef([], ProfileArrayComparer),
+    groupsRef: new ValueRef([], GroupArrayComparer),
     lastRecognizedIdentity: new ValueRef({ identifier: ProfileIdentifier.unknown }),
     currentIdentity: new ValueRef<Profile | null>(null),
     init() {
@@ -30,13 +30,9 @@ export const emptyDefinition: SocialNetworkUIDefinition = {
     injectPostBox: nop,
     injectPostComments: nopWithUnmount,
     injectPostInspector: nopWithUnmount,
-    injectWelcomeBanner: nopWithUnmount,
     resolveLastRecognizedIdentity: nop,
-    async shouldDisplayWelcome() {
-        return false
-    },
     posts: new Map(),
-    friendsRef: new ValueRef([] as Profile[], ProfileArrayComparer),
+    friendsRef: new ValueRef([], ProfileArrayComparer),
     isDangerousNetwork: false,
     isValidUsername() {
         return true

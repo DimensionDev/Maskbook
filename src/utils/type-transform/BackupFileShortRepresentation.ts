@@ -20,7 +20,7 @@ export type BackupJSONFileLatestShort = [
 export function compressBackupFile(file: BackupJSONFileLatest, profileIdentifier?: ProfileIdentifier): string {
     const { grantedHostPermissions, profiles, personas } = file
     if (!profileIdentifier)
-        profileIdentifier = Identifier.fromString(profiles[0].identifier, ProfileIdentifier).unwrap('Cast error')
+        profileIdentifier = Identifier.fromString(profiles[0].identifier, ProfileIdentifier).unwrap()
     const profile = profiles.find(x => x.identifier === profileIdentifier!.toText())
     if (!profile?.linkedPersona) throw new Error('Target profile/persona not found')
     const persona = personas.find(x => x.identifier === profile.linkedPersona)

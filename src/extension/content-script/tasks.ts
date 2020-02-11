@@ -72,9 +72,7 @@ setTimeout(() => {
     const onStatusUpdate = (id: string) => {
         const status: ImmersiveSetupCrossContextStatus = JSON.parse(id || '{}')
         if (status.persona && status.status === 'during') {
-            _tasks.immersiveSetup(
-                Identifier.fromString(status.persona, ECKeyIdentifier).unwrap('Cant cast to ECKeyIdentifier'),
-            )
+            _tasks.immersiveSetup(Identifier.fromString(status.persona, ECKeyIdentifier).unwrap())
         }
     }
     currentImmersiveSetupStatus[x].addListener(onStatusUpdate)

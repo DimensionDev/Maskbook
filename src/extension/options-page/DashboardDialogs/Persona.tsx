@@ -4,7 +4,7 @@ import { DialogContentItem, DialogRouter } from './DialogBase'
 
 import { TextField, Typography, InputBase, makeStyles, TypographyProps } from '@material-ui/core'
 import { useHistory } from 'react-router-dom'
-import BackupRestoreTab, { BackupRestoreTabProps } from '../DashboardComponents/BackupRestoreTab'
+import AbstractTab, { AbstractTabProps } from '../DashboardComponents/AbstractTab'
 import ActionButton from '../DashboardComponents/ActionButton'
 import { ECKeyIdentifier, Identifier } from '../../../database/type'
 import Services from '../../service'
@@ -81,9 +81,7 @@ export function PersonaCreatedDialog() {
     const [persona, setPersona] = useState<Persona | null>(null)
     useAsync(async () => {
         if (identifier)
-            Services.Identity.queryPersona(
-                Identifier.fromString(identifier, ECKeyIdentifier).unwrap('Cast failed'),
-            ).then(setPersona)
+            Services.Identity.queryPersona(Identifier.fromString(identifier, ECKeyIdentifier).unwrap()).then(setPersona)
     }, [identifier])
     return (
         <DialogContentItem
@@ -174,7 +172,7 @@ export function PersonaBackupDialog(props: PersonaBackupDialogProps) {
     }, [persona.identifier])
 
     const state = useState(0)
-    const tabProps: BackupRestoreTabProps = {
+    const tabProps: AbstractTabProps = {
         tabs: [
             {
                 label: 'MNEMONIC WORDS',
@@ -203,7 +201,7 @@ export function PersonaBackupDialog(props: PersonaBackupDialogProps) {
     const content = (
         <>
             <Typography variant="body2">{geti18nString('dashboard_backup_persona_hint')}</Typography>
-            <BackupRestoreTab height={292} margin {...tabProps}></BackupRestoreTab>
+            <AbstractTab height={292} margin {...tabProps}></AbstractTab>
             <Typography variant="body2">
                 {geti18nString(
                     state[0] === 0
@@ -285,7 +283,7 @@ export function PersonaImportDialog() {
         ) : null
     }
 
-    const tabProps: BackupRestoreTabProps = {
+    const tabProps: AbstractTabProps = {
         tabs: [
             {
                 label: 'MNEMONIC WORDS',
@@ -341,7 +339,7 @@ export function PersonaImportDialog() {
     const content = (
         <>
             <Typography variant="body1">{geti18nString('dashboard_persona_import_dialog_hint')}</Typography>
-            <BackupRestoreTab margin="top" {...tabProps}></BackupRestoreTab>
+            <AbstractTab margin="top" {...tabProps}></AbstractTab>
             {restoreState === 'success' && (
                 <DialogRouter
                     fullscreen={false}

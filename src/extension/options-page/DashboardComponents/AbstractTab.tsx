@@ -35,7 +35,7 @@ const TabPanel = (props: TypographyProps & Pick<BoxProps, 'p' | 'height'> & { va
     )
 }
 
-export interface BackupRestoreTabProps {
+export interface AbstractTabProps {
     tabs: { label: string; component: JSX.Element | null; p?: number }[]
     state: [number, React.Dispatch<React.SetStateAction<number>>]
     margin?: true | 'top' | 'bottom'
@@ -43,7 +43,7 @@ export interface BackupRestoreTabProps {
     minHeight?: number
 }
 
-export default function BackupRestoreTab(props: BackupRestoreTabProps) {
+export default function AbstractTab(props: AbstractTabProps) {
     const { tabs, state, margin, height, minHeight } = props
 
     const classes = useStyles()

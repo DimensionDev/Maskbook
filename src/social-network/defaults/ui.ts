@@ -9,10 +9,10 @@ import { MaskbookDarkTheme, MaskbookLightTheme } from '../../utils/theme'
 import { ProfileArrayComparer, GroupArrayComparer, PersonaArrayComparer } from '../../utils/comparer'
 
 const defaultDataSources: Required<SocialNetworkUIDataSources> = cloneDeep({
-    friendsRef: new ValueRef([] as Profile[], ProfileArrayComparer),
-    myIdentitiesRef: new ValueRef([] as Profile[], ProfileArrayComparer),
-    myPersonasRef: new ValueRef([] as Persona[], PersonaArrayComparer),
-    groupsRef: new ValueRef([] as Group[], GroupArrayComparer),
+    friendsRef: new ValueRef([], ProfileArrayComparer),
+    myIdentitiesRef: new ValueRef([], ProfileArrayComparer),
+    myPersonasRef: new ValueRef([], PersonaArrayComparer),
+    groupsRef: new ValueRef([], GroupArrayComparer),
     currentIdentity: new ValueRef<Profile | null>(null),
     lastRecognizedIdentity: new ValueRef({ identifier: ProfileIdentifier.unknown }),
     posts: new Map(),

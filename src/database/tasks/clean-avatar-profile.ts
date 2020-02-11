@@ -28,7 +28,7 @@ export async function cleanProfileWithNoLinkedPersona() {
             if (x.value.linkedPersona) continue
             if (expired < x.value.updatedAt) continue
             const id = Identifier.fromString(x.value.identifier, ProfileIdentifier)
-            if (id.value) cleanedList.set(id.value, undefined)
+            if (id.ok) cleanedList.set(id.val, undefined)
             await x.delete()
         }
     }, false)

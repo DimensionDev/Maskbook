@@ -43,15 +43,16 @@ type WaitingProps = Partial<AdditionalContentProps>
 type FailedProps = Partial<AdditionalContentProps> & { error: Error }
 export const AddToKeyStoreUI = {
     success: React.memo((props: SuccessProps) => (
-        <AdditionalContent title={geti18nString('add_to_key_store_success')} {...props} />
+        <AdditionalContent header={geti18nString('add_to_key_store_success')} {...props} />
     )),
     awaiting: React.memo((props: WaitingProps) => (
-        <AdditionalContent title={geti18nString('add_to_key_store_verifying')} {...props} />
+        <AdditionalContent header={geti18nString('add_to_key_store_verifying')} {...props} />
     )),
     failed: React.memo(({ error, ...props }: FailedProps) => (
-        <AdditionalContent title={geti18nString('add_to_key_store_failed_title')} {...props}>
-            {geti18nString('add_to_key_store_failed_text', error.message)}
-            {console.error(error)}
-        </AdditionalContent>
+        <AdditionalContent
+            header={geti18nString('add_to_key_store_failed_title')}
+            message={(console.error(error), geti18nString('add_to_key_store_failed_text', error.message))}
+            {...props}
+        />
     )),
 }

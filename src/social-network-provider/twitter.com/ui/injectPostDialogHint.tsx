@@ -63,7 +63,7 @@ function PostDialogHintAtTwitter() {
         ...useTwitterButton(),
     }
     const onHintButtonClicked = useCallback(
-        () => MessageCenter.emit('compositionUpdated', { reason: 'timeline', open: true }, true),
+        () => MessageCenter.emit('compositionUpdated', { reason: 'timeline', open: true }),
         [],
     )
     return (

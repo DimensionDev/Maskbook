@@ -11,7 +11,7 @@ function resolveSpecialGroupName(group: Group, knownPeople: Profile[]): string {
     }
     switch (group.groupName) {
         case PreDefinedVirtualGroupNames.friends:
-            return geti18nString('database_group_friends_default_name', owner)
+            return geti18nString('database_group_friends_default_name')
         case PreDefinedVirtualGroupNames.followers:
             return geti18nString('database_group_followers_name', owner)
         case PreDefinedVirtualGroupNames.following:

@@ -15,10 +15,10 @@ import {
     Select,
     MenuItem,
 } from '@material-ui/core'
-import { useStylesExtends } from '../../../../components/custom-ui-helper'
+import { useStylesExtends, or } from '../../../../components/custom-ui-helper'
 import { DialogDismissIconUI } from '../../../../components/InjectedComponents/DialogDismissIcon'
-import BackupRestoreTab from '../../../../extension/options-page/DashboardComponents/BackupRestoreTab'
-import { RedPacket, RedPacketWithState } from '../Dashboard/Components/RedPacket'
+import AbstractTab from '../../../../extension/options-page/DashboardComponents/AbstractTab'
+import { RedPacketWithState } from '../Dashboard/Components/RedPacket'
 import Services from '../../../../extension/service'
 import { createRedPacketInit } from '../../red-packet-fsm'
 import {
@@ -83,11 +83,15 @@ const useNewPacketStyles = makeStyles(theme =>
 
 interface NewPacketProps {
     onCreateNewPacket: (opt: createRedPacketInit) => void
+    onRequireNewWallet: () => void
+    newRedPacketCreatorName?: string
+    wallets: WalletRecord[] | 'loading'
+    tokens: ERC20TokenRecord[]
 }
 
-function NewPacket(props: RedPacketDialogProps & NewPacketProps) {
+function NewPacketUI(props: RedPacketDialogProps & NewPacketProps) {
     const classes = useStylesExtends(useNewPacketStyles(), props)
-    const id = useCurrentIdentity()
+    const { wallets, tokens, onRequireNewWallet } = props
     const [is_random, setIsRandom] = useState(0)
 
     const [send_message, setMsg] = useState('Best Wishes!')
@@ -107,10 +111,8 @@ function NewPacket(props: RedPacketDialogProps & NewPacketProps) {
     >({
         type: 'eth',
     })
-    const [wallets, setWallets] = React.useState<WalletRecord[]>([])
-    const [tokens, setTokens] = React.useState<ERC20TokenRecord[]>([])
 
-    const selectedWallet = wallets.find(x => x.address === selectedWalletAddress)
+    const selectedWallet = wallets === 'loading' ? undefined : wallets.find(x => x.address === selectedWalletAddress)
 
     const availableTokens = Array.from(selectedWallet?.erc20_token_balance || [])
         .filter(([address]) => tokens.find(x => x.address === address))
@@ -143,21 +145,14 @@ function NewPacket(props: RedPacketDialogProps & NewPacketProps) {
     const isSendButtonDisabled = isDisabled.some(x => x)
 
     React.useEffect(() => {
-        const update = () =>
-            Services.Plugin.invokePlugin('maskbook.wallet', 'getWallets').then(([x, y]) => {
-                setWallets(x)
-                setTokens(y)
-                if (selectedWalletAddress === undefined) {
-                    if (x.length === 0) Services.Welcome.openOptionsPage('/wallets/error?reason=nowallet')
-                    else setSelectedWallet(x[0].address)
-                }
-            })
-        update()
-        currentEthereumNetworkSettings.addListener(update)
-        return PluginMessageCenter.on('maskbook.wallets.update', update)
-    }, [selectedWalletAddress])
+        if (selectedWalletAddress === undefined) {
+            if (wallets === 'loading') return
+            if (wallets.length === 0) onRequireNewWallet()
+            else setSelectedWallet(wallets[0].address)
+        }
+    }, [onRequireNewWallet, selectedWalletAddress, wallets])
 
-    const createRedPacket = async () => {
+    const createRedPacket = () => {
         props.onCreateNewPacket({
             duration: 60 /** seconds */ * 60 /** mins */ * 24 /** hours */,
             is_random: Boolean(is_random),
@@ -165,7 +160,7 @@ function NewPacket(props: RedPacketDialogProps & NewPacketProps) {
             send_message,
             send_total: BigInt(send_total * 10 ** (selectedTokenType.type === 'eth' ? 18 : selectedToken!.decimals)),
             sender_address: selectedWalletAddress!,
-            sender_name: id?.linkedPersona?.nickname ?? 'Unknown User',
+            sender_name: props.newRedPacketCreatorName ?? 'Unknown User',
             shares: BigInt(shares),
             token_type: selectedTokenType.type === 'eth' ? RedPacketTokenType.eth : RedPacketTokenType.erc20,
             erc20_token: selectedTokenType.type === 'eth' ? undefined : selectedTokenType.address,
@@ -195,12 +190,15 @@ function NewPacket(props: RedPacketDialogProps & NewPacketProps) {
                     <Select
                         onChange={e => setSelectedWallet(e.target.value as string)}
                         MenuProps={{ container: PortalShadowRoot }}
+                        disabled={wallets === 'loading'}
                         value={selectedWalletAddress || ''}>
-                        {wallets.map(x => (
-                            <MenuItem key={x.address} value={x.address}>
-                                {x.name} ({x.address})
-                            </MenuItem>
-                        ))}
+                        {wallets === 'loading'
+                            ? null
+                            : wallets.map(x => (
+                                  <MenuItem key={x.address} value={x.address}>
+                                      {x.name} ({x.address})
+                                  </MenuItem>
+                              ))}
                     </Select>
                 </FormControl>
             </div>
@@ -318,37 +316,22 @@ const useExistingPacketStyles = makeStyles(theme =>
 
 interface ExistingPacketProps {
     onSelectExistingPacket(opt?: RedPacketJSONPayload | null): void
-    fakeRedPacket?: Partial<RedPacketRecord> | null
+    /**
+     * When the red packet is created and not confirmed by the network,
+     * it will not be written into the database. For UI display purpose,
+     * we need to display it.
+     */
+    preInitialRedPacket?: Partial<RedPacketRecord> | null
+    redPackets: RedPacketRecord[]
+    /**
+     * TODO: Might be merged with preInitialRedPacket.
+     */
+    justCreatedRedPacket: RedPacketRecord | undefined
 }
 
-function ExistingPacket(props: RedPacketDialogProps & ExistingPacketProps) {
-    const { onSelectExistingPacket, fakeRedPacket } = props
+function ExistingPacketUI(props: RedPacketDialogProps & ExistingPacketProps) {
+    const { onSelectExistingPacket, preInitialRedPacket, justCreatedRedPacket, redPackets } = props
     const classes = useStylesExtends(useExistingPacketStyles(), props)
-    const [redPacketRecords, setRedPacketRecords] = React.useState<RedPacketRecord[]>([])
-    const [foundedRedPacket, setFoundedRedPacket] = React.useState<RedPacketRecord | undefined>(undefined)
-
-    React.useEffect(() => {
-        const updateHandler = () => {
-            Services.Plugin.invokePlugin('maskbook.red_packet', 'getRedPackets')
-                .then(packets => {
-                    setFoundedRedPacket(packets.find(p => p.id === fakeRedPacket?.id))
-                    return packets.filter(
-                        p =>
-                            p.id !== fakeRedPacket?.id &&
-                            p.create_transaction_hash &&
-                            (p.status === 'normal' ||
-                                p.status === 'incoming' ||
-                                p.status === 'claimed' ||
-                                p.status === 'pending' ||
-                                p.status === 'claim_pending'),
-                    )
-                })
-                .then(setRedPacketRecords)
-        }
-
-        updateHandler()
-        return PluginMessageCenter.on('maskbook.red_packets.update', updateHandler)
-    }, [fakeRedPacket])
 
     const insertRedPacket = (status?: RedPacketStatus | null, rpid?: RedPacketRecord['red_packet_id']) => {
         if (status === null) return onSelectExistingPacket(null)
@@ -360,14 +343,13 @@ function ExistingPacket(props: RedPacketDialogProps & ExistingPacketProps) {
 
     return (
         <div className={classes.wrapper}>
-            {/*<Typography component="a" color="primary" className={classes.hint} onClick={() => insertRedPacket(null)}>
-                Remove Red Packet from this post
-    </Typography>*/}
-            {!foundedRedPacket && fakeRedPacket && <RedPacketWithState redPacket={fakeRedPacket as RedPacketRecord} />}
-            {foundedRedPacket && (
-                <RedPacketWithState onClick={insertRedPacket} redPacket={foundedRedPacket as RedPacketRecord} />
+            {!justCreatedRedPacket && preInitialRedPacket && (
+                <RedPacketWithState redPacket={preInitialRedPacket as RedPacketRecord} />
             )}
-            {redPacketRecords.map(p => (
+            {justCreatedRedPacket && (
+                <RedPacketWithState onClick={insertRedPacket} redPacket={justCreatedRedPacket as RedPacketRecord} />
+            )}
+            {redPackets.map(p => (
                 <RedPacketWithState onClick={insertRedPacket} key={p.id} redPacket={p} />
             ))}
         </div>
@@ -398,30 +380,69 @@ const useStyles = makeStyles({
 const ResponsiveDialog = withMobileDialog({ breakpoint: 'xs' })(Dialog)
 
 export default function RedPacketDialog(props: RedPacketDialogProps) {
-    const classes = useStylesExtends(useStyles(), props)
-    const rootRef = useRef<HTMLDivElement>(null)
-    const [currentTab, setCurrentTab] = useState(0)
-    const [fakeRedPacket, setFakeRedPacket] = useState<Partial<RedPacketRecord> | null>(null)
+    const tabs = useState<0 | 1>(0)
+    const [preInitialRedPacket, setPreInitialRedPacket] = useState<Partial<RedPacketRecord> | null>(null)
 
-    const createRedPacket = useCallback((opt: createRedPacketInit) => {
-        Services.Plugin.invokePlugin('maskbook.red_packet', 'createRedPacket', opt).then(
-            setFakeRedPacket,
-            console.error,
-        )
-        setFakeRedPacket(({
-            send_message: opt.send_message,
-            sender_name: opt.sender_name,
-            status: 'pending' as RedPacketStatus,
-            erc20_token: opt.erc20_token,
-            raw_payload: {
-                shares: opt.shares,
-                token: {
-                    name: ' ',
+    const createRedPacket = useCallback(
+        (opt: createRedPacketInit) => {
+            Services.Plugin.invokePlugin('maskbook.red_packet', 'createRedPacket', opt).then(
+                setPreInitialRedPacket,
+                console.error,
+            )
+            setPreInitialRedPacket(({
+                send_message: opt.send_message,
+                sender_name: opt.sender_name,
+                status: 'pending' as RedPacketStatus,
+                erc20_token: opt.erc20_token,
+                raw_payload: {
+                    shares: opt.shares,
+                    token: {
+                        name: ' ',
+                    },
                 },
-            },
-        } as any) as Partial<RedPacketRecord>)
-        setCurrentTab(1)
+            } as any) as Partial<RedPacketRecord>)
+            tabs[1](1)
+        },
+        [tabs],
+    )
+    const [wallets, setWallets] = React.useState<WalletRecord[] | 'loading'>('loading')
+    const [tokens, setTokens] = React.useState<ERC20TokenRecord[]>([])
+
+    React.useEffect(() => {
+        const update = () =>
+            Services.Plugin.invokePlugin('maskbook.wallet', 'getWallets').then(([x, y]) => {
+                setWallets(x)
+                setTokens(y)
+            })
+        update()
+        currentEthereumNetworkSettings.addListener(update)
+        return PluginMessageCenter.on('maskbook.wallets.update', update)
     }, [])
+
+    const [redPacket, setRedPacket] = React.useState<RedPacketRecord[]>([])
+    const [justCreatedRedPacket, setJustCreatedRedPacket] = React.useState<RedPacketRecord | undefined>(undefined)
+    React.useEffect(() => {
+        const updateHandler = () => {
+            Services.Plugin.invokePlugin('maskbook.red_packet', 'getRedPackets')
+                .then(packets => {
+                    setJustCreatedRedPacket(packets.find(p => p.id === preInitialRedPacket?.id))
+                    return packets.filter(
+                        p =>
+                            p.id !== preInitialRedPacket?.id &&
+                            p.create_transaction_hash &&
+                            (p.status === 'normal' ||
+                                p.status === 'incoming' ||
+                                p.status === 'claimed' ||
+                                p.status === 'pending' ||
+                                p.status === 'claim_pending'),
+                    )
+                })
+                .then(setRedPacket)
+        }
+
+        updateHandler()
+        return PluginMessageCenter.on('maskbook.red_packets.update', updateHandler)
+    }, [preInitialRedPacket])
 
     const insertRedPacket = (payload?: RedPacketJSONPayload | null) => {
         const ref = getActivatedUI().typedMessageMetadata
@@ -431,21 +452,45 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
         props.onConfirm(payload)
     }
 
+    return (
+        <RedPacketDialogUI
+            {...props}
+            tab={tabs}
+            onRequireNewWallet={() => Services.Welcome.openOptionsPage('/wallets/error?reason=nowallet')}
+            newRedPacketCreatorName={useCurrentIdentity()?.linkedPersona?.nickname}
+            wallets={wallets}
+            tokens={tokens}
+            justCreatedRedPacket={justCreatedRedPacket}
+            redPackets={redPacket}
+            onCreateNewPacket={createRedPacket}
+            onSelectExistingPacket={insertRedPacket}
+            preInitialRedPacket={preInitialRedPacket}
+        />
+    )
+}
+
+export function RedPacketDialogUI(
+    props: RedPacketDialogProps & NewPacketProps & ExistingPacketProps & { tab?: [0 | 1, (next: 0 | 1) => void] },
+) {
+    const classes = useStylesExtends(useStyles(), props)
+    const rootRef = useRef<HTMLDivElement>(null)
+    const [currentTab, setCurrentTab] = or(props.tab, useState<0 | 1>(0)) as [
+        number,
+        React.Dispatch<React.SetStateAction<number>>,
+    ]
+
     const tabs = [
         {
             label: 'Create New',
-            component: <NewPacket {...props} onCreateNewPacket={createRedPacket} />,
+            component: <NewPacketUI {...props} />,
             p: 0,
         },
         {
             label: 'Select Existing',
-            component: (
-                <ExistingPacket {...props} fakeRedPacket={fakeRedPacket} onSelectExistingPacket={insertRedPacket} />
-            ),
+            component: <ExistingPacketUI {...props} />,
             p: 0,
         },
     ]
-
     return (
         <div ref={rootRef}>
             <ResponsiveDialog
@@ -474,7 +519,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                     </Typography>
                 </DialogTitle>
                 <DialogContent className={classes.content}>
-                    <BackupRestoreTab height={400} state={[currentTab, setCurrentTab]} tabs={tabs}></BackupRestoreTab>
+                    <AbstractTab height={400} state={[currentTab, setCurrentTab]} tabs={tabs}></AbstractTab>
                 </DialogContent>
             </ResponsiveDialog>
         </div>

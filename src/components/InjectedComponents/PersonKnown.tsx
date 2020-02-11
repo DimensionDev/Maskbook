@@ -6,6 +6,7 @@ import { ProfileIdentifier } from '../../database/type'
 import Services from '../../extension/service'
 import { ValueRef } from '@holoflows/kit/es'
 import { useValueRef } from '../../utils/hooks/useValueRef'
+import { Typography } from '@material-ui/core'
 
 export interface PersonKnownProps {
     pageOwner: ValueRef<ProfileIdentifier | null>
@@ -19,6 +20,15 @@ export function PersonKnown(props: PersonKnownProps) {
     const owner = useValueRef(pageOwner)
 
     if (!owner) return null
+    const header = (text: string) => (
+        <Typography
+            variant="caption"
+            color="textSecondary"
+            gutterBottom
+            style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            {text}
+        </Typography>
+    )
     return (
         <AsyncComponent
             promise={async () => {
@@ -43,17 +53,14 @@ export function PersonKnown(props: PersonKnownProps) {
                     case 'self':
                         return (
                             <AdditionalContent
-                                hideIcon
-                                center
-                                title={geti18nString('please_include_proof_your_bio', data.prove!)}
+                                header={header(geti18nString('please_include_proof_your_bio', data.prove!))}
                                 {...props.AdditionalContentProps}
                             />
                         )
                     case 'others':
                         return (
                             <AdditionalContent
-                                center
-                                title={geti18nString('seen_in_maskbook_database')}
+                                header={header(geti18nString('seen_in_maskbook_database'))}
                                 {...props.AdditionalContentProps}
                             />
                         )

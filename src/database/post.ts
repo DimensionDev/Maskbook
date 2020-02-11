@@ -23,11 +23,12 @@ const db = createDBAccess(() => {
                 store.getAll().then(values => {
                     store.clear()
                     for (const each of values) {
-                        const id = Identifier.fromString(each.identifier, PostIdentifier).value
-                        if (id) {
+                        const id = Identifier.fromString(each.identifier, PostIdentifier)
+                        if (id.ok) {
+                            const { postId, identifier } = id.val
                             each.identifier = new PostIVIdentifier(
-                                (id.identifier as ProfileIdentifier).network,
-                                id.postId,
+                                (identifier as ProfileIdentifier).network,
+                                postId,
                             ).toText()
                             store.add(each)
                         }
@@ -121,11 +122,12 @@ export async function queryPostsDB(
     t = t || (await db()).transaction('post')
     const selected: PostRecord[] = []
     for await (const { value } of t.store) {
-        const id = Identifier.fromString(value.identifier, PostIVIdentifier).value
-        if (!id) {
-            console.warn(`Found invalid identifier, expected ${PostIVIdentifier}, found ${value.identifier}`)
+        const idResult = Identifier.fromString(value.identifier, PostIVIdentifier)
+        if (idResult.err) {
+            console.warn(idResult.val.message)
             continue
         }
+        const id = idResult.val
         if (typeof query === 'string') {
             if (id.network === query) selected.push(postOutDB(value))
         } else {
@@ -148,9 +150,7 @@ function postOutDB(db: PostDBRecord): PostRecord {
         detail.reason.forEach(x => x.type === 'group' && restorePrototype(x.group, GroupIdentifier.prototype))
     }
     return {
-        identifier: Identifier.fromString(identifier, PostIVIdentifier).unwrap(
-            `Invalid identifier, expected PostIVIdentifier, actual ${identifier}`,
-        ),
+        identifier: Identifier.fromString(identifier, PostIVIdentifier).unwrap(),
         recipientGroups: restorePrototypeArray(recipientGroups, GroupIdentifier.prototype),
         postBy: restorePrototype(postBy, ProfileIdentifier.prototype),
         recipients: recipients as PostRecord['recipients'],
@@ -193,7 +193,8 @@ export function recipientsToNext(x: PostRecord['recipients']): RecipientNext {
         const next: RecipientDetailNext = {
             reason: new Set(x[key].reason),
         }
-        map.set(Identifier.fromString(key, ProfileIdentifier).value, next)
+        const id = Identifier.fromString(key, ProfileIdentifier)
+        id.ok ? map.set(id.val, next) : console.warn(id.val.message)
     }
     return map
 }

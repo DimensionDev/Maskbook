@@ -8,7 +8,7 @@ import { makeStyles } from '@material-ui/core/styles'
 import { Button, List } from '@material-ui/core'
 import { SSRRenderer } from '../../utils/SSRRenderer'
 import { debugModeSetting } from '../../components/shared-settings/settings'
-import { useSettingsUI } from '../../components/shared-settings/createSettings'
+import { SettingsUI } from '../../components/shared-settings/useSettingsUI'
 import { ChooseIdentity } from '../../components/shared/ChooseIdentity'
 import { getActivatedUI } from '../../social-network/ui'
 import { useAsync } from '../../utils/components/AsyncComponent'
@@ -61,7 +61,9 @@ export function Popup() {
                     onClick={e => browser.runtime.openOptionsPage()}>
                     {geti18nString('popup_enter_dashboard')}
                 </Button>
-                <List>{useSettingsUI(debugModeSetting)}</List>
+                <List>
+                    <SettingsUI value={debugModeSetting} />
+                </List>
             </main>
         </ThemeProvider>
     )

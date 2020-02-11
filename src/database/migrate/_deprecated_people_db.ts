@@ -41,9 +41,7 @@ async function outDb({ identifier, publicKey, privateKey, ...rest }: PersonRecor
     rest.groups.forEach(y => Object.setPrototypeOf(y, GroupIdentifier.prototype))
     const result: PersonRecord = {
         ...rest,
-        identifier: Identifier.fromString(identifier, ProfileIdentifier).unwrap(
-            `Invalid identifier, expected ProfileIdentifier, actual ${identifier}`,
-        ),
+        identifier: Identifier.fromString(identifier, ProfileIdentifier).unwrap(),
     }
     if (publicKey) result.publicKey = await JsonWebKeyToCryptoKey(publicKey, ...getKeyParameter('ecdh'))
     if (privateKey) result.privateKey = await JsonWebKeyToCryptoKey(privateKey, ...getKeyParameter('ecdh'))
@@ -123,12 +121,12 @@ export async function queryPeopleDB(
     if (typeof query === 'function') {
         // eslint-disable-next-line @typescript-eslint/await-thenable
         for await (const { value, key } of t.store) {
-            const id = Identifier.fromString(key, ProfileIdentifier).value
-            if (!id) {
-                console.warn('Found invalid identifier', key)
+            const id = Identifier.fromString(key, ProfileIdentifier)
+            if (id.err) {
+                console.warn('Found invalid identifier', id.val.message)
                 continue
             }
-            if (query(id, value)) result.push(value)
+            if (query(id.val, value)) result.push(value)
         }
     } else {
         result.push(

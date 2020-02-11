@@ -7,7 +7,7 @@ import {
     ProfileIdentifier,
     PreDefinedVirtualGroupNames,
 } from '../type'
-import { generate_ECDH_256k1_KeyPair, import_ECDH_256k1_Key } from '../../utils/crypto.subtle'
+import { import_ECDH_256k1_Key } from '../../utils/crypto.subtle'
 
 test('ProfileIdentifier', () => {
     const normal = new ProfileIdentifier('facebook.com', 'user_id')
@@ -115,29 +115,27 @@ test('Static Identifier method', () => {
     expect(Identifier.equals(realG, realG)).toBe(true)
     expect(Identifier.equals(realG, normal)).toBe(false)
 
-    expect(() => Identifier.fromString('').unwrap('err')).toThrowError()
-    expect(Identifier.fromString('').value).toBeFalsy()
-    expect(Identifier.fromString('person:facebook.com/user_id').value).toBeInstanceOf(ProfileIdentifier)
+    expect(() => Identifier.fromString('').unwrap()).toThrowError()
+    expect(Identifier.fromString('').ok).toBeFalsy()
+    expect(Identifier.fromString('person:facebook.com/user_id').val).toBeInstanceOf(ProfileIdentifier)
     {
-        const post = Identifier.fromString('post:post_id_1234/person:facebook.com/user_id').value
+        const post = Identifier.fromString('post:post_id_1234/person:facebook.com/user_id').val
         expect(post).toBeInstanceOf(PostIdentifier)
         expect((post as PostIdentifier).identifier.toText()).toBe(normal.toText())
     }
-    expect(Identifier.fromString('post_iv:facebook.com/akmfkmekfmew').value).toBeInstanceOf(PostIVIdentifier)
-    expect(Identifier.fromString('ec_key:secp256k1/ApDhiWBPBjMDMbUzP0JdI0WnXwo|a2kctSnMkkJz9mPm').value).toBeInstanceOf(
+    expect(Identifier.fromString('post_iv:facebook.com/akmfkmekfmew').val).toBeInstanceOf(PostIVIdentifier)
+    expect(Identifier.fromString('ec_key:secp256k1/ApDhiWBPBjMDMbUzP0JdI0WnXwo|a2kctSnMkkJz9mPm').val).toBeInstanceOf(
         ECKeyIdentifier,
     )
-    expect(Identifier.fromString('group:facebook.com/owner/_default_friends_group_').value).toBeInstanceOf(
+    expect(Identifier.fromString('group:facebook.com/owner/_default_friends_group_').val).toBeInstanceOf(
         GroupIdentifier,
     )
 
     expect(
-        Identifier.fromString('group:facebook.com/owner/_default_friends_group_', GroupIdentifier).value,
+        Identifier.fromString('group:facebook.com/owner/_default_friends_group_', GroupIdentifier).val,
     ).toBeInstanceOf(GroupIdentifier)
-    expect(
-        Identifier.fromString('group:facebook.com/owner/_default_friends_group_', ProfileIdentifier).value,
-    ).toBeFalsy()
+    expect(Identifier.fromString('group:facebook.com/owner/_default_friends_group_', ProfileIdentifier).ok).toBeFalsy()
     expect(() =>
-        Identifier.fromString('group:facebook.com/owner/_default_friends_group_', ProfileIdentifier).unwrap(''),
+        Identifier.fromString('group:facebook.com/owner/_default_friends_group_', ProfileIdentifier).unwrap(),
     ).toThrowError()
 })

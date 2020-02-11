@@ -1,12 +1,12 @@
-import React, { useMemo, useState } from 'react'
+import React, { useMemo, useState, useEffect } from 'react'
 import AsyncComponent from '../../utils/components/AsyncComponent'
 import { AdditionalContent, AdditionalContentProps } from './AdditionalPostContent'
 import { useShareMenu } from './SelectPeopleDialog'
-import { sleep } from '../../utils/utils'
+import { sleep, getUrl } from '../../utils/utils'
 import { ServicesWithProgress } from '../../extension/service'
 import { geti18nString } from '../../utils/i18n'
 import { makeStyles } from '@material-ui/styles'
-import { Box, Link, useMediaQuery, useTheme } from '@material-ui/core'
+import { Box, Link, useMediaQuery, useTheme, Typography } from '@material-ui/core'
 import { Profile } from '../../database'
 import { Identifier, ProfileIdentifier, PostIdentifier } from '../../database/type'
 import { NotSetupYetPrompt } from '../shared/NotSetupYetPrompt'
@@ -24,35 +24,53 @@ import { DebugList } from '../DebugModeUI/DebugList'
 import { useStylesExtends } from '../custom-ui-helper'
 import { BannerProps } from '../Welcomes/Banner'
 import { TypedMessage } from '../../extension/background-script/CryptoServices/utils'
+import RedPacketInDecryptedPost from '../../plugins/Wallet/UI/RedPacket/RedPacketInDecryptedPost'
 
 export interface DecryptPostSuccessProps extends withClasses<KeysInferFromUseStyles<typeof useSuccessStyles>> {
     data: { signatureVerifyResult: boolean; content: TypedMessage }
     postIdentifier?: PostIdentifier<ProfileIdentifier>
     requestAppendRecipients?(to: Profile[]): Promise<void>
     alreadySelectedPreviously: Profile[]
-    people: Profile[]
+    profiles: Profile[]
+    sharedPublic?: boolean
     AdditionalContentProps?: Partial<AdditionalContentProps>
 }
 
 const useSuccessStyles = makeStyles({
+    header: { display: 'flex', alignItems: 'center' },
+    addRecipientsTitle: { marginLeft: '0.25em', marginRight: '0.25em' },
     addRecipientsLink: { marginRight: '1em', cursor: 'pointer' },
     signatureVerifyPassed: { color: 'green' },
     signatureVerifyFailed: { color: 'red' },
 })
 
-export const DecryptPostSuccess = React.memo(function DecryptPostSuccess({
-    data,
-    people,
-    postIdentifier,
-    ...props
-}: DecryptPostSuccessProps) {
-    const classes = useStylesExtends(useSuccessStyles(), props)
-    const { ShareMenu, showShare } = useShareMenu(
+export const DecryptPostSuccess = React.memo(function DecryptPostSuccess(props: DecryptPostSuccessProps) {
+    const { data, profiles: people, postIdentifier } = props
+    const shareMenu = useShareMenu(
         people,
         props.requestAppendRecipients || (async () => {}),
         props.alreadySelectedPreviously,
     )
+    return (
+        <AdditionalContent
+            metadataRenderer={{
+                after: props => <RedPacketInDecryptedPost message={props.message} postIdentifier={postIdentifier} />,
+            }}
+            header={<DecryptPostSuccessHeader {...props} shareMenu={shareMenu} />}
+            message={data.content}
+            {...props.AdditionalContentProps}
+        />
+    )
+})
+
+function DecryptPostSuccessHeader(props: { shareMenu: ReturnType<typeof useShareMenu> } & DecryptPostSuccessProps) {
     const theme = useTheme()
+    const classes = useStylesExtends(useSuccessStyles(), props)
+    const {
+        shareMenu: { ShareMenu, showShare },
+        data,
+        sharedPublic,
+    } = props
     let passString = geti18nString('decrypted_postbox_verified')
     let failString = geti18nString('decrypted_postbox_not_verified')
 
@@ -60,41 +78,25 @@ export const DecryptPostSuccess = React.memo(function DecryptPostSuccess({
         passString = '✔'
         failString = '❌'
     }
-    const msg = data.content
-    if (msg.type === 'unknown')
-        return <AdditionalContent title="Unknown type of Maskbook message" {...props.AdditionalContentProps} />
-    else if (msg.type === 'complex')
-        return (
-            <AdditionalContent
-                title="Complex Maskbook message is not renderable currently"
-                {...props.AdditionalContentProps}
-            />
-        )
     return (
-        <AdditionalContent
-            postIdentifier={postIdentifier}
-            title={
-                <>
-                    {ShareMenu}
-                    {geti18nString('decrypted_postbox_title')}
-                    <Box flex={1} />
-                    {props.requestAppendRecipients && (
-                        <Link color="primary" onClick={showShare} className={classes.addRecipientsLink}>
-                            {geti18nString('decrypted_postbox_add_recipients')}
-                        </Link>
-                    )}
-                    {data.signatureVerifyResult ? (
-                        <span className={classes.signatureVerifyPassed}>{passString}</span>
-                    ) : (
-                        <span className={classes.signatureVerifyFailed}>{failString}</span>
-                    )}
-                </>
-            }
-            renderItem={msg}
-            {...props.AdditionalContentProps}
-        />
+        <Typography variant="caption" color="textSecondary" gutterBottom className={classes.header}>
+            <img alt="" width={16} height={16} src={getUrl('/maskbook-icon-padded.png')} />
+            {ShareMenu}
+            <span className={classes.addRecipientsTitle}>{geti18nString('decrypted_postbox_title')}</span>
+            <Box flex={1} />
+            {props.requestAppendRecipients && !sharedPublic && (
+                <Link color="primary" onClick={showShare} className={classes.addRecipientsLink}>
+                    {geti18nString('decrypted_postbox_add_recipients')}
+                </Link>
+            )}
+            {data.signatureVerifyResult ? (
+                <span className={classes.signatureVerifyPassed}>{passString}</span>
+            ) : (
+                <span className={classes.signatureVerifyFailed}>{failString}</span>
+            )}
+        </Typography>
     )
-})
+}
 
 export interface DecryptPostAwaitingProps {
     type?: DecryptionProgress
@@ -108,7 +110,7 @@ export const DecryptPostAwaiting = React.memo(function DecryptPostAwaiting(props
     } as const
     return (
         <AdditionalContent
-            title={geti18nString(key[(props.type && props.type.progress) || 'undefined'])}
+            header={geti18nString(key[(props.type && props.type.progress) || 'undefined'])}
             {...props.AdditionalContentProps}
         />
     )
@@ -125,8 +127,8 @@ export const DecryptPostFailed = React.memo(function DecryptPostFailed({ error, 
     }
     return (
         <AdditionalContent
-            title={geti18nString('service_decryption_failed')}
-            renderText={error?.message}
+            header={geti18nString('service_decryption_failed')}
+            message={error?.message}
             {...props.AdditionalContentProps}
         />
     )
@@ -134,8 +136,9 @@ export const DecryptPostFailed = React.memo(function DecryptPostFailed({ error, 
 
 export interface DecryptPostProps {
     onDecrypted(post: TypedMessage): void
+    onDecryptedRaw?(post: string): void
     postBy: ProfileIdentifier
-    postId?: string
+    postId?: PostIdentifier<ProfileIdentifier>
     whoAmI: ProfileIdentifier
     encryptedText: string
     people: Profile[]
@@ -161,6 +164,10 @@ export function DecryptPost(props: DecryptPostProps) {
         undefined,
     )
 
+    const [postPayload, setPostPayload] = useState(() => deconstructPayload(encryptedText, null))
+    const sharedPublic = (postPayload?.version === -38 ? postPayload.sharedPublic : false) ?? false
+    useEffect(() => setPostPayload(deconstructPayload(encryptedText, null)), [encryptedText])
+
     const [debugHash, setDebugHash] = useState<string>('Unknown')
     const setting = useValueRef(debugModeSetting)
     const isDebugging = GetContext() === 'options' ? true : setting
@@ -174,11 +181,8 @@ export function DecryptPost(props: DecryptPostProps) {
         }
     }, [requestAppendRecipients, postBy, whoAmI])
     const debugHashJSX = useMemo(() => {
-        if (!isDebugging) return null
-        const postPayload = deconstructPayload(encryptedText, null)
-        if (!postPayload) return null
+        if (!isDebugging || !postPayload) return null
         const postByMyself = <DebugModeUI_PostHashDialog network={postBy.network} post={encryptedText} />
-
         const ownersAESKeyEncrypted =
             postPayload.version === -38 ? postPayload.AESKeyEncrypted : postPayload.ownersAESKeyEncrypted
         return (
@@ -194,16 +198,17 @@ export function DecryptPost(props: DecryptPostProps) {
                 ]}
             />
         )
-    }, [debugHash, whoAmI, decryptedResult, postBy, encryptedText, isDebugging])
+    }, [isDebugging, postPayload, postBy, encryptedText, whoAmI, debugHash, decryptedResult])
     if (decryptedResult && !props.disableSuccessDecryptionCache) {
         return (
             <>
                 <Success
                     data={decryptedResult}
-                    postIdentifier={postId ? new PostIdentifier(postBy, postId) : PostIdentifier.unknown}
+                    postIdentifier={postId}
                     alreadySelectedPreviously={alreadySelectedPreviously}
                     requestAppendRecipients={requestAppendRecipientsWrapped}
-                    people={people}
+                    profiles={people}
+                    sharedPublic={sharedPublic}
                     {...props.successComponentProps}
                 />
                 {isDebugging ? debugHashJSX : null}
@@ -220,13 +225,7 @@ export function DecryptPost(props: DecryptPostProps) {
         <>
             <AsyncComponent
                 promise={async () => {
-                    const postPayload = deconstructPayload(encryptedText, null)
-                    const iter = ServicesWithProgress.decryptFrom(
-                        encryptedText,
-                        postBy,
-                        whoAmI,
-                        (postPayload?.version === -38 ? postPayload.sharedPublic : false) ?? false,
-                    )
+                    const iter = ServicesWithProgress.decryptFrom(encryptedText, postBy, whoAmI, sharedPublic)
                     let last = await iter.next()
                     while (!last.done) {
                         if ('debug' in last.value) {
@@ -255,20 +254,21 @@ export function DecryptPost(props: DecryptPostProps) {
                     }
                     setDecryptedResult(result.data)
                     props.onDecrypted(result.data.content)
+                    props.onDecryptedRaw?.(result.data.rawContent)
 
                     // HACK: the is patch, hidden NOT VERIFIED in everyone
-                    const postPayload = deconstructPayload(encryptedText, null)
-                    if (postPayload?.version === -38 && postPayload.sharedPublic) {
+                    if (sharedPublic) {
                         result.data.signatureVerifyResult = true
                     }
 
                     return (
                         <Success
                             data={result.data}
-                            postIdentifier={postId ? new PostIdentifier(postBy, postId) : PostIdentifier.unknown}
+                            postIdentifier={postId}
                             alreadySelectedPreviously={alreadySelectedPreviously}
                             requestAppendRecipients={requestAppendRecipientsWrapped}
-                            people={people}
+                            profiles={people}
+                            sharedPublic={sharedPublic}
                             {...props.successComponentProps}
                         />
                     )

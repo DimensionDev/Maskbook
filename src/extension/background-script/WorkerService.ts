@@ -13,7 +13,7 @@ const getServiceFromNetworkWorker = memoize((worker: SocialNetworkWorker) => {
     return AsyncCall<ServiceType>(undefined, {
         serializer: Serialization,
         key: worker.internalName,
-        messageChannel: new MessageCenter(),
+        messageChannel: new MessageCenter(false),
     })
 })
 export function getCurrentNetworkWorkerService(network: string | Identifier) {
@@ -34,7 +34,7 @@ export function startWorkerService(e: SocialNetworkWorker) {
     AsyncCall(impl, {
         serializer: Serialization,
         key: e.internalName,
-        messageChannel: new MessageCenter(),
+        messageChannel: new MessageCenter(false),
         log: true,
         strict: { methodNotFound: true, noUndefined: false, unknownMessage: false },
     })

@@ -4,7 +4,7 @@ import { Typography, styled, Theme, makeStyles, createStyles, InputBase } from '
 import { geti18nString } from '../../../utils/i18n'
 import { useDragAndDrop } from '../../../utils/hooks/useDragAndDrop'
 import { Link, useHistory } from 'react-router-dom'
-import BackupRestoreTab, { BackupRestoreTabProps } from '../DashboardComponents/BackupRestoreTab'
+import AbstractTab, { AbstractTabProps } from '../DashboardComponents/AbstractTab'
 import ActionButton from '../DashboardComponents/ActionButton'
 import { decompressBackupFile } from '../../../utils/type-transform/BackupFileShortRepresentation'
 import Services from '../../service'
@@ -149,7 +149,7 @@ export default function InitStep1R() {
         ) : null
     }
 
-    const tabProps: BackupRestoreTabProps = {
+    const tabProps: AbstractTabProps = {
         tabs: [
             {
                 label: 'File',
@@ -190,7 +190,7 @@ export default function InitStep1R() {
 
     const content = (
         <div style={{ alignSelf: 'stretch', textAlign: 'center', width: '100%' }}>
-            <BackupRestoreTab height={200} {...tabProps}></BackupRestoreTab>
+            <AbstractTab height={200} {...tabProps}></AbstractTab>
         </div>
     )
 

@@ -10,7 +10,7 @@ import {
     steganographyModeSetting,
     disableOpenNewTabInBackgroundSettings,
 } from '../../components/shared-settings/settings'
-import { useSettingsUI } from '../../components/shared-settings/createSettings'
+import { SettingsUI } from '../../components/shared-settings/useSettingsUI'
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -22,9 +22,11 @@ const DashboardDebugPage = () => {
     return (
         <>
             <div className={classes.root}>
-                <List>{useSettingsUI(debugModeSetting)}</List>
-                <List>{useSettingsUI(steganographyModeSetting)}</List>
-                <List>{useSettingsUI(disableOpenNewTabInBackgroundSettings)}</List>
+                <List>
+                    <SettingsUI value={debugModeSetting} />
+                    <SettingsUI value={steganographyModeSetting} />
+                    <SettingsUI value={disableOpenNewTabInBackgroundSettings} />
+                </List>
                 <Grid container item spacing={2} direction="column" alignItems="stretch" wrap="nowrap">
                     <Grid item>
                         <SelectEthereumNetwork />
