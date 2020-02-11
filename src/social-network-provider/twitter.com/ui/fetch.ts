@@ -158,8 +158,8 @@ const registerPostCollector = (self: SocialNetworkUI) => {
             const tweetNode = getTweetNode(node)
             const isQuotedTweet = tweetNode?.getAttribute('role') === 'blockquote'
             return tweetNode
-                ? `${isQuotedTweet ? 'QUOTED' : ''}${postIdParser(tweetNode)}${node.innerHTML}`
-                : node.innerHTML
+                ? `${isQuotedTweet ? 'QUOTED' : ''}${postIdParser(tweetNode)}${node.innerText.replace(/\s/gms, '')}`
+                : node.innerText
         })
         .startWatch({
             childList: true,
