@@ -1,10 +1,9 @@
-// noinspection NpmUsedModulesInstalled
 const webpack = require('webpack')
 const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const fs = require('fs')
 
-const src = file => path.join(__dirname, '../', file)
+const src = file => path.join(__dirname, file)
 /**
  * Polyfills that needs to be copied to dist
  */
@@ -15,11 +14,11 @@ let polyfills = [
 
 const publicDir = src('./public')
 const publicPolyfill = src('./public/polyfill')
-const dist = src('./dist')
 
+// TODO: what does it used for?
 process.env.BROWSER = 'none'
 
-const SSRPlugin = require('./SSRPlugin')
+const SSRPlugin = require('./config-overrides/SSRPlugin')
 const WebExtensionHotLoadPlugin = require('webpack-web-ext-plugin')
 const ManifestGeneratorPlugin = require('webpack-extension-manifest-plugin')
 
@@ -32,7 +31,7 @@ const ManifestGeneratorPlugin = require('webpack-extension-manifest-plugin')
  * --chromium
  * --wk-webview
  */
-const target = (argv => ({
+const calcTarget = argv => ({
     /** @type {'nightly' | boolean} */
     Firefox: (argv.firefox || argv['firefox-android'] || argv['firefox-gecko']),
     /** @type {string | boolean} */
@@ -45,25 +44,64 @@ const target = (argv => ({
     Chromium: (argv.chromium),
     /** @type {boolean} */
     WKWebview: (argv['wk-webview']),
-}))(require('yargs').argv)
+})
 
 /**
- * @param config {import("webpack").Configuration}
- * @param env {'development' | 'production'}
+ * @param {object} argvEnv
  * @returns {import("webpack").Configuration}
  */
-function override(config, env) {
+module.exports = (argvEnv, argv) => {
+    const target = calcTarget(argv)
+
     if (target.Firefox) {
         polyfills = polyfills.filter(name => !name.includes('webextension-polyfill'))
-        if (target.StandaloneGeckoView) polyfills.push('src/polyfill/permissions.js')
     }
     if (target.StandaloneGeckoView || target.WKWebview) polyfills.push('src/polyfill/permissions.js')
 
-    // CSP bans eval
-    // And non-inline source-map not working
-    if (env === 'development') config.devtool = 'inline-source-map'
-    else delete config.devtool
-    config.optimization.minimize = false
+    /** @type {"production" | "development"} */
+    const env = argv.mode
+
+    const dist = env === 'production' ? src('./build') : src('./dist')
+
+    /** @type {import('webpack').Configuration} */
+    const config = {
+        mode: env,
+        // CSP bans eval
+        // And non-inline source-map not working
+        devtool: env === 'development' ? 'inline-source-map' : false,
+        entry: {},
+        resolve: {
+            extensions: ['.js', '.ts', '.tsx'],
+            // https://github.com/facebook/create-react-app/blob/865ea05bc93fd2ac56b7e561181c7dc2cead3e78/packages/react-scripts/config/webpack.config.js#L304
+            // add it if any one need React profiling mode for React devtools
+        },
+        module: {
+            strictExportPresence: true,
+            // ? We're going to move to ESModule in future.
+            // ? Don't add new loaders if the motivation is not strong enough.
+            rules: [{ parser: { requireEnsure: false } }, addTSLoader()],
+        },
+        plugins: [
+            new webpack.ProgressPlugin(),
+            new webpack.DefinePlugin({
+                'process.env.NODE_ENV': JSON.stringify(env),
+            }),
+            // The following plugins are from react-dev-utils. let me know if any one need it.
+            // WatchMissingNodeModulesPlugin
+            // ModuleNotFoundPlugin
+            // ModuleScopePlugin
+        ],
+        node: disabledNodeBuiltins(),
+        optimization: { minimize: false },
+        output: {
+            // futureEmitAssets prevents webpackDevServer from writing file to disk
+            futureEmitAssets: false,
+            path: dist,
+        },
+    }
+    /**
+     * @param {string} src
+     */
     function appendReactDevtools(src) {
         /**
          * If you are using Firefox and want to use React devtools,
@@ -98,13 +136,11 @@ function override(config, env) {
     config.module.exprContextCritical = false
     config.module.unknownContextCritical = false
 
-    config.plugins = config.plugins.filter(x => x.constructor.name !== 'HtmlWebpackPlugin')
-    config.plugins = config.plugins.filter(x => x.constructor.name !== 'ManifestPlugin')
     /**
      * @param {HtmlWebpackPlugin.Options} options
      */
     function newPage(options = {}) {
-        let templateContent = fs.readFileSync(path.join(__dirname, './template.html'), 'utf8')
+        let templateContent = fs.readFileSync(src('./config-overrides/template.html'), 'utf8')
         if (target.Firefox) {
             templateContent = templateContent.replace(
                 '<script src="/polyfill/browser-polyfill.min.js"></script>',
@@ -118,9 +154,17 @@ function override(config, env) {
         })
     }
 
+    config.devServer = {
+        writeToDisk: true,
+        compress: false,
+        hot: false,
+        inline: false,
+        injectClient: false,
+        liveReload: false,
+    }
+
     // The background.js is too big to analyzed by the Firefox Addon's linter.
-    // After https://github.com/DimensionDev/Maskbook/pull/372 is shipped this can be removed.
-    if (target.Firefox) {
+    if (target.Firefox && env === 'production') {
         const TerserPlugin = require('terser-webpack-plugin')
         config.plugins.push(new TerserPlugin())
     }
@@ -179,8 +223,8 @@ function override(config, env) {
 
     // Manifest modifies
     {
-        const manifest = require('../src/manifest.json')
-        const modifiers = require('./manifest.overrides')
+        const manifest = require('./src/manifest.json')
+        const modifiers = require('./config-overrides/manifest.overrides')
         if (target.Chromium) modifiers.chromium(manifest)
         if (target.FirefoxDesktop) modifiers.firefox(manifest)
         if (target.FirefoxForAndroid) modifiers.firefox(manifest)
@@ -221,68 +265,43 @@ function override(config, env) {
         config.plugins.push(new SSRPlugin('popup.html', src('./src/extension/popup-page/index.tsx')))
         config.plugins.push(new SSRPlugin('index.html', src('./src/index.tsx')))
     }
-    if (env === 'development') {
-        const tsCheckerPlugin = config.plugins.filter(x => x.constructor.name === 'ForkTsCheckerWebpackPlugin')[0]
-        tsCheckerPlugin.compilerOptions.isolatedModules = false
-    } else {
-        config.plugins = config.plugins.filter(x => x.constructor.name !== 'ForkTsCheckerWebpackPlugin')
-    }
-
-    // Let webpack build to es2017 instead of es5
-    config.module.rules = [
-        // from cra
-        {
-            parser: { requireEnsure: false },
-        },
-        // eslint omitted
-        {
-            oneOf: [
-                // url-loader from cra
-                {
-                    test: [/\.bmp$/, /\.gif$/, /\.jpe?g$/, /\.png$/],
-                    loader: require.resolve('url-loader'),
-                    options: { limit: 10000, name: 'static/media/[name].[hash:8].[ext]' },
-                },
-                // babel-loader omitted
-                // babel-loader omitted
-                // css module loader omitted
-                // css module loader omitted
-                // scss loader omitted
-                // scss (with css module) loader omitted,
-                // file-loader from cra
-                {
-                    loader: require.resolve('file-loader'),
-                    exclude: [/\.(js|mjs|jsx|ts|tsx)$/, /\.html$/, /\.json$/],
-                    options: { name: 'static/media/[name].[hash:8].[ext]' },
-                },
-                // our own ts-loader
-                {
-                    test: /\.(js|mjs|jsx|ts|tsx)$/,
-                    include: src('src'),
-                    loader: require.resolve('ts-loader'),
-                    options: {
-                        transpileOnly: true,
-                        compilerOptions: {
-                            jsx: 'react',
-                        },
-                    },
-                },
-            ],
-        },
-    ]
-
     // futureEmitAssets prevents webpackDevServer from writing file to disk
     config.output.futureEmitAssets = false
     return config
 }
 
-module.exports = {
-    webpack: override,
-    devServer: function(configFunction) {
-        return function(proxy, allowedHost) {
-            const config = configFunction(proxy, allowedHost)
-            config.writeToDisk = true
-            return config
-        }
-    },
+/**
+ * @returns {import('webpack').Rule}
+ */
+function addTSLoader() {
+    return {
+        test: /\.(js|ts|tsx)$/,
+        include: src('./src'),
+        loader: require.resolve('ts-loader'),
+        options: {
+            transpileOnly: true,
+            compilerOptions: {
+                jsx: 'react',
+            },
+        },
+    }
+}
+
+/**
+ * (Copied from cra and not modified.)
+ * Some libraries import Node modules but don't use them in the browser.
+ * Tell Webpack to provide empty mocks for them so importing them works.
+ * @returns {import('webpack').Configuration['node']}
+ */
+function disabledNodeBuiltins() {
+    return {
+        module: 'empty',
+        dgram: 'empty',
+        dns: 'mock',
+        fs: 'empty',
+        http2: 'empty',
+        net: 'empty',
+        tls: 'empty',
+        child_process: 'empty',
+    }
 }
