@@ -1,5 +1,5 @@
 <a href="https://maskbook.com/">
-  <img src="https://dimensiondev.github.io/Maskbook-VI/the-laughing-mask.png"
+  <img src="https://dimensiondev.github.io/Maskbook-VI/assets/Logo/MB--Logo--Ring--ForceCircle.png"
        width="200" height="200" title="([I:b])" alt="([I:b])">
 </a>
 
@@ -66,7 +66,7 @@ Help us by donating us by:
 -   If branch name contains `android` or `gecko`, CI will build for target `firefox` `gecko`
 -   For any other branches, CI will build for target `base` `chromium` `firefox`
 
-#### Non-famous libraries we are using
+#### Other libraries we are using
 
 -   `@holoflows/kit` - A toolkit for extension developing
 -   `anchorme` - Use it to detect links in the text
