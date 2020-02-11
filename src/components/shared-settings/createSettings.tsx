@@ -6,7 +6,7 @@ export interface SettingsTexts {
     secondary?: string
 }
 export const texts = new WeakMap<ValueRef<any>, SettingsTexts>()
-console.log(texts)
+
 function createInternalSettings<T extends browser.storage.StorageValue>(
     storage: string,
     key: string,
