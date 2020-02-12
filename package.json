@@ -117,6 +117,7 @@
     "fake-indexeddb": "^3.0.0",
     "html-webpack-plugin": "^4.0.0-beta.11",
     "jest": "^25.1.0",
+    "jest-environment-jsdom-fourteen": "^1.0.1",
     "jest-esm-transformer": "^1.0.0",
     "jest-junit": "^10.0.0",
     "lint-staged": "^10.0.7",

@@ -8,11 +8,7 @@ module.exports = {
         },
     },
     globalSetup: path.join(__dirname, './scripts/jest-global-setup'),
-    setupFiles: [
-        require.resolve('react-app-polyfill/jsdom'),
-        require.resolve('fake-indexeddb/auto'),
-        path.join(__dirname, './scripts/jest-setup.js'),
-    ],
+    setupFiles: [require.resolve('fake-indexeddb/auto'), path.join(__dirname, './scripts/jest-setup.js')],
     // skip packages other than 'ts-results'
     transformIgnorePatterns: ['node_modules/[a-su-z0-0@]'],
     transform: {
