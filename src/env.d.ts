@@ -34,3 +34,7 @@ declare module 'typeson' {
         parseAsync<T>(...args: Parameters<JSON['parse']>): Promise<T>
     }
 }
+
+declare module 'storybook-addon-figma' {
+    export const WithFigma: typeof import('react').Component<void>
+}
