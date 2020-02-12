@@ -181,7 +181,18 @@ export function PostDialogUI(props: PostDialogUIProps) {
                             <ClickableChip
                                 ChipProps={{
                                     label: '💰 Red Packet',
-                                    onClick: () => setRedPacketDialogOpen(true),
+                                    onClick: async () => {
+                                        const [wallets] = await Services.Plugin.invokePlugin(
+                                            'maskbook.wallet',
+                                            'getWallets',
+                                        )
+
+                                        if (wallets.length) {
+                                            setRedPacketDialogOpen(true)
+                                        } else {
+                                            Services.Welcome.openOptionsPage('/wallets/error?reason=nowallet')
+                                        }
+                                    },
                                 }}
                             />
                         </Box>
