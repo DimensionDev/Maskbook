@@ -797,5 +797,26 @@
     },
     "post_dialog__select_recipients_share_to_everyone": {
         "message": "任何人"
+    },
+    "settings_enable_debug": {
+        "message": "開啓調試模式"
+    },
+    "settings_enable_debug_desc": {
+        "message": "Maskbook 會顯示額外的信息以幫助調試"
+    },
+    "settings_image_based_payload": {
+        "message": "將密文編碼進圖片"
+    },
+    "settings_image_based_payload_desc": {
+        "message": "而不是編碼進文本"
+    },
+    "settings_disable_new_background_tab": {
+        "message": "禁止 Maskbook 靜默地打開新標籤頁"
+    },
+    "settings_disable_new_background_tab_desc": {
+        "message": "這是 Maskbook 因技術所限的舊行爲。如果您發現某些舊帖子無法解密，請關閉此選項再試一次。"
+    },
+    "settings_language": {
+        "message": "語言"
     }
 }

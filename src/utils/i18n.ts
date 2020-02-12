@@ -2,6 +2,8 @@ import en from '../_locales/en/messages.json'
 import zh from '../_locales/zh/messages.json'
 import { GetContext } from '@holoflows/kit/es'
 import { safeReact, safeGetActiveUI } from './safeRequire'
+import { SocialNetworkUI } from '../social-network/ui'
+import { languageSettings } from '../components/shared-settings/settings'
 
 export type I18NStrings = typeof en
 
@@ -41,10 +43,14 @@ if (!Intl.ListFormat) {
     }
 }
 export function geti18nString(key: keyof I18NStrings, substitutions: string | string[] = '') {
-    const uiOverwrite = GetContext() === 'background' ? {} : safeGetActiveUI().i18nOverwrite
+    let uiOverwrite: SocialNetworkUI['i18nOverwrite'] | undefined
+    try {
+        uiOverwrite = GetContext() === 'background' ? {} : safeGetActiveUI().i18nOverwrite
+    } catch {}
 
-    const uiLang = uiOverwrite?.[getCurrentLanguage()]
-    const origLang = langs?.[getCurrentLanguage()]
+    const currentLanguage = languageSettings.value ?? getCurrentLanguage()
+    const uiLang = uiOverwrite?.[currentLanguage]
+    const origLang = langs?.[currentLanguage]
     const uiFallback = uiOverwrite?.en
     const fallback = langs?.en
 

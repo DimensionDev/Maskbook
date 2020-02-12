@@ -797,5 +797,26 @@
     },
     "post_dialog__select_recipients_share_to_everyone": {
         "message": "Everyone"
+    },
+    "settings_enable_debug": {
+        "message": "Enable debug mode"
+    },
+    "settings_enable_debug_desc": {
+        "message": "Enable this will display additional information on the Maskbook UI to help debugging"
+    },
+    "settings_image_based_payload": {
+        "message": "Enable image based mode"
+    },
+    "settings_image_based_payload_desc": {
+        "message": "Publishing post with image based payload instead of text payload"
+    },
+    "settings_disable_new_background_tab": {
+        "message": "Disable open hidden tabs in the background"
+    },
+    "settings_disable_new_background_tab_desc": {
+        "message": "This is an deprecated behavior of Maskbook. If you find that you can not decrypt some old posts, deselect this."
+    },
+    "settings_language": {
+        "message": "Language"
     }
 }

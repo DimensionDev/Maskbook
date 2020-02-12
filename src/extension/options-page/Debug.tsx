@@ -9,6 +9,8 @@ import {
     debugModeSetting,
     steganographyModeSetting,
     disableOpenNewTabInBackgroundSettings,
+    languageSettings,
+    Language,
 } from '../../components/shared-settings/settings'
 import { SettingsUI } from '../../components/shared-settings/useSettingsUI'
 
@@ -23,6 +25,7 @@ const DashboardDebugPage = () => {
         <>
             <div className={classes.root}>
                 <List>
+                    <SettingsUI value={languageSettings} mode={{ enum: Language, type: 'enum' }} />
                     <SettingsUI value={debugModeSetting} />
                     <SettingsUI value={steganographyModeSetting} />
                     <SettingsUI value={disableOpenNewTabInBackgroundSettings} />

@@ -31,7 +31,8 @@ export const currentEthereumNetworkSettings = createNewSettings<EthereumNetwork>
     'eth network',
     EthereumNetwork.Mainnet,
     {
-        primary: 'Choose ETH network',
-        secondary: `You can choose ${EthereumNetwork.Mainnet}, ${EthereumNetwork.Rinkeby} or ${EthereumNetwork.Ropsten}`,
+        primary: () => 'Choose ETH network',
+        secondary: () =>
+            `You can choose ${EthereumNetwork.Mainnet}, ${EthereumNetwork.Rinkeby} or ${EthereumNetwork.Ropsten}`,
     },
 )

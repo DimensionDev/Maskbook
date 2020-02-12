@@ -29,7 +29,7 @@ import { SSRRenderer } from './utils/SSRRenderer'
 
 import { SnackbarProvider } from 'notistack'
 
-import { geti18nString } from './utils/i18n'
+import { geti18nString, geti18nContext } from './utils/i18n'
 import ResponsiveDrawer from './extension/options-page/Drawer'
 
 import { DialogRouter } from './extension/options-page/DashboardDialogs/DialogBase'
@@ -37,6 +37,8 @@ import DashboardHomePage from './extension/options-page/Home'
 import DashboardDebugPage from './extension/options-page/Debug'
 import DashboardInitializeDialog from './extension/options-page/Initialize'
 import DashboardWalletsPage from './plugins/Wallet/UI/Dashboard/Wallets'
+import { languageSettings } from './components/shared-settings/settings'
+import { useValueRef } from './utils/hooks/useValueRef'
 
 const useStyles = makeStyles(theme =>
     createStyles({
@@ -89,21 +91,24 @@ const OptionsPageRouters = (
 )
 
 function DashboardWithProvider() {
+    const i18n = geti18nContext()
     const isDarkTheme = useMediaQuery('(prefers-color-scheme: dark)')
     return (
-        <ThemeProvider theme={isDarkTheme ? MaskbookDarkTheme : MaskbookLightTheme}>
-            <SnackbarProvider
-                maxSnack={30}
-                anchorOrigin={{
-                    vertical: 'top',
-                    horizontal: 'right',
-                }}>
-                <Router>
-                    <CssBaseline />
-                    <Dashboard></Dashboard>
-                </Router>
-            </SnackbarProvider>
-        </ThemeProvider>
+        <i18n.Provider value={useValueRef(languageSettings)}>
+            <ThemeProvider theme={isDarkTheme ? MaskbookDarkTheme : MaskbookLightTheme}>
+                <SnackbarProvider
+                    maxSnack={30}
+                    anchorOrigin={{
+                        vertical: 'top',
+                        horizontal: 'right',
+                    }}>
+                    <Router>
+                        <CssBaseline />
+                        <Dashboard></Dashboard>
+                    </Router>
+                </SnackbarProvider>
+            </ThemeProvider>
+        </i18n.Provider>
     )
 }
 
