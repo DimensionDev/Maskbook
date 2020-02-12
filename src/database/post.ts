@@ -8,7 +8,7 @@ import { createDBAccess } from './helpers/openDB'
 
 const db = createDBAccess(() => {
     return openDB<PostDB>('maskbook-post-v2', 3, {
-        async upgrade(db, oldVersion, newVersion, transaction) {
+        async upgrade(db, oldVersion, newVersion, transaction): Promise<void> {
             if (oldVersion < 1) {
                 // inline keys
                 return void db.createObjectStore('post', { keyPath: 'identifier' })

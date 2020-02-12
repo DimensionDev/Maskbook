@@ -85,6 +85,7 @@ function fromRGB(rgb: string): RGB | undefined {
         const [_, r, g, b] = matched
         return [parseInt(r), parseInt(g), parseInt(b)]
     }
+    return
 }
 
 function clamp(num: number, min: number, max: number) {

@@ -295,12 +295,12 @@ let activatedSocialNetworkUI = ({
     myIdentitiesRef: new ValueRef([]),
     useTheme: () => MaskbookLightTheme,
 } as Partial<SocialNetworkUI>) as SocialNetworkUI
-export function activateSocialNetworkUI() {
+export function activateSocialNetworkUI(): void {
     for (const ui of definedSocialNetworkUIs)
         if (ui.shouldActivate()) {
             console.log('Activating UI provider', ui.networkIdentifier, ui)
             activatedSocialNetworkUI = ui
-            return untilDomLoaded().then(() => {
+            untilDomLoaded().then(() => {
                 hookUIPostMap(ui)
                 ui.init(env, {})
                 ui.resolveLastRecognizedIdentity()
@@ -328,6 +328,7 @@ export function activateSocialNetworkUI() {
                     Services.Identity.resolveIdentity(id.identifier).then()
                 })
             })
+            break
         }
 }
 function hookUIPostMap(ui: SocialNetworkUI) {

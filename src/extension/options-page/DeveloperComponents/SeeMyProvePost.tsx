@@ -17,7 +17,7 @@ export function SeeMyProvePost() {
     const [whoAmI, chooseIdentity] = useIsolatedChooseIdentity()
     const [provePost, setProvePost] = useState<string | null>('')
     useMemo(() => {
-        if (!whoAmI) return null
+        if (!whoAmI) return
         Services.Crypto.getMyProveBio(whoAmI.identifier).then(setProvePost)
     }, [whoAmI])
     return (

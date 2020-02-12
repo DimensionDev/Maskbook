@@ -235,6 +235,7 @@ export const redPacketAPI = {
                 })
                 return true
             }
+            return
         })
             .then(results => {
                 if (!results.some(r => r)) {
@@ -282,6 +283,7 @@ export const redPacketAPI = {
                 })
                 return true
             }
+            return
         })
             .then(results => {
                 if (!results.some(r => r)) {
