@@ -805,10 +805,10 @@
         "message": "Maskbook 會顯示額外的信息以幫助調試"
     },
     "settings_image_based_payload": {
-        "message": "將密文編碼進圖片"
+        "message": "開啓圖片編碼模式"
     },
     "settings_image_based_payload_desc": {
-        "message": "而不是編碼進文本"
+        "message": "將密文編碼進圖片而不是編碼進文本"
     },
     "settings_disable_new_background_tab": {
         "message": "禁止 Maskbook 靜默地打開新標籤頁"
