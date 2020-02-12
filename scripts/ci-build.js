@@ -25,7 +25,8 @@ main().catch(e => {
  * @param {string} branchName
  */
 function buildTypes(branchName) {
-    if (branchName.match(/full/)) return getBuildCommand(['base', 'chromium', 'firefox', 'gecko', 'iOS'])
+    if (branchName.match(/full/) || branchName === 'master')
+        return getBuildCommand(['base', 'chromium', 'firefox', 'gecko', 'iOS'])
     if (branchName.match(/ios/)) return getBuildCommand(['iOS'])
     if (branchName.match(/android|gecko/)) return getBuildCommand(['firefox', 'gecko'])
     return getBuildCommand(['base', 'chromium', 'firefox'])
