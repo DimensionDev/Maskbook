@@ -282,6 +282,7 @@ function addTSLoader() {
             transpileOnly: true,
             compilerOptions: {
                 jsx: 'react',
+                noEmit: false,
             },
         },
     }

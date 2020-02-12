@@ -32,6 +32,7 @@ import {
     DefaultTypedMessageComplexRenderer,
     DefaultTypedMessageUnknownRenderer,
 } from '../components/InjectedComponents/TypedMessageRenderer'
+import { WithFigma } from 'storybook-addon-figma'
 
 storiesOf('Injections', module)
     .add('PersonOrGroupInChip', () => (
@@ -186,7 +187,11 @@ storiesOf('Injections', module)
         }
         try {
             const meta = decoder(text('Metadata', '{}'))
-            return <PostDialog open typedMessageMetadata={meta} />
+            return (
+                <WithFigma url={'https://www.figma.com/file/nDyLQp036eHgcgUXeFmNA1/Post-Composition-v1'}>
+                    <PostDialog open typedMessageMetadata={meta} />
+                </WithFigma>
+            )
         } catch (e) {
             return <>{e.message}</>
         }

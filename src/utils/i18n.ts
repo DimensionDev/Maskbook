@@ -58,10 +58,21 @@ export function geti18nString(key: keyof I18NStrings, substitutions: string | st
         .replace('$3', substitutions[2])
         .replace('$4', substitutions[3])
 }
+let I18nContext: React.Context<string>
+export function geti18nContext() {
+    if (!I18nContext) I18nContext = safeReact().createContext<string>('en')
+    return I18nContext
+}
 export function getCurrentLanguage() {
+    try {
+        return safeReact().useContext(I18nContext)
+    } catch {}
     return navigator.language.split('-')[0]
 }
 
 function getCurrentLanguageFull() {
+    try {
+        return safeReact().useContext(I18nContext)
+    } catch {}
     return navigator.language
 }
