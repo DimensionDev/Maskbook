@@ -34,7 +34,11 @@ export enum Language {
     zh = 'zh',
     en = 'en',
 }
-const lang = getCurrentLanguage()
+let lang: string = 'en'
+try {
+    lang = getCurrentLanguage()
+} catch {}
+
 export const languageSettings = createNewSettings<Language>(
     'language',
     lang in Language ? (lang as Language) : Language.en,

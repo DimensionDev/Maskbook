@@ -2,6 +2,9 @@ const webpack = require('webpack')
 const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const fs = require('fs')
+const WebpackNotifierPlugin = require('webpack-notifier')
+const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin')
+const ForkTsCheckerNotifierWebpackPlugin = require('fork-ts-checker-notifier-webpack-plugin')
 
 const src = file => path.join(__dirname, file)
 /**
@@ -82,7 +85,6 @@ module.exports = (argvEnv, argv) => {
             rules: [{ parser: { requireEnsure: false } }, addTSLoader()],
         },
         plugins: [
-            new webpack.ProgressPlugin(),
             new webpack.DefinePlugin({
                 'process.env.NODE_ENV': JSON.stringify(env),
             }),
@@ -99,6 +101,16 @@ module.exports = (argvEnv, argv) => {
             path: dist,
         },
     }
+
+    if (env === 'development') {
+        const opt = { title: 'Maskbook', excludeWarnings: true, skipFirstNotification: true, skipSuccessful: true }
+        config.plugins.push(
+            new WebpackNotifierPlugin(opt),
+            new ForkTsCheckerWebpackPlugin(),
+            new ForkTsCheckerNotifierWebpackPlugin(opt),
+        )
+    }
+
     /**
      * @param {string} src
      */
