@@ -2,8 +2,6 @@
   "$schema": "https://schemastore.azurewebsites.net/schemas/json/tsconfig.json",
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "module": "commonjs",
-    "jsx": "react",
-    "isolatedModules": false
+    "module": "commonjs"
   }
 }

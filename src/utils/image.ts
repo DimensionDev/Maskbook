@@ -66,4 +66,5 @@ function getDimensionAsJPEG(buf: Uint8Array) {
             }
         }
     }
+    return
 }

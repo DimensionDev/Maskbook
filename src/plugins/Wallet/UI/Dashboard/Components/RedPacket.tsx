@@ -115,7 +115,7 @@ export function RedPacketWithState(props: RedPacketProps) {
                 })
             updateRedPacket()
             return PluginMessageCenter.on('maskbook.red_packets.update', updateRedPacket)
-        }
+        } else return () => {}
     }, [from, unknownRedPacket])
 
     React.useEffect(() => {
