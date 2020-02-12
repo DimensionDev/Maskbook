@@ -8,6 +8,8 @@ import ConstructableStyleSheetsRenderer, {
 } from './ConstructableStyleSheetsRenderer'
 import { getActivatedUI } from '../../social-network/ui'
 import { geti18nContext } from '../i18n'
+import { useValueRef } from '../hooks/useValueRef'
+import { languageSettings } from '../../components/shared-settings/settings'
 
 const jss = create({
     ...jssPreset(),
@@ -45,10 +47,11 @@ export class RenderInShadowRootWrapper extends React.PureComponent {
 function Maskbook(props: React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement>) {
     const theme = getActivatedUI().useTheme()
     const I18n = geti18nContext()
+    const lang = useValueRef(languageSettings)
     return (
         <StylesProvider jss={jss} generateClassName={generateClassName}>
             <ThemeProvider theme={theme}>
-                <I18n.Provider value={navigator.language}>
+                <I18n.Provider value={lang}>
                     <React.StrictMode>
                         <div {...props} />
                     </React.StrictMode>

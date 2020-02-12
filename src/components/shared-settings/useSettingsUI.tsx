@@ -36,9 +36,9 @@ export function SettingsUI<T>(props: { value: ValueRef<T>; mode?: SettingsMode }
     const text = texts.get(valueRef)
 
     const _props: Props = {
-        primaryText: mode.primary ?? text?.primary ?? '_unknown_setting_',
+        primaryText: mode.primary ?? text?.primary?.() ?? '_unknown_setting_',
         settingsRef: valueRef,
-        secondaryText: mode.secondary ?? text?.secondary,
+        secondaryText: mode.secondary ?? text?.secondary?.(),
     }
 
     if (mode.type === 'enum') return <EnumUI {..._props} enumObject={mode.enum} />

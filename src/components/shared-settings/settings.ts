@@ -1,20 +1,21 @@
 import { createNewSettings, createNetworkSpecificSettings } from './createSettings'
 import { ValueRef } from '@holoflows/kit/es'
 import { MessageCenter } from '../../utils/messages'
+import { geti18nString, getCurrentLanguage } from '../../utils/i18n'
 
 /**
  * Does the debug mode on
  */
 export const debugModeSetting = createNewSettings<boolean>('debugMode', false, {
-    primary: 'Enable debug mode',
-    secondary: 'Enable this will display additional information on the Maskbook UI to help debugging',
+    primary: () => geti18nString('settings_enable_debug'),
+    secondary: () => geti18nString('settings_enable_debug_desc'),
 })
 /**
  * Dose steganography post mode on
  */
 export const steganographyModeSetting = createNewSettings<boolean>('steganographyMode', false, {
-    primary: 'Enable steganography mode',
-    secondary: 'Publishing post with steganography payload instead of text playload',
+    primary: () => geti18nString('settings_image_based_payload'),
+    secondary: () => geti18nString('settings_image_based_payload_desc'),
 })
 
 /**
@@ -22,12 +23,22 @@ export const steganographyModeSetting = createNewSettings<boolean>('steganograph
  */
 export const disableOpenNewTabInBackgroundSettings = createNewSettings<boolean>(
     'disable automated tab task open new tab',
-    webpackEnv.firefoxVariant === 'GeckoView' || webpackEnv.target === 'WKWebview' ? true : false,
+    true,
     {
-        primary: 'Disable open hidden tabs in the background',
-        secondary:
-            "Many of Maskbook features relies on this behavior. Disable this behavior will limit Maskbook's functionality",
+        primary: () => geti18nString('settings_disable_new_background_tab'),
+        secondary: () => geti18nString('settings_disable_new_background_tab_desc'),
     },
+)
+
+export enum Language {
+    zh = 'zh',
+    en = 'en',
+}
+const lang = getCurrentLanguage()
+export const languageSettings = createNewSettings<Language>(
+    'language',
+    lang in Language ? (lang as Language) : Language.en,
+    { primary: () => geti18nString('settings_language') },
 )
 
 const createProxiedSettings = <T extends string = string>(settingsKey: string) => {
