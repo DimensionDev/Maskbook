@@ -35,12 +35,13 @@ export interface SelectRecipientsUIProps<T extends Group | Profile = Group | Pro
     GroupInChipProps?: Partial<GroupInChipProps>
     PersonOrGroupInListProps?: Partial<PersonOrGroupInListProps>
     SelectRecipientsDialogUIProps?: Partial<SelectRecipientsDialogUIProps>
+    children?: React.ReactNode
 }
 
 export function SelectRecipientsUI<T extends Group | Profile = Group | Profile>(props: SelectRecipientsUIProps) {
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
-    const { items, selected, onSetSelected } = props
+    const { items, selected, onSetSelected, children } = props
     const isDebugging = useValueRef(debugModeSetting)
     const currentIdentity = useCurrentIdentity()
     const currentIdentifier = currentIdentity ? currentIdentity.identifier.toText() : ''
@@ -124,6 +125,7 @@ export function SelectRecipientsUI<T extends Group | Profile = Group | Profile>(
                     }}
                 />
             ) : null}
+            {children}
 
             <SelectRecipientsDialogUI
                 open={open}
