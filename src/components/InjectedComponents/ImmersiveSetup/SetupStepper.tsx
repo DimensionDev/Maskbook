@@ -17,6 +17,7 @@ import CloseIcon from '@material-ui/icons/Close'
 import { currentImmersiveSetupStatus, ImmersiveSetupCrossContextStatus } from '../../shared-settings/settings'
 import Services from '../../../extension/service'
 import { useI18N } from '../../../utils/i18n-next-ui'
+import { selectElementContents } from '../../../utils/utils'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -74,8 +75,8 @@ export function ImmersiveSetupStepperUI(props: ImmersiveSetupStepperUIProps) {
 
     const ERROR_TEXT = t('immersive_setup_no_bio_got')
 
-    const copyText = (e: React.SyntheticEvent<HTMLElement, MouseEvent>) => {
-        window.getSelection()!.selectAllChildren(e.currentTarget)
+    const copyText = (e: React.MouseEvent<HTMLElement>) => {
+        selectElementContents(e.currentTarget)
     }
 
     const actions = (
