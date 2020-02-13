@@ -12,7 +12,7 @@ import {
     languageSettings,
     Language,
 } from '../../components/shared-settings/settings'
-import { SettingsUI } from '../../components/shared-settings/useSettingsUI'
+import { SettingsUI, SettingsUIEnum } from '../../components/shared-settings/useSettingsUI'
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -25,7 +25,7 @@ const DashboardDebugPage = () => {
         <>
             <div className={classes.root}>
                 <List>
-                    <SettingsUI value={languageSettings} mode={{ enum: Language, type: 'enum' }} />
+                    <SettingsUIEnum value={languageSettings} enumObject={Language} />
                     <SettingsUI value={debugModeSetting} />
                     <SettingsUI value={steganographyModeSetting} />
                     <SettingsUI value={disableOpenNewTabInBackgroundSettings} />
