@@ -1,6 +1,6 @@
 import { ValueRef } from '@holoflows/kit/es'
 import { useValueRef } from '../../utils/hooks/useValueRef'
-import { texts, SettingsTexts } from './createSettings'
+import { texts } from './createSettings'
 import {
     ListItem,
     ListItemText,
@@ -9,100 +9,124 @@ import {
     Select,
     MenuItem,
     makeStyles,
+    ListItemIcon,
+    SelectProps,
 } from '@material-ui/core'
 import React from 'react'
 
 const useStyles = makeStyles({
     container: { listStyleType: 'none', width: '100%' },
 })
-interface SettingsTextsDisplay {
-    primary?: React.ReactNode | string
-    secondary?: React.ReactNode | string
-}
-export type SettingsMode = (
-    | {
-          type: 'auto'
-      }
-    | {
-          type: 'enum'
-          enum: any
-      }
-) &
-    SettingsTextsDisplay
-export function SettingsUI<T>(props: { value: ValueRef<T>; mode?: SettingsMode }) {
-    const { value: valueRef, mode = { type: 'auto' } as SettingsMode } = props
-    // This file is share between context. prevent loading in the background.
-    const currentValue = useValueRef(valueRef)
-    const text = texts.get(valueRef)
 
-    const _props: Props = {
-        primaryText: mode.primary ?? text?.primary?.() ?? '_unknown_setting_',
-        settingsRef: valueRef,
-        secondaryText: mode.secondary ?? text?.secondary?.(),
+function withDefaultText<T>(props: SettingsUIProps<T>): SettingsUIProps<T> {
+    const { value, primary, secondary } = props
+    const text = texts.get(value)
+    return {
+        value,
+        primary: primary ?? text?.primary?.() ?? '_unknown_setting_',
+        secondary: secondary ?? text?.secondary?.(),
     }
-
-    if (mode.type === 'enum') return <EnumUI {..._props} enumObject={mode.enum} />
-    else return <AutoUI {..._props} currentValue={currentValue} />
-}
-interface Props {
-    primaryText: React.ReactNode
-    secondaryText?: React.ReactNode
-    settingsRef: ValueRef<any>
-}
-function EnumUI(props: Props & { enumObject: any }) {
-    const classes = useStyles()
-    const { enumObject, settingsRef, primaryText, secondaryText } = props
-    const enum_ = Object.keys(enumObject)
-        .filter(x => Number.isNaN(parseInt(x)))
-        .map(key => ({ key, value: enumObject[key] }))
-    return (
-        <ListItem component="div" classes={classes}>
-            <ListItemText primary={primaryText} secondary={secondaryText} />
-            <ListItemSecondaryAction>
-                <Select
-                    value={settingsRef.value}
-                    onChange={(event: React.ChangeEvent<any>) => {
-                        let value = event.target.value
-                        if (!Number.isNaN(parseInt(value))) {
-                            value = parseInt(value)
-                        }
-                        if (!enum_.some(x => x.value === value)) {
-                            console.log(value)
-                            throw new Error('Invalid state')
-                        }
-                        settingsRef.value = value
-                    }}>
-                    {enum_.map(({ key, value }) => (
-                        <MenuItem value={String(value)} key={String(key)}>
-                            {String(key)}
-                        </MenuItem>
-                    ))}
-                </Select>
-            </ListItemSecondaryAction>
-        </ListItem>
-    )
 }
 
-function AutoUI(props: Props & { currentValue: unknown }) {
-    const { currentValue, primaryText, settingsRef, secondaryText } = props
+type SettingsUIProps<T> = {
+    value: ValueRef<T>
+    primary?: React.ReactNode
+    secondary?: React.ReactNode
+    icon?: React.ReactElement
+}
+
+export function SettingsUI<T>(props: SettingsUIProps<T>) {
+    const { value, primary, secondary } = withDefaultText(props)
+    const currentValue = useValueRef(value)
     switch (typeof currentValue) {
         case 'boolean':
-            const ref = (settingsRef as ValueRef<unknown>) as ValueRef<boolean>
-            const aria_id = Math.random().toString()
+            const [ui, change] = getBooleanSettingsUI(value as any, currentValue)
             return (
-                <ListItem button onClick={() => (ref.value = !ref.value)}>
-                    <ListItemText id={aria_id} primary={primaryText} secondary={secondaryText} />
-                    <ListItemSecondaryAction>
-                        <Switch
-                            inputProps={{ 'aria-labelledby': aria_id }}
-                            edge="end"
-                            checked={currentValue}
-                            onClick={() => (ref.value = !ref.value)}
-                        />
-                    </ListItemSecondaryAction>
+                <ListItem button onClick={change}>
+                    {props.icon ? <ListItemIcon>{props.icon}</ListItemIcon> : null}
+                    <ListItemText primary={primary} secondary={secondary} />
+                    <ListItemSecondaryAction>{ui}</ListItemSecondaryAction>
                 </ListItem>
             )
         default:
-            throw new Error('Not implemented yet')
+            return (
+                <ListItem>
+                    <ListItemText primary={'Not implemented for type' + typeof currentValue} />
+                </ListItem>
+            )
     }
 }
+export function SettingsUIEnum<T extends object>(
+    props: {
+        enumObject: T
+        getText?: useEnumSettingsParams<T>[2]
+        SelectProps?: SelectProps
+    } & SettingsUIProps<T[keyof T]>,
+) {
+    const { primary, secondary } = withDefaultText(props)
+    const classes = useStyles()
+    const [ui, change] = useEnumSettings(props.value, props.enumObject, props.getText, props.SelectProps)
+    return (
+        <ListItem component="div" classes={classes}>
+            <ListItemText primary={primary} secondary={secondary} />
+            <ListItemSecondaryAction>{ui}</ListItemSecondaryAction>
+        </ListItem>
+    )
+}
+type HookedUI<T> = [/** UI */ React.ReactNode, /** Changer */ T extends void ? () => void : (value: T) => void]
+/**
+ * Convert a ValueRef<boolean> into a Switch element.
+ * This must not be a React hook because it need to run in a switch stmt
+ */
+function getBooleanSettingsUI(ref: ValueRef<boolean>, currentValue: boolean): HookedUI<void> {
+    const change = () => (ref.value = !ref.value)
+    const ui = <Switch edge="end" checked={currentValue} onClick={change} />
+    return [ui, change]
+}
+// TODO: should become generic in future
+export function useSettingsUI(ref: ValueRef<boolean>) {
+    const currentValue = useValueRef(ref)
+    return getBooleanSettingsUI(ref, currentValue)
+}
+/**
+ * Convert a ValueRef<Enum> into a Select element.
+ * @param ref - The value ref
+ * @param enumObject - The enum object
+ * @param getText - Convert enum value into string.
+ *
+ * ? because the limit on the type system, I can't type it as an object which key is enum and value is string
+ */
+function useEnumSettings<Q extends object>(
+    ...[ref, enumObject, getText, selectProps]: useEnumSettingsParams<Q>
+): HookedUI<Q[keyof Q]> {
+    const enum_ = Object.keys(enumObject)
+        // Leave only key of enum
+        .filter(x => Number.isNaN(parseInt(x)))
+        .map(key => ({ key, value: enumObject[key as keyof Q] }))
+    const change = (value: any) => {
+        if (!Number.isNaN(parseInt(value))) {
+            value = parseInt(value)
+        }
+        if (!enum_.some(x => x.value === value)) {
+            console.log(value)
+            throw new Error('Invalid state')
+        }
+        ref.value = value
+    }
+    const ui = (
+        <Select {...selectProps} value={useValueRef(ref)} onChange={event => change(event.target.value)}>
+            {enum_.map(({ key, value }) => (
+                <MenuItem value={String(value)} key={String(key)}>
+                    {getText?.(value) ?? String(key)}
+                </MenuItem>
+            ))}
+        </Select>
+    )
+    return [ui, change as any]
+}
+type useEnumSettingsParams<Q extends object> = [
+    ValueRef<Q[keyof Q]>,
+    Q,
+    ((x: Q[keyof Q]) => string) | undefined,
+    SelectProps | undefined,
+]

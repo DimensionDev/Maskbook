@@ -1,7 +1,7 @@
 import React from 'react'
 import { storiesOf } from '@storybook/react'
 import { ChooseIdentity } from '../components/shared/ChooseIdentity'
-import { SettingsUI } from '../components/shared-settings/useSettingsUI'
+import { SettingsUI, SettingsUIEnum } from '../components/shared-settings/useSettingsUI'
 import { ValueRef } from '@holoflows/kit/es'
 import { List, Paper } from '@material-ui/core'
 import { useValueRef } from '../utils/hooks/useValueRef'
@@ -14,32 +14,26 @@ storiesOf('Shared Components', module)
         function D(props: { x: ValueRef<any> }) {
             const x = useValueRef(props.x)
             return (
-                <div>
+                <span>
                     Current value: {String(x)} (type: {typeof x})
-                </div>
+                </span>
             )
         }
-        const b = <SettingsUI value={bool} mode={{ type: 'auto', primary: 'boolean', secondary: <D x={bool} /> }} />
+        const b = <SettingsUI key="boolean" value={bool} primary="boolean" secondary={<D x={bool} />} />
         const enum__ = (
-            <SettingsUI
+            <SettingsUIEnum
                 value={syntaxKind}
-                mode={{
-                    type: 'enum',
-                    enum: SyntaxKind,
-                    primary: 'String enum',
-                    secondary: <D x={syntaxKind} />,
-                }}
+                enumObject={SyntaxKind}
+                primary="String enum"
+                secondary={<D x={syntaxKind} />}
             />
         )
         const enum_ = (
-            <SettingsUI
+            <SettingsUIEnum
                 value={numberKind}
-                mode={{
-                    type: 'enum',
-                    enum: NumberKind,
-                    primary: 'Number enum',
-                    secondary: <D x={numberKind} />,
-                }}
+                enumObject={NumberKind}
+                primary="Number enum"
+                secondary={<D x={numberKind} />}
             />
         )
         return (
