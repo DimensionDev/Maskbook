@@ -199,14 +199,12 @@ export function PostDialogUI(props: PostDialogUIProps) {
                         <Typography style={{ marginBottom: 10 }}>
                             {t('post_dialog__select_recipients_title')}
                         </Typography>
-                        <Box>
-                            <SelectRecipientsUI
-                                disabled={props.onlyMyself || props.shareToEveryone}
-                                items={props.availableShareTarget}
-                                selected={props.currentShareTarget}
-                                onSetSelected={props.onSetSelected}
-                                {...props.SelectRecipientsUIProps}
-                            />
+                        <SelectRecipientsUI
+                            disabled={props.onlyMyself || props.shareToEveryone}
+                            items={props.availableShareTarget}
+                            selected={props.currentShareTarget}
+                            onSetSelected={props.onSetSelected}
+                            {...props.SelectRecipientsUIProps}>
                             <ClickableChip
                                 checked={props.shareToEveryone}
                                 ChipProps={{
@@ -223,7 +221,7 @@ export function PostDialogUI(props: PostDialogUIProps) {
                                     onClick: () => props.onOnlyMyselfChanged(!props.onlyMyself),
                                 }}
                             />
-                        </Box>
+                        </SelectRecipientsUI>
                     </DialogContent>
                     <DialogActions className={classes.actions}>
                         <Button
