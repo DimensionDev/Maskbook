@@ -818,5 +818,11 @@
     },
     "settings_language": {
         "message": "語言"
+    },
+    "settings": {
+        "message": "設定"
+    },
+    "miscellaneous": {
+        "message": "雜項"
     }
 }
