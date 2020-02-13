@@ -28,10 +28,17 @@ const useStyles = makeStyles((theme: Theme) =>
             marginTop: theme.spacing(1),
             marginRight: theme.spacing(1),
         },
+        buttonWrapper: {
+            marginTop: theme.spacing(2),
+            marginRight: theme.spacing(1),
+            display: 'flex',
+            justifyContent: 'space-between',
+        },
         provePost: {
             wordBreak: 'break-all',
             padding: 6,
             border: `1px solid ${theme.palette.divider}`,
+            margin: theme.spacing(1, 1, 1, 0),
         },
         emptyProvePost: {
             padding: 6,
@@ -67,11 +74,10 @@ export function ImmersiveSetupStepperUI(props: ImmersiveSetupStepperUIProps) {
 
     const ERROR_TEXT = t('immersive_setup_no_bio_got')
 
-    // const backButton = (
-    //     <Button onClick={props.back} className={classes.button}>
-    //         Back
-    //     </Button>
-    // )
+    const copyText = (e: React.SyntheticEvent<HTMLElement, MouseEvent>) => {
+        window.getSelection()!.selectAllChildren(e.currentTarget)
+    }
+
     const actions = (
         <div>
             {/* TODO: Implement back(including side effects rollback) for step 1  */}
@@ -83,11 +89,10 @@ export function ImmersiveSetupStepperUI(props: ImmersiveSetupStepperUIProps) {
         <aside className={classes.root}>
             <AppBar component="nav" position="static" className={classes.header}>
                 <Toolbar variant="dense">
-                    <Typography variant="h6">{t('immersive_setup_title')}</Typography>
-                    <div style={{ flex: 1 }} />
-                    <IconButton edge="end" color="inherit" onClick={props.onClose}>
+                    <IconButton edge="start" color="inherit" onClick={props.onClose}>
                         <CloseIcon />
                     </IconButton>
+                    <Typography variant="h6">{t('immersive_setup_title')}</Typography>
                 </Toolbar>
             </AppBar>
             <Stepper activeStep={activeStep} orientation="vertical">
@@ -172,16 +177,6 @@ export function ImmersiveSetupStepperUI(props: ImmersiveSetupStepperUIProps) {
                         />
                         <br />
                         <Typography>{t('immersive_setup_username_confirm')}</Typography>
-                        <Typography>
-                            <Link
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                color="textSecondary"
-                                href="https://maskbook.com/faq/?2"
-                                variant="body2">
-                                {t('immersive_setup_help_dont_know_what_is_username')}
-                            </Link>
-                        </Typography>
                     </>
                 )
             case ImmersiveSetupState.PasteBio:
@@ -189,26 +184,29 @@ export function ImmersiveSetupStepperUI(props: ImmersiveSetupStepperUIProps) {
                 if (provePostError) return <Typography className={classes.emptyProvePost}>{props.provePost}</Typography>
                 return (
                     <>
-                        <Typography component="address" className={classes.provePost}>
-                            {props.provePost}
-                        </Typography>
                         <Typography>{t('immersive_setup_add_bio_text')}</Typography>
                         {/* <Link style={{ textDecoration: 'underline' }} color="textSecondary" href="/" variant="body2">
                             Link text here, Link text here
                         </Link> */}
-                        <br />
-                        <ActionButtonPromise
-                            variant="contained"
-                            color="primary"
-                            className={classes.button}
-                            executor={props.autoPasteProvePost}
-                            init={t('immersive_setup_paste_into_bio_auto')}
-                            waiting={t('adding')}
-                            complete={t('done')}
-                            failed={t('immersive_setup_paste_into_bio_failed')}
-                            completeOnClick={props.onClose}
-                            failedOnClick="use executor"
-                        />
+                        <Typography onClick={copyText} component="address" className={classes.provePost}>
+                            {props.provePost}
+                        </Typography>
+                        <div className={classes.buttonWrapper}>
+                            <ActionButtonPromise
+                                variant="contained"
+                                color="primary"
+                                executor={props.autoPasteProvePost}
+                                init={t('immersive_setup_paste_into_bio_auto')}
+                                waiting={t('adding')}
+                                complete={t('done')}
+                                failed={t('immersive_setup_paste_into_bio_failed')}
+                                completeOnClick={props.onClose}
+                                failedOnClick="use executor"
+                            />
+                            <Button variant="outlined" onClick={props.onClose}>
+                                完成
+                            </Button>
+                        </div>
                     </>
                 )
             default:
