@@ -4,6 +4,7 @@ import './OptionsPage'
 import './Injections'
 import './Immersive-Setup'
 import './RedPackets'
+import './Settings'
 import './shared'
 import { definedSocialNetworkUIs, defineSocialNetworkUI, activateSocialNetworkUI } from '../social-network/ui'
 import { demoPeople, demoGroup } from './demoPeopleOrGroups'
@@ -11,6 +12,21 @@ import { ValueRef } from '@holoflows/kit/es'
 import { ProfileIdentifier } from '../database/type'
 import { emptyDefinition } from '../social-network/defaults/emptyDefinition'
 import { Profile } from '../database'
+
+Object.assign(globalThis, {
+    browser: {
+        storage: {
+            local: {
+                get() {
+                    return JSON.parse(localStorage.getItem('storybook') || '{}')
+                },
+                set(v: any) {
+                    localStorage.setItem('storybook', JSON.stringify(v))
+                },
+            },
+        },
+    },
+})
 
 definedSocialNetworkUIs.clear()
 defineSocialNetworkUI({
