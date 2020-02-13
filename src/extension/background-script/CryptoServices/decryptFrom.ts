@@ -141,6 +141,8 @@ export async function* decryptFromMessageWithProgress(
 
         // ? Get my public & private key.
         const mine = await queryPersonaRecord(whoAmI)
+
+        // ? Note: src/components/InjectedComponents/DecryptedPost.tsx relies on this error message
         if (!mine?.privateKey) throw new Error('My key not found')
         const ecdhParams = getKeyParameter('ecdh')
         const minePublic = await JsonWebKeyToCryptoKey(mine.publicKey, ...ecdhParams)
