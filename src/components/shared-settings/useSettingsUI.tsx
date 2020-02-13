@@ -68,12 +68,12 @@ export function SettingsUI<T>(props: { value: ValueRef<T>; mode?: SettingsMode }
     )
 }
 
-interface SettingUIGroupProps {
+interface SettingsUIGroupProps {
     children: React.ReactNode
     title: string
 }
 
-export function SettingUIGroup(props: SettingUIGroupProps) {
+export function SettingsUIGroup(props: SettingsUIGroupProps) {
     const { children, title } = props
     return (
         <List>
