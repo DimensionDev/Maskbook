@@ -124,8 +124,7 @@ export interface DecryptPostFailedProps {
     NotSetupYetPromptProps?: Partial<BannerProps>
 }
 export const DecryptPostFailed = React.memo(function DecryptPostFailed({ error, ...props }: DecryptPostFailedProps) {
-    const { t } = useI18N()
-    if (error && error.message === t('service_not_setup_yet')) {
+    if (error && error.message === 'My key not found') {
         return <NotSetupYetPrompt {...props.NotSetupYetPromptProps} />
     }
     return (
