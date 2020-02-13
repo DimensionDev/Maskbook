@@ -10,7 +10,7 @@ import { createTransaction, IDBPSafeTransaction } from '../../database/helpers/o
 import { createWalletDBAccess, WalletDB } from './database/Wallet.db'
 import uuid from 'uuid/v4'
 import { RedPacketCreationResult, RedPacketClaimResult } from './types'
-import { getWalletProvider, getWallets, recoverWallet } from './wallet'
+import { getWalletProvider, getWallets, recoverWallet, getDefaultWallet } from './wallet'
 import { PluginMessageCenter } from '../PluginMessages'
 import { requestNotification } from '../../utils/notification'
 import Web3Utils from 'web3-utils'
@@ -201,10 +201,12 @@ export async function onCreationResult(id: { databaseID: string }, details: RedP
 
 export async function claimRedPacket(
     id: { redPacketID: string },
-    claimWithWallet: string,
+    _claimWithWallet?: string,
 ): Promise<'claiming' | 'expired' | 'empty'> {
     const rec = await getRedPacketByID(undefined, id.redPacketID)
     if (!rec) throw new Error('You should call discover first')
+
+    const claimWithWallet = _claimWithWallet ?? (await getDefaultWallet()).address
 
     const passwords = rec.password
     const status = await getProvider().checkAvailability(id)
