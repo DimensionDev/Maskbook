@@ -175,10 +175,7 @@ export function RedPacketInDecryptedPostClaimDialog(
             scroll="paper"
             fullWidth
             maxWidth="sm"
-            // ? Must have null as value before refactor
-            container={() => null}
-            // container={() => rootRef.current}
-            disablePortal
+            container={PortalShadowRoot}
             disableAutoFocus
             disableEnforceFocus
             onEscapeKeyDown={props.onAbortClaiming}
