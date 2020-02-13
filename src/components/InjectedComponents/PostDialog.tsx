@@ -42,6 +42,7 @@ import { isDAI } from '../../plugins/Wallet/erc20'
 import { PluginRedPacketTheme } from '../../plugins/Wallet/theme'
 import { sleep } from '../../utils/utils'
 import { useI18N } from '../../utils/i18n-next-ui'
+import { PortalShadowRoot } from '../../utils/jss/ShadowRootPortal'
 
 const defaultTheme = {}
 
@@ -101,7 +102,6 @@ export interface PostDialogUIProps
 }
 export function PostDialogUI(props: PostDialogUIProps) {
     const classes = useStylesExtends(useStyles(), props)
-    const rootRef = useRef<HTMLDivElement>(null)
     const { t } = useI18N()
     const [, inputRef] = useCapturedInput(
         newText => {
@@ -114,7 +114,7 @@ export function PostDialogUI(props: PostDialogUIProps) {
     const [redPacketDialogOpen, setRedPacketDialogOpen] = useState(false)
     if (props.postContent.type !== 'text') return <>Unsupported type to edit</>
     return (
-        <div ref={rootRef} className={classes.root}>
+        <div className={classes.root}>
             <ThemeProvider theme={props.theme ?? defaultTheme}>
                 <ResponsiveDialog
                     className={classes.dialog}
@@ -126,8 +126,7 @@ export function PostDialogUI(props: PostDialogUIProps) {
                     scroll="paper"
                     fullWidth
                     maxWidth="sm"
-                    container={() => rootRef.current}
-                    disablePortal
+                    container={PortalShadowRoot}
                     disableAutoFocus
                     disableEnforceFocus
                     onEscapeKeyDown={props.onCloseButtonClicked}
