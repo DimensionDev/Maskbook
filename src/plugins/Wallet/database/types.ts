@@ -76,6 +76,7 @@ export interface WalletRecord {
     mnemonic: string[]
     passphrase: string
     _data_source_: 'real' | 'mock'
+    _wallet_is_default?: boolean
 }
 export interface ERC20TokenRecord {
     /** same to address */

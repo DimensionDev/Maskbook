@@ -70,6 +70,15 @@ export async function getWallets(): Promise<[(WalletRecord & { privateKey: strin
     ]
 }
 
+export async function getDefaultWallet(): Promise<WalletRecord> {
+    // TODO: _wallet_is_default
+    return {} as any
+}
+
+export async function setDefaultWallet(addr: WalletRecord['address']) {
+    // TODO: _wallet_is_default
+}
+
 export async function createNewWallet(
     rec: Omit<WalletRecord, 'id' | 'address' | 'mnemonic' | 'eth_balance' | '_data_source_' | 'erc20_token_balance'>,
 ) {
