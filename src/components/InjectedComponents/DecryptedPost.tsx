@@ -25,6 +25,7 @@ import { useStylesExtends } from '../custom-ui-helper'
 import { BannerProps } from '../Welcomes/Banner'
 import { TypedMessage } from '../../extension/background-script/CryptoServices/utils'
 import RedPacketInDecryptedPost from '../../plugins/Wallet/UI/RedPacket/RedPacketInDecryptedPost'
+import { DecryptFailedReason } from '../../utils/constants'
 
 export interface DecryptPostSuccessProps extends withClasses<KeysInferFromUseStyles<typeof useSuccessStyles>> {
     data: { signatureVerifyResult: boolean; content: TypedMessage }
@@ -117,14 +118,14 @@ export const DecryptPostAwaiting = React.memo(function DecryptPostAwaiting(props
         />
     )
 })
-
 export interface DecryptPostFailedProps {
     error: Error
     AdditionalContentProps?: Partial<AdditionalContentProps>
     NotSetupYetPromptProps?: Partial<BannerProps>
 }
 export const DecryptPostFailed = React.memo(function DecryptPostFailed({ error, ...props }: DecryptPostFailedProps) {
-    if (error && error.message === 'My key not found') {
+    const { t } = useI18N()
+    if (error && error.message === DecryptFailedReason.MyCryptoKeyNotFound) {
         return <NotSetupYetPrompt {...props.NotSetupYetPromptProps} />
     }
     return (
