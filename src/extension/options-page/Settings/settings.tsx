@@ -5,7 +5,7 @@ import BugReport from '@material-ui/icons/BugReport'
 import ImageMode from '@material-ui/icons/Image'
 import OpenInBrowser from '@material-ui/icons/OpenInBrowser'
 import LanguageIcon from '@material-ui/icons/Language'
-import { Typography, Card, Divider } from '@material-ui/core'
+import { Typography, Card, Divider, Container } from '@material-ui/core'
 import { SettingsUI, SettingsUIEnum } from '../../../components/shared-settings/useSettingsUI'
 import {
     debugModeSetting,
@@ -36,7 +36,7 @@ export function Settings() {
         return ''
     }).current
     return (
-        <>
+        <Container maxWidth="md">
             <Typography
                 variant="subtitle2"
                 style={{ marginTop: 21, marginBottom: 12, fontWeight: 300 }}
@@ -44,7 +44,7 @@ export function Settings() {
                 General
             </Typography>
             <Card>
-                <List dense>
+                <List dense disablePadding>
                     <SettingsUI icon={<BugReport />} value={debugModeSetting} />
                     <Divider />
                     <SettingsUIEnum
@@ -63,7 +63,7 @@ export function Settings() {
                 Experimental Features
             </Typography>
             <Card>
-                <List dense>
+                <List dense disablePadding>
                     <SettingsUI icon={<ImageMode />} value={steganographyModeSetting} />
                 </List>
             </Card>
@@ -74,10 +74,10 @@ export function Settings() {
                 Compatibility
             </Typography>
             <Card>
-                <List dense>
+                <List dense disablePadding>
                     <SettingsUI icon={<OpenInBrowser />} value={disableOpenNewTabInBackgroundSettings} />
                 </List>
             </Card>
-        </>
+        </Container>
     )
 }

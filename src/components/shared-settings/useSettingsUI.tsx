@@ -68,6 +68,7 @@ export function SettingsUIEnum<T extends object>(
     const [ui, change] = useEnumSettings(props.value, props.enumObject, props.getText, props.SelectProps)
     return (
         <ListItem component="div" classes={classes}>
+            {props.icon ? <ListItemIcon>{props.icon}</ListItemIcon> : null}
             <ListItemText primary={primary} secondary={secondary} />
             <ListItemSecondaryAction>{ui}</ListItemSecondaryAction>
         </ListItem>
