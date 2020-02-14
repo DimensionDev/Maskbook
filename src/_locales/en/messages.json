@@ -818,5 +818,8 @@
     },
     "settings_language": {
         "message": "Language"
+    },
+    "settings": {
+        "message": "Settings"
     }
 }
