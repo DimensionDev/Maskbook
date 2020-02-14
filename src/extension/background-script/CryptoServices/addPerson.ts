@@ -1,6 +1,4 @@
-import * as Gun1 from '../../../network/gun/version.1'
 import * as Gun2 from '../../../network/gun/version.2'
-import { useI18N } from '../../../utils/i18n-next-ui'
 import { ProfileIdentifier, PostIdentifier } from '../../../database/type'
 import getCurrentNetworkWorker from '../../../social-network/utils/getCurrentNetworkWorker'
 import { verifyOthersProve } from './verifyOthersProve'

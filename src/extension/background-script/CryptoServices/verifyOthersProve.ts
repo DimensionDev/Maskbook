@@ -1,4 +1,3 @@
-import { useI18N } from '../../../utils/i18n-next-ui'
 import { decompressSecp256k1Key } from '../../../utils/type-transform/SECP256k1-Compression'
 import { ProfileIdentifier, ECKeyIdentifier } from '../../../database/type'
 import { getNetworkWorker } from '../../../social-network/worker'

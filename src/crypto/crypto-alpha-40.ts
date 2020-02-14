@@ -10,7 +10,6 @@ import {
 } from '../utils/type-transform/String-ArrayBuffer'
 import { toECDH, addUint8Array, toECDSA } from '../utils/type-transform/ECDSA-ECDH'
 import { memoizePromise } from '../utils/memoize'
-import { useI18N } from '../utils/i18n-next-ui'
 import {
     generate_AES_GCM_256_Key,
     import_AES_GCM_256_Key,

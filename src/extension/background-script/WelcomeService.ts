@@ -1,7 +1,6 @@
 import { OnlyRunInContext } from '@holoflows/kit'
 import { encodeText } from '../../utils/type-transform/String-ArrayBuffer'
 import { sleep } from '../../utils/utils'
-import { useI18N } from '../../utils/i18n-next-ui'
 import getCurrentNetworkWorker from '../../social-network/utils/getCurrentNetworkWorker'
 import { SocialNetworkUI } from '../../social-network/ui'
 import { getWelcomePageURL } from '../options-page/Welcome/getWelcomePageURL'
