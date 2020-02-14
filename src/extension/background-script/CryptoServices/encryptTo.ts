@@ -5,7 +5,6 @@ import { constructAlpha38, PayloadLatest } from '../../../utils/type-transform/P
 import { Group, queryPrivateKey, queryLocalKey } from '../../../database'
 import { ProfileIdentifier, PostIVIdentifier, GroupIdentifier, Identifier } from '../../../database/type'
 import { prepareOthersKeyForEncryptionV39OrV38 } from '../prepareOthersKeyForEncryption'
-import { geti18nString } from '../../../utils/i18n'
 import { getNetworkWorker } from '../../../social-network/worker'
 import { getSignablePayload, TypedMessage, cryptoProviderTable } from './utils'
 import { createPostDB, PostRecord, RecipientReason } from '../../../database/post'
@@ -13,6 +12,7 @@ import { queryUserGroup } from '../UserGroupService'
 import { queryPersonaByProfileDB } from '../../../database/Persona/Persona.db'
 import { compressSecp256k1Key } from '../../../utils/type-transform/SECP256k1-Compression'
 import { import_AES_GCM_256_Key } from '../../../utils/crypto.subtle'
+import { i18n } from '../../../utils/i18n-next'
 
 type EncryptedText = string
 type OthersAESKeyEncryptedToken = string
@@ -123,7 +123,7 @@ export async function encryptTo(
  * @param iv Token that returns in the encryptTo
  */
 export async function publishPostAESKey(iv: string) {
-    if (!OthersAESKeyEncryptedMap.has(iv)) throw new Error(geti18nString('service_publish_post_aes_key_failed'))
+    if (!OthersAESKeyEncryptedMap.has(iv)) throw new Error(i18n.t('service_publish_post_aes_key_failed'))
     // Use the latest payload version here since we do not accept new post for older version.
     return Gun2.publishPostAESKeyOnGun2(-38, iv, ...OthersAESKeyEncryptedMap.get(iv)!)
 }

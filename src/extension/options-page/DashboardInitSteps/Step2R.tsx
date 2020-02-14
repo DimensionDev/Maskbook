@@ -1,7 +1,7 @@
 import React from 'react'
 import StepBase from './StepBase'
 import { Table, TableBody, TableRow, TableCell, styled } from '@material-ui/core'
-import { geti18nString } from '../../../utils/i18n'
+import { useI18N } from '../../../utils/i18n-next-ui'
 import ActionButton from '../DashboardComponents/ActionButton'
 import useQueryParams from '../../../utils/hooks/useQueryParams'
 import { Link } from 'react-router-dom'
@@ -11,6 +11,7 @@ const TableCellNoBorder = styled(TableCell)({
 })
 
 export default function InitStep2R() {
+    const { t } = useI18N()
     const { personas, profiles, posts, contacts, date } = useQueryParams([
         'personas',
         'profiles',
@@ -19,16 +20,15 @@ export default function InitStep2R() {
         'date',
     ])
 
-    const header = geti18nString('dashboard_restoration_successful')
-    const subheader = geti18nString(
-        'dashboard_restoration_successful_hint',
-        new Date(date ? Number(date) : 0).toLocaleString(),
-    )
+    const header = t('dashboard_restoration_successful')
+    const subheader = t('dashboard_restoration_successful_hint', {
+        time: new Date(date ? Number(date) : 0).toLocaleString(),
+    })
 
     const actions = (
         <div>
             <ActionButton<typeof Link> variant="contained" color="primary" component={Link} to="/">
-                {geti18nString('finish')}
+                {t('finish')}
             </ActionButton>
         </div>
     )

@@ -4,21 +4,24 @@ import { Link, Redirect, useRouteMatch } from 'react-router-dom'
 import { DialogRouter } from '../DashboardDialogs/DialogBase'
 import { PersonaImportDialog } from '../DashboardDialogs/Persona'
 import ActionButton from '../DashboardComponents/ActionButton'
-import { geti18nString } from '../../../utils/i18n'
+import { useI18N } from '../../../utils/i18n-next-ui'
 import { InitStep } from '../InitStep'
 
-const header = geti18nString('dashboard_advanced_restoration')
-
-const actions = (
-    <>
-        <ActionButton<typeof Link> variant="outlined" color="default" component={Link} to={`../${InitStep.Restore1}`}>
-            {geti18nString('back')}
-        </ActionButton>
-        <span></span>
-    </>
-)
-
 export default function InitStep1Ra() {
+    const { t } = useI18N()
+    const header = t('dashboard_advanced_restoration')
+    const actions = (
+        <>
+            <ActionButton<typeof Link>
+                variant="outlined"
+                color="default"
+                component={Link}
+                to={`../${InitStep.Restore1}`}>
+                {t('back')}
+            </ActionButton>
+            <span></span>
+        </>
+    )
     const content = (
         <div style={{ alignSelf: 'stretch', textAlign: 'center', width: '100%' }}>
             <ActionButton<typeof Link>
@@ -27,7 +30,7 @@ export default function InitStep1Ra() {
                 color="primary"
                 component={Link}
                 to="persona/import">
-                {geti18nString('import_persona')}
+                {t('import_persona')}
             </ActionButton>
         </div>
     )

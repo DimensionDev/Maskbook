@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react'
 import { useCapturedInput } from '../../utils/hooks/useCapturedEvents'
 import { PropsOf } from '@emotion/styled-base/types/helper'
-import { geti18nString } from '../../utils/i18n'
+import { useI18N } from '../../utils/i18n-next-ui'
 import { makeStyles } from '@material-ui/styles'
 import { InputBase } from '@material-ui/core'
 
@@ -37,6 +37,7 @@ export interface CommentBoxProps {
 export function CommentBox(props: CommentBoxProps) {
     const classes = useStyles()
     const [binder, inputRef] = useCapturedInput(() => {})
+    const { t } = useI18N()
     useEffect(
         binder(['keypress'], e => {
             if (!inputRef.current) return
@@ -50,7 +51,7 @@ export function CommentBox(props: CommentBoxProps) {
         <InputBase
             className={classes.root}
             inputProps={{ className: classes.input, ref: inputRef }}
-            placeholder={geti18nString('comment_box__placeholder')}
+            placeholder={t('comment_box__placeholder')}
             {...props.inputProps}
         />
     )

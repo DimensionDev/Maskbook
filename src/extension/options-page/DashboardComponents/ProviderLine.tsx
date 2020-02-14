@@ -2,7 +2,7 @@ import { FormControl, Typography, Theme } from '@material-ui/core'
 import React from 'react'
 import { makeStyles, createStyles } from '@material-ui/styles'
 import classNames from 'classnames'
-import { geti18nString } from '../../../utils/i18n'
+import { useI18N } from '../../../utils/i18n-next-ui'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -33,6 +33,7 @@ interface ProviderLineProps {
 }
 
 export default function ProviderLine(props: ProviderLineProps) {
+    const { t } = useI18N()
     const { network, connected, userId, onConnect } = props
     const classes = useStyles()
 
@@ -48,9 +49,7 @@ export default function ProviderLine(props: ProviderLineProps) {
                     { [classes.connected]: connected },
                     { [classes.pointer]: !connected },
                 )}>
-                {connected
-                    ? `${geti18nString('dashboard_connected')}: @${userId}`
-                    : `${geti18nString('connect')} ${network}`}
+                {connected ? `${t('dashboard_connected')}: @${userId}` : `${t('connect')} ${network}`}
             </Typography>
         </FormControl>
     )

@@ -4,7 +4,7 @@ import CardContent from '@material-ui/core/CardContent'
 import Typography from '@material-ui/core/Typography'
 import SettingsIcon from '@material-ui/icons/Settings'
 import { Divider, Menu, MenuItem, TextField } from '@material-ui/core'
-import { geti18nString } from '../../../../../utils/i18n'
+import { useI18N } from '../../../../../utils/i18n-next-ui'
 import WalletLine from './WalletLine'
 import ActionButton from '../../../../../extension/options-page/DashboardComponents/ActionButton'
 import {
@@ -71,6 +71,7 @@ const useStyles = makeStyles(theme =>
 )
 
 export default function WalletCard({ wallet, tokens }: Props) {
+    const { t } = useI18N()
     const classes = useStyles()
     const color = useColorProvider()
     const { enqueueSnackbar, closeSnackbar } = useSnackbar()
@@ -110,11 +111,9 @@ export default function WalletCard({ wallet, tokens }: Props) {
     const copyWalletAddress = () => {
         navigator.clipboard
             .writeText(wallet.address)
-            .then(() =>
-                enqueueSnackbar(geti18nString('dashboard_item_copied'), { variant: 'success', autoHideDuration: 1000 }),
-            )
+            .then(() => enqueueSnackbar(t('dashboard_item_copied'), { variant: 'success', autoHideDuration: 1000 }))
             .catch(e => {
-                enqueueSnackbar(geti18nString('dashboard_item_copy_failed'), { variant: 'error' })
+                enqueueSnackbar(t('dashboard_item_copy_failed'), { variant: 'error' })
             })
     }
 
@@ -136,12 +135,12 @@ export default function WalletCard({ wallet, tokens }: Props) {
                                     onClick={handleClose}
                                     PaperProps={{ style: { minWidth: 100 } }}
                                     onClose={handleClose}>
-                                    <MenuItem onClick={() => setRenameWallet(true)}>{geti18nString('rename')}</MenuItem>
+                                    <MenuItem onClick={() => setRenameWallet(true)}>{t('rename')}</MenuItem>
                                     <MenuItem onClick={() => setBackupWallet(true)}>
-                                        {geti18nString('dashboard_create_backup')}
+                                        {t('dashboard_create_backup')}
                                     </MenuItem>
                                     <MenuItem onClick={() => setDeleteWallet(true)} className={color.error}>
-                                        {geti18nString('dashboard_delete_persona')}
+                                        {t('dashboard_delete_persona')}
                                     </MenuItem>
                                 </Menu>
                             </Typography>

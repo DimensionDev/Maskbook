@@ -10,7 +10,7 @@ import {
 } from '../utils/type-transform/String-ArrayBuffer'
 import { toECDH, addUint8Array, toECDSA } from '../utils/type-transform/ECDSA-ECDH'
 import { memoizePromise } from '../utils/memoize'
-import { geti18nString } from '../utils/i18n'
+import { useI18N } from '../utils/i18n-next-ui'
 import {
     generate_AES_GCM_256_Key,
     import_AES_GCM_256_Key,
@@ -211,7 +211,7 @@ export async function decryptMessage1ToNByOther(info: {
             } catch {}
         }),
     )
-    if (resolvedAESKey === null) throw new Error(geti18nString('service_not_share_target'))
+    if (resolvedAESKey === null) throw new Error(i18n.t('service_not_share_target'))
     const aesKey = await import_AES_GCM_256_Key(JSON.parse(resolvedAESKey))
     return [await decryptWithAES({ aesKey, iv, encrypted: encryptedContent }), aesKey]
 }
@@ -345,6 +345,7 @@ export async function decryptComment(
 //#endregion
 
 import { makeTypedMessage } from '../extension/background-script/CryptoServices/utils'
+import { i18n } from '../utils/i18n-next'
 
 export function typedMessageStringify(x: any) {
     throw new Error('Not supported typed message in version older than v39.')

@@ -11,15 +11,14 @@ import {
     debugModeSetting,
     steganographyModeSetting,
     disableOpenNewTabInBackgroundSettings,
-    languageSettings,
-    Language,
 } from '../../components/shared-settings/settings'
 import { SettingsUI } from '../../components/shared-settings/useSettingsUI'
 import { ChooseIdentity } from '../../components/shared/ChooseIdentity'
 import { getActivatedUI } from '../../social-network/ui'
 import { getUrl } from '../../utils/utils'
-import { geti18nString, geti18nContext } from '../../utils/i18n'
-import { useValueRef } from '../../utils/hooks/useValueRef'
+import { I18nextProvider } from 'react-i18next'
+import { useI18N } from '../../utils/i18n-next-ui'
+import i18nNextInstance from '../../utils/i18n-next'
 
 const useStyles = makeStyles(theme => ({
     button: {
@@ -40,10 +39,16 @@ const useStyles = makeStyles(theme => ({
     },
 }))
 
-SSRRenderer(<Popup />)
+SSRRenderer(
+    <ThemeProvider theme={MaskbookLightTheme}>
+        <I18nextProvider i18n={i18nNextInstance}>
+            <Popup />
+        </I18nextProvider>
+    </ThemeProvider>,
+)
 export function Popup() {
+    const { t } = useI18N()
     const classes = useStyles()
-    const i18n = geti18nContext()
 
     const [showIdentitySelector, setShowIdentitySelector] = useState(false)
     setTimeout(() => {
@@ -51,31 +56,29 @@ export function Popup() {
     })
 
     return (
-        <i18n.Provider value={useValueRef(languageSettings)}>
-            <ThemeProvider theme={MaskbookLightTheme}>
-                <style>{`body {
+        <>
+            <style>{`body {
                 overflow-x: hidden;
                 margin: 0 auto;
                 width: 30em;
                 max-width: 100%;
             }`}</style>
-                <main className={classes.container}>
-                    <img className={classes.logo} src={getUrl('/maskbook.svg')} />
-                    {showIdentitySelector ? <ChooseIdentity /> : null}
-                    <Button
-                        variant="contained"
-                        color="primary"
-                        className={classes.button}
-                        onClick={e => browser.runtime.openOptionsPage()}>
-                        {geti18nString('popup_enter_dashboard')}
-                    </Button>
-                    <List>
-                        <SettingsUI value={debugModeSetting} />
-                        <SettingsUI value={steganographyModeSetting} />
-                        <SettingsUI value={disableOpenNewTabInBackgroundSettings} />
-                    </List>
-                </main>
-            </ThemeProvider>
-        </i18n.Provider>
+            <main className={classes.container}>
+                <img className={classes.logo} src={getUrl('/maskbook.svg')} />
+                {showIdentitySelector ? <ChooseIdentity /> : null}
+                <Button
+                    variant="contained"
+                    color="primary"
+                    className={classes.button}
+                    onClick={e => browser.runtime.openOptionsPage()}>
+                    {t('popup_enter_dashboard')}
+                </Button>
+                <List>
+                    <SettingsUI value={debugModeSetting} />
+                    <SettingsUI value={steganographyModeSetting} />
+                    <SettingsUI value={disableOpenNewTabInBackgroundSettings} />
+                </List>
+            </main>
+        </>
     )
 }

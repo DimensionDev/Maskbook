@@ -8,7 +8,7 @@ import AddIcon from '@material-ui/icons/Add'
 import { ClickableChip } from './ClickableChip'
 import { useState, useEffect } from 'react'
 import { SelectRecipientsDialogUIProps, SelectRecipientsDialogUI } from './SelectRecipientsDialog'
-import { geti18nString } from '../../../utils/i18n'
+import { useI18N } from '../../../utils/i18n-next-ui'
 import { difference } from 'lodash-es'
 import { useCurrentIdentity } from '../../DataSource/useActivatedUI'
 import { useStylesExtends } from '../../custom-ui-helper'
@@ -38,6 +38,7 @@ export interface SelectRecipientsUIProps<T extends Group | Profile = Group | Pro
 }
 
 export function SelectRecipientsUI<T extends Group | Profile = Group | Profile>(props: SelectRecipientsUIProps) {
+    const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
     const { items, selected, onSetSelected } = props
     const isDebugging = useValueRef(debugModeSetting)
@@ -112,10 +113,9 @@ export function SelectRecipientsUI<T extends Group | Profile = Group | Profile>(
             {isDebugging ? (
                 <ClickableChip
                     ChipProps={{
-                        label: geti18nString(
-                            'post_dialog__select_specific_friends_title',
-                            String(selectedIdentifiers.length),
-                        ),
+                        label: t('post_dialog__select_specific_friends_title', {
+                            selected: selectedIdentifiers.length,
+                        }),
                         avatar: <AddIcon />,
                         disabled: props.disabled || profileItems.length === 0,
                         onClick() {

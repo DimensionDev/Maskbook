@@ -8,7 +8,7 @@ import Services from '../../service'
 import SettingsIcon from '@material-ui/icons/Settings'
 import { useSnackbar } from 'notistack'
 import { useColorProvider } from '../../../utils/theme'
-import { geti18nString } from '../../../utils/i18n'
+import { useI18N } from '../../../utils/i18n-next-ui'
 import { BackupJSONFileLatest } from '../../../utils/type-transform/BackupFormat/JSON/latest'
 import { PersonaDeleteDialog, PersonaBackupDialog } from '../DashboardDialogs/Persona'
 import { DialogRouter } from '../DashboardDialogs/DialogBase'
@@ -53,6 +53,7 @@ const useStyles = makeStyles(theme =>
 )
 
 export default function PersonaCard({ persona }: Props) {
+    const { t } = useI18N()
     const classes = useStyles()
     const color = useColorProvider()
 
@@ -67,12 +68,10 @@ export default function PersonaCard({ persona }: Props) {
     const copyPublicKey = () => {
         navigator.clipboard
             .writeText(provePost)
-            .then(() =>
-                enqueueSnackbar(geti18nString('dashboard_item_copied'), { variant: 'success', autoHideDuration: 1000 }),
-            )
+            .then(() => enqueueSnackbar(t('dashboard_item_copied'), { variant: 'success', autoHideDuration: 1000 }))
             .catch(e => {
-                enqueueSnackbar(geti18nString('dashboard_item_copy_failed'), { variant: 'error' })
-                setTimeout(() => prompt(geti18nString('automation_request_paste_into_bio_box'), provePost))
+                enqueueSnackbar(t('dashboard_item_copy_failed'), { variant: 'error' })
+                setTimeout(() => prompt(t('automation_request_paste_into_bio_box'), provePost))
             })
     }
 
@@ -81,14 +80,14 @@ export default function PersonaCard({ persona }: Props) {
     const renameIdentity = (event: React.FocusEvent<Inputable> | React.KeyboardEvent<Inputable>) => {
         event.preventDefault()
         Services.Identity.renamePersona(persona.identifier, event.currentTarget.value).then(() => {
-            enqueueSnackbar(geti18nString('dashboard_item_done'), { variant: 'success', autoHideDuration: 1000 })
+            enqueueSnackbar(t('dashboard_item_done'), { variant: 'success', autoHideDuration: 1000 })
             setRename(false)
         })
     }
 
     const [deletePersona, setDeletePersona] = useState(false)
     const confirmDeletePersona = () => {
-        enqueueSnackbar(geti18nString('dashboard_item_deleted'), {
+        enqueueSnackbar(t('dashboard_item_deleted'), {
             variant: 'default',
         })
     }
@@ -140,15 +139,15 @@ export default function PersonaCard({ persona }: Props) {
                                     onClick={handleClose}
                                     PaperProps={{ style: { minWidth: 100 } }}
                                     onClose={handleClose}>
-                                    <MenuItem onClick={() => setRename(true)}>{geti18nString('rename')}</MenuItem>
+                                    <MenuItem onClick={() => setRename(true)}>{t('rename')}</MenuItem>
                                     {
                                         // <MenuItem onClick={copyPublicKey}>Copy Public Key</MenuItem>
                                     }
                                     <MenuItem onClick={() => setBackupPersona(true)}>
-                                        {geti18nString('dashboard_create_backup')}
+                                        {t('dashboard_create_backup')}
                                     </MenuItem>
                                     <MenuItem onClick={() => setDeletePersona(true)} className={color.error}>
-                                        {geti18nString('dashboard_delete_persona')}
+                                        {t('dashboard_delete_persona')}
                                     </MenuItem>
                                 </Menu>
                             </Typography>

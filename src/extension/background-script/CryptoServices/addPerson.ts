@@ -1,12 +1,13 @@
 import * as Gun1 from '../../../network/gun/version.1'
 import * as Gun2 from '../../../network/gun/version.2'
-import { geti18nString } from '../../../utils/i18n'
+import { useI18N } from '../../../utils/i18n-next-ui'
 import { ProfileIdentifier, PostIdentifier } from '../../../database/type'
 import getCurrentNetworkWorker from '../../../social-network/utils/getCurrentNetworkWorker'
 import { verifyOthersProve } from './verifyOthersProve'
 import { memoizePromise } from '../../../utils/memoize'
 import { queryPersonaRecord } from '../../../database'
 import { PersonaRecord } from '../../../database/Persona/Persona.db'
+import { i18n } from '../../../utils/i18n-next'
 
 async function getUserPublicKeyFromBio(user: ProfileIdentifier) {
     const profile = await getCurrentNetworkWorker(user).fetchProfile(user)
@@ -43,7 +44,7 @@ async function getUserPublicKeyFromNetwork(user: ProfileIdentifier) {
     }
     const person = await queryPersonaRecord(user)
     if ((bioRejected && proveRejected) || !person?.publicKey) {
-        throw new Error(geti18nString('service_others_key_not_found', user.userId))
+        throw new Error(i18n.t('service_others_key_not_found', { name: user.userId }))
     }
     return person
 }

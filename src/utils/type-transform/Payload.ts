@@ -1,9 +1,9 @@
-import { geti18nString } from '../i18n'
 import { SocialNetworkWorkerAndUI } from '../../social-network/shared'
 import { isNil } from 'lodash-es'
 import { definedSocialNetworkWorkers } from '../../social-network/worker'
 import { GetContext } from '@holoflows/kit/es'
 import { safeGetActiveUI } from '../safeRequire'
+import { i18n } from '../i18n-next'
 
 export type Payload = PayloadAlpha40_Or_Alpha39 | PayloadAlpha38
 export type PayloadLatest = PayloadAlpha38
@@ -41,19 +41,19 @@ function deconstructAlpha40_Or_Alpha39_Or_Alpha38(str: string, throws = false): 
     str = str.replace('🎼3/4', '🎼4/4')
     const [_, payloadStart] = str.split('🎼4/4|')
     if (!payloadStart)
-        if (throws) throw new Error(geti18nString('payload_not_found'))
+        if (throws) throw new Error(i18n.t('payload_not_found'))
         else return null
     const [payload, rest] = payloadStart.split(':||')
     if (rest === undefined)
-        if (throws) throw new Error(geti18nString('payload_incomplete'))
+        if (throws) throw new Error(i18n.t('payload_incomplete'))
         else return null
     const [AESKeyEncrypted, iv, encryptedText, signature, authorPublicKey, publicShared, ...extra] = payload.split('|')
     if (!(AESKeyEncrypted && iv && encryptedText))
-        if (throws) throw new Error(geti18nString('payload_bad'))
+        if (throws) throw new Error(i18n.t('payload_bad'))
         else return null
     if (extra.length) console.warn('Found extra payload', extra)
     if (isVersion38) {
-        if (!signature) throw new Error(geti18nString('payload_bad'))
+        if (!signature) throw new Error(i18n.t('payload_bad'))
         return {
             version: -38,
             AESKeyEncrypted,
@@ -76,7 +76,7 @@ function deconstructAlpha40_Or_Alpha39_Or_Alpha38(str: string, throws = false): 
 function deconstructAlpha41(str: string, throws = false): null | never {
     // 🎼1/4|ownersAESKeyEncrypted|iv|encryptedText|signature:||
     if (str.includes('🎼1/4') && str.includes(':||'))
-        if (throws) throw new Error(geti18nString('payload_throw_in_alpha41'))
+        if (throws) throw new Error(i18n.t('payload_throw_in_alpha41'))
         else return null
     return null
 }
@@ -112,9 +112,9 @@ export function deconstructPayload(str: string, decoder: Decoder, throws: boolea
         }
     }
     if (str.includes('🎼') && str.includes(':||'))
-        if (throws) throw new TypeError(geti18nString('service_unknown_payload'))
+        if (throws) throw new TypeError(i18n.t('service_unknown_payload'))
         else return null
-    if (throws) throw new TypeError(geti18nString('payload_not_found'))
+    if (throws) throw new TypeError(i18n.t('payload_not_found'))
     else return null
 }
 

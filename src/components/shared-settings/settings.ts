@@ -1,21 +1,21 @@
 import { createNewSettings, createNetworkSpecificSettings } from './createSettings'
 import { ValueRef } from '@holoflows/kit/es'
 import { MessageCenter } from '../../utils/messages'
-import { geti18nString, getCurrentLanguage } from '../../utils/i18n'
+import i18nNextInstance, { i18n } from '../../utils/i18n-next'
 
 /**
  * Does the debug mode on
  */
 export const debugModeSetting = createNewSettings<boolean>('debugMode', false, {
-    primary: () => geti18nString('settings_enable_debug'),
-    secondary: () => geti18nString('settings_enable_debug_desc'),
+    primary: () => i18n.t('settings_enable_debug'),
+    secondary: () => i18n.t('settings_enable_debug_desc'),
 })
 /**
  * Dose steganography post mode on
  */
 export const steganographyModeSetting = createNewSettings<boolean>('steganographyMode', false, {
-    primary: () => geti18nString('settings_image_based_payload'),
-    secondary: () => geti18nString('settings_image_based_payload_desc'),
+    primary: () => i18n.t('settings_image_based_payload'),
+    secondary: () => i18n.t('settings_image_based_payload_desc'),
 })
 
 /**
@@ -25,8 +25,8 @@ export const disableOpenNewTabInBackgroundSettings = createNewSettings<boolean>(
     'disable automated tab task open new tab',
     true,
     {
-        primary: () => geti18nString('settings_disable_new_background_tab'),
-        secondary: () => geti18nString('settings_disable_new_background_tab_desc'),
+        primary: () => i18n.t('settings_disable_new_background_tab'),
+        secondary: () => i18n.t('settings_disable_new_background_tab_desc'),
     },
 )
 
@@ -34,15 +34,11 @@ export enum Language {
     zh = 'zh',
     en = 'en',
 }
-let lang: string = 'en'
-try {
-    lang = getCurrentLanguage()
-} catch {}
-
+const lang: string = i18nNextInstance.language
 export const languageSettings = createNewSettings<Language>(
     'language',
     lang in Language ? (lang as Language) : Language.en,
-    { primary: () => geti18nString('settings_language') },
+    { primary: () => i18n.t('settings_language') },
 )
 
 const createProxiedSettings = <T extends string = string>(settingsKey: string) => {

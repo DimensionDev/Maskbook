@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { useCallback } from 'react'
-import { geti18nString } from '../../utils/i18n'
+import { useI18N } from '../../utils/i18n-next-ui'
 import { makeStyles } from '@material-ui/styles'
 import {
     AppBar,
@@ -48,13 +48,14 @@ const useStyles = makeStyles((theme: Theme) => ({
     },
 }))
 export function BannerUI(props: BannerUIProps) {
+    const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
 
-    const Title = props.title ?? geti18nString('banner_title')
-    const Description = props.description ?? geti18nString('banner_preparing_setup')
+    const Title = props.title ?? t('banner_title')
+    const Description = props.description ?? t('banner_preparing_setup')
 
-    const emptyUsernameHelperText = geti18nString('banner_empty_username')
-    const invalidUsernameHelperText = geti18nString('banner_invalid_username')
+    const emptyUsernameHelperText = t('banner_empty_username')
+    const invalidUsernameHelperText = t('banner_invalid_username')
 
     const { username } = props
 
@@ -104,13 +105,13 @@ export function BannerUI(props: BannerUIProps) {
                 onClick={props.nextStep.onClick}
                 variant="contained"
                 color="primary">
-                {geti18nString('banner_get_started')}
+                {t('banner_get_started')}
             </Button>
         )
     const DismissButton =
         props.close !== 'hidden' ? (
             <Button className={classes.button} color="primary" onClick={props.close.onClose}>
-                {geti18nString('cancel')}
+                {t('cancel')}
             </Button>
         ) : null
     return (

@@ -1,7 +1,7 @@
 import React from 'react'
 import StepBase from './StepBase'
 import { Box, Typography, styled, Theme } from '@material-ui/core'
-import { geti18nString } from '../../../utils/i18n'
+import { useI18N } from '../../../utils/i18n-next-ui'
 import { Link } from 'react-router-dom'
 import ActionButton from '../DashboardComponents/ActionButton'
 import { InitStep } from '../InitStep'
@@ -30,14 +30,15 @@ const LinedBox = styled('div')(({ theme }: { theme: Theme }) => ({
 }))
 
 export default function InitStep0() {
-    const header = geti18nString('dashboard_init_header')
+    const { t } = useI18N()
+    const header = t('dashboard_init_header')
 
     const content = (
         <div style={{ width: '100%' }}>
             <LinedBox>
                 <Box flex={1}>
-                    <Typography variant="h6">{geti18nString('dashboard_new_user')}</Typography>
-                    <Typography variant="body1">{geti18nString('dashboard_new_user_hint')}</Typography>
+                    <Typography variant="h6">{t('dashboard_new_user')}</Typography>
+                    <Typography variant="body1">{t('dashboard_new_user_hint')}</Typography>
                 </Box>
                 <VerticalCenter>
                     <ActionButton<typeof Link>
@@ -45,18 +46,18 @@ export default function InitStep0() {
                         color="primary"
                         component={Link}
                         to={InitStep.Setup1}>
-                        {geti18nString('set_up')}
+                        {t('set_up')}
                     </ActionButton>
                 </VerticalCenter>
             </LinedBox>
             <LinedBox>
                 <Box flex={1}>
-                    <Typography variant="h6">{geti18nString('dashboard_returning_user')}</Typography>
-                    <Typography variant="body1">{geti18nString('dashboard_returning_user_hint')}</Typography>
+                    <Typography variant="h6">{t('dashboard_returning_user')}</Typography>
+                    <Typography variant="body1">{t('dashboard_returning_user_hint')}</Typography>
                 </Box>
                 <VerticalCenter>
                     <ActionButton<typeof Link> variant="outlined" component={Link} to={InitStep.Restore1}>
-                        {geti18nString('restore')}
+                        {t('restore')}
                     </ActionButton>
                 </VerticalCenter>
             </LinedBox>
