@@ -3,7 +3,7 @@
     "i18n-ally.sourceLanguage": "en",
     "i18n-ally.displayLanguage": "zh",
     "i18n-ally.localesPaths": "src/_locales",
-    "i18n-ally.sortKeys": false,
+    "i18n-ally.sortKeys": true,
     "i18n-ally.keystyle": "nested",
     "i18n-ally.annotations": true,
     "i18n-ally.indent": 4

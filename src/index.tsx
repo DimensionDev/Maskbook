@@ -12,7 +12,7 @@ import {
     Tab,
 } from '@material-ui/core'
 
-import AccountBalanceWalletIcon from '@material-ui/icons/AccountBalanceWallet'
+import SettingsIcon from '@material-ui/icons/Settings'
 import CloseIcon from '@material-ui/icons/Close'
 import HomeIcon from '@material-ui/icons/Home'
 import CreditCardIcon from '@material-ui/icons/CreditCard'
@@ -41,6 +41,7 @@ import { languageSettings } from './components/shared-settings/settings'
 import { useValueRef } from './utils/hooks/useValueRef'
 import { useI18N } from './utils/i18n-next-ui'
 import i18nNextInstance from './utils/i18n-next'
+import { Settings as DashboardSettingsPage } from './extension/options-page/Settings/settings'
 
 const useStyles = makeStyles(theme =>
     createStyles({
@@ -85,6 +86,7 @@ const OptionsPageRouters = (
         <Switch>
             <Route path="/home/" component={DashboardHomePage} />
             <Route path="/wallets/" component={DashboardWalletsPage} />
+            <Route path="/settings/" component={DashboardSettingsPage} />
             <Route path="/debug/" component={DashboardDebugPage} />
             <DialogRouter path="/initialize" component={DashboardInitializeDialog} onExit={'/'} fullscreen />
             <Redirect path="*" to="/home/" />
@@ -123,7 +125,7 @@ function Dashboard() {
     const routers: [string, string, JSX.Element][] = [
         [t('home'), '/home/', <HomeIcon />],
         ['Wallets', '/wallets/', <CreditCardIcon />],
-        // ['Settings', '/settings/', <SettingsIcon />],
+        [t('settings'), '/settings/', <SettingsIcon />],
         // ['About', '/about/', <InfoOutlinedIcon />],
         [t('debug'), '/debug/', <BugReportIcon />],
     ]
