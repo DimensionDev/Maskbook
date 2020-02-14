@@ -17,6 +17,7 @@ import { PersonaRecord } from '../../../database/Persona/Persona.db'
 import { verifyOthersProve } from './verifyOthersProve'
 import { import_AES_GCM_256_Key } from '../../../utils/crypto.subtle'
 import { publicSharedAESKey } from '../../../crypto/crypto-alpha-38'
+import { DecryptFailedReason } from '../../../utils/constants'
 
 type Progress = {
     progress: 'finding_person_public_key' | 'finding_post_key'
@@ -58,7 +59,6 @@ function makeSuccessResult(
         content: cryptoProvider.typedMessageParse(rawContent),
     }
 }
-
 /**
  * Decrypt message from a user
  * @param encrypted post
@@ -142,8 +142,7 @@ export async function* decryptFromMessageWithProgress(
         // ? Get my public & private key.
         const mine = await queryPersonaRecord(whoAmI)
 
-        // ? Note: src/components/InjectedComponents/DecryptedPost.tsx relies on this error message
-        if (!mine?.privateKey) throw new Error('My key not found')
+        if (!mine?.privateKey) throw new Error(DecryptFailedReason.MyCryptoKeyNotFound)
         const ecdhParams = getKeyParameter('ecdh')
         const minePublic = await JsonWebKeyToCryptoKey(mine.publicKey, ...ecdhParams)
         const minePrivate = mine.privateKey ? await JsonWebKeyToCryptoKey(mine.privateKey, ...ecdhParams) : undefined
