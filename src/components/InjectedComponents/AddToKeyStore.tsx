@@ -2,7 +2,7 @@ import React from 'react'
 import AsyncComponent from '../../utils/components/AsyncComponent'
 import { AdditionalContent, AdditionalContentProps } from './AdditionalPostContent'
 import Services from '../../extension/service'
-import { geti18nString } from '../../utils/i18n'
+import { useI18N } from '../../utils/i18n-next-ui'
 import { ProfileIdentifier } from '../../database/type'
 
 export interface AddToKeyStoreProps {
@@ -42,17 +42,22 @@ type SuccessProps = Partial<AdditionalContentProps>
 type WaitingProps = Partial<AdditionalContentProps>
 type FailedProps = Partial<AdditionalContentProps> & { error: Error }
 export const AddToKeyStoreUI = {
-    success: React.memo((props: SuccessProps) => (
-        <AdditionalContent header={geti18nString('add_to_key_store_success')} {...props} />
-    )),
-    awaiting: React.memo((props: WaitingProps) => (
-        <AdditionalContent header={geti18nString('add_to_key_store_verifying')} {...props} />
-    )),
-    failed: React.memo(({ error, ...props }: FailedProps) => (
-        <AdditionalContent
-            header={geti18nString('add_to_key_store_failed_title')}
-            message={(console.error(error), geti18nString('add_to_key_store_failed_text', error.message))}
-            {...props}
-        />
-    )),
+    success: React.memo((props: SuccessProps) => {
+        const { t } = useI18N()
+        return <AdditionalContent header={t('add_to_key_store_success')} {...props} />
+    }),
+    awaiting: React.memo((props: WaitingProps) => {
+        const { t } = useI18N()
+        return <AdditionalContent header={t('add_to_key_store_verifying')} {...props} />
+    }),
+    failed: React.memo(({ error, ...props }: FailedProps) => {
+        const { t } = useI18N()
+        return (
+            <AdditionalContent
+                header={t('add_to_key_store_failed_title')}
+                message={(console.error(error), t('add_to_key_store_failed_text', { error: error.message }))}
+                {...props}
+            />
+        )
+    }),
 }

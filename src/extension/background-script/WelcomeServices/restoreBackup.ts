@@ -1,6 +1,6 @@
 import { ProfileIdentifier } from '../../../database/type'
 import { UpgradeBackupJSONFile } from '../../../utils/type-transform/BackupFormat/JSON/latest'
-import { geti18nString } from '../../../utils/i18n'
+import { useI18N } from '../../../utils/i18n-next-ui'
 import { getKeyParameter, JsonWebKeyToCryptoKey } from '../../../utils/type-transform/CryptoKey-JsonWebKey'
 import {
     attachProfileDB,
@@ -15,14 +15,14 @@ import { PostRecordFromJSONFormat } from '../../../utils/type-transform/BackupFo
 import { createOrUpdatePostDB } from '../../../database/post'
 import { GroupRecordFromJSONFormat } from '../../../utils/type-transform/BackupFormat/JSON/DBRecord-JSON/GroupRecord'
 import { createOrUpdateUserGroupDatabase } from '../../../database/group'
-import { IDBPTransaction } from 'idb'
+import { i18n } from '../../../utils/i18n-next'
 
 /**
  * Restore the backup
  */
 export async function restoreBackup(json: object, whoAmI?: ProfileIdentifier): Promise<void> {
     const data = UpgradeBackupJSONFile(json, whoAmI)
-    if (!data) throw new TypeError(geti18nString('service_invalid_backup_file'))
+    if (!data) throw new TypeError(i18n.t('service_invalid_backup_file'))
 
     const keyCache = new Map<JsonWebKey, CryptoKey>()
     const aes = getKeyParameter('aes')

@@ -1,6 +1,6 @@
 import { ProfileIdentifier, PostIdentifier } from '../../../database/type'
 import { usernameValidator } from './user'
-import { geti18nString } from '../../../utils/i18n'
+import { i18n } from '../../../utils/i18n-next'
 
 export const twitterUrl = {
     hostIdentifier: 'twitter.com',
@@ -13,7 +13,7 @@ export const hostLeadingUrlAutoTwitter = (isMobile: boolean) =>
 
 export const getPostUrl = (post: PostIdentifier<ProfileIdentifier>, isMobile: boolean = false) => {
     if (!usernameValidator(post.identifier.userId)) {
-        throw new Error(geti18nString('service_username_invalid'))
+        throw new Error(i18n.t('service_username_invalid'))
     }
     return `${hostLeadingUrlAutoTwitter(isMobile)}/${post.identifier.userId}/status/${post.postId}`
 }

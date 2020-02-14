@@ -1,9 +1,9 @@
-import { geti18nString } from '../../../utils/i18n'
 import { decompressSecp256k1Key } from '../../../utils/type-transform/SECP256k1-Compression'
 import { ProfileIdentifier, ECKeyIdentifier } from '../../../database/type'
 import { getNetworkWorker } from '../../../social-network/worker'
 import { import_ECDH_256k1_Key } from '../../../utils/crypto.subtle'
 import { createProfileWithPersona, queryPersonaRecord } from '../../../database'
+import { i18n } from '../../../utils/i18n-next'
 
 export async function verifyOthersProve(bio: string, others: ProfileIdentifier): Promise<boolean> {
     const compressedX = getNetworkWorker(others.network).publicKeyDecoder(bio)
@@ -22,7 +22,7 @@ export async function verifyOthersProve(bio: string, others: ProfileIdentifier):
         // verify if this key is a valid key
         await import_ECDH_256k1_Key(key)
     } catch {
-        throw new Error(geti18nString('service_key_parse_failed'))
+        throw new Error(i18n.t('service_key_parse_failed'))
     }
     // if privateKey, we should possibly not recreate it
     const hasPrivate =

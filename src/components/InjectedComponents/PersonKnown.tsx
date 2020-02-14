@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { AdditionalContent, AdditionalContentProps } from './AdditionalPostContent'
-import { geti18nString } from '../../utils/i18n'
-import AsyncComponent from '../../utils/components/AsyncComponent'
+import { useI18N } from '../../utils/i18n-next-ui'
+import AsyncComponent, { useAsync } from '../../utils/components/AsyncComponent'
 import { ProfileIdentifier } from '../../database/type'
 import Services from '../../extension/service'
 import { ValueRef } from '@holoflows/kit/es'
@@ -15,6 +15,7 @@ export interface PersonKnownProps {
 }
 
 export function PersonKnown(props: PersonKnownProps) {
+    const { t } = useI18N()
     const { pageOwner, bioContent } = props
     const bio = useValueRef(bioContent)
     const owner = useValueRef(pageOwner)
@@ -53,14 +54,14 @@ export function PersonKnown(props: PersonKnownProps) {
                     case 'self':
                         return (
                             <AdditionalContent
-                                header={header(geti18nString('please_include_proof_your_bio', data.prove!))}
+                                header={header(t('please_include_proof_your_bio', { bio: data.prove }))}
                                 {...props.AdditionalContentProps}
                             />
                         )
                     case 'others':
                         return (
                             <AdditionalContent
-                                header={header(geti18nString('seen_in_maskbook_database'))}
+                                header={header(t('seen_in_maskbook_database'))}
                                 {...props.AdditionalContentProps}
                             />
                         )

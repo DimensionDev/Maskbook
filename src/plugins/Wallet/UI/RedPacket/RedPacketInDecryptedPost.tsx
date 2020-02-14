@@ -29,7 +29,7 @@ import {
 import { useStylesExtends, or } from '../../../../components/custom-ui-helper'
 import { DialogDismissIconUI } from '../../../../components/InjectedComponents/DialogDismissIcon'
 import { PortalShadowRoot } from '../../../../utils/jss/ShadowRootPortal'
-import { geti18nString } from '../../../../utils/i18n'
+import { useI18N } from '../../../../utils/i18n-next-ui'
 
 const useStyles = makeStyles(theme =>
     createStyles({
@@ -157,6 +157,7 @@ export function RedPacketInDecryptedPostClaimDialog(
         open: boolean
     },
 ) {
+    const { t } = useI18N()
     const [selectedWalletAddress, setSelectedWalletAddress] = or(
         props.walletAddress,
         React.useState<undefined | string>(),
@@ -216,7 +217,7 @@ export function RedPacketInDecryptedPostClaimDialog(
                     color="primary"
                     variant="contained"
                     onClick={() => props.onClaimRedPacket(selectedWalletAddress!, claiming?.rpid)}>
-                    {geti18nString('ok')}
+                    {t('ok')}
                 </Button>
             </DialogActions>
         </ResponsiveDialog>

@@ -13,7 +13,7 @@ import {
     DialogActions,
 } from '@material-ui/core'
 import { useStylesExtends } from '../../custom-ui-helper'
-import { geti18nString } from '../../../utils/i18n'
+import { useI18N } from '../../../utils/i18n-next-ui'
 import { ProfileInList } from './ProfileInList'
 import { Profile } from '../../../database'
 import { DialogDismissIconUI } from '../../InjectedComponents/DialogDismissIcon'
@@ -51,6 +51,7 @@ export interface SelectRecipientsDialogUIProps
     onDeselect: (item: Profile) => void
 }
 export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
+    const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
     const rootRef = useRef<HTMLDivElement>(null)
     const { items } = props
@@ -78,12 +79,12 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
                 <DialogTitle className={classes.header}>
                     <IconButton
                         classes={{ root: classes.close }}
-                        aria-label={geti18nString('select_specific_friends_dialog__dismiss_aria')}
+                        aria-label={t('select_specific_friends_dialog__dismiss_aria')}
                         onClick={props.onClose}>
                         <DialogDismissIconUI />
                     </IconButton>
                     <Typography className={classes.title} display="inline" variant="inherit">
-                        {geti18nString('select_specific_friends_dialog__title')}
+                        {t('select_specific_friends_dialog__title')}
                     </Typography>
                 </DialogTitle>
                 <DialogContent className={classes.content}>
@@ -113,7 +114,7 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
                         variant="contained"
                         disabled={props.submitDisabled}
                         onClick={props.onSubmit}>
-                        {geti18nString('select_specific_friends_dialog__button')}
+                        {t('select_specific_friends_dialog__button')}
                     </Button>
                 </DialogActions>
             </ResponsiveDialog>

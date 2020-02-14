@@ -4,7 +4,7 @@ import { SelectPeopleAndGroupsUI, SelectPeopleAndGroupsUIProps } from '../shared
 import { useCapturedInput } from '../../utils/hooks/useCapturedEvents'
 import { Avatar } from '../../utils/components/Avatar'
 import Services from '../../extension/service'
-import { geti18nString } from '../../utils/i18n'
+import { useI18N } from '../../utils/i18n-next-ui'
 import { makeStyles } from '@material-ui/styles'
 import { Box, Button, Card, CardHeader, Divider, InputBase, Paper, Typography } from '@material-ui/core'
 import { Group, Profile } from '../../database'
@@ -57,6 +57,7 @@ export interface AdditionalPostBoxUIProps
 export const AdditionalPostBoxUI = React.memo(function AdditionalPostBoxUI(props: AdditionalPostBoxUIProps) {
     const classes = useStylesExtends(useStyles(), props)
     const [, inputRef] = useCapturedInput(props.onPostTextChange)
+    const { t } = useI18N()
 
     return (
         <Card>
@@ -94,7 +95,7 @@ export const AdditionalPostBoxUI = React.memo(function AdditionalPostBoxUI(props
                     color="primary"
                     className={classes.postButton}
                     disabled={props.postButtonDisabled}>
-                    {geti18nString('additional_post_box__post_button')}
+                    {t('additional_post_box__post_button')}
                 </Button>
             </Box>
         </Card>
@@ -112,6 +113,7 @@ export interface AdditionalPostBoxProps extends Partial<AdditionalPostBoxUIProps
  * This is AdditionalPostBox with default props.
  */
 export function AdditionalPostBox(props: AdditionalPostBoxProps) {
+    const { t } = useI18N()
     const people = useFriendsList()
     const groups = useCurrentGroupsList()
     const availableShareTarget = or(
@@ -136,24 +138,24 @@ export function AdditionalPostBox(props: AdditionalPostBoxProps) {
                 const activeUI = getActivatedUI()
                 if (isSteganography) {
                     activeUI.taskPasteIntoPostBox(
-                        geti18nString('additional_post_box__steganography_post_pre', String(Date.now())),
+                        t('additional_post_box__steganography_post_pre', { random: Date.now() }),
                         {
-                            warningText: geti18nString('additional_post_box__encrypted_failed'),
+                            warningText: t('additional_post_box__encrypted_failed'),
                             shouldOpenPostDialog: false,
                         },
                     )
                     activeUI.taskUploadToPostBox(encrypted, {
-                        warningText: geti18nString('additional_post_box__steganography_post_failed'),
+                        warningText: t('additional_post_box__steganography_post_failed'),
                     })
                 } else {
-                    activeUI.taskPasteIntoPostBox(geti18nString('additional_post_box__encrypted_post_pre', encrypted), {
-                        warningText: geti18nString('additional_post_box__encrypted_failed'),
+                    activeUI.taskPasteIntoPostBox(t('additional_post_box__encrypted_post_pre', { encrypted }), {
+                        warningText: t('additional_post_box__encrypted_failed'),
                         shouldOpenPostDialog: false,
                     })
                 }
                 Services.Crypto.publishPostAESKey(token)
             },
-            [currentIdentity, isSteganography],
+            [currentIdentity, isSteganography, t],
         ),
     )
     const onRequestReset = or(
@@ -175,6 +177,11 @@ export function AdditionalPostBox(props: AdditionalPostBoxProps) {
         return <NotSetupYetPrompt {...props.NotSetupYetPromptProps} />
     }
 
+    const withName = t('additional_post_box__placeholder_w_name', {
+        user: currentIdentity ? currentIdentity.nickname : '',
+    })
+    const woName = t('additional_post_box__placeholder_wo_name')
+
     const ui = (
         <AdditionalPostBoxUI
             currentIdentity={currentIdentity}
@@ -182,12 +189,7 @@ export function AdditionalPostBox(props: AdditionalPostBoxProps) {
             availableShareTarget={availableShareTarget}
             onShareTargetChanged={onShareTargetChanged}
             postBoxText={postText}
-            postBoxPlaceholder={geti18nString(
-                currentIdentity && currentIdentity.nickname
-                    ? 'additional_post_box__placeholder_w_name'
-                    : 'additional_post_box__placeholder_wo_name',
-                currentIdentity ? currentIdentity.nickname : '',
-            )}
+            postBoxPlaceholder={currentIdentity && currentIdentity.nickname ? withName : woName}
             onPostTextChange={setPostText}
             onPostButtonClicked={() => {
                 onRequestPost(currentShareTarget, postText)

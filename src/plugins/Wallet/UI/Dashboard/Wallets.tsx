@@ -28,7 +28,7 @@ import {
     WalletImportDialog,
     WalletErrorDialog,
 } from './Dialogs/Wallet'
-import { geti18nString } from '../../../../utils/i18n'
+import { useI18N } from '../../../../utils/i18n-next-ui'
 import ActionButton from '../../../../extension/options-page/DashboardComponents/ActionButton'
 import { currentEthereumNetworkSettings } from '../../network'
 
@@ -90,6 +90,7 @@ const dialogs = (
 )
 
 export default function DashboardWalletsPage() {
+    const { t } = useI18N()
     const [wallets, setWallets] = useState<(WalletRecord & { privateKey: string })[]>([])
     const [tokens, setTokens] = useState<ERC20TokenRecord[]>([])
     useEffect(() => {
@@ -126,7 +127,7 @@ export default function DashboardWalletsPage() {
                 <Card raised elevation={1}>
                     <List disablePadding>
                         <ListItemWithAction key="wallet-create">
-                            <ListItemText primary={geti18nString('create')} secondary={'Create a new wallet.'} />
+                            <ListItemText primary={t('create')} secondary={'Create a new wallet.'} />
                             <ListItemSecondaryAction>
                                 <ActionButton<typeof Link>
                                     variant="contained"
@@ -134,16 +135,13 @@ export default function DashboardWalletsPage() {
                                     className={classes.button}
                                     component={Link}
                                     to="create/">
-                                    {geti18nString('create')}
+                                    {t('create')}
                                 </ActionButton>
                             </ListItemSecondaryAction>
                         </ListItemWithAction>
                         <Divider></Divider>
                         <ListItemWithAction key="dashboard-restore">
-                            <ListItemText
-                                primary={geti18nString('import')}
-                                secondary={'From a previous wallet backup.'}
-                            />
+                            <ListItemText primary={t('import')} secondary={'From a previous wallet backup.'} />
                             <ListItemSecondaryAction>
                                 <ActionButton<typeof Link>
                                     variant="outlined"
@@ -151,7 +149,7 @@ export default function DashboardWalletsPage() {
                                     className={classes.button}
                                     component={Link}
                                     to="import/">
-                                    {geti18nString('import')}
+                                    {t('import')}
                                 </ActionButton>
                             </ListItemSecondaryAction>
                         </ListItemWithAction>

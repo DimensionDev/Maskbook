@@ -24,12 +24,13 @@ addDecorator(withKnobs)
 addDecorator(muiTheme([MaskbookDarkTheme, MaskbookLightTheme]))
 // i18n
 import * as React from 'react'
-import { geti18nContext } from '../src/utils/i18n'
-const ctx = geti18nContext()
+import { I18nextProvider } from 'react-i18next'
+import i18nNextInstance from '../src/utils/i18n-next'
 addParameters({
     i18n: {
         provider: function i18nProvider(props) {
-            return React.createElement(ctx.Provider, { value: props.locale }, props.children)
+            i18nNextInstance.changeLanguage(props.locale)
+            return React.createElement(I18nextProvider, { i18n: i18nNextInstance }, props.children)
         },
         supportedLocales: ['en', 'zh'],
         providerLocaleKey: 'locale',

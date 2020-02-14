@@ -26,7 +26,7 @@ import { ERC20TokenPredefinedData } from '../../../erc20'
 import { ERC20WellKnownTokenSelector } from './WalletAddTokenDialogContent'
 import Wallet from 'wallet.ts'
 import { useHistory, Link } from 'react-router-dom'
-import { geti18nString } from '../../../../../utils/i18n'
+import { useI18N } from '../../../../../utils/i18n-next-ui'
 import { useColorProvider } from '../../../../../utils/theme'
 import { formatBalance } from '../../../formatter'
 
@@ -368,6 +368,7 @@ export function WalletRedPacketDetailDialogWithRouter(props: Pick<WalletRedPacke
 }
 
 export function WalletCreateDialog() {
+    const { t } = useI18N()
     const [name, setName] = React.useState('')
     const [passphrase, setPassphrase] = React.useState('')
     const history = useHistory()
@@ -397,8 +398,8 @@ export function WalletCreateDialog() {
                 style={{ width: '100%', maxWidth: '320px' }}
                 variant="outlined"
                 label="Password"
-                helperText={geti18nString('dashboard_password_helper_text')}
-                placeholder={geti18nString('dashboard_password_hint')}
+                helperText={t('dashboard_password_helper_text')}
+                placeholder={t('dashboard_password_hint')}
                 value={passphrase}
                 onChange={e => setPassphrase(e.target.value)}
             />
@@ -412,7 +413,7 @@ export function WalletCreateDialog() {
             actionsAlign="center"
             actions={
                 <ActionButton variant="contained" color="primary" component={'a'} onClick={createWallet}>
-                    {geti18nString('create')}
+                    {t('create')}
                 </ActionButton>
             }></DialogContentItem>
     )
@@ -430,6 +431,7 @@ const useWalletImportStyles = makeStyles(theme =>
 )
 
 export function WalletImportDialog() {
+    const { t } = useI18N()
     const [mnemonic, setMnemonic] = React.useState('')
     const [passphrase, setPassphrase] = React.useState('')
     const [name, setName] = React.useState('New wallet')
@@ -476,7 +478,7 @@ export function WalletImportDialog() {
                 <>
                     <span />
                     <ActionButton variant="contained" color="primary" component={'a'} onClick={importWallet}>
-                        {geti18nString('import')}
+                        {t('import')}
                     </ActionButton>
                 </>
             }></DialogContentItem>
@@ -484,6 +486,7 @@ export function WalletImportDialog() {
 }
 
 export function WalletErrorDialog() {
+    const { t } = useI18N()
     const { reason } = useQueryParams(['reason'])
     let content
     switch (reason) {
@@ -516,7 +519,7 @@ export function WalletErrorDialog() {
                 <>
                     <span />
                     <ActionButton<typeof Link> variant="contained" color="primary" component={Link} to="/wallets/">
-                        {geti18nString('ok')}
+                        {t('ok')}
                     </ActionButton>
                 </>
             }></DialogContentItem>
@@ -529,6 +532,7 @@ interface WalletDeleteDialogProps {
     wallet: WalletRecord
 }
 export function WalletDeleteDialog(props: WalletDeleteDialogProps) {
+    const { t } = useI18N()
     const { onConfirm, onDecline, wallet } = props
     const color = useColorProvider()
 
@@ -543,10 +547,10 @@ export function WalletDeleteDialog(props: WalletDeleteDialogProps) {
             actions={
                 <>
                     <ActionButton variant="outlined" color="default" onClick={onDecline}>
-                        {geti18nString('cancel')}
+                        {t('cancel')}
                     </ActionButton>
                     <ActionButton classes={{ root: color.errorButton }} onClick={deleteWallet}>
-                        {geti18nString('ok')}
+                        {t('ok')}
                     </ActionButton>
                 </>
             }></DialogContentItem>

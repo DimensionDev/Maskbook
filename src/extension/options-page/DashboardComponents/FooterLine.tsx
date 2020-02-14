@@ -2,7 +2,7 @@ import React from 'react'
 import { makeStyles, createStyles } from '@material-ui/styles'
 import { Link } from 'react-router-dom'
 import { Breadcrumbs, Theme, Typography, Link as MuiLink } from '@material-ui/core'
-import { geti18nString } from '../../../utils/i18n'
+import { useI18N } from '../../../utils/i18n-next-ui'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -39,20 +39,17 @@ const FooterLink = function(props: React.PropsWithChildren<{ href: string } | { 
 }
 
 export default function FooterLine() {
+    const { t } = useI18N()
     const classes = useStyles()
     return (
         <Breadcrumbs className={classes.footerButtons} separator="|" aria-label="breadcrumb">
             <FooterLink href="https://maskbook.com/">Maskbook.com</FooterLink>
             <FooterLink href="https://github.com/DimensionDev/Maskbook/releases">
-                {geti18nString('version')} {globalThis?.browser.runtime.getManifest().version}
+                {t('version')} {globalThis?.browser.runtime.getManifest().version}
             </FooterLink>
-            <FooterLink href="https://maskbook.com/download-links/#mobile">
-                {geti18nString('dashboard_mobile_test')}
-            </FooterLink>
-            <FooterLink href="https://github.com/DimensionDev/Maskbook">
-                {geti18nString('dashboard_source_code')}
-            </FooterLink>
-            <FooterLink href="https://maskbook.com/privacy-policy/">{geti18nString('privacy_policy')}</FooterLink>
+            <FooterLink href="https://maskbook.com/download-links/#mobile">{t('dashboard_mobile_test')}</FooterLink>
+            <FooterLink href="https://github.com/DimensionDev/Maskbook">{t('dashboard_source_code')}</FooterLink>
+            <FooterLink href="https://maskbook.com/privacy-policy/">{t('privacy_policy')}</FooterLink>
         </Breadcrumbs>
     )
 }

@@ -1,825 +1,276 @@
 {
-    "additional_post_box__placeholder_w_name": {
-        "message": "Hey $1, 有何所思？用 Maskbook 加密分享。"
-    },
-    "additional_post_box__placeholder_wo_name": {
-        "message": "有何所思？用 Maskbook 加密分享。"
-    },
-    "additional_post_box__post_button": {
-        "message": "現在發佈！"
-    },
-    "additional_post_box__encrypted_post_pre": {
-        "message": "來 #Maskbook 解密這個訊息！ $1",
-        "description": "$1 须写在字串末。"
-    },
-    "additional_post_box__encrypted_failed": {
-        "message": "請將以下内容拷貝至發佈框。"
-    },
-    "additional_post_box__steganography_post_pre": {
-        "message": "此圖片僅分享給我的好友。請安裝 Maskbook 以解讀圖片。 ([I:b]) $1"
-    },
-    "additional_post_box__steganography_post_failed": {
-        "message": "請將已下載的圖片上载至發佈框。"
-    },
-    "post_dialog__title": {
-        "message": "Maskbook: 編輯"
-    },
-    "post_dialog__placeholder": {
-        "message": "請輸入…"
-    },
-    "post_dialog__select_recipients_title": {
-        "message": "選擇收件人"
-    },
-    "post_dialog__select_recipients_only_myself": {
-        "message": "我自己"
-    },
-    "post_dialog__select_specific_friends_title": {
-        "message": "選擇好友 (已選 $1)"
-    },
-    "post_dialog__button": {
-        "message": "完成"
-    },
-    "post_dialog__dismiss_aria": {
-        "message": "關閉編輯框"
-    },
-    "post_modal_hint__title": {
-        "message": "在找 Maskbook 嗎？"
-    },
-    "post_modal_hint__button": {
-        "message": "🔒編輯加密訊息🔒"
-    },
-    "select_specific_friends_dialog__title": {
-        "message": "選擇好友"
-    },
-    "select_specific_friends_dialog__button": {
-        "message": "完成"
-    },
-    "select_specific_friends_dialog__dismiss_aria": {
-        "message": "關閉選擇好友對話框"
-    },
-    "comment_box__placeholder": {
-        "message": "添加一條加密評論…"
-    },
-    "comment_box__paste_failed": {
-        "message": "請將以下内容拷貝至評論框。"
-    },
-    "add_to_key_store_success": {
-        "message": "Maskbook 已獲取此公鑰並添加至本地 ✔"
-    },
-    "add_to_key_store_verifying": {
-        "message": "Maskbook 公鑰已獲取，正在驗證…"
-    },
-    "add_to_key_store_failed_title": {
-        "message": "Maskbook 公鑰驗證失敗 ❌"
-    },
-    "add_to_key_store_failed_text": {
-        "message": "$1\nMaskbook 不會添加此金鑰。"
-    },
-    "decrypted_postbox_title": {
-        "message": "此消息使用 Maskbook 加密："
-    },
-    "decrypted_postbox_add_recipients": {
-        "message": "查看或添加收件人"
-    },
-    "decrypted_postbox_verified": {
-        "message": "數字簽名驗證成功 ✔"
-    },
-    "decrypted_postbox_not_verified": {
-        "message": "數字簽名驗證失敗，對方可能被駭了 ❌"
-    },
-    "decrypted_postbox_decrypting": {
-        "message": "Maskbook 正在解密…"
-    },
-    "decrypted_postbox_decrypting_finding_person_key": {
-        "message": "Maskbook 正在搜尋對方的公鈅…"
-    },
-    "decrypted_postbox_decrypting_finding_post_key": {
-        "message": "Maskbook 正在搜尋分享給你的密鑰以解密这篇内容…"
-    },
-    "decrypted_postbox_failed": {
-        "message": "Maskbook 解密失敗"
-    },
-    "person_or_group_in_chip": {
-        "message": "$1 ($2 人)"
-    },
-    "person_or_group_in_list_0": {
-        "message": "這個組是空的"
-    },
-    "person_or_group_in_list_many": {
-        "message": "$1 等，共 $2 人"
-    },
-    "person_or_group_in_list_many_no_preview": {
-        "message": "共 $2 人"
-    },
-    "search_box_placeholder": {
-        "message": "鍵入以搜尋"
-    },
-    "select_all": {
-        "message": "選取全部"
-    },
-    "select_none": {
-        "message": "全部取消選取"
-    },
-    "no_search_result": {
-        "message": "沒有結果"
-    },
-    "cancel": {
-        "message": "取消"
-    },
-    "share_to": {
-        "message": "分享给…"
-    },
-    "sharing": {
-        "message": "正在分享…"
-    },
-    "share": {
-        "message": "分享"
-    },
-    "restore": {
-        "message": "恢復"
-    },
-    "back": {
-        "message": "返回"
-    },
-    "next": {
-        "message": "繼續"
-    },
-    "finish": {
-        "message": "完成"
-    },
-    "undo": {
-        "message": "撤消"
-    },
-    "copy": {
-        "message": "複製"
-    },
-    "public_key": {
-        "message": "公鑰"
-    },
-    "disconnect": {
-        "message": "斷開"
-    },
-    "dashboard": {
-        "message": "儀表板"
-    },
-    "synchronization": {
-        "message": "同步化"
-    },
-    "dashboard_export_keystore": {
-        "message": "導出備份密鑰"
-    },
-    "dashboard_import_backup": {
-        "message": "導入數據備份"
-    },
-    "dashboard_download": {
-        "message": "備份"
-    },
-    "dashboard_add_new_persona": {
-        "message": "創建新的身份"
-    },
-    "dashboard_unknown_network": {
-        "message": "不支援"
-    },
-    "dashboard_create_backup": {
-        "message": "備份"
-    },
-    "dashboard_delete_persona": {
-        "message": "刪除"
-    },
-    "dashboard_show_qr": {
-        "message": "顯示二維碼"
-    },
-    "dashboard_hide_qr": {
-        "message": "隱藏二維碼"
-    },
-    "dashboard_item_copied": {
-        "message": "好了。"
-    },
-    "dashboard_item_deleted": {
-        "message": "好了。"
-    },
-    "dashboard_item_done": {
-        "message": "好了。"
-    },
-    "dashboard_item_copy_failed": {
-        "message": "複製失敗。"
-    },
-    "dashboard_mobile_test": {
-        "message": "加入移動端測試"
-    },
-    "dashboard_source_code": {
-        "message": "程式源代碼"
-    },
-    "welcome_0_close_button": {
-        "message": "我想以後再做"
-    },
-    "welcome_0_restore_key": {
-        "message": "導入備份檔案"
-    },
-    "welcome_1a1_title": {
-        "message": "你希望為哪個賬戶設定 Maskbook？"
-    },
-    "welcome_1a1_didntfind": {
-        "message": "沒有找到你的賬戶？"
-    },
-    "welcome_1a1b_title": {
-        "message": "Maskbook 可以在這些社交網絡上使用"
-    },
-    "welcome_1a1b_danger": {
-        "message": "受審查的站點"
-    },
-    "welcome_1a1b_connect": {
-        "message": "連結"
-    },
-    "welcome_1a1b_switch": {
-        "message": "連接現有的賬戶"
-    },
-    "welcome_1a2_title": {
-        "message": "使用 Maskbook 的輸入框來加密"
-    },
-    "welcome_1a2_imgalt": {
-        "message": "關於如何使用 Maskbook 加密的截圖"
-    },
-    "welcome_1a2_description": {
-        "message": "這樣，只有你選中的好友才能解密這條訊息"
-    },
-    "welcome_1a2_done_button": {
-        "message": "棒耶！"
-    },
-    "welcome_1a3a_title": {
-        "message": "你希望這個賬戶使用什麽密鑰？"
-    },
-    "welcome_1a3a_generate_new_key_title": {
-        "message": "創建新的密鑰"
-    },
-    "welcome_1a3a_generate_new_key_subtitle": {
-        "message": "請妥善保管"
-    },
-    "welcome_1a3a_generate_new_key_password_label": {
-        "message": "新密鑰的密碼"
-    },
-    "welcome_1a3a_generate_new_key_password_help": {
-        "message": "請牢記密碼，否則只憑藉助記詞是無法恢復密鑰的"
-    },
-    "welcome_1a3a_generate_new_key": {
-        "message": "創建新密鑰"
-    },
-    "welcome_1a3a_generate_new_key_result": {
-        "message": "請抄寫助記詞"
-    },
-    "welcome_1a3a_generate_new_key_result_help": {
-        "message": "助記詞用於恢復密鑰，確定保管好后按“確認”"
-    },
-    "welcome_1a3a_connect_title": {
-        "message": "關聯其他賬戶"
-    },
-    "welcome_1a3a_connect_subtitle": {
-        "message": "這會使用相同的密鑰"
-    },
-    "welcome_1a3a_recover_title": {
-        "message": "用助記詞恢復"
-    },
-    "welcome_1a3a_recover_subtitle": {
-        "message": "輸入以前記錄的助記詞"
-    },
-    "welcome_1a3a_recover_input_word": {
-        "message": "助記詞"
-    },
-    "welcome_1a3a_recover_input_password": {
-        "message": "密碼"
-    },
-    "welcome_1a3_title": {
-        "message": "請妥善保管備份檔案"
-    },
-    "welcome_1a3_description1": {
-        "message": "稍後會有一個保存提示，請妥善保管備份檔案。"
-    },
-    "welcome_1a3_description2": {
-        "message": "記得經常創建新備份！"
-    },
-    "welcome_1a3_done_button": {
-        "message": "瞭解！"
-    },
-    "welcome_1a4_auto_radio_aria": {
-        "message": "選擇賬號歸屬權驗證手段"
-    },
-    "welcome_1a4_auto_profile_title": {
-        "message": "添加公鑰到個人簡介"
-    },
-    "welcome_1a4_auto_profile_description1": {
-        "message": "簡潔高效"
-    },
-    "welcome_1a4_auto_profile_description2": {
-        "message": "不會打擾到任何人"
-    },
-    "welcome_1a4_auto_post_title": {
-        "message": "發佈一個聲明訊息"
-    },
-    "welcome_1a4_auto_post_description1": {
-        "message": "我們感謝你的支持"
-    },
-    "welcome_1a4_auto_post_description2": {
-        "message": "你可以調整文本措辭"
-    },
-    "welcome_1a4_title": {
-        "message": "驗證賬號歸屬權"
-    },
-    "welcome_1a4_disabled": {
-        "message": "由於技術問題，暫時只有一種驗證方式可用。"
-    },
-    "welcome_1a4_type_auto_subtitle1": {
-        "message": "避免好友感到迷惑"
-    },
-    "welcome_1a4_type_auto_subtitle2": {
-        "message": "這使得你的好友能夠驗證你的社交網路賬號與你的 Maskbook 公鑰都屬於你。"
-    },
-    "welcome_1a4_type_auto_switch": {
-        "message": "更願意手動操作？"
-    },
-    "welcome_1a4_type_manual_subtitle1": {
-        "message": "將這串文本添加到個人簡介或分享到時間線，在發佈第一條加密訊息之前。"
-    },
-    "welcome_1a4_type_manual_subtitle2": {
-        "message": "這使得你的好友能夠驗證你的社交網路賬號與你的 Maskbook 公鑰都屬於你。"
-    },
-    "welcome_1a4_type_manual_goto": {
-        "message": "拷貝並跳轉到個人簡介"
-    },
-    "welcome_1a4_type_manual_switch": {
-        "message": "更願意讓 Maskbook 代勞？"
-    },
-    "welcome_1b_title": {
-        "message": "導入備份檔案"
-    },
-    "welcome_1b_tabs_backup": {
-        "message": "選擇備份檔案"
-    },
-    "welcome_1b_tabs_qr": {
-        "message": "掃描 QR 碼"
-    },
-    "welcome_1b_tabs_text": {
-        "message": "手動貼入備份檔案的内容"
-    },
-    "welcome_1b_dragging": {
-        "message": "將備份檔案拖拽到此處"
-    },
-    "welcome_1b_no_file_selected": {
-        "message": "選取備份檔案"
-    },
-    "welcome_1b_file_selected": {
-        "message": "已選取備份檔案：$1"
-    },
-    "welcome_1b_hint_identity": {
-        "message": "備份文件中包含了以下身份："
-    },
-    "welcome_1b_hint_network": {
-        "message": "爲此，Maskbook 將要請求以下網站的權限："
-    },
-    "welcome_1b_confirm": {
-        "message": "恢復備份"
-    },
-    "welcome_1b_qr_rescan": {
-        "message": "重試"
-    },
-    "welcome_1b_qr_error_1": {
-        "message": "掃描過程中出現錯誤"
-    },
-    "welcome_1b_qr_error_2": {
-        "message": "你或許可以試試其他方式來恢復賬號設定。"
-    },
-    "welcome_2_title": {
-        "message": "完畢！"
-    },
-    "welcome_2_greeting": {
-        "message": "你現在可以使用 Maskbook 了！"
-    },
-    "banner_title": {
-        "message": "歡迎使用 Maskbook"
-    },
-    "banner_preparing_setup": {
-        "message": "Maskbook 需要你的用戶名來設定你的賬號。"
-    },
-    "banner_get_started": {
-        "message": "繼續設定 Maskbook"
-    },
-    "banner_empty_username": {
-        "message": "如果自動探測用戶名沒有成功，請手動在此輸入"
-    },
-    "banner_invalid_username": {
-        "message": "這看起來不像正確的用戶名"
-    },
-    "service_invalid_backup_file": {
-        "message": "這貌似不是 Maskbook 的備份。"
-    },
-    "service_others_key_not_found": {
-        "message": "$1 的公鑰無法找到！"
-    },
-    "service_not_setup_yet": {
-        "message": "您還沒有進行初始設置，在您沒有導入或生成您的金鑰之前，我們暫時無法爲您解密此消息！"
-    },
-    "service_publish_post_aes_key_failed": {
-        "message": "未能發佈 AES 密鑰。"
-    },
-    "service_not_share_target": {
-        "message": "找不到 AES 密鑰。或許這條訊息不是分享給你的？"
-    },
-    "service_decryption_failed": {
-        "message": "解密失敗。"
-    },
-    "service_self_key_decryption_failed": {
-        "message": "解密失敗。或許您選取了錯誤的檔案或導入了錯誤的金鑰。"
-    },
-    "service_unknown_payload": {
-        "message": "不支援的訊息構造。或許你需要更新 Maskbook 版本了？"
-    },
-    "service_key_parse_failed": {
-        "message": "未能剖析金鑰"
-    },
-    "service_have_no_own_key_yet": {
-        "message": "你還沒有私鑰"
-    },
-    "service_username_invalid": {
-        "message": "無效用戶名"
-    },
-    "automation_request_click_edit_bio_button": {
-        "message": "請點擊「編輯簡介」按鈕或簡介旁的鉛筆圖標"
-    },
-    "automation_request_paste_into_bio_box": {
-        "message": "請拷貝公鑰，然後發佈到個人簡介上。"
-    },
-    "automation_pasted_into_bio_box": {
-        "message": "[Maskbook] 我們幫助您在簡介中填入了公鑰，請您審閱並發布它！"
-    },
-    "automation_request_paste_into_post_box": {
-        "message": "請拷貝公鑰，然後發佈到時間綫上。"
-    },
-    "payload_not_found": {
-        "message": "找不到 payload"
-    },
-    "payload_incomplete": {
-        "message": "不完整的 payload。請點擊「查看全文」。"
-    },
-    "payload_bad": {
-        "message": "Payload 可能遭到了篡改。"
-    },
-    "payload_throw_in_alpha41": {
-        "message": "已經不再支援 Alpha41。請提醒對方安裝新版 Maskbook。"
-    },
-    "options_index_setup": {
-        "message": "設定您的 Maskbook"
-    },
-    "options_index_mobile_export": {
-        "message": "設定行動端"
-    },
-    "options_index_dev": {
-        "message": "開發人員選項"
-    },
-    "options_index_privacy": {
-        "message": "隱私政策"
-    },
-    "options_mobile_export_generating": {
-        "message": "正在生成 QR 碼…"
-    },
-    "options_mobile_export_subtitle": {
-        "message": "請不要保存或將此 QR 碼分享給他人！"
-    },
-    "shared_choose_identity_title": {
-        "message": "點擊此處切換賬號"
-    },
-    "shared_choose_identity_subtitle": {
-        "message": "你的其他 Maskbook 賬戶"
-    },
-    "database_group_friends_default_name": {
-        "message": "互粉好友"
-    },
-    "database_group_followers_name": {
-        "message": "$1 的關注者"
-    },
-    "database_group_following_name": {
-        "message": "$1 關注的人"
-    },
-    "seen_in_maskbook_database": {
-        "message": "Maskbook 已了解此身份 ✔"
-    },
-    "dashboard_welcome_to_maskbook": {
-        "message": "歡迎使用 Maskbook"
-    },
-    "dashboard_init_header": {
-        "message": "在社交網絡上發布信息，但不允許他們跟踪您。"
-    },
-    "dashboard_new_user": {
-        "message": "新用戶"
-    },
-    "dashboard_new_user_hint": {
-        "message": "設置並開始使用。"
-    },
-    "dashboard_returning_user": {
-        "message": "老用戶"
-    },
-    "dashboard_returning_user_hint": {
-        "message": "導入數據庫備份。"
-    },
-    "set_up": {
-        "message": "開始"
-    },
-    "dashboard_init_step_1": {
-        "message": "第1步：您叫什麼名字？"
-    },
-    "dashboard_init_step_1_hint": {
-        "message": "您可以在下一步中將社交網絡個人資料連接到您的角色。"
-    },
-    "dashboard_password_hint": {
-        "message": "至少8個字符"
-    },
-    "dashboard_password_helper_text": {
-        "message": "設置密碼以升級安全級別"
-    },
-    "dashboard_init_step_2": {
-        "message": "第2步：連接社交網絡個人資料"
-    },
-    "dashboard_init_step_2_hint": {
-        "message": "現在我們支持Facebook和Twitter。"
-    },
-    "restore_database": {
-        "message": "恢復數據庫"
-    },
-    "select_file": {
-        "message": "選擇文件"
-    },
-    "select_file_hint": {
-        "message": "或拖放文件至此..."
-    },
-    "advanced": {
-        "message": "高級..."
-    },
-    "dashboard_advanced_restoration": {
-        "message": "高級還原選項"
-    },
-    "import_persona": {
-        "message": "導入角色"
-    },
-    "privacy_policy": {
-        "message": "隱私政策"
-    },
-    "version": {
-        "message": "版本"
-    },
-    "home": {
-        "message": "主頁"
-    },
-    "debug": {
-        "message": "調試"
-    },
-    "dashboard_my_personas": {
-        "message": "我的角色"
-    },
-    "rename": {
-        "message": "改名"
-    },
-    "connect": {
-        "message": "連接"
-    },
-    "dashboard_connected": {
-        "message": "已連接"
-    },
-    "add_persona": {
-        "message": "添加角色"
-    },
-    "create": {
-        "message": "創建"
-    },
-    "dashboard_create_persona_hint": {
-        "message": "創建一個新的角色。"
-    },
-    "import": {
-        "message": "導入"
-    },
-    "dashboard_import_persona_hint": {
-        "message": "導入以前的角色備份。"
-    },
-    "database": {
-        "message": "數據庫"
-    },
-    "backup": {
-        "message": "備份"
-    },
-    "dashboard_backup_database_hint": {
-        "message": "創建數據庫備份文件。要經常做。"
-    },
-    "dashboard_import_database_hint": {
-        "message": "導入以前的數據庫備份。"
-    },
-    "create_persona": {
-        "message": "創建角色"
-    },
-    "dashboard_persona_import_dialog_hint": {
-        "message": "您可以通過以下任一方式導入角色備份。"
-    },
-    "not_available": {
-        "message": "不可用"
-    },
-    "dashboard_restore_database_hint": {
-        "message": "選擇備份文件來還原數據庫。"
-    },
-    "dashboard_persona_created": {
-        "message": "角色已創建"
-    },
-    "dashboard_new_persona_created": {
-        "message": "新角色 «$1» 已創建。 立即連接個人資料！([I:b])"
-    },
-    "import_successful": {
-        "message": "導入成功"
-    },
-    "dashboard_database_import_successful_hint": {
-        "message": "您的數據庫已還原。現有數據將被合併。"
-    },
-    "import_failed": {
-        "message": "導入失敗"
-    },
-    "ok": {
-        "message": "好的"
-    },
-    "dashboard_backup_persona_hint": {
-        "message": "您可以通過以下任一方式備份角色。"
-    },
-    "dashboard_backup_persona_mnemonic_hint": {
-        "message": "小心存放上面的12個字詞。您需要它們來還原此角色的私鑰。"
-    },
-    "dashboard_backup_persona_text_hint": {
-        "message": "小心存放上面的文本。您需要它們來還原此角色的私鑰。"
-    },
-    "dashboard_backup_persona_qr_hint": {
-        "message": "小心存放上面的二維碼。您需要它們來還原此角色的私鑰。"
-    },
-    "backup_persona": {
-        "message": "備份角色"
-    },
-    "delete_persona": {
-        "message": "刪除角色"
-    },
-    "dashboard_delete_persona_confirm_hint": {
-        "message": "您是否真的要刪除角色 $1 ？此操作無法還原。"
-    },
-    "dashboard_import_persona_failed": {
-        "message": "您導入的數據無效。請再次檢查。"
-    },
-    "dashboard_imported_persona": {
-        "message": "導入了角色 `$1`，包含 $2 個資料."
-    },
-    "dashboard_password_optional_hint": {
-        "message": "如未設置，請留空"
-    },
-    "unknown_persona": {
-        "message": "未知角色"
-    },
-    "setup_successful": {
-        "message": "設置成功"
-    },
-    "dashboard_bio_test_succeeful": {
-        "message": "您已成功將 $2 上的 @$1 連接到角色 $3。"
-    },
-    "setup_failure": {
-        "message": "設置失敗"
-    },
-    "dashboard_bio_test_failed": {
-        "message": "個人簡介中應包含 $1。請確保您成功更新了 @$2 的個人簡介。"
-    },
-    "dashboard_username_on": {
-        "message": "$1 上的用戶名"
-    },
-    "dashboard_connect_profile_for": {
-        "message": "為 $1 連接個人資料"
-    },
-    "dashboard_attach_profile_step1": {
-        "message": "步驟1：複製下方的公鑰"
-    },
-    "dashboard_attach_profile_step2": {
-        "message": "步驟2：將其粘貼到個人資料中"
-    },
-    "dashboard_attach_profile_step2_hint": {
-        "message": "當您移至網頁後，將顯示手工指南。"
-    },
-    "go_to": {
-        "message": "前往"
-    },
-    "dashboard_attach_profile_step3": {
-        "message": "步驟3：測試並完成"
-    },
-    "dashboard_attach_profile_step3_hint": {
-        "message": "回到這裡完成程序。測試您是否設置成功。"
-    },
-    "test": {
-        "message": "測試"
-    },
-    "connect_profile": {
-        "message": "連接個人資料"
-    },
-    "disconnect_profile": {
-        "message": "斷開個人資料"
-    },
-    "dashboard_disconnect_profile_hint": {
-        "message": "您是否真的要从角色 $3 上斷開 $2 的 $1？ 此操作無法撤銷。"
-    },
-    "dashboard_no_persona_found": {
-        "message": "找不到角色"
-    },
-    "initialize": {
-        "message": "初始化"
-    },
-    "dashboard_restoration_successful": {
-        "message": "恢復成功"
-    },
-    "dashboard_restoration_successful_hint": {
-        "message": "恢復了 $1 的備份"
-    },
-    "dashboard_ready_to_import": {
-        "message": "準備導入..."
-    },
-    "dashboard_ready_to_import_hint": {
-        "message": "在您導入此備份之前，Maskbook 需要某些網站的訪問許可。"
-    },
-    "dashboard_paste_database_backup_hint": {
-        "message": "在此處粘貼數據庫備份文本..."
-    },
-    "proceed": {
-        "message": "繼續"
-    },
-    "please_include_proof_your_bio": {
-        "message": "請在您的個人簡介中包含引号内的内容 \"$1\"，否則您可能沒法正常使用 Maskbook"
-    },
-    "popup_enter_dashboard": {
-        "message": "進入儀表盘"
-    },
-    "immersive_setup_title": {
-        "message": "設定 Maskbook"
-    },
-    "immersive_setup_connect_as": {
-        "message": "要連接 $1 嗎？"
-    },
-    "immersive_setup_connect_as_unknown": {
-        "message": "你希望以哪個推特賬戶連接？"
-    },
-    "immersive_setup_paste_into_bio": {
-        "message": "「可選的」將密鑰粘入個人簡介"
-    },
-    "connecting": {
-        "message": "連接中……"
-    },
-    "immersive_setup_connect_profile": {
-        "message": "我確認這是我的賬號"
-    },
-    "username": {
-        "message": "用戶名"
-    },
-    "immersive_setup_username_confirm": {
-        "message": "Maskbook 需要瞭解你的用戶名才能繼續。這是正確的用戶名嗎？"
-    },
-    "immersive_setup_help_dont_know_what_is_username": {
-        "message": "但我不知道我的用戶名是什么！"
-    },
-    "immersive_setup_add_bio_text": {
-        "message": "我們建議你把你的公鑰添加到個人簡介中，若如此做，請不要更改或刪除任何一部分。"
-    },
-    "immersive_setup_paste_into_bio_auto": {
-        "message": "幫我加上它"
-    },
-    "adding": {
-        "message": "添加中……"
-    },
-    "done": {
-        "message": "搞定！"
-    },
-    "immersive_setup_paste_into_bio_failed": {
-        "message": "失敗了……請手動將其添加到您的個人簡介中"
-    },
-    "immersive_setup_no_bio_got": {
-        "message": "Maskbook 出現了一些問題！請報告給 Maskbook 的開發者(https://t.me/maskbook_group)，謝謝！"
-    },
-    "post_dialog__select_recipients_share_to_everyone": {
-        "message": "任何人"
-    },
-    "settings_enable_debug": {
-        "message": "開啓調試模式"
-    },
-    "settings_enable_debug_desc": {
-        "message": "Maskbook 會顯示額外的信息以幫助調試"
-    },
-    "settings_image_based_payload": {
-        "message": "開啓圖片編碼模式"
-    },
-    "settings_image_based_payload_desc": {
-        "message": "將密文編碼進圖片而不是編碼進文本"
-    },
-    "settings_disable_new_background_tab": {
-        "message": "禁止 Maskbook 靜默地打開新標籤頁"
-    },
-    "settings_disable_new_background_tab_desc": {
-        "message": "這是 Maskbook 因技術所限的舊行爲。如果您發現某些舊帖子無法解密，請關閉此選項再試一次。"
-    },
-    "settings_language": {
-        "message": "語言"
-    },
-    "settings": {
-        "message": "設定"
-    }
+    "add_persona": "添加角色",
+    "add_to_key_store_failed_text": "{{error}}\nMaskbook 不會添加此金鑰。",
+    "add_to_key_store_failed_title": "Maskbook 公鑰驗證失敗 ❌",
+    "add_to_key_store_success": "Maskbook 已獲取此公鑰並添加至本地 ✔",
+    "add_to_key_store_verifying": "Maskbook 公鑰已獲取，正在驗證…",
+    "adding": "添加中……",
+    "additional_post_box__encrypted_failed": "請將以下内容拷貝至發佈框。",
+    "additional_post_box__encrypted_post_pre": "來 #Maskbook 解密這個訊息！ {{encrypted}}",
+    "additional_post_box__placeholder_w_name": "Hey {{user}}, 有何所思？用 Maskbook 加密分享。",
+    "additional_post_box__placeholder_wo_name": "有何所思？用 Maskbook 加密分享。",
+    "additional_post_box__post_button": "現在發佈！",
+    "additional_post_box__steganography_post_failed": "請將已下載的圖片上载至發佈框。",
+    "additional_post_box__steganography_post_pre": "此圖片僅分享給我的好友。請安裝 Maskbook 以解讀圖片。 ([I:b]) {{random}}",
+    "advanced": "高級...",
+    "automation_pasted_into_bio_box": "[Maskbook] 我們幫助您在簡介中填入了公鑰，請您審閱並發布它！",
+    "automation_request_click_edit_bio_button": "請點擊「編輯簡介」按鈕或簡介旁的鉛筆圖標",
+    "automation_request_paste_into_bio_box": "請拷貝公鑰，然後發佈到個人簡介上。",
+    "automation_request_paste_into_post_box": "請拷貝公鑰，然後發佈到時間綫上。",
+    "back": "返回",
+    "backup": "備份",
+    "backup_persona": "備份角色",
+    "banner_empty_username": "如果自動探測用戶名沒有成功，請手動在此輸入",
+    "banner_get_started": "繼續設定 Maskbook",
+    "banner_invalid_username": "這看起來不像正確的用戶名",
+    "banner_preparing_setup": "Maskbook 需要你的用戶名來設定你的賬號。",
+    "banner_title": "歡迎使用 Maskbook",
+    "cancel": "取消",
+    "comment_box__paste_failed": "請將以下内容拷貝至評論框。",
+    "comment_box__placeholder": "添加一條加密評論…",
+    "connect": "連接",
+    "connect_profile": "連接個人資料",
+    "connecting": "連接中……",
+    "copy": "複製",
+    "create": "創建",
+    "create_persona": "創建角色",
+    "dashboard": "儀表板",
+    "dashboard_add_new_persona": "創建新的身份",
+    "dashboard_advanced_restoration": "高級還原選項",
+    "dashboard_attach_profile_step1": "步驟1：複製下方的公鑰",
+    "dashboard_attach_profile_step2": "步驟2：將其粘貼到個人資料中",
+    "dashboard_attach_profile_step2_hint": "當您移至網頁後，將顯示手工指南。",
+    "dashboard_attach_profile_step3": "步驟3：測試並完成",
+    "dashboard_attach_profile_step3_hint": "回到這裡完成程序。測試您是否設置成功。",
+    "dashboard_backup_database_hint": "創建數據庫備份文件。要經常做。",
+    "dashboard_backup_persona_hint": "您可以通過以下任一方式備份角色。",
+    "dashboard_backup_persona_mnemonic_hint": "小心存放上面的12個字詞。您需要它們來還原此角色的私鑰。",
+    "dashboard_backup_persona_qr_hint": "小心存放上面的二維碼。您需要它們來還原此角色的私鑰。",
+    "dashboard_backup_persona_text_hint": "小心存放上面的文本。您需要它們來還原此角色的私鑰。",
+    "dashboard_bio_test_failed": "個人簡介中應包含 {{bio}}。請確保您成功更新了 @{{name}} 的個人簡介。",
+    "dashboard_bio_test_succeeful": "您已成功將 {{domain}} 上的 @{{profile}} 連接到角色 {{persona}}。",
+    "dashboard_connect_profile_for": "為 {{persona}} 連接個人資料",
+    "dashboard_connected": "已連接",
+    "dashboard_create_backup": "備份",
+    "dashboard_create_persona_hint": "創建一個新的角色。",
+    "dashboard_database_import_successful_hint": "您的數據庫已還原。現有數據將被合併。",
+    "dashboard_delete_persona": "刪除",
+    "dashboard_delete_persona_confirm_hint": "您是否真的要刪除角色 {{name}} ？此操作無法還原。",
+    "dashboard_disconnect_profile_hint": "您是否真的要从角色 {{persona}} 上斷開 {{network}} 的 {{profile}}？ 此操作無法撤銷。",
+    "dashboard_download": "備份",
+    "dashboard_export_keystore": "導出備份密鑰",
+    "dashboard_hide_qr": "隱藏二維碼",
+    "dashboard_import_backup": "導入數據備份",
+    "dashboard_import_database_hint": "導入以前的數據庫備份。",
+    "dashboard_import_persona_failed": "您導入的數據無效。請再次檢查。",
+    "dashboard_import_persona_hint": "導入以前的角色備份。",
+    "dashboard_imported_persona": "導入了角色 `{{name}}`，包含 {{count}} 個資料.",
+    "dashboard_init_header": "在社交網絡上發布信息，但不允許他們跟踪您。",
+    "dashboard_init_step_1": "第1步：您叫什麼名字？",
+    "dashboard_init_step_1_hint": "您可以在下一步中將社交網絡個人資料連接到您的角色。",
+    "dashboard_init_step_2": "第2步：連接社交網絡個人資料",
+    "dashboard_init_step_2_hint": "現在我們支持Facebook和Twitter。",
+    "dashboard_item_copied": "好了。",
+    "dashboard_item_copy_failed": "複製失敗。",
+    "dashboard_item_deleted": "好了。",
+    "dashboard_item_done": "好了。",
+    "dashboard_mobile_test": "加入移動端測試",
+    "dashboard_my_personas": "我的角色",
+    "dashboard_new_persona_created": "新角色 «{{name}}» 已創建。 立即連接個人資料！([I:b])",
+    "dashboard_new_user": "新用戶",
+    "dashboard_new_user_hint": "設置並開始使用。",
+    "dashboard_no_persona_found": "找不到角色",
+    "dashboard_password_helper_text": "設置密碼以升級安全級別",
+    "dashboard_password_hint": "至少8個字符",
+    "dashboard_password_optional_hint": "如未設置，請留空",
+    "dashboard_paste_database_backup_hint": "在此處粘貼數據庫備份文本...",
+    "dashboard_persona_created": "角色已創建",
+    "dashboard_persona_import_dialog_hint": "您可以通過以下任一方式導入角色備份。",
+    "dashboard_ready_to_import": "準備導入...",
+    "dashboard_ready_to_import_hint": "在您導入此備份之前，Maskbook 需要某些網站的訪問許可。",
+    "dashboard_restoration_successful": "恢復成功",
+    "dashboard_restoration_successful_hint": "恢復了 {{time}} 的備份",
+    "dashboard_restore_database_hint": "選擇備份文件來還原數據庫。",
+    "dashboard_returning_user": "老用戶",
+    "dashboard_returning_user_hint": "導入數據庫備份。",
+    "dashboard_show_qr": "顯示二維碼",
+    "dashboard_source_code": "程式源代碼",
+    "dashboard_unknown_network": "不支援",
+    "dashboard_username_on": "{{network}} 上的用戶名",
+    "dashboard_welcome_to_maskbook": "歡迎使用 Maskbook",
+    "database": "數據庫",
+    "database_group_followers_name": "{{owner}} 的關注者",
+    "database_group_following_name": "{{owner}} 關注的人",
+    "database_group_friends_default_name": "互粉好友",
+    "debug": "調試",
+    "decrypted_postbox_add_recipients": "查看或添加收件人",
+    "decrypted_postbox_decrypting": "Maskbook 正在解密…",
+    "decrypted_postbox_decrypting_finding_person_key": "Maskbook 正在搜尋對方的公鈅…",
+    "decrypted_postbox_decrypting_finding_post_key": "Maskbook 正在搜尋分享給你的密鑰以解密这篇内容…",
+    "decrypted_postbox_failed": "Maskbook 解密失敗",
+    "decrypted_postbox_not_verified": "數字簽名驗證失敗，對方可能被駭了 ❌",
+    "decrypted_postbox_title": "此消息使用 Maskbook 加密：",
+    "decrypted_postbox_verified": "數字簽名驗證成功 ✔",
+    "delete_persona": "刪除角色",
+    "disconnect": "斷開",
+    "disconnect_profile": "斷開個人資料",
+    "done": "搞定！",
+    "finish": "完成",
+    "go_to": "前往",
+    "home": "主頁",
+    "immersive_setup_add_bio_text": "我們建議你把你的公鑰添加到個人簡介中，若如此做，請不要更改或刪除任何一部分。",
+    "immersive_setup_connect_as": "要連接 {{profile}} 嗎？",
+    "immersive_setup_connect_as_unknown": "你希望以哪個推特賬戶連接？",
+    "immersive_setup_connect_profile": "我確認這是我的賬號",
+    "immersive_setup_help_dont_know_what_is_username": "但我不知道我的用戶名是什么！",
+    "immersive_setup_no_bio_got": "Maskbook 出現了一些問題！請報告給 Maskbook 的開發者(https://t.me/maskbook_group)，謝謝！",
+    "immersive_setup_paste_into_bio": "「可選的」將密鑰粘入個人簡介",
+    "immersive_setup_paste_into_bio_auto": "幫我加上它",
+    "immersive_setup_paste_into_bio_failed": "失敗了……請手動將其添加到您的個人簡介中",
+    "immersive_setup_title": "設定 Maskbook",
+    "immersive_setup_username_confirm": "Maskbook 需要瞭解你的用戶名才能繼續。這是正確的用戶名嗎？",
+    "import": "導入",
+    "import_failed": "導入失敗",
+    "import_persona": "導入角色",
+    "import_successful": "導入成功",
+    "initialize": "初始化",
+    "next": "繼續",
+    "no_search_result": "沒有結果",
+    "not_available": "不可用",
+    "ok": "好的",
+    "options_index_dev": "開發人員選項",
+    "options_index_mobile_export": "設定行動端",
+    "options_index_privacy": "隱私政策",
+    "options_index_setup": "設定您的 Maskbook",
+    "options_mobile_export_generating": "正在生成 QR 碼…",
+    "options_mobile_export_subtitle": "請不要保存或將此 QR 碼分享給他人！",
+    "payload_bad": "Payload 可能遭到了篡改。",
+    "payload_incomplete": "不完整的 payload。請點擊「查看全文」。",
+    "payload_not_found": "找不到 payload",
+    "payload_throw_in_alpha41": "已經不再支援 Alpha41。請提醒對方安裝新版 Maskbook。",
+    "person_or_group_in_chip": "{{name}} ({{count}} 人)",
+    "person_or_group_in_list_0": "這個組是空的",
+    "person_or_group_in_list_many": "{{people}} 等，共 {{count}} 人",
+    "person_or_group_in_list_many_no_preview": "共 {{count}} 人",
+    "please_include_proof_your_bio": "請在您的個人簡介中包含引号内的内容 \"{{bio}}\"，否則您可能沒法正常使用 Maskbook",
+    "popup_enter_dashboard": "進入儀表盘",
+    "post_dialog__button": "完成",
+    "post_dialog__dismiss_aria": "關閉編輯框",
+    "post_dialog__placeholder": "請輸入…",
+    "post_dialog__select_recipients_only_myself": "我自己",
+    "post_dialog__select_recipients_share_to_everyone": "任何人",
+    "post_dialog__select_recipients_title": "選擇收件人",
+    "post_dialog__select_specific_friends_title": "選擇好友 (已選 {{selected}})",
+    "post_dialog__title": "Maskbook: 編輯",
+    "post_modal_hint__button": "🔒編輯加密訊息🔒",
+    "post_modal_hint__title": "在找 Maskbook 嗎？",
+    "privacy_policy": "隱私政策",
+    "proceed": "繼續",
+    "public_key": "公鑰",
+    "rename": "改名",
+    "restore": "恢復",
+    "restore_database": "恢復數據庫",
+    "search_box_placeholder": "鍵入以搜尋",
+    "seen_in_maskbook_database": "Maskbook 已了解此身份 ✔",
+    "select_all": "選取全部",
+    "select_file": "選擇文件",
+    "select_file_hint": "或拖放文件至此...",
+    "select_none": "全部取消選取",
+    "select_specific_friends_dialog__button": "完成",
+    "select_specific_friends_dialog__dismiss_aria": "關閉選擇好友對話框",
+    "select_specific_friends_dialog__title": "選擇好友",
+    "service_decryption_failed": "解密失敗。",
+    "service_have_no_own_key_yet": "你還沒有私鑰",
+    "service_invalid_backup_file": "這貌似不是 Maskbook 的備份。",
+    "service_key_parse_failed": "未能剖析金鑰",
+    "service_not_setup_yet": "您還沒有進行初始設置，在您沒有導入或生成您的金鑰之前，我們暫時無法爲您解密此消息！",
+    "service_not_share_target": "找不到 AES 密鑰。或許這條訊息不是分享給你的？",
+    "service_others_key_not_found": "{{name}} 的公鑰無法找到！",
+    "service_publish_post_aes_key_failed": "未能發佈 AES 密鑰。",
+    "service_self_key_decryption_failed": "解密失敗。或許您選取了錯誤的檔案或導入了錯誤的金鑰。",
+    "service_unknown_payload": "不支援的訊息構造。或許你需要更新 Maskbook 版本了？",
+    "service_username_invalid": "無效用戶名",
+    "set_up": "開始",
+    "settings": "設定",
+    "settings_disable_new_background_tab": "禁止 Maskbook 靜默地打開新標籤頁",
+    "settings_disable_new_background_tab_desc": "這是 Maskbook 因技術所限的舊行爲。如果您發現某些舊帖子無法解密，請關閉此選項再試一次。",
+    "settings_enable_debug": "開啓調試模式",
+    "settings_enable_debug_desc": "Maskbook 會顯示額外的信息以幫助調試",
+    "settings_image_based_payload": "開啓圖片編碼模式",
+    "settings_image_based_payload_desc": "將密文編碼進圖片而不是編碼進文本",
+    "settings_language": "語言",
+    "setup_failure": "設置失敗",
+    "setup_successful": "設置成功",
+    "share": "分享",
+    "share_to": "分享给…",
+    "shared_choose_identity_subtitle": "你的其他 Maskbook 賬戶",
+    "shared_choose_identity_title": "點擊此處切換賬號",
+    "sharing": "正在分享…",
+    "synchronization": "同步化",
+    "test": "測試",
+    "undo": "撤消",
+    "unknown_persona": "未知角色",
+    "username": "用戶名",
+    "version": "版本",
+    "welcome_0_close_button": "我想以後再做",
+    "welcome_0_restore_key": "導入備份檔案",
+    "welcome_1a1_didntfind": "沒有找到你的賬戶？",
+    "welcome_1a1_title": "你希望為哪個賬戶設定 Maskbook？",
+    "welcome_1a1b_connect": "連結",
+    "welcome_1a1b_danger": "受審查的站點",
+    "welcome_1a1b_switch": "連接現有的賬戶",
+    "welcome_1a1b_title": "Maskbook 可以在這些社交網絡上使用",
+    "welcome_1a2_description": "這樣，只有你選中的好友才能解密這條訊息",
+    "welcome_1a2_done_button": "棒耶！",
+    "welcome_1a2_imgalt": "關於如何使用 Maskbook 加密的截圖",
+    "welcome_1a2_title": "使用 Maskbook 的輸入框來加密",
+    "welcome_1a3_description1": "稍後會有一個保存提示，請妥善保管備份檔案。",
+    "welcome_1a3_description2": "記得經常創建新備份！",
+    "welcome_1a3_done_button": "瞭解！",
+    "welcome_1a3_title": "請妥善保管備份檔案",
+    "welcome_1a3a_connect_subtitle": "這會使用相同的密鑰",
+    "welcome_1a3a_connect_title": "關聯其他賬戶",
+    "welcome_1a3a_generate_new_key": "創建新密鑰",
+    "welcome_1a3a_generate_new_key_password_help": "請牢記密碼，否則只憑藉助記詞是無法恢復密鑰的",
+    "welcome_1a3a_generate_new_key_password_label": "新密鑰的密碼",
+    "welcome_1a3a_generate_new_key_result": "請抄寫助記詞",
+    "welcome_1a3a_generate_new_key_result_help": "助記詞用於恢復密鑰，確定保管好后按“確認”",
+    "welcome_1a3a_generate_new_key_subtitle": "請妥善保管",
+    "welcome_1a3a_generate_new_key_title": "創建新的密鑰",
+    "welcome_1a3a_recover_input_password": "密碼",
+    "welcome_1a3a_recover_input_word": "助記詞",
+    "welcome_1a3a_recover_subtitle": "輸入以前記錄的助記詞",
+    "welcome_1a3a_recover_title": "用助記詞恢復",
+    "welcome_1a3a_title": "你希望這個賬戶使用什麽密鑰？",
+    "welcome_1a4_auto_post_description1": "我們感謝你的支持",
+    "welcome_1a4_auto_post_description2": "你可以調整文本措辭",
+    "welcome_1a4_auto_post_title": "發佈一個聲明訊息",
+    "welcome_1a4_auto_profile_description1": "簡潔高效",
+    "welcome_1a4_auto_profile_description2": "不會打擾到任何人",
+    "welcome_1a4_auto_profile_title": "添加公鑰到個人簡介",
+    "welcome_1a4_auto_radio_aria": "選擇賬號歸屬權驗證手段",
+    "welcome_1a4_disabled": "由於技術問題，暫時只有一種驗證方式可用。",
+    "welcome_1a4_title": "驗證賬號歸屬權",
+    "welcome_1a4_type_auto_subtitle1": "避免好友感到迷惑",
+    "welcome_1a4_type_auto_subtitle2": "這使得你的好友能夠驗證你的社交網路賬號與你的 Maskbook 公鑰都屬於你。",
+    "welcome_1a4_type_auto_switch": "更願意手動操作？",
+    "welcome_1a4_type_manual_goto": "拷貝並跳轉到個人簡介",
+    "welcome_1a4_type_manual_subtitle1": "將這串文本添加到個人簡介或分享到時間線，在發佈第一條加密訊息之前。",
+    "welcome_1a4_type_manual_subtitle2": "這使得你的好友能夠驗證你的社交網路賬號與你的 Maskbook 公鑰都屬於你。",
+    "welcome_1a4_type_manual_switch": "更願意讓 Maskbook 代勞？",
+    "welcome_1b_confirm": "恢復備份",
+    "welcome_1b_dragging": "將備份檔案拖拽到此處",
+    "welcome_1b_file_selected": "已選取備份檔案：{{filename}}",
+    "welcome_1b_hint_identity": "備份文件中包含了以下身份：",
+    "welcome_1b_hint_network": "爲此，Maskbook 將要請求以下網站的權限：",
+    "welcome_1b_no_file_selected": "選取備份檔案",
+    "welcome_1b_qr_error_1": "掃描過程中出現錯誤",
+    "welcome_1b_qr_error_2": "你或許可以試試其他方式來恢復賬號設定。",
+    "welcome_1b_qr_rescan": "重試",
+    "welcome_1b_tabs_backup": "選擇備份檔案",
+    "welcome_1b_tabs_qr": "掃描 QR 碼",
+    "welcome_1b_tabs_text": "手動貼入備份檔案的内容",
+    "welcome_1b_title": "導入備份檔案",
+    "welcome_2_greeting": "你現在可以使用 Maskbook 了！",
+    "welcome_2_title": "完畢！"
 }

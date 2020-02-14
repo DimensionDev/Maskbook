@@ -6,7 +6,7 @@ import classNames from 'classnames'
 import ProviderLine from './ProviderLine'
 import { makeStyles } from '@material-ui/styles'
 import { createStyles, Typography, Theme } from '@material-ui/core'
-import { geti18nString } from '../../../utils/i18n'
+import { useI18N } from '../../../utils/i18n-next-ui'
 import { useColorProvider } from '../../../utils/theme'
 import { ProfileIdentifier } from '../../../database/type'
 import { DialogRouter } from '../DashboardDialogs/DialogBase'
@@ -67,6 +67,7 @@ interface Props {
 }
 
 export default function ProfileBox({ persona, border }: Props) {
+    const { t } = useI18N()
     const classes = useStyles()
     const color = useColorProvider()
     const profiles = persona ? [...persona.linkedProfiles] : []
@@ -117,7 +118,7 @@ export default function ProfileBox({ persona, border }: Props) {
                         <div
                             className={classNames('extra-item', color.error)}
                             onClick={() => setDetachProfile(provider.identifier!)}>
-                            {geti18nString('disconnect')}
+                            {t('disconnect')}
                         </div>
                     )}
                 </Typography>

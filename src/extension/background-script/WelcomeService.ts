@@ -1,7 +1,6 @@
 import { OnlyRunInContext } from '@holoflows/kit'
 import { encodeText } from '../../utils/type-transform/String-ArrayBuffer'
 import { sleep } from '../../utils/utils'
-import { geti18nString } from '../../utils/i18n'
 import getCurrentNetworkWorker from '../../social-network/utils/getCurrentNetworkWorker'
 import { SocialNetworkUI } from '../../social-network/ui'
 import { getWelcomePageURL } from '../options-page/Welcome/getWelcomePageURL'
@@ -12,6 +11,7 @@ import { CryptoKeyToJsonWebKey } from '../../utils/type-transform/CryptoKey-Json
 import { deriveLocalKeyFromECDHKey } from '../../utils/mnemonic-code/localKeyGenerate'
 import { ProfileIdentifier, PersonaIdentifier } from '../../database/type'
 import { generateBackupJSON, BackupOptions } from './WelcomeServices/generateBackupJSON'
+import { i18n } from '../../utils/i18n-next'
 
 OnlyRunInContext('background', 'WelcomeService')
 export { generateBackupJSON } from './WelcomeServices/generateBackupJSON'
@@ -85,7 +85,7 @@ export async function createBackupFile(
 export async function openWelcomePage(id?: SocialNetworkUI['lastRecognizedIdentity']['value']) {
     if (id) {
         if (!getCurrentNetworkWorker(id.identifier).isValidUsername(id.identifier.userId))
-            throw new TypeError(geti18nString('service_username_invalid'))
+            throw new TypeError(i18n.t('service_username_invalid'))
     }
     return browser.tabs.create({ url: getWelcomePageURL(id) })
 }

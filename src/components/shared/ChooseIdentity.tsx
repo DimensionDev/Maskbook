@@ -10,7 +10,7 @@ import { PersonOrGroupInList, PersonOrGroupInListProps } from './SelectPeopleAnd
 import { getActivatedUI } from '../../social-network/ui'
 import { useCurrentIdentity, useMyIdentities } from '../DataSource/useActivatedUI'
 import { ProfileIdentifier } from '../../database/type'
-import { geti18nString } from '../../utils/i18n'
+import { useI18N } from '../../utils/i18n-next-ui'
 import { currentSelectedIdentity } from '../../components/shared-settings/settings'
 import { useStylesExtends } from '../custom-ui-helper'
 
@@ -42,6 +42,7 @@ export interface ChooseIdentityProps
  * Choose the current using identity.
  */
 export const ChooseIdentity: React.FC<ChooseIdentityProps> = props => {
+    const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
     const [expanded, setExpanded] = React.useState<boolean>(false)
 
@@ -66,12 +67,12 @@ export const ChooseIdentity: React.FC<ChooseIdentityProps> = props => {
                         </ListItemIcon>
                         <ListItemText
                             primary={current.nickname || current.identifier.userId}
-                            secondary={geti18nString('shared_choose_identity_title')}
+                            secondary={t('shared_choose_identity_title')}
                         />
                     </ListItem>
                 </ExpansionPanelSummary>
                 <List
-                    subheader={<ListSubheader>{geti18nString('shared_choose_identity_subtitle')}</ListSubheader>}
+                    subheader={<ListSubheader>{t('shared_choose_identity_subtitle')}</ListSubheader>}
                     classes={{ root: classes.list }}>
                     {availableIdentities.map(person =>
                         person.identifier.equals(current.identifier) ? null : (

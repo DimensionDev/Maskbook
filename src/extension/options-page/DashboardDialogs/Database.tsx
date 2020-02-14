@@ -4,12 +4,13 @@ import { DialogContentItem, DialogRouter } from './DialogBase'
 import ActionButton from '../DashboardComponents/ActionButton'
 import Services from '../../service'
 import { decompressBackupFile } from '../../../utils/type-transform/BackupFileShortRepresentation'
-import { geti18nString } from '../../../utils/i18n'
+import { useI18N } from '../../../utils/i18n-next-ui'
 import { BackupJSONFileLatest, UpgradeBackupJSONFile } from '../../../utils/type-transform/BackupFormat/JSON/latest'
 import { useHistory } from 'react-router-dom'
 import { extraPermissions } from '../../../utils/permissions'
 
 export function DatabaseBackupDialog() {
+    const { t } = useI18N()
     return (
         <DialogContentItem
             title="Backup Database"
@@ -17,13 +18,14 @@ export function DatabaseBackupDialog() {
             actionsAlign="center"
             actions={
                 <ActionButton variant="contained" color="primary">
-                    {geti18nString('ok')}
+                    {t('ok')}
                 </ActionButton>
             }></DialogContentItem>
     )
 }
 
 export function DatabaseRestoreDialog() {
+    const { t } = useI18N()
     const ref = React.useRef<HTMLInputElement>(null)
     const history = useHistory()
     const [json, setJson] = React.useState<BackupJSONFileLatest | null>(null)
@@ -54,14 +56,14 @@ export function DatabaseRestoreDialog() {
     return (
         <>
             <DialogContentItem
-                title={geti18nString('restore_database')}
-                content={geti18nString('dashboard_restore_database_hint')}
+                title={t('restore_database')}
+                content={t('dashboard_restore_database_hint')}
                 actionsAlign="center"
                 actions={
                     <>
                         <input type="file" accept="application/json" ref={ref} onChange={fileReceiver} hidden />
                         <ActionButton variant="contained" color="primary" onClick={() => ref.current!.click()}>
-                            {geti18nString('select_file')}
+                            {t('select_file')}
                         </ActionButton>
                     </>
                 }></DialogContentItem>
@@ -108,13 +110,12 @@ interface DatabaseRestoreSuccessDialogProps {
 }
 
 export function DatabaseRestoreSuccessDialog({ permissions, onConfirm, onDecline }: DatabaseRestoreSuccessDialogProps) {
+    const { t } = useI18N()
     return (
         <DialogContentItem
             simplified
-            title={geti18nString(permissions ? 'dashboard_ready_to_import' : 'import_successful')}
-            content={geti18nString(
-                permissions ? 'dashboard_ready_to_import_hint' : 'dashboard_database_import_successful_hint',
-            )}
+            title={t(permissions ? 'dashboard_ready_to_import' : 'import_successful')}
+            content={t(permissions ? 'dashboard_ready_to_import_hint' : 'dashboard_database_import_successful_hint')}
             actions={
                 <>
                     {permissions ? (
@@ -124,15 +125,15 @@ export function DatabaseRestoreSuccessDialog({ permissions, onConfirm, onDecline
                                 variant="outlined"
                                 color="default"
                                 onClick={onDecline}>
-                                {geti18nString('cancel')}
+                                {t('cancel')}
                             </ActionButton>
                             <ActionButton variant="contained" color={'primary'} onClick={onConfirm}>
-                                {geti18nString('proceed')}
+                                {t('proceed')}
                             </ActionButton>
                         </>
                     ) : (
                         <ActionButton variant="outlined" color={'default'} onClick={onConfirm}>
-                            {geti18nString('ok')}
+                            {t('ok')}
                         </ActionButton>
                     )}
                 </>
@@ -146,14 +147,15 @@ interface DatabaseRestoreFailedDialogProps {
 }
 
 export function DatabaseRestoreFailedDialog({ error, onConfirm }: DatabaseRestoreFailedDialogProps) {
+    const { t } = useI18N()
     return (
         <DialogContentItem
             simplified
-            title={geti18nString('import_failed')}
+            title={t('import_failed')}
             content={typeof error === 'string' ? error : error?.message ?? 'Unknown Error'}
             actions={
                 <ActionButton variant="outlined" color="default" onClick={onConfirm}>
-                    {geti18nString('ok')}
+                    {t('ok')}
                 </ActionButton>
             }></DialogContentItem>
     )

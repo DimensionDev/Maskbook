@@ -16,7 +16,7 @@ import { collectPostsFacebook } from './UI/collectPosts'
 import { injectPostInspectorFacebook } from './UI/injectPostInspector'
 import { setStorage } from '../../utils/browser.storage'
 import { isMobileFacebook } from './isMobile'
-import { geti18nString } from '../../utils/i18n'
+import { i18n } from '../../utils/i18n-next'
 import { injectCommentBoxDefaultFactory } from '../../social-network/defaults/injectCommentBox'
 import { injectOptionsPageLinkAtFacebook } from './UI/injectOptionsPageLink'
 import { InitGroupsValueRef } from '../../social-network/defaults/GroupsValueRef'
@@ -62,7 +62,7 @@ export const facebookUISelf = defineSocialNetworkUI({
         realCurrent,
     ) {
         const fail = () => {
-            prompt(geti18nString('comment_box__paste_failed'), encryptedComment)
+            prompt(i18n.t('comment_box__paste_failed'), encryptedComment)
         }
         if (isMobileFacebook) {
             const root = realCurrent || current.commentBoxSelector!.evaluate()[0]

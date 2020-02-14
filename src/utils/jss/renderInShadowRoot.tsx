@@ -7,9 +7,10 @@ import ConstructableStyleSheetsRenderer, {
     livingShadowRoots,
 } from './ConstructableStyleSheetsRenderer'
 import { getActivatedUI } from '../../social-network/ui'
-import { geti18nContext } from '../i18n'
 import { useValueRef } from '../hooks/useValueRef'
 import { languageSettings } from '../../components/shared-settings/settings'
+import { I18nextProvider } from 'react-i18next'
+import i18nNextInstance from '../i18n-next'
 
 const jss = create({
     ...jssPreset(),
@@ -46,16 +47,15 @@ export class RenderInShadowRootWrapper extends React.PureComponent {
 
 function Maskbook(props: React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement>) {
     const theme = getActivatedUI().useTheme()
-    const I18n = geti18nContext()
     const lang = useValueRef(languageSettings)
     return (
         <StylesProvider jss={jss} generateClassName={generateClassName}>
             <ThemeProvider theme={theme}>
-                <I18n.Provider value={lang}>
+                <I18nextProvider i18n={i18nNextInstance}>
                     <React.StrictMode>
                         <div {...props} />
                     </React.StrictMode>
-                </I18n.Provider>
+                </I18nextProvider>
             </ThemeProvider>
         </StylesProvider>
     )

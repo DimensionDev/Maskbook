@@ -1,7 +1,8 @@
 import React from 'react'
-import { geti18nString } from '../../utils/i18n'
+import { useI18N } from '../../utils/i18n-next-ui'
 import { Banner, BannerProps } from '../Welcomes/Banner'
 
 export function NotSetupYetPrompt(props: Partial<BannerProps>) {
-    return <Banner title={geti18nString('service_not_setup_yet')} close="hidden" {...props} />
+    const { t } = useI18N()
+    return <Banner title={t('service_not_setup_yet')} close="hidden" {...props} />
 }

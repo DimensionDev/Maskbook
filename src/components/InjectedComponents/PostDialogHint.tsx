@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { Box, Card, Typography, Button } from '@material-ui/core'
-import { geti18nString } from '../../utils/i18n'
+import { useI18N } from '../../utils/i18n-next-ui'
 import { makeStyles } from '@material-ui/core/styles'
 import { useStylesExtends, or } from '../custom-ui-helper'
 import { useMyIdentities } from '../DataSource/useActivatedUI'
@@ -29,19 +29,20 @@ export interface PostDialogHintUIProps
     onHintButtonClicked: () => void
 }
 export const PostDialogHintUI = React.memo(function PostDialogHintUI(props: PostDialogHintUIProps) {
+    const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
     return (
         <Card className={classes.root} elevation={0}>
             <Box className={classes.content}>
                 <Typography className={classes.title} variant="h4">
-                    {geti18nString('post_modal_hint__title')}
+                    {t('post_modal_hint__title')}
                 </Typography>
                 <Button
                     className={classes.button}
                     variant="contained"
                     color="primary"
                     onClick={props.onHintButtonClicked}>
-                    {geti18nString('post_modal_hint__button')}
+                    {t('post_modal_hint__button')}
                 </Button>
             </Box>
         </Card>
