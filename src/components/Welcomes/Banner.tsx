@@ -9,7 +9,6 @@ import { getActivatedUI } from '../../social-network/ui'
 import { env } from '../../social-network/shared'
 import { setStorage } from '../../utils/browser.storage'
 import { useStylesExtends } from '../custom-ui-helper'
-import { useCapturedInput } from '../../utils/hooks/useCapturedEvents'
 import { ProfileIdentifier } from '../../database/type'
 import { getUrl } from '../../utils/utils'
 
@@ -18,7 +17,6 @@ interface BannerUIProps
     title?: string
     description?: string
     nextStep: 'hidden' | { onClick(): void }
-    close: 'hidden' | { onClose(): void }
     username?:
         | 'hidden'
         | {
@@ -55,46 +53,6 @@ export function BannerUI(props: BannerUIProps) {
     const Title = props.title ?? t('banner_title')
     const Description = props.description ?? t('banner_preparing_setup')
 
-    // const { username } = props
-
-    //#region Input
-    // const [touched, isTouched] = React.useState(false)
-    // const usedValue = username === 'hidden' ? '' : touched ? username.value : username.defaultValue
-    // const isInvalid = username === 'hidden' ? false : touched ? !username.isValid(usedValue) : false
-    // const helperText =
-    //     username === 'hidden'
-    //         ? ''
-    //         : isInvalid
-    //         ? (username.value + username.defaultValue).length
-    //             ? invalidUsernameHelperText
-    //             : emptyUsernameHelperText
-    //         : ' '
-    // const [, ref] = useCapturedInput(
-    //     e => {
-    //         if (username === 'hidden') return
-    //         isTouched(true)
-    //         username.onChange(e)
-    //     },
-    //     [username],
-    // )
-    // const UserNameInput =
-    //     username === 'hidden' ? null : (
-    //         <TextField
-    //             label="Username"
-    //             onChange={() => {}}
-    //             value={usedValue}
-    //             error={isInvalid}
-    //             helperText={helperText}
-    //             fullWidth
-    //             InputProps={{
-    //                 startAdornment: <InputAdornment position="start">@</InputAdornment>,
-    //                 inputRef: ref,
-    //             }}
-    //             margin="dense"
-    //             variant="standard"
-    //         />
-    //     )
-    //#endregion
     const GetStarted =
         props.nextStep === 'hidden' ? null : (
             <Button
@@ -106,12 +64,7 @@ export function BannerUI(props: BannerUIProps) {
                 {t('banner_get_started')}
             </Button>
         )
-    const DismissButton =
-        props.close !== 'hidden' ? (
-            <Button className={classes.button} color="primary" onClick={props.close.onClose}>
-                {t('cancel')}
-            </Button>
-        ) : null
+
     return (
         <AppBar
             style={{ paddingBottom: 0 }}
@@ -119,20 +72,6 @@ export function BannerUI(props: BannerUIProps) {
             color="inherit"
             elevation={0}
             classes={{ root: classes.root }}>
-            {
-                // <DialogTitle classes={{ root: classes.title }} className={classes.header}>
-                //     {Title}
-                // </DialogTitle>
-                // <DialogContent className={classes.content}>
-                //     <DialogContentText>{Description}</DialogContentText>
-                //     {UserNameInput}
-                // </DialogContent>
-                // <DialogActions className={classes.actions}>
-                //     {DismissButton}
-                //     {GetStarted}
-                // </DialogActions>
-            }
-
             <div className={classes.wrapper}>
                 <ListItemIcon>
                     <img alt="" className={classes.maskicon} src={getUrl('/maskbook-icon-padded.png')} />
@@ -187,7 +126,6 @@ export function Banner(props: BannerProps) {
         <BannerUI
             {...props}
             username={props.username ?? defaultUserName}
-            close={props.close ?? { onClose: defaultClose }}
             nextStep={props.nextStep ?? { onClick: defaultNextStep }}
         />
     )

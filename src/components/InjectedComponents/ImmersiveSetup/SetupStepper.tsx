@@ -205,7 +205,7 @@ export function ImmersiveSetupStepperUI(props: ImmersiveSetupStepperUIProps) {
                                 failedOnClick="use executor"
                             />
                             <Button variant="outlined" onClick={props.onClose}>
-                                完成
+                                {t('finish')}
                             </Button>
                         </div>
                     </>

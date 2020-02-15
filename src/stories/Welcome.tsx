@@ -11,13 +11,11 @@ import { demoPeople } from './demoPeopleOrGroups'
 const ResponsiveDialog = Dialog
 storiesOf('Welcome', module)
     .add('Banner', () => {
-        const hiddenClose = boolean('Hidden close button', false)
         const desc = text('description', '')
         const title = text('title', '')
         const isValid = boolean('is username valid', true)
         return (
             <BannerUI
-                close={hiddenClose ? 'hidden' : { onClose: action('Close') }}
                 nextStep={{ onClick: to('Welcome', 'Step 0') }}
                 username={{
                     defaultValue: text('default value', ''),
