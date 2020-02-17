@@ -136,7 +136,7 @@
     "terser-webpack-plugin": "^2.3.4",
     "ts-jest": "^25.2.0",
     "ts-loader": "^6.2.1",
-    "ts-morph": "^6.0.2",
+    "ts-morph": "^6.0.3",
     "ts-node": "^8.6.2",
     "type-coverage": "^2.4.0",
     "typechain": "^1.0.5",
