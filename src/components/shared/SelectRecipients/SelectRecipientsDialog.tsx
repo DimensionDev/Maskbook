@@ -45,6 +45,7 @@ export interface SelectRecipientsDialogUIProps
     items: Profile[]
     selected: Profile[]
     disabled: boolean
+    disabledItems?: Profile[]
     submitDisabled: boolean
     onSubmit: () => void
     onClose: () => void
@@ -54,7 +55,7 @@ export interface SelectRecipientsDialogUIProps
 export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
-    const { items } = props
+    const { items, disabledItems } = props
 
     return (
         <ResponsiveDialog
@@ -91,8 +92,11 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
                         <ProfileInList
                             key={item.identifier.toText()}
                             item={item}
-                            checked={props.selected.some(x => x.identifier.equals(item.identifier))}
-                            disabled={props.disabled}
+                            checked={
+                                props.selected.some(x => x.identifier.equals(item.identifier)) ||
+                                disabledItems?.includes(item)
+                            }
+                            disabled={props.disabled || disabledItems?.includes(item)}
                             onChange={(_, checked) => {
                                 if (checked) {
                                     props.onSelect(item)
