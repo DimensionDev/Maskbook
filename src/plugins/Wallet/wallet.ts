@@ -65,18 +65,28 @@ export async function getWallets(): Promise<[(WalletRecord & { privateKey: strin
                 ...x,
                 privateKey: '0x' + buf2hex((await recoverWallet(x.mnemonic, x.passphrase)).privateKey),
             })),
-        ),
+        ).then(wallets => wallets.sort((a, b) => (a._wallet_is_default ? -1 : b._wallet_is_default ? 1 : 0))),
         tokens,
     ]
 }
 
 export async function getDefaultWallet(): Promise<WalletRecord> {
-    // TODO: _wallet_is_default
-    return {} as any
+    const t = createTransaction(await createWalletDBAccess(), 'readonly')('Wallet')
+    const wallets = await t.objectStore('Wallet').getAll()
+    const wallet = wallets.find(wallet => wallet._wallet_is_default) || wallets.length === 0 ? null : wallets[0]
+    if (!wallet) throw new Error('no wallet')
+    return wallet
 }
 
-export async function setDefaultWallet(addr: WalletRecord['address']) {
-    // TODO: _wallet_is_default
+export async function setDefaultWallet(address: WalletRecord['address']) {
+    const t = createTransaction(await createWalletDBAccess(), 'readwrite')('Wallet')
+    const wallets = await t.objectStore('Wallet').getAll()
+    wallets.forEach(wallet => {
+        if (wallet._wallet_is_default) wallet._wallet_is_default = false
+        if (wallet.address === address) wallet._wallet_is_default = true
+        t.objectStore('Wallet').put(wallet)
+    })
+    PluginMessageCenter.emit('maskbook.wallets.update', undefined)
 }
 
 export async function createNewWallet(
