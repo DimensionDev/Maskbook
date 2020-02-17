@@ -1,6 +1,4 @@
 import React from 'react'
 import { Banner, BannerProps } from '../Welcomes/Banner'
 
-export function NotSetupYetPrompt(props: Partial<BannerProps>) {
-    return <Banner {...props} />
-}
+export const NotSetupYetPrompt = Banner as React.FC<Partial<BannerProps>>
