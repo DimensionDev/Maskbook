@@ -1,0 +1,9 @@
+{
+  "gitflow.branch.master": "released",
+  "gitflow.branch.develop": "master",
+  "gitflow.prefix.feature": "feature/",
+  "gitflow.prefix.support": "support/",
+  "gitflow.prefix.release": "release/",
+  "gitflow.prefix.hotfix": "hotfix/",
+  "gitflow.prefix.versiontag": "v"
+}
