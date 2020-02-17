@@ -57,7 +57,7 @@
     "construct-style-sheets-polyfill": "^2.3.5",
     "elliptic": "^6.4.1",
     "gun": "0.2020.116",
-    "husky": "^4.2.1",
+    "husky": "^4.2.3",
     "i18next": "^19.1.0",
     "idb": "^5.0.1",
     "json-stable-stringify": "^1.0.1",
