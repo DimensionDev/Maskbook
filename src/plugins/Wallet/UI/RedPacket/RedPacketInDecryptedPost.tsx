@@ -19,12 +19,14 @@ import {
     IconButton,
     Typography,
     DialogContent,
-    DialogActions,
     Button,
     FormControl,
     InputLabel,
     Select,
     MenuItem,
+    Checkbox,
+    FormControlLabel,
+    Divider,
 } from '@material-ui/core'
 import { useStylesExtends, or } from '../../../../components/custom-ui-helper'
 import { DialogDismissIconUI } from '../../../../components/InjectedComponents/DialogDismissIcon'
@@ -71,13 +73,18 @@ export default function RedPacketInDecryptedPost(props: RedPacketInDecryptedPost
         setClaiming(null)
     }
 
-    const claimRedPacket = (walletAddress: WalletRecord['address'], rpid?: RedPacketRecord['red_packet_id']) => {
+    const claimRedPacket = (
+        walletAddress: WalletRecord['address'],
+        rpid?: RedPacketRecord['red_packet_id'],
+        setAsDefault?: boolean,
+    ) => {
         setClaiming(null)
         return Services.Plugin.invokePlugin(
             'maskbook.red_packet',
             'claimRedPacket',
             { redPacketID: rpid ?? claiming?.rpid! },
             walletAddress,
+            setAsDefault,
         )
             .catch(e => Services.Welcome.openOptionsPage(`/wallets/error?reason=${e.message}`))
             .finally(() => setLoading(false))
@@ -151,7 +158,11 @@ export function RedPacketInDecryptedPostCard(
 export function RedPacketInDecryptedPostClaimDialog(
     props: RedPacketInDecryptedPostProps & {
         onAbortClaiming(): void
-        onClaimRedPacket: (walletAddress: WalletRecord['address'], rpid?: RedPacketRecord['red_packet_id']) => void
+        onClaimRedPacket: (
+            walletAddress: WalletRecord['address'],
+            rpid?: RedPacketRecord['red_packet_id'],
+            setAsDefault?: boolean,
+        ) => void
         claiming: Claiming
         walletAddress: [string | undefined, (val: string | undefined) => void]
         open: boolean
@@ -162,6 +173,7 @@ export function RedPacketInDecryptedPostClaimDialog(
         props.walletAddress,
         React.useState<undefined | string>(),
     )
+    const [defaultChecked, setDefaultChecked] = React.useState()
     const claiming = props.claiming
     const classes = useStylesExtends(useStyles(), props)
     return (
@@ -190,6 +202,7 @@ export function RedPacketInDecryptedPostClaimDialog(
                     Select Wallet
                 </Typography>
             </DialogTitle>
+            <Divider />
             <DialogContent className={classes.content}>
                 <div className={classes.line}>
                     <FormControl variant="filled" className={classes.input} fullWidth>
@@ -207,16 +220,26 @@ export function RedPacketInDecryptedPostClaimDialog(
                     </FormControl>
                 </div>
             </DialogContent>
-            <DialogActions className={classes.actions}>
+            <DialogContent className={classes.actions} style={{ display: 'flex' }}>
+                <FormControlLabel
+                    control={
+                        <Checkbox
+                            checked={defaultChecked}
+                            onChange={e => setDefaultChecked(e.target.checked)}
+                            color="primary"
+                        />
+                    }
+                    label="Set as Default"
+                />
                 <Button
                     className={classes.button}
-                    style={{ marginLeft: 'auto' }}
+                    style={{ marginLeft: 'auto', marginRight: 0, width: 100 }}
                     color="primary"
                     variant="contained"
-                    onClick={() => props.onClaimRedPacket(selectedWalletAddress!, claiming?.rpid)}>
+                    onClick={() => props.onClaimRedPacket(selectedWalletAddress!, claiming?.rpid, defaultChecked)}>
                     {t('ok')}
                 </Button>
-            </DialogActions>
+            </DialogContent>
         </ResponsiveDialog>
     )
 }
