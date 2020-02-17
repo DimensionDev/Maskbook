@@ -98,7 +98,7 @@
     "@storybook/addon-knobs": "^5.3.12",
     "@storybook/addon-links": "^5.3.12",
     "@storybook/addon-viewport": "^5.3.12",
-    "@storybook/addons": "^5.3.12",
+    "@storybook/addons": "^5.3.13",
     "@storybook/preset-typescript": "^1.2.0",
     "@storybook/react": "^5.3.12",
     "@trust/webcrypto": "^0.9.2",
