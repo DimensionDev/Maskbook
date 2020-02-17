@@ -132,21 +132,18 @@ async function getSteganographyContent(node: DOMProxy) {
     const pass = getPostBy(node, false).identifier.toText()
     return (
         await Promise.all(
-            imgUrls
-                .map(async url => {
-                    try {
-                        const content = await Services.Steganography.decodeImage(
-                            new Uint8Array(await downloadUrl(url)),
-                            {
-                                pass,
-                            },
-                        )
-                        return content.indexOf('🎼') === 0 ? content : ''
-                    } catch {
-                        return ''
-                    }
-                })
-                .filter(Boolean),
+            imgUrls.map(async url => {
+                try {
+                    const content = await Services.Steganography.decodeImage(new Uint8Array(await downloadUrl(url)), {
+                        pass,
+                    })
+                    return content.indexOf('🎼') === 0 ? content : ''
+                } catch {
+                    return ''
+                }
+            }),
         )
-    ).join('\n')
+    )
+        .filter(Boolean)
+        .join('\n')
 }
