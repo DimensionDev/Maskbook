@@ -9,7 +9,7 @@
      *
      * If any API is complaining "this does not implements Window", add it here.
      */
-    const brokenAPI = ['requestAnimationFrame', 'setTimeout', 'clearTimeout', 'matchMedia']
+    const brokenAPI = ['requestAnimationFrame', 'setTimeout', 'clearTimeout', 'matchMedia', 'getComputedStyle']
 
     const webAPIs = Object.getOwnPropertyDescriptors(window)
     Reflect.deleteProperty(webAPIs, 'window')
