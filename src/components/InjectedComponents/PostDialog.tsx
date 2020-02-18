@@ -6,8 +6,6 @@ import {
     Button,
     Typography,
     IconButton,
-    withMobileDialog,
-    Dialog,
     DialogTitle,
     DialogContent,
     DialogActions,
@@ -42,7 +40,7 @@ import { isDAI } from '../../plugins/Wallet/erc20'
 import { PluginRedPacketTheme } from '../../plugins/Wallet/theme'
 import { sleep } from '../../utils/utils'
 import { useI18N } from '../../utils/i18n-next-ui'
-import { PortalShadowRoot } from '../../utils/jss/ShadowRootPortal'
+import ShadowRootDialog from '../../utils/jss/ShadowRootDialog'
 
 const defaultTheme = {}
 
@@ -64,7 +62,6 @@ const useStyles = makeStyles({
         paddingLeft: 26,
     },
 })
-const ResponsiveDialog = withMobileDialog({ breakpoint: 'xs' })(Dialog)
 
 export interface PostDialogUIProps
     extends withClasses<
@@ -112,11 +109,13 @@ export function PostDialogUI(props: PostDialogUIProps) {
         [props.open, props.postContent],
     )
     const [redPacketDialogOpen, setRedPacketDialogOpen] = useState(false)
+
     if (props.postContent.type !== 'text') return <>Unsupported type to edit</>
+
     return (
         <div className={classes.root}>
             <ThemeProvider theme={props.theme ?? defaultTheme}>
-                <ResponsiveDialog
+                <ShadowRootDialog
                     className={classes.dialog}
                     classes={{
                         container: classes.container,
@@ -126,7 +125,6 @@ export function PostDialogUI(props: PostDialogUIProps) {
                     scroll="paper"
                     fullWidth
                     maxWidth="sm"
-                    container={PortalShadowRoot}
                     disableAutoFocus
                     disableEnforceFocus
                     onEscapeKeyDown={props.onCloseButtonClicked}
@@ -234,7 +232,7 @@ export function PostDialogUI(props: PostDialogUIProps) {
                             {t('post_dialog__button')}
                         </Button>
                     </DialogActions>
-                </ResponsiveDialog>
+                </ShadowRootDialog>
             </ThemeProvider>
             <RedPacketDialog
                 classes={classes}

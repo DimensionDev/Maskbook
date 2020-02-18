@@ -33,7 +33,7 @@ export const PostDialogHintUI = React.memo(function PostDialogHintUI(props: Post
     const classes = useStylesExtends(useStyles(), props)
     return (
         <Card className={classes.root} elevation={0}>
-            <Box className={classes.content}>
+            <div className={classes.content}>
                 <Typography className={classes.title} variant="h4">
                     {t('post_modal_hint__title')}
                 </Typography>
@@ -44,7 +44,7 @@ export const PostDialogHintUI = React.memo(function PostDialogHintUI(props: Post
                     onClick={props.onHintButtonClicked}>
                     {t('post_modal_hint__button')}
                 </Button>
-            </Box>
+            </div>
         </Card>
     )
 })

@@ -32,6 +32,7 @@ import { useStylesExtends, or } from '../../../../components/custom-ui-helper'
 import { DialogDismissIconUI } from '../../../../components/InjectedComponents/DialogDismissIcon'
 import { PortalShadowRoot } from '../../../../utils/jss/ShadowRootPortal'
 import { useI18N } from '../../../../utils/i18n-next-ui'
+import ShadowRootDialog from '../../../../utils/jss/ShadowRootDialog'
 
 const useStyles = makeStyles(theme =>
     createStyles({
@@ -60,8 +61,6 @@ interface RedPacketInDecryptedPostProps
     message: TypedMessage
     postIdentifier?: PostIdentifier<ProfileIdentifier>
 }
-
-const ResponsiveDialog = withMobileDialog({ breakpoint: 'xs' })(Dialog)
 
 export default function RedPacketInDecryptedPost(props: RedPacketInDecryptedPostProps) {
     const [loading, setLoading] = React.useState(false)
@@ -177,7 +176,7 @@ export function RedPacketInDecryptedPostClaimDialog(
     const claiming = props.claiming
     const classes = useStylesExtends(useStyles(), props)
     return (
-        <ResponsiveDialog
+        <ShadowRootDialog
             className={classes.dialog}
             classes={{
                 container: classes.container,
@@ -187,7 +186,6 @@ export function RedPacketInDecryptedPostClaimDialog(
             scroll="paper"
             fullWidth
             maxWidth="sm"
-            container={PortalShadowRoot}
             disableAutoFocus
             disableEnforceFocus
             onEscapeKeyDown={props.onAbortClaiming}
@@ -240,6 +238,6 @@ export function RedPacketInDecryptedPostClaimDialog(
                     {t('ok')}
                 </Button>
             </DialogContent>
-        </ResponsiveDialog>
+        </ShadowRootDialog>
     )
 }

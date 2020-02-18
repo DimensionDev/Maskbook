@@ -1,8 +1,6 @@
 import React, { useRef, useState, useCallback } from 'react'
 import {
     makeStyles,
-    withMobileDialog,
-    Dialog,
     DialogTitle,
     IconButton,
     Button,
@@ -31,7 +29,6 @@ import {
     ERC20TokenRecord,
 } from '../../database/types'
 import { useLastRecognizedIdentity, useCurrentIdentity } from '../../../../components/DataSource/useActivatedUI'
-import { PortalShadowRoot } from '../../../../utils/jss/ShadowRootPortal'
 import { useCapturedInput } from '../../../../utils/hooks/useCapturedEvents'
 import { PluginMessageCenter } from '../../../PluginMessages'
 import { getActivatedUI } from '../../../../social-network/ui'
@@ -39,6 +36,8 @@ import { useValueRef } from '../../../../utils/hooks/useValueRef'
 import { debugModeSetting } from '../../../../components/shared-settings/settings'
 import { formatBalance } from '../../formatter'
 import { currentEthereumNetworkSettings } from '../../network'
+import ShadowRootDialog from '../../../../utils/jss/ShadowRootDialog'
+import { PortalShadowRoot } from '../../../../utils/jss/ShadowRootPortal'
 
 interface RedPacketDialogProps
     extends withClasses<
@@ -377,7 +376,6 @@ const useStyles = makeStyles({
         width: '100%',
     },
 })
-const ResponsiveDialog = withMobileDialog({ breakpoint: 'xs' })(Dialog)
 
 export default function RedPacketDialog(props: RedPacketDialogProps) {
     const tabs = useState<0 | 1>(0)
@@ -492,7 +490,7 @@ export function RedPacketDialogUI(
         },
     ]
     return (
-        <ResponsiveDialog
+        <ShadowRootDialog
             className={classes.dialog}
             classes={{
                 container: classes.container,
@@ -502,7 +500,6 @@ export function RedPacketDialogUI(
             scroll="paper"
             fullWidth
             maxWidth="sm"
-            container={PortalShadowRoot}
             disableAutoFocus
             disableEnforceFocus
             BackdropProps={{
@@ -519,6 +516,6 @@ export function RedPacketDialogUI(
             <DialogContent className={classes.content}>
                 <AbstractTab height={400} state={[currentTab, setCurrentTab]} tabs={tabs}></AbstractTab>
             </DialogContent>
-        </ResponsiveDialog>
+        </ShadowRootDialog>
     )
 }

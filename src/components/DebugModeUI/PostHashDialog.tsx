@@ -6,9 +6,7 @@ import ListItem from '@material-ui/core/ListItem'
 import ListItemAvatar from '@material-ui/core/ListItemAvatar'
 import ListItemText from '@material-ui/core/ListItemText'
 import DialogTitle from '@material-ui/core/DialogTitle'
-import Dialog from '@material-ui/core/Dialog'
 import { blue } from '@material-ui/core/colors'
-import { PortalShadowRoot } from '../../utils/jss/ShadowRootPortal'
 import { useFriendsList } from '../DataSource/useActivatedUI'
 import { Avatar } from '../../utils/components/Avatar'
 import { Profile } from '../../database'
@@ -17,6 +15,7 @@ import Services from '../../extension/service'
 import { PostIVIdentifier } from '../../database/type'
 import { deconstructPayload } from '../../utils/type-transform/Payload'
 import { DialogContentText, DialogContent } from '@material-ui/core'
+import ShadowRootDialog from '../../utils/jss/ShadowRootDialog'
 
 const useStyles = makeStyles({
     avatar: {
@@ -41,7 +40,7 @@ function SimpleDialog(props: SimpleDialogProps) {
     }
 
     return (
-        <Dialog disableEnforceFocus container={PortalShadowRoot} onClose={props.onClose} open={open}>
+        <ShadowRootDialog disableEnforceFocus onClose={props.onClose} open={open}>
             <DialogTitle>Troubleshoot</DialogTitle>
             <DialogContent>
                 <DialogContentText>
@@ -80,7 +79,7 @@ function SimpleDialog(props: SimpleDialogProps) {
                     })}
                 </List>
             </DialogContent>
-        </Dialog>
+        </ShadowRootDialog>
     )
 }
 

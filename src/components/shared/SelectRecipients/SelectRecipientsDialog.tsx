@@ -17,7 +17,7 @@ import { useI18N } from '../../../utils/i18n-next-ui'
 import { ProfileInList } from './ProfileInList'
 import { Profile } from '../../../database'
 import { DialogDismissIconUI } from '../../InjectedComponents/DialogDismissIcon'
-import { PortalShadowRoot } from '../../../utils/jss/ShadowRootPortal'
+import ShadowRootDialog from '../../../utils/jss/ShadowRootDialog'
 
 const useStyles = makeStyles(theme => ({
     content: {
@@ -27,7 +27,6 @@ const useStyles = makeStyles(theme => ({
         marginLeft: 6,
     },
 }))
-const ResponsiveDialog = withMobileDialog({ breakpoint: 'xs' })(Dialog)
 
 export interface SelectRecipientsDialogUIProps
     extends withClasses<
@@ -58,7 +57,7 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
     const { items, disabledItems } = props
 
     return (
-        <ResponsiveDialog
+        <ShadowRootDialog
             className={classes.dialog}
             classes={{
                 container: classes.container,
@@ -68,7 +67,6 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
             scroll="paper"
             fullWidth
             maxWidth="sm"
-            container={PortalShadowRoot}
             disableAutoFocus
             disableEnforceFocus
             onEscapeKeyDown={props.onClose}
@@ -119,6 +117,6 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
                     {t('select_specific_friends_dialog__button')}
                 </Button>
             </DialogActions>
-        </ResponsiveDialog>
+        </ShadowRootDialog>
     )
 }
