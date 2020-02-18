@@ -5,7 +5,7 @@ import {
     IDBPTransaction,
     IDBPObjectStore,
     IDBPCursorWithValueIteratorValue,
-} from 'idb'
+} from 'idb/with-async-ittr'
 import { OnlyRunInContext } from '@holoflows/kit/es'
 
 export function createDBAccess<DBSchema>(opener: () => Promise<IDBPDatabase<DBSchema>>) {
