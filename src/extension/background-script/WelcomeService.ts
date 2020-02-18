@@ -13,7 +13,7 @@ import { ProfileIdentifier, PersonaIdentifier } from '../../database/type'
 import { generateBackupJSON, BackupOptions } from './WelcomeServices/generateBackupJSON'
 import { i18n } from '../../utils/i18n-next'
 
-OnlyRunInContext('background', 'WelcomeService')
+OnlyRunInContext(['background', 'debugging'], 'WelcomeService')
 export { generateBackupJSON } from './WelcomeServices/generateBackupJSON'
 export { restoreBackup } from './WelcomeServices/restoreBackup'
 

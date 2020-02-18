@@ -15,7 +15,7 @@ import {
 } from '../../database/Persona/Persona.db'
 import { OnlyRunInContext } from '@holoflows/kit/es'
 
-OnlyRunInContext('background', 'IdentityService')
+OnlyRunInContext(['background', 'debugging'], 'IdentityService')
 
 // region Avatars
 export { storeAvatar, getAvatarDataURL as queryAvatarDataURL } from '../../database'

@@ -34,8 +34,12 @@ export const resetWallet = async () => {
 currentEthereumNetworkSettings.addListener(resetProvider)
 PluginMessageCenter.on('maskbook.wallets.reset', resetWallet)
 
-resetWallet()
-resetProvider()
+setTimeout(() => {
+    try {
+        resetWallet()
+        resetProvider()
+    } catch {}
+}, 100)
 
 export function buf2hex(buffer: ArrayBuffer) {
     return Array.prototype.map.call(new Uint8Array(buffer), x => ('00' + x.toString(16)).slice(-2)).join('')
