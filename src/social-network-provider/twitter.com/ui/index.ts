@@ -9,7 +9,7 @@ import { twitterUIInjections } from './inject'
 import { InitGroupsValueRef } from '../../../social-network/defaults/GroupsValueRef'
 import { twitterUrl } from '../utils/url'
 import { PreDefinedVirtualGroupNames } from '../../../database/type'
-import { twitterUICustomUI } from './custom'
+import { twitterUICustomUI, startWatchThemeColor } from './custom'
 
 export const instanceOfTwitterUI = defineSocialNetworkUI({
     ...sharedSettings,
@@ -28,6 +28,7 @@ export const instanceOfTwitterUI = defineSocialNetworkUI({
         },
     },
     init: (env, pref) => {
+        startWatchThemeColor()
         sharedSettings.init(env, pref)
         InitFriendsValueRef(instanceOfTwitterUI, twitterUrl.hostIdentifier)
         InitGroupsValueRef(instanceOfTwitterUI, twitterUrl.hostIdentifier, [

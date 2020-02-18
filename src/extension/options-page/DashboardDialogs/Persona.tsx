@@ -25,6 +25,7 @@ import {
     encodeArrayBuffer,
     decodeArrayBuffer,
 } from '../../../utils/type-transform/String-ArrayBuffer'
+import { selectElementContents } from '../../../utils/utils'
 
 export function PersonaCreateDialog() {
     const { t } = useI18N()
@@ -139,7 +140,7 @@ const ShowcaseBox = (props: TypographyProps) => {
     const { children, ...other } = props
     const ref = React.useRef<HTMLElement>(null)
     const copyText = () => {
-        window.getSelection()!.selectAllChildren(ref.current!)
+        selectElementContents(ref.current!)
     }
     return (
         <Typography

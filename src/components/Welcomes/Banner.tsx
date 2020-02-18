@@ -2,33 +2,22 @@ import * as React from 'react'
 import { useCallback } from 'react'
 import { useI18N } from '../../utils/i18n-next-ui'
 import { makeStyles } from '@material-ui/styles'
-import {
-    AppBar,
-    Button,
-    Theme,
-    TextField,
-    InputAdornment,
-    DialogTitle,
-    DialogContent,
-    DialogContentText,
-    DialogActions,
-} from '@material-ui/core'
+import { AppBar, Button, Theme, ListItemText, ListItemIcon } from '@material-ui/core'
 import { useLastRecognizedIdentity } from '../DataSource/useActivatedUI'
 import Services from '../../extension/service'
 import { getActivatedUI } from '../../social-network/ui'
 import { env } from '../../social-network/shared'
 import { setStorage } from '../../utils/browser.storage'
 import { useStylesExtends } from '../custom-ui-helper'
-import { useCapturedInput } from '../../utils/hooks/useCapturedEvents'
 import { ProfileIdentifier } from '../../database/type'
+import { getUrl } from '../../utils/utils'
 
 interface BannerUIProps
     extends withClasses<KeysInferFromUseStyles<typeof useStyles> | 'header' | 'content' | 'actions' | 'button'> {
     title?: string
     description?: string
     nextStep: 'hidden' | { onClick(): void }
-    close: 'hidden' | { onClose(): void }
-    username:
+    username?:
         | 'hidden'
         | {
               isValid(username: string): boolean
@@ -46,6 +35,16 @@ const useStyles = makeStyles((theme: Theme) => ({
     title: {
         paddingBottom: 0,
     },
+    wrapper: {
+        margin: theme.spacing(1),
+        display: 'flex',
+        alignItems: 'center',
+    },
+    maskicon: {
+        width: 56,
+        height: 56,
+        margin: theme.spacing(0, 1),
+    },
 }))
 export function BannerUI(props: BannerUIProps) {
     const { t } = useI18N()
@@ -54,79 +53,36 @@ export function BannerUI(props: BannerUIProps) {
     const Title = props.title ?? t('banner_title')
     const Description = props.description ?? t('banner_preparing_setup')
 
-    const emptyUsernameHelperText = t('banner_empty_username')
-    const invalidUsernameHelperText = t('banner_invalid_username')
-
-    const { username } = props
-
-    //#region Input
-    const [touched, isTouched] = React.useState(false)
-    const usedValue = username === 'hidden' ? '' : touched ? username.value : username.defaultValue
-    const isInvalid = username === 'hidden' ? false : touched ? !username.isValid(usedValue) : false
-    const helperText =
-        username === 'hidden'
-            ? ''
-            : isInvalid
-            ? (username.value + username.defaultValue).length
-                ? invalidUsernameHelperText
-                : emptyUsernameHelperText
-            : ' '
-    const [, ref] = useCapturedInput(
-        e => {
-            if (username === 'hidden') return
-            isTouched(true)
-            username.onChange(e)
-        },
-        [username],
-    )
-    const UserNameInput =
-        username === 'hidden' ? null : (
-            <TextField
-                label="Username"
-                onChange={() => {}}
-                value={usedValue}
-                error={isInvalid}
-                helperText={helperText}
-                fullWidth
-                InputProps={{
-                    startAdornment: <InputAdornment position="start">@</InputAdornment>,
-                    inputRef: ref,
-                }}
-                margin="dense"
-                variant="standard"
-            />
-        )
-    //#endregion
     const GetStarted =
         props.nextStep === 'hidden' ? null : (
             <Button
                 className={classes.button}
-                disabled={username === 'hidden' ? false : !username.isValid(usedValue)}
+                // disabled={username === 'hidden' ? false : !username.isValid(usedValue)}
                 onClick={props.nextStep.onClick}
                 variant="contained"
                 color="primary">
                 {t('banner_get_started')}
             </Button>
         )
-    const DismissButton =
-        props.close !== 'hidden' ? (
-            <Button className={classes.button} color="primary" onClick={props.close.onClose}>
-                {t('cancel')}
-            </Button>
-        ) : null
+
     return (
-        <AppBar position="static" color="inherit" elevation={0} classes={{ root: classes.root }}>
-            <DialogTitle classes={{ root: classes.title }} className={classes.header}>
-                {Title}
-            </DialogTitle>
-            <DialogContent className={classes.content}>
-                <DialogContentText>{Description}</DialogContentText>
-                {UserNameInput}
-            </DialogContent>
-            <DialogActions className={classes.actions}>
-                {DismissButton}
+        <AppBar
+            style={{ paddingBottom: 0 }}
+            position="static"
+            color="inherit"
+            elevation={0}
+            classes={{ root: classes.root }}>
+            <div className={classes.wrapper}>
+                <ListItemIcon>
+                    <img alt="" className={classes.maskicon} src={getUrl('/maskbook-icon-padded.png')} />
+                </ListItemIcon>
+                <ListItemText
+                    className={classes.header}
+                    classes={{ primary: classes.title, secondary: classes.content }}
+                    primary={Title}
+                    secondary={Description}></ListItemText>
                 {GetStarted}
-            </DialogActions>
+            </div>
         </AppBar>
     )
 }
@@ -170,7 +126,6 @@ export function Banner(props: BannerProps) {
         <BannerUI
             {...props}
             username={props.username ?? defaultUserName}
-            close={props.close ?? { onClose: defaultClose }}
             nextStep={props.nextStep ?? { onClick: defaultNextStep }}
         />
     )

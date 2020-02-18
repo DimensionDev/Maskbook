@@ -91,6 +91,8 @@ export default function WalletCard({ wallet, tokens }: Props) {
         setAnchorEl(null)
     }
 
+    const setAsDefault = () => Services.Plugin.invokePlugin('maskbook.wallet', 'setDefaultWallet', wallet.address)
+
     const [renameWallet, setRenameWallet] = React.useState(false)
     type Inputable = HTMLInputElement | HTMLTextAreaElement
     const doRenameWallet = (event: React.FocusEvent<Inputable> | React.KeyboardEvent<Inputable>) => {
@@ -125,7 +127,10 @@ export default function WalletCard({ wallet, tokens }: Props) {
                 <Typography className={classes.header} variant="h5" component="h2">
                     {!renameWallet ? (
                         <>
-                            <span className="title">{wallet.name}</span>
+                            <span className="title">
+                                {wallet.name}
+                                {wallet._wallet_is_default && `(${t('default')})`}
+                            </span>
                             <Typography className="fullWidth" variant="body1" component="span" color="textSecondary">
                                 <SettingsIcon className={classes.cursor} fontSize="small" onClick={handleClick} />
                                 <Menu
@@ -135,6 +140,9 @@ export default function WalletCard({ wallet, tokens }: Props) {
                                     onClick={handleClose}
                                     PaperProps={{ style: { minWidth: 100 } }}
                                     onClose={handleClose}>
+                                    <MenuItem disabled={wallet._wallet_is_default} onClick={setAsDefault}>
+                                        {t('set_as_default')}
+                                    </MenuItem>
                                     <MenuItem onClick={() => setRenameWallet(true)}>{t('rename')}</MenuItem>
                                     <MenuItem onClick={() => setBackupWallet(true)}>
                                         {t('dashboard_create_backup')}

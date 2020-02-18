@@ -492,36 +492,33 @@ export function RedPacketDialogUI(
         },
     ]
     return (
-        <div ref={rootRef}>
-            <ResponsiveDialog
-                className={classes.dialog}
-                classes={{
-                    container: classes.container,
-                    paper: classes.paper,
-                }}
-                open={props.open}
-                scroll="paper"
-                fullWidth
-                maxWidth="sm"
-                container={() => rootRef.current}
-                disablePortal
-                disableAutoFocus
-                disableEnforceFocus
-                BackdropProps={{
-                    className: classes.backdrop,
-                }}>
-                <DialogTitle className={classes.header}>
-                    <IconButton classes={{ root: classes.close }} onClick={props.onDecline}>
-                        <DialogDismissIconUI />
-                    </IconButton>
-                    <Typography className={classes.title} display="inline" variant="inherit">
-                        Plugin: Red Packet
-                    </Typography>
-                </DialogTitle>
-                <DialogContent className={classes.content}>
-                    <AbstractTab height={400} state={[currentTab, setCurrentTab]} tabs={tabs}></AbstractTab>
-                </DialogContent>
-            </ResponsiveDialog>
-        </div>
+        <ResponsiveDialog
+            className={classes.dialog}
+            classes={{
+                container: classes.container,
+                paper: classes.paper,
+            }}
+            open={props.open}
+            scroll="paper"
+            fullWidth
+            maxWidth="sm"
+            container={PortalShadowRoot}
+            disableAutoFocus
+            disableEnforceFocus
+            BackdropProps={{
+                className: classes.backdrop,
+            }}>
+            <DialogTitle className={classes.header}>
+                <IconButton classes={{ root: classes.close }} onClick={props.onDecline}>
+                    <DialogDismissIconUI />
+                </IconButton>
+                <Typography className={classes.title} display="inline" variant="inherit">
+                    Plugin: Red Packet
+                </Typography>
+            </DialogTitle>
+            <DialogContent className={classes.content}>
+                <AbstractTab height={400} state={[currentTab, setCurrentTab]} tabs={tabs}></AbstractTab>
+            </DialogContent>
+        </ResponsiveDialog>
     )
 }
