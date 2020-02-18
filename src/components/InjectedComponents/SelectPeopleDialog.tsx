@@ -2,18 +2,10 @@ import React, { useCallback, useState } from 'react'
 import { SelectPeopleAndGroupsUI, SelectPeopleAndGroupsUIProps } from '../shared/SelectPeopleAndGroups'
 import { useI18N } from '../../utils/i18n-next-ui'
 import { makeStyles } from '@material-ui/styles'
-import {
-    Button,
-    CircularProgress,
-    Dialog,
-    DialogActions,
-    DialogContent,
-    DialogTitle,
-    withMobileDialog,
-} from '@material-ui/core'
+import { Button, CircularProgress, DialogActions, DialogContent, DialogTitle } from '@material-ui/core'
 import { Profile } from '../../database'
-import { PortalShadowRoot } from '../../utils/jss/ShadowRootPortal'
 import { useStylesExtends } from '../custom-ui-helper'
+import ShadowRootDialog from '../../utils/jss/ShadowRootDialog'
 
 export interface SelectPeopleDialogProps
     extends withClasses<KeysInferFromUseStyles<typeof useStyles, 'content'> | 'button'> {
@@ -29,7 +21,7 @@ const useStyles = makeStyles({
     content: { padding: '0 12px' },
     progress: { marginRight: 6 },
 })
-const ResponsiveDialog = withMobileDialog({ breakpoint: 'xs' })(Dialog)
+
 export function SelectPeopleDialog(props: SelectPeopleDialogProps) {
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
@@ -49,9 +41,8 @@ export function SelectPeopleDialog(props: SelectPeopleDialogProps) {
     const canClose = !rejection && committed
     const canCommit = committed || people.length === 0
     return (
-        <ResponsiveDialog
+        <ShadowRootDialog
             disableEnforceFocus
-            container={PortalShadowRoot}
             onClose={canClose ? onClose : void 0}
             open={props.open}
             scroll="paper"
@@ -84,7 +75,7 @@ export function SelectPeopleDialog(props: SelectPeopleDialogProps) {
                     {t(committed ? 'sharing' : 'share')}
                 </Button>
             </DialogActions>
-        </ResponsiveDialog>
+        </ShadowRootDialog>
     )
 }
 
