@@ -27,7 +27,6 @@ const handler: ProxyHandler<ShadowRoot> = {
     // ! (1) to make it more like a Document
     // ! (2) to make it more like an Element
     get(target, property, handler) {
-        const ours = ['namespaceURI']
         // ! (1) make react move event listeners to shadowroot instead of document
         if (property === 'ownerDocument') return handler
 
@@ -41,9 +40,9 @@ const handler: ProxyHandler<ShadowRoot> = {
             // @ts-ignore
             return document[property].bind(document)
 
-        // ! (2) if it's not a function, use ours or theirs
+        // ! (2) if it's not a function, use theirs
         // @ts-ignore
-        return ours.includes(property) ? val : document.body[property]
+        return document.body[property]
     },
     set(target, property, value) {
         return Reflect.set(target, property, value, target)

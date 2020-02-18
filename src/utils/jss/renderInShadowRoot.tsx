@@ -8,6 +8,7 @@ import { languageSettings } from '../../components/shared-settings/settings'
 import { I18nextProvider } from 'react-i18next'
 import i18nNextInstance from '../i18n-next'
 import { portalShadowRoot } from './ShadowRootPortal'
+import { useSubscription } from 'use-subscription'
 
 /**
  * Render the Node in the ShadowRoot
@@ -25,11 +26,7 @@ export function renderInShadowRoot(node: React.ReactNode, shadow: ShadowRoot) {
 
 // ! let jss tell us if it has made an update
 class InformativeSheetsRegistry extends SheetsRegistry {
-    private callback: Set<() => void>
-    constructor() {
-        super()
-        this.callback = new Set()
-    }
+    private callback = new Set<() => void>()
     private inform() {
         // TODO: batch update
         // ? aggregating multiple inform request to one callback is possible
@@ -55,23 +52,30 @@ class InformativeSheetsRegistry extends SheetsRegistry {
 
 export const jssRegistryMap: WeakMap<ShadowRoot, InformativeSheetsRegistry> = new WeakMap()
 
-export const useSheetsRegistryStyles = (ref: React.RefObject<Node>) => {
-    const registry = React.useCallback(() => {
-        if (!ref.current) return null
-        let current: Node = ref.current
-        // TODO: remember this lookup
-        // ! lookup the styled shadowroot
-        // ! document-fragment is node but not element
-        while (current.parentElement === current.parentNode) {
-            if (!current.parentNode) return null
-            current = current.parentNode
+export const useSheetsRegistryStyles = (_current: Node | null) => {
+    const subscription = React.useMemo(() => {
+        let registry: InformativeSheetsRegistry | null | undefined = null
+        if (_current) {
+            // ! lookup the styled shadowroot
+            let current: Node | null = _current
+            while (
+                current &&
+                current.nodeType !== Node.DOCUMENT_NODE &&
+                current.nodeType !== Node.DOCUMENT_FRAGMENT_NODE
+            ) {
+                current = current.parentNode
+            }
+            if (current) {
+                const shadowroot = current as ShadowRoot | undefined
+                registry = shadowroot === portalShadowRoot ? null : jssRegistryMap.get(shadowroot as ShadowRoot)
+            }
         }
-        const shadowroot = current.parentNode as ShadowRoot
-        return shadowroot === portalShadowRoot ? null : jssRegistryMap.get(shadowroot)
-    }, [ref])
-    const [styleString, setStyleString] = React.useState(() => registry()?.toString())
-    React.useEffect(() => registry()?.addListener(() => setStyleString(registry()?.toString())))
-    return styleString
+        return {
+            getCurrentValue: () => registry?.toString(),
+            subscribe: (callback: any) => registry?.addListener(callback) ?? (() => 0),
+        }
+    }, [_current])
+    return useSubscription(subscription)
 }
 
 export class RenderInShadowRootWrapper extends React.PureComponent {
