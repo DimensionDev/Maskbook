@@ -4,7 +4,7 @@ import { encodeArrayBuffer } from '../../../utils/type-transform/String-ArrayBuf
 import { constructAlpha38, PayloadLatest } from '../../../utils/type-transform/Payload'
 import { Group, queryPrivateKey, queryLocalKey } from '../../../database'
 import { ProfileIdentifier, PostIVIdentifier, GroupIdentifier, Identifier } from '../../../database/type'
-import { prepareOthersKeyForEncryptionV39OrV38 } from '../prepareOthersKeyForEncryption'
+import { prepareOthersKeyForEncryptionV39OrV38 } from './prepareOthersKeyForEncryption'
 import { getNetworkWorker } from '../../../social-network/worker'
 import { getSignablePayload, TypedMessage, cryptoProviderTable } from './utils'
 import { createPostDB, PostRecord, RecipientReason } from '../../../database/post'
