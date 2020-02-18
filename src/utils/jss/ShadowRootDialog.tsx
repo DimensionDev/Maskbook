@@ -8,7 +8,7 @@ const ResponsiveDialog = withMobileDialog({ breakpoint: 'xs' })(Dialog)
 
 export default function ShadowRootDialog(_props: any) {
     const ref = React.useRef<HTMLDivElement>(null)
-    const styles = useSheetsRegistryStyles(ref)
+    const styles = useSheetsRegistryStyles(ref.current)
 
     // ? I need the render tree to get the shadowroot. Is the extra div must be rendered?
     // ? can style be transported to shadowroot directly instead of with dialog children?
