@@ -100,11 +100,11 @@ interface RedPacketProps {
 
 export function RedPacketWithState(props: RedPacketProps) {
     const { onClick, redPacket: knownRedPacket, unknownRedPacket, loading, from } = props
-    const [redPacket, setRedPacket] = React.useState(knownRedPacket || ({} as Partial<RedPacketRecord>))
+    const [redPacket, setRedPacket] = React.useState(() => knownRedPacket || undefined)
 
     React.useEffect(() => {
         if (unknownRedPacket) {
-            const updateRedPacket = () =>
+            const updateRedPacket = () => {
                 Services.Plugin.invokePlugin(
                     'maskbook.red_packet',
                     'discoverRedPacket',
@@ -113,6 +113,7 @@ export function RedPacketWithState(props: RedPacketProps) {
                 ).then(packet => {
                     setRedPacket(packet)
                 })
+            }
             updateRedPacket()
             return PluginMessageCenter.on('maskbook.red_packets.update', updateRedPacket)
         } else return () => {}
@@ -124,22 +125,22 @@ export function RedPacketWithState(props: RedPacketProps) {
 
     return (
         <RedPacketWithStateUI
-            onClick={() => !loading && onClick?.(redPacket.status, redPacket.red_packet_id)}
+            onClick={() => !loading && redPacket && onClick?.(redPacket.status, redPacket.red_packet_id)}
             loading={loading}
-            redPacket={redPacket!}
+            redPacket={redPacket}
         />
     )
 }
 
 export function RedPacketWithStateUI(props: {
     onClick?(): void
-    redPacket: Partial<RedPacketRecord>
+    redPacket?: Partial<RedPacketRecord>
     loading?: boolean
 }) {
     const classes = useStyles()
     const { onClick, redPacket, loading } = props
     const info = getInfo(redPacket)
-    const status = redPacket?.status
+    const status = redPacket?.status ?? 'pending'
     return (
         <Card
             elevation={0}
@@ -151,34 +152,30 @@ export function RedPacketWithStateUI(props: {
             <div className={classNames(classes.header, { [classes.flex1]: status === 'incoming' })}>
                 {status === 'claimed' ? (
                     <Typography variant="h5" color="inherit">
-                        {redPacket.claim_amount
-                            ? formatBalance(redPacket.claim_amount, info?.decimals ?? 0)
-                            : 'Unknown'}{' '}
+                        {redPacket?.claim_amount ? formatBalance(redPacket?.claim_amount, info?.decimals ?? 0) : '?'}{' '}
                         {info?.name ?? '(unknown)'}
                     </Typography>
                 ) : (
                     <Typography variant="body1" color="inherit">
-                        From: {redPacket.sender_name}
+                        From: {redPacket?.sender_name ?? '(unknown)'}
                     </Typography>
                 )}
                 {status !== 'incoming' && status !== 'normal' && (
                     <Typography className={classes.label} variant="body2">
-                        {status === 'claim_pending' ? 'opening...' : status}
+                        {status === 'claim_pending' ? 'opening...' : status ?? 'Pending'}
                     </Typography>
                 )}
             </div>
             <div className={classNames(classes.content)}>
                 <Typography className={classes.words} variant="h6">
-                    {redPacket.send_message}
+                    {redPacket?.send_message}
                 </Typography>
                 <Typography variant="body2">
                     {status === 'incoming'
                         ? 'Ready to open'
                         : `${
-                              redPacket.send_total
-                                  ? formatBalance(redPacket.send_total, info?.decimals ?? 0)
-                                  : 'Unknown'
-                          } ${info?.name ?? '(unknown)'} / ${redPacket.shares?.toString() ?? 'Unknown'} Shares`}
+                              redPacket?.send_total ? formatBalance(redPacket?.send_total, info?.decimals ?? 0) : '?'
+                          } ${info?.name ?? '(unknown)'} / ${redPacket?.shares?.toString() ?? '?'} Shares`}
                 </Typography>
             </div>
             <div
