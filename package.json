@@ -1,40 +1,49 @@
 {
   "name": "maskbook",
-  "license": "AGPL-3.0-or-later",
   "version": "1.10.7",
   "private": true,
-  "engines": {
-    "node": ">=13.2.0"
-  },
+  "license": "AGPL-3.0-or-later",
   "scripts": {
-    "start": "webpack-dev-server --mode development",
-    "start:firefox": "webpack-dev-server --firefox --mode development",
-    "start:android": "webpack-dev-server --firefox-android --mode development",
-    "start:chromium": "webpack-dev-server --chromium --mode development",
-    "start:gecko": "webpack-dev-server --firefox-gecko --mode development",
-    "start:ios": "webpack-dev-server --wk-webview --mode development",
     "build": "webpack --mode production",
-    "build:base": "webpack --mode production",
-    "build:gecko": "webpack --mode production --firefox-gecko",
-    "build:firefox": "webpack --mode production --firefox",
-    "build:chromium": "webpack --mode production --chromium",
-    "build:ios": "webpack --mode production --wk-webview",
-    "test": "jest --watch",
-    "test:ci": "jest --ci --collectCoverage=true --reporters=default --reporters=jest-junit",
-    "storybook": "start-storybook -p 9009 -s public --quiet",
     "build-storybook": "build-storybook -s public --quiet",
+    "build:base": "webpack --mode production",
+    "build:chromium": "webpack --mode production --chromium",
+    "build:firefox": "webpack --mode production --firefox",
+    "build:gecko": "webpack --mode production --firefox-gecko",
+    "build:ios": "webpack --mode production --wk-webview",
+    "compile:contracts": "./scripts/contracts.sh",
     "install": "node scripts/postinstall.js",
-    "uninstall": "node scripts/postinstall.js",
     "lint": "eslint src/ --ext .ts,.tsx --fix",
     "lint:report": "eslint src/ --ext .ts,.tsx --format junit -o reports/junit/eslint-results.xml",
     "lint:typecoverage": "type-coverage -p tsconfig_cjs.json --strict --ignore-catch --detail --at-least 98.5",
-    "compile:contracts": "./scripts/contracts.sh"
+    "start": "webpack-dev-server --mode development",
+    "start:android": "webpack-dev-server --firefox-android --mode development",
+    "start:chromium": "webpack-dev-server --chromium --mode development",
+    "start:firefox": "webpack-dev-server --firefox --mode development",
+    "start:gecko": "webpack-dev-server --firefox-gecko --mode development",
+    "start:ios": "webpack-dev-server --wk-webview --mode development",
+    "storybook": "start-storybook -p 9009 -s public --quiet",
+    "test": "jest --watch",
+    "test:ci": "jest --ci --collectCoverage=true --reporters=default --reporters=jest-junit",
+    "uninstall": "node scripts/postinstall.js"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged",
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+    }
+  },
+  "lint-staged": {
+    "*.{ts,tsx,js,jsx}": [
+      "npm run lint"
+    ]
   },
   "dependencies": {
     "@holoflows/kit": "https://github.com/DimensionDev/holoflows-kit",
     "@material-ui/core": "4.9.2",
     "@material-ui/icons": "4.9.1",
     "@material-ui/lab": "^4.0.0-alpha.39",
+    "@nice-labs/git-flow-init": "^1.0.1",
     "@types/bip39": "^3.0.0",
     "@types/classnames": "^2.2.7",
     "@types/gun": "^0.9.2",
@@ -152,15 +161,7 @@
     "webpack-web-ext-plugin": "github:DimensionDev/webpack-web-ext-plugin",
     "yargs": "^15.1.0"
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged",
-      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
-    }
-  },
-  "lint-staged": {
-    "*.{ts,tsx,js,jsx}": [
-      "npm run lint"
-    ]
+  "engines": {
+    "node": ">=13.2.0"
   }
 }
