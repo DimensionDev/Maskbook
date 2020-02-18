@@ -78,13 +78,18 @@ export const useSheetsRegistryStyles = (_current: Node | null) => {
     return useSubscription(subscription)
 }
 
-export class RenderInShadowRootWrapper extends React.PureComponent {
+interface RenderInShadowRootWrapperProps {
+    node: React.ReactNode
+    shadow: ShadowRoot
+}
+
+export class RenderInShadowRootWrapper extends React.PureComponent<RenderInShadowRootWrapperProps> {
     jss: Jss
     proxy: HTMLElement
     registry: InformativeSheetsRegistry
-    constructor(props: any) {
+    constructor(props: RenderInShadowRootWrapperProps) {
         super(props)
-        this.proxy = new Proxy(props.shadow, {
+        this.proxy = new Proxy(props.shadow as any, {
             get(target, property: keyof ShadowRoot) {
                 if (property === 'parentNode') return target
                 return target[property]
