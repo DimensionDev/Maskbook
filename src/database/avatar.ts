@@ -2,7 +2,6 @@
 import { openDB, DBSchema } from 'idb/with-async-ittr'
 import { Identifier, ProfileIdentifier, GroupIdentifier } from './type'
 import { createDBAccess, IDBPSafeTransaction, createTransaction } from './helpers/openDB'
-import { OnlyRunInContext } from '@holoflows/kit/es'
 
 //#region Schema
 type IdentityWithAvatar = ProfileIdentifier | GroupIdentifier

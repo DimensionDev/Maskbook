@@ -1,14 +1,15 @@
 /// <reference path="./ShapeDetectionSpec.d.ts" />
 import { isNull } from 'lodash-es'
 import { getUrl } from '../../utils/utils'
+import { sideEffect } from '../../utils/side-effects'
 
 const noop = () => {}
-const worker = new Worker(getUrl('js/qrcode.js'))
+let worker: Worker
+sideEffect.then(() => {
+    worker = new Worker(getUrl('js/qrcode.js'))
+})
 
 class BarcodeDetectorPolyfill implements BarcodeDetector {
-    private worker: Worker = worker
-
-    // noinspection JSMethodCanBeStatic
     public async detect(mediaSource: CanvasImageSource) {
         const canvas = document.createElement('canvas')
         ;[canvas.width, canvas.height] = [1920, 1080]
@@ -19,8 +20,8 @@ class BarcodeDetectorPolyfill implements BarcodeDetector {
         ctx.drawImage(mediaSource, 0, 0)
         const d = ctx.getImageData(0, 0, canvas.width, canvas.height)
         return new Promise<DetectedBarcode[]>(resolve => {
-            this.worker.postMessage([d.data, canvas.width, canvas.height])
-            this.worker.onmessage = (ev: MessageEvent) => {
+            worker.postMessage([d.data, canvas.width, canvas.height])
+            worker.onmessage = (ev: MessageEvent) => {
                 if (isNull(ev.data)) {
                     resolve([])
                     return
@@ -29,12 +30,12 @@ class BarcodeDetectorPolyfill implements BarcodeDetector {
                 result.rawValue = ev.data.data
                 resolve([result])
             }
-            this.worker.onerror = (err: ErrorEvent) => {
+            worker.onerror = (err: ErrorEvent) => {
                 resolve([])
             }
         }).then(detected => {
-            this.worker.onmessage = noop
-            this.worker.onerror = noop
+            worker.onmessage = noop
+            worker.onerror = noop
             return detected
         })
     }
