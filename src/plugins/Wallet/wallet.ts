@@ -10,6 +10,7 @@ import { ERC20TokenPredefinedData } from './erc20'
 import { memoizePromise } from '../../utils/memoize'
 import { currentEthereumNetworkSettings } from './network'
 import { buf2hex } from './web3'
+import { sideEffect } from '../../utils/side-effects'
 
 // Private key at m/44'/coinType'/account'/change/addressIndex
 // coinType = ether

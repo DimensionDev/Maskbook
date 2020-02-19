@@ -15,6 +15,7 @@ import { PluginMessageCenter } from '../PluginMessages'
 import { requestNotification } from '../../utils/notification'
 import Web3Utils from 'web3-utils'
 import { redPacketAPI } from './real'
+import { sideEffect } from '../../utils/side-effects'
 
 function getProvider() {
     return redPacketAPI
@@ -323,9 +324,9 @@ export async function redPacketSyncInit() {
     })
 }
 
-setTimeout(() => {
+sideEffect.then(() => {
     redPacketSyncInit()
-}, 1000)
+})
 
 export async function getRedPacketByID(
     t: undefined | IDBPSafeTransaction<WalletDB, ['RedPacket'], 'readonly'>,

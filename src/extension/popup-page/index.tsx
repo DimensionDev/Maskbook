@@ -51,9 +51,9 @@ export function Popup() {
     const classes = useStyles()
 
     const [showIdentitySelector, setShowIdentitySelector] = useState(false)
-    setTimeout(() => {
+    React.useEffect(() => {
         if (getActivatedUI().networkIdentifier !== 'localhost') setShowIdentitySelector(true)
-    })
+    }, [setShowIdentitySelector])
 
     return (
         <>

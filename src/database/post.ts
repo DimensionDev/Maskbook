@@ -3,7 +3,6 @@ import { PostIdentifier, ProfileIdentifier, Identifier, PostIVIdentifier, GroupI
 import { openDB, DBSchema, IDBPTransaction } from 'idb/with-async-ittr'
 import { restorePrototype, restorePrototypeArray, PrototypeLess } from '../utils/type'
 import { IdentifierMap } from './IdentifierMap'
-import { OnlyRunInContext } from '@holoflows/kit/es'
 import { createDBAccess } from './helpers/openDB'
 
 const db = createDBAccess(() => {
