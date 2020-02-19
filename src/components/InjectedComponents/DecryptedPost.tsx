@@ -147,7 +147,7 @@ export interface DecryptPostProps {
     people: Profile[]
     alreadySelectedPreviously: Profile[]
     requestAppendRecipients?(to: Profile[]): Promise<void>
-    disableSuccessDecryptionCache?: boolean
+    disableSuccessDecryptionCache?: boolean // ! not used
     successComponent?: React.ComponentType<DecryptPostSuccessProps>
     successComponentProps?: Partial<DecryptPostSuccessProps>
     waitingComponent?: React.ComponentType<DecryptPostAwaitingProps>
@@ -202,22 +202,7 @@ export function DecryptPost(props: DecryptPostProps) {
             />
         )
     }, [isDebugging, postPayload, postBy, encryptedText, whoAmI, debugHash, decryptedResult])
-    if (decryptedResult && !props.disableSuccessDecryptionCache) {
-        return (
-            <>
-                <Success
-                    data={decryptedResult}
-                    postIdentifier={postId}
-                    alreadySelectedPreviously={alreadySelectedPreviously}
-                    requestAppendRecipients={requestAppendRecipientsWrapped}
-                    profiles={people}
-                    sharedPublic={sharedPublic}
-                    {...props.successComponentProps}
-                />
-                {isDebugging ? debugHashJSX : null}
-            </>
-        )
-    }
+
     const awaitingComponent =
         decryptingStatus && 'error' in decryptingStatus ? (
             <Failed error={new Error(decryptingStatus.error)} {...props.failedComponentProps} />
