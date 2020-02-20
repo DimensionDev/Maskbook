@@ -5,11 +5,8 @@
  * To chain the sideEffect after this Promise,
  * the sideEffect will only be invoked in the non-test env.
  */
+let invokeSideEffect: () => void
 export const sideEffect = new Promise<void>(resolve => (invokeSideEffect = resolve))
-let invokeSideEffect: () => void = () => {
-    throw new Error('Unreachable case')
-}
-
 try {
     // TODO: also skip storybook env
     if (process.env.NODE_ENV === 'test') {
@@ -17,5 +14,13 @@ try {
         throw new Error()
     }
 } catch {
-    invokeSideEffect()
+    if (typeof invokeSideEffect! === 'undefined') {
+        const i = setInterval(() => {
+            if (typeof invokeSideEffect === 'undefined') return
+            clearInterval(i)
+            invokeSideEffect!()
+        }, 10)
+    } else {
+        invokeSideEffect()
+    }
 }
