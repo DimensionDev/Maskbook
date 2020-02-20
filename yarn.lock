@@ -6454,11 +6454,6 @@ constants-browserify@^1.0.0:
   resolved "https://registry.yarnpkg.com/constants-browserify/-/constants-browserify-1.0.0.tgz#c20b96d8c617748aaf1c16021760cd27fcb8cb75"
   integrity sha1-wguW2MYXdIqvHBYCF2DNJ/y4y3U=
 
-construct-style-sheets-polyfill@^2.3.5:
-  version "2.3.5"
-  resolved "https://registry.yarnpkg.com/construct-style-sheets-polyfill/-/construct-style-sheets-polyfill-2.3.5.tgz#15e85356639d66b75dfb0133466fe4c4c92ac181"
-  integrity sha512-r8+HxnWQ2G3D7zDjQCXL5gGrZt39Fr16lWzvo9uFFfyoQ3ixskmT1Q4Uy6oFEFG40xdIQ4dpdgtc6cgIUGjKnA==
-
 contains-path@^0.1.0:
   version "0.1.0"
   resolved "https://registry.yarnpkg.com/contains-path/-/contains-path-0.1.0.tgz#fe8cf184ff6670b6baef01a9d4861a5cbec4120a"
