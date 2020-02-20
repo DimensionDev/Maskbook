@@ -17,11 +17,18 @@ import { useSubscription } from 'use-subscription'
  */
 export function renderInShadowRoot(node: React.ReactNode, shadow: ShadowRoot) {
     if (shadow.mode === 'open') console.warn('Do not render with open ShadowRoot!')
-
-    // ? how to pass props to class component?
-    // @ts-ignore
-    ReactDOM.render(<RenderInShadowRootWrapper children={node} shadow={shadow} />, shadow as any)
-    return () => ReactDOM.unmountComponentAtNode(shadow as any)
+    let rendered = false
+    const tryRender = () =>
+        setTimeout(() => {
+            // ! DOMRender requires the element inside document
+            if (shadow.host.parentNode === null) tryRender()
+            else {
+                ReactDOM.render(<RenderInShadowRootWrapper children={node} shadow={shadow} />, shadow as any)
+                rendered = true
+            }
+        })
+    tryRender()
+    return () => (rendered ? ReactDOM.unmountComponentAtNode(shadow as any) : 0)
 }
 
 // ! let jss tell us if it has made an update
@@ -57,14 +64,7 @@ export const useSheetsRegistryStyles = (_current: Node | null) => {
         let registry: InformativeSheetsRegistry | null | undefined = null
         if (_current) {
             // ! lookup the styled shadowroot
-            let current: Node | null = _current
-            while (
-                current &&
-                current.nodeType !== Node.DOCUMENT_NODE &&
-                current.nodeType !== Node.DOCUMENT_FRAGMENT_NODE
-            ) {
-                current = current.parentNode
-            }
+            const current: Node = _current.getRootNode()
             if (current) {
                 const shadowroot = current as ShadowRoot | undefined
                 registry = shadowroot === portalShadowRoot ? null : jssRegistryMap.get(shadowroot as ShadowRoot)
@@ -79,7 +79,6 @@ export const useSheetsRegistryStyles = (_current: Node | null) => {
 }
 
 interface RenderInShadowRootWrapperProps {
-    node: React.ReactNode
     shadow: ShadowRoot
 }
 
@@ -91,7 +90,14 @@ export class RenderInShadowRootWrapper extends React.PureComponent<RenderInShado
         super(props)
         this.proxy = new Proxy(props.shadow as any, {
             get(target, property: keyof ShadowRoot) {
-                if (property === 'parentNode') return target
+                if (property === 'parentNode') {
+                    const host = target.getRootNode({ composed: true })
+                    if (host !== document) {
+                        // ! severe error! The style cannot be managed by DOMRender
+                        return null
+                    }
+                    return target
+                }
                 return target[property]
             },
         })
@@ -121,8 +127,10 @@ function Maskbook(_props: MaskbookProps) {
     const theme = getActivatedUI().useTheme()
     const lang = useValueRef(languageSettings)
     const { jss, sheetsRegistry, ...props } = _props
+    // ! sheetsRegistry: We use this to get styles as a whole string
+    // ! sheetsManager: Material-ui uses this to detect if the style has been rendered
     return (
-        <StylesProvider sheetsRegistry={sheetsRegistry} jss={jss}>
+        <StylesProvider sheetsRegistry={sheetsRegistry} jss={jss} sheetsManager={new WeakMap()}>
             <ThemeProvider theme={theme}>
                 <I18nextProvider i18n={i18nNextInstance}>
                     <React.StrictMode>
