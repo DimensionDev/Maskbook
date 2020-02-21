@@ -3,7 +3,7 @@ import { gun2, SharedAESKeyGun2 } from '.'
 import { hashPostSalt, hashCryptoKey, hashCryptoKeyUnstable } from './hash'
 import { PublishedAESKeyRecordV39OrV38 } from '../../../crypto/crypto-alpha-38'
 
-OnlyRunInContext('background', 'gun')
+OnlyRunInContext(['background', 'debugging'], 'gun')
 
 /**
  * Query all possible keys stored on the gun

@@ -1,19 +1,11 @@
 import React, { useCallback, useState } from 'react'
 import { SelectPeopleAndGroupsUI, SelectPeopleAndGroupsUIProps } from '../shared/SelectPeopleAndGroups'
-import { geti18nString } from '../../utils/i18n'
+import { useI18N } from '../../utils/i18n-next-ui'
 import { makeStyles } from '@material-ui/styles'
-import {
-    Button,
-    CircularProgress,
-    Dialog,
-    DialogActions,
-    DialogContent,
-    DialogTitle,
-    withMobileDialog,
-} from '@material-ui/core'
+import { Button, CircularProgress, DialogActions, DialogContent, DialogTitle } from '@material-ui/core'
 import { Profile } from '../../database'
-import { PortalShadowRoot } from '../../utils/jss/ShadowRootPortal'
 import { useStylesExtends } from '../custom-ui-helper'
+import ShadowRootDialog from '../../utils/jss/ShadowRootDialog'
 
 export interface SelectPeopleDialogProps
     extends withClasses<KeysInferFromUseStyles<typeof useStyles, 'content'> | 'button'> {
@@ -29,8 +21,9 @@ const useStyles = makeStyles({
     content: { padding: '0 12px' },
     progress: { marginRight: 6 },
 })
-const ResponsiveDialog = withMobileDialog({ breakpoint: 'xs' })(Dialog)
+
 export function SelectPeopleDialog(props: SelectPeopleDialogProps) {
+    const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
     const [people, select] = useState<Profile[]>([])
     const [committed, setCommitted] = useState(false)
@@ -48,15 +41,14 @@ export function SelectPeopleDialog(props: SelectPeopleDialogProps) {
     const canClose = !rejection && committed
     const canCommit = committed || people.length === 0
     return (
-        <ResponsiveDialog
+        <ShadowRootDialog
             disableEnforceFocus
-            container={PortalShadowRoot}
             onClose={canClose ? onClose : void 0}
             open={props.open}
             scroll="paper"
             fullWidth
             maxWidth="sm">
-            <DialogTitle className={classes.title}>{geti18nString('share_to')}</DialogTitle>
+            <DialogTitle className={classes.title}>{t('share_to')}</DialogTitle>
             <DialogContent className={classes.content}>
                 <SelectPeopleAndGroupsUI<Profile>
                     frozenSelected={props.alreadySelectedPreviously}
@@ -74,16 +66,16 @@ export function SelectPeopleDialog(props: SelectPeopleDialogProps) {
             )}
             <DialogActions>
                 <Button className={classes.button} size="large" disabled={canClose} onClick={onClose}>
-                    {geti18nString('cancel')}
+                    {t('cancel')}
                 </Button>
                 <Button className={classes.button} size="large" disabled={canCommit} color="primary" onClick={share}>
                     {committed && (
                         <CircularProgress aria-busy className={classes.progress} size={16} variant="indeterminate" />
                     )}
-                    {geti18nString(committed ? 'sharing' : 'share')}
+                    {t(committed ? 'sharing' : 'share')}
                 </Button>
             </DialogActions>
-        </ResponsiveDialog>
+        </ShadowRootDialog>
     )
 }
 

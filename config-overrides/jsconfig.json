@@ -1,6 +1,0 @@
-{
-    "compilerOptions": {
-        "resolveJsonModule": true
-    },
-    "include": ["./index.js", "../src/manifest.json", "./manifest.overrides.js"]
-}

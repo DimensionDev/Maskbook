@@ -10,7 +10,6 @@ import {
 import * as persona from '../Persona/Persona.db'
 import { ECKeyIdentifier, ProfileIdentifier } from '../type'
 import { IdentifierMap } from '../IdentifierMap'
-import { IDBPTransaction } from 'idb'
 import { CryptoKeyToJsonWebKey } from '../../utils/type-transform/CryptoKey-JsonWebKey'
 
 export default async function migratePeopleToPersona() {

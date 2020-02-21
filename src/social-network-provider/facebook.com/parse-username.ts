@@ -1,6 +1,6 @@
-import { geti18nString } from '../../utils/i18n'
 import { ProfileIdentifier, GroupIdentifier, PostIdentifier } from '../../database/type'
 import { isMobileFacebook } from './isMobile'
+import { i18n } from '../../utils/i18n-next'
 
 /**
  * @see https://www.facebook.com/help/105399436216001#What-are-the-guidelines-around-creating-a-custom-username?
@@ -26,7 +26,7 @@ export function getPostUrlAtFacebook(post: PostIdentifier<ProfileIdentifier>, us
     const { userId } = id
 
     const host = getFacebookHostName(usage)
-    if (!regularUsername(userId)) throw new TypeError(geti18nString('service_username_invalid'))
+    if (!regularUsername(userId)) throw new TypeError(i18n.t('service_username_invalid'))
     if (parseFloat(userId)) return `${host}/permalink.php?story_fbid=${postId}&id=${userId}`
     return `${host}/${userId}/posts/${postId}`
 }
@@ -39,7 +39,7 @@ export function getProfilePageUrlAtFacebook(user: ProfileIdentifier | GroupIdent
 
     const host = getFacebookHostName(usage)
     const username = user.userId
-    if (!regularUsername(username)) throw new TypeError(geti18nString('service_username_invalid'))
+    if (!regularUsername(username)) throw new TypeError(i18n.t('service_username_invalid'))
     if (parseFloat(username)) return `${host}/profile.php?id=${username}`
     return `${host}/${username}`
 }

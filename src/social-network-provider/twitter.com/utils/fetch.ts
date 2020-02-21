@@ -3,7 +3,7 @@ import { notNullable } from '../../../utils/assert'
 import { defaultTo } from 'lodash-es'
 import { nthChild } from '../../../utils/dom'
 import { ProfileIdentifier } from '../../../database/type'
-import { twitterUrl } from './url'
+import { twitterUrl, canonifyImgUrl } from './url'
 import Services from '../../../extension/service'
 
 /**
@@ -171,27 +171,32 @@ export const postImageParser = async (node: HTMLElement) => {
         const imgNodes = node.querySelectorAll<HTMLImageElement>('img[src*="twimg.com/media"]')
         if (!imgNodes.length) return ''
         const imgUrls = Array.from(imgNodes)
-            .filter(node => (!isQuotedTweet ? !node.closest('[role="blockquote"]') : true))
-            .map(node => node.getAttribute('src') ?? '')
+            .filter(node => isQuotedTweet || !node.closest('[role="blockquote"]'))
+            .flatMap(node => canonifyImgUrl(node.getAttribute('src') ?? ''))
+            .filter(Boolean)
         if (!imgUrls.length) return ''
         const { handle } = postNameParser(node)
         const posterIdentity = new ProfileIdentifier(twitterUrl.hostIdentifier, handle)
         return (
             await Promise.all(
-                imgUrls
-                    .map(async url => {
+                imgUrls.map(async url => {
+                    try {
                         const content = await Services.Steganography.decodeImage(
                             new Uint8Array(await downloadUrl(url)),
                             {
                                 pass: posterIdentity.toText(),
                             },
                         )
-
                         return /https:\/\/.+\..+\/%20(.+)%40/.test(content) ? content : ''
-                    })
-                    .filter(Boolean),
+                    } catch {
+                        // for twitter image url maybe absent
+                        return ''
+                    }
+                }),
             )
-        ).join('\n')
+        )
+            .filter(Boolean)
+            .join('\n')
     }
 }
 

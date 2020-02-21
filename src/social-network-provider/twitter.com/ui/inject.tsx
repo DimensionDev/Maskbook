@@ -1,20 +1,16 @@
-import { PostInfo, SocialNetworkUIInjections } from '../../../social-network/ui'
-import { injectPostInspectorDefault } from '../../../social-network/defaults/injectPostInspector'
+import { SocialNetworkUIInjections } from '../../../social-network/ui'
 import { injectKnownIdentityAtTwitter } from './injectKnownIdentity'
 import { injectPostDialogAtTwitter } from './injectPostDialog'
 import { injectPostDialogHintAtTwitter } from './injectPostDialogHint'
+import { injectPostInspectorAtTwitter } from './injectPostInspector'
 
 const injectPostBox = () => {
     injectPostDialogAtTwitter()
     injectPostDialogHintAtTwitter()
 }
 
-const injectPostInspector = (current: PostInfo) => {
-    return injectPostInspectorDefault({})(current)
-}
-
 export const twitterUIInjections: SocialNetworkUIInjections = {
     injectPostBox,
-    injectPostInspector,
+    injectPostInspector: injectPostInspectorAtTwitter,
     injectKnownIdentity: injectKnownIdentityAtTwitter,
 }

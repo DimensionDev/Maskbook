@@ -1,14 +1,40 @@
-import { useState, useEffect, useLayoutEffect } from 'react'
+import { useState, useEffect } from 'react'
+import { ValueRef, MutationObserverWatcher } from '@holoflows/kit'
 import { Theme, createMuiTheme } from '@material-ui/core'
 import { MaskbookDarkTheme, MaskbookLightTheme } from '../../../utils/theme'
 import { SocialNetworkUICustomUI } from '../../../social-network/ui'
+import { useValueRef } from '../../../utils/hooks/useValueRef'
+import { composeAnchorSelector } from '../utils/selector'
 
 type RGB = [number, number, number]
 
+const primaryColorRef = new ValueRef(toRGB([29, 161, 242]))
+const backgroundColorRef = new ValueRef(toRGB([255, 255, 255]))
+
+export function startWatchThemeColor() {
+    function updateThemeColor() {
+        const color = getBackgroundColor(composeAnchorSelector().evaluate()!)
+        const backgroundColor = getBackgroundColor(document.body)
+
+        if (color) {
+            primaryColorRef.value = color
+        }
+        if (backgroundColor) {
+            backgroundColorRef.value = backgroundColor
+        }
+    }
+    new MutationObserverWatcher(composeAnchorSelector())
+        .addListener('onAdd', updateThemeColor)
+        .addListener('onChange', updateThemeColor)
+        .startWatch({
+            childList: true,
+            subtree: true,
+        })
+}
 export function useTheme() {
     const [theme, setTheme] = useState<Theme>(MaskbookLightTheme)
-    const primaryColor = usePrimaryColor()
-    const backgroundColor = useBackgroundColor()
+    const primaryColor = useValueRef(primaryColorRef)
+    const backgroundColor = useValueRef(backgroundColorRef)
 
     useEffect(() => {
         const MaskbookTheme = isDark(fromRGB(backgroundColor)!) ? MaskbookDarkTheme : MaskbookLightTheme
@@ -38,34 +64,6 @@ export function useTheme() {
     return theme
 }
 
-function usePrimaryColor() {
-    const [primaryColor, setPrimaryColor] = useState(toRGB([29, 161, 242]))
-    useLayoutEffect(() => {
-        const timer = setInterval(() => {
-            const color = getBackgroundColor<HTMLAnchorElement>('a[href="/compose/tweet"]')
-            if (color) {
-                setPrimaryColor(color)
-            }
-        }, 2000)
-        return () => clearInterval(timer)
-    }, [primaryColor])
-    return primaryColor
-}
-
-function useBackgroundColor() {
-    const [backgroundColor, setBackgroundColor] = useState(toRGB([255, 255, 255]))
-    useLayoutEffect(() => {
-        const timer = setInterval(() => {
-            const color = getBackgroundColor<HTMLBodyElement>('body')
-            if (color) {
-                setBackgroundColor(color)
-            }
-        }, 2000)
-        return () => clearInterval(timer)
-    }, [backgroundColor])
-    return backgroundColor
-}
-
 function isDark([r, g, b]: RGB) {
     return r < 68 && g < 68 && b < 68
 }
@@ -75,16 +73,13 @@ function toRGB(channels: RGB | undefined) {
     return `rgb(${channels.join()})`
 }
 
-function toHex(channels: RGB) {
-    return `#${channels.map(c => c.toString(16).toLowerCase()).join('')}`
-}
-
 function fromRGB(rgb: string): RGB | undefined {
     const matched = rgb.match(/rgb\(\s*(\d+?)\s*,\s*(\d+?)\s*,\s*(\d+?)\s*\)/)
     if (matched) {
         const [_, r, g, b] = matched
         return [parseInt(r), parseInt(g), parseInt(b)]
     }
+    return
 }
 
 function clamp(num: number, min: number, max: number) {
@@ -97,16 +92,8 @@ function shade(channels: RGB, percentage: number): RGB {
     return channels.map(c => clamp(Math.floor((c * (100 + percentage)) / 100), 0, 255)) as RGB
 }
 
-function getBackgroundColor<T extends HTMLElement>(selector: string) {
-    if (!document) return ''
-    const element = document.querySelector<T>(selector)
-    if (!element) return ''
-    const color = String(
-        // @ts-ignore CSSOM
-        element.computedStyleMap?.()?.get?.('background-color') ||
-            element?.style?.backgroundColor ||
-            getComputedStyle?.(element, null).getPropertyValue('background-color'),
-    )
+function getBackgroundColor(element: HTMLElement | HTMLBodyElement) {
+    const color = getComputedStyle(element).backgroundColor
     return color ? toRGB(fromRGB(color)) : ''
 }
 

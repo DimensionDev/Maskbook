@@ -14,7 +14,7 @@ import {
     postsSelector,
     bioCardSelector,
 } from '../utils/selector'
-import { geti18nString } from '../../../utils/i18n'
+import { i18n } from '../../../utils/i18n-next'
 import { SocialNetworkUI, SocialNetworkUITasks, getActivatedUI } from '../../../social-network/ui'
 import { bioCardParser, postContentParser } from '../utils/fetch'
 import { getEditorContent, hasFocus, isCompose, hasEditor } from '../utils/postBox'
@@ -115,7 +115,7 @@ const taskPasteIntoBio = async (text: string) => {
             .evaluate()!
             .click()
     } catch {
-        alert(geti18nString('automation_request_click_edit_bio_button'))
+        alert(i18n.t('automation_request_click_edit_bio_button'))
     }
     await sleep(800)
     try {
@@ -125,13 +125,13 @@ const taskPasteIntoBio = async (text: string) => {
         dispatchCustomEvents('input', i.value + text)
     } catch {
         console.warn('Text not pasted to the text area')
-        prompt(geti18nString('automation_request_paste_into_bio_box'), text)
+        prompt(i18n.t('automation_request_paste_into_bio_box'), text)
     }
     if (getValue().indexOf(text) === -1) {
         console.warn('Text pasting failed')
-        prompt(geti18nString('automation_request_paste_into_bio_box'), text)
+        prompt(i18n.t('automation_request_paste_into_bio_box'), text)
     } else {
-        setTimeout(() => alert(geti18nString('automation_pasted_into_bio_box')))
+        setTimeout(() => alert(i18n.t('automation_pasted_into_bio_box')))
     }
 }
 

@@ -15,7 +15,7 @@ import CenterFocusWeakIcon from '@material-ui/icons/CenterFocusWeak'
 
 import Services from '../../extension/service'
 import { makeStyles, Typography, createStyles } from '@material-ui/core'
-import { geti18nString } from '../../utils/i18n'
+import { useI18N } from '../../utils/i18n-next-ui'
 import { ProfileIdentifier, Identifier } from '../../database/type'
 import { QrCode } from '../../components/shared/qrcode'
 import { amber } from '@material-ui/core/colors'
@@ -44,6 +44,7 @@ const useStyles = makeStyles(theme =>
 )
 
 export default function BackupDialog() {
+    const { t } = useI18N()
     const history = useHistory()
 
     const handleClose = () => {
@@ -95,10 +96,10 @@ export default function BackupDialog() {
             <DialogContent className={classes.container}>
                 <ButtonGroup fullWidth>
                     <Button onClick={downloadAsFile} startIcon={<CloudDownloadIcon />}>
-                        {geti18nString('dashboard_download')}
+                        {t('dashboard_download')}
                     </Button>
                     <Button onClick={() => setShowQRCode(!showQRCode)} startIcon={<CenterFocusWeakIcon />}>
-                        {geti18nString(showQRCode ? 'dashboard_hide_qr' : 'dashboard_show_qr')}
+                        {t(showQRCode ? 'dashboard_hide_qr' : 'dashboard_show_qr')}
                     </Button>
                 </ButtonGroup>
                 {showQRCode ? (
@@ -110,13 +111,13 @@ export default function BackupDialog() {
                                 <Typography variant="caption" style={{ margin: '5vh 0' }}>
                                     <CircularProgress />
                                     <br />
-                                    {geti18nString('options_mobile_export_generating')}
+                                    {t('options_mobile_export_generating')}
                                 </Typography>
                             )}
                         </div>
                         <SnackbarContent
                             classes={{ root: classes.warning }}
-                            message={geti18nString('options_mobile_export_subtitle')}
+                            message={t('options_mobile_export_subtitle')}
                         />
                     </>
                 ) : null}

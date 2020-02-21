@@ -24,6 +24,11 @@ export interface PostOnGun2 {
 export interface ApplicationStateInGunVersion2 {
     [sha512_base64_ProfileIdentifier_OR_sha512_base64_PostSalt: string]: PersonOnGun2 | PostOnGun2
 }
-
+try {
+    if (process.env.NODE_ENV === 'test') {
+        // @ts-ignore
+        Gun.window.rad = require('gun/lib/radix')
+    }
+} catch {}
 export const gun2 = new Gun<ApplicationStateInGunVersion2>(gun2Servers)
 gun2.opt({ retry: Infinity })

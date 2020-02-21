@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react'
-import { geti18nString } from '../../../utils/i18n'
+import { useI18N } from '../../../utils/i18n-next-ui'
 import { makeStyles, ListItem, ListItemText, InputBase, Button, List, Box } from '@material-ui/core'
 import { Profile, Group } from '../../../database'
 import { useCurrentIdentity } from '../../DataSource/useActivatedUI'
@@ -37,6 +37,7 @@ const useStyles = makeStyles({
 export function SelectPeopleAndGroupsUI<ServeType extends Group | Profile = PersonOrGroup>(
     props: SelectPeopleAndGroupsUIProps<ServeType>,
 ) {
+    const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
     const myself = useCurrentIdentity()
 
@@ -76,12 +77,12 @@ export function SelectPeopleAndGroupsUI<ServeType extends Group | Profile = Pers
             className={classes.buttons}
             color="primary"
             onClick={() => onSetSelected([...selected, ...listAfterSearch] as ServeType[])}>
-            {geti18nString('select_all')}
+            {t('select_all')}
         </Button>
     )
     const SelectNoneButton = (
         <Button className={classes.buttons} onClick={() => onSetSelected([])}>
-            {geti18nString('select_none')}
+            {t('select_none')}
         </Button>
     )
     const showSelectAll = !hideSelectAll && listAfterSearch.length > 0 && typeof maxSelection === 'undefined'
@@ -114,7 +115,7 @@ export function SelectPeopleAndGroupsUI<ServeType extends Group | Profile = Pers
                             onSetSelected(selected.slice(0, selected.length - 1) as ServeType[])
                         }
                     }}
-                    placeholder={disabled ? '' : geti18nString('search_box_placeholder')}
+                    placeholder={disabled ? '' : t('search_box_placeholder')}
                     disabled={disabled}
                 />
             </Box>
@@ -126,7 +127,7 @@ export function SelectPeopleAndGroupsUI<ServeType extends Group | Profile = Pers
                 <List dense>
                     {listBeforeSearch.length > 0 && listAfterSearch.length === 0 && search && (
                         <ListItem>
-                            <ListItemText primary={geti18nString('no_search_result')} />
+                            <ListItemText primary={t('no_search_result')} />
                         </ListItem>
                     )}
                     {listAfterSearch.map(PeopleListItem)}

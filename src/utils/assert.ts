@@ -1,4 +1,3 @@
-import { isEmpty } from 'lodash-es'
 import { notStrictEqual as notEqual, strictEqual as equal } from 'assert'
 
 export class WithStateAssert {
@@ -16,7 +15,7 @@ export class WithStateAssert {
     }
 }
 
-export const notInclude = (val: unknown, things: unknown[], message: string) => {
+const notInclude = (val: unknown, things: unknown[], message: string) => {
     things.forEach(value => {
         notEqual(val, value, message)
     })
@@ -29,10 +28,3 @@ export const notNullable = <T>(val: T, message: string = 'Unexpected nil value d
     notInclude(val, [null, undefined], message)
     return val as NonNullable<T>
 }
-
-export const notEmpty = (val: unknown, message: string = 'Unexpected empty collection detected') => {
-    equal(isEmpty(val), false, message)
-    return val
-}
-
-export { equal, notEqual }

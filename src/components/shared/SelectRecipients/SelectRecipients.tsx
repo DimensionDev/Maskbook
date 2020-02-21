@@ -6,9 +6,9 @@ import { GroupInChipProps, GroupInChip } from './GroupInChip'
 import { ProfileIdentifier, GroupIdentifier } from '../../../database/type'
 import AddIcon from '@material-ui/icons/Add'
 import { ClickableChip } from './ClickableChip'
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { SelectRecipientsDialogUIProps, SelectRecipientsDialogUI } from './SelectRecipientsDialog'
-import { geti18nString } from '../../../utils/i18n'
+import { useI18N } from '../../../utils/i18n-next-ui'
 import { difference } from 'lodash-es'
 import { useCurrentIdentity } from '../../DataSource/useActivatedUI'
 import { useStylesExtends } from '../../custom-ui-helper'
@@ -35,75 +35,40 @@ export interface SelectRecipientsUIProps<T extends Group | Profile = Group | Pro
     GroupInChipProps?: Partial<GroupInChipProps>
     PersonOrGroupInListProps?: Partial<PersonOrGroupInListProps>
     SelectRecipientsDialogUIProps?: Partial<SelectRecipientsDialogUIProps>
+    children?: React.ReactNode
 }
 
 export function SelectRecipientsUI<T extends Group | Profile = Group | Profile>(props: SelectRecipientsUIProps) {
+    const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
-    const { items, selected, onSetSelected } = props
+    const { items, selected, onSetSelected, children } = props
     const isDebugging = useValueRef(debugModeSetting)
     const currentIdentity = useCurrentIdentity()
-    const currentIdentifier = currentIdentity ? currentIdentity.identifier.toText() : ''
     const groupItems = items.filter(x => isGroup(x)) as Group[]
     const profileItems = items.filter(
         x => isProfile(x) && !x.identifier.equals(currentIdentity?.identifier) && x.linkedPersona?.fingerprint,
     ) as Profile[]
     const [open, setOpen] = useState(false)
-    const selectedAsGroups = selected.filter(x => isGroup(x)) as Group[]
-    const [selectedIdentifiers, setSelectedIdentifiers] = useState<string[]>(
-        difference(
-            Array.from(
-                new Set(selected.flatMap(x => (isGroup(x) ? x.members.map(y => y.toText()) : x.identifier.toText()))),
-            ),
-            [currentIdentifier],
-        ),
+    const selectedGroups = selected.filter(x => isGroup(x)) as Group[]
+
+    const groupMembers = React.useMemo(
+        () => selectedGroups.flatMap(group => group.members).map(identifier => identifier.toText()),
+        [selectedGroups],
     )
 
-    // clear selected identifiers
-    useEffect(() => {
-        if (selected.length === 0) {
-            setSelectedIdentifiers([])
-        }
-    }, [selected])
-
-    // prevent from selecting current identity as recipient
-    useEffect(() => {
-        const next = difference(selectedIdentifiers, [currentIdentifier])
-        if (difference(selectedIdentifiers, next).length) {
-            setSelectedIdentifiers(next)
-        }
-    }, [currentIdentifier, selectedIdentifiers])
-    useEffect(() => {
-        const selectedIdentifiersSet = new Set(selectedIdentifiers)
-        const selectedProfiles = profileItems.filter(x => selectedIdentifiersSet.has(x.identifier.toText()))
-        const selectedGroups: Group[] = groupItems.filter(x => {
-            const groupIdentifiers = x.members.map(y => y.toText())
-            return (
-                groupIdentifiers.length > 0 &&
-                selectedIdentifiers.length > 0 &&
-                groupIdentifiers.length <= selectedIdentifiers.length &&
-                difference(groupIdentifiers, selectedIdentifiers).length === 0
-            )
-        })
-        const next = [...selectedGroups, ...selectedProfiles]
-        if (next.length === selected.length && (next.length === 0 || difference(next, selected).length === 0)) {
-            return
-        }
-        onSetSelected(next)
-    }, [groupItems, onSetSelected, profileItems, selected, selectedIdentifiers])
     return (
         <Box className={classes.root}>
             {groupItems.map(item => (
                 <GroupInChip
                     key={item.identifier.toText()}
                     item={item}
-                    checked={selectedAsGroups.some(x => x.identifier.equals(item.identifier))}
-                    disabled={props.disabled || item.members.length === 0}
+                    checked={selectedGroups.some(x => x.identifier.equals(item.identifier))}
+                    disabled={props.disabled}
                     onChange={(_, checked) => {
-                        const identifiers = item.members.map(x => x.toText())
                         if (checked) {
-                            setSelectedIdentifiers(Array.from(new Set([...selectedIdentifiers, ...identifiers])))
+                            onSetSelected([...selected, item])
                         } else {
-                            setSelectedIdentifiers(difference(selectedIdentifiers, identifiers))
+                            onSetSelected(difference(selected, [item]))
                         }
                     }}
                     {...props.GroupInChipProps}
@@ -112,10 +77,9 @@ export function SelectRecipientsUI<T extends Group | Profile = Group | Profile>(
             {isDebugging ? (
                 <ClickableChip
                     ChipProps={{
-                        label: geti18nString(
-                            'post_dialog__select_specific_friends_title',
-                            String(selectedIdentifiers.length),
-                        ),
+                        label: t('post_dialog__select_specific_friends_title', {
+                            selected: selected.length - selectedGroups.length,
+                        }),
                         avatar: <AddIcon />,
                         disabled: props.disabled || profileItems.length === 0,
                         onClick() {
@@ -124,19 +88,19 @@ export function SelectRecipientsUI<T extends Group | Profile = Group | Profile>(
                     }}
                 />
             ) : null}
+            {children}
 
             <SelectRecipientsDialogUI
                 open={open}
                 items={profileItems}
-                selected={profileItems.filter(x => selectedIdentifiers.indexOf(x.identifier.toText()) > -1)}
+                selected={profileItems.filter(x => selected.includes(x))}
+                disabledItems={profileItems.filter(x => groupMembers.includes(x.identifier.toText()))}
                 disabled={false}
                 submitDisabled={false}
                 onSubmit={() => setOpen(false)}
                 onClose={() => setOpen(false)}
-                onSelect={item => setSelectedIdentifiers([...selectedIdentifiers, item.identifier.toText()])}
-                onDeselect={item =>
-                    setSelectedIdentifiers(selectedIdentifiers.filter(x => x !== item.identifier.toText()))
-                }
+                onSelect={item => onSetSelected([...selected, item])}
+                onDeselect={item => onSetSelected(difference(selected, [item]))}
                 {...props.SelectRecipientsDialogUIProps}
             />
         </Box>

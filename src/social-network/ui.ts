@@ -9,10 +9,11 @@ import { defaultSharedSettings } from './defaults/shared'
 import { defaultSocialNetworkUI } from './defaults/ui'
 import { nopWithUnmount } from '../utils/utils'
 import { Theme } from '@material-ui/core'
-import { MaskbookLightTheme, MaskbookDarkTheme } from '../utils/theme'
+import { MaskbookLightTheme } from '../utils/theme'
 import { untilDomLoaded } from '../utils/dom'
-import { I18NStrings } from '../utils/i18n'
+import { I18NStrings } from '../utils/i18n-next'
 import { TypedMessage } from '../extension/background-script/CryptoServices/utils'
+import i18nNextInstance from '../utils/i18n-next'
 
 OnlyRunInContext(['content', 'debugging', 'options'], 'UI provider')
 
@@ -256,10 +257,7 @@ export interface SocialNetworkUICustomUI {
     i18nOverwrite?: {
         [key: string]: Partial<
             {
-                [P in keyof I18NStrings]: {
-                    message: string
-                    description?: string
-                }
+                [P in keyof I18NStrings]: string
             }
         >
     }
@@ -295,12 +293,19 @@ let activatedSocialNetworkUI = ({
     myIdentitiesRef: new ValueRef([]),
     useTheme: () => MaskbookLightTheme,
 } as Partial<SocialNetworkUI>) as SocialNetworkUI
-export function activateSocialNetworkUI() {
+export function activateSocialNetworkUI(): void {
     for (const ui of definedSocialNetworkUIs)
         if (ui.shouldActivate()) {
             console.log('Activating UI provider', ui.networkIdentifier, ui)
+            {
+                // Do i18nOverwrite
+                for (const lng in ui.i18nOverwrite) {
+                    console.log('Applying ', lng, ui.i18nOverwrite[lng])
+                    i18nNextInstance.addResourceBundle(lng, 'translation', ui.i18nOverwrite[lng], true, true)
+                }
+            }
             activatedSocialNetworkUI = ui
-            return untilDomLoaded().then(() => {
+            untilDomLoaded().then(() => {
                 hookUIPostMap(ui)
                 ui.init(env, {})
                 ui.resolveLastRecognizedIdentity()
@@ -328,6 +333,7 @@ export function activateSocialNetworkUI() {
                     Services.Identity.resolveIdentity(id.identifier).then()
                 })
             })
+            break
         }
 }
 function hookUIPostMap(ui: SocialNetworkUI) {

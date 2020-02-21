@@ -2,8 +2,8 @@ import { ValueRef } from '@holoflows/kit/es'
 import { MessageCenter } from '../../utils/messages'
 
 export interface SettingsTexts {
-    primary: string
-    secondary?: string
+    primary: () => string
+    secondary?: () => string
 }
 export const texts = new WeakMap<ValueRef<any>, SettingsTexts>()
 

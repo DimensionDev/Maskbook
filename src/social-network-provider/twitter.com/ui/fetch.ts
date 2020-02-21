@@ -13,6 +13,7 @@ import { isNil } from 'lodash-es'
 import Services from '../../../extension/service'
 import { twitterUrl } from '../utils/url'
 import { untilElementAvailable } from '../../../utils/dom'
+import { twitterEncoding } from '../encoding'
 
 const resolveLastRecognizedIdentity = (self: SocialNetworkUI) => {
     const selfSelector = selfInfoSelectors().handle
@@ -98,11 +99,30 @@ const registerPostCollector = (self: SocialNetworkUI) => {
             ].join(),
         )
     }
+    const isKnownToMaskbook = (node: HTMLElement, tweetNode: HTMLElement) => {
+        // TODO:
+        // detect image payload is costy postImageParser should cache parse result
+        if (tweetNode.querySelector('img[src*="twimg.com/media"]')) {
+            return true
+        }
+        if (
+            Array.from(node.querySelectorAll('span, a'))
+                .map(n => n.getAttribute('title') ?? '')
+                .some(url => twitterEncoding.payloadDecoder(url) !== 'null')
+        ) {
+            return true
+        }
+        return false
+    }
 
     new MutationObserverWatcher(postsContentSelector())
         .useForeach((node, _, proxy) => {
             const tweetNode = getTweetNode(node)
             if (!tweetNode) return
+            // early return if tweet content unknown to maskbook
+            if (!isKnownToMaskbook(node, tweetNode)) {
+                return
+            }
             // noinspection JSUnnecessarySemicolon
             const info = getEmptyPostInfoByElement({
                 get rootNode() {
@@ -158,7 +178,7 @@ const registerPostCollector = (self: SocialNetworkUI) => {
             const tweetNode = getTweetNode(node)
             const isQuotedTweet = tweetNode?.getAttribute('role') === 'blockquote'
             return tweetNode
-                ? `${isQuotedTweet ? 'QUOTED' : ''}${postIdParser(tweetNode)}${node.innerText.replace(/\s/gms, '')}`
+                ? `${isQuotedTweet ? 'QUOTED' : ''}${postIdParser(tweetNode)}${node.innerText.replace(/\s/gm, '')}`
                 : node.innerText
         })
         .startWatch({

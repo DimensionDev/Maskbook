@@ -2,13 +2,10 @@ import React, { useState } from 'react'
 import { Link, useHistory } from 'react-router-dom'
 import StepBase from './StepBase'
 import { TextField, makeStyles, createStyles } from '@material-ui/core'
-import { geti18nString } from '../../../utils/i18n'
+import { useI18N } from '../../../utils/i18n-next-ui'
 import ActionButton from '../DashboardComponents/ActionButton'
 import Services from '../../service'
 import { InitStep } from '../InitStep'
-
-const header = geti18nString('dashboard_init_step_1')
-const subheader = geti18nString('dashboard_init_step_1_hint')
 
 const useStyles = makeStyles(theme =>
     createStyles({
@@ -29,6 +26,9 @@ const useStyles = makeStyles(theme =>
 )
 
 export default function InitStep1S() {
+    const { t } = useI18N()
+    const header = t('dashboard_init_step_1')
+    const subheader = t('dashboard_init_step_1_hint')
     const [name, setName] = useState('')
     const [password, setPassword] = useState('')
 
@@ -43,10 +43,10 @@ export default function InitStep1S() {
     const actions = (
         <>
             <ActionButton<typeof Link> variant="outlined" color="default" component={Link} to="start">
-                {geti18nString('back')}
+                {t('back')}
             </ActionButton>
             <ActionButton variant="contained" color="primary" onClick={createPersonaAndNext} component="a">
-                {geti18nString('next')}
+                {t('next')}
             </ActionButton>
         </>
     )
@@ -68,11 +68,11 @@ export default function InitStep1S() {
                 InputLabelProps={{ shrink: true }}
                 variant="outlined"
                 value={password}
-                placeholder={geti18nString('dashboard_password_hint')}
+                placeholder={t('dashboard_password_hint')}
                 type="password"
                 onChange={e => setPassword(e.target.value)}
                 label="Password"
-                helperText={geti18nString('dashboard_password_helper_text')}></TextField>
+                helperText={t('dashboard_password_helper_text')}></TextField>
         </div>
     )
 

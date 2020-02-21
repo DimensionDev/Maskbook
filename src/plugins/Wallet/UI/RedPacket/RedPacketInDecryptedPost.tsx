@@ -19,17 +19,20 @@ import {
     IconButton,
     Typography,
     DialogContent,
-    DialogActions,
     Button,
     FormControl,
     InputLabel,
     Select,
     MenuItem,
+    Checkbox,
+    FormControlLabel,
+    Divider,
 } from '@material-ui/core'
 import { useStylesExtends, or } from '../../../../components/custom-ui-helper'
 import { DialogDismissIconUI } from '../../../../components/InjectedComponents/DialogDismissIcon'
 import { PortalShadowRoot } from '../../../../utils/jss/ShadowRootPortal'
-import { geti18nString } from '../../../../utils/i18n'
+import { useI18N } from '../../../../utils/i18n-next-ui'
+import ShadowRootDialog from '../../../../utils/jss/ShadowRootDialog'
 
 const useStyles = makeStyles(theme =>
     createStyles({
@@ -59,8 +62,6 @@ interface RedPacketInDecryptedPostProps
     postIdentifier?: PostIdentifier<ProfileIdentifier>
 }
 
-const ResponsiveDialog = withMobileDialog({ breakpoint: 'xs' })(Dialog)
-
 export default function RedPacketInDecryptedPost(props: RedPacketInDecryptedPostProps) {
     const [loading, setLoading] = React.useState(false)
     const [claiming, setClaiming] = React.useState<Claiming>(null)
@@ -71,13 +72,18 @@ export default function RedPacketInDecryptedPost(props: RedPacketInDecryptedPost
         setClaiming(null)
     }
 
-    const claimRedPacket = (walletAddress: WalletRecord['address'], rpid?: RedPacketRecord['red_packet_id']) => {
+    const claimRedPacket = (
+        walletAddress: WalletRecord['address'],
+        rpid?: RedPacketRecord['red_packet_id'],
+        setAsDefault?: boolean,
+    ) => {
         setClaiming(null)
         return Services.Plugin.invokePlugin(
             'maskbook.red_packet',
             'claimRedPacket',
             { redPacketID: rpid ?? claiming?.rpid! },
             walletAddress,
+            setAsDefault,
         )
             .catch(e => Services.Welcome.openOptionsPage(`/wallets/error?reason=${e.message}`))
             .finally(() => setLoading(false))
@@ -151,20 +157,26 @@ export function RedPacketInDecryptedPostCard(
 export function RedPacketInDecryptedPostClaimDialog(
     props: RedPacketInDecryptedPostProps & {
         onAbortClaiming(): void
-        onClaimRedPacket: (walletAddress: WalletRecord['address'], rpid?: RedPacketRecord['red_packet_id']) => void
+        onClaimRedPacket: (
+            walletAddress: WalletRecord['address'],
+            rpid?: RedPacketRecord['red_packet_id'],
+            setAsDefault?: boolean,
+        ) => void
         claiming: Claiming
         walletAddress: [string | undefined, (val: string | undefined) => void]
         open: boolean
     },
 ) {
+    const { t } = useI18N()
     const [selectedWalletAddress, setSelectedWalletAddress] = or(
         props.walletAddress,
         React.useState<undefined | string>(),
     )
+    const [defaultChecked, setDefaultChecked] = React.useState()
     const claiming = props.claiming
     const classes = useStylesExtends(useStyles(), props)
     return (
-        <ResponsiveDialog
+        <ShadowRootDialog
             className={classes.dialog}
             classes={{
                 container: classes.container,
@@ -174,10 +186,6 @@ export function RedPacketInDecryptedPostClaimDialog(
             scroll="paper"
             fullWidth
             maxWidth="sm"
-            // ? Must have null as value before refactor
-            container={() => null}
-            // container={() => rootRef.current}
-            disablePortal
             disableAutoFocus
             disableEnforceFocus
             onEscapeKeyDown={props.onAbortClaiming}
@@ -192,6 +200,7 @@ export function RedPacketInDecryptedPostClaimDialog(
                     Select Wallet
                 </Typography>
             </DialogTitle>
+            <Divider />
             <DialogContent className={classes.content}>
                 <div className={classes.line}>
                     <FormControl variant="filled" className={classes.input} fullWidth>
@@ -209,16 +218,26 @@ export function RedPacketInDecryptedPostClaimDialog(
                     </FormControl>
                 </div>
             </DialogContent>
-            <DialogActions className={classes.actions}>
+            <DialogContent className={classes.actions} style={{ display: 'flex' }}>
+                <FormControlLabel
+                    control={
+                        <Checkbox
+                            checked={defaultChecked}
+                            onChange={e => setDefaultChecked(e.target.checked)}
+                            color="primary"
+                        />
+                    }
+                    label="Set as Default"
+                />
                 <Button
                     className={classes.button}
-                    style={{ marginLeft: 'auto' }}
+                    style={{ marginLeft: 'auto', marginRight: 0, width: 100 }}
                     color="primary"
                     variant="contained"
-                    onClick={() => props.onClaimRedPacket(selectedWalletAddress!, claiming?.rpid)}>
-                    {geti18nString('ok')}
+                    onClick={() => props.onClaimRedPacket(selectedWalletAddress!, claiming?.rpid, defaultChecked)}>
+                    {t('ok')}
                 </Button>
-            </DialogActions>
-        </ResponsiveDialog>
+            </DialogContent>
+        </ShadowRootDialog>
     )
 }

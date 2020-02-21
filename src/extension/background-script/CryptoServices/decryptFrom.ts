@@ -4,7 +4,7 @@ import * as Gun1 from '../../../network/gun/version.1'
 import * as Gun2 from '../../../network/gun/version.2'
 import { decodeText } from '../../../utils/type-transform/String-ArrayBuffer'
 import { deconstructPayload, Payload } from '../../../utils/type-transform/Payload'
-import { geti18nString } from '../../../utils/i18n'
+import { i18n } from '../../../utils/i18n-next'
 import { queryPrivateKey, queryPersonaRecord, queryLocalKey } from '../../../database'
 import { ProfileIdentifier, PostIVIdentifier } from '../../../database/type'
 import { queryPostDB, updatePostDB } from '../../../database/post'
@@ -17,6 +17,7 @@ import { PersonaRecord } from '../../../database/Persona/Persona.db'
 import { verifyOthersProve } from './verifyOthersProve'
 import { import_AES_GCM_256_Key } from '../../../utils/crypto.subtle'
 import { publicSharedAESKey } from '../../../crypto/crypto-alpha-38'
+import { DecryptFailedReason } from '../../../utils/constants'
 
 type Progress = {
     progress: 'finding_person_public_key' | 'finding_post_key'
@@ -58,7 +59,6 @@ function makeSuccessResult(
         content: cryptoProvider.typedMessageParse(rawContent),
     }
 }
-
 /**
  * Decrypt message from a user
  * @param encrypted post
@@ -127,7 +127,7 @@ export async function* decryptFromMessageWithProgress(
         for await (const _ of iteratorHelper(findAuthorPublicKey(author, !!cachedPostResult))) {
             if (_.done) {
                 if (_.value === 'out of chance')
-                    return { error: geti18nString('service_others_key_not_found', author.userId) }
+                    return { error: i18n.t('service_others_key_not_found', { name: author.userId }) }
                 else if (_.value === 'use cache')
                     return makeSuccessResult(
                         cryptoProvider,
@@ -141,7 +141,8 @@ export async function* decryptFromMessageWithProgress(
 
         // ? Get my public & private key.
         const mine = await queryPersonaRecord(whoAmI)
-        if (!mine?.privateKey) throw new Error('My key not found')
+
+        if (!mine?.privateKey) throw new Error(DecryptFailedReason.MyCryptoKeyNotFound)
         const ecdhParams = getKeyParameter('ecdh')
         const minePublic = await JsonWebKeyToCryptoKey(mine.publicKey, ...ecdhParams)
         const minePrivate = mine.privateKey ? await JsonWebKeyToCryptoKey(mine.privateKey, ...ecdhParams) : undefined
@@ -195,11 +196,11 @@ export async function* decryptFromMessageWithProgress(
             // for the post even that post by myself.
             if (lastError instanceof DOMException) return handleDOMException(lastError)
             console.error(lastError)
-            return { error: geti18nString('service_self_key_decryption_failed') } as Failure
+            return { error: i18n.t('service_self_key_decryption_failed') } as Failure
         }
         // The following process need a ECDH key to do.
         // So if the account have not setup yet, fail here.
-        if (!mine) return { error: geti18nString('service_not_setup_yet') }
+        if (!mine) return { error: i18n.t('service_not_setup_yet') }
 
         yield { progress: 'finding_post_key' }
         const aesKeyEncrypted: Array<Alpha40.PublishedAESKey | Gun2.SharedAESKeyGun2> = []
@@ -207,7 +208,7 @@ export async function* decryptFromMessageWithProgress(
             // Deprecated payload
             // eslint-disable-next-line import/no-deprecated
             const result = await Gun1.queryPostAESKey(iv, whoAmI.userId)
-            if (result === undefined) return { error: geti18nString('service_not_share_target') }
+            if (result === undefined) return { error: i18n.t('service_not_share_target') }
             aesKeyEncrypted.push(result)
         } else if (version === -39 || version === -38) {
             const { keyHash, keys, postHash } = await Gun2.queryPostKeysOnGun2(
@@ -225,13 +226,13 @@ export async function* decryptFromMessageWithProgress(
             // ! Do not remove the await here.
             return await decryptWith(aesKeyEncrypted)
         } catch (e) {
-            if (e.message === geti18nString('service_not_share_target')) {
+            if (e.message === i18n.t('service_not_share_target')) {
                 console.debug(e)
                 // TODO: Replace this error with:
                 // You do not have the necessary private key to decrypt this message.
                 // What to do next: You can ask your friend to visit your profile page, so that their Maskbook extension will detect and add you to recipients.
                 // ? after the auto-share with friends is done.
-                yield { error: geti18nString('service_not_share_target') } as Failure
+                yield { error: i18n.t('service_not_share_target') } as Failure
             } else {
                 return handleDOMException(e)
             }
@@ -316,12 +317,12 @@ export async function* decryptFromMessageWithProgress(
             } as Success
         }
     }
-    return { error: geti18nString('service_unknown_payload') }
+    return { error: i18n.t('service_unknown_payload') }
 }
 function handleDOMException(e: unknown) {
     if (e instanceof DOMException) {
         console.error(e)
-        return { error: geti18nString('service_decryption_failed') } as Failure
+        return { error: i18n.t('service_decryption_failed') } as Failure
     } else throw e
 }
 async function* findAuthorPublicKey(

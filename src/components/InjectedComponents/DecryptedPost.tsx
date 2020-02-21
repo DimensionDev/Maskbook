@@ -4,7 +4,7 @@ import { AdditionalContent, AdditionalContentProps } from './AdditionalPostConte
 import { useShareMenu } from './SelectPeopleDialog'
 import { sleep, getUrl } from '../../utils/utils'
 import { ServicesWithProgress } from '../../extension/service'
-import { geti18nString } from '../../utils/i18n'
+import { useI18N } from '../../utils/i18n-next-ui'
 import { makeStyles } from '@material-ui/styles'
 import { Box, Link, useMediaQuery, useTheme, Typography } from '@material-ui/core'
 import { Profile } from '../../database'
@@ -25,6 +25,7 @@ import { useStylesExtends } from '../custom-ui-helper'
 import { BannerProps } from '../Welcomes/Banner'
 import { TypedMessage } from '../../extension/background-script/CryptoServices/utils'
 import RedPacketInDecryptedPost from '../../plugins/Wallet/UI/RedPacket/RedPacketInDecryptedPost'
+import { DecryptFailedReason } from '../../utils/constants'
 
 export interface DecryptPostSuccessProps extends withClasses<KeysInferFromUseStyles<typeof useSuccessStyles>> {
     data: { signatureVerifyResult: boolean; content: TypedMessage }
@@ -64,6 +65,7 @@ export const DecryptPostSuccess = React.memo(function DecryptPostSuccess(props: 
 })
 
 function DecryptPostSuccessHeader(props: { shareMenu: ReturnType<typeof useShareMenu> } & DecryptPostSuccessProps) {
+    const { t } = useI18N()
     const theme = useTheme()
     const classes = useStylesExtends(useSuccessStyles(), props)
     const {
@@ -71,8 +73,8 @@ function DecryptPostSuccessHeader(props: { shareMenu: ReturnType<typeof useShare
         data,
         sharedPublic,
     } = props
-    let passString = geti18nString('decrypted_postbox_verified')
-    let failString = geti18nString('decrypted_postbox_not_verified')
+    let passString = t('decrypted_postbox_verified')
+    let failString = t('decrypted_postbox_not_verified')
 
     if (useMediaQuery(theme.breakpoints.down('sm'))) {
         passString = '✔'
@@ -82,11 +84,11 @@ function DecryptPostSuccessHeader(props: { shareMenu: ReturnType<typeof useShare
         <Typography variant="caption" color="textSecondary" gutterBottom className={classes.header}>
             <img alt="" width={16} height={16} src={getUrl('/maskbook-icon-padded.png')} />
             {ShareMenu}
-            <span className={classes.addRecipientsTitle}>{geti18nString('decrypted_postbox_title')}</span>
+            <span className={classes.addRecipientsTitle}>{t('decrypted_postbox_title')}</span>
             <Box flex={1} />
             {props.requestAppendRecipients && !sharedPublic && (
                 <Link color="primary" onClick={showShare} className={classes.addRecipientsLink}>
-                    {geti18nString('decrypted_postbox_add_recipients')}
+                    {t('decrypted_postbox_add_recipients')}
                 </Link>
             )}
             {data.signatureVerifyResult ? (
@@ -103,6 +105,7 @@ export interface DecryptPostAwaitingProps {
     AdditionalContentProps?: Partial<AdditionalContentProps>
 }
 export const DecryptPostAwaiting = React.memo(function DecryptPostAwaiting(props: DecryptPostAwaitingProps) {
+    const { t } = useI18N()
     const key = {
         finding_post_key: 'decrypted_postbox_decrypting_finding_post_key',
         finding_person_public_key: 'decrypted_postbox_decrypting_finding_person_key',
@@ -110,24 +113,24 @@ export const DecryptPostAwaiting = React.memo(function DecryptPostAwaiting(props
     } as const
     return (
         <AdditionalContent
-            header={geti18nString(key[(props.type && props.type.progress) || 'undefined'])}
+            header={t(key[(props.type && props.type.progress) || 'undefined'])}
             {...props.AdditionalContentProps}
         />
     )
 })
-
 export interface DecryptPostFailedProps {
     error: Error
     AdditionalContentProps?: Partial<AdditionalContentProps>
     NotSetupYetPromptProps?: Partial<BannerProps>
 }
 export const DecryptPostFailed = React.memo(function DecryptPostFailed({ error, ...props }: DecryptPostFailedProps) {
-    if (error && error.message === geti18nString('service_not_setup_yet')) {
+    const { t } = useI18N()
+    if (error && error.message === DecryptFailedReason.MyCryptoKeyNotFound) {
         return <NotSetupYetPrompt {...props.NotSetupYetPromptProps} />
     }
     return (
         <AdditionalContent
-            header={geti18nString('service_decryption_failed')}
+            header={t('service_decryption_failed')}
             message={error?.message}
             {...props.AdditionalContentProps}
         />
@@ -144,7 +147,7 @@ export interface DecryptPostProps {
     people: Profile[]
     alreadySelectedPreviously: Profile[]
     requestAppendRecipients?(to: Profile[]): Promise<void>
-    disableSuccessDecryptionCache?: boolean
+    disableSuccessDecryptionCache?: boolean // ! not used
     successComponent?: React.ComponentType<DecryptPostSuccessProps>
     successComponentProps?: Partial<DecryptPostSuccessProps>
     waitingComponent?: React.ComponentType<DecryptPostAwaitingProps>
@@ -199,22 +202,7 @@ export function DecryptPost(props: DecryptPostProps) {
             />
         )
     }, [isDebugging, postPayload, postBy, encryptedText, whoAmI, debugHash, decryptedResult])
-    if (decryptedResult && !props.disableSuccessDecryptionCache) {
-        return (
-            <>
-                <Success
-                    data={decryptedResult}
-                    postIdentifier={postId}
-                    alreadySelectedPreviously={alreadySelectedPreviously}
-                    requestAppendRecipients={requestAppendRecipientsWrapped}
-                    profiles={people}
-                    sharedPublic={sharedPublic}
-                    {...props.successComponentProps}
-                />
-                {isDebugging ? debugHashJSX : null}
-            </>
-        )
-    }
+
     const awaitingComponent =
         decryptingStatus && 'error' in decryptingStatus ? (
             <Failed error={new Error(decryptingStatus.error)} {...props.failedComponentProps} />

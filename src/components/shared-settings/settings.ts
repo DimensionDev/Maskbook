@@ -1,20 +1,21 @@
 import { createNewSettings, createNetworkSpecificSettings } from './createSettings'
 import { ValueRef } from '@holoflows/kit/es'
 import { MessageCenter } from '../../utils/messages'
+import i18nNextInstance, { i18n } from '../../utils/i18n-next'
 
 /**
  * Does the debug mode on
  */
 export const debugModeSetting = createNewSettings<boolean>('debugMode', false, {
-    primary: 'Enable debug mode',
-    secondary: 'Enable this will display additional information on the Maskbook UI to help debugging',
+    primary: () => i18n.t('settings_enable_debug'),
+    secondary: () => i18n.t('settings_enable_debug_desc'),
 })
 /**
  * Dose steganography post mode on
  */
 export const steganographyModeSetting = createNewSettings<boolean>('steganographyMode', false, {
-    primary: 'Enable steganography mode',
-    secondary: 'Publishing post with steganography payload instead of text playload',
+    primary: () => i18n.t('settings_image_based_payload'),
+    secondary: () => i18n.t('settings_image_based_payload_desc'),
 })
 
 /**
@@ -22,12 +23,22 @@ export const steganographyModeSetting = createNewSettings<boolean>('steganograph
  */
 export const disableOpenNewTabInBackgroundSettings = createNewSettings<boolean>(
     'disable automated tab task open new tab',
-    webpackEnv.firefoxVariant === 'GeckoView' || webpackEnv.target === 'WKWebview' ? true : false,
+    true,
     {
-        primary: 'Disable open hidden tabs in the background',
-        secondary:
-            "Many of Maskbook features relies on this behavior. Disable this behavior will limit Maskbook's functionality",
+        primary: () => i18n.t('settings_disable_new_background_tab'),
+        secondary: () => i18n.t('settings_disable_new_background_tab_desc'),
     },
+)
+
+export enum Language {
+    zh = 'zh',
+    en = 'en',
+}
+const lang: string = i18nNextInstance.language
+export const languageSettings = createNewSettings<Language>(
+    'language',
+    lang in Language ? (lang as Language) : Language.en,
+    { primary: () => i18n.t('settings_language') },
 )
 
 const createProxiedSettings = <T extends string = string>(settingsKey: string) => {

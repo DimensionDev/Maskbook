@@ -4,7 +4,6 @@ import { GroupIdentifier, Identifier, ProfileIdentifier } from './type'
 import { MessageCenter } from '../utils/messages'
 import { PrototypeLess, restorePrototypeArray } from '../utils/type'
 import { createDBAccess } from './helpers/openDB'
-import { OnlyRunInContext } from '@holoflows/kit/es'
 
 //#region Schema
 interface GroupRecordBase {

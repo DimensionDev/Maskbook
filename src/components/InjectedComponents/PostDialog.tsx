@@ -6,8 +6,6 @@ import {
     Button,
     Typography,
     IconButton,
-    withMobileDialog,
-    Dialog,
     DialogTitle,
     DialogContent,
     DialogActions,
@@ -16,7 +14,6 @@ import {
     ThemeProvider,
     Theme,
 } from '@material-ui/core'
-import { geti18nString, getCurrentLanguage } from '../../utils/i18n'
 import { MessageCenter, CompositionEvent } from '../../utils/messages'
 import { useCapturedInput } from '../../utils/hooks/useCapturedEvents'
 import { useStylesExtends, or } from '../custom-ui-helper'
@@ -42,6 +39,8 @@ import { RedPacketTokenType } from '../../plugins/Wallet/database/types'
 import { isDAI } from '../../plugins/Wallet/erc20'
 import { PluginRedPacketTheme } from '../../plugins/Wallet/theme'
 import { sleep } from '../../utils/utils'
+import { useI18N } from '../../utils/i18n-next-ui'
+import ShadowRootDialog from '../../utils/jss/ShadowRootDialog'
 
 const defaultTheme = {}
 
@@ -63,7 +62,6 @@ const useStyles = makeStyles({
         paddingLeft: 26,
     },
 })
-const ResponsiveDialog = withMobileDialog({ breakpoint: 'xs' })(Dialog)
 
 export interface PostDialogUIProps
     extends withClasses<
@@ -101,7 +99,7 @@ export interface PostDialogUIProps
 }
 export function PostDialogUI(props: PostDialogUIProps) {
     const classes = useStylesExtends(useStyles(), props)
-    const rootRef = useRef<HTMLDivElement>(null)
+    const { t } = useI18N()
     const [, inputRef] = useCapturedInput(
         newText => {
             const msg = props.postContent
@@ -111,11 +109,13 @@ export function PostDialogUI(props: PostDialogUIProps) {
         [props.open, props.postContent],
     )
     const [redPacketDialogOpen, setRedPacketDialogOpen] = useState(false)
+
     if (props.postContent.type !== 'text') return <>Unsupported type to edit</>
+
     return (
-        <div ref={rootRef} className={classes.root}>
+        <div className={classes.root}>
             <ThemeProvider theme={props.theme ?? defaultTheme}>
-                <ResponsiveDialog
+                <ShadowRootDialog
                     className={classes.dialog}
                     classes={{
                         container: classes.container,
@@ -125,8 +125,6 @@ export function PostDialogUI(props: PostDialogUIProps) {
                     scroll="paper"
                     fullWidth
                     maxWidth="sm"
-                    container={() => rootRef.current}
-                    disablePortal
                     disableAutoFocus
                     disableEnforceFocus
                     onEscapeKeyDown={props.onCloseButtonClicked}
@@ -136,12 +134,12 @@ export function PostDialogUI(props: PostDialogUIProps) {
                     <DialogTitle className={classes.header}>
                         <IconButton
                             classes={{ root: classes.close }}
-                            aria-label={geti18nString('post_dialog__dismiss_aria')}
+                            aria-label={t('post_dialog__dismiss_aria')}
                             onClick={props.onCloseButtonClicked}>
                             <DialogDismissIconUI />
                         </IconButton>
                         <Typography className={classes.title} display="inline" variant="inherit">
-                            {geti18nString('post_dialog__title')}
+                            {t('post_dialog__title')}
                         </Typography>
                     </DialogTitle>
                     <DialogContent className={classes.content}>
@@ -174,33 +172,42 @@ export function PostDialogUI(props: PostDialogUIProps) {
                             inputRef={inputRef}
                             fullWidth
                             multiline
-                            placeholder={geti18nString('post_dialog__placeholder')}
+                            placeholder={t('post_dialog__placeholder')}
                         />
                         <Typography style={{ marginBottom: 10 }}>Plugins (Experimental)</Typography>
                         <Box style={{ marginBottom: 10 }} display="flex" flexWrap="wrap">
                             <ClickableChip
                                 ChipProps={{
                                     label: '💰 Red Packet',
-                                    onClick: () => setRedPacketDialogOpen(true),
+                                    onClick: async () => {
+                                        const [wallets] = await Services.Plugin.invokePlugin(
+                                            'maskbook.wallet',
+                                            'getWallets',
+                                        )
+
+                                        if (wallets.length) {
+                                            setRedPacketDialogOpen(true)
+                                        } else {
+                                            Services.Welcome.openOptionsPage('/wallets/error?reason=nowallet')
+                                        }
+                                    },
                                 }}
                             />
                         </Box>
                         <Typography style={{ marginBottom: 10 }}>
-                            {geti18nString('post_dialog__select_recipients_title')}
+                            {t('post_dialog__select_recipients_title')}
                         </Typography>
-                        <Box>
-                            <SelectRecipientsUI
-                                disabled={props.onlyMyself || props.shareToEveryone}
-                                items={props.availableShareTarget}
-                                selected={props.currentShareTarget}
-                                onSetSelected={props.onSetSelected}
-                                {...props.SelectRecipientsUIProps}
-                            />
+                        <SelectRecipientsUI
+                            disabled={props.onlyMyself || props.shareToEveryone}
+                            items={props.availableShareTarget}
+                            selected={props.currentShareTarget}
+                            onSetSelected={props.onSetSelected}
+                            {...props.SelectRecipientsUIProps}>
                             <ClickableChip
                                 checked={props.shareToEveryone}
                                 ChipProps={{
                                     disabled: props.onlyMyself,
-                                    label: geti18nString('post_dialog__select_recipients_share_to_everyone'),
+                                    label: t('post_dialog__select_recipients_share_to_everyone'),
                                     onClick: () => props.onShareToEveryoneChanged(!props.shareToEveryone),
                                 }}
                             />
@@ -208,11 +215,11 @@ export function PostDialogUI(props: PostDialogUIProps) {
                                 checked={props.onlyMyself}
                                 ChipProps={{
                                     disabled: props.shareToEveryone,
-                                    label: geti18nString('post_dialog__select_recipients_only_myself'),
+                                    label: t('post_dialog__select_recipients_only_myself'),
                                     onClick: () => props.onOnlyMyselfChanged(!props.onlyMyself),
                                 }}
                             />
-                        </Box>
+                        </SelectRecipientsUI>
                     </DialogContent>
                     <DialogActions className={classes.actions}>
                         <Button
@@ -222,10 +229,10 @@ export function PostDialogUI(props: PostDialogUIProps) {
                             variant="contained"
                             disabled={props.postBoxButtonDisabled}
                             onClick={props.onFinishButtonClicked}>
-                            {geti18nString('post_dialog__button')}
+                            {t('post_dialog__button')}
                         </Button>
                     </DialogActions>
-                </ResponsiveDialog>
+                </ShadowRootDialog>
             </ThemeProvider>
             <RedPacketDialog
                 classes={classes}
@@ -245,6 +252,7 @@ export interface PostDialogProps extends Partial<PostDialogUIProps> {
     typedMessageMetadata: ReadonlyMap<string, any>
 }
 export function PostDialog(props: PostDialogProps) {
+    const { t, i18n } = useI18N()
     const [onlyMyselfLocal, setOnlyMyself] = useState(false)
     const onlyMyself = props.onlyMyself ?? onlyMyselfLocal
     const [shareToEveryoneLocal, setShareToEveryone] = useState(false)
@@ -290,20 +298,20 @@ export function PostDialog(props: PostDialogProps) {
                         metadata.val.token &&
                         isDAI(metadata.val.token)
                     activeUI.taskPasteIntoPostBox(
-                        geti18nString('additional_post_box__steganography_post_pre', String(Date.now())),
+                        t('additional_post_box__steganography_post_pre', { random: String(Date.now()) }),
                         {
-                            warningText: geti18nString('additional_post_box__encrypted_failed'),
+                            warningText: t('additional_post_box__encrypted_failed'),
                             shouldOpenPostDialog: false,
                         },
                     )
                     activeUI.taskUploadToPostBox(encrypted, {
                         template: isEth ? 'eth' : isDai ? 'dai' : 'default',
-                        warningText: geti18nString('additional_post_box__steganography_post_failed'),
+                        warningText: t('additional_post_box__steganography_post_failed'),
                     })
                 } else {
-                    let text = geti18nString('additional_post_box__encrypted_post_pre', encrypted)
+                    let text = t('additional_post_box__encrypted_post_pre', { encrypted })
                     if (metadata.ok) {
-                        if (getCurrentLanguage() === 'zh') {
+                        if (i18n.language.includes('zh')) {
                             text =
                                 '春節快樂，用 Maskbook 開啟 Twitter 上第一個紅包！ （僅限 Twitter web 版）#MakerDAO #Maskbook 用@realMaskbook 解密 ' +
                                 encrypted
@@ -314,7 +322,7 @@ export function PostDialog(props: PostDialogProps) {
                         }
                     }
                     activeUI.taskPasteIntoPostBox(text, {
-                        warningText: geti18nString('additional_post_box__encrypted_failed'),
+                        warningText: t('additional_post_box__encrypted_failed'),
                         shouldOpenPostDialog: false,
                     })
                 }
@@ -322,7 +330,7 @@ export function PostDialog(props: PostDialogProps) {
                 // there is nothing to write if it shared with public
                 if (!shareToEveryone) Services.Crypto.publishPostAESKey(token)
             },
-            [currentIdentity, isSteganography, props.typedMessageMetadata, shareToEveryone],
+            [currentIdentity, i18n.language, isSteganography, props.typedMessageMetadata, shareToEveryone, t],
         ),
     )
     const onRequestReset = or(

@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import StepBase from './StepBase'
 import { Typography } from '@material-ui/core'
-import { geti18nString } from '../../../utils/i18n'
+import { useI18N } from '../../../utils/i18n-next-ui'
 import { Link } from 'react-router-dom'
 import ActionButton from '../DashboardComponents/ActionButton'
 import useQueryParams from '../../../utils/hooks/useQueryParams'
@@ -13,10 +13,10 @@ import ProfileBox from '../DashboardComponents/ProfileBox'
 import { useMyPersonas } from '../../../components/DataSource/useActivatedUI'
 import { InitStep } from '../InitStep'
 
-const header = geti18nString('dashboard_init_step_2')
-const subheader = geti18nString('dashboard_init_step_2_hint')
-
 export default function InitStep2S() {
+    const { t } = useI18N()
+    const header = t('dashboard_init_step_2')
+    const subheader = t('dashboard_init_step_2_hint')
     const { identifier } = useQueryParams(['identifier'])
     const personas = useMyPersonas()
     const [persona, setPersona] = useState<Persona | null>(null)
@@ -28,7 +28,7 @@ export default function InitStep2S() {
     const actions = (
         <>
             <ActionButton<typeof Link> variant="outlined" color="default" component={Link} to={InitStep.Setup1}>
-                {geti18nString('back')}
+                {t('back')}
             </ActionButton>
             <ActionButton<typeof Link>
                 variant="contained"
@@ -36,7 +36,7 @@ export default function InitStep2S() {
                 disabled={persona?.linkedProfiles.size === 0}
                 component={Link}
                 to="../">
-                {geti18nString('finish')}
+                {t('finish')}
             </ActionButton>
         </>
     )
@@ -44,7 +44,7 @@ export default function InitStep2S() {
     const content = (
         <div style={{ alignSelf: 'stretch', width: '100%' }}>
             <Typography style={{ paddingBottom: '0.5rem' }} variant="h5">
-                {persona?.nickname ?? geti18nString('unknown_persona')}
+                {persona?.nickname ?? t('unknown_persona')}
             </Typography>
             <ProfileBox persona={persona} />
         </div>

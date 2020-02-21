@@ -29,7 +29,7 @@ import { DBSchema, openDB } from 'idb/with-async-ittr'
 import { JsonWebKeyToCryptoKey, getKeyParameter } from '../../utils/type-transform/CryptoKey-JsonWebKey'
 import { OnlyRunInContext } from '@holoflows/kit/es'
 
-OnlyRunInContext('background', 'People db')
+OnlyRunInContext(['background', 'debugging'], 'People db')
 //#region Type and utils
 /**
  * Transform data out of database

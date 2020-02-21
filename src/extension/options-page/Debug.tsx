@@ -1,16 +1,10 @@
 import React from 'react'
-import { Grid, makeStyles, List } from '@material-ui/core'
+import { Grid, makeStyles } from '@material-ui/core'
 import { AddProve } from './DeveloperComponents/AddProve'
 import { DecryptPostDeveloperMode } from './DeveloperComponents/DecryptPost'
 import { SeeMyProvePost } from './DeveloperComponents/SeeMyProvePost'
 import { SelectEthereumNetwork } from '../../plugins/Wallet/UI/Developer/SelectEthereumNetwork'
 import { FriendsDeveloperMode } from './DeveloperComponents/Friends'
-import {
-    debugModeSetting,
-    steganographyModeSetting,
-    disableOpenNewTabInBackgroundSettings,
-} from '../../components/shared-settings/settings'
-import { SettingsUI } from '../../components/shared-settings/useSettingsUI'
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -22,11 +16,6 @@ const DashboardDebugPage = () => {
     return (
         <>
             <div className={classes.root}>
-                <List>
-                    <SettingsUI value={debugModeSetting} />
-                    <SettingsUI value={steganographyModeSetting} />
-                    <SettingsUI value={disableOpenNewTabInBackgroundSettings} />
-                </List>
                 <Grid container item spacing={2} direction="column" alignItems="stretch" wrap="nowrap">
                     <Grid item>
                         <SelectEthereumNetwork />

@@ -115,6 +115,22 @@ jobs:
                       - Maskbook.chromium.zip
                       - Maskbook.firefox.zip
                       - Maskbook.gecko.zip
+    build_storybook:
+        executor: maskbook_node
+        steps:
+            - restore_workspace
+            - run:
+                  name: Install zip
+                  command: sudo apt-get install zip
+            - run:
+                  name: Build Storybook
+                  command: yarn build-storybook
+            - run:
+                  name: Pack dist
+                  command: bash -c "cd storybook-static && zip -r ../storybook.zip ./*"
+            - store_artifacts:
+                  path: storybook.zip
+                  destination: /storybook.zip
     publish-github-release:
         docker:
             - image: cibuilds/github:0.10
@@ -159,6 +175,9 @@ workflows:
                   requires:
                       - install_dependencies
             - jest:
+                  requires:
+                      - install_dependencies
+            - build_storybook:
                   requires:
                       - install_dependencies
             - build:

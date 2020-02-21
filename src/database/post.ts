@@ -3,12 +3,11 @@ import { PostIdentifier, ProfileIdentifier, Identifier, PostIVIdentifier, GroupI
 import { openDB, DBSchema, IDBPTransaction } from 'idb/with-async-ittr'
 import { restorePrototype, restorePrototypeArray, PrototypeLess } from '../utils/type'
 import { IdentifierMap } from './IdentifierMap'
-import { OnlyRunInContext } from '@holoflows/kit/es'
 import { createDBAccess } from './helpers/openDB'
 
 const db = createDBAccess(() => {
     return openDB<PostDB>('maskbook-post-v2', 3, {
-        async upgrade(db, oldVersion, newVersion, transaction) {
+        async upgrade(db, oldVersion, newVersion, transaction): Promise<void> {
             if (oldVersion < 1) {
                 // inline keys
                 return void db.createObjectStore('post', { keyPath: 'identifier' })

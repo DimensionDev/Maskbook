@@ -9,7 +9,7 @@ import { twitterUIInjections } from './inject'
 import { InitGroupsValueRef } from '../../../social-network/defaults/GroupsValueRef'
 import { twitterUrl } from '../utils/url'
 import { PreDefinedVirtualGroupNames } from '../../../database/type'
-import { twitterUICustomUI } from './custom'
+import { twitterUICustomUI, startWatchThemeColor } from './custom'
 
 export const instanceOfTwitterUI = defineSocialNetworkUI({
     ...sharedSettings,
@@ -19,17 +19,16 @@ export const instanceOfTwitterUI = defineSocialNetworkUI({
     ...twitterUICustomUI,
     i18nOverwrite: {
         en: {
-            additional_post_box__encrypted_post_pre: {
-                message: '#Maskbook ([I:b])\nDecrypt this tweet with maskbook.com @realMaskbook.\n—§— /* $1 */',
-            },
+            additional_post_box__encrypted_post_pre:
+                '#Maskbook ([I:b])\nDecrypt this tweet with maskbook.com @realMaskbook.\n—§— /* {{encrypted}} */',
         },
         zh: {
-            additional_post_box__encrypted_post_pre: {
-                message: '#Maskbook ([I:b])\n使用 maskbook.com @realMaskbook 解密这条推文。\n—§— /* $1 */',
-            },
+            additional_post_box__encrypted_post_pre:
+                '#Maskbook ([I:b])\n使用 maskbook.com @realMaskbook 解密这条推文。\n—§— /* {{encrypted}} */',
         },
     },
     init: (env, pref) => {
+        startWatchThemeColor()
         sharedSettings.init(env, pref)
         InitFriendsValueRef(instanceOfTwitterUI, twitterUrl.hostIdentifier)
         InitGroupsValueRef(instanceOfTwitterUI, twitterUrl.hostIdentifier, [

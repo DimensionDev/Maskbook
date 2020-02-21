@@ -1,7 +1,7 @@
 import { ProfileIdentifier } from '../../../database/type'
 import tasks from '../../../extension/content-script/tasks'
 import { getProfileUrl, twitterUrl } from '../utils/url'
-import { geti18nString } from '../../../utils/i18n'
+import { i18n } from '../../../utils/i18n-next'
 
 export const autoVerifyBio = (self: ProfileIdentifier, prove: string) => {
     tasks(getProfileUrl(self), {
@@ -24,7 +24,7 @@ export const autoVerifyPost = (self: ProfileIdentifier, prove: string) => {
         timeout: Infinity,
     })
         .pasteIntoPostBox(prove, {
-            warningText: geti18nString('automation_request_paste_into_post_box'),
+            warningText: i18n.t('automation_request_paste_into_post_box'),
             shouldOpenPostDialog: true,
         })
         .then()

@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import StepBase from './StepBase'
 import { Typography, styled, Theme, makeStyles, createStyles, InputBase } from '@material-ui/core'
-import { geti18nString } from '../../../utils/i18n'
+import { useI18N } from '../../../utils/i18n-next-ui'
 import { useDragAndDrop } from '../../../utils/hooks/useDragAndDrop'
 import { Link, useHistory } from 'react-router-dom'
 import AbstractTab, { AbstractTabProps } from '../DashboardComponents/AbstractTab'
@@ -16,8 +16,6 @@ import { InitStep } from '../InitStep'
 import QRScanner from '../../../components/QRScanner'
 import { hasWKWebkitRPCHandlers } from '../../../utils/iOS-RPC'
 import { WKWebkitQRScanner } from '../../../components/shared/qrcode'
-
-const header = geti18nString('restore_database')
 
 const useStyles = makeStyles(theme =>
     createStyles({
@@ -60,17 +58,6 @@ const useStyles = makeStyles(theme =>
     }),
 )
 
-const actions = (
-    <>
-        <ActionButton<typeof Link> variant="outlined" color="default" component={Link} to="start">
-            {geti18nString('back')}
-        </ActionButton>
-        <ActionButton<typeof Link> variant="outlined" color="primary" component={Link} to={InitStep.RestoreAdvanced1}>
-            {geti18nString('advanced')}
-        </ActionButton>
-    </>
-)
-
 const RestoreBox = styled('div')(({ theme }: { theme: Theme }) => ({
     color: theme.palette.text.hint,
     whiteSpace: 'pre-line',
@@ -85,6 +72,7 @@ const RestoreBox = styled('div')(({ theme }: { theme: Theme }) => ({
 }))
 
 export default function InitStep1R() {
+    const { t } = useI18N()
     const ref = React.useRef<HTMLInputElement>(null)
     const classes = useStyles()
     const [json, setJson] = React.useState<BackupJSONFileLatest | null>(null)
@@ -92,6 +80,8 @@ export default function InitStep1R() {
     const [restoreState, setRestoreState] = React.useState<'success' | Error | null>(null)
     const [requiredPermissions, setRequiredPermissions] = React.useState<string[] | null>(null)
     const history = useHistory()
+
+    const header = t('restore_database')
 
     const setErrorState = (e: Error | null) => {
         setJson(null)
@@ -161,7 +151,7 @@ export default function InitStep1R() {
                 component: (
                     <div className={classes.restoreTextWrapper}>
                         <InputBase
-                            placeholder={geti18nString('dashboard_paste_database_backup_hint')}
+                            placeholder={t('dashboard_paste_database_backup_hint')}
                             className={classes.restoreInputBase}
                             inputRef={(input: HTMLInputElement) => input && input.focus()}
                             multiline
@@ -173,7 +163,7 @@ export default function InitStep1R() {
                             variant="contained"
                             onClick={() => resolveFileInput(textValue)}
                             color="primary">
-                            {geti18nString('restore')}
+                            {t('restore')}
                         </ActionButton>
                     </div>
                 ),
@@ -209,15 +199,15 @@ export default function InitStep1R() {
                     data-active={dragStatus === 'drag-enter'}
                     onClick={() => ref.current && ref.current.click()}>
                     {dragStatus === 'drag-enter' ? (
-                        geti18nString('welcome_1b_dragging')
+                        t('welcome_1b_dragging')
                     ) : fileRef.current ? (
-                        geti18nString('welcome_1b_file_selected', fileRef.current.name)
+                        t('welcome_1b_file_selected', { filename: fileRef.current.name })
                     ) : (
                         <>
                             <ActionButton variant="contained" color="primary" className={classes.restoreBoxButton}>
-                                {geti18nString('select_file')}
+                                {t('select_file')}
                             </ActionButton>
-                            <Typography variant="body2">{geti18nString('select_file_hint')}</Typography>
+                            <Typography variant="body2">{t('select_file_hint')}</Typography>
                         </>
                     )}
                 </RestoreBox>
@@ -258,6 +248,21 @@ export default function InitStep1R() {
             </div>
         )
     }
+
+    const actions = (
+        <>
+            <ActionButton<typeof Link> variant="outlined" color="default" component={Link} to="start">
+                {t('back')}
+            </ActionButton>
+            <ActionButton<typeof Link>
+                variant="outlined"
+                color="primary"
+                component={Link}
+                to={InitStep.RestoreAdvanced1}>
+                {t('advanced')}
+            </ActionButton>
+        </>
+    )
 
     return (
         <StepBase header={header} actions={actions}>

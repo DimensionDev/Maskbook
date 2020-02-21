@@ -70,7 +70,6 @@ Help us by donating us by:
 
 -   `@holoflows/kit` - A toolkit for extension developing
 -   `anchorme` - Use it to detect links in the text
--   `construct-style-sheets-polyfill` - A polyfill for a web api
 -   `elliptic` - A crypto library, we use it to encrypt and decrypt
 -   `gun` - A decentralized graph database we use it to sync user's shared crypto key
 -   `pvtsutils` and `tiny-secp256k1` - A crypto library, we use it to zip and unzip SECP256k1 keys but not using it to encrypt/decrypt

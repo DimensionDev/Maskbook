@@ -1,5 +1,5 @@
-import { ProfileIdentifier } from '../../database/type'
-import { queryPublicKey } from '../../database'
+import { ProfileIdentifier } from '../../../database/type'
+import { queryPublicKey } from '../../../database'
 
 /**
  * @internal

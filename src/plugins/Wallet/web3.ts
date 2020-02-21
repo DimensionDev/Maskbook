@@ -3,6 +3,7 @@ import { WebsocketProvider } from 'web3-core'
 import { getNetworkSettings, currentEthereumNetworkSettings } from './network'
 import { getWallets, recoverWallet } from './wallet'
 import { PluginMessageCenter } from '../PluginMessages'
+import { sideEffect } from '../../utils/side-effects'
 
 export const web3 = new Web3()
 
@@ -34,8 +35,10 @@ export const resetWallet = async () => {
 currentEthereumNetworkSettings.addListener(resetProvider)
 PluginMessageCenter.on('maskbook.wallets.reset', resetWallet)
 
-resetWallet()
-resetProvider()
+sideEffect.then(() => {
+    resetWallet()
+    resetProvider()
+})
 
 export function buf2hex(buffer: ArrayBuffer) {
     return Array.prototype.map.call(new Uint8Array(buffer), x => ('00' + x.toString(16)).slice(-2)).join('')

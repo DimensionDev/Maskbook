@@ -8,7 +8,7 @@ import MuiAvatar from '@material-ui/core/Avatar/Avatar'
 import GroupIcon from '@material-ui/icons/Group'
 import { useFriendsList } from '../../DataSource/useActivatedUI'
 import { ProfileIdentifier } from '../../../database/type'
-import { geti18nString, useIntlListFormat } from '../../../utils/i18n'
+import { useI18N, useIntlListFormat } from '../../../utils/i18n-next-ui'
 import { isGroup } from './SelectPeopleAndGroupsUI'
 import { useResolveSpecialGroupName } from './resolveSpecialGroupName'
 import { useStylesExtends } from '../../custom-ui-helper'
@@ -39,6 +39,7 @@ const useStyle = makeStyles((theme: Theme) => ({
  * Item in the list
  */
 export function PersonOrGroupInList(props: PersonOrGroupInListProps) {
+    const { t } = useI18N()
     const classes = useStylesExtends(useStyle(), props)
     const nicknamePreviewsForGroup = useNickNamesFromList(isGroup(props.item) ? props.item.members : [])
     const listFormat = useIntlListFormat()
@@ -58,12 +59,13 @@ export function PersonOrGroupInList(props: PersonOrGroupInListProps) {
         )
         const joined = listFormat(nicknamePreviewsForGroup)
         const groupSize = group.members.length
+        const data = { people: joined, count: groupSize }
         if (groupSize === 0) {
-            secondaryText = geti18nString('person_or_group_in_list_0')
+            secondaryText = t('person_or_group_in_list_0')
         } else if (nicknamePreviewsForGroup.length === 0) {
-            secondaryText = geti18nString('person_or_group_in_list_many_no_preview', groupSize + '')
+            secondaryText = t('person_or_group_in_list_many_no_preview', data)
         } else if (groupSize > nicknamePreviewsForGroup.length) {
-            secondaryText = geti18nString('person_or_group_in_list_many', [joined, groupSize + ''])
+            secondaryText = t('person_or_group_in_list_many', data)
         } else {
             secondaryText = joined
         }

@@ -9,6 +9,8 @@ import { SocialNetworkUI } from '../../social-network/ui'
 import { memoizePromise } from '../../utils/memoize'
 import { safeGetActiveUI } from '../../utils/safeRequire'
 import Serialization from '../../utils/type-transform/Serialization'
+import { sideEffect } from '../../utils/side-effects'
+import { untilDocumentReady } from '../../utils/dom'
 
 function getActivatedUI() {
     return safeGetActiveUI()
@@ -65,16 +67,16 @@ export default function tasks(...args: Parameters<typeof realTasks>) {
     // for debug purpose
     return _tasks
 }
-setTimeout(() => {
+sideEffect.then(untilDocumentReady).then(() => {
     if (GetContext() !== 'content') return
-    const x = getActivatedUI().networkIdentifier
-    const id = currentImmersiveSetupStatus[x].value
+    const network = getActivatedUI().networkIdentifier
+    const id = currentImmersiveSetupStatus[network].value
     const onStatusUpdate = (id: string) => {
         const status: ImmersiveSetupCrossContextStatus = JSON.parse(id || '{}')
         if (status.persona && status.status === 'during') {
             _tasks.immersiveSetup(Identifier.fromString(status.persona, ECKeyIdentifier).unwrap())
         }
     }
-    currentImmersiveSetupStatus[x].addListener(onStatusUpdate)
+    currentImmersiveSetupStatus[network].addListener(onStatusUpdate)
     onStatusUpdate(id)
-}, 200)
+})

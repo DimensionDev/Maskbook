@@ -12,7 +12,7 @@ import {
     Tab,
 } from '@material-ui/core'
 
-import AccountBalanceWalletIcon from '@material-ui/icons/AccountBalanceWallet'
+import SettingsIcon from '@material-ui/icons/Settings'
 import CloseIcon from '@material-ui/icons/Close'
 import HomeIcon from '@material-ui/icons/Home'
 import CreditCardIcon from '@material-ui/icons/CreditCard'
@@ -29,7 +29,7 @@ import { SSRRenderer } from './utils/SSRRenderer'
 
 import { SnackbarProvider } from 'notistack'
 
-import { geti18nString } from './utils/i18n'
+import { I18nextProvider } from 'react-i18next'
 import ResponsiveDrawer from './extension/options-page/Drawer'
 
 import { DialogRouter } from './extension/options-page/DashboardDialogs/DialogBase'
@@ -37,6 +37,11 @@ import DashboardHomePage from './extension/options-page/Home'
 import DashboardDebugPage from './extension/options-page/Debug'
 import DashboardInitializeDialog from './extension/options-page/Initialize'
 import DashboardWalletsPage from './plugins/Wallet/UI/Dashboard/Wallets'
+import { languageSettings } from './components/shared-settings/settings'
+import { useValueRef } from './utils/hooks/useValueRef'
+import { useI18N } from './utils/i18n-next-ui'
+import i18nNextInstance from './utils/i18n-next'
+import { Settings as DashboardSettingsPage } from './extension/options-page/Settings/settings'
 
 const useStyles = makeStyles(theme =>
     createStyles({
@@ -81,6 +86,7 @@ const OptionsPageRouters = (
         <Switch>
             <Route path="/home/" component={DashboardHomePage} />
             <Route path="/wallets/" component={DashboardWalletsPage} />
+            <Route path="/settings/" component={DashboardSettingsPage} />
             <Route path="/debug/" component={DashboardDebugPage} />
             <DialogRouter path="/initialize" component={DashboardInitializeDialog} onExit={'/'} fullscreen />
             <Redirect path="*" to="/home/" />
@@ -91,34 +97,37 @@ const OptionsPageRouters = (
 function DashboardWithProvider() {
     const isDarkTheme = useMediaQuery('(prefers-color-scheme: dark)')
     return (
-        <ThemeProvider theme={isDarkTheme ? MaskbookDarkTheme : MaskbookLightTheme}>
-            <SnackbarProvider
-                maxSnack={30}
-                anchorOrigin={{
-                    vertical: 'top',
-                    horizontal: 'right',
-                }}>
-                <Router>
-                    <CssBaseline />
-                    <Dashboard></Dashboard>
-                </Router>
-            </SnackbarProvider>
-        </ThemeProvider>
+        <I18nextProvider i18n={i18nNextInstance}>
+            <ThemeProvider theme={isDarkTheme ? MaskbookDarkTheme : MaskbookLightTheme}>
+                <SnackbarProvider
+                    maxSnack={30}
+                    anchorOrigin={{
+                        vertical: 'top',
+                        horizontal: 'right',
+                    }}>
+                    <Router>
+                        <CssBaseline />
+                        <Dashboard></Dashboard>
+                    </Router>
+                </SnackbarProvider>
+            </ThemeProvider>
+        </I18nextProvider>
     )
 }
 
 function Dashboard() {
+    const { t } = useI18N()
     const classes = useStyles()
 
     const shouldRenderAppBar = webpackEnv.firefoxVariant === 'GeckoView' || webpackEnv.target === 'WKWebview'
     const shouldNotRenderAppBar = useMediaQuery('(min-width:1024px)')
 
     const routers: [string, string, JSX.Element][] = [
-        [geti18nString('home'), '/home/', <HomeIcon />],
+        [t('home'), '/home/', <HomeIcon />],
         ['Wallets', '/wallets/', <CreditCardIcon />],
-        // ['Settings', '/settings/', <SettingsIcon />],
+        [t('settings'), '/settings/', <SettingsIcon />],
         // ['About', '/about/', <InfoOutlinedIcon />],
-        [geti18nString('debug'), '/debug/', <BugReportIcon />],
+        [t('debug'), '/debug/', <BugReportIcon />],
     ]
 
     const history = useHistory()

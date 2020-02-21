@@ -9,7 +9,7 @@ import InitStep1R from './DashboardInitSteps/Step1R'
 import InitStep1Ra from './DashboardInitSteps/Step1Ra'
 import InitStep2R from './DashboardInitSteps/Step2R'
 import FooterLine from './DashboardComponents/FooterLine'
-import { geti18nString } from '../../utils/i18n'
+import { useI18N } from '../../utils/i18n-next-ui'
 import { InitStep } from './InitStep'
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -68,6 +68,7 @@ const InitializeSteps = () => {
 }
 
 function DashboardInitializePageInternal() {
+    const { t } = useI18N()
     const { path } = useRouteMatch()!
 
     const classes = useStyles()
@@ -87,7 +88,7 @@ function DashboardInitializePageInternal() {
         <section className={classes.section}>
             <header className={classes.header}>
                 <img className={classes.maskicon} src="https://maskbook.com/img/MB--CircleCanvas--WhiteOverBlue.svg" />
-                <Typography variant="h6">{geti18nString('dashboard_welcome_to_maskbook')}</Typography>
+                <Typography variant="h6">{t('dashboard_welcome_to_maskbook')}</Typography>
             </header>
             <Card className={classes.card}>
                 <RouterItem />
