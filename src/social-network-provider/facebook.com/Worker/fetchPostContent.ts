@@ -2,10 +2,9 @@ import { ProfileIdentifier, PostIdentifier } from '../../../database/type'
 import { parseFacebookStaticHTML } from '../parse-html'
 import { getPostUrlAtFacebook } from '../parse-username'
 import tasks from '../../../extension/content-script/tasks'
-import { isDocument, timeout } from '../../../utils/utils'
-import { facebookWorkerSelf } from '../worker-provider'
-import { isNil } from 'lodash-es'
+import { timeout } from '../../../utils/utils'
 import { getActiveTabFacebook } from '../../../utils/tabs'
+import { isDocument } from '../../../utils/dom'
 
 // ? We now always run fetch request from an active tab.
 // ? If failed, we will fallback to open a new tab to do this.
