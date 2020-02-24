@@ -139,11 +139,13 @@ export async function queryPersonasWithPrivateKey(
     t = t || createTransaction(await db(), 'readonly')('personas', 'profiles')
     const records: PersonaRecord[] = []
     records.push(
-        ...(
-            await t
-                .objectStore('personas')
-                .index('hasPrivateKey')
-                .getAll(IDBKeyRange.only('yes'))
+        // ? WKWebview bug https://bugs.webkit.org/show_bug.cgi?id=177350
+        ...(webpackEnv.target === 'WKWebview'
+            ? (await t.objectStore('personas').getAll()).filter(obj => obj.hasPrivateKey === 'yes')
+            : await t
+                  .objectStore('personas')
+                  .index('hasPrivateKey')
+                  .getAll(IDBKeyRange.only('yes'))
         ).map(personaRecordOutDb),
     )
     return records as PersonaRecordWithPrivateKey[]
@@ -278,12 +280,14 @@ export async function queryProfilesDB(
     t = t || createTransaction(await db(), 'readonly')('profiles')
     const result: ProfileRecord[] = []
     if (typeof network === 'string') {
+        // ? WKWebview bug https://bugs.webkit.org/show_bug.cgi?id=177350
         result.push(
-            ...(
-                await t
-                    .objectStore('profiles')
-                    .index('network')
-                    .getAll(IDBKeyRange.only(network))
+            ...(webpackEnv.target === 'WKWebview'
+                ? (await t.objectStore('profiles').getAll()).filter(obj => obj.network === network)
+                : await t
+                      .objectStore('profiles')
+                      .index('network')
+                      .getAll(IDBKeyRange.only(network))
             ).map(profileOutDB),
         )
     } else {

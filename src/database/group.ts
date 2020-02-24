@@ -179,10 +179,13 @@ export async function queryUserGroupsDatabase(
         }
     } else {
         result.push(
-            ...(await t
-                .objectStore('groups')
-                .index('network')
-                .getAll(IDBKeyRange.only(query.network))),
+            // ? WKWebview bug https://bugs.webkit.org/show_bug.cgi?id=177350
+            ...(webpackEnv.target === 'WKWebview'
+                ? (await t.objectStore('groups').getAll()).filter(obj => obj.network === query.network)
+                : await t
+                      .objectStore('groups')
+                      .index('network')
+                      .getAll(IDBKeyRange.only(query.network))),
         )
     }
     return result.map(GroupRecordOutDB)
