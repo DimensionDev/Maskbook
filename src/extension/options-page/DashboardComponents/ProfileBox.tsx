@@ -72,15 +72,22 @@ export default function ProfileBox({ persona, border }: Props) {
     const color = useColorProvider()
     const profiles = persona ? [...persona.linkedProfiles] : []
 
-    const providers = [...definedSocialNetworkWorkers].map(i => {
-        const profile = profiles.find(([key, value]) => key.network === i.networkIdentifier)
-        return {
-            network: i.networkIdentifier,
-            connected: !!profile,
-            userId: profile?.[0].userId,
-            identifier: profile?.[0],
-        }
-    })
+    const providers = [...definedSocialNetworkWorkers]
+        .filter(i => {
+            if (webpackEnv.target === 'WKWebview' || webpackEnv.firefoxVariant === 'GeckoView') {
+                if (i.networkIdentifier !== 'facebook.com') return false
+            }
+            return true
+        })
+        .map(i => {
+            const profile = profiles.find(([key, value]) => key.network === i.networkIdentifier)
+            return {
+                network: i.networkIdentifier,
+                connected: !!profile,
+                userId: profile?.[0].userId,
+                identifier: profile?.[0],
+            }
+        })
 
     const [connectIdentifier, setConnectIdentifier] = React.useState<ProfileIdentifier | null>(null)
     const [detachProfile, setDetachProfile] = React.useState<ProfileIdentifier | null>(null)

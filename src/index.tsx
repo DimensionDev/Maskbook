@@ -124,7 +124,9 @@ function Dashboard() {
 
     const routers: [string, string, JSX.Element][] = [
         [t('home'), '/home/', <HomeIcon />],
-        ['Wallets', '/wallets/', <CreditCardIcon />],
+        ...((webpackEnv.target === 'WKWebview' || webpackEnv.firefoxVariant === 'GeckoView'
+            ? []
+            : [['Wallets', '/wallets/', <CreditCardIcon />]]) as any),
         [t('settings'), '/settings/', <SettingsIcon />],
         // ['About', '/about/', <InfoOutlinedIcon />],
         [t('debug'), '/debug/', <BugReportIcon />],
