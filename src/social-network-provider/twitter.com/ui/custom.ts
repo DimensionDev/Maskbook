@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react'
 import { ValueRef, MutationObserverWatcher } from '@holoflows/kit'
-import { Theme, createMuiTheme } from '@material-ui/core'
+import { Theme, createMuiTheme, ThemeProvider } from '@material-ui/core'
 import { MaskbookDarkTheme, MaskbookLightTheme } from '../../../utils/theme'
 import { SocialNetworkUICustomUI } from '../../../social-network/ui'
 import { useValueRef } from '../../../utils/hooks/useValueRef'
 import { composeAnchorSelector } from '../utils/selector'
+import React from 'react'
 
 type RGB = [number, number, number]
 
@@ -31,7 +32,7 @@ export function startWatchThemeColor() {
             subtree: true,
         })
 }
-export function useTheme() {
+function useTheme() {
     const [theme, setTheme] = useState<Theme>(MaskbookLightTheme)
     const primaryColor = useValueRef(primaryColorRef)
     const backgroundColor = useValueRef(backgroundColorRef)
@@ -62,6 +63,10 @@ export function useTheme() {
         )
     }, [primaryColor, backgroundColor])
     return theme
+}
+
+export function TwitterThemeProvider(props: Required<React.PropsWithChildren<{}>>) {
+    return React.createElement(ThemeProvider, { theme: useTheme(), children: props.children })
 }
 
 function isDark([r, g, b]: RGB) {

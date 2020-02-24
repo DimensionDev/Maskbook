@@ -33,6 +33,9 @@ import {
     DefaultTypedMessageUnknownRenderer,
 } from '../components/InjectedComponents/TypedMessageRenderer'
 import { WithFigma } from 'storybook-addon-figma'
+import { useTwitterThemedPostDialogHint } from '../social-network-provider/twitter.com/ui/injectPostDialogHint'
+import { useTwitterButton } from '../social-network-provider/twitter.com/utils/theme'
+import { TwitterThemeProvider } from '../social-network-provider/twitter.com/ui/custom'
 
 storiesOf('Injections', module)
     .add('PersonOrGroupInChip', () => (
@@ -197,7 +200,20 @@ storiesOf('Injections', module)
         }
     })
     .add('Post Dialog Hint', () => {
-        return <PostDialogHint onHintButtonClicked={action('clicked')} />
+        return (
+            <>
+                Vanilla:
+                <PostDialogHint onHintButtonClicked={action('clicked')} />
+                Twitter flavor:
+                <TwitterThemeProvider>
+                    <TwitterFlavorPostDialogHint />
+                </TwitterThemeProvider>
+            </>
+        )
+        function TwitterFlavorPostDialogHint() {
+            const style = { ...useTwitterThemedPostDialogHint(), ...useTwitterButton() }
+            return <PostDialogHint classes={style} onHintButtonClicked={action('clicked')} />
+        }
     })
 
 function FakePost(props: React.PropsWithChildren<{ title: string }>) {
