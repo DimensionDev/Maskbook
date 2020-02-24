@@ -12,7 +12,7 @@ export async function getStorage(network: string): Promise<Partial<Storage>> {
 export async function setStorage(network: string, item: Partial<Storage>) {
     if (typeof browser === 'undefined' || !browser.storage) return
     const storage = await getStorage(network)
-    browser.storage.local.set({
+    return browser.storage.local.set({
         [network]: merge(storage, item),
     })
 }
