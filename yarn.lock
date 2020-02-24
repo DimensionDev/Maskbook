@@ -18315,30 +18315,16 @@ typescript@^3.7.5, typescript@~3.7.2:
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.7.5.tgz#0692e21f65fd4108b9330238aac11dd2e177a1ae"
   integrity sha512-/P5lkRXkWHNAbcJIiHPfRoKqyd7bsyCma1hZNUGfn20qm64T6ZBlrzprymeu918H+mB/0rIg2gGK/BXkhhYgBw==
 
-typeson-registry@^1.0.0-alpha.20:
-  version "1.0.0-alpha.33"
-  resolved "https://registry.yarnpkg.com/typeson-registry/-/typeson-registry-1.0.0-alpha.33.tgz#4742511d81a04e1ba9c0f5a71a0f4278beaa4949"
-  integrity sha512-q0jMkVizN10rzPtPcwkUC+pAOlA4iq4tl/GJ0iHDuMCnK3HxaN26bR/SczedswPBt0Pd+c0GjXZDDK+Cn2pgwg==
-  dependencies:
-    base64-arraybuffer-es6 "0.5.0"
-    typeson "5.18.1"
-    whatwg-url "7.1.0"
-
-typeson-registry@^1.0.0-alpha.34:
-  version "1.0.0-alpha.34"
-  resolved "https://registry.yarnpkg.com/typeson-registry/-/typeson-registry-1.0.0-alpha.34.tgz#1651a87c428fadadc17a453a7de10a9bac7a4930"
-  integrity sha512-2U0R5eFGJPaqha8HBAICJv6rW2x/cAVHizURHbcAo61Mpd47s+MDn67Ktxoyl9jWgsqCAibZsrldG8v/2ZuCaw==
+typeson-registry@^1.0.0-alpha.20, typeson-registry@^1.0.0-alpha.35:
+  version "1.0.0-alpha.35"
+  resolved "https://registry.yarnpkg.com/typeson-registry/-/typeson-registry-1.0.0-alpha.35.tgz#b86abfe440e6ee69102eebb0e8c5a916dd182ff9"
+  integrity sha512-a/NffrpFswBTyU6w2d6vjk62K1TZ45H64af9AfRbn7LXqNEfL+h+gw3OV2IaG+enfwqgLB5WmbkrNBaQuc/97A==
   dependencies:
     base64-arraybuffer-es6 "0.5.0"
     typeson "5.18.2"
     whatwg-url "7.1.0"
 
-typeson@5.18.1, typeson@^5.8.2:
-  version "5.18.1"
-  resolved "https://registry.yarnpkg.com/typeson/-/typeson-5.18.1.tgz#fafa2dfd6ef26448ff635a3c97dd39a4bd3cf742"
-  integrity sha512-4cVDwf4tT+9hpeQk22/ioQJXL8lN3AYlzJfJLBpB0MDPG7CGpbvxR0HBkQ6qp9T72/yzryP6k2HSVdxd3jF5qg==
-
-typeson@5.18.2, typeson@^5.18.2:
+typeson@5.18.2, typeson@^5.18.2, typeson@^5.8.2:
   version "5.18.2"
   resolved "https://registry.yarnpkg.com/typeson/-/typeson-5.18.2.tgz#0d217fc0e11184a66aa7ca0076d9aa7707eb7bc2"
   integrity sha512-Vetd+OGX05P4qHyHiSLdHZ5Z5GuQDrHHwSdjkqho9NSCYVSLSfRMjklD/unpHH8tXBR9Z/R05rwJSuMpMFrdsw==
