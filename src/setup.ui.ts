@@ -2,6 +2,7 @@ import { MessageCenter } from './utils/messages'
 import { definedSocialNetworkUIs, activateSocialNetworkUI } from './social-network/ui'
 import './provider.ui'
 import { LiveSelector, Watcher, DOMProxy } from '@holoflows/kit/es'
+import { wrappedTasks } from './extension/content-script/tasks'
 
 if (typeof window === 'object') {
     LiveSelector.enhanceDebugger()
@@ -15,6 +16,10 @@ activateSocialNetworkUI()
 
 const close = globalThis.close
 globalThis.close = () => {
+    if (webpackEnv.target === 'WKWebview') {
+        wrappedTasks('https://m.facebook.com/')
+        return
+    }
     Reflect.apply(close, window, [])
     setTimeout(async () => {
         if (typeof browser !== 'undefined' && browser.tabs && browser.tabs.query && browser.tabs.remove) {

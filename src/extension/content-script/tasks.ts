@@ -70,7 +70,7 @@ export default function tasks(...args: Parameters<typeof realTasks>) {
 
 export function wrappedTasks(...args: Parameters<typeof realTasks>) {
     if (webpackEnv.target !== 'WKWebview') return tasks(...args)
-    const [uri, options, ...others] = args
+    const [uri, options = {}, ...others] = args
     let _key: keyof typeof _tasks
     let _args: any[]
     // Only for Maskbook-iOS
@@ -81,6 +81,7 @@ export function wrappedTasks(...args: Parameters<typeof realTasks>) {
             active: true,
             pinned: false,
             memorable: false,
+            autoClose: false,
         }
         if (tab) {
             Object.assign(updatedOptions, {
