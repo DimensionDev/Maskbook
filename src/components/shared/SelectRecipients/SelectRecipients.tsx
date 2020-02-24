@@ -12,8 +12,6 @@ import { useI18N } from '../../../utils/i18n-next-ui'
 import { difference } from 'lodash-es'
 import { useCurrentIdentity } from '../../DataSource/useActivatedUI'
 import { useStylesExtends } from '../../custom-ui-helper'
-import { useValueRef } from '../../../utils/hooks/useValueRef'
-import { debugModeSetting } from '../../shared-settings/settings'
 
 const useStyles = makeStyles({
     root: {
@@ -42,7 +40,6 @@ export function SelectRecipientsUI<T extends Group | Profile = Group | Profile>(
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
     const { items, selected, onSetSelected, children } = props
-    const isDebugging = useValueRef(debugModeSetting)
     const currentIdentity = useCurrentIdentity()
     const groupItems = items.filter(x => isGroup(x)) as Group[]
     const profileItems = items.filter(
@@ -74,22 +71,19 @@ export function SelectRecipientsUI<T extends Group | Profile = Group | Profile>(
                     {...props.GroupInChipProps}
                 />
             ))}
-            {isDebugging ? (
-                <ClickableChip
-                    ChipProps={{
-                        label: t('post_dialog__select_specific_friends_title', {
-                            selected: selected.length - selectedGroups.length,
-                        }),
-                        avatar: <AddIcon />,
-                        disabled: props.disabled || profileItems.length === 0,
-                        onClick() {
-                            setOpen(true)
-                        },
-                    }}
-                />
-            ) : null}
             {children}
-
+            <ClickableChip
+                ChipProps={{
+                    label: t('post_dialog__select_specific_friends_title', {
+                        selected: selected.length - selectedGroups.length,
+                    }),
+                    avatar: <AddIcon />,
+                    disabled: props.disabled || profileItems.length === 0,
+                    onClick() {
+                        setOpen(true)
+                    },
+                }}
+            />
             <SelectRecipientsDialogUI
                 open={open}
                 items={profileItems}
