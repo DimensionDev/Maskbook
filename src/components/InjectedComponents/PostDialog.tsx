@@ -249,7 +249,7 @@ export interface PostDialogProps extends Partial<PostDialogUIProps> {
     identities?: Profile[]
     onRequestPost?: (target: (Profile | Group)[], content: TypedMessage) => void
     onRequestReset?: () => void
-    typedMessageMetadata: ReadonlyMap<string, any>
+    typedMessageMetadata?: ReadonlyMap<string, any>
 }
 export function PostDialog(props: PostDialogProps) {
     const { t, i18n } = useI18N()
@@ -257,14 +257,15 @@ export function PostDialog(props: PostDialogProps) {
     const onlyMyself = props.onlyMyself ?? onlyMyselfLocal
     const [shareToEveryoneLocal, setShareToEveryone] = useState(false)
     const shareToEveryone = props.shareToEveryone ?? shareToEveryoneLocal
+    const typedMessageMetadata = or(props.typedMessageMetadata, useValueRef(getActivatedUI().typedMessageMetadata))
 
     const isSteganography = useValueRef(steganographyModeSetting)
     //#region TypedMessage
-    const [postBoxContent, setPostBoxContent] = useState<TypedMessage>(makeTypedMessage('', props.typedMessageMetadata))
+    const [postBoxContent, setPostBoxContent] = useState<TypedMessage>(makeTypedMessage('', typedMessageMetadata))
     useEffect(() => {
-        if (props.typedMessageMetadata !== postBoxContent.meta)
-            setPostBoxContent({ ...postBoxContent, meta: props.typedMessageMetadata })
-    }, [props.typedMessageMetadata, postBoxContent])
+        if (typedMessageMetadata !== postBoxContent.meta)
+            setPostBoxContent({ ...postBoxContent, meta: typedMessageMetadata })
+    }, [typedMessageMetadata, postBoxContent])
     //#endregion
     //#region Share target
     const people = useFriendsList()
@@ -288,7 +289,7 @@ export function PostDialog(props: PostDialogProps) {
                     !!shareToEveryone,
                 )
                 const activeUI = getActivatedUI()
-                const metadata = readTypedMessageMetadata(props.typedMessageMetadata, 'com.maskbook.red_packet:1')
+                const metadata = readTypedMessageMetadata(typedMessageMetadata, 'com.maskbook.red_packet:1')
                 if (isSteganography) {
                     const isEth = metadata.ok && metadata.val.token_type === RedPacketTokenType.eth
                     const isDai =
@@ -330,7 +331,7 @@ export function PostDialog(props: PostDialogProps) {
                 // there is nothing to write if it shared with public
                 if (!shareToEveryone) Services.Crypto.publishPostAESKey(token)
             },
-            [currentIdentity, i18n.language, isSteganography, props.typedMessageMetadata, shareToEveryone, t],
+            [currentIdentity, i18n.language, isSteganography, typedMessageMetadata, shareToEveryone, t],
         ),
     )
     const onRequestReset = or(
