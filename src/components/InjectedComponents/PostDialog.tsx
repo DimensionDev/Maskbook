@@ -244,7 +244,8 @@ export function PostDialogUI(props: PostDialogUIProps) {
     )
 }
 
-export interface PostDialogProps extends Partial<PostDialogUIProps> {
+export interface PostDialogProps extends Omit<Partial<PostDialogUIProps>, 'open'> {
+    open?: [boolean, (next: boolean) => void]
     reason?: 'timeline' | 'popup'
     identities?: Profile[]
     onRequestPost?: (target: (Profile | Group)[], content: TypedMessage) => void
@@ -258,6 +259,7 @@ export function PostDialog(props: PostDialogProps) {
     const [shareToEveryoneLocal, setShareToEveryone] = useState(false)
     const shareToEveryone = props.shareToEveryone ?? shareToEveryoneLocal
     const typedMessageMetadata = or(props.typedMessageMetadata, useValueRef(getActivatedUI().typedMessageMetadata))
+    const [open, setOpen] = or(props.open, useState<boolean>(false)) as NonNullable<PostDialogProps['open']>
 
     const isSteganography = useValueRef(steganographyModeSetting)
     //#region TypedMessage
@@ -343,7 +345,7 @@ export function PostDialog(props: PostDialogProps) {
             setPostBoxContent(makeTypedMessage(''))
             setCurrentShareTarget([])
             getActivatedUI().typedMessageMetadata.value = new Map()
-        }, []),
+        }, [setOpen]),
     )
     const onFinishButtonClicked = useCallback(() => {
         onRequestPost(onlyMyself ? [currentIdentity!] : currentShareTarget, postBoxContent)
@@ -351,22 +353,17 @@ export function PostDialog(props: PostDialogProps) {
     }, [currentIdentity, currentShareTarget, onRequestPost, onRequestReset, onlyMyself, postBoxContent])
     const onCloseButtonClicked = useCallback(() => {
         setOpen(false)
-    }, [])
+    }, [setOpen])
     //#endregion
     //#region My Identity
     const identities = useMyIdentities()
-    const [open, setOpen] = useState(false)
     useEffect(() => {
-        const onChange = ({ reason, open }: CompositionEvent) => {
+        return MessageCenter.on('compositionUpdated', ({ reason, open }: CompositionEvent) => {
             if (reason === props.reason && identities.length > 0) {
                 setOpen(open)
             }
-        }
-        MessageCenter.on('compositionUpdated', onChange)
-        return () => {
-            MessageCenter.off('compositionUpdated', onChange)
-        }
-    }, [identities.length, props.reason])
+        })
+    }, [identities.length, props.reason, setOpen])
 
     const onOnlyMyselfChanged = or(
         props.onOnlyMyselfChanged,
@@ -395,7 +392,6 @@ export function PostDialog(props: PostDialogProps) {
 
     return (
         <PostDialogUI
-            open={open}
             theme={theme}
             shareToEveryone={shareToEveryoneLocal}
             onlyMyself={onlyMyself}
@@ -415,6 +411,7 @@ export function PostDialog(props: PostDialogProps) {
             onFinishButtonClicked={onFinishButtonClicked}
             onCloseButtonClicked={onCloseButtonClicked}
             {...props}
+            open={open}
             classes={{ ...props.classes }}
         />
     )

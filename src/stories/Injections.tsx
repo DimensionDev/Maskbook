@@ -192,7 +192,7 @@ storiesOf('Injections', module)
             const meta = decoder(text('Metadata', '{}'))
             return (
                 <WithFigma url={'https://www.figma.com/file/nDyLQp036eHgcgUXeFmNA1/Post-Composition-v1'}>
-                    <PostDialog open typedMessageMetadata={meta} />
+                    <PostDialog open={[true, () => void 0]} typedMessageMetadata={meta} />
                 </WithFigma>
             )
         } catch (e) {
