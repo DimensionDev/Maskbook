@@ -2,7 +2,6 @@ import React from 'react'
 import { storiesOf } from '@storybook/react'
 import { text, boolean, select } from '@storybook/addon-knobs'
 import { action } from '@storybook/addon-actions'
-import { AdditionalPostBox } from '../components/InjectedComponents/AdditionalPostBox'
 import { AdditionalContent } from '../components/InjectedComponents/AdditionalPostContent'
 import {
     DecryptPostSuccess,
@@ -52,7 +51,6 @@ storiesOf('Injections', module)
             ))}
         </Paper>
     ))
-    .add('AdditionalPostBox', () => <AdditionalPostBox onRequestPost={action('onRequestPost')} />)
     .add('Additional Post Content', () => (
         <>
             <Paper>
