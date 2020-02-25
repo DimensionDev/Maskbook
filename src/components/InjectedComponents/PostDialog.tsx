@@ -277,7 +277,8 @@ export function PostDialog(props: PostDialogProps) {
         useMemo(() => [...groups, ...people], [people, groups]),
     )
     const currentIdentity = or(props.currentIdentity, useCurrentIdentity())
-    const [currentShareTarget, setCurrentShareTarget] = useState(availableShareTarget)
+    const [currentShareTarget, setCurrentShareTarget] = useState<(Profile | Group)[]>(() => [])
+
     //#endregion
     //#region callbacks
     const onRequestPost = or(
