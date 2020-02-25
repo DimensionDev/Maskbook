@@ -98,7 +98,7 @@
     "database": "Database",
     "database_group_followers_name": "Followers of {{owner}}",
     "database_group_following_name": "Followed by {{owner}}",
-    "database_group_friends_default_name": "Friends",
+    "database_group_friends_default_name": "Friends of {{owner}}",
     "debug": "Debug",
     "decrypted_postbox_add_recipients": "View/add recipients",
     "decrypted_postbox_decrypting": "Maskbook decrypting...",
