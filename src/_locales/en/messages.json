@@ -7,7 +7,7 @@
     "adding": "Adding...",
     "additional_post_box__encrypted_failed": "Please paste the following text into the post box.",
     "additional_post_box__encrypted_post_pre": "Decrypt this post with #Maskbook ! {{encrypted}}",
-    "additional_post_box__placeholder_w_name": "Hey {{user}}, what's on your mind? Encrypt itwith Maskbook.",
+    "additional_post_box__placeholder_w_name": "Hey {{user}}, what's on your mind? Encrypt it with Maskbook.",
     "additional_post_box__placeholder_wo_name": "What's on your mind? Encrypt it with Maskbook.",
     "additional_post_box__post_button": "📫 Post it!",
     "additional_post_box__steganography_post_failed": "Please upload the downloaded image into the post box.",
