@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { AdditionalContent, AdditionalContentProps } from './AdditionalPostContent'
 import { useI18N } from '../../utils/i18n-next-ui'
-import AsyncComponent, { useAsync } from '../../utils/components/AsyncComponent'
+import AsyncComponent from '../../utils/components/AsyncComponent'
 import { ProfileIdentifier } from '../../database/type'
 import Services from '../../extension/service'
 import { ValueRef } from '@holoflows/kit/es'

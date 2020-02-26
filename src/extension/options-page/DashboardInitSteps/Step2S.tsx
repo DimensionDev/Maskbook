@@ -8,10 +8,10 @@ import useQueryParams from '../../../utils/hooks/useQueryParams'
 import Services from '../../service'
 import { ECKeyIdentifier, Identifier } from '../../../database/type'
 import { Persona } from '../../../database'
-import { useAsync } from '../../../utils/components/AsyncComponent'
 import ProfileBox from '../DashboardComponents/ProfileBox'
 import { useMyPersonas } from '../../../components/DataSource/useActivatedUI'
 import { InitStep } from '../InitStep'
+import { useAsync } from '../../../utils/hooks/useAsync'
 
 export default function InitStep2S() {
     const { t } = useI18N()
