@@ -12,7 +12,7 @@ assignees: neruthes
 Field | Value
 --- | ---
 Previous Stage | ...
-Figma Link | [figma.com/...](___)
+Figma Link | Figma_Link_Here____
 Expected UX prototype due | 2020-W??-5
 Actual UX prototype release | -
 Expected engineering due | 2020-W??-5
