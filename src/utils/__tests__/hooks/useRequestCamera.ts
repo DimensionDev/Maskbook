@@ -1,5 +1,5 @@
 import { renderHook } from '@testing-library/react-hooks'
-import { useRequestCamera, checkPermissionApiUsability, getBackVideoDeviceId } from '../../hooks/useRequestCamera'
+import { useRequestCamera, checkPermissionApiUsability } from '../../hooks/useRequestCamera'
 
 const q = <const>['query', 'request', 'revoke']
 
@@ -12,25 +12,10 @@ beforeEach(() => {
         value: {},
         writable: true,
     })
-    Object.defineProperty(navigator, 'mediaDevices', {
-        value: {
-            enumerateDevices() {
-                return [
-                    {
-                        kind: 'videoinput',
-                        label: 'back',
-                        deviceId: 'back',
-                    },
-                ]
-            },
-        },
-        writable: true,
-    })
 })
 
 afterEach(() => {
     Object.defineProperty(navigator, 'permissions', {})
-    Object.defineProperty(navigator, 'mediaDevices', {})
 })
 
 test('check permission api usability', () => {
@@ -42,10 +27,6 @@ test('check permission api usability', () => {
         request: false,
         revoke: false,
     })
-})
-
-test('get back video device id', async () => {
-    expect(await getBackVideoDeviceId()).toEqual('back')
 })
 
 test('request camera permission without permissions api', () => {
