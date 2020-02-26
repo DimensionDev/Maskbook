@@ -1,6 +1,5 @@
 /** This file is published under MIT License */
 import { useEffect, useState } from 'react'
-import { useAsync } from '../components/AsyncComponent'
 import { hasIn } from 'lodash-es'
 
 const q = <const>['query', 'request', 'revoke']
@@ -38,21 +37,10 @@ export function useRequestCamera(needRequest: boolean) {
                     // but rise an error if specific permission name dose not supported
                     updatePermission('granted')
                 })
-        } else {
-            updatePermission('granted')
-        }
-        return () => {
-            if (permissionStatus) permissionStatus.onchange = null
-        }
-    }, [needRequest, permission])
-    useAsync(async () => {
-        if (!needRequest || permission !== 'prompt') {
-            return
-        }
-        if (checkPermissionApiUsability('request')) {
+        } else if (checkPermissionApiUsability('request')) {
             navigator.permissions
                 .request({ name: 'camera' })
-                .then((p: PermissionStatus) => {
+                .then(p => {
                     updatePermission(p.state)
                 })
                 .catch(() => {
@@ -61,7 +49,10 @@ export function useRequestCamera(needRequest: boolean) {
         } else {
             updatePermission('granted')
         }
-    }, [permission, needRequest])
+        return () => {
+            if (permissionStatus) permissionStatus.onchange = null
+        }
+    }, [needRequest, permission])
     return permission
 }
 
