@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import { DecryptPost, DecryptPostProps } from './DecryptedPost'
 import { AddToKeyStore, AddToKeyStoreProps } from './AddToKeyStore'
-import { useAsync } from '../../utils/components/AsyncComponent'
 import { deconstructPayload } from '../../utils/type-transform/Payload'
 import Services from '../../extension/service'
 import { ProfileIdentifier, PostIdentifier } from '../../database/type'
@@ -12,6 +11,7 @@ import { useValueRef } from '../../utils/hooks/useValueRef'
 import { debugModeSetting } from '../shared-settings/settings'
 import { DebugList } from '../DebugModeUI/DebugList'
 import { TypedMessage } from '../../extension/background-script/CryptoServices/utils'
+import { useAsync } from '../../utils/hooks/useAsync'
 
 export interface PostInspectorProps {
     onDecrypted(post: TypedMessage): void
