@@ -6,10 +6,7 @@ configure({ adapter: new Adapter() })
 import React, { createRef, RefObject } from 'react'
 import { renderHook } from '@testing-library/react-hooks'
 import { useQRCodeScan, getBackVideoDeviceId } from '../../hooks/useQRCodeScan'
-
-function wait(delay: number) {
-    return new Promise(resolve => setTimeout(resolve, delay))
-}
+import { sleep } from '../../utils'
 
 const videoRef: RefObject<HTMLVideoElement> = createRef<HTMLVideoElement>()
 
@@ -74,7 +71,7 @@ test('scan succeeded', async () => {
 
     await hook.waitForNextUpdate()
     expect(onResultSpy.calls.count()).toBe(0)
-    await wait(200)
+    await sleep(200)
     expect(onResultSpy.calls.count() > 0).toBeTruthy()
 })
 
@@ -92,6 +89,6 @@ test('scan failed', async () => {
 
     await hook.waitForNextUpdate()
     expect(onErrorSpy.calls.count()).toBe(0)
-    await wait(1200)
+    await sleep(1200)
     expect(onErrorSpy.calls.count() > 0).toBeTruthy()
 })
