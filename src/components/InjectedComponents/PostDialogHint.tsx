@@ -8,7 +8,9 @@ import { Profile } from '../../database'
 import { ChooseIdentity, ChooseIdentityProps } from '../shared/ChooseIdentity'
 import { BannerProps } from '../Welcomes/Banner'
 import { NotSetupYetPrompt } from '../shared/NotSetupYetPrompt'
-import useConnectingStatus from '../../utils/hooks/useConnectingStatus'
+import { useValueRef } from '../../utils/hooks/useValueRef'
+import { currentImmersiveSetupStatus } from '../shared-settings/settings'
+import { getActivatedUI } from '../../social-network/ui'
 
 const useStyles = makeStyles(theme => ({
     content: {
@@ -65,7 +67,7 @@ export function PostDialogHint(props: PostDialogHintProps) {
     const identities = or(props.identities, useMyIdentities())
     const ui = <PostDialogHintUI onHintButtonClicked={() => {}} {...props} />
 
-    const connecting = useConnectingStatus()
+    const connecting = useValueRef(currentImmersiveSetupStatus[getActivatedUI().networkIdentifier])
 
     if (connecting) return null
 
