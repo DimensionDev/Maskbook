@@ -1,9 +1,6 @@
 import { renderHook } from '@testing-library/react-hooks'
 import { useAsync } from '../../hooks/useAsync'
-
-function wait(delay: number) {
-    return new Promise(resolve => setTimeout(resolve, delay))
-}
+import { sleep } from '../../utils'
 
 test('fast fullfill', async () => {
     const thenable = renderHook(() => useAsync(() => Promise.resolve(0), [])).result.current
@@ -22,7 +19,7 @@ test('fast reject', async () => {
 test('slow fulfill', async () => {
     const thenable = renderHook(() =>
         useAsync(async () => {
-            await wait(100)
+            await sleep(100)
             return 0
         }, []),
     ).result.current
@@ -32,7 +29,7 @@ test('slow fulfill', async () => {
 test('slow reject', async () => {
     const thenable = renderHook(() =>
         useAsync(async () => {
-            await wait(100)
+            await sleep(100)
             throw new Error('reject')
         }, []),
     ).result.current
