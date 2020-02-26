@@ -55,15 +55,3 @@ export function useRequestCamera(needRequest: boolean) {
     }, [needRequest, permission])
     return permission
 }
-
-export async function getBackVideoDeviceId() {
-    const devices = (await navigator.mediaDevices.enumerateDevices()).filter(devices => devices.kind === 'videoinput')
-    const back = devices.find(
-        device =>
-            (device.label.toLowerCase().search('back') !== -1 || device.label.toLowerCase().search('rear') !== -1) &&
-            device.label.toLowerCase().search('front') === -1,
-    )
-    if (back) return back.deviceId
-    if (devices[0]) return devices[0].deviceId
-    return null
-}

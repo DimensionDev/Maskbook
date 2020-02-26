@@ -7,12 +7,10 @@ import React, { createRef, RefObject } from 'react'
 import { renderHook } from '@testing-library/react-hooks'
 import { useCapturedInput, captureEevnts } from '../../hooks/useCapturedEvents'
 
-let containerRef: RefObject<HTMLDivElement>
-let inputRef: RefObject<HTMLInputElement>
+const containerRef: RefObject<HTMLDivElement> = createRef<HTMLDivElement>()
+const inputRef: RefObject<HTMLInputElement> = createRef<HTMLInputElement>()
 
 beforeEach(() => {
-    containerRef = createRef<HTMLDivElement>()
-    inputRef = createRef<HTMLInputElement>()
     mount(
         <div ref={containerRef}>
             <input ref={inputRef} />
