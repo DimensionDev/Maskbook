@@ -1,4 +1,5 @@
-import React, { useState, useEffect, Children } from 'react'
+import React, { useState, useEffect } from 'react'
+import { useAsync } from 'react-use'
 import * as bip39 from 'bip39'
 import { DialogContentItem, DialogRouter } from './DialogBase'
 
@@ -25,7 +26,6 @@ import {
     decodeArrayBuffer,
 } from '../../../utils/type-transform/String-ArrayBuffer'
 import { selectElementContents } from '../../../utils/utils'
-import { useAsync } from '../../../utils/hooks/useAsync'
 
 export function PersonaCreateDialog() {
     const { t } = useI18N()
@@ -83,8 +83,11 @@ export function PersonaCreatedDialog() {
     const { identifier } = useQueryParams(['identifier'])
     const [persona, setPersona] = useState<Persona | null>(null)
     useAsync(async () => {
-        if (identifier)
-            Services.Identity.queryPersona(Identifier.fromString(identifier, ECKeyIdentifier).unwrap()).then(setPersona)
+        if (identifier) {
+            setPersona(
+                await Services.Identity.queryPersona(Identifier.fromString(identifier, ECKeyIdentifier).unwrap()),
+            )
+        }
     }, [identifier])
     return (
         <DialogContentItem
