@@ -1,8 +1,8 @@
 /// <reference path="../../components/QRScanner/ShapeDetectionSpec.d.ts" />
 /** This file is published under MIT License */
 import { useRef, useEffect, useState } from 'react'
+import { useInterval } from 'react-use'
 import { useRequestCamera } from './useRequestCamera'
-import { useInterval } from './useInterval'
 import '../../components/QRScanner/ShapeDetectionPolyfill'
 
 export async function getBackVideoDeviceId() {
