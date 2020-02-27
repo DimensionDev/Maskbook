@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { useAsync } from 'react-use'
 import { makeStyles } from '@material-ui/core/styles'
 import Button from '@material-ui/core/Button'
 import List from '@material-ui/core/List'
@@ -15,7 +16,6 @@ import { PostIVIdentifier } from '../../database/type'
 import { deconstructPayload } from '../../utils/type-transform/Payload'
 import { DialogContentText, DialogContent } from '@material-ui/core'
 import ShadowRootDialog from '../../utils/jss/ShadowRootDialog'
-import { useAsync } from '../../utils/hooks/useAsync'
 
 const useStyles = makeStyles({
     avatar: {
@@ -88,11 +88,11 @@ export function DebugModeUI_PostHashDialog(props: { post: string; network: strin
     const payload = deconstructPayload(props.post, null)
     const [hashMap, setHashMap] = useState<[string, string, string][]>([])
     const friends = useFriendsList()
-    useAsync(() => {
-        if (!payload) return Promise.resolve([])
+    useAsync(async () => {
+        if (!payload) return
         const ivID = new PostIVIdentifier(props.network, payload.iv)
-        return Services.Crypto.debugShowAllPossibleHashForPost(ivID, payload.version)
-    }, [props.post]).then(setHashMap)
+        setHashMap(await Services.Crypto.debugShowAllPossibleHashForPost(ivID, payload.version))
+    }, [props.post])
     return (
         <>
             <Button variant="outlined" color="primary" onClick={() => setOpen(true)}>
