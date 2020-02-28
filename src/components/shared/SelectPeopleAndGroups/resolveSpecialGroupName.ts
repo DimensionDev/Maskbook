@@ -7,13 +7,13 @@ import { useI18N, I18NFunction } from '../../../utils/i18n-next-ui'
 function resolveSpecialGroupName(t: I18NFunction, group: Group, knownPeople: Profile[]): string {
     let owner: string = group.identifier.virtualGroupOwner || 'Unknown'
 
-    for (const person of knownPeople.filter(x => x.identifier.equals(group.identifier.ownerIdentifier))) {
-        owner = person.nickname || owner
+    for (const profile of knownPeople.filter(x => x.identifier.equals(group.identifier.ownerIdentifier))) {
+        owner = profile.linkedPersona?.nickname || profile.nickname || owner
     }
     const data = { owner }
     switch (group.groupName) {
         case PreDefinedVirtualGroupNames.friends:
-            return t('database_group_friends_default_name')
+            return t('database_group_friends_default_name', data)
         case PreDefinedVirtualGroupNames.followers:
             return t('database_group_followers_name', data)
         case PreDefinedVirtualGroupNames.following:

@@ -22,3 +22,36 @@ require('webcrypto-liner/build/webcrypto-liner.shim')
 
 /* global TextEncoder, TextDecoder */
 Object.assign(globalThis, require('@sinonjs/text-encoding/index'))
+
+// TODO:
+// can not find a handy createRange and getSelection polyfill for jest
+// remove these polyfill if we find one in the future
+document.createRange = () => {
+    return {
+        endContainer: null,
+        selectNodeContents(element) {
+            this.endContainer = element
+        },
+    }
+}
+globalThis.getSelection = () => {
+    return {
+        _ranges: [],
+        rangeCount: 0,
+        removeAllRanges() {},
+        addRange(range) {
+            this._ranges.push(range)
+            this.rangeCount = this._ranges.length
+        },
+        getRangeAt(index) {
+            return this._ranges[index]
+        },
+    }
+}
+
+// webkit rpc handler
+globalThis.webkit = globalThis.webkit || {}
+globalThis.webkit.messageHandlers = globalThis.webkit.messageHandlers || {}
+globalThis.webkit.messageHandlers.maskbookjsonrpc = {
+    postMessage(data) {},
+}

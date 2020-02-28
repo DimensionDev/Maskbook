@@ -1,8 +1,9 @@
 import React from 'react'
 import { LiveSelector, MutationObserverWatcher } from '@holoflows/kit'
 import { renderInShadowRoot } from '../../../utils/jss/renderInShadowRoot'
-import { AdditionalPostBox } from '../../../components/InjectedComponents/AdditionalPostBox'
+import { PostDialog } from '../../../components/InjectedComponents/PostDialog'
 import { isMobileFacebook } from '../isMobile'
+import { PostDialogHint } from '../../../components/InjectedComponents/PostDialogHint'
 
 let composeBox: LiveSelector<Element>
 if (isMobileFacebook) {
@@ -20,5 +21,15 @@ export function injectPostBoxFacebook() {
             childList: true,
             subtree: true,
         })
-    renderInShadowRoot(<AdditionalPostBox />, watcher.firstDOMProxy.afterShadow)
+    renderInShadowRoot(<UI />, watcher.firstDOMProxy.afterShadow)
+}
+function UI() {
+    const [open, setOpen] = React.useState(false)
+    const toOpen = () => setOpen(true)
+    return (
+        <>
+            <PostDialogHint onHintButtonClicked={toOpen} />
+            <PostDialog open={[open, setOpen]} />
+        </>
+    )
 }

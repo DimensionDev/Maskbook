@@ -10,7 +10,6 @@ import { ECKeyIdentifier, Identifier } from '../../../database/type'
 import Services from '../../service'
 import { Persona } from '../../../database'
 import useQueryParams from '../../../utils/hooks/useQueryParams'
-import { useAsync } from '../../../utils/components/AsyncComponent'
 import ProfileBox from '../DashboardComponents/ProfileBox'
 import { useColorProvider } from '../../../utils/theme'
 import { useI18N } from '../../../utils/i18n-next-ui'
@@ -26,6 +25,7 @@ import {
     decodeArrayBuffer,
 } from '../../../utils/type-transform/String-ArrayBuffer'
 import { selectElementContents } from '../../../utils/utils'
+import { useAsync } from '../../../utils/hooks/useAsync'
 
 export function PersonaCreateDialog() {
     const { t } = useI18N()

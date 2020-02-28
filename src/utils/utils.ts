@@ -57,9 +57,10 @@ Object.assign(globalThis, { dispatchCustomEvents })
 export function selectElementContents(el: Node) {
     const range = document.createRange()
     range.selectNodeContents(el)
-    const sel = window.getSelection()!
+    const sel = globalThis.getSelection()!
     sel.removeAllRanges()
     sel.addRange(range)
+    return sel
 }
 
 export const nop = (...args: unknown[]) => {}
@@ -115,8 +116,6 @@ export const regexMatchAll = (str: string, regexp: RegExp, index: number = 1) =>
     }
     return sto
 }
-
-export const isDocument = (node: Node): node is Document => node.nodeType === Node.DOCUMENT_NODE
 
 /**
  * batch run string.replace

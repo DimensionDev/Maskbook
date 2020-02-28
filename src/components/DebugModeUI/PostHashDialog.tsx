@@ -10,12 +10,12 @@ import { blue } from '@material-ui/core/colors'
 import { useFriendsList } from '../DataSource/useActivatedUI'
 import { Avatar } from '../../utils/components/Avatar'
 import { Profile } from '../../database'
-import { useAsync } from '../../utils/components/AsyncComponent'
 import Services from '../../extension/service'
 import { PostIVIdentifier } from '../../database/type'
 import { deconstructPayload } from '../../utils/type-transform/Payload'
 import { DialogContentText, DialogContent } from '@material-ui/core'
 import ShadowRootDialog from '../../utils/jss/ShadowRootDialog'
+import { useAsync } from '../../utils/hooks/useAsync'
 
 const useStyles = makeStyles({
     avatar: {

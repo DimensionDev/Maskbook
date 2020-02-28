@@ -3,6 +3,22 @@ import { useEffect, useCallback } from 'react'
 import { or } from '../../components/custom-ui-helper'
 import React from 'react'
 
+export const captureEevnts: (keyof HTMLElementEventMap)[] = [
+    'paste',
+    'keydown',
+    'keypress',
+    'keyup',
+    'input',
+    'drag',
+    'dragend',
+    'dragenter',
+    'dragexit',
+    'dragleave',
+    'dragover',
+    'dragstart',
+    'change',
+]
+
 /**
  * ! Call this hook inside Shadow Root!
  */
@@ -34,26 +50,6 @@ export function useCapturedInput(
         }
     }
     useEffect(binder(['input'], use), [ref.current].concat(deps))
-    useEffect(
-        binder(
-            [
-                'paste',
-                'keydown',
-                'keypress',
-                'keyup',
-                'input',
-                'drag',
-                'dragend',
-                'dragenter',
-                'dragexit',
-                'dragleave',
-                'dragover',
-                'dragstart',
-                'change',
-            ],
-            stop,
-        ),
-        [ref.current].concat(deps),
-    )
+    useEffect(binder(captureEevnts, stop), [ref.current].concat(deps))
     return [binder, ref] as const
 }

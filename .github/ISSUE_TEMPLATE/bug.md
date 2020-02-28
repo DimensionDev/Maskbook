@@ -1,9 +1,9 @@
 ---
 name: Bug
-about: "Report a bug"
+about: Report a bug
 title: "[Bug] "
-labels: 'Type: Bug'
-assignees: neruthes, jack-works
+labels: ''
+assignees: Jack-Works, neruthes
 
 ---
 
