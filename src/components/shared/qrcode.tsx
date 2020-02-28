@@ -45,6 +45,6 @@ export function WKWebkitQRScanner(props: { onScan(val: string): void; onQuit(): 
         } catch (e) {
             props.onQuit()
         }
-    }, [])
+    })
     return null
 }

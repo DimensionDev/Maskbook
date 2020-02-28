@@ -86,12 +86,11 @@ function SimpleDialog(props: SimpleDialogProps) {
 export function DebugModeUI_PostHashDialog(props: { post: string; network: string }) {
     const [open, setOpen] = React.useState(false)
     const payload = deconstructPayload(props.post, null)
-    const [hashMap, setHashMap] = useState<[string, string, string][]>([])
     const friends = useFriendsList()
-    useAsync(async () => {
-        if (!payload) return
+    const { value: hashMap = [] } = useAsync(async () => {
+        if (!payload) return []
         const ivID = new PostIVIdentifier(props.network, payload.iv)
-        setHashMap(await Services.Crypto.debugShowAllPossibleHashForPost(ivID, payload.version))
+        return Services.Crypto.debugShowAllPossibleHashForPost(ivID, payload.version)
     }, [props.post])
     return (
         <>
