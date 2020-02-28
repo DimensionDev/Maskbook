@@ -1,4 +1,4 @@
-import { AutomatedTabTask, GetContext } from '@holoflows/kit'
+import { AutomatedTabTask, GetContext, AutomatedTabTaskRuntimeOptions } from '@holoflows/kit'
 import { ProfileIdentifier, ECKeyIdentifier, Identifier } from '../../database/type'
 import {
     disableOpenNewTabInBackgroundSettings,
@@ -67,6 +67,46 @@ export default function tasks(...args: Parameters<typeof realTasks>) {
     // for debug purpose
     return _tasks
 }
+
+export function wrappedTasks(...args: Parameters<typeof realTasks>) {
+    if (webpackEnv.target !== 'WKWebview') return tasks(...args)
+    const [uri, options, ...others] = args
+    let _key: keyof typeof _tasks
+    let _args: any[]
+    // Only for Maskbook-iOS
+    const promise = Promise.resolve(browser.tabs.query({ active: false, url: ['<all_urls>'] })).then(tabs => {
+        const target = uri.toString().replace(/\/.+$/, '')
+        const [tab] = tabs.filter(tab => tab.url?.startsWith(target))
+        const updatedOptions: Partial<AutomatedTabTaskRuntimeOptions> = {
+            active: true,
+            pinned: false,
+            memorable: false,
+        }
+        if (tab) {
+            Object.assign(updatedOptions, {
+                runAtTabID: tab.id,
+                needRedirect: true,
+                url: tab.url === uri ? undefined : (uri as string),
+            })
+        }
+        Object.assign(updatedOptions, options)
+        const task = tasks(uri, updatedOptions, ...others)
+        // @ts-ignore
+        if (_key in task) return task[_key](..._args)
+        return task
+    })
+    return new Proxy({} as typeof _tasks, {
+        get(_, key: keyof typeof _tasks | 'then') {
+            if (key === 'then') return undefined
+            _key = key
+            return (...args: any) => {
+                _args = args
+                return promise
+            }
+        },
+    })
+}
+
 sideEffect.then(untilDocumentReady).then(() => {
     if (GetContext() !== 'content') return
     const network = getActivatedUI().networkIdentifier

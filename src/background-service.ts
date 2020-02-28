@@ -20,6 +20,7 @@ import * as type from './database/type'
 import * as post from './database/post'
 import { definedSocialNetworkWorkers } from './social-network/worker'
 import { getWelcomePageURL } from './extension/options-page/Welcome/getWelcomePageURL'
+import { wrappedTasks } from './extension/content-script/tasks'
 
 if (GetContext() === 'background') {
     const injectedScript = `{
@@ -70,6 +71,7 @@ if (GetContext() === 'background') {
     })
 
     browser.runtime.onInstalled.addListener(detail => {
+        // ! even if, WKWebview seems not triggering this event
         if (webpackEnv.target === 'WKWebview') return
         if (detail.reason === 'install') {
             browser.tabs.create({ url: getWelcomePageURL() })
@@ -77,14 +79,17 @@ if (GetContext() === 'background') {
     })
 
     if (webpackEnv.target === 'WKWebview') {
-        contentScriptReady.then(() =>
-            browser.tabs.create({
-                url: 'https://m.facebook.com/',
-                active: true,
-            }),
-        )
+        contentScriptReady.then(() => {
+            wrappedTasks(getWelcomePageURL(), { important: true })
+            wrappedTasks('https://m.facebook.com/', { important: true })
+        })
     }
+
     MessageCenter.on('closeActiveTab', async () => {
+        if (webpackEnv.target === 'WKWebview') {
+            wrappedTasks('https://m.facebook.com/')
+            return
+        }
         const tabs = await browser.tabs.query({
             active: true,
         })
