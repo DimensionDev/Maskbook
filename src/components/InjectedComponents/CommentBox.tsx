@@ -36,14 +36,14 @@ export interface CommentBoxProps {
 }
 export function CommentBox(props: CommentBoxProps) {
     const classes = useStyles()
-    const [binder, inputRef] = useCapturedInput(() => {})
+    const [binder, inputRef, node] = useCapturedInput(() => {})
     const { t } = useI18N()
     useEffect(
         binder(['keypress'], e => {
-            if (!inputRef.current) return
+            if (!node) return
             if (e.key === 'Enter') {
-                props.onSubmit(inputRef.current.value)
-                inputRef.current.value = ''
+                props.onSubmit(node.value)
+                node.value = ''
             }
         }),
     )
