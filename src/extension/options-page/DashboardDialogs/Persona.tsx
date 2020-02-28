@@ -81,13 +81,11 @@ export function PersonaCreateDialog() {
 export function PersonaCreatedDialog() {
     const { t } = useI18N()
     const { identifier } = useQueryParams(['identifier'])
-    const [persona, setPersona] = useState<Persona | null>(null)
-    useAsync(async () => {
+    const { value: persona = null } = useAsync(async () => {
         if (identifier) {
-            setPersona(
-                await Services.Identity.queryPersona(Identifier.fromString(identifier, ECKeyIdentifier).unwrap()),
-            )
+            return Services.Identity.queryPersona(Identifier.fromString(identifier, ECKeyIdentifier).unwrap())
         }
+        return null
     }, [identifier])
     return (
         <DialogContentItem

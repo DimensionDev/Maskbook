@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useAsync } from 'react-use'
 import { DecryptPost, DecryptPostProps } from './DecryptedPost'
 import { AddToKeyStore, AddToKeyStoreProps } from './AddToKeyStore'
@@ -37,13 +37,12 @@ export function PostInspector(props: PostInspectorProps) {
         provePost: decodeAsPublicKey,
     }
 
-    useAsync(async () => {
-        if (!whoAmI) return
-        if (!whoAmI.identifier.equals(postBy)) return
-        if (!type.encryptedPost) return
+    const { value: sharedListOfPost } = useAsync(async () => {
+        if (!whoAmI || !whoAmI.identifier.equals(postBy) || !type.encryptedPost) return []
         const { iv, version } = type.encryptedPost
-        setAlreadySelectedPreviously(await Services.Crypto.getSharedListOfPost(version, iv, postBy))
+        return Services.Crypto.getSharedListOfPost(version, iv, postBy)
     }, [post, postBy, whoAmI])
+    useEffect(() => setAlreadySelectedPreviously(sharedListOfPost ?? []), [sharedListOfPost])
 
     if (postBy.isUnknown) return null
 

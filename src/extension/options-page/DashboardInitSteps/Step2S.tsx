@@ -19,13 +19,12 @@ export default function InitStep2S() {
     const subheader = t('dashboard_init_step_2_hint')
     const { identifier } = useQueryParams(['identifier'])
     const personas = useMyPersonas()
-    const [persona, setPersona] = useState<Persona | null>(null)
-    useAsync(async () => {
+
+    const { value: persona = null } = useAsync(async () => {
         if (identifier) {
-            setPersona(
-                await Services.Identity.queryPersona(Identifier.fromString(identifier, ECKeyIdentifier).unwrap()),
-            )
+            return Services.Identity.queryPersona(Identifier.fromString(identifier, ECKeyIdentifier).unwrap())
         }
+        return null
     }, [identifier, personas])
 
     const actions = (
