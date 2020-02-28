@@ -95,12 +95,17 @@ export default function InitStep1R() {
                 if (!json) throw new Error('UpgradeBackupJSONFile failed')
                 setJson(json)
                 const permissions = await extraPermissions(json.grantedHostPermissions)
-                if (!permissions)
+                if (!permissions) {
+                    const restoreParams = new URLSearchParams()
+                    restoreParams.append('personas', String(json.personas?.length ?? ''))
+                    restoreParams.append('profiles', String(json.profiles?.length ?? ''))
+                    restoreParams.append('posts', String(json.posts?.length ?? ''))
+                    restoreParams.append('contacts', String(json.userGroups?.length ?? ''))
+                    restoreParams.append('date', String(json._meta_?.createdAt ?? ''))
                     return await Services.Welcome.restoreBackup(json).then(() =>
-                        history.push(
-                            `${InitStep.Restore2}?personas=${json.personas?.length}&profiles=${json.profiles?.length}&posts=${json.posts?.length}&contacts=${json.userGroups?.length}&date=${json._meta_?.createdAt}`,
-                        ),
+                        history.push(`${InitStep.Restore2}?${restoreParams.toString()}`),
                     )
+                }
                 setRequiredPermissions(permissions)
                 setRestoreState('success')
             } catch (e) {
