@@ -42,10 +42,11 @@ export default function FooterLine() {
     const { t } = useI18N()
     const classes = useStyles()
     const { version } = globalThis?.browser.runtime.getManifest()
+    const versionLink = t('version_link', { tag: process.env.VERSION })
     return (
         <Breadcrumbs className={classes.footerButtons} separator="|" aria-label="breadcrumb">
             <FooterLink href="https://maskbook.com/">Maskbook.com</FooterLink>
-            <FooterLink href={t('version_link')} title={process.env.VERSION}>
+            <FooterLink href={versionLink} title={process.env.VERSION}>
                 {t('version')} {version}
             </FooterLink>
             <FooterLink href={t('dashboard_mobile_test_link')}>{t('dashboard_mobile_test')}</FooterLink>

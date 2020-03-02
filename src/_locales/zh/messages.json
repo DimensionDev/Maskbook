@@ -214,7 +214,7 @@
     "unknown_persona": "未知角色",
     "username": "用戶名",
     "version": "版本",
-    "version_link": "https://github.com/DimensionDev/Maskbook/releases",
+    "version_link": "https://github.com/DimensionDev/Maskbook/releases#{{tag}}",
     "welcome_0_close_button": "我想以後再做",
     "welcome_0_restore_key": "導入備份檔案",
     "welcome_1a1_didntfind": "沒有找到你的賬戶？",
