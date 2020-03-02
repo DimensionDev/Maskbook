@@ -95,7 +95,7 @@ export async function queryProfilesWithQuery(query?: Parameters<typeof queryProf
 }
 
 /**
- * Select a set of Profiles
+ * Select a set of Personas
  */
 export async function queryPersonasWithQuery(query?: Parameters<typeof queryPersonasDB>[0]): Promise<Persona[]> {
     const _ = await queryPersonasDB(query || (_ => true))
@@ -193,6 +193,7 @@ export async function createProfileWithPersona(
     profileID: ProfileIdentifier,
     data: LinkedProfileDetails,
     keys: {
+        nickname?: string
         publicKey: JsonWebKey
         privateKey?: JsonWebKey
         localKey?: CryptoKey
@@ -205,6 +206,7 @@ export async function createProfileWithPersona(
         updatedAt: new Date(),
         identifier: ec_id,
         linkedProfiles: new IdentifierMap(new Map(), ProfileIdentifier),
+        nickname: keys.nickname,
         publicKey: keys.publicKey,
         privateKey: keys.privateKey,
         localKey: keys.localKey,

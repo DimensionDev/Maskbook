@@ -41,7 +41,7 @@ jobs:
             - restore_workspace
             - run:
                   name: 'TypeScript type check'
-                  command: yarn tsc -p tsconfig_cjs.json --noEmit
+                  command: yarn tsc --noEmit
     eslint:
         executor: maskbook_node
         steps:
@@ -91,7 +91,7 @@ jobs:
                   command: sudo apt-get install zip
             - run:
                   name: Build Maskbook
-                  command: node ./scripts/ci-build.js
+                  command: yarn build-ci
             - store_artifacts:
                   path: Maskbook.base.zip
                   destination: /Maskbook.base.zip
