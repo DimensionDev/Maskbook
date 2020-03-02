@@ -17,9 +17,7 @@
     "back": "返回",
     "backup": "備份",
     "backup_persona": "備份角色",
-    "banner_empty_username": "如果自動探測用戶名沒有成功，請手動在此輸入",
     "banner_get_started": "設定 Maskbook",
-    "banner_invalid_username": "這看起來不像正確的用戶名",
     "banner_preparing_setup": "Maskbook 需要設定你的賬號。",
     "banner_title": "歡迎使用 Maskbook",
     "cancel": "取消",
@@ -214,6 +212,7 @@
     "unknown_persona": "未知角色",
     "username": "用戶名",
     "version": "版本",
+<<<<<<< HEAD
     "version_link": "https://github.com/DimensionDev/Maskbook/releases#{{tag}}",
     "welcome_0_close_button": "我想以後再做",
     "welcome_0_restore_key": "導入備份檔案",
@@ -262,18 +261,8 @@
     "welcome_1a4_type_manual_subtitle2": "這使得你的好友能夠驗證你的社交網路賬號與你的 Maskbook 公鑰都屬於你。",
     "welcome_1a4_type_manual_switch": "更願意讓 Maskbook 代勞？",
     "welcome_1b_confirm": "恢復備份",
+=======
+>>>>>>> master
     "welcome_1b_dragging": "將備份檔案拖拽到此處",
-    "welcome_1b_file_selected": "已選取備份檔案：{{filename}}",
-    "welcome_1b_hint_identity": "備份文件中包含了以下身份：",
-    "welcome_1b_hint_network": "爲此，Maskbook 將要請求以下網站的權限：",
-    "welcome_1b_no_file_selected": "選取備份檔案",
-    "welcome_1b_qr_error_1": "掃描過程中出現錯誤",
-    "welcome_1b_qr_error_2": "你或許可以試試其他方式來恢復賬號設定。",
-    "welcome_1b_qr_rescan": "重試",
-    "welcome_1b_tabs_backup": "選擇備份檔案",
-    "welcome_1b_tabs_qr": "掃描 QR 碼",
-    "welcome_1b_tabs_text": "手動貼入備份檔案的内容",
-    "welcome_1b_title": "導入備份檔案",
-    "welcome_2_greeting": "你現在可以使用 Maskbook 了！",
-    "welcome_2_title": "完畢！"
+    "welcome_1b_file_selected": "已選取備份檔案：{{filename}}"
 }
