@@ -23,13 +23,13 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 )
 
-const FooterLink = function(props: React.PropsWithChildren<{ href: string } | { to: string }>) {
+const FooterLink = function(props: React.PropsWithChildren<{ href: string; title?: string } | { to: string }>) {
     const classes = useStyles()
     return (
         <MuiLink
             underline="none"
             {...('href' in props
-                ? { href: props.href, target: '_blank', rel: 'noopener noreferrer' }
+                ? { href: props.href, title: props.title, target: '_blank', rel: 'noopener noreferrer' }
                 : { to: props.to, component: Link })}
             color="inherit"
             className={classes.footerButton}>
@@ -41,15 +41,16 @@ const FooterLink = function(props: React.PropsWithChildren<{ href: string } | { 
 export default function FooterLine() {
     const { t } = useI18N()
     const classes = useStyles()
+    const { version } = globalThis?.browser.runtime.getManifest()
     return (
         <Breadcrumbs className={classes.footerButtons} separator="|" aria-label="breadcrumb">
             <FooterLink href="https://maskbook.com/">Maskbook.com</FooterLink>
-            <FooterLink href="https://github.com/DimensionDev/Maskbook/releases">
-                {t('version')} {globalThis?.browser.runtime.getManifest().version}
+            <FooterLink href={t('version_link')} title={process.env.VERSION}>
+                {t('version')} {version}
             </FooterLink>
-            <FooterLink href="https://maskbook.com/download-links/#mobile">{t('dashboard_mobile_test')}</FooterLink>
-            <FooterLink href="https://github.com/DimensionDev/Maskbook">{t('dashboard_source_code')}</FooterLink>
-            <FooterLink href="https://maskbook.com/privacy-policy/">{t('privacy_policy')}</FooterLink>
+            <FooterLink href={t('dashboard_mobile_test_link')}>{t('dashboard_mobile_test')}</FooterLink>
+            <FooterLink href={t('dashboard_source_code_link')}>{t('dashboard_source_code')}</FooterLink>
+            <FooterLink href={t('privacy_policy_link')}>{t('privacy_policy')}</FooterLink>
         </Breadcrumbs>
     )
 }
