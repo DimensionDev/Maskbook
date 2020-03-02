@@ -212,6 +212,7 @@
     "unknown_persona": "未知角色",
     "username": "用戶名",
     "version": "版本",
+    "version_link": "https://github.com/DimensionDev/Maskbook/releases#{{tag}}",
     "welcome_1b_dragging": "將備份檔案拖拽到此處",
     "welcome_1b_file_selected": "已選取備份檔案：{{filename}}"
 }
