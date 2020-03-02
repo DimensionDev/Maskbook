@@ -5,6 +5,7 @@ const fs = require('fs')
 const WebpackNotifierPlugin = require('webpack-notifier')
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin')
 const ForkTsCheckerNotifierWebpackPlugin = require('fork-ts-checker-notifier-webpack-plugin')
+const git = require('@nice-labs/git-rev').default
 
 const src = file => path.join(__dirname, file)
 /**
@@ -85,8 +86,17 @@ module.exports = (argvEnv, argv) => {
             rules: [{ parser: { requireEnsure: false } }, addTSLoader()],
         },
         plugins: [
-            new webpack.DefinePlugin({
-                'process.env.NODE_ENV': JSON.stringify(env),
+            new webpack.EnvironmentPlugin({
+                NODE_ENV: env,
+                VERSION: git.describe('--dirty'),
+                TAG_NAME: git.tag(),
+                COMMIT_HASH: git.commitHash(),
+                COMMIT_DATE: git.commitDate().toISOString(),
+                BUILD_DATE: target.Firefox ? null : new Date().toISOString(),
+                REMOTE_URL: git.remoteURL(),
+                BRANCH_NAME: git.branchName(),
+                DIRTY: git.isDirty(),
+                TAG_DIRTY: git.isTagDirty(),
             }),
             // The following plugins are from react-dev-utils. let me know if any one need it.
             // WatchMissingNodeModulesPlugin
