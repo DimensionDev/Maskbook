@@ -34,16 +34,11 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 export function injectPostDialogAtTwitter() {
     if (location.hostname.indexOf(twitterUrl.hostIdentifier) === -1) return
-    const meta = instanceOfTwitterUI.typedMessageMetadata
-    renderPostDialogTo('popup', postEditorInPopupSelector(), meta)
-    renderPostDialogTo('timeline', rootSelector(), meta)
+    renderPostDialogTo('popup', postEditorInPopupSelector())
+    renderPostDialogTo('timeline', rootSelector())
 }
 
-function renderPostDialogTo<T>(
-    reason: 'timeline' | 'popup',
-    ls: LiveSelector<T, true>,
-    typedMessageMetadata: ValueRef<ReadonlyMap<string, any>>,
-) {
+function renderPostDialogTo<T>(reason: 'timeline' | 'popup', ls: LiveSelector<T, true>) {
     const watcher = new MutationObserverWatcher(ls)
         .setDOMProxyOption({
             afterShadowRootInit: { mode: 'closed' },
@@ -53,20 +48,12 @@ function renderPostDialogTo<T>(
             subtree: true,
         })
 
-    renderInShadowRoot(
-        <PostDialogAtTwitter typedMessageMetadata={typedMessageMetadata} reason={reason} />,
-        watcher.firstDOMProxy.afterShadow,
-    )
+    renderInShadowRoot(<PostDialogAtTwitter reason={reason} />, watcher.firstDOMProxy.afterShadow)
 }
 
-function PostDialogAtTwitter(props: {
-    reason: 'timeline' | 'popup'
-    typedMessageMetadata: ValueRef<ReadonlyMap<string, any>>
-}) {
-    const meta: ReadonlyMap<string, any> = useValueRef(props.typedMessageMetadata)
+function PostDialogAtTwitter(props: { reason: 'timeline' | 'popup' }) {
     return (
         <PostDialog
-            typedMessageMetadata={meta}
             classes={{
                 ...useStyles(),
                 ...useTwitterLabel(),

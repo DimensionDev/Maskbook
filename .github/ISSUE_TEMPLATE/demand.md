@@ -1,6 +1,6 @@
 ---
 name: Demand
-about: "PRD for new demand"
+about: PRD for new demand
 title: "[Demand] "
 labels: 'Demand: Draft'
 assignees: neruthes
@@ -12,10 +12,10 @@ assignees: neruthes
 Field | Value
 --- | ---
 Previous Stage | ...
-Figma Link | [figma.com/...](___)
-Expected UX prototype due | YYYY-MM-DD
+Figma Link | Figma_Link_Here____
+Expected UX prototype due | 2020-W??-5
 Actual UX prototype release | -
-Expected engineering due | YYYY-MM-DD
+Expected engineering due | 2020-W??-5
 Corresponding Pull Request | -
 Completion Version | -
 

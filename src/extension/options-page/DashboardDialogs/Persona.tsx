@@ -1,4 +1,5 @@
-import React, { useState, useEffect, Children } from 'react'
+import React, { useState, useEffect } from 'react'
+import { useAsync } from 'react-use'
 import * as bip39 from 'bip39'
 import { DialogContentItem, DialogRouter } from './DialogBase'
 
@@ -10,7 +11,6 @@ import { ECKeyIdentifier, Identifier } from '../../../database/type'
 import Services from '../../service'
 import { Persona } from '../../../database'
 import useQueryParams from '../../../utils/hooks/useQueryParams'
-import { useAsync } from '../../../utils/components/AsyncComponent'
 import ProfileBox from '../DashboardComponents/ProfileBox'
 import { useColorProvider } from '../../../utils/theme'
 import { useI18N } from '../../../utils/i18n-next-ui'
@@ -81,10 +81,11 @@ export function PersonaCreateDialog() {
 export function PersonaCreatedDialog() {
     const { t } = useI18N()
     const { identifier } = useQueryParams(['identifier'])
-    const [persona, setPersona] = useState<Persona | null>(null)
-    useAsync(async () => {
-        if (identifier)
-            Services.Identity.queryPersona(Identifier.fromString(identifier, ECKeyIdentifier).unwrap()).then(setPersona)
+    const { value: persona = null } = useAsync(async () => {
+        if (identifier) {
+            return Services.Identity.queryPersona(Identifier.fromString(identifier, ECKeyIdentifier).unwrap())
+        }
+        return null
     }, [identifier])
     return (
         <DialogContentItem

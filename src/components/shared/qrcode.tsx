@@ -1,7 +1,6 @@
-import React from 'react'
+import React, { useRef, useEffect } from 'react'
+import { useAsync } from 'react-use'
 import qr from 'qrcode'
-import { useRef, useEffect } from 'react'
-import { useAsync } from '../../utils/components/AsyncComponent'
 import { iOSHost } from '../../utils/iOS-RPC'
 
 const cache = new Proxy(sessionStorage, {
@@ -40,6 +39,12 @@ export function QrCode(props: {
 }
 
 export function WKWebkitQRScanner(props: { onScan(val: string): void; onQuit(): void }) {
-    useAsync(() => iOSHost.scanQRCode(), []).then(x => props.onScan(x), props.onQuit)
+    useAsync(async () => {
+        try {
+            props.onScan(await iOSHost.scanQRCode())
+        } catch (e) {
+            props.onQuit()
+        }
+    })
     return null
 }

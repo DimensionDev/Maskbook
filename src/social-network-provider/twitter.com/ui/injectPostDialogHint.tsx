@@ -30,7 +30,7 @@ function renderPostDialogHintTo<T>(ls: LiveSelector<T, true>) {
     renderInShadowRoot(<PostDialogHintAtTwitter />, watcher.firstDOMProxy.afterShadow)
 }
 
-const useStyles = makeStyles((theme: Theme) => ({
+export const useTwitterThemedPostDialogHint = makeStyles((theme: Theme) => ({
     root: {
         borderTopLeftRadius: 0,
         borderTopRightRadius: 0,
@@ -51,15 +51,11 @@ const useStyles = makeStyles((theme: Theme) => ({
             },
         },
     },
-    title: {
-        fontSize: 15,
-        fontWeight: 'bold',
-    },
 }))
 
 function PostDialogHintAtTwitter() {
     const classes = {
-        ...useStyles(),
+        ...useTwitterThemedPostDialogHint(),
         ...useTwitterButton(),
     }
     const onHintButtonClicked = useCallback(

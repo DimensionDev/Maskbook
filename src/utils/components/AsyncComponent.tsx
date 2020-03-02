@@ -51,28 +51,3 @@ export default function AsyncComponent<Return>(props: {
         </React.Suspense>
     )
 }
-
-/** React hook for not-cancelable async calculation */
-export function useAsync<T>(fn: () => PromiseLike<T>, dep: ReadonlyArray<unknown>): PromiseLike<T> {
-    let res: Parameters<ConstructorParameters<typeof Promise>[0]>[0] = () => {},
-        rej: Parameters<ConstructorParameters<typeof Promise>[0]>[1] = () => {}
-    React.useEffect(() => {
-        let unmounted = false
-        fn().then(
-            x => unmounted || res(x),
-            err => unmounted || rej(err),
-        )
-        return () => {
-            unmounted = true
-        }
-        // eslint-disable-next-line
-    }, dep)
-    return {
-        then(f, r) {
-            return new Promise<any>((resolve, reject) => {
-                res = (val: any) => (f ? resolve(f(val)) : resolve(val))
-                rej = (err: any) => (r ? resolve(r(err)) : reject(err))
-            })
-        },
-    }
-}

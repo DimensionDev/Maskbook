@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { useAsync } from 'react-use'
 import { makeStyles } from '@material-ui/core/styles'
 import Button from '@material-ui/core/Button'
 import List from '@material-ui/core/List'
@@ -10,7 +11,6 @@ import { blue } from '@material-ui/core/colors'
 import { useFriendsList } from '../DataSource/useActivatedUI'
 import { Avatar } from '../../utils/components/Avatar'
 import { Profile } from '../../database'
-import { useAsync } from '../../utils/components/AsyncComponent'
 import Services from '../../extension/service'
 import { PostIVIdentifier } from '../../database/type'
 import { deconstructPayload } from '../../utils/type-transform/Payload'
@@ -86,13 +86,12 @@ function SimpleDialog(props: SimpleDialogProps) {
 export function DebugModeUI_PostHashDialog(props: { post: string; network: string }) {
     const [open, setOpen] = React.useState(false)
     const payload = deconstructPayload(props.post, null)
-    const [hashMap, setHashMap] = useState<[string, string, string][]>([])
     const friends = useFriendsList()
-    useAsync(() => {
-        if (!payload) return Promise.resolve([])
+    const { value: hashMap = [] } = useAsync(async () => {
+        if (!payload) return []
         const ivID = new PostIVIdentifier(props.network, payload.iv)
         return Services.Crypto.debugShowAllPossibleHashForPost(ivID, payload.version)
-    }, [props.post]).then(setHashMap)
+    }, [props.post])
     return (
         <>
             <Button variant="outlined" color="primary" onClick={() => setOpen(true)}>

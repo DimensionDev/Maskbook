@@ -2,7 +2,6 @@ import React from 'react'
 import { storiesOf } from '@storybook/react'
 import { text, boolean, select } from '@storybook/addon-knobs'
 import { action } from '@storybook/addon-actions'
-import { AdditionalPostBox } from '../components/InjectedComponents/AdditionalPostBox'
 import { AdditionalContent } from '../components/InjectedComponents/AdditionalPostContent'
 import {
     DecryptPostSuccess,
@@ -33,6 +32,9 @@ import {
     DefaultTypedMessageUnknownRenderer,
 } from '../components/InjectedComponents/TypedMessageRenderer'
 import { WithFigma } from 'storybook-addon-figma'
+import { useTwitterThemedPostDialogHint } from '../social-network-provider/twitter.com/ui/injectPostDialogHint'
+import { useTwitterButton } from '../social-network-provider/twitter.com/utils/theme'
+import { TwitterThemeProvider } from '../social-network-provider/twitter.com/ui/custom'
 
 storiesOf('Injections', module)
     .add('PersonOrGroupInChip', () => (
@@ -49,7 +51,6 @@ storiesOf('Injections', module)
             ))}
         </Paper>
     ))
-    .add('AdditionalPostBox', () => <AdditionalPostBox onRequestPost={action('onRequestPost')} />)
     .add('Additional Post Content', () => (
         <>
             <Paper>
@@ -189,7 +190,7 @@ storiesOf('Injections', module)
             const meta = decoder(text('Metadata', '{}'))
             return (
                 <WithFigma url={'https://www.figma.com/file/nDyLQp036eHgcgUXeFmNA1/Post-Composition-v1'}>
-                    <PostDialog open typedMessageMetadata={meta} />
+                    <PostDialog open={[true, () => void 0]} typedMessageMetadata={meta} />
                 </WithFigma>
             )
         } catch (e) {
@@ -197,7 +198,20 @@ storiesOf('Injections', module)
         }
     })
     .add('Post Dialog Hint', () => {
-        return <PostDialogHint onHintButtonClicked={action('clicked')} />
+        return (
+            <>
+                Vanilla:
+                <PostDialogHint onHintButtonClicked={action('clicked')} />
+                Twitter flavor:
+                <TwitterThemeProvider>
+                    <TwitterFlavorPostDialogHint />
+                </TwitterThemeProvider>
+            </>
+        )
+        function TwitterFlavorPostDialogHint() {
+            const style = { ...useTwitterThemedPostDialogHint(), ...useTwitterButton() }
+            return <PostDialogHint classes={style} onHintButtonClicked={action('clicked')} />
+        }
     })
 
 function FakePost(props: React.PropsWithChildren<{ title: string }>) {

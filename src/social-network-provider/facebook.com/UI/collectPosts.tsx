@@ -19,11 +19,7 @@ export function collectPostsFacebook(this: SocialNetworkUI) {
                 .closest('.userContentWrapper, [data-store]')
 
             // ? inject after comments
-            const commentSelectorPC = root
-                .clone()
-                .querySelectorAll('[role=article]')
-                .querySelectorAll('a+span')
-                .closest<HTMLElement>(2)
+            const commentSelectorPC = root.clone().querySelectorAll<HTMLFormElement>('[data-testid="UFI2Comment/body"]')
             const commentSelectorMobile = root
                 .clone()
                 .map(x => x.parentElement)

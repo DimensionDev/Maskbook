@@ -1,9 +1,9 @@
 ---
 name: Task
-about: "Non-coding task"
+about: Non-coding task
 title: "[Task] "
-labels: 'Non-Coding Task'
-assignees:
+labels: Non-Coding Task
+assignees: ''
 
 ---
 
@@ -12,7 +12,7 @@ assignees:
 Field | Value
 --- | ---
 Parent Task/Demand | /* Issue Number*/
-Expected Delivery Date | YYYY-MM-DD
+Expected Delivery Date | 2020-W??-5
 
 ## Content
 
