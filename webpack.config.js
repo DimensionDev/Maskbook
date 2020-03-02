@@ -89,13 +89,14 @@ module.exports = (argvEnv, argv) => {
             new webpack.EnvironmentPlugin({
                 NODE_ENV: env,
                 VERSION: git.describe('--dirty'),
-                TAG_NAME: git.tag({ markDirty: true }),
+                TAG_NAME: git.tag(),
                 COMMIT_HASH: git.commitHash(),
                 COMMIT_DATE: git.commitDate().toISOString(),
-                BUILD_DATE: new Date().toISOString(),
+                BUILD_DATE: target.Firefox ? null : new Date().toISOString(),
                 REMOTE_URL: git.remoteURL(),
                 BRANCH_NAME: git.branchName(),
-                DIRTY_FLAG: String(git.isDirty()),
+                DIRTY: git.isDirty(),
+                TAG_DIRTY: git.isTagDirty(),
             }),
             // The following plugins are from react-dev-utils. let me know if any one need it.
             // WatchMissingNodeModulesPlugin

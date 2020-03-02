@@ -110,7 +110,8 @@ console.log('Build info', {
     BUILD_DATE: process.env.BUILD_DATE,
     REMOTE_URL: process.env.REMOTE_URL,
     BRANCH_NAME: process.env.BRANCH_NAME,
-    DIRTY_FLAG: process.env.DIRTY_FLAG,
+    DIRTY: process.env.DIRTY,
+    TAG_DIRTY: process.env.TAG_DIRTY,
 })
 
 // Friendly to debug
