@@ -1,8 +1,8 @@
-import React, { useState } from 'react'
+import React from 'react'
+import { useDropArea } from 'react-use'
 import StepBase from './StepBase'
 import { Typography, styled, Theme, makeStyles, createStyles, InputBase } from '@material-ui/core'
 import { useI18N } from '../../../utils/i18n-next-ui'
-import { useDragAndDrop } from '../../../utils/hooks/useDragAndDrop'
 import { Link, useHistory } from 'react-router-dom'
 import AbstractTab, { AbstractTabProps } from '../DashboardComponents/AbstractTab'
 import ActionButton from '../DashboardComponents/ActionButton'
@@ -88,36 +88,50 @@ export default function InitStep1R() {
         setRestoreState(e)
     }
 
-    const resolveFileInput = async (str: string) => {
-        try {
-            const json = UpgradeBackupJSONFile(decompressBackupFile(str))
-            if (!json) throw new Error('UpgradeBackupJSONFile failed')
-            setJson(json)
-            const permissions = await extraPermissions(json.grantedHostPermissions)
-            if (!permissions)
-                return await Services.Welcome.restoreBackup(json).then(() =>
-                    history.push(
-                        `${InitStep.Restore2}?personas=${json.personas?.length}&profiles=${json.profiles?.length}&posts=${json.posts?.length}&contacts=${json.userGroups?.length}&date=${json._meta_?.createdAt}`,
-                    ),
-                )
-            setRequiredPermissions(permissions)
-            setRestoreState('success')
-        } catch (e) {
-            console.error(e)
-            setErrorState(e)
-        }
-    }
+    const resolveFileInput = React.useCallback(
+        async (str: string) => {
+            try {
+                const json = UpgradeBackupJSONFile(decompressBackupFile(str))
+                if (!json) throw new Error('UpgradeBackupJSONFile failed')
+                setJson(json)
+                const permissions = await extraPermissions(json.grantedHostPermissions)
+                if (!permissions) {
+                    const restoreParams = new URLSearchParams()
+                    restoreParams.append('personas', String(json.personas?.length ?? ''))
+                    restoreParams.append('profiles', String(json.profiles?.length ?? ''))
+                    restoreParams.append('posts', String(json.posts?.length ?? ''))
+                    restoreParams.append('contacts', String(json.userGroups?.length ?? ''))
+                    restoreParams.append('date', String(json._meta_?.createdAt ?? ''))
+                    return await Services.Welcome.restoreBackup(json).then(() =>
+                        history.push(`${InitStep.Restore2}?${restoreParams.toString()}`),
+                    )
+                }
+                setRequiredPermissions(permissions)
+                setRestoreState('success')
+            } catch (e) {
+                console.error(e)
+                setErrorState(e)
+            }
+        },
+        [history],
+    )
 
-    const { dragEvents, fileReceiver, fileRef, dragStatus } = useDragAndDrop(file => {
-        const fr = new FileReader()
-        fr.readAsText(file)
-        fr.addEventListener('loadend', async () => {
-            const str = fr.result as string
-            resolveFileInput(str)
-        })
+    const [file, setFile] = React.useState<File | null>(null)
+    const [bound, { over }] = useDropArea({
+        onFiles(files) {
+            setFile(files[0])
+        },
     })
 
-    const state = useState(0)
+    React.useEffect(() => {
+        if (file) {
+            const fr = new FileReader()
+            fr.readAsText(file)
+            fr.addEventListener('loadend', () => resolveFileInput(fr.result as string))
+        }
+    }, [file, resolveFileInput])
+
+    const state = React.useState(0)
     const [tabState, setTabState] = state
 
     function QR() {
@@ -186,22 +200,26 @@ export default function InitStep1R() {
 
     function FileUI() {
         return (
-            <div {...dragEvents}>
+            <div {...bound}>
                 <input
                     className={classes.file}
                     type="file"
                     accept="application/json"
                     ref={ref}
-                    onChange={fileReceiver}
+                    onChange={({ currentTarget }: React.ChangeEvent<HTMLInputElement>) => {
+                        if (currentTarget.files) {
+                            setFile(currentTarget.files.item(0))
+                        }
+                    }}
                 />
                 <RestoreBox
                     className={classes.restoreBox}
-                    data-active={dragStatus === 'drag-enter'}
+                    data-active={over}
                     onClick={() => ref.current && ref.current.click()}>
-                    {dragStatus === 'drag-enter' ? (
+                    {over ? (
                         t('welcome_1b_dragging')
-                    ) : fileRef.current ? (
-                        t('welcome_1b_file_selected', { filename: fileRef.current.name })
+                    ) : file ? (
+                        t('welcome_1b_file_selected', { filename: file.name })
                     ) : (
                         <>
                             <ActionButton variant="contained" color="primary" className={classes.restoreBoxButton}>

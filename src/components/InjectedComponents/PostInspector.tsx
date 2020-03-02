@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
+import { useAsync } from 'react-use'
 import { DecryptPost, DecryptPostProps } from './DecryptedPost'
 import { AddToKeyStore, AddToKeyStoreProps } from './AddToKeyStore'
 import { deconstructPayload } from '../../utils/type-transform/Payload'
@@ -11,7 +12,6 @@ import { useValueRef } from '../../utils/hooks/useValueRef'
 import { debugModeSetting } from '../shared-settings/settings'
 import { DebugList } from '../DebugModeUI/DebugList'
 import { TypedMessage } from '../../extension/background-script/CryptoServices/utils'
-import { useAsync } from '../../utils/hooks/useAsync'
 
 export interface PostInspectorProps {
     onDecrypted(post: TypedMessage): void
@@ -36,13 +36,13 @@ export function PostInspector(props: PostInspectorProps) {
         encryptedPost: deconstructPayload(post, getActivatedUI().payloadDecoder),
         provePost: decodeAsPublicKey,
     }
-    useAsync(async () => {
-        if (!whoAmI) return []
-        if (!whoAmI.identifier.equals(postBy)) return []
-        if (!type.encryptedPost) return []
+
+    const { value: sharedListOfPost } = useAsync(async () => {
+        if (!whoAmI || !whoAmI.identifier.equals(postBy) || !type.encryptedPost) return []
         const { iv, version } = type.encryptedPost
         return Services.Crypto.getSharedListOfPost(version, iv, postBy)
-    }, [post, postBy, whoAmI]).then(p => setAlreadySelectedPreviously(p))
+    }, [post, postBy, whoAmI])
+    useEffect(() => setAlreadySelectedPreviously(sharedListOfPost ?? []), [sharedListOfPost])
 
     if (postBy.isUnknown) return null
 
