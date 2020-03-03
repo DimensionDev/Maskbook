@@ -1,6 +1,5 @@
 {
     "typescript.tsdk": "node_modules/typescript/lib",
-    "editor.formatOnSave": true,
     "i18n-ally.sourceLanguage": "en",
     "i18n-ally.displayLanguage": "zh",
     "i18n-ally.localesPaths": "src/_locales",
