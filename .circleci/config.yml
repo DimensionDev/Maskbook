@@ -41,7 +41,7 @@ jobs:
             - restore_workspace
             - run:
                   name: 'TypeScript type check'
-                  command: yarn tsc -p tsconfig_cjs.json --noEmit
+                  command: yarn tsc --noEmit
     eslint:
         executor: maskbook_node
         steps:
