@@ -15,7 +15,7 @@
     "install": "node scripts/postinstall.js",
     "lint": "eslint src/ --ext .ts,.tsx --fix",
     "lint:report": "eslint src/ --ext .ts,.tsx --format junit -o reports/junit/eslint-results.xml",
-    "lint:typecoverage": "type-coverage -p tsconfig_cjs.json --strict --ignore-catch --detail --at-least 98.5",
+    "lint:typecoverage": "type-coverage --strict --ignore-catch --detail --at-least 98.5",
     "start": "webpack-dev-server --mode development",
     "start:android": "webpack-dev-server --firefox-android --mode development",
     "start:chromium": "webpack-dev-server --chromium --mode development",
