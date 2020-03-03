@@ -6,8 +6,8 @@ const cwd = path.join(__dirname, '..')
 const BUILD_PATH = path.join(cwd, 'build')
 
 const exec = (command: string, args?: ReadonlyArray<string>, options?: ExecFileSyncOptions) => {
-    options = { cwd, stdio: [process.stdin, process.stdout, process.stderr], ...options }
-    execFileSync(command, args, options)
+    options = { cwd, stdio: [process.stdin, process.stdout, process.stderr], shell: true, ...options }
+    return execFileSync(command, args, options)
 }
 
 function buildTypes(name: string): string[] {
