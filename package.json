@@ -12,7 +12,7 @@
     "build:gecko": "webpack --mode production --firefox-gecko",
     "build:ios": "webpack --mode production --wk-webview",
     "compile:contracts": "./scripts/contracts.sh",
-    "install": "node scripts/postinstall.js",
+    "install": "ts-node scripts/postinstall.ts",
     "lint": "eslint src/ --ext .ts,.tsx --fix",
     "lint:report": "eslint src/ --ext .ts,.tsx --format junit -o reports/junit/eslint-results.xml",
     "lint:typecoverage": "type-coverage --strict --ignore-catch --detail --at-least 98.5",
@@ -25,7 +25,7 @@
     "storybook": "start-storybook -p 9009 -s public --quiet",
     "test": "jest --watch",
     "test:ci": "jest --ci --collectCoverage=true --reporters=default --reporters=jest-junit",
-    "uninstall": "node scripts/postinstall.js"
+    "uninstall": "ts-node scripts/postinstall.ts"
   },
   "husky": {
     "hooks": {
