@@ -42,13 +42,19 @@ if (GetContext() === 'background') {
     browser.webNavigation.onCommitted.addListener(async arg => {
         if (arg.url === 'about:blank') return
         await contentScriptReady
-        browser.tabs
-            .executeScript(arg.tabId, {
-                runAt: 'document_start',
-                frameId: arg.frameId,
-                code: injectedScript,
-            })
-            .catch(IgnoreError(arg))
+        /**
+         * For WKWebview, there is a special way to do it in the manifest.json
+         *
+         * A `iOS-injected-scripts` field is used to add extra scripts
+         */
+        if (webpackEnv.target !== 'WKWebview')
+            browser.tabs
+                .executeScript(arg.tabId, {
+                    runAt: 'document_start',
+                    frameId: arg.frameId,
+                    code: injectedScript,
+                })
+                .catch(IgnoreError(arg))
         for (const script of contentScripts) {
             const option: browser.extensionTypes.InjectDetails = {
                 runAt: 'document_idle',
