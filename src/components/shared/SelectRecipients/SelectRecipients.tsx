@@ -46,9 +46,9 @@ export function SelectRecipientsUI<T extends Group | Profile = Group | Profile>(
         x => isProfile(x) && !x.identifier.equals(currentIdentity?.identifier) && x.linkedPersona?.fingerprint,
     ) as Profile[]
     const [open, setOpen] = useState(false)
+    const selectedProfiles = selected.filter(x => isProfile(x)) as Profile[]
     const selectedGroups = selected.filter(x => isGroup(x)) as Group[]
-
-    const groupMembers = React.useMemo(
+    const selectedGroupMembers = React.useMemo(
         () => selectedGroups.flatMap(group => group.members).map(identifier => identifier.toText()),
         [selectedGroups],
     )
@@ -75,7 +75,10 @@ export function SelectRecipientsUI<T extends Group | Profile = Group | Profile>(
             <ClickableChip
                 ChipProps={{
                     label: t('post_dialog__select_specific_friends_title', {
-                        selected: selected.length - selectedGroups.length,
+                        selected: new Set([
+                            ...selectedGroupMembers,
+                            ...selectedProfiles.map(x => x.identifier.toText()),
+                        ]).size,
                     }),
                     avatar: <AddIcon />,
                     disabled: props.disabled || profileItems.length === 0,
@@ -88,7 +91,7 @@ export function SelectRecipientsUI<T extends Group | Profile = Group | Profile>(
                 open={open}
                 items={profileItems}
                 selected={profileItems.filter(x => selected.includes(x))}
-                disabledItems={profileItems.filter(x => groupMembers.includes(x.identifier.toText()))}
+                disabledItems={profileItems.filter(x => selectedGroupMembers.includes(x.identifier.toText()))}
                 disabled={false}
                 submitDisabled={false}
                 onSubmit={() => setOpen(false)}
