@@ -8,10 +8,10 @@ import { text } from '@storybook/addon-knobs'
 import { sleep } from '@holoflows/kit/es/util/sleep'
 import { action } from '@storybook/addon-actions'
 import { ECKeyIdentifier } from '../database/type'
-import { DraggablePaper } from '../components/InjectedComponents/ImmersiveSetup/DraggablePaper'
+import { DraggableDiv } from '../components/InjectedComponents/ImmersiveSetup/DraggableDiv'
 
 storiesOf('Immersive Setup', module).add('Stepper', () => (
-    <DraggablePaper>
+    <DraggableDiv>
         <ImmersiveSetupStepper
             persona={new ECKeyIdentifier('secp256k1', 'test_key')}
             loadProfile={async () => {
@@ -25,5 +25,5 @@ storiesOf('Immersive Setup', module).add('Stepper', () => (
                 await sleep(700)
             }}
         />
-    </DraggablePaper>
+    </DraggableDiv>
 ))

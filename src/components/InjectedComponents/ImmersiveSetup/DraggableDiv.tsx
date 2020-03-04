@@ -20,7 +20,7 @@ const useStyle = makeStyles((theme: Theme) => ({
         pointerEvents: 'initial',
     },
 }))
-export function DraggablePaper(props: React.HTMLAttributes<HTMLDivElement>) {
+export function DraggableDiv(props: React.HTMLAttributes<HTMLDivElement>) {
     const classes = useStyle()
     return (
         <div className={classes.root}>
