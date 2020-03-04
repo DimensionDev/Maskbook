@@ -77,14 +77,6 @@ if (GetContext() === 'background') {
         }
     })
 
-    if (webpackEnv.genericTarget === 'app') {
-        contentScriptReady.then(() => {
-            // TODO: twitter app
-            wrappedTasks('https://m.facebook.com/', { important: true })
-            wrappedTasks(getWelcomePageURL({}), { important: true })
-        })
-    }
-
     MessageCenter.on('closeActiveTab', async () => {
         const tabs = await browser.tabs.query({
             active: true,
@@ -93,6 +85,14 @@ if (GetContext() === 'background') {
             await browser.tabs.remove(tabs[0].id!)
         }
     })
+
+    if (webpackEnv.genericTarget === 'app') {
+        contentScriptReady.then(() => {
+            // TODO: twitter app
+            wrappedTasks('https://m.facebook.com/', { important: true })
+            wrappedTasks(getWelcomePageURL({}), { important: true })
+        })
+    }
 }
 function IgnoreError(arg: unknown): (reason: Error) => void {
     return e => {
