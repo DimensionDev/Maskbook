@@ -71,7 +71,7 @@ test('scan succeeded', async () => {
 
     await hook.waitForNextUpdate()
     expect(onResultSpy.calls.count()).toBe(0)
-    await sleep(200)
+    await sleep(1000)
     expect(onResultSpy.calls.count() > 0).toBeTruthy()
 })
 
@@ -89,6 +89,6 @@ test('scan failed', async () => {
 
     await hook.waitForNextUpdate()
     expect(onErrorSpy.calls.count()).toBe(0)
-    await sleep(1200)
+    await sleep(2000)
     expect(onErrorSpy.calls.count() > 0).toBeTruthy()
 })
