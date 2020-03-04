@@ -68,8 +68,13 @@ export default function tasks(...args: Parameters<typeof realTasks>) {
     return _tasks
 }
 
+const uriCanDoTask = (tabUri?: string, targetUri?: any) => {
+    if (tabUri?.startsWith(targetUri)) return true
+    return false
+}
+
 export function wrappedTasks(...args: Parameters<typeof realTasks>) {
-    if (webpackEnv.target !== 'WKWebview') return tasks(...args)
+    if (webpackEnv.genericTarget !== 'app') return tasks(...args)
     const [uri, options = {}, ...others] = args
     let _key: keyof typeof _tasks
     let _args: any[]
@@ -86,8 +91,8 @@ export function wrappedTasks(...args: Parameters<typeof realTasks>) {
         if (tab) {
             Object.assign(updatedOptions, {
                 runAtTabID: tab.id,
-                needRedirect: true,
-                url: tab.url === uri ? undefined : (uri as string),
+                needRedirect: !uriCanDoTask(tab.url, uri),
+                url: uri,
             })
         }
         Object.assign(updatedOptions, options)
