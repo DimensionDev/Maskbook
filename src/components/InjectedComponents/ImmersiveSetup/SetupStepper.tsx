@@ -6,7 +6,7 @@ import StepLabel from '@material-ui/core/StepLabel'
 import StepContent from '@material-ui/core/StepContent'
 import Button from '@material-ui/core/Button'
 import Typography from '@material-ui/core/Typography'
-import { TextField, AppBar, Toolbar, IconButton, Paper } from '@material-ui/core'
+import { TextField, AppBar, Toolbar, IconButton, Paper, Collapse } from '@material-ui/core'
 import { ActionButtonPromise } from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { sleep } from '@holoflows/kit/es/util/sleep'
 import { getActivatedUI } from '../../../social-network/ui'
@@ -53,12 +53,6 @@ const useStyles = makeStyles((theme: Theme) =>
             transition: 'transform 0.1s ease',
             transformOrigin: 'top center',
         },
-        minimized: {
-            transform: 'scaleY(0)',
-        },
-        minimizeend: {
-            height: 0,
-        },
     }),
 )
 
@@ -85,16 +79,11 @@ export function ImmersiveSetupStepperUI(props: ImmersiveSetupStepperUIProps) {
     const steps = getSteps()
     const activeStep = props.currentStep
     const [, inputRef] = useCapturedInput(props.onUsernameChange)
-    const [minimized, _setMinimized] = useState<boolean>(
+    const [minimized, setMinimized] = useState<boolean>(
         () =>
             !!globalThis.location.href.match(/\/login(?:\.php|\/)/) ||
             getActivatedUI().lastRecognizedIdentity.value.identifier.isUnknown,
     )
-    const [minimizeend, setMinimizeend] = useState<boolean>(() => minimized)
-    const setMinimized = useCallback((e: boolean) => {
-        setMinimizeend(false)
-        _setMinimized(e)
-    }, [])
 
     const ERROR_TEXT = t('immersive_setup_no_bio_got')
 
@@ -128,25 +117,21 @@ export function ImmersiveSetupStepperUI(props: ImmersiveSetupStepperUIProps) {
                     </IconButton>
                 </Toolbar>
             </AppBar>
-            <Paper
-                elevation={10}
-                className={classNames(classes.body, {
-                    [classes.minimized]: minimized,
-                    [classes.minimizeend]: minimizeend,
-                })}
-                onTransitionEnd={() => setMinimizeend(minimized)}>
-                <Stepper activeStep={activeStep} orientation="vertical">
-                    {steps.map((label, index) => (
-                        <Step key={index}>
-                            <StepLabel>{label}</StepLabel>
-                            <StepContent>
-                                {getStepContent(index)}
-                                {actions}
-                            </StepContent>
-                        </Step>
-                    ))}
-                </Stepper>
-            </Paper>
+            <Collapse in={!minimized}>
+                <Paper elevation={10} className={classes.body}>
+                    <Stepper activeStep={activeStep} orientation="vertical">
+                        {steps.map((label, index) => (
+                            <Step key={index}>
+                                <StepLabel>{label}</StepLabel>
+                                <StepContent>
+                                    {getStepContent(index)}
+                                    {actions}
+                                </StepContent>
+                            </Step>
+                        ))}
+                    </Stepper>
+                </Paper>
+            </Collapse>
             {/* {activeStep === steps.length && <Typography>{getBioStatus()}</Typography>} */}
         </aside>
     )
