@@ -71,17 +71,17 @@ if (GetContext() === 'background') {
     })
 
     browser.runtime.onInstalled.addListener(detail => {
-        // ! even if, WKWebview seems not triggering this event
-        if (webpackEnv.target === 'WKWebview') return
+        if (webpackEnv.genericTarget === 'app') return
         if (detail.reason === 'install') {
             browser.tabs.create({ url: getWelcomePageURL() })
         }
     })
 
-    if (webpackEnv.target === 'WKWebview') {
+    if (webpackEnv.genericTarget === 'app') {
         contentScriptReady.then(() => {
-            wrappedTasks(getWelcomePageURL(), { important: true })
+            // TODO: twitter app
             wrappedTasks('https://m.facebook.com/', { important: true })
+            wrappedTasks(getWelcomePageURL(), { important: true })
         })
     }
 

@@ -3,6 +3,7 @@
 declare const webpackEnv: {
     readonly target: 'Chromium' | 'Firefox' | 'WKWebview' | undefined
     readonly firefoxVariant: 'android' | 'desktop' | 'GeckoView' | undefined
+    readonly genericTarget: 'app' | 'browser'
 }
 
 declare module NodeJS {
