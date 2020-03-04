@@ -81,7 +81,7 @@ if (GetContext() === 'background') {
         contentScriptReady.then(() => {
             // TODO: twitter app
             wrappedTasks('https://m.facebook.com/', { important: true })
-            wrappedTasks(getWelcomePageURL(), { important: true })
+            wrappedTasks(getWelcomePageURL({}), { important: true })
         })
     }
 
