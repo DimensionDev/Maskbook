@@ -119,14 +119,12 @@ function Dashboard() {
     const { t } = useI18N()
     const classes = useStyles()
 
-    const shouldRenderAppBar = webpackEnv.firefoxVariant === 'GeckoView' || webpackEnv.target === 'WKWebview'
+    const shouldRenderAppBar = webpackEnv.genericTarget === 'app'
     const shouldNotRenderAppBar = useMediaQuery('(min-width:1024px)')
 
     const routers: [string, string, JSX.Element][] = [
         [t('home'), '/home/', <HomeIcon />],
-        ...((webpackEnv.target === 'WKWebview' || webpackEnv.firefoxVariant === 'GeckoView'
-            ? []
-            : [['Wallets', '/wallets/', <CreditCardIcon />]]) as any),
+        ...((webpackEnv.genericTarget === 'app' ? [] : [['Wallets', '/wallets/', <CreditCardIcon />]]) as any),
         [t('settings'), '/settings/', <SettingsIcon />],
         // ['About', '/about/', <InfoOutlinedIcon />],
         [t('debug'), '/debug/', <BugReportIcon />],

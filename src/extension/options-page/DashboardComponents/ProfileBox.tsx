@@ -74,7 +74,8 @@ export default function ProfileBox({ persona, border }: Props) {
 
     const providers = [...definedSocialNetworkWorkers]
         .filter(i => {
-            if (webpackEnv.target === 'WKWebview' || webpackEnv.firefoxVariant === 'GeckoView') {
+            // TODO: twitter app
+            if (webpackEnv.genericTarget === 'app') {
                 if (i.networkIdentifier !== 'facebook.com') return false
             }
             return true

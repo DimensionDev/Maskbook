@@ -16,7 +16,8 @@ activateSocialNetworkUI()
 
 const close = globalThis.close
 globalThis.close = () => {
-    if (webpackEnv.target === 'WKWebview') {
+    if (webpackEnv.genericTarget === 'app') {
+        // TODO: twitter app
         wrappedTasks('https://m.facebook.com/')
         return
     }

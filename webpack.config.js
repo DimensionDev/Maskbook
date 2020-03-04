@@ -226,17 +226,26 @@ module.exports = (argvEnv, argv) => {
         let buildTarget = undefined
         /** @type {'android' | 'desktop' | 'GeckoView' | undefined} */
         let firefoxVariant = undefined
+        /** @type {'app' | 'browser'} */
+        let genericTarget = 'browser'
         if (target.Chromium) buildTarget = 'Chromium'
         if (target.Firefox) buildTarget = 'Firefox'
         if (target.FirefoxDesktop) firefoxVariant = 'desktop'
         if (target.FirefoxForAndroid) firefoxVariant = 'android'
-        if (target.StandaloneGeckoView) firefoxVariant = 'GeckoView'
-        if (target.WKWebview) buildTarget = 'WKWebview'
+        if (target.StandaloneGeckoView) {
+            firefoxVariant = 'GeckoView'
+            genericTarget = 'app'
+        }
+        if (target.WKWebview) {
+            buildTarget = 'WKWebview'
+            genericTarget = 'app'
+        }
         if (target.E2E) buildTarget = 'E2E'
         if (buildTarget)
             config.plugins.push(
                 new webpack.DefinePlugin({
                     'webpackEnv.target': JSON.stringify(buildTarget),
+                    'webpackEnv.genericTarget': JSON.stringify(genericTarget),
                 }),
             )
         if (firefoxVariant)
