@@ -5,7 +5,7 @@ import getCurrentNetworkWorker from '../../social-network/utils/getCurrentNetwor
 import { SocialNetworkUI } from '../../social-network/ui'
 import { getWelcomePageURL } from '../options-page/Welcome/getWelcomePageURL'
 import { recover_ECDH_256k1_KeyPair_ByMnemonicWord } from '../../utils/mnemonic-code'
-import { createPersonaByJsonWebKey } from '../../database'
+import { createPersonaByJsonWebKey, Persona } from '../../database'
 import { attachProfileDB, LinkedProfileDetails } from '../../database/Persona/Persona.db'
 import { CryptoKeyToJsonWebKey } from '../../utils/type-transform/CryptoKey-JsonWebKey'
 import { deriveLocalKeyFromECDHKey } from '../../utils/mnemonic-code/localKeyGenerate'
@@ -93,6 +93,16 @@ export async function openWelcomePage(id?: SocialNetworkUI['lastRecognizedIdenti
 
 export async function openOptionsPage(route?: string) {
     return wrappedTasks(browser.runtime.getURL(route ? '/index.html#' + route : '/'))
+}
+
+export async function startImmersiveSetup(url: string, persona: Persona) {
+    return wrappedTasks(url, {
+        active: true,
+        autoClose: false,
+        important: true,
+        memorable: false,
+        pinned: false,
+    }).immersiveSetup(persona.identifier)
 }
 
 export { createPersonaByMnemonic } from '../../database'
