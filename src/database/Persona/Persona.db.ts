@@ -37,6 +37,7 @@ const db = createDBAccess(() => {
         },
     })
 })
+export const createPersonaDBAccess = db
 export type FullPersonaDBTransaction<Mode extends 'readonly' | 'readwrite'> = IDBPSafeTransaction<
     PersonaDB,
     ['personas', 'profiles'],
@@ -186,7 +187,7 @@ export async function updatePersonaDB(
         ...old,
         ...nextRecord,
         linkedProfiles: nextLinkedProfiles,
-        updatedAt: new Date(),
+        updatedAt: nextRecord.updatedAt ?? new Date(),
     })
     await t.objectStore('personas').put(next)
     MessageCenter.emit('personaUpdated', undefined)
@@ -202,8 +203,8 @@ export async function createOrUpdatePersonaDB(
         return createPersonaDB(
             {
                 ...record,
-                createdAt: new Date(),
-                updatedAt: new Date(),
+                createdAt: record.createdAt ?? new Date(),
+                updatedAt: record.updatedAt ?? new Date(),
                 linkedProfiles: new IdentifierMap(new Map()),
             },
             t,

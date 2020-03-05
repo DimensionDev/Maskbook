@@ -5,6 +5,7 @@
   "license": "AGPL-3.0-or-later",
   "scripts": {
     "build": "webpack --mode production",
+    "build-ci": "ts-node scripts/ci-build.ts",
     "build-storybook": "build-storybook -s public --quiet",
     "build:base": "webpack --mode production",
     "build:chromium": "webpack --mode production --chromium",
@@ -12,10 +13,10 @@
     "build:gecko": "webpack --mode production --firefox-gecko",
     "build:ios": "webpack --mode production --wk-webview",
     "compile:contracts": "./scripts/contracts.sh",
-    "install": "node scripts/postinstall.js",
+    "install": "ts-node scripts/postinstall.ts",
     "lint": "eslint src/ --ext .ts,.tsx --fix",
     "lint:report": "eslint src/ --ext .ts,.tsx --format junit -o reports/junit/eslint-results.xml",
-    "lint:typecoverage": "type-coverage -p tsconfig_cjs.json --strict --ignore-catch --detail --at-least 98.5",
+    "lint:typecoverage": "type-coverage --strict --ignore-catch --detail --at-least 98.5",
     "start": "webpack-dev-server --mode development",
     "start:android": "webpack-dev-server --firefox-android --mode development",
     "start:chromium": "webpack-dev-server --chromium --mode development",
@@ -24,8 +25,8 @@
     "start:ios": "webpack-dev-server --wk-webview --mode development",
     "storybook": "start-storybook -p 9009 -s public --quiet",
     "test": "jest --watch",
-    "test:ci": "jest --ci --collectCoverage=true --reporters=default --reporters=jest-junit",
-    "uninstall": "node scripts/postinstall.js"
+    "test:ci": "jest --ci --collectCoverage=true --reporters=default --reporters=jest-junit -w 1",
+    "uninstall": "ts-node scripts/postinstall.ts"
   },
   "husky": {
     "hooks": {
@@ -35,7 +36,7 @@
   },
   "lint-staged": {
     "*.{ts,tsx,js,jsx}": [
-      "npm run lint"
+      "eslint --ext .ts,.tsx --fix"
     ]
   },
   "dependencies": {
@@ -159,7 +160,7 @@
     "typechain-target-web3-v1": "^1.0.4",
     "typescript": "^3.7.5",
     "web-ext": "^4.1.0",
-    "webpack": "^4.41.6",
+    "webpack": "^4.42.0",
     "webpack-cli": "^3.3.10",
     "webpack-dev-server": "^3.10.3",
     "webpack-extension-manifest-plugin": "^0.5.0",

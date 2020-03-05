@@ -303,6 +303,7 @@ function addTSLoader() {
         options: {
             transpileOnly: true,
             compilerOptions: {
+                module: 'esnext',
                 jsx: 'react',
                 noEmit: false,
             },

@@ -14,11 +14,13 @@ public/polyfill
 
 # testing
 /coverage
+/junit.xml
 
 # production
 /build
 /dist
 /storybook-static
+/Maskbook.*.zip
 
 # misc
 .DS_Store

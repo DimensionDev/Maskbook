@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useCallback } from 'react'
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles'
 import Stepper from '@material-ui/core/Stepper'
 import Step from '@material-ui/core/Step'
@@ -6,7 +6,7 @@ import StepLabel from '@material-ui/core/StepLabel'
 import StepContent from '@material-ui/core/StepContent'
 import Button from '@material-ui/core/Button'
 import Typography from '@material-ui/core/Typography'
-import { TextField, Link, AppBar, Toolbar, IconButton } from '@material-ui/core'
+import { TextField, AppBar, Toolbar, IconButton, Paper, Collapse } from '@material-ui/core'
 import { ActionButtonPromise } from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { sleep } from '@holoflows/kit/es/util/sleep'
 import { getActivatedUI } from '../../../social-network/ui'
@@ -14,10 +14,13 @@ import { useValueRef } from '../../../utils/hooks/useValueRef'
 import { ProfileIdentifier, PersonaIdentifier } from '../../../database/type'
 import { useCapturedInput } from '../../../utils/hooks/useCapturedEvents'
 import CloseIcon from '@material-ui/icons/Close'
+import RemoveIcon from '@material-ui/icons/Remove'
+import AddIcon from '@material-ui/icons/Add'
 import { currentImmersiveSetupStatus, ImmersiveSetupCrossContextStatus } from '../../shared-settings/settings'
 import Services from '../../../extension/service'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { selectElementContents } from '../../../utils/utils'
+import classNames from 'classnames'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -45,7 +48,14 @@ const useStyles = makeStyles((theme: Theme) =>
             padding: 6,
             border: `1px solid ${theme.palette.error.main}`,
         },
-        header: { cursor: 'move' },
+        header: { cursor: 'move', transition: 'opacity 0.4s ease' },
+        minimizedHeader: {
+            opacity: 0.26,
+        },
+        body: {
+            transition: 'transform 0.1s ease',
+            transformOrigin: 'top center',
+        },
     }),
 )
 
@@ -72,6 +82,11 @@ export function ImmersiveSetupStepperUI(props: ImmersiveSetupStepperUIProps) {
     const steps = getSteps()
     const activeStep = props.currentStep
     const [, inputRef] = useCapturedInput(props.onUsernameChange)
+    const [minimized, setMinimized] = useState<boolean>(
+        () =>
+            !!globalThis.location.href.match(/\/login(?:\.php|\/)/) ||
+            getActivatedUI().lastRecognizedIdentity.value.identifier.isUnknown,
+    )
 
     const ERROR_TEXT = t('immersive_setup_no_bio_got')
 
@@ -88,25 +103,43 @@ export function ImmersiveSetupStepperUI(props: ImmersiveSetupStepperUIProps) {
     )
     return (
         <aside className={classes.root}>
-            <AppBar component="nav" position="static" className={classes.header}>
+            <AppBar
+                component="nav"
+                position="static"
+                className={classNames(classes.header, { [classes.minimizedHeader]: minimized })}>
                 <Toolbar variant="dense">
-                    <IconButton edge="start" color="inherit" onClick={props.onClose}>
-                        <CloseIcon />
+                    {!minimized && (
+                        <IconButton edge="start" color="inherit" onClick={props.onClose}>
+                            <CloseIcon />
+                        </IconButton>
+                    )}
+                    <Typography variant="h6">
+                        {t(minimized ? 'banner_get_started' : 'immersive_setup_title')}
+                    </Typography>
+                    <IconButton
+                        style={{ marginLeft: 'auto' }}
+                        edge="end"
+                        color="inherit"
+                        onClick={() => setMinimized(!minimized)}>
+                        {minimized ? <AddIcon /> : <RemoveIcon />}
                     </IconButton>
-                    <Typography variant="h6">{t('immersive_setup_title')}</Typography>
                 </Toolbar>
             </AppBar>
-            <Stepper activeStep={activeStep} orientation="vertical">
-                {steps.map((label, index) => (
-                    <Step key={index}>
-                        <StepLabel>{label}</StepLabel>
-                        <StepContent>
-                            {getStepContent(index)}
-                            {actions}
-                        </StepContent>
-                    </Step>
-                ))}
-            </Stepper>
+            <Collapse in={!minimized}>
+                <Paper elevation={10} className={classes.body}>
+                    <Stepper activeStep={activeStep} orientation="vertical">
+                        {steps.map((label, index) => (
+                            <Step key={index}>
+                                <StepLabel>{label}</StepLabel>
+                                <StepContent>
+                                    {getStepContent(index)}
+                                    {actions}
+                                </StepContent>
+                            </Step>
+                        ))}
+                    </Stepper>
+                </Paper>
+            </Collapse>
             {/* {activeStep === steps.length && <Typography>{getBioStatus()}</Typography>} */}
         </aside>
     )

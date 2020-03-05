@@ -4,7 +4,7 @@ import Adapter from 'enzyme-adapter-react-16'
 configure({ adapter: new Adapter() })
 
 import React, { createRef, RefObject } from 'react'
-import { renderHook } from '@testing-library/react-hooks'
+import { renderHook, act } from '@testing-library/react-hooks'
 import { useCapturedInput, captureEevnts } from '../../hooks/useCapturedEvents'
 
 const containerRef: RefObject<HTMLDivElement> = createRef<HTMLDivElement>()
@@ -20,7 +20,8 @@ beforeEach(() => {
 
 test('invoke callback with input value', () => {
     const inputSpy = jasmine.createSpy()
-    renderHook(() => useCapturedInput(inputSpy, [], inputRef))
+    const [_, updateInputNode] = renderHook(() => useCapturedInput(inputSpy, [])).result.current
+    act(() => updateInputNode(inputRef.current))
 
     inputRef.current!.dispatchEvent(new CustomEvent('input', { bubbles: true }))
     expect(inputSpy.calls.argsFor(0)).toStrictEqual([''])
@@ -42,7 +43,8 @@ for (const name of captureEevnts) {
     })
     test(`capture event: ${name}`, () => {
         const containerSpy = jasmine.createSpy()
-        renderHook(() => useCapturedInput(() => {}, [], inputRef))
+        const [_, updateInputNode] = renderHook(() => useCapturedInput(() => {}, [])).result.current
+        act(() => updateInputNode(inputRef.current))
 
         containerRef.current!.addEventListener(name, containerSpy)
         inputRef.current!.dispatchEvent(new CustomEvent(name, { bubbles: true }))
@@ -52,12 +54,14 @@ for (const name of captureEevnts) {
     })
     test(`remove listener: ${name}`, () => {
         const containerSpy = jasmine.createSpy()
-
         containerRef.current!.addEventListener(name, containerSpy)
         inputRef.current!.dispatchEvent(new CustomEvent(name, { bubbles: true }))
         expect(containerSpy.calls.count()).toBe(1)
 
-        const hook = renderHook(() => useCapturedInput(() => {}, [], inputRef))
+        const hook = renderHook(() => useCapturedInput(() => {}, []))
+        const [_, updateInputNode] = hook.result.current
+        act(() => updateInputNode(inputRef.current))
+
         inputRef.current!.dispatchEvent(new CustomEvent(name, { bubbles: true }))
         expect(containerSpy.calls.count()).toBe(1)
 
