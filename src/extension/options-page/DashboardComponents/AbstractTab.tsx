@@ -83,6 +83,7 @@ export default function AbstractTab(props: AbstractTabProps) {
                     height={height}
                     value={value}
                     index={index}
+                    key={tab.label}
                     p={tab.p}>
                     {tab.component}
                 </TabPanel>
