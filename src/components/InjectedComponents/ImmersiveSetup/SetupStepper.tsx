@@ -48,7 +48,10 @@ const useStyles = makeStyles((theme: Theme) =>
             padding: 6,
             border: `1px solid ${theme.palette.error.main}`,
         },
-        header: { cursor: 'move' },
+        header: { cursor: 'move', transition: 'opacity 0.4s ease' },
+        minimizedHeader: {
+            opacity: 0.26,
+        },
         body: {
             transition: 'transform 0.1s ease',
             transformOrigin: 'top center',
@@ -100,11 +103,16 @@ export function ImmersiveSetupStepperUI(props: ImmersiveSetupStepperUIProps) {
     )
     return (
         <aside className={classes.root}>
-            <AppBar component="nav" position="static" className={classes.header}>
+            <AppBar
+                component="nav"
+                position="static"
+                className={classNames(classes.header, { [classes.minimizedHeader]: minimized })}>
                 <Toolbar variant="dense">
-                    <IconButton edge="start" color="inherit" onClick={props.onClose}>
-                        <CloseIcon />
-                    </IconButton>
+                    {!minimized && (
+                        <IconButton edge="start" color="inherit" onClick={props.onClose}>
+                            <CloseIcon />
+                        </IconButton>
+                    )}
                     <Typography variant="h6">
                         {t(minimized ? 'banner_get_started' : 'immersive_setup_title')}
                     </Typography>
