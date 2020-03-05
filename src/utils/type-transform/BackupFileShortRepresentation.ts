@@ -32,7 +32,7 @@ export function compressBackupFile(file: BackupJSONFileLatest, profileIdentifier
         profileIdentifier.userId,
         nickname,
         localKey?.k ||
-            profiles.filter(x => x.linkedPersona === profileIdentifier!.toText()).filter(x => x.localKey)[0]?.localKey
+            profiles.filter(x => x.identifier === profileIdentifier!.toText()).filter(x => x.localKey)[0]?.localKey
                 ?.k ||
             '',
         compressSecp256k1Key(privateKey, 'private'),
