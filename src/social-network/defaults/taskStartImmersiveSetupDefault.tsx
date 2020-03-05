@@ -5,7 +5,7 @@ import {
     ImmersiveSetupStepper,
     ImmersiveSetupStepperUIProps,
 } from '../../components/InjectedComponents/ImmersiveSetup/SetupStepper'
-import { DraggablePaper } from '../../components/InjectedComponents/ImmersiveSetup/DraggablePaper'
+import { DraggableDiv } from '../../components/InjectedComponents/ImmersiveSetup/DraggableDiv'
 import Services from '../../extension/service'
 import { ValueRef } from '@holoflows/kit/es'
 import { useValueRef } from '../../utils/hooks/useValueRef'
@@ -22,13 +22,13 @@ function UI({
 >) {
     const provePost = useValueRef(post)
     return (
-        <DraggablePaper>
+        <DraggableDiv>
             <ImmersiveSetupStepper
                 persona={persona}
                 provePost={provePost}
                 onClose={unmount}
                 {...rest}></ImmersiveSetupStepper>
-        </DraggablePaper>
+        </DraggableDiv>
     )
 }
 let mounted = false
