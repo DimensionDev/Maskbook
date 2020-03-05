@@ -73,7 +73,7 @@ export default function AbstractTab(props: AbstractTabProps) {
                     textColor="primary"
                     variant="fullWidth">
                     {tabs.map(tab => (
-                        <Tab classes={{ selected: classes.tabSelected }} label={tab.label} />
+                        <Tab classes={{ selected: classes.tabSelected }} label={tab.label} key={tab.label} />
                     ))}
                 </Tabs>
             </AppBar>
