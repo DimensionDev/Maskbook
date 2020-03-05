@@ -11,12 +11,16 @@ import {
     makeStyles,
     ListItemIcon,
     SelectProps,
+    createStyles,
 } from '@material-ui/core'
 import React from 'react'
 
-const useStyles = makeStyles({
-    container: { listStyleType: 'none', width: '100%' },
-})
+const useStyles = makeStyles(theme =>
+    createStyles({
+        container: { listStyleType: 'none', width: '100%' },
+        secondaryAction: { paddingRight: 90 + theme.spacing(2) },
+    }),
+)
 
 function withDefaultText<T>(props: SettingsUIProps<T>): SettingsUIProps<T> {
     const { value, primary, secondary } = props
@@ -56,6 +60,11 @@ export function SettingsUI<T>(props: SettingsUIProps<T>) {
             )
     }
 }
+
+const useStyles2 = makeStyles({
+    secondaryAction: { width: 90 },
+})
+
 export function SettingsUIEnum<T extends object>(
     props: {
         enumObject: T
@@ -65,12 +74,13 @@ export function SettingsUIEnum<T extends object>(
 ) {
     const { primary, secondary } = withDefaultText(props)
     const classes = useStyles()
+    const classes2 = useStyles2()
     const [ui, change] = useEnumSettings(props.value, props.enumObject, props.getText, props.SelectProps)
     return (
         <ListItem component="div" classes={classes}>
             {props.icon ? <ListItemIcon>{props.icon}</ListItemIcon> : null}
             <ListItemText primary={primary} secondary={secondary} />
-            <ListItemSecondaryAction>{ui}</ListItemSecondaryAction>
+            <ListItemSecondaryAction className={classes2.secondaryAction}>{ui}</ListItemSecondaryAction>
         </ListItem>
     )
 }
