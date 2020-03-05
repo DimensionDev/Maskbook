@@ -1,14 +1,15 @@
 import { execFileSync, ExecFileSyncOptions } from 'child_process'
 import path from 'path'
+import os from 'os'
 import git from '@nice-labs/git-rev'
 
 const cwd = path.join(__dirname, '..')
 const BUILD_PATH = path.join(cwd, 'build')
+const stdio = [process.stdin, process.stdout, process.stderr]
+const shell = os.platform() === 'win32'
 
-const exec = (command: string, args?: ReadonlyArray<string>, options?: ExecFileSyncOptions) => {
-    options = { cwd, stdio: [process.stdin, process.stdout, process.stderr], ...options }
-    execFileSync(command, args, options)
-}
+const exec = (command: string, args?: string[], options?: ExecFileSyncOptions) =>
+    execFileSync(command, args, { cwd, stdio, shell, ...options })
 
 function buildTypes(name: string): string[] {
     if (/full/.test(name) || name === 'master') {
