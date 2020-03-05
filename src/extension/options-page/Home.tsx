@@ -38,7 +38,7 @@ const useStyles = makeStyles((theme: Theme) =>
             width: 120,
         },
         secondaryAction: {
-            paddingRight: 120,
+            paddingRight: 120 + theme.spacing(2),
         },
         actionButtons: {
             margin: theme.spacing(2),
