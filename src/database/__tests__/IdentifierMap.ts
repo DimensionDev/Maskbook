@@ -4,6 +4,11 @@ import { ProfileIdentifier, Identifier, PostIVIdentifier, PostIdentifier } from 
 const a = new ProfileIdentifier('localhost', 'id')
 const aa = new ProfileIdentifier('localhost', 'id')
 const b = new ProfileIdentifier('localhost', 'id2')
+
+beforeAll(() => {
+    spyOn(globalThis.console, 'warn')
+})
+
 test('Map<Identifier, ?>', () => {
     const x = new IdentifierMap<Identifier, number>(new Map())
     x.set(a, 1)
