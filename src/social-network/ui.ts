@@ -300,7 +300,6 @@ export function activateSocialNetworkUI(): void {
             {
                 // Do i18nOverwrite
                 for (const lng in ui.i18nOverwrite) {
-                    console.log('Applying ', lng, ui.i18nOverwrite[lng])
                     i18nNextInstance.addResourceBundle(lng, 'translation', ui.i18nOverwrite[lng], true, true)
                 }
             }
