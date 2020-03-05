@@ -13,7 +13,6 @@ import { DialogRouter } from '../DashboardDialogs/DialogBase'
 import { ProfileDisconnectDialog, ProfileConnectStartDialog, ProfileConnectDialog } from '../DashboardDialogs/Profile'
 import Services from '../../service'
 import getCurrentNetworkUI from '../../../social-network/utils/getCurrentNetworkUI'
-import { wrappedTasks } from '../../content-script/tasks'
 import {
     currentImmersiveSetupStatus,
     ImmersiveSetupCrossContextStatus,
@@ -105,13 +104,7 @@ export default function ProfileBox({ persona, border }: Props) {
             status: 'during',
             persona: persona.identifier.toText(),
         } as ImmersiveSetupCrossContextStatus)
-        wrappedTasks(getCurrentNetworkUI(provider.network).getHomePage(), {
-            active: true,
-            autoClose: false,
-            important: true,
-            memorable: false,
-            pinned: false,
-        }).immersiveSetup(persona.identifier)
+        Services.Welcome.startImmersiveSetup(getCurrentNetworkUI(provider.network).getHomePage(), persona)
     }
 
     return (
