@@ -1,10 +1,10 @@
 import { ProfileIdentifier } from '../../../database/type'
 import tasks from '../../../extension/content-script/tasks'
-import { getProfileUrl, twitterUrl } from '../utils/url'
+import { getProfileUrlAtTwitter, twitterUrl } from '../utils/url'
 import { i18n } from '../../../utils/i18n-next'
 
 export const autoVerifyBio = (self: ProfileIdentifier, prove: string) => {
-    tasks(getProfileUrl(self), {
+    tasks(getProfileUrlAtTwitter(self), {
         active: true,
         autoClose: false,
         memorable: false,
