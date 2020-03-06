@@ -12,8 +12,8 @@ const src = file => path.join(__dirname, file)
  * Polyfills that needs to be copied to dist
  */
 let polyfills = [
-    'node_modules/webextension-polyfill/dist/browser-polyfill.min.js',
-    'node_modules/webextension-polyfill/dist/browser-polyfill.min.js.map',
+    require.resolve('webextension-polyfill/dist/browser-polyfill.min.js'),
+    require.resolve('webextension-polyfill/dist/browser-polyfill.min.js.map'),
 ]
 
 const publicDir = src('./public')
@@ -63,7 +63,7 @@ module.exports = (argvEnv, argv) => {
     if (target.Firefox) {
         polyfills = polyfills.filter(name => !name.includes('webextension-polyfill'))
     }
-    if (target.StandaloneGeckoView || target.WKWebview) polyfills.push('src/polyfill/permissions.js')
+    if (target.StandaloneGeckoView || target.WKWebview) polyfills.push(require.resolve('./src/polyfill/permissions.js'))
 
     /** @type {"production" | "development"} */
     const env = argv.mode
@@ -294,7 +294,7 @@ module.exports = (argvEnv, argv) => {
     if (!fs.existsSync(publicPolyfill)) {
         fs.mkdirSync(publicPolyfill)
     }
-    polyfills.map(x => void fs.copyFileSync(src(x), path.join(publicPolyfill, path.basename(x))))
+    polyfills.map(x => void fs.copyFileSync(x, path.join(publicPolyfill, path.basename(x))))
 
     if (env !== 'development') {
         config.plugins.push(new SSRPlugin('popup.html', src('./src/extension/popup-page/index.tsx')))
