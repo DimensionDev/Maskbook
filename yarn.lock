@@ -3897,6 +3897,11 @@
   resolved "https://registry.yarnpkg.com/@types/stack-utils/-/stack-utils-1.0.1.tgz#0a851d3bd96498fa25c33ab7278ed3bd65f06c3e"
   integrity sha512-l42BggppR6zLmpfU6fq9HEa2oGPEI8yrSPL3GITjfRInppYFahObbIQOQK3UGxEnyQpltZLaPe75046NOZQikw==
 
+"@types/systemjs@^6.1.0":
+  version "6.1.0"
+  resolved "https://registry.yarnpkg.com/@types/systemjs/-/systemjs-6.1.0.tgz#eb92e3181391b6f49b8310077fe65bfa3db9392a"
+  integrity sha512-akhlviqwowzRNiz3ooAbkjvyMO8cikBqap9z/0yfvMAb6vIsp91Rfox67qtgIhZosWP01MVSTwsgSFYWo4SWQA==
+
 "@types/testing-library__react-hooks@^3.0.0":
   version "3.2.0"
   resolved "https://registry.yarnpkg.com/@types/testing-library__react-hooks/-/testing-library__react-hooks-3.2.0.tgz#52f3a109bef06080e3b1e3ae7ea1c014ce859897"
@@ -16363,6 +16368,11 @@ realistic-structured-clone@^2.0.1:
     typeson "^5.8.2"
     typeson-registry "^1.0.0-alpha.20"
 
+realms-shim@^1.2.1:
+  version "1.2.2"
+  resolved "https://registry.yarnpkg.com/realms-shim/-/realms-shim-1.2.2.tgz#bdf828ee316afa4c9ea2aab364d55b8ad7eb5904"
+  integrity sha512-NOskQ7IJEnHN4Dhu462Pf0Kl8YHSPjt6V+fVvrGSCs/SfAa433CLTyJ632DFsZC2ENBQ9p6tEZ3w+1Vkycuwyg==
+
 realpath-native@^1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/realpath-native/-/realpath-native-1.1.0.tgz#2003294fea23fb0672f2476ebe22fcf498a2d65c"
@@ -18422,6 +18432,11 @@ symbol.prototype.description@^1.0.0:
   dependencies:
     has-symbols "^1.0.0"
 
+systemjs@^6.2.3:
+  version "6.2.5"
+  resolved "https://registry.yarnpkg.com/systemjs/-/systemjs-6.2.5.tgz#6b01928066704af8d12c56dfb04dd9d8fabcbb36"
+  integrity sha512-Jw1FOgzxG+wIi+ewEPyYKsqxR3IQOQWMwFh1o7C0VfLYoBcVDYSg8EFrKCisUD+5+/KecrDC+NSy4exkl7QRdw==
+
 table@^3.7.8:
   version "3.8.3"
   resolved "https://registry.yarnpkg.com/table/-/table-3.8.3.tgz#2bbc542f0fda9861a755d3947fefd8b3f513855f"
@@ -19811,7 +19826,7 @@ wcwidth@^1.0.0:
   dependencies:
     defaults "^1.0.3"
 
-web-ext-types@^3.1.0:
+web-ext-types@^3.1.0, web-ext-types@^3.2.1:
   version "3.2.1"
   resolved "https://registry.yarnpkg.com/web-ext-types/-/web-ext-types-3.2.1.tgz#3edc0e3c2e8fe121d7d7e4ca0b7ee0c883cea832"
   integrity sha512-oQZYDU3W8X867h8Jmt3129kRVKklz70db40Y6OzoTTuzOJpF/dB2KULJUf0txVPyUUXuyzV8GmT3nVvRHoG+Ew==
@@ -20377,6 +20392,17 @@ webextension-polyfill@^0.6.0:
   version "0.6.0"
   resolved "https://registry.yarnpkg.com/webextension-polyfill/-/webextension-polyfill-0.6.0.tgz#1afd925f3274a0d4848083579b9c0b649a5c6763"
   integrity sha512-PlYwiX8e4bNZrEeBFxbFFsLtm0SMPxJliLTGdNCA0Bq2XkWrAn2ejUd+89vZm+8BnfFB1BclJyCz3iKsm2atNg==
+
+"webextension-shim@https://github.com/DimensionDev/webextension-polyfill":
+  version "0.0.1"
+  resolved "https://github.com/DimensionDev/webextension-polyfill#f5869b3fb52cf0c19518b6415bcac933c9741f0e"
+  dependencies:
+    "@types/systemjs" "^6.1.0"
+    async-call-rpc "^1.0.4"
+    realms-shim "^1.2.1"
+    systemjs "^6.2.3"
+    typescript "^3.7.5"
+    web-ext-types "^3.2.1"
 
 webidl-conversions@^4.0.2:
   version "4.0.2"
