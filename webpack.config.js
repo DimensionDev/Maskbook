@@ -34,6 +34,7 @@ const ManifestGeneratorPlugin = require('webpack-extension-manifest-plugin')
  * --firefox-gecko
  * --chromium
  * --wk-webview
+ * --e2e
  */
 const calcTarget = argv => ({
     /** @type {'nightly' | boolean} */
@@ -48,6 +49,8 @@ const calcTarget = argv => ({
     Chromium: (argv.chromium),
     /** @type {boolean} */
     WKWebview: (argv['wk-webview']),
+    /** @type {boolean} */
+    E2E: (argv.e2e),
 })
 
 /**
@@ -219,7 +222,7 @@ module.exports = (argvEnv, argv) => {
 
     // Setting conditional compilations
     {
-        /** @type {'Chromium' | 'Firefox' | 'WKWebview' | undefined} */
+        /** @type {'Chromium' | 'Firefox' | 'WKWebview' | 'E2E' | undefined} */
         let buildTarget = undefined
         /** @type {'android' | 'desktop' | 'GeckoView' | undefined} */
         let firefoxVariant = undefined
@@ -229,6 +232,7 @@ module.exports = (argvEnv, argv) => {
         if (target.FirefoxForAndroid) firefoxVariant = 'android'
         if (target.StandaloneGeckoView) firefoxVariant = 'GeckoView'
         if (target.WKWebview) buildTarget = 'WKWebview'
+        if (target.E2E) buildTarget = 'E2E'
         if (buildTarget)
             config.plugins.push(
                 new webpack.DefinePlugin({
@@ -252,7 +256,7 @@ module.exports = (argvEnv, argv) => {
         if (target.FirefoxForAndroid) modifiers.firefox(manifest)
         if (target.StandaloneGeckoView) modifiers.geckoview(manifest)
         if (target.WKWebview) modifiers.WKWebview(manifest)
-        if (env === 'development') modifiers.development(manifest, target)
+        if (env === 'development' || target.E2E) modifiers.development(manifest, target)
         else modifiers.production(manifest, target)
 
         config.plugins.push(new ManifestGeneratorPlugin({ config: { base: manifest } }))
