@@ -21,8 +21,7 @@ export function collectPostsFacebook(this: SocialNetworkUI) {
             // ? inject after comments
             const commentSelectorPC = root
                 .clone()
-                .querySelectorAll('[role=article]')
-                .querySelectorAll('a+span')
+                .querySelectorAll('[role=article] [data-ft] > div > a + span')
                 .closest<HTMLElement>(2)
             const commentSelectorMobile = root
                 .clone()
