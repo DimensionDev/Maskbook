@@ -106,7 +106,7 @@
     "@sinonjs/text-encoding": "^0.7.1",
     "@storybook/addon-actions": "^5.3.13",
     "@storybook/addon-docs": "^5.3.13",
-    "@storybook/addon-info": "^5.3.12",
+    "@storybook/addon-info": "^5.3.14",
     "@storybook/addon-knobs": "^5.3.12",
     "@storybook/addon-links": "^5.3.12",
     "@storybook/addon-viewport": "^5.3.13",
