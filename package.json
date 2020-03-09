@@ -76,7 +76,7 @@
     "jsonwebtoken": "^8.5.1",
     "jsqr": "^1.2.0",
     "lodash-es": "^4.17.11",
-    "node-stego": "^0.10.0",
+    "node-stego": "^0.10.1",
     "notistack": "^0.9.7",
     "openzeppelin-solidity": "^2.4.0",
     "pvtsutils": "^1.0.9",
