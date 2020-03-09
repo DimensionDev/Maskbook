@@ -1,37 +1,42 @@
 /// <reference path="./matrix.type.d.ts" />
-import sdk from 'matrix-js-sdk'
-import { MatrixClient, MemoryStorageProvider } from 'matrix-bot-sdk'
+import sdk, { MatrixClient } from 'matrix-js-sdk'
 import mitt from 'mitt'
-
-const endpoint = 'https://matrix.vampire.rip'
-const storage = new MemoryStorageProvider()
-const client = sdk.createClient({ baseUrl: endpoint })
+export const endpoint = 'https://matrix.vampire.rip'
+type MatrixClient = typeof MatrixClient extends { new (...args: any[]): infer U } ? U : never
+function any(x: any): any {
+    return x
+}
 type MatrixLoginCred = Record<'user_id' | 'device_id' | 'access_token' | 'home_server', string>
-
 /**
  * Login a Matrix Account
  * @param username
  * @param password
  */
-export async function loginMatrixAccount(username: string, password: string): Promise<[MatrixLoginCred, MatrixClient]> {
-    const cred: MatrixLoginCred = await (client as any).loginWithPassword(username, password)
-    const bot = new MatrixClient(endpoint, cred.access_token, storage)
-
-    bot.start()
-    return [cred, bot]
+export async function loginMatrixAccount(
+    client: MatrixClient,
+    username: string,
+    password: string,
+): Promise<[MatrixLoginCred, MatrixClient]> {
+    const cred: MatrixLoginCred = await any(client).loginWithPassword(username, password)
+    client.startClient({})
+    return [cred, client]
 }
 /**
  * Register a Matrix Account
  */
-export function registerMatrixAccount(username: string, password: string): Promise<[MatrixLoginCred, MatrixClient]> {
+export function registerMatrixAccount(
+    client: MatrixClient,
+    username: string,
+    password: string,
+): Promise<[MatrixLoginCred, MatrixClient]> {
     const u = undefined
     return new Promise<[MatrixLoginCred, MatrixClient]>(async (resolve, reject) => {
         try {
-            ;(client as any).register(username, password, u, u, u, u, false, (x: any) => {
+            any(client).register(username, password, u, u, u, u, false, (x: any) => {
                 const session = x.data.session
                 if (!session) return reject(x)
-                ;(client as any).register(username, password, session, { type: 'm.login.dummy' }, u, u, false, () =>
-                    loginMatrixAccount(username, password).then(resolve, reject),
+                any(client).register(username, password, session, { type: 'm.login.dummy' }, u, u, false, () =>
+                    loginMatrixAccount(client, username, password).then(resolve, reject),
                 )
             })
         } catch (e) {
@@ -39,33 +44,14 @@ export function registerMatrixAccount(username: string, password: string): Promi
         }
     })
 }
-/**
- *
- * @param bot
- * @param props See https://matrix.org/docs/spec/client_server/r0.6.0#post-matrix-client-r0-createroom
- */
-function createMatrixRoom(
-    bot: MatrixClient,
-    props: {
-        name: string
-        visibility: 'public' | 'private'
-        preset: 'public_chat' | 'private_chat' | 'trusted_private_chat'
-        // initial_state: []
-        room_alias_name: string
-        topic: string
-        creation_content: { 'm.federate': boolean }
-    },
-) {
-    return bot.createRoom(props)
+export function createMatrixRoom(client: MatrixClient, visibility: 'public' | 'private', room_alias_name: string) {
+    return any(client).createRoom({ room_alias_name, visibility })
 }
-const username = ['maskbook-test222', 'passwordpasswordpassword'] as const
-
-setInterval(() => {}, 2000)
 interface MatrixMessageTypes {
     'maskbook.hello.world': { message: string }
     'maskbook.hello.world2': number
 }
-type MatrixMessageEvent<T extends keyof MatrixMessageTypes> = {
+interface MatrixMessageEvent<T extends keyof MatrixMessageTypes> {
     meta: {
         matrix: {
             sender: string
@@ -79,41 +65,51 @@ type MatrixMessageEvent<T extends keyof MatrixMessageTypes> = {
     payload: MatrixMessageTypes[T]
 }
 type MatrixMessageListener<T extends keyof MatrixMessageTypes> = (event: MatrixMessageEvent<T>) => void
-class MatrixMessage {
+interface PatchedEvent extends Omit<MatrixEvent, 'event'> {
+    event: {
+        type: string
+        sender: string
+        content: object
+        origin_server_ts: number
+        unsigned: unknown & {
+            age: number
+        }
+        event_id: string
+        room_id: string
+    }
+}
+export class MatrixMessage {
     public userID: null | string = null
     constructor(public matrixClient: MatrixClient) {
         matrixClient
-            .start()
+            .startClient({})
             .then(() => matrixClient.getUserId())
             .then(id => (this.userID = id))
+
         matrixClient.on(
-            'room.event',
+            'Room.timeline',
             <T extends keyof MatrixMessageTypes>(
-                roomID: string,
-                event: {
-                    type: string
-                    sender: string
-                    content: object
-                    origin_server_ts: number
-                    unsigned: unknown & { age: number }
-                    event_id: string
-                },
+                event: PatchedEvent,
+                _room: Room,
+                _eventTimelineSet: EventTimelineSet,
+                _room2: Room,
             ) => {
+                const e = event.event
                 const data: MatrixMessageEvent<T> = {
-                    type: event.type as T,
+                    type: e.type as T,
                     meta: {
                         matrix: {
-                            room_id: roomID,
-                            room_name: this.reverseCache.get(roomID),
-                            event_id: event.event_id,
-                            origin_server_ts: event.origin_server_ts,
-                            sender: event.sender,
+                            room_id: e.room_id,
+                            room_name: this.reverseCache.get(e.room_id),
+                            event_id: e.event_id,
+                            origin_server_ts: e.origin_server_ts,
+                            sender: e.sender,
                         },
                     },
                     // TODO: validate it with JSON schema
-                    payload: event.content as MatrixMessageTypes[T],
+                    payload: e.content as MatrixMessageTypes[T],
                 }
-                this.mitt.emit(event.type, data)
+                this.mitt.emit(e.type, data)
             },
         )
     }
@@ -125,15 +121,15 @@ class MatrixMessage {
         let id = ''
         if (room.type === 'alias') id = await this.lookupRoomAlias(room.alias)
         else if (room.type === 'id') id = room.id
-        await this.matrixClient.sendEvent(id, eventName, data)
+        await this.matrixClient.sendEvent(id, eventName, data, undefined!, undefined!)
     }
     on<T extends keyof MatrixMessageTypes>(
         event: keyof MatrixMessageTypes,
         f: MatrixMessageListener<T>,
-        options: { ignoreMyself: boolean },
+        options?: { ignoreMyself?: boolean },
     ) {
         const _f: typeof f = event => {
-            if (event.meta.matrix.sender === this.userID && options.ignoreMyself) return
+            if (event.meta.matrix.sender === this.userID && options?.ignoreMyself) return
             f(event)
         }
         this.mitt.on(event, _f)
@@ -144,21 +140,36 @@ class MatrixMessage {
     private reverseCache = new Map<string, string>()
     private async lookupRoomAlias(alias: string): Promise<string> {
         if (this.cache.has(alias)) return this.cache.get(alias)!
-        const x = await this.matrixClient.lookupRoomAlias(alias)
-        this.cache.set(alias, x.roomId)
-        this.reverseCache.set(x.roomId, alias)
-        return x.roomId
+        // @ts-ignore
+        const x: { room_id: string; servers: string[] } = await this.matrixClient.getRoomIdForAlias(alias)
+        this.cache.set(alias, x.room_id)
+        this.reverseCache.set(x.room_id, alias)
+        return x.room_id
     }
 }
+export async function createMatrixMessage(username: string, password: string) {
+    const client = sdk.createClient({ baseUrl: endpoint })
+    await loginMatrixAccount(client, username, password)
+    return new MatrixMessage(client)
+}
+const username = ['maskbook-test222', 'passwordpasswordpassword'] as const
+export const client1 = createMatrixMessage(...username)
+export const client2 = createMatrixMessage('another', 'testtest')
+export const room = '#hchch:matrix.vampire.rip'
+import * as self from './matrix'
+import { MatrixEvent } from 'matrix-js-sdk-type/dts/models/event'
+import Room from 'matrix-js-sdk-type/dts/models/room'
+import EventTimelineSet from 'matrix-js-sdk-type/dts/models/event-timeline-set'
+import { sleep } from '@holoflows/kit/es/util/sleep'
+Object.assign(globalThis, { mat: self })
+console.log('mat\n', self)
 
-loginMatrixAccount(...username)
-    .catch(() => registerMatrixAccount(...username))
-    .then(([cred, client]) => {
-        console.warn(cred)
-        const m = new MatrixMessage(client)
-        Object.assign(globalThis, { temp1: m })
-        m.on('maskbook.hello.world', console.warn, { ignoreMyself: true })
-        m.emit({ type: 'alias', alias: '#hchch:matrix.vampire.rip' }, 'maskbook.hello.world', {
-            message: Math.random().toString(),
-        })
+client1.then(x => {
+    x.on('maskbook.hello.world', f => {
+        console.log(f.payload)
     })
+})
+
+sleep(2000)
+    .then(() => client2)
+    .then(x => x.emit({ type: 'alias', alias: room }, 'maskbook.hello.world', { message: 'hi' }))
