@@ -114,6 +114,14 @@ export const useTwitterDialog = makeStyles((theme: Theme) => {
     }
 })
 
+export const useTwitterMaskbookIcon = makeStyles((theme: Theme) => ({
+    img: {
+        width: 20,
+        height: 20,
+        padding: 8,
+    },
+}))
+
 export const useTwitterBanner = makeStyles((theme: Theme) => ({
     root: {
         borderRadius: 0,
