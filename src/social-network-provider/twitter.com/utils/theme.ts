@@ -121,6 +121,7 @@ export const useTwitterBanner = makeStyles((theme: Theme) => ({
         borderTop: `1px solid ${theme.palette.type === 'dark' ? '#2f3336' : '#e6ecf0'}`,
         paddingBottom: 10,
         marginBottom: 0,
+        boxShadow: 'none',
     },
     actions: {
         padding: '0 17px',
