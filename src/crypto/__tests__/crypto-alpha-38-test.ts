@@ -26,6 +26,10 @@ async function aesFromSeed(seed: string) {
     return derive_AES_GCM_256_Key_From_PBKDF2(await import_PBKDF2_Key(encodeText(seed)), encodeText('iv'))
 }
 
+beforeAll(() => {
+    spyOn(globalThis.console, 'warn')
+})
+
 // Test for:
 c.typedMessageParse && c.typedMessageStringify
 test('Crypto alpha v38 Typed Message', () => {

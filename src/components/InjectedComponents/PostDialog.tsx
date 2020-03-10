@@ -41,6 +41,7 @@ import { PluginRedPacketTheme } from '../../plugins/Wallet/theme'
 import { sleep } from '../../utils/utils'
 import { useI18N } from '../../utils/i18n-next-ui'
 import ShadowRootDialog from '../../utils/jss/ShadowRootDialog'
+import { twitterUrl } from '../../social-network-provider/twitter.com/utils/url'
 
 const defaultTheme = {}
 
@@ -317,12 +318,14 @@ export function PostDialog(props: PostDialogProps) {
                     if (metadata.ok) {
                         if (i18n.language.includes('zh')) {
                             text =
-                                '春節快樂，用 Maskbook 開啟 Twitter 上第一個紅包！ （僅限 Twitter web 版）#MakerDAO #Maskbook 用@realMaskbook 解密 ' +
-                                encrypted
+                                activeUI.networkIdentifier === twitterUrl.hostIdentifier
+                                    ? `用 #Maskbook @realMaskbook 開啟紅包 ${encrypted}`
+                                    : `用 #Maskbook 開啟紅包 ${encrypted}`
                         } else {
                             text =
-                                'Happy Chinese New Year and use Maskbook to receive the first Twitter Red Packet. (Only available on Twitter for web) #MakerDAO #Maskbook Decrypt with @realMaskbook ' +
-                                encrypted
+                                activeUI.networkIdentifier === twitterUrl.hostIdentifier
+                                    ? `Claim this Red Packet with #Maskbook @realMaskbook ${encrypted}`
+                                    : `Claim this Red Packet with #Maskbook ${encrypted}`
                         }
                     }
                     activeUI.taskPasteIntoPostBox(text, {

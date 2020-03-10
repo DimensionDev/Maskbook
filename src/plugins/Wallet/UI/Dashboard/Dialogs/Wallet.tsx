@@ -295,16 +295,21 @@ export function WalletRedPacketDetailDialog(props: WalletRedPacketDetailDialogPr
 
     const classes = useRedPacketDetailStyles()
     const sayThanks = () => {
-        const user = redPacket._found_in_url_?.match(/(?!\/)[\d\w]+(?=\/status)/)
-        const text = `I just received a Red Packet${
-            user ? ` from @${user}` : ''
-        }. Follow @realMaskbook (maskbook.com) to get your first Twitter #RedPacket.
+        // TODO: facebook
+        if (!redPacket._found_in_url_!.includes('twitter.com/')) {
+            window.open(redPacket._found_in_url_, '_blank', 'noopener noreferrer')
+        } else {
+            const user = redPacket._found_in_url_!.match(/(?!\/)[\d\w]+(?=\/status)/)
+            const text = `I just received a Red Packet${
+                user ? ` from @${user}` : ''
+            }. Follow @realMaskbook (maskbook.com) to get your first Twitter #RedPacket.
 #maskbook #makerdao ${redPacket._found_in_url_}`
-        window.open(
-            `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`,
-            '_blank',
-            'noopener noreferrer',
-        )
+            window.open(
+                `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`,
+                '_blank',
+                'noopener noreferrer',
+            )
+        }
     }
 
     return (

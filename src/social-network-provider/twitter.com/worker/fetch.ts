@@ -1,5 +1,5 @@
 import { ProfileIdentifier, PostIdentifier } from '../../../database/type'
-import { getPostUrl, getProfileUrl } from '../utils/url'
+import { getPostUrlAtTwitter, getProfileUrlAtTwitter } from '../utils/url'
 import tasks from '../../../extension/content-script/tasks'
 import { isMobileTwitter } from '../utils/isMobile'
 
@@ -11,9 +11,9 @@ import { isMobileTwitter } from '../utils/isMobile'
  */
 
 export const fetchPostContent = (post: PostIdentifier<ProfileIdentifier>) => {
-    return tasks(getPostUrl(post)).getPostContent()
+    return tasks(getPostUrlAtTwitter(post)).getPostContent()
 }
 
 export const fetchProfile = (self: ProfileIdentifier) => {
-    return tasks(getProfileUrl(self, isMobileTwitter as boolean), {}).getProfile(self)
+    return tasks(getProfileUrlAtTwitter(self, isMobileTwitter as boolean), {}).getProfile(self)
 }

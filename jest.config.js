@@ -1,6 +1,7 @@
 const path = require('path')
 
 module.exports = {
+    testRegex: ['/__tests__/.*\\.[jt]sx?$'],
     preset: 'ts-jest',
     testEnvironment: 'jest-environment-jsdom-fourteen',
     globals: {
@@ -9,6 +10,7 @@ module.exports = {
         },
     },
     globalSetup: path.join(__dirname, './scripts/jest-global-setup'),
+    globalTeardown: path.join(__dirname, './scripts/jest-global-teardown'),
     setupFiles: [
         require.resolve('jest-webextension-mock'),
         require.resolve('fake-indexeddb/auto'),

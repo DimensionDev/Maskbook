@@ -6,7 +6,7 @@ version: 2.1
 executors:
     maskbook_node:
         docker:
-            - image: circleci/node:13.2.0
+            - image: circleci/node:13.2.0-browsers
         working_directory: ~/repo
 commands:
     restore_workspace:
@@ -22,13 +22,13 @@ jobs:
             - restore_cache:
                   name: Restore Yarn Package Cache
                   keys:
-                      - v1-maskbook-cache
+                      - v2-maskbook-cache
             - run:
                   name: Install Dependencies
                   command: yarn install --link-duplicates --frozen-lockfile
             - save_cache:
                   name: Save Yarn Package Cache
-                  key: v1-maskbook-cache
+                  key: v2-maskbook-cache
                   paths:
                       - ~/.cache/yarn
             - persist_to_workspace:
@@ -41,7 +41,7 @@ jobs:
             - restore_workspace
             - run:
                   name: 'TypeScript type check'
-                  command: yarn tsc -p tsconfig_cjs.json --noEmit
+                  command: yarn tsc --noEmit
     eslint:
         executor: maskbook_node
         steps:
@@ -82,6 +82,23 @@ jobs:
                   path: reports/junit
             - store_artifacts:
                   path: coverage
+    e2e:
+        executor: maskbook_node
+        steps:
+            - restore_workspace
+            - run:
+                  name: Setup E2E
+                  command: |
+                      mkdir -p ./screenshots
+                      yarn build:e2e
+            - run:
+                  name: Jest E2E
+                  command: yarn test:e2e
+            - run:
+                  name: Teardown E2E
+                  command: rm -rf ./build
+            - store_artifacts:
+                  path: screenshots
     build:
         executor: maskbook_node
         steps:
@@ -91,7 +108,7 @@ jobs:
                   command: sudo apt-get install zip
             - run:
                   name: Build Maskbook
-                  command: node ./scripts/ci-build.js
+                  command: yarn build-ci
             - store_artifacts:
                   path: Maskbook.base.zip
                   destination: /Maskbook.base.zip
@@ -184,6 +201,10 @@ workflows:
                   requires:
                       # Fail quick with type error.
                       - typescript
+            - e2e:
+                  requires:
+                      # Avoid accessing build/ folder at the same time
+                      - build
             - publish-github-release:
                   requires:
                       - build

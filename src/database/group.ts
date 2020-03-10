@@ -135,11 +135,13 @@ export async function updateUserGroupDatabase(
         nextRecord = type(orig) || orig
     }
     await t.objectStore('groups').put(GroupRecordIntoDB(nextRecord))
-    nonDuplicateNewMembers.length &&
+
+    if (process.env.NODE_ENV !== 'test' && nonDuplicateNewMembers.length) {
         MessageCenter.emit('joinGroup', {
             group: group.identifier,
             newMembers: nonDuplicateNewMembers,
         })
+    }
 }
 
 /**

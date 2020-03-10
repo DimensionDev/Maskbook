@@ -9,7 +9,7 @@ import { RedPacketWithState } from '../Dashboard/Components/RedPacket'
 import { RedPacketRecord, RedPacketStatus, WalletRecord } from '../../database/types'
 import Services from '../../../../extension/service'
 import { PostIdentifier, ProfileIdentifier } from '../../../../database/type'
-import { getPostUrl } from '../../../../social-network-provider/twitter.com/utils/url'
+
 import {
     withMobileDialog,
     Dialog,
@@ -33,6 +33,7 @@ import { DialogDismissIconUI } from '../../../../components/InjectedComponents/D
 import { PortalShadowRoot } from '../../../../utils/jss/ShadowRootPortal'
 import { useI18N } from '../../../../utils/i18n-next-ui'
 import ShadowRootDialog from '../../../../utils/jss/ShadowRootDialog'
+import { getPostUrl } from '../../../../social-network/utils/getPostUrl'
 
 const useStyles = makeStyles(theme =>
     createStyles({
