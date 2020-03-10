@@ -16,6 +16,7 @@ import { createOrUpdatePostDB } from '../../../database/post'
 import { GroupRecordFromJSONFormat } from '../../../utils/type-transform/BackupFormat/JSON/DBRecord-JSON/GroupRecord'
 import { createOrUpdateUserGroupDatabase } from '../../../database/group'
 import { i18n } from '../../../utils/i18n-next'
+import { MessageCenter } from '../../../utils/messages'
 
 /**
  * Restore the backup
@@ -27,42 +28,52 @@ export async function restoreBackup(json: object, whoAmI?: ProfileIdentifier): P
     const keyCache = new Map<JsonWebKey, CryptoKey>()
     const aes = getKeyParameter('aes')
 
-    // Transform all JsonWebKey to CryptoKey
-    await Promise.all([
-        ...[...data.personas, ...data.profiles]
-            .filter(x => x.localKey)
-            .map(x => JsonWebKeyToCryptoKey(x.localKey!, ...aes).then(k => keyCache.set(x.localKey!, k))),
-    ])
-    {
-        await consistentPersonaDBWriteAccess(async t => {
-            for (const x of data.personas) {
-                await createOrUpdatePersonaDB(
-                    PersonaRecordFromJSONFormat(x, keyCache),
-                    { explicitUndefinedField: 'ignore', linkedProfiles: 'merge' },
-                    t,
-                )
-            }
-
-            for (const x of data.profiles) {
-                const { linkedPersona, ...record } = ProfileRecordFromJSONFormat(x, keyCache)
-                await createOrUpdateProfileDB(record, t)
-                if (linkedPersona) {
-                    await attachProfileDB(record.identifier, linkedPersona, { connectionConfirmState: 'confirmed' }, t)
+    MessageCenter.startBatch()
+    try {
+        // Transform all JsonWebKey to CryptoKey
+        await Promise.all([
+            ...[...data.personas, ...data.profiles]
+                .filter(x => x.localKey)
+                .map(x => JsonWebKeyToCryptoKey(x.localKey!, ...aes).then(k => keyCache.set(x.localKey!, k))),
+        ])
+        {
+            await consistentPersonaDBWriteAccess(async t => {
+                for (const x of data.personas) {
+                    await createOrUpdatePersonaDB(
+                        PersonaRecordFromJSONFormat(x, keyCache),
+                        { explicitUndefinedField: 'ignore', linkedProfiles: 'merge' },
+                        t,
+                    )
                 }
-            }
-        })
-    }
 
-    for (const x of data.posts) {
-        if (x.postCryptoKey) {
-            const c = await JsonWebKeyToCryptoKey(x.postCryptoKey, ...aes)
-            keyCache.set(x.postCryptoKey, c)
+                for (const x of data.profiles) {
+                    const { linkedPersona, ...record } = ProfileRecordFromJSONFormat(x, keyCache)
+                    await createOrUpdateProfileDB(record, t)
+                    if (linkedPersona) {
+                        await attachProfileDB(
+                            record.identifier,
+                            linkedPersona,
+                            { connectionConfirmState: 'confirmed' },
+                            t,
+                        )
+                    }
+                }
+            })
         }
-        await createOrUpdatePostDB(PostRecordFromJSONFormat(x, keyCache), 'append')
-    }
 
-    for (const x of data.userGroups) {
-        const rec = GroupRecordFromJSONFormat(x)
-        await createOrUpdateUserGroupDatabase(rec, 'append')
+        for (const x of data.posts) {
+            if (x.postCryptoKey) {
+                const c = await JsonWebKeyToCryptoKey(x.postCryptoKey, ...aes)
+                keyCache.set(x.postCryptoKey, c)
+            }
+            await createOrUpdatePostDB(PostRecordFromJSONFormat(x, keyCache), 'append')
+        }
+
+        for (const x of data.userGroups) {
+            const rec = GroupRecordFromJSONFormat(x)
+            await createOrUpdateUserGroupDatabase(rec, 'append')
+        }
+    } finally {
+        MessageCenter.commitBatch()
     }
 }
