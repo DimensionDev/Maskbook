@@ -95,14 +95,4 @@ export async function openOptionsPage(route?: string) {
     return wrappedTasks(browser.runtime.getURL(route ? '/index.html#' + route : '/'))
 }
 
-export async function startImmersiveSetup(url: string, persona: Persona) {
-    return wrappedTasks(url, {
-        active: true,
-        autoClose: false,
-        important: true,
-        memorable: false,
-        pinned: false,
-    }).immersiveSetup(persona.identifier)
-}
-
 export { createPersonaByMnemonic } from '../../database'
