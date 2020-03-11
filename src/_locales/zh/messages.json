@@ -192,6 +192,8 @@
     "set_as_default": "設為默認",
     "set_up": "開始",
     "settings": "設定",
+    "settings_advance_security": "高級安全模式",
+    "settings_advance_security_desc": "將内容展示在影子根中，以免於社交網路之窺探。",
     "settings_disable_new_background_tab": "禁止 Maskbook 靜默地打開新標籤頁",
     "settings_disable_new_background_tab_desc": "這是 Maskbook 因技術所限的舊行爲。如果您發現某些舊帖子無法解密，請關閉此選項再試一次。",
     "settings_enable_debug": "開啓調試模式",
