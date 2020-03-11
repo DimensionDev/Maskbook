@@ -30,6 +30,8 @@ export const postEditorDraftContentSelector = () =>
     (isCompose() ? postEditorInPopupSelector() : postEditorInTimelineSelector()).querySelector<HTMLElement>(
         '.public-DraftEditor-content, textarea[aria-label="Tweet text"]',
     )
+export const posteditorToolbarSeelctor: () => LiveSelector<E, true> = () =>
+    querySelector<E>('[data-testid="toolBar"] > div > *:last-child')
 
 export const newPostButtonSelector = () => querySelector<E>('[data-testid="SideNav_NewTweet_Button"]')
 
