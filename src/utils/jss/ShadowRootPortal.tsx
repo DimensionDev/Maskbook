@@ -1,5 +1,6 @@
 import { GetContext } from '@holoflows/kit/es'
 import { untilDomLoaded } from '../dom'
+import { renderInShadowRootSettings } from '../../components/shared-settings/settings'
 
 const div = document.createElement('div')
 export const portalShadowRoot = div.attachShadow({ mode: 'closed' })
@@ -52,6 +53,7 @@ const handler: ProxyHandler<ShadowRoot> = {
 export function PortalShadowRoot() {
     if (GetContext() === 'options') return document.body
     if (globalThis.location.hostname === 'localhost') return document.body
+    if (!renderInShadowRootSettings.value) return document.body
     if (!proxy) proxy = new Proxy(portalShadowRoot, handler)
     return (proxy as unknown) as Element
 }

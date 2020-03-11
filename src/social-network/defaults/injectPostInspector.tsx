@@ -40,10 +40,9 @@ export function injectPostInspectorDefault<T extends string>(
         )
     })
 
-    const { injectionPoint, zipPost } = config
+    const { zipPost } = config
     const zipPostF = zipPost || (() => {})
     return function injectPostInspector(current: PostInfo) {
-        const injectionPointDefault = () => current.rootNodeProxy.afterShadow
         return renderInShadowRoot(
             <PostInspectorDefault
                 onDecrypted={val => (current.decryptedPostContent.value = val)}
@@ -51,12 +50,11 @@ export function injectPostInspectorDefault<T extends string>(
                 zipPost={() => zipPostF(current.rootNodeProxy)}
                 {...current}
             />,
-            (injectionPoint || injectionPointDefault)(current.rootNodeProxy),
+            { shadow: () => current.rootNodeProxy.afterShadow, normal: () => current.rootNodeProxy.after },
         )
     }
 }
 
 interface InjectPostInspectorDefaultConfig {
-    injectionPoint?(node: DOMProxy): ShadowRoot
     zipPost?(node: DOMProxy): void
 }

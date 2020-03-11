@@ -21,7 +21,10 @@ export function injectPostBoxFacebook() {
             childList: true,
             subtree: true,
         })
-    renderInShadowRoot(<UI />, watcher.firstDOMProxy.afterShadow)
+    renderInShadowRoot(<UI />, {
+        shadow: () => watcher.firstDOMProxy.afterShadow,
+        normal: () => watcher.firstDOMProxy.after,
+    })
 }
 function UI() {
     const [open, setOpen] = React.useState(false)

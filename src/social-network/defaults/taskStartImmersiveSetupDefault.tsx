@@ -40,7 +40,6 @@ export function createTaskStartImmersiveSetupDefault(
         if (mounted) return
         mounted = true
         const dom = document.createElement('span')
-        const shadow = dom.attachShadow({ mode: 'closed' })
         document.body.appendChild(dom)
         const provePost = new ValueRef('')
         const unmount = renderInShadowRoot(
@@ -52,7 +51,10 @@ export function createTaskStartImmersiveSetupDefault(
                     mounted = false
                 }}
             />,
-            shadow,
+            {
+                shadow: () => dom.attachShadow({ mode: 'closed' }),
+                normal: () => dom,
+            },
         )
         Services.Crypto.getMyProveBio(for_, _().networkIdentifier)
             .then(x => x || '')
