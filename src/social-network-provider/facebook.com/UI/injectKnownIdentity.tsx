@@ -61,10 +61,10 @@ export function injectKnownIdentityAtFacebook(this: SocialNetworkUI) {
         .useForeach(content => {
             const bioRef = new ValueRef(content.innerText)
             const pageOwnerRef = new ValueRef<ProfileIdentifier | null>(getCurrentIdentity())
-            const unmount = renderInShadowRoot(
-                <PersonKnownAtFacebook pageOwner={pageOwnerRef} bioContent={bioRef} />,
-                renderPoint,
-            )
+            const unmount = renderInShadowRoot(<PersonKnownAtFacebook pageOwner={pageOwnerRef} bioContent={bioRef} />, {
+                shadow: () => watcher.firstDOMProxy.afterShadow,
+                normal: () => watcher.firstDOMProxy.after,
+            })
             const update = () => {
                 bioRef.value = content.innerText
                 pageOwnerRef.value = getCurrentIdentity()
@@ -80,5 +80,4 @@ export function injectKnownIdentityAtFacebook(this: SocialNetworkUI) {
             subtree: true,
             characterData: true,
         })
-    const renderPoint = watcher.firstDOMProxy.afterShadow
 }

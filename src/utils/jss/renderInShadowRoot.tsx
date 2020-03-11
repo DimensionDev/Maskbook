@@ -3,32 +3,66 @@ import { jssPreset, StylesProvider, ThemeProvider } from '@material-ui/styles'
 import ReactDOM from 'react-dom'
 import React from 'react'
 import { getActivatedUI } from '../../social-network/ui'
-import { useValueRef } from '../hooks/useValueRef'
-import { languageSettings } from '../../components/shared-settings/settings'
+import { renderInShadowRootSettings } from '../../components/shared-settings/settings'
 import { I18nextProvider } from 'react-i18next'
 import i18nNextInstance from '../i18n-next'
 import { portalShadowRoot } from './ShadowRootPortal'
 import { useSubscription } from 'use-subscription'
 
+const previousShadowedElement = new Set<HTMLElement>()
 /**
  * Render the Node in the ShadowRoot
  * @param node React Node
  * @param shadow ShadowRoot that want to inject to
  */
-export function renderInShadowRoot(node: React.ReactNode, shadow: ShadowRoot) {
-    if (shadow.mode === 'open') console.warn('Do not render with open ShadowRoot!')
+export function renderInShadowRoot(node: React.ReactNode, config: { shadow(): ShadowRoot; normal(): HTMLElement }) {
+    const get = (): HTMLElement => {
+        const dom = config.normal()
+        // ? Once it attached ShadowRoot, there is no way back
+        if (previousShadowedElement.has(dom)) return config.shadow() as any
+        if (renderInShadowRootSettings.value) {
+            const shadow = config.shadow()
+            previousShadowedElement.add(dom)
+            if (shadow instanceof ShadowRoot && shadow.mode === 'open')
+                console.warn('Do not render with open ShadowRoot!')
+            return shadow as any
+        } else return dom
+    }
     let rendered = false
-    const tryRender = () =>
+    const tryRender = () => {
+        const element: HTMLElement = get()
+        if (!(element instanceof ShadowRoot)) {
+            rendered = true
+            return ReactDOM.render(
+                <ErrorBoundary>
+                    <Maskbook children={node} />
+                </ErrorBoundary>,
+                element,
+            )
+        }
         setTimeout(() => {
+            if (!(element instanceof ShadowRoot)) throw new Error()
             // ! DOMRender requires the element inside document
-            if (shadow.host.parentNode === null) tryRender()
+            if (element.host.parentNode === null) tryRender()
             else {
-                ReactDOM.render(<RenderInShadowRootWrapper children={node} shadow={shadow} />, shadow as any)
+                ReactDOM.render(
+                    <ErrorBoundary>
+                        <RenderInShadowRootWrapper shadow={element}>
+                            <Maskbook children={node} />
+                        </RenderInShadowRootWrapper>
+                    </ErrorBoundary>,
+                    element,
+                )
                 rendered = true
             }
         })
+    }
+    // ? Wait for the renderInShadowRootSettings.value to be sync
+    setTimeout(() => tryRender, 400)
     tryRender()
-    return () => (rendered ? ReactDOM.unmountComponentAtNode(shadow as any) : 0)
+    return () => {
+        rendered && ReactDOM.unmountComponentAtNode(get())
+    }
 }
 
 // ! let jss tell us if it has made an update
@@ -82,62 +116,66 @@ interface RenderInShadowRootWrapperProps {
     shadow: ShadowRoot
 }
 
-export class RenderInShadowRootWrapper extends React.PureComponent<RenderInShadowRootWrapperProps> {
-    jss: Jss
-    proxy: HTMLElement
-    registry: InformativeSheetsRegistry
+class RenderInShadowRootWrapper extends React.PureComponent<RenderInShadowRootWrapperProps> {
+    proxy: HTMLElement = new Proxy(this.props.shadow as any, {
+        get(target, property: keyof ShadowRoot) {
+            if (property === 'parentNode') {
+                const host = target.getRootNode({ composed: true })
+                if (host !== document) {
+                    // ! severe error! The style cannot be managed by DOMRender
+                    return null
+                }
+                return target
+            }
+            return target[property]
+        },
+    })
+    jss: Jss = create({
+        ...jssPreset(),
+        insertionPoint: this.proxy,
+    })
+    registry: InformativeSheetsRegistry = new InformativeSheetsRegistry()
+    manager = new WeakMap()
     constructor(props: RenderInShadowRootWrapperProps) {
         super(props)
-        this.proxy = new Proxy(props.shadow as any, {
-            get(target, property: keyof ShadowRoot) {
-                if (property === 'parentNode') {
-                    const host = target.getRootNode({ composed: true })
-                    if (host !== document) {
-                        // ! severe error! The style cannot be managed by DOMRender
-                        return null
-                    }
-                    return target
-                }
-                return target[property]
-            },
-        })
-        this.jss = create({
-            ...jssPreset(),
-            insertionPoint: this.proxy,
-        })
-        this.registry = new InformativeSheetsRegistry()
         jssRegistryMap.set(props.shadow, this.registry)
     }
+    render() {
+        return (
+            // ! sheetsRegistry: We use this to get styles as a whole string
+            // ! sheetsManager: Material-ui uses this to detect if the style has been rendered
+            <StylesProvider
+                sheetsRegistry={this.registry}
+                jss={this.jss}
+                sheetsManager={this.manager}
+                children={this.props.children}
+            />
+        )
+    }
+}
+
+class ErrorBoundary extends React.Component {
     state: { error?: Error } = { error: undefined }
     render() {
         if (this.state.error) return <pre style={{ whiteSpace: 'break-spaces' }}>{this.state.error.message}</pre>
-        return <Maskbook sheetsRegistry={this.registry} jss={this.jss} children={this.props.children} />
+        return this.props.children
     }
     componentDidCatch(error: Error) {
         this.setState({ error })
     }
 }
 
-type MaskbookProps = React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement> & {
-    jss: Jss
-    sheetsRegistry: SheetsRegistry
-}
+type MaskbookProps = React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement>
 
 function Maskbook(_props: MaskbookProps) {
     const theme = getActivatedUI().useTheme()
-    const lang = useValueRef(languageSettings)
-    const { jss, sheetsRegistry, ...props } = _props
-    // ! sheetsRegistry: We use this to get styles as a whole string
-    // ! sheetsManager: Material-ui uses this to detect if the style has been rendered
     return (
-        <StylesProvider sheetsRegistry={sheetsRegistry} jss={jss} sheetsManager={new WeakMap()}>
-            <ThemeProvider theme={theme}>
-                <I18nextProvider i18n={i18nNextInstance}>
-                    <React.StrictMode>
-                        <div {...props} />
-                    </React.StrictMode>
-                </I18nextProvider>
-            </ThemeProvider>
-        </StylesProvider>
+        <ThemeProvider theme={theme}>
+            <I18nextProvider i18n={i18nNextInstance}>
+                <React.StrictMode>
+                    <div {..._props} />
+                </React.StrictMode>
+            </I18nextProvider>
+        </ThemeProvider>
     )
 }

@@ -13,7 +13,10 @@ export function injectOptionsPageLinkAtFacebook() {
             beforeShadowRootInit: { mode: 'closed' },
         })
         .startWatch({ subtree: true, childList: true })
-    renderInShadowRoot(<Link></Link>, watcher.firstDOMProxy.beforeShadow)
+    renderInShadowRoot(<Link></Link>, {
+        shadow: () => watcher.firstDOMProxy.beforeShadow,
+        normal: () => watcher.firstDOMProxy.before,
+    })
 }
 
 const useStyle = makeStyles({
