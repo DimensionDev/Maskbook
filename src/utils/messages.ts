@@ -59,6 +59,42 @@ interface MaskbookMessages {
      */
     compositionUpdated: CompositionEvent
 }
-export const MessageCenter = new MC<MaskbookMessages>(true, 'maskbook-events')
+
+export class BatchedMessageCenter<T> extends MC<T> {
+    buffer = new Map<keyof T, T[keyof T][]>()
+    timeout: number = null!
+    private policy: 'normal' | 'batch' = 'normal'
+    private flushBuffer() {
+        for (const [key, datas] of this.buffer.entries()) {
+            for (const data of datas) super.emit(key, data)
+        }
+        this.buffer.clear()
+    }
+    emit(key: keyof T, data: T[keyof T]) {
+        if (this.policy === 'normal') return super.emit(key, data)
+        const buffer = this.buffer
+        const queue = buffer.get(key) ?? []
+        if (!queue.includes(data)) {
+            if (Array.isArray(data) && Array.isArray(queue[0])) queue[0].concat(data)
+            else queue.push(data)
+            buffer.set(key, queue)
+            window.clearTimeout(this.timeout)
+            this.timeout = window.setTimeout(() => {
+                this.flushBuffer()
+            }, 1000)
+        }
+        return Promise.resolve()
+    }
+    startBatch() {
+        this.policy = 'batch'
+    }
+    commitBatch() {
+        window.clearTimeout(this.timeout)
+        this.flushBuffer()
+        this.policy = 'normal'
+    }
+}
+
+export const MessageCenter = new BatchedMessageCenter<MaskbookMessages>(true, 'maskbook-events')
 
 MessageCenter.serialization = Serialization
