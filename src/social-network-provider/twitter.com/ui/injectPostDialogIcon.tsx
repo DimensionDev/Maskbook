@@ -25,7 +25,10 @@ function renderPostDialogIconTo<T>(ls: LiveSelector<T, true>) {
             subtree: true,
         })
 
-    renderInShadowRoot(<PostDialogIconAtTwitter />, watcher.firstDOMProxy.afterShadow)
+    renderInShadowRoot(<PostDialogIconAtTwitter />, {
+        shadow: () => watcher.firstDOMProxy.afterShadow,
+        normal: () => watcher.firstDOMProxy.after,
+    })
 }
 
 function PostDialogIconAtTwitter() {
