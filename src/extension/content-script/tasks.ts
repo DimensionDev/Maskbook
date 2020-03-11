@@ -77,15 +77,13 @@ export function wrappedTasks(...args: Parameters<typeof realTasks>) {
     const [uri, options = {}, ...others] = args
     const updatedOptions: Partial<AutomatedTabTaskRuntimeOptions> = {
         active: true,
-        pinned: false,
         memorable: false,
         autoClose: false,
     }
     if (webpackEnv.genericTarget !== 'app') return tasks(uri, { ...updatedOptions, ...options }, ...others)
     let _key: keyof typeof _tasks
     let _args: any[]
-    // Only for Maskbook-iOS
-    const promise = Promise.resolve(browser.tabs.query({ active: false, url: ['<all_urls>'] })).then(tabs => {
+    const promise = Promise.resolve(browser.tabs.query({})).then(tabs => {
         const target = uri.toString().replace(/\/.+$/, '')
         const [tab] = tabs.filter(tab => tab.url?.startsWith(target))
         if (tab) {
