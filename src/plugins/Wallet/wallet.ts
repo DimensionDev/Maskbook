@@ -198,6 +198,7 @@ export async function walletAddERC20Token(
     }
     wallet.erc20_token_balance.set(token.address, bal)
     await t.objectStore('Wallet').put(WalletRecordIntoDB(wallet))
+    PluginMessageCenter.emit('maskbook.wallets.update', undefined)
 }
 
 export async function onWalletERC20TokenBalanceUpdated(address: string, tokenAddress: string, newBalance: BigNumber) {

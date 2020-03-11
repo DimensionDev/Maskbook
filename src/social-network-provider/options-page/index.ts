@@ -31,14 +31,6 @@ const optionsPageUISelf = defineSocialNetworkUI({
             )
             Services.Identity.queryProfiles().then((p) => (ref.value = p.filter(hasFingerprint)))
         }
-        {
-            const ref = optionsPageUISelf.myPersonasRef
-            query(ref)
-            MessageCenter.on('personaUpdated', () => query(ref))
-            function query(ref: ValueRef<Persona[]>) {
-                Services.Identity.queryMyPersonas().then((p) => (ref.value = p))
-            }
-        }
     },
     shouldActivate() {
         return GetContext() === 'options'
