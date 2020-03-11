@@ -1,0 +1,55 @@
+name: E2E
+
+# Controls when the action will run. Triggers the workflow on push or pull request
+# events but only for the master branch
+on:
+    push:
+        branches: [master]
+    pull_request:
+        branches: [master]
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+    main:
+        runs-on: self-hosted
+
+        container:
+            image: differui/node-13.2.0-browsers:v2
+
+            # more: https://github.community/t5/GitHub-Actions/How-to-run-action-as-a-non-root-user/m-p/45733/highlight/true#M6330
+            options: --user 1000 # $(id -u ubuntu)
+
+        steps:
+            # @v2 requires too much configurations
+            - uses: actions/checkout@v1
+
+            # temporarily disables actions/cache
+            # block by: https://github.com/actions/cache/issues/184
+            # - uses: actions/cache@v1
+            #   id: yarn-cache
+            #   with:
+            #       path: ./node_modules
+            #       key: yarn-${{ hashFiles('**/yarn.lock') }}
+            #       restore-keys: |
+            #           yarn-
+
+            - name: Install Dependencies
+              run: yarn install --link-duplicates --frozen-lockfile --pure-lockfile
+            #   if: steps.yarn-cache.outputs.cache-hit != 'true'
+
+            - name: Build
+              run: yarn build:e2e
+
+            - name: Setup E2E
+              run: mkdir -p ./screenshots
+            - name: Jest E2E
+              run: xvfb-run --server-args="-screen 0 1280x1024x24" yarn test:e2e
+
+            - name: Teardown E2E
+              run: rm -rf ./build
+
+            - name: Archive Artifacts
+              uses: actions/upload-artifact@v1
+              with:
+                  name: screenshots
+                  path: ./screenshots
