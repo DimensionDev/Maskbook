@@ -9,7 +9,7 @@ import useQueryParams from '../../../utils/hooks/useQueryParams'
 import Services from '../../service'
 import { ECKeyIdentifier, Identifier } from '../../../database/type'
 import ProfileBox from '../DashboardComponents/ProfileBox'
-import { useMyPersonas } from '../../../components/DataSource/useActivatedUI'
+import { useMyPersonas } from '../../../components/DataSource/independent'
 import { InitStep } from '../InitStep'
 
 export default function InitStep2S() {

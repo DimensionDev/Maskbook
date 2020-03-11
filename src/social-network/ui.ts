@@ -208,10 +208,6 @@ export interface SocialNetworkUIDataSources {
      */
     readonly myIdentitiesRef?: ValueRef<Profile[]>
     /**
-     * My personas at current network
-     */
-    readonly myPersonasRef?: ValueRef<Persona[]>
-    /**
      * The account that user is using (may not in the database)
      */
     readonly lastRecognizedIdentity?: ValueRef<Pick<Profile, 'identifier' | 'nickname' | 'avatar'>>
