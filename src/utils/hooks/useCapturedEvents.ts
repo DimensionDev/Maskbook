@@ -1,8 +1,10 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useCallback } from 'react'
 import React from 'react'
+import { useValueRef } from './useValueRef'
+import { renderInShadowRootSettings } from '../../components/shared-settings/settings'
 
-export const captureEevnts: (keyof HTMLElementEventMap)[] = [
+export const captureEvents: (keyof HTMLElementEventMap)[] = [
     'paste',
     'keydown',
     'keypress',
@@ -41,16 +43,19 @@ function binder<T extends keyof HTMLElementEventMap>(
 /**
  * ! Call this hook inside Shadow Root!
  */
-export function useCapturedInput(onChange: (newVal: string) => void, deps: any[] = []) {
+export function useCapturedInput(onChange: (newVal: string) => void, deps: unknown[] = []) {
     const [node, setNode] = React.useState<HTMLInputElement | null>(null)
+    const shadowRootMode = useValueRef(renderInShadowRootSettings)
     const ref = useCallback((nextNode: HTMLInputElement | null) => setNode(nextNode), [])
-    const stop = useCallback((e: Event) => e.stopPropagation(), deps)
+    const stop = useCallback((e: Event) => {
+        if (shadowRootMode) e.stopPropagation()
+    }, deps.concat(shadowRootMode))
     const use = useCallback(
         (e: Event) => onChange((e.currentTarget as HTMLInputElement)?.value ?? (e.target as HTMLInputElement)?.value),
-        [onChange].concat(deps),
+        deps.concat(onChange),
     )
-    useEffect(binder(node, ['input'], use), [node].concat(deps))
-    useEffect(binder(node, captureEevnts, stop), [node].concat(deps))
+    useEffect(binder(node, ['input'], use), deps.concat(node))
+    useEffect(binder(node, captureEvents, stop), deps.concat(deps))
     return [
         <T extends keyof HTMLElementEventMap>(keys: T[], fn: (e: HTMLElementEventMap[T]) => void) =>
             binder(node, keys, fn),
