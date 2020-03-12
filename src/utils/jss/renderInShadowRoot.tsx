@@ -57,8 +57,6 @@ export function renderInShadowRoot(node: React.ReactNode, config: { shadow(): Sh
             }
         })
     }
-    // ? Wait for the renderInShadowRootSettings.value to be sync
-    setTimeout(() => tryRender, 400)
     tryRender()
     return () => {
         rendered && ReactDOM.unmountComponentAtNode(get())
