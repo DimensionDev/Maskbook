@@ -6,3 +6,4 @@ dist/
 public/polyfill
 scripts/
 src/polyfill
+e2e

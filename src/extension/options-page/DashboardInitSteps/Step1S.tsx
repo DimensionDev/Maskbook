@@ -45,7 +45,12 @@ export default function InitStep1S() {
             <ActionButton<typeof Link> variant="outlined" color="default" component={Link} to="start">
                 {t('back')}
             </ActionButton>
-            <ActionButton variant="contained" color="primary" onClick={createPersonaAndNext} component="a">
+            <ActionButton
+                variant="contained"
+                color="primary"
+                onClick={createPersonaAndNext}
+                component="a"
+                data-testid="initialization_next_button">
                 {t('next')}
             </ActionButton>
         </>
@@ -61,7 +66,10 @@ export default function InitStep1S() {
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 label="Name"
-                helperText=" "></TextField>
+                helperText=" "
+                inputProps={{
+                    'data-testid': 'initialization_username_input',
+                }}></TextField>
             <TextField
                 required
                 className={classes.input}
@@ -72,7 +80,10 @@ export default function InitStep1S() {
                 type="password"
                 onChange={(e) => setPassword(e.target.value)}
                 label="Password"
-                helperText={t('dashboard_password_helper_text')}></TextField>
+                helperText={t('dashboard_password_helper_text')}
+                inputProps={{
+                    'data-testid': 'initialization_password_input',
+                }}></TextField>
         </div>
     )
 

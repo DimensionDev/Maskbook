@@ -31,5 +31,22 @@ function development(manifest, target) {
     manifest.key = // ID：jkoeaghipilijlahjplgbfiocjhldnap
         'MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAoz51rhO1w+wD0EKZJEFJaSMkIcIj0qRadfi0tqcl5nbpuJAsafvLe3MaTbW9LhbixTg9PHybO3tlYUFJrZgUuZlEvt2T6SKIu6Rs9e9B3/brNQG3+hCHudbZkq2WG2IzO44dglrs24bRp/pV5oIif0bLuwrzvYsPQ6hgSp+5gc4pg0LEJPLFp01fbORDknWt8suJmEMz7S0O5+u13+34NvxYzUNeLJF9gYrd4zzrAFYITDEYcqr0OMZvVrKz7IkJasER1uJyoGj4gFJeXNGE8y4Sqb150wBju70lKNKlNevWDRJKasG9CjagAD2+BAfqNyltn7KwK7jAyL1w6d6mOwIDAQAB'
 }
+/**
+ * @param {typeof base} manifest
+ */
+function E2E(manifest) {
+    // can not capture premission dialog in pptr
+    manifest.permissions.push(
+        ...manifest.optional_permissions,
+        ...[
+            'https://twitter.com/*',
+            'https://mobile.twitter.com/*',
+            'https://facebook.com/*',
+            'https://www.facebook.com/*',
+            'https://m.facebook.com/*',
+        ],
+    )
+    manifest.optional_permissions = []
+}
 function production(manifest, target) {}
-module.exports = { firefox, geckoview, chromium, WKWebview, development, production }
+module.exports = { firefox, geckoview, chromium, WKWebview, development, production, E2E }

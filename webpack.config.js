@@ -271,6 +271,7 @@ module.exports = (argvEnv, argv) => {
         if (target.FirefoxForAndroid) modifiers.firefox(manifest)
         if (target.StandaloneGeckoView) modifiers.geckoview(manifest)
         if (target.WKWebview) modifiers.WKWebview(manifest)
+        if (target.E2E) modifiers.E2E(manifest)
         if (env === 'development' || target.E2E) modifiers.development(manifest, target)
         else modifiers.production(manifest, target)
 

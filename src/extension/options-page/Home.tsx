@@ -101,6 +101,7 @@ export default function DashboardHomePage() {
         if (personas.length !== 0) return
         // ensure persona
         Services.Identity.queryMyPersonas().then((personas) => {
+            if (webpackEnv.target === 'E2E' && location.hash.includes('no_redirect')) return
             if (!personas.length) history.replace('/initialize')
             if (personas.length === 1)
                 Services.Identity.queryMyProfiles().then((profiles) => {

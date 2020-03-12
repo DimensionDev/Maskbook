@@ -170,13 +170,17 @@ export default function InitStep1R() {
                             inputRef={(input: HTMLInputElement) => input && input.focus()}
                             multiline
                             value={textValue}
-                            onChange={(e) => setTextValue(e.target.value)}></InputBase>
+                            onChange={(e) => setTextValue(e.target.value)}
+                            inputProps={{
+                                'data-testid': 'initialization_upload_textarea',
+                            }}></InputBase>
                         <ActionButton
                             className={classes.restoreActionButton}
                             width={140}
                             variant="contained"
                             onClick={() => resolveFileInput(textValue)}
-                            color="primary">
+                            color="primary"
+                            data-testid="initialization_restore_button">
                             {t('restore')}
                         </ActionButton>
                     </div>
@@ -206,6 +210,7 @@ export default function InitStep1R() {
                     type="file"
                     accept="application/json"
                     ref={ref}
+                    data-testid="initialization_upload_input"
                     onChange={({ currentTarget }: React.ChangeEvent<HTMLInputElement>) => {
                         if (currentTarget.files) {
                             setFile(currentTarget.files.item(0))
@@ -222,7 +227,11 @@ export default function InitStep1R() {
                         t('welcome_1b_file_selected', { filename: file.name })
                     ) : (
                         <>
-                            <ActionButton variant="contained" color="primary" className={classes.restoreBoxButton}>
+                            <ActionButton
+                                variant="contained"
+                                color="primary"
+                                className={classes.restoreBoxButton}
+                                data-testid="initialization_upload_button">
                                 {t('select_file')}
                             </ActionButton>
                             <Typography variant="body2">{t('select_file_hint')}</Typography>

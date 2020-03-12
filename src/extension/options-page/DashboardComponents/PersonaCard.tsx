@@ -127,11 +127,16 @@ export default function PersonaCard({ persona }: Props) {
                 <Typography className={classes.header} variant="h5" component="h2" gutterBottom>
                     {!rename ? (
                         <>
-                            <span ref={titleRef} className="title">
+                            <span ref={titleRef} className="title" data-testid="initialization_persona_title">
                                 {persona.nickname}
                             </span>
                             <Typography className="fullWidth" variant="body1" component="span" color="textSecondary">
-                                <SettingsIcon className={classes.cursor} fontSize="small" onClick={handleClick} />
+                                <SettingsIcon
+                                    className={classes.cursor}
+                                    fontSize="small"
+                                    onClick={handleClick}
+                                    data-testid="initialization_persona_setting_icon"
+                                />
                                 <Menu
                                     anchorEl={anchorEl}
                                     keepMounted
@@ -146,7 +151,10 @@ export default function PersonaCard({ persona }: Props) {
                                     <MenuItem onClick={() => setBackupPersona(true)}>
                                         {t('dashboard_create_backup')}
                                     </MenuItem>
-                                    <MenuItem onClick={() => setDeletePersona(true)} className={color.error}>
+                                    <MenuItem
+                                        onClick={() => setDeletePersona(true)}
+                                        className={color.error}
+                                        data-testid="initialization_persona_delete_button">
                                         {t('dashboard_delete_persona')}
                                     </MenuItem>
                                 </Menu>
