@@ -1,7 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useCallback } from 'react'
 import React from 'react'
-import { useValueRef } from './useValueRef'
 import { renderInShadowRootSettings } from '../../components/shared-settings/settings'
 
 export const captureEvents: (keyof HTMLElementEventMap)[] = [
@@ -45,17 +44,16 @@ function binder<T extends keyof HTMLElementEventMap>(
  */
 export function useCapturedInput(onChange: (newVal: string) => void, deps: unknown[] = []) {
     const [node, setNode] = React.useState<HTMLInputElement | null>(null)
-    const shadowRootMode = useValueRef(renderInShadowRootSettings)
     const ref = useCallback((nextNode: HTMLInputElement | null) => setNode(nextNode), [])
     const stop = useCallback((e: Event) => {
-        if (shadowRootMode) e.stopPropagation()
-    }, deps.concat(shadowRootMode))
+        if (renderInShadowRootSettings.value) e.stopPropagation()
+    }, deps)
     const use = useCallback(
         (e: Event) => onChange((e.currentTarget as HTMLInputElement)?.value ?? (e.target as HTMLInputElement)?.value),
         deps.concat(onChange),
     )
     useEffect(binder(node, ['input'], use), deps.concat(node))
-    useEffect(binder(node, captureEvents, stop), deps.concat(deps))
+    useEffect(binder(node, captureEvents, stop), deps.concat(node))
     return [
         <T extends keyof HTMLElementEventMap>(keys: T[], fn: (e: HTMLElementEventMap[T]) => void) =>
             binder(node, keys, fn),
