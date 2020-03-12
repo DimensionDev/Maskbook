@@ -6,6 +6,12 @@ declare const webpackEnv: {
     readonly genericTarget: 'app' | 'browser'
 }
 
+declare module NodeJS {
+    interface ProcessEnv {
+        NODE_ENV: 'development' | 'production' | 'test'
+    }
+}
+
 interface Permissions {
     request(permission: { name: string }): Promise<PermissionStatus>
 }

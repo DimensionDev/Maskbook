@@ -78,10 +78,13 @@ export function Settings() {
             <Card>
                 <List dense disablePadding>
                     <SettingsUI icon={<OpenInBrowser />} value={disableOpenNewTabInBackgroundSettings} />
-                    <SettingsUI
-                        icon={shadowRoot ? <EnhancedEncryptionIcon /> : <NoEncryptionIcon />}
-                        value={renderInShadowRootSettings}
-                    />
+                    {process.env.NODE_ENV === 'development' ? (
+                        <SettingsUI
+                            icon={shadowRoot ? <EnhancedEncryptionIcon /> : <NoEncryptionIcon />}
+                            value={renderInShadowRootSettings}
+                            secondary="Development mode only"
+                        />
+                    ) : /** This settings is not ready for production */ null}
                 </List>
             </Card>
         </Container>
