@@ -29,6 +29,7 @@ import { useHistory, Link } from 'react-router-dom'
 import { useI18N } from '../../../../../utils/i18n-next-ui'
 import { useColorProvider } from '../../../../../utils/theme'
 import { formatBalance } from '../../../formatter'
+import { wrappedTasks } from '../../../../../extension/content-script/tasks'
 
 interface WalletSendRedPacketDialogProps {
     onDecline(): void
@@ -58,7 +59,18 @@ export function WalletSendRedPacketDialog(props: WalletSendRedPacketDialogProps)
                 <>
                     <Typography className={classes.body}>Select the social network to post...</Typography>
                     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                        {
+                        <ActionButton<React.ComponentType<JSX.IntrinsicElements['a']>>
+                            component="a"
+                            {...(webpackEnv.genericTarget === 'app'
+                                ? { onClick: () => wrappedTasks('https://m.facebook.com/?soft=composer') }
+                                : { href: 'https://facebook.com', target: '_blank', rel: 'noopener noreferrer' })}
+                            variant="outlined"
+                            color="primary"
+                            className={classes.provider}
+                            width={240}>
+                            Open facebook.com
+                        </ActionButton>
+                        {webpackEnv.genericTarget !== 'app' && (
                             <ActionButton<React.ComponentType<JSX.IntrinsicElements['a']>>
                                 component="a"
                                 href="https://twitter.com"
@@ -70,7 +82,7 @@ export function WalletSendRedPacketDialog(props: WalletSendRedPacketDialogProps)
                                 width={240}>
                                 Open twitter.com
                             </ActionButton>
-                        }
+                        )}
                     </div>
                 </>
             }></DialogContentItem>
