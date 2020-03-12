@@ -124,7 +124,7 @@ function Dashboard() {
 
     const routers: [string, string, JSX.Element][] = [
         [t('home'), '/home/', <HomeIcon />],
-        ...((webpackEnv.genericTarget === 'app' ? [] : [['Wallets', '/wallets/', <CreditCardIcon />]]) as any),
+        ['Wallets', '/wallets/', <CreditCardIcon />],
         [t('settings'), '/settings/', <SettingsIcon />],
         // ['About', '/about/', <InfoOutlinedIcon />],
         [t('debug'), '/debug/', <BugReportIcon />],
