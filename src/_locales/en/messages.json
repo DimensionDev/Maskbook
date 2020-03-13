@@ -113,6 +113,7 @@
     "disconnect": "Disconnect",
     "disconnect_profile": "Disconnect Profile",
     "done": "Done!",
+    "feature_redpacket_not_supported": "Experimental feature. Now only available in Maskbook desktop browser extension.",
     "finish": "Finish",
     "go_to": "Go to",
     "home": "Home",

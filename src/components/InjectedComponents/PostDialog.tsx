@@ -175,25 +175,29 @@ export function PostDialogUI(props: PostDialogUIProps) {
                             multiline
                             placeholder={t('post_dialog__placeholder')}
                         />
+
                         <Typography style={{ marginBottom: 10 }}>Plugins (Experimental)</Typography>
                         <Box style={{ marginBottom: 10 }} display="flex" flexWrap="wrap">
-                            <ClickableChip
-                                ChipProps={{
-                                    label: '💰 Red Packet',
-                                    onClick: async () => {
-                                        const [wallets] = await Services.Plugin.invokePlugin(
-                                            'maskbook.wallet',
-                                            'getWallets',
-                                        )
+                            {/* without redpacket */}
+                            {webpackEnv.target !== 'WKWebview' && (
+                                <ClickableChip
+                                    ChipProps={{
+                                        label: '💰 Red Packet',
+                                        onClick: async () => {
+                                            const [wallets] = await Services.Plugin.invokePlugin(
+                                                'maskbook.wallet',
+                                                'getWallets',
+                                            )
 
-                                        if (wallets.length) {
-                                            setRedPacketDialogOpen(true)
-                                        } else {
-                                            Services.Welcome.openOptionsPage('/wallets/error?reason=nowallet')
-                                        }
-                                    },
-                                }}
-                            />
+                                            if (wallets.length) {
+                                                setRedPacketDialogOpen(true)
+                                            } else {
+                                                Services.Welcome.openOptionsPage('/wallets/error?reason=nowallet')
+                                            }
+                                        },
+                                    }}
+                                />
+                            )}
                         </Box>
                         <Typography style={{ marginBottom: 10 }}>
                             {t('post_dialog__select_recipients_title')}

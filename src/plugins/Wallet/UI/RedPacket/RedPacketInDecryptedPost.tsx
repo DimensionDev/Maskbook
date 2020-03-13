@@ -134,22 +134,28 @@ export function RedPacketInDecryptedPostCard(
         onClick: (state: RedPacketStatus, rpid: RedPacketRecord['red_packet_id']) => void
     },
 ) {
+    const { t } = useI18N()
     const { message, postIdentifier, loading, claiming, onClick } = props
     const storybookDebugging: boolean = readTypedMessageMetadataUntyped<boolean>(
         message.meta,
         'storybook.no-side-effect',
         // @ts-ignore https://github.com/vultix/ts-results/issues/4
     ).else(false)
+    /* without redpacket */
     const jsx = message
         ? withMetadata(message.meta, 'com.maskbook.red_packet:1', r => (
               <MaskbookPluginWrapper width={400} pluginName="Red Packet">
-                  <RedPacketWithState
-                      loading={loading || !!claiming}
-                      onClick={onClick}
-                      unknownRedPacket={storybookDebugging ? undefined : r}
-                      redPacket={storybookDebugging ? (r as any) : undefined}
-                      from={postIdentifier && !postIdentifier.isUnknown ? getPostUrl(postIdentifier) : undefined}
-                  />
+                  {webpackEnv.target === 'WKWebview' ? (
+                      <span>{t('feature_redpacket_not_supported')}</span>
+                  ) : (
+                      <RedPacketWithState
+                          loading={loading || !!claiming}
+                          onClick={onClick}
+                          unknownRedPacket={storybookDebugging ? undefined : r}
+                          redPacket={storybookDebugging ? (r as any) : undefined}
+                          from={postIdentifier && !postIdentifier.isUnknown ? getPostUrl(postIdentifier) : undefined}
+                      />
+                  )}
               </MaskbookPluginWrapper>
           ))
         : null
