@@ -243,11 +243,3 @@ function noSlash(str?: string) {
     if (!str) return
     if (str.includes('/')) throw new TypeError('Cannot contain / in a part of identifier')
 }
-
-export function constructPostRecipients(data: [ProfileIdentifier, RecipientDetail][]) {
-    const x: Record<string, RecipientDetail> = {}
-    for (const [id, detail] of data) {
-        x[id.toText()] = detail
-    }
-    return x
-}

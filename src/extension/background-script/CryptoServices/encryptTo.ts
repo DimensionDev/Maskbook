@@ -13,6 +13,7 @@ import { queryPersonaByProfileDB } from '../../../database/Persona/Persona.db'
 import { compressSecp256k1Key } from '../../../utils/type-transform/SECP256k1-Compression'
 import { import_AES_GCM_256_Key } from '../../../utils/crypto.subtle'
 import { i18n } from '../../../utils/i18n-next'
+import { IdentifierMap } from '../../../database/IdentifierMap'
 
 type EncryptedText = string
 type OthersAESKeyEncryptedToken = string
@@ -42,11 +43,12 @@ export async function encryptTo(
     if (to.length === 0 && publicShared === false) return ['', '']
     if (publicShared) to = []
 
-    const recipients: PostRecord['recipients'] = {}
+    const recipients: PostRecord['recipients'] = new IdentifierMap(new Map(), ProfileIdentifier)
     function addRecipients(x: ProfileIdentifier, reason: RecipientReason) {
-        const id = x.toText()
-        if (recipients[id]) recipients[id].reason.push(reason)
-        else recipients[id] = { reason: [reason] }
+        const id = x
+        if (recipients.has(id)) recipients.get(id)!.reason.push(reason)
+        // TODO:
+        else recipients.set(id, { reason: [reason], published: true })
     }
     const sharedGroups = new Set<Group>()
     for (const i of to) {
@@ -81,7 +83,7 @@ export async function encryptTo(
     } = await Alpha38.encrypt1ToN({
         version: -38,
         content: stringifiedContent,
-        othersPublicKeyECDH: toKey,
+        othersPublicKeyECDH: Array.from(toKey.values()),
         ownersLocalKey: localKey,
         privateKeyECDH: minePrivateKey,
         iv: crypto.getRandomValues(new Uint8Array(16)),

@@ -34,7 +34,8 @@ export function initAutoShareToFriends() {
             const notSharedBefore: ProfileIdentifier[] = []
 
             data.newMembers.forEach(x => {
-                if (post.recipients[x.toText()]) {
+                if (post.recipients.has(x)) {
+                    // TODO: should also check the published status
                     // skipping
                 } else notSharedBefore.push(x)
             })
