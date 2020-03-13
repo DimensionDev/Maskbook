@@ -36,6 +36,8 @@ currentEthereumNetworkSettings.addListener(resetProvider)
 PluginMessageCenter.on('maskbook.wallets.reset', resetWallet)
 
 sideEffect.then(() => {
+    /* without redpacket */
+    if (webpackEnv.target === 'WKWebview') return
     resetWallet()
     resetProvider()
 })
