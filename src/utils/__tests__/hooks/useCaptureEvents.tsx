@@ -5,7 +5,7 @@ configure({ adapter: new Adapter() })
 
 import React, { createRef, RefObject } from 'react'
 import { renderHook, act } from '@testing-library/react-hooks'
-import { useCapturedInput, captureEevnts } from '../../hooks/useCapturedEvents'
+import { useCapturedInput, captureEvents } from '../../hooks/useCapturedEvents'
 
 const containerRef: RefObject<HTMLDivElement> = createRef<HTMLDivElement>()
 const inputRef: RefObject<HTMLInputElement> = createRef<HTMLInputElement>()
@@ -31,7 +31,7 @@ test('invoke callback with input value', () => {
     expect(inputSpy.calls.argsFor(1)).toStrictEqual(['test'])
 })
 
-for (const name of captureEevnts) {
+for (const name of captureEvents) {
     test(`bypass event: ${name}`, () => {
         const containerSpy = jasmine.createSpy()
 

@@ -49,10 +49,10 @@ export const injectCommentBoxDefaultFactory = function<T extends string>(
         if (!current.commentBoxSelector) return nop
         const commentBoxWatcher = new MutationObserverWatcher(current.commentBoxSelector.clone(), current.rootNode)
             .useForeach((node, key, meta) =>
-                renderInShadowRoot(
-                    <CommentBoxUI {...{ ...current, realCurrent: meta.realCurrent }} />,
-                    meta.afterShadow,
-                ),
+                renderInShadowRoot(<CommentBoxUI {...{ ...current, realCurrent: meta.realCurrent }} />, {
+                    shadow: () => meta.afterShadow,
+                    normal: () => meta.after,
+                }),
             )
             .setDOMProxyOption({ afterShadowRootInit: { mode: 'closed' } })
             .startWatch({

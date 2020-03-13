@@ -30,6 +30,18 @@ export const disableOpenNewTabInBackgroundSettings = createNewSettings<boolean>(
     },
 )
 
+export const renderInShadowRootSettings = createNewSettings<boolean>(
+    'render in shadow root',
+    /**
+     * ? In WKWebview, the web extension polyfill is not ready for it.
+     */
+    webpackEnv.target === 'WKWebview' ? false : true,
+    {
+        primary: () => i18n.t('settings_advance_security'),
+        secondary: () => i18n.t('settings_advance_security_desc'),
+    },
+)
+
 export enum Language {
     zh = 'zh',
     en = 'en',

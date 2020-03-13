@@ -27,7 +27,10 @@ function renderPostDialogHintTo<T>(ls: LiveSelector<T, true>) {
             subtree: true,
         })
 
-    renderInShadowRoot(<PostDialogHintAtTwitter />, watcher.firstDOMProxy.afterShadow)
+    renderInShadowRoot(<PostDialogHintAtTwitter />, {
+        shadow: () => watcher.firstDOMProxy.afterShadow,
+        normal: () => watcher.firstDOMProxy.after,
+    })
 }
 
 export const useTwitterThemedPostDialogHint = makeStyles((theme: Theme) => ({

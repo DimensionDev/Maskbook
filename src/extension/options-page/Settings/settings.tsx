@@ -13,8 +13,11 @@ import {
     disableOpenNewTabInBackgroundSettings,
     languageSettings,
     Language,
+    renderInShadowRootSettings,
 } from '../../../components/shared-settings/settings'
 import { useValueRef } from '../../../utils/hooks/useValueRef'
+import EnhancedEncryptionIcon from '@material-ui/icons/EnhancedEncryption'
+import NoEncryptionIcon from '@material-ui/icons/NoEncryption'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -27,14 +30,13 @@ const useStyles = makeStyles((theme: Theme) =>
 )
 
 export function Settings() {
-    const [checked, setChecked] = React.useState(['wifi'])
-
     const currentLang = useValueRef(languageSettings)
     const langMapper = React.useRef((x: Language) => {
         if (x === Language.en) return 'English'
         if (x === Language.zh) return '中文'
         return ''
     }).current
+    const shadowRoot = useValueRef(renderInShadowRootSettings)
     return (
         <Container maxWidth="md">
             <Typography
@@ -76,6 +78,13 @@ export function Settings() {
             <Card>
                 <List dense disablePadding>
                     <SettingsUI icon={<OpenInBrowser />} value={disableOpenNewTabInBackgroundSettings} />
+                    {process.env.NODE_ENV === 'development' ? (
+                        <SettingsUI
+                            icon={shadowRoot ? <EnhancedEncryptionIcon /> : <NoEncryptionIcon />}
+                            value={renderInShadowRootSettings}
+                            secondary="Development mode only"
+                        />
+                    ) : /** This settings is not ready for production */ null}
                 </List>
             </Card>
         </Container>
