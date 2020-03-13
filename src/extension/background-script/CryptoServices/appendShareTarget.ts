@@ -1,11 +1,12 @@
 import * as Alpha39 from '../../../crypto/crypto-alpha-39'
 import * as Gun2 from '../../../network/gun/version.2'
-import { ProfileIdentifier, PostIVIdentifier, GroupIdentifier, constructPostRecipients } from '../../../database/type'
+import { ProfileIdentifier, PostIVIdentifier, GroupIdentifier } from '../../../database/type'
 import { prepareOthersKeyForEncryptionV39OrV38 } from './prepareOthersKeyForEncryption'
 import { cryptoProviderTable } from './utils'
 import { updatePostDB, RecipientDetail } from '../../../database/post'
 import { getNetworkWorker } from '../../../social-network/worker'
 import { queryPrivateKey, queryLocalKey } from '../../../database'
+import { IdentifierMap } from '../../../database/IdentifierMap'
 export async function appendShareTarget(
     version: -40 | -39 | -38,
     postAESKey: string | CryptoKey,
@@ -28,22 +29,32 @@ export async function appendShareTarget(
     const myPrivateKey: CryptoKey = (await queryPrivateKey(whoAmI))!
     if (version === -39 || version === -38) {
         const toKey = await prepareOthersKeyForEncryptionV39OrV38(people)
-        const othersAESKeyEncrypted = await Alpha39.generateOthersAESKeyEncrypted(version, AESKey, myPrivateKey, toKey)
+        const othersAESKeyEncrypted = await Alpha39.generateOthersAESKeyEncrypted(
+            version,
+            AESKey,
+            myPrivateKey,
+            Array.from(toKey.values()),
+        )
         Gun2.publishPostAESKeyOnGun2(version, iv, getNetworkWorker(whoAmI).gunNetworkHint, othersAESKeyEncrypted)
         updatePostDB(
             {
                 identifier: new PostIVIdentifier(whoAmI.network, iv),
-                recipients: constructPostRecipients(
-                    people.map<[ProfileIdentifier, RecipientDetail]>(identifier => [
-                        identifier,
-                        {
-                            reason: [
-                                invitedBy
-                                    ? { at: new Date(), group: invitedBy, type: 'group' }
-                                    : { at: new Date(), type: 'direct' },
-                            ],
-                        },
-                    ]),
+                recipients: new IdentifierMap(
+                    new Map(
+                        people.map<[string, RecipientDetail]>(identifier => [
+                            identifier.toText(),
+                            {
+                                reason: [
+                                    invitedBy
+                                        ? { at: new Date(), group: invitedBy, type: 'group' }
+                                        : { at: new Date(), type: 'direct' },
+                                ],
+                                // TODO: handle it.
+                                published: true,
+                            },
+                        ]),
+                    ),
+                    ProfileIdentifier,
                 ),
             },
             'append',
