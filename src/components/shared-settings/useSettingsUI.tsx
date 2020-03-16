@@ -15,13 +15,6 @@ import {
 } from '@material-ui/core'
 import React from 'react'
 
-const useStyles = makeStyles(theme =>
-    createStyles({
-        container: { listStyleType: 'none', width: '100%' },
-        secondaryAction: { paddingRight: 90 + theme.spacing(2) },
-    }),
-)
-
 function withDefaultText<T>(props: SettingsUIProps<T>): SettingsUIProps<T> {
     const { value, primary, secondary } = props
     const text = texts.get(value)
@@ -61,7 +54,14 @@ export function SettingsUI<T>(props: SettingsUIProps<T>) {
     }
 }
 
-const useStyles2 = makeStyles({
+const useListItemStyles = makeStyles(theme =>
+    createStyles({
+        container: { listStyleType: 'none', width: '100%' },
+        secondaryAction: { paddingRight: 90 + theme.spacing(2) },
+    }),
+)
+
+const useStyles = makeStyles({
     secondaryAction: { width: 90 },
 })
 
@@ -73,14 +73,14 @@ export function SettingsUIEnum<T extends object>(
     } & SettingsUIProps<T[keyof T]>,
 ) {
     const { primary, secondary } = withDefaultText(props)
+    const listClasses = useListItemStyles()
     const classes = useStyles()
-    const classes2 = useStyles2()
     const [ui, change] = useEnumSettings(props.value, props.enumObject, props.getText, props.SelectProps)
     return (
-        <ListItem component="div" classes={classes}>
+        <ListItem component="div" classes={listClasses}>
             {props.icon ? <ListItemIcon>{props.icon}</ListItemIcon> : null}
             <ListItemText primary={primary} secondary={secondary} />
-            <ListItemSecondaryAction className={classes2.secondaryAction}>{ui}</ListItemSecondaryAction>
+            <ListItemSecondaryAction className={classes.secondaryAction}>{ui}</ListItemSecondaryAction>
         </ListItem>
     )
 }
