@@ -20,7 +20,7 @@ import * as type from './database/type'
 import * as post from './database/post'
 import { definedSocialNetworkWorkers } from './social-network/worker'
 import { getWelcomePageURL } from './extension/options-page/Welcome/getWelcomePageURL'
-import { wrappedTasks } from './extension/content-script/tasks'
+import { exclusiveTasks } from './extension/content-script/tasks'
 
 if (GetContext() === 'background') {
     const injectedScript = `{
@@ -89,8 +89,8 @@ if (GetContext() === 'background') {
     if (webpackEnv.genericTarget === 'app') {
         contentScriptReady.then(() => {
             // TODO: twitter app
-            wrappedTasks('https://m.facebook.com/', { important: true })
-            wrappedTasks(getWelcomePageURL({}), { important: true })
+            exclusiveTasks('https://m.facebook.com/', { important: true })
+            exclusiveTasks(getWelcomePageURL({}), { important: true })
         })
     }
 }

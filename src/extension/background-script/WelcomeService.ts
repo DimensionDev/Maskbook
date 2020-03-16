@@ -12,7 +12,7 @@ import { deriveLocalKeyFromECDHKey } from '../../utils/mnemonic-code/localKeyGen
 import { ProfileIdentifier, PersonaIdentifier } from '../../database/type'
 import { generateBackupJSON, BackupOptions } from './WelcomeServices/generateBackupJSON'
 import { i18n } from '../../utils/i18n-next'
-import { wrappedTasks } from '../content-script/tasks'
+import { exclusiveTasks } from '../content-script/tasks'
 
 OnlyRunInContext(['background', 'debugging'], 'WelcomeService')
 export { generateBackupJSON } from './WelcomeServices/generateBackupJSON'
@@ -88,11 +88,11 @@ export async function openWelcomePage(id?: SocialNetworkUI['lastRecognizedIdenti
         if (!getCurrentNetworkWorker(id.identifier).isValidUsername(id.identifier.userId))
             throw new TypeError(i18n.t('service_username_invalid'))
     }
-    return wrappedTasks(getWelcomePageURL(id))
+    return exclusiveTasks(getWelcomePageURL(id))
 }
 
 export async function openOptionsPage(route?: string) {
-    return wrappedTasks(browser.runtime.getURL(route ? '/index.html#' + route : '/'))
+    return exclusiveTasks(browser.runtime.getURL(route ? '/index.html#' + route : '/'))
 }
 
 export { createPersonaByMnemonic } from '../../database'

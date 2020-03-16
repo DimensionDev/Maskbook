@@ -2,7 +2,7 @@ import { MessageCenter } from './utils/messages'
 import { definedSocialNetworkUIs, activateSocialNetworkUI } from './social-network/ui'
 import './provider.ui'
 import { LiveSelector, Watcher, DOMProxy } from '@holoflows/kit/es'
-import { wrappedTasks } from './extension/content-script/tasks'
+import { exclusiveTasks } from './extension/content-script/tasks'
 
 if (typeof window === 'object') {
     LiveSelector.enhanceDebugger()
@@ -18,7 +18,7 @@ const close = globalThis.close
 globalThis.close = () => {
     if (webpackEnv.genericTarget === 'app') {
         // TODO: twitter app
-        wrappedTasks('https://m.facebook.com/')
+        exclusiveTasks('https://m.facebook.com/')
         return
     }
     Reflect.apply(close, window, [])
