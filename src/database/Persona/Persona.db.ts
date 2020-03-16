@@ -310,13 +310,20 @@ export async function updateProfileDB(
         ...updating,
     })
     await t.objectStore('profiles').put(nextRecord)
-    setTimeout(
-        async () =>
-            MessageCenter.emit('profilesChanged', [
-                { reason: 'update', of: await queryProfile(updating.identifier) } as const,
-            ]),
-        0,
-    )
+    setTimeout(async () => {
+        const next = await queryProfile(updating.identifier)
+        MessageCenter.emit('profilesChanged', [{ reason: 'update', of: next } as const])
+
+        const oldKey = old.linkedPersona ? restorePrototype(old.linkedPersona, ECKeyIdentifier.prototype) : undefined
+        const newKey = next.linkedPersona
+        if (oldKey?.toText() !== newKey?.identifier.toText()) {
+            MessageCenter.emit('linkedProfileChanged', {
+                of: next.identifier,
+                before: oldKey,
+                after: newKey?.identifier,
+            })
+        }
+    }, 0)
 }
 export async function createOrUpdateProfileDB(rec: ProfileRecord, t: ProfileTransaction<'readwrite'>) {
     if (await queryProfileDB(rec.identifier, t)) return updateProfileDB(rec, t)
