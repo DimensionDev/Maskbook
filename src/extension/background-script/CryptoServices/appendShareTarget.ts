@@ -3,7 +3,7 @@ import * as Gun2 from '../../../network/gun/version.2'
 import { ProfileIdentifier, PostIVIdentifier, GroupIdentifier } from '../../../database/type'
 import { prepareRecipientDetail } from './prepareRecipientDetail'
 import { cryptoProviderTable } from './utils'
-import { updatePostDB, RecipientDetail } from '../../../database/post'
+import { updatePostDB, RecipientDetail, RecipientReason } from '../../../database/post'
 import { getNetworkWorker } from '../../../social-network/worker'
 import { queryPrivateKey, queryLocalKey } from '../../../database'
 import { IdentifierMap } from '../../../database/IdentifierMap'
@@ -13,7 +13,7 @@ export async function appendShareTarget(
     iv: string,
     people: ProfileIdentifier[],
     whoAmI: ProfileIdentifier,
-    invitedBy?: GroupIdentifier,
+    reason: RecipientReason,
 ): Promise<void> {
     const cryptoProvider = cryptoProviderTable[version]
     if (typeof postAESKey === 'string') {
@@ -23,7 +23,7 @@ export async function appendShareTarget(
             iv,
             (await queryLocalKey(whoAmI))!,
         )
-        return appendShareTarget(version, AESKey, iv, people, whoAmI)
+        return appendShareTarget(version, AESKey, iv, people, whoAmI, reason)
     }
     const AESKey: CryptoKey = postAESKey
     const myPrivateKey: CryptoKey = (await queryPrivateKey(whoAmI))!
@@ -44,11 +44,7 @@ export async function appendShareTarget(
                         people.map<[string, RecipientDetail]>(identifier => [
                             identifier.toText(),
                             {
-                                reason: [
-                                    invitedBy
-                                        ? { at: new Date(), group: invitedBy, type: 'group' }
-                                        : { at: new Date(), type: 'direct' },
-                                ],
+                                reason: [reason],
                                 published: toKey.has(identifier),
                             },
                         ]),

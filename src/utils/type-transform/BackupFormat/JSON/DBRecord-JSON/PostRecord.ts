@@ -48,13 +48,14 @@ export function PostRecordFromJSONFormat(
 }
 
 function RecipientReasonToJSON(y: RecipientReason): RecipientReasonJSON {
-    if (y.type === 'direct') return { at: y.at.getTime(), type: y.type }
+    if (y.type === 'direct' || y.type === 'auto-share')
+        return { at: y.at.getTime(), type: y.type } as RecipientReasonJSON
     else if (y.type === 'group') return { at: y.at.getTime(), group: y.group.toText(), type: y.type }
     const x: never = y
     throw new Error('Unreachable case')
 }
 function RecipientReasonFromJSON(y: RecipientReasonJSON): RecipientReason {
-    if (y.type === 'direct') return { at: new Date(y.at), type: y.type }
+    if (y.type === 'direct' || y.type === 'auto-share') return { at: new Date(y.at), type: y.type } as RecipientReason
     else if (y.type === 'group')
         return {
             type: 'group',

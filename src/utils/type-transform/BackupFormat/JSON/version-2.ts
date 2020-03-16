@@ -3,7 +3,11 @@ import { LinkedProfileDetails } from '../../../../database/Persona/Persona.db'
 import { BackupJSONFileVersion1 } from './version-1'
 import { ProfileIdentifier, ECKeyIdentifier, GroupIdentifier } from '../../../../database/type'
 
-export type RecipientReasonJSON = ({ type: 'direct' } | { type: 'group'; group: string /** GroupIdentifier */ }) & {
+export type RecipientReasonJSON = (
+    | { type: 'auto-share' }
+    | { type: 'direct' }
+    | { type: 'group'; group: string /** GroupIdentifier */ }
+) & {
     at: number
 }
 /**

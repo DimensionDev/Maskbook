@@ -198,7 +198,11 @@ function postToDB(out: PostRecord): PostDBRecord {
 /**
  * When you change this, change RecipientReasonJSON as well!
  */
-export type RecipientReason = ({ type: 'direct' } | { type: 'group'; group: GroupIdentifier }) & {
+export type RecipientReason = (
+    | { type: 'auto-share' }
+    | { type: 'direct' }
+    | { type: 'group'; group: GroupIdentifier }
+) & {
     /**
      * When we send the key to them by this reason?
      * If the unix timestamp of this Date is 0,
