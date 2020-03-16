@@ -83,7 +83,7 @@
     "node-stego": "^0.10.1",
     "notistack": "^0.9.7",
     "openzeppelin-solidity": "^2.4.0",
-    "pvtsutils": "^1.0.9",
+    "pvtsutils": "^1.0.10",
     "qrcode": "^1.4.4",
     "react": "^16.13.0",
     "react-dom": "^16.13.0",

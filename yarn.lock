@@ -15733,10 +15733,10 @@ puppeteer@^2.1.1:
     rimraf "^2.6.1"
     ws "^6.1.0"
 
-pvtsutils@^1.0.6, pvtsutils@^1.0.9:
-  version "1.0.9"
-  resolved "https://registry.yarnpkg.com/pvtsutils/-/pvtsutils-1.0.9.tgz#0eb6106f27878ccaa55e7dfbf6bd2c75af461dee"
-  integrity sha512-/kDsuCKPqJuIzn37w6+iN+TiSrN+zrwPEd7FjT61oNbRvceGdsS94fMEWZ4/h6QZU5EZhBMiV+79IYedroP/Yw==
+pvtsutils@^1.0.10, pvtsutils@^1.0.6, pvtsutils@^1.0.9:
+  version "1.0.10"
+  resolved "https://registry.yarnpkg.com/pvtsutils/-/pvtsutils-1.0.10.tgz#157d0fcb853f570d32e0f8788179f3057eacdf38"
+  integrity sha512-8ZKQcxnZKTn+fpDh7wL4yKax5fdl3UJzT8Jv49djZpB/dzPxacyN1Sez90b6YLdOmvIr9vaySJ5gw4aUA1EdSw==
   dependencies:
     tslib "^1.10.0"
 
