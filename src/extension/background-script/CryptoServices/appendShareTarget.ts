@@ -1,7 +1,7 @@
 import * as Alpha39 from '../../../crypto/crypto-alpha-39'
 import * as Gun2 from '../../../network/gun/version.2'
 import { ProfileIdentifier, PostIVIdentifier, GroupIdentifier } from '../../../database/type'
-import { prepareOthersKeyForEncryptionV39OrV38 } from './prepareOthersKeyForEncryption'
+import { prepareRecipientDetail } from './prepareRecipientDetail'
 import { cryptoProviderTable } from './utils'
 import { updatePostDB, RecipientDetail } from '../../../database/post'
 import { getNetworkWorker } from '../../../social-network/worker'
@@ -28,7 +28,7 @@ export async function appendShareTarget(
     const AESKey: CryptoKey = postAESKey
     const myPrivateKey: CryptoKey = (await queryPrivateKey(whoAmI))!
     if (version === -39 || version === -38) {
-        const toKey = await prepareOthersKeyForEncryptionV39OrV38(people)
+        const [, toKey] = await prepareRecipientDetail(people)
         const othersAESKeyEncrypted = await Alpha39.generateOthersAESKeyEncrypted(
             version,
             AESKey,
@@ -49,8 +49,7 @@ export async function appendShareTarget(
                                         ? { at: new Date(), group: invitedBy, type: 'group' }
                                         : { at: new Date(), type: 'direct' },
                                 ],
-                                // TODO: handle it.
-                                published: true,
+                                published: toKey.has(identifier),
                             },
                         ]),
                     ),
