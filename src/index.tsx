@@ -119,7 +119,7 @@ function Dashboard() {
     const { t } = useI18N()
     const classes = useStyles()
 
-    const shouldRenderAppBar = webpackEnv.genericTarget === 'app'
+    const shouldRenderAppBar = webpackEnv.genericTarget === 'facebookApp'
     const shouldNotRenderAppBar = useMediaQuery('(min-width:1024px)')
 
     const routers: [string, string, JSX.Element][] = [
