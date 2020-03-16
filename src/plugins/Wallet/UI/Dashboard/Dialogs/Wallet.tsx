@@ -29,7 +29,7 @@ import { useHistory, Link } from 'react-router-dom'
 import { useI18N } from '../../../../../utils/i18n-next-ui'
 import { useColorProvider } from '../../../../../utils/theme'
 import { formatBalance } from '../../../formatter'
-import { wrappedTasks } from '../../../../../extension/content-script/tasks'
+import { exclusiveTasks } from '../../../../../extension/content-script/tasks'
 
 interface WalletSendRedPacketDialogProps {
     onDecline(): void
@@ -62,7 +62,7 @@ export function WalletSendRedPacketDialog(props: WalletSendRedPacketDialogProps)
                         <ActionButton<React.ComponentType<JSX.IntrinsicElements['a']>>
                             component="a"
                             {...(webpackEnv.genericTarget === 'app'
-                                ? { onClick: () => wrappedTasks('https://m.facebook.com/?soft=composer') }
+                                ? { onClick: () => exclusiveTasks('https://m.facebook.com/?soft=composer') }
                                 : { href: 'https://facebook.com', target: '_blank', rel: 'noopener noreferrer' })}
                             variant="outlined"
                             color="primary"

@@ -16,7 +16,7 @@ import {
     currentImmersiveSetupStatus,
     ImmersiveSetupCrossContextStatus,
 } from '../../../components/shared-settings/settings'
-import { wrappedTasks } from '../../content-script/tasks'
+import { exclusiveTasks } from '../../content-script/tasks'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -104,7 +104,7 @@ export default function ProfileBox({ persona, border }: Props) {
             status: 'during',
             persona: persona.identifier.toText(),
         } as ImmersiveSetupCrossContextStatus)
-        wrappedTasks(getCurrentNetworkUI(provider.network).getHomePage(), {
+        exclusiveTasks(getCurrentNetworkUI(provider.network).getHomePage(), {
             active: true,
             autoClose: false,
             important: true,

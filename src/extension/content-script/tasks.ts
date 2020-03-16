@@ -73,7 +73,14 @@ const uriCanDoTask = (tabUri?: string, targetUri?: any) => {
     return false
 }
 
-export function wrappedTasks(...args: Parameters<typeof realTasks>) {
+/**
+ * ! For mobile standalone app
+ * This function will open/switch tabs (and start tasks)
+ * It tries to check if a tab being able to do the target task already opened before opening it
+ * For Chrome, `browser.tabs.query` won't work for chrome-extension: schema, so this function is not useful
+ */
+
+export function exclusiveTasks(...args: Parameters<typeof realTasks>) {
     const [uri, options = {}, ...others] = args
     const updatedOptions: Partial<AutomatedTabTaskRuntimeOptions> = {
         active: true,
