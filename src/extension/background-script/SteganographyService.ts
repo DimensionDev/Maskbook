@@ -6,6 +6,7 @@ import type { EncodeOptions, DecodeOptions } from 'node-stego/es/stego'
 import { getUrl, downloadUrl } from '../../utils/utils'
 import { memoizePromise } from '../../utils/memoize'
 import { getDimension } from '../../utils/image'
+import { decodeArrayBuffer, encodeArrayBuffer } from '../../utils/type-transform/String-ArrayBuffer'
 
 OnlyRunInContext('background', 'SteganographyService')
 
@@ -39,10 +40,11 @@ type EncodeImageOptions = {
     template?: Template
 } & PartialRequired<Required<EncodeOptions>, 'text' | 'pass'>
 
-export async function encodeImage(buf: Uint8Array, options: EncodeImageOptions) {
+export async function encodeImage(buf: string | ArrayBuffer, options: EncodeImageOptions) {
     const { template } = options
-    return new Uint8Array(
-        await encode(buf.buffer, await getMaskBuf(), {
+    const _buf = typeof buf === 'string' ? decodeArrayBuffer(buf) : buf
+    return encodeArrayBuffer(
+        await encode(_buf, await getMaskBuf(), {
             ...defaultOptions,
             fakeMaskPixels: template !== 'default',
             cropEdgePixels: true,
@@ -56,12 +58,13 @@ export async function encodeImage(buf: Uint8Array, options: EncodeImageOptions) 
 
 type DecodeImageOptions = PartialRequired<Required<DecodeOptions>, 'pass'>
 
-export async function decodeImage(buf: Uint8Array, options: DecodeImageOptions) {
-    const dimension = getDimension(buf)
+export async function decodeImage(buf: string | ArrayBuffer, options: DecodeImageOptions) {
+    const _buf = typeof buf === 'string' ? decodeArrayBuffer(buf) : buf
+    const dimension = getDimension(_buf)
     if (!dimensions.some((otherDimension) => isSameDimension(dimension, otherDimension))) {
         return ''
     }
-    return decode(buf.buffer, await getMaskBuf(), {
+    return decode(_buf, await getMaskBuf(), {
         ...defaultOptions,
         transformAlgorithm: TransformAlgorithm.FFT1D,
         ...options,
@@ -69,7 +72,7 @@ export async function decodeImage(buf: Uint8Array, options: DecodeImageOptions) 
 }
 
 export async function decodeImageUrl(url: string, options: DecodeImageOptions) {
-    return decodeImage(new Uint8Array(await downloadUrl(url)), options)
+    return decodeImage(await downloadUrl(url), options)
 }
 
 export function downloadImage({ buffer }: Uint8Array) {

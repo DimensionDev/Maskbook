@@ -25,6 +25,7 @@ import { twitterEncoding } from '../encoding'
 import { createTaskStartImmersiveSetupDefault } from '../../../social-network/defaults/taskStartImmersiveSetupDefault'
 import { instanceOfTwitterUI } from '.'
 import type { ProfileIdentifier } from '../../../database/type'
+import { encodeArrayBuffer, decodeArrayBuffer } from '../../../utils/type-transform/String-ArrayBuffer'
 
 /**
  * Wait for up to 5000 ms
@@ -78,17 +79,17 @@ const taskUploadToPostBox: SocialNetworkUI['taskUploadToPostBox'] = async (text,
     const { warningText, template = 'default' } = options
     const { currentIdentity } = getActivatedUI()
     const blankImage = await downloadUrl(getUrl(`/maskbook-steganography-${template}.png`))
-    const secretImage = await Services.Steganography.encodeImage(new Uint8Array(blankImage), {
-        text,
-        pass: currentIdentity.value ? currentIdentity.value.identifier.toText() : '',
-        template,
-    })
-
-    const image = new Uint8Array(secretImage)
-
-    await pasteImageToActiveElements(image)
+    const secretImage = new Uint8Array(
+        decodeArrayBuffer(
+            await Services.Steganography.encodeImage(encodeArrayBuffer(blankImage), {
+                text,
+                pass: currentIdentity.value ? currentIdentity.value.identifier.toText() : '',
+                template,
+            }),
+        ),
+    )
+    await pasteImageToActiveElements(secretImage)
     await untilDocumentReady()
-
     try {
         // Need a better way to find whether the image is pasted into
         // throw new Error('auto uploading is undefined')
@@ -99,7 +100,7 @@ const taskUploadToPostBox: SocialNetworkUI['taskUploadToPostBox'] = async (text,
     async function uploadFail() {
         console.warn('Image not uploaded to the post box')
         if (confirm(warningText)) {
-            await Services.Steganography.downloadImage(image)
+            await Services.Steganography.downloadImage(secretImage)
         }
     }
 }
