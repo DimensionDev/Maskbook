@@ -1,7 +1,7 @@
 import { MessageCenter as MC } from '@holoflows/kit/es'
 import { Profile, Group } from '../database'
 import Serialization from './type-transform/Serialization'
-import { ProfileIdentifier, GroupIdentifier } from '../database/type'
+import { ProfileIdentifier, GroupIdentifier, PersonaIdentifier } from '../database/type'
 
 export interface UpdateEvent<Data> {
     readonly reason: 'update' | 'delete' | 'new'
@@ -58,6 +58,14 @@ interface MaskbookMessages {
      * emit when compose status updated.
      */
     compositionUpdated: CompositionEvent
+    /**
+     * Public Key found / Changed
+     */
+    linkedProfileChanged: {
+        of: ProfileIdentifier
+        before: PersonaIdentifier | undefined
+        after: PersonaIdentifier | undefined
+    }
 }
 
 export class BatchedMessageCenter<T> extends MC<T> {
