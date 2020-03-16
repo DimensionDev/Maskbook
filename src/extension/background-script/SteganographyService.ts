@@ -68,6 +68,10 @@ export async function decodeImage(buf: Uint8Array, options: DecodeImageOptions) 
     })
 }
 
+export async function decodeImageUrl(url: string, options: DecodeImageOptions) {
+    return decodeImage(new Uint8Array(await downloadUrl(url)), options)
+}
+
 export function downloadImage({ buffer }: Uint8Array) {
     return browser.downloads.download({
         url: URL.createObjectURL(new Blob([buffer], { type: 'image/png' })),
