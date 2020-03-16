@@ -77,7 +77,7 @@ const db = createDBAccess(() => {
                     const oldType = (cursor.value as unknown) as Version3PostDBRecord
                     const newType: PostDBRecord['recipients'] = new Map()
                     for (const [key, value] of Object.entries(oldType.recipients)) {
-                        newType.set(key, { published: true, reason: value.reason })
+                        newType.set(key, value)
                     }
                     const next: PostDBRecord = {
                         ...cursor.value,
@@ -209,11 +209,6 @@ export type RecipientReason = ({ type: 'direct' } | { type: 'group'; group: Grou
 export interface RecipientDetail {
     /** Why they're able to receive this message? */
     reason: RecipientReason[]
-    /**
-     * Set false if the recipients doesn't have a public key.
-     * Will try to auto share to them once the key is found.
-     */
-    published: boolean
 }
 export interface PostRecord {
     /**
