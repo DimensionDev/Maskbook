@@ -87,6 +87,7 @@ export function PostInspector(props: PostInspectorProps) {
                                       iv,
                                       people.map(x => x.identifier),
                                       whoAmI!.identifier,
+                                      { type: 'direct', at: new Date() },
                                   )
                               }
                     }
