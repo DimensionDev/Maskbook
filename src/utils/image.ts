@@ -1,12 +1,12 @@
 /* eslint-disable no-bitwise */
 import { imgType } from 'node-stego/es/helper'
 
-export function getDimension(buf: Uint8Array) {
+export function getDimension(buf: ArrayBuffer) {
     const fallback = {
         width: 0,
         height: 0,
     }
-    switch (imgType(buf)) {
+    switch (imgType(new Uint8Array(buf))) {
         case 'image/jpeg':
             return getDimensionAsJPEG(buf) ?? fallback
         case 'image/png':
@@ -16,8 +16,8 @@ export function getDimension(buf: Uint8Array) {
     }
 }
 
-function getDimensionAsPNG(buf: Uint8Array) {
-    const dataView = new DataView(buf.buffer, 0, 28)
+function getDimensionAsPNG(buf: ArrayBuffer) {
+    const dataView = new DataView(buf, 0, 28)
     return {
         width: dataView.getInt32(16),
         height: dataView.getInt32(20),
@@ -29,8 +29,8 @@ function getDimensionAsPNG(buf: Uint8Array) {
  *
  * @see http://vip.sugovica.hu/Sardi/kepnezo/JPEG%20File%20Layout%20and%20Format.htm
  */
-function getDimensionAsJPEG(buf: Uint8Array) {
-    const dataView = new DataView(buf.buffer)
+function getDimensionAsJPEG(buf: ArrayBuffer) {
+    const dataView = new DataView(buf)
     let i = 0
     if (
         dataView.getUint8(i) === 0xff &&
@@ -47,9 +47,9 @@ function getDimensionAsJPEG(buf: Uint8Array) {
             dataView.getUint8(i + 6) === 0x00
         ) {
             let block_length = dataView.getUint8(i) * 256 + dataView.getUint8(i + 1)
-            while (i < buf.length) {
+            while (i < dataView.byteLength) {
                 i += block_length
-                if (i >= buf.length) return
+                if (i >= dataView.byteLength) return
                 if (dataView.getUint8(i) !== 0xff) return
                 if (
                     dataView.getUint8(i + 1) === 0xc0 || // SOF0 marker

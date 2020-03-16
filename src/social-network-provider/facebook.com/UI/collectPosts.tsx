@@ -4,7 +4,6 @@ import { getEmptyPostInfoByElement, PostInfo, SocialNetworkUI } from '../../../s
 import { isMobileFacebook } from '../isMobile'
 import { getProfileIdentifierAtFacebook } from '../getPersonIdentifierAtFacebook'
 import Services from '../../../extension/service'
-import { downloadUrl } from '../../../utils/utils'
 
 const posts = new LiveSelector().querySelectorAll<HTMLDivElement>(
     isMobileFacebook ? '.story_body_container ' : '.userContent, .userContent+*+div>div>div>div>div',
@@ -133,7 +132,7 @@ async function getSteganographyContent(node: DOMProxy) {
         await Promise.all(
             imgUrls.map(async url => {
                 try {
-                    const content = await Services.Steganography.decodeImage(new Uint8Array(await downloadUrl(url)), {
+                    const content = await Services.Steganography.decodeImageUrl(url, {
                         pass,
                     })
                     return content.indexOf('🎼') === 0 ? content : ''

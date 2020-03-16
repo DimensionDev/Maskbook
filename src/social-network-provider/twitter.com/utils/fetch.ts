@@ -1,4 +1,4 @@
-import { regexMatch, downloadUrl } from '../../../utils/utils'
+import { regexMatch } from '../../../utils/utils'
 import { notNullable } from '../../../utils/assert'
 import { defaultTo } from 'lodash-es'
 import { nthChild } from '../../../utils/dom'
