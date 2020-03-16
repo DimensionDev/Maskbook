@@ -12,7 +12,7 @@ export async function prepareRecipientDetail(to: (ProfileIdentifier | GroupIdent
             if (who instanceof ProfileIdentifier) {
                 const pub = await queryPublicKey(who)
                 if (pub) keys.set(who, pub)
-                append(who, !!pub, detail)
+                append(who, detail)
             } else if (who instanceof GroupIdentifier) {
                 const group = await queryUserGroup(who)
                 if (!group) return // ? should we throw?
@@ -22,8 +22,8 @@ export async function prepareRecipientDetail(to: (ProfileIdentifier | GroupIdent
             }
         }),
     )
-    function append(who: ProfileIdentifier, published: boolean, reason: RecipientReason) {
-        if (!recipients.has(who)) recipients.set(who, { published, reason: [] })
+    function append(who: ProfileIdentifier, reason: RecipientReason) {
+        if (!recipients.has(who)) recipients.set(who, { reason: [] })
         recipients.get(who)!.reason.push(reason)
     }
     return [recipients, keys] as const
