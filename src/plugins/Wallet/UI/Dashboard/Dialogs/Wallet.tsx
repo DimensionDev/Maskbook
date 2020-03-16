@@ -61,7 +61,7 @@ export function WalletSendRedPacketDialog(props: WalletSendRedPacketDialogProps)
                     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                         <ActionButton<React.ComponentType<JSX.IntrinsicElements['a']>>
                             component="a"
-                            {...(webpackEnv.genericTarget === 'app'
+                            {...(webpackEnv.genericTarget === 'facebookApp'
                                 ? { onClick: () => exclusiveTasks('https://m.facebook.com/?soft=composer') }
                                 : { href: 'https://facebook.com', target: '_blank', rel: 'noopener noreferrer' })}
                             variant="outlined"
@@ -70,7 +70,7 @@ export function WalletSendRedPacketDialog(props: WalletSendRedPacketDialogProps)
                             width={240}>
                             Open facebook.com
                         </ActionButton>
-                        {webpackEnv.genericTarget !== 'app' && (
+                        {webpackEnv.genericTarget === 'browser' && (
                             <ActionButton<React.ComponentType<JSX.IntrinsicElements['a']>>
                                 component="a"
                                 href="https://twitter.com"

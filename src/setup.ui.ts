@@ -16,8 +16,7 @@ activateSocialNetworkUI()
 
 const close = globalThis.close
 globalThis.close = () => {
-    if (webpackEnv.genericTarget === 'app') {
-        // TODO: twitter app
+    if (webpackEnv.genericTarget === 'facebookApp') {
         exclusiveTasks('https://m.facebook.com/')
         return
     }

@@ -87,7 +87,7 @@ export function exclusiveTasks(...args: Parameters<typeof realTasks>) {
         memorable: false,
         autoClose: false,
     }
-    if (webpackEnv.genericTarget !== 'app') return tasks(uri, { ...updatedOptions, ...options }, ...others)
+    if (webpackEnv.genericTarget !== 'facebookApp') return tasks(uri, { ...updatedOptions, ...options }, ...others)
     let _key: keyof typeof _tasks
     let _args: any[]
     const promise = Promise.resolve(browser.tabs.query({})).then(tabs => {

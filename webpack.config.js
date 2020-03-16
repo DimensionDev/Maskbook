@@ -234,11 +234,11 @@ module.exports = (argvEnv, argv) => {
         if (target.FirefoxForAndroid) firefoxVariant = 'android'
         if (target.StandaloneGeckoView) {
             firefoxVariant = 'GeckoView'
-            genericTarget = 'app'
+            genericTarget = 'facebookApp'
         }
         if (target.WKWebview) {
             buildTarget = 'WKWebview'
-            genericTarget = 'app'
+            genericTarget = 'facebookApp'
         }
         if (target.E2E) buildTarget = 'E2E'
         if (buildTarget)
