@@ -55,7 +55,7 @@ function createJPEGBuffer(width: number, height: number) {
         // EOI
         0xff,
         0xd9,
-    ])
+    ]).buffer
 }
 
 function createPNGBuffer(width: number, height: number) {
@@ -82,7 +82,7 @@ function createPNGBuffer(width: number, height: number) {
         0, // compression method
         0, // filter method
         0, // interlace method
-    ])
+    ]).buffer
 }
 
 test('Get dimension of JPEG buffer', () => {
