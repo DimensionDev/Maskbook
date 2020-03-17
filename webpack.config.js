@@ -144,7 +144,7 @@ module.exports = (argvEnv, argv) => {
         return src
     }
     config.entry = {
-        'options-page': appendReactDevtools(src('./src/index.tsx')),
+        'options-page': appendReactDevtools(src('./src/extension/options-page/index.tsx')),
         'content-script': appendReactDevtools(src('./src/content-script.ts')),
         'background-service': src('./src/background-service.ts'),
         'injected-script': src('./src/extension/injected-script/index.ts'),

@@ -1,68 +1,41 @@
-import React, { useCallback } from 'react'
-import Divider from '@material-ui/core/Divider'
-import Drawer from '@material-ui/core/Drawer'
-import Hidden from '@material-ui/core/Hidden'
+import React, { useState } from 'react'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemIcon from '@material-ui/core/ListItemIcon'
 import ListItemText from '@material-ui/core/ListItemText'
 import { makeStyles } from '@material-ui/core/styles'
-import { IconButton, Typography, BottomNavigation, BottomNavigationAction } from '@material-ui/core'
-import classNames from 'classnames'
+import { Typography, Paper } from '@material-ui/core'
 
-import CloseIcon from '@material-ui/icons/Close'
-import { Link, useRouteMatch, useHistory } from 'react-router-dom'
-
-const drawerWidth = 240
+import SentimentSatisfiedOutlinedIcon from '@material-ui/icons/SentimentSatisfiedOutlined'
+import { Link, useRouteMatch } from 'react-router-dom'
 
 const useStyles = makeStyles((theme) => ({
-    root: {
-        display: 'flex',
-    },
     drawer: {
-        [theme.breakpoints.up('md')]: {
-            width: drawerWidth,
-            flexShrink: 0,
-        },
+        height: '100%',
+        display: 'grid',
+        gridTemplateRows: '[drawerHeader] 0fr [drawerList] auto [drawerFooter] 0fr',
+        minWidth: 'var(--drawerWidth)',
+        backgroundColor: 'var(--drawerBody)',
+        color: 'white',
+        overflow: 'auto',
     },
-    appBar: {
-        [theme.breakpoints.up('md')]: {
-            width: `calc(100% - ${drawerWidth}px)`,
-            marginLeft: drawerWidth,
-        },
+    drawerHeader: {
+        padding: theme.spacing(4, 4, 3, 4),
+        backgroundColor: 'var(--drawerHeader)',
+        color: 'white',
     },
-    exitButton: {
-        marginRight: theme.spacing(2),
+    maskTitle: {
+        fontSize: 'large',
+        fontWeight: 'bold',
+        letterSpacing: '1px',
     },
-    padded: {
-        paddingLeft: theme.spacing(2),
-        paddingRight: theme.spacing(2),
-        paddingTop: theme.spacing(1),
-        paddingBottom: theme.spacing(1),
+    drawerList: {},
+    drawerFeedback: {
+        placeSelf: 'center stretch',
+        padding: theme.spacing(3, 0),
     },
-    toolbar: {
-        display: 'flex',
-        alignItems: 'center',
-        ...theme.mixins.toolbar,
-    },
-    drawerPaper: {
-        width: drawerWidth,
-    },
-    content: {
-        flexGrow: 1,
-        padding: theme.spacing(3),
-    },
-    maskicon: {
-        display: 'block',
-        marginTop: 20,
-        marginBottom: 20,
-        width: 72,
-        height: 72,
-    },
-    masktext: {
-        display: 'block',
-        width: 120,
-        height: 'auto',
+    feedback: {
+        marginLeft: '-12px',
     },
 }))
 
@@ -77,24 +50,13 @@ function ResponsiveDrawer(props: ResponsiveDrawerProps) {
 
     const { routers, exitDashboard } = props
 
-    const drawer = (
-        <div>
-            {exitDashboard && (
-                <div className={classNames(classes.toolbar, classes.padded)}>
-                    <IconButton color="inherit" edge="start" onClick={exitDashboard} className={classes.exitButton}>
-                        <CloseIcon />
-                    </IconButton>
-                    <Typography variant="h6">Dashboard</Typography>
-                </div>
-            )}
-            <Divider />
-            <section className={classNames(classes.padded)}>
-                <img className={classes.maskicon} src="/MB--CircleCanvas--WhiteOverBlue.svg" />
-                <img className={classes.masktext} src="/maskbook--logotype-blue.png" />
+    return (
+        <nav className={classes.drawer}>
+            <Paper elevation={0} className={classes.drawerHeader}>
+                <Typography className={classes.maskTitle}>Maskbook</Typography>
                 <Typography variant="caption">Make Privacy Protected Again</Typography>
-            </section>
-            <Divider />
-            <List>
+            </Paper>
+            <List className={classes.drawerList}>
                 {routers.map((item, index) => (
                     <ListItem
                         selected={match ? item[1].startsWith(match.url) : false}
@@ -107,21 +69,12 @@ function ResponsiveDrawer(props: ResponsiveDrawerProps) {
                     </ListItem>
                 ))}
             </List>
-        </div>
-    )
-
-    return (
-        <nav className={classes.drawer}>
-            <Hidden smDown implementation="css">
-                <Drawer
-                    classes={{
-                        paper: classes.drawerPaper,
-                    }}
-                    variant="permanent"
-                    open>
-                    {drawer}
-                </Drawer>
-            </Hidden>
+            <List className={classes.drawerFeedback}>
+                <ListItem button>
+                    <ListItemIcon children={<SentimentSatisfiedOutlinedIcon fontSize="small" />} />
+                    <ListItemText className={classes.feedback} primary="Feedback" />
+                </ListItem>
+            </List>
         </nav>
     )
 }
