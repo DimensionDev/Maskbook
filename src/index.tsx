@@ -125,7 +125,7 @@ function Dashboard() {
     const routers: [string, string, JSX.Element][] = [
         [t('home'), '/home/', <HomeIcon />],
         /* without redpacket */
-        ...(webpackEnv.target !== 'WKWebview'
+        ...(webpackEnv.target === 'WKWebview'
             ? []
             : ([['Wallets', '/wallets/', <CreditCardIcon />]] as [string, string, JSX.Element][])),
         [t('settings'), '/settings/', <SettingsIcon />],
