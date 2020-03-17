@@ -39,7 +39,7 @@ export function initAutoShareToFriends() {
         if (data.group.isReal) return
         const group = await queryUserGroup(data.group)
         if (!group) return
-        if (group.groupName !== PreDefinedVirtualGroupNames.friends) return
+        // if (group.groupName !== PreDefinedVirtualGroupNames.friends) return
 
         const whoAmI = data.group.ownerIdentifier
         if (!whoAmI) return
