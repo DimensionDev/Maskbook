@@ -21,6 +21,9 @@ const baseTheme = (theme: 'dark' | 'light') =>
             primary: { main: '#1C68F3' },
             secondary: { main: orange[800] },
             type: theme,
+            text: {
+                secondary: '#939393',
+            },
         },
         typography: {
             fontFamily: getFontFamily(),
@@ -28,6 +31,42 @@ const baseTheme = (theme: 'dark' | 'light') =>
         shape: { borderRadius: 4 },
         breakpoints: {
             values: { xs: 0, sm: 600, md: 1024, lg: 1280, xl: 1920 },
+        },
+        overrides: {
+            MuiListItem: {
+                root: {
+                    '&$selected$selected': {
+                        backgroundColor: 'var(--drawerText)',
+                        color: 'var(--drawerBody)',
+                        '&::before': {
+                            content: '""',
+                            height: '100%',
+                            width: '5px',
+                            position: 'absolute',
+                            left: '0px',
+                            backgroundColor: 'var(--drawerBody)',
+                        },
+                    },
+                },
+            },
+            MuiListItemIcon: {
+                root: {
+                    justifyContent: 'center',
+                    color: 'unset',
+                },
+            },
+            MuiButton: {
+                root: {
+                    textTransform: 'none',
+                    minWidth: '100px',
+                },
+            },
+        },
+        props: {
+            MuiButton: {
+                disableElevation: true,
+                size: 'small',
+            },
         },
     } as ThemeOptions)
 // Theme
