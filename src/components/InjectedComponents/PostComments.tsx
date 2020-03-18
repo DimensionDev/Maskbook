@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react'
 import { Chip, makeStyles } from '@material-ui/core'
 import Lock from '@material-ui/icons/Lock'
-import AsyncComponent from '../../utils/components/AsyncComponent'
 import Services from '../../extension/service'
 import { ValueRef } from '@holoflows/kit/es'
 import { useValueRef } from '../../utils/hooks/useValueRef'

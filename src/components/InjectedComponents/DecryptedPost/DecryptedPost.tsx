@@ -2,7 +2,7 @@ import React, { useMemo, useState, useEffect } from 'react'
 import { sleep } from '../../../utils/utils'
 import { ServicesWithProgress } from '../../../extension/service'
 import { Profile } from '../../../database'
-import { Identifier, ProfileIdentifier, PostIdentifier } from '../../../database/type'
+import { ProfileIdentifier, PostIdentifier } from '../../../database/type'
 import {
     DecryptionProgress,
     FailureDecryption,
