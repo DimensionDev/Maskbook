@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Chip, makeStyles } from '@material-ui/core'
 import Lock from '@material-ui/icons/Lock'
 import AsyncComponent from '../../utils/components/AsyncComponent'
@@ -8,6 +8,7 @@ import { useValueRef } from '../../utils/hooks/useValueRef'
 import { Payload } from '../../utils/type-transform/Payload'
 import { ChipProps } from '@material-ui/core/Chip'
 import { useStylesExtends } from '../custom-ui-helper'
+import { useAsync } from 'react-use'
 
 const useStyle = makeStyles({
     root: {
@@ -43,23 +44,18 @@ export function PostComment(props: PostCommentProps) {
     const postPayload = useValueRef(props.postPayload)
     const postIV = postPayload ? postPayload.iv : ''
 
+    const dec = useAsync(async () => {
+        if (!postIV || !decryptedPostContent) throw new Error()
+        const result = await Services.Crypto.decryptComment(postIV, decryptedPostContent, comment)
+        if (result === null) throw new Error()
+        return result
+    }, [postIV, decryptedPostContent, comment])
+
     const Success = props.successComponent || PostCommentDecrypted
-    return (
-        <AsyncComponent
-            promise={() => {
-                if (!postIV || !decryptedPostContent) return Promise.reject('')
-                return Services.Crypto.decryptComment(postIV, decryptedPostContent, comment).then(e => {
-                    if (e === null) throw new Error('Decryption failed.')
-                    return e
-                })
-            }}
-            dependencies={[postIV, decryptedPostContent, comment]}
-            awaitingComponent={props.waitingComponent || null}
-            completeComponent={result => {
-                props.needZip()
-                return <Success>{result.data}</Success>
-            }}
-            failedComponent={props.failedComponent || null}
-        />
-    )
+    const { failedComponent: Fail, waitingComponent: Wait, needZip } = props
+    useEffect(() => void (dec.value && needZip()), [dec.value, needZip])
+    if (dec.error) return Fail ? <Fail error={dec.error} /> : null
+    if (dec.loading) return Wait ? <Wait /> : null
+    if (dec.value) return <Success {...props.successComponentProps}>{dec.value}</Success>
+    return null
 }

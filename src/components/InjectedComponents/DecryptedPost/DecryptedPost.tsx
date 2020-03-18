@@ -1,5 +1,4 @@
 import React, { useMemo, useState, useEffect } from 'react'
-import AsyncComponent from '../../../utils/components/AsyncComponent'
 import { sleep } from '../../../utils/utils'
 import { ServicesWithProgress } from '../../../extension/service'
 import { Profile } from '../../../database'
