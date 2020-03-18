@@ -30,9 +30,9 @@ const useSuccessStyles = makeStyles({
 })
 
 export const DecryptPostSuccess = React.memo(function DecryptPostSuccess(props: DecryptPostSuccessProps) {
-    const { data, profiles: people, postIdentifier } = props
+    const { data, profiles, postIdentifier } = props
     const shareMenu = useShareMenu(
-        people,
+        profiles,
         props.requestAppendRecipients || (async () => {}),
         props.alreadySelectedPreviously,
     )

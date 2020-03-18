@@ -9,21 +9,16 @@ import {
     FailureDecryption,
     SuccessDecryption,
 } from '../../../extension/background-script/CryptoServices/decryptFrom'
-import { useValueRef } from '../../../utils/hooks/useValueRef'
-import { debugModeSetting } from '../../shared-settings/settings'
-import { DebugModeUI_PostHashDialog } from '../../DebugModeUI/PostHashDialog'
-import { GetContext } from '@holoflows/kit/es'
 import { deconstructPayload } from '../../../utils/type-transform/Payload'
-import { DebugList } from '../../DebugModeUI/DebugList'
 import { TypedMessage } from '../../../extension/background-script/CryptoServices/utils'
 import { DecryptPostSuccess, DecryptPostSuccessProps } from './DecryptedPostSuccess'
 import { DecryptPostAwaitingProps, DecryptPostAwaiting } from './DecryptPostAwaiting'
 import { DecryptPostFailedProps, DecryptPostFailed } from './DecryptPostFailed'
 import { DecryptedPostDebug } from './DecryptedPostDebug'
+import { asyncIteratorWithResult } from '../../../utils/type-transform/asyncIteratorWithResult'
 
 export interface DecryptPostProps {
-    onDecrypted(post: TypedMessage): void
-    onDecryptedRaw?(post: string): void
+    onDecrypted: (post: TypedMessage, raw: string) => void
     postBy: ProfileIdentifier
     postId?: PostIdentifier<ProfileIdentifier>
     whoAmI: ProfileIdentifier
@@ -31,7 +26,6 @@ export interface DecryptPostProps {
     profiles: Profile[]
     alreadySelectedPreviously: Profile[]
     requestAppendRecipients?(to: Profile[]): Promise<void>
-    disableSuccessDecryptionCache?: boolean // ! not used
     successComponent?: React.ComponentType<DecryptPostSuccessProps>
     successComponentProps?: Partial<DecryptPostSuccessProps>
     waitingComponent?: React.ComponentType<DecryptPostAwaitingProps>
@@ -40,108 +34,104 @@ export interface DecryptPostProps {
     failedComponentProps?: Partial<DecryptPostFailedProps>
 }
 export function DecryptPost(props: DecryptPostProps) {
+    const { postBy, postId, whoAmI, encryptedText, profiles, alreadySelectedPreviously, onDecrypted } = props
     const Success = props.successComponent || DecryptPostSuccess
     const Awaiting = props.waitingComponent || DecryptPostAwaiting
     const Failed = props.failedComponent || DecryptPostFailed
 
-    const {
-        postBy,
-        postId,
-        whoAmI,
-        encryptedText,
-        profiles,
-        alreadySelectedPreviously,
-        requestAppendRecipients,
-    } = props
+    const requestAppendRecipientsWrapped = useMemo(() => {
+        if (!postBy.equals(whoAmI)) return undefined
+        if (!props.requestAppendRecipients) return undefined
+        return async (people: Profile[]) => {
+            await props.requestAppendRecipients!(people)
+            await sleep(1500)
+        }
+    }, [props.requestAppendRecipients, postBy, whoAmI])
 
-    const [decryptedResult, setDecryptedResult] = useState<null | SuccessDecryption>(null)
-    const [decryptingStatus, setDecryptingStatus] = useState<DecryptionProgress | FailureDecryption | undefined>(
-        undefined,
-    )
-
+    //#region Debug info
     const [postPayload, setPostPayload] = useState(() => deconstructPayload(encryptedText, null))
     const sharedPublic = (postPayload?.version === -38 ? postPayload.sharedPublic : false) ?? false
     useEffect(() => setPostPayload(deconstructPayload(encryptedText, null)), [encryptedText])
-
     const [debugHash, setDebugHash] = useState<string>('Unknown')
-
-    const requestAppendRecipientsWrapped = useMemo(() => {
-        if (!postBy.equals(whoAmI)) return undefined
-        if (!requestAppendRecipients) return undefined
-        return async (people: Profile[]) => {
-            await requestAppendRecipients!(people)
-            await sleep(1500)
+    //#endregion
+    //#region Progress
+    const [progress, setDecryptingStatus] = useState<DecryptionProgress | FailureDecryption>({
+        progress: 'finding_person_public_key',
+    })
+    const [decrypted, setDecrypted] = useState<SuccessDecryption | FailureDecryption | undefined>(undefined)
+    //#endregion
+    // Do the query
+    useEffect(() => {
+        const signal = new AbortController()
+        async function run() {
+            const iter = ServicesWithProgress.decryptFrom(encryptedText, postBy, whoAmI, sharedPublic)
+            for await (const status of asyncIteratorWithResult(iter)) {
+                if (signal.signal.aborted) return iter.throw?.(new Error('Aborted'))
+                if (status.done) {
+                    if (sharedPublic && !('error' in status.value)) {
+                        // HACK: the is patch, hidden NOT VERIFIED in everyone
+                        status.value.signatureVerifyResult = true
+                    }
+                    return setDecrypted(status.value)
+                }
+                if ('debug' in status.value) {
+                    switch (status.value.debug) {
+                        case 'debug_finding_hash':
+                            setDebugHash(status.value.hash.join('-'))
+                            break
+                        default:
+                            const _: never = status.value.debug
+                            throw new Error('Unknown case' + _)
+                    }
+                } else setDecryptingStatus(status.value)
+            }
         }
-    }, [requestAppendRecipients, postBy, whoAmI])
+        run().catch(e => setDecrypted({ error: e?.message } as FailureDecryption))
+        return () => signal.abort()
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [encryptedText, postBy.toText(), whoAmI.toText(), sharedPublic])
 
-    const awaitingComponent =
-        decryptingStatus && 'error' in decryptingStatus ? (
-            <Failed error={new Error(decryptingStatus.error)} {...props.failedComponentProps} />
-        ) : (
-            <Awaiting type={decryptingStatus} {...props.waitingComponentProps} />
-        )
-    return (
-        <>
-            <AsyncComponent
-                promise={async () => {
-                    const iter = ServicesWithProgress.decryptFrom(encryptedText, postBy, whoAmI, sharedPublic)
-                    let last = await iter.next()
-                    while (!last.done) {
-                        if ('debug' in last.value) {
-                            switch (last.value.debug) {
-                                case 'debug_finding_hash':
-                                    setDebugHash(last.value.hash.join('-'))
-                            }
-                        } else {
-                            setDecryptingStatus(last.value)
-                        }
-                        last = await iter.next()
-                    }
-                    return last.value
-                }}
-                dependencies={[
-                    encryptedText,
-                    postBy.toText(),
-                    whoAmI.toText(),
-                    Identifier.IdentifiersToString(profiles.map(x => x.identifier)),
-                    Identifier.IdentifiersToString(alreadySelectedPreviously.map(x => x.identifier)),
-                ]}
-                awaitingComponent={awaitingComponent}
-                completeComponent={result => {
-                    if ('error' in result.data) {
-                        return <Failed error={new Error(result.data.error)} {...props.failedComponentProps} />
-                    }
-                    setDecryptedResult(result.data)
-                    props.onDecrypted(result.data.content)
-                    props.onDecryptedRaw?.(result.data.rawContent)
-
-                    // HACK: the is patch, hidden NOT VERIFIED in everyone
-                    if (sharedPublic) {
-                        result.data.signatureVerifyResult = true
-                    }
-
-                    return (
-                        <Success
-                            data={result.data}
-                            postIdentifier={postId}
-                            alreadySelectedPreviously={alreadySelectedPreviously}
-                            requestAppendRecipients={requestAppendRecipientsWrapped}
-                            profiles={profiles}
-                            sharedPublic={sharedPublic}
-                            {...props.successComponentProps}
-                        />
-                    )
-                }}
-                failedComponent={DecryptPostFailed}
-            />
-            <DecryptedPostDebug
-                debugHash={debugHash}
-                decryptedResult={decryptedResult}
-                encryptedText={encryptedText}
-                postBy={postBy}
-                postPayload={postPayload}
-                whoAmI={whoAmI}
-            />
-        </>
+    // Report the result
+    useEffect(
+        () => void (decrypted && !('error' in decrypted) && onDecrypted(decrypted.content, decrypted.rawContent)),
+        [decrypted, onDecrypted],
     )
+
+    // Decrypting
+    if (decrypted === undefined) {
+        // Decrypting with fixable error
+        if ('error' in progress)
+            return withDebugger(<Failed error={new Error(progress.error)} {...props.failedComponentProps} />)
+        // Decrypting...
+        else return withDebugger(<Awaiting type={progress} {...props.waitingComponentProps} />)
+    }
+    // Error
+    if ('error' in decrypted) return <Failed error={new Error(decrypted.error)} {...props.failedComponentProps} />
+    // Success
+    return withDebugger(
+        <Success
+            data={decrypted}
+            postIdentifier={postId}
+            alreadySelectedPreviously={alreadySelectedPreviously}
+            requestAppendRecipients={requestAppendRecipientsWrapped}
+            profiles={profiles}
+            sharedPublic={sharedPublic}
+            {...props.successComponentProps}
+        />,
+    )
+    function withDebugger(jsx: JSX.Element) {
+        return (
+            <>
+                {jsx}
+                <DecryptedPostDebug
+                    debugHash={debugHash}
+                    decryptedResult={decrypted}
+                    encryptedText={encryptedText}
+                    postBy={postBy}
+                    postPayload={postPayload}
+                    whoAmI={whoAmI}
+                />
+            </>
+        )
+    }
 }

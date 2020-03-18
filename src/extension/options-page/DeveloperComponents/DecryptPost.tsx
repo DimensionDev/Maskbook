@@ -1,5 +1,4 @@
 import React, { useMemo, useState } from 'react'
-import { makeStyles } from '@material-ui/core/styles'
 import Card from '@material-ui/core/Card'
 import CardContent from '@material-ui/core/CardContent'
 import Typography from '@material-ui/core/Typography'
@@ -43,11 +42,9 @@ export function DecryptPostDeveloperMode() {
                 {encryptedTextInput}
                 <div style={{ minHeight: 200 }}>
                     <DecryptPost
-                        disableSuccessDecryptionCache
                         alreadySelectedPreviously={[]}
                         encryptedText={encryptedText}
                         onDecrypted={post => {}}
-                        onDecryptedRaw={raw => {}}
                         profiles={[]}
                         postBy={postByMyself ? whoAmIIdentifier : authorIdentifier}
                         whoAmI={whoAmIIdentifier}
