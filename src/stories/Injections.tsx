@@ -3,11 +3,9 @@ import { storiesOf } from '@storybook/react'
 import { text, boolean, select } from '@storybook/addon-knobs'
 import { action } from '@storybook/addon-actions'
 import { AdditionalContent } from '../components/InjectedComponents/AdditionalPostContent'
-import {
-    DecryptPostSuccess,
-    DecryptPostAwaiting,
-    DecryptPostFailed,
-} from '../components/InjectedComponents/DecryptedPost'
+import { DecryptPostFailed } from '../components/InjectedComponents/DecryptedPost/DecryptPostFailed'
+import { DecryptPostAwaiting } from '../components/InjectedComponents/DecryptedPost/DecryptPostAwaiting'
+import { DecryptPostSuccess } from '../components/InjectedComponents/DecryptedPost/DecryptedPostSuccess'
 import { AddToKeyStoreUI } from '../components/InjectedComponents/AddToKeyStore'
 import { useShareMenu } from '../components/InjectedComponents/SelectPeopleDialog'
 import { sleep } from '../utils/utils'

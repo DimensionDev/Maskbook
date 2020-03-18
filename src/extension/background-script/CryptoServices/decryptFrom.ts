@@ -18,6 +18,7 @@ import { verifyOthersProve } from './verifyOthersProve'
 import { import_AES_GCM_256_Key } from '../../../utils/crypto.subtle'
 import { publicSharedAESKey } from '../../../crypto/crypto-alpha-38'
 import { DecryptFailedReason } from '../../../utils/constants'
+import { asyncIteratorWithResult } from '../../../utils/type-transform/asyncIteratorWithResult'
 
 type Progress = {
     progress: 'finding_person_public_key' | 'finding_post_key'
@@ -38,13 +39,7 @@ type Failure = {
 export type SuccessDecryption = Success
 export type FailureDecryption = Failure
 export type DecryptionProgress = Progress
-type ReturnOfDecryptFromMessageWithProgress = AsyncGenerator<
-    Failure | Progress | DebugInfo,
-    Success | Failure,
-    void
-> & {
-    [Symbol.asyncIterator](): AsyncIterator<Failure | Progress | DebugInfo, Success | Failure, void>
-}
+type ReturnOfDecryptFromMessageWithProgress = AsyncGenerator<Failure | Progress | DebugInfo, Success | Failure, void>
 
 function makeSuccessResult(
     cryptoProvider: typeof cryptoProviderTable[keyof typeof cryptoProviderTable],
@@ -124,7 +119,7 @@ export async function* decryptFromMessageWithProgress(
         }
         // ? Find author's public key.
         let byPerson!: PersonaRecord
-        for await (const _ of iteratorHelper(findAuthorPublicKey(author, !!cachedPostResult))) {
+        for await (const _ of asyncIteratorWithResult(findAuthorPublicKey(author, !!cachedPostResult))) {
             if (_.done) {
                 if (_.value === 'out of chance')
                     return { error: i18n.t('service_others_key_not_found', { name: author.userId }) }
@@ -385,7 +380,7 @@ async function* findAuthorPublicKey(
 export async function decryptFrom(
     ...args: Parameters<typeof decryptFromMessageWithProgress>
 ): Promise<Success | Failure> {
-    for await (const _ of iteratorHelper(decryptFromMessageWithProgress(...args))) {
+    for await (const _ of asyncIteratorWithResult(decryptFromMessageWithProgress(...args))) {
         if (_.done) return _.value
     }
     throw new TypeError('Invalid iterator state')
@@ -418,16 +413,4 @@ async function decryptFromCache(postPayload: Payload, by: ProfileIdentifier) {
         return [result, setCache] as const
     }
     return [undefined, setCache] as const
-}
-
-async function* iteratorHelper<T, R, N>(
-    iter: AsyncGenerator<T, R, N>,
-): AsyncGenerator<IteratorResult<T, R>, unknown, unknown> {
-    let yielded: IteratorResult<T, R>
-    do {
-        yielded = await iter.next()
-        if (yielded.done) yield yielded
-        else yield yielded
-    } while (yielded.done === false)
-    return
 }
