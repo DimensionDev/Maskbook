@@ -1,14 +1,14 @@
 import React from 'react'
-import AsyncComponent from '../../utils/components/AsyncComponent'
 import { AdditionalContent, AdditionalContentProps } from './AdditionalPostContent'
 import Services from '../../extension/service'
 import { useI18N } from '../../utils/i18n-next-ui'
 import { ProfileIdentifier } from '../../database/type'
+import { useAsync } from 'react-use'
 
 export interface AddToKeyStoreProps {
     provePost: string
     postBy: ProfileIdentifier
-    completeComponentProps?: Partial<SuccessProps>
+    completeComponentProps?: Partial<SuccessProps & { data: boolean }>
     completeComponent?: React.ComponentType<{ data: boolean }> | null
     waitingComponentProps?: Partial<WaitingProps>
     waitingComponent?: React.ComponentType | null
@@ -16,27 +16,18 @@ export interface AddToKeyStoreProps {
     failedComponent?: React.ComponentType<FailedProps> | null
 }
 export function AddToKeyStore({ provePost, postBy, ...props }: AddToKeyStoreProps) {
-    return (
-        <AsyncComponent
-            promise={async () => Services.Crypto.verifyOthersProve(provePost, postBy)}
-            dependencies={[provePost, postBy]}
-            awaitingComponent={
-                props.waitingComponent === undefined
-                    ? () => <AddToKeyStoreUI.awaiting {...props.waitingComponentProps} />
-                    : props.waitingComponent
-            }
-            completeComponent={
-                props.completeComponent === undefined
-                    ? () => <AddToKeyStoreUI.success {...props.completeComponentProps} />
-                    : props.completeComponent
-            }
-            failedComponent={
-                props.failedComponent === undefined
-                    ? inner => <AddToKeyStoreUI.failed error={inner.error} {...props.failedComponentProps} />
-                    : props.failedComponent
-            }
-        />
-    )
+    const state = useAsync(() => Services.Crypto.verifyOthersProve(provePost, postBy), [provePost, postBy])
+    const { completeComponent: Success, completeComponentProps } = props
+    const { failedComponent: Fail, failedComponentProps } = props
+    const { waitingComponent, waitingComponentProps } = props
+    if (state.loading) return render(waitingComponent, AddToKeyStoreUI.awaiting, waitingComponentProps)
+    if (state.error) return render(Fail, AddToKeyStoreUI.failed, { error: state.error, ...failedComponentProps })
+    else return render(Success, AddToKeyStoreUI.success, completeComponentProps)
+    function render(outer: React.ComponentType<any> | null | undefined, def: React.ComponentType<any>, props?: {}) {
+        if (outer === null) return
+        const C = outer || def
+        return <C {...props} />
+    }
 }
 type SuccessProps = Partial<AdditionalContentProps>
 type WaitingProps = Partial<AdditionalContentProps>
