@@ -19,6 +19,7 @@ import { TypedMessage } from '../../../extension/background-script/CryptoService
 import { DecryptPostSuccess, DecryptPostSuccessProps } from './DecryptedPostSuccess'
 import { DecryptPostAwaitingProps, DecryptPostAwaiting } from './DecryptPostAwaiting'
 import { DecryptPostFailedProps, DecryptPostFailed } from './DecryptPostFailed'
+import { DecryptedPostDebug } from './DecryptedPostDebug'
 
 export interface DecryptPostProps {
     onDecrypted(post: TypedMessage): void
@@ -63,8 +64,6 @@ export function DecryptPost(props: DecryptPostProps) {
     useEffect(() => setPostPayload(deconstructPayload(encryptedText, null)), [encryptedText])
 
     const [debugHash, setDebugHash] = useState<string>('Unknown')
-    const setting = useValueRef(debugModeSetting)
-    const isDebugging = GetContext() === 'options' ? true : setting
 
     const requestAppendRecipientsWrapped = useMemo(() => {
         if (!postBy.equals(whoAmI)) return undefined
@@ -74,25 +73,6 @@ export function DecryptPost(props: DecryptPostProps) {
             await sleep(1500)
         }
     }, [requestAppendRecipients, postBy, whoAmI])
-    const debugHashJSX = useMemo(() => {
-        if (!isDebugging || !postPayload) return null
-        const postByMyself = <DebugModeUI_PostHashDialog network={postBy.network} post={encryptedText} />
-        const ownersAESKeyEncrypted =
-            postPayload.version === -38 ? postPayload.AESKeyEncrypted : postPayload.ownersAESKeyEncrypted
-        return (
-            <DebugList
-                items={[
-                    postBy.equals(whoAmI) ? postByMyself : (['Hash of this post', debugHash] as const),
-                    ['Decrypt reason', decryptedResult ? decryptedResult.through.join(',') : 'Unknown'],
-                    ['Payload version', postPayload.version],
-                    ['Payload ownersAESKeyEncrypted', ownersAESKeyEncrypted],
-                    ['Payload iv', postPayload.iv],
-                    ['Payload encryptedText', postPayload.encryptedText],
-                    ['Payload signature', postPayload.signature],
-                ]}
-            />
-        )
-    }, [isDebugging, postPayload, postBy, encryptedText, whoAmI, debugHash, decryptedResult])
 
     const awaitingComponent =
         decryptingStatus && 'error' in decryptingStatus ? (
@@ -154,7 +134,14 @@ export function DecryptPost(props: DecryptPostProps) {
                 }}
                 failedComponent={DecryptPostFailed}
             />
-            {isDebugging ? debugHashJSX : null}
+            <DecryptedPostDebug
+                debugHash={debugHash}
+                decryptedResult={decryptedResult}
+                encryptedText={encryptedText}
+                postBy={postBy}
+                postPayload={postPayload}
+                whoAmI={whoAmI}
+            />
         </>
     )
 }
