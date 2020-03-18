@@ -12,9 +12,8 @@ import { number, text, select, boolean } from '@storybook/addon-knobs'
 import { Typography, Paper } from '@material-ui/core'
 import { action } from '@storybook/addon-actions'
 import { RedPacketDialogUI } from '../plugins/Wallet/UI/RedPacket/RedPacketDialog'
-import { DecryptPostSuccess } from '../components/InjectedComponents/DecryptedPost'
-import { makeTypedMessage, TypedMessageMetadata } from '../extension/background-script/CryptoServices/utils'
-import { AdditionalContent } from '../components/InjectedComponents/AdditionalPostContent'
+import { DecryptPostSuccess } from '../components/InjectedComponents/DecryptedPost/DecryptedPostSuccess'
+import { makeTypedMessage } from '../extension/background-script/CryptoServices/utils'
 
 storiesOf('Plugin: Red Packets', module)
     .add('RedPacketWithStateUI', () => {
