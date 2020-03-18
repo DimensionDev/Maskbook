@@ -1,7 +1,7 @@
 import React from 'react'
 import { Payload } from '../../../utils/type-transform/Payload'
 import { ProfileIdentifier } from '../../../database/type'
-import { SuccessDecryption } from '../../../extension/background-script/CryptoServices/decryptFrom'
+import { SuccessDecryption, FailureDecryption } from '../../../extension/background-script/CryptoServices/decryptFrom'
 import { DebugList } from '../../DebugModeUI/DebugList'
 import { DebugModeUI_PostHashDialog } from '../../DebugModeUI/PostHashDialog'
 import { useValueRef } from '../../../utils/hooks/useValueRef'
@@ -14,7 +14,7 @@ interface DebugDisplayProps {
     encryptedText: string
     whoAmI: ProfileIdentifier
     debugHash: string
-    decryptedResult: SuccessDecryption | null
+    decryptedResult: SuccessDecryption | FailureDecryption | null
 }
 export const DecryptedPostDebug = React.memo(function DecryptedPostDebug(props: Partial<DebugDisplayProps>) {
     const setting = useValueRef(debugModeSetting)
@@ -29,7 +29,10 @@ export const DecryptedPostDebug = React.memo(function DecryptedPostDebug(props: 
         <DebugList
             items={[
                 postBy.equals(whoAmI) ? postByMyself : (['Hash of this post', debugHash] as const),
-                ['Decrypt reason', decryptedResult ? decryptedResult.through.join(',') : 'Unknown'],
+                [
+                    'Decrypt reason',
+                    decryptedResult && !('error' in decryptedResult) ? decryptedResult.through.join(',') : 'Unknown',
+                ],
                 ['Payload version', postPayload.version],
                 ['Payload ownersAESKeyEncrypted', ownersAESKeyEncrypted],
                 ['Payload iv', postPayload.iv],
