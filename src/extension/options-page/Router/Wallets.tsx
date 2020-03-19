@@ -16,7 +16,7 @@ export default function DashboardWalletsRouter() {
         [],
     )
     return (
-        <DashboardRouterContainer title="My Wallets" actions={actions}>
+        <DashboardRouterContainer padded={false} title="My Wallets" actions={actions}>
             <div></div>
         </DashboardRouterContainer>
     )
