@@ -12,8 +12,10 @@ import {
     ListItemIcon,
     SelectProps,
     createStyles,
+    withStyles,
+    styled,
 } from '@material-ui/core'
-import React from 'react'
+import React, { useRef } from 'react'
 
 function withDefaultText<T>(props: SettingsUIProps<T>): SettingsUIProps<T> {
     const { value, primary, secondary } = props
@@ -39,7 +41,7 @@ export function SettingsUI<T>(props: SettingsUIProps<T>) {
         case 'boolean':
             const [ui, change] = getBooleanSettingsUI(value as any, currentValue)
             return (
-                <ListItem button onClick={change}>
+                <ListItem onClick={change} button disableGutters>
                     {props.icon ? <ListItemIcon>{props.icon}</ListItemIcon> : null}
                     <ListItemText primary={primary} secondary={secondary} />
                     <ListItemSecondaryAction>{ui}</ListItemSecondaryAction>
@@ -57,12 +59,12 @@ export function SettingsUI<T>(props: SettingsUIProps<T>) {
 const useListItemStyles = makeStyles((theme) =>
     createStyles({
         container: { listStyleType: 'none', width: '100%' },
-        secondaryAction: { paddingRight: 90 + theme.spacing(2) },
+        secondaryAction: { paddingRight: 120 + theme.spacing(2) },
     }),
 )
 
 const useStyles = makeStyles({
-    secondaryAction: { width: 90 },
+    secondaryAction: { width: 120 },
 })
 
 export function SettingsUIEnum<T extends object>(
@@ -77,7 +79,7 @@ export function SettingsUIEnum<T extends object>(
     const classes = useStyles()
     const [ui, change] = useEnumSettings(props.value, props.enumObject, props.getText, props.SelectProps)
     return (
-        <ListItem component="div" classes={listClasses}>
+        <ListItem disableGutters component="div" classes={listClasses}>
             {props.icon ? <ListItemIcon>{props.icon}</ListItemIcon> : null}
             <ListItemText primary={primary} secondary={secondary} />
             <ListItemSecondaryAction className={classes.secondaryAction}>{ui}</ListItemSecondaryAction>
@@ -91,7 +93,7 @@ type HookedUI<T> = [/** UI */ React.ReactNode, /** Changer */ T extends void ? (
  */
 function getBooleanSettingsUI(ref: ValueRef<boolean>, currentValue: boolean): HookedUI<void> {
     const change = () => (ref.value = !ref.value)
-    const ui = <Switch edge="end" checked={currentValue} onClick={change} />
+    const ui = <Switch color="primary" edge="end" checked={currentValue} onClick={change} />
     return [ui, change]
 }
 // TODO: should become generic in future
@@ -124,8 +126,15 @@ function useEnumSettings<Q extends object>(
         }
         ref.value = value
     }
+    const selectRef = useRef<HTMLElement>(null!)
     const ui = (
-        <Select {...selectProps} value={useValueRef(ref)} onChange={(event) => change(event.target.value)}>
+        <Select
+            fullWidth
+            variant="outlined"
+            ref={selectRef}
+            {...selectProps}
+            value={useValueRef(ref)}
+            onChange={(event) => change(event.target.value)}>
             {enum_.map(({ key, value }) => (
                 <MenuItem value={String(value)} key={String(key)}>
                     {getText?.(value) ?? String(key)}
