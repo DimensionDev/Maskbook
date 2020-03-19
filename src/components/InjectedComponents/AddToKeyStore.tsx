@@ -24,7 +24,7 @@ export function AddToKeyStore({ provePost, postBy, ...props }: AddToKeyStoreProp
     if (state.error) return render(Fail, AddToKeyStoreUI.failed, { error: state.error, ...failedComponentProps })
     else return render(Success, AddToKeyStoreUI.success, completeComponentProps)
     function render(outer: React.ComponentType<any> | null | undefined, def: React.ComponentType<any>, props?: {}) {
-        if (outer === null) return
+        if (outer === null) return null
         const C = outer || def
         return <C {...props} />
     }
