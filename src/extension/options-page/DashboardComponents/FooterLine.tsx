@@ -34,7 +34,7 @@ const FooterLink = function (
                 ? { href: props.href, title: props.title, target: '_blank', rel: 'noopener noreferrer' }
                 : 'to' in props
                 ? { to: props.to, component: Link }
-                : { href: 'javascript:void(0)', onClick: props.onClick, component: 'a' })}
+                : { style: { cursor: 'pointer' }, onClick: props.onClick, component: 'a' })}
             color="inherit"
             className={classes.footerButton}>
             <Typography variant="body2">{props.children}</Typography>

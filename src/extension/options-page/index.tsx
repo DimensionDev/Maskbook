@@ -9,7 +9,7 @@ import CreditCardIcon from '@material-ui/icons/CreditCard'
 import BookmarkBorderOutlinedIcon from '@material-ui/icons/BookmarkBorderOutlined'
 import SettingsOutlinedIcon from '@material-ui/icons/SettingsOutlined'
 
-import { HashRouter as Router, Route, Switch, Redirect, useLocation, useHistory } from 'react-router-dom'
+import { HashRouter as Router, Route, Switch, Redirect } from 'react-router-dom'
 
 import { MaskbookDarkTheme, MaskbookLightTheme } from '../../utils/theme'
 
@@ -131,9 +131,6 @@ export function useBlurContext(open: boolean) {
 function Dashboard() {
     const { t } = useI18N()
     const classes = useStyles()
-
-    const shouldRenderAppBar = webpackEnv.genericTarget === 'facebookApp'
-    const shouldNotRenderAppBar = useMediaQuery('(min-width:1024px)')
 
     const routers: [string, string, JSX.Element][] = [
         ['Personas', '/personas/', <PeopleOutlinedIcon />],
