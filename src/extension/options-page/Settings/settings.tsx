@@ -78,13 +78,13 @@ export function Settings() {
             <Card>
                 <List dense disablePadding>
                     <SettingsUI icon={<OpenInBrowser />} value={disableOpenNewTabInBackgroundSettings} />
-                    {process.env.NODE_ENV === 'development' ? (
+                    {/* This feature is not ready for iOS */}
+                    {webpackEnv.target !== 'WKWebview' ? (
                         <SettingsUI
                             icon={shadowRoot ? <EnhancedEncryptionIcon /> : <NoEncryptionIcon />}
                             value={renderInShadowRootSettings}
-                            secondary="Development mode only"
                         />
-                    ) : /** This settings is not ready for production */ null}
+                    ) : null}
                 </List>
             </Card>
         </Container>
