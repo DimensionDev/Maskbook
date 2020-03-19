@@ -33,28 +33,6 @@ const baseTheme = (theme: 'dark' | 'light') =>
             values: { xs: 0, sm: 600, md: 1024, lg: 1280, xl: 1920 },
         },
         overrides: {
-            MuiListItem: {
-                root: {
-                    '&$selected$selected': {
-                        backgroundColor: 'var(--drawerText)',
-                        color: 'var(--drawerBody)',
-                        '&::before': {
-                            content: '""',
-                            height: '100%',
-                            width: '5px',
-                            position: 'absolute',
-                            left: '0px',
-                            backgroundColor: 'var(--drawerBody)',
-                        },
-                    },
-                },
-            },
-            MuiListItemIcon: {
-                root: {
-                    justifyContent: 'center',
-                    color: 'unset',
-                },
-            },
             MuiButton: {
                 root: {
                     textTransform: 'none',
