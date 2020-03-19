@@ -102,6 +102,7 @@ export function PostInspector(props: PostInspectorProps) {
         )
     } else if (type.provePost.length) {
         const AddToKeyStoreX = props.AddToKeyStoreComponent || AddToKeyStore
+        if (!AddToKeyStoreX) return null
         return (
             <>
                 <AddToKeyStoreX postBy={postBy} provePost={post} {...props.AddToKeyStoreProps} />
