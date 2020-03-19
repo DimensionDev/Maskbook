@@ -19,9 +19,10 @@ import { import_AES_GCM_256_Key } from '../../../utils/crypto.subtle'
 import { publicSharedAESKey } from '../../../crypto/crypto-alpha-38'
 import { DecryptFailedReason } from '../../../utils/constants'
 import { asyncIteratorWithResult } from '../../../utils/type-transform/asyncIteratorWithResult'
+import { sleep } from '@holoflows/kit/es/util/sleep'
 
 type Progress = {
-    progress: 'finding_person_public_key' | 'finding_post_key'
+    progress: 'finding_person_public_key' | 'finding_post_key' | 'init'
 }
 type DebugInfo = {
     debug: 'debug_finding_hash'
@@ -90,6 +91,7 @@ export async function* decryptFromMessageWithProgress(
     whoAmI: ProfileIdentifier,
     publicShared: boolean,
 ): ReturnOfDecryptFromMessageWithProgress {
+    yield { progress: 'init' }
     // If any of parameters is changed, we will not handle it.
     let _data: Payload
     try {
@@ -135,8 +137,11 @@ export async function* decryptFromMessageWithProgress(
         }
 
         // ? Get my public & private key.
-        const mine = await queryPersonaRecord(whoAmI)
-
+        let mine = (await queryPersonaRecord(whoAmI))!
+        if (!mine) {
+            await sleep(1000)
+            mine = (await queryPersonaRecord(whoAmI))!
+        }
         if (!mine?.privateKey) throw new Error(DecryptFailedReason.MyCryptoKeyNotFound)
         const ecdhParams = getKeyParameter('ecdh')
         const minePublic = await JsonWebKeyToCryptoKey(mine.publicKey, ...ecdhParams)

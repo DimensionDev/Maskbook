@@ -55,7 +55,7 @@ export function DecryptPost(props: DecryptPostProps) {
     //#endregion
     //#region Progress
     const [progress, setDecryptingStatus] = useState<DecryptionProgress | FailureDecryption>({
-        progress: 'finding_person_public_key',
+        progress: 'init',
     })
     const [decrypted, setDecrypted] = useState<SuccessDecryption | FailureDecryption | undefined>(undefined)
     //#endregion
@@ -65,7 +65,7 @@ export function DecryptPost(props: DecryptPostProps) {
         async function run() {
             const iter = ServicesWithProgress.decryptFrom(encryptedText, postBy, whoAmI, sharedPublic)
             for await (const status of asyncIteratorWithResult(iter)) {
-                if (signal.signal.aborted) return iter.throw?.(new Error('Aborted'))
+                if (signal.signal.aborted) return iter.return?.()
                 if (status.done) {
                     if (sharedPublic && !('error' in status.value)) {
                         // HACK: the is patch, hidden NOT VERIFIED in everyone
