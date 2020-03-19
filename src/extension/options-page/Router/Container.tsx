@@ -14,7 +14,7 @@ const useStyles = makeStyles((theme) =>
         wrapper: {
             flex: 1,
             display: 'grid',
-            gridTemplateRows: '[titleAction] 0fr [content] auto',
+            gridTemplateRows: '[titleAction] 0fr [divider] 0fr [content] auto',
         },
         titleAction: {
             display: 'flex',
@@ -50,8 +50,10 @@ export default function DashboardRouterContainer(props: DashboardRouterContainer
                     {actions?.map((action, index) => React.cloneElement(action, { key: index }))}
                 </div>
             </section>
-            <main className={classNames(classes.content, { [classes.contentPadded]: padded !== false })}>
+            <div className={classNames({ [classes.contentPadded]: padded !== false })}>
                 <Divider />
+            </div>
+            <main className={classNames(classes.content, { [classes.contentPadded]: padded !== false })}>
                 {children}
             </main>
         </section>

@@ -1,15 +1,14 @@
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useState, useRef } from 'react'
 import { makeStyles, createStyles } from '@material-ui/core/styles'
 import CardContent from '@material-ui/core/CardContent'
 import Typography from '@material-ui/core/Typography'
 import type { Persona } from '../../../database'
-import { Divider, TextField, Menu, MenuItem } from '@material-ui/core'
+import { Divider, TextField, Menu, MenuItem, Card } from '@material-ui/core'
 import Services from '../../service'
-import SettingsIcon from '@material-ui/icons/Settings'
+import MoreVertIcon from '@material-ui/icons/MoreVert'
 import { useSnackbar } from 'notistack'
 import { useColorProvider } from '../../../utils/theme'
 import { useI18N } from '../../../utils/i18n-next-ui'
-import type { BackupJSONFileLatest } from '../../../utils/type-transform/BackupFormat/JSON/latest'
 import { PersonaDeleteDialog, PersonaBackupDialog } from '../DashboardDialogs/Persona'
 import { DialogRouter } from '../DashboardDialogs/DialogBase'
 import ProfileBox from './ProfileBox'
@@ -22,31 +21,27 @@ interface Props {
 const useStyles = makeStyles((theme) =>
     createStyles({
         card: {
-            width: '100%',
-        },
-        focus: {
-            margin: '-5px',
+            width: '350px',
+            flex: '0 0 auto',
+            marginRight: theme.spacing(6),
+            marginBottom: theme.spacing(5),
+            padding: theme.spacing(4, 3, 5, 3),
         },
         header: {
             display: 'flex',
-            alignItems: 'flex-end',
-            '& > .title': {
-                marginRight: theme.spacing(1),
-                flexGrow: 1,
-                overflow: 'hidden',
-            },
-            '& > .extra-item': {
-                visibility: 'hidden',
-                cursor: 'pointer',
-                fontSize: '0.8rem',
-            },
-            '&:hover': {
-                '& > .extra-item': {
-                    visibility: 'visible',
-                },
-            },
+            alignItems: 'center',
         },
-        cursor: {
+        title: {
+            flex: '1 1 auto',
+            textOverflow: 'ellipsis',
+            overflow: 'hidden',
+            wordBreak: 'break-all',
+            whiteSpace: 'nowrap',
+            fontWeight: 500,
+        },
+        menu: {
+            flex: '0 0 auto',
+            marginLeft: theme.spacing(1),
             cursor: 'pointer',
         },
     }),
@@ -57,23 +52,7 @@ export default function PersonaCard({ persona }: Props) {
     const classes = useStyles()
     const color = useColorProvider()
 
-    const [provePost, setProvePost] = useState<string>('')
-
-    useEffect(() => {
-        Services.Crypto.getMyProveBio(persona.identifier).then((p) => setProvePost(p || ''))
-    }, [persona])
-
-    const { enqueueSnackbar, closeSnackbar } = useSnackbar()
-
-    const copyPublicKey = () => {
-        navigator.clipboard
-            .writeText(provePost)
-            .then(() => enqueueSnackbar(t('dashboard_item_copied'), { variant: 'success', autoHideDuration: 1000 }))
-            .catch((e) => {
-                enqueueSnackbar(t('dashboard_item_copy_failed'), { variant: 'error' })
-                setTimeout(() => prompt(t('automation_request_paste_into_bio_box'), provePost))
-            })
-    }
+    const { enqueueSnackbar } = useSnackbar()
 
     const [rename, setRename] = useState(false)
     type Inputable = HTMLInputElement | HTMLTextAreaElement
@@ -93,8 +72,6 @@ export default function PersonaCard({ persona }: Props) {
     }
 
     const [backupPersona, setBackupPersona] = useState(false)
-
-    const titleRef = useRef<HTMLSpanElement | null>(null)
 
     const [anchorEl, setAnchorEl] = React.useState<null | Element>(null)
     const handleClick = (event: React.MouseEvent) => {
@@ -122,52 +99,40 @@ export default function PersonaCard({ persona }: Props) {
     }
 
     return (
-        <>
-            <CardContent>
-                <Typography className={classes.header} variant="h5" component="h2" gutterBottom>
-                    {!rename ? (
-                        <>
-                            <span ref={titleRef} className="title">
-                                {persona.nickname}
-                            </span>
-                            <Typography className="fullWidth" variant="body1" component="span" color="textSecondary">
-                                <SettingsIcon className={classes.cursor} fontSize="small" onClick={handleClick} />
-                                <Menu
-                                    anchorEl={anchorEl}
-                                    keepMounted
-                                    open={Boolean(anchorEl)}
-                                    onClick={handleClose}
-                                    PaperProps={{ style: { minWidth: 100 } }}
-                                    onClose={handleClose}>
-                                    <MenuItem onClick={() => setRename(true)}>{t('rename')}</MenuItem>
-                                    {
-                                        // <MenuItem onClick={copyPublicKey}>Copy Public Key</MenuItem>
-                                    }
-                                    <MenuItem onClick={() => setBackupPersona(true)}>
-                                        {t('dashboard_create_backup')}
-                                    </MenuItem>
-                                    <MenuItem onClick={() => setDeletePersona(true)} className={color.error}>
-                                        {t('dashboard_delete_persona')}
-                                    </MenuItem>
-                                </Menu>
-                            </Typography>
-                        </>
-                    ) : (
-                        <>
-                            <TextField
-                                style={{ width: '100%', maxWidth: '320px' }}
-                                inputProps={{ onKeyPress: (e) => e.key === 'Enter' && renameIdentity(e) }}
-                                autoFocus
-                                variant="outlined"
-                                label="Name"
-                                defaultValue={persona.nickname}
-                                onBlur={(e) => renameIdentity(e)}></TextField>
-                        </>
-                    )}
-                </Typography>
-                <ProfileBox persona={persona} />
-            </CardContent>
-            <Divider />
+        <Card className={classes.card} elevation={2}>
+            <Typography className={classes.header} variant="h5" component="h2" gutterBottom>
+                {!rename ? (
+                    <>
+                        <span title={persona.nickname} className={classes.title}>
+                            {persona.nickname}
+                        </span>
+                        <MoreVertIcon className={classes.menu} fontSize="small" onClick={handleClick} />
+                        <Menu
+                            anchorEl={anchorEl}
+                            keepMounted
+                            open={Boolean(anchorEl)}
+                            onClick={handleClose}
+                            PaperProps={{ style: { minWidth: 100 } }}
+                            onClose={handleClose}>
+                            <MenuItem onClick={() => setRename(true)}>{t('rename')}</MenuItem>
+                            <MenuItem onClick={() => setBackupPersona(true)}>{t('dashboard_create_backup')}</MenuItem>
+                            <MenuItem onClick={() => setDeletePersona(true)} className={color.error}>
+                                {t('dashboard_delete_persona')}
+                            </MenuItem>
+                        </Menu>
+                    </>
+                ) : (
+                    <TextField
+                        style={{ width: '100%', maxWidth: '320px' }}
+                        inputProps={{ onKeyPress: (e) => e.key === 'Enter' && renameIdentity(e) }}
+                        autoFocus
+                        variant="outlined"
+                        label="Name"
+                        defaultValue={persona.nickname}
+                        onBlur={(e) => renameIdentity(e)}></TextField>
+                )}
+            </Typography>
+            <ProfileBox persona={persona} />
             {deletePersona && (
                 <DialogRouter
                     onExit={dismissDialog}
@@ -186,6 +151,6 @@ export default function PersonaCard({ persona }: Props) {
                     children={<PersonaBackupDialog onClose={dismissDialog} persona={persona} />}
                 />
             )}
-        </>
+        </Card>
     )
 }

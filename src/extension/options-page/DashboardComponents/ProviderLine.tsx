@@ -1,26 +1,37 @@
-import { FormControl, Typography, Theme } from '@material-ui/core'
 import React from 'react'
-import { makeStyles, createStyles } from '@material-ui/styles'
+import { Typography, Divider } from '@material-ui/core'
+import { makeStyles, createStyles } from '@material-ui/core/styles'
 import classNames from 'classnames'
 import { useI18N } from '../../../utils/i18n-next-ui'
 
-const useStyles = makeStyles((theme: Theme) =>
+import LinkOffIcon from '@material-ui/icons/LinkOff'
+import ArrowForwardIcon from '@material-ui/icons/ArrowForward'
+
+const useStyles = makeStyles((theme) =>
     createStyles({
         text: {
-            width: '200px',
-            display: 'block',
             color: theme.palette.primary.main,
-        },
-        control: {
             display: 'flex',
-            textAlign: 'left',
-            width: '100%',
+            alignItems: 'center',
+            margin: theme.spacing(1.2, 2),
+            '& > :first-child': {
+                flex: '1 1 auto',
+                overflow: 'hidden',
+                whiteSpace: 'nowrap',
+                textOverflow: 'ellipsis',
+            },
+            '& > :last-child': {
+                flex: '0 0 auto',
+            },
         },
         connected: {
             color: theme.palette.text.primary,
         },
-        pointer: {
+        cursor: {
             cursor: 'pointer',
+        },
+        control: {
+            marginTop: theme.spacing(2),
         },
     }),
 )
@@ -29,28 +40,34 @@ interface ProviderLineProps {
     network: string
     connected?: boolean
     userId?: string
-    onConnect?: () => void
+    onAction?: () => void
 }
 
 export default function ProviderLine(props: ProviderLineProps) {
     const { t } = useI18N()
-    const { network, connected, userId, onConnect } = props
+    const { network, connected, userId, onAction } = props
     const classes = useStyles()
 
     return (
-        <FormControl className={classes.control}>
-            <Typography variant="overline">{network}</Typography>
+        <div className={classes.control}>
+            <Typography variant="body2" color="textSecondary">
+                {network}
+            </Typography>
             <Typography
                 variant="body1"
                 component="a"
-                onClick={connected ? undefined : onConnect}
+                onClick={connected ? undefined : onAction}
                 className={classNames(
                     classes.text,
                     { [classes.connected]: connected },
-                    { [classes.pointer]: !connected },
+                    { [classes.cursor]: !connected },
                 )}>
-                {connected ? `${t('dashboard_connected')}: @${userId}` : `${t('connect')} ${network}`}
+                <span title={connected ? `@${userId}` : undefined}>
+                    {connected ? `@${userId}` : `${t('connect_to')} ${network}`}
+                </span>
+                {connected ? <LinkOffIcon onClick={onAction} className={classes.cursor} /> : <ArrowForwardIcon />}
             </Typography>
-        </FormControl>
+            <Divider />
+        </div>
     )
 }

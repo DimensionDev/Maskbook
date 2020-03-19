@@ -2,12 +2,7 @@ import React from 'react'
 import type { Persona } from '../../../database'
 import { definedSocialNetworkWorkers } from '../../../social-network/worker'
 
-import classNames from 'classnames'
 import ProviderLine from './ProviderLine'
-import { makeStyles } from '@material-ui/styles'
-import { createStyles, Typography, Theme } from '@material-ui/core'
-import { useI18N } from '../../../utils/i18n-next-ui'
-import { useColorProvider } from '../../../utils/theme'
 import type { ProfileIdentifier } from '../../../database/type'
 import { DialogRouter } from '../DashboardDialogs/DialogBase'
 import { ProfileDisconnectDialog, ProfileConnectDialog } from '../DashboardDialogs/Profile'
@@ -18,57 +13,12 @@ import {
 } from '../../../components/shared-settings/settings'
 import { exclusiveTasks } from '../../content-script/tasks'
 
-const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        line: {
-            display: 'flex',
-            alignItems: 'center',
-            '&:not(:first-child)': {
-                paddingTop: theme.spacing(1),
-            },
-            '& > div': {
-                overflow: 'hidden',
-                textOverflow: 'ellipsis',
-                flexShrink: 1,
-                whiteSpace: 'nowrap',
-            },
-            '& > .content': {
-                margin: '0 1em',
-            },
-            '& > .title': {
-                flexShrink: 0,
-                width: '5rem',
-            },
-            '& > .extra-item': {
-                marginRight: '0',
-                flexShrink: 0,
-                marginLeft: 'auto',
-                cursor: 'pointer',
-                fontSize: '0.8rem',
-            },
-            '&:hover': {
-                '& > .extra-item': {
-                    visibility: 'visible',
-                },
-            },
-        },
-        controlBorder: {
-            paddingTop: theme.spacing(1),
-            paddingBottom: theme.spacing(1),
-            borderBottom: `1px solid ${theme.palette.divider}`,
-        },
-    }),
-)
-
 interface Props {
     persona: Persona | null
     border?: true
 }
 
-export default function ProfileBox({ persona, border }: Props) {
-    const { t } = useI18N()
-    const classes = useStyles()
-    const color = useColorProvider()
+export default function ProfileBox({ persona }: Props) {
     const profiles = persona ? [...persona.linkedProfiles] : []
 
     const providers = [...definedSocialNetworkWorkers]
@@ -111,22 +61,16 @@ export default function ProfileBox({ persona, border }: Props) {
         }).immersiveSetup(persona.identifier)
     }
 
+    const onDisconnect = (provider: typeof providers[0]) => {
+        // TODO:
+    }
+
     return (
         <>
             {providers.map((provider) => (
-                <Typography
-                    key={`profile-line-${provider.network}`}
-                    className={classNames(classes.line, { [classes.controlBorder]: border ?? true })}
-                    component="div">
-                    <ProviderLine onConnect={() => onConnect(provider)} {...provider}></ProviderLine>
-                    {provider.connected && (
-                        <div
-                            className={classNames('extra-item', color.error)}
-                            onClick={() => setDetachProfile(provider.identifier!)}>
-                            {t('disconnect')}
-                        </div>
-                    )}
-                </Typography>
+                <ProviderLine
+                    onAction={() => (provider.connected ? onDisconnect(provider) : onConnect(provider))}
+                    {...provider}></ProviderLine>
             ))}
             {connectIdentifier && (
                 <DialogRouter
