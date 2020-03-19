@@ -57,7 +57,7 @@ export function renderInShadowRoot(node: React.ReactNode, config: { shadow(): Sh
             }
         })
     }
-    tryRender()
+    renderInShadowRootSettings.readyPromise.then(tryRender)
     return () => {
         rendered && ReactDOM.unmountComponentAtNode(get())
     }
