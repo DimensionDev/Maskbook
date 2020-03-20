@@ -2,7 +2,7 @@ import '../../provider.worker'
 
 import React, { useRef, useMemo, useContext, useEffect, useState } from 'react'
 import { CssBaseline, useMediaQuery } from '@material-ui/core'
-import { ThemeProvider, makeStyles, createStyles } from '@material-ui/core/styles'
+import { ThemeProvider, makeStyles, createStyles, useTheme } from '@material-ui/core/styles'
 
 import PeopleOutlinedIcon from '@material-ui/icons/PeopleOutlined'
 import CreditCardIcon from '@material-ui/icons/CreditCard'
@@ -69,18 +69,20 @@ function DashboardWithProvider() {
 const useStyles = makeStyles((theme) =>
     createStyles({
         wrapper: {
+            '--monospace': 'SFMono-Regular,Consolas,Liberation Mono,Menlo,monospace',
+
             '--primary': theme.palette.primary.main,
-            '--primaryLight': theme.palette.primary.light,
             '--textOnPrimary': theme.palette.primary.contrastText,
             '--lightText': '#C4C4C4',
-            '--monospace': 'SFMono-Regular,Consolas,Liberation Mono,Menlo,monospace',
-            '--background': '#F6F9FF',
-            '--container': '#FFFFFF',
+            '--background': theme.palette.type === 'dark' ? '#212121' : '#F6F9FF',
+            '--container': theme.palette.type === 'dark' ? '#121212' : '#FFFFFF',
             '--drawerWidth': '251px',
-            '--drawerHeader': '#1756CA',
-            '--drawerBody': theme.palette.type === 'dark' ? 'var(--primaryLight)' : 'var(--primary)',
+            '--drawerHeader': theme.palette.type === 'dark' ? '#121212' : '#1756CA',
+            '--drawerBody': theme.palette.type === 'dark' ? '#121212' : 'var(--primary)',
             '--drawerText': 'var(--textOnPrimary, #FFFFFF)',
-            '--listSelectedIndicator': 'var(--primaryLight)',
+            '--drawerBodySelected': theme.palette.type === 'dark' ? '#114097' : 'var(--textOnPrimary)',
+            '--drawerTextSelected': theme.palette.type === 'dark' ? 'var(--textOnPrimary)' : 'var(--primary)',
+            '--listSelectedIndicator': 'var(--primary)',
 
             position: 'absolute',
             width: '100vw',
@@ -133,6 +135,12 @@ export function useBlurContext(open: boolean) {
 function Dashboard() {
     const { t } = useI18N()
     const classes = useStyles()
+    const theme = useTheme()
+
+    useEffect(() => {
+        // global filter blur color fix
+        document.body.style.backgroundColor = theme.palette.background.paper
+    }, [theme])
 
     const routers: [string, string, JSX.Element][] = [
         ['Personas', '/personas/', <PeopleOutlinedIcon />],

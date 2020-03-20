@@ -17,7 +17,7 @@ const useStyles = makeStyles((theme) =>
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
-            background: 'url(/aboutDialogBackground.png) repeat-x center / contain',
+            background: 'url(/aboutDialogBackground.png) no-repeat center / cover',
         },
         maskface: {
             width: '120px',
@@ -34,7 +34,7 @@ const useStyles = makeStyles((theme) =>
             marginBottom: theme.spacing(2),
         },
         main: {
-            padding: theme.spacing(3, 8),
+            margin: theme.spacing(3, 8),
             textAlign: 'center',
         },
         getInTouch: {
@@ -49,10 +49,11 @@ const useStyles = makeStyles((theme) =>
             },
         },
         footer: {
+            borderTop: `1px solid ${theme.palette.divider}`,
             color: theme.palette.text.secondary,
-            borderTop: '1px solid #F5F5F5',
             fontSize: '0.77rem',
-            padding: theme.spacing(2, 4, 3, 8),
+            margin: theme.spacing(0, 2),
+            padding: theme.spacing(2, 2, 3, 6),
         },
     }),
 )

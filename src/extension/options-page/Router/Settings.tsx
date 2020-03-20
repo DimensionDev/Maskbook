@@ -1,6 +1,6 @@
 import React from 'react'
-import { Typography, Card, List } from '@material-ui/core'
-import { makeStyles, createStyles, ThemeProvider, Theme } from '@material-ui/core/styles'
+import { Typography, Card, List, Paper } from '@material-ui/core'
+import { makeStyles, createStyles, ThemeProvider, Theme, useTheme } from '@material-ui/core/styles'
 
 import { SettingsUI, SettingsUIEnum } from '../../../components/shared-settings/useSettingsUI'
 import {
@@ -32,7 +32,8 @@ const useStyles = makeStyles((theme) =>
             marginBottom: theme.spacing(1.5),
         },
         section: {
-            padding: theme.spacing(4),
+            padding: theme.spacing(2, 4),
+            margin: theme.spacing(2, 0),
         },
     }),
 )
@@ -48,6 +49,16 @@ const settingsTheme = (theme: Theme): Theme => ({
     },
     overrides: {
         ...theme.overrides,
+        MuiPaper: {
+            rounded: {
+                borderRadius: '12px',
+            },
+        },
+        MuiCard: {
+            root: {
+                overflow: 'visible',
+            },
+        },
         MuiListItem: {
             root: {
                 paddingTop: theme.spacing(1.5),
@@ -96,9 +107,11 @@ function Settings() {
     }).current
     const classes = useStyles()
     const shadowRoot = useValueRef(renderInShadowRootSettings)
+    const theme = useTheme()
+    const elevation = theme.palette.type === 'dark' ? 1 : 0
     return (
         <ThemeProvider theme={settingsTheme}>
-            <section className={classes.section}>
+            <Paper component="section" className={classes.section} elevation={elevation}>
                 <Typography className={classes.title} variant="h6" color="textPrimary">
                     General
                 </Typography>
@@ -113,8 +126,8 @@ function Settings() {
                         />
                     </List>
                 </Card>
-            </section>
-            <section className={classes.section}>
+            </Paper>
+            <Paper component="section" className={classes.section} elevation={elevation}>
                 <Typography className={classes.title} variant="h6" color="textPrimary">
                     Advanced Options
                 </Typography>
@@ -132,7 +145,7 @@ function Settings() {
                         <SettingsUI icon={<MemoryOutlinedIcon />} value={debugModeSetting} />
                     </List>
                 </Card>
-            </section>
+            </Paper>
         </ThemeProvider>
     )
 }
