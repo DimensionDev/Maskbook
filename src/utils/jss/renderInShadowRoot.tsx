@@ -8,6 +8,7 @@ import { I18nextProvider } from 'react-i18next'
 import i18nNextInstance from '../i18n-next'
 import { portalShadowRoot } from './ShadowRootPortal'
 import { useSubscription } from 'use-subscription'
+import '../../components/InjectedComponents/ShadowRootSwitchNotifier'
 
 const previousShadowedElement = new Set<HTMLElement>()
 /**
@@ -57,7 +58,7 @@ export function renderInShadowRoot(node: React.ReactNode, config: { shadow(): Sh
             }
         })
     }
-    tryRender()
+    renderInShadowRootSettings.readyPromise.then(tryRender)
     return () => {
         rendered && ReactDOM.unmountComponentAtNode(get())
     }
@@ -163,6 +164,7 @@ class ErrorBoundary extends React.Component {
     }
 }
 
+import { SnackbarProvider } from 'notistack'
 type MaskbookProps = React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement>
 
 function Maskbook(_props: MaskbookProps) {
@@ -171,7 +173,14 @@ function Maskbook(_props: MaskbookProps) {
         <ThemeProvider theme={theme}>
             <I18nextProvider i18n={i18nNextInstance}>
                 <React.StrictMode>
-                    <div {..._props} />
+                    <SnackbarProvider
+                        maxSnack={30}
+                        anchorOrigin={{
+                            vertical: 'bottom',
+                            horizontal: 'right',
+                        }}>
+                        <div {..._props} />
+                    </SnackbarProvider>
                 </React.StrictMode>
             </I18nextProvider>
         </ThemeProvider>

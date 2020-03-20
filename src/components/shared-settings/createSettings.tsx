@@ -12,10 +12,26 @@ function createInternalSettings<T extends browser.storage.StorageValue>(
     key: string,
     initialValue: T,
     comparer: (a: T, b: T) => boolean = (a, b) => a === b,
-) {
-    const settings = new ValueRef(initialValue, comparer)
+): ValueRef<T> & { readonly ready: boolean; readonly readyPromise: Promise<void> } {
+    const settings = new ValueRef(initialValue, comparer) as ValueRef<T> & {
+        ready: boolean
+        readonly readyPromise: Promise<void>
+    }
+    let ready: () => void = () => {}
+    Object.assign(settings, {
+        ready: false,
+        readyPromise: new Promise(
+            resolve =>
+                (ready = () => {
+                    resolve()
+                    settings.ready = true
+                }),
+        ),
+    })
+
     const instanceKey = `${storage}+${key}`
     update(instanceKey)
+
     settings.addListener(async newVal => {
         const stored = ((await browser.storage.local.get(null))[storage] as object) || {}
         await browser.storage.local.set({
@@ -31,6 +47,7 @@ function createInternalSettings<T extends browser.storage.StorageValue>(
             const stored = value[storage]
             if (typeof stored === 'object' && stored !== null && key in (stored as any)) {
                 settings.value = Reflect.get(stored, key)
+                ready()
             }
         }
     }

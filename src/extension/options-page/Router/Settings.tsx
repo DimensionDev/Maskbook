@@ -128,13 +128,13 @@ function Settings() {
                     <List disablePadding>
                         <SettingsUI icon={<WallpaperOutlinedIcon />} value={steganographyModeSetting} />
                         <SettingsUI icon={<OpenInBrowserIcon />} value={disableOpenNewTabInBackgroundSettings} />
-                        {process.env.NODE_ENV === 'development' ? (
+                        {/* This feature is not ready for iOS */}
+                        {webpackEnv.target !== 'WKWebview' ? (
                             <SettingsUI
                                 icon={shadowRoot ? <EnhancedEncryptionIcon /> : <NoEncryptionIcon />}
                                 value={renderInShadowRootSettings}
-                                secondary="Development mode only"
                             />
-                        ) : /** This settings is not ready for production */ null}
+                        ) : null}
                         <SettingsUI icon={<MemoryOutlinedIcon />} value={debugModeSetting} />
                     </List>
                 </Card>

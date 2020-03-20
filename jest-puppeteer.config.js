@@ -7,6 +7,7 @@ module.exports = {
         args: [
             '--no-sandbox',
             '--disable-infobars',
+            '--disable-setuid-sandbox',
             `--disable-extensions-except=${extPath}`,
             `--load-extension=${extPath}`,
         ],

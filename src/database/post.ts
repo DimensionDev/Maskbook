@@ -6,7 +6,7 @@ import { IdentifierMap } from './IdentifierMap'
 import { createDBAccess } from './helpers/openDB'
 
 const db = createDBAccess(() => {
-    return openDB<PostDB>('maskbook-post-v2', 3, {
+    return openDB<PostDB>('maskbook-post-v2', 4, {
         async upgrade(db, oldVersion, newVersion, transaction): Promise<void> {
             if (oldVersion < 1) {
                 // inline keys
@@ -35,6 +35,13 @@ const db = createDBAccess(() => {
                 })
             }
 
+            interface Version3RecipientDetail {
+                /** Why they're able to receive this message? */
+                reason: RecipientReason[]
+            }
+            type Version3PostDBRecord = Omit<PostDBRecord, 'recipients'> & {
+                recipients: Record<string, Version3RecipientDetail>
+            }
             /**
              * In the version 2 we use `recipients?: ProfileIdentifier[]`
              * After upgrade to version 3, we use `recipients: Record<string, RecipientDetail>`
@@ -44,17 +51,37 @@ const db = createDBAccess(() => {
                 for await (const cursor of store) {
                     const oldType = (cursor.value.recipients as unknown) as ProfileIdentifier[] | undefined
                     oldType && restorePrototypeArray(oldType, ProfileIdentifier.prototype)
-                    const newType: PostDBRecord['recipients'] = {}
+                    const newType: Version3PostDBRecord['recipients'] = {}
                     if (oldType !== undefined)
                         for (const each of oldType) {
                             newType[each.toText()] = { reason: [{ type: 'direct', at: new Date(0) }] }
                         }
-                    const next: PostDBRecord = {
+                    const next: Version3PostDBRecord = {
                         ...cursor.value,
                         recipients: newType,
                         postBy: ProfileIdentifier.unknown,
                         foundAt: new Date(0),
                         recipientGroups: [],
+                    }
+                    cursor.update((next as Version3PostDBRecord) as any)
+                }
+            }
+
+            /**
+             * In the version 3 we use `recipients?: Record<string, RecipientDetail>`
+             * After upgrade to version 4, we use `recipients: IdentifierMap<ProfileIdentifier, RecipientDetail>`
+             */
+            if (oldVersion <= 3) {
+                const store = transaction.objectStore('post')
+                for await (const cursor of store) {
+                    const oldType = (cursor.value as unknown) as Version3PostDBRecord
+                    const newType: PostDBRecord['recipients'] = new Map()
+                    for (const [key, value] of Object.entries(oldType.recipients)) {
+                        newType.set(key, value)
+                    }
+                    const next: PostDBRecord = {
+                        ...cursor.value,
+                        recipients: newType,
                     }
                     cursor.update(next)
                 }
@@ -78,7 +105,7 @@ export async function updatePostDB(
     t = t || (await db()).transaction('post', 'readwrite')
     const emptyRecord: PostRecord = {
         identifier: updateRecord.identifier,
-        recipients: {},
+        recipients: new IdentifierMap(new Map()),
         postBy: ProfileIdentifier.unknown,
         foundAt: new Date(),
         recipientGroups: [],
@@ -89,13 +116,15 @@ export async function updatePostDB(
         mode === 'override' ? postToDB(nextRecord).recipients : postToDB(currentRecord).recipients
     if (mode === 'append') {
         if (updateRecord.recipients) {
-            for (const [id, detail] of Object.entries(updateRecord.recipients)) {
-                if (nextRecipients[id]) {
-                    const { reason, ...rest } = detail
-                    Object.assign(nextRecipients[id], rest)
-                    nextRecipients[id].reason.concat(detail.reason)
+            for (const [id, patchDetail] of updateRecord.recipients) {
+                const idText = id.toText()
+                if (nextRecipients.has(idText)) {
+                    const { reason, ...rest } = patchDetail
+                    const nextDetail = nextRecipients.get(idText)!
+                    Object.assign(nextDetail, rest)
+                    nextDetail.reason = [...nextDetail.reason, ...patchDetail.reason]
                 } else {
-                    nextRecipients[id] = detail
+                    nextRecipients.set(idText, patchDetail)
                 }
             }
         }
@@ -144,21 +173,24 @@ export async function deletePostCryptoKeyDB(record: PostIVIdentifier, t?: PostTr
 //#region db in and out
 function postOutDB(db: PostDBRecord): PostRecord {
     const { identifier, foundAt, postBy, recipientGroups, recipients, postCryptoKey } = db
-    for (const key in recipients) {
-        const detail = recipients[key]
+    for (const detail of recipients.values()) {
         detail.reason.forEach(x => x.type === 'group' && restorePrototype(x.group, GroupIdentifier.prototype))
     }
     return {
         identifier: Identifier.fromString(identifier, PostIVIdentifier).unwrap(),
         recipientGroups: restorePrototypeArray(recipientGroups, GroupIdentifier.prototype),
         postBy: restorePrototype(postBy, ProfileIdentifier.prototype),
-        recipients: recipients as PostRecord['recipients'],
+        recipients: new IdentifierMap(recipients, ProfileIdentifier),
         foundAt: foundAt,
         postCryptoKey: postCryptoKey,
     }
 }
 function postToDB(out: PostRecord): PostDBRecord {
-    return { ...out, identifier: out.identifier.toText() }
+    return {
+        ...out,
+        identifier: out.identifier.toText(),
+        recipients: out.recipients.__raw_map__,
+    }
 }
 //#endregion
 
@@ -166,7 +198,11 @@ function postToDB(out: PostRecord): PostDBRecord {
 /**
  * When you change this, change RecipientReasonJSON as well!
  */
-export type RecipientReason = ({ type: 'direct' } | { type: 'group'; group: GroupIdentifier }) & {
+export type RecipientReason = (
+    | { type: 'auto-share' }
+    | { type: 'direct' }
+    | { type: 'group'; group: GroupIdentifier }
+) & {
     /**
      * When we send the key to them by this reason?
      * If the unix timestamp of this Date is 0,
@@ -178,36 +214,9 @@ export interface RecipientDetail {
     /** Why they're able to receive this message? */
     reason: RecipientReason[]
 }
-/**
- * Next time you upgrade the posts database, use this to replace RecipientDetail
- */
-export interface RecipientDetailNext {
-    /** Why they're able to receive this message? */
-    reason: Set<RecipientReason>
-}
-export type RecipientNext = IdentifierMap<ProfileIdentifier, RecipientDetailNext>
-export function recipientsToNext(x: PostRecord['recipients']): RecipientNext {
-    const map = new IdentifierMap<ProfileIdentifier, RecipientDetailNext>(new Map(), ProfileIdentifier)
-    for (const key in x) {
-        const next: RecipientDetailNext = {
-            reason: new Set(x[key].reason),
-        }
-        const id = Identifier.fromString(key, ProfileIdentifier)
-        id.ok ? map.set(id.val, next) : console.warn(id.val.message)
-    }
-    return map
-}
-export function recipientsFromNext(x: RecipientNext): PostRecord['recipients'] {
-    const y: PostRecord['recipients'] = {}
-    for (const [key, value] of x.entries()) {
-        y[key.toText()] = { reason: Array.from(value.reason) }
-    }
-    return y
-}
 export interface PostRecord {
     /**
-     * For old data stored before version 3,
-     * this identifier may be ProfileIdentifier.unknown
+     * For old data stored before version 3, this identifier may be ProfileIdentifier.unknown
      */
     postBy: ProfileIdentifier
     identifier: PostIVIdentifier
@@ -217,9 +226,9 @@ export interface PostRecord {
      */
     postCryptoKey?: CryptoKey
     /**
-     * Receivers.
+     * Receivers
      */
-    recipients: Record<string, RecipientDetail>
+    recipients: IdentifierMap<ProfileIdentifier, RecipientDetail>
     /**
      * This post shared with these groups.
      */
@@ -235,9 +244,7 @@ export interface PostRecord {
 interface PostDBRecord extends Omit<PostRecord, 'postBy' | 'identifier' | 'recipients' | 'recipientGroups'> {
     postBy: PrototypeLess<ProfileIdentifier>
     identifier: string
-    // In the next version should be IdentifierMap<ProfileIdentifier, RecipientDetail>
-    recipients: PrototypeLess<Record<string, RecipientDetail>>
-    // In the next version should be IdentifierMap<GroupIdentifier, true>
+    recipients: Map<string, RecipientDetail>
     recipientGroups: PrototypeLess<GroupIdentifier>[]
 }
 

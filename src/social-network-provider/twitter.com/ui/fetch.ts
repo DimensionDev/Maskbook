@@ -45,12 +45,9 @@ const registerUserCollector = () => {
             const resolve = async () => {
                 if (!cardNode) return
                 const { isFollower, isFollowing, identifier, bio } = bioCardParser(cardNode)
-                const [verified, myIdentities] = await Promise.all([
-                    Services.Crypto.verifyOthersProve(bio, identifier),
-                    Services.Identity.queryMyProfiles(twitterUrl.hostIdentifier),
-                ])
+                const myIdentities = await Services.Identity.queryMyProfiles(twitterUrl.hostIdentifier)
                 const myIdentity = myIdentities[0] || ProfileIdentifier.unknown
-                const myFirends = GroupIdentifier.getFriendsGroupIdentifier(
+                const myFriends = GroupIdentifier.getFriendsGroupIdentifier(
                     myIdentity.identifier,
                     PreDefinedVirtualGroupNames.friends,
                 )
@@ -62,7 +59,7 @@ const registerUserCollector = () => {
                     myIdentity.identifier,
                     PreDefinedVirtualGroupNames.following,
                 )
-                if (verified && (isFollower || isFollowing)) {
+                if (isFollower || isFollowing) {
                     if (isFollower) {
                         Services.UserGroup.addProfileToFriendsGroup(myFollowers, [identifier]).then()
                     }
@@ -70,10 +67,10 @@ const registerUserCollector = () => {
                         Services.UserGroup.addProfileToFriendsGroup(myFollowing, [identifier]).then()
                     }
                     if (isFollower && isFollowing) {
-                        Services.UserGroup.addProfileToFriendsGroup(myFirends, [identifier]).then()
+                        Services.UserGroup.addProfileToFriendsGroup(myFriends, [identifier]).then()
                     }
                 } else {
-                    Services.UserGroup.removeProfileFromFriendsGroup(myFirends, [identifier]).then()
+                    Services.UserGroup.removeProfileFromFriendsGroup(myFriends, [identifier]).then()
                 }
             }
             resolve()
