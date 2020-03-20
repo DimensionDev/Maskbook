@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { List, ListItem, ListItemIcon, ListItemText, Typography, Paper } from '@material-ui/core'
-import { makeStyles, Theme, ThemeProvider } from '@material-ui/core/styles'
+import { makeStyles, Theme, ThemeProvider, useTheme } from '@material-ui/core/styles'
 import { Link, useRouteMatch } from 'react-router-dom'
 
 import SentimentSatisfiedOutlinedIcon from '@material-ui/icons/SentimentSatisfiedOutlined'
@@ -43,15 +43,15 @@ const drawerTheme = (theme: Theme): Theme => ({
         MuiListItem: {
             root: {
                 '&$selected$selected': {
-                    backgroundColor: 'var(--drawerText)',
-                    color: 'var(--drawerBody)',
+                    backgroundColor: 'var(--drawerBodySelected, --drawerBody)',
+                    color: 'var(--drawerTextSelected, --drawerText)',
                     '&::before': {
                         content: '""',
                         height: '100%',
                         width: '5px',
                         position: 'absolute',
                         left: '0px',
-                        backgroundColor: 'var(--drawerBody)',
+                        backgroundColor: 'var(--listSelectedIndicator)',
                     },
                 },
             },
@@ -74,6 +74,8 @@ function ResponsiveDrawer(props: ResponsiveDrawerProps) {
     const classes = useStyles()
     const match = useRouteMatch('/:param/')
 
+    const theme = useTheme()
+
     const { routers, exitDashboard } = props
 
     return (
@@ -81,7 +83,9 @@ function ResponsiveDrawer(props: ResponsiveDrawerProps) {
             <nav className={classes.drawer}>
                 <Paper elevation={0} className={classes.drawerHeader}>
                     <Typography className={classes.maskTitle}>Maskbook</Typography>
-                    <Typography variant="caption">Make Privacy Protected Again</Typography>
+                    <Typography color={theme.palette.type === 'dark' ? 'textSecondary' : 'inherit'} variant="caption">
+                        Make Privacy Protected Again
+                    </Typography>
                 </Paper>
                 <List className={classes.drawerList}>
                     {routers.map((item, index) => (
