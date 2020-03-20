@@ -72,6 +72,8 @@ const useStyles = makeStyles((theme) =>
             '--primary': theme.palette.primary.main,
             '--primaryLight': theme.palette.primary.light,
             '--textOnPrimary': theme.palette.primary.contrastText,
+            '--lightText': '#C4C4C4',
+            '--monospace': 'SFMono-Regular,Consolas,Liberation Mono,Menlo,monospace',
             '--background': '#F6F9FF',
             '--container': '#FFFFFF',
             '--drawerWidth': '251px',
