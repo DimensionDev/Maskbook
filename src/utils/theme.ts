@@ -15,7 +15,7 @@ function getFontFamily(monospace?: boolean) {
     return !monospace ? '-apple-system, system-ui, sans-serif' : monofont
 }
 
-const baseTheme = (theme: 'dark' | 'light') =>
+const baseTheme = (theme: 'dark' | 'light'): ThemeOptions =>
     ({
         palette: {
             primary: { main: '#1C68F3' },
@@ -23,6 +23,10 @@ const baseTheme = (theme: 'dark' | 'light') =>
             type: theme,
             text: {
                 secondary: '#939393',
+            },
+            background: {
+                default: '#FFF',
+                paper: theme === 'dark' ? '#212121' : '#FFF',
             },
         },
         typography: {

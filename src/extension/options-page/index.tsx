@@ -69,18 +69,20 @@ function DashboardWithProvider() {
 const useStyles = makeStyles((theme) =>
     createStyles({
         wrapper: {
+            '--monospace': 'SFMono-Regular,Consolas,Liberation Mono,Menlo,monospace',
+
             '--primary': theme.palette.primary.main,
-            '--primaryLight': theme.palette.primary.light,
             '--textOnPrimary': theme.palette.primary.contrastText,
             '--lightText': '#C4C4C4',
-            '--monospace': 'SFMono-Regular,Consolas,Liberation Mono,Menlo,monospace',
-            '--background': '#F6F9FF',
-            '--container': '#FFFFFF',
+            '--background': theme.palette.type === 'dark' ? '#212121' : '#F6F9FF',
+            '--container': theme.palette.type === 'dark' ? '#121212' : '#FFFFFF',
             '--drawerWidth': '251px',
-            '--drawerHeader': '#1756CA',
-            '--drawerBody': theme.palette.type === 'dark' ? 'var(--primaryLight)' : 'var(--primary)',
+            '--drawerHeader': theme.palette.type === 'dark' ? '#121212' : '#1756CA',
+            '--drawerBody': theme.palette.type === 'dark' ? '#121212' : 'var(--primary)',
             '--drawerText': 'var(--textOnPrimary, #FFFFFF)',
-            '--listSelectedIndicator': 'var(--primaryLight)',
+            '--drawerBodySelected': theme.palette.type === 'dark' ? '#114097' : 'var(--textOnPrimary)',
+            '--drawerTextSelected': theme.palette.type === 'dark' ? 'var(--textOnPrimary)' : 'var(--primary)',
+            '--listSelectedIndicator': 'var(--primary)',
 
             position: 'absolute',
             width: '100vw',
