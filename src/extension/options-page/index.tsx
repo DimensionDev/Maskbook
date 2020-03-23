@@ -90,7 +90,10 @@ const useStyles = makeStyles((theme) =>
             backgroundColor: 'var(--background)',
             // background: 'var(--background) bottom 10px right 10px no-repeat url(/maskface.svg)',
             display: 'grid',
-            gridTemplateColumns: '165px [content-start] auto [content-end] 165px',
+            gridTemplateColumns: '20px [content-start] minmax(984px, auto) [content-end] 20px',
+            '@media screen and (min-width: 1180px)': {
+                gridTemplateColumns: '1fr [content-start] 1180px [content-end] 1fr',
+            },
             gridTemplateRows: '64px [content-start] auto [content-end] 80px',
             placeItems: 'center',
 
