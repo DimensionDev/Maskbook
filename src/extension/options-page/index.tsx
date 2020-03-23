@@ -2,7 +2,7 @@ import '../../provider.worker'
 
 import React, { useRef, useMemo, useContext, useEffect, useState } from 'react'
 import { CssBaseline, useMediaQuery } from '@material-ui/core'
-import { ThemeProvider, makeStyles, createStyles } from '@material-ui/core/styles'
+import { ThemeProvider, makeStyles, createStyles, useTheme } from '@material-ui/core/styles'
 
 import PeopleOutlinedIcon from '@material-ui/icons/PeopleOutlined'
 import CreditCardIcon from '@material-ui/icons/CreditCard'
@@ -135,6 +135,12 @@ export function useBlurContext(open: boolean) {
 function Dashboard() {
     const { t } = useI18N()
     const classes = useStyles()
+    const theme = useTheme()
+
+    useEffect(() => {
+        // global filter blur color fix
+        document.body.style.backgroundColor = theme.palette.background.paper
+    }, [theme])
 
     const routers: [string, string, JSX.Element][] = [
         ['Personas', '/personas/', <PeopleOutlinedIcon />],
