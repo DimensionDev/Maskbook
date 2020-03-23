@@ -1,5 +1,5 @@
 import React from 'react'
-import { Typography, makeStyles, createStyles, Box, Button, Avatar } from '@material-ui/core'
+import { Typography, makeStyles, createStyles, Box, Button, Avatar, ButtonBase } from '@material-ui/core'
 import FileCopyOutlinedIcon from '@material-ui/icons/FileCopyOutlined'
 import { WalletRecord } from '../../../plugins/Wallet/database/types'
 import classNames from 'classnames'
@@ -10,6 +10,9 @@ const useStyles = makeStyles(theme =>
             padding: theme.spacing(3, 2, 2, 3),
             borderBottom: `1px solid ${theme.palette.divider}`,
             position: 'relative',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'baseline',
             '&::after': {
                 content: '""',
                 position: 'absolute',
@@ -58,7 +61,10 @@ export function WalletItem(props: WalletItemProps) {
     const classes = useStyles()
     const { wallet, selected, onClick } = props
     return (
-        <section onClick={onClick} className={classNames(classes.container, { [classes.selected]: selected })}>
+        <ButtonBase
+            component="section"
+            onClick={onClick}
+            className={classNames(classes.container, { [classes.selected]: selected })}>
             <Typography className={classes.title} variant="h5">
                 {wallet.name}
             </Typography>
@@ -84,6 +90,6 @@ export function WalletItem(props: WalletItemProps) {
                     className={classes.coins}
                     src="https://github.com/trustwallet/assets/raw/master/blockchains/ethereum/assets/0x00000100F2A2bd000715001920eB70D229700085/logo.png"></Avatar>
             </Box>
-        </section>
+        </ButtonBase>
     )
 }
