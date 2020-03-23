@@ -17,7 +17,7 @@ const useStyles = makeStyles(theme =>
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
-            background: 'url(/aboutDialogBackground.png) repeat-x center / contain',
+            background: 'url(/aboutDialogBackground.png) no-repeat center / cover',
         },
         maskface: {
             width: '120px',

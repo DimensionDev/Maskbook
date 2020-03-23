@@ -1,5 +1,5 @@
 import React from 'react'
-import { makeStyles, createStyles, Typography, Divider } from '@material-ui/core'
+import { makeStyles, createStyles, Typography, Divider, Fade } from '@material-ui/core'
 import classNames from 'classnames'
 
 interface DashboardRouterContainer {
@@ -43,19 +43,21 @@ export default function DashboardRouterContainer(props: DashboardRouterContainer
     const { title, actions, children, padded } = props
     const classes = useStyles()
     return (
-        <section className={classes.wrapper}>
-            <section className={classes.titleAction}>
-                <Typography variant="h5">{title}</Typography>
-                <div className={classes.buttons}>
-                    {actions?.map((action, index) => React.cloneElement(action, { key: index }))}
+        <Fade in>
+            <section className={classes.wrapper}>
+                <section className={classes.titleAction}>
+                    <Typography variant="h5">{title}</Typography>
+                    <div className={classes.buttons}>
+                        {actions?.map((action, index) => React.cloneElement(action, { key: index }))}
+                    </div>
+                </section>
+                <div className={classNames({ [classes.contentPadded]: padded !== false })}>
+                    <Divider />
                 </div>
+                <main className={classNames(classes.content, { [classes.contentPadded]: padded !== false })}>
+                    {children}
+                </main>
             </section>
-            <div className={classNames({ [classes.contentPadded]: padded !== false })}>
-                <Divider />
-            </div>
-            <main className={classNames(classes.content, { [classes.contentPadded]: padded !== false })}>
-                {children}
-            </main>
-        </section>
+        </Fade>
     )
 }
