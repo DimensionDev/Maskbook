@@ -1964,14 +1964,15 @@
 
 "@holoflows/kit@https://github.com/DimensionDev/holoflows-kit":
   version "0.7.0"
-  resolved "https://github.com/DimensionDev/holoflows-kit#570f3816991992f13488fef3aa5b7be4860d0b67"
+  uid e24aa4e10ba02f4b489de8ebf2717935f924607b
+  resolved "https://github.com/DimensionDev/holoflows-kit#e24aa4e10ba02f4b489de8ebf2717935f924607b"
   dependencies:
+    "@servie/events" "^1.0.0"
     async-call-rpc "^1.0.4"
     concurrent-lock "^1.0.7"
     jsx-jsonml-devtools-renderer "^1.4.1"
     lodash-es "^4.17.15"
     memorize-decorator "^0.2.2"
-    mitt "^1.1.3"
 
 "@icons/material@^0.2.4":
   version "0.2.4"
@@ -2454,6 +2455,11 @@
   integrity sha512-MI4Xx6LHs4Webyvi6EbspgyAb4D2Q2VtnCQ1blOJcoLS6mVa8lNN2rkIy1CVxfTUpoyIbCTkXES1rLXztFD1lg==
   dependencies:
     any-observable "^0.3.0"
+
+"@servie/events@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@servie/events/-/events-1.0.0.tgz#8258684b52d418ab7b86533e861186638ecc5dc1"
+  integrity sha512-sBSO19KzdrJCM3gdx6eIxV8M9Gxfgg6iDQmH5TIAGaUu+X9VDdsINXJOnoiZ1Kx3TrHdH4bt5UVglkjsEGBcvw==
 
 "@sindresorhus/is@^0.14.0":
   version "0.14.0"
@@ -13718,11 +13724,6 @@ mississippi@^3.0.0:
     pumpify "^1.3.3"
     stream-each "^1.1.0"
     through2 "^2.0.0"
-
-mitt@^1.1.3:
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/mitt/-/mitt-1.2.0.tgz#cb24e6569c806e31bd4e3995787fe38a04fdf90d"
-  integrity sha512-r6lj77KlwqLhIUku9UWYes7KJtsczvolZkzp8hbaDPPaE24OmWl5s539Mytlj22siEQKosZ26qCBgda2PKwoJw==
 
 mixed-map@^0.1.0:
   version "0.1.1"
