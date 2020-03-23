@@ -179,7 +179,7 @@
     "webpack-manifest-plugin": "^2.2.0",
     "webpack-notifier": "^1.8.0",
     "webpack-web-ext-plugin": "github:DimensionDev/webpack-web-ext-plugin",
-    "yargs": "^15.1.0"
+    "yargs": "^15.3.1"
   },
   "engines": {
     "node": ">=13.2.0"
