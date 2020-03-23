@@ -108,7 +108,7 @@
     "@commitlint/cli": "^8.3.5",
     "@commitlint/config-conventional": "^8.3.4",
     "@sinonjs/text-encoding": "^0.7.1",
-    "@storybook/addon-actions": "^5.3.13",
+    "@storybook/addon-actions": "^5.3.17",
     "@storybook/addon-docs": "^5.3.13",
     "@storybook/addon-info": "^5.3.14",
     "@storybook/addon-knobs": "^5.3.17",
