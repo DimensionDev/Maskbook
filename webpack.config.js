@@ -298,7 +298,7 @@ module.exports = (argvEnv, argv) => {
 
     if (env !== 'development') {
         config.plugins.push(new SSRPlugin('popup.html', src('./src/extension/popup-page/index.tsx')))
-        config.plugins.push(new SSRPlugin('index.html', src('./src/index.tsx')))
+        config.plugins.push(new SSRPlugin('index.html', src('./src/extension/options-page/index.tsx')))
     }
     // futureEmitAssets prevents webpackDevServer from writing file to disk
     config.output.futureEmitAssets = false
