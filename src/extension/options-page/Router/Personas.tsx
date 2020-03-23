@@ -4,6 +4,8 @@ import { Button, makeStyles, createStyles } from '@material-ui/core'
 import AddIcon from '@material-ui/icons/Add'
 import { useMyPersonas } from '../../../components/DataSource/useActivatedUI'
 import PersonaCard from '../DashboardComponents/PersonaCard'
+import { DashboardPersonaDialog } from '../Dialog/Persona'
+import { useDialog } from '../Dialog/Base'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -17,10 +19,13 @@ const useStyles = makeStyles((theme) =>
 
 export default function DashboardPersonasRouter() {
     const classes = useStyles()
+    const personas = useMyPersonas()
+
+    const [createPersona, openCreatePersona] = useDialog(<DashboardPersonaDialog />)
 
     const actions = useMemo(
         () => [
-            <Button color="primary" variant="outlined">
+            <Button color="primary" variant="outlined" onClick={() => openCreatePersona()}>
                 Restore
             </Button>,
             <Button color="primary" variant="outlined">
@@ -30,10 +35,8 @@ export default function DashboardPersonasRouter() {
                 New Persona
             </Button>,
         ],
-        [],
+        [openCreatePersona],
     )
-
-    const personas = useMyPersonas()
 
     return (
         <DashboardRouterContainer title="My Personas" actions={actions}>
@@ -42,6 +45,7 @@ export default function DashboardPersonasRouter() {
                     <PersonaCard key={persona.identifier.toText()} persona={persona} />
                 ))}
             </section>
+            {createPersona}
         </DashboardRouterContainer>
     )
 }
