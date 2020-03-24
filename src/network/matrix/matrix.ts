@@ -1,6 +1,6 @@
 /// <reference path="./matrix.type.d.ts" />
 import sdk, { MatrixClient } from 'matrix-js-sdk'
-import mitt from 'mitt'
+import { Emitter } from '@servie/events'
 export const endpoint = 'https://matrix.vampire.rip'
 type MatrixClient = typeof MatrixClient extends { new (...args: any[]): infer U } ? U : never
 function any(x: any): any {
@@ -109,6 +109,7 @@ export class MatrixMessage {
                     // TODO: validate it with JSON schema
                     payload: e.content as MatrixMessageTypes[T],
                 }
+                // @ts-ignore
                 this.mitt.emit(e.type, data)
             },
         )
@@ -132,10 +133,12 @@ export class MatrixMessage {
             if (event.meta.matrix.sender === this.userID && options?.ignoreMyself) return
             f(event)
         }
+        // @ts-ignore
         this.mitt.on(event, _f)
+        // @ts-ignore
         return () => this.mitt.off(event, _f)
     }
-    private mitt = mitt()
+    private mitt = new Emitter<MatrixMessageTypes>()
     private cache = new Map<string, string>()
     private reverseCache = new Map<string, string>()
     private async lookupRoomAlias(alias: string): Promise<string> {
