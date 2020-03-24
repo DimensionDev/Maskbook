@@ -28,7 +28,7 @@
     "start:ios": "webpack-dev-server --wk-webview --mode development",
     "storybook": "start-storybook -p 9009 -s public --quiet",
     "test": "jest --watch",
-    "test:ci": "jest --ci --collectCoverage=true --reporters=default --reporters=jest-junit -w 1",
+    "test:ci": "jest --ci --collectCoverage=true --reporters=default --reporters=jest-junit -w 1 --forceExit",
     "test:e2e": "jest --runInBand --config=jest-e2e.config.js",
     "uninstall": "ts-node scripts/postinstall.ts"
   },

@@ -1,4 +1,4 @@
-import { DBSchema, openDB } from 'idb/with-async-ittr'
+import { DBSchema, openDB } from 'idb/with-async-ittr-cjs'
 import { createDBAccess } from '../../../database/helpers/openDB'
 import type { RedPacketRecord, WalletRecord, ERC20TokenRecord } from './types'
 

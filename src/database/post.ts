@@ -1,6 +1,6 @@
 /// <reference path="./global.d.ts" />
 import { PostIdentifier, ProfileIdentifier, Identifier, PostIVIdentifier, GroupIdentifier } from './type'
-import { openDB, DBSchema, IDBPTransaction } from 'idb/with-async-ittr'
+import { openDB, DBSchema, IDBPTransaction } from 'idb/with-async-ittr-cjs'
 import { restorePrototype, restorePrototypeArray, PrototypeLess } from '../utils/type'
 import { IdentifierMap } from './IdentifierMap'
 import { createDBAccess } from './helpers/openDB'

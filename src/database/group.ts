@@ -1,5 +1,5 @@
 /// <reference path="./global.d.ts" />
-import { DBSchema, openDB, IDBPTransaction } from 'idb/with-async-ittr'
+import { DBSchema, openDB, IDBPTransaction } from 'idb/with-async-ittr-cjs'
 import { GroupIdentifier, Identifier, ProfileIdentifier } from './type'
 import { MessageCenter } from '../utils/messages'
 import { PrototypeLess, restorePrototypeArray } from '../utils/type'

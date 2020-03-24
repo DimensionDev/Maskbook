@@ -1,7 +1,7 @@
 /// <reference path="../global.d.ts" />
 
 import { ProfileIdentifier, PersonaIdentifier, Identifier, ECKeyIdentifier } from '../type'
-import { DBSchema, openDB } from 'idb/with-async-ittr'
+import { DBSchema, openDB } from 'idb/with-async-ittr-cjs'
 import { IdentifierMap } from '../IdentifierMap'
 import { PrototypeLess, restorePrototype } from '../../utils/type'
 import { MessageCenter } from '../../utils/messages'
