@@ -7,7 +7,7 @@ import Button from '@material-ui/core/Button'
 import Typography from '@material-ui/core/Typography'
 import Services from '../../service'
 import { ProfileIdentifier } from '../../../database/type'
-import { useTextField } from '../../../utils/components/useForms'
+import { useTextField } from '../../../utils/hooks/useForms'
 
 const useStyles = makeStyles(theme => ({
     success: {
