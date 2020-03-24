@@ -24,7 +24,7 @@ if (diags) {
 }
 
 function getChecker(): (path: string) => string | null {
-    return x => {
+    return (x) => {
         if (x.includes('@material-ui')) {
             return `@material-ui appears in the import chain!
 To write a cross context file, use safeMUI() inside the function to import them conditionally.
@@ -55,6 +55,7 @@ function checkReferenceRecursive(
     for (const dependency of file.getImportDeclarations()) {
         let isTypeOnlyImport = true
 
+        if (dependency.compilerNode.importClause?.isTypeOnly) continue
         // We consider default import and ns import is not type only import
         if (dependency.getDefaultImport() || dependency.getNamespaceImport()) {
             isTypeOnlyImport = false
@@ -97,7 +98,7 @@ function checkReferenceRecursive(
         esModuleStyleImport.push(path)
     }
     const nodeStyleRequires: string[] = []
-    file.transform(traversal => {
+    file.transform((traversal) => {
         const node = traversal.visitChildren()
         // require('...')
         if (!ts.ts.isCallExpression(node)) return node
@@ -125,7 +126,7 @@ function checkReferenceRecursive(
         if (diag) {
             console.error(`${diag}
 Import chain:
-${nextRefChain.map(x => '  => ' + x).join('\n')}
+${nextRefChain.map((x) => '  => ' + x).join('\n')}
 `)
             hasDiagnostics = true
         }

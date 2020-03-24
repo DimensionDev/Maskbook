@@ -45,18 +45,18 @@
     const PatchThisOfDescriptorToGlobal = (desc, global) => {
         const { get, set, value } = desc
         if (get)
-            desc.get = function() {
+            desc.get = function () {
                 if (this === globalThis) return get.apply(window)
                 return get.apply(this)
             }
         if (set)
-            desc.set = function(val) {
+            desc.set = function (val) {
                 if (this === globalThis) return set.apply(global, val)
                 return set.apply(this, val)
             }
         if (value && typeof value === 'function') {
             const desc2 = Object.getOwnPropertyDescriptors(value)
-            desc.value = function(...args) {
+            desc.value = function (...args) {
                 if (new.target) return Reflect.construct(value, args, new.target)
                 return Reflect.apply(value, this === globalThis ? global : this, args)
             }

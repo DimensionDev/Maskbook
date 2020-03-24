@@ -7,7 +7,7 @@ const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin')
 const ForkTsCheckerNotifierWebpackPlugin = require('fork-ts-checker-notifier-webpack-plugin')
 const git = require('@nice-labs/git-rev').default
 
-const src = file => path.join(__dirname, file)
+const src = (file) => path.join(__dirname, file)
 /**
  * Polyfills that needs to be copied to dist
  */
@@ -36,21 +36,21 @@ const ManifestGeneratorPlugin = require('webpack-extension-manifest-plugin')
  * --wk-webview
  * --e2e
  */
-const calcTarget = argv => ({
+const calcTarget = (argv) => ({
     /** @type {'nightly' | boolean} */
-    Firefox: (argv.firefox || argv['firefox-android'] || argv['firefox-gecko']),
+    Firefox: argv.firefox || argv['firefox-android'] || argv['firefox-gecko'],
     /** @type {string | boolean} */
-    FirefoxDesktop: (argv.firefox),
+    FirefoxDesktop: argv.firefox,
     /** @type {boolean} */
-    FirefoxForAndroid: (argv['firefox-android']),
+    FirefoxForAndroid: argv['firefox-android'],
     /** @type {boolean} */
-    StandaloneGeckoView: (argv['firefox-gecko']),
+    StandaloneGeckoView: argv['firefox-gecko'],
     /** @type {boolean} */
-    Chromium: (argv.chromium),
+    Chromium: argv.chromium,
     /** @type {boolean} */
-    WKWebview: (argv['wk-webview']),
+    WKWebview: argv['wk-webview'],
     /** @type {boolean} */
-    E2E: (argv.e2e),
+    E2E: argv.e2e,
 })
 
 /**
@@ -61,7 +61,7 @@ module.exports = (argvEnv, argv) => {
     const target = calcTarget(argv)
 
     if (target.Firefox) {
-        polyfills = polyfills.filter(name => !name.includes('webextension-polyfill'))
+        polyfills = polyfills.filter((name) => !name.includes('webextension-polyfill'))
     }
     if (target.StandaloneGeckoView || target.WKWebview) polyfills.push(require.resolve('./src/polyfill/permissions.js'))
 
@@ -294,7 +294,7 @@ module.exports = (argvEnv, argv) => {
     if (!fs.existsSync(publicPolyfill)) {
         fs.mkdirSync(publicPolyfill)
     }
-    polyfills.map(x => void fs.copyFileSync(x, path.join(publicPolyfill, path.basename(x))))
+    polyfills.map((x) => void fs.copyFileSync(x, path.join(publicPolyfill, path.basename(x))))
 
     if (env !== 'development') {
         config.plugins.push(new SSRPlugin('popup.html', src('./src/extension/popup-page/index.tsx')))
