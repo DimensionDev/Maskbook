@@ -66,7 +66,7 @@ const drawerTheme = (theme: Theme): Theme => ({
 })
 
 interface ResponsiveDrawerProps {
-    routers: [string, string, JSX.Element][]
+    routers: readonly (readonly [string, string, JSX.Element])[]
     exitDashboard: null | (() => void)
 }
 

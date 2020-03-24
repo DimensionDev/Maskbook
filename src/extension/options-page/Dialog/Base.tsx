@@ -1,5 +1,15 @@
-import React, { useState, useMemo } from 'react'
-import { DialogProps, useMediaQuery, Dialog, Slide } from '@material-ui/core'
+import React, { useState, useMemo, useCallback } from 'react'
+import {
+    DialogProps,
+    useMediaQuery,
+    Dialog,
+    Slide,
+    IconButton,
+    createStyles,
+    makeStyles,
+    IconButtonProps,
+} from '@material-ui/core'
+import CloseIcon from '@material-ui/icons/Close'
 import { TransitionProps } from '@material-ui/core/transitions'
 import { useBlurContext } from '..'
 
@@ -7,9 +17,7 @@ const Transition = React.forwardRef<unknown, TransitionProps>(function Transitio
     return <Slide direction="up" ref={ref} {...props} />
 })
 
-interface DashboardDialogBaseProps extends DialogProps {}
-
-export function DashboardDialogBase(props: DashboardDialogBaseProps) {
+export function DashboardDialogCore(props: DialogProps) {
     const { fullScreen, ...dialogProps } = props
 
     const mobile = useMediaQuery('(max-width: 600px)')
@@ -25,20 +33,44 @@ export function DashboardDialogBase(props: DashboardDialogBaseProps) {
     )
 }
 
+const useStyles = makeStyles(theme =>
+    createStyles({
+        close: {
+            position: 'absolute',
+            right: theme.spacing(1),
+            top: theme.spacing(1),
+        },
+    }),
+)
+
+export interface DashboardDialogBaseProps extends Omit<DialogProps, 'open'> {
+    CloseIconProps?: IconButtonProps
+}
+
 export function useDialog(
     _children: React.ReactNode,
     _props?: DashboardDialogBaseProps,
+    _closeIconColor?: string,
 ): [React.ReactNode, () => void] {
     const [open, setOpen] = useState(false)
     useBlurContext(open)
-    const [[children, props]] = useState(() => [_children, _props])
+    const classes = useStyles()
+    const [[children, props, closeIconColor]] = useState<Parameters<typeof useDialog>>(() => [
+        _children,
+        _props,
+        _closeIconColor,
+    ])
+    const close = useCallback(() => setOpen(false), [])
     const component = useMemo(
         () => (
-            <DashboardDialogBase open={open} onClose={() => setOpen(false)} {...props}>
+            <DashboardDialogCore open={open} onClose={close} {...props}>
                 {children}
-            </DashboardDialogBase>
+                <IconButton onClick={close} className={classes.close} size="small" style={{ color: closeIconColor }}>
+                    <CloseIcon />
+                </IconButton>
+            </DashboardDialogCore>
         ),
-        [children, open, props],
+        [children, classes.close, close, closeIconColor, open, props],
     )
     return useMemo(() => [component, () => setOpen(true)], [component])
 }

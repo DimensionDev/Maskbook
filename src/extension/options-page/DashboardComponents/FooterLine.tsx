@@ -1,9 +1,9 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { makeStyles, createStyles } from '@material-ui/styles'
 import { Link } from 'react-router-dom'
 import { Breadcrumbs, Theme, Typography, Link as MuiLink } from '@material-ui/core'
 import { useI18N } from '../../../utils/i18n-next-ui'
-import { DashboardAboutDialog } from '../About'
+import { useDashboardAboutDialog } from '../Dialog/About'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -47,18 +47,20 @@ export default function FooterLine() {
     const classes = useStyles()
     const { version } = globalThis?.browser.runtime.getManifest()
     const versionLink = t('version_link', { tag: process.env.VERSION })
-    const [open, setOpen] = useState(false)
+
+    const [aboutDialog, openAboutDialog] = useDashboardAboutDialog()
+
     return (
         <Breadcrumbs className={classes.footerButtons} separator=" " aria-label="breadcrumb">
             <FooterLink href="https://maskbook.com/">Maskbook.com</FooterLink>
-            <FooterLink onClick={() => setOpen(true)}>About</FooterLink>
+            <FooterLink onClick={openAboutDialog}>About</FooterLink>
             <FooterLink href={versionLink} title={process.env.VERSION}>
                 {t('version')} {version}
             </FooterLink>
             <FooterLink href={t('dashboard_mobile_test_link')}>{t('dashboard_mobile_test')}</FooterLink>
             <FooterLink href={t('dashboard_source_code_link')}>{t('dashboard_source_code')}</FooterLink>
             <FooterLink href={t('privacy_policy_link')}>{t('privacy_policy')}</FooterLink>
-            <DashboardAboutDialog open={open} onClose={() => setOpen(false)} />
+            {aboutDialog}
         </Breadcrumbs>
     )
 }
