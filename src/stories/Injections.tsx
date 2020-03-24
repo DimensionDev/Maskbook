@@ -33,6 +33,7 @@ import { WithFigma } from 'storybook-addon-figma'
 import { useTwitterThemedPostDialogHint } from '../social-network-provider/twitter.com/ui/injectPostDialogHint'
 import { useTwitterButton } from '../social-network-provider/twitter.com/utils/theme'
 import { TwitterThemeProvider } from '../social-network-provider/twitter.com/ui/custom'
+import { PersonKnownSelf, PersonKnownOthers } from '../components/InjectedComponents/PersonKnown'
 
 storiesOf('Injections', module)
     .add('PersonOrGroupInChip', () => (
@@ -175,6 +176,18 @@ storiesOf('Injections', module)
     })
     .add('Comment box', () => {
         return <CommentBox onSubmit={action('submit')} />
+    })
+    .add('Person Known', () => {
+        const bio = text('Bio', '__bio__content__')
+        return (
+            <>
+                Self:
+                <PersonKnownSelf bio={bio} />
+                <br />
+                Others:
+                <PersonKnownOthers bio={bio} />
+            </>
+        )
     })
     .add('Post Dialog', () => {
         const decoder = (encodedStr: string) => {
