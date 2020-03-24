@@ -21,9 +21,9 @@ export function compressBackupFile(file: BackupJSONFileLatest, profileIdentifier
     const { grantedHostPermissions, profiles, personas } = file
     if (!profileIdentifier)
         profileIdentifier = Identifier.fromString(profiles[0].identifier, ProfileIdentifier).unwrap()
-    const profile = profiles.find(x => x.identifier === profileIdentifier!.toText())
+    const profile = profiles.find((x) => x.identifier === profileIdentifier!.toText())
     if (!profile?.linkedPersona) throw new Error('Target profile/persona not found')
-    const persona = personas.find(x => x.identifier === profile.linkedPersona)
+    const persona = personas.find((x) => x.identifier === profile.linkedPersona)
     if (!persona?.privateKey) throw new Error('Target persona not found')
     const { localKey, nickname, privateKey, linkedProfiles } = persona
     return ([
@@ -32,7 +32,7 @@ export function compressBackupFile(file: BackupJSONFileLatest, profileIdentifier
         profileIdentifier.userId,
         nickname,
         localKey?.k ||
-            profiles.filter(x => x.identifier === profileIdentifier!.toText()).filter(x => x.localKey)[0]?.localKey
+            profiles.filter((x) => x.identifier === profileIdentifier!.toText()).filter((x) => x.localKey)[0]?.localKey
                 ?.k ||
             '',
         compressSecp256k1Key(privateKey, 'private'),

@@ -42,7 +42,7 @@ export function FriendsDeveloperMode() {
                         maxSelection={0}
                         showAtNetwork
                         selected={[]}
-                        onSetSelected={people => setEditing(people[0])}
+                        onSetSelected={(people) => setEditing(people[0])}
                     />
                 </CardContent>
             </Card>

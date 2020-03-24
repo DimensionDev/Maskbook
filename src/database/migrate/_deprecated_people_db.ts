@@ -37,8 +37,8 @@ OnlyRunInContext(['background', 'debugging'], 'People db')
 async function outDb({ identifier, publicKey, privateKey, ...rest }: PersonRecordInDatabase): Promise<PersonRecord> {
     // Restore prototype
     rest.previousIdentifiers &&
-        rest.previousIdentifiers.forEach(y => Object.setPrototypeOf(y, ProfileIdentifier.prototype))
-    rest.groups.forEach(y => Object.setPrototypeOf(y, GroupIdentifier.prototype))
+        rest.previousIdentifiers.forEach((y) => Object.setPrototypeOf(y, ProfileIdentifier.prototype))
+    rest.groups.forEach((y) => Object.setPrototypeOf(y, GroupIdentifier.prototype))
     const result: PersonRecord = {
         ...rest,
         identifier: Identifier.fromString(identifier, ProfileIdentifier).unwrap(),
@@ -129,12 +129,7 @@ export async function queryPeopleDB(
             if (query(id.val, value)) result.push(value)
         }
     } else {
-        result.push(
-            ...(await t
-                .objectStore('people')
-                .index('network')
-                .getAll(IDBKeyRange.only(query.network))),
-        )
+        result.push(...(await t.objectStore('people').index('network').getAll(IDBKeyRange.only(query.network))))
     }
     return Promise.all(result.map(outDb))
 }

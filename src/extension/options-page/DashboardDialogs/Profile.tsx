@@ -12,7 +12,7 @@ import Services from '../../service'
 import { getNetworkWorker } from '../../../social-network/worker'
 import { useI18N } from '../../../utils/i18n-next-ui'
 
-const useStyles = makeStyles(theme =>
+const useStyles = makeStyles((theme) =>
     createStyles({
         button: {
             marginTop: theme.spacing(1),
@@ -96,7 +96,7 @@ export function ProfileConnectStartDialog(props: ProfileConnectStartDialogProps)
                 autoFocus
                 variant="outlined"
                 value={name}
-                onChange={e => setName(e.target.value)}
+                onChange={(e) => setName(e.target.value)}
                 label={t('dashboard_username_on', { network })}></TextField>
         </div>
     )
@@ -143,8 +143,8 @@ export function ProfileConnectDialog(props: ProfileConnectDialogProps) {
         setState('loading')
         const profile = await getNetworkWorker(identifier)
             .fetchProfile(identifier)
-            .then(p => p.bioContent)
-            .catch(e => {
+            .then((p) => p.bioContent)
+            .catch((e) => {
                 console.error(e)
                 return ''
             })

@@ -41,10 +41,7 @@ export type createRedPacketInit = Pick<
  */
 export async function discoverRedPacket(payload: RedPacketJSONPayload, foundInURL: string) {
     const t = createTransaction(await createWalletDBAccess(), 'readwrite')('RedPacket')
-    const original = await t
-        .objectStore('RedPacket')
-        .index('red_packet_id')
-        .get(payload.rpid)
+    const original = await t.objectStore('RedPacket').index('red_packet_id').get(payload.rpid)
     if (original) return original
     const rec: RedPacketRecord = {
         _data_source_: getProvider().dataSource,
@@ -78,8 +75,8 @@ export async function discoverRedPacket(payload: RedPacketJSONPayload, foundInUR
 export async function getRedPackets(owned?: boolean) {
     const t = createTransaction(await createWalletDBAccess(), 'readonly')('RedPacket')
     const all = await t.objectStore('RedPacket').getAll()
-    if (owned === true) return all.filter(x => x.create_transaction_hash)
-    if (owned === false) return all.filter(x => !x.create_transaction_hash)
+    if (owned === true) return all.filter((x) => x.create_transaction_hash)
+    if (owned === false) return all.filter((x) => !x.create_transaction_hash)
     return all
 }
 
@@ -229,10 +226,10 @@ export async function claimRedPacket(
 
     const { claim_transaction_hash } = await getProvider()
         .claim(id, passwords, claimWithWallet, Web3Utils.sha3(claimWithWallet))
-        .catch(async e => {
+        .catch(async (e) => {
             console.log(e.message)
             if ((e.message as string).includes('insufficient funds for gas')) {
-                const wallet = (await getWallets())[0].find(x => x.address === claimWithWallet)!
+                const wallet = (await getWallets())[0].find((x) => x.address === claimWithWallet)!
                 const { privateKey } = await recoverWallet(wallet.mnemonic, wallet.passphrase)
                 return getProvider().claimByServer(claimWithWallet, privateKey, rec.raw_payload!)
             }
@@ -315,7 +312,7 @@ export async function onRefundResult(id: { redPacketID: string }, details: { rem
 export async function redPacketSyncInit() {
     const t = createTransaction(await createWalletDBAccess(), 'readonly')('RedPacket')
     const recs = await t.objectStore('RedPacket').getAll()
-    recs.forEach(x => {
+    recs.forEach((x) => {
         if (x.claim_transaction_hash && x.status === RedPacketStatus.claim_pending) {
             getProvider().watchClaimResult({ databaseID: x.id, transactionHash: x.claim_transaction_hash })
         }
@@ -337,10 +334,7 @@ export async function getRedPacketByID(
     id: string,
 ) {
     if (!t) t = createTransaction(await createWalletDBAccess(), 'readonly')('RedPacket')
-    const rec = await t
-        .objectStore('RedPacket')
-        .index('red_packet_id')
-        .get(id)
+    const rec = await t.objectStore('RedPacket').index('red_packet_id').get(id)
     assert(rec)
     return rec
 }

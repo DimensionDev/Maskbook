@@ -43,7 +43,7 @@ export default function InitStep2R() {
         <div style={{ alignSelf: 'stretch', textAlign: 'center', width: '100%' }}>
             <Table size="small" style={{ maxWidth: 250, margin: 'auto' }}>
                 <TableBody>
-                    {rows.map(row => (
+                    {rows.map((row) => (
                         <TableRow key={row.name}>
                             <TableCellNoBorder component="th" align="left">
                                 {row.name}

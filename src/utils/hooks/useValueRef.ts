@@ -10,7 +10,7 @@ export function useValueRef<T>(ref: ValueRef<T>) {
     const subscription = useMemo<Subscription<T>>(
         () => ({
             getCurrentValue: () => ref.value,
-            subscribe: callback => ref.addListener(callback),
+            subscribe: (callback) => ref.addListener(callback),
         }),
         [ref],
     )

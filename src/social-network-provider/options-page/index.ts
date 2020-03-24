@@ -20,23 +20,23 @@ const optionsPageUISelf = defineSocialNetworkUI({
             query(ref)
             MessageCenter.on('identityUpdated', () => query(ref))
             function query(ref: ValueRef<Profile[]>) {
-                Services.Identity.queryMyProfiles().then(p => (ref.value = p))
+                Services.Identity.queryMyProfiles().then((p) => (ref.value = p))
             }
         }
         {
             const ref = optionsPageUISelf.friendsRef
             MessageCenter.on(
                 'profilesChanged',
-                createDataWithIdentifierChangedListener(ref, e => hasFingerprint(e.of)),
+                createDataWithIdentifierChangedListener(ref, (e) => hasFingerprint(e.of)),
             )
-            Services.Identity.queryProfiles().then(p => (ref.value = p.filter(hasFingerprint)))
+            Services.Identity.queryProfiles().then((p) => (ref.value = p.filter(hasFingerprint)))
         }
         {
             const ref = optionsPageUISelf.myPersonasRef
             query(ref)
             MessageCenter.on('personaUpdated', () => query(ref))
             function query(ref: ValueRef<Persona[]>) {
-                Services.Identity.queryMyPersonas().then(p => (ref.value = p))
+                Services.Identity.queryMyPersonas().then((p) => (ref.value = p))
             }
         }
     },

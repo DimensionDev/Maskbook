@@ -53,10 +53,10 @@ Object.assign(globalThis, { getUserPublicKeyFromBio, getUserPublicKeyFromProvePo
  * @param user Identifier
  */
 export const addPerson = memoizePromise(
-    async function(user: ProfileIdentifier): Promise<PersonaRecord> {
+    async function (user: ProfileIdentifier): Promise<PersonaRecord> {
         const person = await queryPersonaRecord(user)
         if (!person?.publicKey) return getUserPublicKeyFromNetwork(user)
         return person
     },
-    id => id.toText(),
+    (id) => id.toText(),
 )

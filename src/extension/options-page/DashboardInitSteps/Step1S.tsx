@@ -7,7 +7,7 @@ import ActionButton from '../DashboardComponents/ActionButton'
 import Services from '../../service'
 import { InitStep } from '../InitStep'
 
-const useStyles = makeStyles(theme =>
+const useStyles = makeStyles((theme) =>
     createStyles({
         input: {
             width: '100%',
@@ -59,7 +59,7 @@ export default function InitStep1S() {
                 InputLabelProps={{ shrink: true }}
                 variant="outlined"
                 value={name}
-                onChange={e => setName(e.target.value)}
+                onChange={(e) => setName(e.target.value)}
                 label="Name"
                 helperText=" "></TextField>
             <TextField
@@ -70,7 +70,7 @@ export default function InitStep1S() {
                 value={password}
                 placeholder={t('dashboard_password_hint')}
                 type="password"
-                onChange={e => setPassword(e.target.value)}
+                onChange={(e) => setPassword(e.target.value)}
                 label="Password"
                 helperText={t('dashboard_password_helper_text')}></TextField>
         </div>

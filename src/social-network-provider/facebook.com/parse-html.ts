@@ -8,12 +8,12 @@ export function parseFacebookStaticHTML(html: string): (HTMLElement | Document)[
     const rootDom = doc1.body.querySelector<HTMLDivElement>('#root')
     if (codeDom) {
         const nodes = Array.from(doc1.body.querySelectorAll('code'))
-            .map(x => {
+            .map((x) => {
                 const comment = x.childNodes[0]
                 if (!comment) return null
                 return parser.parseFromString(comment.textContent || '', 'text/html')
             })
-            .filter(x => x)
+            .filter((x) => x)
         return nodes as Document[]
     }
 

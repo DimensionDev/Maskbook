@@ -28,7 +28,7 @@ interface Props {
     tokens: ERC20TokenRecord[]
 }
 
-const useStyles = makeStyles(theme =>
+const useStyles = makeStyles((theme) =>
     createStyles({
         card: {
             width: '100%',
@@ -114,7 +114,7 @@ export default function WalletCard({ wallet, tokens }: Props) {
         navigator.clipboard
             .writeText(wallet.address)
             .then(() => enqueueSnackbar(t('dashboard_item_copied'), { variant: 'success', autoHideDuration: 1000 }))
-            .catch(e => {
+            .catch((e) => {
                 enqueueSnackbar(t('dashboard_item_copy_failed'), { variant: 'error' })
             })
     }
@@ -157,12 +157,12 @@ export default function WalletCard({ wallet, tokens }: Props) {
                         <>
                             <TextField
                                 style={{ width: '100%', maxWidth: '320px' }}
-                                inputProps={{ onKeyPress: e => e.key === 'Enter' && doRenameWallet(e) }}
+                                inputProps={{ onKeyPress: (e) => e.key === 'Enter' && doRenameWallet(e) }}
                                 autoFocus
                                 variant="outlined"
                                 label="Name"
                                 defaultValue={wallet.name}
-                                onBlur={e => doRenameWallet(e)}></TextField>
+                                onBlur={(e) => doRenameWallet(e)}></TextField>
                         </>
                     )}
                 </Typography>
@@ -204,7 +204,7 @@ export default function WalletCard({ wallet, tokens }: Props) {
                     }
                 />
                 {Array.from(wallet.erc20_token_balance).map(([addr, amount]) => {
-                    const t = tokens.find(y => y.address === addr)
+                    const t = tokens.find((y) => y.address === addr)
                     return (
                         <WalletLine
                             key={addr}

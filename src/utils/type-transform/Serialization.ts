@@ -14,15 +14,15 @@ export function serializable<T, Q>(name: string, ser?: (x: T) => Q, des?: (x: Q)
         typeson.register({
             [name]:
                 ser && des
-                    ? [x => x instanceof constructor, ser, des]
+                    ? [(x) => x instanceof constructor, ser, des]
                     : [
-                          x => x instanceof constructor,
-                          x => {
+                          (x) => x instanceof constructor,
+                          (x) => {
                               const y = Object.assign({}, x)
-                              Object.getOwnPropertySymbols(y).forEach(x => delete y[x])
+                              Object.getOwnPropertySymbols(y).forEach((x) => delete y[x])
                               return typeson.encapsulate(y)
                           },
-                          x => {
+                          (x) => {
                               const y = typeson.revive(x)
                               Object.setPrototypeOf(y, constructor.prototype)
                               return y

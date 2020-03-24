@@ -80,7 +80,7 @@ beforeAll(() => {
 })
 
 afterEach(async () => {
-    await personaDBWriteAccess(async t => {
+    await personaDBWriteAccess(async (t) => {
         await t.objectStore('personas').clear()
         await t.objectStore('profiles').clear()
     })
@@ -88,7 +88,7 @@ afterEach(async () => {
 
 test('createPersonaDB & queryPersonaDB', async () => {
     const personaRecord = await createPersonaRecord()
-    await personaDBWriteAccess(t => createPersonaDB(personaRecord, t))
+    await personaDBWriteAccess((t) => createPersonaDB(personaRecord, t))
     expect(await queryPersonaDB(personaRecord.identifier)).toEqual(personaRecord)
 })
 
@@ -96,14 +96,14 @@ test('queryPersonasDB', async () => {
     const personaRecordA = await createPersonaRecord()
     const personaRecordB = await createPersonaRecord()
     const names = [personaRecordA.nickname, personaRecordB.nickname]
-    await personaDBWriteAccess(async t => {
+    await personaDBWriteAccess(async (t) => {
         await createPersonaDB(personaRecordA, t)
         await createPersonaDB(personaRecordB, t)
     })
 
-    const personaRecords = await queryPersonasDB(p => !!(p.nickname && names.includes(p.nickname)))
+    const personaRecords = await queryPersonasDB((p) => !!(p.nickname && names.includes(p.nickname)))
     expect(personaRecords.length).toBe(2)
-    expect(personaRecords.every(r => names.includes(r.nickname ?? ''))).toBeTruthy()
+    expect(personaRecords.every((r) => names.includes(r.nickname ?? ''))).toBeTruthy()
 })
 
 test('updatePersonaDB - replace linked profiles', async () => {
@@ -112,7 +112,7 @@ test('updatePersonaDB - replace linked profiles', async () => {
     const personaRecordNew = await createPersonaRecord(id, id)
     personaRecordNew.identifier = personaRecord.identifier
 
-    await personaDBWriteAccess(async t => {
+    await personaDBWriteAccess(async (t) => {
         await createPersonaDB(personaRecord, t)
         await updatePersonaDB(
             personaRecordNew,
@@ -128,10 +128,10 @@ test('updatePersonaDB - replace linked profiles', async () => {
 
 test('deletePersonaDB', async () => {
     const personaRecord = await createPersonaRecord()
-    await personaDBWriteAccess(t => createPersonaDB(personaRecord, t))
+    await personaDBWriteAccess((t) => createPersonaDB(personaRecord, t))
     expect(await queryPersonaDB(personaRecord.identifier)).toEqual(personaRecord)
 
-    await personaDBWriteAccess(t => deletePersonaDB(personaRecord.identifier, 'delete even with private', t))
+    await personaDBWriteAccess((t) => deletePersonaDB(personaRecord.identifier, 'delete even with private', t))
     expect(await queryPersonaDB(personaRecord.identifier)).toEqual(null)
 })
 
@@ -139,7 +139,7 @@ test('queryPersonaByProfileDB', async () => {
     const profileRecord = await createProfileRecord()
     const personaRecord = await createPersonaRecord()
     profileRecord.linkedPersona = personaRecord.identifier
-    await personaDBWriteAccess(async t => {
+    await personaDBWriteAccess(async (t) => {
         await createProfileDB(profileRecord, t)
         await createPersonaDB(personaRecord, t)
     })
@@ -150,11 +150,11 @@ test('queryPersonaByProfileDB', async () => {
 test('queryPersonasWithPrivateKey', async () => {
     const personaRecordA = await createPersonaRecord()
     const personaRecordB = await createPersonaRecord()
-    await personaDBWriteAccess(async t => {
+    await personaDBWriteAccess(async (t) => {
         await createPersonaDB(personaRecordA, t)
         await createPersonaDB(personaRecordB, t)
     })
-    const names = (await queryPersonasWithPrivateKey()).map(p => p.nickname)
+    const names = (await queryPersonasWithPrivateKey()).map((p) => p.nickname)
 
     expect(names.includes(personaRecordA.nickname)).toBe(true)
     expect(names.includes(personaRecordB.nickname)).toBe(true)
@@ -171,10 +171,10 @@ test('createOrUpdatePersonaDB', async () => {
 
     expect(await queryPersonaDB(personaRecord.identifier)).toEqual(null)
 
-    await personaDBWriteAccess(t => createOrUpdatePersonaDB(personaRecord, howToMerge, t))
+    await personaDBWriteAccess((t) => createOrUpdatePersonaDB(personaRecord, howToMerge, t))
     expect(await queryPersonaDB(personaRecord.identifier)).toEqual(personaRecord)
 
-    await personaDBWriteAccess(t => createOrUpdatePersonaDB(personaRecordNew, howToMerge, t))
+    await personaDBWriteAccess((t) => createOrUpdatePersonaDB(personaRecordNew, howToMerge, t))
     expect(await queryPersonaDB(personaRecord.identifier)).toEqual(personaRecordNew)
 })
 
@@ -185,18 +185,18 @@ test('safeDeletePersonaDB', async () => {
         explicitUndefinedField: 'delete field',
     } as Parameters<typeof updatePersonaDB>[1]
 
-    await personaDBWriteAccess(t => createPersonaDB(personaRecord, t))
+    await personaDBWriteAccess((t) => createPersonaDB(personaRecord, t))
     expect(await queryPersonaDB(personaRecord.identifier)).toEqual(personaRecord)
 
     personaRecord.linkedProfiles.clear()
-    await personaDBWriteAccess(async t => {
+    await personaDBWriteAccess(async (t) => {
         await updatePersonaDB(personaRecord, howToMerge, t)
         await safeDeletePersonaDB(personaRecord.identifier, t)
     })
     expect(await queryPersonaDB(personaRecord.identifier)).toEqual(personaRecord)
 
     personaRecord.privateKey = undefined
-    await personaDBWriteAccess(async t => {
+    await personaDBWriteAccess(async (t) => {
         await updatePersonaDB(personaRecord, howToMerge, t)
         await safeDeletePersonaDB(personaRecord.identifier, t)
     })
@@ -205,7 +205,7 @@ test('safeDeletePersonaDB', async () => {
 
 test('createProfileDB && queryProfileDB', async () => {
     const profileRecord = await createProfileRecord()
-    await personaDBWriteAccess(t => createProfileDB(profileRecord, t))
+    await personaDBWriteAccess((t) => createProfileDB(profileRecord, t))
     expect(await queryProfileDB(profileRecord.identifier)).toEqual(profileRecord)
 })
 
@@ -214,14 +214,14 @@ test('queryProfilesDB', async () => {
     const profileRecordB = await createProfileRecord()
     const nicknames = [profileRecordA.nickname, profileRecordB.nickname]
     const networkIds = [profileRecordA.identifier.network, profileRecordB.identifier.network]
-    await personaDBWriteAccess(async t => {
+    await personaDBWriteAccess(async (t) => {
         await createProfileDB(profileRecordA, t)
         await createProfileDB(profileRecordB, t)
     })
 
-    const profileRecords = await queryProfilesDB(p => networkIds.includes(p.identifier.network))
+    const profileRecords = await queryProfilesDB((p) => networkIds.includes(p.identifier.network))
     expect(profileRecords.length).toBe(2)
-    expect(profileRecords.every(r => nicknames.includes(r.nickname ?? ''))).toBeTruthy()
+    expect(profileRecords.every((r) => nicknames.includes(r.nickname ?? ''))).toBeTruthy()
 })
 
 test('updateProfileDB', async () => {
@@ -229,7 +229,7 @@ test('updateProfileDB', async () => {
     const profileRecordNew = await createProfileRecord()
     profileRecordNew.identifier = profileRecord.identifier
 
-    await personaDBWriteAccess(async t => {
+    await personaDBWriteAccess(async (t) => {
         await createProfileDB(profileRecord, t)
         await updateProfileDB(profileRecordNew, t)
     })
@@ -244,10 +244,10 @@ test('createOrUpdateProfileDB', async () => {
 
     expect(await queryProfileDB(profileRecord.identifier)).toEqual(null)
 
-    await personaDBWriteAccess(t => createOrUpdateProfileDB(profileRecord, t))
+    await personaDBWriteAccess((t) => createOrUpdateProfileDB(profileRecord, t))
     expect(await queryProfileDB(profileRecord.identifier)).toEqual(profileRecord)
 
-    await personaDBWriteAccess(t => createOrUpdateProfileDB(profileRecordNew, t))
+    await personaDBWriteAccess((t) => createOrUpdateProfileDB(profileRecordNew, t))
     expect(await queryProfileDB(profileRecord.identifier)).toEqual(profileRecordNew)
 })
 
@@ -255,7 +255,7 @@ test('attachProfileDB && detachProfileDB', async () => {
     const profileRecord = await createProfileRecord()
     const personaRecord = await createPersonaRecord()
 
-    await personaDBWriteAccess(async t => {
+    await personaDBWriteAccess(async (t) => {
         await createPersonaDB(personaRecord, t)
         await attachProfileDB(
             profileRecord.identifier,
@@ -272,9 +272,9 @@ test('attachProfileDB && detachProfileDB', async () => {
 test('deleteProfileDB', async () => {
     const profileRecord = await createProfileRecord()
 
-    await personaDBWriteAccess(t => createProfileDB(profileRecord, t))
+    await personaDBWriteAccess((t) => createProfileDB(profileRecord, t))
     expect(await queryProfileDB(profileRecord.identifier)).toEqual(profileRecord)
 
-    await personaDBWriteAccess(t => deleteProfileDB(profileRecord.identifier, t))
+    await personaDBWriteAccess((t) => deleteProfileDB(profileRecord.identifier, t))
     expect(await queryProfileDB(profileRecord.identifier)).toEqual(null)
 })

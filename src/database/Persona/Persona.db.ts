@@ -141,11 +141,8 @@ export async function queryPersonasWithPrivateKey(
     records.push(
         // ? WKWebview bug https://bugs.webkit.org/show_bug.cgi?id=177350
         ...(webpackEnv.target === 'WKWebview'
-            ? (await t.objectStore('personas').getAll()).filter(obj => obj.hasPrivateKey === 'yes')
-            : await t
-                  .objectStore('personas')
-                  .index('hasPrivateKey')
-                  .getAll(IDBKeyRange.only('yes'))
+            ? (await t.objectStore('personas').getAll()).filter((obj) => obj.hasPrivateKey === 'yes')
+            : await t.objectStore('personas').index('hasPrivateKey').getAll(IDBKeyRange.only('yes'))
         ).map(personaRecordOutDb),
     )
     return records as PersonaRecordWithPrivateKey[]
@@ -283,11 +280,8 @@ export async function queryProfilesDB(
         // ? WKWebview bug https://bugs.webkit.org/show_bug.cgi?id=177350
         result.push(
             ...(webpackEnv.target === 'WKWebview'
-                ? (await t.objectStore('profiles').getAll()).filter(obj => obj.network === network)
-                : await t
-                      .objectStore('profiles')
-                      .index('network')
-                      .getAll(IDBKeyRange.only(network))
+                ? (await t.objectStore('profiles').getAll()).filter((obj) => obj.network === network)
+                : await t.objectStore('profiles').index('network').getAll(IDBKeyRange.only(network))
             ).map(profileOutDB),
         )
     } else {
@@ -396,7 +390,7 @@ export async function attachProfileDB(
  */
 export async function deleteProfileDB(id: ProfileIdentifier, t: ProfileTransaction<'readwrite'>): Promise<void> {
     await t.objectStore('profiles').delete(id.toText())
-    queryProfile(id).then(of => MessageCenter.emit('profilesChanged', [{ reason: 'delete', of } as const]))
+    queryProfile(id).then((of) => MessageCenter.emit('profilesChanged', [{ reason: 'delete', of } as const]))
 }
 
 //#endregion

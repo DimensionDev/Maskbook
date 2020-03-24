@@ -34,7 +34,7 @@ export function PersonaCreateDialog() {
     const history = useHistory()
 
     const createPersona = () => {
-        Services.Identity.createPersonaByMnemonic(name, password).then(persona => {
+        Services.Identity.createPersonaByMnemonic(name, password).then((persona) => {
             history.replace(`created?identifier=${encodeURIComponent(persona.toText())}`)
         })
     }
@@ -47,7 +47,7 @@ export function PersonaCreateDialog() {
                 required
                 variant="outlined"
                 value={name}
-                onChange={e => setName(e.target.value)}
+                onChange={(e) => setName(e.target.value)}
                 helperText=" "
                 label="Name"
             />
@@ -60,7 +60,7 @@ export function PersonaCreateDialog() {
                 helperText={t('dashboard_password_helper_text')}
                 placeholder={t('dashboard_password_hint')}
                 value={password}
-                onChange={e => setPassword(e.target.value)}
+                onChange={(e) => setPassword(e.target.value)}
             />
         </div>
     )
@@ -171,7 +171,7 @@ export function PersonaBackupDialog(props: PersonaBackupDialogProps) {
             noPosts: true,
             noUserGroups: true,
             filter: { type: 'persona', wanted: [persona.identifier] },
-        }).then(file => {
+        }).then((file) => {
             setBase64Value(encodeArrayBuffer(encodeText(JSON.stringify(file))))
             setCompressedQRString(compressBackupFile(file))
         })
@@ -254,7 +254,7 @@ export function PersonaImportDialog() {
         } else if (tabState === 1) {
             Promise.resolve()
                 .then(() => JSON.parse(decodeText(decodeArrayBuffer(base64Value))))
-                .then(object => Services.Welcome.restoreBackup(object))
+                .then((object) => Services.Welcome.restoreBackup(object))
                 .then(() => setRestoreState('success'))
                 .catch(() => setRestoreState('failed'))
         }
@@ -263,7 +263,7 @@ export function PersonaImportDialog() {
     const importFromQR = (str: string) => {
         Promise.resolve()
             .then(() => UpgradeBackupJSONFile(decompressBackupFile(str)))
-            .then(object => Services.Welcome.restoreBackup(object!))
+            .then((object) => Services.Welcome.restoreBackup(object!))
             .then(() => setRestoreState('success'))
             .catch(() => setRestoreState('failed'))
     }
@@ -293,7 +293,7 @@ export function PersonaImportDialog() {
                     <>
                         <TextField
                             className={classes.input}
-                            onChange={e => setNickname(e.target.value)}
+                            onChange={(e) => setNickname(e.target.value)}
                             value={nickname}
                             required
                             label="Name"
@@ -303,13 +303,13 @@ export function PersonaImportDialog() {
                             className={classes.input}
                             required
                             value={mnemonicWordValue}
-                            onChange={e => setMnemonicWordValue(e.target.value)}
+                            onChange={(e) => setMnemonicWordValue(e.target.value)}
                             label="Mnemonic Words"
                             margin="dense"
                         />
                         <TextField
                             className={classes.input}
-                            onChange={e => setPassword(e.target.value)}
+                            onChange={(e) => setPassword(e.target.value)}
                             value={password}
                             label="Password"
                             placeholder={t('dashboard_password_optional_hint')}
@@ -326,7 +326,7 @@ export function PersonaImportDialog() {
                         style={{ width: '100%', minHeight: '100px' }}
                         inputRef={(input: HTMLInputElement) => input && input.focus()}
                         multiline
-                        onChange={e => setBase64Value(e.target.value)}
+                        onChange={(e) => setBase64Value(e.target.value)}
                         value={base64Value}></InputBase>
                 ),
             },

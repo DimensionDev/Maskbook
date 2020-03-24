@@ -18,7 +18,7 @@ import CloseIcon from '@material-ui/icons/Close'
 import classNames from 'classnames'
 import { Route } from 'react-router-dom'
 
-const useStyles = makeStyles(theme =>
+const useStyles = makeStyles((theme) =>
     createStyles({
         dialog: {
             backgroundColor: theme.palette.type === 'light' ? '#F7F8FA' : '#343434',

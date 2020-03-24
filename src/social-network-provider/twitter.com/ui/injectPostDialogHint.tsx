@@ -13,8 +13,8 @@ import { hasEditor, isCompose } from '../utils/postBox'
 export function injectPostDialogHintAtTwitter() {
     if (location.hostname.indexOf(twitterUrl.hostIdentifier) === -1) return
     const emptyNode = document.createElement('div')
-    renderPostDialogHintTo(postEditorInTimelineSelector().map(x => (hasEditor() ? x : emptyNode)))
-    renderPostDialogHintTo(postEditorInPopupSelector().map(x => (isCompose() && hasEditor() ? x : emptyNode)))
+    renderPostDialogHintTo(postEditorInTimelineSelector().map((x) => (hasEditor() ? x : emptyNode)))
+    renderPostDialogHintTo(postEditorInPopupSelector().map((x) => (isCompose() && hasEditor() ? x : emptyNode)))
 }
 
 function renderPostDialogHintTo<T>(ls: LiveSelector<T, true>) {

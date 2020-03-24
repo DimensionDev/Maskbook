@@ -26,9 +26,9 @@ export function getProfileIdentifierAtFacebook(
     try {
         if (!Array.isArray(links)) links = [links]
         const result = links
-            .filter(x => x)
-            .map(x => ({ nickname: x!.innerText, id: getUserID(x!.href), dom: x }))
-            .filter(x => x.id)
+            .filter((x) => x)
+            .map((x) => ({ nickname: x!.innerText, id: getUserID(x!.href), dom: x }))
+            .filter((x) => x.id)
         const { dom, id, nickname } = result[0] || {}
         if (id) {
             const result = new ProfileIdentifier('facebook.com', id)
@@ -68,8 +68,5 @@ function getUserID(x: string) {
         const search = new URLSearchParams(url.search)
         return search.get('id')
     }
-    return url.pathname
-        .replace(/^\//, '')
-        .replace(/\/$/, '')
-        .split('/')[0]
+    return url.pathname.replace(/^\//, '').replace(/\/$/, '').split('/')[0]
 }

@@ -79,7 +79,7 @@ export function DatabaseRestoreDialog() {
                                 if (!requiredPermissions) return history.push('/home')
                                 browser.permissions
                                     .request({ origins: requiredPermissions })
-                                    .then(granted =>
+                                    .then((granted) =>
                                         granted
                                             ? Services.Welcome.restoreBackup(json!)
                                             : Promise.reject(new Error('required permissions are not granted')),

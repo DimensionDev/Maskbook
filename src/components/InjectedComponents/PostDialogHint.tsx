@@ -12,7 +12,7 @@ import { useValueRef } from '../../utils/hooks/useValueRef'
 import { currentImmersiveSetupStatus } from '../shared-settings/settings'
 import { getActivatedUI } from '../../social-network/ui'
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
     content: {
         display: 'flex',
         alignItems: 'center',

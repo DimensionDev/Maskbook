@@ -35,7 +35,7 @@ export function AddToKeyStore({ provePost, postBy, ...props }: AddToKeyStoreProp
 type SuccessProps = Partial<AdditionalContentProps>
 type WaitingProps = Partial<AdditionalContentProps>
 type FailedProps = Partial<AdditionalContentProps> & { error: Error }
-const useStyle = makeStyles(theme => ({
+const useStyle = makeStyles((theme) => ({
     root: {
         display: 'inline-flex',
         lineHeight: '16px',

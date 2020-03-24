@@ -76,7 +76,7 @@ export function upgradeFromBackupJSONFileVersion1(json: BackupJSONFileVersion1):
     const userGroups: BackupJSONFileVersion2['userGroups'] = []
 
     function addPersona(record: Omit<typeof personas[0], 'createdAt' | 'updatedAt'>) {
-        const prev = personas.find(x => x.identifier === record.identifier)
+        const prev = personas.find((x) => x.identifier === record.identifier)
         if (prev) {
             Object.assign(prev, record)
             prev.linkedProfiles.push(...record.linkedProfiles)
@@ -84,7 +84,7 @@ export function upgradeFromBackupJSONFileVersion1(json: BackupJSONFileVersion1):
     }
 
     function addProfile(record: Omit<typeof profiles[0], 'createdAt' | 'updatedAt'>) {
-        const prev = profiles.find(x => x.identifier === record.identifier)
+        const prev = profiles.find((x) => x.identifier === record.identifier)
         if (prev) {
             Object.assign(prev, record)
         } else profiles.push({ ...record, updatedAt: 0, createdAt: 0 })
@@ -95,7 +95,7 @@ export function upgradeFromBackupJSONFileVersion1(json: BackupJSONFileVersion1):
         detail: NonNullable<NonNullable<BackupJSONFileVersion1['people']>[0]['groups']>[0],
     ) {
         const groupId = new GroupIdentifier(detail.network, detail.virtualGroupOwner, detail.groupID).toText()
-        const prev = userGroups.find(x => x.identifier === groupId)
+        const prev = userGroups.find((x) => x.identifier === groupId)
         if (prev) {
             prev.members.push(member.toText())
         } else {
@@ -136,10 +136,10 @@ export function upgradeFromBackupJSONFileVersion1(json: BackupJSONFileVersion1):
             publicKey: x.publicKey,
             nickname: x.nickname,
         })
-        x.groups?.forEach(y => addProfileToGroup(profile, y))
+        x.groups?.forEach((y) => addProfileToGroup(profile, y))
     }
 
-    userGroups.forEach(x => {
+    userGroups.forEach((x) => {
         x.members = Array.from(new Set(x.members))
     })
 

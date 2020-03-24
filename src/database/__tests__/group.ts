@@ -82,5 +82,5 @@ test('queryUserGroupsDatabase', async () => {
     expect(await queryUserGroupsDatabase({ network: groupRecordB.identifier.network })).toEqual([
         groupRecordToDB(groupRecordB),
     ])
-    expect(await queryUserGroupsDatabase(key => networks.includes(key.network))).toBeTruthy()
+    expect(await queryUserGroupsDatabase((key) => networks.includes(key.network))).toBeTruthy()
 })

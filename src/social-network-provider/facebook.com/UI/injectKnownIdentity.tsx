@@ -58,7 +58,7 @@ export function injectKnownIdentityAtFacebook(this: SocialNetworkUI) {
         .setDOMProxyOption({
             afterShadowRootInit: { mode: 'closed' },
         })
-        .useForeach(content => {
+        .useForeach((content) => {
             const bioRef = new ValueRef(content.innerText)
             const pageOwnerRef = new ValueRef<ProfileIdentifier | null>(getCurrentIdentity())
             const unmount = renderInShadowRoot(<PersonKnownAtFacebook pageOwner={pageOwnerRef} bioContent={bioRef} />, {

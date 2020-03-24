@@ -22,15 +22,15 @@ const memoGetWalletBalance = memoizePromise(
     (addr: string) => {
         return getWalletProvider()
             .queryBalance(addr)
-            .then(x => onWalletBalanceUpdated(addr, x))
+            .then((x) => onWalletBalanceUpdated(addr, x))
     },
-    x => x,
+    (x) => x,
 )
 const memoQueryERC20Token = memoizePromise(
     (addr: string, erc20Addr: string) => {
         return getWalletProvider()
             .queryERC20TokenBalance(addr, erc20Addr)
-            .then(x => onWalletERC20TokenBalanceUpdated(addr, erc20Addr, x))
+            .then((x) => onWalletERC20TokenBalanceUpdated(addr, erc20Addr, x))
             .catch(() => {
                 // do nothing
             })
@@ -62,11 +62,11 @@ export async function getWallets(): Promise<[(WalletRecord & { privateKey: strin
     }
     return [
         await Promise.all(
-            wallets.map(async x => ({
+            wallets.map(async (x) => ({
                 ...x,
                 privateKey: '0x' + buf2hex((await recoverWallet(x.mnemonic, x.passphrase)).privateKey),
             })),
-        ).then(wallets => wallets.sort((a, b) => (a._wallet_is_default ? -1 : b._wallet_is_default ? 1 : 0))),
+        ).then((wallets) => wallets.sort((a, b) => (a._wallet_is_default ? -1 : b._wallet_is_default ? 1 : 0))),
         tokens,
     ]
 }
@@ -74,7 +74,7 @@ export async function getWallets(): Promise<[(WalletRecord & { privateKey: strin
 export async function getDefaultWallet(): Promise<WalletRecord> {
     const t = createTransaction(await createWalletDBAccess(), 'readonly')('Wallet')
     const wallets = await t.objectStore('Wallet').getAll()
-    const wallet = wallets.find(wallet => wallet._wallet_is_default) || wallets.length === 0 ? null : wallets[0]
+    const wallet = wallets.find((wallet) => wallet._wallet_is_default) || wallets.length === 0 ? null : wallets[0]
     if (!wallet) throw new Error('no wallet')
     return wallet
 }
@@ -82,7 +82,7 @@ export async function getDefaultWallet(): Promise<WalletRecord> {
 export async function setDefaultWallet(address: WalletRecord['address']) {
     const t = createTransaction(await createWalletDBAccess(), 'readwrite')('Wallet')
     const wallets = await t.objectStore('Wallet').getAll()
-    wallets.forEach(wallet => {
+    wallets.forEach((wallet) => {
         if (wallet._wallet_is_default) wallet._wallet_is_default = false
         if (wallet.address === address) wallet._wallet_is_default = true
         t.objectStore('Wallet').put(wallet)
@@ -103,7 +103,7 @@ export async function importNewWallet(
     const { address } = await recoverWallet(rec.mnemonic, rec.passphrase)
     const bal = await getWalletProvider()
         .queryBalance(address)
-        .catch(x => undefined)
+        .catch((x) => undefined)
     const record: WalletRecord = {
         ...rec,
         address,

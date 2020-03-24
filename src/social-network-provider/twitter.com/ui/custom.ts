@@ -94,7 +94,7 @@ function clamp(num: number, min: number, max: number) {
 }
 
 function shade(channels: RGB, percentage: number): RGB {
-    return channels.map(c => clamp(Math.floor((c * (100 + percentage)) / 100), 0, 255)) as RGB
+    return channels.map((c) => clamp(Math.floor((c * (100 + percentage)) / 100), 0, 255)) as RGB
 }
 
 function getBackgroundColor(element: HTMLElement | HTMLBodyElement) {

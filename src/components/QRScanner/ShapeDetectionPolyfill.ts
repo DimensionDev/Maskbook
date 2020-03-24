@@ -19,7 +19,7 @@ class BarcodeDetectorPolyfill implements BarcodeDetector {
         }
         ctx.drawImage(mediaSource, 0, 0)
         const d = ctx.getImageData(0, 0, canvas.width, canvas.height)
-        return new Promise<DetectedBarcode[]>(resolve => {
+        return new Promise<DetectedBarcode[]>((resolve) => {
             worker.postMessage([d.data, canvas.width, canvas.height])
             worker.onmessage = (ev: MessageEvent) => {
                 if (isNull(ev.data)) {
@@ -33,7 +33,7 @@ class BarcodeDetectorPolyfill implements BarcodeDetector {
             worker.onerror = (err: ErrorEvent) => {
                 resolve([])
             }
-        }).then(detected => {
+        }).then((detected) => {
             worker.onmessage = noop
             worker.onerror = noop
             return detected

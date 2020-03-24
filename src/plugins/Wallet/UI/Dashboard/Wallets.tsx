@@ -95,7 +95,7 @@ export default function DashboardWalletsPage() {
     const [tokens, setTokens] = useState<ERC20TokenRecord[]>([])
     useEffect(() => {
         const query = () =>
-            Services.Plugin.invokePlugin('maskbook.wallet', 'getWallets').then(x => {
+            Services.Plugin.invokePlugin('maskbook.wallet', 'getWallets').then((x) => {
                 setWallets(x[0])
                 setTokens(x[1])
             })
@@ -113,7 +113,7 @@ export default function DashboardWalletsPage() {
                     My Wallets
                 </Typography>
                 <div>
-                    {wallets.map(i => (
+                    {wallets.map((i) => (
                         <Card key={i.address} className={classes.identity} raised elevation={1}>
                             <WalletCard tokens={tokens} wallet={i} />
                         </Card>

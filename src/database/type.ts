@@ -68,8 +68,9 @@ export abstract class Identifier {
         }
         const err = new Err(
             new TypeError(
-                `Can't cast to Identifier. Expected: ${constructor?.name ||
-                    'Any Identifier'}, Try to convert from string: ${id}`,
+                `Can't cast to Identifier. Expected: ${
+                    constructor?.name || 'Any Identifier'
+                }, Try to convert from string: ${id}`,
             ),
         )
         if (!constructor) return result ? new Ok(result) : err
@@ -79,7 +80,7 @@ export abstract class Identifier {
     }) as any
 
     static IdentifiersToString(a: Identifier[], isOrderImportant = false) {
-        const ax = a.map(x => x.toText())
+        const ax = a.map((x) => x.toText())
         if (!isOrderImportant) {
             ax.sort()
         }

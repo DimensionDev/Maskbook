@@ -6,7 +6,7 @@ import { SeeMyProvePost } from './DeveloperComponents/SeeMyProvePost'
 import { SelectEthereumNetwork } from '../../plugins/Wallet/UI/Developer/SelectEthereumNetwork'
 import { FriendsDeveloperMode } from './DeveloperComponents/Friends'
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
     root: {
         padding: theme.spacing(0, 2),
     },

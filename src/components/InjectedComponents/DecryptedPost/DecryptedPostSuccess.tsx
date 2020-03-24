@@ -41,7 +41,7 @@ export const DecryptPostSuccess = React.memo(function DecryptPostSuccess(props: 
     return (
         <AdditionalContent
             metadataRenderer={{
-                after: props => <RedPacketInDecryptedPost message={props.message} postIdentifier={postIdentifier} />,
+                after: (props) => <RedPacketInDecryptedPost message={props.message} postIdentifier={postIdentifier} />,
             }}
             header={<DecryptPostSuccessHeader {...props} shareMenu={shareMenu} />}
             message={data.content}

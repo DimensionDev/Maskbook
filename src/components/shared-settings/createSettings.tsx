@@ -21,7 +21,7 @@ function createInternalSettings<T extends browser.storage.StorageValue>(
     Object.assign(settings, {
         ready: false,
         readyPromise: new Promise(
-            resolve =>
+            (resolve) =>
                 (ready = () => {
                     resolve()
                     settings.ready = true
@@ -32,7 +32,7 @@ function createInternalSettings<T extends browser.storage.StorageValue>(
     const instanceKey = `${storage}+${key}`
     update(instanceKey)
 
-    settings.addListener(async newVal => {
+    settings.addListener(async (newVal) => {
         const stored = ((await browser.storage.local.get(null))[storage] as object) || {}
         await browser.storage.local.set({
             [storage]: { ...stored, [key]: newVal },

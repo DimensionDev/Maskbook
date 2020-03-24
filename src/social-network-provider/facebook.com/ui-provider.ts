@@ -41,7 +41,7 @@ export const facebookUISelf = defineSocialNetworkUI({
         return browser.permissions.request({ origins: ['https://www.facebook.com/*', 'https://m.facebook.com/*'] })
     },
     setupAccount() {
-        facebookUISelf.requestPermission().then(granted => {
+        facebookUISelf.requestPermission().then((granted) => {
             if (granted) {
                 setStorage('facebook.com', { forceDisplayWelcome: true })
                 location.href = 'https://facebook.com/'

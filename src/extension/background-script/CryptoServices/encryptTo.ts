@@ -85,7 +85,7 @@ export async function encryptTo(
         postCryptoKey: postAESKey,
         recipients: recipients,
         foundAt: new Date(),
-        recipientGroups: to.filter(x => x instanceof GroupIdentifier) as GroupIdentifier[],
+        recipientGroups: to.filter((x) => x instanceof GroupIdentifier) as GroupIdentifier[],
     })
 
     const postAESKeyToken = encodeArrayBuffer(iv)

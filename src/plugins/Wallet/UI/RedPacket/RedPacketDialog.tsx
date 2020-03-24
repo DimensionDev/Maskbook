@@ -60,7 +60,7 @@ interface RedPacketDialogProps
     onDecline: () => void
 }
 
-const useNewPacketStyles = makeStyles(theme =>
+const useNewPacketStyles = makeStyles((theme) =>
     createStyles({
         line: {
             display: 'flex',
@@ -97,10 +97,10 @@ function NewPacketUI(props: RedPacketDialogProps & NewPacketProps) {
     const [, msgRef] = useCapturedInput(setMsg)
 
     const [send_per_share, setSendPerShare] = useState(0.01)
-    const [, perShareRef] = useCapturedInput(x => setSendPerShare(parseFloat(x)))
+    const [, perShareRef] = useCapturedInput((x) => setSendPerShare(parseFloat(x)))
 
     const [shares, setShares] = useState(5)
-    const [, sharesRef] = useCapturedInput(x => setShares(parseInt(x)))
+    const [, sharesRef] = useCapturedInput((x) => setShares(parseInt(x)))
 
     const rinkebyNetwork = useValueRef(debugModeSetting)
 
@@ -111,15 +111,15 @@ function NewPacketUI(props: RedPacketDialogProps & NewPacketProps) {
         type: 'eth',
     })
 
-    const selectedWallet = wallets === 'loading' ? undefined : wallets.find(x => x.address === selectedWalletAddress)
+    const selectedWallet = wallets === 'loading' ? undefined : wallets.find((x) => x.address === selectedWalletAddress)
 
     const availableTokens = Array.from(selectedWallet?.erc20_token_balance || [])
-        .filter(([address]) => tokens.find(x => x.address === address))
-        .map(([address, amount]) => ({ amount, ...tokens.find(x => x.address === address)! }))
+        .filter(([address]) => tokens.find((x) => x.address === address))
+        .map(([address, amount]) => ({ amount, ...tokens.find((x) => x.address === address)! }))
     const selectedToken =
         selectedTokenType.type === 'eth'
             ? undefined
-            : availableTokens.find(x => x.address === selectedTokenType.address)!
+            : availableTokens.find((x) => x.address === selectedTokenType.address)!
     const amountPreShareMaxBigint = selectedWallet
         ? selectedTokenType.type === 'eth'
             ? selectedWallet.eth_balance
@@ -141,7 +141,7 @@ function NewPacketUI(props: RedPacketDialogProps & NewPacketProps) {
         selectedWallet === undefined,
         send_total > (amountPreShareMaxNumber || 0),
     ]
-    const isSendButtonDisabled = isDisabled.some(x => x)
+    const isSendButtonDisabled = isDisabled.some((x) => x)
 
     React.useEffect(() => {
         if (selectedWalletAddress === undefined) {
@@ -187,13 +187,13 @@ function NewPacketUI(props: RedPacketDialogProps & NewPacketProps) {
                 <FormControl variant="filled" className={classes.input}>
                     <InputLabel>Wallet</InputLabel>
                     <Select
-                        onChange={e => setSelectedWallet(e.target.value as string)}
+                        onChange={(e) => setSelectedWallet(e.target.value as string)}
                         MenuProps={{ container: PortalShadowRoot }}
                         disabled={wallets === 'loading'}
                         value={selectedWalletAddress || ''}>
                         {wallets === 'loading'
                             ? null
-                            : wallets.map(x => (
+                            : wallets.map((x) => (
                                   <MenuItem key={x.address} value={x.address}>
                                       {x.name} ({x.address})
                                   </MenuItem>
@@ -205,7 +205,7 @@ function NewPacketUI(props: RedPacketDialogProps & NewPacketProps) {
                 <FormControl variant="filled" className={classes.input}>
                     <InputLabel>Token</InputLabel>
                     <Select
-                        onChange={e => {
+                        onChange={(e) => {
                             const v = e.target.value as string
                             if (v === 'eth') setSelectedTokenType({ type: 'eth' })
                             else setSelectedTokenType({ type: 'erc20', address: v })
@@ -215,7 +215,7 @@ function NewPacketUI(props: RedPacketDialogProps & NewPacketProps) {
                         <MenuItem key="eth" value="eth">
                             ETH
                         </MenuItem>
-                        {availableTokens.map(x => (
+                        {availableTokens.map((x) => (
                             <MenuItem disabled={typeof x.amount !== 'bigint'} key={x.address} value={x.address}>
                                 {x.name} ({x.symbol})
                             </MenuItem>
@@ -227,7 +227,7 @@ function NewPacketUI(props: RedPacketDialogProps & NewPacketProps) {
                     <Select
                         MenuProps={{ container: PortalShadowRoot }}
                         value={is_random ? 1 : 0}
-                        onChange={e => setIsRandom(e.target.value as number)}>
+                        onChange={(e) => setIsRandom(e.target.value as number)}>
                         <MenuItem value={0}>Average</MenuItem>
                         <MenuItem value={1}>Random</MenuItem>
                     </Select>
@@ -294,7 +294,7 @@ function NewPacketUI(props: RedPacketDialogProps & NewPacketProps) {
     )
 }
 
-const useExistingPacketStyles = makeStyles(theme =>
+const useExistingPacketStyles = makeStyles((theme) =>
     createStyles({
         wrapper: {
             display: 'flex',
@@ -335,7 +335,7 @@ function ExistingPacketUI(props: RedPacketDialogProps & ExistingPacketProps) {
     const insertRedPacket = (status?: RedPacketStatus | null, rpid?: RedPacketRecord['red_packet_id']) => {
         if (status === null) return onSelectExistingPacket(null)
         if (status === 'pending' || !rpid) return
-        Services.Plugin.invokePlugin('maskbook.red_packet', 'getRedPacketByID', undefined, rpid).then(p =>
+        Services.Plugin.invokePlugin('maskbook.red_packet', 'getRedPacketByID', undefined, rpid).then((p) =>
             onSelectExistingPacket(p.raw_payload),
         )
     }
@@ -348,7 +348,7 @@ function ExistingPacketUI(props: RedPacketDialogProps & ExistingPacketProps) {
             {justCreatedRedPacket && (
                 <RedPacketWithState onClick={insertRedPacket} redPacket={justCreatedRedPacket as RedPacketRecord} />
             )}
-            {redPackets.map(p => (
+            {redPackets.map((p) => (
                 <RedPacketWithState onClick={insertRedPacket} key={p.id} redPacket={p} />
             ))}
         </div>
@@ -422,10 +422,10 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
     React.useEffect(() => {
         const updateHandler = () => {
             Services.Plugin.invokePlugin('maskbook.red_packet', 'getRedPackets')
-                .then(packets => {
-                    setJustCreatedRedPacket(packets.find(p => p.id === preInitialRedPacket?.id))
+                .then((packets) => {
+                    setJustCreatedRedPacket(packets.find((p) => p.id === preInitialRedPacket?.id))
                     return packets.filter(
-                        p =>
+                        (p) =>
                             p.id !== preInitialRedPacket?.id &&
                             p.create_transaction_hash &&
                             (p.status === 'normal' ||

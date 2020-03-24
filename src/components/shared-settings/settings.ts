@@ -55,7 +55,7 @@ export const languageSettings = createNewSettings<Language>(
 
 const createProxiedSettings = <T extends string = string>(settingsKey: string) => {
     const target: { [key: string]: ValueRef<string> } = {}
-    MessageCenter.on('settingsCreated', updatedKey => {
+    MessageCenter.on('settingsCreated', (updatedKey) => {
         if (!(updatedKey in target)) {
             target[updatedKey] = createNetworkSpecificSettings<string>(updatedKey, settingsKey, '')
         }

@@ -72,7 +72,7 @@ export default function AbstractTab(props: AbstractTabProps) {
                     indicatorColor="primary"
                     textColor="primary"
                     variant="fullWidth">
-                    {tabs.map(tab => (
+                    {tabs.map((tab) => (
                         <Tab classes={{ selected: classes.tabSelected }} label={tab.label} key={tab.label} />
                     ))}
                 </Tabs>

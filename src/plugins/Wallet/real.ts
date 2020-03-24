@@ -218,7 +218,7 @@ export const redPacketAPI = {
                 fromBlock: blockNumber,
                 toBlock: blockNumber,
             })
-            const claimSuccessEv = evs.find(ev => ev.transactionHash === id.transactionHash)
+            const claimSuccessEv = evs.find((ev) => ev.transactionHash === id.transactionHash)
 
             if (claimSuccessEv) {
                 const { id: return_id, claimer, claimed_value } = claimSuccessEv.returnValues as {
@@ -237,15 +237,15 @@ export const redPacketAPI = {
             }
             return
         })
-            .then(results => {
-                if (!results.some(r => r)) {
+            .then((results) => {
+                if (!results.some((r) => r)) {
                     onClaimResult(id, {
                         type: 'failed',
                         reason: 'timeout',
                     })
                 }
             })
-            .catch(e => {
+            .catch((e) => {
                 onClaimResult(id, {
                     type: 'failed',
                     reason: e.message,
@@ -264,7 +264,7 @@ export const redPacketAPI = {
                 fromBlock: blockNumber,
                 toBlock: blockNumber,
             })
-            const creationSuccessEv = evs.find(ev => ev.transactionHash === id.transactionHash)
+            const creationSuccessEv = evs.find((ev) => ev.transactionHash === id.transactionHash)
 
             if (creationSuccessEv) {
                 const { total, id: return_id, creator, creation_time } = creationSuccessEv.returnValues as {
@@ -285,15 +285,15 @@ export const redPacketAPI = {
             }
             return
         })
-            .then(results => {
-                if (!results.some(r => r)) {
+            .then((results) => {
+                if (!results.some((r) => r)) {
                     onCreationResult(id, {
                         type: 'failed',
                         reason: 'timeout',
                     })
                 }
             })
-            .catch(e => {
+            .catch((e) => {
                 onCreationResult(id, {
                     type: 'failed',
                     reason: e.message,
@@ -362,7 +362,7 @@ export const redPacketAPI = {
         if (!packet) {
             throw new Error(`can not find red packet with id: ${id}`)
         }
-        if (wallets.every(wallet => wallet.address !== packet.sender_address)) {
+        if (wallets.every((wallet) => wallet.address !== packet.sender_address)) {
             throw new Error('can not find available wallet')
         }
 
@@ -408,7 +408,7 @@ export const redPacketAPI = {
                 fromBlock: blockNumber,
                 toBlock: blockNumber,
             })
-            const refundSuccessEv = evs.find(ev => ev.transactionHash === id.transactionHash)
+            const refundSuccessEv = evs.find((ev) => ev.transactionHash === id.transactionHash)
 
             if (refundSuccessEv) {
                 const { id, remaining_balance } = refundSuccessEv.returnValues as {
@@ -437,10 +437,7 @@ export const walletAPI = {
     },
     queryERC20TokenBalance(walletAddress: string, tokenAddress: string): Promise<bigint> {
         const erc20Contract = createERC20Contract(tokenAddress)
-        return erc20Contract.methods
-            .balanceOf(walletAddress)
-            .call()
-            .then(BigInt)
+        return erc20Contract.methods.balanceOf(walletAddress).call().then(BigInt)
     },
     async approveERC20Token(
         senderAddress: string,

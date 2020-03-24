@@ -32,7 +32,7 @@ async function test1toN(msg: string = Math.random().toString()) {
 
     const [bobDecrypt] = await decryptMessage1ToNByOther({
         version: -40,
-        AESKeyEncrypted: encrypted.othersAESKeyEncrypted.find(x => x.name === 'bob')!.key,
+        AESKeyEncrypted: encrypted.othersAESKeyEncrypted.find((x) => x.name === 'bob')!.key,
         authorsPublicKeyECDH: alice.publicKey,
         encryptedContent: encrypted.encryptedContent,
         iv: encrypted.iv,
@@ -43,7 +43,7 @@ async function test1toN(msg: string = Math.random().toString()) {
     try {
         await decryptMessage1ToNByOther({
             version: -40,
-            AESKeyEncrypted: encrypted.othersAESKeyEncrypted.find(x => x.name === 'bob')!.key,
+            AESKeyEncrypted: encrypted.othersAESKeyEncrypted.find((x) => x.name === 'bob')!.key,
             authorsPublicKeyECDH: alice.publicKey,
             encryptedContent: encrypted.encryptedContent,
             iv: encrypted.iv,

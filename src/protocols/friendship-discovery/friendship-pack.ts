@@ -61,7 +61,7 @@ export async function unpackFriendshipCertificate(
     packed: FriendshipCertificateEncryptedV1,
     privateKey: CryptoKey,
 ): Promise<null | FriendshipCertificateDecryptedV1> {
-    const ownPrivateKey = privateKey.usages.find(x => x === 'deriveKey') ? privateKey : await toECDH(privateKey)
+    const ownPrivateKey = privateKey.usages.find((x) => x === 'deriveKey') ? privateKey : await toECDH(privateKey)
     const packedCryptoKey = await import_ECDH_256k1_Key(packed.cryptoKey)
     const aes = await derive_AES_GCM_256_Key_From_ECDH_256k1_Keys(packedCryptoKey, ownPrivateKey)
     try {

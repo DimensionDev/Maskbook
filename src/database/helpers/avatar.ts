@@ -10,18 +10,18 @@ import { queryProfile } from '..'
  * ? Because of cross-origin restrictions, we cannot use blob url here. sad :(
  */
 export const getAvatarDataURL = memoizePromise(
-    async function(identifier: ProfileIdentifier | GroupIdentifier): Promise<string | undefined> {
+    async function (identifier: ProfileIdentifier | GroupIdentifier): Promise<string | undefined> {
         const buffer = await queryAvatarDB(identifier)
         if (!buffer) throw new Error('Avatar not found')
         return ArrayBufferToBase64(buffer)
     },
-    id => id.toText(),
+    (id) => id.toText(),
 )
 
 function ArrayBufferToBase64(buffer: ArrayBuffer) {
     const f = new Blob([buffer], { type: 'image/png' })
     const fr = new FileReader()
-    return new Promise<string>(resolve => {
+    return new Promise<string>((resolve) => {
         fr.onload = () => resolve(fr.result as string)
         fr.readAsDataURL(f)
     })

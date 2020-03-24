@@ -2,7 +2,7 @@ import React from 'react'
 
 import { Button, Typography, makeStyles, createStyles } from '@material-ui/core'
 
-const useStyles = makeStyles(theme =>
+const useStyles = makeStyles((theme) =>
     createStyles({
         button: {
             width: 190,

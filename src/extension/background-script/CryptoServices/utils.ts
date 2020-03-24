@@ -105,6 +105,6 @@ export function extractTextFromTypedMessage(x: TypedMessage | null): Result<stri
     if (x === null) return Err.EMPTY
     if (x.type === 'text') return new Ok(x.content)
     if (x.type === 'complex')
-        return new Ok(x.items.map(extractTextFromTypedMessage).filter(x => x.ok && x.val.length > 0)[0].val as string)
+        return new Ok(x.items.map(extractTextFromTypedMessage).filter((x) => x.ok && x.val.length > 0)[0].val as string)
     return Err.EMPTY
 }

@@ -54,7 +54,7 @@ export function SettingsUI<T>(props: SettingsUIProps<T>) {
     }
 }
 
-const useListItemStyles = makeStyles(theme =>
+const useListItemStyles = makeStyles((theme) =>
     createStyles({
         container: { listStyleType: 'none', width: '100%' },
         secondaryAction: { paddingRight: 90 + theme.spacing(2) },
@@ -112,20 +112,20 @@ function useEnumSettings<Q extends object>(
 ): HookedUI<Q[keyof Q]> {
     const enum_ = Object.keys(enumObject)
         // Leave only key of enum
-        .filter(x => Number.isNaN(parseInt(x)))
-        .map(key => ({ key, value: enumObject[key as keyof Q] }))
+        .filter((x) => Number.isNaN(parseInt(x)))
+        .map((key) => ({ key, value: enumObject[key as keyof Q] }))
     const change = (value: any) => {
         if (!Number.isNaN(parseInt(value))) {
             value = parseInt(value)
         }
-        if (!enum_.some(x => x.value === value)) {
+        if (!enum_.some((x) => x.value === value)) {
             console.log(value)
             throw new Error('Invalid state')
         }
         ref.value = value
     }
     const ui = (
-        <Select {...selectProps} value={useValueRef(ref)} onChange={event => change(event.target.value)}>
+        <Select {...selectProps} value={useValueRef(ref)} onChange={(event) => change(event.target.value)}>
             {enum_.map(({ key, value }) => (
                 <MenuItem value={String(value)} key={String(key)}>
                     {getText?.(value) ?? String(key)}

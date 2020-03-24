@@ -61,10 +61,9 @@ export async function downloadBackup<T>(obj: T) {
     const blob = new Blob([buffer], { type: 'application/json' })
     const url = URL.createObjectURL(blob)
     const date = new Date()
-    const today = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date
-        .getDate()
+    const today = `${date.getFullYear()}-${(date.getMonth() + 1)
         .toString()
-        .padStart(2, '0')}`
+        .padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`
     browser.downloads.download({
         url,
         filename: `maskbook-keystore-backup-${today}.json`,

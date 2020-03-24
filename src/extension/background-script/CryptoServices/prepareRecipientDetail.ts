@@ -16,7 +16,9 @@ export async function prepareRecipientDetail(to: (ProfileIdentifier | GroupIdent
             } else if (who instanceof GroupIdentifier) {
                 const group = await queryUserGroup(who)
                 if (!group) return // ? should we throw?
-                await Promise.all(group.members.map(x => self(x, _, __, { type: 'group', at: new Date(), group: who })))
+                await Promise.all(
+                    group.members.map((x) => self(x, _, __, { type: 'group', at: new Date(), group: who })),
+                )
             } else {
                 throw new TypeError('Invalid recipients type')
             }

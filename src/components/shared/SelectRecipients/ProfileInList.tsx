@@ -34,7 +34,7 @@ export function ProfileInList(props: ProfileInListProps) {
     const profile = props.item
     const name = profile.nickname || profile.identifier.userId
     const secondary = profile.linkedPersona?.fingerprint ? profile.linkedPersona?.fingerprint.toLowerCase() : undefined
-    const onClick = useCallback(ev => props.onChange(ev, !props.checked), [props])
+    const onClick = useCallback((ev) => props.onChange(ev, !props.checked), [props])
 
     return (
         <ListItem

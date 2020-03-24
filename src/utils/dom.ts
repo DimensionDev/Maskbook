@@ -16,7 +16,7 @@ export const untilElementAvailable = async (ls: LiveSelector<HTMLElement, boolea
 
 export function untilDomLoaded() {
     if (document.readyState !== 'loading') return Promise.resolve()
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
         const callback = () => {
             if (document.readyState !== 'loading') {
                 resolve()
@@ -29,7 +29,7 @@ export function untilDomLoaded() {
 
 export function untilDocumentReady() {
     if (document.readyState === 'complete') return Promise.resolve()
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
         const callback = () => {
             if (document.readyState === 'complete') {
                 resolve()

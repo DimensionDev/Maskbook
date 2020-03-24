@@ -44,7 +44,7 @@ export function DecryptPostDeveloperMode() {
                     <DecryptPost
                         alreadySelectedPreviously={[]}
                         encryptedText={encryptedText}
-                        onDecrypted={post => {}}
+                        onDecrypted={(post) => {}}
                         profiles={[]}
                         postBy={postByMyself ? whoAmIIdentifier : authorIdentifier}
                         whoAmI={whoAmIIdentifier}

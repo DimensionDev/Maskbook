@@ -77,13 +77,13 @@ export function PostInspector(props: PostInspectorProps) {
                         // So should not create new data on version -40
                         type.encryptedPost.version === -40
                             ? undefined
-                            : async people => {
+                            : async (people) => {
                                   setAlreadySelectedPreviously(alreadySelectedPreviously.concat(people))
                                   return Services.Crypto.appendShareTarget(
                                       version,
                                       ownersAESKeyEncrypted,
                                       iv,
-                                      people.map(x => x.identifier),
+                                      people.map((x) => x.identifier),
                                       whoAmI!.identifier,
                                       { type: 'direct', at: new Date() },
                                   )

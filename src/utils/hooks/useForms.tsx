@@ -11,7 +11,7 @@ export function useTextField(label: string, props?: TextFieldProps) {
             fullWidth
             label={label}
             value={value}
-            onChange={e => setValue(e.currentTarget.value)}
+            onChange={(e) => setValue(e.currentTarget.value)}
             margin="normal"
             {..._props}
         />,
