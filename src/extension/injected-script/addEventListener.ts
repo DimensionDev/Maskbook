@@ -40,7 +40,7 @@ export interface CustomEvents {
                 const blob = new Blob([binary], { type: 'image/png' })
                 const file = new File([blob], 'image.png', { lastModified: Date.now(), type: 'image/png' })
                 const dt = new Proxy(new DataTransfer(), {
-                    get(target, key: keyof typeof target) {
+                    get(target, key: keyof DataTransfer) {
                         if (key === 'files') return [file]
                         if (key === 'types') return ['Files']
                         if (key === 'items')

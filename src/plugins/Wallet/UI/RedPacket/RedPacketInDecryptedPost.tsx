@@ -179,7 +179,7 @@ export function RedPacketInDecryptedPostClaimDialog(
         props.walletAddress,
         React.useState<undefined | string>(),
     )
-    const [defaultChecked, setDefaultChecked] = React.useState()
+    const [defaultChecked, setDefaultChecked] = React.useState(false)
     const claiming = props.claiming
     const classes = useStylesExtends(useStyles(), props)
     return (
