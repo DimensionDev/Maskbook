@@ -7,3 +7,14 @@ export async function* asyncIteratorWithResult<T, R, N>(iter: AsyncIterator<T, R
     } while (yielded.done === false)
     return
 }
+
+export function asyncIteratorToAsyncFunction<Args extends any[], T, R>(
+    f: (...args: Args) => AsyncIterator<T, R, undefined>,
+) {
+    return async function(...args: Args): Promise<R> {
+        for await (const _ of asyncIteratorWithResult(f(...args))) {
+            if (_.done) return _.value
+        }
+        throw new TypeError('Invalid iterator state')
+    }
+}

@@ -18,7 +18,10 @@ import { verifyOthersProve } from './verifyOthersProve'
 import { import_AES_GCM_256_Key } from '../../../utils/crypto.subtle'
 import { publicSharedAESKey } from '../../../crypto/crypto-alpha-38'
 import { DecryptFailedReason } from '../../../utils/constants'
-import { asyncIteratorWithResult } from '../../../utils/type-transform/asyncIteratorWithResult'
+import {
+    asyncIteratorWithResult,
+    asyncIteratorToAsyncFunction,
+} from '../../../utils/type-transform/asyncIteratorWithResult'
 import { sleep } from '@holoflows/kit/es/util/sleep'
 
 type Progress = {
@@ -382,14 +385,7 @@ async function* findAuthorPublicKey(
     return 'out of chance'
 }
 
-export async function decryptFrom(
-    ...args: Parameters<typeof decryptFromMessageWithProgress>
-): Promise<Success | Failure> {
-    for await (const _ of asyncIteratorWithResult(decryptFromMessageWithProgress(...args))) {
-        if (_.done) return _.value
-    }
-    throw new TypeError('Invalid iterator state')
-}
+export const decryptFrom = asyncIteratorToAsyncFunction(decryptFromMessageWithProgress)
 
 async function decryptFromCache(postPayload: Payload, by: ProfileIdentifier) {
     const { encryptedText, iv, version } = postPayload
