@@ -10,6 +10,8 @@ import { ProfileIdentifier, PostIdentifier } from '../../../database/type'
 import { useStylesExtends } from '../../custom-ui-helper'
 import { TypedMessage } from '../../../extension/background-script/CryptoServices/utils'
 import RedPacketInDecryptedPost from '../../../plugins/Wallet/UI/RedPacket/RedPacketInDecryptedPost'
+import CheckIcon from '@material-ui/icons/Check'
+import ClearIcon from '@material-ui/icons/Clear'
 
 export interface DecryptPostSuccessProps extends withClasses<KeysInferFromUseStyles<typeof useSuccessStyles>> {
     data: { signatureVerifyResult: boolean; content: TypedMessage }
@@ -25,8 +27,8 @@ const useSuccessStyles = makeStyles({
     header: { display: 'flex', alignItems: 'center' },
     addRecipientsTitle: { marginLeft: '0.25em', marginRight: '0.25em' },
     addRecipientsLink: { marginRight: '1em', cursor: 'pointer' },
-    signatureVerifyPassed: { color: 'green' },
-    signatureVerifyFailed: { color: 'red' },
+    signatureVerifyPassed: { color: 'green', display: 'flex' },
+    signatureVerifyFailed: { color: 'red', display: 'flex' },
 })
 
 export const DecryptPostSuccess = React.memo(function DecryptPostSuccess(props: DecryptPostSuccessProps) {
@@ -57,13 +59,7 @@ function DecryptPostSuccessHeader(props: { shareMenu: ReturnType<typeof useShare
         data,
         sharedPublic,
     } = props
-    let passString = t('decrypted_postbox_verified')
-    let failString = t('decrypted_postbox_not_verified')
-
-    if (useMediaQuery(theme.breakpoints.down('sm'))) {
-        passString = '✔'
-        failString = '❌'
-    }
+    const hideTips = !useMediaQuery(theme.breakpoints.down('sm'))
     return (
         <Typography variant="caption" color="textSecondary" gutterBottom className={classes.header}>
             <img alt="" width={16} height={16} src={getUrl('/maskbook-icon-padded.png')} />
@@ -76,9 +72,15 @@ function DecryptPostSuccessHeader(props: { shareMenu: ReturnType<typeof useShare
                 </Link>
             )}
             {data.signatureVerifyResult ? (
-                <span className={classes.signatureVerifyPassed}>{passString}</span>
+                <span className={classes.signatureVerifyPassed}>
+                    {hideTips ? t('decrypted_postbox_verified') : null}
+                    <CheckIcon fontSize="small" />
+                </span>
             ) : (
-                <span className={classes.signatureVerifyFailed}>{failString}</span>
+                <span className={classes.signatureVerifyFailed}>
+                    {hideTips ? t('decrypted_postbox_not_verified') : null}
+                    <ClearIcon fontSize="small" />
+                </span>
             )}
         </Typography>
     )

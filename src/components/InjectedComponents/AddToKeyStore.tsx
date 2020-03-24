@@ -4,6 +4,10 @@ import Services from '../../extension/service'
 import { useI18N } from '../../utils/i18n-next-ui'
 import { ProfileIdentifier } from '../../database/type'
 import { useAsync } from 'react-use'
+import CheckIcon from '@material-ui/icons/Check'
+import CloseIcon from '@material-ui/icons/Close'
+import { Typography, CircularProgress, makeStyles } from '@material-ui/core'
+import { getUrl } from '../../utils/utils'
 
 export interface AddToKeyStoreProps {
     provePost: string
@@ -31,20 +35,61 @@ export function AddToKeyStore({ provePost, postBy, ...props }: AddToKeyStoreProp
 type SuccessProps = Partial<AdditionalContentProps>
 type WaitingProps = Partial<AdditionalContentProps>
 type FailedProps = Partial<AdditionalContentProps> & { error: Error }
+const useStyle = makeStyles(theme => ({
+    root: {
+        display: 'inline-flex',
+        lineHeight: '16px',
+        '& > *': {
+            margin: theme.spacing(0, 0.5, 0, 0),
+        },
+    },
+}))
+const icon = <img alt="" width={16} height={16} src={getUrl('/maskbook-icon-padded.png')} />
 export const AddToKeyStoreUI = {
     success: React.memo((props: SuccessProps) => {
         const { t } = useI18N()
-        return <AdditionalContent header={t('add_to_key_store_success')} {...props} />
+        const classes = useStyle()
+        return (
+            <AdditionalContent
+                header={
+                    <Typography variant="caption" color="textSecondary" classes={classes}>
+                        {icon}
+                        <span>{t('add_to_key_store_success')}</span>
+                        <CheckIcon htmlColor="green" fontSize="small" />
+                    </Typography>
+                }
+                {...props}
+            />
+        )
     }),
     awaiting: React.memo((props: WaitingProps) => {
         const { t } = useI18N()
-        return <AdditionalContent header={t('add_to_key_store_verifying')} {...props} />
+        const classes = useStyle()
+        return (
+            <AdditionalContent
+                header={
+                    <Typography variant="caption" color="textSecondary" classes={classes}>
+                        {icon}
+                        <span>{t('add_to_key_store_verifying')}</span>
+                        <CircularProgress size={18} />
+                    </Typography>
+                }
+                {...props}
+            />
+        )
     }),
     failed: React.memo(({ error, ...props }: FailedProps) => {
         const { t } = useI18N()
+        const classes = useStyle()
         return (
             <AdditionalContent
-                header={t('add_to_key_store_failed_title')}
+                header={
+                    <Typography variant="caption" color="textSecondary" classes={classes}>
+                        {icon}
+                        <span>{t('add_to_key_store_failed_title')}</span>
+                        <CloseIcon color="error" fontSize="small" />
+                    </Typography>
+                }
                 message={(console.error(error), t('add_to_key_store_failed_text', { error: error.message }))}
                 {...props}
             />
