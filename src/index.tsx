@@ -43,7 +43,7 @@ import { useI18N } from './utils/i18n-next-ui'
 import i18nNextInstance from './utils/i18n-next'
 import { Settings as DashboardSettingsPage } from './extension/options-page/Settings/settings'
 
-const useStyles = makeStyles(theme =>
+const useStyles = makeStyles((theme) =>
     createStyles({
         wrapper: {
             display: 'flex',
@@ -135,7 +135,7 @@ function Dashboard() {
 
     const history = useHistory()
     const currentRouter = useLocation()
-    const index = routers.findIndex(i => currentRouter.pathname.startsWith(i[1]))
+    const index = routers.findIndex((i) => currentRouter.pathname.startsWith(i[1]))
     const value = index < 0 ? 0 : index
 
     const tabBar = (
@@ -147,7 +147,7 @@ function Dashboard() {
                 onChange={(e, v) => history.push(routers[v][1])}
                 indicatorColor="primary"
                 textColor="primary">
-                {routers.map(tab => (
+                {routers.map((tab) => (
                     <Tab
                         key={`dashboard-tab-${tab[0]}`}
                         className={classes.tabItem}

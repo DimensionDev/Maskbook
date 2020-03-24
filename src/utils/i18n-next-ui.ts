@@ -40,7 +40,7 @@ export function useI18N<NS extends keyof Namespaces = 'default'>(
     return useTranslation_(undefined, opt)
 }
 
-languageSettings.addListener(next => {
+languageSettings.addListener((next) => {
     i18nNextInstance.changeLanguage(next)
 })
 

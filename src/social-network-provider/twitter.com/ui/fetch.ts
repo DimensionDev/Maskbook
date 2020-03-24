@@ -104,8 +104,8 @@ const registerPostCollector = (self: SocialNetworkUI) => {
         }
         if (
             Array.from(node.querySelectorAll('span, a'))
-                .map(n => n.getAttribute('title') ?? '')
-                .some(url => twitterEncoding.payloadDecoder(url) !== 'null')
+                .map((n) => n.getAttribute('title') ?? '')
+                .some((url) => twitterEncoding.payloadDecoder(url) !== 'null')
         ) {
             return true
         }
@@ -143,7 +143,7 @@ const registerPostCollector = (self: SocialNetworkUI) => {
                 // decode steganographic image
                 untilElementAvailable(postsImageSelector(tweetNode), 10000)
                     .then(() => postImageParser(tweetNode))
-                    .then(content => {
+                    .then((content) => {
                         if (content && info.postContent.value.indexOf(content) < 0) {
                             info.postContent.value = content
                         }
@@ -152,7 +152,7 @@ const registerPostCollector = (self: SocialNetworkUI) => {
             }
             ;(async () => {
                 await collectPostInfo()
-                info.postPayload.addListener(payload => {
+                info.postPayload.addListener((payload) => {
                     if (!payload) return
                     Services.Identity.updateProfileInfo(info.postBy.value, {
                         nickname: info.nickname.value,
@@ -160,7 +160,7 @@ const registerPostCollector = (self: SocialNetworkUI) => {
                     }).then()
                 })
                 info.postPayload.value = deconstructPayload(info.postContent.value, self.payloadDecoder)
-                info.postContent.addListener(newValue => {
+                info.postContent.addListener((newValue) => {
                     info.postPayload.value = deconstructPayload(newValue, self.payloadDecoder)
                 })
                 self.posts.set(proxy, info)
@@ -171,7 +171,7 @@ const registerPostCollector = (self: SocialNetworkUI) => {
             }
         })
         .setDOMProxyOption({ afterShadowRootInit: { mode: 'closed' } })
-        .assignKeys(node => {
+        .assignKeys((node) => {
             const tweetNode = getTweetNode(node)
             const isQuotedTweet = tweetNode?.getAttribute('role') === 'blockquote'
             return tweetNode

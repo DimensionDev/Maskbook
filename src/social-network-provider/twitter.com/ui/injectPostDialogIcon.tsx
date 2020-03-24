@@ -12,7 +12,7 @@ import { useTwitterMaskbookIcon } from '../utils/theme'
 export function injectPostDialogIconAtTwitter() {
     if (location.hostname.indexOf(twitterUrl.hostIdentifier) === -1) return
     const emptyNode = document.createElement('div')
-    renderPostDialogIconTo(posteditorToolbarSeelctor().map(x => (isMobile() && isCompose() ? x : emptyNode)))
+    renderPostDialogIconTo(posteditorToolbarSeelctor().map((x) => (isMobile() && isCompose() ? x : emptyNode)))
 }
 
 function renderPostDialogIconTo<T>(ls: LiveSelector<T, true>) {

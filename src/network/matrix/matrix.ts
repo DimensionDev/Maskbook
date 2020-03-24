@@ -84,7 +84,7 @@ export class MatrixMessage {
         matrixClient
             .startClient({})
             .then(() => matrixClient.getUserId())
-            .then(id => (this.userID = id))
+            .then((id) => (this.userID = id))
 
         matrixClient.on(
             'Room.timeline',
@@ -129,7 +129,7 @@ export class MatrixMessage {
         f: MatrixMessageListener<T>,
         options?: { ignoreMyself?: boolean },
     ) {
-        const _f: typeof f = event => {
+        const _f: typeof f = (event) => {
             if (event.meta.matrix.sender === this.userID && options?.ignoreMyself) return
             f(event)
         }
@@ -167,12 +167,12 @@ import { sleep } from '@holoflows/kit/es/util/sleep'
 Object.assign(globalThis, { mat: self })
 console.log('mat\n', self)
 
-client1.then(x => {
-    x.on('maskbook.hello.world', f => {
+client1.then((x) => {
+    x.on('maskbook.hello.world', (f) => {
         console.log(f.payload)
     })
 })
 
 sleep(2000)
     .then(() => client2)
-    .then(x => x.emit({ type: 'alias', alias: room }, 'maskbook.hello.world', { message: 'hi' }))
+    .then((x) => x.emit({ type: 'alias', alias: room }, 'maskbook.hello.world', { message: 'hi' }))

@@ -12,7 +12,7 @@ export function memoizePromise<T extends (...args: Args) => PromiseLike<any>, Ar
 ) {
     if (resolver === undefined) resolver = ((x: any) => x) as any
     const memorizedFunction = memoize(
-        (async function(...args: Args) {
+        (async function (...args: Args) {
             try {
                 // ? DO NOT remove "await" here
                 return await f(...args)

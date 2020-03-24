@@ -57,7 +57,7 @@ function SimpleDialog(props: SimpleDialogProps) {
                     If MagicCode is not the same, it means at least one of Maskbook calculate the post hash wrong.
                 </DialogContentText>
                 <List dense>
-                    {props.friends.map(one => {
+                    {props.friends.map((one) => {
                         const [magicCode, fingerprint] = map.get(one.identifier.toText()) || ['Unknown', 'Unknown']
                         return (
                             <ListItem>

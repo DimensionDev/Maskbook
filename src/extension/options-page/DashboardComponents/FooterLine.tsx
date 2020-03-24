@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 )
 
-const FooterLink = function(props: React.PropsWithChildren<{ href: string; title?: string } | { to: string }>) {
+const FooterLink = function (props: React.PropsWithChildren<{ href: string; title?: string } | { to: string }>) {
     const classes = useStyles()
     return (
         <MuiLink

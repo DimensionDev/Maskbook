@@ -29,7 +29,7 @@ const useStyles = makeStyles({
 export function GroupInChip(props: GroupInChipProps) {
     const classes = useStyles()
     const onClick = useCallback(
-        ev => {
+        (ev) => {
             if (props.onChange) {
                 props.onChange(ev, !props.checked)
             }

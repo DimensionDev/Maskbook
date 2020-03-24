@@ -48,7 +48,7 @@ export const instanceOfTwitterUI = defineSocialNetworkUI({
         })
     },
     setupAccount: () => {
-        instanceOfTwitterUI.requestPermission().then(granted => {
+        instanceOfTwitterUI.requestPermission().then((granted) => {
             if (granted) {
                 setStorage(twitterUrl.hostIdentifier, { forceDisplayWelcome: true }).then()
                 location.href = twitterUrl.hostLeadingUrl

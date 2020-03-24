@@ -6,7 +6,7 @@ export const sharedProvider: SocialNetworkWorkerAndUIDefinition = {
     internalName: 'facebook',
     isDangerousNetwork: false,
     networkIdentifier: 'facebook.com',
-    isValidUsername: v => !!regularUsername(v),
+    isValidUsername: (v) => !!regularUsername(v),
     init() {},
     acceptablePayload: ['v40', 'v39', 'v38', 'latest'],
     gunNetworkHint: '',

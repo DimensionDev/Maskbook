@@ -99,11 +99,11 @@ export function PersonOrGroupInList(props: PersonOrGroupInListProps) {
 
 function useNickNamesFromList(preview: readonly ProfileIdentifier[]) {
     const people = useFriendsList()
-    const userWithNames = React.useMemo(() => people.filter(x => x.nickname), [people])
+    const userWithNames = React.useMemo(() => people.filter((x) => x.nickname), [people])
 
     const [x, y, z] = preview
-    const [a] = React.useMemo(() => x && userWithNames.filter(w => w.identifier.equals(x)), [userWithNames, x]) || []
-    const [b] = React.useMemo(() => y && userWithNames.filter(w => w.identifier.equals(y)), [userWithNames, y]) || []
-    const [c] = React.useMemo(() => z && userWithNames.filter(w => w.identifier.equals(z)), [userWithNames, z]) || []
-    return React.useMemo(() => [a, b, c].filter(x => x).map(x => x.nickname!), [a, b, c])
+    const [a] = React.useMemo(() => x && userWithNames.filter((w) => w.identifier.equals(x)), [userWithNames, x]) || []
+    const [b] = React.useMemo(() => y && userWithNames.filter((w) => w.identifier.equals(y)), [userWithNames, y]) || []
+    const [c] = React.useMemo(() => z && userWithNames.filter((w) => w.identifier.equals(z)), [userWithNames, z]) || []
+    return React.useMemo(() => [a, b, c].filter((x) => x).map((x) => x.nickname!), [a, b, c])
 }

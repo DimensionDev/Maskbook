@@ -83,7 +83,7 @@ const avatar = /"profile_image_url_https":"(.*?)"/
  * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/match
  */
 const p = (regex: RegExp, index: number) => {
-    return base.clone().map(x => regexMatch(x.innerText, regex, index))
+    return base.clone().map((x) => regexMatch(x.innerText, regex, index))
 }
 export const selfInfoSelectors = () => ({
     handle: p(handle, 1),

@@ -249,7 +249,7 @@ export async function* decryptFromMessageWithProgress(
                 iv,
                 minePublic,
                 getNetworkWorker(author).gunNetworkHint,
-                async key => {
+                async (key) => {
                     console.log('New key received, trying', key)
                     try {
                         const result = await decryptWith(key)
@@ -351,7 +351,7 @@ async function* findAuthorPublicKey(
                     undo()
                     reject()
                 }
-                const undo = Gun2.subscribePersonFromGun2(by, data => {
+                const undo = Gun2.subscribePersonFromGun2(by, (data) => {
                     const provePostID = data?.provePostId as string | '' | undefined
                     if (provePostID && provePostID.length > 0) {
                         undo()
@@ -360,8 +360,8 @@ async function* findAuthorPublicKey(
                 })
             })
             const databasePromise = new Promise((resolve, reject) => {
-                const undo = MessageCenter.on('profilesChanged', data => {
-                    data.filter(x => x.reason !== 'delete').forEach(x => {
+                const undo = MessageCenter.on('profilesChanged', (data) => {
+                    data.filter((x) => x.reason !== 'delete').forEach((x) => {
                         if (x.of.identifier.equals(by)) {
                             undo()
                             resolve()

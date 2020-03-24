@@ -7,7 +7,7 @@ interface PluginWrapperProps {
     width?: number
 }
 
-const useStyles = makeStyles(theme =>
+const useStyles = makeStyles((theme) =>
     createStyles({
         card: {
             border: `1px solid ${theme.palette.divider}`,

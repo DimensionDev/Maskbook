@@ -57,7 +57,7 @@ export function createTaskStartImmersiveSetupDefault(
             },
         )
         Services.Crypto.getMyProveBio(for_, _().networkIdentifier)
-            .then(x => x || '')
-            .then(x => (provePost.value = x))
+            .then((x) => x || '')
+            .then((x) => (provePost.value = x))
     }
 }

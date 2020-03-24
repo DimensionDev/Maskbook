@@ -8,7 +8,7 @@ import { deletePersona } from '../Persona/helpers'
  *
  * remove this after Mar 1 2020
  */
-export default async function() {
+export default async function () {
     const ids = await queryPersonasWithPrivateKey()
     let hasBug = false
     for (const id of ids) {

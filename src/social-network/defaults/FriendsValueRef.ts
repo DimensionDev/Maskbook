@@ -9,9 +9,9 @@ function hasFingerprint(x: Profile) {
 }
 export function InitFriendsValueRef(self: SocialNetworkUI, network: string) {
     const ref = self.friendsRef
-    Services.Identity.queryProfiles(network).then(p => (ref.value = p.filter(hasFingerprint)))
+    Services.Identity.queryProfiles(network).then((p) => (ref.value = p.filter(hasFingerprint)))
     MessageCenter.on(
         'profilesChanged',
-        createDataWithIdentifierChangedListener(ref, x => x.of.identifier.network === network),
+        createDataWithIdentifierChangedListener(ref, (x) => x.of.identifier.network === network),
     )
 }

@@ -27,7 +27,7 @@ export function queryProfiles(network?: string): Promise<Profile[]> {
     return queryProfilesWithQuery(network)
 }
 export function queryMyProfiles(network?: string) {
-    return queryProfilesWithQuery(network).then(x => x.filter(y => y.linkedPersona?.hasPrivateKey === true))
+    return queryProfilesWithQuery(network).then((x) => x.filter((y) => y.linkedPersona?.hasPrivateKey === true))
 }
 export function updateProfileInfo(
     identifier: ProfileIdentifier,
@@ -44,13 +44,13 @@ export function updateProfileInfo(
             createdAt: new Date(),
             updatedAt: new Date(),
         }
-        return consistentPersonaDBWriteAccess(t => createOrUpdateProfileDB(rec, t as any))
+        return consistentPersonaDBWriteAccess((t) => createOrUpdateProfileDB(rec, t as any))
     }
     if (data.avatarURL) return storeAvatar(identifier, data.avatarURL, data.forceUpdateAvatar)
     return Promise.resolve()
 }
 export function removeProfile(id: ProfileIdentifier): Promise<void> {
-    return consistentPersonaDBWriteAccess(t => deleteProfileDB(id, t))
+    return consistentPersonaDBWriteAccess((t) => deleteProfileDB(id, t))
 }
 //#endregion
 
@@ -58,15 +58,15 @@ export function removeProfile(id: ProfileIdentifier): Promise<void> {
 export { queryPersona, createPersonaByMnemonic, renamePersona } from '../../database'
 export async function queryPersonas(identifier?: PersonaIdentifier, requirePrivateKey = false): Promise<Persona[]> {
     if (typeof identifier === 'undefined')
-        return (await queryPersonasDB(k => (requirePrivateKey ? !!k.privateKey : true))).map(personaRecordToPersona)
+        return (await queryPersonasDB((k) => (requirePrivateKey ? !!k.privateKey : true))).map(personaRecordToPersona)
     const x = await queryPersonaDB(identifier)
     if (!x || (!x.privateKey && requirePrivateKey)) return []
     return [personaRecordToPersona(x)]
 }
 export function queryMyPersonas(network?: string): Promise<Persona[]> {
-    return queryPersonas(undefined, true).then(x =>
+    return queryPersonas(undefined, true).then((x) =>
         typeof network === 'string'
-            ? x.filter(y => {
+            ? x.filter((y) => {
                   for (const z of y.linkedProfiles.keys()) {
                       if (z.network === network) return true
                   }
@@ -104,14 +104,14 @@ export async function resolveIdentity(identifier: ProfileIdentifier): Promise<vo
     const unknown = new ProfileIdentifier(identifier.network, '$unknown')
     const self = new ProfileIdentifier(identifier.network, '$self')
 
-    const r = await queryProfilesDB(x => x.identifier.equals(unknown) || x.identifier.equals(self))
+    const r = await queryProfilesDB((x) => x.identifier.equals(unknown) || x.identifier.equals(self))
     if (!r.length) return
     const final = {
         ...r.reduce((p, c) => ({ ...p, ...c })),
         identifier,
     }
     try {
-        consistentPersonaDBWriteAccess(async t => {
+        consistentPersonaDBWriteAccess(async (t) => {
             await createProfileDB(final, t as any)
             await deleteProfileDB(unknown, t).catch(() => {})
             await deleteProfileDB(self, t).catch(() => {})

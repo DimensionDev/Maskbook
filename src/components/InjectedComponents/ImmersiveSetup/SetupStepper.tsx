@@ -206,7 +206,7 @@ export function ImmersiveSetupStepperUI(props: ImmersiveSetupStepperUIProps) {
                             required
                             label={t('username')}
                             value={props.username}
-                            onChange={e => props.onUsernameChange(e.currentTarget.value)}
+                            onChange={(e) => props.onUsernameChange(e.currentTarget.value)}
                             innerRef={inputRef}
                         />
                         <br />
@@ -297,7 +297,7 @@ export function ImmersiveSetupStepper(
             next={next}
             // ? username & onUsernameChange is a self managed group
             username={username}
-            onUsernameChange={v => {
+            onUsernameChange={(v) => {
                 setUsername(v)
                 touched.current = true
             }}

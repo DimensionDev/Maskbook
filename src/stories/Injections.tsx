@@ -38,14 +38,14 @@ import { PersonKnownSelf, PersonKnownOthers } from '../components/InjectedCompon
 storiesOf('Injections', module)
     .add('PersonOrGroupInChip', () => (
         <>
-            {demoGroup.map(g => (
+            {demoGroup.map((g) => (
                 <PersonOrGroupInChip item={g} />
             ))}
         </>
     ))
     .add('PersonOrGroupInList', () => (
         <Paper>
-            {demoGroup.map(g => (
+            {demoGroup.map((g) => (
                 <PersonOrGroupInList onClick={action('click')} item={g} />
             ))}
         </Paper>

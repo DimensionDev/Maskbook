@@ -22,7 +22,7 @@ export function PersonKnown(props: PersonKnownProps) {
     const state = useAsync(async () => {
         if (!owner) return null
         const profiles = await Services.Identity.queryMyProfiles(owner.network)
-        const myProfile = profiles.find(x => x.identifier.equals(owner))
+        const myProfile = profiles.find((x) => x.identifier.equals(owner))
 
         if (bio && myProfile) {
             const prove = await Services.Crypto.getMyProveBio(myProfile.identifier)

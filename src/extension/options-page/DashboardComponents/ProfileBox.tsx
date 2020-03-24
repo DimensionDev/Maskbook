@@ -72,13 +72,13 @@ export default function ProfileBox({ persona, border }: Props) {
     const profiles = persona ? [...persona.linkedProfiles] : []
 
     const providers = [...definedSocialNetworkWorkers]
-        .filter(i => {
+        .filter((i) => {
             if (webpackEnv.genericTarget === 'facebookApp') {
                 if (i.networkIdentifier !== 'facebook.com') return false
             }
             return true
         })
-        .map(i => {
+        .map((i) => {
             const profile = profiles.find(([key, value]) => key.network === i.networkIdentifier)
             return {
                 network: i.networkIdentifier,
@@ -113,7 +113,7 @@ export default function ProfileBox({ persona, border }: Props) {
 
     return (
         <>
-            {providers.map(provider => (
+            {providers.map((provider) => (
                 <Typography
                     key={`profile-line-${provider.network}`}
                     className={classNames(classes.line, { [classes.controlBorder]: border ?? true })}

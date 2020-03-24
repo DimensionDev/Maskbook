@@ -10,7 +10,7 @@ export async function* asyncIteratorWithResult<T, R, N>(iter: AsyncIterator<T, R
 export function asyncIteratorToAsyncFunction<Args extends any[], T, R>(
     f: (...args: Args) => AsyncIterator<T, R, undefined>,
 ) {
-    return async function(...args: Args): Promise<R> {
+    return async function (...args: Args): Promise<R> {
         for await (const _ of asyncIteratorWithResult(f(...args))) {
             if (_.done) return _.value
         }

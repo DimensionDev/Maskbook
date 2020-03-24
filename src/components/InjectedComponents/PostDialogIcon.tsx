@@ -3,7 +3,7 @@ import { getUrl } from '../../utils/utils'
 import { makeStyles } from '@material-ui/core'
 import { useStylesExtends } from '../custom-ui-helper'
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
     img: {
         verticalAlign: 'middle',
     },

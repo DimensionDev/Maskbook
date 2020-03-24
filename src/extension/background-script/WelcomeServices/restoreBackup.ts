@@ -33,11 +33,11 @@ export async function restoreBackup(json: object, whoAmI?: ProfileIdentifier): P
         // Transform all JsonWebKey to CryptoKey
         await Promise.all([
             ...[...data.personas, ...data.profiles]
-                .filter(x => x.localKey)
-                .map(x => JsonWebKeyToCryptoKey(x.localKey!, ...aes).then(k => keyCache.set(x.localKey!, k))),
+                .filter((x) => x.localKey)
+                .map((x) => JsonWebKeyToCryptoKey(x.localKey!, ...aes).then((k) => keyCache.set(x.localKey!, k))),
         ])
         {
-            await consistentPersonaDBWriteAccess(async t => {
+            await consistentPersonaDBWriteAccess(async (t) => {
                 for (const x of data.personas) {
                     await createOrUpdatePersonaDB(
                         PersonaRecordFromJSONFormat(x, keyCache),

@@ -41,7 +41,7 @@ export async function appendShareTarget(
                 identifier: new PostIVIdentifier(whoAmI.network, iv),
                 recipients: new IdentifierMap(
                     new Map(
-                        people.map<[string, RecipientDetail]>(identifier => [
+                        people.map<[string, RecipientDetail]>((identifier) => [
                             identifier.toText(),
                             {
                                 reason: [reason],

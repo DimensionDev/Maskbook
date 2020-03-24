@@ -61,7 +61,7 @@ const ListboxComponent = React.forwardRef<HTMLDivElement>(function ListboxCompon
                     key={itemCount}
                     outerElementType={OuterElementType}
                     innerElementType="ul"
-                    itemSize={index => getChildSize(itemData[index])}
+                    itemSize={(index) => getChildSize(itemData[index])}
                     overscanCount={5}
                     itemCount={itemCount}>
                     {renderRow}
@@ -108,7 +108,7 @@ export function ERC20WellKnownTokenSelector(props: {
                 control={
                     <Switch
                         checked={useRinkeby}
-                        onChange={e => {
+                        onChange={(e) => {
                             setRinkeby(e.currentTarget.checked)
                             setSelected(undefined)
                         }}
@@ -125,7 +125,7 @@ export function ERC20WellKnownTokenSelector(props: {
                 options={useRinkeby ? rinkeby : mainnet}
                 getOptionLabel={(option: typeof mainnet[0]) => option.name + ` (${option.symbol})`}
                 groupBy={(option: typeof mainnet[0]) => getNameOfToken(option)[0].toUpperCase()}
-                renderInput={params => (
+                renderInput={(params) => (
                     <TextField {...params} variant="outlined" label="Predefined ERC20 Tokens" fullWidth />
                 )}
                 renderOption={(option: typeof mainnet[0]) => <Typography noWrap>{getNameOfToken(option)}</Typography>}

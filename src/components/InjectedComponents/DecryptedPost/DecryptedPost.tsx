@@ -85,7 +85,7 @@ export function DecryptPost(props: DecryptPostProps) {
                 } else setDecryptingStatus(status.value)
             }
         }
-        run().catch(e => setDecrypted({ error: e?.message } as FailureDecryption))
+        run().catch((e) => setDecrypted({ error: e?.message } as FailureDecryption))
         return () => signal.abort()
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [encryptedText, postBy.toText(), whoAmI.toText(), sharedPublic])

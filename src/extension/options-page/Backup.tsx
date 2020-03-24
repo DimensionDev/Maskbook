@@ -22,7 +22,7 @@ import { amber } from '@material-ui/core/colors'
 import { BackupJSONFileLatest } from '../../utils/type-transform/BackupFormat/JSON/latest'
 import { compressBackupFile } from '../../utils/type-transform/BackupFileShortRepresentation'
 
-const useStyles = makeStyles(theme =>
+const useStyles = makeStyles((theme) =>
     createStyles({
         code: {
             padding: '2em',
@@ -64,11 +64,11 @@ export default function BackupDialog() {
     useEffect(() => {
         if (currentIdentifier.err) return
         Services.Welcome.createBackupFile({ download: false, onlyBackupWhoAmI: true })
-            .then(backupObj => {
+            .then((backupObj) => {
                 setBackupObj(backupObj)
                 setQRText(compressBackupFile(backupObj, currentIdentifier.val))
             })
-            .catch(e => {
+            .catch((e) => {
                 alert(e)
                 setBackupObj(null)
                 setQRText('')

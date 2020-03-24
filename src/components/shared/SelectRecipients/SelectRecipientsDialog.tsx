@@ -19,7 +19,7 @@ import { Profile } from '../../../database'
 import { DialogDismissIconUI } from '../../InjectedComponents/DialogDismissIcon'
 import ShadowRootDialog from '../../../utils/jss/ShadowRootDialog'
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
     content: {
         padding: '0 !important',
     },
@@ -86,12 +86,12 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
             </DialogTitle>
             <DialogContent className={classes.content}>
                 <List dense>
-                    {items.map(item => (
+                    {items.map((item) => (
                         <ProfileInList
                             key={item.identifier.toText()}
                             item={item}
                             checked={
-                                props.selected.some(x => x.identifier.equals(item.identifier)) ||
+                                props.selected.some((x) => x.identifier.equals(item.identifier)) ||
                                 disabledItems?.includes(item)
                             }
                             disabled={props.disabled || disabledItems?.includes(item)}
