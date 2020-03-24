@@ -26,7 +26,7 @@ export function AddToKeyStore({ provePost, postBy, ...props }: AddToKeyStoreProp
     function render(outer: React.ComponentType<any> | null | undefined, def: React.ComponentType<any>, props?: {}) {
         if (outer === null) return null
         const C = outer || def
-        return <C {...props} />
+        return React.createElement(outer || def, props)
     }
 }
 type SuccessProps = Partial<AdditionalContentProps>
