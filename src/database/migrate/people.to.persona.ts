@@ -17,7 +17,7 @@ export default async function migratePeopleToPersona() {
     const otherIDs = await queryPeopleDB(() => true)
     await migrateHelper_operateDB(myIDs, otherIDs, queryLocalKeyDB)
 }
-export async function migrateHelper_operateDB(
+async function migrateHelper_operateDB(
     myIDs: PersonRecordPublicPrivate[],
     otherIDs: PersonRecord[],
     getLocalKey: (identifier: ProfileIdentifier) => Promise<CryptoKey | null>,

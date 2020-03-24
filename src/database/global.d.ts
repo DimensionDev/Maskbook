@@ -1,4 +1,4 @@
-declare module 'idb/with-async-ittr' {
+declare module 'idb/with-async-ittr-cjs' {
     export * from 'idb'
 }
 /**

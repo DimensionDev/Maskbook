@@ -25,12 +25,12 @@ globalThis.sessionStorage = {}
 const { join } = require('path')
 const { writeFileSync, readFileSync, unlinkSync } = require('fs')
 
-const restoreLodash = modifyPackage('lodash-es', x => (x.main = '../lodash'))
-const restoreAsyncCall = modifyPackage('async-call-rpc', x => {
+const restoreLodash = modifyPackage('lodash-es', (x) => (x.main = '../lodash'))
+const restoreAsyncCall = modifyPackage('async-call-rpc', (x) => {
     x.main = './_maskbook_ssr.cjs'
     x.types = './out/'
 })
-const restoreTSResult = modifyPackage('ts-results', x => {
+const restoreTSResult = modifyPackage('ts-results', (x) => {
     x.main = './cjs.cjs'
 })
 const undoTSResult = compileToCJS('../node_modules/ts-results/index.js', '../node_modules/ts-results/cjs.cjs')
@@ -41,14 +41,14 @@ exports.AsyncGeneratorCall = () => new Proxy({}, {get(_target, method) {return a
 )
 const restoreKit = modifyPackage(
     '@holoflows/kit',
-    x =>
+    (x) =>
         (x.exports = {
             './es/util/sleep': './umd/index.js',
             './es': './umd/index.js',
         }),
 )
 
-process.on('uncaughtException', function(err) {
+process.on('uncaughtException', function (err) {
     cleanup()
     throw err
 })
@@ -60,7 +60,11 @@ function cleanup() {
     restoreTSResult()
 }
 try {
-    require('ts-node').register({ ...require(__dirname + '/../tsconfig_cjs.json'), transpileOnly: true })
+    require('ts-node').register({
+        project: require.resolve(__dirname + '/../tsconfig.json'),
+        transpileOnly: true,
+        // ignore: [],
+    })
     module.exports = require(process.argv[process.argv.length - 1])
 } finally {
     cleanup()

@@ -1,5 +1,5 @@
 /// <reference path="./global.d.ts" />
-import { openDB, DBSchema } from 'idb/with-async-ittr'
+import { openDB, DBSchema } from 'idb/with-async-ittr-cjs'
 import { Identifier, ProfileIdentifier, GroupIdentifier } from './type'
 import { createDBAccess, IDBPSafeTransaction, createTransaction } from './helpers/openDB'
 
