@@ -3,11 +3,11 @@ module.exports = async () => {
 }
 
 function addAsmCryptoForTest(cb) {
-    var download = function(url, dest, cb) {
+    var download = function (url, dest, cb) {
         var file = fs.createWriteStream(dest)
-        var request = http.get(url, function(response) {
+        var request = http.get(url, function (response) {
             response.pipe(file)
-            file.on('finish', function() {
+            file.on('finish', function () {
                 file.close(cb)
             })
         })

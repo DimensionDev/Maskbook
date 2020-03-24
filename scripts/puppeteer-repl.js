@@ -30,7 +30,7 @@ const pptOpts = {
 function findChrome() {
     try {
         const clBase = path.join(require.resolve('chrome-launcher'), '..')
-        global.clInt = x => require(path.join(clBase, `${x}.js`))
+        global.clInt = (x) => require(path.join(clBase, `${x}.js`))
         return clInt('chrome-finder')[clInt('utils').getPlatform()]()[0]
     } catch (e) {
         console.error(e)
