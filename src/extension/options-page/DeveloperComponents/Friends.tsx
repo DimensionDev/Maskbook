@@ -17,7 +17,7 @@ import {
 import React, { useState } from 'react'
 import { Profile } from '../../../database'
 import { Avatar } from '../../../utils/components/Avatar'
-import { useTextField } from '../../../utils/components/useForms'
+import { useTextField } from '../../../utils/hooks/useForms'
 import Services from '../../service'
 
 export function FriendsDeveloperMode() {

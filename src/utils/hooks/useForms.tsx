@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import { TextField } from '@material-ui/core'
 
 export function useTextField(label: string, props?: TextFieldProps) {
-    const { defaultValue = '', ..._props } = props || {}
+    const { defaultValue = '', value: _, ..._props } = props || {}
     const [value, setValue] = useState<string>(String(defaultValue))
     return [
         value,
