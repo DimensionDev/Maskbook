@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from 'react'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { makeStyles, ListItem, ListItemText, InputBase, Button, List, Box } from '@material-ui/core'
-import { Profile, Group } from '../../../database'
+import type { Profile, Group } from '../../../database'
 import { useCurrentIdentity } from '../../DataSource/useActivatedUI'
 import { PersonOrGroupInList, PersonOrGroupInListProps } from './PersonOrGroupInList'
 import { PersonOrGroupInChip, PersonOrGroupInChipProps } from './PersonOrGroupInChip'

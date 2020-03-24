@@ -1,5 +1,5 @@
 import { postEditorDraftContentSelector } from './selector'
-import { LiveSelector } from '@holoflows/kit'
+import type { LiveSelector } from '@holoflows/kit'
 
 export const getEditorContent = () => {
     const editorNode = postEditorDraftContentSelector().evaluate()

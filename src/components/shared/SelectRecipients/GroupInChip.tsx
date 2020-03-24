@@ -1,7 +1,7 @@
 import * as React from 'react'
 import classNames from 'classnames'
 import Chip, { ChipProps } from '@material-ui/core/Chip'
-import { Group } from '../../../database'
+import type { Group } from '../../../database'
 import DoneIcon from '@material-ui/icons/Done'
 import { useResolveSpecialGroupName } from '../SelectPeopleAndGroups/resolveSpecialGroupName'
 import { makeStyles } from '@material-ui/styles'

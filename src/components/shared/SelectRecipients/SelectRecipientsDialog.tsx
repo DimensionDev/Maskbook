@@ -15,7 +15,7 @@ import {
 import { useStylesExtends } from '../../custom-ui-helper'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { ProfileInList } from './ProfileInList'
-import { Profile } from '../../../database'
+import type { Profile } from '../../../database'
 import { DialogDismissIconUI } from '../../InjectedComponents/DialogDismissIcon'
 import ShadowRootDialog from '../../../utils/jss/ShadowRootDialog'
 

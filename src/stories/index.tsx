@@ -11,7 +11,7 @@ import { demoPeople, demoGroup } from './demoPeopleOrGroups'
 import { ValueRef } from '@holoflows/kit/es'
 import { ProfileIdentifier } from '../database/type'
 import { emptyDefinition } from '../social-network/defaults/emptyDefinition'
-import { Profile } from '../database'
+import type { Profile } from '../database'
 
 Object.assign(globalThis, {
     browser: {

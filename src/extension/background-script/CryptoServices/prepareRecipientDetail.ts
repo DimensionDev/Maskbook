@@ -1,7 +1,7 @@
 import { ProfileIdentifier, GroupIdentifier } from '../../../database/type'
 import { queryPublicKey } from '../../../database'
 import { IdentifierMap } from '../../../database/IdentifierMap'
-import { RecipientDetail, RecipientReason } from '../../../database/post'
+import type { RecipientDetail, RecipientReason } from '../../../database/post'
 import { queryUserGroup } from '../UserGroupService'
 
 export async function prepareRecipientDetail(to: (ProfileIdentifier | GroupIdentifier)[]) {

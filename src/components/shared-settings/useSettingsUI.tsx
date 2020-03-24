@@ -1,4 +1,4 @@
-import { ValueRef } from '@holoflows/kit/es'
+import type { ValueRef } from '@holoflows/kit/es'
 import { useValueRef } from '../../utils/hooks/useValueRef'
 import { texts } from './createSettings'
 import {

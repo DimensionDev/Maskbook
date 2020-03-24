@@ -6,11 +6,10 @@ import { PluginMessageCenter } from '../PluginMessages'
 import { HDKey, EthereumAddress } from 'wallet.ts'
 import * as bip39 from 'bip39'
 import { walletAPI } from './real'
-import { ERC20TokenPredefinedData } from './erc20'
+import type { ERC20TokenPredefinedData } from './erc20'
 import { memoizePromise } from '../../utils/memoize'
 import { currentEthereumNetworkSettings } from './network'
 import { buf2hex } from './web3'
-import { sideEffect } from '../../utils/side-effects'
 
 // Private key at m/44'/coinType'/account'/change/addressIndex
 // coinType = ether

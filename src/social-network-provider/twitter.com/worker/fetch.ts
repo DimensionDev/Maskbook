@@ -1,4 +1,4 @@
-import { ProfileIdentifier, PostIdentifier } from '../../../database/type'
+import type { ProfileIdentifier, PostIdentifier } from '../../../database/type'
 import { getPostUrlAtTwitter, getProfileUrlAtTwitter } from '../utils/url'
 import tasks from '../../../extension/content-script/tasks'
 import { isMobileTwitter } from '../utils/isMobile'

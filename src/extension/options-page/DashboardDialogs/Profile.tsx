@@ -7,7 +7,7 @@ import ActionButton from '../DashboardComponents/ActionButton'
 
 import classNames from 'classnames'
 import { useColorProvider } from '../../../utils/theme'
-import { ProfileIdentifier } from '../../../database/type'
+import type { ProfileIdentifier } from '../../../database/type'
 import Services from '../../service'
 import { getNetworkWorker } from '../../../social-network/worker'
 import { useI18N } from '../../../utils/i18n-next-ui'

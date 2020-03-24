@@ -1,5 +1,5 @@
 /// <reference path="../../env.d.ts" />
-import { Serialization } from '@holoflows/kit'
+import type { Serialization } from '@holoflows/kit'
 import Typeson from 'typeson'
 import { Ok, Err } from 'ts-results'
 

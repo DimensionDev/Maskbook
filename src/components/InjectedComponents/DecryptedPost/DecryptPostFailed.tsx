@@ -2,7 +2,7 @@ import React from 'react'
 import { AdditionalContent, AdditionalContentProps } from '../AdditionalPostContent'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { NotSetupYetPrompt } from '../../shared/NotSetupYetPrompt'
-import { BannerProps } from '../../Welcomes/Banner'
+import type { BannerProps } from '../../Welcomes/Banner'
 import { DecryptFailedReason } from '../../../utils/constants'
 export interface DecryptPostFailedProps {
     error: Error

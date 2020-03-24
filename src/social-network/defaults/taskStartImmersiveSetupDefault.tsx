@@ -1,5 +1,5 @@
 import React from 'react'
-import { PersonaIdentifier, ECKeyIdentifier } from '../../database/type'
+import type { PersonaIdentifier, ECKeyIdentifier } from '../../database/type'
 import { renderInShadowRoot } from '../../utils/jss/renderInShadowRoot'
 import {
     ImmersiveSetupStepper,
@@ -9,7 +9,7 @@ import { DraggableDiv } from '../../components/InjectedComponents/ImmersiveSetup
 import Services from '../../extension/service'
 import { ValueRef } from '@holoflows/kit/es'
 import { useValueRef } from '../../utils/hooks/useValueRef'
-import { SocialNetworkUI } from '../ui'
+import type { SocialNetworkUI } from '../ui'
 import { restorePrototype } from '../../utils/type'
 
 function UI({

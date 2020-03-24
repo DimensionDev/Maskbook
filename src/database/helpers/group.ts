@@ -1,6 +1,6 @@
 import { GroupRecord, createUserGroupDatabase, updateUserGroupDatabase, queryUserGroupsDatabase } from '../group'
 import { ProfileIdentifier, GroupIdentifier, PreDefinedVirtualGroupNames } from '../type'
-import { Profile } from '..'
+import type { Profile } from '..'
 
 export interface Group extends GroupRecord {
     avatar?: string

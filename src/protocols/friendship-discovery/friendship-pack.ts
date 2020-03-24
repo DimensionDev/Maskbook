@@ -1,4 +1,4 @@
-import { FriendshipCertificateDecryptedV1, FriendshipCertificateEncryptedV1 } from './friendship-cert'
+import type { FriendshipCertificateDecryptedV1, FriendshipCertificateEncryptedV1 } from './friendship-cert'
 import { encryptWithAES, decryptWithAES } from '../../crypto/crypto-alpha-40'
 import { encodeArrayBuffer, decodeText } from '../../utils/type-transform/String-ArrayBuffer'
 import { toECDH } from '../../utils/type-transform/ECDSA-ECDH'

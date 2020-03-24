@@ -1,6 +1,5 @@
-import { ProfileIdentifier } from '../../../database/type'
+import type { ProfileIdentifier } from '../../../database/type'
 import { UpgradeBackupJSONFile } from '../../../utils/type-transform/BackupFormat/JSON/latest'
-import { useI18N } from '../../../utils/i18n-next-ui'
 import { getKeyParameter, JsonWebKeyToCryptoKey } from '../../../utils/type-transform/CryptoKey-JsonWebKey'
 import {
     attachProfileDB,

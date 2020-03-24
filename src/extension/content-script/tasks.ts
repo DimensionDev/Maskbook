@@ -5,7 +5,7 @@ import {
     currentImmersiveSetupStatus,
     ImmersiveSetupCrossContextStatus,
 } from '../../components/shared-settings/settings'
-import { SocialNetworkUI } from '../../social-network/ui'
+import type { SocialNetworkUI } from '../../social-network/ui'
 import { memoizePromise } from '../../utils/memoize'
 import { safeGetActiveUI } from '../../utils/safeRequire'
 import Serialization from '../../utils/type-transform/Serialization'

@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { Typography, Link } from '@material-ui/core'
 import anchorme from 'anchorme'
-import {
+import type {
     TypedMessageText,
     TypedMessage,
     TypedMessageComplex,

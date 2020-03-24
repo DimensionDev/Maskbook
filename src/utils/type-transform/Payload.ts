@@ -1,4 +1,4 @@
-import { SocialNetworkWorkerAndUI } from '../../social-network/shared'
+import type { SocialNetworkWorkerAndUI } from '../../social-network/shared'
 import { isNil } from 'lodash-es'
 import { definedSocialNetworkWorkers } from '../../social-network/worker'
 import { GetContext } from '@holoflows/kit/es'

@@ -1,10 +1,10 @@
 import { injectCommentBoxDefaultFactory } from './injectCommentBox'
 import { injectPostCommentsDefault } from './injectComments'
-import { SocialNetworkUIDataSources } from '../ui'
+import type { SocialNetworkUIDataSources } from '../ui'
 import { ValueRef } from '@holoflows/kit'
 import { ProfileIdentifier } from '../../database/type'
 import { cloneDeep } from 'lodash-es'
-import { Profile, Group, Persona } from '../../database'
+import type { Profile, Group, Persona } from '../../database'
 import { MaskbookDarkTheme, MaskbookLightTheme } from '../../utils/theme'
 import { ProfileArrayComparer, GroupArrayComparer, PersonaArrayComparer } from '../../utils/comparer'
 

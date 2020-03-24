@@ -9,7 +9,7 @@ import AbstractTab, { AbstractTabProps } from '../DashboardComponents/AbstractTa
 import ActionButton from '../DashboardComponents/ActionButton'
 import { ECKeyIdentifier, Identifier } from '../../../database/type'
 import Services from '../../service'
-import { Persona } from '../../../database'
+import type { Persona } from '../../../database'
 import useQueryParams from '../../../utils/hooks/useQueryParams'
 import ProfileBox from '../DashboardComponents/ProfileBox'
 import { useColorProvider } from '../../../utils/theme'

@@ -1,4 +1,4 @@
-import { Group, Profile, Persona } from '../database'
+import type { Group, Profile, Persona } from '../database'
 
 export function PersonaComparer(a: Persona, b: Persona): boolean {
     if (a.createdAt.getTime() !== b.createdAt.getTime()) return false

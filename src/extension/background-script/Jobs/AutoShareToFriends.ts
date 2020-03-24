@@ -1,5 +1,5 @@
 import { MessageCenter } from '../../../utils/messages'
-import { PreDefinedVirtualGroupNames, ProfileIdentifier, GroupIdentifier } from '../../../database/type'
+import type { PreDefinedVirtualGroupNames, ProfileIdentifier, GroupIdentifier } from '../../../database/type'
 import { queryPostsDB, PostRecord, RecipientReason } from '../../../database/post'
 import { appendShareTarget } from '../CryptoService'
 import { queryUserGroup } from '../UserGroupService'

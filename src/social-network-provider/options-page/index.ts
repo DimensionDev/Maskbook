@@ -3,7 +3,7 @@ import { emptyDefinition } from '../../social-network/defaults/emptyDefinition'
 import Services from '../../extension/service'
 import { MessageCenter } from '../../utils/messages'
 import { GetContext, ValueRef } from '@holoflows/kit/es'
-import { Profile, Persona } from '../../database'
+import type { Profile, Persona } from '../../database'
 import { createDataWithIdentifierChangedListener } from '../../social-network/defaults/createDataWithIdentifierChangedListener'
 
 function hasFingerprint(x: Profile) {

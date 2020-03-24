@@ -1,7 +1,7 @@
 import React from 'react'
 import { makeStyles, createStyles, Card, Typography, CircularProgress } from '@material-ui/core'
 import classNames from 'classnames'
-import { RedPacketRecord, RedPacketJSONPayload, RedPacketStatus, ERC20TokenRecord } from '../../../database/types'
+import type { RedPacketRecord, RedPacketJSONPayload, RedPacketStatus, ERC20TokenRecord } from '../../../database/types'
 import Services from '../../../../../extension/service'
 import { PluginMessageCenter } from '../../../../PluginMessages'
 import { formatBalance } from '../../../formatter'

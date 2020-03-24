@@ -12,7 +12,7 @@ import {
     IconButton,
     useMediaQuery,
 } from '@material-ui/core'
-import { TransitionProps } from '@material-ui/core/transitions'
+import type { TransitionProps } from '@material-ui/core/transitions'
 import CloseIcon from '@material-ui/icons/Close'
 
 import classNames from 'classnames'

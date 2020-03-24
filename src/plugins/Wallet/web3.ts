@@ -1,5 +1,5 @@
 import Web3 from 'web3'
-import { WebsocketProvider } from 'web3-core'
+import type { WebsocketProvider } from 'web3-core'
 import { getNetworkSettings, currentEthereumNetworkSettings } from './network'
 import { getWallets, recoverWallet } from './wallet'
 import { PluginMessageCenter } from '../PluginMessages'

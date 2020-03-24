@@ -2,12 +2,12 @@ import * as React from 'react'
 import className from 'classnames'
 import { makeStyles, Theme, ListItem, ListItemText, Checkbox, ListItemAvatar } from '@material-ui/core'
 import { useStylesExtends } from '../../custom-ui-helper'
-import { DefaultComponentProps } from '@material-ui/core/OverridableComponent'
-import { Profile } from '../../../database'
+import type { DefaultComponentProps } from '@material-ui/core/OverridableComponent'
+import type { Profile } from '../../../database'
 import { ChangeEvent, useCallback } from 'react'
 import { Avatar } from '../../../utils/components/Avatar'
-import { CheckboxProps } from '@material-ui/core/Checkbox'
-import { ListItemTypeMap } from '@material-ui/core/ListItem'
+import type { CheckboxProps } from '@material-ui/core/Checkbox'
+import type { ListItemTypeMap } from '@material-ui/core/ListItem'
 
 const useStyle = makeStyles((theme: Theme) => ({
     root: {

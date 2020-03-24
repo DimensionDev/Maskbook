@@ -1,10 +1,9 @@
-import { ProfileIdentifier } from '../../../database/type'
+import type { ProfileIdentifier } from '../../../database/type'
 import { getProfilePageUrlAtFacebook } from '../parse-username'
 import { parseFacebookStaticHTML } from '../parse-html'
-import { ProfileUI } from '../../../social-network/shared'
+import type { ProfileUI } from '../../../social-network/shared'
 import tasks from '../../../extension/content-script/tasks'
 import { timeout } from '../../../utils/utils'
-import { facebookWorkerSelf } from '../worker-provider'
 import { getActiveTabFacebook } from '../../../utils/tabs'
 
 // ? We now always run fetch request from an active tab.

@@ -1,7 +1,7 @@
 import React from 'react'
 import { AdditionalContent, AdditionalContentProps } from '../AdditionalPostContent'
 import { useI18N } from '../../../utils/i18n-next-ui'
-import { DecryptionProgress } from '../../../extension/background-script/CryptoServices/decryptFrom'
+import type { DecryptionProgress } from '../../../extension/background-script/CryptoServices/decryptFrom'
 export interface DecryptPostAwaitingProps {
     type?: DecryptionProgress
     AdditionalContentProps?: Partial<AdditionalContentProps>

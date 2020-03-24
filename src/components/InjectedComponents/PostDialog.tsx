@@ -17,7 +17,7 @@ import {
 import { MessageCenter, CompositionEvent } from '../../utils/messages'
 import { useCapturedInput } from '../../utils/hooks/useCapturedEvents'
 import { useStylesExtends, or } from '../custom-ui-helper'
-import { Profile, Group } from '../../database'
+import type { Profile, Group } from '../../database'
 import { useFriendsList, useGroupsList, useCurrentIdentity, useMyIdentities } from '../DataSource/useActivatedUI'
 import { steganographyModeSetting } from '../shared-settings/settings'
 import { useValueRef } from '../../utils/hooks/useValueRef'

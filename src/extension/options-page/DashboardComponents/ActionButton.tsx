@@ -1,6 +1,6 @@
 import React from 'react'
 import { Button, CircularProgress, makeStyles } from '@material-ui/core'
-import { ButtonProps } from '@material-ui/core/Button'
+import type { ButtonProps } from '@material-ui/core/Button'
 import CheckIcon from '@material-ui/icons/Check'
 import ErrorIcon from '@material-ui/icons/Error'
 import { red, green } from '@material-ui/core/colors'

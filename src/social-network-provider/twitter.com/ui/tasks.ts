@@ -24,7 +24,7 @@ import Services from '../../../extension/service'
 import { twitterEncoding } from '../encoding'
 import { createTaskStartImmersiveSetupDefault } from '../../../social-network/defaults/taskStartImmersiveSetupDefault'
 import { instanceOfTwitterUI } from '.'
-import { ProfileIdentifier } from '../../../database/type'
+import type { ProfileIdentifier } from '../../../database/type'
 
 /**
  * Wait for up to 5000 ms

@@ -1,6 +1,6 @@
 import { DBSchema, openDB } from 'idb/with-async-ittr'
 import { createDBAccess } from '../../../database/helpers/openDB'
-import { RedPacketRecord, WalletRecord, ERC20TokenRecord } from './types'
+import type { RedPacketRecord, WalletRecord, ERC20TokenRecord } from './types'
 
 function path<T>(x: T) {
     return x

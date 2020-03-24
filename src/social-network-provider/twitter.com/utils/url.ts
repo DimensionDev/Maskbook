@@ -1,4 +1,4 @@
-import { ProfileIdentifier, PostIdentifier } from '../../../database/type'
+import type { ProfileIdentifier, PostIdentifier } from '../../../database/type'
 import { usernameValidator } from './user'
 import { i18n } from '../../../utils/i18n-next'
 

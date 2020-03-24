@@ -18,7 +18,7 @@ import { DialogDismissIconUI } from '../../../../components/InjectedComponents/D
 import AbstractTab from '../../../../extension/options-page/DashboardComponents/AbstractTab'
 import { RedPacketWithState } from '../Dashboard/Components/RedPacket'
 import Services from '../../../../extension/service'
-import { createRedPacketInit } from '../../red-packet-fsm'
+import type { createRedPacketInit } from '../../red-packet-fsm'
 import {
     EthereumNetwork,
     RedPacketTokenType,
