@@ -3,7 +3,7 @@ import { getUrl } from '../../utils/utils'
 import { makeStyles, Typography, Card } from '@material-ui/core'
 import { useStylesExtends } from '../custom-ui-helper'
 import classNames from 'classnames'
-import { TypedMessageText, TypedMessage } from '../../extension/background-script/CryptoServices/utils'
+import type { TypedMessageText, TypedMessage } from '../../extension/background-script/CryptoServices/utils'
 import { TypedMessageRendererProps, DefaultTypedMessageRenderer } from './TypedMessageRenderer'
 
 export interface AdditionalContentProps

@@ -2,11 +2,11 @@ import * as React from 'react'
 import { Avatar } from '../../../utils/components/Avatar'
 import MuiAvatar from '@material-ui/core/Avatar/Avatar'
 import { Chip } from '@material-ui/core'
-import { Profile, Group } from '../../../database'
+import type { Profile, Group } from '../../../database'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { isGroup, isPerson } from './SelectPeopleAndGroupsUI'
 import { useResolveSpecialGroupName } from './resolveSpecialGroupName'
-import { ChipProps } from '@material-ui/core/Chip'
+import type { ChipProps } from '@material-ui/core/Chip'
 
 export interface PersonOrGroupInChipProps {
     onDelete?(): void

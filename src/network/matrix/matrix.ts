@@ -160,9 +160,9 @@ export const client1 = createMatrixMessage(...username)
 export const client2 = createMatrixMessage('another', 'testtest')
 export const room = '#hchch:matrix.vampire.rip'
 import * as self from './matrix'
-import { MatrixEvent } from 'matrix-js-sdk-type/dts/models/event'
-import Room from 'matrix-js-sdk-type/dts/models/room'
-import EventTimelineSet from 'matrix-js-sdk-type/dts/models/event-timeline-set'
+import type { MatrixEvent } from 'matrix-js-sdk-type/dts/models/event'
+import type Room from 'matrix-js-sdk-type/dts/models/room'
+import type EventTimelineSet from 'matrix-js-sdk-type/dts/models/event-timeline-set'
 import { sleep } from '@holoflows/kit/es/util/sleep'
 Object.assign(globalThis, { mat: self })
 console.log('mat\n', self)

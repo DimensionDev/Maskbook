@@ -5,13 +5,13 @@ import { AddToKeyStore, AddToKeyStoreProps } from './AddToKeyStore'
 import { deconstructPayload } from '../../utils/type-transform/Payload'
 import Services from '../../extension/service'
 import { ProfileIdentifier, PostIdentifier } from '../../database/type'
-import { Profile } from '../../database'
+import type { Profile } from '../../database'
 import { useCurrentIdentity, useFriendsList } from '../DataSource/useActivatedUI'
 import { getActivatedUI } from '../../social-network/ui'
 import { useValueRef } from '../../utils/hooks/useValueRef'
 import { debugModeSetting } from '../shared-settings/settings'
 import { DebugList } from '../DebugModeUI/DebugList'
-import { TypedMessage } from '../../extension/background-script/CryptoServices/utils'
+import type { TypedMessage } from '../../extension/background-script/CryptoServices/utils'
 
 export interface PostInspectorProps {
     onDecrypted(post: TypedMessage, raw: string): void

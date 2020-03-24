@@ -3,7 +3,7 @@ import { SelectPeopleAndGroupsUI, SelectPeopleAndGroupsUIProps } from '../shared
 import { useI18N } from '../../utils/i18n-next-ui'
 import { makeStyles } from '@material-ui/styles'
 import { Button, CircularProgress, DialogActions, DialogContent, DialogTitle } from '@material-ui/core'
-import { Profile } from '../../database'
+import type { Profile } from '../../database'
 import { useStylesExtends } from '../custom-ui-helper'
 import ShadowRootDialog from '../../utils/jss/ShadowRootDialog'
 

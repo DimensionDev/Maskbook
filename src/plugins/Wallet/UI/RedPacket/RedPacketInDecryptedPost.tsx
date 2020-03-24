@@ -6,9 +6,9 @@ import {
 } from '../../../../extension/background-script/CryptoServices/utils'
 import MaskbookPluginWrapper from '../../../MaskbookPluginWrapper'
 import { RedPacketWithState } from '../Dashboard/Components/RedPacket'
-import { RedPacketRecord, RedPacketStatus, WalletRecord } from '../../database/types'
+import type { RedPacketRecord, RedPacketStatus, WalletRecord } from '../../database/types'
 import Services from '../../../../extension/service'
-import { PostIdentifier, ProfileIdentifier } from '../../../../database/type'
+import type { PostIdentifier, ProfileIdentifier } from '../../../../database/type'
 
 import {
     withMobileDialog,

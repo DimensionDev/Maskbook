@@ -2,7 +2,7 @@ import { LiveSelector, MutationObserverWatcher } from '@holoflows/kit/es'
 import { getProfileIdentifierAtFacebook } from '../getPersonIdentifierAtFacebook'
 import Services from '../../../extension/service'
 import { GroupIdentifier } from '../../../database/type'
-import { SocialNetworkUI } from '../../../social-network/ui'
+import type { SocialNetworkUI } from '../../../social-network/ui'
 
 function findPeopleInfo(whoAmI: SocialNetworkUI['currentIdentity']) {
     // TODO: support mobile

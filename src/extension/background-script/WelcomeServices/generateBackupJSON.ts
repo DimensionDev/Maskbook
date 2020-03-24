@@ -1,4 +1,4 @@
-import { BackupJSONFileLatest } from '../../../utils/type-transform/BackupFormat/JSON/latest'
+import type { BackupJSONFileLatest } from '../../../utils/type-transform/BackupFormat/JSON/latest'
 import { queryPersonasDB, queryProfilesDB } from '../../../database/Persona/Persona.db'
 import { CryptoKeyToJsonWebKey } from '../../../utils/type-transform/CryptoKey-JsonWebKey'
 import { queryUserGroupsDatabase } from '../../../database/group'

@@ -1,8 +1,8 @@
 import { LiveSelector, MutationObserverWatcher } from '@holoflows/kit'
 import { ProfileIdentifier } from '../../../database/type'
-import { SocialNetworkUI } from '../../../social-network/ui'
+import type { SocialNetworkUI } from '../../../social-network/ui'
 import { getProfileIdentifierAtFacebook } from '../getPersonIdentifierAtFacebook'
-import { Profile } from '../../../database'
+import type { Profile } from '../../../database'
 
 export function resolveLastRecognizedIdentityFacebook(this: SocialNetworkUI) {
     const ref = this.lastRecognizedIdentity

@@ -4,7 +4,7 @@ import getCurrentNetworkWorker from '../../../social-network/utils/getCurrentNet
 import { verifyOthersProve } from './verifyOthersProve'
 import { memoizePromise } from '../../../utils/memoize'
 import { queryPersonaRecord } from '../../../database'
-import { PersonaRecord } from '../../../database/Persona/Persona.db'
+import type { PersonaRecord } from '../../../database/Persona/Persona.db'
 import { i18n } from '../../../utils/i18n-next'
 
 async function getUserPublicKeyFromBio(user: ProfileIdentifier) {

@@ -1,4 +1,4 @@
-import { Profile, Group, Persona } from '../database'
+import type { Profile, Group, Persona } from '../database'
 import { ProfileIdentifier, GroupIdentifier, ECKeyIdentifier } from '../database/type'
 import { IdentifierMap } from '../database/IdentifierMap'
 

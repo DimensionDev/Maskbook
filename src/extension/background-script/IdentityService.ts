@@ -1,6 +1,6 @@
 import { queryProfilesWithQuery, personaRecordToPersona, storeAvatar, queryProfile } from '../../database'
 import { ProfileIdentifier, PersonaIdentifier } from '../../database/type'
-import { Profile, Persona } from '../../database/Persona/types'
+import type { Profile, Persona } from '../../database/Persona/types'
 import {
     queryPersonaDB,
     deleteProfileDB,

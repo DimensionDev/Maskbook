@@ -1,5 +1,5 @@
 import { createNewSettings, createNetworkSpecificSettings } from './createSettings'
-import { ValueRef } from '@holoflows/kit/es'
+import type { ValueRef } from '@holoflows/kit/es'
 import { MessageCenter } from '../../utils/messages'
 import i18nNextInstance, { i18n } from '../../utils/i18n-next'
 

@@ -2,7 +2,7 @@
  * @see https://github.com/DimensionDev/Maskbook/wiki/Data-structure-on-Gun-version-2
  */
 import Gun from 'gun'
-import { ProfileIdentifier } from '../../../database/type'
+import type { ProfileIdentifier } from '../../../database/type'
 import { memoizePromise } from '../../../utils/memoize'
 import { CryptoKeyToJsonWebKey } from '../../../utils/type-transform/CryptoKey-JsonWebKey'
 

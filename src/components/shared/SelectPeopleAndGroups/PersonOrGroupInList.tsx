@@ -1,18 +1,18 @@
 import * as React from 'react'
-import { Profile, Group } from '../../../database'
+import type { Profile, Group } from '../../../database'
 import { ListItem, Theme, ListItemAvatar, ListItemText } from '@material-ui/core'
-import { DefaultComponentProps } from '@material-ui/core/OverridableComponent'
+import type { DefaultComponentProps } from '@material-ui/core/OverridableComponent'
 import { makeStyles } from '@material-ui/styles'
 import { Avatar } from '../../../utils/components/Avatar'
 import MuiAvatar from '@material-ui/core/Avatar/Avatar'
 import GroupIcon from '@material-ui/icons/Group'
 import { useFriendsList } from '../../DataSource/useActivatedUI'
-import { ProfileIdentifier } from '../../../database/type'
+import type { ProfileIdentifier } from '../../../database/type'
 import { useI18N, useIntlListFormat } from '../../../utils/i18n-next-ui'
 import { isGroup } from './SelectPeopleAndGroupsUI'
 import { useResolveSpecialGroupName } from './resolveSpecialGroupName'
 import { useStylesExtends } from '../../custom-ui-helper'
-import { ListItemTypeMap } from '@material-ui/core/ListItem'
+import type { ListItemTypeMap } from '@material-ui/core/ListItem'
 
 export interface PersonOrGroupInListProps extends withClasses<KeysInferFromUseStyles<typeof useStyle>> {
     onClick: () => void

@@ -1,6 +1,6 @@
 import { ProfileIdentifier } from '../../database/type'
 import Services from '../../extension/service'
-import { Profile } from '../../database'
+import type { Profile } from '../../database'
 
 type link = HTMLAnchorElement | null | undefined
 

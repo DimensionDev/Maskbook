@@ -1,7 +1,7 @@
 import { PreDefinedVirtualGroupNames, GroupIdentifier } from '../../../database/type'
-import { Group, Profile } from '../../../database'
+import type { Group, Profile } from '../../../database'
 import { useFriendsList, useMyIdentities } from '../../DataSource/useActivatedUI'
-import { I18NStrings } from '../../../utils/i18n-next'
+import type { I18NStrings } from '../../../utils/i18n-next'
 import { useI18N, I18NFunction } from '../../../utils/i18n-next-ui'
 
 function resolveSpecialGroupName(t: I18NFunction, group: Group, knownPeople: Profile[]): string {

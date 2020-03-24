@@ -1,7 +1,10 @@
 import React from 'react'
-import { Payload } from '../../../utils/type-transform/Payload'
-import { ProfileIdentifier } from '../../../database/type'
-import { SuccessDecryption, FailureDecryption } from '../../../extension/background-script/CryptoServices/decryptFrom'
+import type { Payload } from '../../../utils/type-transform/Payload'
+import type { ProfileIdentifier } from '../../../database/type'
+import type {
+    SuccessDecryption,
+    FailureDecryption,
+} from '../../../extension/background-script/CryptoServices/decryptFrom'
 import { DebugList } from '../../DebugModeUI/DebugList'
 import { DebugModeUI_PostHashDialog } from '../../DebugModeUI/PostHashDialog'
 import { useValueRef } from '../../../utils/hooks/useValueRef'

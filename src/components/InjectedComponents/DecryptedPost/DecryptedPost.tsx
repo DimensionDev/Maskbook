@@ -1,15 +1,15 @@
 import React, { useMemo, useState, useEffect } from 'react'
 import { sleep } from '../../../utils/utils'
 import { ServicesWithProgress } from '../../../extension/service'
-import { Profile } from '../../../database'
-import { ProfileIdentifier, PostIdentifier } from '../../../database/type'
-import {
+import type { Profile } from '../../../database'
+import type { ProfileIdentifier, PostIdentifier } from '../../../database/type'
+import type {
     DecryptionProgress,
     FailureDecryption,
     SuccessDecryption,
 } from '../../../extension/background-script/CryptoServices/decryptFrom'
 import { deconstructPayload } from '../../../utils/type-transform/Payload'
-import { TypedMessage } from '../../../extension/background-script/CryptoServices/utils'
+import type { TypedMessage } from '../../../extension/background-script/CryptoServices/utils'
 import { DecryptPostSuccess, DecryptPostSuccessProps } from './DecryptedPostSuccess'
 import { DecryptPostAwaitingProps, DecryptPostAwaiting } from './DecryptPostAwaiting'
 import { DecryptPostFailedProps, DecryptPostFailed } from './DecryptPostFailed'

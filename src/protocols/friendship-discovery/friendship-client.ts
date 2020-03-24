@@ -1,4 +1,4 @@
-import { FriendshipCertificateEncryptedV1 } from './friendship-cert'
+import type { FriendshipCertificateEncryptedV1 } from './friendship-cert'
 
 declare function publishCertificate(cert: FriendshipCertificateEncryptedV1): Promise<void>
 declare function pullCertificates(

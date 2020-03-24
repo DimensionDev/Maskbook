@@ -1,5 +1,5 @@
 import { CustomEventId } from './constants'
-import { CustomEvents } from '../extension/injected-script/addEventListener'
+import type { CustomEvents } from '../extension/injected-script/addEventListener'
 
 import { sleep as _sleep, timeout as _timeout } from '@holoflows/kit/es/util/sleep'
 import { flatten, isNull, random } from 'lodash-es'

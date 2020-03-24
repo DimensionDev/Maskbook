@@ -1,6 +1,6 @@
-import { PostRecord, RecipientReason, RecipientDetail } from '../../../../../database/post'
-import { BackupJSONFileLatest } from '../latest'
-import { RecipientReasonJSON } from '../version-2'
+import type { PostRecord, RecipientReason, RecipientDetail } from '../../../../../database/post'
+import type { BackupJSONFileLatest } from '../latest'
+import type { RecipientReasonJSON } from '../version-2'
 import { Identifier, GroupIdentifier, PostIVIdentifier, ProfileIdentifier } from '../../../../../database/type'
 import { IdentifierMap } from '../../../../../database/IdentifierMap'
 

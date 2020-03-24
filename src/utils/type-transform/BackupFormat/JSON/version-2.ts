@@ -1,6 +1,6 @@
 /* eslint-disable import/no-deprecated */
-import { LinkedProfileDetails } from '../../../../database/Persona/Persona.db'
-import { BackupJSONFileVersion1 } from './version-1'
+import type { LinkedProfileDetails } from '../../../../database/Persona/Persona.db'
+import type { BackupJSONFileVersion1 } from './version-1'
 import { ProfileIdentifier, ECKeyIdentifier, GroupIdentifier } from '../../../../database/type'
 
 export type RecipientReasonJSON = (

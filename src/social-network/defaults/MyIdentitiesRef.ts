@@ -1,8 +1,8 @@
 import { MessageCenter } from '../../utils/messages'
 import Services from '../../extension/service'
-import { SocialNetworkUI } from '../ui'
-import { ValueRef } from '@holoflows/kit/es'
-import { Profile } from '../../database'
+import type { SocialNetworkUI } from '../ui'
+import type { ValueRef } from '@holoflows/kit/es'
+import type { Profile } from '../../database'
 
 export function InitMyIdentitiesValueRef(self: SocialNetworkUI, network: string) {
     const ref = self.myIdentitiesRef

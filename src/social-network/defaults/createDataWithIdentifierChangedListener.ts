@@ -1,6 +1,6 @@
-import { UpdateEvent } from '../../utils/messages'
-import { ValueRef } from '@holoflows/kit/es'
-import { Identifier } from '../../database/type'
+import type { UpdateEvent } from '../../utils/messages'
+import type { ValueRef } from '@holoflows/kit/es'
+import type { Identifier } from '../../database/type'
 export function createDataWithIdentifierChangedListener<
     T extends {
         identifier: Identifier

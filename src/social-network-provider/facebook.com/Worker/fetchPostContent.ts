@@ -1,4 +1,4 @@
-import { ProfileIdentifier, PostIdentifier } from '../../../database/type'
+import type { ProfileIdentifier, PostIdentifier } from '../../../database/type'
 import { parseFacebookStaticHTML } from '../parse-html'
 import { getPostUrlAtFacebook } from '../parse-username'
 import tasks from '../../../extension/content-script/tasks'

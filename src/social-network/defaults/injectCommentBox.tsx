@@ -1,5 +1,5 @@
 import React from 'react'
-import { PostInfo } from '../ui'
+import type { PostInfo } from '../ui'
 import { MutationObserverWatcher } from '@holoflows/kit/es'
 import { useValueRef } from '../../utils/hooks/useValueRef'
 import { CommentBox, CommentBoxProps } from '../../components/InjectedComponents/CommentBox'

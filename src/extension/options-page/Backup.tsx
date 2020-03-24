@@ -19,7 +19,7 @@ import { useI18N } from '../../utils/i18n-next-ui'
 import { ProfileIdentifier, Identifier } from '../../database/type'
 import { QrCode } from '../../components/shared/qrcode'
 import { amber } from '@material-ui/core/colors'
-import { BackupJSONFileLatest } from '../../utils/type-transform/BackupFormat/JSON/latest'
+import type { BackupJSONFileLatest } from '../../utils/type-transform/BackupFormat/JSON/latest'
 import { compressBackupFile } from '../../utils/type-transform/BackupFileShortRepresentation'
 
 const useStyles = makeStyles((theme) =>

@@ -6,9 +6,7 @@ import { PostDialog } from '../../../components/InjectedComponents/PostDialog'
 import { useTwitterButton, useTwitterCloseButton, useTwitterLabel, useTwitterDialog } from '../utils/theme'
 import { makeStyles } from '@material-ui/styles'
 import { postEditorInPopupSelector, rootSelector } from '../utils/selector'
-import { Theme } from '@material-ui/core'
-import { useValueRef } from '../../../utils/hooks/useValueRef'
-import { instanceOfTwitterUI } from '.'
+import type { Theme } from '@material-ui/core'
 
 const useStyles = makeStyles((theme: Theme) => ({
     MUIInputInput: {

@@ -2,7 +2,7 @@
 import Gun from 'gun'
 import 'gun/lib/then'
 import { OnlyRunInContext } from '@holoflows/kit/es'
-import { PublishedAESKey } from '../../../crypto/crypto-alpha-40'
+import type { PublishedAESKey } from '../../../crypto/crypto-alpha-40'
 import { gun2 } from '../version.2'
 
 export * from './posts'

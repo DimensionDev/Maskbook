@@ -1,7 +1,7 @@
 import { MessageCenter as MC } from '@holoflows/kit/es'
-import { Profile, Group } from '../database'
+import type { Profile, Group } from '../database'
 import Serialization from './type-transform/Serialization'
-import { ProfileIdentifier, GroupIdentifier, PersonaIdentifier } from '../database/type'
+import type { ProfileIdentifier, GroupIdentifier, PersonaIdentifier } from '../database/type'
 
 export interface UpdateEvent<Data> {
     readonly reason: 'update' | 'delete' | 'new'

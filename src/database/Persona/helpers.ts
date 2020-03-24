@@ -1,5 +1,5 @@
 import { ProfileIdentifier, PersonaIdentifier, ECKeyIdentifier } from '../type'
-import { Profile, Persona } from './types'
+import type { Profile, Persona } from './types'
 import {
     ProfileRecord,
     queryProfilesDB,

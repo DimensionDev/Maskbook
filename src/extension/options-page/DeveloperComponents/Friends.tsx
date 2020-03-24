@@ -15,7 +15,7 @@ import {
     makeStyles,
 } from '@material-ui/core'
 import React, { useState } from 'react'
-import { Profile } from '../../../database'
+import type { Profile } from '../../../database'
 import { Avatar } from '../../../utils/components/Avatar'
 import { useTextField } from '../../../utils/hooks/useForms'
 import Services from '../../service'
