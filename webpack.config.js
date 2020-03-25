@@ -319,6 +319,7 @@ function addTSLoader() {
                 module: 'esnext',
                 jsx: 'react',
                 noEmit: false,
+                importsNotUsedAsValues: 'remove',
             },
         },
     }
