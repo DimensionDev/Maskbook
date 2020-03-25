@@ -1,5 +1,5 @@
 globalThis.location = { hostname: 'localhost' }
-globalThis.navigator = { appVersion: '', userAgent: '', language: '', platform: '' }
+globalThis.navigator = { appVersion: '', userAgent: '', language: '', platform: 'ssr' }
 globalThis.document = {
     adoptedStyleSheets: {},
     getElementById() {},
@@ -49,6 +49,10 @@ const restoreKit = modifyPackage(
 )
 
 process.on('uncaughtException', function (err) {
+    cleanup()
+    throw err
+})
+process.on('unhandledRejection', (err) => {
     cleanup()
     throw err
 })

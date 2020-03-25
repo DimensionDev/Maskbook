@@ -18,6 +18,8 @@ export function SSRRenderer(jsx: JSX.Element, container?: HTMLElement) {
             const styles = sheets.toString()
             return `<style>${styles}</style><div id="root">${html}</div>`
         }
-        render().then(console.log)
+        render()
+            .then(console.log)
+            .then(() => process.exit())
     }
 }
