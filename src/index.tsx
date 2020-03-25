@@ -21,7 +21,7 @@ import BugReportIcon from '@material-ui/icons/BugReport'
 import React from 'react'
 import { ThemeProvider } from '@material-ui/styles'
 import { MaskbookDarkTheme, MaskbookLightTheme } from './utils/theme'
-import { HashRouter as Router, Route, Switch, Redirect, useLocation, useHistory } from 'react-router-dom'
+import { HashRouter, StaticRouter, Route, Switch, Redirect, useLocation, useHistory } from 'react-router-dom'
 import { makeStyles, createStyles } from '@material-ui/core/styles'
 
 import './setup.ui'
@@ -37,8 +37,6 @@ import DashboardHomePage from './extension/options-page/Home'
 import DashboardDebugPage from './extension/options-page/Debug'
 import DashboardInitializeDialog from './extension/options-page/Initialize'
 import DashboardWalletsPage from './plugins/Wallet/UI/Dashboard/Wallets'
-import { languageSettings } from './components/shared-settings/settings'
-import { useValueRef } from './utils/hooks/useValueRef'
 import { useI18N } from './utils/i18n-next-ui'
 import i18nNextInstance from './utils/i18n-next'
 import { Settings as DashboardSettingsPage } from './extension/options-page/Settings/settings'
@@ -96,7 +94,7 @@ const OptionsPageRouters = (
 
 function DashboardWithProvider() {
     const isDarkTheme = useMediaQuery('(prefers-color-scheme: dark)')
-    return (
+    const child = (
         <I18nextProvider i18n={i18nNextInstance}>
             <ThemeProvider theme={isDarkTheme ? MaskbookDarkTheme : MaskbookLightTheme}>
                 <SnackbarProvider
@@ -105,14 +103,13 @@ function DashboardWithProvider() {
                         vertical: 'top',
                         horizontal: 'right',
                     }}>
-                    <Router>
-                        <CssBaseline />
-                        <Dashboard></Dashboard>
-                    </Router>
+                    <CssBaseline />
+                    <Dashboard></Dashboard>
                 </SnackbarProvider>
             </ThemeProvider>
         </I18nextProvider>
     )
+    return navigator.platform === 'ssr' ? <StaticRouter>{child}</StaticRouter> : <HashRouter>{child}</HashRouter>
 }
 
 function Dashboard() {
