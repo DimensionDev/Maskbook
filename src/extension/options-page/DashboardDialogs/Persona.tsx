@@ -182,15 +182,15 @@ export function PersonaBackupDialog(props: PersonaBackupDialogProps) {
         tabs: [
             {
                 label: 'MNEMONIC WORDS',
-                component: <ShowcaseBox>{mnemonicWordValue}</ShowcaseBox>,
+                children: <ShowcaseBox>{mnemonicWordValue}</ShowcaseBox>,
             },
             {
                 label: 'BASE64',
-                component: <ShowcaseBox>{base64Value}</ShowcaseBox>,
+                children: <ShowcaseBox>{base64Value}</ShowcaseBox>,
             },
             {
                 label: 'QR',
-                component: compressedQRString ? (
+                children: compressedQRString ? (
                     <QrCode
                         text={compressedQRString}
                         options={{ width: 260 }}
@@ -289,7 +289,7 @@ export function PersonaImportDialog() {
         tabs: [
             {
                 label: 'MNEMONIC WORDS',
-                component: (
+                children: (
                     <>
                         <TextField
                             className={classes.input}
@@ -321,7 +321,7 @@ export function PersonaImportDialog() {
             },
             {
                 label: 'BASE64',
-                component: (
+                children: (
                     <InputBase
                         style={{ width: '100%', minHeight: '100px' }}
                         inputRef={(input: HTMLInputElement) => input && input.focus()}
@@ -332,7 +332,7 @@ export function PersonaImportDialog() {
             },
             {
                 label: 'QR',
-                component: <QR />,
+                children: <QR />,
                 p: 0,
             },
         ],
