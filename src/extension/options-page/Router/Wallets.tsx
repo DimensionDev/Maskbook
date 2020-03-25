@@ -10,6 +10,8 @@ import HistoryIcon from '@material-ui/icons/History'
 import { WalletItem } from '../DashboardComponents/WalletItem'
 import { WalletRecord } from '../../../plugins/Wallet/database/types'
 import { TokenListItem } from '../DashboardComponents/TokenListItem'
+import { useDialog } from '../Dialog/Base'
+import { DashboardWalletImportDialog, DashboardWalletCreateDialog } from '../Dialog/Wallet'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -74,16 +76,19 @@ const walletTheme = (theme: Theme): Theme => ({
 })
 
 export default function DashboardWalletsRouter() {
+    const [walletImport, openWalletImport] = useDialog(<DashboardWalletImportDialog />)
+    const [walletCreate, openWalletCreate] = useDialog(<DashboardWalletCreateDialog />)
+
     const actions = useMemo(
         () => [
-            <Button color="primary" variant="outlined">
+            <Button color="primary" variant="outlined" onClick={openWalletImport}>
                 Import
             </Button>,
-            <Button color="primary" variant="contained" endIcon={<AddCircleIcon />}>
+            <Button color="primary" variant="contained" onClick={openWalletCreate} endIcon={<AddCircleIcon />}>
                 Create Wallet
             </Button>,
         ],
-        [],
+        [openWalletCreate, openWalletImport],
     )
     const classes = useStyles()
     const wallets: Partial<WalletRecord>[] = [fakeWallet, fakeWallet]
@@ -125,6 +130,8 @@ export default function DashboardWalletsRouter() {
                         </div>
                     </div>
                 </div>
+                {walletImport}
+                {walletCreate}
             </DashboardRouterContainer>
         </ThemeProvider>
     )
