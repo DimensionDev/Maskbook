@@ -11,7 +11,12 @@ import { WalletItem } from '../DashboardComponents/WalletItem'
 import { WalletRecord } from '../../../plugins/Wallet/database/types'
 import { TokenListItem } from '../DashboardComponents/TokenListItem'
 import { useDialog } from '../Dialog/Base'
-import { DashboardWalletImportDialog, DashboardWalletCreateDialog } from '../Dialog/Wallet'
+import {
+    DashboardWalletImportDialog,
+    DashboardWalletCreateDialog,
+    DashboardWalletAddTokenDialog,
+    DashboardWalletHistoryDialog,
+} from '../Dialog/Wallet'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -78,6 +83,8 @@ const walletTheme = (theme: Theme): Theme => ({
 export default function DashboardWalletsRouter() {
     const [walletImport, openWalletImport] = useDialog(<DashboardWalletImportDialog />)
     const [walletCreate, openWalletCreate] = useDialog(<DashboardWalletCreateDialog />)
+    const [addToken, openAddToken] = useDialog(<DashboardWalletAddTokenDialog />)
+    const [walletHistory, oepnWalletHistory] = useDialog(<DashboardWalletHistoryDialog />)
 
     const actions = useMemo(
         () => [
@@ -111,7 +118,7 @@ export default function DashboardWalletsRouter() {
                             <Typography className={classes.title} variant="h5">
                                 Details
                             </Typography>
-                            <Button variant="text" color="primary" startIcon={<AddCircleIcon />}>
+                            <Button variant="text" color="primary" onClick={openAddToken} startIcon={<AddCircleIcon />}>
                                 Add Token
                             </Button>
                             <IconButton>
@@ -124,7 +131,11 @@ export default function DashboardWalletsRouter() {
                             <TokenListItem></TokenListItem>
                         </List>
                         <div className={classes.footer}>
-                            <Button startIcon={<HistoryIcon />} variant="text" color="primary">
+                            <Button
+                                onClick={oepnWalletHistory}
+                                startIcon={<HistoryIcon />}
+                                variant="text"
+                                color="primary">
                                 History
                             </Button>
                         </div>
@@ -132,6 +143,8 @@ export default function DashboardWalletsRouter() {
                 </div>
                 {walletImport}
                 {walletCreate}
+                {addToken}
+                {walletHistory}
             </DashboardRouterContainer>
         </ThemeProvider>
     )
