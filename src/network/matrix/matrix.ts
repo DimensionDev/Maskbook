@@ -1,6 +1,12 @@
 /// <reference path="./matrix.type.d.ts" />
 import sdk, { MatrixClient } from 'matrix-js-sdk'
 import { Emitter } from '@servie/events'
+import type { MatrixEvent } from 'matrix-js-sdk-type/dts/models/event'
+import type Room from 'matrix-js-sdk-type/dts/models/room'
+import type EventTimelineSet from 'matrix-js-sdk-type/dts/models/event-timeline-set'
+import { OnlyRunInContext } from '@holoflows/kit/es'
+import { getLogger } from 'loglevel'
+OnlyRunInContext('background', 'Matrix')
 export const endpoint = 'https://matrix.vampire.rip'
 type MatrixClient = typeof MatrixClient extends { new (...args: any[]): infer U } ? U : never
 function any(x: any): any {
@@ -13,9 +19,9 @@ type MatrixLoginCred = Record<'user_id' | 'device_id' | 'access_token' | 'home_s
  * @param password
  */
 export async function loginMatrixAccount(
-    client: MatrixClient,
     username: string,
     password: string,
+    client = createMatrixClient(),
 ): Promise<[MatrixLoginCred, MatrixClient]> {
     const cred: MatrixLoginCred = await any(client).loginWithPassword(username, password)
     client.startClient({})
@@ -25,9 +31,9 @@ export async function loginMatrixAccount(
  * Register a Matrix Account
  */
 export function registerMatrixAccount(
-    client: MatrixClient,
     username: string,
     password: string,
+    client = createMatrixClient(),
 ): Promise<[MatrixLoginCred, MatrixClient]> {
     const u = undefined
     return new Promise<[MatrixLoginCred, MatrixClient]>(async (resolve, reject) => {
@@ -36,7 +42,7 @@ export function registerMatrixAccount(
                 const session = x.data.session
                 if (!session) return reject(x)
                 any(client).register(username, password, session, { type: 'm.login.dummy' }, u, u, false, () =>
-                    loginMatrixAccount(client, username, password).then(resolve, reject),
+                    loginMatrixAccount(username, password, client).then(resolve, reject),
                 )
             })
         } catch (e) {
@@ -150,29 +156,8 @@ export class MatrixMessage {
         return x.room_id
     }
 }
-export async function createMatrixMessage(username: string, password: string) {
-    const client = sdk.createClient({ baseUrl: endpoint })
-    await loginMatrixAccount(client, username, password)
-    return new MatrixMessage(client)
+export function createMatrixClient() {
+    const log = getLogger('matrix')
+    log.setLevel('silent')
+    return sdk.createClient({ baseUrl: endpoint, logger: log })
 }
-const username = ['maskbook-test222', 'passwordpasswordpassword'] as const
-export const client1 = createMatrixMessage(...username)
-export const client2 = createMatrixMessage('another', 'testtest')
-export const room = '#hchch:matrix.vampire.rip'
-import * as self from './matrix'
-import type { MatrixEvent } from 'matrix-js-sdk-type/dts/models/event'
-import type Room from 'matrix-js-sdk-type/dts/models/room'
-import type EventTimelineSet from 'matrix-js-sdk-type/dts/models/event-timeline-set'
-import { sleep } from '@holoflows/kit/es/util/sleep'
-Object.assign(globalThis, { mat: self })
-console.log('mat\n', self)
-
-client1.then((x) => {
-    x.on('maskbook.hello.world', (f) => {
-        console.log(f.payload)
-    })
-})
-
-sleep(2000)
-    .then(() => client2)
-    .then((x) => x.emit({ type: 'alias', alias: room }, 'maskbook.hello.world', { message: 'hi' }))
