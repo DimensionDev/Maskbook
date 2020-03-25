@@ -49,13 +49,8 @@ const baseTheme = (theme: 'dark' | 'light'): ThemeOptions =>
                     padding: '0',
                 },
             },
-            MuiInputBase: {
-                root: {
-                    alignItems: 'unset',
-                },
-            },
-            MuiPaper: {
-                rounded: {
+            MuiDialog: {
+                paper: {
                     borderRadius: '12px',
                 },
             },
