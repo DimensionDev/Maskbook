@@ -1,4 +1,4 @@
-import { MessageCenter as MC } from '@holoflows/kit/es'
+import { MessageCenter as MC } from '@holoflows/kit'
 import type { Profile, Group } from '../database'
 import Serialization from './type-transform/Serialization'
 import type { ProfileIdentifier, GroupIdentifier, PersonaIdentifier } from '../database/type'

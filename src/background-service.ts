@@ -6,6 +6,8 @@ import './_background_loader.1'
 import './extension/service'
 import './provider.worker'
 
+import './network/matrix/instance'
+
 import * as PersonaDB from './database/Persona/Persona.db'
 import * as PersonaDBHelper from './database/Persona/helpers'
 import { initAutoShareToFriends } from './extension/background-script/Jobs/AutoShareToFriends'
