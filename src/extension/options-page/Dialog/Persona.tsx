@@ -148,7 +148,7 @@ export function DashboardPersonaImportDialog() {
             iconColor="#5FDD97"
             primary="Import Your Persona"
             secondary="You can import a persona backup in the following ways.">
-            <AbstractTab margin="top" {...tabProps}></AbstractTab>
+            <AbstractTab {...tabProps}></AbstractTab>
             <Button hidden={tabState === 2} variant="contained" color="primary" onClick={importPersona}>
                 {t('import')}
             </Button>
