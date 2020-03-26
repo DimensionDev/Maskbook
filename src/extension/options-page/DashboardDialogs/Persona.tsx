@@ -117,12 +117,16 @@ export function PersonaDeleteDialog(props: PersonaDeleteDialogProps) {
     const deletePersona = () => {
         Services.Identity.deletePersona(persona.identifier, 'delete even with private').then(onConfirm)
         Object.keys(currentImmersiveSetupStatus).forEach((network) => {
-            const status = JSON.parse(currentImmersiveSetupStatus[network].value) as ImmersiveSetupCrossContextStatus
-            if (status.persona === persona.identifier.toText()) {
-                currentImmersiveSetupStatus[network].value = JSON.stringify({
-                    status: false,
-                })
-            }
+            try {
+                const status = JSON.parse(
+                    currentImmersiveSetupStatus[network].value,
+                ) as ImmersiveSetupCrossContextStatus
+                if (status.persona === persona.identifier.toText()) {
+                    currentImmersiveSetupStatus[network].value = JSON.stringify({
+                        status: false,
+                    })
+                }
+            } catch {}
         })
     }
 

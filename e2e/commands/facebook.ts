@@ -1,6 +1,6 @@
 import { Page, Browser } from 'puppeteer'
 import { SNS } from '../types/SNS'
-import { getPageByUrl } from '../support/helpers'
+import { getPageByUrl, setupPage } from '../support/helpers'
 
 class Facebook implements SNS {
     constructor(public id: string, public username: string, public password: string) {}
@@ -8,28 +8,34 @@ class Facebook implements SNS {
     name = 'facebook.com'
 
     // selectors
+    composeButtonSelector = '#feedx_sprouts_container textarea'
+    composeImageSelector = '#feedx_sprouts_container .fbScrollableArea img'
+    composeEditorSelector = '#feedx_sprouts_container [contenteditable="true"]'
     profileSelector = '#profile_timeline_intro_card'
     bioTextareaSelector = 'textarea[name="bio"]'
     immersiveDialogSelector = 'body > span'
+    postDialogHintSelector = '#pagelet_composer [aria-label="Dismiss"] + span'
+    postDialogModalSelector = 'body > div[aria-hidden="true"]:not([class]):not([style])'
 
-    getActivePage(browser: Browser) {
-        return getPageByUrl(browser, 'https://www.facebook.com/')
+    async getActivePage(browser: Browser) {
+        const page = await getPageByUrl(browser, 'https://www.facebook.com/')
+        if (page) {
+            await setupPage(page)
+        }
+        return page
     }
 
-    async openHome() {}
-    async openProfile() {}
+    async openNewsFeed(page: Page) {
+        await page.bringToFront()
+        await page.goto('https://www.facebook.com/', {
+            waitUntil: 'load',
+        })
+    }
 
-    async login(browser: Browser) {
-        const page = await browser.newPage()
-
-        // set a modern viewport
-        await page.setViewport({ width: 1366, height: 768 })
-
+    async login(page: Page) {
         // let auto redirect happens
         await page.goto('https://www.facebook.com/', {
-            // why networkidle2 ?
-            // https://github.com/puppeteer/puppeteer/issues/4863#issuecomment-536419476
-            waitUntil: 'networkidle2',
+            waitUntil: 'load',
         })
 
         const profileLink = await page.$('[data-click="profile_icon"] > a')
@@ -38,12 +44,11 @@ class Facebook implements SNS {
         if (profileLink) {
             // user already login
             if ((await profileLink.evaluate(e => e.getAttribute('href')))?.includes(this.id)) {
-                await page.close()
                 return
             }
 
             // logout old account
-            await this.logout(browser)
+            await this.logout(page)
         }
 
         // login with given account
@@ -63,27 +68,27 @@ class Facebook implements SNS {
 
         // wait for home
         await page.waitFor('[data-click="profile_icon"]')
-        await page.close()
     }
 
-    async logout(browser: Browser) {
-        const page = await browser.newPage()
-
-        // set a modern viewport
-        await page.setViewport({ width: 1366, height: 768 })
-
+    async logout(page: Page) {
         // jump to logout dialog
-        await page.goto('https://www.facebook.com/log.out#', {
+        await page.goto('https://www.facebook.com', {
             waitUntil: 'load',
         })
 
+        // click the nav link
+        const navLink = await page.waitFor('#userNavigationLabel')
+        await navLink.click()
+        await page.waitFor(500)
+
+        // click logout button
+        const logoutButton = await page.waitFor('.uiContextualLayer [role="menuitem"][data-gt*="menu_logout"]')
+        await logoutButton.click()
+        await page.waitFor(500)
+
+        // wait for login button
         await page.waitFor('#loginbutton')
-        await page.close()
     }
-
-    async loginIfNeeded(page: Page, username: string, password: string) {}
-
-    async logoutIfNeeded(page: Page, username: string, password: string) {}
 
     async getBio(page: Page) {
         return ''

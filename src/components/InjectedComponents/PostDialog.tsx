@@ -168,7 +168,7 @@ export function PostDialogUI(props: PostDialogUIProps) {
                                 root: classes.MUIInputRoot,
                                 input: classes.MUIInputInput,
                             }}
-                            inputProps={{ className: classes.input }}
+                            inputProps={{ className: classes.input, 'data-testid': 'text_textarea' }}
                             autoFocus
                             value={props.postContent.content}
                             inputRef={inputRef}
@@ -234,7 +234,8 @@ export function PostDialogUI(props: PostDialogUIProps) {
                             color="primary"
                             variant="contained"
                             disabled={props.postBoxButtonDisabled}
-                            onClick={props.onFinishButtonClicked}>
+                            onClick={props.onFinishButtonClicked}
+                            data-testid="finish_button">
                             {t('post_dialog__button')}
                         </Button>
                     </DialogActions>

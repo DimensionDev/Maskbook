@@ -39,7 +39,10 @@ export function SettingsUI<T>(props: SettingsUIProps<T>) {
         case 'boolean':
             const [ui, change] = getBooleanSettingsUI(value as any, currentValue)
             return (
-                <ListItem button onClick={change}>
+                <ListItem
+                    button
+                    onClick={change}
+                    data-testid={typeof primary === 'string' ? primary.toLowerCase().replace(/\s/g, '_') : ''}>
                     {props.icon ? <ListItemIcon>{props.icon}</ListItemIcon> : null}
                     <ListItemText primary={primary} secondary={secondary} />
                     <ListItemSecondaryAction>{ui}</ListItemSecondaryAction>

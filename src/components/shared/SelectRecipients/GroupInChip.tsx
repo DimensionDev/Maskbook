@@ -46,6 +46,7 @@ export function GroupInChip(props: GroupInChipProps) {
             label={useResolveSpecialGroupName(props.item)}
             {...props.ChipProps}
             className={classNames(classes.root, props.ChipProps?.className)}
+            data-testid={props.item.groupName}
         />
     )
 }

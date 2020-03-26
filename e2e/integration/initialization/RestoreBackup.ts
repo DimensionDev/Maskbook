@@ -1,13 +1,11 @@
 import * as dashboard from '../../commands/dashboard'
 import * as restore from '../../commands/restore'
+import * as helpers from '../../support/helpers'
 import { INITIALIZATION_STORY_URL } from '../../support/constants'
 
 beforeAll(async () => {
-    // wait for default option page to be opened
-    await page.waitFor(500)
-
-    // set a modern viewport
-    await page.setViewport({ width: 1366, height: 768 })
+    // setup page
+    await helpers.setupPage(page)
 })
 
 describe(`${INITIALIZATION_STORY_URL}-Workflow1B:CoreInit/RestoreBackup`, () => {
@@ -30,7 +28,7 @@ describe(`${INITIALIZATION_STORY_URL}-Workflow1B:CoreInit/RestoreBackup`, () => 
             switch (backup) {
                 case 'db_backup_1_persona_1_profile':
                     const personaTitle = await page.waitFor('[data-testid="persona_title"]')
-                    expect(await personaTitle.evaluate((e) => e.textContent?.toLowerCase())).toBe('alice')
+                    expect(await personaTitle.evaluate(e => e.textContent?.toLowerCase())).toBe('alice')
                     break
                 case 'db_backup_1_persona_0_profile':
                     expect((await page.evaluate(() => location.hash)).includes('#/initialize/2s')).toBeTruthy()
@@ -63,7 +61,7 @@ describe(`${INITIALIZATION_STORY_URL}-Workflow1B:CoreInit/RestoreBackup`, () => 
             switch (backup) {
                 case 'db_backup_1_persona_1_profile':
                     const personaTitle = await page.waitFor('[data-testid="persona_title"]')
-                    expect(await personaTitle.evaluate((e) => e.textContent?.toLowerCase())).toBe('alice')
+                    expect(await personaTitle.evaluate(e => e.textContent?.toLowerCase())).toBe('alice')
                     break
                 case 'db_backup_1_persona_0_profile':
                     expect((await page.evaluate(() => location.hash)).includes('#/initialize/2s')).toBeTruthy()
