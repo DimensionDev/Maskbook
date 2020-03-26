@@ -81,9 +81,9 @@ export async function getRedPackets(owned?: boolean) {
 }
 
 export async function createRedPacket(packet: createRedPacketInit): Promise<{ password: string }> {
-    if (packet.send_total < packet.shares) {
+    if (packet.send_total.isLessThan(packet.shares)) {
         throw new Error('At least [number of red packets] tokens to your red packet.')
-    } else if (packet.shares.isLessThan(0) /* packet.shares < 0n */) {
+    } else if (packet.shares.isNegative() /* packet.shares < 0n */) {
         throw new Error('At least 1 person should be able to claim the red packet.')
     }
     const password = uuid()
@@ -106,7 +106,7 @@ export async function createRedPacket(packet: createRedPacketInit): Promise<{ pa
     const { create_transaction_hash, create_nonce } = await getProvider().create(
         packet.sender_address,
         Web3Utils.sha3(password),
-        Number(packet.shares),
+        packet.shares.toNumber(),
         packet.is_random,
         packet.duration,
         Web3Utils.sha3(Math.random().toString()),
@@ -189,7 +189,7 @@ export async function onCreationResult(id: { databaseID: string }, details: RedP
             total: String(rec.send_total),
             network: rec.network,
             token,
-            shares: Number(rec.shares),
+            shares: rec.shares.toNumber(),
         }
     }
     t.objectStore('RedPacket').put(rec)

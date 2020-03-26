@@ -433,15 +433,14 @@ export const redPacketAPI = {
 
 export const walletAPI = {
     dataSource: 'real' as const,
-    queryBalance(address: string): Promise<BigNumber> {
-        return web3.eth.getBalance(address).then((value) => new BigNumber(value))
+    async queryBalance(address: string): Promise<BigNumber> {
+        const value = await web3.eth.getBalance(address)
+        return new BigNumber(value)
     },
-    queryERC20TokenBalance(walletAddress: string, tokenAddress: string): Promise<BigNumber> {
+    async queryERC20TokenBalance(walletAddress: string, tokenAddress: string): Promise<BigNumber> {
         const erc20Contract = createERC20Contract(tokenAddress)
-        return erc20Contract.methods
-            .balanceOf(walletAddress)
-            .call()
-            .then((value) => new BigNumber(value))
+        const value = await erc20Contract.methods.balanceOf(walletAddress).call()
+        return new BigNumber(value)
     },
     async approveERC20Token(
         senderAddress: string,

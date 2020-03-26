@@ -10,7 +10,7 @@ import type { ERC20TokenPredefinedData } from './erc20'
 import { memoizePromise } from '../../utils/memoize'
 import { currentEthereumNetworkSettings } from './network'
 import { buf2hex } from './web3'
-import type { BigNumber } from 'bignumber.js'
+import { BigNumber } from 'bignumber.js'
 
 // Private key at m/44'/coinType'/account'/change/addressIndex
 // coinType = ether
@@ -19,21 +19,20 @@ export function getWalletProvider() {
     return walletAPI
 }
 const memoGetWalletBalance = memoizePromise(
-    (addr: string) => {
-        return getWalletProvider()
-            .queryBalance(addr)
-            .then((x) => onWalletBalanceUpdated(addr, x))
+    async (addr: string) => {
+        const x = await getWalletProvider().queryBalance(addr)
+        return onWalletBalanceUpdated(addr, x)
     },
     (x) => x,
 )
 const memoQueryERC20Token = memoizePromise(
-    (addr: string, erc20Addr: string) => {
-        return getWalletProvider()
-            .queryERC20TokenBalance(addr, erc20Addr)
-            .then((x) => onWalletERC20TokenBalanceUpdated(addr, erc20Addr, x))
-            .catch(() => {
-                // do nothing
-            })
+    async (addr: string, erc20Addr: string) => {
+        try {
+            const x = await getWalletProvider().queryERC20TokenBalance(addr, erc20Addr)
+            return onWalletERC20TokenBalanceUpdated(addr, erc20Addr, x)
+        } catch (e) {
+            return
+        }
     },
     (x, y) => x + ',' + y,
 )
@@ -212,5 +211,16 @@ export async function onWalletERC20TokenBalanceUpdated(address: string, tokenAdd
 async function getWalletByAddress(t: IDBPSafeTransaction<WalletDB, ['Wallet'], 'readonly'>, address: string) {
     const rec = await t.objectStore('Wallet').get(address)
     assert(rec)
+    if (rec.eth_balance) {
+        Object.setPrototypeOf(rec.eth_balance, BigNumber.prototype)
+    }
+    const tokenBalance = new Map<string, BigNumber | undefined>()
+    for (const [name, balance] of rec.erc20_token_balance.entries()) {
+        if (balance) {
+            Object.setPrototypeOf(balance, BigNumber.prototype)
+        }
+        tokenBalance.set(name, balance)
+    }
+    rec.erc20_token_balance = tokenBalance
     return rec
 }

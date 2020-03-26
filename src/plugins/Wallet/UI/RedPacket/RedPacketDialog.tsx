@@ -152,14 +152,13 @@ function NewPacketUI(props: RedPacketDialogProps & NewPacketProps) {
     }, [onRequireNewWallet, selectedWalletAddress, wallets])
 
     const createRedPacket = () => {
+        const power = selectedTokenType.type === 'eth' ? 18 : selectedToken.decimals
         props.onCreateNewPacket({
             duration: 60 /** seconds */ * 60 /** mins */ * 24 /** hours */,
             is_random: Boolean(is_random),
             network: rinkebyNetwork ? EthereumNetwork.Rinkeby : EthereumNetwork.Mainnet,
             send_message,
-            send_total: new BigNumber(
-                send_total * 10 ** (selectedTokenType.type === 'eth' ? 18 : selectedToken!.decimals),
-            ),
+            send_total: new BigNumber(send_total).multipliedBy(new BigNumber(10).pow(power)),
             sender_address: selectedWalletAddress!,
             sender_name: props.newRedPacketCreatorName ?? 'Unknown User',
             shares: new BigNumber(shares),
