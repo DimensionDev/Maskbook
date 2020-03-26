@@ -267,7 +267,7 @@ export function WalletRedPacketHistoryDialog(props: WalletRedPacketHistoryDialog
                                 <Typography variant="h6">
                                     {(tabState === 0 && record.claim_amount) || (tabState === 1 && record.send_total)
                                         ? formatBalance(
-                                              tabState === 0 ? record.claim_amount! : record.send_total!,
+                                              tabState === 0 ? record.claim_amount! : record.send_total,
                                               record.raw_payload?.token?.decimals ?? 18,
                                           )
                                         : '0'}{' '}

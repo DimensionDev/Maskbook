@@ -1,4 +1,4 @@
-import BigNumber from 'bignumber.js'
+import type { BigNumber } from 'bignumber.js'
 
 /**
  * @see https://github.com/DimensionDev/Tessercube-iOS/wiki/Red-Packet-Data-Dictionary
