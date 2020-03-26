@@ -49,7 +49,7 @@ export default function ProviderLine(props: ProviderLineProps) {
                     { [classes.connected]: connected },
                     { [classes.pointer]: !connected },
                 )}
-                data-testid={`initialization_connect_button_${network.toLowerCase()}`}>
+                data-testid={`connect_button_${network.toLowerCase()}`}>
                 {connected ? `${t('dashboard_connected')}: @${userId}` : `${t('connect')} ${network}`}
             </Typography>
         </FormControl>

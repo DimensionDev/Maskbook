@@ -131,7 +131,7 @@ export default function PersonaCard({ persona }: Props) {
                 <Typography className={classes.header} variant="h5" component="h2" gutterBottom>
                     {!rename ? (
                         <>
-                            <span ref={titleRef} className="title" data-testid="initialization_persona_title">
+                            <span ref={titleRef} className="title" data-testid="persona_title">
                                 {persona.nickname}
                             </span>
                             <Typography className="fullWidth" variant="body1" component="span" color="textSecondary">
@@ -139,7 +139,7 @@ export default function PersonaCard({ persona }: Props) {
                                     className={classes.cursor}
                                     fontSize="small"
                                     onClick={handleClick}
-                                    data-testid="initialization_persona_setting_icon"
+                                    data-testid="persona_setting_icon"
                                 />
                                 <Menu
                                     anchorEl={anchorEl}
@@ -158,7 +158,7 @@ export default function PersonaCard({ persona }: Props) {
                                     <MenuItem
                                         onClick={() => setDeletePersona(true)}
                                         className={color.error}
-                                        data-testid="initialization_persona_delete_button">
+                                        data-testid="persona_delete_button">
                                         {t('dashboard_delete_persona')}
                                     </MenuItem>
                                 </Menu>

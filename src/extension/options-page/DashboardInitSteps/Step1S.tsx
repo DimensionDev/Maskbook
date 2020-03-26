@@ -50,7 +50,7 @@ export default function InitStep1S() {
                 color="primary"
                 onClick={createPersonaAndNext}
                 component="a"
-                data-testid="initialization_next_button">
+                data-testid="next_button">
                 {t('next')}
             </ActionButton>
         </>
@@ -68,7 +68,7 @@ export default function InitStep1S() {
                 label="Name"
                 helperText=" "
                 inputProps={{
-                    'data-testid': 'initialization_username_input',
+                    'data-testid': 'username_input',
                 }}></TextField>
             <TextField
                 required
@@ -82,7 +82,7 @@ export default function InitStep1S() {
                 label="Password"
                 helperText={t('dashboard_password_helper_text')}
                 inputProps={{
-                    'data-testid': 'initialization_password_input',
+                    'data-testid': 'password_input',
                 }}></TextField>
         </div>
     )

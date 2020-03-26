@@ -77,7 +77,7 @@ export default function AbstractTab(props: AbstractTabProps) {
                             classes={{ selected: classes.tabSelected }}
                             label={tab.label}
                             key={tab.label}
-                            data-testid={`initialization_${tab.label.toLowerCase()}_tab`}
+                            data-testid={`${tab.label.toLowerCase()}_tab`}
                         />
                     ))}
                 </Tabs>

@@ -22,9 +22,9 @@ describe(`${INITIALIZATION_STORY_URL}-Workflow1A:CoreInit/NewUser`, () => {
 
     for (const sns of [new Twitter('', '', ''), new Facebook('', '', '')]) {
         it(sns.name, async () => {
-            const usernameInput = await page.waitFor('[data-testid="initialization_username_input"]')
-            const passwordInput = await page.waitFor('[data-testid="initialization_password_input"]')
-            const nextButton = await page.waitFor('[data-testid="initialization_next_button"]')
+            const usernameInput = await page.waitFor('[data-testid="username_input"]')
+            const passwordInput = await page.waitFor('[data-testid="password_input"]')
+            const nextButton = await page.waitFor('[data-testid="next_button"]')
 
             await usernameInput.type('Alice')
             await passwordInput.type('12345678')
@@ -34,7 +34,7 @@ describe(`${INITIALIZATION_STORY_URL}-Workflow1A:CoreInit/NewUser`, () => {
             const targetSpy = jasmine.createSpy()
             page.browser().on('targetcreated', targetSpy)
 
-            const connectButton = await page.waitFor(`[data-testid="initialization_connect_button_${sns.name}"]`)
+            const connectButton = await page.waitFor(`[data-testid="connect_button_${sns.name}"]`)
             await connectButton.click()
             await page.waitFor(500)
 

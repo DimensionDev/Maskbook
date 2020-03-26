@@ -15,14 +15,14 @@ describe(`${INITIALIZATION_STORY_URL}-Workflow1:CoreInit`, () => {
     })
 
     it('setup', async () => {
-        const setupButton = await page.waitFor('[data-testid="initialization_setup_button"]')
+        const setupButton = await page.waitFor('[data-testid="setup_button"]')
         await setupButton.click()
         await page.waitFor(500)
         expect((await page.evaluate(() => location.hash)).includes('#/initialize/1s')).toBeTruthy()
     })
 
     it('restore', async () => {
-        const restoreButton = await page.waitFor('[data-testid="initialization_restore_button"]')
+        const restoreButton = await page.waitFor('[data-testid="restore_button"]')
         await restoreButton.click()
         await page.waitFor(500)
         expect((await page.evaluate(() => location.hash)).includes('#/initialize/1r')).toBeTruthy()

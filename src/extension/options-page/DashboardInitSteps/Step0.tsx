@@ -42,7 +42,7 @@ export default function InitStep0() {
                 </Box>
                 <VerticalCenter>
                     <ActionButton<typeof Link>
-                        data-testid="initialization_setup_button"
+                        data-testid="setup_button"
                         variant="contained"
                         color="primary"
                         component={Link}
@@ -61,7 +61,7 @@ export default function InitStep0() {
                         variant="outlined"
                         component={Link}
                         to={InitStep.Restore1}
-                        data-testid="initialization_restore_button">
+                        data-testid="restore_button">
                         {t('restore')}
                     </ActionButton>
                 </VerticalCenter>

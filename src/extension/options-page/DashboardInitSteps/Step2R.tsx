@@ -32,7 +32,7 @@ export default function InitStep2R() {
                 color="primary"
                 component={Link}
                 to="/"
-                data-testid="initialization_finish_button">
+                data-testid="finish_button">
                 {t('finish')}
             </ActionButton>
         </div>
