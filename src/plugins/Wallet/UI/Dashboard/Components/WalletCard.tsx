@@ -20,8 +20,8 @@ import { useColorProvider } from '../../../../../utils/theme'
 import type { WalletRecord, RedPacketRecord, ERC20TokenRecord } from '../../../database/types'
 import { useSnackbar } from 'notistack'
 import Services from '../../../../../extension/service'
-import classNames from 'classnames'
 import { formatBalance } from '../../../formatter'
+import BigNumber from 'bignumber.js'
 
 interface Props {
     wallet: WalletRecord & { privateKey: string }
@@ -197,7 +197,7 @@ export default function WalletCard({ wallet, tokens }: Props) {
                     line2="Ethereum"
                     action={
                         <Typography variant="h5">
-                            {typeof wallet.eth_balance === 'bigint'
+                            {BigNumber.isBigNumber(wallet.eth_balance)
                                 ? formatBalance(wallet.eth_balance, 18)
                                 : 'Syncing...'}
                         </Typography>
@@ -216,7 +216,7 @@ export default function WalletCard({ wallet, tokens }: Props) {
                                     <></>
                                 ) : (
                                     <Typography variant="h5">
-                                        {typeof amount === 'bigint'
+                                        {BigNumber.isBigNumber(amount)
                                             ? t
                                                 ? formatBalance(amount, t.decimals ?? 18)
                                                 : 'Unknown'

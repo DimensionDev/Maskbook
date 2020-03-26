@@ -1,3 +1,5 @@
+import BigNumber from 'bignumber.js'
+
 /**
  * @see https://github.com/DimensionDev/Tessercube-iOS/wiki/Red-Packet-Data-Dictionary
  */
@@ -33,7 +35,7 @@ export interface RedPacketRecord {
     /** Trimmed not empty single line string. Max 30 chars */
     sender_name: string
     /** Red packet total value in Wei if ETH. In minimal unit if ERC20 token */
-    send_total: bigint
+    send_total: BigNumber
     /** Trimmed single line string. Allow empty input. Max 140 chars. Replace inline break with space */
     send_message: string
     /** Last in-app share action time */
@@ -43,9 +45,9 @@ export interface RedPacketRecord {
     /** claim transaction hash */
     claim_transaction_hash?: string
     /** Read from claim result */
-    claim_amount?: bigint
+    claim_amount?: BigNumber
     refund_transaction_hash?: string
-    refund_amount?: bigint
+    refund_amount?: BigNumber
     /** Red packet status machine marker. See RedPacketStatus below */
     status: RedPacketStatus
     /** web3 network tag enum. Mainnet or Rinkeby */
@@ -57,11 +59,11 @@ export interface RedPacketRecord {
     /** ERC20 approve transaction hash */
     erc20_approve_transaction_hash?: string
     /** ERC20 approve transaction event value */
-    erc20_approve_value?: bigint
+    erc20_approve_value?: BigNumber
     /** incoming red packet time */
     received_time: Date
     /** Number of red packet shares */
-    shares: bigint
+    shares: BigNumber
     _found_in_url_?: string
     _data_source_: 'real' | 'mock'
 }
@@ -71,8 +73,8 @@ export interface WalletRecord {
     /** User define wallet name. Default address.prefix(6) */
     name: string
     /** Wallet ethereum balance */
-    eth_balance?: bigint
-    erc20_token_balance: Map</** address of the erc20 token */ string, bigint | undefined>
+    eth_balance?: BigNumber
+    erc20_token_balance: Map</** address of the erc20 token */ string, BigNumber | undefined>
     mnemonic: string[]
     passphrase: string
     _data_source_: 'real' | 'mock'

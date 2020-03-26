@@ -1,9 +1,11 @@
+import type { BigNumber } from 'bignumber.js'
+
 export type RedPacketCreationResult =
     | {
           type: 'success'
           block_creation_time: Date
           red_packet_id: string
-          total: bigint
+          total: BigNumber
           creator: string
       }
     | { type: 'failed'; reason?: string }
@@ -14,13 +16,13 @@ export type RedPacketClaimResult =
           /** receiver's address */
           claimer: string
           /** claimed money amount */
-          claimed_value: bigint
+          claimed_value: BigNumber
       }
     | { type: 'failed'; reason?: string }
 
 export interface CheckRedPacketAvailabilityResult {
     token_address: string
-    balance: bigint
+    balance: BigNumber
     totalCount: number
     claimedCount: number
     expired: boolean

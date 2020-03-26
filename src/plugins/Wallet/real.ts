@@ -1,6 +1,7 @@
 import * as jwt from 'jsonwebtoken'
 import type { AbiItem } from 'web3-utils'
 import type { EventData } from 'web3-eth-contract'
+import { BigNumber } from 'bignumber.js'
 import { web3 } from './web3'
 import { onClaimResult, onCreationResult, onExpired, onRefundResult } from './red-packet-fsm'
 import HappyRedPacketABI from './contract/HappyRedPacket.json'
@@ -116,7 +117,7 @@ export const redPacketAPI = {
         name: string,
         token_type: RedPacketTokenType,
         token_addr: string,
-        total_tokens: bigint,
+        total_tokens: BigNumber,
     ): Promise<CreateRedPacketResult> {
         const contract = createRedPacketContract(getNetworkSettings().contractAddress)
         const tx = contract.methods.create_red_packet(
@@ -229,7 +230,7 @@ export const redPacketAPI = {
                 }
                 onClaimResult(id, {
                     type: 'success',
-                    claimed_value: BigInt(claimed_value),
+                    claimed_value: new BigNumber(claimed_value),
                     claimer,
                     red_packet_id: return_id,
                 })
@@ -279,7 +280,7 @@ export const redPacketAPI = {
                     block_creation_time: new Date(parseInt(creation_time) * 1000),
                     red_packet_id: return_id,
                     creator,
-                    total: BigInt(total),
+                    total: new BigNumber(total),
                 })
                 return true
             }
@@ -323,11 +324,11 @@ export const redPacketAPI = {
         } = await contract.methods.check_availability(id.redPacketID).call()
 
         return {
-            balance: BigInt(balance),
-            claimedCount: parseInt(claimed),
+            balance: new BigNumber(balance),
+            claimedCount: parseInt(claimed, 10),
             expired,
             token_address,
-            totalCount: parseInt(total),
+            totalCount: parseInt(total, 10),
             is_claimed: ifclaimed,
         }
     },
@@ -422,7 +423,7 @@ export const redPacketAPI = {
                         redPacketID: id,
                     },
                     {
-                        remaining_balance: BigInt(remaining_balance),
+                        remaining_balance: new BigNumber(remaining_balance),
                     },
                 )
             }
@@ -432,18 +433,21 @@ export const redPacketAPI = {
 
 export const walletAPI = {
     dataSource: 'real' as const,
-    queryBalance(address: string): Promise<bigint> {
-        return web3.eth.getBalance(address).then(BigInt)
+    queryBalance(address: string): Promise<BigNumber> {
+        return web3.eth.getBalance(address).then((value) => new BigNumber(value))
     },
-    queryERC20TokenBalance(walletAddress: string, tokenAddress: string): Promise<bigint> {
+    queryERC20TokenBalance(walletAddress: string, tokenAddress: string): Promise<BigNumber> {
         const erc20Contract = createERC20Contract(tokenAddress)
-        return erc20Contract.methods.balanceOf(walletAddress).call().then(BigInt)
+        return erc20Contract.methods
+            .balanceOf(walletAddress)
+            .call()
+            .then((value) => new BigNumber(value))
     },
     async approveERC20Token(
         senderAddress: string,
         erc20TokenAddress: string,
-        amount: bigint,
-    ): Promise<{ erc20_approve_transaction_hash: string; erc20_approve_value: bigint }> {
+        amount: BigNumber,
+    ): Promise<{ erc20_approve_transaction_hash: string; erc20_approve_value: BigNumber }> {
         const erc20Contract = createERC20Contract(erc20TokenAddress)
         const tx = erc20Contract.methods.approve(getNetworkSettings().contractAddress, amount.toString())
 
