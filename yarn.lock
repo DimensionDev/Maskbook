@@ -3910,11 +3910,6 @@
   resolved "https://registry.yarnpkg.com/@types/stack-utils/-/stack-utils-1.0.1.tgz#0a851d3bd96498fa25c33ab7278ed3bd65f06c3e"
   integrity sha512-l42BggppR6zLmpfU6fq9HEa2oGPEI8yrSPL3GITjfRInppYFahObbIQOQK3UGxEnyQpltZLaPe75046NOZQikw==
 
-"@types/systemjs@^6.1.0":
-  version "6.1.0"
-  resolved "https://registry.yarnpkg.com/@types/systemjs/-/systemjs-6.1.0.tgz#eb92e3181391b6f49b8310077fe65bfa3db9392a"
-  integrity sha512-akhlviqwowzRNiz3ooAbkjvyMO8cikBqap9z/0yfvMAb6vIsp91Rfox67qtgIhZosWP01MVSTwsgSFYWo4SWQA==
-
 "@types/testing-library__react-hooks@^3.0.0":
   version "3.2.0"
   resolved "https://registry.yarnpkg.com/@types/testing-library__react-hooks/-/testing-library__react-hooks-3.2.0.tgz#52f3a109bef06080e3b1e3ae7ea1c014ce859897"
@@ -18458,9 +18453,9 @@ symbol.prototype.description@^1.0.0:
     has-symbols "^1.0.0"
 
 systemjs@^6.2.3:
-  version "6.2.5"
-  resolved "https://registry.yarnpkg.com/systemjs/-/systemjs-6.2.5.tgz#6b01928066704af8d12c56dfb04dd9d8fabcbb36"
-  integrity sha512-Jw1FOgzxG+wIi+ewEPyYKsqxR3IQOQWMwFh1o7C0VfLYoBcVDYSg8EFrKCisUD+5+/KecrDC+NSy4exkl7QRdw==
+  version "6.2.6"
+  resolved "https://registry.yarnpkg.com/systemjs/-/systemjs-6.2.6.tgz#9e529d6eb4a17929d2052ca0e4699ad5fb0eeed1"
+  integrity sha512-cIGKuf8PwDPsiuC+op7tiyvQTWLDzzXYSx9aYmSrHiz6mVal6VT7uAS0gTEBs5WIWc03RqhvnNbNgodaauBsbg==
 
 table@^3.7.8:
   version "3.8.3"
@@ -19172,7 +19167,12 @@ typedarray@^0.0.6:
   resolved "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
   integrity sha1-hnrHTjhkGHsdPUfZlqeOxciDB3c=
 
-typescript@^3.7.5, typescript@^3.8.3, typescript@~3.8.2:
+typescript@3.9.0-dev.20200319:
+  version "3.9.0-dev.20200319"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.9.0-dev.20200319.tgz#29215ad4bc35832c4a7b6b3679198ba1d916337b"
+  integrity sha512-t8BiBTDOeiN8BMSCLXFNNfEeMjm33JrLMGBtqq5NvY95KDxkDJiP2TsW4FnyRQicNpCJ8o9cQ3clrr0NtfYvJg==
+
+typescript@~3.8.2:
   version "3.8.3"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.8.3.tgz#409eb8544ea0335711205869ec458ab109ee1061"
   integrity sha512-MYlEfn5VrLNsgudQTVJeNaQFUAI7DkhnOjdpAp4T+ku1TfQClewlbSuTVHiA+8skNBgaf02TL/kLOvig4y3G8w==
@@ -20420,13 +20420,11 @@ webextension-polyfill@^0.6.0:
 
 "webextension-shim@https://github.com/DimensionDev/webextension-polyfill":
   version "0.0.1"
-  resolved "https://github.com/DimensionDev/webextension-polyfill#f5869b3fb52cf0c19518b6415bcac933c9741f0e"
+  resolved "https://github.com/DimensionDev/webextension-polyfill#0e469704fc875e3826b754d12032b8217d88ab83"
   dependencies:
-    "@types/systemjs" "^6.1.0"
     async-call-rpc "^1.0.4"
     realms-shim "^1.2.1"
     systemjs "^6.2.3"
-    typescript "^3.7.5"
     web-ext-types "^3.2.1"
 
 webidl-conversions@^4.0.2:
