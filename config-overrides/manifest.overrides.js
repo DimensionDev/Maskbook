@@ -25,6 +25,7 @@ function chromium(manifest) {}
  */
 function WKWebview(manifest) {
     manifest['iOS-injected-scripts'] = ['js/injected-script.js']
+    manifest.permissions.push('<all_urls>')
 }
 function development(manifest, target) {
     manifest.key = // ID：jkoeaghipilijlahjplgbfiocjhldnap

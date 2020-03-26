@@ -38,6 +38,8 @@ export const facebookUISelf = defineSocialNetworkUI({
     },
     friendlyName: 'Facebook',
     requestPermission() {
+        // TODO: wait for webextension-shim to support <all_urls> in permission.
+        if (webpackEnv.target === 'WKWebview') return Promise.resolve(true)
         return browser.permissions.request({ origins: ['https://www.facebook.com/*', 'https://m.facebook.com/*'] })
     },
     setupAccount() {
