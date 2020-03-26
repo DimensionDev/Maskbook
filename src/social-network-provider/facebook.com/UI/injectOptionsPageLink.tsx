@@ -10,7 +10,7 @@ export function injectOptionsPageLinkAtFacebook() {
     if (location.hostname !== 'm.facebook.com') return
     const watcher = new MutationObserverWatcher(settings)
         .setDOMProxyOption({
-            beforeShadowRootInit: { mode: 'closed' },
+            beforeShadowRootInit: { mode: webpackEnv.shadowRootMode },
         })
         .startWatch({ subtree: true, childList: true })
     renderInShadowRoot(<Link></Link>, {

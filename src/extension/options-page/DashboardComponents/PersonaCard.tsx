@@ -87,6 +87,10 @@ export default function PersonaCard({ persona }: Props) {
 
     const [deletePersona, setDeletePersona] = useState(false)
     const confirmDeletePersona = () => {
+        // snackbar will cover button
+        if (webpackEnv.target === 'E2E') {
+            return
+        }
         enqueueSnackbar(t('dashboard_item_deleted'), {
             variant: 'default',
         })

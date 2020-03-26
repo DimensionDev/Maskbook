@@ -180,6 +180,7 @@ export function ImmersiveSetupStepperUI(props: ImmersiveSetupStepperUIProps) {
                         complete={t('next')}
                         failed={t('next')}
                         disabled={props.username.length === 0}
+                        data-testid="initialization_confirm_button"
                     />
                 )
             case ImmersiveSetupState.PasteBio:
@@ -208,6 +209,9 @@ export function ImmersiveSetupStepperUI(props: ImmersiveSetupStepperUIProps) {
                             value={props.username}
                             onChange={(e) => props.onUsernameChange(e.currentTarget.value)}
                             innerRef={inputRef}
+                            inputProps={{
+                                'data-testid': 'initialization_id_input',
+                            }}
                         />
                         <br />
                         <Typography>{t('immersive_setup_username_confirm')}</Typography>
@@ -222,7 +226,11 @@ export function ImmersiveSetupStepperUI(props: ImmersiveSetupStepperUIProps) {
                         {/* <Link style={{ textDecoration: 'underline' }} color="textSecondary" href="/" variant="body2">
                             Link text here, Link text here
                         </Link> */}
-                        <Typography onClick={copyText} component="address" className={classes.provePost}>
+                        <Typography
+                            onClick={copyText}
+                            component="address"
+                            className={classes.provePost}
+                            data-testid="initialization_prove_textarea">
                             {props.provePost}
                         </Typography>
                         <div className={classes.buttonWrapper}>
@@ -236,8 +244,12 @@ export function ImmersiveSetupStepperUI(props: ImmersiveSetupStepperUIProps) {
                                 failed={t('immersive_setup_paste_into_bio_failed')}
                                 completeOnClick={props.onClose}
                                 failedOnClick="use executor"
+                                data-testid="initialization_add_button"
                             />
-                            <Button variant="outlined" onClick={props.onClose}>
+                            <Button
+                                variant="outlined"
+                                onClick={props.onClose}
+                                data-testid="initialization_finish_button">
                                 {t('finish')}
                             </Button>
                         </div>

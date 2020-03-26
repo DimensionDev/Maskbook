@@ -20,7 +20,7 @@ export function injectPostDialogHintAtTwitter() {
 function renderPostDialogHintTo<T>(ls: LiveSelector<T, true>) {
     const watcher = new MutationObserverWatcher(ls)
         .setDOMProxyOption({
-            afterShadowRootInit: { mode: 'closed' },
+            afterShadowRootInit: { mode: webpackEnv.shadowRootMode },
         })
         .startWatch({
             childList: true,

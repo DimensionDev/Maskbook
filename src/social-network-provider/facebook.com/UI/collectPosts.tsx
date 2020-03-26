@@ -71,7 +71,7 @@ export function collectPostsFacebook(this: SocialNetworkUI) {
                 onRemove: () => this.posts.delete(metadata),
             }
         })
-        .setDOMProxyOption({ afterShadowRootInit: { mode: 'closed' } })
+        .setDOMProxyOption({ afterShadowRootInit: { mode: webpackEnv.shadowRootMode } })
         .startWatch({
             childList: true,
             subtree: true,

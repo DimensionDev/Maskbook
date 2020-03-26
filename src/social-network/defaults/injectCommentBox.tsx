@@ -54,7 +54,7 @@ export const injectCommentBoxDefaultFactory = function <T extends string>(
                     normal: () => meta.after,
                 }),
             )
-            .setDOMProxyOption({ afterShadowRootInit: { mode: 'closed' } })
+            .setDOMProxyOption({ afterShadowRootInit: { mode: webpackEnv.shadowRootMode } })
             .startWatch({
                 childList: true,
                 subtree: true,

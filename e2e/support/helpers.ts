@@ -1,10 +1,15 @@
 import { readFileSync } from 'fs'
-import { ElementHandle } from 'puppeteer'
+import { Page, ElementHandle, Dialog, Browser } from 'puppeteer'
 
 export function screenshot(name: string) {
     return page.screenshot({
         path: `./screenshots/${name}.png`,
     })
+}
+
+// more: https://github.com/puppeteer/puppeteer/issues/3718#issuecomment-451325093
+export async function getPageByUrl(browser: Browser, url: string) {
+    return (await browser.targets()).find(t => t.url() === url)?.page()
 }
 
 export async function uploadFile(input: ElementHandle<HTMLInputElement>, ...filePaths: string[]) {

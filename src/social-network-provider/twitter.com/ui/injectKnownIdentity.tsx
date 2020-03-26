@@ -36,7 +36,7 @@ export function PersonKnownAtTwitter(props: PersonKnownProps) {
 export function injectKnownIdentityAtTwitter() {
     const watcher = new MutationObserverWatcher(bioCardSelector<false>(false))
         .setDOMProxyOption({
-            afterShadowRootInit: { mode: 'closed' },
+            afterShadowRootInit: { mode: webpackEnv.shadowRootMode },
         })
         .useForeach((content) => {
             const bioRef = new ValueRef('')

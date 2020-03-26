@@ -56,7 +56,7 @@ export function injectKnownIdentityAtFacebook(this: SocialNetworkUI) {
     const self = othersBioLiveSelectorMobile.clone().concat(othersBioLiveSelectorPC)
     const watcher = new MutationObserverWatcher(self)
         .setDOMProxyOption({
-            afterShadowRootInit: { mode: 'closed' },
+            afterShadowRootInit: { mode: webpackEnv.shadowRootMode },
         })
         .useForeach((content) => {
             const bioRef = new ValueRef(content.innerText)

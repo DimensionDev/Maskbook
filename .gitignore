@@ -34,6 +34,11 @@ public/polyfill
 /contracts
 
 # e2e
+/.env/e2e-test
+/.env/e2e-development
+/.env/e2e-production
+/.pptr-alice
+/.pptr-bob
 /screenshots
 
 npm-debug.log*

@@ -3,7 +3,7 @@ import { untilDomLoaded } from '../dom'
 import { renderInShadowRootSettings } from '../../components/shared-settings/settings'
 
 const div = document.createElement('div')
-export const portalShadowRoot = div.attachShadow({ mode: 'closed' })
+export const portalShadowRoot = div.attachShadow({ mode: webpackEnv.shadowRootMode })
 untilDomLoaded().then(() => document.body.appendChild(div))
 
 /**

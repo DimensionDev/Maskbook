@@ -170,7 +170,7 @@ const registerPostCollector = (self: SocialNetworkUI) => {
                 onRemove: () => self.posts.delete(proxy),
             }
         })
-        .setDOMProxyOption({ afterShadowRootInit: { mode: 'closed' } })
+        .setDOMProxyOption({ afterShadowRootInit: { mode: webpackEnv.shadowRootMode } })
         .assignKeys((node) => {
             const tweetNode = getTweetNode(node)
             const isQuotedTweet = tweetNode?.getAttribute('role') === 'blockquote'

@@ -247,6 +247,11 @@ module.exports = (argvEnv, argv) => {
             genericTarget = 'facebookApp'
         }
         if (target.E2E) buildTarget = 'E2E'
+        config.plugins.push(
+            new webpack.DefinePlugin({
+                'webpackEnv.shadowRootMode': JSON.stringify(target.E2E ? 'open' : 'closed'),
+            }),
+        )
         if (buildTarget)
             config.plugins.push(
                 new webpack.DefinePlugin({
