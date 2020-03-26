@@ -10,6 +10,7 @@ import type { ERC20TokenPredefinedData } from './erc20'
 import { memoizePromise } from '../../utils/memoize'
 import { currentEthereumNetworkSettings } from './network'
 import { buf2hex } from './web3'
+import type { BigNumber } from 'bignumber.js'
 
 // Private key at m/44'/coinType'/account'/change/addressIndex
 // coinType = ether
@@ -128,10 +129,10 @@ export async function importNewWallet(
     PluginMessageCenter.emit('maskbook.wallets.update', undefined)
 }
 
-export async function onWalletBalanceUpdated(address: string, newBalance: bigint) {
+export async function onWalletBalanceUpdated(address: string, newBalance: BigNumber) {
     const t = createTransaction(await createWalletDBAccess(), 'readwrite')('Wallet')
     const wallet = await getWalletByAddress(t, address)
-    if (wallet.eth_balance === newBalance) return
+    if (wallet.eth_balance?.isEqualTo(newBalance)) return // wallet.eth_balance === newBalance
     wallet.eth_balance = newBalance
     t.objectStore('Wallet').put(wallet)
     PluginMessageCenter.emit('maskbook.wallets.update', undefined)
@@ -199,10 +200,10 @@ export async function walletAddERC20Token(
     await t.objectStore('Wallet').put(wallet)
 }
 
-export async function onWalletERC20TokenBalanceUpdated(address: string, tokenAddress: string, newBalance: bigint) {
+export async function onWalletERC20TokenBalanceUpdated(address: string, tokenAddress: string, newBalance: BigNumber) {
     const t = createTransaction(await createWalletDBAccess(), 'readwrite')('Wallet')
     const wallet = await getWalletByAddress(t, address)
-    if (wallet.erc20_token_balance.get(tokenAddress) === newBalance) return
+    if (wallet.erc20_token_balance.get(tokenAddress)?.isEqualTo(newBalance)) return // wallet.erc20_token_balance.get(tokenAddress) === newBalance
     wallet.erc20_token_balance.set(tokenAddress, newBalance)
     t.objectStore('Wallet').put(wallet)
     PluginMessageCenter.emit('maskbook.wallets.update', undefined)

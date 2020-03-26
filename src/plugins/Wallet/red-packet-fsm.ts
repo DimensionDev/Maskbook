@@ -12,10 +12,10 @@ import uuid from 'uuid/v4'
 import type { RedPacketCreationResult, RedPacketClaimResult } from './types'
 import { getWalletProvider, getWallets, recoverWallet, getDefaultWallet, setDefaultWallet } from './wallet'
 import { PluginMessageCenter } from '../PluginMessages'
-import { requestNotification } from '../../utils/notification'
 import Web3Utils from 'web3-utils'
 import { redPacketAPI } from './real'
 import { sideEffect } from '../../utils/side-effects'
+import BigNumber from 'bignumber.js'
 
 function getProvider() {
     return redPacketAPI
@@ -53,7 +53,7 @@ export async function discoverRedPacket(payload: RedPacketJSONPayload, foundInUR
         is_random: payload.is_random,
         network: payload.network || EthereumNetwork.Mainnet,
         send_message: payload.sender.message,
-        send_total: BigInt(payload.total),
+        send_total: new BigNumber(payload.total),
         sender_address: payload.sender.address,
         sender_name: payload.sender.name,
         status: RedPacketStatus.incoming,
@@ -65,7 +65,7 @@ export async function discoverRedPacket(payload: RedPacketJSONPayload, foundInUR
         raw_payload: payload,
         _found_in_url_: foundInURL,
         received_time: new Date(),
-        shares: BigInt(payload.shares),
+        shares: new BigNumber(payload.shares),
     }
     t.objectStore('RedPacket').add(rec)
     PluginMessageCenter.emit('maskbook.red_packets.update', undefined)
@@ -83,12 +83,12 @@ export async function getRedPackets(owned?: boolean) {
 export async function createRedPacket(packet: createRedPacketInit): Promise<{ password: string }> {
     if (packet.send_total < packet.shares) {
         throw new Error('At least [number of red packets] tokens to your red packet.')
-    } else if (packet.shares < 0) {
+    } else if (packet.shares.isLessThan(0) /* packet.shares < 0n */) {
         throw new Error('At least 1 person should be able to claim the red packet.')
     }
     const password = uuid()
     let erc20_approve_transaction_hash: string | undefined = undefined
-    let erc20_approve_value: bigint | undefined = undefined
+    let erc20_approve_value: BigNumber | undefined = undefined
     let erc20_token_address: string | undefined = undefined
     if (packet.token_type === RedPacketTokenType.erc20) {
         if (!packet.erc20_token) throw new Error('ERC20 token should have erc20_token field')
@@ -213,7 +213,7 @@ export async function claimRedPacket(
     if (status.expired) {
         await onExpired(id)
         return 'expired'
-    } else if (status.claimedCount === status.totalCount || status.balance === BigInt(0)) {
+    } else if (status.claimedCount === status.totalCount || status.balance.isZero() /* status.balance === 0n */) {
         {
             const t = createTransaction(await createWalletDBAccess(), 'readwrite')('RedPacket')
             const rec = await getRedPacketByID(t, id.redPacketID)
@@ -297,7 +297,7 @@ export async function requestRefund(id: { redPacketID: string }) {
     // TODO: send a notification here maybe?
     PluginMessageCenter.emit('maskbook.red_packets.update', undefined)
 }
-export async function onRefundResult(id: { redPacketID: string }, details: { remaining_balance: bigint }) {
+export async function onRefundResult(id: { redPacketID: string }, details: { remaining_balance: BigNumber }) {
     {
         const t = createTransaction(await createWalletDBAccess(), 'readwrite')('RedPacket')
         const rec = await getRedPacketByID(t, id.redPacketID)

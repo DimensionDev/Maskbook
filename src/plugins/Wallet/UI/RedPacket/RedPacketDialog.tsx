@@ -28,7 +28,7 @@ import {
     WalletRecord,
     ERC20TokenRecord,
 } from '../../database/types'
-import { useLastRecognizedIdentity, useCurrentIdentity } from '../../../../components/DataSource/useActivatedUI'
+import { useCurrentIdentity } from '../../../../components/DataSource/useActivatedUI'
 import { useCapturedInput } from '../../../../utils/hooks/useCapturedEvents'
 import { PluginMessageCenter } from '../../../PluginMessages'
 import { getActivatedUI } from '../../../../social-network/ui'
@@ -38,6 +38,7 @@ import { formatBalance } from '../../formatter'
 import { currentEthereumNetworkSettings } from '../../network'
 import ShadowRootDialog from '../../../../utils/jss/ShadowRootDialog'
 import { PortalShadowRoot } from '../../../../utils/jss/ShadowRootPortal'
+import BigNumber from 'bignumber.js'
 
 interface RedPacketDialogProps
     extends withClasses<
@@ -125,14 +126,13 @@ function NewPacketUI(props: RedPacketDialogProps & NewPacketProps) {
             ? selectedWallet.eth_balance
             : selectedToken?.amount
         : undefined
-    const amountPreShareMaxNumber =
-        typeof amountPreShareMaxBigint === 'bigint'
-            ? selectedTokenType.type === 'eth'
-                ? formatBalance(amountPreShareMaxBigint, 18)
-                : selectedToken
-                ? formatBalance(amountPreShareMaxBigint, selectedToken.decimals)
-                : undefined
+    const amountPreShareMaxNumber = BigNumber.isBigNumber(amountPreShareMaxBigint)
+        ? selectedTokenType.type === 'eth'
+            ? formatBalance(amountPreShareMaxBigint, 18)
+            : selectedToken
+            ? formatBalance(amountPreShareMaxBigint, selectedToken.decimals)
             : undefined
+        : undefined
 
     const send_total = (is_random ? 1 : shares) * send_per_share
     const isDisabled = [
@@ -157,24 +157,26 @@ function NewPacketUI(props: RedPacketDialogProps & NewPacketProps) {
             is_random: Boolean(is_random),
             network: rinkebyNetwork ? EthereumNetwork.Rinkeby : EthereumNetwork.Mainnet,
             send_message,
-            send_total: BigInt(send_total * 10 ** (selectedTokenType.type === 'eth' ? 18 : selectedToken!.decimals)),
+            send_total: new BigNumber(
+                send_total * 10 ** (selectedTokenType.type === 'eth' ? 18 : selectedToken!.decimals),
+            ),
             sender_address: selectedWalletAddress!,
             sender_name: props.newRedPacketCreatorName ?? 'Unknown User',
-            shares: BigInt(shares),
+            shares: new BigNumber(shares),
             token_type: selectedTokenType.type === 'eth' ? RedPacketTokenType.eth : RedPacketTokenType.erc20,
             erc20_token: selectedTokenType.type === 'eth' ? undefined : selectedTokenType.address,
         })
     }
     const ethBalance = selectedWallet
         ? `${
-              typeof selectedWallet.eth_balance === 'bigint'
+              BigNumber.isBigNumber(selectedWallet.eth_balance)
                   ? formatBalance(selectedWallet.eth_balance, 18)
                   : '(Syncing...)'
           } ETH`
         : undefined
     const erc20Balance = selectedToken
         ? `${
-              typeof selectedToken.amount === 'bigint'
+              BigNumber.isBigNumber(selectedToken.amount)
                   ? formatBalance(selectedToken.amount, selectedToken.decimals)
                   : '(Syncing...)'
           } ${selectedToken.symbol}`
@@ -216,7 +218,7 @@ function NewPacketUI(props: RedPacketDialogProps & NewPacketProps) {
                             ETH
                         </MenuItem>
                         {availableTokens.map((x) => (
-                            <MenuItem disabled={typeof x.amount !== 'bigint'} key={x.address} value={x.address}>
+                            <MenuItem disabled={!BigNumber.isBigNumber(x.amount)} key={x.address} value={x.address}>
                                 {x.name} ({x.symbol})
                             </MenuItem>
                         ))}

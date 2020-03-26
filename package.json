@@ -68,6 +68,7 @@
     "@types/uuid": "^3.4.7",
     "anchorme": "^1.1.2",
     "async-call-rpc": "^1.0.4",
+    "bignumber.js": "^9.0.0",
     "bip39": "^3.0.2",
     "classnames": "^2.2.6",
     "elliptic": "^6.4.1",

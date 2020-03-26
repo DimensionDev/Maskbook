@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { useState, useMemo, useCallback, useEffect, useRef } from 'react'
+import { useState, useMemo, useCallback, useEffect } from 'react'
 import {
     makeStyles,
     InputBase,
@@ -14,6 +14,7 @@ import {
     ThemeProvider,
     Theme,
 } from '@material-ui/core'
+import { BigNumber } from 'bignumber.js'
 import { MessageCenter, CompositionEvent } from '../../utils/messages'
 import { useCapturedInput } from '../../utils/hooks/useCapturedEvents'
 import { useStylesExtends, or } from '../custom-ui-helper'
@@ -156,9 +157,10 @@ export function PostDialogUI(props: PostDialogUIProps) {
                                         props.onShareToEveryoneChanged(false)
                                     }
                                 }}
-                                label={`A Red Packet with $${formatBalance(BigInt(r.total), r.token?.decimals || 18)} ${
-                                    r.token?.name || 'ETH'
-                                } from ${r.sender.name}`}
+                                label={`A Red Packet with $${formatBalance(
+                                    new BigNumber(r.total),
+                                    r.token?.decimals ?? 18,
+                                )} ${r.token?.name || 'ETH'} from ${r.sender.name}`}
                             />
                         ))}
                         <InputBase
