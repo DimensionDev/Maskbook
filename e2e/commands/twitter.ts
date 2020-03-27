@@ -66,9 +66,13 @@ class Twitter implements SNS {
             waitUntil: 'load',
         })
 
-        const nameInput = await page.waitFor('[name="session[username_or_email]"]')
-        const passwordInput = await page.waitFor('[name="session[password]"]')
-        const submitButton = await page.waitFor('[data-testid="LoginForm_Login_Button"]')
+        const nameInput = await page.waitFor(
+            '.signin [name="session[username_or_email]"], #react-root [name="session[username_or_email]"]',
+        )
+        const passwordInput = await page.waitFor(
+            '.signin [name="session[password]"], #react-root [name="session[password]"]',
+        )
+        const submitButton = await page.waitFor('.signin [type="submit"], [data-testid="LoginForm_Login_Button"]')
         await nameInput.type(this.username)
         await passwordInput.type(this.password)
         await submitButton.click()

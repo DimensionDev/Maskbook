@@ -37,6 +37,8 @@ module.exports = {
     launch: {
         dumpio: true,
         headless: false,
+
+        // more: https://peter.sh/experiments/chromium-command-line-switches/
         args: [
             '--no-sandbox',
             '--disable-infobars',
@@ -44,6 +46,7 @@ module.exports = {
             `--disable-extensions-except=${process.env.E2E_EXT_DIR}`,
             `--load-extension=${process.env.E2E_EXT_DIR}`,
             `--user-data-dir=${process.env.E2E_ALICE_USER_DATA_DIR}`,
+            `--user-agent=${process.env.E2E_USER_AGENT}`,
         ],
     },
     browser: 'chromium',
