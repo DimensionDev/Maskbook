@@ -69,11 +69,11 @@ export interface RedPacketRecord {
 }
 export interface RedPacketRecordInDatabase
     extends Omit<RedPacketRecord, 'send_total' | 'claim_amount' | 'refund_amount' | 'erc20_approve_value' | 'shares'> {
-    send_total: string
-    claim_amount?: string
-    refund_amount?: string
-    erc20_approve_value?: string
-    shares: string
+    send_total: string | bigint
+    claim_amount?: string | bigint
+    refund_amount?: string | bigint
+    erc20_approve_value?: string | bigint
+    shares: string | bigint
 }
 export interface WalletRecord {
     /** ethereum hex address */
@@ -89,8 +89,8 @@ export interface WalletRecord {
     _wallet_is_default?: boolean
 }
 export interface WalletRecordInDatabase extends Omit<WalletRecord, 'eth_balance' | 'erc20_token_balance'> {
-    eth_balance?: string
-    erc20_token_balance: Map<string, string | undefined>
+    eth_balance?: string | bigint
+    erc20_token_balance: Map<string, string | bigint | undefined>
 }
 export interface ERC20TokenRecord {
     /** same to address */

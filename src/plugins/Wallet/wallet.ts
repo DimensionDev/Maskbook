@@ -218,13 +218,13 @@ async function getWalletByAddress(t: IDBPSafeTransaction<WalletDB, ['Wallet'], '
 function WalletRecordOutDB(x: WalletRecordInDatabase): WalletRecord {
     const record = omit(x, ['eth_balance', 'erc20_token_balance']) as WalletRecord
     if (x.eth_balance) {
-        record.eth_balance = new BigNumber(x.eth_balance)
+        record.eth_balance = new BigNumber(String(x.eth_balance))
     }
     record.erc20_token_balance = new Map()
     for (const [name, value] of x.erc20_token_balance.entries()) {
         let balance
         if (value) {
-            balance = new BigNumber(value)
+            balance = new BigNumber(String(value))
         }
         record.erc20_token_balance.set(name, balance)
     }
