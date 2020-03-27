@@ -3,7 +3,7 @@ import { DashboardDialogCore, DashboardDialogWrapper, WrappedDialogProps } from 
 import { Smile as SmileIcon } from 'react-feather'
 import { Button, TextField } from '@material-ui/core'
 
-export function DashboardFeedbackDialog(props: WrappedDialogProps) {
+export function DashboardContactDialog(props: WrappedDialogProps) {
     const [name, setName] = useState('')
     const [email, setEmail] = useState('')
     const [message, setMessage] = useState('')

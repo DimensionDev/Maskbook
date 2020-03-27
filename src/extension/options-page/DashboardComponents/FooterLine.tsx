@@ -3,7 +3,8 @@ import { makeStyles, createStyles } from '@material-ui/styles'
 import { Link } from 'react-router-dom'
 import { Breadcrumbs, Theme, Typography, Link as MuiLink } from '@material-ui/core'
 import { useI18N } from '../../../utils/i18n-next-ui'
-import { useDashboardAboutDialog } from '../Dialog/About'
+import { DashboardAboutDialog } from '../Dialog/About'
+import { useModal } from '../Dialog/Base'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -48,19 +49,21 @@ export default function FooterLine() {
     const { version } = globalThis?.browser.runtime.getManifest()
     const versionLink = t('version_link', { tag: process.env.VERSION })
 
-    const [aboutDialog, openAboutDialog] = useDashboardAboutDialog()
+    const [aboutDialog, openAboutDialog] = useModal(DashboardAboutDialog)
 
     return (
-        <Breadcrumbs className={classes.footerButtons} separator=" " aria-label="breadcrumb">
-            <FooterLink href="https://maskbook.com/">Maskbook.com</FooterLink>
-            <FooterLink onClick={openAboutDialog}>About</FooterLink>
-            <FooterLink href={versionLink} title={process.env.VERSION}>
-                {t('version')} {version}
-            </FooterLink>
-            <FooterLink href={t('dashboard_mobile_test_link')}>{t('dashboard_mobile_test')}</FooterLink>
-            <FooterLink href={t('dashboard_source_code_link')}>{t('dashboard_source_code')}</FooterLink>
-            <FooterLink href={t('privacy_policy_link')}>{t('privacy_policy')}</FooterLink>
+        <>
+            <Breadcrumbs className={classes.footerButtons} separator=" " aria-label="breadcrumb">
+                <FooterLink href="https://maskbook.com/">Maskbook.com</FooterLink>
+                <FooterLink onClick={openAboutDialog}>About</FooterLink>
+                <FooterLink href={versionLink} title={process.env.VERSION}>
+                    {t('version')} {version}
+                </FooterLink>
+                <FooterLink href={t('dashboard_mobile_test_link')}>{t('dashboard_mobile_test')}</FooterLink>
+                <FooterLink href={t('dashboard_source_code_link')}>{t('dashboard_source_code')}</FooterLink>
+                <FooterLink href={t('privacy_policy_link')}>{t('privacy_policy')}</FooterLink>
+            </Breadcrumbs>
             {aboutDialog}
-        </Breadcrumbs>
+        </>
     )
 }
