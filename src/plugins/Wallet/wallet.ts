@@ -1,4 +1,4 @@
-import _ from 'lodash'
+import { omit, noop } from 'lodash-es'
 import { createTransaction, IDBPSafeTransaction } from '../../database/helpers/openDB'
 import { createWalletDBAccess, WalletDB } from './database/Wallet.db'
 import { WalletRecord, ERC20TokenRecord, EthereumNetwork, WalletRecordInDatabase } from './database/types'
@@ -29,7 +29,7 @@ const memoGetWalletBalance = memoizePromise(
 const memoQueryERC20Token = memoizePromise(
     async (addr: string, erc20Addr: string) => {
         const x = await getWalletProvider().queryERC20TokenBalance(addr, erc20Addr)
-        return onWalletERC20TokenBalanceUpdated(addr, erc20Addr, x).catch(_.noop)
+        return onWalletERC20TokenBalanceUpdated(addr, erc20Addr, x).catch(noop)
     },
     (x, y) => x + ',' + y,
 )
@@ -215,7 +215,7 @@ async function getWalletByAddress(t: IDBPSafeTransaction<WalletDB, ['Wallet'], '
 }
 
 function WalletRecordOutDB(x: WalletRecordInDatabase): WalletRecord {
-    const record = _.omit(x, ['eth_balance', 'erc20_token_balance']) as WalletRecord
+    const record = omit(x, ['eth_balance', 'erc20_token_balance']) as WalletRecord
     if (x.eth_balance) {
         record.eth_balance = new BigNumber(x.eth_balance)
     }
@@ -230,7 +230,7 @@ function WalletRecordOutDB(x: WalletRecordInDatabase): WalletRecord {
     return record
 }
 function WalletRecordIntoDB(x: WalletRecord): WalletRecordInDatabase {
-    const record = _.omit(x, ['eth_balance', 'erc20_token_balance']) as WalletRecordInDatabase
+    const record = omit(x, ['eth_balance', 'erc20_token_balance']) as WalletRecordInDatabase
     if (x.eth_balance) {
         record.eth_balance = x.eth_balance.toString()
     }

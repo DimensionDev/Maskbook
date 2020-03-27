@@ -1,4 +1,4 @@
-import _ from 'lodash'
+import { omit } from 'lodash-es'
 import {
     RedPacketRecord,
     RedPacketStatus,
@@ -365,7 +365,7 @@ export function assert(x: any, ...args: any): asserts x {
 
 function RedPacketRecordOutDB(x: RedPacketRecordInDatabase): RedPacketRecord {
     const names = ['send_total', 'claim_amount', 'refund_amount', 'erc20_approve_value', 'shares'] as const
-    const record = _.omit(x, names) as RedPacketRecord
+    const record = omit(x, names) as RedPacketRecord
     for (const name of names) {
         const original = x[name]
         if (typeof original !== 'undefined') {
@@ -376,7 +376,7 @@ function RedPacketRecordOutDB(x: RedPacketRecordInDatabase): RedPacketRecord {
 }
 function RedPacketRecordIntoDB(x: RedPacketRecord): RedPacketRecordInDatabase {
     const names = ['send_total', 'claim_amount', 'refund_amount', 'erc20_approve_value', 'shares'] as const
-    const record = _.omit(x, names) as RedPacketRecordInDatabase
+    const record = omit(x, names) as RedPacketRecordInDatabase
     for (const name of names) {
         const original = x[name]
         if (typeof original !== 'undefined') {
