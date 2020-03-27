@@ -3,6 +3,9 @@
 # UNDER CURRENT DIR TO CUSTOMIZE E2E BEHAVIOR FOR DIFFERENT ENV
 # DO NOT RUN ANY E2E TEST WITHOUT THESE VARIABLES SET PROPERLY
 
+# Specify the user agent
+E2E_USER_AGENT=
+
 # Specify the extension id
 E2E_EXT_ID=jkoeaghipilijlahjplgbfiocjhldnap
 
@@ -15,7 +18,7 @@ E2E_EXT_DIR=
 # more about --user-data-dir:
 # - https://peter.sh/experiments/chromium-command-line-switches/#user-data-dir
 E2E_ALICE_USER_DATA_DIR=
-E2E-BOB_USER_DATA_DIR=
+E2E_BOB_USER_DATA_DIR=
 
 # Specify alice's twitter account
 E2E_ALICE_TWITTER_ID=
