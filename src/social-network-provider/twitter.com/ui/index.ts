@@ -53,7 +53,7 @@ export const instanceOfTwitterUI = defineSocialNetworkUI({
         instanceOfTwitterUI.requestPermission().then((granted) => {
             if (granted) {
                 setStorage(twitterUrl.hostIdentifier, { forceDisplayWelcome: true }).then()
-                location.href = twitterUrl.hostLeadingUrl
+                location.assign(twitterUrl.hostLeadingUrl)
             }
         })
     },

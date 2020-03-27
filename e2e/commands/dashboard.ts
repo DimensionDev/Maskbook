@@ -76,13 +76,16 @@ export async function reset(page: Page) {
         const settingIcon = await page.$('[data-testid="persona_setting_icon"]')
 
         if (settingIcon) {
+            // click cog icon
             await settingIcon.click()
             await page.waitFor(500)
 
+            // click the delete button
             const deleteButton = await page.waitFor('[data-testid="persona_delete_button"]')
             await deleteButton.click()
             await page.waitFor(500)
 
+            // click the confirm button
             const confirmButton = await page.waitFor('[data-testid="dialog_confirm_button"]')
             await confirmButton.click()
             await page.waitFor(500)
