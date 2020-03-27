@@ -150,7 +150,7 @@ function NewPacketUI(props: RedPacketDialogProps & NewPacketProps) {
     }, [onRequireNewWallet, selectedWalletAddress, wallets])
 
     const createRedPacket = () => {
-        const power = selectedTokenType.type === 'eth' ? 18 : selectedToken.decimals
+        const power = selectedTokenType.type === 'eth' ? 18 : selectedToken!.decimals
         props.onCreateNewPacket({
             duration: 60 /* seconds */ * 60 /* mins */ * 24 /* hours */,
             is_random: Boolean(is_random),

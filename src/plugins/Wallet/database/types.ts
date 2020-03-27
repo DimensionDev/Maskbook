@@ -67,6 +67,14 @@ export interface RedPacketRecord {
     _found_in_url_?: string
     _data_source_: 'real' | 'mock'
 }
+export interface RedPacketRecordInDatabase
+    extends Omit<RedPacketRecord, 'send_total' | 'claim_amount' | 'refund_amount' | 'erc20_approve_value' | 'shares'> {
+    send_total: string
+    claim_amount?: string
+    refund_amount?: string
+    erc20_approve_value?: string
+    shares: string
+}
 export interface WalletRecord {
     /** ethereum hex address */
     address: string
@@ -79,6 +87,10 @@ export interface WalletRecord {
     passphrase: string
     _data_source_: 'real' | 'mock'
     _wallet_is_default?: boolean
+}
+export interface WalletRecordInDatabase extends Omit<WalletRecord, 'eth_balance' | 'erc20_token_balance'> {
+    eth_balance?: string
+    erc20_token_balance: Map<string, string | undefined>
 }
 export interface ERC20TokenRecord {
     /** same to address */
