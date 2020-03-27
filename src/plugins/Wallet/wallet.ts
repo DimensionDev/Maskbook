@@ -27,11 +27,12 @@ const memoGetWalletBalance = memoizePromise(
     (x) => x,
 )
 const memoQueryERC20Token = memoizePromise(
-    async (addr: string, erc20Addr: string) => {
-        const x = await getWalletProvider().queryERC20TokenBalance(addr, erc20Addr)
-        return onWalletERC20TokenBalanceUpdated(addr, erc20Addr, x).catch(noop)
-    },
-    (x, y) => x + ',' + y,
+    (addr: string, erc20Addr: string) =>
+        getWalletProvider()
+            .queryERC20TokenBalance(addr, erc20Addr)
+            .then((balance) => onWalletERC20TokenBalanceUpdated(addr, erc20Addr, balance))
+            .catch(noop),
+    (x, y) => `${x},${y}`,
 )
 const clearCache = () => {
     memoGetWalletBalance?.cache?.clear?.()
