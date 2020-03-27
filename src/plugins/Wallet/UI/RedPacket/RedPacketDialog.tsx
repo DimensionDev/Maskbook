@@ -129,9 +129,7 @@ function NewPacketUI(props: RedPacketDialogProps & NewPacketProps) {
     const amountPreShareMaxNumber = BigNumber.isBigNumber(amountPreShareMaxBigint)
         ? selectedTokenType.type === 'eth'
             ? formatBalance(amountPreShareMaxBigint, 18)
-            : selectedToken
-            ? formatBalance(amountPreShareMaxBigint, selectedToken.decimals)
-            : undefined
+            : selectedToken && formatBalance(amountPreShareMaxBigint, selectedToken.decimals)
         : undefined
 
     const send_total = (is_random ? 1 : shares) * send_per_share
@@ -154,7 +152,7 @@ function NewPacketUI(props: RedPacketDialogProps & NewPacketProps) {
     const createRedPacket = () => {
         const power = selectedTokenType.type === 'eth' ? 18 : selectedToken.decimals
         props.onCreateNewPacket({
-            duration: 60 /** seconds */ * 60 /** mins */ * 24 /** hours */,
+            duration: 60 /* seconds */ * 60 /* mins */ * 24 /* hours */,
             is_random: Boolean(is_random),
             network: rinkebyNetwork ? EthereumNetwork.Rinkeby : EthereumNetwork.Mainnet,
             send_message,
@@ -167,18 +165,10 @@ function NewPacketUI(props: RedPacketDialogProps & NewPacketProps) {
         })
     }
     const ethBalance = selectedWallet
-        ? `${
-              BigNumber.isBigNumber(selectedWallet.eth_balance)
-                  ? formatBalance(selectedWallet.eth_balance, 18)
-                  : '(Syncing...)'
-          } ETH`
+        ? `${formatBalance(selectedWallet.eth_balance, 18) ?? '(Syncing...)'} ETH`
         : undefined
     const erc20Balance = selectedToken
-        ? `${
-              BigNumber.isBigNumber(selectedToken.amount)
-                  ? formatBalance(selectedToken.amount, selectedToken.decimals)
-                  : '(Syncing...)'
-          } ${selectedToken.symbol}`
+        ? `${formatBalance(selectedToken.amount, selectedToken.decimals) ?? '(Syncing...)'} ${selectedToken.symbol}`
         : undefined
     return (
         <div>
