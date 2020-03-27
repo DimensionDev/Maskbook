@@ -4,9 +4,9 @@ name: E2E
 # events but only for the master branch
 on:
     push:
-        branches: [master]
+        branches: [master, released]
     pull_request:
-        branches: [master]
+        branches: [master, released]
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -17,9 +17,26 @@ jobs:
             image: differui/node-13.2.0-browsers:v2
 
             # more: https://github.community/t5/GitHub-Actions/How-to-run-action-as-a-non-root-user/m-p/45733/highlight/true#M6330
-            options: --user 1000 -v /home/ubuntu/.cache/yarn/v6:/tmp/.yarn-cache-1000/v6 # $(id -u ubuntu)
+            options: '--user 1000
+                -v /home/ubuntu/.cache/yarn/v6:/tmp/.yarn-cache-1000/v6
+                -v /home/ubuntu/.cache/alice_home:/tmp/alice_home
+                -v /home/ubuntu/.cache/bob_home:/tmp/bob_home
+                -v /home/ubuntu/.e2e/e2e-test:/tmp/e2e-test'
 
+            # more: https://stackoverflow.com/a/60202672/1986338
+            # volumes:
+            #     - /home/ubuntu/.cache/yarn/v6:/tmp/.yarn-cache-1000/v6
+            #     - /home/ubuntu/.cache/alice_home:/tmp/alice_home
+            #     - /home/ubuntu/.cache/bob_home:/tmp/bob_home
+            #     - /home/ubuntu/.e2e/e2e-test:/tmp/e2e-test
         steps:
+            # - name: Debug
+            #   run: |
+            #       pwd
+            #       ls /tmp/alice_home
+            #       ls /tmp/bob_home
+            #       ls -alh
+
             # @v2 requires too much configurations
             - uses: actions/checkout@v1
 
@@ -32,9 +49,13 @@ jobs:
               run: yarn build:e2e
 
             - name: Setup E2E
-              run: mkdir -p ./screenshots
+              run: |
+                  mkdir -p ./.env
+                  cp /tmp/e2e-test ./.env/e2e-test
+                  mkdir -p ./screenshots
+
             - name: Jest E2E
-              run: xvfb-run --server-args="-screen 0 1280x1024x24" yarn test:e2e
+              run: xvfb-run --server-args="-screen 0 1366x768x24" yarn test:e2e
 
             - name: Teardown E2E
               run: rm -rf ./build
