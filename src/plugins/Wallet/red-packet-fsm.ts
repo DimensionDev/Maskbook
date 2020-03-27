@@ -194,7 +194,7 @@ export async function onCreationResult(id: { databaseID: string }, details: RedP
             total: String(record.send_total),
             network: record.network,
             token,
-            shares: new BigNumber(record.shares).toNumber(),
+            shares: new BigNumber(String(record.shares)).toNumber(),
         }
     }
     t.objectStore('RedPacket').put(record)
@@ -369,7 +369,7 @@ function RedPacketRecordOutDB(x: RedPacketRecordInDatabase): RedPacketRecord {
     for (const name of names) {
         const original = x[name]
         if (typeof original !== 'undefined') {
-            record[name] = new BigNumber(original)
+            record[name] = new BigNumber(String(original))
         }
     }
     return record
