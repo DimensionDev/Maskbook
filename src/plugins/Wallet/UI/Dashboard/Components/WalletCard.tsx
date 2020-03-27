@@ -196,11 +196,7 @@ export default function WalletCard({ wallet, tokens }: Props) {
                     line1="ETH"
                     line2="Ethereum"
                     action={
-                        <Typography variant="h5">
-                            {BigNumber.isBigNumber(wallet.eth_balance)
-                                ? formatBalance(wallet.eth_balance, 18)
-                                : 'Syncing...'}
-                        </Typography>
+                        <Typography variant="h5">{formatBalance(wallet.eth_balance, 18) ?? 'Syncing...'}</Typography>
                     }
                 />
                 {Array.from(wallet.erc20_token_balance).map(([addr, amount]) => {
