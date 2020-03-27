@@ -2,6 +2,7 @@
 import type { Serialization } from '@holoflows/kit'
 import Typeson from 'typeson'
 import { Ok, Err } from 'ts-results'
+import { BigNumber } from 'bignumber.js'
 
 export function serializable<T, Q>(name: string, ser?: (x: T) => Q, des?: (x: Q) => T) {
     return <T extends NewableFunction>(constructor: T) => {
@@ -33,9 +34,23 @@ export function serializable<T, Q>(name: string, ser?: (x: T) => Q, des?: (x: Q)
     }
 }
 
+const customTypes = {
+    BigNumber: {
+        test: BigNumber.isBigNumber,
+        replace(input: BigNumber) {
+            return input.toString()
+        },
+        revive(input: string) {
+            return new BigNumber(input)
+        },
+    },
+}
+
 // @ts-ignore
 import builtins from 'typeson-registry/dist/presets/builtin'
-const typeson = new Typeson({}).register([builtins])
+const typeson = new Typeson({})
+typeson.register(builtins)
+typeson.register([customTypes])
 serializable('Ok')(Ok)
 serializable('Err')(Err)
 export default {

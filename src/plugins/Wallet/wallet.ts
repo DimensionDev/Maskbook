@@ -1,6 +1,7 @@
+import _ from 'lodash'
 import { createTransaction, IDBPSafeTransaction } from '../../database/helpers/openDB'
 import { createWalletDBAccess, WalletDB } from './database/Wallet.db'
-import { WalletRecord, ERC20TokenRecord, EthereumNetwork } from './database/types'
+import { WalletRecord, ERC20TokenRecord, EthereumNetwork, WalletRecordInDatabase } from './database/types'
 import { assert } from './red-packet-fsm'
 import { PluginMessageCenter } from '../PluginMessages'
 import { HDKey, EthereumAddress } from 'wallet.ts'
@@ -27,12 +28,8 @@ const memoGetWalletBalance = memoizePromise(
 )
 const memoQueryERC20Token = memoizePromise(
     async (addr: string, erc20Addr: string) => {
-        try {
-            const x = await getWalletProvider().queryERC20TokenBalance(addr, erc20Addr)
-            return onWalletERC20TokenBalanceUpdated(addr, erc20Addr, x)
-        } catch (e) {
-            return
-        }
+        const x = await getWalletProvider().queryERC20TokenBalance(addr, erc20Addr)
+        return onWalletERC20TokenBalanceUpdated(addr, erc20Addr, x).catch(_.noop)
     },
     (x, y) => x + ',' + y,
 )
@@ -59,15 +56,18 @@ export async function getWallets(): Promise<[(WalletRecord & { privateKey: strin
         memoGetWalletBalance(x.address)
         for (const t of x.erc20_token_balance.keys()) memoQueryERC20Token(x.address, t)
     }
-    return [
-        await Promise.all(
-            wallets.map(async (x) => ({
-                ...x,
-                privateKey: '0x' + buf2hex((await recoverWallet(x.mnemonic, x.passphrase)).privateKey),
-            })),
-        ).then((wallets) => wallets.sort((a, b) => (a._wallet_is_default ? -1 : b._wallet_is_default ? 1 : 0))),
-        tokens,
-    ]
+    async function makeWallets() {
+        const records = wallets
+            .map(WalletRecordOutDB)
+            .map(async (record) => ({ ...record, privateKey: await makePrivateKey(record) }))
+        const recordWithKeys = await Promise.all(records)
+        return recordWithKeys.sort((a, b) => (a._wallet_is_default ? -1 : b._wallet_is_default ? 1 : 0))
+        async function makePrivateKey(record: WalletRecord) {
+            const recover = await recoverWallet(record.mnemonic, record.passphrase)
+            return '0x' + buf2hex(recover.privateKey)
+        }
+    }
+    return [await makeWallets(), tokens]
 }
 
 export async function getDefaultWallet(): Promise<WalletRecord> {
@@ -75,7 +75,7 @@ export async function getDefaultWallet(): Promise<WalletRecord> {
     const wallets = await t.objectStore('Wallet').getAll()
     const wallet = wallets.find((wallet) => wallet._wallet_is_default) || wallets.length === 0 ? null : wallets[0]
     if (!wallet) throw new Error('no wallet')
-    return wallet
+    return WalletRecordOutDB(wallet)
 }
 
 export async function setDefaultWallet(address: WalletRecord['address']) {
@@ -114,7 +114,7 @@ export async function importNewWallet(
     {
         const t = createTransaction(await createWalletDBAccess(), 'readwrite')('Wallet', 'ERC20Token')
         t.objectStore('Wallet')
-            .add(record)
+            .add(WalletRecordIntoDB(record))
             .then(() => PluginMessageCenter.emit('maskbook.wallets.reset', undefined))
         t.objectStore('ERC20Token').put({
             decimals: 18,
@@ -133,7 +133,7 @@ export async function onWalletBalanceUpdated(address: string, newBalance: BigNum
     const wallet = await getWalletByAddress(t, address)
     if (wallet.eth_balance?.isEqualTo(newBalance)) return // wallet.eth_balance === newBalance
     wallet.eth_balance = newBalance
-    t.objectStore('Wallet').put(wallet)
+    t.objectStore('Wallet').put(WalletRecordIntoDB(wallet))
     PluginMessageCenter.emit('maskbook.wallets.update', undefined)
 }
 
@@ -142,7 +142,7 @@ export async function renameWallet(address: string, name: string) {
     const wallet = await getWalletByAddress(t, address)
 
     wallet.name = name
-    t.objectStore('Wallet').put(wallet)
+    t.objectStore('Wallet').put(WalletRecordIntoDB(wallet))
     PluginMessageCenter.emit('maskbook.wallets.update', undefined)
 }
 
@@ -196,7 +196,7 @@ export async function walletAddERC20Token(
         await t.objectStore('ERC20Token').add(rec)
     }
     wallet.erc20_token_balance.set(token.address, bal)
-    await t.objectStore('Wallet').put(wallet)
+    await t.objectStore('Wallet').put(WalletRecordIntoDB(wallet))
 }
 
 export async function onWalletERC20TokenBalanceUpdated(address: string, tokenAddress: string, newBalance: BigNumber) {
@@ -204,23 +204,39 @@ export async function onWalletERC20TokenBalanceUpdated(address: string, tokenAdd
     const wallet = await getWalletByAddress(t, address)
     if (wallet.erc20_token_balance.get(tokenAddress)?.isEqualTo(newBalance)) return // wallet.erc20_token_balance.get(tokenAddress) === newBalance
     wallet.erc20_token_balance.set(tokenAddress, newBalance)
-    t.objectStore('Wallet').put(wallet)
+    t.objectStore('Wallet').put(WalletRecordIntoDB(wallet))
     PluginMessageCenter.emit('maskbook.wallets.update', undefined)
 }
 
 async function getWalletByAddress(t: IDBPSafeTransaction<WalletDB, ['Wallet'], 'readonly'>, address: string) {
-    const rec = await t.objectStore('Wallet').get(address)
-    assert(rec)
-    if (rec.eth_balance) {
-        Object.setPrototypeOf(rec.eth_balance, BigNumber.prototype)
+    const record = await t.objectStore('Wallet').get(address)
+    assert(record)
+    return WalletRecordOutDB(record)
+}
+
+function WalletRecordOutDB(x: WalletRecordInDatabase): WalletRecord {
+    const record = _.omit(x, ['eth_balance', 'erc20_token_balance']) as WalletRecord
+    if (x.eth_balance) {
+        record.eth_balance = new BigNumber(x.eth_balance)
     }
-    const tokenBalance = new Map<string, BigNumber | undefined>()
-    for (const [name, balance] of rec.erc20_token_balance.entries()) {
-        if (balance) {
-            Object.setPrototypeOf(balance, BigNumber.prototype)
+    record.erc20_token_balance = new Map()
+    for (const [name, value] of x.erc20_token_balance.entries()) {
+        let balance
+        if (value) {
+            balance = new BigNumber(value)
         }
-        tokenBalance.set(name, balance)
+        record.erc20_token_balance.set(name, balance)
     }
-    rec.erc20_token_balance = tokenBalance
-    return rec
+    return record
+}
+function WalletRecordIntoDB(x: WalletRecord): WalletRecordInDatabase {
+    const record = _.omit(x, ['eth_balance', 'erc20_token_balance']) as WalletRecordInDatabase
+    if (x.eth_balance) {
+        record.eth_balance = x.eth_balance.toString()
+    }
+    record.erc20_token_balance = new Map()
+    for (const [name, value] of x.erc20_token_balance.entries()) {
+        record.erc20_token_balance.set(name, value?.toString())
+    }
+    return record
 }
