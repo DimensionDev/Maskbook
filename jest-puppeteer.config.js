@@ -3,7 +3,7 @@ const { readdirSync, existsSync, lstatSync, unlinkSync, rmdirSync } = require('f
 
 // load envs
 require('dotenv').config({
-    path: join(__dirname, `./.env/e2e-${process.env.NODE_ENV}`),
+    path: join(__dirname, '.env', `e2e-${process.env.NODE_ENV}`),
 })
 
 // clean user data
@@ -30,7 +30,7 @@ deleteFolderRecursive(
 )
 
 deleteFolderRecursive(
-    join(process.env.E2E_ALICE_USER_DATA_DIR, `./Default/Local Extension Settings/${process.env.E2E_EXT_ID}`),
+    join(process.env.E2E_ALICE_USER_DATA_DIR, 'Default', 'Local Extension Settings', process.env.E2E_EXT_ID),
 )
 
 module.exports = {

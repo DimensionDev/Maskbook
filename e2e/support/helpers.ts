@@ -1,9 +1,10 @@
 import { readFileSync } from 'fs'
+import { join } from 'path'
 import { Page, ElementHandle, Dialog, Browser } from 'puppeteer'
 
 export function screenshot(page: Page, name: string) {
     return page.screenshot({
-        path: `./screenshots/${name}.png`,
+        path: join(process.cwd(), 'screenshots', `${name}.png`),
     })
 }
 
