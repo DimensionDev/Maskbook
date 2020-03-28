@@ -18,6 +18,7 @@ export type BackupJSONFileLatestShort = [
     string,
 ]
 export function compressBackupFile(file: BackupJSONFileLatest, profileIdentifier?: ProfileIdentifier): string {
+    // TODO!: not work with persona with no profiles
     const { grantedHostPermissions, profiles, personas } = file
     if (!profileIdentifier)
         profileIdentifier = Identifier.fromString(profiles[0].identifier, ProfileIdentifier).unwrap()
