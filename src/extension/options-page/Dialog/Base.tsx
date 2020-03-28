@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useCallback, memo } from 'react'
+import React, { useMemo, useCallback, useReducer } from 'react'
 import {
     DialogProps,
     useMediaQuery,
@@ -71,21 +71,36 @@ enum DialogState {
     Destroyed,
 }
 
-export function useModal<T extends object>(
+const reducer = (
+    state: { state: DialogState; props: any },
+    action: { type: 'open' | 'close' | 'destroy'; props: any },
+) => {
+    const { type, props } = action
+    if (type === 'open') return { state: DialogState.Opened, props }
+    if (type === 'close') return { state: DialogState.Closing, props: state.props }
+    return { state: DialogState.Destroyed }
+}
+
+// TODO!: type P
+export function useModal<T extends object, P extends object>(
     component: React.FunctionComponent<WrappedDialogProps<T>>,
     ComponentProps?: T,
-): [React.ReactNode, ShowModal] {
+): [React.ReactNode, () => void, (props: P) => void] {
     const Modal = useMemo(() => component, [component])
-    const [state, setState] = useState<DialogState>(DialogState.Destroyed)
-    const showModal = useCallback(() => setState(DialogState.Opened), [])
-    const onClose = useCallback(() => setState(DialogState.Closing), [])
-    const onExited = useCallback(() => setState(DialogState.Destroyed), [])
+    // TODO!: type this
+    // @ts-ignore
+    const [status, dispatch] = useReducer<typeof reducer>(reducer, { state: DialogState.Destroyed })
+    const showModal = useCallback(() => dispatch({ type: 'open' }), [])
+    const showStatefulModal = useCallback((props?: P) => dispatch({ type: 'open', props }), [])
+    const onClose = useCallback(() => dispatch({ type: 'close' }), [])
+    const onExited = useCallback(() => dispatch({ type: 'destroy' }), [])
+    const { state, props } = status
 
     const renderedComponent =
         state === DialogState.Destroyed ? null : (
             <Modal
                 {...{
-                    ...(ComponentProps ? { ComponentProps } : {}),
+                    ...(ComponentProps || props ? { ComponentProps: { ...ComponentProps, ...props } } : {}),
                     open: state === DialogState.Opened,
                     onClose,
                     onExited,
@@ -93,7 +108,7 @@ export function useModal<T extends object>(
             />
         )
 
-    return [renderedComponent, showModal]
+    return [renderedComponent, showModal, showStatefulModal]
 }
 
 interface DashboardDialogWrapperProps {
@@ -191,7 +206,7 @@ export function DashboardDialogWrapper(props: DashboardDialogWrapperProps) {
     )
 }
 
-export function useSnackbarCallback<T>(
+export function useSnackbarCallback<T = void>(
     executor: () => Promise<T>,
     deps: any[],
     onSuccess?: (ret: T) => void,
@@ -208,11 +223,11 @@ export function useSnackbarCallback<T>(
                     return res
                 },
                 err => {
-                    enqueueSnackbar(`Error: ${err.message}`, { key })
+                    enqueueSnackbar(`Error: ${err.message || err}`, { key })
                     onError?.(err)
                     throw err
                 },
             ),
-        [enqueueSnackbar, executor, key, onError, onSuccess],
+        [...deps, enqueueSnackbar, executor, key, onError, onSuccess],
     )
 }
