@@ -14,6 +14,7 @@ import { Theme, ThemeProvider } from '@material-ui/core/styles'
 import CloseIcon from '@material-ui/icons/Close'
 import type { TransitionProps } from '@material-ui/core/transitions'
 import { useBlurContext } from '..'
+import { useSnackbar } from 'notistack'
 
 const Transition = React.forwardRef<unknown, TransitionProps>(function Transition(props, ref) {
     return <Fade ref={ref} {...props} />
@@ -61,6 +62,7 @@ export function DashboardDialogCore(props: DashboardDialogCoreProps) {
 
 export interface WrappedDialogProps<T extends object = any> extends DialogProps {
     ComponentProps?: T
+    onClose(): void
 }
 type ShowModal = () => void
 enum DialogState {
@@ -73,20 +75,25 @@ export function useModal<T extends object>(
     component: React.FunctionComponent<WrappedDialogProps<T>>,
     ComponentProps?: T,
 ): [React.ReactNode, ShowModal] {
-    const modal = useMemo(() => component, [component])
+    const Modal = useMemo(() => component, [component])
     const [state, setState] = useState<DialogState>(DialogState.Destroyed)
     const showModal = useCallback(() => setState(DialogState.Opened), [])
     const onClose = useCallback(() => setState(DialogState.Closing), [])
     const onExited = useCallback(() => setState(DialogState.Destroyed), [])
 
-    const renderedComponent = modal({
-        ...(ComponentProps ? { ComponentProps } : {}),
-        open: state === DialogState.Opened,
-        onClose,
-        onExited,
-    })
+    const renderedComponent =
+        state === DialogState.Destroyed ? null : (
+            <Modal
+                {...{
+                    ...(ComponentProps ? { ComponentProps } : {}),
+                    open: state === DialogState.Opened,
+                    onClose,
+                    onExited,
+                }}
+            />
+        )
 
-    return [state === DialogState.Destroyed ? null : renderedComponent, showModal]
+    return [renderedComponent, showModal]
 }
 
 interface DashboardDialogWrapperProps {
@@ -181,5 +188,31 @@ export function DashboardDialogWrapper(props: DashboardDialogWrapperProps) {
                 <section className={classes.content}>{children}</section>
             </DialogContent>
         </ThemeProvider>
+    )
+}
+
+export function useSnackbarCallback<T>(
+    executor: () => Promise<T>,
+    deps: any[],
+    onSuccess?: (ret: T) => void,
+    onError?: (err: Error) => void,
+    key?: string,
+) {
+    const { enqueueSnackbar } = useSnackbar()
+    return useCallback(
+        () =>
+            executor().then(
+                res => {
+                    enqueueSnackbar('OK', { key, variant: 'success' })
+                    onSuccess?.(res)
+                    return res
+                },
+                err => {
+                    enqueueSnackbar(`Error: ${err.message}`, { key })
+                    onError?.(err)
+                    throw err
+                },
+            ),
+        [enqueueSnackbar, executor, key, onError, onSuccess],
     )
 }
