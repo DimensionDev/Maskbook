@@ -1,6 +1,6 @@
 import { Page, ElementHandle } from 'puppeteer'
 import { join } from 'path'
-import { uploadFile, updateInput, loadFile } from '../support/helpers'
+import { uploadFile, updateInput, loadFile, loadFileTmp } from '../support/helpers'
 
 export async function fromFile(page: Page, backup: string) {
     const fileTab = await page.waitFor('[data-testid="file_tab"]')
@@ -8,7 +8,7 @@ export async function fromFile(page: Page, backup: string) {
     await page.waitFor(500)
 
     const uploadInput = await page.waitFor('[data-testid="upload_input"]')
-    await uploadFile(uploadInput, join(__dirname, backup))
+    await uploadFile(uploadInput, loadFileTmp(join(__dirname, backup)))
 
     const finishButton = await page.waitFor('[data-testid="finish_button"]')
     await finishButton.click()

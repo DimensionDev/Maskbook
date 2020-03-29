@@ -1,6 +1,8 @@
-import { readFileSync } from 'fs'
+import { readFileSync, writeFileSync } from 'fs'
 import { join } from 'path'
 import { Page, ElementHandle, Dialog, Browser } from 'puppeteer'
+import { createHash } from 'crypto'
+import { tmpdir } from 'os'
 
 export function screenshot(page: Page, name: string) {
     return page.screenshot({
@@ -36,7 +38,25 @@ export async function uploadFile(input: ElementHandle<HTMLInputElement>, ...file
 }
 
 export function loadFile(filePath: string) {
-    return readFileSync(filePath).toString('utf8')
+    return readFileSync(filePath)
+        .toString('utf8')
+        .replace(/%E2E_ALICE_TWITTER_ID%/g, process.env.E2E_ALICE_TWITTER_ID ?? 'alice')
+        .replace(/%E2E_ALICE_FACEBOOK_ID%/g, process.env.E2E_ALICE_FACEBOOK_ID ?? 'alice')
+        .replace(/%E2E_BOB_TWITTER_ID%/g, process.env.E2E_BOB_TWITTER_ID ?? 'bob')
+        .replace(/%E2E_BOB_FACEBOOK_ID%/g, process.env.E2E_BOB_FACEBOOK_ID ?? 'bob')
+}
+
+export function loadFileTmp(filePath: string) {
+    const tmpContent = loadFile(filePath)
+    const tmpPath = join(
+        tmpdir(),
+        createHash('md5')
+            .update(tmpContent)
+            .digest()
+            .toString('hex'),
+    )
+    writeFileSync(tmpPath, tmpContent)
+    return tmpPath
 }
 
 export function loadJSON(filePath: string) {
