@@ -19,7 +19,7 @@ const TabPanel = (props: TabPanelProps & { value: number; index: number }) => {
 }
 
 export interface AbstractTabProps {
-    tabs: TabPanelProps[]
+    tabs: Omit<TabPanelProps, 'height' | 'minHeight'>[]
     state: [number, React.Dispatch<React.SetStateAction<number>>]
     margin?: true | 'top' | 'bottom'
     height?: number | string
