@@ -93,17 +93,26 @@ describe(`${INITIALIZATION_STORY_URL}-Workflow2:ConnectProfile`, () => {
             // listening 'dialog' event
             await new Promise(async resolve => {
                 snsPage.on('dialog', async dialog => {
+                    // get prompt value
+                    const defaultValue = dialog.defaultValue()
                     await dialog.dismiss()
 
                     // wait for auto pasting
                     await snsPage.waitFor(2000)
 
-                    // validate bio
-                    const descriptionTextarea: ElementHandle<HTMLTextAreaElement> = await snsPage.waitFor(
-                        sns.bioTextareaSelector,
-                    )
-                    expect((await descriptionTextarea.evaluate(e => e.value)).includes(proveContent!)).toBeTruthy()
-                    resolve()
+                    // auto pasting not working
+                    if (defaultValue.includes(proveContent!)) {
+                        resolve()
+                    } else {
+                        // get bio
+                        const descriptionTextarea = await snsPage.$(sns.bioTextareaSelector)
+                        if (!descriptionTextarea) return
+
+                        // validate bio
+                        const bio = await descriptionTextarea.evaluate(e => e.textContent)
+                        expect(bio?.includes(proveContent!)).toBeTruthy()
+                        resolve()
+                    }
                 })
                 await (addButton as any).click()
             })
