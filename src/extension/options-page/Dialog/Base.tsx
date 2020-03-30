@@ -90,7 +90,7 @@ export function useModal<T extends object, P extends object>(
     const Modal = useMemo(() => component, [component])
     // TODO!: type this
     // @ts-ignore
-    const [status, dispatch] = useReducer<typeof reducer>(reducer, { state: DialogState.Destroyed })
+    const [status, dispatch]: [any, any] = useReducer<typeof reducer>(reducer, { state: DialogState.Destroyed })
     const showModal = useCallback(() => dispatch({ type: 'open' }), [])
     const showStatefulModal = useCallback((props?: P) => dispatch({ type: 'open', props }), [])
     const onClose = useCallback(() => dispatch({ type: 'close' }), [])
