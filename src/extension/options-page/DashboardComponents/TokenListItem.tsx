@@ -9,7 +9,7 @@ import {
     Avatar,
 } from '@material-ui/core'
 
-const useStyles = makeStyles(theme =>
+const useStyles = makeStyles((theme) =>
     createStyles({
         coin: {
             width: '24px',
