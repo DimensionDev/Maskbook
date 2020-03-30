@@ -9,7 +9,7 @@
     "build-storybook": "build-storybook -s public --quiet",
     "build:base": "webpack --mode production",
     "build:chromium": "webpack --mode production --chromium",
-    "build:firefox": "webpack --mode production --firefox",
+    "build:firefox": "webpack --mode production --firefox --reproducible-build",
     "build:gecko": "webpack --mode production --firefox-gecko",
     "build:e2e": "webpack --mode production --e2e",
     "build:ios": "run-s build:ios:webpack build:ios:ext:prebuilt",
