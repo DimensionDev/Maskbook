@@ -36,7 +36,7 @@ const ManifestGeneratorPlugin = require('webpack-extension-manifest-plugin')
  * --wk-webview
  * --e2e
  */
-const calcTarget = (argv) => ({
+const calcArgs = (argv) => ({
     /** @type {'nightly' | boolean} */
     Firefox: argv.firefox || argv['firefox-android'] || argv['firefox-gecko'],
     /** @type {string | boolean} */
@@ -51,6 +51,8 @@ const calcTarget = (argv) => ({
     WKWebview: argv['wk-webview'],
     /** @type {boolean} */
     E2E: argv.e2e,
+    /** @type {boolean} */
+    ReproducibleBuild: argv['reproducible-build'],
 })
 
 /**
@@ -58,7 +60,7 @@ const calcTarget = (argv) => ({
  * @returns {import("webpack").Configuration}
  */
 module.exports = (argvEnv, argv) => {
-    const target = calcTarget(argv)
+    const target = calcArgs(argv)
 
     if (target.Firefox) {
         polyfills = polyfills.filter((name) => !name.includes('webextension-polyfill'))
@@ -91,21 +93,25 @@ module.exports = (argvEnv, argv) => {
         plugins: [
             new webpack.EnvironmentPlugin({
                 NODE_ENV: env,
-                VERSION: git.describe('--dirty'),
-                TAG_NAME: git.tag(),
-                COMMIT_HASH: git.commitHash(),
-                COMMIT_DATE: git.commitDate().toISOString(),
-                BUILD_DATE: target.Firefox ? null : new Date().toISOString(),
-                REMOTE_URL: git.remoteURL(),
-                BRANCH_NAME: git.branchName(),
-                DIRTY: git.isDirty(),
-                TAG_DIRTY: git.isTagDirty(),
             }),
+            target.ReproducibleBuild
+                ? undefined
+                : new webpack.EnvironmentPlugin({
+                      BUILD_DATE: new Date().toISOString(),
+                      VERSION: git.describe('--dirty'),
+                      TAG_NAME: git.tag(),
+                      COMMIT_HASH: git.commitHash(),
+                      COMMIT_DATE: git.commitDate().toISOString(),
+                      REMOTE_URL: git.remoteURL(),
+                      BRANCH_NAME: git.branchName(),
+                      DIRTY: git.isDirty(),
+                      TAG_DIRTY: git.isTagDirty(),
+                  }),
             // The following plugins are from react-dev-utils. let me know if any one need it.
             // WatchMissingNodeModulesPlugin
             // ModuleNotFoundPlugin
             // ModuleScopePlugin
-        ],
+        ].filter((x) => x),
         node: disabledNodeBuiltins(),
         optimization: { minimize: false },
         output: {
