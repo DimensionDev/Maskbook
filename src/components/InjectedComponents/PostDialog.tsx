@@ -13,6 +13,8 @@ import {
     Chip,
     ThemeProvider,
     Theme,
+    Switch,
+    FormControlLabel,
 } from '@material-ui/core'
 import { BigNumber } from 'bignumber.js'
 import { MessageCenter, CompositionEvent } from '../../utils/messages'
@@ -86,6 +88,7 @@ export interface PostDialogUIProps
     open: boolean
     onlyMyself: boolean
     shareToEveryone: boolean
+    imagePayload: boolean
     availableShareTarget: Array<Profile | Group>
     currentShareTarget: Array<Profile | Group>
     currentIdentity: Profile | null
@@ -94,6 +97,7 @@ export interface PostDialogUIProps
     onPostContentChanged: (nextMessage: TypedMessage) => void
     onOnlyMyselfChanged: (checked: boolean) => void
     onShareToEveryoneChanged: (checked: boolean) => void
+    onImagePayloadSwitchChanged: (checked: boolean) => void
     onFinishButtonClicked: () => void
     onCloseButtonClicked: () => void
     onSetSelected: SelectRecipientsUIProps['onSetSelected']
@@ -228,6 +232,15 @@ export function PostDialogUI(props: PostDialogUIProps) {
                         </SelectRecipientsUI>
                     </DialogContent>
                     <DialogActions className={classes.actions}>
+                        <FormControlLabel
+                            control={
+                                <Switch
+                                    checked={props.imagePayload}
+                                    onChange={() => props.onImagePayloadSwitchChanged(!props.imagePayload)}
+                                />
+                            }
+                            label={t('post_dialog__image_payload')}
+                        />
                         <Button
                             className={classes.button}
                             style={{ marginLeft: 'auto' }}
@@ -267,7 +280,6 @@ export function PostDialog(props: PostDialogProps) {
     const typedMessageMetadata = or(props.typedMessageMetadata, useValueRef(getActivatedUI().typedMessageMetadata))
     const [open, setOpen] = or(props.open, useState<boolean>(false)) as NonNullable<PostDialogProps['open']>
 
-    const isSteganography = useValueRef(steganographyModeSetting)
     //#region TypedMessage
     const [postBoxContent, setPostBoxContent] = useState<TypedMessage>(makeTypedMessage('', typedMessageMetadata))
     useEffect(() => {
@@ -284,7 +296,13 @@ export function PostDialog(props: PostDialogProps) {
     )
     const currentIdentity = or(props.currentIdentity, useCurrentIdentity())
     const [currentShareTarget, setCurrentShareTarget] = useState<(Profile | Group)[]>(() => [])
-
+    //#endregion
+    //#region Image Based Payload Switch
+    const [imagePayload, setImagePayload] = useState(useValueRef(steganographyModeSetting))
+    const onImagePayloadSwitchChanged = or(
+        props.onImagePayloadSwitchChanged,
+        useCallback((checked: boolean) => setImagePayload(checked), []),
+    )
     //#endregion
     //#region callbacks
     const onRequestPost = or(
@@ -299,7 +317,7 @@ export function PostDialog(props: PostDialogProps) {
                 )
                 const activeUI = getActivatedUI()
                 const metadata = readTypedMessageMetadata(typedMessageMetadata, 'com.maskbook.red_packet:1')
-                if (isSteganography) {
+                if (imagePayload) {
                     const isEth = metadata.ok && metadata.val.token_type === RedPacketTokenType.eth
                     const isDai =
                         metadata.ok &&
@@ -342,7 +360,7 @@ export function PostDialog(props: PostDialogProps) {
                 // there is nothing to write if it shared with public
                 if (!shareToEveryone) Services.Crypto.publishPostAESKey(token)
             },
-            [currentIdentity, i18n.language, isSteganography, typedMessageMetadata, shareToEveryone, t],
+            [currentIdentity, shareToEveryone, typedMessageMetadata, imagePayload, t, i18n.language],
         ),
     )
     const onRequestReset = or(
@@ -405,6 +423,7 @@ export function PostDialog(props: PostDialogProps) {
             shareToEveryone={shareToEveryoneLocal}
             onlyMyself={onlyMyself}
             availableShareTarget={availableShareTarget}
+            imagePayload={imagePayload}
             currentIdentity={currentIdentity}
             currentShareTarget={currentShareTarget}
             postContent={postBoxContent}
@@ -417,6 +436,7 @@ export function PostDialog(props: PostDialogProps) {
             onPostContentChanged={setPostBoxContent}
             onShareToEveryoneChanged={onShareToEveryoneChanged}
             onOnlyMyselfChanged={onOnlyMyselfChanged}
+            onImagePayloadSwitchChanged={onImagePayloadSwitchChanged}
             onFinishButtonClicked={onFinishButtonClicked}
             onCloseButtonClicked={onCloseButtonClicked}
             {...props}
