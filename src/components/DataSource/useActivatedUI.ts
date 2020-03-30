@@ -16,11 +16,6 @@ export function useLastRecognizedIdentity() {
 export function useMyIdentities() {
     return useValueRef(getActivatedUI().myIdentitiesRef)
 }
-export function useMyPersonas() {
-    OnlyRunInContext('options', 'useMyPersonas')
-    const personasRef = useValueRef(getActivatedUI().myPersonasRef)
-    return personasRef
-}
 export function useCurrentIdentity(noDefault?: boolean): Profile | null {
     const all = useMyIdentities()
     const current = useValueRef(currentSelectedIdentity[getActivatedUI().networkIdentifier])

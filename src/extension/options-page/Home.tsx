@@ -13,7 +13,7 @@ import {
     Container,
 } from '@material-ui/core'
 import { Link, useHistory, useRouteMatch, Redirect } from 'react-router-dom'
-import { useMyPersonas } from '../../components/DataSource/useActivatedUI'
+import { useMyPersonas } from '../../components/DataSource/independent'
 import Services from '../service'
 import { DialogRouter } from './DashboardDialogs/DialogBase'
 
@@ -98,6 +98,8 @@ export default function DashboardHomePage() {
     )
 
     React.useEffect(() => {
+        if (personas.length !== 0) return
+        // ensure persona
         Services.Identity.queryMyPersonas().then((personas) => {
             if (!personas.length) history.replace('/initialize')
             if (personas.length === 1)
