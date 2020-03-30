@@ -140,7 +140,7 @@
     "eslint-config-prettier": "^6.10.1",
     "eslint-plugin-import": "^2.20.1",
     "eslint-plugin-prettier": "^3.1.2",
-    "eslint-plugin-react-hooks": "^2.5.1",
+    "eslint-plugin-react-hooks": "^3.0.0",
     "esm": "^3.2.25",
     "expect-puppeteer": "^4.4.0",
     "fake-indexeddb": "^3.0.0",
