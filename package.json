@@ -158,7 +158,7 @@
     "prettier": "^2.0.2",
     "puppeteer": "^2.1.1",
     "react-devtools": "^4.5.0",
-    "react-docgen-typescript-loader": "^3.7.1",
+    "react-docgen-typescript-loader": "^3.7.2",
     "react-test-renderer": "^16.13.0",
     "storybook-addon-figma": "^0.1.0",
     "storybook-addon-i18n": "^5.1.13",
