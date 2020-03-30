@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { DashboardDialogCore, DashboardDialogWrapper, WrappedDialogProps, useSnackbarCallback } from './Base'
 import { TextField, makeStyles, createStyles } from '@material-ui/core'
-import { Profile } from '../../../database'
+import type { Profile } from '../../../database'
 import { Avatar } from '../../../utils/components/Avatar'
 import Services from '../../service'
 import { ThrottledButton } from '../DashboardComponents/ActionButton'
@@ -10,7 +10,7 @@ interface ContactDialogProps {
     contact: Profile
 }
 
-const useStyles = makeStyles(theme =>
+const useStyles = makeStyles((theme) =>
     createStyles({
         avatar: {
             width: '64px',
@@ -43,13 +43,13 @@ export function DashboardContactDialog(props: WrappedDialogProps<ContactDialogPr
                     <TextField
                         label="Nickname"
                         value={nickname}
-                        onChange={e => setNickname(e.target.value)}
+                        onChange={(e) => setNickname(e.target.value)}
                         variant="outlined"
                     />
                     <TextField
                         label="New Avatar URL"
                         value={avatarURL}
-                        onChange={e => setAvatarURL(e.target.value)}
+                        onChange={(e) => setAvatarURL(e.target.value)}
                         variant="outlined"
                     />
                     <TextField

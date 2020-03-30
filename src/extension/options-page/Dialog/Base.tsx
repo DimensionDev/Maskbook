@@ -12,7 +12,7 @@ import {
 } from '@material-ui/core'
 import { Theme, ThemeProvider } from '@material-ui/core/styles'
 import CloseIcon from '@material-ui/icons/Close'
-import { TransitionProps } from '@material-ui/core/transitions'
+import type { TransitionProps } from '@material-ui/core/transitions'
 import { useBlurContext } from '..'
 import { useSnackbar } from 'notistack'
 import { useI18N } from '../../../utils/i18n-next-ui'
@@ -21,7 +21,7 @@ const Transition = React.forwardRef<unknown, TransitionProps>(function Transitio
     return <Fade ref={ref} {...props} />
 })
 
-const useStyles = makeStyles(theme =>
+const useStyles = makeStyles((theme) =>
     createStyles({
         close: {
             position: 'absolute',
@@ -51,7 +51,7 @@ export function DashboardDialogCore(props: DashboardDialogCoreProps) {
             {...dialogProps}>
             {children}
             <IconButton
-                onClick={e => dialogProps.onClose?.(e, 'backdropClick')}
+                onClick={(e) => dialogProps.onClose?.(e, 'backdropClick')}
                 className={classes.close}
                 size="small"
                 style={{ color: closeIconColor }}>
@@ -90,7 +90,7 @@ export function useModal<T extends object, P extends object>(
     const Modal = useMemo(() => component, [component])
     // TODO!: type this
     // @ts-ignore
-    const [status, dispatch] = useReducer<typeof reducer>(reducer, { state: DialogState.Destroyed })
+    const [status, dispatch]: [any, any] = useReducer<typeof reducer>(reducer, { state: DialogState.Destroyed })
     const showModal = useCallback(() => dispatch({ type: 'open' }), [])
     const showStatefulModal = useCallback((props?: P) => dispatch({ type: 'open', props }), [])
     const onClose = useCallback(() => dispatch({ type: 'close' }), [])
@@ -121,11 +121,11 @@ interface DashboardDialogWrapperProps {
     children: React.ReactNode
 }
 
-const useDashboardDialogWrapperStyles = makeStyles(theme =>
+const useDashboardDialogWrapperStyles = makeStyles((theme) =>
     createStyles<string, DashboardDialogWrapperProps>({
         wrapper: {
-            width: props => (props.size === 'small' ? '350px' : '440px'),
-            padding: props => theme.spacing(props.size === 'small' ? 3 : 4),
+            width: (props) => (props.size === 'small' ? '350px' : '440px'),
+            padding: (props) => theme.spacing(props.size === 'small' ? 3 : 4),
         },
         header: {
             marginTop: theme.spacing(1),
@@ -137,7 +137,7 @@ const useDashboardDialogWrapperStyles = makeStyles(theme =>
             maxWidth: '350px',
         },
         content: {
-            marginTop: props => theme.spacing(props.size === 'small' ? 4 : 2),
+            marginTop: (props) => theme.spacing(props.size === 'small' ? 4 : 2),
             textAlign: 'center',
             '& > *:not(:last-child)': {
                 marginBottom: theme.spacing(2),
@@ -219,12 +219,12 @@ export function useSnackbarCallback<T = void>(
     return useCallback(
         () =>
             executor().then(
-                res => {
+                (res) => {
                     enqueueSnackbar(t('done'), { key, variant: 'success' })
                     onSuccess?.(res)
                     return res
                 },
-                err => {
+                (err) => {
                     enqueueSnackbar(`Error: ${err.message || err}`, { key })
                     onError?.(err)
                     throw err

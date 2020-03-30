@@ -21,9 +21,13 @@ export function DashboardWalletImportDialog(props: WrappedDialogProps) {
                 label: 'Mnemonic  Word',
                 children: (
                     <form>
-                        <TextField placeholder="Mnemonic Word*" value={word} onChange={e => setWord(e.target.value)} />
-                        <TextField placeholder="Password*" value={pass} onChange={e => setPass(e.target.value)} />
-                        <TextField placeholder="Wallet Name*" value={name} onChange={e => setName(e.target.value)} />
+                        <TextField
+                            placeholder="Mnemonic Word*"
+                            value={word}
+                            onChange={(e) => setWord(e.target.value)}
+                        />
+                        <TextField placeholder="Password*" value={pass} onChange={(e) => setPass(e.target.value)} />
+                        <TextField placeholder="Wallet Name*" value={name} onChange={(e) => setName(e.target.value)} />
                     </form>
                 ),
                 p: 0,
@@ -32,13 +36,13 @@ export function DashboardWalletImportDialog(props: WrappedDialogProps) {
                 label: 'Private key',
                 children: (
                     <form>
-                        <TextField placeholder="Wallet Name*" value={name} onChange={e => setName(e.target.value)} />
+                        <TextField placeholder="Wallet Name*" value={name} onChange={(e) => setName(e.target.value)} />
                         <TextField
                             multiline
                             rows={4}
                             placeholder="Private Key*"
                             value={privKey}
-                            onChange={e => setPrivKey(e.target.value)}
+                            onChange={(e) => setPrivKey(e.target.value)}
                         />
                     </form>
                 ),
@@ -74,8 +78,8 @@ export function DashboardWalletCreateDialog(props: WrappedDialogProps) {
         <DashboardDialogCore {...props}>
             <DashboardDialogWrapper icon={<CreditCardIcon />} iconColor="#4EE0BC" primary="Create a Wallet">
                 <form>
-                    <TextField placeholder="Wallet Name*" value={name} onChange={e => setName(e.target.value)} />
-                    <TextField placeholder="Password*" value={pass} onChange={e => setPass(e.target.value)} />
+                    <TextField placeholder="Wallet Name*" value={name} onChange={(e) => setName(e.target.value)} />
+                    <TextField placeholder="Password*" value={pass} onChange={(e) => setPass(e.target.value)} />
                 </form>
                 <Typography variant="body2" color="textSecondary">
                     Set a password to improve the security level

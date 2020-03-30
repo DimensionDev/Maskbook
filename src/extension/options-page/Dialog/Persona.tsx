@@ -19,7 +19,7 @@ import AbstractTab, { AbstractTabProps } from '../DashboardComponents/AbstractTa
 import { QrCode, WKWebkitQRScanner } from '../../../components/shared/qrcode'
 import { useSnackbar } from 'notistack'
 import { selectElementContents } from '../../../utils/utils'
-import { Persona } from '../../../database'
+import type { Persona } from '../../../database'
 import { ThrottledButton } from '../DashboardComponents/ActionButton'
 
 export function DashboardPersonaCreateDialog(props: WrappedDialogProps) {
@@ -36,8 +36,8 @@ export function DashboardPersonaCreateDialog(props: WrappedDialogProps) {
         <DashboardDialogCore {...props}>
             <DashboardDialogWrapper icon={<UserPlus />} iconColor="#5FDD97" primary="Create a Persona">
                 <form>
-                    <TextField placeholder="Name*" value={name} onChange={e => setName(e.target.value)} />
-                    <TextField placeholder="Password*" value={password} onChange={e => setPassword(e.target.value)} />
+                    <TextField placeholder="Name*" value={name} onChange={(e) => setName(e.target.value)} />
+                    <TextField placeholder="Password*" value={password} onChange={(e) => setPassword(e.target.value)} />
                 </form>
                 <Typography variant="body2" color="textSecondary">
                     Set a password to improve the security level
@@ -50,7 +50,7 @@ export function DashboardPersonaCreateDialog(props: WrappedDialogProps) {
     )
 }
 
-const useStyles = makeStyles(theme =>
+const useStyles = makeStyles((theme) =>
     createStyles({
         textarea: {
             height: 'auto',
@@ -93,7 +93,7 @@ export function DashboardPersonaImportDialog(props: WrappedDialogProps) {
     const importFromQR = (str: string) => {
         Promise.resolve()
             .then(() => UpgradeBackupJSONFile(decompressBackupFile(str)))
-            .then(object => Services.Welcome.restoreBackup(object!))
+            .then((object) => Services.Welcome.restoreBackup(object!))
     }
 
     function QR() {
@@ -118,14 +118,14 @@ export function DashboardPersonaImportDialog(props: WrappedDialogProps) {
                 label: 'Mnemonic Word',
                 children: (
                     <>
-                        <TextField onChange={e => setNickname(e.target.value)} value={nickname} placeholder="Name*" />
+                        <TextField onChange={(e) => setNickname(e.target.value)} value={nickname} placeholder="Name*" />
                         <TextField
                             value={mnemonicWordValue}
-                            onChange={e => setMnemonicWordValue(e.target.value)}
+                            onChange={(e) => setMnemonicWordValue(e.target.value)}
                             placeholder="Mnemonic Words*"
                         />
                         <TextField
-                            onChange={e => setPassword(e.target.value)}
+                            onChange={(e) => setPassword(e.target.value)}
                             value={password}
                             placeholder="Password"
                         />
@@ -141,7 +141,7 @@ export function DashboardPersonaImportDialog(props: WrappedDialogProps) {
                         multiline
                         rows={1}
                         placeholder="Input the base64 code"
-                        onChange={e => setBase64Value(e.target.value)}
+                        onChange={(e) => setBase64Value(e.target.value)}
                         value={base64Value}></TextField>
                 ),
                 display: 'flex',
@@ -208,7 +208,7 @@ export function DashboardPersonaBackupDialog(props: WrappedDialogProps<PersonaPr
             noPosts: true,
             noUserGroups: true,
             filter: { type: 'persona', wanted: [persona.identifier] },
-        }).then(file => {
+        }).then((file) => {
             setBase64Value(encodeArrayBuffer(encodeText(JSON.stringify(file))))
             setCompressedQRString(compressBackupFile(file))
         })

@@ -9,7 +9,7 @@ interface DashboardRouterContainer {
     padded?: boolean
 }
 
-const useStyles = makeStyles(theme =>
+const useStyles = makeStyles((theme) =>
     createStyles({
         wrapper: {
             flex: 1,

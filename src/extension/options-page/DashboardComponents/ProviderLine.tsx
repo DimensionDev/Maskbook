@@ -7,7 +7,7 @@ import { useI18N } from '../../../utils/i18n-next-ui'
 import LinkOffIcon from '@material-ui/icons/LinkOff'
 import ArrowForwardIcon from '@material-ui/icons/ArrowForward'
 
-const useStyles = makeStyles(theme =>
+const useStyles = makeStyles((theme) =>
     createStyles({
         text: {
             color: theme.palette.primary.main,

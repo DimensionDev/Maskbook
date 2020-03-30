@@ -9,7 +9,7 @@ import { useModal } from '../Dialog/Base'
 import { Database as DatabaseIcon } from 'react-feather'
 import { DashboardDatabaseBackupDialog, DashboardDatabaseRestoreDialog } from '../Dialog/Database'
 
-const useStyles = makeStyles(theme =>
+const useStyles = makeStyles((theme) =>
     createStyles({
         container: {
             display: 'flex',
@@ -55,7 +55,7 @@ export default function DashboardPersonasRouter() {
     return (
         <DashboardRouterContainer title="My Personas" actions={actions}>
             <section className={classes.container}>
-                {personas.map(persona => (
+                {personas.map((persona) => (
                     <PersonaCard key={persona.identifier.toText()} persona={persona} />
                 ))}
             </section>

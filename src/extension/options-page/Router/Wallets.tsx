@@ -8,7 +8,7 @@ import MoreVertOutlinedIcon from '@material-ui/icons/MoreVertOutlined'
 import HistoryIcon from '@material-ui/icons/History'
 
 import { WalletItem } from '../DashboardComponents/WalletItem'
-import { WalletRecord } from '../../../plugins/Wallet/database/types'
+import type { WalletRecord } from '../../../plugins/Wallet/database/types'
 import { TokenListItem } from '../DashboardComponents/TokenListItem'
 import { useModal } from '../Dialog/Base'
 import {
@@ -18,7 +18,7 @@ import {
     DashboardWalletHistoryDialog,
 } from '../Dialog/Wallet'
 
-const useStyles = makeStyles(theme =>
+const useStyles = makeStyles((theme) =>
     createStyles({
         wrapper: {
             display: 'flex',

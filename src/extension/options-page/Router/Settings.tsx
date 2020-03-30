@@ -21,7 +21,7 @@ import OpenInBrowserIcon from '@material-ui/icons/OpenInBrowser'
 import LanguageIcon from '@material-ui/icons/Language'
 import DashboardRouterContainer from './Container'
 
-const useStyles = makeStyles(theme =>
+const useStyles = makeStyles((theme) =>
     createStyles({
         root: {
             width: '100%',

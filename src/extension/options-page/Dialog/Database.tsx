@@ -66,7 +66,7 @@ export function DashboardDatabaseRestoreDialog(props: WrappedDialogProps) {
         () =>
             browser.permissions
                 .request({ origins: requiredPermissions! })
-                .then(granted =>
+                .then((granted) =>
                     granted
                         ? Services.Welcome.restoreBackup(json!)
                         : Promise.reject(new Error('required permissions are not granted')),

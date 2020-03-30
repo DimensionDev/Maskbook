@@ -7,7 +7,7 @@ import SearchIcon from '@material-ui/icons/Search'
 import { useFriendsList } from '../../../components/DataSource/useActivatedUI'
 import { ContactLine } from '../DashboardComponents/ContactLine'
 
-const useStyles = makeStyles(theme =>
+const useStyles = makeStyles((theme) =>
     createStyles({
         title: {
             margin: theme.spacing(3, 0),
@@ -26,7 +26,7 @@ export default function DashboardContactsRouter() {
                 variant="outlined"
                 size="small"
                 value={search}
-                onChange={e => setSearch(e.target.value)}
+                onChange={(e) => setSearch(e.target.value)}
                 InputProps={{
                     endAdornment: (
                         <IconButton size="small" onClick={() => setSearch('')}>
@@ -40,7 +40,7 @@ export default function DashboardContactsRouter() {
     )
 
     const classes = useStyles()
-    const contacts = useFriendsList().filter(i =>
+    const contacts = useFriendsList().filter((i) =>
         search ? i.nickname?.includes(search) || i.identifier.toText().includes(search) : true,
     )
 
@@ -50,7 +50,7 @@ export default function DashboardContactsRouter() {
                 All people recorded in the Maskbook database.
             </Typography>
             <section>
-                {contacts.map(contact => (
+                {contacts.map((contact) => (
                     <ContactLine key={contact.identifier.toText()} contact={contact}></ContactLine>
                 ))}
             </section>

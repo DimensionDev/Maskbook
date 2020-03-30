@@ -1,10 +1,10 @@
 import React from 'react'
 import { Typography, makeStyles, createStyles, Box, Button, Avatar, ButtonBase } from '@material-ui/core'
 import FileCopyOutlinedIcon from '@material-ui/icons/FileCopyOutlined'
-import { WalletRecord } from '../../../plugins/Wallet/database/types'
+import type { WalletRecord } from '../../../plugins/Wallet/database/types'
 import classNames from 'classnames'
 
-const useStyles = makeStyles(theme =>
+const useStyles = makeStyles((theme) =>
     createStyles({
         container: {
             padding: theme.spacing(3, 2, 2, 3),

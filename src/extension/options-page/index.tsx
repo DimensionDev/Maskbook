@@ -66,7 +66,7 @@ function DashboardWithProvider() {
     )
 }
 
-const useStyles = makeStyles(theme =>
+const useStyles = makeStyles((theme) =>
     createStyles({
         wrapper: {
             '--monospace': 'SFMono-Regular,Consolas,Liberation Mono,Menlo,monospace',
@@ -150,7 +150,7 @@ function Dashboard() {
         webpackEnv.target === 'WKWebview' ? undefined! : (['Wallets', '/wallets/', <CreditCardIcon />] as const),
         ['Contacts', '/contacts/', <BookmarkBorderOutlinedIcon />],
         [t('settings'), '/settings/', <SettingsOutlinedIcon />],
-    ] as const).filter(x => x)
+    ] as const).filter((x) => x)
 
     const ref = useRef<HTMLDivElement>(null!)
 
