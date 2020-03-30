@@ -14,7 +14,7 @@ class Facebook implements SNS {
     profileSelector = '#profile_timeline_intro_card'
     bioTextareaSelector = 'textarea[name="bio"]'
     immersiveDialogSelector = 'body > span'
-    postDialogHintSelector = '#pagelet_composer [aria-label="Dismiss"] + span'
+    postDialogHintSelector = '#pagelet_composer [role="button"] + span'
     postDialogModalSelector = 'body > div[aria-hidden="true"]:not([class]):not([style])'
 
     async getActivePage(browser: Browser) {
