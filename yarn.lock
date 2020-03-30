@@ -4200,10 +4200,10 @@
     text-table "^0.2.0"
     webpack-log "^1.1.2"
 
-"@xobotyi/scrollbar-width@1.9.3":
-  version "1.9.3"
-  resolved "https://registry.yarnpkg.com/@xobotyi/scrollbar-width/-/scrollbar-width-1.9.3.tgz#76a82f3a3452967cf05509e472c6e154804ba07d"
-  integrity sha512-15JdCA3BjDktOdJ9xRdxkZcd2ZiHHbb3ycSPtC9JCjwkHzvrPr3n8uZoNw9CYF6UhkIMnW85d+P9mi3eXaKcFg==
+"@xobotyi/scrollbar-width@1.9.5":
+  version "1.9.5"
+  resolved "https://registry.yarnpkg.com/@xobotyi/scrollbar-width/-/scrollbar-width-1.9.5.tgz#80224a6919272f405b87913ca13b92929bdf3c4d"
+  integrity sha512-N8tkAACJx2ww8vFMneJmaAgmjAG1tnVBZJRLRcx061tmsLRZHSEZSLuGWnwPtunsSLvSqXQ2wfp7Mgqg1I+2dQ==
 
 "@xtuc/ieee754@^1.2.0":
   version "1.2.0"
@@ -16180,13 +16180,13 @@ react-transition-group@^4.3.0:
     loose-envify "^1.4.0"
     prop-types "^15.6.2"
 
-react-use@^13.26.3:
-  version "13.26.3"
-  resolved "https://registry.yarnpkg.com/react-use/-/react-use-13.26.3.tgz#d278bb0f8c995c3684a15de2026fbb51bd04df02"
-  integrity sha512-81I+p1F7LFxdkGM3qiLjF9NUi2mTupvaiN76IAWL5JMY7BHTGSk6PFdzByqJrxnTJ/RBrbIVttmqvYKHOz/9Tw==
+react-use@^13.27.1:
+  version "13.27.1"
+  resolved "https://registry.yarnpkg.com/react-use/-/react-use-13.27.1.tgz#e2ae2b708dafc7893c4772628801589aab9de370"
+  integrity sha512-bAwdqDMXs5lovEanXnL1izledfrPEUUv1afoTVB59eUiYcDyKul+M/dT/2WcgHjoY/R6QlrTcZoW4R7ifwvBfw==
   dependencies:
     "@types/js-cookie" "2.2.5"
-    "@xobotyi/scrollbar-width" "1.9.3"
+    "@xobotyi/scrollbar-width" "1.9.5"
     copy-to-clipboard "^3.2.0"
     fast-deep-equal "^3.1.1"
     fast-shallow-equal "^1.0.0"
