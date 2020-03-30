@@ -104,7 +104,7 @@ export const postNameParser = (node: HTMLElement) => {
         const nameInDoubleAnchorsTweet = Array.from(
             tweetElement.children[1]?.querySelectorAll<HTMLAnchorElement>('a[aria-haspopup="false"]') ?? [],
         )
-            .map(a => a.textContent)
+            .map((a) => a.textContent)
             .join('')
         const nameInQuoteTweet = tweetElement.children[0]?.querySelector<HTMLDivElement>('[aria-haspopup="false"]')
             ?.innerText
@@ -112,8 +112,8 @@ export const postNameParser = (node: HTMLElement) => {
         return (
             [nameInUniqueAnchorTweet, nameInDoubleAnchorsTweet, nameInQuoteTweet]
                 .filter(Boolean)
-                .map(n => parseNameArea(n!))
-                .find(r => r.name && r.handle) ?? {
+                .map((n) => parseNameArea(n!))
+                .find((r) => r.name && r.handle) ?? {
                 name: '',
                 handle: '',
             }
@@ -139,7 +139,7 @@ export const postContentParser = (node: HTMLElement) => {
             return ''
         }
         return Array.from(containerNode.childNodes)
-            .map(node => {
+            .map((node) => {
                 if (node.nodeType === Node.TEXT_NODE) {
                     return node.nodeValue
                 }
@@ -155,8 +155,8 @@ export const postContentParser = (node: HTMLElement) => {
             return lang ? Array.from(lang.querySelectorAll<T>(selectors)) : []
         }
         const sto = [
-            ...select<HTMLAnchorElement>('a').map(x => x.title),
-            ...select<HTMLSpanElement>('span').map(x => x.innerText),
+            ...select<HTMLAnchorElement>('a').map((x) => x.title),
+            ...select<HTMLSpanElement>('span').map((x) => x.innerText),
         ]
         return sto.filter(Boolean).join(' ')
     }
@@ -171,15 +171,15 @@ export const postImageParser = async (node: HTMLElement) => {
         const imgNodes = node.querySelectorAll<HTMLImageElement>('img[src*="twimg.com/media"]')
         if (!imgNodes.length) return ''
         const imgUrls = Array.from(imgNodes)
-            .filter(node => isQuotedTweet || !node.closest('[role="blockquote"]'))
-            .flatMap(node => canonifyImgUrl(node.getAttribute('src') ?? ''))
+            .filter((node) => isQuotedTweet || !node.closest('[role="blockquote"]'))
+            .flatMap((node) => canonifyImgUrl(node.getAttribute('src') ?? ''))
             .filter(Boolean)
         if (!imgUrls.length) return ''
         const { handle } = postNameParser(node)
         const posterIdentity = new ProfileIdentifier(twitterUrl.hostIdentifier, handle)
         return (
             await Promise.all(
-                imgUrls.map(async url => {
+                imgUrls.map(async (url) => {
                     try {
                         const content = await Services.Steganography.decodeImage(
                             new Uint8Array(await downloadUrl(url)),

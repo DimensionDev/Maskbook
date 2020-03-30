@@ -1,5 +1,5 @@
 import tasks from '../../../extension/content-script/tasks'
-import { ProfileIdentifier } from '../../../database/type'
+import type { ProfileIdentifier } from '../../../database/type'
 import { getProfilePageUrlAtFacebook } from '../parse-username'
 export function autoVerifyBioFacebook(user: ProfileIdentifier, prove: string) {
     tasks(getProfilePageUrlAtFacebook(user, 'open'), {

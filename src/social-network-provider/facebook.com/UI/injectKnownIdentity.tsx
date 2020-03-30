@@ -2,7 +2,7 @@ import * as React from 'react'
 import { useState } from 'react'
 import { LiveSelector, MutationObserverWatcher, ValueRef } from '@holoflows/kit'
 import { renderInShadowRoot } from '../../../utils/jss/renderInShadowRoot'
-import { SocialNetworkUI } from '../../../social-network/ui'
+import type { SocialNetworkUI } from '../../../social-network/ui'
 import { PersonKnown, PersonKnownProps } from '../../../components/InjectedComponents/PersonKnown'
 import { ProfileIdentifier } from '../../../database/type'
 import { makeStyles } from '@material-ui/core'
@@ -58,7 +58,7 @@ export function injectKnownIdentityAtFacebook(this: SocialNetworkUI) {
         .setDOMProxyOption({
             afterShadowRootInit: { mode: 'closed' },
         })
-        .useForeach(content => {
+        .useForeach((content) => {
             const bioRef = new ValueRef(content.innerText)
             const pageOwnerRef = new ValueRef<ProfileIdentifier | null>(getCurrentIdentity())
             const unmount = renderInShadowRoot(<PersonKnownAtFacebook pageOwner={pageOwnerRef} bioContent={bioRef} />, {

@@ -1,4 +1,4 @@
-import { PostIdentifier, ProfileIdentifier } from '../../database/type'
+import type { PostIdentifier, ProfileIdentifier } from '../../database/type'
 import { getPostUrlAtFacebook } from '../../social-network-provider/facebook.com/parse-username'
 import { getPostUrlAtTwitter } from '../../social-network-provider/twitter.com/utils/url'
 

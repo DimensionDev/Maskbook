@@ -2,7 +2,6 @@ import stableStringify from 'json-stable-stringify'
 const CryptoKeyCache = new Map<string, CryptoKey>()
 const JsonWebKeyCache = new WeakMap<CryptoKey, JsonWebKey>()
 
-type Usages = 'encrypt' | 'decrypt' | 'sign' | 'verify' | 'deriveKey' | 'deriveBits' | 'unwrapKey'
 type Algorithms =
     | string
     | RsaHashedImportParams
@@ -11,7 +10,7 @@ type Algorithms =
     | DhImportKeyParams
     | AesKeyAlgorithm
 
-export function getKeyParameter(type: 'ecdh' | 'ecdsa' | 'aes'): [readonly Usages[], Readonly<Algorithms>] {
+export function getKeyParameter(type: 'ecdh' | 'ecdsa' | 'aes'): [readonly KeyUsage[], Readonly<Algorithms>] {
     if (type === 'ecdh') return [['deriveKey', 'deriveBits'], { name: 'ECDH', namedCurve: 'K-256' }]
     if (type === 'aes') return [['encrypt', 'decrypt'], { name: 'AES-GCM', length: 256 }]
     if (type === 'ecdsa') return [['sign', 'verify'], { name: 'ecdsa', namedCurve: 'K-256' }]
@@ -29,7 +28,7 @@ export function getKeyParameter(type: 'ecdh' | 'ecdsa' | 'aes'): [readonly Usage
  */
 export async function JsonWebKeyToCryptoKey(
     key: JsonWebKey,
-    usage: readonly Usages[],
+    usage: readonly KeyUsage[],
     algorithm: Algorithms,
 ): Promise<CryptoKey> {
     key = { ...key }
@@ -42,7 +41,7 @@ export async function JsonWebKeyToCryptoKey(
     }
     const _key = stableStringify(key) + usages
     if (CryptoKeyCache.has(_key)) return CryptoKeyCache.get(_key)!
-    const cryptoKey = await crypto.subtle.importKey('jwk', key, algorithm, true, usage as string[])
+    const cryptoKey = await crypto.subtle.importKey('jwk', key, algorithm, true, [...usage])
     CryptoKeyCache.set(_key, cryptoKey)
     JsonWebKeyCache.set(cryptoKey, key)
     return cryptoKey

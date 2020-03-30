@@ -1,4 +1,4 @@
-import { SocialNetworkWorkerAndUI } from '../../../social-network/shared'
+import type { SocialNetworkWorkerAndUI } from '../../../social-network/shared'
 import { isNull } from 'lodash-es'
 
 /**

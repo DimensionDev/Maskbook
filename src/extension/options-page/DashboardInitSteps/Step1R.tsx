@@ -17,7 +17,7 @@ import QRScanner from '../../../components/QRScanner'
 import { hasWKWebkitRPCHandlers } from '../../../utils/iOS-RPC'
 import { WKWebkitQRScanner } from '../../../components/shared/qrcode'
 
-const useStyles = makeStyles(theme =>
+const useStyles = makeStyles((theme) =>
     createStyles({
         file: {
             display: 'none',
@@ -170,7 +170,7 @@ export default function InitStep1R() {
                             inputRef={(input: HTMLInputElement) => input && input.focus()}
                             multiline
                             value={textValue}
-                            onChange={e => setTextValue(e.target.value)}></InputBase>
+                            onChange={(e) => setTextValue(e.target.value)}></InputBase>
                         <ActionButton
                             className={classes.restoreActionButton}
                             width={140}
@@ -241,7 +241,7 @@ export default function InitStep1R() {
                                 onConfirm={() => {
                                     browser.permissions
                                         .request({ origins: requiredPermissions ?? [] })
-                                        .then(granted =>
+                                        .then((granted) =>
                                             granted ? Services.Welcome.restoreBackup(json!) : Promise.reject(),
                                         )
                                         .then(() =>

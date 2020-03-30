@@ -1,6 +1,6 @@
 import { env, ProfileUI, SocialNetworkWorkerAndUIDefinition } from './shared'
 import { GetContext } from '@holoflows/kit/es'
-import { ProfileIdentifier, PostIdentifier } from '../database/type'
+import type { ProfileIdentifier, PostIdentifier } from '../database/type'
 import { startWorkerService } from '../extension/background-script/WorkerService'
 import { defaultSocialNetworkWorker } from './defaults/worker'
 import { defaultSharedSettings } from './defaults/shared'

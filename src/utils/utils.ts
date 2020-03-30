@@ -1,5 +1,5 @@
 import { CustomEventId } from './constants'
-import { CustomEvents } from '../extension/injected-script/addEventListener'
+import type { CustomEvents } from '../extension/injected-script/addEventListener'
 
 import { sleep as _sleep, timeout as _timeout } from '@holoflows/kit/es/util/sleep'
 import { flatten, isNull, random } from 'lodash-es'
@@ -66,7 +66,7 @@ export function selectElementContents(el: Node) {
 export const nop = (...args: unknown[]) => {}
 // noinspection JSUnusedLocalSymbols
 export const nopWithUnmount = (...args: unknown[]) => nop
-export const bypass: <T>(args: T) => T = args => args
+export const bypass: <T>(args: T) => T = (args) => args
 
 /**
  * index starts at one.

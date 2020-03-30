@@ -1,5 +1,5 @@
 import React from 'react'
-import { PostInfo } from '../ui'
+import type { PostInfo } from '../ui'
 import { MutationObserverWatcher } from '@holoflows/kit/es'
 import { useValueRef } from '../../utils/hooks/useValueRef'
 import { CommentBox, CommentBoxProps } from '../../components/InjectedComponents/CommentBox'
@@ -24,7 +24,7 @@ const defHandler = async (encryptedComment: string, current: PostInfo, realCurre
     if (!root.innerText.includes(encryptedComment)) prompt('Please paste it into the comment box!', encryptedComment)
 }
 
-export const injectCommentBoxDefaultFactory = function<T extends string>(
+export const injectCommentBoxDefaultFactory = function <T extends string>(
     onPasteToCommentBox = defHandler,
     additionPropsToCommentBox: (classes: Record<T, string>) => Partial<CommentBoxProps> = () => ({}),
     useCustomStyles: (props?: any) => Record<T, string> = makeStyles({}) as any,
@@ -35,7 +35,7 @@ export const injectCommentBoxDefaultFactory = function<T extends string>(
         const styles = useCustomStyles()
         const props = additionPropsToCommentBox(styles)
         const onCallback = React.useCallback(
-            async content => {
+            async (content) => {
                 const encryptedComment = await Services.Crypto.encryptComment(payload!.iv, decrypted, content)
                 onPasteToCommentBox(encryptedComment, current, current.realCurrent).then()
             },

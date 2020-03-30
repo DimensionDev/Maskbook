@@ -17,7 +17,7 @@ export default async function migratePeopleToPersona() {
     const otherIDs = await queryPeopleDB(() => true)
     await migrateHelper_operateDB(myIDs, otherIDs, queryLocalKeyDB)
 }
-export async function migrateHelper_operateDB(
+async function migrateHelper_operateDB(
     myIDs: PersonRecordPublicPrivate[],
     otherIDs: PersonRecord[],
     getLocalKey: (identifier: ProfileIdentifier) => Promise<CryptoKey | null>,
@@ -28,7 +28,7 @@ export async function migrateHelper_operateDB(
         getLocalKey,
     )
 
-    await persona.consistentPersonaDBWriteAccess(async t => {
+    await persona.consistentPersonaDBWriteAccess(async (t) => {
         for (const [v, incomingRecord] of personaMap) {
             const currentRecord = await persona.queryPersonaDB(incomingRecord.identifier, t)
             if (!currentRecord) {
@@ -65,7 +65,7 @@ async function migrateHelper_importPersonaFromPersonRecord(
     const profilesMap = new IdentifierMap<ProfileIdentifier, persona.ProfileRecord>(new Map(), ProfileIdentifier)
 
     await Promise.all(
-        otherIDs.concat(myIDs).map(async value => {
+        otherIDs.concat(myIDs).map(async (value) => {
             if (value.publicKey) jwkMap.set(value.publicKey, await CryptoKeyToJsonWebKey(value.publicKey))
             if (value.privateKey) jwkMap.set(value.privateKey, await CryptoKeyToJsonWebKey(value.privateKey))
 
@@ -75,7 +75,7 @@ async function migrateHelper_importPersonaFromPersonRecord(
         }),
     )
     await Promise.all(
-        myIDs.map(async value => {
+        myIDs.map(async (value) => {
             const key = await getLocalKey(value.identifier)
             key && localKeysMap.set(value.identifier, key)
         }),

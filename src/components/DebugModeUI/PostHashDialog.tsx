@@ -10,7 +10,7 @@ import DialogTitle from '@material-ui/core/DialogTitle'
 import { blue } from '@material-ui/core/colors'
 import { useFriendsList } from '../DataSource/useActivatedUI'
 import { Avatar } from '../../utils/components/Avatar'
-import { Profile } from '../../database'
+import type { Profile } from '../../database'
 import Services from '../../extension/service'
 import { PostIVIdentifier } from '../../database/type'
 import { deconstructPayload } from '../../utils/type-transform/Payload'
@@ -57,7 +57,7 @@ function SimpleDialog(props: SimpleDialogProps) {
                     If MagicCode is not the same, it means at least one of Maskbook calculate the post hash wrong.
                 </DialogContentText>
                 <List dense>
-                    {props.friends.map(one => {
+                    {props.friends.map((one) => {
                         const [magicCode, fingerprint] = map.get(one.identifier.toText()) || ['Unknown', 'Unknown']
                         return (
                             <ListItem>

@@ -1,6 +1,6 @@
-import { FullPersonaDBTransaction } from './Persona.db'
+import type { FullPersonaDBTransaction } from './Persona.db'
 import { ProfileIdentifier, PersonaIdentifier, Identifier, ECKeyIdentifier } from '../type'
-import { IdentifierMap } from '../IdentifierMap'
+import type { IdentifierMap } from '../IdentifierMap'
 import { restorePrototype } from '../../utils/type'
 
 type ReadwriteFullPersonaDBTransaction = FullPersonaDBTransaction<'readwrite'>

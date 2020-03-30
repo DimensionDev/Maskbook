@@ -1,6 +1,6 @@
-import { PostRecord, RecipientReason, RecipientDetail } from '../../../../../database/post'
-import { BackupJSONFileLatest } from '../latest'
-import { RecipientReasonJSON } from '../version-2'
+import type { PostRecord, RecipientReason, RecipientDetail } from '../../../../../database/post'
+import type { BackupJSONFileLatest } from '../latest'
+import type { RecipientReasonJSON } from '../version-2'
 import { Identifier, GroupIdentifier, PostIVIdentifier, ProfileIdentifier } from '../../../../../database/type'
 import { IdentifierMap } from '../../../../../database/IdentifierMap'
 
@@ -13,7 +13,7 @@ export function PostRecordToJSONFormat(
         foundAt: post.foundAt.getTime(),
         identifier: post.identifier.toText(),
         postBy: post.postBy.toText(),
-        recipientGroups: post.recipientGroups.map(x => x.toText()),
+        recipientGroups: post.recipientGroups.map((x) => x.toText()),
         recipients: Array.from(post.recipients).map(([identifier, detail]): [
             string,
             { reason: RecipientReasonJSON[] },
@@ -35,7 +35,7 @@ export function PostRecordFromJSONFormat(
         foundAt: new Date(post.foundAt),
         identifier: Identifier.fromString(post.identifier, PostIVIdentifier).unwrap(),
         postBy: Identifier.fromString(post.postBy, ProfileIdentifier).unwrap(),
-        recipientGroups: post.recipientGroups.map(x => Identifier.fromString(x, GroupIdentifier).unwrap()),
+        recipientGroups: post.recipientGroups.map((x) => Identifier.fromString(x, GroupIdentifier).unwrap()),
         recipients: new IdentifierMap<ProfileIdentifier, RecipientDetail>(
             new Map<string, RecipientDetail>(
                 post.recipients.map(([x, y]) => [

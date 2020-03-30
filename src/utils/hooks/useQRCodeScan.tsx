@@ -6,9 +6,9 @@ import { useRequestCamera } from './useRequestCamera'
 import '../../components/QRScanner/ShapeDetectionPolyfill'
 
 export async function getBackVideoDeviceId() {
-    const devices = (await navigator.mediaDevices.enumerateDevices()).filter(devices => devices.kind === 'videoinput')
+    const devices = (await navigator.mediaDevices.enumerateDevices()).filter((devices) => devices.kind === 'videoinput')
     const back = devices.find(
-        device =>
+        (device) =>
             (device.label.toLowerCase().search('back') !== -1 || device.label.toLowerCase().search('rear') !== -1) &&
             device.label.toLowerCase().search('front') === -1,
     )
@@ -32,7 +32,7 @@ export function useQRCodeScan(
         useEffect(() => {
             function stop() {
                 if (mediaStream) {
-                    mediaStream.getTracks().forEach(x => x.stop())
+                    mediaStream.getTracks().forEach((x) => x.stop())
                 }
                 video.current!.pause()
             }

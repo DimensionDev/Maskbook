@@ -2,14 +2,14 @@ import { OnlyRunInContext } from '@holoflows/kit'
 import { encodeText } from '../../utils/type-transform/String-ArrayBuffer'
 import { sleep } from '../../utils/utils'
 import getCurrentNetworkWorker from '../../social-network/utils/getCurrentNetworkWorker'
-import { SocialNetworkUI } from '../../social-network/ui'
+import type { SocialNetworkUI } from '../../social-network/ui'
 import { getWelcomePageURL } from '../options-page/Welcome/getWelcomePageURL'
 import { recover_ECDH_256k1_KeyPair_ByMnemonicWord } from '../../utils/mnemonic-code'
 import { createPersonaByJsonWebKey, Persona } from '../../database'
 import { attachProfileDB, LinkedProfileDetails } from '../../database/Persona/Persona.db'
 import { CryptoKeyToJsonWebKey } from '../../utils/type-transform/CryptoKey-JsonWebKey'
 import { deriveLocalKeyFromECDHKey } from '../../utils/mnemonic-code/localKeyGenerate'
-import { ProfileIdentifier, PersonaIdentifier } from '../../database/type'
+import type { ProfileIdentifier, PersonaIdentifier } from '../../database/type'
 import { generateBackupJSON, BackupOptions } from './WelcomeServices/generateBackupJSON'
 import { i18n } from '../../utils/i18n-next'
 import { exclusiveTasks } from '../content-script/tasks'
@@ -61,10 +61,9 @@ export async function downloadBackup<T>(obj: T) {
     const blob = new Blob([buffer], { type: 'application/json' })
     const url = URL.createObjectURL(blob)
     const date = new Date()
-    const today = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date
-        .getDate()
+    const today = `${date.getFullYear()}-${(date.getMonth() + 1)
         .toString()
-        .padStart(2, '0')}`
+        .padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`
     browser.downloads.download({
         url,
         filename: `maskbook-keystore-backup-${today}.json`,

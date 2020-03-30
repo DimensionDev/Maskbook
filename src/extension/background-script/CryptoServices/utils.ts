@@ -1,4 +1,4 @@
-import { Payload, PayloadAlpha38 } from '../../../utils/type-transform/Payload'
+import type { Payload, PayloadAlpha38 } from '../../../utils/type-transform/Payload'
 import stringify from 'json-stable-stringify'
 
 export function getSignablePayload(payload: Payload) {
@@ -19,7 +19,7 @@ export function getSignablePayload(payload: Payload) {
 import * as Alpha40 from '../../../crypto/crypto-alpha-40'
 import * as Alpha39 from '../../../crypto/crypto-alpha-39'
 import * as Alpha38 from '../../../crypto/crypto-alpha-38'
-import { RedPacketJSONPayload } from '../../../plugins/Wallet/database/types'
+import type { RedPacketJSONPayload } from '../../../plugins/Wallet/database/types'
 import { Result, Err, Ok } from 'ts-results'
 
 export const cryptoProviderTable = {
@@ -105,6 +105,6 @@ export function extractTextFromTypedMessage(x: TypedMessage | null): Result<stri
     if (x === null) return Err.EMPTY
     if (x.type === 'text') return new Ok(x.content)
     if (x.type === 'complex')
-        return new Ok(x.items.map(extractTextFromTypedMessage).filter(x => x.ok && x.val.length > 0)[0].val as string)
+        return new Ok(x.items.map(extractTextFromTypedMessage).filter((x) => x.ok && x.val.length > 0)[0].val as string)
     return Err.EMPTY
 }

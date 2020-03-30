@@ -24,7 +24,7 @@ import Services from '../../../extension/service'
 import { twitterEncoding } from '../encoding'
 import { createTaskStartImmersiveSetupDefault } from '../../../social-network/defaults/taskStartImmersiveSetupDefault'
 import { instanceOfTwitterUI } from '.'
-import { ProfileIdentifier } from '../../../database/type'
+import type { ProfileIdentifier } from '../../../database/type'
 
 /**
  * Wait for up to 5000 ms
@@ -33,16 +33,14 @@ import { ProfileIdentifier } from '../../../database/type'
 const taskPasteIntoPostBox: SocialNetworkUI['taskPasteIntoPostBox'] = (text, opt) => {
     const interval = 500
     const timeout = 5000
-    const worker = async function(abort: AbortController) {
+    const worker = async function (abort: AbortController) {
         const checkSignal = () => {
             if (abort.signal.aborted) throw new Error('Aborted')
         }
         if (!isCompose() && !hasEditor()) {
             // open tweet window
             await untilElementAvailable(newPostButtonSelector())
-            newPostButtonSelector()
-                .evaluate()!
-                .click()
+            newPostButtonSelector().evaluate()!.click()
             checkSignal()
         }
 
@@ -73,7 +71,7 @@ const taskPasteIntoPostBox: SocialNetworkUI['taskPasteIntoPostBox'] = (text, opt
     setTimeout(() => {
         abortCtr.abort()
     }, timeout)
-    worker(abortCtr).then(undefined, e => fail(e))
+    worker(abortCtr).then(undefined, (e) => fail(e))
 }
 
 const taskUploadToPostBox: SocialNetworkUI['taskUploadToPostBox'] = async (text, options) => {
@@ -111,9 +109,7 @@ const taskPasteIntoBio = async (text: string) => {
     await untilDocumentReady()
     await sleep(800)
     try {
-        profileEditorButtonSelector()
-            .evaluate()!
-            .click()
+        profileEditorButtonSelector().evaluate()!.click()
     } catch {
         alert(i18n.t('automation_request_click_edit_bio_button'))
     }
@@ -151,7 +147,7 @@ const taskGetProfile = async () => {
 
 function taskGotoProfilePage(profile: ProfileIdentifier) {
     const path = `/${profile.userId}`
-        // The PWA way
+    // The PWA way
     ;(document.querySelector(`[href="${path}"]`) as HTMLElement | undefined)?.click()
     setTimeout(() => {
         // The classic way

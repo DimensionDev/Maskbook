@@ -1,6 +1,6 @@
 import { GroupRecord, createUserGroupDatabase, updateUserGroupDatabase, queryUserGroupsDatabase } from '../group'
 import { ProfileIdentifier, GroupIdentifier, PreDefinedVirtualGroupNames } from '../type'
-import { Profile } from '..'
+import type { Profile } from '..'
 
 export interface Group extends GroupRecord {
     avatar?: string
@@ -19,18 +19,18 @@ export function createDefaultFriendsGroup(who: ProfileIdentifier) {
 }
 
 export async function addProfileToFriendsGroup(group: GroupIdentifier, newMembers: (Profile | ProfileIdentifier)[]) {
-    const memberList = newMembers.map(x => (x instanceof ProfileIdentifier ? x : x.identifier)) as ProfileIdentifier[]
+    const memberList = newMembers.map((x) => (x instanceof ProfileIdentifier ? x : x.identifier)) as ProfileIdentifier[]
     await updateUserGroupDatabase({ identifier: group, members: memberList }, 'append')
 }
 export function removeProfileFromFriendsGroup(group: GroupIdentifier, removedFriend: (Profile | ProfileIdentifier)[]) {
-    const friendList = removedFriend.map(x =>
+    const friendList = removedFriend.map((x) =>
         x instanceof ProfileIdentifier ? x : x.identifier,
     ) as ProfileIdentifier[]
-    return updateUserGroupDatabase({ identifier: group }, r => {
-        r.members = r.members.filter(x => !friendList.some(y => y.equals(x)))
+    return updateUserGroupDatabase({ identifier: group }, (r) => {
+        r.members = r.members.filter((x) => !friendList.some((y) => y.equals(x)))
     })
 }
 
 export function queryUserGroups(network: string): Promise<Group[]> {
-    return queryUserGroupsDatabase(r => r.network === network)
+    return queryUserGroupsDatabase((r) => r.network === network)
 }

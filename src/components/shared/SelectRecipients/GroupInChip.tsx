@@ -1,7 +1,7 @@
 import * as React from 'react'
 import classNames from 'classnames'
 import Chip, { ChipProps } from '@material-ui/core/Chip'
-import { Group } from '../../../database'
+import type { Group } from '../../../database'
 import DoneIcon from '@material-ui/icons/Done'
 import { useResolveSpecialGroupName } from '../SelectPeopleAndGroups/resolveSpecialGroupName'
 import { makeStyles } from '@material-ui/styles'
@@ -29,7 +29,7 @@ const useStyles = makeStyles({
 export function GroupInChip(props: GroupInChipProps) {
     const classes = useStyles()
     const onClick = useCallback(
-        ev => {
+        (ev) => {
             if (props.onChange) {
                 props.onChange(ev, !props.checked)
             }

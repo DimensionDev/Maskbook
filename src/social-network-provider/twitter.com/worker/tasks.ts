@@ -1,4 +1,4 @@
-import { ProfileIdentifier } from '../../../database/type'
+import type { ProfileIdentifier } from '../../../database/type'
 import tasks from '../../../extension/content-script/tasks'
 import { getProfileUrlAtTwitter, twitterUrl } from '../utils/url'
 import { i18n } from '../../../utils/i18n-next'

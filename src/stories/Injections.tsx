@@ -3,11 +3,9 @@ import { storiesOf } from '@storybook/react'
 import { text, boolean, select } from '@storybook/addon-knobs'
 import { action } from '@storybook/addon-actions'
 import { AdditionalContent } from '../components/InjectedComponents/AdditionalPostContent'
-import {
-    DecryptPostSuccess,
-    DecryptPostAwaiting,
-    DecryptPostFailed,
-} from '../components/InjectedComponents/DecryptedPost'
+import { DecryptPostFailed } from '../components/InjectedComponents/DecryptedPost/DecryptPostFailed'
+import { DecryptPostAwaiting } from '../components/InjectedComponents/DecryptedPost/DecryptPostAwaiting'
+import { DecryptPostSuccess } from '../components/InjectedComponents/DecryptedPost/DecryptedPostSuccess'
 import { AddToKeyStoreUI } from '../components/InjectedComponents/AddToKeyStore'
 import { useShareMenu } from '../components/InjectedComponents/SelectPeopleDialog'
 import { sleep } from '../utils/utils'
@@ -15,7 +13,7 @@ import { Paper, MuiThemeProvider, Typography, Divider } from '@material-ui/core'
 import { demoPeople as demoProfiles, demoGroup } from './demoPeopleOrGroups'
 import { PostCommentDecrypted } from '../components/InjectedComponents/PostComments'
 import { CommentBox } from '../components/InjectedComponents/CommentBox'
-import { DecryptionProgress } from '../extension/background-script/CryptoServices/decryptFrom'
+import type { DecryptionProgress } from '../extension/background-script/CryptoServices/decryptFrom'
 import { PersonOrGroupInChip, PersonOrGroupInList } from '../components/shared/SelectPeopleAndGroups'
 import { MaskbookLightTheme } from '../utils/theme'
 import { PostDialog } from '../components/InjectedComponents/PostDialog'
@@ -35,18 +33,19 @@ import { WithFigma } from 'storybook-addon-figma'
 import { useTwitterThemedPostDialogHint } from '../social-network-provider/twitter.com/ui/injectPostDialogHint'
 import { useTwitterButton } from '../social-network-provider/twitter.com/utils/theme'
 import { TwitterThemeProvider } from '../social-network-provider/twitter.com/ui/custom'
+import { PersonKnownSelf, PersonKnownOthers } from '../components/InjectedComponents/PersonKnown'
 
 storiesOf('Injections', module)
     .add('PersonOrGroupInChip', () => (
         <>
-            {demoGroup.map(g => (
+            {demoGroup.map((g) => (
                 <PersonOrGroupInChip item={g} />
             ))}
         </>
     ))
     .add('PersonOrGroupInList', () => (
         <Paper>
-            {demoGroup.map(g => (
+            {demoGroup.map((g) => (
                 <PersonOrGroupInList onClick={action('click')} item={g} />
             ))}
         </Paper>
@@ -177,6 +176,18 @@ storiesOf('Injections', module)
     })
     .add('Comment box', () => {
         return <CommentBox onSubmit={action('submit')} />
+    })
+    .add('Person Known', () => {
+        const bio = text('Bio', '__bio__content__')
+        return (
+            <>
+                Self:
+                <PersonKnownSelf bio={bio} />
+                <br />
+                Others:
+                <PersonKnownOthers bio={bio} />
+            </>
+        )
     })
     .add('Post Dialog', () => {
         const decoder = (encodedStr: string) => {

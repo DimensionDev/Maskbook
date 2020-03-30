@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 )
 
-const FooterLink = function(
+const FooterLink = function (
     props: React.PropsWithChildren<{ href?: string; title?: string; to?: string; onClick?(): void }>,
 ) {
     const classes = useStyles()

@@ -1,5 +1,5 @@
 import React from 'react'
-import { Persona } from '../../../database'
+import type { Persona } from '../../../database'
 import { definedSocialNetworkWorkers } from '../../../social-network/worker'
 
 import ProviderLine from './ProviderLine'
@@ -21,13 +21,13 @@ export default function ProfileBox({ persona }: Props) {
     const profiles = persona ? [...persona.linkedProfiles] : []
 
     const providers = [...definedSocialNetworkWorkers]
-        .filter(i => {
+        .filter((i) => {
             if (webpackEnv.genericTarget === 'facebookApp') {
                 if (i.networkIdentifier !== 'facebook.com') return false
             }
             return true
         })
-        .map(i => {
+        .map((i) => {
             const profile = profiles.find(([key, value]) => key.network === i.networkIdentifier)
             return {
                 network: i.networkIdentifier,
@@ -60,7 +60,7 @@ export default function ProfileBox({ persona }: Props) {
 
     return (
         <>
-            {providers.map(provider => (
+            {providers.map((provider) => (
                 <ProviderLine
                     onAction={() => (provider.connected ? onDisconnect(provider) : onConnect(provider))}
                     {...provider}></ProviderLine>

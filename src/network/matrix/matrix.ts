@@ -1,6 +1,6 @@
 /// <reference path="./matrix.type.d.ts" />
 import sdk, { MatrixClient } from 'matrix-js-sdk'
-import mitt from 'mitt'
+import { Emitter } from '@servie/events'
 export const endpoint = 'https://matrix.vampire.rip'
 type MatrixClient = typeof MatrixClient extends { new (...args: any[]): infer U } ? U : never
 function any(x: any): any {
@@ -84,7 +84,7 @@ export class MatrixMessage {
         matrixClient
             .startClient({})
             .then(() => matrixClient.getUserId())
-            .then(id => (this.userID = id))
+            .then((id) => (this.userID = id))
 
         matrixClient.on(
             'Room.timeline',
@@ -109,6 +109,7 @@ export class MatrixMessage {
                     // TODO: validate it with JSON schema
                     payload: e.content as MatrixMessageTypes[T],
                 }
+                // @ts-ignore
                 this.mitt.emit(e.type, data)
             },
         )
@@ -128,14 +129,16 @@ export class MatrixMessage {
         f: MatrixMessageListener<T>,
         options?: { ignoreMyself?: boolean },
     ) {
-        const _f: typeof f = event => {
+        const _f: typeof f = (event) => {
             if (event.meta.matrix.sender === this.userID && options?.ignoreMyself) return
             f(event)
         }
+        // @ts-ignore
         this.mitt.on(event, _f)
+        // @ts-ignore
         return () => this.mitt.off(event, _f)
     }
-    private mitt = mitt()
+    private mitt = new Emitter<MatrixMessageTypes>()
     private cache = new Map<string, string>()
     private reverseCache = new Map<string, string>()
     private async lookupRoomAlias(alias: string): Promise<string> {
@@ -157,19 +160,19 @@ export const client1 = createMatrixMessage(...username)
 export const client2 = createMatrixMessage('another', 'testtest')
 export const room = '#hchch:matrix.vampire.rip'
 import * as self from './matrix'
-import { MatrixEvent } from 'matrix-js-sdk-type/dts/models/event'
-import Room from 'matrix-js-sdk-type/dts/models/room'
-import EventTimelineSet from 'matrix-js-sdk-type/dts/models/event-timeline-set'
+import type { MatrixEvent } from 'matrix-js-sdk-type/dts/models/event'
+import type Room from 'matrix-js-sdk-type/dts/models/room'
+import type EventTimelineSet from 'matrix-js-sdk-type/dts/models/event-timeline-set'
 import { sleep } from '@holoflows/kit/es/util/sleep'
 Object.assign(globalThis, { mat: self })
 console.log('mat\n', self)
 
-client1.then(x => {
-    x.on('maskbook.hello.world', f => {
+client1.then((x) => {
+    x.on('maskbook.hello.world', (f) => {
         console.log(f.payload)
     })
 })
 
 sleep(2000)
     .then(() => client2)
-    .then(x => x.emit({ type: 'alias', alias: room }, 'maskbook.hello.world', { message: 'hi' }))
+    .then((x) => x.emit({ type: 'alias', alias: room }, 'maskbook.hello.world', { message: 'hi' }))

@@ -1,4 +1,4 @@
-import { PostInfo } from '../../../social-network/ui'
+import type { PostInfo } from '../../../social-network/ui'
 import { injectPostInspectorDefault } from '../../../social-network/defaults/injectPostInspector'
 
 export function injectPostInspectorAtTwitter(current: PostInfo) {

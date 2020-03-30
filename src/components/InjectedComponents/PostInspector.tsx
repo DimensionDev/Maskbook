@@ -1,21 +1,20 @@
 import React, { useState, useEffect } from 'react'
 import { useAsync } from 'react-use'
-import { DecryptPost, DecryptPostProps } from './DecryptedPost'
+import { DecryptPost, DecryptPostProps } from './DecryptedPost/DecryptedPost'
 import { AddToKeyStore, AddToKeyStoreProps } from './AddToKeyStore'
 import { deconstructPayload } from '../../utils/type-transform/Payload'
 import Services from '../../extension/service'
 import { ProfileIdentifier, PostIdentifier } from '../../database/type'
-import { Profile } from '../../database'
+import type { Profile } from '../../database'
 import { useCurrentIdentity, useFriendsList } from '../DataSource/useActivatedUI'
 import { getActivatedUI } from '../../social-network/ui'
 import { useValueRef } from '../../utils/hooks/useValueRef'
 import { debugModeSetting } from '../shared-settings/settings'
 import { DebugList } from '../DebugModeUI/DebugList'
-import { TypedMessage } from '../../extension/background-script/CryptoServices/utils'
+import type { TypedMessage } from '../../extension/background-script/CryptoServices/utils'
 
 export interface PostInspectorProps {
-    onDecrypted(post: TypedMessage): void
-    onDecryptedRaw(post: string): void
+    onDecrypted(post: TypedMessage, raw: string): void
     post: string
     postBy: ProfileIdentifier
     postId: PostIdentifier<ProfileIdentifier>
@@ -73,26 +72,25 @@ export function PostInspector(props: PostInspectorProps) {
             <>
                 <DecryptPostX
                     onDecrypted={props.onDecrypted}
-                    onDecryptedRaw={props.onDecryptedRaw}
                     requestAppendRecipients={
                         // Version -40 is leaking info
                         // So should not create new data on version -40
                         type.encryptedPost.version === -40
                             ? undefined
-                            : async people => {
+                            : async (people) => {
                                   setAlreadySelectedPreviously(alreadySelectedPreviously.concat(people))
                                   return Services.Crypto.appendShareTarget(
                                       version,
                                       ownersAESKeyEncrypted,
                                       iv,
-                                      people.map(x => x.identifier),
+                                      people.map((x) => x.identifier),
                                       whoAmI!.identifier,
                                       { type: 'direct', at: new Date() },
                                   )
                               }
                     }
                     alreadySelectedPreviously={alreadySelectedPreviously}
-                    people={people}
+                    profiles={people}
                     postId={postId}
                     encryptedText={post}
                     whoAmI={whoAmI ? whoAmI.identifier : ProfileIdentifier.unknown}
@@ -104,6 +102,7 @@ export function PostInspector(props: PostInspectorProps) {
         )
     } else if (type.provePost.length) {
         const AddToKeyStoreX = props.AddToKeyStoreComponent || AddToKeyStore
+        if (!AddToKeyStoreX) return null
         return (
             <>
                 <AddToKeyStoreX postBy={postBy} provePost={post} {...props.AddToKeyStoreProps} />

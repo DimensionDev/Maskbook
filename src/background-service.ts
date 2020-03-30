@@ -30,17 +30,17 @@ if (GetContext() === 'background') {
     }`
     const contentScripts: Array<{ code: string } | { file: string }> = []
     const contentScriptReady = fetch('generated__content__script.html')
-        .then(x => x.text())
-        .then(html => {
+        .then((x) => x.text())
+        .then((html) => {
             const parser = new DOMParser()
             const root = parser.parseFromString(html, 'text/html')
-            root.querySelectorAll('script').forEach(script => {
+            root.querySelectorAll('script').forEach((script) => {
                 if (script.innerText) contentScripts.push({ code: script.innerText })
                 else if (script.src)
                     contentScripts.push({ file: new URL(script.src, browser.runtime.getURL('')).pathname })
             })
         })
-    browser.webNavigation.onCommitted.addListener(async arg => {
+    browser.webNavigation.onCommitted.addListener(async (arg) => {
         if (arg.url === 'about:blank') return
         await contentScriptReady
         /**
@@ -70,7 +70,7 @@ if (GetContext() === 'background') {
         }
     })
 
-    browser.runtime.onInstalled.addListener(detail => {
+    browser.runtime.onInstalled.addListener((detail) => {
         if (webpackEnv.genericTarget === 'facebookApp') return
         if (detail.reason === 'install') {
             browser.tabs.create({ url: getWelcomePageURL() })
@@ -94,7 +94,7 @@ if (GetContext() === 'background') {
     })
 }
 function IgnoreError(arg: unknown): (reason: Error) => void {
-    return e => {
+    return (e) => {
         if (e.message.includes('non-structured-clonable data')) {
             // It's okay we don't need the result, happened on Firefox
         } else if (e.message.includes('Frame not found, or missing host permission')) {

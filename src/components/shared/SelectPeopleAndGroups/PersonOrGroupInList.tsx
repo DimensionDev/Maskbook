@@ -1,18 +1,18 @@
 import * as React from 'react'
-import { Profile, Group } from '../../../database'
+import type { Profile, Group } from '../../../database'
 import { ListItem, Theme, ListItemAvatar, ListItemText } from '@material-ui/core'
-import { DefaultComponentProps } from '@material-ui/core/OverridableComponent'
+import type { DefaultComponentProps } from '@material-ui/core/OverridableComponent'
 import { makeStyles } from '@material-ui/styles'
 import { Avatar } from '../../../utils/components/Avatar'
 import MuiAvatar from '@material-ui/core/Avatar/Avatar'
 import GroupIcon from '@material-ui/icons/Group'
 import { useFriendsList } from '../../DataSource/useActivatedUI'
-import { ProfileIdentifier } from '../../../database/type'
+import type { ProfileIdentifier } from '../../../database/type'
 import { useI18N, useIntlListFormat } from '../../../utils/i18n-next-ui'
 import { isGroup } from './SelectPeopleAndGroupsUI'
 import { useResolveSpecialGroupName } from './resolveSpecialGroupName'
 import { useStylesExtends } from '../../custom-ui-helper'
-import { ListItemTypeMap } from '@material-ui/core/ListItem'
+import type { ListItemTypeMap } from '@material-ui/core/ListItem'
 
 export interface PersonOrGroupInListProps extends withClasses<KeysInferFromUseStyles<typeof useStyle>> {
     onClick: () => void
@@ -99,11 +99,11 @@ export function PersonOrGroupInList(props: PersonOrGroupInListProps) {
 
 function useNickNamesFromList(preview: readonly ProfileIdentifier[]) {
     const people = useFriendsList()
-    const userWithNames = React.useMemo(() => people.filter(x => x.nickname), [people])
+    const userWithNames = React.useMemo(() => people.filter((x) => x.nickname), [people])
 
     const [x, y, z] = preview
-    const [a] = React.useMemo(() => x && userWithNames.filter(w => w.identifier.equals(x)), [userWithNames, x]) || []
-    const [b] = React.useMemo(() => y && userWithNames.filter(w => w.identifier.equals(y)), [userWithNames, y]) || []
-    const [c] = React.useMemo(() => z && userWithNames.filter(w => w.identifier.equals(z)), [userWithNames, z]) || []
-    return React.useMemo(() => [a, b, c].filter(x => x).map(x => x.nickname!), [a, b, c])
+    const [a] = React.useMemo(() => x && userWithNames.filter((w) => w.identifier.equals(x)), [userWithNames, x]) || []
+    const [b] = React.useMemo(() => y && userWithNames.filter((w) => w.identifier.equals(y)), [userWithNames, y]) || []
+    const [c] = React.useMemo(() => z && userWithNames.filter((w) => w.identifier.equals(z)), [userWithNames, z]) || []
+    return React.useMemo(() => [a, b, c].filter((x) => x).map((x) => x.nickname!), [a, b, c])
 }

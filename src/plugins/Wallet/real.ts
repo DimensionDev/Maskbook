@@ -1,14 +1,15 @@
 import * as jwt from 'jsonwebtoken'
-import { AbiItem } from 'web3-utils'
-import { EventData } from 'web3-eth-contract'
+import type { AbiItem } from 'web3-utils'
+import type { EventData } from 'web3-eth-contract'
+import { BigNumber } from 'bignumber.js'
 import { web3 } from './web3'
 import { onClaimResult, onCreationResult, onExpired, onRefundResult } from './red-packet-fsm'
 import HappyRedPacketABI from './contract/HappyRedPacket.json'
 import IERC20ABI from './contract/IERC20.json'
-import { IERC20 } from './contract/IERC20'
-import { HappyRedPacket } from './contract/HappyRedPacket'
-import { TransactionObject, Tx } from './contract/types'
-import { CheckRedPacketAvailabilityResult, CreateRedPacketResult } from './types'
+import type { IERC20 } from './contract/IERC20'
+import type { HappyRedPacket } from './contract/HappyRedPacket'
+import type { TransactionObject, Tx } from './contract/types'
+import type { CheckRedPacketAvailabilityResult, CreateRedPacketResult } from './types'
 import { RedPacketTokenType, EthereumNetwork, RedPacketJSONPayload } from './database/types'
 import { asyncTimes, pollingTask } from '../../utils/utils'
 import { createWalletDBAccess } from './database/Wallet.db'
@@ -116,7 +117,7 @@ export const redPacketAPI = {
         name: string,
         token_type: RedPacketTokenType,
         token_addr: string,
-        total_tokens: bigint,
+        total_tokens: BigNumber,
     ): Promise<CreateRedPacketResult> {
         const contract = createRedPacketContract(getNetworkSettings().contractAddress)
         const tx = contract.methods.create_red_packet(
@@ -218,7 +219,7 @@ export const redPacketAPI = {
                 fromBlock: blockNumber,
                 toBlock: blockNumber,
             })
-            const claimSuccessEv = evs.find(ev => ev.transactionHash === id.transactionHash)
+            const claimSuccessEv = evs.find((ev) => ev.transactionHash === id.transactionHash)
 
             if (claimSuccessEv) {
                 const { id: return_id, claimer, claimed_value } = claimSuccessEv.returnValues as {
@@ -229,7 +230,7 @@ export const redPacketAPI = {
                 }
                 onClaimResult(id, {
                     type: 'success',
-                    claimed_value: BigInt(claimed_value),
+                    claimed_value: new BigNumber(claimed_value),
                     claimer,
                     red_packet_id: return_id,
                 })
@@ -237,15 +238,15 @@ export const redPacketAPI = {
             }
             return
         })
-            .then(results => {
-                if (!results.some(r => r)) {
+            .then((results) => {
+                if (!results.some((r) => r)) {
                     onClaimResult(id, {
                         type: 'failed',
                         reason: 'timeout',
                     })
                 }
             })
-            .catch(e => {
+            .catch((e) => {
                 onClaimResult(id, {
                     type: 'failed',
                     reason: e.message,
@@ -264,7 +265,7 @@ export const redPacketAPI = {
                 fromBlock: blockNumber,
                 toBlock: blockNumber,
             })
-            const creationSuccessEv = evs.find(ev => ev.transactionHash === id.transactionHash)
+            const creationSuccessEv = evs.find((ev) => ev.transactionHash === id.transactionHash)
 
             if (creationSuccessEv) {
                 const { total, id: return_id, creator, creation_time } = creationSuccessEv.returnValues as {
@@ -279,21 +280,21 @@ export const redPacketAPI = {
                     block_creation_time: new Date(parseInt(creation_time) * 1000),
                     red_packet_id: return_id,
                     creator,
-                    total: BigInt(total),
+                    total: new BigNumber(total),
                 })
                 return true
             }
             return
         })
-            .then(results => {
-                if (!results.some(r => r)) {
+            .then((results) => {
+                if (!results.some((r) => r)) {
                     onCreationResult(id, {
                         type: 'failed',
                         reason: 'timeout',
                     })
                 }
             })
-            .catch(e => {
+            .catch((e) => {
                 onCreationResult(id, {
                     type: 'failed',
                     reason: e.message,
@@ -323,11 +324,11 @@ export const redPacketAPI = {
         } = await contract.methods.check_availability(id.redPacketID).call()
 
         return {
-            balance: BigInt(balance),
-            claimedCount: parseInt(claimed),
+            balance: new BigNumber(balance),
+            claimedCount: parseInt(claimed, 10),
             expired,
             token_address,
-            totalCount: parseInt(total),
+            totalCount: parseInt(total, 10),
             is_claimed: ifclaimed,
         }
     },
@@ -362,7 +363,7 @@ export const redPacketAPI = {
         if (!packet) {
             throw new Error(`can not find red packet with id: ${id}`)
         }
-        if (wallets.every(wallet => wallet.address !== packet.sender_address)) {
+        if (wallets.every((wallet) => wallet.address !== packet.sender_address)) {
             throw new Error('can not find available wallet')
         }
 
@@ -408,7 +409,7 @@ export const redPacketAPI = {
                 fromBlock: blockNumber,
                 toBlock: blockNumber,
             })
-            const refundSuccessEv = evs.find(ev => ev.transactionHash === id.transactionHash)
+            const refundSuccessEv = evs.find((ev) => ev.transactionHash === id.transactionHash)
 
             if (refundSuccessEv) {
                 const { id, remaining_balance } = refundSuccessEv.returnValues as {
@@ -422,7 +423,7 @@ export const redPacketAPI = {
                         redPacketID: id,
                     },
                     {
-                        remaining_balance: BigInt(remaining_balance),
+                        remaining_balance: new BigNumber(remaining_balance),
                     },
                 )
             }
@@ -432,21 +433,20 @@ export const redPacketAPI = {
 
 export const walletAPI = {
     dataSource: 'real' as const,
-    queryBalance(address: string): Promise<bigint> {
-        return web3.eth.getBalance(address).then(BigInt)
+    async queryBalance(address: string): Promise<BigNumber> {
+        const value = await web3.eth.getBalance(address)
+        return new BigNumber(value)
     },
-    queryERC20TokenBalance(walletAddress: string, tokenAddress: string): Promise<bigint> {
+    async queryERC20TokenBalance(walletAddress: string, tokenAddress: string): Promise<BigNumber> {
         const erc20Contract = createERC20Contract(tokenAddress)
-        return erc20Contract.methods
-            .balanceOf(walletAddress)
-            .call()
-            .then(BigInt)
+        const value = await erc20Contract.methods.balanceOf(walletAddress).call()
+        return new BigNumber(value)
     },
     async approveERC20Token(
         senderAddress: string,
         erc20TokenAddress: string,
-        amount: bigint,
-    ): Promise<{ erc20_approve_transaction_hash: string; erc20_approve_value: bigint }> {
+        amount: BigNumber,
+    ): Promise<{ erc20_approve_transaction_hash: string; erc20_approve_value: BigNumber }> {
         const erc20Contract = createERC20Contract(erc20TokenAddress)
         const tx = erc20Contract.methods.approve(getNetworkSettings().contractAddress, amount.toString())
 

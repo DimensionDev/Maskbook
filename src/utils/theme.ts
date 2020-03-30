@@ -1,7 +1,7 @@
 import { createMuiTheme } from '@material-ui/core'
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles'
 import { orange, green, red, blue } from '@material-ui/core/colors'
-import { ThemeOptions } from '@material-ui/core/styles/createMuiTheme'
+import type { ThemeOptions } from '@material-ui/core/styles/createMuiTheme'
 
 function getFontFamily(monospace?: boolean) {
     // We want to look native.

@@ -5,7 +5,7 @@ import {
     currentImmersiveSetupStatus,
     ImmersiveSetupCrossContextStatus,
 } from '../../components/shared-settings/settings'
-import { SocialNetworkUI } from '../../social-network/ui'
+import type { SocialNetworkUI } from '../../social-network/ui'
 import { memoizePromise } from '../../utils/memoize'
 import { safeGetActiveUI } from '../../utils/safeRequire'
 import Serialization from '../../utils/type-transform/Serialization'
@@ -38,13 +38,13 @@ const _tasks = {
      * Fetch a url in the current context
      */
     async fetch(...args: Parameters<typeof fetch>) {
-        return fetch(...args).then(x => x.text())
+        return fetch(...args).then((x) => x.text())
     },
     memoizeFetch: memoizePromise(
-        url => {
-            return fetch(url).then(x => x.text())
+        (url) => {
+            return fetch(url).then((x) => x.text())
         },
-        x => x,
+        (x) => x,
     ),
     async immersiveSetup(for_: ECKeyIdentifier) {
         getActivatedUI().taskStartImmersiveSetup(for_)
@@ -90,9 +90,9 @@ export function exclusiveTasks(...args: Parameters<typeof realTasks>) {
     if (webpackEnv.genericTarget !== 'facebookApp') return tasks(uri, { ...updatedOptions, ...options }, ...others)
     let _key: keyof typeof _tasks
     let _args: any[]
-    const promise = Promise.resolve(browser.tabs.query({})).then(tabs => {
+    const promise = Promise.resolve(browser.tabs.query({})).then((tabs) => {
         const target = uri.toString().replace(/\/.+$/, '')
-        const [tab] = tabs.filter(tab => tab.url?.startsWith(target))
+        const [tab] = tabs.filter((tab) => tab.url?.startsWith(target))
         if (tab) {
             Object.assign(updatedOptions, {
                 runAtTabID: tab.id,

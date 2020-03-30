@@ -1,5 +1,5 @@
-import { ProfileIdentifier } from '../../../database/type'
-import { ProfileUI } from '../../../social-network/shared'
+import type { ProfileIdentifier } from '../../../database/type'
+import type { ProfileUI } from '../../../social-network/shared'
 import { timeout } from '../../../utils/utils'
 import { MutationObserverWatcher, LiveSelector } from '@holoflows/kit/es'
 

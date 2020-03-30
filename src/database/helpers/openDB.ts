@@ -1,11 +1,11 @@
-import {
+import type {
     IDBPDatabase,
     DBSchema,
     StoreNames,
     IDBPTransaction,
     IDBPObjectStore,
     IDBPCursorWithValueIteratorValue,
-} from 'idb/with-async-ittr'
+} from 'idb/with-async-ittr-cjs'
 import { OnlyRunInContext } from '@holoflows/kit/es'
 
 export function createDBAccess<DBSchema>(opener: () => Promise<IDBPDatabase<DBSchema>>) {
@@ -14,7 +14,7 @@ export function createDBAccess<DBSchema>(opener: () => Promise<IDBPDatabase<DBSc
         OnlyRunInContext(['background', 'debugging'], 'Database')
         if (db) return db
         db = await opener()
-        db.addEventListener('close', e => (db = undefined))
+        db.addEventListener('close', (e) => (db = undefined))
         return db
     }
 }

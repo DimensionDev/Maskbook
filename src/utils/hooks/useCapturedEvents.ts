@@ -25,8 +25,8 @@ function binder<T extends keyof HTMLElementEventMap>(
     fn: (e: HTMLElementEventMap[T]) => void,
 ) {
     let current: HTMLInputElement | null
-    const bind = (input: HTMLInputElement) => keys.forEach(k => input.addEventListener(k, fn, true))
-    const unbind = (input: HTMLInputElement) => keys.forEach(k => input.removeEventListener(k, fn, true))
+    const bind = (input: HTMLInputElement) => keys.forEach((k) => input.addEventListener(k, fn, true))
+    const unbind = (input: HTMLInputElement) => keys.forEach((k) => input.removeEventListener(k, fn, true))
     return () => {
         if (!node) return
         current = node

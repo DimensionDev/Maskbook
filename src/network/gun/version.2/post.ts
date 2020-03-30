@@ -1,7 +1,7 @@
 import { OnlyRunInContext } from '@holoflows/kit/es'
 import { gun2, SharedAESKeyGun2 } from '.'
 import { hashPostSalt, hashCryptoKey, hashCryptoKeyUnstable } from './hash'
-import { PublishedAESKeyRecordV39OrV38 } from '../../../crypto/crypto-alpha-38'
+import type { PublishedAESKeyRecordV39OrV38 } from '../../../crypto/crypto-alpha-38'
 
 OnlyRunInContext(['background', 'debugging'], 'gun')
 
@@ -29,9 +29,9 @@ export async function queryPostKeysOnGun2(
             // @ts-ignore
             .get(keyHash).then!()) || {}
     // ? In this step we get something like ["jzarhbyjtexiE7aB1DvQ", "jzarhuse6xlTAtblKRx9"]
-    const internalKeys = Object.keys(internalNodes).filter(x => x !== '_')
+    const internalKeys = Object.keys(internalNodes).filter((x) => x !== '_')
     // ? In this step we get all keys in this category (gun2[postHash][keyHash])
-    const resultPromise = internalKeys.map(key => gun2.get(key).then!())
+    const resultPromise = internalKeys.map((key) => gun2.get(key).then!())
     const result = (await Promise.all(resultPromise)) as SharedAESKeyGun2[]
     console.info(`await gun2[${postHash}][${keyHash}]\n`, result)
     return { keys: result, keyHash, postHash }
@@ -51,9 +51,9 @@ export function subscribePostKeysOnGun2(
     networkHint: string,
     callback: (data: SharedAESKeyGun2) => void,
 ) {
-    hashPostSalt(postSalt, networkHint).then(postHash => {
+    hashPostSalt(postSalt, networkHint).then((postHash) => {
         // In version > -39, we will use stable hash to prevent unstable result for key hashing
-        ;(version <= -39 ? hashCryptoKeyUnstable : hashCryptoKey)(partitionByCryptoKey).then(keyHash => {
+        ;(version <= -39 ? hashCryptoKeyUnstable : hashCryptoKey)(partitionByCryptoKey).then((keyHash) => {
             gun2.get(postHash)
                 // @ts-ignore
                 .get(keyHash)

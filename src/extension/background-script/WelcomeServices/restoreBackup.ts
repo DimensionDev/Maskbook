@@ -1,6 +1,5 @@
-import { ProfileIdentifier } from '../../../database/type'
+import type { ProfileIdentifier } from '../../../database/type'
 import { UpgradeBackupJSONFile } from '../../../utils/type-transform/BackupFormat/JSON/latest'
-import { useI18N } from '../../../utils/i18n-next-ui'
 import { getKeyParameter, JsonWebKeyToCryptoKey } from '../../../utils/type-transform/CryptoKey-JsonWebKey'
 import {
     attachProfileDB,
@@ -33,11 +32,11 @@ export async function restoreBackup(json: object, whoAmI?: ProfileIdentifier): P
         // Transform all JsonWebKey to CryptoKey
         await Promise.all([
             ...[...data.personas, ...data.profiles]
-                .filter(x => x.localKey)
-                .map(x => JsonWebKeyToCryptoKey(x.localKey!, ...aes).then(k => keyCache.set(x.localKey!, k))),
+                .filter((x) => x.localKey)
+                .map((x) => JsonWebKeyToCryptoKey(x.localKey!, ...aes).then((k) => keyCache.set(x.localKey!, k))),
         ])
         {
-            await consistentPersonaDBWriteAccess(async t => {
+            await consistentPersonaDBWriteAccess(async (t) => {
                 for (const x of data.personas) {
                     await createOrUpdatePersonaDB(
                         PersonaRecordFromJSONFormat(x, keyCache),

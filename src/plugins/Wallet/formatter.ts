@@ -1,18 +1,24 @@
-export function formatBalance(balance: bigint, decimals: number, precision: number = 6) {
-    const negative = balance < BigInt(0)
-    const base = BigInt(10) ** BigInt(decimals)
+import { BigNumber } from 'bignumber.js'
 
-    if (negative) {
-        balance = balance * BigInt(-1)
+export function formatBalance(balance: BigNumber | undefined, decimals: number, precision: number = 6) {
+    if (!BigNumber.isBigNumber(balance)) {
+        return
     }
 
-    let fraction = (balance % base).toString(10)
+    const negative = balance.isNegative() // balance < 0n
+    const base = new BigNumber(10).pow(decimals) // 10n ** decimals
+
+    if (negative) {
+        balance = balance.absoluteValue() // balance * -1n
+    }
+
+    let fraction = balance.modulo(base).toString(10) // (balance % base).toString(10)
 
     while (fraction.length < decimals) {
         fraction = `0${fraction}`
     }
 
-    const whole = (balance / base).toString(10)
+    const whole = balance.dividedBy(base).toString(10) // (balance / base).toString(10)
     const value = `${whole}${fraction == '0' ? '' : `.${fraction.substr(0, precision)}`}` // eslint-disable-line
     const raw = negative ? `-${value}` : value
 

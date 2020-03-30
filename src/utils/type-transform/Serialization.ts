@@ -1,7 +1,8 @@
 /// <reference path="../../env.d.ts" />
-import { Serialization } from '@holoflows/kit'
+import type { Serialization } from '@holoflows/kit'
 import Typeson from 'typeson'
 import { Ok, Err } from 'ts-results'
+import { BigNumber } from 'bignumber.js'
 
 export function serializable<T, Q>(name: string, ser?: (x: T) => Q, des?: (x: Q) => T) {
     return <T extends NewableFunction>(constructor: T) => {
@@ -14,15 +15,15 @@ export function serializable<T, Q>(name: string, ser?: (x: T) => Q, des?: (x: Q)
         typeson.register({
             [name]:
                 ser && des
-                    ? [x => x instanceof constructor, ser, des]
+                    ? [(x) => x instanceof constructor, ser, des]
                     : [
-                          x => x instanceof constructor,
-                          x => {
+                          (x) => x instanceof constructor,
+                          (x) => {
                               const y = Object.assign({}, x)
-                              Object.getOwnPropertySymbols(y).forEach(x => delete y[x])
+                              Object.getOwnPropertySymbols(y).forEach((x) => delete y[x])
                               return typeson.encapsulate(y)
                           },
-                          x => {
+                          (x) => {
                               const y = typeson.revive(x)
                               Object.setPrototypeOf(y, constructor.prototype)
                               return y
@@ -33,9 +34,23 @@ export function serializable<T, Q>(name: string, ser?: (x: T) => Q, des?: (x: Q)
     }
 }
 
+const customTypes = {
+    BigNumber: {
+        test: BigNumber.isBigNumber,
+        replace(input: BigNumber) {
+            return input.toString()
+        },
+        revive(input: string) {
+            return new BigNumber(input)
+        },
+    },
+}
+
 // @ts-ignore
 import builtins from 'typeson-registry/dist/presets/builtin'
-const typeson = new Typeson({}).register([builtins])
+const typeson = new Typeson({})
+typeson.register(builtins)
+typeson.register([customTypes])
 serializable('Ok')(Ok)
 serializable('Err')(Err)
 export default {

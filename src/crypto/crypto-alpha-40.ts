@@ -38,8 +38,8 @@ async function deriveAESKey(
     /** If salt is not provided, we will generate one. And you should send it to your friend. */
     salt: ArrayBuffer | string = crypto.getRandomValues(new Uint8Array(64)),
 ) {
-    const op = othersPublicKey.usages.find(x => x === 'deriveKey') ? othersPublicKey : await toECDH(othersPublicKey)
-    const pr = privateKey.usages.find(x => x === 'deriveKey') ? privateKey : await toECDH(privateKey)
+    const op = othersPublicKey.usages.find((x) => x === 'deriveKey') ? othersPublicKey : await toECDH(othersPublicKey)
+    const pr = privateKey.usages.find((x) => x === 'deriveKey') ? privateKey : await toECDH(privateKey)
     const derivedKey = await derive_AES_GCM_256_Key_From_ECDH_256k1_Keys(op, pr)
 
     const _salt = typeof salt === 'string' ? decodeArrayBuffer(salt) : salt
@@ -197,7 +197,7 @@ export async function decryptMessage1ToNByOther(info: {
 
     let resolvedAESKey: string | null = null
     await Promise.all(
-        AESKeyEncrypted.map(async key => {
+        AESKeyEncrypted.map(async (key) => {
             try {
                 const result = await decryptMessage1To1({
                     version: -40,
@@ -296,7 +296,7 @@ function extractCommentPayload(text: string) {
     return
 }
 const getCommentKey = memoizePromise(
-    async function(postIV: string, postContent: string) {
+    async function (postIV: string, postContent: string) {
         const pbkdf = await import_PBKDF2_Key(encodeText(postContent))
         const aes = await derive_AES_GCM_256_Key_From_PBKDF2(pbkdf, encodeText(postIV))
         return aes

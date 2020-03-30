@@ -1,18 +1,18 @@
 import { env, Env, Preference, ProfileUI, SocialNetworkWorkerAndUIDefinition } from './shared'
 import { DOMProxy, LiveSelector, ValueRef, OnlyRunInContext } from '@holoflows/kit/es'
-import { Group, Profile, Persona } from '../database'
+import type { Group, Profile, Persona } from '../database'
 import { ProfileIdentifier, PersonaIdentifier } from '../database/type'
-import { Payload } from '../utils/type-transform/Payload'
+import type { Payload } from '../utils/type-transform/Payload'
 import { defaultTo, isNull } from 'lodash-es'
 import Services from '../extension/service'
 import { defaultSharedSettings } from './defaults/shared'
 import { defaultSocialNetworkUI } from './defaults/ui'
 import { nopWithUnmount } from '../utils/utils'
-import { Theme } from '@material-ui/core'
+import type { Theme } from '@material-ui/core'
 import { MaskbookLightTheme } from '../utils/theme'
 import { untilDomLoaded } from '../utils/dom'
-import { I18NStrings } from '../utils/i18n-next'
-import { TypedMessage } from '../extension/background-script/CryptoServices/utils'
+import type { I18NStrings } from '../utils/i18n-next'
+import type { TypedMessage } from '../extension/background-script/CryptoServices/utils'
 import i18nNextInstance from '../utils/i18n-next'
 
 OnlyRunInContext(['content', 'debugging', 'options'], 'UI provider')
@@ -311,7 +311,7 @@ export function activateSocialNetworkUI(): void {
                 ui.injectPostBox()
                 ui.collectPeople()
                 ui.collectPosts()
-                ui.myIdentitiesRef.addListener(val => {
+                ui.myIdentitiesRef.addListener((val) => {
                     if (val.length === 1) ui.currentIdentity.value = val[0]
                 })
                 {
@@ -322,12 +322,12 @@ export function activateSocialNetworkUI(): void {
                     const mountKnownIdentity = ui.injectKnownIdentity
                     if (typeof mountKnownIdentity === 'function') mountKnownIdentity()
                 }
-                ui.lastRecognizedIdentity.addListener(id => {
+                ui.lastRecognizedIdentity.addListener((id) => {
                     if (id.identifier.isUnknown) return
 
                     if (isNull(ui.currentIdentity.value)) {
                         ui.currentIdentity.value =
-                            ui.myIdentitiesRef.value.find(x => id.identifier.equals(x.identifier)) || null
+                            ui.myIdentitiesRef.value.find((x) => id.identifier.equals(x.identifier)) || null
                     }
                     Services.Identity.resolveIdentity(id.identifier).then()
                 })
@@ -338,7 +338,7 @@ export function activateSocialNetworkUI(): void {
 function hookUIPostMap(ui: SocialNetworkUI) {
     const unmountFunctions = new WeakMap<object, () => void>()
     const setter = ui.posts.set
-    ui.posts.set = function(key, value) {
+    ui.posts.set = function (key, value) {
         const unmountPostInspector = ui.injectPostInspector(value)
         const unmountCommentBox: () => void =
             ui.injectCommentBox === 'disabled' ? nopWithUnmount : defaultTo(ui.injectCommentBox, nopWithUnmount)(value)
@@ -355,7 +355,7 @@ function hookUIPostMap(ui: SocialNetworkUI) {
         return this
     }
     const remove = ui.posts.delete
-    ui.posts.delete = function(key) {
+    ui.posts.delete = function (key) {
         const f = unmountFunctions.get(key)
         f && f()
         return Reflect.apply(remove, this, [key])

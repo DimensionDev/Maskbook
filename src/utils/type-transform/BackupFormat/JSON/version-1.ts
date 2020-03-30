@@ -1,6 +1,6 @@
 /* eslint-disable import/no-deprecated */
-import { BackupJSONFileVersion0 } from './version-0'
-import { ProfileIdentifier } from '../../../../database/type'
+import type { BackupJSONFileVersion0 } from './version-0'
+import type { ProfileIdentifier } from '../../../../database/type'
 
 /**
  * @deprecated The old version 1 backup file before persona db was done.

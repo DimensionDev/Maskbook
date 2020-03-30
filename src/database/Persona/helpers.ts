@@ -1,5 +1,5 @@
 import { ProfileIdentifier, PersonaIdentifier, ECKeyIdentifier } from '../type'
-import { Profile, Persona } from './types'
+import type { Profile, Persona } from './types'
 import {
     ProfileRecord,
     queryProfilesDB,
@@ -90,7 +90,7 @@ export async function queryPersona(identifier: PersonaIdentifier): Promise<Perso
  * Select a set of Profiles
  */
 export async function queryProfilesWithQuery(query?: Parameters<typeof queryProfilesDB>[0]): Promise<Profile[]> {
-    const _ = await queryProfilesDB(query || (_ => true))
+    const _ = await queryProfilesDB(query || ((_) => true))
     return Promise.all(_.map(profileRecordToProfile))
 }
 
@@ -98,12 +98,12 @@ export async function queryProfilesWithQuery(query?: Parameters<typeof queryProf
  * Select a set of Personas
  */
 export async function queryPersonasWithQuery(query?: Parameters<typeof queryPersonasDB>[0]): Promise<Persona[]> {
-    const _ = await queryPersonasDB(query || (_ => true))
+    const _ = await queryPersonasDB(query || ((_) => true))
     return _.map(personaRecordToPersona)
 }
 
 export async function deletePersona(id: PersonaIdentifier, confirm: 'delete even with private' | 'safe delete') {
-    return consistentPersonaDBWriteAccess(async t => {
+    return consistentPersonaDBWriteAccess(async (t) => {
         const d = await queryPersonaDB(id, t as any)
         if (!d) return
         for (const e of d.linkedProfiles) {
@@ -115,7 +115,7 @@ export async function deletePersona(id: PersonaIdentifier, confirm: 'delete even
 }
 
 export async function renamePersona(identifier: PersonaIdentifier, nickname: string) {
-    return consistentPersonaDBWriteAccess(t =>
+    return consistentPersonaDBWriteAccess((t) =>
         updatePersonaDB(
             { identifier, nickname },
             { linkedProfiles: 'merge', explicitUndefinedField: 'ignore' },
@@ -186,7 +186,7 @@ export async function createPersonaByJsonWebKey(options: {
         mnemonic: options.mnemonic,
         localKey: options.localKey ? localKeyCryptoKey : undefined,
     }
-    await consistentPersonaDBWriteAccess(t => createPersonaDB(record, t as any))
+    await consistentPersonaDBWriteAccess((t) => createPersonaDB(record, t as any))
     return identifier
 }
 export async function createProfileWithPersona(
@@ -212,7 +212,7 @@ export async function createProfileWithPersona(
         localKey: keys.localKey,
         mnemonic: keys.mnemonic,
     }
-    await consistentPersonaDBWriteAccess(async t => {
+    await consistentPersonaDBWriteAccess(async (t) => {
         await createOrUpdatePersonaDB(rec, { explicitUndefinedField: 'ignore', linkedProfiles: 'merge' }, t as any)
         await attachProfileDB(profileID, ec_id, data, t)
     })

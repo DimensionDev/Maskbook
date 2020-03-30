@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from 'react'
 import { Button, CircularProgress, makeStyles } from '@material-ui/core'
-import { ButtonProps } from '@material-ui/core/Button'
+import type { ButtonProps } from '@material-ui/core/Button'
 import CheckIcon from '@material-ui/icons/Check'
 import ErrorIcon from '@material-ui/icons/Error'
 import { red, green } from '@material-ui/core/colors'
@@ -20,7 +20,7 @@ export function ThrottledButton(_props: ButtonProps) {
         state: ThrottledButtonState.Normal,
     })
     const hookedClick = useCallback(
-        e => {
+        (e) => {
             e.stopPropagation()
             if (loading.state !== ThrottledButtonState.Normal) return
             setLoading({ state: ThrottledButtonState.Clicked })

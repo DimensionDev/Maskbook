@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { useState, useMemo, useCallback, useEffect, useRef } from 'react'
+import { useState, useMemo, useCallback, useEffect } from 'react'
 import {
     makeStyles,
     InputBase,
@@ -14,10 +14,11 @@ import {
     ThemeProvider,
     Theme,
 } from '@material-ui/core'
+import { BigNumber } from 'bignumber.js'
 import { MessageCenter, CompositionEvent } from '../../utils/messages'
 import { useCapturedInput } from '../../utils/hooks/useCapturedEvents'
 import { useStylesExtends, or } from '../custom-ui-helper'
-import { Profile, Group } from '../../database'
+import type { Profile, Group } from '../../database'
 import { useFriendsList, useGroupsList, useCurrentIdentity, useMyIdentities } from '../DataSource/useActivatedUI'
 import { steganographyModeSetting } from '../shared-settings/settings'
 import { useValueRef } from '../../utils/hooks/useValueRef'
@@ -102,7 +103,7 @@ export function PostDialogUI(props: PostDialogUIProps) {
     const classes = useStylesExtends(useStyles(), props)
     const { t } = useI18N()
     const [, inputRef] = useCapturedInput(
-        newText => {
+        (newText) => {
             const msg = props.postContent
             if (msg.type === 'text') props.onPostContentChanged(makeTypedMessage(newText, msg.meta))
             else throw new Error('Not impled yet')
@@ -144,7 +145,7 @@ export function PostDialogUI(props: PostDialogUIProps) {
                         </Typography>
                     </DialogTitle>
                     <DialogContent className={classes.content}>
-                        {withMetadata(props.postContent.meta, 'com.maskbook.red_packet:1', r => (
+                        {withMetadata(props.postContent.meta, 'com.maskbook.red_packet:1', (r) => (
                             <Chip
                                 onDelete={async () => {
                                     const ref = getActivatedUI().typedMessageMetadata
@@ -157,8 +158,8 @@ export function PostDialogUI(props: PostDialogUIProps) {
                                     }
                                 }}
                                 label={`A Red Packet with $${formatBalance(
-                                    BigInt(r.total),
-                                    r.token?.decimals || 18,
+                                    new BigNumber(r.total),
+                                    r.token?.decimals ?? 18,
                                 )} ${r.token?.name || 'ETH'} from ${r.sender.name}`}
                             />
                         ))}
@@ -292,7 +293,7 @@ export function PostDialog(props: PostDialogProps) {
             async (target: (Profile | Group)[], content: TypedMessage) => {
                 const [encrypted, token] = await Services.Crypto.encryptTo(
                     content,
-                    target.map(x => x.identifier),
+                    target.map((x) => x.identifier),
                     currentIdentity!.identifier,
                     !!shareToEveryone,
                 )

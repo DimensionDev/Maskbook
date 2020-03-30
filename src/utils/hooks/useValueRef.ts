@@ -1,6 +1,6 @@
 import { ValueRef, GetContext } from '@holoflows/kit/es'
 import { safeReact } from '../safeRequire'
-import { Subscription } from 'use-subscription'
+import type { Subscription } from 'use-subscription'
 
 export function useValueRef<T>(ref: ValueRef<T>) {
     if (GetContext() === 'background') throw new Error('Illegal context')
@@ -10,7 +10,7 @@ export function useValueRef<T>(ref: ValueRef<T>) {
     const subscription = useMemo<Subscription<T>>(
         () => ({
             getCurrentValue: () => ref.value,
-            subscribe: callback => ref.addListener(callback),
+            subscribe: (callback) => ref.addListener(callback),
         }),
         [ref],
     )

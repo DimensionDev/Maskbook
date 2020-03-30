@@ -1,4 +1,4 @@
-import { SocialNetworkWorkerAndUI } from '../../social-network/shared'
+import type { SocialNetworkWorkerAndUI } from '../../social-network/shared'
 import { isNil } from 'lodash-es'
 import { definedSocialNetworkWorkers } from '../../social-network/worker'
 import { GetContext } from '@holoflows/kit/es'
@@ -97,12 +97,12 @@ export function deconstructPayload(str: string, decoder: Decoder, throws: boolea
             if (GetContext() === 'content') {
                 return [safeGetActiveUI().payloadDecoder]
             }
-            return Array.from(definedSocialNetworkWorkers).map(x => x.payloadDecoder)
+            return Array.from(definedSocialNetworkWorkers).map((x) => x.payloadDecoder)
         }
         return [decoder]
     })()
 
-    if (decoders.length === 0) decoders.push(x => x)
+    if (decoders.length === 0) decoders.push((x) => x)
 
     for (const versionDecoder of versions) {
         for (const networkDecoder of decoders) {

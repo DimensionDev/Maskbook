@@ -1,5 +1,5 @@
 import { MessageCenter } from '../../../utils/messages'
-import { PreDefinedVirtualGroupNames, ProfileIdentifier, GroupIdentifier } from '../../../database/type'
+import type { PreDefinedVirtualGroupNames, ProfileIdentifier, GroupIdentifier } from '../../../database/type'
 import { queryPostsDB, PostRecord, RecipientReason } from '../../../database/post'
 import { appendShareTarget } from '../CryptoService'
 import { queryUserGroup } from '../UserGroupService'
@@ -54,12 +54,12 @@ export function initAutoShareToFriends() {
         appendShare(
             (record, id) => {
                 if (id.network !== data.group.network) return false
-                if (record.recipientGroups.some(x => data.group.equals(x))) return true
+                if (record.recipientGroups.some((x) => data.group.equals(x))) return true
                 return false
             },
-            post => {
+            (post) => {
                 const notSharedBefore: ProfileIdentifier[] = []
-                data.newMembers.forEach(x => {
+                data.newMembers.forEach((x) => {
                     if (post.recipients.has(x)) {
                     } else notSharedBefore.push(x)
                 })
@@ -72,11 +72,11 @@ export function initAutoShareToFriends() {
         )
         console.groupEnd()
     })
-    MessageCenter.on('linkedProfileChanged', async e => {
+    MessageCenter.on('linkedProfileChanged', async (e) => {
         const mine = await queryMyProfiles()
         appendShare(
-            rec => !!e.after && mine.some(q => rec.postBy.equals(q.identifier)) && rec.recipients.has(e.of),
-            rec => ({ share: [e.of], whoAmI: rec.postBy, reason: { type: 'auto-share', at: new Date() } }),
+            (rec) => !!e.after && mine.some((q) => rec.postBy.equals(q.identifier)) && rec.recipients.has(e.of),
+            (rec) => ({ share: [e.of], whoAmI: rec.postBy, reason: { type: 'auto-share', at: new Date() } }),
         )
     })
 }

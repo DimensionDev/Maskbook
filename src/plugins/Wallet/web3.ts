@@ -1,5 +1,5 @@
 import Web3 from 'web3'
-import { WebsocketProvider } from 'web3-core'
+import type { WebsocketProvider } from 'web3-core'
 import { getNetworkSettings, currentEthereumNetworkSettings } from './network'
 import { getWallets, recoverWallet } from './wallet'
 import { PluginMessageCenter } from '../PluginMessages'
@@ -43,5 +43,5 @@ sideEffect.then(() => {
 })
 
 export function buf2hex(buffer: ArrayBuffer) {
-    return Array.prototype.map.call(new Uint8Array(buffer), x => ('00' + x.toString(16)).slice(-2)).join('')
+    return Array.prototype.map.call(new Uint8Array(buffer), (x) => ('00' + x.toString(16)).slice(-2)).join('')
 }

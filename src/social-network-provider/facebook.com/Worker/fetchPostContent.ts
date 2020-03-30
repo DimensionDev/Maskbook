@@ -1,4 +1,4 @@
-import { ProfileIdentifier, PostIdentifier } from '../../../database/type'
+import type { ProfileIdentifier, PostIdentifier } from '../../../database/type'
 import { parseFacebookStaticHTML } from '../parse-html'
 import { getPostUrlAtFacebook } from '../parse-username'
 import tasks from '../../../extension/content-script/tasks'
@@ -14,11 +14,11 @@ export async function fetchPostContentFacebook(post: PostIdentifier<ProfileIdent
         // Path 1: fetch by http req
         const url = getPostUrlAtFacebook(post, 'fetch')
         const { memoizeFetch } = tasks(activeTabID)
-        const html = await timeout(memoizeFetch(url), 10000).catch(_ => null)
+        const html = await timeout(memoizeFetch(url), 10000).catch((_) => null)
         if (html !== null) {
             try {
                 const doc = parseFacebookStaticHTML(html)
-                if (doc.length) return doc.map(x => (isDocument(x) ? x.body : x).innerText).join('')
+                if (doc.length) return doc.map((x) => (isDocument(x) ? x.body : x).innerText).join('')
             } catch (e) {
                 console.warn(e)
                 memoizeFetch.cache?.delete(url)

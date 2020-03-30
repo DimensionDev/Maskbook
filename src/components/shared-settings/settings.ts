@@ -1,5 +1,5 @@
 import { createNewSettings, createNetworkSpecificSettings } from './createSettings'
-import { ValueRef } from '@holoflows/kit/es'
+import type { ValueRef } from '@holoflows/kit/es'
 import { MessageCenter } from '../../utils/messages'
 import i18nNextInstance, { i18n } from '../../utils/i18n-next'
 
@@ -55,7 +55,7 @@ export const languageSettings = createNewSettings<Language>(
 
 const createProxiedSettings = <T extends string = string>(settingsKey: string) => {
     const target: { [key: string]: ValueRef<string> } = {}
-    MessageCenter.on('settingsCreated', updatedKey => {
+    MessageCenter.on('settingsCreated', (updatedKey) => {
         if (!(updatedKey in target)) {
             target[updatedKey] = createNetworkSpecificSettings<string>(updatedKey, settingsKey, '')
         }

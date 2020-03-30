@@ -4,7 +4,7 @@ import { decompressSecp256k1Key } from '../type-transform/SECP256k1-Compression'
 import { Convert } from 'pvtsutils'
 import { import_ECDH_256k1_KeyPair } from '../crypto.subtle'
 import { encodeArrayBuffer } from '../type-transform/String-ArrayBuffer'
-import { PersonaRecord } from '../../database/Persona/Persona.db'
+import type { PersonaRecord } from '../../database/Persona/Persona.db'
 
 // Private key at m/44'/coinType'/account'/change/addressIndex
 // coinType = ether

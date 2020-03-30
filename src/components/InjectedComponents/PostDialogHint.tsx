@@ -4,15 +4,15 @@ import { useI18N } from '../../utils/i18n-next-ui'
 import { makeStyles } from '@material-ui/core/styles'
 import { useStylesExtends, or } from '../custom-ui-helper'
 import { useMyIdentities } from '../DataSource/useActivatedUI'
-import { Profile } from '../../database'
+import type { Profile } from '../../database'
 import { ChooseIdentity, ChooseIdentityProps } from '../shared/ChooseIdentity'
-import { BannerProps } from '../Welcomes/Banner'
+import type { BannerProps } from '../Welcomes/Banner'
 import { NotSetupYetPrompt } from '../shared/NotSetupYetPrompt'
 import { useValueRef } from '../../utils/hooks/useValueRef'
 import { currentImmersiveSetupStatus } from '../shared-settings/settings'
 import { getActivatedUI } from '../../social-network/ui'
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
     content: {
         display: 'flex',
         alignItems: 'center',

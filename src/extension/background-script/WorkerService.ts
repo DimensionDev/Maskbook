@@ -1,6 +1,6 @@
-import { SocialNetworkWorker } from '../../social-network/worker'
+import type { SocialNetworkWorker } from '../../social-network/worker'
 import getCurrentNetworkWorker from '../../social-network/utils/getCurrentNetworkWorker'
-import { Identifier } from '../../database/type'
+import type { Identifier } from '../../database/type'
 import { GetContext, OnlyRunInContext, MessageCenter } from '@holoflows/kit/es'
 import { AsyncCall } from 'async-call-rpc'
 import Serialization from '../../utils/type-transform/Serialization'

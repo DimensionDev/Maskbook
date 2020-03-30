@@ -1,3 +1,4 @@
+import { omit } from 'lodash-es'
 import {
     RedPacketRecord,
     RedPacketStatus,
@@ -5,17 +6,18 @@ import {
     isNextRedPacketStatusValid,
     RedPacketJSONPayload,
     EthereumNetwork,
+    RedPacketRecordInDatabase,
 } from './database/types'
 import { createTransaction, IDBPSafeTransaction } from '../../database/helpers/openDB'
 import { createWalletDBAccess, WalletDB } from './database/Wallet.db'
 import uuid from 'uuid/v4'
-import { RedPacketCreationResult, RedPacketClaimResult } from './types'
+import type { RedPacketCreationResult, RedPacketClaimResult } from './types'
 import { getWalletProvider, getWallets, recoverWallet, getDefaultWallet, setDefaultWallet } from './wallet'
 import { PluginMessageCenter } from '../PluginMessages'
-import { requestNotification } from '../../utils/notification'
 import Web3Utils from 'web3-utils'
 import { redPacketAPI } from './real'
 import { sideEffect } from '../../utils/side-effects'
+import BigNumber from 'bignumber.js'
 
 function getProvider() {
     return redPacketAPI
@@ -41,12 +43,9 @@ export type createRedPacketInit = Pick<
  */
 export async function discoverRedPacket(payload: RedPacketJSONPayload, foundInURL: string) {
     const t = createTransaction(await createWalletDBAccess(), 'readwrite')('RedPacket')
-    const original = await t
-        .objectStore('RedPacket')
-        .index('red_packet_id')
-        .get(payload.rpid)
-    if (original) return original
-    const rec: RedPacketRecord = {
+    const original = await t.objectStore('RedPacket').index('red_packet_id').get(payload.rpid)
+    if (original) return RedPacketRecordOutDB(original)
+    const record: RedPacketRecord = {
         _data_source_: getProvider().dataSource,
         aes_version: 1,
         contract_address: payload.contract_address,
@@ -56,7 +55,7 @@ export async function discoverRedPacket(payload: RedPacketJSONPayload, foundInUR
         is_random: payload.is_random,
         network: payload.network || EthereumNetwork.Mainnet,
         send_message: payload.sender.message,
-        send_total: BigInt(payload.total),
+        send_total: new BigNumber(payload.total),
         sender_address: payload.sender.address,
         sender_name: payload.sender.name,
         status: RedPacketStatus.incoming,
@@ -68,30 +67,30 @@ export async function discoverRedPacket(payload: RedPacketJSONPayload, foundInUR
         raw_payload: payload,
         _found_in_url_: foundInURL,
         received_time: new Date(),
-        shares: BigInt(payload.shares),
+        shares: new BigNumber(payload.shares),
     }
-    t.objectStore('RedPacket').add(rec)
+    t.objectStore('RedPacket').add(RedPacketRecordIntoDB(record))
     PluginMessageCenter.emit('maskbook.red_packets.update', undefined)
-    return rec
+    return record
 }
 
 export async function getRedPackets(owned?: boolean) {
     const t = createTransaction(await createWalletDBAccess(), 'readonly')('RedPacket')
-    const all = await t.objectStore('RedPacket').getAll()
-    if (owned === true) return all.filter(x => x.create_transaction_hash)
-    if (owned === false) return all.filter(x => !x.create_transaction_hash)
+    const all = (await t.objectStore('RedPacket').getAll()).map(RedPacketRecordOutDB)
+    if (owned === true) return all.filter((x) => x.create_transaction_hash)
+    if (owned === false) return all.filter((x) => !x.create_transaction_hash)
     return all
 }
 
 export async function createRedPacket(packet: createRedPacketInit): Promise<{ password: string }> {
-    if (packet.send_total < packet.shares) {
+    if (packet.send_total.isLessThan(packet.shares)) {
         throw new Error('At least [number of red packets] tokens to your red packet.')
-    } else if (packet.shares < 0) {
+    } else if (packet.shares.isNegative() /* packet.shares < 0n */) {
         throw new Error('At least 1 person should be able to claim the red packet.')
     }
     const password = uuid()
     let erc20_approve_transaction_hash: string | undefined = undefined
-    let erc20_approve_value: bigint | undefined = undefined
+    let erc20_approve_value: BigNumber | undefined = undefined
     let erc20_token_address: string | undefined = undefined
     if (packet.token_type === RedPacketTokenType.erc20) {
         if (!packet.erc20_token) throw new Error('ERC20 token should have erc20_token field')
@@ -109,7 +108,7 @@ export async function createRedPacket(packet: createRedPacketInit): Promise<{ pa
     const { create_transaction_hash, create_nonce } = await getProvider().create(
         packet.sender_address,
         Web3Utils.sha3(password),
-        Number(packet.shares),
+        packet.shares.toNumber(),
         packet.is_random,
         packet.duration,
         Web3Utils.sha3(Math.random().toString()),
@@ -146,7 +145,7 @@ export async function createRedPacket(packet: createRedPacketInit): Promise<{ pa
     }
     {
         const transaction = createTransaction(await createWalletDBAccess(), 'readwrite')(...everything)
-        transaction.objectStore('RedPacket').add(record)
+        transaction.objectStore('RedPacket').add(RedPacketRecordIntoDB(record))
     }
     getProvider().watchCreateResult({ databaseID: record.id, transactionHash: create_transaction_hash })
     PluginMessageCenter.emit('maskbook.red_packets.update', undefined)
@@ -155,47 +154,50 @@ export async function createRedPacket(packet: createRedPacketInit): Promise<{ pa
 
 export async function onCreationResult(id: { databaseID: string }, details: RedPacketCreationResult) {
     const t = createTransaction(await createWalletDBAccess(), 'readwrite')('RedPacket', 'ERC20Token')
-    const rec = await t.objectStore('RedPacket').get(id.databaseID)
-    if (!rec) return
+    const record = await t.objectStore('RedPacket').get(id.databaseID)
+    if (!record) return
 
-    setNextState(rec, details.type === 'success' ? RedPacketStatus.normal : RedPacketStatus.fail)
+    setNextState(
+        RedPacketRecordOutDB(record),
+        details.type === 'success' ? RedPacketStatus.normal : RedPacketStatus.fail,
+    )
 
     if (details.type === 'failed') {
     } else {
         let token: RedPacketJSONPayload['token'] | undefined = undefined
-        if (rec.erc20_token) {
-            const tokenRec = await t.objectStore('ERC20Token').get(rec.erc20_token)
+        if (record.erc20_token) {
+            const tokenRec = await t.objectStore('ERC20Token').get(record.erc20_token)
             if (!tokenRec) throw new Error('Unknown token')
             token = {
-                address: rec.erc20_token,
+                address: record.erc20_token,
                 decimals: tokenRec.decimals,
                 name: tokenRec.name,
                 symbol: tokenRec.symbol,
             }
         }
-        rec.block_creation_time = details.block_creation_time
-        rec.red_packet_id = details.red_packet_id
-        rec.raw_payload = {
-            contract_address: rec.contract_address,
-            contract_version: rec.contract_version,
+        record.block_creation_time = details.block_creation_time
+        record.red_packet_id = details.red_packet_id
+        record.raw_payload = {
+            contract_address: record.contract_address,
+            contract_version: record.contract_version,
             creation_time: details.block_creation_time.getTime(),
-            duration: rec.duration,
-            is_random: rec.is_random,
-            password: rec.password,
+            duration: record.duration,
+            is_random: record.is_random,
+            password: record.password,
             rpid: details.red_packet_id,
             sender: {
-                address: rec.sender_address,
-                message: rec.send_message,
-                name: rec.sender_name,
+                address: record.sender_address,
+                message: record.send_message,
+                name: record.sender_name,
             },
-            token_type: rec.token_type,
-            total: String(rec.send_total),
-            network: rec.network,
+            token_type: record.token_type,
+            total: String(record.send_total),
+            network: record.network,
             token,
-            shares: Number(rec.shares),
+            shares: new BigNumber(String(record.shares)).toNumber(),
         }
     }
-    t.objectStore('RedPacket').put(rec)
+    t.objectStore('RedPacket').put(record)
     // TODO: send a notification here.
     PluginMessageCenter.emit('maskbook.red_packets.update', undefined)
 }
@@ -216,12 +218,12 @@ export async function claimRedPacket(
     if (status.expired) {
         await onExpired(id)
         return 'expired'
-    } else if (status.claimedCount === status.totalCount || status.balance === BigInt(0)) {
+    } else if (status.claimedCount === status.totalCount || status.balance.isZero() /* status.balance === 0n */) {
         {
             const t = createTransaction(await createWalletDBAccess(), 'readwrite')('RedPacket')
-            const rec = await getRedPacketByID(t, id.redPacketID)
-            setNextState(rec, RedPacketStatus.empty)
-            t.objectStore('RedPacket').put(rec)
+            const record = await getRedPacketByID(t, id.redPacketID)
+            setNextState(record, RedPacketStatus.empty)
+            t.objectStore('RedPacket').put(RedPacketRecordIntoDB(record))
         }
         PluginMessageCenter.emit('maskbook.red_packets.update', undefined)
         return 'empty'
@@ -229,10 +231,10 @@ export async function claimRedPacket(
 
     const { claim_transaction_hash } = await getProvider()
         .claim(id, passwords, claimWithWallet, Web3Utils.sha3(claimWithWallet))
-        .catch(async e => {
+        .catch(async (e) => {
             console.log(e.message)
             if ((e.message as string).includes('insufficient funds for gas')) {
-                const wallet = (await getWallets())[0].find(x => x.address === claimWithWallet)!
+                const wallet = (await getWallets())[0].find((x) => x.address === claimWithWallet)!
                 const { privateKey } = await recoverWallet(wallet.mnemonic, wallet.passphrase)
                 return getProvider().claimByServer(claimWithWallet, privateKey, rec.raw_payload!)
             }
@@ -241,11 +243,11 @@ export async function claimRedPacket(
     let dbID = ''
     {
         const t = createTransaction(await createWalletDBAccess(), 'readwrite')('RedPacket')
-        const rec = await getRedPacketByID(t, id.redPacketID)
-        dbID = rec.id
-        setNextState(rec, RedPacketStatus.claim_pending)
-        rec.claim_transaction_hash = claim_transaction_hash
-        t.objectStore('RedPacket').put(rec)
+        const record = await getRedPacketByID(t, id.redPacketID)
+        dbID = record.id
+        setNextState(record, RedPacketStatus.claim_pending)
+        record.claim_transaction_hash = claim_transaction_hash
+        t.objectStore('RedPacket').put(RedPacketRecordIntoDB(record))
     }
     getProvider().watchClaimResult({ transactionHash: claim_transaction_hash, databaseID: dbID })
     PluginMessageCenter.emit('maskbook.red_packets.update', undefined)
@@ -255,14 +257,17 @@ export async function claimRedPacket(
 export async function onClaimResult(id: { databaseID: string }, details: RedPacketClaimResult) {
     {
         const t = createTransaction(await createWalletDBAccess(), 'readwrite')('RedPacket')
-        const rec = await t.objectStore('RedPacket').get(id.databaseID)
-        if (!rec) throw new Error('Claim result of unknown id')
-        setNextState(rec, details.type === 'success' ? RedPacketStatus.claimed : RedPacketStatus.normal)
+        const record = await t.objectStore('RedPacket').get(id.databaseID)
+        if (!record) throw new Error('Claim result of unknown id')
+        setNextState(
+            RedPacketRecordOutDB(record),
+            details.type === 'success' ? RedPacketStatus.claimed : RedPacketStatus.normal,
+        )
         if (details.type === 'success') {
-            rec.claim_address = details.claimer
-            rec.claim_amount = details.claimed_value
+            record.claim_address = details.claimer
+            record.claim_amount = details.claimed_value.toString()
         }
-        t.objectStore('RedPacket').put(rec)
+        t.objectStore('RedPacket').put(record)
     }
     if (details.type === 'success') {
         getProvider().watchExpired({ redPacketID: details.red_packet_id })
@@ -274,13 +279,13 @@ export async function onClaimResult(id: { databaseID: string }, details: RedPack
 export async function onExpired(id: { redPacketID: string }) {
     {
         const t = createTransaction(await createWalletDBAccess(), 'readwrite')('RedPacket')
-        const rec = await getRedPacketByID(t, id.redPacketID)
-        if (rec.status !== RedPacketStatus.expired) {
-            setNextState(rec, RedPacketStatus.expired)
-            t.objectStore('RedPacket').put(rec)
+        const record = await getRedPacketByID(t, id.redPacketID)
+        if (record.status !== RedPacketStatus.expired) {
+            setNextState(record, RedPacketStatus.expired)
+            t.objectStore('RedPacket').put(RedPacketRecordIntoDB(record))
         }
 
-        if (rec.create_transaction_hash) requestRefund(id)
+        if (record.create_transaction_hash) requestRefund(id)
     }
     PluginMessageCenter.emit('maskbook.red_packets.update', undefined)
 }
@@ -290,23 +295,23 @@ export async function requestRefund(id: { redPacketID: string }) {
     let dbID = ''
     {
         const t = createTransaction(await createWalletDBAccess(), 'readwrite')('RedPacket')
-        const rec = await getRedPacketByID(t, id.redPacketID)
-        dbID = rec.id
-        setNextState(rec, RedPacketStatus.refund_pending)
-        rec.refund_transaction_hash = refund_transaction_hash
-        t.objectStore('RedPacket').put(rec)
+        const record = await getRedPacketByID(t, id.redPacketID)
+        dbID = record.id
+        setNextState(record, RedPacketStatus.refund_pending)
+        record.refund_transaction_hash = refund_transaction_hash
+        t.objectStore('RedPacket').put(RedPacketRecordIntoDB(record))
     }
     getProvider().watchRefundResult({ databaseID: dbID, transactionHash: refund_transaction_hash })
     // TODO: send a notification here maybe?
     PluginMessageCenter.emit('maskbook.red_packets.update', undefined)
 }
-export async function onRefundResult(id: { redPacketID: string }, details: { remaining_balance: bigint }) {
+export async function onRefundResult(id: { redPacketID: string }, details: { remaining_balance: BigNumber }) {
     {
         const t = createTransaction(await createWalletDBAccess(), 'readwrite')('RedPacket')
-        const rec = await getRedPacketByID(t, id.redPacketID)
-        setNextState(rec, RedPacketStatus.refunded)
-        rec.refund_amount = details.remaining_balance
-        t.objectStore('RedPacket').put(rec)
+        const record = await getRedPacketByID(t, id.redPacketID)
+        setNextState(record, RedPacketStatus.refunded)
+        record.refund_amount = details.remaining_balance
+        t.objectStore('RedPacket').put(RedPacketRecordIntoDB(record))
     }
     // TODO: send a notification here.
     PluginMessageCenter.emit('maskbook.red_packets.update', undefined)
@@ -315,7 +320,7 @@ export async function onRefundResult(id: { redPacketID: string }, details: { rem
 export async function redPacketSyncInit() {
     const t = createTransaction(await createWalletDBAccess(), 'readonly')('RedPacket')
     const recs = await t.objectStore('RedPacket').getAll()
-    recs.forEach(x => {
+    recs.forEach((x) => {
         if (x.claim_transaction_hash && x.status === RedPacketStatus.claim_pending) {
             getProvider().watchClaimResult({ databaseID: x.id, transactionHash: x.claim_transaction_hash })
         }
@@ -337,12 +342,9 @@ export async function getRedPacketByID(
     id: string,
 ) {
     if (!t) t = createTransaction(await createWalletDBAccess(), 'readonly')('RedPacket')
-    const rec = await t
-        .objectStore('RedPacket')
-        .index('red_packet_id')
-        .get(id)
-    assert(rec)
-    return rec
+    const record = await t.objectStore('RedPacket').index('red_packet_id').get(id)
+    assert(record)
+    return RedPacketRecordOutDB(record)
 }
 function setNextState(rec: RedPacketRecord, nextState: RedPacketStatus) {
     assert(
@@ -359,4 +361,27 @@ function setNextState(rec: RedPacketRecord, nextState: RedPacketStatus) {
 export function assert(x: any, ...args: any): asserts x {
     console.assert(x, ...args)
     if (!x) throw new Error('Assert failed!')
+}
+
+function RedPacketRecordOutDB(x: RedPacketRecordInDatabase): RedPacketRecord {
+    const names = ['send_total', 'claim_amount', 'refund_amount', 'erc20_approve_value', 'shares'] as const
+    const record = omit(x, names) as RedPacketRecord
+    for (const name of names) {
+        const original = x[name]
+        if (typeof original !== 'undefined') {
+            record[name] = new BigNumber(String(original))
+        }
+    }
+    return record
+}
+function RedPacketRecordIntoDB(x: RedPacketRecord): RedPacketRecordInDatabase {
+    const names = ['send_total', 'claim_amount', 'refund_amount', 'erc20_approve_value', 'shares'] as const
+    const record = omit(x, names) as RedPacketRecordInDatabase
+    for (const name of names) {
+        const original = x[name]
+        if (typeof original !== 'undefined') {
+            record[name] = original.toString()
+        }
+    }
+    return record
 }

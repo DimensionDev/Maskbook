@@ -8,7 +8,7 @@ import SentimentSatisfiedOutlinedIcon from '@material-ui/icons/SentimentSatisfie
 import { useModal } from './Dialog/Base'
 import { DashboardFeedbackDialog } from './Dialog/Feedback'
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
     drawer: {
         height: '100%',
         display: 'grid',

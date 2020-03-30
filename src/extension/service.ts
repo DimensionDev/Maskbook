@@ -53,7 +53,7 @@ function createProxyToService(name: string) {
                 if (key === 'methods') {
                     return () => {
                         return Object.keys(service)
-                            .map(f => f + ': ' + service[f].toString().split('\n')[0])
+                            .map((f) => f + ': ' + service[f].toString().split('\n')[0])
                             .join('\n')
                     }
                 }
@@ -101,7 +101,7 @@ function register<T extends Service>(service: T, name: keyof Services, mock?: Pa
             // ? -> UI developing
             const mockService = new Proxy(mock || {}, {
                 get(target: any, key: string) {
-                    return async function(...args: any[]) {
+                    return async function (...args: any[]) {
                         if (target[key]) return target[key](...args)
                         return void 0
                     }

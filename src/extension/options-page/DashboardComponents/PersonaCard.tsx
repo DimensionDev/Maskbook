@@ -1,17 +1,15 @@
 import React, { useState, useRef } from 'react'
 import { makeStyles, createStyles } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
-import { Persona } from '../../../database'
+import type { Persona } from '../../../database'
 import { TextField, Menu, MenuItem, Card } from '@material-ui/core'
 import Services from '../../service'
 import MoreVertIcon from '@material-ui/icons/MoreVert'
 import { useSnackbar } from 'notistack'
 import { useColorProvider } from '../../../utils/theme'
 import { useI18N } from '../../../utils/i18n-next-ui'
-import { PersonaDeleteDialog } from '../DashboardDialogs/Persona'
-import { DialogRouter } from '../DashboardDialogs/DialogBase'
 import ProfileBox from './ProfileBox'
-import { ProfileIdentifier } from '../../../database/type'
+import type { ProfileIdentifier } from '../../../database/type'
 import { useModal } from '../Dialog/Base'
 import { DashboardPersonaBackupDialog, DashboardPersonaDeleteConfirmDialog } from '../Dialog/Persona'
 
@@ -19,7 +17,7 @@ interface Props {
     persona: Persona
 }
 
-const useStyles = makeStyles(theme =>
+const useStyles = makeStyles((theme) =>
     createStyles({
         card: {
             width: '350px',
@@ -84,8 +82,8 @@ export default function PersonaCard({ persona }: Props) {
         if (!profile) Services.Identity.renamePersona(persona.identifier, persona.identifier.compressedPoint)
         else
             Services.Identity.queryProfile(profile)
-                .then(profile => profile.nickname || profile.identifier.userId)
-                .then(newName => Services.Identity.renamePersona(persona.identifier, newName))
+                .then((profile) => profile.nickname || profile.identifier.userId)
+                .then((newName) => Services.Identity.renamePersona(persona.identifier, newName))
     }, [persona.identifier, id, persona.nickname])
 
     return (
@@ -114,12 +112,12 @@ export default function PersonaCard({ persona }: Props) {
                 ) : (
                     <TextField
                         style={{ width: '100%', maxWidth: '320px' }}
-                        inputProps={{ onKeyPress: e => e.key === 'Enter' && renameIdentity(e) }}
+                        inputProps={{ onKeyPress: (e) => e.key === 'Enter' && renameIdentity(e) }}
                         autoFocus
                         variant="outlined"
                         label="Name"
                         defaultValue={persona.nickname}
-                        onBlur={e => renameIdentity(e)}></TextField>
+                        onBlur={(e) => renameIdentity(e)}></TextField>
                 )}
             </Typography>
             <ProfileBox persona={persona} />

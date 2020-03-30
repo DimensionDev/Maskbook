@@ -1,7 +1,7 @@
 import { MessageCenter } from '../../utils/messages'
 import Services from '../../extension/service'
-import { SocialNetworkUI } from '../ui'
-import { Profile, Group } from '../../database'
+import type { SocialNetworkUI } from '../ui'
+import type { Profile, Group } from '../../database'
 import { createDataWithIdentifierChangedListener } from './createDataWithIdentifierChangedListener'
 
 function hasFingerprint(x: Profile) {
@@ -9,9 +9,9 @@ function hasFingerprint(x: Profile) {
 }
 export function InitFriendsValueRef(self: SocialNetworkUI, network: string) {
     const ref = self.friendsRef
-    Services.Identity.queryProfiles(network).then(p => (ref.value = p.filter(hasFingerprint)))
+    Services.Identity.queryProfiles(network).then((p) => (ref.value = p.filter(hasFingerprint)))
     MessageCenter.on(
         'profilesChanged',
-        createDataWithIdentifierChangedListener(ref, x => x.of.identifier.network === network),
+        createDataWithIdentifierChangedListener(ref, (x) => x.of.identifier.network === network),
     )
 }

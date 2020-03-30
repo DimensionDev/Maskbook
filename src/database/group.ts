@@ -1,5 +1,5 @@
 /// <reference path="./global.d.ts" />
-import { DBSchema, openDB, IDBPTransaction } from 'idb/with-async-ittr'
+import { DBSchema, openDB, IDBPTransaction } from 'idb/with-async-ittr-cjs'
 import { GroupIdentifier, Identifier, ProfileIdentifier } from './type'
 import { MessageCenter } from '../utils/messages'
 import { PrototypeLess, restorePrototypeArray } from '../utils/type'
@@ -127,9 +127,9 @@ export async function updateUserGroupDatabase(
             banned: !orig.banned && !group.banned ? undefined : [...(orig.banned || []), ...(group.banned || [])],
             groupName: group.groupName || orig.groupName,
             members: Array.from(nextMembers)
-                .map(x => Identifier.fromString(x, ProfileIdentifier))
-                .filter(x => x.ok)
-                .map(x => x.val as ProfileIdentifier),
+                .map((x) => Identifier.fromString(x, ProfileIdentifier))
+                .filter((x) => x.ok)
+                .map((x) => x.val as ProfileIdentifier),
         }
     } else {
         nextRecord = type(orig) || orig
@@ -181,11 +181,8 @@ export async function queryUserGroupsDatabase(
         result.push(
             // ? WKWebview bug https://bugs.webkit.org/show_bug.cgi?id=177350
             ...(webpackEnv.target === 'WKWebview'
-                ? (await t.objectStore('groups').getAll()).filter(obj => obj.network === query.network)
-                : await t
-                      .objectStore('groups')
-                      .index('network')
-                      .getAll(IDBKeyRange.only(query.network))),
+                ? (await t.objectStore('groups').getAll()).filter((obj) => obj.network === query.network)
+                : await t.objectStore('groups').index('network').getAll(IDBKeyRange.only(query.network))),
         )
     }
     return result.map(GroupRecordOutDB)

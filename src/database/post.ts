@@ -1,6 +1,6 @@
 /// <reference path="./global.d.ts" />
 import { PostIdentifier, ProfileIdentifier, Identifier, PostIVIdentifier, GroupIdentifier } from './type'
-import { openDB, DBSchema, IDBPTransaction } from 'idb/with-async-ittr'
+import { openDB, DBSchema, IDBPTransaction } from 'idb/with-async-ittr-cjs'
 import { restorePrototype, restorePrototypeArray, PrototypeLess } from '../utils/type'
 import { IdentifierMap } from './IdentifierMap'
 import { createDBAccess } from './helpers/openDB'
@@ -19,7 +19,7 @@ const db = createDBAccess(() => {
              */
             if (oldVersion <= 1) {
                 const store = transaction.objectStore('post')
-                store.getAll().then(values => {
+                store.getAll().then((values) => {
                     store.clear()
                     for (const each of values) {
                         const id = Identifier.fromString(each.identifier, PostIdentifier)
@@ -174,7 +174,7 @@ export async function deletePostCryptoKeyDB(record: PostIVIdentifier, t?: PostTr
 function postOutDB(db: PostDBRecord): PostRecord {
     const { identifier, foundAt, postBy, recipientGroups, recipients, postCryptoKey } = db
     for (const detail of recipients.values()) {
-        detail.reason.forEach(x => x.type === 'group' && restorePrototype(x.group, GroupIdentifier.prototype))
+        detail.reason.forEach((x) => x.type === 'group' && restorePrototype(x.group, GroupIdentifier.prototype))
     }
     return {
         identifier: Identifier.fromString(identifier, PostIVIdentifier).unwrap(),

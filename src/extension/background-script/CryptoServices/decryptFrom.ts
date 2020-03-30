@@ -13,14 +13,19 @@ import { MessageCenter } from '../../../utils/messages'
 import { getNetworkWorker } from '../../../social-network/worker'
 import { getSignablePayload, cryptoProviderTable, TypedMessage } from './utils'
 import { JsonWebKeyToCryptoKey, getKeyParameter } from '../../../utils/type-transform/CryptoKey-JsonWebKey'
-import { PersonaRecord } from '../../../database/Persona/Persona.db'
+import type { PersonaRecord } from '../../../database/Persona/Persona.db'
 import { verifyOthersProve } from './verifyOthersProve'
 import { import_AES_GCM_256_Key } from '../../../utils/crypto.subtle'
 import { publicSharedAESKey } from '../../../crypto/crypto-alpha-38'
 import { DecryptFailedReason } from '../../../utils/constants'
+import {
+    asyncIteratorWithResult,
+    asyncIteratorToAsyncFunction,
+} from '../../../utils/type-transform/asyncIteratorWithResult'
+import { sleep } from '@holoflows/kit/es/util/sleep'
 
 type Progress = {
-    progress: 'finding_person_public_key' | 'finding_post_key'
+    progress: 'finding_person_public_key' | 'finding_post_key' | 'init'
 }
 type DebugInfo = {
     debug: 'debug_finding_hash'
@@ -38,13 +43,7 @@ type Failure = {
 export type SuccessDecryption = Success
 export type FailureDecryption = Failure
 export type DecryptionProgress = Progress
-type ReturnOfDecryptFromMessageWithProgress = AsyncGenerator<
-    Failure | Progress | DebugInfo,
-    Success | Failure,
-    void
-> & {
-    [Symbol.asyncIterator](): AsyncIterator<Failure | Progress | DebugInfo, Success | Failure, void>
-}
+type ReturnOfDecryptFromMessageWithProgress = AsyncGenerator<Failure | Progress | DebugInfo, Success | Failure, void>
 
 function makeSuccessResult(
     cryptoProvider: typeof cryptoProviderTable[keyof typeof cryptoProviderTable],
@@ -95,6 +94,7 @@ export async function* decryptFromMessageWithProgress(
     whoAmI: ProfileIdentifier,
     publicShared: boolean,
 ): ReturnOfDecryptFromMessageWithProgress {
+    yield { progress: 'init' }
     // If any of parameters is changed, we will not handle it.
     let _data: Payload
     try {
@@ -124,7 +124,7 @@ export async function* decryptFromMessageWithProgress(
         }
         // ? Find author's public key.
         let byPerson!: PersonaRecord
-        for await (const _ of iteratorHelper(findAuthorPublicKey(author, !!cachedPostResult))) {
+        for await (const _ of asyncIteratorWithResult(findAuthorPublicKey(author, !!cachedPostResult))) {
             if (_.done) {
                 if (_.value === 'out of chance')
                     return { error: i18n.t('service_others_key_not_found', { name: author.userId }) }
@@ -140,8 +140,11 @@ export async function* decryptFromMessageWithProgress(
         }
 
         // ? Get my public & private key.
-        const mine = await queryPersonaRecord(whoAmI)
-
+        let mine = (await queryPersonaRecord(whoAmI))!
+        if (!mine) {
+            await sleep(1000)
+            mine = (await queryPersonaRecord(whoAmI))!
+        }
         if (!mine?.privateKey) throw new Error(DecryptFailedReason.MyCryptoKeyNotFound)
         const ecdhParams = getKeyParameter('ecdh')
         const minePublic = await JsonWebKeyToCryptoKey(mine.publicKey, ...ecdhParams)
@@ -246,7 +249,7 @@ export async function* decryptFromMessageWithProgress(
                 iv,
                 minePublic,
                 getNetworkWorker(author).gunNetworkHint,
-                async key => {
+                async (key) => {
                     console.log('New key received, trying', key)
                     try {
                         const result = await decryptWith(key)
@@ -348,7 +351,7 @@ async function* findAuthorPublicKey(
                     undo()
                     reject()
                 }
-                const undo = Gun2.subscribePersonFromGun2(by, data => {
+                const undo = Gun2.subscribePersonFromGun2(by, (data) => {
                     const provePostID = data?.provePostId as string | '' | undefined
                     if (provePostID && provePostID.length > 0) {
                         undo()
@@ -357,8 +360,8 @@ async function* findAuthorPublicKey(
                 })
             })
             const databasePromise = new Promise((resolve, reject) => {
-                const undo = MessageCenter.on('profilesChanged', data => {
-                    data.filter(x => x.reason !== 'delete').forEach(x => {
+                const undo = MessageCenter.on('profilesChanged', (data) => {
+                    data.filter((x) => x.reason !== 'delete').forEach((x) => {
                         if (x.of.identifier.equals(by)) {
                             undo()
                             resolve()
@@ -382,14 +385,7 @@ async function* findAuthorPublicKey(
     return 'out of chance'
 }
 
-export async function decryptFrom(
-    ...args: Parameters<typeof decryptFromMessageWithProgress>
-): Promise<Success | Failure> {
-    for await (const _ of iteratorHelper(decryptFromMessageWithProgress(...args))) {
-        if (_.done) return _.value
-    }
-    throw new TypeError('Invalid iterator state')
-}
+export const decryptFrom = asyncIteratorToAsyncFunction(decryptFromMessageWithProgress)
 
 async function decryptFromCache(postPayload: Payload, by: ProfileIdentifier) {
     const { encryptedText, iv, version } = postPayload
@@ -418,16 +414,4 @@ async function decryptFromCache(postPayload: Payload, by: ProfileIdentifier) {
         return [result, setCache] as const
     }
     return [undefined, setCache] as const
-}
-
-async function* iteratorHelper<T, R, N>(
-    iter: AsyncGenerator<T, R, N>,
-): AsyncGenerator<IteratorResult<T, R>, unknown, unknown> {
-    let yielded: IteratorResult<T, R>
-    do {
-        yielded = await iter.next()
-        if (yielded.done) yield yielded
-        else yield yielded
-    } while (yielded.done === false)
-    return
 }

@@ -1,4 +1,4 @@
-import { ProfileIdentifier } from '../../../database/type'
+import type { ProfileIdentifier } from '../../../database/type'
 import { gun2, PersonOnGun2 as ProfileOnGun2 } from '.'
 import { hashProfileIdentifier } from './hash'
 
@@ -19,7 +19,7 @@ export async function queryPersonFromGun2(user: ProfileIdentifier): Promise<Prof
  * @param callback Callback
  */
 export function subscribePersonFromGun2(user: ProfileIdentifier, callback: (data: ProfileOnGun2) => void) {
-    hashProfileIdentifier(user).then(hash =>
+    hashProfileIdentifier(user).then((hash) =>
         gun2.get(hash).on((data: ProfileOnGun2) => {
             const data2 = Object.assign({}, data)
             // @ts-ignore

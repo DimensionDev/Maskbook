@@ -2,7 +2,7 @@ import { encode, decode } from 'node-stego/es/dom'
 import { GrayscaleAlgorithm } from 'node-stego/es/grayscale'
 import { TransformAlgorithm } from 'node-stego/es/transform'
 import { OnlyRunInContext } from '@holoflows/kit/es'
-import { EncodeOptions, DecodeOptions } from 'node-stego/es/stego'
+import type { EncodeOptions, DecodeOptions } from 'node-stego/es/stego'
 import { getUrl, downloadUrl } from '../../utils/utils'
 import { memoizePromise } from '../../utils/memoize'
 import { getDimension } from '../../utils/image'
@@ -58,7 +58,7 @@ type DecodeImageOptions = PartialRequired<Required<DecodeOptions>, 'pass'>
 
 export async function decodeImage(buf: Uint8Array, options: DecodeImageOptions) {
     const dimension = getDimension(buf)
-    if (!dimensions.some(otherDimension => isSameDimension(dimension, otherDimension))) {
+    if (!dimensions.some((otherDimension) => isSameDimension(dimension, otherDimension))) {
         return ''
     }
     return decode(buf.buffer, await getMaskBuf(), {
