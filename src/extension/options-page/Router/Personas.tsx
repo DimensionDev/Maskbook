@@ -8,6 +8,7 @@ import { DashboardPersonaCreateDialog, DashboardPersonaImportDialog } from '../D
 import { useModal } from '../Dialog/Base'
 import { Database as DatabaseIcon } from 'react-feather'
 import { DashboardDatabaseBackupDialog, DashboardDatabaseRestoreDialog } from '../Dialog/Database'
+import SpacedButtonGroup from '../DashboardComponents/SpacedButtonGroup'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -21,12 +22,7 @@ const useStyles = makeStyles((theme) =>
             paddingTop: theme.spacing(2),
         },
         footer: {
-            flexGrow: 0,
-            flexShrink: 0,
             margin: theme.spacing(2, 0),
-            '& > *:not(:last-child)': {
-                marginRight: theme.spacing(1),
-            },
         },
     }),
 )
@@ -59,7 +55,7 @@ export default function DashboardPersonasRouter() {
                     <PersonaCard key={persona.identifier.toText()} persona={persona} />
                 ))}
             </section>
-            <section className={classes.footer}>
+            <SpacedButtonGroup className={classes.footer}>
                 <Button
                     onClick={openRestoreDatabase}
                     startIcon={<DatabaseIcon size={18} />}
@@ -70,7 +66,7 @@ export default function DashboardPersonasRouter() {
                 <Button onClick={openBackupDatabase} color="primary" variant="text">
                     Backup Datebase
                 </Button>
-            </section>
+            </SpacedButtonGroup>
             {createPersona}
             {importPersona}
             {backupDatabase}
