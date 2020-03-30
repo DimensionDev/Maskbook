@@ -230,6 +230,6 @@ export function useSnackbarCallback<T = void>(
                     throw err
                 },
             ),
-        [enqueueSnackbar, executor, key, onError, onSuccess, t],
+        [...deps, enqueueSnackbar, executor, key, onError, onSuccess, t],
     )
 }

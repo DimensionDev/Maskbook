@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react'
-import { Button, CircularProgress, makeStyles } from '@material-ui/core'
+import { Button, CircularProgress, makeStyles, createStyles } from '@material-ui/core'
 import type { ButtonProps } from '@material-ui/core/Button'
 import CheckIcon from '@material-ui/icons/Check'
 import ErrorIcon from '@material-ui/icons/Error'
@@ -14,11 +14,34 @@ enum ThrottledButtonState {
     Loading,
 }
 
-export function ThrottledButton(_props: ButtonProps) {
-    const { onClick, ...props } = _props
+interface ThrottledButtonProps extends Omit<ButtonProps, 'color'> {
+    color: ButtonProps['color'] | 'danger'
+}
+
+const useDangerStyles = makeStyles((theme) =>
+    createStyles({
+        containedPrimary: {
+            backgroundColor: 'rgb(244, 99, 125)',
+            '&:hover': {
+                backgroundColor: 'rgb(235, 71, 101)',
+            },
+        },
+        outlinedPrimary: {
+            borderColor: 'rgb(244, 99, 125)',
+            color: 'rgb(244, 99, 125)',
+            '&:hover': {
+                borderColor: 'rgb(235, 71, 101)',
+            },
+        },
+    }),
+)
+
+export function ThrottledButton(_props: ThrottledButtonProps) {
+    const { onClick, color, ...props } = _props
     const [loading, setLoading] = useState<{ state: ThrottledButtonState; timer?: number }>({
         state: ThrottledButtonState.Normal,
     })
+    const classes = useDangerStyles()
     const hookedClick = useCallback(
         (e) => {
             e.stopPropagation()
@@ -42,6 +65,8 @@ export function ThrottledButton(_props: ButtonProps) {
             startIcon={loading.state === ThrottledButtonState.Loading ? circle : undefined}
             disabled={loading.state === ThrottledButtonState.Loading}
             onClick={hookedClick}
+            classes={color === 'danger' ? classes : undefined}
+            color={color === 'danger' ? 'primary' : color}
             {...props}></Button>
     )
 }

@@ -1,13 +1,20 @@
 import React, { useState } from 'react'
-import { DashboardDialogCore, DashboardDialogWrapper, WrappedDialogProps, useSnackbarCallback } from './Base'
+import { DashboardDialogCore, DashboardDialogWrapper, WrappedDialogProps, useSnackbarCallback, useModal } from './Base'
 import { TextField, makeStyles, createStyles } from '@material-ui/core'
 import type { Profile } from '../../../database'
 import { Avatar } from '../../../utils/components/Avatar'
 import Services from '../../service'
 import { ThrottledButton } from '../DashboardComponents/ActionButton'
+import SpacedButtonGroup from '../DashboardComponents/SpacedButtonGroup'
+import { useI18N } from '../../../utils/i18n-next-ui'
+import { UserMinus } from 'react-feather'
 
-interface ContactDialogProps {
+interface ContactProps {
     contact: Profile
+}
+
+interface ContactDeleteProps extends ContactProps {
+    onDeleted(): void
 }
 
 const useStyles = makeStyles((theme) =>
@@ -19,7 +26,40 @@ const useStyles = makeStyles((theme) =>
     }),
 )
 
-export function DashboardContactDialog(props: WrappedDialogProps<ContactDialogProps>) {
+export function DashboardContactDeleteConfirmDialog(props: WrappedDialogProps<ContactDeleteProps>) {
+    const { contact, onDeleted } = props.ComponentProps!
+    const { t } = useI18N()
+
+    // TODO!: delete profile breaks database
+    const onDelete = useSnackbarCallback(
+        // ! directly destroy parent dialog is NG so close self first
+        () => Services.Identity.removeProfile(contact.identifier).then(props.onClose),
+        [contact],
+        onDeleted,
+    )
+
+    return (
+        <DashboardDialogCore {...props}>
+            <DashboardDialogWrapper
+                size="small"
+                icon={<UserMinus />}
+                iconColor="#F4637D"
+                primary={'Delete Contact'}
+                secondary={'Do you want to delete this contact? This operation cannot be reverted.'}>
+                <SpacedButtonGroup>
+                    <ThrottledButton variant="contained" color="danger" onClick={onDelete}>
+                        OK
+                    </ThrottledButton>
+                    <ThrottledButton variant="outlined" color="primary" onClick={props.onClose}>
+                        Cancel
+                    </ThrottledButton>
+                </SpacedButtonGroup>
+            </DashboardDialogWrapper>
+        </DashboardDialogCore>
+    )
+}
+
+export function DashboardContactDialog(props: WrappedDialogProps<ContactProps>) {
     const { contact } = props.ComponentProps!
 
     const [nickname, setNickname] = useState(contact.nickname)
@@ -32,6 +72,11 @@ export function DashboardContactDialog(props: WrappedDialogProps<ContactDialogPr
         [nickname, avatarURL],
         props.onClose,
     )
+
+    const [deleteContact, openDeleteContact] = useModal(DashboardContactDeleteConfirmDialog, {
+        contact,
+        onDeleted: props.onClose,
+    })
 
     return (
         <DashboardDialogCore {...props}>
@@ -59,9 +104,15 @@ export function DashboardContactDialog(props: WrappedDialogProps<ContactDialogPr
                         disabled
                     />
                 </form>
-                <ThrottledButton variant="contained" color="primary" onClick={onSubmit}>
-                    Submit
-                </ThrottledButton>
+                <SpacedButtonGroup>
+                    <ThrottledButton variant="contained" color="primary" onClick={onSubmit}>
+                        Save
+                    </ThrottledButton>
+                    <ThrottledButton variant="outlined" color="danger" onClick={openDeleteContact}>
+                        Delete
+                    </ThrottledButton>
+                </SpacedButtonGroup>
+                {deleteContact}
             </DashboardDialogWrapper>
         </DashboardDialogCore>
     )
