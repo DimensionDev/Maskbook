@@ -94,7 +94,7 @@ class Twitter implements SNS {
         }
 
         // wait for home
-        await page.waitFor('[aria-label="Profile"]')
+        await page.waitFor('[data-testid="AppTabBar_Home_Link"]')
     }
 
     async logout(page: Page) {
