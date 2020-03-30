@@ -80,7 +80,7 @@
     "jsonwebtoken": "^8.5.1",
     "jsqr": "^1.2.0",
     "lodash-es": "^4.17.11",
-    "matrix-js-sdk": "^2.4.6",
+    "matrix-js-sdk": "^5.1.1",
     "matrix-js-sdk-type": "https://github.com/DimensionDev/matrix-js-sdk-type",
     "node-stego": "^0.10.1",
     "notistack": "^0.9.7",
