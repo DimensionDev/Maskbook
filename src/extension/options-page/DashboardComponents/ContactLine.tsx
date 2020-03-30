@@ -1,7 +1,7 @@
 import React from 'react'
 import { Typography, ButtonBase, ButtonBaseProps } from '@material-ui/core'
 import { makeStyles, createStyles } from '@material-ui/core/styles'
-import { Profile } from '../../../database'
+import type { Profile } from '../../../database'
 import { Avatar } from '../../../utils/components/Avatar'
 import { useModal } from '../Dialog/Base'
 import { DashboardContactDialog } from '../Dialog/Contact'
