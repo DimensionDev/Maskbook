@@ -1,12 +1,13 @@
-import React from 'react'
+import React, { useCallback, useState, useEffect } from 'react'
 import TextField from '@material-ui/core/TextField'
 import Autocomplete, { RenderGroupParams } from '@material-ui/lab/Autocomplete'
 import useMediaQuery from '@material-ui/core/useMediaQuery'
 import ListSubheader from '@material-ui/core/ListSubheader'
 import { useTheme, makeStyles } from '@material-ui/core/styles'
 import { VariableSizeList, ListChildComponentProps } from 'react-window'
-import { Typography, FormControlLabel, Switch } from '@material-ui/core'
+import { Typography, Switch, List, ListItem, ListItemText, ListItemSecondaryAction, Box } from '@material-ui/core'
 import type { ERC20TokenPredefinedData } from '../../../erc20'
+import Wallet from 'wallet.ts'
 
 const LISTBOX_PADDING = 8 // px
 
@@ -95,51 +96,110 @@ const renderGroup = (params: RenderGroupParams) => [
 ]
 
 export function ERC20WellKnownTokenSelector(props: {
-    selectedItem: [ERC20TokenPredefinedData[0] | undefined, (next: ERC20TokenPredefinedData[0] | undefined) => void]
+    onItem: (next: ERC20TokenPredefinedData[0] | null) => void
     useRinkebyNetwork: [boolean, (x: boolean) => void]
+    isCustom?: boolean
 }) {
     const classes = useStyles()
-    const [selected, setSelected] = props.selectedItem
+    const [selected, setSelected] = useState<ERC20TokenPredefinedData[0] | null>(null)
     const [useRinkeby, setRinkeby] = props.useRinkebyNetwork
+    const { onItem, isCustom } = props
+
+    const [address, setTokenAddress] = useState('')
+    const [decimals, setDecimal] = useState(0)
+    const [tokenName, setTokenName] = useState('')
+    const [symbol, setSymbol] = useState('')
+    const isInvalidAddr = !Wallet.EthereumAddress.isValid(address)
+    const isValidInput = !(!isCustom
+        ? selected === null
+        : isInvalidAddr || tokenName.length === 0 || symbol.length === 0)
+
+    useEffect(() => {
+        if (isValidInput) onItem(isCustom ? { address, decimals, name: tokenName, symbol } : selected)
+        else onItem(null)
+    }, [selected, address, decimals, tokenName, symbol])
+
+    const onChange = useCallback(
+        (e) => {
+            setRinkeby(!useRinkeby)
+            setSelected(null)
+        },
+        [useRinkeby],
+    )
 
     return (
-        <>
-            <FormControlLabel
-                control={
-                    <Switch
-                        checked={useRinkeby}
-                        onChange={(e) => {
-                            setRinkeby(e.currentTarget.checked)
-                            setSelected(undefined)
+        <Box textAlign="left" py={1}>
+            <List disablePadding>
+                <ListItem button onClick={onChange}>
+                    <ListItemText primary="Use Rinkeby Network"></ListItemText>
+                    <ListItemSecondaryAction>
+                        <Switch onClick={onChange} checked={useRinkeby} color="primary" />
+                    </ListItemSecondaryAction>
+                </ListItem>
+            </List>
+            {!isCustom ? (
+                <Box textAlign="left" px={1}>
+                    <Autocomplete
+                        size="small"
+                        disableListWrap
+                        classes={classes}
+                        ListboxComponent={ListboxComponent as React.ComponentType<React.HTMLAttributes<HTMLElement>>}
+                        renderGroup={renderGroup}
+                        options={useRinkeby ? rinkeby : mainnet}
+                        getOptionLabel={(option: typeof mainnet[0]) => option.name + ` (${option.symbol})`}
+                        groupBy={(option: typeof mainnet[0]) => getNameOfToken(option)[0].toUpperCase()}
+                        renderInput={(params) => (
+                            <TextField {...params} variant="outlined" label="Predefined ERC20 Tokens" fullWidth />
+                        )}
+                        renderOption={(option: typeof mainnet[0]) => (
+                            <Typography key={option.address} noWrap>
+                                {getNameOfToken(option)}
+                            </Typography>
+                        )}
+                        value={selected}
+                        onChange={(event: any, newValue: typeof mainnet[0] | null) => {
+                            setSelected(newValue || null)
                         }}
-                        color="primary"
                     />
-                }
-                label="Use Rinkeby Network"
-            />
-            <Autocomplete
-                disableListWrap
-                classes={classes}
-                ListboxComponent={ListboxComponent as React.ComponentType<React.HTMLAttributes<HTMLElement>>}
-                renderGroup={renderGroup}
-                options={useRinkeby ? rinkeby : mainnet}
-                getOptionLabel={(option: typeof mainnet[0]) => option.name + ` (${option.symbol})`}
-                groupBy={(option: typeof mainnet[0]) => getNameOfToken(option)[0].toUpperCase()}
-                renderInput={(params) => (
-                    <TextField {...params} variant="outlined" label="Predefined ERC20 Tokens" fullWidth />
-                )}
-                renderOption={(option: typeof mainnet[0]) => <Typography noWrap>{getNameOfToken(option)}</Typography>}
-                value={selected}
-                onChange={(event: any, newValue: typeof mainnet[0] | null) => {
-                    setSelected(newValue || undefined)
-                }}
-            />
-            <Typography style={{ marginTop: 24 }} variant="caption">
-                Address: {selected?.address}
-            </Typography>
-            <br />
-            <Typography variant="caption">Decimals: {selected?.decimals}</Typography>
-        </>
+                    <Typography component="p" style={{ marginTop: 8 }} variant="caption">
+                        Address: {selected?.address}
+                    </Typography>
+                    <Typography component="p" variant="caption">
+                        Decimals: {selected?.decimals}
+                    </Typography>
+                </Box>
+            ) : (
+                <Box>
+                    <TextField
+                        required
+                        size="small"
+                        error={isInvalidAddr && !!address.length}
+                        label="Contract Address"
+                        value={address}
+                        onChange={(e) => setTokenAddress(e.target.value)}></TextField>
+                    <TextField
+                        required
+                        size="small"
+                        label="Decimal"
+                        value={decimals}
+                        type="number"
+                        inputProps={{ min: 0 }}
+                        onChange={(e) => setDecimal(parseInt(e.target.value))}></TextField>
+                    <TextField
+                        required
+                        size="small"
+                        label="Name"
+                        value={tokenName}
+                        onChange={(e) => setTokenName(e.target.value)}></TextField>
+                    <TextField
+                        required
+                        size="small"
+                        label="Symbol"
+                        value={symbol}
+                        onChange={(e) => setSymbol(e.target.value)}></TextField>{' '}
+                </Box>
+            )}
+        </Box>
     )
 }
 function getNameOfToken(x: typeof mainnet[0]) {
