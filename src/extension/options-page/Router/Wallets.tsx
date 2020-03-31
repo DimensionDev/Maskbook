@@ -17,6 +17,7 @@ import {
     DashboardWalletHistoryDialog,
     DashboardWalletBackupDialog,
     DashboardWalletDeleteConfirmDialog,
+    DashboardWalletRenameDialog,
 } from '../Dialog/Wallet'
 import { useMyWallets } from '../../../components/DataSource/independent'
 import DashboardMenu from '../DashboardComponents/DashboardMenu'
@@ -57,11 +58,6 @@ const useStyles = makeStyles((theme) =>
     }),
 )
 
-const fakeWallet = {
-    name: 'Wallet A',
-    address: '0x668281324fd6cB5F205F0764D114D6681A8AC6d1',
-}
-
 const walletTheme = (theme: Theme): Theme => ({
     ...theme,
     overrides: {
@@ -97,6 +93,7 @@ export default function DashboardWalletsRouter() {
     const [walletHistory, oepnWalletHistory] = useModal(DashboardWalletHistoryDialog)
     const [walletBackup, , oepnWalletBackup] = useModal(DashboardWalletBackupDialog)
     const [walletDelete, , oepnWalletDelete] = useModal(DashboardWalletDeleteConfirmDialog)
+    const [walletRename, , oepnWalletRename] = useModal(DashboardWalletRenameDialog)
 
     const actions = useMemo(
         () => [
@@ -115,7 +112,7 @@ export default function DashboardWalletsRouter() {
 
     const menus = useMemo(
         () => [
-            // <MenuItem onClick={openRename}>{t('rename')}</MenuItem>,
+            <MenuItem onClick={() => oepnWalletRename({ wallet: wallets[current] })}>{t('rename')}</MenuItem>,
             <MenuItem onClick={() => oepnWalletBackup({ wallet: wallets[current] })}>
                 {t('dashboard_create_backup')}
             </MenuItem>,
@@ -170,6 +167,7 @@ export default function DashboardWalletsRouter() {
             {walletDelete}
             {walletImport}
             {walletCreate}
+            {walletRename}
             {addToken}
             {walletHistory}
         </DashboardRouterContainer>
