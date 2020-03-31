@@ -3,6 +3,8 @@ import { Typography, makeStyles, createStyles, Box, Button, Avatar, ButtonBase }
 import FileCopyOutlinedIcon from '@material-ui/icons/FileCopyOutlined'
 import type { WalletRecord } from '../../../plugins/Wallet/database/types'
 import classNames from 'classnames'
+import { ThrottledButton } from './ActionButton'
+import { useCopyToClipboard } from 'react-use'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -72,6 +74,7 @@ interface WalletItemProps {
 export function WalletItem(props: WalletItemProps) {
     const classes = useStyles()
     const { wallet, selected, onClick } = props
+    const [, copyToClipboard] = useCopyToClipboard()
     return (
         <ButtonBase
             component="section"
@@ -91,9 +94,15 @@ export function WalletItem(props: WalletItemProps) {
                     {wallet.address}
                 </Typography>
             </Box>
-            <Button color="primary" size="small" variant="outlined" startIcon={<FileCopyOutlinedIcon />}>
+            <ThrottledButton
+                onMouseDown={(e) => e.stopPropagation()}
+                onClick={() => copyToClipboard(wallet.address!)}
+                color="primary"
+                size="small"
+                variant="outlined"
+                startIcon={<FileCopyOutlinedIcon />}>
                 Copy
-            </Button>
+            </ThrottledButton>
             <Box py={2} display="flex">
                 <Avatar
                     className={classes.coins}
