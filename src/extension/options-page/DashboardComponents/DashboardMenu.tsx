@@ -14,7 +14,7 @@ export default function DashboardMenu(props: WrappedDialogProps<{ anchorEl?: Ele
                     <Paper>
                         <ClickAwayListener onClickAway={props.onClose}>
                             <MenuList autoFocusItem={props.open} onClick={props.onClose}>
-                                {menus}
+                                {menus.map((menu, index) => React.cloneElement(menu, { key: index }))}
                             </MenuList>
                         </ClickAwayListener>
                     </Paper>
