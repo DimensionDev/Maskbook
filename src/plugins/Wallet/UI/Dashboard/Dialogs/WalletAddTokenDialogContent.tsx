@@ -138,6 +138,7 @@ export function ERC20WellKnownTokenSelector(props: {
                 </ListItem>
             </List>
             {!isCustom ? (
+                // TODO!: the selected item is wrong
                 <Box textAlign="left" px={1}>
                     <Autocomplete
                         size="small"

@@ -149,6 +149,7 @@ const useDashboardDialogWrapperStyles = makeStyles((theme) =>
         secondary: {
             lineHeight: 1.75,
             textAlign: 'center',
+            wordBreak: 'break-word',
         },
     }),
 )
@@ -158,7 +159,9 @@ const dialogTheme = (theme: Theme): Theme => ({
     overrides: {
         ...theme.overrides,
         MuiOutlinedInput: {
+            ...theme.overrides?.MuiOutlinedInput,
             notchedOutline: {
+                ...theme.overrides?.MuiOutlinedInput?.notchedOutline,
                 borderColor: '#EAEAEA',
             },
         },

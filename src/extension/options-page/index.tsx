@@ -1,7 +1,7 @@
 import '../../provider.worker'
 
 import React, { useRef, useMemo, useContext, useEffect, useState } from 'react'
-import { CssBaseline, useMediaQuery } from '@material-ui/core'
+import { CssBaseline, useMediaQuery, NoSsr } from '@material-ui/core'
 import { ThemeProvider, makeStyles, createStyles, useTheme } from '@material-ui/core/styles'
 
 import PeopleOutlinedIcon from '@material-ui/icons/PeopleOutlined'
@@ -56,10 +56,12 @@ function DashboardWithProvider() {
                         vertical: 'top',
                         horizontal: 'center',
                     }}>
-                    <Router>
-                        <CssBaseline />
-                        <Dashboard></Dashboard>
-                    </Router>
+                    <NoSsr>
+                        <Router>
+                            <CssBaseline />
+                            <Dashboard />
+                        </Router>
+                    </NoSsr>
                 </SnackbarProvider>
             </ThemeProvider>
         </I18nextProvider>
