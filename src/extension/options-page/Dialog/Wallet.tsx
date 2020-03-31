@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useMemo } from 'react'
 import { DashboardDialogCore, DashboardDialogWrapper, WrappedDialogProps, useSnackbarCallback } from './Base'
 import { CreditCard as CreditCardIcon, Hexagon as HexagonIcon, Clock as ClockIcon } from 'react-feather'
 import { TextField, Typography, makeStyles, createStyles, Paper } from '@material-ui/core'
@@ -7,8 +7,10 @@ import { useI18N } from '../../../utils/i18n-next-ui'
 import { ThrottledButton } from '../DashboardComponents/ActionButton'
 import SpacedButtonGroup from '../DashboardComponents/SpacedButtonGroup'
 import Services from '../../service'
-import type { WalletRecord } from '../../../plugins/Wallet/database/types'
+import { WalletRecord, EthereumNetwork } from '../../../plugins/Wallet/database/types'
 import classNames from 'classnames'
+import { ERC20WellKnownTokenSelector } from '../../../plugins/Wallet/UI/Dashboard/Dialogs/WalletAddTokenDialogContent'
+import type { ERC20TokenPredefinedData } from '../../../plugins/Wallet/erc20'
 
 export function DashboardWalletImportDialog(props: WrappedDialogProps) {
     const state = useState(0)
@@ -143,38 +145,71 @@ interface WalletProps {
     wallet: WalletRecord
 }
 
-export function DashboardWalletAddTokenDialog(props: WrappedDialogProps) {
+export function DashboardWalletAddTokenDialog(props: WrappedDialogProps<WalletProps>) {
     const { t } = useI18N()
+    const { wallet } = props.ComponentProps!
 
-    const [name, setName] = useState('')
-    const [pass, setPass] = useState('')
+    const [token, setToken] = React.useState<null | ERC20TokenPredefinedData[0]>(null)
+    const [useRinkeby, setRinkeby] = React.useState(false)
 
-    const state = useState(0)
-    const [tabState, setTabState] = state
+    const [tabState, _setTabState] = useState(0)
+    const state = useMemo(
+        () =>
+            [
+                tabState,
+                (state: number) => {
+                    setToken(null)
+                    return _setTabState(state)
+                },
+            ] as [number, React.Dispatch<React.SetStateAction<number>>],
+        [tabState],
+    )
+
+    const onSubmit = useSnackbarCallback(
+        () =>
+            Services.Plugin.invokePlugin(
+                'maskbook.wallet',
+                'walletAddERC20Token',
+                // TODO!: three network?
+                wallet.address,
+                useRinkeby ? EthereumNetwork.Rinkeby : EthereumNetwork.Mainnet,
+                token!,
+                tabState === 1,
+            ),
+        [token, useRinkeby],
+        props.onClose,
+    )
 
     const tabProps: AbstractTabProps = {
         tabs: [
             {
                 label: 'Well-know token',
-                children: <></>,
+                children: (
+                    <ERC20WellKnownTokenSelector onItem={setToken} useRinkebyNetwork={[useRinkeby, setRinkeby]} />
+                ),
                 p: 0,
             },
             {
                 label: 'Add your own',
-                children: <></>,
-                display: 'flex',
+                children: (
+                    <ERC20WellKnownTokenSelector
+                        onItem={setToken}
+                        useRinkebyNetwork={[useRinkeby, setRinkeby]}
+                        isCustom
+                    />
+                ),
                 p: 0,
             },
         ],
         state,
-        height: 240,
+        height: 320,
     }
 
     return (
         <DashboardDialogCore {...props}>
             <DashboardDialogWrapper icon={<HexagonIcon />} iconColor="#699CF7" primary="Add token">
                 <AbstractTab {...tabProps}></AbstractTab>
-                <ThrottledButton hidden={tabState === 2} variant="contained" color="primary" onClick={console.log}>
+                <ThrottledButton disabled={!token} variant="contained" color="primary" onClick={onSubmit}>
                     {t('import')}
                 </ThrottledButton>
             </DashboardDialogWrapper>
@@ -182,7 +217,7 @@ export function DashboardWalletAddTokenDialog(props: WrappedDialogProps) {
     )
 }
 
-export function DashboardWalletHistoryDialog(props: WrappedDialogProps) {
+export function DashboardWalletHistoryDialog(props: WrappedDialogProps<WalletProps>) {
     const { t } = useI18N()
 
     const [name, setName] = useState('')

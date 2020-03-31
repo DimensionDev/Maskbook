@@ -90,7 +90,7 @@ export default function DashboardWalletsRouter() {
 
     const [walletImport, openWalletImport] = useModal(DashboardWalletImportDialog)
     const [walletCreate, openWalletCreate] = useModal(DashboardWalletCreateDialog)
-    const [addToken, openAddToken] = useModal(DashboardWalletAddTokenDialog)
+    const [addToken, , openAddToken] = useModal(DashboardWalletAddTokenDialog)
     const [walletHistory, oepnWalletHistory] = useModal(DashboardWalletHistoryDialog)
     const [walletBackup, , oepnWalletBackup] = useModal(DashboardWalletBackupDialog)
     const [walletDelete, , oepnWalletDelete] = useModal(DashboardWalletDeleteConfirmDialog)
@@ -147,7 +147,11 @@ export default function DashboardWalletsRouter() {
                         <Typography className={classes.title} variant="h5">
                             Details
                         </Typography>
-                        <Button variant="text" color="primary" onClick={openAddToken} startIcon={<AddCircleIcon />}>
+                        <Button
+                            variant="text"
+                            color="primary"
+                            onClick={() => openAddToken({ wallet })}
+                            startIcon={<AddCircleIcon />}>
                             Add Token
                         </Button>
                         <IconButton onClick={(e) => openMenu({ anchorEl: e.currentTarget })}>
