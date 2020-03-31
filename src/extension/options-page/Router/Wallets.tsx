@@ -9,7 +9,7 @@ import HistoryIcon from '@material-ui/icons/History'
 
 import { WalletItem } from '../DashboardComponents/WalletItem'
 import { TokenListItem } from '../DashboardComponents/TokenListItem'
-import { useModal } from '../Dialog/Base'
+import { useModal, useSnackbarCallback } from '../Dialog/Base'
 import {
     DashboardWalletImportDialog,
     DashboardWalletCreateDialog,
@@ -23,6 +23,7 @@ import { useMyWallets } from '../../../components/DataSource/independent'
 import DashboardMenu from '../DashboardComponents/DashboardMenu'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { useColorProvider } from '../../../utils/theme'
+import Services from '../../service'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -108,19 +109,23 @@ export default function DashboardWalletsRouter() {
     )
 
     const [wallets, tokens] = useMyWallets()
-    const [current, setCurrent] = useState(0)
+    const [current, setCurrent] = useState(() => wallets[0]?.address ?? '')
+    const wallet = wallets.find((i) => i.address === current)
+    const setAsDefault = useSnackbarCallback(
+        () => Services.Plugin.invokePlugin('maskbook.wallet', 'setDefaultWallet', wallet!.address),
+        [wallet?.address],
+    )
 
     const menus = useMemo(
         () => [
-            <MenuItem onClick={() => oepnWalletRename({ wallet: wallets[current] })}>{t('rename')}</MenuItem>,
-            <MenuItem onClick={() => oepnWalletBackup({ wallet: wallets[current] })}>
-                {t('dashboard_create_backup')}
-            </MenuItem>,
-            <MenuItem onClick={() => oepnWalletDelete({ wallet: wallets[current] })} className={color.error}>
+            <MenuItem onClick={setAsDefault}>{t('set_as_default')}</MenuItem>,
+            <MenuItem onClick={() => oepnWalletRename({ wallet })}>{t('rename')}</MenuItem>,
+            <MenuItem onClick={() => oepnWalletBackup({ wallet })}>{t('dashboard_create_backup')}</MenuItem>,
+            <MenuItem onClick={() => oepnWalletDelete({ wallet })} className={color.error}>
                 {t('dashboard_delete_persona')}
             </MenuItem>,
         ],
-        [wallets, current],
+        [wallet?.address],
     )
 
     const [menu, , openMenu] = useModal(DashboardMenu, { menus })
@@ -129,11 +134,12 @@ export default function DashboardWalletsRouter() {
         <DashboardRouterContainer padded={false} title="My Wallets" actions={actions}>
             <div className={classes.wrapper}>
                 <div className={classes.list}>
-                    {wallets.map((wallet, index) => (
+                    {wallets.map((wallet) => (
                         <WalletItem
-                            onClick={() => setCurrent(index)}
+                            key={wallet.address}
+                            onClick={() => setCurrent(wallet.address)}
                             wallet={wallet}
-                            selected={index === current}></WalletItem>
+                            selected={wallet.address === current}></WalletItem>
                     ))}
                 </div>
                 <div className={classes.content}>
