@@ -13,12 +13,13 @@ export function DashboardFeedbackDialog(props: WrappedDialogProps) {
         <DashboardDialogCore {...props}>
             <DashboardDialogWrapper icon={<SmileIcon />} iconColor="#F8B03E" primary="Feedback">
                 <form>
-                    <TextField placeholder="Name" value={name} onChange={(e) => setName(e.target.value)} />
-                    <TextField placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
+                    <TextField required label="Name" value={name} onChange={(e) => setName(e.target.value)} />
+                    <TextField required label="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
                     <TextField
                         multiline
                         rows={4}
-                        placeholder="Your message..."
+                        required
+                        label="Your message..."
                         value={message}
                         onChange={(e) => setMessage(e.target.value)}
                     />
