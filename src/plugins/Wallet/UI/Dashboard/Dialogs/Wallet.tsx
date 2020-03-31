@@ -111,7 +111,7 @@ export function WalletAddTokenDialog(props: WalletAddTokenDialogProps) {
     const classes = useAddTokenStyles()
     const [tabID, setTabID] = React.useState<0 | 1>(0)
 
-    const [wellknown, setWellknown] = React.useState<undefined | ERC20TokenPredefinedData[0]>()
+    const [wellknown, setWellknown] = React.useState<null | ERC20TokenPredefinedData[0]>(null)
     const [useRinkeby, setRinkeby] = React.useState(false)
 
     const [address, setTokenAddress] = React.useState('')
@@ -137,11 +137,12 @@ export function WalletAddTokenDialog(props: WalletAddTokenDialogProps) {
             content={
                 <>
                     {tabID === 0 ? (
-                        <ERC20WellKnownTokenSelector
-                            selectedItem={[wellknown, setWellknown]}
-                            useRinkebyNetwork={[useRinkeby, setRinkeby]}
-                        />
+                        <></>
                     ) : (
+                        // <ERC20WellKnownTokenSelector
+                        // selectedItem={[wellknown, setWellknown]}
+                        // useRinkebyNetwork={[useRinkeby, setRinkeby]}
+                        // />
                         <>
                             <FormControlLabel
                                 control={
