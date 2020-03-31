@@ -27,6 +27,18 @@ const useStyles = makeStyles((theme) =>
                 backgroundColor: 'var(--listSelectedIndicator)',
             },
         },
+        default: {
+            '&::before': {
+                content: '""',
+                position: 'absolute',
+                left: 0,
+                top: 0,
+                borderTop: '12px solid #F8B03E',
+                borderBottom: '12px solid transparent',
+                borderLeft: '12px solid #F8B03E',
+                borderRight: '12px solid transparent',
+            },
+        },
         selected: {
             '&::after': {
                 opacity: 100,
@@ -64,7 +76,10 @@ export function WalletItem(props: WalletItemProps) {
         <ButtonBase
             component="section"
             onClick={onClick}
-            className={classNames(classes.container, { [classes.selected]: selected })}>
+            className={classNames(classes.container, {
+                [classes.selected]: selected,
+                [classes.default]: wallet._wallet_is_default,
+            })}>
             <Typography className={classes.title} variant="h5">
                 {wallet.name}
             </Typography>
