@@ -81,6 +81,9 @@ export function DashboardAboutDialog(props: WrappedDialogProps) {
                     </Typography>
                     <section className={classes.getInTouch}>
                         <Typography variant="inherit">Get in touch</Typography>
+                        {
+                            // TODO!: link
+                        }
                         <div className={classes.brands}>
                             <FacebookIcon />
                             <TwitterIcon />

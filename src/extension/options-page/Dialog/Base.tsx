@@ -149,6 +149,7 @@ const useDashboardDialogWrapperStyles = makeStyles((theme) =>
         secondary: {
             lineHeight: 1.75,
             textAlign: 'center',
+            wordBreak: 'break-word',
         },
     }),
 )

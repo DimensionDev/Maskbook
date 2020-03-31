@@ -1,7 +1,7 @@
 import React from 'react'
 import { Typography, makeStyles, createStyles, Box, Button, Avatar, ButtonBase } from '@material-ui/core'
 import FileCopyOutlinedIcon from '@material-ui/icons/FileCopyOutlined'
-import type { WalletRecord } from '../../../plugins/Wallet/database/types'
+import type { WalletRecord, ERC20TokenRecord } from '../../../plugins/Wallet/database/types'
 import classNames from 'classnames'
 import { ThrottledButton } from './ActionButton'
 import { useCopyToClipboard } from 'react-use'
@@ -68,12 +68,13 @@ const useStyles = makeStyles((theme) =>
 interface WalletItemProps {
     wallet: Partial<WalletRecord>
     selected?: boolean
+    tokens?: ERC20TokenRecord[]
     onClick?(): void
 }
 
 export function WalletItem(props: WalletItemProps) {
     const classes = useStyles()
-    const { wallet, selected, onClick } = props
+    const { wallet, selected, onClick, tokens } = props
     const [, copyToClipboard] = useCopyToClipboard()
     return (
         <ButtonBase
@@ -104,15 +105,14 @@ export function WalletItem(props: WalletItemProps) {
                 Copy
             </ThrottledButton>
             <Box py={2} display="flex">
-                <Avatar
-                    className={classes.coins}
-                    src="https://github.com/trustwallet/assets/raw/master/blockchains/ethereum/assets/0x00000100F2A2bd000715001920eB70D229700085/logo.png"></Avatar>
-                <Avatar
-                    className={classes.coins}
-                    src="https://github.com/trustwallet/assets/raw/master/blockchains/ethereum/assets/0x00000100F2A2bd000715001920eB70D229700085/logo.png"></Avatar>
-                <Avatar
-                    className={classes.coins}
-                    src="https://github.com/trustwallet/assets/raw/master/blockchains/ethereum/assets/0x00000100F2A2bd000715001920eB70D229700085/logo.png"></Avatar>
+                {tokens &&
+                    tokens.map((token) => (
+                        <Avatar
+                            key={token.address}
+                            className={classes.coins}
+                            src={`https://github.com/trustwallet/assets/raw/master/blockchains/ethereum/assets/${token.address}/logo.png`}
+                        />
+                    ))}
             </Box>
         </ButtonBase>
     )
