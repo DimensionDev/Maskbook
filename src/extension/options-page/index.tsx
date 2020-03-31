@@ -40,7 +40,7 @@ const OptionsPageRouters = (
             <Route path="/contacts/" component={DashboardContactsRouter} />
             <Route path="/settings/" component={DashboardSettingsRouter} />
             <DialogRouter path="/initialize" component={DashboardInitializeDialog} onExit={'/'} fullscreen />
-            <Redirect path="*" to="/home/" />
+            <Redirect path="*" to="/personas/" />
         </Switch>
     </>
 )
