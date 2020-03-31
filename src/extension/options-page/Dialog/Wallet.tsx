@@ -1,13 +1,14 @@
 import React, { useState } from 'react'
 import { DashboardDialogCore, DashboardDialogWrapper, WrappedDialogProps, useSnackbarCallback } from './Base'
 import { CreditCard as CreditCardIcon, Hexagon as HexagonIcon, Clock as ClockIcon } from 'react-feather'
-import { TextField, Typography } from '@material-ui/core'
+import { TextField, Typography, makeStyles, createStyles, Paper } from '@material-ui/core'
 import AbstractTab, { AbstractTabProps } from '../DashboardComponents/AbstractTab'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { ThrottledButton } from '../DashboardComponents/ActionButton'
 import SpacedButtonGroup from '../DashboardComponents/SpacedButtonGroup'
 import Services from '../../service'
 import type { WalletRecord } from '../../../plugins/Wallet/database/types'
+import classNames from 'classnames'
 
 export function DashboardWalletImportDialog(props: WrappedDialogProps) {
     const state = useState(0)
@@ -203,7 +204,27 @@ export function DashboardWalletHistoryDialog(props: WrappedDialogProps) {
     )
 }
 
-export function DashboardWalletBackupDialog(props: WrappedDialogProps) {
+const useBackupDialogStyles = makeStyles((theme) =>
+    createStyles({
+        section: {
+            textAlign: 'left',
+        },
+        blockquote: {
+            padding: theme.spacing(2, 3),
+            backgroundColor: '#FAFAFA',
+            border: '1px solid #EAEAEA',
+            margin: 'auto',
+            lineHeight: '1.71',
+        },
+        breakAll: {
+            wordBreak: 'break-all',
+        },
+    }),
+)
+
+export function DashboardWalletBackupDialog(props: WrappedDialogProps<WalletProps>) {
+    const { wallet } = props.ComponentProps!
+    const classes = useBackupDialogStyles()
     return (
         <DashboardDialogCore {...props}>
             <DashboardDialogWrapper
@@ -211,15 +232,54 @@ export function DashboardWalletBackupDialog(props: WrappedDialogProps) {
                 iconColor="#4EE0BC"
                 primary="Backup Wallet"
                 secondary="Keep the 12 words below carefully in a safe place. You will need them to restore the private key of this wallet.">
-                <section>
-                    <blockquote>
-                        utility require remember merge cram carbon hungry force series minimum entire remove
-                    </blockquote>
+                <section className={classes.section}>
+                    <Paper elevation={0} className={classes.blockquote} component="blockquote">
+                        {wallet.mnemonic.join(' ')}
+                    </Paper>
                 </section>
-                <section>
-                    <Typography variant="body2">Private key</Typography>
-                    <blockquote>0x1a3car70f81c1f812b9b84711a99c62fe7c986a9db174e3ffc180cfdcbbf9933</blockquote>
+                <section className={classes.section}>
+                    <Typography color="textSecondary" variant="body2" component="p">
+                        Private key
+                    </Typography>
+                    <Paper
+                        elevation={0}
+                        className={classNames(classes.breakAll, classes.blockquote)}
+                        component="blockquote">
+                        // TODO!: private key
+                    </Paper>
                 </section>
+            </DashboardDialogWrapper>
+        </DashboardDialogCore>
+    )
+}
+
+export function DashboardWalletRenameDialog(props: WrappedDialogProps<WalletProps>) {
+    const { t } = useI18N()
+    const { wallet } = props.ComponentProps!
+    const [name, setName] = useState(wallet.name)
+    const onConfirm = useSnackbarCallback(
+        () => Services.Plugin.invokePlugin('maskbook.wallet', 'renameWallet', wallet.address, name),
+        [wallet.address],
+        props.onClose,
+    )
+    return (
+        <DashboardDialogCore {...props}>
+            <DashboardDialogWrapper size="small" primary="Give wallet a new name">
+                <TextField
+                    required
+                    label="Wallet name"
+                    variant="outlined"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                />
+                <SpacedButtonGroup>
+                    <ThrottledButton variant="contained" color="primary" onClick={onConfirm}>
+                        OK
+                    </ThrottledButton>
+                    <ThrottledButton variant="outlined" color="primary" onClick={props.onClose}>
+                        Cancel
+                    </ThrottledButton>
+                </SpacedButtonGroup>
             </DashboardDialogWrapper>
         </DashboardDialogCore>
     )
@@ -228,7 +288,7 @@ export function DashboardWalletBackupDialog(props: WrappedDialogProps) {
 export function DashboardWalletDeleteConfirmDialog(props: WrappedDialogProps<WalletProps>) {
     const { t } = useI18N()
     const { wallet } = props.ComponentProps!
-    const deletePersona = useSnackbarCallback(
+    const onConfirm = useSnackbarCallback(
         () => Services.Plugin.invokePlugin('maskbook.wallet', 'removeWallet', wallet.address),
         [wallet.address],
         props.onClose,
@@ -242,7 +302,7 @@ export function DashboardWalletDeleteConfirmDialog(props: WrappedDialogProps<Wal
                 primary={'Delete Wallet'}
                 secondary={'Are you sure? If you do not have backup, you will lose ALL YOUR MONEY of it.'}>
                 <SpacedButtonGroup>
-                    <ThrottledButton variant="contained" color="danger" onClick={deletePersona}>
+                    <ThrottledButton variant="contained" color="danger" onClick={onConfirm}>
                         OK
                     </ThrottledButton>
                     <ThrottledButton variant="outlined" color="primary" onClick={props.onClose}>
