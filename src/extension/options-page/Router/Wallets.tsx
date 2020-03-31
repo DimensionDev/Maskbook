@@ -139,38 +139,47 @@ export default function DashboardWalletsRouter() {
                             key={wallet.address}
                             onClick={() => setCurrent(wallet.address)}
                             wallet={wallet}
+                            tokens={tokens}
                             selected={wallet.address === current}></WalletItem>
                     ))}
                 </div>
                 <div className={classes.content}>
-                    <Box pt={3} pb={2} pl={3} pr={2} display="flex" alignItems="center">
-                        <Typography className={classes.title} variant="h5">
-                            Details
-                        </Typography>
-                        <Button
-                            variant="text"
-                            color="primary"
-                            onClick={() => openAddToken({ wallet })}
-                            startIcon={<AddCircleIcon />}>
-                            Add Token
-                        </Button>
-                        <IconButton onClick={(e) => openMenu({ anchorEl: e.currentTarget })}>
-                            <MoreVertOutlinedIcon />
-                        </IconButton>
-                        {menu}
-                    </Box>
-                    <ThemeProvider theme={walletTheme}>
-                        <List className={classes.tokenList} disablePadding>
-                            {tokens.map((token) => (
-                                <TokenListItem token={token} key={token.address} />
-                            ))}
-                        </List>
-                    </ThemeProvider>
-                    <div className={classes.footer}>
-                        <Button onClick={oepnWalletHistory} startIcon={<HistoryIcon />} variant="text" color="primary">
-                            History
-                        </Button>
-                    </div>
+                    {wallet && (
+                        <>
+                            <Box pt={3} pb={2} pl={3} pr={2} display="flex" alignItems="center">
+                                <Typography className={classes.title} variant="h5">
+                                    Details
+                                </Typography>
+                                <Button
+                                    variant="text"
+                                    color="primary"
+                                    onClick={() => openAddToken({ wallet })}
+                                    startIcon={<AddCircleIcon />}>
+                                    Add Token
+                                </Button>
+                                <IconButton onClick={(e) => openMenu({ anchorEl: e.currentTarget })}>
+                                    <MoreVertOutlinedIcon />
+                                </IconButton>
+                                {menu}
+                            </Box>
+                            <ThemeProvider theme={walletTheme}>
+                                <List className={classes.tokenList} disablePadding>
+                                    {tokens.map((token) => (
+                                        <TokenListItem token={token} key={token.address} />
+                                    ))}
+                                </List>
+                            </ThemeProvider>
+                            <div className={classes.footer}>
+                                <Button
+                                    onClick={oepnWalletHistory}
+                                    startIcon={<HistoryIcon />}
+                                    variant="text"
+                                    color="primary">
+                                    History
+                                </Button>
+                            </div>
+                        </>
+                    )}
                 </div>
             </div>
             {walletBackup}
