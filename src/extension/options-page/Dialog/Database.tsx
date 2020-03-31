@@ -1,13 +1,13 @@
 import React from 'react'
 import { DashboardDialogCore, DashboardDialogWrapper, WrappedDialogProps, useSnackbarCallback } from './Base'
 import { Database as DatabaseIcon } from 'react-feather'
-import { Button } from '@material-ui/core'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { BackupJSONFileLatest, UpgradeBackupJSONFile } from '../../../utils/type-transform/BackupFormat/JSON/latest'
 import { decompressBackupFile } from '../../../utils/type-transform/BackupFileShortRepresentation'
 import Services from '../../service'
 import { extraPermissions } from '../../../utils/permissions'
 import { useSnackbar } from 'notistack'
+import { ThrottledButton } from '../DashboardComponents/ActionButton'
 
 export function DashboardDatabaseBackupDialog(props: WrappedDialogProps) {
     const onClick = useSnackbarCallback(
@@ -23,9 +23,9 @@ export function DashboardDatabaseBackupDialog(props: WrappedDialogProps) {
                 iconColor="#699CF7"
                 primary="Backup Database"
                 secondary="Create a database backup file. Do it frequently.">
-                <Button variant="contained" color="primary" onClick={onClick}>
+                <ThrottledButton variant="contained" color="primary" onClick={onClick}>
                     Ok, Back it up
-                </Button>
+                </ThrottledButton>
             </DashboardDialogWrapper>
         </DashboardDialogCore>
     )
@@ -89,13 +89,13 @@ export function DashboardDatabaseRestoreDialog(props: WrappedDialogProps) {
                 }>
                 <input type="file" accept="application/json" ref={ref} onChange={fileReceiver} hidden />
                 {requiredPermissions ? (
-                    <Button variant="contained" color="secondary" onClick={confirmPermissions}>
+                    <ThrottledButton variant="contained" color="secondary" onClick={confirmPermissions}>
                         Confirm
-                    </Button>
+                    </ThrottledButton>
                 ) : (
-                    <Button variant="contained" color="primary" onClick={() => ref.current?.click()}>
+                    <ThrottledButton variant="contained" color="primary" onClick={() => ref.current?.click()}>
                         Browse...
-                    </Button>
+                    </ThrottledButton>
                 )}
             </DashboardDialogWrapper>
         </DashboardDialogCore>

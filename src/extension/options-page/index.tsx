@@ -1,7 +1,7 @@
 import '../../provider.worker'
 
 import React, { useRef, useMemo, useContext, useEffect, useState } from 'react'
-import { CssBaseline, useMediaQuery } from '@material-ui/core'
+import { CssBaseline, useMediaQuery, NoSsr } from '@material-ui/core'
 import { ThemeProvider, makeStyles, createStyles, useTheme } from '@material-ui/core/styles'
 
 import PeopleOutlinedIcon from '@material-ui/icons/PeopleOutlined'
@@ -40,7 +40,7 @@ const OptionsPageRouters = (
             <Route path="/contacts/" component={DashboardContactsRouter} />
             <Route path="/settings/" component={DashboardSettingsRouter} />
             <DialogRouter path="/initialize" component={DashboardInitializeDialog} onExit={'/'} fullscreen />
-            <Redirect path="*" to="/home/" />
+            <Redirect path="*" to="/personas/" />
         </Switch>
     </>
 )
@@ -56,10 +56,12 @@ function DashboardWithProvider() {
                         vertical: 'top',
                         horizontal: 'center',
                     }}>
-                    <Router>
-                        <CssBaseline />
-                        <Dashboard></Dashboard>
-                    </Router>
+                    <NoSsr>
+                        <Router>
+                            <CssBaseline />
+                            <Dashboard />
+                        </Router>
+                    </NoSsr>
                 </SnackbarProvider>
             </ThemeProvider>
         </I18nextProvider>
