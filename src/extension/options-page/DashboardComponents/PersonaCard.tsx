@@ -1,8 +1,8 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useMemo } from 'react'
 import { makeStyles, createStyles } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
 import type { Persona } from '../../../database'
-import { TextField, Menu, MenuItem, Card } from '@material-ui/core'
+import { TextField, MenuItem, Card } from '@material-ui/core'
 import Services from '../../service'
 import MoreVertIcon from '@material-ui/icons/MoreVert'
 import { useSnackbar } from 'notistack'
@@ -12,6 +12,7 @@ import ProfileBox from './ProfileBox'
 import type { ProfileIdentifier } from '../../../database/type'
 import { useModal } from '../Dialog/Base'
 import { DashboardPersonaBackupDialog, DashboardPersonaDeleteConfirmDialog } from '../Dialog/Persona'
+import DashboardMenu from './DashboardMenu'
 
 interface Props {
     persona: Persona
@@ -66,14 +67,18 @@ export default function PersonaCard({ persona }: Props) {
     const [deletePersona, openDeletePersona] = useModal(DashboardPersonaDeleteConfirmDialog, { persona })
     const [backupPersona, openBackupPersona] = useModal(DashboardPersonaBackupDialog, { persona })
 
-    const [anchorEl, setAnchorEl] = React.useState<null | Element>(null)
-    const handleClick = (event: React.MouseEvent) => {
-        setAnchorEl(event.currentTarget)
-    }
+    const menus = useMemo(
+        () => [
+            <MenuItem onClick={() => setRename(true)}>{t('rename')}</MenuItem>,
+            <MenuItem onClick={openBackupPersona}>{t('dashboard_create_backup')}</MenuItem>,
+            <MenuItem onClick={openDeletePersona} className={color.error}>
+                {t('dashboard_delete_persona')}
+            </MenuItem>,
+        ],
+        [],
+    )
 
-    const handleClose = () => {
-        setAnchorEl(null)
-    }
+    const [menu, , openMenu] = useModal(DashboardMenu, { menus })
 
     const id = persona.linkedProfiles.keys().next().value as ProfileIdentifier | undefined
     React.useEffect(() => {
@@ -94,20 +99,12 @@ export default function PersonaCard({ persona }: Props) {
                         <span title={persona.nickname} className={classes.title}>
                             {persona.nickname}
                         </span>
-                        <MoreVertIcon className={classes.menu} fontSize="small" onClick={handleClick} />
-                        <Menu
-                            anchorEl={anchorEl}
-                            keepMounted
-                            open={Boolean(anchorEl)}
-                            onClick={handleClose}
-                            PaperProps={{ style: { minWidth: 100 } }}
-                            onClose={handleClose}>
-                            <MenuItem onClick={() => setRename(true)}>{t('rename')}</MenuItem>
-                            <MenuItem onClick={openBackupPersona}>{t('dashboard_create_backup')}</MenuItem>
-                            <MenuItem onClick={openDeletePersona} className={color.error}>
-                                {t('dashboard_delete_persona')}
-                            </MenuItem>
-                        </Menu>
+                        <MoreVertIcon
+                            className={classes.menu}
+                            fontSize="small"
+                            onClick={(e) => openMenu({ anchorEl: e.currentTarget })}
+                        />
+                        {menu}
                     </>
                 ) : (
                     <TextField

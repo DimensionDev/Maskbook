@@ -40,8 +40,13 @@ export function DashboardPersonaCreateDialog(props: WrappedDialogProps) {
         <DashboardDialogCore {...props}>
             <DashboardDialogWrapper icon={<UserPlus />} iconColor="#5FDD97" primary="Create a Persona">
                 <form>
-                    <TextField placeholder="Name*" value={name} onChange={(e) => setName(e.target.value)} />
-                    <TextField placeholder="Password*" value={password} onChange={(e) => setPassword(e.target.value)} />
+                    <TextField required label="Name" value={name} onChange={(e) => setName(e.target.value)} />
+                    <TextField
+                        required
+                        label="Password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                    />
                 </form>
                 <Typography variant="body2" color="textSecondary">
                     Set a password to improve the security level
@@ -122,17 +127,19 @@ export function DashboardPersonaImportDialog(props: WrappedDialogProps) {
                 label: 'Mnemonic Word',
                 children: (
                     <>
-                        <TextField onChange={(e) => setNickname(e.target.value)} value={nickname} placeholder="Name*" />
+                        <TextField
+                            onChange={(e) => setNickname(e.target.value)}
+                            value={nickname}
+                            required
+                            label="Name"
+                        />
                         <TextField
                             value={mnemonicWordValue}
                             onChange={(e) => setMnemonicWordValue(e.target.value)}
-                            placeholder="Mnemonic Words*"
+                            required
+                            label="Mnemonic Words"
                         />
-                        <TextField
-                            onChange={(e) => setPassword(e.target.value)}
-                            value={password}
-                            placeholder="Password"
-                        />
+                        <TextField onChange={(e) => setPassword(e.target.value)} value={password} label="Password" />
                     </>
                 ),
                 p: 0,

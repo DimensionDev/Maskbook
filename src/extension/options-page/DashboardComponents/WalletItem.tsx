@@ -1,8 +1,10 @@
 import React from 'react'
 import { Typography, makeStyles, createStyles, Box, Button, Avatar, ButtonBase } from '@material-ui/core'
 import FileCopyOutlinedIcon from '@material-ui/icons/FileCopyOutlined'
-import type { WalletRecord } from '../../../plugins/Wallet/database/types'
+import type { WalletRecord, ERC20TokenRecord } from '../../../plugins/Wallet/database/types'
 import classNames from 'classnames'
+import { ThrottledButton } from './ActionButton'
+import { useCopyToClipboard } from 'react-use'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -25,6 +27,18 @@ const useStyles = makeStyles((theme) =>
                 right: 0,
                 width: '4px',
                 backgroundColor: 'var(--listSelectedIndicator)',
+            },
+        },
+        default: {
+            '&::before': {
+                content: '""',
+                position: 'absolute',
+                left: 0,
+                top: 0,
+                borderTop: '12px solid #F8B03E',
+                borderBottom: '12px solid transparent',
+                borderLeft: '12px solid #F8B03E',
+                borderRight: '12px solid transparent',
             },
         },
         selected: {
@@ -54,17 +68,22 @@ const useStyles = makeStyles((theme) =>
 interface WalletItemProps {
     wallet: Partial<WalletRecord>
     selected?: boolean
+    tokens?: ERC20TokenRecord[]
     onClick?(): void
 }
 
 export function WalletItem(props: WalletItemProps) {
     const classes = useStyles()
-    const { wallet, selected, onClick } = props
+    const { wallet, selected, onClick, tokens } = props
+    const [, copyToClipboard] = useCopyToClipboard()
     return (
         <ButtonBase
             component="section"
             onClick={onClick}
-            className={classNames(classes.container, { [classes.selected]: selected })}>
+            className={classNames(classes.container, {
+                [classes.selected]: selected,
+                [classes.default]: wallet._wallet_is_default,
+            })}>
             <Typography className={classes.title} variant="h5">
                 {wallet.name}
             </Typography>
@@ -76,19 +95,24 @@ export function WalletItem(props: WalletItemProps) {
                     {wallet.address}
                 </Typography>
             </Box>
-            <Button color="primary" size="small" variant="outlined" startIcon={<FileCopyOutlinedIcon />}>
+            <ThrottledButton
+                onMouseDown={(e) => e.stopPropagation()}
+                onClick={() => copyToClipboard(wallet.address!)}
+                color="primary"
+                size="small"
+                variant="outlined"
+                startIcon={<FileCopyOutlinedIcon />}>
                 Copy
-            </Button>
+            </ThrottledButton>
             <Box py={2} display="flex">
-                <Avatar
-                    className={classes.coins}
-                    src="https://github.com/trustwallet/assets/raw/master/blockchains/ethereum/assets/0x00000100F2A2bd000715001920eB70D229700085/logo.png"></Avatar>
-                <Avatar
-                    className={classes.coins}
-                    src="https://github.com/trustwallet/assets/raw/master/blockchains/ethereum/assets/0x00000100F2A2bd000715001920eB70D229700085/logo.png"></Avatar>
-                <Avatar
-                    className={classes.coins}
-                    src="https://github.com/trustwallet/assets/raw/master/blockchains/ethereum/assets/0x00000100F2A2bd000715001920eB70D229700085/logo.png"></Avatar>
+                {tokens &&
+                    tokens.map((token) => (
+                        <Avatar
+                            key={token.address}
+                            className={classes.coins}
+                            src={`https://github.com/trustwallet/assets/raw/master/blockchains/ethereum/assets/${token.address}/logo.png`}
+                        />
+                    ))}
             </Box>
         </ButtonBase>
     )

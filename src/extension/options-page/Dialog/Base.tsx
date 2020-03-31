@@ -113,7 +113,7 @@ export function useModal<T extends object, P extends object>(
 }
 
 interface DashboardDialogWrapperProps {
-    icon: React.ReactElement
+    icon?: React.ReactElement
     iconColor?: string
     primary: string
     secondary?: string
@@ -137,7 +137,7 @@ const useDashboardDialogWrapperStyles = makeStyles((theme) =>
             maxWidth: '350px',
         },
         content: {
-            marginTop: (props) => theme.spacing(props.size === 'small' ? 4 : 2),
+            marginTop: (props) => theme.spacing(props.size === 'small' && props.icon ? 4 : 2),
             textAlign: 'center',
             '& > *:not(:last-child)': {
                 marginBottom: theme.spacing(2),
@@ -149,6 +149,7 @@ const useDashboardDialogWrapperStyles = makeStyles((theme) =>
         secondary: {
             lineHeight: 1.75,
             textAlign: 'center',
+            wordBreak: 'break-word',
         },
     }),
 )
@@ -158,7 +159,9 @@ const dialogTheme = (theme: Theme): Theme => ({
     overrides: {
         ...theme.overrides,
         MuiOutlinedInput: {
+            ...theme.overrides?.MuiOutlinedInput,
             notchedOutline: {
+                ...theme.overrides?.MuiOutlinedInput?.notchedOutline,
                 borderColor: '#EAEAEA',
             },
         },
@@ -193,7 +196,7 @@ export function DashboardDialogWrapper(props: DashboardDialogWrapperProps) {
         <ThemeProvider theme={dialogTheme}>
             <DialogContent className={classes.wrapper}>
                 <section className={classes.header}>
-                    {React.cloneElement(icon, { width: 64, height: 64, stroke: iconColor })}
+                    {icon && React.cloneElement(icon, { width: 64, height: 64, stroke: iconColor })}
                     <Typography className={classes.primary} variant="h5">
                         {primary}
                     </Typography>

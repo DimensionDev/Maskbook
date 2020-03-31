@@ -42,11 +42,63 @@ const baseTheme = (theme: 'dark' | 'light'): ThemeOptions =>
                     textTransform: 'unset',
                     minWidth: '100px',
                 },
+                outlinedPrimary: {
+                    ...(theme === 'dark'
+                        ? {
+                              border: '1px solid rgba(255, 255, 255, 0.6)',
+                              color: '#FFF',
+                              '&:hover': {
+                                  border: '1px solid rgba(255, 255, 255, 1)',
+                              },
+                          }
+                        : {}),
+                },
+                textPrimary: {
+                    ...(theme === 'dark'
+                        ? {
+                              color: '#FFF',
+                              '&:hover': {
+                                  backgroundColor: 'rgba(255, 255, 255, 0.2)',
+                              },
+                          }
+                        : {}),
+                },
             },
             MuiTab: {
                 root: {
                     textTransform: 'unset',
                     padding: '0',
+                },
+                textColorPrimary: {
+                    '&$selected$selected': {
+                        ...(theme === 'dark'
+                            ? {
+                                  color: '#FFF',
+                              }
+                            : {}),
+                    },
+                },
+            },
+            MuiOutlinedInput: {
+                root: {
+                    ...(theme === 'dark'
+                        ? {
+                              '&$focused$focused $notchedOutline': {
+                                  borderColor: '#FFF',
+                              },
+                          }
+                        : {}),
+                },
+            },
+            MuiFormLabel: {
+                root: {
+                    ...(theme === 'dark'
+                        ? {
+                              '&$focused$focused': {
+                                  color: '#FFF',
+                              },
+                          }
+                        : {}),
                 },
             },
             MuiDialog: {
@@ -71,7 +123,7 @@ const FixedWidthFonts = getFontFamily(true)
 export const useColorProvider = makeStyles((theme: typeof MaskbookDarkTheme) =>
     createStyles({
         error: {
-            color: theme.palette.type === 'dark' ? red[700] : red[900],
+            color: theme.palette.type === 'dark' ? red[500] : red[900],
         },
         success: {
             color: theme.palette.type === 'dark' ? green[500] : green[800],
