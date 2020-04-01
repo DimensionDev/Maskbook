@@ -159,7 +159,9 @@ const dialogTheme = (theme: Theme): Theme => ({
     overrides: {
         ...theme.overrides,
         MuiOutlinedInput: {
+            ...theme.overrides?.MuiOutlinedInput,
             notchedOutline: {
+                ...theme.overrides?.MuiOutlinedInput?.notchedOutline,
                 borderColor: '#EAEAEA',
             },
         },
