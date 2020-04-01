@@ -62,6 +62,7 @@ export default function ProfileBox({ persona }: Props) {
         <>
             {providers.map((provider) => (
                 <ProviderLine
+                    key={provider.identifier?.toText()}
                     onAction={() => (provider.connected ? onDisconnect(provider) : onConnect(provider))}
                     {...provider}></ProviderLine>
             ))}
