@@ -1,5 +1,5 @@
 import React from 'react'
-import { makeStyles, Typography, createStyles, Avatar } from '@material-ui/core'
+import { makeStyles, Typography, createStyles, Avatar, IconButton } from '@material-ui/core'
 
 import FacebookIcon from '@material-ui/icons/Facebook'
 import TwitterIcon from '@material-ui/icons/Twitter'
@@ -12,7 +12,7 @@ const useStyles = makeStyles((theme) =>
             color: 'white',
         },
         wrapper: {
-            width: '580px',
+            width: '520px',
             lineHeight: 1.75,
         },
         header: {
@@ -81,13 +81,19 @@ export function DashboardAboutDialog(props: WrappedDialogProps) {
                     </Typography>
                     <section className={classes.getInTouch}>
                         <Typography variant="inherit">Get in touch</Typography>
-                        {
-                            // TODO!: link
-                        }
                         <div className={classes.brands}>
-                            <FacebookIcon />
-                            <TwitterIcon />
-                            <GitHubIcon />
+                            <IconButton
+                                target="_blank"
+                                size="small"
+                                href="https://www.facebook.com/groups/324857694838456">
+                                <FacebookIcon />
+                            </IconButton>
+                            <IconButton target="_blank" size="small" href="https://twitter.com/realmaskbook">
+                                <TwitterIcon />
+                            </IconButton>
+                            <IconButton target="_blank" size="small" href="https://github.com/DimensionDev/Maskbook">
+                                <GitHubIcon />
+                            </IconButton>
                         </div>
                     </section>
                 </main>
