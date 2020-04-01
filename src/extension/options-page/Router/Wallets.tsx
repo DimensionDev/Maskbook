@@ -99,13 +99,13 @@ export default function DashboardWalletsRouter() {
     const actions = useMemo(
         () => [
             <Button color="primary" variant="outlined" onClick={openWalletImport}>
-                Import
+                {t('import')}
             </Button>,
             <Button color="primary" variant="contained" onClick={openWalletCreate} endIcon={<AddCircleIcon />}>
-                Create Wallet
+                {t('create_wallet')}
             </Button>,
         ],
-        [openWalletCreate, openWalletImport],
+        [t, openWalletCreate, openWalletImport],
     )
 
     const [wallets, tokens] = useMyWallets()
@@ -120,9 +120,9 @@ export default function DashboardWalletsRouter() {
         () => [
             <MenuItem onClick={setAsDefault}>{t('set_as_default')}</MenuItem>,
             <MenuItem onClick={() => oepnWalletRename({ wallet })}>{t('rename')}</MenuItem>,
-            <MenuItem onClick={() => oepnWalletBackup({ wallet })}>{t('dashboard_create_backup')}</MenuItem>,
+            <MenuItem onClick={() => oepnWalletBackup({ wallet })}>{t('backup')}</MenuItem>,
             <MenuItem onClick={() => oepnWalletDelete({ wallet })} className={color.error}>
-                {t('dashboard_delete_persona')}
+                {t('delete')}
             </MenuItem>,
         ],
         [wallet?.address],
@@ -131,7 +131,7 @@ export default function DashboardWalletsRouter() {
     const [menu, , openMenu] = useModal(DashboardMenu, { menus })
 
     return (
-        <DashboardRouterContainer padded={false} title="My Wallets" actions={actions}>
+        <DashboardRouterContainer padded={false} title={t('my_wallets')} actions={actions}>
             <div className={classes.wrapper}>
                 <div className={classes.list}>
                     {wallets.map((wallet) => (
@@ -148,14 +148,14 @@ export default function DashboardWalletsRouter() {
                         <>
                             <Box pt={3} pb={2} pl={3} pr={2} display="flex" alignItems="center">
                                 <Typography className={classes.title} variant="h5">
-                                    Details
+                                    {t('details')}
                                 </Typography>
                                 <Button
                                     variant="text"
                                     color="primary"
                                     onClick={() => openAddToken({ wallet })}
                                     startIcon={<AddCircleIcon />}>
-                                    Add Token
+                                    {t('add_token')}
                                 </Button>
                                 <IconButton onClick={(e) => openMenu({ anchorEl: e.currentTarget })}>
                                     <MoreVertOutlinedIcon />
@@ -175,7 +175,7 @@ export default function DashboardWalletsRouter() {
                                     startIcon={<HistoryIcon />}
                                     variant="text"
                                     color="primary">
-                                    History
+                                    {t('history')}
                                 </Button>
                             </div>
                         </>
