@@ -55,7 +55,7 @@ export function ThrottledButton(_props: ThrottledButtonProps) {
                 .then(onClick)
                 .finally(() => {
                     window.clearTimeout(timer)
-                    setLoading({ state: ThrottledButtonState.Normal })
+                    window.setTimeout(setLoading, 300, { state: ThrottledButtonState.Normal })
                 })
         },
         [loading.state, onClick],
