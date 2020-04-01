@@ -1,10 +1,12 @@
 import React from 'react'
 import { makeStyles } from '@material-ui/styles'
-import { Theme, createStyles, Tabs, Tab, Typography, Box, TypographyProps, BoxProps, Paper } from '@material-ui/core'
+import { Theme, createStyles, Tabs, Tab, Box, BoxProps, Paper } from '@material-ui/core'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
-        tabs: {},
+        tab: {
+            minWidth: 'unset',
+        },
     }),
 )
 
@@ -39,18 +41,14 @@ export default function AbstractTab(props: AbstractTabProps) {
     return (
         <div>
             <Paper square elevation={0}>
-                {
-                    // TODO!: tabs overflow
-                }
                 <Tabs
                     variant="fullWidth"
-                    className={classes.tabs}
                     value={value}
                     onChange={handleChange}
                     indicatorColor="primary"
                     textColor="primary">
                     {tabs.map((tab) => (
-                        <Tab component="span" label={tab.label} key={tab.label} />
+                        <Tab className={classes.tab} component="span" label={tab.label} key={tab.label} />
                     ))}
                 </Tabs>
             </Paper>

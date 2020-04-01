@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 
-import { TextField, makeStyles, createStyles, Typography, TypographyProps } from '@material-ui/core'
+import { TextField, makeStyles, createStyles, Typography, TypographyProps, Box } from '@material-ui/core'
 import { UserPlus, UserCheck, User, UserMinus } from 'react-feather'
 
 import * as bip39 from 'bip39'
@@ -188,12 +188,13 @@ export function DashboardPersonaImportDialog(props: WrappedDialogProps) {
     )
 }
 
-const ShowcaseBox = (props: TypographyProps) => {
+const ShowcaseBox = (props: TypographyProps<'div'>) => {
     const { children, ...other } = props
-    const ref = React.useRef<HTMLElement>(null)
+    const ref = React.useRef<HTMLDivElement>(null)
     const copyText = () => selectElementContents(ref.current!)
     return (
         <Typography
+            component="div"
             variant="body1"
             onClick={copyText}
             ref={ref}
@@ -204,7 +205,7 @@ const ShowcaseBox = (props: TypographyProps) => {
                 display: 'flex',
             }}
             {...other}>
-            <div style={{ margin: 'auto' }}>{children}</div>
+            <Box margin="auto">{children}</Box>
         </Typography>
     )
 }
