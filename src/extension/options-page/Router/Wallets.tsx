@@ -157,7 +157,7 @@ export default function DashboardWalletsRouter() {
                                     startIcon={<AddCircleIcon />}>
                                     {t('add_token')}
                                 </Button>
-                                <IconButton onClick={(e) => openMenu({ anchorEl: e.currentTarget })}>
+                                <IconButton size="small" onClick={(e) => openMenu({ anchorEl: e.currentTarget })}>
                                     <MoreVertOutlinedIcon />
                                 </IconButton>
                                 {menu}
