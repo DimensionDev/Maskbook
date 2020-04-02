@@ -1,5 +1,5 @@
 import React from 'react'
-import { Typography, Divider } from '@material-ui/core'
+import { Typography, Divider, IconButton } from '@material-ui/core'
 import { makeStyles, createStyles } from '@material-ui/core/styles'
 import classNames from 'classnames'
 import { useI18N } from '../../../utils/i18n-next-ui'
@@ -65,7 +65,16 @@ export default function ProviderLine(props: ProviderLineProps) {
                 <span title={connected ? `@${userId}` : undefined}>
                     {connected ? `@${userId}` : `${t('connect_to')} ${network}`}
                 </span>
-                {connected ? <LinkOffIcon onClick={onAction} className={classes.cursor} /> : <ArrowForwardIcon />}
+
+                {connected ? (
+                    <IconButton size="small" onClick={onAction} className={classes.cursor}>
+                        <LinkOffIcon />
+                    </IconButton>
+                ) : (
+                    <IconButton color="inherit" size="small">
+                        <ArrowForwardIcon />
+                    </IconButton>
+                )}
             </Typography>
             <Divider />
         </div>
