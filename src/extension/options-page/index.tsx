@@ -101,6 +101,23 @@ const useStyles = makeStyles((theme) =>
 
             transition: 'filter 0.3s linear',
             willChange: 'filter',
+
+            '--thumbBG': 'rgba(0,0,0,0.15)',
+            '--scrollbarBG': 'rgba(15,34,0,0.05)',
+
+            scrollbarWidth: 'thin',
+            scrollbarColor: 'var(--thumbBG) var(--scrollbarBG)',
+            '& *::-webkit-scrollbar': {
+                width: '8px',
+            },
+            '& *::-webkit-scrollbar-track': {
+                borderRadius: '6px',
+                background: 'var(--scrollbarBG)',
+            },
+            '& *::-webkit-scrollbar-thumb': {
+                borderRadius: '50px',
+                backgroundColor: 'var(--thumbBG)',
+            },
         },
         container: {
             width: '100%',
