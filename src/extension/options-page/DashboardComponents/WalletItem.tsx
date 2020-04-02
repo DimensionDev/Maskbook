@@ -112,8 +112,9 @@ export function WalletItem(props: WalletItemProps) {
                         <Avatar
                             key={token.address}
                             className={classes.coins}
-                            src={`https://github.com/trustwallet/assets/raw/master/blockchains/ethereum/assets/${token.address}/logo.png`}
-                        />
+                            src={`https://github.com/trustwallet/assets/raw/master/blockchains/ethereum/assets/${token.address}/logo.png`}>
+                            {token.name?.substr(0, 1).toLocaleUpperCase()}
+                        </Avatar>
                     ))}
             </Box>
         </ButtonBase>
