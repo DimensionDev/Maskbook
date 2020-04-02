@@ -2,7 +2,7 @@ import React, { useState, useMemo } from 'react'
 import { makeStyles, createStyles } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
 import type { Persona } from '../../../database'
-import { TextField, MenuItem, Card } from '@material-ui/core'
+import { TextField, MenuItem, Card, IconButton } from '@material-ui/core'
 import Services from '../../service'
 import MoreVertIcon from '@material-ui/icons/MoreVert'
 import { useSnackbar } from 'notistack'
@@ -99,11 +99,12 @@ export default function PersonaCard({ persona }: Props) {
                         <span title={persona.nickname} className={classes.title}>
                             {persona.nickname}
                         </span>
-                        <MoreVertIcon
+                        <IconButton
+                            size="small"
                             className={classes.menu}
-                            fontSize="small"
-                            onClick={(e) => openMenu({ anchorEl: e.currentTarget })}
-                        />
+                            onClick={(e) => openMenu({ anchorEl: e.currentTarget })}>
+                            <MoreVertIcon />
+                        </IconButton>
                         {menu}
                     </>
                 ) : (
