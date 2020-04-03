@@ -24,6 +24,7 @@ import DashboardMenu from '../DashboardComponents/DashboardMenu'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { useColorProvider } from '../../../utils/theme'
 import Services from '../../service'
+import { merge, cloneDeep } from 'lodash-es'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -59,29 +60,28 @@ const useStyles = makeStyles((theme) =>
     }),
 )
 
-const walletTheme = (theme: Theme): Theme => ({
-    ...theme,
-    overrides: {
-        ...theme.overrides,
-        MuiList: {
-            root: {
-                margin: theme.spacing(0, 3),
+const walletTheme = (theme: Theme): Theme =>
+    merge(cloneDeep(theme), {
+        overrides: {
+            MuiList: {
+                root: {
+                    margin: theme.spacing(0, 3),
+                },
+            },
+            MuiListItemIcon: {
+                root: {
+                    justifyContent: 'center',
+                    minWidth: 'unset',
+                    marginRight: theme.spacing(2),
+                },
+            },
+            MuiListItemSecondaryAction: {
+                root: {
+                    ...theme.typography.body1,
+                },
             },
         },
-        MuiListItemIcon: {
-            root: {
-                justifyContent: 'center',
-                minWidth: 'unset',
-                marginRight: theme.spacing(2),
-            },
-        },
-        MuiListItemSecondaryAction: {
-            root: {
-                ...theme.typography.body1,
-            },
-        },
-    },
-})
+    })
 
 export default function DashboardWalletsRouter() {
     const classes = useStyles()
