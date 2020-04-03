@@ -108,6 +108,7 @@ export default function DashboardWalletsRouter() {
         [t, openWalletCreate, openWalletImport],
     )
 
+    // TODO!: all wallets are using same set of tokens
     const [wallets, tokens] = useMyWallets()
     const [current, setCurrent] = useState(() => wallets[0]?.address ?? '')
     const wallet = wallets.find((i) => i.address === current)
