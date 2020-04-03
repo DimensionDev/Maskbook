@@ -8,14 +8,20 @@ class Twitter implements SNS {
     name = 'twitter.com'
 
     // selectors
-    composeButtonSelector = ''
+    composeButtonSelector = '' // no compose button for twitter
     composeImageSelector = '[data-testid="primaryColumn"] [data-testid="attachments"] img'
     composeEditorSelector = '[data-testid="primaryColumn"] .DraftEditor-root [contenteditable="true"]'
     profileSelector = '[data-testid="primaryColumn"]'
     bioTextareaSelector = 'textarea[name="description"]'
+    commentInputSelector = '' // no comment form for twitter
+
+    // mount point
     immersiveDialogSelector = 'body > script[nonce] ~ span'
     postDialogHintSelector = '[data-testid="primaryColumn"] [role="progressbar"] ~ span'
     postDialogModalSelector = 'body > script[nonce] ~ div[aria-hidden="true"]'
+    postAffixingCanvasSelector = '[role="article"] [data-testid="tweet"] ~ div [lang="en"] ~ span'
+    commentSelector = '' // no comment for twitter
+    commentBoxSelector = '' // no comment form for twitter
 
     async getActivePage(browser: Browser) {
         const page =

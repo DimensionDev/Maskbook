@@ -99,7 +99,7 @@ const registerPostCollector = (self: SocialNetworkUI) => {
     const isKnownToMaskbook = (node: HTMLElement, tweetNode: HTMLElement) => {
         // TODO:
         // detect image payload is costy postImageParser should cache parse result
-        if (tweetNode.querySelector('img[src*="twimg.com/media"]')) {
+        if (tweetNode.querySelector('img[src*="twimg.com/media"], a[href*="/photo"]')) {
             return true
         }
         if (

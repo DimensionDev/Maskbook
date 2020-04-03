@@ -13,9 +13,15 @@ class Facebook implements SNS {
     composeEditorSelector = '#feedx_sprouts_container [contenteditable="true"]'
     profileSelector = '#profile_timeline_intro_card'
     bioTextareaSelector = 'textarea[name="bio"]'
+    commentInputSelector = '.userContentWrapper form.commentable_item form [contenteditable="true"]'
+
     immersiveDialogSelector = 'body > span'
     postDialogHintSelector = '#pagelet_composer [role="button"] + span'
     postDialogModalSelector = 'body > div[aria-hidden="true"]:not([class]):not([style])'
+    postAffixingCanvasSelector = '[data-testid="post_message"] + span'
+    commentSelector =
+        '.userContentWrapper form.commentable_item .accessible_elem ~ ul > li:first-child [data-ft] + span'
+    commentBoxSelector = '.userContentWrapper form.commentable_item form ~ span:last-child'
 
     async getActivePage(browser: Browser) {
         const page = await getPageByUrl(browser, 'https://www.facebook.com/')

@@ -18,7 +18,7 @@ export interface SNS {
     password: string
 
     /**
-     * the compose button which will trigger native composing iew
+     * the compose button which will trigger native composing view
      */
     composeButtonSelector: string
 
@@ -43,6 +43,11 @@ export interface SNS {
     bioTextareaSelector: string
 
     /**
+     * the editor node for comment
+     */
+    commentInputSelector: string
+
+    /**
      * the mount node for immersive dialog
      */
     immersiveDialogSelector: string
@@ -56,6 +61,21 @@ export interface SNS {
      * the mount node for post dialog modal
      */
     postDialogModalSelector: string
+
+    /**
+     * the mount node for the post-affixing canvas
+     */
+    postAffixingCanvasSelector: string
+
+    /**
+     * the mount node for the comment
+     */
+    commentSelector: string
+
+    /**
+     * the mount node for the comment box
+     */
+    commentBoxSelector: string
 
     getActivePage(browser: Browser): Promise<Page | undefined>
 
