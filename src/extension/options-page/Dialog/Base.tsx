@@ -16,6 +16,7 @@ import type { TransitionProps } from '@material-ui/core/transitions'
 import { useBlurContext } from '..'
 import { useSnackbar } from 'notistack'
 import { useI18N } from '../../../utils/i18n-next-ui'
+import { merge, cloneDeep } from 'lodash-es'
 
 const Transition = React.forwardRef<unknown, TransitionProps>(function Transition(props, ref) {
     return <Fade ref={ref} {...props} />
@@ -155,40 +156,33 @@ const useDashboardDialogWrapperStyles = makeStyles((theme) =>
     }),
 )
 
-const dialogTheme = (theme: Theme): Theme => ({
-    ...theme,
-    overrides: {
-        ...theme.overrides,
-        MuiOutlinedInput: {
-            ...theme.overrides?.MuiOutlinedInput,
-            notchedOutline: {
-                ...theme.overrides?.MuiOutlinedInput?.notchedOutline,
-                borderColor: '#EAEAEA',
+const dialogTheme = (theme: Theme): Theme =>
+    merge(cloneDeep(theme), {
+        overrides: {
+            MuiOutlinedInput: {
+                notchedOutline: {
+                    borderColor: '#EAEAEA',
+                },
             },
-        },
-        MuiButton: {
-            ...theme.overrides?.MuiButton,
-            root: {
-                ...theme.overrides?.MuiButton?.root,
-                '&[hidden]': {
-                    visibility: 'hidden',
+            MuiButton: {
+                root: {
+                    '&[hidden]': {
+                        visibility: 'hidden',
+                    },
                 },
             },
         },
-    },
-    props: {
-        ...theme.props,
-        MuiButton: {
-            ...theme.props?.MuiButton,
-            size: 'medium',
+        props: {
+            MuiButton: {
+                size: 'medium',
+            },
+            MuiTextField: {
+                fullWidth: true,
+                variant: 'outlined',
+                margin: 'normal',
+            },
         },
-        MuiTextField: {
-            fullWidth: true,
-            variant: 'outlined',
-            margin: 'normal',
-        },
-    },
-})
+    })
 
 export function DashboardDialogWrapper(props: DashboardDialogWrapperProps) {
     const { icon, iconColor, primary, secondary, children } = props
