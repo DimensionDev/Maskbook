@@ -24,9 +24,14 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 )
 
-const FooterLink = function (
-    props: React.PropsWithChildren<{ href?: string; title?: string; to?: string; onClick?(): void }>,
-) {
+type FooterLinkBaseProps = { title?: string }
+type FooterLinkLinkProps = FooterLinkBaseProps & { to: string }
+type FooterLinkAnchorProps = FooterLinkBaseProps & { href: string }
+type FooterLinkAnchorButtonProps = FooterLinkBaseProps & { onClick(e: React.MouseEvent<HTMLAnchorElement>): void }
+
+type FooterLinkProps = FooterLinkLinkProps | FooterLinkAnchorProps | FooterLinkAnchorButtonProps
+
+const FooterLink = function (props: React.PropsWithChildren<FooterLinkProps>) {
     const classes = useStyles()
     return (
         <MuiLink
