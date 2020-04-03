@@ -2,6 +2,7 @@ import { createMuiTheme } from '@material-ui/core'
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles'
 import { orange, green, red, blue } from '@material-ui/core/colors'
 import type { ThemeOptions } from '@material-ui/core/styles/createMuiTheme'
+import { merge, cloneDeep } from 'lodash-es'
 
 function getFontFamily(monospace?: boolean) {
     // We want to look native.
@@ -15,105 +16,112 @@ function getFontFamily(monospace?: boolean) {
     return !monospace ? '-apple-system, system-ui, sans-serif' : monofont
 }
 
-const baseTheme = (theme: 'dark' | 'light'): ThemeOptions =>
-    ({
-        palette: {
-            primary: { main: '#1C68F3' },
-            secondary: { main: orange[800] },
-            type: theme,
-            text: {
-                secondary: '#939393',
-            },
-            background: {
-                default: '#FFF',
-                paper: theme === 'dark' ? '#212121' : '#FFF',
+const base: ThemeOptions = {
+    palette: {
+        primary: { main: '#1C68F3' },
+        secondary: { main: orange[800] },
+        text: {
+            secondary: '#939393',
+        },
+        background: {
+            default: '#FFF',
+        },
+    },
+    typography: {
+        fontFamily: getFontFamily(),
+    },
+    shape: { borderRadius: 4 },
+    breakpoints: {
+        values: { xs: 0, sm: 600, md: 1024, lg: 1280, xl: 1920 },
+    },
+    overrides: {
+        MuiButton: {
+            root: {
+                textTransform: 'unset',
+                minWidth: '100px',
             },
         },
-        typography: {
-            fontFamily: getFontFamily(),
+        MuiTab: {
+            root: {
+                textTransform: 'unset',
+                padding: '0',
+            },
         },
-        shape: { borderRadius: 4 },
-        breakpoints: {
-            values: { xs: 0, sm: 600, md: 1024, lg: 1280, xl: 1920 },
+        MuiDialog: {
+            paper: {
+                borderRadius: '12px',
+            },
         },
-        overrides: {
-            MuiButton: {
-                root: {
-                    textTransform: 'unset',
-                    minWidth: '100px',
-                },
-                outlinedPrimary: {
-                    ...(theme === 'dark'
-                        ? {
-                              border: '1px solid rgba(255, 255, 255, 0.6)',
-                              color: '#FFF',
-                              '&:hover': {
-                                  border: '1px solid rgba(255, 255, 255, 1)',
-                              },
-                          }
-                        : {}),
-                },
-                textPrimary: {
-                    ...(theme === 'dark'
-                        ? {
-                              color: '#FFF',
-                              '&:hover': {
-                                  backgroundColor: 'rgba(255, 255, 255, 0.2)',
-                              },
-                          }
-                        : {}),
-                },
-            },
-            MuiTab: {
-                root: {
-                    textTransform: 'unset',
-                    padding: '0',
-                },
-                textColorPrimary: {
-                    '&$selected$selected': {
-                        ...(theme === 'dark'
-                            ? {
-                                  color: '#FFF',
-                              }
-                            : {}),
-                    },
+    },
+    props: {
+        MuiButton: {
+            disableElevation: true,
+            size: 'small',
+        },
+    },
+}
+
+const lightThemePatch: Partial<ThemeOptions> = {
+    palette: {
+        type: 'light',
+        background: {
+            paper: '#FFF',
+        },
+    },
+}
+
+const darkThemePatch: Partial<ThemeOptions> = {
+    palette: {
+        type: 'dark',
+        background: {
+            paper: '#212121',
+        },
+    },
+    overrides: {
+        MuiButton: {
+            outlinedPrimary: {
+                border: '1px solid rgba(255, 255, 255, 0.6)',
+                color: '#FFF',
+                '&:hover': {
+                    border: '1px solid rgba(255, 255, 255, 1)',
                 },
             },
-            MuiOutlinedInput: {
-                root: {
-                    ...(theme === 'dark'
-                        ? {
-                              '&$focused$focused $notchedOutline': {
-                                  borderColor: '#FFF',
-                              },
-                          }
-                        : {}),
-                },
-            },
-            MuiFormLabel: {
-                root: {
-                    ...(theme === 'dark'
-                        ? {
-                              '&$focused$focused': {
-                                  color: '#FFF',
-                              },
-                          }
-                        : {}),
-                },
-            },
-            MuiDialog: {
-                paper: {
-                    borderRadius: '12px',
+            textPrimary: {
+                color: '#FFF',
+                '&:hover': {
+                    backgroundColor: 'rgba(255, 255, 255, 0.2)',
                 },
             },
         },
-        props: {
-            MuiButton: {
-                disableElevation: true,
-                size: 'small',
+        MuiTab: {
+            textColorPrimary: {
+                '&$selected$selected': {
+                    color: '#FFF',
+                },
             },
         },
-    } as ThemeOptions)
+        MuiOutlinedInput: {
+            root: {
+                '&$focused$focused $notchedOutline': {
+                    borderColor: '#FFF',
+                },
+            },
+        },
+        MuiFormLabel: {
+            root: {
+                '&$focused$focused': {
+                    color: '#FFF',
+                },
+            },
+        },
+    },
+}
+
+const baseTheme = (theme: 'dark' | 'light') => {
+    if (theme === 'light') return merge(cloneDeep(base), lightThemePatch)
+    return merge(cloneDeep(base), darkThemePatch)
+}
+
 // Theme
 export const MaskbookLightTheme = createMuiTheme(baseTheme('light'))
 export const MaskbookDarkTheme = createMuiTheme(baseTheme('dark'))
