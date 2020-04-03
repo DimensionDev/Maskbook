@@ -20,6 +20,7 @@ import OpenInBrowserIcon from '@material-ui/icons/OpenInBrowser'
 import LanguageIcon from '@material-ui/icons/Language'
 import DashboardRouterContainer from './Container'
 import { useI18N } from '../../../utils/i18n-next-ui'
+import { merge, cloneDeep } from 'lodash-es'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -38,65 +39,62 @@ const useStyles = makeStyles((theme) =>
     }),
 )
 
-const settingsTheme = (theme: Theme): Theme => ({
-    ...theme,
-    typography: {
-        ...theme.typography,
-        body1: {
-            ...theme.typography.body1,
-            lineHeight: 1.75,
-        },
-    },
-    overrides: {
-        ...theme.overrides,
-        MuiPaper: {
-            rounded: {
-                borderRadius: '12px',
+const settingsTheme = (theme: Theme): Theme =>
+    merge(cloneDeep(theme), {
+        typography: {
+            body1: {
+                lineHeight: 1.75,
             },
         },
-        MuiCard: {
-            root: {
-                overflow: 'visible',
-            },
-        },
-        MuiListItem: {
-            root: {
-                paddingTop: theme.spacing(1.5),
-                paddingBottom: theme.spacing(1.5),
-                borderBottom: `1px solid ${theme.palette.divider}`,
-            },
-            secondaryAction: {
-                paddingRight: '90px',
-            },
-        },
-        MuiListItemIcon: {
-            root: {
-                justifyContent: 'flex-start',
-                minWidth: 'unset',
-                marginLeft: theme.spacing(2),
-                marginRight: theme.spacing(3),
-            },
-        },
-        MuiOutlinedInput: {
-            input: {
-                paddingTop: theme.spacing(1),
-                paddingBottom: theme.spacing(1),
-            },
-        },
-        MuiSwitch: {
-            colorPrimary: {
-                '&$checked$checked': {
-                    color: 'var(--textOnPrimary)',
+        overrides: {
+            MuiPaper: {
+                rounded: {
+                    borderRadius: '12px',
                 },
             },
-            track: {
-                '$checked$checked + &': {
-                    opacity: '1 !important',
+            MuiCard: {
+                root: {
+                    overflow: 'visible',
+                },
+            },
+            MuiListItem: {
+                root: {
+                    paddingTop: theme.spacing(1.5),
+                    paddingBottom: theme.spacing(1.5),
+                    borderBottom: `1px solid ${theme.palette.divider}`,
+                },
+                secondaryAction: {
+                    paddingRight: '90px',
+                },
+            },
+            MuiListItemIcon: {
+                root: {
+                    justifyContent: 'flex-start',
+                    minWidth: 'unset',
+                    marginLeft: theme.spacing(2),
+                    marginRight: theme.spacing(3),
+                },
+            },
+            MuiOutlinedInput: {
+                input: {
+                    paddingTop: theme.spacing(1),
+                    paddingBottom: theme.spacing(1),
+                },
+            },
+            MuiSwitch: {
+                colorPrimary: {
+                    '&$checked$checked': {
+                        color: 'var(--textOnPrimary)',
+                    },
+                },
+                track: {
+                    '$checked$checked + &': {
+                        opacity: '1 !important',
+                    },
                 },
             },
         },
-    },
-})
+    })
 
 export default function DashboardSettingsRouter() {
     const { t } = useI18N()

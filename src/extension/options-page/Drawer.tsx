@@ -8,6 +8,7 @@ import SentimentSatisfiedOutlinedIcon from '@material-ui/icons/SentimentSatisfie
 import { useModal } from './Dialog/Base'
 import { DashboardFeedbackDialog } from './Dialog/Feedback'
 import { useI18N } from '../../utils/i18n-next-ui'
+import { cloneDeep, merge } from 'lodash-es'
 
 const useStyles = makeStyles((theme) => ({
     drawer: {
@@ -39,34 +40,33 @@ const useStyles = makeStyles((theme) => ({
     },
 }))
 
-const drawerTheme = (theme: Theme): Theme => ({
-    ...theme,
-    overrides: {
-        ...theme.overrides,
-        MuiListItem: {
-            root: {
-                '&$selected$selected': {
-                    backgroundColor: 'var(--drawerBodySelected, --drawerBody)',
-                    color: 'var(--drawerTextSelected, --drawerText)',
-                    '&::before': {
-                        content: '""',
-                        height: '100%',
-                        width: '5px',
-                        position: 'absolute',
-                        left: '0px',
-                        backgroundColor: 'var(--listSelectedIndicator)',
+const drawerTheme = (theme: Theme): Theme =>
+    merge(cloneDeep(theme), {
+        overrides: {
+            MuiListItem: {
+                root: {
+                    '&$selected$selected': {
+                        backgroundColor: 'var(--drawerBodySelected, --drawerBody)',
+                        color: 'var(--drawerTextSelected, --drawerText)',
+                        '&::before': {
+                            content: '""',
+                            height: '100%',
+                            width: '5px',
+                            position: 'absolute',
+                            left: '0px',
+                            backgroundColor: 'var(--listSelectedIndicator)',
+                        },
                     },
                 },
             },
-        },
-        MuiListItemIcon: {
-            root: {
-                justifyContent: 'center',
-                color: 'unset',
+            MuiListItemIcon: {
+                root: {
+                    justifyContent: 'center',
+                    color: 'unset',
+                },
             },
         },
-    },
-})
+    })
 
 interface ResponsiveDrawerProps {
     routers: readonly (readonly [string, string, JSX.Element])[]
