@@ -122,7 +122,7 @@ export function PersonaDeleteDialog(props: PersonaDeleteDialogProps) {
                     currentImmersiveSetupStatus[network].value,
                 ) as ImmersiveSetupCrossContextStatus
                 if (status.persona === persona.identifier.toText()) {
-                    currentImmersiveSetupStatus[network].value = undefined
+                    currentImmersiveSetupStatus[network].value = ''
                 }
             } catch {}
         })

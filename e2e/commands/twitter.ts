@@ -79,6 +79,8 @@ class Twitter implements SNS {
             '.signin [name="session[password]"], #react-root [name="session[password]"]',
         )
         const submitButton = await page.waitFor('.signin [type="submit"], [data-testid="LoginForm_Login_Button"]')
+        // select preexist name
+        await nameInput.click({ clickCount: 3 })
         await nameInput.type(this.username)
         await passwordInput.type(this.password)
         await submitButton.click()

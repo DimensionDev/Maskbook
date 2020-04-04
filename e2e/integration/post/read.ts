@@ -32,6 +32,9 @@ describe(`${READ_POST_STORY_URL}#Story:ReadPost(?br=wip)-BasicWorkflow`, () => {
             process.env.E2E_ALICE_FACEBOOK_PASSWORD!,
         ),
     ]) {
+        // specifiy network
+        if (process.env.E2E_NETWORK_ID && process.env.E2E_NETWORK_ID !== sns.name) continue
+
         const posts = helpers.loadJSON(join(__dirname, `../../fixtures/post/post_backup_${sns.name}.json`)) as {
             url: string
             text: string
