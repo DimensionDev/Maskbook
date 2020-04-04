@@ -96,30 +96,10 @@ const registerPostCollector = (self: SocialNetworkUI) => {
             ].join(),
         )
     }
-    const isKnownToMaskbook = (node: HTMLElement, tweetNode: HTMLElement) => {
-        // TODO:
-        // detect image payload is costy postImageParser should cache parse result
-        if (tweetNode.querySelector('img[src*="twimg.com/media"], a[href*="/photo"]')) {
-            return true
-        }
-        if (
-            Array.from(node.querySelectorAll('span, a'))
-                .map((n) => n.getAttribute('title') ?? '')
-                .some((url) => twitterEncoding.payloadDecoder(url) !== 'null')
-        ) {
-            return true
-        }
-        return false
-    }
-
     new MutationObserverWatcher(postsContentSelector())
         .useForeach((node, _, proxy) => {
             const tweetNode = getTweetNode(node)
             if (!tweetNode) return
-            // early return if tweet content unknown to maskbook
-            if (!isKnownToMaskbook(node, tweetNode)) {
-                return
-            }
             // noinspection JSUnnecessarySemicolon
             const info = getEmptyPostInfoByElement({
                 get rootNode() {
@@ -128,7 +108,6 @@ const registerPostCollector = (self: SocialNetworkUI) => {
                 rootNodeProxy: proxy,
             })
             const collectPostInfo = async () => {
-                if (!tweetNode) return
                 const { pid, content, handle, name, avatar } = postParser(tweetNode)
                 if (!pid) return
                 const postBy = new ProfileIdentifier(self.networkIdentifier, handle)
