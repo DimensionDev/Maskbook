@@ -97,7 +97,6 @@ const registerPostCollector = (self: SocialNetworkUI) => {
             ].join(),
         )
     }
-
     new MutationObserverWatcher(postsContentSelector())
         .useForeach((node, _, proxy) => {
             const tweetNode = getTweetNode(node)
