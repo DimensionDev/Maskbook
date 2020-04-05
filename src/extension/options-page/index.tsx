@@ -1,6 +1,6 @@
 import '../../provider.worker'
 
-import { useRef, useMemo, useEffect, useState } from 'react'
+import React, { useRef, useMemo, useEffect } from 'react'
 import { CssBaseline, useMediaQuery, NoSsr } from '@material-ui/core'
 import { ThemeProvider, makeStyles, createStyles, useTheme } from '@material-ui/core/styles'
 

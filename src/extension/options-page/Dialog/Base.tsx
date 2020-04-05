@@ -73,37 +73,40 @@ enum DialogState {
     Destroyed,
 }
 
-const reducer = (
-    state: { state: DialogState; props: any },
-    action: { type: 'open' | 'close' | 'destroy'; props: any },
-) => {
-    const { type, props } = action
-    if (type === 'open') return { state: DialogState.Opened, props }
-    if (type === 'close') return { state: DialogState.Closing, props: state.props }
+type useModalState<Props extends object> = { state: DialogState; props?: Props }
+type useModalActions<Props extends object> = { type: 'open' | 'close' | 'destroy'; props?: Props }
+function reducer<Props extends object>(
+    state: useModalState<Props>,
+    action: useModalActions<Props>,
+): useModalState<Props> {
+    if (action.type === 'open') return { state: DialogState.Opened, props: action.props }
+    if (action.type === 'close') return { state: DialogState.Closing, props: state.props }
     return { state: DialogState.Destroyed }
 }
 
-// TODO!: type P
-export function useModal<T extends object, P extends object>(
-    component: React.FunctionComponent<WrappedDialogProps<T>>,
-    ComponentProps?: T,
-): [React.ReactNode, () => void, (props: P) => void] {
+export function useModal<DialogProps extends object, AdditionalPropsAppendByDispatch extends Partial<DialogProps>>(
+    component: React.FunctionComponent<WrappedDialogProps<DialogProps>>,
+    ComponentProps?: DialogProps,
+): [React.ReactNode, () => void, (props: AdditionalPropsAppendByDispatch) => void] {
     const Modal = useMemo(() => component, [component])
-    // TODO!: type this
-    // @ts-ignore
-    const [status, dispatch]: [any, any] = useReducer<typeof reducer>(reducer, { state: DialogState.Destroyed })
+    const [status, dispatch] = useReducer(reducer, { state: DialogState.Destroyed })
     const showModal = useCallback(() => dispatch({ type: 'open' }), [])
-    const showStatefulModal = useCallback((props?: P) => dispatch({ type: 'open', props }), [])
+    const showStatefulModal = useCallback(
+        (props?: AdditionalPropsAppendByDispatch) => dispatch({ type: 'open', props }),
+        [],
+    )
     // TODO: prevent onClose on some cases (e.g, click away while loading)
     const onClose = useCallback(() => dispatch({ type: 'close' }), [])
     const onExited = useCallback(() => dispatch({ type: 'destroy' }), [])
     const { state, props } = status
 
+    const compositeProps =
+        ComponentProps || props ? { ComponentProps: { ...ComponentProps, ...props } as DialogProps } : {}
     const renderedComponent =
         state === DialogState.Destroyed ? null : (
             <Modal
                 {...{
-                    ...(ComponentProps || props ? { ComponentProps: { ...ComponentProps, ...props } } : {}),
+                    ...compositeProps,
                     open: state === DialogState.Opened,
                     onClose,
                     onExited,
@@ -228,6 +231,7 @@ export function useSnackbarCallback<T = void>(
                     throw err
                 },
             ),
+        // eslint-disable-next-line react-hooks/exhaustive-deps
         [...deps, enqueueSnackbar, executor, key, onError, onSuccess, t],
     )
 }
