@@ -26,7 +26,7 @@ export function DashboardFeedbackDialog(props: WrappedDialogProps) {
                         onChange={(e) => setMessage(e.target.value)}
                     />
                 </form>
-                <ThrottledButton variant="contained" color="primary">
+                <ThrottledButton onClick={async () => {}} variant="contained" color="primary">
                     {t('submit')}
                 </ThrottledButton>
             </DashboardDialogWrapper>

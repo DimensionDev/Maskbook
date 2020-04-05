@@ -97,15 +97,17 @@ export function WalletItem(props: WalletItemProps) {
                     {wallet.address}
                 </Typography>
             </Box>
-            <ThrottledButton
-                onMouseDown={(e) => e.stopPropagation()}
-                onClick={() => copyToClipboard(wallet.address!)}
-                color="primary"
-                size="small"
-                variant="outlined"
-                startIcon={<FileCopyOutlinedIcon />}>
-                {t('copy')}
-            </ThrottledButton>
+            {/* Prevent the event to make the whole card ripple */}
+            <span onMouseDown={(e) => e.stopPropagation()}>
+                <ThrottledButton
+                    onClick={() => copyToClipboard(wallet.address!)}
+                    color="primary"
+                    size="small"
+                    variant="outlined"
+                    startIcon={<FileCopyOutlinedIcon />}>
+                    {t('copy')}
+                </ThrottledButton>
+            </span>
             <Box py={2} display="flex">
                 {tokens &&
                     tokens.map((token) => (
