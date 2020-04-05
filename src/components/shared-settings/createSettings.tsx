@@ -55,8 +55,8 @@ function createInternalSettings<T extends browser.storage.StorageValue>(
             const stored = value[storage]
             if (typeof stored === 'object' && stored !== null && key in (stored as any)) {
                 settings.value = Reflect.get(stored, key)
+                ready()
             }
-            ready()
         }
     }
     return settings
