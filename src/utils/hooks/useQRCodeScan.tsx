@@ -18,7 +18,7 @@ export function useQRCodeScan(
     onResult: (data: string) => void,
     onError: () => void,
 ) {
-    // TODO!: ? not work
+    // TODO!: ? not work See https://github.com/DimensionDev/Maskbook/issues/810
     // ? Get video stream
     {
         const permission = useRequestCamera(isScanning)

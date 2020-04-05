@@ -7,7 +7,7 @@ import { decompressBackupFile } from '../../../utils/type-transform/BackupFileSh
 import Services from '../../service'
 import { extraPermissions } from '../../../utils/permissions'
 import { useSnackbar } from 'notistack'
-import { ThrottledButton } from '../DashboardComponents/ActionButton'
+import { DebounceButton } from '../DashboardComponents/ActionButton'
 import { useDrop } from 'react-use'
 
 export function DashboardDatabaseBackupDialog(props: WrappedDialogProps) {
@@ -25,9 +25,9 @@ export function DashboardDatabaseBackupDialog(props: WrappedDialogProps) {
                 iconColor="#699CF7"
                 primary={t('backup_database')}
                 secondary={t('dashboard_backup_database_hint')}>
-                <ThrottledButton variant="contained" color="primary" onClick={onClick}>
+                <DebounceButton variant="contained" color="primary" onClick={onClick}>
                     {t('dashboard_backup_database_confirmation')}
-                </ThrottledButton>
+                </DebounceButton>
             </DashboardDialogWrapper>
         </DashboardDialogCore>
     )
@@ -98,13 +98,13 @@ export function DashboardDatabaseRestoreDialog(props: WrappedDialogProps) {
                 }>
                 <input type="file" accept="application/json" ref={ref} onChange={fileReceiver} hidden />
                 {requiredPermissions ? (
-                    <ThrottledButton variant="contained" color="secondary" onClick={confirmPermissions}>
+                    <DebounceButton variant="contained" color="secondary" onClick={confirmPermissions}>
                         {t('confirm')}
-                    </ThrottledButton>
+                    </DebounceButton>
                 ) : (
-                    <ThrottledButton variant="contained" color="primary" onClick={() => ref.current?.click()}>
+                    <DebounceButton variant="contained" color="primary" onClick={() => ref.current?.click()}>
                         {t('browse')}
-                    </ThrottledButton>
+                    </DebounceButton>
                 )}
             </DashboardDialogWrapper>
         </DashboardDialogCore>
