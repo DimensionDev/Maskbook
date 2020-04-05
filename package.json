@@ -81,7 +81,7 @@
     "jsqr": "^1.2.0",
     "lodash-es": "^4.17.11",
     "matrix-js-sdk": "^5.2.0",
-    "matrix-js-sdk-type": "https://github.com/DimensionDev/matrix-js-sdk-type",
+    "matrix-js-sdk-type": "https://github.com/Jack-Works/matrix-js-sdk-type",
     "node-stego": "^0.10.1",
     "notistack": "^0.9.7",
     "openzeppelin-solidity": "^3.0.0",

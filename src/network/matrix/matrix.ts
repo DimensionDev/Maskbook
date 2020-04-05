@@ -8,8 +8,7 @@ import { OnlyRunInContext } from '@holoflows/kit/es'
 import { getLogger } from 'loglevel'
 OnlyRunInContext('background', 'Matrix')
 export const endpoint = 'https://matrix.vampire.rip'
-type MatrixClient = typeof MatrixClient extends { new (...args: any[]): infer U } ? U : never
-function any(x: any): any {
+function any<T>(x: T): any {
     return x
 }
 type MatrixLoginCred = Record<'user_id' | 'device_id' | 'access_token' | 'home_server', string>
@@ -55,7 +54,7 @@ export function createMatrixRoom(client: MatrixClient, visibility: 'public' | 'p
 }
 interface MatrixMessageTypes {
     'maskbook.hello.world': { message: string }
-    'maskbook.hello.world2': number
+    'maskbook.hello.world2': { message2: string }
 }
 interface MatrixMessageEvent<T extends keyof MatrixMessageTypes> {
     meta: {
