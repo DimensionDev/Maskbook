@@ -1,6 +1,6 @@
 import '../../provider.worker'
 
-import React, { useRef, useMemo, useContext, useEffect, useState } from 'react'
+import { useRef, useMemo, useEffect, useState } from 'react'
 import { CssBaseline, useMediaQuery, NoSsr } from '@material-ui/core'
 import { ThemeProvider, makeStyles, createStyles, useTheme } from '@material-ui/core/styles'
 
@@ -31,6 +31,7 @@ import DashboardPersonasRouter from './Router/Personas'
 import DashboardWalletsRouter from './Router/Wallets'
 import DashboardContactsRouter from './Router/Contacts'
 import DashboardSettingsRouter from './Router/Settings'
+import { DashboardBlurContextProvider } from './DashboardBlurContext'
 
 const OptionsPageRouters = (
     <>
@@ -142,17 +143,6 @@ const useStyles = makeStyles((theme) =>
 )
 
 let blurRequest = 0
-
-const DashboardBlurContext = React.createContext<{
-    blur(): void
-    unblur(): void
-}>(null!)
-const DashboardBlurContextProvider = DashboardBlurContext.Provider
-
-export function useBlurContext(open: boolean) {
-    const context = useContext(DashboardBlurContext)
-    useEffect(() => (open ? context.blur() : context.unblur()), [context, open])
-}
 
 function Dashboard() {
     const { t } = useI18N()

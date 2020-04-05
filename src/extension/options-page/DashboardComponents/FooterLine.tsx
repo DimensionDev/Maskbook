@@ -51,7 +51,7 @@ const FooterLink = function (props: React.PropsWithChildren<FooterLinkProps>) {
 export default function FooterLine() {
     const { t } = useI18N()
     const classes = useStyles()
-    const { version } = globalThis?.browser.runtime.getManifest()
+    const { version } = globalThis.browser?.runtime.getManifest() ?? {}
     const versionLink = t('version_link', { tag: process.env.VERSION })
 
     const [aboutDialog, openAboutDialog] = useModal(DashboardAboutDialog)
