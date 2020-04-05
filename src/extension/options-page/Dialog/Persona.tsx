@@ -23,7 +23,7 @@ import type { Persona } from '../../../database'
 
 import { DashboardDialogCore, DashboardDialogWrapper, WrappedDialogProps, useSnackbarCallback } from './Base'
 import AbstractTab, { AbstractTabProps } from '../DashboardComponents/AbstractTab'
-import { ThrottledButton } from '../DashboardComponents/ActionButton'
+import { DebounceButton } from '../DashboardComponents/ActionButton'
 import SpacedButtonGroup from '../DashboardComponents/SpacedButtonGroup'
 
 export function DashboardPersonaCreateDialog(props: WrappedDialogProps) {
@@ -52,9 +52,9 @@ export function DashboardPersonaCreateDialog(props: WrappedDialogProps) {
                 <Typography variant="body2" color="textSecondary">
                     {t('dashboard_password_helper_text')}
                 </Typography>
-                <ThrottledButton type="submit" variant="contained" color="primary" onClick={createPersona}>
+                <DebounceButton type="submit" variant="contained" color="primary" onClick={createPersona}>
                     {t('create')}
-                </ThrottledButton>
+                </DebounceButton>
             </DashboardDialogWrapper>
         </DashboardDialogCore>
     )
@@ -180,9 +180,9 @@ export function DashboardPersonaImportDialog(props: WrappedDialogProps) {
                 primary={t('import_your_persona')}
                 secondary={t('dashboard_persona_import_dialog_hint')}>
                 <AbstractTab {...tabProps}></AbstractTab>
-                <ThrottledButton hidden={tabState === 2} variant="contained" color="primary" onClick={importPersona}>
+                <DebounceButton hidden={tabState === 2} variant="contained" color="primary" onClick={importPersona}>
                     {t('import')}
-                </ThrottledButton>
+                </DebounceButton>
             </DashboardDialogWrapper>
         </DashboardDialogCore>
     )
@@ -289,12 +289,12 @@ export function DashboardPersonaDeleteConfirmDialog(props: WrappedDialogProps<Pe
                 primary={t('delete_persona')}
                 secondary={t('dashboard_delete_persona_confirm_hint', { name: persona.nickname })}>
                 <SpacedButtonGroup>
-                    <ThrottledButton variant="contained" color="danger" onClick={deletePersona}>
+                    <DebounceButton variant="contained" color="danger" onClick={deletePersona}>
                         {t('confirm')}
-                    </ThrottledButton>
-                    <ThrottledButton variant="outlined" color="primary" onClick={props.onClose}>
+                    </DebounceButton>
+                    <DebounceButton variant="outlined" color="primary" onClick={props.onClose}>
                         {t('cancel')}
-                    </ThrottledButton>
+                    </DebounceButton>
                 </SpacedButtonGroup>
             </DashboardDialogWrapper>
         </DashboardDialogCore>
@@ -329,12 +329,12 @@ export function DashboardPersonaUnlinkConfirmDialog(props: WrappedDialogProps) {
                     profile: identifier.userId,
                 })}>
                 <SpacedButtonGroup>
-                    <ThrottledButton variant="contained" color="danger" onClick={onClick}>
+                    <DebounceButton variant="contained" color="danger" onClick={onClick}>
                         {t('confirm')}
-                    </ThrottledButton>
-                    <ThrottledButton variant="outlined" color="primary" onClick={props.onClose}>
+                    </DebounceButton>
+                    <DebounceButton variant="outlined" color="primary" onClick={props.onClose}>
                         {t('cancel')}
-                    </ThrottledButton>
+                    </DebounceButton>
                 </SpacedButtonGroup>
             </DashboardDialogWrapper>
         </DashboardDialogCore>

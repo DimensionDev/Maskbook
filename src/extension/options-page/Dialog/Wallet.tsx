@@ -4,7 +4,7 @@ import { CreditCard as CreditCardIcon, Hexagon as HexagonIcon, Clock as ClockIco
 import { TextField, Typography, makeStyles, createStyles, Paper } from '@material-ui/core'
 import AbstractTab, { AbstractTabProps } from '../DashboardComponents/AbstractTab'
 import { useI18N } from '../../../utils/i18n-next-ui'
-import { ThrottledButton } from '../DashboardComponents/ActionButton'
+import { DebounceButton } from '../DashboardComponents/ActionButton'
 import SpacedButtonGroup from '../DashboardComponents/SpacedButtonGroup'
 import Services from '../../service'
 import { WalletRecord, EthereumNetwork } from '../../../plugins/Wallet/database/types'
@@ -101,9 +101,9 @@ export function DashboardWalletImportDialog(props: WrappedDialogProps) {
                 primary={t('import_wallet')}
                 secondary={t('import_wallet_hint')}>
                 <AbstractTab {...tabProps}></AbstractTab>
-                <ThrottledButton variant="contained" color="primary" onClick={onSubmit}>
+                <DebounceButton variant="contained" color="primary" onClick={onSubmit}>
                     {t('import')}
-                </ThrottledButton>
+                </DebounceButton>
             </DashboardDialogWrapper>
         </DashboardDialogCore>
     )
@@ -140,9 +140,9 @@ export function DashboardWalletCreateDialog(props: WrappedDialogProps) {
                 <Typography variant="body2" color="textSecondary">
                     {t('dashboard_password_helper_text')}
                 </Typography>
-                <ThrottledButton variant="contained" color="primary" onClick={onSubmit}>
+                <DebounceButton variant="contained" color="primary" onClick={onSubmit}>
                     {t('create')}
-                </ThrottledButton>
+                </DebounceButton>
             </DashboardDialogWrapper>
         </DashboardDialogCore>
     )
@@ -216,9 +216,9 @@ export function DashboardWalletAddTokenDialog(props: WrappedDialogProps<WalletPr
         <DashboardDialogCore {...props}>
             <DashboardDialogWrapper icon={<HexagonIcon />} iconColor="#699CF7" primary={t('add_token')}>
                 <AbstractTab {...tabProps}></AbstractTab>
-                <ThrottledButton disabled={!token} variant="contained" color="primary" onClick={onSubmit}>
+                <DebounceButton disabled={!token} variant="contained" color="primary" onClick={onSubmit}>
                     {t('import')}
-                </ThrottledButton>
+                </DebounceButton>
             </DashboardDialogWrapper>
         </DashboardDialogCore>
     )
@@ -332,12 +332,12 @@ export function DashboardWalletRenameDialog(props: WrappedDialogProps<WalletProp
                     onChange={(e) => setName(e.target.value)}
                 />
                 <SpacedButtonGroup>
-                    <ThrottledButton variant="contained" color="primary" onClick={onConfirm}>
+                    <DebounceButton variant="contained" color="primary" onClick={onConfirm}>
                         {t('ok')}
-                    </ThrottledButton>
-                    <ThrottledButton variant="outlined" color="primary" onClick={props.onClose}>
+                    </DebounceButton>
+                    <DebounceButton variant="outlined" color="primary" onClick={props.onClose}>
                         {t('cancel')}
-                    </ThrottledButton>
+                    </DebounceButton>
                 </SpacedButtonGroup>
             </DashboardDialogWrapper>
         </DashboardDialogCore>
@@ -361,12 +361,12 @@ export function DashboardWalletDeleteConfirmDialog(props: WrappedDialogProps<Wal
                 primary={t('delete_wallet')}
                 secondary={t('delete_wallet_hint')}>
                 <SpacedButtonGroup>
-                    <ThrottledButton variant="contained" color="danger" onClick={onConfirm}>
+                    <DebounceButton variant="contained" color="danger" onClick={onConfirm}>
                         {t('confirm')}
-                    </ThrottledButton>
-                    <ThrottledButton variant="outlined" color="primary" onClick={props.onClose}>
+                    </DebounceButton>
+                    <DebounceButton variant="outlined" color="primary" onClick={props.onClose}>
                         {t('cancel')}
-                    </ThrottledButton>
+                    </DebounceButton>
                 </SpacedButtonGroup>
             </DashboardDialogWrapper>
         </DashboardDialogCore>
