@@ -1,9 +1,6 @@
 /// <reference path="./matrix.type.d.ts" />
-import sdk, { MatrixClient } from 'matrix-js-sdk'
+import sdk, { MatrixClient, Room, EventTimelineSet, MatrixEvent } from 'matrix-js-sdk'
 import { Emitter } from '@servie/events'
-import type { MatrixEvent } from 'matrix-js-sdk-type/dts/models/event'
-import type Room from 'matrix-js-sdk-type/dts/models/room'
-import type EventTimelineSet from 'matrix-js-sdk-type/dts/models/event-timeline-set'
 import { OnlyRunInContext } from '@holoflows/kit/es'
 import { getLogger } from 'loglevel'
 OnlyRunInContext('background', 'Matrix')
@@ -49,8 +46,17 @@ export function registerMatrixAccount(
         }
     })
 }
-export function createMatrixRoom(client: MatrixClient, visibility: 'public' | 'private', room_alias_name: string) {
-    return any(client).createRoom({ room_alias_name, visibility })
+export async function createMatrixRoom(
+    client: MatrixClient,
+    /** Suggest to private. */
+    visibility: 'public' | 'private',
+    /** Suggest not to set? */
+    room_alias_name?: string,
+    topic = 'Hi, this room is created by Maskbook and used for internal communication',
+) {
+    const room: string = (await any(client).createRoom({ room_alias_name, visibility })).room_id
+    await client.setRoomTopic(room, topic, undefined!).catch(() => { })
+    return room
 }
 interface MatrixMessageTypes {
     'maskbook.hello.world': { message: string }
@@ -158,5 +164,6 @@ export class MatrixMessage {
 export function createMatrixClient() {
     const log = getLogger('matrix')
     log.setLevel('silent')
+    // @ts-ignore
     return sdk.createClient({ baseUrl: endpoint, logger: log })
 }
