@@ -4,7 +4,7 @@ import { TextField, makeStyles, createStyles } from '@material-ui/core'
 import type { Profile } from '../../../database'
 import { Avatar } from '../../../utils/components/Avatar'
 import Services from '../../service'
-import { ThrottledButton } from '../DashboardComponents/ActionButton'
+import { DebounceButton } from '../DashboardComponents/ActionButton'
 import SpacedButtonGroup from '../DashboardComponents/SpacedButtonGroup'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { UserMinus } from 'react-feather'
@@ -47,12 +47,12 @@ export function DashboardContactDeleteConfirmDialog(props: WrappedDialogProps<Co
                 primary={t('delete_contact')}
                 secondary={t('delete_contact_confirmation')}>
                 <SpacedButtonGroup>
-                    <ThrottledButton variant="contained" color="danger" onClick={onDelete}>
+                    <DebounceButton variant="contained" color="danger" onClick={onDelete}>
                         {t('ok')}
-                    </ThrottledButton>
-                    <ThrottledButton variant="outlined" color="primary" onClick={props.onClose}>
+                    </DebounceButton>
+                    <DebounceButton variant="outlined" color="primary" onClick={props.onClose}>
                         {t('cancel')}
-                    </ThrottledButton>
+                    </DebounceButton>
                 </SpacedButtonGroup>
             </DashboardDialogWrapper>
         </DashboardDialogCore>
@@ -111,12 +111,12 @@ export function DashboardContactDialog(props: WrappedDialogProps<ContactProps>) 
                     />
                 </form>
                 <SpacedButtonGroup>
-                    <ThrottledButton variant="contained" color="primary" onClick={onSubmit}>
+                    <DebounceButton variant="contained" color="primary" onClick={onSubmit}>
                         {t('save')}
-                    </ThrottledButton>
-                    <ThrottledButton variant="outlined" color="danger" onClick={openDeleteContact}>
+                    </DebounceButton>
+                    <DebounceButton variant="outlined" color="danger" onClick={openDeleteContact}>
                         {t('delete')}
-                    </ThrottledButton>
+                    </DebounceButton>
                 </SpacedButtonGroup>
                 {deleteContact}
             </DashboardDialogWrapper>
