@@ -62,7 +62,7 @@ const useStyles = makeStyles((theme) =>
 
 export function DashboardAboutDialog(props: WrappedDialogProps) {
     const classes = useStyles()
-    const { version } = globalThis?.browser.runtime.getManifest()
+    const { version } = globalThis.browser?.runtime.getManifest() ?? {}
     return (
         <DashboardDialogCore {...props} closeIconColor="#FFF">
             <section className={classes.wrapper}>
