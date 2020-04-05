@@ -19,7 +19,7 @@ let polyfills = [
 const publicDir = src('./public')
 const publicPolyfill = src('./public/polyfill')
 
-// Don't open browser
+// Do not open the browser
 process.env.BROWSER = 'none'
 
 const SSRPlugin = require('./config-overrides/SSRPlugin')

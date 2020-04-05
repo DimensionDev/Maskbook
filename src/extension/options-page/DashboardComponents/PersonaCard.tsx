@@ -75,7 +75,7 @@ export default function PersonaCard({ persona }: Props) {
                 {t('delete')}
             </MenuItem>,
         ],
-        [t, color.error],
+        [t, openBackupPersona, openDeletePersona, color.error],
     )
 
     const [menu, , openMenu] = useModal(DashboardMenu, { menus })
