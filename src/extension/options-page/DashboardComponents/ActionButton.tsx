@@ -5,6 +5,7 @@ import CheckIcon from '@material-ui/icons/Check'
 import ErrorIcon from '@material-ui/icons/Error'
 import { red, green } from '@material-ui/core/colors'
 import classNames from 'classnames'
+import { useDebounce, useAsyncFn } from 'react-use'
 
 const circle = <CircularProgress size={18} />
 
@@ -14,8 +15,9 @@ enum ThrottledButtonState {
     Loading,
 }
 
-interface ThrottledButtonProps extends Omit<ButtonProps, 'color'> {
+interface ThrottledButtonProps extends Omit<ButtonProps, 'color' | 'onClick'> {
     color: ButtonProps['color'] | 'danger'
+    onClick: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => unknown
 }
 
 const useDangerStyles = makeStyles((theme) =>
@@ -35,36 +37,41 @@ const useDangerStyles = makeStyles((theme) =>
         },
     }),
 )
-
+function useDebounceAsync<T extends any[]>(
+    asyncFn: (...args: T) => unknown,
+): { loading: boolean; disabled: boolean; f(...args: T): void } {
+    // useAsyncFn use T | [] as it's parameter where is conflict with our usage.
+    // We should ensure always call startAsyncFn with parameters.
+    const [state, startAsyncFn] = useAsyncFn<void, T>(asyncFn as any, [], { loading: false, value: undefined })
+    // Sync the debounce state after 500ms
+    const [debounceLoading, setDebounceLoading] = useState(false)
+    useDebounce(() => setDebounceLoading(state.loading), 500, [state])
+    const f = useCallback(
+        (...args: T) => {
+            if (!state.loading) {
+                setDebounceLoading(false)
+                startAsyncFn(...args)
+            }
+        },
+        [startAsyncFn, state.loading],
+    )
+    // loading 0ms to 500ms: disabled, !loading
+    // loading 500ms+: disabled, loading
+    if (state.loading) return { f, disabled: true, loading: debounceLoading }
+    // The debounceLoading is invalidated, refresh it now (instead of waiting for 500ms)
+    if (debounceLoading) setDebounceLoading(false)
+    // If the task is not running, ignore the throttledLoading
+    return { disabled: false, loading: false, f }
+}
 export function ThrottledButton(_props: ThrottledButtonProps) {
     const { onClick, color, ...props } = _props
-    const [loading, setLoading] = useState<{ state: ThrottledButtonState; timer?: number }>({
-        state: ThrottledButtonState.Normal,
-    })
     const classes = useDangerStyles()
-    const hookedClick = useCallback(
-        (e) => {
-            e.stopPropagation()
-            if (loading.state !== ThrottledButtonState.Normal) return
-            setLoading({ state: ThrottledButtonState.Clicked })
-            const timer: number = window.setTimeout(
-                () => setLoading({ state: ThrottledButtonState.Loading, timer }),
-                500,
-            )
-            return Promise.resolve(e)
-                .then(onClick)
-                .finally(() => {
-                    window.clearTimeout(timer)
-                    window.setTimeout(setLoading, 300, { state: ThrottledButtonState.Normal })
-                })
-        },
-        [loading.state, onClick],
-    )
+    const { f, loading } = useDebounceAsync(onClick)
     return (
         <Button
-            startIcon={loading.state === ThrottledButtonState.Loading ? circle : undefined}
-            disabled={loading.state === ThrottledButtonState.Loading}
-            onClick={hookedClick}
+            startIcon={loading ? circle : undefined}
+            disabled={loading}
+            onClick={f}
             classes={color === 'danger' ? classes : undefined}
             color={color === 'danger' ? 'primary' : color}
             {...props}></Button>
