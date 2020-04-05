@@ -3,7 +3,7 @@ import { Typography, makeStyles, createStyles, Box, Button, Avatar, ButtonBase }
 import FileCopyOutlinedIcon from '@material-ui/icons/FileCopyOutlined'
 import type { WalletRecord, ERC20TokenRecord } from '../../../plugins/Wallet/database/types'
 import classNames from 'classnames'
-import { ThrottledButton } from './ActionButton'
+import { DebounceButton } from './ActionButton'
 import { useCopyToClipboard } from 'react-use'
 import { useI18N } from '../../../utils/i18n-next-ui'
 
@@ -99,14 +99,14 @@ export function WalletItem(props: WalletItemProps) {
             </Box>
             {/* Prevent the event to make the whole card ripple */}
             <span onMouseDown={(e) => e.stopPropagation()}>
-                <ThrottledButton
+                <DebounceButton
                     onClick={() => copyToClipboard(wallet.address!)}
                     color="primary"
                     size="small"
                     variant="outlined"
                     startIcon={<FileCopyOutlinedIcon />}>
                     {t('copy')}
-                </ThrottledButton>
+                </DebounceButton>
             </span>
             <Box py={2} display="flex">
                 {tokens &&

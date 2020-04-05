@@ -15,7 +15,7 @@ enum ThrottledButtonState {
     Loading,
 }
 
-interface ThrottledButtonProps extends Omit<ButtonProps, 'color' | 'onClick'> {
+interface DebounceButtonProps extends Omit<ButtonProps, 'color' | 'onClick'> {
     color: ButtonProps['color'] | 'danger'
     onClick: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => unknown
 }
@@ -63,7 +63,7 @@ function useDebounceAsync<T extends any[]>(
     // If the task is not running, ignore the throttledLoading
     return { disabled: false, loading: false, f }
 }
-export function ThrottledButton(_props: ThrottledButtonProps) {
+export function DebounceButton(_props: DebounceButtonProps) {
     const { onClick, color, ...props } = _props
     const classes = useDangerStyles()
     const { f, loading } = useDebounceAsync(onClick)

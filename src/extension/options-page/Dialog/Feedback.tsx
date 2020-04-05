@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { DashboardDialogCore, DashboardDialogWrapper, WrappedDialogProps } from './Base'
 import { Smile as SmileIcon } from 'react-feather'
 import { TextField } from '@material-ui/core'
-import { ThrottledButton } from '../DashboardComponents/ActionButton'
+import { DebounceButton } from '../DashboardComponents/ActionButton'
 import { useI18N } from '../../../utils/i18n-next-ui'
 
 export function DashboardFeedbackDialog(props: WrappedDialogProps) {
@@ -26,9 +26,9 @@ export function DashboardFeedbackDialog(props: WrappedDialogProps) {
                         onChange={(e) => setMessage(e.target.value)}
                     />
                 </form>
-                <ThrottledButton onClick={async () => {}} variant="contained" color="primary">
+                <DebounceButton onClick={async () => {}} variant="contained" color="primary">
                     {t('submit')}
-                </ThrottledButton>
+                </DebounceButton>
             </DashboardDialogWrapper>
         </DashboardDialogCore>
     )
