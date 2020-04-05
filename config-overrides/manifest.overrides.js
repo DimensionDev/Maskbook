@@ -4,8 +4,8 @@ const base = require('../src/manifest.json')
  */
 function firefox(manifest) {
     // TODO: To make `browser.tabs.executeScript` run on Firefox,
-    // TODO: we need an extra permission "tabs".
-    // TODO: Switch to browser.userScripts (Firefox only) API can resolve the problem.
+    // we need an extra permission "tabs".
+    // Switch to browser.userScripts (Firefox only) API can resolve the problem.
     manifest.permissions.push('tabs')
 }
 /**
