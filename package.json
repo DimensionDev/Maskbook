@@ -128,7 +128,7 @@
     "@types/jest-environment-puppeteer": "^4.3.1",
     "@types/puppeteer": "^2.0.0",
     "@typescript-eslint/eslint-plugin": "^2.25.0",
-    "@typescript-eslint/parser": "^2.25.0",
+    "@typescript-eslint/parser": "^2.26.0",
     "asmcrypto.js": "^2.3.2",
     "awesome-typescript-loader": "^5.2.1",
     "babel-loader": "^8.1.0",
