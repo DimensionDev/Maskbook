@@ -13,8 +13,6 @@ import {
     Chip,
     ThemeProvider,
     Theme,
-    Switch,
-    FormControlLabel,
 } from '@material-ui/core'
 import { BigNumber } from 'bignumber.js'
 import { MessageCenter, CompositionEvent } from '../../utils/messages'
@@ -207,40 +205,43 @@ export function PostDialogUI(props: PostDialogUIProps) {
                         <Typography style={{ marginBottom: 10 }}>
                             {t('post_dialog__select_recipients_title')}
                         </Typography>
-                        <SelectRecipientsUI
-                            disabled={props.onlyMyself || props.shareToEveryone}
-                            items={props.availableShareTarget}
-                            selected={props.currentShareTarget}
-                            onSetSelected={props.onSetSelected}
-                            {...props.SelectRecipientsUIProps}>
+                        <Box style={{ marginBottom: 10 }} display="flex" flexWrap="wrap">
+                            <SelectRecipientsUI
+                                disabled={props.onlyMyself || props.shareToEveryone}
+                                items={props.availableShareTarget}
+                                selected={props.currentShareTarget}
+                                onSetSelected={props.onSetSelected}
+                                {...props.SelectRecipientsUIProps}>
+                                <ClickableChip
+                                    checked={props.shareToEveryone}
+                                    ChipProps={{
+                                        disabled: props.onlyMyself,
+                                        label: t('post_dialog__select_recipients_share_to_everyone'),
+                                        onClick: () => props.onShareToEveryoneChanged(!props.shareToEveryone),
+                                    }}
+                                />
+                                <ClickableChip
+                                    checked={props.onlyMyself}
+                                    ChipProps={{
+                                        disabled: props.shareToEveryone,
+                                        label: t('post_dialog__select_recipients_only_myself'),
+                                        onClick: () => props.onOnlyMyselfChanged(!props.onlyMyself),
+                                    }}
+                                />
+                            </SelectRecipientsUI>
+                        </Box>
+                        <Typography style={{ marginBottom: 10 }}>{t('post_dialog__more_options_title')}</Typography>
+                        <Box style={{ marginBottom: 10 }} display="flex" flexWrap="wrap">
                             <ClickableChip
-                                checked={props.shareToEveryone}
+                                checked={props.imagePayload}
                                 ChipProps={{
-                                    disabled: props.onlyMyself,
-                                    label: t('post_dialog__select_recipients_share_to_everyone'),
-                                    onClick: () => props.onShareToEveryoneChanged(!props.shareToEveryone),
+                                    label: t('post_dialog__image_payload'),
+                                    onClick: () => props.onImagePayloadSwitchChanged(!props.imagePayload),
                                 }}
                             />
-                            <ClickableChip
-                                checked={props.onlyMyself}
-                                ChipProps={{
-                                    disabled: props.shareToEveryone,
-                                    label: t('post_dialog__select_recipients_only_myself'),
-                                    onClick: () => props.onOnlyMyselfChanged(!props.onlyMyself),
-                                }}
-                            />
-                        </SelectRecipientsUI>
+                        </Box>
                     </DialogContent>
                     <DialogActions className={classes.actions}>
-                        <FormControlLabel
-                            control={
-                                <Switch
-                                    checked={props.imagePayload}
-                                    onChange={() => props.onImagePayloadSwitchChanged(!props.imagePayload)}
-                                />
-                            }
-                            label={t('post_dialog__image_payload')}
-                        />
                         <Button
                             className={classes.button}
                             style={{ marginLeft: 'auto' }}

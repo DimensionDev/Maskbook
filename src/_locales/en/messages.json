@@ -162,6 +162,7 @@
     "post_dialog__select_recipients_share_to_everyone": "Everyone",
     "post_dialog__select_recipients_title": "Select Recipients",
     "post_dialog__select_specific_friends_title": "Specific Friends ({{selected}} selected)",
+    "post_dialog__more_options_title": "More Options",
     "post_dialog__image_payload": "Image Payload",
     "post_dialog__title": "Maskbook: Compose",
     "post_modal_hint__button": "🔒 Compose encrypted post 🔒",
