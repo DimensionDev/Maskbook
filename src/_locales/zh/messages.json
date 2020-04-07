@@ -160,6 +160,7 @@
     "post_dialog__select_recipients_share_to_everyone": "任何人",
     "post_dialog__select_recipients_title": "選擇收件人",
     "post_dialog__select_specific_friends_title": "選擇好友 (已選 {{selected}})",
+    "post_dialog__more_options_title": "更多選項",
     "post_dialog__image_payload": "圖片編碼",
     "post_dialog__title": "Maskbook: 編輯",
     "post_modal_hint__button": "🔒 編輯加密訊息 🔒",
