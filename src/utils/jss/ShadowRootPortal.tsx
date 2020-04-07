@@ -49,11 +49,19 @@ const handler: ProxyHandler<ShadowRoot> = {
     },
 }
 
-export function PortalShadowRoot() {
-    if (GetContext() === 'options') return document.body
-    if (globalThis.location.hostname === 'localhost') return document.body
-    if (!proxy) proxy = new Proxy(portalShadowRoot, handler)
-    return (proxy as unknown) as Element
+export function PortalShadowRoot(): Element
+export function PortalShadowRoot(shadowRoot: ShadowRoot): Element
+export function PortalShadowRoot(shadowRoot?: ShadowRoot) {
+    const getContainer = (root: ShadowRoot) => {
+        if (GetContext() === 'options') return document.body
+        if (globalThis.location.hostname === 'localhost') return document.body
+        if (!proxy) proxy = new Proxy(root, handler)
+        return (proxy as unknown) as Element
+    }
+    if (shadowRoot) {
+        return () => getContainer(shadowRoot)
+    }
+    return getContainer(portalShadowRoot)
 }
 
 // ? do we still need this?

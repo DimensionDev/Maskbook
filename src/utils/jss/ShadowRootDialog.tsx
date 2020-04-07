@@ -12,10 +12,15 @@ export default function ShadowRootDialog(_props: any) {
 
     // ? I need the render tree to get the shadowroot. Is the extra div must be rendered?
     // ? can style be transported to shadowroot directly instead of with dialog children?
-    const { children, ...props } = _props
+    const { children, container, ...props } = _props
+
+    if (container) {
+        console.log(container)
+        console.log(PortalShadowRoot(container))
+    }
     return (
         <div ref={ref}>
-            <ResponsiveDialog {...props} container={PortalShadowRoot}>
+            <ResponsiveDialog {...props} container={container ? PortalShadowRoot(container) : PortalShadowRoot}>
                 <style>{styles}</style>
                 {children}
             </ResponsiveDialog>

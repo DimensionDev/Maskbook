@@ -82,6 +82,7 @@ export interface PostDialogUIProps
         | 'switch'
     > {
     theme?: Theme
+    container?: HTMLElement | ShadowRoot
     open: boolean
     onlyMyself: boolean
     shareToEveryone: boolean
@@ -112,7 +113,6 @@ export function PostDialogUI(props: PostDialogUIProps) {
     const [redPacketDialogOpen, setRedPacketDialogOpen] = useState(false)
 
     if (props.postContent.type !== 'text') return <>Unsupported type to edit</>
-
     return (
         <div className={classes.root}>
             <ThemeProvider theme={props.theme ?? defaultTheme}>
@@ -123,6 +123,7 @@ export function PostDialogUI(props: PostDialogUIProps) {
                         paper: classes.paper,
                     }}
                     open={props.open}
+                    container={props.container}
                     scroll="paper"
                     fullWidth
                     maxWidth="sm"
@@ -363,6 +364,7 @@ export function PostDialog(props: PostDialogProps) {
     const identities = useMyIdentities()
     useEffect(() => {
         return MessageCenter.on('compositionUpdated', ({ reason, open }: CompositionEvent) => {
+            console.log(reason)
             if (reason === props.reason && identities.length > 0) {
                 setOpen(open)
             }
