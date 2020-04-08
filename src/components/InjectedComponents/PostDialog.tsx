@@ -299,10 +299,12 @@ export function PostDialog(props: PostDialogProps) {
     const [currentShareTarget, setCurrentShareTarget] = useState<(Profile | Group)[]>(() => [])
     //#endregion
     //#region Image Based Payload Switch
-    const [imagePayload, setImagePayload] = useState(() => steganographyModeSetting.value)
+    const imagePayload = useValueRef(steganographyModeSetting)
     const onImagePayloadSwitchChanged = or(
         props.onImagePayloadSwitchChanged,
-        useCallback((checked: boolean) => setImagePayload(checked), []),
+        useCallback((checked: boolean) => {
+            steganographyModeSetting.value = checked
+        }, []),
     )
     //#endregion
     //#region callbacks
