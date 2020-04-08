@@ -9,7 +9,6 @@ import { Typography, Card, Divider, Container } from '@material-ui/core'
 import { SettingsUI, SettingsUIEnum } from '../../../components/shared-settings/useSettingsUI'
 import {
     debugModeSetting,
-    steganographyModeSetting,
     disableOpenNewTabInBackgroundSettings,
     languageSettings,
     Language,
@@ -56,17 +55,6 @@ export function Settings() {
                         icon={<LanguageIcon />}
                         value={languageSettings}
                     />
-                </List>
-            </Card>
-            <Typography
-                variant="subtitle2"
-                style={{ marginTop: 21, marginBottom: 12, fontWeight: 300 }}
-                color="textPrimary">
-                Experimental Features
-            </Typography>
-            <Card>
-                <List dense disablePadding>
-                    <SettingsUI icon={<ImageMode />} value={steganographyModeSetting} />
                 </List>
             </Card>
             <Typography
