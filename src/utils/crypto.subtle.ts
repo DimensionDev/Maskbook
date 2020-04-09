@@ -27,7 +27,7 @@ export function import_AES_GCM_256_Key(key: JsonWebKey | ArrayBuffer) {
     return crypto.subtle.importKey(getType(key), key, { name: 'AES-GCM', length: 256 }, true, ['encrypt', 'decrypt'])
 }
 
-export function import_PBKDF2_Key(key: ArrayBuffer | JsonWebKey) {
+export function import_PBKDF2_Key(key: ArrayBuffer) {
     return crypto.subtle.importKey(getType(key), key, 'PBKDF2', false, ['deriveBits', 'deriveKey'])
 }
 export function derive_AES_GCM_256_Key_From_ECDH_256k1_Keys(pub: CryptoKey, priv: CryptoKey) {

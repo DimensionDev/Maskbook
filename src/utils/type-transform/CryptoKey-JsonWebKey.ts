@@ -10,10 +10,13 @@ type Algorithms =
     | DhImportKeyParams
     | AesKeyAlgorithm
 
-export function getKeyParameter(type: 'ecdh' | 'ecdsa' | 'aes'): [readonly KeyUsage[], Readonly<Algorithms>] {
+export function getKeyParameter(
+    type: 'ecdh' | 'ecdsa' | 'aes' | 'pbkdf2',
+): [readonly KeyUsage[], Readonly<Algorithms>] {
     if (type === 'ecdh') return [['deriveKey', 'deriveBits'], { name: 'ECDH', namedCurve: 'K-256' }]
     if (type === 'aes') return [['encrypt', 'decrypt'], { name: 'AES-GCM', length: 256 }]
     if (type === 'ecdsa') return [['sign', 'verify'], { name: 'ecdsa', namedCurve: 'K-256' }]
+    if (type === 'pbkdf2') return [['deriveBits', 'deriveKey'], 'PBKDF2']
     throw new TypeError('Invalid key type')
 }
 
