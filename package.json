@@ -53,6 +53,7 @@
     "@servie/events": "^1.0.0",
     "@types/bip39": "^3.0.0",
     "@types/classnames": "^2.2.10",
+    "@types/elliptic": "^6.4.12",
     "@types/gun": "^0.9.2",
     "@types/json-stable-stringify": "^1.0.32",
     "@types/jsonwebtoken": "^8.3.9",
