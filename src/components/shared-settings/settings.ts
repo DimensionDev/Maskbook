@@ -11,14 +11,6 @@ export const debugModeSetting = createNewSettings<boolean>('debugMode', false, {
     secondary: () => i18n.t('settings_enable_debug_desc'),
 })
 /**
- * Dose steganography post mode on
- */
-export const steganographyModeSetting = createNewSettings<boolean>('steganographyMode', false, {
-    primary: () => i18n.t('settings_image_based_payload'),
-    secondary: () => i18n.t('settings_image_based_payload_desc'),
-})
-
-/**
  * Never open a new tab in the background
  */
 export const disableOpenNewTabInBackgroundSettings = createNewSettings<boolean>(
@@ -75,6 +67,11 @@ const createProxiedSettings = <T extends string = string>(settingsKey: string) =
         },
     }) as typeof target) as unknown) as { [key: string]: ValueRef<T> }
 }
+
+export interface ImagePayloadStatus {
+    enabled: boolean
+}
+export const currentImagePayloadStatus = createProxiedSettings('currentImagePayloadStatus')
 
 export const currentSelectedIdentity = createProxiedSettings('currentSelectedIdentity')
 export type ImmersiveSetupCrossContextStatus = {
