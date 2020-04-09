@@ -30,17 +30,23 @@ function createInternalSettings<T extends browser.storage.StorageValue>(
     })
 
     const instanceKey = `${storage}+${key}`
-    update(instanceKey)
+    updateStorage(initialValue, true)
+    updateValueRef(instanceKey)
+    settings.addListener((newVal) => updateStorage(newVal, false))
+    MessageCenter.on('settingsUpdated', updateValueRef)
 
-    settings.addListener(async (newVal) => {
+    async function updateStorage<T extends browser.storage.StorageValue>(newVal: T, initial: boolean = false) {
         const stored = ((await browser.storage.local.get(null))[storage] as object) || {}
-        await browser.storage.local.set({
-            [storage]: { ...stored, [key]: newVal },
-        })
-        MessageCenter.emit('settingsUpdated', instanceKey)
-    })
-    MessageCenter.on('settingsUpdated', update)
-    async function update(receivedKey: string) {
+        if (!initial || (initial && !(key in stored))) {
+            await browser.storage.local.set({
+                [storage]: { ...stored, [key]: newVal },
+            })
+            if (!initial) {
+                MessageCenter.emit('settingsUpdated', instanceKey)
+            }
+        }
+    }
+    async function updateValueRef(receivedKey: string) {
         if (receivedKey !== instanceKey) return
         if (typeof browser === 'object') {
             const value = await browser.storage.local.get(null)
