@@ -20,7 +20,7 @@ import { useCapturedInput } from '../../utils/hooks/useCapturedEvents'
 import { useStylesExtends, or } from '../custom-ui-helper'
 import type { Profile, Group } from '../../database'
 import { useFriendsList, useGroupsList, useCurrentIdentity, useMyIdentities } from '../DataSource/useActivatedUI'
-import { steganographyModeSetting } from '../shared-settings/settings'
+import { currentImagePayloadStatus, ImagePayloadStatus } from '../shared-settings/settings'
 import { useValueRef } from '../../utils/hooks/useValueRef'
 import { getActivatedUI } from '../../social-network/ui'
 import Services from '../../extension/service'
@@ -299,11 +299,22 @@ export function PostDialog(props: PostDialogProps) {
     const [currentShareTarget, setCurrentShareTarget] = useState<(Profile | Group)[]>(() => [])
     //#endregion
     //#region Image Based Payload Switch
-    const imagePayload = useValueRef(steganographyModeSetting)
+    const imagePayloadStatus_ = useValueRef(currentImagePayloadStatus[getActivatedUI().networkIdentifier])
+    const imagePayloadStatus = useMemo<ImagePayloadStatus>(() => {
+        try {
+            return JSON.parse(imagePayloadStatus_)
+        } catch {
+            return {
+                enabled: false,
+            }
+        }
+    }, [imagePayloadStatus_])
     const onImagePayloadSwitchChanged = or(
         props.onImagePayloadSwitchChanged,
         useCallback((checked: boolean) => {
-            steganographyModeSetting.value = checked
+            currentImagePayloadStatus[getActivatedUI().networkIdentifier].value = JSON.stringify({
+                enabled: checked,
+            })
         }, []),
     )
     //#endregion
@@ -320,7 +331,7 @@ export function PostDialog(props: PostDialogProps) {
                 )
                 const activeUI = getActivatedUI()
                 const metadata = readTypedMessageMetadata(typedMessageMetadata, 'com.maskbook.red_packet:1')
-                if (imagePayload) {
+                if (imagePayloadStatus.enabled) {
                     const isEth = metadata.ok && metadata.val.token_type === RedPacketTokenType.eth
                     const isDai =
                         metadata.ok &&
@@ -363,7 +374,7 @@ export function PostDialog(props: PostDialogProps) {
                 // there is nothing to write if it shared with public
                 if (!shareToEveryone) Services.Crypto.publishPostAESKey(token)
             },
-            [currentIdentity, shareToEveryone, typedMessageMetadata, imagePayload, t, i18n.language],
+            [currentIdentity, shareToEveryone, typedMessageMetadata, imagePayloadStatus, t, i18n.language],
         ),
     )
     const onRequestReset = or(
@@ -426,7 +437,7 @@ export function PostDialog(props: PostDialogProps) {
             shareToEveryone={shareToEveryoneLocal}
             onlyMyself={onlyMyself}
             availableShareTarget={availableShareTarget}
-            imagePayload={imagePayload}
+            imagePayload={imagePayloadStatus.enabled}
             currentIdentity={currentIdentity}
             currentShareTarget={currentShareTarget}
             postContent={postBoxContent}
