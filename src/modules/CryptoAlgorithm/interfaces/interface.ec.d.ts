@@ -1,8 +1,10 @@
+import { JsonWebKeyPair, ShaName } from './interface'
+import { AESName } from './interface.aes'
 type ECName = 'ECDSA' | 'ECDH'
-type GenerateKeyPair = (name: ECName) => PromiseLike<JsonWebKey>
+type GenerateKeyPair = (name: ECName) => PromiseLike<JsonWebKeyPair>
 type Sign = (ecdsa_key: JsonWebKey, hash: ShaName, message: ArrayBuffer) => PromiseLike<ArrayBuffer>
 type Verify = (key: JsonWebKey, hash: ShaName, msg: ArrayBuffer, signature: ArrayBuffer) => PromiseLike<boolean>
-type DeriveAES = (priv: JsonWebKey, pub: JsonWebKey, aes: AESName, length: 256) => PromiseLike<ArrayBuffer>
+type DeriveAES = (priv: JsonWebKey, pub: JsonWebKey, aes: AESName, length: 256) => PromiseLike<JsonWebKey>
 export interface ECMethods {
     generate_ec_k256_pair: GenerateKeyPair
     // generate_ec_p256_pair: GenerateKeyPair
