@@ -95,7 +95,7 @@
     "dashboard_unknown_network": "不支援",
     "dashboard_username_on": "{{network}} 上的用戶名",
     "dashboard_welcome_to_maskbook": "歡迎使用 Maskbook",
-    "database": "數據庫",
+    "database": "檔案庫（不含錢包）",
     "database_group_followers_name": "{{owner}} 的關注者",
     "database_group_following_name": "{{owner}} 關注的人",
     "database_group_friends_default_name": "{{owner}} 的好友",
