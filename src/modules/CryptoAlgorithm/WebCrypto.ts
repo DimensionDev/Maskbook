@@ -1,4 +1,4 @@
-import type { CryptoAlgorithmProviderMethods } from './interface'
+import type { CryptoAlgorithmProviderMethods } from './interfaces/interface'
 import {
     JsonWebKeyToCryptoKey,
     getKeyParameter,
@@ -8,11 +8,11 @@ import {
 export type WebCryptoSupportedMethods = Pick<
     CryptoAlgorithmProviderMethods,
     | 'decrypt_aes_gcm'
-    | 'derive_aes_gcm256_from_pbkdf2'
+    | 'derive_aes_from_pbkdf2'
+    | 'digest_sha'
     | 'encrypt_aes_gcm'
     | 'generate_aes_gcm'
     | 'import_pbkdf2'
-    | 'digest_sha256'
 >
 export type WebCryptoNotSupportedMethods = Omit<CryptoAlgorithmProviderMethods, keyof WebCryptoSupportedMethods>
 
@@ -29,23 +29,23 @@ export const WebCryptoMethods: WebCryptoSupportedMethods = {
         const key = await JsonWebKeyToCryptoKey(jwk, ...getKeyParameter('aes'))
         return crypto.subtle.decrypt({ name: 'AES-GCM', iv }, key, message)
     },
-    async generate_aes_gcm() {
-        const key = await crypto.subtle.generateKey({ name: 'AES-GCM', length: 256 }, true, ['encrypt', 'decrypt'])
+    async generate_aes_gcm(length) {
+        const key = await crypto.subtle.generateKey({ name: 'AES-GCM', length }, true, ['encrypt', 'decrypt'])
         return CryptoKeyToJsonWebKey(key)
     },
-    async derive_aes_gcm256_from_pbkdf2(hash, iterations, pbkdf, salt) {
+    async derive_aes_from_pbkdf2(pbkdf, salt, hash, aes_algr, aes_length, iterations) {
         const key = await JsonWebKeyToCryptoKey(pbkdf, ...getKeyParameter('pbkdf2'))
         const aes = await crypto.subtle.deriveKey(
             { name: 'PBKDF2', salt, iterations, hash },
             key,
-            { name: 'AES-GCM', length: 256 },
+            { name: aes_algr, length: aes_length },
             true,
             ['encrypt', 'decrypt'],
         )
         return CryptoKeyToJsonWebKey(aes)
     },
-    digest_sha256(data) {
-        return crypto.subtle.digest('SHA-256', data)
+    digest_sha(alg, data) {
+        return crypto.subtle.digest(alg, data)
     },
     async import_pbkdf2(seed) {
         return crypto.subtle
