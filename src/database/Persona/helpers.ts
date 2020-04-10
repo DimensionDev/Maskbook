@@ -158,6 +158,7 @@ export async function createPersonaByMnemonic(
             name: null,
             mnemonic: key.mnemonicRecord.words.split(' '),
             passphrase: password,
+            _wallet_is_default: true,
         })
     }
 
