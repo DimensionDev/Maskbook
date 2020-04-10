@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { Link, useHistory } from 'react-router-dom'
+import { useSnackbar } from 'notistack'
 import StepBase from './StepBase'
 import { TextField, makeStyles, createStyles } from '@material-ui/core'
 import { useI18N } from '../../../utils/i18n-next-ui'
@@ -31,11 +32,20 @@ export default function InitStep1S() {
     const subheader = t('dashboard_init_step_1_hint')
     const [name, setName] = useState('')
     const [password, setPassword] = useState('')
+    const { enqueueSnackbar } = useSnackbar()
 
     const classes = useStyles()
     const history = useHistory()
 
     const createPersonaAndNext = async () => {
+        if (!name) {
+            enqueueSnackbar(t('error_name_absent'), { variant: 'error' })
+            return
+        }
+        if (!password) {
+            enqueueSnackbar(t('error_password_absent'), { variant: 'error' })
+            return
+        }
         const persona = await Services.Identity.createPersonaByMnemonic(name, password)
         history.replace(`${InitStep.Setup2}?identifier=${encodeURIComponent(persona.toText())}`)
     }

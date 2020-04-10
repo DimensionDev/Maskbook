@@ -5,6 +5,7 @@ import { DialogContentItem, DialogRouter } from './DialogBase'
 
 import { TextField, Typography, InputBase, makeStyles, TypographyProps } from '@material-ui/core'
 import { useHistory } from 'react-router-dom'
+import { useSnackbar } from 'notistack'
 import AbstractTab, { AbstractTabProps } from '../DashboardComponents/AbstractTab'
 import ActionButton from '../DashboardComponents/ActionButton'
 import { ECKeyIdentifier, Identifier } from '../../../database/type'
@@ -32,8 +33,17 @@ export function PersonaCreateDialog() {
     const [name, setName] = useState('')
     const [password, setPassword] = useState('')
     const history = useHistory()
+    const { enqueueSnackbar } = useSnackbar()
 
     const createPersona = () => {
+        if (!name) {
+            enqueueSnackbar(t('error_name_absent'), { variant: 'error' })
+            return
+        }
+        if (!password) {
+            enqueueSnackbar(t('error_password_absent'), { variant: 'error' })
+            return
+        }
         Services.Identity.createPersonaByMnemonic(name, password).then((persona) => {
             history.replace(`created?identifier=${encodeURIComponent(persona.toText())}`)
         })
