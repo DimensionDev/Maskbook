@@ -24,6 +24,9 @@ import { definedSocialNetworkWorkers } from './social-network/worker'
 import { getWelcomePageURL } from './extension/options-page/Welcome/getWelcomePageURL'
 import { exclusiveTasks } from './extension/content-script/tasks'
 
+// It's working but not migrated yet.
+// import CryptoWorker from './modules/CryptoAlgorithm/EllipticBackend/worker'
+
 if (GetContext() === 'background') {
     const injectedScript = `{
         const script = document.createElement('script')

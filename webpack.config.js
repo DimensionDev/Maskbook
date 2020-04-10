@@ -150,6 +150,7 @@ module.exports = (argvEnv, argv) => {
         'injected-script': src('./src/extension/injected-script/index.ts'),
         popup: appendReactDevtools(src('./src/extension/popup-page/index.tsx')),
         qrcode: src('./src/web-workers/QRCode.ts'),
+        'crypto-worker': src('./src/modules/CryptoAlgorithm/EllipticBackend/worker.ts'),
     }
     if (env !== 'development') delete config.entry.devtools
 
