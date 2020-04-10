@@ -1,4 +1,6 @@
-import type { WebCryptoNotSupportedMethods, WebCryptoSupportedMethods } from '../WebCrypto'
+import './elliptic-loader'
+import 'webcrypto-liner'
+import { WebCryptoNotSupportedMethods, WebCryptoSupportedMethods, WebCryptoMethods } from '../WebCrypto'
 import {
     getKeyParameter,
     CryptoKeyToJsonWebKey,
@@ -12,7 +14,7 @@ import {
 
 const ECDH = getKeyParameter('ecdh')[0]
 const ECDSA = getKeyParameter('ecdsa')[0]
-export function initEllipticBackend(_: WebCryptoSupportedMethods): WebCryptoNotSupportedMethods {
+function initEllipticBackend(_: WebCryptoSupportedMethods): WebCryptoNotSupportedMethods {
     return {
         async generate_ec_k256_pair(name) {
             const { privateKey, publicKey } = await crypto.subtle.generateKey(
@@ -73,4 +75,9 @@ async function _helper(x: MnemonicGenerationInformation) {
         private: await CryptoKeyToJsonWebKey(privateKey),
         public: await CryptoKeyToJsonWebKey(publicKey),
     }
+}
+
+export default {
+    ...WebCryptoMethods,
+    ...initEllipticBackend(WebCryptoMethods),
 }
