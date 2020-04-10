@@ -117,6 +117,8 @@
     "finish": "完成",
     "go_to": "前往",
     "home": "主頁",
+    "error_name_absent": "名稱不能為空",
+    "error_password_absent": "密碼不能為空",
     "immersive_setup_add_bio_text": "我們建議你把你的公鑰添加到個人簡介中，若如此做，請不要更改或刪除任何一部分。",
     "immersive_setup_connect_as": "要連接 {{profile}} 嗎？",
     "immersive_setup_connect_as_unknown": "你希望以哪個推特賬戶連接？",
