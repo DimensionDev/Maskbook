@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { useAsync, useMultiStateValidator } from 'react-use'
 import * as bip39 from 'bip39'
 import { DialogContentItem, DialogRouter } from './DialogBase'
@@ -187,15 +187,18 @@ export function PersonaBackupDialog(props: PersonaBackupDialogProps) {
     const mnemonicWordValue = persona.mnemonic?.words ?? t('not_available')
     const [base64Value, setBase64Value] = useState(t('not_available'))
     const [compressedQRString, setCompressedQRString] = useState<string | null>(null)
-    useEffect(() => {
-        Services.Welcome.generateBackupJSON({
+    useAsync(async () => {
+        const file = await Services.Welcome.generateBackupJSON({
             noPosts: true,
             noUserGroups: true,
             filter: { type: 'persona', wanted: [persona.identifier] },
-        }).then((file) => {
-            setBase64Value(encodeArrayBuffer(encodeText(JSON.stringify(file))))
-            setCompressedQRString(compressBackupFile(file))
         })
+        setBase64Value(encodeArrayBuffer(encodeText(JSON.stringify(file))))
+        setCompressedQRString(
+            compressBackupFile(file, {
+                personaIdentifier: persona.identifier,
+            }),
+        )
     }, [persona.identifier])
 
     const state = useState(0)
