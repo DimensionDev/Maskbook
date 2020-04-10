@@ -41,7 +41,9 @@ function createInternalSettings<T extends browser.storage.StorageValue>(
             await browser.storage.local.set({
                 [storage]: { ...stored, [key]: newVal },
             })
-            if (!initial) {
+            if (initial) {
+                updateValueRef(key)
+            } else {
                 MessageCenter.emit('settingsUpdated', instanceKey)
             }
         }
