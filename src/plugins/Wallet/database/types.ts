@@ -79,7 +79,7 @@ export interface WalletRecord {
     /** ethereum hex address */
     address: string
     /** User define wallet name. Default address.prefix(6) */
-    name: string
+    name: string | null
     /** Wallet ethereum balance */
     eth_balance?: BigNumber
     erc20_token_balance: Map</** address of the erc20 token */ string, BigNumber | undefined>
