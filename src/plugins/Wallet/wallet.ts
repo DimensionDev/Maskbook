@@ -48,6 +48,13 @@ currentEthereumNetworkSettings.addListener(() => {
     clearCache()
     PluginMessageCenter.emit('maskbook.wallets.update', undefined)
 })
+
+export async function isEmptyWallets() {
+    const t = createTransaction(await createWalletDBAccess(), 'readonly')('Wallet')
+    const count = await t.objectStore('Wallet').count()
+    return count === 0
+}
+
 export async function getWallets(): Promise<[(WalletRecord & { privateKey: string })[], ERC20TokenRecord[]]> {
     const t = createTransaction(await createWalletDBAccess(), 'readonly')('Wallet', 'ERC20Token')
     const wallets = await t.objectStore('Wallet').getAll()
@@ -104,6 +111,9 @@ export async function importNewWallet(
     const bal = await getWalletProvider()
         .queryBalance(address)
         .catch((x) => undefined)
+    if (rec.name === null) {
+        rec.name = address.slice(0, 6)
+    }
     const record: WalletRecord = {
         ...rec,
         address,
