@@ -45,7 +45,7 @@ export const languageSettings = createNewSettings<Language>(
     { primary: () => i18n.t('settings_language') },
 )
 
-const createProxiedSettings = <T extends string = string>(settingsKey: string) => {
+const createProxiedSettings = <T extends string | boolean = string>(settingsKey: string) => {
     const target: { [key: string]: ValueRef<string> } = {}
     MessageCenter.on('settingsCreated', (updatedKey) => {
         if (!(updatedKey in target)) {
@@ -68,10 +68,7 @@ const createProxiedSettings = <T extends string = string>(settingsKey: string) =
     }) as typeof target) as unknown) as { [key: string]: ValueRef<T> }
 }
 
-export interface ImagePayloadStatus {
-    enabled: boolean
-}
-export const currentImagePayloadStatus = createProxiedSettings('currentImagePayloadStatus')
+export const currentImagePayloadStatus = createProxiedSettings<boolean>('currentImagePayloadStatus')
 
 export const currentSelectedIdentity = createProxiedSettings('currentSelectedIdentity')
 export type ImmersiveSetupCrossContextStatus = {

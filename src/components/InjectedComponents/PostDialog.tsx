@@ -20,7 +20,7 @@ import { useCapturedInput } from '../../utils/hooks/useCapturedEvents'
 import { useStylesExtends, or } from '../custom-ui-helper'
 import type { Profile, Group } from '../../database'
 import { useFriendsList, useGroupsList, useCurrentIdentity, useMyIdentities } from '../DataSource/useActivatedUI'
-import { currentImagePayloadStatus, ImagePayloadStatus } from '../shared-settings/settings'
+import { currentImagePayloadStatus } from '../shared-settings/settings'
 import { useValueRef } from '../../utils/hooks/useValueRef'
 import { getActivatedUI } from '../../social-network/ui'
 import Services from '../../extension/service'
@@ -299,22 +299,11 @@ export function PostDialog(props: PostDialogProps) {
     const [currentShareTarget, setCurrentShareTarget] = useState<(Profile | Group)[]>(() => [])
     //#endregion
     //#region Image Based Payload Switch
-    const imagePayloadStatus_ = useValueRef(currentImagePayloadStatus[getActivatedUI().networkIdentifier])
-    const imagePayloadStatus = useMemo<ImagePayloadStatus>(() => {
-        try {
-            return JSON.parse(imagePayloadStatus_)
-        } catch {
-            return {
-                enabled: false,
-            }
-        }
-    }, [imagePayloadStatus_])
+    const imagePayloadStatus = useValueRef(currentImagePayloadStatus[getActivatedUI().networkIdentifier])
     const onImagePayloadSwitchChanged = or(
         props.onImagePayloadSwitchChanged,
-        useCallback((checked: boolean) => {
-            currentImagePayloadStatus[getActivatedUI().networkIdentifier].value = JSON.stringify({
-                enabled: checked,
-            })
+        useCallback((checked) => {
+            currentImagePayloadStatus[getActivatedUI().networkIdentifier].value = checked
         }, []),
     )
     //#endregion
@@ -331,7 +320,7 @@ export function PostDialog(props: PostDialogProps) {
                 )
                 const activeUI = getActivatedUI()
                 const metadata = readTypedMessageMetadata(typedMessageMetadata, 'com.maskbook.red_packet:1')
-                if (imagePayloadStatus.enabled) {
+                if (imagePayloadStatus) {
                     const isEth = metadata.ok && metadata.val.token_type === RedPacketTokenType.eth
                     const isDai =
                         metadata.ok &&
@@ -437,7 +426,7 @@ export function PostDialog(props: PostDialogProps) {
             shareToEveryone={shareToEveryoneLocal}
             onlyMyself={onlyMyself}
             availableShareTarget={availableShareTarget}
-            imagePayload={imagePayloadStatus.enabled}
+            imagePayload={imagePayloadStatus}
             currentIdentity={currentIdentity}
             currentShareTarget={currentShareTarget}
             postContent={postBoxContent}
