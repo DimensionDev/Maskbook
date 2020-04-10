@@ -36,6 +36,7 @@ export function createTaskStartImmersiveSetupDefault(
     _: () => SocialNetworkUI,
     props: Partial<ImmersiveSetupStepperUIProps> = {},
 ) {
+    let shadowRoot: ShadowRoot
     return (for_: PersonaIdentifier) => {
         if (mounted) return
         mounted = true
@@ -52,7 +53,12 @@ export function createTaskStartImmersiveSetupDefault(
                 }}
             />,
             {
-                shadow: () => dom.attachShadow({ mode: 'closed' }),
+                shadow: () => {
+                    if (!shadowRoot) {
+                        shadowRoot = dom.attachShadow({ mode: 'closed' })
+                    }
+                    return shadowRoot
+                },
                 normal: () => dom,
             },
         )
