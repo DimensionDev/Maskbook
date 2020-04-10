@@ -27,7 +27,8 @@ export function renderInShadowRoot(node: React.ReactNode, config: { shadow(): Sh
             if (shadow instanceof ShadowRoot && shadow.mode === 'open')
                 console.warn('Do not render with open ShadowRoot!')
             return shadow as any
-        } else return dom
+        }
+        return dom
     }
     let rendered = false
     const tryRender = () => {
