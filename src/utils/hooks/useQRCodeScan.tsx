@@ -1,20 +1,15 @@
 /// <reference path="../../components/QRScanner/ShapeDetectionSpec.d.ts" />
 /** This file is published under MIT License */
+import { filter, find, first } from 'lodash-es'
 import { useRef, useEffect, useState } from 'react'
 import { useInterval } from 'react-use'
 import { useRequestCamera } from './useRequestCamera'
 import '../../components/QRScanner/ShapeDetectionPolyfill'
 
 export async function getBackVideoDeviceId() {
-    const devices = (await navigator.mediaDevices.enumerateDevices()).filter((devices) => devices.kind === 'videoinput')
-    const back = devices.find(
-        (device) =>
-            (device.label.toLowerCase().search('back') !== -1 || device.label.toLowerCase().search('rear') !== -1) &&
-            device.label.toLowerCase().search('front') === -1,
-    )
-    if (back) return back.deviceId
-    if (devices[0]) return devices[0].deviceId
-    return null
+    const devices = filter(await navigator.mediaDevices.enumerateDevices(), ({ kind }) => kind === 'videoinput')
+    const back = find(devices, ({ label }) => !/Front/i.test(label) && /Back|Rear/i.test(label))
+    return (back ?? first(devices))?.deviceId ?? null
 }
 
 export function useQRCodeScan(
