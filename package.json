@@ -164,7 +164,7 @@
     "storybook-addon-i18n": "^5.1.13",
     "storybook-addon-material-ui": "^0.9.0-alpha.21",
     "terser-webpack-plugin": "^2.3.5",
-    "ts-jest": "^25.2.1",
+    "ts-jest": "^25.3.1",
     "ts-loader": "^6.2.1",
     "ts-morph": "^7.0.1",
     "ts-node": "^8.6.2",
