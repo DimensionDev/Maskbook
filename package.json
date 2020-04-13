@@ -47,7 +47,7 @@
     "@holoflows/kit": "https://github.com/DimensionDev/holoflows-kit",
     "@material-ui/core": "4.9.5",
     "@material-ui/icons": "4.9.1",
-    "@material-ui/lab": "^4.0.0-alpha.45",
+    "@material-ui/lab": "^4.0.0-alpha.47",
     "@nice-labs/git-flow-init": "^1.0.1",
     "@nice-labs/git-rev": "^3.3.1",
     "@servie/events": "^1.0.0",
