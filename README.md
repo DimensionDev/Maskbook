@@ -3,13 +3,17 @@
        width="200" height="200" title="([I:b])" alt="([I:b])">
 </a>
 
-# Maskbook &middot; [![GitHub license](https://img.shields.io/badge/license-AGPL-blue.svg?style=flat-square)](https://github.com/DimensionDev/Maskbook/blob/master/LICENSE) [![Circle CI](https://img.shields.io/circleci/project/github/DimensionDev/Maskbook.svg?style=flat-square&logo=circleci)](https://circleci.com/gh/DimensionDev/Maskbook) [![Join the chat at https://gitter.im/Maskbook/community](https://badges.gitter.im/Maskbook/community.svg)](https://gitter.im/Maskbook/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) [![Chrome Web Store](https://img.shields.io/chrome-web-store/v/jkoeaghipilijlahjplgbfiocjhldnap.svg?logo=Maskbook&logoColor=%231c68f3&style=flat-square&label=Chrome%20store)][crext] [![Mozilla Add-on](https://img.shields.io/amo/v/maskbook?label=Firefox%20store&style=flat-square)][fxaddon]
+# Maskbook &middot; [![GitHub license](https://img.shields.io/badge/license-AGPL-blue.svg?style=flat-square)](https://github.com/DimensionDev/Maskbook/blob/master/LICENSE) [![Circle CI](https://img.shields.io/circleci/project/github/DimensionDev/Maskbook.svg?style=flat-square&logo=circleci)](https://circleci.com/gh/DimensionDev/Maskbook) [![Join the chat at https://gitter.im/Maskbook/community](https://badges.gitter.im/Maskbook/community.svg)](https://gitter.im/Maskbook/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) [![Chrome Web Store](https://img.shields.io/chrome-web-store/v/jkoeaghipilijlahjplgbfiocjhldnap.svg?logo=Maskbook&logoColor=%231c68f3&style=flat-square&label=Chrome%20store)][crext] [![Mozilla Add-on](https://img.shields.io/amo/v/maskbook?label=Firefox%20store&style=flat-square)][![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FDimensionDev%2FMaskbook.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2FDimensionDev%2FMaskbook?ref=badge_shield)
+[fxaddon]
 
 Encrypt your posts & chats on You-Know-Where. Allow only your friends to decrypt.
 
 For general introductions, see [Maskbook.com](https://maskbook.com/).
 
 /_ I thought what I'd do was, I'd pretend I was one of those deaf-mutes. _/
+
+
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FDimensionDev%2FMaskbook.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2FDimensionDev%2FMaskbook?ref=badge_large)
 
 ## Downloads
 
