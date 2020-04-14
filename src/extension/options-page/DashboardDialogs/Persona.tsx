@@ -3,7 +3,7 @@ import { useAsync } from 'react-use'
 import * as bip39 from 'bip39'
 import { DialogContentItem, DialogRouter } from './DialogBase'
 
-import { TextField, Typography, InputBase, makeStyles, TypographyProps } from '@material-ui/core'
+import { Card, TextField, Typography, InputBase, makeStyles, CardProps } from '@material-ui/core'
 import { useHistory } from 'react-router-dom'
 import AbstractTab, { AbstractTabProps } from '../DashboardComponents/AbstractTab'
 import ActionButton from '../DashboardComponents/ActionButton'
@@ -137,15 +137,14 @@ interface PersonaBackupDialogProps {
     persona: Persona
 }
 
-const ShowcaseBox = (props: TypographyProps) => {
+const ShowcaseBox = (props: CardProps) => {
     const { children, ...other } = props
     const ref = React.useRef<HTMLElement>(null)
     const copyText = () => {
         selectElementContents(ref.current!)
     }
     return (
-        <Typography
-            variant="body1"
+        <Card
             onClick={copyText}
             ref={ref}
             style={{
@@ -156,7 +155,7 @@ const ShowcaseBox = (props: TypographyProps) => {
             }}
             {...other}>
             <div style={{ margin: 'auto' }}>{children}</div>
-        </Typography>
+        </Card>
     )
 }
 
