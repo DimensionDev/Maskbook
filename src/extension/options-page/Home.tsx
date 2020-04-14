@@ -98,8 +98,6 @@ export default function DashboardHomePage() {
     )
 
     React.useEffect(() => {
-        if (personas.length !== 0) return
-        // ensure persona
         Services.Identity.queryMyPersonas().then((personas) => {
             if (!personas.length) history.replace('/initialize')
             if (personas.length === 1)
