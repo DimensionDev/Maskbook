@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react'
-import { useAsync } from 'react-use'
+import { useAsync, useMultiStateValidator } from 'react-use'
 import * as bip39 from 'bip39'
 import { DialogContentItem, DialogRouter } from './DialogBase'
 
 import { TextField, Typography, InputBase, makeStyles, TypographyProps } from '@material-ui/core'
 import { useHistory } from 'react-router-dom'
-import { useSnackbar } from 'notistack'
 import AbstractTab, { AbstractTabProps } from '../DashboardComponents/AbstractTab'
 import ActionButton from '../DashboardComponents/ActionButton'
 import { ECKeyIdentifier, Identifier } from '../../../database/type'
@@ -33,41 +32,53 @@ export function PersonaCreateDialog() {
     const [name, setName] = useState('')
     const [password, setPassword] = useState('')
     const history = useHistory()
-    const { enqueueSnackbar } = useSnackbar()
+
+    //#region validation
+    type ValidationResult = [boolean, string, string]
+    type ValidationState = [string, string]
+    const [[isValid, nameErrorMessage, passwordErrorMessage]] = useMultiStateValidator<
+        ValidationResult,
+        ValidationState,
+        ValidationResult
+    >(
+        [name, password],
+        ([name, password]: ValidationState): ValidationResult => [
+            Boolean(name && password),
+            name ? '' : t('error_name_absent'),
+            password ? '' : t('error_password_absent'),
+        ],
+    )
+    const [submitted, setSubmitted] = useState(false)
+    //#endregion
 
     const createPersona = () => {
-        if (!name) {
-            enqueueSnackbar(t('error_name_absent'), { variant: 'error' })
-            return
-        }
-        if (!password) {
-            enqueueSnackbar(t('error_password_absent'), { variant: 'error' })
-            return
-        }
+        setSubmitted(true)
+        if (!isValid) return
         Services.Identity.createPersonaByMnemonic(name, password).then((persona) => {
             history.replace(`created?identifier=${encodeURIComponent(persona.toText())}`)
         })
     }
-
     const content = (
         <div style={{ alignSelf: 'stretch', textAlign: 'center', width: '100%' }}>
             <TextField
+                required
+                error={submitted && Boolean(nameErrorMessage)}
                 style={{ width: '100%', maxWidth: '320px' }}
                 autoFocus
-                required
                 variant="outlined"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                helperText=" "
+                helperText={(submitted && nameErrorMessage) || ' '}
                 label="Name"
             />
             <TextField
                 required
+                error={submitted && Boolean(passwordErrorMessage)}
                 type="password"
+                label="Password"
                 style={{ width: '100%', maxWidth: '320px' }}
                 variant="outlined"
-                label="Password"
-                helperText={t('dashboard_password_helper_text')}
+                helperText={(submitted && passwordErrorMessage) || t('dashboard_password_helper_text')}
                 placeholder={t('dashboard_password_hint')}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
