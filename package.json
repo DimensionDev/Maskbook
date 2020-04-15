@@ -115,7 +115,7 @@
     "@storybook/addon-info": "^5.3.18",
     "@storybook/addon-knobs": "^5.3.17",
     "@storybook/addon-links": "^5.3.18",
-    "@storybook/addon-viewport": "^5.3.13",
+    "@storybook/addon-viewport": "^5.3.18",
     "@storybook/addons": "^5.3.17",
     "@storybook/preset-typescript": "^2.1.0",
     "@storybook/react": "^5.3.18",
