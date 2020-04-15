@@ -1,9 +1,9 @@
 import * as crypto38 from '../crypto-alpha-38'
 import { decodeText } from '../../utils/type-transform/String-ArrayBuffer'
-import { generate_ECDH_256k1_KeyPair } from '../../utils/crypto.subtle'
+import { CryptoWorker } from '../../modules/workers'
 async function test1to1(text: string = Math.random().toString()) {
-    const alice = await generate_ECDH_256k1_KeyPair()
-    const bob = await generate_ECDH_256k1_KeyPair()
+    const alice = await CryptoWorker.generate_ec_k256_pair()
+    const bob = await CryptoWorker.generate_ec_k256_pair()
 
     const encrypted = await crypto38.encrypt1To1({
         content: text,

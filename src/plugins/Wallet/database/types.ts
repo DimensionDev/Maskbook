@@ -1,4 +1,5 @@
 import type { BigNumber } from 'bignumber.js'
+import { unreachable } from '../../../utils/utils'
 
 /**
  * @see https://github.com/DimensionDev/Tessercube-iOS/wiki/Red-Packet-Data-Dictionary
@@ -163,8 +164,7 @@ export function isNextRedPacketStatusValid(current: RedPacketStatus, next: RedPa
         case RedPacketStatus.refund_pending:
             return RedPacketStatus.refunded === next
         default:
-            const _x: never = current
-            return false
+            return unreachable(current)
     }
 }
 export interface RedPacketJSONPayload {

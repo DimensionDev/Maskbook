@@ -4,10 +4,10 @@ import {
     TypedMessageComplex,
     TypedMessageUnknown,
 } from '../../extension/background-script/CryptoServices/utils'
-import { derive_AES_GCM_256_Key_From_PBKDF2, import_PBKDF2_Key } from '../../utils/crypto.subtle'
 import { encodeText, encodeArrayBuffer, decodeText } from '../../utils/type-transform/String-ArrayBuffer'
-import { CryptoKeyToJsonWebKey } from '../../utils/type-transform/CryptoKey-JsonWebKey'
 import { recover_ECDH_256k1_KeyPair_ByMnemonicWord } from '../../utils/mnemonic-code'
+import { CryptoWorker } from '../../modules/workers'
+import { derive_AES_GCM_256_Key_From_PBKDF2 } from '../../modules/CryptoAlgorithm/helper'
 
 function helper(x: any) {
     if (x instanceof ArrayBuffer) return toString(x)
@@ -23,7 +23,8 @@ function helper(x: any) {
     }
 }
 async function aesFromSeed(seed: string) {
-    return derive_AES_GCM_256_Key_From_PBKDF2(await import_PBKDF2_Key(encodeText(seed)), encodeText('iv'))
+    const pbkdf2 = await CryptoWorker.import_pbkdf2(encodeText(seed))
+    return derive_AES_GCM_256_Key_From_PBKDF2(pbkdf2, encodeText('iv'))
 }
 
 beforeAll(() => {

@@ -1,4 +1,5 @@
 import { ProfileIdentifier } from '../../database/type'
+import type { EC_Public_JsonWebKey, AESJsonWebKey } from '../../modules/CryptoAlgorithm/interfaces/utils'
 
 /**
  * Server guide:
@@ -20,7 +21,7 @@ export interface FriendshipCertificateDecryptedV1 {
     /**
      * ? This key is used to join and decrypt the message in the private channel
      */
-    channelCryptoKey: JsonWebKey
+    channelCryptoKey: AESJsonWebKey
     /**
      * ? This seed is used to generate the deterministic channel ID
      */
@@ -32,7 +33,7 @@ export interface FriendshipCertificateEncryptedV1 {
      * ! A NEW RANDOM crypto key !
      * ! If a server receive a cert with a cryptoKey previously received, reject it !
      */
-    cryptoKey: JsonWebKey
+    cryptoKey: EC_Public_JsonWebKey
     /**
      * This is encrypted {@link FriendshipCertificate} by {@link FriendshipCertificatePacked.cryptoKey}
      */

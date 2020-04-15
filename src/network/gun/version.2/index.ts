@@ -1,6 +1,7 @@
 import Gun from 'gun/gun'
 import 'gun/sea'
 import { gun2Servers } from '../../gun-servers'
+import type { EC_Public_JsonWebKey } from '../../../modules/CryptoAlgorithm/interfaces/utils'
 
 export * from './people'
 export * from './post'
@@ -14,7 +15,7 @@ export type PersonOnGun2 =
 export type SharedAESKeyGun2 = {
     encryptedKey: string
     salt: string
-    ephemeralKey?: CryptoKey
+    ephemeralKey?: EC_Public_JsonWebKey
     ephemeralKeySign?: string
 }
 export interface PostOnGun2 {

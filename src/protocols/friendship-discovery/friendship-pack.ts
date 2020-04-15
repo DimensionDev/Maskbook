@@ -1,22 +1,23 @@
 import type { FriendshipCertificateDecryptedV1, FriendshipCertificateEncryptedV1 } from './friendship-cert'
 import { encryptWithAES, decryptWithAES } from '../../crypto/crypto-alpha-40'
 import { encodeArrayBuffer, decodeText } from '../../utils/type-transform/String-ArrayBuffer'
-import { toECDH } from '../../utils/type-transform/ECDSA-ECDH'
 import { ProfileIdentifier } from '../../database/type'
-import {
-    generate_ECDH_256k1_KeyPair,
-    import_ECDH_256k1_Key,
-    derive_AES_GCM_256_Key_From_ECDH_256k1_Keys,
-} from '../../utils/crypto.subtle'
+import { CryptoWorker } from '../../modules/workers'
+import type {
+    EC_Public_JsonWebKey,
+    AESJsonWebKey,
+    EC_Private_JsonWebKey,
+} from '../../modules/CryptoAlgorithm/interfaces/utils'
+import { derive_AES_GCM_256_Key_From_ECDH_256k1_Keys } from '../../modules/CryptoAlgorithm/helper'
 
 export async function issueFriendshipCertificate(
     whoAmI: ProfileIdentifier,
-    channelKey: CryptoKey,
+    channelCryptoKey: AESJsonWebKey,
     channelSeed: string,
 ): Promise<FriendshipCertificateDecryptedV1> {
     return {
         certificateIssuer: whoAmI,
-        channelCryptoKey: await crypto.subtle.exportKey('jwk', channelKey),
+        channelCryptoKey,
         channelSeed: channelSeed,
     }
 }
@@ -34,16 +35,16 @@ export async function issueFriendshipCertificate(
  */
 export async function packFriendshipCertificate(
     cert: FriendshipCertificateDecryptedV1,
-    targetKey: CryptoKey,
+    targetKey: EC_Public_JsonWebKey,
 ): Promise<FriendshipCertificateEncryptedV1> {
-    const key = await generate_ECDH_256k1_KeyPair()
-    const aes = await derive_AES_GCM_256_Key_From_ECDH_256k1_Keys(targetKey, key.privateKey)
+    const key = await CryptoWorker.generate_ec_k256_pair()
+    const aes = await CryptoWorker.derive_aes_from_ecdh_k256(key.privateKey, targetKey, 'AES-GCM', 256)
     const { content: payload, iv } = await encryptWithAES({
         aesKey: aes,
         content: JSON.stringify(cert),
     })
     return {
-        cryptoKey: await crypto.subtle.exportKey('jwk', key.publicKey),
+        cryptoKey: key.publicKey,
         iv: encodeArrayBuffer(iv),
         payload: encodeArrayBuffer(payload),
         timestamp: Date.now(),
@@ -59,11 +60,10 @@ export async function packFriendshipCertificate(
  */
 export async function unpackFriendshipCertificate(
     packed: FriendshipCertificateEncryptedV1,
-    privateKey: CryptoKey,
+    privateKey: EC_Private_JsonWebKey,
 ): Promise<null | FriendshipCertificateDecryptedV1> {
-    const ownPrivateKey = privateKey.usages.find((x) => x === 'deriveKey') ? privateKey : await toECDH(privateKey)
-    const packedCryptoKey = await import_ECDH_256k1_Key(packed.cryptoKey)
-    const aes = await derive_AES_GCM_256_Key_From_ECDH_256k1_Keys(packedCryptoKey, ownPrivateKey)
+    const packedCryptoKey = packed.cryptoKey
+    const aes = await derive_AES_GCM_256_Key_From_ECDH_256k1_Keys(privateKey, packedCryptoKey)
     try {
         const certBuffer = await decryptWithAES({ aesKey: aes, encrypted: packed.payload, iv: packed.iv })
         const certString = decodeText(certBuffer)

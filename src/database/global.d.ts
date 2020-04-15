@@ -8,3 +8,7 @@ interface IDBFactory {
     databases?(): Promise<Array<{ name: string; version: number }>>
 }
 type IF<Condition, True, False> = Condition extends true ? True : False
+/**
+ * Magic variable, used to debug
+ */
+declare const __line: number

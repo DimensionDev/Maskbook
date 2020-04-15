@@ -2,6 +2,7 @@ import type { FullPersonaDBTransaction } from './Persona.db'
 import { ProfileIdentifier, PersonaIdentifier, Identifier, ECKeyIdentifier } from '../type'
 import type { IdentifierMap } from '../IdentifierMap'
 import { restorePrototype } from '../../utils/type'
+import { unreachable } from '../../utils/utils'
 
 type ReadwriteFullPersonaDBTransaction = FullPersonaDBTransaction<'readwrite'>
 
@@ -54,8 +55,7 @@ async function fixDBInconsistency(diagnosis: Diagnosis, t: ReadwriteFullPersonaD
             return profiles.put(rec!)
         }
         default:
-            const _never: never = diagnosis
-            throw new Error('Unreachable case' + _never)
+            return unreachable(diagnosis)
     }
 }
 

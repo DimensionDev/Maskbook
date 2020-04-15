@@ -7,6 +7,7 @@ import type {
     TypedMessageComplex,
     TypedMessageUnknown,
 } from '../../extension/background-script/CryptoServices/utils'
+import { unreachable } from '../../utils/utils'
 
 interface MetadataRendererProps {
     metadata: TypedMessage['meta']
@@ -43,10 +44,8 @@ export const DefaultTypedMessageRenderer = React.memo(function DefaultTypedMessa
             const Unknown = props.TypedMessageUnknownRenderer || DefaultTypedMessageUnknownRenderer
             return <Unknown {...props} message={props.message} />
         }
-        default: {
-            const _: never = props.message
-            throw new Error('Unreachable case')
-        }
+        default:
+            return unreachable(props.message)
     }
 })
 

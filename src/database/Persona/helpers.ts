@@ -20,14 +20,14 @@ import {
 } from './Persona.db'
 import { IdentifierMap } from '../IdentifierMap'
 import { getAvatarDataURL } from '../helpers/avatar'
-import {
-    JsonWebKeyToCryptoKey,
-    CryptoKeyToJsonWebKey,
-    getKeyParameter,
-} from '../../utils/type-transform/CryptoKey-JsonWebKey'
 import { generate_ECDH_256k1_KeyPair_ByMnemonicWord } from '../../utils/mnemonic-code'
 import { deriveLocalKeyFromECDHKey } from '../../utils/mnemonic-code/localKeyGenerate'
-import { createNewWallet, importNewWallet, isEmptyWallets } from '../../plugins/Wallet/wallet'
+import { importNewWallet, isEmptyWallets } from '../../plugins/Wallet/wallet'
+import type {
+    EC_Public_JsonWebKey,
+    AESJsonWebKey,
+    EC_Private_JsonWebKey,
+} from '../../modules/CryptoAlgorithm/interfaces/utils'
 
 export async function profileRecordToProfile(record: ProfileRecord): Promise<Profile> {
     const rec = { ...record }
@@ -131,57 +131,52 @@ export function queryPersonaRecord(i: ProfileIdentifier | PersonaIdentifier): Pr
     return i instanceof ProfileIdentifier ? queryPersonaByProfileDB(i) : queryPersonaDB(i)
 }
 
-export async function queryPublicKey(i: ProfileIdentifier | PersonaIdentifier): Promise<CryptoKey | undefined> {
-    const jwk = (await queryPersonaRecord(i))?.publicKey
-    if (jwk) return JsonWebKeyToCryptoKey(jwk, ...getKeyParameter('ecdh'))
-    return undefined
+export async function queryPublicKey(
+    i: ProfileIdentifier | PersonaIdentifier,
+): Promise<EC_Public_JsonWebKey | undefined> {
+    return queryPersonaRecord(i).then((x) => x?.publicKey)
 }
-export async function queryPrivateKey(i: ProfileIdentifier | PersonaIdentifier): Promise<CryptoKey | undefined> {
-    const jwk = (await queryPersonaRecord(i))?.privateKey
-    if (jwk) return JsonWebKeyToCryptoKey(jwk, ...getKeyParameter('ecdh'))
-    return undefined
+export async function queryPrivateKey(
+    i: ProfileIdentifier | PersonaIdentifier,
+): Promise<EC_Private_JsonWebKey | undefined> {
+    return queryPersonaRecord(i).then((x) => x?.privateKey)
 }
 
 export async function createPersonaByMnemonic(
     nickname: string | undefined,
     password: string,
 ): Promise<PersonaIdentifier> {
-    const key = await generate_ECDH_256k1_KeyPair_ByMnemonicWord(password)
-    const jwkPub = await CryptoKeyToJsonWebKey(key.key.publicKey)
-    const jwkPriv = await CryptoKeyToJsonWebKey(key.key.privateKey)
-    const localKey = await deriveLocalKeyFromECDHKey(key.key.publicKey, key.mnemonicRecord.words)
-    const jwkLocalKey = await CryptoKeyToJsonWebKey(localKey)
+    const { key, mnemonicRecord: mnemonic } = await generate_ECDH_256k1_KeyPair_ByMnemonicWord(password)
+    const { privateKey, publicKey } = key
+    const localKey = await deriveLocalKeyFromECDHKey(publicKey, mnemonic.words)
 
     // TODO: move to plugin logic
     if (await isEmptyWallets()) {
         importNewWallet({
             name: null,
-            mnemonic: key.mnemonicRecord.words.split(' '),
+            mnemonic: mnemonic.words.split(' '),
             passphrase: password,
             _wallet_is_default: true,
         })
     }
 
     return createPersonaByJsonWebKey({
-        privateKey: jwkPriv,
-        publicKey: jwkPub,
-        localKey: jwkLocalKey,
-        mnemonic: key.mnemonicRecord,
-        nickname: nickname,
+        privateKey,
+        publicKey,
+        localKey,
+        mnemonic,
+        nickname,
     })
 }
 
 export async function createPersonaByJsonWebKey(options: {
-    publicKey: JsonWebKey
-    privateKey: JsonWebKey
-    localKey?: JsonWebKey
+    publicKey: EC_Public_JsonWebKey
+    privateKey: EC_Private_JsonWebKey
+    localKey?: AESJsonWebKey
     nickname?: string
     mnemonic?: PersonaRecord['mnemonic']
 }): Promise<PersonaIdentifier> {
     const identifier = ECKeyIdentifier.fromJsonWebKey(options.publicKey)
-    const localKeyCryptoKey = options.localKey
-        ? await JsonWebKeyToCryptoKey(options.localKey, ...getKeyParameter('aes'))
-        : undefined
     const record: PersonaRecord = {
         createdAt: new Date(),
         updatedAt: new Date(),
@@ -191,7 +186,7 @@ export async function createPersonaByJsonWebKey(options: {
         privateKey: options.privateKey,
         nickname: options.nickname,
         mnemonic: options.mnemonic,
-        localKey: options.localKey ? localKeyCryptoKey : undefined,
+        localKey: options.localKey,
     }
     await consistentPersonaDBWriteAccess((t) => createPersonaDB(record, t as any))
     return identifier
@@ -201,9 +196,9 @@ export async function createProfileWithPersona(
     data: LinkedProfileDetails,
     keys: {
         nickname?: string
-        publicKey: JsonWebKey
-        privateKey?: JsonWebKey
-        localKey?: CryptoKey
+        publicKey: EC_Public_JsonWebKey
+        privateKey?: EC_Private_JsonWebKey
+        localKey?: AESJsonWebKey
         mnemonic?: PersonaRecord['mnemonic']
     },
 ): Promise<void> {
@@ -225,7 +220,7 @@ export async function createProfileWithPersona(
     })
 }
 
-export async function queryLocalKey(i: ProfileIdentifier | PersonaIdentifier): Promise<CryptoKey | null> {
+export async function queryLocalKey(i: ProfileIdentifier | PersonaIdentifier): Promise<AESJsonWebKey | null> {
     if (i instanceof ProfileIdentifier) {
         const profile = await queryProfileDB(i)
         if (!profile) return null

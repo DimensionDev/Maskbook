@@ -5,14 +5,14 @@ import getCurrentNetworkWorker from '../../social-network/utils/getCurrentNetwor
 import type { SocialNetworkUI } from '../../social-network/ui'
 import { getWelcomePageURL } from '../options-page/Welcome/getWelcomePageURL'
 import { recover_ECDH_256k1_KeyPair_ByMnemonicWord } from '../../utils/mnemonic-code'
-import { createPersonaByJsonWebKey, Persona } from '../../database'
+import { createPersonaByJsonWebKey } from '../../database'
 import { attachProfileDB, LinkedProfileDetails } from '../../database/Persona/Persona.db'
-import { CryptoKeyToJsonWebKey } from '../../utils/type-transform/CryptoKey-JsonWebKey'
 import { deriveLocalKeyFromECDHKey } from '../../utils/mnemonic-code/localKeyGenerate'
 import type { ProfileIdentifier, PersonaIdentifier } from '../../database/type'
 import { generateBackupJSON, BackupOptions } from './WelcomeServices/generateBackupJSON'
 import { i18n } from '../../utils/i18n-next'
 import { exclusiveTasks } from '../content-script/tasks'
+import type { AESJsonWebKey } from '../../modules/CryptoAlgorithm/interfaces/utils'
 
 OnlyRunInContext(['background', 'debugging'], 'WelcomeService')
 export { generateBackupJSON } from './WelcomeServices/generateBackupJSON'
@@ -31,22 +31,19 @@ export async function restoreNewIdentityWithMnemonicWord(
     info: {
         whoAmI?: ProfileIdentifier
         nickname?: string
-        localKey?: JsonWebKey
+        localKey?: AESJsonWebKey
         details?: LinkedProfileDetails
     },
 ): Promise<PersonaIdentifier> {
-    const key = await recover_ECDH_256k1_KeyPair_ByMnemonicWord(word, password)
-    const pubJwk = await CryptoKeyToJsonWebKey(key.key.publicKey)
-    const privJwk = await CryptoKeyToJsonWebKey(key.key.privateKey)
-    const localKeyJwk = await deriveLocalKeyFromECDHKey(key.key.publicKey, key.mnemonicRecord.words).then(
-        CryptoKeyToJsonWebKey,
-    )
+    const { key, mnemonicRecord } = await recover_ECDH_256k1_KeyPair_ByMnemonicWord(word, password)
+    const { privateKey, publicKey } = key
+    const localKeyJwk = await deriveLocalKeyFromECDHKey(publicKey, mnemonicRecord.words)
 
     const ecKeyID = await createPersonaByJsonWebKey({
-        publicKey: pubJwk,
-        privateKey: privJwk,
+        publicKey,
+        privateKey,
         localKey: info.localKey || localKeyJwk,
-        mnemonic: key.mnemonicRecord,
+        mnemonic: mnemonicRecord,
         nickname: info.nickname,
     })
     if (info.whoAmI) {

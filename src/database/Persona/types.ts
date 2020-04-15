@@ -1,6 +1,11 @@
 import type { ProfileRecord, PersonaRecord, LinkedProfileDetails } from './Persona.db'
-import type { ReadonlyIdentifierMap } from '../IdentifierMap'
-import type { ProfileIdentifier } from '../type'
+import type { ReadonlyIdentifierMap, IdentifierMap } from '../IdentifierMap'
+import type { ProfileIdentifier, PersonaIdentifier } from '../type'
+import type {
+    EC_Public_JsonWebKey,
+    EC_Private_JsonWebKey,
+    AESJsonWebKey,
+} from '../../modules/CryptoAlgorithm/interfaces/utils'
 
 type TypedOmit<T, Q extends keyof T> = Omit<T, Q>
 export interface Profile extends Readonly<TypedOmit<ProfileRecord, 'localKey' | 'linkedPersona'>> {

@@ -1,15 +1,16 @@
 import * as Alpha39 from '../../../crypto/crypto-alpha-39'
 import * as Gun2 from '../../../network/gun/version.2'
-import { ProfileIdentifier, PostIVIdentifier, GroupIdentifier } from '../../../database/type'
+import { ProfileIdentifier, PostIVIdentifier } from '../../../database/type'
 import { prepareRecipientDetail } from './prepareRecipientDetail'
 import { cryptoProviderTable } from './utils'
 import { updatePostDB, RecipientDetail, RecipientReason } from '../../../database/post'
 import { getNetworkWorker } from '../../../social-network/worker'
 import { queryPrivateKey, queryLocalKey } from '../../../database'
 import { IdentifierMap } from '../../../database/IdentifierMap'
+import type { AESJsonWebKey, EC_Private_JsonWebKey } from '../../../modules/CryptoAlgorithm/interfaces/utils'
 export async function appendShareTarget(
     version: -40 | -39 | -38,
-    postAESKey: string | CryptoKey,
+    postAESKey: string | AESJsonWebKey,
     iv: string,
     people: ProfileIdentifier[],
     whoAmI: ProfileIdentifier,
@@ -25,13 +26,12 @@ export async function appendShareTarget(
         )
         return appendShareTarget(version, AESKey, iv, people, whoAmI, reason)
     }
-    const AESKey: CryptoKey = postAESKey
-    const myPrivateKey: CryptoKey = (await queryPrivateKey(whoAmI))!
+    const myPrivateKey: EC_Private_JsonWebKey = (await queryPrivateKey(whoAmI))!
     if (version === -39 || version === -38) {
         const [, toKey] = await prepareRecipientDetail(people)
         const othersAESKeyEncrypted = await Alpha39.generateOthersAESKeyEncrypted(
             version,
-            AESKey,
+            postAESKey,
             myPrivateKey,
             Array.from(toKey.values()),
         )

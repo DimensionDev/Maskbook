@@ -1,15 +1,15 @@
 import { packFriendshipCertificate, unpackFriendshipCertificate, issueFriendshipCertificate } from '../friendship-pack'
 import { ProfileIdentifier } from '../../../database/type'
-import { generate_ECDH_256k1_KeyPair, generate_AES_GCM_256_Key } from '../../../utils/crypto.subtle'
+import { CryptoWorker } from '../../../modules/workers'
 
 const aliceID = new ProfileIdentifier('localhost', 'alice.test')
 async function testFriendshipDiscover() {
     // Alice don't need a keypair during the process
-    const bob = await generate_ECDH_256k1_KeyPair()
+    const bob = await CryptoWorker.generate_ec_k256_pair()
 
     const rawCert = await issueFriendshipCertificate(
         aliceID,
-        await generate_AES_GCM_256_Key(),
+        await CryptoWorker.generate_aes_gcm(),
         Math.random().toString(),
     )
     // Alice to bob

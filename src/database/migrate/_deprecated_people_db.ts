@@ -21,7 +21,7 @@
  *
  * # ObjectStore `localKeys`:
  * @description Store local AES keys.
- * @type {Record<string, CryptoKey>} Record of <userId, CryptoKey>
+ * @type {Record<string, AESJsonWebKey>} Record of <userId, CryptoKey>
  * @keys outline, string, which means network.
  */
 import { GroupIdentifier, Identifier, ProfileIdentifier } from '../type'
@@ -29,6 +29,7 @@ import { DBSchema, openDB } from 'idb/with-async-ittr-cjs'
 import { JsonWebKeyToCryptoKey, getKeyParameter } from '../../utils/type-transform/CryptoKey-JsonWebKey'
 import { OnlyRunInContext } from '@holoflows/kit/es'
 import { createDBAccess } from '../helpers/openDB'
+import type { AESJsonWebKey } from '../../modules/CryptoAlgorithm/interfaces/utils'
 
 OnlyRunInContext(['background', 'debugging'], 'People db')
 //#region Type and utils
@@ -71,7 +72,7 @@ interface PersonRecordInDatabase extends Base<true> {
     nickname?: string
     groups: GroupIdentifier[]
 }
-type LocalKeys = Record<string, CryptoKey | undefined>
+type LocalKeys = Record<string, AESJsonWebKey | undefined>
 interface PeopleDB extends DBSchema {
     /** Use inline keys */
     people: {
@@ -95,7 +96,7 @@ interface PeopleDB extends DBSchema {
 }
 const db = createDBAccess(() =>
     openDB<PeopleDB>('maskbook-people-v2', 1, {
-        upgrade(db, oldVersion, newVersion, transaction) {
+        upgrade(db, oldVersion, _newVersion, transaction) {
             function v0_v1() {
                 // inline keys
                 db.createObjectStore('people', { keyPath: 'identifier' })
@@ -155,8 +156,10 @@ export async function getMyIdentitiesDB(): Promise<PersonRecordPublicPrivate[]> 
  * @deprecated
  */
 export async function queryLocalKeyDB(network: string): Promise<LocalKeys>
-export async function queryLocalKeyDB(identifier: ProfileIdentifier): Promise<CryptoKey | null>
-export async function queryLocalKeyDB(identifier: string | ProfileIdentifier): Promise<LocalKeys | CryptoKey | null> {
+export async function queryLocalKeyDB(identifier: ProfileIdentifier): Promise<AESJsonWebKey | null>
+export async function queryLocalKeyDB(
+    identifier: string | ProfileIdentifier,
+): Promise<LocalKeys | AESJsonWebKey | null> {
     const t = (await db()).transaction('localKeys')
     if (typeof identifier === 'string') {
         const result = await t.objectStore('localKeys').get(identifier)
