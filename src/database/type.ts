@@ -60,7 +60,7 @@ export abstract class Identifier {
             else if (type === 'post') result = PostIdentifier[$fromString](rest.join(':'))
             else if (type === 'post_iv') result = PostIVIdentifier[$fromString](rest.join(':'))
             else if (type === 'ec_key') result = ECKeyIdentifier[$fromString](rest.join(':'))
-            else unreachable(type)
+            else return new Err(new TypeError('Unreachable case:' + type))
             fromStringCache.set(id, result)
         }
         const err = new Err(

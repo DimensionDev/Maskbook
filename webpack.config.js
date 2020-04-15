@@ -19,7 +19,7 @@ let polyfills = [
 const publicDir = src('./public')
 const publicPolyfill = src('./public/polyfill')
 
-// TODO: what does it used for?
+// Don't open browser
 process.env.BROWSER = 'none'
 
 const SSRPlugin = require('./config-overrides/SSRPlugin')
@@ -253,6 +253,7 @@ module.exports = (argvEnv, argv) => {
                 new webpack.DefinePlugin({
                     'webpackEnv.target': JSON.stringify(buildTarget),
                     'webpackEnv.genericTarget': JSON.stringify(genericTarget),
+                    'process.env.STORYBOOK': 'false',
                 }),
             )
         if (firefoxVariant)

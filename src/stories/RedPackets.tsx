@@ -144,10 +144,7 @@ storiesOf('Plugin: Red Packets', module)
             total: (knobs.total * 10 ** 18).toString(),
             creation_time: Date.now(),
         }
-        const meta = new Map<string, any>([
-            ['com.maskbook.red_packet:1', payload],
-            ['storybook.no-side-effect', true],
-        ])
+        const meta = new Map<string, any>([['com.maskbook.red_packet:1', payload]])
         return (
             <Paper style={{ maxWidth: 400 }}>
                 <div>

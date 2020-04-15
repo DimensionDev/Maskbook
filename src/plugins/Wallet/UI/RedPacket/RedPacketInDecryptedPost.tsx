@@ -136,11 +136,7 @@ export function RedPacketInDecryptedPostCard(
 ) {
     const { t } = useI18N()
     const { message, postIdentifier, loading, claiming, onClick } = props
-    const storybookDebugging: boolean = readTypedMessageMetadataUntyped<boolean>(
-        message.meta,
-        'storybook.no-side-effect',
-        // @ts-ignore https://github.com/vultix/ts-results/issues/4
-    ).else(false)
+    const storybookDebugging: boolean = !!process.env.STORYBOOK
     /* without redpacket */
     const jsx = message
         ? withMetadata(message.meta, 'com.maskbook.red_packet:1', (r) => (

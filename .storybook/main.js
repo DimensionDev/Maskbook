@@ -13,7 +13,7 @@ module.exports = {
         '@storybook/addon-docs',
         '@storybook/addon-viewport/register',
     ],
-    webpackFinal: async config => {
+    webpackFinal: async (/** @type {import('webpack').Configuration} */ config) => {
         config.module.rules.push({
             test: /\.(ts|tsx)$/,
             use: [
@@ -28,6 +28,12 @@ module.exports = {
             ],
         })
         config.resolve.extensions.push('.ts', '.tsx')
+        const webpack = require('webpack')
+        config.plugins.push(
+            new webpack.DefinePlugin({
+                'process.env.storybook': 'true',
+            }),
+        )
         return config
     },
 }

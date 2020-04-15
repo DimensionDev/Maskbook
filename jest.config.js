@@ -9,7 +9,6 @@ module.exports = {
             isolatedModules: true,
         },
     },
-    globalSetup: path.join(__dirname, './scripts/jest-global-setup'),
     globalTeardown: path.join(__dirname, './scripts/jest-global-teardown'),
     setupFiles: [
         require.resolve('jest-webextension-mock'),
