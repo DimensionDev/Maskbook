@@ -1,5 +1,7 @@
 import elliptic from 'elliptic'
-Object.assign(globalThis, { elliptic })
+// @ts-ignore
+import regeneratorRuntime from 'regenerator-runtime'
+Object.assign(globalThis, { elliptic, regeneratorRuntime })
 
 /**
  * Workaround of https://github.com/PeculiarVentures/webcrypto-liner/issues/76

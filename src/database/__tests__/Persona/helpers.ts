@@ -159,7 +159,7 @@ test('queryPersonaRecord', async () => {
 test('queryPublicKey', async () => {
     const profileRecord = await createProfileRecord()
     const personaRecord = await createPersonaRecord()
-    const publicKey = await JsonWebKeyToCryptoKey(personaRecord.publicKey, ...getKeyParameter('ecdh'))
+    const publicKey = personaRecord.publicKey
     profileRecord.linkedPersona = personaRecord.identifier
     personaRecord.linkedProfiles.set(profileRecord.identifier, {
         connectionConfirmState: 'confirmed',
@@ -175,7 +175,7 @@ test('queryPublicKey', async () => {
 test('queryPrivateKey', async () => {
     const profileRecord = await createProfileRecord()
     const personaRecord = await createPersonaRecord()
-    const privateKey = await JsonWebKeyToCryptoKey(personaRecord.privateKey!, ...getKeyParameter('ecdh'))
+    const privateKey = personaRecord.privateKey
     profileRecord.linkedPersona = personaRecord.identifier
     personaRecord.linkedProfiles.set(profileRecord.identifier, {
         connectionConfirmState: 'confirmed',

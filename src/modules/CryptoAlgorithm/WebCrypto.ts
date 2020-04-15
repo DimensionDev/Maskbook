@@ -5,7 +5,7 @@ import {
     CryptoKeyToJsonWebKey,
 } from '../../utils/type-transform/CryptoKey-JsonWebKey'
 import type { AESName } from './interfaces/interface.aes'
-import type { AESJsonWebKey } from './interfaces/utils'
+import type { AESJsonWebKey, PBKDF2UnknownKey } from './interfaces/utils'
 
 export type WebCryptoSupportedMethods = Pick<
     CryptoAlgorithmProviderMethods,
@@ -38,10 +38,12 @@ export const WebCryptoMethods: WebCryptoSupportedMethods = {
         return CryptoKeyToJsonWebKey(key)
     },
     async derive_aes_from_pbkdf2(pbkdf, salt, hash, aes_algr, aes_length, iterations) {
-        const key = await JsonWebKeyToCryptoKey(pbkdf, ...getKeyParameter('pbkdf2'))
+        if (process.env.NODE_ENV !== 'test')
+            if (!(pbkdf instanceof CryptoKey))
+                throw new TypeError('Expect PBKDF2UnknownKey to be a CryptoKey at runtime')
         const aes = await crypto.subtle.deriveKey(
             { name: 'PBKDF2', salt, iterations, hash },
-            key,
+            (pbkdf as unknown) as CryptoKey,
             { name: aes_algr, length: aes_length },
             true,
             ['encrypt', 'decrypt'],
@@ -53,7 +55,8 @@ export const WebCryptoMethods: WebCryptoSupportedMethods = {
     },
     async import_pbkdf2(seed) {
         const key = await crypto.subtle.importKey('raw', seed, 'PBKDF2', false, ['deriveBits', 'deriveKey'])
-        return CryptoKeyToJsonWebKey(key)
+        // In the WebCrypto spec, it is not exportable. We choose CryptoKey as our PBKDF2UnknownKey
+        return ((key as CryptoKey) as unknown) as PBKDF2UnknownKey
     },
     async aes_to_raw(aes, name: AESName = 'AES-GCM', length: 256 = 256) {
         const cryptoKey = await crypto.subtle.importKey('jwk', aes, { name, length } as AesKeyAlgorithm, true, [
@@ -61,7 +64,7 @@ export const WebCryptoMethods: WebCryptoSupportedMethods = {
         ])
         return crypto.subtle.exportKey('raw', cryptoKey)
     },
-    async raw_to_aes(raw) {
+    async raw_to_aes(raw, name: AESName = 'AES-GCM') {
         const cryptoKey = await crypto.subtle.importKey('raw', raw, { name, length } as AesKeyAlgorithm, true, [
             ...getKeyParameter('aes')[0],
         ])

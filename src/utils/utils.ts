@@ -69,7 +69,7 @@ export const nopWithUnmount = (...args: unknown[]) => nop
 export const bypass: <T>(args: T) => T = (args) => args
 export const unreachable = (val: never) => {
     console.error('Unhandled value: ', val)
-    throw new Error('Unreachable case')
+    throw new Error('Unreachable case:' + val)
 }
 /**
  * index starts at one.

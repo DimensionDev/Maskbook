@@ -1,8 +1,8 @@
 import { CryptoWorker } from '../workers'
-import type { PBKDF2JsonWebKey, EC_Public_JsonWebKey, EC_Private_JsonWebKey, JsonWebKeyPair } from './interfaces/utils'
+import type { PBKDF2UnknownKey, EC_Public_JsonWebKey, EC_Private_JsonWebKey, JsonWebKeyPair } from './interfaces/utils'
 
 export function derive_AES_GCM_256_Key_From_PBKDF2(
-    pbkdf: PBKDF2JsonWebKey,
+    pbkdf: PBKDF2UnknownKey,
     iv: ArrayBuffer,
     hash: 'SHA-256' = 'SHA-256',
     iterations = 100000,

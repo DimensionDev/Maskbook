@@ -5,8 +5,9 @@ export class WorkerMessage implements MessageChannel {
     private ref: { type: 'worker'; main: Worker } | { type: 'main'; worker: Worker[] }
     private listeners: Set<(...args: any) => void> = new Set()
     constructor() {
-        if (this.isMainRealm) {
+        skipSSR: if (this.isMainRealm) {
             this.ref = { type: 'main', worker: [] }
+            if (typeof window !== 'object') break skipSSR
             const worker = new Worker('/js/crypto-worker.js')
             worker.addEventListener(
                 'message',
