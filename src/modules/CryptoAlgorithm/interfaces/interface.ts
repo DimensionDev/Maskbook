@@ -10,11 +10,10 @@
  * Signature:
  * - No native CryptoKey, JsonWebKey only
  */
-import { ECMethods } from './interface.ec'
-import { AESMethods } from './interface.aes'
-import { PBKDF2Methods } from './interface.pbkdf2'
+import type { ECMethods } from './interface.ec'
+import type { AESMethods } from './interface.aes'
+import type { PBKDF2Methods } from './interface.pbkdf2'
 import type { BlockChainMethods } from './interface.blockchain'
-export type JsonWebKeyPair = { public: JsonWebKek; private: JsonWebKey }
 export interface CryptoAlgorithmProviderMethods extends AESMethods, ECMethods, PBKDF2Methods, BlockChainMethods {
     digest_sha(alg: ShaName, data: ArrayBuffer): PromiseLike<ArrayBuffer>
 }

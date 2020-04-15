@@ -5,9 +5,20 @@ import { DBSchema, openDB } from 'idb/with-async-ittr-cjs'
 import { IdentifierMap } from '../IdentifierMap'
 import { PrototypeLess, restorePrototype } from '../../utils/type'
 import { MessageCenter } from '../../utils/messages'
-import { createDBAccess, IDBPSafeTransaction, createTransaction } from '../helpers/openDB'
+import {
+    createDBAccess,
+    IDBPSafeTransaction,
+    createTransaction,
+    createDBAccessWithAsyncUpgrade,
+} from '../helpers/openDB'
 import { queryProfile } from './helpers'
 import { assertPersonaDBConsistency } from './consistency'
+import type {
+    AESJsonWebKey,
+    EC_Public_JsonWebKey,
+    EC_Private_JsonWebKey,
+} from '../../modules/CryptoAlgorithm/interfaces/utils'
+import { CryptoKeyToJsonWebKey } from '../../utils/type-transform/CryptoKey-JsonWebKey'
 /**
  * Database structure:
  *
@@ -24,19 +35,62 @@ import { assertPersonaDBConsistency } from './consistency'
  * @keys inline, {@link ProfileRecord.identifier}
  */
 
-const db = createDBAccess(() => {
-    return openDB<PersonaDB>('maskbook-persona', 1, {
-        upgrade(db, oldVersion, newVersion, transaction) {
-            function v0_v1() {
-                db.createObjectStore('personas', { keyPath: 'identifier' })
-                db.createObjectStore('profiles', { keyPath: 'identifier' })
-                transaction.objectStore('profiles').createIndex('network', 'network', { unique: false })
-                transaction.objectStore('personas').createIndex('hasPrivateKey', 'hasPrivateKey', { unique: false })
+const db = createDBAccessWithAsyncUpgrade<PersonaDB, Knowledge>(
+    1,
+    2,
+    (currentOpenVersion, knowledge) => {
+        return openDB<PersonaDB>('maskbook-persona', currentOpenVersion, {
+            upgrade(db, oldVersion, newVersion, transaction) {
+                function v0_v1() {
+                    db.createObjectStore('personas', { keyPath: 'identifier' })
+                    db.createObjectStore('profiles', { keyPath: 'identifier' })
+                    transaction.objectStore('profiles').createIndex('network', 'network', { unique: false })
+                    transaction.objectStore('personas').createIndex('hasPrivateKey', 'hasPrivateKey', { unique: false })
+                }
+                async function v1_v2() {
+                    const persona = transaction.objectStore('personas')
+                    const profile = transaction.objectStore('profiles')
+                    await update(persona)
+                    await update(profile)
+                    async function update(q: typeof persona | typeof profile) {
+                        for await (const rec of persona) {
+                            if (!rec.value.localKey) continue
+                            const jwk = knowledge?.data.get(rec.value.identifier)
+                            if (!jwk) {
+                                // !!! This should not happen
+                                // !!! Remove it will implicitly drop user's localKey
+                                delete rec.value.localKey
+                                // !!! Keep it will leave a bug, broken data in the DB
+                                // continue
+                                // !!! DON'T throw cause it will break the database upgrade
+                            }
+                            rec.value.localKey = jwk
+                            await rec.update(rec.value)
+                        }
+                    }
+                }
+                if (oldVersion < 1) return v0_v1()
+                if (oldVersion < 2) v1_v2()
+            },
+        })
+    },
+    async (db) => {
+        if (db.version === 1) {
+            const map: V1To2 = { version: 2, data: new Map() }
+            const t = createTransaction(db, 'readonly')('personas', 'profiles')
+            const a = await t.objectStore('personas').getAll()
+            const b = await t.objectStore('profiles').getAll()
+            for (const rec of [...a, ...b]) {
+                if (!rec.localKey) continue
+                map.data.set(rec.identifier, await CryptoKeyToJsonWebKey(rec.localKey as any))
             }
-            if (oldVersion < 1) v0_v1()
-        },
-    })
-})
+            return map
+        }
+        return undefined
+    },
+)
+type V1To2 = { version: 2; data: Map<string, AESJsonWebKey> }
+type Knowledge = V1To2
 export const createPersonaDBAccess = db
 export type FullPersonaDBTransaction<Mode extends 'readonly' | 'readwrite'> = IDBPSafeTransaction<
     PersonaDB,
@@ -399,7 +453,7 @@ export async function deleteProfileDB(id: ProfileIdentifier, t: ProfileTransacti
 export interface ProfileRecord {
     identifier: ProfileIdentifier
     nickname?: string
-    localKey?: CryptoKey
+    localKey?: AESJsonWebKey
     linkedPersona?: PersonaIdentifier
     createdAt: Date
     updatedAt: Date
@@ -418,9 +472,9 @@ export interface PersonaRecord {
         words: string
         parameter: { path: string; withPassword: boolean }
     }
-    publicKey: JsonWebKey
-    privateKey?: JsonWebKey
-    localKey?: CryptoKey
+    publicKey: EC_Public_JsonWebKey
+    privateKey?: EC_Private_JsonWebKey
+    localKey?: AESJsonWebKey
     nickname?: string
     linkedProfiles: IdentifierMap<ProfileIdentifier, LinkedProfileDetails>
     createdAt: Date

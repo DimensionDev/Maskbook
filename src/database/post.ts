@@ -3,25 +3,62 @@ import { PostIdentifier, ProfileIdentifier, Identifier, PostIVIdentifier, GroupI
 import { openDB, DBSchema, IDBPTransaction } from 'idb/with-async-ittr-cjs'
 import { restorePrototype, restorePrototypeArray, PrototypeLess } from '../utils/type'
 import { IdentifierMap } from './IdentifierMap'
-import { createDBAccess } from './helpers/openDB'
+import { createDBAccessWithAsyncUpgrade, createTransaction } from './helpers/openDB'
+import type { AESJsonWebKey } from '../modules/CryptoAlgorithm/interfaces/utils'
+import { CryptoKeyToJsonWebKey } from '../utils/type-transform/CryptoKey-JsonWebKey'
 
-const db = createDBAccess(() => {
-    return openDB<PostDB>('maskbook-post-v2', 4, {
-        async upgrade(db, oldVersion, newVersion, transaction): Promise<void> {
-            if (oldVersion < 1) {
-                // inline keys
-                return void db.createObjectStore('post', { keyPath: 'identifier' })
-            }
-            /**
-             * In the version 1 we use PostIdentifier to store post that identified by post iv
-             * After upgrade to version 2, we use PostIVIdentifier to store it.
-             * So we transform all old data into new data.
-             */
-            if (oldVersion <= 1) {
-                const store = transaction.objectStore('post')
-                store.getAll().then((values) => {
-                    store.clear()
-                    for (const each of values) {
+type UpgradeKnowledge = { version: 4; data: Map<string, AESJsonWebKey> } | undefined
+const db = createDBAccessWithAsyncUpgrade<PostDB, UpgradeKnowledge>(
+    4,
+    5,
+    (currentTryOpen, knowledge) =>
+        openDB<PostDB>('maskbook-post-v2', currentTryOpen, {
+            async upgrade(db, oldVersion, _newVersion, transaction): Promise<void> {
+                type Version2PostRecord = {
+                    postBy: PrototypeLess<ProfileIdentifier>
+                    identifier: string
+                    recipientGroups: PrototypeLess<GroupIdentifier>[]
+                    recipients?: ProfileIdentifier[]
+                    foundAt: Date
+                    postCryptoKey?: CryptoKey
+                }
+                type Version3RecipientDetail = {
+                    /** Why they're able to receive this message? */
+                    reason: RecipientReason[]
+                }
+                type Version3PostRecord = Omit<Version2PostRecord, 'recipients'> & {
+                    recipients: Record<string, Version3RecipientDetail>
+                }
+                type Version4PostRecord = Omit<Version3PostRecord, 'recipients'> & {
+                    recipients: Map<string, Version3RecipientDetail>
+                }
+                type Version5PostRecord = Omit<Version4PostRecord, 'postCryptoKey'> & {
+                    postCryptoKey?: AESJsonWebKey
+                }
+                /**
+                 * A type assert that make sure a and b are the same type
+                 * @param a The latest version PostRecord
+                 */
+                function _assert(a: Version5PostRecord, b: PostDBRecord) {
+                    a = b
+                    b = a
+                }
+                // Prevent unused code removal
+                if (1 + 1 === 3) _assert({} as any, {} as any)
+                if (oldVersion < 1) {
+                    // inline keys
+                    return void db.createObjectStore('post', { keyPath: 'identifier' })
+                }
+                /**
+                 * In the version 1 we use PostIdentifier to store post that identified by post iv
+                 * After upgrade to version 2, we use PostIVIdentifier to store it.
+                 * So we transform all old data into new data.
+                 */
+                if (oldVersion <= 1) {
+                    const store = transaction.objectStore('post')
+                    const old = await store.getAll()
+                    await store.clear()
+                    for (const each of old) {
                         const id = Identifier.fromString(each.identifier, PostIdentifier)
                         if (id.ok) {
                             const { postId, identifier } = id.val
@@ -29,66 +66,92 @@ const db = createDBAccess(() => {
                                 (identifier as ProfileIdentifier).network,
                                 postId,
                             ).toText()
-                            store.add(each)
+                            await store.add(each)
                         }
                     }
-                })
-            }
+                }
 
-            interface Version3RecipientDetail {
-                /** Why they're able to receive this message? */
-                reason: RecipientReason[]
-            }
-            type Version3PostDBRecord = Omit<PostDBRecord, 'recipients'> & {
-                recipients: Record<string, Version3RecipientDetail>
-            }
-            /**
-             * In the version 2 we use `recipients?: ProfileIdentifier[]`
-             * After upgrade to version 3, we use `recipients: Record<string, RecipientDetail>`
-             */
-            if (oldVersion <= 2) {
-                const store = transaction.objectStore('post')
-                for await (const cursor of store) {
-                    const oldType = (cursor.value.recipients as unknown) as ProfileIdentifier[] | undefined
-                    oldType && restorePrototypeArray(oldType, ProfileIdentifier.prototype)
-                    const newType: Version3PostDBRecord['recipients'] = {}
-                    if (oldType !== undefined)
-                        for (const each of oldType) {
-                            newType[each.toText()] = { reason: [{ type: 'direct', at: new Date(0) }] }
+                /**
+                 * In the version 2 we use `recipients?: ProfileIdentifier[]`
+                 * After upgrade to version 3, we use `recipients: Record<string, RecipientDetail>`
+                 */
+                if (oldVersion <= 2) {
+                    const store = transaction.objectStore('post')
+                    for await (const cursor of store) {
+                        const v2record: Version2PostRecord = cursor.value as any
+                        const oldType = v2record.recipients
+                        oldType && restorePrototypeArray(oldType, ProfileIdentifier.prototype)
+                        const newType: Version3PostRecord['recipients'] = {}
+                        if (oldType !== undefined)
+                            for (const each of oldType) {
+                                newType[each.toText()] = { reason: [{ type: 'direct', at: new Date(0) }] }
+                            }
+                        const next: Version3PostRecord = {
+                            ...v2record,
+                            recipients: newType,
+                            postBy: ProfileIdentifier.unknown,
+                            foundAt: new Date(0),
+                            recipientGroups: [],
                         }
-                    const next: Version3PostDBRecord = {
-                        ...cursor.value,
-                        recipients: newType,
-                        postBy: ProfileIdentifier.unknown,
-                        foundAt: new Date(0),
-                        recipientGroups: [],
+                        await cursor.update((next as Version3PostRecord) as any)
                     }
-                    cursor.update((next as Version3PostDBRecord) as any)
                 }
-            }
 
-            /**
-             * In the version 3 we use `recipients?: Record<string, RecipientDetail>`
-             * After upgrade to version 4, we use `recipients: IdentifierMap<ProfileIdentifier, RecipientDetail>`
-             */
-            if (oldVersion <= 3) {
-                const store = transaction.objectStore('post')
-                for await (const cursor of store) {
-                    const oldType = (cursor.value as unknown) as Version3PostDBRecord
-                    const newType: PostDBRecord['recipients'] = new Map()
-                    for (const [key, value] of Object.entries(oldType.recipients)) {
-                        newType.set(key, value)
+                /**
+                 * In the version 3 we use `recipients?: Record<string, RecipientDetail>`
+                 * After upgrade to version 4, we use `recipients: IdentifierMap<ProfileIdentifier, RecipientDetail>`
+                 */
+                if (oldVersion <= 3) {
+                    const store = transaction.objectStore('post')
+                    for await (const cursor of store) {
+                        const v3Record: Version3PostRecord = cursor.value as any
+                        const newType: Version4PostRecord['recipients'] = new Map()
+                        for (const [key, value] of Object.entries(v3Record.recipients)) {
+                            newType.set(key, value)
+                        }
+                        const v4Record: Version4PostRecord = {
+                            ...v3Record,
+                            recipients: newType,
+                        }
+                        await cursor.update(v4Record as any)
                     }
-                    const next: PostDBRecord = {
-                        ...cursor.value,
-                        recipients: newType,
-                    }
-                    cursor.update(next)
                 }
+                /**
+                 * In version 4 we use CryptoKey, in version 5 we use JsonWebKey
+                 */
+                if (oldVersion <= 4) {
+                    const store = transaction.objectStore('post')
+                    for await (const cursor of store) {
+                        const v4Record: Version4PostRecord = cursor.value as any
+                        const data = knowledge?.data!
+                        if (!v4Record.postCryptoKey) continue
+                        const v5Record: Version5PostRecord = {
+                            ...v4Record,
+                            postCryptoKey: data.get(v4Record.identifier)!,
+                        }
+                        if (!v5Record.postCryptoKey) delete v5Record.postCryptoKey
+                        await cursor.update(v5Record as any)
+                    }
+                }
+            },
+        }),
+    async (db): Promise<UpgradeKnowledge> => {
+        if (db.version === 4) {
+            const map = new Map<string, AESJsonWebKey>()
+            const knowledge: UpgradeKnowledge = { version: 4, data: map }
+            const records = await createTransaction(db, 'readonly')('post').objectStore('post').getAll()
+            for (const r of records) {
+                const x = r.postCryptoKey
+                if (!x) continue
+                const key = await CryptoKeyToJsonWebKey<AESJsonWebKey>(x as any).catch(() => undefined)
+                if (!key) continue
+                map.set(r.identifier, key)
             }
-        },
-    })
-})
+            return knowledge
+        }
+        return undefined
+    },
+)
 export const PostDBAccess = db
 
 type PostTransaction = IDBPTransaction<PostDB, ['post']>
@@ -220,11 +283,7 @@ export interface PostRecord {
      */
     postBy: ProfileIdentifier
     identifier: PostIVIdentifier
-
-    /**
-     * ! This MUST BE a native CryptoKey
-     */
-    postCryptoKey?: CryptoKey
+    postCryptoKey?: AESJsonWebKey
     /**
      * Receivers
      */

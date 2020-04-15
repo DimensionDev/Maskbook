@@ -25,17 +25,14 @@ import {
     safeDeletePersonaDB,
 } from '../../Persona/Persona.db'
 import { generate_ECDH_256k1_KeyPair_ByMnemonicWord } from '../../../utils/mnemonic-code'
-import { CryptoKeyToJsonWebKey } from '../../../utils/type-transform/CryptoKey-JsonWebKey'
 import { deriveLocalKeyFromECDHKey } from '../../../utils/mnemonic-code/localKeyGenerate'
 import { createTransaction } from '../../helpers/openDB'
 
 export async function createPersonaRecord(name: string = uuid(), password: string = uuid()) {
-    const key = await generate_ECDH_256k1_KeyPair_ByMnemonicWord(password)
-    const jwkPub = await CryptoKeyToJsonWebKey(key.key.publicKey)
-    const jwkPriv = await CryptoKeyToJsonWebKey(key.key.privateKey)
-    const localKey = await deriveLocalKeyFromECDHKey(key.key.publicKey, key.mnemonicRecord.words)
-    const jwkLocalKey = await CryptoKeyToJsonWebKey(localKey)
-    const identifier = ECKeyIdentifier.fromJsonWebKey(jwkPub)
+    const { key, mnemonicRecord: mnemonic } = await generate_ECDH_256k1_KeyPair_ByMnemonicWord(password)
+    const { publicKey, privateKey } = key
+    const localKey = await deriveLocalKeyFromECDHKey(publicKey, mnemonic.words)
+    const identifier = ECKeyIdentifier.fromJsonWebKey(publicKey)
 
     return {
         nickname: name,
@@ -43,10 +40,10 @@ export async function createPersonaRecord(name: string = uuid(), password: strin
         updatedAt: new Date(),
         identifier: identifier,
         linkedProfiles: new IdentifierMap<ProfileIdentifier, LinkedProfileDetails>(new Map(), ProfileIdentifier),
-        publicKey: jwkPub,
-        privateKey: jwkPriv,
-        mnemonic: key.mnemonicRecord,
-        localKey: jwkLocalKey,
+        publicKey,
+        privateKey,
+        mnemonic,
+        localKey,
     } as PersonaRecord
 }
 

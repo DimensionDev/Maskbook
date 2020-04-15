@@ -5,17 +5,15 @@ import * as Gun2 from '../../../network/gun/version.2'
 import { decodeText } from '../../../utils/type-transform/String-ArrayBuffer'
 import { deconstructPayload, Payload } from '../../../utils/type-transform/Payload'
 import { i18n } from '../../../utils/i18n-next'
-import { queryPrivateKey, queryPersonaRecord, queryLocalKey } from '../../../database'
+import { queryPersonaRecord, queryLocalKey } from '../../../database'
 import { ProfileIdentifier, PostIVIdentifier } from '../../../database/type'
 import { queryPostDB, updatePostDB } from '../../../database/post'
 import { addPerson } from './addPerson'
 import { MessageCenter } from '../../../utils/messages'
 import { getNetworkWorker } from '../../../social-network/worker'
 import { getSignablePayload, cryptoProviderTable, TypedMessage } from './utils'
-import { JsonWebKeyToCryptoKey, getKeyParameter } from '../../../utils/type-transform/CryptoKey-JsonWebKey'
 import type { PersonaRecord } from '../../../database/Persona/Persona.db'
 import { verifyOthersProve } from './verifyOthersProve'
-import { import_AES_GCM_256_Key } from '../../../utils/crypto.subtle'
 import { publicSharedAESKey } from '../../../crypto/crypto-alpha-38'
 import { DecryptFailedReason } from '../../../utils/constants'
 import {
@@ -23,6 +21,7 @@ import {
     asyncIteratorToAsyncFunction,
 } from '../../../utils/type-transform/asyncIteratorWithResult'
 import { sleep } from '@holoflows/kit/es/util/sleep'
+import type { EC_Public_JsonWebKey, AESJsonWebKey } from '../../../modules/CryptoAlgorithm/interfaces/utils'
 
 type Progress = {
     progress: 'finding_person_public_key' | 'finding_post_key' | 'init'
@@ -146,9 +145,8 @@ export async function* decryptFromMessageWithProgress(
             mine = (await queryPersonaRecord(whoAmI))!
         }
         if (!mine?.privateKey) throw new Error(DecryptFailedReason.MyCryptoKeyNotFound)
-        const ecdhParams = getKeyParameter('ecdh')
-        const minePublic = await JsonWebKeyToCryptoKey(mine.publicKey, ...ecdhParams)
-        const minePrivate = mine.privateKey ? await JsonWebKeyToCryptoKey(mine.privateKey, ...ecdhParams) : undefined
+        const minePublic = mine.publicKey
+        const minePrivate = mine.privateKey
         if (cachedPostResult) {
             if (!author.equals(whoAmI) && minePrivate && version !== -40) {
                 const { keyHash, postHash } = await Gun2.queryPostKeysOnGun2(
@@ -160,11 +158,7 @@ export async function* decryptFromMessageWithProgress(
                 yield { debug: 'debug_finding_hash', hash: [postHash, keyHash] }
             }
             const signatureVerifyResult = byPerson.publicKey
-                ? await cryptoProvider.verify(
-                      waitForVerifySignaturePayload,
-                      signature || '',
-                      await JsonWebKeyToCryptoKey(byPerson.publicKey, ...ecdhParams),
-                  )
+                ? await cryptoProvider.verify(waitForVerifySignaturePayload, signature || '', byPerson.publicKey)
                 : false
             return makeSuccessResult(cryptoProvider, cachedPostResult, ['post_key_cached'], signatureVerifyResult)
         }
@@ -176,10 +170,8 @@ export async function* decryptFromMessageWithProgress(
          * ? then try to go through a normal decrypt process
          */
         try {
-            // ? try to decrypt the post as I am the author
-            const authorsPrivate = await queryPrivateKey(author)
             // ! Don't remove the await
-            if (authorsPrivate) return await decryptAsAuthor(author, authorsPrivate)
+            return await decryptAsAuthor(author, mine.publicKey)
         } catch (e) {
             lastError = e
         }
@@ -271,7 +263,7 @@ export async function* decryptFromMessageWithProgress(
             const [contentArrayBuffer, postAESKey] = await cryptoProvider.decryptMessage1ToNByOther({
                 version,
                 AESKeyEncrypted: key,
-                authorsPublicKeyECDH: await JsonWebKeyToCryptoKey(byPerson.publicKey, ...getKeyParameter('ecdh')),
+                authorsPublicKeyECDH: byPerson.publicKey,
                 encryptedContent: encryptedText,
                 privateKeyECDH: minePrivate!,
                 iv,
@@ -285,7 +277,7 @@ export async function* decryptFromMessageWithProgress(
                 const signatureVerifyResult = await cryptoProvider.verify(
                     waitForVerifySignaturePayload,
                     signature,
-                    await JsonWebKeyToCryptoKey(byPerson.publicKey, ...getKeyParameter('ecdh')),
+                    byPerson.publicKey,
                 )
                 return makeSuccessResult(cryptoProvider, content, ['normal_decrypted'], signatureVerifyResult)
             } catch {
@@ -293,10 +285,8 @@ export async function* decryptFromMessageWithProgress(
             }
         }
 
-        async function decryptAsAuthor(authorIdentifier: ProfileIdentifier, authorPublic: CryptoKey) {
-            const localKey = publicShared
-                ? await import_AES_GCM_256_Key(publicSharedAESKey)
-                : await queryLocalKey(authorIdentifier)
+        async function decryptAsAuthor(authorIdentifier: ProfileIdentifier, authorPublic: EC_Public_JsonWebKey) {
+            const localKey = publicShared ? publicSharedAESKey : await queryLocalKey(authorIdentifier)
             if (!localKey) throw new Error(`Local key for identity ${authorIdentifier.toText()} not found`)
             const [contentArrayBuffer, postAESKey] = await cryptoProvider.decryptMessage1ToNByMyself({
                 version,
@@ -393,7 +383,7 @@ async function decryptFromCache(postPayload: Payload, by: ProfileIdentifier) {
 
     const postIdentifier = new PostIVIdentifier(by.network, iv)
     const cachedKey = await queryPostDB(postIdentifier)
-    const setCache = (postAESKey: CryptoKey) => {
+    const setCache = (postAESKey: AESJsonWebKey) => {
         updatePostDB(
             {
                 identifier: postIdentifier,

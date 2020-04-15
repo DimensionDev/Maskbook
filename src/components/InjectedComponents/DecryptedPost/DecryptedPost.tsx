@@ -1,5 +1,5 @@
 import React, { useMemo, useState, useEffect } from 'react'
-import { sleep } from '../../../utils/utils'
+import { sleep, unreachable } from '../../../utils/utils'
 import { ServicesWithProgress } from '../../../extension/service'
 import type { Profile } from '../../../database'
 import type { ProfileIdentifier, PostIdentifier } from '../../../database/type'
@@ -79,8 +79,7 @@ export function DecryptPost(props: DecryptPostProps) {
                             setDebugHash(status.value.hash.join('-'))
                             break
                         default:
-                            const _: never = status.value.debug
-                            throw new Error('Unknown case' + _)
+                            unreachable(status.value.debug)
                     }
                 } else setDecryptingStatus(status.value)
             }

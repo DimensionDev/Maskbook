@@ -4,6 +4,8 @@ import {
     getKeyParameter,
     CryptoKeyToJsonWebKey,
 } from '../../utils/type-transform/CryptoKey-JsonWebKey'
+import type { AESName } from './interfaces/interface.aes'
+import type { AESJsonWebKey } from './interfaces/utils'
 
 export type WebCryptoSupportedMethods = Pick<
     CryptoAlgorithmProviderMethods,
@@ -13,6 +15,8 @@ export type WebCryptoSupportedMethods = Pick<
     | 'encrypt_aes_gcm'
     | 'generate_aes_gcm'
     | 'import_pbkdf2'
+    | 'aes_to_raw'
+    | 'raw_to_aes'
 >
 export type WebCryptoNotSupportedMethods = Omit<CryptoAlgorithmProviderMethods, keyof WebCryptoSupportedMethods>
 
@@ -29,7 +33,7 @@ export const WebCryptoMethods: WebCryptoSupportedMethods = {
         const key = await JsonWebKeyToCryptoKey(jwk, ...getKeyParameter('aes'))
         return crypto.subtle.decrypt({ name: 'AES-GCM', iv }, key, message)
     },
-    async generate_aes_gcm(length) {
+    async generate_aes_gcm(length = 256) {
         const key = await crypto.subtle.generateKey({ name: 'AES-GCM', length }, true, ['encrypt', 'decrypt'])
         return CryptoKeyToJsonWebKey(key)
     },
@@ -48,8 +52,19 @@ export const WebCryptoMethods: WebCryptoSupportedMethods = {
         return crypto.subtle.digest(alg, data)
     },
     async import_pbkdf2(seed) {
-        return crypto.subtle
-            .importKey('raw', seed, 'PBKDF2', false, ['deriveBits', 'deriveKey'])
-            .then(CryptoKeyToJsonWebKey)
+        const key = await crypto.subtle.importKey('raw', seed, 'PBKDF2', false, ['deriveBits', 'deriveKey'])
+        return CryptoKeyToJsonWebKey(key)
+    },
+    async aes_to_raw(aes, name: AESName = 'AES-GCM', length: 256 = 256) {
+        const cryptoKey = await crypto.subtle.importKey('jwk', aes, { name, length } as AesKeyAlgorithm, true, [
+            ...getKeyParameter('aes')[0],
+        ])
+        return crypto.subtle.exportKey('raw', cryptoKey)
+    },
+    async raw_to_aes(raw) {
+        const cryptoKey = await crypto.subtle.importKey('raw', raw, { name, length } as AesKeyAlgorithm, true, [
+            ...getKeyParameter('aes')[0],
+        ])
+        return (((await crypto.subtle.exportKey('jwk', cryptoKey)) as JsonWebKey) as unknown) as AESJsonWebKey
     },
 }

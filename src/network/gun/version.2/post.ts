@@ -2,6 +2,7 @@ import { OnlyRunInContext } from '@holoflows/kit/es'
 import { gun2, SharedAESKeyGun2 } from '.'
 import { hashPostSalt, hashCryptoKey, hashCryptoKeyUnstable } from './hash'
 import type { PublishedAESKeyRecordV39OrV38 } from '../../../crypto/crypto-alpha-38'
+import type { EC_Public_JsonWebKey } from '../../../modules/CryptoAlgorithm/interfaces/utils'
 
 OnlyRunInContext(['background', 'debugging'], 'gun')
 
@@ -14,7 +15,7 @@ OnlyRunInContext(['background', 'debugging'], 'gun')
 export async function queryPostKeysOnGun2(
     version: -39 | -38,
     postSalt: string,
-    partitionByCryptoKey: CryptoKey,
+    partitionByCryptoKey: EC_Public_JsonWebKey,
     networkHint: string,
 ): Promise<{ keys: SharedAESKeyGun2[]; postHash: string; keyHash: string }> {
     const postHash = await hashPostSalt(postSalt, networkHint)
@@ -47,7 +48,7 @@ export async function queryPostKeysOnGun2(
 export function subscribePostKeysOnGun2(
     version: -39 | -38,
     postSalt: string,
-    partitionByCryptoKey: CryptoKey,
+    partitionByCryptoKey: EC_Public_JsonWebKey,
     networkHint: string,
     callback: (data: SharedAESKeyGun2) => void,
 ) {

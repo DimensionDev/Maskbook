@@ -18,6 +18,38 @@ export function createDBAccess<DBSchema>(opener: () => Promise<IDBPDatabase<DBSc
         return db
     }
 }
+export function createDBAccessWithAsyncUpgrade<DBSchema, AsyncUpgradePreparedData>(
+    firstVersionThatRequiresAsyncUpgrade: number,
+    latestVersion: number,
+    opener: (currentTryOpenVersion: number, knowledge?: AsyncUpgradePreparedData) => Promise<IDBPDatabase<DBSchema>>,
+    asyncUpgradePrepare: (db: IDBPDatabase<DBSchema>) => Promise<AsyncUpgradePreparedData | undefined>,
+) {
+    let db: IDBPDatabase<DBSchema> | undefined = undefined
+    return async (): Promise<IDBPDatabase<DBSchema>> => {
+        OnlyRunInContext(['background', 'debugging'], 'Database')
+        if (db) return db
+        let currentVersion = firstVersionThatRequiresAsyncUpgrade
+        let lastVersionData: AsyncUpgradePreparedData | undefined = undefined
+        while (currentVersion < latestVersion) {
+            try {
+                db = await opener(currentVersion, lastVersionData)
+                // if the open success, the stored version is small or eq than currentTryOpenVersion
+                // let's call the prepare function to do all the async jobs
+                lastVersionData = await asyncUpgradePrepare(db)
+            } catch (e) {
+                if (currentVersion >= latestVersion) throw e
+                // if the stored database version is bigger than the currentTryOpenVersion
+                // It will fail and we just move to next version
+            }
+            currentVersion += 1
+            db?.close()
+        }
+        db = await opener(currentVersion, lastVersionData)
+        if (!db) throw new Error('Invalid state')
+        db.addEventListener('close', (e) => (db = undefined))
+        return db
+    }
+}
 export interface IDBPSafeObjectStore<
     DBTypes extends DBSchema,
     TxStores extends StoreNames<DBTypes>[] = StoreNames<DBTypes>[],

@@ -11,18 +11,22 @@ import {
     recover_ECDH_256k1_KeyPair_ByMnemonicWord,
     MnemonicGenerationInformation,
 } from '../../../utils/mnemonic-code'
+import type { MnemonicWordDetail } from '../interfaces/interface.blockchain'
 
 const ECDH = getKeyParameter('ecdh')[0]
 const ECDSA = getKeyParameter('ecdsa')[0]
 function initEllipticBackend(_: WebCryptoSupportedMethods): WebCryptoNotSupportedMethods {
     return {
-        async generate_ec_k256_pair(name) {
+        async generate_ec_k256_pair() {
             const { privateKey, publicKey } = await crypto.subtle.generateKey(
                 { name: 'ECDH', namedCurve: 'K-256' },
                 true,
                 [...(name === 'ECDH' ? ECDH : ECDSA)],
             )
-            return { private: await CryptoKeyToJsonWebKey(privateKey), public: await CryptoKeyToJsonWebKey(publicKey) }
+            return {
+                privateKey: await CryptoKeyToJsonWebKey(privateKey),
+                publicKey: await CryptoKeyToJsonWebKey(publicKey),
+            }
         },
         async sign_ecdsa_k256(key, hash, message) {
             return crypto.subtle.sign(
@@ -39,16 +43,15 @@ function initEllipticBackend(_: WebCryptoSupportedMethods): WebCryptoNotSupporte
                 message,
             )
         },
-        async derive_aes_from_ecdh_k256(priv, pub, aes, length) {
-            return crypto.subtle
-                .deriveKey(
-                    { name: 'ECDH', public: await JsonWebKeyToCryptoKey(pub, ...getKeyParameter('ecdh')) },
-                    await JsonWebKeyToCryptoKey(priv, ...getKeyParameter('ecdh')),
-                    { name: aes, length },
-                    true,
-                    ['encrypt', 'decrypt'],
-                )
-                .then(CryptoKeyToJsonWebKey)
+        async derive_aes_from_ecdh_k256(priv, pub, aes = 'AES-GCM', length = 256) {
+            const key = await crypto.subtle.deriveKey(
+                { name: 'ECDH', public: await JsonWebKeyToCryptoKey(pub, ...getKeyParameter('ecdh')) },
+                await JsonWebKeyToCryptoKey(priv, ...getKeyParameter('ecdh')),
+                { name: aes, length },
+                true,
+                ['encrypt', 'decrypt'],
+            )
+            return CryptoKeyToJsonWebKey(key)
         },
         async generate_ecdh_k256_from_mnemonic(password) {
             return _helper(await generate_ECDH_256k1_KeyPair_ByMnemonicWord(password))
@@ -58,7 +61,7 @@ function initEllipticBackend(_: WebCryptoSupportedMethods): WebCryptoNotSupporte
         },
     }
 }
-async function _helper(x: MnemonicGenerationInformation) {
+async function _helper(x: MnemonicGenerationInformation): Promise<MnemonicWordDetail> {
     const {
         key: { privateKey, publicKey },
         mnemonicRecord: {
@@ -72,8 +75,8 @@ async function _helper(x: MnemonicGenerationInformation) {
         parameter_path: path,
         parameter_with_password: withPassword,
         password,
-        private: await CryptoKeyToJsonWebKey(privateKey),
-        public: await CryptoKeyToJsonWebKey(publicKey),
+        privateKey,
+        publicKey,
     }
 }
 

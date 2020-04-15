@@ -9,8 +9,8 @@ import {
     deletePostCryptoKeyDB,
 } from '../post'
 import { ProfileIdentifier, PostIVIdentifier } from '../type'
-import { generate_AES_GCM_256_Key } from '../../utils/crypto.subtle'
 import { IdentifierMap } from '../IdentifierMap'
+import { CryptoWorker } from '../../modules/workers'
 
 async function createPostRecord(
     postBy: ProfileIdentifier = new ProfileIdentifier(uuid(), uuid()),
@@ -19,7 +19,7 @@ async function createPostRecord(
     return {
         postBy,
         identifier,
-        postCryptoKey: await generate_AES_GCM_256_Key(),
+        postCryptoKey: await CryptoWorker.generate_aes_gcm(),
         recipients: new IdentifierMap(new Map()),
         recipientGroups: [],
         foundAt: new Date(),

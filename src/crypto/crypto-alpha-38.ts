@@ -1,7 +1,9 @@
 import { TypedMessage, makeTypedMessage } from '../extension/background-script/CryptoServices/utils'
+import type { AESJsonWebKey } from '../modules/CryptoAlgorithm/interfaces/utils'
 export * from './crypto-alpha-39'
 
-export const publicSharedAESKey: JsonWebKey = {
+// @ts-ignore
+export const publicSharedAESKey: AESJsonWebKey = {
     alg: 'A256GCM',
     ext: true,
     k: '3Bf8BJ3ZPSMUM2jg2ThODeLuRRD_-_iwQEaeLdcQXpg',

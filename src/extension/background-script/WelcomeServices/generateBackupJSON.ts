@@ -23,7 +23,6 @@ export async function generateBackupJSON(opts: Partial<BackupOptions> = {}): Pro
     const profiles: BackupJSONFileLatest['profiles'] = []
     const userGroups: BackupJSONFileLatest['userGroups'] = []
 
-    const map = new WeakMap<CryptoKey, JsonWebKey>()
     if (!opts.filter) {
         if (!opts.noPersonas) await backupPersona()
         if (!opts.noProfiles) await backProfiles()
@@ -56,48 +55,34 @@ export async function generateBackupJSON(opts: Partial<BackupOptions> = {}): Pro
     }
 
     async function backupAllPosts() {
-        const data = await queryPostsDB(() => true)
-        await Promise.all(
-            data.map(
-                async (x) =>
-                    x.postCryptoKey &&
-                    // ? Some old post key is not exportable. Skip them if export failed.
-                    CryptoKeyToJsonWebKey(x.postCryptoKey).then(
-                        (y) => map.set(x.postCryptoKey!, y),
-                        () => {},
-                    ),
-            ),
-        )
-        data.filter((x) => !!map.get(x.postCryptoKey!)).forEach((x) => posts.push(PostRecordToJSONFormat(x, map)))
+        posts.push(...(await queryPostsDB(() => true)).map(PostRecordToJSONFormat))
     }
 
     async function backupAllUserGroups() {
-        const data = await queryUserGroupsDatabase(() => true)
-        data.forEach((x) => userGroups.push(GroupRecordToJSONFormat(x)))
+        userGroups.push(...(await queryUserGroupsDatabase(() => true)).map(GroupRecordToJSONFormat))
     }
 
     async function backProfiles(of?: ProfileIdentifier[]) {
-        const data = await queryProfilesDB((p) => {
-            if (of === undefined) return true
-            if (!of.some((x) => x.equals(p.identifier))) return false
-            return true
-        })
-        await Promise.all(
-            data.map(async (x) => x.localKey && map.set(x.localKey, await CryptoKeyToJsonWebKey(x.localKey))),
-        )
-        data.filter((x) => !!x.linkedPersona).forEach((x) => profiles.push(ProfileRecordToJSONFormat(x, map)))
+        const data = (
+            await queryProfilesDB((p) => {
+                if (of === undefined) return true
+                if (!of.some((x) => x.equals(p.identifier))) return false
+                if (!p.linkedPersona) return false
+                return true
+            })
+        ).map(ProfileRecordToJSONFormat)
+        profiles.push(...data)
     }
 
     async function backupPersona(of?: PersonaIdentifier[]) {
-        const data = await queryPersonasDB((p) => {
-            if (opts.hasPrivateKeyOnly && !p.privateKey) return false
-            if (of === undefined) return true
-            if (!of.some((x) => x.equals(p.identifier))) return false
-            return true
-        })
-        await Promise.all(
-            data.map(async (x) => x.localKey && map.set(x.localKey, await CryptoKeyToJsonWebKey(x.localKey))),
-        )
-        data.forEach((x) => personas.push(PersonaRecordToJSONFormat(x, map)))
+        const data = (
+            await queryPersonasDB((p) => {
+                if (opts.hasPrivateKeyOnly && !p.privateKey) return false
+                if (of === undefined) return true
+                if (!of.some((x) => x.equals(p.identifier))) return false
+                return true
+            })
+        ).map(PersonaRecordToJSONFormat)
+        personas.push(...data)
     }
 }

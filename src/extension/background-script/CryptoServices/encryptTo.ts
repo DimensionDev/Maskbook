@@ -3,14 +3,13 @@ import * as Gun2 from '../../../network/gun/version.2'
 import { encodeArrayBuffer } from '../../../utils/type-transform/String-ArrayBuffer'
 import { constructAlpha38, PayloadLatest } from '../../../utils/type-transform/Payload'
 import { queryPrivateKey, queryLocalKey } from '../../../database'
-import { ProfileIdentifier, PostIVIdentifier, GroupIdentifier, Identifier } from '../../../database/type'
+import { ProfileIdentifier, PostIVIdentifier, GroupIdentifier } from '../../../database/type'
 import { prepareRecipientDetail } from './prepareRecipientDetail'
 import { getNetworkWorker } from '../../../social-network/worker'
-import { getSignablePayload, TypedMessage, cryptoProviderTable } from './utils'
+import { getSignablePayload, TypedMessage } from './utils'
 import { createPostDB } from '../../../database/post'
 import { queryPersonaByProfileDB } from '../../../database/Persona/Persona.db'
 import { compressSecp256k1Key } from '../../../utils/type-transform/SECP256k1-Compression'
-import { import_AES_GCM_256_Key } from '../../../utils/crypto.subtle'
 import { i18n } from '../../../utils/i18n-next'
 
 type EncryptedText = string
@@ -45,9 +44,7 @@ export async function encryptTo(
     const minePrivateKey = await queryPrivateKey(whoAmI)
     if (!minePrivateKey) throw new TypeError('Not inited yet')
     const stringifiedContent = Alpha38.typedMessageStringify(content)
-    const localKey = publicShared
-        ? await import_AES_GCM_256_Key(Alpha38.publicSharedAESKey)
-        : (await queryLocalKey(whoAmI))!
+    const localKey = publicShared ? Alpha38.publicSharedAESKey : (await queryLocalKey(whoAmI))!
     const {
         encryptedContent: encryptedText,
         othersAESKeyEncrypted,

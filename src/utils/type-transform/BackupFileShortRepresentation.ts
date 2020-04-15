@@ -2,6 +2,7 @@ import { ProfileIdentifier, Identifier, ECKeyIdentifier, PersonaIdentifier } fro
 import { compressSecp256k1Key, decompressSecp256k1Key } from './SECP256k1-Compression'
 import type { BackupJSONFileLatest } from './BackupFormat/JSON/latest'
 import type { ProfileRecord } from '../../database/Persona/Persona.db'
+import type { AESJsonWebKey } from '../../modules/CryptoAlgorithm/interfaces/utils'
 
 export type BackupJSONFileLatestShort = [
     string, // version, should be "1"
@@ -67,13 +68,13 @@ export function decompressBackupFile(short: string): BackupJSONFileLatest {
 
     if (version !== '1') throw new Error(`QR Code cannot be shared between different version of Maskbook`)
 
-    const localKeyJWK: JsonWebKey = {
+    const localKeyJWK: AESJsonWebKey = ({
         alg: 'A256GCM',
         ext: true,
         k: localKey,
         key_ops: ['encrypt', 'decrypt'],
         kty: 'oct',
-    }
+    } as JsonWebKey) as any
     const publicJWK = decompressSecp256k1Key(privateKey, 'public')
     const privateJWK = decompressSecp256k1Key(privateKey, 'private')
 

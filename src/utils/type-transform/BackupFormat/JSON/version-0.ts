@@ -1,15 +1,22 @@
 /* eslint-disable import/no-deprecated */
+
+import type {
+    EC_Public_JsonWebKey,
+    EC_Private_JsonWebKey,
+    AESJsonWebKey,
+} from '../../../../modules/CryptoAlgorithm/interfaces/utils'
+
 /**
  * @deprecated History JSON backup file
  */
 export interface BackupJSONFileVersion0 {
     key: {
         username: string
-        key: { publicKey: JsonWebKey; privateKey?: JsonWebKey }
+        key: { publicKey: EC_Public_JsonWebKey; privateKey?: EC_Private_JsonWebKey }
         algor: unknown
         usages: string[]
     }
-    local: JsonWebKey
+    local: AESJsonWebKey
 }
 // eslint-disable-next-line import/no-deprecated
 export function isBackupJSONFileVersion0(obj: object): obj is BackupJSONFileVersion0 {

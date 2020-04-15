@@ -3,10 +3,12 @@ import { queryPublicKey } from '../../../database'
 import { IdentifierMap } from '../../../database/IdentifierMap'
 import type { RecipientDetail, RecipientReason } from '../../../database/post'
 import { queryUserGroup } from '../UserGroupService'
+import type { EC_Public_JsonWebKey } from '../../../modules/CryptoAlgorithm/interfaces/utils'
+import { unreachable } from '../../../utils/utils'
 
 export async function prepareRecipientDetail(to: (ProfileIdentifier | GroupIdentifier)[]) {
     const recipients = new IdentifierMap<ProfileIdentifier, RecipientDetail>(new Map(), ProfileIdentifier)
-    const keys = new IdentifierMap<ProfileIdentifier, CryptoKey>(new Map(), ProfileIdentifier)
+    const keys = new IdentifierMap<ProfileIdentifier, EC_Public_JsonWebKey>(new Map(), ProfileIdentifier)
     await Promise.all(
         to.map(async function self(who, _, __, detail: RecipientReason = { at: new Date(), type: 'direct' }) {
             if (who instanceof ProfileIdentifier) {
@@ -19,9 +21,7 @@ export async function prepareRecipientDetail(to: (ProfileIdentifier | GroupIdent
                 await Promise.all(
                     group.members.map((x) => self(x, _, __, { type: 'group', at: new Date(), group: who })),
                 )
-            } else {
-                throw new TypeError('Invalid recipients type')
-            }
+            } else unreachable(who)
         }),
     )
     function append(who: ProfileIdentifier, reason: RecipientReason) {

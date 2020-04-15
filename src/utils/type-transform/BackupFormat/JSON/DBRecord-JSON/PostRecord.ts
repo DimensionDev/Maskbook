@@ -3,13 +3,11 @@ import type { BackupJSONFileLatest } from '../latest'
 import type { RecipientReasonJSON } from '../version-2'
 import { Identifier, GroupIdentifier, PostIVIdentifier, ProfileIdentifier } from '../../../../../database/type'
 import { IdentifierMap } from '../../../../../database/IdentifierMap'
+import { unreachable } from '../../../../utils'
 
-export function PostRecordToJSONFormat(
-    post: PostRecord,
-    keyMap: WeakMap<CryptoKey, JsonWebKey>,
-): BackupJSONFileLatest['posts'][0] {
+export function PostRecordToJSONFormat(post: PostRecord): BackupJSONFileLatest['posts'][0] {
     return {
-        postCryptoKey: post.postCryptoKey ? keyMap.get(post.postCryptoKey) : undefined,
+        postCryptoKey: post.postCryptoKey,
         foundAt: post.foundAt.getTime(),
         identifier: post.identifier.toText(),
         postBy: post.postBy.toText(),
@@ -26,12 +24,9 @@ export function PostRecordToJSONFormat(
     }
 }
 
-export function PostRecordFromJSONFormat(
-    post: BackupJSONFileLatest['posts'][0],
-    keyMap: WeakMap<JsonWebKey, CryptoKey>,
-): PostRecord {
+export function PostRecordFromJSONFormat(post: BackupJSONFileLatest['posts'][0]): PostRecord {
     return {
-        postCryptoKey: post.postCryptoKey ? keyMap.get(post.postCryptoKey) : undefined,
+        postCryptoKey: post.postCryptoKey,
         foundAt: new Date(post.foundAt),
         identifier: Identifier.fromString(post.identifier, PostIVIdentifier).unwrap(),
         postBy: Identifier.fromString(post.postBy, ProfileIdentifier).unwrap(),
@@ -51,8 +46,7 @@ function RecipientReasonToJSON(y: RecipientReason): RecipientReasonJSON {
     if (y.type === 'direct' || y.type === 'auto-share')
         return { at: y.at.getTime(), type: y.type } as RecipientReasonJSON
     else if (y.type === 'group') return { at: y.at.getTime(), group: y.group.toText(), type: y.type }
-    const x: never = y
-    throw new Error('Unreachable case')
+    return unreachable(y)
 }
 function RecipientReasonFromJSON(y: RecipientReasonJSON): RecipientReason {
     if (y.type === 'direct' || y.type === 'auto-share') return { at: new Date(y.at), type: y.type } as RecipientReason
@@ -62,6 +56,5 @@ function RecipientReasonFromJSON(y: RecipientReasonJSON): RecipientReason {
             at: new Date(y.at),
             group: Identifier.fromString(y.group, GroupIdentifier).unwrap(),
         }
-    const x: never = y
-    throw new Error('Unreachable case')
+    return unreachable(y)
 }

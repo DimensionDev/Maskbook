@@ -2,6 +2,11 @@
 import type { LinkedProfileDetails } from '../../../../database/Persona/Persona.db'
 import type { BackupJSONFileVersion1 } from './version-1'
 import { ProfileIdentifier, ECKeyIdentifier, GroupIdentifier } from '../../../../database/type'
+import type {
+    AESJsonWebKey,
+    EC_Public_JsonWebKey,
+    EC_Private_JsonWebKey,
+} from '../../../../modules/CryptoAlgorithm/interfaces/utils'
 
 export type RecipientReasonJSON = (
     | { type: 'auto-share' }
@@ -30,9 +35,9 @@ export interface BackupJSONFileVersion2 {
             words: string
             parameter: { path: string; withPassword: boolean }
         }
-        publicKey: JsonWebKey
-        privateKey?: JsonWebKey
-        localKey?: JsonWebKey
+        publicKey: EC_Public_JsonWebKey
+        privateKey?: EC_Private_JsonWebKey
+        localKey?: AESJsonWebKey
         nickname?: string
         linkedProfiles: [/** ProfileIdentifier.toText() */ string, LinkedProfileDetails][]
         createdAt: number // Unix timestamp
@@ -41,7 +46,7 @@ export interface BackupJSONFileVersion2 {
     profiles: Array<{
         identifier: string // ProfileIdentifier.toText()
         nickname?: string
-        localKey?: JsonWebKey
+        localKey?: AESJsonWebKey
         linkedPersona?: string // PersonaIdentifier.toText()
         createdAt: number // Unix timestamp
         updatedAt: number // Unix timestamp
@@ -55,7 +60,7 @@ export interface BackupJSONFileVersion2 {
     posts: Array<{
         postBy: string // ProfileIdentifier.toText()
         identifier: string // PostIVIdentifier.toText()
-        postCryptoKey?: JsonWebKey
+        postCryptoKey?: AESJsonWebKey
         recipients: [/** ProfileIdentifier.toText() */ string, { reason: RecipientReasonJSON[] }][]
         recipientGroups: string[] // Array<GroupIdentifier.toText()>
         foundAt: number // Unix timestamp
