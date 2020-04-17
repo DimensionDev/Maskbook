@@ -42,7 +42,7 @@ function createInternalSettings<T extends browser.storage.StorageValue>(
                 [storage]: { ...stored, [key]: newVal },
             })
             if (initial) {
-                updateValueRef(key)
+                updateValueRef(`settings+${key}`)
             } else {
                 MessageCenter.emit('settingsUpdated', instanceKey)
             }
