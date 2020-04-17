@@ -230,16 +230,23 @@ export function PostDialogUI(props: PostDialogUIProps) {
                                 />
                             </SelectRecipientsUI>
                         </Box>
-                        <Typography style={{ marginBottom: 10 }}>{t('post_dialog__more_options_title')}</Typography>
-                        <Box style={{ marginBottom: 10 }} display="flex" flexWrap="wrap">
-                            <ClickableChip
-                                checked={props.imagePayload}
-                                ChipProps={{
-                                    label: t('post_dialog__image_payload'),
-                                    onClick: () => props.onImagePayloadSwitchChanged(!props.imagePayload),
-                                }}
-                            />
-                        </Box>
+                        {/* This feature is not ready for mobile version */}
+                        {webpackEnv.target !== 'WKWebview' && webpackEnv.firefoxVariant !== 'android' ? (
+                            <>
+                                <Typography style={{ marginBottom: 10 }}>
+                                    {t('post_dialog__more_options_title')}
+                                </Typography>
+                                <Box style={{ marginBottom: 10 }} display="flex" flexWrap="wrap">
+                                    <ClickableChip
+                                        checked={props.imagePayload}
+                                        ChipProps={{
+                                            label: t('post_dialog__image_payload'),
+                                            onClick: () => props.onImagePayloadSwitchChanged(!props.imagePayload),
+                                        }}
+                                    />
+                                </Box>
+                            </>
+                        ) : null}
                     </DialogContent>
                     <DialogActions className={classes.actions}>
                         <Button
