@@ -53,7 +53,14 @@ const useStyles = makeStyles((theme) =>
             flexDirection: 'column',
         },
         title: {
+            color: theme.palette.text.primary,
             flex: 1,
+        },
+        addButton: {
+            color: theme.palette.primary.main,
+        },
+        moreButton: {
+            color: theme.palette.text.primary,
         },
         tokenList: {
             flex: 1,
@@ -164,13 +171,17 @@ export default function DashboardWalletsRouter() {
                                         {t('details')}
                                     </Typography>
                                     <Button
+                                        className={classes.addButton}
                                         variant="text"
                                         color="primary"
                                         onClick={() => openAddToken({ wallet })}
                                         startIcon={<AddIcon />}>
                                         {t('add_token')}
                                     </Button>
-                                    <IconButton size="small" onClick={(e) => openMenu({ anchorEl: e.currentTarget })}>
+                                    <IconButton
+                                        className={classes.moreButton}
+                                        size="small"
+                                        onClick={(e) => openMenu({ anchorEl: e.currentTarget })}>
                                         <MoreVertOutlinedIcon />
                                     </IconButton>
                                     {menu}
