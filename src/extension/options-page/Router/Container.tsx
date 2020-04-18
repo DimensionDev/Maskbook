@@ -31,6 +31,7 @@ const useStyles = makeStyles((theme) =>
             padding: '40px 24px 40px 34px',
         },
         title: {
+            color: theme.palette.text.primary,
             fontWeight: 500,
             fontSize: 40,
             lineHeight: '48px',
@@ -43,6 +44,9 @@ const useStyles = makeStyles((theme) =>
         dividerPadded: {
             paddingLeft: 34,
             paddingRight: 24,
+        },
+        divider: {
+            backgroundColor: theme.palette.divider,
         },
         contentPadded: {
             '& > * ': {
@@ -80,7 +84,7 @@ export default function DashboardRouterContainer(props: DashboardRouterContainer
                     </div>
                 </section>
                 <div className={classNames({ [classes.dividerPadded]: padded !== false })}>
-                    <Divider />
+                    <Divider className={classes.divider} />
                 </div>
                 <main className={classNames(classes.content, { [classes.contentPadded]: padded !== false })}>
                     <div className={classes.scroller}>{children}</div>

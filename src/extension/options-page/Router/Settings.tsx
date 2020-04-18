@@ -4,13 +4,14 @@ import { makeStyles, createStyles, ThemeProvider, Theme, useTheme } from '@mater
 
 import { SettingsUI, SettingsUIEnum } from '../../../components/shared-settings/useSettingsUI'
 import {
-    nightModeSetting,
     debugModeSetting,
     steganographyModeSetting,
     disableOpenNewTabInBackgroundSettings,
     languageSettings,
     Language,
     renderInShadowRootSettings,
+    Apperance,
+    apperanceSettings,
 } from '../../../components/shared-settings/settings'
 import { useValueRef } from '../../../utils/hooks/useValueRef'
 
@@ -20,6 +21,7 @@ import NightsStay from '@material-ui/icons/NightsStay'
 import MemoryOutlinedIcon from '@material-ui/icons/MemoryOutlined'
 import WallpaperOutlinedIcon from '@material-ui/icons/WallpaperOutlined'
 import OpenInBrowserIcon from '@material-ui/icons/OpenInBrowser'
+import PaletteIcon from '@material-ui/icons/Palette'
 import LanguageIcon from '@material-ui/icons/Language'
 import DashboardRouterContainer from './Container'
 import { useI18N } from '../../../utils/i18n-next-ui'
@@ -108,10 +110,16 @@ const settingsTheme = (theme: Theme): Theme =>
 export default function DashboardSettingsRouter() {
     const { t } = useI18N()
     const currentLang = useValueRef(languageSettings)
+    const currentApperance = useValueRef(apperanceSettings)
     const langMapper = React.useRef((x: Language) => {
         if (x === Language.en) return 'English'
         if (x === Language.zh) return '中文'
         return ''
+    }).current
+    const apperanceMapper = React.useRef((x: Apperance) => {
+        if (x === Apperance.dark) return t('settings_apperance_dark')
+        if (x === Apperance.light) return t('settings_apperance_light')
+        return t('settings_apperance_default')
     }).current
     const classes = useStyles()
     const shadowRoot = useValueRef(renderInShadowRootSettings)
@@ -133,6 +141,13 @@ export default function DashboardSettingsRouter() {
                                     getText={langMapper}
                                     icon={<LanguageIcon />}
                                     value={languageSettings}
+                                />
+                                <SettingsUIEnum
+                                    secondary={apperanceMapper(currentApperance)}
+                                    enumObject={Apperance}
+                                    getText={apperanceMapper}
+                                    icon={<PaletteIcon />}
+                                    value={apperanceSettings}
                                 />
                             </List>
                         </Card>
@@ -156,7 +171,6 @@ export default function DashboardSettingsRouter() {
                                     />
                                 ) : null}
                                 <SettingsUI icon={<MemoryOutlinedIcon />} value={debugModeSetting} />
-                                <SettingsUI icon={<NightsStay />} value={nightModeSetting} />
                             </List>
                         </Card>
                     </Paper>

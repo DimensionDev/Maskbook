@@ -48,6 +48,7 @@ const useStyles = makeStyles((theme) =>
             },
         },
         title: {
+            color: theme.palette.text.primary,
             fontSize: 24,
             fontWeight: 500,
             lineHeight: '34px',
@@ -57,11 +58,17 @@ const useStyles = makeStyles((theme) =>
             textOverflow: 'ellipsis',
         },
         label: {
+            color: theme.palette.text.secondary,
             fontWeight: 500,
         },
         address: {
+            color: theme.palette.text.primary,
             fontFamily: 'var(--monospace)',
             wordBreak: 'break-all',
+        },
+        copyButton: {
+            color: theme.palette.type === 'dark' ? theme.palette.text.primary : theme.palette.primary.light,
+            borderColor: theme.palette.type === 'dark' ? theme.palette.text.primary : theme.palette.primary.light,
         },
         coins: {
             width: '16px',
@@ -105,6 +112,7 @@ export function WalletItem(props: WalletItemProps) {
             {/* Prevent the event to make the whole card ripple */}
             <span onMouseDown={(e) => e.stopPropagation()}>
                 <Button
+                    className={classes.copyButton}
                     onClick={() => copyToClipboard(wallet.address!)}
                     color="primary"
                     size="small"

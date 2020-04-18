@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme) =>
         },
         listItemSecondaryAction: {
             right: 0,
-            width: 120,
+            width: 140,
             display: 'flex',
             justifyContent: 'flex-end',
         },

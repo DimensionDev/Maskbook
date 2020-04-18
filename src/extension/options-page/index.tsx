@@ -33,7 +33,7 @@ import DashboardContactsRouter from './Router/Contacts'
 import DashboardSettingsRouter from './Router/Settings'
 import { DashboardBlurContextProvider } from './DashboardBlurContext'
 import { useValueRef } from '../../utils/hooks/useValueRef'
-import { nightModeSetting } from '../../components/shared-settings/settings'
+import { apperanceSettings, Apperance } from '../../components/shared-settings/settings'
 
 const OptionsPageRouters = (
     <>
@@ -49,10 +49,16 @@ const OptionsPageRouters = (
 )
 
 function DashboardWithProvider() {
-    const isNightMode = useValueRef(nightModeSetting)
+    const isPerferDark = useMediaQuery('(prefers-color-scheme: dark)')
+    const apperance = useValueRef(apperanceSettings)
     return (
         <I18nextProvider i18n={i18nNextInstance}>
-            <ThemeProvider theme={isNightMode ? MaskbookDarkTheme : MaskbookLightTheme}>
+            <ThemeProvider
+                theme={
+                    (isPerferDark && apperance === Apperance.default) || apperance === Apperance.dark
+                        ? MaskbookDarkTheme
+                        : MaskbookLightTheme
+                }>
                 <SnackbarProvider
                     maxSnack={30}
                     anchorOrigin={{
