@@ -108,6 +108,7 @@ const useAddTokenStyles = makeStyles((theme) =>
 export function WalletAddTokenDialog(props: WalletAddTokenDialogProps) {
     const { onConfirm, onDecline } = props
 
+    const { t } = useI18N()
     const classes = useAddTokenStyles()
     const [tabID, setTabID] = React.useState<0 | 1>(0)
 
@@ -125,7 +126,7 @@ export function WalletAddTokenDialog(props: WalletAddTokenDialogProps) {
     return (
         <DialogContentItem
             onExit={onDecline}
-            title={'Add Token'}
+            title={t('add_token')}
             tabs={
                 <Paper square>
                     <Tabs value={tabID} onChange={(e, n) => setTabID(n as any)}>
@@ -197,7 +198,7 @@ export function WalletAddTokenDialog(props: WalletAddTokenDialogProps) {
                             useRinkeby ? EthereumNetwork.Rinkeby : EthereumNetwork.Mainnet,
                         )
                     }>
-                    Add Token
+                    {t('add_token')}
                 </ActionButton>
             }></DialogContentItem>
     )

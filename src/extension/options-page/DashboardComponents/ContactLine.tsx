@@ -20,6 +20,7 @@ const useStyles = makeStyles((theme) =>
             height: '32px',
         },
         user: {
+            color: theme.palette.text.primary,
             fontWeight: 500,
             margin: theme.spacing(0, 2),
             flex: '0 1 auto',

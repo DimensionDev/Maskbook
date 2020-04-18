@@ -5,14 +5,6 @@ import i18nNextInstance, { i18n } from '../../utils/i18n-next'
 import { sideEffect } from '../../utils/side-effects'
 
 /**
- * Does the night mode on
- */
-export const nightModeSetting = createNewSettings<boolean>('nightMode', false, {
-    primary: () => i18n.t('settings_enable_night'),
-    secondary: () => i18n.t('settings_enable_night_desc'),
-})
-
-/**
  * Does the debug mode on
  */
 export const debugModeSetting = createNewSettings<boolean>('debugMode', false, {
@@ -43,6 +35,17 @@ export const renderInShadowRootSettings = createNewSettings<boolean>(
         secondary: () => i18n.t('settings_advance_security_desc'),
     },
 )
+
+export enum Apperance {
+    default = 'default',
+    light = 'light',
+    dark = 'dark',
+}
+
+const apperance = Apperance.default
+export const apperanceSettings = createNewSettings<Apperance>('apperance', apperance, {
+    primary: () => i18n.t('settings_apperance'),
+})
 
 export enum Language {
     zh = 'zh',
