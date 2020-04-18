@@ -25,7 +25,11 @@ const useStyles = makeStyles((theme) =>
             marginLeft: -4,
             paddingLeft: 4,
         },
-        button: {
+        importButton: {
+            color: theme.palette.type === 'dark' ? theme.palette.text.primary : theme.palette.primary.light,
+            borderColor: theme.palette.type === 'dark' ? theme.palette.text.primary : theme.palette.primary.light,
+        },
+        databaseButton: {
             paddingTop: 0,
             paddingBottom: 0,
             lineHeight: '24px',
@@ -83,14 +87,18 @@ export default function DashboardPersonasRouter() {
                 <div className={classes.placeholder}></div>
                 <SpacedButtonGroup className={classes.footer}>
                     <Button
-                        className={classes.button}
+                        className={classes.databaseButton}
                         onClick={openRestoreDatabase}
                         startIcon={<DatabaseIcon size={18} />}
                         color="primary"
                         variant="text">
                         {t('restore_database')}
                     </Button>
-                    <Button className={classes.button} onClick={openBackupDatabase} color="primary" variant="text">
+                    <Button
+                        className={classes.databaseButton}
+                        onClick={openBackupDatabase}
+                        color="primary"
+                        variant="text">
                         {t('backup_database')}
                     </Button>
                 </SpacedButtonGroup>

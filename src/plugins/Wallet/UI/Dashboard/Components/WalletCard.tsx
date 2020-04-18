@@ -238,7 +238,7 @@ export default function WalletCard({ wallet, tokens }: Props) {
                         color="primary"
                         variant="body1"
                         onClick={() => setShowAddToken(true)}>
-                        Add Token
+                        {t('add_token')}
                     </Typography>
                 </div>
             </CardContent>

@@ -14,14 +14,20 @@ import { ThemeProvider, useMediaQuery, Dialog } from '@material-ui/core'
 import { MaskbookDarkTheme, MaskbookLightTheme } from '../utils/theme'
 import { action } from '@storybook/addon-actions'
 import { useCurrentIdentity } from '../components/DataSource/useActivatedUI'
-import { nightModeSetting } from '../components/shared-settings/settings'
+import { apperanceSettings, Apperance } from '../components/shared-settings/settings'
 import { useValueRef } from '../utils/hooks/useValueRef'
 
 function DashboardDialog({ children }: { children: React.ReactNode }) {
-    const isNightMode = useValueRef(nightModeSetting)
+    const isPerferDark = useMediaQuery('(prefers-color-scheme: dark)')
+    const apperance = useValueRef(apperanceSettings)
     return (
         <Router>
-            <ThemeProvider theme={isNightMode ? MaskbookDarkTheme : MaskbookLightTheme}>
+            <ThemeProvider
+                theme={
+                    (isPerferDark && apperance === Apperance.default) || apperance === Apperance.dark
+                        ? MaskbookDarkTheme
+                        : MaskbookLightTheme
+                }>
                 <Dialog open>{children}</Dialog>
             </ThemeProvider>
         </Router>

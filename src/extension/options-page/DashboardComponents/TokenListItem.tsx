@@ -16,6 +16,12 @@ const useStyles = makeStyles((theme) =>
             width: '24px',
             height: '24px',
         },
+        name: {
+            color: theme.palette.text.primary,
+        },
+        amount: {
+            color: theme.palette.text.primary,
+        },
     }),
 )
 
@@ -36,8 +42,8 @@ export function TokenListItem(props: TokenListItemProps) {
                     {name}
                 </Avatar>
             </ListItemIcon>
-            <ListItemText primary={token.symbol} secondary={token.name} />
-            <ListItemSecondaryAction>{token.decimals}</ListItemSecondaryAction>
+            <ListItemText className={classes.name} primary={token.symbol} secondary={token.name} />
+            <ListItemSecondaryAction className={classes.amount}>{token.decimals}</ListItemSecondaryAction>
         </ListItem>
     )
 }
