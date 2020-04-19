@@ -8,7 +8,7 @@ import { PostDialogHint } from '../../../components/InjectedComponents/PostDialo
 import { makeStyles, Theme } from '@material-ui/core'
 import { MessageCenter } from '../../../utils/messages'
 import { useTwitterButton, useTwitterBanner } from '../utils/theme'
-import { hasEditor, isCompose } from '../utils/postBox'
+import { hasEditor, isCompose, isMobile } from '../utils/postBox'
 
 export function injectPostDialogHintAtTwitter() {
     if (location.hostname.indexOf(twitterUrl.hostIdentifier) === -1) return
@@ -18,19 +18,21 @@ export function injectPostDialogHintAtTwitter() {
 }
 
 function renderPostDialogHintTo<T>(ls: LiveSelector<T, true>) {
+    if (isMobile()) return
     const watcher = new MutationObserverWatcher(ls)
         .setDOMProxyOption({
             afterShadowRootInit: { mode: 'closed' },
+        })
+        .useForeach(() => {
+            renderInShadowRoot(<PostDialogHintAtTwitter />, {
+                shadow: () => watcher.firstDOMProxy.afterShadow,
+                normal: () => watcher.firstDOMProxy.after,
+            })
         })
         .startWatch({
             childList: true,
             subtree: true,
         })
-
-    renderInShadowRoot(<PostDialogHintAtTwitter />, {
-        shadow: () => watcher.firstDOMProxy.afterShadow,
-        normal: () => watcher.firstDOMProxy.after,
-    })
 }
 
 export const useTwitterThemedPostDialogHint = makeStyles((theme: Theme) => ({

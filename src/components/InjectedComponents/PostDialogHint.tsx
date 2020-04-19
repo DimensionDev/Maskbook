@@ -66,15 +66,12 @@ export interface PostDialogHintProps extends Partial<PostDialogHintUIProps> {
 export function PostDialogHint(props: PostDialogHintProps) {
     const identities = or(props.identities, useMyIdentities())
     const ui = <PostDialogHintUI onHintButtonClicked={() => {}} {...props} />
-
     const connecting = useValueRef(currentImmersiveSetupStatus[getActivatedUI().networkIdentifier])
 
     if (connecting) return null
-
     if (identities.length === 0) {
         return <NotSetupYetPrompt {...props.NotSetupYetPromptProps} />
     }
-
     if (identities.length > 1) {
         return (
             <>
@@ -83,6 +80,5 @@ export function PostDialogHint(props: PostDialogHintProps) {
             </>
         )
     }
-
     return ui
 }

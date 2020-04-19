@@ -26,10 +26,17 @@ export const postEditorInPopupSelector: () => LiveSelector<E, true> = () =>
     )
 export const postEditorInTimelineSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('[role="main"] :not(aside) > [role="progressbar"] ~ div')
-export const postEditorDraftContentSelector = () =>
-    (isCompose() ? postEditorInPopupSelector() : postEditorInTimelineSelector()).querySelector<HTMLElement>(
-        '.public-DraftEditor-content, textarea[aria-label="Tweet text"]',
-    )
+
+export const postEditorDraftContentSelector = () => {
+    if (isMobile()) {
+        return querySelector<E>('.public-DraftEditor-content, textarea[aria-label="Tweet text"]')
+    } else {
+        return (isCompose() ? postEditorInPopupSelector() : postEditorInTimelineSelector()).querySelector<HTMLElement>(
+            '.public-DraftEditor-content, textarea[aria-label="Tweet text"]',
+        )
+    }
+}
+
 export const posteditorToolbarSeelctor: () => LiveSelector<E, true> = () =>
     querySelector<E>('[data-testid="toolBar"] > div > *:last-child')
 

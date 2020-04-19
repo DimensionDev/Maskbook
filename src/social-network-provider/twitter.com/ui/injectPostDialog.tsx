@@ -41,15 +41,16 @@ function renderPostDialogTo<T>(reason: 'timeline' | 'popup', ls: LiveSelector<T,
         .setDOMProxyOption({
             afterShadowRootInit: { mode: 'closed' },
         })
+        .useForeach(() => {
+            renderInShadowRoot(<PostDialogAtTwitter reason={reason} />, {
+                shadow: () => watcher.firstDOMProxy.afterShadow,
+                normal: () => watcher.firstDOMProxy.after,
+            })
+        })
         .startWatch({
             childList: true,
             subtree: true,
         })
-
-    renderInShadowRoot(<PostDialogAtTwitter reason={reason} />, {
-        shadow: () => watcher.firstDOMProxy.afterShadow,
-        normal: () => watcher.firstDOMProxy.after,
-    })
 }
 
 function PostDialogAtTwitter(props: { reason: 'timeline' | 'popup' }) {
