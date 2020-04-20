@@ -69,9 +69,13 @@ export function renderInShadowRoot(node: React.ReactNode, config: { shadow(): Sh
 class InformativeSheetsRegistry extends SheetsRegistry {
     private callback = new Set<() => void>()
     private inform() {
-        // TODO: batch update
-        // ? aggregating multiple inform request to one callback is possible
-        for (const cb of this.callback) cb()
+        // ? Callback must be async or React will complain:
+        // Warning: Cannot update a component from inside the function body of a different component.
+        setTimeout(() => {
+            // TODO: batch update
+            // ? aggregating multiple inform request to one callback is possible
+            for (const cb of this.callback) cb()
+        })
     }
     addListener(cb: () => void) {
         this.callback.add(cb)
