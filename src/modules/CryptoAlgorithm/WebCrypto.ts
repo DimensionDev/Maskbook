@@ -64,7 +64,7 @@ export const WebCryptoMethods: WebCryptoSupportedMethods = {
         ])
         return crypto.subtle.exportKey('raw', cryptoKey)
     },
-    async raw_to_aes(raw, name: AESName = 'AES-GCM') {
+    async raw_to_aes(raw, name: AESName = 'AES-GCM', length: 256 = 256) {
         const cryptoKey = await crypto.subtle.importKey('raw', raw, { name, length } as AesKeyAlgorithm, true, [
             ...getKeyParameter('aes')[0],
         ])

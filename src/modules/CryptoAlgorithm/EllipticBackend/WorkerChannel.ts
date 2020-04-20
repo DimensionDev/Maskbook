@@ -1,5 +1,7 @@
 import type { AsyncCallOptions } from 'async-call-rpc'
+import { OnlyRunInContext } from '@holoflows/kit'
 type MessageChannel = AsyncCallOptions['messageChannel']
+
 export class WorkerMessage implements MessageChannel {
     private isMainRealm = typeof document === 'object'
     private ref: { type: 'worker'; main: Worker } | { type: 'main'; worker: Worker[] }
@@ -8,6 +10,7 @@ export class WorkerMessage implements MessageChannel {
         skipSSR: if (this.isMainRealm) {
             this.ref = { type: 'main', worker: [] }
             if (typeof window !== 'object') break skipSSR
+            OnlyRunInContext('background', '')
             const worker = new Worker('/js/crypto-worker.js')
             worker.addEventListener(
                 'message',
