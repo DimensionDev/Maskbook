@@ -18886,10 +18886,10 @@ ts-map@^1.0.3:
   resolved "https://registry.yarnpkg.com/ts-map/-/ts-map-1.0.3.tgz#1c4d218dec813d2103b7e04e4bcf348e1471c1ff"
   integrity sha512-vDWbsl26LIcPGmDpoVzjEP6+hvHZkBkLW7JpvwbCv/5IYPJlsbzCVXY3wsCeAxAUeTclNOUZxnLdGh3VBD/J6w==
 
-ts-morph@^7.0.1:
-  version "7.0.1"
-  resolved "https://registry.yarnpkg.com/ts-morph/-/ts-morph-7.0.1.tgz#50ea7b48bf278ac8a9755038fc95de9754d66030"
-  integrity sha512-/HghaxCDqBKHWPI+n9/ueT4k5NKTxSsEfJMMUMLybTn7zvi9gcZ8ynnGYrQt5cfl2oapFe/X5VHjLcS1ugV4lg==
+ts-morph@^7.0.2:
+  version "7.0.2"
+  resolved "https://registry.yarnpkg.com/ts-morph/-/ts-morph-7.0.2.tgz#8fba6f2faa0a0f60b6a89851ca3d7638779e3443"
+  integrity sha512-sd9ZWy3eDvbCKPzrmqykRU4J+fe7ZEOStLqLJuN6zWfOA6OCT5ckodz1BhymmeiP4YbcKere9eNfLp64K6549Q==
   dependencies:
     "@dsherret/to-absolute-glob" "^2.0.2"
     "@ts-morph/common" "~0.4.0"
