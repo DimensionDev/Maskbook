@@ -1964,7 +1964,8 @@
 
 "@holoflows/kit@https://github.com/DimensionDev/holoflows-kit":
   version "0.7.0"
-  resolved "https://github.com/DimensionDev/holoflows-kit#57bceb046ca0f40b2980cb01b2262fb9c94c834d"
+  uid e418d5cf0455b3efbb486dde3894d2df9f660098
+  resolved "https://github.com/DimensionDev/holoflows-kit#e418d5cf0455b3efbb486dde3894d2df9f660098"
   dependencies:
     "@servie/events" "^1.0.0"
     async-call-rpc "^1.0.4"
