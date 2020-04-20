@@ -9,7 +9,7 @@ export function DebugList(props: { items: readonly (readonly [string, string | n
     return (
         <ul style={{ wordBreak: 'break-all', padding: '0 1em', margin: 0, background: 'black', color: 'white' }}>
             {props.items.map((x) =>
-                Array.isArray(x) ? <F hint={x[0]} content={x[1] === undefined ? 'undefined' : x[1]} /> : x,
+                Array.isArray(x) ? <F key={x[0]} hint={x[0]} content={x[1] === undefined ? 'undefined' : x[1]} /> : x,
             )}
         </ul>
     )

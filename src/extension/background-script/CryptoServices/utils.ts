@@ -16,17 +16,8 @@ export function getSignablePayload(payload: Payload) {
         }|${payload.encryptedText}`
 }
 
-import * as Alpha40 from '../../../crypto/crypto-alpha-40'
-import * as Alpha39 from '../../../crypto/crypto-alpha-39'
-import * as Alpha38 from '../../../crypto/crypto-alpha-38'
 import type { RedPacketJSONPayload } from '../../../plugins/Wallet/database/types'
 import { Result, Err, Ok } from 'ts-results'
-
-export const cryptoProviderTable = {
-    [-40]: Alpha40,
-    [-39]: Alpha39,
-    [-38]: Alpha38,
-} as const
 
 export interface TypedMessageMetadata {
     readonly meta?: ReadonlyMap<string, any>

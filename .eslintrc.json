@@ -23,6 +23,7 @@
         "prefer-const": "error",
         "eqeqeq": "error",
         "no-extra-bind": "error",
-        "use-isnan": "error"
+        "use-isnan": "error",
+        "no-restricted-globals": ["error", "event", "name", "length", "closed"]
     }
 }
