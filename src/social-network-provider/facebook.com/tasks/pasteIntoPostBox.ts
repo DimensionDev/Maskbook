@@ -87,7 +87,7 @@ export async function pasteIntoPostBoxFacebook(
             if (e) e.style.display = 'none'
         }
         // Prevent Custom Paste failed, this will cause service not available to user.
-        if (element.innerText.indexOf(text) === -1 && 'value' in element && element.value.indexOf(text) === -1) {
+        if (element.innerText.indexOf(text) === -1 || ('value' in element && element.value.indexOf(text) === -1)) {
             copyFailed()
         }
     } catch {
