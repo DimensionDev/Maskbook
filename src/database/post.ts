@@ -143,9 +143,12 @@ const db = createDBAccessWithAsyncUpgrade<PostDB, UpgradeKnowledge>(
             for (const r of records) {
                 const x = r.postCryptoKey
                 if (!x) continue
-                const key = await CryptoKeyToJsonWebKey<AESJsonWebKey>(x as any).catch(() => undefined)
-                if (!key) continue
-                map.set(r.identifier, key)
+                try {
+                    const key = await CryptoKeyToJsonWebKey<AESJsonWebKey>(x as any)
+                    map.set(r.identifier, key)
+                } catch {
+                    continue
+                }
             }
             return knowledge
         }

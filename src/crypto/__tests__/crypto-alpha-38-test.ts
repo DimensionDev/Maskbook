@@ -120,15 +120,15 @@ c.encrypt1ToN && c.decryptMessage1To1 && c.decryptMessage1ToNByMyself && c.decry
 
 // Test for:
 c.verify && c.sign
-test('Crypto alpha v38 sign & verify', async () => {
+// TODO: ECDSA related test is skipped, see https://github.com/nodejs/webcrypto/issues/48
+test.skip('Crypto alpha v38 sign & verify', async () => {
     const alice = await recover_ECDH_256k1_KeyPair_ByMnemonicWord('seed!', 'password!')
     const bob = await recover_ECDH_256k1_KeyPair_ByMnemonicWord('Seed@', 'password@')
     const message = 'aaaaaaaaaaaa'
     const signature = 'zfDbfJy1n32SBBR6OYXVfHMZyJYqQfrpi+2F5xogtUJ2G8VtCuZBvI2LL9pzSCB1dbgeQ7NdUo2L5Goo/qBzbg=='
-    // TODO: ECDSA related test is skipped, see https://github.com/nodejs/webcrypto/issues/48
-    // expect(c.sign(message, alice.key.privateKey).then(helper)).resolves.toBe(signature)
-    // expect(c.verify(message, signature, alice.key.publicKey)).resolves.toBeTruthy()
-    // expect(c.verify(message, signature, bob.key.publicKey)).resolves.toBeFalsy()
+    expect(c.sign(message, alice.key.privateKey).then(helper)).resolves.toBe(signature)
+    expect(c.verify(message, signature, alice.key.publicKey)).resolves.toBeTruthy()
+    expect(c.verify(message, signature, bob.key.publicKey)).resolves.toBeFalsy()
 })
 
 // Test for:
