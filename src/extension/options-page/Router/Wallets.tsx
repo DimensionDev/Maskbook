@@ -56,6 +56,10 @@ const useStyles = makeStyles((theme) =>
             color: theme.palette.text.primary,
             flex: 1,
         },
+        importButton: {
+            color: theme.palette.type === 'dark' ? theme.palette.text.primary : theme.palette.primary.light,
+            borderColor: theme.palette.type === 'dark' ? theme.palette.text.primary : theme.palette.primary.light,
+        },
         addButton: {
             color: theme.palette.primary.main,
         },
@@ -115,7 +119,7 @@ export default function DashboardWalletsRouter() {
 
     const actions = useMemo(
         () => [
-            <Button color="primary" variant="outlined" onClick={openWalletImport}>
+            <Button className={classes.importButton} color="primary" variant="outlined" onClick={openWalletImport}>
                 {t('import')}
             </Button>,
             <Button color="primary" variant="contained" onClick={openWalletCreate} endIcon={<AddCircleIcon />}>
