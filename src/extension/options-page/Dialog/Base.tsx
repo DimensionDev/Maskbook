@@ -10,6 +10,7 @@ import {
     DialogContent,
     Typography,
     FadeProps,
+    SvgIconProps,
 } from '@material-ui/core'
 import { Theme, ThemeProvider } from '@material-ui/core/styles'
 import CloseIcon from '@material-ui/icons/Close'
@@ -32,19 +33,20 @@ const Transition = React.forwardRef<unknown, TransitionProps & Pick<FadeProps, '
 const useStyles = makeStyles((theme) =>
     createStyles({
         close: {
+            color: theme.palette.text.primary,
             position: 'absolute',
-            right: theme.spacing(1),
-            top: theme.spacing(1),
+            right: 10,
+            top: 10,
         },
     }),
 )
 
 export interface DashboardDialogCoreProps extends DialogProps {
-    closeIconColor?: string
+    CloseIconProps?: Partial<SvgIconProps>
 }
 
 export function DashboardDialogCore(props: DashboardDialogCoreProps) {
-    const { fullScreen, children, closeIconColor, ...dialogProps } = props
+    const { fullScreen, children, CloseIconProps, ...dialogProps } = props
 
     const mobile = useMediaQuery('(max-width: 600px)')
     const classes = useStyles()
@@ -59,11 +61,10 @@ export function DashboardDialogCore(props: DashboardDialogCoreProps) {
             {...dialogProps}>
             {children}
             <IconButton
-                onClick={(e) => dialogProps.onClose?.(e, 'backdropClick')}
                 className={classes.close}
-                size="small"
-                style={{ color: closeIconColor }}>
-                <CloseIcon />
+                onClick={(e) => dialogProps.onClose?.(e, 'backdropClick')}
+                size="small">
+                <CloseIcon {...CloseIconProps} />
             </IconButton>
         </Dialog>
     )
@@ -140,38 +141,50 @@ interface DashboardDialogWrapperProps {
     primary: string
     secondary?: string
     size?: 'small' | 'medium'
-    children: React.ReactNode
+    content?: React.ReactNode
+    footer?: React.ReactNode
 }
 
 const useDashboardDialogWrapperStyles = makeStyles((theme) =>
     createStyles<string, DashboardDialogWrapperProps>({
         wrapper: {
-            width: (props) => (props.size === 'small' ? '350px' : '440px'),
-            padding: (props) => theme.spacing(props.size === 'small' ? 3 : 4),
+            display: 'flex',
+            flexDirection: 'column',
+            width: (props) => (props.size === 'small' ? 280 : 440),
+            padding: (props) => (props.size === 'small' ? '40px 24px !important' : '40px 36px !important'),
         },
         header: {
-            marginTop: theme.spacing(1),
-            marginLeft: 'auto',
-            marginRight: 'auto',
+            textAlign: 'center',
+            margin: '0 auto',
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
-            maxWidth: '350px',
+            width: (props) => (props.size === 'small' ? 232 : 256),
         },
         content: {
-            marginTop: (props) => theme.spacing(props.size === 'small' && props.icon ? 4 : 2),
+            flex: 1,
             textAlign: 'center',
-            '& > *:not(:last-child)': {
-                marginBottom: theme.spacing(2),
-            },
+            // '& > *:not(:last-child)': {
+            //     marginBottom: theme.spacing(2),
+            // },
+        },
+        footer: {
+            display: 'flex',
+            justifyContent: 'space-around',
+            marginTop: theme.spacing(3),
         },
         primary: {
             margin: theme.spacing(2, 0, 1),
+            fontWeight: 500,
+            fontSize: 20,
+            lineHeight: '30px',
         },
         secondary: {
             lineHeight: 1.75,
+            fontSize: 14,
             textAlign: 'center',
             wordBreak: 'break-word',
+            marginBottom: 18,
         },
     }),
 )
@@ -191,6 +204,26 @@ const dialogTheme = (theme: Theme): Theme =>
                     },
                 },
             },
+            MuiTextField: {
+                root: {
+                    marginTop: theme.spacing(1),
+                    marginBottom: theme.spacing(1),
+                },
+            },
+            MuiTabs: {
+                root: {
+                    minHeight: 44,
+                },
+                indicator: {
+                    height: 1,
+                },
+            },
+            MuiTab: {
+                root: {
+                    minHeight: 44,
+                    borderBottom: `solid 1px ${theme.palette.divider}`,
+                },
+            },
         },
         props: {
             MuiButton: {
@@ -205,7 +238,7 @@ const dialogTheme = (theme: Theme): Theme =>
     })
 
 export function DashboardDialogWrapper(props: DashboardDialogWrapperProps) {
-    const { icon, iconColor, primary, secondary, children } = props
+    const { icon, iconColor, primary, secondary, content, footer } = props
     const classes = useDashboardDialogWrapperStyles(props)
     return (
         <ThemeProvider theme={dialogTheme}>
@@ -219,14 +252,15 @@ export function DashboardDialogWrapper(props: DashboardDialogWrapperProps) {
                         {secondary}
                     </Typography>
                 </section>
-                <section className={classes.content}>{children}</section>
+                {content ? <section className={classes.content}>{content}</section> : null}
+                {footer ? <section className={classes.footer}>{footer}</section> : null}
             </DialogContent>
         </ThemeProvider>
     )
 }
 
-export function useSnackbarCallback<T = void>(
-    executor: () => Promise<T>,
+export function useSnackbarCallback<P extends (...args: any[]) => Promise<T>, T>(
+    executor: P,
     deps: React.DependencyList,
     onSuccess?: (ret: T) => void,
     onError?: (err: Error) => void,
@@ -235,8 +269,8 @@ export function useSnackbarCallback<T = void>(
     const { t } = useI18N()
     const { enqueueSnackbar } = useSnackbar()
     return useCallback(
-        () =>
-            executor().then(
+        (...args) =>
+            executor(...args).then(
                 (res) => {
                     enqueueSnackbar(t('done'), { key, variant: 'success' })
                     onSuccess?.(res)

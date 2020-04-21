@@ -8,40 +8,48 @@ import { DashboardDialogCore, WrappedDialogProps } from './Base'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
-        closeIcon: {
-            color: 'white',
-        },
         wrapper: {
-            width: '520px',
+            width: 580,
+            height: 660,
             lineHeight: 1.75,
         },
         header: {
+            height: 300,
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
             background: 'url(/aboutDialogBackground.png) no-repeat center / cover',
         },
         maskface: {
-            width: '120px',
-            height: '120px',
-            marginTop: '75px',
+            width: 120,
+            height: 120,
+            marginTop: 75,
         },
         masktext: {
-            marginTop: theme.spacing(2),
-            marginBottom: theme.spacing(2),
+            marginTop: 20,
+            marginBottom: 20,
         },
         version: {
             color: '#FFF',
-            fontSize: '0.625rem',
-            marginBottom: theme.spacing(2),
+            fontSize: 12,
+            marginBottom: 20,
         },
         main: {
-            margin: theme.spacing(3, 8),
+            fontSize: 16,
             textAlign: 'center',
+            margin: '24px 68px',
         },
         getInTouch: {
+            fontSize: 16,
             fontWeight: 'bold',
-            marginTop: theme.spacing(2),
+            marginTop: 20,
+            marginBottom: 28,
+        },
+        icon: {
+            color: theme.palette.text.primary,
+        },
+        close: {
+            color: '#FFF',
         },
         brands: {
             marginTop: theme.spacing(1),
@@ -64,7 +72,7 @@ export function DashboardAboutDialog(props: WrappedDialogProps) {
     const classes = useStyles()
     const { version } = globalThis.browser?.runtime.getManifest() ?? {}
     return (
-        <DashboardDialogCore {...props} closeIconColor="#FFF">
+        <DashboardDialogCore {...props} CloseIconProps={{ className: classes.close }}>
             <section className={classes.wrapper}>
                 <header className={classes.header}>
                     <Avatar className={classes.maskface} src="/MB--CircleCanvas--WhiteOverBlue.svg"></Avatar>
@@ -83,15 +91,24 @@ export function DashboardAboutDialog(props: WrappedDialogProps) {
                         <Typography variant="inherit">Get in touch</Typography>
                         <div className={classes.brands}>
                             <IconButton
+                                className={classes.icon}
                                 target="_blank"
                                 size="small"
                                 href="https://www.facebook.com/groups/324857694838456">
                                 <FacebookIcon />
                             </IconButton>
-                            <IconButton target="_blank" size="small" href="https://twitter.com/realmaskbook">
+                            <IconButton
+                                className={classes.icon}
+                                target="_blank"
+                                size="small"
+                                href="https://twitter.com/realmaskbook">
                                 <TwitterIcon />
                             </IconButton>
-                            <IconButton target="_blank" size="small" href="https://github.com/DimensionDev/Maskbook">
+                            <IconButton
+                                className={classes.icon}
+                                target="_blank"
+                                size="small"
+                                href="https://github.com/DimensionDev/Maskbook">
                                 <GitHubIcon />
                             </IconButton>
                         </div>

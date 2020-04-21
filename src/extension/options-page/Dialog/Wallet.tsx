@@ -99,12 +99,13 @@ export function DashboardWalletImportDialog(props: WrappedDialogProps) {
                 icon={<CreditCardIcon />}
                 iconColor="#4EE0BC"
                 primary={t('import_wallet')}
-                secondary={t('import_wallet_hint')}>
-                <AbstractTab {...tabProps}></AbstractTab>
-                <DebounceButton variant="contained" color="primary" onClick={onSubmit}>
-                    {t('import')}
-                </DebounceButton>
-            </DashboardDialogWrapper>
+                secondary={t('import_wallet_hint')}
+                content={<AbstractTab {...tabProps}></AbstractTab>}
+                footer={
+                    <DebounceButton variant="contained" color="primary" onClick={onSubmit}>
+                        {t('import')}
+                    </DebounceButton>
+                }></DashboardDialogWrapper>
         </DashboardDialogCore>
     )
 }
@@ -122,29 +123,37 @@ export function DashboardWalletCreateDialog(props: WrappedDialogProps) {
 
     return (
         <DashboardDialogCore {...props}>
-            <DashboardDialogWrapper icon={<CreditCardIcon />} iconColor="#4EE0BC" primary={t('create_a_wallet')}>
-                <form>
-                    <TextField
-                        required
-                        label={t('wallet_name')}
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
-                    />
-                    <TextField
-                        required
-                        label={t('password')}
-                        type="password"
-                        value={passphrase}
-                        onChange={(e) => setPassphrase(e.target.value)}
-                    />
-                </form>
-                <Typography variant="body2" color="textSecondary">
-                    {t('dashboard_password_helper_text')}
-                </Typography>
-                <DebounceButton variant="contained" color="primary" onClick={onSubmit}>
-                    {t('create')}
-                </DebounceButton>
-            </DashboardDialogWrapper>
+            <DashboardDialogWrapper
+                icon={<CreditCardIcon />}
+                iconColor="#4EE0BC"
+                primary={t('create_a_wallet')}
+                content={
+                    <>
+                        <form>
+                            <TextField
+                                required
+                                label={t('wallet_name')}
+                                value={name}
+                                onChange={(e) => setName(e.target.value)}
+                            />
+                            <TextField
+                                required
+                                label={t('password')}
+                                type="password"
+                                value={passphrase}
+                                onChange={(e) => setPassphrase(e.target.value)}
+                            />
+                        </form>
+                        <Typography variant="body2" color="textSecondary">
+                            {t('dashboard_password_helper_text')}
+                        </Typography>
+                    </>
+                }
+                footer={
+                    <DebounceButton variant="contained" color="primary" onClick={onSubmit}>
+                        {t('create')}
+                    </DebounceButton>
+                }></DashboardDialogWrapper>
         </DashboardDialogCore>
     )
 }
@@ -215,12 +224,16 @@ export function DashboardWalletAddTokenDialog(props: WrappedDialogProps<WalletPr
 
     return (
         <DashboardDialogCore {...props}>
-            <DashboardDialogWrapper icon={<HexagonIcon />} iconColor="#699CF7" primary={t('add_token')}>
-                <AbstractTab {...tabProps}></AbstractTab>
-                <DebounceButton disabled={!token} variant="contained" color="primary" onClick={onSubmit}>
-                    {t('import')}
-                </DebounceButton>
-            </DashboardDialogWrapper>
+            <DashboardDialogWrapper
+                icon={<HexagonIcon />}
+                iconColor="#699CF7"
+                primary={t('add_token')}
+                content={<AbstractTab {...tabProps}></AbstractTab>}
+                footer={
+                    <DebounceButton disabled={!token} variant="contained" color="primary" onClick={onSubmit}>
+                        {t('import')}
+                    </DebounceButton>
+                }></DashboardDialogWrapper>
         </DashboardDialogCore>
     )
 }
@@ -256,9 +269,11 @@ export function DashboardWalletHistoryDialog(props: WrappedDialogProps<WalletPro
 
     return (
         <DashboardDialogCore {...props}>
-            <DashboardDialogWrapper icon={<ClockIcon />} iconColor="#FB5858" primary="History">
-                <AbstractTab {...tabProps}></AbstractTab>
-            </DashboardDialogWrapper>
+            <DashboardDialogWrapper
+                icon={<ClockIcon />}
+                iconColor="#FB5858"
+                primary="History"
+                content={<AbstractTab {...tabProps}></AbstractTab>}></DashboardDialogWrapper>
         </DashboardDialogCore>
     )
 }
@@ -290,24 +305,27 @@ export function DashboardWalletBackupDialog(props: WrappedDialogProps<WalletProp
                 icon={<CreditCardIcon />}
                 iconColor="#4EE0BC"
                 primary={t('backup_wallet')}
-                secondary={t('backup_wallet_hint')}>
-                <section className={classes.section}>
-                    <Card elevation={0} className={classes.blockquote} component="blockquote">
-                        {wallet.mnemonic.join(' ')}
-                    </Card>
-                </section>
-                <section className={classes.section}>
-                    <Typography color="textSecondary" variant="body2" component="p">
-                        {t('private_key')}
-                    </Typography>
-                    <Card
-                        elevation={0}
-                        className={classNames(classes.breakAll, classes.blockquote)}
-                        component="blockquote">
-                        // TODO!: private key
-                    </Card>
-                </section>
-            </DashboardDialogWrapper>
+                secondary={t('backup_wallet_hint')}
+                content={
+                    <>
+                        <section className={classes.section}>
+                            <Card elevation={0} className={classes.blockquote} component="blockquote">
+                                {wallet.mnemonic.join(' ')}
+                            </Card>
+                        </section>
+                        <section className={classes.section}>
+                            <Typography color="textSecondary" variant="body2" component="p">
+                                {t('private_key')}
+                            </Typography>
+                            <Card
+                                elevation={0}
+                                className={classNames(classes.breakAll, classes.blockquote)}
+                                component="blockquote">
+                                // TODO!: private key
+                            </Card>
+                        </section>
+                    </>
+                }></DashboardDialogWrapper>
         </DashboardDialogCore>
     )
 }
@@ -316,30 +334,37 @@ export function DashboardWalletRenameDialog(props: WrappedDialogProps<WalletProp
     const { t } = useI18N()
     const { wallet } = props.ComponentProps!
     const [name, setName] = useState(wallet.name ?? '')
-    const onConfirm = useSnackbarCallback(
+    const renameWallet = useSnackbarCallback(
         () => Services.Plugin.invokePlugin('maskbook.wallet', 'renameWallet', wallet.address, name),
         [wallet.address],
         props.onClose,
     )
     return (
         <DashboardDialogCore {...props}>
-            <DashboardDialogWrapper size="small" primary={t('wallet_new_name')}>
-                <TextField
-                    required
-                    label={t('wallet_name')}
-                    variant="outlined"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                />
-                <SpacedButtonGroup>
-                    <DebounceButton variant="contained" color="primary" onClick={onConfirm}>
-                        {t('ok')}
-                    </DebounceButton>
-                    <DebounceButton variant="outlined" color="primary" onClick={props.onClose}>
-                        {t('cancel')}
-                    </DebounceButton>
-                </SpacedButtonGroup>
-            </DashboardDialogWrapper>
+            <DashboardDialogWrapper
+                size="small"
+                primary={t('wallet_new_name')}
+                content={
+                    <TextField
+                        required
+                        label={t('wallet_name')}
+                        variant="outlined"
+                        value={name}
+                        autoFocus
+                        onChange={(e) => setName(e.target.value)}
+                        inputProps={{ onKeyPress: (e) => e.key === 'Enter' && renameWallet() }}
+                    />
+                }
+                footer={
+                    <SpacedButtonGroup>
+                        <DebounceButton variant="contained" color="primary" onClick={renameWallet}>
+                            {t('ok')}
+                        </DebounceButton>
+                        <DebounceButton variant="outlined" color="primary" onClick={props.onClose}>
+                            {t('cancel')}
+                        </DebounceButton>
+                    </SpacedButtonGroup>
+                }></DashboardDialogWrapper>
         </DashboardDialogCore>
     )
 }
@@ -359,16 +384,17 @@ export function DashboardWalletDeleteConfirmDialog(props: WrappedDialogProps<Wal
                 icon={<CreditCardIcon />}
                 iconColor="#F4637D"
                 primary={t('delete_wallet')}
-                secondary={t('delete_wallet_hint')}>
-                <SpacedButtonGroup>
-                    <DebounceButton variant="contained" color="danger" onClick={onConfirm}>
-                        {t('confirm')}
-                    </DebounceButton>
-                    <DebounceButton variant="outlined" color="primary" onClick={props.onClose}>
-                        {t('cancel')}
-                    </DebounceButton>
-                </SpacedButtonGroup>
-            </DashboardDialogWrapper>
+                secondary={t('delete_wallet_hint')}
+                footer={
+                    <SpacedButtonGroup>
+                        <DebounceButton variant="contained" color="danger" onClick={onConfirm}>
+                            {t('confirm')}
+                        </DebounceButton>
+                        <DebounceButton variant="outlined" color="primary" onClick={props.onClose}>
+                            {t('cancel')}
+                        </DebounceButton>
+                    </SpacedButtonGroup>
+                }></DashboardDialogWrapper>
         </DashboardDialogCore>
     )
 }

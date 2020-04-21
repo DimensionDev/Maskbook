@@ -7,6 +7,11 @@ const useStyles = makeStyles((theme: Theme) =>
         tab: {
             minWidth: 'unset',
         },
+        tabPanel: {
+            height: 200,
+            minHeight: 200,
+            marginTop: theme.spacing(3),
+        },
     }),
 )
 
@@ -38,7 +43,7 @@ export default function AbstractTab(props: AbstractTabProps) {
     }
 
     return (
-        <div>
+        <>
             <Paper square elevation={0}>
                 <Tabs
                     variant="fullWidth"
@@ -52,8 +57,16 @@ export default function AbstractTab(props: AbstractTabProps) {
                 </Tabs>
             </Paper>
             {tabs.map(({ label, ...tab }, index) => (
-                <TabPanel value={value} index={index} height={height} minHeight={height} key={label} {...tab} />
+                <TabPanel
+                    className={classes.tabPanel}
+                    value={value}
+                    index={index}
+                    height={height}
+                    minHeight={height}
+                    key={label}
+                    {...tab}
+                />
             ))}
-        </div>
+        </>
     )
 }

@@ -131,12 +131,12 @@ export function DialogRouter(props: DialogRouterProps) {
 
     return (
         <Dialog
+            classes={{ paper: classes.dialog }}
             disableEscapeKeyDown
             closeAfterTransition
             onClose={onExitAction}
             fullScreen={fullscreen ?? mobile}
             open={routeMatching}
-            classes={{ paper: classes.dialog }}
             TransitionComponent={Transition}>
             {routeMatching && (
                 <Route path={matchPattern?.path} component={component}>

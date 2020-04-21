@@ -73,7 +73,7 @@ export default function DashboardPersonasRouter() {
                 {t('create_persona')}
             </Button>,
         ],
-        [t, openCreatePersona, openImportPersona],
+        [t, classes.importButton, openCreatePersona, openImportPersona],
     )
 
     return (
