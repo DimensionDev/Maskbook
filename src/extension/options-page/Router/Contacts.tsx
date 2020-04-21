@@ -20,6 +20,8 @@ const useStyles = makeStyles((theme) =>
 
 export default function DashboardContactsRouter() {
     const { t } = useI18N()
+    const classes = useStyles()
+
     // ? re-rendering this component seems too expensive, how to avoid?
     // TODO: debounce searching
     const [search, setSearch] = useState('')
@@ -42,8 +44,6 @@ export default function DashboardContactsRouter() {
         ],
         [search],
     )
-
-    const classes = useStyles()
     const contacts = useFriendsList().filter((i) =>
         search ? i.nickname?.includes(search) || i.identifier.toText().includes(search) : true,
     )
