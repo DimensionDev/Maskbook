@@ -7,6 +7,8 @@ import SearchIcon from '@material-ui/icons/Search'
 import { useFriendsList } from '../../../components/DataSource/useActivatedUI'
 import { ContactLine } from '../DashboardComponents/ContactLine'
 import { useI18N } from '../../../utils/i18n-next-ui'
+import { FixedSizeList } from 'react-window'
+import AutoResize from 'react-virtualized-auto-sizer'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -51,10 +53,17 @@ export default function DashboardContactsRouter() {
             <Typography className={classes.title} variant="body2" color="textSecondary">
                 {t('people_in_database')}
             </Typography>
-            <section>
-                {contacts.map((contact) => (
-                    <ContactLine key={contact.identifier.toText()} contact={contact}></ContactLine>
-                ))}
+            {/* without flex: 1, the auto resize cannot resize to the max height it need. */}
+            <section style={{ flex: 1 }}>
+                <AutoResize>
+                    {(size) => (
+                        <FixedSizeList {...size} itemSize={64} itemCount={contacts.length}>
+                            {({ index, style }) => (
+                                <ContactLine style={style} key={index} contact={contacts[index]}></ContactLine>
+                            )}
+                        </FixedSizeList>
+                    )}
+                </AutoResize>
             </section>
         </DashboardRouterContainer>
     )
