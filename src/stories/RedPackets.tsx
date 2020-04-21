@@ -112,6 +112,8 @@ storiesOf('Plugin: Red Packets', module)
                         name: 'Wallet Name',
                         passphrase: 'password',
                         eth_balance: new BigNumber(2).multipliedBy(new BigNumber(10).pow(18)), // 2 * (10 ** 18)
+                        createdAt: new Date(),
+                        updatedAt: new Date(),
                     },
                 ]}
                 justCreatedRedPacket={undefined}
