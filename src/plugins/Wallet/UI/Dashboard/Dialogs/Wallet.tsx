@@ -427,7 +427,7 @@ export function WalletCreateDialog() {
 
     return (
         <DialogContentItem
-            title={'Create Wallet'}
+            title={t('create_wallet')}
             content={content}
             actionsAlign="center"
             actions={
