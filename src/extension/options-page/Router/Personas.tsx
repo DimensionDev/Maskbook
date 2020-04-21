@@ -80,9 +80,15 @@ export default function DashboardPersonasRouter() {
         <DashboardRouterContainer title={t('my_personas')} actions={actions}>
             <ThemeProvider theme={personasTheme}>
                 <section className={classes.container}>
-                    {personas.map((persona) => (
-                        <PersonaCard key={persona.identifier.toText()} persona={persona} />
-                    ))}
+                    {personas
+                        .sort((a, b) => {
+                            if (a.updatedAt > b.updatedAt) return -1
+                            if (a.updatedAt < b.updatedAt) return 1
+                            return 0
+                        })
+                        .map((persona) => (
+                            <PersonaCard key={persona.identifier.toText()} persona={persona} />
+                        ))}
                 </section>
                 <div className={classes.placeholder}></div>
                 <SpacedButtonGroup className={classes.footer}>
