@@ -126,7 +126,7 @@ export default function DashboardWalletsRouter() {
                 {t('create_wallet')}
             </Button>,
         ],
-        [t, openWalletCreate, openWalletImport],
+        [t, classes.importButton, openWalletCreate, openWalletImport],
     )
 
     // TODO!: all wallets are using same set of tokens

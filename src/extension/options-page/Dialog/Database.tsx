@@ -24,11 +24,12 @@ export function DashboardDatabaseBackupDialog(props: WrappedDialogProps) {
                 icon={<DatabaseIcon />}
                 iconColor="#699CF7"
                 primary={t('backup_database')}
-                secondary={t('dashboard_backup_database_hint')}>
-                <DebounceButton variant="contained" color="primary" onClick={onClick}>
-                    {t('dashboard_backup_database_confirmation')}
-                </DebounceButton>
-            </DashboardDialogWrapper>
+                secondary={t('dashboard_backup_database_hint')}
+                footer={
+                    <DebounceButton variant="contained" color="primary" onClick={onClick}>
+                        {t('dashboard_backup_database_confirmation')}
+                    </DebounceButton>
+                }></DashboardDialogWrapper>
         </DashboardDialogCore>
     )
 }
@@ -95,18 +96,19 @@ export function DashboardDatabaseRestoreDialog(props: WrappedDialogProps) {
                 primary={t('restore_database')}
                 secondary={
                     requiredPermissions ? t('dashboard_permission_required') : t('dashboard_restore_database_hint')
-                }>
-                <input type="file" accept="application/json" ref={ref} onChange={fileReceiver} hidden />
-                {requiredPermissions ? (
-                    <DebounceButton variant="contained" color="secondary" onClick={confirmPermissions}>
-                        {t('confirm')}
-                    </DebounceButton>
-                ) : (
-                    <DebounceButton variant="contained" color="primary" onClick={() => ref.current?.click()}>
-                        {t('browse')}
-                    </DebounceButton>
-                )}
-            </DashboardDialogWrapper>
+                }
+                content={<input type="file" accept="application/json" ref={ref} onChange={fileReceiver} hidden />}
+                footer={
+                    requiredPermissions ? (
+                        <DebounceButton variant="contained" color="secondary" onClick={confirmPermissions}>
+                            {t('confirm')}
+                        </DebounceButton>
+                    ) : (
+                        <DebounceButton variant="contained" color="primary" onClick={() => ref.current?.click()}>
+                            {t('browse')}
+                        </DebounceButton>
+                    )
+                }></DashboardDialogWrapper>
         </DashboardDialogCore>
     )
 }
