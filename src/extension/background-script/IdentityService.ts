@@ -29,7 +29,7 @@ export function queryProfiles(network?: string): Promise<Profile[]> {
 export function queryMyProfiles(network?: string) {
     return queryProfilesWithQuery(network).then((x) => x.filter((y) => y.linkedPersona?.hasPrivateKey === true))
 }
-export function updateProfileInfo(
+export async function updateProfileInfo(
     identifier: ProfileIdentifier,
     data: {
         nickname?: string | null
@@ -44,10 +44,9 @@ export function updateProfileInfo(
             createdAt: new Date(),
             updatedAt: new Date(),
         }
-        return consistentPersonaDBWriteAccess((t) => createOrUpdateProfileDB(rec, t as any))
+        await consistentPersonaDBWriteAccess((t) => createOrUpdateProfileDB(rec, t as any))
     }
-    if (data.avatarURL) return storeAvatar(identifier, data.avatarURL, data.forceUpdateAvatar)
-    return Promise.resolve()
+    if (data.avatarURL) await storeAvatar(identifier, data.avatarURL, data.forceUpdateAvatar)
 }
 export function removeProfile(id: ProfileIdentifier): Promise<void> {
     return consistentPersonaDBWriteAccess((t) => deleteProfileDB(id, t))
