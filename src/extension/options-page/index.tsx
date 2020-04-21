@@ -33,7 +33,7 @@ import DashboardContactsRouter from './Router/Contacts'
 import DashboardSettingsRouter from './Router/Settings'
 import { DashboardBlurContextProvider } from './DashboardBlurContext'
 import { useValueRef } from '../../utils/hooks/useValueRef'
-import { apperanceSettings, Apperance } from '../../components/shared-settings/settings'
+import { appearanceSettings, Appearance } from '../../components/shared-settings/settings'
 
 const OptionsPageRouters = (
     <>
@@ -49,13 +49,13 @@ const OptionsPageRouters = (
 )
 
 function DashboardWithProvider() {
-    const isPerferDark = useMediaQuery('(prefers-color-scheme: dark)')
-    const apperance = useValueRef(apperanceSettings)
+    const preferDarkScheme = useMediaQuery('(prefers-color-scheme: dark)')
+    const appearance = useValueRef(appearanceSettings)
     return (
         <I18nextProvider i18n={i18nNextInstance}>
             <ThemeProvider
                 theme={
-                    (isPerferDark && apperance === Apperance.default) || apperance === Apperance.dark
+                    (preferDarkScheme && appearance === Appearance.default) || appearance === Appearance.dark
                         ? MaskbookDarkTheme
                         : MaskbookLightTheme
                 }>
