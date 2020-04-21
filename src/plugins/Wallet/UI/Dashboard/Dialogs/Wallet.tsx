@@ -436,7 +436,7 @@ export function WalletCreateDialog() {
 
     return (
         <DialogContentItem
-            title={'Create Wallet'}
+            title={t('create_wallet')}
             content={content}
             actionsAlign="center"
             actions={
@@ -484,7 +484,7 @@ export function WalletImportDialog() {
         tabs: [
             {
                 label: 'MNEMONIC WORDS',
-                component: (
+                component: () => (
                     <>
                         <TextField
                             className={classes.input}
@@ -515,7 +515,7 @@ export function WalletImportDialog() {
             },
             {
                 label: 'PRIVATE KEY',
-                component: (
+                component: () => (
                     <>
                         <TextField
                             className={classes.input}

@@ -61,6 +61,7 @@ export async function getWallets(): Promise<[(WalletRecord & { privateKey: strin
     const t = createTransaction(await createWalletDBAccess(), 'readonly')('Wallet', 'ERC20Token')
     const wallets = await t.objectStore('Wallet').getAll()
     const tokens = await t.objectStore('ERC20Token').getAll()
+
     // Schedule an update
     for (const x of wallets) {
         memoGetWalletBalance(x.address)
@@ -71,7 +72,15 @@ export async function getWallets(): Promise<[(WalletRecord & { privateKey: strin
             .map(WalletRecordOutDB)
             .map(async (record) => ({ ...record, privateKey: await makePrivateKey(record) }))
         const recordWithKeys = await Promise.all(records)
-        return recordWithKeys.sort((a, b) => (a._wallet_is_default ? -1 : b._wallet_is_default ? 1 : 0))
+        return recordWithKeys.sort((a, b) => {
+            if (a._wallet_is_default) return -1
+            if (b._wallet_is_default) return 1
+            if (a.updatedAt > b.updatedAt) return -1
+            if (a.updatedAt < b.updatedAt) return 1
+            if (a.createdAt > b.createdAt) return -1
+            if (a.createdAt < b.createdAt) return 1
+            return 0
+        })
         async function makePrivateKey(record: WalletRecord) {
             const recover = record._private_key_
                 ? await recoverWalletFromPrivateKey(record._private_key_)
@@ -96,16 +105,27 @@ export async function setDefaultWallet(address: WalletRecord['address']) {
     wallets.forEach((wallet) => {
         if (wallet._wallet_is_default) wallet._wallet_is_default = false
         if (wallet.address === address) wallet._wallet_is_default = true
+        if (wallet._wallet_is_default || wallet.address === address) wallet.updatedAt = new Date()
         t.objectStore('Wallet').put(wallet)
     })
     PluginMessageCenter.emit('maskbook.wallets.update', undefined)
 }
 
 export async function createNewWallet(
-    rec: Omit<WalletRecord, 'id' | 'address' | 'mnemonic' | 'eth_balance' | '_data_source_' | 'erc20_token_balance'>,
+    rec: Omit<
+        WalletRecord,
+        | 'id'
+        | 'address'
+        | 'mnemonic'
+        | 'eth_balance'
+        | '_data_source_'
+        | 'erc20_token_balance'
+        | 'createdAt'
+        | 'updatedAt'
+    >,
 ) {
     const mnemonic = bip39.generateMnemonic().split(' ')
-    importNewWallet({ mnemonic, ...rec })
+    await importNewWallet({ mnemonic, ...rec })
 }
 
 export async function importNewWallet(
@@ -134,6 +154,8 @@ export async function importNewWallet(
             [OKB_ADDRESS, undefined],
         ]),
         _data_source_: getWalletProvider().dataSource,
+        createdAt: new Date(),
+        updatedAt: new Date(),
     }
     /** Wallet recover from private key */
     if (rec._private_key_) record._private_key_ = rec._private_key_
@@ -171,6 +193,7 @@ export async function onWalletBalanceUpdated(address: string, newBalance: BigNum
     const wallet = await getWalletByAddress(t, address)
     if (wallet.eth_balance?.isEqualTo(newBalance)) return // wallet.eth_balance === newBalance
     wallet.eth_balance = newBalance
+    wallet.updatedAt = new Date()
     t.objectStore('Wallet').put(WalletRecordIntoDB(wallet))
     PluginMessageCenter.emit('maskbook.wallets.update', undefined)
 }
@@ -180,6 +203,7 @@ export async function renameWallet(address: string, name: string) {
     const wallet = await getWalletByAddress(t, address)
 
     wallet.name = name
+    wallet.updatedAt = wallet.updatedAt ?? new Date()
     t.objectStore('Wallet').put(WalletRecordIntoDB(wallet))
     PluginMessageCenter.emit('maskbook.wallets.update', undefined)
 }
@@ -263,6 +287,7 @@ export async function walletAddERC20Token(
         await t.objectStore('ERC20Token').add(rec)
     }
     wallet.erc20_token_balance.set(token.address, bal)
+    wallet.updatedAt = new Date()
     await t.objectStore('Wallet').put(WalletRecordIntoDB(wallet))
     PluginMessageCenter.emit('maskbook.wallets.update', undefined)
 }
@@ -272,6 +297,7 @@ export async function onWalletERC20TokenBalanceUpdated(address: string, tokenAdd
     const wallet = await getWalletByAddress(t, address)
     if (wallet.erc20_token_balance.get(tokenAddress)?.isEqualTo(newBalance)) return // wallet.erc20_token_balance.get(tokenAddress) === newBalance
     wallet.erc20_token_balance.set(tokenAddress, newBalance)
+    wallet.updatedAt = new Date()
     t.objectStore('Wallet').put(WalletRecordIntoDB(wallet))
     PluginMessageCenter.emit('maskbook.wallets.update', undefined)
 }

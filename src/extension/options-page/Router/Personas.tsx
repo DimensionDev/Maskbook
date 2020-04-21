@@ -2,7 +2,6 @@ import React, { useMemo } from 'react'
 import DashboardRouterContainer from './Container'
 import { Button, makeStyles, createStyles, Theme, ThemeProvider } from '@material-ui/core'
 import AddCircleIcon from '@material-ui/icons/AddCircle'
-import { useMyPersonas } from '../../../components/DataSource/useActivatedUI'
 import PersonaCard from '../DashboardComponents/PersonaCard'
 import { DashboardPersonaCreateDialog, DashboardPersonaImportDialog } from '../Dialog/Persona'
 import { useModal } from '../Dialog/Base'
@@ -11,6 +10,7 @@ import { DashboardDatabaseBackupDialog, DashboardDatabaseRestoreDialog } from '.
 import SpacedButtonGroup from '../DashboardComponents/SpacedButtonGroup'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { merge, cloneDeep } from 'lodash-es'
+import { useMyPersonas } from '../../../components/DataSource/independent'
 
 const useStyles = makeStyles((theme) =>
     createStyles({

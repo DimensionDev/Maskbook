@@ -9,6 +9,7 @@ import {
     makeStyles,
     DialogContent,
     Typography,
+    FadeProps,
 } from '@material-ui/core'
 import { Theme, ThemeProvider } from '@material-ui/core/styles'
 import CloseIcon from '@material-ui/icons/Close'
@@ -18,7 +19,10 @@ import { useSnackbar } from 'notistack'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { merge, cloneDeep } from 'lodash-es'
 
-const Transition = React.forwardRef<unknown, TransitionProps>(function Transition(props, ref) {
+const Transition = React.forwardRef<unknown, TransitionProps & Pick<FadeProps, 'children'>>(function Transition(
+    props,
+    ref,
+) {
     return <Fade ref={ref} {...props} />
 })
 

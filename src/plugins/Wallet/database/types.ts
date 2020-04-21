@@ -86,6 +86,8 @@ export interface WalletRecord {
     erc20_token_balance: Map</** address of the erc20 token */ string, BigNumber | undefined>
     mnemonic: string[]
     passphrase: string
+    createdAt: Date
+    updatedAt: Date
     _data_source_: 'real' | 'mock'
     /** Wallet recover from private key */
     _private_key_?: string

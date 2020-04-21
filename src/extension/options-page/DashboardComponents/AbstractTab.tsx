@@ -25,11 +25,10 @@ export interface AbstractTabProps {
     state: [number, React.Dispatch<React.SetStateAction<number>>]
     margin?: true | 'top' | 'bottom'
     height?: number | string
-    minHeight?: number
 }
 
 export default function AbstractTab(props: AbstractTabProps) {
-    const { tabs, state, height, minHeight } = props
+    const { tabs, state, height } = props
 
     const classes = useStyles()
     const [value, setValue] = state
