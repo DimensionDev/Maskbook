@@ -37,7 +37,7 @@ class SSRPlugin {
      * @param {import('webpack').Compiler} compiler
      */
     apply(compiler) {
-        compiler.hooks.compilation.tap('SSRPlugin', compilation => {
+        compiler.hooks.compilation.tap('SSRPlugin', (compilation) => {
             /**
              * @see https://github.com/jantimon/html-webpack-plugin#options
              * @type {import('webpack').compilation.CompilerHooks
@@ -49,7 +49,7 @@ class SSRPlugin {
              *  }>}}
              */
             const htmlWebpackPluginHook = HtmlWebpackPlugin.getHooks(compilation)
-            htmlWebpackPluginHook.beforeEmit.tapPromise('SSRPlugin', async args => {
+            htmlWebpackPluginHook.beforeEmit.tapPromise('SSRPlugin', async (args) => {
                 const { html: originalHTML, outputName, plugin } = args
                 if (outputName !== this.htmlFileName) return args
                 const html = await this.generateSSRHTMLFile(compilation, originalHTML)

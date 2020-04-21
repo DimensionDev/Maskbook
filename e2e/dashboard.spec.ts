@@ -5,7 +5,7 @@ describe('dashboard - setup a account', () => {
 
     it('render welcome page', async () => {
         const setupButton = await page.waitFor('a[href="#/initialize/1s"]')
-        expect(await setupButton.evaluate(e => e.textContent.toLowerCase())).toBe('set up')
+        expect(await setupButton.evaluate((e) => e.textContent.toLowerCase())).toBe('set up')
     })
 
     it('take a screenshot', async () => {
