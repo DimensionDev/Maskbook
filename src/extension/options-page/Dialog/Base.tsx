@@ -17,6 +17,9 @@ import { useBlurContext } from '../DashboardBlurContext'
 import { useSnackbar } from 'notistack'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { merge, cloneDeep } from 'lodash-es'
+import { useValueRef } from '../../../utils/hooks/useValueRef'
+import { appearanceSettings, Appearance } from '../../../components/shared-settings/settings'
+import { MaskbookLightTheme, MaskbookDarkTheme } from '../../../utils/theme'
 
 const Transition = React.forwardRef<unknown, TransitionProps>(function Transition(props, ref) {
     return <Fade ref={ref} {...props} />
@@ -102,16 +105,26 @@ export function useModal<DialogProps extends object, AdditionalPropsAppendByDisp
 
     const compositeProps =
         ComponentProps || props ? { ComponentProps: { ...ComponentProps, ...props } as DialogProps } : {}
+
+    const preferDarkScheme = useMediaQuery('(prefers-color-scheme: dark)')
+    const appearance = useValueRef(appearanceSettings)
     const renderedComponent =
         state === DialogState.Destroyed ? null : (
-            <Modal
-                {...{
-                    ...compositeProps,
-                    open: state === DialogState.Opened,
-                    onClose,
-                    onExited,
-                }}
-            />
+            <ThemeProvider
+                theme={
+                    (preferDarkScheme && appearance === Appearance.default) || appearance === Appearance.dark
+                        ? MaskbookDarkTheme
+                        : MaskbookLightTheme
+                }>
+                <Modal
+                    {...{
+                        ...compositeProps,
+                        open: state === DialogState.Opened,
+                        onClose,
+                        onExited,
+                    }}
+                />
+            </ThemeProvider>
         )
 
     return [renderedComponent, showModal, showStatefulModal]
