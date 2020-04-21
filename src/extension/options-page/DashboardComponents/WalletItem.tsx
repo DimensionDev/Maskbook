@@ -5,6 +5,7 @@ import type { WalletRecord, ERC20TokenRecord } from '../../../plugins/Wallet/dat
 import classNames from 'classnames'
 import { useCopyToClipboard } from 'react-use'
 import { useI18N } from '../../../utils/i18n-next-ui'
+import { useSnackbarCallback } from '../Dialog/Base'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -90,6 +91,7 @@ export function WalletItem(props: WalletItemProps) {
     const classes = useStyles()
     const { wallet, selected, onClick, tokens } = props
     const [, copyToClipboard] = useCopyToClipboard()
+    const copyWalletAddress = useSnackbarCallback(async (address: string) => copyToClipboard(address), [])
     return (
         <ButtonBase
             component="section"
@@ -113,11 +115,11 @@ export function WalletItem(props: WalletItemProps) {
             <span onMouseDown={(e) => e.stopPropagation()}>
                 <Button
                     className={classes.copyButton}
-                    onClick={() => copyToClipboard(wallet.address!)}
                     color="primary"
                     size="small"
                     variant="outlined"
-                    startIcon={<FileCopyOutlinedIcon />}>
+                    startIcon={<FileCopyOutlinedIcon />}
+                    onClick={() => copyWalletAddress(wallet.address)}>
                     {t('copy')}
                 </Button>
             </span>

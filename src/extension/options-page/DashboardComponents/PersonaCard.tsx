@@ -5,12 +5,11 @@ import type { Persona } from '../../../database'
 import { TextField, MenuItem, Card, IconButton } from '@material-ui/core'
 import Services from '../../service'
 import MoreVertIcon from '@material-ui/icons/MoreVert'
-import { useSnackbar } from 'notistack'
 import { useColorProvider } from '../../../utils/theme'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import ProfileBox from './ProfileBox'
 import type { ProfileIdentifier } from '../../../database/type'
-import { useModal } from '../Dialog/Base'
+import { useModal, useSnackbarCallback } from '../Dialog/Base'
 import { DashboardPersonaBackupDialog, DashboardPersonaDeleteConfirmDialog } from '../Dialog/Persona'
 import DashboardMenu from './DashboardMenu'
 
@@ -56,17 +55,16 @@ export default function PersonaCard({ persona }: Props) {
     const classes = useStyles()
     const color = useColorProvider()
 
-    const { enqueueSnackbar } = useSnackbar()
-
     const [rename, setRename] = useState(false)
     type Inputable = HTMLInputElement | HTMLTextAreaElement
-    const renameIdentity = (event: React.FocusEvent<Inputable> | React.KeyboardEvent<Inputable>) => {
-        event.preventDefault()
-        Services.Identity.renamePersona(persona.identifier, event.currentTarget.value).then(() => {
-            enqueueSnackbar(t('dashboard_item_done'), { variant: 'success', autoHideDuration: 1000 })
-            setRename(false)
-        })
-    }
+    const renameIdentity = useSnackbarCallback(
+        (event: React.FocusEvent<Inputable> | React.KeyboardEvent<Inputable>) => {
+            event.preventDefault()
+            return Services.Identity.renamePersona(persona.identifier, event.currentTarget.value)
+        },
+        [name],
+        () => setRename(false),
+    )
 
     const [deletePersona, openDeletePersona] = useModal(DashboardPersonaDeleteConfirmDialog, { persona })
     const [backupPersona, openBackupPersona] = useModal(DashboardPersonaBackupDialog, { persona })
