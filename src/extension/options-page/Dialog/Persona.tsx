@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 
-import { TextField, makeStyles, createStyles, Typography, TypographyProps, Box } from '@material-ui/core'
+import { TextField, makeStyles, createStyles, Typography, TypographyProps, Box, Paper } from '@material-ui/core'
 import { UserPlus, UserCheck, User, UserMinus } from 'react-feather'
 
 import * as bip39 from 'bip39'
@@ -26,8 +26,67 @@ import AbstractTab, { AbstractTabProps } from '../DashboardComponents/AbstractTa
 import { DebounceButton } from '../DashboardComponents/ActionButton'
 import SpacedButtonGroup from '../DashboardComponents/SpacedButtonGroup'
 
+const useStyles = makeStyles((theme) =>
+    createStyles({
+        textfield: {
+            '&:first-child': {
+                marginTop: 0,
+            },
+            '&:last-child': {
+                marginBottom: 0,
+            },
+        },
+        textarea: {
+            marginTop: 0,
+            marginBottom: 0,
+            height: 200,
+            '& > *, & textarea': {
+                height: '100%',
+            },
+        },
+        tip: {
+            marginTop: theme.spacing(2),
+        },
+    }),
+)
+
+const useShowcaseBoxStyle = makeStyles((theme) =>
+    createStyles({
+        paper: {
+            height: '100%',
+            border: `solid 1px ${theme.palette.divider}`,
+            backgroundColor: theme.palette.type === 'light' ? '#FAFAFA' : '',
+            boxShadow: 'none',
+            padding: theme.spacing(2, 3),
+        },
+        scroller: {
+            height: '100%',
+            overflow: 'auto',
+            wordBreak: 'break-all',
+        },
+    }),
+)
+
+const ShowcaseBox = (props: TypographyProps<'div'>) => {
+    const classes = useShowcaseBoxStyle()
+    const { children, ...other } = props
+    const ref = React.useRef<HTMLDivElement>(null)
+    const copyText = () => selectElementContents(ref.current!)
+    return (
+        <Paper className={classes.paper}>
+            <div className={classes.scroller}>
+                <Typography component="div" variant="body1" onClick={copyText} ref={ref} {...other}>
+                    {children}
+                </Typography>
+            </div>
+        </Paper>
+    )
+}
+
 export function DashboardPersonaCreateDialog(props: WrappedDialogProps) {
     const { t } = useI18N()
+    const classes = useStyles()
+
     const [name, setName] = useState('')
     const [password, setPassword] = useState('')
 
@@ -39,38 +98,43 @@ export function DashboardPersonaCreateDialog(props: WrappedDialogProps) {
 
     return (
         <DashboardDialogCore {...props}>
-            <DashboardDialogWrapper icon={<UserPlus />} iconColor="#5FDD97" primary={t('create_a_persona')}>
-                <form>
-                    <TextField required label={t('name')} value={name} onChange={(e) => setName(e.target.value)} />
-                    <TextField
-                        required
-                        label={t('password')}
-                        type="password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                    />
-                </form>
-                <Typography variant="body2" color="textSecondary">
-                    {t('dashboard_password_helper_text')}
-                </Typography>
-                <DebounceButton type="submit" variant="contained" color="primary" onClick={createPersona}>
-                    {t('create')}
-                </DebounceButton>
-            </DashboardDialogWrapper>
+            <DashboardDialogWrapper
+                icon={<UserPlus />}
+                iconColor="#5FDD97"
+                primary={t('create_a_persona')}
+                secondary={' '}
+                content={
+                    <>
+                        <form>
+                            <TextField
+                                className={classes.textfield}
+                                required
+                                label={t('name')}
+                                value={name}
+                                onChange={(e) => setName(e.target.value)}
+                            />
+                            <TextField
+                                className={classes.textfield}
+                                required
+                                label={t('password')}
+                                type="password"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                            />
+                        </form>
+                        <Typography className={classes.tip} variant="body2" color="textSecondary">
+                            {t('dashboard_password_helper_text')}
+                        </Typography>
+                    </>
+                }
+                footer={
+                    <DebounceButton type="submit" variant="contained" color="primary" onClick={createPersona}>
+                        {t('create')}
+                    </DebounceButton>
+                }></DashboardDialogWrapper>
         </DashboardDialogCore>
     )
 }
-
-const useStyles = makeStyles((theme) =>
-    createStyles({
-        textarea: {
-            height: 'auto',
-            '& > *, & textarea': {
-                height: '100%',
-            },
-        },
-    }),
-)
 
 export function DashboardPersonaImportDialog(props: WrappedDialogProps) {
     const { t } = useI18N()
@@ -87,7 +151,7 @@ export function DashboardPersonaImportDialog(props: WrappedDialogProps) {
 
     const { enqueueSnackbar } = useSnackbar()
 
-    const importPersona = useSnackbarCallback<any>(
+    const importPersona = useSnackbarCallback(
         async () => {
             if (tabState === 0) {
                 if (!bip39.validateMnemonic(mnemonicWordValue)) throw new Error('the mnemonic word is not valid')
@@ -130,18 +194,21 @@ export function DashboardPersonaImportDialog(props: WrappedDialogProps) {
                 children: (
                     <>
                         <TextField
+                            className={classes.textfield}
                             onChange={(e) => setNickname(e.target.value)}
                             value={nickname}
                             required
                             label={t('name')}
                         />
                         <TextField
+                            className={classes.textfield}
                             value={mnemonicWordValue}
                             onChange={(e) => setMnemonicWordValue(e.target.value)}
                             required
                             label={t('mnemonic_words')}
                         />
                         <TextField
+                            className={classes.textfield}
                             onChange={(e) => setPassword(e.target.value)}
                             value={password}
                             label={t('password')}
@@ -179,35 +246,14 @@ export function DashboardPersonaImportDialog(props: WrappedDialogProps) {
                 icon={<UserCheck />}
                 iconColor="#5FDD97"
                 primary={t('import_your_persona')}
-                secondary={t('dashboard_persona_import_dialog_hint')}>
-                <AbstractTab {...tabProps}></AbstractTab>
-                <DebounceButton hidden={tabState === 2} variant="contained" color="primary" onClick={importPersona}>
-                    {t('import')}
-                </DebounceButton>
-            </DashboardDialogWrapper>
+                secondary={t('dashboard_persona_import_dialog_hint')}
+                content={<AbstractTab {...tabProps}></AbstractTab>}
+                footer={
+                    <DebounceButton hidden={tabState === 2} variant="contained" color="primary" onClick={importPersona}>
+                        {t('import')}
+                    </DebounceButton>
+                }></DashboardDialogWrapper>
         </DashboardDialogCore>
-    )
-}
-
-const ShowcaseBox = (props: TypographyProps<'div'>) => {
-    const { children, ...other } = props
-    const ref = React.useRef<HTMLDivElement>(null)
-    const copyText = () => selectElementContents(ref.current!)
-    return (
-        <Typography
-            component="div"
-            variant="body1"
-            onClick={copyText}
-            ref={ref}
-            style={{
-                height: '100%',
-                overflow: 'auto',
-                wordBreak: 'break-all',
-                display: 'flex',
-            }}
-            {...other}>
-            <Box margin="auto">{children}</Box>
-        </Typography>
     )
 }
 
@@ -250,7 +296,7 @@ export function DashboardPersonaBackupDialog(props: WrappedDialogProps<PersonaPr
                         text={compressedQRString}
                         options={{ width: 200 }}
                         canvasProps={{
-                            style: { display: 'block', margin: 'auto' },
+                            style: { display: 'block', margin: 'auto', marginTop: -16 },
                         }}
                     />
                 ) : null,
@@ -266,9 +312,8 @@ export function DashboardPersonaBackupDialog(props: WrappedDialogProps<PersonaPr
                 icon={<User />}
                 iconColor="#5FDD97"
                 primary={t('backup_persona')}
-                secondary={t('dashboard_backup_persona_hint')}>
-                <AbstractTab height={240} margin {...tabProps}></AbstractTab>
-            </DashboardDialogWrapper>
+                secondary={t('dashboard_backup_persona_hint')}
+                content={<AbstractTab height={240} margin {...tabProps}></AbstractTab>}></DashboardDialogWrapper>
         </DashboardDialogCore>
     )
 }
@@ -288,16 +333,17 @@ export function DashboardPersonaDeleteConfirmDialog(props: WrappedDialogProps<Pe
                 icon={<UserMinus />}
                 iconColor="#F4637D"
                 primary={t('delete_persona')}
-                secondary={t('dashboard_delete_persona_confirm_hint', { name: persona.nickname })}>
-                <SpacedButtonGroup>
-                    <DebounceButton variant="contained" color="danger" onClick={deletePersona}>
-                        {t('confirm')}
-                    </DebounceButton>
-                    <DebounceButton variant="outlined" color="primary" onClick={props.onClose}>
-                        {t('cancel')}
-                    </DebounceButton>
-                </SpacedButtonGroup>
-            </DashboardDialogWrapper>
+                secondary={t('dashboard_delete_persona_confirm_hint', { name: persona.nickname })}
+                footer={
+                    <SpacedButtonGroup>
+                        <DebounceButton variant="contained" color="danger" onClick={deletePersona}>
+                            {t('confirm')}
+                        </DebounceButton>
+                        <DebounceButton variant="outlined" color="primary" onClick={props.onClose}>
+                            {t('cancel')}
+                        </DebounceButton>
+                    </SpacedButtonGroup>
+                }></DashboardDialogWrapper>
         </DashboardDialogCore>
     )
 }
@@ -328,16 +374,17 @@ export function DashboardPersonaUnlinkConfirmDialog(props: WrappedDialogProps) {
                     persona: nickname,
                     network: identifier.network,
                     profile: identifier.userId,
-                })}>
-                <SpacedButtonGroup>
-                    <DebounceButton variant="contained" color="danger" onClick={onClick}>
-                        {t('confirm')}
-                    </DebounceButton>
-                    <DebounceButton variant="outlined" color="primary" onClick={props.onClose}>
-                        {t('cancel')}
-                    </DebounceButton>
-                </SpacedButtonGroup>
-            </DashboardDialogWrapper>
+                })}
+                footer={
+                    <SpacedButtonGroup>
+                        <DebounceButton variant="contained" color="danger" onClick={onClick}>
+                            {t('confirm')}
+                        </DebounceButton>
+                        <DebounceButton variant="outlined" color="primary" onClick={props.onClose}>
+                            {t('cancel')}
+                        </DebounceButton>
+                    </SpacedButtonGroup>
+                }></DashboardDialogWrapper>
         </DashboardDialogCore>
     )
 }
