@@ -81,7 +81,7 @@ export async function getWallets(): Promise<[(WalletRecord & { privateKey: strin
         })
         async function makePrivateKey(record: WalletRecord) {
             const recover = await recoverWallet(record.mnemonic, record.passphrase)
-            return '0x' + buf2hex(recover.privateKey)
+            return recover.privateKeyInHex
         }
     }
     return [await makeWallets(), tokens]
@@ -206,7 +206,10 @@ export async function recoverWallet(mnemonic: string[], password: string) {
     const walletPublicKey = wallet.publicKey
     const walletPrivateKey = wallet.privateKey!
     const address = EthereumAddress.from(walletPublicKey).address
-    return { address, privateKey: walletPrivateKey, mnemonic }
+    return { address, privateKey: walletPrivateKey, privateKeyInHex: `0x${buf2hex(walletPrivateKey)}`, mnemonic }
+    function buf2hex(buffer: ArrayBuffer) {
+        return Array.prototype.map.call(new Uint8Array(buffer), (x) => ('00' + x.toString(16)).slice(-2)).join('')
+    }
 }
 
 export async function walletAddERC20Token(
