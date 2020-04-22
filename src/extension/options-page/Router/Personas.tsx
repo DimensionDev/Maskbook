@@ -25,10 +25,6 @@ const useStyles = makeStyles((theme) =>
             marginLeft: -4,
             paddingLeft: 4,
         },
-        importButton: {
-            color: theme.palette.type === 'dark' ? theme.palette.text.primary : theme.palette.primary.light,
-            borderColor: theme.palette.type === 'dark' ? theme.palette.text.primary : theme.palette.primary.light,
-        },
         databaseButton: {
             paddingTop: 0,
             paddingBottom: 0,
@@ -66,14 +62,14 @@ export default function DashboardPersonasRouter() {
 
     const actions = useMemo(
         () => [
-            <Button className={classes.importButton} color="primary" variant="outlined" onClick={openImportPersona}>
+            <Button color="primary" variant="outlined" onClick={openImportPersona}>
                 {t('import')}
             </Button>,
             <Button color="primary" variant="contained" onClick={openCreatePersona} endIcon={<AddCircleIcon />}>
                 {t('create_persona')}
             </Button>,
         ],
-        [t, classes.importButton, openCreatePersona, openImportPersona],
+        [t, openCreatePersona, openImportPersona],
     )
 
     return (
