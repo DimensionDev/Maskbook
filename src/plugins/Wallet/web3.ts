@@ -27,8 +27,8 @@ export const resetWallet = async () => {
     const [wallets] = await getWallets()
 
     for await (const { mnemonic, passphrase } of wallets) {
-        const { privateKey } = await recoverWallet(mnemonic, passphrase)
-        web3.eth.accounts.wallet.add(`0x${buf2hex(privateKey)}`)
+        const { privateKeyInHex } = await recoverWallet(mnemonic, passphrase)
+        web3.eth.accounts.wallet.add(privateKeyInHex)
     }
 }
 
@@ -41,7 +41,3 @@ sideEffect.then(() => {
     resetWallet()
     resetProvider()
 })
-
-export function buf2hex(buffer: ArrayBuffer) {
-    return Array.prototype.map.call(new Uint8Array(buffer), (x) => ('00' + x.toString(16)).slice(-2)).join('')
-}
