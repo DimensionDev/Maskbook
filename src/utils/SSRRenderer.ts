@@ -1,5 +1,5 @@
-import React from 'react'
 import ReactDOM from 'react-dom'
+import React from 'react'
 
 export function SSRRenderer(jsx: JSX.Element, container?: HTMLElement) {
     if (typeof window === 'object') {
@@ -8,7 +8,7 @@ export function SSRRenderer(jsx: JSX.Element, container?: HTMLElement) {
             container = document.createElement('div')
             document.body.appendChild(container)
         }
-        ReactDOM.render(React.createElement(React.StrictMode, {}, jsx), container)
+        ReactDOM.createRoot(container).render(React.createElement(React.StrictMode, {}, jsx))
     } else {
         async function render() {
             const Server = await import('react-dom/server')
