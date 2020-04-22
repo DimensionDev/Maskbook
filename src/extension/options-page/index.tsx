@@ -195,4 +195,4 @@ function Dashboard() {
     )
 }
 
-SSRRenderer(<DashboardWithProvider />)
+SSRRenderer(<DashboardWithProvider />, false)

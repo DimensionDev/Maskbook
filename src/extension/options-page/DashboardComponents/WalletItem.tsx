@@ -67,10 +67,6 @@ const useStyles = makeStyles((theme) =>
             fontFamily: 'var(--monospace)',
             wordBreak: 'break-all',
         },
-        copyButton: {
-            color: theme.palette.type === 'dark' ? theme.palette.text.primary : theme.palette.primary.light,
-            borderColor: theme.palette.type === 'dark' ? theme.palette.text.primary : theme.palette.primary.light,
-        },
         coins: {
             width: '16px',
             height: '16px',
@@ -114,7 +110,6 @@ export function WalletItem(props: WalletItemProps) {
             {/* Prevent the event to make the whole card ripple */}
             <span onMouseDown={(e) => e.stopPropagation()}>
                 <Button
-                    className={classes.copyButton}
                     color="primary"
                     size="small"
                     variant="outlined"
