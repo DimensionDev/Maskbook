@@ -1,4 +1,3 @@
-import React from 'react'
 import ReactDOM from 'react-dom'
 
 export function SSRRenderer(jsx: JSX.Element, container?: HTMLElement) {
@@ -8,7 +7,7 @@ export function SSRRenderer(jsx: JSX.Element, container?: HTMLElement) {
             container = document.createElement('div')
             document.body.appendChild(container)
         }
-        ReactDOM.hydrate(React.createElement(React.StrictMode, {}, jsx), container)
+        ReactDOM.createRoot(container).render(jsx)
     } else {
         async function render() {
             const Server = await import('react-dom/server')

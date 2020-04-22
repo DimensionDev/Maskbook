@@ -17,6 +17,7 @@ import {
     consistentPersonaDBWriteAccess,
     updatePersonaDB,
     createOrUpdatePersonaDB,
+    queryProfilesPagedDB,
 } from './Persona.db'
 import { IdentifierMap } from '../IdentifierMap'
 import { getAvatarDataURL } from '../helpers/avatar'
@@ -67,6 +68,11 @@ export async function queryProfile(identifier: ProfileIdentifier): Promise<Profi
         createdAt: new Date(),
         updatedAt: new Date(),
     }
+}
+
+export async function queryProfilePaged(...args: Parameters<typeof queryProfilesPagedDB>): Promise<Profile[]> {
+    const _ = await queryProfilesPagedDB(...args)
+    return Promise.all(_.map(profileRecordToProfile))
 }
 
 /**

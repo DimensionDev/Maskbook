@@ -1,4 +1,6 @@
 /// <reference types="web-ext-types" />
+/// <reference types="react/experimental" />
+/// <reference types="react-dom/experimental" />
 
 declare const webpackEnv: {
     readonly target: 'Chromium' | 'Firefox' | 'WKWebview' | undefined
