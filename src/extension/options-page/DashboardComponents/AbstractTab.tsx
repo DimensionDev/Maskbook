@@ -8,8 +8,6 @@ const useStyles = makeStyles((theme: Theme) =>
             minWidth: 'unset',
         },
         tabPanel: {
-            height: 200,
-            minHeight: 200,
             marginTop: theme.spacing(3),
         },
     }),
@@ -33,7 +31,7 @@ export interface AbstractTabProps {
 }
 
 export default function AbstractTab(props: AbstractTabProps) {
-    const { tabs, state, height } = props
+    const { tabs, state, height = 200 } = props
 
     const classes = useStyles()
     const [value, setValue] = state
