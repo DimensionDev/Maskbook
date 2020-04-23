@@ -72,7 +72,14 @@ const ListboxComponent = React.forwardRef<HTMLDivElement>(function ListboxCompon
     )
 })
 
-const useStyles = makeStyles({
+const useListItemStyles = makeStyles((theme) => ({
+    root: { padding: 0 },
+    listItemSecondaryAction: {
+        right: 0,
+    },
+}))
+
+const useAutoCompleteStyles = makeStyles({
     listbox: {
         '& ul': {
             padding: 0,
@@ -80,6 +87,7 @@ const useStyles = makeStyles({
         },
     },
 })
+
 import mainnet from '../../../erc20/mainnet.json'
 import rinkeby from '../../../erc20/rinkeby.json'
 const sort = (x: ERC20TokenPredefinedData[0], y: ERC20TokenPredefinedData[0]): 1 | -1 => {
@@ -100,7 +108,8 @@ export function ERC20WellKnownTokenSelector(props: {
     useRinkebyNetwork: [boolean, (x: boolean) => void]
     isCustom?: boolean
 }) {
-    const classes = useStyles()
+    const listItemClasses = useListItemStyles()
+    const autoCompleteClasses = useAutoCompleteStyles()
     const [selected, setSelected] = useState<ERC20TokenPredefinedData[0] | null>(null)
     const [useRinkeby, setRinkeby] = props.useRinkebyNetwork
     const { onItem, isCustom } = props
@@ -128,22 +137,21 @@ export function ERC20WellKnownTokenSelector(props: {
     )
 
     return (
-        <Box textAlign="left" py={1}>
+        <Box textAlign="left">
             <List disablePadding>
-                <ListItem button onClick={onChange}>
+                <ListItem classes={{ root: listItemClasses.root }} onClick={onChange}>
                     <ListItemText primary="Use Rinkeby Network"></ListItemText>
-                    <ListItemSecondaryAction>
-                        <Switch onClick={onChange} checked={useRinkeby} color="primary" />
+                    <ListItemSecondaryAction classes={{ root: listItemClasses.listItemSecondaryAction }}>
+                        <Switch onClick={onChange} checked={useRinkeby} color="primary" edge="end" />
                     </ListItemSecondaryAction>
                 </ListItem>
             </List>
             {!isCustom ? (
                 // TODO!: the selected item is wrong
-                <Box textAlign="left" px={1}>
+                <>
                     <Autocomplete
-                        size="small"
                         disableListWrap
-                        classes={classes}
+                        classes={autoCompleteClasses}
                         ListboxComponent={ListboxComponent as React.ComponentType<React.HTMLAttributes<HTMLElement>>}
                         renderGroup={renderGroup}
                         options={useRinkeby ? rinkeby : mainnet}
@@ -162,25 +170,27 @@ export function ERC20WellKnownTokenSelector(props: {
                             setSelected(newValue || null)
                         }}
                     />
-                    <Typography component="p" style={{ marginTop: 8 }} variant="caption">
-                        Address: {selected?.address}
-                    </Typography>
-                    <Typography component="p" variant="caption">
-                        Decimals: {selected?.decimals}
-                    </Typography>
-                </Box>
+                    {selected?.address ? (
+                        <Typography component="p" style={{ marginTop: 8 }} variant="caption">
+                            Address: {selected?.address}
+                        </Typography>
+                    ) : null}
+                    {selected?.decimals ? (
+                        <Typography component="p" variant="caption">
+                            Decimals: {selected?.decimals}
+                        </Typography>
+                    ) : null}
+                </>
             ) : (
-                <Box>
+                <>
                     <TextField
                         required
-                        size="small"
                         error={isInvalidAddr && !!address.length}
                         label="Contract Address"
                         value={address}
                         onChange={(e) => setTokenAddress(e.target.value)}></TextField>
                     <TextField
                         required
-                        size="small"
                         label="Decimal"
                         value={decimals}
                         type="number"
@@ -188,17 +198,15 @@ export function ERC20WellKnownTokenSelector(props: {
                         onChange={(e) => setDecimal(parseInt(e.target.value))}></TextField>
                     <TextField
                         required
-                        size="small"
                         label="Name"
                         value={tokenName}
                         onChange={(e) => setTokenName(e.target.value)}></TextField>
                     <TextField
                         required
-                        size="small"
                         label="Symbol"
                         value={symbol}
                         onChange={(e) => setSymbol(e.target.value)}></TextField>{' '}
-                </Box>
+                </>
             )}
         </Box>
     )
