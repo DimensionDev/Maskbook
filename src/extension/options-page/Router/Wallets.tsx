@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react'
+import React, { useMemo, useState, useEffect } from 'react'
 import DashboardRouterContainer from './Container'
 import { Button, Typography, Box, IconButton, List, MenuItem } from '@material-ui/core'
 import { makeStyles, createStyles, Theme, ThemeProvider } from '@material-ui/core/styles'
@@ -127,12 +127,17 @@ export default function DashboardWalletsRouter() {
 
     // TODO!: all wallets are using same set of tokens
     const [wallets, tokens] = useMyWallets()
-    const [current, setCurrent] = useState(() => wallets[0]?.address ?? '')
+    const [current, setCurrent] = useState('')
     const wallet = wallets.find((i) => i.address === current)
     const setAsDefault = useSnackbarCallback(
         () => Services.Plugin.invokePlugin('maskbook.wallet', 'setDefaultWallet', wallet!.address),
         [wallet?.address],
     )
+    useEffect(() => {
+        if (!current && wallets[0]?.address) {
+            setCurrent(wallets[0]?.address)
+        }
+    }, [current, wallets])
 
     const menus = useMemo(
         () => [
