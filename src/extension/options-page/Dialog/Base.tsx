@@ -193,8 +193,40 @@ const dialogTheme = (theme: Theme): Theme =>
     merge(cloneDeep(theme), {
         overrides: {
             MuiOutlinedInput: {
+                input: {
+                    paddingTop: 14.5,
+                    paddingBottom: 14.5,
+                },
+                multiline: {
+                    paddingTop: 14.5,
+                    paddingBottom: 14.5,
+                },
                 notchedOutline: {
                     borderColor: '#EAEAEA',
+                },
+            },
+            MuiInputLabel: {
+                outlined: {
+                    transform: 'translate(14px, 16px) scale(1)',
+                },
+            },
+            MuiAutocomplete: {
+                root: {
+                    marginTop: theme.spacing(2),
+                },
+                inputRoot: {
+                    paddingTop: '5px !important',
+                    paddingBottom: '5px !important',
+                },
+            },
+            MuiTextField: {
+                root: {
+                    marginTop: theme.spacing(2),
+                    marginBottom: 0,
+
+                    '&:first-child': {
+                        marginTop: 0,
+                    },
                 },
             },
             MuiButton: {
@@ -204,15 +236,9 @@ const dialogTheme = (theme: Theme): Theme =>
                     },
                 },
             },
-            MuiTextField: {
-                root: {
-                    marginTop: theme.spacing(1),
-                    marginBottom: theme.spacing(1),
-                },
-            },
             MuiTabs: {
                 root: {
-                    minHeight: 44,
+                    minHeight: 38,
                 },
                 indicator: {
                     height: 1,
@@ -220,7 +246,7 @@ const dialogTheme = (theme: Theme): Theme =>
             },
             MuiTab: {
                 root: {
-                    minHeight: 44,
+                    minHeight: 38,
                     borderBottom: `solid 1px ${theme.palette.divider}`,
                 },
             },

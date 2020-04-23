@@ -28,14 +28,6 @@ import ShowcaseBox from '../DashboardComponents/ShowcaseBox'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
-        textfield: {
-            '&:first-child': {
-                marginTop: 0,
-            },
-            '&:last-child': {
-                marginBottom: 0,
-            },
-        },
         textarea: {
             marginTop: 0,
             marginBottom: 0,
@@ -74,14 +66,12 @@ export function DashboardPersonaCreateDialog(props: WrappedDialogProps) {
                     <>
                         <form>
                             <TextField
-                                className={classes.textfield}
                                 required
                                 label={t('name')}
                                 value={name}
                                 onChange={(e) => setName(e.target.value)}
                             />
                             <TextField
-                                className={classes.textfield}
                                 required
                                 label={t('password')}
                                 type="password"
@@ -105,8 +95,6 @@ export function DashboardPersonaCreateDialog(props: WrappedDialogProps) {
 
 export function DashboardPersonaImportDialog(props: WrappedDialogProps) {
     const { t } = useI18N()
-
-    const classes = useStyles()
 
     const [nickname, setNickname] = useState('')
     const [mnemonicWordValue, setMnemonicWordValue] = useState('')
@@ -148,7 +136,7 @@ export function DashboardPersonaImportDialog(props: WrappedDialogProps) {
                 <QRScanner
                     onError={() => enqueueSnackbar('QRCode scan Failed')}
                     scanning={shouldRenderQRComponent}
-                    width="100%"
+                    style={{ maxHeight: 236 }}
                     onResult={importFromQR}
                 />
             )
@@ -161,21 +149,18 @@ export function DashboardPersonaImportDialog(props: WrappedDialogProps) {
                 children: (
                     <>
                         <TextField
-                            className={classes.textfield}
                             onChange={(e) => setNickname(e.target.value)}
                             value={nickname}
                             required
                             label={t('name')}
                         />
                         <TextField
-                            className={classes.textfield}
                             value={mnemonicWordValue}
                             onChange={(e) => setMnemonicWordValue(e.target.value)}
                             required
                             label={t('mnemonic_words')}
                         />
                         <TextField
-                            className={classes.textfield}
                             onChange={(e) => setPassword(e.target.value)}
                             value={password}
                             label={t('password')}
@@ -188,7 +173,7 @@ export function DashboardPersonaImportDialog(props: WrappedDialogProps) {
                 label: 'Base64',
                 children: (
                     <TextField
-                        className={classes.textarea}
+                        inputProps={{ style: { height: 147 } }}
                         multiline
                         rows={1}
                         placeholder="Input the base64 code"
@@ -205,7 +190,7 @@ export function DashboardPersonaImportDialog(props: WrappedDialogProps) {
             },
         ],
         state,
-        height: 240,
+        height: 176,
     }
     return (
         <DashboardDialogCore {...props}>
@@ -263,11 +248,10 @@ export function DashboardPersonaBackupDialog(props: WrappedDialogProps<PersonaPr
                         text={compressedQRString}
                         options={{ width: 200 }}
                         canvasProps={{
-                            style: { display: 'block', margin: 'auto', marginTop: -16 },
+                            style: { display: 'block', margin: 'auto' },
                         }}
                     />
                 ) : null,
-                p: 2,
             },
         ],
         state,
@@ -280,7 +264,7 @@ export function DashboardPersonaBackupDialog(props: WrappedDialogProps<PersonaPr
                 iconColor="#5FDD97"
                 primary={t('backup_persona')}
                 secondary={t('dashboard_backup_persona_hint')}
-                content={<AbstractTab height={240} margin {...tabProps}></AbstractTab>}></DashboardDialogWrapper>
+                content={<AbstractTab height={200} {...tabProps}></AbstractTab>}></DashboardDialogWrapper>
         </DashboardDialogCore>
     )
 }
