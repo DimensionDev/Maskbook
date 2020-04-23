@@ -9,7 +9,6 @@ import SpacedButtonGroup from '../DashboardComponents/SpacedButtonGroup'
 import ShowcaseBox from '../DashboardComponents/ShowcaseBox'
 import Services from '../../service'
 import { WalletRecord, EthereumNetwork } from '../../../plugins/Wallet/database/types'
-import classNames from 'classnames'
 import { ERC20WellKnownTokenSelector } from '../../../plugins/Wallet/UI/Dashboard/Dialogs/WalletAddTokenDialogContent'
 import type { ERC20TokenPredefinedData } from '../../../plugins/Wallet/erc20'
 import { recoverWallet } from '../../../plugins/Wallet/wallet'
@@ -64,8 +63,8 @@ export function DashboardWalletImportDialog(props: WrappedDialogProps) {
                             onChange={(e) => setName(e.target.value)}
                         />
                         <TextField
+                            InputProps={{ style: { height: 112 } }}
                             multiline
-                            rows={4}
                             required
                             label={t('private_key')}
                             value={privKey}
@@ -78,7 +77,7 @@ export function DashboardWalletImportDialog(props: WrappedDialogProps) {
             },
         ],
         state,
-        height: 240,
+        height: 176,
     }
 
     const onSubmit = useSnackbarCallback(
@@ -147,6 +146,7 @@ export function DashboardWalletCreateDialog(props: WrappedDialogProps) {
                                 onChange={(e) => setPassphrase(e.target.value)}
                             />
                         </form>
+                        <br />
                         <Typography variant="body2" color="textSecondary">
                             {t('dashboard_password_helper_text')}
                         </Typography>
@@ -172,34 +172,18 @@ export function DashboardWalletAddTokenDialog(props: WrappedDialogProps<WalletPr
     const [token, setToken] = React.useState<null | ERC20TokenPredefinedData[0]>(null)
     const [useRinkeby, setRinkeby] = React.useState(false)
 
-    const [tabState, _setTabState] = useState(0)
+    const [tabState, setTabState] = useState(0)
     const state = useMemo(
         () =>
             [
                 tabState,
                 (state: number) => {
                     setToken(null)
-                    return _setTabState(state)
+                    return setTabState(state)
                 },
             ] as [number, React.Dispatch<React.SetStateAction<number>>],
         [tabState],
     )
-
-    const onSubmit = useSnackbarCallback(
-        () =>
-            Services.Plugin.invokePlugin(
-                'maskbook.wallet',
-                'walletAddERC20Token',
-                // TODO!: three network?
-                wallet.address,
-                useRinkeby ? EthereumNetwork.Rinkeby : EthereumNetwork.Mainnet,
-                token!,
-                tabState === 1,
-            ),
-        [token, useRinkeby],
-        props.onClose,
-    )
-
     const tabProps: AbstractTabProps = {
         tabs: [
             {
@@ -207,7 +191,6 @@ export function DashboardWalletAddTokenDialog(props: WrappedDialogProps<WalletPr
                 children: (
                     <ERC20WellKnownTokenSelector onItem={setToken} useRinkebyNetwork={[useRinkeby, setRinkeby]} />
                 ),
-                p: 0,
             },
             {
                 label: 'Add your own',
@@ -218,12 +201,28 @@ export function DashboardWalletAddTokenDialog(props: WrappedDialogProps<WalletPr
                         isCustom
                     />
                 ),
-                p: 0,
             },
         ],
         state,
-        height: 320,
+        height: 288,
     }
+
+    const onSubmit = useSnackbarCallback(
+        () =>
+            Services.Plugin.invokePlugin(
+                'maskbook.wallet',
+                'walletAddERC20Token',
+                wallet.address,
+                // TODO
+                // For now we only support mainnet and rinkeby
+                // maybe we should support other networks in the future
+                useRinkeby ? EthereumNetwork.Rinkeby : EthereumNetwork.Mainnet,
+                token!,
+                tabState === 1,
+            ),
+        [token, useRinkeby],
+        props.onClose,
+    )
 
     return (
         <DashboardDialogCore {...props}>
