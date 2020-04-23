@@ -1,11 +1,14 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 
-export function SSRRenderer(jsx: JSX.Element, strict = true) {
+export function SSRRenderer(jsx: JSX.Element, container?: HTMLElement) {
     if (typeof window === 'object') {
-        const container = document.createElement('div')
-        document.body.appendChild(container)
-        ReactDOM.hydrate(strict ? React.createElement(React.StrictMode, {}, jsx) : jsx, container)
+        if (!container) container = document.getElementById('root')!
+        if (!container) {
+            container = document.createElement('div')
+            document.body.appendChild(container)
+        }
+        ReactDOM.hydrate(React.createElement(React.StrictMode, {}, jsx), container)
     } else {
         async function render() {
             const Server = await import('react-dom/server')
