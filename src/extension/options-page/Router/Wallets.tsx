@@ -26,6 +26,7 @@ import { useI18N } from '../../../utils/i18n-next-ui'
 import { useColorProvider } from '../../../utils/theme'
 import Services from '../../service'
 import { merge, cloneDeep } from 'lodash-es'
+import BigNumber from 'bignumber.js'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -193,7 +194,11 @@ export default function DashboardWalletsRouter() {
                                 </Box>
                                 <List className={classes.tokenList} disablePadding>
                                     {tokens.map((token) => (
-                                        <TokenListItem token={token} key={token.address} />
+                                        <TokenListItem
+                                            balance={wallet.erc20_token_balance.get(token.address) ?? new BigNumber(0)}
+                                            token={token}
+                                            key={token.address}
+                                        />
                                     ))}
                                 </List>
                             </ThemeProvider>
