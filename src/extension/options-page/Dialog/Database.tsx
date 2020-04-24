@@ -9,6 +9,7 @@ import { extraPermissions } from '../../../utils/permissions'
 import { useSnackbar } from 'notistack'
 import { DebounceButton } from '../DashboardComponents/ActionButton'
 import { useDrop } from 'react-use'
+import { Button } from '@material-ui/core'
 
 export function DashboardDatabaseBackupDialog(props: WrappedDialogProps) {
     const { t } = useI18N()
@@ -100,13 +101,13 @@ export function DashboardDatabaseRestoreDialog(props: WrappedDialogProps) {
                 content={<input type="file" accept="application/json" ref={ref} onChange={fileReceiver} hidden />}
                 footer={
                     requiredPermissions ? (
-                        <DebounceButton variant="contained" color="secondary" onClick={confirmPermissions}>
+                        <Button variant="contained" color="secondary" onClick={confirmPermissions}>
                             {t('confirm')}
-                        </DebounceButton>
+                        </Button>
                     ) : (
-                        <DebounceButton variant="contained" color="primary" onClick={() => ref.current?.click()}>
+                        <Button variant="contained" color="primary" onClick={() => ref.current?.click()}>
                             {t('browse')}
-                        </DebounceButton>
+                        </Button>
                     )
                 }></DashboardDialogWrapper>
         </DashboardDialogCore>
