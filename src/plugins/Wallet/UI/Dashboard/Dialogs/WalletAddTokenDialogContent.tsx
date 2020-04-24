@@ -126,7 +126,7 @@ export function ERC20WellKnownTokenSelector(props: {
     useEffect(() => {
         if (isValidInput) onItem(isCustom ? { address, decimals, name: tokenName, symbol } : selected)
         else onItem(null)
-    }, [selected, address, decimals, tokenName, symbol])
+    }, [isCustom, isValidInput, onItem, selected, address, decimals, tokenName, symbol])
 
     const onChange = useCallback(
         (e) => {
