@@ -134,6 +134,7 @@ export async function importNewWallet(
 ) {
     const { name, mnemonic = [], passphrase = '' } = rec
     const address = await getWalletAddress()
+    if (!address) throw new Error('cannot get the address of wallet')
     const bal = await getWalletProvider()
         .queryBalance(address)
         .catch((x) => undefined)
@@ -232,6 +233,15 @@ export async function recoverWallet(mnemonic: string[], password: string) {
 function buf2hex(buffer: ArrayBuffer) {
     return Array.prototype.map.call(new Uint8Array(buffer), (x) => ('00' + x.toString(16)).slice(-2)).join('')
 }
+
+function hex2buf(hex: string) {
+    let hex_ = hex
+    hex_ = hex.replace(/^0x/, '') // strip 0x
+    if (hex_.length % 2) hex_ = `0${hex_}` // pad even zero
+    const buf = []
+    for (let i = 0; i < hex_.length; i += 2) buf.push(parseInt(hex_.substr(i, 2), 16))
+    return new Uint8Array(buf)
+}
 export async function recoverWalletFromPrivateKey(privateKey: string) {
     if (!privateKey) throw new Error('cannot import an empty private key')
     const ec = new EC('secp256k1')
@@ -246,20 +256,12 @@ export async function recoverWalletFromPrivateKey(privateKey: string) {
         mnemonic: [],
     }
     function privateKeyVerify(key: string) {
-        const k = BigInt(`0x${key}`)
-        const n = BigInt('0xfffffffffffffffffffffffffffffffebaaedce6af48a03bbfd25e8cd0364141')
-        return k !== BigInt(0) && k < n
+        const k = new BigNumber(key, 16)
+        const n = new BigNumber('fffffffffffffffffffffffffffffffebaaedce6af48a03bbfd25e8cd0364141', 16)
+        return !k.isZero() && k.isLessThan(n)
     }
 }
 
-function hex2buf(hex: string) {
-    let hex_ = hex
-    hex_ = hex.replace(/^0x/, '') // strip 0x
-    if (hex_.length % 2) hex_ = `0${hex_}` // pad even zero
-    const buf = []
-    for (let i = 0; i < hex_.length; i += 2) buf.push(parseInt(hex_.substr(i, 2), 16))
-    return new Uint8Array(buf)
-}
 export async function walletAddERC20Token(
     walletAddress: string,
     network: EthereumNetwork,
