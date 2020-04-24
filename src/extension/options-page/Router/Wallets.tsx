@@ -134,10 +134,10 @@ export default function DashboardWalletsRouter() {
         () => Services.Plugin.invokePlugin('maskbook.wallet', 'setDefaultWallet', wallet!.address),
         [wallet?.address],
     )
+
     useEffect(() => {
-        if (!current && wallets[0]?.address) {
-            setCurrent(wallets[0]?.address)
-        }
+        if (current && wallets.some((w) => w.address === current)) return
+        if (wallets[0]?.address) setCurrent(wallets[0]?.address)
     }, [current, wallets])
 
     const menus = useMemo(
