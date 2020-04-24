@@ -29,7 +29,13 @@ export function DashboardWalletImportDialog(props: WrappedDialogProps) {
             {
                 label: t('mnemonic_word'),
                 children: (
-                    <form>
+                    <div>
+                        <TextField
+                            required
+                            label={t('wallet_name')}
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
+                        />
                         <TextField
                             required
                             label={t('mnemonic_word')}
@@ -38,24 +44,19 @@ export function DashboardWalletImportDialog(props: WrappedDialogProps) {
                         />
                         <TextField
                             required
+                            type="password"
                             label={t('password')}
                             value={passphrase}
                             onChange={(e) => setPassphrase(e.target.value)}
                         />
-                        <TextField
-                            required
-                            label={t('wallet_name')}
-                            value={name}
-                            onChange={(e) => setName(e.target.value)}
-                        />
-                    </form>
+                    </div>
                 ),
                 p: 0,
             },
             {
                 label: t('private_key'),
                 children: (
-                    <form>
+                    <div>
                         <TextField
                             required
                             label={t('wallet_name')}
@@ -63,14 +64,13 @@ export function DashboardWalletImportDialog(props: WrappedDialogProps) {
                             onChange={(e) => setName(e.target.value)}
                         />
                         <TextField
-                            InputProps={{ style: { height: 112 } }}
-                            multiline
+                            type="password"
                             required
                             label={t('private_key')}
                             value={privKey}
                             onChange={(e) => setPrivKey(e.target.value)}
                         />
-                    </form>
+                    </div>
                 ),
                 display: 'flex',
                 p: 0,
@@ -82,14 +82,19 @@ export function DashboardWalletImportDialog(props: WrappedDialogProps) {
 
     const onSubmit = useSnackbarCallback(
         () => {
-            if (state[0] === 1)
+            if (state[0] === 0)
                 return Services.Plugin.invokePlugin('maskbook.wallet', 'importNewWallet', {
                     name,
                     mnemonic: mnemonic.split(' '),
                     passphrase,
                 })
-            alert('// TODO!: import private key')
-            return Promise.reject()
+            return Services.Plugin.invokePlugin(
+                'maskbook.wallet',
+                'recoverWalletFromPrivateKey',
+                privKey,
+            ).then(({ address }) =>
+                Services.Plugin.invokePlugin('maskbook.wallet', 'importNewWallet', { name, address }),
+            )
         },
         [name, mnemonic, passphrase],
         props.onClose,
@@ -303,9 +308,11 @@ export function DashboardWalletBackupDialog(props: WrappedDialogProps<WalletProp
                 secondary={t('backup_wallet_hint')}
                 content={
                     <>
-                        <section className={classes.section}>
-                            <ShowcaseBox>{wallet.mnemonic.join(' ')}</ShowcaseBox>
-                        </section>
+                        {wallet.mnemonic.length ? (
+                            <section className={classes.section}>
+                                <ShowcaseBox>{wallet.mnemonic.join(' ')}</ShowcaseBox>
+                            </section>
+                        ) : null}
                         <section className={classes.section}>
                             <ShowcaseBox title={t('private_key')}>{wallet_.value?.privateKeyInHex}</ShowcaseBox>
                         </section>
