@@ -9,6 +9,8 @@ import {
     Avatar,
 } from '@material-ui/core'
 import type { ERC20TokenRecord } from '../../../plugins/Wallet/database/types'
+import BigNumber from 'bignumber.js'
+import { formatBalance } from '../../../plugins/Wallet/formatter'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -26,12 +28,13 @@ const useStyles = makeStyles((theme) =>
 )
 
 interface TokenListItemProps {
+    balance: BigNumber
     token: ERC20TokenRecord
 }
 
 export function TokenListItem(props: TokenListItemProps) {
     const classes = useStyles()
-    const { token } = props
+    const { balance, token } = props
     const name = token.name?.substr(0, 1).toLocaleUpperCase()
     return (
         <ListItem divider disableGutters>
@@ -43,7 +46,9 @@ export function TokenListItem(props: TokenListItemProps) {
                 </Avatar>
             </ListItemIcon>
             <ListItemText className={classes.name} primary={token.symbol} secondary={token.name} />
-            <ListItemSecondaryAction className={classes.amount}>{token.decimals}</ListItemSecondaryAction>
+            <ListItemSecondaryAction className={classes.amount}>
+                {formatBalance(balance, token.decimals)}
+            </ListItemSecondaryAction>
         </ListItem>
     )
 }
