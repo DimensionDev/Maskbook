@@ -298,12 +298,12 @@ export function useSnackbarCallback<P extends (...args: any[]) => Promise<T>, T>
         (...args) =>
             executor(...args).then(
                 (res) => {
-                    enqueueSnackbar(t('done'), { key, variant: 'success' })
+                    enqueueSnackbar(t('done'), { key, variant: 'success', preventDuplicate: true })
                     onSuccess?.(res)
                     return res
                 },
                 (err) => {
-                    enqueueSnackbar(`Error: ${err.message || err}`, { key })
+                    enqueueSnackbar(`Error: ${err.message || err}`, { key, preventDuplicate: true })
                     onError?.(err)
                     throw err
                 },
