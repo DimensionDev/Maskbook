@@ -9,7 +9,7 @@ import {
     Avatar,
 } from '@material-ui/core'
 import type { ERC20TokenRecord } from '../../../plugins/Wallet/database/types'
-import BigNumber from 'bignumber.js'
+import type BigNumber from 'bignumber.js'
 import { formatBalance } from '../../../plugins/Wallet/formatter'
 
 const useStyles = makeStyles((theme) =>
