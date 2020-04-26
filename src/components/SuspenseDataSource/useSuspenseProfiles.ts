@@ -6,12 +6,13 @@ import Services from '../../extension/service'
 // Change dependency to swr latest after this PR is merged and released
 import useSWR, { useSWRPages } from 'swr'
 import { last } from 'lodash-es'
-import React from 'react'
+import React, { useTransition, useCallback } from 'react'
 import { IdentifierMap } from '../../database/IdentifierMap'
 
 export function useSWRProfiles(query: string | undefined) {
+    const [startTransition, isPending] = useTransition({ timeoutMs: 10000 })
     const queryKey = query ? 'profiles:' + query : 'profiles'
-    const swr = useSWRPages<string | null, Profile[], unknown>(
+    const { isLoadingMore, ...swr } = useSWRPages<string | null, Profile[], unknown>(
         queryKey,
         ({ offset, withSWR }) => {
             const key: Parameters<typeof fetcher> = [query, offset ?? void 0]
@@ -46,11 +47,15 @@ export function useSWRProfiles(query: string | undefined) {
     //     .filter((x) => x)
     //     .reduce((x, y) => (y.data ? x.concat(y.data) : x), [] as Profile[])
     //     .filter((x) => x)
-    return { ...swr, items }
+    return {
+        ...swr,
+        items,
+        loadMore: useCallback(() => startTransition(swr.loadMore), [startTransition, swr.loadMore]),
+        newDataPending: isPending,
+    }
 }
 
 async function fetcher(query: string | undefined, offset: string | undefined) {
-    // await sleep(2000)
     const id = offset ? ProfileIdentifier.fromString(offset, ProfileIdentifier).unwrap() : void 0
     const data = await Services.Identity.queryProfilePaged({ after: id, query }, 20)
     return data

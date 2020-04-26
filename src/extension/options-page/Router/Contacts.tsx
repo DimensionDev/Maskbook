@@ -1,6 +1,6 @@
-import React, { useMemo, useState, Suspense, useRef, useTransition, useCallback } from 'react'
+import React, { useMemo, useState, Suspense, useRef, useTransition } from 'react'
 import DashboardRouterContainer from './Container'
-import { TextField, IconButton, Typography } from '@material-ui/core'
+import { TextField, IconButton, Typography, LinearProgress } from '@material-ui/core'
 import { makeStyles, createStyles } from '@material-ui/core/styles'
 import ClearIcon from '@material-ui/icons/Clear'
 import SearchIcon from '@material-ui/icons/Search'
@@ -9,7 +9,6 @@ import { useI18N } from '../../../utils/i18n-next-ui'
 import { FixedSizeList } from 'react-window'
 import AutoResize from 'react-virtualized-auto-sizer'
 import { useSWRProfiles } from '../../../components/SuspenseDataSource/useSuspenseProfiles'
-import type { Profile } from '../../../database'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -77,30 +76,32 @@ export default function DashboardContactsRouter() {
 }
 function ContactsList(props: { query: string | undefined }) {
     const ref = useRef<FixedSizeList>(null)
-    const { isEmpty, isLoadingMore, isReachingEnd, loadMore, pages, items } = useSWRProfiles(props.query)
-    const [startTransition] = useTransition({ timeoutMs: 5000 })
+    const { isEmpty, isReachingEnd, loadMore, pages, items, newDataPending } = useSWRProfiles(props.query)
     const isRealEmpty = isEmpty && items.length === 0
+    const displayProgressBar = newDataPending && items.length === 0
     return (
         <>
             <div style={{ display: 'none' }}>{pages}</div>
             {isRealEmpty ? 'TODO: No result' : ''}
+            {displayProgressBar ? <LinearProgress variant="query" /> : null}
             <AutoResize>
                 {(size) => (
                     <FixedSizeList
                         ref={ref}
                         overscanCount={5}
                         onItemsRendered={(data) => {
-                            if (!items[data.overscanStopIndex]) startTransition(loadMore)
+                            if (newDataPending || isReachingEnd) return
+                            if (!items[data.overscanStopIndex]) loadMore()
                         }}
                         itemSize={64}
-                        itemCount={items.length + (!isReachingEnd ? 1 : 0)}
+                        itemCount={items.length + (isReachingEnd ? 0 : 1)}
                         {...size}>
                         {({ index, style }) =>
                             items[index] ? (
                                 <ContactLine style={style} key={index} contact={items[index]}></ContactLine>
-                            ) : (
+                            ) : !displayProgressBar ? (
                                 <ContactLineSkeleton style={style} key={index} />
-                            )
+                            ) : null
                         }
                     </FixedSizeList>
                 )}
