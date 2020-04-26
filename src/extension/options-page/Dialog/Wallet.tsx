@@ -255,6 +255,7 @@ export function DashboardWalletHistoryDialog(props: WrappedDialogProps<WalletPro
     const [tabState, setTabState] = state
 
     // TODO!:
+    // redpacket history
 
     const tabProps: AbstractTabProps = {
         tabs: [
