@@ -79,7 +79,6 @@ export function Popup() {
                 </Button>
                 <List>
                     <SettingsUI classes={settingsUIClasses} value={debugModeSetting} />
-                    <SettingsUI classes={settingsUIClasses} value={steganographyModeSetting} />
                     <SettingsUI classes={settingsUIClasses} value={disableOpenNewTabInBackgroundSettings} />
                 </List>
             </main>

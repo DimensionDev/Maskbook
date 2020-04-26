@@ -97,9 +97,12 @@ export default function DashboardWalletsPage() {
                     My Wallets
                 </Typography>
                 <div>
-                    {wallets.map((i) => (
-                        <Card key={i.address} className={classes.identity} raised elevation={1}>
-                            <WalletCard tokens={tokens} wallet={i} />
+                    {wallets.map((wallet) => (
+                        <Card key={wallet.address} className={classes.identity} raised elevation={1}>
+                            <WalletCard
+                                tokens={tokens.filter((token) => wallet.erc20_token_balance.has(token.address))}
+                                wallet={wallet}
+                            />
                         </Card>
                     ))}
                 </div>
