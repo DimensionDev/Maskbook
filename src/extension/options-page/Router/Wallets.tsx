@@ -126,13 +126,13 @@ export default function DashboardWalletsRouter() {
         [t, openWalletCreate, openWalletImport],
     )
 
-    // TODO!: all wallets are using same set of tokens
     const [wallets, tokens] = useMyWallets()
     const [current, setCurrent] = useState('')
-    const wallet = wallets.find((i) => i.address === current)
+    const currentWallet = wallets.find((i) => i.address === current)
+    const currentTokens = tokens.filter((token) => currentWallet?.erc20_token_balance.has(token.address))
     const setAsDefault = useSnackbarCallback(
-        () => Services.Plugin.invokePlugin('maskbook.wallet', 'setDefaultWallet', wallet!.address),
-        [wallet?.address],
+        () => Services.Plugin.invokePlugin('maskbook.wallet', 'setDefaultWallet', currentWallet!.address),
+        [currentWallet?.address],
     )
 
     useEffect(() => {
@@ -143,13 +143,13 @@ export default function DashboardWalletsRouter() {
     const menus = useMemo(
         () => [
             <MenuItem onClick={setAsDefault}>{t('set_as_default')}</MenuItem>,
-            <MenuItem onClick={() => oepnWalletRename({ wallet })}>{t('rename')}</MenuItem>,
-            <MenuItem onClick={() => oepnWalletBackup({ wallet })}>{t('backup')}</MenuItem>,
-            <MenuItem onClick={() => oepnWalletDelete({ wallet })} className={color.error}>
+            <MenuItem onClick={() => oepnWalletRename({ wallet: currentWallet })}>{t('rename')}</MenuItem>,
+            <MenuItem onClick={() => oepnWalletBackup({ wallet: currentWallet })}>{t('backup')}</MenuItem>,
+            <MenuItem onClick={() => oepnWalletDelete({ wallet: currentWallet })} className={color.error}>
                 {t('delete')}
             </MenuItem>,
         ],
-        [wallet?.address],
+        [currentWallet?.address],
     )
 
     const [menu, , openMenu] = useModal(DashboardMenu, { menus })
@@ -163,13 +163,13 @@ export default function DashboardWalletsRouter() {
                             key={wallet.address}
                             onClick={() => setCurrent(wallet.address)}
                             wallet={wallet}
-                            tokens={tokens}
+                            tokens={tokens.filter((token) => wallet.erc20_token_balance.has(token.address))}
                             selected={wallet.address === current}
                         />
                     ))}
                 </div>
                 <div className={classes.content}>
-                    {wallet && (
+                    {currentWallet && (
                         <>
                             <ThemeProvider theme={walletTheme}>
                                 <Box pt={3} pb={2} pl={3} pr={2} display="flex" alignItems="center">
@@ -180,7 +180,7 @@ export default function DashboardWalletsRouter() {
                                         className={classes.addButton}
                                         variant="text"
                                         color="primary"
-                                        onClick={() => openAddToken({ wallet })}
+                                        onClick={() => openAddToken({ wallet: currentWallet })}
                                         startIcon={<AddIcon />}>
                                         {t('add_token')}
                                     </Button>
@@ -193,9 +193,11 @@ export default function DashboardWalletsRouter() {
                                     {menu}
                                 </Box>
                                 <List className={classes.tokenList} disablePadding>
-                                    {tokens.map((token) => (
+                                    {currentTokens.map((token) => (
                                         <TokenListItem
-                                            balance={wallet.erc20_token_balance.get(token.address) ?? new BigNumber(0)}
+                                            balance={
+                                                currentWallet.erc20_token_balance.get(token.address) ?? new BigNumber(0)
+                                            }
                                             token={token}
                                             key={token.address}
                                         />
