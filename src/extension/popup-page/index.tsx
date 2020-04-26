@@ -22,12 +22,13 @@ import i18nNextInstance from '../../utils/i18n-next'
 
 const useStyles = makeStyles((theme) => ({
     button: {
-        margin: theme.spacing(1),
+        margin: theme.spacing(1, 0),
         whiteSpace: 'nowrap',
     },
     container: {
         display: 'flex',
         flexDirection: 'column',
+        padding: theme.spacing(0, 2),
     },
     logo: {
         width: 'auto',
@@ -36,6 +37,12 @@ const useStyles = makeStyles((theme) => ({
     },
     input: {
         display: 'none',
+    },
+}))
+
+const useSettingsUIStyles = makeStyles((theme) => ({
+    secondaryAction: {
+        paddingRight: theme.spacing(6),
     },
 }))
 
@@ -49,6 +56,7 @@ SSRRenderer(
 export function Popup() {
     const { t } = useI18N()
     const classes = useStyles()
+    const settingsUIClasses = useSettingsUIStyles()
 
     const [showIdentitySelector, setShowIdentitySelector] = useState(false)
     React.useEffect(() => {
@@ -74,9 +82,9 @@ export function Popup() {
                     {t('popup_enter_dashboard')}
                 </Button>
                 <List>
-                    <SettingsUI value={debugModeSetting} />
-                    <SettingsUI value={steganographyModeSetting} />
-                    <SettingsUI value={disableOpenNewTabInBackgroundSettings} />
+                    <SettingsUI classes={settingsUIClasses} value={debugModeSetting} />
+                    <SettingsUI classes={settingsUIClasses} value={steganographyModeSetting} />
+                    <SettingsUI classes={settingsUIClasses} value={disableOpenNewTabInBackgroundSettings} />
                 </List>
             </main>
         </>

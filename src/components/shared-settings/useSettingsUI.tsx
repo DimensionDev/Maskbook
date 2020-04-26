@@ -14,6 +14,7 @@ import {
     createStyles,
 } from '@material-ui/core'
 import React, { useRef } from 'react'
+import { useStylesExtends } from '../custom-ui-helper'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -44,7 +45,7 @@ function withDefaultText<T>(props: SettingsUIProps<T>): SettingsUIProps<T> {
     }
 }
 
-type SettingsUIProps<T> = {
+interface SettingsUIProps<T> extends withClasses<KeysInferFromUseStyles<typeof useStyles>> {
     value: ValueRef<T>
     primary?: React.ReactNode
     secondary?: React.ReactNode
@@ -54,7 +55,7 @@ type SettingsUIProps<T> = {
 export function SettingsUI<T>(props: SettingsUIProps<T>) {
     const { value, primary, secondary } = withDefaultText(props)
     const currentValue = useValueRef(value)
-    const classes = useStyles()
+    const classes = useStylesExtends(useStyles(), props)
     switch (typeof currentValue) {
         case 'boolean':
             const [ui, change] = getBooleanSettingsUI(value as any, currentValue)
