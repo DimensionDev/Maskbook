@@ -5,6 +5,7 @@ import { appendShareTarget } from '../CryptoService'
 import { queryUserGroup } from '../UserGroupService'
 import { IdentifierMap } from '../../../database/IdentifierMap'
 import { queryMyProfiles } from '../IdentityService'
+import { currentImportingBackup } from '../../../components/shared-settings/settings'
 
 interface ShareTarget {
     share: ProfileIdentifier[]
@@ -36,6 +37,7 @@ async function appendShare(
 
 export function initAutoShareToFriends() {
     MessageCenter.on('joinGroup', async (data: { group: GroupIdentifier; newMembers: ProfileIdentifier[] }) => {
+        if (currentImportingBackup.value) return
         if (data.group.isReal) return
         const group = await queryUserGroup(data.group)
         if (!group) return
@@ -73,6 +75,7 @@ export function initAutoShareToFriends() {
         console.groupEnd()
     })
     MessageCenter.on('linkedProfileChanged', async (e) => {
+        if (currentImportingBackup.value) return
         const mine = await queryMyProfiles()
         appendShare(
             (rec) => !!e.after && mine.some((q) => rec.postBy.equals(q.identifier)) && rec.recipients.has(e.of),
