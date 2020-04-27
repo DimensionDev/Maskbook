@@ -329,7 +329,6 @@ export async function queryProfilesPagedDB(
     }
     return data
 }
-Object.assign(globalThis, { queryProfilesPagedDB })
 
 /**
  * Update a profile.

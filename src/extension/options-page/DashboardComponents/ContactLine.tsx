@@ -68,15 +68,13 @@ export function ContactLineSkeleton(props: ButtonBaseProps) {
     const classes = useStyles()
     const text = (len: number) => <Skeleton height={16} width={len} />
     return (
-        <>
-            <ButtonBase disabled className={classes.line} {...props}>
-                <Skeleton variant="circle" className={classes.avatar} />
-                <Typography className={classes.user}>{text(16 * 10)}</Typography>
-                <Typography className={classes.provider}>{text(16 * 5)}</Typography>
-                <Typography component="code" color="textSecondary" className={classes.fingerprint}>
-                    {text(16 * 25)}
-                </Typography>
-            </ButtonBase>
-        </>
+        <ButtonBase disabled className={classes.line} {...props}>
+            <Skeleton variant="circle" className={classes.avatar} />
+            <Typography className={classes.user}>{text(16 * 10)}</Typography>
+            <Typography className={classes.provider}>{text(16 * 5)}</Typography>
+            <Typography component="code" color="textSecondary" className={classes.fingerprint}>
+                {text(16 * 25)}
+            </Typography>
+        </ButtonBase>
     )
 }
