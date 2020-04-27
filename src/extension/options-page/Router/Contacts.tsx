@@ -28,7 +28,6 @@ const contactLineFallback = (
         <ContactLineSkeleton />
         <ContactLineSkeleton />
         <ContactLineSkeleton />
-        <ContactLineSkeleton />
     </>
 )
 export default function DashboardContactsRouter() {
