@@ -2,6 +2,7 @@ import { createNewSettings, createNetworkSpecificSettings } from './createSettin
 import type { ValueRef } from '@holoflows/kit/es'
 import { MessageCenter } from '../../utils/messages'
 import i18nNextInstance, { i18n } from '../../utils/i18n-next'
+import { sideEffect } from '../../utils/side-effects'
 
 /**
  * Does the debug mode on
@@ -77,3 +78,11 @@ export type ImmersiveSetupCrossContextStatus = {
     username?: string
 }
 export const currentImmersiveSetupStatus = createProxiedSettings('currentImmersiveSetupStatus')
+export const currentImportingBackup = createNewSettings<boolean>('importingBackup', false, {
+    primary: () => 'DO NOT DISPLAY IT IN UI',
+})
+
+sideEffect.then(() => {
+    // reset it to false after Maskbook startup
+    currentImportingBackup.value = false
+})
