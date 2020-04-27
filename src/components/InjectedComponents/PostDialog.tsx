@@ -13,6 +13,7 @@ import {
     Chip,
     ThemeProvider,
     Theme,
+    DialogProps,
 } from '@material-ui/core'
 import { MessageCenter, CompositionEvent } from '../../utils/messages'
 import { useCapturedInput } from '../../utils/hooks/useCapturedEvents'
@@ -96,6 +97,7 @@ export interface PostDialogUIProps
     onFinishButtonClicked: () => void
     onCloseButtonClicked: () => void
     onSetSelected: SelectRecipientsUIProps['onSetSelected']
+    DialogProps?: Partial<DialogProps>
     SelectRecipientsUIProps?: Partial<SelectRecipientsUIProps>
 }
 export function PostDialogUI(props: PostDialogUIProps) {
@@ -131,7 +133,8 @@ export function PostDialogUI(props: PostDialogUIProps) {
                     onEscapeKeyDown={props.onCloseButtonClicked}
                     BackdropProps={{
                         className: classes.backdrop,
-                    }}>
+                    }}
+                    {...props.DialogProps}>
                     <DialogTitle className={classes.header}>
                         <IconButton
                             classes={{ root: classes.close }}
@@ -240,6 +243,7 @@ export function PostDialogUI(props: PostDialogUIProps) {
                 open={props.open && redPacketDialogOpen}
                 onConfirm={() => setRedPacketDialogOpen(false)}
                 onDecline={() => setRedPacketDialogOpen(false)}
+                DialogProps={props.DialogProps}
             />
         </div>
     )
