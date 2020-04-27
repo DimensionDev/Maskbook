@@ -5,10 +5,8 @@ import { renderInShadowRoot } from '../../../utils/jss/renderInShadowRoot'
 import { PostDialog } from '../../../components/InjectedComponents/PostDialog'
 import { useTwitterButton, useTwitterCloseButton, useTwitterLabel, useTwitterDialog } from '../utils/theme'
 import { makeStyles } from '@material-ui/styles'
-import { postEditorInPopupSelector, rootSelector } from '../utils/selector'
+import { postEditorContentInPopupSelector, rootSelector } from '../utils/selector'
 import { Theme } from '@material-ui/core'
-import { useValueRef } from '../../../utils/hooks/useValueRef'
-import { instanceOfTwitterUI } from '.'
 
 const useStyles = makeStyles((theme: Theme) => ({
     MUIInputInput: {
@@ -34,7 +32,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 export function injectPostDialogAtTwitter() {
     if (location.hostname.indexOf(twitterUrl.hostIdentifier) === -1) return
-    renderPostDialogTo('popup', postEditorInPopupSelector())
+    renderPostDialogTo('popup', postEditorContentInPopupSelector())
     renderPostDialogTo('timeline', rootSelector())
 }
 
@@ -52,7 +50,15 @@ function renderPostDialogTo<T>(reason: 'timeline' | 'popup', ls: LiveSelector<T,
 }
 
 function PostDialogAtTwitter(props: { reason: 'timeline' | 'popup' }) {
-    return (
+    const rootRef = React.useRef<HTMLDivElement>(null)
+    const dialogProps =
+        props.reason === 'popup'
+            ? {
+                  disablePortal: true,
+                  container: () => rootRef.current,
+              }
+            : {}
+    const dialog = (
         <PostDialog
             classes={{
                 ...useStyles(),
@@ -61,6 +67,7 @@ function PostDialogAtTwitter(props: { reason: 'timeline' | 'popup' }) {
                 ...useTwitterButton(),
                 ...useTwitterCloseButton(),
             }}
+            DialogProps={dialogProps}
             SelectRecipientsUIProps={{
                 SelectRecipientsDialogUIProps: {
                     classes: {
@@ -73,4 +80,8 @@ function PostDialogAtTwitter(props: { reason: 'timeline' | 'popup' }) {
             reason={props.reason}
         />
     )
+
+    // ! Render dialog into native composition view instead of portal shadow
+    // ! More https://github.com/DimensionDev/Maskbook/issues/837
+    return props.reason === 'popup' ? <div ref={rootRef}>{dialog}</div> : dialog
 }
