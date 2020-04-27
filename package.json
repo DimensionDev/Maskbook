@@ -89,7 +89,7 @@
     "qrcode": "^1.4.4",
     "react": "^16.13.1",
     "react-dom": "^16.13.0",
-    "react-i18next": "^11.3.2",
+    "react-i18next": "^11.4.0",
     "react-router-dom": "^5.0.0",
     "react-use": "^14.2.0",
     "react-window": "^1.8.5",
