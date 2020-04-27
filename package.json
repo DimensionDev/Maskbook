@@ -84,7 +84,7 @@
     "matrix-js-sdk-type": "https://github.com/DimensionDev/matrix-js-sdk-type",
     "node-stego": "^0.10.1",
     "notistack": "^0.9.7",
-    "openzeppelin-solidity": "^2.4.0",
+    "openzeppelin-solidity": "^3.0.0",
     "pvtsutils": "^1.0.10",
     "qrcode": "^1.4.4",
     "react": "^16.13.1",
