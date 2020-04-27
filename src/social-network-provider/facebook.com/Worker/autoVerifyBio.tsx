@@ -6,7 +6,6 @@ export function autoVerifyBioFacebook(user: ProfileIdentifier, prove: string) {
         active: true,
         autoClose: false,
         memorable: false,
-        pinned: false,
         timeout: Infinity,
     }).pasteIntoBio(prove)
 }

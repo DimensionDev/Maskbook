@@ -8,7 +8,6 @@ export const autoVerifyBio = (self: ProfileIdentifier, prove: string) => {
         active: true,
         autoClose: false,
         memorable: false,
-        pinned: false,
         timeout: Infinity,
     })
         .pasteIntoBio(prove)
@@ -20,7 +19,6 @@ export const autoVerifyPost = (self: ProfileIdentifier, prove: string) => {
         active: true,
         autoClose: false,
         memorable: false,
-        pinned: false,
         timeout: Infinity,
     })
         .pasteIntoPostBox(prove, {
