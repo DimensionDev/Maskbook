@@ -3,15 +3,14 @@ import type { Persona } from '../../../database'
 import { definedSocialNetworkWorkers } from '../../../social-network/worker'
 
 import ProviderLine from './ProviderLine'
-import type { ProfileIdentifier } from '../../../database/type'
-import { DialogRouter } from '../DashboardDialogs/DialogBase'
-import { ProfileDisconnectDialog, ProfileConnectDialog } from '../DashboardDialogs/Profile'
 import getCurrentNetworkUI from '../../../social-network/utils/getCurrentNetworkUI'
 import {
     currentImmersiveSetupStatus,
     ImmersiveSetupCrossContextStatus,
 } from '../../../components/shared-settings/settings'
 import { exclusiveTasks } from '../../content-script/tasks'
+import { useModal } from '../Dialog/Base'
+import { DashboardPersonaUnlinkConfirmDialog } from '../Dialog/Persona'
 
 interface Props {
     persona: Persona | null
@@ -38,13 +37,7 @@ export default function ProfileBox({ persona }: Props) {
             }
         })
 
-    const [connectIdentifier, setConnectIdentifier] = React.useState<ProfileIdentifier | null>(null)
-    const [detachProfile, setDetachProfile] = React.useState<ProfileIdentifier | null>(null)
-
-    const deletedOrNot = () => setDetachProfile(null)
-    const dismissConnect = () => {
-        setConnectIdentifier(null)
-    }
+    const [detachProfile, , setDetachProfile] = useModal(DashboardPersonaUnlinkConfirmDialog)
 
     const onConnect = async (provider: typeof providers[0]) => {
         if (!persona) return
@@ -62,7 +55,7 @@ export default function ProfileBox({ persona }: Props) {
     }
 
     const onDisconnect = (provider: typeof providers[0]) => {
-        // TODO:
+        setDetachProfile({ nickname: persona?.nickname, identifier: provider.identifier })
     }
 
     return (
@@ -72,29 +65,7 @@ export default function ProfileBox({ persona }: Props) {
                     onAction={() => (provider.connected ? onDisconnect(provider) : onConnect(provider))}
                     {...provider}></ProviderLine>
             ))}
-            {connectIdentifier && (
-                <DialogRouter
-                    onExit={dismissConnect}
-                    children={
-                        <ProfileConnectDialog
-                            onClose={dismissConnect}
-                            nickname={persona?.nickname!}
-                            identifier={connectIdentifier}
-                        />
-                    }></DialogRouter>
-            )}
-            {detachProfile && (
-                <DialogRouter
-                    onExit={deletedOrNot}
-                    children={
-                        <ProfileDisconnectDialog
-                            onConfirm={deletedOrNot}
-                            onDecline={deletedOrNot}
-                            nickname={persona?.nickname}
-                            identifier={detachProfile}
-                        />
-                    }></DialogRouter>
-            )}
+            {detachProfile}
         </>
     )
 }
