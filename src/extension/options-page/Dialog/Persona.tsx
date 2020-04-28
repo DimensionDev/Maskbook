@@ -45,6 +45,7 @@ export function DashboardPersonaCreateDialog(props: WrappedDialogProps) {
                     <TextField
                         required
                         label={t('password')}
+                        type="password"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                     />

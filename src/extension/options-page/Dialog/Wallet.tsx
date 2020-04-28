@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from 'react'
 import { DashboardDialogCore, DashboardDialogWrapper, WrappedDialogProps, useSnackbarCallback } from './Base'
 import { CreditCard as CreditCardIcon, Hexagon as HexagonIcon, Clock as ClockIcon } from 'react-feather'
-import { TextField, Typography, makeStyles, createStyles, Paper } from '@material-ui/core'
+import { TextField, Typography, makeStyles, createStyles, Paper, Card } from '@material-ui/core'
 import AbstractTab, { AbstractTabProps } from '../DashboardComponents/AbstractTab'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { DebounceButton } from '../DashboardComponents/ActionButton'
@@ -133,6 +133,7 @@ export function DashboardWalletCreateDialog(props: WrappedDialogProps) {
                     <TextField
                         required
                         label={t('password')}
+                        type="password"
                         value={passphrase}
                         onChange={(e) => setPassphrase(e.target.value)}
                     />
@@ -269,7 +270,6 @@ const useBackupDialogStyles = makeStyles((theme) =>
         },
         blockquote: {
             padding: theme.spacing(2, 3),
-            backgroundColor: '#FAFAFA',
             border: '1px solid #EAEAEA',
             margin: 'auto',
             lineHeight: '1.71',
@@ -292,20 +292,20 @@ export function DashboardWalletBackupDialog(props: WrappedDialogProps<WalletProp
                 primary={t('backup_wallet')}
                 secondary={t('backup_wallet_hint')}>
                 <section className={classes.section}>
-                    <Paper elevation={0} className={classes.blockquote} component="blockquote">
+                    <Card elevation={0} className={classes.blockquote} component="blockquote">
                         {wallet.mnemonic.join(' ')}
-                    </Paper>
+                    </Card>
                 </section>
                 <section className={classes.section}>
                     <Typography color="textSecondary" variant="body2" component="p">
                         {t('private_key')}
                     </Typography>
-                    <Paper
+                    <Card
                         elevation={0}
                         className={classNames(classes.breakAll, classes.blockquote)}
                         component="blockquote">
                         // TODO!: private key
-                    </Paper>
+                    </Card>
                 </section>
             </DashboardDialogWrapper>
         </DashboardDialogCore>
