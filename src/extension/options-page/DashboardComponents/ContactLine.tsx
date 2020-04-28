@@ -1,13 +1,17 @@
 import React from 'react'
-import { Avatar, Typography } from '@material-ui/core'
+import { Typography, ButtonBase, ButtonBaseProps } from '@material-ui/core'
 import { makeStyles, createStyles } from '@material-ui/core/styles'
 import { Profile } from '../../../database'
+import { Avatar } from '../../../utils/components/Avatar'
+import { useModal } from '../Dialog/Base'
+import { DashboardContactDialog } from '../Dialog/Contact'
 
-const useStyles = makeStyles(theme =>
+const useStyles = makeStyles((theme) =>
     createStyles({
         line: {
             display: 'flex',
             alignItems: 'center',
+            width: '100%',
             padding: theme.spacing(2, 0),
             borderBottom: `1px solid ${theme.palette.divider}`,
         },
@@ -35,34 +39,25 @@ const useStyles = makeStyles(theme =>
     }),
 )
 
-interface ContactLineProps {
+interface ContactLineProps extends ButtonBaseProps {
     contact: Profile
-}
-
-const mapColor = (string: string) => {
-    const hash = [...string].reduce((prev, current) => {
-        // eslint-disable-next-line no-bitwise
-        const next = current.charCodeAt(0) + (prev << 5) - prev
-        // eslint-disable-next-line no-bitwise
-        return next & next
-    }, 0)
-    return `hsl(${hash % 360}, 98%, 70%)`
 }
 
 export function ContactLine(props: ContactLineProps) {
     const classes = useStyles()
     const { contact } = props
-    const name = contact.nickname || contact.identifier.userId || ''
+    const [contactDialog, openContactDialog] = useModal(DashboardContactDialog, { contact })
     return (
-        <div className={classes.line}>
-            <Avatar className={classes.avatar} src={contact.avatar} style={{ backgroundColor: mapColor(name) }}>
-                {name.slice(0, 1)}
-            </Avatar>
-            <Typography className={classes.user}>{contact.nickname || contact.identifier.userId}</Typography>
-            <Typography className={classes.provider}>@{contact.identifier.network}</Typography>
-            <Typography component="code" color="textSecondary" className={classes.fingerprint}>
-                {contact.linkedPersona?.fingerprint}
-            </Typography>
-        </div>
+        <>
+            <ButtonBase onClick={() => openContactDialog()} className={classes.line} {...props}>
+                <Avatar className={classes.avatar} person={contact} />
+                <Typography className={classes.user}>{contact.nickname || contact.identifier.userId}</Typography>
+                <Typography className={classes.provider}>@{contact.identifier.network}</Typography>
+                <Typography component="code" color="textSecondary" className={classes.fingerprint}>
+                    {contact.linkedPersona?.fingerprint}
+                </Typography>
+            </ButtonBase>
+            {contactDialog}
+        </>
     )
 }
