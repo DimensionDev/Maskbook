@@ -165,7 +165,7 @@ export default function WalletCard({ wallet, tokens }: Props) {
                     )}
                 </Typography>
                 <WalletLine
-                    line1="Wallet Address"
+                    line1={t('wallet_address')}
                     line2={wallet.address}
                     action={
                         <Typography

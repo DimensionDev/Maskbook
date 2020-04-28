@@ -26,6 +26,7 @@ const useStyles = makeStyles((theme) =>
             marginRight: theme.spacing(6),
             marginBottom: theme.spacing(5),
             padding: theme.spacing(4, 3, 5, 3),
+            boxShadow: '0px 2px 4px rgba(96, 97, 112, 0.16), 0px 0px 1px rgba(40, 41, 61, 0.04)',
         },
         header: {
             display: 'flex',

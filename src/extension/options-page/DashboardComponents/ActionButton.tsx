@@ -42,7 +42,7 @@ function useDebounceAsync<T extends any[]>(
 ): { loading: boolean; disabled: boolean; f(...args: T): void } {
     // useAsyncFn use T | [] as it's parameter where is conflict with our usage.
     // We should ensure always call startAsyncFn with parameters.
-    const [state, startAsyncFn] = useAsyncFn<void, T>(asyncFn as any, [], { loading: false, value: undefined })
+    const [state, startAsyncFn] = useAsyncFn<void, T>(asyncFn as any, [asyncFn], { loading: false, value: undefined })
     // Sync the debounce state after 500ms
     const [debounceLoading, setDebounceLoading] = useState(false)
     useDebounce(() => setDebounceLoading(state.loading), 500, [state])

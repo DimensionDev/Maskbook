@@ -9,6 +9,9 @@ import ArrowForwardIcon from '@material-ui/icons/ArrowForward'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
+        title: {
+            fontWeight: 500,
+        },
         text: {
             color: theme.palette.primary.main,
             display: 'flex',
@@ -50,7 +53,7 @@ export default function ProviderLine(props: ProviderLineProps) {
 
     return (
         <div className={classes.control}>
-            <Typography variant="body2" color="textSecondary">
+            <Typography className={classes.title} variant="body2" color="textSecondary">
                 {network}
             </Typography>
             <Typography

@@ -12,10 +12,27 @@ import {
     ListItemIcon,
     SelectProps,
     createStyles,
-    withStyles,
-    styled,
 } from '@material-ui/core'
 import React, { useRef } from 'react'
+
+const useStyles = makeStyles((theme) =>
+    createStyles({
+        container: { listStyleType: 'none', width: '100%' },
+        secondaryAction: { paddingRight: 120 + theme.spacing(2) },
+        listItemText: {
+            fontWeight: 500,
+        },
+        listItemIcon: {
+            marginLeft: 0,
+        },
+        listItemSecondaryAction: {
+            right: 0,
+            width: 120,
+            display: 'flex',
+            justifyContent: 'flex-end',
+        },
+    }),
+)
 
 function withDefaultText<T>(props: SettingsUIProps<T>): SettingsUIProps<T> {
     const { value, primary, secondary } = props
@@ -37,14 +54,22 @@ type SettingsUIProps<T> = {
 export function SettingsUI<T>(props: SettingsUIProps<T>) {
     const { value, primary, secondary } = withDefaultText(props)
     const currentValue = useValueRef(value)
+    const classes = useStyles()
     switch (typeof currentValue) {
         case 'boolean':
             const [ui, change] = getBooleanSettingsUI(value as any, currentValue)
             return (
-                <ListItem onClick={change} button disableGutters>
-                    {props.icon ? <ListItemIcon>{props.icon}</ListItemIcon> : null}
-                    <ListItemText primary={primary} secondary={secondary} />
-                    <ListItemSecondaryAction>{ui}</ListItemSecondaryAction>
+                <ListItem
+                    onClick={change}
+                    disableGutters
+                    classes={{ container: classes.container, secondaryAction: classes.secondaryAction }}>
+                    {props.icon ? (
+                        <ListItemIcon classes={{ root: classes.listItemIcon }}>{props.icon}</ListItemIcon>
+                    ) : null}
+                    <ListItemText classes={{ primary: classes.listItemText }} primary={primary} secondary={secondary} />
+                    <ListItemSecondaryAction classes={{ root: classes.listItemSecondaryAction }}>
+                        {ui}
+                    </ListItemSecondaryAction>
                 </ListItem>
             )
         default:
@@ -56,17 +81,6 @@ export function SettingsUI<T>(props: SettingsUIProps<T>) {
     }
 }
 
-const useListItemStyles = makeStyles((theme) =>
-    createStyles({
-        container: { listStyleType: 'none', width: '100%' },
-        secondaryAction: { paddingRight: 120 + theme.spacing(2) },
-    }),
-)
-
-const useStyles = makeStyles({
-    secondaryAction: { width: 120 },
-})
-
 export function SettingsUIEnum<T extends object>(
     props: {
         enumObject: T
@@ -75,14 +89,16 @@ export function SettingsUIEnum<T extends object>(
     } & SettingsUIProps<T[keyof T]>,
 ) {
     const { primary, secondary } = withDefaultText(props)
-    const listClasses = useListItemStyles()
     const classes = useStyles()
     const [ui, change] = useEnumSettings(props.value, props.enumObject, props.getText, props.SelectProps)
     return (
-        <ListItem disableGutters component="div" classes={listClasses}>
-            {props.icon ? <ListItemIcon>{props.icon}</ListItemIcon> : null}
-            <ListItemText primary={primary} secondary={secondary} />
-            <ListItemSecondaryAction className={classes.secondaryAction}>{ui}</ListItemSecondaryAction>
+        <ListItem
+            disableGutters
+            component="div"
+            classes={{ container: classes.container, secondaryAction: classes.secondaryAction }}>
+            {props.icon ? <ListItemIcon classes={{ root: classes.listItemIcon }}>{props.icon}</ListItemIcon> : null}
+            <ListItemText classes={{ primary: classes.listItemText }} primary={primary} secondary={secondary} />
+            <ListItemSecondaryAction classes={{ root: classes.listItemSecondaryAction }}>{ui}</ListItemSecondaryAction>
         </ListItem>
     )
 }
