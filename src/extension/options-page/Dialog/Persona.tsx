@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import * as bip39 from 'bip39'
 import { DashboardDialogCore, DashboardDialogWrapper, WrappedDialogProps, useSnackbarCallback } from './Base'
 import { UserPlus, UserCheck, User, UserMinus } from 'react-feather'
-import { TextField, makeStyles, createStyles, Typography, Button, TypographyProps } from '@material-ui/core'
+import { TextField, makeStyles, createStyles, Typography, TypographyProps } from '@material-ui/core'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import Services from '../../service'
 import {
@@ -20,6 +20,7 @@ import { QrCode, WKWebkitQRScanner } from '../../../components/shared/qrcode'
 import { useSnackbar } from 'notistack'
 import { selectElementContents } from '../../../utils/utils'
 import type { Persona } from '../../../database'
+import { ThrottledButton } from '../DashboardComponents/ActionButton'
 
 export function DashboardPersonaCreateDialog(props: WrappedDialogProps) {
     const [name, setName] = useState('')
@@ -41,9 +42,9 @@ export function DashboardPersonaCreateDialog(props: WrappedDialogProps) {
                 <Typography variant="body2" color="textSecondary">
                     Set a password to improve the security level
                 </Typography>
-                <Button type="submit" variant="contained" color="primary" onClick={createPersona}>
+                <ThrottledButton type="submit" variant="contained" color="primary" onClick={createPersona}>
                     Create
-                </Button>
+                </ThrottledButton>
             </DashboardDialogWrapper>
         </DashboardDialogCore>
     )
@@ -163,9 +164,9 @@ export function DashboardPersonaImportDialog(props: WrappedDialogProps) {
                 primary="Import Your Persona"
                 secondary="You can import a persona backup in the following ways.">
                 <AbstractTab {...tabProps}></AbstractTab>
-                <Button hidden={tabState === 2} variant="contained" color="primary" onClick={importPersona}>
+                <ThrottledButton hidden={tabState === 2} variant="contained" color="primary" onClick={importPersona}>
                     {t('import')}
-                </Button>
+                </ThrottledButton>
             </DashboardDialogWrapper>
         </DashboardDialogCore>
     )
@@ -282,9 +283,9 @@ export function DashboardPersonaDeleteConfirmDialog(props: WrappedDialogProps<Pe
                 iconColor="#F4637D"
                 primary={t('delete_persona')}
                 secondary={t('dashboard_delete_persona_confirm_hint', { name: persona.nickname })}>
-                <Button variant="contained" color="primary" onClick={deletePersona}>
+                <ThrottledButton variant="contained" color="primary" onClick={deletePersona}>
                     OK
-                </Button>
+                </ThrottledButton>
             </DashboardDialogWrapper>
         </DashboardDialogCore>
     )
@@ -308,9 +309,9 @@ export function DashboardPersonaUnlinkConfirmDialog(props: WrappedDialogProps) {
                     network: identifier.network,
                     profile: identifier.userId,
                 })}>
-                <Button variant="contained" color="primary" onClick={onClick}>
+                <ThrottledButton variant="contained" color="primary" onClick={onClick}>
                     {t('ok')}
-                </Button>
+                </ThrottledButton>
             </DashboardDialogWrapper>
         </DashboardDialogCore>
     )
