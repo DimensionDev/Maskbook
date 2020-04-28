@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useCallback } from 'react'
 import { Button, CircularProgress, makeStyles } from '@material-ui/core'
 import type { ButtonProps } from '@material-ui/core/Button'
 import CheckIcon from '@material-ui/icons/Check'
@@ -6,7 +6,45 @@ import ErrorIcon from '@material-ui/icons/Error'
 import { red, green } from '@material-ui/core/colors'
 import classNames from 'classnames'
 
-const circle = <CircularProgress size={24} />
+const circle = <CircularProgress size={18} />
+
+enum ThrottledButtonState {
+    Normal = 1,
+    Clicked,
+    Loading,
+}
+
+export function ThrottledButton(_props: ButtonProps) {
+    const { onClick, ...props } = _props
+    const [loading, setLoading] = useState<{ state: ThrottledButtonState; timer?: number }>({
+        state: ThrottledButtonState.Normal,
+    })
+    const hookedClick = useCallback(
+        (e) => {
+            e.stopPropagation()
+            if (loading.state !== ThrottledButtonState.Normal) return
+            setLoading({ state: ThrottledButtonState.Clicked })
+            const timer: number = window.setTimeout(
+                () => setLoading({ state: ThrottledButtonState.Loading, timer }),
+                500,
+            )
+            return Promise.resolve(e)
+                .then(onClick)
+                .finally(() => {
+                    window.clearTimeout(timer)
+                    setLoading({ state: ThrottledButtonState.Normal })
+                })
+        },
+        [loading.state, onClick],
+    )
+    return (
+        <Button
+            startIcon={loading.state === ThrottledButtonState.Loading ? circle : undefined}
+            disabled={loading.state === ThrottledButtonState.Loading}
+            onClick={hookedClick}
+            {...props}></Button>
+    )
+}
 
 interface ActionButtonProps extends ButtonProps, PropsOf<typeof Button> {
     width?: number | string

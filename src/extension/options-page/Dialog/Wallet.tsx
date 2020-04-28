@@ -1,9 +1,10 @@
 import React, { useState } from 'react'
 import { DashboardDialogCore, DashboardDialogWrapper, WrappedDialogProps } from './Base'
 import { CreditCard as CreditCardIcon, Hexagon as HexagonIcon, Clock as ClockIcon } from 'react-feather'
-import { Button, TextField, Typography } from '@material-ui/core'
+import { TextField, Typography } from '@material-ui/core'
 import AbstractTab, { AbstractTabProps } from '../DashboardComponents/AbstractTab'
 import { useI18N } from '../../../utils/i18n-next-ui'
+import { ThrottledButton } from '../DashboardComponents/ActionButton'
 
 export function DashboardWalletImportDialog(props: WrappedDialogProps) {
     const state = useState(0)
@@ -61,9 +62,9 @@ export function DashboardWalletImportDialog(props: WrappedDialogProps) {
                 primary="Import Wallet"
                 secondary="Import a wallet with mnemonic words and password.">
                 <AbstractTab {...tabProps}></AbstractTab>
-                <Button variant="contained" color="primary">
+                <ThrottledButton variant="contained" color="primary">
                     Import
-                </Button>
+                </ThrottledButton>
             </DashboardDialogWrapper>
         </DashboardDialogCore>
     )
@@ -83,9 +84,9 @@ export function DashboardWalletCreateDialog(props: WrappedDialogProps) {
                 <Typography variant="body2" color="textSecondary">
                     Set a password to improve the security level
                 </Typography>
-                <Button variant="contained" color="primary">
+                <ThrottledButton variant="contained" color="primary">
                     Create
-                </Button>
+                </ThrottledButton>
             </DashboardDialogWrapper>
         </DashboardDialogCore>
     )
@@ -122,9 +123,9 @@ export function DashboardWalletAddTokenDialog(props: WrappedDialogProps) {
         <DashboardDialogCore {...props}>
             <DashboardDialogWrapper icon={<HexagonIcon />} iconColor="#699CF7" primary="Add token">
                 <AbstractTab {...tabProps}></AbstractTab>
-                <Button hidden={tabState === 2} variant="contained" color="primary" onClick={console.log}>
+                <ThrottledButton hidden={tabState === 2} variant="contained" color="primary" onClick={console.log}>
                     {t('import')}
-                </Button>
+                </ThrottledButton>
             </DashboardDialogWrapper>
         </DashboardDialogCore>
     )
