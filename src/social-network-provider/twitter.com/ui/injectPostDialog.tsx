@@ -9,11 +9,6 @@ import { postEditorInPopupSelector, rootSelector } from '../utils/selector'
 import type { Theme } from '@material-ui/core'
 
 const useStyles = makeStyles((theme: Theme) => ({
-    MUIInputInput: {
-        border: 'none',
-        borderRadius: 5,
-        padding: '12px 8px',
-    },
     input: {
         '&::placeholder': {
             color: '#9197a3',
