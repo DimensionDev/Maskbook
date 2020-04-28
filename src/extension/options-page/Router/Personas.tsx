@@ -4,9 +4,10 @@ import { Button, makeStyles, createStyles } from '@material-ui/core'
 import AddCircleIcon from '@material-ui/icons/AddCircle'
 import { useMyPersonas } from '../../../components/DataSource/useActivatedUI'
 import PersonaCard from '../DashboardComponents/PersonaCard'
-import { DashboardPersonaDialog } from '../Dialog/Persona'
+import { DashboardPersonaCreateDialog, DashboardPersonaImportDialog } from '../Dialog/Persona'
 import { useDialog } from '../Dialog/Base'
 import { Database as DatabaseIcon } from 'react-feather'
+import { DashboardDatabaseBackupDialog, DashboardDatabaseRestoreDialog } from '../Dialog/Database'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -34,18 +35,21 @@ export default function DashboardPersonasRouter() {
     const classes = useStyles()
     const personas = useMyPersonas()
 
-    const [createPersona, openCreatePersona] = useDialog(<DashboardPersonaDialog />)
+    const [createPersona, openCreatePersona] = useDialog(<DashboardPersonaCreateDialog />)
+    const [importPersona, openImportPersona] = useDialog(<DashboardPersonaImportDialog />)
+    const [backupDatabase, openBackupDatabase] = useDialog(<DashboardDatabaseBackupDialog />)
+    const [restoreDatabase, openRestoreDatabase] = useDialog(<DashboardDatabaseRestoreDialog />)
 
     const actions = useMemo(
         () => [
-            <Button color="primary" variant="outlined">
+            <Button color="primary" variant="outlined" onClick={openImportPersona}>
                 Import
             </Button>,
-            <Button color="primary" variant="contained" endIcon={<AddCircleIcon />}>
+            <Button color="primary" variant="contained" onClick={openCreatePersona} endIcon={<AddCircleIcon />}>
                 Create Persona
             </Button>,
         ],
-        [],
+        [openCreatePersona, openImportPersona],
     )
 
     return (
@@ -56,14 +60,21 @@ export default function DashboardPersonasRouter() {
                 ))}
             </section>
             <section className={classes.footer}>
-                <Button startIcon={<DatabaseIcon size={18} />} color="primary" variant="text">
+                <Button
+                    onClick={openRestoreDatabase}
+                    startIcon={<DatabaseIcon size={18} />}
+                    color="primary"
+                    variant="text">
                     Restore Datebase
                 </Button>
-                <Button color="primary" variant="text">
+                <Button onClick={openBackupDatabase} color="primary" variant="text">
                     Backup Datebase
                 </Button>
             </section>
             {createPersona}
+            {importPersona}
+            {backupDatabase}
+            {restoreDatabase}
         </DashboardRouterContainer>
     )
 }

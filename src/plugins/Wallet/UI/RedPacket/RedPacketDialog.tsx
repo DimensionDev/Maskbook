@@ -471,12 +471,12 @@ export function RedPacketDialogUI(
     const tabs = [
         {
             label: 'Create New',
-            component: <NewPacketUI {...props} />,
+            children: <NewPacketUI {...props} />,
             p: 0,
         },
         {
             label: 'Select Existing',
-            component: <ExistingPacketUI {...props} />,
+            children: <ExistingPacketUI {...props} />,
             p: 0,
         },
     ]

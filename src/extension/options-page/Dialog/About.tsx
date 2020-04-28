@@ -14,7 +14,6 @@ const useStyles = makeStyles((theme) =>
         wrapper: {
             width: '580px',
             lineHeight: 1.75,
-            borderRadius: '12px',
         },
         header: {
             display: 'flex',

@@ -15,6 +15,7 @@ const useStyles = makeStyles((theme) =>
     createStyles({
         wrapper: {
             display: 'flex',
+            flex: 1,
         },
         list: {
             width: '251px',
