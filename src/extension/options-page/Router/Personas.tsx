@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react'
 import DashboardRouterContainer from './Container'
-import { Button, makeStyles, createStyles } from '@material-ui/core'
+import { Button, makeStyles, createStyles, Theme, ThemeProvider } from '@material-ui/core'
 import AddCircleIcon from '@material-ui/icons/AddCircle'
 import { useMyPersonas } from '../../../components/DataSource/useActivatedUI'
 import PersonaCard from '../DashboardComponents/PersonaCard'
@@ -10,23 +10,45 @@ import { Database as DatabaseIcon } from 'react-feather'
 import { DashboardDatabaseBackupDialog, DashboardDatabaseRestoreDialog } from '../Dialog/Database'
 import SpacedButtonGroup from '../DashboardComponents/SpacedButtonGroup'
 import { useI18N } from '../../../utils/i18n-next-ui'
+import { merge, cloneDeep } from 'lodash-es'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
         container: {
             display: 'flex',
             flexWrap: 'wrap',
-            flex: 1,
             alignItems: 'baseline',
             overflow: 'auto',
-            marginTop: theme.spacing(1),
-            paddingTop: theme.spacing(2),
+            paddingTop: theme.spacing(3),
+
+            // keep the shadow of the persona card
+            marginLeft: -4,
+            paddingLeft: 4,
+        },
+        button: {
+            paddingTop: 0,
+            paddingBottom: 0,
+            lineHeight: '24px',
+        },
+        placeholder: {
+            flex: 1,
         },
         footer: {
-            margin: theme.spacing(2, 0),
+            padding: theme.spacing(2, 0),
         },
     }),
 )
+
+const personasTheme = (theme: Theme): Theme =>
+    merge(cloneDeep(theme), {
+        overrides: {
+            MuiIconButton: {
+                root: {
+                    color: theme.palette.text,
+                },
+            },
+        },
+    })
 
 export default function DashboardPersonasRouter() {
     const { t } = useI18N()
@@ -52,27 +74,31 @@ export default function DashboardPersonasRouter() {
 
     return (
         <DashboardRouterContainer title={t('my_personas')} actions={actions}>
-            <section className={classes.container}>
-                {personas.map((persona) => (
-                    <PersonaCard key={persona.identifier.toText()} persona={persona} />
-                ))}
-            </section>
-            <SpacedButtonGroup className={classes.footer}>
-                <Button
-                    onClick={openRestoreDatabase}
-                    startIcon={<DatabaseIcon size={18} />}
-                    color="primary"
-                    variant="text">
-                    {t('restore_database')}
-                </Button>
-                <Button onClick={openBackupDatabase} color="primary" variant="text">
-                    {t('backup_database')}
-                </Button>
-            </SpacedButtonGroup>
-            {createPersona}
-            {importPersona}
-            {backupDatabase}
-            {restoreDatabase}
+            <ThemeProvider theme={personasTheme}>
+                <section className={classes.container}>
+                    {personas.map((persona) => (
+                        <PersonaCard key={persona.identifier.toText()} persona={persona} />
+                    ))}
+                </section>
+                <div className={classes.placeholder}></div>
+                <SpacedButtonGroup className={classes.footer}>
+                    <Button
+                        className={classes.button}
+                        onClick={openRestoreDatabase}
+                        startIcon={<DatabaseIcon size={18} />}
+                        color="primary"
+                        variant="text">
+                        {t('restore_database')}
+                    </Button>
+                    <Button className={classes.button} onClick={openBackupDatabase} color="primary" variant="text">
+                        {t('backup_database')}
+                    </Button>
+                </SpacedButtonGroup>
+                {createPersona}
+                {importPersona}
+                {backupDatabase}
+                {restoreDatabase}
+            </ThemeProvider>
         </DashboardRouterContainer>
     )
 }

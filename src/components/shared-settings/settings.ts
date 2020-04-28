@@ -4,6 +4,14 @@ import { MessageCenter } from '../../utils/messages'
 import i18nNextInstance, { i18n } from '../../utils/i18n-next'
 
 /**
+ * Does the night mode on
+ */
+export const nightModeSetting = createNewSettings<boolean>('nightMode', false, {
+    primary: () => i18n.t('settings_enable_night'),
+    secondary: () => i18n.t('settings_enable_night_desc'),
+})
+
+/**
  * Does the debug mode on
  */
 export const debugModeSetting = createNewSettings<boolean>('debugMode', false, {

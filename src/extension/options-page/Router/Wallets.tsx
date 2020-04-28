@@ -4,6 +4,7 @@ import { Button, Typography, Box, IconButton, List, MenuItem } from '@material-u
 import { makeStyles, createStyles, Theme, ThemeProvider } from '@material-ui/core/styles'
 
 import AddCircleIcon from '@material-ui/icons/AddCircle'
+import AddIcon from '@material-ui/icons/Add'
 import MoreVertOutlinedIcon from '@material-ui/icons/MoreVertOutlined'
 import HistoryIcon from '@material-ui/icons/History'
 
@@ -28,17 +29,21 @@ import { merge, cloneDeep } from 'lodash-es'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
-        wrapper: {
+        root: {
             display: 'flex',
             flex: '0 0 100%',
             height: '100%',
         },
-        list: {
-            width: '251px',
-            flex: '0 0 auto',
+        scroller: {
+            width: 224,
             height: '100%',
-            overflow: 'auto',
+            flex: '0 0 auto',
             borderRight: `1px solid ${theme.palette.divider}`,
+            overflowY: 'auto',
+            scrollbarWidth: 'none',
+            '&::-webkit-scrollbar': {
+                display: 'none',
+            },
         },
         content: {
             width: '100%',
@@ -63,6 +68,11 @@ const useStyles = makeStyles((theme) =>
 const walletTheme = (theme: Theme): Theme =>
     merge(cloneDeep(theme), {
         overrides: {
+            MuiIconButton: {
+                root: {
+                    color: theme.palette.text,
+                },
+            },
             MuiList: {
                 root: {
                     margin: theme.spacing(0, 3),
@@ -133,37 +143,38 @@ export default function DashboardWalletsRouter() {
 
     return (
         <DashboardRouterContainer padded={false} title={t('my_wallets')} actions={actions}>
-            <div className={classes.wrapper}>
-                <div className={classes.list}>
+            <div className={classes.root}>
+                <div className={classes.scroller}>
                     {wallets.map((wallet) => (
                         <WalletItem
                             key={wallet.address}
                             onClick={() => setCurrent(wallet.address)}
                             wallet={wallet}
                             tokens={tokens}
-                            selected={wallet.address === current}></WalletItem>
+                            selected={wallet.address === current}
+                        />
                     ))}
                 </div>
                 <div className={classes.content}>
                     {wallet && (
                         <>
-                            <Box pt={3} pb={2} pl={3} pr={2} display="flex" alignItems="center">
-                                <Typography className={classes.title} variant="h5">
-                                    {t('details')}
-                                </Typography>
-                                <Button
-                                    variant="text"
-                                    color="primary"
-                                    onClick={() => openAddToken({ wallet })}
-                                    startIcon={<AddCircleIcon />}>
-                                    {t('add_token')}
-                                </Button>
-                                <IconButton size="small" onClick={(e) => openMenu({ anchorEl: e.currentTarget })}>
-                                    <MoreVertOutlinedIcon />
-                                </IconButton>
-                                {menu}
-                            </Box>
                             <ThemeProvider theme={walletTheme}>
+                                <Box pt={3} pb={2} pl={3} pr={2} display="flex" alignItems="center">
+                                    <Typography className={classes.title} variant="h5">
+                                        {t('details')}
+                                    </Typography>
+                                    <Button
+                                        variant="text"
+                                        color="primary"
+                                        onClick={() => openAddToken({ wallet })}
+                                        startIcon={<AddIcon />}>
+                                        {t('add_token')}
+                                    </Button>
+                                    <IconButton size="small" onClick={(e) => openMenu({ anchorEl: e.currentTarget })}>
+                                        <MoreVertOutlinedIcon />
+                                    </IconButton>
+                                    {menu}
+                                </Box>
                                 <List className={classes.tokenList} disablePadding>
                                     {tokens.map((token) => (
                                         <TokenListItem token={token} key={token.address} />

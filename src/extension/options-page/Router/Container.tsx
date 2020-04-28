@@ -16,26 +16,45 @@ const useStyles = makeStyles((theme) =>
             display: 'grid',
             gridTemplateRows: '[titleAction] 0fr [divider] 0fr [content] auto',
         },
+        scroller: {
+            height: '100%',
+            scrollbarWidth: 'none',
+            '&::-webkit-scrollbar': {
+                display: 'none',
+            },
+        },
         titleAction: {
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
-            height: '90px',
-            padding: theme.spacing(3, 2, 3, 4),
+            height: 129,
+            padding: '40px 24px 40px 34px',
+        },
+        title: {
+            fontWeight: 500,
+            fontSize: 40,
+            lineHeight: '48px',
         },
         content: {
             display: 'flex',
             flexDirection: 'column',
-            overflow: 'auto',
+            overflow: 'hidden',
         },
         dividerPadded: {
-            paddingLeft: theme.spacing(3),
-            paddingRight: theme.spacing(3),
+            paddingLeft: 34,
+            paddingRight: 24,
         },
         contentPadded: {
             '& > * ': {
-                paddingLeft: theme.spacing(3),
-                paddingRight: theme.spacing(3),
+                overflow: 'auto',
+                display: 'flex',
+                flexDirection: 'column',
+                paddingLeft: 34,
+                paddingRight: 24,
+                scrollbarWidth: 'none',
+                '&::-webkit-scrollbar': {
+                    display: 'none',
+                },
             },
         },
         buttons: {
@@ -53,7 +72,9 @@ export default function DashboardRouterContainer(props: DashboardRouterContainer
         <Fade in>
             <section className={classes.wrapper}>
                 <section className={classes.titleAction}>
-                    <Typography variant="h5">{title}</Typography>
+                    <Typography className={classes.title} color="textPrimary" variant="h6">
+                        {title}
+                    </Typography>
                     <div className={classes.buttons}>
                         {actions?.map((action, index) => React.cloneElement(action, { key: index }))}
                     </div>
@@ -62,7 +83,7 @@ export default function DashboardRouterContainer(props: DashboardRouterContainer
                     <Divider />
                 </div>
                 <main className={classNames(classes.content, { [classes.contentPadded]: padded !== false })}>
-                    {children}
+                    <div className={classes.scroller}>{children}</div>
                 </main>
             </section>
         </Fade>

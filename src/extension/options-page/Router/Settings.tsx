@@ -4,6 +4,7 @@ import { makeStyles, createStyles, ThemeProvider, Theme, useTheme } from '@mater
 
 import { SettingsUI, SettingsUIEnum } from '../../../components/shared-settings/useSettingsUI'
 import {
+    nightModeSetting,
     debugModeSetting,
     disableOpenNewTabInBackgroundSettings,
     languageSettings,
@@ -14,6 +15,7 @@ import { useValueRef } from '../../../utils/hooks/useValueRef'
 
 import EnhancedEncryptionIcon from '@material-ui/icons/EnhancedEncryption'
 import NoEncryptionIcon from '@material-ui/icons/NoEncryption'
+import NightsStay from '@material-ui/icons/NightsStay'
 import MemoryOutlinedIcon from '@material-ui/icons/MemoryOutlined'
 import WallpaperOutlinedIcon from '@material-ui/icons/WallpaperOutlined'
 import OpenInBrowserIcon from '@material-ui/icons/OpenInBrowser'
@@ -30,17 +32,22 @@ const useStyles = makeStyles((theme) =>
             backgroundColor: theme.palette.background.paper,
         },
         title: {
+            fontWeight: 'normal',
+            lineHeight: '30px',
             marginBottom: theme.spacing(1.5),
         },
         section: {
-            padding: theme.spacing(2, 4),
-            margin: theme.spacing(2, 0),
+            padding: '26px 40px',
+            margin: theme.spacing(3, 0),
         },
     }),
 )
 
 const settingsTheme = (theme: Theme): Theme =>
     merge(cloneDeep(theme), {
+        wrapper: {
+            padding: '0 24px',
+        },
         typography: {
             body1: {
                 lineHeight: 1.75,
@@ -69,6 +76,7 @@ const settingsTheme = (theme: Theme): Theme =>
             },
             MuiListItemIcon: {
                 root: {
+                    color: theme.palette.text,
                     justifyContent: 'flex-start',
                     minWidth: 'unset',
                     marginLeft: theme.spacing(2),
@@ -110,42 +118,48 @@ export default function DashboardSettingsRouter() {
     const elevation = theme.palette.type === 'dark' ? 1 : 0
     return (
         <DashboardRouterContainer title={t('settings')}>
-            <ThemeProvider theme={settingsTheme}>
-                <Paper component="section" className={classes.section} elevation={elevation}>
-                    <Typography className={classes.title} variant="h6" color="textPrimary">
-                        {t('general')}
-                    </Typography>
-                    <Card elevation={0}>
-                        <List disablePadding>
-                            <SettingsUIEnum
-                                secondary={langMapper(currentLang)}
-                                enumObject={Language}
-                                getText={langMapper}
-                                icon={<LanguageIcon />}
-                                value={languageSettings}
-                            />
-                        </List>
-                    </Card>
-                </Paper>
-                <Paper component="section" className={classes.section} elevation={elevation}>
-                    <Typography className={classes.title} variant="h6" color="textPrimary">
-                        {t('advanced_options')}
-                    </Typography>
-                    <Card elevation={0}>
-                        <List disablePadding>
-                            <SettingsUI icon={<OpenInBrowserIcon />} value={disableOpenNewTabInBackgroundSettings} />
-                            {/* This feature is not ready for iOS */}
-                            {webpackEnv.target !== 'WKWebview' ? (
-                                <SettingsUI
-                                    icon={shadowRoot ? <EnhancedEncryptionIcon /> : <NoEncryptionIcon />}
-                                    value={renderInShadowRootSettings}
+            <div className="wrapper">
+                <ThemeProvider theme={settingsTheme}>
+                    <Paper component="section" className={classes.section} elevation={elevation}>
+                        <Typography className={classes.title} variant="h6" color="textPrimary">
+                            {t('general')}
+                        </Typography>
+                        <Card elevation={0}>
+                            <List disablePadding>
+                                <SettingsUIEnum
+                                    secondary={langMapper(currentLang)}
+                                    enumObject={Language}
+                                    getText={langMapper}
+                                    icon={<LanguageIcon />}
+                                    value={languageSettings}
                                 />
-                            ) : null}
-                            <SettingsUI icon={<MemoryOutlinedIcon />} value={debugModeSetting} />
-                        </List>
-                    </Card>
-                </Paper>
-            </ThemeProvider>
+                            </List>
+                        </Card>
+                    </Paper>
+                    <Paper component="section" className={classes.section} elevation={elevation}>
+                        <Typography className={classes.title} variant="h6" color="textPrimary">
+                            {t('advanced_options')}
+                        </Typography>
+                        <Card elevation={0}>
+                            <List disablePadding>
+                                <SettingsUI
+                                    icon={<OpenInBrowserIcon />}
+                                    value={disableOpenNewTabInBackgroundSettings}
+                                />
+                                {/* This feature is not ready for iOS */}
+                                {webpackEnv.target !== 'WKWebview' ? (
+                                    <SettingsUI
+                                        icon={shadowRoot ? <EnhancedEncryptionIcon /> : <NoEncryptionIcon />}
+                                        value={renderInShadowRootSettings}
+                                    />
+                                ) : null}
+                                <SettingsUI icon={<MemoryOutlinedIcon />} value={debugModeSetting} />
+                                <SettingsUI icon={<NightsStay />} value={nightModeSetting} />
+                            </List>
+                        </Card>
+                    </Paper>
+                </ThemeProvider>
+            </div>
         </DashboardRouterContainer>
     )
 }
