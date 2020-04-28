@@ -5,7 +5,9 @@ import classNames from 'classnames'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
-        text: {},
+        text: {
+            fontWeight: 500,
+        },
         action: {},
         control: {
             textAlign: 'left',
@@ -40,7 +42,9 @@ export default function WalletLine(props: WalletLineProps) {
         <>
             <div className={classNames(classes.wrapper, { [classes.cursor]: !!onClick })} onClick={onClick}>
                 <FormControl className={classes.control}>
-                    <Typography variant={invert ? 'body1' : 'overline'}>{line1}</Typography>
+                    <Typography className={classes.text} variant={invert ? 'body1' : 'overline'}>
+                        {line1}
+                    </Typography>
                     <Typography
                         variant={invert ? 'caption' : 'body1'}
                         component="a"

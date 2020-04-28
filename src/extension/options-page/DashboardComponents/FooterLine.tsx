@@ -16,9 +16,8 @@ const useStyles = makeStyles((theme: Theme) =>
         footerButton: {
             borderRadius: '0',
             whiteSpace: 'nowrap',
-            '& > span': {
-                marginLeft: theme.spacing(1),
-                marginRight: theme.spacing(1),
+            '& > p': {
+                fontSize: 12,
             },
         },
     }),

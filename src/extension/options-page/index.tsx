@@ -32,6 +32,8 @@ import DashboardWalletsRouter from './Router/Wallets'
 import DashboardContactsRouter from './Router/Contacts'
 import DashboardSettingsRouter from './Router/Settings'
 import { DashboardBlurContextProvider } from './DashboardBlurContext'
+import { useValueRef } from '../../utils/hooks/useValueRef'
+import { nightModeSetting } from '../../components/shared-settings/settings'
 
 const OptionsPageRouters = (
     <>
@@ -47,10 +49,10 @@ const OptionsPageRouters = (
 )
 
 function DashboardWithProvider() {
-    const isDarkTheme = useMediaQuery('(prefers-color-scheme: dark)')
+    const isNightMode = useValueRef(nightModeSetting)
     return (
         <I18nextProvider i18n={i18nNextInstance}>
-            <ThemeProvider theme={isDarkTheme ? MaskbookDarkTheme : MaskbookLightTheme}>
+            <ThemeProvider theme={isNightMode ? MaskbookDarkTheme : MaskbookLightTheme}>
                 <SnackbarProvider
                     maxSnack={30}
                     anchorOrigin={{
@@ -79,7 +81,7 @@ const useStyles = makeStyles((theme) =>
             '--lightText': '#C4C4C4',
             '--background': theme.palette.type === 'dark' ? '#212121' : '#F6F9FF',
             '--container': theme.palette.type === 'dark' ? '#121212' : '#FFFFFF',
-            '--drawerWidth': '251px',
+            '--drawerWidth': '250px',
             '--drawerHeader': theme.palette.type === 'dark' ? '#121212' : '#1756CA',
             '--drawerBody': theme.palette.type === 'dark' ? '#121212' : 'var(--primary)',
             '--drawerText': 'var(--textOnPrimary, #FFFFFF)',
@@ -91,12 +93,8 @@ const useStyles = makeStyles((theme) =>
             width: '100vw',
             height: '100vh',
             backgroundColor: 'var(--background)',
-            // background: 'var(--background) bottom 10px right 10px no-repeat url(/maskface.svg)',
             display: 'grid',
-            gridTemplateColumns: '20px [content-start] minmax(984px, auto) [content-end] 20px',
-            '@media screen and (min-width: 1180px)': {
-                gridTemplateColumns: '1fr [content-start] 1180px [content-end] 1fr',
-            },
+            gridTemplateColumns: '1fr [content-start] 1110px [content-end] 1fr',
             gridTemplateRows: '64px [content-start] auto [content-end] 80px',
             placeItems: 'center',
 
@@ -125,7 +123,6 @@ const useStyles = makeStyles((theme) =>
             height: '100%',
             overflow: 'auto',
             borderRadius: '12px',
-            maxWidth: '1100px',
             backgroundColor: 'var(--container)',
             gridRow: 'content-start / content-end',
             gridColumn: 'content-start / content-end',

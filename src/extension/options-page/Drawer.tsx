@@ -1,4 +1,5 @@
 import React from 'react'
+import classNames from 'classnames'
 
 import { List, ListItem, ListItemIcon, ListItemText, Typography, Paper } from '@material-ui/core'
 import { makeStyles, Theme, ThemeProvider, useTheme } from '@material-ui/core/styles'
@@ -9,34 +10,45 @@ import { useModal } from './Dialog/Base'
 import { DashboardFeedbackDialog } from './Dialog/Feedback'
 import { useI18N } from '../../utils/i18n-next-ui'
 import { cloneDeep, merge } from 'lodash-es'
+import Logo from './DashboardComponents/Logo'
 
 const useStyles = makeStyles((theme) => ({
     drawer: {
         height: '100%',
         display: 'grid',
         gridTemplateRows: '[drawerHeader] 0fr [drawerList] auto [drawerFooter] 0fr',
-        minWidth: 'var(--drawerWidth)',
+        width: 'var(--drawerWidth)',
         backgroundColor: 'var(--drawerBody)',
         color: 'white',
         overflow: 'auto',
     },
     drawerHeader: {
-        padding: theme.spacing(4, 4, 3, 4),
-        backgroundColor: 'var(--drawerHeader)',
+        padding: theme.spacing(4, 2, 3, 4),
         color: 'white',
+        backgroundColor: 'var(--drawerHeader)',
     },
-    maskTitle: {
-        fontSize: 'large',
-        fontWeight: 'bold',
-        letterSpacing: '1px',
+    maskDescription: {
+        fontSize: 14,
+        lineHeight: '24px',
+        marginTop: 6,
+        display: 'block',
     },
-    drawerList: {},
+    drawerList: {
+        padding: '0 0 0 5px',
+    },
+    drawerItem: {
+        paddingTop: 16,
+        paddingBottom: 16,
+    },
+    drawerItemText: {
+        margin: 0,
+    },
     drawerFeedback: {
         placeSelf: 'center stretch',
-        padding: theme.spacing(3, 0),
+        padding: 0,
     },
     feedback: {
-        marginLeft: '-12px',
+        paddingLeft: 0,
     },
 }))
 
@@ -46,16 +58,8 @@ const drawerTheme = (theme: Theme): Theme =>
             MuiListItem: {
                 root: {
                     '&$selected$selected': {
-                        backgroundColor: 'var(--drawerBodySelected, --drawerBody)',
                         color: 'var(--drawerTextSelected, --drawerText)',
-                        '&::before': {
-                            content: '""',
-                            height: '100%',
-                            width: '5px',
-                            position: 'absolute',
-                            left: '0px',
-                            backgroundColor: 'var(--listSelectedIndicator)',
-                        },
+                        backgroundColor: 'var(--drawerBodySelected, --drawerBody)',
                     },
                 },
             },
@@ -63,6 +67,13 @@ const drawerTheme = (theme: Theme): Theme =>
                 root: {
                     justifyContent: 'center',
                     color: 'unset',
+                },
+            },
+            MuiListItemText: {
+                primary: {
+                    fontSize: 14,
+                    lineHeight: '24px',
+                    fontWeight: 500,
                 },
             },
         },
@@ -87,28 +98,32 @@ function ResponsiveDrawer(props: ResponsiveDrawerProps) {
         <ThemeProvider theme={drawerTheme}>
             <nav className={classes.drawer}>
                 <Paper elevation={0} className={classes.drawerHeader}>
-                    <Typography className={classes.maskTitle}>Maskbook</Typography>
-                    <Typography color={theme.palette.type === 'dark' ? 'textSecondary' : 'inherit'} variant="caption">
+                    <Logo />
+                    <Typography
+                        className={classes.maskDescription}
+                        color={theme.palette.type === 'dark' ? 'textSecondary' : 'inherit'}
+                        variant="caption">
                         Make Privacy Protected Again
                     </Typography>
                 </Paper>
                 <List className={classes.drawerList}>
                     {routers.map((item, index) => (
                         <ListItem
+                            className={classes.drawerItem}
                             selected={match ? item[1].startsWith(match.url) : false}
                             component={Link}
                             to={item[1]}
                             button
                             key={index}>
                             <ListItemIcon children={item[2]}></ListItemIcon>
-                            <ListItemText primary={item[0]} />
+                            <ListItemText className={classes.drawerItemText} primary={item[0]} />
                         </ListItem>
                     ))}
                 </List>
-                <List className={classes.drawerFeedback}>
-                    <ListItem button onClick={openFeedback}>
+                <List className={classNames(classes.drawerList, classes.feedback)}>
+                    <ListItem className={classes.drawerItem} button onClick={openFeedback}>
                         <ListItemIcon children={<SentimentSatisfiedOutlinedIcon fontSize="small" />} />
-                        <ListItemText className={classes.feedback} primary={t('feedback')} />
+                        <ListItemText className={classes.drawerItemText} primary={t('feedback')} />
                     </ListItem>
                 </List>
                 {feedback}

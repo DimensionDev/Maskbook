@@ -3,7 +3,6 @@ import { Typography, makeStyles, createStyles, Box, Button, Avatar, ButtonBase }
 import FileCopyOutlinedIcon from '@material-ui/icons/FileCopyOutlined'
 import type { WalletRecord, ERC20TokenRecord } from '../../../plugins/Wallet/database/types'
 import classNames from 'classnames'
-import { DebounceButton } from './ActionButton'
 import { useCopyToClipboard } from 'react-use'
 import { useI18N } from '../../../utils/i18n-next-ui'
 
@@ -49,10 +48,16 @@ const useStyles = makeStyles((theme) =>
             },
         },
         title: {
+            fontSize: 24,
+            fontWeight: 500,
+            lineHeight: '34px',
             wordBreak: 'break-all',
             overflow: 'hidden',
             whiteSpace: 'nowrap',
             textOverflow: 'ellipsis',
+        },
+        label: {
+            fontWeight: 500,
         },
         address: {
             fontFamily: 'var(--monospace)',
@@ -90,7 +95,7 @@ export function WalletItem(props: WalletItemProps) {
                 {wallet.name}
             </Typography>
             <Box py={2}>
-                <Typography component="p" color="textSecondary" variant="overline">
+                <Typography className={classes.label} component="p" color="textSecondary" variant="overline">
                     {t('wallet_address')}
                 </Typography>
                 <Typography className={classes.address} component="code">
@@ -99,14 +104,14 @@ export function WalletItem(props: WalletItemProps) {
             </Box>
             {/* Prevent the event to make the whole card ripple */}
             <span onMouseDown={(e) => e.stopPropagation()}>
-                <DebounceButton
+                <Button
                     onClick={() => copyToClipboard(wallet.address!)}
                     color="primary"
                     size="small"
                     variant="outlined"
                     startIcon={<FileCopyOutlinedIcon />}>
                     {t('copy')}
-                </DebounceButton>
+                </Button>
             </span>
             <Box py={2} display="flex">
                 {tokens &&
