@@ -14,8 +14,8 @@ interface TabPanelProps extends BoxProps {
     label: string
 }
 
-const TabPanel = (props: TabPanelProps & { value: number; index: number }) => {
-    const { value, index, display, label, ...other } = props
+const TabPanel = (props: Omit<TabPanelProps, 'label'> & { value: number; index: number }) => {
+    const { value, index, display, ...other } = props
 
     return <Box role="tabpanel" display={value !== index ? 'none' : display} {...other} />
 }
@@ -52,8 +52,8 @@ export default function AbstractTab(props: AbstractTabProps) {
                     ))}
                 </Tabs>
             </Paper>
-            {tabs.map((tab, index) => (
-                <TabPanel value={value} index={index} height={height} minHeight={height} key={tab.label} {...tab} />
+            {tabs.map(({ label, ...tab }, index) => (
+                <TabPanel value={value} index={index} height={height} minHeight={height} key={label} {...tab} />
             ))}
         </div>
     )
