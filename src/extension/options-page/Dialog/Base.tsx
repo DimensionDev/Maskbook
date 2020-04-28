@@ -15,6 +15,7 @@ import CloseIcon from '@material-ui/icons/Close'
 import type { TransitionProps } from '@material-ui/core/transitions'
 import { useBlurContext } from '..'
 import { useSnackbar } from 'notistack'
+import { useI18N } from '../../../utils/i18n-next-ui'
 
 const Transition = React.forwardRef<unknown, TransitionProps>(function Transition(props, ref) {
     return <Fade ref={ref} {...props} />
@@ -213,21 +214,22 @@ export function useSnackbarCallback<T = void>(
     onError?: (err: Error) => void,
     key?: string,
 ) {
+    const { t } = useI18N()
     const { enqueueSnackbar } = useSnackbar()
     return useCallback(
         () =>
             executor().then(
-                res => {
-                    enqueueSnackbar('OK', { key, variant: 'success' })
+                (res) => {
+                    enqueueSnackbar(t('done'), { key, variant: 'success' })
                     onSuccess?.(res)
                     return res
                 },
-                err => {
+                (err) => {
                     enqueueSnackbar(`Error: ${err.message || err}`, { key })
                     onError?.(err)
                     throw err
                 },
             ),
-        [...deps, enqueueSnackbar, executor, key, onError, onSuccess],
+        [enqueueSnackbar, executor, key, onError, onSuccess, t],
     )
 }
