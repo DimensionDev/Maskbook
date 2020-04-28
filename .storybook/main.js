@@ -3,9 +3,8 @@ module.exports = {
     addons: [
         '@storybook/addon-knobs/register',
         '@storybook/addon-actions',
-        'storybook-addon-material-ui/register',
         'storybook-addon-i18n/register.js',
-        'storybook-addon-figma/register',
+        'storybook-addon-designs',
         '@storybook/addon-links',
         '@storybook/preset-typescript',
         // ---------^ not working.
