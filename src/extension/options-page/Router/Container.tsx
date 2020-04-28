@@ -28,8 +28,15 @@ const useStyles = makeStyles((theme) =>
             flexDirection: 'column',
             overflow: 'auto',
         },
+        dividerPadded: {
+            paddingLeft: theme.spacing(3),
+            paddingRight: theme.spacing(3),
+        },
         contentPadded: {
-            padding: theme.spacing(0, 3),
+            '& > * ': {
+                paddingLeft: theme.spacing(3),
+                paddingRight: theme.spacing(3),
+            },
         },
         buttons: {
             '& > *': {
@@ -51,7 +58,7 @@ export default function DashboardRouterContainer(props: DashboardRouterContainer
                         {actions?.map((action, index) => React.cloneElement(action, { key: index }))}
                     </div>
                 </section>
-                <div className={classNames({ [classes.contentPadded]: padded !== false })}>
+                <div className={classNames({ [classes.dividerPadded]: padded !== false })}>
                     <Divider />
                 </div>
                 <main className={classNames(classes.content, { [classes.contentPadded]: padded !== false })}>
