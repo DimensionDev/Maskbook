@@ -1,9 +1,10 @@
 import React, { useState } from 'react'
 import { DashboardDialogCore, DashboardDialogWrapper, WrappedDialogProps, useSnackbarCallback } from './Base'
-import { Button, TextField, makeStyles, createStyles } from '@material-ui/core'
+import { TextField, makeStyles, createStyles } from '@material-ui/core'
 import type { Profile } from '../../../database'
 import { Avatar } from '../../../utils/components/Avatar'
 import Services from '../../service'
+import { ThrottledButton } from '../DashboardComponents/ActionButton'
 
 interface ContactDialogProps {
     contact: Profile
@@ -58,9 +59,9 @@ export function DashboardContactDialog(props: WrappedDialogProps<ContactDialogPr
                         disabled
                     />
                 </form>
-                <Button variant="contained" color="primary" onClick={onSubmit}>
+                <ThrottledButton variant="contained" color="primary" onClick={onSubmit}>
                     Submit
-                </Button>
+                </ThrottledButton>
             </DashboardDialogWrapper>
         </DashboardDialogCore>
     )

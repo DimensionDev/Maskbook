@@ -1,7 +1,8 @@
 import React, { useState } from 'react'
 import { DashboardDialogCore, DashboardDialogWrapper, WrappedDialogProps } from './Base'
 import { Smile as SmileIcon } from 'react-feather'
-import { Button, TextField } from '@material-ui/core'
+import { TextField } from '@material-ui/core'
+import { ThrottledButton } from '../DashboardComponents/ActionButton'
 
 export function DashboardFeedbackDialog(props: WrappedDialogProps) {
     const [name, setName] = useState('')
@@ -22,9 +23,9 @@ export function DashboardFeedbackDialog(props: WrappedDialogProps) {
                         onChange={(e) => setMessage(e.target.value)}
                     />
                 </form>
-                <Button variant="contained" color="primary">
+                <ThrottledButton variant="contained" color="primary">
                     Submit
-                </Button>
+                </ThrottledButton>
             </DashboardDialogWrapper>
         </DashboardDialogCore>
     )
