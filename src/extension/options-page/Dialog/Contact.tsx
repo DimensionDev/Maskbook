@@ -44,14 +44,14 @@ export function DashboardContactDeleteConfirmDialog(props: WrappedDialogProps<Co
                 size="small"
                 icon={<UserMinus />}
                 iconColor="#F4637D"
-                primary={'Delete Contact'}
-                secondary={'Do you want to delete this contact? This operation cannot be reverted.'}>
+                primary={t('delete_contact')}
+                secondary={t('delete_contact_confirmation')}>
                 <SpacedButtonGroup>
                     <ThrottledButton variant="contained" color="danger" onClick={onDelete}>
-                        OK
+                        {t('ok')}
                     </ThrottledButton>
                     <ThrottledButton variant="outlined" color="primary" onClick={props.onClose}>
-                        Cancel
+                        {t('cancel')}
                     </ThrottledButton>
                 </SpacedButtonGroup>
             </DashboardDialogWrapper>
@@ -61,6 +61,7 @@ export function DashboardContactDeleteConfirmDialog(props: WrappedDialogProps<Co
 
 export function DashboardContactDialog(props: WrappedDialogProps<ContactProps>) {
     const { contact } = props.ComponentProps!
+    const { t } = useI18N()
 
     const [nickname, setNickname] = useState(contact.nickname)
     const [avatarURL, setAvatarURL] = useState(contact.avatar)
@@ -84,21 +85,26 @@ export function DashboardContactDialog(props: WrappedDialogProps<ContactProps>) 
                 icon={<Avatar className={classes.avatar} person={contact} />}
                 primary={contact.nickname || '<Unnamed>'}>
                 <form>
-                    <TextField label="Internal ID" value={contact.identifier.toText()} variant="outlined" disabled />
                     <TextField
-                        label="Nickname"
+                        label={t('internal_id')}
+                        value={contact.identifier.toText()}
+                        variant="outlined"
+                        disabled
+                    />
+                    <TextField
+                        label={t('nickname')}
                         value={nickname}
                         onChange={(e) => setNickname(e.target.value)}
                         variant="outlined"
                     />
                     <TextField
-                        label="New Avatar URL"
+                        label={t('avatar_url')}
                         value={avatarURL}
                         onChange={(e) => setAvatarURL(e.target.value)}
                         variant="outlined"
                     />
                     <TextField
-                        label="Fingerprint"
+                        label={t('fingerprint')}
                         defaultValue={contact.linkedPersona?.fingerprint}
                         variant="outlined"
                         disabled
@@ -106,10 +112,10 @@ export function DashboardContactDialog(props: WrappedDialogProps<ContactProps>) 
                 </form>
                 <SpacedButtonGroup>
                     <ThrottledButton variant="contained" color="primary" onClick={onSubmit}>
-                        Save
+                        {t('save')}
                     </ThrottledButton>
                     <ThrottledButton variant="outlined" color="danger" onClick={openDeleteContact}>
-                        Delete
+                        {t('delete')}
                     </ThrottledButton>
                 </SpacedButtonGroup>
                 {deleteContact}

@@ -55,7 +55,7 @@ export default function FooterLine() {
         <>
             <Breadcrumbs className={classes.footerButtons} separator=" " aria-label="breadcrumb">
                 <FooterLink href="https://maskbook.com/">Maskbook.com</FooterLink>
-                <FooterLink onClick={openAboutDialog}>About</FooterLink>
+                <FooterLink onClick={openAboutDialog}>{t('about')}</FooterLink>
                 <FooterLink href={versionLink} title={process.env.VERSION}>
                     {t('version')} {version}
                 </FooterLink>
