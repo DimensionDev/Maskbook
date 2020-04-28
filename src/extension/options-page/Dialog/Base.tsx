@@ -11,10 +11,10 @@ import {
     DialogContent,
     Typography,
 } from '@material-ui/core'
+import { Theme, ThemeProvider } from '@material-ui/core/styles'
 import CloseIcon from '@material-ui/icons/Close'
 import type { TransitionProps } from '@material-ui/core/transitions'
 import { useBlurContext } from '..'
-import classNames from 'classnames'
 
 const Transition = React.forwardRef<unknown, TransitionProps>(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />
@@ -46,14 +46,10 @@ interface DashboardDialogWrapperProps {
 }
 
 const useDashboardDialogWrapperStyles = makeStyles((theme) =>
-    createStyles({
+    createStyles<string, DashboardDialogWrapperProps>({
         wrapper: {
-            width: '440px',
-            padding: theme.spacing(4),
-        },
-        wrapperSizedSmall: {
-            width: '280px',
-            padding: theme.spacing(3),
+            width: (props) => (props.size === 'small' ? '350px' : '440px'),
+            padding: (props) => theme.spacing(props.size === 'small' ? 3 : 4),
         },
         header: {
             marginTop: theme.spacing(1),
@@ -62,10 +58,17 @@ const useDashboardDialogWrapperStyles = makeStyles((theme) =>
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
-            width: '280px',
+            maxWidth: '350px',
+        },
+        content: {
+            marginTop: (props) => theme.spacing(props.size === 'small' ? 4 : 2),
+            textAlign: 'center',
+            '& > *:not(:last-child)': {
+                marginBottom: theme.spacing(2),
+            },
         },
         primary: {
-            margin: theme.spacing(1, 0),
+            margin: theme.spacing(2, 0, 1),
         },
         secondary: {
             lineHeight: 1.75,
@@ -74,22 +77,57 @@ const useDashboardDialogWrapperStyles = makeStyles((theme) =>
     }),
 )
 
+const dialogTheme = (theme: Theme): Theme => ({
+    ...theme,
+    overrides: {
+        ...theme.overrides,
+        MuiOutlinedInput: {
+            notchedOutline: {
+                borderColor: '#EAEAEA',
+            },
+        },
+        MuiButton: {
+            ...theme.overrides?.MuiButton,
+            root: {
+                ...theme.overrides?.MuiButton?.root,
+                '&[hidden]': {
+                    visibility: 'hidden',
+                },
+            },
+        },
+    },
+    props: {
+        ...theme.props,
+        MuiButton: {
+            ...theme.props?.MuiButton,
+            size: 'medium',
+        },
+        MuiTextField: {
+            fullWidth: true,
+            variant: 'outlined',
+            margin: 'normal',
+        },
+    },
+})
+
 export function DashboardDialogWrapper(props: DashboardDialogWrapperProps) {
-    const { icon, iconColor, primary, secondary, children, size } = props
-    const classes = useDashboardDialogWrapperStyles()
+    const { icon, iconColor, primary, secondary, children } = props
+    const classes = useDashboardDialogWrapperStyles(props)
     return (
-        <DialogContent className={classNames(classes.wrapper, { [classes.wrapperSizedSmall]: size === 'small' })}>
-            <section className={classes.header}>
-                {React.cloneElement(icon, { width: 64, height: 64, stroke: iconColor })}
-                <Typography className={classes.primary} variant="h5">
-                    {primary}
-                </Typography>
-                <Typography className={classes.secondary} color="textSecondary" variant="body2">
-                    {secondary}
-                </Typography>
-            </section>
-            {children}
-        </DialogContent>
+        <ThemeProvider theme={dialogTheme}>
+            <DialogContent className={classes.wrapper}>
+                <section className={classes.header}>
+                    {React.cloneElement(icon, { width: 64, height: 64, stroke: iconColor })}
+                    <Typography className={classes.primary} variant="h5">
+                        {primary}
+                    </Typography>
+                    <Typography className={classes.secondary} color="textSecondary" variant="body2">
+                        {secondary}
+                    </Typography>
+                </section>
+                <section className={classes.content}>{children}</section>
+            </DialogContent>
+        </ThemeProvider>
     )
 }
 
