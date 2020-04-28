@@ -93,6 +93,7 @@ export function useModal<T extends object, P extends object>(
     const [status, dispatch]: [any, any] = useReducer<typeof reducer>(reducer, { state: DialogState.Destroyed })
     const showModal = useCallback(() => dispatch({ type: 'open' }), [])
     const showStatefulModal = useCallback((props?: P) => dispatch({ type: 'open', props }), [])
+    // TODO: prevent onClose on some cases (e.g, click away while loading)
     const onClose = useCallback(() => dispatch({ type: 'close' }), [])
     const onExited = useCallback(() => dispatch({ type: 'destroy' }), [])
     const { state, props } = status
@@ -212,7 +213,7 @@ export function DashboardDialogWrapper(props: DashboardDialogWrapperProps) {
 
 export function useSnackbarCallback<T = void>(
     executor: () => Promise<T>,
-    deps: any[],
+    deps: React.DependencyList,
     onSuccess?: (ret: T) => void,
     onError?: (err: Error) => void,
     key?: string,
