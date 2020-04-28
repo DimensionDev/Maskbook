@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import * as bip39 from 'bip39'
-import { DashboardDialogWrapper } from './Base'
+import { DashboardDialogCore, DashboardDialogWrapper, WrappedDialogProps } from './Base'
 import { UserPlus, UserCheck } from 'react-feather'
 import { TextField, makeStyles, createStyles, Typography, Button, InputBase } from '@material-ui/core'
 import { useI18N } from '../../../utils/i18n-next-ui'
@@ -13,23 +13,25 @@ import QRScanner from '../../../components/QRScanner'
 import AbstractTab, { AbstractTabProps } from '../DashboardComponents/AbstractTab'
 import { WKWebkitQRScanner } from '../../../components/shared/qrcode'
 
-export function DashboardPersonaCreateDialog() {
+export function DashboardPersonaCreateDialog(props: WrappedDialogProps) {
     const [name, setName] = useState('')
     const [password, setPassword] = useState('')
 
     return (
-        <DashboardDialogWrapper icon={<UserPlus />} iconColor="#5FDD97" primary="Create a Persona">
-            <form>
-                <TextField placeholder="Name*" value={name} onChange={(e) => setName(e.target.value)} />
-                <TextField placeholder="Password*" value={password} onChange={(e) => setPassword(e.target.value)} />
-            </form>
-            <Typography variant="body2" color="textSecondary">
-                Set a password to improve the security level
-            </Typography>
-            <Button type="submit" variant="contained" color="primary">
-                Create
-            </Button>
-        </DashboardDialogWrapper>
+        <DashboardDialogCore {...props}>
+            <DashboardDialogWrapper icon={<UserPlus />} iconColor="#5FDD97" primary="Create a Persona">
+                <form>
+                    <TextField placeholder="Name*" value={name} onChange={(e) => setName(e.target.value)} />
+                    <TextField placeholder="Password*" value={password} onChange={(e) => setPassword(e.target.value)} />
+                </form>
+                <Typography variant="body2" color="textSecondary">
+                    Set a password to improve the security level
+                </Typography>
+                <Button type="submit" variant="contained" color="primary">
+                    Create
+                </Button>
+            </DashboardDialogWrapper>
+        </DashboardDialogCore>
     )
 }
 
@@ -44,7 +46,7 @@ const useStyles = makeStyles((theme) =>
     }),
 )
 
-export function DashboardPersonaImportDialog() {
+export function DashboardPersonaImportDialog(props: WrappedDialogProps) {
     const { t } = useI18N()
 
     const classes = useStyles()
@@ -143,15 +145,17 @@ export function DashboardPersonaImportDialog() {
         height: 240,
     }
     return (
-        <DashboardDialogWrapper
-            icon={<UserCheck />}
-            iconColor="#5FDD97"
-            primary="Import Your Persona"
-            secondary="You can import a persona backup in the following ways.">
-            <AbstractTab {...tabProps}></AbstractTab>
-            <Button hidden={tabState === 2} variant="contained" color="primary" onClick={importPersona}>
-                {t('import')}
-            </Button>
-        </DashboardDialogWrapper>
+        <DashboardDialogCore {...props}>
+            <DashboardDialogWrapper
+                icon={<UserCheck />}
+                iconColor="#5FDD97"
+                primary="Import Your Persona"
+                secondary="You can import a persona backup in the following ways.">
+                <AbstractTab {...tabProps}></AbstractTab>
+                <Button hidden={tabState === 2} variant="contained" color="primary" onClick={importPersona}>
+                    {t('import')}
+                </Button>
+            </DashboardDialogWrapper>
+        </DashboardDialogCore>
     )
 }
