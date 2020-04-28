@@ -1,28 +1,64 @@
 import React, { useState } from 'react'
-import { DashboardDialogCore, DashboardDialogWrapper, WrappedDialogProps } from './Base'
-import { Smile as SmileIcon } from 'react-feather'
-import { Button, TextField } from '@material-ui/core'
+import { DashboardDialogCore, DashboardDialogWrapper, WrappedDialogProps, useSnackbarCallback } from './Base'
+import { Button, TextField, makeStyles, createStyles } from '@material-ui/core'
+import type { Profile } from '../../../database'
+import { Avatar } from '../../../utils/components/Avatar'
+import Services from '../../service'
 
-export function DashboardContactDialog(props: WrappedDialogProps) {
-    const [name, setName] = useState('')
-    const [email, setEmail] = useState('')
-    const [message, setMessage] = useState('')
+interface ContactDialogProps {
+    contact: Profile
+}
+
+const useStyles = makeStyles((theme) =>
+    createStyles({
+        avatar: {
+            width: '64px',
+            height: '64px',
+        },
+    }),
+)
+
+export function DashboardContactDialog(props: WrappedDialogProps<ContactDialogProps>) {
+    const { contact } = props.ComponentProps!
+
+    const [nickname, setNickname] = useState(contact.nickname)
+    const [avatarURL, setAvatarURL] = useState(contact.avatar)
+
+    const classes = useStyles()
+
+    const onSubmit = useSnackbarCallback(
+        () => Services.Identity.updateProfileInfo(contact.identifier, { nickname, avatarURL, forceUpdateAvatar: true }),
+        [nickname, avatarURL],
+        props.onClose,
+    )
 
     return (
         <DashboardDialogCore {...props}>
-            <DashboardDialogWrapper icon={<SmileIcon />} iconColor="#F8B03E" primary="Feedback">
+            <DashboardDialogWrapper
+                icon={<Avatar className={classes.avatar} person={contact} />}
+                primary={contact.nickname || '<Unnamed>'}>
                 <form>
-                    <TextField placeholder="Name" value={name} onChange={(e) => setName(e.target.value)} />
-                    <TextField placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
+                    <TextField label="Internal ID" value={contact.identifier.toText()} variant="outlined" disabled />
                     <TextField
-                        multiline
-                        rows={4}
-                        placeholder="Your message..."
-                        value={message}
-                        onChange={(e) => setMessage(e.target.value)}
+                        label="Nickname"
+                        value={nickname}
+                        onChange={(e) => setNickname(e.target.value)}
+                        variant="outlined"
+                    />
+                    <TextField
+                        label="New Avatar URL"
+                        value={avatarURL}
+                        onChange={(e) => setAvatarURL(e.target.value)}
+                        variant="outlined"
+                    />
+                    <TextField
+                        label="Fingerprint"
+                        defaultValue={contact.linkedPersona?.fingerprint}
+                        variant="outlined"
+                        disabled
                     />
                 </form>
-                <Button variant="contained" color="primary">
+                <Button variant="contained" color="primary" onClick={onSubmit}>
                     Submit
                 </Button>
             </DashboardDialogWrapper>
