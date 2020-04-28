@@ -8,6 +8,7 @@ import Services from '../../service'
 import { extraPermissions } from '../../../utils/permissions'
 import { useSnackbar } from 'notistack'
 import { ThrottledButton } from '../DashboardComponents/ActionButton'
+import { useDrop } from 'react-use'
 
 export function DashboardDatabaseBackupDialog(props: WrappedDialogProps) {
     const { t } = useI18N()
@@ -39,29 +40,38 @@ export function DashboardDatabaseRestoreDialog(props: WrappedDialogProps) {
     const ref = React.useRef<HTMLInputElement>(null!)
     const [json, setJson] = React.useState<BackupJSONFileLatest | null>(null)
     const [requiredPermissions, setRequiredPermissions] = React.useState<string[] | null>(null)
-    const fileReceiver = async (e: React.ChangeEvent<HTMLInputElement>) => {
-        const fr = new FileReader()
-        fr.readAsText(e.currentTarget.files![0])
-        fr.addEventListener('loadend', async () => {
-            ref.current!.value = ''
-            const str = fr.result as string
-            try {
-                const json = UpgradeBackupJSONFile(decompressBackupFile(str))
-                if (!json) throw new Error('UpgradeBackupJSONFile failed')
-                const permissions = await extraPermissions(json.grantedHostPermissions)
-                if (!permissions) {
-                    await Services.Welcome.restoreBackup(json)
-                    enqueueSnackbar(t('done'), { variant: 'success' })
-                    props.onClose()
-                } else {
-                    setJson(json)
-                    setRequiredPermissions(permissions)
+
+    const fileReceiver = (e: React.ChangeEvent<HTMLInputElement>) =>
+        new Promise((resolve) => {
+            const fr = new FileReader()
+            fr.readAsText(e.currentTarget.files![0])
+            fr.addEventListener('loadend', async () => {
+                ref.current!.value = ''
+                const str = fr.result as string
+                try {
+                    const json = UpgradeBackupJSONFile(decompressBackupFile(str))
+                    if (!json) throw new Error('UpgradeBackupJSONFile failed')
+                    const permissions = await extraPermissions(json.grantedHostPermissions)
+                    if (!permissions) {
+                        await Services.Welcome.restoreBackup(json)
+                        enqueueSnackbar(t('done'), { variant: 'success' })
+                        props.onClose()
+                    } else {
+                        setJson(json)
+                        setRequiredPermissions(permissions)
+                    }
+                } catch (e) {
+                    enqueueSnackbar(`Error: ${e.message}`, { variant: 'error' })
+                } finally {
+                    resolve()
                 }
-            } catch (e) {
-                enqueueSnackbar(`Error: ${e.message}`, { variant: 'success' })
-            }
+            })
+            fr.addEventListener('error', resolve)
         })
-    }
+
+    useDrop({
+        onFiles: (files) => fileReceiver({ currentTarget: { files } } as any),
+    })
 
     const confirmPermissions = useSnackbarCallback(
         () =>
