@@ -6,6 +6,7 @@ import ClearIcon from '@material-ui/icons/Clear'
 import SearchIcon from '@material-ui/icons/Search'
 import { useFriendsList } from '../../../components/DataSource/useActivatedUI'
 import { ContactLine } from '../DashboardComponents/ContactLine'
+import { useI18N } from '../../../utils/i18n-next-ui'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -16,6 +17,7 @@ const useStyles = makeStyles((theme) =>
 )
 
 export default function DashboardContactsRouter() {
+    const { t } = useI18N()
     // ? re-rendering this component seems too expensive, how to avoid?
     // TODO: debounce searching
     const [search, setSearch] = useState('')
@@ -45,9 +47,9 @@ export default function DashboardContactsRouter() {
     )
 
     return (
-        <DashboardRouterContainer title="Contacts" actions={actions}>
+        <DashboardRouterContainer title={t('contacts')} actions={actions}>
             <Typography className={classes.title} variant="body2" color="textSecondary">
-                All people recorded in the Maskbook database.
+                {t('people_in_database')}
             </Typography>
             <section>
                 {contacts.map((contact) => (

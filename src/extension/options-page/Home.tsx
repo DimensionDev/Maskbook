@@ -116,7 +116,7 @@ export default function DashboardHomePage() {
         <Container maxWidth="md">
             <section className={classes.sections}>
                 <Typography className={classes.title} variant="h5" align="left">
-                    {t('dashboard_my_personas')}
+                    {t('my_personas')}
                 </Typography>
                 {!personas.length && (
                     <Card raised elevation={1}>

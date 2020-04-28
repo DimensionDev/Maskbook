@@ -148,9 +148,9 @@ function Dashboard() {
     }, [theme])
 
     const routers = ([
-        ['Personas', '/personas/', <PeopleOutlinedIcon />],
-        webpackEnv.target === 'WKWebview' ? undefined! : (['Wallets', '/wallets/', <CreditCardIcon />] as const),
-        ['Contacts', '/contacts/', <BookmarkBorderOutlinedIcon />],
+        [t('personas'), '/personas/', <PeopleOutlinedIcon />],
+        webpackEnv.target === 'WKWebview' ? undefined! : ([t('wallets'), '/wallets/', <CreditCardIcon />] as const),
+        [t('contacts'), '/contacts/', <BookmarkBorderOutlinedIcon />],
         [t('settings'), '/settings/', <SettingsOutlinedIcon />],
     ] as const).filter((x) => x)
 
