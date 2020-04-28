@@ -10,6 +10,7 @@ import { useSnackbar } from 'notistack'
 import { ThrottledButton } from '../DashboardComponents/ActionButton'
 
 export function DashboardDatabaseBackupDialog(props: WrappedDialogProps) {
+    const { t } = useI18N()
     const onClick = useSnackbarCallback(
         () => Services.Welcome.createBackupFile({ download: true, onlyBackupWhoAmI: false }),
         [],
@@ -21,10 +22,10 @@ export function DashboardDatabaseBackupDialog(props: WrappedDialogProps) {
                 size="small"
                 icon={<DatabaseIcon />}
                 iconColor="#699CF7"
-                primary="Backup Database"
-                secondary="Create a database backup file. Do it frequently.">
+                primary={t('backup_database')}
+                secondary={t('dashboard_backup_database_hint')}>
                 <ThrottledButton variant="contained" color="primary" onClick={onClick}>
-                    Ok, Back it up
+                    {t('dashboard_backup_database_confirmation')}
                 </ThrottledButton>
             </DashboardDialogWrapper>
         </DashboardDialogCore>
@@ -81,20 +82,18 @@ export function DashboardDatabaseRestoreDialog(props: WrappedDialogProps) {
                 size="small"
                 icon={<DatabaseIcon />}
                 iconColor="#699CF7"
-                primary="Restore Database"
+                primary={t('restore_database')}
                 secondary={
-                    requiredPermissions
-                        ? 'We need permissions to do that.'
-                        : 'Choose a backup file to restore your database.'
+                    requiredPermissions ? t('dashboard_permission_required') : t('dashboard_restore_database_hint')
                 }>
                 <input type="file" accept="application/json" ref={ref} onChange={fileReceiver} hidden />
                 {requiredPermissions ? (
                     <ThrottledButton variant="contained" color="secondary" onClick={confirmPermissions}>
-                        Confirm
+                        {t('confirm')}
                     </ThrottledButton>
                 ) : (
                     <ThrottledButton variant="contained" color="primary" onClick={() => ref.current?.click()}>
-                        Browse...
+                        {t('browse')}
                     </ThrottledButton>
                 )}
             </DashboardDialogWrapper>

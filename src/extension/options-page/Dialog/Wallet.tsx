@@ -13,6 +13,7 @@ import { ERC20WellKnownTokenSelector } from '../../../plugins/Wallet/UI/Dashboar
 import type { ERC20TokenPredefinedData } from '../../../plugins/Wallet/erc20'
 
 export function DashboardWalletImportDialog(props: WrappedDialogProps) {
+    const { t } = useI18N()
     const state = useState(0)
 
     const [mnemonic, setMnemonic] = useState('')
@@ -24,24 +25,24 @@ export function DashboardWalletImportDialog(props: WrappedDialogProps) {
     const tabProps: AbstractTabProps = {
         tabs: [
             {
-                label: 'Mnemonic  Word',
+                label: t('mnemonic_word'),
                 children: (
                     <form>
                         <TextField
                             required
-                            label="Mnemonic Word"
+                            label={t('mnemonic_word')}
                             value={mnemonic}
                             onChange={(e) => setMnemonic(e.target.value)}
                         />
                         <TextField
                             required
-                            label="Password"
+                            label={t('password')}
                             value={passphrase}
                             onChange={(e) => setPassphrase(e.target.value)}
                         />
                         <TextField
                             required
-                            label="Wallet Name"
+                            label={t('wallet_name')}
                             value={name}
                             onChange={(e) => setName(e.target.value)}
                         />
@@ -50,12 +51,12 @@ export function DashboardWalletImportDialog(props: WrappedDialogProps) {
                 p: 0,
             },
             {
-                label: 'Private key',
+                label: t('private_key'),
                 children: (
                     <form>
                         <TextField
                             required
-                            label="Wallet Name"
+                            label={t('wallet_name')}
                             value={name}
                             onChange={(e) => setName(e.target.value)}
                         />
@@ -63,7 +64,7 @@ export function DashboardWalletImportDialog(props: WrappedDialogProps) {
                             multiline
                             rows={4}
                             required
-                            label="Private Key*"
+                            label={t('private_key')}
                             value={privKey}
                             onChange={(e) => setPrivKey(e.target.value)}
                         />
@@ -97,11 +98,11 @@ export function DashboardWalletImportDialog(props: WrappedDialogProps) {
             <DashboardDialogWrapper
                 icon={<CreditCardIcon />}
                 iconColor="#4EE0BC"
-                primary="Import Wallet"
-                secondary="Import a wallet with mnemonic words and password.">
+                primary={t('import_wallet')}
+                secondary={t('import_wallet_hint')}>
                 <AbstractTab {...tabProps}></AbstractTab>
                 <ThrottledButton variant="contained" color="primary" onClick={onSubmit}>
-                    Import
+                    {t('import')}
                 </ThrottledButton>
             </DashboardDialogWrapper>
         </DashboardDialogCore>
@@ -109,6 +110,7 @@ export function DashboardWalletImportDialog(props: WrappedDialogProps) {
 }
 
 export function DashboardWalletCreateDialog(props: WrappedDialogProps) {
+    const { t } = useI18N()
     const [name, setName] = useState('')
     const [passphrase, setPassphrase] = useState('')
 
@@ -120,21 +122,26 @@ export function DashboardWalletCreateDialog(props: WrappedDialogProps) {
 
     return (
         <DashboardDialogCore {...props}>
-            <DashboardDialogWrapper icon={<CreditCardIcon />} iconColor="#4EE0BC" primary="Create a Wallet">
+            <DashboardDialogWrapper icon={<CreditCardIcon />} iconColor="#4EE0BC" primary={t('create_a_wallet')}>
                 <form>
-                    <TextField required label="Wallet Name" value={name} onChange={(e) => setName(e.target.value)} />
                     <TextField
                         required
-                        label="Password"
+                        label={t('wallet_name')}
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                    />
+                    <TextField
+                        required
+                        label={t('password')}
                         value={passphrase}
                         onChange={(e) => setPassphrase(e.target.value)}
                     />
                 </form>
                 <Typography variant="body2" color="textSecondary">
-                    Set a password to improve the security level
+                    {t('dashboard_password_helper_text')}
                 </Typography>
                 <ThrottledButton variant="contained" color="primary" onClick={onSubmit}>
-                    Create
+                    {t('create')}
                 </ThrottledButton>
             </DashboardDialogWrapper>
         </DashboardDialogCore>
@@ -207,7 +214,7 @@ export function DashboardWalletAddTokenDialog(props: WrappedDialogProps<WalletPr
 
     return (
         <DashboardDialogCore {...props}>
-            <DashboardDialogWrapper icon={<HexagonIcon />} iconColor="#699CF7" primary="Add token">
+            <DashboardDialogWrapper icon={<HexagonIcon />} iconColor="#699CF7" primary={t('add_token')}>
                 <AbstractTab {...tabProps}></AbstractTab>
                 <ThrottledButton disabled={!token} variant="contained" color="primary" onClick={onSubmit}>
                     {t('import')}
@@ -272,6 +279,7 @@ const useBackupDialogStyles = makeStyles((theme) =>
 )
 
 export function DashboardWalletBackupDialog(props: WrappedDialogProps<WalletProps>) {
+    const { t } = useI18N()
     const { wallet } = props.ComponentProps!
     const classes = useBackupDialogStyles()
     return (
@@ -279,8 +287,8 @@ export function DashboardWalletBackupDialog(props: WrappedDialogProps<WalletProp
             <DashboardDialogWrapper
                 icon={<CreditCardIcon />}
                 iconColor="#4EE0BC"
-                primary="Backup Wallet"
-                secondary="Keep the 12 words below carefully in a safe place. You will need them to restore the private key of this wallet.">
+                primary={t('backup_wallet')}
+                secondary={t('backup_wallet_hint')}>
                 <section className={classes.section}>
                     <Paper elevation={0} className={classes.blockquote} component="blockquote">
                         {wallet.mnemonic.join(' ')}
@@ -288,7 +296,7 @@ export function DashboardWalletBackupDialog(props: WrappedDialogProps<WalletProp
                 </section>
                 <section className={classes.section}>
                     <Typography color="textSecondary" variant="body2" component="p">
-                        Private key
+                        {t('private_key')}
                     </Typography>
                     <Paper
                         elevation={0}
@@ -313,20 +321,20 @@ export function DashboardWalletRenameDialog(props: WrappedDialogProps<WalletProp
     )
     return (
         <DashboardDialogCore {...props}>
-            <DashboardDialogWrapper size="small" primary="Give wallet a new name">
+            <DashboardDialogWrapper size="small" primary={t('wallet_new_name')}>
                 <TextField
                     required
-                    label="Wallet name"
+                    label={t('wallet_name')}
                     variant="outlined"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                 />
                 <SpacedButtonGroup>
                     <ThrottledButton variant="contained" color="primary" onClick={onConfirm}>
-                        OK
+                        {t('ok')}
                     </ThrottledButton>
                     <ThrottledButton variant="outlined" color="primary" onClick={props.onClose}>
-                        Cancel
+                        {t('cancel')}
                     </ThrottledButton>
                 </SpacedButtonGroup>
             </DashboardDialogWrapper>
@@ -348,14 +356,14 @@ export function DashboardWalletDeleteConfirmDialog(props: WrappedDialogProps<Wal
                 size="small"
                 icon={<CreditCardIcon />}
                 iconColor="#F4637D"
-                primary={'Delete Wallet'}
-                secondary={'Are you sure? If you do not have backup, you will lose ALL YOUR MONEY of it.'}>
+                primary={t('delete_wallet')}
+                secondary={t('delete_wallet_hint')}>
                 <SpacedButtonGroup>
                     <ThrottledButton variant="contained" color="danger" onClick={onConfirm}>
-                        OK
+                        {t('confirm')}
                     </ThrottledButton>
                     <ThrottledButton variant="outlined" color="primary" onClick={props.onClose}>
-                        Cancel
+                        {t('cancel')}
                     </ThrottledButton>
                 </SpacedButtonGroup>
             </DashboardDialogWrapper>

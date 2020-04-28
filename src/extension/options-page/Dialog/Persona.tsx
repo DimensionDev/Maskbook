@@ -27,6 +27,7 @@ import { ThrottledButton } from '../DashboardComponents/ActionButton'
 import SpacedButtonGroup from '../DashboardComponents/SpacedButtonGroup'
 
 export function DashboardPersonaCreateDialog(props: WrappedDialogProps) {
+    const { t } = useI18N()
     const [name, setName] = useState('')
     const [password, setPassword] = useState('')
 
@@ -38,21 +39,21 @@ export function DashboardPersonaCreateDialog(props: WrappedDialogProps) {
 
     return (
         <DashboardDialogCore {...props}>
-            <DashboardDialogWrapper icon={<UserPlus />} iconColor="#5FDD97" primary="Create a Persona">
+            <DashboardDialogWrapper icon={<UserPlus />} iconColor="#5FDD97" primary={t('create_a_persona')}>
                 <form>
-                    <TextField required label="Name" value={name} onChange={(e) => setName(e.target.value)} />
+                    <TextField required label={t('name')} value={name} onChange={(e) => setName(e.target.value)} />
                     <TextField
                         required
-                        label="Password"
+                        label={t('password')}
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                     />
                 </form>
                 <Typography variant="body2" color="textSecondary">
-                    Set a password to improve the security level
+                    {t('dashboard_password_helper_text')}
                 </Typography>
                 <ThrottledButton type="submit" variant="contained" color="primary" onClick={createPersona}>
-                    Create
+                    {t('create')}
                 </ThrottledButton>
             </DashboardDialogWrapper>
         </DashboardDialogCore>
@@ -124,22 +125,26 @@ export function DashboardPersonaImportDialog(props: WrappedDialogProps) {
     const tabProps: AbstractTabProps = {
         tabs: [
             {
-                label: 'Mnemonic Word',
+                label: t('mnemonic_word'),
                 children: (
                     <>
                         <TextField
                             onChange={(e) => setNickname(e.target.value)}
                             value={nickname}
                             required
-                            label="Name"
+                            label={t('name')}
                         />
                         <TextField
                             value={mnemonicWordValue}
                             onChange={(e) => setMnemonicWordValue(e.target.value)}
                             required
-                            label="Mnemonic Words"
+                            label={t('mnemonic_words')}
                         />
-                        <TextField onChange={(e) => setPassword(e.target.value)} value={password} label="Password" />
+                        <TextField
+                            onChange={(e) => setPassword(e.target.value)}
+                            value={password}
+                            label={t('password')}
+                        />
                     </>
                 ),
                 p: 0,
@@ -159,7 +164,7 @@ export function DashboardPersonaImportDialog(props: WrappedDialogProps) {
                 p: 0,
             },
             {
-                label: 'QR Code',
+                label: t('qr_code'),
                 children: <QR />,
                 p: 0,
             },
@@ -172,8 +177,8 @@ export function DashboardPersonaImportDialog(props: WrappedDialogProps) {
             <DashboardDialogWrapper
                 icon={<UserCheck />}
                 iconColor="#5FDD97"
-                primary="Import Your Persona"
-                secondary="You can import a persona backup in the following ways.">
+                primary={t('import_your_persona')}
+                secondary={t('dashboard_persona_import_dialog_hint')}>
                 <AbstractTab {...tabProps}></AbstractTab>
                 <ThrottledButton hidden={tabState === 2} variant="contained" color="primary" onClick={importPersona}>
                     {t('import')}
@@ -229,7 +234,7 @@ export function DashboardPersonaBackupDialog(props: WrappedDialogProps<PersonaPr
     const tabProps: AbstractTabProps = {
         tabs: [
             {
-                label: 'Mnemonic Word',
+                label: t('mnemonic_word'),
                 children: <ShowcaseBox>{mnemonicWordValue}</ShowcaseBox>,
             },
             {
@@ -237,7 +242,7 @@ export function DashboardPersonaBackupDialog(props: WrappedDialogProps<PersonaPr
                 children: <ShowcaseBox>{base64Value}</ShowcaseBox>,
             },
             {
-                label: 'QR Code',
+                label: t('qr_code'),
                 children: compressedQRString ? (
                     <QrCode
                         text={compressedQRString}
@@ -258,21 +263,9 @@ export function DashboardPersonaBackupDialog(props: WrappedDialogProps<PersonaPr
             <DashboardDialogWrapper
                 icon={<User />}
                 iconColor="#5FDD97"
-                primary="Backup Persona"
+                primary={t('backup_persona')}
                 secondary={t('dashboard_backup_persona_hint')}>
                 <AbstractTab height={240} margin {...tabProps}></AbstractTab>
-                {// TODO!: ?
-                false && (
-                    <Typography variant="body2" color="textSecondary">
-                        {t(
-                            state[0] === 0
-                                ? 'dashboard_backup_persona_mnemonic_hint'
-                                : state[0] === 1
-                                ? 'dashboard_backup_persona_text_hint'
-                                : 'dashboard_backup_persona_qr_hint',
-                        )}
-                    </Typography>
-                )}
             </DashboardDialogWrapper>
         </DashboardDialogCore>
     )
@@ -296,10 +289,10 @@ export function DashboardPersonaDeleteConfirmDialog(props: WrappedDialogProps<Pe
                 secondary={t('dashboard_delete_persona_confirm_hint', { name: persona.nickname })}>
                 <SpacedButtonGroup>
                     <ThrottledButton variant="contained" color="danger" onClick={deletePersona}>
-                        OK
+                        {t('confirm')}
                     </ThrottledButton>
                     <ThrottledButton variant="outlined" color="primary" onClick={props.onClose}>
-                        Cancel
+                        {t('cancel')}
                     </ThrottledButton>
                 </SpacedButtonGroup>
             </DashboardDialogWrapper>
@@ -336,10 +329,10 @@ export function DashboardPersonaUnlinkConfirmDialog(props: WrappedDialogProps) {
                 })}>
                 <SpacedButtonGroup>
                     <ThrottledButton variant="contained" color="danger" onClick={onClick}>
-                        {t('ok')}
+                        {t('confirm')}
                     </ThrottledButton>
                     <ThrottledButton variant="outlined" color="primary" onClick={props.onClose}>
-                        Cancel
+                        {t('cancel')}
                     </ThrottledButton>
                 </SpacedButtonGroup>
             </DashboardDialogWrapper>
