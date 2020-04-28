@@ -1,6 +1,5 @@
 import React, { useEffect, useRef } from 'react'
 import { useCapturedInput } from '../../utils/hooks/useCapturedEvents'
-import type { PropsOf } from '@emotion/styled-base/types/helper'
 import { useI18N } from '../../utils/i18n-next-ui'
 import { makeStyles } from '@material-ui/styles'
 import { InputBase } from '@material-ui/core'

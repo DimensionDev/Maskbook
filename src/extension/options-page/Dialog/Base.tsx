@@ -212,7 +212,7 @@ export function DashboardDialogWrapper(props: DashboardDialogWrapperProps) {
 
 export function useSnackbarCallback<T = void>(
     executor: () => Promise<T>,
-    deps: any[],
+    deps: React.DependencyList,
     onSuccess?: (ret: T) => void,
     onError?: (err: Error) => void,
     key?: string,

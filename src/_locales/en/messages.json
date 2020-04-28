@@ -259,7 +259,7 @@
     "username": "Username",
     "version": "Version",
     "version_link": "https://github.com/DimensionDev/Maskbook/releases#{{tag}}",
-    "wallet_address": "WALLET ADDRESS",
+    "wallet_address": "Wallet Address",
     "wallet_name": "Wallet Name",
     "wallet_new_name": "Give wallet a new name",
     "wallets": "Wallets",
