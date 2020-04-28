@@ -29,11 +29,11 @@ import {
     DefaultTypedMessageComplexRenderer,
     DefaultTypedMessageUnknownRenderer,
 } from '../components/InjectedComponents/TypedMessageRenderer'
-import { WithFigma } from 'storybook-addon-figma'
 import { useTwitterThemedPostDialogHint } from '../social-network-provider/twitter.com/ui/injectPostDialogHint'
 import { useTwitterButton } from '../social-network-provider/twitter.com/utils/theme'
 import { TwitterThemeProvider } from '../social-network-provider/twitter.com/ui/custom'
 import { PersonKnownSelf, PersonKnownOthers } from '../components/InjectedComponents/PersonKnown'
+import { figmaLink } from './utils'
 
 storiesOf('Injections', module)
     .add('PersonOrGroupInChip', () => (
@@ -189,25 +189,25 @@ storiesOf('Injections', module)
             </>
         )
     })
-    .add('Post Dialog', () => {
-        const decoder = (encodedStr: string) => {
-            const parser = new DOMParser()
-            const dom = parser.parseFromString('<!doctype html><body>' + encodedStr, 'text/html')
-            console.log(dom.body.textContent)
-            // eslint-disable-next-line no-eval
-            return new Map(Object.entries(eval(`(${dom.body.textContent})`)))
-        }
-        try {
-            const meta = decoder(text('Metadata', '{}'))
-            return (
-                <WithFigma url={'https://www.figma.com/file/nDyLQp036eHgcgUXeFmNA1/Post-Composition-v1'}>
-                    <PostDialog open={[true, () => void 0]} typedMessageMetadata={meta} />
-                </WithFigma>
-            )
-        } catch (e) {
-            return <>{e.message}</>
-        }
-    })
+    .add(
+        'Post Dialog',
+        () => {
+            const decoder = (encodedStr: string) => {
+                const parser = new DOMParser()
+                const dom = parser.parseFromString('<!doctype html><body>' + encodedStr, 'text/html')
+                console.log(dom.body.textContent)
+                // eslint-disable-next-line no-eval
+                return new Map(Object.entries(eval(`(${dom.body.textContent})`)))
+            }
+            try {
+                const meta = decoder(text('Metadata', '{}'))
+                return <PostDialog open={[true, () => void 0]} typedMessageMetadata={meta} />
+            } catch (e) {
+                return <>{e.message}</>
+            }
+        },
+        figmaLink('https://www.figma.com/file/nDyLQp036eHgcgUXeFmNA1/Post-Composition-v1'),
+    )
     .add('Post Dialog Hint', () => {
         return (
             <>
