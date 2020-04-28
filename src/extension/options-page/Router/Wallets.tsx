@@ -10,7 +10,7 @@ import HistoryIcon from '@material-ui/icons/History'
 import { WalletItem } from '../DashboardComponents/WalletItem'
 import { WalletRecord } from '../../../plugins/Wallet/database/types'
 import { TokenListItem } from '../DashboardComponents/TokenListItem'
-import { useDialog } from '../Dialog/Base'
+import { useModal } from '../Dialog/Base'
 import {
     DashboardWalletImportDialog,
     DashboardWalletCreateDialog,
@@ -81,10 +81,10 @@ const walletTheme = (theme: Theme): Theme => ({
 })
 
 export default function DashboardWalletsRouter() {
-    const [walletImport, openWalletImport] = useDialog(<DashboardWalletImportDialog />)
-    const [walletCreate, openWalletCreate] = useDialog(<DashboardWalletCreateDialog />)
-    const [addToken, openAddToken] = useDialog(<DashboardWalletAddTokenDialog />)
-    const [walletHistory, oepnWalletHistory] = useDialog(<DashboardWalletHistoryDialog />)
+    const [walletImport, openWalletImport] = useModal(DashboardWalletImportDialog)
+    const [walletCreate, openWalletCreate] = useModal(DashboardWalletCreateDialog)
+    const [addToken, openAddToken] = useModal(DashboardWalletAddTokenDialog)
+    const [walletHistory, oepnWalletHistory] = useModal(DashboardWalletHistoryDialog)
 
     const actions = useMemo(
         () => [

@@ -88,6 +88,7 @@
     "react": "0.0.0-experimental-e5d06e34b",
     "react-dom": "0.0.0-experimental-e5d06e34b",
     "react-i18next": "^11.4.0",
+    "react-feather": "^2.0.3",
     "react-router-dom": "^5.0.0",
     "react-use": "^14.2.0",
     "react-window": "^1.8.5",

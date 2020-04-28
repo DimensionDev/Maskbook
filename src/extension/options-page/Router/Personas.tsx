@@ -5,7 +5,7 @@ import AddCircleIcon from '@material-ui/icons/AddCircle'
 import { useMyPersonas } from '../../../components/DataSource/useActivatedUI'
 import PersonaCard from '../DashboardComponents/PersonaCard'
 import { DashboardPersonaCreateDialog, DashboardPersonaImportDialog } from '../Dialog/Persona'
-import { useDialog } from '../Dialog/Base'
+import { useModal } from '../Dialog/Base'
 import { Database as DatabaseIcon } from 'react-feather'
 import { DashboardDatabaseBackupDialog, DashboardDatabaseRestoreDialog } from '../Dialog/Database'
 
@@ -35,10 +35,10 @@ export default function DashboardPersonasRouter() {
     const classes = useStyles()
     const personas = useMyPersonas()
 
-    const [createPersona, openCreatePersona] = useDialog(<DashboardPersonaCreateDialog />)
-    const [importPersona, openImportPersona] = useDialog(<DashboardPersonaImportDialog />)
-    const [backupDatabase, openBackupDatabase] = useDialog(<DashboardDatabaseBackupDialog />)
-    const [restoreDatabase, openRestoreDatabase] = useDialog(<DashboardDatabaseRestoreDialog />)
+    const [createPersona, openCreatePersona] = useModal(DashboardPersonaCreateDialog)
+    const [importPersona, openImportPersona] = useModal(DashboardPersonaImportDialog)
+    const [backupDatabase, openBackupDatabase] = useModal(DashboardDatabaseBackupDialog)
+    const [restoreDatabase, openRestoreDatabase] = useModal(DashboardDatabaseRestoreDialog)
 
     const actions = useMemo(
         () => [

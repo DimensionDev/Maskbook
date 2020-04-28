@@ -5,7 +5,7 @@ import { makeStyles, Theme, ThemeProvider, useTheme } from '@material-ui/core/st
 import { Link, useRouteMatch } from 'react-router-dom'
 
 import SentimentSatisfiedOutlinedIcon from '@material-ui/icons/SentimentSatisfiedOutlined'
-import { useDialog } from './Dialog/Base'
+import { useModal } from './Dialog/Base'
 import { DashboardFeedbackDialog } from './Dialog/Feedback'
 
 const useStyles = makeStyles((theme) => ({
@@ -79,7 +79,7 @@ function ResponsiveDrawer(props: ResponsiveDrawerProps) {
     const theme = useTheme()
 
     const { routers, exitDashboard } = props
-    const [feedback, openFeedback] = useDialog(<DashboardFeedbackDialog />)
+    const [feedback, openFeedback] = useModal(DashboardFeedbackDialog)
 
     return (
         <ThemeProvider theme={drawerTheme}>
