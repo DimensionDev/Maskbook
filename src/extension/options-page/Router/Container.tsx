@@ -15,6 +15,7 @@ const useStyles = makeStyles((theme) =>
             flex: 1,
             display: 'grid',
             gridTemplateRows: '[titleAction] 0fr [divider] 0fr [content] auto',
+            height: '100%',
         },
         scroller: {
             height: '100%',
