@@ -36,10 +36,12 @@ import { getActivatedUI } from '../../../../social-network/ui'
 import { useValueRef } from '../../../../utils/hooks/useValueRef'
 import { debugModeSetting } from '../../../../components/shared-settings/settings'
 import { formatBalance } from '../../formatter'
-import { currentEthereumNetworkSettings } from '../../network'
 import ShadowRootDialog from '../../../../utils/jss/ShadowRootDialog'
 import { PortalShadowRoot } from '../../../../utils/jss/ShadowRootPortal'
 import BigNumber from 'bignumber.js'
+import { useWalletDataSource, useSelectWallet } from '../../../shared/useWallet'
+import { WalletSelect } from '../../../shared/WalletSelect'
+import { TokenSelect } from '../../../shared/TokenSelect'
 
 interface RedPacketDialogProps
     extends withClasses<
@@ -107,22 +109,19 @@ function NewPacketUI(props: RedPacketDialogProps & NewPacketProps) {
 
     const rinkebyNetwork = useValueRef(debugModeSetting)
 
-    const [selectedWalletAddress, setSelectedWallet] = React.useState<undefined | string>(undefined)
-    const [selectedTokenType, setSelectedTokenType] = React.useState<
-        { type: 'eth' } | { type: 'erc20'; address: string }
-    >({
-        type: 'eth',
-    })
+    const useSelectWalletResult = useSelectWallet(onRequireNewWallet, wallets, tokens)
+    const {
+        erc20Balance,
+        ethBalance,
+        selectedToken,
+        selectedTokenType,
+        selectedWallet,
+        selectedWalletAddress,
+        setSelectedTokenType,
+        setSelectedWallet,
+        availableTokens,
+    } = useSelectWalletResult
 
-    const selectedWallet = wallets === 'loading' ? undefined : wallets.find((x) => x.address === selectedWalletAddress)
-
-    const availableTokens = Array.from(selectedWallet?.erc20_token_balance || [])
-        .filter(([address]) => tokens.find((x) => x.address === address))
-        .map(([address, amount]) => ({ amount, ...tokens.find((x) => x.address === address)! }))
-    const selectedToken =
-        selectedTokenType.type === 'eth'
-            ? undefined
-            : availableTokens.find((x) => x.address === selectedTokenType.address)!
     const amountPreShareMaxBigint = selectedWallet
         ? selectedTokenType.type === 'eth'
             ? selectedWallet.eth_balance
@@ -143,14 +142,6 @@ function NewPacketUI(props: RedPacketDialogProps & NewPacketProps) {
     ]
     const isSendButtonDisabled = isDisabled.some((x) => x)
 
-    React.useEffect(() => {
-        if (selectedWalletAddress === undefined) {
-            if (wallets === 'loading') return
-            if (wallets.length === 0) onRequireNewWallet()
-            else setSelectedWallet(wallets[0].address)
-        }
-    }, [onRequireNewWallet, selectedWalletAddress, wallets])
-
     const createRedPacket = () => {
         const power = selectedTokenType.type === 'eth' ? 18 : selectedToken!.decimals
         props.onCreateNewPacket({
@@ -166,55 +157,22 @@ function NewPacketUI(props: RedPacketDialogProps & NewPacketProps) {
             erc20_token: selectedTokenType.type === 'eth' ? undefined : selectedTokenType.address,
         })
     }
-    const ethBalance = selectedWallet
-        ? `${formatBalance(selectedWallet.eth_balance, 18) ?? '(Syncing...)'} ETH`
-        : undefined
-    const erc20Balance = selectedToken
-        ? `${formatBalance(selectedToken.amount, selectedToken.decimals) ?? '(Syncing...)'} ${selectedToken.symbol}`
-        : undefined
     return (
         <div>
             {rinkebyNetwork ? <div>Debug mode, will use test rinkeby to send your red packet</div> : null}
             <br />
             <div className={classes.line}>
-                <FormControl variant="filled" className={classes.input}>
-                    <InputLabel>Wallet</InputLabel>
-                    <Select
-                        onChange={(e) => setSelectedWallet(e.target.value as string)}
-                        MenuProps={{ container: props.DialogProps?.container ?? PortalShadowRoot }}
-                        disabled={wallets === 'loading'}
-                        value={selectedWalletAddress || ''}>
-                        {wallets === 'loading'
-                            ? null
-                            : wallets.map((x) => (
-                                  <MenuItem key={x.address} value={x.address}>
-                                      {x.name} ({x.address})
-                                  </MenuItem>
-                              ))}
-                    </Select>
-                </FormControl>
+                <WalletSelect
+                    {...props}
+                    className={classes.input}
+                    useSelectWalletHooks={useSelectWalletResult}
+                    wallets={wallets}></WalletSelect>
             </div>
             <div className={classes.line}>
-                <FormControl variant="filled" className={classes.input}>
-                    <InputLabel>Token</InputLabel>
-                    <Select
-                        onChange={(e) => {
-                            const v = e.target.value as string
-                            if (v === 'eth') setSelectedTokenType({ type: 'eth' })
-                            else setSelectedTokenType({ type: 'erc20', address: v })
-                        }}
-                        MenuProps={{ container: props.DialogProps?.container ?? PortalShadowRoot }}
-                        value={selectedTokenType.type === 'eth' ? 'eth' : selectedTokenType.address}>
-                        <MenuItem key="eth" value="eth">
-                            ETH
-                        </MenuItem>
-                        {availableTokens.map((x) => (
-                            <MenuItem disabled={!BigNumber.isBigNumber(x.amount)} key={x.address} value={x.address}>
-                                {x.name} ({x.symbol})
-                            </MenuItem>
-                        ))}
-                    </Select>
-                </FormControl>
+                <TokenSelect
+                    {...props}
+                    className={classes.input}
+                    useSelectWalletHooks={useSelectWalletResult}></TokenSelect>
                 <FormControl variant="filled" className={classes.input}>
                     <InputLabel>Split Mode</InputLabel>
                     <Select
@@ -396,19 +354,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
         },
         [tabs],
     )
-    const [wallets, setWallets] = React.useState<WalletRecord[] | 'loading'>('loading')
-    const [tokens, setTokens] = React.useState<ERC20TokenRecord[]>([])
-
-    React.useEffect(() => {
-        const update = () =>
-            Services.Plugin.invokePlugin('maskbook.wallet', 'getWallets').then(([x, y]) => {
-                setWallets(x)
-                setTokens(y)
-            })
-        update()
-        currentEthereumNetworkSettings.addListener(update)
-        return PluginMessageCenter.on('maskbook.wallets.update', update)
-    }, [])
+    const [wallets, tokens] = useWalletDataSource()
 
     const [redPacket, setRedPacket] = React.useState<RedPacketRecord[]>([])
     const [justCreatedRedPacket, setJustCreatedRedPacket] = React.useState<RedPacketRecord | undefined>(undefined)
