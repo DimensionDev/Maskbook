@@ -1,18 +1,21 @@
-import React, { useState, useMemo } from 'react'
+import React, { useState, useEffect, useMemo } from 'react'
 import { DashboardDialogCore, DashboardDialogWrapper, WrappedDialogProps, useSnackbarCallback } from './Base'
 import { CreditCard as CreditCardIcon, Hexagon as HexagonIcon, Clock as ClockIcon } from 'react-feather'
-import { TextField, Typography, makeStyles, createStyles, Paper, Card } from '@material-ui/core'
+import { TextField, Typography, makeStyles, createStyles, Paper, Card, List } from '@material-ui/core'
 import AbstractTab, { AbstractTabProps } from '../DashboardComponents/AbstractTab'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { DebounceButton } from '../DashboardComponents/ActionButton'
 import SpacedButtonGroup from '../DashboardComponents/SpacedButtonGroup'
 import ShowcaseBox from '../DashboardComponents/ShowcaseBox'
 import Services from '../../service'
-import { WalletRecord, EthereumNetwork } from '../../../plugins/Wallet/database/types'
+import { WalletRecord, EthereumNetwork, RedPacketRecord } from '../../../plugins/Wallet/database/types'
 import { ERC20WellKnownTokenSelector } from '../../../plugins/Wallet/UI/Dashboard/Dialogs/WalletAddTokenDialogContent'
 import type { ERC20TokenPredefinedData } from '../../../plugins/Wallet/erc20'
 import { recoverWallet } from '../../../plugins/Wallet/wallet'
 import { useAsync } from 'react-use'
+import { PluginMessageCenter } from '../../../plugins/PluginMessages'
+import WalletLine from '../../../plugins/Wallet/UI/Dashboard/Components/WalletLine'
+import { formatBalance } from '../../../plugins/Wallet/formatter'
 
 export function DashboardWalletImportDialog(props: WrappedDialogProps) {
     const { t } = useI18N()
@@ -245,28 +248,75 @@ export function DashboardWalletAddTokenDialog(props: WrappedDialogProps<WalletPr
     )
 }
 
+const useHistoryDialogStyles = makeStyles((theme) =>
+    createStyles({
+        list: {
+            width: '100%',
+            overflow: 'auto',
+        },
+    }),
+)
+
 export function DashboardWalletHistoryDialog(props: WrappedDialogProps<WalletProps>) {
     const { t } = useI18N()
 
-    const [name, setName] = useState('')
-    const [pass, setPass] = useState('')
+    const classes = useHistoryDialogStyles()
 
     const state = useState(0)
-    const [tabState, setTabState] = state
+    const [tabState] = state
 
-    // TODO!:
-    // redpacket history
+    const { wallet } = props.ComponentProps!
 
+    const [redPacketRecords, setRedPacketRecords] = useState<RedPacketRecord[]>([])
+    const inboundRecords = redPacketRecords.filter((record) => record.claim_address === wallet.address)
+    const outboundRecords = redPacketRecords.filter((record) => record.sender_address === wallet.address)
+
+    useEffect(() => {
+        const updateHandler = () =>
+            Services.Plugin.invokePlugin('maskbook.red_packet', 'getRedPackets', undefined).then(setRedPacketRecords)
+
+        updateHandler()
+        return PluginMessageCenter.on('maskbook.red_packets.update', updateHandler)
+    }, [tabState])
+
+    const Record = (record: RedPacketRecord) => (
+        <WalletLine
+            key={record.id}
+            line1={record.send_message}
+            line2={`${record.block_creation_time?.toLocaleString()} from ${record.sender_name}`}
+            onClick={() => alert('clicked')}
+            invert
+            action={
+                <Typography variant="h6">
+                    {(tabState === 0 && record.claim_amount) || (tabState === 1 && record.send_total)
+                        ? formatBalance(
+                              tabState === 0 ? record.claim_amount! : record.send_total,
+                              record.raw_payload?.token?.decimals ?? 18,
+                          )
+                        : '0'}{' '}
+                    {record.raw_payload?.token?.name || 'ETH'}
+                </Typography>
+            }
+        />
+    )
     const tabProps: AbstractTabProps = {
         tabs: [
             {
                 label: 'Inbound',
-                children: <></>,
+                children: (
+                    <List className={classes.list} disablePadding>
+                        {inboundRecords.map(Record)}
+                    </List>
+                ),
                 p: 0,
             },
             {
                 label: 'Outbound',
-                children: <></>,
+                children: (
+                    <List className={classes.list} disablePadding>
+                        {outboundRecords.map(Record)}
+                    </List>
+                ),
                 display: 'flex',
                 p: 0,
             },

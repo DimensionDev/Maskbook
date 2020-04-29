@@ -109,7 +109,7 @@ export default function DashboardWalletsRouter() {
     const [walletImport, openWalletImport] = useModal(DashboardWalletImportDialog)
     const [walletCreate, openWalletCreate] = useModal(DashboardWalletCreateDialog)
     const [addToken, , openAddToken] = useModal(DashboardWalletAddTokenDialog)
-    const [walletHistory, oepnWalletHistory] = useModal(DashboardWalletHistoryDialog)
+    const [walletHistory, , oepnWalletHistory] = useModal(DashboardWalletHistoryDialog)
     const [walletBackup, , oepnWalletBackup] = useModal(DashboardWalletBackupDialog)
     const [walletDelete, , oepnWalletDelete] = useModal(DashboardWalletDeleteConfirmDialog)
     const [walletRename, , oepnWalletRename] = useModal(DashboardWalletRenameDialog)
@@ -206,7 +206,7 @@ export default function DashboardWalletsRouter() {
                             </ThemeProvider>
                             <div className={classes.footer}>
                                 <Button
-                                    onClick={oepnWalletHistory}
+                                    onClick={() => oepnWalletHistory({ wallet: currentWallet })}
                                     startIcon={<HistoryIcon />}
                                     variant="text"
                                     color="primary">
