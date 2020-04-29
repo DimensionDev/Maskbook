@@ -326,7 +326,7 @@ export function DashboardWalletBackupDialog(props: WrappedDialogProps<WalletProp
 export function DashboardWalletRenameDialog(props: WrappedDialogProps<WalletProps>) {
     const { t } = useI18N()
     const { wallet } = props.ComponentProps!
-    const [name, setName] = useState(wallet.name)
+    const [name, setName] = useState(wallet.name ?? '')
     const renameWallet = useSnackbarCallback(
         () => Services.Plugin.invokePlugin('maskbook.wallet', 'renameWallet', wallet.address, name),
         [wallet.address],

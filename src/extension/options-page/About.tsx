@@ -1,10 +1,10 @@
 import React from 'react'
 import { Dialog, makeStyles, Typography, createStyles, Avatar } from '@material-ui/core'
-import { useBlurContext } from './index'
 
 import FacebookIcon from '@material-ui/icons/Facebook'
 import TwitterIcon from '@material-ui/icons/Twitter'
 import GitHubIcon from '@material-ui/icons/GitHub'
+import { useBlurContext } from './DashboardBlurContext'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
