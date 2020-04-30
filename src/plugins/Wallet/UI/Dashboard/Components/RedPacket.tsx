@@ -6,8 +6,9 @@ import Services from '../../../../../extension/service'
 import { PluginMessageCenter } from '../../../../PluginMessages'
 import { formatBalance } from '../../../formatter'
 import { getUrl } from '../../../../../utils/utils'
+import { DAI_ADDRESS, OKB_ADDRESS } from '../../../erc20'
 
-const useStyles = makeStyles(theme =>
+const useStyles = makeStyles((theme) =>
     createStyles({
         box: {
             borderRadius: theme.spacing(1),
@@ -63,6 +64,7 @@ const useStyles = makeStyles(theme =>
             width: '6em',
             height: '6em',
         },
+        okb: {},
         text: {
             padding: theme.spacing(0.5, 2),
             height: '100%',
@@ -111,7 +113,7 @@ export function RedPacketWithState(props: RedPacketProps) {
                     'discoverRedPacket',
                     unknownRedPacket,
                     from ?? '',
-                ).then(packet => {
+                ).then((packet) => {
                     setRedPacket(packet)
                 })
             }
@@ -174,14 +176,18 @@ export function RedPacketWithStateUI(props: {
                 <Typography variant="body2">
                     {status === 'incoming'
                         ? 'Ready to open'
-                        : `${
-                              redPacket?.send_total ? formatBalance(redPacket?.send_total, info?.decimals ?? 0) : '?'
-                          } ${info?.name ?? '(unknown)'} / ${redPacket?.shares?.toString() ?? '?'} Shares`}
+                        : `${redPacket?.send_total ? formatBalance(redPacket?.send_total, info?.decimals ?? 0) : '?'} ${
+                              info?.name ?? '(unknown)'
+                          } / ${redPacket?.shares?.toString() ?? '?'} Shares`}
                 </Typography>
             </div>
             <div
                 className={classNames(classes.packet, {
-                    [classes.dai]: info.name === 'DAI' || info.address === '0x6B175474E89094C44Da98b954EedeAC495271d0F',
+                    [classes.dai]: info.name === 'DAI' || info.address === DAI_ADDRESS,
+                })}></div>
+            <div
+                className={classNames(classes.packet, {
+                    [classes.okb]: info.name === 'OKB' || info.address === OKB_ADDRESS,
                 })}></div>
             <div
                 className={classNames(classes.loader, {
