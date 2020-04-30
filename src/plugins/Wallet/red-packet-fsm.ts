@@ -10,7 +10,7 @@ import {
 } from './database/types'
 import { createTransaction, IDBPSafeTransaction } from '../../database/helpers/openDB'
 import { createWalletDBAccess, WalletDB } from './database/Wallet.db'
-import uuid from 'uuid/v4'
+import { v4 as uuid } from 'uuid'
 import type { RedPacketCreationResult, RedPacketClaimResult } from './types'
 import { getWalletProvider, getWallets, recoverWallet, getDefaultWallet, setDefaultWallet } from './wallet'
 import { PluginMessageCenter } from '../PluginMessages'

@@ -55,7 +55,7 @@ const useStyles = makeStyles((theme) =>
 )
 
 const Transition = React.forwardRef<unknown, TransitionProps>(function Transition(props, ref) {
-    return <Slide direction="up" ref={ref} {...props} />
+    return <Slide direction="up" ref={ref} {...props} children={props.children as any} />
 })
 
 interface DialogContentItemProps {
