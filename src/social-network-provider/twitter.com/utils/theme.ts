@@ -43,6 +43,7 @@ export const useTwitterDialog = makeStyles((theme: Theme) => {
     return {
         MUIInputInput: {
             borderStyle: 'none',
+            lineHeight: 1.3125, // copy from native composing dialog
         },
         dialog: {
             display: 'flex',
