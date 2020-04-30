@@ -15,6 +15,7 @@ import { RedPacketDialogUI } from '../plugins/Wallet/UI/RedPacket/RedPacketDialo
 import { DecryptPostSuccess } from '../components/InjectedComponents/DecryptedPost'
 import { makeTypedMessage, TypedMessageMetadata } from '../extension/background-script/CryptoServices/utils'
 import { AdditionalContent } from '../components/InjectedComponents/AdditionalPostContent'
+import { DAI_ADDRESS, OKB_ADDRESS } from '../plugins/Wallet/erc20'
 
 storiesOf('Plugin: Red Packets', module)
     .add('RedPacketWithStateUI', () => {
@@ -41,8 +42,19 @@ storiesOf('Plugin: Red Packets', module)
             type: RedPacketTokenType.erc20,
             total: total * 10 ** decimals,
             token: {
-                address: '0x6B175474E89094C44Da98b954EedeAC495271d0F',
+                address: DAI_ADDRESS,
                 name: 'DAI',
+                decimals,
+                symbol: erc20symbol,
+            },
+        })
+        const okb = createRecord({
+            ...opts,
+            type: RedPacketTokenType.erc20,
+            total: total * 10 ** decimals,
+            token: {
+                address: OKB_ADDRESS,
+                name: 'OKB',
                 decimals,
                 symbol: erc20symbol,
             },
@@ -57,6 +69,9 @@ storiesOf('Plugin: Red Packets', module)
                 <hr />
                 <Typography>DAI</Typography>
                 <RedPacketWithStateUI onClick={action('onClick')} loading={loading} redPacket={dai} />
+                <hr />
+                <Typography>OKB</Typography>
+                <RedPacketWithStateUI onClick={action('onClick')} loading={loading} redPacket={okb} />
             </>
         )
     })

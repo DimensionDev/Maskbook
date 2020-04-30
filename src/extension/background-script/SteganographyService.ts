@@ -10,7 +10,7 @@ import { decodeArrayBuffer, encodeArrayBuffer } from '../../utils/type-transform
 
 OnlyRunInContext('background', 'SteganographyService')
 
-type Template = 'default' | 'eth' | 'dai'
+type Template = 'default' | 'eth' | 'dai' | 'okb'
 
 type Dimension = {
     width: number
@@ -61,7 +61,7 @@ type DecodeImageOptions = PartialRequired<Required<DecodeOptions>, 'pass'>
 export async function decodeImage(buf: string | ArrayBuffer, options: DecodeImageOptions) {
     const _buf = typeof buf === 'string' ? decodeArrayBuffer(buf) : buf
     const dimension = getDimension(_buf)
-    if (!dimensions.some(otherDimension => isSameDimension(dimension, otherDimension))) {
+    if (!dimensions.some((otherDimension) => isSameDimension(dimension, otherDimension))) {
         return ''
     }
     return decode(_buf, await getMaskBuf(), {
