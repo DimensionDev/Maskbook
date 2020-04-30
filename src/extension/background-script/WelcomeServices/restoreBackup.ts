@@ -16,19 +16,21 @@ import { GroupRecordFromJSONFormat } from '../../../utils/type-transform/BackupF
 import { createOrUpdateUserGroupDatabase } from '../../../database/group'
 import { i18n } from '../../../utils/i18n-next'
 import { MessageCenter } from '../../../utils/messages'
+import { currentImportingBackup } from '../../../components/shared-settings/settings'
 
 /**
  * Restore the backup
  */
 export async function restoreBackup(json: object, whoAmI?: ProfileIdentifier): Promise<void> {
-    const data = UpgradeBackupJSONFile(json, whoAmI)
-    if (!data) throw new TypeError(i18n.t('service_invalid_backup_file'))
-
-    const keyCache = new Map<JsonWebKey, CryptoKey>()
-    const aes = getKeyParameter('aes')
-
-    MessageCenter.startBatch()
+    currentImportingBackup.value = true
     try {
+        const data = UpgradeBackupJSONFile(json, whoAmI)
+        if (!data) throw new TypeError(i18n.t('service_invalid_backup_file'))
+
+        const keyCache = new Map<JsonWebKey, CryptoKey>()
+        const aes = getKeyParameter('aes')
+
+        MessageCenter.startBatch()
         // Transform all JsonWebKey to CryptoKey
         await Promise.all([
             ...[...data.personas, ...data.profiles]
@@ -74,5 +76,6 @@ export async function restoreBackup(json: object, whoAmI?: ProfileIdentifier): P
         }
     } finally {
         MessageCenter.commitBatch()
+        currentImportingBackup.value = false
     }
 }

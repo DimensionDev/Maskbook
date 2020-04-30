@@ -7,7 +7,7 @@ import { PluginMessageCenter } from '../PluginMessages'
 import { HDKey, EthereumAddress } from 'wallet.ts'
 import * as bip39 from 'bip39'
 import { walletAPI } from './real'
-import type { ERC20TokenPredefinedData } from './erc20'
+import { ERC20TokenPredefinedData, OKB_ADDRESS, DAI_ADDRESS } from './erc20'
 import { memoizePromise } from '../../utils/memoize'
 import { currentEthereumNetworkSettings } from './network'
 import { buf2hex } from './web3'
@@ -119,7 +119,10 @@ export async function importNewWallet(
         address,
         eth_balance: bal,
         /** Builtin Dai Stablecoin */
-        erc20_token_balance: new Map([['0x6B175474E89094C44Da98b954EedeAC495271d0F', undefined]]),
+        erc20_token_balance: new Map([
+            [DAI_ADDRESS, undefined],
+            [OKB_ADDRESS, undefined],
+        ]),
         _data_source_: getWalletProvider().dataSource,
     }
     {
@@ -131,7 +134,15 @@ export async function importNewWallet(
             decimals: 18,
             symbol: 'DAI',
             name: 'Dai Stablecoin',
-            address: '0x6B175474E89094C44Da98b954EedeAC495271d0F',
+            address: DAI_ADDRESS,
+            network: EthereumNetwork.Mainnet,
+            is_user_defined: false,
+        })
+        t.objectStore('ERC20Token').put({
+            decimals: 18,
+            symbol: 'OKB',
+            name: 'OKB',
+            address: OKB_ADDRESS,
             network: EthereumNetwork.Mainnet,
             is_user_defined: false,
         })

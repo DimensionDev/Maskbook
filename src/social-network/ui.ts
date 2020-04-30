@@ -144,7 +144,7 @@ export interface SocialNetworkUITasks {
     taskUploadToPostBox(
         text: string,
         options: {
-            template?: 'default' | 'eth' | 'dai'
+            template?: 'default' | 'eth' | 'dai' | 'okb'
             warningText: string
         },
     ): void

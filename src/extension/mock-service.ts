@@ -19,7 +19,7 @@ export const WelcomeService: Partial<typeof import('./background-script/WelcomeS
 }
 export const SteganographyService: Partial<typeof import('./background-script/SteganographyService')> = {
     async encodeImage() {
-        return new Uint8Array()
+        return ''
     },
     async decodeImage() {
         return ''

@@ -1,4 +1,4 @@
-import { regexMatch, downloadUrl } from '../../../utils/utils'
+import { regexMatch } from '../../../utils/utils'
 import { notNullable } from '../../../utils/assert'
 import { defaultTo } from 'lodash-es'
 import { nthChild } from '../../../utils/dom'
@@ -181,12 +181,9 @@ export const postImageParser = async (node: HTMLElement) => {
             await Promise.all(
                 imgUrls.map(async (url) => {
                     try {
-                        const content = await Services.Steganography.decodeImage(
-                            new Uint8Array(await downloadUrl(url)),
-                            {
-                                pass: posterIdentity.toText(),
-                            },
-                        )
+                        const content = await Services.Steganography.decodeImageUrl(url, {
+                            pass: posterIdentity.toText(),
+                        })
                         return /https:\/\/.+\..+\/%20(.+)%40/.test(content) ? content : ''
                     } catch {
                         // for twitter image url maybe absent

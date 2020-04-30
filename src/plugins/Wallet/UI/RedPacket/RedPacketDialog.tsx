@@ -12,6 +12,7 @@ import {
     InputLabel,
     Select,
     MenuItem,
+    DialogProps,
 } from '@material-ui/core'
 import { useStylesExtends, or } from '../../../../components/custom-ui-helper'
 import { DialogDismissIconUI } from '../../../../components/InjectedComponents/DialogDismissIcon'
@@ -59,6 +60,7 @@ interface RedPacketDialogProps
     open: boolean
     onConfirm: (opt?: RedPacketJSONPayload | null) => void
     onDecline: () => void
+    DialogProps?: Partial<DialogProps>
 }
 
 const useNewPacketStyles = makeStyles((theme) =>
@@ -462,7 +464,6 @@ export function RedPacketDialogUI(
     props: RedPacketDialogProps & NewPacketProps & ExistingPacketProps & { tab?: [0 | 1, (next: 0 | 1) => void] },
 ) {
     const classes = useStylesExtends(useStyles(), props)
-    const rootRef = useRef<HTMLDivElement>(null)
     const [currentTab, setCurrentTab] = or(props.tab, useState<0 | 1>(0)) as [
         number,
         React.Dispatch<React.SetStateAction<number>>,
@@ -495,7 +496,8 @@ export function RedPacketDialogUI(
             disableEnforceFocus
             BackdropProps={{
                 className: classes.backdrop,
-            }}>
+            }}
+            {...props.DialogProps}>
             <DialogTitle className={classes.header}>
                 <IconButton classes={{ root: classes.close }} onClick={props.onDecline}>
                     <DialogDismissIconUI />
