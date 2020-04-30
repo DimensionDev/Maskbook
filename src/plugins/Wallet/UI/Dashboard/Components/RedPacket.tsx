@@ -8,7 +8,7 @@ import { formatBalance } from '../../../formatter'
 import { getUrl } from '../../../../../utils/utils'
 import { DAI_ADDRESS, OKB_ADDRESS } from '../../../erc20'
 
-const useStyles = makeStyles((theme) =>
+const useStyles = makeStyles(theme =>
     createStyles({
         box: {
             borderRadius: theme.spacing(1),
@@ -113,7 +113,7 @@ export function RedPacketWithState(props: RedPacketProps) {
                     'discoverRedPacket',
                     unknownRedPacket,
                     from ?? '',
-                ).then((packet) => {
+                ).then(packet => {
                     setRedPacket(packet)
                 })
             }
@@ -176,9 +176,9 @@ export function RedPacketWithStateUI(props: {
                 <Typography variant="body2">
                     {status === 'incoming'
                         ? 'Ready to open'
-                        : `${redPacket?.send_total ? formatBalance(redPacket?.send_total, info?.decimals ?? 0) : '?'} ${
-                              info?.name ?? '(unknown)'
-                          } / ${redPacket?.shares?.toString() ?? '?'} Shares`}
+                        : `${
+                              redPacket?.send_total ? formatBalance(redPacket?.send_total, info?.decimals ?? 0) : '?'
+                          } ${info?.name ?? '(unknown)'} / ${redPacket?.shares?.toString() ?? '?'} Shares`}
                 </Typography>
             </div>
             <div

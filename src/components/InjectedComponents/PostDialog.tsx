@@ -104,7 +104,7 @@ export function PostDialogUI(props: PostDialogUIProps) {
     const classes = useStylesExtends(useStyles(), props)
     const { t } = useI18N()
     const [, inputRef] = useCapturedInput(
-        (newText) => {
+        newText => {
             const msg = props.postContent
             if (msg.type === 'text') props.onPostContentChanged(makeTypedMessage(newText, msg.meta))
             else throw new Error('Not impled yet')
@@ -147,7 +147,7 @@ export function PostDialogUI(props: PostDialogUIProps) {
                         </Typography>
                     </DialogTitle>
                     <DialogContent className={classes.content}>
-                        {withMetadata(props.postContent.meta, 'com.maskbook.red_packet:1', (r) => (
+                        {withMetadata(props.postContent.meta, 'com.maskbook.red_packet:1', r => (
                             <Chip
                                 onDelete={async () => {
                                     const ref = getActivatedUI().typedMessageMetadata
@@ -159,9 +159,10 @@ export function PostDialogUI(props: PostDialogUIProps) {
                                         props.onShareToEveryoneChanged(false)
                                     }
                                 }}
-                                label={`A Red Packet with $${formatBalance(BigInt(r.total), r.token?.decimals || 18)} ${
-                                    r.token?.name || 'ETH'
-                                } from ${r.sender.name}`}
+                                label={`A Red Packet with $${formatBalance(
+                                    BigInt(r.total),
+                                    r.token?.decimals || 18,
+                                )} ${r.token?.name || 'ETH'} from ${r.sender.name}`}
                             />
                         ))}
                         <InputBase
@@ -291,7 +292,7 @@ export function PostDialog(props: PostDialogProps) {
             async (target: (Profile | Group)[], content: TypedMessage) => {
                 const [encrypted, token] = await Services.Crypto.encryptTo(
                     content,
-                    target.map((x) => x.identifier),
+                    target.map(x => x.identifier),
                     currentIdentity!.identifier,
                     !!shareToEveryone,
                 )

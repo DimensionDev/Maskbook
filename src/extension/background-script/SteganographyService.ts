@@ -61,7 +61,7 @@ type DecodeImageOptions = PartialRequired<Required<DecodeOptions>, 'pass'>
 export async function decodeImage(buf: string | ArrayBuffer, options: DecodeImageOptions) {
     const _buf = typeof buf === 'string' ? decodeArrayBuffer(buf) : buf
     const dimension = getDimension(_buf)
-    if (!dimensions.some((otherDimension) => isSameDimension(dimension, otherDimension))) {
+    if (!dimensions.some(otherDimension => isSameDimension(dimension, otherDimension))) {
         return ''
     }
     return decode(_buf, await getMaskBuf(), {
