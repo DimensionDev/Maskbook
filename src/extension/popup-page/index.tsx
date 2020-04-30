@@ -18,12 +18,13 @@ import i18nNextInstance from '../../utils/i18n-next'
 
 const useStyles = makeStyles((theme) => ({
     button: {
-        margin: theme.spacing(1),
+        margin: theme.spacing(1, 0),
         whiteSpace: 'nowrap',
     },
     container: {
         display: 'flex',
         flexDirection: 'column',
+        padding: theme.spacing(0, 2),
     },
     logo: {
         width: 'auto',

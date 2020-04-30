@@ -13,11 +13,17 @@ import { hasEditor, isCompose } from '../utils/postBox'
 export function injectPostDialogHintAtTwitter() {
     if (location.hostname.indexOf(twitterUrl.hostIdentifier) === -1) return
     const emptyNode = document.createElement('div')
-    renderPostDialogHintTo(postEditorInTimelineSelector().map((x) => (hasEditor() ? x : emptyNode)))
-    renderPostDialogHintTo(postEditorInPopupSelector().map((x) => (isCompose() && hasEditor() ? x : emptyNode)))
+    renderPostDialogHintTo(
+        'timeline',
+        postEditorInTimelineSelector().map((x) => (hasEditor() ? x : emptyNode)),
+    )
+    renderPostDialogHintTo(
+        'popup',
+        postEditorInPopupSelector().map((x) => (isCompose() && hasEditor() ? x : emptyNode)),
+    )
 }
 
-function renderPostDialogHintTo<T>(ls: LiveSelector<T, true>) {
+function renderPostDialogHintTo<T>(reason: 'timeline' | 'popup', ls: LiveSelector<T, true>) {
     const watcher = new MutationObserverWatcher(ls)
         .setDOMProxyOption({
             afterShadowRootInit: { mode: 'closed' },
@@ -27,7 +33,7 @@ function renderPostDialogHintTo<T>(ls: LiveSelector<T, true>) {
             subtree: true,
         })
 
-    renderInShadowRoot(<PostDialogHintAtTwitter />, {
+    renderInShadowRoot(<PostDialogHintAtTwitter reason={reason} />, {
         shadow: () => watcher.firstDOMProxy.afterShadow,
         normal: () => watcher.firstDOMProxy.after,
     })
@@ -56,15 +62,14 @@ export const useTwitterThemedPostDialogHint = makeStyles((theme: Theme) => ({
     },
 }))
 
-function PostDialogHintAtTwitter() {
+function PostDialogHintAtTwitter({ reason }: { reason: 'timeline' | 'popup' }) {
     const classes = {
         ...useTwitterThemedPostDialogHint(),
         ...useTwitterButton(),
     }
-    const onHintButtonClicked = useCallback(
-        () => MessageCenter.emit('compositionUpdated', { reason: 'timeline', open: true }),
-        [],
-    )
+    const onHintButtonClicked = useCallback(() => MessageCenter.emit('compositionUpdated', { reason, open: true }), [
+        reason,
+    ])
     return (
         <PostDialogHint
             classes={classes}

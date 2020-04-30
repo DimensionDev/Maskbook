@@ -11,7 +11,9 @@ export function decodeArrayBuffer(str: string): ArrayBuffer {
     return new Uint8Array(uintArr).buffer
 }
 export function encodeArrayBuffer(buffer: ArrayBuffer) {
-    const x = [...new Uint8Array(buffer)]
-    const encodedString = String.fromCharCode.apply(null, x)
+    let encodedString = ''
+    for (const byte of new Uint8Array(buffer)) {
+        encodedString += String.fromCharCode(byte)
+    }
     return btoa(encodedString)
 }
