@@ -19,18 +19,12 @@ import { useStylesExtends } from '../custom-ui-helper'
 const useStyles = makeStyles((theme) =>
     createStyles({
         container: { listStyleType: 'none', width: '100%' },
-        secondaryAction: { paddingRight: 120 + theme.spacing(2) },
+        secondaryAction: { paddingLeft: theme.spacing(2), paddingRight: 120 + theme.spacing(3) },
         listItemText: {
             fontWeight: 500,
         },
         listItemIcon: {
             marginLeft: 0,
-        },
-        listItemSecondaryAction: {
-            right: 0,
-            width: 140,
-            display: 'flex',
-            justifyContent: 'flex-end',
         },
     }),
 )
@@ -62,15 +56,14 @@ export function SettingsUI<T>(props: SettingsUIProps<T>) {
             return (
                 <ListItem
                     onClick={change}
+                    button
                     disableGutters
                     classes={{ container: classes.container, secondaryAction: classes.secondaryAction }}>
                     {props.icon ? (
                         <ListItemIcon classes={{ root: classes.listItemIcon }}>{props.icon}</ListItemIcon>
                     ) : null}
                     <ListItemText classes={{ primary: classes.listItemText }} primary={primary} secondary={secondary} />
-                    <ListItemSecondaryAction classes={{ root: classes.listItemSecondaryAction }}>
-                        {ui}
-                    </ListItemSecondaryAction>
+                    <ListItemSecondaryAction>{ui}</ListItemSecondaryAction>
                 </ListItem>
             )
         default:
@@ -99,7 +92,7 @@ export function SettingsUIEnum<T extends object>(
             classes={{ container: classes.container, secondaryAction: classes.secondaryAction }}>
             {props.icon ? <ListItemIcon classes={{ root: classes.listItemIcon }}>{props.icon}</ListItemIcon> : null}
             <ListItemText classes={{ primary: classes.listItemText }} primary={primary} secondary={secondary} />
-            <ListItemSecondaryAction classes={{ root: classes.listItemSecondaryAction }}>{ui}</ListItemSecondaryAction>
+            <ListItemSecondaryAction>{ui}</ListItemSecondaryAction>
         </ListItem>
     )
 }
