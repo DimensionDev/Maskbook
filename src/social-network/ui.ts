@@ -15,7 +15,9 @@ import type { I18NStrings } from '../utils/i18n-next'
 import type { TypedMessage } from '../extension/background-script/CryptoServices/utils'
 import i18nNextInstance from '../utils/i18n-next'
 
-OnlyRunInContext(['content', 'debugging', 'options'], 'UI provider')
+if (!process.env.STORYBOOK) {
+    OnlyRunInContext(['content', 'debugging', 'options'], 'UI provider')
+}
 
 //#region SocialNetworkUI
 export interface SocialNetworkUIDefinition

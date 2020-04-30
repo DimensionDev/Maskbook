@@ -6,9 +6,6 @@ module.exports = {
         'storybook-addon-i18n/register.js',
         'storybook-addon-designs',
         '@storybook/addon-links',
-        '@storybook/preset-typescript',
-        // ---------^ not working.
-        // maybe see https://github.com/storybookjs/presets/issues/65
         '@storybook/addon-docs',
         '@storybook/addon-viewport/register',
     ],
@@ -20,7 +17,11 @@ module.exports = {
                     loader: require.resolve('ts-loader'),
                     options: {
                         transpileOnly: true,
-                        compilerOptions: { noEmit: false },
+                        compilerOptions: {
+                            module: 'esnext',
+                            noEmit: false,
+                            importsNotUsedAsValues: 'remove',
+                        },
                     },
                 },
                 { loader: require.resolve('react-docgen-typescript-loader') },

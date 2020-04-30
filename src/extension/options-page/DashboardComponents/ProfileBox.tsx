@@ -10,7 +10,7 @@ import { useI18N } from '../../../utils/i18n-next-ui'
 import { useColorProvider } from '../../../utils/theme'
 import type { ProfileIdentifier } from '../../../database/type'
 import { DialogRouter } from '../DashboardDialogs/DialogBase'
-import { ProfileDisconnectDialog, ProfileConnectStartDialog, ProfileConnectDialog } from '../DashboardDialogs/Profile'
+import { ProfileDisconnectDialog, ProfileConnectDialog } from '../DashboardDialogs/Profile'
 import getCurrentNetworkUI from '../../../social-network/utils/getCurrentNetworkUI'
 import {
     currentImmersiveSetupStatus,

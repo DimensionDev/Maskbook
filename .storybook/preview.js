@@ -33,7 +33,7 @@ import i18nNextInstance from '../src/utils/i18n-next'
 addParameters({
     i18n: {
         provider: function i18nProvider(props) {
-            i18nNextInstance.changeLanguage(props.locale)
+            i18nNextInstance.language !== props.locale && i18nNextInstance.changeLanguage(props.locale)
             return React.createElement(I18nextProvider, { i18n: i18nNextInstance }, props.children)
         },
         supportedLocales: ['en', 'zh'],

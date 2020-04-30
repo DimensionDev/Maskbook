@@ -39,14 +39,14 @@ writeFileSync(
     `exports.AsyncCall = () => new Proxy({}, {get(_target, method) {return (...params) => new Promise(x => {})}})
 exports.AsyncGeneratorCall = () => new Proxy({}, {get(_target, method) {return async function* (...params) { await new Promise(x => {})}}})`,
 )
-const restoreKit = modifyPackage(
-    '@holoflows/kit',
-    (x) =>
-        (x.exports = {
-            './es/util/sleep': './umd/index.js',
-            './es': './umd/index.js',
-        }),
-)
+const restoreKit = modifyPackage('@holoflows/kit', (x) => {
+    x.exports = {
+        '.': './umd/index.js',
+        './es/util/sleep': './umd/index.js',
+        './es': './umd/index.js',
+        './package.json': './package.json',
+    }
+})
 
 process.on('uncaughtException', function (err) {
     cleanup()

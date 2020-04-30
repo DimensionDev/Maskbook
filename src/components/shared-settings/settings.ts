@@ -23,12 +23,13 @@ export const disableOpenNewTabInBackgroundSettings = createNewSettings<boolean>(
     },
 )
 
+const disableShadowRoot = webpackEnv.target === 'WKWebview' || process.env.STORYBOOK
 export const renderInShadowRootSettings = createNewSettings<boolean>(
     'render in shadow root',
     /**
      * ? In WKWebview, the web extension polyfill is not ready for it.
      */
-    webpackEnv.target === 'WKWebview' ? false : true,
+    !disableShadowRoot,
     {
         primary: () => i18n.t('settings_advance_security'),
         secondary: () => i18n.t('settings_advance_security_desc'),
