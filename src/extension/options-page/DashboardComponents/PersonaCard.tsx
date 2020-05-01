@@ -62,7 +62,7 @@ export default function PersonaCard({ persona }: Props) {
             event.preventDefault()
             return Services.Identity.renamePersona(persona.identifier, event.currentTarget.value)
         },
-        [name],
+        [rename],
         () => setRename(false),
     )
 
