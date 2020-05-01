@@ -10,7 +10,7 @@ export const PluginRedPacketTheme = createMuiTheme({
                 position: 'relative',
                 '&::after': {
                     position: 'absolute',
-                    backgroundImage: `url(${getUrl('wallet/present-dai.png')})`,
+                    backgroundImage: `url(${getUrl('wallet/present-default.png')})`,
                     width: '4em',
                     height: '5.7em',
                     top: 250,
