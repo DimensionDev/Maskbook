@@ -1,11 +1,15 @@
 import React from 'react'
 import { makeStyles, createStyles, Typography, Divider, Fade } from '@material-ui/core'
 import classNames from 'classnames'
+import { useRouteMatch } from 'react-router-dom'
 
-interface DashboardRouterContainer {
-    title: string
+interface DashboardRouterContainerProps {
+    title?: string
     actions?: React.ReactElement[]
     children: React.ReactNode
+    /**
+     * add or remove the space between divider and left panel
+     */
     padded?: boolean
 }
 
@@ -70,23 +74,33 @@ const useStyles = makeStyles((theme) =>
     }),
 )
 
-export default function DashboardRouterContainer(props: DashboardRouterContainer) {
+export default function DashboardRouterContainer(props: DashboardRouterContainerProps) {
     const { title, actions, children, padded } = props
     const classes = useStyles()
+    const match = useRouteMatch('/:param/')
+    const forSetupPurpose = match?.url.includes('/setup')
     return (
         <Fade in>
-            <section className={classes.wrapper}>
-                <section className={classes.titleAction}>
-                    <Typography className={classes.title} color="textPrimary" variant="h6">
-                        {title}
-                    </Typography>
-                    <div className={classes.buttons}>
-                        {actions?.map((action, index) => React.cloneElement(action, { key: index }))}
-                    </div>
-                </section>
-                <div className={classNames({ [classes.dividerPadded]: padded !== false })}>
-                    <Divider className={classes.divider} />
-                </div>
+            <section
+                className={classes.wrapper}
+                style={{
+                    gridTemplateRows: forSetupPurpose ? '1fr' : '[titleAction] 0fr [divider] 0fr [content] auto',
+                }}>
+                {forSetupPurpose ? null : (
+                    <>
+                        <section className={classes.titleAction}>
+                            <Typography className={classes.title} color="textPrimary" variant="h6">
+                                {title}
+                            </Typography>
+                            <div className={classes.buttons}>
+                                {actions?.map((action, index) => React.cloneElement(action, { key: index }))}
+                            </div>
+                        </section>
+                        <div className={classNames({ [classes.dividerPadded]: padded !== false })}>
+                            <Divider className={classes.divider} />
+                        </div>
+                    </>
+                )}
                 <main className={classNames(classes.content, { [classes.contentPadded]: padded !== false })}>
                     <div className={classes.scroller}>{children}</div>
                 </main>

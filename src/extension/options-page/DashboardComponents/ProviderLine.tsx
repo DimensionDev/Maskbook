@@ -6,17 +6,23 @@ import { useI18N } from '../../../utils/i18n-next-ui'
 
 import LinkOffIcon from '@material-ui/icons/LinkOff'
 import ArrowForwardIcon from '@material-ui/icons/ArrowForward'
+import { useStylesExtends } from '../../../components/custom-ui-helper'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
         title: {
             fontWeight: 500,
+            fontSize: 12,
+            lineHeight: 1.75,
         },
         text: {
+            fontSize: 14,
+            lineHeight: '24px',
             color: theme.palette.primary.main,
+            borderBottom: `solid 1px ${theme.palette.divider}`,
             display: 'flex',
             alignItems: 'center',
-            margin: theme.spacing(1.2, 2),
+            padding: theme.spacing(1, 2),
             '& > :first-child': {
                 flex: '1 1 auto',
                 overflow: 'hidden',
@@ -39,7 +45,7 @@ const useStyles = makeStyles((theme) =>
     }),
 )
 
-interface ProviderLineProps {
+export interface ProviderLineProps extends withClasses<KeysInferFromUseStyles<typeof useStyles>> {
     network: string
     connected?: boolean
     userId?: string
@@ -49,7 +55,7 @@ interface ProviderLineProps {
 export default function ProviderLine(props: ProviderLineProps) {
     const { t } = useI18N()
     const { network, connected, userId, onAction } = props
-    const classes = useStyles()
+    const classes = useStylesExtends(useStyles(), props)
 
     return (
         <div className={classes.control}>
@@ -79,7 +85,6 @@ export default function ProviderLine(props: ProviderLineProps) {
                     </IconButton>
                 )}
             </Typography>
-            <Divider />
         </div>
     )
 }
