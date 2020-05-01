@@ -34,18 +34,20 @@ import DashboardSettingsRouter from './Router/Settings'
 import { DashboardBlurContextProvider } from './DashboardBlurContext'
 import { useValueRef } from '../../utils/hooks/useValueRef'
 import { appearanceSettings, Appearance } from '../../components/shared-settings/settings'
+import { DashboardSetupRouter } from './Router/Setup'
 
 const OptionsPageRouters = (
-    <>
-        <Switch>
-            <Route path="/personas/" component={DashboardPersonasRouter} />
-            <Route path="/wallets/" component={DashboardWalletsRouter} />
-            <Route path="/contacts/" component={DashboardContactsRouter} />
-            <Route path="/settings/" component={DashboardSettingsRouter} />
-            <DialogRouter path="/initialize" component={DashboardInitializeDialog} onExit={'/'} fullscreen />
-            <Redirect path="*" to="/personas/" />
-        </Switch>
-    </>
+    <Switch>
+        <Route path="/personas/" component={DashboardPersonasRouter} />
+        <Route path="/wallets/" component={DashboardWalletsRouter} />
+        <Route path="/contacts/" component={DashboardContactsRouter} />
+        <Route path="/settings/" component={DashboardSettingsRouter} />
+        <Route path="/setup" component={DashboardSetupRouter} onExit={'/'} />
+
+        {/** deprecated */}
+        <DialogRouter path="/initialize" component={DashboardInitializeDialog} onExit={'/'} fullscreen />
+        <Redirect path="*" to="/personas/" />
+    </Switch>
 )
 
 function DashboardWithProvider() {
@@ -184,6 +186,7 @@ function Dashboard() {
         <DashboardBlurContextProvider value={toggle}>
             <div className={classes.wrapper} ref={ref}>
                 <div className={classes.container}>
+                    {/* TODO: detect clean for setup only */}
                     <ResponsiveDrawer routers={routers} exitDashboard={null} />
                     {OptionsPageRouters}
                 </div>

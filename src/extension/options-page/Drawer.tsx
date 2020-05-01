@@ -1,7 +1,7 @@
 import React from 'react'
 import classNames from 'classnames'
 
-import { List, ListItem, ListItemIcon, ListItemText, Typography, Paper } from '@material-ui/core'
+import { List, ListItem, ListItemIcon, ListItemText, Typography, Paper, Box } from '@material-ui/core'
 import { makeStyles, Theme, ThemeProvider, useTheme } from '@material-ui/core/styles'
 import { Link, useRouteMatch } from 'react-router-dom'
 
@@ -18,14 +18,17 @@ const useStyles = makeStyles((theme) => ({
         display: 'grid',
         gridTemplateRows: '[drawerHeader] 0fr [drawerList] auto [drawerFooter] 0fr',
         width: 'var(--drawerWidth)',
-        backgroundColor: 'var(--drawerBody)',
         color: 'white',
-        overflow: 'auto',
+        overflow: 'visible',
+        position: 'relative',
     },
     drawerHeader: {
         padding: theme.spacing(4, 2, 3, 4),
         color: 'white',
         backgroundColor: 'var(--drawerHeader)',
+    },
+    drawerBody: {
+        backgroundColor: 'var(--drawerBody)',
     },
     maskDescription: {
         fontSize: 14,
@@ -49,6 +52,19 @@ const useStyles = makeStyles((theme) => ({
     },
     feedback: {
         paddingLeft: 0,
+    },
+    slogan: {
+        color: theme.palette.type === 'light' ? '#A1C1FA' : '#3B3B3B',
+        opacity: 0.5,
+        width: 316,
+        height: 260,
+        left: 48,
+        bottom: 30,
+        fontWeight: 500,
+        fontSize: 40,
+        lineHeight: 1.2,
+        letterSpacing: -0.4,
+        position: 'absolute',
     },
 }))
 
@@ -88,6 +104,7 @@ function ResponsiveDrawer(props: ResponsiveDrawerProps) {
     const { t } = useI18N()
     const classes = useStyles()
     const match = useRouteMatch('/:param/')
+    const forSetupPurpose = match?.url.includes('/setup')
 
     const theme = useTheme()
 
@@ -97,7 +114,9 @@ function ResponsiveDrawer(props: ResponsiveDrawerProps) {
     return (
         <ThemeProvider theme={drawerTheme}>
             <nav className={classes.drawer}>
-                <Paper elevation={0} className={classes.drawerHeader}>
+                <Box
+                    className={classes.drawerHeader}
+                    style={{ backgroundColor: `var(${forSetupPurpose ? '--drawerBody' : '--drawerHeader'})` }}>
                     <Logo />
                     <Typography
                         className={classes.maskDescription}
@@ -105,28 +124,43 @@ function ResponsiveDrawer(props: ResponsiveDrawerProps) {
                         variant="caption">
                         Make Privacy Protected Again
                     </Typography>
-                </Paper>
-                <List className={classes.drawerList}>
-                    {routers.map((item, index) => (
-                        <ListItem
-                            className={classes.drawerItem}
-                            selected={match ? item[1].startsWith(match.url) : false}
-                            component={Link}
-                            to={item[1]}
-                            button
-                            key={index}>
-                            <ListItemIcon children={item[2]}></ListItemIcon>
-                            <ListItemText className={classes.drawerItemText} primary={item[0]} />
-                        </ListItem>
-                    ))}
-                </List>
-                <List className={classNames(classes.drawerList, classes.feedback)}>
-                    <ListItem className={classes.drawerItem} button onClick={openFeedback}>
-                        <ListItemIcon children={<SentimentSatisfiedOutlinedIcon fontSize="small" />} />
-                        <ListItemText className={classes.drawerItemText} primary={t('feedback')} />
-                    </ListItem>
-                </List>
-                {feedback}
+                </Box>
+                <Box
+                    display="flex"
+                    flexDirection="column"
+                    justifyContent="space-between"
+                    className={classes.drawerBody}>
+                    {forSetupPurpose ? null : (
+                        <>
+                            <List className={classes.drawerList}>
+                                {routers.map((item, index) => (
+                                    <ListItem
+                                        className={classes.drawerItem}
+                                        selected={match ? item[1].startsWith(match.url) : false}
+                                        component={Link}
+                                        to={item[1]}
+                                        button
+                                        key={index}>
+                                        <ListItemIcon children={item[2]}></ListItemIcon>
+                                        <ListItemText className={classes.drawerItemText} primary={item[0]} />
+                                    </ListItem>
+                                ))}
+                            </List>
+                            <List className={classNames(classes.drawerList, classes.feedback)}>
+                                <ListItem className={classes.drawerItem} button onClick={openFeedback}>
+                                    <ListItemIcon children={<SentimentSatisfiedOutlinedIcon fontSize="small" />} />
+                                    <ListItemText className={classes.drawerItemText} primary={t('feedback')} />
+                                </ListItem>
+                            </List>
+                            {feedback}
+                        </>
+                    )}
+                </Box>
+                {forSetupPurpose ? (
+                    <Typography className={classes.slogan}>
+                        Post on social networks without allowing the corporations to stalk you.
+                    </Typography>
+                ) : null}
             </nav>
         </ThemeProvider>
     )

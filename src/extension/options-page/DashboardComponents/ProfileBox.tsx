@@ -2,7 +2,7 @@ import React from 'react'
 import type { Persona } from '../../../database'
 import { definedSocialNetworkWorkers } from '../../../social-network/worker'
 
-import ProviderLine from './ProviderLine'
+import ProviderLine, { ProviderLineProps } from './ProviderLine'
 import getCurrentNetworkUI from '../../../social-network/utils/getCurrentNetworkUI'
 import {
     currentImmersiveSetupStatus,
@@ -12,12 +12,13 @@ import { exclusiveTasks } from '../../content-script/tasks'
 import { useModal } from '../Dialog/Base'
 import { DashboardPersonaUnlinkConfirmDialog } from '../Dialog/Persona'
 
-interface Props {
+interface ProfileBoxProps {
     persona: Persona | null
     border?: true
+    ProviderLineProps?: Partial<ProviderLineProps>
 }
 
-export default function ProfileBox({ persona }: Props) {
+export default function ProfileBox({ persona, ProviderLineProps }: ProfileBoxProps) {
     const profiles = persona ? [...persona.linkedProfiles] : []
 
     const providers = [...definedSocialNetworkWorkers]
@@ -64,7 +65,8 @@ export default function ProfileBox({ persona }: Props) {
                 <ProviderLine
                     key={provider.identifier?.toText()}
                     onAction={() => (provider.connected ? onDisconnect(provider) : onConnect(provider))}
-                    {...provider}></ProviderLine>
+                    {...provider}
+                    {...ProviderLineProps}></ProviderLine>
             ))}
             {detachProfile}
         </>
