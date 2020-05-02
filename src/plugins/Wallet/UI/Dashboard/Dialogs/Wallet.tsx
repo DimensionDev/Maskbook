@@ -303,7 +303,7 @@ export function WalletRedPacketDetailDialog(props: WalletRedPacketDetailDialogPr
             const text = `I just received a Red Packet${
                 user ? ` from @${user}` : ''
             }. Follow @realMaskbook (maskbook.com) to get your first Twitter #RedPacket.
-#maskbook #makerdao ${redPacket._found_in_url_}`
+#maskbook ${redPacket._found_in_url_}`
             window.open(
                 `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`,
                 '_blank',
