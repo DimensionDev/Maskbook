@@ -12,6 +12,8 @@ import { memoizePromise } from '../../utils/memoize'
 import { currentEthereumNetworkSettings } from './network'
 import { buf2hex } from './web3'
 import { BigNumber } from 'bignumber.js'
+import { sideEffect } from '../../utils/side-effects'
+import { ec as EC } from 'elliptic'
 
 // Private key at m/44'/coinType'/account'/change/addressIndex
 // coinType = ether
@@ -71,7 +73,9 @@ export async function getWallets(): Promise<[(WalletRecord & { privateKey: strin
         const recordWithKeys = await Promise.all(records)
         return recordWithKeys.sort((a, b) => (a._wallet_is_default ? -1 : b._wallet_is_default ? 1 : 0))
         async function makePrivateKey(record: WalletRecord) {
-            const recover = await recoverWallet(record.mnemonic, record.passphrase)
+            const recover = record._private_key_
+                ? await recoverWalletFromPrivateKey(record._private_key_)
+                : await recoverWallet(record.mnemonic, record.passphrase)
             return '0x' + buf2hex(recover.privateKey)
         }
     }
@@ -105,9 +109,16 @@ export async function createNewWallet(
 }
 
 export async function importNewWallet(
-    rec: Omit<WalletRecord, 'id' | 'address' | 'eth_balance' | '_data_source_' | 'erc20_token_balance'>,
+    rec: PartialRequired<
+        Omit<
+            WalletRecord,
+            'id' | 'address' | 'eth_balance' | '_data_source_' | 'erc20_token_balance' | 'createdAt' | 'updatedAt'
+        >,
+        'name'
+    >,
 ) {
-    const { address } = await recoverWallet(rec.mnemonic, rec.passphrase)
+    const { name, mnemonic = [], passphrase = '' } = rec
+    const address = await getWalletAddress()
     const bal = await getWalletProvider()
         .queryBalance(address)
         .catch((x) => undefined)
@@ -115,7 +126,9 @@ export async function importNewWallet(
         rec.name = address.slice(0, 6)
     }
     const record: WalletRecord = {
-        ...rec,
+        name,
+        mnemonic,
+        passphrase,
         address,
         eth_balance: bal,
         /** Builtin Dai Stablecoin */
@@ -125,6 +138,8 @@ export async function importNewWallet(
         ]),
         _data_source_: getWalletProvider().dataSource,
     }
+    /** Wallet recover from private key */
+    if (rec._private_key_) record._private_key_ = rec._private_key_
     {
         const t = createTransaction(await createWalletDBAccess(), 'readwrite')('Wallet', 'ERC20Token')
         t.objectStore('Wallet')
@@ -148,6 +163,10 @@ export async function importNewWallet(
         })
     }
     PluginMessageCenter.emit('maskbook.wallets.update', undefined)
+    async function getWalletAddress() {
+        if (rec._private_key_) return (await recoverWalletFromPrivateKey(rec._private_key_)).address
+        return (await recoverWallet(mnemonic, passphrase)).address
+    }
 }
 
 export async function onWalletBalanceUpdated(address: string, newBalance: BigNumber) {
@@ -190,7 +209,37 @@ export async function recoverWallet(mnemonic: string[], password: string) {
     const walletPublicKey = wallet.publicKey
     const walletPrivateKey = wallet.privateKey!
     const address = EthereumAddress.from(walletPublicKey).address
-    return { address, privateKey: walletPrivateKey, mnemonic }
+    return { address, privateKey: walletPrivateKey, privateKeyInHex: `0x${buf2hex(walletPrivateKey)}`, mnemonic }
+    function buf2hex(buffer: ArrayBuffer) {
+        return Array.prototype.map.call(new Uint8Array(buffer), (x) => ('00' + x.toString(16)).slice(-2)).join('')
+    }
+}
+export async function recoverWalletFromPrivateKey(privateKey: string) {
+    if (!privateKey) throw new Error('cannot import an empty private key')
+    const ec = new EC('secp256k1')
+    const privateKey_ = privateKey.replace(/^0x/, '') // strip 0x
+    if (!privateKeyVerify(privateKey_)) throw new Error('cannot import invalid private key')
+    const key = ec.keyFromPrivate(privateKey_)
+    const address = EthereumAddress.from(key.getPublic(false, 'array') as any).address
+    return {
+        address,
+        privateKey: hex2buf(privateKey_),
+        privateKeyInHex: privateKey.startsWith('0x') ? privateKey : `0x${privateKey}`,
+        mnemonic: [],
+    }
+    function hex2buf(hex: string) {
+        let hex_ = hex
+        hex_ = hex.replace(/^0x/, '') // strip 0x
+        if (hex_.length % 2) hex_ = `0${hex_}` // pad even zero
+        const buf = []
+        for (let i = 0; i < hex_.length; i += 2) buf.push(parseInt(hex_.substr(i, 2), 16))
+        return new Uint8Array(buf)
+    }
+    function privateKeyVerify(key: string) {
+        const k = BigInt(`0x${key}`)
+        const n = BigInt('0xfffffffffffffffffffffffffffffffebaaedce6af48a03bbfd25e8cd0364141')
+        return k !== BigInt(0) && k < n
+    }
 }
 
 export async function walletAddERC20Token(

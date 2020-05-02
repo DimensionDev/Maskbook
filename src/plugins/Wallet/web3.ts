@@ -1,7 +1,7 @@
 import Web3 from 'web3'
 import type { WebsocketProvider } from 'web3-core'
 import { getNetworkSettings, currentEthereumNetworkSettings } from './network'
-import { getWallets, recoverWallet } from './wallet'
+import { getWallets, recoverWallet, recoverWalletFromPrivateKey } from './wallet'
 import { PluginMessageCenter } from '../PluginMessages'
 import { sideEffect } from '../../utils/side-effects'
 
@@ -25,10 +25,12 @@ export const resetWallet = async () => {
     web3.eth.accounts.wallet.clear()
 
     const [wallets] = await getWallets()
-
-    for await (const { mnemonic, passphrase } of wallets) {
-        const { privateKey } = await recoverWallet(mnemonic, passphrase)
-        web3.eth.accounts.wallet.add(`0x${buf2hex(privateKey)}`)
+    for await (const { mnemonic, passphrase, privateKey } of wallets) {
+        const { privateKey: privKey } =
+            mnemonic && passphrase
+                ? await recoverWallet(mnemonic, passphrase)
+                : await recoverWalletFromPrivateKey(privateKey)
+        web3.eth.accounts.wallet.add(`0x${buf2hex(privKey)}`)
     }
 }
 
