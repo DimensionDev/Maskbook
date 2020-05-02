@@ -1933,7 +1933,6 @@
 
 "@holoflows/kit@https://github.com/DimensionDev/holoflows-kit":
   version "0.7.0"
-  uid "47ddaad5ceff4526d4a58e3d14ad0d8125365c78"
   resolved "https://github.com/DimensionDev/holoflows-kit#47ddaad5ceff4526d4a58e3d14ad0d8125365c78"
   dependencies:
     "@servie/events" "^1.0.0"
@@ -3760,6 +3759,11 @@
   integrity sha512-IW3dFGNyVkVLC1MCMogVWQaKH/ZtjPQdOW9c3X128o5lVpFYNsq/l3Qo1pV7sfTmvDzWEXR3QTxg1TMy1pyaAQ==
   dependencies:
     "@types/node" "*"
+
+"@types/twemoji-parser@^12.1.0":
+  version "12.1.0"
+  resolved "https://registry.npm.taobao.org/@types/twemoji-parser/download/@types/twemoji-parser-12.1.0.tgz#7aba95c6b4c92556737c2f4ef162ecdc73e8c40d"
+  integrity sha1-erqVxrTJJVZzfC9O8WLs3HPoxA0=
 
 "@types/unist@^2.0.0", "@types/unist@^2.0.2":
   version "2.0.3"
@@ -18921,6 +18925,11 @@ tweetnacl@^0.14.3, tweetnacl@~0.14.0:
   version "0.14.5"
   resolved "https://registry.yarnpkg.com/tweetnacl/-/tweetnacl-0.14.5.tgz#5ae68177f192d4456269d108afa93ff8743f4f64"
   integrity sha1-WuaBd/GS1EViadEIr6k/+HQ/T2Q=
+
+twemoji-parser@^12.1.3:
+  version "12.1.3"
+  resolved "https://registry.npm.taobao.org/twemoji-parser/download/twemoji-parser-12.1.3.tgz#916c0153e77bd5f1011e7a99cbeacf52e43c9371"
+  integrity sha1-kWwBU+d71fEBHnqZy+rPUuQ8k3E=
 
 type-check@~0.3.2:
   version "0.3.2"

@@ -1,4 +1,28 @@
 /* eslint-disable no-bitwise */
+import { BASE_1024, BASE_2048 } from './constants'
+import { parse } from 'twemoji-parser'
+
+/**
+ * Single remapping Fn
+ *
+ * Join all elements into one string with mapping
+ */
+function reMapping(input: ArrayLike<string>, mapFn: (bytes: string, index: number) => string): string {
+    return Array.from(input, mapFn).join('')
+}
+
+/**
+ * Parsing codepoints to emoji strings
+ */
+function parseEmojis(points: string[]): string[] {
+    return points
+        .map((point: string) => {
+            const mapFn = (hs: string) => String.fromCodePoint(Number.parseInt(hs, 16))
+            return String(point.split('-').map(mapFn).join(''))
+        })
+        .sort((c: string, n: string) => c.length - n.length)
+}
+
 /**
  * @file Codec
  * @name codec.ts<utils>
@@ -14,6 +38,7 @@
  */
 interface CodecScheme {
     bits: number
+    name: string
     table: string[]
     tail: string
 }
@@ -24,6 +49,7 @@ interface CodecScheme {
 // prettier-ignore
 export const Binary: CodecScheme = {
     bits: 1,
+    name: "Binary",
     table: [
         "0",
         "1",
@@ -37,6 +63,7 @@ export const Binary: CodecScheme = {
 // prettier-ignore
 export const HEX: CodecScheme = {
     bits: 4,
+    name: "Hex",
     table: [
         "0", "1", "2", "3",
         "4", "5", "6", "7",
@@ -52,6 +79,7 @@ export const HEX: CodecScheme = {
 // prettier-ignore
 export const BASE64: CodecScheme = {
     bits: 6,
+    name: "Base64",
     table: [
         "A", "B", "C", "D", "E", "F",
         "G", "H", "I", "J", "K", "L",
@@ -69,11 +97,50 @@ export const BASE64: CodecScheme = {
 }
 
 /**
- * Unicode code points range: `0 - 0x10FFFF`.
- *
- * If there is no element at point, the value is `undefined`.
+ * BASE1024 Encoding
  */
-type Point = number | undefined
+export const BASE1024: CodecScheme = {
+    bits: 10,
+    name: 'Base1024',
+    table: BASE_1024,
+    tail: '=',
+}
+
+/**
+ * BASE2048 Encoding
+ */
+export const BASE2048: CodecScheme = {
+    bits: 11,
+    name: 'Base2048',
+    table: parseEmojis(BASE_2048),
+    tail: '=',
+}
+
+/**
+ * Assert `CodecSchema`
+ *
+ * - `bits` : should be `number`
+ * - `table`: `length` of table should be `1 << bits`
+ * - `tail` : should be `string`
+ */
+function assertScheme(scheme: CodecScheme) {
+    // Assert bits
+    if (typeof scheme.bits !== 'number') {
+        throw new Error(`the bits field of ${scheme.name} should be type 'number'`)
+    }
+
+    // Assert table
+    //
+    // Emojis' combining characters needs full of them
+    if (1 << scheme.bits > scheme.table.length) {
+        throw new Error(`table \`length\` of ${scheme.name} should larger than ${1 << scheme.bits}`)
+    }
+
+    // Assert tail
+    if (typeof scheme.tail !== 'string') {
+        throw new Error(`the tail field of ${scheme.name} should be type 'string'`)
+    }
+}
 
 /**
  * Codec
@@ -91,7 +158,7 @@ type Point = number | undefined
  * |      | 1000010111 |  535  |
  * |      | 0011011011 |  219  |
  *
- * For `ASCII`: `[ 01001101, 01100001, 01110011, 01101011 ]`
+ * For `UTF-16`: `[ 01001101, 01100001, 01110011, 01101011 ]`
  *
  * | Text |  Binary  | Index |
  * | ---- | -------- | ----- |
@@ -127,30 +194,56 @@ type Point = number | undefined
  *
  * @property {Point[]} points - Code points
  *
- * @method  toHex            - Convert code points to hex string
- * @method  toBase64         - Convert code points to base64 string
- * @method  toString         - Convert code points to utf-16 string
+ * @method  toHex    - Convert code points to hex string
+ * @method  toBase64 - Convert code points to base64 string
+ * @method  toString - Convert code points to utf-16 string
  */
-export default class Codec {
+export class Codec {
     /**
      * Build `Codec` from target scheme string
      *
-     * @param {CodecScheme} scheme - target codec scheme
-     * @param {string}      str    - the base `CodecScheme` string
+     * @param  {CodecScheme} scheme - target codec scheme
+     * @param  {string}      input  - the base `CodecScheme` string
      */
-    static from(scheme: CodecScheme, str: string): Codec {
-        return new Codec(
-            Array.from(str, (byte: string) => {
-                const index = scheme.table.indexOf(byte)
+    static from(scheme: CodecScheme, input: string | string[], emoji: boolean = false): Codec {
+        assertScheme(scheme)
 
-                // return empty string if it is tail
-                if (index === -1) {
-                    return ''
-                }
+        // Map bytes to binary string
+        let bits: number = 0
+        const mapFn = (byte: string) => {
+            // return empty string if it is tail
+            if (byte === scheme.tail) {
+                bits += 2
+                return ''
+            }
 
-                return ('0'.repeat(scheme.bits - 1) + Number(index).toString(2)).slice(-scheme.bits)
-            }).reduce((o: string, c: string) => (o += c)),
-        )
+            // throw error if out of range
+            const index = scheme.table.indexOf(byte)
+            if (index === -1) {
+                throw new Error(`Decode from ${scheme.name} string failed`)
+            }
+
+            // Complete
+            return String(('0'.repeat(scheme.bits - 1) + Number(index).toString(2)).slice(-scheme.bits))
+        }
+
+        // Check if need to parse emojis
+        if (emoji) {
+            const tails = String(input.slice(input.indexOf(scheme.tail)))
+            input = parse(input as string).map((emoji: Record<string, any>) => emoji.text)
+            input = input.concat(tails.split(''))
+        }
+
+        // Check if need reTrim last byte
+        let binary: string = reMapping(input, mapFn)
+        if (bits !== 0) {
+            let lastByte = binary.slice(-scheme.bits)
+            lastByte = lastByte.slice(lastByte.indexOf('1')) + lastByte.slice(0, lastByte.indexOf('1'))
+            binary = binary.slice(0, -scheme.bits) + lastByte
+        }
+
+        // Return new codec
+        return new Codec(binary.slice(0, bits > 0 ? -bits : binary.length))
     }
 
     /**
@@ -163,6 +256,33 @@ export default class Codec {
     }
 
     /**
+     * Build `Codec` from emojis string
+     *
+     * @param {string} b1024 - b1024 string
+     */
+    static fromBase1024(b1024: string): Codec {
+        return Codec.from(BASE1024, b1024, true)
+    }
+
+    /**
+     * Build `Codec` from emojis string
+     *
+     * @param {string} b2048 - b2048 string
+     */
+    static fromBase2048(b2048: string): Codec {
+        return Codec.from(BASE2048, b2048, true)
+    }
+
+    /**
+     * Build `Codec` from binary string
+     *
+     * @param {string} binary - binary string
+     */
+    static fromBinary(binary: string): Codec {
+        return new Codec(binary)
+    }
+
+    /**
      * Build `Codec` from hex string
      *
      * @param {string} str - hex string
@@ -172,63 +292,22 @@ export default class Codec {
     }
 
     /**
-     * Build Codec from utf-16 string
+     * Build Codec from utf8 string
      *
-     * @param {string} str - utf16 string
+     * @param {string} str - utf8 string
      */
-    static fromUtf16(str: string): Codec {
+    static fromUtf8(utf8: string): Codec {
         return new Codec(
-            Array.from(str, (char: string) => {
+            Array.from(utf8, (char: string) => {
                 const point = char.codePointAt(0)
                 if (point === undefined) {
-                    return '0'.repeat(8)
+                    throw new Error('Invalid character while parsing utf-8 string')
                 }
 
                 // Complete the 0 prefix from every byte
                 return ('0'.repeat(8) + point.toString(2)).slice(-8)
             }).reduce((o: string, c: string) => (o += c)),
         )
-    }
-
-    /**
-     * Convert code point into target radix string
-     *
-     * @name P2RS - Point to Radix String
-     *
-     * @param {CodecScheme} scheme      - target codec scheme
-     * @param {Point}       point       - code point
-     * @param {string}      str         - the output string
-     * @param {boolean}     completion  - if complete the prefix
-     */
-    static P2RS(scheme: CodecScheme, point: Point, str: string, completion: boolean): [number, string] {
-        if (point === undefined) {
-            return [0, '']
-        } else if (point === 0) {
-            return [0, str]
-        }
-
-        // Complete prefix if it is required
-        const reminder = completion
-            ? (scheme.table[0].repeat(scheme.bits - 1) + scheme.table[point & ((1 << scheme.bits) - 1)]).slice(
-                  -scheme.bits,
-              )
-            : scheme.table[point & ((1 << scheme.bits) - 1)]
-
-        // Recursive result
-        return this.P2RS(scheme, point >> scheme.bits, reminder + str, completion)
-    }
-
-    /**
-     * Convert code points into target radix string
-     *
-     * @name Ps2RS - Points to Radix String
-     *
-     * @param {CodecScheme} scheme     - target codec scheme.
-     * @param {Point[]}     points     - code points
-     * @param {boolean}     completion - complete prefix
-     */
-    static Ps2RS(scheme: CodecScheme, points: Point[], completion: boolean): string {
-        return points.map((point: Point) => Codec.P2RS(scheme, point, '', completion)[1]).reduce((o, c) => (o += c))
     }
 
     /**
@@ -242,14 +321,14 @@ export default class Codec {
      * @param {string} binary - binary string
      */
     constructor(binary: string) {
-        this.bin = binary
+        this.bin = String(binary)
     }
 
     /**
      * Convert points to hex
      */
     public toBinary(): string {
-        return this.bin
+        return String(this.bin)
     }
 
     /**
@@ -267,35 +346,53 @@ export default class Codec {
     }
 
     /**
+     * Convert points to hex
+     */
+    public toBase1024(): string {
+        return this.toSchemeString(BASE1024)
+    }
+
+    /**
+     * Convert points to hex
+     */
+    public toBase2048(): string {
+        return this.toSchemeString(BASE2048)
+    }
+
+    /**
      * Convert codec binary to target scheme string
      *
      * @param {CodecScheme} scheme - target codec scheme
      *
      * @public This method can be used by manual `CodecSchema`.
      *
-     * @return {string} schema string
+     * @return {string} scheme string
      */
-    // prettier-ignore
     public toSchemeString(scheme: CodecScheme): string {
-        const bytes = this.bin.match(new RegExp(`.{1,${scheme.bits}}`, "g"));
+        assertScheme(scheme)
+
+        // Match bytes in target schemem
+        const bytes = this.bin.match(new RegExp(`.{1,${scheme.bits}}`, 'g'))
         if (bytes === null) {
-            return "";
+            throw new Error('Can not convert to target codec scheme.')
         }
 
-        let tail: number = 0;
-        return Array.from(bytes.map((
-            byte: string
-        ) => {
+        // Fill the prefix for every byte
+        let tails: number = 0
+        const mapBytes = (byte: string): string => {
             if (byte.length !== scheme.bits) {
-                tail = (scheme.bits - byte.length) / 2;
-                return byte + "0".repeat(tail * 2);
+                const bits = scheme.bits - byte.length
+                byte += '0'.repeat(bits)
+
+                // calculating tails
+                tails = bits / 2
             }
-            return byte;
-        }), (
-            byte: string
-        ) => scheme.table[parseInt(byte, 2)]).reduce((
-            o: string, c: string
-        ) => o += c) + scheme.tail.repeat(tail);
+
+            return String(scheme.table[Number.parseInt(byte, 2)])
+        }
+
+        // Return codec string
+        return String(reMapping(bytes, mapBytes) + scheme.tail.repeat(tails))
     }
 
     /**
@@ -312,7 +409,10 @@ export default class Codec {
         // Return string from code points
         return String.fromCodePoint.apply(
             null,
-            bytes.map((byte: string) => parseInt(byte, 2)),
+            bytes.map((byte: string) => Number.parseInt(byte, 2)),
         )
     }
 }
+
+// Export default
+export default Codec
