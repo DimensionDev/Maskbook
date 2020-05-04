@@ -76,6 +76,8 @@ export interface WalletRecord {
     mnemonic: string[]
     passphrase: string
     _data_source_: 'real' | 'mock'
+    /** Wallet recover from private key */
+    _private_key_?: string
     _wallet_is_default?: boolean
 }
 export interface ERC20TokenRecord {
