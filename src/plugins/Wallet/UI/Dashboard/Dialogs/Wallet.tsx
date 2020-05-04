@@ -30,6 +30,7 @@ import { useI18N } from '../../../../../utils/i18n-next-ui'
 import { useColorProvider } from '../../../../../utils/theme'
 import { formatBalance } from '../../../formatter'
 import { exclusiveTasks } from '../../../../../extension/content-script/tasks'
+import AbstractTab, { AbstractTabProps } from '../../../../../extension/options-page/DashboardComponents/AbstractTab'
 
 interface WalletSendRedPacketDialogProps {
     onDecline(): void
@@ -315,7 +316,7 @@ export function WalletRedPacketDetailDialog(props: WalletRedPacketDetailDialogPr
             const text = `I just received a Red Packet${
                 user ? ` from @${user}` : ''
             }. Follow @realMaskbook (maskbook.com) to get your first Twitter #RedPacket.
-#maskbook #makerdao ${redPacket._found_in_url_}`
+#maskbook ${redPacket._found_in_url_}`
             window.open(
                 `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`,
                 '_blank',
@@ -438,6 +439,9 @@ export function WalletCreateDialog() {
 
 const useWalletImportStyles = makeStyles((theme) =>
     createStyles({
+        input: {
+            width: '100%',
+        },
         box: {
             border: `1px solid ${theme.palette.divider}`,
             marginTop: theme.spacing(2),
@@ -451,39 +455,81 @@ export function WalletImportDialog() {
     const { t } = useI18N()
     const [mnemonic, setMnemonic] = React.useState('')
     const [passphrase, setPassphrase] = React.useState('')
+    const [privateKey, setPrivateKey] = React.useState('')
     const [name, setName] = React.useState('New wallet')
     const history = useHistory()
     const classes = useWalletImportStyles()
 
-    const importWallet = () => {
+    const state = React.useState(0)
+
+    const importWallet = () =>
         Services.Plugin.invokePlugin('maskbook.wallet', 'importNewWallet', {
+            name,
             mnemonic: mnemonic.split(' '),
             passphrase,
-            name,
-        } as Pick<WalletRecord, 'name' | 'mnemonic' | 'passphrase'>).then(() => history.replace('../'))
+            _private_key_: state[0] === 0 ? '' : privateKey,
+        }).then(() => history.replace('../'))
+
+    const tabProps: AbstractTabProps = {
+        tabs: [
+            {
+                label: 'MNEMONIC WORDS',
+                component: (
+                    <>
+                        <TextField
+                            className={classes.input}
+                            required
+                            value={mnemonic}
+                            placeholder="flag wave term illness equal airport hint item dinosaur opinion special kick"
+                            onChange={(e) => setMnemonic(e.target.value)}
+                            label="Mnemonic Words"
+                            helperText=" "
+                        />
+                        <TextField
+                            className={classes.input}
+                            required
+                            value={passphrase}
+                            onChange={(e) => setPassphrase(e.target.value)}
+                            label="Password"
+                            helperText=" "
+                        />
+                        <TextField
+                            className={classes.input}
+                            required
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
+                            label="Wallet name"
+                        />
+                    </>
+                ),
+            },
+            {
+                label: 'PRIVATE KEY',
+                component: (
+                    <>
+                        <TextField
+                            className={classes.input}
+                            required
+                            value={privateKey}
+                            placeholder=""
+                            onChange={(e) => setPrivateKey(e.target.value)}
+                            label="Private Key"
+                            helperText=" "
+                        />
+                    </>
+                ),
+            },
+        ],
+        state,
     }
 
     const content = (
         <Box alignSelf="stretch" width="100%">
-            <Typography variant="body1">Import a wallet with mnemonic words and password.</Typography>
-            <Box display="flex" flexDirection="column" p={1} className={classes.box}>
-                <TextField
-                    required
-                    value={mnemonic}
-                    placeholder="flag wave term illness equal airport hint item dinosaur opinion special kick"
-                    onChange={(e) => setMnemonic(e.target.value)}
-                    label="Mnemonic Words"
-                    helperText=" "
-                />
-                <TextField
-                    required
-                    value={passphrase}
-                    onChange={(e) => setPassphrase(e.target.value)}
-                    label="Password"
-                    helperText=" "
-                />
-                <TextField required value={name} onChange={(e) => setName(e.target.value)} label="Wallet name" />
-            </Box>
+            {state[0] === 0 ? (
+                <Typography variant="body1">Import a wallet with mnemonic words and password.</Typography>
+            ) : null}
+            {state[0] === 1 ? <Typography variant="body1">Import a wallet with private key.</Typography> : null}
+            <AbstractTab margin="top" {...tabProps}></AbstractTab>
         </Box>
     )
 

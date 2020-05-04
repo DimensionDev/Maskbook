@@ -1,6 +1,6 @@
 {
   "name": "maskbook",
-  "version": "1.10.11",
+  "version": "1.10.12",
   "private": true,
   "license": "AGPL-3.0-or-later",
   "scripts": {
@@ -121,6 +121,7 @@
     "@storybook/react": "^5.3.18",
     "@testing-library/react-hooks": "^3.2.1",
     "@trust/webcrypto": "^0.9.2",
+    "@types/elliptic": "^6.4.12",
     "@types/enzyme": "^3.10.5",
     "@types/enzyme-adapter-react-16": "^1.0.6",
     "@types/expect-puppeteer": "^4.4.0",
