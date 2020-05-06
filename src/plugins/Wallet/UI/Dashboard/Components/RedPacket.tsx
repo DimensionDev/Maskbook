@@ -64,7 +64,12 @@ const useStyles = makeStyles(theme =>
             width: '6em',
             height: '6em',
         },
-        okb: {},
+        okb: {
+            backgroundImage: `url(${getUrl('wallet/present-okb.png')})`,
+            right: 0,
+            width: '6em',
+            height: '6em',
+        },
         text: {
             padding: theme.spacing(0.5, 2),
             height: '100%',
@@ -184,9 +189,6 @@ export function RedPacketWithStateUI(props: {
             <div
                 className={classNames(classes.packet, {
                     [classes.dai]: info.name === 'DAI' || info.address === DAI_ADDRESS,
-                })}></div>
-            <div
-                className={classNames(classes.packet, {
                     [classes.okb]: info.name === 'OKB' || info.address === OKB_ADDRESS,
                 })}></div>
             <div
