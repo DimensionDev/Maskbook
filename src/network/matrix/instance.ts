@@ -9,7 +9,7 @@ sideEffect.then(() => matrixAccount.readyPromise).then(console.trace)
 sideEffect
     .then(() => matrixAccount.readyPromise)
     .then(() => {
-        if (process.env.NODE_ENV === 'production') return Promise.reject('Not enabled in prod')
+        if (process.env.NODE_ENV === 'production') throw 'Not enabled in prod'
         if (!matrixAccount.value) {
             const username = 'maskbook-bot-' + uuid()
             const password = uuid()
