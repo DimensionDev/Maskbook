@@ -33,6 +33,7 @@ const useStyles = makeStyles((theme: Theme) => ({
         marginBottom: 10,
     },
     title: {
+        color: theme.palette.text.primary,
         paddingBottom: 0,
     },
     wrapper: {
