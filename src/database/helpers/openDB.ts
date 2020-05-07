@@ -27,7 +27,7 @@ export function createDBAccessWithAsyncUpgrade<DBSchema, AsyncUpgradePreparedDat
     let db: IDBPDatabase<DBSchema> | undefined = undefined
     return async (): Promise<IDBPDatabase<DBSchema>> => {
         OnlyRunInContext(['background', 'debugging'], 'Database')
-        if (db) return db
+        if (db?.version === latestVersion) return db
         let currentVersion = firstVersionThatRequiresAsyncUpgrade
         let lastVersionData: AsyncUpgradePreparedData | undefined = undefined
         while (currentVersion < latestVersion) {
@@ -43,10 +43,11 @@ export function createDBAccessWithAsyncUpgrade<DBSchema, AsyncUpgradePreparedDat
             }
             currentVersion += 1
             db?.close()
+            db = undefined
         }
         db = await opener(currentVersion, lastVersionData)
-        if (!db) throw new Error('Invalid state')
         db.addEventListener('close', (e) => (db = undefined))
+        if (!db) throw new Error('Invalid state')
         return db
     }
 }
