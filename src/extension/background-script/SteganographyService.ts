@@ -71,7 +71,7 @@ export async function decodeImage(buf: string | ArrayBuffer, options: DecodeImag
     const _buf = typeof buf === 'string' ? decodeArrayBuffer(buf) : buf
     const _dimension = getDimension(_buf)
     const preset = dimensionPreset.find(d => isSameDimension(d, _dimension))
-    if (!preset) return
+    if (!preset) return ''
     return decode(_buf, await getMaskBuf(preset.mask), {
         ...defaultOptions,
         transformAlgorithm: TransformAlgorithm.FFT1D,
