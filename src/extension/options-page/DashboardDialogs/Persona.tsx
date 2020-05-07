@@ -30,23 +30,14 @@ import { selectElementContents } from '../../../utils/utils'
 export function PersonaCreateDialog() {
     const { t } = useI18N()
     const [name, setName] = useState('')
-    const [password, setPassword] = useState('')
     const history = useHistory()
 
     //#region validation
-    type ValidationResult = [boolean, string, string]
-    type ValidationState = [string, string]
-    const [[isValid, nameErrorMessage, passwordErrorMessage]] = useMultiStateValidator<
-        ValidationResult,
-        ValidationState,
-        ValidationResult
-    >(
-        [name, password],
-        ([name, password]: ValidationState): ValidationResult => [
-            Boolean(name && password),
-            name ? '' : t('error_name_absent'),
-            password ? '' : t('error_password_absent'),
-        ],
+    type ValidationResult = [boolean, string]
+    type ValidationState = [string]
+    const [[isValid, nameErrorMessage]] = useMultiStateValidator<ValidationResult, ValidationState, ValidationResult>(
+        [name],
+        ([name]: ValidationState): ValidationResult => [Boolean(name), name ? '' : t('error_name_absent')],
     )
     const [submitted, setSubmitted] = useState(false)
     //#endregion
@@ -54,7 +45,7 @@ export function PersonaCreateDialog() {
     const createPersona = () => {
         setSubmitted(true)
         if (!isValid) return
-        Services.Identity.createPersonaByMnemonic(name, password).then((persona) => {
+        Services.Identity.createPersonaByMnemonic(name, '').then((persona) => {
             history.replace(`created?identifier=${encodeURIComponent(persona.toText())}`)
         })
     }
@@ -70,18 +61,6 @@ export function PersonaCreateDialog() {
                 onChange={(e) => setName(e.target.value)}
                 helperText={(submitted && nameErrorMessage) || ' '}
                 label="Name"
-            />
-            <TextField
-                required
-                error={submitted && Boolean(passwordErrorMessage)}
-                type="password"
-                label="Password"
-                style={{ width: '100%', maxWidth: '320px' }}
-                variant="outlined"
-                helperText={(submitted && passwordErrorMessage) || t('dashboard_password_helper_text')}
-                placeholder={t('dashboard_password_hint')}
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
             />
         </div>
     )
