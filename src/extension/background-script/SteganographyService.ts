@@ -17,10 +17,16 @@ type Dimension = {
     height: number
 }
 
-const dimensions: Dimension[] = [
+const dimensionPreset: (Dimension & { mask: 'default' | 'transparent' })[] = [
     {
         width: 1024,
         height: 1240,
+        mask: 'default',
+    },
+    {
+        width: 1200,
+        height: 680,
+        mask: 'transparent',
     },
 ]
 
@@ -34,7 +40,10 @@ const defaultOptions = {
 const isSameDimension = (dimension: Dimension, otherDimension: Dimension) =>
     dimension.width === otherDimension.width && dimension.height === otherDimension.height
 
-const getMaskBuf = memoizePromise(() => downloadUrl(getUrl('/maskbook-mask-default.png')), undefined)
+const getMaskBuf = memoizePromise(
+    (type: 'default' | 'transparent') => downloadUrl(getUrl(`/mask-${type}.png`)),
+    undefined,
+)
 
 type EncodeImageOptions = {
     template?: Template
@@ -44,12 +53,12 @@ export async function encodeImage(buf: string | ArrayBuffer, options: EncodeImag
     const { template } = options
     const _buf = typeof buf === 'string' ? decodeArrayBuffer(buf) : buf
     return encodeArrayBuffer(
-        await encode(_buf, await getMaskBuf(), {
+        await encode(_buf, await getMaskBuf(template === 'default' ? 'default' : 'transparent'), {
             ...defaultOptions,
-            fakeMaskPixels: template !== 'default',
+            fakeMaskPixels: false,
             cropEdgePixels: true,
             exhaustPixels: true,
-            grayscaleAlgorithm: template === 'default' ? GrayscaleAlgorithm.LUMINANCE : GrayscaleAlgorithm.NONE,
+            grayscaleAlgorithm: GrayscaleAlgorithm.NONE,
             transformAlgorithm: TransformAlgorithm.FFT1D,
             ...options,
         }),
@@ -60,11 +69,10 @@ type DecodeImageOptions = PartialRequired<Required<DecodeOptions>, 'pass'>
 
 export async function decodeImage(buf: string | ArrayBuffer, options: DecodeImageOptions) {
     const _buf = typeof buf === 'string' ? decodeArrayBuffer(buf) : buf
-    const dimension = getDimension(_buf)
-    if (!dimensions.some(otherDimension => isSameDimension(dimension, otherDimension))) {
-        return ''
-    }
-    return decode(_buf, await getMaskBuf(), {
+    const _dimension = getDimension(_buf)
+    const preset = dimensionPreset.find(d => isSameDimension(d, _dimension))
+    if (!preset) return
+    return decode(_buf, await getMaskBuf(preset.mask), {
         ...defaultOptions,
         transformAlgorithm: TransformAlgorithm.FFT1D,
         ...options,
