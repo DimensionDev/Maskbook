@@ -30,11 +30,10 @@ import { selectElementContents } from '../../../utils/utils'
 export function PersonaCreateDialog() {
     const { t } = useI18N()
     const [name, setName] = useState('')
-    const [password, setPassword] = useState('')
     const history = useHistory()
 
     const createPersona = () => {
-        Services.Identity.createPersonaByMnemonic(name, password).then(persona => {
+        Services.Identity.createPersonaByMnemonic(name, '').then(persona => {
             history.replace(`created?identifier=${encodeURIComponent(persona.toText())}`)
         })
     }
@@ -50,17 +49,6 @@ export function PersonaCreateDialog() {
                 onChange={e => setName(e.target.value)}
                 helperText=" "
                 label="Name"
-            />
-            <TextField
-                required
-                type="password"
-                style={{ width: '100%', maxWidth: '320px' }}
-                variant="outlined"
-                label="Password"
-                helperText={t('dashboard_password_helper_text')}
-                placeholder={t('dashboard_password_hint')}
-                value={password}
-                onChange={e => setPassword(e.target.value)}
             />
         </div>
     )

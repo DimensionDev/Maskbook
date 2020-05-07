@@ -30,13 +30,12 @@ export default function InitStep1S() {
     const header = t('dashboard_init_step_1')
     const subheader = t('dashboard_init_step_1_hint')
     const [name, setName] = useState('')
-    const [password, setPassword] = useState('')
 
     const classes = useStyles()
     const history = useHistory()
 
     const createPersonaAndNext = async () => {
-        const persona = await Services.Identity.createPersonaByMnemonic(name, password)
+        const persona = await Services.Identity.createPersonaByMnemonic(name, '')
         history.replace(`${InitStep.Setup2}?identifier=${encodeURIComponent(persona.toText())}`)
     }
 
@@ -62,17 +61,6 @@ export default function InitStep1S() {
                 onChange={e => setName(e.target.value)}
                 label="Name"
                 helperText=" "></TextField>
-            <TextField
-                required
-                className={classes.input}
-                InputLabelProps={{ shrink: true }}
-                variant="outlined"
-                value={password}
-                placeholder={t('dashboard_password_hint')}
-                type="password"
-                onChange={e => setPassword(e.target.value)}
-                label="Password"
-                helperText={t('dashboard_password_helper_text')}></TextField>
         </div>
     )
 
