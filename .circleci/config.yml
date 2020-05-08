@@ -99,7 +99,9 @@ workflows:
     main:
         jobs:
             - install_dependencies
-            - build
+            - build:
+                  requires:
+                      - install_dependencies
             - publish-github-release:
                   requires:
                       - build
