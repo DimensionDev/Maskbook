@@ -48,11 +48,10 @@ const useStyles = makeStyles(theme =>
         },
         packet: {
             backgroundImage: `url(${getUrl('wallet/present-default.png')})`,
-            width: '4em',
-            height: '5.7em',
-            position: 'absolute',
             right: 0,
-            bottom: '1em',
+            width: '6em',
+            height: '6em',
+            position: 'absolute',
             backgroundAttachment: 'local',
             backgroundPosition: 'center',
             backgroundSize: 'contain',
@@ -60,15 +59,9 @@ const useStyles = makeStyles(theme =>
         },
         dai: {
             backgroundImage: `url(${getUrl('wallet/present-dai.png')})`,
-            right: '-0.5em',
-            width: '6em',
-            height: '6em',
         },
         okb: {
             backgroundImage: `url(${getUrl('wallet/present-okb.png')})`,
-            right: 0,
-            width: '6em',
-            height: '6em',
         },
         text: {
             padding: theme.spacing(0.5, 2),
