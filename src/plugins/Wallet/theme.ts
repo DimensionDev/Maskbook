@@ -14,7 +14,7 @@ export const PluginRedPacketTheme = createMuiTheme({
                     width: '4em',
                     height: '5.7em',
                     top: 250,
-                    right: 0,
+                    right: '-0.6em',
                     opacity: 0.8,
                     backgroundAttachment: 'local',
                     backgroundPosition: 'center',

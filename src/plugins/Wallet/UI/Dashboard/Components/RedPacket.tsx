@@ -47,8 +47,7 @@ const useStyles = makeStyles(theme =>
             justifyContent: 'center',
         },
         packet: {
-            backgroundImage: `url(${getUrl('wallet/present-default.png')})`,
-            right: 0,
+            right: '-0.6em',
             width: '6em',
             height: '6em',
             position: 'absolute',
@@ -56,6 +55,7 @@ const useStyles = makeStyles(theme =>
             backgroundPosition: 'center',
             backgroundSize: 'contain',
             backgroundRepeat: 'no-repeat',
+            backgroundImage: `url(${getUrl('wallet/present-default.png')})`,
         },
         dai: {
             backgroundImage: `url(${getUrl('wallet/present-dai.png')})`,
