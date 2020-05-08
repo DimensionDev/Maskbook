@@ -54,8 +54,9 @@ export function createDBAccessWithAsyncUpgrade<DBSchema, AsyncUpgradePreparedDat
     return () => {
         // Share a Promise to prevent async upgrade for multiple times
         if (pendingOpen) return pendingOpen
-        pendingOpen = open()
-        return pendingOpen
+        const promise = (pendingOpen = open())
+        promise.catch(() => (pendingOpen = undefined))
+        return promise
     }
 }
 export interface IDBPSafeObjectStore<
