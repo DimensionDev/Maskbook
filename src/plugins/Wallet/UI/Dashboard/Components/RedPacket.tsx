@@ -47,9 +47,10 @@ const useStyles = makeStyles(theme =>
             justifyContent: 'center',
         },
         packet: {
-            right: '-0.6em',
-            width: '6em',
-            height: '6em',
+            top: 40,
+            right: -10,
+            width: 90,
+            height: 90,
             position: 'absolute',
             backgroundAttachment: 'local',
             backgroundPosition: 'center',

@@ -114,7 +114,7 @@ async function getSteganographyContent(node: DOMProxy) {
     const parent = node.current.parentElement
     if (!parent) return ''
     const imgNodes = parent.querySelectorAll<HTMLElement>(
-        isMobileFacebook ? 'div>div>div>a>div>div>i.img' : '.uiScaledImageContainer img',
+        isMobileFacebook ? 'div>div>div>a>div>div>i.img' : '.userContentWrapper a[data-ploi]',
     )
     if (!imgNodes.length) return ''
     const imgUrls = isMobileFacebook
@@ -124,7 +124,7 @@ async function getSteganographyContent(node: DOMProxy) {
               .split(',')
               .filter(Boolean)
         : Array.from(imgNodes)
-              .map(node => node.getAttribute('src') || '')
+              .map(node => node.getAttribute('data-ploi') || '')
               .filter(Boolean)
     if (!imgUrls.length) return ''
     const pass = getPostBy(node, false).identifier.toText()
