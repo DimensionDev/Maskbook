@@ -14,6 +14,7 @@ public/polyfill
 
 # testing
 /coverage
+/reports
 /junit.xml
 
 # production

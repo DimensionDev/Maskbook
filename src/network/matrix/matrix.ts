@@ -55,7 +55,7 @@ export async function createMatrixRoom(
     topic = 'Hi, this room is created by Maskbook and used for internal communication',
 ) {
     const room: string = (await any(client).createRoom({ room_alias_name, visibility })).room_id
-    await client.setRoomTopic(room, topic, undefined!).catch(() => { })
+    await client.setRoomTopic(room, topic, undefined!).catch(() => {})
     return room
 }
 interface MatrixMessageTypes {
