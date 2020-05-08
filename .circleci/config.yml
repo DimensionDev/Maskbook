@@ -99,10 +99,7 @@ workflows:
     main:
         jobs:
             - install_dependencies
-            - build:
-                  requires:
-                      # Fail quick with type error.
-                      - typescript
+            - build
             - publish-github-release:
                   requires:
                       - build

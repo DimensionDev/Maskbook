@@ -23,7 +23,18 @@ jobs:
             # @v2 requires too much configurations
             - uses: actions/checkout@v1
 
+            - name: Get yarn cache directory path
+              id: yarn-cache-dir-path
+              run: echo "::set-output name=dir::$(yarn cache dir)"
+            - uses: actions/cache@v1
+              id: yarn-cache # use this to check for `cache-hit` (`steps.yarn-cache.outputs.cache-hit != 'true'`)
+              with:
+                  path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+                  key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+                  restore-keys: |
+                      ${{ runner.os }}-yarn-
             - name: Install Dependencies
+              if: steps.yarn-cache.outputs.cache-hit != 'true'
               run: |
                   yarn config set cache-folder /tmp/.yarn-cache-1000/v6
                   yarn install --link-duplicates --frozen-lockfile --pure-lockfile
@@ -51,7 +62,18 @@ jobs:
             options: --user 1000 -v /home/ubuntu/.cache/yarn/v6:/tmp/.yarn-cache-1000/v6 # $(id -u ubuntu)
         steps:
             - uses: actions/checkout@v1
+            - name: Get yarn cache directory path
+              id: yarn-cache-dir-path
+              run: echo "::set-output name=dir::$(yarn cache dir)"
+            - uses: actions/cache@v1
+              id: yarn-cache # use this to check for `cache-hit` (`steps.yarn-cache.outputs.cache-hit != 'true'`)
+              with:
+                  path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+                  key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+                  restore-keys: |
+                      ${{ runner.os }}-yarn-
             - name: Install Dependencies
+              if: steps.yarn-cache.outputs.cache-hit != 'true'
               run: |
                   yarn config set cache-folder /tmp/.yarn-cache-1000/v6
                   yarn install --link-duplicates --frozen-lockfile --pure-lockfile
@@ -75,13 +97,24 @@ jobs:
             options: --user 1000 -v /home/ubuntu/.cache/yarn/v6:/tmp/.yarn-cache-1000/v6 # $(id -u ubuntu)
         steps:
             - uses: actions/checkout@v1
+            - name: Get yarn cache directory path
+              id: yarn-cache-dir-path
+              run: echo "::set-output name=dir::$(yarn cache dir)"
+            - uses: actions/cache@v1
+              id: yarn-cache # use this to check for `cache-hit` (`steps.yarn-cache.outputs.cache-hit != 'true'`)
+              with:
+                  path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+                  key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+                  restore-keys: |
+                      ${{ runner.os }}-yarn-
             - name: Install Dependencies
+              if: steps.yarn-cache.outputs.cache-hit != 'true'
               run: |
                   yarn config set cache-folder /tmp/.yarn-cache-1000/v6
                   yarn install --link-duplicates --frozen-lockfile --pure-lockfile
             - name: Build storybook
               run: yarn build-storybook
-            - name: ESLint result
+            - name: Storybook output
               uses: actions/upload-artifact@v1
               with:
                   name: storybook
@@ -95,7 +128,18 @@ jobs:
             JEST_JUNIT_OUTPUT_DIR: 'reports/junit/js-test-results.xml'
         steps:
             - uses: actions/checkout@v1
+            - name: Get yarn cache directory path
+              id: yarn-cache-dir-path
+              run: echo "::set-output name=dir::$(yarn cache dir)"
+            - uses: actions/cache@v1
+              id: yarn-cache # use this to check for `cache-hit` (`steps.yarn-cache.outputs.cache-hit != 'true'`)
+              with:
+                  path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+                  key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+                  restore-keys: |
+                      ${{ runner.os }}-yarn-
             - name: Install Dependencies
+              if: steps.yarn-cache.outputs.cache-hit != 'true'
               run: |
                   yarn config set cache-folder /tmp/.yarn-cache-1000/v6
                   yarn install --link-duplicates --frozen-lockfile --pure-lockfile
