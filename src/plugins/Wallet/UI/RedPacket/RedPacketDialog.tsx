@@ -181,7 +181,7 @@ function NewPacketUI(props: RedPacketDialogProps & NewPacketProps) {
                     <InputLabel>Wallet</InputLabel>
                     <Select
                         onChange={(e) => setSelectedWallet(e.target.value as string)}
-                        MenuProps={{ container: PortalShadowRoot }}
+                        MenuProps={{ container: props.DialogProps?.container ?? PortalShadowRoot }}
                         disabled={wallets === 'loading'}
                         value={selectedWalletAddress || ''}>
                         {wallets === 'loading'
@@ -203,7 +203,7 @@ function NewPacketUI(props: RedPacketDialogProps & NewPacketProps) {
                             if (v === 'eth') setSelectedTokenType({ type: 'eth' })
                             else setSelectedTokenType({ type: 'erc20', address: v })
                         }}
-                        MenuProps={{ container: PortalShadowRoot }}
+                        MenuProps={{ container: props.DialogProps?.container ?? PortalShadowRoot }}
                         value={selectedTokenType.type === 'eth' ? 'eth' : selectedTokenType.address}>
                         <MenuItem key="eth" value="eth">
                             ETH
@@ -218,7 +218,7 @@ function NewPacketUI(props: RedPacketDialogProps & NewPacketProps) {
                 <FormControl variant="filled" className={classes.input}>
                     <InputLabel>Split Mode</InputLabel>
                     <Select
-                        MenuProps={{ container: PortalShadowRoot }}
+                        MenuProps={{ container: props.DialogProps?.container ?? PortalShadowRoot }}
                         value={is_random ? 1 : 0}
                         onChange={(e) => setIsRandom(e.target.value as number)}>
                         <MenuItem value={0}>Average</MenuItem>
