@@ -31,25 +31,16 @@ export default function InitStep1S() {
     const header = t('dashboard_init_step_1')
     const subheader = t('dashboard_init_step_1_hint')
     const [name, setName] = useState('')
-    const [password, setPassword] = useState('')
 
     const classes = useStyles()
     const history = useHistory()
 
     //#region validation
-    type ValidationResult = [boolean, string, string]
-    type ValidationState = [string, string]
-    const [[isValid, nameErrorMessage, passwordErrorMessage]] = useMultiStateValidator<
-        ValidationResult,
-        ValidationState,
-        ValidationResult
-    >(
-        [name, password],
-        ([name, password]: ValidationState): ValidationResult => [
-            Boolean(name && password),
-            name ? '' : t('error_name_absent'),
-            password ? '' : t('error_password_absent'),
-        ],
+    type ValidationResult = [boolean, string]
+    type ValidationState = [string]
+    const [[isValid, nameErrorMessage]] = useMultiStateValidator<ValidationResult, ValidationState, ValidationResult>(
+        [name],
+        ([name]: ValidationState): ValidationResult => [Boolean(name), name ? '' : t('error_name_absent')],
     )
     const [submitted, setSubmitted] = useState(false)
     //#endregion
@@ -57,7 +48,7 @@ export default function InitStep1S() {
     const createPersonaAndNext = async () => {
         setSubmitted(true)
         if (!isValid) return
-        const persona = await Services.Identity.createPersonaByMnemonic(name, password)
+        const persona = await Services.Identity.createPersonaByMnemonic(name, '')
         history.replace(`${InitStep.Setup2}?identifier=${encodeURIComponent(persona.toText())}`)
     }
     const actions = (
@@ -83,19 +74,6 @@ export default function InitStep1S() {
                 onChange={(e) => setName(e.target.value)}
                 label="Name"
                 helperText={(submitted && nameErrorMessage) || ' '}
-            />
-            <TextField
-                required
-                error={submitted && Boolean(passwordErrorMessage)}
-                className={classes.input}
-                InputLabelProps={{ shrink: true }}
-                variant="outlined"
-                value={password}
-                placeholder={t('dashboard_password_hint')}
-                type="password"
-                label="Password"
-                onChange={(e) => setPassword(e.target.value)}
-                helperText={(submitted && passwordErrorMessage) || t('dashboard_password_helper_text')}
             />
         </div>
     )
