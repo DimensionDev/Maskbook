@@ -25,7 +25,8 @@ export function createDBAccessWithAsyncUpgrade<DBSchema, AsyncUpgradePreparedDat
     asyncUpgradePrepare: (db: IDBPDatabase<DBSchema>) => Promise<AsyncUpgradePreparedData | undefined>,
 ) {
     let db: IDBPDatabase<DBSchema> | undefined = undefined
-    return async (): Promise<IDBPDatabase<DBSchema>> => {
+    let pendingOpen: Promise<IDBPDatabase<DBSchema>> | undefined = undefined
+    async function open(): Promise<IDBPDatabase<DBSchema>> {
         OnlyRunInContext(['background', 'debugging'], 'Database')
         if (db?.version === latestVersion) return db
         let currentVersion = firstVersionThatRequiresAsyncUpgrade
@@ -49,6 +50,12 @@ export function createDBAccessWithAsyncUpgrade<DBSchema, AsyncUpgradePreparedDat
         db.addEventListener('close', (e) => (db = undefined))
         if (!db) throw new Error('Invalid state')
         return db
+    }
+    return () => {
+        // Share a Promise to prevent async upgrade for multiple times
+        if (pendingOpen) return pendingOpen
+        pendingOpen = open()
+        return pendingOpen
     }
 }
 export interface IDBPSafeObjectStore<
