@@ -84,7 +84,7 @@
     "@ungap/promise-all-settled": "^1.1.2",
     "@uniswap/sdk": "^3.0.3-beta.1",
     "@walletconnect/client": "^1.2.2",
-    "anchorme": "^1.1.2",
+    "anchorme": "^2.1.2",
     "arweave": "^1.9.1",
     "async-call-rpc": "^4.1.0",
     "bignumber.js": "^9.0.0",
