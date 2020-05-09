@@ -2,6 +2,8 @@ import { create, Jss, SheetsRegistry } from 'jss'
 import { jssPreset, StylesProvider, ThemeProvider } from '@material-ui/styles'
 import ReactDOM from 'react-dom'
 import React from 'react'
+import type {} from 'react/experimental'
+import type {} from 'react-dom/experimental'
 import { getActivatedUI } from '../../social-network/ui'
 import { renderInShadowRootSettings } from '../../components/shared-settings/settings'
 import { I18nextProvider } from 'react-i18next'
@@ -16,7 +18,14 @@ const previousShadowedElement = new Set<HTMLElement>()
  * @param node React Node
  * @param shadow ShadowRoot that want to inject to
  */
-export function renderInShadowRoot(node: React.ReactNode, config: { shadow(): ShadowRoot; normal(): HTMLElement }) {
+export function renderInShadowRoot(
+    node: React.ReactNode,
+    config: {
+        shadow(): ShadowRoot
+        normal(): HTMLElement
+        concurrent?: boolean
+    },
+) {
     const get = (): HTMLElement => {
         const dom = config.normal()
         // ? Once it attached ShadowRoot, there is no way back
@@ -31,15 +40,17 @@ export function renderInShadowRoot(node: React.ReactNode, config: { shadow(): Sh
         return dom
     }
     let rendered = false
+    let unmount = () => {}
     const tryRender = () => {
         const element: HTMLElement = get()
         if (!(element instanceof ShadowRoot)) {
             rendered = true
-            return ReactDOM.render(
+            unmount = mount(
+                element,
                 <ErrorBoundary>
                     <Maskbook children={node} />
                 </ErrorBoundary>,
-                element,
+                config.concurrent,
             )
         }
         setTimeout(() => {
@@ -47,21 +58,31 @@ export function renderInShadowRoot(node: React.ReactNode, config: { shadow(): Sh
             // ! DOMRender requires the element inside document
             if (element.host.parentNode === null) tryRender()
             else {
-                ReactDOM.render(
+                rendered = true
+                unmount = mount(
+                    element,
                     <ErrorBoundary>
                         <RenderInShadowRootWrapper shadow={element}>
                             <Maskbook children={node} />
                         </RenderInShadowRootWrapper>
                     </ErrorBoundary>,
-                    element,
+                    config.concurrent,
                 )
-                rendered = true
             }
         })
     }
     renderInShadowRootSettings.readyPromise.then(tryRender)
-    return () => {
-        rendered && ReactDOM.unmountComponentAtNode(get())
+    return () => rendered && unmount()
+}
+
+function mount(e: (HTMLElement & ShadowRoot) | HTMLElement, _: JSX.Element, concurrent?: boolean) {
+    if (concurrent) {
+        const root = ReactDOM.createRoot(e)
+        root.render(_)
+        return () => root.unmount()
+    } else {
+        ReactDOM.render(_, e)
+        return () => ReactDOM.unmountComponentAtNode(e)
     }
 }
 
