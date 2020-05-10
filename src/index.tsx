@@ -40,6 +40,7 @@ import DashboardWalletsPage from './plugins/Wallet/UI/Dashboard/Wallets'
 import { useI18N } from './utils/i18n-next-ui'
 import i18nNextInstance from './utils/i18n-next'
 import { Settings as DashboardSettingsPage } from './extension/options-page/Settings/settings'
+import { RequestPermissionPage } from './components/RequestPermission/RequestPermission'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -82,6 +83,7 @@ const useStyles = makeStyles((theme) =>
 const OptionsPageRouters = (
     <>
         <Switch>
+            <Route path="/request-permission" component={RequestPermissionPage} />
             <Route path="/home/" component={DashboardHomePage} />
             <Route path="/wallets/" component={DashboardWalletsPage} />
             <Route path="/settings/" component={DashboardSettingsPage} />
@@ -155,6 +157,8 @@ function Dashboard() {
             </Tabs>
         </AppBar>
     )
+
+    if (currentRouter.pathname === '/request-permission') return OptionsPageRouters
 
     return (
         <div className={classes.wrapper}>

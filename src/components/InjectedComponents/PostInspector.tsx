@@ -12,6 +12,7 @@ import { useValueRef } from '../../utils/hooks/useValueRef'
 import { debugModeSetting } from '../shared-settings/settings'
 import { DebugList } from '../DebugModeUI/DebugList'
 import type { TypedMessage } from '../../extension/background-script/CryptoServices/utils'
+import { GitCoinConfig } from '../../plugins/Gitcoin/define'
 
 export interface PostInspectorProps {
     onDecrypted(post: TypedMessage, raw: string): void
@@ -34,6 +35,7 @@ export function PostInspector(props: PostInspectorProps) {
     const type = {
         encryptedPost: deconstructPayload(post, getActivatedUI().payloadDecoder),
         provePost: decodeAsPublicKey,
+        extraCanvas: post.toLowerCase().includes('gitcoin'),
     }
 
     const { value: sharedListOfPost } = useAsync(async () => {
@@ -109,6 +111,8 @@ export function PostInspector(props: PostInspectorProps) {
                 {debugInfo}
             </>
         )
+    } else if (GitCoinConfig.shouldActivate(post)) {
+        return <GitCoinConfig.Renderer post={post} />
     }
     return debugInfo
 }

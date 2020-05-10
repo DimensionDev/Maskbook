@@ -11,7 +11,7 @@ import Services from '../../service'
 import { DialogRouter } from '../DashboardDialogs/DialogBase'
 import { DatabaseRestoreSuccessDialog, DatabaseRestoreFailedDialog } from '../DashboardDialogs/Database'
 import { BackupJSONFileLatest, UpgradeBackupJSONFile } from '../../../utils/type-transform/BackupFormat/JSON/latest'
-import { extraPermissions } from '../../../utils/permissions'
+import { extraPermissions, notifyPermissionUpdate } from '../../../utils/permissions'
 import { InitStep } from '../InitStep'
 import QRScanner from '../../../components/QRScanner'
 import { hasWKWebkitRPCHandlers } from '../../../utils/iOS-RPC'
@@ -241,6 +241,7 @@ export default function InitStep1R() {
                                 onConfirm={() => {
                                     browser.permissions
                                         .request({ origins: requiredPermissions ?? [] })
+                                        .then(notifyPermissionUpdate)
                                         .then((granted) =>
                                             granted ? Services.Welcome.restoreBackup(json!) : Promise.reject(),
                                         )

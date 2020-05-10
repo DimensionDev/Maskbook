@@ -29,9 +29,9 @@ module.exports = {
         })
         config.resolve.extensions.push('.ts', '.tsx')
         const webpack = require('webpack')
-        config.plugins.push(
+        config.plugins.unshift(
             new webpack.DefinePlugin({
-                'process.env.storybook': 'true',
+                'process.env.STORYBOOK': 'true',
             }),
         )
         return config

@@ -1,7 +1,7 @@
 import React from 'react'
 import { storiesOf } from '@storybook/react'
 import { PreviewCard } from '../plugins/Gitcoin/PreviewCard'
-import { text } from '@storybook/addon-knobs'
+import { text, boolean } from '@storybook/addon-knobs'
 import { DonateCard } from '../plugins/Gitcoin/DonateCard'
 import { figmaLink } from './utils'
 import { action } from '@storybook/addon-actions'
@@ -19,6 +19,9 @@ storiesOf('Plugin: Gitcoin', module)
         }`}
                 </style>
                 <PreviewCard
+                    hasNoPermission={boolean('Has no permission', false)}
+                    requestPermission={action('Request permission')}
+                    loading={boolean('Loading', false)}
                     image={<img width="100%" height="100%" />}
                     title={text('Title', `This is a really long long long long long title`)}
                     line1={text('Line 1', `12,345 DAI`)}

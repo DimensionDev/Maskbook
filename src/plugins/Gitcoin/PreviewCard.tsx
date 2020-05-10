@@ -1,5 +1,5 @@
 import React from 'react'
-import { makeStyles, createStyles, Theme, Typography } from '@material-ui/core'
+import { makeStyles, createStyles, Theme, Typography, SnackbarContent, Button } from '@material-ui/core'
 const border = '1.5px solid rgb(0, 154, 87)'
 interface PreviewCardProps {
     title: string
@@ -8,9 +8,27 @@ interface PreviewCardProps {
     line2: string
     line3: string
     line4: string
+    hasNoPermission?: boolean
+    requestPermission(): void
+    loading?: boolean
 }
 export function PreviewCard(props: PreviewCardProps) {
     const classes = useStyles()
+    if (props.hasNoPermission) {
+        return (
+            <SnackbarContent
+                message="This post links to the Gitcoin. To preview it or donate this Gitcoin grant, Maskbook needs permission to Gitcoin.co"
+                action={
+                    <Button
+                        onClick={props.requestPermission}
+                        children="Allow access to gitcoin.co"
+                        color="secondary"
+                        size="small"
+                    />
+                }
+            />
+        )
+    }
     return (
         <main className={classes.root}>
             <div className={classes.title}>

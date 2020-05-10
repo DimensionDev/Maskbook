@@ -8,7 +8,7 @@ export function SSRRenderer(jsx: JSX.Element, container?: HTMLElement) {
             container = document.createElement('div')
             document.body.appendChild(container)
         }
-        ReactDOM.hydrate(React.createElement(React.StrictMode, {}, jsx), container)
+        ReactDOM.render(React.createElement(React.StrictMode, {}, jsx), container)
     } else {
         async function render() {
             const Server = await import('react-dom/server')

@@ -10,6 +10,7 @@ import { InitGroupsValueRef } from '../../../social-network/defaults/GroupsValue
 import { twitterUrl } from '../utils/url'
 import { PreDefinedVirtualGroupNames } from '../../../database/type'
 import { twitterUICustomUI, startWatchThemeColor } from './custom'
+import { notifyPermissionUpdate } from '../../../utils/permissions'
 
 export const instanceOfTwitterUI = defineSocialNetworkUI({
     ...sharedSettings,
@@ -45,9 +46,11 @@ export const instanceOfTwitterUI = defineSocialNetworkUI({
     requestPermission() {
         // TODO: wait for webextension-shim to support <all_urls> in permission.
         if (webpackEnv.target === 'WKWebview') return Promise.resolve(true)
-        return browser.permissions.request({
-            origins: [`${twitterUrl.hostLeadingUrl}/*`, `${twitterUrl.hostLeadingUrlMobile}/*`],
-        })
+        return browser.permissions
+            .request({
+                origins: [`${twitterUrl.hostLeadingUrl}/*`, `${twitterUrl.hostLeadingUrlMobile}/*`],
+            })
+            .then(notifyPermissionUpdate)
     },
     setupAccount: () => {
         instanceOfTwitterUI.requestPermission().then((granted) => {

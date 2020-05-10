@@ -4,6 +4,20 @@ import './provider.ui'
 import { LiveSelector, Watcher, DOMProxy } from '@holoflows/kit/es'
 import { exclusiveTasks } from './extension/content-script/tasks'
 
+// Jesus.png
+{
+    const React = require('react')
+    const ReactDOM = require('react-dom')
+    const isUnstable = (x: string) => x.startsWith('unstable_')
+    const stabilize = (x: string) => x.replace('unstable_', '')
+    Object.keys(React)
+        .filter(isUnstable)
+        .forEach((x) => (React[stabilize(x)] = React[x]))
+    Object.keys(ReactDOM)
+        .filter(isUnstable)
+        .forEach((x) => (ReactDOM[stabilize(x)] = ReactDOM[x]))
+}
+
 if (typeof window === 'object') {
     LiveSelector.enhanceDebugger()
     Watcher.enhanceDebugger()

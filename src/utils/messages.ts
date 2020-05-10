@@ -14,9 +14,7 @@ export interface CompositionEvent {
 }
 
 interface MaskbookMessages {
-    /**
-     * Used to polyfill window.close in iOS and Android.
-     */
+    /** Used to polyfill window.close. */
     closeActiveTab: undefined
     /**
      * emit when a settings created.
@@ -28,44 +26,34 @@ interface MaskbookMessages {
      * value is instanceKey
      */
     settingsUpdated: string
-    /**
-     * emit when my identities created.
-     */
+    /** emit when my identities created. */
     identityCreated: undefined
-    /**
-     * emit when my identities updated.
-     */
+    /** emit when my identities updated. */
     identityUpdated: undefined
     /**
      * emit people changed in the database.
      * emit when my personas created
      */
     personaCreated: undefined
-    /**
-     * emit when my personas updated
-     */
+    /** emit when my personas updated */
     personaUpdated: undefined
-    /**
-     * emit people changed in the database
-     */
+    /** emit people changed in the database */
     profilesChanged: readonly UpdateEvent<Profile>[]
     groupsChanged: readonly UpdateEvent<Group>[]
     joinGroup: {
         group: GroupIdentifier
         newMembers: ProfileIdentifier[]
     }
-    /**
-     * emit when compose status updated.
-     */
+    /** emit when compose status updated. */
     compositionUpdated: CompositionEvent
-    /**
-     * Public Key found / Changed
-     */
+    /** Public Key found / Changed */
     linkedProfileChanged: {
         of: ProfileIdentifier
         before: PersonaIdentifier | undefined
         after: PersonaIdentifier | undefined
     }
+    /** Permission updated */
+    permissionUpdated: void
 }
 
 export class BatchedMessageCenter<T> extends MC<T> {

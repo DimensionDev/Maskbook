@@ -50,7 +50,11 @@ export function injectPostInspectorDefault<T extends string>(
                 zipPost={() => zipPostF(current.rootNodeProxy)}
                 {...current}
             />,
-            { shadow: () => current.rootNodeProxy.afterShadow, normal: () => current.rootNodeProxy.after },
+            {
+                shadow: () => current.rootNodeProxy.afterShadow,
+                normal: () => current.rootNodeProxy.after,
+                concurrent: true,
+            },
         )
     }
 }

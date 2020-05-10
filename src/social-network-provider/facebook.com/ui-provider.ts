@@ -23,6 +23,7 @@ import { InitGroupsValueRef } from '../../social-network/defaults/GroupsValueRef
 import { injectKnownIdentityAtFacebook } from './UI/injectKnownIdentity'
 import { createTaskStartImmersiveSetupDefault } from '../../social-network/defaults/taskStartImmersiveSetupDefault'
 import { getProfilePageUrlAtFacebook } from './parse-username'
+import { notifyPermissionUpdate } from '../../utils/permissions'
 
 export const facebookUISelf = defineSocialNetworkUI({
     ...sharedProvider,
@@ -40,7 +41,9 @@ export const facebookUISelf = defineSocialNetworkUI({
     requestPermission() {
         // TODO: wait for webextension-shim to support <all_urls> in permission.
         if (webpackEnv.target === 'WKWebview') return Promise.resolve(true)
-        return browser.permissions.request({ origins: ['https://www.facebook.com/*', 'https://m.facebook.com/*'] })
+        return browser.permissions
+            .request({ origins: ['https://www.facebook.com/*', 'https://m.facebook.com/*'] })
+            .then(notifyPermissionUpdate)
     },
     setupAccount() {
         facebookUISelf.requestPermission().then((granted) => {
