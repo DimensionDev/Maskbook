@@ -6,3 +6,4 @@ dist/
 public/polyfill
 scripts/
 src/polyfill
+src/utils/constants/.macros

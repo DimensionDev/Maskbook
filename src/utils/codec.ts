@@ -1,6 +1,6 @@
 /* eslint-disable no-bitwise */
 import '../polyfill/codec'
-import { BASE1024_SCHEMA } from './constants'
+import { EMOJIS } from './constants'
 
 /**
  * Polyfill common codec stuffs
@@ -11,11 +11,12 @@ import { BASE1024_SCHEMA } from './constants'
 interface ICodecUtil {
     _atob: (data: string) => string
     _btoa: (data: string) => string
+    _trim: (bytes: Uint8Array) => Uint8Array
     // encoding
-    bytesToHex: (data: Uint8Array) => string
-    bytesToBase64: (data: Uint8Array) => string
-    bytesToUtf8: (data: Uint8Array) => string
-    bytesToBase1024: (data: Uint8Array) => string
+    bytesToHex: (bytes: Uint8Array) => string
+    bytesToBase64: (bytes: Uint8Array) => string
+    bytesToUtf8: (bytes: Uint8Array) => string
+    bytesToBase1024: (bytes: Uint8Array) => string
     // decoding
     hexToBytes: (data: string) => Uint8Array
     base64ToBytes: (data: string) => Uint8Array
@@ -32,6 +33,14 @@ export const CodecUtil: ICodecUtil = Object.freeze({
     },
     _btoa: (data: string): string => {
         return Buffer.from(data, 'utf-8').toString('base64')
+    },
+    _trim: (bytes: Uint8Array): Uint8Array => {
+        for (let i = bytes.length; i > 0; i -= 1) {
+            if (bytes[i - 1] !== 0) {
+                return bytes.slice(0, i)
+            }
+        }
+        return bytes
     },
     bytesToHex: (bytes: Uint8Array): string => {
         const reduceFn = (str: string, byte: number): string => {
@@ -52,11 +61,7 @@ export const CodecUtil: ICodecUtil = Object.freeze({
             const beta = ((bytes[i + 1] & 0x3f) << 4) | (bytes[i + 2] >> 4)
             const gamma = ((bytes[i + 2] & 0xf) << 6) | (bytes[i + 3] >> 2)
             const delta = ((bytes[i + 3] & 0x3) << 8) | bytes[i + 4]
-            result += [alpha, beta, gamma, delta]
-                .map((char: number) => {
-                    return BASE1024_SCHEMA.table[char]
-                })
-                .join('')
+            result += [alpha, beta, gamma, delta].map((char: number) => EMOJIS[char]).join('')
         }
         return result
     },
@@ -74,9 +79,9 @@ export const CodecUtil: ICodecUtil = Object.freeze({
         return new TextEncoder().encode(data)
     },
     base1024ToBytes: (data: string): Uint8Array => {
-        const source: number[] = Array.from(data, (char: string) => {
-            return BASE1024_SCHEMA.table.indexOf(char)
-        }).filter((n: number) => n !== -1)
+        const source: number[] = Array.from(data)
+            // .filter((_: string, i: number) => i % 2 === 0)
+            .map((e: string) => EMOJIS.indexOf(e))
 
         let bytes: number[] = []
         for (let i = 0; i < data.length; i += 4) {
@@ -88,7 +93,7 @@ export const CodecUtil: ICodecUtil = Object.freeze({
             bytes = bytes.concat([alpha, beta, gamma, delta, epsilon])
         }
 
-        return Uint8Array.from(bytes)
+        return CodecUtil._trim(Uint8Array.from(bytes))
     },
 })
 

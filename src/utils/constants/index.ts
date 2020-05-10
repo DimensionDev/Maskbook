@@ -7,4 +7,3 @@ export const enum DecryptFailedReason {
 
 /* Export Codec Deps */
 export { EMOJIS } from './emojis'
-export { HEX_SCHEMA, BASE1024_SCHEMA } from './codec'

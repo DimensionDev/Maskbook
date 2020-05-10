@@ -43,5 +43,5 @@ yarn-error.log*
 .firefox
 .chrome
 
-# log
+# logs
 /.log
