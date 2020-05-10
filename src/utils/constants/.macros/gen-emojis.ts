@@ -2,6 +2,14 @@ import * as fs from "fs";
 import * as path from "path";
 import EMOJIS from "./twemojis";
 
+/**
+ * Sorting emojis
+ * --------------
+ * + no nation && flags
+ * + independent emojis - without `'-'`
+ * + code point doesn't change after encoding to emoji string
+ * + the length of emoji string is `2`
+ */
 const rSort = EMOJIS
     .filter((e: string) => e.length < 6)
     .map((point: string): number => Number.parseInt(point, 16))
@@ -11,7 +19,7 @@ const rSort = EMOJIS
     })
     .sort((a: number, b: number) => a - b)
     .slice(0, 1024)
-    // delete the line following if you want to generate code point array
+    // delete the following line if you want to generate the code point array
     .map((point: number) => "\"" + String.fromCodePoint(point) + "\"");
 
 /**
