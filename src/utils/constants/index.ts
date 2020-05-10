@@ -5,6 +5,6 @@ export const enum DecryptFailedReason {
     MyCryptoKeyNotFound = 'MyCryptoKeyNotFound',
 }
 
-/* Export Emojis */
-export { BASE_1024 } from './base1024'
-export { BASE_2048 } from './base2048'
+/* Export Codec Deps */
+export { EMOJIS } from './emojis'
+export { HEX_SCHEMA, BASE1024_SCHEMA } from './codec'

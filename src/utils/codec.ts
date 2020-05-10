@@ -1,146 +1,96 @@
 /* eslint-disable no-bitwise */
-import { BASE_1024, BASE_2048 } from './constants'
-import { parse } from 'twemoji-parser'
+import '../polyfill/codec'
+import { BASE1024_SCHEMA } from './constants'
 
 /**
- * Single remapping Fn
+ * Polyfill common codec stuffs
  *
- * Join all elements into one string with mapping
+ * + `Enconding` to `Uint8Array`
+ * + `Uint8Array` to `Encoding`
  */
-function reMapping(input: ArrayLike<string>, mapFn: (bytes: string, index: number) => string): string {
-    return Array.from(input, mapFn).join('')
+interface ICodecUtil {
+    _atob: (data: string) => string
+    _btoa: (data: string) => string
+    // encoding
+    bytesToHex: (data: Uint8Array) => string
+    bytesToBase64: (data: Uint8Array) => string
+    bytesToUtf8: (data: Uint8Array) => string
+    bytesToBase1024: (data: Uint8Array) => string
+    // decoding
+    hexToBytes: (data: string) => Uint8Array
+    base64ToBytes: (data: string) => Uint8Array
+    utf8ToBytes: (data: string) => Uint8Array
+    base1024ToBytes: (data: string) => Uint8Array
 }
 
 /**
- * Parsing codepoints to emoji strings
+ * Implement `CodecPolyFill` as `CodecUtil`
  */
-function parseEmojis(points: string[]): string[] {
-    return points
-        .map((point: string) => {
-            const mapFn = (hs: string) => String.fromCodePoint(Number.parseInt(hs, 16))
-            return String(point.split('-').map(mapFn).join(''))
-        })
-        .sort((c: string, n: string) => c.length - n.length)
-}
+export const CodecUtil: ICodecUtil = Object.freeze({
+    _atob: (data: string): string => {
+        return Buffer.from(data, 'base64').toString('utf-8')
+    },
+    _btoa: (data: string): string => {
+        return Buffer.from(data, 'utf-8').toString('base64')
+    },
+    bytesToHex: (bytes: Uint8Array): string => {
+        const reduceFn = (str: string, byte: number): string => {
+            return str + Number(byte).toString(16).padStart(2, '0')
+        }
+        return bytes.reduce(reduceFn, '')
+    },
+    bytesToBase64: (bytes: Uint8Array): string => {
+        return CodecUtil._btoa(new TextDecoder().decode(bytes))
+    },
+    bytesToUtf8: (bytes: Uint8Array): string => {
+        return new TextDecoder().decode(bytes)
+    },
+    bytesToBase1024: (bytes: Uint8Array): string => {
+        let result: string = ''
+        for (let i = 0; i < bytes.length; i += 5) {
+            const alpha = ((bytes[i] & 0xff) << 2) | (bytes[i + 1] >> 6)
+            const beta = ((bytes[i + 1] & 0x3f) << 4) | (bytes[i + 2] >> 4)
+            const gamma = ((bytes[i + 2] & 0xf) << 6) | (bytes[i + 3] >> 2)
+            const delta = ((bytes[i + 3] & 0x3) << 8) | bytes[i + 4]
+            result += [alpha, beta, gamma, delta]
+                .map((char: number) => {
+                    return BASE1024_SCHEMA.table[char]
+                })
+                .join('')
+        }
+        return result
+    },
+    hexToBytes: (data: string): Uint8Array => {
+        const arr = data.match(/.{1,2}/g)
+        if (arr === null) {
+            return new Uint8Array()
+        }
+        return Uint8Array.from(arr.map((char: string) => parseInt(char, 16)))
+    },
+    base64ToBytes: (data: string): Uint8Array => {
+        return new TextEncoder().encode(CodecUtil._atob(data))
+    },
+    utf8ToBytes: (data: string): Uint8Array => {
+        return new TextEncoder().encode(data)
+    },
+    base1024ToBytes: (data: string): Uint8Array => {
+        const source: number[] = Array.from(data, (char: string) => {
+            return BASE1024_SCHEMA.table.indexOf(char)
+        }).filter((n: number) => n !== -1)
 
-/**
- * @file Codec
- * @name codec.ts<utils>
- * @description |
- *
- *    |    base    |  bitwise  |  bits  |
- *    | ---------- | --------- | ------ |
- *    |    16      |  1 << 4   |   4    |
- *    |    64      |  1 << 6   |   6    |
- *    |    256     |  1 << 8   |   8    |
- *    |    1024    |  1 << 10  |   10   |
- *
- */
-interface CodecScheme {
-    bits: number
-    name: string
-    table: string[]
-    tail: string
-}
+        let bytes: number[] = []
+        for (let i = 0; i < data.length; i += 4) {
+            const alpha = source[i] >> 2
+            const beta = ((source[i] & 0x3) << 6) | (source[i + 1] >> 4)
+            const gamma = ((source[i + 1] & 0xf) << 4) | (source[i + 2] >> 6)
+            const delta = ((source[i + 2] & 0x3f) << 2) | (source[i + 3] >> 8)
+            const epsilon = source[i + 3] & 0xff
+            bytes = bytes.concat([alpha, beta, gamma, delta, epsilon])
+        }
 
-/**
- * Binary Encoding
- */
-// prettier-ignore
-export const Binary: CodecScheme = {
-    bits: 1,
-    name: "Binary",
-    table: [
-        "0",
-        "1",
-    ],
-    tail: "",
-}
-
-/**
- * Hex Encoding
- */
-// prettier-ignore
-export const HEX: CodecScheme = {
-    bits: 4,
-    name: "Hex",
-    table: [
-        "0", "1", "2", "3",
-        "4", "5", "6", "7",
-        "8", "9", "a", "b",
-        "c", "d", "e", "f",
-    ],
-    tail: "",
-}
-
-/**
- * Base64 Encoding
- */
-// prettier-ignore
-export const BASE64: CodecScheme = {
-    bits: 6,
-    name: "Base64",
-    table: [
-        "A", "B", "C", "D", "E", "F",
-        "G", "H", "I", "J", "K", "L",
-        "M", "N", "O", "P", "Q", "R",
-        "S", "T", "U", "V", "W", "X",
-        "Y", "Z", "a", "b", "c", "d",
-        "e", "f", "g", "h", "i", "j",
-        "k", "l", "m", "n", "o", "p",
-        "q", "r", "s", "t", "u", "v",
-        "w", "x", "y", "z", "0", "1",
-        "2", "3", "4", "5", "6", "7",
-        "8", "9", "+", "/"
-    ],
-    tail: "=",
-}
-
-/**
- * BASE1024 Encoding
- */
-export const BASE1024: CodecScheme = {
-    bits: 10,
-    name: 'Base1024',
-    table: BASE_1024,
-    tail: '=',
-}
-
-/**
- * BASE2048 Encoding
- */
-export const BASE2048: CodecScheme = {
-    bits: 11,
-    name: 'Base2048',
-    table: parseEmojis(BASE_2048),
-    tail: '=',
-}
-
-/**
- * Assert `CodecSchema`
- *
- * - `bits` : should be `number`
- * - `table`: `length` of table should be `1 << bits`
- * - `tail` : should be `string`
- */
-function assertScheme(scheme: CodecScheme) {
-    // Assert bits
-    if (typeof scheme.bits !== 'number') {
-        throw new Error(`the bits field of ${scheme.name} should be type 'number'`)
-    }
-
-    // Assert table
-    //
-    // Emojis' combining characters needs full of them
-    if (1 << scheme.bits > scheme.table.length) {
-        throw new Error(`table \`length\` of ${scheme.name} should larger than ${1 << scheme.bits}`)
-    }
-
-    // Assert tail
-    if (typeof scheme.tail !== 'string') {
-        throw new Error(`the tail field of ${scheme.name} should be type 'string'`)
-    }
-}
+        return Uint8Array.from(bytes)
+    },
+})
 
 /**
  * Codec
@@ -158,7 +108,7 @@ function assertScheme(scheme: CodecScheme) {
  * |      | 1000010111 |  535  |
  * |      | 0011011011 |  219  |
  *
- * For `UTF-16`: `[ 01001101, 01100001, 01110011, 01101011 ]`
+ * For `UTF-8`: `[ 01001101, 01100001, 01110011, 01101011 ]`
  *
  * | Text |  Binary  | Index |
  * | ---- | -------- | ----- |
@@ -200,50 +150,21 @@ function assertScheme(scheme: CodecScheme) {
  */
 export class Codec {
     /**
-     * Build `Codec` from target scheme string
+     * Build `Codec` from usc2 string string
      *
-     * @param  {CodecScheme} scheme - target codec scheme
-     * @param  {string}      input  - the base `CodecScheme` string
+     * @param {string} usc2  - the common javascript `string`
      */
-    static from(scheme: CodecScheme, input: string | string[], emoji: boolean = false): Codec {
-        assertScheme(scheme)
+    static fromUtf8(utf8: string): Codec {
+        return new Codec(CodecUtil.utf8ToBytes(utf8))
+    }
 
-        // Map bytes to binary string
-        let bits: number = 0
-        const mapFn = (byte: string) => {
-            // return empty string if it is tail
-            if (byte === scheme.tail) {
-                bits += 2
-                return ''
-            }
-
-            // throw error if out of range
-            const index = scheme.table.indexOf(byte)
-            if (index === -1) {
-                throw new Error(`Decode from ${scheme.name} string failed`)
-            }
-
-            // Complete
-            return String(('0'.repeat(scheme.bits - 1) + Number(index).toString(2)).slice(-scheme.bits))
-        }
-
-        // Check if need to parse emojis
-        if (emoji) {
-            const tails = String(input.slice(input.indexOf(scheme.tail)))
-            input = parse(input as string).map((emoji: Record<string, any>) => emoji.text)
-            input = input.concat(tails.split(''))
-        }
-
-        // Check if need reTrim last byte
-        let binary: string = reMapping(input, mapFn)
-        if (bits !== 0) {
-            let lastByte = binary.slice(-scheme.bits)
-            lastByte = lastByte.slice(lastByte.indexOf('1')) + lastByte.slice(0, lastByte.indexOf('1'))
-            binary = binary.slice(0, -scheme.bits) + lastByte
-        }
-
-        // Return new codec
-        return new Codec(binary.slice(0, bits > 0 ? -bits : binary.length))
+    /**
+     * Build `Codec` from hex string
+     *
+     * @param {string} hex - hex string
+     */
+    static fromHex(hex: string): Codec {
+        return new Codec(CodecUtil.hexToBytes(hex))
     }
 
     /**
@@ -252,165 +173,75 @@ export class Codec {
      * @param {string} b64 - base64 string
      */
     static fromBase64(b64: string): Codec {
-        return Codec.from(BASE64, b64)
+        return new Codec(CodecUtil.base64ToBytes(b64))
     }
 
     /**
-     * Build `Codec` from emojis string
+     * Build `Codec` from base1024 string
      *
-     * @param {string} b1024 - b1024 string
+     * @param {string} b1024 - base1024 string
      */
     static fromBase1024(b1024: string): Codec {
-        return Codec.from(BASE1024, b1024, true)
+        return new Codec(CodecUtil.base1024ToBytes(b1024))
     }
 
     /**
-     * Build `Codec` from emojis string
+     * `Codec` class is `Uint8Array` based
+     */
+    private bytes: Uint8Array
+
+    /**
+     * Generate `Codec` from `Uint8Array` directly
      *
-     * @param {string} b2048 - b2048 string
+     * @param {Uint8Array} bytes - construct Codec by bytes
      */
-    static fromBase2048(b2048: string): Codec {
-        return Codec.from(BASE2048, b2048, true)
+    constructor(bytes: Uint8Array) {
+        this.bytes = bytes
     }
 
     /**
-     * Build `Codec` from binary string
+     * Return the byte array
      *
-     * @param {string} binary - binary string
+     * @return {Uint8Array} - bytes
      */
-    static fromBinary(binary: string): Codec {
-        return new Codec(binary)
+    public toBytes(): Uint8Array {
+        return this.bytes
     }
 
     /**
-     * Build `Codec` from hex string
+     * Encoding `Codec` source to hex string
      *
-     * @param {string} str - hex string
-     */
-    static fromHex(hex: string): Codec {
-        return Codec.from(HEX, hex)
-    }
-
-    /**
-     * Build Codec from utf8 string
-     *
-     * @param {string} str - utf8 string
-     */
-    static fromUtf8(utf8: string): Codec {
-        return new Codec(
-            Array.from(utf8, (char: string) => {
-                const point = char.codePointAt(0)
-                if (point === undefined) {
-                    throw new Error('Invalid character while parsing utf-8 string')
-                }
-
-                // Complete the 0 prefix from every byte
-                return ('0'.repeat(8) + point.toString(2)).slice(-8)
-            }).reduce((o: string, c: string) => (o += c)),
-        )
-    }
-
-    /**
-     * This binary is converted from 8 bits points
-     */
-    private bin: string
-
-    /**
-     * Build Codec from binary string
-     *
-     * @param {string} binary - binary string
-     */
-    constructor(binary: string) {
-        this.bin = String(binary)
-    }
-
-    /**
-     * Convert points to hex
-     */
-    public toBinary(): string {
-        return String(this.bin)
-    }
-
-    /**
-     * Convert points to hex
+     * @return {string} - hex string
      */
     public toHex(): string {
-        return this.toSchemeString(HEX)
+        return CodecUtil.bytesToHex(this.bytes)
     }
 
     /**
-     * Convert points to hex
+     * Encoding `Codec` source to `base64` string
+     *
+     * @return {string} - base64 string
      */
     public toBase64(): string {
-        return this.toSchemeString(BASE64)
+        return CodecUtil.bytesToBase64(this.bytes)
     }
 
     /**
-     * Convert points to hex
+     * Encoding `Codec` source to `base64` string
+     *
+     * @return {string} - base64 string
      */
     public toBase1024(): string {
-        return this.toSchemeString(BASE1024)
+        return CodecUtil.bytesToBase1024(this.bytes)
     }
 
     /**
-     * Convert points to hex
+     * Encoding `Codec` source to utf-8 string
+     *
+     * @return {string} - utf8 string
      */
-    public toBase2048(): string {
-        return this.toSchemeString(BASE2048)
-    }
-
-    /**
-     * Convert codec binary to target scheme string
-     *
-     * @param {CodecScheme} scheme - target codec scheme
-     *
-     * @public This method can be used by manual `CodecSchema`.
-     *
-     * @return {string} scheme string
-     */
-    public toSchemeString(scheme: CodecScheme): string {
-        assertScheme(scheme)
-
-        // Match bytes in target schemem
-        const bytes = this.bin.match(new RegExp(`.{1,${scheme.bits}}`, 'g'))
-        if (bytes === null) {
-            throw new Error('Can not convert to target codec scheme.')
-        }
-
-        // Fill the prefix for every byte
-        let tails: number = 0
-        const mapBytes = (byte: string): string => {
-            if (byte.length !== scheme.bits) {
-                const bits = scheme.bits - byte.length
-                byte += '0'.repeat(bits)
-
-                // calculating tails
-                tails = bits / 2
-            }
-
-            return String(scheme.table[Number.parseInt(byte, 2)])
-        }
-
-        // Return codec string
-        return String(reMapping(bytes, mapBytes) + scheme.tail.repeat(tails))
-    }
-
-    /**
-     * Convert source binary to utf-16 string
-     *
-     * @return {string} string constructed by code points
-     */
-    public toString(): string {
-        const bytes = this.bin.match(/.{1,8}/g)
-        if (bytes === null) {
-            return ''
-        }
-
-        // Return string from code points
-        return String.fromCodePoint.apply(
-            null,
-            bytes.map((byte: string) => Number.parseInt(byte, 2)),
-        )
+    public toUtf8(): string {
+        return CodecUtil.bytesToUtf8(this.bytes)
     }
 }
 
