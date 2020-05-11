@@ -73,7 +73,7 @@ export default function DashboardPersonasRouter() {
     )
 
     return (
-        <DashboardRouterContainer title={t('my_personas')} actions={actions}>
+        <DashboardRouterContainer title={t('my_personas')} empty={!personas.length} actions={actions}>
             <ThemeProvider theme={personasTheme}>
                 <section className={classes.container}>
                     {personas

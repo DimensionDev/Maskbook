@@ -2,6 +2,7 @@ import React from 'react'
 import { makeStyles, createStyles, Typography, Divider, Fade } from '@material-ui/core'
 import classNames from 'classnames'
 import { useRouteMatch } from 'react-router-dom'
+import { getUrl } from '../../../utils/utils'
 
 interface DashboardRouterContainerProps {
     title?: string
@@ -11,6 +12,10 @@ interface DashboardRouterContainerProps {
      * add or remove the space between divider and left panel
      */
     padded?: boolean
+    /**
+     * add or remove the placeholder
+     */
+    empty?: boolean
 }
 
 const useStyles = makeStyles((theme) =>
@@ -20,6 +25,20 @@ const useStyles = makeStyles((theme) =>
             display: 'grid',
             gridTemplateRows: '[titleAction] 0fr [divider] 0fr [content] auto',
             height: '100%',
+        },
+        placeholder: {
+            height: '100%',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            position: 'absolute',
+            backgroundSize: '185px 128px',
+            backgroundRepeat: 'no-repeat',
+            backgroundPosition: 'center center',
+            backgroundImage: `url(${getUrl(
+                theme.palette.type === 'light' ? 'dashboard-placeholder.png' : 'dashboard-placeholder-dark.png',
+            )})`,
         },
         scroller: {
             height: '100%',
@@ -45,6 +64,7 @@ const useStyles = makeStyles((theme) =>
             display: 'flex',
             flexDirection: 'column',
             overflow: 'hidden',
+            position: 'relative',
         },
         dividerPadded: {
             paddingLeft: 34,
@@ -75,7 +95,7 @@ const useStyles = makeStyles((theme) =>
 )
 
 export default function DashboardRouterContainer(props: DashboardRouterContainerProps) {
-    const { title, actions, children, padded } = props
+    const { title, actions, children, padded, empty } = props
     const classes = useStyles()
     const match = useRouteMatch('/:param/')
     const forSetupPurpose = match?.url.includes('/setup')
@@ -103,6 +123,7 @@ export default function DashboardRouterContainer(props: DashboardRouterContainer
                 )}
                 <main className={classNames(classes.content, { [classes.contentPadded]: padded !== false })}>
                     <div className={classes.scroller}>{children}</div>
+                    {empty ? <div className={classes.placeholder}></div> : null}
                 </main>
             </section>
         </Fade>
