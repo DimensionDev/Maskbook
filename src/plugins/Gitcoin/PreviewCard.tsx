@@ -1,5 +1,13 @@
 import React from 'react'
-import { makeStyles, createStyles, Theme, Typography, SnackbarContent, Button } from '@material-ui/core'
+import {
+    makeStyles,
+    createStyles,
+    Theme,
+    Typography,
+    SnackbarContent,
+    Button,
+    CircularProgress,
+} from '@material-ui/core'
 const border = '1.5px solid rgb(0, 154, 87)'
 interface PreviewCardProps {
     title: string

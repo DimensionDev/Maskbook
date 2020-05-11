@@ -190,3 +190,10 @@ export function addUint8Array(a: ArrayBuffer, b: ArrayBuffer) {
     c.set(y, x.length)
     return c
 }
+
+import anchorme from 'anchorme'
+export function parseURL(string: string) {
+    // TODO: upgrade to anchorme 2
+    const links: { raw: string; protocol: string; encoded: string }[] = anchorme(string, { list: true })
+    return links.map((x) => x.raw)
+}
