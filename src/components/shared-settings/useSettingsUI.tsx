@@ -14,6 +14,7 @@ import {
     createStyles,
 } from '@material-ui/core'
 import React, { useRef } from 'react'
+import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos'
 import { useStylesExtends } from '../custom-ui-helper'
 
 const useStyles = makeStyles((theme) =>
@@ -25,6 +26,9 @@ const useStyles = makeStyles((theme) =>
         },
         listItemIcon: {
             marginLeft: 0,
+        },
+        arrowIcon: {
+            color: theme.palette.text.secondary,
         },
     }),
 )
@@ -47,6 +51,7 @@ interface SettingsUIProps<T> extends withClasses<KeysInferFromUseStyles<typeof u
 }
 
 export function SettingsUI<T>(props: SettingsUIProps<T>) {
+    const { icon } = props
     const { value, primary, secondary } = withDefaultText(props)
     const currentValue = useValueRef(value)
     const classes = useStylesExtends(useStyles(), props)
@@ -59,9 +64,7 @@ export function SettingsUI<T>(props: SettingsUIProps<T>) {
                     button
                     disableGutters
                     classes={{ container: classes.container, secondaryAction: classes.secondaryAction }}>
-                    {props.icon ? (
-                        <ListItemIcon classes={{ root: classes.listItemIcon }}>{props.icon}</ListItemIcon>
-                    ) : null}
+                    {icon ? <ListItemIcon classes={{ root: classes.listItemIcon }}>{icon}</ListItemIcon> : null}
                     <ListItemText classes={{ primary: classes.listItemText }} primary={primary} secondary={secondary} />
                     <ListItemSecondaryAction>{ui}</ListItemSecondaryAction>
                 </ListItem>
@@ -73,6 +76,24 @@ export function SettingsUI<T>(props: SettingsUIProps<T>) {
                 </ListItem>
             )
     }
+}
+
+export function SettingsUIDummy(props: Omit<SettingsUIProps<null>, 'value'> & { onClick: () => void }) {
+    const { icon, primary, secondary, onClick } = props
+    const classes = useStylesExtends(useStyles(), props)
+    return (
+        <ListItem
+            onClick={onClick}
+            button
+            disableGutters
+            classes={{ container: classes.container, secondaryAction: classes.secondaryAction }}>
+            {icon ? <ListItemIcon classes={{ root: classes.listItemIcon }}>{icon}</ListItemIcon> : null}
+            <ListItemText classes={{ primary: classes.listItemText }} primary={primary} secondary={secondary} />
+            <ListItemSecondaryAction>
+                <ArrowForwardIosIcon classes={{ root: classes.arrowIcon }} />
+            </ListItemSecondaryAction>
+        </ListItem>
+    )
 }
 
 export function SettingsUIEnum<T extends object>(

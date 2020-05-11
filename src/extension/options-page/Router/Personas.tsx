@@ -5,9 +5,6 @@ import AddCircleIcon from '@material-ui/icons/AddCircle'
 import PersonaCard from '../DashboardComponents/PersonaCard'
 import { DashboardPersonaCreateDialog, DashboardPersonaImportDialog } from '../Dialog/Persona'
 import { useModal } from '../Dialog/Base'
-import { Database as DatabaseIcon } from 'react-feather'
-import { DashboardDatabaseBackupDialog, DashboardDatabaseRestoreDialog } from '../Dialog/Database'
-import SpacedButtonGroup from '../DashboardComponents/SpacedButtonGroup'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { merge, cloneDeep } from 'lodash-es'
 import { useMyPersonas } from '../../../components/DataSource/independent'
@@ -33,9 +30,6 @@ const useStyles = makeStyles((theme) =>
         placeholder: {
             flex: 1,
         },
-        footer: {
-            padding: theme.spacing(2, 0),
-        },
     }),
 )
 
@@ -57,8 +51,6 @@ export default function DashboardPersonasRouter() {
 
     const [createPersona, openCreatePersona] = useModal(DashboardPersonaCreateDialog)
     const [importPersona, openImportPersona] = useModal(DashboardPersonaImportDialog)
-    const [backupDatabase, openBackupDatabase] = useModal(DashboardDatabaseBackupDialog)
-    const [restoreDatabase, openRestoreDatabase] = useModal(DashboardDatabaseRestoreDialog)
 
     const actions = useMemo(
         () => [
@@ -86,28 +78,8 @@ export default function DashboardPersonasRouter() {
                             <PersonaCard key={persona.identifier.toText()} persona={persona} />
                         ))}
                 </section>
-                <div className={classes.placeholder}></div>
-                <SpacedButtonGroup className={classes.footer}>
-                    <Button
-                        className={classes.databaseButton}
-                        onClick={openRestoreDatabase}
-                        startIcon={<DatabaseIcon size={18} />}
-                        color="primary"
-                        variant="text">
-                        {t('restore_database')}
-                    </Button>
-                    <Button
-                        className={classes.databaseButton}
-                        onClick={openBackupDatabase}
-                        color="primary"
-                        variant="text">
-                        {t('backup_database')}
-                    </Button>
-                </SpacedButtonGroup>
                 {createPersona}
                 {importPersona}
-                {backupDatabase}
-                {restoreDatabase}
             </ThemeProvider>
         </DashboardRouterContainer>
     )
