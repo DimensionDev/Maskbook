@@ -171,7 +171,7 @@
     "type-coverage": "^2.4.2",
     "typechain": "^1.0.5",
     "typechain-target-web3-v1": "^1.0.4",
-    "typescript": "^3.9.0-beta",
+    "typescript": "^3.9.0-dev.20200427",
     "web-ext": "^4.2.0",
     "webcrypto": "https://github.com/DimensionDev/webcrypto",
     "webextension-shim": "https://github.com/DimensionDev/webextension-polyfill",
