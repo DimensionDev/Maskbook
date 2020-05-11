@@ -155,19 +155,21 @@ export default function DashboardWalletsRouter() {
     const [menu, , openMenu] = useModal(DashboardMenu, { menus })
 
     return (
-        <DashboardRouterContainer padded={false} title={t('my_wallets')} actions={actions}>
+        <DashboardRouterContainer padded={false} empty={!wallets.length} title={t('my_wallets')} actions={actions}>
             <div className={classes.root}>
-                <div className={classes.scroller}>
-                    {wallets.map((wallet) => (
-                        <WalletItem
-                            key={wallet.address}
-                            onClick={() => setCurrent(wallet.address)}
-                            wallet={wallet}
-                            tokens={tokens.filter((token) => wallet.erc20_token_balance.has(token.address))}
-                            selected={wallet.address === current}
-                        />
-                    ))}
-                </div>
+                {wallets.length ? (
+                    <div className={classes.scroller}>
+                        {wallets.map((wallet) => (
+                            <WalletItem
+                                key={wallet.address}
+                                onClick={() => setCurrent(wallet.address)}
+                                wallet={wallet}
+                                tokens={tokens.filter((token) => wallet.erc20_token_balance.has(token.address))}
+                                selected={wallet.address === current}
+                            />
+                        ))}
+                    </div>
+                ) : null}
                 <div className={classes.content}>
                     {currentWallet && (
                         <>

@@ -59,30 +59,28 @@ export default function DashboardContactsRouter() {
         [search, searchUI, startTransition],
     )
 
+    const swr = useSWRProfiles(search === '' ? void 0 : search)
+    const isEmpty = swr.items.length === 0
+
     return (
-        <DashboardRouterContainer title={t('contacts')} actions={actions}>
+        <DashboardRouterContainer title={t('contacts')} empty={isEmpty} actions={actions}>
             <Typography className={classes.title} variant="body2" color="textSecondary">
                 {t('people_in_database')}
             </Typography>
             {/* without flex: 1, the auto resize cannot resize to the max height it need. */}
             <section style={{ flex: 1 }}>
                 <Suspense fallback={contactLineFallback}>
-                    <ContactsList query={search === '' ? void 0 : search} />
+                    <ContactsList {...swr}></ContactsList>
                 </Suspense>
             </section>
         </DashboardRouterContainer>
     )
 }
-function ContactsList(props: { query: string | undefined }) {
+function ContactsList({ isReachingEnd, loadMore, pages, items, newDataPending }: ReturnType<typeof useSWRProfiles>) {
     const ref = useRef<FixedSizeList>(null)
-    const { isEmpty, isReachingEnd, loadMore, pages, items, newDataPending } = useSWRProfiles(props.query)
-    const isRealEmpty = isEmpty && items.length === 0
-    const displayProgressBar = newDataPending && items.length === 0
     return (
         <>
             <div style={{ display: 'none' }}>{pages}</div>
-            {isRealEmpty ? 'TODO: No result' : ''}
-            {displayProgressBar ? <LinearProgress variant="query" /> : null}
             <AutoResize>
                 {(size) => (
                     <FixedSizeList
@@ -98,7 +96,7 @@ function ContactsList(props: { query: string | undefined }) {
                         {({ index, style }) =>
                             items[index] ? (
                                 <ContactLine style={style} key={index} contact={items[index]}></ContactLine>
-                            ) : !displayProgressBar ? (
+                            ) : newDataPending && items.length === 0 ? (
                                 <ContactLineSkeleton style={style} key={index} />
                             ) : null
                         }
