@@ -106,7 +106,7 @@
     "decrypted_postbox_decrypting_finding_post_key": "Maskbook 正在搜尋分享給你的密鑰以解密这篇内容…",
     "decrypted_postbox_failed": "Maskbook 解密失敗",
     "decrypted_postbox_not_verified": "數字簽名驗證失敗，對方可能被駭了 ❌",
-    "decrypted_postbox_title": "此消息使用 Maskbook 加密：",
+    "decrypted_postbox_title": "此消息使用 Maskbook 解密：",
     "decrypted_postbox_verified": "數字簽名驗證成功 ✔",
     "default": "默認",
     "delete_persona": "刪除角色",
