@@ -1,8 +1,8 @@
 import React from 'react'
 import type { WalletRecord, ERC20TokenRecord } from '../Wallet/database/types'
 import Services from '../../extension/service'
-import { currentEthereumNetworkSettings } from '../Wallet/network'
 import { PluginMessageCenter } from '../PluginMessages'
+import { currentEthereumNetworkSettings } from '../Wallet/UI/Developer/SelectEthereumNetwork'
 import { formatBalance } from '../Wallet/formatter'
 
 export function useWalletDataSource() {

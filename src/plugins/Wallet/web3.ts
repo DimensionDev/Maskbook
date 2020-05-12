@@ -1,9 +1,9 @@
 import Web3 from 'web3'
 import type { WebsocketProvider } from 'web3-core'
-import { getNetworkSettings, currentEthereumNetworkSettings } from './network'
 import { getWallets, recoverWallet, recoverWalletFromPrivateKey } from './wallet'
 import { PluginMessageCenter } from '../PluginMessages'
 import { sideEffect } from '../../utils/side-effects'
+import { currentEthereumNetworkSettings, getNetworkSettings } from './UI/Developer/SelectEthereumNetwork'
 
 export const web3 = new Web3()
 

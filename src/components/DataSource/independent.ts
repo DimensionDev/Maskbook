@@ -5,9 +5,9 @@ import { MessageCenter } from '../../utils/messages'
 import type { Persona } from '../../database'
 import { useValueRef } from '../../utils/hooks/useValueRef'
 import { PluginMessageCenter } from '../../plugins/PluginMessages'
-import { currentEthereumNetworkSettings } from '../../plugins/Wallet/network'
 import type { WalletRecord, ERC20TokenRecord } from '../../plugins/Wallet/database/types'
 import { sideEffect } from '../../utils/side-effects'
+import { currentEthereumNetworkSettings } from '../../plugins/Wallet/UI/Developer/SelectEthereumNetwork'
 
 const independentRef = {
     myPersonasRef: new ValueRef<Persona[]>([], PersonaArrayComparer),

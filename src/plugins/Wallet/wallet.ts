@@ -9,11 +9,11 @@ import * as bip39 from 'bip39'
 import { walletAPI } from './real'
 import { ERC20TokenPredefinedData, OKB_ADDRESS, DAI_ADDRESS } from './erc20'
 import { memoizePromise } from '../../utils/memoize'
-import { currentEthereumNetworkSettings } from './network'
 import { buf2hex } from './web3'
 import { BigNumber } from 'bignumber.js'
-import { sideEffect } from '../../utils/side-effects'
 import { ec as EC } from 'elliptic'
+import { currentEthereumNetworkSettings } from './UI/Developer/SelectEthereumNetwork'
+import { sideEffect } from '../../utils/side-effects'
 
 // Private key at m/44'/coinType'/account'/change/addressIndex
 // coinType = ether

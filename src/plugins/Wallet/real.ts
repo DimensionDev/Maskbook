@@ -1,6 +1,5 @@
 import * as jwt from 'jsonwebtoken'
 import type { AbiItem } from 'web3-utils'
-import type { EventData } from 'web3-eth-contract'
 import { BigNumber } from 'bignumber.js'
 import { web3 } from './web3'
 import { onClaimResult, onCreationResult, onExpired, onRefundResult } from './red-packet-fsm'
@@ -8,13 +7,13 @@ import HappyRedPacketABI from './contract/HappyRedPacket.json'
 import IERC20ABI from './contract/IERC20.json'
 import type { IERC20 } from './contract/IERC20'
 import type { HappyRedPacket } from './contract/HappyRedPacket'
-import type { TransactionObject, Tx } from './contract/types'
 import type { CheckRedPacketAvailabilityResult, CreateRedPacketResult } from './types'
 import { RedPacketTokenType, EthereumNetwork, RedPacketJSONPayload } from './database/types'
 import { asyncTimes, pollingTask } from '../../utils/utils'
 import { createWalletDBAccess } from './database/Wallet.db'
 import { createTransaction } from '../../database/helpers/openDB'
-import { getNetworkSettings } from './network'
+import { sendTx } from './tx'
+import { getNetworkSettings } from './UI/Developer/SelectEthereumNetwork'
 
 function createRedPacketContract(address: string) {
     return (new web3.eth.Contract(HappyRedPacketABI as AbiItem[], address) as unknown) as HappyRedPacket
@@ -22,36 +21,6 @@ function createRedPacketContract(address: string) {
 
 function createERC20Contract(address: string) {
     return (new web3.eth.Contract(IERC20ABI as AbiItem[], address) as unknown) as IERC20
-}
-
-interface TxReceipt {
-    blockHash: string
-    blockNumber: number
-    transactionHash: string
-    events: Record<string, EventData>
-}
-
-interface TxListeners {
-    onTransactionHash?: (hash: string) => void
-    onTransactionError?: (error: Error) => void
-    onReceipt?: (receipt: TxReceipt) => void
-    onEstimateError?: (error: Error) => void
-}
-
-async function sendTx<R, T extends TransactionObject<R>>(txObject: T, tx: Tx = {}, listeners: TxListeners = {}) {
-    return Promise.all([txObject.estimateGas(tx), web3.eth.getGasPrice()])
-        .then(([gas, gasPrice]) =>
-            txObject
-                .send({
-                    ...tx,
-                    gas,
-                    gasPrice,
-                })
-                .on('transactionHash', (hash: string) => listeners?.onTransactionHash?.(hash))
-                .on('receipt', (receipt: TxReceipt) => listeners?.onReceipt?.(receipt))
-                .on('error', (err: Error) => listeners?.onTransactionError?.(err)),
-        )
-        .catch((err: Error) => listeners?.onEstimateError?.(err))
 }
 
 export const redPacketAPI = {
