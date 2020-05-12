@@ -9,9 +9,9 @@ import type { Profile } from '../../../database'
 import type { ProfileIdentifier, PostIdentifier } from '../../../database/type'
 import { useStylesExtends } from '../../custom-ui-helper'
 import type { TypedMessage } from '../../../extension/background-script/CryptoServices/utils'
-import RedPacketInDecryptedPost from '../../../plugins/Wallet/UI/RedPacket/RedPacketInDecryptedPost'
 import CheckIcon from '@material-ui/icons/Check'
 import ClearIcon from '@material-ui/icons/Clear'
+import { PluginUI, PluginSuccessDecryptionComponentProps } from '../../../plugins/plugin'
 
 export interface DecryptPostSuccessProps extends withClasses<KeysInferFromUseStyles<typeof useSuccessStyles>> {
     data: { signatureVerifyResult: boolean; content: TypedMessage }
@@ -41,7 +41,7 @@ export const DecryptPostSuccess = React.memo(function DecryptPostSuccess(props: 
     return (
         <AdditionalContent
             metadataRenderer={{
-                after: (props) => <RedPacketInDecryptedPost message={props.message} postIdentifier={postIdentifier} />,
+                after: (props) => <SuccessDecryptionPlugin postIdentifier={postIdentifier} message={props.message} />,
             }}
             header={<DecryptPostSuccessHeader {...props} shareMenu={shareMenu} />}
             message={data.content}
@@ -49,6 +49,17 @@ export const DecryptPostSuccess = React.memo(function DecryptPostSuccess(props: 
         />
     )
 })
+function SuccessDecryptionPlugin(props: PluginSuccessDecryptionComponentProps) {
+    return (
+        <>
+            {[...PluginUI.values()]
+                .filter((x) => x.shouldActivateInSuccessDecryption(props.message))
+                .map((X) => (
+                    <X.SuccessDecryptionComponent key={X.identifier} {...props} />
+                ))}
+        </>
+    )
+}
 
 function DecryptPostSuccessHeader(props: { shareMenu: ReturnType<typeof useShareMenu> } & DecryptPostSuccessProps) {
     const { t } = useI18N()

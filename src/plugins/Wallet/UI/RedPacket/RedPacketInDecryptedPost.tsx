@@ -34,6 +34,8 @@ import { PortalShadowRoot } from '../../../../utils/jss/ShadowRootPortal'
 import { useI18N } from '../../../../utils/i18n-next-ui'
 import ShadowRootDialog from '../../../../utils/jss/ShadowRootDialog'
 import { getPostUrl } from '../../../../social-network/utils/getPostUrl'
+import { RedPacketMetaKey } from '../../RedPacketMetaKey'
+import type { PluginSuccessDecryptionComponentProps } from '../../../plugin'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -45,23 +47,21 @@ const useStyles = makeStyles((theme) =>
 
 interface RedPacketInDecryptedPostProps
     extends withClasses<
-        | KeysInferFromUseStyles<typeof useStyles>
-        | 'dialog'
-        | 'backdrop'
-        | 'container'
-        | 'paper'
-        | 'input'
-        | 'header'
-        | 'content'
-        | 'actions'
-        | 'close'
-        | 'button'
-        | 'label'
-        | 'title'
-    > {
-    message: TypedMessage
-    postIdentifier?: PostIdentifier<ProfileIdentifier>
-}
+            | KeysInferFromUseStyles<typeof useStyles>
+            | 'dialog'
+            | 'backdrop'
+            | 'container'
+            | 'paper'
+            | 'input'
+            | 'header'
+            | 'content'
+            | 'actions'
+            | 'close'
+            | 'button'
+            | 'label'
+            | 'title'
+        >,
+        PluginSuccessDecryptionComponentProps {}
 
 export default function RedPacketInDecryptedPost(props: RedPacketInDecryptedPostProps) {
     const [loading, setLoading] = React.useState(false)
@@ -139,7 +139,7 @@ export function RedPacketInDecryptedPostCard(
     const storybookDebugging: boolean = !!process.env.STORYBOOK
     /* without redpacket */
     const jsx = message
-        ? withMetadata(message.meta, 'com.maskbook.red_packet:1', (r) => (
+        ? withMetadata(message.meta, RedPacketMetaKey, (r) => (
               <MaskbookPluginWrapper width={400} pluginName="Red Packet">
                   {webpackEnv.target === 'WKWebview' ? (
                       <span>{t('feature_redpacket_not_supported')}</span>

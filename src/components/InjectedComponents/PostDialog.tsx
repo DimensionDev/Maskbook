@@ -44,6 +44,7 @@ import { sleep } from '../../utils/utils'
 import { useI18N } from '../../utils/i18n-next-ui'
 import ShadowRootDialog from '../../utils/jss/ShadowRootDialog'
 import { twitterUrl } from '../../social-network-provider/twitter.com/utils/url'
+import { RedPacketMetaKey } from '../../plugins/Wallet/RedPacketMetaKey'
 
 const defaultTheme = {}
 
@@ -150,12 +151,13 @@ export function PostDialogUI(props: PostDialogUIProps) {
                         </Typography>
                     </DialogTitle>
                     <DialogContent className={classes.content}>
-                        {withMetadata(props.postContent.meta, 'com.maskbook.red_packet:1', (r) => (
+                        {/* TODO: move into the plugin system */}
+                        {withMetadata(props.postContent.meta, RedPacketMetaKey, (r) => (
                             <Chip
                                 onDelete={async () => {
                                     const ref = getActivatedUI().typedMessageMetadata
                                     const next = new Map(ref.value.entries())
-                                    next.delete('com.maskbook.red_packet:1')
+                                    next.delete(RedPacketMetaKey)
                                     ref.value = next
                                     if (props.onShareToEveryoneChanged) {
                                         await sleep(300)
@@ -330,7 +332,8 @@ export function PostDialog(props: PostDialogProps) {
                     !!shareToEveryone,
                 )
                 const activeUI = getActivatedUI()
-                const metadata = readTypedMessageMetadata(typedMessageMetadata, 'com.maskbook.red_packet:1')
+                // TODO: move into the plugin system
+                const metadata = readTypedMessageMetadata(typedMessageMetadata, RedPacketMetaKey)
                 if (imagePayloadStatus) {
                     const isEth = metadata.ok && metadata.val.token_type === RedPacketTokenType.eth
                     const isErc20 =
@@ -424,7 +427,8 @@ export function PostDialog(props: PostDialogProps) {
     )
     //#endregion
     //#region Red Packet
-    const hasRedPacket = readTypedMessageMetadata(postBoxContent.meta || new Map(), 'com.maskbook.red_packet:1').ok
+    // TODO: move into the plugin system
+    const hasRedPacket = readTypedMessageMetadata(postBoxContent.meta, RedPacketMetaKey).ok
     const theme = hasRedPacket ? PluginRedPacketTheme : undefined
     const mustSelectShareToEveryone = hasRedPacket && !shareToEveryone
 

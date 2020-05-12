@@ -42,6 +42,7 @@ import BigNumber from 'bignumber.js'
 import { useWalletDataSource, useSelectWallet } from '../../../shared/useWallet'
 import { WalletSelect } from '../../../shared/WalletSelect'
 import { TokenSelect } from '../../../shared/TokenSelect'
+import { RedPacketMetaKey } from '../../RedPacketMetaKey'
 
 interface RedPacketDialogProps
     extends withClasses<
@@ -384,7 +385,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
     const insertRedPacket = (payload?: RedPacketJSONPayload | null) => {
         const ref = getActivatedUI().typedMessageMetadata
         const next = new Map(ref.value.entries())
-        payload ? next.set('com.maskbook.red_packet:1', payload) : next.delete('com.maskbook.red_packet:1')
+        payload ? next.set(RedPacketMetaKey, payload) : next.delete(RedPacketMetaKey)
         ref.value = next
         props.onConfirm(payload)
     }

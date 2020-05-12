@@ -16,6 +16,7 @@ import BigNumber from 'bignumber.js'
 import { makeTypedMessage } from '../extension/background-script/CryptoServices/utils'
 import { DAI_ADDRESS, OKB_ADDRESS } from '../plugins/Wallet/erc20'
 import { DecryptPostSuccess } from '../components/InjectedComponents/DecryptedPost/DecryptedPostSuccess'
+import { RedPacketMetaKey } from '../plugins/Wallet/RedPacketMetaKey'
 
 storiesOf('Plugin: Red Packets', module)
     .add('RedPacketWithStateUI', () => {
@@ -144,7 +145,7 @@ storiesOf('Plugin: Red Packets', module)
             total: (knobs.total * 10 ** 18).toString(),
             creation_time: Date.now(),
         }
-        const meta = new Map<string, any>([['com.maskbook.red_packet:1', payload]])
+        const meta = new Map<string, any>([[RedPacketMetaKey, payload]])
         return (
             <Paper style={{ maxWidth: 400 }}>
                 <div>

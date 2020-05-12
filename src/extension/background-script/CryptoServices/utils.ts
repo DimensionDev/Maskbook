@@ -18,6 +18,7 @@ export function getSignablePayload(payload: Payload) {
 
 import type { RedPacketJSONPayload } from '../../../plugins/Wallet/database/types'
 import { Result, Err, Ok } from 'ts-results'
+import { RedPacketMetaKey } from '../../../plugins/Wallet/RedPacketMetaKey'
 
 export interface TypedMessageMetadata {
     readonly meta?: ReadonlyMap<string, any>
@@ -46,7 +47,7 @@ export function makeTypedMessage(content: string, meta?: ReadonlyMap<string, any
 }
 
 interface KnownMetadata {
-    'com.maskbook.red_packet:1': RedPacketJSONPayload
+    [RedPacketMetaKey]: RedPacketJSONPayload
 }
 const builtinMetadataSchema: Partial<Record<string, object>> = {} as Partial<Record<keyof KnownMetadata, object>>
 export function readTypedMessageMetadata<T extends keyof KnownMetadata>(

@@ -117,7 +117,6 @@ export function PostInspector(props: PostInspectorProps) {
     }
 }
 function PluginPostInspector(props: { post: string }) {
-    if (process.env.STORYBOOK) return null
     return (
         <>
             {[...PluginUI.values()]

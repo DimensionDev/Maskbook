@@ -16,11 +16,14 @@ export const GitCoinConfig: PluginConfig = {
         return shouldActivate(post).ok
     },
     shouldActivateInSuccessDecryption(post) {
-        return extractTextFromTypedMessage(post).map(shouldActivate).ok
+        const text = extractTextFromTypedMessage(post)
+        // https://github.com/vultix/ts-results/issues/8
+        if (text.ok) return shouldActivate(text.val).ok
+        return false
     },
     PostInspectorComponent: Renderer,
     SuccessDecryptionComponent(props) {
-        const text = extractTextFromTypedMessage(props.post)
+        const text = extractTextFromTypedMessage(props.message)
         if (text.err) return null
         return Renderer({ post: text.val })
     },
