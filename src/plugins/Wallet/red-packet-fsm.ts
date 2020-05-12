@@ -2,7 +2,7 @@ import { omit } from 'lodash-es'
 import {
     RedPacketRecord,
     RedPacketStatus,
-    RedPacketTokenType,
+    EthereumTokenType,
     isNextRedPacketStatusValid,
     RedPacketJSONPayload,
     EthereumNetwork,
@@ -18,11 +18,11 @@ import Web3Utils from 'web3-utils'
 import { redPacketAPI } from './real'
 import { sideEffect } from '../../utils/side-effects'
 import BigNumber from 'bignumber.js'
+import { getNetworkSettings } from './UI/Developer/SelectEthereumNetwork'
 
 function getProvider() {
     return redPacketAPI
 }
-const contract_address = '0x19D0b6091D37Bc262ecC460ee4Bd57DBBD68754C'
 const everything = ['ERC20Token', 'RedPacket', 'Wallet'] as const
 export type createRedPacketInit = Pick<
     RedPacketRecord,
@@ -92,7 +92,7 @@ export async function createRedPacket(packet: createRedPacketInit): Promise<{ pa
     let erc20_approve_transaction_hash: string | undefined = undefined
     let erc20_approve_value: BigNumber | undefined = undefined
     let erc20_token_address: string | undefined = undefined
-    if (packet.token_type === RedPacketTokenType.erc20) {
+    if (packet.token_type === EthereumTokenType.erc20) {
         if (!packet.erc20_token) throw new Error('ERC20 token should have erc20_token field')
         const res = await getWalletProvider().approveERC20Token(
             packet.sender_address,
@@ -102,7 +102,7 @@ export async function createRedPacket(packet: createRedPacketInit): Promise<{ pa
         erc20_token_address = packet.erc20_token
         erc20_approve_transaction_hash = res.erc20_approve_transaction_hash
         erc20_approve_value = res.erc20_approve_value
-    } else if (packet.token_type === RedPacketTokenType.erc721) {
+    } else if (packet.token_type === EthereumTokenType.erc721) {
         throw new Error('Not supported')
     }
     const { create_transaction_hash, create_nonce } = await getProvider().create(
@@ -122,7 +122,7 @@ export async function createRedPacket(packet: createRedPacketInit): Promise<{ pa
         _data_source_: getProvider().dataSource,
         aes_version: 1,
         contract_version: 1,
-        contract_address,
+        contract_address: getNetworkSettings().happyRedPacketContractAddress,
         id: uuid(),
         duration: packet.duration,
         is_random: packet.is_random,

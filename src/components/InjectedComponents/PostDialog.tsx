@@ -37,7 +37,7 @@ import {
     extractTextFromTypedMessage,
 } from '../../extension/background-script/CryptoServices/utils'
 import { formatBalance } from '../../plugins/Wallet/formatter'
-import { RedPacketTokenType } from '../../plugins/Wallet/database/types'
+import { EthereumTokenType } from '../../plugins/Wallet/database/types'
 import { DAI_ADDRESS, OKB_ADDRESS } from '../../plugins/Wallet/erc20'
 import { PluginRedPacketTheme } from '../../plugins/Wallet/theme'
 import { sleep } from '../../utils/utils'
@@ -335,12 +335,12 @@ export function PostDialog(props: PostDialogProps) {
                 // TODO: move into the plugin system
                 const metadata = readTypedMessageMetadata(typedMessageMetadata, RedPacketMetaKey)
                 if (imagePayloadStatus) {
-                    const isEth = metadata.ok && metadata.val.token_type === RedPacketTokenType.eth
+                    const isEth = metadata.ok && metadata.val.token_type === EthereumTokenType.eth
                     const isErc20 =
                         metadata.ok &&
                         metadata.val &&
                         metadata.val.token &&
-                        metadata.val.token_type === RedPacketTokenType.erc20
+                        metadata.val.token_type === EthereumTokenType.erc20
                     const isDai = isErc20 && metadata.ok && metadata.val.token?.address === DAI_ADDRESS
                     const isOkb = isErc20 && metadata.ok && metadata.val.token?.address === OKB_ADDRESS
 

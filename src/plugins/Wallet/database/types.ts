@@ -1,6 +1,20 @@
 import type { BigNumber } from 'bignumber.js'
 import { unreachable } from '../../../utils/utils'
 
+export enum EthereumNetwork {
+    Mainnet = 'Mainnet',
+    Rinkeby = 'Rinkeby',
+    Ropsten = 'Ropsten',
+}
+
+export enum EthereumTokenType {
+    eth = 0,
+    erc20 = 1,
+    erc721 = 2,
+}
+
+//#region red packet
+
 /**
  * @see https://github.com/DimensionDev/Tessercube-iOS/wiki/Red-Packet-Data-Dictionary
  */
@@ -54,7 +68,7 @@ export interface RedPacketRecord {
     /** web3 network tag enum. Mainnet or Rinkeby */
     network: EthereumNetwork
     /** token type tag for red packet */
-    token_type: RedPacketTokenType
+    token_type: EthereumTokenType
     /** ERC20Token contract address if erc20 token type */
     erc20_token?: string
     /** ERC20 approve transaction hash */
@@ -76,52 +90,7 @@ export interface RedPacketRecordInDatabase
     erc20_approve_value?: string | bigint
     shares: string | bigint
 }
-export interface WalletRecord {
-    /** ethereum hex address */
-    address: string
-    /** User define wallet name. Default address.prefix(6) */
-    name: string | null
-    /** Wallet ethereum balance */
-    eth_balance?: BigNumber
-    erc20_token_balance: Map</** address of the erc20 token */ string, BigNumber | undefined>
-    mnemonic: string[]
-    passphrase: string
-    _data_source_: 'real' | 'mock'
-    /** Wallet recover from private key */
-    _private_key_?: string
-    _wallet_is_default?: boolean
-}
-export interface WalletRecordInDatabase extends Omit<WalletRecord, 'eth_balance' | 'erc20_token_balance'> {
-    eth_balance?: string | bigint
-    erc20_token_balance: Map<string, string | bigint | undefined>
-}
-export interface ERC20TokenRecord {
-    /** same to address */
-    // id: string
-    /** token address */
-    address: string
-    /** token name */
-    name: string
-    /** token decimal */
-    decimals: number
-    /** token symbol */
-    symbol: string
-    network: EthereumNetwork
-    /** Yes if user added token */
-    is_user_defined: boolean
-    /** Delete time for soft delete */
-    deleted_at?: Date
-}
-export enum RedPacketTokenType {
-    eth = 0,
-    erc20 = 1,
-    erc721 = 2,
-}
-export enum EthereumNetwork {
-    Mainnet = 'Mainnet',
-    Rinkeby = 'Rinkeby',
-    Ropsten = 'Ropsten',
-}
+
 export enum RedPacketStatus {
     /** Red packet ready to send */
     initial = 'initial',
@@ -183,6 +152,81 @@ export interface RedPacketJSONPayload {
     creation_time: number
     duration: number
     network?: EthereumNetwork
-    token_type: RedPacketTokenType
+    token_type: EthereumTokenType
     token?: Pick<ERC20TokenRecord, 'address' | 'name' | 'decimals' | 'symbol'>
 }
+//#endregion
+
+//#region wallet
+export interface WalletRecord {
+    /** ethereum hex address */
+    address: string
+    /** User define wallet name. Default address.prefix(6) */
+    name: string | null
+    /** Wallet ethereum balance */
+    eth_balance?: BigNumber
+    erc20_token_balance: Map</** address of the erc20 token */ string, BigNumber | undefined>
+    mnemonic: string[]
+    passphrase: string
+    _data_source_: 'real' | 'mock'
+    /** Wallet recover from private key */
+    _private_key_?: string
+    _wallet_is_default?: boolean
+}
+export interface WalletRecordInDatabase extends Omit<WalletRecord, 'eth_balance' | 'erc20_token_balance'> {
+    eth_balance?: string | bigint
+    erc20_token_balance: Map<string, string | bigint | undefined>
+}
+//#endregion
+
+//#region erc20
+export interface ERC20TokenRecord {
+    /** same to address */
+    // id: string
+    /** token address */
+    address: string
+    /** token name */
+    name: string
+    /** token decimal */
+    decimals: number
+    /** token symbol */
+    symbol: string
+    network: EthereumNetwork
+    /** Yes if user added token */
+    is_user_defined: boolean
+    /** Delete time for soft delete */
+    deleted_at?: Date
+}
+//#endregion
+
+//#region gitcoin
+export interface GitcoinFundRecord {
+    contract_version: number
+    contract_address: string
+    /** donation transaction nonce when send */
+    donation_nonce?: number
+    /** Read from donation transaction result */
+    donation_transaction_hash?: string
+    /** Read from donation transaction result */
+    block_creation_time?: Date
+    /** The address of the donated account on Gitcoin */
+    donation_address: string
+    /** The address of donor */
+    donor_address: string
+    /** Donation value in Wei if ETH. In minimal unit if ERC20 token */
+    donation_total: string
+    /** web3 network tag enum. Mainnet or Rinkeby */
+    network: EthereumNetwork
+    /** token type tag for red packet */
+    token_type: EthereumTokenType
+    /** ERC20Token contract address if erc20 token type */
+    erc20_token?: string
+    /** ERC20 approve transaction hash */
+    erc20_approve_transaction_hash?: string
+    /** ERC20 approve transaction event value */
+    erc20_approve_value?: BigNumber
+    /** The comment with donation */
+    comment?: string
+    _data_source_: 'real' | 'mock'
+}
+//#endregion
