@@ -60,7 +60,7 @@ export default function DashboardContactsRouter() {
     )
 
     const swr = useSWRProfiles(search === '' ? void 0 : search)
-    const isEmpty = swr.items.length === 0
+    const isEmpty = !swr.newDataPending && swr.items.length === 0
 
     return (
         <DashboardRouterContainer title={t('contacts')} empty={isEmpty} actions={actions}>
@@ -93,13 +93,13 @@ function ContactsList({ isReachingEnd, loadMore, pages, items, newDataPending }:
                         itemSize={64}
                         itemCount={items.length + (isReachingEnd ? 0 : 1)}
                         {...size}>
-                        {({ index, style }) =>
-                            items[index] ? (
-                                <ContactLine style={style} key={index} contact={items[index]}></ContactLine>
-                            ) : newDataPending && items.length === 0 ? (
-                                <ContactLineSkeleton style={style} key={index} />
-                            ) : null
-                        }
+                        {({ index, style }) => {
+                            if (items[index])
+                                return <ContactLine style={style} key={index} contact={items[index]}></ContactLine>
+                            if (newDataPending && items.length === 0)
+                                return <ContactLineSkeleton style={style} key={index} />
+                            return null
+                        }}
                     </FixedSizeList>
                 )}
             </AutoResize>

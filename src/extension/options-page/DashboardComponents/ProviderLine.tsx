@@ -18,7 +18,6 @@ const useStyles = makeStyles((theme) =>
         text: {
             fontSize: 14,
             lineHeight: '24px',
-            color: theme.palette.primary.main,
             borderBottom: `solid 1px ${theme.palette.divider}`,
             display: 'flex',
             alignItems: 'center',
@@ -33,14 +32,11 @@ const useStyles = makeStyles((theme) =>
                 flex: '0 0 auto',
             },
         },
-        connected: {
-            color: theme.palette.text.primary,
-        },
         cursor: {
             cursor: 'pointer',
         },
         control: {
-            marginTop: theme.spacing(2),
+            marginBottom: theme.spacing(2),
         },
     }),
 )
@@ -63,18 +59,14 @@ export default function ProviderLine(props: ProviderLineProps) {
                 {network}
             </Typography>
             <Typography
+                className={classNames(classes.text, { [classes.cursor]: !connected })}
+                color="primary"
                 variant="body1"
                 component="a"
-                onClick={connected ? undefined : onAction}
-                className={classNames(
-                    classes.text,
-                    { [classes.connected]: connected },
-                    { [classes.cursor]: !connected },
-                )}>
+                onClick={connected ? undefined : onAction}>
                 <span title={connected ? `@${userId}` : undefined}>
                     {connected ? `@${userId}` : `${t('connect_to')} ${network}`}
                 </span>
-
                 {connected ? (
                     <IconButton size="small" onClick={onAction} className={classes.cursor}>
                         <LinkOffIcon />
