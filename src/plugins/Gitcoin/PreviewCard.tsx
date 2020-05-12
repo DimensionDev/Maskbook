@@ -1,13 +1,5 @@
 import React from 'react'
-import {
-    makeStyles,
-    createStyles,
-    Theme,
-    Typography,
-    SnackbarContent,
-    Button,
-    CircularProgress,
-} from '@material-ui/core'
+import { makeStyles, createStyles, Theme, Typography, SnackbarContent, Button } from '@material-ui/core'
 const border = '1.5px solid rgb(0, 154, 87)'
 interface PreviewCardProps {
     title: string
@@ -65,7 +57,8 @@ const useStyles = makeStyles((theme: Theme) =>
             borderRadius: 12,
             border: border,
             background: 'white',
-            width: 400,
+            minWidth: 400,
+            width: '100%',
             height: 200,
             display: 'grid',
             gridTemplateColumns: '2fr 1fr',

@@ -6,6 +6,7 @@ import { useExtensionPermission } from '../../components/DataSource/useExtension
 import useSWR from 'swr'
 import { parseURL } from '../../utils/utils'
 import Services from '../../extension/service'
+import MaskbookPluginWrapper from '../MaskbookPluginWrapper'
 
 export const GitCoinConfig: PluginConfig = {
     shouldActivate(post) {
@@ -13,9 +14,11 @@ export const GitCoinConfig: PluginConfig = {
     },
     Renderer(props) {
         return (
-            <Suspense fallback={<SnackbarContent message="Maskbook is loading this plugin..." />}>
-                <PreviewCardLogic {...props} />
-            </Suspense>
+            <MaskbookPluginWrapper pluginName="Gitcoin">
+                <Suspense fallback={<SnackbarContent message="Maskbook is loading this plugin..." />}>
+                    <PreviewCardLogic {...props} />
+                </Suspense>
+            </MaskbookPluginWrapper>
         )
     },
 }
@@ -31,7 +34,7 @@ function PreviewCardLogic(props: { post: string }) {
         },
     })
     if (!data || data.err) return null
-    const { amount, contributors, description, finalAmount, title, image, height, width } = data.val
+    const { amount, contributors, finalAmount, title, image, width } = data.val
     return (
         <PreviewCard
             requestPermission={request}
