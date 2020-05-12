@@ -10,6 +10,7 @@ export interface GitcoinGrantMetadata {
     finalAmount?: number
     amount?: number
     contributors?: number
+    address?: string
 }
 const domain = 'https://gitcoin.co/'
 export async function fetchMetadata(url: string): Promise<Result<GitcoinGrantMetadata, [Reason, Error?]>> {
@@ -41,8 +42,9 @@ export async function fetchMetadata(url: string): Promise<Result<GitcoinGrantMet
         ?.innerText.split(' ')
         .filter((x) => !Number.isNaN(parse(x)))
         .map(parse) || [NaN, NaN]
+    const address = domTree.querySelector('#wallet-address')?.textContent?.trim() ?? undefined
 
-    return new Ok({ amount, contributors, description, finalAmount, height, image, title, width })
+    return new Ok({ amount, contributors, description, finalAmount, height, image, title, width, address })
 }
 
 function fetchData(url: string) {
