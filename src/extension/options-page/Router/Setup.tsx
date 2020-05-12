@@ -24,6 +24,7 @@ import useQueryParams from '../../../utils/hooks/useQueryParams'
 import { useAsync, useMultiStateValidator } from 'react-use'
 import { Identifier, ECKeyIdentifier } from '../../../database/type'
 import { useI18N } from '../../../utils/i18n-next-ui'
+import { useMyPersonas } from '../../../components/DataSource/independent'
 
 enum SetupStep {
     CreatePersona = 'create-persona',
@@ -125,7 +126,7 @@ export function CreatePersona() {
         setSubmitted(true)
         if (!isValid) return
         const persona = await Services.Identity.createPersonaByMnemonic(name, '')
-        history.replace(`${SetupStep.ConnectNetwork}?identifier=${encodeURIComponent(persona.toText())}`)
+        history.push(`${SetupStep.ConnectNetwork}?identifier=${encodeURIComponent(persona.toText())}`)
     }
     return (
         <SetupForm
@@ -185,13 +186,21 @@ export function ConnectNetwork() {
     const classes = useSetupFormSetyles()
     const history = useHistory()
 
+    const personas = useMyPersonas()
     const { identifier } = useQueryParams(['identifier'])
     const { value: persona = null } = useAsync(async () => {
         if (identifier) {
             return Services.Identity.queryPersona(Identifier.fromString(identifier, ECKeyIdentifier).unwrap())
         }
         return null
-    }, [identifier])
+    }, [identifier, personas])
+
+    const deletePersona = async () => {
+        history.goBack()
+        if (persona) {
+            await Services.Identity.deletePersona(persona.identifier, 'delete even with private')
+        }
+    }
 
     return (
         <SetupForm
@@ -211,10 +220,15 @@ export function ConnectNetwork() {
             }
             actions={
                 <>
-                    <ActionButton className={classes.confirm} variant="contained" color="primary">
+                    <ActionButton
+                        className={classes.confirm}
+                        variant="contained"
+                        color="primary"
+                        disabled={persona?.linkedProfiles.size === 0}
+                        onClick={() => history.goBack()}>
                         Finish
                     </ActionButton>
-                    <ActionButton variant="text" component={Link} onClick={() => history.goBack()}>
+                    <ActionButton variant="text" component={Link} onClick={deletePersona}>
                         Cancel
                     </ActionButton>
                 </>
