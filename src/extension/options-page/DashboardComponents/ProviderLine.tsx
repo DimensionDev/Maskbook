@@ -1,7 +1,8 @@
 import React from 'react'
-import { Typography, Divider, IconButton } from '@material-ui/core'
+import { Typography, IconButton } from '@material-ui/core'
 import { makeStyles, createStyles } from '@material-ui/core/styles'
 import classNames from 'classnames'
+import { capitalize } from 'lodash-es'
 import { useI18N } from '../../../utils/i18n-next-ui'
 
 import LinkOffIcon from '@material-ui/icons/LinkOff'
@@ -42,6 +43,7 @@ const useStyles = makeStyles((theme) =>
 )
 
 export interface ProviderLineProps extends withClasses<KeysInferFromUseStyles<typeof useStyles>> {
+    internalName: string
     network: string
     connected?: boolean
     userId?: string
@@ -50,13 +52,13 @@ export interface ProviderLineProps extends withClasses<KeysInferFromUseStyles<ty
 
 export default function ProviderLine(props: ProviderLineProps) {
     const { t } = useI18N()
-    const { network, connected, userId, onAction } = props
+    const { internalName, network, connected, userId, onAction } = props
     const classes = useStylesExtends(useStyles(), props)
 
     return (
         <div className={classes.control}>
             <Typography className={classes.title} variant="body2" color="textSecondary">
-                {network}
+                {capitalize(internalName)}
             </Typography>
             <Typography
                 className={classNames(classes.text, { [classes.cursor]: !connected })}

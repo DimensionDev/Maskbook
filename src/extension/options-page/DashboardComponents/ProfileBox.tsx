@@ -31,6 +31,7 @@ export default function ProfileBox({ persona, ProviderLineProps }: ProfileBoxPro
         .map((i) => {
             const profile = profiles.find(([key, value]) => key.network === i.networkIdentifier)
             return {
+                internalName: i.internalName,
                 network: i.networkIdentifier,
                 connected: !!profile,
                 userId: profile?.[0].userId,
