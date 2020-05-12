@@ -23,7 +23,6 @@
     "backup": "Backup",
     "backup_database": "Backup Database",
     "backup_persona": "Backup your persona",
-
     "backup_wallet": "Backup Wallet",
     "backup_wallet_hint": "Keep the 12 words below carefully in a safe place. You will need them to restore the private key of this wallet.",
     "banner_get_started": "Setup Maskbook",

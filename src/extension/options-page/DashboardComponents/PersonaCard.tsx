@@ -33,6 +33,7 @@ const useStyles = makeStyles((theme) =>
         header: {
             display: 'flex',
             alignItems: 'center',
+            marginBottom: theme.spacing(3),
         },
         title: {
             flex: '1 1 auto',
@@ -95,7 +96,7 @@ export default function PersonaCard({ persona }: Props) {
 
     return (
         <Card className={classes.card} elevation={2}>
-            <Typography className={classes.header} variant="h5" component="h2" gutterBottom>
+            <Typography className={classes.header} variant="h5" component="h2">
                 {!rename ? (
                     <>
                         <span title={persona.nickname} className={classes.title}>

@@ -13,6 +13,7 @@
     "additional_post_box__steganography_post_pre": "此圖片僅分享給我的好友。請安裝 Maskbook 以解讀圖片。 ([I:b]) {{random}}",
     "advanced": "高級...",
     "advanced_options": "高級選項",
+    "database_management": "資料庫管理",
     "automation_pasted_into_bio_box": "[Maskbook] 我們幫助您在簡介中填入了公鑰，請您審閱並發布它！",
     "automation_request_click_edit_bio_button": "請點擊「編輯簡介」按鈕或簡介旁的鉛筆圖標",
     "automation_request_paste_into_bio_box": "請拷貝公鑰，然後發佈到個人簡介上。",

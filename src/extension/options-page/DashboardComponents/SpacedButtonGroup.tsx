@@ -8,7 +8,7 @@ const useStyles = makeStyles((theme) =>
             flexGrow: 0,
             flexShrink: 0,
             '& > *:not(:last-child)': {
-                marginRight: theme.spacing(1),
+                marginRight: theme.spacing(2),
             },
         },
     }),

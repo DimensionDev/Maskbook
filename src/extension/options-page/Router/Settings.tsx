@@ -188,13 +188,13 @@ export default function DashboardSettingsRouter() {
                                     icon={<UnarchiveOutlinedIcon />}
                                     primary={t('backup_database')}
                                     secondary={t('dashboard_backup_database_hint')}
-                                    onClick={openRestoreDatabase}
+                                    onClick={openBackupDatabase}
                                 />
                                 <SettingsUIDummy
                                     icon={<ArchiveOutlinedIcon />}
                                     primary={t('restore_database')}
                                     secondary={t('dashboard_import_database_hint')}
-                                    onClick={openBackupDatabase}
+                                    onClick={openRestoreDatabase}
                                 />
                             </List>
                         </Card>
