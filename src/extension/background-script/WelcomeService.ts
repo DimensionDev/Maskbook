@@ -87,8 +87,8 @@ export async function openWelcomePage(id?: SocialNetworkUI['lastRecognizedIdenti
     return exclusiveTasks(getWelcomePageURL(id))
 }
 
-export async function openOptionsPage(route?: string) {
-    return exclusiveTasks(browser.runtime.getURL(route ? '/index.html#' + route : '/'))
+export async function openOptionsPage(route?: string): Promise<void> {
+    exclusiveTasks(browser.runtime.getURL(route ? '/index.html#' + route : '/'))
 }
 
 export { createPersonaByMnemonic } from '../../database'

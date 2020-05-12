@@ -19,13 +19,16 @@ export function useWalletDataSource() {
         currentEthereumNetworkSettings.addListener(update)
         return PluginMessageCenter.on('maskbook.wallets.update', update)
     }, [])
-    return [wallets, tokens] as const
+    return [
+        wallets,
+        tokens,
+        React.useCallback(() => {
+            Services.Welcome.openOptionsPage('/wallets/error?reason=nowallet')
+        }, []),
+    ] as const
 }
 
-export function useSelectWallet(
-    onRequireNewWallet: () => void,
-    ...[wallets, tokens]: ReturnType<typeof useWalletDataSource>
-) {
+export function useSelectWallet(...[wallets, tokens, onRequireNewWallet]: ReturnType<typeof useWalletDataSource>) {
     const [selectedWalletAddress, setSelectedWallet] = React.useState<undefined | string>(undefined)
     const [selectedTokenType, setSelectedTokenType] = React.useState<
         { type: 'eth' } | { type: 'erc20'; address: string }

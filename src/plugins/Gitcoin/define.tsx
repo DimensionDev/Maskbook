@@ -1,6 +1,6 @@
 import type { PluginConfig } from '../plugin'
 import { PreviewCard } from './PreviewCard'
-import React, { Suspense, useMemo } from 'react'
+import React, { Suspense, useMemo, useState } from 'react'
 import { SnackbarContent } from '@material-ui/core'
 import { useExtensionPermission } from '../../components/DataSource/useExtensionPermission'
 import useSWR from 'swr'
@@ -9,6 +9,8 @@ import Services from '../../extension/service'
 import MaskbookPluginWrapper from '../MaskbookPluginWrapper'
 import { extractTextFromTypedMessage } from '../../extension/background-script/CryptoServices/utils'
 import { Result, Ok, Err } from 'ts-results'
+import { DonateCard } from './DonateCard'
+import { useWalletDataSource } from '../shared/useWallet'
 
 export const GitCoinConfig: PluginConfig = {
     identifier: 'co.gitcoin',
@@ -46,6 +48,8 @@ function shouldActivate(post: string): Result<void, void> {
 }
 
 function PreviewCardLogic(props: { post: string }) {
+    const [open, setOpen] = useState(false)
+    const [wallets, tokens, onRequireNewWallet] = useWalletDataSource()
     const { hasPermission, request } = useExtensionPermission({ origins: ['https://gitcoin.co/grants/**/*'] })
     const url = useMemo(() => parseURL(props.post).find((x) => x.startsWith('https://gitcoin.co/grants')) ?? null, [
         props.post,
@@ -55,19 +59,32 @@ function PreviewCardLogic(props: { post: string }) {
             return Services.Plugin.invokePlugin('co.gitcoin', 'fetchMetadata', url)
         },
     })
-    if (!data || data.err) return null
-    const { amount, contributors, finalAmount, title, image } = data.val
+    if (!data || data.err || !url) return null
+    const { amount, contributors, finalAmount, title, image, description, address } = data.val
     return (
-        <PreviewCard
-            requestPermission={request}
-            hasNoPermission={!hasPermission}
-            loading={isValidating}
-            image={image ? <img src={image} width="100%" /> : null}
-            line1={`${finalAmount ?? 'Many'} DAI`}
-            line2="ESTIMATED"
-            line3={`${amount ?? 'Many'} DAI`}
-            line4={`${contributors ?? 'Many'} contributors`}
-            title={title ?? 'A Gitcoin grant'}
-        />
+        <>
+            <PreviewCard
+                onRequestGrant={() => setOpen(true)}
+                requestPermission={request}
+                hasNoPermission={!hasPermission}
+                loading={isValidating}
+                image={image ? <img src={image} width="100%" /> : null}
+                line1={`${finalAmount ?? 'Many'} DAI`}
+                line2="ESTIMATED"
+                line3={`${amount ?? 'Many'} DAI`}
+                line4={`${contributors ?? 'Many'} contributors`}
+                title={title ?? 'A Gitcoin grant'}
+                address={address}
+                originalURL={url}
+            />
+            <DonateCard
+                {...{ wallets, tokens, onRequireNewWallet, address }}
+                open={!!(open && address?.length)}
+                onClose={() => setOpen(false)}
+                title={title ?? 'A Gitcoin grant'}
+                description={description ?? ''}
+                onDonate={() => {}}
+            />
+        </>
     )
 }

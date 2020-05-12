@@ -1,4 +1,4 @@
-import React, { useRef, useState, useCallback } from 'react'
+import React, { useState, useCallback } from 'react'
 import {
     makeStyles,
     DialogTitle,
@@ -110,7 +110,7 @@ function NewPacketUI(props: RedPacketDialogProps & NewPacketProps) {
 
     const rinkebyNetwork = useValueRef(debugModeSetting)
 
-    const useSelectWalletResult = useSelectWallet(onRequireNewWallet, wallets, tokens)
+    const useSelectWalletResult = useSelectWallet(wallets, tokens, onRequireNewWallet)
     const {
         erc20Balance,
         ethBalance,
@@ -355,7 +355,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
         },
         [tabs],
     )
-    const [wallets, tokens] = useWalletDataSource()
+    const [wallets, tokens, onRequireNewWallet] = useWalletDataSource()
 
     const [redPacket, setRedPacket] = React.useState<RedPacketRecord[]>([])
     const [justCreatedRedPacket, setJustCreatedRedPacket] = React.useState<RedPacketRecord | undefined>(undefined)
@@ -394,7 +394,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
         <RedPacketDialogUI
             {...props}
             tab={tabs}
-            onRequireNewWallet={() => Services.Welcome.openOptionsPage('/wallets/error?reason=nowallet')}
+            onRequireNewWallet={onRequireNewWallet}
             newRedPacketCreatorName={useCurrentIdentity()?.linkedPersona?.nickname}
             wallets={wallets}
             tokens={tokens}

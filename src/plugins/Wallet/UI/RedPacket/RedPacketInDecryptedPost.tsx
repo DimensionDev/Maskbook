@@ -36,6 +36,7 @@ import ShadowRootDialog from '../../../../utils/jss/ShadowRootDialog'
 import { getPostUrl } from '../../../../social-network/utils/getPostUrl'
 import { RedPacketMetaKey } from '../../RedPacketMetaKey'
 import type { PluginSuccessDecryptionComponentProps } from '../../../plugin'
+import { useWalletDataSource } from '../../../shared/useWallet'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -89,15 +90,16 @@ export default function RedPacketInDecryptedPost(props: RedPacketInDecryptedPost
             .catch((e) => Services.Welcome.openOptionsPage(`/wallets/error?reason=${e.message}`))
             .finally(() => setLoading(false))
     }
+    const [wallets, tokens, onRequireNewWallet] = useWalletDataSource()
 
     const onClick = async (state: RedPacketStatus, rpid: RedPacketRecord['red_packet_id']) => {
         if (!rpid) return
         if (state === 'incoming' || state === 'normal') {
             setLoading(true)
             try {
-                const [wallets] = await Services.Plugin.invokePlugin('maskbook.wallet', 'getWallets')
+                if (wallets === 'loading') throw new Error('Loading')
                 if (!wallets[0]) {
-                    Services.Welcome.openOptionsPage('/wallets/error?reason=nowallet')
+                    onRequireNewWallet()
                     throw new Error('Claim failed')
                 }
                 if (wallets.length > 1) setClaiming({ rpid, wallets })
