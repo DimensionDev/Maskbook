@@ -14,11 +14,9 @@ export const resetProvider = () => {
         provider.removeListener('end', resetProvider) // prevent from circular reseting
         provider.disconnect(-1, 'change provider')
     }
-    const newProvider = new Web3.providers.WebsocketProvider(getNetworkSettings().middlewareAddress)
-
-    newProvider.on('end', resetProvider)
-    provider = newProvider
-    web3.setProvider(newProvider)
+    provider = new Web3.providers.WebsocketProvider(getNetworkSettings().middlewareAddress)
+    provider.on('end', resetProvider)
+    web3.setProvider(provider)
 }
 
 export const resetWallet = async () => {
