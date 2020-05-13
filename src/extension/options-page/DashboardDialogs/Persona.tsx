@@ -92,7 +92,9 @@ export function PersonaCreatedDialog() {
             title={t('dashboard_persona_created')}
             content={
                 <>
-                    {t('dashboard_new_persona_created', { name: persona?.nickname })}
+                    <Typography variant="body1">
+                        {t('dashboard_new_persona_created', { name: persona?.nickname })}
+                    </Typography>
                     <section style={{ marginTop: 12 }}>
                         <ProfileBox persona={persona} />
                     </section>
@@ -118,7 +120,11 @@ export function PersonaDeleteDialog(props: PersonaDeleteDialogProps) {
         <DialogContentItem
             simplified
             title={t('delete_persona')}
-            content={t('dashboard_delete_persona_confirm_hint', { name: persona?.nickname })}
+            content={
+                <Typography variant="body1">
+                    {t('dashboard_delete_persona_confirm_hint', { name: persona?.nickname })}
+                </Typography>
+            }
             actions={
                 <>
                     <ActionButton variant="outlined" color="default" onClick={onDecline}>
@@ -391,7 +397,7 @@ export function PersonaImportFailedDialog(props: PersonaImportFailedDialogProps)
         <DialogContentItem
             simplified
             title={t('import_failed')}
-            content={t('dashboard_import_persona_failed')}
+            content={<Typography variant="body1">{t('dashboard_import_persona_failed')}</Typography>}
             actions={
                 <ActionButton variant="outlined" color="default" onClick={onConfirm}>
                     {t('ok')}
@@ -414,9 +420,11 @@ export function PersonaImportSuccessDialog(props: PersonaImportSuccessDialogProp
             simplified
             title={t('import_successful')}
             content={
-                nickname
-                    ? t('dashboard_imported_persona', { name: nickname, count: profiles ?? 0 })
-                    : t('dashboard_database_import_successful_hint')
+                <Typography variant="body1">
+                    {nickname
+                        ? t('dashboard_imported_persona', { name: nickname, count: profiles ?? 0 })
+                        : t('dashboard_database_import_successful_hint')}
+                </Typography>
             }
             actions={
                 <ActionButton variant="outlined" color="default" onClick={onConfirm}>
