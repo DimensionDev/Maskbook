@@ -57,7 +57,7 @@ const taskPasteIntoPostBox: SocialNetworkUI['taskPasteIntoPostBox'] = (text, opt
         // paste
         dispatchCustomEvents('paste', text)
         await sleep(interval)
-        if (!getEditorContent().includes(text)) {
+        if (!getEditorContent().replace(/\n/g, '').includes(text.replace(/\n/g, ''))) {
             prompt(opt.warningText, text)
             throw new Error('Unable to paste text automatically')
         }

@@ -106,7 +106,7 @@
     "decrypted_postbox_decrypting_finding_post_key": "Maskbook is retrieving the post key to decrypt this post...",
     "decrypted_postbox_failed": "Maskbook decryption failed",
     "decrypted_postbox_not_verified": "Signature NOT verified",
-    "decrypted_postbox_title": "Encrypted by Maskbook:",
+    "decrypted_postbox_title": "Decrypted by Maskbook:",
     "decrypted_postbox_verified": "Signature verified",
     "default": "Default",
     "delete_persona": "Delete Persona",

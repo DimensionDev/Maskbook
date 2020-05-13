@@ -20,12 +20,20 @@ export const instanceOfTwitterUI = defineSocialNetworkUI({
     ...twitterUICustomUI,
     i18nOverwrite: {
         en: {
-            additional_post_box__encrypted_post_pre:
-                '#Maskbook ([I:b])\nDecrypt this tweet with maskbook.com @realMaskbook.\n—§— /* {{encrypted}} */',
+            additional_post_box__encrypted_post_pre: [
+                'This tweet is encrypted with Maskbook (@realmaskbook).',
+                'Install maskbook.com to decrypt it. 📮🔑',
+                '#Maskbook',
+                '🚫Do not click this link. 🔐{{encrypted}}🔐',
+            ].join('\n\n'),
         },
         zh: {
-            additional_post_box__encrypted_post_pre:
-                '#Maskbook ([I:b])\n使用 maskbook.com @realMaskbook 解密这条推文。\n—§— /* {{encrypted}} */',
+            additional_post_box__encrypted_post_pre: [
+                '此推文已被 Maskbook（@realmaskbook）加密。',
+                '請安裝 maskbook.com 進行解密。📮🔑',
+                '#Maskbook',
+                '🚫請不要點擊此連結。🔐{{encrypted}}🔐',
+            ].join('\n\n'),
         },
     },
     init: (env, pref) => {
