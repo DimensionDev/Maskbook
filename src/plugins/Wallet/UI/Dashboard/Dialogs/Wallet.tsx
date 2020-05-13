@@ -22,7 +22,7 @@ import Services from '../../../../../extension/service'
 import { PluginMessageCenter } from '../../../../PluginMessages'
 import { RedPacketRecord, WalletRecord, EthereumNetwork } from '../../../database/types'
 import useQueryParams from '../../../../../utils/hooks/useQueryParams'
-import { ERC20TokenPredefinedData } from '../../../erc20'
+import { ERC20TokenPredefinedData, OKB_ADDRESS } from '../../../erc20'
 import { ERC20WellKnownTokenSelector } from './WalletAddTokenDialogContent'
 import Wallet from 'wallet.ts'
 import { useHistory, Link } from 'react-router-dom'
@@ -301,10 +301,17 @@ export function WalletRedPacketDetailDialog(props: WalletRedPacketDetailDialogPr
             window.open(redPacket._found_in_url_, '_blank', 'noopener noreferrer')
         } else {
             const user = redPacket._found_in_url_!.match(/(?!\/)[\d\w]+(?=\/status)/)
-            const text = `I just received a Red Packet${
-                user ? ` from @${user}` : ''
-            }. Follow @realMaskbook (maskbook.com) to get your first Twitter #RedPacket.
-#maskbook ${redPacket._found_in_url_}`
+            const userText = user ? ` from @${user}` : ''
+            const text =
+                redPacket.erc20_token === OKB_ADDRESS
+                    ? [
+                          `#OKBAprilReport Wow! I just received an #OKB Red Packet${userText} using Maskbook. Follow @JayHao8 and answer quiz to gain more #OKB.`,
+                          'https://twitter.com/JayHao8/status/1260482603079122946',
+                      ].join('\n')
+                    : [
+                          `I just received a Red Packet${userText}. Follow @realMaskbook (maskbook.com) to get your first Twitter #RedPacket.`,
+                          `#maskbook ${redPacket._found_in_url_}`,
+                      ].join('\n')
             window.open(
                 `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`,
                 '_blank',
