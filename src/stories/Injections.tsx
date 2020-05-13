@@ -238,7 +238,7 @@ function FakePost(props: React.PropsWithChildren<{ title: string }>) {
         <MuiThemeProvider theme={MaskbookLightTheme}>
             {props.title}
             <div style={{ marginBottom: '2em', maxWidth: 500 }}>
-                <img width={500} src={require('./post-a.jpg')} style={{ marginBottom: -4 }} />
+                <img width={500} src={require('./post-a.jpg')} style={{ marginBottom: -12 }} />
                 <div
                     style={{
                         border: '1px solid #dfe0e2',
