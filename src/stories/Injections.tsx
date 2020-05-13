@@ -1,15 +1,15 @@
 import React from 'react'
 import { storiesOf } from '@storybook/react'
-import { text, boolean, select } from '@storybook/addon-knobs'
+import { text, boolean, select, radios } from '@storybook/addon-knobs'
 import { action } from '@storybook/addon-actions'
-import { AdditionalContent } from '../components/InjectedComponents/AdditionalPostContent'
+import { AdditionalContent, AdditionalIcon } from '../components/InjectedComponents/AdditionalPostContent'
 import { DecryptPostFailed } from '../components/InjectedComponents/DecryptedPost/DecryptPostFailed'
 import { DecryptPostAwaiting } from '../components/InjectedComponents/DecryptedPost/DecryptPostAwaiting'
 import { DecryptPostSuccess } from '../components/InjectedComponents/DecryptedPost/DecryptedPostSuccess'
 import { AddToKeyStoreUI } from '../components/InjectedComponents/AddToKeyStore'
 import { useShareMenu } from '../components/InjectedComponents/SelectPeopleDialog'
 import { sleep } from '../utils/utils'
-import { Paper, MuiThemeProvider, Typography, Divider } from '@material-ui/core'
+import { Paper, MuiThemeProvider, Typography, Divider, Button, Link } from '@material-ui/core'
 import { demoPeople as demoProfiles, demoGroup } from './demoPeopleOrGroups'
 import { PostCommentDecrypted } from '../components/InjectedComponents/PostComments'
 import { CommentBox } from '../components/InjectedComponents/CommentBox'
@@ -50,16 +50,20 @@ storiesOf('Injections', module)
             ))}
         </Paper>
     ))
-    .add('Additional Post Content', () => (
-        <>
-            <Paper>
+    .add('Additional Post Content', () => {
+        const icon = radios('RightIcon', { ...AdditionalIcon, No: 'None' }, 'None')
+        return (
+            <Paper style={{ padding: 24 }}>
                 <AdditionalContent
-                    header={text('Title', 'Additional text')}
+                    progress={boolean('progress', false)}
+                    titleIcon={icon === 'None' ? undefined : icon}
+                    title={text('Title', 'Additional text')}
                     message={text('Rich text', 'a[text](https://g.cn/)')}
+                    headerActions={boolean('Has right action?', true) ? <Link>An action</Link> : undefined}
                 />
             </Paper>
-        </>
-    ))
+        )
+    })
     .add('Typed Message Renderer', () => {
         const _text: TypedMessageText = {
             type: 'text',
@@ -115,6 +119,7 @@ storiesOf('Injections', module)
             finding_person_public_key,
             finding_post_key,
             undefined,
+            init,
         }
         function getProgress(x: ProgressType): DecryptionProgress | undefined {
             switch (x) {
@@ -122,6 +127,8 @@ storiesOf('Injections', module)
                     return { progress: 'finding_person_public_key' }
                 case ProgressType.finding_post_key:
                     return { progress: 'finding_post_key' }
+                case ProgressType.init:
+                    return { progress: 'init' }
                 case ProgressType.undefined:
                     return undefined
             }
@@ -133,6 +140,7 @@ storiesOf('Injections', module)
                     finding_person_public_key: ProgressType.finding_person_public_key,
                     finding_post_key: ProgressType.finding_post_key,
                     undefined: ProgressType.undefined,
+                    init: ProgressType.init,
                 },
                 ProgressType.undefined,
             ),

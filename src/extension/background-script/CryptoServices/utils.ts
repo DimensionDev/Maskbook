@@ -100,3 +100,12 @@ export function extractTextFromTypedMessage(x: TypedMessage | null): Result<stri
         return new Ok(x.items.map(extractTextFromTypedMessage).filter((x) => x.ok && x.val.length > 0)[0].val as string)
     return Err.EMPTY
 }
+
+export function textIntoTypedMessage(x: TypedMessage | string): TypedMessage {
+    if (typeof x !== 'string') return x
+    return {
+        content: x,
+        type: 'text',
+        version: 1,
+    }
+}

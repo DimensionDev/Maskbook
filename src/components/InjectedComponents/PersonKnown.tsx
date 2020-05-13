@@ -46,15 +46,6 @@ export function PersonKnown(props: PersonKnownProps) {
     }
 }
 
-const header = (text: React.ReactChild) => (
-    <Typography
-        variant="caption"
-        color="textSecondary"
-        gutterBottom
-        style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        {text}
-    </Typography>
-)
 export interface PersonKnownUIProps {
     AdditionalContentProps?: Partial<AdditionalContentProps>
     bio?: string | null
@@ -63,7 +54,7 @@ export function PersonKnownSelf(props: PersonKnownUIProps) {
     const { t } = useI18N()
     return (
         <AdditionalContent
-            header={header(t('please_include_proof_your_bio', { bio: props.bio }))}
+            title={t('please_include_proof_your_bio', { bio: props.bio })}
             {...props.AdditionalContentProps}
         />
     )
@@ -72,14 +63,6 @@ export function PersonKnownSelf(props: PersonKnownUIProps) {
 export function PersonKnownOthers(props: PersonKnownUIProps) {
     const { t } = useI18N()
     return (
-        <AdditionalContent
-            header={header(
-                <>
-                    {t('seen_in_maskbook_database')}
-                    <CheckIcon fontSize="small" htmlColor="green" />
-                </>,
-            )}
-            {...props.AdditionalContentProps}
-        />
+        <AdditionalContent title={t('seen_in_maskbook_database')} titleIcon="check" {...props.AdditionalContentProps} />
     )
 }
