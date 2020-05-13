@@ -98,16 +98,15 @@ export const postNameParser = (node: HTMLElement) => {
     if (isMobilePost(node)) {
         return parseNameArea(notNullable(node.querySelector<HTMLTableCellElement>('.user-info')).innerText)
     } else {
-        const tweetElement = node.querySelector('[data-testid="tweet"]') ?? node
+        const tweetElement = node.querySelector<HTMLElement>('[data-testid="tweet"]') ?? node
         const nameInUniqueAnchorTweet =
-            tweetElement.children[1]?.querySelector<HTMLAnchorElement>('a[aria-haspopup="false"]')?.innerText ?? ''
+            tweetElement.children[1]?.querySelector<HTMLAnchorElement>('a[data-focusable="true"]')?.innerText ?? ''
         const nameInDoubleAnchorsTweet = Array.from(
-            tweetElement.children[1]?.querySelectorAll<HTMLAnchorElement>('a[aria-haspopup="false"]') ?? [],
+            tweetElement.children[1]?.querySelectorAll<HTMLAnchorElement>('a[data-focusable="true"]') ?? [],
         )
             .map((a) => a.textContent)
             .join('')
-        const nameInQuoteTweet = tweetElement.children[0]?.querySelector<HTMLDivElement>('[aria-haspopup="false"]')
-            ?.innerText
+        const nameInQuoteTweet = nthChild(tweetElement, 0, 0, 0)?.innerText
 
         return (
             [nameInUniqueAnchorTweet, nameInDoubleAnchorsTweet, nameInQuoteTweet]
