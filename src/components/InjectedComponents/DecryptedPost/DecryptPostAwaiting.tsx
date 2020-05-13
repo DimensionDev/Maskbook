@@ -16,7 +16,8 @@ export const DecryptPostAwaiting = React.memo(function DecryptPostAwaiting(props
     } as const
     return (
         <AdditionalContent
-            header={key[(props.type && props.type.progress) || 'undefined']}
+            title={key[(props.type && props.type.progress) || 'undefined']}
+            progress
             {...props.AdditionalContentProps}
         />
     )
