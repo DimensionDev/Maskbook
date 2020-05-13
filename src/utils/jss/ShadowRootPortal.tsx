@@ -36,14 +36,19 @@ const handler: ProxyHandler<ShadowRoot> = {
         if (typeof val === 'function') return val.bind(target)
 
         // @ts-ignore
+        const doc = document[property]
         // ! (1) document can createElement, createElementNS, etc., so if we don't have such methods, use theirs
-        if (typeof val === 'undefined' && typeof document[property] === 'function')
-            // @ts-ignore
-            return document[property].bind(document)
+        if (typeof val === 'undefined' && typeof doc === 'function') return doc.bind(document)
 
         // ! (2) if it's not a function, use theirs
+        // ! if not return the body version, React will throw in findDOMNode
+        // ! if not return the self version, we will have react#18895 problem
+        // https://github.com/facebook/react/issues/18895
         // @ts-ignore
-        return document.body[property]
+        const body = document.body[property]
+        // @ts-ignore
+        const self = portalShadowRoot[property]
+        return body ?? self
     },
     set(target, property, value) {
         return Reflect.set(target, property, value, target)
