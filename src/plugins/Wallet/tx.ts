@@ -1,18 +1,12 @@
 import type { EventData } from 'web3-eth-contract'
 import { web3 } from './web3'
 import type { TransactionObject, Tx } from './contract/types'
-
-interface TxReceipt {
-    blockHash: string
-    blockNumber: number
-    transactionHash: string
-    events: Record<string, EventData>
-}
+import type { TransactionConfig, TransactionReceipt } from 'web3-core'
 
 interface TxListeners {
     onTransactionHash?: (hash: string) => void
     onTransactionError?: (error: Error) => void
-    onReceipt?: (receipt: TxReceipt) => void
+    onReceipt?: (receipt: TransactionReceipt) => void
     onEstimateError?: (error: Error) => void
 }
 
@@ -26,8 +20,18 @@ export async function sendTx<R, T extends TransactionObject<R>>(txObject: T, tx:
                     gasPrice,
                 })
                 .on('transactionHash', (hash: string) => listeners?.onTransactionHash?.(hash))
-                .on('receipt', (receipt: TxReceipt) => listeners?.onReceipt?.(receipt))
+                .on('receipt', (receipt: TransactionReceipt) => listeners?.onReceipt?.(receipt))
                 .on('error', (err: Error) => listeners?.onTransactionError?.(err)),
         )
         .catch((err: Error) => listeners?.onEstimateError?.(err))
+}
+
+export async function sendTxConfigForTxHash(config: TransactionConfig) {
+    return new Promise<string>((resolve, reject) => {
+        web3.eth
+            .sendTransaction(config)
+            .on('transactionHash', (hash: string) => resolve(hash))
+            .on('error', (err: Error) => reject(err))
+            .catch((err: Error) => reject(err))
+    })
 }

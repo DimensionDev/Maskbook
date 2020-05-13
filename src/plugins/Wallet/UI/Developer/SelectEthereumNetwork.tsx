@@ -6,6 +6,11 @@ import { SettingsUIEnum } from '../../../../components/shared-settings/useSettin
 import { createNewSettings } from '../../../../components/shared-settings/createSettings'
 
 const settings = {
+    gitcoinDonationAddress: {
+        [EthereumNetwork.Mainnet]: '0x00De4B13153673BCAE2616b67bf822500d325Fc3',
+        [EthereumNetwork.Rinkeby]: '',
+        [EthereumNetwork.Ropsten]: '',
+    },
     splitterContractAddress: {
         [EthereumNetwork.Mainnet]: '0xdf869FAD6dB91f437B59F1EdEFab319493D4C4cE',
         [EthereumNetwork.Rinkeby]: '',
@@ -22,6 +27,7 @@ const settings = {
         [EthereumNetwork.Ropsten]: 'wss://ropsten.infura.io/ws/v3/11f8b6b36f4a408e85d8a4e52d31edc5',
     },
 } as {
+    gitcoinDonationAddress: Record<EthereumNetwork, string>
     splitterContractAddress: Record<EthereumNetwork, string>
     happyRedPacketContractAddress: Record<EthereumNetwork, string>
     middlewareAddress: Record<EthereumNetwork, string>

@@ -15,7 +15,7 @@ import type { RedPacketCreationResult, RedPacketClaimResult } from './types'
 import { getWalletProvider, getWallets, recoverWallet, getDefaultWallet, setDefaultWallet } from './wallet'
 import { PluginMessageCenter } from '../PluginMessages'
 import Web3Utils from 'web3-utils'
-import { redPacketAPI } from './real'
+import { redPacketAPI } from './api'
 import { sideEffect } from '../../utils/side-effects'
 import BigNumber from 'bignumber.js'
 import { getNetworkSettings } from './UI/Developer/SelectEthereumNetwork'
@@ -96,6 +96,7 @@ export async function createRedPacket(packet: createRedPacketInit): Promise<{ pa
         if (!packet.erc20_token) throw new Error('ERC20 token should have erc20_token field')
         const res = await getWalletProvider().approveERC20Token(
             packet.sender_address,
+            getNetworkSettings().happyRedPacketContractAddress,
             packet.erc20_token,
             packet.send_total,
         )

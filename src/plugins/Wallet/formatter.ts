@@ -18,7 +18,7 @@ export function formatBalance(balance: BigNumber | undefined, decimals: number, 
         fraction = `0${fraction}`
     }
 
-    const whole = balance.dividedBy(base).toString(10) // (balance / base).toString(10)
+    const whole = balance.dividedToIntegerBy(base).toString(10) // (balance / base).toString(10)
     const value = `${whole}${fraction == '0' ? '' : `.${fraction.substr(0, precision)}`}` // eslint-disable-line
     const raw = negative ? `-${value}` : value
 
