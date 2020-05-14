@@ -17,8 +17,6 @@ export const resetProvider = () => {
     const newProvider = new Web3.providers.WebsocketProvider(getNetworkSettings().middlewareAddress)
 
     newProvider.on('end', resetProvider)
-    // @ts-expect-error
-    // TODO: Type 'WebsocketProvider' is missing the following properties from type 'WebsocketProvider': responseCallbacks, notificationCallbacks, addDefaultEventsts(2739)
     provider = newProvider
     web3.setProvider(newProvider)
 }
