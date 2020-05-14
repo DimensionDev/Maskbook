@@ -33,6 +33,8 @@ function zipPostLinkPreview(node: DOMProxy) {
 }
 function zipEncryptedPostContent(node: DOMProxy) {
     const parent = node.current.parentElement
+    // It's image based encryption, skip zip post.
+    if (!node.current.innerText.includes('🎼')) return
     // Style modification for repost
     if (!node.current.className.includes('userContent') && node.current.innerText.length > 0) {
         node.after.setAttribute(
