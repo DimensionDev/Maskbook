@@ -105,7 +105,7 @@ const registerPostCollector = (self: SocialNetworkUI) => {
         if (
             Array.from(node.querySelectorAll('span, a'))
                 .map((n) => n.getAttribute('title') ?? '')
-                .some((url) => twitterEncoding.payloadDecoder(url) !== 'null')
+                .some((url) => twitterEncoding.payloadDecoder(url) !== null)
         ) {
             return true
         }
