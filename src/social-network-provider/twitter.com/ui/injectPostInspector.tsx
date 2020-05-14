@@ -30,8 +30,8 @@ export function injectPostInspectorAtTwitter(current: PostInfo) {
         },
     })(current)
 }
-function matches(str: string) {
-    return str.includes('maskbook.com') && str.includes('Make Privacy Protected Again')
+function matches(input: string) {
+    return /maskbook\.com/i.test(input) && /Make Privacy Protected Again/i.test(input)
 }
 
 function hideDOM(a: HTMLElement) {
