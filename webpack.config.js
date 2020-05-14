@@ -72,6 +72,24 @@ module.exports = (argvEnv, argv) => {
 
     const dist = env === 'production' ? src('./build') : src('./dist')
 
+    const gitInfo = () => {
+        if (target.ReproducibleBuild) return undefined
+        try {
+            return new webpack.EnvironmentPlugin({
+                BUILD_DATE: new Date().toISOString(),
+                VERSION: git.describe('--dirty'),
+                TAG_NAME: git.tag(),
+                COMMIT_HASH: git.commitHash(),
+                COMMIT_DATE: git.commitDate().toISOString(),
+                REMOTE_URL: git.remoteURL(),
+                BRANCH_NAME: git.branchName(),
+                DIRTY: git.isDirty(),
+                TAG_DIRTY: git.isTagDirty(),
+            })
+        } catch (e) {
+            return undefined
+        }
+    }
     /** @type {import('webpack').Configuration} */
     const config = {
         mode: env,
@@ -94,19 +112,7 @@ module.exports = (argvEnv, argv) => {
             new webpack.EnvironmentPlugin({
                 NODE_ENV: env,
             }),
-            target.ReproducibleBuild
-                ? undefined
-                : new webpack.EnvironmentPlugin({
-                      BUILD_DATE: new Date().toISOString(),
-                      VERSION: git.describe('--dirty'),
-                      TAG_NAME: git.tag(),
-                      COMMIT_HASH: git.commitHash(),
-                      COMMIT_DATE: git.commitDate().toISOString(),
-                      REMOTE_URL: git.remoteURL(),
-                      BRANCH_NAME: git.branchName(),
-                      DIRTY: git.isDirty(),
-                      TAG_DIRTY: git.isTagDirty(),
-                  }),
+            gitInfo(),
             // The following plugins are from react-dev-utils. let me know if any one need it.
             // WatchMissingNodeModulesPlugin
             // ModuleNotFoundPlugin
