@@ -22,8 +22,8 @@ export interface PluginConfig {
 const plugins = new Set<PluginConfig>()
 export const PluginUI: ReadonlySet<PluginConfig> = plugins
 
-import { GitCoinConfig } from './Gitcoin/define'
+import { GitcoinPluginDefine } from './Gitcoin/define'
 import { RedPacketPluginDefine } from './Wallet/define'
 import type { PostInfo } from '../social-network/ui'
-plugins.add(GitCoinConfig)
+plugins.add(GitcoinPluginDefine)
 plugins.add(RedPacketPluginDefine)

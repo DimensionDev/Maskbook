@@ -15,7 +15,7 @@ import { useValueRef } from '../../utils/hooks/useValueRef'
 import { useObservableValues } from '../../utils/hooks/useObservableMapSet'
 
 const isGitcoin = (x: string): boolean => x.startsWith('https://gitcoin.co/grants')
-export const GitCoinConfig: PluginConfig = {
+export const GitcoinPluginDefine: PluginConfig = {
     identifier: 'co.gitcoin',
     shouldActivateInSuccessDecryption(post) {
         const text = extractTextFromTypedMessage(post)
