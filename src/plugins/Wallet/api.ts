@@ -4,7 +4,7 @@ import { BigNumber } from 'bignumber.js'
 import { web3 } from './web3'
 import { onClaimResult, onCreationResult, onExpired, onRefundResult } from './red-packet-fsm'
 import HappyRedPacketABI from './contract/HappyRedPacket.json'
-import ERC20Abi from './contract/ERC20.json'
+import ERC20ABI from './contract/ERC20.json'
 import SplitterABI from './contract/Splitter.json'
 import type { ERC20 } from './contract/ERC20'
 import type { Splitter } from './contract/Splitter'
@@ -22,7 +22,7 @@ function createRedPacketContract(address: string) {
 }
 
 function createERC20Contract(address: string) {
-    return (new web3.eth.Contract(ERC20Abi as AbiItem[], address) as unknown) as ERC20
+    return (new web3.eth.Contract(ERC20ABI as AbiItem[], address) as unknown) as ERC20
 }
 
 function createSplitterContract(address: string) {
@@ -479,15 +479,6 @@ export const gitcoinAPI = {
 
         // donate with erc20 token
         if (erc20Address) {
-            // approve splitter contract for spending erc20 token
-            await walletAPI.approveERC20Token(
-                donorAddress,
-                getNetworkSettings().splitterContractAddress,
-                erc20Address,
-                donationTotal,
-            )
-
-            // split the donation total amount
             const { fund_hash: donate_transaction_hash } = await gitcoinAPI.splitFundERC20(
                 donorAddress,
                 donationAddress,
@@ -519,7 +510,14 @@ export const gitcoinAPI = {
             }
         }
     },
-
+    /**
+     * Split fund Ether
+     * @param senderAddress The account address of payer
+     * @param toFirst The account address of the first payee
+     * @param toSecond The account address of the second payee
+     * @param valueFirst How many ERC20 tokens to the first payee
+     * @param valueSecond How many ERC20 token to the second payee
+     */
     async splitFundEther(
         senderAddress: string,
         toFirst: string,
@@ -554,7 +552,6 @@ export const gitcoinAPI = {
             }
         })
     },
-
     /**
      * Split fund ERC20 token
      * @param senderAddress The account address of payer
@@ -572,6 +569,14 @@ export const gitcoinAPI = {
         valueSecond: BigNumber,
         erc20Address: string,
     ) {
+        // approve splitter contract for spending erc20 token
+        await walletAPI.approveERC20Token(
+            senderAddress,
+            getNetworkSettings().splitterContractAddress,
+            erc20Address,
+            // add approve buffer
+            valueFirst.plus(valueSecond).plus(1e5),
+        )
         const contract = createSplitterContract(getNetworkSettings().splitterContractAddress)
         return new Promise<{ fund_hash: string; fund_value: BigNumber }>((resolve, reject) => {
             let txHash = ''
