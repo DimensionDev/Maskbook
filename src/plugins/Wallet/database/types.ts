@@ -203,8 +203,6 @@ export interface ERC20TokenRecord {
 export interface GitcoinFundRecord {
     contract_version: number
     contract_address: string
-    /** donation transaction nonce when send */
-    donation_nonce?: number
     /** Read from donation transaction result */
     donation_transaction_hash?: string
     /** Read from donation transaction result */

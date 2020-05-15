@@ -12,7 +12,7 @@ import { useValueRef } from '../../utils/hooks/useValueRef'
 import { debugModeSetting } from '../shared-settings/settings'
 import { DebugList } from '../DebugModeUI/DebugList'
 import type { TypedMessage } from '../../extension/background-script/CryptoServices/utils'
-import { GitCoinConfig } from '../../plugins/Gitcoin/define'
+import { GitcoinPluginDefine } from '../../plugins/Gitcoin/define'
 import { PluginUI } from '../../plugins/plugin'
 
 export interface PostInspectorProps {

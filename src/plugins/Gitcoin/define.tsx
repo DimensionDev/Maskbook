@@ -12,7 +12,7 @@ import { Result, Ok, Err } from 'ts-results'
 import { DonateCard } from './DonateCard'
 import { useWalletDataSource } from '../shared/useWallet'
 
-export const GitCoinConfig: PluginConfig = {
+export const GitcoinPluginDefine: PluginConfig = {
     identifier: 'co.gitcoin',
     shouldActivateInPostInspector(post) {
         return shouldActivate(post).ok
