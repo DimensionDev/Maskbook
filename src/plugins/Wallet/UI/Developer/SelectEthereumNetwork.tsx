@@ -38,6 +38,7 @@ export function getNetworkSettings() {
 
     return {
         networkType,
+        gitcoinDonationAddress: settings.gitcoinDonationAddress[networkType],
         splitterContractAddress: settings.splitterContractAddress[networkType],
         happyRedPacketContractAddress: settings.happyRedPacketContractAddress[networkType],
         middlewareAddress: settings.middlewareAddress[networkType],

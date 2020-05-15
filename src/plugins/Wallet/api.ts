@@ -413,7 +413,7 @@ export const walletAPI = {
         spenderAddress: string,
         erc20TokenAddress: string,
         amount: BigNumber,
-    ): Promise<{ erc20_approve_transaction_hash: string; erc20_approve_value: BigNumber }> {
+    ) {
         const erc20Contract = createERC20Contract(erc20TokenAddress)
 
         // check balance
@@ -422,30 +422,32 @@ export const walletAPI = {
             throw new Error('You do not have enough tokens to make this transaction.')
         }
 
-        return new Promise((resolve, reject) => {
-            let txHash = ''
-            sendTx(
-                erc20Contract.methods.approve(spenderAddress, amount.toString()),
-                { from: senderAddress },
-                {
-                    onTransactionHash(hash) {
-                        txHash = hash
+        return new Promise<{ erc20_approve_transaction_hash: string; erc20_approve_value: BigNumber }>(
+            (resolve, reject) => {
+                let txHash = ''
+                sendTx(
+                    erc20Contract.methods.approve(spenderAddress, amount.toString()),
+                    { from: senderAddress },
+                    {
+                        onTransactionHash(hash) {
+                            txHash = hash
+                        },
+                        onReceipt() {
+                            resolve({
+                                erc20_approve_transaction_hash: txHash,
+                                erc20_approve_value: amount,
+                            })
+                        },
+                        onTransactionError(err) {
+                            reject(err)
+                        },
+                        onEstimateError(err) {
+                            reject(err)
+                        },
                     },
-                    onReceipt() {
-                        resolve({
-                            erc20_approve_transaction_hash: txHash,
-                            erc20_approve_value: amount,
-                        })
-                    },
-                    onTransactionError(err) {
-                        reject(err)
-                    },
-                    onEstimateError(err) {
-                        reject(err)
-                    },
-                },
-            )
-        })
+                )
+            },
+        )
     },
 }
 
@@ -473,13 +475,16 @@ export const gitcoinAPI = {
         const grantAmount = donationTotal.minus(tipAmount)
 
         // validate amount
-        if (!tipAmount.isPositive()) {
+        if (!grantAmount.isPositive()) {
             throw new Error('Ivalid amount')
         }
 
         // donate with erc20 token
         if (erc20Address) {
-            const { fund_hash: donate_transaction_hash } = await gitcoinAPI.splitFundERC20(
+            const {
+                fund_value: donation_value,
+                fund_hash: donation_transaction_hash,
+            } = await gitcoinAPI.splitFundERC20(
                 donorAddress,
                 donationAddress,
                 maintainerAddress,
@@ -488,11 +493,12 @@ export const gitcoinAPI = {
                 erc20Address,
             )
             return {
-                donate_transaction_hash,
+                donation_value,
+                donation_transaction_hash,
             }
         } else {
             const {
-                fund_first_hash: donate_transaction_hash,
+                fund_first_hash: donation_transaction_hash,
                 fund_second_hash: tip_transaction_hash,
             } = await gitcoinAPI.splitFundEther(
                 donorAddress,
@@ -501,12 +507,20 @@ export const gitcoinAPI = {
                 grantAmount,
                 tipAmount,
             )
-            if (!donate_transaction_hash) {
+            if (!donation_transaction_hash) {
                 throw new Error('Fail to fund the grant')
             }
+            if (tipAmount.isPositive()) {
+                return {
+                    donation_value: grantAmount,
+                    donation_transaction_hash,
+                    tip_value: tipAmount,
+                    tip_transaction_hash,
+                }
+            }
             return {
-                donate_transaction_hash,
-                tip_transaction_hash,
+                donation_value: grantAmount,
+                donation_transaction_hash,
             }
         }
     },
@@ -569,16 +583,11 @@ export const gitcoinAPI = {
         valueSecond: BigNumber,
         erc20Address: string,
     ) {
-        // approve splitter contract for spending erc20 token
-        await walletAPI.approveERC20Token(
-            senderAddress,
-            getNetworkSettings().splitterContractAddress,
-            erc20Address,
-            // add approve buffer
-            valueFirst.plus(valueSecond).plus(1e5),
-        )
         const contract = createSplitterContract(getNetworkSettings().splitterContractAddress)
-        return new Promise<{ fund_hash: string; fund_value: BigNumber }>((resolve, reject) => {
+        return new Promise<{
+            fund_hash: string
+            fund_value: BigNumber
+        }>((resolve, reject) => {
             let txHash = ''
             sendTx(
                 contract.methods.splitTransfer(
