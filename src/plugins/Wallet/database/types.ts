@@ -239,4 +239,12 @@ export interface GitcoinDonationRecord {
     comment?: string
     _data_source_: 'real' | 'mock'
 }
+
+export interface GitcoinDonationRecordInDatabase
+    extends Omit<GitcoinDonationRecord, 'donation_total' | 'donation_value' | 'tip_value' | 'erc20_approve_value'> {
+    donation_total: string | bigint
+    donation_value: string | bigint
+    tip_value?: string | bigint
+    erc20_approve_value?: string | bigint
+}
 //#endregion

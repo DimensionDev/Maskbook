@@ -1,6 +1,11 @@
 import { DBSchema, openDB } from 'idb/with-async-ittr-cjs'
 import { createDBAccess } from '../../../database/helpers/openDB'
-import type { ERC20TokenRecord, WalletRecordInDatabase, RedPacketRecordInDatabase } from './types'
+import type {
+    ERC20TokenRecord,
+    WalletRecordInDatabase,
+    RedPacketRecordInDatabase,
+    GitcoinDonationRecordInDatabase,
+} from './types'
 
 function path<T>(x: T) {
     return x
@@ -9,6 +14,9 @@ export const createWalletDBAccess = createDBAccess(() => {
     return openDB<WalletDB>('maskbook-plugin-wallet', 1, {
         upgrade(db, oldVersion, newVersion, tx) {
             function v0_v1() {
+                db.createObjectStore('GitcoinDonation', {
+                    keyPath: path<keyof GitcoinDonationRecordInDatabase>('donation_transaction_hash'),
+                })
                 db.createObjectStore('RedPacket', { keyPath: path<keyof RedPacketRecordInDatabase>('id') })
                 db.createObjectStore('ERC20Token', { keyPath: path<keyof WalletRecordInDatabase>('address') })
                 db.createObjectStore('Wallet', { keyPath: path<keyof WalletRecordInDatabase>('address') })
@@ -20,6 +28,10 @@ export const createWalletDBAccess = createDBAccess(() => {
 })
 
 export interface WalletDB extends DBSchema {
+    GitcoinDonation: {
+        value: GitcoinDonationRecordInDatabase
+        key: string
+    }
     RedPacket: {
         value: RedPacketRecordInDatabase
         key: string

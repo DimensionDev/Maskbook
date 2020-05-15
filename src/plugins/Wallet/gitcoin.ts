@@ -1,9 +1,17 @@
 import { BigNumber } from 'bignumber.js'
 import { gitcoinAPI, walletAPI } from './api'
-import { GitcoinDonationPayload, GitcoinDonationRecord, EthereumTokenType } from './database/types'
+import {
+    GitcoinDonationPayload,
+    GitcoinDonationRecord,
+    GitcoinDonationRecordInDatabase,
+    EthereumTokenType,
+} from './database/types'
 import { getNetworkSettings } from './UI/Developer/SelectEthereumNetwork'
 import { PluginMessageCenter } from '../PluginMessages'
 import type { _UnboxPromise } from '@holoflows/kit/node_modules/async-call-rpc'
+import { createTransaction, IDBPSafeTransaction } from '../../database/helpers/openDB'
+import { createWalletDBAccess, WalletDB } from './database/Wallet.db'
+import { omit } from 'lodash-es'
 
 function getProvider() {
     return {
@@ -29,6 +37,7 @@ export async function donateGrant(donation: GitcoinDonationPayload) {
         )
     }
 
+    // fund
     const funded = await getProvider().fund(
         donor_address,
         gitcoinDonationAddress,
@@ -36,6 +45,8 @@ export async function donateGrant(donation: GitcoinDonationPayload) {
         donation_total,
         token?.address,
     )
+
+    // persistant record in DB
     const record: GitcoinDonationRecord = {
         _data_source_: 'real',
         donor_address,
@@ -48,12 +59,45 @@ export async function donateGrant(donation: GitcoinDonationPayload) {
         ...approved,
         ...funded,
     }
-
-    // TODO:
-    // persistant record in DB
     {
+        const t = createTransaction(await createWalletDBAccess(), 'readwrite')('GitcoinDonation')
+        t.objectStore('GitcoinDonation').add(GitcoinDonationRecordIntoDB(record))
     }
-
     PluginMessageCenter.emit('maskbook.gitcoin.update', undefined)
+    return record
+}
+
+export async function getDonationByID(
+    t: undefined | IDBPSafeTransaction<WalletDB, ['GitcoinDonation'], 'readonly'>,
+    id: string,
+) {
+    if (!t) t = createTransaction(await createWalletDBAccess(), 'readonly')('GitcoinDonation')
+    const donations = await t.objectStore('GitcoinDonation').getAll()
+    const donation = donations.find((donation) => donation.donation_transaction_hash === id)
+    if (donation) return GitcoinDonationRecordOutDB(donation)
+    return
+}
+
+function GitcoinDonationRecordOutDB(x: GitcoinDonationRecordInDatabase): GitcoinDonationRecord {
+    const names = ['donation_total', 'donation_value', 'tip_value', 'erc20_approve_value'] as const
+    const record = omit(x, names) as GitcoinDonationRecord
+    for (const name of names) {
+        const original = x[name]
+        if (typeof original !== 'undefined') {
+            record[name] = new BigNumber(String(original))
+        }
+    }
+    return record
+}
+
+function GitcoinDonationRecordIntoDB(x: GitcoinDonationRecord): GitcoinDonationRecordInDatabase {
+    const names = ['donation_total', 'donation_value', 'tip_value', 'erc20_approve_value'] as const
+    const record = omit(x, names) as GitcoinDonationRecordInDatabase
+    for (const name of names) {
+        const original = x[name]
+        if (typeof original !== 'undefined') {
+            record[name] = original.toString()
+        }
+    }
     return record
 }
