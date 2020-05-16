@@ -26,10 +26,10 @@ export interface AdditionalContentProps
     message?: TypedMessage | string
 }
 const useStyles = makeStyles((theme: Theme) => ({
-    root: { backgroundColor: 'transparent', borderColor: theme.palette.primary.light, marginTop: theme.spacing(1) },
+    root: { backgroundColor: 'transparent', borderColor: 'transparent' },
     title: { display: 'flex', alignItems: 'center' },
     icon: { paddingRight: theme.spacing(0.75), display: 'flex', width: 20, height: 20 },
-    content: { margin: theme.spacing(1), padding: 0 },
+    content: { margin: theme.spacing(1, 0), padding: 0 },
     rightIcon: { paddingLeft: theme.spacing(0.75) },
 }))
 
