@@ -35,6 +35,7 @@ interface TxListeners {
     onTransactionHash?: (hash: string) => void
     onTransactionError?: (error: Error) => void
     onReceipt?: (receipt: TxReceipt) => void
+    onConfirmation?: (no: number, receipt: TxReceipt) => void
     onEstimateError?: (error: Error) => void
 }
 
@@ -47,8 +48,37 @@ async function sendTx<R, T extends TransactionObject<R>>(txObject: T, tx: Tx = {
                     gas,
                     gasPrice,
                 })
+                /**
+                 * @returns {String}
+                 *
+                 * Is fired right after the transaction is
+                 * sent and a transaction hash is available.
+                 */
                 .on('transactionHash', (hash: string) => listeners?.onTransactionHash?.(hash))
+                /**
+                 * @returns {TxReceipt}
+                 *
+                 * Is fired when the transaction receipt is available.
+                 */
                 .on('receipt', (receipt: TxReceipt) => listeners?.onReceipt?.(receipt))
+                /**
+                 * @returns {Number, TxReceipt}
+                 *
+                 * Is fired for every confirmation up to the 12th confirmation.
+                 * Receives the confirmation number as the first and the receipt
+                 * as the second argument.
+                 *
+                 * Fired from confirmation 0 on, which is the block where its minded.
+                 */
+                .on('confirmation', (no: number, receipt: TxReceipt) => listeners?.onConfirmation?.(no, receipt))
+                /**
+                 * @returns {Error, TxReceipt|undefined}
+                 *
+                 * Is fired if an error occurs during sending.
+                 *
+                 * If the transaction was rejected by the network with a
+                 * receipt, the second parameter will be the receipt.
+                 */
                 .on('error', (err: Error) => listeners?.onTransactionError?.(err)),
         )
         .catch((err: Error) => listeners?.onEstimateError?.(err))
@@ -118,6 +148,7 @@ export const redPacketAPI = {
         token_type: RedPacketTokenType,
         token_addr: string,
         total_tokens: BigNumber,
+        receipt = false,
     ): Promise<CreateRedPacketResult> {
         const contract = createRedPacketContract(getNetworkSettings().contractAddress)
         const tx = contract.methods.create_red_packet(
@@ -147,6 +178,14 @@ export const redPacketAPI = {
                         txHash = hash
                     },
                     async onReceipt() {
+                        if (receipt) {
+                            resolve({
+                                create_nonce: (await web3.eth.getTransaction(txHash)).nonce,
+                                create_transaction_hash: txHash,
+                            })
+                        }
+                    },
+                    async onConfirmation() {
                         resolve({
                             create_nonce: (await web3.eth.getTransaction(txHash)).nonce,
                             create_transaction_hash: txHash,
@@ -167,6 +206,7 @@ export const redPacketAPI = {
         password: string,
         recipient: string,
         validation: string,
+        receipt = false,
     ): Promise<{ claim_transaction_hash: string }> {
         const contract = createRedPacketContract(getNetworkSettings().contractAddress)
         const tx = contract.methods.claim(id.redPacketID, password, recipient, validation)
@@ -184,6 +224,13 @@ export const redPacketAPI = {
                         txHash = hash
                     },
                     onReceipt() {
+                        if (receipt) {
+                            resolve({
+                                claim_transaction_hash: txHash,
+                            })
+                        }
+                    },
+                    onConfirmation() {
                         resolve({
                             claim_transaction_hash: txHash,
                         })
@@ -345,7 +392,7 @@ export const redPacketAPI = {
      * Refund transaction hash
      * @param red_packet_id Red packet ID
      */
-    async refund(id: RedPacketID): Promise<{ refund_transaction_hash: string }> {
+    async refund(id: RedPacketID, receipt = false): Promise<{ refund_transaction_hash: string }> {
         const packet = await createTransaction(
             await createWalletDBAccess(),
             'readonly',
@@ -383,6 +430,13 @@ export const redPacketAPI = {
                         txHash = hash
                     },
                     onReceipt() {
+                        if (receipt) {
+                            resolve({
+                                refund_transaction_hash: txHash,
+                            })
+                        }
+                    },
+                    onConfirmation() {
                         resolve({
                             refund_transaction_hash: txHash,
                         })
@@ -446,6 +500,7 @@ export const walletAPI = {
         senderAddress: string,
         erc20TokenAddress: string,
         amount: BigNumber,
+        receipt = false,
     ): Promise<{ erc20_approve_transaction_hash: string; erc20_approve_value: BigNumber }> {
         const erc20Contract = createERC20Contract(erc20TokenAddress)
         const tx = erc20Contract.methods.approve(getNetworkSettings().contractAddress, amount.toString())
@@ -460,6 +515,14 @@ export const walletAPI = {
                         txHash = hash
                     },
                     onReceipt() {
+                        if (receipt) {
+                            resolve({
+                                erc20_approve_transaction_hash: txHash,
+                                erc20_approve_value: amount,
+                            })
+                        }
+                    },
+                    onConfirmation() {
                         resolve({
                             erc20_approve_transaction_hash: txHash,
                             erc20_approve_value: amount,
