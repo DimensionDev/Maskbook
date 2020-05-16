@@ -50,20 +50,24 @@ storiesOf('Injections', module)
             ))}
         </Paper>
     ))
-    .add('Additional Post Content', () => {
-        const icon = radios('RightIcon', { ...AdditionalIcon, No: 'None' }, 'None')
-        return (
-            <Paper style={{ padding: 24 }}>
-                <AdditionalContent
-                    progress={boolean('progress', false)}
-                    titleIcon={icon === 'None' ? undefined : icon}
-                    title={text('Title', 'Additional text')}
-                    message={text('Rich text', 'a[text](https://g.cn/)')}
-                    headerActions={boolean('Has right action?', true) ? <Link>An action</Link> : undefined}
-                />
-            </Paper>
-        )
-    })
+    .add(
+        'Additional Post Content',
+        () => {
+            const icon = radios('RightIcon', { ...AdditionalIcon, No: 'None' }, 'None')
+            return (
+                <Paper style={{ padding: 24 }}>
+                    <AdditionalContent
+                        progress={boolean('progress', false)}
+                        titleIcon={icon === 'None' ? undefined : icon}
+                        title={text('Title', 'Additional text')}
+                        message={text('Rich text', 'a[text](https://g.cn/)')}
+                        headerActions={boolean('Has right action?', true) ? <Link>An action</Link> : undefined}
+                    />
+                </Paper>
+            )
+        },
+        figmaLink('https://www.figma.com/file/TCHH8gXbhww88I5tHwHOW9/tweet-details?node-id=0%3A1'),
+    )
     .add('Typed Message Renderer', () => {
         const _text: TypedMessageText = {
             type: 'text',
@@ -106,64 +110,68 @@ storiesOf('Injections', module)
         }
         return <SelectPeople />
     })
-    .add('Decrypted post', () => {
-        const msg = text(
-            'Post content',
-            `This is a post
+    .add(
+        'Decrypted post',
+        () => {
+            const msg = text(
+                'Post content',
+                `This is a post
         that with multiline.
 
         Hello world!`,
-        )
-        const vr = boolean('Verified', true)
-        enum ProgressType {
-            finding_person_public_key,
-            finding_post_key,
-            undefined,
-            init,
-        }
-        function getProgress(x: ProgressType): DecryptionProgress | undefined {
-            switch (x) {
-                case ProgressType.finding_person_public_key:
-                    return { progress: 'finding_person_public_key' }
-                case ProgressType.finding_post_key:
-                    return { progress: 'finding_post_key' }
-                case ProgressType.init:
-                    return { progress: 'init' }
-                case ProgressType.undefined:
-                    return undefined
+            )
+            const vr = boolean('Verified', true)
+            enum ProgressType {
+                finding_person_public_key,
+                finding_post_key,
+                undefined,
+                init,
             }
-        }
-        const progress = getProgress(
-            select(
-                'Decryption progress',
-                {
-                    finding_person_public_key: ProgressType.finding_person_public_key,
-                    finding_post_key: ProgressType.finding_post_key,
-                    undefined: ProgressType.undefined,
-                    init: ProgressType.init,
-                },
-                ProgressType.undefined,
-            ),
-        )
-        return (
-            <>
-                <FakePost title="Decrypted:">
-                    <DecryptPostSuccess
-                        alreadySelectedPreviously={[]}
-                        requestAppendRecipients={async () => {}}
-                        profiles={demoProfiles}
-                        data={{ content: makeTypedMessage(msg), signatureVerifyResult: vr }}
-                    />
-                </FakePost>
-                <FakePost title="Decrypting:">
-                    <DecryptPostAwaiting type={progress} />
-                </FakePost>
-                <FakePost title="Failed:">
-                    <DecryptPostFailed error={new Error('Error message')} />
-                </FakePost>
-            </>
-        )
-    })
+            function getProgress(x: ProgressType): DecryptionProgress | undefined {
+                switch (x) {
+                    case ProgressType.finding_person_public_key:
+                        return { progress: 'finding_person_public_key' }
+                    case ProgressType.finding_post_key:
+                        return { progress: 'finding_post_key' }
+                    case ProgressType.init:
+                        return { progress: 'init' }
+                    case ProgressType.undefined:
+                        return undefined
+                }
+            }
+            const progress = getProgress(
+                select(
+                    'Decryption progress',
+                    {
+                        finding_person_public_key: ProgressType.finding_person_public_key,
+                        finding_post_key: ProgressType.finding_post_key,
+                        undefined: ProgressType.undefined,
+                        init: ProgressType.init,
+                    },
+                    ProgressType.undefined,
+                ),
+            )
+            return (
+                <>
+                    <FakePost title="Decrypted:">
+                        <DecryptPostSuccess
+                            alreadySelectedPreviously={[]}
+                            requestAppendRecipients={async () => {}}
+                            profiles={demoProfiles}
+                            data={{ content: makeTypedMessage(msg), signatureVerifyResult: vr }}
+                        />
+                    </FakePost>
+                    <FakePost title="Decrypting:">
+                        <DecryptPostAwaiting type={progress} />
+                    </FakePost>
+                    <FakePost title="Failed:">
+                        <DecryptPostFailed error={new Error('Error message')} />
+                    </FakePost>
+                </>
+            )
+        },
+        figmaLink('https://www.figma.com/file/TCHH8gXbhww88I5tHwHOW9/tweet-details?node-id=0%3A1'),
+    )
     .add('Verify Prove Post', () => {
         return (
             <>
