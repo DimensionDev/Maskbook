@@ -163,7 +163,7 @@ export function RedPacketWithStateUI(props: {
                 )}
                 {status !== 'incoming' && status !== 'normal' && (
                     <Typography className={classes.label} variant="body2">
-                        {status === 'claim_pending' ? 'opening...' : status ?? 'Pending'}
+                        {status === 'claim_pending' ? 'opening…' : status ?? 'Pending'}
                     </Typography>
                 )}
             </div>

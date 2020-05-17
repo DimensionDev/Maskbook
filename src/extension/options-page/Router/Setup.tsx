@@ -264,7 +264,7 @@ export function RestoreDatabase() {
                         variant="text"
                         component={Link}
                         to={SetupStep.RestoreDatabaseAdvance}>
-                        Advance...
+                        Advance…
                     </ActionButton>
                     <Typography className={classes.or} variant="body1">
                         or

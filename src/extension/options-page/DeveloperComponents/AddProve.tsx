@@ -45,7 +45,7 @@ export function AddProve() {
                     variant="contained"
                     size="small"
                     onClick={() => {
-                        setResult('Verifying...')
+                        setResult('Verifying…')
                         Services.Crypto.verifyOthersProve(provePost, new ProfileIdentifier(network, userID)).then(
                             setResult,
                             setResult,
