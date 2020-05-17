@@ -49,12 +49,14 @@ const useSetupFormSetyles = makeStyles((theme) =>
             alignItems: 'center',
         },
         primary: {
+            textAlign: 'center',
             fontWeight: 500,
             fontSize: 39,
             lineHeight: '37px',
             marginBottom: theme.spacing(2),
         },
         secondary: {
+            textAlign: 'center',
             fontSize: 20,
             lineHeight: 1.5,
             marginBottom: theme.spacing(5),
@@ -88,20 +90,22 @@ interface SetupFormProps {
 function SetupForm(props: SetupFormProps) {
     const classes = useSetupFormSetyles()
     return (
-        <div className={classes.wrapper}>
-            <div className={classes.section}>
-                <Typography className={classes.primary} variant="h5">
-                    {props.primary}
-                </Typography>
-                <Typography className={classes.secondary} variant="body1">
-                    {props.secondary}
-                </Typography>
+        <Fade in>
+            <div className={classes.wrapper}>
+                <div className={classes.section}>
+                    <Typography className={classes.primary} variant="h5">
+                        {props.primary}
+                    </Typography>
+                    <Typography className={classes.secondary} variant="body1">
+                        {props.secondary}
+                    </Typography>
+                </div>
+                <div className={classes.section}>
+                    <form className={classes.form}>{props.content}</form>
+                </div>
+                <div className={classes.section}>{props.actions}</div>
             </div>
-            <div className={classes.section}>
-                <form className={classes.form}>{props.content}</form>
-            </div>
-            <div className={classes.section}>{props.actions}</div>
-        </div>
+        </Fade>
     )
 }
 
@@ -126,7 +130,7 @@ export function CreatePersona() {
         setSubmitted(true)
         if (!isValid) return
         const persona = await Services.Identity.createPersonaByMnemonic(name, '')
-        history.push(`${SetupStep.ConnectNetwork}?identifier=${encodeURIComponent(persona.toText())}`)
+        history.replace(`${SetupStep.ConnectNetwork}?identifier=${encodeURIComponent(persona.toText())}`)
     }
     return (
         <SetupForm
@@ -143,6 +147,12 @@ export function CreatePersona() {
                         variant="outlined"
                         value={name}
                         onChange={(e) => setName(e.target.value)}
+                        onKeyDown={(e) => {
+                            if (e.key === 'Enter') {
+                                e.preventDefault()
+                                createPersonaAndNext()
+                            }
+                        }}
                         label="Name"
                         helperText={(submitted && nameErrorMessage) || ' '}
                     />
@@ -184,36 +194,33 @@ const useProviderLineStyle = makeStyles((theme: Theme) => ({
 
 export function ConnectNetwork() {
     const classes = useSetupFormSetyles()
+    const providerLineClasses = useProviderLineStyle()
     const history = useHistory()
 
     const personas = useMyPersonas()
     const { identifier } = useQueryParams(['identifier'])
-    const { value: persona = null } = useAsync(async () => {
-        if (identifier) {
+    const { value: persona = null, loading } = useAsync(async () => {
+        if (identifier)
             return Services.Identity.queryPersona(Identifier.fromString(identifier, ECKeyIdentifier).unwrap())
-        }
         return null
     }, [identifier, personas])
 
-    const deletePersona = async () => {
-        history.goBack()
-        if (persona) {
-            await Services.Identity.deletePersona(persona.identifier, 'delete even with private')
-        }
+    const deletePersonaAndBack = async () => {
+        history.replace(SetupStep.CreatePersona)
+        if (persona) await Services.Identity.deletePersona(persona.identifier, 'delete even with private')
     }
 
+    if (loading) return null
     return (
         <SetupForm
-            primary="Connect a Social Network Profile"
+            primary={`Connect a Social Network Profile for "${persona?.nickname}"`}
             secondary="Now Facebook and Twitter are supported."
             content={
                 <>
                     <ProfileBox
                         persona={persona}
                         ProviderLineProps={{
-                            classes: {
-                                ...useProviderLineStyle(),
-                            },
+                            classes: providerLineClasses,
                         }}
                     />
                 </>
@@ -225,10 +232,10 @@ export function ConnectNetwork() {
                         variant="contained"
                         color="primary"
                         disabled={persona?.linkedProfiles.size === 0}
-                        onClick={() => history.goBack()}>
+                        onClick={() => history.replace('/personas')}>
                         Finish
                     </ActionButton>
-                    <ActionButton variant="text" component={Link} onClick={deletePersona}>
+                    <ActionButton variant="text" component={Link} onClick={deletePersonaAndBack}>
                         Cancel
                     </ActionButton>
                 </>
@@ -378,10 +385,10 @@ const setupTheme = (theme: Theme): Theme =>
 const CurrentStep = () => {
     const { step } = useParams()
     switch (step as SetupStep) {
-        case SetupStep.ConnectNetwork:
-            return <ConnectNetwork />
         case SetupStep.CreatePersona:
             return <CreatePersona />
+        case SetupStep.ConnectNetwork:
+            return <ConnectNetwork />
         case SetupStep.RestoreDatabase:
             return <RestoreDatabase />
         case SetupStep.RestoreDatabaseAdvance:
@@ -392,6 +399,12 @@ const CurrentStep = () => {
             return <RestoreDatabaseSuccessful />
     }
 }
+
+const CurrentStepFade = () => (
+    <Fade in>
+        <CurrentStep />
+    </Fade>
+)
 
 export interface DashboardSetupRouterProps {}
 
