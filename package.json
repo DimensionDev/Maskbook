@@ -27,9 +27,9 @@
     "start:gecko": "webpack-dev-server --firefox-gecko --mode development",
     "start:ios": "webpack-dev-server --wk-webview --mode development",
     "storybook": "start-storybook -p 9009 -s public --quiet",
-    "test": "jest --watch",
-    "test:ci": "jest --ci --collectCoverage=true --reporters=default --reporters=jest-junit -w 1 --forceExit",
-    "test:e2e": "jest --runInBand --config=jest-e2e.config.js",
+    "test": "jest --verbose --watch",
+    "test:ci": "jest --verbose --ci --collectCoverage=true --reporters=default --reporters=jest-junit -w 1 --forceExit",
+    "test:e2e": "jest --verbose --runInBand --config=jest-e2e.config.js",
     "uninstall": "ts-node scripts/postinstall.ts"
   },
   "husky": {
@@ -39,9 +39,7 @@
     }
   },
   "lint-staged": {
-    "*.{ts,tsx,js,jsx}": [
-      "eslint --ext .ts,.tsx --fix"
-    ]
+    "*.{ts,tsx,js,jsx}": ["eslint --ext .ts,.tsx --fix"]
   },
   "dependencies": {
     "@holoflows/kit": "https://github.com/DimensionDev/holoflows-kit",
