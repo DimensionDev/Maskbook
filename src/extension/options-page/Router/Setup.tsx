@@ -3,9 +3,6 @@ import {
     Typography,
     styled,
     Theme,
-    CardHeader,
-    CardContent,
-    CardActions,
     TextField,
     Fade,
     Box,
@@ -14,11 +11,18 @@ import {
     createStyles,
     ThemeProvider,
     InputBase,
+    Table,
+    TableBody,
+    TableRow,
+    TableCell,
+    Checkbox,
 } from '@material-ui/core'
+import classNames from 'classnames'
 import DashboardRouterContainer from './Container'
 import { useParams, useRouteMatch, Switch, Route, Redirect, Link, useHistory } from 'react-router-dom'
-import ArchiveOutlinedIcon from '@material-ui/icons/ArchiveOutlined'
-import StorageIcon from '@material-ui/icons/Storage'
+import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline'
+import RadioButtonUncheckedIcon from '@material-ui/icons/RadioButtonUnchecked'
+import CheckBoxOutlinedIcon from '@material-ui/icons/CheckBoxOutlined'
 import AddBoxOutlinedIcon from '@material-ui/icons/AddBoxOutlined'
 import ActionButton from '../DashboardComponents/ActionButton'
 import { merge, cloneDeep } from 'lodash-es'
@@ -32,9 +36,9 @@ import { useMyPersonas } from '../../../components/DataSource/independent'
 import { BackupJSONFileLatest, UpgradeBackupJSONFile } from '../../../utils/type-transform/BackupFormat/JSON/latest'
 import { decompressBackupFile } from '../../../utils/type-transform/BackupFileShortRepresentation'
 import { extraPermissions } from '../../../utils/permissions'
-import QRScanner from '../../../components/QRScanner'
 import AbstractTab, { AbstractTabProps } from '../DashboardComponents/AbstractTab'
-import { getUrl } from '../../../utils/utils'
+import { getUrl, unreachable } from '../../../utils/utils'
+import { green } from '@material-ui/core/colors'
 
 enum SetupStep {
     CreatePersona = 'create-persona',
@@ -79,13 +83,20 @@ const useSetupFormSetyles = makeStyles((theme) =>
             width: '100%',
         },
         or: {
-            marginTop: 50,
+            marginTop: 28,
             marginBottom: 10,
         },
         button: {
             width: 220,
             height: 40,
             marginBottom: 20,
+        },
+        doneButton: {
+            color: '#fff',
+            backgroundColor: green[500],
+            '&:hover': {
+                backgroundColor: green[700],
+            },
         },
     }),
 )
@@ -153,8 +164,6 @@ export function CreatePersona() {
                         error={submitted && Boolean(nameErrorMessage)}
                         autoFocus
                         className={classes.input}
-                        InputLabelProps={{ shrink: true }}
-                        variant="outlined"
                         value={name}
                         onChange={(e) => setName(e.target.value)}
                         onKeyDown={(e) => {
@@ -163,7 +172,7 @@ export function CreatePersona() {
                                 createPersonaAndNext()
                             }
                         }}
-                        label="Name"
+                        label={t('name')}
                         helperText={(submitted && nameErrorMessage) || ' '}
                     />
                 </>
@@ -262,6 +271,7 @@ const useRestoreDatabaseStyle = makeStyles((theme) =>
             display: 'none',
         },
         placeholder: {
+            pointerEvents: 'none',
             width: 64,
             height: 64,
             margin: '40px auto 28px',
@@ -271,6 +281,24 @@ const useRestoreDatabaseStyle = makeStyles((theme) =>
             backgroundImage: `url(${getUrl(
                 theme.palette.type === 'light' ? 'restore-placeholder.png' : 'restore-placeholder-dark.png',
             )})`,
+        },
+        input: {
+            width: '100%',
+            padding: theme.spacing(2, 3),
+            flex: 1,
+            display: 'flex',
+            overflow: 'auto',
+            '& > textarea': {
+                height: '100% !important',
+            },
+        },
+        button: {
+            '& > span:first-child': {
+                display: 'inline-block',
+                maxWidth: 320,
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+            },
         },
         restoreBox: {
             width: '100%',
@@ -291,16 +319,6 @@ const useRestoreDatabaseStyle = makeStyles((theme) =>
             flexDirection: 'column',
             height: '100%',
         },
-        input: {
-            width: '100%',
-            padding: theme.spacing(2, 3),
-            flex: 1,
-            display: 'flex',
-            overflow: 'auto',
-            '& > textarea': {
-                height: '100% !important',
-            },
-        },
         restoreActionButton: {
             alignSelf: 'flex-end',
             marginTop: theme.spacing(1),
@@ -314,6 +332,7 @@ const RestoreBox = styled('div')(({ theme }: { theme: Theme }) => ({
     width: '100%',
     height: '100%',
     display: 'flex',
+    alignItems: 'center',
     flexDirection: 'column',
     justifyContent: 'flex-start',
     textAlign: 'center',
@@ -340,62 +359,24 @@ export function RestoreDatabase() {
     const [textValue, setTextValue] = useState('')
     const [json, setJson] = useState<BackupJSONFileLatest | null>(null)
     const [restoreState, setRestoreState] = useState<'success' | Error | null>(null)
-    const [requiredPermissions, setRequiredPermissions] = React.useState<string[] | null>(null)
+    const [requiredPermissions, setRequiredPermissions] = useState<string[] | null>(null)
 
     const setErrorState = (e: Error | null) => {
         setJson(null)
         setRestoreState(e)
     }
 
-    const resolveFileInput = React.useCallback(
-        async (str: string) => {
-            try {
-                const json = UpgradeBackupJSONFile(decompressBackupFile(str))
-                if (!json) throw new Error('UpgradeBackupJSONFile failed')
-                setJson(json)
-                const permissions = await extraPermissions(json.grantedHostPermissions)
-                if (!permissions) {
-                    const restoreParams = new URLSearchParams()
-                    restoreParams.append('personas', String(json.personas?.length ?? ''))
-                    restoreParams.append('profiles', String(json.profiles?.length ?? ''))
-                    restoreParams.append('posts', String(json.posts?.length ?? ''))
-                    restoreParams.append('contacts', String(json.userGroups?.length ?? ''))
-                    restoreParams.append('date', String(json._meta_?.createdAt ?? ''))
-                    return await Services.Welcome.restoreBackup(json).then(
-                        () => console.log(history),
-                        // history.push(`${InitStep.Restore2}?${restoreParams.toString()}`),
-                    )
-                }
-                setRequiredPermissions(permissions)
-                setRestoreState('success')
-            } catch (e) {
-                console.error(e)
-                setErrorState(e)
-            }
-        },
-        [history],
-    )
-
-    const [file, setFile] = React.useState<File | null>(null)
+    const [file, setFile] = useState<File | null>(null)
     const [bound, { over }] = useDropArea({
         onFiles(files) {
             setFile(files[0])
         },
     })
-
-    React.useEffect(() => {
-        if (file) {
-            const fr = new FileReader()
-            fr.readAsText(file)
-            fr.addEventListener('loadend', () => resolveFileInput(fr.result as string))
-        }
-    }, [file, resolveFileInput])
-
-    const state = React.useState(0)
+    const state = useState(0)
 
     function FileUI() {
         return (
-            <div {...bound}>
+            <div {...bound} style={{ width: '100%' }}>
                 <input
                     className={restoreDatabaseClasses.file}
                     type="file"
@@ -407,26 +388,21 @@ export function RestoreDatabase() {
                         }
                     }}
                 />
+
                 <RestoreBox
                     className={restoreDatabaseClasses.restoreBox}
                     data-active={over}
                     onClick={() => ref.current && ref.current.click()}>
-                    {over ? (
-                        t('welcome_1b_dragging')
-                    ) : file ? (
-                        t('welcome_1b_file_selected', { filename: file.name })
-                    ) : (
-                        <>
-                            <div className={restoreDatabaseClasses.placeholder}></div>
-                            <ActionButton
-                                startIcon={<AddBoxOutlinedIcon></AddBoxOutlinedIcon>}
-                                component={Link}
-                                color="primary"
-                                variant="text">
-                                drag the file here or browser a file…
-                            </ActionButton>
-                        </>
-                    )}
+                    <div className={restoreDatabaseClasses.placeholder}></div>
+                    <ActionButton
+                        className={file ? restoreDatabaseClasses.button : ''}
+                        color="primary"
+                        variant="text"
+                        component={Link}
+                        startIcon={over || file ? null : <AddBoxOutlinedIcon></AddBoxOutlinedIcon>}
+                        onClick={(e: React.MouseEvent<HTMLButtonElement>) => e.preventDefault()}>
+                        {over ? t('welcome_1b_dragging') : file ? file.name : 'Drag the file here or browser a file…'}
+                    </ActionButton>
                 </RestoreBox>
 
                 {/* {restoreState === 'success' && (
@@ -476,17 +452,6 @@ export function RestoreDatabase() {
                             value={textValue}
                             onChange={(e) => setTextValue(e.target.value)}></InputBase>
                     </ShowcaseBox>
-
-                    // <div className={restoreDatabaseClasses.restoreTextWrapper}>
-                    //     <ActionButton
-                    //         className={restoreDatabaseClasses.restoreActionButton}
-                    //         width={140}
-                    //         variant="contained"
-                    //         onClick={() => resolveFileInput(textValue)}
-                    //         color="primary">
-                    //         {t('restore')}
-                    //     </ActionButton>
-                    // </div>
                 ),
                 p: 0,
             },
@@ -494,6 +459,44 @@ export function RestoreDatabase() {
         state,
         height: 176,
     }
+
+    const resolveFileInput = useCallback(
+        async (str: string) => {
+            try {
+                const json = UpgradeBackupJSONFile(decompressBackupFile(str))
+                if (!json) throw new Error('UpgradeBackupJSONFile failed')
+                setJson(json)
+                const permissions = await extraPermissions(json.grantedHostPermissions)
+                if (!permissions) {
+                    const restoreParams = new URLSearchParams()
+                    restoreParams.append('personas', String(json.personas?.length ?? ''))
+                    restoreParams.append('profiles', String(json.profiles?.length ?? ''))
+                    restoreParams.append('posts', String(json.posts?.length ?? ''))
+                    restoreParams.append('contacts', String(json.userGroups?.length ?? ''))
+                    restoreParams.append('date', String(json._meta_?.createdAt ?? ''))
+                    return await Services.Welcome.restoreBackup(json).then(() =>
+                        history.push(`${SetupStep.RestoreDatabaseConfirmation}?${restoreParams.toString()}`),
+                    )
+                }
+                setRequiredPermissions(permissions)
+                setRestoreState('success')
+            } catch (e) {
+                console.error(e)
+                setErrorState(e)
+            }
+        },
+        [history],
+    )
+    const resolveFileAndNext = useCallback(() => {
+        if (file) {
+            const fr = new FileReader()
+            fr.readAsText(file)
+            fr.addEventListener('loadend', () => resolveFileInput(fr.result as string))
+        } else if (textValue) {
+            resolveFileInput(textValue)
+        }
+    }, [file, textValue, resolveFileInput])
+
     return (
         <SetupForm
             primary="Restore Database"
@@ -506,7 +509,8 @@ export function RestoreDatabase() {
                         style={{ marginTop: 44 }}
                         color="primary"
                         variant="contained"
-                        disabled>
+                        disabled={!(state[0] === 0 && file) && !(state[0] === 1 && textValue)}
+                        onClick={resolveFileAndNext}>
                         Restore
                     </ActionButton>
                     <ActionButton<typeof Link>
@@ -543,7 +547,7 @@ export function RestoreDatabaseAdvance() {
                     <ActionButton className={classes.button} variant="contained" color="primary">
                         Import
                     </ActionButton>
-                    <ActionButton color="primary" variant="text" component={Link} onClick={() => history.goBack()}>
+                    <ActionButton variant="text" component={Link} onClick={() => history.goBack()}>
                         Cancel
                     </ActionButton>
                 </>
@@ -552,27 +556,166 @@ export function RestoreDatabaseAdvance() {
     )
 }
 
+//#region restore database
+const useDatabaseRecordStyle = makeStyles((theme: Theme) =>
+    createStyles({
+        table: {
+            width: 432,
+            borderRadius: 4,
+            borderCollapse: 'unset',
+            border: `solid 1px ${theme.palette.divider}`,
+            padding: 32,
+            marginLeft: -32,
+            marginBottom: 38,
+        },
+        cell: {
+            border: 'none',
+            padding: '9px 0 !important',
+        },
+        label: {
+            verticalAlign: 'middle',
+            fontSize: 20,
+            fontWeight: 500,
+            lineHeight: '30px',
+        },
+        icon: {
+            color: theme.palette.divider,
+            width: 20,
+            height: 20,
+            verticalAlign: 'middle',
+            marginLeft: 18,
+        },
+        iconChecked: {
+            color: theme.palette.success.main,
+        },
+    }),
+)
+
+enum DatabaseRecordType {
+    Persona,
+    Profile,
+    Post,
+    Contact,
+}
+
+interface DatabasePreviewCardProps {
+    records: {
+        type: DatabaseRecordType
+        length: number
+        checked: boolean
+    }[]
+}
+
+function DatabasePreviewCard(props: DatabasePreviewCardProps) {
+    const classes = useDatabaseRecordStyle()
+
+    const resolveRecordName = (type: DatabaseRecordType) => {
+        switch (type) {
+            case DatabaseRecordType.Persona:
+                return 'Personas'
+            case DatabaseRecordType.Profile:
+                return 'Profiles'
+            case DatabaseRecordType.Post:
+                return 'Posts'
+            case DatabaseRecordType.Contact:
+                return 'Contacts'
+            default:
+                return unreachable(type)
+        }
+    }
+    const records = props.records.map((record) => ({
+        ...record,
+        name: resolveRecordName(record.type),
+    }))
+    return (
+        <Table className={classes.table} size="small">
+            <TableBody>
+                {records.map((record) => (
+                    <TableRow key={record.name}>
+                        <TableCell className={classes.cell} component="th" align="left">
+                            <Typography className={classes.label} variant="body2" component="span">
+                                {record.name}
+                            </Typography>
+                        </TableCell>
+                        <TableCell className={classes.cell} align="right">
+                            <Typography className={classes.label} variant="body2" component="span">
+                                {record.length}
+                            </Typography>
+                            {record.checked ? (
+                                <CheckCircleOutlineIcon className={classNames(classes.icon, classes.iconChecked)} />
+                            ) : (
+                                <RadioButtonUncheckedIcon className={classes.icon} />
+                            )}
+                        </TableCell>
+                    </TableRow>
+                ))}
+            </TableBody>
+        </Table>
+    )
+}
+
 export function RestoreDatabaseConfirmation() {
+    const { t } = useI18N()
     const classes = useSetupFormSetyles()
     const history = useHistory()
+
+    const [imported, setImported] = useState(false)
+
+    const { personas, profiles, posts, contacts, date } = useQueryParams([
+        'personas',
+        'profiles',
+        'posts',
+        'contacts',
+        'date',
+    ])
+    const time = new Date(date ? Number(date) : 0)
+    const records = [
+        { type: DatabaseRecordType.Persona, length: Number.parseInt(personas ?? '0'), checked: imported },
+        { type: DatabaseRecordType.Profile, length: Number.parseInt(profiles ?? '0'), checked: imported },
+        { type: DatabaseRecordType.Post, length: Number.parseInt(posts ?? '0'), checked: imported },
+        { type: DatabaseRecordType.Contact, length: Number.parseInt(contacts ?? '0'), checked: imported },
+    ]
+
     return (
         <SetupForm
-            primary="Import Your Persona"
-            secondary="Following data will be import."
-            content={<></>}
+            primary="Restore Database"
+            secondary={
+                imported
+                    ? time.getTime() === 0
+                        ? 'Unknown time'
+                        : t('dashboard_restoration_successful_hint', {
+                              time: time.toLocaleString(),
+                          })
+                    : 'Following data will be imported.'
+            }
+            content={<DatabasePreviewCard records={records}></DatabasePreviewCard>}
             actions={
-                <>
-                    <ActionButton className={classes.button} variant="contained" color="primary">
-                        Import
+                imported ? (
+                    <ActionButton
+                        className={classNames(classes.button, classes.doneButton)}
+                        variant="contained"
+                        onClick={() => history.replace('/')}>
+                        Done
                     </ActionButton>
-                    <ActionButton color="primary" variant="text" component={Link} onClick={() => history.goBack()}>
-                        Cancel
-                    </ActionButton>
-                </>
+                ) : (
+                    <>
+                        <ActionButton
+                            className={classes.button}
+                            variant="contained"
+                            color="primary"
+                            onClick={() => setImported(true)}>
+                            Confirm
+                        </ActionButton>
+                        <ActionButton variant="text" component={Link} onClick={() => history.goBack()}>
+                            Cancel
+                        </ActionButton>
+                    </>
+                )
             }
         />
     )
 }
+//#endregion
 
 export function RestoreDatabaseSuccessful() {
     const classes = useSetupFormSetyles()
