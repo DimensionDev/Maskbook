@@ -48,37 +48,9 @@ async function sendTx<R, T extends TransactionObject<R>>(txObject: T, tx: Tx = {
                     gas,
                     gasPrice,
                 })
-                /**
-                 * @returns {String}
-                 *
-                 * Is fired right after the transaction is
-                 * sent and a transaction hash is available.
-                 */
                 .on('transactionHash', (hash: string) => listeners?.onTransactionHash?.(hash))
-                /**
-                 * @returns {TxReceipt}
-                 *
-                 * Is fired when the transaction receipt is available.
-                 */
                 .on('receipt', (receipt: TxReceipt) => listeners?.onReceipt?.(receipt))
-                /**
-                 * @returns {Number, TxReceipt}
-                 *
-                 * Is fired for every confirmation up to the 12th confirmation.
-                 * Receives the confirmation number as the first and the receipt
-                 * as the second argument.
-                 *
-                 * Fired from confirmation 0 on, which is the block where its minded.
-                 */
                 .on('confirmation', (no: number, receipt: TxReceipt) => listeners?.onConfirmation?.(no, receipt))
-                /**
-                 * @returns {Error, TxReceipt|undefined}
-                 *
-                 * Is fired if an error occurs during sending.
-                 *
-                 * If the transaction was rejected by the network with a
-                 * receipt, the second parameter will be the receipt.
-                 */
                 .on('error', (err: Error) => listeners?.onTransactionError?.(err)),
         )
         .catch((err: Error) => listeners?.onEstimateError?.(err))
