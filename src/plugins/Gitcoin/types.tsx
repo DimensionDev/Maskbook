@@ -1,4 +1,4 @@
-export const enum GitcoinGrantFailedReason {
+export enum GitcoinGrantFailedReason {
     NoPermission,
     InvalidURL,
     FetchFailed,
