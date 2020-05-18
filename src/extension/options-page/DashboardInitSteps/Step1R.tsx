@@ -153,51 +153,6 @@ export default function InitStep1R() {
         ) : null
     }
 
-    const tabProps: AbstractTabProps = {
-        tabs: [
-            {
-                label: 'File',
-                children: <FileUI></FileUI>,
-                p: 0,
-            },
-            {
-                label: 'TEXT',
-                children: (
-                    <div className={classes.restoreTextWrapper}>
-                        <InputBase
-                            placeholder={t('dashboard_paste_database_backup_hint')}
-                            className={classes.restoreInputBase}
-                            inputRef={(input: HTMLInputElement) => input && input.focus()}
-                            multiline
-                            value={textValue}
-                            onChange={(e) => setTextValue(e.target.value)}></InputBase>
-                        <ActionButton
-                            className={classes.restoreActionButton}
-                            width={140}
-                            variant="contained"
-                            onClick={() => resolveFileInput(textValue)}
-                            color="primary">
-                            {t('restore')}
-                        </ActionButton>
-                    </div>
-                ),
-                p: 1,
-            },
-            {
-                label: 'QR',
-                children: <QR />,
-                p: 0,
-            },
-        ],
-        state,
-    }
-
-    const content = (
-        <div style={{ alignSelf: 'stretch', textAlign: 'center', width: '100%' }}>
-            <AbstractTab height={200} {...tabProps}></AbstractTab>
-        </div>
-    )
-
     function FileUI() {
         return (
             <div {...bound}>
@@ -267,6 +222,51 @@ export default function InitStep1R() {
             </div>
         )
     }
+
+    const tabProps: AbstractTabProps = {
+        tabs: [
+            {
+                label: 'File',
+                children: <FileUI></FileUI>,
+                p: 0,
+            },
+            {
+                label: 'TEXT',
+                children: (
+                    <div className={classes.restoreTextWrapper}>
+                        <InputBase
+                            placeholder={t('dashboard_paste_database_backup_hint')}
+                            className={classes.restoreInputBase}
+                            inputRef={(input: HTMLInputElement) => input && input.focus()}
+                            multiline
+                            value={textValue}
+                            onChange={(e) => setTextValue(e.target.value)}></InputBase>
+                        <ActionButton
+                            className={classes.restoreActionButton}
+                            width={140}
+                            variant="contained"
+                            onClick={() => resolveFileInput(textValue)}
+                            color="primary">
+                            {t('restore')}
+                        </ActionButton>
+                    </div>
+                ),
+                p: 1,
+            },
+            {
+                label: 'QR',
+                children: <QR />,
+                p: 0,
+            },
+        ],
+        state,
+    }
+
+    const content = (
+        <div style={{ alignSelf: 'stretch', textAlign: 'center', width: '100%' }}>
+            <AbstractTab height={200} {...tabProps}></AbstractTab>
+        </div>
+    )
 
     const actions = (
         <>
