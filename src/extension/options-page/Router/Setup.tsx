@@ -392,7 +392,6 @@ export function RestoreDatabase() {
     }, [file, resolveFileInput])
 
     const state = React.useState(0)
-    const [tabState, setTabState] = state
 
     function FileUI() {
         return (
@@ -452,19 +451,6 @@ export function RestoreDatabase() {
                 )} */}
             </div>
         )
-    }
-
-    function QR() {
-        const shouldRenderQRComponent = tabState === 2 && !json
-
-        return shouldRenderQRComponent ? (
-            <QRScanner
-                onError={() => setErrorState(new Error('QR Error'))}
-                scanning
-                width="100%"
-                onResult={resolveFileInput}
-            />
-        ) : null
     }
 
     const tabProps: AbstractTabProps = {
