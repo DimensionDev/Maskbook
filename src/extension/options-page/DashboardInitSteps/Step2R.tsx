@@ -21,9 +21,13 @@ export default function InitStep2R() {
     ])
 
     const header = t('dashboard_restoration_successful')
-    const subheader = t('dashboard_restoration_successful_hint', {
-        time: new Date(date ? Number(date) : 0).toLocaleString(),
-    })
+    const time = new Date(date ? Number(date) : 0)
+    const subheader =
+        time.getTime() === 0
+            ? t('unknown_time')
+            : t('dashboard_restoration_successful_hint', {
+                  time: time.toLocaleString(),
+              })
 
     const actions = (
         <div>
