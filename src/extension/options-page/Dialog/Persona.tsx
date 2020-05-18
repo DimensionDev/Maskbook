@@ -255,6 +255,7 @@ export function DashboardPersonaBackupDialog(props: WrappedDialogProps<PersonaPr
             },
         ],
         state,
+        height: 200,
     }
 
     return (
@@ -264,7 +265,7 @@ export function DashboardPersonaBackupDialog(props: WrappedDialogProps<PersonaPr
                 iconColor="#5FDD97"
                 primary={t('backup_persona')}
                 secondary={t('dashboard_backup_persona_hint')}
-                content={<AbstractTab height={200} {...tabProps}></AbstractTab>}></DashboardDialogWrapper>
+                content={<AbstractTab {...tabProps}></AbstractTab>}></DashboardDialogWrapper>
         </DashboardDialogCore>
     )
 }

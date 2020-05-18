@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react'
+import React, { useState, useCallback, useRef } from 'react'
 import {
     Typography,
     styled,
@@ -13,18 +13,28 @@ import {
     makeStyles,
     createStyles,
     ThemeProvider,
+    InputBase,
 } from '@material-ui/core'
 import DashboardRouterContainer from './Container'
 import { useParams, useRouteMatch, Switch, Route, Redirect, Link, useHistory } from 'react-router-dom'
+import ArchiveOutlinedIcon from '@material-ui/icons/ArchiveOutlined'
+import StorageIcon from '@material-ui/icons/Storage'
+import AddBoxOutlinedIcon from '@material-ui/icons/AddBoxOutlined'
 import ActionButton from '../DashboardComponents/ActionButton'
 import { merge, cloneDeep } from 'lodash-es'
 import ProfileBox from '../DashboardComponents/ProfileBox'
 import Services from '../../service'
 import useQueryParams from '../../../utils/hooks/useQueryParams'
-import { useAsync, useMultiStateValidator } from 'react-use'
+import { useAsync, useMultiStateValidator, useDropArea } from 'react-use'
 import { Identifier, ECKeyIdentifier } from '../../../database/type'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { useMyPersonas } from '../../../components/DataSource/independent'
+import { BackupJSONFileLatest, UpgradeBackupJSONFile } from '../../../utils/type-transform/BackupFormat/JSON/latest'
+import { decompressBackupFile } from '../../../utils/type-transform/BackupFileShortRepresentation'
+import { extraPermissions } from '../../../utils/permissions'
+import QRScanner from '../../../components/QRScanner'
+import AbstractTab, { AbstractTabProps } from '../DashboardComponents/AbstractTab'
+import { getUrl } from '../../../utils/utils'
 
 enum SetupStep {
     CreatePersona = 'create-persona',
@@ -246,17 +256,271 @@ export function ConnectNetwork() {
 //#endregion
 
 //#region restore database
+const useRestoreDatabaseStyle = makeStyles((theme) =>
+    createStyles({
+        file: {
+            display: 'none',
+        },
+        placeholder: {
+            width: 64,
+            height: 64,
+            margin: '40px auto 28px',
+            backgroundRepeat: 'no-repeat',
+            backgroundPosition: 'center',
+            backgroundSize: '64px 64px',
+            backgroundImage: `url(${getUrl(
+                theme.palette.type === 'light' ? 'restore-placeholder.png' : 'restore-placeholder-dark.png',
+            )})`,
+        },
+        restoreBox: {
+            width: '100%',
+            color: 'gray',
+            transition: '0.4s',
+            '&[data-active=true]': {
+                color: 'black',
+            },
+        },
+        restoreBoxButton: {
+            alignSelf: 'center',
+            width: '180px',
+            boxShadow: 'none',
+            marginBottom: theme.spacing(1),
+        },
+        restoreTextWrapper: {
+            display: 'flex',
+            flexDirection: 'column',
+            height: '100%',
+        },
+        input: {
+            width: '100%',
+            padding: theme.spacing(2, 3),
+            flex: 1,
+            display: 'flex',
+            overflow: 'auto',
+            '& > textarea': {
+                height: '100% !important',
+            },
+        },
+        restoreActionButton: {
+            alignSelf: 'flex-end',
+            marginTop: theme.spacing(1),
+        },
+    }),
+)
+
+const RestoreBox = styled('div')(({ theme }: { theme: Theme }) => ({
+    color: theme.palette.text.hint,
+    whiteSpace: 'pre-line',
+    width: '100%',
+    height: '100%',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'flex-start',
+    textAlign: 'center',
+    cursor: 'pointer',
+}))
+
+const ShowcaseBox = styled('div')(({ theme }: { theme: Theme }) => ({
+    overflow: 'auto',
+    boxSizing: 'border-box',
+    border: `solid 1px ${theme.palette.divider}`,
+    display: 'flex',
+    justifyContent: 'center',
+    height: 176,
+    borderRadius: 4,
+}))
+
 export function RestoreDatabase() {
+    const { t } = useI18N()
     const classes = useSetupFormSetyles()
+    const restoreDatabaseClasses = useRestoreDatabaseStyle()
     const history = useHistory()
+
+    const ref = useRef<HTMLInputElement>(null)
+    const [textValue, setTextValue] = useState('')
+    const [json, setJson] = useState<BackupJSONFileLatest | null>(null)
+    const [restoreState, setRestoreState] = useState<'success' | Error | null>(null)
+    const [requiredPermissions, setRequiredPermissions] = React.useState<string[] | null>(null)
+
+    const setErrorState = (e: Error | null) => {
+        setJson(null)
+        setRestoreState(e)
+    }
+
+    const resolveFileInput = React.useCallback(
+        async (str: string) => {
+            try {
+                const json = UpgradeBackupJSONFile(decompressBackupFile(str))
+                if (!json) throw new Error('UpgradeBackupJSONFile failed')
+                setJson(json)
+                const permissions = await extraPermissions(json.grantedHostPermissions)
+                if (!permissions) {
+                    const restoreParams = new URLSearchParams()
+                    restoreParams.append('personas', String(json.personas?.length ?? ''))
+                    restoreParams.append('profiles', String(json.profiles?.length ?? ''))
+                    restoreParams.append('posts', String(json.posts?.length ?? ''))
+                    restoreParams.append('contacts', String(json.userGroups?.length ?? ''))
+                    restoreParams.append('date', String(json._meta_?.createdAt ?? ''))
+                    return await Services.Welcome.restoreBackup(json).then(
+                        () => console.log(history),
+                        // history.push(`${InitStep.Restore2}?${restoreParams.toString()}`),
+                    )
+                }
+                setRequiredPermissions(permissions)
+                setRestoreState('success')
+            } catch (e) {
+                console.error(e)
+                setErrorState(e)
+            }
+        },
+        [history],
+    )
+
+    const [file, setFile] = React.useState<File | null>(null)
+    const [bound, { over }] = useDropArea({
+        onFiles(files) {
+            setFile(files[0])
+        },
+    })
+
+    React.useEffect(() => {
+        if (file) {
+            const fr = new FileReader()
+            fr.readAsText(file)
+            fr.addEventListener('loadend', () => resolveFileInput(fr.result as string))
+        }
+    }, [file, resolveFileInput])
+
+    const state = React.useState(0)
+    const [tabState, setTabState] = state
+
+    function FileUI() {
+        return (
+            <div {...bound}>
+                <input
+                    className={restoreDatabaseClasses.file}
+                    type="file"
+                    accept="application/json"
+                    ref={ref}
+                    onChange={({ currentTarget }: React.ChangeEvent<HTMLInputElement>) => {
+                        if (currentTarget.files) {
+                            setFile(currentTarget.files.item(0))
+                        }
+                    }}
+                />
+                <RestoreBox
+                    className={restoreDatabaseClasses.restoreBox}
+                    data-active={over}
+                    onClick={() => ref.current && ref.current.click()}>
+                    {over ? (
+                        t('welcome_1b_dragging')
+                    ) : file ? (
+                        t('welcome_1b_file_selected', { filename: file.name })
+                    ) : (
+                        <>
+                            <div className={restoreDatabaseClasses.placeholder}></div>
+                            <ActionButton
+                                startIcon={<AddBoxOutlinedIcon></AddBoxOutlinedIcon>}
+                                component={Link}
+                                color="primary"
+                                variant="text">
+                                drag the file here or browser a file…
+                            </ActionButton>
+                        </>
+                    )}
+                </RestoreBox>
+
+                {/* {restoreState === 'success' && (
+                    <DatabaseRestoreSuccessDialog
+                        permissions={!!requiredPermissions}
+                        onDecline={() => setErrorState(null)}
+                        onConfirm={() => {
+                            browser.permissions
+                                .request({ origins: requiredPermissions ?? [] })
+                                .then((granted) => (granted ? Services.Welcome.restoreBackup(json!) : Promise.reject()))
+                                .then(() =>
+                                    history.push(
+                                        `${InitStep.Restore2}?personas=${json?.personas?.length}&profiles=${json?.profiles?.length}&posts=${json?.posts?.length}&contacts=${json?.userGroups?.length}&date=${json?._meta_?.createdAt}`,
+                                    ),
+                                )
+                                .catch(setErrorState)
+                        }}
+                    />
+                )}
+                {restoreState && restoreState !== 'success' && (
+                    <DatabaseRestoreFailedDialog onConfirm={() => setRestoreState(null)} error={restoreState} />
+                )} */}
+            </div>
+        )
+    }
+
+    function QR() {
+        const shouldRenderQRComponent = tabState === 2 && !json
+
+        return shouldRenderQRComponent ? (
+            <QRScanner
+                onError={() => setErrorState(new Error('QR Error'))}
+                scanning
+                width="100%"
+                onResult={resolveFileInput}
+            />
+        ) : null
+    }
+
+    const tabProps: AbstractTabProps = {
+        tabs: [
+            {
+                label: 'File',
+                children: (
+                    <ShowcaseBox>
+                        <FileUI></FileUI>
+                    </ShowcaseBox>
+                ),
+                p: 0,
+            },
+            {
+                label: 'Text',
+                children: (
+                    <ShowcaseBox>
+                        <InputBase
+                            className={restoreDatabaseClasses.input}
+                            placeholder={t('dashboard_paste_database_backup_hint')}
+                            inputRef={(input: HTMLInputElement) => input && input.focus()}
+                            multiline
+                            value={textValue}
+                            onChange={(e) => setTextValue(e.target.value)}></InputBase>
+                    </ShowcaseBox>
+
+                    // <div className={restoreDatabaseClasses.restoreTextWrapper}>
+                    //     <ActionButton
+                    //         className={restoreDatabaseClasses.restoreActionButton}
+                    //         width={140}
+                    //         variant="contained"
+                    //         onClick={() => resolveFileInput(textValue)}
+                    //         color="primary">
+                    //         {t('restore')}
+                    //     </ActionButton>
+                    // </div>
+                ),
+                p: 0,
+            },
+        ],
+        state,
+        height: 176,
+    }
     return (
         <SetupForm
             primary="Restore Database"
             secondary="Restore from a previous database backup."
-            content={<></>}
+            content={<AbstractTab {...tabProps}></AbstractTab>}
             actions={
                 <>
-                    <ActionButton className={classes.button} color="primary" variant="contained" disabled>
+                    <ActionButton
+                        className={classes.button}
+                        style={{ marginTop: 44 }}
+                        color="primary"
+                        variant="contained"
+                        disabled>
                         Restore
                     </ActionButton>
                     <ActionButton<typeof Link>
@@ -368,6 +632,25 @@ const setupTheme = (theme: Theme): Theme =>
                 },
                 text: {
                     height: 28,
+                },
+            },
+            MuiPaper: {
+                root: {
+                    backgroundColor: 'transparent',
+                },
+            },
+            MuiTabs: {
+                root: {
+                    minHeight: 38,
+                },
+                indicator: {
+                    height: 1,
+                },
+            },
+            MuiTab: {
+                root: {
+                    minHeight: 38,
+                    borderBottom: `solid 1px ${theme.palette.divider}`,
                 },
             },
         },
