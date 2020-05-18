@@ -72,7 +72,7 @@ const useSetupFormSetyles = makeStyles((theme) =>
             marginTop: 50,
             marginBottom: 10,
         },
-        confirm: {
+        button: {
             width: 220,
             height: 40,
             marginBottom: 20,
@@ -161,7 +161,7 @@ export function CreatePersona() {
             actions={
                 <>
                     <ActionButton
-                        className={classes.confirm}
+                        className={classes.button}
                         variant="contained"
                         color="primary"
                         onClick={createPersonaAndNext}>
@@ -228,7 +228,7 @@ export function ConnectNetwork() {
             actions={
                 <>
                     <ActionButton
-                        className={classes.confirm}
+                        className={classes.button}
                         variant="contained"
                         color="primary"
                         disabled={persona?.linkedProfiles.size === 0}
@@ -256,12 +256,13 @@ export function RestoreDatabase() {
             content={<></>}
             actions={
                 <>
-                    <ActionButton className={classes.confirm} disabled variant="contained" color="primary">
+                    <ActionButton className={classes.button} color="primary" variant="contained" disabled>
                         Restore
                     </ActionButton>
                     <ActionButton<typeof Link>
+                        className={classes.button}
                         color="primary"
-                        variant="text"
+                        variant="outlined"
                         component={Link}
                         to={SetupStep.RestoreDatabaseAdvance}>
                         Advance…
@@ -289,7 +290,7 @@ export function RestoreDatabaseAdvance() {
             content={<></>}
             actions={
                 <>
-                    <ActionButton className={classes.confirm} variant="contained" color="primary">
+                    <ActionButton className={classes.button} variant="contained" color="primary">
                         Import
                     </ActionButton>
                     <ActionButton color="primary" variant="text" component={Link} onClick={() => history.goBack()}>
@@ -311,7 +312,7 @@ export function RestoreDatabaseConfirmation() {
             content={<></>}
             actions={
                 <>
-                    <ActionButton className={classes.confirm} variant="contained" color="primary">
+                    <ActionButton className={classes.button} variant="contained" color="primary">
                         Import
                     </ActionButton>
                     <ActionButton color="primary" variant="text" component={Link} onClick={() => history.goBack()}>
@@ -334,7 +335,7 @@ export function RestoreDatabaseSuccessful() {
             actions={
                 <>
                     <ActionButton
-                        className={classes.confirm}
+                        className={classes.button}
                         variant="text"
                         component={Link}
                         onClick={() => history.goBack()}>
