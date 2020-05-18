@@ -17,8 +17,7 @@ import {
 } from '@material-ui/core'
 import DashboardRouterContainer from './Container'
 import { useParams, useRouteMatch, Switch, Route, Redirect, Link, useHistory } from 'react-router-dom'
-import ArchiveOutlinedIcon from '@material-ui/icons/ArchiveOutlined'
-import StorageIcon from '@material-ui/icons/Storage'
+import CheckBoxOutlinedIcon from '@material-ui/icons/CheckBoxOutlined'
 import AddBoxOutlinedIcon from '@material-ui/icons/AddBoxOutlined'
 import ActionButton from '../DashboardComponents/ActionButton'
 import { merge, cloneDeep } from 'lodash-es'
@@ -32,7 +31,6 @@ import { useMyPersonas } from '../../../components/DataSource/independent'
 import { BackupJSONFileLatest, UpgradeBackupJSONFile } from '../../../utils/type-transform/BackupFormat/JSON/latest'
 import { decompressBackupFile } from '../../../utils/type-transform/BackupFileShortRepresentation'
 import { extraPermissions } from '../../../utils/permissions'
-import QRScanner from '../../../components/QRScanner'
 import AbstractTab, { AbstractTabProps } from '../DashboardComponents/AbstractTab'
 import { getUrl } from '../../../utils/utils'
 
@@ -262,6 +260,7 @@ const useRestoreDatabaseStyle = makeStyles((theme) =>
             display: 'none',
         },
         placeholder: {
+            pointerEvents: 'none',
             width: 64,
             height: 64,
             margin: '40px auto 28px',
@@ -271,6 +270,24 @@ const useRestoreDatabaseStyle = makeStyles((theme) =>
             backgroundImage: `url(${getUrl(
                 theme.palette.type === 'light' ? 'restore-placeholder.png' : 'restore-placeholder-dark.png',
             )})`,
+        },
+        input: {
+            width: '100%',
+            padding: theme.spacing(2, 3),
+            flex: 1,
+            display: 'flex',
+            overflow: 'auto',
+            '& > textarea': {
+                height: '100% !important',
+            },
+        },
+        button: {
+            '& > span:first-child': {
+                display: 'inline-block',
+                maxWidth: 320,
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+            },
         },
         restoreBox: {
             width: '100%',
@@ -291,16 +308,6 @@ const useRestoreDatabaseStyle = makeStyles((theme) =>
             flexDirection: 'column',
             height: '100%',
         },
-        input: {
-            width: '100%',
-            padding: theme.spacing(2, 3),
-            flex: 1,
-            display: 'flex',
-            overflow: 'auto',
-            '& > textarea': {
-                height: '100% !important',
-            },
-        },
         restoreActionButton: {
             alignSelf: 'flex-end',
             marginTop: theme.spacing(1),
@@ -314,6 +321,7 @@ const RestoreBox = styled('div')(({ theme }: { theme: Theme }) => ({
     width: '100%',
     height: '100%',
     display: 'flex',
+    alignItems: 'center',
     flexDirection: 'column',
     justifyContent: 'flex-start',
     textAlign: 'center',
@@ -340,62 +348,24 @@ export function RestoreDatabase() {
     const [textValue, setTextValue] = useState('')
     const [json, setJson] = useState<BackupJSONFileLatest | null>(null)
     const [restoreState, setRestoreState] = useState<'success' | Error | null>(null)
-    const [requiredPermissions, setRequiredPermissions] = React.useState<string[] | null>(null)
+    const [requiredPermissions, setRequiredPermissions] = useState<string[] | null>(null)
 
     const setErrorState = (e: Error | null) => {
         setJson(null)
         setRestoreState(e)
     }
 
-    const resolveFileInput = React.useCallback(
-        async (str: string) => {
-            try {
-                const json = UpgradeBackupJSONFile(decompressBackupFile(str))
-                if (!json) throw new Error('UpgradeBackupJSONFile failed')
-                setJson(json)
-                const permissions = await extraPermissions(json.grantedHostPermissions)
-                if (!permissions) {
-                    const restoreParams = new URLSearchParams()
-                    restoreParams.append('personas', String(json.personas?.length ?? ''))
-                    restoreParams.append('profiles', String(json.profiles?.length ?? ''))
-                    restoreParams.append('posts', String(json.posts?.length ?? ''))
-                    restoreParams.append('contacts', String(json.userGroups?.length ?? ''))
-                    restoreParams.append('date', String(json._meta_?.createdAt ?? ''))
-                    return await Services.Welcome.restoreBackup(json).then(
-                        () => console.log(history),
-                        // history.push(`${InitStep.Restore2}?${restoreParams.toString()}`),
-                    )
-                }
-                setRequiredPermissions(permissions)
-                setRestoreState('success')
-            } catch (e) {
-                console.error(e)
-                setErrorState(e)
-            }
-        },
-        [history],
-    )
-
-    const [file, setFile] = React.useState<File | null>(null)
+    const [file, setFile] = useState<File | null>(null)
     const [bound, { over }] = useDropArea({
         onFiles(files) {
             setFile(files[0])
         },
     })
-
-    React.useEffect(() => {
-        if (file) {
-            const fr = new FileReader()
-            fr.readAsText(file)
-            fr.addEventListener('loadend', () => resolveFileInput(fr.result as string))
-        }
-    }, [file, resolveFileInput])
-
-    const state = React.useState(0)
+    const state = useState(0)
 
     function FileUI() {
         return (
-            <div {...bound}>
+            <div {...bound} style={{ width: '100%' }}>
                 <input
                     className={restoreDatabaseClasses.file}
                     type="file"
@@ -407,26 +377,21 @@ export function RestoreDatabase() {
                         }
                     }}
                 />
+
                 <RestoreBox
                     className={restoreDatabaseClasses.restoreBox}
                     data-active={over}
                     onClick={() => ref.current && ref.current.click()}>
-                    {over ? (
-                        t('welcome_1b_dragging')
-                    ) : file ? (
-                        t('welcome_1b_file_selected', { filename: file.name })
-                    ) : (
-                        <>
-                            <div className={restoreDatabaseClasses.placeholder}></div>
-                            <ActionButton
-                                startIcon={<AddBoxOutlinedIcon></AddBoxOutlinedIcon>}
-                                component={Link}
-                                color="primary"
-                                variant="text">
-                                drag the file here or browser a file…
-                            </ActionButton>
-                        </>
-                    )}
+                    <div className={restoreDatabaseClasses.placeholder}></div>
+                    <ActionButton
+                        className={file ? restoreDatabaseClasses.button : ''}
+                        color="primary"
+                        variant="text"
+                        component={Link}
+                        startIcon={over || file ? null : <AddBoxOutlinedIcon></AddBoxOutlinedIcon>}
+                        onClick={(e: React.MouseEvent<HTMLButtonElement>) => e.preventDefault()}>
+                        {over ? t('welcome_1b_dragging') : file ? file.name : 'Drag the file here or browser a file…'}
+                    </ActionButton>
                 </RestoreBox>
 
                 {/* {restoreState === 'success' && (
@@ -494,6 +459,44 @@ export function RestoreDatabase() {
         state,
         height: 176,
     }
+
+    const resolveFileInput = useCallback(
+        async (str: string) => {
+            try {
+                const json = UpgradeBackupJSONFile(decompressBackupFile(str))
+                if (!json) throw new Error('UpgradeBackupJSONFile failed')
+                setJson(json)
+                const permissions = await extraPermissions(json.grantedHostPermissions)
+                if (!permissions) {
+                    const restoreParams = new URLSearchParams()
+                    restoreParams.append('personas', String(json.personas?.length ?? ''))
+                    restoreParams.append('profiles', String(json.profiles?.length ?? ''))
+                    restoreParams.append('posts', String(json.posts?.length ?? ''))
+                    restoreParams.append('contacts', String(json.userGroups?.length ?? ''))
+                    restoreParams.append('date', String(json._meta_?.createdAt ?? ''))
+                    return await Services.Welcome.restoreBackup(json).then(() =>
+                        history.push(`${SetupStep.RestoreDatabaseConfirmation}?${restoreParams.toString()}`),
+                    )
+                }
+                setRequiredPermissions(permissions)
+                setRestoreState('success')
+            } catch (e) {
+                console.error(e)
+                setErrorState(e)
+            }
+        },
+        [history],
+    )
+    const resolveFileAndNext = useCallback(() => {
+        if (file) {
+            const fr = new FileReader()
+            fr.readAsText(file)
+            fr.addEventListener('loadend', () => resolveFileInput(fr.result as string))
+        } else if (textValue) {
+            resolveFileInput(textValue)
+        }
+    }, [file, textValue, resolveFileInput])
+
     return (
         <SetupForm
             primary="Restore Database"
@@ -506,7 +509,8 @@ export function RestoreDatabase() {
                         style={{ marginTop: 44 }}
                         color="primary"
                         variant="contained"
-                        disabled>
+                        disabled={!(state[0] === 0 && file) && !(state[0] === 1 && textValue)}
+                        onClick={resolveFileAndNext}>
                         Restore
                     </ActionButton>
                     <ActionButton<typeof Link>
@@ -543,7 +547,7 @@ export function RestoreDatabaseAdvance() {
                     <ActionButton className={classes.button} variant="contained" color="primary">
                         Import
                     </ActionButton>
-                    <ActionButton color="primary" variant="text" component={Link} onClick={() => history.goBack()}>
+                    <ActionButton variant="text" component={Link} onClick={() => history.goBack()}>
                         Cancel
                     </ActionButton>
                 </>
@@ -565,7 +569,7 @@ export function RestoreDatabaseConfirmation() {
                     <ActionButton className={classes.button} variant="contained" color="primary">
                         Import
                     </ActionButton>
-                    <ActionButton color="primary" variant="text" component={Link} onClick={() => history.goBack()}>
+                    <ActionButton variant="text" component={Link} onClick={() => history.goBack()}>
                         Cancel
                     </ActionButton>
                 </>
