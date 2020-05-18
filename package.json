@@ -93,7 +93,7 @@
     "tiny-secp256k1": "^1.1.4",
     "ts-results": "^2.0.1",
     "typeson": "^5.18.2",
-    "typeson-registry": "^1.0.0-alpha.35",
+    "typeson-registry": "^1.0.0-alpha.36",
     "use-subscription": "^1.4.1",
     "uuid": "^8.0.0",
     "wallet.ts": "^0.2.8",
