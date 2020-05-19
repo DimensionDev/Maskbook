@@ -8,7 +8,7 @@ interface PreviewCardProps {
     line2: string
     line3: string
     line4: string
-    hasNoPermission?: boolean
+    hasPermission?: boolean
     requestPermission(): void
     onRequestGrant(): void
     loading?: boolean
@@ -17,7 +17,7 @@ interface PreviewCardProps {
 }
 export function PreviewCard(props: PreviewCardProps) {
     const classes = useStyles()
-    if (props.hasNoPermission) {
+    if (!props.hasPermission) {
         return (
             <SnackbarContent
                 message="This post links to the Gitcoin. To preview it or donate this Gitcoin grant, Maskbook needs permission to Gitcoin.co"
