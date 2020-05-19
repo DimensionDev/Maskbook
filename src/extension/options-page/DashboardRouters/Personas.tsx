@@ -8,6 +8,7 @@ import { useModal } from '../Dialogs/Base'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { merge, cloneDeep } from 'lodash-es'
 import { useMyPersonas } from '../../../components/DataSource/independent'
+import { useHistory } from 'react-router-dom'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -48,6 +49,7 @@ export default function DashboardPersonasRouter() {
     const { t } = useI18N()
     const classes = useStyles()
     const personas = useMyPersonas()
+    const history = useHistory()
 
     const [createPersona, openCreatePersona] = useModal(DashboardPersonaCreateDialog)
     const [importPersona, openImportPersona] = useModal(DashboardPersonaImportDialog)
