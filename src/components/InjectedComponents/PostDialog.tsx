@@ -164,10 +164,10 @@ export function PostDialogUI(props: PostDialogUIProps) {
                                         props.onShareToEveryoneChanged(false)
                                     }
                                 }}
-                                label={`A Red Packet with $${formatBalance(
+                                label={`A Red Packet with ${formatBalance(
                                     new BigNumber(r.total),
                                     r.token?.decimals ?? 18,
-                                )} ${r.token?.name || 'ETH'} from ${r.sender.name}`}
+                                )} $${r.token?.name || 'ETH'} from ${r.sender.name}`}
                             />
                         ))}
                         <InputBase
