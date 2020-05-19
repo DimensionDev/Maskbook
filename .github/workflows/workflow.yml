@@ -10,15 +10,12 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-    E2E:
+    setup:
         runs-on: self-hosted
-
         container:
             image: differui/node-13.2.0-browsers:v2
-
             # more: https://github.community/t5/GitHub-Actions/How-to-run-action-as-a-non-root-user/m-p/45733/highlight/true#M6330
             options: --user 1000 -v /home/ubuntu/.cache/yarn/v6:/tmp/.yarn-cache-1000/v6 # $(id -u ubuntu)
-
         steps:
             # @v2 requires too much configurations
             - uses: actions/checkout@v1
@@ -27,7 +24,13 @@ jobs:
               run: |
                   yarn config set cache-folder /tmp/.yarn-cache-1000/v6
                   yarn install --link-duplicates --frozen-lockfile --pure-lockfile
-
+    E2E:
+        needs: setup
+        runs-on: self-hosted
+        container:
+            image: differui/node-13.2.0-browsers:v2
+            options: --user 1000 -v /home/ubuntu/.cache/yarn/v6:/tmp/.yarn-cache-1000/v6
+        steps:
             - name: Build
               run: yarn build:e2e
 
@@ -45,16 +48,12 @@ jobs:
                   name: screenshots
                   path: ./screenshots
     linters:
+        needs: setup
         runs-on: self-hosted
         container:
             image: differui/node-13.2.0-browsers:v2
-            options: --user 1000 -v /home/ubuntu/.cache/yarn/v6:/tmp/.yarn-cache-1000/v6 # $(id -u ubuntu)
+            options: --user 1000 -v /home/ubuntu/.cache/yarn/v6:/tmp/.yarn-cache-1000/v6
         steps:
-            - uses: actions/checkout@v1
-            - name: Install Dependencies
-              run: |
-                  yarn config set cache-folder /tmp/.yarn-cache-1000/v6
-                  yarn install --link-duplicates --frozen-lockfile --pure-lockfile
             - name: TypeScript type check
               run: yarn tsc --noEmit
             - name: Type coverage
@@ -69,16 +68,12 @@ jobs:
                   name: eslint
                   path: ./reports/junit
     storybook:
+        needs: setup
         runs-on: self-hosted
         container:
             image: differui/node-13.2.0-browsers:v2
-            options: --user 1000 -v /home/ubuntu/.cache/yarn/v6:/tmp/.yarn-cache-1000/v6 # $(id -u ubuntu)
+            options: --user 1000 -v /home/ubuntu/.cache/yarn/v6:/tmp/.yarn-cache-1000/v6
         steps:
-            - uses: actions/checkout@v1
-            - name: Install Dependencies
-              run: |
-                  yarn config set cache-folder /tmp/.yarn-cache-1000/v6
-                  yarn install --link-duplicates --frozen-lockfile --pure-lockfile
             - name: Build storybook
               run: yarn build-storybook
             - name: Storybook output
@@ -87,18 +82,14 @@ jobs:
                   name: storybook
                   path: ./storybook-static
     test:
+        needs: setup
         runs-on: self-hosted
         container:
             image: differui/node-13.2.0-browsers:v2
-            options: --user 1000 -v /home/ubuntu/.cache/yarn/v6:/tmp/.yarn-cache-1000/v6 # $(id -u ubuntu)
+            options: --user 1000 -v /home/ubuntu/.cache/yarn/v6:/tmp/.yarn-cache-1000/v6
         env:
             JEST_JUNIT_OUTPUT_DIR: 'reports/junit/js-test-results.xml'
         steps:
-            - uses: actions/checkout@v1
-            - name: Install Dependencies
-              run: |
-                  yarn config set cache-folder /tmp/.yarn-cache-1000/v6
-                  yarn install --link-duplicates --frozen-lockfile --pure-lockfile
             - name: Jest
               run: yarn test:ci
             - name: Jest result
