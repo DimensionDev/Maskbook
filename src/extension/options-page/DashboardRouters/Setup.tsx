@@ -218,7 +218,7 @@ export function ConnectNetwork() {
 
     const personas = useMyPersonas()
     const { identifier } = useQueryParams(['identifier'])
-    const { value: persona = null, loading } = useAsync(async () => {
+    const { value: persona = null, error, loading } = useAsync(async () => {
         if (identifier)
             return Services.Identity.queryPersona(Identifier.fromString(identifier, ECKeyIdentifier).unwrap())
         return null
@@ -229,7 +229,7 @@ export function ConnectNetwork() {
         if (persona) await Services.Identity.deletePersona(persona.identifier, 'delete even with private')
     }
 
-    if (loading) return null
+    if (error || loading) return null
     return (
         <SetupForm
             primary={`Connect a Social Network Profile for "${persona?.nickname}"`}
@@ -254,7 +254,7 @@ export function ConnectNetwork() {
                         onClick={() => history.replace('/personas')}>
                         Finish
                     </ActionButton>
-                    <ActionButton variant="text" component={Link} onClick={deletePersonaAndBack}>
+                    <ActionButton variant="text" onClick={deletePersonaAndBack}>
                         Cancel
                     </ActionButton>
                 </>
@@ -524,7 +524,7 @@ export function RestoreDatabase() {
                     <Typography className={classes.or} variant="body1">
                         or
                     </Typography>
-                    <ActionButton color="primary" variant="text" component={Link} onClick={() => history.goBack()}>
+                    <ActionButton color="primary" variant="text" onClick={() => history.goBack()}>
                         Start From Scratch
                     </ActionButton>
                 </>
@@ -548,7 +548,7 @@ export function RestoreDatabaseAdvance() {
                     <ActionButton className={classes.button} variant="contained" color="primary">
                         Import
                     </ActionButton>
-                    <ActionButton variant="text" component={Link} onClick={() => history.goBack()}>
+                    <ActionButton variant="text" onClick={() => history.goBack()}>
                         Cancel
                     </ActionButton>
                 </>
@@ -708,7 +708,7 @@ export function RestoreDatabaseConfirmation() {
                             onClick={() => setImported(true)}>
                             Confirm
                         </ActionButton>
-                        <ActionButton variant="text" component={Link} onClick={() => history.goBack()}>
+                        <ActionButton variant="text" onClick={() => history.goBack()}>
                             Cancel
                         </ActionButton>
                     </>
@@ -763,6 +763,7 @@ const setupTheme = (theme: Theme): Theme =>
                 },
                 text: {
                     height: 28,
+                    lineHeight: 1,
                 },
             },
             MuiPaper: {
