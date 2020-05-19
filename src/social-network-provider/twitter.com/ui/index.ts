@@ -11,6 +11,7 @@ import { twitterUrl } from '../utils/url'
 import { PreDefinedVirtualGroupNames } from '../../../database/type'
 import { twitterUICustomUI, startWatchThemeColor } from './custom'
 import { notifyPermissionUpdate } from '../../../utils/permissions'
+import { injectMaskbookIconToProfile, injectMaskbookIconIntoFloatingProfileCard } from './injectMaskbookIcon'
 
 export const instanceOfTwitterUI = defineSocialNetworkUI({
     ...sharedSettings,
@@ -46,6 +47,8 @@ export const instanceOfTwitterUI = defineSocialNetworkUI({
             PreDefinedVirtualGroupNames.following,
         ])
         InitMyIdentitiesValueRef(instanceOfTwitterUI, twitterUrl.hostIdentifier)
+        injectMaskbookIconToProfile()
+        injectMaskbookIconIntoFloatingProfileCard()
     },
     shouldActivate(location: Location | URL = globalThis.location) {
         return location.hostname.endsWith(twitterUrl.hostIdentifier)

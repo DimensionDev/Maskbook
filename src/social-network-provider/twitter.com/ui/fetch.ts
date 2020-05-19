@@ -14,6 +14,7 @@ import Services from '../../../extension/service'
 import { twitterUrl } from '../utils/url'
 import { untilElementAvailable } from '../../../utils/dom'
 import { twitterEncoding } from '../encoding'
+import { injectMaskbookIconToPost } from './injectMaskbookIcon'
 
 const resolveLastRecognizedIdentity = (self: SocialNetworkUI) => {
     const selfSelector = selfInfoSelectors().handle
@@ -96,31 +97,11 @@ const registerPostCollector = (self: SocialNetworkUI) => {
             ].join(),
         )
     }
-    const isKnownToMaskbook = (node: HTMLElement, tweetNode: HTMLElement) => {
-        // TODO:
-        // detect image payload is costy postImageParser should cache parse result
-        if (tweetNode.querySelector('img[src*="twimg.com/media"]')) {
-            return true
-        }
-        if (
-            Array.from(node.querySelectorAll('span, a'))
-                .map((n) => n.getAttribute('title') ?? '')
-                .some((url) => twitterEncoding.payloadDecoder(url) !== null)
-        ) {
-            return true
-        }
-        return false
-    }
 
     new MutationObserverWatcher(postsContentSelector())
         .useForeach((node, _, proxy) => {
             const tweetNode = getTweetNode(node)
             if (!tweetNode) return
-            // early return if tweet content unknown to maskbook
-            if (!isKnownToMaskbook(node, tweetNode)) {
-                return
-            }
-            // noinspection JSUnnecessarySemicolon
             const info = getEmptyPostInfoByElement({
                 get rootNode() {
                     return proxy.current
@@ -163,6 +144,7 @@ const registerPostCollector = (self: SocialNetworkUI) => {
                 info.postContent.addListener((newValue) => {
                     info.postPayload.value = deconstructPayload(newValue, self.payloadDecoder)
                 })
+                injectMaskbookIconToPost(info)
                 self.posts.set(proxy, info)
             })()
             return {
