@@ -60,7 +60,6 @@ function shouldActivate(post: string): Result<void, void> {
 function PreviewCardLogic(props: { url: string }) {
     const [open, setOpen] = useState(false)
     const [wallets, tokens, onRequireNewWallet] = useWalletDataSource()
-    const { hasPermission, request } = useExtensionPermission({ origins: ['https://gitcoin.co/grants/**/*'] })
     const url = props.url
     const { revalidate, data, isValidating } = useSWR(url, {
         fetcher(url: string) {
@@ -74,14 +73,14 @@ function PreviewCardLogic(props: { url: string }) {
         <>
             <PreviewCard
                 onRequestGrant={() => (wallets.length === 0 ? onRequireNewWallet() : setOpen(true))}
-                requestPermission={request}
-                hasNoPermission={!hasPermission}
+                requestPermission={() => {}}
+                hasPermission={true}
                 loading={isValidating}
                 image={image ? <img src={image} width="100%" /> : null}
-                line1={`${finalAmount ?? 'Many'} DAI`}
+                line1={finalAmount ? `${finalAmount} DAI` : ''}
                 line2="ESTIMATED"
-                line3={`${amount ?? 'Many'} DAI`}
-                line4={`${contributors ?? 'Many'} contributors`}
+                line3={amount ? `${amount} DAI` : ''}
+                line4={contributors ? `${contributors} contributors` : ''}
                 title={title ?? 'A Gitcoin grant'}
                 address={address}
                 originalURL={url ?? ''}

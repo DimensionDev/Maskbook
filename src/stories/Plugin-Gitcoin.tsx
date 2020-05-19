@@ -22,7 +22,7 @@ storiesOf('Plugin: Gitcoin', module)
                 <PreviewCard
                     originalURL={text('originalURL', '')}
                     onRequestGrant={action('Request grant')}
-                    hasNoPermission={boolean('Has no permission', false)}
+                    hasPermission={boolean('Has permission', false)}
                     requestPermission={action('Request permission')}
                     loading={boolean('Loading', false)}
                     image={<img width="100%" height="100%" />}
