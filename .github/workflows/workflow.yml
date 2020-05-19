@@ -58,29 +58,8 @@ jobs:
               with:
                   name: storybook
                   path: ./storybook-static
-    test:
-        needs: [setup, linters, storybook]
-        runs-on: self-hosted
-        container:
-            image: differui/node-13.2.0-browsers:v2
-            options: --user 1000 -v /home/ubuntu/.cache/yarn/v6:/tmp/.yarn-cache-1000/v6
-        env:
-            JEST_JUNIT_OUTPUT_DIR: 'reports/junit/js-test-results.xml'
-        steps:
-            - name: Jest
-              run: yarn test:ci
-            - name: Jest result
-              uses: actions/upload-artifact@v1
-              with:
-                  name: jest
-                  path: ./reports/junit
-            - name: Coverage result
-              uses: actions/upload-artifact@v1
-              with:
-                  name: jest
-                  path: ./coverage
     E2E:
-        needs: [setup, linters, storybook, test]
+        needs: [setup, linters, storybook]
         runs-on: self-hosted
         container:
             image: differui/node-13.2.0-browsers:v2
