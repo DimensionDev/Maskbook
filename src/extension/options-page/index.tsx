@@ -103,7 +103,7 @@ const useStyles = makeStyles((theme) =>
             backgroundColor: 'var(--background)',
             display: 'grid',
             gridTemplateColumns: '1fr [content-start] 1110px [content-end] 1fr',
-            gridTemplateRows: '64px [content-start] auto [content-end] 80px',
+            gridTemplateRows: '32px [content-start] auto [content-end] 50px',
             placeItems: 'center',
 
             transition: 'filter 0.3s linear',

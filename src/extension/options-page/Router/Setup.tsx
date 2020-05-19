@@ -3,9 +3,6 @@ import {
     Typography,
     styled,
     Theme,
-    CardHeader,
-    CardContent,
-    CardActions,
     TextField,
     Fade,
     Box,
@@ -14,9 +11,17 @@ import {
     createStyles,
     ThemeProvider,
     InputBase,
+    Table,
+    TableBody,
+    TableRow,
+    TableCell,
+    Checkbox,
 } from '@material-ui/core'
+import classNames from 'classnames'
 import DashboardRouterContainer from './Container'
 import { useParams, useRouteMatch, Switch, Route, Redirect, Link, useHistory } from 'react-router-dom'
+import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline'
+import RadioButtonUncheckedIcon from '@material-ui/icons/RadioButtonUnchecked'
 import CheckBoxOutlinedIcon from '@material-ui/icons/CheckBoxOutlined'
 import AddBoxOutlinedIcon from '@material-ui/icons/AddBoxOutlined'
 import ActionButton from '../DashboardComponents/ActionButton'
@@ -32,7 +37,8 @@ import { BackupJSONFileLatest, UpgradeBackupJSONFile } from '../../../utils/type
 import { decompressBackupFile } from '../../../utils/type-transform/BackupFileShortRepresentation'
 import { extraPermissions } from '../../../utils/permissions'
 import AbstractTab, { AbstractTabProps } from '../DashboardComponents/AbstractTab'
-import { getUrl } from '../../../utils/utils'
+import { getUrl, unreachable } from '../../../utils/utils'
+import { green } from '@material-ui/core/colors'
 
 enum SetupStep {
     CreatePersona = 'create-persona',
@@ -77,13 +83,20 @@ const useSetupFormSetyles = makeStyles((theme) =>
             width: '100%',
         },
         or: {
-            marginTop: 50,
+            marginTop: 28,
             marginBottom: 10,
         },
         button: {
             width: 220,
             height: 40,
             marginBottom: 20,
+        },
+        doneButton: {
+            color: '#fff',
+            backgroundColor: green[500],
+            '&:hover': {
+                backgroundColor: green[700],
+            },
         },
     }),
 )
@@ -151,8 +164,6 @@ export function CreatePersona() {
                         error={submitted && Boolean(nameErrorMessage)}
                         autoFocus
                         className={classes.input}
-                        InputLabelProps={{ shrink: true }}
-                        variant="outlined"
                         value={name}
                         onChange={(e) => setName(e.target.value)}
                         onKeyDown={(e) => {
@@ -161,7 +172,7 @@ export function CreatePersona() {
                                 createPersonaAndNext()
                             }
                         }}
-                        label="Name"
+                        label={t('name')}
                         helperText={(submitted && nameErrorMessage) || ' '}
                     />
                 </>
@@ -441,17 +452,6 @@ export function RestoreDatabase() {
                             value={textValue}
                             onChange={(e) => setTextValue(e.target.value)}></InputBase>
                     </ShowcaseBox>
-
-                    // <div className={restoreDatabaseClasses.restoreTextWrapper}>
-                    //     <ActionButton
-                    //         className={restoreDatabaseClasses.restoreActionButton}
-                    //         width={140}
-                    //         variant="contained"
-                    //         onClick={() => resolveFileInput(textValue)}
-                    //         color="primary">
-                    //         {t('restore')}
-                    //     </ActionButton>
-                    // </div>
                 ),
                 p: 0,
             },
@@ -556,27 +556,166 @@ export function RestoreDatabaseAdvance() {
     )
 }
 
+//#region restore database
+const useDatabaseRecordStyle = makeStyles((theme: Theme) =>
+    createStyles({
+        table: {
+            width: 432,
+            borderRadius: 4,
+            borderCollapse: 'unset',
+            border: `solid 1px ${theme.palette.divider}`,
+            padding: 32,
+            marginLeft: -32,
+            marginBottom: 38,
+        },
+        cell: {
+            border: 'none',
+            padding: '9px 0 !important',
+        },
+        label: {
+            verticalAlign: 'middle',
+            fontSize: 20,
+            fontWeight: 500,
+            lineHeight: '30px',
+        },
+        icon: {
+            color: theme.palette.divider,
+            width: 20,
+            height: 20,
+            verticalAlign: 'middle',
+            marginLeft: 18,
+        },
+        iconChecked: {
+            color: theme.palette.success.main,
+        },
+    }),
+)
+
+enum DatabaseRecordType {
+    Persona,
+    Profile,
+    Post,
+    Contact,
+}
+
+interface DatabasePreviewCardProps {
+    records: {
+        type: DatabaseRecordType
+        length: number
+        checked: boolean
+    }[]
+}
+
+function DatabasePreviewCard(props: DatabasePreviewCardProps) {
+    const classes = useDatabaseRecordStyle()
+
+    const resolveRecordName = (type: DatabaseRecordType) => {
+        switch (type) {
+            case DatabaseRecordType.Persona:
+                return 'Personas'
+            case DatabaseRecordType.Profile:
+                return 'Profiles'
+            case DatabaseRecordType.Post:
+                return 'Posts'
+            case DatabaseRecordType.Contact:
+                return 'Contacts'
+            default:
+                return unreachable(type)
+        }
+    }
+    const records = props.records.map((record) => ({
+        ...record,
+        name: resolveRecordName(record.type),
+    }))
+    return (
+        <Table className={classes.table} size="small">
+            <TableBody>
+                {records.map((record) => (
+                    <TableRow key={record.name}>
+                        <TableCell className={classes.cell} component="th" align="left">
+                            <Typography className={classes.label} variant="body2" component="span">
+                                {record.name}
+                            </Typography>
+                        </TableCell>
+                        <TableCell className={classes.cell} align="right">
+                            <Typography className={classes.label} variant="body2" component="span">
+                                {record.length}
+                            </Typography>
+                            {record.checked ? (
+                                <CheckCircleOutlineIcon className={classNames(classes.icon, classes.iconChecked)} />
+                            ) : (
+                                <RadioButtonUncheckedIcon className={classes.icon} />
+                            )}
+                        </TableCell>
+                    </TableRow>
+                ))}
+            </TableBody>
+        </Table>
+    )
+}
+
 export function RestoreDatabaseConfirmation() {
+    const { t } = useI18N()
     const classes = useSetupFormSetyles()
     const history = useHistory()
+
+    const [imported, setImported] = useState(false)
+
+    const { personas, profiles, posts, contacts, date } = useQueryParams([
+        'personas',
+        'profiles',
+        'posts',
+        'contacts',
+        'date',
+    ])
+    const time = new Date(date ? Number(date) : 0)
+    const records = [
+        { type: DatabaseRecordType.Persona, length: Number.parseInt(personas ?? '0'), checked: imported },
+        { type: DatabaseRecordType.Profile, length: Number.parseInt(profiles ?? '0'), checked: imported },
+        { type: DatabaseRecordType.Post, length: Number.parseInt(posts ?? '0'), checked: imported },
+        { type: DatabaseRecordType.Contact, length: Number.parseInt(contacts ?? '0'), checked: imported },
+    ]
+
     return (
         <SetupForm
-            primary="Import Your Persona"
-            secondary="Following data will be import."
-            content={<></>}
+            primary="Restore Database"
+            secondary={
+                imported
+                    ? time.getTime() === 0
+                        ? 'Unknown time'
+                        : t('dashboard_restoration_successful_hint', {
+                              time: time.toLocaleString(),
+                          })
+                    : 'Following data will be imported.'
+            }
+            content={<DatabasePreviewCard records={records}></DatabasePreviewCard>}
             actions={
-                <>
-                    <ActionButton className={classes.button} variant="contained" color="primary">
-                        Import
+                imported ? (
+                    <ActionButton
+                        className={classNames(classes.button, classes.doneButton)}
+                        variant="contained"
+                        onClick={() => history.replace('/')}>
+                        Done
                     </ActionButton>
-                    <ActionButton variant="text" component={Link} onClick={() => history.goBack()}>
-                        Cancel
-                    </ActionButton>
-                </>
+                ) : (
+                    <>
+                        <ActionButton
+                            className={classes.button}
+                            variant="contained"
+                            color="primary"
+                            onClick={() => setImported(true)}>
+                            Confirm
+                        </ActionButton>
+                        <ActionButton variant="text" component={Link} onClick={() => history.goBack()}>
+                            Cancel
+                        </ActionButton>
+                    </>
+                )
             }
         />
     )
 }
+//#endregion
 
 export function RestoreDatabaseSuccessful() {
     const classes = useSetupFormSetyles()
