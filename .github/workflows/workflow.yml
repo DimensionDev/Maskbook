@@ -24,29 +24,6 @@ jobs:
               run: |
                   yarn config set cache-folder /tmp/.yarn-cache-1000/v6
                   yarn install --link-duplicates --frozen-lockfile --pure-lockfile
-    E2E:
-        needs: setup
-        runs-on: self-hosted
-        container:
-            image: differui/node-13.2.0-browsers:v2
-            options: --user 1000 -v /home/ubuntu/.cache/yarn/v6:/tmp/.yarn-cache-1000/v6
-        steps:
-            - name: Build
-              run: yarn build:e2e
-
-            - name: Setup E2E
-              run: mkdir -p ./screenshots
-            - name: Jest E2E
-              run: xvfb-run --server-args="-screen 0 1280x1024x24" yarn test:e2e
-
-            - name: Teardown E2E
-              run: rm -rf ./build
-
-            - name: Archive Artifacts
-              uses: actions/upload-artifact@v1
-              with:
-                  name: screenshots
-                  path: ./screenshots
     linters:
         needs: setup
         runs-on: self-hosted
@@ -68,7 +45,7 @@ jobs:
                   name: eslint
                   path: ./reports/junit
     storybook:
-        needs: setup
+        needs: [setup, linters]
         runs-on: self-hosted
         container:
             image: differui/node-13.2.0-browsers:v2
@@ -82,7 +59,7 @@ jobs:
                   name: storybook
                   path: ./storybook-static
     test:
-        needs: setup
+        needs: [setup, linters, storybook]
         runs-on: self-hosted
         container:
             image: differui/node-13.2.0-browsers:v2
@@ -102,3 +79,26 @@ jobs:
               with:
                   name: jest
                   path: ./coverage
+    E2E:
+        needs: [setup, linters, storybook, test]
+        runs-on: self-hosted
+        container:
+            image: differui/node-13.2.0-browsers:v2
+            options: --user 1000 -v /home/ubuntu/.cache/yarn/v6:/tmp/.yarn-cache-1000/v6
+        steps:
+            - name: Build
+              run: yarn build:e2e
+
+            - name: Setup E2E
+              run: mkdir -p ./screenshots
+            - name: Jest E2E
+              run: xvfb-run --server-args="-screen 0 1280x1024x24" yarn test:e2e
+
+            - name: Teardown E2E
+              run: rm -rf ./build
+
+            - name: Archive Artifacts
+              uses: actions/upload-artifact@v1
+              with:
+                  name: screenshots
+                  path: ./screenshots
