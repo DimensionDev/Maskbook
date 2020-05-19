@@ -30,7 +30,7 @@ import { SSRRenderer } from './utils/SSRRenderer'
 import { SnackbarProvider } from 'notistack'
 
 import { I18nextProvider } from 'react-i18next'
-import ResponsiveDrawer from './extension/options-page/Drawer'
+import Drawer from './extension/options-page/DashboardComponents/Drawer'
 
 import { DialogRouter } from './extension/options-page/DashboardDialogs/DialogBase'
 import DashboardHomePage from './extension/options-page/Home'
@@ -39,8 +39,8 @@ import DashboardInitializeDialog from './extension/options-page/Initialize'
 import DashboardWalletsPage from './plugins/Wallet/UI/Dashboard/Wallets'
 import { useI18N } from './utils/i18n-next-ui'
 import i18nNextInstance from './utils/i18n-next'
-import { Settings as DashboardSettingsPage } from './extension/options-page/Settings/settings'
 import { RequestPermissionPage } from './components/RequestPermission/RequestPermission'
+import { Settings as DashboardSettingsPage } from './extension/options-page/Settings'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -162,7 +162,7 @@ function Dashboard() {
 
     return (
         <div className={classes.wrapper}>
-            <ResponsiveDrawer routers={routers} exitDashboard={shouldRenderAppBar ? () => window.close() : null} />
+            <Drawer routers={routers} exitDashboard={shouldRenderAppBar ? () => window.close() : null} />
             <section className={classes.container}>
                 {(shouldRenderAppBar ? true : !shouldNotRenderAppBar) && (
                     <AppBar position="static">

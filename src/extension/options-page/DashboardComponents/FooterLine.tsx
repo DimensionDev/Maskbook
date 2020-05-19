@@ -3,8 +3,8 @@ import { makeStyles, createStyles } from '@material-ui/styles'
 import { Link } from 'react-router-dom'
 import { Breadcrumbs, Theme, Typography, Link as MuiLink } from '@material-ui/core'
 import { useI18N } from '../../../utils/i18n-next-ui'
-import { DashboardAboutDialog } from '../Dialog/About'
-import { useModal } from '../Dialog/Base'
+import { DashboardAboutDialog } from '../Dialogs/About'
+import { useModal } from '../Dialogs/Base'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({

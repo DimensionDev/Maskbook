@@ -1,6 +1,6 @@
 import React from 'react'
 
-export default function Logo() {
+export default function MaskbookLogo() {
     return (
         <svg
             style={{ display: 'block' }}

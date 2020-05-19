@@ -10,7 +10,7 @@ import HistoryIcon from '@material-ui/icons/History'
 
 import { WalletItem } from '../DashboardComponents/WalletItem'
 import { TokenListItem } from '../DashboardComponents/TokenListItem'
-import { useModal, useSnackbarCallback } from '../Dialog/Base'
+import { useModal, useSnackbarCallback } from '../Dialogs/Base'
 import {
     DashboardWalletImportDialog,
     DashboardWalletCreateDialog,
@@ -19,7 +19,7 @@ import {
     DashboardWalletBackupDialog,
     DashboardWalletDeleteConfirmDialog,
     DashboardWalletRenameDialog,
-} from '../Dialog/Wallet'
+} from '../Dialogs/Wallet'
 import { useMyWallets } from '../../../components/DataSource/independent'
 import DashboardMenu from '../DashboardComponents/DashboardMenu'
 import { useI18N } from '../../../utils/i18n-next-ui'

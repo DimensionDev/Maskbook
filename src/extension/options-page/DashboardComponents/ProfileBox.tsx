@@ -9,8 +9,8 @@ import {
     ImmersiveSetupCrossContextStatus,
 } from '../../../components/shared-settings/settings'
 import { exclusiveTasks } from '../../content-script/tasks'
-import { useModal } from '../Dialog/Base'
-import { DashboardPersonaUnlinkConfirmDialog } from '../Dialog/Persona'
+import { useModal } from '../Dialogs/Base'
+import { DashboardPersonaUnlinkConfirmDialog } from '../Dialogs/Persona'
 
 interface ProfileBoxProps {
     persona: Persona | null

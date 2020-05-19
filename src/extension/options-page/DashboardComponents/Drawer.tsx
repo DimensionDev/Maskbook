@@ -6,11 +6,11 @@ import { makeStyles, Theme, ThemeProvider, useTheme } from '@material-ui/core/st
 import { Link, useRouteMatch } from 'react-router-dom'
 
 import SentimentSatisfiedOutlinedIcon from '@material-ui/icons/SentimentSatisfiedOutlined'
-import { useModal } from './Dialog/Base'
-import { DashboardFeedbackDialog } from './Dialog/Feedback'
-import { useI18N } from '../../utils/i18n-next-ui'
+import { useModal } from '../Dialogs/Base'
+import { DashboardFeedbackDialog } from '../Dialogs/Feedback'
+import { useI18N } from '../../../utils/i18n-next-ui'
 import { cloneDeep, merge } from 'lodash-es'
-import Logo from './DashboardComponents/Logo'
+import Logo from './MaskbookLogo'
 
 const useStyles = makeStyles((theme) => ({
     drawer: {
@@ -95,12 +95,12 @@ const drawerTheme = (theme: Theme): Theme =>
         },
     })
 
-interface ResponsiveDrawerProps {
+interface DrawerProps {
     routers: readonly (readonly [string, string, JSX.Element])[]
     exitDashboard: null | (() => void)
 }
 
-function ResponsiveDrawer(props: ResponsiveDrawerProps) {
+export default function Drawer(props: DrawerProps) {
     const { t } = useI18N()
     const classes = useStyles()
     const match = useRouteMatch('/:param/')
@@ -165,5 +165,3 @@ function ResponsiveDrawer(props: ResponsiveDrawerProps) {
         </ThemeProvider>
     )
 }
-
-export default ResponsiveDrawer

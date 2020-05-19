@@ -1,8 +1,6 @@
-import '../../provider.worker'
-
-import React, { useRef, useMemo, useEffect } from 'react'
+import React from 'react'
 import { CssBaseline, useMediaQuery, NoSsr } from '@material-ui/core'
-import { ThemeProvider, makeStyles, createStyles, useTheme } from '@material-ui/core/styles'
+import { ThemeProvider, makeStyles, createStyles } from '@material-ui/core/styles'
 
 import PeopleOutlinedIcon from '@material-ui/icons/PeopleOutlined'
 import CreditCardIcon from '@material-ui/icons/CreditCard'
@@ -15,69 +13,24 @@ import { MaskbookDarkTheme, MaskbookLightTheme } from '../../utils/theme'
 
 import '../../setup.ui'
 import { SSRRenderer } from '../../utils/SSRRenderer'
+import { useValueRef } from '../../utils/hooks/useValueRef'
 
 import { SnackbarProvider } from 'notistack'
 
 import { I18nextProvider } from 'react-i18next'
-import ResponsiveDrawer from './Drawer'
 
-import { DialogRouter } from './DashboardDialogs/DialogBase'
-import DashboardInitializeDialog from './Initialize'
 import { useI18N } from '../../utils/i18n-next-ui'
 import i18nNextInstance from '../../utils/i18n-next'
 import FooterLine from './DashboardComponents/FooterLine'
+import Drawer from './DashboardComponents/Drawer'
 
-import DashboardPersonasRouter from './Router/Personas'
-import DashboardWalletsRouter from './Router/Wallets'
-import DashboardContactsRouter from './Router/Contacts'
-import DashboardSettingsRouter from './Router/Settings'
-import { DashboardBlurContextProvider } from './DashboardBlurContext'
-import { useValueRef } from '../../utils/hooks/useValueRef'
+import DashboardPersonasRouter from './DashboardRouters/Personas'
+import DashboardWalletsRouter from './DashboardRouters/Wallets'
+import DashboardContactsRouter from './DashboardRouters/Contacts'
+import DashboardSettingsRouter from './DashboardRouters/Settings'
 import { appearanceSettings, Appearance } from '../../components/shared-settings/settings'
-import { DashboardSetupRouter } from './Router/Setup'
-
-const OptionsPageRouters = (
-    <Switch>
-        <Route path="/personas/" component={DashboardPersonasRouter} />
-        <Route path="/wallets/" component={DashboardWalletsRouter} />
-        <Route path="/contacts/" component={DashboardContactsRouter} />
-        <Route path="/settings/" component={DashboardSettingsRouter} />
-        <Route path="/setup" component={DashboardSetupRouter} onExit={'/'} />
-
-        {/** deprecated */}
-        <DialogRouter path="/initialize" component={DashboardInitializeDialog} onExit={'/'} fullscreen />
-        <Redirect path="*" to="/personas/" />
-    </Switch>
-)
-
-function DashboardWithProvider() {
-    const preferDarkScheme = useMediaQuery('(prefers-color-scheme: dark)')
-    const appearance = useValueRef(appearanceSettings)
-    return (
-        <I18nextProvider i18n={i18nNextInstance}>
-            <ThemeProvider
-                theme={
-                    (preferDarkScheme && appearance === Appearance.default) || appearance === Appearance.dark
-                        ? MaskbookDarkTheme
-                        : MaskbookLightTheme
-                }>
-                <SnackbarProvider
-                    maxSnack={30}
-                    anchorOrigin={{
-                        vertical: 'top',
-                        horizontal: 'center',
-                    }}>
-                    <NoSsr>
-                        <Router>
-                            <CssBaseline />
-                            <Dashboard />
-                        </Router>
-                    </NoSsr>
-                </SnackbarProvider>
-            </ThemeProvider>
-        </I18nextProvider>
-    )
-}
+import { DashboardSetupRouter } from './DashboardRouters/Setup'
+import { DashboardBlurContextUI } from './DashboardContexts/BlurContext'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -147,17 +100,9 @@ const useStyles = makeStyles((theme) =>
     }),
 )
 
-let blurRequest = 0
-
-function Dashboard() {
+function DashboardUI() {
     const { t } = useI18N()
     const classes = useStyles()
-    const theme = useTheme()
-
-    useEffect(() => {
-        // global filter blur color fix
-        document.body.style.backgroundColor = theme.palette.background.paper
-    }, [theme])
 
     const routers = ([
         [t('personas'), '/personas/', <PeopleOutlinedIcon />],
@@ -166,36 +111,56 @@ function Dashboard() {
         [t('settings'), '/settings/', <SettingsOutlinedIcon />],
     ] as const).filter((x) => x)
 
-    const ref = useRef<HTMLDivElement>(null!)
-
-    const toggle = useMemo(
-        () => ({
-            blur: () => {
-                blurRequest += 1
-                ref.current.classList.add(classes.blur)
-            },
-            unblur: () => {
-                blurRequest -= 1
-                if (blurRequest <= 0) ref.current.classList.remove(classes.blur)
-            },
-        }),
-        [classes.blur],
-    )
-
     return (
-        <DashboardBlurContextProvider value={toggle}>
-            <div className={classes.wrapper} ref={ref}>
+        <DashboardBlurContextUI>
+            <div className={classes.wrapper}>
                 <div className={classes.container}>
                     {/* TODO: detect clean for setup only */}
-                    <ResponsiveDrawer routers={routers} exitDashboard={null} />
-                    {OptionsPageRouters}
+                    <Drawer routers={routers} exitDashboard={null} />
+                    <Switch>
+                        <Route path="/personas/" component={DashboardPersonasRouter} />
+                        <Route path="/wallets/" component={DashboardWalletsRouter} />
+                        <Route path="/contacts/" component={DashboardContactsRouter} />
+                        <Route path="/settings/" component={DashboardSettingsRouter} />
+                        <Route path="/setup" component={DashboardSetupRouter} onExit={'/'} />
+                        <Redirect path="*" to="/personas/" />
+                    </Switch>
                 </div>
                 <footer className={classes.footer}>
                     <FooterLine />
                 </footer>
             </div>
-        </DashboardBlurContextProvider>
+        </DashboardBlurContextUI>
     )
 }
 
-SSRRenderer(<DashboardWithProvider />)
+export default function Dashboard() {
+    const preferDarkScheme = useMediaQuery('(prefers-color-scheme: dark)')
+    const appearance = useValueRef(appearanceSettings)
+    return (
+        <I18nextProvider i18n={i18nNextInstance}>
+            <ThemeProvider
+                theme={
+                    (preferDarkScheme && appearance === Appearance.default) || appearance === Appearance.dark
+                        ? MaskbookDarkTheme
+                        : MaskbookLightTheme
+                }>
+                <SnackbarProvider
+                    maxSnack={30}
+                    anchorOrigin={{
+                        vertical: 'top',
+                        horizontal: 'center',
+                    }}>
+                    <NoSsr>
+                        <Router>
+                            <CssBaseline />
+                            <DashboardUI />
+                        </Router>
+                    </NoSsr>
+                </SnackbarProvider>
+            </ThemeProvider>
+        </I18nextProvider>
+    )
+}
+
+SSRRenderer(<Dashboard />)
