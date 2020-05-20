@@ -12,7 +12,6 @@ import { memoizePromise } from '../../utils/memoize'
 import { currentEthereumNetworkSettings } from './network'
 import { buf2hex } from './web3'
 import { BigNumber } from 'bignumber.js'
-import { sideEffect } from '../../utils/side-effects'
 import { ec as EC } from 'elliptic'
 
 // Private key at m/44'/coinType'/account'/change/addressIndex
@@ -118,7 +117,7 @@ export async function importNewWallet(
     const address = await getWalletAddress()
     const bal = await getWalletProvider()
         .queryBalance(address)
-        .catch((x) => undefined)
+        .catch((_) => undefined)
     if (rec.name === null) {
         rec.name = address.slice(0, 6)
     }
