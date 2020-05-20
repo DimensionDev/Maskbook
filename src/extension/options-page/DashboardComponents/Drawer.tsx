@@ -37,9 +37,10 @@ const useStyles = makeStyles((theme) => ({
         display: 'block',
     },
     drawerList: {
-        padding: '0 0 0 5px',
+        padding: 0,
     },
     drawerItem: {
+        borderLeft: 'solid 5px transparent',
         paddingTop: 16,
         paddingBottom: 16,
     },
@@ -76,6 +77,7 @@ const drawerTheme = (theme: Theme): Theme =>
                     '&$selected$selected': {
                         color: 'var(--drawerTextSelected, --drawerText)',
                         backgroundColor: 'var(--drawerBodySelected, --drawerBody)',
+                        borderLeftColor: '#1C68F3',
                     },
                 },
             },
