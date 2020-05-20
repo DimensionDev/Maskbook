@@ -510,10 +510,12 @@ export function RestoreDatabase() {
 }
 //#endregion
 
-//#region advance restore
+//#region advance restore advance
 export function RestoreDatabaseAdvance() {
+    const { t } = useI18N()
     const classes = useSetupFormSetyles()
     const history = useHistory()
+
     return (
         <SetupForm
             primary="Advanced Restoration Options"
