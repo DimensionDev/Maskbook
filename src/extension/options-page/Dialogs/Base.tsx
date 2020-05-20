@@ -162,6 +162,7 @@ const useDashboardDialogWrapperStyles = makeStyles((theme) =>
             width: (props) => (props.size === 'small' ? 232 : 256),
         },
         content: {
+            minHeight: 100,
             flex: 1,
             textAlign: 'center',
             // '& > *:not(:last-child)': {
