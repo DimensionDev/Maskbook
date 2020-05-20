@@ -18,6 +18,7 @@ import {
     Checkbox,
 } from '@material-ui/core'
 import classNames from 'classnames'
+import * as bip39 from 'bip39'
 import DashboardRouterContainer from './Container'
 import { useParams, useRouteMatch, Switch, Route, Redirect, Link, useHistory } from 'react-router-dom'
 import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline'
@@ -31,7 +32,7 @@ import ProfileBox from '../DashboardComponents/ProfileBox'
 import Services from '../../service'
 import useQueryParams from '../../../utils/hooks/useQueryParams'
 import { useAsync, useMultiStateValidator, useDropArea } from 'react-use'
-import { Identifier, ECKeyIdentifier } from '../../../database/type'
+import { Identifier, ECKeyIdentifier, PersonaIdentifier } from '../../../database/type'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { useMyPersonas } from '../../../components/DataSource/independent'
 import { BackupJSONFileLatest, UpgradeBackupJSONFile } from '../../../utils/type-transform/BackupFormat/JSON/latest'
@@ -42,6 +43,11 @@ import { getUrl, unreachable } from '../../../utils/utils'
 import { green } from '@material-ui/core/colors'
 import { DashboardRoute } from '../Route'
 import { useSnackbar } from 'notistack'
+import { hasWKWebkitRPCHandlers } from '../../../utils/iOS-RPC'
+import { WKWebkitQRScanner } from '../../../components/shared/qrcode'
+import QRScanner from '../../../components/QRScanner'
+import { decodeArrayBuffer, decodeText } from '../../../utils/type-transform/String-ArrayBuffer'
+import type { Persona } from '../../../database'
 
 export enum SetupStep {
     CreatePersona = 'create-persona',
@@ -93,6 +99,12 @@ const useSetupFormSetyles = makeStyles((theme) =>
             width: 220,
             height: 40,
             marginBottom: 20,
+        },
+        restoreButton: {
+            marginTop: 44,
+        },
+        importButton: {
+            marginTop: 44,
         },
         doneButton: {
             color: '#fff',
@@ -481,8 +493,7 @@ export function RestoreDatabase() {
             actions={
                 <>
                     <ActionButton
-                        className={classes.button}
-                        style={{ marginTop: 44 }}
+                        className={classNames(classes.button, classes.restoreButton)}
                         color="primary"
                         variant="contained"
                         disabled={!(state[0] === 0 && file) && !(state[0] === 1 && textValue)}
@@ -513,17 +524,139 @@ export function RestoreDatabase() {
 //#region advance restore advance
 export function RestoreDatabaseAdvance() {
     const { t } = useI18N()
+    const { enqueueSnackbar, closeSnackbar } = useSnackbar()
     const classes = useSetupFormSetyles()
     const history = useHistory()
+
+    const [nickname, setNickname] = useState('')
+    const [mnemonicWordsValue, setMnemonicWordsValue] = useState('')
+    const [password, setPassword] = useState('')
+    const [base64Value, setBase64Value] = useState('')
+
+    const state = useState(0)
+    const [tabState, setTabState] = state
+
+    const restorePersona = async (str?: string) => {
+        if (tabState === 0) {
+            if (!bip39.validateMnemonic(mnemonicWordsValue)) throw new Error('the mnemonic words are not valid')
+            const identifier = await Services.Welcome.restoreNewIdentityWithMnemonicWord(mnemonicWordsValue, password, {
+                nickname,
+            })
+            return Services.Identity.queryPersona(identifier)
+        } else {
+            const object = str
+                ? UpgradeBackupJSONFile(decompressBackupFile(str))
+                : (JSON.parse(decodeText(decodeArrayBuffer(base64Value))) as BackupJSONFileLatest)
+            await Services.Welcome.restoreBackup(object!)
+            if (object?.personas?.length) {
+                return Services.Identity.queryPersona(
+                    Identifier.fromString(object.personas[0].identifier, ECKeyIdentifier).unwrap(),
+                )
+            }
+            return
+        }
+    }
+    const importPersona = async (str?: string) => {
+        const failToRestore = () => enqueueSnackbar('Restore failed', { variant: 'error' })
+        try {
+            const persona = await restorePersona(str)
+            if (persona) {
+                history.replace(
+                    persona.linkedProfiles.size
+                        ? DashboardRoute.Personas
+                        : `${SetupStep.ConnectNetwork}?identifier=${encodeURIComponent(persona.identifier.toText())}`,
+                )
+            } else {
+                failToRestore()
+            }
+        } catch (e) {
+            failToRestore()
+        }
+    }
+
+    function QR() {
+        const shouldRenderQRComponent = tabState === 2
+
+        return shouldRenderQRComponent ? (
+            hasWKWebkitRPCHandlers ? (
+                <WKWebkitQRScanner onScan={restorePersona} onQuit={() => setTabState(0)} />
+            ) : (
+                <QRScanner
+                    onError={() => enqueueSnackbar('QRCode scan Failed')}
+                    scanning={shouldRenderQRComponent}
+                    style={{ maxHeight: 176, width: '100%', borderRadius: 4 }}
+                    onResult={restorePersona}
+                />
+            )
+        ) : null
+    }
+
+    const tabProps: AbstractTabProps = {
+        tabs: [
+            {
+                label: t('mnemonic_words'),
+                children: (
+                    <>
+                        <TextField
+                            onChange={(e) => setNickname(e.target.value)}
+                            value={nickname}
+                            required
+                            label={t('name')}
+                        />
+                        <TextField
+                            value={mnemonicWordsValue}
+                            onChange={(e) => setMnemonicWordsValue(e.target.value)}
+                            required
+                            label={t('mnemonic_words')}
+                        />
+                        <TextField
+                            onChange={(e) => setPassword(e.target.value)}
+                            value={password}
+                            label={t('password')}
+                        />
+                    </>
+                ),
+                p: 0,
+            },
+            {
+                label: 'Base64',
+                children: (
+                    <TextField
+                        inputProps={{ style: { height: 147 } }}
+                        multiline
+                        rows={1}
+                        placeholder="Input the base64 code"
+                        onChange={(e) => setBase64Value(e.target.value)}
+                        value={base64Value}></TextField>
+                ),
+                display: 'flex',
+                p: 0,
+            },
+            {
+                label: t('qr_code'),
+                children: <QR />,
+                p: 0,
+            },
+        ],
+        state,
+        height: 176,
+    }
 
     return (
         <SetupForm
             primary="Advanced Restoration Options"
             secondary="You can import a persona backup in the following ways."
-            content={<></>}
+            content={<AbstractTab {...tabProps}></AbstractTab>}
             actions={
                 <>
-                    <ActionButton className={classes.button} variant="contained" color="primary">
+                    <ActionButton
+                        className={classNames(classes.button, classes.importButton)}
+                        variant="contained"
+                        color="primary"
+                        disabled={
+                            !(tabState === 0 && nickname && mnemonicWordsValue) && !(tabState === 1 && base64Value)
+                        }
+                        onClick={() => importPersona()}>
                         Import
                     </ActionButton>
                     <ActionButton variant="text" onClick={() => history.goBack()}>
@@ -659,10 +792,7 @@ export function RestoreDatabaseConfirmation() {
     ]
 
     const restoreConfirmation = async () => {
-        const failToRestore = () => {
-            closeSnackbar()
-            enqueueSnackbar('Restore failed', { variant: 'error' })
-        }
+        const failToRestore = () => enqueueSnackbar('Restore failed', { variant: 'error' })
         if (uuid) {
             try {
                 setImported('loading')
@@ -742,6 +872,24 @@ export function RestoreDatabaseSuccessful() {
 const setupTheme = (theme: Theme): Theme =>
     merge(cloneDeep(theme), {
         overrides: {
+            MuiOutlinedInput: {
+                input: {
+                    paddingTop: 14.5,
+                    paddingBottom: 14.5,
+                },
+                multiline: {
+                    paddingTop: 14.5,
+                    paddingBottom: 14.5,
+                },
+                notchedOutline: {
+                    borderColor: '#EAEAEA',
+                },
+            },
+            MuiInputLabel: {
+                outlined: {
+                    transform: 'translate(14px, 16px) scale(1)',
+                },
+            },
             MuiTextField: {
                 root: {
                     marginTop: theme.spacing(2),
