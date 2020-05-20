@@ -24,7 +24,7 @@ import { DialogDismissIconUI } from '../../components/InjectedComponents/DialogD
 import AbstractTab from '../../extension/options-page/DashboardComponents/AbstractTab'
 import { TokenSelect } from '../shared/TokenSelect'
 import { WalletSelect } from '../shared/WalletSelect'
-import { useSelectWallet } from '../shared/useWallet'
+import { useSelectWallet, SelectedTokenType } from '../shared/useWallet'
 import type { WalletRecord, ERC20TokenRecord } from '../Wallet/database/types'
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -40,7 +40,13 @@ const useStyles = makeStyles((theme: Theme) =>
 interface DonateCardProps {
     title: string
     description: string
-    onDonate(): void
+    onDonate(opt: {
+        comment: string
+        amount: number
+        hideWalletAddr: boolean
+        selectedWallet: string
+        selectedToken: SelectedTokenType
+    }): void
     open: boolean
     onClose(): void
     onRequireNewWallet: () => void
@@ -81,23 +87,23 @@ export function DonateCard(props: DonateCardProps) {
                     </Typography>
                     <form className={classes.form}>
                         <WalletSelect
-                            FormControlProps={{ fullWidth: true, variant: 'outlined' }}
+                            FormControlProps={{ fullWidth: true }}
                             wallets={props.wallets}
                             useSelectWalletHooks={useSelectWalletResult}></WalletSelect>
                         <TokenSelect
-                            FormControlProps={{ fullWidth: true, variant: 'outlined' }}
+                            FormControlProps={{ fullWidth: true }}
                             useSelectWalletHooks={useSelectWalletResult}></TokenSelect>
                         <TextField
-                            variant="outlined"
+                            variant="filled"
                             fullWidth
                             value={amount}
-                            inputProps={{ min: 0 }}
+                            inputProps={{ min: 0, max: useSelectWalletResult }}
                             type="number"
                             label="Amount"
                             onChange={(e) => setAmount(parseFloat(e.currentTarget.value))}
                         />
                         <TextField
-                            variant="outlined"
+                            variant="filled"
                             fullWidth
                             label="Comment (Public)"
                             multiline
@@ -134,7 +140,20 @@ export function DonateCard(props: DonateCardProps) {
                     </form>
                 </DialogContent>
                 <DialogActions>
-                    <ActionButton variant="contained" color="primary" width="30%" onClick={props.onDonate}>
+                    <ActionButton
+                        variant="contained"
+                        color="primary"
+                        width="30%"
+                        disabled={useSelectWalletResult.selectedWalletAddress === undefined || amount <= 0}
+                        onClick={() =>
+                            props.onDonate({
+                                amount,
+                                comment,
+                                hideWalletAddr,
+                                selectedToken: useSelectWalletResult.selectedTokenType,
+                                selectedWallet: useSelectWalletResult.selectedWalletAddress!,
+                            })
+                        }>
                         Donate
                     </ActionButton>
                 </DialogActions>

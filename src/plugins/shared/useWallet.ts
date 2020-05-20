@@ -27,12 +27,18 @@ export function useWalletDataSource() {
         }, []),
     ] as const
 }
-
+export type SelectedTokenType =
+    | {
+          type: 'eth'
+      }
+    | {
+          type: 'erc20'
+          address: string
+      }
 export function useSelectWallet(...[wallets, tokens, onRequireNewWallet]: ReturnType<typeof useWalletDataSource>) {
     const [selectedWalletAddress, setSelectedWallet] = React.useState<undefined | string>(undefined)
-    const [selectedTokenType, setSelectedTokenType] = React.useState<
-        { type: 'eth' } | { type: 'erc20'; address: string }
-    >({
+
+    const [selectedTokenType, setSelectedTokenType] = React.useState<SelectedTokenType>({
         type: 'eth',
     })
     const selectedWallet = wallets === 'loading' ? undefined : wallets.find((x) => x.address === selectedWalletAddress)

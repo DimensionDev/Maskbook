@@ -50,6 +50,7 @@ const _tasks = {
     async immersiveSetup(for_: ECKeyIdentifier) {
         getActivatedUI().taskStartImmersiveSetup(for_)
     },
+    async noop() {},
 }
 const realTasks = AutomatedTabTask(_tasks, {
     memorable: true,

@@ -13,6 +13,7 @@ import { DonateCard } from './DonateCard'
 import { useWalletDataSource } from '../shared/useWallet'
 import { useValueRef } from '../../utils/hooks/useValueRef'
 import { useObservableValues } from '../../utils/hooks/useObservableMapSet'
+import type { GitcoinGrantMetadata } from './Services'
 
 const isGitcoin = (x: string): boolean => x.startsWith('https://gitcoin.co/grants')
 export const GitcoinPluginDefine: PluginConfig = {
@@ -66,12 +67,13 @@ function PreviewCardLogic(props: { url: string }) {
             return Services.Plugin.invokePlugin('co.gitcoin', 'fetchMetadata', url)
         },
     })
-    if (!data || data.err || !url) return null
-    const { amount, contributors, finalAmount, title, image, description, address } = data.val
+    const { amount, contributors, finalAmount, title, image, description, address } = data?.ok
+        ? data.val
+        : ({} as GitcoinGrantMetadata)
     return (
         <>
             <PreviewCard
-                onRequestGrant={() => setOpen(true)}
+                onRequestGrant={() => (wallets.length === 0 ? onRequireNewWallet() : setOpen(true))}
                 requestPermission={request}
                 hasNoPermission={!hasPermission}
                 loading={isValidating}
@@ -82,16 +84,18 @@ function PreviewCardLogic(props: { url: string }) {
                 line4={`${contributors ?? 'Many'} contributors`}
                 title={title ?? 'A Gitcoin grant'}
                 address={address}
-                originalURL={url}
+                originalURL={url ?? ''}
             />
-            <DonateCard
-                {...{ wallets, tokens, onRequireNewWallet, address }}
-                open={!!(open && address?.length)}
-                onClose={() => setOpen(false)}
-                title={title ?? 'A Gitcoin grant'}
-                description={description ?? ''}
-                onDonate={() => {}}
-            />
+            {wallets.length ? (
+                <DonateCard
+                    {...{ wallets, tokens, onRequireNewWallet, address }}
+                    open={!!(open && address?.length)}
+                    onClose={() => setOpen(false)}
+                    title={title ?? 'A Gitcoin grant'}
+                    description={description ?? ''}
+                    onDonate={() => {}}
+                />
+            ) : null}
         </>
     )
 }
