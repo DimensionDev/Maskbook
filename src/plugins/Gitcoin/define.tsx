@@ -66,7 +66,7 @@ function PreviewCardLogic(props: { post: string }) {
     return (
         <>
             <PreviewCard
-                onRequestGrant={() => setOpen(true)}
+                onRequestGrant={() => (wallets.length === 0 ? onRequireNewWallet() : setOpen(true))}
                 requestPermission={request}
                 hasNoPermission={!hasPermission}
                 loading={isValidating}
@@ -79,14 +79,16 @@ function PreviewCardLogic(props: { post: string }) {
                 address={address}
                 originalURL={url ?? ''}
             />
-            <DonateCard
-                {...{ wallets, tokens, onRequireNewWallet, address }}
-                open={!!(open && address?.length)}
-                onClose={() => setOpen(false)}
-                title={title ?? 'A Gitcoin grant'}
-                description={description ?? ''}
-                onDonate={() => {}}
-            />
+            {wallets.length ? (
+                <DonateCard
+                    {...{ wallets, tokens, onRequireNewWallet, address }}
+                    open={!!(open && address?.length)}
+                    onClose={() => setOpen(false)}
+                    title={title ?? 'A Gitcoin grant'}
+                    description={description ?? ''}
+                    onDonate={() => {}}
+                />
+            ) : null}
         </>
     )
 }
