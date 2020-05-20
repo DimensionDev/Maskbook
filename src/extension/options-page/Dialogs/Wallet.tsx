@@ -30,7 +30,7 @@ export function DashboardWalletImportDialog(props: WrappedDialogProps) {
     const tabProps: AbstractTabProps = {
         tabs: [
             {
-                label: t('mnemonic_word'),
+                label: t('mnemonic_words'),
                 children: (
                     <div>
                         <TextField
@@ -41,7 +41,7 @@ export function DashboardWalletImportDialog(props: WrappedDialogProps) {
                         />
                         <TextField
                             required
-                            label={t('mnemonic_word')}
+                            label={t('mnemonic_words')}
                             value={mnemonic}
                             onChange={(e) => setMnemonic(e.target.value)}
                         />

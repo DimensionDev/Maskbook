@@ -231,20 +231,12 @@ export function PersonaBackupDialog(props: PersonaBackupDialogProps) {
     return <DialogContentItem onExit={onClose} title={t('backup_persona')} content={content}></DialogContentItem>
 }
 
-const useImportDialogStyles = makeStyles({
-    input: {
-        width: '100%',
-    },
-})
-
 export function PersonaImportDialog() {
     const { t } = useI18N()
     const [nickname, setNickname] = useState('')
     const [mnemonicWordValue, setMnemonicWordValue] = useState('')
     const [password, setPassword] = useState('')
     const [base64Value, setBase64Value] = useState('')
-
-    const classes = useImportDialogStyles()
 
     const history = useHistory()
 
@@ -296,11 +288,10 @@ export function PersonaImportDialog() {
     const tabProps: AbstractTabProps = {
         tabs: [
             {
-                label: 'MNEMONIC WORDS',
+                label: 'Mnemonic Words',
                 children: (
                     <>
                         <TextField
-                            className={classes.input}
                             onChange={(e) => setNickname(e.target.value)}
                             value={nickname}
                             required
@@ -308,7 +299,6 @@ export function PersonaImportDialog() {
                             margin="dense"
                         />
                         <TextField
-                            className={classes.input}
                             required
                             value={mnemonicWordValue}
                             onChange={(e) => setMnemonicWordValue(e.target.value)}
@@ -316,7 +306,6 @@ export function PersonaImportDialog() {
                             margin="dense"
                         />
                         <TextField
-                            className={classes.input}
                             onChange={(e) => setPassword(e.target.value)}
                             value={password}
                             label="Password"
@@ -328,7 +317,7 @@ export function PersonaImportDialog() {
                 p: 2,
             },
             {
-                label: 'BASE64',
+                label: 'Base64',
                 children: (
                     <InputBase
                         style={{ width: '100%', minHeight: '100px' }}
@@ -339,7 +328,7 @@ export function PersonaImportDialog() {
                 ),
             },
             {
-                label: 'QR',
+                label: 'QR Code',
                 children: <QR />,
                 p: 0,
             },
