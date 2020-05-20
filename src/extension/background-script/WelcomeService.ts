@@ -16,7 +16,7 @@ import type { AESJsonWebKey } from '../../modules/CryptoAlgorithm/interfaces/uti
 
 OnlyRunInContext(['background', 'debugging'], 'WelcomeService')
 export { generateBackupJSON } from './WelcomeServices/generateBackupJSON'
-export { restoreBackup } from './WelcomeServices/restoreBackup'
+export * from './WelcomeServices/restoreBackup'
 
 /**
  * Recover new identity by a password and mnemonic words

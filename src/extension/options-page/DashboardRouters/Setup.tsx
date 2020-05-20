@@ -26,6 +26,7 @@ import CheckBoxOutlinedIcon from '@material-ui/icons/CheckBoxOutlined'
 import AddBoxOutlinedIcon from '@material-ui/icons/AddBoxOutlined'
 import ActionButton from '../DashboardComponents/ActionButton'
 import { merge, cloneDeep } from 'lodash-es'
+import { v4 as uuid } from 'uuid'
 import ProfileBox from '../DashboardComponents/ProfileBox'
 import Services from '../../service'
 import useQueryParams from '../../../utils/hooks/useQueryParams'
@@ -40,6 +41,7 @@ import AbstractTab, { AbstractTabProps } from '../DashboardComponents/AbstractTa
 import { getUrl, unreachable } from '../../../utils/utils'
 import { green } from '@material-ui/core/colors'
 import { DashboardRoute } from '../Route'
+import { useSnackbar } from 'notistack'
 
 export enum SetupStep {
     CreatePersona = 'create-persona',
@@ -95,6 +97,8 @@ const useSetupFormSetyles = makeStyles((theme) =>
         doneButton: {
             color: '#fff',
             backgroundColor: green[500],
+            // extra 28 pixel eliminats the visual shaking when switch between pages
+            marginBottom: 20 + 28,
             '&:hover': {
                 backgroundColor: green[700],
             },
@@ -359,14 +363,6 @@ export function RestoreDatabase() {
     const ref = useRef<HTMLInputElement>(null)
     const [textValue, setTextValue] = useState('')
     const [json, setJson] = useState<BackupJSONFileLatest | null>(null)
-    const [restoreState, setRestoreState] = useState<'success' | Error | null>(null)
-    const [requiredPermissions, setRequiredPermissions] = useState<string[] | null>(null)
-
-    const setErrorState = (e: Error | null) => {
-        setJson(null)
-        setRestoreState(e)
-    }
-
     const [file, setFile] = useState<File | null>(null)
     const [bound, { over }] = useDropArea({
         onFiles(files) {
@@ -389,7 +385,6 @@ export function RestoreDatabase() {
                         }
                     }}
                 />
-
                 <RestoreBox
                     className={restoreDatabaseClasses.restoreBox}
                     data-active={over}
@@ -399,33 +394,11 @@ export function RestoreDatabase() {
                         className={file ? restoreDatabaseClasses.button : ''}
                         color="primary"
                         variant="text"
-                        component={Link}
                         startIcon={over || file ? null : <AddBoxOutlinedIcon></AddBoxOutlinedIcon>}
                         onClick={(e: React.MouseEvent<HTMLButtonElement>) => e.preventDefault()}>
                         {over ? t('welcome_1b_dragging') : file ? file.name : 'Drag the file here or browser a file…'}
                     </ActionButton>
                 </RestoreBox>
-
-                {/* {restoreState === 'success' && (
-                    <DatabaseRestoreSuccessDialog
-                        permissions={!!requiredPermissions}
-                        onDecline={() => setErrorState(null)}
-                        onConfirm={() => {
-                            browser.permissions
-                                .request({ origins: requiredPermissions ?? [] })
-                                .then((granted) => (granted ? Services.Welcome.restoreBackup(json!) : Promise.reject()))
-                                .then(() =>
-                                    history.push(
-                                        `${InitStep.Restore2}?personas=${json?.personas?.length}&profiles=${json?.profiles?.length}&posts=${json?.posts?.length}&contacts=${json?.userGroups?.length}&date=${json?._meta_?.createdAt}`,
-                                    ),
-                                )
-                                .catch(setErrorState)
-                        }}
-                    />
-                )}
-                {restoreState && restoreState !== 'success' && (
-                    <DatabaseRestoreFailedDialog onConfirm={() => setRestoreState(null)} error={restoreState} />
-                )} */}
             </div>
         )
     }
@@ -467,23 +440,25 @@ export function RestoreDatabase() {
                 const json = UpgradeBackupJSONFile(decompressBackupFile(str))
                 if (!json) throw new Error('UpgradeBackupJSONFile failed')
                 setJson(json)
+
+                // grant permissions before jump into confirmation page
                 const permissions = await extraPermissions(json.grantedHostPermissions)
-                if (!permissions) {
-                    const restoreParams = new URLSearchParams()
-                    restoreParams.append('personas', String(json.personas?.length ?? ''))
-                    restoreParams.append('profiles', String(json.profiles?.length ?? ''))
-                    restoreParams.append('posts', String(json.posts?.length ?? ''))
-                    restoreParams.append('contacts', String(json.userGroups?.length ?? ''))
-                    restoreParams.append('date', String(json._meta_?.createdAt ?? ''))
-                    return await Services.Welcome.restoreBackup(json).then(() =>
-                        history.push(`${SetupStep.RestoreDatabaseConfirmation}?${restoreParams.toString()}`),
-                    )
+                if (permissions) {
+                    const granted = await browser.permissions.request({ origins: permissions ?? [] })
+                    if (!granted) return
                 }
-                setRequiredPermissions(permissions)
-                setRestoreState('success')
+                const restoreParams = new URLSearchParams()
+                const restoreId = uuid()
+                restoreParams.append('personas', String(json.personas?.length ?? ''))
+                restoreParams.append('profiles', String(json.profiles?.length ?? ''))
+                restoreParams.append('posts', String(json.posts?.length ?? ''))
+                restoreParams.append('contacts', String(json.userGroups?.length ?? ''))
+                restoreParams.append('date', String(json._meta_?.createdAt ?? ''))
+                restoreParams.append('uuid', restoreId)
+                await Services.Welcome.restoreBackupAfterConfirmation(restoreId, json)
+                history.push(`${SetupStep.RestoreDatabaseConfirmation}?${restoreParams.toString()}`)
             } catch (e) {
-                console.error(e)
-                setErrorState(e)
+                setJson(null)
             }
         },
         [history],
@@ -661,29 +636,51 @@ export function RestoreDatabaseConfirmation() {
     const { t } = useI18N()
     const classes = useSetupFormSetyles()
     const history = useHistory()
+    const { enqueueSnackbar, closeSnackbar } = useSnackbar()
 
-    const [imported, setImported] = useState(false)
-
-    const { personas, profiles, posts, contacts, date } = useQueryParams([
+    const [imported, setImported] = useState<boolean | 'loading'>(false)
+    const { personas, profiles, posts, contacts, date, uuid } = useQueryParams([
         'personas',
         'profiles',
         'posts',
         'contacts',
         'date',
+        'uuid',
     ])
+
     const time = new Date(date ? Number(date) : 0)
     const records = [
-        { type: DatabaseRecordType.Persona, length: Number.parseInt(personas ?? '0'), checked: imported },
-        { type: DatabaseRecordType.Profile, length: Number.parseInt(profiles ?? '0'), checked: imported },
-        { type: DatabaseRecordType.Post, length: Number.parseInt(posts ?? '0'), checked: imported },
-        { type: DatabaseRecordType.Contact, length: Number.parseInt(contacts ?? '0'), checked: imported },
+        { type: DatabaseRecordType.Persona, length: Number.parseInt(personas ?? '0'), checked: imported === true },
+        { type: DatabaseRecordType.Profile, length: Number.parseInt(profiles ?? '0'), checked: imported === true },
+        { type: DatabaseRecordType.Post, length: Number.parseInt(posts ?? '0'), checked: imported === true },
+        { type: DatabaseRecordType.Contact, length: Number.parseInt(contacts ?? '0'), checked: imported === true },
     ]
+
+    const restoreConfirmation = async () => {
+        const failToRestore = () => {
+            closeSnackbar()
+            enqueueSnackbar('Restore failed', { variant: 'error' })
+        }
+        if (uuid) {
+            try {
+                setImported('loading')
+                await Services.Welcome.restoreBackupConfirmation(uuid)
+                setImported(true)
+            } catch (e) {
+                console.error(e)
+                failToRestore()
+                setImported(false)
+            }
+        } else {
+            failToRestore()
+        }
+    }
 
     return (
         <SetupForm
             primary="Restore Database"
             secondary={
-                imported
+                imported === true
                     ? time.getTime() === 0
                         ? 'Unknown time'
                         : t('dashboard_restoration_successful_hint', {
@@ -693,7 +690,7 @@ export function RestoreDatabaseConfirmation() {
             }
             content={<DatabasePreviewCard records={records}></DatabasePreviewCard>}
             actions={
-                imported ? (
+                imported === true ? (
                     <ActionButton
                         className={classNames(classes.button, classes.doneButton)}
                         variant="contained"
@@ -706,7 +703,8 @@ export function RestoreDatabaseConfirmation() {
                             className={classes.button}
                             variant="contained"
                             color="primary"
-                            onClick={() => setImported(true)}>
+                            disabled={imported === 'loading'}
+                            onClick={restoreConfirmation}>
                             Confirm
                         </ActionButton>
                         <ActionButton variant="text" onClick={() => history.goBack()}>
@@ -730,11 +728,7 @@ export function RestoreDatabaseSuccessful() {
             content={<></>}
             actions={
                 <>
-                    <ActionButton
-                        className={classes.button}
-                        variant="text"
-                        component={Link}
-                        onClick={() => history.goBack()}>
+                    <ActionButton className={classes.button} variant="text" onClick={() => history.goBack()}>
                         Done
                     </ActionButton>
                 </>
@@ -765,6 +759,8 @@ const setupTheme = (theme: Theme): Theme =>
                 text: {
                     height: 28,
                     lineHeight: 1,
+                    paddingTop: 0,
+                    paddingBottom: 0,
                 },
             },
             MuiPaper: {
