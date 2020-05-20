@@ -19,7 +19,7 @@ import { currentImportingBackup } from '../../../components/shared-settings/sett
 /**
  * Restore the backup
  */
-export async function restoreBackup(json: object, whoAmI?: ProfileIdentifier): Promise<void> {
+export async function restoreBackup(json: object, whoAmI?: ProfileIdentifier) {
     currentImportingBackup.value = true
     try {
         const data = UpgradeBackupJSONFile(json, whoAmI)
@@ -62,5 +62,20 @@ export async function restoreBackup(json: object, whoAmI?: ProfileIdentifier): P
     } finally {
         MessageCenter.commitBatch()
         currentImportingBackup.value = false
+    }
+}
+
+const uncomfirmedBackup = new Map<string, object>()
+
+export async function restoreBackupAfterConfirmation(id: string, json: object) {
+    uncomfirmedBackup.set(id, json)
+}
+
+export async function restoreBackupConfirmation(id: string, whoAmI?: ProfileIdentifier) {
+    if (uncomfirmedBackup.has(id)) {
+        await restoreBackup(uncomfirmedBackup.get(id)!, whoAmI)
+        uncomfirmedBackup.delete(id)
+    } else {
+        throw new Error('cannot find backup')
     }
 }
