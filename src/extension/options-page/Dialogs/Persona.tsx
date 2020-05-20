@@ -95,28 +95,27 @@ export function DashboardPersonaCreateDialog(props: WrappedDialogProps) {
 
 export function DashboardPersonaImportDialog(props: WrappedDialogProps) {
     const { t } = useI18N()
+    const { enqueueSnackbar } = useSnackbar()
 
     const [nickname, setNickname] = useState('')
-    const [mnemonicWordValue, setMnemonicWordValue] = useState('')
+    const [mnemonicWordsValue, setMnemonicWordsValue] = useState('')
     const [password, setPassword] = useState('')
     const [base64Value, setBase64Value] = useState('')
 
     const state = useState(0)
     const [tabState, setTabState] = state
 
-    const { enqueueSnackbar } = useSnackbar()
-
     const importPersona = useSnackbarCallback(
         async () => {
             if (tabState === 0) {
-                if (!bip39.validateMnemonic(mnemonicWordValue)) throw new Error('the mnemonic word is not valid')
+                if (!bip39.validateMnemonic(mnemonicWordsValue)) throw new Error('the mnemonic words are not valid')
                 // TODO!: not work
-                return Services.Welcome.restoreNewIdentityWithMnemonicWord(mnemonicWordValue, password, { nickname })
+                return Services.Welcome.restoreNewIdentityWithMnemonicWord(mnemonicWordsValue, password, { nickname })
             }
             const object = JSON.parse(decodeText(decodeArrayBuffer(base64Value)))
             return Services.Welcome.restoreBackup(object)
         },
-        [mnemonicWordValue, password, nickname, base64Value],
+        [mnemonicWordsValue, password, nickname, base64Value],
         props.onClose,
     )
 
@@ -136,7 +135,7 @@ export function DashboardPersonaImportDialog(props: WrappedDialogProps) {
                 <QRScanner
                     onError={() => enqueueSnackbar('QRCode scan Failed')}
                     scanning={shouldRenderQRComponent}
-                    style={{ maxHeight: 236 }}
+                    style={{ maxHeight: 236, width: '100%', borderRadius: 4 }}
                     onResult={importFromQR}
                 />
             )
@@ -145,7 +144,7 @@ export function DashboardPersonaImportDialog(props: WrappedDialogProps) {
     const tabProps: AbstractTabProps = {
         tabs: [
             {
-                label: t('mnemonic_word'),
+                label: t('mnemonic_words'),
                 children: (
                     <>
                         <TextField
@@ -155,8 +154,8 @@ export function DashboardPersonaImportDialog(props: WrappedDialogProps) {
                             label={t('name')}
                         />
                         <TextField
-                            value={mnemonicWordValue}
-                            onChange={(e) => setMnemonicWordValue(e.target.value)}
+                            value={mnemonicWordsValue}
+                            onChange={(e) => setMnemonicWordsValue(e.target.value)}
                             required
                             label={t('mnemonic_words')}
                         />
@@ -216,7 +215,7 @@ interface PersonaProps {
 export function DashboardPersonaBackupDialog(props: WrappedDialogProps<PersonaProps>) {
     const { t } = useI18N()
     const { persona } = props.ComponentProps!
-    const mnemonicWordValue = persona.mnemonic?.words ?? t('not_available')
+    const mnemonicWordsValue = persona.mnemonic?.words ?? t('not_available')
     const [base64Value, setBase64Value] = useState(t('not_available'))
     const [compressedQRString, setCompressedQRString] = useState<string | null>(null)
     useEffect(() => {
@@ -234,8 +233,8 @@ export function DashboardPersonaBackupDialog(props: WrappedDialogProps<PersonaPr
     const tabProps: AbstractTabProps = {
         tabs: [
             {
-                label: t('mnemonic_word'),
-                children: <ShowcaseBox>{mnemonicWordValue}</ShowcaseBox>,
+                label: t('mnemonic_words'),
+                children: <ShowcaseBox>{mnemonicWordsValue}</ShowcaseBox>,
             },
             {
                 label: 'Base64',
