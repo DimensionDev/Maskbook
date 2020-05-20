@@ -12,8 +12,8 @@ export function SSRRenderer(jsx: JSX.Element, container?: HTMLElement) {
     } else {
         async function render() {
             const Server = await import('react-dom/server')
-            const ServerStyleSheets = await import('@material-ui/styles/ServerStyleSheets')
-            const sheets = new ServerStyleSheets.default()
+            const { ServerStyleSheets } = await import('@material-ui/core/styles')
+            const sheets = new ServerStyleSheets()
             const html = Server.renderToString(sheets.collect(jsx))
             const styles = sheets.toString()
             return `<style>${styles}</style><div id="root">${html}</div>`

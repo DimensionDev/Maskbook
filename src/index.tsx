@@ -19,10 +19,9 @@ import CreditCardIcon from '@material-ui/icons/CreditCard'
 import BugReportIcon from '@material-ui/icons/BugReport'
 
 import React from 'react'
-import { ThemeProvider } from '@material-ui/styles'
 import { MaskbookDarkTheme, MaskbookLightTheme } from './utils/theme'
 import { HashRouter, StaticRouter, Route, Switch, Redirect, useLocation, useHistory } from 'react-router-dom'
-import { makeStyles, createStyles } from '@material-ui/core/styles'
+import { ThemeProvider, makeStyles, createStyles } from '@material-ui/core/styles'
 
 import './setup.ui'
 import { SSRRenderer } from './utils/SSRRenderer'

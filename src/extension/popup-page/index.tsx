@@ -2,9 +2,8 @@ import '../../social-network-provider/popup-page/index'
 import '../../setup.ui'
 import React, { useState } from 'react'
 
-import { ThemeProvider } from '@material-ui/styles'
 import { MaskbookLightTheme, MaskbookDarkTheme } from '../../utils/theme'
-import { makeStyles } from '@material-ui/core/styles'
+import { ThemeProvider, makeStyles } from '@material-ui/core/styles'
 import { Button, List, useMediaQuery, Paper } from '@material-ui/core'
 import { SSRRenderer } from '../../utils/SSRRenderer'
 import {

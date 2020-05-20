@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from 'react'
 import { SelectPeopleAndGroupsUI, SelectPeopleAndGroupsUIProps } from '../shared/SelectPeopleAndGroups'
 import { useI18N } from '../../utils/i18n-next-ui'
-import { makeStyles } from '@material-ui/styles'
+import { makeStyles } from '@material-ui/core/styles'
 import { Button, CircularProgress, DialogActions, DialogContent, DialogTitle } from '@material-ui/core'
 import type { Profile } from '../../database'
 import { useStylesExtends } from '../custom-ui-helper'

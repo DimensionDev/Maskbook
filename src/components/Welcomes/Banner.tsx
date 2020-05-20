@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { useCallback } from 'react'
 import { useI18N } from '../../utils/i18n-next-ui'
-import { makeStyles } from '@material-ui/styles'
+import { makeStyles } from '@material-ui/core/styles'
 import { Paper, Button, Theme, ListItemText, ListItemIcon } from '@material-ui/core'
 import { useLastRecognizedIdentity } from '../DataSource/useActivatedUI'
 import Services from '../../extension/service'

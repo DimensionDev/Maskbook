@@ -4,7 +4,7 @@ import { PersonKnown, PersonKnownProps } from '../../../components/InjectedCompo
 import { bioCardSelector } from '../utils/selector'
 import { renderInShadowRoot } from '../../../utils/jss/renderInShadowRoot'
 import { twitterUrl } from '../utils/url'
-import { makeStyles } from '@material-ui/styles'
+import { makeStyles } from '@material-ui/core/styles'
 import { bioCardParser } from '../utils/fetch'
 import { twitterEncoding } from '../encoding'
 import { ProfileIdentifier } from '../../../database/type'

@@ -4,7 +4,7 @@ import { MutationObserverWatcher, LiveSelector, ValueRef } from '@holoflows/kit/
 import { renderInShadowRoot } from '../../../utils/jss/renderInShadowRoot'
 import { PostDialog } from '../../../components/InjectedComponents/PostDialog'
 import { useTwitterButton, useTwitterCloseButton, useTwitterLabel, useTwitterDialog } from '../utils/theme'
-import { makeStyles } from '@material-ui/styles'
+import { makeStyles } from '@material-ui/core/styles'
 import type { Theme } from '@material-ui/core'
 import { postEditorContentInPopupSelector, rootSelector } from '../utils/selector'
 
