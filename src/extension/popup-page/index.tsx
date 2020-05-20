@@ -2,9 +2,9 @@ import '../../social-network-provider/popup-page/index'
 import '../../setup.ui'
 import React, { useState } from 'react'
 
-import { MaskbookLightTheme, MaskbookDarkTheme } from '../../utils/theme'
-import { ThemeProvider, makeStyles } from '@material-ui/core/styles'
+import { ThemeProvider, makeStyles, useTheme } from '@material-ui/core/styles'
 import { Button, List, useMediaQuery, Paper } from '@material-ui/core'
+import { MaskbookLightTheme, MaskbookDarkTheme } from '../../utils/theme'
 import { SSRRenderer } from '../../utils/SSRRenderer'
 import {
     debugModeSetting,
@@ -51,6 +51,7 @@ const useSettingsUIStyles = makeStyles((theme) => ({
 function Popup() {
     const { t } = useI18N()
     const classes = useStyles()
+    const theme = useTheme()
     const settingsUIClasses = useSettingsUIStyles()
 
     const [showIdentitySelector, setShowIdentitySelector] = useState(false)
@@ -67,7 +68,10 @@ function Popup() {
                 max-width: 100%;
             }`}</style>
             <Paper className={classes.container}>
-                <img className={classes.logo} src={getUrl('/maskbook.svg')} />
+                <img
+                    className={classes.logo}
+                    src={getUrl(`/maskbook-title-${theme.palette.type === 'light' ? 'blue' : 'white'}.svg`)}
+                />
                 {showIdentitySelector ? <ChooseIdentity /> : null}
                 <Button
                     variant="contained"
