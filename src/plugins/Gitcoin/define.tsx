@@ -11,6 +11,7 @@ import { extractTextFromTypedMessage } from '../../extension/background-script/C
 import { Result, Ok, Err } from 'ts-results'
 import { DonateCard } from './DonateCard'
 import { useWalletDataSource } from '../shared/useWallet'
+import type { GitcoinGrantMetadata } from './Services'
 
 export const GitcoinPluginDefine: PluginConfig = {
     identifier: 'co.gitcoin',
@@ -59,8 +60,9 @@ function PreviewCardLogic(props: { post: string }) {
             return Services.Plugin.invokePlugin('co.gitcoin', 'fetchMetadata', url)
         },
     })
-    if (!data || data.err || !url) return null
-    const { amount, contributors, finalAmount, title, image, description, address } = data.val
+    const { amount, contributors, finalAmount, title, image, description, address } = data?.ok
+        ? data.val
+        : ({} as GitcoinGrantMetadata)
     return (
         <>
             <PreviewCard
@@ -75,7 +77,7 @@ function PreviewCardLogic(props: { post: string }) {
                 line4={`${contributors ?? 'Many'} contributors`}
                 title={title ?? 'A Gitcoin grant'}
                 address={address}
-                originalURL={url}
+                originalURL={url ?? ''}
             />
             <DonateCard
                 {...{ wallets, tokens, onRequireNewWallet, address }}
