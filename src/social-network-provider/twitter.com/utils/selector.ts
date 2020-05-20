@@ -30,6 +30,7 @@ export const postEditorInTimelineSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('[role="main"] :not(aside) > [role="progressbar"] ~ div')
 export const postEditorDraftContentSelector = () =>
     (isCompose() ? postEditorInPopupSelector() : postEditorInTimelineSelector()).querySelector<HTMLElement>(
+        // TODO: the aria-label is related to the language
         '.public-DraftEditor-content, textarea[aria-label="Tweet text"]',
     )
 export const posteditorToolbarSeelctor: () => LiveSelector<E, true> = () =>
@@ -42,6 +43,15 @@ export const profileEditorButtonSelector = () =>
 export const profileEditorTextareaSelector = () => querySelector<HTMLTextAreaElement>('textarea[placeholder*="bio"]')
 
 export const bioSelector = () => querySelector<HTMLDivElement>(['[data-testid="UserProfileHeader_Items"]'].join())
+export const bioPageUserNickNameSelector = () =>
+    querySelector<HTMLDivElement>('[data-testid="UserDescription"]')
+        .map((x) => x.parentElement?.parentElement?.previousElementSibling)
+        .querySelector('span')
+export const bioPageUserIDSelector = (selector: () => LiveSelector<HTMLSpanElement, true>) =>
+    selector().map((x) =>
+        (x.parentElement?.parentElement?.nextElementSibling as HTMLElement).innerText.replace('@', ''),
+    )
+export const floatingBioCardSelector = () => querySelector<HTMLSpanElement>(`[style^="left:"] a[role=link] span`)
 export const bioCardSelector = <SingleMode extends boolean = true>(singleMode = true) =>
     querySelector<HTMLDivElement, SingleMode>(
         [
