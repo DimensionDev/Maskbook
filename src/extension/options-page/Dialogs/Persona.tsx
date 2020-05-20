@@ -47,7 +47,7 @@ export function DashboardPersonaCreateDialog(props: WrappedDialogProps) {
     const classes = useStyles()
 
     const [name, setName] = useState('')
-    const [password, setPassword] = useState('')
+    const [password] = useState('')
 
     const createPersona = useSnackbarCallback(
         () => Services.Identity.createPersonaByMnemonic(name, password),
@@ -71,17 +71,7 @@ export function DashboardPersonaCreateDialog(props: WrappedDialogProps) {
                                 value={name}
                                 onChange={(e) => setName(e.target.value)}
                             />
-                            <TextField
-                                required
-                                label={t('password')}
-                                type="password"
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                            />
                         </form>
-                        <Typography className={classes.tip} variant="body2" color="textSecondary">
-                            {t('dashboard_password_helper_text')}
-                        </Typography>
                     </>
                 }
                 footer={
