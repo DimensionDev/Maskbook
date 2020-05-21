@@ -11,6 +11,7 @@ import { DebounceButton } from './ActionButton'
 const useStyles = makeStyles((theme) =>
     createStyles({
         container: {
+            opacity: 0.75,
             padding: theme.spacing(3, 2, 2, 3),
             borderBottom: `1px solid ${theme.palette.divider}`,
             position: 'relative',
@@ -44,6 +45,7 @@ const useStyles = makeStyles((theme) =>
             },
         },
         selected: {
+            opacity: 'unset',
             '&::after': {
                 opacity: 100,
                 transform: 'scaleY(1)',
