@@ -237,7 +237,11 @@ export function DashboardPersonaBackupDialog(props: WrappedDialogProps<PersonaPr
             filter: { type: 'persona', wanted: [persona.identifier] },
         }).then((file) => {
             setBase64Value(encodeArrayBuffer(encodeText(JSON.stringify(file))))
-            setCompressedQRString(compressBackupFile(file))
+            setCompressedQRString(
+                compressBackupFile(file, {
+                    personaIdentifier: persona.identifier,
+                }),
+            )
         })
     }, [persona.identifier])
 
