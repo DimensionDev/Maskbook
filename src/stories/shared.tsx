@@ -1,7 +1,7 @@
 import React from 'react'
 import { storiesOf } from '@storybook/react'
 import { ChooseIdentity } from '../components/shared/ChooseIdentity'
-import { SharedListItem, SettingsUIEnum } from '../components/shared-settings/useSettingsUI'
+import { SettingsUI, SettingsUIEnum } from '../components/shared-settings/useSettingsUI'
 import { ValueRef } from '@holoflows/kit/es'
 import { List, Paper } from '@material-ui/core'
 import { useValueRef } from '../utils/hooks/useValueRef'
@@ -19,7 +19,7 @@ storiesOf('Shared Components', module)
                 </span>
             )
         }
-        const b = <SharedListItem key="boolean" value={bool} primary="boolean" secondary={<D x={bool} />} />
+        const b = <SettingsUI key="boolean" value={bool} primary="boolean" secondary={<D x={bool} />} />
         const enum__ = (
             <SettingsUIEnum
                 value={syntaxKind}
