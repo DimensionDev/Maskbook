@@ -1,10 +1,6 @@
 import React from 'react'
 import { storiesOf } from '@storybook/react'
 import {
-    PersonaCreateDialog,
-    PersonaCreatedDialog,
-    PersonaDeleteDialog,
-    PersonaBackupDialog,
     PersonaImportDialog,
     PersonaImportSuccessDialog,
     PersonaImportFailedDialog,
@@ -35,36 +31,6 @@ function DashboardDialog({ children }: { children: React.ReactNode }) {
 }
 
 storiesOf('Dashboard', module)
-    .add('Persona Create Dialog', () => (
-        <DashboardDialog>
-            <PersonaCreateDialog />
-        </DashboardDialog>
-    ))
-    .add('Persona Created Dialog', () => (
-        <DashboardDialog>
-            <PersonaCreatedDialog />
-        </DashboardDialog>
-    ))
-    .add('Persona Delete Dialog', () => {
-        const currentIdentity = useCurrentIdentity()
-        return (
-            <DashboardDialog>
-                <PersonaDeleteDialog
-                    onConfirm={action('confirmed')}
-                    onDecline={action('declined')}
-                    persona={currentIdentity?.linkedPersona!}
-                />
-            </DashboardDialog>
-        )
-    })
-    .add('Persona Backup Dialog', () => {
-        const currentIdentity = useCurrentIdentity()
-        return (
-            <DashboardDialog>
-                <PersonaBackupDialog onClose={action('close')} persona={currentIdentity?.linkedPersona!} />
-            </DashboardDialog>
-        )
-    })
     .add('Persona Import Dialog', () => (
         <DashboardDialog>
             <PersonaImportDialog />

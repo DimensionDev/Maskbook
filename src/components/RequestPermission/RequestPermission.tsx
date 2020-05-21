@@ -3,24 +3,16 @@ import {
     makeStyles,
     createStyles,
     Theme,
-    Avatar,
-    CardHeader,
-    IconButton,
     Button,
     Card,
-    CardActions,
-    CardContent,
     List,
     ListItem,
     ListItemText,
     ListSubheader,
-    Typography,
     DialogTitle,
     DialogActions,
     DialogContent,
 } from '@material-ui/core'
-import { MoreVert as MoreVertIcon } from '@material-ui/icons'
-import { getUrl } from '../../utils/utils'
 import { useLocation } from 'react-router-dom'
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({

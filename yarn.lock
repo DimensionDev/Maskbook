@@ -15937,7 +15937,7 @@ react-docgen@^5.0.0:
     node-dir "^0.1.10"
     strip-indent "^3.0.0"
 
-react-dom@^0.0.0-experimental-e5d06e34b:
+react-dom@0.0.0-experimental-e5d06e34b:
   version "0.0.0-experimental-e5d06e34b"
   resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-0.0.0-experimental-e5d06e34b.tgz#e90fd8a1f5ac18045798f276734feecdf107442e"
   integrity sha512-E2jMRRCHs69jfI5YMnUEFEdWLv1FthDE52xDP67luRVGBU+Hc2xq06Eu+ukiHgCevgwAqBM4Q9HeYbQrcBvFdg==
@@ -16248,7 +16248,7 @@ react-window@^1.8.5:
     "@babel/runtime" "^7.0.0"
     memoize-one ">=3.1.1 <6"
 
-react@^0.0.0-experimental-e5d06e34b:
+react@0.0.0-experimental-e5d06e34b:
   version "0.0.0-experimental-e5d06e34b"
   resolved "https://registry.yarnpkg.com/react/-/react-0.0.0-experimental-e5d06e34b.tgz#bfdbe2b228e1d1967330fc18b9e05331818f610d"
   integrity sha512-2WUOtH5VE3cSyg22XxavfDoMQDIc51Pyudr/mrU1I1GcWIDKVg7QA/1dh5DlKyIvyWlM44pkwqz7V7gYHFzf2A==

@@ -4,4 +4,5 @@ export enum DashboardRoute {
     Contacts = '/contracts',
     Settings = '/settings',
     Setup = '/setup',
+    RequestPermission = '/request-permission',
 }

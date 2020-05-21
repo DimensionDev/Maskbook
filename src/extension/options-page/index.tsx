@@ -36,6 +36,7 @@ import DashboardInitializeDialog from './Initialize'
 import { DialogRouter } from './DashboardDialogs/DialogBase'
 import { useAsync } from 'react-use'
 import Services from '../service'
+import { RequestPermissionPage } from '../../components/RequestPermission/RequestPermission'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -146,6 +147,8 @@ function DashboardUI() {
                                 <Route path={DashboardRoute.Contacts} component={DashboardContactsRouter} />
                                 <Route path={DashboardRoute.Settings} component={DashboardSettingsRouter} />
                                 <Route path={DashboardRoute.Setup} component={DashboardSetupRouter} />
+                                {/* // TODO: this page should be boardless */}
+                                <Route path={DashboardRoute.RequestPermission} component={RequestPermissionPage} />
                                 <DialogRouter
                                     path="/initialize"
                                     component={DashboardInitializeDialog}
