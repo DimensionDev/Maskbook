@@ -40,7 +40,7 @@ const useStyles = makeStyles((theme) => ({
         padding: 0,
     },
     drawerItem: {
-        borderLeft: 'solid 5px transparent',
+        borderLeft: `solid 5px ${theme.palette.type === 'light' ? 'var(--drawerBody)' : 'transparent'}`,
         paddingTop: 16,
         paddingBottom: 16,
     },
