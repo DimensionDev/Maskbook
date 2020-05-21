@@ -13,14 +13,14 @@ import {
     SelectProps,
     createStyles,
 } from '@material-ui/core'
-import React, { useRef } from 'react'
+import React from 'react'
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos'
 import { useStylesExtends } from '../custom-ui-helper'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
         container: { listStyleType: 'none', width: '100%' },
-        secondaryAction: { paddingLeft: theme.spacing(2), paddingRight: 120 + theme.spacing(3) },
+        secondaryAction: { paddingLeft: theme.spacing(2) },
         listItemText: {
             fontWeight: 500,
         },
@@ -32,6 +32,7 @@ const useStyles = makeStyles((theme) =>
         },
     }),
 )
+type ExtraClasses = 'listItemRoot'
 
 function withDefaultText<T>(props: SettingsUIProps<T>): SettingsUIProps<T> {
     const { value, primary, secondary } = props
@@ -43,56 +44,69 @@ function withDefaultText<T>(props: SettingsUIProps<T>): SettingsUIProps<T> {
     }
 }
 
-interface SettingsUIProps<T> extends withClasses<KeysInferFromUseStyles<typeof useStyles>> {
+interface SettingsUIProps<T> extends withClasses<KeysInferFromUseStyles<typeof useStyles> | ExtraClasses> {
     value: ValueRef<T>
     primary?: React.ReactNode
     secondary?: React.ReactNode
     icon?: React.ReactElement
 }
 
-export function SettingsUI<T>(props: SettingsUIProps<T>) {
-    const { icon } = props
-    const { value, primary, secondary } = withDefaultText(props)
-    const currentValue = useValueRef(value)
-    const classes = useStylesExtends(useStyles(), props)
-    switch (typeof currentValue) {
-        case 'boolean':
-            const [ui, change] = getBooleanSettingsUI(value as any, currentValue)
-            return (
-                <ListItem
-                    onClick={change}
-                    button
-                    disableGutters
-                    classes={{ container: classes.container, secondaryAction: classes.secondaryAction }}>
-                    {icon ? <ListItemIcon classes={{ root: classes.listItemIcon }}>{icon}</ListItemIcon> : null}
-                    <ListItemText classes={{ primary: classes.listItemText }} primary={primary} secondary={secondary} />
-                    <ListItemSecondaryAction>{ui}</ListItemSecondaryAction>
-                </ListItem>
-            )
-        default:
-            return (
-                <ListItem>
-                    <ListItemText primary={'Not implemented for type' + typeof currentValue} />
-                </ListItem>
-            )
-    }
-}
-
-export function SettingsUIDummy(props: Omit<SettingsUIProps<null>, 'value'> & { onClick: () => void }) {
-    const { icon, primary, secondary, onClick } = props
+function SharedListItem(
+    props: Omit<SettingsUIProps<any>, 'value'> & { onClick?: () => void; action?: React.ReactNode; button?: boolean },
+) {
+    const { onClick, icon, action, primary, secondary, button } = props
     const classes = useStylesExtends(useStyles(), props)
     return (
         <ListItem
             onClick={onClick}
-            button
+            {...((button ? { button: true } : { component: 'div' }) as any)}
             disableGutters
-            classes={{ container: classes.container, secondaryAction: classes.secondaryAction }}>
+            classes={{
+                root: classes.listItemRoot,
+                container: classes.container,
+                secondaryAction: classes.secondaryAction,
+            }}>
             {icon ? <ListItemIcon classes={{ root: classes.listItemIcon }}>{icon}</ListItemIcon> : null}
             <ListItemText classes={{ primary: classes.listItemText }} primary={primary} secondary={secondary} />
-            <ListItemSecondaryAction>
-                <ArrowForwardIosIcon classes={{ root: classes.arrowIcon }} />
-            </ListItemSecondaryAction>
+            {action}
         </ListItem>
+    )
+}
+
+export function SettingsUI<T>(props: SettingsUIProps<T>) {
+    const { value } = withDefaultText(props)
+    const currentValue = useValueRef(value)
+    switch (typeof currentValue) {
+        case 'boolean':
+            const [ui, change] = getBooleanSettingsUI(value as any, currentValue)
+            const { primary, secondary } = withDefaultText(props)
+            return (
+                <SharedListItem
+                    {...props}
+                    button
+                    primary={primary}
+                    secondary={secondary}
+                    onClick={change}
+                    action={<ListItemSecondaryAction>{ui}</ListItemSecondaryAction>}
+                />
+            )
+        default:
+            return <SharedListItem {...props} primary={'Not implemented for type' + typeof currentValue} />
+    }
+}
+
+export function SettingsUIDummy(props: Omit<SettingsUIProps<null>, 'value'> & { onClick: () => void }) {
+    const classes = useStylesExtends(useStyles(), props)
+    return (
+        <SharedListItem
+            {...props}
+            button
+            action={
+                <ListItemSecondaryAction>
+                    <ArrowForwardIosIcon classes={{ root: classes.arrowIcon }} />
+                </ListItemSecondaryAction>
+            }
+        />
     )
 }
 
@@ -104,17 +118,14 @@ export function SettingsUIEnum<T extends object>(
     } & SettingsUIProps<T[keyof T]>,
 ) {
     const { primary, secondary } = withDefaultText(props)
-    const classes = useStyles()
-    const [ui, change] = useEnumSettings(props.value, props.enumObject, props.getText, props.SelectProps)
+    const [ui] = useEnumSettings(props.value, props.enumObject, props.getText, props.SelectProps)
     return (
-        <ListItem
-            disableGutters
-            component="div"
-            classes={{ container: classes.container, secondaryAction: classes.secondaryAction }}>
-            {props.icon ? <ListItemIcon classes={{ root: classes.listItemIcon }}>{props.icon}</ListItemIcon> : null}
-            <ListItemText classes={{ primary: classes.listItemText }} primary={primary} secondary={secondary} />
-            <ListItemSecondaryAction>{ui}</ListItemSecondaryAction>
-        </ListItem>
+        <SharedListItem
+            {...props}
+            primary={primary}
+            secondary={secondary}
+            action={<ListItemSecondaryAction>{ui}</ListItemSecondaryAction>}
+        />
     )
 }
 type HookedUI<T> = [/** UI */ React.ReactNode, /** Changer */ T extends void ? () => void : (value: T) => void]
@@ -157,12 +168,10 @@ function useEnumSettings<Q extends object>(
         }
         ref.value = value
     }
-    const selectRef = useRef<HTMLElement>(null!)
     const ui = (
         <Select
             fullWidth
             variant="outlined"
-            ref={selectRef}
             {...selectProps}
             value={useValueRef(ref)}
             onChange={(event) => change(event.target.value)}>

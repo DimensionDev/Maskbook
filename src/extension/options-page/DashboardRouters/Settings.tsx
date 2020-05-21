@@ -47,6 +47,11 @@ const useStyles = makeStyles((theme) =>
             padding: '26px 40px',
             margin: theme.spacing(3, 0),
         },
+        listItemRoot: {
+            paddingTop: theme.spacing(1.5),
+            paddingBottom: theme.spacing(1.5),
+            borderBottom: `1px solid ${theme.palette.divider}`,
+        },
     }),
 )
 
@@ -69,25 +74,6 @@ const settingsTheme = (theme: Theme): Theme =>
             MuiCard: {
                 root: {
                     overflow: 'visible',
-                },
-            },
-            MuiListItem: {
-                root: {
-                    paddingTop: theme.spacing(1.5),
-                    paddingBottom: theme.spacing(1.5),
-                    borderBottom: `1px solid ${theme.palette.divider}`,
-                },
-                secondaryAction: {
-                    paddingRight: '90px',
-                },
-            },
-            MuiListItemIcon: {
-                root: {
-                    color: theme.palette.text,
-                    justifyContent: 'flex-start',
-                    minWidth: 'unset',
-                    marginLeft: theme.spacing(2),
-                    marginRight: theme.spacing(3),
                 },
             },
             MuiOutlinedInput: {
@@ -133,6 +119,9 @@ export default function DashboardSettingsRouter() {
     const [backupDatabase, openBackupDatabase] = useModal(DashboardDatabaseBackupDialog)
     const [restoreDatabase, openRestoreDatabase] = useModal(DashboardDatabaseRestoreDialog)
 
+    const listStyle = {
+        listItemRoot: classes.listItemRoot,
+    }
     return (
         <DashboardRouterContainer title={t('settings')}>
             <div className="wrapper">
@@ -144,6 +133,7 @@ export default function DashboardSettingsRouter() {
                         <Card elevation={0}>
                             <List disablePadding>
                                 <SettingsUIEnum
+                                    classes={listStyle}
                                     secondary={langMapper(currentLang)}
                                     enumObject={Language}
                                     getText={langMapper}
@@ -151,6 +141,7 @@ export default function DashboardSettingsRouter() {
                                     value={languageSettings}
                                 />
                                 <SettingsUIEnum
+                                    classes={listStyle}
                                     secondary={apperanceMapper(currentApperance)}
                                     enumObject={Appearance}
                                     getText={apperanceMapper}
@@ -166,15 +157,24 @@ export default function DashboardSettingsRouter() {
                         </Typography>
                         <Card elevation={0}>
                             <List disablePadding>
-                                <SettingsUI icon={<TabIcon />} value={disableOpenNewTabInBackgroundSettings} />
+                                <SettingsUI
+                                    classes={listStyle}
+                                    icon={<TabIcon />}
+                                    value={disableOpenNewTabInBackgroundSettings}
+                                />
                                 {/* This feature is not ready for iOS */}
                                 {webpackEnv.target !== 'WKWebview' ? (
                                     <SettingsUI
+                                        classes={listStyle}
                                         icon={shadowRoot ? <EnhancedEncryptionIcon /> : <NoEncryptionIcon />}
                                         value={renderInShadowRootSettings}
                                     />
                                 ) : null}
-                                <SettingsUI icon={<MemoryOutlinedIcon />} value={debugModeSetting} />
+                                <SettingsUI
+                                    classes={listStyle}
+                                    icon={<MemoryOutlinedIcon />}
+                                    value={debugModeSetting}
+                                />
                             </List>
                         </Card>
                     </Paper>
@@ -185,12 +185,14 @@ export default function DashboardSettingsRouter() {
                         <Card elevation={0}>
                             <List disablePadding>
                                 <SettingsUIDummy
+                                    classes={listStyle}
                                     icon={<UnarchiveOutlinedIcon />}
                                     primary={t('backup_database')}
                                     secondary={t('dashboard_backup_database_hint')}
                                     onClick={openBackupDatabase}
                                 />
                                 <SettingsUIDummy
+                                    classes={listStyle}
                                     icon={<ArchiveOutlinedIcon />}
                                     primary={t('restore_database')}
                                     secondary={t('dashboard_import_database_hint')}
