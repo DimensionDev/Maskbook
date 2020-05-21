@@ -168,7 +168,7 @@ export function CreatePersona() {
         setSubmitted(true)
         if (!isValid) return
         const persona = await Services.Identity.createPersonaByMnemonic(name, '')
-        history.replace(`${SetupStep.ConnectNetwork}?identifier=${encodeURIComponent(persona.toText())}`)
+        history.push(`${SetupStep.ConnectNetwork}?identifier=${encodeURIComponent(persona.toText())}`)
     }
     return (
         <SetupForm
