@@ -149,9 +149,8 @@ export default function DashboardWalletsRouter() {
                 {t('delete')}
             </MenuItem>,
         ],
-        [currentWallet?.address],
+        [color.error, currentWallet, oepnWalletBackup, oepnWalletDelete, oepnWalletRename, setAsDefault, t],
     )
-
     const [menu, , openMenu] = useModal(DashboardMenu, { menus })
 
     return (
