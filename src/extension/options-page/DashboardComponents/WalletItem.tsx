@@ -28,7 +28,7 @@ const useStyles = makeStyles((theme) =>
                 bottom: 0,
                 right: 0,
                 width: '4px',
-                backgroundColor: 'var(--listSelectedIndicator)',
+                backgroundColor: theme.palette.primary.main,
             },
         },
         default: {

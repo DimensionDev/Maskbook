@@ -62,7 +62,7 @@ export default function ProviderLine(props: ProviderLineProps) {
             </Typography>
             <Typography
                 className={classNames(classes.text, { [classes.cursor]: !connected })}
-                color="primary"
+                color={connected ? 'textPrimary' : 'primary'}
                 variant="body1"
                 component="a"
                 onClick={connected ? undefined : onAction}>
@@ -70,11 +70,11 @@ export default function ProviderLine(props: ProviderLineProps) {
                     {connected ? `@${userId}` : `${t('connect_to')} ${network}`}
                 </span>
                 {connected ? (
-                    <IconButton size="small" onClick={onAction} className={classes.cursor}>
+                    <IconButton color="secondary" size="small" onClick={onAction} className={classes.cursor}>
                         <LinkOffIcon />
                     </IconButton>
                 ) : (
-                    <IconButton color="inherit" size="small">
+                    <IconButton size="small">
                         <ArrowForwardIcon />
                     </IconButton>
                 )}
