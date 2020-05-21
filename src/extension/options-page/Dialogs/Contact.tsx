@@ -68,6 +68,7 @@ export function DashboardContactDialog(props: WrappedDialogProps<ContactProps>) 
 
     const classes = useStyles()
 
+    // TODO: revalidate SWR after this change
     const onSubmit = useSnackbarCallback(
         () => Services.Identity.updateProfileInfo(contact.identifier, { nickname, avatarURL, forceUpdateAvatar: true }),
         [nickname, avatarURL],
@@ -100,7 +101,8 @@ export function DashboardContactDialog(props: WrappedDialogProps<ContactProps>) 
                                 variant="outlined"
                             />
                             <TextField
-                                label={t('avatar_url')}
+                                label={t('new_avatar_url')}
+                                placeholder={t('new_avatar_url_placeholder')}
                                 value={avatarURL}
                                 onChange={(e) => setAvatarURL(e.target.value)}
                                 variant="outlined"
