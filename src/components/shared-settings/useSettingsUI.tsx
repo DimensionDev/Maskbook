@@ -33,7 +33,6 @@ const useStyles = makeStyles((theme) =>
         },
     }),
 )
-type ExtraClasses = 'listItemRoot'
 
 function withDefaultText<T>(props: SettingsUIProps<T>): SettingsUIProps<T> {
     const { value, primary, secondary } = props
@@ -45,7 +44,7 @@ function withDefaultText<T>(props: SettingsUIProps<T>): SettingsUIProps<T> {
     }
 }
 
-interface SettingsUIProps<T> extends withClasses<KeysInferFromUseStyles<typeof useStyles> | ExtraClasses> {
+interface SettingsUIProps<T> extends withClasses<KeysInferFromUseStyles<typeof useStyles> | 'listItemRoot'> {
     value: ValueRef<T>
     primary?: React.ReactNode
     secondary?: React.ReactNode

@@ -16,10 +16,7 @@ import { useValueRef } from '../../../utils/hooks/useValueRef'
 
 import EnhancedEncryptionIcon from '@material-ui/icons/EnhancedEncryption'
 import NoEncryptionIcon from '@material-ui/icons/NoEncryption'
-import NightsStay from '@material-ui/icons/NightsStay'
 import MemoryOutlinedIcon from '@material-ui/icons/MemoryOutlined'
-import WallpaperOutlinedIcon from '@material-ui/icons/WallpaperOutlined'
-import OpenInBrowserIcon from '@material-ui/icons/OpenInBrowser'
 import ArchiveOutlinedIcon from '@material-ui/icons/ArchiveOutlined'
 import UnarchiveOutlinedIcon from '@material-ui/icons/UnarchiveOutlined'
 import TabIcon from '@material-ui/icons/Tab'
@@ -47,10 +44,20 @@ const useStyles = makeStyles((theme) =>
             padding: '26px 40px',
             margin: theme.spacing(3, 0),
         },
+        secondaryAction: {
+            paddingRight: '90px',
+        },
         listItemRoot: {
             paddingTop: theme.spacing(1.5),
             paddingBottom: theme.spacing(1.5),
             borderBottom: `1px solid ${theme.palette.divider}`,
+        },
+        listItemIcon: {
+            color: theme.palette.text.primary,
+            justifyContent: 'flex-start',
+            minWidth: 'unset',
+            marginLeft: theme.spacing(2),
+            marginRight: theme.spacing(3),
         },
     }),
 )
@@ -120,7 +127,9 @@ export default function DashboardSettingsRouter() {
     const [restoreDatabase, openRestoreDatabase] = useModal(DashboardDatabaseRestoreDialog)
 
     const listStyle = {
+        secondaryAction: classes.secondaryAction,
         listItemRoot: classes.listItemRoot,
+        listItemIcon: classes.listItemIcon,
     }
     return (
         <DashboardRouterContainer title={t('settings')}>
