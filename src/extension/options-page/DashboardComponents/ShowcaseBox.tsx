@@ -19,7 +19,7 @@ const useStyle = makeStyles((theme) =>
         scroller: {
             height: '100%',
             overflow: 'auto',
-            wordBreak: 'break-all',
+            wordBreak: 'break-word',
         },
     }),
 )
