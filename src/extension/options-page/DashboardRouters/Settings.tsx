@@ -89,18 +89,6 @@ const settingsTheme = (theme: Theme): Theme =>
                     paddingBottom: theme.spacing(1),
                 },
             },
-            MuiSwitch: {
-                colorPrimary: {
-                    '&$checked$checked': {
-                        color: 'var(--textOnPrimary)',
-                    },
-                },
-                track: {
-                    '$checked$checked + &': {
-                        opacity: '1 !important',
-                    },
-                },
-            },
         },
     })
 
