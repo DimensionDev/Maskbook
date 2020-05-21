@@ -17,7 +17,7 @@ const useStyles = makeStyles((theme) => ({
         height: '100%',
         display: 'grid',
         gridTemplateRows: '[drawerHeader] 0fr [drawerList] auto [drawerFooter] 0fr',
-        width: 'var(--drawerWidth)',
+        width: 250,
         color: 'white',
         overflow: 'visible',
         position: 'relative',
@@ -75,9 +75,8 @@ const drawerTheme = (theme: Theme): Theme =>
             MuiListItem: {
                 root: {
                     '&$selected$selected': {
-                        color: 'var(--drawerTextSelected, --drawerText)',
-                        backgroundColor: 'var(--drawerBodySelected, --drawerBody)',
-                        borderLeftColor: '#1C68F3',
+                        backgroundColor: theme.palette.primary.dark,
+                        borderLeftColor: theme.palette.action.active,
                     },
                 },
             },

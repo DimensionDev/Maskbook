@@ -32,17 +32,34 @@ type FooterLinkProps = FooterLinkLinkProps | FooterLinkAnchorProps | FooterLinkA
 
 const FooterLink = function (props: React.PropsWithChildren<FooterLinkProps>) {
     const classes = useStyles()
+    const children = <Typography variant="body2">{props.children}</Typography>
+    if ('href' in props)
+        return (
+            <MuiLink
+                underline="none"
+                {...props}
+                target="_blank"
+                rel="noopener noreferrer"
+                color="textPrimary"
+                className={classes.footerButton}>
+                {children}
+            </MuiLink>
+        )
+    if ('to' in props)
+        return (
+            <MuiLink underline="none" {...props} component={Link} color="textPrimary" className={classes.footerButton}>
+                {children}
+            </MuiLink>
+        )
     return (
         <MuiLink
             underline="none"
-            {...('href' in props
-                ? { href: props.href, title: props.title, target: '_blank', rel: 'noopener noreferrer' }
-                : 'to' in props
-                ? { to: props.to, component: Link }
-                : { style: { cursor: 'pointer' }, onClick: props.onClick, component: 'a' })}
-            color="inherit"
+            {...props}
+            component="a"
+            style={{ cursor: 'pointer' }}
+            color="textPrimary"
             className={classes.footerButton}>
-            <Typography variant="body2">{props.children}</Typography>
+            {children}
         </MuiLink>
     )
 }

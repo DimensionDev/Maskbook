@@ -37,29 +37,21 @@ import { DialogRouter } from './DashboardDialogs/DialogBase'
 import { useAsync } from 'react-use'
 import Services from '../service'
 import { RequestPermissionPage } from '../../components/RequestPermission/RequestPermission'
+import { grey } from '@material-ui/core/colors'
 
-const useStyles = makeStyles((theme) =>
-    createStyles({
+const useStyles = makeStyles((theme) => {
+    const dark = theme.palette.type === 'dark'
+    return createStyles({
         wrapper: {
-            '--monospace': 'SFMono-Regular,Consolas,Liberation Mono,Menlo,monospace',
+            '--monospace': 'SFMono-Regular, Consolas, "Liberation Mono", Menlo, monospace',
 
-            '--primary': theme.palette.primary.main,
-            '--textOnPrimary': theme.palette.primary.contrastText,
-            '--lightText': '#C4C4C4',
-            '--background': theme.palette.type === 'dark' ? '#212121' : '#F6F9FF',
-            '--container': theme.palette.type === 'dark' ? '#121212' : '#FFFFFF',
-            '--drawerWidth': '250px',
-            '--drawerHeader': theme.palette.type === 'dark' ? '#121212' : '#1756CA',
-            '--drawerBody': theme.palette.type === 'dark' ? '#121212' : 'var(--primary)',
-            '--drawerText': 'var(--textOnPrimary, #FFFFFF)',
-            '--drawerBodySelected': theme.palette.type === 'dark' ? '#114097' : 'var(--textOnPrimary)',
-            '--drawerTextSelected': theme.palette.type === 'dark' ? 'var(--textOnPrimary)' : 'var(--primary)',
-            '--listSelectedIndicator': 'var(--primary)',
+            '--drawerHeader': dark ? '#121212' : theme.palette.primary.dark,
+            '--drawerBody': dark ? '#121212' : theme.palette.primary.main,
 
             position: 'absolute',
             width: '100vw',
             height: '100vh',
-            backgroundColor: 'var(--background)',
+            backgroundColor: dark ? grey[900] : grey[50],
             display: 'grid',
             gridTemplateColumns: '1fr [content-start] 1110px [content-end] 1fr',
             gridTemplateRows: '32px [content-start] auto [content-end] 50px',
@@ -68,8 +60,8 @@ const useStyles = makeStyles((theme) =>
             transition: 'filter 0.3s linear',
             willChange: 'filter',
 
-            '--thumbBG': 'rgba(0,0,0,0.15)',
-            '--scrollbarBG': 'rgba(15,34,0,0.05)',
+            '--thumbBG': 'rgba(0, 0, 0, 0.15)',
+            '--scrollbarBG': 'rgba(15, 34, 0, 0.05)',
 
             scrollbarWidth: 'thin',
             scrollbarColor: 'var(--thumbBG) var(--scrollbarBG)',
@@ -90,7 +82,7 @@ const useStyles = makeStyles((theme) =>
             height: '100%',
             overflow: 'auto',
             borderRadius: '12px',
-            backgroundColor: 'var(--container)',
+            backgroundColor: dark ? '#121212' : '#FFFFFF',
             gridRow: 'content-start / content-end',
             gridColumn: 'content-start / content-end',
 
@@ -103,8 +95,8 @@ const useStyles = makeStyles((theme) =>
         blur: {
             filter: 'blur(3px)',
         },
-    }),
-)
+    })
+})
 
 function DashboardUI() {
     const { t } = useI18N()

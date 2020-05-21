@@ -129,6 +129,7 @@ const useWalletCreateDialogStyle = makeStyles((theme) =>
             fontWeight: 500,
             textAlign: 'center',
             backgroundColor: '#FFD5B3',
+            color: 'black',
             padding: '8px 22px',
             margin: '24px -36px 0',
         },
