@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme) =>
             whiteSpace: 'nowrap',
         },
         provider: {
-            color: theme.palette.text.disabled,
+            color: theme.palette.text.secondary,
             marginRight: theme.spacing(2),
         },
         fingerprint: {

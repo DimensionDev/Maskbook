@@ -75,7 +75,8 @@ const drawerTheme = (theme: Theme): Theme =>
             MuiListItem: {
                 root: {
                     '&$selected$selected': {
-                        backgroundColor: theme.palette.primary.dark,
+                        backgroundColor:
+                            theme.palette.type === 'dark' ? theme.palette.primary.dark : theme.palette.primary.light,
                         borderLeftColor: theme.palette.action.active,
                     },
                 },

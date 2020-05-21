@@ -18,7 +18,7 @@ function getFontFamily(monospace?: boolean) {
 
 const base: ThemeOptions = {
     palette: {
-        primary: blue,
+        primary: { main: '#1c68f3' }, // blue,
         secondary: orange,
     },
     typography: {
