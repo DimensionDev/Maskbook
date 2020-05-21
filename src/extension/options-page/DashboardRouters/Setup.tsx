@@ -32,14 +32,14 @@ import ProfileBox from '../DashboardComponents/ProfileBox'
 import Services from '../../service'
 import useQueryParams from '../../../utils/hooks/useQueryParams'
 import { useAsync, useMultiStateValidator, useDropArea } from 'react-use'
-import { Identifier, ECKeyIdentifier, PersonaIdentifier } from '../../../database/type'
+import { Identifier, ECKeyIdentifier } from '../../../database/type'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { useMyPersonas } from '../../../components/DataSource/independent'
 import { BackupJSONFileLatest, UpgradeBackupJSONFile } from '../../../utils/type-transform/BackupFormat/JSON/latest'
 import { decompressBackupFile } from '../../../utils/type-transform/BackupFileShortRepresentation'
 import { extraPermissions } from '../../../utils/permissions'
 import AbstractTab, { AbstractTabProps } from '../DashboardComponents/AbstractTab'
-import { getUrl, unreachable } from '../../../utils/utils'
+import { getUrl, unreachable, sleep } from '../../../utils/utils'
 import { green } from '@material-ui/core/colors'
 import { DashboardRoute } from '../Route'
 import { useSnackbar } from 'notistack'
@@ -242,11 +242,12 @@ export function ConnectNetwork() {
     }, [identifier, personas])
 
     const deletePersonaAndBack = async () => {
-        history.replace(SetupStep.CreatePersona)
         if (persona) await Services.Identity.deletePersona(persona.identifier, 'delete even with private')
+        history.goBack()
     }
 
-    if (error || loading) return null
+    // detect persona's nickname prevent from displaying undefined
+    if (loading || !persona?.nickname) return null
     return (
         <SetupForm
             primary={`Connect a Social Network Profile for "${persona?.nickname}"`}

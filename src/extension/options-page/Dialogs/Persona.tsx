@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 
-import { TextField, makeStyles, createStyles, Typography } from '@material-ui/core'
+import { TextField } from '@material-ui/core'
 import { UserPlus, UserCheck, User, UserMinus } from 'react-feather'
 
 import * as bip39 from 'bip39'
@@ -12,7 +12,7 @@ import {
     encodeArrayBuffer,
     encodeText,
 } from '../../../utils/type-transform/String-ArrayBuffer'
-import { UpgradeBackupJSONFile } from '../../../utils/type-transform/BackupFormat/JSON/latest'
+import { UpgradeBackupJSONFile, BackupJSONFileLatest } from '../../../utils/type-transform/BackupFormat/JSON/latest'
 import { decompressBackupFile, compressBackupFile } from '../../../utils/type-transform/BackupFileShortRepresentation'
 import { hasWKWebkitRPCHandlers } from '../../../utils/iOS-RPC'
 import QRScanner from '../../../components/QRScanner'
@@ -25,33 +25,19 @@ import AbstractTab, { AbstractTabProps } from '../DashboardComponents/AbstractTa
 import { DebounceButton } from '../DashboardComponents/ActionButton'
 import SpacedButtonGroup from '../DashboardComponents/SpacedButtonGroup'
 import ShowcaseBox from '../DashboardComponents/ShowcaseBox'
-
-const useStyles = makeStyles((theme) =>
-    createStyles({
-        textarea: {
-            marginTop: 0,
-            marginBottom: 0,
-            height: 200,
-            '& > *, & textarea': {
-                height: '100%',
-            },
-        },
-        tip: {
-            marginTop: theme.spacing(2),
-        },
-    }),
-)
+import { DashboardRoute } from '../Route'
+import { SetupStep } from '../DashboardRouters/Setup'
+import { Identifier, ECKeyIdentifier } from '../../../database/type'
+import { useHistory } from 'react-router-dom'
+import { sleep } from '../../../utils/utils'
 
 export function DashboardPersonaCreateDialog(props: WrappedDialogProps) {
     const { t } = useI18N()
-    const classes = useStyles()
-
     const [name, setName] = useState('')
-    const [password] = useState('')
 
     const createPersona = useSnackbarCallback(
-        () => Services.Identity.createPersonaByMnemonic(name, password),
-        [name, password],
+        () => Services.Identity.createPersonaByMnemonic(name, ''),
+        [name, ''],
         props.onClose,
     )
 
@@ -75,7 +61,12 @@ export function DashboardPersonaCreateDialog(props: WrappedDialogProps) {
                     </>
                 }
                 footer={
-                    <DebounceButton type="submit" variant="contained" color="primary" onClick={createPersona}>
+                    <DebounceButton
+                        type="submit"
+                        variant="contained"
+                        color="primary"
+                        onClick={createPersona}
+                        disabled={!name}>
                         {t('create')}
                     </DebounceButton>
                 }></DashboardDialogWrapper>
@@ -86,6 +77,7 @@ export function DashboardPersonaCreateDialog(props: WrappedDialogProps) {
 export function DashboardPersonaImportDialog(props: WrappedDialogProps) {
     const { t } = useI18N()
     const { enqueueSnackbar } = useSnackbar()
+    const history = useHistory()
 
     const [nickname, setNickname] = useState('')
     const [mnemonicWordsValue, setMnemonicWordsValue] = useState('')
@@ -95,24 +87,47 @@ export function DashboardPersonaImportDialog(props: WrappedDialogProps) {
     const state = useState(0)
     const [tabState, setTabState] = state
 
-    const importPersona = useSnackbarCallback(
-        async () => {
-            if (tabState === 0) {
-                if (!bip39.validateMnemonic(mnemonicWordsValue)) throw new Error('the mnemonic words are not valid')
-                // TODO!: not work
-                return Services.Welcome.restoreNewIdentityWithMnemonicWord(mnemonicWordsValue, password, { nickname })
+    const restorePersona = async (str?: string) => {
+        if (tabState === 0) {
+            if (!bip39.validateMnemonic(mnemonicWordsValue)) throw new Error('the mnemonic words are not valid')
+            const identifier = await Services.Welcome.restoreNewIdentityWithMnemonicWord(mnemonicWordsValue, password, {
+                nickname,
+            })
+            return Services.Identity.queryPersona(identifier)
+        } else {
+            const object = str
+                ? UpgradeBackupJSONFile(decompressBackupFile(str))
+                : (JSON.parse(decodeText(decodeArrayBuffer(base64Value))) as BackupJSONFileLatest)
+            await Services.Welcome.restoreBackup(object!)
+            if (object?.personas?.length) {
+                return Services.Identity.queryPersona(
+                    Identifier.fromString(object.personas[0].identifier, ECKeyIdentifier).unwrap(),
+                )
             }
-            const object = JSON.parse(decodeText(decodeArrayBuffer(base64Value)))
-            return Services.Welcome.restoreBackup(object)
-        },
-        [mnemonicWordsValue, password, nickname, base64Value],
-        props.onClose,
-    )
-
-    const importFromQR = (str: string) => {
-        Promise.resolve()
-            .then(() => UpgradeBackupJSONFile(decompressBackupFile(str)))
-            .then((object) => Services.Welcome.restoreBackup(object!))
+            return
+        }
+    }
+    const importPersona = async (str?: string) => {
+        const failToRestore = () => enqueueSnackbar('Restore failed', { variant: 'error' })
+        try {
+            const persona = await restorePersona(str)
+            if (persona) {
+                props.onClose()
+                // ensure blur mask closed
+                await sleep(300)
+                if (!persona.linkedProfiles.size) {
+                    history.push(
+                        `${DashboardRoute.Setup}/${SetupStep.ConnectNetwork}?identifier=${encodeURIComponent(
+                            persona.identifier.toText(),
+                        )}`,
+                    )
+                }
+            } else {
+                failToRestore()
+            }
+        } catch (e) {
+            failToRestore()
+        }
     }
 
     function QR() {
@@ -120,13 +135,13 @@ export function DashboardPersonaImportDialog(props: WrappedDialogProps) {
 
         return shouldRenderQRComponent ? (
             hasWKWebkitRPCHandlers ? (
-                <WKWebkitQRScanner onScan={importFromQR} onQuit={() => setTabState(0)} />
+                <WKWebkitQRScanner onScan={restorePersona} onQuit={() => setTabState(0)} />
             ) : (
                 <QRScanner
                     onError={() => enqueueSnackbar('QRCode scan Failed')}
                     scanning={shouldRenderQRComponent}
                     style={{ maxHeight: 236, width: '100%', borderRadius: 4 }}
-                    onResult={importFromQR}
+                    onResult={restorePersona}
                 />
             )
         ) : null
@@ -190,7 +205,14 @@ export function DashboardPersonaImportDialog(props: WrappedDialogProps) {
                 secondary={t('dashboard_persona_import_dialog_hint')}
                 content={<AbstractTab {...tabProps}></AbstractTab>}
                 footer={
-                    <DebounceButton hidden={tabState === 2} variant="contained" color="primary" onClick={importPersona}>
+                    <DebounceButton
+                        hidden={tabState === 2}
+                        variant="contained"
+                        color="primary"
+                        onClick={() => importPersona()}
+                        disabled={
+                            !(tabState === 0 && nickname && mnemonicWordsValue) && !(tabState === 1 && base64Value)
+                        }>
                         {t('import')}
                     </DebounceButton>
                 }></DashboardDialogWrapper>
