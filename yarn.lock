@@ -2007,7 +2007,7 @@
 
 "@holoflows/kit@https://github.com/DimensionDev/holoflows-kit":
   version "0.7.0"
-  resolved "https://github.com/DimensionDev/holoflows-kit#47ddaad5ceff4526d4a58e3d14ad0d8125365c78"
+  resolved "https://github.com/DimensionDev/holoflows-kit#fb58a35b0e7a0606e46a35c822e1f98988a74e18"
   dependencies:
     "@servie/events" "^1.0.0"
     async-call-rpc "^1.0.4"

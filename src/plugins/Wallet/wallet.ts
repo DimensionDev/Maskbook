@@ -137,7 +137,7 @@ export async function importNewWallet(
     if (!address) throw new Error('cannot get the address of wallet')
     const bal = await getWalletProvider()
         .queryBalance(address)
-        .catch((x) => undefined)
+        .catch((_) => undefined)
     if (rec.name === null) {
         rec.name = address.slice(0, 6)
     }

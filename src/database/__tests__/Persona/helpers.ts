@@ -20,7 +20,6 @@ import {
 import { queryPersonaDB, createProfileDB, createPersonaDB, queryProfileDB } from '../../Persona/Persona.db'
 import { createPersonaRecord, createProfileRecord, personaDBWriteAccess } from './Persona.db'
 import { storeAvatarDB } from '../../avatar'
-import { JsonWebKeyToCryptoKey, getKeyParameter } from '../../../utils/type-transform/CryptoKey-JsonWebKey'
 
 beforeAll(() => {
     // MessageCenter will dispatch events on each tab
