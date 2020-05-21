@@ -1,10 +1,11 @@
 import React from 'react'
-import { makeStyles, Typography, createStyles, Avatar, IconButton } from '@material-ui/core'
+import { makeStyles, Typography, createStyles, Avatar, IconButton, Link } from '@material-ui/core'
 
 import FacebookIcon from '@material-ui/icons/Facebook'
 import TwitterIcon from '@material-ui/icons/Twitter'
 import GitHubIcon from '@material-ui/icons/GitHub'
 import { DashboardDialogCore, WrappedDialogProps } from './Base'
+import { useI18N } from '../../../utils/i18n-next-ui'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -69,6 +70,7 @@ const useStyles = makeStyles((theme) =>
 )
 
 export function DashboardAboutDialog(props: WrappedDialogProps) {
+    const { t } = useI18N()
     const classes = useStyles()
     const { version } = globalThis.browser?.runtime.getManifest() ?? {}
     return (
@@ -78,17 +80,15 @@ export function DashboardAboutDialog(props: WrappedDialogProps) {
                     <Avatar className={classes.maskface} src="/MB--CircleCanvas--WhiteOverBlue.svg"></Avatar>
                     <img className={classes.masktext} src="/maskbook-title-white.svg" />
                     <Typography className={classes.version} variant="body2" color="inherit">
-                        Version {version}
+                        {t('version')} {version}
                     </Typography>
                 </header>
                 <main className={classes.main}>
                     <Typography component="p" variant="inherit">
-                        Maskbook allows you to publish encrypted posts on social networks, so that you may mitigate the
-                        big data surveillance from the big corporations. Only you and your friends (who are also using
-                        Maskbook) can decrypt your encrypted posts.
+                        {t('about_dialog_description')}
                     </Typography>
                     <section className={classes.getInTouch}>
-                        <Typography variant="inherit">Get in touch</Typography>
+                        <Typography variant="inherit">{t('about_dialog_touch')}</Typography>
                         <div className={classes.brands}>
                             <IconButton
                                 className={classes.icon}
@@ -116,13 +116,15 @@ export function DashboardAboutDialog(props: WrappedDialogProps) {
                 </main>
                 <footer className={classes.footer}>
                     <Typography component="p" variant="inherit">
-                        Feedback: info@dimension.im
+                        <span>{t('about_dialog_feedback')}</span>
+                        <Link href={`mailto:${t('dashboard_email_address')}`}>{t('dashboard_email_address')}</Link>
                     </Typography>
                     <Typography component="p" variant="inherit">
-                        Source code: https://github.com/DimensionDev/Maskbook
+                        <span>{t('about_dialog_source_code')}</span>
+                        <Link href={t('dashboard_source_code_link')}>{t('dashboard_source_code_link')}</Link>
                     </Typography>
                     <Typography component="p" variant="inherit">
-                        License: GNU AGPL 3.0
+                        {t('about_dialog_license')} {t('dashboard_license')}
                     </Typography>
                 </footer>
             </section>
