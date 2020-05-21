@@ -116,9 +116,7 @@ export default function Drawer(props: DrawerProps) {
     return (
         <ThemeProvider theme={drawerTheme}>
             <nav className={classes.drawer}>
-                <Box
-                    className={classes.drawerHeader}
-                    style={{ backgroundColor: `var(${forSetupPurpose ? '--drawerBody' : '--drawerHeader'})` }}>
+                <Box className={classes.drawerHeader} style={{ backgroundColor: `var(--drawerBody)` }}>
                     <Logo />
                     <Typography
                         className={classes.maskDescription}
