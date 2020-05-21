@@ -173,28 +173,27 @@ export function DashboardWalletCreateDialog(props: WrappedDialogProps) {
                             />
                             <TextField
                                 required
-                                label={'Confirm your setup'}
+                                label={t('wallet_confirmation')}
                                 value={confirmation}
                                 onChange={(e) => setConfirmation(e.target.value)}
                             />
                         </form>
                         <br />
                         <Box display="flex" alignItems="center" justifyContent="center">
-                            <Typography className={classes.confirmation} variant="body2" color="textSecondary">
-                                Please type <strong>Create a Wallet</strong> to confirm.
-                            </Typography>
+                            <Typography
+                                className={classes.confirmation}
+                                variant="body2"
+                                color="textSecondary"
+                                dangerouslySetInnerHTML={{
+                                    __html: t('wallet_confirmation_hint', { meme: 'Create a Wallet' }),
+                                }}></Typography>
                             <InfoOutlinedIcon
                                 className={classes.notificationIcon}
                                 cursor="pointer"
                                 onClick={() => setShowNotification((t) => !t)}></InfoOutlinedIcon>
                         </Box>
                         {showNotification ? (
-                            <Typography className={classes.notification}>
-                                This will create a new wallet other than the default wallet. You are responsible for
-                                keeping the private key to the wallet safe. Maskbook does not backup for you
-                                automatically. Please also note that Maskbook won't be able to pay for your transactions
-                                on Ethereum.
-                            </Typography>
+                            <Typography className={classes.notification}>{t('wallet_notification')}</Typography>
                         ) : null}
                     </>
                 }
