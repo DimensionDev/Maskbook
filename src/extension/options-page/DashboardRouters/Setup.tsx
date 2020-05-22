@@ -174,8 +174,8 @@ export function CreatePersona() {
             classes={{
                 form: createPersonaClasses.form,
             }}
-            primary="Getting Started"
-            secondary="You may connect social network profiles to your persona in the next step."
+            primary={t('set_up_getting_started')}
+            secondary={t('set_up_getting_started_hint')}
             content={
                 <>
                     <TextField
@@ -203,17 +203,17 @@ export function CreatePersona() {
                         color="primary"
                         onClick={createPersonaAndNext}
                         disabled={!name}>
-                        Next
+                        {t('set_up_button_next')}
                     </ActionButton>
                     <Typography className={setupFormClasses.or} variant="body1">
-                        or
+                        {t('set_up_tip_or')}
                     </Typography>
                     <ActionButton<typeof Link>
                         color="primary"
                         variant="text"
                         component={Link}
                         to={SetupStep.RestoreDatabase}>
-                        Restore From Backup
+                        {t('set_up_button_from_backup')}
                     </ActionButton>
                 </>
             }
@@ -231,6 +231,7 @@ const useProviderLineStyle = makeStyles((theme: Theme) => ({
 }))
 
 export function ConnectNetwork() {
+    const { t } = useI18N()
     const classes = useSetupFormSetyles()
     const providerLineClasses = useProviderLineStyle()
     const history = useHistory()
@@ -252,8 +253,8 @@ export function ConnectNetwork() {
     if (loading || !persona?.nickname) return null
     return (
         <SetupForm
-            primary={`Connect a Social Network Profile for "${persona?.nickname}"`}
-            secondary="Now Facebook and Twitter are supported."
+            primary={t('set_up_connect', { name: persona.nickname })}
+            secondary={t('set_up_connect_hint')}
             content={
                 <>
                     <ProfileBox
@@ -272,10 +273,10 @@ export function ConnectNetwork() {
                         color="primary"
                         disabled={persona?.linkedProfiles.size === 0}
                         onClick={() => history.replace(DashboardRoute.Personas)}>
-                        Finish
+                        {t('set_up_button_finish')}
                     </ActionButton>
                     <ActionButton variant="text" onClick={deletePersonaAndBack}>
-                        Cancel
+                        {t('set_up_button_cancel')}
                     </ActionButton>
                 </>
             }
@@ -411,7 +412,7 @@ export function RestoreDatabase() {
                         variant="text"
                         startIcon={over || file ? null : <AddBoxOutlinedIcon></AddBoxOutlinedIcon>}
                         onClick={(e: React.MouseEvent<HTMLButtonElement>) => e.preventDefault()}>
-                        {over ? t('welcome_1b_dragging') : file ? file.name : 'Drag the file here or browser a file…'}
+                        {over ? t('restore_database_dragging') : file ? file.name : t('restore_database_dragged')}
                     </ActionButton>
                 </RestoreBox>
             </div>
@@ -421,7 +422,7 @@ export function RestoreDatabase() {
     const tabProps: AbstractTabProps = {
         tabs: [
             {
-                label: 'File',
+                label: t('restore_database_file'),
                 children: (
                     <ShowcaseBox>
                         <FileUI></FileUI>
@@ -430,7 +431,7 @@ export function RestoreDatabase() {
                 p: 0,
             },
             {
-                label: 'Text',
+                label: t('restore_database_text'),
                 children: (
                     <ShowcaseBox>
                         <InputBase
@@ -490,8 +491,8 @@ export function RestoreDatabase() {
 
     return (
         <SetupForm
-            primary="Restore Database"
-            secondary="Restore from a previous database backup."
+            primary={t('set_up_restore')}
+            secondary={t('set_up_restore_hint')}
             content={<AbstractTab {...tabProps}></AbstractTab>}
             actions={
                 <>
@@ -501,7 +502,7 @@ export function RestoreDatabase() {
                         variant="contained"
                         disabled={!(state[0] === 0 && file) && !(state[0] === 1 && textValue)}
                         onClick={resolveFileAndNext}>
-                        Restore
+                        {t('set_up_button_restore')}
                     </ActionButton>
                     <ActionButton<typeof Link>
                         className={classes.button}
@@ -509,13 +510,13 @@ export function RestoreDatabase() {
                         variant="outlined"
                         component={Link}
                         to={SetupStep.RestoreDatabaseAdvance}>
-                        Advance…
+                        {t('set_up_button_advance')}
                     </ActionButton>
                     <Typography className={classes.or} variant="body1">
-                        or
+                        {t('set_up_tip_or')}
                     </Typography>
                     <ActionButton color="primary" variant="text" onClick={() => history.goBack()}>
-                        Start From Scratch
+                        {t('set_up_button_from_scratch')}
                     </ActionButton>
                 </>
             }
@@ -628,7 +629,7 @@ export function RestoreDatabaseAdvance() {
                         inputProps={{ style: { height: 147 } }}
                         multiline
                         rows={1}
-                        placeholder="Input the base64 code"
+                        placeholder={t('dashboard_paste_database_base64_hint')}
                         onChange={(e) => setBase64Value(e.target.value)}
                         value={base64Value}></TextField>
                 ),
@@ -647,8 +648,8 @@ export function RestoreDatabaseAdvance() {
 
     return (
         <SetupForm
-            primary="Advanced Restoration Options"
-            secondary="You can import a persona backup in the following ways."
+            primary={t('set_up_advance_restore')}
+            secondary={t('set_up_advance_restore_hint')}
             content={<AbstractTab {...tabProps}></AbstractTab>}
             actions={
                 <>
@@ -660,10 +661,10 @@ export function RestoreDatabaseAdvance() {
                             !(tabState === 0 && nickname && mnemonicWordsValue) && !(tabState === 1 && base64Value)
                         }
                         onClick={() => importPersona()}>
-                        Import
+                        {t('set_up_button_import')}
                     </ActionButton>
                     <ActionButton variant="text" onClick={() => history.goBack()}>
-                        Cancel
+                        {t('set_up_button_cancel')}
                     </ActionButton>
                 </>
             }
@@ -723,18 +724,19 @@ interface DatabasePreviewCardProps {
 }
 
 function DatabasePreviewCard(props: DatabasePreviewCardProps) {
+    const { t } = useI18N()
     const classes = useDatabaseRecordStyle()
 
     const resolveRecordName = (type: DatabaseRecordType) => {
         switch (type) {
             case DatabaseRecordType.Persona:
-                return 'Personas'
+                return t('personas')
             case DatabaseRecordType.Profile:
-                return 'Profiles'
+                return t('profiles')
             case DatabaseRecordType.Post:
-                return 'Posts'
+                return t('posts')
             case DatabaseRecordType.Contact:
-                return 'Contacts'
+                return t('contacts')
             default:
                 return unreachable(type)
         }
@@ -813,15 +815,15 @@ export function RestoreDatabaseConfirmation() {
 
     return (
         <SetupForm
-            primary="Restore Database"
+            primary={t('set_up_restore_confirmation')}
             secondary={
                 imported === true
                     ? time.getTime() === 0
-                        ? 'Unknown time'
+                        ? t('unknown_time')
                         : t('dashboard_restoration_successful_hint', {
                               time: time.toLocaleString(),
                           })
-                    : 'Following data will be imported.'
+                    : t('set_up_restore_confirmation_hint')
             }
             content={<DatabasePreviewCard records={records}></DatabasePreviewCard>}
             actions={
@@ -840,10 +842,10 @@ export function RestoreDatabaseConfirmation() {
                             color="primary"
                             disabled={imported === 'loading'}
                             onClick={restoreConfirmation}>
-                            Confirm
+                            {t('set_up_button_confirm')}
                         </ActionButton>
                         <ActionButton variant="text" onClick={() => history.goBack()}>
-                            Cancel
+                            {t('set_up_button_cancel')}
                         </ActionButton>
                     </>
                 )
@@ -854,6 +856,7 @@ export function RestoreDatabaseConfirmation() {
 //#endregion
 
 export function RestoreDatabaseSuccessful() {
+    const { t } = useI18N()
     const classes = useSetupFormSetyles()
     const history = useHistory()
     return (
@@ -864,7 +867,7 @@ export function RestoreDatabaseSuccessful() {
             actions={
                 <>
                     <ActionButton className={classes.button} variant="text" onClick={() => history.goBack()}>
-                        Done
+                        {t('set_up_button_done')}
                     </ActionButton>
                 </>
             }
