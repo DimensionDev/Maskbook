@@ -47,7 +47,7 @@ import { hasWKWebkitRPCHandlers } from '../../../utils/iOS-RPC'
 import { WKWebkitQRScanner } from '../../../components/shared/qrcode'
 import QRScanner from '../../../components/QRScanner'
 import { decodeArrayBuffer, decodeText } from '../../../utils/type-transform/String-ArrayBuffer'
-import type { Persona } from '../../../database'
+import { useStylesExtends } from '../../../components/custom-ui-helper'
 
 export enum SetupStep {
     CreatePersona = 'create-persona',
@@ -58,6 +58,7 @@ export enum SetupStep {
     RestoreDatabaseSuccessful = 'restore-database-successful',
 }
 
+//#region setup form
 const useSetupFormSetyles = makeStyles((theme) =>
     createStyles({
         wrapper: {
@@ -118,7 +119,7 @@ const useSetupFormSetyles = makeStyles((theme) =>
     }),
 )
 
-interface SetupFormProps {
+interface SetupFormProps extends withClasses<KeysInferFromUseStyles<typeof useSetupFormSetyles>> {
     primary: string
     secondary: string
     content?: React.ReactNode
@@ -126,7 +127,7 @@ interface SetupFormProps {
 }
 
 function SetupForm(props: SetupFormProps) {
-    const classes = useSetupFormSetyles()
+    const classes = useStylesExtends(useSetupFormSetyles(), props)
     return (
         <Fade in>
             <div className={classes.wrapper}>
@@ -146,11 +147,21 @@ function SetupForm(props: SetupFormProps) {
         </Fade>
     )
 }
+//#region
 
 //#region create persona
+const userCreatePersonaStyles = makeStyles((theme) =>
+    createStyles({
+        form: {
+            minHeight: 130,
+        },
+    }),
+)
+
 export function CreatePersona() {
     const { t } = useI18N()
-    const classes = useSetupFormSetyles()
+    const setupFormClasses = useSetupFormSetyles()
+    const createPersonaClasses = userCreatePersonaStyles()
     const [name, setName] = useState('')
     const history = useHistory()
 
@@ -160,6 +171,9 @@ export function CreatePersona() {
     }
     return (
         <SetupForm
+            classes={{
+                form: createPersonaClasses.form,
+            }}
             primary="Getting Started"
             secondary="You may connect social network profiles to your persona in the next step."
             content={
@@ -167,7 +181,7 @@ export function CreatePersona() {
                     <TextField
                         required
                         autoFocus
-                        className={classes.input}
+                        className={setupFormClasses.input}
                         value={name}
                         onChange={(e) => setName(e.target.value)}
                         onKeyDown={(e) => {
@@ -184,14 +198,14 @@ export function CreatePersona() {
             actions={
                 <>
                     <ActionButton
-                        className={classes.button}
+                        className={setupFormClasses.button}
                         variant="contained"
                         color="primary"
                         onClick={createPersonaAndNext}
                         disabled={!name}>
                         Next
                     </ActionButton>
-                    <Typography className={classes.or} variant="body1">
+                    <Typography className={setupFormClasses.or} variant="body1">
                         or
                     </Typography>
                     <ActionButton<typeof Link>
