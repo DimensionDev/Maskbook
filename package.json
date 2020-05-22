@@ -168,7 +168,7 @@
     "ts-loader": "^7.0.2",
     "ts-morph": "^7.0.3",
     "ts-node": "^8.10.1",
-    "type-coverage": "^2.5.0",
+    "type-coverage": "^2.6.1",
     "typechain": "^1.0.5",
     "typechain-target-web3-v1": "^1.0.4",
     "typescript": "^3.9.0-beta",
