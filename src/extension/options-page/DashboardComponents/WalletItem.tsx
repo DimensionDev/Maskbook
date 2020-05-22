@@ -6,7 +6,7 @@ import classNames from 'classnames'
 import { useCopyToClipboard } from 'react-use'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { useSnackbarCallback } from '../Dialogs/Base'
-import { DebounceButton } from './ActionButton'
+import ActionButton, { DebounceButton } from './ActionButton'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -110,17 +110,17 @@ export function WalletItem(props: WalletItemProps) {
                     {wallet.address}
                 </Typography>
             </Box>
-            {/* Prevent the event to make the whole card ripple */}
-            <span onMouseDown={(e) => e.stopPropagation()}>
-                <DebounceButton
-                    color="primary"
-                    size="small"
-                    variant="outlined"
-                    startIcon={<FileCopyOutlinedIcon />}
-                    onClick={() => copyWalletAddress(wallet.address)}>
-                    {t('copy')}
-                </DebounceButton>
-            </span>
+            <ActionButton
+                color="primary"
+                size="small"
+                variant="outlined"
+                startIcon={<FileCopyOutlinedIcon />}
+                onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+                    e.stopPropagation()
+                    copyWalletAddress(wallet.address)
+                }}>
+                {t('copy')}
+            </ActionButton>
             <Box py={2} display="flex">
                 {tokens &&
                     tokens.map((token) => (
