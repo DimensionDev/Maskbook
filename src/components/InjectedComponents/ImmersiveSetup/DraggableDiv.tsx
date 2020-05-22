@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import Draggable from 'react-draggable'
 import { makeStyles, Theme } from '@material-ui/core'
 
@@ -22,11 +22,13 @@ const useStyle = makeStyles((theme: Theme) => ({
 }))
 export function DraggableDiv(props: React.HTMLAttributes<HTMLDivElement>) {
     const classes = useStyle()
-    return (
-        <div className={classes.root}>
-            <Draggable bounds="parent" cancel="input, button, address" handle="nav">
-                <div {...props} className={classes.paper} />
-            </Draggable>
-        </div>
+    const ref = useRef<HTMLDivElement>(null)
+    const dom = (
+        // See https://github.com/STRML/react-draggable/pull/478: Looks like nodeRef is missing in typings
+        // @ts-expect-error
+        <Draggable nodeRef={ref} bounds="parent" cancel="input, button, address" handle="nav">
+            <div {...props} ref={ref} className={classes.paper} />
+        </Draggable>
     )
+    return <div className={classes.root}>{dom}</div>
 }
