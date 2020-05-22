@@ -70,12 +70,12 @@ export default function ProviderLine(props: ProviderLineProps) {
                     {connected ? `@${userId}` : `${t('connect_to')} ${network}`}
                 </span>
                 {connected ? (
-                    <IconButton color="secondary" size="small" onClick={onAction} className={classes.cursor}>
+                    <IconButton size="small" onClick={onAction} className={classes.cursor}>
                         <LinkOffIcon />
                     </IconButton>
                 ) : (
                     <IconButton size="small">
-                        <ArrowForwardIcon />
+                        <ArrowForwardIcon color="primary" />
                     </IconButton>
                 )}
             </Typography>
