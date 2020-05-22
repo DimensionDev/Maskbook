@@ -180,7 +180,7 @@ export function DashboardPersonaImportDialog(props: WrappedDialogProps) {
                         inputProps={{ style: { height: 147 } }}
                         multiline
                         rows={1}
-                        placeholder="Input the base64 code"
+                        placeholder={t('dashboard_paste_database_base64_hint')}
                         onChange={(e) => setBase64Value(e.target.value)}
                         value={base64Value}></TextField>
                 ),
