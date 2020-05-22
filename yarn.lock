@@ -2460,10 +2460,10 @@
     schema-utils "^2.6.4"
     yargs "^15.1.0"
 
-"@nice-labs/git-rev@^3.3.1":
-  version "3.3.1"
-  resolved "https://registry.yarnpkg.com/@nice-labs/git-rev/-/git-rev-3.3.1.tgz#a5ed8a8a1f7ed10fcbc36a66bc94685a10c68d26"
-  integrity sha512-hJ3nJi34sTZNKxLHNdaKWSMxgAi9uWQmkmr96eZk0c7hqGJSYPuVF0JariRDgdkT6mIXXrVBw8PIz9Enbxw9eg==
+"@nice-labs/git-rev@^3.4.2":
+  version "3.4.2"
+  resolved "https://registry.yarnpkg.com/@nice-labs/git-rev/-/git-rev-3.4.2.tgz#24262ac0281bb535bd9d2523803e4dcef71161d4"
+  integrity sha512-yTt+WQy5mTVc1ND19meqtMh0nlTK1dwcYaG9gRICJYS7v+rxtoWfcufsOK4eZfPaymMbf/FY1LvqzVozEMoXyA==
 
 "@nodelib/fs.scandir@2.1.3":
   version "2.1.3"
