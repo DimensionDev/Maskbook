@@ -13,7 +13,7 @@ const useStyle = makeStyles((theme: Theme) => ({
         pointerEvents: 'none',
     },
     paper: {
-        maxWidth: 350,
+        maxWidth: 550,
         position: 'fixed',
         top: '2em',
         right: '2em',
@@ -24,7 +24,7 @@ export function DraggableDiv(props: React.HTMLAttributes<HTMLDivElement>) {
     const classes = useStyle()
     return (
         <div className={classes.root}>
-            <Draggable bounds="parent" cancel="input, button, address" handle="nav">
+            <Draggable bounds="parent" cancel="p, h1, input, button, address" handle="#draggable_handle">
                 <div {...props} className={classes.paper} />
             </Draggable>
         </div>

@@ -76,6 +76,7 @@ export interface ImmersiveSetupStepperUIProps {
     onUsernameChange: (newUserName: string) => void
     onClose(): void
 }
+
 export function ImmersiveSetupStepperUI(props: ImmersiveSetupStepperUIProps) {
     const { t } = useI18N()
     const classes = useStyles()

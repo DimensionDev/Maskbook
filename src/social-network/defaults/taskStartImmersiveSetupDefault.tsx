@@ -11,6 +11,7 @@ import { ValueRef } from '@holoflows/kit/es'
 import { useValueRef } from '../../utils/hooks/useValueRef'
 import type { SocialNetworkUI } from '../ui'
 import { restorePrototype } from '../../utils/type'
+import { SetupGuide } from '../../components/InjectedComponents/ImmersiveGuide/SetupGuide'
 
 function UI({
     post,
@@ -23,6 +24,7 @@ function UI({
     const provePost = useValueRef(post)
     return (
         <DraggableDiv>
+            <SetupGuide></SetupGuide>
             <ImmersiveSetupStepper
                 persona={persona}
                 provePost={provePost}
