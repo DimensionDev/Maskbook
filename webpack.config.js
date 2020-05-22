@@ -73,8 +73,19 @@ module.exports = (argvEnv, argv) => {
     const dist = env === 'production' ? src('./build') : src('./dist')
 
     const gitInfo = () => {
-        if (target.ReproducibleBuild) return undefined
-        try {
+        const reproducible = new webpack.EnvironmentPlugin({
+            BUILD_DATE: new Date(0).toISOString(),
+            VERSION: require('./package.json').version + '-reproducible',
+            TAG_NAME: 'N/A',
+            COMMIT_HASH: 'N/A',
+            COMMIT_DATE: 'N/A',
+            REMOTE_URL: 'N/A',
+            BRANCH_NAME: 'N/A',
+            DIRTY: 'N/A',
+            TAG_DIRTY: 'N/A',
+        })
+        if (target.ReproducibleBuild) return reproducible
+        if (git.isRepository())
             return new webpack.EnvironmentPlugin({
                 BUILD_DATE: new Date().toISOString(),
                 VERSION: git.describe('--dirty'),
@@ -86,9 +97,7 @@ module.exports = (argvEnv, argv) => {
                 DIRTY: git.isDirty(),
                 TAG_DIRTY: git.isTagDirty(),
             })
-        } catch (e) {
-            return undefined
-        }
+        return reproducible
     }
     /** @type {import('webpack').Configuration} */
     const config = {
@@ -239,7 +248,7 @@ module.exports = (argvEnv, argv) => {
         let buildTarget = undefined
         /** @type {'android' | 'desktop' | 'GeckoView' | undefined} */
         let firefoxVariant = undefined
-        /** @type {'app' | 'browser'} */
+        /** @type {'app' | 'browser' | 'facebookApp'} */
         let genericTarget = 'browser'
         if (target.Chromium) buildTarget = 'Chromium'
         if (target.Firefox) buildTarget = 'Firefox'
