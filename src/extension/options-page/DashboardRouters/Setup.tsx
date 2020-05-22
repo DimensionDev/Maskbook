@@ -154,19 +154,7 @@ export function CreatePersona() {
     const [name, setName] = useState('')
     const history = useHistory()
 
-    //#region validation
-    type ValidationResult = [boolean, string]
-    type ValidationState = [string]
-    const [[isValid, nameErrorMessage]] = useMultiStateValidator<ValidationResult, ValidationState, ValidationResult>(
-        [name],
-        ([name]: ValidationState): ValidationResult => [Boolean(name), name ? '' : t('error_name_absent')],
-    )
-    const [submitted, setSubmitted] = useState(false)
-    //#endregion
-
     const createPersonaAndNext = async () => {
-        setSubmitted(true)
-        if (!isValid) return
         const persona = await Services.Identity.createPersonaByMnemonic(name, '')
         history.push(`${SetupStep.ConnectNetwork}?identifier=${encodeURIComponent(persona.toText())}`)
     }
@@ -178,7 +166,6 @@ export function CreatePersona() {
                 <>
                     <TextField
                         required
-                        error={submitted && Boolean(nameErrorMessage)}
                         autoFocus
                         className={classes.input}
                         value={name}
@@ -190,7 +177,7 @@ export function CreatePersona() {
                             }
                         }}
                         label={t('name')}
-                        helperText={(submitted && nameErrorMessage) || ' '}
+                        helperText={' '}
                     />
                 </>
             }
@@ -200,7 +187,8 @@ export function CreatePersona() {
                         className={classes.button}
                         variant="contained"
                         color="primary"
-                        onClick={createPersonaAndNext}>
+                        onClick={createPersonaAndNext}
+                        disabled={!name}>
                         Next
                     </ActionButton>
                     <Typography className={classes.or} variant="body1">
