@@ -1,9 +1,10 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import classNames from 'classnames'
 
-import { List, ListItem, ListItemIcon, ListItemText, Typography, Paper, Box } from '@material-ui/core'
+import { List, ListItem, ListItemIcon, ListItemText, Typography, Paper, Box, Fade } from '@material-ui/core'
 import { makeStyles, Theme, ThemeProvider, useTheme } from '@material-ui/core/styles'
 import { Link, useRouteMatch } from 'react-router-dom'
+import { useInterval } from 'react-use'
 
 import SentimentSatisfiedOutlinedIcon from '@material-ui/icons/SentimentSatisfiedOutlined'
 import { useModal } from '../Dialogs/Base'
@@ -11,6 +12,26 @@ import { DashboardFeedbackDialog } from '../Dialogs/Feedback'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { cloneDeep, merge } from 'lodash-es'
 import Logo from './MaskbookLogo'
+
+interface CarouselProps {
+    items: React.ReactElement[]
+    delay?: number
+}
+
+function Carousel({ items, delay = 1e4 }: CarouselProps) {
+    const [current, setCurrent] = useState(0)
+
+    useInterval(() => setCurrent((c) => c + 1), delay)
+    return (
+        <>
+            {items.map((item, i) => (
+                <Fade in={current % items.length === i} key={i} style={{ transitionDuration: '2s' }}>
+                    {item}
+                </Fade>
+            ))}
+        </>
+    )
+}
 
 const useStyles = makeStyles((theme) => ({
     drawer: {
@@ -40,7 +61,7 @@ const useStyles = makeStyles((theme) => ({
         padding: 0,
     },
     drawerItem: {
-        borderLeft: `solid 5px ${theme.palette.type === 'light' ? 'var(--drawerBody)' : 'transparent'}`,
+        borderLeft: 'solid 5px var(--drawerBody)',
         paddingTop: 16,
         paddingBottom: 16,
     },
@@ -48,11 +69,7 @@ const useStyles = makeStyles((theme) => ({
         margin: 0,
     },
     drawerFeedback: {
-        placeSelf: 'center stretch',
-        padding: 0,
-    },
-    feedback: {
-        paddingLeft: 0,
+        borderLeft: 'none',
     },
     slogan: {
         color: theme.palette.type === 'light' ? '#A1C1FA' : '#3B3B3B',
@@ -61,7 +78,7 @@ const useStyles = makeStyles((theme) => ({
         height: 260,
         left: 48,
         bottom: 30,
-        fontWeight: 500,
+        fontWeight: 'bold',
         fontSize: 40,
         lineHeight: 1.2,
         letterSpacing: -0.4,
@@ -75,9 +92,10 @@ const drawerTheme = (theme: Theme): Theme =>
             MuiListItem: {
                 root: {
                     '&$selected$selected': {
+                        borderLeftColor:
+                            theme.palette.type === 'dark' ? theme.palette.primary.light : 'var(--drawerBody)',
                         backgroundColor:
                             theme.palette.type === 'dark' ? theme.palette.primary.dark : theme.palette.primary.light,
-                        borderLeftColor: theme.palette.action.active,
                     },
                 },
             },
@@ -146,8 +164,11 @@ export default function Drawer(props: DrawerProps) {
                                     </ListItem>
                                 ))}
                             </List>
-                            <List className={classNames(classes.drawerList, classes.feedback)}>
-                                <ListItem className={classes.drawerItem} button onClick={openFeedback}>
+                            <List className={classes.drawerList}>
+                                <ListItem
+                                    className={classNames(classes.drawerItem, classes.drawerFeedback)}
+                                    button
+                                    onClick={openFeedback}>
                                     <ListItemIcon children={<SentimentSatisfiedOutlinedIcon fontSize="small" />} />
                                     <ListItemText className={classes.drawerItemText} primary={t('feedback')} />
                                 </ListItem>
@@ -157,9 +178,16 @@ export default function Drawer(props: DrawerProps) {
                     )}
                 </Box>
                 {forSetupPurpose ? (
-                    <Typography className={classes.slogan}>
-                        Post on social networks without allowing the corporations to stalk you.
-                    </Typography>
+                    <Carousel
+                        items={[
+                            <Typography className={classes.slogan}>
+                                Post on social networks without allowing the corporations to stalk you.
+                            </Typography>,
+                            <Typography className={classes.slogan}>Take back our online privacy.</Typography>,
+                            <Typography className={classes.slogan}>
+                                Neutralize the surveillance from tech giants.
+                            </Typography>,
+                        ]}></Carousel>
                 ) : null}
             </nav>
         </ThemeProvider>

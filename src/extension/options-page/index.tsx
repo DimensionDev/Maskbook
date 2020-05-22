@@ -45,7 +45,7 @@ const useStyles = makeStyles((theme) => {
         wrapper: {
             '--monospace': 'SFMono-Regular, Consolas, "Liberation Mono", Menlo, monospace',
 
-            '--drawerHeader': dark ? '#121212' : theme.palette.primary.dark,
+            '--drawerHeader': dark ? '#121212' : theme.palette.primary.main,
             '--drawerBody': dark ? '#121212' : theme.palette.primary.main,
 
             position: 'absolute',

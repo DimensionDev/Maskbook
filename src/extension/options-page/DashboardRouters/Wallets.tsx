@@ -230,7 +230,7 @@ export default function DashboardWalletsRouter() {
                                 onClick={async () => {
                                     setCurrent('an_adsent_wallet_address')
                                     // for animation purpose
-                                    await sleep(200)
+                                    await sleep(100)
                                     setCurrent(wallet.address)
                                 }}
                                 wallet={wallet}
