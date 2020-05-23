@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useMemo, useEffect } from 'react'
 import {
     makeStyles,
     createStyles,
@@ -14,34 +14,27 @@ import {
 import classNames from 'classnames'
 import AlternateEmailIcon from '@material-ui/icons/AlternateEmail'
 import CloseIcon from '@material-ui/icons/Close'
-import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
+import ActionButton, { ActionButtonPromise } from '../../../extension/options-page/DashboardComponents/ActionButton'
 import ShowcaseBox from '../../../extension/options-page/DashboardComponents/ShowcaseBox'
-import { merge, cloneDeep } from 'lodash-es'
-import { green, orange } from '@material-ui/core/colors'
+import { merge, cloneDeep, noop } from 'lodash-es'
+import { useI18N } from '../../../utils/i18n-next-ui'
+import { sleep } from '@holoflows/kit/es/util/sleep'
+import { getActivatedUI } from '../../../social-network/ui'
+import { currentImmersiveSetupStatus, ImmersiveSetupCrossContextStatus } from '../../shared-settings/settings'
+import { useValueRef } from '../../../utils/hooks/useValueRef'
+import { useCapturedInput } from '../../../utils/hooks/useCapturedEvents'
+import { PersonaIdentifier, ProfileIdentifier } from '../../../database/type'
+import Services from '../../../extension/service'
 
-export enum ImmersiveGuideStep {
+export enum SetupGuideStep {
     FindUsername = 'find-username',
     PasteIntoBio = 'paste-into-bio',
 }
-
-const CurrentStep = (step: ImmersiveGuideStep) => {
-    switch (step) {
-        case ImmersiveGuideStep.FindUsername:
-            return <FindUsername></FindUsername>
-        case ImmersiveGuideStep.PasteIntoBio:
-            return <PasteIntoBio></PasteIntoBio>
-    }
-}
-
+//#region wizard dialog
 const wizardTheme = (theme: Theme): Theme =>
     merge(cloneDeep(theme), {
         palette: {
-            secondary: {
-                contrastText: '#fff',
-                light: orange[300],
-                main: orange[500],
-                dark: orange[700],
-            },
+            secondary: theme.palette.warning,
         },
         overrides: {
             MuiOutlinedInput: {
@@ -98,9 +91,22 @@ const wizardTheme = (theme: Theme): Theme =>
         },
     })
 
-//#region wizard dialog
+const wizardSuccessTheme = (theme: Theme): Theme =>
+    merge(cloneDeep(theme), {
+        palette: {
+            secondary: theme.palette.success,
+        },
+    })
+
+const wizardErrorTheme = (theme: Theme): Theme =>
+    merge(cloneDeep(theme), {
+        palette: {
+            secondary: theme.palette.error,
+        },
+    })
+
 const useWizardDialogStyles = makeStyles((theme) =>
-    createStyles<string, { completion: number }>({
+    createStyles({
         root: {
             boxSizing: 'border-box',
             padding: '50px 36px 40px',
@@ -140,6 +146,7 @@ const useWizardDialogStyles = makeStyles((theme) =>
             lineHeight: 1.75,
         },
         button: {
+            fontSize: 16,
             width: 200,
             height: 40,
             marginBottom: 14,
@@ -156,7 +163,6 @@ const useWizardDialogStyles = makeStyles((theme) =>
             marginTop: 36,
         },
         progress: {
-            color: (props) => (props.completion === 100 ? theme.palette.success.main : theme.palette.warning.main),
             left: 0,
             right: 0,
             bottom: 0,
@@ -169,6 +175,7 @@ const useWizardDialogStyles = makeStyles((theme) =>
 interface WizardDialogProps {
     title: string
     completion: number
+    status: boolean | 'undecided'
     optional?: boolean
     content?: React.ReactNode
     footer?: React.ReactNode
@@ -176,14 +183,21 @@ interface WizardDialogProps {
 }
 
 function WizardDialog(props: WizardDialogProps) {
-    const { title, optional = false, completion, content, footer, onClose } = props
+    const { title, optional = false, completion, status, content, footer, onClose } = props
     const classes = useWizardDialogStyles(props)
-    const theme = useTheme()
-
-    theme.palette.secondary.main = orange[500]
+    const getTheme = () => {
+        switch (status) {
+            case true:
+                return wizardSuccessTheme
+            case false:
+                return wizardErrorTheme
+            default:
+                return wizardTheme
+        }
+    }
 
     return (
-        <ThemeProvider theme={wizardTheme}>
+        <ThemeProvider theme={getTheme()}>
             <Paper id="draggable_handle" className={classes.root}>
                 <header className={classes.header}>
                     <Typography className={classes.primary} color="textPrimary" variant="h1">
@@ -199,10 +213,10 @@ function WizardDialog(props: WizardDialogProps) {
                 <footer className={classes.footer}>{footer}</footer>
                 <LinearProgress
                     className={classes.progress}
-                    variant="determinate"
                     color="secondary"
+                    variant="determinate"
                     value={completion}></LinearProgress>
-                <CloseIcon className={classes.close} cursor="pointer"></CloseIcon>
+                <CloseIcon className={classes.close} cursor="pointer" onClick={onClose}></CloseIcon>
             </Paper>
         </ThemeProvider>
     )
@@ -228,14 +242,21 @@ const useFindUsernameStyles = makeStyles((theme) =>
     }),
 )
 
-interface FindUsernameProps {}
+interface FindUsernameProps extends Partial<WizardDialogProps> {
+    username: string
+    onNext?: () => void
+    onUsernameChange?: (username: string) => void
+}
 
-function FindUsername(props: FindUsernameProps) {
-    const classes = useWizardDialogStyles({ completion: 50 })
+function FindUsername({ username, onNext, onClose, onUsernameChange = noop }: FindUsernameProps) {
+    const classes = useWizardDialogStyles()
     const findUsernameClasses = useFindUsernameStyles()
+    const [, inputRef] = useCapturedInput(onUsernameChange)
+
     return (
         <WizardDialog
             completion={50}
+            status="undecided"
             title="Find your username"
             content={
                 <form>
@@ -243,6 +264,7 @@ function FindUsername(props: FindUsernameProps) {
                         className={findUsernameClasses.input}
                         variant="outlined"
                         label="Username"
+                        value={username}
                         InputProps={{
                             classes: {
                                 focused: findUsernameClasses.inputFocus,
@@ -252,7 +274,8 @@ function FindUsername(props: FindUsernameProps) {
                                     <AlternateEmailIcon className={findUsernameClasses.icon} />
                                 </InputAdornment>
                             ),
-                        }}></TextField>
+                        }}
+                        inputRef={inputRef}></TextField>
                     <Typography className={classNames(classes.tip, findUsernameClasses.tip)} variant="body2">
                         Maskbook needs the username to connect your Profile to your Persona.
                         <br /> Make sure it is correct.
@@ -260,10 +283,16 @@ function FindUsername(props: FindUsernameProps) {
                 </form>
             }
             footer={
-                <ActionButton className={classes.button} variant="contained" color="primary">
+                <ActionButton
+                    className={classes.button}
+                    variant="contained"
+                    color="primary"
+                    onClick={onNext}
+                    disabled={!username}>
                     Next
                 </ActionButton>
-            }></WizardDialog>
+            }
+            onClose={onClose}></WizardDialog>
     )
 }
 //#endregion
@@ -278,46 +307,159 @@ const usePasteIntoBioStyles = makeStyles((theme) =>
         tip: {
             marginBottom: 16,
         },
+        showcaseBoxContent: {
+            wordBreak: 'break-all',
+        },
+        doneButton: {
+            color: theme.palette.common.white,
+        },
     }),
 )
 
-interface PasteIntoBioProps {}
+interface PasteIntoBioProps extends Partial<WizardDialogProps> {
+    provePost: string
+    onCancel?: () => void
+}
 
-function PasteIntoBio(props: PasteIntoBioProps) {
-    const classes = useWizardDialogStyles({ completion: 100 })
+function PasteIntoBio({ provePost, onClose, onCancel }: PasteIntoBioProps) {
+    const { t } = useI18N()
+    const classes = useWizardDialogStyles()
     const pasteIntoBioClasses = usePasteIntoBioStyles()
+    const ui = getActivatedUI()
+
+    const [pastedStatus, setPastedStatus] = useState<boolean | 'undecided'>('undecided')
+    const onConfirm = async () => {
+        try {
+            await navigator.clipboard.writeText(provePost)
+            await sleep(400)
+            ui.taskPasteIntoBio(provePost)
+            setPastedStatus(true)
+        } catch (e) {
+            setPastedStatus(false)
+        }
+    }
+
     return (
         <WizardDialog
             completion={100}
+            status={pastedStatus}
             title="Paste it in your bio"
             optional
             content={
                 <form>
                     <Typography className={classNames(classes.tip, pasteIntoBioClasses.tip)} variant="body2">
-                        Add the text above in your bio to access advanced features. Please don't delete or change it.
+                        {pastedStatus === false
+                            ? t('immersive_setup_paste_into_bio_failed')
+                            : "Add the text above in your bio to access advanced features. Please don't delete or change it."}
                     </Typography>
-                    <ShowcaseBox>asdfsadfasfsfskjdfkjdsfkjasdfasdfsadfasfsfskjdfkjdsfkjasdf</ShowcaseBox>
+                    <ShowcaseBox ContentProps={{ className: pasteIntoBioClasses.showcaseBoxContent }}>
+                        {provePost}
+                    </ShowcaseBox>
                 </form>
             }
             footer={
                 <>
-                    <ActionButton className={classes.button} variant="contained" color="primary">
+                    <ActionButtonPromise
+                        className={classes.button}
+                        variant="contained"
+                        color="primary"
+                        init={t('immersive_setup_paste_into_bio_auto')}
+                        waiting={t('adding')}
+                        complete={t('done')}
+                        failed={t('immersive_setup_paste_into_bio_failed')}
+                        executor={onConfirm}
+                        completeOnClick={onClose}
+                        failedOnClick="use executor">
                         Please add it for me
+                    </ActionButtonPromise>
+                    <ActionButton variant="text" onClick={onCancel}>
+                        Cancel
                     </ActionButton>
-                    <ActionButton className={classes.button} variant="contained" color="secondary">
-                        Done
-                    </ActionButton>
-                    <ActionButton variant="text">Finish</ActionButton>
                 </>
-            }></WizardDialog>
+            }
+            onClose={onClose}></WizardDialog>
     )
 }
 //#endregion
 
 //#region setup guide
-export interface SetupGuideProps {}
+export interface SetupGuideProps {
+    provePost: string
+    persona: PersonaIdentifier
+    onClose?: () => void
+}
 
 export function SetupGuide(props: SetupGuideProps) {
-    return CurrentStep(ImmersiveGuideStep.FindUsername)
+    const { persona, provePost } = props
+    const [step, setStep] = useState(SetupGuideStep.FindUsername)
+    const ui = getActivatedUI()
+
+    //#region parse setup status
+    const lastStateRef = currentImmersiveSetupStatus[ui.networkIdentifier]
+    const lastState_ = useValueRef(lastStateRef)
+    const lastState = React.useMemo<ImmersiveSetupCrossContextStatus>(() => {
+        try {
+            return JSON.parse(lastState_)
+        } catch {
+            return {}
+        }
+    }, [lastState_])
+    useEffect(() => {
+        if (step === SetupGuideStep.FindUsername && lastState.username && lastState.status === 'during') {
+            setStep(SetupGuideStep.PasteIntoBio)
+        }
+    }, [step, setStep, lastState])
+    //#endregion
+
+    //#region setup username
+    const lastRecognized = useValueRef(getActivatedUI().lastRecognizedIdentity)
+    const getUsername = () =>
+        lastState.username || (lastRecognized.identifier.isUnknown ? '' : lastRecognized.identifier.userId)
+    const [username, setUsername] = useState(getUsername)
+    //#endregion
+
+    const onNext = async () => {
+        currentImmersiveSetupStatus[ui.networkIdentifier].value = JSON.stringify({
+            status: 'during',
+            username: username,
+            persona: persona.toText(),
+        } as ImmersiveSetupCrossContextStatus)
+        const connecting = new ProfileIdentifier(ui.networkIdentifier, username)
+        await Services.Identity.attachProfile(connecting, persona, { connectionConfirmState: 'confirmed' })
+        ui.taskGotoProfilePage(connecting)
+        await sleep(400)
+        setStep(SetupGuideStep.PasteIntoBio)
+    }
+    const onCancel = async () => {
+        const username_ = getUsername()
+        currentImmersiveSetupStatus[ui.networkIdentifier].value = JSON.stringify({
+            status: 'during',
+            // ensure staying find-username page
+            username: '',
+            persona: persona.toText(),
+        } as ImmersiveSetupCrossContextStatus)
+        const connected = new ProfileIdentifier(ui.networkIdentifier, username_)
+        await Services.Identity.detachProfile(connected)
+        setStep(SetupGuideStep.FindUsername)
+    }
+    const onClose = () => {
+        currentImmersiveSetupStatus[ui.networkIdentifier].value = ''
+        props.onClose?.()
+    }
+
+    switch (step) {
+        case SetupGuideStep.FindUsername:
+            return (
+                <FindUsername
+                    username={username}
+                    onNext={onNext}
+                    onClose={onClose}
+                    onUsernameChange={(u) => setUsername(u)}></FindUsername>
+            )
+        case SetupGuideStep.PasteIntoBio:
+            return <PasteIntoBio provePost={provePost} onCancel={onCancel} onClose={onClose}></PasteIntoBio>
+        default:
+            return null
+    }
 }
 //#endregion

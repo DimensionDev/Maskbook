@@ -24,12 +24,12 @@ function UI({
     const provePost = useValueRef(post)
     return (
         <DraggableDiv>
-            <SetupGuide></SetupGuide>
-            <ImmersiveSetupStepper
+            <SetupGuide persona={persona} provePost={provePost} onClose={unmount}></SetupGuide>
+            {/* <ImmersiveSetupStepper
                 persona={persona}
                 provePost={provePost}
                 onClose={unmount}
-                {...rest}></ImmersiveSetupStepper>
+                {...rest}></ImmersiveSetupStepper> */}
         </DraggableDiv>
     )
 }
