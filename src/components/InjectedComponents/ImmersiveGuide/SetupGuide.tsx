@@ -111,7 +111,7 @@ const useWizardDialogStyles = makeStyles((theme) =>
             padding: '50px 36px 40px',
             position: 'relative',
             width: 440,
-            height: 440,
+            minHeight: 440,
             borderRadius: 12,
             boxShadow:
                 theme.palette.type === 'dark'
@@ -182,6 +182,7 @@ interface WizardDialogProps {
 }
 
 function WizardDialog(props: WizardDialogProps) {
+    const { t } = useI18N()
     const { title, optional = false, completion, status, content, footer, onClose } = props
     const classes = useWizardDialogStyles(props)
     const getTheme = () => {
@@ -204,7 +205,7 @@ function WizardDialog(props: WizardDialogProps) {
                     </Typography>
                     {optional ? (
                         <Typography className={classes.secondary} color="textSecondary" variant="body2">
-                            [Optional]
+                            {t('immersive_setup_optional')}
                         </Typography>
                     ) : null}
                 </header>
@@ -248,6 +249,7 @@ interface FindUsernameProps extends Partial<WizardDialogProps> {
 }
 
 function FindUsername({ username, onNext, onClose, onUsernameChange = noop }: FindUsernameProps) {
+    const { t } = useI18N()
     const classes = useWizardDialogStyles()
     const findUsernameClasses = useFindUsernameStyles()
     const [, inputRef] = useCapturedInput(onUsernameChange)
@@ -256,13 +258,13 @@ function FindUsername({ username, onNext, onClose, onUsernameChange = noop }: Fi
         <WizardDialog
             completion={50}
             status="undecided"
-            title="Find your username"
+            title={t('immersive_setup_find_username_title')}
             content={
                 <form>
                     <TextField
                         className={findUsernameClasses.input}
                         variant="outlined"
-                        label="Username"
+                        label={t('username')}
                         value={username}
                         InputProps={{
                             classes: {
@@ -275,10 +277,10 @@ function FindUsername({ username, onNext, onClose, onUsernameChange = noop }: Fi
                             ),
                         }}
                         inputRef={inputRef}></TextField>
-                    <Typography className={classNames(classes.tip, findUsernameClasses.tip)} variant="body2">
-                        Maskbook needs the username to connect your Profile to your Persona.
-                        <br /> Make sure it is correct.
-                    </Typography>
+                    <Typography
+                        className={classNames(classes.tip, findUsernameClasses.tip)}
+                        variant="body2"
+                        dangerouslySetInnerHTML={{ __html: t('immersive_setup_find_username_text') }}></Typography>
                 </form>
             }
             footer={
@@ -288,7 +290,7 @@ function FindUsername({ username, onNext, onClose, onUsernameChange = noop }: Fi
                     color="primary"
                     onClick={onNext}
                     disabled={!username}>
-                    Next
+                    {t('next')}
                 </ActionButton>
             }
             onClose={onClose}></WizardDialog>
@@ -342,14 +344,14 @@ function PasteIntoBio({ provePost, onClose, onCancel }: PasteIntoBioProps) {
         <WizardDialog
             completion={100}
             status={pastedStatus}
-            title="Paste it in your bio"
+            title={t('immersive_setup_add_bio_title')}
             optional
             content={
                 <form>
                     <Typography className={classNames(classes.tip, pasteIntoBioClasses.tip)} variant="body2">
                         {pastedStatus === false
                             ? t('immersive_setup_paste_into_bio_failed')
-                            : "Add the text above in your bio to access advanced features. Please don't delete or change it."}
+                            : t('immersive_setup_add_bio_text')}
                     </Typography>
                     <ShowcaseBox ContentProps={{ className: pasteIntoBioClasses.showcaseBoxContent }}>
                         {provePost}
@@ -370,7 +372,7 @@ function PasteIntoBio({ provePost, onClose, onCancel }: PasteIntoBioProps) {
                         completeOnClick={onClose}
                         failedOnClick="use executor"></ActionButtonPromise>
                     <ActionButton variant="text" onClick={onCancel}>
-                        Cancel
+                        {t('cancel')}
                     </ActionButton>
                 </>
             }
