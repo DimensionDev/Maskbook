@@ -1,5 +1,5 @@
 import React from 'react'
-import Draggable from 'react-draggable'
+import ReactDraggable from 'react-draggable'
 import { makeStyles, Theme } from '@material-ui/core'
 
 const useStyle = makeStyles((theme: Theme) => ({
@@ -20,13 +20,14 @@ const useStyle = makeStyles((theme: Theme) => ({
         pointerEvents: 'initial',
     },
 }))
-export function DraggableDiv(props: React.HTMLAttributes<HTMLDivElement>) {
+
+export function Draggable(props: React.HTMLAttributes<HTMLDivElement>) {
     const classes = useStyle()
     return (
         <div className={classes.root}>
-            <Draggable bounds="parent" cancel="p, h1, input, button, address" handle="#draggable_handle">
+            <ReactDraggable bounds="parent" cancel="p, h1, input, button, address" handle="#draggable_handle">
                 <div {...props} className={classes.paper} />
-            </Draggable>
+            </ReactDraggable>
         </div>
     )
 }

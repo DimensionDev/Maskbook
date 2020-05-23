@@ -1,43 +1,28 @@
 import React from 'react'
-import type { PersonaIdentifier, ECKeyIdentifier } from '../../database/type'
+import type { PersonaIdentifier } from '../../database/type'
 import { renderInShadowRoot } from '../../utils/jss/renderInShadowRoot'
-import {
-    ImmersiveSetupStepper,
-    ImmersiveSetupStepperUIProps,
-} from '../../components/InjectedComponents/ImmersiveSetup/SetupStepper'
-import { DraggableDiv } from '../../components/InjectedComponents/ImmersiveSetup/DraggableDiv'
+import { Draggable } from '../../components/InjectedComponents/ImmersiveGuide/Draggable'
 import Services from '../../extension/service'
 import { ValueRef } from '@holoflows/kit/es'
 import { useValueRef } from '../../utils/hooks/useValueRef'
 import type { SocialNetworkUI } from '../ui'
-import { restorePrototype } from '../../utils/type'
-import { SetupGuide } from '../../components/InjectedComponents/ImmersiveGuide/SetupGuide'
+import { SetupGuide, SetupGuideProps } from '../../components/InjectedComponents/ImmersiveGuide/SetupGuide'
 
 function UI({
     post,
     unmount,
     persona,
     ...rest
-}: { unmount: () => void; post: ValueRef<string>; persona: PersonaIdentifier } & Partial<
-    ImmersiveSetupStepperUIProps
->) {
+}: { unmount: () => void; post: ValueRef<string>; persona: PersonaIdentifier } & Partial<SetupGuideProps>) {
     const provePost = useValueRef(post)
     return (
-        <DraggableDiv>
+        <Draggable>
             <SetupGuide persona={persona} provePost={provePost} onClose={unmount}></SetupGuide>
-            {/* <ImmersiveSetupStepper
-                persona={persona}
-                provePost={provePost}
-                onClose={unmount}
-                {...rest}></ImmersiveSetupStepper> */}
-        </DraggableDiv>
+        </Draggable>
     )
 }
 let mounted = false
-export function createTaskStartImmersiveSetupDefault(
-    _: () => SocialNetworkUI,
-    props: Partial<ImmersiveSetupStepperUIProps> = {},
-) {
+export function createTaskStartImmersiveSetupDefault(_: () => SocialNetworkUI, props: Partial<SetupGuideProps> = {}) {
     let shadowRoot: ShadowRoot
     return (for_: PersonaIdentifier) => {
         if (mounted) return

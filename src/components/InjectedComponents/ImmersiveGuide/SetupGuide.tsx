@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from 'react'
+import React, { useMemo, useState, useEffect } from 'react'
 import {
     makeStyles,
     createStyles,
@@ -9,7 +9,6 @@ import {
     ThemeProvider,
     InputAdornment,
     LinearProgress,
-    useTheme,
 } from '@material-ui/core'
 import classNames from 'classnames'
 import AlternateEmailIcon from '@material-ui/icons/AlternateEmail'
@@ -369,9 +368,7 @@ function PasteIntoBio({ provePost, onClose, onCancel }: PasteIntoBioProps) {
                         failed={t('immersive_setup_paste_into_bio_failed')}
                         executor={onConfirm}
                         completeOnClick={onClose}
-                        failedOnClick="use executor">
-                        Please add it for me
-                    </ActionButtonPromise>
+                        failedOnClick="use executor"></ActionButtonPromise>
                     <ActionButton variant="text" onClick={onCancel}>
                         Cancel
                     </ActionButton>
@@ -397,7 +394,7 @@ export function SetupGuide(props: SetupGuideProps) {
     //#region parse setup status
     const lastStateRef = currentImmersiveSetupStatus[ui.networkIdentifier]
     const lastState_ = useValueRef(lastStateRef)
-    const lastState = React.useMemo<ImmersiveSetupCrossContextStatus>(() => {
+    const lastState = useMemo<ImmersiveSetupCrossContextStatus>(() => {
         try {
             return JSON.parse(lastState_)
         } catch {
