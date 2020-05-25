@@ -149,7 +149,7 @@ export function DashboardWalletCreateDialog(props: WrappedDialogProps) {
     const [name, setName] = useState('')
     const [passphrase] = useState('')
     const [confirmation, setConfirmation] = useState('')
-    const [showNotification, setShowNotification] = useState(true)
+    const [showNotification, setShowNotification] = useState(false)
 
     const onSubmit = useSnackbarCallback(
         () => Services.Plugin.invokePlugin('maskbook.wallet', 'createNewWallet', { name, passphrase }),
