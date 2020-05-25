@@ -29,6 +29,7 @@ import type {
     AESJsonWebKey,
     EC_Private_JsonWebKey,
 } from '../../modules/CryptoAlgorithm/interfaces/utils'
+import { i18n } from '../../utils/i18n-next'
 
 export async function profileRecordToProfile(record: ProfileRecord): Promise<Profile> {
     const rec = { ...record }
@@ -159,7 +160,7 @@ export async function createPersonaByMnemonic(
     // TODO: move to plugin logic
     if (await isEmptyWallets()) {
         importNewWallet({
-            name: null,
+            name: nickname ?? i18n.t('untitled_wallet'),
             mnemonic: mnemonic.words.split(' '),
             passphrase: password,
             _wallet_is_default: true,

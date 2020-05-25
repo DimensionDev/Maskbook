@@ -309,5 +309,6 @@
     "welcome_1b_dragging": "Drag your key backup into this dialog…",
     "welcome_1b_file_selected": "Selected exported key backup: {{filename}}",
     "unknown_time": "Unknown time",
+    "untitled_wallet": "Untitled Wallet",
     "your_message": "Your message…"
 }
