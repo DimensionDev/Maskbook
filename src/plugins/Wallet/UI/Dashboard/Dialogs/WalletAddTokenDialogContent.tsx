@@ -138,14 +138,16 @@ export function ERC20WellKnownTokenSelector(props: {
 
     return (
         <Box textAlign="left">
-            <List disablePadding>
-                <ListItem classes={{ root: listItemClasses.root }} onClick={onChange}>
-                    <ListItemText primary="Use Rinkeby Network"></ListItemText>
-                    <ListItemSecondaryAction classes={{ root: listItemClasses.listItemSecondaryAction }}>
-                        <Switch onClick={onChange} checked={useRinkeby} color="primary" edge="end" />
-                    </ListItemSecondaryAction>
-                </ListItem>
-            </List>
+            {process.env.NODE_ENV !== 'development' ? (
+                <List disablePadding>
+                    <ListItem classes={{ root: listItemClasses.root }} onClick={onChange}>
+                        <ListItemText primary="Use Rinkeby Network"></ListItemText>
+                        <ListItemSecondaryAction classes={{ root: listItemClasses.listItemSecondaryAction }}>
+                            <Switch onClick={onChange} checked={useRinkeby} color="primary" edge="end" />
+                        </ListItemSecondaryAction>
+                    </ListItem>
+                </List>
+            ) : null}
             {!isCustom ? (
                 // TODO!: the selected item is wrong
                 <>

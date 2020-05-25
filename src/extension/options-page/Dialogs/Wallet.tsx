@@ -255,7 +255,7 @@ export function DashboardWalletAddTokenDialog(props: WrappedDialogProps<WalletPr
             },
         ],
         state,
-        height: 288,
+        height: 240,
     }
 
     const onSubmit = useSnackbarCallback(
