@@ -152,7 +152,6 @@ const useDashboardDialogWrapperStyles = makeStyles((theme) =>
             alignItems: 'center',
         },
         content: {
-            minHeight: 100,
             flex: 1,
             textAlign: 'center',
         },
@@ -260,14 +259,13 @@ interface DashboardDialogWrapperProps {
     iconColor?: string
     primary: string
     secondary?: string
-    confineSecondary?: boolean
     size?: 'small' | 'medium'
     content?: React.ReactNode
     footer?: React.ReactNode
 }
 
 export function DashboardDialogWrapper(props: DashboardDialogWrapperProps) {
-    const { icon, iconColor, primary, secondary, confineSecondary = true, content, footer } = props
+    const { size, icon, iconColor, primary, secondary, content, footer } = props
     const classes = useDashboardDialogWrapperStyles(props)
     return (
         <ThemeProvider theme={dialogTheme}>
@@ -278,7 +276,7 @@ export function DashboardDialogWrapper(props: DashboardDialogWrapperProps) {
                         {primary}
                     </Typography>
                     <Typography
-                        className={classNames(classes.secondary, confineSecondary ? classes.confineSecondary : '')}
+                        className={classNames(classes.secondary, size !== 'small' ? classes.confineSecondary : '')}
                         color="textSecondary"
                         variant="body2"
                         dangerouslySetInnerHTML={{ __html: secondary ?? '' }}></Typography>
