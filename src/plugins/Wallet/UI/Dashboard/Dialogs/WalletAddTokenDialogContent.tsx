@@ -98,7 +98,7 @@ rinkeby.sort(sort)
 
 const renderGroup = (params: RenderGroupParams) => [
     <ListSubheader key={params.key} component="div">
-        {params.key}
+        {params.group}
     </ListSubheader>,
     params.children,
 ]
@@ -158,7 +158,7 @@ export function ERC20WellKnownTokenSelector(props: {
                         renderGroup={renderGroup}
                         options={useRinkeby ? rinkeby : mainnet}
                         getOptionLabel={(option: typeof mainnet[0]) => option.name + ` (${option.symbol})`}
-                        groupBy={(option: typeof mainnet[0]) => getNameOfToken(option)[0].toUpperCase()}
+                        groupBy={(option: typeof mainnet[0]) => getNameOfToken(option)[0]}
                         renderInput={(params) => (
                             <TextField {...params} variant="outlined" label="Predefined ERC20 Tokens" fullWidth />
                         )}
