@@ -89,7 +89,7 @@
     "react-dom": "0.0.0-experimental-e5d06e34b",
     "react-i18next": "^11.5.0",
     "react-router-dom": "^5.0.0",
-    "react-use": "^14.2.0",
+    "react-use": "^15.1.0",
     "react-window": "^1.8.5",
     "swr": "github:innocentiv/swr#reset-pages-build",
     "tiny-secp256k1": "^1.1.4",
