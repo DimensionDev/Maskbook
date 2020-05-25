@@ -259,13 +259,14 @@ interface DashboardDialogWrapperProps {
     iconColor?: string
     primary: string
     secondary?: string
+    constraintSecondary?: boolean
     size?: 'small' | 'medium'
     content?: React.ReactNode
     footer?: React.ReactNode
 }
 
 export function DashboardDialogWrapper(props: DashboardDialogWrapperProps) {
-    const { size, icon, iconColor, primary, secondary, content, footer } = props
+    const { size, icon, iconColor, primary, secondary, constraintSecondary = true, content, footer } = props
     const classes = useDashboardDialogWrapperStyles(props)
     return (
         <ThemeProvider theme={dialogTheme}>
@@ -276,7 +277,10 @@ export function DashboardDialogWrapper(props: DashboardDialogWrapperProps) {
                         {primary}
                     </Typography>
                     <Typography
-                        className={classNames(classes.secondary, size !== 'small' ? classes.confineSecondary : '')}
+                        className={classNames(
+                            classes.secondary,
+                            size !== 'small' && constraintSecondary ? classes.confineSecondary : '',
+                        )}
                         color="textSecondary"
                         variant="body2"
                         dangerouslySetInnerHTML={{ __html: secondary ?? '' }}></Typography>
