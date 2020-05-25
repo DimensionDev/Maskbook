@@ -56,6 +56,7 @@ const useStyles = makeStyles((theme) => {
             gridTemplateColumns: '1fr [content-start] 1110px [content-end] 1fr',
             gridTemplateRows: '32px [content-start] auto [content-end] 50px',
             placeItems: 'center',
+            userSelect: 'none',
 
             transition: 'filter 0.3s linear',
             willChange: 'filter',
