@@ -18655,10 +18655,10 @@ symbol.prototype.description@^1.0.0:
   dependencies:
     has-symbols "^1.0.0"
 
-systemjs@^6.2.3:
-  version "6.3.1"
-  resolved "https://registry.yarnpkg.com/systemjs/-/systemjs-6.3.1.tgz#661adf60f257c1f65b8075fd5b034c0c69b306f4"
-  integrity sha512-pYAQxEK2a3Xj6cRVXrXgogSfKc3oFTzEWejK8KfHcZxwT31yT2xL43WXjUNcjOk5P048Z1zLRIlfrB3Mq4W+PQ==
+systemjs@^6.3.2:
+  version "6.3.2"
+  resolved "https://registry.yarnpkg.com/systemjs/-/systemjs-6.3.2.tgz#2c3407f949260fdfb3b837c191869db933d1fe0f"
+  integrity sha512-zcALS1RIYtsQBG4fbaE+cJzKx+UoEuSM8xCkGGH99i7p7Ym3ALvhi9QrpF2lo0CMQaejqrE1GnbkuG2m/+H7ew==
 
 table@^3.7.8:
   version "3.8.3"
@@ -20698,11 +20698,12 @@ webextension-polyfill@^0.6.0:
 
 "webextension-shim@https://github.com/DimensionDev/webextension-polyfill":
   version "0.0.1"
-  resolved "https://github.com/DimensionDev/webextension-polyfill#0e469704fc875e3826b754d12032b8217d88ab83"
+  uid "9115003ab1407ab9eff9ad0b7be6870b711c2f76"
+  resolved "https://github.com/DimensionDev/webextension-polyfill#9115003ab1407ab9eff9ad0b7be6870b711c2f76"
   dependencies:
     async-call-rpc "^1.0.4"
     realms-shim "^1.2.1"
-    systemjs "^6.2.3"
+    systemjs "^6.3.2"
     web-ext-types "^3.2.1"
 
 webidl-conversions@^4.0.2:
