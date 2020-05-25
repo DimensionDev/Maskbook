@@ -17,6 +17,7 @@ const useStyle = makeStyles((theme) =>
             padding: theme.spacing(2, 3),
         },
         scroller: {
+            userSelect: 'text',
             height: '100%',
             overflow: 'auto',
             wordBreak: 'break-word',

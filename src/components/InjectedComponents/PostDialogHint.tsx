@@ -26,6 +26,7 @@ const useStyles = makeStyles((theme) => ({
         whiteSpace: 'nowrap',
     },
     title: {
+        userSelect: 'none',
         fontSize: 15,
         fontWeight: 'bold',
         [`@media (max-width: ${theme.breakpoints.width('sm')}px)`]: {

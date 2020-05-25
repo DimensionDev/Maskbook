@@ -33,6 +33,9 @@ const Transition = React.forwardRef<unknown, TransitionProps & Pick<FadeProps, '
 
 const useStyles = makeStyles((theme) =>
     createStyles({
+        root: {
+            userSelect: 'none',
+        },
         close: {
             color: theme.palette.text.primary,
             position: 'absolute',
@@ -55,6 +58,7 @@ export function DashboardDialogCore(props: DashboardDialogCoreProps) {
 
     return (
         <Dialog
+            className={classes.root}
             closeAfterTransition
             fullScreen={fullScreen ?? mobile}
             TransitionComponent={Transition}
