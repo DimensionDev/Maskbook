@@ -2,6 +2,7 @@
 import { useEffect, useCallback } from 'react'
 import React from 'react'
 import { renderInShadowRootSettings } from '../../components/shared-settings/settings'
+import { useValueRef } from './useValueRef'
 
 export const captureEvents: (keyof HTMLElementEventMap)[] = [
     'paste',
@@ -45,9 +46,13 @@ function binder<T extends keyof HTMLElementEventMap>(
 export function useCapturedInput(onChange: (newVal: string) => void, deps: unknown[] = []) {
     const [node, setNode] = React.useState<HTMLInputElement | null>(null)
     const ref = useCallback((nextNode: HTMLInputElement | null) => setNode(nextNode), [])
-    const stop = useCallback((e: Event) => {
-        if (renderInShadowRootSettings.value) e.stopPropagation()
-    }, deps)
+    const renderInShadowRoot = useValueRef(renderInShadowRootSettings)
+    const stop = useCallback(
+        (e: Event) => {
+            if (renderInShadowRoot) e.stopPropagation()
+        },
+        [renderInShadowRoot],
+    )
     const use = useCallback(
         (e: Event) => onChange((e.currentTarget as HTMLInputElement)?.value ?? (e.target as HTMLInputElement)?.value),
         deps.concat(onChange),
