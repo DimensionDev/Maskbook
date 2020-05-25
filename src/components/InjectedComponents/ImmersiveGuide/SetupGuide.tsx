@@ -250,8 +250,19 @@ function FindUsername({ username, onNext, onClose, onUsernameChange = noop }: Fi
     const { t } = useI18N()
     const classes = useWizardDialogStyles()
     const findUsernameClasses = useFindUsernameStyles()
-    const [, inputRef] = useCapturedInput(onUsernameChange)
+    const [binder, inputRef] = useCapturedInput(onUsernameChange, [])
 
+    useEffect(
+        () =>
+            binder(['keydown'], (e) => {
+                e.stopPropagation()
+                if (e.key === 'Enter') {
+                    e.preventDefault()
+                    onNext?.()
+                }
+            })(),
+        [onNext, binder],
+    )
     return (
         <WizardDialog
             completion={50}
