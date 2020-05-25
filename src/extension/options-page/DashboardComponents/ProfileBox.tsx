@@ -62,9 +62,9 @@ export default function ProfileBox({ persona, ProviderLineProps }: ProfileBoxPro
 
     return (
         <>
-            {providers.map((provider) => (
+            {providers.map((provider, index) => (
                 <ProviderLine
-                    key={provider.identifier?.toText()}
+                    key={index}
                     onAction={() => (provider.connected ? onDisconnect(provider) : onConnect(provider))}
                     {...provider}
                     {...ProviderLineProps}></ProviderLine>

@@ -25,7 +25,7 @@ function Carousel({ items, delay = 1e4 }: CarouselProps) {
     return (
         <>
             {items.map((item, i) => (
-                <Fade in={current % items.length === i} key={i} style={{ transitionDuration: '2s' }}>
+                <Fade in={current % items.length === i} key={i}>
                     {item}
                 </Fade>
             ))}
@@ -83,6 +83,7 @@ const useStyles = makeStyles((theme) => ({
         lineHeight: 1.2,
         letterSpacing: -0.4,
         position: 'absolute',
+        transitionDuration: '2s',
     },
 }))
 
