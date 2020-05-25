@@ -171,14 +171,6 @@ export async function importNewWallet(
             network: EthereumNetwork.Mainnet,
             is_user_defined: false,
         })
-        t.objectStore('ERC20Token').put({
-            decimals: 18,
-            symbol: 'OKB',
-            name: 'OKB',
-            address: OKB_ADDRESS,
-            network: EthereumNetwork.Mainnet,
-            is_user_defined: false,
-        })
     }
     PluginMessageCenter.emit('maskbook.wallets.update', undefined)
     async function getWalletAddress() {

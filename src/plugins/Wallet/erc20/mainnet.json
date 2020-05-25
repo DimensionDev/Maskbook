@@ -1,12 +1,6 @@
 [
     {
         "decimals": 18,
-        "symbol": "DAI",
-        "name": "Dai Stablecoin",
-        "address": "0x6B175474E89094C44Da98b954EedeAC495271d0F"
-    },
-    {
-        "decimals": 18,
         "symbol": "OKB",
         "name": "OKB",
         "address": "0x75231f58b43240c9718dd58b4967c5114342a86c"
