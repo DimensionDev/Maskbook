@@ -57,6 +57,12 @@ export function DashboardPersonaCreateDialog(props: WrappedDialogProps) {
                                 label={t('name')}
                                 value={name}
                                 onChange={(e) => setName(e.target.value)}
+                                onKeyDown={(e) => {
+                                    if (e.key === 'Enter') {
+                                        e.preventDefault()
+                                        createPersona()
+                                    }
+                                }}
                             />
                         </form>
                     </>
