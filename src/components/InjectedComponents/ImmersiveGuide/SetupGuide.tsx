@@ -9,6 +9,7 @@ import {
     ThemeProvider,
     InputAdornment,
     LinearProgress,
+    createMuiTheme,
 } from '@material-ui/core'
 import classNames from 'classnames'
 import AlternateEmailIcon from '@material-ui/icons/AlternateEmail'
@@ -32,9 +33,6 @@ export enum SetupGuideStep {
 //#region wizard dialog
 const wizardTheme = (theme: Theme): Theme =>
     merge(cloneDeep(theme), {
-        palette: {
-            secondary: theme.palette.warning,
-        },
         overrides: {
             MuiOutlinedInput: {
                 input: {
@@ -90,28 +88,14 @@ const wizardTheme = (theme: Theme): Theme =>
         },
     })
 
-const wizardSuccessTheme = (theme: Theme): Theme =>
-    merge(cloneDeep(theme), {
-        palette: {
-            secondary: theme.palette.success,
-        },
-    })
-
-const wizardErrorTheme = (theme: Theme): Theme =>
-    merge(cloneDeep(theme), {
-        palette: {
-            secondary: theme.palette.error,
-        },
-    })
-
 const useWizardDialogStyles = makeStyles((theme) =>
     createStyles({
         root: {
             boxSizing: 'border-box',
-            padding: '50px 36px 40px',
+            padding: '48px 20px 0',
             position: 'relative',
-            width: 440,
-            minHeight: 440,
+            width: 320,
+            minHeight: 404,
             borderRadius: 12,
             boxShadow:
                 theme.palette.type === 'dark'
@@ -143,6 +127,7 @@ const useWizardDialogStyles = makeStyles((theme) =>
         tip: {
             fontSize: 16,
             lineHeight: 1.75,
+            marginBottom: 24,
         },
         button: {
             fontSize: 16,
@@ -150,8 +135,11 @@ const useWizardDialogStyles = makeStyles((theme) =>
             height: 40,
             marginBottom: 14,
         },
+        textButton: {
+            fontSize: 16,
+        },
         header: {
-            marginBottom: 24,
+            marginBottom: 0,
         },
         content: {},
         footer: {
@@ -159,7 +147,7 @@ const useWizardDialogStyles = makeStyles((theme) =>
             alignItems: 'center',
             justifyContent: 'center',
             flexDirection: 'column',
-            marginTop: 36,
+            marginTop: 16,
         },
         progress: {
             left: 0,
@@ -185,39 +173,50 @@ function WizardDialog(props: WizardDialogProps) {
     const { t } = useI18N()
     const { title, optional = false, completion, status, content, footer, onClose } = props
     const classes = useWizardDialogStyles(props)
-    const getTheme = () => {
-        switch (status) {
-            case true:
-                return wizardSuccessTheme
-            case false:
-                return wizardErrorTheme
-            default:
-                return wizardTheme
-        }
-    }
 
     return (
-        <ThemeProvider theme={getTheme()}>
-            <Paper id="draggable_handle" className={classes.root}>
-                <header className={classes.header}>
-                    <Typography className={classes.primary} color="textPrimary" variant="h1">
-                        {title}
-                    </Typography>
-                    {optional ? (
-                        <Typography className={classes.secondary} color="textSecondary" variant="body2">
-                            {t('immersive_setup_optional')}
+        <ThemeProvider theme={wizardTheme}>
+            <ThemeProvider
+                theme={(theme: Theme) => {
+                    const getSecondaryColor = () => {
+                        switch (status) {
+                            case true:
+                                return theme.palette.success
+                            case false:
+                                return theme.palette.error
+                            default:
+                                return theme.palette.warning
+                        }
+                    }
+                    return createMuiTheme({
+                        ...theme,
+                        palette: {
+                            ...theme.palette,
+                            secondary: getSecondaryColor(),
+                        },
+                    })
+                }}>
+                <Paper id="draggable_handle" className={classes.root}>
+                    <header className={classes.header}>
+                        <Typography className={classes.primary} color="textPrimary" variant="h1">
+                            {title}
                         </Typography>
-                    ) : null}
-                </header>
-                <main className={classes.content}>{content}</main>
-                <footer className={classes.footer}>{footer}</footer>
-                <LinearProgress
-                    className={classes.progress}
-                    color="secondary"
-                    variant="determinate"
-                    value={completion}></LinearProgress>
-                <CloseIcon className={classes.close} cursor="pointer" onClick={onClose}></CloseIcon>
-            </Paper>
+                        {optional ? (
+                            <Typography className={classes.secondary} color="textSecondary" variant="body2">
+                                {t('immersive_setup_optional')}
+                            </Typography>
+                        ) : null}
+                    </header>
+                    <main className={classes.content}>{content}</main>
+                    <footer className={classes.footer}>{footer}</footer>
+                    <LinearProgress
+                        className={classes.progress}
+                        color="secondary"
+                        variant="determinate"
+                        value={completion}></LinearProgress>
+                    <CloseIcon className={classes.close} cursor="pointer" onClick={onClose}></CloseIcon>
+                </Paper>
+            </ThemeProvider>
         </ThemeProvider>
     )
 }
@@ -227,7 +226,7 @@ function WizardDialog(props: WizardDialogProps) {
 const useFindUsernameStyles = makeStyles((theme) =>
     createStyles({
         input: {
-            marginTop: '50px !important',
+            marginTop: '45px !important',
             marginBottom: 24,
         },
         inputFocus: {
@@ -238,7 +237,6 @@ const useFindUsernameStyles = makeStyles((theme) =>
         icon: {
             color: theme.palette.text.secondary,
         },
-        tip: {},
     }),
 )
 
@@ -278,7 +276,7 @@ function FindUsername({ username, onNext, onClose, onUsernameChange = noop }: Fi
                         }}
                         inputRef={inputRef}></TextField>
                     <Typography
-                        className={classNames(classes.tip, findUsernameClasses.tip)}
+                        className={classes.tip}
                         variant="body2"
                         dangerouslySetInnerHTML={{ __html: t('immersive_setup_find_username_text') }}></Typography>
                 </form>
@@ -301,12 +299,8 @@ function FindUsername({ username, onNext, onClose, onUsernameChange = noop }: Fi
 //#region paste into bio
 const usePasteIntoBioStyles = makeStyles((theme) =>
     createStyles({
-        input: {
-            marginTop: '50px !important',
-            marginBottom: 24,
-        },
         tip: {
-            marginBottom: 16,
+            marginBottom: 8,
         },
         showcaseBoxContent: {
             wordBreak: 'break-all',
@@ -370,8 +364,10 @@ function PasteIntoBio({ provePost, onClose, onCancel }: PasteIntoBioProps) {
                         failed={t('immersive_setup_paste_into_bio_failed')}
                         executor={onConfirm}
                         completeOnClick={onClose}
+                        completeIcon={null}
+                        failIcon={null}
                         failedOnClick="use executor"></ActionButtonPromise>
-                    <ActionButton variant="text" onClick={onCancel}>
+                    <ActionButton className={classes.textButton} variant="text" onClick={onCancel}>
                         {t('cancel')}
                     </ActionButton>
                 </>
