@@ -109,11 +109,25 @@ interface ActionButtonPromiseProps extends ButtonProps {
     waitingOnClick?: () => ActionButtonPromiseState
     failed: React.ReactChild
     failedOnClick?: 'use executor' | (() => void)
+    completeIcon?: React.ReactNode
+    failIcon?: React.ReactNode
 }
 type ActionButtonPromiseState = 'init' | 'complete' | 'wait' | 'fail'
 export function ActionButtonPromise(props: ActionButtonPromiseProps) {
     const classes = useStyles()
-    const { executor, complete, failed, waiting, init, completeOnClick, waitingOnClick, failedOnClick, ...b } = props
+    const {
+        executor,
+        complete,
+        failed,
+        waiting,
+        init,
+        completeOnClick,
+        waitingOnClick,
+        failedOnClick,
+        completeIcon = <CheckIcon />,
+        failIcon = <ErrorIcon />,
+        ...b
+    } = props
 
     const [state, setState] = React.useState<ActionButtonPromiseState>('init')
     const completeClass = classNames(classes.success, b.className)
@@ -139,7 +153,7 @@ export function ActionButtonPromise(props: ActionButtonPromiseProps) {
             <Button
                 {...b}
                 disabled={!completeClick}
-                startIcon={<CheckIcon />}
+                startIcon={completeIcon}
                 children={complete}
                 className={completeClass}
                 onClick={completeClick}
@@ -150,7 +164,7 @@ export function ActionButtonPromise(props: ActionButtonPromiseProps) {
             <Button
                 {...b}
                 disabled={!failClick}
-                startIcon={<ErrorIcon />}
+                startIcon={failIcon}
                 children={failed}
                 className={failClass}
                 onClick={failClick}
