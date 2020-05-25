@@ -54,10 +54,12 @@ function Popup() {
     const theme = useTheme()
     const settingsUIClasses = useSettingsUIStyles()
 
+    const ui = getActivatedUI()
+    const myIdentities = useValueRef(ui.myIdentitiesRef)
     const [showIdentitySelector, setShowIdentitySelector] = useState(false)
     React.useEffect(() => {
-        if (getActivatedUI().networkIdentifier !== 'localhost') setShowIdentitySelector(true)
-    }, [setShowIdentitySelector])
+        if (ui.networkIdentifier !== 'localhost' && myIdentities.length > 1) setShowIdentitySelector(true)
+    }, [myIdentities, setShowIdentitySelector, ui.networkIdentifier])
 
     return (
         <>
