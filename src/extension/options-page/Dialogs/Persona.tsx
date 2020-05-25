@@ -52,6 +52,7 @@ export function DashboardPersonaCreateDialog(props: WrappedDialogProps) {
                     <>
                         <form>
                             <TextField
+                                style={{ marginBottom: 20 }}
                                 required
                                 label={t('name')}
                                 value={name}

@@ -137,7 +137,7 @@
     "delete_contact_confirmation": "Do you want to delete this contact? This operation cannot be reverted.",
     "delete_persona": "Delete Persona",
     "delete_wallet": "Delete Wallet",
-    "delete_wallet_hint": "Are you sure? If you do not have backup, you will lose ALL YOUR MONEY of it.",
+    "delete_wallet_hint": "Are you sure?<br/> If you do not have backup, you will lose <strong>ALL YOUR MONEY</strong> of it.",
     "details": "Details",
     "disconnect": "Disconnect",
     "disconnect_profile": "Disconnect Profile",

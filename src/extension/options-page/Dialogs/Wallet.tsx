@@ -400,7 +400,6 @@ export function DashboardWalletBackupDialog(props: WrappedDialogProps<WalletProp
                 iconColor="#4EE0BC"
                 primary={t('backup_wallet')}
                 secondary={t('backup_wallet_hint')}
-                confineSecondary={false}
                 content={
                     <>
                         {wallet.mnemonic.length ? (
