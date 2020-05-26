@@ -70,9 +70,10 @@ const useStyles = makeStyles((theme) =>
             fontFamily: 'var(--monospace)',
             wordBreak: 'break-all',
         },
-        coins: {
-            width: '16px',
-            height: '16px',
+        coin: {
+            width: 16,
+            height: 16,
+            marginTop: theme.spacing(1),
             marginRight: theme.spacing(1),
         },
     }),
@@ -121,12 +122,12 @@ export function WalletItem(props: WalletItemProps) {
                 }}>
                 {t('copy')}
             </ActionButton>
-            <Box py={2} display="flex">
+            <Box py={1} display="flex" flexWrap="wrap">
                 {tokens &&
                     tokens.map((token) => (
                         <Avatar
                             key={token.address}
-                            className={classes.coins}
+                            className={classes.coin}
                             src={`https://github.com/trustwallet/assets/raw/master/blockchains/ethereum/assets/${token.address}/logo.png`}>
                             {token.name?.substr(0, 1).toLocaleUpperCase()}
                         </Avatar>
