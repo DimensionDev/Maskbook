@@ -7,7 +7,7 @@ import { PluginMessageCenter } from '../PluginMessages'
 import { HDKey, EthereumAddress } from 'wallet.ts'
 import * as bip39 from 'bip39'
 import { walletAPI } from './real'
-import { ERC20TokenPredefinedData, OKB_ADDRESS, DAI_ADDRESS } from './token'
+import { OKB_ADDRESS, DAI_ADDRESS, ERC20Token } from './token'
 import { memoizePromise } from '../../utils/memoize'
 import { ethereumNetworkSettings } from './network'
 import { BigNumber } from 'bignumber.js'
@@ -257,7 +257,7 @@ export async function recoverWalletFromPrivateKey(privateKey: string) {
 export async function walletAddERC20Token(
     walletAddress: string,
     network: EthereumNetwork,
-    token: ERC20TokenPredefinedData[0],
+    token: ERC20Token,
     user_defined: boolean,
 ) {
     const bal = await getWalletProvider()

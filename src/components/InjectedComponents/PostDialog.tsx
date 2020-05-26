@@ -38,7 +38,7 @@ import {
 } from '../../extension/background-script/CryptoServices/utils'
 import { formatBalance } from '../../plugins/Wallet/formatter'
 import { RedPacketTokenType } from '../../plugins/Wallet/database/types'
-import { DAI_ADDRESS, OKB_ADDRESS } from '../../plugins/Wallet/token'
+import { isDAI, isOKB } from '../../plugins/Wallet/token'
 import { PluginRedPacketTheme } from '../../plugins/Wallet/theme'
 import { sleep } from '../../utils/utils'
 import { useI18N } from '../../utils/i18n-next-ui'
@@ -341,8 +341,8 @@ export function PostDialog(props: PostDialogProps) {
                         metadata.val &&
                         metadata.val.token &&
                         metadata.val.token_type === RedPacketTokenType.erc20
-                    const isDai = isErc20 && metadata.ok && metadata.val.token?.address === DAI_ADDRESS
-                    const isOkb = isErc20 && metadata.ok && metadata.val.token?.address === OKB_ADDRESS
+                    const isDai = isErc20 && metadata.ok && isDAI(metadata.val.token?.address ?? '')
+                    const isOkb = isErc20 && metadata.ok && isOKB(metadata.val.token?.address ?? '')
 
                     activeUI.taskPasteIntoPostBox(
                         t('additional_post_box__steganography_post_pre', { random: String(Date.now()) }),

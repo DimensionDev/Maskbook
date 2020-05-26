@@ -6,7 +6,7 @@ import Services from '../../../../../extension/service'
 import { PluginMessageCenter } from '../../../../PluginMessages'
 import { formatBalance } from '../../../formatter'
 import { getUrl } from '../../../../../utils/utils'
-import { DAI_ADDRESS, OKB_ADDRESS } from '../../../token'
+import { isDAI, isOKB } from '../../../token'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -181,8 +181,8 @@ export function RedPacketWithStateUI(props: {
             </div>
             <div
                 className={classNames(classes.packet, {
-                    [classes.dai]: info.name === 'DAI' || info.address === DAI_ADDRESS,
-                    [classes.okb]: info.name === 'OKB' || info.address === OKB_ADDRESS,
+                    [classes.dai]: info.name === 'DAI' || isDAI(info.address ?? ''),
+                    [classes.okb]: info.name === 'OKB' || isOKB(info.address ?? ''),
                 })}></div>
             <div
                 className={classNames(classes.loader, {
