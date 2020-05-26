@@ -3,19 +3,12 @@ import '../../setup.ui'
 import React, { useState } from 'react'
 
 import { ThemeProvider, makeStyles, useTheme } from '@material-ui/core/styles'
-import { Button, List, useMediaQuery, Paper } from '@material-ui/core'
+import { Button, useMediaQuery, Paper } from '@material-ui/core'
 import { MaskbookLightTheme, MaskbookDarkTheme } from '../../utils/theme'
 import { SSRRenderer } from '../../utils/SSRRenderer'
-import {
-    debugModeSetting,
-    disableOpenNewTabInBackgroundSettings,
-    appearanceSettings,
-    Appearance,
-} from '../../components/shared-settings/settings'
-import { SettingsUI } from '../../components/shared-settings/useSettingsUI'
+import { appearanceSettings, Appearance } from '../../components/shared-settings/settings'
 import { ChooseIdentity } from '../../components/shared/ChooseIdentity'
 import { getActivatedUI } from '../../social-network/ui'
-import { getUrl } from '../../utils/utils'
 import { I18nextProvider } from 'react-i18next'
 import { useI18N } from '../../utils/i18n-next-ui'
 import i18nNextInstance from '../../utils/i18n-next'
@@ -42,17 +35,10 @@ const useStyles = makeStyles((theme) => ({
     },
 }))
 
-const useSettingsUIStyles = makeStyles((theme) => ({
-    secondaryAction: {
-        paddingRight: theme.spacing(6),
-    },
-}))
-
 function Popup() {
     const { t } = useI18N()
     const classes = useStyles()
     const theme = useTheme()
-    const settingsUIClasses = useSettingsUIStyles()
 
     const ui = getActivatedUI()
     const myIdentities = useValueRef(ui.myIdentitiesRef)
@@ -70,10 +56,6 @@ function Popup() {
                 max-width: 100%;
             }`}</style>
             <Paper className={classes.container}>
-                <img
-                    className={classes.logo}
-                    src={getUrl(`/maskbook-title-${theme.palette.type === 'light' ? 'blue' : 'white'}.svg`)}
-                />
                 {showIdentitySelector ? <ChooseIdentity /> : null}
                 <Button
                     variant="contained"
@@ -82,10 +64,6 @@ function Popup() {
                     onClick={(e) => browser.runtime.openOptionsPage()}>
                     {t('popup_enter_dashboard')}
                 </Button>
-                <List>
-                    <SettingsUI classes={settingsUIClasses} value={debugModeSetting} />
-                    <SettingsUI classes={settingsUIClasses} value={disableOpenNewTabInBackgroundSettings} />
-                </List>
             </Paper>
         </>
     )
