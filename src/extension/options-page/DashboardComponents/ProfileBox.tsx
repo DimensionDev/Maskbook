@@ -20,7 +20,6 @@ interface ProfileBoxProps {
 
 export default function ProfileBox({ persona, ProviderLineProps }: ProfileBoxProps) {
     const profiles = persona ? [...persona.linkedProfiles] : []
-
     const providers = [...definedSocialNetworkWorkers]
         .filter((i) => {
             if (webpackEnv.genericTarget === 'facebookApp') {
@@ -38,7 +37,6 @@ export default function ProfileBox({ persona, ProviderLineProps }: ProfileBoxPro
                 identifier: profile?.[0],
             }
         })
-
     const [detachProfile, , setDetachProfile] = useModal(DashboardPersonaUnlinkConfirmDialog)
 
     const onConnect = async (provider: typeof providers[0]) => {
@@ -55,7 +53,6 @@ export default function ProfileBox({ persona, ProviderLineProps }: ProfileBoxPro
             memorable: false,
         }).immersiveSetup(persona.identifier)
     }
-
     const onDisconnect = (provider: typeof providers[0]) => {
         setDetachProfile({ nickname: persona?.nickname, identifier: provider.identifier })
     }

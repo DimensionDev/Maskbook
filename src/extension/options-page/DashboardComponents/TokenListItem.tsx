@@ -41,7 +41,11 @@ export function TokenListItem(props: TokenListItemProps) {
             <ListItemIcon>
                 <Avatar
                     className={classes.coin}
-                    src={`https://rawcdn.githack.com/trustwallet/assets/257c82b25e6f27ede7a2b309aadc0ed17bca45ae/blockchains/ethereum/assets/${token.address}/logo.png`}>
+                    src={
+                        token.address === '0x0000000000000000000000000000000000000000'
+                            ? 'https://rawcdn.githack.com/trustwallet/assets/257c82b25e6f27ede7a2b309aadc0ed17bca45ae/blockchains/ethereum/info/logo.png'
+                            : `https://rawcdn.githack.com/trustwallet/assets/257c82b25e6f27ede7a2b309aadc0ed17bca45ae/blockchains/ethereum/assets/${token.address}/logo.png`
+                    }>
                     {name}
                 </Avatar>
             </ListItemIcon>
