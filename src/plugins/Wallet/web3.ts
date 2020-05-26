@@ -1,6 +1,6 @@
 import Web3 from 'web3'
 import type { WebsocketProvider } from 'web3-core'
-import { getNetworkSettings, currentEthereumNetworkSettings } from './network'
+import { getNetworkSettings, ethereumNetworkSettings } from './network'
 import { getWallets, recoverWallet, recoverWalletFromPrivateKey } from './wallet'
 import { PluginMessageCenter } from '../PluginMessages'
 import { sideEffect } from '../../utils/side-effects'
@@ -12,7 +12,7 @@ let provider: WebsocketProvider
 export const resetProvider = () => {
     if (provider) {
         provider.removeListener('end', resetProvider) // prevent from circular reseting
-        provider.disconnect(-1, 'change provider')
+        provider.disconnect(1000, 'change provider')
     }
     provider = new Web3.providers.WebsocketProvider(getNetworkSettings().middlewareAddress)
     provider.on('end', resetProvider)
@@ -32,7 +32,7 @@ export const resetWallet = async () => {
     }
 }
 
-currentEthereumNetworkSettings.addListener(resetProvider)
+ethereumNetworkSettings.addListener(resetProvider)
 PluginMessageCenter.on('maskbook.wallets.reset', resetWallet)
 
 sideEffect.then(() => {

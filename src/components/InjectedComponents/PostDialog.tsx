@@ -38,7 +38,7 @@ import {
 } from '../../extension/background-script/CryptoServices/utils'
 import { formatBalance } from '../../plugins/Wallet/formatter'
 import { RedPacketTokenType } from '../../plugins/Wallet/database/types'
-import { DAI_ADDRESS, OKB_ADDRESS } from '../../plugins/Wallet/erc20'
+import { DAI_ADDRESS, OKB_ADDRESS } from '../../plugins/Wallet/token'
 import { PluginRedPacketTheme } from '../../plugins/Wallet/theme'
 import { sleep } from '../../utils/utils'
 import { useI18N } from '../../utils/i18n-next-ui'

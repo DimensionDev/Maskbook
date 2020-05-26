@@ -1,7 +1,7 @@
 import React from 'react'
 import type { WalletRecord, ERC20TokenRecord } from '../Wallet/database/types'
 import Services from '../../extension/service'
-import { currentEthereumNetworkSettings } from '../Wallet/network'
+import { ethereumNetworkSettings } from '../Wallet/network'
 import { PluginMessageCenter } from '../PluginMessages'
 import { formatBalance } from '../Wallet/formatter'
 
@@ -16,7 +16,7 @@ export function useWalletDataSource() {
                 setTokens(y)
             })
         update()
-        currentEthereumNetworkSettings.addListener(update)
+        ethereumNetworkSettings.addListener(update)
         return PluginMessageCenter.on('maskbook.wallets.update', update)
     }, [])
     return [

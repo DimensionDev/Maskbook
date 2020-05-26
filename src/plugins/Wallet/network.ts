@@ -18,7 +18,7 @@ const settings = {
 }
 
 export function getNetworkSettings() {
-    const networkType = currentEthereumNetworkSettings.value
+    const networkType = ethereumNetworkSettings.value
 
     return {
         networkType,
@@ -27,12 +27,8 @@ export function getNetworkSettings() {
     }
 }
 
-export const currentEthereumNetworkSettings = createNewSettings<EthereumNetwork>(
-    'eth network',
-    EthereumNetwork.Mainnet,
-    {
-        primary: () => 'Choose ETH network',
-        secondary: () =>
-            `You can choose ${EthereumNetwork.Mainnet}, ${EthereumNetwork.Rinkeby} or ${EthereumNetwork.Ropsten}`,
-    },
-)
+export const ethereumNetworkSettings = createNewSettings<EthereumNetwork>('eth network', EthereumNetwork.Rinkeby, {
+    primary: () => 'Ethereum Network',
+    secondary: () =>
+        `You can choose ${EthereumNetwork.Mainnet}, ${EthereumNetwork.Rinkeby} or ${EthereumNetwork.Ropsten}`,
+})

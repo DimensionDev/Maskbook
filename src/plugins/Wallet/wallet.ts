@@ -7,9 +7,9 @@ import { PluginMessageCenter } from '../PluginMessages'
 import { HDKey, EthereumAddress } from 'wallet.ts'
 import * as bip39 from 'bip39'
 import { walletAPI } from './real'
-import { ERC20TokenPredefinedData, OKB_ADDRESS, DAI_ADDRESS } from './erc20'
+import { ERC20TokenPredefinedData, OKB_ADDRESS, DAI_ADDRESS } from './token'
 import { memoizePromise } from '../../utils/memoize'
-import { currentEthereumNetworkSettings } from './network'
+import { ethereumNetworkSettings } from './network'
 import { BigNumber } from 'bignumber.js'
 import { ec as EC } from 'elliptic'
 
@@ -44,7 +44,7 @@ PluginMessageCenter.on('maskbook.red_packets.update', () => {
 })
 /** Cache most valid for 15 seconds */
 setInterval(clearCache, 1000 * 15)
-currentEthereumNetworkSettings.addListener(() => {
+ethereumNetworkSettings.addListener(() => {
     clearCache()
     PluginMessageCenter.emit('maskbook.wallets.update', undefined)
 })
@@ -273,7 +273,7 @@ export async function walletAddERC20Token(
             decimals: token.decimals,
             is_user_defined: user_defined,
             name: token.name,
-            network: network,
+            network,
             symbol: token.symbol,
         }
         await t.objectStore('ERC20Token').add(rec)

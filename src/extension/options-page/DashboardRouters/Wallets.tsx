@@ -29,6 +29,9 @@ import { merge, cloneDeep } from 'lodash-es'
 import BigNumber from 'bignumber.js'
 import type { WalletRecord, ERC20TokenRecord } from '../../../plugins/Wallet/database/types'
 import { sleep } from '../../../utils/utils'
+import { ETH_ADDRESS } from '../../../plugins/Wallet/token'
+import { ethereumNetworkSettings } from '../../../plugins/Wallet/network'
+import { useValueRef } from '../../../utils/hooks/useValueRef'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -112,6 +115,8 @@ function WalletContent({ wallet, tokens }: WalletContentProps) {
     const classes = useStyles()
     const { t } = useI18N()
     const color = useColorProvider()
+
+    const network = useValueRef(ethereumNetworkSettings)
 
     const [addToken, , openAddToken] = useModal(DashboardWalletAddTokenDialog)
     const [walletHistory, , oepnWalletHistory] = useModal(DashboardWalletHistoryDialog)
