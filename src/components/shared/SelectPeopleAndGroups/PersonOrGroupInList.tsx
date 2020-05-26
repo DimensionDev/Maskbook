@@ -15,7 +15,7 @@ import { useStylesExtends } from '../../custom-ui-helper'
 import type { ListItemTypeMap } from '@material-ui/core/ListItem'
 
 export interface PersonOrGroupInListProps extends withClasses<KeysInferFromUseStyles<typeof useStyle>> {
-    onClick: () => void
+    onClick?: () => void
     disabled?: boolean
     showAtNetwork?: boolean
     ListItemProps?: Partial<DefaultComponentProps<ListItemTypeMap<{ button: true }, 'div'>>>
