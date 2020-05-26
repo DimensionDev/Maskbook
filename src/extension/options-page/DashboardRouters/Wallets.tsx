@@ -169,6 +169,16 @@ function WalletContent({ wallet, tokens }: WalletContentProps) {
                     {menu}
                 </Box>
                 <List className={classes.tokenList} disablePadding>
+                    <TokenListItem
+                        balance={wallet.eth_balance ?? new BigNumber(0)}
+                        token={{
+                            address: ETH_ADDRESS,
+                            name: 'Ether',
+                            symbol: 'ETH',
+                            network,
+                            decimals: 18,
+                            is_user_defined: false,
+                        }}></TokenListItem>
                     {currentTokens.map((token) => (
                         <TokenListItem
                             balance={wallet.erc20_token_balance.get(token.address) ?? new BigNumber(0)}
