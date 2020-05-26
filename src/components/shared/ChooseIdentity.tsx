@@ -15,14 +15,18 @@ import { currentSelectedIdentity } from '../../components/shared-settings/settin
 import { useStylesExtends } from '../custom-ui-helper'
 
 const useStyles = makeStyles({
-    root: { width: '100%' },
-    expansionRoot: { padding: '0 12px' },
-    expansionContent: { margin: '6px 0' },
+    root: { width: '100%', lineHeight: 1.75 },
+    expansionPanelRoot: { boxShadow: 'none', width: '100%' },
+    expansionPanelSummaryRoot: { padding: 0 },
+    expansionPanelSummaryContent: { width: '100%', margin: 0 },
     list: { width: '100%' },
-    currentSelected: { padding: 0 },
+    listItemRoot: { padding: '12px 8px' },
+    fingerprint: { textOverflow: 'ellipsis', overflow: 'hidden', fontSize: 12 },
 })
 export interface ChooseIdentityProps
-    extends withClasses<KeysInferFromUseStyles<typeof useStyles, 'expansionContent' | 'expansionRoot'>> {
+    extends withClasses<
+        KeysInferFromUseStyles<typeof useStyles, 'expansionPanelSummaryContent' | 'expansionPanelSummaryRoot'>
+    > {
     /**
      * Current selected identity
      * @defaultValue the global selected identity
@@ -52,43 +56,38 @@ export const ChooseIdentity: React.FC<ChooseIdentityProps> = (props) => {
     const { availableIdentities = all, current = currentDefault } = props
 
     const handleChange = useCallback(() => {
-        setExpanded(!expanded)
-    }, [expanded])
+        if (availableIdentities.length > 1) setExpanded(!expanded)
+    }, [availableIdentities.length, expanded])
 
     return (
         <div className={classes.root}>
-            <ExpansionPanel expanded={expanded} onChange={handleChange}>
+            <ExpansionPanel classes={{ root: classes.expansionPanelRoot }} expanded={expanded} onChange={handleChange}>
                 <ExpansionPanelSummary
-                    classes={{ root: classes.expansionRoot, content: classes.expansionContent }}
-                    expandIcon={<ExpandMoreIcon />}>
-                    <ListItem dense classes={{ gutters: classes.currentSelected }}>
-                        <ListItemIcon>
-                            <Avatar person={current} />
-                        </ListItemIcon>
-                        <ListItemText
-                            primary={current.nickname || current.identifier.userId}
-                            secondary={t('shared_choose_identity_title')}
-                        />
-                    </ListItem>
+                    classes={{ root: classes.expansionPanelSummaryRoot, content: classes.expansionPanelSummaryContent }}
+                    expandIcon={availableIdentities.length > 1 ? <ExpandMoreIcon /> : null}>
+                    <PersonOrGroupInList
+                        ListItemProps={{ dense: true }}
+                        item={current}
+                        {...props.PersonOrGroupInListProps}></PersonOrGroupInList>
                 </ExpansionPanelSummary>
-                <List
-                    subheader={<ListSubheader>{t('shared_choose_identity_subtitle')}</ListSubheader>}
-                    classes={{ root: classes.list }}>
-                    {availableIdentities.map((person) =>
-                        person.identifier.equals(current.identifier) ? null : (
-                            <PersonOrGroupInList
-                                ListItemProps={{ dense: true }}
-                                item={person}
-                                key={person.identifier.toText()}
-                                onClick={() => {
-                                    props.onChangeIdentity!(person)
-                                    setExpanded(false)
-                                }}
-                                {...props.PersonOrGroupInListProps}
-                            />
-                        ),
-                    )}
-                </List>
+                {availableIdentities.length ? (
+                    <List classes={{ root: classes.list }}>
+                        {availableIdentities.map((person) =>
+                            person.identifier.equals(current.identifier) ? null : (
+                                <PersonOrGroupInList
+                                    ListItemProps={{ dense: true }}
+                                    item={person}
+                                    key={person.identifier.toText()}
+                                    onClick={() => {
+                                        props.onChangeIdentity!(person)
+                                        setExpanded(false)
+                                    }}
+                                    {...props.PersonOrGroupInListProps}
+                                />
+                            ),
+                        )}
+                    </List>
+                ) : null}
             </ExpansionPanel>
         </div>
     )

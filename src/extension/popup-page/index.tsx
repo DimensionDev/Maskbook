@@ -3,7 +3,8 @@ import '../../setup.ui'
 import React, { useState } from 'react'
 
 import { ThemeProvider, makeStyles, useTheme } from '@material-ui/core/styles'
-import { Button, useMediaQuery, Paper } from '@material-ui/core'
+import { Button, useMediaQuery, Paper, Divider, Typography } from '@material-ui/core'
+import TuneIcon from '@material-ui/icons/Tune'
 import { MaskbookLightTheme, MaskbookDarkTheme } from '../../utils/theme'
 import { SSRRenderer } from '../../utils/SSRRenderer'
 import { appearanceSettings, Appearance } from '../../components/shared-settings/settings'
@@ -15,52 +16,49 @@ import i18nNextInstance from '../../utils/i18n-next'
 import { useValueRef } from '../../utils/hooks/useValueRef'
 
 const useStyles = makeStyles((theme) => ({
-    button: {
-        margin: theme.spacing(1, 0),
-        whiteSpace: 'nowrap',
-    },
     container: {
-        display: 'flex',
-        flexDirection: 'column',
-        padding: theme.spacing(0, 2),
+        padding: '12px 20px',
         borderRadius: 0,
     },
-    logo: {
-        width: 'auto',
-        height: '32px',
-        margin: '20px auto',
+    title: {
+        fontSize: 20,
+        fontWeight: 500,
+        lineHeight: 1.5,
     },
-    input: {
-        display: 'none',
+    divider: {
+        marginTop: 20,
+        marginBottom: 20,
+    },
+    button: {
+        whiteSpace: 'nowrap',
     },
 }))
 
 function Popup() {
     const { t } = useI18N()
     const classes = useStyles()
-    const theme = useTheme()
 
     const ui = getActivatedUI()
     const myIdentities = useValueRef(ui.myIdentitiesRef)
-    const [showIdentitySelector, setShowIdentitySelector] = useState(false)
-    React.useEffect(() => {
-        if (ui.networkIdentifier !== 'localhost' && myIdentities.length > 1) setShowIdentitySelector(true)
-    }, [myIdentities, setShowIdentitySelector, ui.networkIdentifier])
 
     return (
         <>
             <style>{`body {
                 overflow-x: hidden;
                 margin: 0 auto;
-                width: 30em;
+                width: 340px;
                 max-width: 100%;
+                background-color: transparent;
             }`}</style>
             <Paper className={classes.container}>
-                {showIdentitySelector ? <ChooseIdentity /> : null}
+                <Typography className={classes.title}>Switch account</Typography>
+                <ChooseIdentity />
+                <Divider className={classes.divider} />
                 <Button
-                    variant="contained"
-                    color="primary"
                     className={classes.button}
+                    variant="text"
+                    color="primary"
+                    startIcon={<TuneIcon />}
                     onClick={(e) => browser.runtime.openOptionsPage()}>
                     {t('popup_enter_dashboard')}
                 </Button>
