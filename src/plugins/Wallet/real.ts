@@ -5,8 +5,8 @@ import { BigNumber } from 'bignumber.js'
 import { web3 } from './web3'
 import { onClaimResult, onCreationResult, onExpired, onRefundResult } from './red-packet-fsm'
 import HappyRedPacketABI from './contract/HappyRedPacket.json'
-import IERC20ABI from './contract/IERC20.json'
-import type { IERC20 } from './contract/IERC20'
+import ERC20ABI from './contract/ERC20.json'
+import type { ERC20 } from './contract/ERC20'
 import type { HappyRedPacket } from './contract/HappyRedPacket'
 import type { TransactionObject, Tx } from './contract/types'
 import type { CheckRedPacketAvailabilityResult, CreateRedPacketResult } from './types'
@@ -15,13 +15,14 @@ import { asyncTimes, pollingTask } from '../../utils/utils'
 import { createWalletDBAccess } from './database/Wallet.db'
 import { createTransaction } from '../../database/helpers/openDB'
 import { getNetworkSettings } from './network'
+import type { ERC20Token } from './token'
 
 function createRedPacketContract(address: string) {
     return (new web3.eth.Contract(HappyRedPacketABI as AbiItem[], address) as unknown) as HappyRedPacket
 }
 
 function createERC20Contract(address: string) {
-    return (new web3.eth.Contract(IERC20ABI as AbiItem[], address) as unknown) as IERC20
+    return (new web3.eth.Contract(ERC20ABI as AbiItem[], address) as unknown) as ERC20
 }
 
 interface TxReceipt {
@@ -467,6 +468,20 @@ export const walletAPI = {
         const erc20Contract = createERC20Contract(tokenAddress)
         const value = await erc20Contract.methods.balanceOf(walletAddress).call()
         return new BigNumber(value)
+    },
+    async queryERC20Token(tokenAddress: string): Promise<ERC20Token> {
+        const erc20Contract = createERC20Contract(tokenAddress)
+        const [name, symbol] = await Promise.all([
+            erc20Contract.methods.name().call(),
+            erc20Contract.methods.symbol().call(),
+            // erc20Contract.methods.decimals().call(),
+        ])
+        return {
+            name,
+            decimals: 0, // parseInt(decimals),
+            symbol,
+            address: tokenAddress,
+        }
     },
     async approveERC20Token(
         senderAddress: string,

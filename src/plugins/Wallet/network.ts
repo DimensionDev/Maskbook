@@ -27,7 +27,7 @@ export function getNetworkSettings() {
     }
 }
 
-export const ethereumNetworkSettings = createNewSettings<EthereumNetwork>('eth network', EthereumNetwork.Rinkeby, {
+export const ethereumNetworkSettings = createNewSettings<EthereumNetwork>('eth network', EthereumNetwork.Mainnet, {
     primary: () => 'Ethereum Network',
     secondary: () =>
         `You can choose ${EthereumNetwork.Mainnet}, ${EthereumNetwork.Rinkeby} or ${EthereumNetwork.Ropsten}`,
