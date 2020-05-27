@@ -8,6 +8,7 @@ import { useI18N } from '../../../utils/i18n-next-ui'
 import { useSnackbarCallback } from '../Dialogs/Base'
 import ActionButton from './ActionButton'
 import { ETH_ADDRESS } from '../../../plugins/Wallet/token'
+import { TokenIcon } from './TokenIcon'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -72,8 +73,6 @@ const useStyles = makeStyles((theme) =>
             wordBreak: 'break-all',
         },
         coin: {
-            width: 16,
-            height: 16,
             marginTop: theme.spacing(1),
             marginRight: theme.spacing(1),
         },
@@ -124,20 +123,14 @@ export function WalletItem(props: WalletItemProps) {
                 {t('copy')}
             </ActionButton>
             <Box py={1} display="flex" flexWrap="wrap">
-                <Avatar
-                    className={classes.coin}
-                    key={ETH_ADDRESS}
-                    src="https://rawcdn.githack.com/trustwallet/assets/257c82b25e6f27ede7a2b309aadc0ed17bca45ae/blockchains/ethereum/info/logo.png">
-                    {'ETH'}
-                </Avatar>
+                <TokenIcon classes={{ coin: classes.coin }} address={ETH_ADDRESS} name="ETH"></TokenIcon>
                 {tokens &&
                     tokens.map((token) => (
-                        <Avatar
+                        <TokenIcon
+                            classes={{ coin: classes.coin }}
                             key={token.address}
-                            className={classes.coin}
-                            src={`https://github.com/trustwallet/assets/raw/master/blockchains/ethereum/assets/${token.address}/logo.png`}>
-                            {token.name?.substr(0, 1).toLocaleUpperCase()}
-                        </Avatar>
+                            address={token.address}
+                            name={token.name?.substr(0, 1).toLocaleUpperCase()}></TokenIcon>
                     ))}
             </Box>
         </ButtonBase>
