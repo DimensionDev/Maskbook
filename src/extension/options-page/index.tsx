@@ -11,7 +11,6 @@ import BookmarkBorderOutlinedIcon from '@material-ui/icons/BookmarkBorderOutline
 import SettingsOutlinedIcon from '@material-ui/icons/SettingsOutlined'
 import { HashRouter as Router, Route, Switch, Redirect, useHistory } from 'react-router-dom'
 
-import { SnackbarProvider } from 'notistack'
 import { I18nextProvider } from 'react-i18next'
 
 import { useI18N } from '../../utils/i18n-next-ui'
@@ -38,6 +37,7 @@ import { useAsync } from 'react-use'
 import Services from '../service'
 import { RequestPermissionPage } from '../../components/RequestPermission/RequestPermission'
 import { grey } from '@material-ui/core/colors'
+import { DashboardSnackbarProvider } from './DashboardComponents/DashboardSnackbar'
 
 const useStyles = makeStyles((theme) => {
     const dark = theme.palette.type === 'dark'
@@ -172,19 +172,14 @@ export default function Dashboard() {
                         ? MaskbookDarkTheme
                         : MaskbookLightTheme
                 }>
-                <SnackbarProvider
-                    maxSnack={30}
-                    anchorOrigin={{
-                        vertical: 'top',
-                        horizontal: 'center',
-                    }}>
+                <DashboardSnackbarProvider>
                     <NoSsr>
                         <Router>
                             <CssBaseline />
                             <DashboardUI />
                         </Router>
                     </NoSsr>
-                </SnackbarProvider>
+                </DashboardSnackbarProvider>
             </ThemeProvider>
         </I18nextProvider>
     )
