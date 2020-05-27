@@ -2,7 +2,16 @@ import React, { useState, useEffect, useMemo } from 'react'
 import { useAsync } from 'react-use'
 import { DashboardDialogCore, DashboardDialogWrapper, WrappedDialogProps, useSnackbarCallback } from './Base'
 import { CreditCard as CreditCardIcon, Hexagon as HexagonIcon, Clock as ClockIcon } from 'react-feather'
-import { TextField, Typography, makeStyles, createStyles, List, Box } from '@material-ui/core'
+import {
+    TextField,
+    Typography,
+    makeStyles,
+    createStyles,
+    List,
+    Box,
+    FormControlLabel,
+    Checkbox,
+} from '@material-ui/core'
 import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined'
 import AbstractTab, { AbstractTabProps } from '../DashboardComponents/AbstractTab'
 import { useI18N } from '../../../utils/i18n-next-ui'
@@ -130,13 +139,11 @@ interface WalletProps {
 const useWalletCreateDialogStyle = makeStyles((theme) =>
     createStyles({
         confirmation: {
-            '& > strong': {
-                color: theme.palette.text.primary,
-            },
+            fontSize: 16,
+            lineHeight: 1.75,
         },
         notification: {
             fontSize: 12,
-            lineHeight: '21px',
             fontWeight: 500,
             textAlign: 'center',
             backgroundColor: '#FFD5B3',
@@ -159,6 +166,7 @@ export function DashboardWalletCreateDialog(props: WrappedDialogProps) {
 
     const [name, setName] = useState('')
     const [passphrase] = useState('')
+    const [confirmed, setConfirmed] = useState(false)
     const [showNotification, setShowNotification] = useState(false)
 
     const onSubmit = useSnackbarCallback(
@@ -185,17 +193,26 @@ export function DashboardWalletCreateDialog(props: WrappedDialogProps) {
                         </form>
                         <br />
                         <Box display="flex" alignItems="center" justifyContent="center">
-                            <Typography
-                                className={classes.confirmation}
-                                variant="body2"
-                                color="textSecondary"
-                                dangerouslySetInnerHTML={{
-                                    __html: t('wallet_confirmation_hint', { meme: 'Create a Wallet' }),
-                                }}></Typography>
-                            <InfoOutlinedIcon
-                                className={classes.notificationIcon}
-                                cursor="pointer"
-                                onClick={() => setShowNotification((t) => !t)}></InfoOutlinedIcon>
+                            <FormControlLabel
+                                control={
+                                    <Checkbox
+                                        checked={confirmed}
+                                        onChange={() => setConfirmed((confirmed) => !confirmed)}
+                                    />
+                                }
+                                label={
+                                    <Box display="inline-flex" alignItems="center">
+                                        <Typography className={classes.confirmation} variant="body2">
+                                            {t('wallet_confirmation_hint')}
+                                        </Typography>
+                                        <InfoOutlinedIcon
+                                            className={classes.notificationIcon}
+                                            cursor="pointer"
+                                            onClick={() => setShowNotification((t) => !t)}
+                                        />
+                                    </Box>
+                                }
+                            />
                         </Box>
                         {showNotification ? (
                             <Typography className={classes.notification}>{t('wallet_notification')}</Typography>
@@ -203,7 +220,11 @@ export function DashboardWalletCreateDialog(props: WrappedDialogProps) {
                     </>
                 }
                 footer={
-                    <DebounceButton variant="contained" color="primary" onClick={onSubmit} disabled={!name}>
+                    <DebounceButton
+                        variant="contained"
+                        color="primary"
+                        onClick={onSubmit}
+                        disabled={!name || !confirmed}>
                         {t('create')}
                     </DebounceButton>
                 }></DashboardDialogWrapper>
