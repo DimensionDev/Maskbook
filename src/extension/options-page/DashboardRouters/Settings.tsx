@@ -59,7 +59,7 @@ const useStyles = makeStyles((theme) =>
             color: theme.palette.text.primary,
             justifyContent: 'flex-start',
             minWidth: 'unset',
-            marginLeft: theme.spacing(2),
+            marginLeft: 0,
             marginRight: theme.spacing(3),
         },
     }),
