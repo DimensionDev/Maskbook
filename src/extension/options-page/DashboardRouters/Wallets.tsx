@@ -29,7 +29,7 @@ import { merge, cloneDeep } from 'lodash-es'
 import BigNumber from 'bignumber.js'
 import type { WalletRecord, ERC20TokenRecord } from '../../../plugins/Wallet/database/types'
 import { sleep } from '../../../utils/utils'
-import { ETH_ADDRESS } from '../../../plugins/Wallet/token'
+import { ETH_ADDRESS, isDAI } from '../../../plugins/Wallet/token'
 import { ethereumNetworkSettings } from '../../../plugins/Wallet/network'
 import { useValueRef } from '../../../utils/hooks/useValueRef'
 
@@ -125,7 +125,13 @@ function WalletContent({ wallet, tokens }: WalletContentProps) {
     const [walletDelete, , oepnWalletDelete] = useModal(DashboardWalletDeleteConfirmDialog)
     const [walletRename, , oepnWalletRename] = useModal(DashboardWalletRenameDialog)
 
-    const currentTokens = tokens.filter((token) => wallet?.erc20_token_balance.has(token.address))
+    const addedTokens = tokens
+        .filter((token) => wallet?.erc20_token_balance.has(token.address))
+        .sort((token, otherToken) => {
+            if (isDAI(token.address)) return -1
+            if (isDAI(otherToken.address)) return 1
+            return token.name < otherToken.name ? -1 : 1
+        })
     const setAsDefault = useSnackbarCallback(
         () => Services.Plugin.invokePlugin('maskbook.wallet', 'setDefaultWallet', wallet!.address),
         [wallet?.address],
@@ -179,7 +185,7 @@ function WalletContent({ wallet, tokens }: WalletContentProps) {
                             decimals: 18,
                             is_user_defined: false,
                         }}></TokenListItem>
-                    {currentTokens.map((token) => (
+                    {addedTokens.map((token) => (
                         <TokenListItem
                             balance={wallet.erc20_token_balance.get(token.address) ?? new BigNumber(0)}
                             token={token}
