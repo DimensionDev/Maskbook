@@ -76,7 +76,6 @@ if (GetContext() === 'background') {
     })
 
     browser.runtime.onInstalled.addListener((detail) => {
-        if (webpackEnv.genericTarget === 'facebookApp') return
         if (detail.reason === 'install') {
             browser.tabs.create({ url: getWelcomePageURL() })
         }
@@ -89,13 +88,6 @@ if (GetContext() === 'background') {
         if (tabs[0]) {
             await browser.tabs.remove(tabs[0].id!)
         }
-    })
-
-    contentScriptReady.then(() => {
-        if (webpackEnv.genericTarget === 'facebookApp') {
-            exclusiveTasks('https://m.facebook.com/', { important: true })
-        }
-        exclusiveTasks(getWelcomePageURL({}), { important: true })
     })
 }
 function IgnoreError(arg: unknown): (reason: Error) => void {

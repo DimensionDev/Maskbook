@@ -16501,11 +16501,6 @@ realistic-structured-clone@^2.0.1:
     typeson "^5.8.2"
     typeson-registry "^1.0.0-alpha.20"
 
-realms-shim@^1.2.1:
-  version "1.2.2"
-  resolved "https://registry.yarnpkg.com/realms-shim/-/realms-shim-1.2.2.tgz#bdf828ee316afa4c9ea2aab364d55b8ad7eb5904"
-  integrity sha512-NOskQ7IJEnHN4Dhu462Pf0Kl8YHSPjt6V+fVvrGSCs/SfAa433CLTyJ632DFsZC2ENBQ9p6tEZ3w+1Vkycuwyg==
-
 realpath-native@^1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/realpath-native/-/realpath-native-1.1.0.tgz#2003294fea23fb0672f2476ebe22fcf498a2d65c"
@@ -18655,10 +18650,10 @@ symbol.prototype.description@^1.0.0:
   dependencies:
     has-symbols "^1.0.0"
 
-systemjs@^6.2.3:
-  version "6.3.1"
-  resolved "https://registry.yarnpkg.com/systemjs/-/systemjs-6.3.1.tgz#661adf60f257c1f65b8075fd5b034c0c69b306f4"
-  integrity sha512-pYAQxEK2a3Xj6cRVXrXgogSfKc3oFTzEWejK8KfHcZxwT31yT2xL43WXjUNcjOk5P048Z1zLRIlfrB3Mq4W+PQ==
+systemjs@^6.3.2:
+  version "6.3.2"
+  resolved "https://registry.yarnpkg.com/systemjs/-/systemjs-6.3.2.tgz#2c3407f949260fdfb3b837c191869db933d1fe0f"
+  integrity sha512-zcALS1RIYtsQBG4fbaE+cJzKx+UoEuSM8xCkGGH99i7p7Ym3ALvhi9QrpF2lo0CMQaejqrE1GnbkuG2m/+H7ew==
 
 table@^3.7.8:
   version "3.8.3"
@@ -20698,11 +20693,10 @@ webextension-polyfill@^0.6.0:
 
 "webextension-shim@https://github.com/DimensionDev/webextension-polyfill":
   version "0.0.1"
-  resolved "https://github.com/DimensionDev/webextension-polyfill#0e469704fc875e3826b754d12032b8217d88ab83"
+  resolved "https://github.com/DimensionDev/webextension-polyfill#b78e152edf42c608c58194102a6499528a220891"
   dependencies:
     async-call-rpc "^1.0.4"
-    realms-shim "^1.2.1"
-    systemjs "^6.2.3"
+    systemjs "^6.3.2"
     web-ext-types "^3.2.1"
 
 webidl-conversions@^4.0.2:

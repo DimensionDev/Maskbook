@@ -72,19 +72,17 @@ export function WalletSendRedPacketDialog(props: WalletSendRedPacketDialogProps)
                             width={240}>
                             Open facebook.com
                         </ActionButton>
-                        {webpackEnv.genericTarget === 'browser' && (
-                            <ActionButton<React.ComponentType<JSX.IntrinsicElements['a']>>
-                                component="a"
-                                href="https://twitter.com"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                variant="outlined"
-                                color="primary"
-                                className={classes.provider}
-                                width={240}>
-                                Open twitter.com
-                            </ActionButton>
-                        )}
+                        <ActionButton<React.ComponentType<JSX.IntrinsicElements['a']>>
+                            component="a"
+                            href="https://twitter.com"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            variant="outlined"
+                            color="primary"
+                            className={classes.provider}
+                            width={240}>
+                            Open twitter.com
+                        </ActionButton>
                     </div>
                 </>
             }></DialogContentItem>
