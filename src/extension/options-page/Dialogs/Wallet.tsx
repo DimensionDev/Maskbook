@@ -159,7 +159,6 @@ export function DashboardWalletCreateDialog(props: WrappedDialogProps) {
 
     const [name, setName] = useState('')
     const [passphrase] = useState('')
-    const [confirmation, setConfirmation] = useState('')
     const [showNotification, setShowNotification] = useState(false)
 
     const onSubmit = useSnackbarCallback(
@@ -183,12 +182,6 @@ export function DashboardWalletCreateDialog(props: WrappedDialogProps) {
                                 value={name}
                                 onChange={(e) => setName(e.target.value)}
                             />
-                            <TextField
-                                required
-                                label={t('wallet_confirmation')}
-                                value={confirmation}
-                                onChange={(e) => setConfirmation(e.target.value)}
-                            />
                         </form>
                         <br />
                         <Box display="flex" alignItems="center" justifyContent="center">
@@ -210,11 +203,7 @@ export function DashboardWalletCreateDialog(props: WrappedDialogProps) {
                     </>
                 }
                 footer={
-                    <DebounceButton
-                        variant="contained"
-                        color="primary"
-                        onClick={onSubmit}
-                        disabled={!name || confirmation !== 'Create a Wallet'}>
+                    <DebounceButton variant="contained" color="primary" onClick={onSubmit} disabled={!name}>
                         {t('create')}
                     </DebounceButton>
                 }></DashboardDialogWrapper>

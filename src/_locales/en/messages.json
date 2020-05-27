@@ -303,8 +303,6 @@
     "version_link": "https://github.com/DimensionDev/Maskbook/releases#{{tag}}",
     "wallet_address": "Wallet Address",
     "wallet_name": "Wallet Name",
-    "wallet_confirmation": "Confirm your setup",
-    "wallet_confirmation_hint": "Please type <strong>{{meme}}</strong> to confirm.",
     "wallet_new_name": "Give wallet a new name",
     "wallet_notification": "This will create a new wallet other than the default wallet. You are responsible for keeping the private key to the wallet safe. Maskbook does not backup for you automatically. Please also note that Maskbook won't be able to pay for your transactions on Ethereum.",
     "wallets": "Wallets",
