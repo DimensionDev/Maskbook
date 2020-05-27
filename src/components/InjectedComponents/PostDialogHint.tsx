@@ -1,11 +1,10 @@
-import * as React from 'react'
+import React from 'react'
 import { Card, Typography, Button } from '@material-ui/core'
 import { useI18N } from '../../utils/i18n-next-ui'
 import { makeStyles } from '@material-ui/core/styles'
 import { useStylesExtends, or } from '../custom-ui-helper'
 import { useMyIdentities } from '../DataSource/useActivatedUI'
 import type { Profile } from '../../database'
-import { ChooseIdentity, ChooseIdentityProps } from '../shared/ChooseIdentity'
 import type { BannerProps } from '../Welcomes/Banner'
 import { NotSetupYetPrompt } from '../shared/NotSetupYetPrompt'
 import { useValueRef } from '../../utils/hooks/useValueRef'
@@ -61,7 +60,6 @@ export const PostDialogHintUI = React.memo(function PostDialogHintUI(props: Post
 
 export interface PostDialogHintProps extends Partial<PostDialogHintUIProps> {
     identities?: Profile[]
-    ChooseIdentityProps?: Partial<ChooseIdentityProps>
     NotSetupYetPromptProps?: Partial<BannerProps>
 }
 export function PostDialogHint(props: PostDialogHintProps) {
@@ -71,19 +69,6 @@ export function PostDialogHint(props: PostDialogHintProps) {
     const connecting = useValueRef(currentImmersiveSetupStatus[getActivatedUI().networkIdentifier])
 
     if (connecting) return null
-
-    if (identities.length === 0) {
-        return <NotSetupYetPrompt {...props.NotSetupYetPromptProps} />
-    }
-
-    if (identities.length > 1) {
-        return (
-            <>
-                <ChooseIdentity {...props.ChooseIdentityProps} />
-                {ui}
-            </>
-        )
-    }
-
+    if (identities.length === 0) return <NotSetupYetPrompt {...props.NotSetupYetPromptProps} />
     return ui
 }

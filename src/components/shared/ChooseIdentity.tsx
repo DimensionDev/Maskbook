@@ -3,9 +3,8 @@ import { makeStyles } from '@material-ui/core/styles'
 import ExpansionPanel from '@material-ui/core/ExpansionPanel'
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
-import { Avatar } from '../../utils/components/Avatar'
 import type { Profile } from '../../database'
-import { List, ListItem, ListItemIcon, ListItemText, ListSubheader } from '@material-ui/core'
+import { List } from '@material-ui/core'
 import { PersonOrGroupInList, PersonOrGroupInListProps } from './SelectPeopleAndGroups'
 import { getActivatedUI } from '../../social-network/ui'
 import { useCurrentIdentity, useMyIdentities } from '../DataSource/useActivatedUI'
@@ -15,18 +14,50 @@ import { currentSelectedIdentity } from '../../components/shared-settings/settin
 import { useStylesExtends } from '../custom-ui-helper'
 
 const useStyles = makeStyles({
-    root: { width: '100%', lineHeight: 1.75 },
-    expansionPanelRoot: { boxShadow: 'none', width: '100%' },
-    expansionPanelSummaryRoot: { padding: 0 },
-    expansionPanelSummaryContent: { width: '100%', margin: 0 },
-    list: { width: '100%' },
-    listItemRoot: { padding: '12px 8px' },
-    fingerprint: { textOverflow: 'ellipsis', overflow: 'hidden', fontSize: 12 },
+    root: {
+        width: '100%',
+        lineHeight: 1.75,
+    },
+    expansionPanelRoot: {
+        boxShadow: 'none',
+        width: '100%',
+    },
+    list: {
+        width: '100%',
+        padding: 0,
+    },
+    listItemRoot: {
+        padding: '6px 24px 6px 8px',
+    },
+    fingerprint: {
+        textOverflow: 'ellipsis',
+        overflow: 'hidden',
+        fontSize: 12,
+    },
 })
-export interface ChooseIdentityProps
-    extends withClasses<
-        KeysInferFromUseStyles<typeof useStyles, 'expansionPanelSummaryContent' | 'expansionPanelSummaryRoot'>
-    > {
+
+const useExpansionPanelSummaryStyle = makeStyles({
+    root: {
+        padding: 0,
+    },
+    content: {
+        width: '100%',
+        margin: 0,
+    },
+    expanded: {
+        margin: '0 !important',
+        minHeight: 'unset !important',
+    },
+    expandIcon: {
+        padding: 0,
+        marginRight: '0 !important',
+        right: 4,
+        position: 'absolute',
+        pointerEvents: 'none',
+    },
+})
+
+export interface ChooseIdentityProps extends withClasses<KeysInferFromUseStyles<typeof useStyles>> {
     /**
      * Current selected identity
      * @defaultValue the global selected identity
@@ -46,8 +77,8 @@ export interface ChooseIdentityProps
  * Choose the current using identity.
  */
 export const ChooseIdentity: React.FC<ChooseIdentityProps> = (props) => {
-    const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
+    const expansionPanelSummaryClasses = useStylesExtends(useExpansionPanelSummaryStyle(), props)
     const [expanded, setExpanded] = React.useState<boolean>(false)
 
     const all = useMyIdentities()
@@ -63,10 +94,10 @@ export const ChooseIdentity: React.FC<ChooseIdentityProps> = (props) => {
         <div className={classes.root}>
             <ExpansionPanel classes={{ root: classes.expansionPanelRoot }} expanded={expanded} onChange={handleChange}>
                 <ExpansionPanelSummary
-                    classes={{ root: classes.expansionPanelSummaryRoot, content: classes.expansionPanelSummaryContent }}
+                    classes={expansionPanelSummaryClasses}
                     expandIcon={availableIdentities.length > 1 ? <ExpandMoreIcon /> : null}>
                     <PersonOrGroupInList
-                        ListItemProps={{ dense: true }}
+                        ListItemProps={{ dense: true, classes: { root: classes.listItemRoot } }}
                         item={current}
                         {...props.PersonOrGroupInListProps}></PersonOrGroupInList>
                 </ExpansionPanelSummary>
@@ -75,12 +106,12 @@ export const ChooseIdentity: React.FC<ChooseIdentityProps> = (props) => {
                         {availableIdentities.map((person) =>
                             person.identifier.equals(current.identifier) ? null : (
                                 <PersonOrGroupInList
-                                    ListItemProps={{ dense: true }}
+                                    ListItemProps={{ dense: true, classes: { root: classes.listItemRoot } }}
                                     item={person}
                                     key={person.identifier.toText()}
                                     onClick={() => {
-                                        props.onChangeIdentity!(person)
                                         setExpanded(false)
+                                        props.onChangeIdentity!(person)
                                     }}
                                     {...props.PersonOrGroupInListProps}
                                 />
