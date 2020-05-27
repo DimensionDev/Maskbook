@@ -6,7 +6,8 @@ import classNames from 'classnames'
 import { useCopyToClipboard } from 'react-use'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { useSnackbarCallback } from '../Dialogs/Base'
-import ActionButton, { DebounceButton } from './ActionButton'
+import ActionButton from './ActionButton'
+import { ETH_ADDRESS } from '../../../plugins/Wallet/token'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -123,6 +124,12 @@ export function WalletItem(props: WalletItemProps) {
                 {t('copy')}
             </ActionButton>
             <Box py={1} display="flex" flexWrap="wrap">
+                <Avatar
+                    className={classes.coin}
+                    key={ETH_ADDRESS}
+                    src="https://rawcdn.githack.com/trustwallet/assets/257c82b25e6f27ede7a2b309aadc0ed17bca45ae/blockchains/ethereum/info/logo.png">
+                    {'ETH'}
+                </Avatar>
                 {tokens &&
                     tokens.map((token) => (
                         <Avatar
