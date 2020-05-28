@@ -31,7 +31,7 @@ export async function openPostDialogFacebook() {
                 const [dom1] = await timeout(new MutationObserverWatcher(notActivated), 1000)
                 dom1.click()
                 console.log('Non-activated post box found Stage 1', dom1)
-                const [dom2] = await timeout(new IntervalWatcher(notActivated.clone().filter(x => x !== dom1)), 3000)
+                const [dom2] = await timeout(new IntervalWatcher(notActivated.clone().filter((x) => x !== dom1)), 3000)
                 console.log('Non-activated post box found Stage 2', dom2)
                 dom2.click()
                 await timeout(new MutationObserverWatcher(activated), 1000)
@@ -64,7 +64,7 @@ export async function pasteIntoPostBoxFacebook(
     await untilDocumentReady()
     // Save the scrolling position
     const scrolling = document.scrollingElement || document.documentElement
-    const scrollBack = (top => () => scrolling.scroll({ top }))(scrolling.scrollTop)
+    const scrollBack = ((top) => () => scrolling.scroll({ top }))(scrolling.scrollTop)
 
     const activated = new LiveSelector().querySelector<HTMLDivElement | HTMLTextAreaElement>(
         isMobileFacebook ? 'form textarea' : '.notranslate',
@@ -78,16 +78,17 @@ export async function pasteIntoPostBoxFacebook(
         const [element] = activated.evaluate()
         element.focus()
         await sleep(100)
-        if ('value' in document.activeElement!) dispatchCustomEvents('input', text)
-        else dispatchCustomEvents('paste', text)
-        element.dispatchEvent(new CustomEvent('input', { bubbles: true, cancelable: false, composed: true }))
+        // HACK: the is workaround
+        // https://github.com/eraeco/party.lol/blob/f63ae89b0b339b52aac12f65eb7a0865e522530a/content.js#L102
+        element.querySelector('br')?.replaceWith(document.createTextNode(text))
+        onToggleInput(element)
         await sleep(400)
         if (isMobileFacebook) {
             const e = document.querySelector<HTMLDivElement | HTMLTextAreaElement>('.mentions-placeholder')
             if (e) e.style.display = 'none'
         }
         // Prevent Custom Paste failed, this will cause service not available to user.
-        if (element.innerText.indexOf(text) === -1 && 'value' in element && element.value.indexOf(text) === -1) {
+        if (!(element.innerText.includes(text) || ('value' in element && element.value.includes(text)))) {
             copyFailed()
         }
     } catch {
@@ -98,4 +99,19 @@ export async function pasteIntoPostBoxFacebook(
         console.warn('Text not pasted to the text area')
         prompt(warningText, text)
     }
+}
+
+function onToggleInput(element: Element) {
+    try {
+        const init = { bubbles: true, cancelable: true }
+        for (const name of ['input', 'change']) {
+            element.dispatchEvent(new Event(name, init))
+        }
+        for (const name of ['keydown', 'keypress', 'keyup']) {
+            element.dispatchEvent(new KeyboardEvent(name, init))
+        }
+    } catch {
+        return false
+    }
+    return true
 }
