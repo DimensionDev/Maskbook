@@ -7,10 +7,10 @@ import { useLastRecognizedIdentity } from '../DataSource/useActivatedUI'
 import Services from '../../extension/service'
 import { getActivatedUI } from '../../social-network/ui'
 import { env } from '../../social-network/shared'
-import { setStorage } from '../../utils/browser.storage'
 import { useStylesExtends } from '../custom-ui-helper'
 import { ProfileIdentifier } from '../../database/type'
 import { getUrl } from '../../utils/utils'
+import { setStorage } from '../../storage/storage'
 
 interface BannerUIProps
     extends withClasses<KeysInferFromUseStyles<typeof useStyles> | 'header' | 'content' | 'actions' | 'button'> {

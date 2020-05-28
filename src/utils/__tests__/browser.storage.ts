@@ -1,4 +1,4 @@
-import { getStorage, setStorage } from '../browser.storage'
+import { getStorage, setStorage } from '../../storage/storage'
 
 test('get and set storage', async () => {
     const before = await getStorage('network_id')

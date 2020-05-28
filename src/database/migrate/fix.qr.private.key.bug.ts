@@ -1,4 +1,4 @@
-import { setStorage } from '../../utils/browser.storage'
+import { setStorage } from '../../storage/storage'
 import { queryPersonasWithPrivateKey } from '../Persona/Persona.db'
 import { deletePersona } from '../Persona/helpers'
 

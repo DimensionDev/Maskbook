@@ -14,7 +14,6 @@ import { injectPostCommentsDefault } from '../../social-network/defaults/injectC
 import { dispatchCustomEvents, selectElementContents, sleep } from '../../utils/utils'
 import { collectPostsFacebook } from './UI/collectPosts'
 import { injectPostInspectorFacebook } from './UI/injectPostInspector'
-import { setStorage } from '../../utils/browser.storage'
 import { isMobileFacebook } from './isMobile'
 import { i18n } from '../../utils/i18n-next'
 import { injectCommentBoxDefaultFactory } from '../../social-network/defaults/injectCommentBox'
@@ -24,6 +23,7 @@ import { injectKnownIdentityAtFacebook } from './UI/injectKnownIdentity'
 import { createTaskStartImmersiveSetupDefault } from '../../social-network/defaults/taskStartImmersiveSetupDefault'
 import { getProfilePageUrlAtFacebook } from './parse-username'
 import { notifyPermissionUpdate } from '../../utils/permissions'
+import { setStorage } from '../../storage/storage'
 
 export const facebookUISelf = defineSocialNetworkUI({
     ...sharedProvider,

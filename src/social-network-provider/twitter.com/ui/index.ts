@@ -2,7 +2,6 @@ import { defineSocialNetworkUI } from '../../../social-network/ui'
 import { sharedSettings } from '../index'
 import { InitFriendsValueRef } from '../../../social-network/defaults/FriendsValueRef'
 import { InitMyIdentitiesValueRef } from '../../../social-network/defaults/MyIdentitiesRef'
-import { setStorage } from '../../../utils/browser.storage'
 import { twitterUITasks } from './tasks'
 import { twitterUIFetch } from './fetch'
 import { twitterUIInjections } from './inject'
@@ -12,6 +11,7 @@ import { PreDefinedVirtualGroupNames } from '../../../database/type'
 import { twitterUICustomUI, startWatchThemeColor } from './custom'
 import { notifyPermissionUpdate } from '../../../utils/permissions'
 import { injectMaskbookIconToProfile, injectMaskbookIconIntoFloatingProfileCard } from './injectMaskbookIcon'
+import { setStorage } from '../../../storage/storage'
 
 export const instanceOfTwitterUI = defineSocialNetworkUI({
     ...sharedSettings,
