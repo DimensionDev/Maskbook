@@ -47,18 +47,26 @@ export const languageSettings = createNewSettings<Language>(
     { primary: () => i18n.t('settings_language') },
 )
 
-const createProxiedSettings = <T extends string | boolean = string>(settingsKey: string) => {
-    const target: { [key: string]: ValueRef<string> } = {}
+const createProxiedSettings = (settingsKey: string) => {
+    const target: {
+        [key: string]: ValueRef<string> & {
+            ready: boolean
+            readyPromise: Promise<string>
+        }
+    } = {}
     MessageCenter.on('settingsCreated', (updatedKey) => {
         if (!(updatedKey in target)) {
-            target[updatedKey] = createNetworkSpecificSettings<string>(updatedKey, settingsKey, '')
+            target[updatedKey] = createNetworkSpecificSettings(updatedKey, settingsKey, '')
         }
     })
-    return ((new Proxy(target, {
+    return new Proxy(target, {
         get(target, gettingKey: string) {
             if (!(gettingKey in target)) {
-                MessageCenter.emit('settingsCreated', gettingKey)
-                target[gettingKey] = createNetworkSpecificSettings<string>(gettingKey, settingsKey, '')
+                const settings = createNetworkSpecificSettings<string>(gettingKey, settingsKey, '')
+                target[gettingKey] = settings
+                settings.readyPromise.then(() => {
+                    MessageCenter.emit('settingsCreated', gettingKey)
+                })
             }
             return target[gettingKey]
         },
@@ -67,10 +75,10 @@ const createProxiedSettings = <T extends string | boolean = string>(settingsKey:
             obj.value = value
             return true
         },
-    }) as typeof target) as unknown) as { [key: string]: ValueRef<T> }
+    })
 }
 
-export const currentImagePayloadStatus = createProxiedSettings<boolean>('currentImagePayloadStatus')
+export const currentImagePayloadStatus = createProxiedSettings<>('currentImagePayloadStatus')
 
 export const currentSelectedIdentity = createProxiedSettings('currentSelectedIdentity')
 export type ImmersiveSetupCrossContextStatus = {

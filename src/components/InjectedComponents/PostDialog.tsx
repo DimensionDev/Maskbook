@@ -313,10 +313,11 @@ export function PostDialog(props: PostDialogProps) {
     //#endregion
     //#region Image Based Payload Switch
     const imagePayloadStatus = useValueRef(currentImagePayloadStatus[getActivatedUI().networkIdentifier])
+    const imagePayloadEnabled = imagePayloadStatus === 'true'
     const onImagePayloadSwitchChanged = or(
         props.onImagePayloadSwitchChanged,
         useCallback((checked) => {
-            currentImagePayloadStatus[getActivatedUI().networkIdentifier].value = checked
+            currentImagePayloadStatus[getActivatedUI().networkIdentifier].value = String(checked)
         }, []),
     )
     //#endregion
@@ -334,7 +335,7 @@ export function PostDialog(props: PostDialogProps) {
                 const activeUI = getActivatedUI()
                 // TODO: move into the plugin system
                 const metadata = readTypedMessageMetadata(typedMessageMetadata, RedPacketMetaKey)
-                if (imagePayloadStatus) {
+                if (imagePayloadEnabled) {
                     const isEth = metadata.ok && metadata.val.token_type === RedPacketTokenType.eth
                     const isErc20 =
                         metadata.ok &&
@@ -379,7 +380,7 @@ export function PostDialog(props: PostDialogProps) {
                 // there is nothing to write if it shared with public
                 if (!shareToEveryone) Services.Crypto.publishPostAESKey(token)
             },
-            [currentIdentity, shareToEveryone, typedMessageMetadata, imagePayloadStatus, t, i18n.language],
+            [currentIdentity, shareToEveryone, typedMessageMetadata, imagePayloadEnabled, t, i18n.language],
         ),
     )
     const onRequestReset = or(
@@ -443,7 +444,7 @@ export function PostDialog(props: PostDialogProps) {
             shareToEveryone={shareToEveryoneLocal}
             onlyMyself={onlyMyself}
             availableShareTarget={availableShareTarget}
-            imagePayload={imagePayloadStatus}
+            imagePayload={imagePayloadEnabled}
             currentIdentity={currentIdentity}
             currentShareTarget={currentShareTarget}
             postContent={postBoxContent}
