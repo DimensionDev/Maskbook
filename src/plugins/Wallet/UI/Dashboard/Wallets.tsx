@@ -6,7 +6,6 @@ import {
     Typography,
     Card,
     Container,
-    Button,
     List,
     ListItemText,
     ListItemSecondaryAction,
@@ -18,10 +17,6 @@ import { DialogRouter } from '../../../../extension/options-page/DashboardDialog
 
 import FooterLine from '../../../../extension/options-page/DashboardComponents/FooterLine'
 import WalletCard from './Components/WalletCard'
-import Services from '../../../../extension/service'
-import { WalletRecord, ERC20TokenRecord } from '../../database/types'
-import { useState, useEffect } from 'react'
-import { PluginMessageCenter } from '../../../PluginMessages'
 import {
     WalletRedPacketDetailDialogWithRouter,
     WalletCreateDialog,
@@ -30,7 +25,7 @@ import {
 } from './Dialogs/Wallet'
 import { useI18N } from '../../../../utils/i18n-next-ui'
 import ActionButton from '../../../../extension/options-page/DashboardComponents/ActionButton'
-import { currentEthereumNetworkSettings } from '../../network'
+import { useMyWallets } from '../../../../components/DataSource/independent'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -46,7 +41,7 @@ const useStyles = makeStyles((theme: Theme) =>
             width: 120,
         },
         secondaryAction: {
-            paddingRight: 120,
+            paddingRight: 120 + theme.spacing(2),
         },
         actionButtons: {
             margin: theme.spacing(2),
@@ -91,18 +86,7 @@ const dialogs = (
 
 export default function DashboardWalletsPage() {
     const { t } = useI18N()
-    const [wallets, setWallets] = useState<(WalletRecord & { privateKey: string })[]>([])
-    const [tokens, setTokens] = useState<ERC20TokenRecord[]>([])
-    useEffect(() => {
-        const query = () =>
-            Services.Plugin.invokePlugin('maskbook.wallet', 'getWallets').then(x => {
-                setWallets(x[0])
-                setTokens(x[1])
-            })
-        query()
-        currentEthereumNetworkSettings.addListener(query)
-        return PluginMessageCenter.on('maskbook.wallets.update', query)
-    }, [])
+    const [wallets, tokens] = useMyWallets()
     const classes = useStyles()
     const match = useRouteMatch()!
 
@@ -113,7 +97,7 @@ export default function DashboardWalletsPage() {
                     My Wallets
                 </Typography>
                 <div>
-                    {wallets.map(i => (
+                    {wallets.map((i) => (
                         <Card key={i.address} className={classes.identity} raised elevation={1}>
                             <WalletCard tokens={tokens} wallet={i} />
                         </Card>

@@ -14,15 +14,8 @@ const exec = (command: string, args: string[], options?: ExecFileSyncOptions) =>
 }
 
 function buildTypes(name: string): string[] {
-    if (/full/.test(name) || name === 'master') {
-        return ['base', 'chromium', 'firefox', 'gecko', 'iOS']
-    } else if (/ios/.test(name)) {
-        return ['iOS']
-    } else if (/android|gecko/.test(name)) {
-        return ['firefox', 'gecko']
-    } else {
-        return ['base', 'chromium', 'firefox']
-    }
+    // Always build full types
+    return ['base', 'chromium', 'firefox', 'gecko', 'iOS']
 }
 
 const branch = git.branchName()

@@ -1,4 +1,4 @@
-import { Profile, Group, Persona } from '../database'
+import type { Profile, Group, Persona } from '../database'
 import { ProfileIdentifier, GroupIdentifier, ECKeyIdentifier } from '../database/type'
 import { IdentifierMap } from '../database/IdentifierMap'
 
@@ -10,10 +10,7 @@ const emptyProfile = {
         updatedAt: new Date(),
         hasPrivateKey: false,
         identifier: new ECKeyIdentifier('secp256k1', Math.random().toString()),
-        fingerprint: Math.random()
-            .toString(26)
-            .slice(2)
-            .toUpperCase(),
+        fingerprint: Math.random().toString(26).slice(2).toUpperCase(),
         linkedProfiles: new IdentifierMap(new Map(), ProfileIdentifier) as Persona['linkedProfiles'],
     },
 }
@@ -47,22 +44,22 @@ export const demoGroup: Group[] = [
     {
         groupName: 'Group A',
         identifier: new GroupIdentifier('localhost', null, '12345'),
-        members: demoPeople.map(x => x.identifier),
+        members: demoPeople.map((x) => x.identifier),
     },
     {
         groupName: 'Group B',
         identifier: new GroupIdentifier('localhost', demoPeople[0].identifier.userId, '2345'),
-        members: demoPeople.map(x => x.identifier).slice(1),
+        members: demoPeople.map((x) => x.identifier).slice(1),
     },
     {
         groupName: 'Group C',
         identifier: new GroupIdentifier('localhost', null, '3456'),
-        members: demoPeople.map(x => x.identifier).slice(2),
+        members: demoPeople.map((x) => x.identifier).slice(2),
     },
     {
         groupName: 'Group D',
         identifier: new GroupIdentifier('localhost', null, '4567'),
-        members: demoPeople.map(x => x.identifier).slice(3),
+        members: demoPeople.map((x) => x.identifier).slice(3),
     },
     {
         groupName: 'Group E',

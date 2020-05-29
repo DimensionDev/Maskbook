@@ -25,14 +25,14 @@ export function useRequestCamera(needRequest: boolean) {
         if (checkPermissionApiUsability('query')) {
             navigator.permissions
                 .query({ name: 'camera' })
-                .then(p => {
+                .then((p) => {
                     permissionStatus = p
                     permissionStatus.onchange = () => {
                         updatePermission(permissionStatus.state)
                     }
                     updatePermission(permissionStatus.state)
                 })
-                .catch(e => {
+                .catch((e) => {
                     // for some user agents which implemented `query` method
                     // but rise an error if specific permission name dose not supported
                     updatePermission('granted')
@@ -40,7 +40,7 @@ export function useRequestCamera(needRequest: boolean) {
         } else if (checkPermissionApiUsability('request')) {
             navigator.permissions
                 .request({ name: 'camera' })
-                .then(p => {
+                .then((p) => {
                     updatePermission(p.state)
                 })
                 .catch(() => {

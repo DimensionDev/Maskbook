@@ -1,11 +1,8 @@
-import { BackupJSONFileLatest } from '../latest'
-import { PersonaRecord } from '../../../../../database/Persona/Persona.db'
+import type { BackupJSONFileLatest } from '../latest'
+import type { PersonaRecord } from '../../../../../database/Persona/Persona.db'
 import { Identifier, ECKeyIdentifier, ProfileIdentifier } from '../../../../../database/type'
 import { IdentifierMap } from '../../../../../database/IdentifierMap'
-export function PersonaRecordToJSONFormat(
-    persona: PersonaRecord,
-    localKeyMap: WeakMap<CryptoKey, JsonWebKey>,
-): BackupJSONFileLatest['personas'][0] {
+export function PersonaRecordToJSONFormat(persona: PersonaRecord): BackupJSONFileLatest['personas'][0] {
     return {
         createdAt: persona.createdAt.getTime(),
         updatedAt: persona.updatedAt.getTime(),
@@ -14,15 +11,12 @@ export function PersonaRecordToJSONFormat(
         privateKey: persona.privateKey,
         nickname: persona.nickname,
         mnemonic: persona.mnemonic,
-        localKey: persona.localKey ? localKeyMap.get(persona.localKey) : undefined,
+        localKey: persona.localKey,
         linkedProfiles: Array.from(persona.linkedProfiles).map(([x, y]) => [x.toText(), y]),
     }
 }
 
-export function PersonaRecordFromJSONFormat(
-    persona: BackupJSONFileLatest['personas'][0],
-    localKeyMap: WeakMap<JsonWebKey, CryptoKey>,
-): PersonaRecord {
+export function PersonaRecordFromJSONFormat(persona: BackupJSONFileLatest['personas'][0]): PersonaRecord {
     if (persona.privateKey && !persona.privateKey.d) throw new Error('Private have no secret')
     return {
         createdAt: new Date(persona.createdAt),
@@ -32,7 +26,7 @@ export function PersonaRecordFromJSONFormat(
         privateKey: persona.privateKey,
         nickname: persona.nickname,
         mnemonic: persona.mnemonic,
-        localKey: persona.localKey ? localKeyMap.get(persona.localKey) : undefined,
+        localKey: persona.localKey,
         linkedProfiles: new IdentifierMap(new Map(persona.linkedProfiles), ProfileIdentifier),
     }
 }

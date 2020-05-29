@@ -17,18 +17,18 @@ import {
 } from '../Dialogs/Wallet'
 import { DialogRouter } from '../../../../../extension/options-page/DashboardDialogs/DialogBase'
 import { useColorProvider } from '../../../../../utils/theme'
-import { WalletRecord, RedPacketRecord, ERC20TokenRecord } from '../../../database/types'
+import type { WalletRecord, RedPacketRecord, ERC20TokenRecord } from '../../../database/types'
 import { useSnackbar } from 'notistack'
 import Services from '../../../../../extension/service'
-import classNames from 'classnames'
 import { formatBalance } from '../../../formatter'
+import BigNumber from 'bignumber.js'
 
 interface Props {
     wallet: WalletRecord & { privateKey: string }
     tokens: ERC20TokenRecord[]
 }
 
-const useStyles = makeStyles(theme =>
+const useStyles = makeStyles((theme) =>
     createStyles({
         card: {
             width: '100%',
@@ -114,7 +114,7 @@ export default function WalletCard({ wallet, tokens }: Props) {
         navigator.clipboard
             .writeText(wallet.address)
             .then(() => enqueueSnackbar(t('dashboard_item_copied'), { variant: 'success', autoHideDuration: 1000 }))
-            .catch(e => {
+            .catch((e) => {
                 enqueueSnackbar(t('dashboard_item_copy_failed'), { variant: 'error' })
             })
     }
@@ -157,12 +157,12 @@ export default function WalletCard({ wallet, tokens }: Props) {
                         <>
                             <TextField
                                 style={{ width: '100%', maxWidth: '320px' }}
-                                inputProps={{ onKeyPress: e => e.key === 'Enter' && doRenameWallet(e) }}
+                                inputProps={{ onKeyPress: (e) => e.key === 'Enter' && doRenameWallet(e) }}
                                 autoFocus
                                 variant="outlined"
                                 label="Name"
                                 defaultValue={wallet.name}
-                                onBlur={e => doRenameWallet(e)}></TextField>
+                                onBlur={(e) => doRenameWallet(e)}></TextField>
                         </>
                     )}
                 </Typography>
@@ -196,15 +196,11 @@ export default function WalletCard({ wallet, tokens }: Props) {
                     line1="ETH"
                     line2="Ethereum"
                     action={
-                        <Typography variant="h5">
-                            {typeof wallet.eth_balance === 'bigint'
-                                ? formatBalance(wallet.eth_balance, 18)
-                                : 'Syncing...'}
-                        </Typography>
+                        <Typography variant="h5">{formatBalance(wallet.eth_balance, 18) ?? 'Syncing...'}</Typography>
                     }
                 />
                 {Array.from(wallet.erc20_token_balance).map(([addr, amount]) => {
-                    const t = tokens.find(y => y.address === addr)
+                    const t = tokens.find((y) => y.address === addr)
                     return (
                         <WalletLine
                             key={addr}
@@ -216,7 +212,7 @@ export default function WalletCard({ wallet, tokens }: Props) {
                                     <></>
                                 ) : (
                                     <Typography variant="h5">
-                                        {typeof amount === 'bigint'
+                                        {BigNumber.isBigNumber(amount)
                                             ? t
                                                 ? formatBalance(amount, t.decimals ?? 18)
                                                 : 'Unknown'

@@ -1,13 +1,13 @@
 import { PreDefinedVirtualGroupNames, GroupIdentifier } from '../../../database/type'
-import { Group, Profile } from '../../../database'
+import type { Group, Profile } from '../../../database'
 import { useFriendsList, useMyIdentities } from '../../DataSource/useActivatedUI'
-import { I18NStrings } from '../../../utils/i18n-next'
+import type { I18NStrings } from '../../../utils/i18n-next'
 import { useI18N, I18NFunction } from '../../../utils/i18n-next-ui'
 
 function resolveSpecialGroupName(t: I18NFunction, group: Group, knownPeople: Profile[]): string {
     let owner: string = group.identifier.virtualGroupOwner || 'Unknown'
 
-    for (const profile of knownPeople.filter(x => x.identifier.equals(group.identifier.ownerIdentifier))) {
+    for (const profile of knownPeople.filter((x) => x.identifier.equals(group.identifier.ownerIdentifier))) {
         owner = profile.linkedPersona?.nickname || profile.nickname || owner
     }
     const data = { owner }

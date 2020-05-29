@@ -1,4 +1,4 @@
-import { ValueRef } from '@holoflows/kit/es'
+import { ValueRef } from '@holoflows/kit'
 import { MessageCenter } from '../../utils/messages'
 
 export interface SettingsTexts {
@@ -12,25 +12,49 @@ function createInternalSettings<T extends browser.storage.StorageValue>(
     key: string,
     initialValue: T,
     comparer: (a: T, b: T) => boolean = (a, b) => a === b,
-) {
-    const settings = new ValueRef(initialValue, comparer)
-    const instanceKey = `${storage}+${key}`
-    update(instanceKey)
-    settings.addListener(async newVal => {
-        const stored = ((await browser.storage.local.get(null))[storage] as object) || {}
-        await browser.storage.local.set({
-            [storage]: { ...stored, [key]: newVal },
-        })
-        MessageCenter.emit('settingsUpdated', instanceKey)
+): ValueRef<T> & { readonly ready: boolean; readonly readyPromise: Promise<T> } {
+    const settings = new ValueRef(initialValue, comparer) as ValueRef<T> & {
+        ready: boolean
+        readonly readyPromise: Promise<T>
+    }
+    let ready: () => void = undefined!
+    Object.assign(settings, {
+        ready: false,
+        readyPromise: new Promise<T>(
+            (resolve) =>
+                (ready = () => {
+                    resolve(settings.value)
+                    settings.ready = true
+                }),
+        ),
     })
-    MessageCenter.on('settingsUpdated', update)
-    async function update(receivedKey: string) {
+
+    const instanceKey = `${storage}+${key}`
+    updateStorage(initialValue, true)
+    updateValueRef(instanceKey)
+    settings.addListener((newVal) => updateStorage(newVal, false))
+    MessageCenter.on('settingsUpdated', updateValueRef)
+
+    async function updateStorage<T extends browser.storage.StorageValue>(newVal: T, initial: boolean = false) {
+        const stored = await browser.storage.local.get(instanceKey)
+        if (!initial || (initial && !(instanceKey in stored))) {
+            await browser.storage.local.set({
+                [instanceKey]: newVal,
+            })
+            if (initial) {
+                updateValueRef(instanceKey)
+            } else {
+                MessageCenter.emit('settingsUpdated', instanceKey)
+            }
+        }
+    }
+    async function updateValueRef(receivedKey: string) {
         if (receivedKey !== instanceKey) return
         if (typeof browser === 'object') {
-            const value = await browser.storage.local.get(null)
-            const stored = value[storage]
-            if (typeof stored === 'object' && stored !== null && key in (stored as any)) {
-                settings.value = Reflect.get(stored, key)
+            const stored = await browser.storage.local.get(instanceKey)
+            if (instanceKey in stored) {
+                settings.value = Reflect.get(stored, instanceKey)
+                ready()
             }
         }
     }

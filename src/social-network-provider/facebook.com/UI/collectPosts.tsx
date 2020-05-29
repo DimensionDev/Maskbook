@@ -14,7 +14,7 @@ export function collectPostsFacebook(this: SocialNetworkUI) {
         .useForeach((node, key, metadata) => {
             const root = new LiveSelector()
                 .replace(() => [metadata.realCurrent])
-                .filter(x => x)
+                .filter((x) => x)
                 .closest('.userContentWrapper, [data-store]')
 
             // ? inject after comments
@@ -24,7 +24,7 @@ export function collectPostsFacebook(this: SocialNetworkUI) {
                 .closest<HTMLElement>(2)
             const commentSelectorMobile = root
                 .clone()
-                .map(x => x.parentElement)
+                .map((x) => x.parentElement)
                 .querySelectorAll<HTMLElement>('[data-commentid]')
 
             const commentSelector = isMobileFacebook ? commentSelectorMobile : commentSelectorPC
@@ -34,10 +34,10 @@ export function collectPostsFacebook(this: SocialNetworkUI) {
 
             const commentBoxSelectorMobile = root
                 .clone()
-                .map(x => x.parentElement)
+                .map((x) => x.parentElement)
                 .querySelectorAll('textarea')
-                .map(x => x.parentElement)
-                .filter(x => x.innerHTML.indexOf('comment') !== -1)
+                .map((x) => x.parentElement)
+                .filter((x) => x.innerHTML.indexOf('comment') !== -1)
 
             const commentBoxSelector = isMobileFacebook ? commentBoxSelectorMobile : commentBoxSelectorPC
 
@@ -55,14 +55,14 @@ export function collectPostsFacebook(this: SocialNetworkUI) {
                 info.postContent.value = node.innerText
                 info.postBy.value = getPostBy(metadata, info.postPayload.value !== null).identifier
                 info.postID.value = getPostID(metadata)
-                getSteganographyContent(metadata).then(content => {
+                getSteganographyContent(metadata).then((content) => {
                     if (content && info.postContent.value.indexOf(content) === -1 && content.substr(0, 2) === '🎼')
                         info.postContent.value = content
                 })
             }
             collectPostInfo()
             info.postPayload.value = deconstructPayload(info.postContent.value, this.payloadDecoder)
-            info.postContent.addListener(newVal => {
+            info.postContent.addListener((newVal) => {
                 info.postPayload.value = deconstructPayload(newVal, this.payloadDecoder)
             })
             return {
@@ -103,8 +103,8 @@ function getPostID(node: DOMProxy): null | string {
             const parent = node.current.parentElement
             if (!parent) return null
             const idNode = Array.from(parent.querySelectorAll('[id]'))
-                .map(x => x.id.split(';'))
-                .filter(x => x.length > 1)
+                .map((x) => x.id.split(';'))
+                .filter((x) => x.length > 1)
             if (!idNode.length) return null
             return idNode[0][2]
         }
@@ -124,13 +124,13 @@ async function getSteganographyContent(node: DOMProxy) {
               .split(',')
               .filter(Boolean)
         : Array.from(imgNodes)
-              .map(node => node.getAttribute('data-ploi') || '')
+              .map((node) => node.getAttribute('data-ploi') || '')
               .filter(Boolean)
     if (!imgUrls.length) return ''
     const pass = getPostBy(node, false).identifier.toText()
     return (
         await Promise.all(
-            imgUrls.map(async url => {
+            imgUrls.map(async (url) => {
                 try {
                     const content = await Services.Steganography.decodeImageUrl(url, {
                         pass,

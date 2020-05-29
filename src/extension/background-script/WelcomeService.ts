@@ -2,16 +2,17 @@ import { OnlyRunInContext } from '@holoflows/kit'
 import { encodeText } from '../../utils/type-transform/String-ArrayBuffer'
 import { sleep } from '../../utils/utils'
 import getCurrentNetworkWorker from '../../social-network/utils/getCurrentNetworkWorker'
-import { SocialNetworkUI } from '../../social-network/ui'
+import type { SocialNetworkUI } from '../../social-network/ui'
 import { getWelcomePageURL } from '../options-page/Welcome/getWelcomePageURL'
 import { recover_ECDH_256k1_KeyPair_ByMnemonicWord } from '../../utils/mnemonic-code'
 import { createPersonaByJsonWebKey } from '../../database'
 import { attachProfileDB, LinkedProfileDetails } from '../../database/Persona/Persona.db'
-import { CryptoKeyToJsonWebKey } from '../../utils/type-transform/CryptoKey-JsonWebKey'
 import { deriveLocalKeyFromECDHKey } from '../../utils/mnemonic-code/localKeyGenerate'
-import { ProfileIdentifier, PersonaIdentifier } from '../../database/type'
+import type { ProfileIdentifier, PersonaIdentifier } from '../../database/type'
 import { generateBackupJSON, BackupOptions } from './WelcomeServices/generateBackupJSON'
 import { i18n } from '../../utils/i18n-next'
+import { exclusiveTasks } from '../content-script/tasks'
+import type { AESJsonWebKey } from '../../modules/CryptoAlgorithm/interfaces/utils'
 
 OnlyRunInContext(['background', 'debugging'], 'WelcomeService')
 export { generateBackupJSON } from './WelcomeServices/generateBackupJSON'
@@ -30,22 +31,19 @@ export async function restoreNewIdentityWithMnemonicWord(
     info: {
         whoAmI?: ProfileIdentifier
         nickname?: string
-        localKey?: JsonWebKey
+        localKey?: AESJsonWebKey
         details?: LinkedProfileDetails
     },
 ): Promise<PersonaIdentifier> {
-    const key = await recover_ECDH_256k1_KeyPair_ByMnemonicWord(word, password)
-    const pubJwk = await CryptoKeyToJsonWebKey(key.key.publicKey)
-    const privJwk = await CryptoKeyToJsonWebKey(key.key.privateKey)
-    const localKeyJwk = await deriveLocalKeyFromECDHKey(key.key.publicKey, key.mnemonicRecord.words).then(
-        CryptoKeyToJsonWebKey,
-    )
+    const { key, mnemonicRecord } = await recover_ECDH_256k1_KeyPair_ByMnemonicWord(word, password)
+    const { privateKey, publicKey } = key
+    const localKeyJwk = await deriveLocalKeyFromECDHKey(publicKey, mnemonicRecord.words)
 
     const ecKeyID = await createPersonaByJsonWebKey({
-        publicKey: pubJwk,
-        privateKey: privJwk,
+        publicKey,
+        privateKey,
         localKey: info.localKey || localKeyJwk,
-        mnemonic: key.mnemonicRecord,
+        mnemonic: mnemonicRecord,
         nickname: info.nickname,
     })
     if (info.whoAmI) {
@@ -60,10 +58,9 @@ export async function downloadBackup<T>(obj: T) {
     const blob = new Blob([buffer], { type: 'application/json' })
     const url = URL.createObjectURL(blob)
     const date = new Date()
-    const today = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date
-        .getDate()
+    const today = `${date.getFullYear()}-${(date.getMonth() + 1)
         .toString()
-        .padStart(2, '0')}`
+        .padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`
     browser.downloads.download({
         url,
         filename: `maskbook-keystore-backup-${today}.json`,
@@ -87,11 +84,14 @@ export async function openWelcomePage(id?: SocialNetworkUI['lastRecognizedIdenti
         if (!getCurrentNetworkWorker(id.identifier).isValidUsername(id.identifier.userId))
             throw new TypeError(i18n.t('service_username_invalid'))
     }
-    return browser.tabs.create({ url: getWelcomePageURL(id) })
+    return exclusiveTasks(getWelcomePageURL(id))
 }
 
-export async function openOptionsPage(route: string) {
-    return browser.tabs.create({ url: browser.runtime.getURL('/index.html#' + route) })
+export async function openOptionsPage(route?: string): Promise<void> {
+    exclusiveTasks(browser.runtime.getURL(route ? '/index.html#' + route : '/'))
 }
 
 export { createPersonaByMnemonic } from '../../database'
+export function queryPermission(permission: browser.permissions.Permissions) {
+    return browser.permissions.contains(permission)
+}

@@ -6,7 +6,7 @@ version: 2.1
 executors:
     maskbook_node:
         docker:
-            - image: circleci/node:13.2.0-browsers
+            - image: circleci/node:13.2.0
         working_directory: ~/repo
 commands:
     restore_workspace:
@@ -35,70 +35,6 @@ jobs:
                   root: ~/
                   paths:
                       - repo
-    typescript:
-        executor: maskbook_node
-        steps:
-            - restore_workspace
-            - run:
-                  name: 'TypeScript type check'
-                  command: yarn tsc --noEmit
-    eslint:
-        executor: maskbook_node
-        steps:
-            - restore_workspace
-            - run:
-                  name: 'ESLint'
-                  command: 'yarn lint:report'
-            - store_test_results:
-                  path: reports/junit
-            - store_artifacts:
-                  path: reports/junit
-    type_coverage:
-        executor: maskbook_node
-        steps:
-            - restore_workspace
-            - run:
-                  name: 'Type coverage'
-                  command: 'yarn lint:typecoverage'
-    custom_linter:
-        executor: maskbook_node
-        steps:
-            - restore_workspace
-            - run:
-                  name: 'Import linter'
-                  command: 'yarn ts-node -T ./scripts/import-linter.ts'
-    jest:
-        executor: maskbook_node
-        steps:
-            - restore_workspace
-            - run:
-                  name: 'Jest'
-                  command: yarn test:ci
-                  environment:
-                      JEST_JUNIT_OUTPUT_DIR: 'reports/junit/js-test-results.xml'
-            - store_test_results:
-                  path: reports/junit
-            - store_artifacts:
-                  path: reports/junit
-            - store_artifacts:
-                  path: coverage
-    e2e:
-        executor: maskbook_node
-        steps:
-            - restore_workspace
-            - run:
-                  name: Setup E2E
-                  command: |
-                      mkdir -p ./screenshots
-                      yarn build:e2e
-            - run:
-                  name: Jest E2E
-                  command: yarn test:e2e
-            - run:
-                  name: Teardown E2E
-                  command: rm -rf ./build
-            - store_artifacts:
-                  path: screenshots
     build:
         executor: maskbook_node
         steps:
@@ -132,22 +68,6 @@ jobs:
                       - Maskbook.chromium.zip
                       - Maskbook.firefox.zip
                       - Maskbook.gecko.zip
-    build_storybook:
-        executor: maskbook_node
-        steps:
-            - restore_workspace
-            - run:
-                  name: Install zip
-                  command: sudo apt-get install zip
-            - run:
-                  name: Build Storybook
-                  command: yarn build-storybook
-            - run:
-                  name: Pack dist
-                  command: bash -c "cd storybook-static && zip -r ../storybook.zip ./*"
-            - store_artifacts:
-                  path: storybook.zip
-                  destination: /storybook.zip
     publish-github-release:
         docker:
             - image: cibuilds/github:0.10
@@ -179,32 +99,9 @@ workflows:
     main:
         jobs:
             - install_dependencies
-            - typescript:
-                  requires:
-                      - install_dependencies
-            - eslint:
-                  requires:
-                      - install_dependencies
-            - custom_linter:
-                  requires:
-                      - install_dependencies
-            - type_coverage:
-                  requires:
-                      - install_dependencies
-            - jest:
-                  requires:
-                      - install_dependencies
-            - build_storybook:
-                  requires:
-                      - install_dependencies
             - build:
                   requires:
-                      # Fail quick with type error.
-                      - typescript
-            - e2e:
-                  requires:
-                      # Avoid accessing build/ folder at the same time
-                      - build
+                      - install_dependencies
             - publish-github-release:
                   requires:
                       - build

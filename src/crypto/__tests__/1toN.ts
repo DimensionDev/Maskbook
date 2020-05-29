@@ -1,13 +1,13 @@
 import { encrypt1ToN, decryptMessage1ToNByMyself, decryptMessage1ToNByOther } from '../crypto-alpha-40'
 import { decodeText } from '../../utils/type-transform/String-ArrayBuffer'
-import { generate_ECDH_256k1_KeyPair, generate_AES_GCM_256_Key } from '../../utils/crypto.subtle'
+import { CryptoWorker } from '../../modules/workers'
 
 async function test1toN(msg: string = Math.random().toString()) {
-    const alice = await generate_ECDH_256k1_KeyPair()
-    const aliceLocal = await generate_AES_GCM_256_Key()
-    const bob = await generate_ECDH_256k1_KeyPair()
-    const david = await generate_ECDH_256k1_KeyPair()
-    const zoe = await generate_ECDH_256k1_KeyPair()
+    const alice = await CryptoWorker.generate_ec_k256_pair()
+    const aliceLocal = await CryptoWorker.generate_aes_gcm()
+    const bob = await CryptoWorker.generate_ec_k256_pair()
+    const david = await CryptoWorker.generate_ec_k256_pair()
+    const zoe = await CryptoWorker.generate_ec_k256_pair()
 
     const encrypted = await encrypt1ToN({
         version: -40,
@@ -32,7 +32,7 @@ async function test1toN(msg: string = Math.random().toString()) {
 
     const [bobDecrypt] = await decryptMessage1ToNByOther({
         version: -40,
-        AESKeyEncrypted: encrypted.othersAESKeyEncrypted.find(x => x.name === 'bob')!.key,
+        AESKeyEncrypted: encrypted.othersAESKeyEncrypted.find((x) => x.name === 'bob')!.key,
         authorsPublicKeyECDH: alice.publicKey,
         encryptedContent: encrypted.encryptedContent,
         iv: encrypted.iv,
@@ -43,7 +43,7 @@ async function test1toN(msg: string = Math.random().toString()) {
     try {
         await decryptMessage1ToNByOther({
             version: -40,
-            AESKeyEncrypted: encrypted.othersAESKeyEncrypted.find(x => x.name === 'bob')!.key,
+            AESKeyEncrypted: encrypted.othersAESKeyEncrypted.find((x) => x.name === 'bob')!.key,
             authorsPublicKeyECDH: alice.publicKey,
             encryptedContent: encrypted.encryptedContent,
             iv: encrypted.iv,

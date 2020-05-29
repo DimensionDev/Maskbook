@@ -6,9 +6,9 @@ import {
 } from '../../../../extension/background-script/CryptoServices/utils'
 import MaskbookPluginWrapper from '../../../MaskbookPluginWrapper'
 import { RedPacketWithState } from '../Dashboard/Components/RedPacket'
-import { RedPacketRecord, RedPacketStatus, WalletRecord } from '../../database/types'
+import type { RedPacketRecord, RedPacketStatus, WalletRecord } from '../../database/types'
 import Services from '../../../../extension/service'
-import { PostIdentifier, ProfileIdentifier } from '../../../../database/type'
+import type { PostIdentifier, ProfileIdentifier } from '../../../../database/type'
 
 import {
     withMobileDialog,
@@ -34,8 +34,11 @@ import { PortalShadowRoot } from '../../../../utils/jss/ShadowRootPortal'
 import { useI18N } from '../../../../utils/i18n-next-ui'
 import ShadowRootDialog from '../../../../utils/jss/ShadowRootDialog'
 import { getPostUrl } from '../../../../social-network/utils/getPostUrl'
+import { RedPacketMetaKey } from '../../RedPacketMetaKey'
+import type { PluginSuccessDecryptionComponentProps } from '../../../plugin'
+import { useWalletDataSource } from '../../../shared/useWallet'
 
-const useStyles = makeStyles(theme =>
+const useStyles = makeStyles((theme) =>
     createStyles({
         line: {
             padding: theme.spacing(1, 0),
@@ -45,23 +48,21 @@ const useStyles = makeStyles(theme =>
 
 interface RedPacketInDecryptedPostProps
     extends withClasses<
-        | KeysInferFromUseStyles<typeof useStyles>
-        | 'dialog'
-        | 'backdrop'
-        | 'container'
-        | 'paper'
-        | 'input'
-        | 'header'
-        | 'content'
-        | 'actions'
-        | 'close'
-        | 'button'
-        | 'label'
-        | 'title'
-    > {
-    message: TypedMessage
-    postIdentifier?: PostIdentifier<ProfileIdentifier>
-}
+            | KeysInferFromUseStyles<typeof useStyles>
+            | 'dialog'
+            | 'backdrop'
+            | 'container'
+            | 'paper'
+            | 'input'
+            | 'header'
+            | 'content'
+            | 'actions'
+            | 'close'
+            | 'button'
+            | 'label'
+            | 'title'
+        >,
+        PluginSuccessDecryptionComponentProps {}
 
 export default function RedPacketInDecryptedPost(props: RedPacketInDecryptedPostProps) {
     const [loading, setLoading] = React.useState(false)
@@ -86,18 +87,19 @@ export default function RedPacketInDecryptedPost(props: RedPacketInDecryptedPost
             walletAddress,
             setAsDefault,
         )
-            .catch(e => Services.Welcome.openOptionsPage(`/wallets/error?reason=${e.message}`))
+            .catch((e) => Services.Welcome.openOptionsPage(`/wallets/error?reason=${e.message}`))
             .finally(() => setLoading(false))
     }
+    const [wallets, tokens, onRequireNewWallet] = useWalletDataSource()
 
     const onClick = async (state: RedPacketStatus, rpid: RedPacketRecord['red_packet_id']) => {
         if (!rpid) return
         if (state === 'incoming' || state === 'normal') {
             setLoading(true)
             try {
-                const [wallets] = await Services.Plugin.invokePlugin('maskbook.wallet', 'getWallets')
+                if (wallets === 'loading') throw new Error('Loading')
                 if (!wallets[0]) {
-                    Services.Welcome.openOptionsPage('/wallets/error?reason=nowallet')
+                    onRequireNewWallet()
                     throw new Error('Claim failed')
                 }
                 if (wallets.length > 1) setClaiming({ rpid, wallets })
@@ -134,22 +136,24 @@ export function RedPacketInDecryptedPostCard(
         onClick: (state: RedPacketStatus, rpid: RedPacketRecord['red_packet_id']) => void
     },
 ) {
+    const { t } = useI18N()
     const { message, postIdentifier, loading, claiming, onClick } = props
-    const storybookDebugging: boolean = readTypedMessageMetadataUntyped<boolean>(
-        message.meta,
-        'storybook.no-side-effect',
-        // @ts-ignore https://github.com/vultix/ts-results/issues/4
-    ).else(false)
+    const storybookDebugging: boolean = !!process.env.STORYBOOK
+    /* without redpacket */
     const jsx = message
-        ? withMetadata(message.meta, 'com.maskbook.red_packet:1', r => (
+        ? withMetadata(message.meta, RedPacketMetaKey, (r) => (
               <MaskbookPluginWrapper width={400} pluginName="Red Packet">
-                  <RedPacketWithState
-                      loading={loading || !!claiming}
-                      onClick={onClick}
-                      unknownRedPacket={storybookDebugging ? undefined : r}
-                      redPacket={storybookDebugging ? (r as any) : undefined}
-                      from={postIdentifier && !postIdentifier.isUnknown ? getPostUrl(postIdentifier) : undefined}
-                  />
+                  {webpackEnv.target === 'WKWebview' ? (
+                      <span>{t('feature_redpacket_not_supported')}</span>
+                  ) : (
+                      <RedPacketWithState
+                          loading={loading || !!claiming}
+                          onClick={onClick}
+                          unknownRedPacket={storybookDebugging ? undefined : r}
+                          redPacket={storybookDebugging ? (r as any) : undefined}
+                          from={postIdentifier && !postIdentifier.isUnknown ? getPostUrl(postIdentifier) : undefined}
+                      />
+                  )}
               </MaskbookPluginWrapper>
           ))
         : null
@@ -173,7 +177,7 @@ export function RedPacketInDecryptedPostClaimDialog(
         props.walletAddress,
         React.useState<undefined | string>(),
     )
-    const [defaultChecked, setDefaultChecked] = React.useState()
+    const [defaultChecked, setDefaultChecked] = React.useState(false)
     const claiming = props.claiming
     const classes = useStylesExtends(useStyles(), props)
     return (
@@ -207,10 +211,10 @@ export function RedPacketInDecryptedPostClaimDialog(
                     <FormControl variant="filled" className={classes.input} fullWidth>
                         <InputLabel>Wallet</InputLabel>
                         <Select
-                            onChange={e => setSelectedWalletAddress(e.target.value as string)}
+                            onChange={(e) => setSelectedWalletAddress(e.target.value as string)}
                             MenuProps={{ container: PortalShadowRoot }}
                             value={selectedWalletAddress || ''}>
-                            {claiming?.wallets.map(x => (
+                            {claiming?.wallets.map((x) => (
                                 <MenuItem key={x.address} value={x.address}>
                                     {x.name} ({x.address})
                                 </MenuItem>
@@ -224,7 +228,7 @@ export function RedPacketInDecryptedPostClaimDialog(
                     control={
                         <Checkbox
                             checked={defaultChecked}
-                            onChange={e => setDefaultChecked(e.target.checked)}
+                            onChange={(e) => setDefaultChecked(e.target.checked)}
                             color="primary"
                         />
                     }

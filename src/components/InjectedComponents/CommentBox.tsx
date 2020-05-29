@@ -1,6 +1,5 @@
 import React, { useEffect, useRef } from 'react'
 import { useCapturedInput } from '../../utils/hooks/useCapturedEvents'
-import { PropsOf } from '@emotion/styled-base/types/helper'
 import { useI18N } from '../../utils/i18n-next-ui'
 import { makeStyles } from '@material-ui/styles'
 import { InputBase } from '@material-ui/core'
@@ -39,7 +38,7 @@ export function CommentBox(props: CommentBoxProps) {
     const [binder, inputRef, node] = useCapturedInput(() => {})
     const { t } = useI18N()
     useEffect(
-        binder(['keypress'], e => {
+        binder(['keypress'], (e) => {
             if (!node) return
             if (e.key === 'Enter') {
                 props.onSubmit(node.value)

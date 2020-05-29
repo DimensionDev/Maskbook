@@ -1,5 +1,5 @@
 import React from 'react'
-import { PersonaIdentifier, ECKeyIdentifier } from '../../database/type'
+import type { PersonaIdentifier, ECKeyIdentifier } from '../../database/type'
 import { renderInShadowRoot } from '../../utils/jss/renderInShadowRoot'
 import {
     ImmersiveSetupStepper,
@@ -9,7 +9,7 @@ import { DraggableDiv } from '../../components/InjectedComponents/ImmersiveSetup
 import Services from '../../extension/service'
 import { ValueRef } from '@holoflows/kit/es'
 import { useValueRef } from '../../utils/hooks/useValueRef'
-import { SocialNetworkUI } from '../ui'
+import type { SocialNetworkUI } from '../ui'
 import { restorePrototype } from '../../utils/type'
 
 function UI({
@@ -36,11 +36,11 @@ export function createTaskStartImmersiveSetupDefault(
     _: () => SocialNetworkUI,
     props: Partial<ImmersiveSetupStepperUIProps> = {},
 ) {
+    let shadowRoot: ShadowRoot
     return (for_: PersonaIdentifier) => {
         if (mounted) return
         mounted = true
         const dom = document.createElement('span')
-        const shadow = dom.attachShadow({ mode: 'closed' })
         document.body.appendChild(dom)
         const provePost = new ValueRef('')
         const unmount = renderInShadowRoot(
@@ -52,10 +52,18 @@ export function createTaskStartImmersiveSetupDefault(
                     mounted = false
                 }}
             />,
-            shadow,
+            {
+                shadow: () => {
+                    if (!shadowRoot) {
+                        shadowRoot = dom.attachShadow({ mode: 'closed' })
+                    }
+                    return shadowRoot
+                },
+                normal: () => dom,
+            },
         )
         Services.Crypto.getMyProveBio(for_, _().networkIdentifier)
-            .then(x => x || '')
-            .then(x => (provePost.value = x))
+            .then((x) => x || '')
+            .then((x) => (provePost.value = x))
     }
 }

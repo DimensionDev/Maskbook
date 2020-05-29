@@ -1,5 +1,5 @@
 import { getUrl } from '../../../utils/utils'
-import { ProfileIdentifier } from '../../../database/type'
+import type { ProfileIdentifier } from '../../../database/type'
 type Query = {
     identifier?: ProfileIdentifier
     avatar?: string

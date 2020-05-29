@@ -3,6 +3,7 @@
 .vscode/tasks.json
 /.awcache
 /.tscache
+/.log
 public/polyfill
 # dependencies
 /node_modules
@@ -14,6 +15,7 @@ public/polyfill
 
 # testing
 /coverage
+/reports
 /junit.xml
 
 # production

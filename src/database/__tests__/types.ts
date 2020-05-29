@@ -7,7 +7,7 @@ import {
     ProfileIdentifier,
     PreDefinedVirtualGroupNames,
 } from '../type'
-import { import_ECDH_256k1_Key } from '../../utils/crypto.subtle'
+import type { EC_Public_JsonWebKey } from '../../modules/CryptoAlgorithm/interfaces/utils'
 
 test('ProfileIdentifier', () => {
     const normal = new ProfileIdentifier('facebook.com', 'user_id')
@@ -49,7 +49,8 @@ test('ECKeyIdentifier', async () => {
     expect(ec_id.curve).toBe('secp256k1')
     expect(ec_id.type).toBe('ec_key')
 
-    const jwk = {
+    // @ts-expect-error
+    const jwk: EC_Public_JsonWebKey = {
         crv: 'K-256',
         ext: true,
         x: '7seqxT72nd8UhC8tIWKqux0LWT-de7sDVSYqO4vLJnI',
@@ -58,8 +59,6 @@ test('ECKeyIdentifier', async () => {
         kty: 'EC',
     }
     const ecKeyID = 'ec_key:secp256k1/A+7HqsU+9p3fFIQvLSFiqrsdC1k|nXu7A1UmKjuLyyZy'
-    const cryptoKey = await import_ECDH_256k1_Key(jwk)
-    expect((await ECKeyIdentifier.fromCryptoKey(cryptoKey)).toText()).toBe(ecKeyID)
     expect(ECKeyIdentifier.fromJsonWebKey(jwk).toText()).toBe(ecKeyID)
 })
 

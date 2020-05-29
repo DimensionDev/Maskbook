@@ -6,16 +6,21 @@ import {
     generateOthersAESKeyEncrypted as generateOthersAESKeyEncryptedV40,
     encrypt1ToN as encrypt1ToN40,
 } from './crypto-alpha-40'
+import type {
+    AESJsonWebKey,
+    EC_Private_JsonWebKey,
+    EC_Public_JsonWebKey,
+} from '../modules/CryptoAlgorithm/interfaces/utils'
 export type PublishedAESKey = { encryptedKey: string; salt: string }
 export type PublishedAESKeyRecordV39OrV38 = {
     aesKey: PublishedAESKey
-    receiverKey: CryptoKey
+    receiverKey: EC_Public_JsonWebKey
 }
 export async function generateOthersAESKeyEncrypted(
     version: -39 | -38,
-    AESKey: CryptoKey,
-    privateKeyECDH: CryptoKey,
-    othersPublicKeyECDH: CryptoKey[],
+    AESKey: AESJsonWebKey,
+    privateKeyECDH: EC_Private_JsonWebKey,
+    othersPublicKeyECDH: EC_Public_JsonWebKey[],
 ): Promise<PublishedAESKeyRecordV39OrV38[]> {
     const othersPublicKeyECDH_ = othersPublicKeyECDH.map((x, index) => ({ key: x, name: index.toString() }))
     const othersAESKeyEncrypted = await generateOthersAESKeyEncryptedV40(
@@ -24,7 +29,7 @@ export async function generateOthersAESKeyEncrypted(
         privateKeyECDH,
         othersPublicKeyECDH_,
     )
-    const othersAESKeyEncrypted_ = othersAESKeyEncrypted.map<PublishedAESKeyRecordV39OrV38>(key => ({
+    const othersAESKeyEncrypted_ = othersAESKeyEncrypted.map<PublishedAESKeyRecordV39OrV38>((key) => ({
         aesKey: key.key,
         receiverKey: othersPublicKeyECDH[parseInt(key.name, 10)],
     }))
@@ -40,11 +45,11 @@ export async function encrypt1ToN(info: {
     /** Message to encrypt */
     content: string | ArrayBuffer
     /** Your private key */
-    privateKeyECDH: CryptoKey
+    privateKeyECDH: EC_Private_JsonWebKey
     /** Your local AES key, used to encrypt the random AES key to decrypt the post by yourself */
-    ownersLocalKey: CryptoKey
+    ownersLocalKey: AESJsonWebKey
     /** Other's public keys. For everyone, will use 1 to 1 encryption to encrypt the random aes key */
-    othersPublicKeyECDH: CryptoKey[]
+    othersPublicKeyECDH: EC_Public_JsonWebKey[]
     /** iv */
     iv: ArrayBuffer
 }): Promise<{
@@ -56,7 +61,7 @@ export async function encrypt1ToN(info: {
     /** All encrypted post aes key. Should be post on the gun. */
     othersAESKeyEncrypted: PublishedAESKeyRecordV39OrV38[]
     /** The raw post AESKey. Be aware to protect it! */
-    postAESKey: CryptoKey
+    postAESKey: AESJsonWebKey
 }> {
     const othersPublicKeyECDH = info.othersPublicKeyECDH.map((x, index) => ({ key: x, name: index.toString() }))
     const { encryptedContent, iv, othersAESKeyEncrypted, ownersAESKeyEncrypted, postAESKey } = await encrypt1ToN40({
@@ -64,7 +69,7 @@ export async function encrypt1ToN(info: {
         othersPublicKeyECDH,
         version: -40,
     })
-    const othersAESKeyEncrypted_ = othersAESKeyEncrypted.map(key => ({
+    const othersAESKeyEncrypted_ = othersAESKeyEncrypted.map((key) => ({
         aesKey: key.key,
         receiverKey: othersPublicKeyECDH[parseInt(key.name, 10)].key,
     }))

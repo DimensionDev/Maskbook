@@ -1,8 +1,8 @@
 import { GetContext, ValueRef } from '@holoflows/kit/es'
 import { ProfileIdentifier } from '../../database/type'
-import { SocialNetworkUIDefinition } from '../ui'
+import type { SocialNetworkUIDefinition } from '../ui'
 import { nop, nopWithUnmount } from '../../utils/utils'
-import { Profile, Group } from '../../database'
+import type { Profile } from '../../database'
 import { ProfileArrayComparer, GroupArrayComparer } from '../../utils/comparer'
 
 /**

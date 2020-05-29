@@ -2,16 +2,14 @@ import * as Alpha38 from '../../../crypto/crypto-alpha-38'
 import * as Gun2 from '../../../network/gun/version.2'
 import { encodeArrayBuffer } from '../../../utils/type-transform/String-ArrayBuffer'
 import { constructAlpha38, PayloadLatest } from '../../../utils/type-transform/Payload'
-import { Group, queryPrivateKey, queryLocalKey } from '../../../database'
-import { ProfileIdentifier, PostIVIdentifier, GroupIdentifier, Identifier } from '../../../database/type'
-import { prepareOthersKeyForEncryptionV39OrV38 } from './prepareOthersKeyForEncryption'
+import { queryPrivateKey, queryLocalKey } from '../../../database'
+import { ProfileIdentifier, PostIVIdentifier, GroupIdentifier } from '../../../database/type'
+import { prepareRecipientDetail } from './prepareRecipientDetail'
 import { getNetworkWorker } from '../../../social-network/worker'
-import { getSignablePayload, TypedMessage, cryptoProviderTable } from './utils'
-import { createPostDB, PostRecord, RecipientReason } from '../../../database/post'
-import { queryUserGroup } from '../UserGroupService'
+import { getSignablePayload, TypedMessage } from './utils'
+import { createPostDB } from '../../../database/post'
 import { queryPersonaByProfileDB } from '../../../database/Persona/Persona.db'
 import { compressSecp256k1Key } from '../../../utils/type-transform/SECP256k1-Compression'
-import { import_AES_GCM_256_Key } from '../../../utils/crypto.subtle'
 import { i18n } from '../../../utils/i18n-next'
 
 type EncryptedText = string
@@ -41,37 +39,12 @@ export async function encryptTo(
 ): Promise<[EncryptedText, OthersAESKeyEncryptedToken]> {
     if (to.length === 0 && publicShared === false) return ['', '']
     if (publicShared) to = []
+    const [recipients, toKey] = await prepareRecipientDetail(to)
 
-    const recipients: PostRecord['recipients'] = {}
-    function addRecipients(x: ProfileIdentifier, reason: RecipientReason) {
-        const id = x.toText()
-        if (recipients[id]) recipients[id].reason.push(reason)
-        else recipients[id] = { reason: [reason] }
-    }
-    const sharedGroups = new Set<Group>()
-    for (const i of to) {
-        if (i instanceof ProfileIdentifier) addRecipients(i, { type: 'direct', at: new Date() })
-        // TODO: Should we throw if there the group is not find?
-        else sharedGroups.add((await queryUserGroup(i))!)
-    }
-    for (const group of sharedGroups) {
-        for (const each of group.members) {
-            addRecipients(each, { at: new Date(), type: 'group', group: group.identifier })
-        }
-    }
-
-    const toKey = await prepareOthersKeyForEncryptionV39OrV38(
-        Object.keys(recipients)
-            .map(x => Identifier.fromString(x, ProfileIdentifier))
-            .filter(x => x.ok)
-            .map(x => x.val as ProfileIdentifier),
-    )
     const minePrivateKey = await queryPrivateKey(whoAmI)
     if (!minePrivateKey) throw new TypeError('Not inited yet')
     const stringifiedContent = Alpha38.typedMessageStringify(content)
-    const localKey = publicShared
-        ? await import_AES_GCM_256_Key(Alpha38.publicSharedAESKey)
-        : (await queryLocalKey(whoAmI))!
+    const localKey = publicShared ? Alpha38.publicSharedAESKey : (await queryLocalKey(whoAmI))!
     const {
         encryptedContent: encryptedText,
         othersAESKeyEncrypted,
@@ -81,7 +54,7 @@ export async function encryptTo(
     } = await Alpha38.encrypt1ToN({
         version: -38,
         content: stringifiedContent,
-        othersPublicKeyECDH: toKey,
+        othersPublicKeyECDH: Array.from(toKey.values()),
         ownersLocalKey: localKey,
         privateKeyECDH: minePrivateKey,
         iv: crypto.getRandomValues(new Uint8Array(16)),
@@ -109,7 +82,7 @@ export async function encryptTo(
         postCryptoKey: postAESKey,
         recipients: recipients,
         foundAt: new Date(),
-        recipientGroups: to.filter(x => x instanceof GroupIdentifier) as GroupIdentifier[],
+        recipientGroups: to.filter((x) => x instanceof GroupIdentifier) as GroupIdentifier[],
     })
 
     const postAESKeyToken = encodeArrayBuffer(iv)

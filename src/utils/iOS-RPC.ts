@@ -17,7 +17,7 @@ const _window: any = globalThis
 export const hasWKWebkitRPCHandlers = _window?.webkit?.messageHandlers?.[key]
 class iOSWebkitChannel {
     constructor() {
-        document.addEventListener(key, e => {
+        document.addEventListener(key, (e) => {
             const detail = (e as CustomEvent<unknown>).detail
             for (const f of this.listener) {
                 try {

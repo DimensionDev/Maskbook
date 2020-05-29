@@ -5,8 +5,8 @@ import { renderInShadowRoot } from '../../../utils/jss/renderInShadowRoot'
 import { PostDialog } from '../../../components/InjectedComponents/PostDialog'
 import { useTwitterButton, useTwitterCloseButton, useTwitterLabel, useTwitterDialog } from '../utils/theme'
 import { makeStyles } from '@material-ui/styles'
+import type { Theme } from '@material-ui/core'
 import { postEditorContentInPopupSelector, rootSelector } from '../utils/selector'
-import { Theme } from '@material-ui/core'
 
 const useStyles = makeStyles((theme: Theme) => ({
     input: {
@@ -41,7 +41,10 @@ function renderPostDialogTo<T>(reason: 'timeline' | 'popup', ls: LiveSelector<T,
             subtree: true,
         })
 
-    renderInShadowRoot(<PostDialogAtTwitter reason={reason} />, watcher.firstDOMProxy.afterShadow)
+    renderInShadowRoot(<PostDialogAtTwitter reason={reason} />, {
+        shadow: () => watcher.firstDOMProxy.afterShadow,
+        normal: () => watcher.firstDOMProxy.after,
+    })
 }
 
 function PostDialogAtTwitter(props: { reason: 'timeline' | 'popup' }) {

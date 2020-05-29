@@ -6,8 +6,9 @@ import { useI18N } from '../../../utils/i18n-next-ui'
 import ActionButton from '../DashboardComponents/ActionButton'
 import Services from '../../service'
 import { InitStep } from '../InitStep'
+import { useMultiStateValidator } from 'react-use'
 
-const useStyles = makeStyles(theme =>
+const useStyles = makeStyles((theme) =>
     createStyles({
         input: {
             width: '100%',
@@ -34,11 +35,22 @@ export default function InitStep1S() {
     const classes = useStyles()
     const history = useHistory()
 
+    //#region validation
+    type ValidationResult = [boolean, string]
+    type ValidationState = [string]
+    const [[isValid, nameErrorMessage]] = useMultiStateValidator<ValidationResult, ValidationState, ValidationResult>(
+        [name],
+        ([name]: ValidationState): ValidationResult => [Boolean(name), name ? '' : t('error_name_absent')],
+    )
+    const [submitted, setSubmitted] = useState(false)
+    //#endregion
+
     const createPersonaAndNext = async () => {
+        setSubmitted(true)
+        if (!isValid) return
         const persona = await Services.Identity.createPersonaByMnemonic(name, '')
         history.replace(`${InitStep.Setup2}?identifier=${encodeURIComponent(persona.toText())}`)
     }
-
     const actions = (
         <>
             <ActionButton<typeof Link> variant="outlined" color="default" component={Link} to="start">
@@ -52,15 +64,17 @@ export default function InitStep1S() {
     const content = (
         <div className={classes.container}>
             <TextField
-                autoFocus
                 required
+                error={submitted && Boolean(nameErrorMessage)}
+                autoFocus
                 className={classes.input}
                 InputLabelProps={{ shrink: true }}
                 variant="outlined"
                 value={name}
-                onChange={e => setName(e.target.value)}
+                onChange={(e) => setName(e.target.value)}
                 label="Name"
-                helperText=" "></TextField>
+                helperText={(submitted && nameErrorMessage) || ' '}
+            />
         </div>
     )
 

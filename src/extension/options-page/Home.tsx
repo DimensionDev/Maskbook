@@ -13,7 +13,7 @@ import {
     Container,
 } from '@material-ui/core'
 import { Link, useHistory, useRouteMatch, Redirect } from 'react-router-dom'
-import { useMyPersonas } from '../../components/DataSource/useActivatedUI'
+import { useMyPersonas } from '../../components/DataSource/independent'
 import Services from '../service'
 import { DialogRouter } from './DashboardDialogs/DialogBase'
 
@@ -38,7 +38,7 @@ const useStyles = makeStyles((theme: Theme) =>
             width: 120,
         },
         secondaryAction: {
-            paddingRight: 120,
+            paddingRight: 120 + theme.spacing(2),
         },
         actionButtons: {
             margin: theme.spacing(2),
@@ -98,10 +98,10 @@ export default function DashboardHomePage() {
     )
 
     React.useEffect(() => {
-        Services.Identity.queryMyPersonas().then(personas => {
+        Services.Identity.queryMyPersonas().then((personas) => {
             if (!personas.length) history.replace('/initialize')
             if (personas.length === 1)
-                Services.Identity.queryMyProfiles().then(profiles => {
+                Services.Identity.queryMyProfiles().then((profiles) => {
                     if (!profiles.length) {
                         history.replace(
                             `/initialize/2s?identifier=${encodeURIComponent(personas[0].identifier.toText())}`,

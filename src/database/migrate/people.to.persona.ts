@@ -11,16 +11,17 @@ import * as persona from '../Persona/Persona.db'
 import { ECKeyIdentifier, ProfileIdentifier } from '../type'
 import { IdentifierMap } from '../IdentifierMap'
 import { CryptoKeyToJsonWebKey } from '../../utils/type-transform/CryptoKey-JsonWebKey'
+import type { AESJsonWebKey } from '../../modules/CryptoAlgorithm/interfaces/utils'
 
 export default async function migratePeopleToPersona() {
     const myIDs = await getMyIdentitiesDB()
     const otherIDs = await queryPeopleDB(() => true)
     await migrateHelper_operateDB(myIDs, otherIDs, queryLocalKeyDB)
 }
-export async function migrateHelper_operateDB(
+async function migrateHelper_operateDB(
     myIDs: PersonRecordPublicPrivate[],
     otherIDs: PersonRecord[],
-    getLocalKey: (identifier: ProfileIdentifier) => Promise<CryptoKey | null>,
+    getLocalKey: (identifier: ProfileIdentifier) => Promise<AESJsonWebKey | null>,
 ) {
     const [personaMap, profilesMap, attachRelationMap] = await migrateHelper_importPersonaFromPersonRecord(
         myIDs,
@@ -28,7 +29,7 @@ export async function migrateHelper_operateDB(
         getLocalKey,
     )
 
-    await persona.consistentPersonaDBWriteAccess(async t => {
+    await persona.consistentPersonaDBWriteAccess(async (t) => {
         for (const [v, incomingRecord] of personaMap) {
             const currentRecord = await persona.queryPersonaDB(incomingRecord.identifier, t)
             if (!currentRecord) {
@@ -56,16 +57,16 @@ export async function migrateHelper_operateDB(
 async function migrateHelper_importPersonaFromPersonRecord(
     myIDs: PersonRecordPublicPrivate[],
     otherIDs: PersonRecord[],
-    getLocalKey: (identifier: ProfileIdentifier) => Promise<CryptoKey | null>,
+    getLocalKey: (identifier: ProfileIdentifier) => Promise<AESJsonWebKey | null>,
 ) {
     const jwkMap = new Map<CryptoKey, JsonWebKey>()
     const attachRelationMap = new IdentifierMap<ProfileIdentifier, ECKeyIdentifier>(new Map(), ProfileIdentifier)
-    const localKeysMap = new IdentifierMap<ProfileIdentifier, CryptoKey>(new Map(), ProfileIdentifier)
+    const localKeysMap = new IdentifierMap<ProfileIdentifier, AESJsonWebKey>(new Map(), ProfileIdentifier)
     const personaMap = new IdentifierMap<ECKeyIdentifier, persona.PersonaRecord>(new Map(), ECKeyIdentifier)
     const profilesMap = new IdentifierMap<ProfileIdentifier, persona.ProfileRecord>(new Map(), ProfileIdentifier)
 
     await Promise.all(
-        otherIDs.concat(myIDs).map(async value => {
+        otherIDs.concat(myIDs).map(async (value) => {
             if (value.publicKey) jwkMap.set(value.publicKey, await CryptoKeyToJsonWebKey(value.publicKey))
             if (value.privateKey) jwkMap.set(value.privateKey, await CryptoKeyToJsonWebKey(value.privateKey))
 
@@ -75,7 +76,7 @@ async function migrateHelper_importPersonaFromPersonRecord(
         }),
     )
     await Promise.all(
-        myIDs.map(async value => {
+        myIDs.map(async (value) => {
             const key = await getLocalKey(value.identifier)
             key && localKeysMap.set(value.identifier, key)
         }),
@@ -100,6 +101,7 @@ function updateOrCreatePersonaRecord(
     const rec = map.get(ec_id)
     if (rec) {
         if (profile.privateKey) {
+            // @ts-ignore
             rec.privateKey = cryptoKeyMap.get(profile.privateKey)!
         }
         rec.linkedProfiles.set(profile.identifier, {
@@ -107,7 +109,9 @@ function updateOrCreatePersonaRecord(
         })
     } else {
         map.set(ec_id, {
+            // @ts-ignore
             privateKey: cryptoKeyMap.get(profile.privateKey!)!,
+            // @ts-ignore
             publicKey: cryptoKeyMap.get(profile.publicKey)!,
             createdAt: new Date(0),
             updatedAt: new Date(),
@@ -122,7 +126,7 @@ function updateOrCreatePersonaRecord(
 function updateOrCreateProfileRecord(
     map: IdentifierMap<ProfileIdentifier, persona.ProfileRecord>,
     ec_idMap: IdentifierMap<ProfileIdentifier, ECKeyIdentifier>,
-    localKeyMap: IdentifierMap<ProfileIdentifier, CryptoKey>,
+    localKeyMap: IdentifierMap<ProfileIdentifier, AESJsonWebKey>,
     profile: PersonRecord,
 ) {
     const rec = map.get(profile.identifier)

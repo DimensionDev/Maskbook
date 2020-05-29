@@ -2,7 +2,7 @@ import { LiveSelector, MutationObserverWatcher } from '@holoflows/kit/es'
 import { getProfileIdentifierAtFacebook } from '../getPersonIdentifierAtFacebook'
 import Services from '../../../extension/service'
 import { GroupIdentifier } from '../../../database/type'
-import { SocialNetworkUI } from '../../../social-network/ui'
+import type { SocialNetworkUI } from '../../../social-network/ui'
 
 function findPeopleInfo(whoAmI: SocialNetworkUI['currentIdentity']) {
     // TODO: support mobile
@@ -11,7 +11,7 @@ function findPeopleInfo(whoAmI: SocialNetworkUI['currentIdentity']) {
         /**
          * @var node: bio in the side of user page
          */
-        .useForeach(node => {
+        .useForeach((node) => {
             function tryFindBioKey() {
                 /**
                  * @var text
@@ -68,7 +68,7 @@ enum Status {
  */
 const isFriend = new LiveSelector()
     .querySelectorAll('#pagelet_timeline_profile_actions button:not(.hidden_elem)')
-    .replace(arr => {
+    .replace((arr) => {
         if (arr.length === 3) return [Status.Friend]
         else if (arr.length === 2) return [Status.NonFriend]
         return [Status.Unknown]

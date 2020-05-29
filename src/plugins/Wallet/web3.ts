@@ -1,5 +1,5 @@
 import Web3 from 'web3'
-import { WebsocketProvider } from 'web3-core'
+import type { WebsocketProvider } from 'web3-core'
 import { getNetworkSettings, currentEthereumNetworkSettings } from './network'
 import { getWallets, recoverWallet, recoverWalletFromPrivateKey } from './wallet'
 import { PluginMessageCenter } from '../PluginMessages'
@@ -14,11 +14,9 @@ export const resetProvider = () => {
         provider.removeListener('end', resetProvider) // prevent from circular reseting
         provider.disconnect(-1, 'change provider')
     }
-    const newProvider = new Web3.providers.WebsocketProvider(getNetworkSettings().middlewareAddress)
-
-    newProvider.on('end', resetProvider)
-    provider = newProvider
-    web3.setProvider(newProvider)
+    provider = new Web3.providers.WebsocketProvider(getNetworkSettings().middlewareAddress)
+    provider.on('end', resetProvider)
+    web3.setProvider(provider)
 }
 
 export const resetWallet = async () => {
@@ -38,10 +36,12 @@ currentEthereumNetworkSettings.addListener(resetProvider)
 PluginMessageCenter.on('maskbook.wallets.reset', resetWallet)
 
 sideEffect.then(() => {
+    /* without redpacket */
+    if (webpackEnv.target === 'WKWebview') return
     resetWallet()
     resetProvider()
 })
 
 export function buf2hex(buffer: ArrayBuffer) {
-    return Array.prototype.map.call(new Uint8Array(buffer), x => ('00' + x.toString(16)).slice(-2)).join('')
+    return Array.prototype.map.call(new Uint8Array(buffer), (x) => ('00' + x.toString(16)).slice(-2)).join('')
 }

@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from 'react'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { makeStyles, ListItem, ListItemText, InputBase, Button, List, Box } from '@material-ui/core'
-import { Profile, Group } from '../../../database'
+import type { Profile, Group } from '../../../database'
 import { useCurrentIdentity } from '../../DataSource/useActivatedUI'
 import { PersonOrGroupInList, PersonOrGroupInListProps } from './PersonOrGroupInList'
 import { PersonOrGroupInChip, PersonOrGroupInChipProps } from './PersonOrGroupInChip'
@@ -48,19 +48,19 @@ export function SelectPeopleAndGroupsUI<ServeType extends Group | Profile = Pers
 
     React.useEffect(() => {
         if (myself && ignoreMyself) {
-            const filtered = selected.find(x => x.identifier.equals(myself.identifier))
-            if (filtered) onSetSelected(selected.filter(x => x !== filtered) as ServeType[])
+            const filtered = selected.find((x) => x.identifier.equals(myself.identifier))
+            if (filtered) onSetSelected(selected.filter((x) => x !== filtered) as ServeType[])
         }
     }, [ignoreMyself, myself, onSetSelected, selected])
 
     const [search, setSearch] = useState('')
-    const listBeforeSearch = items.filter(x => {
+    const listBeforeSearch = items.filter((x) => {
         if (ignoreMyself && myself && x.identifier.equals(myself.identifier)) return false
-        if (selected.find(y => x.identifier.equals(y.identifier))) return false
+        if (selected.find((y) => x.identifier.equals(y.identifier))) return false
         return true
     })
-    const listAfterSearch = listBeforeSearch.filter(x => {
-        if (frozenSelected && frozenSelected.find(y => x.identifier.equals(y.identifier))) return false
+    const listAfterSearch = listBeforeSearch.filter((x) => {
+        if (frozenSelected && frozenSelected.find((y) => x.identifier.equals(y.identifier))) return false
         if (search === '') return true
         if (isPerson(x)) {
             return (
@@ -90,17 +90,17 @@ export function SelectPeopleAndGroupsUI<ServeType extends Group | Profile = Pers
     return (
         <div className={classes.root}>
             <Box display="flex" className={classes.selectedArea}>
-                {frozenSelected.map(x => FrozenChip(x, props.PersonOrGroupInChipProps))}
+                {frozenSelected.map((x) => FrozenChip(x, props.PersonOrGroupInChipProps))}
                 {selected
-                    .filter(item => !frozenSelected.includes(item as ServeType))
-                    .map(item => (
+                    .filter((item) => !frozenSelected.includes(item as ServeType))
+                    .map((item) => (
                         <PersonOrGroupInChip
                             disabled={disabled}
                             key={item.identifier.toText()}
                             item={item}
                             onDelete={() =>
                                 onSetSelected(
-                                    selected.filter(x => !x.identifier.equals(item.identifier)) as ServeType[],
+                                    selected.filter((x) => !x.identifier.equals(item.identifier)) as ServeType[],
                                 )
                             }
                             {...props.PersonOrGroupInChipProps}
@@ -109,8 +109,8 @@ export function SelectPeopleAndGroupsUI<ServeType extends Group | Profile = Pers
                 <InputBase
                     className={classes.input}
                     value={disabled ? '' : search}
-                    onChange={useCallback(e => setSearch(e.target.value), [])}
-                    onKeyDown={e => {
+                    onChange={useCallback((e) => setSearch(e.target.value), [])}
+                    onKeyDown={(e) => {
                         if (search === '' && e.key === 'Backspace') {
                             onSetSelected(selected.slice(0, selected.length - 1) as ServeType[])
                         }

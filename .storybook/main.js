@@ -3,17 +3,13 @@ module.exports = {
     addons: [
         '@storybook/addon-knobs/register',
         '@storybook/addon-actions',
-        'storybook-addon-material-ui/register',
         'storybook-addon-i18n/register.js',
-        'storybook-addon-figma/register',
+        'storybook-addon-designs',
         '@storybook/addon-links',
-        '@storybook/preset-typescript',
-        // ---------^ not working.
-        // maybe see https://github.com/storybookjs/presets/issues/65
         '@storybook/addon-docs',
         '@storybook/addon-viewport/register',
     ],
-    webpackFinal: async config => {
+    webpackFinal: async (/** @type {import('webpack').Configuration} */ config) => {
         config.module.rules.push({
             test: /\.(ts|tsx)$/,
             use: [
@@ -21,13 +17,23 @@ module.exports = {
                     loader: require.resolve('ts-loader'),
                     options: {
                         transpileOnly: true,
-                        compilerOptions: { noEmit: false },
+                        compilerOptions: {
+                            module: 'esnext',
+                            noEmit: false,
+                            importsNotUsedAsValues: 'remove',
+                        },
                     },
                 },
                 { loader: require.resolve('react-docgen-typescript-loader') },
             ],
         })
         config.resolve.extensions.push('.ts', '.tsx')
+        const webpack = require('webpack')
+        config.plugins.unshift(
+            new webpack.DefinePlugin({
+                'process.env.STORYBOOK': 'true',
+            }),
+        )
         return config
     },
 }

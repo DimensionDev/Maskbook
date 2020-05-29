@@ -12,10 +12,11 @@ import { number, text, select, boolean } from '@storybook/addon-knobs'
 import { Typography, Paper } from '@material-ui/core'
 import { action } from '@storybook/addon-actions'
 import { RedPacketDialogUI } from '../plugins/Wallet/UI/RedPacket/RedPacketDialog'
-import { DecryptPostSuccess } from '../components/InjectedComponents/DecryptedPost'
-import { makeTypedMessage, TypedMessageMetadata } from '../extension/background-script/CryptoServices/utils'
-import { AdditionalContent } from '../components/InjectedComponents/AdditionalPostContent'
+import BigNumber from 'bignumber.js'
+import { makeTypedMessage } from '../extension/background-script/CryptoServices/utils'
 import { DAI_ADDRESS, OKB_ADDRESS } from '../plugins/Wallet/erc20'
+import { DecryptPostSuccess } from '../components/InjectedComponents/DecryptedPost/DecryptedPostSuccess'
+import { RedPacketMetaKey } from '../plugins/Wallet/RedPacketMetaKey'
 
 storiesOf('Plugin: Red Packets', module)
     .add('RedPacketWithStateUI', () => {
@@ -126,7 +127,7 @@ storiesOf('Plugin: Red Packets', module)
                         mnemonic: ['mem'],
                         name: 'Wallet Name',
                         passphrase: 'password',
-                        eth_balance: BigInt(2 * 10 ** 18),
+                        eth_balance: new BigNumber(2).multipliedBy(new BigNumber(10).pow(18)), // 2 * (10 ** 18)
                     },
                 ]}
                 justCreatedRedPacket={undefined}
@@ -144,10 +145,7 @@ storiesOf('Plugin: Red Packets', module)
             total: (knobs.total * 10 ** 18).toString(),
             creation_time: Date.now(),
         }
-        const meta = new Map<string, any>([
-            ['com.maskbook.red_packet:1', payload],
-            ['storybook.no-side-effect', true],
-        ])
+        const meta = new Map<string, any>([[RedPacketMetaKey, payload]])
         return (
             <Paper style={{ maxWidth: 400 }}>
                 <div>
@@ -198,14 +196,14 @@ function createRecord(opts: {
         password: 'password',
         received_time: new Date(),
         send_message: opts.message,
-        send_total: BigInt(opts.total),
+        send_total: new BigNumber(opts.total),
         sender_address: 'sender_address',
         sender_name: opts.senderName,
-        shares: BigInt(opts.shares),
+        shares: new BigNumber(opts.shares),
         status: opts.status,
         token_type: opts.type,
         _found_in_url_: 'https://g.cn/',
-        claim_amount: BigInt(opts.claimedAmount),
+        claim_amount: new BigNumber(opts.claimedAmount),
         raw_payload: { token: opts.token } as any,
         erc20_token: opts.token ? 'aefwf' : undefined,
     }

@@ -30,8 +30,11 @@ export const postEditorInTimelineSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('[role="main"] :not(aside) > [role="progressbar"] ~ div')
 export const postEditorDraftContentSelector = () =>
     (isCompose() ? postEditorInPopupSelector() : postEditorInTimelineSelector()).querySelector<HTMLElement>(
+        // TODO: the aria-label is related to the language
         '.public-DraftEditor-content, textarea[aria-label="Tweet text"]',
     )
+export const posteditorToolbarSeelctor: () => LiveSelector<E, true> = () =>
+    querySelector<E>('[data-testid="toolBar"] > div > *:last-child')
 
 export const newPostButtonSelector = () => querySelector<E>('[data-testid="SideNav_NewTweet_Button"]')
 
@@ -40,6 +43,15 @@ export const profileEditorButtonSelector = () =>
 export const profileEditorTextareaSelector = () => querySelector<HTMLTextAreaElement>('textarea[placeholder*="bio"]')
 
 export const bioSelector = () => querySelector<HTMLDivElement>(['[data-testid="UserProfileHeader_Items"]'].join())
+export const bioPageUserNickNameSelector = () =>
+    querySelector<HTMLDivElement>('[data-testid="UserDescription"]')
+        .map((x) => x.parentElement?.parentElement?.previousElementSibling)
+        .querySelector('span')
+export const bioPageUserIDSelector = (selector: () => LiveSelector<HTMLSpanElement, true>) =>
+    selector().map((x) =>
+        (x.parentElement?.parentElement?.nextElementSibling as HTMLElement).innerText.replace('@', ''),
+    )
+export const floatingBioCardSelector = () => querySelector<HTMLSpanElement>(`[style^="left:"] a[role=link] span`)
 export const bioCardSelector = <SingleMode extends boolean = true>(singleMode = true) =>
     querySelector<HTMLDivElement, SingleMode>(
         [
@@ -83,7 +95,7 @@ const avatar = /"profile_image_url_https":"(.*?)"/
  * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/match
  */
 const p = (regex: RegExp, index: number) => {
-    return base.clone().map(x => regexMatch(x.innerText, regex, index))
+    return base.clone().map((x) => regexMatch(x.innerText, regex, index))
 }
 export const selfInfoSelectors = () => ({
     handle: p(handle, 1),

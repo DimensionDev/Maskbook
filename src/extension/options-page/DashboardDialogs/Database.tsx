@@ -7,7 +7,7 @@ import { decompressBackupFile } from '../../../utils/type-transform/BackupFileSh
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { BackupJSONFileLatest, UpgradeBackupJSONFile } from '../../../utils/type-transform/BackupFormat/JSON/latest'
 import { useHistory } from 'react-router-dom'
-import { extraPermissions } from '../../../utils/permissions'
+import { extraPermissions, notifyPermissionUpdate } from '../../../utils/permissions'
 
 export function DatabaseBackupDialog() {
     const { t } = useI18N()
@@ -79,7 +79,8 @@ export function DatabaseRestoreDialog() {
                                 if (!requiredPermissions) return history.push('/home')
                                 browser.permissions
                                     .request({ origins: requiredPermissions })
-                                    .then(granted =>
+                                    .then(notifyPermissionUpdate)
+                                    .then((granted) =>
                                         granted
                                             ? Services.Welcome.restoreBackup(json!)
                                             : Promise.reject(new Error('required permissions are not granted')),

@@ -1,4 +1,4 @@
-import { ValueRef } from '@holoflows/kit/es'
+import type { ValueRef } from '@holoflows/kit/es'
 import { useValueRef } from '../../utils/hooks/useValueRef'
 import { texts } from './createSettings'
 import {
@@ -11,12 +11,9 @@ import {
     makeStyles,
     ListItemIcon,
     SelectProps,
+    createStyles,
 } from '@material-ui/core'
 import React from 'react'
-
-const useStyles = makeStyles({
-    container: { listStyleType: 'none', width: '100%' },
-})
 
 function withDefaultText<T>(props: SettingsUIProps<T>): SettingsUIProps<T> {
     const { value, primary, secondary } = props
@@ -56,6 +53,18 @@ export function SettingsUI<T>(props: SettingsUIProps<T>) {
             )
     }
 }
+
+const useListItemStyles = makeStyles((theme) =>
+    createStyles({
+        container: { listStyleType: 'none', width: '100%' },
+        secondaryAction: { paddingRight: 90 + theme.spacing(2) },
+    }),
+)
+
+const useStyles = makeStyles({
+    secondaryAction: { width: 90 },
+})
+
 export function SettingsUIEnum<T extends object>(
     props: {
         enumObject: T
@@ -64,13 +73,14 @@ export function SettingsUIEnum<T extends object>(
     } & SettingsUIProps<T[keyof T]>,
 ) {
     const { primary, secondary } = withDefaultText(props)
+    const listClasses = useListItemStyles()
     const classes = useStyles()
     const [ui, change] = useEnumSettings(props.value, props.enumObject, props.getText, props.SelectProps)
     return (
-        <ListItem component="div" classes={classes}>
+        <ListItem component="div" classes={listClasses}>
             {props.icon ? <ListItemIcon>{props.icon}</ListItemIcon> : null}
             <ListItemText primary={primary} secondary={secondary} />
-            <ListItemSecondaryAction>{ui}</ListItemSecondaryAction>
+            <ListItemSecondaryAction className={classes.secondaryAction}>{ui}</ListItemSecondaryAction>
         </ListItem>
     )
 }
@@ -102,20 +112,20 @@ function useEnumSettings<Q extends object>(
 ): HookedUI<Q[keyof Q]> {
     const enum_ = Object.keys(enumObject)
         // Leave only key of enum
-        .filter(x => Number.isNaN(parseInt(x)))
-        .map(key => ({ key, value: enumObject[key as keyof Q] }))
+        .filter((x) => Number.isNaN(parseInt(x)))
+        .map((key) => ({ key, value: enumObject[key as keyof Q] }))
     const change = (value: any) => {
         if (!Number.isNaN(parseInt(value))) {
             value = parseInt(value)
         }
-        if (!enum_.some(x => x.value === value)) {
+        if (!enum_.some((x) => x.value === value)) {
             console.log(value)
             throw new Error('Invalid state')
         }
         ref.value = value
     }
     const ui = (
-        <Select {...selectProps} value={useValueRef(ref)} onChange={event => change(event.target.value)}>
+        <Select {...selectProps} value={useValueRef(ref)} onChange={(event) => change(event.target.value)}>
             {enum_.map(({ key, value }) => (
                 <MenuItem value={String(value)} key={String(key)}>
                     {getText?.(value) ?? String(key)}

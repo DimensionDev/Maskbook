@@ -15,11 +15,11 @@ export function injectPostDialogHintAtTwitter() {
     const emptyNode = document.createElement('div')
     renderPostDialogHintTo(
         'timeline',
-        postEditorInTimelineSelector().map(x => (hasEditor() ? x : emptyNode)),
+        postEditorInTimelineSelector().map((x) => (hasEditor() ? x : emptyNode)),
     )
     renderPostDialogHintTo(
         'popup',
-        postEditorInPopupSelector().map(x => (isCompose() && hasEditor() ? x : emptyNode)),
+        postEditorInPopupSelector().map((x) => (isCompose() && hasEditor() ? x : emptyNode)),
     )
 }
 
@@ -33,7 +33,10 @@ function renderPostDialogHintTo<T>(reason: 'timeline' | 'popup', ls: LiveSelecto
             subtree: true,
         })
 
-    renderInShadowRoot(<PostDialogHintAtTwitter reason={reason} />, watcher.firstDOMProxy.afterShadow)
+    renderInShadowRoot(<PostDialogHintAtTwitter reason={reason} />, {
+        shadow: () => watcher.firstDOMProxy.afterShadow,
+        normal: () => watcher.firstDOMProxy.after,
+    })
 }
 
 export const useTwitterThemedPostDialogHint = makeStyles((theme: Theme) => ({

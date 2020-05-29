@@ -9,7 +9,6 @@ module.exports = {
             isolatedModules: true,
         },
     },
-    globalSetup: path.join(__dirname, './scripts/jest-global-setup'),
     globalTeardown: path.join(__dirname, './scripts/jest-global-teardown'),
     setupFiles: [
         require.resolve('jest-webextension-mock'),
@@ -17,13 +16,12 @@ module.exports = {
         path.join(__dirname, './scripts/jest-setup.js'),
     ],
     // skip packages other than 'ts-results', 'async-call-rpc' and 'holoflows/kit'
-    transformIgnorePatterns: ['node_modules((?!(ts-results|async-call-rpc|@holoflows\\/kit)).)*$'],
+    transformIgnorePatterns: [],
     transform: {
-        '[/\\\\]node_modules[/\\\\].+\\.m?js$': 'jest-esm-transformer',
+        'node_modules.+(ts-results|async-call-rpc|holoflows).+.js$': 'jest-esm-transformer',
     },
     moduleNameMapper: {
-        '^@holoflows/kit.+(?<!sleep)$': require.resolve('@holoflows/kit/umd/index.js'),
         'lodash-es': require.resolve('lodash'),
-        'idb/with-async-ittr': require.resolve('idb/with-async-ittr-cjs.js'),
+        'idb/with-async-ittr-cjs': require.resolve('idb/with-async-ittr-cjs.js'),
     },
 }

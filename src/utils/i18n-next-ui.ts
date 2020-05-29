@@ -1,8 +1,8 @@
-import { i18n } from 'i18next'
+import type { i18n } from 'i18next'
 import { initReactI18next, useTranslation as useTranslation_, UseTranslationOptions } from 'react-i18next'
-import { TOptions } from 'i18next'
+import type { TOptions } from 'i18next'
 import React from 'react'
-import en from '../_locales/en/messages.json'
+import type en from '../_locales/en/messages.json'
 import i18nNextInstance from './i18n-next'
 import { languageSettings } from '../components/shared-settings/settings'
 
@@ -40,7 +40,7 @@ export function useI18N<NS extends keyof Namespaces = 'default'>(
     return useTranslation_(undefined, opt)
 }
 
-languageSettings.addListener(next => {
+languageSettings.addListener((next) => {
     i18nNextInstance.changeLanguage(next)
 })
 

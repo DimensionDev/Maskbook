@@ -8,9 +8,8 @@ import ActionButton from '../DashboardComponents/ActionButton'
 import useQueryParams from '../../../utils/hooks/useQueryParams'
 import Services from '../../service'
 import { ECKeyIdentifier, Identifier } from '../../../database/type'
-import { Persona } from '../../../database'
 import ProfileBox from '../DashboardComponents/ProfileBox'
-import { useMyPersonas } from '../../../components/DataSource/useActivatedUI'
+import { useMyPersonas } from '../../../components/DataSource/independent'
 import { InitStep } from '../InitStep'
 
 export default function InitStep2S() {

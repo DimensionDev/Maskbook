@@ -7,19 +7,19 @@ const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin')
 const ForkTsCheckerNotifierWebpackPlugin = require('fork-ts-checker-notifier-webpack-plugin')
 const git = require('@nice-labs/git-rev').default
 
-const src = file => path.join(__dirname, file)
+const src = (file) => path.join(__dirname, file)
 /**
  * Polyfills that needs to be copied to dist
  */
 let polyfills = [
-    'node_modules/webextension-polyfill/dist/browser-polyfill.min.js',
-    'node_modules/webextension-polyfill/dist/browser-polyfill.min.js.map',
+    require.resolve('webextension-polyfill/dist/browser-polyfill.min.js'),
+    require.resolve('webextension-polyfill/dist/browser-polyfill.min.js.map'),
 ]
 
 const publicDir = src('./public')
 const publicPolyfill = src('./public/polyfill')
 
-// TODO: what does it used for?
+// Don't open browser
 process.env.BROWSER = 'none'
 
 const SSRPlugin = require('./config-overrides/SSRPlugin')
@@ -36,21 +36,23 @@ const ManifestGeneratorPlugin = require('webpack-extension-manifest-plugin')
  * --wk-webview
  * --e2e
  */
-const calcTarget = argv => ({
+const calcArgs = (argv) => ({
     /** @type {'nightly' | boolean} */
-    Firefox: (argv.firefox || argv['firefox-android'] || argv['firefox-gecko']),
+    Firefox: argv.firefox || argv['firefox-android'] || argv['firefox-gecko'],
     /** @type {string | boolean} */
-    FirefoxDesktop: (argv.firefox),
+    FirefoxDesktop: argv.firefox,
     /** @type {boolean} */
-    FirefoxForAndroid: (argv['firefox-android']),
+    FirefoxForAndroid: argv['firefox-android'],
     /** @type {boolean} */
-    StandaloneGeckoView: (argv['firefox-gecko']),
+    StandaloneGeckoView: argv['firefox-gecko'],
     /** @type {boolean} */
-    Chromium: (argv.chromium),
+    Chromium: argv.chromium,
     /** @type {boolean} */
-    WKWebview: (argv['wk-webview']),
+    WKWebview: argv['wk-webview'],
     /** @type {boolean} */
-    E2E: (argv.e2e),
+    E2E: argv.e2e,
+    /** @type {boolean} */
+    ReproducibleBuild: argv['reproducible-build'],
 })
 
 /**
@@ -58,18 +60,45 @@ const calcTarget = argv => ({
  * @returns {import("webpack").Configuration}
  */
 module.exports = (argvEnv, argv) => {
-    const target = calcTarget(argv)
+    const target = calcArgs(argv)
 
     if (target.Firefox) {
-        polyfills = polyfills.filter(name => !name.includes('webextension-polyfill'))
+        polyfills = polyfills.filter((name) => !name.includes('webextension-polyfill'))
     }
-    if (target.StandaloneGeckoView || target.WKWebview) polyfills.push('src/polyfill/permissions.js')
+    if (target.StandaloneGeckoView || target.WKWebview) polyfills.push(require.resolve('./src/polyfill/permissions.js'))
 
     /** @type {"production" | "development"} */
     const env = argv.mode
 
     const dist = env === 'production' ? src('./build') : src('./dist')
 
+    const gitInfo = () => {
+        const reproducible = new webpack.EnvironmentPlugin({
+            BUILD_DATE: new Date(0).toISOString(),
+            VERSION: require('./package.json').version + '-reproducible',
+            TAG_NAME: 'N/A',
+            COMMIT_HASH: 'N/A',
+            COMMIT_DATE: 'N/A',
+            REMOTE_URL: 'N/A',
+            BRANCH_NAME: 'N/A',
+            DIRTY: 'N/A',
+            TAG_DIRTY: 'N/A',
+        })
+        if (target.ReproducibleBuild) return reproducible
+        if (git.isRepository())
+            return new webpack.EnvironmentPlugin({
+                BUILD_DATE: new Date().toISOString(),
+                VERSION: git.describe('--dirty'),
+                TAG_NAME: git.tag(),
+                COMMIT_HASH: git.commitHash(),
+                COMMIT_DATE: git.commitDate().toISOString(),
+                REMOTE_URL: git.remoteURL(),
+                BRANCH_NAME: git.branchName(),
+                DIRTY: git.isDirty(),
+                TAG_DIRTY: git.isTagDirty(),
+            })
+        return reproducible
+    }
     /** @type {import('webpack').Configuration} */
     const config = {
         mode: env,
@@ -91,21 +120,13 @@ module.exports = (argvEnv, argv) => {
         plugins: [
             new webpack.EnvironmentPlugin({
                 NODE_ENV: env,
-                VERSION: git.describe('--dirty'),
-                TAG_NAME: git.tag(),
-                COMMIT_HASH: git.commitHash(),
-                COMMIT_DATE: git.commitDate().toISOString(),
-                BUILD_DATE: target.Firefox ? null : new Date().toISOString(),
-                REMOTE_URL: git.remoteURL(),
-                BRANCH_NAME: git.branchName(),
-                DIRTY: git.isDirty(),
-                TAG_DIRTY: git.isTagDirty(),
             }),
+            gitInfo(),
             // The following plugins are from react-dev-utils. let me know if any one need it.
             // WatchMissingNodeModulesPlugin
             // ModuleNotFoundPlugin
             // ModuleScopePlugin
-        ],
+        ].filter((x) => x),
         node: disabledNodeBuiltins(),
         optimization: { minimize: false },
         output: {
@@ -144,6 +165,7 @@ module.exports = (argvEnv, argv) => {
         'injected-script': src('./src/extension/injected-script/index.ts'),
         popup: appendReactDevtools(src('./src/extension/popup-page/index.tsx')),
         qrcode: src('./src/web-workers/QRCode.ts'),
+        'crypto-worker': src('./src/modules/CryptoAlgorithm/EllipticBackend/worker.ts'),
     }
     if (env !== 'development') delete config.entry.devtools
 
@@ -226,17 +248,27 @@ module.exports = (argvEnv, argv) => {
         let buildTarget = undefined
         /** @type {'android' | 'desktop' | 'GeckoView' | undefined} */
         let firefoxVariant = undefined
+        /** @type {'app' | 'browser' | 'facebookApp'} */
+        let genericTarget = 'browser'
         if (target.Chromium) buildTarget = 'Chromium'
         if (target.Firefox) buildTarget = 'Firefox'
         if (target.FirefoxDesktop) firefoxVariant = 'desktop'
         if (target.FirefoxForAndroid) firefoxVariant = 'android'
-        if (target.StandaloneGeckoView) firefoxVariant = 'GeckoView'
-        if (target.WKWebview) buildTarget = 'WKWebview'
+        if (target.StandaloneGeckoView) {
+            firefoxVariant = 'GeckoView'
+            genericTarget = 'facebookApp'
+        }
+        if (target.WKWebview) {
+            buildTarget = 'WKWebview'
+            genericTarget = 'facebookApp'
+        }
         if (target.E2E) buildTarget = 'E2E'
         if (buildTarget)
             config.plugins.push(
                 new webpack.DefinePlugin({
                     'webpackEnv.target': JSON.stringify(buildTarget),
+                    'webpackEnv.genericTarget': JSON.stringify(genericTarget),
+                    'process.env.STORYBOOK': 'false',
                 }),
             )
         if (firefoxVariant)
@@ -285,7 +317,7 @@ module.exports = (argvEnv, argv) => {
     if (!fs.existsSync(publicPolyfill)) {
         fs.mkdirSync(publicPolyfill)
     }
-    polyfills.map(x => void fs.copyFileSync(src(x), path.join(publicPolyfill, path.basename(x))))
+    polyfills.map((x) => void fs.copyFileSync(x, path.join(publicPolyfill, path.basename(x))))
 
     if (env !== 'development') {
         config.plugins.push(new SSRPlugin('popup.html', src('./src/extension/popup-page/index.tsx')))
@@ -308,8 +340,8 @@ function addTSLoader() {
             transpileOnly: true,
             compilerOptions: {
                 module: 'esnext',
-                jsx: 'react',
                 noEmit: false,
+                importsNotUsedAsValues: 'remove',
             },
         },
     }

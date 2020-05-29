@@ -20,7 +20,6 @@ import {
 import { queryPersonaDB, createProfileDB, createPersonaDB, queryProfileDB } from '../../Persona/Persona.db'
 import { createPersonaRecord, createProfileRecord, personaDBWriteAccess } from './Persona.db'
 import { storeAvatarDB } from '../../avatar'
-import { JsonWebKeyToCryptoKey, getKeyParameter } from '../../../utils/type-transform/CryptoKey-JsonWebKey'
 
 beforeAll(() => {
     // MessageCenter will dispatch events on each tab
@@ -31,7 +30,7 @@ beforeAll(() => {
 })
 
 afterEach(async () => {
-    await personaDBWriteAccess(async t => {
+    await personaDBWriteAccess(async (t) => {
         await t.objectStore('personas').clear()
         await t.objectStore('profiles').clear()
     })
@@ -61,7 +60,7 @@ test('queryProfile', async () => {
     expect(fake.linkedPersona).toBe(undefined)
 
     await storeAvatarDB(profileRecord.identifier, new ArrayBuffer(20))
-    await personaDBWriteAccess(t => createProfileDB(profileRecord, t))
+    await personaDBWriteAccess((t) => createProfileDB(profileRecord, t))
 
     const real = await queryProfile(profileRecord.identifier)
     expect(real.avatar).toBe('data:image/png;base64,AAAAAAAAAAAAAAAAAAAAAAAAAAA=')
@@ -74,7 +73,7 @@ test('queryPersona', async () => {
     expect(fake.hasPrivateKey).toBe(false)
     expect(fake.fingerprint).toBe(personaRecord.identifier.compressedPoint)
 
-    await personaDBWriteAccess(t => createPersonaDB(personaRecord, t))
+    await personaDBWriteAccess((t) => createPersonaDB(personaRecord, t))
 
     const real = await queryPersona(personaRecord.identifier)
     expect(real.hasPrivateKey).toBe(true)
@@ -86,13 +85,13 @@ test('queryProfilesWithQuery', async () => {
     const profileRecordB = await createProfileRecord()
     const names = [profileRecordA.nickname, profileRecordB.nickname]
 
-    await personaDBWriteAccess(async t => {
+    await personaDBWriteAccess(async (t) => {
         await createProfileDB(profileRecordA, t)
         await createProfileDB(profileRecordB, t)
     })
 
     const profiles = await queryProfilesWithQuery(({ nickname }) => names.includes(nickname))
-    expect(profiles.every(p => names.includes(p.nickname))).toBe(true)
+    expect(profiles.every((p) => names.includes(p.nickname))).toBe(true)
 })
 
 test('queryPersonasWithQuery', async () => {
@@ -100,18 +99,18 @@ test('queryPersonasWithQuery', async () => {
     const personaRecordB = await createPersonaRecord()
     const names = [personaRecordA.nickname, personaRecordB.nickname]
 
-    await personaDBWriteAccess(async t => {
+    await personaDBWriteAccess(async (t) => {
         await createPersonaDB(personaRecordA, t)
         await createPersonaDB(personaRecordB, t)
     })
 
     const personas = await queryPersonasWithQuery(({ nickname }) => names.includes(nickname))
-    expect(personas.every(p => names.includes(p.nickname))).toBe(true)
+    expect(personas.every((p) => names.includes(p.nickname))).toBe(true)
 })
 
 test('deletePersona', async () => {
     const personaRecord = await createPersonaRecord()
-    await personaDBWriteAccess(t => createPersonaDB(personaRecord, t))
+    await personaDBWriteAccess((t) => createPersonaDB(personaRecord, t))
     expect(await queryPersonaDB(personaRecord.identifier)).toEqual(personaRecord)
 
     await deletePersona(personaRecord.identifier, 'delete even with private')
@@ -122,7 +121,7 @@ test('renamePersona', async () => {
     const name = uuid()
     const personaRecord = await createPersonaRecord()
 
-    await personaDBWriteAccess(t => createPersonaDB(personaRecord, t))
+    await personaDBWriteAccess((t) => createPersonaDB(personaRecord, t))
     await renamePersona(personaRecord.identifier, name)
     expect((await queryPersonaDB(personaRecord.identifier))?.nickname).toBe(name)
 })
@@ -134,7 +133,7 @@ test('queryPersonaByProfile', async () => {
     personaRecord.linkedProfiles.set(profileRecord.identifier, {
         connectionConfirmState: 'confirmed',
     })
-    await personaDBWriteAccess(async t => {
+    await personaDBWriteAccess(async (t) => {
         await createProfileDB(profileRecord, t)
         await createPersonaDB(personaRecord, t)
     })
@@ -148,7 +147,7 @@ test('queryPersonaRecord', async () => {
     personaRecord.linkedProfiles.set(profileRecord.identifier, {
         connectionConfirmState: 'confirmed',
     })
-    await personaDBWriteAccess(async t => {
+    await personaDBWriteAccess(async (t) => {
         await createProfileDB(profileRecord, t)
         await createPersonaDB(personaRecord, t)
     })
@@ -159,12 +158,12 @@ test('queryPersonaRecord', async () => {
 test('queryPublicKey', async () => {
     const profileRecord = await createProfileRecord()
     const personaRecord = await createPersonaRecord()
-    const publicKey = await JsonWebKeyToCryptoKey(personaRecord.publicKey, ...getKeyParameter('ecdh'))
+    const publicKey = personaRecord.publicKey
     profileRecord.linkedPersona = personaRecord.identifier
     personaRecord.linkedProfiles.set(profileRecord.identifier, {
         connectionConfirmState: 'confirmed',
     })
-    await personaDBWriteAccess(async t => {
+    await personaDBWriteAccess(async (t) => {
         await createProfileDB(profileRecord, t)
         await createPersonaDB(personaRecord, t)
     })
@@ -175,12 +174,12 @@ test('queryPublicKey', async () => {
 test('queryPrivateKey', async () => {
     const profileRecord = await createProfileRecord()
     const personaRecord = await createPersonaRecord()
-    const privateKey = await JsonWebKeyToCryptoKey(personaRecord.privateKey!, ...getKeyParameter('ecdh'))
+    const privateKey = personaRecord.privateKey
     profileRecord.linkedPersona = personaRecord.identifier
     personaRecord.linkedProfiles.set(profileRecord.identifier, {
         connectionConfirmState: 'confirmed',
     })
-    await personaDBWriteAccess(async t => {
+    await personaDBWriteAccess(async (t) => {
         await createProfileDB(profileRecord, t)
         await createPersonaDB(personaRecord, t)
     })
@@ -224,7 +223,7 @@ test('queryLocalKey', async () => {
     personaRecord.linkedProfiles.set(profileRecord.identifier, {
         connectionConfirmState: 'confirmed',
     })
-    await personaDBWriteAccess(async t => {
+    await personaDBWriteAccess(async (t) => {
         await createProfileDB(profileRecord, t)
         await createPersonaDB(personaRecord, t)
     })

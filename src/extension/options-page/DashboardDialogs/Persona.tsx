@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react'
-import { useAsync } from 'react-use'
+import React, { useState } from 'react'
+import { useAsync, useMultiStateValidator } from 'react-use'
 import * as bip39 from 'bip39'
 import { DialogContentItem, DialogRouter } from './DialogBase'
 
@@ -9,7 +9,7 @@ import AbstractTab, { AbstractTabProps } from '../DashboardComponents/AbstractTa
 import ActionButton from '../DashboardComponents/ActionButton'
 import { ECKeyIdentifier, Identifier } from '../../../database/type'
 import Services from '../../service'
-import { Persona } from '../../../database'
+import type { Persona } from '../../../database'
 import useQueryParams from '../../../utils/hooks/useQueryParams'
 import ProfileBox from '../DashboardComponents/ProfileBox'
 import { useColorProvider } from '../../../utils/theme'
@@ -32,22 +32,34 @@ export function PersonaCreateDialog() {
     const [name, setName] = useState('')
     const history = useHistory()
 
+    //#region validation
+    type ValidationResult = [boolean, string]
+    type ValidationState = [string]
+    const [[isValid, nameErrorMessage]] = useMultiStateValidator<ValidationResult, ValidationState, ValidationResult>(
+        [name],
+        ([name]: ValidationState): ValidationResult => [Boolean(name), name ? '' : t('error_name_absent')],
+    )
+    const [submitted, setSubmitted] = useState(false)
+    //#endregion
+
     const createPersona = () => {
-        Services.Identity.createPersonaByMnemonic(name, '').then(persona => {
+        setSubmitted(true)
+        if (!isValid) return
+        Services.Identity.createPersonaByMnemonic(name, '').then((persona) => {
             history.replace(`created?identifier=${encodeURIComponent(persona.toText())}`)
         })
     }
-
     const content = (
         <div style={{ alignSelf: 'stretch', textAlign: 'center', width: '100%' }}>
             <TextField
+                required
+                error={submitted && Boolean(nameErrorMessage)}
                 style={{ width: '100%', maxWidth: '320px' }}
                 autoFocus
-                required
                 variant="outlined"
                 value={name}
-                onChange={e => setName(e.target.value)}
-                helperText=" "
+                onChange={(e) => setName(e.target.value)}
+                helperText={(submitted && nameErrorMessage) || ' '}
                 label="Name"
             />
         </div>
@@ -80,7 +92,9 @@ export function PersonaCreatedDialog() {
             title={t('dashboard_persona_created')}
             content={
                 <>
-                    {t('dashboard_new_persona_created', { name: persona?.nickname })}
+                    <Typography variant="body1">
+                        {t('dashboard_new_persona_created', { name: persona?.nickname })}
+                    </Typography>
                     <section style={{ marginTop: 12 }}>
                         <ProfileBox persona={persona} />
                     </section>
@@ -106,7 +120,11 @@ export function PersonaDeleteDialog(props: PersonaDeleteDialogProps) {
         <DialogContentItem
             simplified
             title={t('delete_persona')}
-            content={t('dashboard_delete_persona_confirm_hint', { name: persona?.nickname })}
+            content={
+                <Typography variant="body1">
+                    {t('dashboard_delete_persona_confirm_hint', { name: persona?.nickname })}
+                </Typography>
+            }
             actions={
                 <>
                     <ActionButton variant="outlined" color="default" onClick={onDecline}>
@@ -154,15 +172,18 @@ export function PersonaBackupDialog(props: PersonaBackupDialogProps) {
     const mnemonicWordValue = persona.mnemonic?.words ?? t('not_available')
     const [base64Value, setBase64Value] = useState(t('not_available'))
     const [compressedQRString, setCompressedQRString] = useState<string | null>(null)
-    useEffect(() => {
-        Services.Welcome.generateBackupJSON({
+    useAsync(async () => {
+        const file = await Services.Welcome.generateBackupJSON({
             noPosts: true,
             noUserGroups: true,
             filter: { type: 'persona', wanted: [persona.identifier] },
-        }).then(file => {
-            setBase64Value(encodeArrayBuffer(encodeText(JSON.stringify(file))))
-            setCompressedQRString(compressBackupFile(file))
         })
+        setBase64Value(encodeArrayBuffer(encodeText(JSON.stringify(file))))
+        setCompressedQRString(
+            compressBackupFile(file, {
+                personaIdentifier: persona.identifier,
+            }),
+        )
     }, [persona.identifier])
 
     const state = useState(0)
@@ -242,7 +263,7 @@ export function PersonaImportDialog() {
         } else if (tabState === 1) {
             Promise.resolve()
                 .then(() => JSON.parse(decodeText(decodeArrayBuffer(base64Value))))
-                .then(object => Services.Welcome.restoreBackup(object))
+                .then((object) => Services.Welcome.restoreBackup(object))
                 .then(() => setRestoreState('success'))
                 .catch(() => setRestoreState('failed'))
         }
@@ -251,7 +272,7 @@ export function PersonaImportDialog() {
     const importFromQR = (str: string) => {
         Promise.resolve()
             .then(() => UpgradeBackupJSONFile(decompressBackupFile(str)))
-            .then(object => Services.Welcome.restoreBackup(object!))
+            .then((object) => Services.Welcome.restoreBackup(object!))
             .then(() => setRestoreState('success'))
             .catch(() => setRestoreState('failed'))
     }
@@ -281,7 +302,7 @@ export function PersonaImportDialog() {
                     <>
                         <TextField
                             className={classes.input}
-                            onChange={e => setNickname(e.target.value)}
+                            onChange={(e) => setNickname(e.target.value)}
                             value={nickname}
                             required
                             label="Name"
@@ -291,13 +312,13 @@ export function PersonaImportDialog() {
                             className={classes.input}
                             required
                             value={mnemonicWordValue}
-                            onChange={e => setMnemonicWordValue(e.target.value)}
+                            onChange={(e) => setMnemonicWordValue(e.target.value)}
                             label="Mnemonic Words"
                             margin="dense"
                         />
                         <TextField
                             className={classes.input}
-                            onChange={e => setPassword(e.target.value)}
+                            onChange={(e) => setPassword(e.target.value)}
                             value={password}
                             label="Password"
                             placeholder={t('dashboard_password_optional_hint')}
@@ -314,7 +335,7 @@ export function PersonaImportDialog() {
                         style={{ width: '100%', minHeight: '100px' }}
                         inputRef={(input: HTMLInputElement) => input && input.focus()}
                         multiline
-                        onChange={e => setBase64Value(e.target.value)}
+                        onChange={(e) => setBase64Value(e.target.value)}
                         value={base64Value}></InputBase>
                 ),
             },
@@ -376,7 +397,7 @@ export function PersonaImportFailedDialog(props: PersonaImportFailedDialogProps)
         <DialogContentItem
             simplified
             title={t('import_failed')}
-            content={t('dashboard_import_persona_failed')}
+            content={<Typography variant="body1">{t('dashboard_import_persona_failed')}</Typography>}
             actions={
                 <ActionButton variant="outlined" color="default" onClick={onConfirm}>
                     {t('ok')}
@@ -399,9 +420,11 @@ export function PersonaImportSuccessDialog(props: PersonaImportSuccessDialogProp
             simplified
             title={t('import_successful')}
             content={
-                nickname
-                    ? t('dashboard_imported_persona', { name: nickname, count: profiles ?? 0 })
-                    : t('dashboard_database_import_successful_hint')
+                <Typography variant="body1">
+                    {nickname
+                        ? t('dashboard_imported_persona', { name: nickname, count: profiles ?? 0 })
+                        : t('dashboard_database_import_successful_hint')}
+                </Typography>
             }
             actions={
                 <ActionButton variant="outlined" color="default" onClick={onConfirm}>

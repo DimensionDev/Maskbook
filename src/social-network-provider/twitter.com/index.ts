@@ -1,4 +1,4 @@
-import { SocialNetworkWorkerAndUIDefinition } from '../../social-network/shared'
+import type { SocialNetworkWorkerAndUIDefinition } from '../../social-network/shared'
 import { usernameValidator } from './utils/user'
 import { twitterEncoding } from './encoding'
 import { twitterUrl, hostLeadingUrlAutoTwitter } from './utils/url'

@@ -10,6 +10,8 @@ import { InitGroupsValueRef } from '../../../social-network/defaults/GroupsValue
 import { twitterUrl } from '../utils/url'
 import { PreDefinedVirtualGroupNames } from '../../../database/type'
 import { twitterUICustomUI, startWatchThemeColor } from './custom'
+import { notifyPermissionUpdate } from '../../../utils/permissions'
+import { injectMaskbookIconToProfile, injectMaskbookIconIntoFloatingProfileCard } from './injectMaskbookIcon'
 
 export const instanceOfTwitterUI = defineSocialNetworkUI({
     ...sharedSettings,
@@ -45,18 +47,24 @@ export const instanceOfTwitterUI = defineSocialNetworkUI({
             PreDefinedVirtualGroupNames.following,
         ])
         InitMyIdentitiesValueRef(instanceOfTwitterUI, twitterUrl.hostIdentifier)
+        injectMaskbookIconToProfile()
+        injectMaskbookIconIntoFloatingProfileCard()
     },
     shouldActivate(location: Location | URL = globalThis.location) {
         return location.hostname.endsWith(twitterUrl.hostIdentifier)
     },
     friendlyName: 'Twitter (Insider Preview)',
     requestPermission() {
-        return browser.permissions.request({
-            origins: [`${twitterUrl.hostLeadingUrl}/*`, `${twitterUrl.hostLeadingUrlMobile}/*`],
-        })
+        // TODO: wait for webextension-shim to support <all_urls> in permission.
+        if (webpackEnv.target === 'WKWebview') return Promise.resolve(true)
+        return browser.permissions
+            .request({
+                origins: [`${twitterUrl.hostLeadingUrl}/*`, `${twitterUrl.hostLeadingUrlMobile}/*`],
+            })
+            .then(notifyPermissionUpdate)
     },
     setupAccount: () => {
-        instanceOfTwitterUI.requestPermission().then(granted => {
+        instanceOfTwitterUI.requestPermission().then((granted) => {
             if (granted) {
                 setStorage(twitterUrl.hostIdentifier, { forceDisplayWelcome: true }).then()
                 location.href = twitterUrl.hostLeadingUrl

@@ -1,9 +1,18 @@
 /* eslint-disable import/no-deprecated */
-import { LinkedProfileDetails } from '../../../../database/Persona/Persona.db'
-import { BackupJSONFileVersion1 } from './version-1'
+import type { LinkedProfileDetails } from '../../../../database/Persona/Persona.db'
+import type { BackupJSONFileVersion1 } from './version-1'
 import { ProfileIdentifier, ECKeyIdentifier, GroupIdentifier } from '../../../../database/type'
+import type {
+    AESJsonWebKey,
+    EC_Public_JsonWebKey,
+    EC_Private_JsonWebKey,
+} from '../../../../modules/CryptoAlgorithm/interfaces/utils'
 
-export type RecipientReasonJSON = ({ type: 'direct' } | { type: 'group'; group: string /** GroupIdentifier */ }) & {
+export type RecipientReasonJSON = (
+    | { type: 'auto-share' }
+    | { type: 'direct' }
+    | { type: 'group'; group: string /** GroupIdentifier */ }
+) & {
     at: number
 }
 /**
@@ -26,9 +35,9 @@ export interface BackupJSONFileVersion2 {
             words: string
             parameter: { path: string; withPassword: boolean }
         }
-        publicKey: JsonWebKey
-        privateKey?: JsonWebKey
-        localKey?: JsonWebKey
+        publicKey: EC_Public_JsonWebKey
+        privateKey?: EC_Private_JsonWebKey
+        localKey?: AESJsonWebKey
         nickname?: string
         linkedProfiles: [/** ProfileIdentifier.toText() */ string, LinkedProfileDetails][]
         createdAt: number // Unix timestamp
@@ -37,7 +46,7 @@ export interface BackupJSONFileVersion2 {
     profiles: Array<{
         identifier: string // ProfileIdentifier.toText()
         nickname?: string
-        localKey?: JsonWebKey
+        localKey?: AESJsonWebKey
         linkedPersona?: string // PersonaIdentifier.toText()
         createdAt: number // Unix timestamp
         updatedAt: number // Unix timestamp
@@ -51,7 +60,7 @@ export interface BackupJSONFileVersion2 {
     posts: Array<{
         postBy: string // ProfileIdentifier.toText()
         identifier: string // PostIVIdentifier.toText()
-        postCryptoKey?: JsonWebKey
+        postCryptoKey?: AESJsonWebKey
         recipients: [/** ProfileIdentifier.toText() */ string, { reason: RecipientReasonJSON[] }][]
         recipientGroups: string[] // Array<GroupIdentifier.toText()>
         foundAt: number // Unix timestamp
@@ -72,7 +81,7 @@ export function upgradeFromBackupJSONFileVersion1(json: BackupJSONFileVersion1):
     const userGroups: BackupJSONFileVersion2['userGroups'] = []
 
     function addPersona(record: Omit<typeof personas[0], 'createdAt' | 'updatedAt'>) {
-        const prev = personas.find(x => x.identifier === record.identifier)
+        const prev = personas.find((x) => x.identifier === record.identifier)
         if (prev) {
             Object.assign(prev, record)
             prev.linkedProfiles.push(...record.linkedProfiles)
@@ -80,7 +89,7 @@ export function upgradeFromBackupJSONFileVersion1(json: BackupJSONFileVersion1):
     }
 
     function addProfile(record: Omit<typeof profiles[0], 'createdAt' | 'updatedAt'>) {
-        const prev = profiles.find(x => x.identifier === record.identifier)
+        const prev = profiles.find((x) => x.identifier === record.identifier)
         if (prev) {
             Object.assign(prev, record)
         } else profiles.push({ ...record, updatedAt: 0, createdAt: 0 })
@@ -91,7 +100,7 @@ export function upgradeFromBackupJSONFileVersion1(json: BackupJSONFileVersion1):
         detail: NonNullable<NonNullable<BackupJSONFileVersion1['people']>[0]['groups']>[0],
     ) {
         const groupId = new GroupIdentifier(detail.network, detail.virtualGroupOwner, detail.groupID).toText()
-        const prev = userGroups.find(x => x.identifier === groupId)
+        const prev = userGroups.find((x) => x.identifier === groupId)
         if (prev) {
             prev.members.push(member.toText())
         } else {
@@ -132,10 +141,10 @@ export function upgradeFromBackupJSONFileVersion1(json: BackupJSONFileVersion1):
             publicKey: x.publicKey,
             nickname: x.nickname,
         })
-        x.groups?.forEach(y => addProfileToGroup(profile, y))
+        x.groups?.forEach((y) => addProfileToGroup(profile, y))
     }
 
-    userGroups.forEach(x => {
+    userGroups.forEach((x) => {
         x.members = Array.from(new Set(x.members))
     })
 

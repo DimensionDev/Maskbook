@@ -1,5 +1,5 @@
 import { CustomEventId } from './constants'
-import { CustomEvents } from '../extension/injected-script/addEventListener'
+import type { CustomEvents } from '../extension/injected-script/addEventListener'
 
 import { sleep as _sleep, timeout as _timeout } from '@holoflows/kit/es/util/sleep'
 import { flatten, isNull, random } from 'lodash-es'
@@ -66,8 +66,11 @@ export function selectElementContents(el: Node) {
 export const nop = (...args: unknown[]) => {}
 // noinspection JSUnusedLocalSymbols
 export const nopWithUnmount = (...args: unknown[]) => nop
-export const bypass: <T>(args: T) => T = args => args
-
+export const bypass: <T>(args: T) => T = (args) => args
+export const unreachable = (val: never) => {
+    console.error('Unhandled value: ', val)
+    throw new Error('Unreachable case:' + val)
+}
 /**
  * index starts at one.
  */
@@ -178,4 +181,19 @@ export const pollingTask = (
         }
     }
     runTask()
+}
+export function addUint8Array(a: ArrayBuffer, b: ArrayBuffer) {
+    const x = new Uint8Array(a)
+    const y = new Uint8Array(b)
+    const c = new Uint8Array(x.length + y.length)
+    c.set(x)
+    c.set(y, x.length)
+    return c
+}
+
+import anchorme from 'anchorme'
+export function parseURL(string: string) {
+    // TODO: upgrade to anchorme 2
+    const links: { raw: string; protocol: string; encoded: string }[] = anchorme(string, { list: true })
+    return links.map((x) => x.raw)
 }

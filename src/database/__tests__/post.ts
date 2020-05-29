@@ -7,11 +7,10 @@ import {
     createOrUpdatePostDB,
     queryPostsDB,
     deletePostCryptoKeyDB,
-    recipientsToNext,
-    recipientsFromNext,
 } from '../post'
-import { ProfileIdentifier, PostIVIdentifier, GroupIdentifier } from '../type'
-import { generate_AES_GCM_256_Key } from '../../utils/crypto.subtle'
+import { ProfileIdentifier, PostIVIdentifier } from '../type'
+import { IdentifierMap } from '../IdentifierMap'
+import { CryptoWorker } from '../../modules/workers'
 
 async function createPostRecord(
     postBy: ProfileIdentifier = new ProfileIdentifier(uuid(), uuid()),
@@ -20,8 +19,8 @@ async function createPostRecord(
     return {
         postBy,
         identifier,
-        postCryptoKey: await generate_AES_GCM_256_Key(),
-        recipients: {},
+        postCryptoKey: await CryptoWorker.generate_aes_gcm(),
+        recipients: new IdentifierMap(new Map()),
         recipientGroups: [],
         foundAt: new Date(),
     } as PostRecord
@@ -75,26 +74,4 @@ test('deletePostCryptoKeyDB', async () => {
 
     await deletePostCryptoKeyDB(postRecord.identifier)
     expect(await queryPostDB(postRecord.identifier)).toEqual(null)
-})
-
-test('recipientsToNext & recipientsFromNext', async () => {
-    const profileIdentifierA = new ProfileIdentifier(uuid(), uuid())
-    const profileIdentifierB = new ProfileIdentifier(uuid(), uuid())
-    const groupIdentifier = new GroupIdentifier(uuid(), uuid(), uuid())
-    const recipients = {
-        [profileIdentifierA.toText()]: {
-            reason: [{ type: 'direct', at: new Date() }],
-        },
-        [profileIdentifierB.toText()]: {
-            reason: [{ type: 'group', group: groupIdentifier, at: new Date() }],
-        },
-    } as PostRecord['recipients']
-
-    const next = recipientsToNext(recipients)
-    expect(next.get(profileIdentifierA)?.reason).toEqual(new Set(recipients[profileIdentifierA.toText()].reason))
-    expect(next.get(profileIdentifierB)?.reason).toEqual(new Set(recipients[profileIdentifierB.toText()].reason))
-
-    const previous = recipientsFromNext(next)
-    expect(new Set(previous[profileIdentifierA.toText()].reason)).toEqual(next.get(profileIdentifierA)?.reason)
-    expect(new Set(previous[profileIdentifierB.toText()].reason)).toEqual(next.get(profileIdentifierB)?.reason)
 })

@@ -8,7 +8,7 @@ export function SSRRenderer(jsx: JSX.Element, container?: HTMLElement) {
             container = document.createElement('div')
             document.body.appendChild(container)
         }
-        ReactDOM.hydrate(React.createElement(React.StrictMode, {}, jsx), container)
+        ReactDOM.render(React.createElement(React.StrictMode, {}, jsx), container)
     } else {
         async function render() {
             const Server = await import('react-dom/server')
@@ -18,6 +18,8 @@ export function SSRRenderer(jsx: JSX.Element, container?: HTMLElement) {
             const styles = sheets.toString()
             return `<style>${styles}</style><div id="root">${html}</div>`
         }
-        render().then(console.log)
+        render()
+            .then(console.log)
+            .then(() => process.exit())
     }
 }

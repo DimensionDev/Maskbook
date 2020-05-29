@@ -9,12 +9,14 @@ import { Typography, Card, Divider, Container } from '@material-ui/core'
 import { SettingsUI, SettingsUIEnum } from '../../../components/shared-settings/useSettingsUI'
 import {
     debugModeSetting,
-    steganographyModeSetting,
     disableOpenNewTabInBackgroundSettings,
     languageSettings,
     Language,
+    renderInShadowRootSettings,
 } from '../../../components/shared-settings/settings'
 import { useValueRef } from '../../../utils/hooks/useValueRef'
+import EnhancedEncryptionIcon from '@material-ui/icons/EnhancedEncryption'
+import NoEncryptionIcon from '@material-ui/icons/NoEncryption'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -27,14 +29,13 @@ const useStyles = makeStyles((theme: Theme) =>
 )
 
 export function Settings() {
-    const [checked, setChecked] = React.useState(['wifi'])
-
     const currentLang = useValueRef(languageSettings)
     const langMapper = React.useRef((x: Language) => {
         if (x === Language.en) return 'English'
         if (x === Language.zh) return '中文'
         return ''
     }).current
+    const shadowRoot = useValueRef(renderInShadowRootSettings)
     return (
         <Container maxWidth="md">
             <Typography
@@ -60,22 +61,18 @@ export function Settings() {
                 variant="subtitle2"
                 style={{ marginTop: 21, marginBottom: 12, fontWeight: 300 }}
                 color="textPrimary">
-                Experimental Features
-            </Typography>
-            <Card>
-                <List dense disablePadding>
-                    <SettingsUI icon={<ImageMode />} value={steganographyModeSetting} />
-                </List>
-            </Card>
-            <Typography
-                variant="subtitle2"
-                style={{ marginTop: 21, marginBottom: 12, fontWeight: 300 }}
-                color="textPrimary">
                 Compatibility
             </Typography>
             <Card>
                 <List dense disablePadding>
                     <SettingsUI icon={<OpenInBrowser />} value={disableOpenNewTabInBackgroundSettings} />
+                    {/* This feature is not ready for iOS */}
+                    {webpackEnv.target !== 'WKWebview' ? (
+                        <SettingsUI
+                            icon={shadowRoot ? <EnhancedEncryptionIcon /> : <NoEncryptionIcon />}
+                            value={renderInShadowRootSettings}
+                        />
+                    ) : null}
                 </List>
             </Card>
         </Container>

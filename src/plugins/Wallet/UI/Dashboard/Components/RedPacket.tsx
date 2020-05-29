@@ -1,14 +1,14 @@
 import React from 'react'
 import { makeStyles, createStyles, Card, Typography, CircularProgress } from '@material-ui/core'
 import classNames from 'classnames'
-import { RedPacketRecord, RedPacketJSONPayload, RedPacketStatus, ERC20TokenRecord } from '../../../database/types'
+import type { RedPacketRecord, RedPacketJSONPayload, RedPacketStatus, ERC20TokenRecord } from '../../../database/types'
 import Services from '../../../../../extension/service'
 import { PluginMessageCenter } from '../../../../PluginMessages'
 import { formatBalance } from '../../../formatter'
 import { getUrl } from '../../../../../utils/utils'
 import { DAI_ADDRESS, OKB_ADDRESS } from '../../../erc20'
 
-const useStyles = makeStyles(theme =>
+const useStyles = makeStyles((theme) =>
     createStyles({
         box: {
             borderRadius: theme.spacing(1),
@@ -112,7 +112,7 @@ export function RedPacketWithState(props: RedPacketProps) {
                     'discoverRedPacket',
                     unknownRedPacket,
                     from ?? '',
-                ).then(packet => {
+                ).then((packet) => {
                     setRedPacket(packet)
                 })
             }
@@ -154,8 +154,7 @@ export function RedPacketWithStateUI(props: {
             <div className={classNames(classes.header, { [classes.flex1]: status === 'incoming' })}>
                 {status === 'claimed' ? (
                     <Typography variant="h5" color="inherit">
-                        {redPacket?.claim_amount ? formatBalance(redPacket?.claim_amount, info?.decimals ?? 0) : '?'}{' '}
-                        {info?.name ?? '(unknown)'}
+                        {formatBalance(redPacket?.claim_amount, info?.decimals ?? 0) ?? '?'} {info?.name ?? '(unknown)'}
                     </Typography>
                 ) : (
                     <Typography variant="body1" color="inherit">
@@ -175,9 +174,9 @@ export function RedPacketWithStateUI(props: {
                 <Typography variant="body2">
                     {status === 'incoming'
                         ? 'Ready to open'
-                        : `${
-                              redPacket?.send_total ? formatBalance(redPacket?.send_total, info?.decimals ?? 0) : '?'
-                          } ${info?.name ?? '(unknown)'} / ${redPacket?.shares?.toString() ?? '?'} Shares`}
+                        : `${formatBalance(redPacket?.send_total, info?.decimals ?? 0) ?? '?'} ${
+                              info?.name ?? '(unknown)'
+                          } / ${redPacket?.shares?.toString() ?? '?'} Shares`}
                 </Typography>
             </div>
             <div
@@ -212,7 +211,7 @@ export function RedPacket(props: { redPacket?: RedPacketRecord }) {
 
     const formatted = {
         claim_amount: '',
-        send_total: redPacket?.send_total ? formatBalance(redPacket?.send_total, info?.decimals ?? 0) : 'Unknown',
+        send_total: formatBalance(redPacket?.send_total, info?.decimals ?? 0) ?? 'Unknown',
         name: info.name ?? '(unknown)',
     }
 

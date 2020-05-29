@@ -7,11 +7,7 @@ import { MaskbookLightTheme } from '../../utils/theme'
 import { makeStyles } from '@material-ui/core/styles'
 import { Button, List } from '@material-ui/core'
 import { SSRRenderer } from '../../utils/SSRRenderer'
-import {
-    debugModeSetting,
-    steganographyModeSetting,
-    disableOpenNewTabInBackgroundSettings,
-} from '../../components/shared-settings/settings'
+import { debugModeSetting, disableOpenNewTabInBackgroundSettings } from '../../components/shared-settings/settings'
 import { SettingsUI } from '../../components/shared-settings/useSettingsUI'
 import { ChooseIdentity } from '../../components/shared/ChooseIdentity'
 import { getActivatedUI } from '../../social-network/ui'
@@ -20,7 +16,7 @@ import { I18nextProvider } from 'react-i18next'
 import { useI18N } from '../../utils/i18n-next-ui'
 import i18nNextInstance from '../../utils/i18n-next'
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
     button: {
         margin: theme.spacing(1, 0),
         whiteSpace: 'nowrap',
@@ -71,12 +67,11 @@ export function Popup() {
                     variant="contained"
                     color="primary"
                     className={classes.button}
-                    onClick={e => browser.runtime.openOptionsPage()}>
+                    onClick={(e) => browser.runtime.openOptionsPage()}>
                     {t('popup_enter_dashboard')}
                 </Button>
                 <List>
                     <SettingsUI value={debugModeSetting} />
-                    <SettingsUI value={steganographyModeSetting} />
                     <SettingsUI value={disableOpenNewTabInBackgroundSettings} />
                 </List>
             </main>

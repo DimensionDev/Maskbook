@@ -15,9 +15,9 @@ import {
     makeStyles,
 } from '@material-ui/core'
 import React, { useState } from 'react'
-import { Profile } from '../../../database'
+import type { Profile } from '../../../database'
 import { Avatar } from '../../../utils/components/Avatar'
-import { useTextField } from '../../../utils/components/useForms'
+import { useTextField } from '../../../utils/hooks/useForms'
 import Services from '../../service'
 
 export function FriendsDeveloperMode() {
@@ -42,7 +42,7 @@ export function FriendsDeveloperMode() {
                         maxSelection={0}
                         showAtNetwork
                         selected={[]}
-                        onSetSelected={people => setEditing(people[0])}
+                        onSetSelected={(people) => setEditing(people[0])}
                     />
                 </CardContent>
             </Card>

@@ -1,9 +1,9 @@
 {
     "$schema": "http://json.schemastore.org/chrome-manifest",
     "name": "Maskbook",
-    "version": "1.10.19",
+    "version": "1.10.20",
     "manifest_version": 2,
-    "web_accessible_resources": ["*.css", "*.js", "*.jpg", "*.png"],
+    "web_accessible_resources": ["*.css", "*.js", "*.jpg", "*.png", "*.svg"],
     "permissions": ["storage", "downloads", "webNavigation", "activeTab"],
     "optional_permissions": ["<all_urls>", "notifications"],
     "background": { "page": "background.html" },

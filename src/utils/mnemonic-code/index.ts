@@ -2,16 +2,21 @@ import * as bip39 from 'bip39'
 import * as wallet from 'wallet.ts'
 import { decompressSecp256k1Key } from '../type-transform/SECP256k1-Compression'
 import { Convert } from 'pvtsutils'
-import { import_ECDH_256k1_KeyPair } from '../crypto.subtle'
 import { encodeArrayBuffer } from '../type-transform/String-ArrayBuffer'
-import { PersonaRecord } from '../../database/Persona/Persona.db'
+import type { PersonaRecord } from '../../database/Persona/Persona.db'
+import type {
+    JsonWebKeyPair,
+    EC_Public_JsonWebKey,
+    EC_Private_JsonWebKey,
+} from '../../modules/CryptoAlgorithm/interfaces/utils'
+import { split_ec_k256_keypair_into_pub_priv } from '../../modules/CryptoAlgorithm/helper'
 
 // Private key at m/44'/coinType'/account'/change/addressIndex
 // coinType = ether
 const path = "m/44'/60'/0'/0/0"
 
 export type MnemonicGenerationInformation = {
-    key: CryptoKeyPair
+    key: JsonWebKeyPair<EC_Public_JsonWebKey, EC_Private_JsonWebKey>
     password: string
     mnemonicRecord: NonNullable<PersonaRecord['mnemonic']>
 }
@@ -22,7 +27,7 @@ export async function generate_ECDH_256k1_KeyPair_ByMnemonicWord(
     const seed = await bip39.mnemonicToSeed(mnemonicWord, password)
     const masterKey = wallet.HDKey.parseMasterSeed(seed)
     const derivedKey = masterKey.derive(path)
-    const key = await import_ECDH_256k1_KeyPair(HDKeyToJwk(derivedKey))
+    const key = await split_ec_k256_keypair_into_pub_priv(HDKeyToJwk(derivedKey))
     return {
         key,
         password,
@@ -44,7 +49,7 @@ export async function recover_ECDH_256k1_KeyPair_ByMnemonicWord(
     const seed = await bip39.mnemonicToSeed(mnemonicWord, password)
     const masterKey = wallet.HDKey.parseMasterSeed(seed)
     const derivedKey = masterKey.derive(path)
-    const key = await import_ECDH_256k1_KeyPair(HDKeyToJwk(derivedKey))
+    const key = await split_ec_k256_keypair_into_pub_priv(HDKeyToJwk(derivedKey))
     return {
         key,
         password,

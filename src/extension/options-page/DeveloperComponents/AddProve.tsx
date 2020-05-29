@@ -7,9 +7,9 @@ import Button from '@material-ui/core/Button'
 import Typography from '@material-ui/core/Typography'
 import Services from '../../service'
 import { ProfileIdentifier } from '../../../database/type'
-import { useTextField } from '../../../utils/components/useForms'
+import { useTextField } from '../../../utils/hooks/useForms'
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
     success: {
         color: 'green',
     },
@@ -55,7 +55,7 @@ export function AddProve() {
                 </Button>
                 <Typography color="textSecondary" gutterBottom>
                     Result:{' '}
-                    {(r => {
+                    {((r) => {
                         if (r === undefined) return ''
                         if (r === false) return <span className={classes.error}>❌ Failed</span>
                         if (r === true) return <span className={classes.success}>✔ Added</span>

@@ -12,7 +12,7 @@ if (isMobileFacebook) {
     composeBox = new LiveSelector()
         .querySelector('[aria-multiline="true"][contenteditable="true"][role="textbox"]')
         .closest('[role="dialog"], #pagelet_event_composer')
-        .map(x => (x.getAttribute('role') === 'dialog' ? x.lastElementChild!.lastElementChild : x))
+        .map((x) => (x.getAttribute('role') === 'dialog' ? x.lastElementChild!.lastElementChild : x))
 }
 export function injectPostBoxFacebook() {
     const watcher = new MutationObserverWatcher(composeBox.clone().enableSingleMode())
@@ -21,7 +21,10 @@ export function injectPostBoxFacebook() {
             childList: true,
             subtree: true,
         })
-    renderInShadowRoot(<UI />, watcher.firstDOMProxy.afterShadow)
+    renderInShadowRoot(<UI />, {
+        shadow: () => watcher.firstDOMProxy.afterShadow,
+        normal: () => watcher.firstDOMProxy.after,
+    })
 }
 function UI() {
     const [open, setOpen] = React.useState(false)

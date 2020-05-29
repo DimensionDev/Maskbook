@@ -16,7 +16,7 @@ export class IdentifierMap<IdentifierType extends Identifier, T> implements Map<
      */
     constructor(public readonly __raw_map__: Map<string, T>, ...constructor: (new (...args: any) => IdentifierType)[]) {
         if (constructor) {
-            this.constructorName = constructor.map(x => x.name)
+            this.constructorName = constructor.map((x) => x.name)
         }
     }
     private constructorName: string[] = []

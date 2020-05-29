@@ -1,4 +1,4 @@
-import { Payload, PayloadAlpha38 } from '../../../utils/type-transform/Payload'
+import type { Payload, PayloadAlpha38 } from '../../../utils/type-transform/Payload'
 import stringify from 'json-stable-stringify'
 
 export function getSignablePayload(payload: Payload) {
@@ -16,17 +16,9 @@ export function getSignablePayload(payload: Payload) {
         }|${payload.encryptedText}`
 }
 
-import * as Alpha40 from '../../../crypto/crypto-alpha-40'
-import * as Alpha39 from '../../../crypto/crypto-alpha-39'
-import * as Alpha38 from '../../../crypto/crypto-alpha-38'
-import { RedPacketJSONPayload } from '../../../plugins/Wallet/database/types'
+import type { RedPacketJSONPayload } from '../../../plugins/Wallet/database/types'
 import { Result, Err, Ok } from 'ts-results'
-
-export const cryptoProviderTable = {
-    [-40]: Alpha40,
-    [-39]: Alpha39,
-    [-38]: Alpha38,
-} as const
+import { RedPacketMetaKey } from '../../../plugins/Wallet/RedPacketMetaKey'
 
 export interface TypedMessageMetadata {
     readonly meta?: ReadonlyMap<string, any>
@@ -55,7 +47,7 @@ export function makeTypedMessage(content: string, meta?: ReadonlyMap<string, any
 }
 
 interface KnownMetadata {
-    'com.maskbook.red_packet:1': RedPacketJSONPayload
+    [RedPacketMetaKey]: RedPacketJSONPayload
 }
 const builtinMetadataSchema: Partial<Record<string, object>> = {} as Partial<Record<keyof KnownMetadata, object>>
 export function readTypedMessageMetadata<T extends keyof KnownMetadata>(
@@ -105,6 +97,15 @@ export function extractTextFromTypedMessage(x: TypedMessage | null): Result<stri
     if (x === null) return Err.EMPTY
     if (x.type === 'text') return new Ok(x.content)
     if (x.type === 'complex')
-        return new Ok(x.items.map(extractTextFromTypedMessage).filter(x => x.ok && x.val.length > 0)[0].val as string)
+        return new Ok(x.items.map(extractTextFromTypedMessage).filter((x) => x.ok && x.val.length > 0)[0].val as string)
     return Err.EMPTY
+}
+
+export function textIntoTypedMessage(x: TypedMessage | string): TypedMessage {
+    if (typeof x !== 'string') return x
+    return {
+        content: x,
+        type: 'text',
+        version: 1,
+    }
 }

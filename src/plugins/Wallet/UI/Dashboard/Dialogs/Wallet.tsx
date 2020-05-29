@@ -22,20 +22,22 @@ import Services from '../../../../../extension/service'
 import { PluginMessageCenter } from '../../../../PluginMessages'
 import { RedPacketRecord, WalletRecord, EthereumNetwork } from '../../../database/types'
 import useQueryParams from '../../../../../utils/hooks/useQueryParams'
-import { ERC20TokenPredefinedData, OKB_ADDRESS } from '../../../erc20'
+import type { ERC20TokenPredefinedData } from '../../../erc20'
+import { OKB_ADDRESS } from '../../../erc20'
 import { ERC20WellKnownTokenSelector } from './WalletAddTokenDialogContent'
 import Wallet from 'wallet.ts'
 import { useHistory, Link } from 'react-router-dom'
 import { useI18N } from '../../../../../utils/i18n-next-ui'
 import { useColorProvider } from '../../../../../utils/theme'
 import { formatBalance } from '../../../formatter'
+import { exclusiveTasks } from '../../../../../extension/content-script/tasks'
 import AbstractTab, { AbstractTabProps } from '../../../../../extension/options-page/DashboardComponents/AbstractTab'
 
 interface WalletSendRedPacketDialogProps {
     onDecline(): void
 }
 
-const useSendRedPacketStyles = makeStyles(theme =>
+const useSendRedPacketStyles = makeStyles((theme) =>
     createStyles({
         body: {
             padding: theme.spacing(1, 0),
@@ -59,7 +61,18 @@ export function WalletSendRedPacketDialog(props: WalletSendRedPacketDialogProps)
                 <>
                     <Typography className={classes.body}>Select the social network to post...</Typography>
                     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                        {
+                        <ActionButton<React.ComponentType<JSX.IntrinsicElements['a']>>
+                            component="a"
+                            {...(webpackEnv.genericTarget === 'facebookApp'
+                                ? { onClick: () => exclusiveTasks('https://m.facebook.com/?soft=composer') }
+                                : { href: 'https://facebook.com', target: '_blank', rel: 'noopener noreferrer' })}
+                            variant="outlined"
+                            color="primary"
+                            className={classes.provider}
+                            width={240}>
+                            Open facebook.com
+                        </ActionButton>
+                        {webpackEnv.genericTarget === 'browser' && (
                             <ActionButton<React.ComponentType<JSX.IntrinsicElements['a']>>
                                 component="a"
                                 href="https://twitter.com"
@@ -71,7 +84,7 @@ export function WalletSendRedPacketDialog(props: WalletSendRedPacketDialogProps)
                                 width={240}>
                                 Open twitter.com
                             </ActionButton>
-                        }
+                        )}
                     </div>
                 </>
             }></DialogContentItem>
@@ -83,7 +96,7 @@ interface WalletAddTokenDialogProps {
     onDecline(): void
 }
 
-const useAddTokenStyles = makeStyles(theme =>
+const useAddTokenStyles = makeStyles((theme) =>
     createStyles({
         textfield: {
             width: '100%',
@@ -134,7 +147,7 @@ export function WalletAddTokenDialog(props: WalletAddTokenDialogProps) {
                                 control={
                                     <Switch
                                         checked={useRinkeby}
-                                        onChange={e => setRinkeby(e.currentTarget.checked)}
+                                        onChange={(e) => setRinkeby(e.currentTarget.checked)}
                                         color="primary"
                                     />
                                 }
@@ -146,7 +159,7 @@ export function WalletAddTokenDialog(props: WalletAddTokenDialogProps) {
                                 className={classes.textfield}
                                 label="Contract Address"
                                 value={address}
-                                onChange={e => setTokenAddress(e.target.value)}></TextField>
+                                onChange={(e) => setTokenAddress(e.target.value)}></TextField>
                             <TextField
                                 required
                                 className={classes.textfield}
@@ -154,19 +167,19 @@ export function WalletAddTokenDialog(props: WalletAddTokenDialogProps) {
                                 value={decimals}
                                 type="number"
                                 inputProps={{ min: 0 }}
-                                onChange={e => setDecimal(parseInt(e.target.value))}></TextField>
+                                onChange={(e) => setDecimal(parseInt(e.target.value))}></TextField>
                             <TextField
                                 required
                                 className={classes.textfield}
                                 label="Name"
                                 value={tokenName}
-                                onChange={e => setTokenName(e.target.value)}></TextField>
+                                onChange={(e) => setTokenName(e.target.value)}></TextField>
                             <TextField
                                 required
                                 className={classes.textfield}
                                 label="Symbol"
                                 value={symbol}
-                                onChange={e => setSymbol(e.target.value)}></TextField>
+                                onChange={(e) => setSymbol(e.target.value)}></TextField>
                         </>
                     )}
                 </>
@@ -195,7 +208,7 @@ interface WalletRedPacketHistoryDialogProps {
     walletAddress: string
 }
 
-const usePacketHistoryStyles = makeStyles(theme =>
+const usePacketHistoryStyles = makeStyles((theme) =>
     createStyles({
         paper: {
             backgroundColor: theme.palette.type === 'light' ? '#F7F8FA' : '#343434',
@@ -209,7 +222,7 @@ export function WalletRedPacketHistoryDialog(props: WalletRedPacketHistoryDialog
     const [tabState, setTabState] = React.useState(0)
     const [redPacketRecords, setRedPacketRecords] = React.useState<RedPacketRecord[]>([])
 
-    const filteredRecords = redPacketRecords.filter(record => {
+    const filteredRecords = redPacketRecords.filter((record) => {
         if (tabState === 0) {
             return record.claim_address === walletAddress
         } else if (tabState === 1) {
@@ -245,7 +258,7 @@ export function WalletRedPacketHistoryDialog(props: WalletRedPacketHistoryDialog
             }
             content={
                 <>
-                    {filteredRecords.map(record => (
+                    {filteredRecords.map((record) => (
                         <WalletLine
                             key={record.id}
                             line1={record.send_message}
@@ -256,7 +269,7 @@ export function WalletRedPacketHistoryDialog(props: WalletRedPacketHistoryDialog
                                 <Typography variant="h6">
                                     {(tabState === 0 && record.claim_amount) || (tabState === 1 && record.send_total)
                                         ? formatBalance(
-                                              tabState === 0 ? record.claim_amount! : record.send_total!,
+                                              tabState === 0 ? record.claim_amount! : record.send_total,
                                               record.raw_payload?.token?.decimals ?? 18,
                                           )
                                         : '0'}{' '}
@@ -270,7 +283,7 @@ export function WalletRedPacketHistoryDialog(props: WalletRedPacketHistoryDialog
     )
 }
 
-const useRedPacketDetailStyles = makeStyles(theme =>
+const useRedPacketDetailStyles = makeStyles((theme) =>
     createStyles({
         openBy: {
             margin: theme.spacing(2, 0, 0.5),
@@ -401,7 +414,7 @@ export function WalletCreateDialog() {
                 required
                 variant="outlined"
                 value={name}
-                onChange={e => setName(e.target.value)}
+                onChange={(e) => setName(e.target.value)}
                 helperText=" "
                 label="Wallet Name"
             />
@@ -414,7 +427,7 @@ export function WalletCreateDialog() {
                 helperText={t('dashboard_password_helper_text')}
                 placeholder={t('dashboard_password_hint')}
                 value={passphrase}
-                onChange={e => setPassphrase(e.target.value)}
+                onChange={(e) => setPassphrase(e.target.value)}
             />
         </div>
     )
@@ -432,7 +445,7 @@ export function WalletCreateDialog() {
     )
 }
 
-const useWalletImportStyles = makeStyles(theme =>
+const useWalletImportStyles = makeStyles((theme) =>
     createStyles({
         input: {
             width: '100%',
@@ -476,7 +489,7 @@ export function WalletImportDialog() {
                             required
                             value={mnemonic}
                             placeholder="flag wave term illness equal airport hint item dinosaur opinion special kick"
-                            onChange={e => setMnemonic(e.target.value)}
+                            onChange={(e) => setMnemonic(e.target.value)}
                             label="Mnemonic Words"
                             helperText=" "
                         />
@@ -484,7 +497,7 @@ export function WalletImportDialog() {
                             className={classes.input}
                             required
                             value={passphrase}
-                            onChange={e => setPassphrase(e.target.value)}
+                            onChange={(e) => setPassphrase(e.target.value)}
                             label="Password"
                             helperText=" "
                         />
@@ -492,7 +505,7 @@ export function WalletImportDialog() {
                             className={classes.input}
                             required
                             value={name}
-                            onChange={e => setName(e.target.value)}
+                            onChange={(e) => setName(e.target.value)}
                             label="Wallet name"
                         />
                     </>
@@ -507,7 +520,7 @@ export function WalletImportDialog() {
                             required
                             value={privateKey}
                             placeholder=""
-                            onChange={e => setPrivateKey(e.target.value)}
+                            onChange={(e) => setPrivateKey(e.target.value)}
                             label="Private Key"
                             helperText=" "
                         />

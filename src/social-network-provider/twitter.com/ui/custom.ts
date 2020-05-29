@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { ValueRef, MutationObserverWatcher } from '@holoflows/kit'
 import { Theme, createMuiTheme, ThemeProvider } from '@material-ui/core'
 import { MaskbookDarkTheme, MaskbookLightTheme } from '../../../utils/theme'
-import { SocialNetworkUICustomUI } from '../../../social-network/ui'
+import type { SocialNetworkUICustomUI } from '../../../social-network/ui'
 import { useValueRef } from '../../../utils/hooks/useValueRef'
 import { composeAnchorSelector } from '../utils/selector'
 import React from 'react'
@@ -94,7 +94,7 @@ function clamp(num: number, min: number, max: number) {
 }
 
 function shade(channels: RGB, percentage: number): RGB {
-    return channels.map(c => clamp(Math.floor((c * (100 + percentage)) / 100), 0, 255)) as RGB
+    return channels.map((c) => clamp(Math.floor((c * (100 + percentage)) / 100), 0, 255)) as RGB
 }
 
 function getBackgroundColor(element: HTMLElement | HTMLBodyElement) {

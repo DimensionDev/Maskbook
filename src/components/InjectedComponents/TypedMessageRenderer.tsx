@@ -1,12 +1,13 @@
 import * as React from 'react'
 import { Typography, Link } from '@material-ui/core'
 import anchorme from 'anchorme'
-import {
+import type {
     TypedMessageText,
     TypedMessage,
     TypedMessageComplex,
     TypedMessageUnknown,
 } from '../../extension/background-script/CryptoServices/utils'
+import { unreachable } from '../../utils/utils'
 
 interface MetadataRendererProps {
     metadata: TypedMessage['meta']
@@ -17,6 +18,8 @@ export interface TypedMessageRendererProps<T extends TypedMessage> {
      * The TypedMessage
      */
     message: T
+    afterPreviousMetadata?: React.ReactNode
+    beforeLatterMetadata?: React.ReactNode
     metadataRenderer?: {
         before?: React.ComponentType<MetadataRendererProps>
         after?: React.ComponentType<MetadataRendererProps>
@@ -43,10 +46,8 @@ export const DefaultTypedMessageRenderer = React.memo(function DefaultTypedMessa
             const Unknown = props.TypedMessageUnknownRenderer || DefaultTypedMessageUnknownRenderer
             return <Unknown {...props} message={props.message} />
         }
-        default: {
-            const _: never = props.message
-            throw new Error('Unreachable case')
-        }
+        default:
+            return unreachable(props.message)
     }
 })
 
@@ -55,7 +56,7 @@ export const DefaultTypedMessageTextRenderer = React.memo(function DefaultTypedM
 ) {
     return renderWithMetadata(
         props,
-        <Typography>
+        <Typography variant="body1" style={{ lineBreak: 'anywhere' }}>
             <RenderText text={props.message.content}></RenderText>
         </Typography>,
     )
@@ -104,7 +105,9 @@ function renderWithMetadata(props: TypedMessageRendererProps<TypedMessage>, jsx:
     return (
         <>
             <Before metadata={props.message.meta} message={props.message} />
+            {props.afterPreviousMetadata}
             {jsx}
+            {props.beforeLatterMetadata}
             <After metadata={props.message.meta} message={props.message} />
         </>
     )
@@ -136,7 +139,7 @@ function parseText(string: string) {
             const link = links[0].protocol + links[0].encoded
             result.push(
                 current.substring(0, search2),
-                <Link target="_blank" rel="noopener noreferrer" href={link} key={link}>
+                <Link color="textPrimary" target="_blank" rel="noopener noreferrer" href={link} key={link}>
                     {links[0].raw}
                 </Link>,
             )

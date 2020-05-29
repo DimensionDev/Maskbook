@@ -1,7 +1,8 @@
 import { createNewSettings, createNetworkSpecificSettings } from './createSettings'
-import { ValueRef } from '@holoflows/kit/es'
+import type { ValueRef } from '@holoflows/kit/es'
 import { MessageCenter } from '../../utils/messages'
 import i18nNextInstance, { i18n } from '../../utils/i18n-next'
+import { sideEffect } from '../../utils/side-effects'
 
 /**
  * Does the debug mode on
@@ -11,14 +12,6 @@ export const debugModeSetting = createNewSettings<boolean>('debugMode', false, {
     secondary: () => i18n.t('settings_enable_debug_desc'),
 })
 /**
- * Dose steganography post mode on
- */
-export const steganographyModeSetting = createNewSettings<boolean>('steganographyMode', false, {
-    primary: () => i18n.t('settings_image_based_payload'),
-    secondary: () => i18n.t('settings_image_based_payload_desc'),
-})
-
-/**
  * Never open a new tab in the background
  */
 export const disableOpenNewTabInBackgroundSettings = createNewSettings<boolean>(
@@ -27,6 +20,19 @@ export const disableOpenNewTabInBackgroundSettings = createNewSettings<boolean>(
     {
         primary: () => i18n.t('settings_disable_new_background_tab'),
         secondary: () => i18n.t('settings_disable_new_background_tab_desc'),
+    },
+)
+
+const disableShadowRoot = webpackEnv.target === 'WKWebview' || process.env.STORYBOOK
+export const renderInShadowRootSettings = createNewSettings<boolean>(
+    'render in shadow root',
+    /**
+     * ? In WKWebview, the web extension polyfill is not ready for it.
+     */
+    !disableShadowRoot,
+    {
+        primary: () => i18n.t('settings_advance_security'),
+        secondary: () => i18n.t('settings_advance_security_desc'),
     },
 )
 
@@ -41,18 +47,26 @@ export const languageSettings = createNewSettings<Language>(
     { primary: () => i18n.t('settings_language') },
 )
 
-const createProxiedSettings = <T extends string = string>(settingsKey: string) => {
-    const target: { [key: string]: ValueRef<string> } = {}
-    MessageCenter.on('settingsCreated', updatedKey => {
+const createProxiedSettings = (settingsKey: string) => {
+    const target: {
+        [key: string]: ValueRef<string> & {
+            ready: boolean
+            readyPromise: Promise<string>
+        }
+    } = {}
+    MessageCenter.on('settingsCreated', (updatedKey) => {
         if (!(updatedKey in target)) {
-            target[updatedKey] = createNetworkSpecificSettings<string>(updatedKey, settingsKey, '')
+            target[updatedKey] = createNetworkSpecificSettings(updatedKey, settingsKey, '')
         }
     })
-    return ((new Proxy(target, {
+    return new Proxy(target, {
         get(target, gettingKey: string) {
             if (!(gettingKey in target)) {
-                MessageCenter.emit('settingsCreated', gettingKey)
-                target[gettingKey] = createNetworkSpecificSettings<string>(gettingKey, settingsKey, '')
+                const settings = createNetworkSpecificSettings<string>(gettingKey, settingsKey, '')
+                target[gettingKey] = settings
+                settings.readyPromise.then(() => {
+                    MessageCenter.emit('settingsCreated', gettingKey)
+                })
             }
             return target[gettingKey]
         },
@@ -61,8 +75,10 @@ const createProxiedSettings = <T extends string = string>(settingsKey: string) =
             obj.value = value
             return true
         },
-    }) as typeof target) as unknown) as { [key: string]: ValueRef<T> }
+    })
 }
+
+export const currentImagePayloadStatus = createProxiedSettings<>('currentImagePayloadStatus')
 
 export const currentSelectedIdentity = createProxiedSettings('currentSelectedIdentity')
 export type ImmersiveSetupCrossContextStatus = {
@@ -71,3 +87,11 @@ export type ImmersiveSetupCrossContextStatus = {
     username?: string
 }
 export const currentImmersiveSetupStatus = createProxiedSettings('currentImmersiveSetupStatus')
+export const currentImportingBackup = createNewSettings<boolean>('importingBackup', false, {
+    primary: () => 'DO NOT DISPLAY IT IN UI',
+})
+
+sideEffect.then(() => {
+    // reset it to false after Maskbook startup
+    currentImportingBackup.value = false
+})

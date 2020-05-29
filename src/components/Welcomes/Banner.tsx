@@ -2,7 +2,7 @@ import * as React from 'react'
 import { useCallback } from 'react'
 import { useI18N } from '../../utils/i18n-next-ui'
 import { makeStyles } from '@material-ui/styles'
-import { AppBar, Button, Theme, ListItemText, ListItemIcon } from '@material-ui/core'
+import { Paper, Button, Theme, ListItemText, ListItemIcon } from '@material-ui/core'
 import { useLastRecognizedIdentity } from '../DataSource/useActivatedUI'
 import Services from '../../extension/service'
 import { getActivatedUI } from '../../social-network/ui'
@@ -67,12 +67,7 @@ export function BannerUI(props: BannerUIProps) {
         )
 
     return (
-        <AppBar
-            style={{ paddingBottom: 0 }}
-            position="static"
-            color="inherit"
-            elevation={0}
-            classes={{ root: classes.root }}>
+        <Paper style={{ paddingBottom: 0 }} classes={{ root: classes.root }}>
             <div className={classes.wrapper}>
                 <ListItemIcon>
                     <img alt="" className={classes.maskicon} src={getUrl('/maskbook-icon-padded.png')} />
@@ -84,7 +79,7 @@ export function BannerUI(props: BannerUIProps) {
                     secondary={Description}></ListItemText>
                 {GetStarted}
             </div>
-        </AppBar>
+        </Paper>
     )
 }
 

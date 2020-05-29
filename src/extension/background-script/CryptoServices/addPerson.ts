@@ -4,7 +4,7 @@ import getCurrentNetworkWorker from '../../../social-network/utils/getCurrentNet
 import { verifyOthersProve } from './verifyOthersProve'
 import { memoizePromise } from '../../../utils/memoize'
 import { queryPersonaRecord } from '../../../database'
-import { PersonaRecord } from '../../../database/Persona/Persona.db'
+import type { PersonaRecord } from '../../../database/Persona/Persona.db'
 import { i18n } from '../../../utils/i18n-next'
 
 async function getUserPublicKeyFromBio(user: ProfileIdentifier) {
@@ -53,10 +53,10 @@ Object.assign(globalThis, { getUserPublicKeyFromBio, getUserPublicKeyFromProvePo
  * @param user Identifier
  */
 export const addPerson = memoizePromise(
-    async function(user: ProfileIdentifier): Promise<PersonaRecord> {
+    async function (user: ProfileIdentifier): Promise<PersonaRecord> {
         const person = await queryPersonaRecord(user)
         if (!person?.publicKey) return getUserPublicKeyFromNetwork(user)
         return person
     },
-    id => id.toText(),
+    (id) => id.toText(),
 )

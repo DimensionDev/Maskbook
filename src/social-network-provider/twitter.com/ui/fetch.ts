@@ -14,6 +14,7 @@ import Services from '../../../extension/service'
 import { twitterUrl } from '../utils/url'
 import { untilElementAvailable } from '../../../utils/dom'
 import { twitterEncoding } from '../encoding'
+import { injectMaskbookIconToPost } from './injectMaskbookIcon'
 
 const resolveLastRecognizedIdentity = (self: SocialNetworkUI) => {
     const selfSelector = selfInfoSelectors().handle
@@ -45,12 +46,9 @@ const registerUserCollector = () => {
             const resolve = async () => {
                 if (!cardNode) return
                 const { isFollower, isFollowing, identifier, bio } = bioCardParser(cardNode)
-                const [verified, myIdentities] = await Promise.all([
-                    Services.Crypto.verifyOthersProve(bio, identifier),
-                    Services.Identity.queryMyProfiles(twitterUrl.hostIdentifier),
-                ])
+                const myIdentities = await Services.Identity.queryMyProfiles(twitterUrl.hostIdentifier)
                 const myIdentity = myIdentities[0] || ProfileIdentifier.unknown
-                const myFirends = GroupIdentifier.getFriendsGroupIdentifier(
+                const myFriends = GroupIdentifier.getFriendsGroupIdentifier(
                     myIdentity.identifier,
                     PreDefinedVirtualGroupNames.friends,
                 )
@@ -62,7 +60,7 @@ const registerUserCollector = () => {
                     myIdentity.identifier,
                     PreDefinedVirtualGroupNames.following,
                 )
-                if (verified && (isFollower || isFollowing)) {
+                if (isFollower || isFollowing) {
                     if (isFollower) {
                         Services.UserGroup.addProfileToFriendsGroup(myFollowers, [identifier]).then()
                     }
@@ -70,10 +68,10 @@ const registerUserCollector = () => {
                         Services.UserGroup.addProfileToFriendsGroup(myFollowing, [identifier]).then()
                     }
                     if (isFollower && isFollowing) {
-                        Services.UserGroup.addProfileToFriendsGroup(myFirends, [identifier]).then()
+                        Services.UserGroup.addProfileToFriendsGroup(myFriends, [identifier]).then()
                     }
                 } else {
-                    Services.UserGroup.removeProfileFromFriendsGroup(myFirends, [identifier]).then()
+                    Services.UserGroup.removeProfileFromFriendsGroup(myFriends, [identifier]).then()
                 }
             }
             resolve()
@@ -99,31 +97,11 @@ const registerPostCollector = (self: SocialNetworkUI) => {
             ].join(),
         )
     }
-    const isKnownToMaskbook = (node: HTMLElement, tweetNode: HTMLElement) => {
-        // TODO:
-        // detect image payload is costy postImageParser should cache parse result
-        if (tweetNode.querySelector('img[src*="twimg.com/media"]')) {
-            return true
-        }
-        if (
-            Array.from(node.querySelectorAll('span, a'))
-                .map(n => n.getAttribute('title') ?? '')
-                .some(url => twitterEncoding.payloadDecoder(url) !== 'null')
-        ) {
-            return true
-        }
-        return false
-    }
 
     new MutationObserverWatcher(postsContentSelector())
         .useForeach((node, _, proxy) => {
             const tweetNode = getTweetNode(node)
             if (!tweetNode) return
-            // early return if tweet content unknown to maskbook
-            if (!isKnownToMaskbook(node, tweetNode)) {
-                return
-            }
-            // noinspection JSUnnecessarySemicolon
             const info = getEmptyPostInfoByElement({
                 get rootNode() {
                     return proxy.current
@@ -146,7 +124,7 @@ const registerPostCollector = (self: SocialNetworkUI) => {
                 // decode steganographic image
                 untilElementAvailable(postsImageSelector(tweetNode), 10000)
                     .then(() => postImageParser(tweetNode))
-                    .then(content => {
+                    .then((content) => {
                         if (content && info.postContent.value.indexOf(content) < 0) {
                             info.postContent.value = content
                         }
@@ -155,7 +133,7 @@ const registerPostCollector = (self: SocialNetworkUI) => {
             }
             ;(async () => {
                 await collectPostInfo()
-                info.postPayload.addListener(payload => {
+                info.postPayload.addListener((payload) => {
                     if (!payload) return
                     Services.Identity.updateProfileInfo(info.postBy.value, {
                         nickname: info.nickname.value,
@@ -163,9 +141,10 @@ const registerPostCollector = (self: SocialNetworkUI) => {
                     }).then()
                 })
                 info.postPayload.value = deconstructPayload(info.postContent.value, self.payloadDecoder)
-                info.postContent.addListener(newValue => {
+                info.postContent.addListener((newValue) => {
                     info.postPayload.value = deconstructPayload(newValue, self.payloadDecoder)
                 })
+                injectMaskbookIconToPost(info)
                 self.posts.set(proxy, info)
             })()
             return {
@@ -174,7 +153,7 @@ const registerPostCollector = (self: SocialNetworkUI) => {
             }
         })
         .setDOMProxyOption({ afterShadowRootInit: { mode: 'closed' } })
-        .assignKeys(node => {
+        .assignKeys((node) => {
             const tweetNode = getTweetNode(node)
             const isQuotedTweet = tweetNode?.getAttribute('role') === 'blockquote'
             return tweetNode

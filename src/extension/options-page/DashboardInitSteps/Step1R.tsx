@@ -11,13 +11,13 @@ import Services from '../../service'
 import { DialogRouter } from '../DashboardDialogs/DialogBase'
 import { DatabaseRestoreSuccessDialog, DatabaseRestoreFailedDialog } from '../DashboardDialogs/Database'
 import { BackupJSONFileLatest, UpgradeBackupJSONFile } from '../../../utils/type-transform/BackupFormat/JSON/latest'
-import { extraPermissions } from '../../../utils/permissions'
+import { extraPermissions, notifyPermissionUpdate } from '../../../utils/permissions'
 import { InitStep } from '../InitStep'
 import QRScanner from '../../../components/QRScanner'
 import { hasWKWebkitRPCHandlers } from '../../../utils/iOS-RPC'
 import { WKWebkitQRScanner } from '../../../components/shared/qrcode'
 
-const useStyles = makeStyles(theme =>
+const useStyles = makeStyles((theme) =>
     createStyles({
         file: {
             display: 'none',
@@ -170,7 +170,7 @@ export default function InitStep1R() {
                             inputRef={(input: HTMLInputElement) => input && input.focus()}
                             multiline
                             value={textValue}
-                            onChange={e => setTextValue(e.target.value)}></InputBase>
+                            onChange={(e) => setTextValue(e.target.value)}></InputBase>
                         <ActionButton
                             className={classes.restoreActionButton}
                             width={140}
@@ -241,7 +241,8 @@ export default function InitStep1R() {
                                 onConfirm={() => {
                                     browser.permissions
                                         .request({ origins: requiredPermissions ?? [] })
-                                        .then(granted =>
+                                        .then(notifyPermissionUpdate)
+                                        .then((granted) =>
                                             granted ? Services.Welcome.restoreBackup(json!) : Promise.reject(),
                                         )
                                         .then(() =>

@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { useState, useMemo, useCallback, useEffect, useRef } from 'react'
+import { useState, useMemo, useCallback, useEffect } from 'react'
 import {
     makeStyles,
     InputBase,
@@ -15,12 +15,13 @@ import {
     Theme,
     DialogProps,
 } from '@material-ui/core'
+import { BigNumber } from 'bignumber.js'
 import { MessageCenter, CompositionEvent } from '../../utils/messages'
 import { useCapturedInput } from '../../utils/hooks/useCapturedEvents'
 import { useStylesExtends, or } from '../custom-ui-helper'
-import { Profile, Group } from '../../database'
+import type { Profile, Group } from '../../database'
 import { useFriendsList, useGroupsList, useCurrentIdentity, useMyIdentities } from '../DataSource/useActivatedUI'
-import { steganographyModeSetting } from '../shared-settings/settings'
+import { currentImagePayloadStatus } from '../shared-settings/settings'
 import { useValueRef } from '../../utils/hooks/useValueRef'
 import { getActivatedUI } from '../../social-network/ui'
 import Services from '../../extension/service'
@@ -43,6 +44,7 @@ import { sleep } from '../../utils/utils'
 import { useI18N } from '../../utils/i18n-next-ui'
 import ShadowRootDialog from '../../utils/jss/ShadowRootDialog'
 import { twitterUrl } from '../../social-network-provider/twitter.com/utils/url'
+import { RedPacketMetaKey } from '../../plugins/Wallet/RedPacketMetaKey'
 
 const defaultTheme = {}
 
@@ -86,6 +88,7 @@ export interface PostDialogUIProps
     open: boolean
     onlyMyself: boolean
     shareToEveryone: boolean
+    imagePayload: boolean
     availableShareTarget: Array<Profile | Group>
     currentShareTarget: Array<Profile | Group>
     currentIdentity: Profile | null
@@ -94,6 +97,7 @@ export interface PostDialogUIProps
     onPostContentChanged: (nextMessage: TypedMessage) => void
     onOnlyMyselfChanged: (checked: boolean) => void
     onShareToEveryoneChanged: (checked: boolean) => void
+    onImagePayloadSwitchChanged: (checked: boolean) => void
     onFinishButtonClicked: () => void
     onCloseButtonClicked: () => void
     onSetSelected: SelectRecipientsUIProps['onSetSelected']
@@ -104,7 +108,7 @@ export function PostDialogUI(props: PostDialogUIProps) {
     const classes = useStylesExtends(useStyles(), props)
     const { t } = useI18N()
     const [, inputRef] = useCapturedInput(
-        newText => {
+        (newText) => {
             const msg = props.postContent
             if (msg.type === 'text') props.onPostContentChanged(makeTypedMessage(newText, msg.meta))
             else throw new Error('Not impled yet')
@@ -147,22 +151,23 @@ export function PostDialogUI(props: PostDialogUIProps) {
                         </Typography>
                     </DialogTitle>
                     <DialogContent className={classes.content}>
-                        {withMetadata(props.postContent.meta, 'com.maskbook.red_packet:1', r => (
+                        {/* TODO: move into the plugin system */}
+                        {withMetadata(props.postContent.meta, RedPacketMetaKey, (r) => (
                             <Chip
                                 onDelete={async () => {
                                     const ref = getActivatedUI().typedMessageMetadata
                                     const next = new Map(ref.value.entries())
-                                    next.delete('com.maskbook.red_packet:1')
+                                    next.delete(RedPacketMetaKey)
                                     ref.value = next
                                     if (props.onShareToEveryoneChanged) {
                                         await sleep(300)
                                         props.onShareToEveryoneChanged(false)
                                     }
                                 }}
-                                label={`A Red Packet with $${formatBalance(
-                                    BigInt(r.total),
-                                    r.token?.decimals || 18,
-                                )} ${r.token?.name || 'ETH'} from ${r.sender.name}`}
+                                label={`A Red Packet with ${formatBalance(
+                                    new BigNumber(r.total),
+                                    r.token?.decimals ?? 18,
+                                )} $${r.token?.name || 'ETH'} from ${r.sender.name}`}
                             />
                         ))}
                         <InputBase
@@ -178,52 +183,75 @@ export function PostDialogUI(props: PostDialogUIProps) {
                             multiline
                             placeholder={t('post_dialog__placeholder')}
                         />
+
                         <Typography style={{ marginBottom: 10 }}>Plugins (Experimental)</Typography>
                         <Box style={{ marginBottom: 10 }} display="flex" flexWrap="wrap">
-                            <ClickableChip
-                                ChipProps={{
-                                    label: '💰 Red Packet',
-                                    onClick: async () => {
-                                        const [wallets] = await Services.Plugin.invokePlugin(
-                                            'maskbook.wallet',
-                                            'getWallets',
-                                        )
+                            {/* without redpacket */}
+                            {webpackEnv.target !== 'WKWebview' && (
+                                <ClickableChip
+                                    ChipProps={{
+                                        label: '💰 Red Packet',
+                                        onClick: async () => {
+                                            const [wallets] = await Services.Plugin.invokePlugin(
+                                                'maskbook.wallet',
+                                                'getWallets',
+                                            )
 
-                                        if (wallets.length) {
-                                            setRedPacketDialogOpen(true)
-                                        } else {
-                                            Services.Welcome.openOptionsPage('/wallets/error?reason=nowallet')
-                                        }
-                                    },
-                                }}
-                            />
+                                            if (wallets.length) {
+                                                setRedPacketDialogOpen(true)
+                                            } else {
+                                                Services.Welcome.openOptionsPage('/wallets/error?reason=nowallet')
+                                            }
+                                        },
+                                    }}
+                                />
+                            )}
                         </Box>
                         <Typography style={{ marginBottom: 10 }}>
                             {t('post_dialog__select_recipients_title')}
                         </Typography>
-                        <SelectRecipientsUI
-                            disabled={props.onlyMyself || props.shareToEveryone}
-                            items={props.availableShareTarget}
-                            selected={props.currentShareTarget}
-                            onSetSelected={props.onSetSelected}
-                            {...props.SelectRecipientsUIProps}>
-                            <ClickableChip
-                                checked={props.shareToEveryone}
-                                ChipProps={{
-                                    disabled: props.onlyMyself,
-                                    label: t('post_dialog__select_recipients_share_to_everyone'),
-                                    onClick: () => props.onShareToEveryoneChanged(!props.shareToEveryone),
-                                }}
-                            />
-                            <ClickableChip
-                                checked={props.onlyMyself}
-                                ChipProps={{
-                                    disabled: props.shareToEveryone,
-                                    label: t('post_dialog__select_recipients_only_myself'),
-                                    onClick: () => props.onOnlyMyselfChanged(!props.onlyMyself),
-                                }}
-                            />
-                        </SelectRecipientsUI>
+                        <Box style={{ marginBottom: 10 }} display="flex" flexWrap="wrap">
+                            <SelectRecipientsUI
+                                disabled={props.onlyMyself || props.shareToEveryone}
+                                items={props.availableShareTarget}
+                                selected={props.currentShareTarget}
+                                onSetSelected={props.onSetSelected}
+                                {...props.SelectRecipientsUIProps}>
+                                <ClickableChip
+                                    checked={props.shareToEveryone}
+                                    ChipProps={{
+                                        disabled: props.onlyMyself,
+                                        label: t('post_dialog__select_recipients_share_to_everyone'),
+                                        onClick: () => props.onShareToEveryoneChanged(!props.shareToEveryone),
+                                    }}
+                                />
+                                <ClickableChip
+                                    checked={props.onlyMyself}
+                                    ChipProps={{
+                                        disabled: props.shareToEveryone,
+                                        label: t('post_dialog__select_recipients_only_myself'),
+                                        onClick: () => props.onOnlyMyselfChanged(!props.onlyMyself),
+                                    }}
+                                />
+                            </SelectRecipientsUI>
+                        </Box>
+                        {/* This feature is not ready for mobile version */}
+                        {webpackEnv.target !== 'WKWebview' && webpackEnv.firefoxVariant !== 'android' ? (
+                            <>
+                                <Typography style={{ marginBottom: 10 }}>
+                                    {t('post_dialog__more_options_title')}
+                                </Typography>
+                                <Box style={{ marginBottom: 10 }} display="flex" flexWrap="wrap">
+                                    <ClickableChip
+                                        checked={props.imagePayload}
+                                        ChipProps={{
+                                            label: t('post_dialog__image_payload'),
+                                            onClick: () => props.onImagePayloadSwitchChanged(!props.imagePayload),
+                                        }}
+                                    />
+                                </Box>
+                            </>
+                        ) : null}
                     </DialogContent>
                     <DialogActions className={classes.actions}>
                         <Button
@@ -266,7 +294,6 @@ export function PostDialog(props: PostDialogProps) {
     const typedMessageMetadata = or(props.typedMessageMetadata, useValueRef(getActivatedUI().typedMessageMetadata))
     const [open, setOpen] = or(props.open, useState<boolean>(false)) as NonNullable<PostDialogProps['open']>
 
-    const isSteganography = useValueRef(steganographyModeSetting)
     //#region TypedMessage
     const [postBoxContent, setPostBoxContent] = useState<TypedMessage>(makeTypedMessage('', typedMessageMetadata))
     useEffect(() => {
@@ -283,7 +310,16 @@ export function PostDialog(props: PostDialogProps) {
     )
     const currentIdentity = or(props.currentIdentity, useCurrentIdentity())
     const [currentShareTarget, setCurrentShareTarget] = useState<(Profile | Group)[]>(() => [])
-
+    //#endregion
+    //#region Image Based Payload Switch
+    const imagePayloadStatus = useValueRef(currentImagePayloadStatus[getActivatedUI().networkIdentifier])
+    const imagePayloadEnabled = imagePayloadStatus === 'true'
+    const onImagePayloadSwitchChanged = or(
+        props.onImagePayloadSwitchChanged,
+        useCallback((checked) => {
+            currentImagePayloadStatus[getActivatedUI().networkIdentifier].value = String(checked)
+        }, []),
+    )
     //#endregion
     //#region callbacks
     const onRequestPost = or(
@@ -292,13 +328,14 @@ export function PostDialog(props: PostDialogProps) {
             async (target: (Profile | Group)[], content: TypedMessage) => {
                 const [encrypted, token] = await Services.Crypto.encryptTo(
                     content,
-                    target.map(x => x.identifier),
+                    target.map((x) => x.identifier),
                     currentIdentity!.identifier,
                     !!shareToEveryone,
                 )
                 const activeUI = getActivatedUI()
-                const metadata = readTypedMessageMetadata(typedMessageMetadata, 'com.maskbook.red_packet:1')
-                if (isSteganography) {
+                // TODO: move into the plugin system
+                const metadata = readTypedMessageMetadata(typedMessageMetadata, RedPacketMetaKey)
+                if (imagePayloadEnabled) {
                     const isEth = metadata.ok && metadata.val.token_type === RedPacketTokenType.eth
                     const isErc20 =
                         metadata.ok &&
@@ -343,7 +380,7 @@ export function PostDialog(props: PostDialogProps) {
                 // there is nothing to write if it shared with public
                 if (!shareToEveryone) Services.Crypto.publishPostAESKey(token)
             },
-            [currentIdentity, i18n.language, isSteganography, typedMessageMetadata, shareToEveryone, t],
+            [currentIdentity, shareToEveryone, typedMessageMetadata, imagePayloadEnabled, t, i18n.language],
         ),
     )
     const onRequestReset = or(
@@ -391,7 +428,8 @@ export function PostDialog(props: PostDialogProps) {
     )
     //#endregion
     //#region Red Packet
-    const hasRedPacket = readTypedMessageMetadata(postBoxContent.meta || new Map(), 'com.maskbook.red_packet:1').ok
+    // TODO: move into the plugin system
+    const hasRedPacket = readTypedMessageMetadata(postBoxContent.meta, RedPacketMetaKey).ok
     const theme = hasRedPacket ? PluginRedPacketTheme : undefined
     const mustSelectShareToEveryone = hasRedPacket && !shareToEveryone
 
@@ -406,6 +444,7 @@ export function PostDialog(props: PostDialogProps) {
             shareToEveryone={shareToEveryoneLocal}
             onlyMyself={onlyMyself}
             availableShareTarget={availableShareTarget}
+            imagePayload={imagePayloadEnabled}
             currentIdentity={currentIdentity}
             currentShareTarget={currentShareTarget}
             postContent={postBoxContent}
@@ -418,6 +457,7 @@ export function PostDialog(props: PostDialogProps) {
             onPostContentChanged={setPostBoxContent}
             onShareToEveryoneChanged={onShareToEveryoneChanged}
             onOnlyMyselfChanged={onOnlyMyselfChanged}
+            onImagePayloadSwitchChanged={onImagePayloadSwitchChanged}
             onFinishButtonClicked={onFinishButtonClicked}
             onCloseButtonClicked={onCloseButtonClicked}
             {...props}

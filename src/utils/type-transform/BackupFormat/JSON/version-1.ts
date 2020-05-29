@@ -1,6 +1,11 @@
 /* eslint-disable import/no-deprecated */
-import { BackupJSONFileVersion0 } from './version-0'
-import { ProfileIdentifier } from '../../../../database/type'
+import type { BackupJSONFileVersion0 } from './version-0'
+import type { ProfileIdentifier } from '../../../../database/type'
+import type {
+    EC_Public_JsonWebKey,
+    EC_Private_JsonWebKey,
+    AESJsonWebKey,
+} from '../../../../modules/CryptoAlgorithm/interfaces/utils'
 
 /**
  * @deprecated The old version 1 backup file before persona db was done.
@@ -11,16 +16,16 @@ export interface BackupJSONFileVersion1 {
     whoami: Array<{
         network: string
         userId: string
-        publicKey: JsonWebKey
-        privateKey: JsonWebKey
-        localKey: JsonWebKey
+        publicKey: EC_Public_JsonWebKey
+        privateKey: EC_Private_JsonWebKey
+        localKey: AESJsonWebKey
         previousIdentifiers?: { network: string; userId: string }[]
         nickname?: string
     }>
     people?: Array<{
         network: string
         userId: string
-        publicKey: JsonWebKey
+        publicKey: EC_Public_JsonWebKey
         previousIdentifiers?: { network: string; userId: string }[]
         nickname?: string
         groups?: { network: string; groupID: string; virtualGroupOwner: string | null }[]

@@ -40,7 +40,7 @@ export interface CustomEvents {
                 const blob = new Blob([binary], { type: 'image/png' })
                 const file = new File([blob], 'image.png', { lastModified: Date.now(), type: 'image/png' })
                 const dt = new Proxy(new DataTransfer(), {
-                    get(target, key: keyof typeof target) {
+                    get(target, key: keyof DataTransfer) {
                         if (key === 'files') return [file]
                         if (key === 'types') return ['Files']
                         if (key === 'items')
@@ -71,7 +71,7 @@ export interface CustomEvents {
         },
     }
     ;(Object.keys(hacks) as (keyof DocumentEventMap)[]).concat(['keyup', 'input']).forEach(hijack)
-    const invokeCustomEvent: EventListenerOrEventListenerObject = e => {
+    const invokeCustomEvent: EventListenerOrEventListenerObject = (e) => {
         const ev = e as CustomEvent<string>
         const [eventName, param]: [keyof CustomEvents, CustomEvents[keyof CustomEvents]] = JSON.parse(ev.detail)
 

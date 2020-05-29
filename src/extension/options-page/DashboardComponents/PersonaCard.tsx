@@ -2,24 +2,24 @@ import React, { useState, useRef, useEffect } from 'react'
 import { makeStyles, createStyles } from '@material-ui/core/styles'
 import CardContent from '@material-ui/core/CardContent'
 import Typography from '@material-ui/core/Typography'
-import { Persona } from '../../../database'
+import type { Persona } from '../../../database'
 import { Divider, TextField, Menu, MenuItem } from '@material-ui/core'
 import Services from '../../service'
 import SettingsIcon from '@material-ui/icons/Settings'
 import { useSnackbar } from 'notistack'
 import { useColorProvider } from '../../../utils/theme'
 import { useI18N } from '../../../utils/i18n-next-ui'
-import { BackupJSONFileLatest } from '../../../utils/type-transform/BackupFormat/JSON/latest'
+import type { BackupJSONFileLatest } from '../../../utils/type-transform/BackupFormat/JSON/latest'
 import { PersonaDeleteDialog, PersonaBackupDialog } from '../DashboardDialogs/Persona'
 import { DialogRouter } from '../DashboardDialogs/DialogBase'
 import ProfileBox from './ProfileBox'
-import { ProfileIdentifier } from '../../../database/type'
+import type { ProfileIdentifier } from '../../../database/type'
 
 interface Props {
     persona: Persona
 }
 
-const useStyles = makeStyles(theme =>
+const useStyles = makeStyles((theme) =>
     createStyles({
         card: {
             width: '100%',
@@ -60,7 +60,7 @@ export default function PersonaCard({ persona }: Props) {
     const [provePost, setProvePost] = useState<string>('')
 
     useEffect(() => {
-        Services.Crypto.getMyProveBio(persona.identifier).then(p => setProvePost(p || ''))
+        Services.Crypto.getMyProveBio(persona.identifier).then((p) => setProvePost(p || ''))
     }, [persona])
 
     const { enqueueSnackbar, closeSnackbar } = useSnackbar()
@@ -69,7 +69,7 @@ export default function PersonaCard({ persona }: Props) {
         navigator.clipboard
             .writeText(provePost)
             .then(() => enqueueSnackbar(t('dashboard_item_copied'), { variant: 'success', autoHideDuration: 1000 }))
-            .catch(e => {
+            .catch((e) => {
                 enqueueSnackbar(t('dashboard_item_copy_failed'), { variant: 'error' })
                 setTimeout(() => prompt(t('automation_request_paste_into_bio_box'), provePost))
             })
@@ -112,8 +112,8 @@ export default function PersonaCard({ persona }: Props) {
         if (!profile) Services.Identity.renamePersona(persona.identifier, persona.identifier.compressedPoint)
         else
             Services.Identity.queryProfile(profile)
-                .then(profile => profile.nickname || profile.identifier.userId)
-                .then(newName => Services.Identity.renamePersona(persona.identifier, newName))
+                .then((profile) => profile.nickname || profile.identifier.userId)
+                .then((newName) => Services.Identity.renamePersona(persona.identifier, newName))
     }, [persona.identifier, id, persona.nickname])
 
     const dismissDialog = () => {
@@ -156,12 +156,12 @@ export default function PersonaCard({ persona }: Props) {
                         <>
                             <TextField
                                 style={{ width: '100%', maxWidth: '320px' }}
-                                inputProps={{ onKeyPress: e => e.key === 'Enter' && renameIdentity(e) }}
+                                inputProps={{ onKeyPress: (e) => e.key === 'Enter' && renameIdentity(e) }}
                                 autoFocus
                                 variant="outlined"
                                 label="Name"
                                 defaultValue={persona.nickname}
-                                onBlur={e => renameIdentity(e)}></TextField>
+                                onBlur={(e) => renameIdentity(e)}></TextField>
                         </>
                     )}
                 </Typography>

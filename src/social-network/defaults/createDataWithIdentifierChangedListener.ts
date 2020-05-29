@@ -1,6 +1,6 @@
-import { UpdateEvent } from '../../utils/messages'
-import { ValueRef } from '@holoflows/kit/es'
-import { Identifier } from '../../database/type'
+import type { UpdateEvent } from '../../utils/messages'
+import type { ValueRef } from '@holoflows/kit/es'
+import type { Identifier } from '../../database/type'
 export function createDataWithIdentifierChangedListener<
     T extends {
         identifier: Identifier
@@ -10,7 +10,7 @@ export function createDataWithIdentifierChangedListener<
         let next = [...ref.value]
         for (const event of events.filter(filter)) {
             if (event.reason === 'delete') {
-                next = next.filter(x => !x.identifier.equals(event.of.identifier))
+                next = next.filter((x) => !x.identifier.equals(event.of.identifier))
             } else if (event.reason === 'update') {
                 next.forEach((current, index, arr) => {
                     if (current.identifier.equals(event.of.identifier)) {
@@ -18,7 +18,7 @@ export function createDataWithIdentifierChangedListener<
                     }
                 })
             } else if (event.reason === 'new') {
-                next = next.filter(x => !x.identifier.equals(event.of.identifier))
+                next = next.filter((x) => !x.identifier.equals(event.of.identifier))
                 next.push(event.of)
             } else {
                 throw new Error('Invalid state')

@@ -1,10 +1,9 @@
-import { ProfileIdentifier } from '../../../database/type'
+import type { ProfileIdentifier } from '../../../database/type'
 import { getProfilePageUrlAtFacebook } from '../parse-username'
 import { parseFacebookStaticHTML } from '../parse-html'
-import { ProfileUI } from '../../../social-network/shared'
+import type { ProfileUI } from '../../../social-network/shared'
 import tasks from '../../../extension/content-script/tasks'
 import { timeout } from '../../../utils/utils'
-import { facebookWorkerSelf } from '../worker-provider'
 import { getActiveTabFacebook } from '../../../utils/tabs'
 
 // ? We now always run fetch request from an active tab.
@@ -14,7 +13,7 @@ export async function fetchProfileFacebook(who: ProfileIdentifier): Promise<Prof
     if (activeTabID) {
         const url = getProfilePageUrlAtFacebook(who, 'fetch')
         const { memoizeFetch } = tasks(activeTabID)
-        const html = await timeout(memoizeFetch(url), 10000).catch(_ => null)
+        const html = await timeout(memoizeFetch(url), 10000).catch((_) => null)
         if (html !== null) {
             // Path 1: fetch by http req
             try {
@@ -22,12 +21,12 @@ export async function fetchProfileFacebook(who: ProfileIdentifier): Promise<Prof
                 if (!doc.length) throw new Error("Can't parse the page")
                 const bio = doc
                     .map(
-                        doc =>
+                        (doc) =>
                             doc.querySelector<HTMLDivElement>('#intro_container_id') ||
                             doc.querySelector<HTMLDivElement>('#bio') ||
                             doc.querySelector<HTMLDivElement>('div > div > div:nth-child(2) > div:nth-child(2)'),
                     )
-                    .map(x => x && x.innerText)
+                    .map((x) => x && x.innerText)
                     .join('')
                 return { bioContent: bio }
             } catch (e) {

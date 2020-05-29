@@ -21,13 +21,15 @@
  *
  * # ObjectStore `localKeys`:
  * @description Store local AES keys.
- * @type {Record<string, CryptoKey>} Record of <userId, CryptoKey>
+ * @type {Record<string, AESJsonWebKey>} Record of <userId, CryptoKey>
  * @keys outline, string, which means network.
  */
 import { GroupIdentifier, Identifier, ProfileIdentifier } from '../type'
-import { DBSchema, openDB } from 'idb/with-async-ittr'
+import { DBSchema, openDB } from 'idb/with-async-ittr-cjs'
 import { JsonWebKeyToCryptoKey, getKeyParameter } from '../../utils/type-transform/CryptoKey-JsonWebKey'
 import { OnlyRunInContext } from '@holoflows/kit/es'
+import { createDBAccess } from '../helpers/openDB'
+import type { AESJsonWebKey } from '../../modules/CryptoAlgorithm/interfaces/utils'
 
 OnlyRunInContext(['background', 'debugging'], 'People db')
 //#region Type and utils
@@ -37,8 +39,8 @@ OnlyRunInContext(['background', 'debugging'], 'People db')
 async function outDb({ identifier, publicKey, privateKey, ...rest }: PersonRecordInDatabase): Promise<PersonRecord> {
     // Restore prototype
     rest.previousIdentifiers &&
-        rest.previousIdentifiers.forEach(y => Object.setPrototypeOf(y, ProfileIdentifier.prototype))
-    rest.groups.forEach(y => Object.setPrototypeOf(y, GroupIdentifier.prototype))
+        rest.previousIdentifiers.forEach((y) => Object.setPrototypeOf(y, ProfileIdentifier.prototype))
+    rest.groups.forEach((y) => Object.setPrototypeOf(y, GroupIdentifier.prototype))
     const result: PersonRecord = {
         ...rest,
         identifier: Identifier.fromString(identifier, ProfileIdentifier).unwrap(),
@@ -70,7 +72,7 @@ interface PersonRecordInDatabase extends Base<true> {
     nickname?: string
     groups: GroupIdentifier[]
 }
-type LocalKeys = Record<string, CryptoKey | undefined>
+type LocalKeys = Record<string, AESJsonWebKey | undefined>
 interface PeopleDB extends DBSchema {
     /** Use inline keys */
     people: {
@@ -92,21 +94,22 @@ interface PeopleDB extends DBSchema {
         key: string
     }
 }
-const db = openDB<PeopleDB>('maskbook-people-v2', 1, {
-    upgrade(db, oldVersion, newVersion, transaction) {
-        function v0_v1() {
-            // inline keys
-            db.createObjectStore('people', { keyPath: 'identifier' })
-            // inline keys
-            db.createObjectStore('myself', { keyPath: 'identifier' })
-            db.createObjectStore('localKeys')
+const db = createDBAccess(() =>
+    openDB<PeopleDB>('maskbook-people-v2', 1, {
+        upgrade(db, oldVersion, _newVersion, transaction) {
+            function v0_v1() {
+                // inline keys
+                db.createObjectStore('people', { keyPath: 'identifier' })
+                // inline keys
+                db.createObjectStore('myself', { keyPath: 'identifier' })
+                db.createObjectStore('localKeys')
 
-            transaction.objectStore('people').createIndex('network', 'network', { unique: false })
-        }
-        if (oldVersion < 1) v0_v1()
-    },
-})
-export const deprecated_people_db = db
+                transaction.objectStore('people').createIndex('network', 'network', { unique: false })
+            }
+            if (oldVersion < 1) v0_v1()
+        },
+    }),
+)
 //#endregion
 //#region Other people
 /**
@@ -116,7 +119,7 @@ export const deprecated_people_db = db
 export async function queryPeopleDB(
     query: ((key: ProfileIdentifier, record: PersonRecordInDatabase) => boolean) | { network: string } = () => true,
 ): Promise<PersonRecord[]> {
-    const t = (await db).transaction('people')
+    const t = (await db()).transaction('people')
     const result: PersonRecordInDatabase[] = []
     if (typeof query === 'function') {
         // eslint-disable-next-line @typescript-eslint/await-thenable
@@ -129,12 +132,7 @@ export async function queryPeopleDB(
             if (query(id.val, value)) result.push(value)
         }
     } else {
-        result.push(
-            ...(await t
-                .objectStore('people')
-                .index('network')
-                .getAll(IDBKeyRange.only(query.network))),
-        )
+        result.push(...(await t.objectStore('people').index('network').getAll(IDBKeyRange.only(query.network))))
     }
     return Promise.all(result.map(outDb))
 }
@@ -146,7 +144,7 @@ export async function queryPeopleDB(
  * @deprecated
  */
 export async function getMyIdentitiesDB(): Promise<PersonRecordPublicPrivate[]> {
-    const t = (await db).transaction('myself')
+    const t = (await db()).transaction('myself')
     const result = await t.objectStore('myself').getAll()
     return Promise.all(result.map(outDb)) as Promise<PersonRecordPublicPrivate[]>
 }
@@ -158,9 +156,11 @@ export async function getMyIdentitiesDB(): Promise<PersonRecordPublicPrivate[]> 
  * @deprecated
  */
 export async function queryLocalKeyDB(network: string): Promise<LocalKeys>
-export async function queryLocalKeyDB(identifier: ProfileIdentifier): Promise<CryptoKey | null>
-export async function queryLocalKeyDB(identifier: string | ProfileIdentifier): Promise<LocalKeys | CryptoKey | null> {
-    const t = (await db).transaction('localKeys')
+export async function queryLocalKeyDB(identifier: ProfileIdentifier): Promise<AESJsonWebKey | null>
+export async function queryLocalKeyDB(
+    identifier: string | ProfileIdentifier,
+): Promise<LocalKeys | AESJsonWebKey | null> {
+    const t = (await db()).transaction('localKeys')
     if (typeof identifier === 'string') {
         const result = await t.objectStore('localKeys').get(identifier)
         return result || {}

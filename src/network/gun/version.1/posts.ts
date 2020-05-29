@@ -9,10 +9,7 @@ OnlyRunInContext('background', 'gun')
  * @deprecated
  */
 export async function queryPostAESKey(salt: string, myUsername: string) {
-    const result = await gun1
-        .get('posts')
-        .get(salt)
-        .get(myUsername).then!()
+    const result = await gun1.get('posts').get(salt).get(myUsername).then!()
     if (result && result.encryptedKey && result.salt) return result
     return undefined
 }

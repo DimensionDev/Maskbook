@@ -1,5 +1,5 @@
 import React from 'react'
-import { BrowserRouter, HashRouter } from 'react-router-dom'
+import { BrowserRouter } from 'react-router-dom'
 import { renderHook } from '@testing-library/react-hooks'
 import useQueryParams from '../../hooks/useQueryParams'
 

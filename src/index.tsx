@@ -21,7 +21,7 @@ import BugReportIcon from '@material-ui/icons/BugReport'
 import React from 'react'
 import { ThemeProvider } from '@material-ui/styles'
 import { MaskbookDarkTheme, MaskbookLightTheme } from './utils/theme'
-import { HashRouter as Router, Route, Switch, Redirect, useLocation, useHistory } from 'react-router-dom'
+import { HashRouter, StaticRouter, Route, Switch, Redirect, useLocation, useHistory } from 'react-router-dom'
 import { makeStyles, createStyles } from '@material-ui/core/styles'
 
 import './setup.ui'
@@ -37,13 +37,12 @@ import DashboardHomePage from './extension/options-page/Home'
 import DashboardDebugPage from './extension/options-page/Debug'
 import DashboardInitializeDialog from './extension/options-page/Initialize'
 import DashboardWalletsPage from './plugins/Wallet/UI/Dashboard/Wallets'
-import { languageSettings } from './components/shared-settings/settings'
-import { useValueRef } from './utils/hooks/useValueRef'
 import { useI18N } from './utils/i18n-next-ui'
 import i18nNextInstance from './utils/i18n-next'
 import { Settings as DashboardSettingsPage } from './extension/options-page/Settings/settings'
+import { RequestPermissionPage } from './components/RequestPermission/RequestPermission'
 
-const useStyles = makeStyles(theme =>
+const useStyles = makeStyles((theme) =>
     createStyles({
         wrapper: {
             display: 'flex',
@@ -84,6 +83,7 @@ const useStyles = makeStyles(theme =>
 const OptionsPageRouters = (
     <>
         <Switch>
+            <Route path="/request-permission" component={RequestPermissionPage} />
             <Route path="/home/" component={DashboardHomePage} />
             <Route path="/wallets/" component={DashboardWalletsPage} />
             <Route path="/settings/" component={DashboardSettingsPage} />
@@ -96,7 +96,7 @@ const OptionsPageRouters = (
 
 function DashboardWithProvider() {
     const isDarkTheme = useMediaQuery('(prefers-color-scheme: dark)')
-    return (
+    const child = (
         <I18nextProvider i18n={i18nNextInstance}>
             <ThemeProvider theme={isDarkTheme ? MaskbookDarkTheme : MaskbookLightTheme}>
                 <SnackbarProvider
@@ -105,26 +105,28 @@ function DashboardWithProvider() {
                         vertical: 'top',
                         horizontal: 'right',
                     }}>
-                    <Router>
-                        <CssBaseline />
-                        <Dashboard></Dashboard>
-                    </Router>
+                    <CssBaseline />
+                    <Dashboard></Dashboard>
                 </SnackbarProvider>
             </ThemeProvider>
         </I18nextProvider>
     )
+    return navigator.platform === 'ssr' ? <StaticRouter>{child}</StaticRouter> : <HashRouter>{child}</HashRouter>
 }
 
 function Dashboard() {
     const { t } = useI18N()
     const classes = useStyles()
 
-    const shouldRenderAppBar = webpackEnv.firefoxVariant === 'GeckoView' || webpackEnv.target === 'WKWebview'
+    const shouldRenderAppBar = webpackEnv.genericTarget === 'facebookApp'
     const shouldNotRenderAppBar = useMediaQuery('(min-width:1024px)')
 
     const routers: [string, string, JSX.Element][] = [
         [t('home'), '/home/', <HomeIcon />],
-        ['Wallets', '/wallets/', <CreditCardIcon />],
+        /* without redpacket */
+        ...(webpackEnv.target === 'WKWebview'
+            ? []
+            : ([['Wallets', '/wallets/', <CreditCardIcon />]] as [string, string, JSX.Element][])),
         [t('settings'), '/settings/', <SettingsIcon />],
         // ['About', '/about/', <InfoOutlinedIcon />],
         [t('debug'), '/debug/', <BugReportIcon />],
@@ -132,7 +134,7 @@ function Dashboard() {
 
     const history = useHistory()
     const currentRouter = useLocation()
-    const index = routers.findIndex(i => currentRouter.pathname.startsWith(i[1]))
+    const index = routers.findIndex((i) => currentRouter.pathname.startsWith(i[1]))
     const value = index < 0 ? 0 : index
 
     const tabBar = (
@@ -144,7 +146,7 @@ function Dashboard() {
                 onChange={(e, v) => history.push(routers[v][1])}
                 indicatorColor="primary"
                 textColor="primary">
-                {routers.map(tab => (
+                {routers.map((tab) => (
                     <Tab
                         key={`dashboard-tab-${tab[0]}`}
                         className={classes.tabItem}
@@ -155,6 +157,8 @@ function Dashboard() {
             </Tabs>
         </AppBar>
     )
+
+    if (currentRouter.pathname === '/request-permission') return OptionsPageRouters
 
     return (
         <div className={classes.wrapper}>

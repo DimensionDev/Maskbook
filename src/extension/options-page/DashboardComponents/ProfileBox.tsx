@@ -1,5 +1,5 @@
 import React from 'react'
-import { Persona } from '../../../database'
+import type { Persona } from '../../../database'
 import { definedSocialNetworkWorkers } from '../../../social-network/worker'
 
 import classNames from 'classnames'
@@ -8,16 +8,15 @@ import { makeStyles } from '@material-ui/styles'
 import { createStyles, Typography, Theme } from '@material-ui/core'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { useColorProvider } from '../../../utils/theme'
-import { ProfileIdentifier } from '../../../database/type'
+import type { ProfileIdentifier } from '../../../database/type'
 import { DialogRouter } from '../DashboardDialogs/DialogBase'
-import { ProfileDisconnectDialog, ProfileConnectStartDialog, ProfileConnectDialog } from '../DashboardDialogs/Profile'
-import Services from '../../service'
+import { ProfileDisconnectDialog, ProfileConnectDialog } from '../DashboardDialogs/Profile'
 import getCurrentNetworkUI from '../../../social-network/utils/getCurrentNetworkUI'
-import tasks from '../../content-script/tasks'
 import {
     currentImmersiveSetupStatus,
     ImmersiveSetupCrossContextStatus,
 } from '../../../components/shared-settings/settings'
+import { exclusiveTasks } from '../../content-script/tasks'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -72,15 +71,22 @@ export default function ProfileBox({ persona, border }: Props) {
     const color = useColorProvider()
     const profiles = persona ? [...persona.linkedProfiles] : []
 
-    const providers = [...definedSocialNetworkWorkers].map(i => {
-        const profile = profiles.find(([key, value]) => key.network === i.networkIdentifier)
-        return {
-            network: i.networkIdentifier,
-            connected: !!profile,
-            userId: profile?.[0].userId,
-            identifier: profile?.[0],
-        }
-    })
+    const providers = [...definedSocialNetworkWorkers]
+        .filter((i) => {
+            if (webpackEnv.genericTarget === 'facebookApp') {
+                if (i.networkIdentifier !== 'facebook.com') return false
+            }
+            return true
+        })
+        .map((i) => {
+            const profile = profiles.find(([key, value]) => key.network === i.networkIdentifier)
+            return {
+                network: i.networkIdentifier,
+                connected: !!profile,
+                userId: profile?.[0].userId,
+                identifier: profile?.[0],
+            }
+        })
 
     const [connectIdentifier, setConnectIdentifier] = React.useState<ProfileIdentifier | null>(null)
     const [detachProfile, setDetachProfile] = React.useState<ProfileIdentifier | null>(null)
@@ -97,18 +103,17 @@ export default function ProfileBox({ persona, border }: Props) {
             status: 'during',
             persona: persona.identifier.toText(),
         } as ImmersiveSetupCrossContextStatus)
-        tasks(getCurrentNetworkUI(provider.network).getHomePage(), {
+        exclusiveTasks(getCurrentNetworkUI(provider.network).getHomePage(), {
             active: true,
             autoClose: false,
             important: true,
             memorable: false,
-            pinned: false,
         }).immersiveSetup(persona.identifier)
     }
 
     return (
         <>
-            {providers.map(provider => (
+            {providers.map((provider) => (
                 <Typography
                     key={`profile-line-${provider.network}`}
                     className={classNames(classes.line, { [classes.controlBorder]: border ?? true })}

@@ -1,11 +1,11 @@
-import {
+import type {
     IDBPDatabase,
     DBSchema,
     StoreNames,
     IDBPTransaction,
     IDBPObjectStore,
     IDBPCursorWithValueIteratorValue,
-} from 'idb/with-async-ittr'
+} from 'idb/with-async-ittr-cjs'
 import { OnlyRunInContext } from '@holoflows/kit/es'
 
 export function createDBAccess<DBSchema>(opener: () => Promise<IDBPDatabase<DBSchema>>) {
@@ -14,8 +14,49 @@ export function createDBAccess<DBSchema>(opener: () => Promise<IDBPDatabase<DBSc
         OnlyRunInContext(['background', 'debugging'], 'Database')
         if (db) return db
         db = await opener()
-        db.addEventListener('close', e => (db = undefined))
+        db.addEventListener('close', (e) => (db = undefined))
         return db
+    }
+}
+export function createDBAccessWithAsyncUpgrade<DBSchema, AsyncUpgradePreparedData>(
+    firstVersionThatRequiresAsyncUpgrade: number,
+    latestVersion: number,
+    opener: (currentTryOpenVersion: number, knowledge?: AsyncUpgradePreparedData) => Promise<IDBPDatabase<DBSchema>>,
+    asyncUpgradePrepare: (db: IDBPDatabase<DBSchema>) => Promise<AsyncUpgradePreparedData | undefined>,
+) {
+    let db: IDBPDatabase<DBSchema> | undefined = undefined
+    let pendingOpen: Promise<IDBPDatabase<DBSchema>> | undefined = undefined
+    async function open(): Promise<IDBPDatabase<DBSchema>> {
+        OnlyRunInContext(['background', 'debugging'], 'Database')
+        if (db?.version === latestVersion) return db
+        let currentVersion = firstVersionThatRequiresAsyncUpgrade
+        let lastVersionData: AsyncUpgradePreparedData | undefined = undefined
+        while (currentVersion < latestVersion) {
+            try {
+                db = await opener(currentVersion, lastVersionData)
+                // if the open success, the stored version is small or eq than currentTryOpenVersion
+                // let's call the prepare function to do all the async jobs
+                lastVersionData = await asyncUpgradePrepare(db)
+            } catch (e) {
+                if (currentVersion >= latestVersion) throw e
+                // if the stored database version is bigger than the currentTryOpenVersion
+                // It will fail and we just move to next version
+            }
+            currentVersion += 1
+            db?.close()
+            db = undefined
+        }
+        db = await opener(currentVersion, lastVersionData)
+        db.addEventListener('close', (e) => (db = undefined))
+        if (!db) throw new Error('Invalid state')
+        return db
+    }
+    return () => {
+        // Share a Promise to prevent async upgrade for multiple times
+        if (pendingOpen) return pendingOpen
+        const promise = (pendingOpen = open())
+        promise.catch(() => (pendingOpen = undefined))
+        return promise
     }
 }
 export interface IDBPSafeObjectStore<

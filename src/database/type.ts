@@ -1,8 +1,9 @@
 import { serializable } from '../utils/type-transform/Serialization'
-import { RecipientDetail } from './post'
 import { compressSecp256k1Key } from '../utils/type-transform/SECP256k1-Compression'
 import { CryptoKeyToJsonWebKey } from '../utils/type-transform/CryptoKey-JsonWebKey'
 import { Result, Ok, Err } from 'ts-results'
+import type { EC_JsonWebKey } from '../modules/CryptoAlgorithm/interfaces/utils'
+import { unreachable } from '../utils/utils'
 
 /**
  * @internal symbol that used to construct this type from the Identifier
@@ -59,17 +60,14 @@ export abstract class Identifier {
             else if (type === 'post') result = PostIdentifier[$fromString](rest.join(':'))
             else if (type === 'post_iv') result = PostIVIdentifier[$fromString](rest.join(':'))
             else if (type === 'ec_key') result = ECKeyIdentifier[$fromString](rest.join(':'))
-            else {
-                // ? if we add new value to Identifiers, this line will be a TypeError
-                const _: never = type
-                return new Err(new TypeError('Unreachable case'))
-            }
+            else return new Err(new TypeError('Unreachable case:' + type))
             fromStringCache.set(id, result)
         }
         const err = new Err(
             new TypeError(
-                `Can't cast to Identifier. Expected: ${constructor?.name ||
-                    'Any Identifier'}, Try to convert from string: ${id}`,
+                `Can't cast to Identifier. Expected: ${
+                    constructor?.name || 'Any Identifier'
+                }, Try to convert from string: ${id}`,
             ),
         )
         if (!constructor) return result ? new Ok(result) : err
@@ -79,7 +77,7 @@ export abstract class Identifier {
     }) as any
 
     static IdentifiersToString(a: Identifier[], isOrderImportant = false) {
-        const ax = a.map(x => x.toText())
+        const ax = a.map((x) => x.toText())
         if (!isOrderImportant) {
             ax.sort()
         }
@@ -205,10 +203,13 @@ export class PostIVIdentifier extends Identifier {
  */
 @serializable('ECKeyIdentifier')
 export class ECKeyIdentifier extends Identifier {
+    /**
+     * @deprecated
+     */
     static async fromCryptoKey(key: CryptoKey) {
         return this.fromJsonWebKey(await CryptoKeyToJsonWebKey(key))
     }
-    static fromJsonWebKey(key: JsonWebKey) {
+    static fromJsonWebKey(key: EC_JsonWebKey) {
         const x = compressSecp256k1Key(key, 'public')
         return new ECKeyIdentifier('secp256k1', x)
     }
@@ -242,12 +243,4 @@ export type PersonaIdentifier = ECKeyIdentifier
 function noSlash(str?: string) {
     if (!str) return
     if (str.includes('/')) throw new TypeError('Cannot contain / in a part of identifier')
-}
-
-export function constructPostRecipients(data: [ProfileIdentifier, RecipientDetail][]) {
-    const x: Record<string, RecipientDetail> = {}
-    for (const [id, detail] of data) {
-        x[id.toText()] = detail
-    }
-    return x
 }

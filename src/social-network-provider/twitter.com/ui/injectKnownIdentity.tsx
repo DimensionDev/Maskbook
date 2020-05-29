@@ -38,7 +38,7 @@ export function injectKnownIdentityAtTwitter() {
         .setDOMProxyOption({
             afterShadowRootInit: { mode: 'closed' },
         })
-        .useForeach(content => {
+        .useForeach((content) => {
             const bioRef = new ValueRef('')
             const pageOwnerRef = new ValueRef<ProfileIdentifier | null>(null)
             const update = () => {
@@ -51,10 +51,10 @@ export function injectKnownIdentityAtTwitter() {
 
             update()
 
-            const unmount = renderInShadowRoot(
-                <PersonKnownAtTwitter pageOwner={pageOwnerRef} bioContent={bioRef} />,
-                renderPoint,
-            )
+            const unmount = renderInShadowRoot(<PersonKnownAtTwitter pageOwner={pageOwnerRef} bioContent={bioRef} />, {
+                shadow: () => watcher.firstDOMProxy.afterShadow,
+                normal: () => watcher.firstDOMProxy.after,
+            })
             return {
                 onNodeMutation: update,
                 onRemove: unmount,
@@ -66,5 +66,4 @@ export function injectKnownIdentityAtTwitter() {
             subtree: true,
             characterData: true,
         })
-    const renderPoint = watcher.firstDOMProxy.afterShadow
 }

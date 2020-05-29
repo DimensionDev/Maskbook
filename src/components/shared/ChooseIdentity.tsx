@@ -4,7 +4,7 @@ import ExpansionPanel from '@material-ui/core/ExpansionPanel'
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import { Avatar } from '../../utils/components/Avatar'
-import { Profile } from '../../database'
+import type { Profile } from '../../database'
 import { List, ListItem, ListItemIcon, ListItemText, ListSubheader } from '@material-ui/core'
 import { PersonOrGroupInList, PersonOrGroupInListProps } from './SelectPeopleAndGroups'
 import { getActivatedUI } from '../../social-network/ui'
@@ -41,7 +41,7 @@ export interface ChooseIdentityProps
 /**
  * Choose the current using identity.
  */
-export const ChooseIdentity: React.FC<ChooseIdentityProps> = props => {
+export const ChooseIdentity: React.FC<ChooseIdentityProps> = (props) => {
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
     const [expanded, setExpanded] = React.useState<boolean>(false)
@@ -74,7 +74,7 @@ export const ChooseIdentity: React.FC<ChooseIdentityProps> = props => {
                 <List
                     subheader={<ListSubheader>{t('shared_choose_identity_subtitle')}</ListSubheader>}
                     classes={{ root: classes.list }}>
-                    {availableIdentities.map(person =>
+                    {availableIdentities.map((person) =>
                         person.identifier.equals(current.identifier) ? null : (
                             <PersonOrGroupInList
                                 ListItemProps={{ dense: true }}

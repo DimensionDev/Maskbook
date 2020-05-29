@@ -3,6 +3,14 @@
 declare const webpackEnv: {
     readonly target: 'Chromium' | 'Firefox' | 'WKWebview' | undefined
     readonly firefoxVariant: 'android' | 'desktop' | 'GeckoView' | undefined
+    readonly genericTarget: 'facebookApp' | 'browser'
+}
+
+declare module NodeJS {
+    interface ProcessEnv {
+        NODE_ENV: 'development' | 'production' | 'test'
+        STORYBOOK?: boolean
+    }
 }
 
 interface Permissions {
@@ -33,8 +41,4 @@ declare module 'typeson' {
         parseSync<T>(...args: Parameters<JSON['parse']>): T
         parseAsync<T>(...args: Parameters<JSON['parse']>): Promise<T>
     }
-}
-
-declare module 'storybook-addon-figma' {
-    export const WithFigma: typeof import('react').Component<void>
 }

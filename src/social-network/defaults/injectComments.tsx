@@ -1,5 +1,5 @@
 import React from 'react'
-import { PostInfo, SocialNetworkUI } from '../ui'
+import type { PostInfo } from '../ui'
 import { DOMProxy, MutationObserverWatcher, ValueRef } from '@holoflows/kit/es'
 import { renderInShadowRoot } from '../../utils/jss/renderInShadowRoot'
 import { PostComment, PostCommentProps } from '../../components/InjectedComponents/PostComments'
@@ -8,7 +8,6 @@ import { makeStyles } from '@material-ui/core'
 
 interface injectPostCommentsDefaultConfig {
     needZip?(): void
-    getInjectionPoint?(node: DOMProxy<HTMLElement & Node, HTMLSpanElement, HTMLSpanElement>): ShadowRoot
 }
 /**
  * Creat a default implementation of injectPostComments
@@ -18,7 +17,7 @@ export function injectPostCommentsDefault<T extends string>(
     additionalPropsToPostComment: (classes: Record<T, string>) => Partial<PostCommentProps> = () => ({}),
     useCustomStyles: (props?: any) => Record<T, string> = makeStyles({}) as any,
 ) {
-    const { needZip, getInjectionPoint } = config
+    const { needZip } = config
     const PostCommentDefault = React.memo(function PostCommentDefault(
         props: Pick<PostCommentProps, 'needZip' | 'comment'> & PostInfo,
     ) {
@@ -46,10 +45,9 @@ export function injectPostCommentsDefault<T extends string>(
                         commentNode.style.whiteSpace = 'nowrap'
                         commentNode.style.overflow = 'hidden'
                     })
-                const injectionPointDefault = () => meta.afterShadow
                 const unmount = renderInShadowRoot(
                     <PostCommentDefault needZip={needZipF} comment={commentRef} {...current} />,
-                    (getInjectionPoint || injectionPointDefault)(meta),
+                    { normal: () => meta.after, shadow: () => meta.afterShadow },
                 )
                 return {
                     onNodeMutation() {

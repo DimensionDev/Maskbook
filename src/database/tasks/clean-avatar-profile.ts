@@ -23,7 +23,7 @@ export async function cleanProfileWithNoLinkedPersona() {
         GroupIdentifier,
     )
     const expired = new Date(Date.now() - 1000 * 60 * 60 * 24 * 14 /** days */)
-    await consistentPersonaDBWriteAccess(async t => {
+    await consistentPersonaDBWriteAccess(async (t) => {
         for await (const x of t.objectStore('profiles')) {
             if (x.value.linkedPersona) continue
             if (expired < x.value.updatedAt) continue

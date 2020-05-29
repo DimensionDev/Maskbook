@@ -59,21 +59,20 @@ export const twitterEncoding = {
             [/\|/g, '.'],
         ])}`,
     payloadDecoder: (text: string) => {
+        if (!text) return null
+        if (!text.includes('%20') || !text.includes('%40')) return null
         const links: { raw: string; protocol: string; encoded: string }[] = anchorme(text, { list: true })
         let links_ = links
-            .map(l => ({
+            .map((l) => ({
                 ...l,
                 raw: l.raw.replace(/…$/, ''),
             }))
-            .filter(x => x.raw.endsWith('%40'))[0]?.raw
+            .filter((x) => x.raw.endsWith('%40'))[0]?.raw
         try {
-            links_ = new URL(links_).pathname
-                .slice(1)
-                .replace(/^%20/, '')
-                .replace(/%40$/, '')
-            if (!links_) return 'null'
+            links_ = new URL(links_).pathname.slice(1).replace(/^%20/, '').replace(/%40$/, '')
+            if (!links_) return null
         } catch {
-            return 'null'
+            return null
         }
         links_ = batchReplace(links_, [
             ['-', '+'],

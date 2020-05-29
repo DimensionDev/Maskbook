@@ -1,10 +1,12 @@
 import { ProfileIdentifier, Identifier, ECKeyIdentifier, PersonaIdentifier } from '../../database/type'
 import { compressSecp256k1Key, decompressSecp256k1Key } from './SECP256k1-Compression'
-import { BackupJSONFileLatest } from './BackupFormat/JSON/latest'
-import { ProfileRecord } from '../../database/Persona/Persona.db'
+import type { BackupJSONFileLatest } from './BackupFormat/JSON/latest'
+import type { ProfileRecord } from '../../database/Persona/Persona.db'
+import type { AESJsonWebKey } from '../../modules/CryptoAlgorithm/interfaces/utils'
 
 export type BackupJSONFileLatestShort = [
     string, // version, should be "1"
+    // network and userId may be empty string for unconnected persona!
     ProfileIdentifier['network'],
     ProfileIdentifier['userId'],
     ProfileRecord['nickname'],
@@ -17,22 +19,34 @@ export type BackupJSONFileLatestShort = [
     // BackupJSONFileLatest['grantedHostPermissions'].join(';'),
     string,
 ]
-export function compressBackupFile(file: BackupJSONFileLatest, profileIdentifier?: ProfileIdentifier): string {
+export function compressBackupFile(
+    file: BackupJSONFileLatest,
+    {
+        profileIdentifier,
+        personaIdentifier,
+    }: {
+        profileIdentifier?: ProfileIdentifier
+        personaIdentifier?: PersonaIdentifier
+    } = {},
+): string {
     const { grantedHostPermissions, profiles, personas } = file
-    if (!profileIdentifier)
-        profileIdentifier = Identifier.fromString(profiles[0].identifier, ProfileIdentifier).unwrap()
-    const profile = profiles.find(x => x.identifier === profileIdentifier!.toText())
-    if (!profile?.linkedPersona) throw new Error('Target profile/persona not found')
-    const persona = personas.find(x => x.identifier === profile.linkedPersona)
-    if (!persona?.privateKey) throw new Error('Target persona not found')
-    const { localKey, nickname, privateKey, linkedProfiles } = persona
+    const personaIdentifier_ =
+        personaIdentifier?.toText() ?? profiles.find((x) => x.identifier === profileIdentifier?.toText())?.linkedPersona
+    const persona = personas.find((x) => x.identifier === personaIdentifier_)
+    if (!persona || !persona.privateKey) throw new Error('Target persona not found')
+    const linkedProfile = persona.linkedProfiles[0]?.[0]
+    const profileIdentifier_ =
+        profileIdentifier ?? linkedProfile
+            ? Identifier.fromString(linkedProfile, ProfileIdentifier).unwrap()
+            : undefined
+    const { localKey, nickname, privateKey } = persona
     return ([
         '1',
-        profileIdentifier.network,
-        profileIdentifier.userId,
+        profileIdentifier_?.network,
+        profileIdentifier_?.userId,
         nickname,
         localKey?.k ||
-            profiles.filter(x => x.identifier === profileIdentifier!.toText()).filter(x => x.localKey)[0]?.localKey
+            profiles.filter((x) => x.identifier === profileIdentifier_?.toText()).filter((x) => x.localKey)[0]?.localKey
                 ?.k ||
             '',
         compressSecp256k1Key(privateKey, 'private'),
@@ -54,17 +68,17 @@ export function decompressBackupFile(short: string): BackupJSONFileLatest {
 
     if (version !== '1') throw new Error(`QR Code cannot be shared between different version of Maskbook`)
 
-    const localKeyJWK: JsonWebKey = {
+    const localKeyJWK: AESJsonWebKey = ({
         alg: 'A256GCM',
         ext: true,
         k: localKey,
         key_ops: ['encrypt', 'decrypt'],
         kty: 'oct',
-    }
+    } as JsonWebKey) as any
     const publicJWK = decompressSecp256k1Key(privateKey, 'public')
     const privateJWK = decompressSecp256k1Key(privateKey, 'private')
 
-    const profileID = new ProfileIdentifier(network, userID)
+    const profileID = network && userID ? new ProfileIdentifier(network, userID) : undefined
     const ECID = ECKeyIdentifier.fromJsonWebKey(publicJWK)
     return {
         _meta_: {
@@ -73,7 +87,7 @@ export function decompressBackupFile(short: string): BackupJSONFileLatest {
             version: 2,
             type: 'maskbook-backup',
         },
-        grantedHostPermissions: grantedHostPermissions.split(';'),
+        grantedHostPermissions: grantedHostPermissions.split(';').filter(Boolean),
         posts: [],
         userGroups: [],
         personas: [
@@ -83,20 +97,22 @@ export function decompressBackupFile(short: string): BackupJSONFileLatest {
                 privateKey: privateJWK,
                 publicKey: publicJWK,
                 identifier: ECID.toText(),
-                linkedProfiles: [[profileID.toText(), { connectionConfirmState: 'confirmed' }]],
+                linkedProfiles: profileID ? [[profileID.toText(), { connectionConfirmState: 'confirmed' }]] : [],
                 nickname,
                 localKey: localKeyJWK,
             },
         ],
-        profiles: [
-            {
-                createdAt: 0,
-                identifier: profileID.toText(),
-                updatedAt: 0,
-                linkedPersona: ECID.toText(),
-                localKey: localKeyJWK,
-                nickname: nickname,
-            },
-        ],
+        profiles: profileID
+            ? [
+                  {
+                      createdAt: 0,
+                      identifier: profileID.toText(),
+                      updatedAt: 0,
+                      linkedPersona: ECID.toText(),
+                      nickname: nickname,
+                      localKey: localKeyJWK,
+                  },
+              ]
+            : [],
     }
 }
