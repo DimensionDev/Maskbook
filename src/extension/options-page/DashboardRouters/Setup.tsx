@@ -16,6 +16,9 @@ import {
     TableRow,
     TableCell,
     Checkbox,
+    Select,
+    MenuItem,
+    FormControl,
 } from '@material-ui/core'
 import classNames from 'classnames'
 import * as bip39 from 'bip39'
@@ -24,6 +27,7 @@ import { useParams, useRouteMatch, Switch, Route, Redirect, Link, useHistory } f
 import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline'
 import RadioButtonUncheckedIcon from '@material-ui/icons/RadioButtonUnchecked'
 import CheckBoxOutlinedIcon from '@material-ui/icons/CheckBoxOutlined'
+import CropFreeIcon from '@material-ui/icons/CropFree'
 import AddBoxOutlinedIcon from '@material-ui/icons/AddBoxOutlined'
 import ActionButton from '../DashboardComponents/ActionButton'
 import { merge, cloneDeep } from 'lodash-es'
@@ -48,6 +52,7 @@ import { WKWebkitQRScanner } from '../../../components/shared/qrcode'
 import QRScanner from '../../../components/QRScanner'
 import { decodeArrayBuffer, decodeText } from '../../../utils/type-transform/String-ArrayBuffer'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
+import { PortalShadowRoot } from '../../../utils/jss/ShadowRootPortal'
 
 export enum SetupStep {
     CreatePersona = 'create-persona',
@@ -285,32 +290,23 @@ export function ConnectNetwork() {
 }
 //#endregion
 
-//#region restore database
-const useRestoreDatabaseStyle = makeStyles((theme) =>
-    createStyles({
-        file: {
-            display: 'none',
-        },
-        placeholder: {
-            pointerEvents: 'none',
-            width: 64,
-            height: 64,
-            margin: '40px auto 28px',
-            backgroundRepeat: 'no-repeat',
-            backgroundPosition: 'center',
-            backgroundSize: '64px 64px',
-            backgroundImage: `url(${getUrl(
-                theme.palette.type === 'light' ? 'restore-placeholder.png' : 'restore-placeholder-dark.png',
-            )})`,
-        },
-        input: {
+//#region restore box
+const useRestoreBoxStyles = makeStyles((theme) =>
+    createStyles<string, RestoreBoxProps>({
+        root: {
+            color: theme.palette.text.hint,
+            whiteSpace: 'pre-line',
             width: '100%',
-            padding: theme.spacing(2, 3),
-            flex: 1,
+            height: '100%',
             display: 'flex',
-            overflow: 'auto',
-            '& > textarea': {
-                height: '100% !important',
+            alignItems: 'center',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            textAlign: 'center',
+            cursor: 'pointer',
+            transition: '0.4s',
+            '&[data-active=true]': {
+                color: 'black',
             },
         },
         button: {
@@ -321,19 +317,63 @@ const useRestoreDatabaseStyle = makeStyles((theme) =>
                 textOverflow: 'ellipsis',
             },
         },
-        restoreBox: {
-            width: '100%',
-            color: 'gray',
-            transition: '0.4s',
-            '&[data-active=true]': {
-                color: 'black',
-            },
+        placeholder: {
+            pointerEvents: 'none',
+            width: 64,
+            height: 64,
+            margin: '0 auto 28px',
+            backgroundRepeat: 'no-repeat',
+            backgroundPosition: 'center',
+            backgroundSize: '64px 64px',
+            backgroundImage: (props) => `url(${getUrl(`${props.placeholder}-${theme.palette.type}.png`)})`,
         },
-        restoreBoxButton: {
-            alignSelf: 'center',
-            width: '180px',
-            boxShadow: 'none',
-            marginBottom: theme.spacing(1),
+    }),
+)
+
+interface RestoreBoxProps extends withClasses<'root' | 'button' | 'placeholder'>, React.HTMLAttributes<HTMLDivElement> {
+    file: File | null
+    entered: boolean
+    enterText: string
+    leaveText: string
+    placeholder?: string
+    children?: React.ReactNode
+}
+
+function RestoreBox(props: RestoreBoxProps) {
+    const { entered, file, enterText, leaveText, ...restProps } = props
+    const classes = useStylesExtends(useRestoreBoxStyles(props), props)
+
+    return (
+        <div className={classes.root} {...restProps}>
+            <div className={classes.placeholder}></div>
+            <ActionButton
+                className={file ? classes.button : ''}
+                color="primary"
+                variant="text"
+                startIcon={entered || file ? null : <AddBoxOutlinedIcon />}
+                onClick={(e: React.MouseEvent<HTMLButtonElement>) => e.preventDefault()}>
+                {entered ? enterText : file ? file.name : leaveText}
+            </ActionButton>
+        </div>
+    )
+}
+//#endregion
+
+//#region restore database
+const useRestoreDatabaseStyle = makeStyles((theme) =>
+    createStyles({
+        file: {
+            display: 'none',
+        },
+        input: {
+            width: '100%',
+            padding: theme.spacing(2, 3),
+            flex: 1,
+            display: 'flex',
+            overflow: 'auto',
+            '& > textarea': {
+                height: '100% !important',
+            },
         },
         restoreTextWrapper: {
             display: 'flex',
@@ -346,19 +386,6 @@ const useRestoreDatabaseStyle = makeStyles((theme) =>
         },
     }),
 )
-
-const RestoreBox = styled('div')(({ theme }: { theme: Theme }) => ({
-    color: theme.palette.text.hint,
-    whiteSpace: 'pre-line',
-    width: '100%',
-    height: '100%',
-    display: 'flex',
-    alignItems: 'center',
-    flexDirection: 'column',
-    justifyContent: 'flex-start',
-    textAlign: 'center',
-    cursor: 'pointer',
-}))
 
 const ShowcaseBox = styled('div')(({ theme }: { theme: Theme }) => ({
     overflow: 'auto',
@@ -388,6 +415,7 @@ export function RestoreDatabase() {
     const state = useState(0)
 
     function FileUI() {
+        const { t } = useI18N()
         return (
             <div {...bound} style={{ width: '100%' }}>
                 <input
@@ -402,19 +430,14 @@ export function RestoreDatabase() {
                     }}
                 />
                 <RestoreBox
-                    className={restoreDatabaseClasses.restoreBox}
+                    file={file}
+                    entered={over}
+                    enterText={t('restore_database_dragging')}
+                    leaveText={t('restore_database_dragged')}
+                    placeholder="restore-file-placeholder"
                     data-active={over}
-                    onClick={() => ref.current && ref.current.click()}>
-                    <div className={restoreDatabaseClasses.placeholder}></div>
-                    <ActionButton
-                        className={file ? restoreDatabaseClasses.button : ''}
-                        color="primary"
-                        variant="text"
-                        startIcon={over || file ? null : <AddBoxOutlinedIcon></AddBoxOutlinedIcon>}
-                        onClick={(e: React.MouseEvent<HTMLButtonElement>) => e.preventDefault()}>
-                        {over ? t('restore_database_dragging') : file ? file.name : t('restore_database_dragged')}
-                    </ActionButton>
-                </RestoreBox>
+                    onClick={() => ref.current && ref.current.click()}
+                />
             </div>
         )
     }
@@ -425,7 +448,7 @@ export function RestoreDatabase() {
                 label: t('restore_database_file'),
                 children: (
                     <ShowcaseBox>
-                        <FileUI></FileUI>
+                        <FileUI />
                     </ShowcaseBox>
                 ),
                 p: 0,
@@ -526,16 +549,50 @@ export function RestoreDatabase() {
 //#endregion
 
 //#region advance restore advance
+const useRestoreDatabaseAdvanceStyles = makeStyles((theme) =>
+    createStyles({
+        showcase: {
+            height: 120,
+            marginBottom: 16,
+        },
+        file: {
+            display: 'none',
+        },
+        restoreBoxPlaceholder: {
+            marginBottom: 6,
+        },
+        select: {
+            flex: 1,
+        },
+        button: {
+            width: 64,
+            minWidth: 'unset',
+            padding: 0,
+            marginLeft: 16,
+        },
+    }),
+)
+
 export function RestoreDatabaseAdvance() {
     const { t } = useI18N()
     const { enqueueSnackbar, closeSnackbar } = useSnackbar()
-    const classes = useSetupFormSetyles()
     const history = useHistory()
+
+    const classes = useSetupFormSetyles()
+    const restoreDatabaseAdvanceClasses = useRestoreDatabaseAdvanceStyles()
 
     const [nickname, setNickname] = useState('')
     const [mnemonicWordsValue, setMnemonicWordsValue] = useState('')
     const [password, setPassword] = useState('')
     const [base64Value, setBase64Value] = useState('')
+
+    const ref = useRef<HTMLInputElement>(null)
+    const [file, setFile] = useState<File | null>(null)
+    const [bound, { over }] = useDropArea({
+        onFiles(files) {
+            setFile(files[0])
+        },
+    })
 
     const state = useState(0)
     const [tabState, setTabState] = state
@@ -595,6 +652,49 @@ export function RestoreDatabaseAdvance() {
         ) : null
     }
 
+    function QRUI() {
+        const { t } = useI18N()
+        return (
+            <div {...bound} style={{ width: '100%', height: 120 }}>
+                <input
+                    className={restoreDatabaseAdvanceClasses.file}
+                    type="file"
+                    accept="application/json"
+                    ref={ref}
+                    onChange={({ currentTarget }: React.ChangeEvent<HTMLInputElement>) => {
+                        if (currentTarget.files) {
+                            setFile(currentTarget.files.item(0))
+                        }
+                    }}
+                />
+                <ShowcaseBox className={restoreDatabaseAdvanceClasses.showcase}>
+                    <RestoreBox
+                        classes={{ placeholder: restoreDatabaseAdvanceClasses.restoreBoxPlaceholder }}
+                        file={file}
+                        entered={over}
+                        enterText={t('restore_database_advance_dragging')}
+                        leaveText={t('restore_database_advance_dragged')}
+                        placeholder="restore-image-placeholder"
+                        data-active={over}
+                        onClick={() => ref.current && ref.current.click()}
+                    />
+                </ShowcaseBox>
+                <Box display="flex" justifyContent="space-between">
+                    <FormControl className={restoreDatabaseAdvanceClasses.select} variant="filled">
+                        <Select value={10} variant="outlined" MenuProps={{ container: PortalShadowRoot }}>
+                            <MenuItem value={10}>Ten</MenuItem>
+                            <MenuItem value={11}>Eleven</MenuItem>
+                            <MenuItem value={12}>12</MenuItem>
+                        </Select>
+                    </FormControl>
+                    <Button className={restoreDatabaseAdvanceClasses.button} color="primary" variant="outlined">
+                        <CropFreeIcon />
+                    </Button>
+                </Box>
+            </div>
+        )
+    }
+
     const tabProps: AbstractTabProps = {
         tabs: [
             {
@@ -638,7 +738,7 @@ export function RestoreDatabaseAdvance() {
             },
             {
                 label: t('qr_code'),
-                children: <QR />,
+                children: <QRUI />,
                 p: 0,
             },
         ],
