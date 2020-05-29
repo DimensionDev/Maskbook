@@ -314,6 +314,7 @@ const usePasteIntoBioStyles = makeStyles((theme) =>
             marginBottom: 8,
         },
         showcaseBoxContent: {
+            fontSize: 14,
             wordBreak: 'break-all',
         },
         doneButton: {
