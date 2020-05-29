@@ -78,7 +78,7 @@ const createProxiedSettings = (settingsKey: string) => {
     })
 }
 
-export const currentImagePayloadStatus = createProxiedSettings<>('currentImagePayloadStatus')
+export const currentImagePayloadStatus = createProxiedSettings('currentImagePayloadStatus')
 
 export const currentSelectedIdentity = createProxiedSettings('currentSelectedIdentity')
 export type ImmersiveSetupCrossContextStatus = {
