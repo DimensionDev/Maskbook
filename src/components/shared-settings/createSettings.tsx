@@ -12,18 +12,18 @@ function createInternalSettings<T extends browser.storage.StorageValue>(
     key: string,
     initialValue: T,
     comparer: (a: T, b: T) => boolean = (a, b) => a === b,
-): ValueRef<T> & { readonly ready: boolean; readonly readyPromise: Promise<void> } {
+): ValueRef<T> & { readonly ready: boolean; readonly readyPromise: Promise<T> } {
     const settings = new ValueRef(initialValue, comparer) as ValueRef<T> & {
         ready: boolean
-        readonly readyPromise: Promise<void>
+        readonly readyPromise: Promise<T>
     }
     let ready: () => void = undefined!
     Object.assign(settings, {
         ready: false,
-        readyPromise: new Promise(
+        readyPromise: new Promise<T>(
             (resolve) =>
                 (ready = () => {
-                    resolve()
+                    resolve(settings.value)
                     settings.ready = true
                 }),
         ),
@@ -36,13 +36,13 @@ function createInternalSettings<T extends browser.storage.StorageValue>(
     MessageCenter.on('settingsUpdated', updateValueRef)
 
     async function updateStorage<T extends browser.storage.StorageValue>(newVal: T, initial: boolean = false) {
-        const stored = ((await browser.storage.local.get(null))[storage] as object) || {}
-        if (!initial || (initial && !(key in stored))) {
+        const stored = await browser.storage.local.get(instanceKey)
+        if (!initial || (initial && !(instanceKey in stored))) {
             await browser.storage.local.set({
-                [storage]: { ...stored, [key]: newVal },
+                [instanceKey]: newVal,
             })
             if (initial) {
-                updateValueRef(`settings+${key}`)
+                updateValueRef(instanceKey)
             } else {
                 MessageCenter.emit('settingsUpdated', instanceKey)
             }
@@ -51,10 +51,9 @@ function createInternalSettings<T extends browser.storage.StorageValue>(
     async function updateValueRef(receivedKey: string) {
         if (receivedKey !== instanceKey) return
         if (typeof browser === 'object') {
-            const value = await browser.storage.local.get(null)
-            const stored = value[storage]
-            if (typeof stored === 'object' && stored !== null && key in (stored as any)) {
-                settings.value = Reflect.get(stored, key)
+            const stored = await browser.storage.local.get(instanceKey)
+            if (instanceKey in stored) {
+                settings.value = Reflect.get(stored, instanceKey)
                 ready()
             }
         }

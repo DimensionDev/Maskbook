@@ -129,5 +129,6 @@ sideEffect.then(untilDocumentReady).then(() => {
         }
     }
     currentImmersiveSetupStatus[network].addListener(onStatusUpdate)
+    currentImmersiveSetupStatus[network].readyPromise.then(onStatusUpdate)
     onStatusUpdate(id)
 })
