@@ -44,6 +44,7 @@
     ]
   },
   "dependencies": {
+    "@dimensiondev/webpack-web-ext-plugin": "^0.0.2",
     "@holoflows/kit": "https://github.com/DimensionDev/holoflows-kit",
     "@material-ui/core": "4.10.0",
     "@material-ui/icons": "4.9.1",
@@ -180,7 +181,6 @@
     "webpack-extension-manifest-plugin": "^0.5.0",
     "webpack-manifest-plugin": "^2.2.0",
     "webpack-notifier": "^1.8.0",
-    "webpack-web-ext-plugin": "github:DimensionDev/webpack-web-ext-plugin",
     "yargs": "^15.3.1"
   },
   "engines": {

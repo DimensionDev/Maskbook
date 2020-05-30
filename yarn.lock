@@ -1853,6 +1853,13 @@
   dependencies:
     find-up "^4.0.0"
 
+"@dimensiondev/webpack-web-ext-plugin@^0.0.2":
+  version "0.0.2"
+  resolved "https://npm.pkg.github.com/download/@dimensiondev/webpack-web-ext-plugin/0.0.2/8a1550c25428253d535e58a5c053c520192e12a77998b3c2b870be7d306b4853#6b61b468aa2acc1613bbfd81ca303f32264f9586"
+  integrity sha512-68NWU78O9TMqW6IOAgTXqPC8TWOJ/InmNQODm1Yk9DAqQMonTVcknpvxzBo5jMF3gu5e47TANrVsyCGYgzBraw==
+  dependencies:
+    inquirer "^7.0.0"
+
 "@dsherret/to-absolute-glob@^2.0.2":
   version "2.0.2"
   resolved "https://registry.yarnpkg.com/@dsherret/to-absolute-glob/-/to-absolute-glob-2.0.2.tgz#1f6475dc8bd974cea07a2daf3864b317b1dd332c"

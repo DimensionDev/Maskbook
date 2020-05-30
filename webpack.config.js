@@ -23,7 +23,7 @@ const publicPolyfill = src('./public/polyfill')
 process.env.BROWSER = 'none'
 
 const SSRPlugin = require('./config-overrides/SSRPlugin')
-const WebExtensionHotLoadPlugin = require('webpack-web-ext-plugin')
+const WebExtensionHotLoadPlugin = require('@dimensiondev/webpack-web-ext-plugin')
 const ManifestGeneratorPlugin = require('webpack-extension-manifest-plugin')
 
 /**
