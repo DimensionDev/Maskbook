@@ -70,10 +70,10 @@ function PreviewCardLogic(props: { post: string }) {
                 hasPermission={true}
                 loading={isValidating}
                 image={image ? <img src={image} width="100%" /> : null}
-                line1={`${finalAmount ?? 'Many'} DAI`}
+                line1={finalAmount ? `${finalAmount} DAI` : ''}
                 line2="ESTIMATED"
-                line3={`${amount ?? 'Many'} DAI`}
-                line4={`${contributors ?? 'Many'} contributors`}
+                line3={amount ? `${amount} DAI` : ''}
+                line4={contributors ? `${contributors} contributors` : ''}
                 title={title ?? 'A Gitcoin grant'}
                 address={address}
                 originalURL={url ?? ''}
