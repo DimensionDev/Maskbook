@@ -32,4 +32,5 @@ for (const type of types) {
         exec('zip', ['-FS', '-r', `../Maskbook.${type}.zip`, '.'], { cwd: BUILD_PATH })
         exec('rm', ['-rfv', 'build'])
     }
+    exec('free', ['-h'])
 }
