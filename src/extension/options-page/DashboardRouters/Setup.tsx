@@ -561,8 +561,11 @@ const useRestoreDatabaseAdvanceStyles = makeStyles((theme) =>
         restoreBoxPlaceholder: {
             marginBottom: 6,
         },
-        select: {
+        formControl: {
             flex: 1,
+        },
+        menuPaper: {
+            backgroundColor: theme.palette.background.paper,
         },
         button: {
             width: 64,
@@ -680,8 +683,14 @@ export function RestoreDatabaseAdvance() {
                     />
                 </ShowcaseBox>
                 <Box display="flex" justifyContent="space-between">
-                    <FormControl className={restoreDatabaseAdvanceClasses.select} variant="filled">
-                        <Select value={10} variant="outlined" MenuProps={{ container: PortalShadowRoot }}>
+                    <FormControl className={restoreDatabaseAdvanceClasses.formControl} variant="filled">
+                        <Select
+                            value={10}
+                            variant="outlined"
+                            MenuProps={{
+                                container: PortalShadowRoot,
+                                classes: { paper: restoreDatabaseAdvanceClasses.menuPaper },
+                            }}>
                             <MenuItem value={10}>Ten</MenuItem>
                             <MenuItem value={11}>Eleven</MenuItem>
                             <MenuItem value={12}>12</MenuItem>
