@@ -53,6 +53,8 @@ import QRScanner from '../../../components/QRScanner'
 import { decodeArrayBuffer, decodeText } from '../../../utils/type-transform/String-ArrayBuffer'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { PortalShadowRoot } from '../../../utils/jss/ShadowRootPortal'
+import { useModal } from '../Dialogs/Base'
+import { QRCodeScannerDialog } from '../Dialogs/Setup'
 
 export enum SetupStep {
     CreatePersona = 'create-persona',
@@ -638,25 +640,10 @@ export function RestoreDatabaseAdvance() {
         }
     }
 
-    function QR() {
-        const shouldRenderQRComponent = tabState === 2
-
-        return shouldRenderQRComponent ? (
-            hasWKWebkitRPCHandlers ? (
-                <WKWebkitQRScanner onScan={restorePersona} onQuit={() => setTabState(0)} />
-            ) : (
-                <QRScanner
-                    onError={() => enqueueSnackbar('QRCode scan Failed')}
-                    scanning={shouldRenderQRComponent}
-                    style={{ maxHeight: 176, width: '100%', borderRadius: 4 }}
-                    onResult={restorePersona}
-                />
-            )
-        ) : null
-    }
-
     function QRUI() {
         const { t } = useI18N()
+        const [qrCodeScannerDialog, , openQRCodeScannerDialog] = useModal(QRCodeScannerDialog)
+
         return (
             <div {...bound} style={{ width: '100%', height: 120 }}>
                 <input
@@ -696,10 +683,23 @@ export function RestoreDatabaseAdvance() {
                             <MenuItem value={12}>12</MenuItem>
                         </Select>
                     </FormControl>
-                    <Button className={restoreDatabaseAdvanceClasses.button} color="primary" variant="outlined">
+                    <Button
+                        className={restoreDatabaseAdvanceClasses.button}
+                        color="primary"
+                        variant="outlined"
+                        onClick={() =>
+                            openQRCodeScannerDialog({
+                                onScan: importPersona,
+                                onError: () =>
+                                    enqueueSnackbar(t('set_up_qr_scanner_fail'), {
+                                        variant: 'error',
+                                    }),
+                            })
+                        }>
                         <CropFreeIcon />
                     </Button>
                 </Box>
+                {qrCodeScannerDialog}
             </div>
         )
     }

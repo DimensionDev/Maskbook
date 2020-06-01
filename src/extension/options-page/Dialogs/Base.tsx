@@ -12,6 +12,7 @@ import {
     Typography,
     FadeProps,
     SvgIconProps,
+    IconButtonProps,
 } from '@material-ui/core'
 import { Theme, ThemeProvider } from '@material-ui/core/styles'
 import CloseIcon from '@material-ui/icons/Close'
@@ -47,12 +48,13 @@ const useStyles = makeStyles((theme) =>
 
 export interface DashboardDialogCoreProps extends DialogProps {
     CloseIconProps?: Partial<SvgIconProps>
+    CloseButtonProps?: Partial<IconButtonProps>
 }
 
 export function DashboardDialogCore(props: DashboardDialogCoreProps) {
-    const { fullScreen, children, CloseIconProps, ...dialogProps } = props
+    const { fullScreen, children, CloseIconProps, CloseButtonProps, ...dialogProps } = props
 
-    const mobile = useMediaQuery('(max-width: 600px)')
+    const mobile = useMediaQuery('(mIax-width: 600px)')
     const classes = useStyles()
     useBlurContext(dialogProps.open)
 
@@ -68,7 +70,8 @@ export function DashboardDialogCore(props: DashboardDialogCoreProps) {
             <IconButton
                 className={classes.close}
                 onClick={(e) => dialogProps.onClose?.(e, 'backdropClick')}
-                size="small">
+                size="small"
+                {...CloseButtonProps}>
                 <CloseIcon {...CloseIconProps} />
             </IconButton>
         </Dialog>
