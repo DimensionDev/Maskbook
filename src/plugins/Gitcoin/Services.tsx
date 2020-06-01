@@ -36,7 +36,10 @@ function fetchData(url: string) {
 }
 function getURL(url: string) {
     const x = url.match(/\d+/)?.[0]
-    if (x) return new Ok(`https://gitcoin.co/api/v0.1/grants/${x}/`)
+    // https://github.com/gitcoinco/web/issues/6679
+    // https://github.com/gitcoinco/web/issues/6493#issuecomment-631218226
+    // if (x) return new Ok(`https://gitcoin.co/api/v0.1/grants/${x}/`)
+    if (x) return new Ok(`https://gitcoin.provide.maskbook.com/api/v0.1/grants/${x}/`)
     return new Err(Reason.InvalidURL)
 }
 
