@@ -102,7 +102,7 @@
     "web-ext-types": "^3.1.0",
     "web3": "^1.2.8",
     "web3-core": "^1.2.7",
-    "webcrypto-liner": "1.1.4",
+    "webcrypto-liner": "1.2.2",
     "webextension-polyfill": "^0.6.0"
   },
   "devDependencies": {
