@@ -82,6 +82,8 @@ export function DecryptPost(props: DecryptPostProps) {
                             unreachable(status.value.debug)
                     }
                 } else setDecryptingStatus(status.value)
+                if ('progress' in status.value && status.value.progress === 'intermediate_success')
+                    setDecrypted(status.value.data)
             }
         }
         run().catch((e) => setDecrypted({ error: e?.message } as FailureDecryption))
@@ -90,10 +92,9 @@ export function DecryptPost(props: DecryptPostProps) {
     }, [encryptedText, postBy.toText(), whoAmI.toText(), sharedPublic])
 
     // Report the result
-    useEffect(
-        () => void (decrypted && !('error' in decrypted) && onDecrypted(decrypted.content, decrypted.rawContent)),
-        [decrypted, onDecrypted],
-    )
+    useEffect(() => {
+        decrypted && !('error' in decrypted) && onDecrypted(decrypted.content, decrypted.rawContent)
+    }, [decrypted, onDecrypted])
 
     // Decrypting
     if (decrypted === undefined) {
