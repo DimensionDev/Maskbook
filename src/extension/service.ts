@@ -8,7 +8,6 @@ import { getCurrentNetworkWorkerService } from './background-script/WorkerServic
 import tasks from './content-script/tasks'
 import { MessageCenter } from '@holoflows/kit/es'
 import { IdentifierMap } from '../database/IdentifierMap'
-Object.assign(globalThis, { tasks })
 
 interface Services {
     Crypto: typeof import('./background-script/CryptoService')

@@ -28,11 +28,7 @@ import { exclusiveTasks } from './extension/content-script/tasks'
 // import CryptoWorker from './modules/CryptoAlgorithm/EllipticBackend/worker'
 
 if (GetContext() === 'background') {
-    const injectedScript = `{
-        const script = document.createElement('script')
-        script.src = "${browser.runtime.getURL('js/injected-script.js')}"
-        document.documentElement.appendChild(script)
-    }`
+    const injectedScript = getInjectedScript()
     const contentScripts: Array<{ code: string } | { file: string }> = []
     const contentScriptReady = fetch('generated__content__script.html')
         .then((x) => x.text())
@@ -58,7 +54,7 @@ if (GetContext() === 'background') {
                 .executeScript(arg.tabId, {
                     runAt: 'document_start',
                     frameId: arg.frameId,
-                    code: injectedScript,
+                    code: process.env.NODE_ENV === 'development' ? await getInjectedScript() : await injectedScript,
                 })
                 .catch(IgnoreError(arg))
         for (const script of contentScripts) {
@@ -97,6 +93,15 @@ if (GetContext() === 'background') {
         }
         exclusiveTasks(getWelcomePageURL({}), { important: true })
     })
+}
+async function getInjectedScript() {
+    return `{
+        const script = document.createElement('script')
+        script.innerHTML = ${await fetch('js/injected-script.js')
+            .then((x) => x.text())
+            .then(JSON.stringify)}
+        document.documentElement.appendChild(script)
+    }`
 }
 function IgnoreError(arg: unknown): (reason: Error) => void {
     return (e) => {

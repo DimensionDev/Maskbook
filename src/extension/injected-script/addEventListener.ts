@@ -4,31 +4,35 @@ export interface CustomEvents {
     input: [string]
 }
 {
-    const store: Partial<Record<keyof DocumentEventMap, Set<(event: Event) => void>>> = {}
-    function hijack(key: string) {
-        store[key as keyof DocumentEventMap] = new Set()
+    const store: Partial<Record<Events, CallbackMap>> = {}
+    const { apply } = Reflect
+    const { error } = console
+    const hijack = (key: string) => (store[key as keyof DocumentEventMap] = new Map())
+    const isHacked = (key: string): key is keyof typeof store => key in store
+    const isConnectedGetter = Object.getOwnPropertyDescriptor(Node.prototype, 'isConnected' as keyof Node)!.get!
+    const isConnected = (x: unknown) => {
+        try {
+            return isConnectedGetter.call(x)
+        } catch {
+            return false
+        }
     }
-    function isEnabled(key: string): key is keyof typeof store {
-        return key in store
-    }
-
-    function getEvent<T extends Event>(x: T, mocks: Partial<T> = {}) {
+    const getEvent = <T extends Event>(event: T, mocks: Partial<T> = {}) => {
         const mockTable = {
             target: document.activeElement,
             srcElement: document.activeElement,
-            // Since it is bubbled to the document.
+            // TODO: Since it is bubbled to the <del>document</del> React root.
             currentTarget: document,
-            // ! Why?
+            // ? Why ?
             _inherits_from_prototype: true,
             ...mocks,
         }
-        return new Proxy(x, {
+        return new Proxy(event, {
             get(target: T, key: keyof T) {
-                return (mockTable as any)[key] || target[key]
+                return mockTable[key] ?? target[key]
             },
         })
     }
-
     const hacks: { [key in keyof CustomEvents & keyof DocumentEventMap]: (...params: CustomEvents[key]) => Event } = {
         paste(textOrImage) {
             const e = new ClipboardEvent('paste', { clipboardData: new DataTransfer() })
@@ -73,29 +77,55 @@ export interface CustomEvents {
     ;(Object.keys(hacks) as (keyof DocumentEventMap)[]).concat(['keyup', 'input']).forEach(hijack)
     const invokeCustomEvent: EventListenerOrEventListenerObject = (e) => {
         const ev = e as CustomEvent<string>
-        const [eventName, param]: [keyof CustomEvents, CustomEvents[keyof CustomEvents]] = JSON.parse(ev.detail)
-
-        for (const f of store[eventName] || []) {
+        type K = keyof CustomEvents
+        const [eventName, param]: [K, CustomEvents[K]] = JSON.parse(ev.detail)
+        // TODO: handle target
+        for (const [f, target] of store[eventName] || []) {
+            // Skip for Non-Node target
+            if (!isConnected(target)) continue
             try {
-                const hack = hacks[eventName]
-                if (hack) f((hack as any)(...param))
+                const hack: any = hacks[eventName]
+                if (hack) f(hack(...param))
                 else f(param as any)
             } catch (e) {
-                console.error(e)
+                error(e)
             }
         }
     }
     document.addEventListener(CustomEventId, invokeCustomEvent)
-    document.addEventListener = new Proxy(document.addEventListener, {
-        apply(target, thisRef, [event, callback, ...args]) {
-            if (isEnabled(event)) store[event]!.add(callback)
-            return Reflect.apply(target, thisRef, [event, callback, ...args])
+    EventTarget.prototype.addEventListener = new Proxy(EventTarget.prototype.addEventListener, {
+        apply(target, thisRef, args) {
+            const [[event, f], once] = normalizeArgs(args)
+            if (isHacked(event) && f) {
+                if (once) store[event]?.set((e) => (store[event]?.delete(f), f(e)), thisRef)
+                else store[event]?.set(f, thisRef)
+            }
+            return apply(target, thisRef, args)
         },
     })
-    document.removeEventListener = new Proxy(document.removeEventListener, {
-        apply(target, thisRef, [event, callback, ...args]) {
-            if (isEnabled(event)) store[event]!.delete(callback)
-            return Reflect.apply(target, thisRef, [event, callback, ...args])
+    EventTarget.prototype.removeEventListener = new Proxy(EventTarget.prototype.removeEventListener, {
+        apply(target, thisRef, args: Parameters<EventTarget['removeEventListener']>) {
+            const [[event, f]] = normalizeArgs(args)
+            if (isHacked(event) && f) store[event]?.delete(f)
+            return apply(target, thisRef, args)
         },
     })
+
+    const normalizeArgs = (args: Parameters<EventTarget['addEventListener']>) => {
+        const [type, listener, options] = args
+        let f: EventListener | undefined
+        if (typeof listener === 'function') f = listener
+        else if (typeof listener === 'object') f = listener?.handleEvent.bind(listener)
+
+        // let capture: boolean
+        // if (typeof options === 'boolean') capture = options
+        // else if (typeof options === 'object') capture = options?.capture ?? false
+
+        let once = false
+        if (typeof options === 'object') once = options?.once ?? false
+        return [[type, f, options], once] as const
+    }
 }
+type Events = keyof DocumentEventMap
+type Callback = (event: Event) => void
+type CallbackMap = Map<Callback, EventTarget>
