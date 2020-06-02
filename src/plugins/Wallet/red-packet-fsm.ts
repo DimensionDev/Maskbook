@@ -107,11 +107,11 @@ export async function createRedPacket(packet: createRedPacketInit): Promise<{ pa
     }
     const { create_transaction_hash, create_nonce } = await getProvider().create(
         packet.sender_address,
-        Web3Utils.sha3(password),
+        Web3Utils.sha3(password)!,
         packet.shares.toNumber(),
         packet.is_random,
         packet.duration,
-        Web3Utils.sha3(Math.random().toString()),
+        Web3Utils.sha3(Math.random().toString())!,
         packet.send_message,
         packet.sender_name,
         packet.token_type,
@@ -230,7 +230,7 @@ export async function claimRedPacket(
     }
 
     const { claim_transaction_hash } = await getProvider()
-        .claim(id, passwords, claimWithWallet, Web3Utils.sha3(claimWithWallet))
+        .claim(id, passwords, claimWithWallet, Web3Utils.sha3(claimWithWallet)!)
         .catch(async (e) => {
             console.log(e.message)
             if ((e.message as string).includes('insufficient funds for gas')) {
