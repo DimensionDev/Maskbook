@@ -30,6 +30,7 @@ import { SetupStep } from '../DashboardRouters/Setup'
 import { Identifier, ECKeyIdentifier } from '../../../database/type'
 import { useHistory } from 'react-router-dom'
 import { sleep } from '../../../utils/utils'
+import { RestoreFromQRCodeBox } from '../DashboardComponents/RestoreFromQRCodeImageBox'
 
 export function DashboardPersonaCreateDialog(props: WrappedDialogProps) {
     const { t } = useI18N()
@@ -90,6 +91,7 @@ export function DashboardPersonaImportDialog(props: WrappedDialogProps) {
     const [mnemonicWordsValue, setMnemonicWordsValue] = useState('')
     const [password, setPassword] = useState('')
     const [base64Value, setBase64Value] = useState('')
+    const [scannedValue, setScannedValue] = useState('')
 
     const state = useState(0)
     const [tabState, setTabState] = state
@@ -114,21 +116,15 @@ export function DashboardPersonaImportDialog(props: WrappedDialogProps) {
             return
         }
     }
-    const importPersona = async (str?: string) => {
-        const failToRestore = () => enqueueSnackbar('Restore failed', { variant: 'error' })
+    const importPersona = (persona: null | Persona) => {
+        const failToRestore = () => enqueueSnackbar(t('set_up_advance_restore_fail'), { variant: 'error' })
         try {
-            const persona = await restorePersona(str)
             if (persona) {
-                props.onClose()
-                // ensure blur mask closed
-                await sleep(300)
-                if (!persona.linkedProfiles.size) {
-                    history.push(
-                        `${DashboardRoute.Setup}/${SetupStep.ConnectNetwork}?identifier=${encodeURIComponent(
-                            persona.identifier.toText(),
-                        )}`,
-                    )
-                }
+                history.push(
+                    `${DashboardRoute.Setup}/${SetupStep.ConnectNetwork}?identifier=${encodeURIComponent(
+                        persona.identifier.toText(),
+                    )}`,
+                )
             } else {
                 failToRestore()
             }
@@ -137,22 +133,6 @@ export function DashboardPersonaImportDialog(props: WrappedDialogProps) {
         }
     }
 
-    function QR() {
-        const shouldRenderQRComponent = tabState === 2
-
-        return shouldRenderQRComponent ? (
-            hasWKWebkitRPCHandlers ? (
-                <WKWebkitQRScanner onScan={restorePersona} onQuit={() => setTabState(0)} />
-            ) : (
-                <QRScanner
-                    onError={() => enqueueSnackbar('QRCode scan Failed')}
-                    scanning={shouldRenderQRComponent}
-                    style={{ maxHeight: 236, width: '100%', borderRadius: 4 }}
-                    onResult={restorePersona}
-                />
-            )
-        ) : null
-    }
     const tabProps: AbstractTabProps = {
         tabs: [
             {
@@ -196,7 +176,7 @@ export function DashboardPersonaImportDialog(props: WrappedDialogProps) {
             },
             {
                 label: t('qr_code'),
-                children: <QR />,
+                children: <RestoreFromQRCodeBox onScan={setScannedValue} />,
                 p: 0,
             },
         ],
@@ -213,13 +193,28 @@ export function DashboardPersonaImportDialog(props: WrappedDialogProps) {
                 content={<AbstractTab {...tabProps}></AbstractTab>}
                 footer={
                     <DebounceButton
-                        hidden={tabState === 2}
                         variant="contained"
                         color="primary"
-                        onClick={() => importPersona()}
                         disabled={
-                            !(tabState === 0 && nickname && mnemonicWordsValue) && !(tabState === 1 && base64Value)
-                        }>
+                            !(tabState === 0 && nickname && mnemonicWordsValue) &&
+                            !(tabState === 1 && base64Value) &&
+                            !(tabState === 2 && scannedValue)
+                        }
+                        onClick={async () => {
+                            try {
+                                const persona = await (tabState === 0
+                                    ? Services.Persona.restoreFromMnemonicWords(mnemonicWordsValue, nickname, password)
+                                    : tabState === 1
+                                    ? Services.Persona.restoreFromBase64(base64Value)
+                                    : Services.Persona.restoreFromBackup(scannedValue))
+
+                                importPersona(persona)
+                            } catch (e) {
+                                enqueueSnackbar(t('set_up_restore_fail'), {
+                                    variant: 'error',
+                                })
+                            }
+                        }}>
                         {t('import')}
                     </DebounceButton>
                 }></DashboardDialogWrapper>
