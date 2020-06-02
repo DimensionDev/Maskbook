@@ -24,15 +24,15 @@ import {
 import { sleep } from '@holoflows/kit/es/util/sleep'
 import type { EC_Public_JsonWebKey, AESJsonWebKey } from '../../../modules/CryptoAlgorithm/interfaces/utils'
 
-type Progress = {
-    progress: 'finding_person_public_key' | 'finding_post_key' | 'init'
-}
+type Progress =
+    | { progress: 'finding_person_public_key' | 'finding_post_key' | 'init' }
+    | { progress: 'intermediate_success'; data: Success }
 type DebugInfo = {
     debug: 'debug_finding_hash'
     hash: [string, string]
 }
 type Success = {
-    signatureVerifyResult: boolean
+    signatureVerifyResult: boolean | 'verifying'
     content: TypedMessage
     rawContent: string
     through: ('author_key_not_found' | 'post_key_cached' | 'normal_decrypted')[]
@@ -49,7 +49,7 @@ function makeSuccessResult(
     cryptoProvider: typeof cryptoProviderTable[keyof typeof cryptoProviderTable],
     rawContent: string,
     through: Success['through'],
-    signatureVerifyResult: boolean = true,
+    signatureVerifyResult: Success['signatureVerifyResult'] = true,
 ): Success {
     return {
         signatureVerifyResult,
@@ -114,6 +114,12 @@ export async function* decryptFromMessageWithProgress(
 
         // ? First, read the cache.
         const [cachedPostResult, setPostCache] = await decryptFromCache(data, author)
+        if (cachedPostResult) {
+            yield {
+                progress: 'intermediate_success',
+                data: makeSuccessResult(cryptoProvider, cachedPostResult, ['post_key_cached'], 'verifying'),
+            }
+        }
 
         // ? If the author's key is in the payload, store it.
         if (data.version === -38 && data.authorPublicKey) {
