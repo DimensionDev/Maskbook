@@ -1,5 +1,5 @@
-import React, { useState, useRef, useCallback } from 'react'
-import { useDropArea } from 'react-use'
+import React, { useState, useRef, useCallback, useEffect } from 'react'
+import { useDropArea, useMediaDevices } from 'react-use'
 import { makeStyles, createStyles, Box, FormControl, Select, MenuItem, Button } from '@material-ui/core'
 import CropFreeIcon from '@material-ui/icons/CropFree'
 import { useI18N } from '../../../utils/i18n-next-ui'
@@ -9,6 +9,8 @@ import { RestoreBox } from './RestoreBox'
 import { QRCodeImageScanner } from './QRCodeImageScanner'
 import { PortalShadowRoot } from '../../../utils/jss/ShadowRootPortal'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
+import { useVideoDevices } from '../../../utils/hooks/useVideoDevices'
+import { first } from 'lodash-es'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -82,6 +84,13 @@ export function RestoreFromQRCodeBox(props: RestoreFromQRCodeBoxProps) {
         [scanImage],
     )
 
+    const devices = useVideoDevices()
+    const [selectedDeviceId, setSelectedDeviceId] = useState('')
+
+    useEffect(() => {
+        if (!selectedDeviceId) setSelectedDeviceId(devices[0]?.deviceId)
+    }, [devices, selectedDeviceId])
+
     return (
         <div className={classes.root} {...bound}>
             <input
@@ -109,19 +118,25 @@ export function RestoreFromQRCodeBox(props: RestoreFromQRCodeBoxProps) {
             <Box display="flex" justifyContent="space-between">
                 <FormControl className={classes.formControl} variant="filled">
                     <Select
-                        value={10}
+                        value={selectedDeviceId}
                         variant="outlined"
                         MenuProps={{
                             container: PortalShadowRoot,
                             classes: { paper: classes.menuPaper },
-                        }}>
-                        <MenuItem value={10}>Default Camera</MenuItem>
+                        }}
+                        onChange={(e) => setSelectedDeviceId(e.target.value as string)}>
+                        {devices.map(({ deviceId, label }) => (
+                            <MenuItem key={deviceId} value={deviceId}>
+                                {label}
+                            </MenuItem>
+                        ))}
                     </Select>
                 </FormControl>
                 <Button
                     className={classes.button}
                     color="primary"
                     variant="outlined"
+                    disabled={!selectedDeviceId}
                     onClick={() =>
                         openQRCodeVideoScannerDialog({
                             onScan: scanVideo,
