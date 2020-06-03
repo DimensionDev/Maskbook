@@ -21,6 +21,7 @@ function buildTypes(name: string): string[] {
 const branch = git.branchName()
 const types = buildTypes(branch.toLowerCase())
 console.log(`Branch: ${branch}`)
+exec('Export', ['NODE_OPTIONS=--max_old_space_size=4096'])  // Increate mem
 for (const type of types) {
     console.log('#', 'Building for target:', type)
     if (type === 'chromium' && types.includes('base')) {
