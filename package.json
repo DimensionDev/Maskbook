@@ -5,7 +5,7 @@
   "license": "AGPL-3.0-or-later",
   "scripts": {
     "build": "webpack --mode production",
-    "build-ci": "ts-node scripts/ci-build.ts",
+    "build-ci": "node --max_old_space_size=4096 -r ts-node/register/transpile-only scripts/ci-build.ts",
     "build-storybook": "build-storybook -s public --quiet",
     "build:base": "webpack --mode production",
     "build:chromium": "webpack --mode production --chromium",
