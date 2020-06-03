@@ -17,8 +17,7 @@ import {
 import classNames from 'classnames'
 import DashboardRouterContainer from './Container'
 import { useParams, useRouteMatch, Switch, Route, Redirect, Link, useHistory } from 'react-router-dom'
-import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline'
-import RadioButtonUncheckedIcon from '@material-ui/icons/RadioButtonUnchecked'
+
 import ActionButton from '../DashboardComponents/ActionButton'
 import { merge, cloneDeep } from 'lodash-es'
 import { v4 as uuid } from 'uuid'
@@ -33,7 +32,6 @@ import { UpgradeBackupJSONFile } from '../../../utils/type-transform/BackupForma
 import { decompressBackupFile } from '../../../utils/type-transform/BackupFileShortRepresentation'
 import { extraPermissions } from '../../../utils/permissions'
 import AbstractTab, { AbstractTabProps } from '../DashboardComponents/AbstractTab'
-import { unreachable } from '../../../utils/utils'
 import { green } from '@material-ui/core/colors'
 import { DashboardRoute } from '../Route'
 import { useSnackbar } from 'notistack'
@@ -41,6 +39,7 @@ import { useStylesExtends } from '../../../components/custom-ui-helper'
 import type { Persona } from '../../../database'
 import { RestoreFromQRCodeBox } from '../DashboardComponents/RestoreFromQRCodeImageBox'
 import { RestoreFromBackupBox } from '../DashboardComponents/RestoreFromBackupBox'
+import { DatabaseRecordType, DatabasePreviewCard } from '../DashboardComponents/DatabasePreviewCard'
 
 export enum SetupStep {
     CreatePersona = 'create-persona',
@@ -562,104 +561,6 @@ export function RestoreDatabaseAdvance() {
 //#endregion
 
 //#region restore database confirmation
-const useDatabasePreviewCardStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        table: {
-            width: 432,
-            borderRadius: 4,
-            borderCollapse: 'unset',
-            border: `solid 1px ${theme.palette.divider}`,
-            padding: 32,
-            marginLeft: -32,
-            marginBottom: 38,
-        },
-        cell: {
-            border: 'none',
-            padding: '9px 0 !important',
-        },
-        label: {
-            verticalAlign: 'middle',
-            fontSize: 20,
-            fontWeight: 500,
-            lineHeight: '30px',
-        },
-        icon: {
-            color: theme.palette.divider,
-            width: 20,
-            height: 20,
-            verticalAlign: 'middle',
-            marginLeft: 18,
-        },
-        iconChecked: {
-            color: theme.palette.success.main,
-        },
-    }),
-)
-
-enum DatabaseRecordType {
-    Persona,
-    Profile,
-    Post,
-    Contact,
-}
-
-interface DatabasePreviewCardProps {
-    records: {
-        type: DatabaseRecordType
-        length: number
-        checked: boolean
-    }[]
-}
-
-function DatabasePreviewCard(props: DatabasePreviewCardProps) {
-    const { t } = useI18N()
-    const classes = useDatabasePreviewCardStyles()
-
-    const resolveRecordName = (type: DatabaseRecordType) => {
-        switch (type) {
-            case DatabaseRecordType.Persona:
-                return t('personas')
-            case DatabaseRecordType.Profile:
-                return t('profiles')
-            case DatabaseRecordType.Post:
-                return t('posts')
-            case DatabaseRecordType.Contact:
-                return t('contacts')
-            default:
-                return unreachable(type)
-        }
-    }
-    const records = props.records.map((record) => ({
-        ...record,
-        name: resolveRecordName(record.type),
-    }))
-    return (
-        <Table className={classes.table} size="small">
-            <TableBody>
-                {records.map((record) => (
-                    <TableRow key={record.name}>
-                        <TableCell className={classes.cell} component="th" align="left">
-                            <Typography className={classes.label} variant="body2" component="span">
-                                {record.name}
-                            </Typography>
-                        </TableCell>
-                        <TableCell className={classes.cell} align="right">
-                            <Typography className={classes.label} variant="body2" component="span">
-                                {record.length}
-                            </Typography>
-                            {record.checked ? (
-                                <CheckCircleOutlineIcon className={classNames(classes.icon, classes.iconChecked)} />
-                            ) : (
-                                <RadioButtonUncheckedIcon className={classes.icon} />
-                            )}
-                        </TableCell>
-                    </TableRow>
-                ))}
-            </TableBody>
-        </Table>
-    )
-}
-
 export function RestoreDatabaseConfirmation() {
     const { t } = useI18N()
     const classes = useSetupFormSetyles()
@@ -713,7 +614,7 @@ export function RestoreDatabaseConfirmation() {
                           })
                     : t('set_up_restore_confirmation_hint')
             }
-            content={<DatabasePreviewCard records={records}></DatabasePreviewCard>}
+            content={<DatabasePreviewCard records={records} />}
             actions={
                 imported === true ? (
                     <ActionButton
