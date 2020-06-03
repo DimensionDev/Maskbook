@@ -15,7 +15,7 @@ export default function QRScanner(
     const { scanning, onResult, onError, ...videoProps } = props
     const video = useRef<HTMLVideoElement | null>(null)
 
-    useQRCodeVideoScan(video, scanning, (x) => onResult(x), onError)
+    useQRCodeVideoScan(video, scanning, undefined, (x) => onResult(x), onError)
     return (
         <div style={{ position: 'relative' }}>
             <video ref={video} aria-label="QR Code scanner" {...videoProps} />

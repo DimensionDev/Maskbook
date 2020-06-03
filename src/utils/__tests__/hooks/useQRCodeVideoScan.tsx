@@ -69,7 +69,7 @@ test('scan succeeded', async () => {
     window.BarcodeDetector = BarcodeDetector
 
     const onResultSpy = jasmine.createSpy()
-    const hook = renderHook(() => useQRCodeVideoScan(videoRef, true, onResultSpy, () => {}))
+    const hook = renderHook(() => useQRCodeVideoScan(videoRef, true, undefined, onResultSpy, () => {}))
 
     await hook.waitForNextUpdate()
     expect(onResultSpy.calls.count()).toBe(0)
@@ -87,7 +87,7 @@ test('scan failed', async () => {
     window.BarcodeDetector = BarcodeDetector
 
     const onErrorSpy = jasmine.createSpy()
-    const hook = renderHook(() => useQRCodeVideoScan(videoRef, true, () => {}, onErrorSpy))
+    const hook = renderHook(() => useQRCodeVideoScan(videoRef, true, undefined, () => {}, onErrorSpy))
 
     await hook.waitForNextUpdate()
     expect(onErrorSpy.calls.count()).toBe(0)

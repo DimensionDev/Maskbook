@@ -45,13 +45,14 @@ const useStyles = makeStyles((theme) =>
 )
 
 interface QRCodeVideoScannerDialogProps {
-    onScan: (val: string) => void
-    onError: () => void
+    deviceId?: string
+    onScan?: (val: string) => void
+    onError?: () => void
 }
 
 export function QRCodeVideoScannerDialog(props: WrappedDialogProps) {
     const { open, onClose } = props
-    const { onScan, onError } = props.ComponentProps! as QRCodeVideoScannerDialogProps
+    const { deviceId, onScan, onError } = props.ComponentProps! as QRCodeVideoScannerDialogProps
 
     const { t } = useI18N()
     const classes = useStyles()
@@ -69,8 +70,9 @@ export function QRCodeVideoScannerDialog(props: WrappedDialogProps) {
                             onClose()
                             // ensure blur mask closed
                             await sleep(300)
-                            onScan(data)
+                            onScan?.(data)
                         }}
+                        deviceId={deviceId}
                         onError={onError}
                         onQuit={onClose}
                     />

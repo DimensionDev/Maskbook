@@ -38,12 +38,12 @@ export function QRCode(props: {
     return image ? <img src={image} {...props.canvasProps} /> : <canvas {...props.canvasProps} ref={ref} />
 }
 
-export function WKWebkitQRScanner(props: { onScan(val: string): void; onQuit(): void }) {
+export function WKWebkitQRScanner(props: { onScan?: (val: string) => void; onQuit?: () => void }) {
     useAsync(async () => {
         try {
-            props.onScan(await iOSHost.scanQRCode())
+            props.onScan?.(await iOSHost.scanQRCode())
         } catch (e) {
-            props.onQuit()
+            props.onQuit?.()
         }
     })
     return null

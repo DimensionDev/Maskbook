@@ -5,14 +5,15 @@ import { useQRCodeVideoScan } from '../../../utils/hooks/useQRCodeVideoScan'
 
 export interface QRCodeVideoScannerProps {
     scanning: boolean
-    onScan: (value: string) => void
-    onError: () => void
-    onQuit: () => void
+    deviceId?: string
+    onScan?: (value: string) => void
+    onError?: () => void
+    onQuit?: () => void
 }
 
-export function QRCodeVideoScanner({ scanning, onScan, onError, onQuit }: QRCodeVideoScannerProps) {
+export function QRCodeVideoScanner({ scanning, deviceId, onScan, onError, onQuit }: QRCodeVideoScannerProps) {
     const videoRef = useRef<HTMLVideoElement | null>(null)
-    useQRCodeVideoScan(videoRef, scanning, onScan, onError)
+    useQRCodeVideoScan(videoRef, scanning, deviceId, onScan, onError)
 
     return hasWKWebkitRPCHandlers ? (
         <WKWebkitQRScanner onScan={onScan} onQuit={onQuit} />

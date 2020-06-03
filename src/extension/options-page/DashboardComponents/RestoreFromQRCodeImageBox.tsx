@@ -139,6 +139,7 @@ export function RestoreFromQRCodeBox(props: RestoreFromQRCodeBoxProps) {
                     disabled={!selectedDeviceId}
                     onClick={() =>
                         openQRCodeVideoScannerDialog({
+                            deviceId: selectedDeviceId,
                             onScan: scanVideo,
                             onError,
                         })
