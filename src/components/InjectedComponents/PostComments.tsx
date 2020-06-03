@@ -8,6 +8,7 @@ import type { Payload } from '../../utils/type-transform/Payload'
 import type { ChipProps } from '@material-ui/core/Chip'
 import { useStylesExtends } from '../custom-ui-helper'
 import { useAsync } from 'react-use'
+import type { PostInfo } from '../../social-network/ui'
 
 const useStyle = makeStyles({
     root: {
@@ -29,7 +30,7 @@ export function PostCommentDecrypted(props: PostCommentDecryptedProps) {
 }
 export interface PostCommentProps {
     decryptedPostContentRaw: ValueRef<string>
-    postPayload: ValueRef<Payload | null>
+    postPayload: PostInfo['postPayload']
     comment: ValueRef<string>
     needZip(): void
     successComponentProps?: PostCommentDecryptedProps
@@ -41,7 +42,7 @@ export function PostComment(props: PostCommentProps) {
     const decryptedPostContent = useValueRef(props.decryptedPostContentRaw)
     const comment = useValueRef(props.comment)
     const postPayload = useValueRef(props.postPayload)
-    const postIV = postPayload ? postPayload.iv : ''
+    const postIV = postPayload.ok ? postPayload.val.iv : ''
 
     const dec = useAsync(async () => {
         if (!postIV || !decryptedPostContent) throw new Error()

@@ -86,8 +86,9 @@ export async function encryptTo(
     })
 
     const postAESKeyToken = encodeArrayBuffer(iv)
-    OthersAESKeyEncryptedMap.set(postAESKeyToken, [getNetworkWorker(whoAmI).gunNetworkHint, othersAESKeyEncrypted])
-    return [constructAlpha38(payload, getNetworkWorker(whoAmI.network).payloadEncoder), postAESKeyToken]
+    const worker = getNetworkWorker(whoAmI).unwrap()
+    OthersAESKeyEncryptedMap.set(postAESKeyToken, [worker.gunNetworkHint, othersAESKeyEncrypted])
+    return [constructAlpha38(payload, worker.payloadEncoder), postAESKeyToken]
 }
 
 /**

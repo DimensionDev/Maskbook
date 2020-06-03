@@ -12,7 +12,7 @@ export async function debugShowAllPossibleHashForPost(post: PostIVIdentifier, pa
                 async (x) =>
                     [
                         x.identifier.toText(),
-                        (await hashPostSalt(post.postIV, getNetworkWorker(post).gunNetworkHint)) +
+                        (await hashPostSalt(post.postIV, getNetworkWorker(post).unwrap().gunNetworkHint)) +
                             '-' +
                             (await (payloadVersion <= -39 ? hashCryptoKeyUnstable : hashCryptoKey)(
                                 (await queryPublicKey(x.identifier))!,

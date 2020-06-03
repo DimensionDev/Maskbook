@@ -3,8 +3,9 @@ import { ProfileIdentifier, ECKeyIdentifier } from '../../../database/type'
 import { getNetworkWorker } from '../../../social-network/worker'
 import { createProfileWithPersona, queryPersonaRecord } from '../../../database'
 
-export async function verifyOthersProve(bio: string, others: ProfileIdentifier): Promise<boolean> {
-    const compressedX = getNetworkWorker(others.network).publicKeyDecoder(bio)
+export async function verifyOthersProve(bio: string | { raw: string }, others: ProfileIdentifier): Promise<boolean> {
+    const compressedX =
+        typeof bio === 'string' ? getNetworkWorker(others.network).unwrap().publicKeyDecoder(bio) : [bio.raw]
     if (!compressedX) return false
     const publicKey = compressedX
         .map((x) => {

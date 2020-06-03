@@ -81,7 +81,7 @@ export async function createBackupFile(
 
 export async function openWelcomePage(id?: SocialNetworkUI['lastRecognizedIdentity']['value']) {
     if (id) {
-        if (!getCurrentNetworkWorker(id.identifier).isValidUsername(id.identifier.userId))
+        if (!getCurrentNetworkWorker(id.identifier).unwrap().isValidUsername(id.identifier.userId))
             throw new TypeError(i18n.t('service_username_invalid'))
     }
     return exclusiveTasks(getWelcomePageURL(id))

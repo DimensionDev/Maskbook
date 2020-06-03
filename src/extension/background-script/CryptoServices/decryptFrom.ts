@@ -95,15 +95,12 @@ export async function* decryptFromMessageWithProgress(
     publicShared: boolean,
 ): ReturnOfDecryptFromMessageWithProgress {
     yield { progress: 'init' }
-    // If any of parameters is changed, we will not handle it.
-    let _data: Payload
-    try {
-        const decoder = getNetworkWorker(author.network).payloadDecoder
-        _data = deconstructPayload(encrypted, decoder, true)
-    } catch (e) {
-        return { error: e.message }
-    }
-    const data = _data
+
+    const authorNetworkWorker = getNetworkWorker(author.network)
+    if (authorNetworkWorker.err) return { error: authorNetworkWorker.val.message }
+    const decodeResult = deconstructPayload(encrypted, authorNetworkWorker.val.payloadDecoder)
+    if (decodeResult.err) return { error: decodeResult.val.message }
+    const data = decodeResult.val
     const { version } = data
 
     if (version === -40 || version === -39 || version === -38) {
@@ -123,10 +120,7 @@ export async function* decryptFromMessageWithProgress(
 
         // ? If the author's key is in the payload, store it.
         if (data.version === -38 && data.authorPublicKey) {
-            await verifyOthersProve(
-                getNetworkWorker(author.network).publicKeyEncoder(data.authorPublicKey),
-                author,
-            ).catch(console.error)
+            await verifyOthersProve({ raw: data.authorPublicKey }, author).catch(console.error)
         }
         // ? Find author's public key.
         let byPerson!: PersonaRecord
@@ -160,7 +154,7 @@ export async function* decryptFromMessageWithProgress(
                     version,
                     iv,
                     minePublic,
-                    getNetworkWorker(whoAmI).gunNetworkHint,
+                    getNetworkWorker(whoAmI).unwrap().gunNetworkHint,
                 )
                 yield { debug: 'debug_finding_hash', hash: [postHash, keyHash] }
             }
@@ -217,8 +211,7 @@ export async function* decryptFromMessageWithProgress(
                 version,
                 iv,
                 minePublic,
-
-                getNetworkWorker(author).gunNetworkHint,
+                authorNetworkWorker.val.gunNetworkHint,
             )
             yield { debug: 'debug_finding_hash', hash: [postHash, keyHash] }
             aesKeyEncrypted.push(...keys)
@@ -247,7 +240,7 @@ export async function* decryptFromMessageWithProgress(
                 version,
                 iv,
                 minePublic,
-                getNetworkWorker(author).gunNetworkHint,
+                authorNetworkWorker.val.gunNetworkHint,
                 async (key) => {
                     console.log('New key received, trying', key)
                     try {

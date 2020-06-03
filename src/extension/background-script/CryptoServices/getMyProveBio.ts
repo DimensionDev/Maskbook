@@ -13,8 +13,8 @@ export async function getMyProveBio(
     const compressed = compressSecp256k1Key(myIdentity, 'public')
     // FIXME: wait for #191
     return whoAmI instanceof ProfileIdentifier
-        ? getNetworkWorker(whoAmI.network).publicKeyEncoder(compressed)
+        ? getNetworkWorker(whoAmI.network).unwrap().publicKeyEncoder(compressed)
         : networkHint
-        ? getNetworkWorker(networkHint).publicKeyEncoder(compressed)
+        ? getNetworkWorker(networkHint).unwrap().publicKeyEncoder(compressed)
         : compressed
 }

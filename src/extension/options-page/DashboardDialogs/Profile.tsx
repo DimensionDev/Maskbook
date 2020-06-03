@@ -135,13 +135,14 @@ export function ProfileConnectDialog(props: ProfileConnectDialogProps) {
     }
 
     const navToProvider = () => {
-        if (provePost) getNetworkWorker(identifier).autoVerifyBio?.(identifier, provePost)
+        if (provePost) getNetworkWorker(identifier).unwrap().autoVerifyBio?.(identifier, provePost)
     }
 
     const testIfSet = async () => {
         if (!provePost) return
         setState('loading')
         const profile = await getNetworkWorker(identifier)
+            .unwrap()
             .fetchProfile(identifier)
             .then((p) => p.bioContent)
             .catch((e) => {

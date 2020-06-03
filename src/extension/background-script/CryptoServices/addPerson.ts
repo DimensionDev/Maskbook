@@ -8,7 +8,7 @@ import type { PersonaRecord } from '../../../database/Persona/Persona.db'
 import { i18n } from '../../../utils/i18n-next'
 
 async function getUserPublicKeyFromBio(user: ProfileIdentifier) {
-    const profile = await getCurrentNetworkWorker(user).fetchProfile(user)
+    const profile = await getCurrentNetworkWorker(user).unwrap().fetchProfile(user)
     if (!(await verifyOthersProve(profile.bioContent, user))) {
         throw new Error('Not in bio!')
     }
@@ -20,7 +20,7 @@ async function getUserPublicKeyFromProvePost(user: ProfileIdentifier) {
         throw new Error('Not in gun!')
     }
     const postId = new PostIdentifier(user, proverPostID)
-    const post = await getCurrentNetworkWorker(postId).fetchPostContent(postId)
+    const post = await getCurrentNetworkWorker(postId).unwrap().fetchPostContent(postId)
     if ((await verifyOthersProve(post, user)) === false) throw new Error('Not in prove post!')
 }
 async function getUserPublicKeyFromNetwork(user: ProfileIdentifier) {
