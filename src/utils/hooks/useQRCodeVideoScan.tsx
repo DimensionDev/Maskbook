@@ -15,8 +15,9 @@ export async function getBackVideoDeviceId() {
 export function useQRCodeVideoScan(
     video: React.MutableRefObject<HTMLVideoElement | null>,
     isScanning: boolean,
-    onResult: (data: string) => void,
-    onError: () => void,
+    deviceId?: string,
+    onResult?: (data: string) => void,
+    onError?: () => void,
 ) {
     // TODO!: ? not work See https://github.com/DimensionDev/Maskbook/issues/810
     // ? Get video stream
@@ -36,7 +37,7 @@ export function useQRCodeVideoScan(
                 try {
                     let media = mediaStream
                     if (!media) {
-                        const device = await getBackVideoDeviceId()
+                        const device = deviceId ?? (await getBackVideoDeviceId())
                         media = await navigator.mediaDevices.getUserMedia({
                             audio: false,
                             video: device === null ? { facingMode: 'environment' } : { deviceId: device },
@@ -57,7 +58,7 @@ export function useQRCodeVideoScan(
             return () => {
                 stop()
             }
-        }, [isScanning, mediaStream, permission, video])
+        }, [deviceId, isScanning, mediaStream, permission, video])
     }
     // ? Do scan
     {
@@ -68,14 +69,14 @@ export function useQRCodeVideoScan(
             if (errorTimes.current >= 10)
                 if (errorTimes.current === 10) {
                     errorTimes.current += 1
-                    return onError()
+                    return onError?.()
                 } else return
             if (lastScanning.current) return
             if (!video.current || !isScanning) return
             lastScanning.current = true
             try {
                 const [result] = await scanner.current.detect(video.current)
-                if (result) onResult(result.rawValue)
+                if (result) onResult?.(result.rawValue)
             } catch (e) {
                 errorTimes.current += 1
             } finally {
