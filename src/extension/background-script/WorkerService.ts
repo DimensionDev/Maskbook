@@ -20,7 +20,7 @@ export function getCurrentNetworkWorkerService(network: string | Identifier) {
     if (GetContext() === 'background') {
         throw new Error('This function is not for this env')
     }
-    const worker = getCurrentNetworkWorker(network)
+    const worker = getCurrentNetworkWorker(network).unwrap()
     return getServiceFromNetworkWorker(worker)
 }
 

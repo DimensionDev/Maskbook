@@ -40,8 +40,8 @@ export function PostInspector(props: PostInspectorProps) {
     }
 
     const { value: sharedListOfPost } = useAsync(async () => {
-        if (!whoAmI || !whoAmI.identifier.equals(postBy) || !type.encryptedPost) return []
-        const { iv, version } = type.encryptedPost
+        if (!whoAmI || !whoAmI.identifier.equals(postBy) || !type.encryptedPost.ok) return []
+        const { iv, version } = type.encryptedPost.val
         return Services.Crypto.getSharedListOfPost(version, iv, postBy)
     }, [post, postBy, whoAmI])
     useEffect(() => setAlreadySelectedPreviously(sharedListOfPost ?? []), [sharedListOfPost])
@@ -63,13 +63,11 @@ export function PostInspector(props: PostInspectorProps) {
         />
     ) : null
 
-    if (type.encryptedPost) {
+    if (type.encryptedPost.ok) {
         if (!isDebugging) props.needZip()
-        const { iv, version } = type.encryptedPost
-        const ownersAESKeyEncrypted =
-            type.encryptedPost.version === -38
-                ? type.encryptedPost.AESKeyEncrypted
-                : type.encryptedPost.ownersAESKeyEncrypted
+        const { val } = type.encryptedPost
+        const { iv, version } = val
+        const ownersAESKeyEncrypted = val.version === -38 ? val.AESKeyEncrypted : val.ownersAESKeyEncrypted
         const DecryptPostX = props.DecryptPostComponent || DecryptPost
         return withAdditionalContent(
             <DecryptPostX
@@ -77,7 +75,7 @@ export function PostInspector(props: PostInspectorProps) {
                 requestAppendRecipients={
                     // Version -40 is leaking info
                     // So should not create new data on version -40
-                    type.encryptedPost.version === -40
+                    version === -40
                         ? undefined
                         : async (people) => {
                               setAlreadySelectedPreviously(alreadySelectedPreviously.concat(people))

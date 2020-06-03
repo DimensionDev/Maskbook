@@ -35,7 +35,12 @@ export async function appendShareTarget(
             myPrivateKey,
             Array.from(toKey.values()),
         )
-        Gun2.publishPostAESKeyOnGun2(version, iv, getNetworkWorker(whoAmI).gunNetworkHint, othersAESKeyEncrypted)
+        Gun2.publishPostAESKeyOnGun2(
+            version,
+            iv,
+            getNetworkWorker(whoAmI).unwrap().gunNetworkHint,
+            othersAESKeyEncrypted,
+        )
         updatePostDB(
             {
                 identifier: new PostIVIdentifier(whoAmI.network, iv),

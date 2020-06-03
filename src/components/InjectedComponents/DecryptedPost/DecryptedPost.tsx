@@ -49,7 +49,7 @@ export function DecryptPost(props: DecryptPostProps) {
 
     //#region Debug info
     const [postPayload, setPostPayload] = useState(() => deconstructPayload(encryptedText, null))
-    const sharedPublic = (postPayload?.version === -38 ? postPayload.sharedPublic : false) ?? false
+    const sharedPublic = postPayload.ok && postPayload.val.version === -38 ? !!postPayload.val.sharedPublic : false
     useEffect(() => setPostPayload(deconstructPayload(encryptedText, null)), [encryptedText])
     const [debugHash, setDebugHash] = useState<string>('Unknown')
     //#endregion
@@ -127,7 +127,7 @@ export function DecryptPost(props: DecryptPostProps) {
                     decryptedResult={decrypted}
                     encryptedText={encryptedText}
                     postBy={postBy}
-                    postPayload={postPayload}
+                    postPayload={postPayload.unwrap()}
                     whoAmI={whoAmI}
                 />
             </>

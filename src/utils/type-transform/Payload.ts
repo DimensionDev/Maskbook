@@ -4,6 +4,7 @@ import { definedSocialNetworkWorkers } from '../../social-network/worker'
 import { GetContext } from '@holoflows/kit/es'
 import { safeGetActiveUI } from '../safeRequire'
 import { i18n } from '../i18n-next'
+import { Result, Ok, Err } from 'ts-results'
 
 export type Payload = PayloadAlpha40_Or_Alpha39 | PayloadAlpha38
 export type PayloadLatest = PayloadAlpha38
@@ -89,9 +90,7 @@ const versions = new Set([deconstructAlpha40_Or_Alpha39_Or_Alpha38, deconstructA
 type Decoder = SocialNetworkWorkerAndUI['payloadDecoder'] | null
 type Encoder = SocialNetworkWorkerAndUI['payloadEncoder']
 
-export function deconstructPayload(str: string, decoder: Decoder, throws?: false): Payload | null
-export function deconstructPayload(str: string, decoder: Decoder, throws?: true): Payload
-export function deconstructPayload(str: string, decoder: Decoder, throws: boolean = false): Payload | null {
+export function deconstructPayload(str: string, decoder: Decoder): Result<Payload, TypeError> {
     const decoders = (() => {
         if (isNil(decoder)) {
             if (GetContext() === 'content') {
@@ -108,14 +107,11 @@ export function deconstructPayload(str: string, decoder: Decoder, throws: boolea
         for (const networkDecoder of decoders) {
             if (isNil(networkDecoder(str))) continue
             const result = versionDecoder(networkDecoder(str)!, false)
-            if (!isNil(result)) return result
+            if (!isNil(result)) return new Ok(result)
         }
     }
-    if (str.includes('🎼') && str.includes(':||'))
-        if (throws) throw new TypeError(i18n.t('service_unknown_payload'))
-        else return null
-    if (throws) throw new TypeError(i18n.t('payload_not_found'))
-    else return null
+    if (str.includes('🎼') && str.includes(':||')) return new Err(new TypeError(i18n.t('service_unknown_payload')))
+    return new Err(new TypeError(i18n.t('payload_not_found')))
 }
 
 export function constructAlpha38(data: PayloadAlpha38, encoder: Encoder) {

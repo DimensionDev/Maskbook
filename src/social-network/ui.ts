@@ -14,6 +14,7 @@ import { untilDomLoaded } from '../utils/dom'
 import type { I18NStrings } from '../utils/i18n-next'
 import type { TypedMessage } from '../extension/background-script/CryptoServices/utils'
 import i18nNextInstance from '../utils/i18n-next'
+import { Result, Err } from 'ts-results'
 
 if (!process.env.STORYBOOK) {
     OnlyRunInContext(['content', 'debugging', 'options'], 'UI provider')
@@ -232,7 +233,7 @@ export type PostInfo = {
     readonly postBy: ValueRef<ProfileIdentifier>
     readonly postID: ValueRef<string | null>
     readonly postContent: ValueRef<string>
-    readonly postPayload: ValueRef<Payload | null>
+    readonly postPayload: ValueRef<Result<Payload, Error>>
     readonly steganographyContent: ValueRef<string>
     readonly commentsSelector?: LiveSelector<HTMLElement, false>
     readonly commentBoxSelector?: LiveSelector<HTMLElement, false>
@@ -273,7 +274,7 @@ export const getEmptyPostInfoByElement = (
         postBy: new ValueRef(ProfileIdentifier.unknown, ProfileIdentifier.equals),
         postContent: new ValueRef(''),
         postID: new ValueRef<string | null>(null),
-        postPayload: new ValueRef<Payload | null>(null),
+        postPayload: new ValueRef<Result<Payload, Error>>(new Err(new Error('Not inited'))),
         avatarURL: new ValueRef<string | null>(null),
         nickname: new ValueRef<string | null>(null),
         steganographyContent: new ValueRef<string>(''),

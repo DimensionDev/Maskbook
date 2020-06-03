@@ -36,7 +36,7 @@ export const injectCommentBoxDefaultFactory = function <T extends string>(
         const props = additionPropsToCommentBox(styles)
         const onCallback = React.useCallback(
             async (content) => {
-                const encryptedComment = await Services.Crypto.encryptComment(payload!.iv, decrypted, content)
+                const encryptedComment = await Services.Crypto.encryptComment(payload.unwrap().iv, decrypted, content)
                 onPasteToCommentBox(encryptedComment, current, current.realCurrent).then()
             },
             [current, decrypted, payload],
