@@ -12,10 +12,10 @@ import { exclusiveTasks } from './extension/content-script/tasks'
     const stabilize = (x: string) => x.replace('unstable_', '')
     Object.keys(React)
         .filter(isUnstable)
-        .forEach((x) => (React[stabilize(x)] = React[x]))
+        .forEach((x) => (React[stabilize(x)] = React[stabilize(x)] ?? React[x]))
     Object.keys(ReactDOM)
         .filter(isUnstable)
-        .forEach((x) => (ReactDOM[stabilize(x)] = ReactDOM[x]))
+        .forEach((x) => (ReactDOM[stabilize(x)] = ReactDOM[stabilize(x)] ?? ReactDOM[x]))
 }
 
 if (typeof window === 'object') {

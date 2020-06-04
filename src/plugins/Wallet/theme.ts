@@ -1,7 +1,7 @@
-import { createMuiTheme } from '@material-ui/core'
+import { unstable_createMuiStrictModeTheme } from '@material-ui/core'
 import { getUrl } from '../../utils/utils'
 
-export const PluginRedPacketTheme = createMuiTheme({
+export const PluginRedPacketTheme = unstable_createMuiStrictModeTheme({
     overrides: {
         MuiDialog: {
             paper: {
