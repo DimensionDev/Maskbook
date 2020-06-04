@@ -190,7 +190,6 @@
     "service_have_no_own_key_yet": "你還沒有私鑰",
     "service_invalid_backup_file": "這貌似不是 Maskbook 的備份。",
     "service_key_parse_failed": "未能剖析金鑰",
-    "service_not_setup_yet": "您還沒有進行初始設置，在您沒有導入或生成您的金鑰之前，我們暫時無法爲您解密此消息！",
     "service_not_share_target": "找不到 AES 密鑰。或許這條訊息不是分享給你的？",
     "service_others_key_not_found": "{{name}} 的公鑰無法找到！",
     "service_publish_post_aes_key_failed": "未能發佈 AES 密鑰。",

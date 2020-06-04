@@ -190,7 +190,6 @@
     "service_have_no_own_key_yet": "You don't have a private key yet.",
     "service_invalid_backup_file": "This does not seem like a backup of Maskbook.",
     "service_key_parse_failed": "Key parse failed",
-    "service_not_setup_yet": "You have not set up Maskbook yet!",
     "service_not_share_target": "Maskbook does not find the post key. This post may not be intended to share with you.",
     "service_others_key_not_found": "The public key of {{name}} cannot be found!",
     "service_publish_post_aes_key_failed": "Failed to publish the AES key!",
