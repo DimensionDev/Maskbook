@@ -121,7 +121,7 @@ export async function* decryptFromMessageWithProgress(
         const waitForVerifySignaturePayload = getSignablePayload(data)
         const cryptoProvider = cryptoProviderTable[version]
 
-        // ? First, read the cache.
+        // ? Early emit the cache.
         const [cachedPostResult, setPostCache] = await decryptFromCache(data, author)
         if (cachedPostResult) {
             yield makeProgress(makeSuccessResult(cryptoProvider, cachedPostResult, ['post_key_cached'], 'verifying'))
@@ -132,31 +132,31 @@ export async function* decryptFromMessageWithProgress(
             await verifyOthersProve({ raw: data.authorPublicKey }, author).catch(console.error)
         }
         // ? Find author's public key.
-        let byPerson!: PersonaRecord
+        let authorPersona!: PersonaRecord
         for await (const _ of asyncIteratorWithResult(findAuthorPublicKey(author, !!cachedPostResult))) {
-            if (_.done) {
-                if (_.value === 'out of chance')
-                    return makeError(i18n.t('service_others_key_not_found', { name: author.userId }))
-                else if (_.value === 'use cache')
-                    return makeSuccessResult(
-                        cryptoProvider,
-                        cachedPostResult!,
-                        ['author_key_not_found', 'post_key_cached'],
-                        false,
-                    )
-                else byPerson = _.value
+            if (!_.done) {
+                yield _.value
+                continue
             }
+            const result = _.value
+            if (result === 'out of chance')
+                return makeError(i18n.t('service_others_key_not_found', { name: author.userId }))
+            else if (result === 'use cache')
+                return makeSuccessResult(
+                    cryptoProvider,
+                    cachedPostResult!,
+                    ['author_key_not_found', 'post_key_cached'],
+                    false,
+                )
+            else authorPersona = result
         }
 
         // ? Get my public & private key.
-        let mine = (await queryPersonaRecord(whoAmI))!
-        if (!mine) {
-            await sleep(1000)
-            mine = (await queryPersonaRecord(whoAmI))!
-        }
-        if (!mine?.privateKey) throw new Error(DecryptFailedReason.MyCryptoKeyNotFound)
-        const minePublic = mine.publicKey
-        const minePrivate = mine.privateKey
+        const queryWhoAmI = () => queryPersonaRecord(whoAmI)
+        const mine = await queryWhoAmI().then((x) => x || sleep(1000).then(queryWhoAmI))
+        if (!mine?.privateKey) return makeError(DecryptFailedReason.MyCryptoKeyNotFound)
+
+        const { publicKey: minePublic, privateKey: minePrivate } = mine
         if (cachedPostResult) {
             if (!author.equals(whoAmI) && minePrivate && version !== -40) {
                 const { keyHash, postHash } = await Gun2.queryPostKeysOnGun2(
@@ -167,8 +167,8 @@ export async function* decryptFromMessageWithProgress(
                 )
                 yield { type: 'debug', debug: 'debug_finding_hash', hash: [postHash, keyHash] }
             }
-            const signatureVerifyResult = byPerson.publicKey
-                ? await cryptoProvider.verify(waitForVerifySignaturePayload, signature || '', byPerson.publicKey)
+            const signatureVerifyResult = authorPersona.publicKey
+                ? await cryptoProvider.verify(waitForVerifySignaturePayload, signature || '', authorPersona.publicKey)
                 : false
             return makeSuccessResult(cryptoProvider, cachedPostResult, ['post_key_cached'], signatureVerifyResult)
         }
@@ -180,16 +180,10 @@ export async function* decryptFromMessageWithProgress(
          * ? then try to go through a normal decrypt process
          */
         try {
+            const a = decryptAsAuthor(author, minePublic)
+            const b = decryptAsAuthor(whoAmI, minePublic)
             // ! Don't remove the await
-            return await decryptAsAuthor(author, mine.publicKey)
-        } catch (e) {
-            lastError = e
-        }
-
-        try {
-            // ? try to decrypt the post as the whoAmI hint
-            // ! Don't remove the await
-            if (mine) return await decryptAsAuthor(whoAmI, minePublic)
+            return await a.catch(() => b)
         } catch (e) {
             lastError = e
         }
@@ -197,15 +191,12 @@ export async function* decryptFromMessageWithProgress(
         if (author.equals(whoAmI)) {
             // if the decryption process goes here,
             // that means it is failed to decrypt by local identities.
-            // By removing this if block, Maskbook will search the key
+            // If remove this if block, Maskbook will search the key
             // for the post even that post by myself.
             if (lastError instanceof DOMException) return handleDOMException(lastError)
             console.error(lastError)
-            return { error: i18n.t('service_self_key_decryption_failed') } as Failure
+            return makeError(i18n.t('service_self_key_decryption_failed'))
         }
-        // The following process need a ECDH key to do.
-        // So if the account have not setup yet, fail here.
-        if (!mine) return makeError(i18n.t('service_not_setup_yet'))
 
         yield makeProgress('finding_post_key')
         const aesKeyEncrypted: Array<Alpha40.PublishedAESKey | Gun2.SharedAESKeyGun2> = []
@@ -236,7 +227,7 @@ export async function* decryptFromMessageWithProgress(
                 // You do not have the necessary private key to decrypt this message.
                 // What to do next: You can ask your friend to visit your profile page, so that their Maskbook extension will detect and add you to recipients.
                 // ? after the auto-share with friends is done.
-                yield { error: i18n.t('service_not_share_target') } as Failure
+                yield makeError(e)
             } else {
                 return handleDOMException(e)
             }
@@ -272,7 +263,7 @@ export async function* decryptFromMessageWithProgress(
             const [contentArrayBuffer, postAESKey] = await cryptoProvider.decryptMessage1ToNByOther({
                 version,
                 AESKeyEncrypted: key,
-                authorsPublicKeyECDH: byPerson.publicKey,
+                authorsPublicKeyECDH: authorPersona.publicKey,
                 encryptedContent: encryptedText,
                 privateKeyECDH: minePrivate!,
                 iv,
@@ -286,7 +277,7 @@ export async function* decryptFromMessageWithProgress(
                 const signatureVerifyResult = await cryptoProvider.verify(
                     waitForVerifySignaturePayload,
                     signature,
-                    byPerson.publicKey,
+                    authorPersona.publicKey,
                 )
                 return makeSuccessResult(cryptoProvider, content, ['normal_decrypted'], signatureVerifyResult)
             } catch {
@@ -312,11 +303,7 @@ export async function* decryptFromMessageWithProgress(
                 signature || '',
                 authorPublic,
             )
-            return {
-                signatureVerifyResult,
-                content: cryptoProvider.typedMessageParse(content),
-                through: ['normal_decrypted'],
-            } as Success
+            return makeSuccessResult(cryptoProvider, content, ['normal_decrypted'], signatureVerifyResult)
         }
     }
     return makeError(i18n.t('service_unknown_payload'))
@@ -324,7 +311,7 @@ export async function* decryptFromMessageWithProgress(
 function handleDOMException(e: unknown) {
     if (e instanceof DOMException) {
         console.error(e)
-        return { error: i18n.t('service_decryption_failed') } as Failure
+        return makeError(i18n.t('service_decryption_failed'))
     } else throw e
 }
 async function* findAuthorPublicKey(
@@ -334,14 +321,14 @@ async function* findAuthorPublicKey(
 ): AsyncGenerator<Progress, 'out of chance' | 'use cache' | PersonaRecord, unknown> {
     let author = await queryPersonaRecord(by)
     let iterations = 0
-    while (author === null || !author.publicKey) {
+    while (!author?.publicKey) {
         iterations += 1
-        if (iterations < maxIteration) yield { progress: 'finding_person_public_key' } as Progress
+        if (iterations < maxIteration) yield makeProgress('finding_person_public_key')
         else return 'out of chance' as const
 
         author = await addPerson(by).catch(() => null)
 
-        if (!author || !author.publicKey) {
+        if (!author?.publicKey) {
             if (hasCache) return 'use cache' as const
             let rejectGun = () => {}
             let rejectDatabase = () => {}
@@ -403,14 +390,16 @@ async function decryptFromCache(postPayload: Payload, by: ProfileIdentifier) {
         )
     }
     if (cachedKey && cachedKey.postCryptoKey) {
-        const result = decodeText(
-            await cryptoProvider.decryptWithAES({
-                aesKey: cachedKey.postCryptoKey,
-                encrypted: encryptedText,
-                iv: iv,
-            }),
-        )
-        return [result, setCache] as const
+        try {
+            const result = decodeText(
+                await cryptoProvider.decryptWithAES({
+                    aesKey: cachedKey.postCryptoKey,
+                    encrypted: encryptedText,
+                    iv: iv,
+                }),
+            )
+            return [result, setCache] as const
+        } catch {}
     }
     return [undefined, setCache] as const
 }

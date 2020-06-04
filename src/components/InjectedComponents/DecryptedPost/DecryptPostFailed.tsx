@@ -11,7 +11,7 @@ export interface DecryptPostFailedProps {
 }
 export const DecryptPostFailed = React.memo(function DecryptPostFailed({ error, ...props }: DecryptPostFailedProps) {
     const { t } = useI18N()
-    if (error && error.message === DecryptFailedReason.MyCryptoKeyNotFound) {
+    if (error?.message === DecryptFailedReason.MyCryptoKeyNotFound) {
         return <NotSetupYetPrompt {...props.NotSetupYetPromptProps} />
     }
     return (
