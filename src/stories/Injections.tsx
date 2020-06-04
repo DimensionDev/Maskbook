@@ -124,17 +124,30 @@ storiesOf('Injections', module)
             enum ProgressType {
                 finding_person_public_key,
                 finding_post_key,
+                intermediate_success,
                 undefined,
                 init,
             }
             function getProgress(x: ProgressType): DecryptionProgress | undefined {
                 switch (x) {
                     case ProgressType.finding_person_public_key:
-                        return { progress: 'finding_person_public_key' }
+                        return { progress: 'finding_person_public_key', type: 'progress' }
                     case ProgressType.finding_post_key:
-                        return { progress: 'finding_post_key' }
+                        return { progress: 'finding_post_key', type: 'progress' }
                     case ProgressType.init:
-                        return { progress: 'init' }
+                        return { progress: 'init', type: 'progress' }
+                    case ProgressType.intermediate_success:
+                        return {
+                            progress: 'intermediate_success',
+                            type: 'progress',
+                            data: {
+                                content: makeTypedMessage(msg),
+                                signatureVerifyResult: vr,
+                                rawContent: '',
+                                through: [],
+                                type: 'success',
+                            },
+                        }
                     case ProgressType.undefined:
                         return undefined
                 }
@@ -146,6 +159,7 @@ storiesOf('Injections', module)
                         finding_person_public_key: ProgressType.finding_person_public_key,
                         finding_post_key: ProgressType.finding_post_key,
                         undefined: ProgressType.undefined,
+                        intermediate_success: ProgressType.intermediate_success,
                         init: ProgressType.init,
                     },
                     ProgressType.undefined,

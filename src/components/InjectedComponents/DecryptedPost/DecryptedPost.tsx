@@ -56,6 +56,7 @@ export function DecryptPost(props: DecryptPostProps) {
     //#region Progress
     const [progress, setDecryptingStatus] = useState<DecryptionProgress | FailureDecryption>({
         progress: 'init',
+        type: 'progress',
     })
     const [decrypted, setDecrypted] = useState<SuccessDecryption | FailureDecryption | undefined>(undefined)
     //#endregion
@@ -67,13 +68,13 @@ export function DecryptPost(props: DecryptPostProps) {
             for await (const status of asyncIteratorWithResult(iter)) {
                 if (signal.signal.aborted) return iter.return?.()
                 if (status.done) {
-                    if (sharedPublic && !('error' in status.value)) {
+                    if (sharedPublic && status.value.type !== 'error') {
                         // HACK: the is patch, hidden NOT VERIFIED in everyone
                         status.value.signatureVerifyResult = true
                     }
                     return setDecrypted(status.value)
                 }
-                if ('debug' in status.value) {
+                if (status.value.type === 'debug') {
                     switch (status.value.debug) {
                         case 'debug_finding_hash':
                             setDebugHash(status.value.hash.join('-'))
@@ -82,7 +83,7 @@ export function DecryptPost(props: DecryptPostProps) {
                             unreachable(status.value.debug)
                     }
                 } else setDecryptingStatus(status.value)
-                if ('progress' in status.value && status.value.progress === 'intermediate_success')
+                if (status.value.type === 'progress' && status.value.progress === 'intermediate_success')
                     setDecrypted(status.value.data)
             }
         }
@@ -93,19 +94,19 @@ export function DecryptPost(props: DecryptPostProps) {
 
     // Report the result
     useEffect(() => {
-        decrypted && !('error' in decrypted) && onDecrypted(decrypted.content, decrypted.rawContent)
+        decrypted && decrypted.type !== 'error' && onDecrypted(decrypted.content, decrypted.rawContent)
     }, [decrypted, onDecrypted])
 
     // Decrypting
     if (decrypted === undefined) {
-        // Decrypting with fixable error
-        if ('error' in progress)
+        // Decrypting with recoverable error
+        if (progress.type === 'error')
             return withDebugger(<Failed error={new Error(progress.error)} {...props.failedComponentProps} />)
         // Decrypting...
         else return withDebugger(<Awaiting type={progress} {...props.waitingComponentProps} />)
     }
     // Error
-    if ('error' in decrypted) return <Failed error={new Error(decrypted.error)} {...props.failedComponentProps} />
+    if (decrypted.type === 'error') return <Failed error={new Error(decrypted.error)} {...props.failedComponentProps} />
     // Success
     return withDebugger(
         <Success

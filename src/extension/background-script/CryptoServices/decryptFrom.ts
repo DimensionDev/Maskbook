@@ -25,13 +25,15 @@ import { sleep } from '@holoflows/kit/es/util/sleep'
 import type { EC_Public_JsonWebKey, AESJsonWebKey } from '../../../modules/CryptoAlgorithm/interfaces/utils'
 
 type Progress =
-    | { progress: 'finding_person_public_key' | 'finding_post_key' | 'init' }
-    | { progress: 'intermediate_success'; data: Success }
+    | { type: 'progress'; progress: 'finding_person_public_key' | 'finding_post_key' | 'init' }
+    | { type: 'progress'; progress: 'intermediate_success'; data: Success }
 type DebugInfo = {
     debug: 'debug_finding_hash'
     hash: [string, string]
+    type: 'debug'
 }
 type Success = {
+    type: 'success'
     signatureVerifyResult: boolean | 'verifying'
     content: TypedMessage
     rawContent: string
@@ -39,6 +41,7 @@ type Success = {
 }
 type Failure = {
     error: string
+    type: 'error'
 }
 export type SuccessDecryption = Success
 export type FailureDecryption = Failure
@@ -56,7 +59,16 @@ function makeSuccessResult(
         rawContent,
         through,
         content: cryptoProvider.typedMessageParse(rawContent),
+        type: 'success',
     }
+}
+function makeProgress(progress: Exclude<Progress['progress'], 'intermediate_success'> | Success): Progress {
+    if (typeof progress === 'string') return { type: 'progress', progress }
+    return { type: 'progress', progress: 'intermediate_success', data: progress }
+}
+function makeError(error: string | Error): Failure {
+    if (typeof error === 'string') return { type: 'error', error }
+    return makeError(error.message)
 }
 /**
  * Decrypt message from a user
@@ -94,12 +106,12 @@ export async function* decryptFromMessageWithProgress(
     whoAmI: ProfileIdentifier,
     publicShared: boolean,
 ): ReturnOfDecryptFromMessageWithProgress {
-    yield { progress: 'init' }
+    yield makeProgress('init')
 
     const authorNetworkWorker = getNetworkWorker(author.network)
-    if (authorNetworkWorker.err) return { error: authorNetworkWorker.val.message }
+    if (authorNetworkWorker.err) return makeError(authorNetworkWorker.val)
     const decodeResult = deconstructPayload(encrypted, authorNetworkWorker.val.payloadDecoder)
-    if (decodeResult.err) return { error: decodeResult.val.message }
+    if (decodeResult.err) return makeError(decodeResult.val)
     const data = decodeResult.val
     const { version } = data
 
@@ -112,10 +124,7 @@ export async function* decryptFromMessageWithProgress(
         // ? First, read the cache.
         const [cachedPostResult, setPostCache] = await decryptFromCache(data, author)
         if (cachedPostResult) {
-            yield {
-                progress: 'intermediate_success',
-                data: makeSuccessResult(cryptoProvider, cachedPostResult, ['post_key_cached'], 'verifying'),
-            }
+            yield makeProgress(makeSuccessResult(cryptoProvider, cachedPostResult, ['post_key_cached'], 'verifying'))
         }
 
         // ? If the author's key is in the payload, store it.
@@ -127,7 +136,7 @@ export async function* decryptFromMessageWithProgress(
         for await (const _ of asyncIteratorWithResult(findAuthorPublicKey(author, !!cachedPostResult))) {
             if (_.done) {
                 if (_.value === 'out of chance')
-                    return { error: i18n.t('service_others_key_not_found', { name: author.userId }) }
+                    return makeError(i18n.t('service_others_key_not_found', { name: author.userId }))
                 else if (_.value === 'use cache')
                     return makeSuccessResult(
                         cryptoProvider,
@@ -156,7 +165,7 @@ export async function* decryptFromMessageWithProgress(
                     minePublic,
                     getNetworkWorker(whoAmI).unwrap().gunNetworkHint,
                 )
-                yield { debug: 'debug_finding_hash', hash: [postHash, keyHash] }
+                yield { type: 'debug', debug: 'debug_finding_hash', hash: [postHash, keyHash] }
             }
             const signatureVerifyResult = byPerson.publicKey
                 ? await cryptoProvider.verify(waitForVerifySignaturePayload, signature || '', byPerson.publicKey)
@@ -196,15 +205,15 @@ export async function* decryptFromMessageWithProgress(
         }
         // The following process need a ECDH key to do.
         // So if the account have not setup yet, fail here.
-        if (!mine) return { error: i18n.t('service_not_setup_yet') }
+        if (!mine) return makeError(i18n.t('service_not_setup_yet'))
 
-        yield { progress: 'finding_post_key' }
+        yield makeProgress('finding_post_key')
         const aesKeyEncrypted: Array<Alpha40.PublishedAESKey | Gun2.SharedAESKeyGun2> = []
         if (version === -40) {
             // Deprecated payload
             // eslint-disable-next-line import/no-deprecated
             const result = await Gun1.queryPostAESKey(iv, whoAmI.userId)
-            if (result === undefined) return { error: i18n.t('service_not_share_target') }
+            if (result === undefined) return makeError(i18n.t('service_not_share_target'))
             aesKeyEncrypted.push(result)
         } else if (version === -39 || version === -38) {
             const { keyHash, keys, postHash } = await Gun2.queryPostKeysOnGun2(
@@ -213,7 +222,7 @@ export async function* decryptFromMessageWithProgress(
                 minePublic,
                 authorNetworkWorker.val.gunNetworkHint,
             )
-            yield { debug: 'debug_finding_hash', hash: [postHash, keyHash] }
+            yield { type: 'debug', debug: 'debug_finding_hash', hash: [postHash, keyHash] }
             aesKeyEncrypted.push(...keys)
         }
         // If we can decrypt with current info, just do it.
@@ -310,7 +319,7 @@ export async function* decryptFromMessageWithProgress(
             } as Success
         }
     }
-    return { error: i18n.t('service_unknown_payload') }
+    return makeError(i18n.t('service_unknown_payload'))
 }
 function handleDOMException(e: unknown) {
     if (e instanceof DOMException) {

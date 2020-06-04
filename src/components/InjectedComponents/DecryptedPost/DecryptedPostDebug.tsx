@@ -34,7 +34,7 @@ export const DecryptedPostDebug = React.memo(function DecryptedPostDebug(props: 
                 postBy.equals(whoAmI) ? postByMyself : (['Hash of this post', debugHash] as const),
                 [
                     'Decrypt reason',
-                    decryptedResult && !('error' in decryptedResult) ? decryptedResult.through.join(',') : 'Unknown',
+                    decryptedResult && decryptedResult.type !== 'error' ? decryptedResult.through.join(',') : 'Unknown',
                 ],
                 ['Payload version', postPayload.version],
                 ['Payload ownersAESKeyEncrypted', ownersAESKeyEncrypted],
