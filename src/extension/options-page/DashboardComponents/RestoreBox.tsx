@@ -31,6 +31,12 @@ const useStyle = makeStyles((theme) =>
                 textOverflow: 'ellipsis',
             },
         },
+        buttonText: {
+            height: 28,
+            lineHeight: 1,
+            paddingTop: 0,
+            paddingBottom: 0,
+        },
         placeholder: {
             display: 'flex',
             alignItems: 'center',
@@ -78,6 +84,7 @@ export function RestoreBox(props: RestoreBoxProps) {
             </div>
             <ActionButton
                 className={file ? classes.button : ''}
+                classes={{ text: classes.buttonText }}
                 color="primary"
                 variant="text"
                 startIcon={entered || file ? null : <AddBoxOutlinedIcon />}

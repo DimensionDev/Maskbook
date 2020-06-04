@@ -1,7 +1,6 @@
 import React, { useState, useCallback } from 'react'
 import {
     Typography,
-    styled,
     Theme,
     TextField,
     Fade,
@@ -9,10 +8,6 @@ import {
     createStyles,
     ThemeProvider,
     InputBase,
-    Table,
-    TableBody,
-    TableRow,
-    TableCell,
 } from '@material-ui/core'
 import classNames from 'classnames'
 import DashboardRouterContainer from './Container'
@@ -101,8 +96,8 @@ const useSetupFormSetyles = makeStyles((theme) =>
         doneButton: {
             color: '#fff',
             backgroundColor: green[500],
-            // extra 28 pixel eliminats the visual shaking when switch between pages
-            marginBottom: 20 + 28,
+            // extra 36 pixel eliminats the visual shaking when switch between pages
+            marginBottom: 20 + 36,
             '&:hover': {
                 backgroundColor: green[700],
             },
@@ -392,8 +387,8 @@ export function RestoreDatabase() {
                         className={classNames(classes.button, classes.restoreButton)}
                         color="primary"
                         variant="contained"
-                        disabled={!textValue}
-                        onClick={() => restoreDB(textValue)}>
+                        disabled={!(state[0] === 0 && backupValue) && !(state[0] === 1 && textValue)}
+                        onClick={() => restoreDB(state[0] === 0 ? backupValue : textValue)}>
                         {t('set_up_button_restore')}
                     </ActionButton>
                     <ActionButton<typeof Link>
@@ -429,6 +424,7 @@ export function RestoreDatabaseAdvance() {
     const [mnemonicWordsValue, setMnemonicWordsValue] = useState('')
     const [password, setPassword] = useState('')
     const [base64Value, setBase64Value] = useState('')
+    const [file, setFile] = useState<File | null>(null)
     const [scannedValue, setScannedValue] = useState('')
 
     const state = useState(0)
@@ -497,7 +493,11 @@ export function RestoreDatabaseAdvance() {
                 label: t('qr_code'),
                 children: (
                     <RestoreFromQRCodeBox
-                        onScan={setScannedValue}
+                        file={file}
+                        onScan={useCallback((file: File | null, content: string) => {
+                            setFile(file)
+                            setScannedValue(content)
+                        }, [])}
                         onError={useCallback(
                             () =>
                                 enqueueSnackbar(t('set_up_qr_scanner_fail'), {
@@ -565,6 +565,7 @@ const useRestoreDatabaseConfirmationStyles = makeStyles((theme: Theme) =>
             border: `solid 1px ${theme.palette.divider}`,
             borderRadius: 4,
             padding: 32,
+            marginTop: 0,
             marginLeft: -32,
             marginBottom: 38,
         },
@@ -647,7 +648,7 @@ export function RestoreDatabaseConfirmation() {
                         className={classNames(classes.button, classes.doneButton)}
                         variant="contained"
                         onClick={() => history.replace('/')}>
-                        {t('set_up_button_done')}Done
+                        {t('set_up_button_done')}
                     </ActionButton>
                 ) : (
                     <>
@@ -706,12 +707,6 @@ const setupTheme = (theme: Theme): Theme =>
                     '&[hidden]': {
                         visibility: 'hidden',
                     },
-                },
-                text: {
-                    height: 28,
-                    lineHeight: 1,
-                    paddingTop: 0,
-                    paddingBottom: 0,
                 },
             },
             MuiPaper: {
