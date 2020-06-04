@@ -19,7 +19,8 @@ const useStyles = makeStyles((theme) =>
 )
 
 export interface RestoreFromBackupBoxProps extends withClasses<KeysInferFromUseStyles<typeof useStyles>> {
-    onChange?: (content: string) => void
+    file: File | null
+    onChange?: (file: File, content: string) => void
 }
 
 export function RestoreFromBackupBox(props: RestoreFromBackupBoxProps) {
@@ -27,7 +28,7 @@ export function RestoreFromBackupBox(props: RestoreFromBackupBoxProps) {
     const classes = useStylesExtends(useStyles(), props)
 
     const inputRef = useRef<HTMLInputElement>(null)
-    const [file, setFile] = useState<File | null>(null)
+    const [file, setFile] = useState<File | null>(props.file)
     const [bound, { over }] = useDropArea({
         onFiles(files) {
             setFile(files[0])
@@ -39,7 +40,7 @@ export function RestoreFromBackupBox(props: RestoreFromBackupBoxProps) {
         if (file) {
             const fr = new FileReader()
             fr.readAsText(file)
-            fr.addEventListener('loadend', () => props.onChange?.(fr.result as string))
+            fr.addEventListener('loadend', () => props.onChange?.(file, fr.result as string))
         }
     }, [file, props.onChange])
 
