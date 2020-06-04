@@ -1,4 +1,4 @@
-import { createMuiTheme } from '@material-ui/core'
+import { unstable_createMuiStrictModeTheme } from '@material-ui/core'
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles'
 import { orange, green, red, blue } from '@material-ui/core/colors'
 import type { ThemeOptions } from '@material-ui/core/styles/createMuiTheme'
@@ -31,8 +31,8 @@ const baseTheme = (theme: 'dark' | 'light') =>
         },
     } as ThemeOptions)
 // Theme
-export const MaskbookLightTheme = createMuiTheme(baseTheme('light'))
-export const MaskbookDarkTheme = createMuiTheme(baseTheme('dark'))
+export const MaskbookLightTheme = unstable_createMuiStrictModeTheme(baseTheme('light'))
+export const MaskbookDarkTheme = unstable_createMuiStrictModeTheme(baseTheme('dark'))
 
 const FixedWidthFonts = getFontFamily(true)
 

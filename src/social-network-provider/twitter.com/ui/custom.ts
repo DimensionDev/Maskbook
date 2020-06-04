@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { ValueRef, MutationObserverWatcher } from '@holoflows/kit'
-import { Theme, createMuiTheme, ThemeProvider } from '@material-ui/core'
+import { Theme, unstable_createMuiStrictModeTheme, ThemeProvider } from '@material-ui/core'
 import { MaskbookDarkTheme, MaskbookLightTheme } from '../../../utils/theme'
 import type { SocialNetworkUICustomUI } from '../../../social-network/ui'
 import { useValueRef } from '../../../utils/hooks/useValueRef'
@@ -41,7 +41,7 @@ function useTheme() {
         const MaskbookTheme = isDark(fromRGB(backgroundColor)!) ? MaskbookDarkTheme : MaskbookLightTheme
         const primaryColorRGB = fromRGB(primaryColor)!
         setTheme(
-            createMuiTheme({
+            unstable_createMuiStrictModeTheme({
                 ...MaskbookTheme,
                 palette: {
                     ...MaskbookTheme.palette,
