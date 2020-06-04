@@ -1,5 +1,5 @@
 import React, { useState, useRef, useCallback, useEffect } from 'react'
-import { useDropArea, useMediaDevices } from 'react-use'
+import { useDropArea } from 'react-use'
 import { makeStyles, createStyles, Box, FormControl, Select, MenuItem, Button } from '@material-ui/core'
 import CropFreeIcon from '@material-ui/icons/CropFree'
 import { useI18N } from '../../../utils/i18n-next-ui'
@@ -10,7 +10,6 @@ import { QRCodeImageScanner } from './QRCodeImageScanner'
 import { PortalShadowRoot } from '../../../utils/jss/ShadowRootPortal'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import { useVideoDevices } from '../../../utils/hooks/useVideoDevices'
-import { first } from 'lodash-es'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -51,7 +50,8 @@ const useStyles = makeStyles((theme) =>
 )
 
 export interface RestoreFromQRCodeBoxProps extends withClasses<KeysInferFromUseStyles<typeof useStyles>> {
-    onScan?: (scannedContent: string) => void
+    file: File | null
+    onScan?: (file: File | null, content: string) => void
     onError?: () => void
 }
 
@@ -62,7 +62,7 @@ export function RestoreFromQRCodeBox(props: RestoreFromQRCodeBoxProps) {
     const [qrCodeVideoScannerDialog, , openQRCodeVideoScannerDialog] = useModal(QRCodeVideoScannerDialog)
 
     const inputRef = useRef<HTMLInputElement>(null)
-    const [file, setFile] = useState<File | null>(null)
+    const [file, setFile] = useState<File | null>(props.file)
     const [bound, { over }] = useDropArea({
         onFiles(files) {
             setFile(files[0])
@@ -71,10 +71,10 @@ export function RestoreFromQRCodeBox(props: RestoreFromQRCodeBoxProps) {
 
     const scanImage = useCallback(
         (content: string) => {
-            onScan?.(content)
-            if (!content) onError?.()
+            onScan?.(file, content)
+            if (file && !content) onError?.()
         },
-        [onScan, onError],
+        [file, onScan, onError],
     )
     const scanVideo = useCallback(
         (content: string) => {
@@ -88,7 +88,7 @@ export function RestoreFromQRCodeBox(props: RestoreFromQRCodeBoxProps) {
     const [selectedDeviceId, setSelectedDeviceId] = useState('')
 
     useEffect(() => {
-        if (!selectedDeviceId) setSelectedDeviceId(devices[0]?.deviceId)
+        if (!selectedDeviceId && devices[0]?.deviceId) setSelectedDeviceId(devices[0]?.deviceId)
     }, [devices, selectedDeviceId])
 
     return (

@@ -1,22 +1,13 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 
 import { TextField } from '@material-ui/core'
 import { UserPlus, UserCheck, User, UserMinus } from 'react-feather'
 
-import * as bip39 from 'bip39'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import Services from '../../service'
-import {
-    decodeText,
-    decodeArrayBuffer,
-    encodeArrayBuffer,
-    encodeText,
-} from '../../../utils/type-transform/String-ArrayBuffer'
-import { UpgradeBackupJSONFile, BackupJSONFileLatest } from '../../../utils/type-transform/BackupFormat/JSON/latest'
-import { decompressBackupFile, compressBackupFile } from '../../../utils/type-transform/BackupFileShortRepresentation'
-import { hasWKWebkitRPCHandlers } from '../../../utils/iOS-RPC'
-import QRScanner from '../../../components/QRScanner'
-import { QRCode, WKWebkitQRScanner } from '../../../components/shared/qrcode'
+import { encodeArrayBuffer, encodeText } from '../../../utils/type-transform/String-ArrayBuffer'
+import { compressBackupFile } from '../../../utils/type-transform/BackupFileShortRepresentation'
+import { QRCode } from '../../../components/shared/qrcode'
 import { useSnackbar } from 'notistack'
 import type { Persona } from '../../../database'
 
@@ -27,9 +18,7 @@ import SpacedButtonGroup from '../DashboardComponents/SpacedButtonGroup'
 import ShowcaseBox from '../DashboardComponents/ShowcaseBox'
 import { DashboardRoute } from '../Route'
 import { SetupStep } from '../DashboardRouters/Setup'
-import { Identifier, ECKeyIdentifier } from '../../../database/type'
 import { useHistory } from 'react-router-dom'
-import { sleep } from '../../../utils/utils'
 import { RestoreFromQRCodeBox } from '../DashboardComponents/RestoreFromQRCodeImageBox'
 
 export function DashboardPersonaCreateDialog(props: WrappedDialogProps) {
@@ -91,31 +80,9 @@ export function DashboardPersonaImportDialog(props: WrappedDialogProps) {
     const [mnemonicWordsValue, setMnemonicWordsValue] = useState('')
     const [password, setPassword] = useState('')
     const [base64Value, setBase64Value] = useState('')
+    const [file, setFile] = useState<File | null>(null)
     const [scannedValue, setScannedValue] = useState('')
 
-    const state = useState(0)
-    const [tabState, setTabState] = state
-
-    const restorePersona = async (str?: string) => {
-        if (tabState === 0) {
-            if (!bip39.validateMnemonic(mnemonicWordsValue)) throw new Error('the mnemonic words are not valid')
-            const identifier = await Services.Welcome.restoreNewIdentityWithMnemonicWord(mnemonicWordsValue, password, {
-                nickname,
-            })
-            return Services.Identity.queryPersona(identifier)
-        } else {
-            const object = str
-                ? UpgradeBackupJSONFile(decompressBackupFile(str))
-                : (JSON.parse(decodeText(decodeArrayBuffer(base64Value))) as BackupJSONFileLatest)
-            await Services.Welcome.restoreBackup(object!)
-            if (object?.personas?.length) {
-                return Services.Identity.queryPersona(
-                    Identifier.fromString(object.personas[0].identifier, ECKeyIdentifier).unwrap(),
-                )
-            }
-            return
-        }
-    }
     const importPersona = (persona: null | Persona) => {
         const failToRestore = () => enqueueSnackbar(t('set_up_advance_restore_fail'), { variant: 'error' })
         try {
@@ -133,6 +100,7 @@ export function DashboardPersonaImportDialog(props: WrappedDialogProps) {
         }
     }
 
+    const state = useState(0)
     const tabProps: AbstractTabProps = {
         tabs: [
             {
@@ -176,7 +144,22 @@ export function DashboardPersonaImportDialog(props: WrappedDialogProps) {
             },
             {
                 label: t('qr_code'),
-                children: <RestoreFromQRCodeBox onScan={setScannedValue} />,
+                children: (
+                    <RestoreFromQRCodeBox
+                        file={file}
+                        onScan={useCallback((file: File | null, content: string) => {
+                            setFile(file)
+                            setScannedValue(content)
+                        }, [])}
+                        onError={useCallback(
+                            () =>
+                                enqueueSnackbar(t('set_up_qr_scanner_fail'), {
+                                    variant: 'error',
+                                }),
+                            [enqueueSnackbar, t],
+                        )}
+                    />
+                ),
                 p: 0,
             },
         ],
@@ -196,15 +179,15 @@ export function DashboardPersonaImportDialog(props: WrappedDialogProps) {
                         variant="contained"
                         color="primary"
                         disabled={
-                            !(tabState === 0 && nickname && mnemonicWordsValue) &&
-                            !(tabState === 1 && base64Value) &&
-                            !(tabState === 2 && scannedValue)
+                            !(state[0] === 0 && nickname && mnemonicWordsValue) &&
+                            !(state[0] === 1 && base64Value) &&
+                            !(state[0] === 2 && scannedValue)
                         }
                         onClick={async () => {
                             try {
-                                const persona = await (tabState === 0
+                                const persona = await (state[0] === 0
                                     ? Services.Persona.restoreFromMnemonicWords(mnemonicWordsValue, nickname, password)
-                                    : tabState === 1
+                                    : state[0] === 1
                                     ? Services.Persona.restoreFromBase64(base64Value)
                                     : Services.Persona.restoreFromBackup(scannedValue))
 

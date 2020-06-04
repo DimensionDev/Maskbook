@@ -323,12 +323,6 @@ const backupTheme = (theme: Theme): Theme =>
                         visibility: 'hidden',
                     },
                 },
-                text: {
-                    height: 28,
-                    lineHeight: 1,
-                    paddingTop: 0,
-                    paddingBottom: 0,
-                },
             },
         },
     })
