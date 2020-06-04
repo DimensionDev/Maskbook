@@ -1,15 +1,10 @@
-import React, { useState, useRef, useCallback, useEffect } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import { useDropArea } from 'react-use'
-import { makeStyles, createStyles, Box, FormControl, Select, MenuItem, Button } from '@material-ui/core'
-import CropFreeIcon from '@material-ui/icons/CropFree'
+import { makeStyles, createStyles } from '@material-ui/core'
 import { useI18N } from '../../../utils/i18n-next-ui'
-import { useModal } from '../Dialogs/Base'
-import { QRCodeVideoScannerDialog } from '../Dialogs/Setup'
 import { RestoreBox } from './RestoreBox'
-import { QRCodeImageScanner } from './QRCodeImageScanner'
-import { PortalShadowRoot } from '../../../utils/jss/ShadowRootPortal'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
-import { useVideoDevices } from '../../../utils/hooks/useVideoDevices'
+import { QRCodeImageScanner } from './QRCodeImageScanner'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -19,6 +14,11 @@ const useStyles = makeStyles((theme) =>
         },
         file: {
             display: 'none',
+        },
+        qr: {
+            maxWidth: 64,
+            maxHeight: 64,
+            display: 'block',
         },
         restoreBoxRoot: {
             overflow: 'auto',
@@ -30,66 +30,47 @@ const useStyles = makeStyles((theme) =>
             marginBottom: 16,
             borderRadius: 4,
         },
-
         restoreBoxPlaceholder: {
             marginBottom: 6,
-        },
-        formControl: {
-            flex: 1,
-        },
-        menuPaper: {
-            backgroundColor: theme.palette.background.paper,
-        },
-        button: {
-            width: 64,
-            minWidth: 'unset',
-            padding: 0,
-            marginLeft: 16,
         },
     }),
 )
 
-export interface RestoreFromQRCodeBoxProps extends withClasses<KeysInferFromUseStyles<typeof useStyles>> {
+export interface RestoreFromQRCodeImageBoxProps extends withClasses<KeysInferFromUseStyles<typeof useStyles>> {
     file: File | null
-    onScan?: (file: File | null, content: string) => void
+    onScan?: (content: string) => void
     onError?: () => void
+    onChange?: (file: File | null) => void
 }
 
-export function RestoreFromQRCodeBox(props: RestoreFromQRCodeBoxProps) {
-    const { onScan, onError } = props
+export function RestoreFromQRCodeImageBox(props: RestoreFromQRCodeImageBoxProps) {
+    const { file, onScan, onError, onChange } = props
+
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
-    const [qrCodeVideoScannerDialog, , openQRCodeVideoScannerDialog] = useModal(QRCodeVideoScannerDialog)
+    const [dataURL, setDataURL] = useState('')
 
     const inputRef = useRef<HTMLInputElement>(null)
-    const [file, setFile] = useState<File | null>(props.file)
     const [bound, { over }] = useDropArea({
         onFiles(files) {
-            setFile(files[0])
+            onChange?.(files[0])
         },
     })
 
-    const scanImage = useCallback(
-        (content: string) => {
-            onScan?.(file, content)
-            if (file && !content) onError?.()
-        },
-        [file, onScan, onError],
-    )
-    const scanVideo = useCallback(
-        (content: string) => {
-            setFile(null)
-            scanImage(content)
-        },
-        [scanImage],
-    )
-
-    const devices = useVideoDevices()
-    const [selectedDeviceId, setSelectedDeviceId] = useState('')
-
+    // read file as data URL
     useEffect(() => {
-        if (!selectedDeviceId && devices[0]?.deviceId) setSelectedDeviceId(devices[0]?.deviceId)
-    }, [devices, selectedDeviceId])
+        if (file) {
+            const fr = new FileReader()
+            fr.readAsDataURL(file)
+            fr.addEventListener('loadend', () => setDataURL(fr.result as string))
+            fr.addEventListener('error', () => setDataURL(''))
+        } else {
+            setDataURL('')
+        }
+    }, [file])
+
+    // invoke onChange callback
+    useEffect(() => onChange?.(file), [file, onChange])
 
     return (
         <div className={classes.root} {...bound}>
@@ -99,9 +80,7 @@ export function RestoreFromQRCodeBox(props: RestoreFromQRCodeBoxProps) {
                 accept="image/*"
                 ref={inputRef}
                 onChange={({ currentTarget }: React.ChangeEvent<HTMLInputElement>) => {
-                    if (currentTarget.files) {
-                        setFile(currentTarget.files.item(0))
-                    }
+                    if (currentTarget.files) onChange?.(currentTarget.files.item(0))
                 }}
             />
             <RestoreBox
@@ -113,41 +92,8 @@ export function RestoreFromQRCodeBox(props: RestoreFromQRCodeBoxProps) {
                 placeholder="restore-image-placeholder"
                 data-active={over}
                 onClick={() => inputRef.current && inputRef.current.click()}>
-                {file ? <QRCodeImageScanner file={file} onScan={scanImage} onError={onError} /> : null}
+                {file ? <QRCodeImageScanner src={dataURL} onScan={onScan} onError={onError} /> : null}
             </RestoreBox>
-            <Box display="flex" justifyContent="space-between">
-                <FormControl className={classes.formControl} variant="filled">
-                    <Select
-                        value={selectedDeviceId}
-                        variant="outlined"
-                        MenuProps={{
-                            container: PortalShadowRoot,
-                            classes: { paper: classes.menuPaper },
-                        }}
-                        onChange={(e) => setSelectedDeviceId(e.target.value as string)}>
-                        {devices.map(({ deviceId, label }) => (
-                            <MenuItem key={deviceId} value={deviceId}>
-                                {label}
-                            </MenuItem>
-                        ))}
-                    </Select>
-                </FormControl>
-                <Button
-                    className={classes.button}
-                    color="primary"
-                    variant="outlined"
-                    disabled={!selectedDeviceId}
-                    onClick={() =>
-                        openQRCodeVideoScannerDialog({
-                            deviceId: selectedDeviceId,
-                            onScan: scanVideo,
-                            onError,
-                        })
-                    }>
-                    <CropFreeIcon />
-                </Button>
-            </Box>
-            {qrCodeVideoScannerDialog}
         </div>
     )
 }

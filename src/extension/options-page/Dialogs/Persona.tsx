@@ -19,7 +19,8 @@ import ShowcaseBox from '../DashboardComponents/ShowcaseBox'
 import { DashboardRoute } from '../Route'
 import { SetupStep } from '../DashboardRouters/Setup'
 import { useHistory } from 'react-router-dom'
-import { RestoreFromQRCodeBox } from '../DashboardComponents/RestoreFromQRCodeImageBox'
+import { RestoreFromQRCodeImageBox } from '../DashboardComponents/RestoreFromQRCodeImageBox'
+import { RestoreFromQRCodeCameraBox } from '../DashboardComponents/RestoreFromQRCodeCameraBox'
 
 export function DashboardPersonaCreateDialog(props: WrappedDialogProps) {
     const { t } = useI18N()
@@ -145,20 +146,29 @@ export function DashboardPersonaImportDialog(props: WrappedDialogProps) {
             {
                 label: t('qr_code'),
                 children: (
-                    <RestoreFromQRCodeBox
-                        file={file}
-                        onScan={useCallback((file: File | null, content: string) => {
-                            setFile(file)
-                            setScannedValue(content)
-                        }, [])}
-                        onError={useCallback(
-                            () =>
+                    <>
+                        <RestoreFromQRCodeImageBox
+                            file={file}
+                            onChange={setFile}
+                            onScan={setScannedValue}
+                            onError={() => {
                                 enqueueSnackbar(t('set_up_qr_scanner_fail'), {
                                     variant: 'error',
-                                }),
-                            [enqueueSnackbar, t],
-                        )}
-                    />
+                                })
+                            }}
+                        />
+                        <RestoreFromQRCodeCameraBox
+                            onScan={(scannedValue: string) => {
+                                setFile(null)
+                                setScannedValue(scannedValue)
+                            }}
+                            onError={() => {
+                                enqueueSnackbar(t('set_up_qr_scanner_fail'), {
+                                    variant: 'error',
+                                })
+                            }}
+                        />
+                    </>
                 ),
                 p: 0,
             },

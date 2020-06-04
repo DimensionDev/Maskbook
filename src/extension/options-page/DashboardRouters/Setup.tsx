@@ -32,9 +32,10 @@ import { DashboardRoute } from '../Route'
 import { useSnackbar } from 'notistack'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
 import type { Persona } from '../../../database'
-import { RestoreFromQRCodeBox } from '../DashboardComponents/RestoreFromQRCodeImageBox'
+import { RestoreFromQRCodeImageBox } from '../DashboardComponents/RestoreFromQRCodeImageBox'
 import { RestoreFromBackupBox } from '../DashboardComponents/RestoreFromBackupBox'
 import { DatabaseRecordType, DatabasePreviewCard } from '../DashboardComponents/DatabasePreviewCard'
+import { RestoreFromQRCodeCameraBox } from '../DashboardComponents/RestoreFromQRCodeCameraBox'
 
 export enum SetupStep {
     CreatePersona = 'create-persona',
@@ -492,20 +493,29 @@ export function RestoreDatabaseAdvance() {
             {
                 label: t('qr_code'),
                 children: (
-                    <RestoreFromQRCodeBox
-                        file={file}
-                        onScan={useCallback((file: File | null, content: string) => {
-                            setFile(file)
-                            setScannedValue(content)
-                        }, [])}
-                        onError={useCallback(
-                            () =>
+                    <>
+                        <RestoreFromQRCodeImageBox
+                            file={file}
+                            onChange={setFile}
+                            onScan={setScannedValue}
+                            onError={() => {
                                 enqueueSnackbar(t('set_up_qr_scanner_fail'), {
                                     variant: 'error',
-                                }),
-                            [enqueueSnackbar, t],
-                        )}
-                    />
+                                })
+                            }}
+                        />
+                        <RestoreFromQRCodeCameraBox
+                            onScan={(scannedValue: string) => {
+                                setFile(null)
+                                setScannedValue(scannedValue)
+                            }}
+                            onError={() => {
+                                enqueueSnackbar(t('set_up_qr_scanner_fail'), {
+                                    variant: 'error',
+                                })
+                            }}
+                        />
+                    </>
                 ),
                 p: 0,
             },
