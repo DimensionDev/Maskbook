@@ -36,6 +36,7 @@ import { RestoreFromQRCodeImageBox } from '../DashboardComponents/RestoreFromQRC
 import { RestoreFromBackupBox } from '../DashboardComponents/RestoreFromBackupBox'
 import { DatabaseRecordType, DatabasePreviewCard } from '../DashboardComponents/DatabasePreviewCard'
 import { RestoreFromQRCodeCameraBox } from '../DashboardComponents/RestoreFromQRCodeCameraBox'
+import { sleep } from '../../../utils/utils'
 
 export enum SetupStep {
     CreatePersona = 'create-persona',
@@ -233,6 +234,8 @@ export function ConnectNetwork() {
 
     const deletePersonaAndBack = async () => {
         if (persona) await Services.Identity.deletePersona(persona.identifier, 'delete even with private')
+        // prevent from displaying delete persona
+        await sleep(300)
         history.goBack()
     }
 
