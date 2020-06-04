@@ -1,45 +1,43 @@
-import React, { useRef, useState, useEffect, useCallback } from 'react'
+import React, { useRef, useEffect, useCallback } from 'react'
 import { useQRCodeImageScan } from '../../../utils/hooks/useQRCodeImageScan'
-import { CircularProgress } from '@material-ui/core'
+import { CircularProgress, makeStyles, createStyles, Theme } from '@material-ui/core'
+
+const useStyles = makeStyles((theme: Theme) =>
+    createStyles({
+        progress: {
+            maxWidth: 64,
+            maxHeight: 64,
+            position: 'absolute',
+        },
+        img: {
+            maxWidth: 64,
+            maxHeight: 64,
+        },
+    }),
+)
 
 export interface QRCodeImageScanner
     extends React.DetailedHTMLProps<React.VideoHTMLAttributes<HTMLImageElement>, HTMLImageElement> {
-    file: File | null
+    src: string
     onScan?: (value: string) => void
     onError?: () => void
 }
 
-export function QRCodeImageScanner({ file, onScan, onError }: QRCodeImageScanner) {
+export function QRCodeImageScanner({ src, onScan, onError }: QRCodeImageScanner) {
+    const classes = useStyles()
     const imageRef = useRef<HTMLImageElement | null>(null)
-    const [dataURL, setDataURL] = useState('')
     const { value, loading, error } = useQRCodeImageScan(imageRef)
-
-    // read file as data URL
-    useEffect(() => {
-        if (file) {
-            const fr = new FileReader()
-            fr.readAsDataURL(file)
-            fr.addEventListener('loadend', () => setDataURL(fr.result as string))
-            fr.addEventListener('error', () => setDataURL(''))
-        } else {
-            setDataURL('')
-        }
-    }, [file])
 
     // invoke scan result callbacks
     useEffect(() => {
-        if (loading) return
+        if (!src || loading) return
         if (error) onError?.()
         else onScan?.(value ?? '')
-    }, [loading, value, error, onError, onScan])
+    }, [src, loading, value, error, onError, onScan])
     return (
         <>
-            {loading ? <CircularProgress color="primary" style={{ maxWidth: 64, maxHeight: 64 }} /> : null}
-            <img
-                ref={imageRef}
-                src={dataURL}
-                style={{ maxWidth: 64, maxHeight: 64, display: !file || loading ? 'none' : 'block' }}
-            />
+            <img className={classes.img} ref={imageRef} src={src} />
+            {loading ? <CircularProgress className={classes.progress} color="primary" /> : null}
         </>
     )
 }
