@@ -24,8 +24,8 @@ const useDatabasePreviewCardStyles = makeStyles((theme: Theme) =>
         },
         icon: {
             color: theme.palette.divider,
-            width: 16,
-            height: 16,
+            width: 20,
+            height: 20,
             verticalAlign: 'middle',
             marginLeft: 18,
         },

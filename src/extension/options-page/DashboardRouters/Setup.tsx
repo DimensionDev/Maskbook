@@ -290,6 +290,7 @@ const useRestoreDatabaseStyle = makeStyles((theme) =>
             height: 176,
             padding: theme.spacing(2, 3),
             '& > textarea': {
+                overflow: 'auto !important',
                 height: '100% !important',
             },
         },
@@ -312,6 +313,8 @@ export function RestoreDatabase() {
     const restoreDatabaseClasses = useRestoreDatabaseStyle()
     const { enqueueSnackbar, closeSnackbar } = useSnackbar()
 
+    const [file, setFile] = useState<File | null>(null)
+    const [backupValue, setBackupValue] = useState('')
     const [textValue, setTextValue] = useState('')
 
     const state = useState(0)
@@ -319,7 +322,15 @@ export function RestoreDatabase() {
         tabs: [
             {
                 label: t('restore_database_file'),
-                children: <RestoreFromBackupBox onChange={setTextValue} />,
+                children: (
+                    <RestoreFromBackupBox
+                        file={file}
+                        onChange={(file: File, content: string) => {
+                            setFile(file)
+                            setBackupValue(content)
+                        }}
+                    />
+                ),
                 p: 0,
             },
             {
@@ -636,7 +647,7 @@ export function RestoreDatabaseConfirmation() {
                         className={classNames(classes.button, classes.doneButton)}
                         variant="contained"
                         onClick={() => history.replace('/')}>
-                        Done
+                        {t('set_up_button_done')}Done
                     </ActionButton>
                 ) : (
                     <>
