@@ -36,6 +36,8 @@ export interface CreateRedPacketResult {
 }
 
 export interface DonateResult {
-    donate_transaction_hash: string
+    donation_value: BigNumber
+    donation_transaction_hash: string
+    tip_value?: BigNumber
     tip_transaction_hash?: string
 }
