@@ -48,19 +48,24 @@ export type FailureDecryption = Failure
 export type DecryptionProgress = Progress
 type ReturnOfDecryptFromMessageWithProgress = AsyncGenerator<Failure | Progress | DebugInfo, Success | Failure, void>
 
-function makeSuccessResult(
+const successDecryptionCache = new Map<string, Success>()
+const makeSuccessResultF = (
+    rawPayload: string,
     cryptoProvider: typeof cryptoProviderTable[keyof typeof cryptoProviderTable],
-    rawContent: string,
+) => (
+    rawEncryptedContent: string,
     through: Success['through'],
     signatureVerifyResult: Success['signatureVerifyResult'] = true,
-): Success {
-    return {
+): Success => {
+    const success: Success = {
         signatureVerifyResult,
-        rawContent,
+        rawContent: rawEncryptedContent,
         through,
-        content: cryptoProvider.typedMessageParse(rawContent),
+        content: cryptoProvider.typedMessageParse(rawEncryptedContent),
         type: 'success',
     }
+    successDecryptionCache.set(rawPayload, success)
+    return success
 }
 function makeProgress(progress: Exclude<Progress['progress'], 'intermediate_success'> | Success): Progress {
     if (typeof progress === 'string') return { type: 'progress', progress }
@@ -106,6 +111,7 @@ export async function* decryptFromMessageWithProgress(
     whoAmI: ProfileIdentifier,
     publicShared: boolean,
 ): ReturnOfDecryptFromMessageWithProgress {
+    if (successDecryptionCache.has(encrypted)) return successDecryptionCache.get(encrypted)!
     yield makeProgress('init')
 
     const authorNetworkWorker = getNetworkWorker(author.network)
@@ -117,14 +123,15 @@ export async function* decryptFromMessageWithProgress(
 
     if (version === -40 || version === -39 || version === -38) {
         const { encryptedText, iv, signature, version } = data
+        const cryptoProvider = cryptoProviderTable[version]
+        const makeSuccessResult = makeSuccessResultF(encrypted, cryptoProvider)
         const ownersAESKeyEncrypted = data.version === -38 ? data.AESKeyEncrypted : data.ownersAESKeyEncrypted
         const waitForVerifySignaturePayload = getSignablePayload(data)
-        const cryptoProvider = cryptoProviderTable[version]
 
         // ? Early emit the cache.
         const [cachedPostResult, setPostCache] = await decryptFromCache(data, author)
         if (cachedPostResult) {
-            yield makeProgress(makeSuccessResult(cryptoProvider, cachedPostResult, ['post_key_cached'], 'verifying'))
+            yield makeProgress(makeSuccessResult(cachedPostResult, ['post_key_cached'], 'verifying'))
         }
 
         // ? If the author's key is in the payload, store it.
@@ -142,12 +149,7 @@ export async function* decryptFromMessageWithProgress(
             if (result === 'out of chance')
                 return makeError(i18n.t('service_others_key_not_found', { name: author.userId }))
             else if (result === 'use cache')
-                return makeSuccessResult(
-                    cryptoProvider,
-                    cachedPostResult!,
-                    ['author_key_not_found', 'post_key_cached'],
-                    false,
-                )
+                return makeSuccessResult(cachedPostResult!, ['author_key_not_found', 'post_key_cached'], false)
             else authorPersona = result
         }
 
@@ -170,7 +172,7 @@ export async function* decryptFromMessageWithProgress(
             const signatureVerifyResult = authorPersona.publicKey
                 ? await cryptoProvider.verify(waitForVerifySignaturePayload, signature || '', authorPersona.publicKey)
                 : false
-            return makeSuccessResult(cryptoProvider, cachedPostResult, ['post_key_cached'], signatureVerifyResult)
+            return makeSuccessResult(cachedPostResult, ['post_key_cached'], signatureVerifyResult)
         }
 
         let lastError: unknown
@@ -279,9 +281,9 @@ export async function* decryptFromMessageWithProgress(
                     signature,
                     authorPersona.publicKey,
                 )
-                return makeSuccessResult(cryptoProvider, content, ['normal_decrypted'], signatureVerifyResult)
+                return makeSuccessResult(content, ['normal_decrypted'], signatureVerifyResult)
             } catch {
-                return makeSuccessResult(cryptoProvider, content, ['normal_decrypted'], false)
+                return makeSuccessResult(content, ['normal_decrypted'], false)
             }
         }
 
@@ -303,7 +305,7 @@ export async function* decryptFromMessageWithProgress(
                 signature || '',
                 authorPublic,
             )
-            return makeSuccessResult(cryptoProvider, content, ['normal_decrypted'], signatureVerifyResult)
+            return makeSuccessResult(content, ['normal_decrypted'], signatureVerifyResult)
         }
     }
     return makeError(i18n.t('service_unknown_payload'))
