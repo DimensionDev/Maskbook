@@ -12,9 +12,15 @@ let provider: WebsocketProvider
 export const resetProvider = () => {
     if (provider) {
         provider.removeListener('end', resetProvider) // prevent from circular reseting
-        provider.disconnect(-1, 'change provider')
+        provider.disconnect(1000, 'change provider')
     }
-    provider = new Web3.providers.WebsocketProvider(getNetworkSettings().middlewareAddress)
+    provider = new Web3.providers.WebsocketProvider(getNetworkSettings().middlewareAddress, {
+        // @ts-ignore
+        clientConfig: {
+            keepalive: true,
+            keepaliveInterval: 1e4, // milliseconds
+        },
+    })
     provider.on('end', resetProvider)
     web3.setProvider(provider)
 }
