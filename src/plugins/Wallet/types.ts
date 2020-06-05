@@ -37,5 +37,5 @@ export interface CreateRedPacketResult {
 
 export interface DonateResult {
     donate_transaction_hash: string
-    donate_nonce: number
+    tip_transaction_hash?: string
 }

@@ -4,9 +4,9 @@ import { BigNumber } from 'bignumber.js'
 import { web3 } from './web3'
 import { onClaimResult, onCreationResult, onExpired, onRefundResult } from './red-packet-fsm'
 import HappyRedPacketABI from './contract/HappyRedPacket.json'
-import IERC20ABI from './contract/IERC20.json'
+import ERC20Abi from './contract/ERC20.json'
 import SplitterABI from './contract/Splitter.json'
-import type { IERC20 } from './contract/IERC20'
+import type { ERC20 } from './contract/ERC20'
 import type { Splitter } from './contract/Splitter'
 import type { HappyRedPacket } from './contract/HappyRedPacket'
 import type { CheckRedPacketAvailabilityResult, CreateRedPacketResult, DonateResult } from './types'
@@ -14,7 +14,7 @@ import { EthereumTokenType, EthereumNetwork, RedPacketJSONPayload } from './data
 import { asyncTimes, pollingTask } from '../../utils/utils'
 import { createWalletDBAccess } from './database/Wallet.db'
 import { createTransaction } from '../../database/helpers/openDB'
-import { sendTx } from './tx'
+import { sendTx, sendTxConfigForTxHash } from './tx'
 import { getNetworkSettings } from './UI/Developer/SelectEthereumNetwork'
 
 function createRedPacketContract(address: string) {
@@ -22,7 +22,7 @@ function createRedPacketContract(address: string) {
 }
 
 function createERC20Contract(address: string) {
-    return (new web3.eth.Contract(IERC20ABI as AbiItem[], address) as unknown) as IERC20
+    return (new web3.eth.Contract(ERC20Abi as AbiItem[], address) as unknown) as ERC20
 }
 
 function createSplitterContract(address: string) {
@@ -96,24 +96,21 @@ export const redPacketAPI = {
         receipt = false,
     ): Promise<CreateRedPacketResult> {
         const contract = createRedPacketContract(getNetworkSettings().happyRedPacketContractAddress)
-        const tx = contract.methods.create_red_packet(
-            hash_of_password,
-            quantity,
-            isRandom,
-            duration,
-            seed,
-            message,
-            name,
-            token_type,
-            token_addr,
-            total_tokens.toString(),
-        )
-
         return new Promise((resolve, reject) => {
             let txHash = ''
-
             sendTx(
-                tx,
+                contract.methods.create_red_packet(
+                    hash_of_password,
+                    quantity,
+                    isRandom,
+                    duration,
+                    seed,
+                    message,
+                    name,
+                    token_type,
+                    token_addr,
+                    total_tokens.toString(),
+                ),
                 {
                     from: ____sender__addr,
                     value: token_type === EthereumTokenType.eth ? total_tokens.toString() : undefined,
@@ -154,13 +151,10 @@ export const redPacketAPI = {
         receipt = false,
     ): Promise<{ claim_transaction_hash: string }> {
         const contract = createRedPacketContract(getNetworkSettings().happyRedPacketContractAddress)
-        const tx = contract.methods.claim(id.redPacketID, password, recipient, validation)
-
         return new Promise((resolve, reject) => {
             let txHash = ''
-
             sendTx(
-                tx,
+                contract.methods.claim(id.redPacketID, password, recipient, validation),
                 {
                     from: recipient,
                 },
@@ -360,13 +354,10 @@ export const redPacketAPI = {
         }
 
         const contract = createRedPacketContract(getNetworkSettings().happyRedPacketContractAddress)
-        const tx = contract.methods.refund(id.redPacketID)
-
         return new Promise((resolve, reject) => {
             let txHash = ''
-
             sendTx(
-                tx,
+                contract.methods.refund(id.redPacketID),
                 {
                     from: packet!.sender_address,
                 },
@@ -443,17 +434,23 @@ export const walletAPI = {
     },
     async approveERC20Token(
         senderAddress: string,
+        spenderAddress: string,
         erc20TokenAddress: string,
         amount: BigNumber,
         receipt = false,
     ): Promise<{ erc20_approve_transaction_hash: string; erc20_approve_value: BigNumber }> {
         const erc20Contract = createERC20Contract(erc20TokenAddress)
-        const tx = erc20Contract.methods.approve(getNetworkSettings().happyRedPacketContractAddress, amount.toString())
+
+        // check balance
+        const balance = await erc20Contract.methods.balanceOf(senderAddress).call()
+        if (new BigNumber(balance).lt(amount)) {
+            throw new Error('You do not have enough tokens to make this transaction.')
+        }
 
         return new Promise((resolve, reject) => {
             let txHash = ''
             sendTx(
-                tx,
+                erc20Contract.methods.approve(spenderAddress, amount.toString()),
                 { from: senderAddress },
                 {
                     onTransactionHash(hash) {
@@ -487,20 +484,157 @@ export const walletAPI = {
 
 export const gitcoinAPI = {
     dataSource: 'real' as const,
+
+    /**
+     * Fund a gitcoin grant
+     * @param donorAddress The account address of donor
+     * @param maintainerAddress The account address of gitcoin maintainer
+     * @param donationAddress The account address of project owner
+     * @param donationTotal The total amount of donation value
+     * @param erc20Address An optional ERC20 contract address when donate with ERC20 token
+     * @param tipPercentage For each donation of gitcoin grant, a small tip will be transfered to the gitcoin maintainer's account
+     */
     async fund(
+        donorAddress: string,
         maintainerAddress: string,
         donationAddress: string,
-        tip: BigNumber,
-        fund: BigNumber,
+        donationTotal: BigNumber,
         erc20Address?: string,
+        tipPercentage: number = 5,
     ): Promise<DonateResult> {
-        const contract = createSplitterContract(getNetworkSettings().splitterContractAddress)
+        const tipAmount = new BigNumber(tipPercentage / 100).multipliedBy(donationTotal)
+        const grantAmount = donationTotal.minus(tipAmount)
 
-        // TODO: invoke contract methods
-        console.log(contract)
-        return Promise.resolve({
-            donate_transaction_hash: '',
-            donate_nonce: 0,
+        // validate amount
+        if (!tipAmount.isPositive()) {
+            throw new Error('Ivalid amount')
+        }
+
+        // donate with erc20 token
+        if (erc20Address) {
+            // approve splitter contract for spending erc20 token
+            await walletAPI.approveERC20Token(
+                donorAddress,
+                getNetworkSettings().splitterContractAddress,
+                erc20Address,
+                donationTotal,
+            )
+
+            // split the donation total amount
+            const { fund_hash: donate_transaction_hash } = await gitcoinAPI.splitFundERC20(
+                donorAddress,
+                donationAddress,
+                maintainerAddress,
+                grantAmount,
+                tipAmount,
+                erc20Address,
+            )
+            return {
+                donate_transaction_hash,
+            }
+        } else {
+            const {
+                fund_first_hash: donate_transaction_hash,
+                fund_second_hash: tip_transaction_hash,
+            } = await gitcoinAPI.splitFundEther(
+                donorAddress,
+                donationAddress,
+                maintainerAddress,
+                grantAmount,
+                tipAmount,
+            )
+            if (!donate_transaction_hash) {
+                throw new Error('Fail to fund the grant')
+            }
+            return {
+                donate_transaction_hash,
+                tip_transaction_hash,
+            }
+        }
+    },
+
+    async splitFundEther(
+        senderAddress: string,
+        toFirst: string,
+        toSecond: string,
+        valueFirst: BigNumber,
+        valueSecond: BigNumber,
+    ) {
+        const gasPrice = await web3.eth.getGasPrice()
+        return new Promise<{ fund_first_hash?: string; fund_second_hash?: string }>(async (resolve, reject) => {
+            let fund_first_hash
+            let fund_second_hash
+
+            if (valueFirst.isPositive()) {
+                fund_first_hash = await sendTxConfigForTxHash({
+                    from: senderAddress,
+                    to: toFirst,
+                    value: toFirst.toString(),
+                    gasPrice,
+                })
+            }
+            if (valueSecond.isPositive()) {
+                fund_second_hash = await sendTxConfigForTxHash({
+                    from: senderAddress,
+                    to: toSecond,
+                    value: valueSecond.toString(),
+                    gasPrice,
+                })
+            }
+            return {
+                fund_first_hash,
+                fund_second_hash,
+            }
+        })
+    },
+
+    /**
+     * Split fund ERC20 token
+     * @param senderAddress The account address of payer
+     * @param toFirst The account address of the first payee
+     * @param toSecond The account address of the second payee
+     * @param valueFirst How many ERC20 tokens to the first payee
+     * @param valueSecond How many ERC20 token to the second payee
+     * @param erc20Address The contract address of specific ERC20 token
+     */
+    async splitFundERC20(
+        senderAddress: string,
+        toFirst: string,
+        toSecond: string,
+        valueFirst: BigNumber,
+        valueSecond: BigNumber,
+        erc20Address: string,
+    ) {
+        const contract = createSplitterContract(getNetworkSettings().splitterContractAddress)
+        return new Promise<{ fund_hash: string; fund_value: BigNumber }>((resolve, reject) => {
+            let txHash = ''
+            sendTx(
+                contract.methods.splitTransfer(
+                    toFirst,
+                    toSecond,
+                    valueFirst.toString(),
+                    valueSecond.toString(),
+                    erc20Address,
+                ),
+                { from: senderAddress },
+                {
+                    onTransactionHash(hash) {
+                        txHash = hash
+                    },
+                    onReceipt() {
+                        resolve({
+                            fund_hash: txHash,
+                            fund_value: valueFirst.plus(valueSecond),
+                        })
+                    },
+                    onTransactionError(err) {
+                        reject(err)
+                    },
+                    onEstimateError(err) {
+                        reject(err)
+                    },
+                },
+            )
         })
     },
 }
