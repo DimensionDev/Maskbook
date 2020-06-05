@@ -154,7 +154,7 @@ export const postContentParser = (node: HTMLElement) => {
             return lang ? Array.from(lang.querySelectorAll<T>(selectors)) : []
         }
         const sto = [
-            ...select<HTMLAnchorElement>('a').map((x) => x.title),
+            ...select<HTMLAnchorElement>('a').map((x) => x.textContent),
             ...select<HTMLSpanElement>('span').map((x) => x.innerText),
         ]
         return sto.filter(Boolean).join(' ')
