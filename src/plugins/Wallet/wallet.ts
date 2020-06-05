@@ -178,6 +178,7 @@ export async function importNewWallet(
     }
     PluginMessageCenter.emit('maskbook.wallets.update', undefined)
     async function getWalletAddress() {
+        if (rec.address) return rec.address
         if (rec._private_key_) return (await recoverWalletFromPrivateKey(rec._private_key_)).address
         return (await recoverWallet(mnemonic, passphrase)).address
     }
