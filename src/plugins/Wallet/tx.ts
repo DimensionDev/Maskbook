@@ -31,11 +31,10 @@ export async function sendTx<R, T extends TransactionObject<R>>(txObject: T, tx:
 }
 
 export async function sendTxConfigForTxHash(config: TransactionConfig) {
-    return new Promise<string>((resolve, reject) => {
-        web3.eth
-            .sendTransaction(config)
-            .on('transactionHash', (hash: string) => resolve(hash))
-            .on('error', (err: Error) => reject(err))
-            .catch((err: Error) => reject(err))
-    })
+    return new Promise<string>(async (resolve, reject) =>
+        web3.eth.sendTransaction(config, (err, hash) => {
+            if (err) reject(err)
+            else resolve(hash)
+        }),
+    )
 }

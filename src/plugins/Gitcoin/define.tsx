@@ -14,6 +14,9 @@ import { useWalletDataSource } from '../shared/useWallet'
 import { useValueRef } from '../../utils/hooks/useValueRef'
 import { useObservableValues } from '../../utils/hooks/useObservableMapSet'
 import type { GitcoinGrantMetadata } from './Services'
+import BigNumber from 'bignumber.js'
+import { EthereumNetwork, EthereumTokenType } from '../Wallet/database/types'
+import { getNetworkSettings } from '../Wallet/UI/Developer/SelectEthereumNetwork'
 
 const isGitcoin = (x: string): boolean => x.startsWith('https://gitcoin.co/grants')
 export const GitcoinPluginDefine: PluginConfig = {
@@ -92,7 +95,27 @@ function PreviewCardLogic(props: { url: string }) {
                     onClose={() => setOpen(false)}
                     title={title ?? 'A Gitcoin grant'}
                     description={description ?? ''}
-                    onDonate={() => {}}
+                    onDonate={async ({ comment, amount, selectedWallet, selectedToken, selectedTokenType }) => {
+                        if (!address) {
+                            return
+                        }
+                        const power = selectedTokenType.type === 'eth' ? 18 : selectedToken!.decimals
+                        try {
+                            await Services.Plugin.invokePlugin('co.gitcoin', 'donateGrant', {
+                                donation_address: address,
+                                donation_total: new BigNumber(amount).multipliedBy(new BigNumber(10).pow(power)),
+                                donor_address: selectedWallet,
+                                network: getNetworkSettings().networkType,
+                                token_type:
+                                    selectedTokenType.type === 'eth' ? EthereumTokenType.eth : EthereumTokenType.erc20,
+                                comment,
+                                token: selectedToken,
+                            })
+                        } catch (e) {
+                            alert(e.message)
+                            console.log(`error: ${e}`)
+                        }
+                    }}
                 />
             ) : null}
         </>

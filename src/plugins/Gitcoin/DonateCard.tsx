@@ -45,7 +45,8 @@ interface DonateCardProps {
         amount: number
         hideWalletAddr: boolean
         selectedWallet: string
-        selectedToken: SelectedTokenType
+        selectedToken: ERC20TokenRecord
+        selectedTokenType: SelectedTokenType
     }): void
     open: boolean
     onClose(): void
@@ -150,7 +151,8 @@ export function DonateCard(props: DonateCardProps) {
                                 amount,
                                 comment,
                                 hideWalletAddr,
-                                selectedToken: useSelectWalletResult.selectedTokenType,
+                                selectedToken: useSelectWalletResult.selectedToken!,
+                                selectedTokenType: useSelectWalletResult.selectedTokenType,
                                 selectedWallet: useSelectWalletResult.selectedWalletAddress!,
                             })
                         }>
