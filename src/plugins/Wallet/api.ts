@@ -570,31 +570,31 @@ export const gitcoinAPI = {
         valueSecond: BigNumber,
     ) {
         const gasPrice = await web3.eth.getGasPrice()
-        return new Promise<{ fund_first_hash?: string; fund_second_hash?: string }>(async (resolve, reject) => {
-            let fund_first_hash
-            let fund_second_hash
+        let fund_first_hash
+        let fund_second_hash
 
-            if (valueFirst.isPositive()) {
-                fund_first_hash = await sendTxConfigForTxHash({
-                    from: senderAddress,
-                    to: toFirst,
-                    value: toFirst.toString(),
-                    gasPrice,
-                })
-            }
-            if (valueSecond.isPositive()) {
-                fund_second_hash = await sendTxConfigForTxHash({
-                    from: senderAddress,
-                    to: toSecond,
-                    value: valueSecond.toString(),
-                    gasPrice,
-                })
-            }
-            return {
-                fund_first_hash,
-                fund_second_hash,
-            }
-        })
+        if (valueFirst.isPositive()) {
+            fund_first_hash = await sendTxConfigForTxHash({
+                from: senderAddress,
+                to: toFirst,
+                value: valueFirst.toString(),
+                gas: 318730,
+                gasPrice,
+            })
+        }
+        if (valueSecond.isPositive()) {
+            fund_second_hash = await sendTxConfigForTxHash({
+                from: senderAddress,
+                to: toSecond,
+                value: valueSecond.toString(),
+                gas: 318730,
+                gasPrice,
+            })
+        }
+        return {
+            fund_first_hash,
+            fund_second_hash,
+        }
     },
     /**
      * Split fund ERC20 token

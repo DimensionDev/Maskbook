@@ -1,6 +1,8 @@
 import { Result, Err, Ok } from 'ts-results'
 import { GitcoinGrantFailedReason as Reason } from './types'
 
+export * from '../Wallet/gitcoin'
+
 export interface GitcoinGrantMetadata {
     title?: string
     description?: string
@@ -16,7 +18,7 @@ export async function fetchMetadata(url: string): Promise<Result<GitcoinGrantMet
     const data = await fetchData(url)
     if (data.err) return data.mapErr((e) => [Reason.FetchFailed, e])
     const { val } = data
-    const { title, description, logo: image, contract_address: address } = val
+    const { title, description, logo: image, admin_address: address } = val
     const finalAmount = parse(data.val.amount_received)
     // TODO: wait for https://github.com/gitcoinco/web/pull/6633
     const [amount, contributors] = [undefined, undefined]
