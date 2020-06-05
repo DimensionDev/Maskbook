@@ -1,5 +1,5 @@
 import type { BigNumber } from 'bignumber.js'
-import { gitcoinAPI } from './real'
+import { gitcoinAPI } from './api'
 import type { GitcoinFundRecord } from './database/types'
 
 function getProvider() {
@@ -12,6 +12,15 @@ export function fundGrant(
         'donor_address' | 'donation_address' | 'donation_total' | 'network' | 'token_type' | 'erc20_token' | 'comment'
     >,
 ) {
+    // split amount
+
+    // if (eth) {
+    //     transfer
+    // } else {
+    //     approve ERC20
+    //     split transfer
+    // }
+
     // TODO:
     // getProvider().fund()
     return Promise.resolve({})
