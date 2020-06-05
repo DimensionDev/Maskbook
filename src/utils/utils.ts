@@ -197,3 +197,15 @@ export function parseURL(string: string) {
     const links: { raw: string; protocol: string; encoded: string }[] = anchorme(string, { list: true })
     return links.map((x) => x.raw)
 }
+/**
+ * !!!! Please use the Promise constructor if possible
+ * If you don't understand https://groups.google.com/forum/#!topic/bluebird-js/mUiX2-vXW2s
+ */
+export function defer<T, E = unknown>() {
+    let a!: (val: T) => void, b!: (err: E) => void
+    const p = new Promise<T>((x, y) => {
+        a = x
+        b = y
+    })
+    return [p, a, b] as const
+}

@@ -1,5 +1,6 @@
 import { ValueRef } from '@holoflows/kit'
 import { MessageCenter } from '../../utils/messages'
+import { defer } from '../../utils/utils'
 
 export interface SettingsTexts {
     primary: () => string
@@ -17,16 +18,10 @@ function createInternalSettings<T extends browser.storage.StorageValue>(
         ready: boolean
         readonly readyPromise: Promise<T>
     }
-    let ready: () => void = undefined!
+    const [readyPromise, ready] = defer<T>()
     Object.assign(settings, {
         ready: false,
-        readyPromise: new Promise<T>(
-            (resolve) =>
-                (ready = () => {
-                    resolve(settings.value)
-                    settings.ready = true
-                }),
-        ),
+        readyPromise,
     })
 
     const instanceKey = `${storage}+${key}`
@@ -54,7 +49,8 @@ function createInternalSettings<T extends browser.storage.StorageValue>(
             const stored = await browser.storage.local.get(instanceKey)
             if (instanceKey in stored) {
                 settings.value = Reflect.get(stored, instanceKey)
-                ready()
+                settings.ready = true
+                ready(settings.value)
             }
         }
     }

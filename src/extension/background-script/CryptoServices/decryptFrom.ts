@@ -330,40 +330,38 @@ async function* findAuthorPublicKey(
 
         if (!author?.publicKey) {
             if (hasCache) return 'use cache' as const
-            let rejectGun = () => {}
-            let rejectDatabase = () => {}
+            const abort = new AbortController()
             const gunPromise = new Promise((resolve, reject) => {
-                rejectGun = () => {
+                abort.signal.addEventListener('abort', () => {
                     undo()
                     reject()
-                }
+                })
                 const undo = Gun2.subscribePersonFromGun2(by, (data) => {
                     const provePostID = data?.provePostId as string | '' | undefined
-                    if (provePostID && provePostID.length > 0) {
+                    if (provePostID?.length ?? 0 > 0) {
                         undo()
                         resolve()
                     }
                 })
             })
             const databasePromise = new Promise((resolve, reject) => {
+                abort.signal.addEventListener('abort', () => {
+                    undo()
+                    reject()
+                })
                 const undo = MessageCenter.on('profilesChanged', (data) => {
-                    data.filter((x) => x.reason !== 'delete').forEach((x) => {
+                    for (const x of data) {
+                        if (x.reason === 'delete') continue
                         if (x.of.identifier.equals(by)) {
                             undo()
                             resolve()
+                            break
                         }
-                    })
+                    }
                 })
-                rejectDatabase = () => {
-                    undo()
-                    reject()
-                }
             })
             await Promise.race([gunPromise, databasePromise])
-                .then(() => {
-                    rejectDatabase()
-                    rejectGun()
-                })
+                .then(() => abort.abort())
                 .catch(() => null)
         }
     }
