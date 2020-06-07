@@ -94,6 +94,7 @@ function register<T extends Service>(service: T, name: keyof Services, mock?: Pa
                 log: logOptions,
                 messageChannel: mc,
                 preferLocalImplementation: GetContext() === 'background',
+                preservePauseOnException: process.env.NODE_ENV === 'development',
             }),
         })
         Object.assign(globalThis, { [name]: Object.assign({}, service) })
@@ -112,6 +113,7 @@ function register<T extends Service>(service: T, name: keyof Services, mock?: Pa
                 serializer: Serialization,
                 log: logOptions,
                 messageChannel: new MessageCenter(true),
+                preservePauseOnException: process.env.NODE_ENV === 'development',
             })
         }
     } else {

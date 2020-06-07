@@ -66,7 +66,7 @@
     "@types/use-subscription": "^1.0.0",
     "@types/uuid": "^7.0.3",
     "anchorme": "^1.1.2",
-    "async-call-rpc": "^1.0.4",
+    "async-call-rpc": "^2.0.1",
     "bignumber.js": "^9.0.0",
     "bip39": "^3.0.2",
     "classnames": "^2.2.6",
