@@ -3,7 +3,10 @@
  * This file is modified from webextension-shim
  * which published as AGPLv3.
  */
-{
+code: {
+    if (typeof webkit === 'object') {
+        if (webkit.messageHandlers) break code
+    }
     /**
      * @type {(keyof typeof window & keyof typeof globalThis)[]}
      *
