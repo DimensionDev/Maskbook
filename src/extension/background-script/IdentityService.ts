@@ -77,7 +77,7 @@ export function queryMyPersonas(network?: string): Promise<Persona[]> {
 /**
  * Remove an identity.
  */
-export { deletePersona } from '../../database'
+export { setupPersona, deletePersona } from '../../database'
 //#endregion
 
 //#region Profile & Persona

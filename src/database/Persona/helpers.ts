@@ -131,6 +131,22 @@ export async function renamePersona(identifier: PersonaIdentifier, nickname: str
         ),
     )
 }
+
+export async function setupPersona(id: PersonaIdentifier) {
+    return consistentPersonaDBWriteAccess(async (t) => {
+        const d = await queryPersonaDB(id, t as any)
+        if (!d) throw new Error('cannot find persona')
+        if (d.linkedProfiles.size === 0) throw new Error('persona should link at least one profile')
+        if (d.uninitialized) {
+            await updatePersonaDB(
+                { identifier: id, uninitialized: false },
+                { linkedProfiles: 'merge', explicitUndefinedField: 'ignore' },
+                t as any,
+            )
+        }
+    })
+}
+
 export async function queryPersonaByProfile(i: ProfileIdentifier) {
     return (await queryProfile(i)).linkedPersona
 }

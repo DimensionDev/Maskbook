@@ -177,7 +177,6 @@ export async function queryPersonasDB(
     t = t || createTransaction(await db(), 'readonly')('personas')
     const records: PersonaRecord[] = []
     for await (const each of t.objectStore('personas')) {
-        if (each.value.uninitialized) continue
         const out = personaRecordOutDB(each.value)
         if (query(out)) records.push(out)
     }

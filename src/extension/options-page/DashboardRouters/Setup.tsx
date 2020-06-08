@@ -22,7 +22,7 @@ import useQueryParams from '../../../utils/hooks/useQueryParams'
 import { useAsync } from 'react-use'
 import { Identifier, ECKeyIdentifier } from '../../../database/type'
 import { useI18N } from '../../../utils/i18n-next-ui'
-import { useMyPersonas } from '../../../components/DataSource/independent'
+import { useMyPersonas, useMyUninitializedPersonas } from '../../../components/DataSource/independent'
 import { UpgradeBackupJSONFile } from '../../../utils/type-transform/BackupFormat/JSON/latest'
 import { decompressBackupFile } from '../../../utils/type-transform/BackupFileShortRepresentation'
 import { extraPermissions } from '../../../utils/permissions'
@@ -224,16 +224,29 @@ export function ConnectNetwork() {
     const providerLineClasses = useProviderLineStyle()
     const history = useHistory()
 
-    const personas = useMyPersonas()
+    const [persona, setPersona] = useState<Persona | null>(null)
+    // a restored persona threat as initialized persona
+    const initializedPersonas = useMyPersonas()
+    const uninitializedPersonas = useMyUninitializedPersonas()
     const { identifier } = useQueryParams(['identifier'])
-    const { value: persona = null, loading, error } = useAsync(async () => {
-        if (identifier)
-            return Services.Identity.queryPersona(Identifier.fromString(identifier, ECKeyIdentifier).unwrap())
-        return null
-    }, [identifier, personas])
 
-    // detect persona's nickname prevent from displaying undefined
-    if (loading || !persona?.nickname) return null
+    const { value = null, loading, error } = useAsync(
+        async () =>
+            identifier
+                ? Services.Identity.queryPersona(Identifier.fromString(identifier, ECKeyIdentifier).unwrap())
+                : null,
+        [identifier, initializedPersonas, uninitializedPersonas],
+    )
+
+    // update persona when link/unlink really happen
+    if (!loading && value?.linkedProfiles.size !== persona?.linkedProfiles.size) setPersona(value)
+
+    // prevent from displaying persona's nickname as 'undefined'
+    if (!persona?.nickname) return null
+
+    // TODO:
+    // show error message
+
     return (
         <SetupForm
             primary={t('set_up_connect', { name: persona.nickname })}
@@ -256,12 +269,15 @@ export function ConnectNetwork() {
                         color="primary"
                         disabled={persona?.linkedProfiles.size === 0}
                         onClick={async () => {
-                            await Services.Plugin.invokePlugin('maskbook.wallet', 'importFirstWallet', {
-                                name: persona.nickname ?? t('untitled_wallet'),
-                                mnemonic: persona.mnemonic?.words.split(' '),
-                                passphrase: '',
-                                _wallet_is_default: true,
-                            })
+                            await Promise.all([
+                                Services.Identity.setupPersona(persona.identifier),
+                                Services.Plugin.invokePlugin('maskbook.wallet', 'importFirstWallet', {
+                                    name: persona.nickname ?? t('untitled_wallet'),
+                                    mnemonic: persona.mnemonic?.words.split(' '),
+                                    passphrase: '',
+                                    _wallet_is_default: true,
+                                }),
+                            ])
                             await sleep(300)
                             history.replace(DashboardRoute.Personas)
                         }}>

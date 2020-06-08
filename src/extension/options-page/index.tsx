@@ -115,7 +115,7 @@ function DashboardUI() {
 
     // jump to persona if needed
     const { loading } = useAsync(async () => {
-        const personas = await Services.Identity.queryMyPersonas()
+        const personas = (await Services.Identity.queryMyPersonas()).filter((x) => !x.uninitialized)
         if (!personas.length) history.replace(`${DashboardRoute.Setup}/${SetupStep.CreatePersona}`)
         if (personas.length !== 1) return
         const profiles = await Services.Identity.queryMyProfiles()
