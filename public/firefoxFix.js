@@ -1,3 +1,18 @@
+// https://github.com/facebook/react/issues/19099
+// Another strange Firefox problem
+// https://bugzilla.mozilla.org/show_bug.cgi?id=1644132
+{
+    let log = console.log
+    let info = console.info
+    let warn = console.warn
+    let error = console.error
+    Object.defineProperties(console, {
+        log: { configurable: true, get: () => log, set: (v) => void (log = v) },
+        info: { configurable: true, get: () => info, set: (v) => void (info = v) },
+        warn: { configurable: true, get: () => warn, set: (v) => void (warn = v) },
+        error: { configurable: true, get: () => error, set: (v) => void (error = v) },
+    })
+}
 // See: https://bugzilla.mozilla.org/show_bug.cgi?id=1577400
 /**
  * This file is modified from webextension-shim
