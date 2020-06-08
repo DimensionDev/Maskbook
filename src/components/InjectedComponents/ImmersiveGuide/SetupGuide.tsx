@@ -412,8 +412,11 @@ export function SetupGuide(props: SetupGuideProps) {
         }
     }, [lastState_])
     useEffect(() => {
-        if (step === SetupGuideStep.FindUsername && lastState.username && lastState.status === 'during') {
+        if (lastState.status !== 'during') return
+        if (step === SetupGuideStep.FindUsername && lastState.username) {
             setStep(SetupGuideStep.PasteIntoBio)
+        } else if (step === SetupGuideStep.PasteIntoBio && !lastState.username) {
+            setStep(SetupGuideStep.FindUsername)
         }
     }, [step, setStep, lastState])
     //#endregion

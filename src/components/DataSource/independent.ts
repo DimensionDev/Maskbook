@@ -11,15 +11,18 @@ import { currentEthereumNetworkSettings } from '../../plugins/Wallet/UI/Develope
 
 const independentRef = {
     myPersonasRef: new ValueRef<Persona[]>([], PersonaArrayComparer),
+    myUninitializedPersonasRef: new ValueRef<Persona[]>([], PersonaArrayComparer),
     walletTokenRef: new ValueRef<[(WalletRecord & { privateKey: string })[], ERC20TokenRecord[]]>([[], []]),
 }
 
 {
-    const ref = independentRef.myPersonasRef
-    sideEffect.then(query)
+    const ref = sideEffect.then(query)
     MessageCenter.on('personaUpdated', query)
     function query() {
-        Services.Identity.queryMyPersonas().then((p) => (ref.value = p))
+        Services.Identity.queryMyPersonas().then((p) => {
+            independentRef.myPersonasRef.value = p.filter((x) => !x.uninitialized)
+            independentRef.myUninitializedPersonasRef.value = p.filter((x) => x.uninitialized)
+        })
     }
 }
 
@@ -35,6 +38,10 @@ const independentRef = {
 
 export function useMyPersonas() {
     return useValueRef(independentRef.myPersonasRef)
+}
+
+export function useMyUninitializedPersonas() {
+    return useValueRef(independentRef.myUninitializedPersonasRef)
 }
 
 export function useMyWallets() {

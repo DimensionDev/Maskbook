@@ -25,12 +25,14 @@ import { RestoreFromQRCodeCameraBox } from '../DashboardComponents/RestoreFromQR
 export function DashboardPersonaCreateDialog(props: WrappedDialogProps) {
     const { t } = useI18N()
     const [name, setName] = useState('')
+    const history = useHistory()
 
-    const createPersona = useSnackbarCallback(
-        () => Services.Identity.createPersonaByMnemonic(name, ''),
-        [name, ''],
-        props.onClose,
-    )
+    const createPersonaAndNext = async () => {
+        const persona = await Services.Identity.createPersonaByMnemonic(name, '')
+        history.push(
+            `${DashboardRoute.Setup}/${SetupStep.ConnectNetwork}?identifier=${encodeURIComponent(persona.toText())}`,
+        )
+    }
 
     return (
         <DashboardDialogCore {...props}>
@@ -51,7 +53,7 @@ export function DashboardPersonaCreateDialog(props: WrappedDialogProps) {
                                 onKeyDown={(e) => {
                                     if (e.key === 'Enter') {
                                         e.preventDefault()
-                                        createPersona()
+                                        createPersonaAndNext()
                                     }
                                 }}
                             />
@@ -63,7 +65,7 @@ export function DashboardPersonaCreateDialog(props: WrappedDialogProps) {
                         type="submit"
                         variant="contained"
                         color="primary"
-                        onClick={createPersona}
+                        onClick={createPersonaAndNext}
                         disabled={!name}>
                         {t('create')}
                     </DebounceButton>
@@ -72,7 +74,7 @@ export function DashboardPersonaCreateDialog(props: WrappedDialogProps) {
     )
 }
 
-export function DashboardPersonaImportDialog(props: WrappedDialogProps) {
+export function DashboardImportPersonaDialog(props: WrappedDialogProps) {
     const { t } = useI18N()
     const { enqueueSnackbar } = useSnackbar()
     const history = useHistory()

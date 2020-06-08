@@ -3,7 +3,7 @@ import DashboardRouterContainer from './Container'
 import { Button, makeStyles, createStyles, Theme, ThemeProvider } from '@material-ui/core'
 import AddCircleIcon from '@material-ui/icons/AddCircle'
 import PersonaCard from '../DashboardComponents/PersonaCard'
-import { DashboardPersonaCreateDialog, DashboardPersonaImportDialog } from '../Dialogs/Persona'
+import { DashboardPersonaCreateDialog, DashboardImportPersonaDialog } from '../Dialogs/Persona'
 import { useModal } from '../Dialogs/Base'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { merge, cloneDeep } from 'lodash-es'
@@ -52,7 +52,7 @@ export default function DashboardPersonasRouter() {
     const history = useHistory()
 
     const [createPersona, openCreatePersona] = useModal(DashboardPersonaCreateDialog)
-    const [importPersona, openImportPersona] = useModal(DashboardPersonaImportDialog)
+    const [importPersona, openImportPersona] = useModal(DashboardImportPersonaDialog)
 
     const actions = useMemo(
         () => [
