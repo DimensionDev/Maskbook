@@ -4,7 +4,6 @@ import Lock from '@material-ui/icons/Lock'
 import Services from '../../extension/service'
 import type { ValueRef } from '@holoflows/kit/es'
 import { useValueRef } from '../../utils/hooks/useValueRef'
-import type { Payload } from '../../utils/type-transform/Payload'
 import type { ChipProps } from '@material-ui/core/Chip'
 import { useStylesExtends } from '../custom-ui-helper'
 import { useAsync } from 'react-use'
@@ -45,9 +44,9 @@ export function PostComment(props: PostCommentProps) {
     const postIV = postPayload.ok ? postPayload.val.iv : ''
 
     const dec = useAsync(async () => {
-        if (!postIV || !decryptedPostContent) throw new Error()
+        if (!postIV || !decryptedPostContent) throw new Error('Decrypt comment failed')
         const result = await Services.Crypto.decryptComment(postIV, decryptedPostContent, comment)
-        if (result === null) throw new Error()
+        if (result === null) throw new Error('Decrypt result empty')
         return result
     }, [postIV, decryptedPostContent, comment])
 

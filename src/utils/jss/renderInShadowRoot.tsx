@@ -54,7 +54,7 @@ export function renderInShadowRoot(
             )
         }
         setTimeout(() => {
-            if (!(element instanceof ShadowRoot)) throw new Error()
+            if (!(element instanceof ShadowRoot)) throw new Error('Element not instance of ShadowRoot')
             // ! DOMRender requires the element inside document
             if (element.host.parentNode === null) tryRender()
             else {
