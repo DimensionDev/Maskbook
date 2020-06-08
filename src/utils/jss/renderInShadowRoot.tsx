@@ -54,7 +54,10 @@ export function renderInShadowRoot(
             )
         }
         setTimeout(() => {
-            if (!(element instanceof ShadowRoot)) throw new Error('Element not instance of ShadowRoot')
+            if (!(element instanceof ShadowRoot)) {
+                console.log('Element = ', element)
+                throw new Error('Element not instance of ShadowRoot')
+            }
             // ! DOMRender requires the element inside document
             if (element.host.parentNode === null) tryRender()
             else {
@@ -205,7 +208,7 @@ function Maskbook(_props: MaskbookProps) {
                             vertical: 'bottom',
                             horizontal: 'right',
                         }}>
-                        <div {..._props} />
+                        <span {..._props} />
                     </SnackbarProvider>
                 </React.StrictMode>
             </I18nextProvider>

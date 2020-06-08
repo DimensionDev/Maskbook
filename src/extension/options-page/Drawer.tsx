@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React from 'react'
 import Divider from '@material-ui/core/Divider'
 import Drawer from '@material-ui/core/Drawer'
 import Hidden from '@material-ui/core/Hidden'
@@ -7,11 +7,12 @@ import ListItem from '@material-ui/core/ListItem'
 import ListItemIcon from '@material-ui/core/ListItemIcon'
 import ListItemText from '@material-ui/core/ListItemText'
 import { makeStyles } from '@material-ui/core/styles'
-import { IconButton, Typography, BottomNavigation, BottomNavigationAction } from '@material-ui/core'
+import { IconButton, Typography } from '@material-ui/core'
 import classNames from 'classnames'
+import { MaskbookIcon } from '../../resources/Maskbook-Circle-WhiteGraph-BlueBackground'
 
 import CloseIcon from '@material-ui/icons/Close'
-import { Link, useRouteMatch, useHistory } from 'react-router-dom'
+import { Link, useRouteMatch } from 'react-router-dom'
 
 const drawerWidth = 240
 
@@ -89,7 +90,7 @@ function ResponsiveDrawer(props: ResponsiveDrawerProps) {
             )}
             <Divider />
             <section className={classNames(classes.padded)}>
-                <img className={classes.maskicon} src="/MB--CircleCanvas--WhiteOverBlue.svg" />
+                <MaskbookIcon className={classes.maskicon} />
                 <img className={classes.masktext} src="/maskbook--logotype-blue.png" />
                 <Typography variant="caption">Make Privacy Protected Again</Typography>
             </section>

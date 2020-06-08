@@ -3,7 +3,7 @@ import { GrayscaleAlgorithm } from 'node-stego/es/grayscale'
 import { TransformAlgorithm } from 'node-stego/es/transform'
 import { OnlyRunInContext } from '@holoflows/kit/es'
 import type { EncodeOptions, DecodeOptions } from 'node-stego/es/stego'
-import { getUrl, downloadUrl } from '../../utils/utils'
+import { getUrl, downloadUrl, unreachable } from '../../utils/utils'
 import { memoizePromise } from '../../utils/memoize'
 import { getDimension } from '../../utils/image'
 import { decodeArrayBuffer, encodeArrayBuffer } from '../../utils/type-transform/String-ArrayBuffer'
@@ -40,10 +40,13 @@ const defaultOptions = {
 const isSameDimension = (dimension: Dimension, otherDimension: Dimension) =>
     dimension.width === otherDimension.width && dimension.height === otherDimension.height
 
-const getMaskBuf = memoizePromise(
-    (type: 'default' | 'transparent') => downloadUrl(getUrl(`/mask-${type}.png`)),
-    undefined,
-)
+type ImgKind = 'default' | 'transparent'
+function getImageURL(type: ImgKind) {
+    if (type === 'default') return getUrl(`/mask-default.png`)
+    if (type === 'transparent') return getUrl(`/mask-transparent.png`)
+    return unreachable(type)
+}
+const getMaskBuf = memoizePromise((type: 'default' | 'transparent') => downloadUrl(getImageURL(type)), undefined)
 
 type EncodeImageOptions = {
     template?: Template
