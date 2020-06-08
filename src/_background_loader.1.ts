@@ -10,6 +10,7 @@ import * as IdentityService from './extension/background-script/IdentityService'
 import * as UserGroupService from './extension/background-script/UserGroupService'
 import * as SteganographyService from './extension/background-script/SteganographyService'
 import * as PluginService from './extension/background-script/PluginService'
+import * as HelperService from './extension/background-script/HelperService'
 import { decryptFromMessageWithProgress } from './extension/background-script/CryptoServices/decryptFrom'
 
 Object.assign(window, {
@@ -19,6 +20,7 @@ Object.assign(window, {
     IdentityService,
     UserGroupService,
     PluginService,
+    HelperService,
 })
 Object.assign(window, {
     ServicesWithProgress: {

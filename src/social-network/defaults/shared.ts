@@ -1,4 +1,4 @@
-import { bypass, regexMatch, regexMatchAll } from '../../utils/utils'
+import { bypass, regexMatchAll } from '../../utils/utils'
 import { cloneDeep } from 'lodash-es'
 
 export const defaultSharedSettings = cloneDeep({

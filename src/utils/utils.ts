@@ -1,13 +1,16 @@
+/**
+ * Prefer function declaration than const f = () => ...
+ * in this file please.
+ */
 import { CustomEventId } from './constants'
 import type { CustomEvents } from '../extension/injected-script/addEventListener'
 
-import { sleep as _sleep, timeout as _timeout } from '@holoflows/kit/es/util/sleep'
 import { flatten, isNull, random } from 'lodash-es'
 
-export const sleep = _sleep
-export const timeout = _timeout
+import { sleep } from '@holoflows/kit/es/util/sleep'
+export { sleep, timeout } from '@holoflows/kit/es/util/sleep'
 
-export const randomElement = (arr: unknown[]) => {
+export function randomElement(arr: unknown[]) {
     const e = flatten(arr)
     return e[random(0, e.length - 1)]
 }
@@ -26,6 +29,11 @@ export function getUrl(path: string, fallback: string = '') {
  * Download given url return as ArrayBuffer
  */
 export async function downloadUrl(url: string) {
+    try {
+        if (url.startsWith(browser.runtime.getURL(''))) {
+            return Services.Helper.fetch(url)
+        }
+    } catch {}
     const res = await fetch(url)
     if (!res.ok) throw new Error('Fetch failed.')
     return res.arrayBuffer()
@@ -63,21 +71,25 @@ export function selectElementContents(el: Node) {
     return sel
 }
 
-export const nop = (...args: unknown[]) => {}
-// noinspection JSUnusedLocalSymbols
-export const nopWithUnmount = (...args: unknown[]) => nop
-export const bypass: <T>(args: T) => T = (args) => args
-export const unreachable = (val: never) => {
+import { noop } from 'lodash-es'
+export { noop as nop } from 'lodash-es'
+export { identity as bypass } from 'lodash-es'
+export function nopWithUnmount(..._args: unknown[]) {
+    return noop
+}
+export function unreachable(val: never): never {
     console.error('Unhandled value: ', val)
     throw new Error('Unreachable case:' + val)
+}
+export function safeUnreachable(val: never) {
+    console.error('Unhandled value: ', val)
 }
 /**
  * index starts at one.
  */
-export const regexMatch: {
-    (str: string, regexp: RegExp, index?: number): string | null
-    (str: string, regexp: RegExp, index: null): RegExpMatchArray | null
-} = (str: string, regexp: RegExp, index: number | null = 1) => {
+export function regexMatch(str: string, regexp: RegExp, index?: number): string | null
+export function regexMatch(str: string, regexp: RegExp, index: null): RegExpMatchArray | null
+export function regexMatch(str: string, regexp: RegExp, index: number | null = 1) {
     const r = str.match(regexp)
     if (isNull(r)) return null
     if (index === null) {
@@ -97,7 +109,7 @@ export const regexMatch: {
  *  regexMatchAll(">target<whatever>target2<", />(.+)</)
  *  >>> ["target", "target2"]
  */
-export const regexMatchAll = (str: string, regexp: RegExp, index: number = 1) => {
+export function regexMatchAll(str: string, regexp: RegExp, index: number = 1) {
     const gPos = regexp.flags.indexOf('g')
     const withoutG = gPos >= 0 ? `${regexp.flags.slice(0, gPos)}${regexp.flags.slice(gPos + 1)}` : regexp.flags
     const o = new RegExp(regexp.source, withoutG)
@@ -128,7 +140,7 @@ export const regexMatchAll = (str: string, regexp: RegExp, index: number = 1) =>
  *                  string.replace
  * @return          result string
  */
-export const batchReplace = (source: string, group: Array<[string | RegExp, string]>) => {
+export function batchReplace(source: string, group: Array<[string | RegExp, string]>) {
     let storage = source
     for (const v of group) {
         storage = storage.replace(v[0], v[1])
@@ -136,7 +148,7 @@ export const batchReplace = (source: string, group: Array<[string | RegExp, stri
     return storage
 }
 
-export const asyncTimes = async <T>(
+export async function asyncTimes<T>(
     times: number,
     iteratee: () => Promise<T | void>,
     {
@@ -146,7 +158,7 @@ export const asyncTimes = async <T>(
         delay?: number
         earlyStop?: boolean // stop for first value
     } = {},
-) => {
+) {
     const result: (T | void)[] = []
 
     for await (const i of Array.from(Array(times).keys())) {
@@ -161,14 +173,14 @@ export const asyncTimes = async <T>(
     return result
 }
 
-export const pollingTask = (
+export function pollingTask(
     task: () => Promise<boolean>,
     {
         delay = 30 * 1000,
     }: {
         delay?: number
     } = {},
-) => {
+) {
     const runTask = async () => {
         let stop = false
         try {
@@ -192,6 +204,7 @@ export function addUint8Array(a: ArrayBuffer, b: ArrayBuffer) {
 }
 
 import anchorme from 'anchorme'
+import Services from '../extension/service'
 export function parseURL(string: string) {
     // TODO: upgrade to anchorme 2
     const links: { raw: string; protocol: string; encoded: string }[] = anchorme(string, { list: true })

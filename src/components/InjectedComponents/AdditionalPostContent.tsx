@@ -8,6 +8,7 @@ import { TypedMessageRendererProps, DefaultTypedMessageRenderer } from './TypedM
 import CheckIcon from '@material-ui/icons/Check'
 import CloseIcon from '@material-ui/icons/Close'
 import green from '@material-ui/core/colors/green'
+import { MaskbookIcon } from '../../resources/Maskbook-Circle-WhiteGraph-BlueBackground'
 
 export enum AdditionalIcon {
     check = 'check',
@@ -35,7 +36,6 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 export const AdditionalContent = React.memo(function AdditionalContent(props: AdditionalContentProps) {
     const classes = useStylesExtends(useStyles(), props)
-    const icon = getUrl('/maskbook-icon-padded.png')
     const stop = React.useCallback((ev: React.MouseEvent<HTMLDivElement, MouseEvent>) => ev.stopPropagation(), [])
     const { progress, title, message } = props
     const ProgressJSX = !progress ? null : progress === true ? (
@@ -55,7 +55,7 @@ export const AdditionalContent = React.memo(function AdditionalContent(props: Ad
             color={message ? 'textSecondary' : 'textPrimary'}
             gutterBottom
             className={classNames(classes.title)}>
-            <span className={classes.icon}>{ProgressJSX || <img alt="" width={20} height={20} src={icon} />}</span>
+            <span className={classes.icon}>{ProgressJSX || <MaskbookIcon></MaskbookIcon>}</span>
             <Box flex={1} display="flex">
                 {title}
                 {RightIconJSX}

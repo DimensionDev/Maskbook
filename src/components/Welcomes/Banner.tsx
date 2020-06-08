@@ -11,6 +11,7 @@ import { setStorage } from '../../utils/browser.storage'
 import { useStylesExtends } from '../custom-ui-helper'
 import { ProfileIdentifier } from '../../database/type'
 import { getUrl } from '../../utils/utils'
+import { MaskbookIcon } from '../../resources/Maskbook-Circle-WhiteGraph-BlueBackground'
 
 interface BannerUIProps
     extends withClasses<KeysInferFromUseStyles<typeof useStyles> | 'header' | 'content' | 'actions' | 'button'> {
@@ -70,7 +71,7 @@ export function BannerUI(props: BannerUIProps) {
         <Paper style={{ paddingBottom: 0 }} classes={{ root: classes.root }}>
             <div className={classes.wrapper}>
                 <ListItemIcon>
-                    <img alt="" className={classes.maskicon} src={getUrl('/maskbook-icon-padded.png')} />
+                    <MaskbookIcon className={classes.maskicon}></MaskbookIcon>
                 </ListItemIcon>
                 <ListItemText
                     className={classes.header}

@@ -5,7 +5,6 @@ import Serialization from '../utils/type-transform/Serialization'
 import { ProfileIdentifier, GroupIdentifier, PostIdentifier, PostIVIdentifier, ECKeyIdentifier } from '../database/type'
 import { getCurrentNetworkWorkerService } from './background-script/WorkerService'
 
-import tasks from './content-script/tasks'
 import { MessageCenter } from '@holoflows/kit/es'
 import { IdentifierMap } from '../database/IdentifierMap'
 
@@ -16,6 +15,7 @@ interface Services {
     Welcome: typeof import('./background-script/WelcomeService')
     Steganography: typeof import('./background-script/SteganographyService')
     Plugin: typeof import('./background-script/PluginService')
+    Helper: typeof import('./background-script/HelperService')
 }
 const Services = {} as Services
 export default Services
@@ -29,16 +29,17 @@ const logOptions: AsyncCallOptions['log'] = {
 }
 if (!('Services' in globalThis)) {
     Object.assign(globalThis, { Services })
-    // Sorry you should add import at '../background-service.ts'
+    // Sorry you should add import at '../_background_loader.1.ts'
     register(createProxyToService('CryptoService'), 'Crypto', MockService.CryptoService)
     register(createProxyToService('WelcomeService'), 'Welcome', MockService.WelcomeService)
     register(createProxyToService('SteganographyService'), 'Steganography', MockService.SteganographyService)
     register(createProxyToService('IdentityService'), 'Identity', {})
     register(createProxyToService('UserGroupService'), 'UserGroup', {})
     register(createProxyToService('PluginService'), 'Plugin', {})
+    register(createProxyToService('HelperService'), 'Helper', {})
 }
 interface ServicesWithProgress {
-    // Sorry you should add import at '../background-service.ts'
+    // Sorry you should add import at '../_background_loader.1.ts'
     decryptFrom: typeof import('./background-script/CryptoServices/decryptFrom').decryptFromMessageWithProgress
 }
 function createProxyToService(name: string) {
@@ -86,13 +87,13 @@ function register<T extends Service>(service: T, name: keyof Services, mock?: Pa
     if (OnlyRunInContext(['content', 'options', 'debugging', 'background'], false)) {
         GetContext() !== 'debugging' && console.log(`Service ${name} registered in ${GetContext()}`)
         const mc = new MessageCenter(false)
-        // mc.writeToConsole = true
         Object.assign(Services, {
             [name]: AsyncCall(service, {
                 key: name,
                 serializer: Serialization,
                 log: logOptions,
                 messageChannel: mc,
+                preferLocalImplementation: GetContext() === 'background',
             }),
         })
         Object.assign(globalThis, { [name]: Object.assign({}, service) })

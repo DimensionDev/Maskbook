@@ -4,6 +4,7 @@ import { LiveSelector, MutationObserverWatcher } from '@holoflows/kit'
 import { renderInShadowRoot } from '../../../utils/jss/renderInShadowRoot'
 import { makeStyles } from '@material-ui/core'
 import Services from '../../../extension/service'
+import { MaskbookIcon } from '../../../resources/Maskbook-Circle-WhiteGraph-BlueBackground'
 
 const settings = new LiveSelector().querySelector('.mSideMenu').enableSingleMode()
 export function injectOptionsPageLinkAtFacebook() {
@@ -26,19 +27,20 @@ const useStyle = makeStyles({
         lineHeight: '42px',
         fontSize: '1rem',
         borderBottom: '1px solid rgb(233, 234, 237)',
+        width: 34,
+        height: 34,
     },
     icon: { transform: 'translate(-1px, 1px)', margin: '4px 5px 0 7px' },
 })
 function Link() {
     const style = useStyle()
-    const icon = getUrl('/maskbook-icon-padded.png')
     return (
         <a
             className={style.root}
             onClick={() => {
                 Services.Welcome.openOptionsPage('/')
             }}>
-            <img alt="" width={34} height={34} src={icon} className={style.icon} />
+            <MaskbookIcon className={style.icon}></MaskbookIcon>
             Maskbook Settings
         </a>
     )
