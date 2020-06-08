@@ -26,6 +26,7 @@ import { createTaskStartImmersiveSetupDefault } from '../../../social-network/de
 import { instanceOfTwitterUI } from '.'
 import type { ProfileIdentifier } from '../../../database/type'
 import { encodeArrayBuffer, decodeArrayBuffer } from '../../../utils/type-transform/String-ArrayBuffer'
+import { isMobileTwitter } from '../utils/isMobile'
 
 /**
  * Wait for up to 5000 ms
@@ -55,7 +56,7 @@ const taskPasteIntoPostBox: SocialNetworkUI['taskPasteIntoPostBox'] = (text, opt
             await sleep(interval)
         }
         // paste
-        dispatchCustomEvents('paste', text)
+        isMobileTwitter ? dispatchCustomEvents('input', text) : dispatchCustomEvents('paste', text)
         await sleep(interval)
         if (!getEditorContent().replace(/\n/g, '').includes(text.replace(/\n/g, ''))) {
             prompt(opt.warningText, text)

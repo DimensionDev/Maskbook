@@ -75,12 +75,11 @@ export interface CustomEvents {
         },
     }
     ;(Object.keys(hacks) as (keyof DocumentEventMap)[]).concat(['keyup', 'input']).forEach(hijack)
-    const invokeCustomEvent: EventListenerOrEventListenerObject = (e) => {
-        const ev = e as CustomEvent<string>
-        type K = keyof CustomEvents
-        const [eventName, param]: [K, CustomEvents[K]] = JSON.parse(ev.detail)
-        // TODO: handle target
-        for (const [f, target] of store[eventName] || []) {
+    function invoke<T extends keyof CustomEvents>(eventName: T, param: CustomEvents[T]) {
+        const _ = store[eventName]
+        if (!_) return
+        // TODO: handle DOM tree hierarchy
+        for (const [f, target] of _ as CallbackMap) {
             // Skip for Non-Node target
             if (!isConnected(target)) continue
             try {
@@ -91,6 +90,13 @@ export interface CustomEvents {
                 error(e)
             }
         }
+    }
+    if (process.env.NODE_ENV === 'development') console.log(`Invoke custom event:`, invoke)
+    const invokeCustomEvent: EventListenerOrEventListenerObject = (e) => {
+        const ev = e as CustomEvent<string>
+        type K = keyof CustomEvents
+        const [eventName, param]: [K, CustomEvents[K]] = JSON.parse(ev.detail)
+        invoke(eventName, param)
     }
     document.addEventListener(CustomEventId, invokeCustomEvent)
     EventTarget.prototype.addEventListener = new Proxy(EventTarget.prototype.addEventListener, {

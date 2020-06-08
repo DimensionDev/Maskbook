@@ -28,11 +28,14 @@ export const postEditorInPopupSelector: () => LiveSelector<E, true> = () =>
     )
 export const postEditorInTimelineSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('[role="main"] :not(aside) > [role="progressbar"] ~ div')
-export const postEditorDraftContentSelector = () =>
-    (isCompose() ? postEditorInPopupSelector() : postEditorInTimelineSelector()).querySelector<HTMLElement>(
-        // TODO: the aria-label is related to the language
-        '.public-DraftEditor-content, textarea[aria-label="Tweet text"]',
+export const postEditorDraftContentSelector = () => {
+    if (location.pathname === '/compose/tweet') {
+        return querySelector<HTMLTextAreaElement>(`textarea[aria-label][spellcheck]`)
+    }
+    return (isCompose() ? postEditorInPopupSelector() : postEditorInTimelineSelector()).querySelector<HTMLElement>(
+        '.public-DraftEditor-content, textarea[aria-label][spellcheck]',
     )
+}
 export const posteditorToolbarSeelctor: () => LiveSelector<E, true> = () =>
     querySelector<E>('[data-testid="toolBar"] > div > *:last-child')
 
