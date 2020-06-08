@@ -66,9 +66,10 @@ export async function pasteIntoPostBoxFacebook(
     const scrolling = document.scrollingElement || document.documentElement
     const scrollBack = ((top) => () => scrolling.scroll({ top }))(scrolling.scrollTop)
 
-    const activated = new LiveSelector().querySelector<HTMLDivElement | HTMLTextAreaElement>(
+    const activated = new LiveSelector().querySelectorAll<HTMLDivElement | HTMLTextAreaElement>(
         isMobileFacebook ? 'form textarea' : '.notranslate',
     )
+    if (isMobileFacebook) activated.filter((x) => x.getClientRects().length > 0)
     // If page is just loaded
     if (shouldOpenPostDialog) {
         await openPostDialogFacebook()
