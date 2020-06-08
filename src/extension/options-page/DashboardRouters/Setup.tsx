@@ -232,13 +232,6 @@ export function ConnectNetwork() {
         return null
     }, [identifier, personas])
 
-    const deletePersonaAndBack = async () => {
-        if (persona) await Services.Identity.deletePersona(persona.identifier, 'delete even with private')
-        // prevent from displaying delete persona
-        await sleep(300)
-        history.goBack()
-    }
-
     // detect persona's nickname prevent from displaying undefined
     if (loading || !persona?.nickname) return null
     return (
@@ -269,13 +262,12 @@ export function ConnectNetwork() {
                                 passphrase: '',
                                 _wallet_is_default: true,
                             })
-                            // prevent from displaying delete persona
                             await sleep(300)
                             history.replace(DashboardRoute.Personas)
                         }}>
                         {t('set_up_button_finish')}
                     </ActionButton>
-                    <ActionButton variant="text" onClick={deletePersonaAndBack}>
+                    <ActionButton variant="text" onClick={() => history.goBack()}>
                         {t('set_up_button_cancel')}
                     </ActionButton>
                 </>
