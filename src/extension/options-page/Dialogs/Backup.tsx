@@ -71,7 +71,11 @@ export function DashboardBackupDialog(props: WrappedDialogProps) {
                             classes={{ table: classes.dashboardPreviewCardTable }}
                             dense
                             records={records}></DatabasePreviewCard>
-                        <DebounceButton disabled={loading} variant="contained" color="primary" onClick={onConfirm}>
+                        <DebounceButton
+                            disabled={loading || records.every((r) => !r.length)}
+                            variant="contained"
+                            color="primary"
+                            onClick={onConfirm}>
                             {t('dashboard_backup_database_confirmation')}
                         </DebounceButton>
                     </Box>
