@@ -13,7 +13,7 @@ jobs:
     setup:
         runs-on: self-hosted
         container:
-            image: differui/node-13.2.0-browsers:v2
+            image: differui/node-14.4.0-browsers:v1
             # more: https://github.community/t5/GitHub-Actions/How-to-run-action-as-a-non-root-user/m-p/45733/highlight/true#M6330
             options: --user 1000 -v /home/ubuntu/.cache/yarn/v6:/tmp/.yarn-cache-1000/v6 # $(id -u ubuntu)
         steps:
@@ -28,7 +28,7 @@ jobs:
         needs: setup
         runs-on: self-hosted
         container:
-            image: differui/node-13.2.0-browsers:v2
+            image: differui/node-14.4.0-browsers:v1
             options: --user 1000 -v /home/ubuntu/.cache/yarn/v6:/tmp/.yarn-cache-1000/v6
         steps:
             - name: TypeScript type check
@@ -48,7 +48,7 @@ jobs:
         needs: [setup, linters]
         runs-on: self-hosted
         container:
-            image: differui/node-13.2.0-browsers:v2
+            image: differui/node-14.4.0-browsers:v1
             options: --user 1000 -v /home/ubuntu/.cache/yarn/v6:/tmp/.yarn-cache-1000/v6
         steps:
             - name: Build storybook
@@ -62,7 +62,7 @@ jobs:
         needs: [setup, linters, storybook]
         runs-on: self-hosted
         container:
-            image: differui/node-13.2.0-browsers:v2
+            image: differui/node-14.4.0-browsers:v1
             options: --user 1000 -v /home/ubuntu/.cache/yarn/v6:/tmp/.yarn-cache-1000/v6
         steps:
             - name: Build
