@@ -17,6 +17,7 @@ import {
     ImmersiveSetupCrossContextStatus,
 } from '../../../components/shared-settings/settings'
 import { exclusiveTasks } from '../../content-script/tasks'
+import stringify from 'json-stable-stringify'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -99,7 +100,7 @@ export default function ProfileBox({ persona, border }: Props) {
     const onConnect = async (provider: typeof providers[0]) => {
         if (!persona) return
         if (!(await getCurrentNetworkUI(provider.network).requestPermission())) return
-        currentImmersiveSetupStatus[provider.network].value = JSON.stringify({
+        currentImmersiveSetupStatus[provider.network].value = stringify({
             status: 'during',
             persona: persona.identifier.toText(),
         } as ImmersiveSetupCrossContextStatus)

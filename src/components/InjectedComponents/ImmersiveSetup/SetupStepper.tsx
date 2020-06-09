@@ -21,6 +21,7 @@ import Services from '../../../extension/service'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { selectElementContents } from '../../../utils/utils'
 import classNames from 'classnames'
+import stringify from 'json-stable-stringify'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -321,7 +322,7 @@ export function ImmersiveSetupStepper(
 async function defaultLoadProfile(props: { username?: string; persona: PersonaIdentifier }, username: string) {
     const ui = getActivatedUI()
     const finalUsername = props.username || username
-    currentImmersiveSetupStatus[ui.networkIdentifier].value = JSON.stringify({
+    currentImmersiveSetupStatus[ui.networkIdentifier].value = stringify({
         status: 'during',
         username: finalUsername,
         persona: props.persona.toText(),
