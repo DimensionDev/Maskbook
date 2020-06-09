@@ -235,9 +235,9 @@ export async function recoverWalletFromPrivateKey(privateKey: string) {
         return new Uint8Array(buf)
     }
     function privateKeyVerify(key: string) {
-        const k = BigInt(`0x${key}`)
-        const n = BigInt('0xfffffffffffffffffffffffffffffffebaaedce6af48a03bbfd25e8cd0364141')
-        return k !== BigInt(0) && k < n
+        const k = new BigNumber(`0x${key}`)
+        const n = new BigNumber('0xfffffffffffffffffffffffffffffffebaaedce6af48a03bbfd25e8cd0364141')
+        return !k.isEqualTo(0) && n.isGreaterThan(k)
     }
 }
 
