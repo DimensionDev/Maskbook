@@ -150,7 +150,6 @@
     "done": "Done!",
     "error_name_absent": "Name cannot be empty",
     "error_password_absent": "Password cannot be empty",
-    "feature_redpacket_not_supported": "Experimental feature. Now only available in Maskbook desktop browser extension.",
     "feedback": "Feedback",
     "fingerprint": "Fingerprint",
     "finish": "Finish",
