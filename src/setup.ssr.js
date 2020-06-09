@@ -26,19 +26,10 @@ const { join } = require('path')
 const { writeFileSync, readFileSync, unlinkSync } = require('fs')
 
 const restoreLodash = modifyPackage('lodash-es', (x) => (x.main = '../lodash'))
-const restoreAsyncCall = modifyPackage('async-call-rpc', (x) => {
-    x.main = './_maskbook_ssr.cjs'
-    x.types = './out/'
-})
 const restoreTSResult = modifyPackage('ts-results', (x) => {
     x.main = './cjs.cjs'
 })
 const undoTSResult = compileToCJS('../node_modules/ts-results/index.js', '../node_modules/ts-results/cjs.cjs')
-writeFileSync(
-    join(__dirname, '../node_modules/async-call-rpc/_maskbook_ssr.cjs'),
-    `exports.AsyncCall = () => new Proxy({}, {get(_target, method) {return (...params) => new Promise(x => {})}})
-exports.AsyncGeneratorCall = () => new Proxy({}, {get(_target, method) {return async function* (...params) { await new Promise(x => {})}}})`,
-)
 const restoreKit = modifyPackage('@holoflows/kit', (x) => {
     x.exports = {
         '.': './umd/index.js',
@@ -58,7 +49,6 @@ process.on('unhandledRejection', (err) => {
 })
 function cleanup() {
     restoreLodash()
-    restoreAsyncCall()
     restoreKit()
     undoTSResult()
     restoreTSResult()

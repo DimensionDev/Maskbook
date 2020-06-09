@@ -6,7 +6,7 @@ version: 2.1
 executors:
     maskbook_node:
         docker:
-            - image: circleci/node:13.2.0
+            - image: circleci/node:14.4.0
         working_directory: ~/repo
 commands:
     restore_workspace:
