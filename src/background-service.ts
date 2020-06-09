@@ -22,6 +22,7 @@ import * as type from './database/type'
 import * as post from './database/post'
 import { definedSocialNetworkWorkers } from './social-network/worker'
 import { getWelcomePageURL } from './extension/options-page/Welcome/getWelcomePageURL'
+import { exclusiveTasks } from './extension/content-script/tasks'
 
 if (GetContext() === 'background') {
     const injectedScript = getInjectedScript()
