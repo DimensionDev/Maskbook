@@ -188,22 +188,19 @@ export function PostDialogUI(props: PostDialogUIProps) {
 
                         <Typography style={{ marginBottom: 10 }}>Plugins (Experimental)</Typography>
                         <Box style={{ marginBottom: 10 }} display="flex" flexWrap="wrap">
-                            {/* without redpacket */}
-                            {webpackEnv.target !== 'WKWebview' && (
-                                <ClickableChip
-                                    ChipProps={{
-                                        label: '💰 Red Packet',
-                                        onClick: async () => {
-                                            const { wallets } = await Services.Plugin.getWallets()
-                                            if (wallets.length) {
-                                                setRedPacketDialogOpen(true)
-                                            } else {
-                                                Services.Welcome.openOptionsPage('/wallets?error=nowallet')
-                                            }
-                                        },
-                                    }}
-                                />
-                            )}
+                            <ClickableChip
+                                ChipProps={{
+                                    label: '💰 Red Packet',
+                                    onClick: async () => {
+                                        const { wallets } = await Services.Plugin.getWallets()
+                                        if (wallets.length) {
+                                            setRedPacketDialogOpen(true)
+                                        } else {
+                                            Services.Welcome.openOptionsPage('/wallets?error=nowallet')
+                                        }
+                                    },
+                                }}
+                            />
                         </Box>
                         <Typography style={{ marginBottom: 10 }}>
                             {t('post_dialog__select_recipients_title')}

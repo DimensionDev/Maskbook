@@ -139,17 +139,13 @@ export function RedPacketInDecryptedPostCard(
     const jsx = message
         ? withMetadata(message.meta, RedPacketMetaKey, (r) => (
               <MaskbookPluginWrapper width={400} pluginName="Red Packet">
-                  {webpackEnv.target === 'WKWebview' ? (
-                      <span>{t('feature_redpacket_not_supported')}</span>
-                  ) : (
-                      <RedPacketWithState
-                          loading={loading || !!claiming}
-                          onClick={onClick}
-                          unknownRedPacket={storybookDebugging ? undefined : r}
-                          redPacket={storybookDebugging ? (r as any) : undefined}
-                          from={postIdentifier && !postIdentifier.isUnknown ? getPostUrl(postIdentifier) : undefined}
-                      />
-                  )}
+                  <RedPacketWithState
+                      loading={loading || !!claiming}
+                      onClick={onClick}
+                      unknownRedPacket={storybookDebugging ? undefined : r}
+                      redPacket={storybookDebugging ? (r as any) : undefined}
+                      from={postIdentifier && !postIdentifier.isUnknown ? getPostUrl(postIdentifier) : undefined}
+                  />
               </MaskbookPluginWrapper>
           ))
         : null

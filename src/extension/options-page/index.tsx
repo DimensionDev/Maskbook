@@ -107,9 +107,7 @@ function DashboardUI() {
 
     const routers = ([
         [t('personas'), DashboardRoute.Personas, <PeopleOutlinedIcon />],
-        webpackEnv.target === 'WKWebview'
-            ? undefined!
-            : ([t('wallets'), DashboardRoute.Wallets, <CreditCardIcon />] as const),
+        [t('wallets'), DashboardRoute.Wallets, <CreditCardIcon />],
         [t('contacts'), DashboardRoute.Contacts, <BookmarkBorderOutlinedIcon />],
         [t('settings'), DashboardRoute.Settings, <SettingsOutlinedIcon />],
     ] as const).filter((x) => x)
