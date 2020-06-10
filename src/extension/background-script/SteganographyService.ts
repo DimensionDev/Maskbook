@@ -7,6 +7,7 @@ import { getUrl, downloadUrl, unreachable } from '../../utils/utils'
 import { memoizePromise } from '../../utils/memoize'
 import { getDimension } from '../../utils/image'
 import { decodeArrayBuffer, encodeArrayBuffer } from '../../utils/type-transform/String-ArrayBuffer'
+import { saveAsFile } from './HelperService'
 
 OnlyRunInContext('background', 'SteganographyService')
 
@@ -87,9 +88,5 @@ export async function decodeImageUrl(url: string, options: DecodeImageOptions) {
 }
 
 export function downloadImage({ buffer }: Uint8Array) {
-    return browser.downloads.download({
-        url: URL.createObjectURL(new Blob([buffer], { type: 'image/png' })),
-        filename: 'maskbook.png',
-        saveAs: true,
-    })
+    return saveAsFile(buffer, 'image/png', 'maskbook.png')
 }

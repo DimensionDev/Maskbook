@@ -97,6 +97,6 @@ export async function pasteIntoPostBoxFacebook(
     scrollBack()
     function copyFailed() {
         console.warn('Text not pasted to the text area')
-        prompt(warningText, text)
+        if (warningText) prompt(warningText, text)
     }
 }

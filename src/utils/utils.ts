@@ -52,7 +52,7 @@ export function dispatchCustomEvents<T extends keyof CustomEvents>(event: T, ...
  * paste image to activeElements
  * @param bytes
  */
-export async function pasteImageToActiveElements(bytes: Uint8Array) {
+export function pasteImageToActiveElements(bytes: Uint8Array) {
     return dispatchCustomEvents('paste', { type: 'image', value: Array.from(bytes) })
 }
 
