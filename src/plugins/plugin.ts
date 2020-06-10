@@ -8,8 +8,8 @@ export interface PluginSuccessDecryptionComponentProps {
 
 export interface PluginConfig {
     identifier: string
-    shouldActivateInPostInspector(post: string): boolean
-    shouldActivateInSuccessDecryption(post: TypedMessage): boolean
+    shouldActivateInPostInspector(post: string): boolean | Promise<boolean>
+    shouldActivateInSuccessDecryption(post: TypedMessage): boolean // | Promise<boolean>
     PostInspectorComponent: React.ComponentType<{ post: string }>
     SuccessDecryptionComponent: React.ComponentType<PluginSuccessDecryptionComponentProps>
 }
