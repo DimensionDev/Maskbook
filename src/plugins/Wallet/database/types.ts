@@ -207,7 +207,6 @@ export interface GitcoinDonationPayload {
     network: EthereumNetwork
     token_type: EthereumTokenType
     token?: Pick<ERC20TokenRecord, 'address' | 'name' | 'decimals' | 'symbol'>
-    comment?: string
 }
 
 export interface GitcoinDonationRecord {
@@ -235,8 +234,6 @@ export interface GitcoinDonationRecord {
     erc20_approve_value?: BigNumber
     /** ERC20 approve transaction hash */
     erc20_approve_transaction_hash?: string
-    /** The comment with donation */
-    comment?: string
     _data_source_: 'real' | 'mock'
 }
 
