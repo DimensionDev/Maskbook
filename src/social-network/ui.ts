@@ -159,7 +159,7 @@ export interface SocialNetworkUITasks {
     taskPasteIntoPostBox(
         text: string,
         options: {
-            warningText: string
+            warningText?: string
             shouldOpenPostDialog: boolean
         },
     ): void

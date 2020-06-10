@@ -23,7 +23,7 @@ export async function uploadToPostBoxFacebook(
             }),
         ),
     )
-    await pasteImageToActiveElements(secretImage)
+    pasteImageToActiveElements(secretImage)
     await untilDocumentReady()
     try {
         // Need a better way to find whether the image is pasted into
