@@ -7,6 +7,7 @@ import { cloneDeep } from 'lodash-es'
 import type { Profile } from '../../database'
 import { MaskbookLightTheme } from '../../utils/theme'
 import { ProfileArrayComparer, GroupArrayComparer } from '../../utils/comparer'
+import { ObservableWeakMap } from '../../utils/ObservableMapSet'
 
 const defaultDataSources: Required<SocialNetworkUIDataSources> = cloneDeep({
     friendsRef: new ValueRef([], ProfileArrayComparer),
@@ -14,7 +15,7 @@ const defaultDataSources: Required<SocialNetworkUIDataSources> = cloneDeep({
     groupsRef: new ValueRef([], GroupArrayComparer),
     currentIdentity: new ValueRef<Profile | null>(null),
     lastRecognizedIdentity: new ValueRef({ identifier: ProfileIdentifier.unknown }),
-    posts: new Map(),
+    posts: new ObservableWeakMap(),
     typedMessageMetadata: new ValueRef<ReadonlyMap<string, any>>(new Map<string, any>()),
 })
 

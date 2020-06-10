@@ -15,6 +15,7 @@ import type { I18NStrings } from '../utils/i18n-next'
 import type { TypedMessage } from '../extension/background-script/CryptoServices/utils'
 import i18nNextInstance from '../utils/i18n-next'
 import { Result, Err } from 'ts-results'
+import type { ObservableWeakMap } from '../utils/ObservableMapSet'
 
 if (!process.env.STORYBOOK) {
     OnlyRunInContext(['content', 'debugging', 'options'], 'UI provider')
@@ -221,7 +222,7 @@ export interface SocialNetworkUIDataSources {
     /**
      * Posts that Maskbook detects
      */
-    readonly posts?: WeakMap<object, PostInfo>
+    readonly posts?: ObservableWeakMap<object, PostInfo>
     /**
      * Typed message metadata
      */
@@ -241,6 +242,9 @@ export type PostInfo = {
     readonly decryptedPostContentRaw: ValueRef<string>
     readonly rootNode: HTMLElement
     readonly rootNodeProxy: DOMProxy
+    // readonly postMetadata: {
+    // images
+    // }
 }
 //#endregion
 //#region SocialNetworkUICustomUI
@@ -336,8 +340,7 @@ export function activateSocialNetworkUI(): void {
 }
 function hookUIPostMap(ui: SocialNetworkUI) {
     const unmountFunctions = new WeakMap<object, () => void>()
-    const setter = ui.posts.set
-    ui.posts.set = function (key, value) {
+    ui.posts.onSet = (key, value) => {
         const unmountPostInspector = ui.injectPostInspector(value)
         const unmountCommentBox: () => void =
             ui.injectCommentBox === 'disabled' ? nopWithUnmount : defaultTo(ui.injectCommentBox, nopWithUnmount)(value)
@@ -350,14 +353,10 @@ function hookUIPostMap(ui: SocialNetworkUI) {
             unmountCommentBox()
             unmountPostComments()
         })
-        Reflect.apply(setter, this, [key, value])
-        return this
     }
-    const remove = ui.posts.delete
-    ui.posts.delete = function (key) {
+    ui.posts.onDelete = (key) => {
         const f = unmountFunctions.get(key)
         f && f()
-        return Reflect.apply(remove, this, [key])
     }
 }
 
