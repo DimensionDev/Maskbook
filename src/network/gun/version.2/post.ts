@@ -89,6 +89,7 @@ export async function publishPostAESKeyOnGun2(
         gun2.get(postHash)
             // @ts-ignore
             .get(keyHash)
+            // @ts-ignore
             .set(aesKey)
     })
 }

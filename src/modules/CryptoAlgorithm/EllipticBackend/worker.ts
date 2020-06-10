@@ -9,7 +9,6 @@ const worker: typeof methods =
         : AsyncCall<typeof methods>(typeof document === 'object' ? {} : require('./methods').default, {
               messageChannel: new WorkerMessage(),
               strict: { methodNotFound: true, unknownMessage: true },
-              preservePauseOnException: process.env.NODE_ENV === 'development',
               log: false,
           })
 export default worker
