@@ -95,7 +95,7 @@ function Gitcoin(props: { url: string }) {
                     onClose={() => setOpen(false)}
                     title={title ?? 'A Gitcoin grant'}
                     description={description ?? ''}
-                    onDonate={async ({ comment, amount, selectedWallet, selectedToken, selectedTokenType }) => {
+                    onDonate={async ({ amount, selectedWallet, selectedToken, selectedTokenType }) => {
                         if (!address) {
                             return
                         }
@@ -108,7 +108,6 @@ function Gitcoin(props: { url: string }) {
                                 network: getNetworkSettings().networkType,
                                 token_type:
                                     selectedTokenType.type === 'eth' ? EthereumTokenType.eth : EthereumTokenType.erc20,
-                                comment,
                                 token: selectedToken,
                             })
                         } catch (e) {

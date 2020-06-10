@@ -22,7 +22,7 @@ function getProvider() {
 
 export async function donateGrant(donation: GitcoinDonationPayload) {
     const { networkType, gitcoinDonationAddress } = getNetworkSettings()
-    const { comment, donor_address, donation_address, donation_total, token, token_type } = donation
+    const { donor_address, donation_address, donation_total, token, token_type } = donation
 
     let approved: _UnboxPromise<ReturnType<typeof walletAPI.approveERC20Token>> | undefined
 
@@ -55,7 +55,6 @@ export async function donateGrant(donation: GitcoinDonationPayload) {
         network: networkType,
         token_type,
         erc20_token: token?.address,
-        comment,
         ...approved,
         ...funded,
     }

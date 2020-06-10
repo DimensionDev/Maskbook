@@ -9,19 +9,13 @@ import {
     DialogContent,
     Divider,
     TextField,
-    Checkbox,
-    FormControlLabel,
-    FormHelperText,
-    FormControl,
     Link,
-    FormGroup,
     DialogActions,
 } from '@material-ui/core'
 import ActionButton from '../../extension/options-page/DashboardComponents/ActionButton'
 import { useI18N } from '../../utils/i18n-next-ui'
 import ShadowRootDialog from '../../utils/jss/ShadowRootDialog'
 import { DialogDismissIconUI } from '../../components/InjectedComponents/DialogDismissIcon'
-import AbstractTab from '../../extension/options-page/DashboardComponents/AbstractTab'
 import { TokenSelect } from '../shared/TokenSelect'
 import { WalletSelect } from '../shared/WalletSelect'
 import { useSelectWallet, SelectedTokenType } from '../shared/useWallet'
@@ -41,9 +35,7 @@ interface DonateCardProps {
     title: string
     description: string
     onDonate(opt: {
-        comment: string
         amount: number
-        hideWalletAddr: boolean
         selectedWallet: string
         selectedToken: ERC20TokenRecord
         selectedTokenType: SelectedTokenType
@@ -58,9 +50,7 @@ interface DonateCardProps {
 export function DonateCard(props: DonateCardProps) {
     const classes = useStyles()
     const { t } = useI18N()
-    const [comment, setComment] = useState('')
     const [amount, setAmount] = useState(0)
-    const [hideWalletAddr, setHideWalletAddr] = useState(false)
     const useSelectWalletResult = useSelectWallet(props.wallets, props.tokens, props.onRequireNewWallet)
     if (!props.address) return null
     return (
@@ -103,32 +93,6 @@ export function DonateCard(props: DonateCardProps) {
                             label="Amount"
                             onChange={(e) => setAmount(parseFloat(e.currentTarget.value))}
                         />
-                        <TextField
-                            variant="filled"
-                            fullWidth
-                            label="Comment (Public)"
-                            multiline
-                            value={comment}
-                            rows={3}
-                            onChange={(e) => setComment(e.currentTarget.value)}
-                        />
-                        <FormControl component="fieldset">
-                            <FormGroup>
-                                <FormControlLabel
-                                    control={
-                                        <Checkbox
-                                            value={hideWalletAddr}
-                                            onChange={(e) => setHideWalletAddr(Boolean(e.currentTarget.value))}
-                                            color="primary"
-                                        />
-                                    }
-                                    label="Hide my wallet address"
-                                />
-                                <FormHelperText className={classes.helperText}>
-                                    If this option is chosen, your wallet address will be hidden.
-                                </FormHelperText>
-                            </FormGroup>
-                        </FormControl>
                         <Typography variant="body1">
                             By using this service, you'll also be contributing 5% of your contribution to the{' '}
                             <Link
@@ -149,8 +113,6 @@ export function DonateCard(props: DonateCardProps) {
                         onClick={() =>
                             props.onDonate({
                                 amount,
-                                comment,
-                                hideWalletAddr,
                                 selectedToken: useSelectWalletResult.selectedToken!,
                                 selectedTokenType: useSelectWalletResult.selectedTokenType,
                                 selectedWallet: useSelectWalletResult.selectedWalletAddress!,
