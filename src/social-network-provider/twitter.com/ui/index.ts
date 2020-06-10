@@ -22,18 +22,14 @@ export const instanceOfTwitterUI = defineSocialNetworkUI({
     i18nOverwrite: {
         en: {
             additional_post_box__encrypted_post_pre: [
-                'This tweet is encrypted with Maskbook (@realmaskbook).',
-                'Install maskbook.com to decrypt it. 📮🔑',
-                '#Maskbook',
-                '🚫Do not click this link. 🔐{{encrypted}}🔐',
+                'This tweet is encrypted with #Maskbook (@realMaskbook). 📪🔑',
+                'Install {{encrypted}} to decrypt it.',
             ].join('\n\n'),
         },
         zh: {
             additional_post_box__encrypted_post_pre: [
-                '此推文已被 Maskbook（@realmaskbook）加密。',
-                '請安裝 maskbook.com 進行解密。📮🔑',
-                '#Maskbook',
-                '🚫請不要點擊此連結。🔐{{encrypted}}🔐',
+                '此推文已被 Maskbook（@realmaskbook）加密。📪🔑',
+                '請安裝 {{encrypted}} 進行解密。',
             ].join('\n\n'),
         },
     },

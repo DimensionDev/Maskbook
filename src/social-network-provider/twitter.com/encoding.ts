@@ -1,6 +1,5 @@
-import { batchReplace, randomElement, regexMatch, regexMatchAll } from '../../utils/utils'
-import { isNil, isNull } from 'lodash-es'
-import { topSites } from './utils/url'
+import { batchReplace, regexMatchAll } from '../../utils/utils'
+import { isNull } from 'lodash-es'
 import anchorme from 'anchorme'
 
 const ICAO9303Checksum = {
@@ -51,7 +50,7 @@ export const twitterEncoding = {
      * @link https://github.com/DimensionDev/Maskbook/issues/198
      */
     payloadEncoder: (text: string) =>
-        `https://${randomElement(topSites)}/${batchReplace(text, [
+        `https://maskbook.com/?PostData_v1=${batchReplace(text, [
             ['🎼', '%20'],
             [':||', '%40'],
             ['+', '-'],
