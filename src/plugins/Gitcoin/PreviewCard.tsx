@@ -1,76 +1,12 @@
 import React from 'react'
-import { makeStyles, createStyles, Theme, Typography, SnackbarContent, Button, Box } from '@material-ui/core'
-const border = '1.5px solid rgb(0, 154, 87)'
-interface PreviewCardProps {
-    title: string
-    image: React.ReactNode
-    line1: string
-    line2: string
-    line3: string
-    line4: string
-    hasPermission?: boolean
-    requestPermission(): void
-    onRequestGrant(): void
-    loading?: boolean
-    address?: string
-    originalURL: string
-}
-export function PreviewCard(props: PreviewCardProps) {
-    const classes = useStyles()
-    if (!props.hasPermission) {
-        return (
-            <SnackbarContent
-                message="This post links to the Gitcoin. To preview it or donate this Gitcoin grant, Maskbook needs permission to Gitcoin.co"
-                action={
-                    <Button
-                        onClick={props.requestPermission}
-                        children="Allow access to gitcoin.co"
-                        color="secondary"
-                        size="small"
-                    />
-                }
-            />
-        )
-    }
-    return (
-        <div>
-            <main className={classes.root}>
-                <div className={classes.title}>
-                    <Typography variant="h5">{props.title}</Typography>
-                </div>
-                <div className={classes.infoArea}>
-                    <Typography className={classes.expectedArea} variant="h6">
-                        {props.line1}
-                    </Typography>
-                    <Typography className={classes.expectedArea} variant="body2">
-                        {props.line2}
-                    </Typography>
-                    <Typography variant="body1" style={{ fontWeight: 'bold' }}>
-                        {props.line3}
-                    </Typography>
-                    <Typography variant="body2">{props.line4}</Typography>
-                </div>
-                <aside className={classes.image}>{props.image}</aside>
-            </main>
-            <Box paddingTop={2} textAlign="center">
-                <Button
-                    // If failed to fetch the contract address, fallback
-                    onClick={() => (props.address ? props.onRequestGrant() : window.open(props.originalURL))}
-                    variant="contained"
-                    color="primary">
-                    Fund this grant
-                </Button>
-            </Box>
-        </div>
-    )
-}
+import { makeStyles, createStyles, Theme, Typography, SnackbarContent, Button, Box, Paper } from '@material-ui/core'
 
+const border = '1.5px solid rgb(0, 154, 87)'
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         root: {
             borderRadius: 12,
             border: border,
-            background: 'white',
             minWidth: 400,
             width: '100%',
             height: 200,
@@ -123,3 +59,67 @@ const useStyles = makeStyles((theme: Theme) =>
         },
     }),
 )
+
+interface PreviewCardProps {
+    title: string
+    image: React.ReactNode
+    line1: string
+    line2: string
+    line3: string
+    line4: string
+    hasPermission?: boolean
+    requestPermission(): void
+    onRequestGrant(): void
+    loading?: boolean
+    address?: string
+    originalURL: string
+}
+export function PreviewCard(props: PreviewCardProps) {
+    const classes = useStyles()
+    if (!props.hasPermission) {
+        return (
+            <SnackbarContent
+                message="This post links to the Gitcoin. To preview it or donate this Gitcoin grant, Maskbook needs permission to Gitcoin.co"
+                action={
+                    <Button
+                        onClick={props.requestPermission}
+                        children="Allow access to gitcoin.co"
+                        color="secondary"
+                        size="small"
+                    />
+                }
+            />
+        )
+    }
+    return (
+        <>
+            <Paper className={classes.root}>
+                <div className={classes.title}>
+                    <Typography variant="h5">{props.title}</Typography>
+                </div>
+                <div className={classes.infoArea}>
+                    <Typography className={classes.expectedArea} variant="h6">
+                        {props.line1}
+                    </Typography>
+                    <Typography className={classes.expectedArea} variant="body2">
+                        {props.line2}
+                    </Typography>
+                    <Typography variant="body1" style={{ fontWeight: 'bold' }}>
+                        {props.line3}
+                    </Typography>
+                    <Typography variant="body2">{props.line4}</Typography>
+                </div>
+                <aside className={classes.image}>{props.image}</aside>
+            </Paper>
+            <Box paddingTop={2} textAlign="center">
+                <Button
+                    // If failed to fetch the contract address, fallback
+                    onClick={() => (props.address ? props.onRequestGrant() : window.open(props.originalURL))}
+                    variant="contained"
+                    color="primary">
+                    Fund this grant
+                </Button>
+            </Box>
+        </>
+    )
+}

@@ -1,6 +1,7 @@
 import React from 'react'
-import { makeStyles, createStyles, Typography } from '@material-ui/core'
+import { makeStyles, createStyles, Typography, ThemeProvider } from '@material-ui/core'
 import { getUrl } from '../utils/utils'
+import { getActivatedUI } from '../social-network/ui'
 
 interface PluginWrapperProps {
     pluginName: string
@@ -40,16 +41,19 @@ const useStyles = makeStyles((theme) =>
 export default function MaskbookPluginWrapper(props: PluginWrapperProps) {
     const classes = useStyles()
     const { pluginName, children, width } = props
+    const theme = getActivatedUI().useTheme()
     return (
-        <div className={classes.card} style={{ width }}>
-            <div className={classes.header}>
-                <img src={getUrl('/maskbook-icon.png')} className={classes.icon} />
-                <div className={classes.title}>
-                    <Typography variant="overline">Maskbook Plugin</Typography>
-                    <Typography variant="h6">{pluginName}</Typography>
+        <ThemeProvider theme={theme}>
+            <div className={classes.card} style={{ width }}>
+                <div className={classes.header}>
+                    <img src={getUrl('/maskbook-icon.png')} className={classes.icon} />
+                    <div className={classes.title}>
+                        <Typography variant="overline">Maskbook Plugin</Typography>
+                        <Typography variant="h6">{pluginName}</Typography>
+                    </div>
                 </div>
+                <div className={classes.body}>{children}</div>
             </div>
-            <div className={classes.body}>{children}</div>
-        </div>
+        </ThemeProvider>
     )
 }
