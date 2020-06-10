@@ -34,3 +34,8 @@ export interface CreateRedPacketResult {
     create_transaction_hash: string
     create_nonce: number
 }
+
+export interface DonateResult {
+    donate_transaction_hash: string
+    donate_nonce: number
+}
