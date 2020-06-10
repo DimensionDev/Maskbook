@@ -22,7 +22,7 @@ import Services from '../../../../extension/service'
 import type { createRedPacketInit } from '../../red-packet-fsm'
 import {
     EthereumNetwork,
-    RedPacketTokenType,
+    EthereumTokenType,
     RedPacketRecord,
     RedPacketStatus,
     RedPacketJSONPayload,
@@ -154,7 +154,7 @@ function NewPacketUI(props: RedPacketDialogProps & NewPacketProps) {
             sender_address: selectedWalletAddress!,
             sender_name: props.newRedPacketCreatorName ?? 'Unknown User',
             shares: new BigNumber(shares),
-            token_type: selectedTokenType.type === 'eth' ? RedPacketTokenType.eth : RedPacketTokenType.erc20,
+            token_type: selectedTokenType.type === 'eth' ? EthereumTokenType.eth : EthereumTokenType.erc20,
             erc20_token: selectedTokenType.type === 'eth' ? undefined : selectedTokenType.address,
         })
     }

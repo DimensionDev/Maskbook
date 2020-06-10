@@ -37,7 +37,7 @@ import {
     extractTextFromTypedMessage,
 } from '../../extension/background-script/CryptoServices/utils'
 import { formatBalance } from '../../plugins/Wallet/formatter'
-import { RedPacketTokenType } from '../../plugins/Wallet/database/types'
+import { EthereumTokenType } from '../../plugins/Wallet/database/types'
 import { DAI_ADDRESS, OKB_ADDRESS } from '../../plugins/Wallet/erc20'
 import { PluginRedPacketTheme } from '../../plugins/Wallet/theme'
 import { sleep } from '../../utils/utils'
@@ -335,13 +335,13 @@ export function PostDialog(props: PostDialogProps) {
                 const activeUI = getActivatedUI()
                 // TODO: move into the plugin system
                 const metadata = readTypedMessageMetadata(typedMessageMetadata, RedPacketMetaKey)
-                if (imagePayloadEnabled) {
-                    const isEth = metadata.ok && metadata.val.token_type === RedPacketTokenType.eth
+                if (imagePayloadStatus) {
+                    const isEth = metadata.ok && metadata.val.token_type === EthereumTokenType.eth
                     const isErc20 =
                         metadata.ok &&
                         metadata.val &&
                         metadata.val.token &&
-                        metadata.val.token_type === RedPacketTokenType.erc20
+                        metadata.val.token_type === EthereumTokenType.erc20
                     const isDai = isErc20 && metadata.ok && metadata.val.token?.address === DAI_ADDRESS
                     const isOkb = isErc20 && metadata.ok && metadata.val.token?.address === OKB_ADDRESS
 
@@ -377,7 +377,7 @@ export function PostDialog(props: PostDialogProps) {
                 // there is nothing to write if it shared with public
                 if (!shareToEveryone) Services.Crypto.publishPostAESKey(token)
             },
-            [currentIdentity, shareToEveryone, typedMessageMetadata, imagePayloadEnabled, t, i18n.language],
+            [currentIdentity, shareToEveryone, typedMessageMetadata, imagePayloadStatus, t, i18n.language],
         ),
     )
     const onRequestReset = or(
