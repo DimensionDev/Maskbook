@@ -336,12 +336,12 @@ export function PostDialog(props: PostDialogProps) {
                 // TODO: move into the plugin system
                 const metadata = readTypedMessageMetadata(typedMessageMetadata, RedPacketMetaKey)
                 if (imagePayloadStatus) {
-                    const isEth = metadata.ok && metadata.val.token_type === EthereumTokenType.eth
+                    const isEth = metadata.ok && metadata.val.token_type === EthereumTokenType.ETH
                     const isErc20 =
                         metadata.ok &&
                         metadata.val &&
                         metadata.val.token &&
-                        metadata.val.token_type === EthereumTokenType.erc20
+                        metadata.val.token_type === EthereumTokenType.ERC20
                     const isDai = isErc20 && metadata.ok && metadata.val.token?.address === DAI_ADDRESS
                     const isOkb = isErc20 && metadata.ok && metadata.val.token?.address === OKB_ADDRESS
 

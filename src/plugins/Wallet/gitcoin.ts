@@ -27,7 +27,7 @@ export async function donateGrant(donation: GitcoinDonationPayload) {
     let approved: _UnboxPromise<ReturnType<typeof walletAPI.approveERC20Token>> | undefined
 
     // approve splitter contract for spending erc20 token
-    if (token_type === EthereumTokenType.erc20) {
+    if (token_type === EthereumTokenType.ERC20) {
         approved = await getProvider().approveERC20Token(
             donor_address,
             getNetworkSettings().splitterContractAddress,

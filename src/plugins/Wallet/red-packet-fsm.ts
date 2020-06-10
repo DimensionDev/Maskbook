@@ -92,7 +92,7 @@ export async function createRedPacket(packet: createRedPacketInit): Promise<{ pa
     let erc20_approve_transaction_hash: string | undefined = undefined
     let erc20_approve_value: BigNumber | undefined = undefined
     let erc20_token_address: string | undefined = undefined
-    if (packet.token_type === EthereumTokenType.erc20) {
+    if (packet.token_type === EthereumTokenType.ERC20) {
         if (!packet.erc20_token) throw new Error('ERC20 token should have erc20_token field')
         const res = await getWalletProvider().approveERC20Token(
             packet.sender_address,
@@ -103,7 +103,7 @@ export async function createRedPacket(packet: createRedPacketInit): Promise<{ pa
         erc20_token_address = packet.erc20_token
         erc20_approve_transaction_hash = res.erc20_approve_transaction_hash
         erc20_approve_value = res.erc20_approve_value
-    } else if (packet.token_type === EthereumTokenType.erc721) {
+    } else if (packet.token_type === EthereumTokenType.ERC721) {
         throw new Error('Not supported')
     }
     const { create_transaction_hash, create_nonce } = await getProvider().create(

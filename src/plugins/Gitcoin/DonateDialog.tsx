@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
     makeStyles,
     createStyles,
@@ -6,24 +6,24 @@ import {
     DialogTitle,
     IconButton,
     Typography,
+    Button,
     DialogContent,
     Divider,
     TextField,
     Link,
     DialogActions,
 } from '@material-ui/core'
-import ActionButton from '../../extension/options-page/DashboardComponents/ActionButton'
 import { useI18N } from '../../utils/i18n-next-ui'
 import ShadowRootDialog from '../../utils/jss/ShadowRootDialog'
 import { DialogDismissIconUI } from '../../components/InjectedComponents/DialogDismissIcon'
 import { TokenSelect } from '../shared/TokenSelect'
 import { WalletSelect } from '../shared/WalletSelect'
-import { useSelectWallet, SelectedTokenType } from '../shared/useWallet'
-import type { WalletRecord, ERC20TokenRecord } from '../Wallet/database/types'
+import { useSelectWallet } from '../shared/useWallet'
+import { WalletRecord, ERC20TokenRecord, EthereumTokenType } from '../Wallet/database/types'
+import { useStylesExtends } from '../../components/custom-ui-helper'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
-        root: {},
         form: { '& > *': { margin: theme.spacing(1, 0) } },
         helperText: {
             marginLeft: theme.spacing(4),
@@ -31,15 +31,24 @@ const useStyles = makeStyles((theme: Theme) =>
         },
     }),
 )
-interface DonateCardProps {
+
+export interface DonateDialogProps
+    extends withClasses<
+        | KeysInferFromUseStyles<typeof useStyles>
+        | 'root'
+        | 'dialog'
+        | 'backdrop'
+        | 'container'
+        | 'paper'
+        | 'header'
+        | 'content'
+        | 'actions'
+        | 'close'
+        | 'button'
+    > {
     title: string
     description: string
-    onDonate(opt: {
-        amount: number
-        selectedWallet: string
-        selectedToken: ERC20TokenRecord
-        selectedTokenType: SelectedTokenType
-    }): void
+    onDonate(opt: { amount: number; address: string; token: ERC20TokenRecord; tokenType: EthereumTokenType }): void
     open: boolean
     onClose(): void
     onRequireNewWallet: () => void
@@ -47,15 +56,24 @@ interface DonateCardProps {
     tokens: ERC20TokenRecord[]
     address?: string
 }
-export function DonateCard(props: DonateCardProps) {
-    const classes = useStyles()
+
+export function DonateDialog(props: DonateDialogProps) {
     const { t } = useI18N()
+    const classes = useStylesExtends(useStyles(), props)
     const [amount, setAmount] = useState(0)
-    const useSelectWalletResult = useSelectWallet(props.wallets, props.tokens, props.onRequireNewWallet)
+    const selectWallet = useSelectWallet(props.wallets, props.tokens, props.onRequireNewWallet)
+
+    // set default token
+    useEffect(() => selectWallet.setSelectedTokenType(EthereumTokenType.ETH))
     if (!props.address) return null
     return (
         <div className={classes.root}>
             <ShadowRootDialog
+                className={classes.dialog}
+                classes={{
+                    container: classes.container,
+                    paper: classes.paper,
+                }}
                 open={props.open}
                 scroll="body"
                 fullWidth
@@ -63,15 +81,18 @@ export function DonateCard(props: DonateCardProps) {
                 disableAutoFocus
                 disableEnforceFocus
                 onEscapeKeyDown={props.onClose}
-                onExit={props.onClose}>
-                <DialogTitle>
-                    <IconButton onClick={props.onClose} size="small">
+                onExit={props.onClose}
+                BackdropProps={{
+                    className: classes.backdrop,
+                }}>
+                <DialogTitle className={classes.header}>
+                    <IconButton classes={{ root: classes.close }} onClick={props.onClose}>
                         <DialogDismissIconUI />
                     </IconButton>
                     Gitcoin Grant
                 </DialogTitle>
                 <Divider />
-                <DialogContent>
+                <DialogContent className={classes.content}>
                     <Typography variant="h6">{props.title}</Typography>
                     <Typography variant="body1" style={{ whiteSpace: 'pre-line' }}>
                         {props.description}
@@ -80,15 +101,15 @@ export function DonateCard(props: DonateCardProps) {
                         <WalletSelect
                             FormControlProps={{ fullWidth: true }}
                             wallets={props.wallets}
-                            useSelectWalletHooks={useSelectWalletResult}></WalletSelect>
+                            useSelectWalletHooks={selectWallet}></WalletSelect>
                         <TokenSelect
                             FormControlProps={{ fullWidth: true }}
-                            useSelectWalletHooks={useSelectWalletResult}></TokenSelect>
+                            useSelectWalletHooks={selectWallet}></TokenSelect>
                         <TextField
                             variant="filled"
                             fullWidth
                             value={amount}
-                            inputProps={{ min: 0, max: useSelectWalletResult }}
+                            inputProps={{ min: 0, max: selectWallet }}
                             type="number"
                             label="Amount"
                             onChange={(e) => setAmount(parseFloat(e.currentTarget.value))}
@@ -104,22 +125,23 @@ export function DonateCard(props: DonateCardProps) {
                         </Typography>
                     </form>
                 </DialogContent>
-                <DialogActions>
-                    <ActionButton
-                        variant="contained"
+                <DialogActions className={classes.actions}>
+                    <Button
+                        className={classes.button}
+                        style={{ marginLeft: 'auto' }}
                         color="primary"
-                        width="30%"
-                        disabled={useSelectWalletResult.selectedWalletAddress === undefined || amount <= 0}
+                        variant="contained"
+                        disabled={selectWallet.selectedWalletAddress === undefined || amount <= 0}
                         onClick={() =>
                             props.onDonate({
                                 amount,
-                                selectedToken: useSelectWalletResult.selectedToken!,
-                                selectedTokenType: useSelectWalletResult.selectedTokenType,
-                                selectedWallet: useSelectWalletResult.selectedWalletAddress!,
+                                address: selectWallet.selectedWalletAddress!,
+                                token: selectWallet.selectedToken!,
+                                tokenType: selectWallet.selectedTokenType,
                             })
                         }>
                         Donate
-                    </ActionButton>
+                    </Button>
                 </DialogActions>
             </ShadowRootDialog>
         </div>
