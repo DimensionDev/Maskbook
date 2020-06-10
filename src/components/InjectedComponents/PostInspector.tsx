@@ -12,8 +12,7 @@ import { useValueRef } from '../../utils/hooks/useValueRef'
 import { debugModeSetting } from '../shared-settings/settings'
 import { DebugList } from '../DebugModeUI/DebugList'
 import type { TypedMessage } from '../../extension/background-script/CryptoServices/utils'
-import { GitCoinConfig } from '../../plugins/Gitcoin/define'
-import { PluginUI } from '../../plugins/plugin'
+import { PluginUI, PluginConfig } from '../../plugins/plugin'
 
 export interface PostInspectorProps {
     onDecrypted(post: TypedMessage, raw: string): void
@@ -114,14 +113,19 @@ export function PostInspector(props: PostInspectorProps) {
         )
     }
 }
+import { useAsyncFn } from 'react-use'
 function PluginPostInspector(props: { post: string }) {
     return (
         <>
-            {[...PluginUI.values()]
-                .filter((x) => x.shouldActivateInPostInspector(props.post))
-                .map((X) => (
-                    <X.PostInspectorComponent key={X.identifier} {...props} />
-                ))}
+            {[...PluginUI.values()].map((x) => (
+                <PluginPostInspectorForEach key={x.identifier} pluginConfig={x} post={props.post} />
+            ))}
         </>
     )
+}
+function PluginPostInspectorForEach({ pluginConfig, post }: { post: string; pluginConfig: PluginConfig }) {
+    const [{ loading, error, value }] = useAsyncFn(async () => pluginConfig.shouldActivateInPostInspector(post))
+    if (loading) return null
+    if (value) return <pluginConfig.PostInspectorComponent post={post} />
+    return null
 }
