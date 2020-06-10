@@ -8,9 +8,9 @@ export enum EthereumNetwork {
 }
 
 export enum EthereumTokenType {
-    eth = 0,
-    erc20 = 1,
-    erc721 = 2,
+    ETH = 0,
+    ERC20 = 1,
+    ERC721 = 2,
 }
 
 //#region red packet

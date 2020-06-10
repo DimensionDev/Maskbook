@@ -9,14 +9,15 @@ import Services from '../../extension/service'
 import MaskbookPluginWrapper from '../MaskbookPluginWrapper'
 import { extractTextFromTypedMessage } from '../../extension/background-script/CryptoServices/utils'
 import { Result, Ok, Err } from 'ts-results'
-import { DonateCard } from './DonateCard'
+import { DonateDialog, DonateDialogProps } from './DonateDialog'
 import { useWalletDataSource } from '../shared/useWallet'
 import { useValueRef } from '../../utils/hooks/useValueRef'
 import { useObservableValues } from '../../utils/hooks/useObservableMapSet'
 import type { GitcoinGrantMetadata } from './Services'
 import BigNumber from 'bignumber.js'
-import { EthereumNetwork, EthereumTokenType } from '../Wallet/database/types'
+import { EthereumNetwork, EthereumTokenType, ERC20TokenRecord } from '../Wallet/database/types'
 import { getNetworkSettings } from '../Wallet/UI/Developer/SelectEthereumNetwork'
+import { ERC20TokenPredefinedData } from '../Wallet/erc20'
 
 const isGitcoin = (x: string): boolean => x.startsWith('https://gitcoin.co/grants')
 export const GitcoinPluginDefine: PluginConfig = {
@@ -72,6 +73,37 @@ function Gitcoin(props: { url: string }) {
     const { amount, contributors, finalAmount, title, image, description, address } = data?.ok
         ? data.val
         : ({} as GitcoinGrantMetadata)
+
+    const onDonate = async ({
+        amount,
+        address,
+        token,
+        tokenType,
+    }: {
+        amount: number
+        address: string
+        token: ERC20TokenRecord
+        tokenType: EthereumTokenType
+    }) => {
+        if (!address) {
+            return
+        }
+        const power = tokenType === EthereumTokenType.ETH ? 18 : token!.decimals
+        try {
+            await Services.Plugin.invokePlugin('co.gitcoin', 'donateGrant', {
+                donation_address: address,
+                donation_total: new BigNumber(amount).multipliedBy(new BigNumber(10).pow(power)),
+                donor_address: address,
+                network: getNetworkSettings().networkType,
+                token_type: tokenType,
+                token: token,
+            })
+        } catch (e) {
+            alert(e.message)
+            console.log(`error: ${e}`)
+        }
+    }
+
     return (
         <>
             <PreviewCard
@@ -89,32 +121,13 @@ function Gitcoin(props: { url: string }) {
                 originalURL={url ?? ''}
             />
             {wallets.length ? (
-                <DonateCard
+                <DonateDialog
                     {...{ wallets, tokens, onRequireNewWallet, address }}
                     open={!!(open && address?.length)}
-                    onClose={() => setOpen(false)}
                     title={title ?? 'A Gitcoin grant'}
                     description={description ?? ''}
-                    onDonate={async ({ amount, selectedWallet, selectedToken, selectedTokenType }) => {
-                        if (!address) {
-                            return
-                        }
-                        const power = selectedTokenType.type === 'eth' ? 18 : selectedToken!.decimals
-                        try {
-                            await Services.Plugin.invokePlugin('co.gitcoin', 'donateGrant', {
-                                donation_address: address,
-                                donation_total: new BigNumber(amount).multipliedBy(new BigNumber(10).pow(power)),
-                                donor_address: selectedWallet,
-                                network: getNetworkSettings().networkType,
-                                token_type:
-                                    selectedTokenType.type === 'eth' ? EthereumTokenType.eth : EthereumTokenType.erc20,
-                                token: selectedToken,
-                            })
-                        } catch (e) {
-                            alert(e.message)
-                            console.log(`error: ${e}`)
-                        }
-                    }}
+                    onDonate={onDonate}
+                    onClose={() => setOpen(false)}
                 />
             ) : null}
         </>

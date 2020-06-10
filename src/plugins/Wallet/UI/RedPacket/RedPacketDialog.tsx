@@ -116,20 +116,18 @@ function NewPacketUI(props: RedPacketDialogProps & NewPacketProps) {
         ethBalance,
         selectedToken,
         selectedTokenType,
+        selectedTokenAddress,
         selectedWallet,
         selectedWalletAddress,
-        setSelectedTokenType,
-        setSelectedWallet,
-        availableTokens,
     } = useSelectWalletResult
 
     const amountPreShareMaxBigint = selectedWallet
-        ? selectedTokenType.type === 'eth'
+        ? selectedTokenType === EthereumTokenType.ETH
             ? selectedWallet.eth_balance
             : selectedToken?.amount
         : undefined
     const amountPreShareMaxNumber = BigNumber.isBigNumber(amountPreShareMaxBigint)
-        ? selectedTokenType.type === 'eth'
+        ? selectedTokenType === EthereumTokenType.ETH
             ? formatBalance(amountPreShareMaxBigint, 18)
             : selectedToken && formatBalance(amountPreShareMaxBigint, selectedToken.decimals)
         : undefined
@@ -144,7 +142,7 @@ function NewPacketUI(props: RedPacketDialogProps & NewPacketProps) {
     const isSendButtonDisabled = isDisabled.some((x) => x)
 
     const createRedPacket = () => {
-        const power = selectedTokenType.type === 'eth' ? 18 : selectedToken!.decimals
+        const power = selectedTokenType === EthereumTokenType.ETH ? 18 : selectedToken!.decimals
         props.onCreateNewPacket({
             duration: 60 /* seconds */ * 60 /* mins */ * 24 /* hours */,
             is_random: Boolean(is_random),
@@ -154,8 +152,8 @@ function NewPacketUI(props: RedPacketDialogProps & NewPacketProps) {
             sender_address: selectedWalletAddress!,
             sender_name: props.newRedPacketCreatorName ?? 'Unknown User',
             shares: new BigNumber(shares),
-            token_type: selectedTokenType.type === 'eth' ? EthereumTokenType.eth : EthereumTokenType.erc20,
-            erc20_token: selectedTokenType.type === 'eth' ? undefined : selectedTokenType.address,
+            token_type: selectedTokenType === EthereumTokenType.ETH ? EthereumTokenType.ETH : EthereumTokenType.ERC20,
+            erc20_token: selectedTokenType === EthereumTokenType.ETH ? undefined : selectedTokenAddress,
         })
     }
     return (
@@ -239,7 +237,7 @@ function NewPacketUI(props: RedPacketDialogProps & NewPacketProps) {
                         ? 'Not valid'
                         : `Send ${+send_total.toFixed(3) === +send_total.toFixed(9) ? '' : '~'}${+send_total.toFixed(
                               3,
-                          )} ${selectedTokenType.type === 'eth' ? 'ETH' : selectedToken?.symbol}`}
+                          )} ${selectedTokenType === EthereumTokenType.ETH ? 'ETH' : selectedToken?.symbol}`}
                 </Button>
             </div>
         </div>

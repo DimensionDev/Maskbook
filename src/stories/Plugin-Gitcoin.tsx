@@ -2,7 +2,7 @@ import React from 'react'
 import { storiesOf } from '@storybook/react'
 import { PreviewCard } from '../plugins/Gitcoin/PreviewCard'
 import { text, boolean } from '@storybook/addon-knobs'
-import { DonateCard } from '../plugins/Gitcoin/DonateCard'
+import { DonateDialog } from '../plugins/Gitcoin/DonateDialog'
 import { figmaLink } from './utils'
 import { action } from '@storybook/addon-actions'
 import BigNumber from 'bignumber.js'
@@ -39,7 +39,7 @@ storiesOf('Plugin: Gitcoin', module)
         'Donate Card',
         () => (
             <div style={{ padding: 16, background: 'white' }}>
-                <DonateCard
+                <DonateDialog
                     open
                     tokens={[]}
                     wallets={[
@@ -57,7 +57,7 @@ storiesOf('Plugin: Gitcoin', module)
                     onClose={action('onClose')}
                     title={text('Title', 'Mask + Test Kit Mutual Aid Fund')}
                     description={text('Description', 'It is accepting contributions in any token.')}
-                    onDonate={action('onDonate')}></DonateCard>
+                    onDonate={action('onDonate')}></DonateDialog>
             </div>
         ),
         figmaLink('https://www.figma.com/file/6YeqA0eCTz67I1HVFXOd4X/Plugin%3A-Gitcoin'),

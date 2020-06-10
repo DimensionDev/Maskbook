@@ -19,14 +19,14 @@ interface WalletSelectProps {
     DialogProps?: Partial<DialogProps>
 }
 export function WalletSelect({ useSelectWalletHooks, wallets, ...p }: WalletSelectProps) {
-    const { selectedWalletAddress, setSelectedWallet } = useSelectWalletHooks
+    const { selectedWalletAddress, setSelectedTokenAddress } = useSelectWalletHooks
     const { SelectProps, className, FormControlProps } = p
     return (
         <FormControl variant="filled" {...FormControlProps} className={className}>
             <InputLabel>Wallet</InputLabel>
             <Select
                 {...SelectProps}
-                onChange={(e) => setSelectedWallet(e.target.value as string)}
+                onChange={(e) => setSelectedTokenAddress(e.target.value as string)}
                 MenuProps={{ container: p.DialogProps?.container ?? PortalShadowRoot }}
                 disabled={wallets === 'loading'}
                 value={selectedWalletAddress || ''}>

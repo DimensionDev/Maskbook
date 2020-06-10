@@ -1,15 +1,16 @@
-import React from 'react'
-import type { WalletRecord, ERC20TokenRecord } from '../Wallet/database/types'
+import React, { useState, useEffect, useCallback } from 'react'
+import { WalletRecord, ERC20TokenRecord, EthereumTokenType } from '../Wallet/database/types'
 import Services from '../../extension/service'
 import { PluginMessageCenter } from '../PluginMessages'
 import { currentEthereumNetworkSettings } from '../Wallet/UI/Developer/SelectEthereumNetwork'
 import { formatBalance } from '../Wallet/formatter'
+import { ETH_ADDRESS } from '../Wallet/erc20'
 
 export function useWalletDataSource() {
-    const [wallets, setWallets] = React.useState<WalletRecord[] | 'loading'>('loading')
-    const [tokens, setTokens] = React.useState<ERC20TokenRecord[]>([])
+    const [wallets, setWallets] = useState<WalletRecord[] | 'loading'>('loading')
+    const [tokens, setTokens] = useState<ERC20TokenRecord[]>([])
 
-    React.useEffect(() => {
+    useEffect(() => {
         const update = () =>
             Services.Plugin.invokePlugin('maskbook.wallet', 'getWallets').then(([x, y]) => {
                 setWallets(x)
@@ -22,7 +23,7 @@ export function useWalletDataSource() {
     return [
         wallets,
         tokens,
-        React.useCallback(() => {
+        useCallback(() => {
             Services.Welcome.openOptionsPage('/wallets/error?reason=nowallet')
         }, []),
     ] as const
@@ -36,26 +37,25 @@ export type SelectedTokenType =
           address: string
       }
 export function useSelectWallet(...[wallets, tokens, onRequireNewWallet]: ReturnType<typeof useWalletDataSource>) {
-    const [selectedWalletAddress, setSelectedWallet] = React.useState<undefined | string>(undefined)
+    const [selectedWalletAddress, setSelectedWalletAddress] = useState<undefined | string>(undefined)
 
-    const [selectedTokenType, setSelectedTokenType] = React.useState<SelectedTokenType>({
-        type: 'eth',
-    })
+    const [selectedTokenAddress, setSelectedTokenAddress] = useState(ETH_ADDRESS)
+    const [selectedTokenType, setSelectedTokenType] = useState<EthereumTokenType>(EthereumTokenType.ETH)
     const selectedWallet = wallets === 'loading' ? undefined : wallets.find((x) => x.address === selectedWalletAddress)
 
     const availableTokens = Array.from(selectedWallet?.erc20_token_balance || [])
         .filter(([address]) => tokens.find((x) => x.address === address))
         .map(([address, amount]) => ({ amount, ...tokens.find((x) => x.address === address)! }))
     const selectedToken =
-        selectedTokenType.type === 'eth'
+        selectedTokenType === EthereumTokenType.ETH
             ? undefined
-            : availableTokens.find((x) => x.address === selectedTokenType.address)!
+            : availableTokens.find((x) => x.address === selectedTokenAddress)!
 
-    React.useEffect(() => {
+    useEffect(() => {
         if (selectedWalletAddress === undefined) {
             if (wallets === 'loading') return
             if (wallets.length === 0) onRequireNewWallet()
-            else setSelectedWallet(wallets[0].address)
+            else setSelectedWalletAddress(wallets[0].address)
         }
     }, [onRequireNewWallet, selectedWalletAddress, wallets])
 
@@ -71,11 +71,13 @@ export function useSelectWallet(...[wallets, tokens, onRequireNewWallet]: Return
         //
         selectedWallet,
         selectedWalletAddress,
-        setSelectedWallet,
+        setSelectedWalletAddress,
         //
         selectedToken,
         selectedTokenType,
         setSelectedTokenType,
+        selectedTokenAddress,
+        setSelectedTokenAddress,
         availableTokens,
     }
 }
