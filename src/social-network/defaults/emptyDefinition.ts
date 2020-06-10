@@ -4,6 +4,7 @@ import type { SocialNetworkUIDefinition } from '../ui'
 import { nop, nopWithUnmount } from '../../utils/utils'
 import type { Profile } from '../../database'
 import { ProfileArrayComparer, GroupArrayComparer } from '../../utils/comparer'
+import { ObservableWeakMap } from '../../utils/ObservableMapSet'
 
 /**
  * DO NOT use this in content script
@@ -31,7 +32,7 @@ export const emptyDefinition: SocialNetworkUIDefinition = {
     injectPostComments: nopWithUnmount,
     injectPostInspector: nopWithUnmount,
     resolveLastRecognizedIdentity: nop,
-    posts: new Map(),
+    posts: new ObservableWeakMap(),
     friendsRef: new ValueRef([], ProfileArrayComparer),
     isDangerousNetwork: false,
     isValidUsername() {
