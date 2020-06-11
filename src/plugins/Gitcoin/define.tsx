@@ -9,7 +9,7 @@ import Services from '../../extension/service'
 import MaskbookPluginWrapper from '../MaskbookPluginWrapper'
 import { extractTextFromTypedMessage } from '../../extension/background-script/CryptoServices/utils'
 import { Result, Ok, Err } from 'ts-results'
-import { DonateDialog } from './DonateDialog'
+import { DonateDialog, DonatePayload } from './DonateDialog'
 import { useWalletDataSource } from '../shared/useWallet'
 import { useValueRef } from '../../utils/hooks/useValueRef'
 import { useObservableValues } from '../../utils/hooks/useObservableMapSet'
@@ -18,6 +18,7 @@ import BigNumber from 'bignumber.js'
 import { EthereumTokenType, ERC20TokenRecord } from '../Wallet/database/types'
 import { getNetworkSettings } from '../Wallet/UI/Developer/SelectEthereumNetwork'
 import { isNumber } from 'lodash-es'
+import { DonateSuccessDialog, DonateFailDialog } from './Dialogs'
 
 const isGitcoin = (x: string): boolean => x.startsWith('https://gitcoin.co/grants')
 export const GitcoinPluginDefine: PluginConfig = {
@@ -74,18 +75,13 @@ function Gitcoin(props: { url: string }) {
     const { amount, contributors, finalAmount, title, image, description, address: donationAddress } = data?.ok
         ? data.val
         : ({} as GitcoinGrantMetadata)
+    const grantTitle = title ?? 'A Gitcoin grant'
 
-    const onDonate = async ({
-        amount,
-        address,
-        token,
-        tokenType,
-    }: {
-        amount: number
-        address: string
-        token: ERC20TokenRecord
-        tokenType: EthereumTokenType
-    }) => {
+    const [status, setStatus] = useState<'succeed' | 'failed' | 'initial'>('initial')
+    const [donateError, setDonateError] = useState<Error | null>(null)
+    const [donatePayload, setDonatePayload] = useState<DonatePayload | null>(null)
+    const onDonate = async (payload: DonatePayload) => {
+        const { amount, address, token, tokenType } = payload
         if (!donationAddress) return
         const power = tokenType === EthereumTokenType.ETH ? 18 : token!.decimals
         try {
@@ -98,13 +94,17 @@ function Gitcoin(props: { url: string }) {
                 token_type: tokenType,
                 token: token,
             })
+            setOpen(false)
+            setDonatePayload(payload)
+            setStatus('succeed')
         } catch (e) {
-            alert(e.message)
-            console.log(`error: ${e}`)
+            setDonateError(e)
+            setStatus('failed')
         } finally {
             setLoading(false)
         }
     }
+    const onClose = () => setStatus('initial')
 
     return (
         <>
@@ -114,7 +114,7 @@ function Gitcoin(props: { url: string }) {
                 hasPermission={true}
                 loading={isValidating}
                 image={image ? <img src={image} width="100%" /> : null}
-                title={title ?? 'A Gitcoin grant'}
+                title={grantTitle}
                 line1={isNumber(finalAmount) ? `${finalAmount} DAI` : ''}
                 line2="ESTIMATED"
                 line3={isNumber(amount) ? `${amount} DAI` : ''}
@@ -130,12 +130,24 @@ function Gitcoin(props: { url: string }) {
                     wallets={wallets}
                     tokens={tokens}
                     open={!!(open && donationAddress?.length)}
-                    title={title ?? 'A Gitcoin grant'}
+                    title={grantTitle}
                     description={description ?? ''}
                     onDonate={onDonate}
                     onClose={() => setOpen(false)}
                 />
             ) : null}
+
+            <DonateSuccessDialog
+                open={status === 'succeed'}
+                title={grantTitle}
+                amount={donatePayload?.amount!}
+                token={donatePayload?.token!}
+                tokenType={donatePayload?.tokenType!}
+                onClose={onClose}></DonateSuccessDialog>
+            <DonateFailDialog
+                open={status === 'failed'}
+                message={donateError?.message}
+                onClose={onClose}></DonateFailDialog>
         </>
     )
 }

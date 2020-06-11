@@ -1,0 +1,109 @@
+import React from 'react'
+import {
+    makeStyles,
+    Theme,
+    createStyles,
+    Button,
+    DialogTitle,
+    DialogContent,
+    DialogActions,
+    DialogContentText,
+} from '@material-ui/core'
+import { EthereumTokenType, ERC20TokenRecord } from '../Wallet/database/types'
+import ShadowRootDialog from '../../utils/jss/ShadowRootDialog'
+import { useStylesExtends } from '../../components/custom-ui-helper'
+import { getActivatedUI } from '../../social-network/ui'
+
+const useStyles = makeStyles((theme: Theme) =>
+    createStyles({
+        container: {
+            width: 340,
+            margin: '0 auto',
+        },
+    }),
+)
+
+interface GitcoinDialogProps extends withClasses<KeysInferFromUseStyles<typeof useStyles>> {
+    message?: string
+    open: boolean
+    onClose(): void
+}
+
+//#region donate success dialog
+export interface DonateSuccessDialogProps extends GitcoinDialogProps {
+    title: string
+    amount: number
+    token: ERC20TokenRecord | null
+    tokenType: EthereumTokenType
+}
+
+export function DonateSuccessDialog(props: DonateSuccessDialogProps) {
+    const classes = useStylesExtends(useStyles(), props)
+    const { title, amount, token, tokenType, open, onClose } = props
+    const ui = getActivatedUI()
+
+    const onShare = () => {
+        onClose()
+        const text = `I just donated the Gitcoin grant "${title}" with ${
+            tokenType === EthereumTokenType.ETH ? 'ETH' : token?.symbol
+        } ${amount} through #Maskbook! Install maskbook.com?`
+        window.open(
+            `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`,
+            '_blank',
+            'noopener noreferrer',
+        )
+    }
+    return (
+        <ShadowRootDialog
+            classes={{
+                container: classes.container,
+            }}
+            open={open}
+            onClose={onClose}>
+            <DialogTitle>Donated Successfully</DialogTitle>
+            <DialogContent>
+                <DialogContentText>{`You have donated "${title}" ${
+                    tokenType === EthereumTokenType.ETH ? 'ETH' : token?.symbol
+                } ${amount}.`}</DialogContentText>
+            </DialogContent>
+            <DialogActions>
+                <Button onClick={onClose} color="primary">
+                    Close
+                </Button>
+                {ui.internalName === 'twitter' ? (
+                    <Button onClick={onShare} color="primary" autoFocus>
+                        Share
+                    </Button>
+                ) : null}
+            </DialogActions>
+        </ShadowRootDialog>
+    )
+}
+//#endregion
+
+//#region donate fail dialog
+export interface DonateFailDialogProps extends GitcoinDialogProps {}
+
+export function DonateFailDialog(props: DonateFailDialogProps) {
+    const classes = useStylesExtends(useStyles(), props)
+    const { message, open, onClose } = props
+    return (
+        <ShadowRootDialog
+            classes={{
+                container: classes.container,
+            }}
+            open={open}
+            onClose={onClose}>
+            <DialogTitle>Donated Failed</DialogTitle>
+            <DialogContent>
+                <DialogContentText>{message}</DialogContentText>
+            </DialogContent>
+            <DialogActions>
+                <Button onClick={onClose} color="primary">
+                    Close
+                </Button>
+            </DialogActions>
+        </ShadowRootDialog>
+    )
+}
+//#endregion
