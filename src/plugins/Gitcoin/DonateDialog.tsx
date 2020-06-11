@@ -12,6 +12,7 @@ import {
     TextField,
     Link,
     DialogActions,
+    CircularProgress,
 } from '@material-ui/core'
 import { useI18N } from '../../utils/i18n-next-ui'
 import ShadowRootDialog from '../../utils/jss/ShadowRootDialog'
@@ -51,6 +52,13 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 )
 
+interface DonatePayload {
+    amount: number
+    address: string
+    token: ERC20TokenRecord
+    tokenType: EthereumTokenType
+}
+
 interface DonateDialogUIProps
     extends withClasses<
         | KeysInferFromUseStyles<typeof useStyles>
@@ -66,14 +74,15 @@ interface DonateDialogUIProps
         | 'button'
     > {
     title: string
+    loading: boolean
     description: string
-    onDonate(opt: { amount: number; address: string; token: ERC20TokenRecord; tokenType: EthereumTokenType }): void
+    address?: string
     open: boolean
+    onDonate(opt: DonatePayload): Promise<void>
     onClose(): void
-    onRequireNewWallet: () => void
+    onRequireNewWallet(): void
     wallets: WalletRecord[] | 'loading'
     tokens: ERC20TokenRecord[]
-    address?: string
 }
 
 function DonateDialogUI(props: DonateDialogUIProps) {
@@ -191,8 +200,9 @@ function DonateDialogUI(props: DonateDialogUIProps) {
                         className={classes.button}
                         style={{ marginLeft: 'auto' }}
                         color="primary"
+                        startIcon={props.loading ? <CircularProgress size={24} /> : null}
                         variant="contained"
-                        disabled={isButtonDisabled}
+                        disabled={isButtonDisabled || props.loading}
                         onClick={() =>
                             props.onDonate({
                                 amount,

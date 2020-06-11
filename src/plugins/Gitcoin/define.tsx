@@ -62,6 +62,7 @@ function shouldActivate(post: string): Result<void, void> {
 }
 
 function Gitcoin(props: { url: string }) {
+    const [loading, setLoading] = useState(false)
     const [open, setOpen] = useState(false)
     const [wallets, tokens, onRequireNewWallet] = useWalletDataSource()
     const url = props.url
@@ -90,6 +91,7 @@ function Gitcoin(props: { url: string }) {
         }
         const power = tokenType === EthereumTokenType.ETH ? 18 : token!.decimals
         try {
+            setLoading(true)
             await Services.Plugin.invokePlugin('co.gitcoin', 'donateGrant', {
                 donation_address: address,
                 donation_total: new BigNumber(amount).multipliedBy(new BigNumber(10).pow(power)),
@@ -101,6 +103,8 @@ function Gitcoin(props: { url: string }) {
         } catch (e) {
             alert(e.message)
             console.log(`error: ${e}`)
+        } finally {
+            setLoading(false)
         }
     }
 
@@ -122,6 +126,7 @@ function Gitcoin(props: { url: string }) {
             />
             {wallets.length ? (
                 <DonateDialog
+                    loading={loading}
                     address={address}
                     onRequireNewWallet={onRequireNewWallet}
                     wallets={wallets}
