@@ -52,7 +52,7 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 )
 
-interface DonatePayload {
+export interface DonatePayload {
     amount: number
     address: string
     token: ERC20TokenRecord
