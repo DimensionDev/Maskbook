@@ -21,10 +21,19 @@ import { WalletSelect } from '../shared/WalletSelect'
 import { useSelectWallet } from '../shared/useWallet'
 import { WalletRecord, ERC20TokenRecord, EthereumTokenType } from '../Wallet/database/types'
 import { useStylesExtends } from '../../components/custom-ui-helper'
+import { getActivatedUI } from '../../social-network/ui'
+import {
+    useTwitterDialog,
+    useTwitterButton,
+    useTwitterCloseButton,
+} from '../../social-network-provider/twitter.com/utils/theme'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         form: { '& > *': { margin: theme.spacing(1, 0) } },
+        title: {
+            marginLeft: 6,
+        },
         helperText: {
             marginLeft: theme.spacing(4),
             marginTop: theme.spacing(-1.5),
@@ -32,7 +41,7 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 )
 
-export interface DonateDialogProps
+interface DonateDialogUIProps
     extends withClasses<
         | KeysInferFromUseStyles<typeof useStyles>
         | 'root'
@@ -57,7 +66,7 @@ export interface DonateDialogProps
     address?: string
 }
 
-export function DonateDialog(props: DonateDialogProps) {
+function DonateDialogUI(props: DonateDialogUIProps) {
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
     const [amount, setAmount] = useState(0)
@@ -89,7 +98,9 @@ export function DonateDialog(props: DonateDialogProps) {
                     <IconButton classes={{ root: classes.close }} onClick={props.onClose}>
                         <DialogDismissIconUI />
                     </IconButton>
-                    Gitcoin Grant
+                    <Typography className={classes.title} display="inline" variant="inherit">
+                        Plugin: Gitcoin Grant
+                    </Typography>
                 </DialogTitle>
                 <Divider />
                 <DialogContent className={classes.content}>
@@ -145,5 +156,22 @@ export function DonateDialog(props: DonateDialogProps) {
                 </DialogActions>
             </ShadowRootDialog>
         </div>
+    )
+}
+
+export interface DonateDialogProps extends DonateDialogUIProps {}
+
+export function DonateDialog(props: DonateDialogProps) {
+    const ui = getActivatedUI()
+    const twitterClasses = {
+        ...useTwitterDialog(),
+        ...useTwitterButton(),
+        ...useTwitterCloseButton(),
+    }
+
+    return ui.internalName === 'twitter' ? (
+        <DonateDialogUI classes={twitterClasses} {...props} />
+    ) : (
+        <DonateDialogUI {...props} />
     )
 }

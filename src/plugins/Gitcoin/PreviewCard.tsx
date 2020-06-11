@@ -111,7 +111,7 @@ export function PreviewCard(props: PreviewCardProps) {
                 </div>
                 <aside className={classes.image}>{props.image}</aside>
             </Paper>
-            <Box paddingTop={2} textAlign="center">
+            <Box paddingTop={2} display="flex" justifyContent="center">
                 <Button
                     // If failed to fetch the contract address, fallback
                     onClick={() => (props.address ? props.onRequestGrant() : window.open(props.originalURL))}
