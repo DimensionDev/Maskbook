@@ -142,7 +142,7 @@ function DonateDialogUI(props: DonateDialogUIProps) {
                 <Divider />
                 <DialogContent className={classes.content}>
                     <Typography variant="h6">{props.title}</Typography>
-                    <Typography variant="body1" style={{ whiteSpace: 'pre-line' }}>
+                    <Typography variant="body1" style={{ whiteSpace: 'pre-line', maxHeight: 150, overflow: 'auto' }}>
                         {props.description}
                     </Typography>
                     <form className={classes.form}>
