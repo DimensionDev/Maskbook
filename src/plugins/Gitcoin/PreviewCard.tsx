@@ -25,6 +25,7 @@ const useStyles = makeStyles((theme: Theme) =>
             alignItems: 'center',
             justifyContent: 'center',
             borderLeft: border,
+            backgroundColor: 'rgba(255, 255, 255, 0.3)',
         },
         title: {
             padding: theme.spacing(2),
@@ -37,7 +38,7 @@ const useStyles = makeStyles((theme: Theme) =>
             '& > *': { overflow: 'hidden' },
         },
         infoArea: {
-            background: 'rgb(232, 255, 246)',
+            background: theme.palette.type === 'dark' ? 'rgba(255, 255, 255, 0.15)' : 'rgb(232, 255, 246)',
             flex: 1,
             display: 'grid',
             gridTemplateColumns: '1fr 1fr',
