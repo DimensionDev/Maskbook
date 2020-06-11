@@ -61,23 +61,29 @@ export const twitterEncoding = {
         if (!text) return null
         if (!text.includes('%20') || !text.includes('%40')) return null
         const links: { raw: string; protocol: string; encoded: string }[] = anchorme(text, { list: true })
-        let links_ = links
+        const payloadLink = links
             .map((l) => ({
                 ...l,
                 raw: l.raw.replace(/…$/, ''),
             }))
             .filter((x) => x.raw.endsWith('%40'))[0]?.raw
         try {
-            links_ = new URL(links_).pathname.slice(1).replace(/^%20/, '').replace(/%40$/, '')
-            if (!links_) return null
+            const { search, pathname } = new URL(payloadLink)
+            const payload = search ? search.slice(1) : pathname.slice(1)
+            if (!payload) return null
+            return `🎼${batchReplace(
+                payload
+                    .replace(/^PostData_v\d=/i, '')
+                    .replace(/^%20/, '')
+                    .replace(/%40$/, ''),
+                [
+                    ['-', '+'],
+                    ['_', '='],
+                    [/\./g, '|'],
+                ],
+            )}:||`
         } catch {
             return null
         }
-        links_ = batchReplace(links_, [
-            ['-', '+'],
-            ['_', '='],
-            [/\./g, '|'],
-        ])
-        return `🎼${links_}:||`
     },
 }
