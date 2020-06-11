@@ -71,7 +71,7 @@ function Gitcoin(props: { url: string }) {
             return Services.Plugin.invokePlugin('co.gitcoin', 'fetchMetadata', url)
         },
     })
-    const { amount, contributors, finalAmount, title, image, description, address } = data?.ok
+    const { amount, contributors, finalAmount, title, image, description, address: donationAddress } = data?.ok
         ? data.val
         : ({} as GitcoinGrantMetadata)
 
@@ -86,14 +86,12 @@ function Gitcoin(props: { url: string }) {
         token: ERC20TokenRecord
         tokenType: EthereumTokenType
     }) => {
-        if (!address) {
-            return
-        }
+        if (!donationAddress) return
         const power = tokenType === EthereumTokenType.ETH ? 18 : token!.decimals
         try {
             setLoading(true)
             await Services.Plugin.invokePlugin('co.gitcoin', 'donateGrant', {
-                donation_address: address,
+                donation_address: donationAddress,
                 donation_total: new BigNumber(amount).multipliedBy(new BigNumber(10).pow(power)),
                 donor_address: address,
                 network: getNetworkSettings().networkType,
@@ -121,17 +119,17 @@ function Gitcoin(props: { url: string }) {
                 line2="ESTIMATED"
                 line3={isNumber(amount) ? `${amount} DAI` : ''}
                 line4={isNumber(contributors) ? `${contributors} contributors` : ''}
-                address={address}
+                address={donationAddress}
                 originalURL={url ?? ''}
             />
             {wallets.length ? (
                 <DonateDialog
                     loading={loading}
-                    address={address}
+                    address={donationAddress}
                     onRequireNewWallet={onRequireNewWallet}
                     wallets={wallets}
                     tokens={tokens}
-                    open={!!(open && address?.length)}
+                    open={!!(open && donationAddress?.length)}
                     title={title ?? 'A Gitcoin grant'}
                     description={description ?? ''}
                     onDonate={onDonate}

@@ -506,7 +506,7 @@ export const gitcoinAPI = {
 
         // validate amount
         if (!grantAmount.isPositive()) {
-            throw new Error('Ivalid amount')
+            throw new Error('Invalid amount')
         }
 
         // donate with erc20 token
@@ -569,25 +569,29 @@ export const gitcoinAPI = {
         valueFirst: BigNumber,
         valueSecond: BigNumber,
     ) {
+        const nonce = await web3.eth.getTransactionCount(senderAddress)
         const gasPrice = await web3.eth.getGasPrice()
         let fund_first_hash
         let fund_second_hash
 
         if (valueFirst.isPositive()) {
             fund_first_hash = await sendTxConfigForTxHash({
+                nonce: nonce,
                 from: senderAddress,
                 to: toFirst,
                 value: valueFirst.toString(),
-                gas: 318730,
+                gas: 100000,
                 gasPrice,
             })
         }
+
         if (valueSecond.isPositive()) {
             fund_second_hash = await sendTxConfigForTxHash({
+                nonce: nonce + 1,
                 from: senderAddress,
                 to: toSecond,
                 value: valueSecond.toString(),
-                gas: 318730,
+                gas: 100000,
                 gasPrice,
             })
         }

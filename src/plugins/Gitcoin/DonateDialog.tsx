@@ -78,7 +78,7 @@ interface DonateDialogUIProps
     description: string
     address?: string
     open: boolean
-    onDonate(opt: DonatePayload): Promise<void>
+    onDonate(opt: DonatePayload): Promise<void> | void
     onClose(): void
     onRequireNewWallet(): void
     wallets: WalletRecord[] | 'loading'

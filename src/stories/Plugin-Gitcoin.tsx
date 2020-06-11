@@ -40,6 +40,7 @@ storiesOf('Plugin: Gitcoin', module)
         () => (
             <div style={{ padding: 16, background: 'white' }}>
                 <DonateDialog
+                    loading={false}
                     open
                     tokens={[]}
                     wallets={[
