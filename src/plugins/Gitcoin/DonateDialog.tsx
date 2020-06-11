@@ -27,6 +27,9 @@ import {
     useTwitterButton,
     useTwitterCloseButton,
 } from '../../social-network-provider/twitter.com/utils/theme'
+import { useCapturedInput } from '../../utils/hooks/useCapturedEvents'
+import BigNumber from 'bignumber.js'
+import { formatBalance } from '../Wallet/formatter'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -37,6 +40,13 @@ const useStyles = makeStyles((theme: Theme) =>
         helperText: {
             marginLeft: theme.spacing(4),
             marginTop: theme.spacing(-1.5),
+        },
+        nativeInput: {
+            '&::-webkit-outer-spin-button, &::-webkit-inner-spin-button': {
+                '-webkit-appearance': 'none',
+                margin: 0,
+            },
+            '-moz-appearance': 'textfield',
         },
     }),
 )
@@ -69,11 +79,41 @@ interface DonateDialogUIProps
 function DonateDialogUI(props: DonateDialogUIProps) {
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
-    const [amount, setAmount] = useState(0)
-    const selectWallet = useSelectWallet(props.wallets, props.tokens, props.onRequireNewWallet)
+    // const [amount, setAmount] = useState(0)
+    const useSelectWalletResult = useSelectWallet(props.wallets, props.tokens, props.onRequireNewWallet)
+    const {
+        erc20Balance,
+        ethBalance,
+        selectedToken,
+        selectedTokenType,
+        selectedTokenAddress,
+        selectedWallet,
+        selectedWalletAddress,
+    } = useSelectWalletResult
+
+    const [amount, setAmount] = useState(0.01)
+    const [, amountInputRef] = useCapturedInput((x) => setAmount(parseFloat(x)))
+    const amountMaxBigint = selectedWallet
+        ? selectedTokenType === EthereumTokenType.ETH
+            ? selectedWallet.eth_balance
+            : selectedToken?.amount
+        : undefined
+    const amountMaxNumber = BigNumber.isBigNumber(amountMaxBigint)
+        ? selectedTokenType === EthereumTokenType.ETH
+            ? formatBalance(amountMaxBigint, 18)
+            : selectedToken && formatBalance(amountMaxBigint, selectedToken.decimals)
+        : undefined
+
+    const isDisabled = [
+        Number.isNaN(amount),
+        amount <= 0,
+        selectedWallet === undefined,
+        amount > (amountMaxNumber || 0),
+    ]
+    const isButtonDisabled = isDisabled.some((x) => x)
 
     // set default token
-    useEffect(() => selectWallet.setSelectedTokenType(EthereumTokenType.ETH))
+    useEffect(() => useSelectWalletResult.setSelectedTokenType(EthereumTokenType.ETH))
     if (!props.address) return null
     return (
         <div className={classes.root}>
@@ -112,18 +152,22 @@ function DonateDialogUI(props: DonateDialogUIProps) {
                         <WalletSelect
                             FormControlProps={{ fullWidth: true }}
                             wallets={props.wallets}
-                            useSelectWalletHooks={selectWallet}></WalletSelect>
+                            useSelectWalletHooks={useSelectWalletResult}></WalletSelect>
                         <TokenSelect
                             FormControlProps={{ fullWidth: true }}
-                            useSelectWalletHooks={selectWallet}></TokenSelect>
+                            useSelectWalletHooks={useSelectWalletResult}></TokenSelect>
                         <TextField
+                            InputProps={{ inputRef: amountInputRef }}
+                            inputProps={{
+                                min: 0,
+                                max: amountMaxNumber,
+                                className: classes.nativeInput,
+                            }}
                             variant="filled"
                             fullWidth
-                            value={amount}
-                            inputProps={{ min: 0, max: selectWallet }}
+                            defaultValue={amount}
                             type="number"
                             label="Amount"
-                            onChange={(e) => setAmount(parseFloat(e.currentTarget.value))}
                         />
                         <Typography variant="body1">
                             By using this service, you'll also be contributing 5% of your contribution to the{' '}
@@ -137,21 +181,34 @@ function DonateDialogUI(props: DonateDialogUIProps) {
                     </form>
                 </DialogContent>
                 <DialogActions className={classes.actions}>
+                    <Typography variant="body2">
+                        {selectedWallet
+                            ? erc20Balance
+                                ? `Balance: ${erc20Balance} (${ethBalance})`
+                                : `Balance: ${ethBalance}`
+                            : null}
+                        <br />
+                        Notice: A small gas fee will occur for publishing.
+                    </Typography>
                     <Button
                         className={classes.button}
                         style={{ marginLeft: 'auto' }}
                         color="primary"
                         variant="contained"
-                        disabled={selectWallet.selectedWalletAddress === undefined || amount <= 0}
+                        disabled={isButtonDisabled}
                         onClick={() =>
                             props.onDonate({
                                 amount,
-                                address: selectWallet.selectedWalletAddress!,
-                                token: selectWallet.selectedToken!,
-                                tokenType: selectWallet.selectedTokenType,
+                                address: useSelectWalletResult.selectedWalletAddress!,
+                                token: useSelectWalletResult.selectedToken!,
+                                tokenType: useSelectWalletResult.selectedTokenType,
                             })
                         }>
-                        Donate
+                        {isButtonDisabled
+                            ? 'Not valid'
+                            : `Donate ${+amount.toFixed(3) === +amount.toFixed(9) ? '' : '~'}${+amount.toFixed(3)} ${
+                                  selectedTokenType === EthereumTokenType.ETH ? 'ETH' : selectedToken?.symbol
+                              }`}
                     </Button>
                 </DialogActions>
             </ShadowRootDialog>
