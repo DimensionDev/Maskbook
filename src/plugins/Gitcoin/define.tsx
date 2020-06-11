@@ -17,6 +17,7 @@ import type { GitcoinGrantMetadata } from './Services'
 import BigNumber from 'bignumber.js'
 import { EthereumTokenType, ERC20TokenRecord } from '../Wallet/database/types'
 import { getNetworkSettings } from '../Wallet/UI/Developer/SelectEthereumNetwork'
+import { isNumber } from 'lodash-es'
 
 const isGitcoin = (x: string): boolean => x.startsWith('https://gitcoin.co/grants')
 export const GitcoinPluginDefine: PluginConfig = {
@@ -112,16 +113,19 @@ function Gitcoin(props: { url: string }) {
                 loading={isValidating}
                 image={image ? <img src={image} width="100%" /> : null}
                 title={title ?? 'A Gitcoin grant'}
-                line1={finalAmount ? `${finalAmount} DAI` : ''}
+                line1={isNumber(finalAmount) ? `${finalAmount} DAI` : ''}
                 line2="ESTIMATED"
-                line3={amount ? `${amount} DAI` : ''}
-                line4={contributors ? `${contributors} contributors` : ''}
+                line3={isNumber(amount) ? `${amount} DAI` : ''}
+                line4={isNumber(contributors) ? `${contributors} contributors` : ''}
                 address={address}
                 originalURL={url ?? ''}
             />
             {wallets.length ? (
                 <DonateDialog
-                    {...{ wallets, tokens, onRequireNewWallet, address }}
+                    address={address}
+                    onRequireNewWallet={onRequireNewWallet}
+                    wallets={wallets}
+                    tokens={tokens}
                     open={!!(open && address?.length)}
                     title={title ?? 'A Gitcoin grant'}
                     description={description ?? ''}

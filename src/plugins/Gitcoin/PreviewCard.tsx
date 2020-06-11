@@ -54,8 +54,11 @@ const useStyles = makeStyles((theme: Theme) =>
                 textOverflow: 'ellipsis',
             } as React.CSSProperties,
         },
-        expectedArea: {
+        primaryArea: {
             color: 'rgb(0, 154, 87)',
+        },
+        secondaryArea: {
+            color: theme.palette.common.black,
         },
     }),
 )
@@ -98,16 +101,18 @@ export function PreviewCard(props: PreviewCardProps) {
                     <Typography variant="h5">{props.title}</Typography>
                 </div>
                 <div className={classes.infoArea}>
-                    <Typography className={classes.expectedArea} variant="h6">
+                    <Typography className={classes.primaryArea} variant="h6">
                         {props.line1}
                     </Typography>
-                    <Typography className={classes.expectedArea} variant="body2">
+                    <Typography className={classes.primaryArea} variant="body2">
                         {props.line2}
                     </Typography>
-                    <Typography variant="body1" style={{ fontWeight: 'bold' }}>
+                    <Typography className={classes.secondaryArea} variant="body1" style={{ fontWeight: 'bold' }}>
                         {props.line3}
                     </Typography>
-                    <Typography variant="body2">{props.line4}</Typography>
+                    <Typography className={classes.secondaryArea} variant="body2">
+                        {props.line4}
+                    </Typography>
                 </div>
                 <aside className={classes.image}>{props.image}</aside>
             </Paper>
