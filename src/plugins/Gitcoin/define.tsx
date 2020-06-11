@@ -9,15 +9,14 @@ import Services from '../../extension/service'
 import MaskbookPluginWrapper from '../MaskbookPluginWrapper'
 import { extractTextFromTypedMessage } from '../../extension/background-script/CryptoServices/utils'
 import { Result, Ok, Err } from 'ts-results'
-import { DonateDialog, DonateDialogProps } from './DonateDialog'
+import { DonateDialog } from './DonateDialog'
 import { useWalletDataSource } from '../shared/useWallet'
 import { useValueRef } from '../../utils/hooks/useValueRef'
 import { useObservableValues } from '../../utils/hooks/useObservableMapSet'
 import type { GitcoinGrantMetadata } from './Services'
 import BigNumber from 'bignumber.js'
-import { EthereumNetwork, EthereumTokenType, ERC20TokenRecord } from '../Wallet/database/types'
+import { EthereumTokenType, ERC20TokenRecord } from '../Wallet/database/types'
 import { getNetworkSettings } from '../Wallet/UI/Developer/SelectEthereumNetwork'
-import { ERC20TokenPredefinedData } from '../Wallet/erc20'
 
 const isGitcoin = (x: string): boolean => x.startsWith('https://gitcoin.co/grants')
 export const GitcoinPluginDefine: PluginConfig = {
