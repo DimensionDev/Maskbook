@@ -8,7 +8,7 @@ import { createNewSettings } from '../../../../components/shared-settings/create
 const settings = {
     gitcoinDonationAddress: {
         [EthereumNetwork.Mainnet]: '0x00De4B13153673BCAE2616b67bf822500d325Fc3',
-        [EthereumNetwork.Rinkeby]: '0x16c23Eeb6f96EB3d0d130853c630922713492e1b',
+        [EthereumNetwork.Rinkeby]: '0xF292D41EBdCc4baF2a71121D2169d6Dfa2B56B8D',
         [EthereumNetwork.Ropsten]: '0x00De4B13153673BCAE2616b67bf822500d325Fc3',
     },
     splitterContractAddress: {
