@@ -8,13 +8,13 @@ import { createNewSettings } from '../../../../components/shared-settings/create
 const settings = {
     gitcoinDonationAddress: {
         [EthereumNetwork.Mainnet]: '0x00De4B13153673BCAE2616b67bf822500d325Fc3',
-        [EthereumNetwork.Rinkeby]: '',
-        [EthereumNetwork.Ropsten]: '',
+        [EthereumNetwork.Rinkeby]: '0x16c23Eeb6f96EB3d0d130853c630922713492e1b',
+        [EthereumNetwork.Ropsten]: '0x00De4B13153673BCAE2616b67bf822500d325Fc3',
     },
     splitterContractAddress: {
         [EthereumNetwork.Mainnet]: '0xdf869FAD6dB91f437B59F1EdEFab319493D4C4cE',
-        [EthereumNetwork.Rinkeby]: '',
-        [EthereumNetwork.Ropsten]: '',
+        [EthereumNetwork.Rinkeby]: '0x16c23Eeb6f96EB3d0d130853c630922713492e1b',
+        [EthereumNetwork.Ropsten]: '0xdf869FAD6dB91f437B59F1EdEFab319493D4C4cE',
     },
     happyRedPacketContractAddress: {
         [EthereumNetwork.Mainnet]: '0x26760783c12181efa3c435aee4ae686c53bdddbb',
