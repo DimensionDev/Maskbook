@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import {
     makeStyles,
     createStyles,
@@ -79,7 +79,6 @@ interface DonateDialogUIProps
 function DonateDialogUI(props: DonateDialogUIProps) {
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
-    // const [amount, setAmount] = useState(0)
     const useSelectWalletResult = useSelectWallet(props.wallets, props.tokens, props.onRequireNewWallet)
     const {
         erc20Balance,
@@ -112,8 +111,6 @@ function DonateDialogUI(props: DonateDialogUIProps) {
     ]
     const isButtonDisabled = isDisabled.some((x) => x)
 
-    // set default token
-    useEffect(() => useSelectWalletResult.setSelectedTokenType(EthereumTokenType.ETH))
     if (!props.address) return null
     return (
         <div className={classes.root}>

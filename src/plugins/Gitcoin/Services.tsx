@@ -21,7 +21,7 @@ export async function fetchMetadata(url: string): Promise<Result<GitcoinGrantMet
     const { title, description, logo: image, admin_address: address } = val
     const finalAmount = parse(data.val.amount_received)
     // TODO: wait for https://github.com/gitcoinco/web/pull/6633
-    const [amount, contributors] = [undefined, undefined]
+    const [amount, contributors] = [0, 0]
 
     return new Ok({ amount, contributors, description, finalAmount, image, title, address })
 }
