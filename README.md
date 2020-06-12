@@ -1,5 +1,5 @@
 <a href="https://maskbook.com/">
-  <img src="https://dimensiondev.github.io/Maskbook-VI/assets/Logo/MB--Logo--Ring--ForceCircle.png"
+  <img src="https://dimensiondev.github.io/Maskbook-VI/assets/Logo/MB--Logo--Geo--ForceCircle--Blue.svg"
        width="200" height="200" title="([I:b])" alt="([I:b])">
 </a>
 
