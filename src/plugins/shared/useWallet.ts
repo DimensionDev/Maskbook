@@ -2,9 +2,9 @@ import React, { useState, useEffect, useCallback } from 'react'
 import { WalletRecord, ERC20TokenRecord, EthereumTokenType } from '../Wallet/database/types'
 import Services from '../../extension/service'
 import { PluginMessageCenter } from '../PluginMessages'
-import { currentEthereumNetworkSettings } from '../Wallet/UI/Developer/SelectEthereumNetwork'
 import { formatBalance } from '../Wallet/formatter'
 import { ETH_ADDRESS } from '../Wallet/erc20'
+import { currentEthereumNetworkSettings } from '../Wallet/UI/Developer/EthereumNetworkSettings'
 
 export function useWalletDataSource() {
     const [wallets, setWallets] = useState<WalletRecord[] | 'loading'>('loading')

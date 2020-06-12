@@ -1,6 +1,4 @@
-import type { ValueRef } from '@holoflows/kit/es'
-import { useValueRef } from '../../utils/hooks/useValueRef'
-import { texts } from './createSettings'
+import React from 'react'
 import {
     ListItem,
     ListItemText,
@@ -13,7 +11,9 @@ import {
     SelectProps,
     createStyles,
 } from '@material-ui/core'
-import React from 'react'
+import type { ValueRef } from '@holoflows/kit/es'
+import { useValueRef } from '../../utils/hooks/useValueRef'
+import { texts } from './createSettings'
 
 function withDefaultText<T>(props: SettingsUIProps<T>): SettingsUIProps<T> {
     const { value, primary, secondary } = props

@@ -6,12 +6,12 @@ import {
     GitcoinDonationRecordInDatabase,
     EthereumTokenType,
 } from './database/types'
-import { getNetworkSettings } from './UI/Developer/SelectEthereumNetwork'
 import { PluginMessageCenter } from '../PluginMessages'
 import type { _UnboxPromise } from '@holoflows/kit/node_modules/async-call-rpc'
 import { createTransaction, IDBPSafeTransaction } from '../../database/helpers/openDB'
 import { createWalletDBAccess, WalletDB } from './database/Wallet.db'
 import { omit } from 'lodash-es'
+import { getNetworkSettings } from './UI/Developer/EthereumNetworkSettings'
 
 function getProvider() {
     return {

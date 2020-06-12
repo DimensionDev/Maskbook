@@ -18,7 +18,7 @@ import Web3Utils from 'web3-utils'
 import { redPacketAPI } from './api'
 import { sideEffect } from '../../utils/side-effects'
 import BigNumber from 'bignumber.js'
-import { getNetworkSettings } from './UI/Developer/SelectEthereumNetwork'
+import { getNetworkSettings } from './UI/Developer/EthereumNetworkSettings'
 
 function getProvider() {
     return redPacketAPI

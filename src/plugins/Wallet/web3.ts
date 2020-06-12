@@ -3,7 +3,7 @@ import type { WebsocketProvider } from 'web3-core'
 import { getWallets, recoverWallet, recoverWalletFromPrivateKey } from './wallet'
 import { PluginMessageCenter } from '../PluginMessages'
 import { sideEffect } from '../../utils/side-effects'
-import { currentEthereumNetworkSettings, getNetworkSettings } from './UI/Developer/SelectEthereumNetwork'
+import { currentEthereumNetworkSettings, getNetworkSettings } from './UI/Developer/EthereumNetworkSettings'
 
 export const web3 = new Web3()
 
