@@ -45,6 +45,7 @@ export async function profileRecordToProfile(record: ProfileRecord): Promise<Pro
 export function personaRecordToPersona(record: PersonaRecord): Persona {
     const rec = { ...record }
     delete rec.localKey
+    // @ts-ignore
     delete rec.publicKey
     const hasPrivateKey = !!rec.privateKey
     delete rec.privateKey

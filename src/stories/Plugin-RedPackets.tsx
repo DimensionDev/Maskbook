@@ -207,7 +207,9 @@ function createRecord(opts: {
         raw_payload: { token: opts.token } as any,
         erc20_token: opts.token ? 'aefwf' : undefined,
     }
+    // @ts-ignore
     if (opts.total === 0) delete x.send_total
+    // @ts-ignore
     if (opts.shares === 0) delete x.shares
     return x
 }
