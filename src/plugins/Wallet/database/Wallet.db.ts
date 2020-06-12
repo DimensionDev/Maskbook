@@ -25,7 +25,7 @@ export const createWalletDBAccess = createDBAccess(() => {
                 })
             }
             if (oldVersion < 1) v0_v1()
-            if (oldversion < 2) v1_v2()
+            if (oldVersion < 2) v1_v2()
         },
     })
 })
