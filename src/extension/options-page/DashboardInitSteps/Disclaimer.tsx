@@ -26,15 +26,9 @@ export default function Disclaimer() {
         <div style={{ width: '100%' }}>
             <LinedBox>
                 <Typography>
-                    Maskbook will collect some data when you use, but the developers of Maskbook have no access to them.
-                    The collected data are stored locally, except for the data which are necessary for enabling your
-                    friends to decrypt the posts you shared.
-                </Typography>
-                <Typography>
-                    The data being collected include: Your social network profile URL, the Maskbook public keys of your
-                    contacts (friends, who you follow, and who follow you), the relations between you and your contacts,
-                    the cleartext of your posts, the encryption keys of your posts, and the data managed by each Plugin
-                    in Maskbook (they have their own privacy policies).
+                    Maskbook will collect some data (listed in the privacy policy) when you use, but the developers of
+                    Maskbook have no access to them. The collected data are stored locally, except for the data which
+                    are necessary for enabling your friends to decrypt the posts you shared.
                 </Typography>
                 <Box display="flex" alignItems="center">
                     <FormControlLabel
@@ -46,7 +40,7 @@ export default function Disclaimer() {
                         }
                         label={
                             <>
-                                I understand this and accept the{' '}
+                                I agree with the{' '}
                                 <MuiLink
                                     href="https://maskbook.com/privacy-policy/"
                                     target="_blank"
