@@ -1,50 +1,55 @@
+import { Emitter } from '@servie/events'
 // Consider switch to libraries like Mobx if this file become too complex.
 export class ObservableWeakMap<K extends object, V> extends WeakMap<K, V> {
     declare __brand: 'Map'
-    declare onDelete?: (key: K) => void
+
+    event = new Emitter<{ delete: [K]; set: [K, V] }>()
     delete(key: K) {
-        this.onDelete?.(key)
-        return super.delete(key)
+        const _ = super.delete(key)
+        this.event.emit('delete', key)
+        return _
     }
-    declare onSet?: (key: K, value: V) => void
     set(key: K, value: V) {
-        this.onSet?.(key, value)
-        return super.set(key, value)
+        const _ = super.set(key, value)
+        this.event.emit('set', key, value)
+        return _
     }
 }
 export class ObservableMap<K, V> extends Map<K, V> {
     declare __brand: 'Map'
-    declare onClear?: () => void
+
+    event = new Emitter<{ delete: [K]; set: [K, V]; clear: [] }>()
     clear() {
-        this.onClear?.()
         super.clear()
+        this.event.emit('clear')
     }
-    declare onDelete?: (key: K) => void
     delete(key: K) {
-        this.onDelete?.(key)
-        return super.delete(key)
+        const _ = super.delete(key)
+        this.event.emit('delete', key)
+        return _
     }
-    declare onSet?: (key: K, value: V) => void
     set(key: K, value: V) {
-        this.onSet?.(key, value)
-        return super.set(key, value)
+        const _ = super.set(key, value)
+        this.event.emit('set', key, value)
+        return _
     }
 }
 export class ObservableSet<T> extends Set<T> {
     declare __brand: 'ObservableSet'
-    declare onClear?: () => void
+
+    event = new Emitter<{ delete: [T]; add: [T]; clear: [] }>()
     clear() {
-        this.onClear?.()
         super.clear()
+        this.event.emit('clear')
     }
-    declare onDelete?: (value: T) => void
-    delete(value: T) {
-        this.onDelete?.(value)
-        return super.delete(value)
+    delete(key: T) {
+        const _ = super.delete(key)
+        this.event.emit('delete', key)
+        return _
     }
-    declare onAdd?: (value: T) => void
     add(value: T) {
-        this.onAdd?.(value)
-        return super.add(value)
+        const _ = super.add(value)
+        this.event.emit('add', value)
+        return _
     }
 }

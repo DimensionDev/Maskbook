@@ -15,7 +15,8 @@ import type { I18NStrings } from '../utils/i18n-next'
 import type { TypedMessage } from '../extension/background-script/CryptoServices/utils'
 import i18nNextInstance from '../utils/i18n-next'
 import { Result, Err } from 'ts-results'
-import type { ObservableWeakMap } from '../utils/ObservableMapSet'
+import { ObservableWeakMap, ObservableSet, ObservableMap } from '../utils/ObservableMapSet'
+import { PluginUI } from '../plugins/plugin'
 
 if (!process.env.STORYBOOK) {
     OnlyRunInContext(['content', 'debugging', 'options'], 'UI provider')
@@ -242,9 +243,12 @@ export type PostInfo = {
     readonly decryptedPostContentRaw: ValueRef<string>
     readonly rootNode: HTMLElement
     readonly rootNodeProxy: DOMProxy
-    // readonly postMetadata: {
-    // images
-    // }
+    readonly postMetadata: {
+        // TODO: Implement this
+        images: ObservableSet<HTMLImageElement>
+        // TODO: add in-post links
+        mentionedLinks: ObservableMap<HTMLElement, string>
+    }
 }
 //#endregion
 //#region SocialNetworkUICustomUI
@@ -282,6 +286,10 @@ export const getEmptyPostInfoByElement = (
         avatarURL: new ValueRef<string | null>(null),
         nickname: new ValueRef<string | null>(null),
         steganographyContent: new ValueRef<string>(''),
+        postMetadata: {
+            images: new ObservableSet(),
+            mentionedLinks: new ObservableMap(),
+        },
         ...opt,
     }
     return x
@@ -340,7 +348,7 @@ export function activateSocialNetworkUI(): void {
 }
 function hookUIPostMap(ui: SocialNetworkUI) {
     const unmountFunctions = new WeakMap<object, () => void>()
-    ui.posts.onSet = (key, value) => {
+    ui.posts.event.on('set', (key, value) => {
         const unmountPostInspector = ui.injectPostInspector(value)
         const unmountCommentBox: () => void =
             ui.injectCommentBox === 'disabled' ? nopWithUnmount : defaultTo(ui.injectCommentBox, nopWithUnmount)(value)
@@ -353,11 +361,11 @@ function hookUIPostMap(ui: SocialNetworkUI) {
             unmountCommentBox()
             unmountPostComments()
         })
-    }
-    ui.posts.onDelete = (key) => {
+    })
+    ui.posts.event.on('delete', (key) => {
         const f = unmountFunctions.get(key)
         f && f()
-    }
+    })
 }
 
 export function defineSocialNetworkUI(UI: SocialNetworkUIDefinition) {

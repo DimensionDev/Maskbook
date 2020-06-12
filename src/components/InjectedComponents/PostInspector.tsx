@@ -7,16 +7,18 @@ import Services from '../../extension/service'
 import { ProfileIdentifier, PostIdentifier } from '../../database/type'
 import type { Profile } from '../../database'
 import { useCurrentIdentity, useFriendsList } from '../DataSource/useActivatedUI'
-import { getActivatedUI } from '../../social-network/ui'
+import { getActivatedUI, PostInfo } from '../../social-network/ui'
 import { useValueRef } from '../../utils/hooks/useValueRef'
 import { debugModeSetting } from '../shared-settings/settings'
 import { DebugList } from '../DebugModeUI/DebugList'
 import type { TypedMessage } from '../../extension/background-script/CryptoServices/utils'
 import { PluginUI, PluginConfig } from '../../plugins/plugin'
 
+// TODO: simplify this props @Jack-Works
 export interface PostInspectorProps {
     onDecrypted(post: TypedMessage, raw: string): void
     post: string
+    postInfo: PostInfo
     postBy: ProfileIdentifier
     postId: PostIdentifier<ProfileIdentifier>
     needZip(): void
@@ -26,7 +28,7 @@ export interface PostInspectorProps {
     AddToKeyStoreComponent?: React.ComponentType<AddToKeyStoreProps>
 }
 export function PostInspector(props: PostInspectorProps) {
-    const { post, postBy, postId } = props
+    const { post, postBy, postId, postInfo } = props
     const whoAmI = useCurrentIdentity()
     const people = useFriendsList()
     const [alreadySelectedPreviously, setAlreadySelectedPreviously] = useState<Profile[]>([])
@@ -107,14 +109,13 @@ export function PostInspector(props: PostInspectorProps) {
         return (
             <>
                 {x}
-                <PluginPostInspector post={post} />
+                <PluginPostInspector post={postInfo} />
                 {debugInfo}
             </>
         )
     }
 }
-import { useAsyncFn } from 'react-use'
-function PluginPostInspector(props: { post: string }) {
+function PluginPostInspector(props: { post: PostInfo }) {
     return (
         <>
             {[...PluginUI.values()].map((x) => (
@@ -123,9 +124,14 @@ function PluginPostInspector(props: { post: string }) {
         </>
     )
 }
-function PluginPostInspectorForEach({ pluginConfig, post }: { post: string; pluginConfig: PluginConfig }) {
-    const [{ loading, error, value }] = useAsyncFn(async () => pluginConfig.shouldActivateInPostInspector(post))
-    if (loading) return null
-    if (value) return <pluginConfig.PostInspectorComponent post={post} />
-    return null
+function PluginPostInspectorForEach({ pluginConfig, post }: { post: PostInfo; pluginConfig: PluginConfig }) {
+    const ref = React.useRef<HTMLDivElement>(null)
+    const F = pluginConfig.postInspector
+    React.useEffect(() => {
+        if (!ref.current || !F || typeof F === 'function') return
+        return F.init(post, ref.current)
+    }, [F, post])
+    if (!F) return null
+    if (typeof F === 'function') return <F {...post} />
+    return <div ref={ref} />
 }
