@@ -3,7 +3,7 @@ name: Bug
 about: Report a bug
 title: "[Bug] "
 labels: 'Type: Bug'
-assignees: Jack-Works, neruthes
+assignees: Jack-Works
 
 ---
 
