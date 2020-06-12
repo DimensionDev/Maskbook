@@ -11,38 +11,40 @@ export interface GitcoinGrantMetadata {
     amount?: number
     contributors?: number
     address?: string
+    permalink?: string
 }
 const domain = 'https://gitcoin.co/'
 export async function fetchMetadata(url: string): Promise<Result<GitcoinGrantMetadata, [Reason, Error?]>> {
     if (!url.startsWith(domain)) return new Err([Reason.InvalidURL])
-    const data = await fetchData(url)
+    const id = url.match(/\d+/)?.[0]
+    if (!id) return new Err([Reason.InvalidURL])
+    const data = await fetchData(id)
     if (data.err) return data.mapErr((e) => [Reason.FetchFailed, e])
     const { val } = data
-    const { title, description, logo: image, admin_address: address } = val
+    const { title, slug, description, logo: image, admin_address: address } = val
     const finalAmount = parse(data.val.amount_received)
     // TODO: wait for https://github.com/gitcoinco/web/pull/6633
     const [amount, contributors] = [undefined, undefined]
 
-    return new Ok({ amount, contributors, description, finalAmount, image, title, address })
+    return new Ok({
+        amount,
+        contributors,
+        description,
+        finalAmount,
+        image,
+        title,
+        address,
+        permalink: `${domain}grants/${id}/${slug}`,
+    })
 }
 
-function fetchData(url: string) {
-    const u = getURL(url)
-    if (!u.ok) return Promise.reject(u)
-    return fetch(u.val)
+function fetchData(id: string) {
+    return fetch(`https://gitcoin.provide.maskbook.com/api/v0.1/grants/${id}/`)
         .then((x) => x.json())
         .then(
             (x) => new Ok(x as Gitcoin),
             (e) => new Err<Error>(e),
         )
-}
-function getURL(url: string) {
-    const x = url.match(/\d+/)?.[0]
-    // https://github.com/gitcoinco/web/issues/6679
-    // https://github.com/gitcoinco/web/issues/6493#issuecomment-631218226
-    // if (x) return new Ok(`https://gitcoin.co/api/v0.1/grants/${x}/`)
-    if (x) return new Ok(`https://gitcoin.provide.maskbook.com/api/v0.1/grants/${x}/`)
-    return new Err(Reason.InvalidURL)
 }
 
 function parse(x: string | null | undefined) {

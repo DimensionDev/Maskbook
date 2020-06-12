@@ -32,6 +32,7 @@ interface GitcoinDialogProps extends withClasses<KeysInferFromUseStyles<typeof u
 //#region donate success dialog
 export interface DonateSuccessDialogProps extends GitcoinDialogProps {
     title: string
+    url: string
     amount: number
     token: ERC20TokenRecord | null
     tokenType: EthereumTokenType
@@ -39,14 +40,19 @@ export interface DonateSuccessDialogProps extends GitcoinDialogProps {
 
 export function DonateSuccessDialog(props: DonateSuccessDialogProps) {
     const classes = useStylesExtends(useStyles(), props)
-    const { title, amount, token, tokenType, open, onClose } = props
+    const { title, url, amount, token, tokenType, open, onClose } = props
     const ui = getActivatedUI()
 
     const onShare = () => {
         onClose()
-        const text = `I just donated the Gitcoin grant "${title}" with ${
-            tokenType === EthereumTokenType.ETH ? 'ETH' : token?.symbol
-        } ${amount} through #Maskbook! Install maskbook.com?`
+        const text = [
+            url,
+            `I donated ${amount} ${
+                tokenType === EthereumTokenType.ETH ? 'ETH' : token?.symbol
+            } for the campaign "${title}" on Gitcoin through #Maskbook!`,
+        ]
+            .filter(Boolean)
+            .join('\n')
         window.open(
             `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`,
             '_blank',

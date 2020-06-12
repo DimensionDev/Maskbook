@@ -25,6 +25,7 @@ export function DraggableDiv(props: React.HTMLAttributes<HTMLDivElement>) {
     const ref = useRef<HTMLDivElement>(null)
     const dom = (
         // See https://github.com/STRML/react-draggable/pull/478: Looks like nodeRef is missing in typings
+        // @ts-ignore
         <Draggable nodeRef={ref} bounds="parent" cancel="input, button, address" handle="nav">
             <div {...props} ref={ref} className={classes.paper} />
         </Draggable>
