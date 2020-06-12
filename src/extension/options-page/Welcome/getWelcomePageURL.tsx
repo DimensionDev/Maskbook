@@ -13,6 +13,6 @@ export function getWelcomePageURL(query?: Query) {
         if (identifier) param.set('identifier', identifier.toText())
         return getUrl(`index.html#/home/?${param.toString()}`)
     } else {
-        return getUrl(`index.html#/initialize/`)
+        return getUrl(`index.html#/initialize/1d`)
     }
 }

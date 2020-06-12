@@ -2,6 +2,7 @@ import React from 'react'
 import { Switch, useRouteMatch, Route, useParams, Redirect } from 'react-router-dom'
 import { makeStyles } from '@material-ui/styles'
 import { Theme, Typography, Card, Container } from '@material-ui/core'
+import Disclaimer from './DashboardInitSteps/Disclaimer'
 import InitStep0 from './DashboardInitSteps/Step0'
 import InitStep1S from './DashboardInitSteps/Step1S'
 import InitStep2S from './DashboardInitSteps/Step2S'
@@ -54,6 +55,8 @@ const useStyles = makeStyles((theme: Theme) => ({
 const InitializeSteps = () => {
     const { step } = useParams()
     switch (step as InitStep) {
+        case InitStep.Disclaimer:
+            return <Disclaimer />
         case InitStep.Setup1:
             return <InitStep1S />
         case InitStep.Setup2:

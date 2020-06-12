@@ -12,6 +12,7 @@ const VerticalCenter = styled('div')({
     margin: 'auto',
     width: 180,
 })
+
 const LinedBox = styled('div')(({ theme }: { theme: Theme }) => ({
     border: '1px solid #ddd',
     borderRadius: theme.shape.borderRadius,
