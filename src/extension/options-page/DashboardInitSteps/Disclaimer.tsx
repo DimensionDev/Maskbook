@@ -21,15 +21,11 @@ const LinedBox = styled('div')(({ theme }: { theme: Theme }) => ({
 export default function Disclaimer() {
     const { t } = useI18N()
     const [checked, setChecked] = useState(false)
-    const header = 'Be aware of your data when using Maskbook.'
+    const header = t('dashboard_init_step_-1')
     const content = (
         <div style={{ width: '100%' }}>
             <LinedBox>
-                <Typography>
-                    Maskbook will collect some data (listed in the privacy policy) when you use, but the developers of
-                    Maskbook have no access to them. The collected data are stored locally, except for the data which
-                    are necessary for enabling your friends to decrypt the posts you shared.
-                </Typography>
+                <Typography>{t('dashboard_init_step_-1_hint')}</Typography>
                 <Box display="flex" alignItems="center">
                     <FormControlLabel
                         control={
@@ -40,14 +36,14 @@ export default function Disclaimer() {
                         }
                         label={
                             <>
-                                I agree with the{' '}
+                                {t('dashboard_init_step_-1_privacy_prefix')}
                                 <MuiLink
                                     href="https://maskbook.com/privacy-policy/"
                                     target="_blank"
                                     rel="noopener noreferrer">
-                                    privacy policy
+                                    {t('dashboard_init_step_-1_privacy')}
                                 </MuiLink>
-                                .
+                                {t('dashboard_init_step_-1_privacy_suffix')}
                             </>
                         }
                     />
@@ -59,7 +55,7 @@ export default function Disclaimer() {
                         component={Link}
                         disabled={!checked}
                         to={InitStep.Setup0}>
-                        Get Started
+                        {t('get_started')}
                     </ActionButton>
                 </Box>
             </LinedBox>
