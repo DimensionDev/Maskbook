@@ -72,9 +72,16 @@ function Gitcoin(props: { url: string }) {
             return Services.Plugin.invokePlugin('co.gitcoin', 'fetchMetadata', url)
         },
     })
-    const { amount, contributors, finalAmount, title, image, description, address: donationAddress } = data?.ok
-        ? data.val
-        : ({} as GitcoinGrantMetadata)
+    const {
+        amount,
+        contributors,
+        finalAmount,
+        title,
+        permalink,
+        image,
+        description,
+        address: donationAddress,
+    } = data?.ok ? data.val : ({} as GitcoinGrantMetadata)
     const grantTitle = title ?? 'A Gitcoin grant'
 
     const [status, setStatus] = useState<'succeed' | 'failed' | 'initial'>('initial')
@@ -139,6 +146,7 @@ function Gitcoin(props: { url: string }) {
             <DonateSuccessDialog
                 open={status === 'succeed'}
                 title={grantTitle}
+                url={permalink ?? ''}
                 amount={donatePayload?.amount!}
                 token={donatePayload?.token!}
                 tokenType={donatePayload?.tokenType!}
