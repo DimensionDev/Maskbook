@@ -36,14 +36,13 @@ export default function Disclaimer() {
                         }
                         label={
                             <>
-                                {t('dashboard_init_step_-1_privacy_prefix')}
+                                {t('dashboard_init_step_-1_privacy_1')}
                                 <MuiLink
                                     href="https://maskbook.com/privacy-policy/"
                                     target="_blank"
                                     rel="noopener noreferrer">
-                                    {t('dashboard_init_step_-1_privacy')}
+                                    {t('dashboard_init_step_-1_privacy_2')}
                                 </MuiLink>
-                                {t('dashboard_init_step_-1_privacy_suffix')}
                             </>
                         }
                     />
