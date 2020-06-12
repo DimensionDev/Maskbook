@@ -26,9 +26,9 @@ const DashboardDebugPage = () => {
                     <Grid item>
                         <AddProve />
                     </Grid>
-                    <Grid item>
+                    {/* <Grid item>
                         <DecryptPostDeveloperMode />
-                    </Grid>
+                    </Grid> */}
                     <Grid item>
                         <FriendsDeveloperMode />
                     </Grid>
