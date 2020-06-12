@@ -25,7 +25,6 @@ storiesOf('Plugin: Gitcoin', module)
                     hasPermission={boolean('Has permission', false)}
                     requestPermission={action('Request permission')}
                     loading={boolean('Loading', false)}
-                    image={<img width="100%" height="100%" />}
                     title={text('Title', `This is a really long long long long long title`)}
                     line1={text('Line 1', `12,345 DAI`)}
                     line2={text('Line 2', `ESTIMATED`)}

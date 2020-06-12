@@ -13,7 +13,7 @@ const settings = {
     },
     splitterContractAddress: {
         [EthereumNetwork.Mainnet]: '0xdf869FAD6dB91f437B59F1EdEFab319493D4C4cE',
-        [EthereumNetwork.Rinkeby]: '0x16c23Eeb6f96EB3d0d130853c630922713492e1b',
+        [EthereumNetwork.Rinkeby]: '0xe93b4fF96201B68078E9fdDB8314BF732E9FFF91',
         [EthereumNetwork.Ropsten]: '0xdf869FAD6dB91f437B59F1EdEFab319493D4C4cE',
     },
     happyRedPacketContractAddress: {
