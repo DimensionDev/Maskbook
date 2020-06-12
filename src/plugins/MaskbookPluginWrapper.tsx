@@ -2,6 +2,7 @@ import React from 'react'
 import { makeStyles, createStyles, Typography, ThemeProvider } from '@material-ui/core'
 import { getUrl } from '../utils/utils'
 import { getActivatedUI } from '../social-network/ui'
+import { MaskbookIcon } from '../resources/Maskbook-Circle-WhiteGraph-BlueBackground'
 
 interface PluginWrapperProps {
     pluginName: string
@@ -46,7 +47,7 @@ export default function MaskbookPluginWrapper(props: PluginWrapperProps) {
         <ThemeProvider theme={theme}>
             <div className={classes.card} style={{ width }}>
                 <div className={classes.header}>
-                    <img src={getUrl('/maskbook-icon.png')} className={classes.icon} />
+                    <MaskbookIcon className={classes.icon}></MaskbookIcon>
                     <div className={classes.title}>
                         <Typography variant="overline">Maskbook Plugin</Typography>
                         <Typography variant="h6">{pluginName}</Typography>
