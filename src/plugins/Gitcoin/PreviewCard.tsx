@@ -19,13 +19,16 @@ const useStyles = makeStyles((theme: Theme) =>
             `,
             overflow: 'hidden',
         },
-        image: {
+        aside: {
             gridArea: 'image',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
             borderLeft: border,
             backgroundColor: 'rgba(255, 255, 255, 0.3)',
+        },
+        image: {
+            maxWidth: '90%',
         },
         title: {
             padding: theme.spacing(2),
@@ -65,8 +68,8 @@ const useStyles = makeStyles((theme: Theme) =>
 )
 
 interface PreviewCardProps {
+    logo?: string
     title: string
-    image: React.ReactNode
     line1: string
     line2: string
     line3: string
@@ -115,7 +118,9 @@ export function PreviewCard(props: PreviewCardProps) {
                         {props.line4}
                     </Typography>
                 </div>
-                <aside className={classes.image}>{props.image}</aside>
+                <aside className={classes.aside}>
+                    {props.logo ? <img className={classes.image} src={props.logo} /> : null}
+                </aside>
             </Paper>
             <Box paddingTop={2} display="flex" justifyContent="center">
                 <Button

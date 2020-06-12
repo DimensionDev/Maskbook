@@ -113,7 +113,7 @@ function Gitcoin(props: { url: string }) {
                 requestPermission={() => {}}
                 hasPermission={true}
                 loading={isValidating}
-                image={image ? <img src={image} width="100%" /> : null}
+                logo={image}
                 title={grantTitle}
                 line1={isNumber(finalAmount) ? `${finalAmount} DAI` : ''}
                 line2="ESTIMATED"
@@ -136,7 +136,6 @@ function Gitcoin(props: { url: string }) {
                     onClose={() => setOpen(false)}
                 />
             ) : null}
-
             <DonateSuccessDialog
                 open={status === 'succeed'}
                 title={grantTitle}
