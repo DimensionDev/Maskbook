@@ -46,10 +46,10 @@ export function DonateSuccessDialog(props: DonateSuccessDialogProps) {
     const onShare = () => {
         onClose()
         const text = [
-            url,
             `I donated ${amount} ${
                 tokenType === EthereumTokenType.ETH ? 'ETH' : token?.symbol
             } for the campaign "${title}" on Gitcoin through #Maskbook!`,
+            url,
         ]
             .filter(Boolean)
             .join('\n')
