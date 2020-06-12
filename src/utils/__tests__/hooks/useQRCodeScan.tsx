@@ -16,7 +16,9 @@ beforeAll(() => {
 })
 
 afterAll(() => {
+    // @ts-ignore
     delete window.HTMLMediaElement.prototype.play
+    // @ts-ignore
     delete window.HTMLMediaElement.prototype.pause
 })
 

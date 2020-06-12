@@ -542,6 +542,7 @@ function personaRecordToDB(x: PersonaRecord): PersonaRecordDb {
     }
 }
 function personaRecordOutDb(x: PersonaRecordDb): PersonaRecord {
+    // @ts-ignore
     delete x.hasPrivateKey
     const obj: PersonaRecord = {
         ...x,
