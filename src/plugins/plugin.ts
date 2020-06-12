@@ -8,10 +8,15 @@ export interface PluginSuccessDecryptionComponentProps {
 
 export interface PluginConfig {
     identifier: string
-    shouldActivateInPostInspector(post: string): boolean | Promise<boolean>
+    // TODO: switch shouldActivateInSuccessDecryption to postInspector style API  @Jack-Works
     shouldActivateInSuccessDecryption(post: TypedMessage): boolean // | Promise<boolean>
-    PostInspectorComponent: React.ComponentType<{ post: string }>
     SuccessDecryptionComponent: React.ComponentType<PluginSuccessDecryptionComponentProps>
+    postInspector?:
+        | {
+              type: 'raw'
+              init: (post: PostInfo, mountingPoint: HTMLDivElement) => () => void
+          }
+        | React.ComponentType<PostInfo>
 }
 
 const plugins = new Set<PluginConfig>()
@@ -19,5 +24,6 @@ export const PluginUI: ReadonlySet<PluginConfig> = plugins
 
 import { GitCoinConfig } from './Gitcoin/define'
 import { RedPacketPluginDefine } from './Wallet/define'
+import type { PostInfo } from '../social-network/ui'
 plugins.add(GitCoinConfig)
 plugins.add(RedPacketPluginDefine)

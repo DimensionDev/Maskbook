@@ -13,7 +13,6 @@ import { isNil } from 'lodash-es'
 import Services from '../../../extension/service'
 import { twitterUrl } from '../utils/url'
 import { untilElementAvailable } from '../../../utils/dom'
-import { twitterEncoding } from '../encoding'
 import { injectMaskbookIconToPost } from './injectMaskbookIcon'
 
 const resolveLastRecognizedIdentity = (self: SocialNetworkUI) => {
@@ -131,8 +130,22 @@ const registerPostCollector = (self: SocialNetworkUI) => {
                     })
                     .catch(() => {})
             }
+            const collectLinks = () => {
+                const links = [...tweetNode.querySelectorAll('a')].filter((x) => x.rel)
+                const seen = new Set<string>(['https://help.twitter.com/using-twitter/how-to-tweet#source-labels'])
+                for (const x of links) {
+                    if (seen.has(x.href)) continue
+                    seen.add(x.href)
+                    info.postMetadata.mentionedLinks.set(x, x.href)
+                    Services.Helper.resolveTCOLink(x.href).then((val) => {
+                        if (!val) return
+                        info.postMetadata.mentionedLinks.set(x, val)
+                    })
+                }
+            }
             ;(async () => {
                 await collectPostInfo()
+                collectLinks()
                 info.postPayload.addListener((payload) => {
                     if (!payload) return
                     Services.Identity.updateProfileInfo(info.postBy.value, {
@@ -150,6 +163,9 @@ const registerPostCollector = (self: SocialNetworkUI) => {
             return {
                 onTargetChanged: collectPostInfo,
                 onRemove: () => self.posts.delete(proxy),
+                onNodeMutation: () => {
+                    collectLinks()
+                },
             }
         })
         .setDOMProxyOption({ afterShadowRootInit: { mode: 'closed' } })

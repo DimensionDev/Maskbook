@@ -5,8 +5,6 @@ import { RedPacketMetaKey } from './RedPacketMetaKey'
 
 export const RedPacketPluginDefine: PluginConfig = {
     identifier: 'com.maskbook.redpacket',
-    shouldActivateInPostInspector: () => false,
     shouldActivateInSuccessDecryption: (props) => readTypedMessageMetadata(props.meta, RedPacketMetaKey).ok,
-    PostInspectorComponent: () => null,
     SuccessDecryptionComponent: RedPacketInDecryptedPost,
 }
