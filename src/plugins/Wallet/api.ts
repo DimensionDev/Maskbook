@@ -15,7 +15,7 @@ import { asyncTimes, pollingTask } from '../../utils/utils'
 import { createWalletDBAccess } from './database/Wallet.db'
 import { createTransaction } from '../../database/helpers/openDB'
 import { sendTx, sendTxConfigForTxHash } from './tx'
-import { getNetworkSettings } from './UI/Developer/SelectEthereumNetwork'
+import { getNetworkSettings } from './UI/Developer/EthereumNetworkSettings'
 
 function createRedPacketContract(address: string) {
     return (new web3.eth.Contract(HappyRedPacketABI as AbiItem[], address) as unknown) as HappyRedPacket

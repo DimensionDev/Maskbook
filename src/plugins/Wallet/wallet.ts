@@ -12,7 +12,7 @@ import { memoizePromise } from '../../utils/memoize'
 import { buf2hex } from './web3'
 import { BigNumber } from 'bignumber.js'
 import { ec as EC } from 'elliptic'
-import { currentEthereumNetworkSettings } from './UI/Developer/SelectEthereumNetwork'
+import { currentEthereumNetworkSettings } from './UI/Developer/EthereumNetworkSettings'
 import { sideEffect } from '../../utils/side-effects'
 
 // Private key at m/44'/coinType'/account'/change/addressIndex

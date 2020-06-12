@@ -7,7 +7,7 @@ import { useValueRef } from '../../utils/hooks/useValueRef'
 import { PluginMessageCenter } from '../../plugins/PluginMessages'
 import type { WalletRecord, ERC20TokenRecord } from '../../plugins/Wallet/database/types'
 import { sideEffect } from '../../utils/side-effects'
-import { currentEthereumNetworkSettings } from '../../plugins/Wallet/UI/Developer/SelectEthereumNetwork'
+import { currentEthereumNetworkSettings } from '../../plugins/Wallet/UI/Developer/EthereumNetworkSettings'
 
 const independentRef = {
     myPersonasRef: new ValueRef<Persona[]>([], PersonaArrayComparer),
