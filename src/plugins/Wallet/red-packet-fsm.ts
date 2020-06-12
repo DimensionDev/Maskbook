@@ -155,16 +155,12 @@ export async function createRedPacket(packet: createRedPacketInit): Promise<{ pa
 
 export async function onCreationResult(id: { databaseID: string }, details: RedPacketCreationResult) {
     const t = createTransaction(await createWalletDBAccess(), 'readwrite')('RedPacket', 'ERC20Token')
-    const record = await t.objectStore('RedPacket').get(id.databaseID)
-    if (!record) return
+    const record_ = await t.objectStore('RedPacket').get(id.databaseID)
+    if (!record_) return
+    const record = RedPacketRecordOutDB(record_)
+    setNextState(record, details.type === 'success' ? RedPacketStatus.normal : RedPacketStatus.fail)
 
-    setNextState(
-        RedPacketRecordOutDB(record),
-        details.type === 'success' ? RedPacketStatus.normal : RedPacketStatus.fail,
-    )
-
-    if (details.type === 'failed') {
-    } else {
+    if (details.type !== 'failed') {
         let token: RedPacketJSONPayload['token'] | undefined = undefined
         if (record.erc20_token) {
             const tokenRec = await t.objectStore('ERC20Token').get(record.erc20_token)
@@ -198,7 +194,7 @@ export async function onCreationResult(id: { databaseID: string }, details: RedP
             shares: new BigNumber(String(record.shares)).toNumber(),
         }
     }
-    t.objectStore('RedPacket').put(record)
+    t.objectStore('RedPacket').put(RedPacketRecordIntoDB(record))
     // TODO: send a notification here.
     PluginMessageCenter.emit('maskbook.red_packets.update', undefined)
 }
@@ -258,17 +254,15 @@ export async function claimRedPacket(
 export async function onClaimResult(id: { databaseID: string }, details: RedPacketClaimResult) {
     {
         const t = createTransaction(await createWalletDBAccess(), 'readwrite')('RedPacket')
-        const record = await t.objectStore('RedPacket').get(id.databaseID)
-        if (!record) throw new Error('Claim result of unknown id')
-        setNextState(
-            RedPacketRecordOutDB(record),
-            details.type === 'success' ? RedPacketStatus.claimed : RedPacketStatus.normal,
-        )
+        const record_ = await t.objectStore('RedPacket').get(id.databaseID)
+        if (!record_) throw new Error('Claim result of unknown id')
+        const record = RedPacketRecordOutDB(record_)
+        setNextState(record, details.type === 'success' ? RedPacketStatus.claimed : RedPacketStatus.normal)
         if (details.type === 'success') {
             record.claim_address = details.claimer
-            record.claim_amount = details.claimed_value.toString()
+            record.claim_amount = details.claimed_value
         }
-        t.objectStore('RedPacket').put(record)
+        t.objectStore('RedPacket').put(RedPacketRecordIntoDB(record))
     }
     if (details.type === 'success') {
         getProvider().watchExpired({ redPacketID: details.red_packet_id })
