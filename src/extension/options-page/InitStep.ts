@@ -1,5 +1,5 @@
 export enum InitStep {
-    Disclaimer = '1d',
+    Disclaimer = '-1s',
     Setup0 = '0s',
     Setup1 = '1s',
     Setup2 = '2s',
