@@ -44,6 +44,7 @@
     ]
   },
   "dependencies": {
+    "@dimensiondev/stego-js": "^0.11.0",
     "@holoflows/kit": "https://github.com/DimensionDev/holoflows-kit",
     "@material-ui/core": "4.10.0",
     "@material-ui/icons": "4.9.1",
@@ -81,7 +82,6 @@
     "lodash-es": "^4.17.11",
     "matrix-js-sdk": "^6.0.0",
     "matrix-js-sdk-type": "https://github.com/Jack-Works/matrix-js-sdk-type",
-    "node-stego": "^0.10.1",
     "notistack": "^0.9.11",
     "pvtsutils": "^1.0.10",
     "qrcode": "^1.4.4",

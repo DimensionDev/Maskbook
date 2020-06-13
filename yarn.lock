@@ -1853,6 +1853,13 @@
   dependencies:
     find-up "^4.0.0"
 
+"@dimensiondev/stego-js@^0.11.0":
+  version "0.11.0"
+  resolved "https://registry.yarnpkg.com/@dimensiondev/stego-js/-/stego-js-0.11.0.tgz#4cc874fd51564e1a0b7380ecf2f52eb3dbb0bd7e"
+  integrity sha512-CKJv/bh5s4wvmQhUgTOof+DQ3UXrD/spJZZB6vuViqdlAvzn9T8GT3WuvVBKYTvsiAUHA01sOWLqUeNIWWdCwA==
+  dependencies:
+    meow "^5.0.0"
+
 "@dsherret/to-absolute-glob@^2.0.2":
   version "2.0.2"
   resolved "https://registry.yarnpkg.com/@dsherret/to-absolute-glob/-/to-absolute-glob-2.0.2.tgz#1f6475dc8bd974cea07a2daf3864b317b1dd332c"
@@ -14483,13 +14490,6 @@ node-releases@^1.1.47:
   integrity sha512-Hr8BbmUl1ujAST0K0snItzEA5zkJTQup8VNTKNfT6Zw8vTJkIiagUPNfxHmgDOyfFYNfKAul40sD0UEYTvwebw==
   dependencies:
     semver "^6.3.0"
-
-node-stego@^0.10.1:
-  version "0.10.1"
-  resolved "https://registry.yarnpkg.com/node-stego/-/node-stego-0.10.1.tgz#5cbbd91c3ef70fa5a5d8fcdb6f4477b82ae5bd02"
-  integrity sha512-ZMZChU6FrsGvXBoUzMPVhsmkJx/gsPjGwzkHuH1tqBOSsHTX/dC5uQtj+8+w7WpnA7ZkYmdaGbJ6dPA278jE/w==
-  dependencies:
-    meow "^5.0.0"
 
 nopt@^4.0.1:
   version "4.0.1"
