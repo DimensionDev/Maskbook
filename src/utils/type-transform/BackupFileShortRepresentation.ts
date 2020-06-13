@@ -19,6 +19,14 @@ export type BackupJSONFileLatestShort = [
     // BackupJSONFileLatest['grantedHostPermissions'].join(';'),
     string,
 ]
+
+export function sanitizeBackupFile(backup: BackupJSONFileLatest): BackupJSONFileLatest {
+    return {
+        ...backup,
+        grantedHostPermissions: backup.grantedHostPermissions.filter((url) => /^(http|<all_urls>)/.test(url)),
+    }
+}
+
 export function compressBackupFile(
     file: BackupJSONFileLatest,
     {
@@ -57,7 +65,7 @@ export function decompressBackupFile(short: string): BackupJSONFileLatest {
     let compressed: string
     try {
         compressed = JSON.parse(short)
-        if (typeof compressed === 'object') return compressed
+        if (typeof compressed === 'object') return sanitizeBackupFile(compressed)
     } catch {
         if (!short.includes('🤔')) throw new Error('This backup is not a compressed string')
         compressed = short
@@ -80,14 +88,14 @@ export function decompressBackupFile(short: string): BackupJSONFileLatest {
 
     const profileID = network && userID ? new ProfileIdentifier(network, userID) : undefined
     const ECID = ECKeyIdentifier.fromJsonWebKey(publicJWK)
-    return {
+    return sanitizeBackupFile({
         _meta_: {
             createdAt: 0,
             maskbookVersion: browser.runtime.getManifest().version,
             version: 2,
             type: 'maskbook-backup',
         },
-        grantedHostPermissions: grantedHostPermissions.split(';').filter((url) => /^http|<all_urls>/.test(url)),
+        grantedHostPermissions: grantedHostPermissions.split(';').filter(Boolean),
         posts: [],
         userGroups: [],
         personas: [
@@ -114,5 +122,5 @@ export function decompressBackupFile(short: string): BackupJSONFileLatest {
                   },
               ]
             : [],
-    }
+    })
 }
