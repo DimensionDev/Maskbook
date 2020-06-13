@@ -350,7 +350,7 @@ export function PostDialog(props: PostDialogProps) {
                         { shouldOpenPostDialog: false },
                     )
                     activeUI.taskUploadToPostBox(encrypted, {
-                        template: isEth ? 'eth' : isDai ? 'dai' : isOkb ? 'okb' : 'default',
+                        template: isEth ? 'eth' : isDai ? 'dai' : isOkb ? 'okb' : 'v2',
                         warningText: t('additional_post_box__steganography_post_failed'),
                     })
                 } else {

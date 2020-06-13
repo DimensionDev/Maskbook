@@ -3,15 +3,17 @@ import { untilDocumentReady } from '../../../utils/dom'
 import { getUrl, downloadUrl, pasteImageToActiveElements } from '../../../utils/utils'
 import Services from '../../../extension/service'
 import { decodeArrayBuffer } from '../../../utils/type-transform/String-ArrayBuffer'
-import { GrayscaleAlgorithm } from 'node-stego/es/grayscale'
+import { GrayscaleAlgorithm } from '@dimensiondev/stego-js/es/grayscale'
 
 export async function uploadToPostBoxFacebook(
     text: string,
     options: Parameters<SocialNetworkUI['taskUploadToPostBox']>[1],
 ) {
-    const { warningText, template = 'default' } = options
+    const { warningText, template = 'v2' } = options
     const { currentIdentity } = getActivatedUI()
-    const blankImage = await downloadUrl(getUrl(`${template === 'default' ? '' : '/wallet'}/payload-${template}.png`))
+    const blankImage = await downloadUrl(
+        getUrl(`${template === 'v2' ? '/image-payload' : '/wallet'}/payload-${template}.png`),
+    )
     const secretImage = new Uint8Array(
         decodeArrayBuffer(
             await Services.Steganography.encodeImage(new Uint8Array(blankImage), {
