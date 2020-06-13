@@ -56,7 +56,7 @@ const realTasks = AutomatedTabTask(_tasks, {
     memorable: true,
     AsyncCallOptions: { serializer: Serialization },
 })!
-console.log('To debug tasks, use globalThis.tasks, sleep fn is also available')
+// console.log('To debug tasks, use globalThis.tasks, sleep fn is also available')
 Object.assign(globalThis, { tasks: _tasks, sleep: sleep })
 export default function tasks(...args: Parameters<typeof realTasks>) {
     const [tabIdOrUri, options] = args
