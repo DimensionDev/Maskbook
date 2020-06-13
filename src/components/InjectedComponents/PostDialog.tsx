@@ -336,7 +336,7 @@ export function PostDialog(props: PostDialogProps) {
                 // TODO: move into the plugin system
                 const metadata = readTypedMessageMetadata(typedMessageMetadata, RedPacketMetaKey)
                 if (imagePayloadEnabled) {
-                    const isEth = metadata.ok && metadata.val.token_type === EthereumTokenType.ETH
+                    const isRedPacket = metadata.ok && metadata.val.rpid
                     const isErc20 =
                         metadata.ok &&
                         metadata.val &&
@@ -350,7 +350,7 @@ export function PostDialog(props: PostDialogProps) {
                         { shouldOpenPostDialog: false },
                     )
                     activeUI.taskUploadToPostBox(encrypted, {
-                        template: isEth ? 'eth' : isDai ? 'dai' : isOkb ? 'okb' : 'v2',
+                        template: isRedPacket ? (isDai ? 'dai' : isOkb ? 'okb' : 'eth') : 'v2',
                         warningText: t('additional_post_box__steganography_post_failed'),
                     })
                 } else {
