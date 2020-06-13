@@ -183,7 +183,7 @@ export const postImageParser = async (node: HTMLElement) => {
                         const content = await Services.Steganography.decodeImageUrl(url, {
                             pass: posterIdentity.toText(),
                         })
-                        return /https:\/\/.+\..+\/%20(.+)%40/.test(content) ? content : ''
+                        return /https:\/\/.+\..+\/(\?PostData_v\d=)?%20(.+)%40/.test(content) ? content : ''
                     } catch {
                         // for twitter image url maybe absent
                         return ''
