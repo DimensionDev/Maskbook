@@ -1,9 +1,9 @@
-import { encode, decode } from 'node-stego/es/dom'
-import { GrayscaleAlgorithm } from 'node-stego/es/grayscale'
-import { TransformAlgorithm } from 'node-stego/es/transform'
+import { encode, decode } from '@dimensiondev/stego-js/es/dom'
+import { GrayscaleAlgorithm } from '@dimensiondev/stego-js/es/grayscale'
+import { TransformAlgorithm } from '@dimensiondev/stego-js/es/transform'
 import { OnlyRunInContext } from '@holoflows/kit/es'
-import type { EncodeOptions, DecodeOptions } from 'node-stego/es/stego'
-import { getUrl, downloadUrl, unreachable } from '../../utils/utils'
+import type { EncodeOptions, DecodeOptions } from '@dimensiondev/stego-js/es/stego'
+import { getUrl, downloadUrl } from '../../utils/utils'
 import { memoizePromise } from '../../utils/memoize'
 import { getDimension } from '../../utils/image'
 import { decodeArrayBuffer, encodeArrayBuffer } from '../../utils/type-transform/String-ArrayBuffer'
@@ -11,18 +11,24 @@ import { saveAsFile } from './HelperService'
 
 OnlyRunInContext('background', 'SteganographyService')
 
-type Template = 'default' | 'eth' | 'dai' | 'okb'
+type Template = 'v1' | 'v2' | 'eth' | 'dai' | 'okb'
+type Mask = 'v1' | 'v2' | 'transparent'
 
 type Dimension = {
     width: number
     height: number
 }
 
-const dimensionPreset: (Dimension & { mask: 'default' | 'transparent' })[] = [
+const dimensionPreset: (Dimension & { mask: Mask })[] = [
     {
         width: 1024,
         height: 1240,
-        mask: 'default',
+        mask: 'v1',
+    },
+    {
+        width: 1200,
+        height: 681,
+        mask: 'v2',
     },
     {
         width: 1200,
@@ -41,13 +47,7 @@ const defaultOptions = {
 const isSameDimension = (dimension: Dimension, otherDimension: Dimension) =>
     dimension.width === otherDimension.width && dimension.height === otherDimension.height
 
-type ImgKind = 'default' | 'transparent'
-function getImageURL(type: ImgKind) {
-    if (type === 'default') return getUrl(`/mask-default.png`)
-    if (type === 'transparent') return getUrl(`/mask-transparent.png`)
-    return unreachable(type)
-}
-const getMaskBuf = memoizePromise((type: 'default' | 'transparent') => downloadUrl(getImageURL(type)), undefined)
+const getMaskBuf = memoizePromise((type: Mask) => downloadUrl(getUrl(`/image-payload/mask-${type}.png`)), undefined)
 
 type EncodeImageOptions = {
     template?: Template
@@ -57,10 +57,10 @@ export async function encodeImage(buf: string | ArrayBuffer, options: EncodeImag
     const { template } = options
     const _buf = typeof buf === 'string' ? decodeArrayBuffer(buf) : buf
     return encodeArrayBuffer(
-        await encode(_buf, await getMaskBuf(template === 'default' ? 'default' : 'transparent'), {
+        await encode(_buf, await getMaskBuf(template === 'v2' ? template : 'transparent'), {
             ...defaultOptions,
             fakeMaskPixels: false,
-            cropEdgePixels: true,
+            cropEdgePixels: template !== 'v2',
             exhaustPixels: true,
             grayscaleAlgorithm: GrayscaleAlgorithm.NONE,
             transformAlgorithm: TransformAlgorithm.FFT1D,
