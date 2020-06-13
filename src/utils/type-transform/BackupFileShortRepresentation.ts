@@ -87,7 +87,7 @@ export function decompressBackupFile(short: string): BackupJSONFileLatest {
             version: 2,
             type: 'maskbook-backup',
         },
-        grantedHostPermissions: grantedHostPermissions.split(';').filter(Boolean),
+        grantedHostPermissions: grantedHostPermissions.split(';').filter((url) => /^http|<all_urls>/.test(url)),
         posts: [],
         userGroups: [],
         personas: [
