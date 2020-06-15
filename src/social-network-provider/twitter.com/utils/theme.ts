@@ -1,4 +1,4 @@
-import { makeStyles } from '@material-ui/styles'
+import { makeStyles } from '@material-ui/core/styles'
 import { Theme, fade } from '@material-ui/core'
 
 export const useTwitterButton = makeStyles((theme: Theme) => ({

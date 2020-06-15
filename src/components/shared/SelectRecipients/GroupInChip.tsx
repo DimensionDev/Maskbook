@@ -4,7 +4,7 @@ import Chip, { ChipProps } from '@material-ui/core/Chip'
 import type { Group } from '../../../database'
 import DoneIcon from '@material-ui/icons/Done'
 import { useResolveSpecialGroupName } from '../SelectPeopleAndGroups/resolveSpecialGroupName'
-import { makeStyles } from '@material-ui/styles'
+import { makeStyles } from '@material-ui/core/styles'
 import { useCallback, ChangeEvent } from 'react'
 
 export interface GroupInChipProps {
