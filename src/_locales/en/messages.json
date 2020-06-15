@@ -13,6 +13,7 @@
     "additional_post_box__steganography_post_pre": "This post is shared with my friends. You may install Maskbook to decrypt the content from the image. ([I:b]) {{random}}",
     "advanced": "Advanced...",
     "advanced_options": "Advanced Options",
+    "database_management": "Database Management",
     "automation_pasted_into_bio_box": "[Maskbook] We helped you append the public key to your bio. Please review and publish it!",
     "automation_request_click_edit_bio_button": "Please click the “Edit bio” button or the pencil on the bio box.",
     "automation_request_paste_into_bio_box": "Please copy your public key into the bio box and publish it.",
@@ -22,6 +23,7 @@
     "backup": "Backup",
     "backup_database": "Backup Database",
     "backup_persona": "Backup your persona",
+
     "backup_wallet": "Backup Wallet",
     "backup_wallet_hint": "Keep the 12 words below carefully in a safe place. You will need them to restore the private key of this wallet.",
     "banner_get_started": "Setup Maskbook",
