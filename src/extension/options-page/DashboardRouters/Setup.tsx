@@ -1,13 +1,16 @@
-import React, { useState, useCallback } from 'react'
+import React, { useState, useCallback, ChangeEvent } from 'react'
 import {
     Typography,
     Theme,
     TextField,
     Fade,
+    Checkbox,
+    Link as MuiLink,
     makeStyles,
     createStyles,
     ThemeProvider,
     InputBase,
+    FormControlLabel,
 } from '@material-ui/core'
 import classNames from 'classnames'
 import DashboardRouterContainer from './Container'
@@ -39,6 +42,7 @@ import { RestoreFromQRCodeCameraBox } from '../DashboardComponents/RestoreFromQR
 import { sleep } from '../../../utils/utils'
 
 export enum SetupStep {
+    ConsentDataCollection = 'consent-data-collection',
     CreatePersona = 'create-persona',
     ConnectNetwork = 'connect-network',
     RestoreDatabase = 'restore-database',
@@ -109,7 +113,7 @@ const useSetupFormSetyles = makeStyles((theme) =>
 
 interface SetupFormProps extends withClasses<KeysInferFromUseStyles<typeof useSetupFormSetyles>> {
     primary: string
-    secondary: string
+    secondary?: string
     content?: React.ReactNode
     actions?: React.ReactNode
 }
@@ -123,9 +127,11 @@ function SetupForm(props: SetupFormProps) {
                     <Typography className={classes.primary} variant="h5">
                         {props.primary}
                     </Typography>
-                    <Typography className={classes.secondary} variant="body1">
-                        {props.secondary}
-                    </Typography>
+                    {props.secondary ? (
+                        <Typography className={classes.secondary} variant="body1">
+                            {props.secondary}
+                        </Typography>
+                    ) : null}
                 </div>
                 <div className={classes.section}>
                     <form className={classes.form}>{props.content}</form>
@@ -133,6 +139,76 @@ function SetupForm(props: SetupFormProps) {
                 <div className={classes.section}>{props.actions}</div>
             </div>
         </Fade>
+    )
+}
+//#endregion
+
+//#region consent data collection
+const useConsentDataCollectionStyles = makeStyles((theme) =>
+    createStyles({
+        form: {
+            fontSize: 16,
+            lineHeight: 1.75,
+            width: 660,
+            minHeight: 256,
+            marginTop: 78,
+        },
+        label: {
+            marginBottom: 32,
+        },
+        button: {
+            minWidth: 220,
+        },
+    }),
+)
+
+export function ConsentDataCollection() {
+    const { t } = useI18N()
+    const setupFormClasses = useSetupFormSetyles()
+    const consentDataCollection = useConsentDataCollectionStyles()
+    const [checked, setChecked] = useState(false)
+    return (
+        <SetupForm
+            classes={{
+                form: consentDataCollection.form,
+            }}
+            primary={t('set_up_consent_data_collection')}
+            content={t('set_up_consent_data_collection_hint')}
+            actions={
+                <>
+                    <FormControlLabel
+                        className={consentDataCollection.label}
+                        control={
+                            <Checkbox
+                                color="primary"
+                                checked={checked}
+                                onChange={(ev: ChangeEvent<HTMLInputElement>) => setChecked(ev.target.checked)}
+                            />
+                        }
+                        label={
+                            <>
+                                {t('set_up_consent_data_collection_privacy_policy_1')}
+                                <MuiLink
+                                    href="https://maskbook.com/privacy-policy/"
+                                    target="_blank"
+                                    rel="noopener noreferrer">
+                                    {t('set_up_consent_data_collection_privacy_policy_2')}
+                                </MuiLink>
+                            </>
+                        }
+                    />
+                    <ActionButton<typeof Link>
+                        className={consentDataCollection.button}
+                        color="primary"
+                        variant="contained"
+                        component={Link}
+                        disabled={!checked}
+                        to={SetupStep.CreatePersona}>
+                        {t('set_up_button_get_started')}
+                    </ActionButton>
+                </>
+            }
+        />
     )
 }
 //#endregion
@@ -162,8 +238,8 @@ export function CreatePersona() {
             classes={{
                 form: createPersonaClasses.form,
             }}
-            primary={t('set_up_getting_started')}
-            secondary={t('set_up_getting_started_hint')}
+            primary={t('set_up_create_persona')}
+            secondary={t('set_up_create_persona_hint')}
             content={
                 <>
                     <TextField
@@ -775,6 +851,8 @@ const setupTheme = (theme: Theme): Theme =>
 const CurrentStep = () => {
     const { step } = useParams()
     switch (step as SetupStep) {
+        case SetupStep.ConsentDataCollection:
+            return <ConsentDataCollection />
         case SetupStep.CreatePersona:
             return <CreatePersona />
         case SetupStep.ConnectNetwork:

@@ -12,7 +12,6 @@ import { exclusiveTasks } from '../../content-script/tasks'
 import stringify from 'json-stable-stringify'
 import { useModal } from '../Dialogs/Base'
 import { DashboardPersonaUnlinkConfirmDialog } from '../Dialogs/Persona'
-import { sleep } from '../../../utils/utils'
 
 interface ProfileBoxProps {
     persona: Persona | null
