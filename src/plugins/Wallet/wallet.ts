@@ -9,7 +9,6 @@ import * as bip39 from 'bip39'
 import { walletAPI, erc20API } from './api'
 import { ERC20TokenPredefinedData, OKB_ADDRESS, DAI_ADDRESS } from './erc20'
 import { memoizePromise } from '../../utils/memoize'
-import { buf2hex } from './web3'
 import { BigNumber } from 'bignumber.js'
 import { ec as EC } from 'elliptic'
 import { currentEthereumNetworkSettings } from './UI/Developer/EthereumNetworkSettings'
@@ -233,9 +232,9 @@ export async function recoverWallet(mnemonic: string[], password: string) {
     const walletPrivateKey = wallet.privateKey!
     const address = EthereumAddress.from(walletPublicKey).address
     return { address, privateKey: walletPrivateKey, privateKeyInHex: `0x${buf2hex(walletPrivateKey)}`, mnemonic }
-    function buf2hex(buffer: ArrayBuffer) {
-        return Array.prototype.map.call(new Uint8Array(buffer), (x) => ('00' + x.toString(16)).slice(-2)).join('')
-    }
+}
+function buf2hex(buffer: ArrayBuffer) {
+    return Array.prototype.map.call(new Uint8Array(buffer), (x) => ('00' + x.toString(16)).slice(-2)).join('')
 }
 export async function recoverWalletFromPrivateKey(privateKey: string) {
     if (!privateKey) throw new Error('cannot import an empty private key')
@@ -250,14 +249,6 @@ export async function recoverWalletFromPrivateKey(privateKey: string) {
         privateKeyInHex: privateKey.startsWith('0x') ? privateKey : `0x${privateKey}`,
         mnemonic: [],
     }
-    function hex2buf(hex: string) {
-        let hex_ = hex
-        hex_ = hex.replace(/^0x/, '') // strip 0x
-        if (hex_.length % 2) hex_ = `0${hex_}` // pad even zero
-        const buf = []
-        for (let i = 0; i < hex_.length; i += 2) buf.push(parseInt(hex_.substr(i, 2), 16))
-        return new Uint8Array(buf)
-    }
     function privateKeyVerify(key: string) {
         const k = BigInt(`0x${key}`)
         const n = BigInt('0xfffffffffffffffffffffffffffffffebaaedce6af48a03bbfd25e8cd0364141')
@@ -265,6 +256,14 @@ export async function recoverWalletFromPrivateKey(privateKey: string) {
     }
 }
 
+function hex2buf(hex: string) {
+    let hex_ = hex
+    hex_ = hex.replace(/^0x/, '') // strip 0x
+    if (hex_.length % 2) hex_ = `0${hex_}` // pad even zero
+    const buf = []
+    for (let i = 0; i < hex_.length; i += 2) buf.push(parseInt(hex_.substr(i, 2), 16))
+    return new Uint8Array(buf)
+}
 export async function walletAddERC20Token(
     walletAddress: string,
     network: EthereumNetwork,

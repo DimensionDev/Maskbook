@@ -6,11 +6,14 @@ import AbstractTab, { AbstractTabProps } from '../DashboardComponents/AbstractTa
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { DebounceButton } from '../DashboardComponents/ActionButton'
 import SpacedButtonGroup from '../DashboardComponents/SpacedButtonGroup'
+import ShowcaseBox from '../DashboardComponents/ShowcaseBox'
 import Services from '../../service'
 import { WalletRecord, EthereumNetwork } from '../../../plugins/Wallet/database/types'
 import classNames from 'classnames'
 import { ERC20WellKnownTokenSelector } from '../../../plugins/Wallet/UI/Dashboard/Dialogs/WalletAddTokenDialogContent'
 import type { ERC20TokenPredefinedData } from '../../../plugins/Wallet/erc20'
+import { recoverWallet } from '../../../plugins/Wallet/wallet'
+import { useAsync } from 'react-use'
 
 export function DashboardWalletImportDialog(props: WrappedDialogProps) {
     const { t } = useI18N()
@@ -283,15 +286,6 @@ const useBackupDialogStyles = makeStyles((theme) =>
         section: {
             textAlign: 'left',
         },
-        blockquote: {
-            padding: theme.spacing(2, 3),
-            border: '1px solid #EAEAEA',
-            margin: 'auto',
-            lineHeight: '1.71',
-        },
-        breakAll: {
-            wordBreak: 'break-all',
-        },
     }),
 )
 
@@ -299,6 +293,8 @@ export function DashboardWalletBackupDialog(props: WrappedDialogProps<WalletProp
     const { t } = useI18N()
     const { wallet } = props.ComponentProps!
     const classes = useBackupDialogStyles()
+    const wallet_ = useAsync(() => recoverWallet(wallet.mnemonic, wallet.passphrase))
+
     return (
         <DashboardDialogCore {...props}>
             <DashboardDialogWrapper
@@ -309,20 +305,10 @@ export function DashboardWalletBackupDialog(props: WrappedDialogProps<WalletProp
                 content={
                     <>
                         <section className={classes.section}>
-                            <Card elevation={0} className={classes.blockquote} component="blockquote">
-                                {wallet.mnemonic.join(' ')}
-                            </Card>
+                            <ShowcaseBox>{wallet.mnemonic.join(' ')}</ShowcaseBox>
                         </section>
                         <section className={classes.section}>
-                            <Typography color="textSecondary" variant="body2" component="p">
-                                {t('private_key')}
-                            </Typography>
-                            <Card
-                                elevation={0}
-                                className={classNames(classes.breakAll, classes.blockquote)}
-                                component="blockquote">
-                                // TODO!: private key
-                            </Card>
+                            <ShowcaseBox title={t('private_key')}>{wallet_.value?.privateKeyInHex}</ShowcaseBox>
                         </section>
                     </>
                 }></DashboardDialogWrapper>
