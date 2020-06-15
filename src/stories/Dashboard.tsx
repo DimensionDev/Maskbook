@@ -14,17 +14,17 @@ import { ThemeProvider, useMediaQuery, Dialog } from '@material-ui/core'
 import { MaskbookDarkTheme, MaskbookLightTheme } from '../utils/theme'
 import { action } from '@storybook/addon-actions'
 import { useCurrentIdentity } from '../components/DataSource/useActivatedUI'
-import { apperanceSettings, Apperance } from '../components/shared-settings/settings'
+import { appearanceSettings, Appearance } from '../components/shared-settings/settings'
 import { useValueRef } from '../utils/hooks/useValueRef'
 
 function DashboardDialog({ children }: { children: React.ReactNode }) {
     const isPerferDark = useMediaQuery('(prefers-color-scheme: dark)')
-    const apperance = useValueRef(apperanceSettings)
+    const apperance = useValueRef(appearanceSettings)
     return (
         <Router>
             <ThemeProvider
                 theme={
-                    (isPerferDark && apperance === Apperance.default) || apperance === Apperance.dark
+                    (isPerferDark && apperance === Appearance.default) || apperance === Appearance.dark
                         ? MaskbookDarkTheme
                         : MaskbookLightTheme
                 }>
