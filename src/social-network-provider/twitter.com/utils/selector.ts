@@ -43,7 +43,7 @@ export const newPostButtonSelector = () => querySelector<E>('[data-testid="SideN
 
 export const profileEditorButtonSelector = () =>
     querySelector<HTMLAnchorElement>('[data-testid="primaryColumn"] [href="/settings/profile"]')
-export const profileEditorTextareaSelector = () => querySelector<HTMLTextAreaElement>('textarea[placeholder*="bio"]')
+export const profileEditorTextareaSelector = () => querySelector<HTMLTextAreaElement>('textarea[name="description"]')
 
 export const bioSelector = () => querySelector<HTMLDivElement>(['[data-testid="UserProfileHeader_Items"]'].join())
 export const bioPageUserNickNameSelector = () =>
