@@ -114,6 +114,7 @@ const registerPostCollector = (self: SocialNetworkUI) => {
                 collectPostInfo(tweetNode, info, self)
                 collectLinks(tweetNode, info)
             }
+            run()
             info.postPayload.addListener((payload) => {
                 if (!payload) return
                 Services.Identity.updateProfileInfo(info.postBy.value, {
