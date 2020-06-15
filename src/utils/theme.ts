@@ -15,12 +15,19 @@ function getFontFamily(monospace?: boolean) {
     return !monospace ? '-apple-system, system-ui, sans-serif' : monofont
 }
 
-const baseTheme = (theme: 'dark' | 'light') =>
+const baseTheme = (theme: 'dark' | 'light'): ThemeOptions =>
     ({
         palette: {
             primary: { main: '#1C68F3' },
             secondary: { main: orange[800] },
             type: theme,
+            text: {
+                secondary: '#939393',
+            },
+            background: {
+                default: '#FFF',
+                paper: theme === 'dark' ? '#212121' : '#FFF',
+            },
         },
         typography: {
             fontFamily: getFontFamily(),
@@ -28,6 +35,20 @@ const baseTheme = (theme: 'dark' | 'light') =>
         shape: { borderRadius: 4 },
         breakpoints: {
             values: { xs: 0, sm: 600, md: 1024, lg: 1280, xl: 1920 },
+        },
+        overrides: {
+            MuiButton: {
+                root: {
+                    textTransform: 'none',
+                    minWidth: '100px',
+                },
+            },
+        },
+        props: {
+            MuiButton: {
+                disableElevation: true,
+                size: 'small',
+            },
         },
     } as ThemeOptions)
 // Theme
