@@ -5,17 +5,12 @@ import RadioButtonUncheckedIcon from '@material-ui/icons/RadioButtonUnchecked'
 import { Table, TableBody, TableRow, TableCell, Typography, makeStyles, Theme, createStyles } from '@material-ui/core'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { unreachable } from '../../../utils/utils'
+import { useStylesExtends } from '../../../components/custom-ui-helper'
 
 const useDatabasePreviewCardStyles = makeStyles((theme: Theme) =>
     createStyles({
         table: {
-            width: 432,
-            borderRadius: 4,
             borderCollapse: 'unset',
-            border: `solid 1px ${theme.palette.divider}`,
-            padding: 32,
-            marginLeft: -32,
-            marginBottom: 38,
         },
         cell: {
             border: 'none',
@@ -23,14 +18,14 @@ const useDatabasePreviewCardStyles = makeStyles((theme: Theme) =>
         },
         label: {
             verticalAlign: 'middle',
-            fontSize: 20,
+            fontSize: 16,
             fontWeight: 500,
-            lineHeight: '30px',
+            lineHeight: 1.75,
         },
         icon: {
             color: theme.palette.divider,
-            width: 20,
-            height: 20,
+            width: 16,
+            height: 16,
             verticalAlign: 'middle',
             marginLeft: 18,
         },
@@ -47,7 +42,9 @@ export enum DatabaseRecordType {
     Contact,
 }
 
-export interface DatabasePreviewCardProps {
+export interface DatabasePreviewCardProps
+    extends withClasses<KeysInferFromUseStyles<typeof useDatabasePreviewCardStyles>> {
+    dense?: boolean
     records: {
         type: DatabaseRecordType
         length: number
@@ -56,8 +53,9 @@ export interface DatabasePreviewCardProps {
 }
 
 export function DatabasePreviewCard(props: DatabasePreviewCardProps) {
+    const { dense = false, records } = props
     const { t } = useI18N()
-    const classes = useDatabasePreviewCardStyles()
+    const classes = useStylesExtends(useDatabasePreviewCardStyles(), props)
 
     const resolveRecordName = (type: DatabaseRecordType) => {
         switch (type) {
@@ -73,14 +71,14 @@ export function DatabasePreviewCard(props: DatabasePreviewCardProps) {
                 return unreachable(type)
         }
     }
-    const records = props.records.map((record) => ({
+    const resolvedRecords = records.map((record) => ({
         ...record,
         name: resolveRecordName(record.type),
     }))
     return (
         <Table className={classes.table} size="small">
             <TableBody>
-                {records.map((record) => (
+                {resolvedRecords.map((record) => (
                     <TableRow key={record.name}>
                         <TableCell className={classes.cell} component="th" align="left">
                             <Typography className={classes.label} variant="body2" component="span">
@@ -91,11 +89,13 @@ export function DatabasePreviewCard(props: DatabasePreviewCardProps) {
                             <Typography className={classes.label} variant="body2" component="span">
                                 {record.length}
                             </Typography>
-                            {record.checked ? (
-                                <CheckCircleOutlineIcon className={classNames(classes.icon, classes.iconChecked)} />
-                            ) : (
-                                <RadioButtonUncheckedIcon className={classes.icon} />
-                            )}
+                            {!dense ? (
+                                record.checked ? (
+                                    <CheckCircleOutlineIcon className={classNames(classes.icon, classes.iconChecked)} />
+                                ) : (
+                                    <RadioButtonUncheckedIcon className={classes.icon} />
+                                )
+                            ) : null}
                         </TableCell>
                     </TableRow>
                 ))}
