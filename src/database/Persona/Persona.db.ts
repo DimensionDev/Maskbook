@@ -24,7 +24,7 @@ import { CryptoKeyToJsonWebKey } from '../../utils/type-transform/CryptoKey-Json
  *
  * # ObjectStore `persona`:
  * @description Store Personas.
- * @type {PersonaRecordDb}
+ * @type {PersonaRecordDB}
  * @keys inline, {@link PersonaRecordDb.identifier}
  *
  * # ObjectStore `profiles`:
@@ -163,7 +163,7 @@ export async function queryPersonaDB(
 ): Promise<PersonaRecord | null> {
     t = t || createTransaction(await db(), 'readonly')('personas')
     const x = await t.objectStore('personas').get(query.toText())
-    if (x) return personaRecordOutDb(x)
+    if (x) return personaRecordOutDB(x)
     return null
 }
 
@@ -177,7 +177,8 @@ export async function queryPersonasDB(
     t = t || createTransaction(await db(), 'readonly')('personas')
     const records: PersonaRecord[] = []
     for await (const each of t.objectStore('personas')) {
-        const out = personaRecordOutDb(each.value)
+        if (each.value.uninitialized) continue
+        const out = personaRecordOutDB(each.value)
         if (query(out)) records.push(out)
     }
     return records
@@ -197,7 +198,7 @@ export async function queryPersonasWithPrivateKey(
         ...(webpackEnv.target === 'WKWebview'
             ? (await t.objectStore('personas').getAll()).filter((obj) => obj.hasPrivateKey === 'yes')
             : await t.objectStore('personas').index('hasPrivateKey').getAll(IDBKeyRange.only('yes'))
-        ).map(personaRecordOutDb),
+        ).map(personaRecordOutDB),
     )
     return records as PersonaRecordWithPrivateKey[]
 }
@@ -219,7 +220,7 @@ export async function updatePersonaDB(
 ): Promise<void> {
     const _old = await t.objectStore('personas').get(nextRecord.identifier.toText())
     if (!_old) throw new TypeError('Update an non-exist data')
-    const old = personaRecordOutDb(_old)
+    const old = personaRecordOutDB(_old)
     let nextLinkedProfiles = old.linkedProfiles
     if (nextRecord.linkedProfiles) {
         if (howToMerge.linkedProfiles === 'merge')
@@ -236,7 +237,7 @@ export async function updatePersonaDB(
             }
         }
     }
-    const next: PersonaRecordDb = personaRecordToDB({
+    const next: PersonaRecordDB = personaRecordToDB({
         ...old,
         ...nextRecord,
         linkedProfiles: nextLinkedProfiles,
@@ -516,13 +517,18 @@ export interface PersonaRecord {
     linkedProfiles: IdentifierMap<ProfileIdentifier, LinkedProfileDetails>
     createdAt: Date
     updatedAt: Date
+    /**
+     * create a dummy persona which should hide to the user until
+     * connected at least one SNS identity
+     */
+    uninitialized?: boolean
 }
 type ProfileRecordDB = Omit<ProfileRecord, 'identifier' | 'hasPrivateKey' | 'linkedPersona'> & {
     identifier: string
     network: string
     linkedPersona?: PrototypeLess<PersonaIdentifier>
 }
-type PersonaRecordDb = Omit<PersonaRecord, 'identifier' | 'linkedProfiles'> & {
+type PersonaRecordDB = Omit<PersonaRecord, 'identifier' | 'linkedProfiles'> & {
     identifier: string
     linkedProfiles: Map<string, LinkedProfileDetails>
     /**
@@ -534,7 +540,7 @@ type PersonaRecordDb = Omit<PersonaRecord, 'identifier' | 'linkedProfiles'> & {
 export interface PersonaDB extends DBSchema {
     /** Use inline keys */
     personas: {
-        value: PersonaRecordDb
+        value: PersonaRecordDB
         key: string
         indexes: {
             hasPrivateKey: string
@@ -570,7 +576,7 @@ function profileOutDB({ network, ...x }: ProfileRecordDB): ProfileRecord {
         linkedPersona: restorePrototype(x.linkedPersona, ECKeyIdentifier.prototype),
     }
 }
-function personaRecordToDB(x: PersonaRecord): PersonaRecordDb {
+function personaRecordToDB(x: PersonaRecord): PersonaRecordDB {
     return {
         ...x,
         identifier: x.identifier.toText(),
@@ -578,7 +584,7 @@ function personaRecordToDB(x: PersonaRecord): PersonaRecordDb {
         linkedProfiles: x.linkedProfiles.__raw_map__,
     }
 }
-function personaRecordOutDb(x: PersonaRecordDb): PersonaRecord {
+function personaRecordOutDB(x: PersonaRecordDB): PersonaRecord {
     // @ts-ignore
     delete x.hasPrivateKey
     const obj: PersonaRecord = {
