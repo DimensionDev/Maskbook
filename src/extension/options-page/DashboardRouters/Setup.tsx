@@ -561,9 +561,30 @@ export function RestoreDatabaseAdvance() {
 //#endregion
 
 //#region restore database confirmation
+const useRestoreDatabaseConfirmationStyles = makeStyles((theme: Theme) =>
+    createStyles({
+        databasePreviewCardTable: {
+            width: 432,
+            border: `solid 1px ${theme.palette.divider}`,
+            borderRadius: 4,
+            padding: 32,
+            marginLeft: -32,
+            marginBottom: 38,
+        },
+        databasePreviewCardLabel: {
+            fontSize: 18,
+        },
+        databasePreviewCardIcon: {
+            width: 18,
+            height: 18,
+        },
+    }),
+)
+
 export function RestoreDatabaseConfirmation() {
     const { t } = useI18N()
     const classes = useSetupFormSetyles()
+    const restoreDatabaseConfirmationClasses = useRestoreDatabaseConfirmationStyles()
     const history = useHistory()
     const { enqueueSnackbar, closeSnackbar } = useSnackbar()
 
@@ -614,7 +635,16 @@ export function RestoreDatabaseConfirmation() {
                           })
                     : t('set_up_restore_confirmation_hint')
             }
-            content={<DatabasePreviewCard records={records} />}
+            content={
+                <DatabasePreviewCard
+                    classes={{
+                        table: restoreDatabaseConfirmationClasses.databasePreviewCardTable,
+                        label: restoreDatabaseConfirmationClasses.databasePreviewCardLabel,
+                        icon: restoreDatabaseConfirmationClasses.databasePreviewCardIcon,
+                    }}
+                    records={records}
+                />
+            }
             actions={
                 imported === true ? (
                     <ActionButton

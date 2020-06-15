@@ -30,6 +30,7 @@ import { useModal } from '../Dialogs/Base'
 import { DashboardDatabaseBackupDialog, DashboardDatabaseRestoreDialog } from '../Dialogs/Database'
 import { EthereumNetwork } from '../../../plugins/Wallet/database/types'
 import { currentEthereumNetworkSettings } from '../../../plugins/Wallet/UI/Developer/EthereumNetworkSettings'
+import { DashboardBackupDialog } from '../Dialogs/Backup'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -115,7 +116,8 @@ export default function DashboardSettingsRouter() {
     const theme = useTheme()
     const elevation = theme.palette.type === 'dark' ? 1 : 0
 
-    const [backupDatabase, openBackupDatabase] = useModal(DashboardDatabaseBackupDialog)
+    // const [backupDatabase, openBackupDatabase] = useModal(DashboardDatabaseBackupDialog)
+    const [backupDialog, openBackupDialog] = useModal(DashboardBackupDialog)
     const [restoreDatabase, openRestoreDatabase] = useModal(DashboardDatabaseRestoreDialog)
 
     const listStyle = {
@@ -199,7 +201,7 @@ export default function DashboardSettingsRouter() {
                                     icon={<UnarchiveOutlinedIcon />}
                                     primary={t('backup_database')}
                                     secondary={t('dashboard_backup_database_hint')}
-                                    onClick={openBackupDatabase}
+                                    onClick={openBackupDialog}
                                 />
                                 <SettingsUIDummy
                                     classes={listStyle}
@@ -210,7 +212,7 @@ export default function DashboardSettingsRouter() {
                                 />
                             </List>
                         </Card>
-                        {backupDatabase}
+                        {backupDialog}
                         {restoreDatabase}
                     </Paper>
                 </ThemeProvider>
