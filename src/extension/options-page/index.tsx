@@ -1,3 +1,5 @@
+import '../../provider.worker'
+
 import React from 'react'
 import { CssBaseline, useMediaQuery, NoSsr } from '@material-ui/core'
 import { ThemeProvider, makeStyles, createStyles } from '@material-ui/core/styles'

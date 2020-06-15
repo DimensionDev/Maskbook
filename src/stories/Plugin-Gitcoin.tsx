@@ -50,6 +50,8 @@ storiesOf('Plugin: Gitcoin', module)
                             mnemonic: ['mem'],
                             name: 'Wallet Name',
                             passphrase: 'password',
+                            createdAt: new Date(),
+                            updatedAt: new Date(),
                             eth_balance: new BigNumber(2).multipliedBy(new BigNumber(10).pow(18)), // 2 * (10 ** 18)
                         },
                     ]}

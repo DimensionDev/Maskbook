@@ -11,8 +11,8 @@ export function getWelcomePageURL(query?: Query) {
         const { identifier, ...params } = query
         const param = new URLSearchParams(params as Record<string, string>)
         if (identifier) param.set('identifier', identifier.toText())
-        return getUrl(`index.html#/home/?${param.toString()}`)
+        return getUrl(`index.html#/personas/?${param.toString()}`)
     } else {
-        return getUrl('index.html#/initialize/-1s')
+        return getUrl(`index.html#/setup/`)
     }
 }
