@@ -81,12 +81,14 @@ export const postsImageSelector = (node: HTMLElement) =>
         ].join(),
     )
 export const postsContentSelector = () =>
-    querySelectorAll(
-        [
-            '.tweet-text > div', // both timeline and detail page for legacy twitter
-            'article div[lang]', // both timeline and detail page for new twitter
-        ].join(),
-    )
+    querySelectorAll('.tweet-text > div') // both timeline and detail page for legacy twitter
+        .concat(
+            querySelectorAll('article').map((x) => {
+                const textContent = x.querySelector('[lang]')
+                const detailNoContent = x.querySelector('[role="group"]')?.parentElement?.firstElementChild
+                return (textContent ?? detailNoContent) as HTMLElement | undefined
+            }), // both timeline and detail page for new twitter,
+        )
 
 const base = querySelector<HTMLScriptElement>('#react-root + script')
 const handle = /"screen_name":"(.*?)"/
