@@ -314,5 +314,6 @@
     "wallets": "錢包",
     "welcome_1b_dragging": "將備份檔案拖拽到此處……",
     "welcome_1b_file_selected": "已選取備份檔案：{{filename}}",
+    "untitled_wallet": "未命名錢包",
     "your_message": "您的留言……"
 }
