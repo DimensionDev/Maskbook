@@ -30,10 +30,10 @@ export const postEditorInTimelineSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('[role="main"] :not(aside) > [role="progressbar"] ~ div')
 export const postEditorDraftContentSelector = () => {
     if (location.pathname === '/compose/tweet') {
-        return querySelector<HTMLTextAreaElement>(`textarea[aria-label][spellcheck]`)
+        return querySelector<HTMLDivElement>(`[contenteditable][aria-label][spellcheck]`)
     }
     return (isCompose() ? postEditorInPopupSelector() : postEditorInTimelineSelector()).querySelector<HTMLElement>(
-        '.public-DraftEditor-content, textarea[aria-label][spellcheck]',
+        '.public-DraftEditor-content, [contenteditable][aria-label][spellcheck]',
     )
 }
 export const posteditorToolbarSeelctor: () => LiveSelector<E, true> = () =>
@@ -43,7 +43,7 @@ export const newPostButtonSelector = () => querySelector<E>('[data-testid="SideN
 
 export const profileEditorButtonSelector = () =>
     querySelector<HTMLAnchorElement>('[data-testid="primaryColumn"] [href="/settings/profile"]')
-export const profileEditorTextareaSelector = () => querySelector<HTMLTextAreaElement>('textarea[placeholder*="bio"]')
+export const profileEditorTextareaSelector = () => querySelector<HTMLTextAreaElement>('textarea[name="description"]')
 
 export const bioSelector = () => querySelector<HTMLDivElement>(['[data-testid="UserProfileHeader_Items"]'].join())
 export const bioPageUserNickNameSelector = () =>
@@ -81,15 +81,14 @@ export const postsImageSelector = (node: HTMLElement) =>
         ].join(),
     )
 export const postsContentSelector = () =>
-    querySelectorAll('.tweet-text > div')
-        // both timeline and detail page for legacy twitter
+    querySelectorAll('.tweet-text > div') // both timeline and detail page for legacy twitter
         .concat(
             querySelectorAll('article').map((x) => {
                 const textContent = x.querySelector('[lang]')
                 const detailNoContent = x.querySelector('[role="group"]')?.parentElement?.firstElementChild
                 return (textContent ?? detailNoContent) as HTMLElement | undefined
-            }),
-        ) // both timeline and detail page for new twitter
+            }), // both timeline and detail page for new twitter,
+        )
 
 const base = querySelector<HTMLScriptElement>('#react-root + script')
 const handle = /"screen_name":"(.*?)"/
