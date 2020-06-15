@@ -2,7 +2,7 @@ import React from 'react'
 import { Typography, Card, List, Paper } from '@material-ui/core'
 import { makeStyles, createStyles, ThemeProvider, Theme, useTheme } from '@material-ui/core/styles'
 
-import { SettingsUI, SettingsUIEnum } from '../../../components/shared-settings/useSettingsUI'
+import { SettingsUI, SettingsUIEnum, SettingsUIDummy } from '../../../components/shared-settings/useSettingsUI'
 import {
     debugModeSetting,
     disableOpenNewTabInBackgroundSettings,
@@ -20,11 +20,16 @@ import NightsStay from '@material-ui/icons/NightsStay'
 import MemoryOutlinedIcon from '@material-ui/icons/MemoryOutlined'
 import WallpaperOutlinedIcon from '@material-ui/icons/WallpaperOutlined'
 import OpenInBrowserIcon from '@material-ui/icons/OpenInBrowser'
+import ArchiveOutlinedIcon from '@material-ui/icons/ArchiveOutlined'
+import UnarchiveOutlinedIcon from '@material-ui/icons/UnarchiveOutlined'
+import TabIcon from '@material-ui/icons/Tab'
 import PaletteIcon from '@material-ui/icons/Palette'
 import LanguageIcon from '@material-ui/icons/Language'
 import DashboardRouterContainer from './Container'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { merge, cloneDeep } from 'lodash-es'
+import { useModal } from '../Dialog/Base'
+import { DashboardDatabaseBackupDialog, DashboardDatabaseRestoreDialog } from '../Dialog/Database'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -124,6 +129,10 @@ export default function DashboardSettingsRouter() {
     const shadowRoot = useValueRef(renderInShadowRootSettings)
     const theme = useTheme()
     const elevation = theme.palette.type === 'dark' ? 1 : 0
+
+    const [backupDatabase, openBackupDatabase] = useModal(DashboardDatabaseBackupDialog)
+    const [restoreDatabase, openRestoreDatabase] = useModal(DashboardDatabaseRestoreDialog)
+
     return (
         <DashboardRouterContainer title={t('settings')}>
             <div className="wrapper">
@@ -157,10 +166,7 @@ export default function DashboardSettingsRouter() {
                         </Typography>
                         <Card elevation={0}>
                             <List disablePadding>
-                                <SettingsUI
-                                    icon={<OpenInBrowserIcon />}
-                                    value={disableOpenNewTabInBackgroundSettings}
-                                />
+                                <SettingsUI icon={<TabIcon />} value={disableOpenNewTabInBackgroundSettings} />
                                 {/* This feature is not ready for iOS */}
                                 {webpackEnv.target !== 'WKWebview' ? (
                                     <SettingsUI
@@ -171,6 +177,29 @@ export default function DashboardSettingsRouter() {
                                 <SettingsUI icon={<MemoryOutlinedIcon />} value={debugModeSetting} />
                             </List>
                         </Card>
+                    </Paper>
+                    <Paper component="section" className={classes.section} elevation={elevation}>
+                        <Typography className={classes.title} variant="h6" color="textPrimary">
+                            {t('database_management')}
+                        </Typography>
+                        <Card elevation={0}>
+                            <List disablePadding>
+                                <SettingsUIDummy
+                                    icon={<UnarchiveOutlinedIcon />}
+                                    primary={t('backup_database')}
+                                    secondary={t('dashboard_backup_database_hint')}
+                                    onClick={openRestoreDatabase}
+                                />
+                                <SettingsUIDummy
+                                    icon={<ArchiveOutlinedIcon />}
+                                    primary={t('restore_database')}
+                                    secondary={t('dashboard_import_database_hint')}
+                                    onClick={openBackupDatabase}
+                                />
+                            </List>
+                        </Card>
+                        {backupDatabase}
+                        {restoreDatabase}
                     </Paper>
                 </ThemeProvider>
             </div>
