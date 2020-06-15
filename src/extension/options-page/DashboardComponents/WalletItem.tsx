@@ -5,7 +5,7 @@ import type { WalletRecord, ERC20TokenRecord } from '../../../plugins/Wallet/dat
 import classNames from 'classnames'
 import { useCopyToClipboard } from 'react-use'
 import { useI18N } from '../../../utils/i18n-next-ui'
-import { useSnackbarCallback } from '../Dialog/Base'
+import { useSnackbarCallback } from '../Dialogs/Base'
 import { DebounceButton } from './ActionButton'
 
 const useStyles = makeStyles((theme) =>

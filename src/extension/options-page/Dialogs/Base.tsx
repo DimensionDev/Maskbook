@@ -15,7 +15,7 @@ import {
 import { Theme, ThemeProvider } from '@material-ui/core/styles'
 import CloseIcon from '@material-ui/icons/Close'
 import type { TransitionProps } from '@material-ui/core/transitions'
-import { useBlurContext } from '../DashboardBlurContext'
+import { useBlurContext } from '../DashboardContexts/BlurContext'
 import { useSnackbar } from 'notistack'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { merge, cloneDeep } from 'lodash-es'

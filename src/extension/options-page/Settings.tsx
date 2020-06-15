@@ -6,15 +6,15 @@ import ImageMode from '@material-ui/icons/Image'
 import OpenInBrowser from '@material-ui/icons/OpenInBrowser'
 import LanguageIcon from '@material-ui/icons/Language'
 import { Typography, Card, Divider, Container } from '@material-ui/core'
-import { SettingsUI, SettingsUIEnum } from '../../../components/shared-settings/useSettingsUI'
+import { SettingsUI, SettingsUIEnum } from '../../components/shared-settings/useSettingsUI'
 import {
     debugModeSetting,
     disableOpenNewTabInBackgroundSettings,
     languageSettings,
     Language,
     renderInShadowRootSettings,
-} from '../../../components/shared-settings/settings'
-import { useValueRef } from '../../../utils/hooks/useValueRef'
+} from '../../components/shared-settings/settings'
+import { useValueRef } from '../../utils/hooks/useValueRef'
 import EnhancedEncryptionIcon from '@material-ui/icons/EnhancedEncryption'
 import NoEncryptionIcon from '@material-ui/icons/NoEncryption'
 

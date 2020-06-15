@@ -3,8 +3,8 @@ import { Typography, ButtonBase, ButtonBaseProps } from '@material-ui/core'
 import { makeStyles, createStyles } from '@material-ui/core/styles'
 import type { Profile } from '../../../database'
 import { Avatar } from '../../../utils/components/Avatar'
-import { useModal } from '../Dialog/Base'
-import { DashboardContactDialog } from '../Dialog/Contact'
+import { useModal } from '../Dialogs/Base'
+import { DashboardContactDialog } from '../Dialogs/Contact'
 import { Skeleton } from '@material-ui/lab'
 
 const useStyles = makeStyles((theme) =>
