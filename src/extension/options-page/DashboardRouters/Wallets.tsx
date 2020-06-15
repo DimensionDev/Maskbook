@@ -19,6 +19,7 @@ import {
     DashboardWalletBackupDialog,
     DashboardWalletDeleteConfirmDialog,
     DashboardWalletRenameDialog,
+    DashboardWalletErrorDialog,
 } from '../Dialogs/Wallet'
 import { useMyWallets } from '../../../components/DataSource/independent'
 import DashboardMenu from '../DashboardComponents/DashboardMenu'
@@ -30,8 +31,9 @@ import BigNumber from 'bignumber.js'
 import type { WalletRecord, ERC20TokenRecord } from '../../../plugins/Wallet/database/types'
 import { sleep } from '../../../utils/utils'
 import { ETH_ADDRESS, isDAI } from '../../../plugins/Wallet/token'
-import { ethereumNetworkSettings } from '../../../plugins/Wallet/network'
 import { useValueRef } from '../../../utils/hooks/useValueRef'
+import useQueryParams from '../../../utils/hooks/useQueryParams'
+import { currentEthereumNetworkSettings } from '../../../plugins/Wallet/UI/Developer/EthereumNetworkSettings'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -116,11 +118,9 @@ function WalletContent({ wallet, tokens }: WalletContentProps) {
     const { t } = useI18N()
     const color = useColorProvider()
 
-    const network = useValueRef(ethereumNetworkSettings)
-
+    const network = useValueRef(currentEthereumNetworkSettings)
     const [addToken, , openAddToken] = useModal(DashboardWalletAddTokenDialog)
     const [walletHistory, , oepnWalletHistory] = useModal(DashboardWalletHistoryDialog)
-
     const [walletBackup, , oepnWalletBackup] = useModal(DashboardWalletBackupDialog)
     const [walletDelete, , oepnWalletDelete] = useModal(DashboardWalletDeleteConfirmDialog)
     const [walletRename, , oepnWalletRename] = useModal(DashboardWalletRenameDialog)
@@ -215,9 +215,11 @@ function WalletContent({ wallet, tokens }: WalletContentProps) {
 export default function DashboardWalletsRouter() {
     const classes = useStyles()
     const { t } = useI18N()
+    const { error } = useQueryParams(['error'])
 
     const [walletImport, openWalletImport] = useModal(DashboardWalletImportDialog)
     const [walletCreate, openWalletCreate] = useModal(DashboardWalletCreateDialog)
+    const [walletError, openWalletError] = useModal(DashboardWalletErrorDialog)
 
     const [wallets, tokens] = useMyWallets()
     const [current, setCurrent] = useState('')
@@ -228,6 +230,11 @@ export default function DashboardWalletsRouter() {
         if (current) return
         if (wallets[0]?.address) setCurrent(wallets[0]?.address)
     }, [current, wallets])
+
+    // show error dialog
+    useEffect(() => {
+        if (error) openWalletError()
+    }, [error, openWalletError])
 
     return (
         <DashboardRouterContainer
@@ -273,6 +280,7 @@ export default function DashboardWalletsRouter() {
             </div>
             {walletImport}
             {walletCreate}
+            {walletError}
         </DashboardRouterContainer>
     )
 }

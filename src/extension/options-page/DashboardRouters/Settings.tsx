@@ -28,8 +28,8 @@ import { useI18N } from '../../../utils/i18n-next-ui'
 import { merge, cloneDeep } from 'lodash-es'
 import { useModal } from '../Dialogs/Base'
 import { DashboardDatabaseBackupDialog, DashboardDatabaseRestoreDialog } from '../Dialogs/Database'
-import { ethereumNetworkSettings } from '../../../plugins/Wallet/network'
 import { EthereumNetwork } from '../../../plugins/Wallet/database/types'
+import { currentEthereumNetworkSettings } from '../../../plugins/Wallet/UI/Developer/EthereumNetworkSettings'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -99,7 +99,7 @@ export default function DashboardSettingsRouter() {
     const { t } = useI18N()
     const currentLang = useValueRef(languageSettings)
     const currentApperance = useValueRef(appearanceSettings)
-    const currentEthereumNetwork = useValueRef(ethereumNetworkSettings)
+    const currentEthereumNetwork = useValueRef(currentEthereumNetworkSettings)
     const langMapper = React.useRef((x: Language) => {
         if (x === Language.en) return 'English'
         if (x === Language.zh) return '中文'
