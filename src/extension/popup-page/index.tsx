@@ -36,6 +36,12 @@ const useStyles = makeStyles((theme) => ({
     },
 }))
 
+const useSettingsUIStyles = makeStyles((theme) => ({
+    secondaryAction: {
+        paddingRight: theme.spacing(6),
+    },
+}))
+
 SSRRenderer(
     <ThemeProvider theme={MaskbookLightTheme}>
         <I18nextProvider i18n={i18nNextInstance}>
@@ -46,6 +52,7 @@ SSRRenderer(
 export function Popup() {
     const { t } = useI18N()
     const classes = useStyles()
+    const settingsUIClasses = useSettingsUIStyles()
 
     const [showIdentitySelector, setShowIdentitySelector] = useState(false)
     React.useEffect(() => {
@@ -71,8 +78,9 @@ export function Popup() {
                     {t('popup_enter_dashboard')}
                 </Button>
                 <List>
-                    <SettingsUI value={debugModeSetting} />
-                    <SettingsUI value={disableOpenNewTabInBackgroundSettings} />
+                    <SettingsUI classes={settingsUIClasses} value={debugModeSetting} />
+                    <SettingsUI classes={settingsUIClasses} value={steganographyModeSetting} />
+                    <SettingsUI classes={settingsUIClasses} value={disableOpenNewTabInBackgroundSettings} />
                 </List>
             </main>
         </>
