@@ -347,6 +347,44 @@ export async function queryProfilesDB(
     return result
 }
 
+export async function queryProfilesPagedDB(
+    options: {
+        after: ProfileIdentifier | undefined
+        query?: string
+    },
+    count: number,
+): Promise<ProfileRecord[]> {
+    const t = createTransaction(await db(), 'readonly')('profiles')
+    const breakPoint = options.after?.toText()
+    let firstRecord = true
+    const data: ProfileRecord[] = []
+    for await (const rec of t.objectStore('profiles').iterate()) {
+        if (firstRecord && breakPoint && rec.key !== breakPoint) {
+            rec.continue(breakPoint)
+            firstRecord = false
+            continue
+        }
+        firstRecord = false
+        if (rec.key === breakPoint) {
+            // after this record
+            continue
+        }
+        if (count <= 0) break
+        const outData = profileOutDB(rec.value)
+        const query = options.query?.toLowerCase()
+        if (typeof query === 'string') {
+            const network = rec.value.network.toLowerCase() === query
+            const nickname = outData.nickname?.toLowerCase().includes(query)
+            const id = outData.identifier.userId.toLowerCase().includes(query)
+            if (!network && !nickname && !id) continue
+        }
+        count -= 1
+        data.push(outData)
+    }
+    return data
+}
+Object.assign(globalThis, { queryProfilesPagedDB })
+
 /**
  * Update a profile.
  */

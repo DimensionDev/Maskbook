@@ -21,7 +21,7 @@ OnlyRunInContext(['background', 'debugging'], 'IdentityService')
 export { storeAvatar, getAvatarDataURL as queryAvatarDataURL } from '../../database'
 
 //#region Profile
-export { queryProfile } from '../../database'
+export { queryProfile, queryProfilePaged } from '../../database'
 
 export function queryProfiles(network?: string): Promise<Profile[]> {
     return queryProfilesWithQuery(network)
