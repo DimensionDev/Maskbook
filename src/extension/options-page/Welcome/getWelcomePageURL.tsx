@@ -1,6 +1,7 @@
 import { getUrl } from '../../../utils/utils'
 import type { ProfileIdentifier } from '../../../database/type'
 import { DashboardRoute } from '../Route'
+import { SetupStep } from '../DashboardRouters/Setup'
 
 type Query = {
     identifier?: ProfileIdentifier
@@ -15,6 +16,6 @@ export function getWelcomePageURL(query?: Query) {
         if (identifier) param.set('identifier', identifier.toText())
         return getUrl(`index.html#${DashboardRoute.Personas}/?${param.toString()}`)
     } else {
-        return getUrl(`index.html#${DashboardRoute.Setup}`)
+        return getUrl(`index.html#${DashboardRoute.Setup}/${SetupStep.ConsentDataCollection}`)
     }
 }
