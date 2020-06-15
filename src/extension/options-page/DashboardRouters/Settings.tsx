@@ -30,7 +30,7 @@ import { useModal } from '../Dialogs/Base'
 import { DashboardDatabaseBackupDialog, DashboardDatabaseRestoreDialog } from '../Dialogs/Database'
 import { EthereumNetwork } from '../../../plugins/Wallet/database/types'
 import { currentEthereumNetworkSettings } from '../../../plugins/Wallet/UI/Developer/EthereumNetworkSettings'
-import { DashboardBackupDialog } from '../Dialogs/Backup'
+import { DashboardBackupDialog, DashboardRestoreDialog } from '../Dialogs/Backup'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -118,6 +118,7 @@ export default function DashboardSettingsRouter() {
 
     // const [backupDatabase, openBackupDatabase] = useModal(DashboardDatabaseBackupDialog)
     const [backupDialog, openBackupDialog] = useModal(DashboardBackupDialog)
+    const [restoreDialog, openRestoreDialog] = useModal(DashboardRestoreDialog)
     const [restoreDatabase, openRestoreDatabase] = useModal(DashboardDatabaseRestoreDialog)
 
     const listStyle = {
@@ -208,11 +209,12 @@ export default function DashboardSettingsRouter() {
                                     icon={<ArchiveOutlinedIcon />}
                                     primary={t('restore_database')}
                                     secondary={t('dashboard_import_database_hint')}
-                                    onClick={openRestoreDatabase}
+                                    onClick={openRestoreDialog}
                                 />
                             </List>
                         </Card>
                         {backupDialog}
+                        {restoreDialog}
                         {restoreDatabase}
                     </Paper>
                 </ThemeProvider>

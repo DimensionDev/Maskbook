@@ -7,6 +7,11 @@ import { useI18N } from '../../../utils/i18n-next-ui'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
+        root: {
+            border: `solid 1px ${theme.palette.divider}`,
+            height: 176,
+            borderRadius: 4,
+        },
         file: {
             display: 'none',
         },
@@ -39,7 +44,7 @@ export function RestoreFromBackupBox(props: RestoreFromBackupBoxProps) {
     }, [file, props.onChange])
 
     return (
-        <div {...bound} style={{ width: '100%' }}>
+        <div className={classes.root} {...bound}>
             <input
                 className={classes.file}
                 type="file"
