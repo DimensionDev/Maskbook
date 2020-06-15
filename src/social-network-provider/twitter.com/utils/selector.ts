@@ -30,10 +30,10 @@ export const postEditorInTimelineSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('[role="main"] :not(aside) > [role="progressbar"] ~ div')
 export const postEditorDraftContentSelector = () => {
     if (location.pathname === '/compose/tweet') {
-        return querySelector<HTMLTextAreaElement>(`textarea[aria-label][spellcheck]`)
+        return querySelector<HTMLDivElement>(`[contenteditable][aria-label][spellcheck]`)
     }
     return (isCompose() ? postEditorInPopupSelector() : postEditorInTimelineSelector()).querySelector<HTMLElement>(
-        '.public-DraftEditor-content, textarea[aria-label][spellcheck]',
+        '.public-DraftEditor-content, [contenteditable][aria-label][spellcheck]',
     )
 }
 export const posteditorToolbarSeelctor: () => LiveSelector<E, true> = () =>
