@@ -36,15 +36,15 @@ export const renderInShadowRootSettings = createNewSettings<boolean>(
     },
 )
 
-export enum Apperance {
+export enum Appearance {
     default = 'default',
     light = 'light',
     dark = 'dark',
 }
 
-const apperance = Apperance.default
-export const apperanceSettings = createNewSettings<Apperance>('apperance', apperance, {
-    primary: () => i18n.t('settings_apperance'),
+const appearance = Appearance.default
+export const appearanceSettings = createNewSettings<Appearance>('apperance', appearance, {
+    primary: () => i18n.t('settings_appearance'),
 })
 
 export enum Language {

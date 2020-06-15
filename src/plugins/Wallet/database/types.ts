@@ -90,7 +90,49 @@ export interface RedPacketRecordInDatabase
     erc20_approve_value?: string | bigint
     shares: string | bigint
 }
-
+export interface WalletRecord {
+    /** ethereum hex address */
+    address: string
+    /** User define wallet name. Default address.prefix(6) */
+    name: string | null
+    /** Wallet ethereum balance */
+    eth_balance?: BigNumber
+    erc20_token_balance: Map</** address of the erc20 token */ string, BigNumber | undefined>
+    mnemonic: string[]
+    passphrase: string
+    createdAt: Date
+    updatedAt: Date
+    _data_source_: 'real' | 'mock'
+    /** Wallet recover from private key */
+    _private_key_?: string
+    _wallet_is_default?: boolean
+}
+export interface WalletRecordInDatabase extends Omit<WalletRecord, 'eth_balance' | 'erc20_token_balance'> {
+    eth_balance?: string | bigint
+    erc20_token_balance: Map<string, string | bigint | undefined>
+}
+export interface ERC20TokenRecord {
+    /** same to address */
+    // id: string
+    /** token address */
+    address: string
+    /** token name */
+    name: string
+    /** token decimal */
+    decimals: number
+    /** token symbol */
+    symbol: string
+    network: EthereumNetwork
+    /** Yes if user added token */
+    is_user_defined: boolean
+    /** Delete time for soft delete */
+    deleted_at?: Date
+}
+export enum RedPacketTokenType {
+    eth = 0,
+    erc20 = 1,
+    erc721 = 2,
+}
 export enum RedPacketStatus {
     /** Red packet ready to send */
     initial = 'initial',

@@ -9,8 +9,8 @@ import {
     languageSettings,
     Language,
     renderInShadowRootSettings,
-    Apperance,
-    apperanceSettings,
+    Appearance,
+    appearanceSettings,
 } from '../../../components/shared-settings/settings'
 import { useValueRef } from '../../../utils/hooks/useValueRef'
 
@@ -109,16 +109,16 @@ const settingsTheme = (theme: Theme): Theme =>
 export default function DashboardSettingsRouter() {
     const { t } = useI18N()
     const currentLang = useValueRef(languageSettings)
-    const currentApperance = useValueRef(apperanceSettings)
+    const currentApperance = useValueRef(appearanceSettings)
     const langMapper = React.useRef((x: Language) => {
         if (x === Language.en) return 'English'
         if (x === Language.zh) return '中文'
         return ''
     }).current
-    const apperanceMapper = React.useRef((x: Apperance) => {
-        if (x === Apperance.dark) return t('settings_apperance_dark')
-        if (x === Apperance.light) return t('settings_apperance_light')
-        return t('settings_apperance_default')
+    const apperanceMapper = React.useRef((x: Appearance) => {
+        if (x === Appearance.dark) return t('settings_appearance_dark')
+        if (x === Appearance.light) return t('settings_appearance_light')
+        return t('settings_appearance_default')
     }).current
     const classes = useStyles()
     const shadowRoot = useValueRef(renderInShadowRootSettings)
@@ -143,10 +143,10 @@ export default function DashboardSettingsRouter() {
                                 />
                                 <SettingsUIEnum
                                     secondary={apperanceMapper(currentApperance)}
-                                    enumObject={Apperance}
+                                    enumObject={Appearance}
                                     getText={apperanceMapper}
                                     icon={<PaletteIcon />}
-                                    value={apperanceSettings}
+                                    value={appearanceSettings}
                                 />
                             </List>
                         </Card>
