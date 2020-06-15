@@ -9,7 +9,6 @@ import * as bip39 from 'bip39'
 import { walletAPI } from './api'
 import { ERC20Token, OKB_ADDRESS, DAI_ADDRESS } from './token'
 import { memoizePromise } from '../../utils/memoize'
-import { ethereumNetworkSettings } from './network'
 import { BigNumber } from 'bignumber.js'
 import { ec as EC } from 'elliptic'
 import { currentEthereumNetworkSettings } from './UI/Developer/EthereumNetworkSettings'
@@ -49,7 +48,7 @@ PluginMessageCenter.on('maskbook.red_packets.update', () => {
 })
 /** Cache most valid for 15 seconds */
 setInterval(clearCache, 1000 * 15)
-ethereumNetworkSettings.addListener(() => {
+currentEthereumNetworkSettings.addListener(() => {
     clearCache()
     PluginMessageCenter.emit('maskbook.wallets.update', undefined)
 })

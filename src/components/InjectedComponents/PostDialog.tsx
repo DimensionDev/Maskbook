@@ -196,11 +196,10 @@ export function PostDialogUI(props: PostDialogUIProps) {
                                                 'maskbook.wallet',
                                                 'getWallets',
                                             )
-
                                             if (wallets.length) {
                                                 setRedPacketDialogOpen(true)
                                             } else {
-                                                Services.Welcome.openOptionsPage('/wallets/error?reason=nowallet')
+                                                Services.Welcome.openOptionsPage('/wallets?error=nowallet')
                                             }
                                         },
                                     }}

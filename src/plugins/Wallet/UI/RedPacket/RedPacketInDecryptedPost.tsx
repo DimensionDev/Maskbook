@@ -81,7 +81,7 @@ export default function RedPacketInDecryptedPost(props: RedPacketInDecryptedPost
             walletAddress,
             setAsDefault,
         )
-            .catch((e) => Services.Welcome.openOptionsPage(`/wallets/error?reason=${e.message}`))
+            .catch((e) => Services.Welcome.openOptionsPage(`/wallets?error=${e.message}`))
             .finally(() => setLoading(false))
     }
     const [wallets, , onRequireNewWallet] = useWalletDataSource()

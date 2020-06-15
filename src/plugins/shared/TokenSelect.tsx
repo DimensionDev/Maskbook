@@ -12,7 +12,7 @@ import { PortalShadowRoot } from '../../utils/jss/ShadowRootPortal'
 import BigNumber from 'bignumber.js'
 import type { useSelectWallet } from './useWallet'
 import { EthereumTokenType } from '../Wallet/database/types'
-import { ETH_ADDRESS } from '../Wallet/erc20'
+import { ETH_ADDRESS } from '../Wallet/token'
 interface TokenSelectProps {
     useSelectWalletHooks: ReturnType<typeof useSelectWallet>
     className?: string
