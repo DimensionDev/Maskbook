@@ -284,10 +284,11 @@ const useRestoreDatabaseStyle = makeStyles((theme) =>
         },
         input: {
             width: '100%',
+            boxSizing: 'border-box',
+            border: `solid 1px ${theme.palette.divider}`,
+            borderRadius: 4,
+            height: 176,
             padding: theme.spacing(2, 3),
-            flex: 1,
-            display: 'flex',
-            overflow: 'auto',
             '& > textarea': {
                 height: '100% !important',
             },
@@ -304,16 +305,6 @@ const useRestoreDatabaseStyle = makeStyles((theme) =>
     }),
 )
 
-const ShowcaseBox = styled('div')(({ theme }: { theme: Theme }) => ({
-    overflow: 'auto',
-    boxSizing: 'border-box',
-    border: `solid 1px ${theme.palette.divider}`,
-    display: 'flex',
-    justifyContent: 'center',
-    height: 176,
-    borderRadius: 4,
-}))
-
 export function RestoreDatabase() {
     const { t } = useI18N()
     const history = useHistory()
@@ -322,31 +313,26 @@ export function RestoreDatabase() {
     const { enqueueSnackbar, closeSnackbar } = useSnackbar()
 
     const [textValue, setTextValue] = useState('')
-    const state = useState(0)
 
+    const state = useState(0)
     const tabProps: AbstractTabProps = {
         tabs: [
             {
                 label: t('restore_database_file'),
-                children: (
-                    <ShowcaseBox>
-                        <RestoreFromBackupBox onChange={setTextValue} />
-                    </ShowcaseBox>
-                ),
+                children: <RestoreFromBackupBox onChange={setTextValue} />,
                 p: 0,
             },
             {
                 label: t('restore_database_text'),
                 children: (
-                    <ShowcaseBox>
-                        <InputBase
-                            className={restoreDatabaseClasses.input}
-                            placeholder={t('dashboard_paste_database_backup_hint')}
-                            inputRef={(input: HTMLInputElement) => input && input.focus()}
-                            multiline
-                            value={textValue}
-                            onChange={(e) => setTextValue(e.target.value)}></InputBase>
-                    </ShowcaseBox>
+                    <InputBase
+                        className={restoreDatabaseClasses.input}
+                        placeholder={t('dashboard_paste_database_backup_hint')}
+                        inputRef={(input: HTMLInputElement) => input && input.focus()}
+                        multiline
+                        value={textValue}
+                        onChange={(e) => setTextValue(e.target.value)}
+                    />
                 ),
                 p: 0,
             },
@@ -614,7 +600,6 @@ export function RestoreDatabaseConfirmation() {
                 await Services.Welcome.restoreBackupConfirmation(uuid)
                 setImported(true)
             } catch (e) {
-                console.error(e)
                 failToRestore()
                 setImported(false)
             }
