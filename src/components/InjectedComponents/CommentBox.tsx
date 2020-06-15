@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react'
 import { useCapturedInput } from '../../utils/hooks/useCapturedEvents'
 import { useI18N } from '../../utils/i18n-next-ui'
-import { makeStyles } from '@material-ui/styles'
+import { makeStyles } from '@material-ui/core/styles'
 import { InputBase } from '@material-ui/core'
 
 const useStyles = makeStyles(() => {

@@ -3,7 +3,7 @@ import { AdditionalContent, AdditionalContentProps } from '../AdditionalPostCont
 import { useShareMenu } from '../SelectPeopleDialog'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { makeStyles } from '@material-ui/styles'
-import { Link, Typography, Theme, CircularProgress } from '@material-ui/core'
+import { Link, Typography, CircularProgress } from '@material-ui/core'
 import type { Profile } from '../../../database'
 import { useStylesExtends } from '../../custom-ui-helper'
 import type { TypedMessage } from '../../../extension/background-script/CryptoServices/utils'

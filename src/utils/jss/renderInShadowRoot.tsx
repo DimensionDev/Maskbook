@@ -1,5 +1,5 @@
 import { create, Jss, SheetsRegistry } from 'jss'
-import { jssPreset, StylesProvider, ThemeProvider } from '@material-ui/styles'
+import { jssPreset, StylesProvider, ThemeProvider } from '@material-ui/core/styles'
 import ReactDOM from 'react-dom'
 import React from 'react'
 import type {} from 'react/experimental'

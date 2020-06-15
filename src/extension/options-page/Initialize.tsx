@@ -1,6 +1,6 @@
 import React from 'react'
 import { Switch, useRouteMatch, Route, useParams, Redirect } from 'react-router-dom'
-import { makeStyles } from '@material-ui/styles'
+import { makeStyles } from '@material-ui/core/styles'
 import { Theme, Typography, Card, Container } from '@material-ui/core'
 import Disclaimer from './DashboardInitSteps/Disclaimer'
 import InitStep0 from './DashboardInitSteps/Step0'

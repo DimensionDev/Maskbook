@@ -1,6 +1,6 @@
 import { FormControl, Typography, Theme, Divider } from '@material-ui/core'
 import React from 'react'
-import { makeStyles, createStyles } from '@material-ui/styles'
+import { makeStyles, createStyles } from '@material-ui/core/styles'
 import classNames from 'classnames'
 
 const useStyles = makeStyles((theme: Theme) =>
