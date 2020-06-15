@@ -1,4 +1,5 @@
 import React, { useMemo, useCallback, useReducer } from 'react'
+import classNames from 'classnames'
 import {
     DialogProps,
     useMediaQuery,
@@ -135,16 +136,6 @@ export function useModal<DialogProps extends object, AdditionalPropsAppendByDisp
     return [renderedComponent, showModal, showStatefulModal]
 }
 
-interface DashboardDialogWrapperProps {
-    icon?: React.ReactElement
-    iconColor?: string
-    primary: string
-    secondary?: string
-    size?: 'small' | 'medium'
-    content?: React.ReactNode
-    footer?: React.ReactNode
-}
-
 const useDashboardDialogWrapperStyles = makeStyles((theme) =>
     createStyles<string, DashboardDialogWrapperProps>({
         wrapper: {
@@ -159,15 +150,11 @@ const useDashboardDialogWrapperStyles = makeStyles((theme) =>
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
-            width: (props) => (props.size === 'small' ? 232 : 256),
         },
         content: {
             minHeight: 100,
             flex: 1,
             textAlign: 'center',
-            // '& > *:not(:last-child)': {
-            //     marginBottom: theme.spacing(2),
-            // },
         },
         footer: {
             display: 'flex',
@@ -186,6 +173,10 @@ const useDashboardDialogWrapperStyles = makeStyles((theme) =>
             textAlign: 'center',
             wordBreak: 'break-word',
             marginBottom: 18,
+        },
+        confineSecondary: {
+            paddingLeft: (props) => (props.size === 'small' ? 24 : 46),
+            paddingRight: (props) => (props.size === 'small' ? 24 : 46),
         },
     }),
 )
@@ -264,8 +255,19 @@ const dialogTheme = (theme: Theme): Theme =>
         },
     })
 
+interface DashboardDialogWrapperProps {
+    icon?: React.ReactElement
+    iconColor?: string
+    primary: string
+    secondary?: string
+    confineSecondary?: boolean
+    size?: 'small' | 'medium'
+    content?: React.ReactNode
+    footer?: React.ReactNode
+}
+
 export function DashboardDialogWrapper(props: DashboardDialogWrapperProps) {
-    const { icon, iconColor, primary, secondary, content, footer } = props
+    const { icon, iconColor, primary, secondary, confineSecondary = true, content, footer } = props
     const classes = useDashboardDialogWrapperStyles(props)
     return (
         <ThemeProvider theme={dialogTheme}>
@@ -275,9 +277,11 @@ export function DashboardDialogWrapper(props: DashboardDialogWrapperProps) {
                     <Typography className={classes.primary} variant="h5">
                         {primary}
                     </Typography>
-                    <Typography className={classes.secondary} color="textSecondary" variant="body2">
-                        {secondary}
-                    </Typography>
+                    <Typography
+                        className={classNames(classes.secondary, confineSecondary ? classes.confineSecondary : '')}
+                        color="textSecondary"
+                        variant="body2"
+                        dangerouslySetInnerHTML={{ __html: secondary ?? '' }}></Typography>
                 </section>
                 {content ? <section className={classes.content}>{content}</section> : null}
                 {footer ? <section className={classes.footer}>{footer}</section> : null}

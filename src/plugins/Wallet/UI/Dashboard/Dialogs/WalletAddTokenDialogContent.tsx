@@ -133,7 +133,7 @@ export function ERC20WellKnownTokenSelector(props: {
             setRinkeby(!useRinkeby)
             setSelected(null)
         },
-        [useRinkeby],
+        [useRinkeby, setRinkeby],
     )
 
     return (
