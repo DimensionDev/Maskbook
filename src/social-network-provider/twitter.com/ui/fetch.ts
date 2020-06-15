@@ -5,6 +5,8 @@ import {
     getEmptyPostInfoByElement,
     SocialNetworkUI,
     SocialNetworkUIInformationCollector,
+    PostInfo,
+    SocialNetworkUIDefinition,
 } from '../../../social-network/ui'
 import { deconstructPayload } from '../../../utils/type-transform/Payload'
 import { instanceOfTwitterUI } from './index'
@@ -107,65 +109,28 @@ const registerPostCollector = (self: SocialNetworkUI) => {
                 },
                 rootNodeProxy: proxy,
             })
-            const collectPostInfo = async () => {
-                if (!tweetNode) return
-                const { pid, content, handle, name, avatar } = postParser(tweetNode)
-                if (!pid) return
-                const postBy = new ProfileIdentifier(self.networkIdentifier, handle)
-                info.postID.value = pid
-                info.postContent.value = content
-                if (!info.postBy.value.equals(postBy)) {
-                    info.postBy.value = postBy
-                }
-                info.nickname.value = name
-                info.avatarURL.value = avatar || null
 
-                // decode steganographic image
-                untilElementAvailable(postsImageSelector(tweetNode), 10000)
-                    .then(() => postImageParser(tweetNode))
-                    .then((content) => {
-                        if (content && info.postContent.value.indexOf(content) < 0) {
-                            info.postContent.value = content
-                        }
-                    })
-                    .catch(() => {})
+            function run() {
+                collectPostInfo(tweetNode, info, self)
+                collectLinks(tweetNode, info)
             }
-            const collectLinks = () => {
-                const links = [...tweetNode.querySelectorAll('a')].filter((x) => x.rel)
-                const seen = new Set<string>(['https://help.twitter.com/using-twitter/how-to-tweet#source-labels'])
-                for (const x of links) {
-                    if (seen.has(x.href)) continue
-                    seen.add(x.href)
-                    info.postMetadata.mentionedLinks.set(x, x.href)
-                    Services.Helper.resolveTCOLink(x.href).then((val) => {
-                        if (!val) return
-                        info.postMetadata.mentionedLinks.set(x, val)
-                    })
-                }
-            }
-            ;(async () => {
-                await collectPostInfo()
-                collectLinks()
-                info.postPayload.addListener((payload) => {
-                    if (!payload) return
-                    Services.Identity.updateProfileInfo(info.postBy.value, {
-                        nickname: info.nickname.value,
-                        avatarURL: info.avatarURL.value,
-                    }).then()
-                })
-                info.postPayload.value = deconstructPayload(info.postContent.value, self.payloadDecoder)
-                info.postContent.addListener((newValue) => {
-                    info.postPayload.value = deconstructPayload(newValue, self.payloadDecoder)
-                })
-                injectMaskbookIconToPost(info)
-                self.posts.set(proxy, info)
-            })()
+            info.postPayload.addListener((payload) => {
+                if (!payload) return
+                Services.Identity.updateProfileInfo(info.postBy.value, {
+                    nickname: info.nickname.value,
+                    avatarURL: info.avatarURL.value,
+                }).then()
+            })
+            info.postPayload.value = deconstructPayload(info.postContent.value, self.payloadDecoder)
+            info.postContent.addListener((newValue) => {
+                info.postPayload.value = deconstructPayload(newValue, self.payloadDecoder)
+            })
+            injectMaskbookIconToPost(info)
+            self.posts.set(proxy, info)
             return {
-                onTargetChanged: collectPostInfo,
+                onTargetChanged: run,
                 onRemove: () => self.posts.delete(proxy),
-                onNodeMutation: () => {
-                    collectLinks()
-                },
+                onNodeMutation: run,
             }
         })
         .setDOMProxyOption({ afterShadowRootInit: { mode: 'closed' } })
@@ -186,4 +151,43 @@ export const twitterUIFetch: SocialNetworkUIInformationCollector = {
     resolveLastRecognizedIdentity: () => resolveLastRecognizedIdentity(instanceOfTwitterUI),
     collectPeople: registerUserCollector,
     collectPosts: () => registerPostCollector(instanceOfTwitterUI),
+}
+
+function collectLinks(tweetNode: HTMLDivElement | null, info: PostInfo) {
+    if (!tweetNode) return
+    const links = [...tweetNode.querySelectorAll('a')].filter((x) => x.rel)
+    const seen = new Set<string>(['https://help.twitter.com/using-twitter/how-to-tweet#source-labels'])
+    for (const x of links) {
+        if (seen.has(x.href)) continue
+        seen.add(x.href)
+        info.postMetadata.mentionedLinks.set(x, x.href)
+        Services.Helper.resolveTCOLink(x.href).then((val) => {
+            if (!val) return
+            info.postMetadata.mentionedLinks.set(x, val)
+        })
+    }
+}
+function collectPostInfo(tweetNode: HTMLDivElement | null, info: PostInfo, self: Required<SocialNetworkUIDefinition>) {
+    if (!tweetNode) return
+    const { pid, content, handle, name, avatar } = postParser(tweetNode)
+    if (!pid) return
+    const postBy = new ProfileIdentifier(self.networkIdentifier, handle)
+    info.postID.value = pid
+    info.postContent.value = content
+    if (!info.postBy.value.equals(postBy)) {
+        info.postBy.value = postBy
+    }
+    info.nickname.value = name
+    info.avatarURL.value = avatar || null
+
+    // decode steganographic image
+    // don't add await on this
+    untilElementAvailable(postsImageSelector(tweetNode), 10000)
+        .then(() => postImageParser(tweetNode))
+        .then((content) => {
+            if (content && info.postContent.value.indexOf(content) < 0) {
+                info.postContent.value = content
+            }
+        })
+        .catch(() => {})
 }
