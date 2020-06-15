@@ -27,7 +27,6 @@ import DashboardRouterContainer from './Container'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { merge, cloneDeep } from 'lodash-es'
 import { useModal } from '../Dialogs/Base'
-import { DashboardDatabaseBackupDialog, DashboardDatabaseRestoreDialog } from '../Dialogs/Database'
 import { EthereumNetwork } from '../../../plugins/Wallet/database/types'
 import { currentEthereumNetworkSettings } from '../../../plugins/Wallet/UI/Developer/EthereumNetworkSettings'
 import { DashboardBackupDialog, DashboardRestoreDialog } from '../Dialogs/Backup'
@@ -116,10 +115,8 @@ export default function DashboardSettingsRouter() {
     const theme = useTheme()
     const elevation = theme.palette.type === 'dark' ? 1 : 0
 
-    // const [backupDatabase, openBackupDatabase] = useModal(DashboardDatabaseBackupDialog)
     const [backupDialog, openBackupDialog] = useModal(DashboardBackupDialog)
     const [restoreDialog, openRestoreDialog] = useModal(DashboardRestoreDialog)
-    const [restoreDatabase, openRestoreDatabase] = useModal(DashboardDatabaseRestoreDialog)
 
     const listStyle = {
         secondaryAction: classes.secondaryAction,
@@ -158,7 +155,7 @@ export default function DashboardSettingsRouter() {
                                         secondary={currentEthereumNetwork}
                                         enumObject={EthereumNetwork}
                                         icon={<WifiIcon />}
-                                        value={ethereumNetworkSettings}
+                                        value={currentEthereumNetworkSettings}
                                     />
                                 ) : null}
                             </List>
@@ -215,7 +212,6 @@ export default function DashboardSettingsRouter() {
                         </Card>
                         {backupDialog}
                         {restoreDialog}
-                        {restoreDatabase}
                     </Paper>
                 </ThemeProvider>
             </div>
