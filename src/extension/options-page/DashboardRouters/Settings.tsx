@@ -28,8 +28,8 @@ import LanguageIcon from '@material-ui/icons/Language'
 import DashboardRouterContainer from './Container'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { merge, cloneDeep } from 'lodash-es'
-import { useModal } from '../Dialog/Base'
-import { DashboardDatabaseBackupDialog, DashboardDatabaseRestoreDialog } from '../Dialog/Database'
+import { useModal } from '../Dialogs/Base'
+import { DashboardDatabaseBackupDialog, DashboardDatabaseRestoreDialog } from '../Dialogs/Database'
 
 const useStyles = makeStyles((theme) =>
     createStyles({

@@ -534,6 +534,7 @@ export function RestoreDatabase() {
 }
 //#endregion
 
+//#region advance restore
 export function RestoreDatabaseAdvance() {
     const classes = useSetupFormSetyles()
     const history = useHistory()
@@ -555,6 +556,7 @@ export function RestoreDatabaseAdvance() {
         />
     )
 }
+//#endregion
 
 //#region restore database
 const useDatabaseRecordStyle = makeStyles((theme: Theme) =>
