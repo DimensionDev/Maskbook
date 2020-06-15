@@ -39,8 +39,9 @@ import { extraPermissions } from '../../../utils/permissions'
 import AbstractTab, { AbstractTabProps } from '../DashboardComponents/AbstractTab'
 import { getUrl, unreachable } from '../../../utils/utils'
 import { green } from '@material-ui/core/colors'
+import { DashboardRoute } from '../Route'
 
-enum SetupStep {
+export enum SetupStep {
     CreatePersona = 'create-persona',
     ConnectNetwork = 'connect-network',
     RestoreDatabase = 'restore-database',
@@ -218,7 +219,7 @@ export function ConnectNetwork() {
 
     const personas = useMyPersonas()
     const { identifier } = useQueryParams(['identifier'])
-    const { value: persona = null, error, loading } = useAsync(async () => {
+    const { value: persona = null, loading, error } = useAsync(async () => {
         if (identifier)
             return Services.Identity.queryPersona(Identifier.fromString(identifier, ECKeyIdentifier).unwrap())
         return null
@@ -251,7 +252,7 @@ export function ConnectNetwork() {
                         variant="contained"
                         color="primary"
                         disabled={persona?.linkedProfiles.size === 0}
-                        onClick={() => history.replace('/personas')}>
+                        onClick={() => history.replace(DashboardRoute.Personas)}>
                         Finish
                     </ActionButton>
                     <ActionButton variant="text" onClick={deletePersonaAndBack}>
@@ -816,12 +817,6 @@ const CurrentStep = () => {
     }
 }
 
-const CurrentStepFade = () => (
-    <Fade in>
-        <CurrentStep />
-    </Fade>
-)
-
 export interface DashboardSetupRouterProps {}
 
 export function DashboardSetupRouter(props: DashboardSetupRouterProps) {
@@ -834,7 +829,7 @@ export function DashboardSetupRouter(props: DashboardSetupRouterProps) {
                         <CurrentStep />
                     </Route>
                     <Route path="*">
-                        <Redirect path="*" to={`/setup/${SetupStep.CreatePersona}`} />
+                        <Redirect path="*" to={`${DashboardRoute.Setup}/${SetupStep.CreatePersona}`} />
                     </Route>
                 </Switch>
             </ThemeProvider>

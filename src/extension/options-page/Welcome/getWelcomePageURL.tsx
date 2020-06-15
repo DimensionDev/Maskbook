@@ -1,5 +1,7 @@
 import { getUrl } from '../../../utils/utils'
 import type { ProfileIdentifier } from '../../../database/type'
+import { DashboardRoute } from '../Route'
+
 type Query = {
     identifier?: ProfileIdentifier
     avatar?: string
@@ -11,8 +13,8 @@ export function getWelcomePageURL(query?: Query) {
         const { identifier, ...params } = query
         const param = new URLSearchParams(params as Record<string, string>)
         if (identifier) param.set('identifier', identifier.toText())
-        return getUrl(`index.html#/personas/?${param.toString()}`)
+        return getUrl(`index.html#${DashboardRoute.Personas}/?${param.toString()}`)
     } else {
-        return getUrl(`index.html#/setup/`)
+        return getUrl(`index.html#${DashboardRoute.Setup}`)
     }
 }

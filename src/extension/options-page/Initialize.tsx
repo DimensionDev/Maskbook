@@ -12,7 +12,7 @@ import InitStep2R from './DashboardInitSteps/Step2R'
 import FooterLine from './DashboardComponents/FooterLine'
 import { useI18N } from '../../utils/i18n-next-ui'
 import { InitStep } from './InitStep'
-import { MaskbookIcon } from '../../resources/Maskbook-Circle-WhiteGraph-BlueBackground'
+import { getUrl } from '../../utils/utils'
 
 const useStyles = makeStyles((theme: Theme) => ({
     wrapper: {
@@ -91,7 +91,7 @@ function DashboardInitializePageInternal() {
     return (
         <section className={classes.section}>
             <header className={classes.header}>
-                <MaskbookIcon className={classes.maskicon} />
+                <img className={classes.maskicon} src={getUrl('MB--CircleCanvas--WhiteOverBlue.svg')} />
                 <Typography variant="h6">{t('dashboard_welcome_to_maskbook')}</Typography>
             </header>
             <Card className={classes.card}>
