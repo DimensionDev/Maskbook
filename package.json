@@ -1,6 +1,6 @@
 {
   "name": "maskbook",
-  "version": "1.11.1",
+  "version": "1.12.0",
   "private": true,
   "license": "AGPL-3.0-or-later",
   "scripts": {
