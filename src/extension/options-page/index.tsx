@@ -1,4 +1,5 @@
 import '../../provider.worker'
+import '../../setup.ui'
 
 import React from 'react'
 import { CssBaseline, useMediaQuery, NoSsr } from '@material-ui/core'
@@ -8,21 +9,15 @@ import PeopleOutlinedIcon from '@material-ui/icons/PeopleOutlined'
 import CreditCardIcon from '@material-ui/icons/CreditCard'
 import BookmarkBorderOutlinedIcon from '@material-ui/icons/BookmarkBorderOutlined'
 import SettingsOutlinedIcon from '@material-ui/icons/SettingsOutlined'
-
-import { HashRouter as Router, Route, Switch, Redirect } from 'react-router-dom'
-
-import { MaskbookDarkTheme, MaskbookLightTheme } from '../../utils/theme'
-
-import '../../setup.ui'
-import { SSRRenderer } from '../../utils/SSRRenderer'
-import { useValueRef } from '../../utils/hooks/useValueRef'
+import { HashRouter as Router, Route, Switch, Redirect, useHistory } from 'react-router-dom'
 
 import { SnackbarProvider } from 'notistack'
-
 import { I18nextProvider } from 'react-i18next'
 
 import { useI18N } from '../../utils/i18n-next-ui'
 import i18nNextInstance from '../../utils/i18n-next'
+import { MaskbookDarkTheme, MaskbookLightTheme } from '../../utils/theme'
+
 import FooterLine from './DashboardComponents/FooterLine'
 import Drawer from './DashboardComponents/Drawer'
 
@@ -31,8 +26,16 @@ import DashboardWalletsRouter from './DashboardRouters/Wallets'
 import DashboardContactsRouter from './DashboardRouters/Contacts'
 import DashboardSettingsRouter from './DashboardRouters/Settings'
 import { appearanceSettings, Appearance } from '../../components/shared-settings/settings'
-import { DashboardSetupRouter } from './DashboardRouters/Setup'
+import { DashboardSetupRouter, SetupStep } from './DashboardRouters/Setup'
 import { DashboardBlurContextUI } from './DashboardContexts/BlurContext'
+import { DashboardRoute } from './Route'
+import { SSRRenderer } from '../../utils/SSRRenderer'
+import { useValueRef } from '../../utils/hooks/useValueRef'
+
+import DashboardInitializeDialog from './Initialize'
+import { DialogRouter } from './DashboardDialogs/DialogBase'
+import { useAsync } from 'react-use'
+import Services from '../service'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -105,28 +108,54 @@ const useStyles = makeStyles((theme) =>
 function DashboardUI() {
     const { t } = useI18N()
     const classes = useStyles()
+    const history = useHistory()
 
     const routers = ([
-        [t('personas'), '/personas/', <PeopleOutlinedIcon />],
-        webpackEnv.target === 'WKWebview' ? undefined! : ([t('wallets'), '/wallets/', <CreditCardIcon />] as const),
-        [t('contacts'), '/contacts/', <BookmarkBorderOutlinedIcon />],
-        [t('settings'), '/settings/', <SettingsOutlinedIcon />],
+        [t('personas'), DashboardRoute.Personas, <PeopleOutlinedIcon />],
+        webpackEnv.target === 'WKWebview'
+            ? undefined!
+            : ([t('wallets'), DashboardRoute.Wallets, <CreditCardIcon />] as const),
+        [t('contacts'), DashboardRoute.Contacts, <BookmarkBorderOutlinedIcon />],
+        [t('settings'), DashboardRoute.Settings, <SettingsOutlinedIcon />],
     ] as const).filter((x) => x)
+
+    // jump to persona if needed
+    const { loading } = useAsync(async () => {
+        const personas = await Services.Identity.queryMyPersonas()
+        if (!personas.length) history.replace(`${DashboardRoute.Setup}/${SetupStep.CreatePersona}`)
+        if (personas.length !== 1) return
+        const profiles = await Services.Identity.queryMyProfiles()
+        if (profiles.length) return
+        history.replace(
+            `${DashboardRoute.Setup}/${SetupStep.ConnectNetwork}?identifier=${encodeURIComponent(
+                personas[0].identifier.toText(),
+            )}`,
+        )
+    }, [])
 
     return (
         <DashboardBlurContextUI>
             <div className={classes.wrapper}>
                 <div className={classes.container}>
-                    {/* TODO: detect clean for setup only */}
-                    <Drawer routers={routers} exitDashboard={null} />
-                    <Switch>
-                        <Route path="/personas/" component={DashboardPersonasRouter} />
-                        <Route path="/wallets/" component={DashboardWalletsRouter} />
-                        <Route path="/contacts/" component={DashboardContactsRouter} />
-                        <Route path="/settings/" component={DashboardSettingsRouter} />
-                        <Route path="/setup" component={DashboardSetupRouter} onExit={'/'} />
-                        <Redirect path="*" to="/personas/" />
-                    </Switch>
+                    {loading ? null : (
+                        <>
+                            <Drawer routers={routers} exitDashboard={null} />
+                            <Switch>
+                                <Route path={DashboardRoute.Personas} component={DashboardPersonasRouter} />
+                                <Route path={DashboardRoute.Wallets} component={DashboardWalletsRouter} />
+                                <Route path={DashboardRoute.Contacts} component={DashboardContactsRouter} />
+                                <Route path={DashboardRoute.Settings} component={DashboardSettingsRouter} />
+                                <Route path={DashboardRoute.Setup} component={DashboardSetupRouter} />
+                                <DialogRouter
+                                    path="/initialize"
+                                    component={DashboardInitializeDialog}
+                                    onExit={'/'}
+                                    fullscreen
+                                />
+                                <Redirect path="*" to={DashboardRoute.Personas} />
+                            </Switch>
+                        </>
+                    )}
                 </div>
                 <footer className={classes.footer}>
                     <FooterLine />
