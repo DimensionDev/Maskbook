@@ -1,7 +1,9 @@
 import React, { useState, useEffect, useMemo } from 'react'
+import { useAsync } from 'react-use'
 import { DashboardDialogCore, DashboardDialogWrapper, WrappedDialogProps, useSnackbarCallback } from './Base'
 import { CreditCard as CreditCardIcon, Hexagon as HexagonIcon, Clock as ClockIcon } from 'react-feather'
-import { TextField, Typography, makeStyles, createStyles, Paper, Card, List } from '@material-ui/core'
+import { TextField, Typography, makeStyles, createStyles, List, Box } from '@material-ui/core'
+import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined'
 import AbstractTab, { AbstractTabProps } from '../DashboardComponents/AbstractTab'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { DebounceButton } from '../DashboardComponents/ActionButton'
@@ -12,7 +14,6 @@ import { WalletRecord, EthereumNetwork, RedPacketRecord } from '../../../plugins
 import { ERC20WellKnownTokenSelector } from '../../../plugins/Wallet/UI/Dashboard/Dialogs/WalletAddTokenDialogContent'
 import type { ERC20TokenPredefinedData } from '../../../plugins/Wallet/erc20'
 import { recoverWallet } from '../../../plugins/Wallet/wallet'
-import { useAsync } from 'react-use'
 import { PluginMessageCenter } from '../../../plugins/PluginMessages'
 import WalletLine from '../../../plugins/Wallet/UI/Dashboard/Components/WalletLine'
 import { formatBalance } from '../../../plugins/Wallet/formatter'
@@ -21,10 +22,8 @@ export function DashboardWalletImportDialog(props: WrappedDialogProps) {
     const { t } = useI18N()
     const state = useState(0)
 
-    const [mnemonic, setMnemonic] = useState('')
-    const [passphrase, setPassphrase] = useState('')
     const [name, setName] = useState('')
-
+    const [mnemonic, setMnemonic] = useState('')
     const [privKey, setPrivKey] = useState('')
 
     const tabProps: AbstractTabProps = {
@@ -44,13 +43,6 @@ export function DashboardWalletImportDialog(props: WrappedDialogProps) {
                             label={t('mnemonic_words')}
                             value={mnemonic}
                             onChange={(e) => setMnemonic(e.target.value)}
-                        />
-                        <TextField
-                            required
-                            type="password"
-                            label={t('password')}
-                            value={passphrase}
-                            onChange={(e) => setPassphrase(e.target.value)}
                         />
                     </div>
                 ),
@@ -80,7 +72,7 @@ export function DashboardWalletImportDialog(props: WrappedDialogProps) {
             },
         ],
         state,
-        height: 176,
+        height: 112,
     }
 
     const onSubmit = useSnackbarCallback(
@@ -89,7 +81,7 @@ export function DashboardWalletImportDialog(props: WrappedDialogProps) {
                 return Services.Plugin.invokePlugin('maskbook.wallet', 'importNewWallet', {
                     name,
                     mnemonic: mnemonic.split(' '),
-                    passphrase,
+                    passphrase: '',
                 })
             return Services.Plugin.invokePlugin(
                 'maskbook.wallet',
@@ -99,7 +91,7 @@ export function DashboardWalletImportDialog(props: WrappedDialogProps) {
                 Services.Plugin.invokePlugin('maskbook.wallet', 'importNewWallet', { name, address }),
             )
         },
-        [name, mnemonic, passphrase],
+        [name, mnemonic],
         props.onClose,
     )
 
@@ -109,10 +101,13 @@ export function DashboardWalletImportDialog(props: WrappedDialogProps) {
                 icon={<CreditCardIcon />}
                 iconColor="#4EE0BC"
                 primary={t('import_wallet')}
-                secondary={t('import_wallet_hint')}
                 content={<AbstractTab {...tabProps}></AbstractTab>}
                 footer={
-                    <DebounceButton variant="contained" color="primary" onClick={onSubmit}>
+                    <DebounceButton
+                        variant="contained"
+                        color="primary"
+                        onClick={onSubmit}
+                        disabled={!(state[0] === 0 && name && mnemonic) && !(state[0] === 1 && name && privKey)}>
                         {t('import')}
                     </DebounceButton>
                 }></DashboardDialogWrapper>
@@ -120,10 +115,40 @@ export function DashboardWalletImportDialog(props: WrappedDialogProps) {
     )
 }
 
+//#region wallet create dialog
+const useWalletCreateDialogStyle = makeStyles((theme) =>
+    createStyles({
+        confirmation: {
+            '& > strong': {
+                color: theme.palette.text.primary,
+            },
+        },
+        notification: {
+            fontSize: 12,
+            lineHeight: '21px',
+            fontWeight: 500,
+            textAlign: 'center',
+            backgroundColor: '#FFD5B3',
+            padding: '8px 22px',
+            margin: '24px -36px 0',
+        },
+        notificationIcon: {
+            width: 16,
+            height: 16,
+            color: '#FF9138',
+            marginLeft: 5,
+        },
+    }),
+)
+
 export function DashboardWalletCreateDialog(props: WrappedDialogProps) {
     const { t } = useI18N()
+    const classes = useWalletCreateDialogStyle()
+
     const [name, setName] = useState('')
-    const [passphrase, setPassphrase] = useState('')
+    const [passphrase] = useState('')
+    const [confirmation, setConfirmation] = useState('')
+    const [showNotification, setShowNotification] = useState(true)
 
     const onSubmit = useSnackbarCallback(
         () => Services.Plugin.invokePlugin('maskbook.wallet', 'createNewWallet', { name, passphrase }),
@@ -148,26 +173,44 @@ export function DashboardWalletCreateDialog(props: WrappedDialogProps) {
                             />
                             <TextField
                                 required
-                                label={t('password')}
-                                type="password"
-                                value={passphrase}
-                                onChange={(e) => setPassphrase(e.target.value)}
+                                label={'Confirm your setup'}
+                                value={confirmation}
+                                onChange={(e) => setConfirmation(e.target.value)}
                             />
                         </form>
                         <br />
-                        <Typography variant="body2" color="textSecondary">
-                            {t('dashboard_password_helper_text')}
-                        </Typography>
+                        <Box display="flex" alignItems="center" justifyContent="center">
+                            <Typography className={classes.confirmation} variant="body2" color="textSecondary">
+                                Please type <strong>Create a Wallet</strong> to confirm.
+                            </Typography>
+                            <InfoOutlinedIcon
+                                className={classes.notificationIcon}
+                                cursor="pointer"
+                                onClick={() => setShowNotification((t) => !t)}></InfoOutlinedIcon>
+                        </Box>
+                        {showNotification ? (
+                            <Typography className={classes.notification}>
+                                This will create a new wallet other than the default wallet. You are responsible for
+                                keeping the private key to the wallet safe. Maskbook does not backup for you
+                                automatically. Please also note that Maskbook won't be able to pay for your transactions
+                                on Ethereum.
+                            </Typography>
+                        ) : null}
                     </>
                 }
                 footer={
-                    <DebounceButton variant="contained" color="primary" onClick={onSubmit}>
+                    <DebounceButton
+                        variant="contained"
+                        color="primary"
+                        onClick={onSubmit}
+                        disabled={!name || confirmation !== 'Create a Wallet'}>
                         {t('create')}
                     </DebounceButton>
                 }></DashboardDialogWrapper>
         </DashboardDialogCore>
     )
 }
+//#endregion
 
 interface WalletProps {
     wallet: WalletRecord
@@ -357,11 +400,12 @@ export function DashboardWalletBackupDialog(props: WrappedDialogProps<WalletProp
                 iconColor="#4EE0BC"
                 primary={t('backup_wallet')}
                 secondary={t('backup_wallet_hint')}
+                confineSecondary={false}
                 content={
                     <>
                         {wallet.mnemonic.length ? (
                             <section className={classes.section}>
-                                <ShowcaseBox>{wallet.mnemonic.join(' ')}</ShowcaseBox>
+                                <ShowcaseBox title={t('mnemonic_words')}>{wallet.mnemonic.join(' ')}</ShowcaseBox>
                             </section>
                         ) : null}
                         <section className={classes.section}>
