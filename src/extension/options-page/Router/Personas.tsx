@@ -9,6 +9,7 @@ import { useModal } from '../Dialog/Base'
 import { Database as DatabaseIcon } from 'react-feather'
 import { DashboardDatabaseBackupDialog, DashboardDatabaseRestoreDialog } from '../Dialog/Database'
 import SpacedButtonGroup from '../DashboardComponents/SpacedButtonGroup'
+import { useI18N } from '../../../utils/i18n-next-ui'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -28,6 +29,7 @@ const useStyles = makeStyles((theme) =>
 )
 
 export default function DashboardPersonasRouter() {
+    const { t } = useI18N()
     const classes = useStyles()
     const personas = useMyPersonas()
 
@@ -39,17 +41,17 @@ export default function DashboardPersonasRouter() {
     const actions = useMemo(
         () => [
             <Button color="primary" variant="outlined" onClick={openImportPersona}>
-                Import
+                {t('import')}
             </Button>,
             <Button color="primary" variant="contained" onClick={openCreatePersona} endIcon={<AddCircleIcon />}>
-                Create Persona
+                {t('create_persona')}
             </Button>,
         ],
-        [openCreatePersona, openImportPersona],
+        [t, openCreatePersona, openImportPersona],
     )
 
     return (
-        <DashboardRouterContainer title="My Personas" actions={actions}>
+        <DashboardRouterContainer title={t('my_personas')} actions={actions}>
             <section className={classes.container}>
                 {personas.map((persona) => (
                     <PersonaCard key={persona.identifier.toText()} persona={persona} />
@@ -61,10 +63,10 @@ export default function DashboardPersonasRouter() {
                     startIcon={<DatabaseIcon size={18} />}
                     color="primary"
                     variant="text">
-                    Restore Datebase
+                    {t('restore_database')}
                 </Button>
                 <Button onClick={openBackupDatabase} color="primary" variant="text">
-                    Backup Datebase
+                    {t('backup_database')}
                 </Button>
             </SpacedButtonGroup>
             {createPersona}

@@ -7,6 +7,7 @@ import { Link, useRouteMatch } from 'react-router-dom'
 import SentimentSatisfiedOutlinedIcon from '@material-ui/icons/SentimentSatisfiedOutlined'
 import { useModal } from './Dialog/Base'
 import { DashboardFeedbackDialog } from './Dialog/Feedback'
+import { useI18N } from '../../utils/i18n-next-ui'
 
 const useStyles = makeStyles((theme) => ({
     drawer: {
@@ -73,6 +74,7 @@ interface ResponsiveDrawerProps {
 }
 
 function ResponsiveDrawer(props: ResponsiveDrawerProps) {
+    const { t } = useI18N()
     const classes = useStyles()
     const match = useRouteMatch('/:param/')
 
@@ -106,7 +108,7 @@ function ResponsiveDrawer(props: ResponsiveDrawerProps) {
                 <List className={classes.drawerFeedback}>
                     <ListItem button onClick={openFeedback}>
                         <ListItemIcon children={<SentimentSatisfiedOutlinedIcon fontSize="small" />} />
-                        <ListItemText className={classes.feedback} primary="Feedback" />
+                        <ListItemText className={classes.feedback} primary={t('feedback')} />
                     </ListItem>
                 </List>
                 {feedback}

@@ -70,9 +70,9 @@ export default function PersonaCard({ persona }: Props) {
     const menus = useMemo(
         () => [
             <MenuItem onClick={() => setRename(true)}>{t('rename')}</MenuItem>,
-            <MenuItem onClick={openBackupPersona}>{t('dashboard_create_backup')}</MenuItem>,
+            <MenuItem onClick={openBackupPersona}>{t('backup')}</MenuItem>,
             <MenuItem onClick={openDeletePersona} className={color.error}>
-                {t('dashboard_delete_persona')}
+                {t('delete')}
             </MenuItem>,
         ],
         [],
