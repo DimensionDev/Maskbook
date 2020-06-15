@@ -193,9 +193,7 @@ export default function WalletCard({ wallet, tokens }: Props) {
                     invert
                     line1="ETH"
                     line2="Ethereum"
-                    action={
-                        <Typography variant="h5">{formatBalance(wallet.eth_balance, 18) ?? 'Syncing...'}</Typography>
-                    }
+                    action={<Typography variant="h5">{formatBalance(wallet.eth_balance, 18) ?? 'Syncing…'}</Typography>}
                 />
                 {Array.from(wallet.erc20_token_balance).map(([addr, amount]) => {
                     const t = tokens.find((y) => y.address === addr)
@@ -214,7 +212,7 @@ export default function WalletCard({ wallet, tokens }: Props) {
                                             ? t
                                                 ? formatBalance(amount, t.decimals ?? 18)
                                                 : 'Unknown'
-                                            : 'Syncing...'}
+                                            : 'Syncing…'}
                                     </Typography>
                                 )
                             }
