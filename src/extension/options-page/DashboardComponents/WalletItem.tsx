@@ -5,6 +5,7 @@ import type { WalletRecord, ERC20TokenRecord } from '../../../plugins/Wallet/dat
 import classNames from 'classnames'
 import { ThrottledButton } from './ActionButton'
 import { useCopyToClipboard } from 'react-use'
+import { useI18N } from '../../../utils/i18n-next-ui'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -73,6 +74,7 @@ interface WalletItemProps {
 }
 
 export function WalletItem(props: WalletItemProps) {
+    const { t } = useI18N()
     const classes = useStyles()
     const { wallet, selected, onClick, tokens } = props
     const [, copyToClipboard] = useCopyToClipboard()
@@ -89,7 +91,7 @@ export function WalletItem(props: WalletItemProps) {
             </Typography>
             <Box py={2}>
                 <Typography component="p" color="textSecondary" variant="overline">
-                    WALLET ADDRESS
+                    {t('wallet_address')}
                 </Typography>
                 <Typography className={classes.address} component="code">
                     {wallet.address}
@@ -102,7 +104,7 @@ export function WalletItem(props: WalletItemProps) {
                 size="small"
                 variant="outlined"
                 startIcon={<FileCopyOutlinedIcon />}>
-                Copy
+                {t('copy')}
             </ThrottledButton>
             <Box py={2} display="flex">
                 {tokens &&

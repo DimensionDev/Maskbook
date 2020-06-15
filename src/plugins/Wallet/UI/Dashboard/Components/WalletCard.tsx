@@ -144,11 +144,9 @@ export default function WalletCard({ wallet, tokens }: Props) {
                                         {t('set_as_default')}
                                     </MenuItem>
                                     <MenuItem onClick={() => setRenameWallet(true)}>{t('rename')}</MenuItem>
-                                    <MenuItem onClick={() => setBackupWallet(true)}>
-                                        {t('dashboard_create_backup')}
-                                    </MenuItem>
+                                    <MenuItem onClick={() => setBackupWallet(true)}>{t('backup')}</MenuItem>
                                     <MenuItem onClick={() => setDeleteWallet(true)} className={color.error}>
-                                        {t('dashboard_delete_persona')}
+                                        {t('delete')}
                                     </MenuItem>
                                 </Menu>
                             </Typography>
