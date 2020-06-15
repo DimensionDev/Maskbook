@@ -90,7 +90,7 @@
     "react-draggable": "^4.4.2",
     "react-i18next": "^11.5.0",
     "react-router-dom": "^5.2.0",
-    "react-use": "^15.1.0",
+    "react-use": "^15.2.5",
     "react-window": "^1.8.5",
     "swr": "github:innocentiv/swr#reset-pages-build",
     "tiny-secp256k1": "^1.1.4",
