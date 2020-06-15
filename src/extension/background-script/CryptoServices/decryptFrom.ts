@@ -20,7 +20,8 @@ import { DecryptFailedReason } from '../../../utils/constants'
 import {
     asyncIteratorWithResult,
     asyncIteratorToAsyncFunction,
-} from '../../../utils/type-transform/asyncIteratorWithResult'
+    memorizeAsyncGenerator,
+} from '../../../utils/type-transform/asyncIteratorHelpers'
 import { sleep } from '@holoflows/kit/es/util/sleep'
 import type { EC_Public_JsonWebKey, AESJsonWebKey } from '../../../modules/CryptoAlgorithm/interfaces/utils'
 
@@ -105,7 +106,7 @@ function makeError(error: string | Error): Failure {
  *      1. listen to future new keys on Gun
  *      2. try to decrypt with that key
  */
-export async function* decryptFromMessageWithProgress(
+export async function* decryptFromMessageWithProgress_raw(
     encrypted: string,
     author: ProfileIdentifier,
     whoAmI: ProfileIdentifier,
@@ -310,6 +311,14 @@ export async function* decryptFromMessageWithProgress(
     }
     return makeError(i18n.t('service_unknown_payload'))
 }
+
+export const decryptFromMessageWithProgress = memorizeAsyncGenerator(
+    decryptFromMessageWithProgress_raw,
+    (encrypted, author, whoAmI, publicShared) =>
+        JSON.stringify([encrypted, author.toText(), whoAmI.toText(), publicShared]),
+    1000 * 30,
+)
+
 function handleDOMException(e: unknown) {
     if (e instanceof DOMException) {
         console.error(e)
@@ -371,7 +380,7 @@ async function* findAuthorPublicKey(
     return 'out of chance'
 }
 
-export const decryptFrom = asyncIteratorToAsyncFunction(decryptFromMessageWithProgress)
+export const decryptFrom = asyncIteratorToAsyncFunction(decryptFromMessageWithProgress_raw)
 
 async function decryptFromCache(postPayload: Payload, by: ProfileIdentifier) {
     const { encryptedText, iv, version } = postPayload
