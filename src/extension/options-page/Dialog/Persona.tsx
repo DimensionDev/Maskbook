@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 
-import { TextField, makeStyles, createStyles, Typography, TypographyProps, Box, Paper } from '@material-ui/core'
+import { TextField, makeStyles, createStyles, Typography } from '@material-ui/core'
 import { UserPlus, UserCheck, User, UserMinus } from 'react-feather'
 
 import * as bip39 from 'bip39'
@@ -18,13 +18,13 @@ import { hasWKWebkitRPCHandlers } from '../../../utils/iOS-RPC'
 import QRScanner from '../../../components/QRScanner'
 import { QrCode, WKWebkitQRScanner } from '../../../components/shared/qrcode'
 import { useSnackbar } from 'notistack'
-import { selectElementContents } from '../../../utils/utils'
 import type { Persona } from '../../../database'
 
 import { DashboardDialogCore, DashboardDialogWrapper, WrappedDialogProps, useSnackbarCallback } from './Base'
 import AbstractTab, { AbstractTabProps } from '../DashboardComponents/AbstractTab'
 import { DebounceButton } from '../DashboardComponents/ActionButton'
 import SpacedButtonGroup from '../DashboardComponents/SpacedButtonGroup'
+import ShowcaseBox from '../DashboardComponents/ShowcaseBox'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -49,39 +49,6 @@ const useStyles = makeStyles((theme) =>
         },
     }),
 )
-
-const useShowcaseBoxStyle = makeStyles((theme) =>
-    createStyles({
-        paper: {
-            height: '100%',
-            border: `solid 1px ${theme.palette.divider}`,
-            backgroundColor: theme.palette.type === 'light' ? '#FAFAFA' : '',
-            boxShadow: 'none',
-            padding: theme.spacing(2, 3),
-        },
-        scroller: {
-            height: '100%',
-            overflow: 'auto',
-            wordBreak: 'break-all',
-        },
-    }),
-)
-
-const ShowcaseBox = (props: TypographyProps<'div'>) => {
-    const classes = useShowcaseBoxStyle()
-    const { children, ...other } = props
-    const ref = React.useRef<HTMLDivElement>(null)
-    const copyText = () => selectElementContents(ref.current!)
-    return (
-        <Paper className={classes.paper}>
-            <div className={classes.scroller}>
-                <Typography component="div" variant="body1" onClick={copyText} ref={ref} {...other}>
-                    {children}
-                </Typography>
-            </div>
-        </Paper>
-    )
-}
 
 export function DashboardPersonaCreateDialog(props: WrappedDialogProps) {
     const { t } = useI18N()
