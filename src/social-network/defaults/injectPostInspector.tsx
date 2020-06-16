@@ -22,7 +22,6 @@ export function injectPostInspectorDefault<T extends string>(
         const _id = useValueRef(postID)
         const by = useValueRef(postBy)
         const id = _id ? new PostIdentifier(by, _id) : PostIdentifier.unknown
-        const content = useValueRef(postContent)
         const classes = useCustomStyles()
         const additionalProps = additionalPropsToPostInspector(classes)
         return (
@@ -30,8 +29,6 @@ export function injectPostInspectorDefault<T extends string>(
                 onDecrypted={onDecrypted}
                 needZip={zipPost}
                 postId={id}
-                post={content}
-                postBy={by}
                 AddToKeyStoreProps={{ failedComponent: null }}
                 postInfo={props}
                 {...additionalProps}
