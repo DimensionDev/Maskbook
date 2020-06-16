@@ -1,8 +1,7 @@
 import { env, Env, Preference, ProfileUI, SocialNetworkWorkerAndUIDefinition } from './shared'
-import { DOMProxy, LiveSelector, ValueRef, OnlyRunInContext } from '@holoflows/kit/es'
+import { ValueRef, OnlyRunInContext } from '@holoflows/kit/es'
 import type { Group, Profile, Persona } from '../database'
 import { ProfileIdentifier, PersonaIdentifier } from '../database/type'
-import type { Payload } from '../utils/type-transform/Payload'
 import { defaultTo, isNull } from 'lodash-es'
 import Services from '../extension/service'
 import { defaultSharedSettings } from './defaults/shared'
@@ -12,11 +11,9 @@ import type { Theme } from '@material-ui/core'
 import { MaskbookLightTheme } from '../utils/theme'
 import { untilDomLoaded } from '../utils/dom'
 import type { I18NStrings } from '../utils/i18n-next'
-import type { TypedMessage } from '../extension/background-script/CryptoServices/utils'
 import i18nNextInstance from '../utils/i18n-next'
-import { Result, Err } from 'ts-results'
-import { ObservableWeakMap, ObservableSet, ObservableMap } from '../utils/ObservableMapSet'
-import { PluginUI } from '../plugins/plugin'
+import type { ObservableWeakMap } from '../utils/ObservableMapSet'
+import type { PostInfo } from './PostInfo'
 
 if (!process.env.STORYBOOK) {
     OnlyRunInContext(['content', 'debugging', 'options'], 'UI provider')
@@ -229,27 +226,6 @@ export interface SocialNetworkUIDataSources {
      */
     readonly typedMessageMetadata?: ValueRef<ReadonlyMap<string, any>>
 }
-export type PostInfo = {
-    readonly nickname: ValueRef<string | null>
-    readonly avatarURL: ValueRef<string | null>
-    readonly postBy: ValueRef<ProfileIdentifier>
-    readonly postID: ValueRef<string | null>
-    readonly postContent: ValueRef<string>
-    readonly postPayload: ValueRef<Result<Payload, Error>>
-    readonly steganographyContent: ValueRef<string>
-    readonly commentsSelector?: LiveSelector<HTMLElement, false>
-    readonly commentBoxSelector?: LiveSelector<HTMLElement, false>
-    readonly decryptedPostContent: ValueRef<TypedMessage | null>
-    readonly decryptedPostContentRaw: ValueRef<string>
-    readonly rootNode: HTMLElement
-    readonly rootNodeProxy: DOMProxy
-    readonly postMetadata: {
-        // TODO: Implement this
-        images: ObservableSet<HTMLImageElement>
-        // TODO: add in-post links
-        mentionedLinks: ObservableMap<HTMLElement, string>
-    }
-}
 //#endregion
 //#region SocialNetworkUICustomUI
 export interface SocialNetworkUICustomUI {
@@ -272,28 +248,6 @@ export interface SocialNetworkUICustomUI {
 //#endregion
 
 export type SocialNetworkUI = Required<SocialNetworkUIDefinition>
-
-export const getEmptyPostInfoByElement = (
-    opt: Pick<PostInfo, 'rootNode' | 'rootNodeProxy' | 'commentsSelector' | 'commentBoxSelector'>,
-) => {
-    const x: PostInfo = {
-        decryptedPostContent: new ValueRef<TypedMessage | null>(null),
-        decryptedPostContentRaw: new ValueRef(''),
-        postBy: new ValueRef(ProfileIdentifier.unknown, ProfileIdentifier.equals),
-        postContent: new ValueRef(''),
-        postID: new ValueRef<string | null>(null),
-        postPayload: new ValueRef<Result<Payload, Error>>(new Err(new Error('Not inited'))),
-        avatarURL: new ValueRef<string | null>(null),
-        nickname: new ValueRef<string | null>(null),
-        steganographyContent: new ValueRef<string>(''),
-        postMetadata: {
-            images: new ObservableSet(),
-            mentionedLinks: new ObservableMap(),
-        },
-        ...opt,
-    }
-    return x
-}
 
 export const definedSocialNetworkUIs = new Set<SocialNetworkUI>()
 export const getActivatedUI = () => activatedSocialNetworkUI

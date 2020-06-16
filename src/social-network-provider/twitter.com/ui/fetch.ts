@@ -1,13 +1,12 @@
 import { bioCardSelector, selfInfoSelectors, postsContentSelector, postsImageSelector } from '../utils/selector'
 import { MutationObserverWatcher } from '@holoflows/kit'
 import { GroupIdentifier, ProfileIdentifier, PreDefinedVirtualGroupNames } from '../../../database/type'
-import {
-    getEmptyPostInfoByElement,
+import type {
     SocialNetworkUI,
     SocialNetworkUIInformationCollector,
-    PostInfo,
     SocialNetworkUIDefinition,
 } from '../../../social-network/ui'
+import { PostInfo } from '../../../social-network/PostInfo'
 import { deconstructPayload } from '../../../utils/type-transform/Payload'
 import { instanceOfTwitterUI } from './index'
 import { bioCardParser, postParser, postImageParser, postIdParser } from '../utils/fetch'
@@ -103,13 +102,14 @@ const registerPostCollector = (self: SocialNetworkUI) => {
         .useForeach((node, _, proxy) => {
             const tweetNode = getTweetNode(node)
             if (!tweetNode) return
-            const info = getEmptyPostInfoByElement({
+            const info: PostInfo = new (class extends PostInfo {
                 get rootNode() {
                     return proxy.current
-                },
-                rootNodeProxy: proxy,
-            })
-
+                }
+                rootNodeProxy = proxy
+                commentsSelector = undefined
+                commentBoxSelector = undefined
+            })()
             function run() {
                 collectPostInfo(tweetNode, info, self)
                 collectLinks(tweetNode, info)
@@ -161,10 +161,10 @@ function collectLinks(tweetNode: HTMLDivElement | null, info: PostInfo) {
     for (const x of links) {
         if (seen.has(x.href)) continue
         seen.add(x.href)
-        info.postMetadata.mentionedLinks.set(x, x.href)
+        info.postMetadataMentionedLinks.set(x, x.href)
         Services.Helper.resolveTCOLink(x.href).then((val) => {
             if (!val) return
-            info.postMetadata.mentionedLinks.set(x, val)
+            info.postMetadataMentionedLinks.set(x, val)
         })
     }
 }

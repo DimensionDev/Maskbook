@@ -7,7 +7,7 @@ import { useValueRef } from '../../utils/hooks/useValueRef'
 import type { ChipProps } from '@material-ui/core/Chip'
 import { useStylesExtends } from '../custom-ui-helper'
 import { useAsync } from 'react-use'
-import type { PostInfo } from '../../social-network/ui'
+import { usePostInfoDetails } from '../DataSource/usePostInfo'
 
 const useStyle = makeStyles({
     root: {
@@ -28,8 +28,6 @@ export function PostCommentDecrypted(props: PostCommentDecryptedProps) {
     )
 }
 export interface PostCommentProps {
-    decryptedPostContentRaw: ValueRef<string>
-    postPayload: PostInfo['postPayload']
     comment: ValueRef<string>
     needZip(): void
     successComponentProps?: PostCommentDecryptedProps
@@ -38,9 +36,10 @@ export interface PostCommentProps {
     failedComponent?: React.ComponentType<{ error: Error }>
 }
 export function PostComment(props: PostCommentProps) {
-    const decryptedPostContent = useValueRef(props.decryptedPostContentRaw)
+    const { failedComponent: Fail, waitingComponent: Wait, needZip } = props
     const comment = useValueRef(props.comment)
-    const postPayload = useValueRef(props.postPayload)
+    const decryptedPostContent = usePostInfoDetails('decryptedPostContentRaw')
+    const postPayload = usePostInfoDetails('postPayload')
     const postIV = postPayload.ok ? postPayload.val.iv : ''
 
     const dec = useAsync(async () => {
@@ -51,7 +50,6 @@ export function PostComment(props: PostCommentProps) {
     }, [postIV, decryptedPostContent, comment])
 
     const Success = props.successComponent || PostCommentDecrypted
-    const { failedComponent: Fail, waitingComponent: Wait, needZip } = props
     useEffect(() => void (dec.value && needZip()), [dec.value, needZip])
     if (dec.error) return Fail ? <Fail error={dec.error} /> : null
     if (dec.loading) return Wait ? <Wait /> : null

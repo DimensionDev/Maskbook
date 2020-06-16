@@ -2,7 +2,6 @@ import type { Profile } from '../../database'
 import { useValueRef } from '../../utils/hooks/useValueRef'
 import { getActivatedUI } from '../../social-network/ui'
 import { currentSelectedIdentity } from '../../components/shared-settings/settings'
-import { OnlyRunInContext } from '@holoflows/kit/es'
 
 export function useFriendsList() {
     return useValueRef(getActivatedUI().friendsRef)

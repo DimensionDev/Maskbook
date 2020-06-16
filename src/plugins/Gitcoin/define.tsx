@@ -7,37 +7,30 @@ import { parseURL } from '../../utils/utils'
 import Services from '../../extension/service'
 import MaskbookPluginWrapper from '../MaskbookPluginWrapper'
 import { extractTextFromTypedMessage } from '../../extension/background-script/CryptoServices/utils'
-import { Result, Ok, Err } from 'ts-results'
 import { DonateDialog, DonatePayload } from './DonateDialog'
 import { useWalletDataSource } from '../shared/useWallet'
-import { useValueRef } from '../../utils/hooks/useValueRef'
-import { useObservableValues } from '../../utils/hooks/useObservableMapSet'
 import type { GitcoinGrantMetadata } from './Services'
 import BigNumber from 'bignumber.js'
 import { EthereumTokenType } from '../Wallet/database/types'
 import { isNumber } from 'lodash-es'
 import { DonateSuccessDialog, DonateFailDialog } from './Dialogs'
 import { getNetworkSettings } from '../Wallet/UI/Developer/EthereumNetworkSettings'
+import { usePostInfoDetails } from '../../components/DataSource/usePostInfo'
 
 const isGitcoin = (x: string): boolean => x.startsWith('https://gitcoin.co/grants')
+
 export const GitcoinPluginDefine: PluginConfig = {
     identifier: 'co.gitcoin',
-    shouldActivateInSuccessDecryption(post) {
-        const text = extractTextFromTypedMessage(post)
-        // https://github.com/vultix/ts-results/issues/8
-        if (text.ok) return shouldActivate(text.val).ok
-        return false
+    successDecryptionInspector: function Component(props): JSX.Element | null {
+        const text = useMemo(() => extractTextFromTypedMessage(props.message), [props.message])
+        const link = useMemo(() => parseURL(text.val || ''), [text.val]).find(isGitcoin)
+        if (!text.ok) return null
+        if (!link) return null
+        return <Renderer url={link} />
     },
-    SuccessDecryptionComponent(props) {
-        const text = extractTextFromTypedMessage(props.message)
-        if (text.err) return null
-        const gitcoin = parseURL(text.val).find(isGitcoin)
-        if (gitcoin) return Renderer({ url: gitcoin })
-        return null
-    },
-    postInspector: function Comp(props) {
-        const post = useValueRef(props.postContent)
-        const link = useObservableValues(props.postMetadata.mentionedLinks)
+    postInspector: function Component(): JSX.Element | null {
+        const post = usePostInfoDetails('postContent')
+        const link = usePostInfoDetails('postMetadataMentionedLinks')
             .concat(useMemo(() => parseURL(post), [post]))
             .find(isGitcoin)
         if (!link) return null
@@ -53,12 +46,6 @@ function Renderer(props: React.PropsWithChildren<{ url: string }>) {
             </Suspense>
         </MaskbookPluginWrapper>
     )
-}
-
-function shouldActivate(post: string): Result<void, void> {
-    const has = post.includes('https://gitcoin.co/grants/')
-    if (has) return Ok.EMPTY
-    return Err.EMPTY
 }
 
 function Gitcoin(props: { url: string }) {

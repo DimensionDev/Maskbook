@@ -5,9 +5,7 @@ import type { ProfileIdentifier } from '../../database/type'
 import Services from '../../extension/service'
 import type { ValueRef } from '@holoflows/kit/es'
 import { useValueRef } from '../../utils/hooks/useValueRef'
-import { Typography } from '@material-ui/core'
 import { useAsync } from 'react-use'
-import CheckIcon from '@material-ui/icons/Check'
 export interface PersonKnownProps {
     pageOwner: ValueRef<ProfileIdentifier | null>
     bioContent: ValueRef<string>

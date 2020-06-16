@@ -1,10 +1,11 @@
 import React from 'react'
-import type { PostInfo } from '../ui'
+import type { PostInfo } from '../PostInfo'
 import { DOMProxy, MutationObserverWatcher, ValueRef } from '@holoflows/kit/es'
 import { renderInShadowRoot } from '../../utils/jss/renderInShadowRoot'
 import { PostComment, PostCommentProps } from '../../components/InjectedComponents/PostComments'
 import { nop } from '../../utils/utils'
 import { makeStyles } from '@material-ui/core'
+import { PostInfoContext, usePostInfoDetails } from '../../components/DataSource/usePostInfo'
 
 interface injectPostCommentsDefaultConfig {
     needZip?(): void
@@ -19,19 +20,11 @@ export function injectPostCommentsDefault<T extends string>(
 ) {
     const { needZip } = config
     const PostCommentDefault = React.memo(function PostCommentDefault(
-        props: Pick<PostCommentProps, 'needZip' | 'comment'> & PostInfo,
+        props: Pick<PostCommentProps, 'needZip' | 'comment'>,
     ) {
         const classes = useCustomStyles()
         const additional = additionalPropsToPostComment(classes)
-        return (
-            <PostComment
-                needZip={props.needZip}
-                decryptedPostContentRaw={props.decryptedPostContentRaw}
-                comment={props.comment}
-                postPayload={props.postPayload}
-                {...additional}
-            />
-        )
+        return <PostComment {...props} {...additional} />
     })
     return function injectPostComments(current: PostInfo) {
         const selector = current.commentsSelector
@@ -46,7 +39,9 @@ export function injectPostCommentsDefault<T extends string>(
                         commentNode.style.overflow = 'hidden'
                     })
                 const unmount = renderInShadowRoot(
-                    <PostCommentDefault needZip={needZipF} comment={commentRef} {...current} />,
+                    <PostInfoContext.Provider value={current}>
+                        <PostCommentDefault needZip={needZipF} comment={commentRef} {...current} />
+                    </PostInfoContext.Provider>,
                     { normal: () => meta.after, shadow: () => meta.afterShadow },
                 )
                 return {

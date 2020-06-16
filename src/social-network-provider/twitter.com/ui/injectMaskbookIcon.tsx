@@ -1,6 +1,6 @@
 import { bioPageUserNickNameSelector, floatingBioCardSelector, bioPageUserIDSelector } from '../utils/selector'
 import { MutationObserverWatcher, DOMProxy, LiveSelector } from '@holoflows/kit/es'
-import type { PostInfo } from '../../../social-network/ui'
+import type { PostInfo } from '../../../social-network/PostInfo'
 import Services from '../../../extension/service'
 import { ProfileIdentifier } from '../../../database/type'
 import { MaskbookIcon } from '../../../resources/Maskbook-Circle-WhiteGraph-BlueBackground'

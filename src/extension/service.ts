@@ -17,7 +17,13 @@ interface Services {
     Plugin: typeof import('./background-script/PluginService')
     Helper: typeof import('./background-script/HelperService')
 }
-const Services = {} as Services
+const Services = {
+    Plugin: {
+        invokePlugin() {
+            return new Promise(() => {})
+        },
+    } as any,
+} as Services
 export default Services
 
 const logOptions: AsyncCallOptions['log'] = {
@@ -35,7 +41,11 @@ if (!('Services' in globalThis)) {
     register(createProxyToService('SteganographyService'), 'Steganography', MockService.SteganographyService)
     register(createProxyToService('IdentityService'), 'Identity', {})
     register(createProxyToService('UserGroupService'), 'UserGroup', {})
-    register(createProxyToService('PluginService'), 'Plugin', {})
+    register(createProxyToService('PluginService'), 'Plugin', {
+        invokePlugin() {
+            return new Promise(() => {})
+        },
+    })
     register(createProxyToService('HelperService'), 'Helper', {})
 }
 interface ServicesWithProgress {
@@ -98,7 +108,7 @@ function register<T extends Service>(service: T, name: keyof Services, mock?: Pa
             }),
         })
         Object.assign(globalThis, { [name]: Object.assign({}, service) })
-        if (GetContext() === 'debugging') {
+        if (process.env.STORYBOOK) {
             // ? -> UI developing
             const mockService = new Proxy(mock || {}, {
                 get(target: any, key: string) {

@@ -36,8 +36,8 @@ interface IdentifierFromString {
     // <T extends Identifier>(id: T): T
 }
 export abstract class Identifier {
-    static equals(a: Identifier, b: Identifier) {
-        return a.equals(b)
+    static equals(a?: Identifier | null, b?: Identifier | null) {
+        return !!a?.equals(b)
     }
     public equals(other: Identifier | null | undefined) {
         if (!other) return false

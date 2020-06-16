@@ -266,13 +266,15 @@ export function PostDialogUI(props: PostDialogUIProps) {
                     </DialogActions>
                 </ShadowRootDialog>
             </ThemeProvider>
-            <RedPacketDialog
-                classes={classes}
-                open={props.open && redPacketDialogOpen}
-                onConfirm={() => setRedPacketDialogOpen(false)}
-                onDecline={() => setRedPacketDialogOpen(false)}
-                DialogProps={props.DialogProps}
-            />
+            {!process.env.STORYBOOK && (
+                <RedPacketDialog
+                    classes={classes}
+                    open={props.open && redPacketDialogOpen}
+                    onConfirm={() => setRedPacketDialogOpen(false)}
+                    onDecline={() => setRedPacketDialogOpen(false)}
+                    DialogProps={props.DialogProps}
+                />
+            )}
         </div>
     )
 }

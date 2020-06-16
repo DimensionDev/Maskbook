@@ -1,18 +1,11 @@
-import React, { useRef } from 'react'
-import {
-    TypedMessage,
-    withMetadata,
-    readTypedMessageMetadataUntyped,
-} from '../../../../extension/background-script/CryptoServices/utils'
+import React from 'react'
+import { withMetadata, TypedMessage } from '../../../../extension/background-script/CryptoServices/utils'
 import MaskbookPluginWrapper from '../../../MaskbookPluginWrapper'
 import { RedPacketWithState } from '../Dashboard/Components/RedPacket'
 import type { RedPacketRecord, RedPacketStatus, WalletRecord } from '../../database/types'
 import Services from '../../../../extension/service'
-import type { PostIdentifier, ProfileIdentifier } from '../../../../database/type'
 
 import {
-    withMobileDialog,
-    Dialog,
     makeStyles,
     createStyles,
     DialogTitle,
@@ -35,8 +28,8 @@ import { useI18N } from '../../../../utils/i18n-next-ui'
 import ShadowRootDialog from '../../../../utils/jss/ShadowRootDialog'
 import { getPostUrl } from '../../../../social-network/utils/getPostUrl'
 import { RedPacketMetaKey } from '../../RedPacketMetaKey'
-import type { PluginSuccessDecryptionComponentProps } from '../../../plugin'
 import { useWalletDataSource } from '../../../shared/useWallet'
+import { usePostInfoDetails } from '../../../../components/DataSource/usePostInfo'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -48,21 +41,22 @@ const useStyles = makeStyles((theme) =>
 
 interface RedPacketInDecryptedPostProps
     extends withClasses<
-            | KeysInferFromUseStyles<typeof useStyles>
-            | 'dialog'
-            | 'backdrop'
-            | 'container'
-            | 'paper'
-            | 'input'
-            | 'header'
-            | 'content'
-            | 'actions'
-            | 'close'
-            | 'button'
-            | 'label'
-            | 'title'
-        >,
-        PluginSuccessDecryptionComponentProps {}
+        | KeysInferFromUseStyles<typeof useStyles>
+        | 'dialog'
+        | 'backdrop'
+        | 'container'
+        | 'paper'
+        | 'input'
+        | 'header'
+        | 'content'
+        | 'actions'
+        | 'close'
+        | 'button'
+        | 'label'
+        | 'title'
+    > {
+    message: TypedMessage
+}
 
 export default function RedPacketInDecryptedPost(props: RedPacketInDecryptedPostProps) {
     const [loading, setLoading] = React.useState(false)
@@ -90,7 +84,7 @@ export default function RedPacketInDecryptedPost(props: RedPacketInDecryptedPost
             .catch((e) => Services.Welcome.openOptionsPage(`/wallets/error?reason=${e.message}`))
             .finally(() => setLoading(false))
     }
-    const [wallets, tokens, onRequireNewWallet] = useWalletDataSource()
+    const [wallets, , onRequireNewWallet] = useWalletDataSource()
 
     const onClick = async (state: RedPacketStatus, rpid: RedPacketRecord['red_packet_id']) => {
         if (!rpid) return
@@ -137,7 +131,8 @@ export function RedPacketInDecryptedPostCard(
     },
 ) {
     const { t } = useI18N()
-    const { message, postIdentifier, loading, claiming, onClick } = props
+    const { message, loading, claiming, onClick } = props
+    const postIdentifier = usePostInfoDetails('postIdentifier')
     const storybookDebugging: boolean = !!process.env.STORYBOOK
     /* without redpacket */
     const jsx = message

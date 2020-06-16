@@ -1,4 +1,4 @@
-import type { PostInfo } from '../../../social-network/ui'
+import type { PostInfo } from '../../../social-network/PostInfo'
 import { injectPostInspectorDefault } from '../../../social-network/defaults/injectPostInspector'
 import { twitterEncoding } from '../encoding'
 

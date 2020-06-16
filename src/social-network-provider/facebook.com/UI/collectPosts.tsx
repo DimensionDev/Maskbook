@@ -1,6 +1,7 @@
 import { DOMProxy, LiveSelector, MutationObserverWatcher } from '@holoflows/kit'
 import { deconstructPayload } from '../../../utils/type-transform/Payload'
-import { getEmptyPostInfoByElement, PostInfo, SocialNetworkUI } from '../../../social-network/ui'
+import type { SocialNetworkUI } from '../../../social-network/ui'
+import { PostInfo } from '../../../social-network/PostInfo'
 import { isMobileFacebook } from '../isMobile'
 import { getProfileIdentifierAtFacebook } from '../getPersonIdentifierAtFacebook'
 import Services from '../../../extension/service'
@@ -41,14 +42,14 @@ export function collectPostsFacebook(this: SocialNetworkUI) {
 
             const commentBoxSelector = isMobileFacebook ? commentBoxSelectorMobile : commentBoxSelectorPC
 
-            const info: PostInfo = getEmptyPostInfoByElement({
-                commentsSelector: commentSelector,
-                commentBoxSelector: commentBoxSelector,
+            const info: PostInfo = new (class extends PostInfo {
+                commentsSelector = commentSelector
+                commentBoxSelector = commentBoxSelector
                 get rootNode() {
                     return root.evaluate()[0]! as HTMLElement
-                },
-                rootNodeProxy: metadata,
-            })
+                }
+                rootNodeProxy = metadata
+            })()
 
             this.posts.set(metadata, info)
             function collectPostInfo() {

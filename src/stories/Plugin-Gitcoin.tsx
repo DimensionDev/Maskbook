@@ -53,6 +53,7 @@ storiesOf('Plugin: Gitcoin', module)
                             eth_balance: new BigNumber(2).multipliedBy(new BigNumber(10).pow(18)), // 2 * (10 ** 18)
                         },
                     ]}
+                    address="fake"
                     onRequireNewWallet={action('onRequestNewWallet')}
                     onClose={action('onClose')}
                     title={text('Title', 'Mask + Test Kit Mutual Aid Fund')}

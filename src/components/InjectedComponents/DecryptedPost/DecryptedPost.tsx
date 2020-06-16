@@ -15,11 +15,10 @@ import { DecryptPostAwaitingProps, DecryptPostAwaiting } from './DecryptPostAwai
 import { DecryptPostFailedProps, DecryptPostFailed } from './DecryptPostFailed'
 import { DecryptedPostDebug } from './DecryptedPostDebug'
 import { asyncIteratorWithResult } from '../../../utils/type-transform/asyncIteratorWithResult'
+import { usePostInfoDetails } from '../../DataSource/usePostInfo'
 
 export interface DecryptPostProps {
     onDecrypted: (post: TypedMessage, raw: string) => void
-    postBy: ProfileIdentifier
-    postId?: PostIdentifier<ProfileIdentifier>
     whoAmI: ProfileIdentifier
     encryptedText: string
     profiles: Profile[]
@@ -33,7 +32,8 @@ export interface DecryptPostProps {
     failedComponentProps?: Partial<DecryptPostFailedProps>
 }
 export function DecryptPost(props: DecryptPostProps) {
-    const { postBy, postId, whoAmI, encryptedText, profiles, alreadySelectedPreviously, onDecrypted } = props
+    const { whoAmI, encryptedText, profiles, alreadySelectedPreviously, onDecrypted } = props
+    const postBy = usePostInfoDetails('postBy')
     const Success = props.successComponent || DecryptPostSuccess
     const Awaiting = props.waitingComponent || DecryptPostAwaiting
     const Failed = props.failedComponent || DecryptPostFailed
@@ -111,7 +111,6 @@ export function DecryptPost(props: DecryptPostProps) {
     return withDebugger(
         <Success
             data={decrypted}
-            postIdentifier={postId}
             alreadySelectedPreviously={alreadySelectedPreviously}
             requestAppendRecipients={requestAppendRecipientsWrapped}
             profiles={profiles}

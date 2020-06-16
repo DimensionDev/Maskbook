@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { WalletRecord, ERC20TokenRecord, EthereumTokenType } from '../Wallet/database/types'
 import Services from '../../extension/service'
 import { PluginMessageCenter } from '../PluginMessages'

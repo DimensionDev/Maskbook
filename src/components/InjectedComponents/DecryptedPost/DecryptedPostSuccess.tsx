@@ -5,19 +5,18 @@ import { useI18N } from '../../../utils/i18n-next-ui'
 import { makeStyles } from '@material-ui/styles'
 import { Link, Typography, Theme, CircularProgress } from '@material-ui/core'
 import type { Profile } from '../../../database'
-import type { ProfileIdentifier, PostIdentifier } from '../../../database/type'
 import { useStylesExtends } from '../../custom-ui-helper'
 import type { TypedMessage } from '../../../extension/background-script/CryptoServices/utils'
 import CheckIcon from '@material-ui/icons/Check'
 import ClearIcon from '@material-ui/icons/Clear'
-import { PluginUI, PluginSuccessDecryptionComponentProps } from '../../../plugins/plugin'
+import { PluginUI, PluginConfig } from '../../../plugins/plugin'
 import green from '@material-ui/core/colors/green'
 import red from '@material-ui/core/colors/red'
 import type { SuccessDecryption } from '../../../extension/background-script/CryptoServices/decryptFrom'
+import { usePostInfo } from '../../DataSource/usePostInfo'
 
 export interface DecryptPostSuccessProps extends withClasses<KeysInferFromUseStyles<typeof useSuccessStyles>> {
     data: { signatureVerifyResult: SuccessDecryption['signatureVerifyResult']; content: TypedMessage }
-    postIdentifier?: PostIdentifier<ProfileIdentifier>
     requestAppendRecipients?(to: Profile[]): Promise<void>
     alreadySelectedPreviously: Profile[]
     profiles: Profile[]
@@ -36,7 +35,6 @@ export const DecryptPostSuccess = React.memo(function DecryptPostSuccess(props: 
     const {
         data: { content, signatureVerifyResult },
         profiles,
-        postIdentifier,
     } = props
     const classes = useStylesExtends(useSuccessStyles(), props)
     const { t } = useI18N()
@@ -71,11 +69,7 @@ export const DecryptPostSuccess = React.memo(function DecryptPostSuccess(props: 
         <>
             {shareMenu.ShareMenu}
             <AdditionalContent
-                metadataRenderer={{
-                    after: (props) => (
-                        <SuccessDecryptionPlugin postIdentifier={postIdentifier} message={props.message} />
-                    ),
-                }}
+                metadataRenderer={{ after: SuccessDecryptionPlugin }}
                 headerActions={rightActions}
                 title={t('decrypted_postbox_title')}
                 message={content}
@@ -88,11 +82,27 @@ export const DecryptPostSuccess = React.memo(function DecryptPostSuccess(props: 
 function SuccessDecryptionPlugin(props: PluginSuccessDecryptionComponentProps) {
     return (
         <>
-            {[...PluginUI.values()]
-                .filter((x) => x.shouldActivateInSuccessDecryption(props.message))
-                .map((X) => (
-                    <X.SuccessDecryptionComponent key={X.identifier} {...props} />
-                ))}
+            {[...PluginUI.values()].map((x) => (
+                <PluginSuccessDecryptionPostInspectorForEach key={x.identifier} pluginConfig={x} {...props} />
+            ))}
         </>
     )
+}
+
+function PluginSuccessDecryptionPostInspectorForEach(props: { pluginConfig: PluginConfig; message: TypedMessage }) {
+    const { pluginConfig, message } = props
+    const ref = React.useRef<HTMLDivElement>(null)
+    const F = pluginConfig.successDecryptionInspector
+    const post = usePostInfo()
+    React.useEffect(() => {
+        if (!ref.current || !F || typeof F === 'function') return
+        return F.init(post, { message }, ref.current)
+    }, [F, post, message])
+    if (!F) return null
+    if (typeof F === 'function') return <F {...post} message={message} />
+    return <div ref={ref} />
+}
+
+interface PluginSuccessDecryptionComponentProps {
+    message: TypedMessage
 }
