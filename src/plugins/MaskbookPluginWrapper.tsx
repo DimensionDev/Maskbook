@@ -45,7 +45,7 @@ export default function MaskbookPluginWrapper(props: PluginWrapperProps) {
     const theme = getActivatedUI().useTheme()
     return (
         <ThemeProvider theme={theme}>
-            <div className={classes.card} style={{ width }}>
+            <div className={classes.card} style={{ width }} onClick={(ev) => ev.stopPropagation()}>
                 <div className={classes.header}>
                     <MaskbookIcon className={classes.icon}></MaskbookIcon>
                     <div className={classes.title}>
