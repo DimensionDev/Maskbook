@@ -1,6 +1,7 @@
 import { web3 } from './web3'
 import type { TransactionObject, Tx } from './contracts/types'
 import type { TransactionConfig, TransactionReceipt } from 'web3-core'
+import Services from '../../extension/service'
 
 interface TxListeners {
     onTransactionHash?: (hash: string) => void
@@ -11,15 +12,20 @@ interface TxListeners {
 }
 
 export async function sendTx<R, T extends TransactionObject<R>>(txObject: T, tx: Tx = {}, listeners: TxListeners = {}) {
-    return Promise.all([txObject.estimateGas(tx), web3.eth.getGasPrice()])
-        .then(([gas, gasPrice]) =>
+    if (!tx.from) throw new Error('cannot find address')
+    return Promise.all([txObject.estimateGas(tx), web3.eth.getGasPrice(), Services.Nonce.getNonce(tx.from)])
+        .then(([gas, gasPrice, nonce]) =>
             txObject
                 .send({
                     ...tx,
                     gas,
                     gasPrice,
+                    nonce,
                 })
-                .on('transactionHash', (hash: string) => listeners?.onTransactionHash?.(hash))
+                .on('transactionHash', (hash: string) => {
+                    Services.Nonce.commitNonce(web3.utils.toHex(tx.from!))
+                    listeners?.onTransactionHash?.(hash)
+                })
                 .on('receipt', (receipt: TransactionReceipt) => listeners?.onReceipt?.(receipt))
                 .on('confirmation', (no: number, receipt: TransactionReceipt) =>
                     listeners?.onConfirmation?.(no, receipt),
@@ -30,10 +36,20 @@ export async function sendTx<R, T extends TransactionObject<R>>(txObject: T, tx:
 }
 
 export async function sendTxConfigForTxHash(config: TransactionConfig) {
+    if (!config.from) throw new Error('cannot find address')
     return new Promise<string>(async (resolve, reject) =>
-        web3.eth.sendTransaction(config, (err, hash) => {
-            if (err) reject(err)
-            else resolve(hash)
-        }),
+        web3.eth.sendTransaction(
+            {
+                ...config,
+                nonce: await Services.Nonce.getNonce(web3.utils.toHex(config.from!)),
+            },
+            (err, hash) => {
+                if (err) reject(err)
+                else {
+                    Services.Nonce.commitNonce(web3.utils.toHex(config.from!))
+                    resolve(hash)
+                }
+            },
+        ),
     )
 }

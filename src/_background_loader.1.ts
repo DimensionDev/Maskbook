@@ -11,6 +11,7 @@ import * as UserGroupService from './extension/background-script/UserGroupServic
 import * as SteganographyService from './extension/background-script/SteganographyService'
 import * as PluginService from './extension/background-script/PluginService'
 import * as HelperService from './extension/background-script/HelperService'
+import * as NonceService from './extension/background-script/NonceService'
 import { decryptFromMessageWithProgress } from './extension/background-script/CryptoServices/decryptFrom'
 
 Object.assign(window, {
@@ -21,6 +22,7 @@ Object.assign(window, {
     UserGroupService,
     PluginService,
     HelperService,
+    NonceService,
 })
 Object.assign(window, {
     ServicesWithProgress: {

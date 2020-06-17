@@ -94,7 +94,7 @@ export async function createRedPacket(packet: createRedPacketInit): Promise<{ pa
     let erc20_token_address: string | undefined = undefined
     if (packet.token_type === EthereumTokenType.ERC20) {
         if (!packet.erc20_token) throw new Error('ERC20 token should have erc20_token field')
-        const res = await getWalletProvider().approveERC20Token(
+        const res = await getWalletProvider().approve(
             packet.sender_address,
             getNetworkSettings().happyRedPacketContractAddress,
             packet.erc20_token,

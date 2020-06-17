@@ -6,7 +6,7 @@ import { assert } from './red-packet-fsm'
 import { PluginMessageCenter } from '../PluginMessages'
 import { HDKey, EthereumAddress } from 'wallet.ts'
 import * as bip39 from 'bip39'
-import { walletAPI } from './api'
+import { walletAPI, erc20API } from './api'
 import { ERC20TokenPredefinedData, OKB_ADDRESS, DAI_ADDRESS } from './erc20'
 import { memoizePromise } from '../../utils/memoize'
 import { buf2hex } from './web3'
@@ -19,7 +19,10 @@ import { sideEffect } from '../../utils/side-effects'
 // coinType = ether
 const path = "m/44'/60'/0'/0/0"
 export function getWalletProvider() {
-    return walletAPI
+    return {
+        ...walletAPI,
+        ...erc20API,
+    }
 }
 const memoGetWalletBalance = memoizePromise(
     async (addr: string) => {
@@ -31,7 +34,7 @@ const memoGetWalletBalance = memoizePromise(
 const memoQueryERC20Token = memoizePromise(
     (addr: string, erc20Addr: string) =>
         getWalletProvider()
-            .queryERC20TokenBalance(addr, erc20Addr)
+            .balanceOf(addr, erc20Addr)
             .then((balance) => onWalletERC20TokenBalanceUpdated(addr, erc20Addr, balance))
             .catch(noop),
     (x, y) => `${x},${y}`,
@@ -245,7 +248,7 @@ export async function walletAddERC20Token(
     user_defined: boolean,
 ) {
     const bal = await getWalletProvider()
-        .queryERC20TokenBalance(walletAddress, token.address)
+        .balanceOf(walletAddress, token.address)
         .catch(() => undefined)
 
     const t = createTransaction(await createWalletDBAccess(), 'readwrite')('ERC20Token', 'Wallet')
