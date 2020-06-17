@@ -81,14 +81,18 @@ export const postsImageSelector = (node: HTMLElement) =>
         ].join(),
     )
 export const postsContentSelector = () =>
-    querySelectorAll('.tweet-text > div') // both timeline and detail page for legacy twitter
-        .concat(
-            querySelectorAll('article').map((x) => {
-                const textContent = x.querySelector('[lang]')
-                const detailNoContent = x.querySelector('[role="group"]')?.parentElement?.firstElementChild
-                return (textContent ?? detailNoContent) as HTMLElement | undefined
-            }), // both timeline and detail page for new twitter,
-        )
+    querySelectorAll(
+        [
+            '.tweet-text > div', // both timeline and detail page for legacy twitter
+            '[data-testid="tweet"] + div > div:first-child', // detail page for new twitter
+            '[data-testid="tweet"] + div [role="blockquote"] div[lang]', // quoted tweet in detail page for new twitter
+            '[data-testid="tweet"] > div:last-child [role="blockquote"] div[lang]', // quoted tweet in timeline page for new twitter
+        ].join(),
+    ).concat(
+        querySelectorAll('[data-testid="tweet"] > div:last-child').map(
+            (x) => x.querySelector('[role="group"]')?.parentElement?.firstElementChild as HTMLDivElement | undefined,
+        ), // timeline page for new twitter
+    )
 
 const base = querySelector<HTMLScriptElement>('#react-root + script')
 const handle = /"screen_name":"(.*?)"/
