@@ -5,10 +5,8 @@ import { web3 } from './web3'
 import { onClaimResult, onCreationResult, onExpired, onRefundResult } from './red-packet-fsm'
 import HappyRedPacketABI from './contracts/happy-red-packet/HappyRedPacket.json'
 import ERC20ABI from './contracts/splitter/ERC20.json'
-import SplitterABI from './contracts/splitter/Splitter.json'
 import BulkCheckoutABI from './contracts/bulk-checkout/BulkCheckout.json'
 import type { Erc20 as ERC20 } from './contracts/splitter/ERC20'
-import type { Splitter } from './contracts/splitter/Splitter'
 import type { BulkCheckout } from './contracts/bulk-checkout/BulkCheckout'
 import type { HappyRedPacket } from './contracts/happy-red-packet/HappyRedPacket'
 import type { CheckRedPacketAvailabilityResult, CreateRedPacketResult, DonateResult } from './types'
@@ -26,10 +24,6 @@ function createRedPacketContract(address: string) {
 
 function createERC20Contract(address: string) {
     return (new web3.eth.Contract(ERC20ABI as AbiItem[], address) as unknown) as ERC20
-}
-
-function createSplitterContract(address: string) {
-    return (new web3.eth.Contract(SplitterABI as AbiItem[], address) as unknown) as Splitter
 }
 
 function createBulkCheckoutContract(address: string) {
@@ -583,184 +577,6 @@ export const gitcoinAPI = {
                         resolve({
                             donation_transaction_hash: txHash,
                             donation_value: donationTotal,
-                        })
-                    },
-                    onTransactionError: reject,
-                    onEstimateError: reject,
-                },
-            )
-        })
-    },
-
-    /**
-     * Fund a gitcoin grant
-     * @param donorAddress The account address of donor
-     * @param maintainerAddress The account address of gitcoin maintainer
-     * @param donationAddress The account address of project owner
-     * @param donationTotal The total amount of donation value
-     * @param erc20Address An optional ERC20 contract address when donate with ERC20 token
-     * @param tipPercentage For each donation of gitcoin grant, a small tip will be transfered to the gitcoin maintainer's account
-     */
-    async fund(
-        donorAddress: string,
-        maintainerAddress: string,
-        donationAddress: string,
-        donationTotal: BigNumber,
-        erc20Address?: string,
-        tipPercentage: number = 5,
-    ): Promise<DonateResult> {
-        const tipAmount = new BigNumber(tipPercentage / 100).multipliedBy(donationTotal)
-        const grantAmount = donationTotal.minus(tipAmount)
-
-        // validate tip percentage
-        if (tipPercentage < 0 || tipPercentage > 99)
-            throw new Error('Gitcoin contribution amount must be between 0% and 99%')
-
-        // validate amount
-        if (!grantAmount.isPositive()) throw new Error('Cannot have negative donation amounts')
-
-        // donate with erc20 token
-        if (erc20Address) {
-            const {
-                fund_value: donation_value,
-                fund_hash: donation_transaction_hash,
-            } = await gitcoinAPI.splitFundERC20(
-                donorAddress,
-                donationAddress,
-                maintainerAddress,
-                grantAmount,
-                tipAmount,
-                erc20Address,
-            )
-            return {
-                donation_value,
-                donation_transaction_hash,
-            }
-        } else {
-            const {
-                fund_first_hash: donation_transaction_hash,
-                fund_second_hash: tip_transaction_hash,
-            } = await gitcoinAPI.splitFundEther(
-                donorAddress,
-                donationAddress,
-                maintainerAddress,
-                grantAmount,
-                tipAmount,
-            )
-            if (!donation_transaction_hash) {
-                throw new Error('Fail to fund the grant')
-            }
-            if (tipAmount.isPositive()) {
-                return {
-                    donation_value: grantAmount,
-                    donation_transaction_hash,
-                    tip_value: tipAmount,
-                    tip_transaction_hash,
-                }
-            }
-            return {
-                donation_value: grantAmount,
-                donation_transaction_hash,
-            }
-        }
-    },
-    /**
-     * Split fund Ether
-     * @param ownerAddress The account address of payer
-     * @param toFirst The account address of the first payee
-     * @param toSecond The account address of the second payee
-     * @param valueFirst How many ERC20 tokens to the first payee
-     * @param valueSecond How many ERC20 token to the second payee
-     */
-    async splitFundEther(
-        ownerAddress: string,
-        toFirst: string,
-        toSecond: string,
-        valueFirst: BigNumber,
-        valueSecond: BigNumber,
-    ) {
-        // check balance
-        const fundValue = valueFirst.plus(valueSecond)
-        const balance = await web3.eth.getBalance(ownerAddress)
-        if (fundValue.gt(new BigNumber(balance))) throw new Error('Insufficient ETH balance to complete donation')
-
-        const gasPrice = await web3.eth.getGasPrice()
-        let fund_first_hash
-        let fund_second_hash
-
-        if (valueFirst.isPositive()) {
-            fund_first_hash = await sendTxConfigForTxHash({
-                from: ownerAddress,
-                to: toFirst,
-                value: valueFirst.toString(),
-                gas: 100000,
-                gasPrice,
-            })
-        }
-
-        if (valueSecond.isPositive()) {
-            fund_second_hash = await sendTxConfigForTxHash({
-                from: ownerAddress,
-                to: toSecond,
-                value: valueSecond.toString(),
-                gas: 100000,
-                gasPrice,
-            })
-        }
-        return {
-            fund_first_hash,
-            fund_second_hash,
-        }
-    },
-    /**
-     * Split fund ERC20 token
-     * @param ownerAddress The account address of payer
-     * @param toFirst The account address of the first payee
-     * @param toSecond The account address of the second payee
-     * @param valueFirst How many ERC20 tokens to the first payee
-     * @param valueSecond How many ERC20 token to the second payee
-     * @param erc20Address The contract address of specific ERC20 token
-     */
-    async splitFundERC20(
-        ownerAddress: string,
-        toFirst: string,
-        toSecond: string,
-        valueFirst: BigNumber,
-        valueSecond: BigNumber,
-        erc20Address: string,
-        receipt = false,
-    ) {
-        const contract = createSplitterContract(getNetworkSettings().splitterContractAddress)
-        return new Promise<{
-            fund_hash: string
-            fund_value: BigNumber
-        }>((resolve, reject) => {
-            let txHash = ''
-            sendTx(
-                contract.methods.splitTransfer(
-                    toFirst,
-                    toSecond,
-                    valueFirst.toString(),
-                    valueSecond.toString(),
-                    erc20Address,
-                ),
-                { from: ownerAddress },
-                {
-                    onTransactionHash(hash) {
-                        txHash = hash
-                    },
-                    onReceipt() {
-                        if (receipt) {
-                            resolve({
-                                fund_hash: txHash,
-                                fund_value: valueFirst.plus(valueSecond),
-                            })
-                        }
-                    },
-                    onConfirmation() {
-                        resolve({
-                            fund_hash: txHash,
-                            fund_value: valueFirst.plus(valueSecond),
                         })
                     },
                     onTransactionError: reject,
