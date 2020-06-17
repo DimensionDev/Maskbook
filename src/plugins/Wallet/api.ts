@@ -6,16 +6,19 @@ import { onClaimResult, onCreationResult, onExpired, onRefundResult } from './re
 import HappyRedPacketABI from './contracts/happy-red-packet/HappyRedPacket.json'
 import ERC20ABI from './contracts/splitter/ERC20.json'
 import SplitterABI from './contracts/splitter/Splitter.json'
+import BulkCheckoutABI from './contracts/bulk-checkout/BulkCheckout.json'
 import type { Erc20 as ERC20 } from './contracts/splitter/ERC20'
 import type { Splitter } from './contracts/splitter/Splitter'
+import type { BulkCheckout } from './contracts/bulk-checkout/BulkCheckout'
 import type { HappyRedPacket } from './contracts/happy-red-packet/HappyRedPacket'
 import type { CheckRedPacketAvailabilityResult, CreateRedPacketResult, DonateResult } from './types'
 import { EthereumTokenType, EthereumNetwork, RedPacketJSONPayload } from './database/types'
 import { asyncTimes, pollingTask } from '../../utils/utils'
 import { createWalletDBAccess } from './database/Wallet.db'
 import { createTransaction } from '../../database/helpers/openDB'
-import { sendTx, sendTxConfigForTxHash } from './tx'
+import { sendTx } from './tx'
 import { getNetworkSettings } from './UI/Developer/EthereumNetworkSettings'
+import { GITCOIN_ETH_ADDRESS, USDT_ADDRESS, UDDT_RINKEBY_ADDRESS } from './erc20'
 
 function createRedPacketContract(address: string) {
     return (new web3.eth.Contract(HappyRedPacketABI as AbiItem[], address) as unknown) as HappyRedPacket
@@ -27,6 +30,10 @@ function createERC20Contract(address: string) {
 
 function createSplitterContract(address: string) {
     return (new web3.eth.Contract(SplitterABI as AbiItem[], address) as unknown) as Splitter
+}
+
+function createBulkCheckoutContract(address: string) {
+    return (new web3.eth.Contract(BulkCheckoutABI as AbiItem[], address) as unknown) as BulkCheckout
 }
 
 export const redPacketAPI = {
@@ -133,12 +140,8 @@ export const redPacketAPI = {
                             create_transaction_hash: txHash,
                         })
                     },
-                    onTransactionError(err) {
-                        reject(err)
-                    },
-                    onEstimateError(err) {
-                        reject(err)
-                    },
+                    onTransactionError: reject,
+                    onEstimateError: reject,
                 },
             )
         })
@@ -174,12 +177,8 @@ export const redPacketAPI = {
                             claim_transaction_hash: txHash,
                         })
                     },
-                    onTransactionError(err) {
-                        reject(err)
-                    },
-                    onEstimateError(err) {
-                        reject(err)
-                    },
+                    onTransactionError: reject,
+                    onEstimateError: reject,
                 },
             )
         })
@@ -377,12 +376,8 @@ export const redPacketAPI = {
                             refund_transaction_hash: txHash,
                         })
                     },
-                    onTransactionError(err) {
-                        reject(err)
-                    },
-                    onEstimateError(err) {
-                        reject(err)
-                    },
+                    onTransactionError: reject,
+                    onEstimateError: reject,
                 },
             )
         })
@@ -427,40 +422,69 @@ export const walletAPI = {
         const value = await web3.eth.getBalance(address)
         return new BigNumber(value)
     },
-    async queryERC20TokenBalance(walletAddress: string, tokenAddress: string): Promise<BigNumber> {
-        const erc20Contract = createERC20Contract(tokenAddress)
-        const value = await erc20Contract.methods.balanceOf(walletAddress).call()
+}
+
+export const erc20API = {
+    dataSource: 'real' as const,
+    async balanceOf(address: string, erc20TokenAddress: string) {
+        const erc20Contract = createERC20Contract(erc20TokenAddress)
+        const value = await erc20Contract.methods.balanceOf(address).call()
         return new BigNumber(value)
     },
-    async approveERC20Token(
-        senderAddress: string,
+
+    async allowance(ownerAddress: string, spenderAddress: string, erc20TokenAddress: string) {
+        const erc20Contract = createERC20Contract(erc20TokenAddress)
+        const value = await erc20Contract.methods.allowance(ownerAddress, spenderAddress).call()
+        return new BigNumber(value)
+    },
+
+    async approve(
+        ownerAddress: string,
         spenderAddress: string,
         erc20TokenAddress: string,
         amount: BigNumber,
+        receipt = false,
     ) {
         const erc20Contract = createERC20Contract(erc20TokenAddress)
 
         // check balance
-        const balance = await erc20Contract.methods.balanceOf(senderAddress).call()
-        if (new BigNumber(balance).lt(amount)) {
-            throw new Error('You do not have enough tokens to make this transaction.')
-        }
+        const balance = await erc20Contract.methods.balanceOf(ownerAddress).call()
+        if (new BigNumber(balance).lt(amount)) throw new Error('You do not have enough tokens to complete donation.')
 
+        // check allowance
+        if (amount.gt(0)) {
+            const allowance_ = await erc20Contract.methods.allowance(ownerAddress, spenderAddress).call()
+            const allowance = new BigNumber(allowance_)
+
+            // allowance is enough
+            if (allowance.gte(amount)) {
+                return Promise.resolve({
+                    erc20_approve_transaction_hash: '',
+                    erc20_approve_value: amount,
+                })
+            }
+            // reset allowance to 0 for USDT
+            if ((allowance.gt(0) && erc20TokenAddress === USDT_ADDRESS) || erc20TokenAddress === UDDT_RINKEBY_ADDRESS) {
+                await this.approve(ownerAddress, spenderAddress, erc20TokenAddress, new BigNumber(0), receipt)
+            }
+        }
         return new Promise<{ erc20_approve_transaction_hash: string; erc20_approve_value: BigNumber }>(
             (resolve, reject) => {
                 let txHash = ''
                 sendTx(
                     erc20Contract.methods.approve(spenderAddress, amount.toString()),
-                    { from: senderAddress },
+                    { from: ownerAddress },
                     {
                         onTransactionHash(hash) {
                             txHash = hash
                         },
                         onReceipt() {
-                            resolve({
-                                erc20_approve_transaction_hash: txHash,
-                                erc20_approve_value: amount,
-                            })
+                            if (receipt) {
+                                resolve({
+                                    erc20_approve_transaction_hash: txHash,
+                                    erc20_approve_value: amount,
+                                })
+                            }
                         },
                         onConfirmation() {
                             resolve({
@@ -468,21 +492,105 @@ export const walletAPI = {
                                 erc20_approve_value: amount,
                             })
                         },
-                        onTransactionError(err) {
-                            reject(err)
-                        },
-                        onEstimateError(err) {
-                            reject(err)
-                        },
+                        onTransactionError: reject,
+                        onEstimateError: reject,
                     },
                 )
             },
         )
     },
 }
-
 export const gitcoinAPI = {
     dataSource: 'real' as const,
+
+    /**
+     * Bulk checkout donation
+     * @param donorAddress The account address of donor
+     * @param maintainerAddress The account address of gitcoin maintainer
+     * @param donationAddress The account address of project owner
+     * @param donationTotal The total amount of donation value
+     * @param erc20Address An optional ERC20 contract address when donate with ERC20 token
+     * @param tipPercentage For each donation of gitcoin grant, a small tip will be transfered to the gitcoin maintainer's account
+     */
+    donate(
+        donorAddress: string,
+        maintainerAddress: string,
+        donationAddress: string,
+        donationTotal: BigNumber,
+        erc20Address?: string,
+        tipPercentage: number = 5,
+        receipt = false,
+    ) {
+        const tipAmount = new BigNumber(tipPercentage / 100).multipliedBy(donationTotal)
+        const grantAmount = donationTotal.minus(tipAmount)
+
+        // validate tip percentage
+        if (tipPercentage < 0 || tipPercentage > 99)
+            throw new Error('Gitcoin contribution amount must be between 0% and 99%')
+
+        // validate amount
+        if (!grantAmount.isPositive()) throw new Error('Cannot have negative donation amounts')
+
+        const contract = createBulkCheckoutContract(getNetworkSettings().bulkCheckoutContractAddress)
+        const donations: {
+            token: string
+            amount: BigNumber
+            dest: string
+        }[] = [
+            {
+                token: erc20Address ?? GITCOIN_ETH_ADDRESS,
+                amount: tipAmount,
+                dest: maintainerAddress,
+            },
+            {
+                token: erc20Address ?? GITCOIN_ETH_ADDRESS,
+                amount: grantAmount,
+                dest: donationAddress,
+            },
+        ]
+        return new Promise<DonateResult>((resolve, reject) => {
+            let txHash = ''
+            sendTx(
+                contract.methods.donate(
+                    donations.map((x) => ({
+                        ...x,
+                        amount: x.amount.toString(),
+                    })),
+                ),
+                {
+                    from: donorAddress,
+                    value: donations
+                        .reduce(
+                            (accumulator: BigNumber, { token, amount }) =>
+                                accumulator.plus(token === GITCOIN_ETH_ADDRESS ? amount : 0),
+                            new BigNumber(0),
+                        )
+                        .toString(),
+                },
+                {
+                    onTransactionHash(hash) {
+                        txHash = hash
+                    },
+                    onReceipt() {
+                        if (receipt) {
+                            resolve({
+                                donation_transaction_hash: txHash,
+                                donation_value: donationTotal,
+                            })
+                        }
+                    },
+                    onConfirmation() {
+                        resolve({
+                            donation_transaction_hash: txHash,
+                            donation_value: donationTotal,
+                        })
+                    },
+                    onTransactionError: reject,
+                    onEstimateError: reject,
+                },
+            )
+        })
+    },
 
     /**
      * Fund a gitcoin grant
@@ -504,10 +612,12 @@ export const gitcoinAPI = {
         const tipAmount = new BigNumber(tipPercentage / 100).multipliedBy(donationTotal)
         const grantAmount = donationTotal.minus(tipAmount)
 
+        // validate tip percentage
+        if (tipPercentage < 0 || tipPercentage > 99)
+            throw new Error('Gitcoin contribution amount must be between 0% and 99%')
+
         // validate amount
-        if (!grantAmount.isPositive()) {
-            throw new Error('Invalid amount')
-        }
+        if (!grantAmount.isPositive()) throw new Error('Cannot have negative donation amounts')
 
         // donate with erc20 token
         if (erc20Address) {
@@ -556,28 +666,31 @@ export const gitcoinAPI = {
     },
     /**
      * Split fund Ether
-     * @param senderAddress The account address of payer
+     * @param ownerAddress The account address of payer
      * @param toFirst The account address of the first payee
      * @param toSecond The account address of the second payee
      * @param valueFirst How many ERC20 tokens to the first payee
      * @param valueSecond How many ERC20 token to the second payee
      */
     async splitFundEther(
-        senderAddress: string,
+        ownerAddress: string,
         toFirst: string,
         toSecond: string,
         valueFirst: BigNumber,
         valueSecond: BigNumber,
     ) {
-        const nonce = await web3.eth.getTransactionCount(senderAddress)
+        // check balance
+        const fundValue = valueFirst.plus(valueSecond)
+        const balance = await web3.eth.getBalance(ownerAddress)
+        if (fundValue.gt(new BigNumber(balance))) throw new Error('Insufficient ETH balance to complete donation')
+
         const gasPrice = await web3.eth.getGasPrice()
         let fund_first_hash
         let fund_second_hash
 
         if (valueFirst.isPositive()) {
             fund_first_hash = await sendTxConfigForTxHash({
-                nonce: nonce,
-                from: senderAddress,
+                from: ownerAddress,
                 to: toFirst,
                 value: valueFirst.toString(),
                 gas: 100000,
@@ -587,8 +700,7 @@ export const gitcoinAPI = {
 
         if (valueSecond.isPositive()) {
             fund_second_hash = await sendTxConfigForTxHash({
-                nonce: nonce + 1,
-                from: senderAddress,
+                from: ownerAddress,
                 to: toSecond,
                 value: valueSecond.toString(),
                 gas: 100000,
@@ -602,7 +714,7 @@ export const gitcoinAPI = {
     },
     /**
      * Split fund ERC20 token
-     * @param senderAddress The account address of payer
+     * @param ownerAddress The account address of payer
      * @param toFirst The account address of the first payee
      * @param toSecond The account address of the second payee
      * @param valueFirst How many ERC20 tokens to the first payee
@@ -610,12 +722,13 @@ export const gitcoinAPI = {
      * @param erc20Address The contract address of specific ERC20 token
      */
     async splitFundERC20(
-        senderAddress: string,
+        ownerAddress: string,
         toFirst: string,
         toSecond: string,
         valueFirst: BigNumber,
         valueSecond: BigNumber,
         erc20Address: string,
+        receipt = false,
     ) {
         const contract = createSplitterContract(getNetworkSettings().splitterContractAddress)
         return new Promise<{
@@ -631,23 +744,27 @@ export const gitcoinAPI = {
                     valueSecond.toString(),
                     erc20Address,
                 ),
-                { from: senderAddress },
+                { from: ownerAddress },
                 {
                     onTransactionHash(hash) {
                         txHash = hash
                     },
                     onReceipt() {
+                        if (receipt) {
+                            resolve({
+                                fund_hash: txHash,
+                                fund_value: valueFirst.plus(valueSecond),
+                            })
+                        }
+                    },
+                    onConfirmation() {
                         resolve({
                             fund_hash: txHash,
                             fund_value: valueFirst.plus(valueSecond),
                         })
                     },
-                    onTransactionError(err) {
-                        reject(err)
-                    },
-                    onEstimateError(err) {
-                        reject(err)
-                    },
+                    onTransactionError: reject,
+                    onEstimateError: reject,
                 },
             )
         })

@@ -1,5 +1,5 @@
 import { BigNumber } from 'bignumber.js'
-import { gitcoinAPI, walletAPI } from './api'
+import { gitcoinAPI, walletAPI, erc20API } from './api'
 import {
     GitcoinDonationPayload,
     GitcoinDonationRecord,
@@ -17,30 +17,30 @@ function getProvider() {
     return {
         ...gitcoinAPI,
         ...walletAPI,
+        ...erc20API,
     }
 }
 
 export async function donateGrant(donation: GitcoinDonationPayload) {
-    const { networkType, gitcoinDonationAddress } = getNetworkSettings()
+    const { networkType, gitcoinMaintainerAddress } = getNetworkSettings()
     const { donor_address, donation_address, donation_total, token, token_type } = donation
 
-    let approved: _UnboxPromise<ReturnType<typeof walletAPI.approveERC20Token>> | undefined
+    let approved: _UnboxPromise<ReturnType<typeof erc20API.approve>> | undefined
 
     // approve splitter contract for spending erc20 token
     if (token_type === EthereumTokenType.ERC20) {
-        approved = await getProvider().approveERC20Token(
+        approved = await getProvider().approve(
             donor_address,
-            getNetworkSettings().splitterContractAddress,
+            getNetworkSettings().bulkCheckoutContractAddress,
             token?.address!,
-            // add approve buffer
-            new BigNumber(donation_total).plus(1e5),
+            new BigNumber(donation_total),
         )
     }
 
-    // fund
-    const funded = await getProvider().fund(
+    // donate
+    const donated = await getProvider().donate(
         donor_address,
-        gitcoinDonationAddress,
+        gitcoinMaintainerAddress,
         donation_address,
         donation_total,
         token?.address,
@@ -56,7 +56,7 @@ export async function donateGrant(donation: GitcoinDonationPayload) {
         token_type,
         erc20_token: token?.address,
         ...approved,
-        ...funded,
+        ...donated,
     }
     {
         const t = createTransaction(await createWalletDBAccess(), 'readwrite')('GitcoinDonation')
