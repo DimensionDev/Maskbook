@@ -4,6 +4,7 @@ import type { Payload } from '../utils/type-transform/Payload'
 import type { TypedMessage } from '../extension/background-script/CryptoServices/utils'
 import { Result, Err } from 'ts-results'
 import { ObservableSet, ObservableMap } from '../utils/ObservableMapSet'
+import { parseURL } from '../utils/utils'
 export abstract class PostInfo {
     constructor() {
         const calc = () => {
@@ -14,6 +15,12 @@ export abstract class PostInfo {
         }
         this.postID.addListener(calc)
         this.postBy.addListener(calc)
+
+        // update in-post links automatically
+        this.postContent.addListener((post) => {
+            this.postMentionedLinks.clear()
+            this.postMentionedLinks.add(...parseURL(post))
+        })
     }
     readonly nickname = new ValueRef<string | null>(null)
     readonly avatarURL = new ValueRef<string | null>(null)
@@ -32,8 +39,11 @@ export abstract class PostInfo {
     abstract readonly rootNodeProxy: DOMProxy
     // TODO: Implement this
     readonly postMetadataImages = new ObservableSet<HTMLImageElement>()
-    // TODO: add in-post links
-    readonly postMetadataMentionedLinks = new ObservableMap<HTMLElement, string>()
+    /** The links appears in the post content */
+    readonly postMentionedLinks = new ObservableSet<string>()
+    /** The links does not appear in the post content */
+    readonly postMetadataMentionedLinks = new ObservableMap<HTMLAnchorElement, string>()
+    readonly postMetadataMentionedLinksEncrypted = new ObservableMap<unknown, string>()
 }
 
 export const emptyPostInfo: PostInfo = new (class extends PostInfo {

@@ -29,9 +29,8 @@ export const GitcoinPluginDefine: PluginConfig = {
         return <Renderer url={link} />
     },
     postInspector: function Component(): JSX.Element | null {
-        const post = usePostInfoDetails('postContent')
         const link = usePostInfoDetails('postMetadataMentionedLinks')
-            .concat(useMemo(() => parseURL(post), [post]))
+            .concat(usePostInfoDetails('postMentionedLinks'))
             .find(isGitcoin)
         if (!link) return null
         return <Renderer url={link} />

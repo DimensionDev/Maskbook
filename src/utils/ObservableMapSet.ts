@@ -37,7 +37,7 @@ export class ObservableMap<K, V> extends Map<K, V> {
 export class ObservableSet<T> extends Set<T> {
     declare __brand: 'ObservableSet'
 
-    event = new Emitter<{ delete: [T]; add: [T]; clear: [] }>()
+    event = new Emitter<{ delete: [T]; add: [T[]]; clear: [] }>()
     clear() {
         super.clear()
         this.event.emit('clear')
@@ -47,9 +47,9 @@ export class ObservableSet<T> extends Set<T> {
         this.event.emit('delete', key)
         return _
     }
-    add(value: T) {
-        const _ = super.add(value)
+    add(...value: T[]) {
+        value.forEach((x) => super.add(x))
         this.event.emit('add', value)
-        return _
+        return this
     }
 }

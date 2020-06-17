@@ -19,8 +19,7 @@ export async function split_ec_k256_keypair_into_pub_priv(
 ): Promise<JsonWebKeyPair<EC_Public_JsonWebKey, EC_Private_JsonWebKey>> {
     const { d, ...pub } = key
     if (!d) throw new TypeError('split_ec_k256_keypair_into_pub_priv requires a private key (jwk.d)')
-    // @ts-ignore Do a force transform
     // TODO: maybe should do some extra check on properties
-    // @ts-expect-error
+    // @ts-expect-error Do a force transform
     return { privateKey: { ...key }, publicKey: pub }
 }

@@ -151,7 +151,6 @@ export async function createPersonaByMnemonic(
     const { privateKey, publicKey } = key
     const localKey = await deriveLocalKeyFromECDHKey(publicKey, mnemonic.words)
 
-    // TODO: move to plugin logic
     if (await isEmptyWallets()) {
         importNewWallet({
             name: null,
