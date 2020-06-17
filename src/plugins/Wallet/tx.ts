@@ -1,6 +1,5 @@
-import type { EventData } from 'web3-eth-contract'
 import { web3 } from './web3'
-import type { TransactionObject, Tx } from './contract/types'
+import type { TransactionObject, Tx } from './contracts/types'
 import type { TransactionConfig, TransactionReceipt } from 'web3-core'
 
 interface TxListeners {
