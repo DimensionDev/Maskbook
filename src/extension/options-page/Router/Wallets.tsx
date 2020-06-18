@@ -3,18 +3,26 @@ import DashboardRouterContainer from './Container'
 import { Button, Typography, Box, IconButton, List } from '@material-ui/core'
 import { makeStyles, createStyles, Theme, ThemeProvider } from '@material-ui/core/styles'
 
-import AddIcon from '@material-ui/icons/Add'
+import AddCircleIcon from '@material-ui/icons/AddCircle'
 import MoreVertOutlinedIcon from '@material-ui/icons/MoreVertOutlined'
+import HistoryIcon from '@material-ui/icons/History'
 
 import { WalletItem } from '../DashboardComponents/WalletItem'
 import { WalletRecord } from '../../../plugins/Wallet/database/types'
 import { TokenListItem } from '../DashboardComponents/TokenListItem'
+import { useModal } from '../Dialog/Base'
+import {
+    DashboardWalletImportDialog,
+    DashboardWalletCreateDialog,
+    DashboardWalletAddTokenDialog,
+    DashboardWalletHistoryDialog,
+} from '../Dialog/Wallet'
 
-const useStyles = makeStyles(theme =>
+const useStyles = makeStyles((theme) =>
     createStyles({
         wrapper: {
             display: 'flex',
-            height: '100%',
+            flex: 1,
         },
         list: {
             width: '251px',
@@ -27,9 +35,18 @@ const useStyles = makeStyles(theme =>
             width: '100%',
             overflow: 'auto',
             flex: '1 1 auto',
+            display: 'flex',
+            flexDirection: 'column',
         },
         title: {
-            flex: '1',
+            flex: 1,
+        },
+        tokenList: {
+            flex: 1,
+        },
+        footer: {
+            flex: 0,
+            margin: theme.spacing(1),
         },
     }),
 )
@@ -64,16 +81,21 @@ const walletTheme = (theme: Theme): Theme => ({
 })
 
 export default function DashboardWalletsRouter() {
+    const [walletImport, openWalletImport] = useModal(DashboardWalletImportDialog)
+    const [walletCreate, openWalletCreate] = useModal(DashboardWalletCreateDialog)
+    const [addToken, openAddToken] = useModal(DashboardWalletAddTokenDialog)
+    const [walletHistory, oepnWalletHistory] = useModal(DashboardWalletHistoryDialog)
+
     const actions = useMemo(
         () => [
-            <Button color="primary" variant="outlined">
+            <Button color="primary" variant="outlined" onClick={openWalletImport}>
                 Import
             </Button>,
-            <Button color="primary" variant="contained" endIcon={<AddIcon />}>
+            <Button color="primary" variant="contained" onClick={openWalletCreate} endIcon={<AddCircleIcon />}>
                 Create Wallet
             </Button>,
         ],
-        [],
+        [openWalletCreate, openWalletImport],
     )
     const classes = useStyles()
     const wallets: Partial<WalletRecord>[] = [fakeWallet, fakeWallet]
@@ -96,20 +118,33 @@ export default function DashboardWalletsRouter() {
                             <Typography className={classes.title} variant="h5">
                                 Details
                             </Typography>
-                            <Button variant="text" color="primary" startIcon={<AddIcon />}>
+                            <Button variant="text" color="primary" onClick={openAddToken} startIcon={<AddCircleIcon />}>
                                 Add Token
                             </Button>
                             <IconButton>
                                 <MoreVertOutlinedIcon />
                             </IconButton>
                         </Box>
-                        <List disablePadding>
+                        <List className={classes.tokenList} disablePadding>
                             <TokenListItem></TokenListItem>
                             <TokenListItem></TokenListItem>
                             <TokenListItem></TokenListItem>
                         </List>
+                        <div className={classes.footer}>
+                            <Button
+                                onClick={oepnWalletHistory}
+                                startIcon={<HistoryIcon />}
+                                variant="text"
+                                color="primary">
+                                History
+                            </Button>
+                        </div>
                     </div>
                 </div>
+                {walletImport}
+                {walletCreate}
+                {addToken}
+                {walletHistory}
             </DashboardRouterContainer>
         </ThemeProvider>
     )

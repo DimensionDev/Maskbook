@@ -145,15 +145,12 @@ function Dashboard() {
         document.body.style.backgroundColor = theme.palette.background.paper
     }, [theme])
 
-    const routers: [string, string, JSX.Element][] = [
+    const routers = ([
         ['Personas', '/personas/', <PeopleOutlinedIcon />],
-        /* without redpacket */
-        ...(webpackEnv.target === 'WKWebview'
-            ? []
-            : ([['Wallets', '/wallets/', <CreditCardIcon />]] as [string, string, JSX.Element][])),
+        webpackEnv.target === 'WKWebview' ? undefined! : (['Wallets', '/wallets/', <CreditCardIcon />] as const),
         ['Contacts', '/contacts/', <BookmarkBorderOutlinedIcon />],
         [t('settings'), '/settings/', <SettingsOutlinedIcon />],
-    ]
+    ] as const).filter((x) => x)
 
     const ref = useRef<HTMLDivElement>(null!)
 

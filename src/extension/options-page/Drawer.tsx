@@ -5,6 +5,8 @@ import { makeStyles, Theme, ThemeProvider, useTheme } from '@material-ui/core/st
 import { Link, useRouteMatch } from 'react-router-dom'
 
 import SentimentSatisfiedOutlinedIcon from '@material-ui/icons/SentimentSatisfiedOutlined'
+import { useModal } from './Dialog/Base'
+import { DashboardFeedbackDialog } from './Dialog/Feedback'
 
 const useStyles = makeStyles((theme) => ({
     drawer: {
@@ -66,7 +68,7 @@ const drawerTheme = (theme: Theme): Theme => ({
 })
 
 interface ResponsiveDrawerProps {
-    routers: [string, string, JSX.Element][]
+    routers: readonly (readonly [string, string, JSX.Element])[]
     exitDashboard: null | (() => void)
 }
 
@@ -77,6 +79,7 @@ function ResponsiveDrawer(props: ResponsiveDrawerProps) {
     const theme = useTheme()
 
     const { routers, exitDashboard } = props
+    const [feedback, openFeedback] = useModal(DashboardFeedbackDialog)
 
     return (
         <ThemeProvider theme={drawerTheme}>
@@ -101,11 +104,12 @@ function ResponsiveDrawer(props: ResponsiveDrawerProps) {
                     ))}
                 </List>
                 <List className={classes.drawerFeedback}>
-                    <ListItem button>
+                    <ListItem button onClick={openFeedback}>
                         <ListItemIcon children={<SentimentSatisfiedOutlinedIcon fontSize="small" />} />
                         <ListItemText className={classes.feedback} primary="Feedback" />
                     </ListItem>
                 </List>
+                {feedback}
             </nav>
         </ThemeProvider>
     )
