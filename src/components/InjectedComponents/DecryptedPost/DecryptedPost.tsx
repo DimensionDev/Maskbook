@@ -14,8 +14,8 @@ import { DecryptPostSuccess, DecryptPostSuccessProps } from './DecryptedPostSucc
 import { DecryptPostAwaitingProps, DecryptPostAwaiting } from './DecryptPostAwaiting'
 import { DecryptPostFailedProps, DecryptPostFailed } from './DecryptPostFailed'
 import { DecryptedPostDebug } from './DecryptedPostDebug'
-import { asyncIteratorWithResult } from '../../../utils/type-transform/asyncIteratorWithResult'
 import { usePostInfoDetails } from '../../DataSource/usePostInfo'
+import { asyncIteratorWithResult } from '../../../utils/type-transform/asyncIteratorHelpers'
 
 export interface DecryptPostProps {
     onDecrypted: (post: TypedMessage, raw: string) => void
