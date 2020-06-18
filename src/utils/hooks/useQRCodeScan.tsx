@@ -18,6 +18,7 @@ export function useQRCodeScan(
     onResult: (data: string) => void,
     onError: () => void,
 ) {
+    // TODO!: ? not work
     // ? Get video stream
     {
         const permission = useRequestCamera(isScanning)

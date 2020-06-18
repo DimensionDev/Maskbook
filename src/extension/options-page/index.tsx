@@ -54,7 +54,7 @@ function DashboardWithProvider() {
                     maxSnack={30}
                     anchorOrigin={{
                         vertical: 'top',
-                        horizontal: 'right',
+                        horizontal: 'center',
                     }}>
                     <Router>
                         <CssBaseline />

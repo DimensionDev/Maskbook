@@ -1,18 +1,17 @@
 import React, { useState, useRef } from 'react'
 import { makeStyles, createStyles } from '@material-ui/core/styles'
-import CardContent from '@material-ui/core/CardContent'
 import Typography from '@material-ui/core/Typography'
 import type { Persona } from '../../../database'
-import { Divider, TextField, Menu, MenuItem, Card } from '@material-ui/core'
+import { TextField, Menu, MenuItem, Card } from '@material-ui/core'
 import Services from '../../service'
 import MoreVertIcon from '@material-ui/icons/MoreVert'
 import { useSnackbar } from 'notistack'
 import { useColorProvider } from '../../../utils/theme'
 import { useI18N } from '../../../utils/i18n-next-ui'
-import { PersonaDeleteDialog, PersonaBackupDialog } from '../DashboardDialogs/Persona'
-import { DialogRouter } from '../DashboardDialogs/DialogBase'
 import ProfileBox from './ProfileBox'
 import type { ProfileIdentifier } from '../../../database/type'
+import { useModal } from '../Dialog/Base'
+import { DashboardPersonaBackupDialog, DashboardPersonaDeleteConfirmDialog } from '../Dialog/Persona'
 
 interface Props {
     persona: Persona
@@ -64,14 +63,8 @@ export default function PersonaCard({ persona }: Props) {
         })
     }
 
-    const [deletePersona, setDeletePersona] = useState(false)
-    const confirmDeletePersona = () => {
-        enqueueSnackbar(t('dashboard_item_deleted'), {
-            variant: 'default',
-        })
-    }
-
-    const [backupPersona, setBackupPersona] = useState(false)
+    const [deletePersona, openDeletePersona] = useModal(DashboardPersonaDeleteConfirmDialog, { persona })
+    const [backupPersona, openBackupPersona] = useModal(DashboardPersonaBackupDialog, { persona })
 
     const [anchorEl, setAnchorEl] = React.useState<null | Element>(null)
     const handleClick = (event: React.MouseEvent) => {
@@ -93,11 +86,6 @@ export default function PersonaCard({ persona }: Props) {
                 .then((newName) => Services.Identity.renamePersona(persona.identifier, newName))
     }, [persona.identifier, id, persona.nickname])
 
-    const dismissDialog = () => {
-        setBackupPersona(false)
-        setDeletePersona(false)
-    }
-
     return (
         <Card className={classes.card} elevation={2}>
             <Typography className={classes.header} variant="h5" component="h2" gutterBottom>
@@ -115,8 +103,8 @@ export default function PersonaCard({ persona }: Props) {
                             PaperProps={{ style: { minWidth: 100 } }}
                             onClose={handleClose}>
                             <MenuItem onClick={() => setRename(true)}>{t('rename')}</MenuItem>
-                            <MenuItem onClick={() => setBackupPersona(true)}>{t('dashboard_create_backup')}</MenuItem>
-                            <MenuItem onClick={() => setDeletePersona(true)} className={color.error}>
+                            <MenuItem onClick={openBackupPersona}>{t('dashboard_create_backup')}</MenuItem>
+                            <MenuItem onClick={openDeletePersona} className={color.error}>
                                 {t('dashboard_delete_persona')}
                             </MenuItem>
                         </Menu>
@@ -133,24 +121,8 @@ export default function PersonaCard({ persona }: Props) {
                 )}
             </Typography>
             <ProfileBox persona={persona} />
-            {deletePersona && (
-                <DialogRouter
-                    onExit={dismissDialog}
-                    children={
-                        <PersonaDeleteDialog
-                            onDecline={dismissDialog}
-                            onConfirm={confirmDeletePersona}
-                            persona={persona}
-                        />
-                    }
-                />
-            )}
-            {backupPersona && (
-                <DialogRouter
-                    onExit={dismissDialog}
-                    children={<PersonaBackupDialog onClose={dismissDialog} persona={persona} />}
-                />
-            )}
+            {deletePersona}
+            {backupPersona}
         </Card>
     )
 }
