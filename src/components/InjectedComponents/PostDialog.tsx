@@ -37,7 +37,7 @@ import {
     extractTextFromTypedMessage,
 } from '../../extension/background-script/CryptoServices/utils'
 import { formatBalance } from '../../plugins/Wallet/formatter'
-import { RedPacketTokenType } from '../../plugins/Wallet/database/types'
+import { EthereumTokenType } from '../../plugins/Wallet/database/types'
 import { isDAI, isOKB } from '../../plugins/Wallet/token'
 import { PluginRedPacketTheme } from '../../plugins/Wallet/theme'
 import { sleep } from '../../utils/utils'
@@ -342,7 +342,7 @@ export function PostDialog(props: PostDialogProps) {
                         metadata.ok &&
                         metadata.val &&
                         metadata.val.token &&
-                        metadata.val.token_type === RedPacketTokenType.erc20
+                        metadata.val.token_type === EthereumTokenType.ERC20
                     const isDai = isErc20 && metadata.ok && isDAI(metadata.val.token?.address ?? '')
                     const isOkb = isErc20 && metadata.ok && isOKB(metadata.val.token?.address ?? '')
 

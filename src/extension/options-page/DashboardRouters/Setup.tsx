@@ -40,15 +40,7 @@ import { RestoreFromBackupBox } from '../DashboardComponents/RestoreFromBackupBo
 import { DatabaseRecordType, DatabasePreviewCard } from '../DashboardComponents/DatabasePreviewCard'
 import { RestoreFromQRCodeCameraBox } from '../DashboardComponents/RestoreFromQRCodeCameraBox'
 import { sleep } from '../../../utils/utils'
-
-export enum SetupStep {
-    ConsentDataCollection = 'consent-data-collection',
-    CreatePersona = 'create-persona',
-    ConnectNetwork = 'connect-network',
-    RestoreDatabase = 'restore-database',
-    RestoreDatabaseAdvance = 'restore-database-advance',
-    RestoreDatabaseConfirmation = 'restore-database-confirmation',
-}
+import { SetupStep } from '../SetupStep'
 
 //#region setup form
 const useSetupFormSetyles = makeStyles((theme) =>
