@@ -96,8 +96,8 @@ export function getNonce(address: string) {
  * @param address the account address
  */
 export async function commitNonce(address: string) {
-    const noce = await cache.get(address)!.getNonce()
-    return setNonce(address, noce + 1)
+    if (!cache.has(address)) cache.set(address, new NonceManager(address))
+    return setNonce(address, (await cache.get(address)!.getNonce()) + 1)
 }
 
 /**

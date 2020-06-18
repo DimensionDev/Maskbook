@@ -12,8 +12,9 @@ interface TxListeners {
 }
 
 export async function sendTx<R, T extends TransactionObject<R>>(txObject: T, tx: Tx = {}, listeners: TxListeners = {}) {
-    if (!tx.from) throw new Error('cannot find address')
-    return Promise.all([txObject.estimateGas(tx), web3.eth.getGasPrice(), Services.Nonce.getNonce(tx.from)])
+    const address = tx.from
+    if (!address) throw new Error('cannot find address')
+    return Promise.all([txObject.estimateGas(tx), web3.eth.getGasPrice(), Services.Nonce.getNonce(address)])
         .then(([gas, gasPrice, nonce]) =>
             txObject
                 .send({
@@ -23,30 +24,36 @@ export async function sendTx<R, T extends TransactionObject<R>>(txObject: T, tx:
                     nonce,
                 })
                 .on('transactionHash', (hash: string) => {
-                    Services.Nonce.commitNonce(web3.utils.toHex(tx.from!))
+                    Services.Nonce.commitNonce(address)
                     listeners?.onTransactionHash?.(hash)
                 })
                 .on('receipt', (receipt: TransactionReceipt) => listeners?.onReceipt?.(receipt))
                 .on('confirmation', (no: number, receipt: TransactionReceipt) =>
                     listeners?.onConfirmation?.(no, receipt),
                 )
-                .on('error', (err: Error) => listeners?.onTransactionError?.(err)),
+                .on('error', (err: Error) => {
+                    if (err.message.includes('nonce too low')) Services.Nonce.resetNonce(address)
+                    listeners?.onTransactionError?.(err)
+                }),
         )
         .catch((err: Error) => listeners?.onEstimateError?.(err))
 }
 
-export async function sendTxConfigForTxHash(config: TransactionConfig) {
-    if (!config.from) throw new Error('cannot find address')
+export async function sendTxConfigForTxHash(config: TransactionConfig & { from?: string }) {
+    const address = config.from
+    if (!address) throw new Error('cannot find address')
     return new Promise<string>(async (resolve, reject) =>
         web3.eth.sendTransaction(
             {
                 ...config,
-                nonce: await Services.Nonce.getNonce(web3.utils.toHex(config.from!)),
+                nonce: await Services.Nonce.getNonce(address),
             },
             (err, hash) => {
-                if (err) reject(err)
-                else {
-                    Services.Nonce.commitNonce(web3.utils.toHex(config.from!))
+                if (err) {
+                    if (err.message.includes('nonce too low')) Services.Nonce.resetNonce(address)
+                    reject(err)
+                } else {
+                    Services.Nonce.commitNonce(address)
                     resolve(hash)
                 }
             },
