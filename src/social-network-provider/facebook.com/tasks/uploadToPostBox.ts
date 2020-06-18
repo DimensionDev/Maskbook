@@ -10,7 +10,7 @@ export async function uploadToPostBoxFacebook(
     options: Parameters<SocialNetworkUI['taskUploadToPostBox']>[1],
 ) {
     const { warningText, template = 'v2' } = options
-    const { currentIdentity } = getActivatedUI()
+    const { lastRecognizedIdentity } = getActivatedUI()
     const blankImage = await downloadUrl(
         getUrl(`${template === 'v2' ? '/image-payload' : '/wallet'}/payload-${template}.png`),
     )
@@ -18,7 +18,7 @@ export async function uploadToPostBoxFacebook(
         decodeArrayBuffer(
             await Services.Steganography.encodeImage(new Uint8Array(blankImage), {
                 text,
-                pass: currentIdentity.value ? currentIdentity.value.identifier.toText() : '',
+                pass: lastRecognizedIdentity.value ? lastRecognizedIdentity.value.identifier.toText() : '',
                 template,
                 // ! the color image cannot compression resistance in Facebook
                 grayscaleAlgorithm: GrayscaleAlgorithm.LUMINANCE,
