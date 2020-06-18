@@ -31,7 +31,6 @@ import {
     ERC20CustomizedTokenSelector,
 } from '../../../plugins/Wallet/UI/Dashboard/Dialogs/WalletAddTokenDialogContent'
 import type { ERC20Token } from '../../../plugins/Wallet/token'
-import { recoverWallet } from '../../../plugins/Wallet/wallet'
 import { PluginMessageCenter } from '../../../plugins/PluginMessages'
 import WalletLine from '../../../plugins/Wallet/UI/Dashboard/Components/WalletLine'
 import { formatBalance } from '../../../plugins/Wallet/formatter'
@@ -428,7 +427,9 @@ export function DashboardWalletBackupDialog(props: WrappedDialogProps<WalletProp
     const { t } = useI18N()
     const { wallet } = props.ComponentProps!
     const classes = useBackupDialogStyles()
-    const wallet_ = useAsync(() => recoverWallet(wallet.mnemonic, wallet.passphrase))
+    const wallet_ = useAsync(() =>
+        Services.Plugin.invokePlugin('maskbook.wallet', 'recoverWallet', wallet.mnemonic, wallet.passphrase),
+    )
 
     return (
         <DashboardDialogCore {...props}>

@@ -1,9 +1,9 @@
 import Web3 from 'web3'
 import type { WebsocketProvider } from 'web3-core'
-import { getWallets, recoverWallet, recoverWalletFromPrivateKey } from './wallet'
 import { PluginMessageCenter } from '../PluginMessages'
 import { sideEffect } from '../../utils/side-effects'
 import { currentEthereumNetworkSettings, getNetworkSettings } from './UI/Developer/EthereumNetworkSettings'
+import Services from '../../extension/service'
 
 export const web3 = new Web3()
 
@@ -28,12 +28,12 @@ export const resetProvider = () => {
 export const resetWallet = async () => {
     web3.eth.accounts.wallet.clear()
 
-    const [wallets] = await getWallets()
+    const [wallets] = await Services.Plugin.invokePlugin('maskbook.wallet', 'getWallets')
     for await (const { mnemonic, passphrase, privateKey } of wallets) {
         const { privateKeyInHex } =
             mnemonic && passphrase
-                ? await recoverWallet(mnemonic, passphrase)
-                : await recoverWalletFromPrivateKey(privateKey)
+                ? await Services.Plugin.invokePlugin('maskbook.wallet', 'recoverWallet', mnemonic, passphrase)
+                : await Services.Plugin.invokePlugin('maskbook.wallet', 'recoverWalletFromPrivateKey', privateKey)
         web3.eth.accounts.wallet.add(privateKeyInHex)
     }
 }

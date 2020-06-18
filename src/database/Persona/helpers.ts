@@ -23,7 +23,6 @@ import { IdentifierMap } from '../IdentifierMap'
 import { getAvatarDataURL } from '../helpers/avatar'
 import { generate_ECDH_256k1_KeyPair_ByMnemonicWord } from '../../utils/mnemonic-code'
 import { deriveLocalKeyFromECDHKey } from '../../utils/mnemonic-code/localKeyGenerate'
-import { importNewWallet, isEmptyWallets } from '../../plugins/Wallet/wallet'
 import type {
     EC_Public_JsonWebKey,
     AESJsonWebKey,
