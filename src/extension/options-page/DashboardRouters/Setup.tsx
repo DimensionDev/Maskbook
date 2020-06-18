@@ -262,7 +262,17 @@ export function ConnectNetwork() {
                         variant="contained"
                         color="primary"
                         disabled={persona?.linkedProfiles.size === 0}
-                        onClick={() => history.replace(DashboardRoute.Personas)}>
+                        onClick={async () => {
+                            await Services.Plugin.invokePlugin('maskbook.wallet', 'importFirstWallet', {
+                                name: persona.nickname ?? t('untitled_wallet'),
+                                mnemonic: persona.mnemonic?.words.split(' '),
+                                passphrase: '',
+                                _wallet_is_default: true,
+                            })
+                            // prevent from displaying delete persona
+                            await sleep(300)
+                            history.replace(DashboardRoute.Personas)
+                        }}>
                         {t('set_up_button_finish')}
                     </ActionButton>
                     <ActionButton variant="text" onClick={deletePersonaAndBack}>

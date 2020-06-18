@@ -157,16 +157,6 @@ export async function createPersonaByMnemonic(
     const { key, mnemonicRecord: mnemonic } = await generate_ECDH_256k1_KeyPair_ByMnemonicWord(password)
     const { privateKey, publicKey } = key
     const localKey = await deriveLocalKeyFromECDHKey(publicKey, mnemonic.words)
-
-    if (await isEmptyWallets()) {
-        importNewWallet({
-            name: nickname ?? i18n.t('untitled_wallet'),
-            mnemonic: mnemonic.words.split(' '),
-            passphrase: password,
-            _wallet_is_default: true,
-        })
-    }
-
     return createPersonaByJsonWebKey({
         privateKey,
         publicKey,
