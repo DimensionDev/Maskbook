@@ -12,7 +12,7 @@ export async function getBackVideoDeviceId() {
     return (back ?? first(devices))?.deviceId ?? null
 }
 
-export function useQRCodeScan(
+export function useQRCodeVideoScan(
     video: React.MutableRefObject<HTMLVideoElement | null>,
     isScanning: boolean,
     onResult: (data: string) => void,

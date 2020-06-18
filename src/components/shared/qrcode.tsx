@@ -16,7 +16,7 @@ const cache = new Proxy(sessionStorage, {
     },
 })
 
-export function QrCode(props: {
+export function QRCode(props: {
     text: string
     options?: qr.QRCodeRenderersOptions
     canvasProps?: React.DetailedHTMLProps<

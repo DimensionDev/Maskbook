@@ -5,7 +5,7 @@ configure({ adapter: new Adapter() })
 
 import React, { createRef, RefObject } from 'react'
 import { renderHook } from '@testing-library/react-hooks'
-import { useQRCodeScan, getBackVideoDeviceId } from '../../hooks/useQRCodeScan'
+import { useQRCodeVideoScan, getBackVideoDeviceId } from '../../hooks/useQRCodeVideoScan'
 import { sleep } from '../../utils'
 
 const videoRef: RefObject<HTMLVideoElement> = createRef<HTMLVideoElement>()
@@ -69,7 +69,7 @@ test('scan succeeded', async () => {
     window.BarcodeDetector = BarcodeDetector
 
     const onResultSpy = jasmine.createSpy()
-    const hook = renderHook(() => useQRCodeScan(videoRef, true, onResultSpy, () => {}))
+    const hook = renderHook(() => useQRCodeVideoScan(videoRef, true, onResultSpy, () => {}))
 
     await hook.waitForNextUpdate()
     expect(onResultSpy.calls.count()).toBe(0)
@@ -87,7 +87,7 @@ test('scan failed', async () => {
     window.BarcodeDetector = BarcodeDetector
 
     const onErrorSpy = jasmine.createSpy()
-    const hook = renderHook(() => useQRCodeScan(videoRef, true, () => {}, onErrorSpy))
+    const hook = renderHook(() => useQRCodeVideoScan(videoRef, true, () => {}, onErrorSpy))
 
     await hook.waitForNextUpdate()
     expect(onErrorSpy.calls.count()).toBe(0)
