@@ -1,7 +1,7 @@
 import { getUrl } from '../../../utils/utils'
 import type { ProfileIdentifier } from '../../../database/type'
 import { DashboardRoute } from '../Route'
-import { SetupStep } from '../DashboardRouters/Setup'
+import { SetupStep } from '../SetupStep'
 
 type Query = {
     identifier?: ProfileIdentifier

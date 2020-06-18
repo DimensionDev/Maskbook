@@ -9,7 +9,7 @@ export function SSRRenderer(jsx: JSX.Element, container?: HTMLElement) {
             document.body.appendChild(container)
         }
         const oldChildren = [...container.children]
-        ReactDOM.createRoot(container).render(<React.StrictMode children={jsx} />)
+        ReactDOM.unstable_createRoot(container).render(<React.StrictMode children={jsx} />)
         oldChildren.forEach((x) => x.remove())
     } else {
         async function render() {

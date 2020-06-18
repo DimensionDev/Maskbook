@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useState, useEffect } from 'react'
 
 import { TextField } from '@material-ui/core'
 import { UserPlus, UserCheck, User, UserMinus } from 'react-feather'
@@ -17,10 +17,10 @@ import { DebounceButton } from '../DashboardComponents/ActionButton'
 import SpacedButtonGroup from '../DashboardComponents/SpacedButtonGroup'
 import ShowcaseBox from '../DashboardComponents/ShowcaseBox'
 import { DashboardRoute } from '../Route'
-import { SetupStep } from '../DashboardRouters/Setup'
 import { useHistory } from 'react-router-dom'
 import { RestoreFromQRCodeImageBox } from '../DashboardComponents/RestoreFromQRCodeImageBox'
 import { RestoreFromQRCodeCameraBox } from '../DashboardComponents/RestoreFromQRCodeCameraBox'
+import { SetupStep } from '../SetupStep'
 
 export function DashboardPersonaCreateDialog(props: WrappedDialogProps) {
     const { t } = useI18N()
