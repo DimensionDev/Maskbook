@@ -2,7 +2,6 @@ import { omit, noop } from 'lodash-es'
 import { createTransaction, IDBPSafeTransaction } from '../../database/helpers/openDB'
 import { createWalletDBAccess, WalletDB } from './database/Wallet.db'
 import { WalletRecord, ERC20TokenRecord, EthereumNetwork, WalletRecordInDatabase } from './database/types'
-import { assert } from './red-packet-fsm'
 import { PluginMessageCenter } from '../PluginMessages'
 import { HDKey, EthereumAddress } from 'wallet.ts'
 import * as bip39 from 'bip39'
@@ -340,4 +339,8 @@ function WalletRecordIntoDB(x: WalletRecord): WalletRecordInDatabase {
         record.erc20_token_balance.set(name, value?.toString())
     }
     return record
+}
+function assert(x: any, ...args: any): asserts x {
+    console.assert(x, ...args)
+    if (!x) throw new Error('Assert failed!')
 }

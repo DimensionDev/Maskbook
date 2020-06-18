@@ -353,7 +353,7 @@ function setNextState(rec: RedPacketRecord, nextState: RedPacketStatus) {
     rec.status = nextState
 }
 
-export function assert(x: any, ...args: any): asserts x {
+function assert(x: any, ...args: any): asserts x {
     console.assert(x, ...args)
     if (!x) throw new Error('Assert failed!')
 }

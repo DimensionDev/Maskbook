@@ -207,6 +207,7 @@ export const redPacketAPI = {
                     claimed_value: string
                     token_address: string
                 }
+                // Services.Plugin.invokePlugin('maskbook.wallet')
                 onClaimResult(id, {
                     type: 'success',
                     claimed_value: new BigNumber(claimed_value),
