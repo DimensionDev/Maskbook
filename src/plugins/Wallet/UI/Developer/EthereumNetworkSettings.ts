@@ -49,7 +49,7 @@ export function getNetworkSettings() {
 
 export const currentEthereumNetworkSettings = createNewSettings<EthereumNetwork>(
     'eth network',
-    EthereumNetwork.Rinkeby,
+    EthereumNetwork.Mainnet,
     {
         primary: () => 'Ethereum Network',
         secondary: () =>
