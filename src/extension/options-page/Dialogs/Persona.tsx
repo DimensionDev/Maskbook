@@ -16,7 +16,7 @@ import { UpgradeBackupJSONFile, BackupJSONFileLatest } from '../../../utils/type
 import { decompressBackupFile, compressBackupFile } from '../../../utils/type-transform/BackupFileShortRepresentation'
 import { hasWKWebkitRPCHandlers } from '../../../utils/iOS-RPC'
 import QRScanner from '../../../components/QRScanner'
-import { QrCode, WKWebkitQRScanner } from '../../../components/shared/qrcode'
+import { QRCode, WKWebkitQRScanner } from '../../../components/shared/qrcode'
 import { useSnackbar } from 'notistack'
 import type { Persona } from '../../../database'
 
@@ -266,7 +266,7 @@ export function DashboardPersonaBackupDialog(props: WrappedDialogProps<PersonaPr
             {
                 label: t('qr_code'),
                 children: compressedQRString ? (
-                    <QrCode
+                    <QRCode
                         text={compressedQRString}
                         options={{ width: 200 }}
                         canvasProps={{

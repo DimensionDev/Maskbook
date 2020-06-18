@@ -1,28 +1,9 @@
-import React, { useRef } from 'react'
+import React from 'react'
 import { makeStyles, createStyles, Typography } from '@material-ui/core'
 import { DashboardDialogCore, WrappedDialogProps } from '../Dialogs/Base'
 import { useI18N } from '../../../utils/i18n-next-ui'
-import { hasWKWebkitRPCHandlers } from '../../../utils/iOS-RPC'
-import { WKWebkitQRScanner } from '../../../components/shared/qrcode'
-import { useQRCodeScan } from '../../../utils/hooks/useQRCodeScan'
-
-interface QRScannerProps {
-    scanning: boolean
-    onScan: (value: string) => void
-    onError: () => void
-    onQuit: () => void
-}
-
-function QRScanner({ scanning, onScan, onError, onQuit }: QRScannerProps) {
-    const videoRef = useRef<HTMLVideoElement | null>(null)
-    useQRCodeScan(videoRef, scanning, onScan, onError)
-
-    return hasWKWebkitRPCHandlers ? (
-        <WKWebkitQRScanner onScan={onScan} onQuit={onQuit} />
-    ) : (
-        <video style={{ minWidth: 404 }} ref={videoRef} aria-label="QR Code scanner" />
-    )
-}
+import { sleep } from '../../../utils/utils'
+import { QRCodeVideoScanner } from '../DashboardComponents/QRCodeVideoScanner'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -63,14 +44,14 @@ const useStyles = makeStyles((theme) =>
     }),
 )
 
-interface QRCodeScannerDialogProps {
+interface QRCodeVideoScannerDialogProps {
     onScan: (val: string) => void
     onError: () => void
 }
 
-export function QRCodeScannerDialog(props: WrappedDialogProps) {
+export function QRCodeVideoScannerDialog(props: WrappedDialogProps) {
     const { open, onClose } = props
-    const { onScan, onError } = props.ComponentProps! as QRCodeScannerDialogProps
+    const { onScan, onError } = props.ComponentProps! as QRCodeVideoScannerDialogProps
 
     const { t } = useI18N()
     const classes = useStyles()
@@ -81,7 +62,19 @@ export function QRCodeScannerDialog(props: WrappedDialogProps) {
             CloseIconProps={{ className: classes.closeIcon }}
             CloseButtonProps={{ className: classes.closeButton }}>
             <div className={classes.wrapper}>
-                {open ? <QRScanner scanning={open} onScan={onScan} onError={onError} onQuit={onClose} /> : null}
+                {open ? (
+                    <QRCodeVideoScanner
+                        scanning={open}
+                        onScan={async (data: string) => {
+                            onClose()
+                            // ensure blur mask closed
+                            await sleep(300)
+                            onScan(data)
+                        }}
+                        onError={onError}
+                        onQuit={onClose}
+                    />
+                ) : null}
                 <Typography className={classes.title} variant="h1">
                     {t('set_up_qr_scanner_title')}
                 </Typography>

@@ -1,12 +1,10 @@
-import React, { useState, useCallback, useRef } from 'react'
+import React, { useState, useCallback } from 'react'
 import {
     Typography,
     styled,
     Theme,
     TextField,
     Fade,
-    Box,
-    Button,
     makeStyles,
     createStyles,
     ThemeProvider,
@@ -15,46 +13,34 @@ import {
     TableBody,
     TableRow,
     TableCell,
-    Checkbox,
-    Select,
-    MenuItem,
-    FormControl,
 } from '@material-ui/core'
 import classNames from 'classnames'
-import * as bip39 from 'bip39'
 import DashboardRouterContainer from './Container'
 import { useParams, useRouteMatch, Switch, Route, Redirect, Link, useHistory } from 'react-router-dom'
 import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline'
 import RadioButtonUncheckedIcon from '@material-ui/icons/RadioButtonUnchecked'
-import CheckBoxOutlinedIcon from '@material-ui/icons/CheckBoxOutlined'
-import CropFreeIcon from '@material-ui/icons/CropFree'
-import AddBoxOutlinedIcon from '@material-ui/icons/AddBoxOutlined'
 import ActionButton from '../DashboardComponents/ActionButton'
 import { merge, cloneDeep } from 'lodash-es'
 import { v4 as uuid } from 'uuid'
 import ProfileBox from '../DashboardComponents/ProfileBox'
 import Services from '../../service'
 import useQueryParams from '../../../utils/hooks/useQueryParams'
-import { useAsync, useMultiStateValidator, useDropArea } from 'react-use'
+import { useAsync } from 'react-use'
 import { Identifier, ECKeyIdentifier } from '../../../database/type'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { useMyPersonas } from '../../../components/DataSource/independent'
-import { BackupJSONFileLatest, UpgradeBackupJSONFile } from '../../../utils/type-transform/BackupFormat/JSON/latest'
+import { UpgradeBackupJSONFile } from '../../../utils/type-transform/BackupFormat/JSON/latest'
 import { decompressBackupFile } from '../../../utils/type-transform/BackupFileShortRepresentation'
 import { extraPermissions } from '../../../utils/permissions'
 import AbstractTab, { AbstractTabProps } from '../DashboardComponents/AbstractTab'
-import { getUrl, unreachable, sleep } from '../../../utils/utils'
+import { unreachable } from '../../../utils/utils'
 import { green } from '@material-ui/core/colors'
 import { DashboardRoute } from '../Route'
 import { useSnackbar } from 'notistack'
-import { hasWKWebkitRPCHandlers } from '../../../utils/iOS-RPC'
-import { WKWebkitQRScanner } from '../../../components/shared/qrcode'
-import QRScanner from '../../../components/QRScanner'
-import { decodeArrayBuffer, decodeText } from '../../../utils/type-transform/String-ArrayBuffer'
 import { useStylesExtends } from '../../../components/custom-ui-helper'
-import { PortalShadowRoot } from '../../../utils/jss/ShadowRootPortal'
-import { useModal } from '../Dialogs/Base'
-import { QRCodeScannerDialog } from '../Dialogs/Setup'
+import type { Persona } from '../../../database'
+import { RestoreFromQRCodeBox } from '../DashboardComponents/RestoreFromQRCodeImageBox'
+import { RestoreFromBackupBox } from '../DashboardComponents/RestoreFromBackupBox'
 
 export enum SetupStep {
     CreatePersona = 'create-persona',
@@ -62,7 +48,6 @@ export enum SetupStep {
     RestoreDatabase = 'restore-database',
     RestoreDatabaseAdvance = 'restore-database-advance',
     RestoreDatabaseConfirmation = 'restore-database-confirmation',
-    RestoreDatabaseSuccessful = 'restore-database-successful',
 }
 
 //#region setup form
@@ -154,7 +139,7 @@ function SetupForm(props: SetupFormProps) {
         </Fade>
     )
 }
-//#region
+//#endregion
 
 //#region create persona
 const userCreatePersonaStyles = makeStyles((theme) =>
@@ -292,76 +277,7 @@ export function ConnectNetwork() {
 }
 //#endregion
 
-//#region restore box
-const useRestoreBoxStyles = makeStyles((theme) =>
-    createStyles<string, RestoreBoxProps>({
-        root: {
-            color: theme.palette.text.hint,
-            whiteSpace: 'pre-line',
-            width: '100%',
-            height: '100%',
-            display: 'flex',
-            alignItems: 'center',
-            flexDirection: 'column',
-            justifyContent: 'center',
-            textAlign: 'center',
-            cursor: 'pointer',
-            transition: '0.4s',
-            '&[data-active=true]': {
-                color: 'black',
-            },
-        },
-        button: {
-            '& > span:first-child': {
-                display: 'inline-block',
-                maxWidth: 320,
-                overflow: 'hidden',
-                textOverflow: 'ellipsis',
-            },
-        },
-        placeholder: {
-            pointerEvents: 'none',
-            width: 64,
-            height: 64,
-            margin: '0 auto 28px',
-            backgroundRepeat: 'no-repeat',
-            backgroundPosition: 'center',
-            backgroundSize: '64px 64px',
-            backgroundImage: (props) => `url(${getUrl(`${props.placeholder}-${theme.palette.type}.png`)})`,
-        },
-    }),
-)
-
-interface RestoreBoxProps extends withClasses<'root' | 'button' | 'placeholder'>, React.HTMLAttributes<HTMLDivElement> {
-    file: File | null
-    entered: boolean
-    enterText: string
-    leaveText: string
-    placeholder?: string
-    children?: React.ReactNode
-}
-
-function RestoreBox(props: RestoreBoxProps) {
-    const { entered, file, enterText, leaveText, ...restProps } = props
-    const classes = useStylesExtends(useRestoreBoxStyles(props), props)
-
-    return (
-        <div className={classes.root} {...restProps}>
-            <div className={classes.placeholder}></div>
-            <ActionButton
-                className={file ? classes.button : ''}
-                color="primary"
-                variant="text"
-                startIcon={entered || file ? null : <AddBoxOutlinedIcon />}
-                onClick={(e: React.MouseEvent<HTMLButtonElement>) => e.preventDefault()}>
-                {entered ? enterText : file ? file.name : leaveText}
-            </ActionButton>
-        </div>
-    )
-}
-//#endregion
-
-//#region restore database
+//#region restore
 const useRestoreDatabaseStyle = makeStyles((theme) =>
     createStyles({
         file: {
@@ -401,48 +317,13 @@ const ShowcaseBox = styled('div')(({ theme }: { theme: Theme }) => ({
 
 export function RestoreDatabase() {
     const { t } = useI18N()
+    const history = useHistory()
     const classes = useSetupFormSetyles()
     const restoreDatabaseClasses = useRestoreDatabaseStyle()
-    const history = useHistory()
+    const { enqueueSnackbar, closeSnackbar } = useSnackbar()
 
-    const ref = useRef<HTMLInputElement>(null)
     const [textValue, setTextValue] = useState('')
-    const [json, setJson] = useState<BackupJSONFileLatest | null>(null)
-    const [file, setFile] = useState<File | null>(null)
-    const [bound, { over }] = useDropArea({
-        onFiles(files) {
-            setFile(files[0])
-        },
-    })
     const state = useState(0)
-
-    function FileUI() {
-        const { t } = useI18N()
-        return (
-            <div {...bound} style={{ width: '100%' }}>
-                <input
-                    className={restoreDatabaseClasses.file}
-                    type="file"
-                    accept="application/json"
-                    ref={ref}
-                    onChange={({ currentTarget }: React.ChangeEvent<HTMLInputElement>) => {
-                        if (currentTarget.files) {
-                            setFile(currentTarget.files.item(0))
-                        }
-                    }}
-                />
-                <RestoreBox
-                    file={file}
-                    entered={over}
-                    enterText={t('restore_database_dragging')}
-                    leaveText={t('restore_database_dragged')}
-                    placeholder="restore-file-placeholder"
-                    data-active={over}
-                    onClick={() => ref.current && ref.current.click()}
-                />
-            </div>
-        )
-    }
 
     const tabProps: AbstractTabProps = {
         tabs: [
@@ -450,7 +331,7 @@ export function RestoreDatabase() {
                 label: t('restore_database_file'),
                 children: (
                     <ShowcaseBox>
-                        <FileUI />
+                        <RestoreFromBackupBox onChange={setTextValue} />
                     </ShowcaseBox>
                 ),
                 p: 0,
@@ -475,12 +356,11 @@ export function RestoreDatabase() {
         height: 176,
     }
 
-    const resolveFileInput = useCallback(
+    const restoreDB = useCallback(
         async (str: string) => {
             try {
                 const json = UpgradeBackupJSONFile(decompressBackupFile(str))
                 if (!json) throw new Error('UpgradeBackupJSONFile failed')
-                setJson(json)
 
                 // grant permissions before jump into confirmation page
                 const permissions = await extraPermissions(json.grantedHostPermissions)
@@ -499,20 +379,11 @@ export function RestoreDatabase() {
                 await Services.Welcome.restoreBackupAfterConfirmation(restoreId, json)
                 history.push(`${SetupStep.RestoreDatabaseConfirmation}?${restoreParams.toString()}`)
             } catch (e) {
-                setJson(null)
+                enqueueSnackbar(t('set_up_restore_fail'), { variant: 'error' })
             }
         },
-        [history],
+        [enqueueSnackbar, history, t],
     )
-    const resolveFileAndNext = useCallback(() => {
-        if (file) {
-            const fr = new FileReader()
-            fr.readAsText(file)
-            fr.addEventListener('loadend', () => resolveFileInput(fr.result as string))
-        } else if (textValue) {
-            resolveFileInput(textValue)
-        }
-    }, [file, textValue, resolveFileInput])
 
     return (
         <SetupForm
@@ -525,8 +396,8 @@ export function RestoreDatabase() {
                         className={classNames(classes.button, classes.restoreButton)}
                         color="primary"
                         variant="contained"
-                        disabled={!(state[0] === 0 && file) && !(state[0] === 1 && textValue)}
-                        onClick={resolveFileAndNext}>
+                        disabled={!textValue}
+                        onClick={() => restoreDB(textValue)}>
                         {t('set_up_button_restore')}
                     </ActionButton>
                     <ActionButton<typeof Link>
@@ -550,84 +421,28 @@ export function RestoreDatabase() {
 }
 //#endregion
 
-//#region advance restore advance
-const useRestoreDatabaseAdvanceStyles = makeStyles((theme) =>
-    createStyles({
-        showcase: {
-            height: 120,
-            marginBottom: 16,
-        },
-        file: {
-            display: 'none',
-        },
-        restoreBoxPlaceholder: {
-            marginBottom: 6,
-        },
-        formControl: {
-            flex: 1,
-        },
-        menuPaper: {
-            backgroundColor: theme.palette.background.paper,
-        },
-        button: {
-            width: 64,
-            minWidth: 'unset',
-            padding: 0,
-            marginLeft: 16,
-        },
-    }),
-)
-
+//#region advance restore
 export function RestoreDatabaseAdvance() {
     const { t } = useI18N()
     const { enqueueSnackbar, closeSnackbar } = useSnackbar()
     const history = useHistory()
 
     const classes = useSetupFormSetyles()
-    const restoreDatabaseAdvanceClasses = useRestoreDatabaseAdvanceStyles()
 
     const [nickname, setNickname] = useState('')
     const [mnemonicWordsValue, setMnemonicWordsValue] = useState('')
     const [password, setPassword] = useState('')
     const [base64Value, setBase64Value] = useState('')
-
-    const ref = useRef<HTMLInputElement>(null)
-    const [file, setFile] = useState<File | null>(null)
-    const [bound, { over }] = useDropArea({
-        onFiles(files) {
-            setFile(files[0])
-        },
-    })
+    const [scannedValue, setScannedValue] = useState('')
 
     const state = useState(0)
-    const [tabState, setTabState] = state
+    const [tabState] = state
 
-    const restorePersona = async (str?: string) => {
-        if (tabState === 0) {
-            if (!bip39.validateMnemonic(mnemonicWordsValue)) throw new Error('the mnemonic words are not valid')
-            const identifier = await Services.Welcome.restoreNewIdentityWithMnemonicWord(mnemonicWordsValue, password, {
-                nickname,
-            })
-            return Services.Identity.queryPersona(identifier)
-        } else {
-            const object = str
-                ? UpgradeBackupJSONFile(decompressBackupFile(str))
-                : (JSON.parse(decodeText(decodeArrayBuffer(base64Value))) as BackupJSONFileLatest)
-            await Services.Welcome.restoreBackup(object!)
-            if (object?.personas?.length) {
-                return Services.Identity.queryPersona(
-                    Identifier.fromString(object.personas[0].identifier, ECKeyIdentifier).unwrap(),
-                )
-            }
-            return
-        }
-    }
-    const importPersona = async (str?: string) => {
-        const failToRestore = () => enqueueSnackbar('Restore failed', { variant: 'error' })
+    const importPersona = (persona: null | Persona) => {
+        const failToRestore = () => enqueueSnackbar(t('set_up_advance_restore_fail'), { variant: 'error' })
         try {
-            const persona = await restorePersona(str)
             if (persona) {
-                history.replace(
+                history.push(
                     persona.linkedProfiles.size
                         ? DashboardRoute.Personas
                         : `${SetupStep.ConnectNetwork}?identifier=${encodeURIComponent(persona.identifier.toText())}`,
@@ -638,70 +453,6 @@ export function RestoreDatabaseAdvance() {
         } catch (e) {
             failToRestore()
         }
-    }
-
-    function QRUI() {
-        const { t } = useI18N()
-        const [qrCodeScannerDialog, , openQRCodeScannerDialog] = useModal(QRCodeScannerDialog)
-
-        return (
-            <div {...bound} style={{ width: '100%', height: 120 }}>
-                <input
-                    className={restoreDatabaseAdvanceClasses.file}
-                    type="file"
-                    accept="application/json"
-                    ref={ref}
-                    onChange={({ currentTarget }: React.ChangeEvent<HTMLInputElement>) => {
-                        if (currentTarget.files) {
-                            setFile(currentTarget.files.item(0))
-                        }
-                    }}
-                />
-                <ShowcaseBox className={restoreDatabaseAdvanceClasses.showcase}>
-                    <RestoreBox
-                        classes={{ placeholder: restoreDatabaseAdvanceClasses.restoreBoxPlaceholder }}
-                        file={file}
-                        entered={over}
-                        enterText={t('restore_database_advance_dragging')}
-                        leaveText={t('restore_database_advance_dragged')}
-                        placeholder="restore-image-placeholder"
-                        data-active={over}
-                        onClick={() => ref.current && ref.current.click()}
-                    />
-                </ShowcaseBox>
-                <Box display="flex" justifyContent="space-between">
-                    <FormControl className={restoreDatabaseAdvanceClasses.formControl} variant="filled">
-                        <Select
-                            value={10}
-                            variant="outlined"
-                            MenuProps={{
-                                container: PortalShadowRoot,
-                                classes: { paper: restoreDatabaseAdvanceClasses.menuPaper },
-                            }}>
-                            <MenuItem value={10}>Ten</MenuItem>
-                            <MenuItem value={11}>Eleven</MenuItem>
-                            <MenuItem value={12}>12</MenuItem>
-                        </Select>
-                    </FormControl>
-                    <Button
-                        className={restoreDatabaseAdvanceClasses.button}
-                        color="primary"
-                        variant="outlined"
-                        onClick={() =>
-                            openQRCodeScannerDialog({
-                                onScan: importPersona,
-                                onError: () =>
-                                    enqueueSnackbar(t('set_up_qr_scanner_fail'), {
-                                        variant: 'error',
-                                    }),
-                            })
-                        }>
-                        <CropFreeIcon />
-                    </Button>
-                </Box>
-                {qrCodeScannerDialog}
-            </div>
-        )
     }
 
     const tabProps: AbstractTabProps = {
@@ -740,14 +491,26 @@ export function RestoreDatabaseAdvance() {
                         rows={1}
                         placeholder={t('dashboard_paste_database_base64_hint')}
                         onChange={(e) => setBase64Value(e.target.value)}
-                        value={base64Value}></TextField>
+                        value={base64Value}
+                    />
                 ),
                 display: 'flex',
                 p: 0,
             },
             {
                 label: t('qr_code'),
-                children: <QRUI />,
+                children: (
+                    <RestoreFromQRCodeBox
+                        onScan={setScannedValue}
+                        onError={useCallback(
+                            () =>
+                                enqueueSnackbar(t('set_up_qr_scanner_fail'), {
+                                    variant: 'error',
+                                }),
+                            [enqueueSnackbar, t],
+                        )}
+                    />
+                ),
                 p: 0,
             },
         ],
@@ -767,9 +530,25 @@ export function RestoreDatabaseAdvance() {
                         variant="contained"
                         color="primary"
                         disabled={
-                            !(tabState === 0 && nickname && mnemonicWordsValue) && !(tabState === 1 && base64Value)
+                            !(tabState === 0 && nickname && mnemonicWordsValue) &&
+                            !(tabState === 1 && base64Value) &&
+                            !(tabState === 2 && scannedValue)
                         }
-                        onClick={() => importPersona()}>
+                        onClick={async () => {
+                            try {
+                                const persona = await (tabState === 0
+                                    ? Services.Persona.restoreFromMnemonicWords(mnemonicWordsValue, nickname, password)
+                                    : tabState === 1
+                                    ? Services.Persona.restoreFromBase64(base64Value)
+                                    : Services.Persona.restoreFromBackup(scannedValue))
+
+                                importPersona(persona)
+                            } catch (e) {
+                                enqueueSnackbar(t('set_up_advance_restore_fail'), {
+                                    variant: 'error',
+                                })
+                            }
+                        }}>
                         {t('set_up_button_import')}
                     </ActionButton>
                     <ActionButton variant="text" onClick={() => history.goBack()}>
@@ -782,8 +561,8 @@ export function RestoreDatabaseAdvance() {
 }
 //#endregion
 
-//#region restore database
-const useDatabaseRecordStyle = makeStyles((theme: Theme) =>
+//#region restore database confirmation
+const useDatabasePreviewCardStyles = makeStyles((theme: Theme) =>
     createStyles({
         table: {
             width: 432,
@@ -834,7 +613,7 @@ interface DatabasePreviewCardProps {
 
 function DatabasePreviewCard(props: DatabasePreviewCardProps) {
     const { t } = useI18N()
-    const classes = useDatabaseRecordStyle()
+    const classes = useDatabasePreviewCardStyles()
 
     const resolveRecordName = (type: DatabaseRecordType) => {
         switch (type) {
@@ -906,7 +685,7 @@ export function RestoreDatabaseConfirmation() {
     ]
 
     const restoreConfirmation = async () => {
-        const failToRestore = () => enqueueSnackbar('Restore failed', { variant: 'error' })
+        const failToRestore = () => enqueueSnackbar(t('set_up_restore_fail'), { variant: 'error' })
         if (uuid) {
             try {
                 setImported('loading')
@@ -963,26 +742,6 @@ export function RestoreDatabaseConfirmation() {
     )
 }
 //#endregion
-
-export function RestoreDatabaseSuccessful() {
-    const { t } = useI18N()
-    const classes = useSetupFormSetyles()
-    const history = useHistory()
-    return (
-        <SetupForm
-            primary="Restoration Successful"
-            secondary="Restored from a backup at 1/1/1990, 8:45:44 PM."
-            content={<></>}
-            actions={
-                <>
-                    <ActionButton className={classes.button} variant="text" onClick={() => history.goBack()}>
-                        {t('set_up_button_done')}
-                    </ActionButton>
-                </>
-            }
-        />
-    )
-}
 
 const setupTheme = (theme: Theme): Theme =>
     merge(cloneDeep(theme), {
@@ -1073,8 +832,6 @@ const CurrentStep = () => {
             return <RestoreDatabaseAdvance />
         case SetupStep.RestoreDatabaseConfirmation:
             return <RestoreDatabaseConfirmation />
-        case SetupStep.RestoreDatabaseSuccessful:
-            return <RestoreDatabaseSuccessful />
     }
 }
 
