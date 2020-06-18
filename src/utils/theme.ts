@@ -39,8 +39,19 @@ const baseTheme = (theme: 'dark' | 'light'): ThemeOptions =>
         overrides: {
             MuiButton: {
                 root: {
-                    textTransform: 'none',
+                    textTransform: 'unset',
                     minWidth: '100px',
+                },
+            },
+            MuiTab: {
+                root: {
+                    textTransform: 'unset',
+                    padding: '0',
+                },
+            },
+            MuiDialog: {
+                paper: {
+                    borderRadius: '12px',
                 },
             },
         },

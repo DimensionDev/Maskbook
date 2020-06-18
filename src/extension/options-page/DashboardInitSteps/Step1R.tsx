@@ -157,12 +157,12 @@ export default function InitStep1R() {
         tabs: [
             {
                 label: 'File',
-                component: <FileUI></FileUI>,
+                children: <FileUI></FileUI>,
                 p: 0,
             },
             {
                 label: 'TEXT',
-                component: (
+                children: (
                     <div className={classes.restoreTextWrapper}>
                         <InputBase
                             placeholder={t('dashboard_paste_database_backup_hint')}
@@ -185,7 +185,7 @@ export default function InitStep1R() {
             },
             {
                 label: 'QR',
-                component: <QR />,
+                children: <QR />,
                 p: 0,
             },
         ],
