@@ -640,8 +640,8 @@ export function WalletBackupDialog(props: WalletBackupDialogProps) {
     const content = (
         <Box alignSelf="stretch" width="100%">
             <Typography variant="body1">
-                Keep the 12 words below carefully in a safe place. You will need them to restore the private key of this
-                wallet.
+                Keep the <strong>12 mnemonic words</strong> OR <strong>private key</strong> below{' '}
+                <strong>carefully</strong> in a safe place. You will need them to restore this wallet.
             </Typography>
             <Box display="flex" flexDirection="column" p={1} className={classes.box} height={152}>
                 <Typography variant="body1">{wallet.mnemonic.join(' ')}</Typography>
