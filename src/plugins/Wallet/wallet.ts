@@ -184,6 +184,12 @@ export async function importNewWallet(
     }
 }
 
+export async function importFirstWallet(rec: Parameters<typeof importNewWallet>[0]) {
+    if (await isEmptyWallets()) {
+        await importNewWallet(rec)
+    }
+}
+
 export async function onWalletBalanceUpdated(address: string, newBalance: BigNumber) {
     const t = createTransaction(await createWalletDBAccess(), 'readwrite')('Wallet')
     const wallet = await getWalletByAddress(t, address)
