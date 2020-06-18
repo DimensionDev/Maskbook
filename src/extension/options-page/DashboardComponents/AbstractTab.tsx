@@ -39,6 +39,9 @@ export default function AbstractTab(props: AbstractTabProps) {
     return (
         <div>
             <Paper square elevation={0}>
+                {
+                    // TODO!: tabs overflow
+                }
                 <Tabs
                     variant="fullWidth"
                     className={classes.tabs}
