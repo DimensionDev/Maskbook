@@ -91,7 +91,7 @@ function SuccessDecryptionPlugin(props: PluginSuccessDecryptionComponentProps) {
 
 function PluginSuccessDecryptionPostInspectorForEach(props: { pluginConfig: PluginConfig; message: TypedMessage }) {
     const { pluginConfig, message } = props
-    const ref = React.useRef<HTMLDivElement>(null)
+    const ref = React.useRef<HTMLDivElement | null>(null)
     const F = pluginConfig.successDecryptionInspector
     const post = usePostInfo()
     React.useEffect(() => {
