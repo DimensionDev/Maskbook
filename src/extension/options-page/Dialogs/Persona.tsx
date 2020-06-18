@@ -198,10 +198,10 @@ export function DashboardImportPersonaDialog(props: WrappedDialogProps) {
                         onClick={async () => {
                             try {
                                 const persona = await (state[0] === 0
-                                    ? Services.Persona.restoreFromMnemonicWords(mnemonicWordsValue, nickname, password)
+                                    ? Services.Identity.restoreFromMnemonicWords(mnemonicWordsValue, nickname, password)
                                     : state[0] === 1
-                                    ? Services.Persona.restoreFromBase64(base64Value)
-                                    : Services.Persona.restoreFromBackup(scannedValue))
+                                    ? Services.Identity.restoreFromBase64(base64Value)
+                                    : Services.Identity.restoreFromBackup(scannedValue))
 
                                 importPersona(persona)
                             } catch (e) {

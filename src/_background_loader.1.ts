@@ -9,7 +9,6 @@ import * as WelcomeService from './extension/background-script/WelcomeService'
 import * as IdentityService from './extension/background-script/IdentityService'
 import * as UserGroupService from './extension/background-script/UserGroupService'
 import * as SteganographyService from './extension/background-script/SteganographyService'
-import * as PersonaService from './extension/background-script/PersonaService'
 import * as PluginService from './extension/background-script/PluginService'
 import * as HelperService from './extension/background-script/HelperService'
 import * as NonceService from './extension/background-script/NonceService'
@@ -21,7 +20,6 @@ Object.assign(window, {
     SteganographyService,
     IdentityService,
     UserGroupService,
-    PersonaService,
     PluginService,
     HelperService,
     NonceService,
