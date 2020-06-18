@@ -14,7 +14,6 @@ interface Services {
     UserGroup: typeof import('./background-script/UserGroupService')
     Welcome: typeof import('./background-script/WelcomeService')
     Steganography: typeof import('./background-script/SteganographyService')
-    Persona: typeof import('./background-script/PersonaService')
     Plugin: typeof import('./background-script/PluginService')
     Helper: typeof import('./background-script/HelperService')
     Nonce: typeof import('./background-script/NonceService')
@@ -48,7 +47,6 @@ if (!('Services' in globalThis)) {
             return new Promise(() => {})
         },
     })
-    register(createProxyToService('PersonaService'), 'Persona', {})
     register(createProxyToService('HelperService'), 'Helper', {})
     register(createProxyToService('NonceService'), 'Nonce', {})
 }

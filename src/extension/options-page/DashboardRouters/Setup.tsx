@@ -632,10 +632,10 @@ export function RestoreDatabaseAdvance() {
                         onClick={async () => {
                             try {
                                 const persona = await (tabState === 0
-                                    ? Services.Persona.restoreFromMnemonicWords(mnemonicWordsValue, nickname, password)
+                                    ? Services.Identity.restoreFromMnemonicWords(mnemonicWordsValue, nickname, password)
                                     : tabState === 1
-                                    ? Services.Persona.restoreFromBase64(base64Value)
-                                    : Services.Persona.restoreFromBackup(scannedValue))
+                                    ? Services.Identity.restoreFromBase64(base64Value)
+                                    : Services.Identity.restoreFromBackup(scannedValue))
 
                                 importPersona(persona)
                             } catch (e) {
