@@ -15,18 +15,18 @@ import Services from '../../../extension/service'
  * }
  */
 const parseNameArea = (nameArea: string) => {
-    const result = regexMatch(nameArea, /([^@]*)@(.+)/, null)
-
-    if (!result) {
-        return {
-            name: '',
-            handle: '',
-        }
-    }
-    return {
-        name: result[1].replace(/\n+/g, ''),
-        handle: result[2].replace(/\n+/g, ''),
-    }
+    const atIndex = nameArea.lastIndexOf('@')
+    const name = nameArea.slice(0, atIndex).replace(/\n+/g, '')
+    const handle = nameArea.slice(atIndex + 1).replace(/\n+/g, '')
+    return name && handle
+        ? {
+              name,
+              handle,
+          }
+        : {
+              name: '',
+              handle: '',
+          }
 }
 
 const parseId = (t: string) => {
