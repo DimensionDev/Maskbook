@@ -32,6 +32,9 @@ describe(`${INITIALIZATION_STORY_URL}-Workflow2:ConnectProfile`, () => {
             process.env.E2E_ALICE_FACEBOOK_PASSWORD!,
         ),
     ]) {
+        // specifiy network
+        if (process.env.E2E_NETWORK_ID && process.env.E2E_NETWORK_ID !== sns.name) continue
+
         it(sns.name, async () => {
             // login sns account
             const loginPage = await helpers.newPage(page)
@@ -82,10 +85,8 @@ describe(`${INITIALIZATION_STORY_URL}-Workflow2:ConnectProfile`, () => {
             const proveContent = await proveTextarea.asElement()?.evaluate(e => e.textContent)
             expect(proveContent).toBeTruthy()
 
-            // click the 'add it for me' button
-            const addButton = await snsPage.waitForFunction(
-                `document.querySelector('${sns.immersiveDialogSelector}').shadowRoot.querySelector('[data-testid="add_button"]')`,
-            )
+            // wait for UI update
+            await snsPage.waitFor(500)
 
             // listening 'dialog' event
             await new Promise(async resolve => {
@@ -116,6 +117,11 @@ describe(`${INITIALIZATION_STORY_URL}-Workflow2:ConnectProfile`, () => {
                         resolve()
                     }
                 })
+
+                // click the 'add it for me' button
+                const addButton = await snsPage.waitForFunction(
+                    `document.querySelector('${sns.immersiveDialogSelector}').shadowRoot.querySelector('[data-testid="add_button"]')`,
+                )
                 await (addButton as any).click()
             })
 
@@ -125,7 +131,12 @@ describe(`${INITIALIZATION_STORY_URL}-Workflow2:ConnectProfile`, () => {
                 `document.querySelector('${sns.immersiveDialogSelector}').shadowRoot.querySelector('[data-testid="finish_button"]')`,
             )
             await (finishButton as any).click()
-            await page.waitFor(500)
+
+            // wait for UI updates
+            await snsPage.waitFor(500)
+
+            // close the page
+            await snsPage.close()
         })
     }
 })
