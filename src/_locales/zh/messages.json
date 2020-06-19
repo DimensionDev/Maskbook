@@ -30,7 +30,7 @@
     "backup_database": "備份資料庫",
     "backup_persona": "備份角色",
     "backup_wallet": "備份錢包",
-    "backup_wallet_hint": "請<strong>小心</strong>將以下<strong>12個助記詞</strong>或<strong>私鑰</strong>放在安全的地方，您需要它們來還原此錢包。",
+    "backup_wallet_hint": "請<strong>務必</strong>將以下<strong>12個助記詞</strong>或<strong>私鑰</strong>放在安全的地方，您需要它們來還原此錢包。",
     "banner_get_started": "設定 Maskbook",
     "banner_preparing_setup": "Maskbook 需要設定你的賬號。",
     "banner_title": "歡迎使用 Maskbook",
