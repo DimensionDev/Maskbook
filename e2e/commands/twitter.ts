@@ -8,6 +8,7 @@ class Twitter implements SNS {
     name = 'twitter.com'
 
     // selectors
+    composeButtonSelector = ''
     composeImageSelector = '[data-testid="primaryColumn"] [data-testid="attachments"] img'
     composeEditorSelector = '[data-testid="primaryColumn"] .DraftEditor-root [contenteditable="true"]'
     profileSelector = '[data-testid="primaryColumn"]'
