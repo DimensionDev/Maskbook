@@ -42,16 +42,7 @@ function development(manifest, target) {
  */
 function E2E(manifest) {
     // can not capture premission dialog in pptr
-    manifest.permissions.push(
-        ...manifest.optional_permissions,
-        ...[
-            'https://twitter.com/*',
-            'https://mobile.twitter.com/*',
-            'https://facebook.com/*',
-            'https://www.facebook.com/*',
-            'https://m.facebook.com/*',
-        ],
-    )
+    manifest.permissions.push(...manifest.optional_permissions, ...['<all_urls>'])
     manifest.optional_permissions = []
 }
 function production(manifest, target) {}

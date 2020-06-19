@@ -1,3 +1,4 @@
+import React, { useCallback, unstable_useTransition } from 'react'
 import type { Profile } from '../../database'
 import { ProfileIdentifier } from '../../database/type'
 import Services from '../../extension/service'
@@ -6,7 +7,6 @@ import Services from '../../extension/service'
 // Change dependency to swr latest after this PR is merged and released
 import useSWR, { useSWRPages } from 'swr'
 import { last } from 'lodash-es'
-import React, { useCallback, unstable_useTransition } from 'react'
 import { IdentifierMap } from '../../database/IdentifierMap'
 
 export function useSWRProfiles(query: string | undefined) {

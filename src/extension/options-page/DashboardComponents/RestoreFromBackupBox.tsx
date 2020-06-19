@@ -52,10 +52,9 @@ export function RestoreFromBackupBox(props: RestoreFromBackupBoxProps) {
                 accept="application/json"
                 ref={inputRef}
                 onChange={({ currentTarget }: React.ChangeEvent<HTMLInputElement>) => {
-                    if (currentTarget.files) {
-                        setFile(currentTarget.files.item(0))
-                    }
+                    if (currentTarget.files) setFile(currentTarget.files.item(0))
                 }}
+                data-testid="file_input"
             />
             <RestoreBox
                 file={file}

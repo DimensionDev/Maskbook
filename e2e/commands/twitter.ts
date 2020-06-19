@@ -16,7 +16,7 @@ class Twitter implements SNS {
     commentInputSelector = '' // no comment form for twitter
 
     // mount point
-    immersiveDialogSelector = 'body > script[nonce] ~ span'
+    setupGuideSelector = 'body > script[nonce] ~ span'
     postDialogHintSelector = '[data-testid="primaryColumn"] [role="progressbar"] ~ span'
     postDialogModalSelector = 'body > script[nonce] ~ div[aria-hidden="true"]'
     postAffixingCanvasSelector = '[role="article"] [data-testid="tweet"] ~ div [lang="en"] ~ span'
@@ -59,9 +59,7 @@ class Twitter implements SNS {
             const screenNameLink = await page.waitFor('[href="/settings/screen_name"]')
 
             // user already login
-            if ((await screenNameLink.evaluate((e) => e.textContent))?.includes(this.username)) {
-                return
-            }
+            if ((await screenNameLink.evaluate((e) => e.textContent))?.includes(this.username)) return
 
             // logout old account
             await this.logout(page)

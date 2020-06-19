@@ -15,6 +15,8 @@ export function getWelcomePageURL(query?: Query) {
         const param = new URLSearchParams(params as Record<string, string>)
         if (identifier) param.set('identifier', identifier.toText())
         return getUrl(`index.html#${DashboardRoute.Personas}/?${param.toString()}`)
+    } else if (webpackEnv.target === 'E2E') {
+        return getUrl(`index.html#${DashboardRoute.Setup}`)
     } else {
         return getUrl(`index.html#${DashboardRoute.Setup}/${SetupStep.ConsentDataCollection}`)
     }

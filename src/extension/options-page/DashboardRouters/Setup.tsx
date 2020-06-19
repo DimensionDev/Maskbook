@@ -248,6 +248,9 @@ export function CreatePersona() {
                         }}
                         label={t('name')}
                         helperText={' '}
+                        inputProps={{
+                            'data-testid': 'username_input',
+                        }}
                     />
                 </>
             }
@@ -258,7 +261,8 @@ export function CreatePersona() {
                         variant="contained"
                         color="primary"
                         onClick={createPersonaAndNext}
-                        disabled={!name}>
+                        disabled={!name}
+                        data-testid="submit_button">
                         {t('set_up_button_next')}
                     </ActionButton>
                     <Typography className={setupFormClasses.or} variant="body1">
@@ -268,7 +272,8 @@ export function CreatePersona() {
                         color="primary"
                         variant="text"
                         component={Link}
-                        to={SetupStep.RestoreDatabase}>
+                        to={SetupStep.RestoreDatabase}
+                        data-testid="backup_button">
                         {t('set_up_button_from_backup')}
                     </ActionButton>
                 </>
@@ -406,6 +411,7 @@ export function RestoreDatabase() {
     const tabProps: AbstractTabProps = {
         tabs: [
             {
+                id: 'file',
                 label: t('restore_database_file'),
                 children: (
                     <RestoreFromBackupBox
@@ -419,6 +425,7 @@ export function RestoreDatabase() {
                 p: 0,
             },
             {
+                id: 'text',
                 label: t('restore_database_text'),
                 children: (
                     <InputBase
@@ -428,6 +435,9 @@ export function RestoreDatabase() {
                         multiline
                         value={textValue}
                         onChange={(e) => setTextValue(e.target.value)}
+                        inputProps={{
+                            'data-testid': 'text_textarea',
+                        }}
                     />
                 ),
                 p: 0,
@@ -478,7 +488,8 @@ export function RestoreDatabase() {
                         color="primary"
                         variant="contained"
                         disabled={!(state[0] === 0 && backupValue) && !(state[0] === 1 && textValue)}
-                        onClick={() => restoreDB(state[0] === 0 ? backupValue : textValue)}>
+                        onClick={() => restoreDB(state[0] === 0 ? backupValue : textValue)}
+                        data-testid="restore_button">
                         {t('set_up_button_restore')}
                     </ActionButton>
                     <ActionButton<typeof Link>
@@ -486,13 +497,18 @@ export function RestoreDatabase() {
                         color="primary"
                         variant="outlined"
                         component={Link}
-                        to={SetupStep.RestoreDatabaseAdvance}>
+                        to={SetupStep.RestoreDatabaseAdvance}
+                        data-testid="advance_button">
                         {t('set_up_button_advance')}
                     </ActionButton>
                     <Typography className={classes.or} variant="body1">
                         {t('set_up_tip_or')}
                     </Typography>
-                    <ActionButton color="primary" variant="text" onClick={() => history.goBack()}>
+                    <ActionButton
+                        color="primary"
+                        variant="text"
+                        onClick={() => history.goBack()}
+                        data-testid="restart_button">
                         {t('set_up_button_from_scratch')}
                     </ActionButton>
                 </>
@@ -548,17 +564,26 @@ export function RestoreDatabaseAdvance() {
                             value={nickname}
                             required
                             label={t('name')}
+                            inputProps={{
+                                'data-testid': 'username_input',
+                            }}
                         />
                         <TextField
                             value={mnemonicWordsValue}
                             onChange={(e) => setMnemonicWordsValue(e.target.value)}
                             required
                             label={t('mnemonic_words')}
+                            inputProps={{
+                                'data-testid': 'mnemonic_input',
+                            }}
                         />
                         <TextField
                             onChange={(e) => setPassword(e.target.value)}
                             value={password}
                             label={t('password')}
+                            inputProps={{
+                                'data-testid': 'password_input',
+                            }}
                         />
                     </>
                 ),
@@ -568,12 +593,15 @@ export function RestoreDatabaseAdvance() {
                 label: 'Base64',
                 children: (
                     <TextField
-                        inputProps={{ style: { height: 147 } }}
                         multiline
                         rows={1}
                         placeholder={t('dashboard_paste_database_base64_hint')}
                         onChange={(e) => setBase64Value(e.target.value)}
                         value={base64Value}
+                        inputProps={{
+                            style: { height: 147 },
+                            'data-testid': 'base64_input',
+                        }}
                     />
                 ),
                 display: 'flex',
@@ -643,10 +671,11 @@ export function RestoreDatabaseAdvance() {
                                     variant: 'error',
                                 })
                             }
-                        }}>
+                        }}
+                        data-testid="import_button">
                         {t('set_up_button_import')}
                     </ActionButton>
-                    <ActionButton variant="text" onClick={() => history.goBack()}>
+                    <ActionButton variant="text" onClick={() => history.goBack()} data-testid="cancel_button">
                         {t('set_up_button_cancel')}
                     </ActionButton>
                 </>
@@ -746,7 +775,8 @@ export function RestoreDatabaseConfirmation() {
                     <ActionButton
                         className={classNames(classes.button, classes.doneButton)}
                         variant="contained"
-                        onClick={() => history.replace('/')}>
+                        onClick={() => history.replace('/')}
+                        data-testid="finish_button">
                         {t('set_up_button_done')}
                     </ActionButton>
                 ) : (
@@ -756,7 +786,8 @@ export function RestoreDatabaseConfirmation() {
                             variant="contained"
                             color="primary"
                             disabled={imported === 'loading'}
-                            onClick={restoreConfirmation}>
+                            onClick={restoreConfirmation}
+                            data-testid="confirm_button">
                             {t('set_up_button_confirm')}
                         </ActionButton>
                         <ActionButton variant="text" onClick={() => history.goBack()}>
