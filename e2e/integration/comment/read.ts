@@ -32,6 +32,9 @@ describe(`${READ_COMMENT_STORY_URL}#Story:ReadComment(?br=wip)-BasicWorkflow`, (
             process.env.E2E_ALICE_FACEBOOK_PASSWORD!,
         ),
     ]) {
+        // specifiy network
+        if (process.env.E2E_NETWORK_ID && process.env.E2E_NETWORK_ID !== sns.name) continue
+
         const posts = helpers.loadJSON(join(__dirname, `../../fixtures/comment/post_backup_${sns.name}.json`)) as {
             url: string
             description?: string
@@ -74,4 +77,7 @@ describe(`${READ_COMMENT_STORY_URL}#Story:ReadComment(?br=wip)-BasicWorkflow`, (
             })
         }
     }
+
+    // dismiss empty test suite error
+    test.skip('skip', () => {})
 })

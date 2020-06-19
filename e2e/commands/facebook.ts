@@ -65,6 +65,8 @@ class Facebook implements SNS {
         const nameInput = await page.waitFor('[name="email"]')
         const passwordInput = await page.waitFor('[name="pass"]')
         const submitButton = await page.waitFor('[name="login"]')
+        // select preexist name
+        await nameInput.click({ clickCount: 3 })
         await nameInput.type(this.username)
         await passwordInput.type(this.password)
         await submitButton.click()
