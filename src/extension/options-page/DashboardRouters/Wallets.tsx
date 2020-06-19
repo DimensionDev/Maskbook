@@ -142,7 +142,10 @@ function WalletContent({ wallet, tokens }: WalletContentProps) {
             <MenuItem onClick={setAsDefault}>{t('set_as_default')}</MenuItem>,
             <MenuItem onClick={() => oepnWalletRename({ wallet: wallet })}>{t('rename')}</MenuItem>,
             <MenuItem onClick={() => oepnWalletBackup({ wallet: wallet })}>{t('backup')}</MenuItem>,
-            <MenuItem onClick={() => oepnWalletDelete({ wallet: wallet })} className={color.error}>
+            <MenuItem
+                onClick={() => oepnWalletDelete({ wallet: wallet })}
+                className={color.error}
+                data-testid="delete_button">
                 {t('delete')}
             </MenuItem>,
         ],
@@ -169,7 +172,8 @@ function WalletContent({ wallet, tokens }: WalletContentProps) {
                     <IconButton
                         className={classes.moreButton}
                         size="small"
-                        onClick={(e) => openMenu({ anchorEl: e.currentTarget })}>
+                        onClick={(e) => openMenu({ anchorEl: e.currentTarget })}
+                        data-testid="setting_icon">
                         <MoreVertOutlinedIcon />
                     </IconButton>
                     {menu}

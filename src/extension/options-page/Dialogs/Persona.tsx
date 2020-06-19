@@ -316,7 +316,11 @@ export function DashboardPersonaDeleteConfirmDialog(props: WrappedDialogProps<Pe
                 secondary={t('dashboard_delete_persona_confirm_hint', { name: persona.nickname })}
                 footer={
                     <SpacedButtonGroup>
-                        <DebounceButton variant="contained" color="danger" onClick={deletePersona}>
+                        <DebounceButton
+                            variant="contained"
+                            color="danger"
+                            onClick={deletePersona}
+                            data-testid="confirm_button">
                             {t('confirm')}
                         </DebounceButton>
                         <DebounceButton variant="outlined" color="primary" onClick={props.onClose}>

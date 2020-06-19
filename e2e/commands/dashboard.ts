@@ -14,6 +14,12 @@ export async function openPersonas(page: Page) {
     await page.waitFor(500)
 }
 
+export async function openWallets(page: Page) {
+    await page.bringToFront()
+    await page.goto(`${DASHBOARD_URL}#/wallets?noredirect=true`)
+    await page.waitFor(500)
+}
+
 export async function openDebug(page: Page) {
     await page.bringToFront()
     await page.goto(`${DASHBOARD_URL}#/debug`)
@@ -45,33 +51,31 @@ export async function openSetupRestoreDatabaseAdvance(page: Page) {
 }
 
 export async function reset(page: Page) {
-    await openPersonas(page)
+    for await (const openPage of [openPersonas, openWallets]) {
+        // open the page
+        await openPage(page)
 
-    // remove all personas
-    while (true) {
-        const settingIcon = await page.$('[data-testid="persona_setting_icon"]')
+        // remove all items
+        while (true) {
+            const settingIcon = await page.$('[data-testid="setting_icon"]')
 
-        if (settingIcon) {
-            // click cog icon
-            await settingIcon.click()
-            await page.waitFor(500)
+            if (settingIcon) {
+                // click cog icon
+                await settingIcon.click()
+                await page.waitFor(500)
 
-            // click the delete button
-            const deleteButton = await page.waitFor('[data-testid="persona_delete_button"]')
-            await deleteButton.click()
-            await page.waitFor(500)
+                // click the delete button
+                const deleteButton = await page.waitFor('[data-testid="delete_button"]')
+                await deleteButton.click()
+                await page.waitFor(500)
 
-            // click the confirm button
-            const confirmButton = await page.waitFor('[data-testid="dialog_confirm_button"]')
-            await confirmButton.click()
-            await page.waitFor(500)
-        } else {
-            break
+                // click the confirm button
+                const confirmButton = await page.waitFor('[data-testid="confirm_button"]')
+                await confirmButton.click()
+                await page.waitFor(500)
+            } else {
+                break
+            }
         }
     }
-
-    // remove all wallets
-    // TODO
-
-    // reset switches
 }

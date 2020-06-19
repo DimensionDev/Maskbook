@@ -3,23 +3,26 @@ import * as dashboard from '../../commands/dashboard'
 import * as restore from '../../commands/restore'
 import Twitter from '../../commands/twitter'
 import Facebook from '../../commands/facebook'
-import { INITIALIZATION_STORY_URL } from '../../support/constants'
+import { SETUP_STORY_URL } from '../../support/constants'
 import * as helpers from '../../support/helpers'
 
-beforeAll(async () => {
+beforeEach(async () => {
     // setup page
     await helpers.setupPage(page)
 
     // restore alice's db backup
     await dashboard.openSetupRestoreDatabase(page)
+
+    // restore an unconnected persona
     await restore.fromFile(page, join(__dirname, '../../fixtures/setup/db_backup_1_persona_0_profile.json'))
 })
 
-afterAll(async () => {
+afterEach(async () => {
+    // reset dashboard
     await dashboard.reset(page)
 })
 
-describe(`${INITIALIZATION_STORY_URL}-Workflow2:ConnectProfile`, () => {
+describe(`${SETUP_STORY_URL}-Workflow2:ConnectProfile`, () => {
     for (const sns of [
         new Twitter(
             process.env.E2E_ALICE_TWITTER_ID!,

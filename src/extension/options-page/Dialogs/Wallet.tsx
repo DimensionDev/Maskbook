@@ -516,7 +516,11 @@ export function DashboardWalletDeleteConfirmDialog(props: WrappedDialogProps<Wal
                 secondary={t('delete_wallet_hint')}
                 footer={
                     <SpacedButtonGroup>
-                        <DebounceButton variant="contained" color="danger" onClick={onConfirm}>
+                        <DebounceButton
+                            variant="contained"
+                            color="danger"
+                            onClick={onConfirm}
+                            data-testid="confirm_button">
                             {t('confirm')}
                         </DebounceButton>
                         <DebounceButton variant="outlined" color="primary" onClick={props.onClose}>

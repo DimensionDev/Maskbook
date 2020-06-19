@@ -33,6 +33,14 @@ export async function fromText(page: Page, backup: string) {
     const restoreButton = await page.waitFor('[data-testid="restore_button"]')
     await restoreButton.click()
     await page.waitFor(500)
+
+    const confirmButton = await page.waitFor('[data-testid="confirm_button"]')
+    await confirmButton.click()
+    await page.waitFor(500)
+
+    const finishButton = await page.waitFor('[data-testid="finish_button"]')
+    await finishButton.click()
+    await page.waitFor(500)
 }
 
 export async function fromPersona(
