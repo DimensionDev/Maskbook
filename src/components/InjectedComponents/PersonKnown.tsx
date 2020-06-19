@@ -25,23 +25,13 @@ export function PersonKnown(props: PersonKnownProps) {
         if (bio && myProfile) {
             const prove = await Services.Crypto.getMyProveBio(myProfile.identifier)
             if (prove && bio.includes(prove)) return null
-            return { type: 'self', prove }
-        } else {
-            const otherProfile = await Services.Identity.queryProfile(owner)
-            if (!otherProfile.linkedPersona?.fingerprint) return null
-            return { type: 'others' }
+            return { type: 'self', prove } as const
         }
+        return null
     }, [owner?.toText(), bio])
     if (state.loading) return null
     if (!state.value) return null
-    switch (state.value.type) {
-        case 'self':
-            return <PersonKnownSelf {...props} bio={state.value.prove} />
-        case 'others':
-            return <PersonKnownOthers {...props} bio={state.value.prove} />
-        default:
-            return null
-    }
+    return <PersonKnownSelf {...props} bio={state.value.prove} />
 }
 
 export interface PersonKnownUIProps {
@@ -55,12 +45,5 @@ export function PersonKnownSelf(props: PersonKnownUIProps) {
             title={t('please_include_proof_your_bio', { bio: props.bio })}
             {...props.AdditionalContentProps}
         />
-    )
-}
-
-export function PersonKnownOthers(props: PersonKnownUIProps) {
-    const { t } = useI18N()
-    return (
-        <AdditionalContent title={t('seen_in_maskbook_database')} titleIcon="check" {...props.AdditionalContentProps} />
     )
 }
