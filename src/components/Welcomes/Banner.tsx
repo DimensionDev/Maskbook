@@ -29,7 +29,7 @@ interface BannerUIProps
 }
 const useStyles = makeStyles((theme: Theme) => ({
     root: {
-        border: '1px solid #ccc',
+        border: `1px solid ${theme.palette.divider}`,
         borderRadius: 4,
         marginBottom: 10,
     },

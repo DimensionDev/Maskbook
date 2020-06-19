@@ -4,7 +4,7 @@ describe('dashboard - setup a account', () => {
     })
 
     it('render welcome page', async () => {
-        const setupButton = await page.waitFor('a[href="#/setup/create-persona"]')
+        const setupButton = await page.waitFor('a[href="#/setup/restore-database"]')
         expect(await setupButton.evaluate((e) => e.textContent.toLowerCase())).toBe('set up')
     })
 

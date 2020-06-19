@@ -43,9 +43,6 @@ const wizardTheme = (theme: Theme): Theme =>
                     paddingTop: 14.5,
                     paddingBottom: 14.5,
                 },
-                notchedOutline: {
-                    borderColor: '#EAEAEA',
-                },
             },
             MuiInputLabel: {
                 outlined: {
@@ -97,10 +94,7 @@ const useWizardDialogStyles = makeStyles((theme) =>
             width: 320,
             minHeight: 404,
             borderRadius: 12,
-            boxShadow:
-                theme.palette.type === 'dark'
-                    ? 'none'
-                    : '0px 2px 4px rgba(96, 97, 112, 0.16), 0px 0px 1px rgba(40, 41, 61, 0.04)',
+            boxShadow: theme.palette.type === 'dark' ? 'none' : theme.shadows[4],
             border: `${theme.palette.type === 'dark' ? 'solid' : 'none'} 1px ${theme.palette.divider}`,
             overflow: 'hidden',
         },

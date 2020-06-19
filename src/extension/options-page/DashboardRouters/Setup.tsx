@@ -782,9 +782,6 @@ const setupTheme = (theme: Theme): Theme =>
                     paddingTop: 14.5,
                     paddingBottom: 14.5,
                 },
-                notchedOutline: {
-                    borderColor: '#EAEAEA',
-                },
             },
             MuiInputLabel: {
                 outlined: {

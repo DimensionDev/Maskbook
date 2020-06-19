@@ -190,7 +190,6 @@
     "options_mobile_export_generating": "Generating QR Code…",
     "options_mobile_export_subtitle": "DO NOT share it with others!",
     "password": "Password",
-    "extra_password": "Extra Password",
     "payload_bad": "This post seems to be corrupted. Maskbook cannot decrypt it.",
     "payload_incomplete": "This post is incomplete. You need to view the full post to decrypt it.",
     "payload_not_found": "Payload not found.",

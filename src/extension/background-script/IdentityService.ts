@@ -84,7 +84,7 @@ export function queryMyPersonas(network?: string): Promise<Persona[]> {
 }
 export async function restoreFromObject(object: null | BackupJSONFileLatest) {
     if (!object) return null
-    await restoreBackup(object!)
+    await restoreBackup(object)
     if (object?.personas?.length) {
         return queryPersona(Identifier.fromString(object.personas[0].identifier, ECKeyIdentifier).unwrap())
     }
