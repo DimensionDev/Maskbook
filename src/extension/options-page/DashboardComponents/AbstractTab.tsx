@@ -43,7 +43,7 @@ export default function AbstractTab({ tabs, state, height = 200 }: AbstractTabPr
                             component="span"
                             label={tab.label}
                             key={tab.label}
-                            data-testid={`initialization_${tab.label.toLowerCase()}_tab`}
+                            data-testid={`${tab.label.toLowerCase()}_tab`}
                         />
                     ))}
                 </Tabs>

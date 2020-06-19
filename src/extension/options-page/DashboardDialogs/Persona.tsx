@@ -82,7 +82,7 @@ export function PersonaImportDialog() {
                             label="Name"
                             margin="dense"
                             inputProps={{
-                                'data-testid': 'initialization_username_input',
+                                'data-testid': 'username_input',
                             }}
                         />
                         <TextField
@@ -92,7 +92,7 @@ export function PersonaImportDialog() {
                             label="Mnemonic Words"
                             margin="dense"
                             inputProps={{
-                                'data-testid': 'initialization_mnemonic_input',
+                                'data-testid': 'mnemonic_input',
                             }}
                         />
                         <TextField
@@ -102,7 +102,7 @@ export function PersonaImportDialog() {
                             placeholder={t('dashboard_password_optional_hint')}
                             margin="dense"
                             inputProps={{
-                                'data-testid': 'initialization_password_input',
+                                'data-testid': 'password_input',
                             }}
                         />
                     </>
@@ -163,7 +163,7 @@ export function PersonaImportDialog() {
                         variant="contained"
                         color="primary"
                         onClick={importPersona}
-                        data-testid="initialization_import_button">
+                        data-testid="import_button">
                         {t('import')}
                     </ActionButton>
                 )
@@ -188,7 +188,7 @@ export function PersonaImportFailedDialog(props: PersonaImportFailedDialogProps)
                     variant="outlined"
                     color="default"
                     onClick={onConfirm}
-                    data-testid="initialization_dialog_comfirm_button">
+                    data-testid="dialog_comfirm_button">
                     {t('ok')}
                 </ActionButton>
             }></DialogContentItem>
@@ -220,7 +220,7 @@ export function PersonaImportSuccessDialog(props: PersonaImportSuccessDialogProp
                     variant="outlined"
                     color="default"
                     onClick={onConfirm}
-                    data-testid="initialization_dialog_comfirm_button">
+                    data-testid="dialog_comfirm_button">
                     {t('ok')}
                 </ActionButton>
             }></DialogContentItem>
