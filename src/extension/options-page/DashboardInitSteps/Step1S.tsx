@@ -61,7 +61,7 @@ export default function InitStep1S() {
                 color="primary"
                 onClick={createPersonaAndNext}
                 component="a"
-                data-testid="initialization_next_button">
+                data-testid="next_button">
                 {t('next')}
             </ActionButton>
         </>
