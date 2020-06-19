@@ -11,7 +11,7 @@ beforeAll(async () => {
 
 describe(`${INITIALIZATION_STORY_URL}-Workflow1B:CoreInit/RestoreBackup`, () => {
     beforeEach(async () => {
-        await dashboard.openInitializeRestore(page)
+        await dashboard.openSetupRestoreDatabase(page)
     })
 
     afterEach(async () => {
@@ -25,11 +25,11 @@ describe(`${INITIALIZATION_STORY_URL}-Workflow1B:CoreInit/RestoreBackup`, () => 
         // 'db_backup_2_personas_0_profile', // TODO
     ]) {
         it(`backup file - ${backup}`, async () => {
-            await restore.fromFile(page, join(__dirname, `../../fixtures/initialization/${backup}.json`))
+            await restore.fromFile(page, join(__dirname, `../../fixtures/setup/${backup}.json`))
             switch (backup) {
                 case 'db_backup_1_persona_1_profile':
                     const personaTitle = await page.waitFor('[data-testid="persona_title"]')
-                    expect(await personaTitle.evaluate(e => e.textContent?.toLowerCase())).toBe('alice')
+                    expect(await personaTitle.evaluate((e) => e.textContent?.toLowerCase())).toBe('alice')
                     break
                 case 'db_backup_1_persona_0_profile':
                     expect((await page.evaluate(() => location.hash)).includes('#/initialize/2s')).toBeTruthy()
@@ -44,7 +44,7 @@ describe(`${INITIALIZATION_STORY_URL}-Workflow1B:CoreInit/RestoreBackup`, () => 
 
 describe(`${INITIALIZATION_STORY_URL}-Workflow1B:CoreInit/RestoreBackup`, () => {
     beforeEach(async () => {
-        await dashboard.openInitializeRestore(page)
+        await dashboard.openSetupRestoreDatabase(page)
     })
 
     afterEach(async () => {
@@ -58,11 +58,11 @@ describe(`${INITIALIZATION_STORY_URL}-Workflow1B:CoreInit/RestoreBackup`, () => 
         // 'db_backup_2_personas_0_profile', // TODO
     ]) {
         it(`text - ${backup}`, async () => {
-            await restore.fromText(page, join(__dirname, `../../fixtures/initialization/${backup}.json`))
+            await restore.fromText(page, join(__dirname, `../../fixtures/setup/${backup}.json`))
             switch (backup) {
                 case 'db_backup_1_persona_1_profile':
                     const personaTitle = await page.waitFor('[data-testid="persona_title"]')
-                    expect(await personaTitle.evaluate(e => e.textContent?.toLowerCase())).toBe('alice')
+                    expect(await personaTitle.evaluate((e) => e.textContent?.toLowerCase())).toBe('alice')
                     break
                 case 'db_backup_1_persona_0_profile':
                     expect((await page.evaluate(() => location.hash)).includes('#/initialize/2s')).toBeTruthy()
@@ -77,7 +77,7 @@ describe(`${INITIALIZATION_STORY_URL}-Workflow1B:CoreInit/RestoreBackup`, () => 
 
 describe(`${INITIALIZATION_STORY_URL}-Workflow1B:CoreInit/RestoreBackup`, () => {
     beforeEach(async () => {
-        await dashboard.openInitializePersona(page)
+        await dashboard.openSetupRestoreDatabaseAdvance(page)
     })
 
     afterEach(async () => {

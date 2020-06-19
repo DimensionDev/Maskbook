@@ -8,15 +8,9 @@ export async function open(page: Page) {
     await page.waitFor(500)
 }
 
-export async function openHome(page: Page) {
+export async function openPersonas(page: Page) {
     await page.bringToFront()
-    await page.goto(`${DASHBOARD_URL}#/home/`)
-    await page.waitFor(500)
-}
-
-export async function openHomeNoRedirect(page: Page) {
-    await page.bringToFront()
-    await page.goto(`${DASHBOARD_URL}#/home/?no_redirect`)
+    await page.goto(`${DASHBOARD_URL}#/personas?noredirect=true`)
     await page.waitFor(500)
 }
 
@@ -28,48 +22,30 @@ export async function openDebug(page: Page) {
 
 export async function openSettings(page: Page) {
     await page.bringToFront()
-    await page.goto(`${DASHBOARD_URL}#/settings`)
+    await page.goto(`${DASHBOARD_URL}#/settings?noredirect=true`)
     await page.waitFor(500)
 }
 
-export async function openInitializeStart(page: Page) {
+export async function openSetupCreatePersona(page: Page) {
     await page.bringToFront()
-    await page.goto(`${DASHBOARD_URL}#/initialize/start`)
+    await page.goto(`${DASHBOARD_URL}#/setup/create-persona`)
     await page.waitFor(500)
 }
 
-export async function openInitializeNew(page: Page) {
+export async function openSetupRestoreDatabase(page: Page) {
     await page.bringToFront()
-    await page.goto(`${DASHBOARD_URL}#/initialize/1s`)
+    await page.goto(`${DASHBOARD_URL}#/setup/restore-database?noredirect=true`)
     await page.waitFor(500)
 }
 
-export async function openInitializeRestore(page: Page) {
+export async function openSetupRestoreDatabaseAdvance(page: Page) {
     await page.bringToFront()
-    await page.goto(`${DASHBOARD_URL}#/initialize/1r`)
+    await page.goto(`${DASHBOARD_URL}#/setup/restore-database-advance?noredirect=true`)
     await page.waitFor(500)
-}
-
-export async function openInitializePersona(page: Page) {
-    await page.bringToFront()
-    await page.goto(`${DASHBOARD_URL}#/initialize/1ra/persona/import`)
-    await page.waitFor(500)
-}
-
-export async function toggleImagePayload(page: Page, expected: boolean) {
-    // open settings
-    await openSettings(page)
-
-    // toggle the switch if needed
-    const enableImageModeSwitch = await page.waitFor('[data-testid="enable_image_mode"] + div .MuiSwitch-root')
-    if ((await enableImageModeSwitch.evaluate((e) => !!e.querySelector('.Mui-checked'))) !== expected) {
-        await enableImageModeSwitch.click()
-        await page.waitFor(1000)
-    }
 }
 
 export async function reset(page: Page) {
-    await openHomeNoRedirect(page)
+    await openPersonas(page)
 
     // remove all personas
     while (true) {

@@ -11,8 +11,8 @@ beforeAll(async () => {
     await helpers.setupPage(page)
 
     // restore alice's db backup
-    await dashboard.openInitializeRestore(page)
-    await restore.fromFile(page, join(__dirname, '../../fixtures/initialization/db_backup_1_persona_0_profile.json'))
+    await dashboard.openSetupRestoreDatabase(page)
+    await restore.fromFile(page, join(__dirname, '../../fixtures/setup/db_backup_1_persona_0_profile.json'))
 })
 
 afterAll(async () => {
@@ -42,7 +42,7 @@ describe(`${INITIALIZATION_STORY_URL}-Workflow2:ConnectProfile`, () => {
             await loginPage.close()
 
             // open dashbaord
-            await dashboard.openHome(page)
+            await dashboard.openPersonas(page)
 
             // click the connect button
             const connectButton = await page.waitFor(`[data-testid="connect_button_${sns.name}"]`)
@@ -53,44 +53,41 @@ describe(`${INITIALIZATION_STORY_URL}-Workflow2:ConnectProfile`, () => {
             const snsPage = await sns.getActivePage(page.browser())
 
             // sns home page is not opened
-            if (!snsPage) {
-                throw new Error(`fail to find ${sns.name} home page`)
-            }
+            if (!snsPage) throw new Error(`fail to find ${sns.name} home page`)
 
             // wait maskbook inject immersive dialog
-            await snsPage.waitFor(sns.immersiveDialogSelector)
+            await snsPage.waitFor(sns.setupGuideSelector)
 
             // validate username
-            const idInput = await snsPage.waitForFunction(
-                `document.querySelector('${sns.immersiveDialogSelector}').shadowRoot.querySelector('[data-testid="id_input"]')`,
+            const usernameInput = await snsPage.waitForFunction(
+                `document.querySelector('${sns.setupGuideSelector}').shadowRoot.querySelector('[data-testid="username_input"]')`,
             )
-            expect(await idInput.asElement()?.evaluate(e => (e as any).value)).toBe(sns.id)
+            expect(await usernameInput.asElement()?.evaluate((e) => (e as any).value)).toBe(sns.id)
 
-            // click the 'confirm' button
-            const confirmButton = await snsPage.waitForFunction(
-                `document.querySelector('${sns.immersiveDialogSelector}').shadowRoot.querySelector('[data-testid="confirm_button"]')`,
+            // click the 'next' button
+            const nextButton = await snsPage.waitForFunction(
+                `document.querySelector('${sns.setupGuideSelector}').shadowRoot.querySelector('[data-testid="next_button"]')`,
             )
-            await (confirmButton as any).click()
+            await (nextButton as any).click()
 
             // redirect to profile page
             await snsPage.waitFor(sns.profileSelector)
 
             // wait maskbook inject immersive dialog
-            await snsPage.waitFor(sns.immersiveDialogSelector)
+            await snsPage.waitFor(sns.setupGuideSelector)
 
             // validate prove bio
             const proveTextarea = await snsPage.waitForFunction(
-                `document.querySelector('${sns.immersiveDialogSelector}').shadowRoot.querySelector('[data-testid="prove_textarea"]')`,
+                `document.querySelector('${sns.setupGuideSelector}').shadowRoot.querySelector('[data-testid="prove_textarea"]')`,
             )
-            const proveContent = await proveTextarea.asElement()?.evaluate(e => e.textContent)
+            const proveContent = await proveTextarea.asElement()?.evaluate((e) => e.textContent)
             expect(proveContent).toBeTruthy()
 
             // wait for UI update
             await snsPage.waitFor(500)
-
             // listening 'dialog' event
-            await new Promise(async resolve => {
-                snsPage.on('dialog', async dialog => {
+            await new Promise(async (resolve) => {
+                snsPage.on('dialog', async (dialog) => {
                     // get prompt value
                     const defaultValue = dialog.defaultValue()
 
@@ -110,9 +107,7 @@ describe(`${INITIALIZATION_STORY_URL}-Workflow2:ConnectProfile`, () => {
                         if (!descriptionTextarea) return
 
                         // validate bio
-                        const bio = await descriptionTextarea.evaluate(
-                            e => e.textContent || (e as HTMLTextAreaElement).value,
-                        )
+                        const bio = await descriptionTextarea.evaluate((e) => (e as HTMLTextAreaElement).value)
                         expect(bio?.includes(proveContent!)).toBeTruthy()
                         resolve()
                     }
@@ -120,7 +115,7 @@ describe(`${INITIALIZATION_STORY_URL}-Workflow2:ConnectProfile`, () => {
 
                 // click the 'add it for me' button
                 const addButton = await snsPage.waitForFunction(
-                    `document.querySelector('${sns.immersiveDialogSelector}').shadowRoot.querySelector('[data-testid="add_button"]')`,
+                    `document.querySelector('${sns.setupGuideSelector}').shadowRoot.querySelector('[data-testid="add_button"]')`,
                 )
                 await (addButton as any).click()
             })
@@ -128,7 +123,7 @@ describe(`${INITIALIZATION_STORY_URL}-Workflow2:ConnectProfile`, () => {
             // click the 'finish' button
             await snsPage.waitFor(500)
             const finishButton = await snsPage.waitForFunction(
-                `document.querySelector('${sns.immersiveDialogSelector}').shadowRoot.querySelector('[data-testid="finish_button"]')`,
+                `document.querySelector('${sns.setupGuideSelector}').shadowRoot.querySelector('[data-testid="add_button"]')`,
             )
             await (finishButton as any).click()
 
