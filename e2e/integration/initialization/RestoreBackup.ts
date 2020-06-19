@@ -1,3 +1,4 @@
+import { join } from 'path'
 import * as dashboard from '../../commands/dashboard'
 import * as restore from '../../commands/restore'
 import * as helpers from '../../support/helpers'
@@ -24,7 +25,7 @@ describe(`${INITIALIZATION_STORY_URL}-Workflow1B:CoreInit/RestoreBackup`, () => 
         // 'db_backup_2_personas_0_profile', // TODO
     ]) {
         it(`backup file - ${backup}`, async () => {
-            await restore.fromFile(page, `../fixtures/initialization/${backup}.json`)
+            await restore.fromFile(page, join(__dirname, `../../fixtures/initialization/${backup}.json`))
             switch (backup) {
                 case 'db_backup_1_persona_1_profile':
                     const personaTitle = await page.waitFor('[data-testid="persona_title"]')
@@ -57,7 +58,7 @@ describe(`${INITIALIZATION_STORY_URL}-Workflow1B:CoreInit/RestoreBackup`, () => 
         // 'db_backup_2_personas_0_profile', // TODO
     ]) {
         it(`text - ${backup}`, async () => {
-            await restore.fromText(page, `../fixtures/initialization/${backup}.json`)
+            await restore.fromText(page, join(__dirname, `../../fixtures/initialization/${backup}.json`))
             switch (backup) {
                 case 'db_backup_1_persona_1_profile':
                     const personaTitle = await page.waitFor('[data-testid="persona_title"]')

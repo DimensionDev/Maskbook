@@ -43,7 +43,9 @@
                 "key_ops": ["encrypt", "decrypt"],
                 "kty": "oct"
             },
-            "linkedProfiles": [["person:facebook.com/alice", { "connectionConfirmState": "confirmed" }]]
+            "linkedProfiles": [
+                ["person:facebook.com/%E2E_ALICE_FACEBOOK_ID%", { "connectionConfirmState": "confirmed" }]
+            ]
         }
     ],
     "posts": [],
@@ -51,14 +53,14 @@
         {
             "createdAt": 1584508747338,
             "updatedAt": 1584508747338,
-            "identifier": "person:facebook.com/alice",
+            "identifier": "person:facebook.com/%E2E_ALICE_FACEBOOK_ID%",
             "linkedPersona": "ec_key:secp256k1/ArjRiU0WBLcl6tVA68mekhaUVMLXKT0LmT8sFvESYNi4"
         }
     ],
     "userGroups": [
         {
             "groupName": "_default_friends_group_",
-            "identifier": "group:facebook.com/alice/_default_friends_group_",
+            "identifier": "group:facebook.com/%E2E_ALICE_FACEBOOK_ID%/_default_friends_group_",
             "members": []
         }
     ]

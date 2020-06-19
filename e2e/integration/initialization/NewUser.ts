@@ -4,27 +4,19 @@ import * as helpers from '../../support/helpers'
 import Twitter from '../../commands/twitter'
 import Facebook from '../../commands/facebook'
 
-beforeAll(async () => {
-    // setup page
-    await helpers.setupPage(page)
-})
-
 describe(`${INITIALIZATION_STORY_URL}-Workflow1A:CoreInit/NewUser`, () => {
-    beforeEach(async () => {
-        await dashboard.openInitializeNew(page)
-    })
-
-    afterEach(async () => {
-        await dashboard.reset(page)
-    })
-
     for (const sns of [new Twitter('', '', ''), new Facebook('', '', '')]) {
         it(sns.name, async () => {
-            // fill the form
+            // setup page
+            await helpers.setupPage(page)
+
+            // open initialize page
+            await dashboard.openInitializeNew(page)
+
+            // fill & submit the form
             const usernameInput = await page.waitFor('[data-testid="username_input"]')
             const passwordInput = await page.waitFor('[data-testid="password_input"]')
             const nextButton = await page.waitFor('[data-testid="next_button"]')
-
             await usernameInput.type('Alice')
             await passwordInput.type('12345678')
             await nextButton.click()
@@ -47,6 +39,9 @@ describe(`${INITIALIZATION_STORY_URL}-Workflow1A:CoreInit/NewUser`, () => {
                     .url()
                     .includes(sns.name),
             ).toBeTruthy()
+
+            // reset dashboard
+            await dashboard.reset(page)
         })
     }
 })
