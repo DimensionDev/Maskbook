@@ -99,13 +99,17 @@ export default function PersonaCard({ persona }: Props) {
             <Typography className={classes.header} variant="h5" component="h2">
                 {!rename ? (
                     <>
-                        <span title={persona.nickname} className={classes.title}>
+                        <span
+                            title={persona.nickname}
+                            className={classes.title}
+                            data-testid="initialization_persona_title">
                             {persona.nickname}
                         </span>
                         <IconButton
                             size="small"
                             className={classes.menu}
-                            onClick={(e) => openMenu({ anchorEl: e.currentTarget })}>
+                            onClick={(e) => openMenu({ anchorEl: e.currentTarget })}
+                            data-testid="initialization_persona_setting_icon">
                             <MoreVertIcon />
                         </IconButton>
                         {menu}

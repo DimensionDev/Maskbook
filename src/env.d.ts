@@ -3,7 +3,7 @@
 /// <reference types="react-dom/experimental" />
 
 declare const webpackEnv: {
-    readonly target: 'Chromium' | 'Firefox' | 'WKWebview' | undefined
+    readonly target: 'Chromium' | 'Firefox' | 'WKWebview' | 'E2E' | undefined
     readonly firefoxVariant: 'android' | 'desktop' | 'GeckoView' | undefined
     readonly genericTarget: 'facebookApp' | 'browser'
 }

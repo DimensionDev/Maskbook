@@ -161,6 +161,7 @@ export default function InitStep1R() {
                     type="file"
                     accept="application/json"
                     ref={ref}
+                    data-testid="initialization_upload_input"
                     onChange={({ currentTarget }: React.ChangeEvent<HTMLInputElement>) => {
                         if (currentTarget.files) {
                             setFile(currentTarget.files.item(0))
@@ -177,7 +178,11 @@ export default function InitStep1R() {
                         t('welcome_1b_file_selected', { filename: file.name })
                     ) : (
                         <>
-                            <ActionButton variant="contained" color="primary" className={classes.restoreBoxButton}>
+                            <ActionButton
+                                variant="contained"
+                                color="primary"
+                                className={classes.restoreBoxButton}
+                                data-testid="initialization_upload_button">
                                 {t('select_file')}
                             </ActionButton>
                             <Typography variant="body2">{t('select_file_hint')}</Typography>

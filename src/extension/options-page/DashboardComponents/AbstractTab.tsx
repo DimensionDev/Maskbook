@@ -38,7 +38,13 @@ export default function AbstractTab({ tabs, state, height = 200 }: AbstractTabPr
                     textColor="primary"
                     onChange={(_: React.ChangeEvent<{}>, newValue: number) => setValue(newValue)}>
                     {tabs.map((tab) => (
-                        <Tab className={classes.tab} component="span" label={tab.label} key={tab.label} />
+                        <Tab
+                            className={classes.tab}
+                            component="span"
+                            label={tab.label}
+                            key={tab.label}
+                            data-testid={`initialization_${tab.label.toLowerCase()}_tab`}
+                        />
                     ))}
                 </Tabs>
             </Paper>

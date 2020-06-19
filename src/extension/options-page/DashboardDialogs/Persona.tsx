@@ -81,6 +81,9 @@ export function PersonaImportDialog() {
                             required
                             label="Name"
                             margin="dense"
+                            inputProps={{
+                                'data-testid': 'initialization_username_input',
+                            }}
                         />
                         <TextField
                             required
@@ -88,6 +91,9 @@ export function PersonaImportDialog() {
                             onChange={(e) => setMnemonicWordValue(e.target.value)}
                             label="Mnemonic Words"
                             margin="dense"
+                            inputProps={{
+                                'data-testid': 'initialization_mnemonic_input',
+                            }}
                         />
                         <TextField
                             onChange={(e) => setPassword(e.target.value)}
@@ -95,6 +101,9 @@ export function PersonaImportDialog() {
                             label="Password"
                             placeholder={t('dashboard_password_optional_hint')}
                             margin="dense"
+                            inputProps={{
+                                'data-testid': 'initialization_password_input',
+                            }}
                         />
                     </>
                 ),
@@ -150,7 +159,11 @@ export function PersonaImportDialog() {
             content={content}
             actions={
                 tabState === 2 ? null : (
-                    <ActionButton variant="contained" color="primary" onClick={importPersona}>
+                    <ActionButton
+                        variant="contained"
+                        color="primary"
+                        onClick={importPersona}
+                        data-testid="initialization_import_button">
                         {t('import')}
                     </ActionButton>
                 )
@@ -171,7 +184,11 @@ export function PersonaImportFailedDialog(props: PersonaImportFailedDialogProps)
             title={t('import_failed')}
             content={<Typography variant="body1">{t('dashboard_import_persona_failed')}</Typography>}
             actions={
-                <ActionButton variant="outlined" color="default" onClick={onConfirm}>
+                <ActionButton
+                    variant="outlined"
+                    color="default"
+                    onClick={onConfirm}
+                    data-testid="initialization_dialog_comfirm_button">
                     {t('ok')}
                 </ActionButton>
             }></DialogContentItem>
@@ -199,7 +216,11 @@ export function PersonaImportSuccessDialog(props: PersonaImportSuccessDialogProp
                 </Typography>
             }
             actions={
-                <ActionButton variant="outlined" color="default" onClick={onConfirm}>
+                <ActionButton
+                    variant="outlined"
+                    color="default"
+                    onClick={onConfirm}
+                    data-testid="initialization_dialog_comfirm_button">
                     {t('ok')}
                 </ActionButton>
             }></DialogContentItem>
