@@ -1,5 +1,5 @@
 import { Page, ElementHandle, Browser } from 'puppeteer'
-import { screenshot, updateInput, getPageByUrl } from '../support/helpers'
+import { screenshot, updateInput, getPageByUrl, setupPage } from '../support/helpers'
 import { SNS } from '../types/SNS'
 
 class Twitter implements SNS {
@@ -8,27 +8,27 @@ class Twitter implements SNS {
     name = 'twitter.com'
 
     // selectors
+    composeImageSelector = '[data-testid="primaryColumn"] [data-testid="attachments"] img'
+    composeEditorSelector = '[data-testid="primaryColumn"] .DraftEditor-root [contenteditable="true"]'
     profileSelector = '[data-testid="primaryColumn"]'
-    immersiveDialogSelector = 'body > script[nonce] ~ span'
     bioTextareaSelector = 'textarea[name="description"]'
+    immersiveDialogSelector = 'body > script[nonce] ~ span'
+    postDialogHintSelector = '[data-testid="primaryColumn"] [role="progressbar"] ~ span'
+    postDialogModalSelector = 'body > script[nonce] ~ div[aria-hidden="true"]'
 
     async getActivePage(browser: Browser) {
-        return (
+        const page =
             (await getPageByUrl(browser, 'https://twitter.com/')) ||
             (await getPageByUrl(browser, 'https://twitter.com/home'))
-        )
+        if (page) {
+            await setupPage(page)
+        }
+        return page
     }
 
-    async openHome(page: Page) {
+    async openNewsFeed(page: Page) {
         await page.bringToFront()
         await page.goto('https://twitter.com/home', {
-            waitUntil: 'load',
-        })
-    }
-
-    async openProfile(page: Page) {
-        await page.bringToFront()
-        await page.goto(`https://twitter.com/${this.username}`, {
             waitUntil: 'load',
         })
     }
@@ -40,31 +40,23 @@ class Twitter implements SNS {
         })
     }
 
-    async login(browser: Browser) {
-        const page = await browser.newPage()
-
-        // set a modern viewport
-        await page.setViewport({ width: 1366, height: 768 })
-
+    async login(page: Page) {
         // let auto redirect happens
-        await page.goto('https://twitter.com/', {
-            // why networkidle2 ?
-            // https://github.com/puppeteer/puppeteer/issues/4863#issuecomment-536419476
-            waitUntil: 'networkidle2',
+        await page.goto('https://twitter.com/settings/account', {
+            waitUntil: 'load',
         })
 
         // logined
-        if ((await page.evaluate(() => location.href)).includes('home')) {
-            const profileLink = await page.waitFor('[aria-label="Profile"]')
+        if ((await page.evaluate(() => location.href)).includes('/settings/account')) {
+            const screenNameLink = await page.waitFor('[href="/settings/screen_name"]')
 
             // user already login
-            if ((await profileLink.evaluate(e => e.getAttribute('href')))?.includes(this.username)) {
-                await page.close()
+            if ((await screenNameLink.evaluate(e => e.textContent))?.includes(this.username)) {
                 return
             }
 
             // logout old account
-            await this.logout(browser)
+            await this.logout(page)
         }
 
         // login with given account
@@ -97,15 +89,9 @@ class Twitter implements SNS {
 
         // wait for home
         await page.waitFor('[aria-label="Profile"]')
-        await page.close()
     }
 
-    async logout(browser: Browser) {
-        const page = await browser.newPage()
-
-        // set a modern viewport
-        await page.setViewport({ width: 1366, height: 768 })
-
+    async logout(page: Page) {
         // jump to logout dialog
         await page.goto('https://twitter.com/logout', {
             waitUntil: 'load',
@@ -114,7 +100,6 @@ class Twitter implements SNS {
         const confirmButton = await page.waitFor('[data-testid="confirmationSheetConfirm"]')
         await confirmButton.click()
         await page.waitFor('[data-testid="signupButton"]')
-        await page.close()
     }
 
     async getBio(page: Page) {

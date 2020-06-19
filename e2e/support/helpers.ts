@@ -1,10 +1,24 @@
 import { readFileSync } from 'fs'
 import { Page, ElementHandle, Dialog, Browser } from 'puppeteer'
 
-export function screenshot(name: string) {
+export function screenshot(page: Page, name: string) {
     return page.screenshot({
         path: `./screenshots/${name}.png`,
     })
+}
+
+export async function newPage(page: Page) {
+    const _newPage = await page.browser().newPage()
+    await setupPage(_newPage)
+    return _newPage
+}
+
+export async function setupPage(page: Page) {
+    // set a modern viewport
+    await page.setViewport({ width: 1366, height: 768 })
+
+    // wait for default option page to be opened
+    await page.waitFor(500)
 }
 
 // more: https://github.com/puppeteer/puppeteer/issues/3718#issuecomment-451325093
