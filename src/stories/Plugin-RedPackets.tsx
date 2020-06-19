@@ -14,7 +14,7 @@ import { action } from '@storybook/addon-actions'
 import { RedPacketDialogUI } from '../plugins/Wallet/UI/RedPacket/RedPacketDialog'
 import BigNumber from 'bignumber.js'
 import { makeTypedMessage } from '../extension/background-script/CryptoServices/utils'
-import { DAI_ADDRESS, OKB_ADDRESS } from '../plugins/Wallet/erc20'
+import { DAI_ADDRESS, OKB_ADDRESS } from '../plugins/Wallet/token'
 import { DecryptPostSuccess } from '../components/InjectedComponents/DecryptedPost/DecryptedPostSuccess'
 import { RedPacketMetaKey } from '../plugins/Wallet/RedPacketMetaKey'
 

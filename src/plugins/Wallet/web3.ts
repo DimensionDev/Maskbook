@@ -3,7 +3,7 @@ import type { WebsocketProvider } from 'web3-core'
 import { getWallets, recoverWallet, recoverWalletFromPrivateKey } from './wallet'
 import { PluginMessageCenter } from '../PluginMessages'
 import { sideEffect } from '../../utils/side-effects'
-import { currentEthereumNetworkSettings, getNetworkSettings } from './UI/Developer/EthereumNetworkSettings'
+import { ethereumNetworkSettings, getNetworkSettings } from './UI/Developer/EthereumNetworkSettings'
 
 export const web3 = new Web3()
 
@@ -38,7 +38,7 @@ export const resetWallet = async () => {
     }
 }
 
-currentEthereumNetworkSettings.addListener(resetProvider)
+ethereumNetworkSettings.addListener(resetProvider)
 PluginMessageCenter.on('maskbook.wallets.reset', resetWallet)
 
 sideEffect.then(() => {
