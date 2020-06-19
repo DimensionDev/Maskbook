@@ -1,5 +1,5 @@
 {
-    "_meta_": { "createdAt": 1585284379295, "maskbookVersion": "1.10.11", "version": 2, "type": "maskbook-backup" },
+    "_meta_": { "createdAt": 1585213294572, "maskbookVersion": "1.10.11", "version": 2, "type": "maskbook-backup" },
     "grantedHostPermissions": [
         "<all_urls>",
         "chrome://favicon/*",
@@ -11,42 +11,53 @@
     ],
     "personas": [
         {
-            "createdAt": 1584273741400,
-            "updatedAt": 1584273741400,
-            "identifier": "ec_key:secp256k1/ArjRiU0WBLcl6tVA68mekhaUVMLXKT0LmT8sFvESYNi4",
+            "createdAt": 1585213252982,
+            "updatedAt": 1585213252982,
+            "identifier": "ec_key:secp256k1/AhCrMWJl2aF9qtdWTagC4r4RVaOkb+3GmTdV|MWxmryr",
             "publicKey": {
-                "x": "uNGJTRYEtyXq1UDryZ6SFpRUwtcpPQuZPywW8RJg2Lg",
-                "y": "Spa6wfHUFqqfoN3L34tU6qd4kUuks92wdwN3otBYtAA",
+                "x": "EKsxYmXZoX2q11ZNqALivhFVo6Rv7caZN1X8xbGavKs",
+                "y": "xKFkyp77luNbCLqEvaQVOJFEbEXcGlc7vxmqMx746Qo",
                 "ext": true,
                 "key_ops": ["deriveKey", "deriveBits"],
                 "crv": "K-256",
                 "kty": "EC"
             },
             "privateKey": {
-                "d": "Y9858PUBRTP3ni-ePtfsjHQ9hhvjooiPVyc4GNp2Osg",
-                "x": "uNGJTRYEtyXq1UDryZ6SFpRUwtcpPQuZPywW8RJg2Lg",
-                "y": "Spa6wfHUFqqfoN3L34tU6qd4kUuks92wdwN3otBYtAA",
+                "d": "WWu90ctEg334KBsDhDamDiocmtFq0vm98YzJGB2nQAo",
+                "x": "EKsxYmXZoX2q11ZNqALivhFVo6Rv7caZN1X8xbGavKs",
+                "y": "xKFkyp77luNbCLqEvaQVOJFEbEXcGlc7vxmqMx746Qo",
                 "ext": true,
                 "key_ops": ["deriveKey", "deriveBits"],
                 "crv": "K-256",
                 "kty": "EC"
             },
-            "nickname": "Alice",
+            "nickname": "Bob",
             "mnemonic": {
                 "parameter": { "path": "m/44'/60'/0'/0/0", "withPassword": true },
-                "words": "uncle screen pull attack typical urban improve unique spider fine hover brisk"
+                "words": "snap toilet legal express slice romance boat bacon exchange quiz detail cushion"
             },
             "localKey": {
                 "alg": "A256GCM",
                 "ext": true,
-                "k": "pOeTQBl6J2C-n2SiZIb_izn0daTfhGaoJjWDx1pc0_Y",
+                "k": "b43I8iL9kzHb-ErlOXygfeMtX1kX-UtySgApMMqRyXE",
                 "key_ops": ["encrypt", "decrypt"],
                 "kty": "oct"
             },
-            "linkedProfiles": [
-                ["person:twitter.com/horge11", { "connectionConfirmState": "confirmed" }],
-                ["person:facebook.com/elya.domershhikova", { "connectionConfirmState": "confirmed" }]
-            ]
+            "linkedProfiles": [["person:twitter.com/hodochikai", { "connectionConfirmState": "confirmed" }]]
+        },
+        {
+            "createdAt": 1585213283945,
+            "updatedAt": 1585213283945,
+            "identifier": "ec_key:secp256k1/ArjRiU0WBLcl6tVA68mekhaUVMLXKT0LmT8sFvESYNi4",
+            "publicKey": {
+                "crv": "K-256",
+                "ext": true,
+                "x": "uNGJTRYEtyXq1UDryZ6SFpRUwtcpPQuZPywW8RJg2Lg",
+                "y": "Spa6wfHUFqqfoN3L34tU6qd4kUuks92wdwN3otBYtAA",
+                "key_ops": ["deriveKey", "deriveBits"],
+                "kty": "EC"
+            },
+            "linkedProfiles": [["person:twitter.com/horge11", { "connectionConfirmState": "pending" }]]
         },
         {
             "createdAt": 1585213005801,
@@ -60,22 +71,16 @@
                 "key_ops": ["deriveKey", "deriveBits"],
                 "kty": "EC"
             },
-            "linkedProfiles": [["person:twitter.com/hodochikai", { "connectionConfirmState": "confirmed" }]]
+            "linkedProfiles": []
         }
     ],
     "posts": [],
     "profiles": [
         {
-            "createdAt": 1585284310705,
-            "updatedAt": 1585284310705,
-            "identifier": "person:facebook.com/elya.domershhikova",
-            "linkedPersona": "ec_key:secp256k1/ArjRiU0WBLcl6tVA68mekhaUVMLXKT0LmT8sFvESYNi4"
-        },
-        {
             "createdAt": 1585212918355,
             "updatedAt": 1585212918355,
             "identifier": "person:twitter.com/hodochikai",
-            "linkedPersona": "ec_key:secp256k1/AtLl2YIxsHG4+p3jKFgXcLPCkyGuqviBKnhUUyhjrQ|t"
+            "linkedPersona": "ec_key:secp256k1/AhCrMWJl2aF9qtdWTagC4r4RVaOkb+3GmTdV|MWxmryr"
         },
         {
             "createdAt": 1585212864895,
@@ -87,23 +92,18 @@
     "userGroups": [
         {
             "groupName": "_default_friends_group_",
-            "identifier": "group:facebook.com/elya.domershhikova/_default_friends_group_",
-            "members": []
-        },
-        {
-            "groupName": "_default_friends_group_",
-            "identifier": "group:twitter.com/horge11/_default_friends_group_",
-            "members": ["person:twitter.com/hodochikai"]
+            "identifier": "group:twitter.com/hodochikai/_default_friends_group_",
+            "members": ["person:twitter.com/horge11"]
         },
         {
             "groupName": "_followers_group_",
-            "identifier": "group:twitter.com/horge11/_followers_group_",
-            "members": ["person:twitter.com/hodochikai"]
+            "identifier": "group:twitter.com/hodochikai/_followers_group_",
+            "members": ["person:twitter.com/horge11"]
         },
         {
             "groupName": "_following_group_",
-            "identifier": "group:twitter.com/horge11/_following_group_",
-            "members": ["person:twitter.com/hodochikai"]
+            "identifier": "group:twitter.com/hodochikai/_following_group_",
+            "members": ["person:twitter.com/horge11"]
         }
     ]
 }
