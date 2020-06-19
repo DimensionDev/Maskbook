@@ -32,7 +32,7 @@ import {
 import { useTwitterThemedPostDialogHint } from '../social-network-provider/twitter.com/ui/injectPostDialogHint'
 import { useTwitterButton } from '../social-network-provider/twitter.com/utils/theme'
 import { TwitterThemeProvider } from '../social-network-provider/twitter.com/ui/custom'
-import { PersonKnownSelf, PersonKnownOthers } from '../components/InjectedComponents/PersonKnown'
+import { PersonKnownSelf } from '../components/InjectedComponents/PersonKnown'
 import { figmaLink } from './utils'
 
 storiesOf('Injections', module)
@@ -209,15 +209,7 @@ storiesOf('Injections', module)
     })
     .add('Person Known', () => {
         const bio = text('Bio', '__bio__content__')
-        return (
-            <>
-                Self:
-                <PersonKnownSelf bio={bio} />
-                <br />
-                Others:
-                <PersonKnownOthers bio={bio} />
-            </>
-        )
+        return <PersonKnownSelf bio={bio} />
     })
     .add(
         'Post Dialog',
