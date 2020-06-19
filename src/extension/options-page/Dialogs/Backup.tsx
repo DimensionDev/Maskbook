@@ -127,6 +127,7 @@ function SelectBackup({ onConfirm }: SelectBackupProps) {
     const tabProps: AbstractTabProps = {
         tabs: [
             {
+                id: 'file',
                 label: t('restore_database_file'),
                 children: (
                     <RestoreFromBackupBox
@@ -140,6 +141,7 @@ function SelectBackup({ onConfirm }: SelectBackupProps) {
                 p: 0,
             },
             {
+                id: 'text',
                 label: t('restore_database_text'),
                 children: (
                     <InputBase
@@ -149,6 +151,9 @@ function SelectBackup({ onConfirm }: SelectBackupProps) {
                         multiline
                         value={textValue}
                         onChange={(e) => setTextValue(e.target.value)}
+                        inputProps={{
+                            'data-testid': 'upload_textarea',
+                        }}
                     />
                 ),
                 p: 0,
@@ -201,7 +206,8 @@ function SelectBackup({ onConfirm }: SelectBackupProps) {
                         variant="contained"
                         color="primary"
                         disabled={!(state[0] === 0 && backupValue) && !(state[0] === 1 && textValue)}
-                        onClick={() => restoreDB(state[0] === 0 ? backupValue : textValue)}>
+                        onClick={() => restoreDB(state[0] === 0 ? backupValue : textValue)}
+                        data-testid="restore_button">
                         {t('set_up_button_restore')}
                     </ActionButton>
                 </Box>

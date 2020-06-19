@@ -11,7 +11,7 @@ describe(`${INITIALIZATION_STORY_URL}-Workflow1A:CoreInit/NewUser`, () => {
             await helpers.setupPage(page)
 
             // open initialize page
-            await dashboard.openInitializeNew(page)
+            await dashboard.openSetupCreatePersona(page)
 
             // fill & submit the form
             const usernameInput = await page.waitFor('[data-testid="username_input"]')

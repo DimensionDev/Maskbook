@@ -11,7 +11,7 @@ beforeAll(async () => {
     await helpers.setupPage(page)
 
     // restore alice's db backup
-    await dashboard.openInitializeRestore(page)
+    await dashboard.openSetupRestoreDatabase(page)
     await restore.fromFile(page, join(__dirname, '../../fixtures/persona/persona_backup_alice.json'))
 })
 
@@ -81,9 +81,9 @@ describe(`${CREATE_POST_STORY_URL}#Story:CreatePost(?br=wip)-BasicWorkflow`, () 
                 await (defaultGroupChip as any).click()
 
                 // trun on/off image-based payload switch
-                const dashboardPage = await helpers.newPage(page)
-                await dashboard.toggleImagePayload(dashboardPage, enableImageMode)
-                await dashboardPage.close()
+                // const dashboardPage = await helpers.newPage(page)
+                // await dashboard.toggleImagePayload(dashboardPage, enableImageMode)
+                // await dashboardPage.close()
 
                 // click the finish
                 const finishButton = await snsFeedPage.waitForFunction(
@@ -94,13 +94,13 @@ describe(`${CREATE_POST_STORY_URL}#Story:CreatePost(?br=wip)-BasicWorkflow`, () 
                 // validate text
                 await snsFeedPage.waitFor(2000)
                 const payloadTextarea = await snsFeedPage.waitFor(sns.composeEditorSelector)
-                const cipherText = await payloadTextarea.evaluate(e => e.textContent)
+                const cipherText = await payloadTextarea.evaluate((e) => e.textContent)
                 expect(cipherText?.includes('Maskbook')).toBe(true)
 
                 // valdiate attachment
                 if (enableImageMode) {
                     const payloadImage = await snsFeedPage.waitFor(sns.composeImageSelector)
-                    const imageUrl = await payloadImage.evaluate(e => e.getAttribute('src'))
+                    const imageUrl = await payloadImage.evaluate((e) => e.getAttribute('src'))
                     expect(imageUrl).toBeTruthy()
                 }
 

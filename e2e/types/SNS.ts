@@ -48,9 +48,9 @@ export interface SNS {
     commentInputSelector: string
 
     /**
-     * the mount node for immersive dialog
+     * the mount node for setup guide
      */
-    immersiveDialogSelector: string
+    setupGuideSelector: string
 
     /**
      * the mount node for post dialog hint

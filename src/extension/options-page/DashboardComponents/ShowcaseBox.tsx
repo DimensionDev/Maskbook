@@ -45,7 +45,7 @@ export default function ShowcaseBox(props: ShowcaseBoxProps) {
                 </Typography>
             ) : null}
             <Paper className={classes.paper}>
-                <div className={classes.scroller}>
+                <div className={classes.scroller} data-testid="prove_textarea">
                     <Typography component="div" variant="body1" onClick={copyText} ref={ref} {...ContentProps}>
                         {children}
                     </Typography>

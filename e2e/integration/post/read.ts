@@ -11,7 +11,7 @@ beforeAll(async () => {
     await helpers.setupPage(page)
 
     // restore alice's db backup
-    await dashboard.openInitializeRestore(page)
+    await dashboard.openSetupRestoreDatabase(page)
     await restore.fromFile(page, join(__dirname, '../../fixtures/persona/persona_backup_alice.json'))
 })
 
