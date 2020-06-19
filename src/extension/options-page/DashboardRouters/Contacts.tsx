@@ -1,4 +1,4 @@
-import React, { useMemo, useState, Suspense, useRef } from 'react'
+import React, { useMemo, useState, Suspense, useRef, unstable_useTransition } from 'react'
 import DashboardRouterContainer from './Container'
 import { TextField, IconButton, Typography } from '@material-ui/core'
 import { makeStyles, createStyles } from '@material-ui/core/styles'
@@ -35,8 +35,7 @@ export default function DashboardContactsRouter() {
     const classes = useStyles()
     const [searchUI, setSearchUI] = useState('')
     const [search, setSearch] = useState('')
-    //@ts-ignore
-    const [startTransition] = React.useTransition({ timeoutMs: 5000 })
+    const [startTransition] = unstable_useTransition({ timeoutMs: 5000 })
     const actions = useMemo(
         () => [
             <TextField

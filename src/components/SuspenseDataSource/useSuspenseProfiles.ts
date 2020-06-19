@@ -6,12 +6,11 @@ import Services from '../../extension/service'
 // Change dependency to swr latest after this PR is merged and released
 import useSWR, { useSWRPages } from 'swr'
 import { last } from 'lodash-es'
-import React, { useCallback } from 'react'
+import React, { useCallback, unstable_useTransition } from 'react'
 import { IdentifierMap } from '../../database/IdentifierMap'
 
 export function useSWRProfiles(query: string | undefined) {
-    //@ts-ignore
-    const [startTransition, isPending] = React.useTransition({ timeoutMs: 10000 })
+    const [startTransition, isPending] = unstable_useTransition({ timeoutMs: 10000 })
     const queryKey = query ? 'profiles:' + query : 'profiles'
     const { isLoadingMore, ...swr } = useSWRPages<string | null, Profile[], unknown>(
         queryKey,
