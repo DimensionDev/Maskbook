@@ -46,7 +46,6 @@ export function DecryptPostDeveloperMode() {
                         encryptedText={encryptedText}
                         onDecrypted={(post) => {}}
                         profiles={[]}
-                        postBy={postByMyself ? whoAmIIdentifier : authorIdentifier}
                         whoAmI={whoAmIIdentifier}
                     />
                 </div>
