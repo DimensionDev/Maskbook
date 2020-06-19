@@ -6,7 +6,7 @@ import Services from '../../../../../extension/service'
 import { PluginMessageCenter } from '../../../../PluginMessages'
 import { formatBalance } from '../../../formatter'
 import { getUrl } from '../../../../../utils/utils'
-import { DAI_ADDRESS, OKB_ADDRESS } from '../../../erc20'
+import { DAI_ADDRESS, OKB_ADDRESS } from '../../../token'
 
 const useStyles = makeStyles((theme) =>
     createStyles({

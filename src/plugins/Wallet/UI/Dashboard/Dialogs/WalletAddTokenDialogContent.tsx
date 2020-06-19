@@ -6,7 +6,7 @@ import ListSubheader from '@material-ui/core/ListSubheader'
 import { useTheme, makeStyles } from '@material-ui/core/styles'
 import { VariableSizeList, ListChildComponentProps } from 'react-window'
 import { Typography, Switch, List, ListItem, ListItemText, ListItemSecondaryAction, Box } from '@material-ui/core'
-import type { ERC20TokenPredefinedData } from '../../../erc20'
+import type { ERC20TokenPredefinedData } from '../../../token'
 import Wallet from 'wallet.ts'
 
 const LISTBOX_PADDING = 8 // px
