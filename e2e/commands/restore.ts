@@ -1,5 +1,4 @@
 import { Page, ElementHandle } from 'puppeteer'
-import { join } from 'path'
 import { uploadFile, updateInput, loadFile, loadFileTmp } from '../support/helpers'
 
 export async function fromFile(page: Page, backup: string) {
@@ -8,7 +7,7 @@ export async function fromFile(page: Page, backup: string) {
     await page.waitFor(500)
 
     const uploadInput = await page.waitFor('[data-testid="upload_input"]')
-    await uploadFile(uploadInput, loadFileTmp(join(__dirname, backup)))
+    await uploadFile(uploadInput, loadFileTmp(backup))
 
     const finishButton = await page.waitFor('[data-testid="finish_button"]')
     await finishButton.click()
@@ -21,7 +20,7 @@ export async function fromText(page: Page, backup: string) {
     await page.waitFor(500)
 
     const uploadTextarea: ElementHandle<HTMLTextAreaElement> = await page.waitFor('[data-testid="upload_textarea"]')
-    await updateInput(uploadTextarea, loadFile(join(__dirname, backup)))
+    await updateInput(uploadTextarea, loadFile(backup))
 
     const restoreButton = await page.waitFor('[data-testid="restore_button"]')
     await restoreButton.click()
