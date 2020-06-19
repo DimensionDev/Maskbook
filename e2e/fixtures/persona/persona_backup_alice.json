@@ -44,8 +44,8 @@
                 "kty": "oct"
             },
             "linkedProfiles": [
-                ["person:twitter.com/horge11", { "connectionConfirmState": "confirmed" }],
-                ["person:facebook.com/elya.domershhikova", { "connectionConfirmState": "confirmed" }]
+                ["person:twitter.com/%E2E_ALICE_TWITTER_ID%", { "connectionConfirmState": "confirmed" }],
+                ["person:facebook.com/%E2E_ALICE_FACEBOOK_ID%", { "connectionConfirmState": "confirmed" }]
             ]
         },
         {
@@ -60,7 +60,10 @@
                 "key_ops": ["deriveKey", "deriveBits"],
                 "kty": "EC"
             },
-            "linkedProfiles": [["person:twitter.com/hodochikai", { "connectionConfirmState": "confirmed" }]]
+            "linkedProfiles": [
+                ["person:twitter.com/%E2E_BOB_TWITTER_ID%", { "connectionConfirmState": "confirmed" }],
+                ["person:facebook.com/%E2E_BOB_FACEBOOK_ID%", { "connectionConfirmState": "confirmed" }]
+            ]
         }
     ],
     "posts": [],
@@ -68,42 +71,48 @@
         {
             "createdAt": 1585284310705,
             "updatedAt": 1585284310705,
-            "identifier": "person:facebook.com/elya.domershhikova",
+            "identifier": "person:facebook.com/%E2E_ALICE_FACEBOOK_ID%",
             "linkedPersona": "ec_key:secp256k1/ArjRiU0WBLcl6tVA68mekhaUVMLXKT0LmT8sFvESYNi4"
-        },
-        {
-            "createdAt": 1585212918355,
-            "updatedAt": 1585212918355,
-            "identifier": "person:twitter.com/hodochikai",
-            "linkedPersona": "ec_key:secp256k1/AtLl2YIxsHG4+p3jKFgXcLPCkyGuqviBKnhUUyhjrQ|t"
         },
         {
             "createdAt": 1585212864895,
             "updatedAt": 1585212864895,
-            "identifier": "person:twitter.com/horge11",
+            "identifier": "person:twitter.com/%E2E_ALICE_TWITTER_ID%",
             "linkedPersona": "ec_key:secp256k1/ArjRiU0WBLcl6tVA68mekhaUVMLXKT0LmT8sFvESYNi4"
+        },
+        {
+            "createdAt": 1585212918000,
+            "updatedAt": 1585212918000,
+            "identifier": "person:facebook.com/%E2E_BOB_FACEBOOK_ID%",
+            "linkedPersona": "ec_key:secp256k1/AtLl2YIxsHG4+p3jKFgXcLPCkyGuqviBKnhUUyhjrQ|t"
+        },
+        {
+            "createdAt": 1585212918355,
+            "updatedAt": 1585212918355,
+            "identifier": "person:twitter.com/%E2E_BOB_TWITTER_ID%",
+            "linkedPersona": "ec_key:secp256k1/AtLl2YIxsHG4+p3jKFgXcLPCkyGuqviBKnhUUyhjrQ|t"
         }
     ],
     "userGroups": [
         {
             "groupName": "_default_friends_group_",
-            "identifier": "group:facebook.com/elya.domershhikova/_default_friends_group_",
-            "members": []
+            "identifier": "group:facebook.com/%E2E_ALICE_FACEBOOK_ID%/_default_friends_group_",
+            "members": ["person:facebook.com/%E2E_BOB_FACEBOOK_ID%"]
         },
         {
             "groupName": "_default_friends_group_",
-            "identifier": "group:twitter.com/horge11/_default_friends_group_",
-            "members": ["person:twitter.com/hodochikai"]
+            "identifier": "group:twitter.com/%E2E_ALICE_TWITTER_ID%/_default_friends_group_",
+            "members": ["person:twitter.com/%E2E_BOB_TWITTER_ID%"]
         },
         {
             "groupName": "_followers_group_",
-            "identifier": "group:twitter.com/horge11/_followers_group_",
-            "members": ["person:twitter.com/hodochikai"]
+            "identifier": "group:twitter.com/%E2E_ALICE_TWITTER_ID%/_followers_group_",
+            "members": ["person:twitter.com/%E2E_BOB_TWITTER_ID%"]
         },
         {
             "groupName": "_following_group_",
-            "identifier": "group:twitter.com/horge11/_following_group_",
-            "members": ["person:twitter.com/hodochikai"]
+            "identifier": "group:twitter.com/%E2E_ALICE_TWITTER_ID%/_following_group_",
+            "members": ["person:twitter.com/%E2E_BOB_TWITTER_ID%"]
         }
     ]
 }

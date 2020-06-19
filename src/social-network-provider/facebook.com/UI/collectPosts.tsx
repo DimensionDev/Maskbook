@@ -124,6 +124,7 @@ function getPostID(node: DOMProxy): null | string {
 }
 async function getSteganographyContent(node: DOMProxy) {
     const parent = node.current.parentElement
+
     if (!parent) return ''
     const imgNodes = parent.querySelectorAll<HTMLElement>(
         isMobileFacebook ? 'div>div>div>a>div>div>i.img' : '.userContentWrapper a[data-ploi]',
