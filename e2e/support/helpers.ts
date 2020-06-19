@@ -1,6 +1,6 @@
+import type { Page, ElementHandle, Browser } from 'puppeteer'
 import { readFileSync, writeFileSync } from 'fs'
 import { join } from 'path'
-import { Page, ElementHandle, Browser } from 'puppeteer'
 import { createHash } from 'crypto'
 import { tmpdir } from 'os'
 
@@ -26,15 +26,15 @@ export async function setupPage(page: Page) {
 
 // more: https://github.com/puppeteer/puppeteer/issues/3718#issuecomment-451325093
 export async function getPageByUrl(browser: Browser, url: string) {
-    return (await browser.targets()).find(t => t.url() === url)?.page()
+    return (await browser.targets()).find((t) => t.url() === url)?.page()
 }
 
 export async function uploadFile(input: ElementHandle<HTMLInputElement>, ...filePaths: string[]) {
     // reveal the upload node ensure uploadFile method is working
-    await input.evaluate(e => (e.style.display = 'block'))
+    await input.evaluate((e) => (e.style.display = 'block'))
     await input.uploadFile(...filePaths)
     // manually trigger change event for react
-    await input.evaluate(e => e.dispatchEvent(new Event('change', { bubbles: true })))
+    await input.evaluate((e) => e.dispatchEvent(new Event('change', { bubbles: true })))
 }
 
 export function loadFile(filePath: string) {
@@ -48,13 +48,7 @@ export function loadFile(filePath: string) {
 
 export function loadFileTmp(filePath: string) {
     const tmpContent = loadFile(filePath)
-    const tmpPath = join(
-        tmpdir(),
-        createHash('md5')
-            .update(tmpContent)
-            .digest()
-            .toString('hex'),
-    )
+    const tmpPath = join(tmpdir(), createHash('md5').update(tmpContent).digest().toString('hex'))
     writeFileSync(tmpPath, tmpContent)
     return tmpPath
 }

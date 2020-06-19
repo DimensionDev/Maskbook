@@ -1,5 +1,5 @@
-import { Page, Browser } from 'puppeteer'
-import { SNS } from '../types/SNS'
+import type { Page, Browser } from 'puppeteer'
+import type { SNS } from '../types/SNS'
 import { getPageByUrl, setupPage } from '../support/helpers'
 
 class Facebook implements SNS {
@@ -49,7 +49,7 @@ class Facebook implements SNS {
         // logined
         if (profileLink) {
             // user already login
-            if ((await profileLink.evaluate(e => e.getAttribute('href')))?.includes(this.id)) {
+            if ((await profileLink.evaluate((e) => e.getAttribute('href')))?.includes(this.id)) {
                 return
             }
 

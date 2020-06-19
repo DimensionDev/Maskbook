@@ -1,4 +1,4 @@
-import { Page, Browser } from 'puppeteer'
+import type { Page } from 'puppeteer'
 
 export const DASHBOARD_URL = 'chrome-extension://jkoeaghipilijlahjplgbfiocjhldnap/index.html'
 
@@ -62,7 +62,7 @@ export async function toggleImagePayload(page: Page, expected: boolean) {
 
     // toggle the switch if needed
     const enableImageModeSwitch = await page.waitFor('[data-testid="enable_image_mode"] + div .MuiSwitch-root')
-    if ((await enableImageModeSwitch.evaluate(e => !!e.querySelector('.Mui-checked'))) !== expected) {
+    if ((await enableImageModeSwitch.evaluate((e) => !!e.querySelector('.Mui-checked'))) !== expected) {
         await enableImageModeSwitch.click()
         await page.waitFor(1000)
     }
