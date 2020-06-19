@@ -20,6 +20,18 @@ export async function openHomeNoRedirect(page: Page) {
     await page.waitFor(500)
 }
 
+export async function openDebug(page: Page) {
+    await page.bringToFront()
+    await page.goto(`${DASHBOARD_URL}#/debug`)
+    await page.waitFor(500)
+}
+
+export async function openSettings(page: Page) {
+    await page.bringToFront()
+    await page.goto(`${DASHBOARD_URL}#/settings`)
+    await page.waitFor(500)
+}
+
 export async function openInitializeStart(page: Page) {
     await page.bringToFront()
     await page.goto(`${DASHBOARD_URL}#/initialize/start`)
@@ -49,17 +61,17 @@ export async function reset(page: Page) {
 
     // remove all personas
     while (true) {
-        const settingIcon = await page.$('[data-testid="initialization_persona_setting_icon"]')
+        const settingIcon = await page.$('[data-testid="persona_setting_icon"]')
 
         if (settingIcon) {
             await settingIcon.click()
             await page.waitFor(500)
 
-            const deleteButton = await page.waitFor('[data-testid="initialization_persona_delete_button"]')
+            const deleteButton = await page.waitFor('[data-testid="persona_delete_button"]')
             await deleteButton.click()
             await page.waitFor(500)
 
-            const confirmButton = await page.waitFor('[data-testid="initialization_dialog_confirm_button"]')
+            const confirmButton = await page.waitFor('[data-testid="dialog_confirm_button"]')
             await confirmButton.click()
             await page.waitFor(500)
         } else {

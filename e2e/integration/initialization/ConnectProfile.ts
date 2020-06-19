@@ -15,6 +15,7 @@ beforeAll(async () => {
 
     // restore alice's db backup
     await dashboard.openInitializeRestore(page)
+    await restore.fromFile(page, '../fixtures/initialization/db_backup_1_persona_0_profile.json')
 })
 
 afterAll(async () => {
@@ -41,8 +42,8 @@ describe(`${INITIALIZATION_STORY_URL}-Workflow2:ConnectProfile`, () => {
             // open dashbaord
             await dashboard.openHome(page)
 
-            // build connection with sns
-            const connectButton = await page.waitFor(`[data-testid="initialization_connect_button_${sns.name}"]`)
+            // click the connect button
+            const connectButton = await page.waitFor(`[data-testid="connect_button_${sns.name}"]`)
             await connectButton.click()
             await page.waitFor(500)
 
@@ -63,14 +64,14 @@ describe(`${INITIALIZATION_STORY_URL}-Workflow2:ConnectProfile`, () => {
             // validate username
             await snsPage.waitFor(500)
             const idInput = await snsPage.evaluateHandle(
-                `document.querySelector('${sns.immersiveDialogSelector}').shadowRoot.querySelector('[data-testid="initialization_id_input"]')`,
+                `document.querySelector('${sns.immersiveDialogSelector}').shadowRoot.querySelector('[data-testid="id_input"]')`,
             )
-            expect(await idInput.asElement()?.evaluate(e => (e as any).value)).toBe(sns.id)
+            expect(await idInput.asElement()?.evaluate((e) => (e as any).value)).toBe(sns.id)
 
             // click the 'confirm' button
             await snsPage.waitFor(500)
             const confirmButton = await snsPage.evaluateHandle(
-                `document.querySelector('${sns.immersiveDialogSelector}').shadowRoot.querySelector('[data-testid="initialization_confirm_button"]')`,
+                `document.querySelector('${sns.immersiveDialogSelector}').shadowRoot.querySelector('[data-testid="confirm_button"]')`,
             )
             await (confirmButton as any).click()
 
@@ -82,20 +83,20 @@ describe(`${INITIALIZATION_STORY_URL}-Workflow2:ConnectProfile`, () => {
 
             // validate prove bio
             const proveTextarea = await snsPage.evaluateHandle(
-                `document.querySelector('${sns.immersiveDialogSelector}').shadowRoot.querySelector('[data-testid="initialization_prove_textarea"]')`,
+                `document.querySelector('${sns.immersiveDialogSelector}').shadowRoot.querySelector('[data-testid="prove_textarea"]')`,
             )
-            const proveContent = await proveTextarea.asElement()?.evaluate(e => e.textContent)
+            const proveContent = await proveTextarea.asElement()?.evaluate((e) => e.textContent)
             expect(proveContent).toBeTruthy()
 
             // click the 'add it for me' button
             await snsPage.waitFor(500)
             const addButton = await snsPage.evaluateHandle(
-                `document.querySelector('${sns.immersiveDialogSelector}').shadowRoot.querySelector('[data-testid="initialization_add_button"]')`,
+                `document.querySelector('${sns.immersiveDialogSelector}').shadowRoot.querySelector('[data-testid="add_button"]')`,
             )
 
             // listening 'dialog' event
-            return new Promise(async resolve => {
-                snsPage.on('dialog', async dialog => {
+            return new Promise(async (resolve) => {
+                snsPage.on('dialog', async (dialog) => {
                     const message = dialog.message()
                     await dialog.dismiss()
 
@@ -109,7 +110,9 @@ describe(`${INITIALIZATION_STORY_URL}-Workflow2:ConnectProfile`, () => {
                         const descriptionTextarea: ElementHandle<HTMLTextAreaElement> = await snsPage.waitFor(
                             sns.bioTextareaSelector,
                         )
-                        expect((await descriptionTextarea.evaluate(e => e.value)).includes(proveContent!)).toBeTruthy()
+                        expect(
+                            (await descriptionTextarea.evaluate((e) => e.value)).includes(proveContent!),
+                        ).toBeTruthy()
                     }
                     resolve()
                 })
