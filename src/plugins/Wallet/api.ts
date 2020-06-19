@@ -16,7 +16,7 @@ import { createWalletDBAccess } from './database/Wallet.db'
 import { createTransaction } from '../../database/helpers/openDB'
 import { sendTx } from './tx'
 import { getNetworkSettings } from './UI/Developer/EthereumNetworkSettings'
-import { GITCOIN_ETH_ADDRESS, USDT_ADDRESS, USDT_RINKEBY_ADDRESS } from './erc20'
+import { ERC20Token, GITCOIN_ETH_ADDRESS, isUSDT } from './token'
 
 function createRedPacketContract(address: string) {
     return (new web3.eth.Contract(HappyRedPacketABI as AbiItem[], address) as unknown) as HappyRedPacket
@@ -458,7 +458,7 @@ export const erc20API = {
                 })
             }
             // reset allowance to 0 for USDT
-            if (allowance.gt(0) && (erc20TokenAddress === USDT_ADDRESS || erc20TokenAddress === USDT_RINKEBY_ADDRESS)) {
+            if (allowance.gt(0) && isUSDT(erc20TokenAddress)) {
                 await this.approve(ownerAddress, spenderAddress, erc20TokenAddress, new BigNumber(0), receipt)
             }
         }

@@ -10,14 +10,20 @@ import { DebounceButton } from '../DashboardComponents/ActionButton'
 import SpacedButtonGroup from '../DashboardComponents/SpacedButtonGroup'
 import ShowcaseBox from '../DashboardComponents/ShowcaseBox'
 import Services from '../../service'
-import { WalletRecord, EthereumNetwork, RedPacketRecord } from '../../../plugins/Wallet/database/types'
-import { ERC20WellKnownTokenSelector } from '../../../plugins/Wallet/UI/Dashboard/Dialogs/WalletAddTokenDialogContent'
-import type { ERC20TokenPredefinedData } from '../../../plugins/Wallet/token'
+import type { WalletRecord, EthereumNetwork, RedPacketRecord } from '../../../plugins/Wallet/database/types'
+import {
+    ERC20PredefinedTokenSelector,
+    ERC20CustomizedTokenSelector,
+} from '../../../plugins/Wallet/UI/Dashboard/Dialogs/WalletAddTokenDialogContent'
+import type { ERC20Token } from '../../../plugins/Wallet/token'
 import { recoverWallet } from '../../../plugins/Wallet/wallet'
 import { PluginMessageCenter } from '../../../plugins/PluginMessages'
 import WalletLine from '../../../plugins/Wallet/UI/Dashboard/Components/WalletLine'
 import { formatBalance } from '../../../plugins/Wallet/formatter'
+import { useValueRef } from '../../../utils/hooks/useValueRef'
+import { ethereumNetworkSettings } from '../../../plugins/Wallet/network'
 
+//#region wallet import dialog
 export function DashboardWalletImportDialog(props: WrappedDialogProps) {
     const { t } = useI18N()
     const state = useState(0)
@@ -114,8 +120,13 @@ export function DashboardWalletImportDialog(props: WrappedDialogProps) {
         </DashboardDialogCore>
     )
 }
+//#endregion
 
 //#region wallet create dialog
+interface WalletProps {
+    wallet: WalletRecord
+}
+
 const useWalletCreateDialogStyle = makeStyles((theme) =>
     createStyles({
         confirmation: {
@@ -212,16 +223,15 @@ export function DashboardWalletCreateDialog(props: WrappedDialogProps) {
 }
 //#endregion
 
-interface WalletProps {
-    wallet: WalletRecord
-}
-
+//#region wallet add token dialog
 export function DashboardWalletAddTokenDialog(props: WrappedDialogProps<WalletProps>) {
     const { t } = useI18N()
     const { wallet } = props.ComponentProps!
 
-    const [token, setToken] = React.useState<null | ERC20TokenPredefinedData[0]>(null)
-    const [useRinkeby, setRinkeby] = React.useState(false)
+    const addedTokens = Array.from(wallet.erc20_token_balance.keys())
+    const currentNetwork = useValueRef(ethereumNetworkSettings)
+    const [token, setToken] = React.useState<ERC20Token | null>(null)
+    const [network, setNetwork] = useState<EthereumNetwork>(currentNetwork)
 
     const [tabState, setTabState] = useState(0)
     const state = useMemo(
@@ -240,16 +250,24 @@ export function DashboardWalletAddTokenDialog(props: WrappedDialogProps<WalletPr
             {
                 label: 'Well-know token',
                 children: (
-                    <ERC20WellKnownTokenSelector onItem={setToken} useRinkebyNetwork={[useRinkeby, setRinkeby]} />
+                    <ERC20PredefinedTokenSelector
+                        token={token}
+                        excludeTokens={addedTokens}
+                        network={network}
+                        onTokenChange={setToken}
+                        onNetworkChange={setNetwork}
+                    />
                 ),
             },
             {
                 label: 'Add your own',
                 children: (
-                    <ERC20WellKnownTokenSelector
-                        onItem={setToken}
-                        useRinkebyNetwork={[useRinkeby, setRinkeby]}
-                        isCustom
+                    <ERC20CustomizedTokenSelector
+                        token={token}
+                        excludeTokens={addedTokens}
+                        network={network}
+                        onTokenChange={setToken}
+                        onNetworkChange={setNetwork}
                     />
                 ),
             },
@@ -257,21 +275,19 @@ export function DashboardWalletAddTokenDialog(props: WrappedDialogProps<WalletPr
         state,
         height: 240,
     }
-
     const onSubmit = useSnackbarCallback(
-        () =>
-            Services.Plugin.invokePlugin(
+        async () => {
+            if (!token) return
+            return Services.Plugin.invokePlugin(
                 'maskbook.wallet',
                 'walletAddERC20Token',
                 wallet.address,
-                // TODO
-                // For now we only support mainnet and rinkeby
-                // maybe we should support other networks in the future
-                useRinkeby ? EthereumNetwork.Rinkeby : EthereumNetwork.Mainnet,
-                token!,
+                network,
+                token,
                 tabState === 1,
-            ),
-        [token, useRinkeby],
+            )
+        },
+        [token, network],
         props.onClose,
     )
 
@@ -290,7 +306,9 @@ export function DashboardWalletAddTokenDialog(props: WrappedDialogProps<WalletPr
         </DashboardDialogCore>
     )
 }
+//#endregion
 
+//#region wallet history dialog
 const useHistoryDialogStyles = makeStyles((theme) =>
     createStyles({
         list: {
@@ -301,10 +319,7 @@ const useHistoryDialogStyles = makeStyles((theme) =>
 )
 
 export function DashboardWalletHistoryDialog(props: WrappedDialogProps<WalletProps>) {
-    const { t } = useI18N()
-
     const classes = useHistoryDialogStyles()
-
     const state = useState(0)
     const [tabState] = state
 
@@ -378,7 +393,9 @@ export function DashboardWalletHistoryDialog(props: WrappedDialogProps<WalletPro
         </DashboardDialogCore>
     )
 }
+//#endregion
 
+//#region wallet backup dialog
 const useBackupDialogStyles = makeStyles((theme) =>
     createStyles({
         section: {
@@ -416,7 +433,9 @@ export function DashboardWalletBackupDialog(props: WrappedDialogProps<WalletProp
         </DashboardDialogCore>
     )
 }
+//#endregion
 
+//#region wallet rename dialog
 export function DashboardWalletRenameDialog(props: WrappedDialogProps<WalletProps>) {
     const { t } = useI18N()
     const { wallet } = props.ComponentProps!
@@ -455,7 +474,9 @@ export function DashboardWalletRenameDialog(props: WrappedDialogProps<WalletProp
         </DashboardDialogCore>
     )
 }
+//#endregion
 
+//#region wallet delete dialog
 export function DashboardWalletDeleteConfirmDialog(props: WrappedDialogProps<WalletProps>) {
     const { t } = useI18N()
     const { wallet } = props.ComponentProps!
@@ -485,3 +506,4 @@ export function DashboardWalletDeleteConfirmDialog(props: WrappedDialogProps<Wal
         </DashboardDialogCore>
     )
 }
+//#endregion
