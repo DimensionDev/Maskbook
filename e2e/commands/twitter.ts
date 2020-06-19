@@ -46,6 +46,7 @@ class Twitter implements SNS {
         await page.goto('https://twitter.com/settings/account', {
             waitUntil: 'load',
         })
+        await page.waitFor(2000)
 
         // logined
         if ((await page.evaluate(() => location.href)).includes('/settings/account')) {
