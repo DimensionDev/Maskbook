@@ -262,7 +262,7 @@ export function CreatePersona() {
                         color="primary"
                         onClick={createPersonaAndNext}
                         disabled={!name}
-                        data-testid="submit_button">
+                        data-testid="next_button">
                         {t('set_up_button_next')}
                     </ActionButton>
                     <Typography className={setupFormClasses.or} variant="body1">
