@@ -134,7 +134,7 @@ const registerPostCollector = (self: SocialNetworkUI) => {
                 onNodeMutation: run,
             }
         })
-        .setDOMProxyOption({ afterShadowRootInit: { mode: 'closed' } })
+        .setDOMProxyOption({ afterShadowRootInit: { mode: webpackEnv.shadowRootMode } })
         .assignKeys((node) => {
             const tweetNode = getTweetNode(node)
             const isQuotedTweet = tweetNode?.getAttribute('role') === 'blockquote'
