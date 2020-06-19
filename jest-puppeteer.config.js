@@ -1,5 +1,5 @@
 const path = require('path')
-const extPath = path.join(__dirname, './build')
+const extPath = path.join(__dirname, './dist')
 module.exports = {
     launch: {
         dumpio: true,
