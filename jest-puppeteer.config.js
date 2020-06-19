@@ -12,7 +12,7 @@ function deleteFolderRecursive(dirPath) {
         return
     }
     readdirSync(dirPath).forEach((file) => {
-        const curPath = dirPath + '/' + file
+        const curPath = join(dirPath, file)
         if (lstatSync(curPath).isDirectory()) {
             deleteFolderRecursive(curPath)
         } else {

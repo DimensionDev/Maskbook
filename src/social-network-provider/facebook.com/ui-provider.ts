@@ -49,7 +49,7 @@ export const facebookUISelf = defineSocialNetworkUI({
         facebookUISelf.requestPermission().then((granted) => {
             if (granted) {
                 setStorage('facebook.com', { forceDisplayWelcome: true })
-                location.href = 'https://www.facebook.com/'
+                location.assign('https://www.facebook.com/')
             }
         })
     },
@@ -102,6 +102,6 @@ export const facebookUISelf = defineSocialNetworkUI({
     taskGotoProfilePage(profilePage) {
         // there is no PWA way on Facebook desktop.
         // mobile not tested
-        location.href = getProfilePageUrlAtFacebook(profilePage, 'open')
+        location.assign(getProfilePageUrlAtFacebook(profilePage, 'open'))
     },
 })
