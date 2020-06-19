@@ -1,4 +1,4 @@
-import { Page } from 'puppeteer'
+import { Page, Browser } from 'puppeteer'
 
 export const DASHBOARD_URL = 'chrome-extension://jkoeaghipilijlahjplgbfiocjhldnap/index.html'
 
@@ -56,6 +56,18 @@ export async function openInitializePersona(page: Page) {
     await page.waitFor(500)
 }
 
+export async function toggleImagePayload(page: Page, expected: boolean) {
+    // open settings
+    await openSettings(page)
+
+    // toggle the switch if needed
+    const enableImageModeSwitch = await page.waitFor('[data-testid="enable_image_mode"] + div .MuiSwitch-root')
+    if ((await enableImageModeSwitch.evaluate(e => !!e.querySelector('.Mui-checked'))) !== expected) {
+        await enableImageModeSwitch.click()
+        await page.waitFor(1000)
+    }
+}
+
 export async function reset(page: Page) {
     await openHomeNoRedirect(page)
 
@@ -81,4 +93,6 @@ export async function reset(page: Page) {
 
     // remove all wallets
     // TODO
+
+    // reset switches
 }
