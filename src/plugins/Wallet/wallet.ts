@@ -5,7 +5,7 @@ import { WalletRecord, ERC20TokenRecord, EthereumNetwork, WalletRecordInDatabase
 import { PluginMessageCenter } from '../PluginMessages'
 import { HDKey, EthereumAddress } from 'wallet.ts'
 import * as bip39 from 'bip39'
-import { walletAPI } from './api'
+import { walletAPI, erc20API } from './api'
 import { ERC20Token, OKB_ADDRESS, DAI_ADDRESS } from './token'
 import { memoizePromise } from '../../utils/memoize'
 import { BigNumber } from 'bignumber.js'
@@ -262,10 +262,6 @@ export async function recoverWalletFromPrivateKey(privateKey: string) {
         const n = new BigNumber('fffffffffffffffffffffffffffffffebaaedce6af48a03bbfd25e8cd0364141', 16)
         return !k.isZero() && k.isLessThan(n)
     }
-}
-
-export function walletGetERC20Token(tokenAddress: string) {
-    return getWalletProvider().queryERC20Token(tokenAddress)
 }
 
 export async function walletAddERC20Token(

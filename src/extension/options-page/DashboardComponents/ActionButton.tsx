@@ -23,16 +23,16 @@ interface DebounceButtonProps extends Omit<ButtonProps, 'color' | 'onClick'> {
 const useDangerStyles = makeStyles((theme) =>
     createStyles({
         containedPrimary: {
-            backgroundColor: 'rgb(244, 99, 125)',
+            backgroundColor: red[500],
             '&:hover': {
-                backgroundColor: 'rgb(235, 71, 101)',
+                backgroundColor: red[700],
             },
         },
         outlinedPrimary: {
-            borderColor: 'rgb(244, 99, 125)',
-            color: 'rgb(244, 99, 125)',
+            borderColor: red[500],
+            color: red[500],
             '&:hover': {
-                borderColor: 'rgb(235, 71, 101)',
+                borderColor: red[700],
             },
         },
     }),

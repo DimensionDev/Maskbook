@@ -191,7 +191,6 @@
     "options_mobile_export_generating": "正在生成 QR 碼…",
     "options_mobile_export_subtitle": "請不要保存或將此 QR 碼分享給他人！",
     "password": "密碼",
-    "extra_password": "密码",
     "payload_bad": "Payload 可能遭到了篡改。",
     "payload_incomplete": "不完整的 payload。請點擊「查看全文」。",
     "payload_not_found": "找不到 payload",
