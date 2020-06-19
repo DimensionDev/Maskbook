@@ -4,21 +4,21 @@ import * as helpers from '../../support/helpers'
 import Twitter from '../../commands/twitter'
 import Facebook from '../../commands/facebook'
 
+beforeEach(async () => {
+    // setup page
+    await helpers.setupPage(page)
+
+    // restore alice's db backup
+    await dashboard.openSetupCreatePersona(page)
+})
+
 describe(`${INITIALIZATION_STORY_URL}-Workflow1A:CoreInit/NewUser`, () => {
     for (const sns of [new Twitter('', '', ''), new Facebook('', '', '')]) {
         it(sns.name, async () => {
-            // setup page
-            await helpers.setupPage(page)
-
-            // open initialize page
-            await dashboard.openSetupCreatePersona(page)
-
             // fill & submit the form
             const usernameInput = await page.waitFor('[data-testid="username_input"]')
-            const passwordInput = await page.waitFor('[data-testid="password_input"]')
             const nextButton = await page.waitFor('[data-testid="next_button"]')
             await usernameInput.type('Alice')
-            await passwordInput.type('12345678')
             await nextButton.click()
             await page.waitFor(500)
 
