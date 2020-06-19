@@ -49,7 +49,7 @@ export const facebookUISelf = defineSocialNetworkUI({
         facebookUISelf.requestPermission().then((granted) => {
             if (granted) {
                 setStorage('facebook.com', { forceDisplayWelcome: true })
-                location.href = 'https://facebook.com/'
+                location.href = 'https://www.facebook.com/'
             }
         })
     },
