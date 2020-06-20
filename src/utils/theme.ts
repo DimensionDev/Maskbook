@@ -60,7 +60,7 @@ export const MaskbookDarkTheme = unstable_createMuiStrictModeTheme(baseTheme('da
 
 const FixedWidthFonts = getFontFamily(true)
 
-export const useColorProvider = makeStyles((theme: typeof MaskbookDarkTheme) => {
+export const useColorStyles = makeStyles((theme: typeof MaskbookDarkTheme) => {
     const dark = theme.palette.type === 'dark'
     return createStyles({
         error: {
@@ -72,15 +72,24 @@ export const useColorProvider = makeStyles((theme: typeof MaskbookDarkTheme) => 
         info: {
             color: dark ? blue[500] : blue[800],
         },
-        errorButton: {
-            color: theme.palette.getContrastText(red[900]),
-            '&>.MuiButton-label': {
-                color: theme.palette.getContrastText(red[900]),
-            },
+    })
+})
+
+export const useErrorStyles = makeStyles((theme) => {
+    const dark = theme.palette.type === 'dark'
+    return createStyles({
+        containedPrimary: {
+            backgroundColor: dark ? red[500] : red[900],
             '&:hover': {
-                background: dark ? red[900] : red[700],
+                backgroundColor: dark ? red[900] : red[700],
             },
-            background: dark ? red[700] : red[900],
+        },
+        outlinedPrimary: {
+            borderColor: dark ? red[500] : red[900],
+            color: dark ? red[500] : red[900],
+            '&:hover': {
+                borderColor: dark ? red[900] : red[700],
+            },
         },
     })
 })

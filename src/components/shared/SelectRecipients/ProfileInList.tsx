@@ -1,5 +1,5 @@
 import * as React from 'react'
-import className from 'classnames'
+import classNames from 'classnames'
 import { makeStyles, Theme, ListItem, ListItemText, Checkbox, ListItemAvatar } from '@material-ui/core'
 import { useStylesExtends } from '../../custom-ui-helper'
 import type { DefaultComponentProps } from '@material-ui/core/OverridableComponent'
@@ -42,7 +42,7 @@ export function ProfileInList(props: ProfileInListProps) {
             onClick={onClick}
             disabled={props.disabled}
             {...props.ListItemProps}
-            className={className(classes.root, props.ListItemProps?.className)}>
+            className={classNames(classes.root, props.ListItemProps?.className)}>
             <Checkbox checked={props.checked} color="primary" {...props.CheckboxProps} />
             <ListItemAvatar>
                 <Avatar person={profile} />

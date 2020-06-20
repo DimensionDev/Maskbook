@@ -24,7 +24,7 @@ import {
 import { useMyWallets } from '../../../components/DataSource/independent'
 import DashboardMenu from '../DashboardComponents/DashboardMenu'
 import { useI18N } from '../../../utils/i18n-next-ui'
-import { useColorProvider } from '../../../utils/theme'
+import { useColorStyles } from '../../../utils/theme'
 import Services from '../../service'
 import { merge, cloneDeep } from 'lodash-es'
 import BigNumber from 'bignumber.js'
@@ -121,7 +121,7 @@ interface WalletContentProps {
 function WalletContent({ wallet, tokens }: WalletContentProps) {
     const classes = useStyles()
     const { t } = useI18N()
-    const color = useColorProvider()
+    const color = useColorStyles()
 
     const network = useValueRef(currentEthereumNetworkSettings)
     const [addToken, , openAddToken] = useModal(DashboardWalletAddTokenDialog)
