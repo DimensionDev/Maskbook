@@ -60,6 +60,11 @@ const useStyles = makeStyles((theme) =>
             display: 'flex',
             flexDirection: 'column',
         },
+        wrapper: {
+            display: 'flex',
+            flexDirection: 'column',
+            height: '100%',
+        },
         title: {
             color: theme.palette.text.primary,
             flex: 1,
@@ -155,7 +160,6 @@ const WalletContent = React.forwardRef<HTMLDivElement, WalletContentProps>(funct
         [color.error, wallet, openWalletBackup, openWalletDelete, openWalletRename, setAsDefault, t],
     )
     const [menu, , openMenu] = useModal(DashboardMenu, { menus })
-
     if (!wallet) return null
     return (
         <div ref={ref}>
@@ -277,11 +281,9 @@ export default function DashboardWalletsRouter() {
                 ) : null}
                 <div className={classes.content}>
                     <Fade in={Boolean(current)}>
-                        {currentWallet ? (
-                            <WalletContent wallet={currentWallet} tokens={tokens}></WalletContent>
-                        ) : (
-                            <div></div>
-                        )}
+                        <div className={classes.wrapper}>
+                            {currentWallet && <WalletContent wallet={currentWallet} tokens={tokens} />}
+                        </div>
                     </Fade>
                 </div>
             </div>
