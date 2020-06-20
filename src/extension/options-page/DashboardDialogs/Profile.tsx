@@ -6,7 +6,7 @@ import { TextField, Typography, makeStyles, createStyles, Dialog } from '@materi
 import ActionButton from '../DashboardComponents/ActionButton'
 
 import classNames from 'classnames'
-import { useColorProvider } from '../../../utils/theme'
+import { useErrorStyles } from '../../../utils/theme'
 import type { ProfileIdentifier } from '../../../database/type'
 import Services from '../../service'
 import { getNetworkWorker } from '../../../social-network/worker'
@@ -212,7 +212,7 @@ interface ProfileDisconnectDialogProps {
 export function ProfileDisconnectDialog(props: ProfileDisconnectDialogProps) {
     const { t } = useI18N()
     const { onDecline, onConfirm, nickname, identifier } = props
-    const color = useColorProvider()
+    const errorClasses = useErrorStyles()
 
     const deletePersona = () => {
         Services.Identity.detachProfile(identifier).then(onConfirm)
@@ -233,7 +233,7 @@ export function ProfileDisconnectDialog(props: ProfileDisconnectDialogProps) {
                     <ActionButton variant="outlined" color="default" onClick={onDecline}>
                         {t('cancel')}
                     </ActionButton>
-                    <ActionButton classes={{ root: color.errorButton }} onClick={deletePersona}>
+                    <ActionButton classes={errorClasses} color="primary" onClick={deletePersona}>
                         {t('ok')}
                     </ActionButton>
                 </>

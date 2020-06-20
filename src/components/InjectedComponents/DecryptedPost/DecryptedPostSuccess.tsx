@@ -1,8 +1,9 @@
 import React from 'react'
+import classNames from 'classnames'
 import { AdditionalContent, AdditionalContentProps } from '../AdditionalPostContent'
 import { useShareMenu } from '../SelectPeopleDialog'
 import { useI18N } from '../../../utils/i18n-next-ui'
-import { makeStyles } from '@material-ui/styles'
+import { makeStyles, createStyles } from '@material-ui/core/styles'
 import { Link, Typography, CircularProgress } from '@material-ui/core'
 import type { Profile } from '../../../database'
 import { useStylesExtends } from '../../custom-ui-helper'
@@ -10,10 +11,9 @@ import type { TypedMessage } from '../../../extension/background-script/CryptoSe
 import CheckIcon from '@material-ui/icons/Check'
 import ClearIcon from '@material-ui/icons/Clear'
 import { PluginUI, PluginConfig } from '../../../plugins/plugin'
-import green from '@material-ui/core/colors/green'
-import red from '@material-ui/core/colors/red'
 import type { SuccessDecryption } from '../../../extension/background-script/CryptoServices/decryptFrom'
 import { usePostInfo } from '../../DataSource/usePostInfo'
+import { useColorStyles } from '../../../utils/theme'
 
 export interface DecryptPostSuccessProps extends withClasses<KeysInferFromUseStyles<typeof useSuccessStyles>> {
     data: { signatureVerifyResult: SuccessDecryption['signatureVerifyResult']; content: TypedMessage }
@@ -24,12 +24,15 @@ export interface DecryptPostSuccessProps extends withClasses<KeysInferFromUseSty
     AdditionalContentProps?: Partial<AdditionalContentProps>
 }
 
-const useSuccessStyles = makeStyles(() => ({
-    header: { display: 'flex', alignItems: 'center' },
-    addRecipientsLink: { cursor: 'pointer' },
-    signatureVerifyPassed: { color: green[500], display: 'flex' },
-    signatureVerifyFailed: { color: red[500], display: 'flex' },
-}))
+const useSuccessStyles = makeStyles((theme) => {
+    const dark = theme.palette.type === 'dark'
+    return createStyles({
+        header: { display: 'flex', alignItems: 'center' },
+        addRecipientsLink: { cursor: 'pointer' },
+        signatureVerifyPassed: { display: 'flex' },
+        signatureVerifyFailed: { display: 'flex' },
+    })
+})
 
 export const DecryptPostSuccess = React.memo(function DecryptPostSuccess(props: DecryptPostSuccessProps) {
     const {
@@ -37,6 +40,7 @@ export const DecryptPostSuccess = React.memo(function DecryptPostSuccess(props: 
         profiles,
     } = props
     const classes = useStylesExtends(useSuccessStyles(), props)
+    const color = useColorStyles()
     const { t } = useI18N()
     const shareMenu = useShareMenu(
         profiles,
@@ -50,17 +54,17 @@ export const DecryptPostSuccess = React.memo(function DecryptPostSuccess(props: 
     )
     const verify =
         signatureVerifyResult === 'verifying' ? (
-            <Typography variant="caption" className={classes.signatureVerifyPassed}>
+            <Typography variant="caption" className={classNames(classes.signatureVerifyPassed, color.success)}>
                 {t('decrypted_postbox_verifying')}
                 <CircularProgress style={{ marginLeft: 6 }} variant="indeterminate" size={16} />
             </Typography>
         ) : signatureVerifyResult ? (
-            <Typography variant="caption" className={classes.signatureVerifyPassed}>
+            <Typography variant="caption" className={classNames(classes.signatureVerifyPassed, color.success)}>
                 {t('decrypted_postbox_verified')}
                 <CheckIcon fontSize="small" />
             </Typography>
         ) : (
-            <Typography variant="caption" className={classes.signatureVerifyFailed}>
+            <Typography variant="caption" className={classNames(classes.signatureVerifyFailed, color.error)}>
                 {t('decrypted_postbox_not_verified')}
                 <ClearIcon fontSize="small" />
             </Typography>

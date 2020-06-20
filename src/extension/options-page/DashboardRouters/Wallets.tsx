@@ -23,7 +23,7 @@ import {
 } from '../Dialogs/Wallet'
 import DashboardMenu from '../DashboardComponents/DashboardMenu'
 import { useI18N } from '../../../utils/i18n-next-ui'
-import { useColorProvider } from '../../../utils/theme'
+import { useColorStyles } from '../../../utils/theme'
 import Services from '../../service'
 import { merge, cloneDeep } from 'lodash-es'
 import BigNumber from 'bignumber.js'
@@ -124,7 +124,7 @@ const WalletContent = React.forwardRef<HTMLDivElement, WalletContentProps>(funct
 ) {
     const classes = useStyles()
     const { t } = useI18N()
-    const color = useColorProvider()
+    const color = useColorStyles()
 
     const network = useValueRef(currentEthereumNetworkSettings)
     const [addToken, , openAddToken] = useModal(DashboardWalletAddTokenDialog)
