@@ -6,6 +6,7 @@ import ErrorIcon from '@material-ui/icons/Error'
 import { red, green } from '@material-ui/core/colors'
 import classNames from 'classnames'
 import { useDebounce, useAsyncFn } from 'react-use'
+import { useErrorStyles } from '../../../utils/theme'
 
 const circle = <CircularProgress size={18} />
 
@@ -20,23 +21,6 @@ interface DebounceButtonProps extends Omit<ButtonProps, 'color' | 'onClick'> {
     onClick: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => unknown
 }
 
-const useDangerStyles = makeStyles((theme) =>
-    createStyles({
-        containedPrimary: {
-            backgroundColor: red[500],
-            '&:hover': {
-                backgroundColor: red[700],
-            },
-        },
-        outlinedPrimary: {
-            borderColor: red[500],
-            color: red[500],
-            '&:hover': {
-                borderColor: red[700],
-            },
-        },
-    }),
-)
 function useDebounceAsync<T extends any[]>(
     asyncFn: (...args: T) => unknown,
 ): { loading: boolean; disabled: boolean; f(...args: T): void } {
@@ -65,7 +49,7 @@ function useDebounceAsync<T extends any[]>(
 }
 export function DebounceButton(_props: DebounceButtonProps) {
     const { onClick, color, ...props } = _props
-    const classes = useDangerStyles()
+    const classes = useErrorStyles()
     const { f, loading } = useDebounceAsync(onClick)
     return (
         <Button
