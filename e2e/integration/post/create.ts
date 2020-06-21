@@ -16,6 +16,7 @@ beforeAll(async () => {
 })
 
 afterAll(async () => {
+    // reset datashboard
     await dashboard.reset(page)
 })
 
@@ -72,27 +73,34 @@ describe(`${CREATE_POST_STORY_URL}#Story:CreatePost(?br=wip)-BasicWorkflow`, () 
                     `document.querySelector('${sns.postDialogModalSelector}').shadowRoot.querySelector('[data-testid="text_textarea"]')`,
                 )
                 await (textTextarea as any).type('maskbook')
+                await snsFeedPage.waitFor(500)
 
                 // designates recipients
-                await snsFeedPage.waitFor(500)
                 const defaultGroupChip = await snsFeedPage.waitForFunction(
                     `document.querySelector('${sns.postDialogModalSelector}').shadowRoot.querySelector('[data-testid="_default_friends_group_"]')`,
                 )
                 await (defaultGroupChip as any).click()
 
                 // trun on/off image-based payload switch
-                // const dashboardPage = await helpers.newPage(page)
-                // await dashboard.toggleImagePayload(dashboardPage, enableImageMode)
-                // await dashboardPage.close()
+                const imageChip = await snsFeedPage.waitForFunction(
+                    `document.querySelector('${sns.postDialogModalSelector}').shadowRoot.querySelector('[data-testid="image_chip"]')`,
+                )
+                const imageChipChecked = await imageChip
+                    .asElement()
+                    ?.evaluate((e) => /MuiChip-colorPrimary/.test(e.className))
+                if (enableImageMode !== imageChipChecked) {
+                    await (imageChip as any).click()
+                    await snsFeedPage.waitFor(500)
+                }
 
                 // click the finish
                 const finishButton = await snsFeedPage.waitForFunction(
                     `document.querySelector('${sns.postDialogModalSelector}').shadowRoot.querySelector('[data-testid="finish_button"]')`,
                 )
                 await (finishButton as any).click()
+                await snsFeedPage.waitFor(2000)
 
                 // validate text
-                await snsFeedPage.waitFor(2000)
                 const payloadTextarea = await snsFeedPage.waitFor(sns.composeEditorSelector)
                 const cipherText = await payloadTextarea.evaluate((e) => e.textContent)
                 expect(cipherText?.includes('Maskbook')).toBe(true)

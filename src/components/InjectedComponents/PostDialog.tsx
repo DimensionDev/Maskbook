@@ -177,13 +177,13 @@ export function PostDialogUI(props: PostDialogUIProps) {
                                 root: classes.MUIInputRoot,
                                 input: classes.MUIInputInput,
                             }}
-                            inputProps={{ className: classes.input, 'data-testid': 'text_textarea' }}
                             autoFocus
                             value={props.postContent.content}
                             inputRef={inputRef}
                             fullWidth
                             multiline
                             placeholder={t('post_dialog__placeholder')}
+                            inputProps={{ className: classes.input, 'data-testid': 'text_textarea' }}
                         />
 
                         <Typography style={{ marginBottom: 10 }}>Plugins (Experimental)</Typography>
@@ -245,6 +245,7 @@ export function PostDialogUI(props: PostDialogUIProps) {
                                         ChipProps={{
                                             label: t('post_dialog__image_payload'),
                                             onClick: () => props.onImagePayloadSwitchChanged(!props.imagePayload),
+                                            'data-testid': 'image_chip',
                                         }}
                                     />
                                 </Box>
