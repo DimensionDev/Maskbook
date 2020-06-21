@@ -36,7 +36,10 @@ describe(`${SETUP_STORY_URL}-Workflow2:ConnectProfile`, () => {
         ),
     ]) {
         // specifiy network
-        if (process.env.E2E_NETWORK_ID && process.env.E2E_NETWORK_ID !== sns.name) continue
+        if (process.env.E2E_NETWORK_ID && process.env.E2E_NETWORK_ID !== sns.name) {
+            test.skip(sns.name, () => {})
+            continue
+        }
 
         it(sns.name, async () => {
             // login sns account
@@ -138,7 +141,4 @@ describe(`${SETUP_STORY_URL}-Workflow2:ConnectProfile`, () => {
             await snsPage.close()
         })
     }
-
-    // dismiss empty test suite error
-    test.skip('skip', () => {})
 })
