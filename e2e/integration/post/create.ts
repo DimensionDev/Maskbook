@@ -64,6 +64,7 @@ describe(`${CREATE_POST_STORY_URL}#Story:CreatePost(?br=wip)-BasicWorkflow`, () 
                     `document.querySelector('${sns.postDialogHintSelector}').shadowRoot.querySelector('[data-testid="hint_button"]')`,
                 )
                 await (hintButton as any).click()
+                await snsFeedPage.waitFor(500)
 
                 // wait maskbook inject post dialog modal
                 await snsFeedPage.waitFor(sns.postDialogModalSelector)
@@ -80,6 +81,7 @@ describe(`${CREATE_POST_STORY_URL}#Story:CreatePost(?br=wip)-BasicWorkflow`, () 
                     `document.querySelector('${sns.postDialogModalSelector}').shadowRoot.querySelector('[data-testid="_default_friends_group_"]')`,
                 )
                 await (defaultGroupChip as any).click()
+                await snsFeedPage.waitFor(500)
 
                 // trun on/off image-based payload switch
                 const imageChip = await snsFeedPage.waitForFunction(
@@ -117,4 +119,7 @@ describe(`${CREATE_POST_STORY_URL}#Story:CreatePost(?br=wip)-BasicWorkflow`, () 
             })
         }
     }
+
+    // dismiss empty test suite error
+    test.skip('skip', () => {})
 })

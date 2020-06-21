@@ -16,6 +16,7 @@ beforeAll(async () => {
 })
 
 afterAll(async () => {
+    // reset datashboard
     await dashboard.reset(page)
 })
 
@@ -70,4 +71,7 @@ describe(`${READ_POST_STORY_URL}#Story:ReadPost(?br=wip)-BasicWorkflow`, () => {
             })
         }
     }
+
+    // dismiss empty test suite error
+    test.skip('skip', () => {})
 })
