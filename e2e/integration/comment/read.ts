@@ -33,7 +33,10 @@ describe(`${READ_COMMENT_STORY_URL}#Story:ReadComment(?br=wip)-BasicWorkflow`, (
         ),
     ]) {
         // specifiy network
-        if (process.env.E2E_NETWORK_ID && process.env.E2E_NETWORK_ID !== sns.name) continue
+        if (process.env.E2E_NETWORK_ID && process.env.E2E_NETWORK_ID !== sns.name) {
+            test.skip(sns.name, () => {})
+            continue
+        }
 
         const posts = helpers.loadJSON(join(__dirname, `../../fixtures/comment/post_backup_${sns.name}.json`)) as {
             url: string
@@ -69,7 +72,7 @@ describe(`${READ_COMMENT_STORY_URL}#Story:ReadComment(?br=wip)-BasicWorkflow`, (
                 )
 
                 // validate comment
-                const comment = await commentField.asElement()?.evaluate(e => e.textContent)
+                const comment = await commentField.asElement()?.evaluate((e) => e.textContent)
                 expect(comment?.includes(text)).toBeTruthy()
 
                 // close the page
@@ -77,7 +80,4 @@ describe(`${READ_COMMENT_STORY_URL}#Story:ReadComment(?br=wip)-BasicWorkflow`, (
             })
         }
     }
-
-    // dismiss empty test suite error
-    test.skip('skip', () => {})
 })
