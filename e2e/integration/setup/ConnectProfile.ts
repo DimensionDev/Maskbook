@@ -72,6 +72,7 @@ describe(`${SETUP_STORY_URL}-Workflow2:ConnectProfile`, () => {
                 `document.querySelector('${sns.setupGuideSelector}').shadowRoot.querySelector('[data-testid="next_button"]')`,
             )
             await (nextButton as any).click()
+            await page.waitFor(500)
 
             // redirect to profile page
             await snsPage.waitFor(sns.profileSelector)
@@ -88,6 +89,7 @@ describe(`${SETUP_STORY_URL}-Workflow2:ConnectProfile`, () => {
 
             // wait for UI update
             await snsPage.waitFor(500)
+
             // listening 'dialog' event
             await new Promise(async (resolve) => {
                 snsPage.on('dialog', async (dialog) => {
@@ -121,6 +123,7 @@ describe(`${SETUP_STORY_URL}-Workflow2:ConnectProfile`, () => {
                     `document.querySelector('${sns.setupGuideSelector}').shadowRoot.querySelector('[data-testid="add_button"]')`,
                 )
                 await (addButton as any).click()
+                await snsPage.waitFor(500)
             })
 
             // click the 'finish' button
@@ -129,12 +132,13 @@ describe(`${SETUP_STORY_URL}-Workflow2:ConnectProfile`, () => {
                 `document.querySelector('${sns.setupGuideSelector}').shadowRoot.querySelector('[data-testid="add_button"]')`,
             )
             await (finishButton as any).click()
-
-            // wait for UI updates
             await snsPage.waitFor(500)
 
             // close the page
             await snsPage.close()
         })
     }
+
+    // dismiss empty test suite error
+    test.skip('skip', () => {})
 })
