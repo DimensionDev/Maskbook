@@ -35,7 +35,10 @@ describe(`${CREATE_POST_STORY_URL}#Story:CreatePost(?br=wip)-BasicWorkflow`, () 
             ),
         ]) {
             // specifiy network
-            if (process.env.E2E_NETWORK_ID && process.env.E2E_NETWORK_ID !== sns.name) continue
+            if (process.env.E2E_NETWORK_ID && process.env.E2E_NETWORK_ID !== sns.name) {
+                test.skip(sns.name, () => {})
+                continue
+            }
 
             it(`create ${enableImageMode ? 'image-based payload' : 'generic payload'} on ${sns.name}`, async () => {
                 // login sns account
@@ -119,7 +122,4 @@ describe(`${CREATE_POST_STORY_URL}#Story:CreatePost(?br=wip)-BasicWorkflow`, () 
             })
         }
     }
-
-    // dismiss empty test suite error
-    test.skip('skip', () => {})
 })
