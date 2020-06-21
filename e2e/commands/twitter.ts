@@ -19,7 +19,7 @@ class Twitter implements SNS {
     setupGuideSelector = 'body > script[nonce] ~ span'
     postDialogHintSelector = '[data-testid="primaryColumn"] [role="progressbar"] ~ span'
     postDialogModalSelector = 'body > script[nonce] ~ div[aria-hidden="true"]'
-    postAffixingCanvasSelector = '[role="article"] [data-testid="tweet"] ~ div [lang="en"] ~ span'
+    postAffixingCanvasSelector = '[role="article"] [data-testid="tweet"] + div > div:first-child ~ span'
     commentSelector = '' // no comment for twitter
     commentBoxSelector = '' // no comment form for twitter
 
