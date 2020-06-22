@@ -181,7 +181,7 @@ function DonateDialogUI(props: DonateDialogUIProps) {
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 href="https://gitcoin.co/grants/86/gitcoin-sustainability-fund">
-                                Gitcoin grants round 6+ development fund
+                                Gitcoin grants development fund
                             </Link>
                         </Typography>
                     </form>
