@@ -39,7 +39,7 @@ export function CommentBox(props: CommentBoxProps) {
     const { t } = useI18N()
     useEffect(
         binder(['keypress'], (e) => {
-            if (!node) return
+            if (!node || !node.value) return
             if (e.key === 'Enter') {
                 props.onSubmit(node.value)
                 node.value = ''
