@@ -52,8 +52,19 @@ export function collectPostsFacebook(this: SocialNetworkUI) {
             })()
 
             this.posts.set(metadata, info)
+            function collectNodeText(node: HTMLElement): string {
+                return [
+                    node.innerText,
+                    ...Array.from(node.querySelectorAll('a'))
+                        .map((anchor) => {
+                            const href = anchor.getAttribute('href') ?? ''
+                            return href.includes('l.facebook.com') ? new URL(href).searchParams.get('u') : href
+                        })
+                        .filter(Boolean),
+                ].join('\n')
+            }
             function collectPostInfo() {
-                info.postContent.value = node.innerText
+                info.postContent.value = collectNodeText(node)
                 info.postBy.value = getPostBy(metadata, info.postPayload.value !== null).identifier
                 info.postID.value = getPostID(metadata)
                 getSteganographyContent(metadata).then((content) => {
