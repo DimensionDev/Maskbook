@@ -24,7 +24,7 @@ function getProvider() {
     return redPacketAPI
 }
 const everything = ['ERC20Token', 'RedPacket', 'Wallet'] as const
-export type createRedPacketInit = Pick<
+export type CreateRedPacketInit = Pick<
     RedPacketRecord,
     | 'is_random'
     | 'duration'
@@ -82,16 +82,16 @@ export async function getRedPackets(owned?: boolean) {
     return all
 }
 
-export async function createRedPacket(packet: createRedPacketInit): Promise<{ password: string }> {
-    if (packet.send_total.isLessThan(packet.shares)) {
+export async function createRedPacket(packet: CreateRedPacketInit): Promise<RedPacketRecord> {
+    if (packet.send_total.isLessThan(packet.shares))
         throw new Error('At least [number of red packets] tokens to your red packet.')
-    } else if (packet.shares.isNegative() /* packet.shares < 0n */) {
+    if (packet.shares.isNegative() /* packet.shares < 0n */)
         throw new Error('At least 1 person should be able to claim the red packet.')
-    }
     const password = uuid()
     let erc20_approve_transaction_hash: string | undefined = undefined
     let erc20_approve_value: BigNumber | undefined = undefined
     let erc20_token_address: string | undefined = undefined
+    if (packet.token_type === EthereumTokenType.ERC721) throw new Error('Not supported')
     if (packet.token_type === EthereumTokenType.ERC20) {
         if (!packet.erc20_token) throw new Error('ERC20 token should have erc20_token field')
         const res = await getWalletProvider().approve(
@@ -103,8 +103,6 @@ export async function createRedPacket(packet: createRedPacketInit): Promise<{ pa
         erc20_token_address = packet.erc20_token
         erc20_approve_transaction_hash = res.erc20_approve_transaction_hash
         erc20_approve_value = res.erc20_approve_value
-    } else if (packet.token_type === EthereumTokenType.ERC721) {
-        throw new Error('Not supported')
     }
     const { create_transaction_hash, create_nonce } = await getProvider().create(
         packet.sender_address,

@@ -11,7 +11,6 @@ import {
 import { number, text, select, boolean } from '@storybook/addon-knobs'
 import { Typography, Paper } from '@material-ui/core'
 import { action } from '@storybook/addon-actions'
-import { RedPacketDialogUI } from '../plugins/Wallet/UI/RedPacket/RedPacketDialog'
 import BigNumber from 'bignumber.js'
 import { makeTypedMessage } from '../extension/background-script/CryptoServices/utils'
 import { DAI_ADDRESS, OKB_ADDRESS } from '../plugins/Wallet/erc20'
@@ -104,35 +103,6 @@ storiesOf('Plugin: Red Packets', module)
                     })}
                 />
             </>
-        )
-    })
-    .add('RedPacketDialog', () => {
-        const _ = { ...createRedPacketKnobs(), type: EthereumTokenType.ETH }
-        _.total *= 10 ** 18
-        return (
-            <RedPacketDialogUI
-                open
-                onCreateNewPacket={action('onCreateNewPacket')}
-                onSelectExistingPacket={action('onSelectExistingPacket')}
-                onConfirm={action('onConfirm')}
-                onDecline={action('onDecline')}
-                onRequireNewWallet={action('onRequireNewWallet')}
-                newRedPacketCreatorName="Story book user"
-                tokens={[]}
-                wallets={[
-                    {
-                        _data_source_: 'mock',
-                        address: '0x23333',
-                        erc20_token_balance: new Map(),
-                        mnemonic: ['mem'],
-                        name: 'Wallet Name',
-                        passphrase: 'password',
-                        eth_balance: new BigNumber(2).multipliedBy(new BigNumber(10).pow(18)), // 2 * (10 ** 18)
-                    },
-                ]}
-                justCreatedRedPacket={undefined}
-                redPackets={[createRecord(_), createRecord(_)]}
-            />
         )
     })
     .add('Decrypted post with Red Packet', () => {

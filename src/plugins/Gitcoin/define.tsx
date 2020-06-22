@@ -62,7 +62,6 @@ function shouldActivate(post: string): Result<void, void> {
 }
 
 function Gitcoin(props: { url: string }) {
-    const [loading, setLoading] = useState(false)
     const [open, setOpen] = useState(false)
     const [wallets, tokens, onRequireNewWallet] = useWalletDataSource()
     const url = props.url
@@ -83,7 +82,8 @@ function Gitcoin(props: { url: string }) {
     } = data?.ok ? data.val : ({} as GitcoinGrantMetadata)
     const grantTitle = title ?? 'A Gitcoin grant'
 
-    const [status, setStatus] = useState<'succeed' | 'failed' | 'initial'>('initial')
+    const [status, setStatus] = useState<'succeed' | 'failed' | 'undetermined' | 'initial'>('initial')
+    const loading = status === 'undetermined'
     const [donateError, setDonateError] = useState<Error | null>(null)
     const [donatePayload, setDonatePayload] = useState<DonatePayload | null>(null)
     const onDonate = async (payload: DonatePayload) => {
@@ -91,7 +91,7 @@ function Gitcoin(props: { url: string }) {
         if (!donationAddress) return
         const power = tokenType === EthereumTokenType.ETH ? 18 : token!.decimals
         try {
-            setLoading(true)
+            setStatus('undetermined')
             await Services.Plugin.invokePlugin('co.gitcoin', 'donateGrant', {
                 donation_address: donationAddress,
                 donation_total: new BigNumber(amount).multipliedBy(new BigNumber(10).pow(power)),
@@ -106,8 +106,6 @@ function Gitcoin(props: { url: string }) {
         } catch (e) {
             setDonateError(e)
             setStatus('failed')
-        } finally {
-            setLoading(false)
         }
     }
     const onClose = () => setStatus('initial')

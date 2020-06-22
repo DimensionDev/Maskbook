@@ -1,18 +1,11 @@
-import React, { useRef } from 'react'
-import {
-    TypedMessage,
-    withMetadata,
-    readTypedMessageMetadataUntyped,
-} from '../../../../extension/background-script/CryptoServices/utils'
+import React from 'react'
+import { withMetadata } from '../../../../extension/background-script/CryptoServices/utils'
 import MaskbookPluginWrapper from '../../../MaskbookPluginWrapper'
 import { RedPacketWithState } from '../Dashboard/Components/RedPacket'
 import type { RedPacketRecord, RedPacketStatus, WalletRecord } from '../../database/types'
 import Services from '../../../../extension/service'
-import type { PostIdentifier, ProfileIdentifier } from '../../../../database/type'
 
 import {
-    withMobileDialog,
-    Dialog,
     makeStyles,
     createStyles,
     DialogTitle,
