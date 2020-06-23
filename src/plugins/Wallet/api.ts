@@ -12,11 +12,10 @@ import type { HappyRedPacket } from './contracts/happy-red-packet/HappyRedPacket
 import type { CheckRedPacketAvailabilityResult, CreateRedPacketResult, DonateResult } from './types'
 import { EthereumTokenType, EthereumNetwork, RedPacketJSONPayload } from './database/types'
 import { asyncTimes, pollingTask } from '../../utils/utils'
-import { createWalletDBAccess } from './database/Wallet.db'
-import { createTransaction } from '../../database/helpers/openDB'
 import { sendTx } from './tx'
 import { getNetworkSettings } from './UI/Developer/EthereumNetworkSettings'
-import { ERC20Token, GITCOIN_ETH_ADDRESS, isUSDT } from './token'
+import { GITCOIN_ETH_ADDRESS, isUSDT } from './token'
+import { createRedPacketTransaction } from './createRedPacketTransaction'
 
 function createRedPacketContract(address: string) {
     return (new web3.eth.Contract(HappyRedPacketABI as AbiItem[], address) as unknown) as HappyRedPacket
@@ -190,19 +189,9 @@ export const redPacketAPI = {
      * @param red_packet_id Red packet ID
      */
     async refund(id: RedPacketID, receipt = false): Promise<{ refund_transaction_hash: string }> {
-        const packet = await createTransaction(
-            await createWalletDBAccess(),
-            'readonly',
-        )('RedPacket')
-            .objectStore('RedPacket')
-            .index('red_packet_id')
-            .get(id.redPacketID)
-        const wallets = await createTransaction(
-            await createWalletDBAccess(),
-            'readonly',
-        )('Wallet')
-            .objectStore('Wallet')
-            .getAll()
+        const t = await createRedPacketTransaction('readonly')
+        const packet = (await t.index('red_packet_id').get(id.redPacketID))?.value
+        const wallets = await t.objectStore('Wallet').getAll()
 
         if (!packet) throw new Error(`can not find red packet with id: ${id}`)
         if (wallets.every((wallet) => wallet.address !== packet.sender_address))

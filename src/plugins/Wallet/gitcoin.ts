@@ -8,11 +8,17 @@ import {
 } from './database/types'
 import { PluginMessageCenter } from '../PluginMessages'
 import type { _UnboxPromise } from '@holoflows/kit/node_modules/async-call-rpc'
-import { createTransaction, IDBPSafeTransaction } from '../../database/helpers/openDB'
-import { createWalletDBAccess, WalletDB } from './database/Wallet.db'
 import { omit } from 'lodash-es'
 import { getNetworkSettings } from './UI/Developer/EthereumNetworkSettings'
+import { createPluginWalletAccess } from '../pluginDatabase'
 
+const createTransaction = createPluginWalletAccess<GitcoinDonationRecordInDatabase, []>(
+    'com.maskbook.provide.co.gitcoin',
+)({}, 'donation_transaction_hash')
+const ro = () => createTransaction('readonly')
+const rw = () => createTransaction('readwrite')
+type GitcoinPluginReificatedWalletDBReadOnly = _UnboxPromise<ReturnType<typeof ro>>
+type GitcoinPluginReificatedWalletDBReadWrite = _UnboxPromise<ReturnType<typeof rw>>
 function getProvider() {
     return {
         ...gitcoinAPI,
@@ -59,19 +65,16 @@ export async function donateGrant(donation: GitcoinDonationPayload) {
         ...donated,
     }
     {
-        const t = createTransaction(await createWalletDBAccess(), 'readwrite')('GitcoinDonation')
-        t.objectStore('GitcoinDonation').add(GitcoinDonationRecordIntoDB(record))
+        const t = await createTransaction('readwrite')
+        t.add(GitcoinDonationRecordIntoDB(record))
     }
     PluginMessageCenter.emit('maskbook.gitcoin.update', undefined)
     return record
 }
 
-export async function getDonationByID(
-    t: undefined | IDBPSafeTransaction<WalletDB, ['GitcoinDonation'], 'readonly'>,
-    id: string,
-) {
-    if (!t) t = createTransaction(await createWalletDBAccess(), 'readonly')('GitcoinDonation')
-    const donations = await t.objectStore('GitcoinDonation').getAll()
+export async function getDonationByID(t: undefined | GitcoinPluginReificatedWalletDBReadOnly, id: string) {
+    if (!t) t = await createTransaction('readonly')
+    const donations = await t.getAll()
     const donation = donations.find((donation) => donation.donation_transaction_hash === id)
     if (donation) return GitcoinDonationRecordOutDB(donation)
     return
