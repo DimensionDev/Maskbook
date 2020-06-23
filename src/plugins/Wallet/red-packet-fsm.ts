@@ -8,8 +8,6 @@ import {
     EthereumNetwork,
     RedPacketRecordInDatabase,
 } from './database/types'
-import { createTransaction, IDBPSafeTransaction } from '../../database/helpers/openDB'
-import { createWalletDBAccess, WalletDB } from './database/Wallet.db'
 import { v4 as uuid } from 'uuid'
 import type { RedPacketCreationResult, RedPacketClaimResult } from './types'
 import { getWalletProvider, getWallets, recoverWallet, getDefaultWallet, setDefaultWallet } from './wallet'
@@ -19,11 +17,11 @@ import { redPacketAPI } from './api'
 import { sideEffect } from '../../utils/side-effects'
 import BigNumber from 'bignumber.js'
 import { getNetworkSettings } from './UI/Developer/EthereumNetworkSettings'
+import { createRedPacketTransaction, RedPacketPluginReificatedWalletDBReadOnly } from './createRedPacketTransaction'
 
 function getProvider() {
     return redPacketAPI
 }
-const everything = ['ERC20Token', 'RedPacket', 'Wallet'] as const
 export type CreateRedPacketInit = Pick<
     RedPacketRecord,
     | 'is_random'
@@ -42,9 +40,9 @@ export type CreateRedPacketInit = Pick<
  * Note: Only call this for other one's redpacket or it will duplicate in the database!
  */
 export async function discoverRedPacket(payload: RedPacketJSONPayload, foundInURL: string) {
-    const t = createTransaction(await createWalletDBAccess(), 'readwrite')('RedPacket')
-    const original = await t.objectStore('RedPacket').index('red_packet_id').get(payload.rpid)
-    if (original) return RedPacketRecordOutDB(original)
+    const t = await createRedPacketTransaction('readwrite')
+    const original = await t.index('red_packet_id').get(payload.rpid)
+    if (original) return RedPacketRecordOutDB(original.value)
     const record: RedPacketRecord = {
         _data_source_: getProvider().dataSource,
         aes_version: 1,
@@ -69,14 +67,14 @@ export async function discoverRedPacket(payload: RedPacketJSONPayload, foundInUR
         received_time: new Date(),
         shares: new BigNumber(payload.shares),
     }
-    t.objectStore('RedPacket').add(RedPacketRecordIntoDB(record))
+    await t.add(RedPacketRecordIntoDB(record))
     PluginMessageCenter.emit('maskbook.red_packets.update', undefined)
     return record
 }
 
 export async function getRedPackets(owned?: boolean) {
-    const t = createTransaction(await createWalletDBAccess(), 'readonly')('RedPacket')
-    const all = (await t.objectStore('RedPacket').getAll()).map(RedPacketRecordOutDB)
+    const t = await createRedPacketTransaction('readonly')
+    const all = (await t.getAll()).map(RedPacketRecordOutDB)
     if (owned === true) return all.filter((x) => x.create_transaction_hash)
     if (owned === false) return all.filter((x) => !x.create_transaction_hash)
     return all
@@ -143,8 +141,8 @@ export async function createRedPacket(packet: CreateRedPacketInit): Promise<RedP
         shares: packet.shares,
     }
     {
-        const transaction = createTransaction(await createWalletDBAccess(), 'readwrite')(...everything)
-        transaction.objectStore('RedPacket').add(RedPacketRecordIntoDB(record))
+        const transaction = await createRedPacketTransaction('readwrite')
+        transaction.add(RedPacketRecordIntoDB(record))
     }
     getProvider().watchCreateResult({ databaseID: record.id, transactionHash: create_transaction_hash })
     PluginMessageCenter.emit('maskbook.red_packets.update', undefined)
@@ -152,8 +150,8 @@ export async function createRedPacket(packet: CreateRedPacketInit): Promise<RedP
 }
 
 export async function onCreationResult(id: { databaseID: string }, details: RedPacketCreationResult) {
-    const t = createTransaction(await createWalletDBAccess(), 'readwrite')('RedPacket', 'ERC20Token')
-    const record_ = await t.objectStore('RedPacket').get(id.databaseID)
+    const t = await createRedPacketTransaction('readwrite')
+    const record_ = await t.get(id.databaseID)
     if (!record_) return
     const record = RedPacketRecordOutDB(record_)
     setNextState(record, details.type === 'success' ? RedPacketStatus.normal : RedPacketStatus.fail)
@@ -192,7 +190,7 @@ export async function onCreationResult(id: { databaseID: string }, details: RedP
             shares: new BigNumber(String(record.shares)).toNumber(),
         }
     }
-    t.objectStore('RedPacket').put(RedPacketRecordIntoDB(record))
+    t.put(RedPacketRecordIntoDB(record))
     // TODO: send a notification here.
     PluginMessageCenter.emit('maskbook.red_packets.update', undefined)
 }
@@ -215,10 +213,10 @@ export async function claimRedPacket(
         return 'expired'
     } else if (status.claimedCount === status.totalCount || status.balance.isZero() /* status.balance === 0n */) {
         {
-            const t = createTransaction(await createWalletDBAccess(), 'readwrite')('RedPacket')
+            const t = await createRedPacketTransaction('readwrite')
             const record = await getRedPacketByID(t, id.redPacketID)
             setNextState(record, RedPacketStatus.empty)
-            t.objectStore('RedPacket').put(RedPacketRecordIntoDB(record))
+            t.put(RedPacketRecordIntoDB(record))
         }
         PluginMessageCenter.emit('maskbook.red_packets.update', undefined)
         return 'empty'
@@ -237,12 +235,12 @@ export async function claimRedPacket(
         })
     let dbID = ''
     {
-        const t = createTransaction(await createWalletDBAccess(), 'readwrite')('RedPacket')
+        const t = await createRedPacketTransaction('readwrite')
         const record = await getRedPacketByID(t, id.redPacketID)
         dbID = record.id
         setNextState(record, RedPacketStatus.claim_pending)
         record.claim_transaction_hash = claim_transaction_hash
-        t.objectStore('RedPacket').put(RedPacketRecordIntoDB(record))
+        t.put(RedPacketRecordIntoDB(record))
     }
     getProvider().watchClaimResult({ transactionHash: claim_transaction_hash, databaseID: dbID })
     PluginMessageCenter.emit('maskbook.red_packets.update', undefined)
@@ -251,8 +249,8 @@ export async function claimRedPacket(
 
 export async function onClaimResult(id: { databaseID: string }, details: RedPacketClaimResult) {
     {
-        const t = createTransaction(await createWalletDBAccess(), 'readwrite')('RedPacket')
-        const record_ = await t.objectStore('RedPacket').get(id.databaseID)
+        const t = await createRedPacketTransaction('readwrite')
+        const record_ = await t.get(id.databaseID)
         if (!record_) throw new Error('Claim result of unknown id')
         const record = RedPacketRecordOutDB(record_)
         setNextState(record, details.type === 'success' ? RedPacketStatus.claimed : RedPacketStatus.normal)
@@ -260,7 +258,7 @@ export async function onClaimResult(id: { databaseID: string }, details: RedPack
             record.claim_address = details.claimer
             record.claim_amount = details.claimed_value
         }
-        t.objectStore('RedPacket').put(RedPacketRecordIntoDB(record))
+        t.put(RedPacketRecordIntoDB(record))
     }
     if (details.type === 'success') {
         getProvider().watchExpired({ redPacketID: details.red_packet_id })
@@ -271,11 +269,11 @@ export async function onClaimResult(id: { databaseID: string }, details: RedPack
 
 export async function onExpired(id: { redPacketID: string }) {
     {
-        const t = createTransaction(await createWalletDBAccess(), 'readwrite')('RedPacket')
+        const t = await createRedPacketTransaction('readwrite')
         const record = await getRedPacketByID(t, id.redPacketID)
         if (record.status !== RedPacketStatus.expired) {
             setNextState(record, RedPacketStatus.expired)
-            t.objectStore('RedPacket').put(RedPacketRecordIntoDB(record))
+            t.put(RedPacketRecordIntoDB(record))
         }
 
         if (record.create_transaction_hash) requestRefund(id)
@@ -287,12 +285,12 @@ export async function requestRefund(id: { redPacketID: string }) {
     const { refund_transaction_hash } = await getProvider().refund(id)
     let dbID = ''
     {
-        const t = createTransaction(await createWalletDBAccess(), 'readwrite')('RedPacket')
+        const t = await createRedPacketTransaction('readwrite')
         const record = await getRedPacketByID(t, id.redPacketID)
         dbID = record.id
         setNextState(record, RedPacketStatus.refund_pending)
         record.refund_transaction_hash = refund_transaction_hash
-        t.objectStore('RedPacket').put(RedPacketRecordIntoDB(record))
+        t.put(RedPacketRecordIntoDB(record))
     }
     getProvider().watchRefundResult({ databaseID: dbID, transactionHash: refund_transaction_hash })
     // TODO: send a notification here maybe?
@@ -300,19 +298,19 @@ export async function requestRefund(id: { redPacketID: string }) {
 }
 export async function onRefundResult(id: { redPacketID: string }, details: { remaining_balance: BigNumber }) {
     {
-        const t = createTransaction(await createWalletDBAccess(), 'readwrite')('RedPacket')
+        const t = await createRedPacketTransaction('readwrite')
         const record = await getRedPacketByID(t, id.redPacketID)
         setNextState(record, RedPacketStatus.refunded)
         record.refund_amount = details.remaining_balance
-        t.objectStore('RedPacket').put(RedPacketRecordIntoDB(record))
+        t.put(RedPacketRecordIntoDB(record))
     }
     // TODO: send a notification here.
     PluginMessageCenter.emit('maskbook.red_packets.update', undefined)
 }
 
 export async function redPacketSyncInit() {
-    const t = createTransaction(await createWalletDBAccess(), 'readonly')('RedPacket')
-    const recs = await t.objectStore('RedPacket').getAll()
+    const t = await createRedPacketTransaction('readonly')
+    const recs = await t.getAll()
     recs.forEach((x) => {
         if (x.claim_transaction_hash && x.status === RedPacketStatus.claim_pending) {
             getProvider().watchClaimResult({ databaseID: x.id, transactionHash: x.claim_transaction_hash })
@@ -330,14 +328,11 @@ sideEffect.then(() => {
     redPacketSyncInit()
 })
 
-export async function getRedPacketByID(
-    t: undefined | IDBPSafeTransaction<WalletDB, ['RedPacket'], 'readonly'>,
-    id: string,
-) {
-    if (!t) t = createTransaction(await createWalletDBAccess(), 'readonly')('RedPacket')
-    const record = await t.objectStore('RedPacket').index('red_packet_id').get(id)
+export async function getRedPacketByID(t: undefined | RedPacketPluginReificatedWalletDBReadOnly, id: string) {
+    if (!t) t = await createRedPacketTransaction('readonly')
+    const record = await t.index('red_packet_id').get(id)
     assert(record)
-    return RedPacketRecordOutDB(record)
+    return RedPacketRecordOutDB(record.value)
 }
 function setNextState(rec: RedPacketRecord, nextState: RedPacketStatus) {
     assert(
