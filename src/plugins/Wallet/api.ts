@@ -140,6 +140,14 @@ export const redPacketAPI = {
             )
         })
     },
+    /**
+     * Claim a red packet
+     * @param id Red packet ID
+     * @param password Password, index from check_availability
+     * @param recipient address of the receiver
+     * @param validation hash of the request sender
+     * @returns Claimed money
+     */
     async claim(
         id: RedPacketID,
         password: string,
@@ -178,21 +186,72 @@ export const redPacketAPI = {
         })
     },
     /**
-     * Claim a red packet
-     * @param id Red packet ID
-     * @param password Password, index from check_availability
-     * @param recipient address of the receiver
-     * @param validation hash of the request sender
-     * @returns Claimed money
+     * Refund transaction hash
+     * @param red_packet_id Red packet ID
      */
+    async refund(id: RedPacketID, receipt = false): Promise<{ refund_transaction_hash: string }> {
+        const packet = await createTransaction(
+            await createWalletDBAccess(),
+            'readonly',
+        )('RedPacket')
+            .objectStore('RedPacket')
+            .index('red_packet_id')
+            .get(id.redPacketID)
+        const wallets = await createTransaction(
+            await createWalletDBAccess(),
+            'readonly',
+        )('Wallet')
+            .objectStore('Wallet')
+            .getAll()
+
+        if (!packet) throw new Error(`can not find red packet with id: ${id}`)
+        if (wallets.every((wallet) => wallet.address !== packet.sender_address))
+            throw new Error('can not find available wallet')
+
+        const contract = createRedPacketContract(getNetworkSettings().happyRedPacketContractAddress)
+        return new Promise((resolve, reject) => {
+            let txHash = ''
+            sendTx(
+                contract.methods.refund(id.redPacketID),
+                {
+                    from: packet!.sender_address,
+                },
+                {
+                    onTransactionHash(hash: string) {
+                        txHash = hash
+                    },
+                    onReceipt() {
+                        if (receipt) {
+                            resolve({
+                                refund_transaction_hash: txHash,
+                            })
+                        }
+                    },
+                    onConfirmation() {
+                        resolve({
+                            refund_transaction_hash: txHash,
+                        })
+                    },
+                    onTransactionError: reject,
+                    onEstimateError: reject,
+                },
+            )
+        })
+    },
+    /**
+     * Check claimed address list
+     * @param id Red packet ID
+     */
+    async checkClaimedList(id: RedPacketID): Promise<string[]> {
+        return createRedPacketContract(getNetworkSettings().happyRedPacketContractAddress)
+            .methods.check_claimed_list(id.redPacketID)
+            .call()
+    },
     async watchClaimResult(id: TxHashID & DatabaseID) {
         const contract = createRedPacketContract(getNetworkSettings().happyRedPacketContractAddress)
         asyncTimes(10, async () => {
             const { blockNumber } = await web3.eth.getTransaction(id.transactionHash)
-
-            if (!blockNumber) {
-                return
-            }
+            if (!blockNumber) return
 
             const evs = await contract.getPastEvents('ClaimSuccess', {
                 fromBlock: blockNumber,
@@ -237,10 +296,8 @@ export const redPacketAPI = {
         const contract = createRedPacketContract(getNetworkSettings().happyRedPacketContractAddress)
         asyncTimes(10, async () => {
             const { blockNumber } = await web3.eth.getTransaction(id.transactionHash)
+            if (!blockNumber) return
 
-            if (!blockNumber) {
-                return
-            }
             const evs = await contract.getPastEvents('CreationSuccess', {
                 fromBlock: blockNumber,
                 toBlock: blockNumber,
@@ -302,7 +359,6 @@ export const redPacketAPI = {
             total,
             ifclaimed,
         } = await contract.methods.check_availability(id.redPacketID).call()
-
         return {
             balance: new BigNumber(balance),
             claimedCount: parseInt(claimed, 10),
@@ -312,79 +368,12 @@ export const redPacketAPI = {
             is_claimed: ifclaimed,
         }
     },
-    /**
-     * Check claimed address list
-     * @param id Red packet ID
-     */
-    async checkClaimedList(id: RedPacketID): Promise<string[]> {
-        return createRedPacketContract(getNetworkSettings().happyRedPacketContractAddress)
-            .methods.check_claimed_list(id.redPacketID)
-            .call()
-    },
-    /**
-     * Refund transaction hash
-     * @param red_packet_id Red packet ID
-     */
-    async refund(id: RedPacketID, receipt = false): Promise<{ refund_transaction_hash: string }> {
-        const packet = await createTransaction(
-            await createWalletDBAccess(),
-            'readonly',
-        )('RedPacket')
-            .objectStore('RedPacket')
-            .index('red_packet_id')
-            .get(id.redPacketID)
-        const wallets = await createTransaction(
-            await createWalletDBAccess(),
-            'readonly',
-        )('Wallet')
-            .objectStore('Wallet')
-            .getAll()
-
-        if (!packet) {
-            throw new Error(`can not find red packet with id: ${id}`)
-        }
-        if (wallets.every((wallet) => wallet.address !== packet.sender_address)) {
-            throw new Error('can not find available wallet')
-        }
-
-        const contract = createRedPacketContract(getNetworkSettings().happyRedPacketContractAddress)
-        return new Promise((resolve, reject) => {
-            let txHash = ''
-            sendTx(
-                contract.methods.refund(id.redPacketID),
-                {
-                    from: packet!.sender_address,
-                },
-                {
-                    onTransactionHash(hash: string) {
-                        txHash = hash
-                    },
-                    onReceipt() {
-                        if (receipt) {
-                            resolve({
-                                refund_transaction_hash: txHash,
-                            })
-                        }
-                    },
-                    onConfirmation() {
-                        resolve({
-                            refund_transaction_hash: txHash,
-                        })
-                    },
-                    onTransactionError: reject,
-                    onEstimateError: reject,
-                },
-            )
-        })
-    },
     async watchRefundResult(id: TxHashID & DatabaseID) {
         const contract = createRedPacketContract(getNetworkSettings().happyRedPacketContractAddress)
         asyncTimes(10, async () => {
             const { blockNumber } = await web3.eth.getTransaction(id.transactionHash)
+            if (!blockNumber) return
 
-            if (!blockNumber) {
-                return
-            }
             const evs = await contract.getPastEvents('RefundSuccess', {
                 fromBlock: blockNumber,
                 toBlock: blockNumber,
