@@ -1,4 +1,4 @@
-import { Page, ElementHandle } from 'puppeteer'
+import type { Page, ElementHandle } from 'puppeteer'
 import { uploadFile, updateInput, loadFile, loadFileTmp } from '../support/helpers'
 
 export async function fromFile(page: Page, backup: string) {

@@ -1,6 +1,6 @@
-import { Page, ElementHandle, Browser } from 'puppeteer'
+import type { Page, ElementHandle, Browser } from 'puppeteer'
+import type { SNS } from '../types/SNS'
 import { screenshot, updateInput, getPageByUrl, setupPage } from '../support/helpers'
-import { SNS } from '../types/SNS'
 
 class Twitter implements SNS {
     constructor(public id: string, public username: string, public password: string) {}
@@ -59,7 +59,7 @@ class Twitter implements SNS {
             const screenNameLink = await page.waitFor('[href="/settings/screen_name"]')
 
             // user already login
-            if ((await screenNameLink.evaluate(e => e.textContent))?.includes(this.username)) {
+            if ((await screenNameLink.evaluate((e) => e.textContent))?.includes(this.username)) {
                 return
             }
 
@@ -127,7 +127,7 @@ class Twitter implements SNS {
         })
 
         const bioTextarea: ElementHandle<HTMLTextAreaElement> = await page.waitFor('textarea[name="description"]')
-        await bioTextarea.evaluate(e => (e.value = bio))
+        await bioTextarea.evaluate((e) => (e.value = bio))
 
         const saveButton = await page.waitFor('[data-testid="Profile_Save_Button"]')
         await updateInput(bioTextarea, bio)

@@ -1,4 +1,4 @@
-import { Page, Browser } from 'puppeteer'
+import type { Page, Browser } from 'puppeteer'
 
 export interface SNS {
     /**
