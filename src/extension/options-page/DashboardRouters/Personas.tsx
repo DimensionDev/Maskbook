@@ -58,7 +58,12 @@ export default function DashboardPersonasRouter() {
             <Button color="primary" variant="outlined" onClick={openImportPersona}>
                 {t('import')}
             </Button>,
-            <Button color="primary" variant="contained" onClick={openCreatePersona} endIcon={<AddCircleIcon />}>
+            <Button
+                color="primary"
+                variant="contained"
+                onClick={openCreatePersona}
+                endIcon={<AddCircleIcon />}
+                data-testid="create_button">
                 {t('create_persona')}
             </Button>,
         ],
