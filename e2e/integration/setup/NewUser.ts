@@ -27,23 +27,8 @@ describe(`${SETUP_STORY_URL}-Workflow1A:CoreInit/NewUser`, () => {
             await nextButton.click()
             await page.waitFor(500)
 
-            // setup spy for new page
-            const targetSpy = jasmine.createSpy()
-            page.browser().on('targetcreated', targetSpy)
-
-            // click the connect button
-            const connectButton = await page.waitFor(`[data-testid="connect_button_${sns.name}"]`)
-            await connectButton.click()
-            await page.waitFor(500)
-
-            // validate spy
-            expect(targetSpy).toHaveBeenCalled()
-            expect(
-                targetSpy.calls
-                    .argsFor(0)[0] // target
-                    .url()
-                    .includes(sns.name),
-            ).toBeTruthy()
+            // evaluate network
+            expect((await page.evaluate(() => location.hash)).includes('#/setup/connect-network')).toBeTruthy()
         })
     }
 })

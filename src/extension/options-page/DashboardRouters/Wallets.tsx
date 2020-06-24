@@ -253,7 +253,12 @@ export default function DashboardWalletsRouter() {
                 <Button color="primary" variant="outlined" onClick={openWalletImport}>
                     {t('import')}
                 </Button>,
-                <Button color="primary" variant="contained" onClick={openWalletCreate} endIcon={<AddCircleIcon />}>
+                <Button
+                    color="primary"
+                    variant="contained"
+                    onClick={openWalletCreate}
+                    endIcon={<AddCircleIcon />}
+                    data-testid="create_button">
                     {t('create_wallet')}
                 </Button>,
             ]}>

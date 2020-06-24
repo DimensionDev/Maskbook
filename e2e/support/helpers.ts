@@ -17,10 +17,11 @@ export async function newPage(page: Page) {
 }
 
 export async function setupPage(page: Page) {
+    // wait for default option page to be opened
+    await page.waitFor(500)
+
     // set a modern viewport
     await page.setViewport({ width: 1366, height: 768 })
-
-    // wait for default option page to be opened
     await page.waitFor(500)
 }
 

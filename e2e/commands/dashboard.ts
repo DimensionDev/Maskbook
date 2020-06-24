@@ -34,7 +34,7 @@ export async function openSettings(page: Page) {
 
 export async function openSetupCreatePersona(page: Page) {
     await page.bringToFront()
-    await page.goto(`${DASHBOARD_URL}#/setup/create-persona`)
+    await page.goto(`${DASHBOARD_URL}#/setup/create-persona?noredirect=true`)
     await page.waitFor(500)
 }
 
