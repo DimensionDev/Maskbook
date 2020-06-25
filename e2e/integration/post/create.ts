@@ -106,12 +106,13 @@ describe(`${CREATE_POST_STORY_URL}#Story:CreatePost(?br=wip)-BasicWorkflow`, () 
                     `document.querySelector('${sns.postDialogModalSelector}').shadowRoot.querySelector('[data-testid="finish_button"]')`,
                 )
                 await (finishButton as any).click()
-                await snsFeedPage.waitFor(2000)
+                await snsFeedPage.waitFor(3000)
 
                 // validate text
                 const payloadTextarea = await snsFeedPage.waitFor(sns.composeEditorSelector)
                 const cipherText = await payloadTextarea.evaluate((e) => e.textContent)
-                expect(cipherText?.includes('Maskbook')).toBe(true)
+
+                expect(cipherText?.includes('Maskbook')).toBeTruthy()
 
                 // valdiate attachment
                 if (enableImageMode) {
@@ -119,6 +120,9 @@ describe(`${CREATE_POST_STORY_URL}#Story:CreatePost(?br=wip)-BasicWorkflow`, () 
                     const imageUrl = await payloadImage.evaluate((e) => e.getAttribute('src'))
                     expect(imageUrl).toBeTruthy()
                 }
+
+                // take screenshot
+                await helpers.screenshot(snsFeedPage, `${sns.name}_post_create_${enableImageMode ? 'image' : 'text'}`)
 
                 // close the page
                 await snsFeedPage.close()

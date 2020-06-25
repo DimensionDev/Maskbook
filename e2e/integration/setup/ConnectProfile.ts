@@ -61,6 +61,9 @@ describe(`${SETUP_STORY_URL}-Workflow2:ConnectProfile`, () => {
             // sns home page is not opened
             if (!snsPage) throw new Error(`fail to find ${sns.name} home page`)
 
+            // dimiss dialogs
+            await sns.dimissAnyDialog(snsPage)
+
             // wait maskbook inject immersive dialog
             await snsPage.waitFor(sns.setupGuideSelector)
 
@@ -69,6 +72,9 @@ describe(`${SETUP_STORY_URL}-Workflow2:ConnectProfile`, () => {
                 `document.querySelector('${sns.setupGuideSelector}').shadowRoot.querySelector('[data-testid="username_input"]')`,
             )
             expect(await usernameInput.asElement()?.evaluate((e) => (e as any).value)).toBe(sns.id)
+
+            // take screenshot
+            await helpers.screenshot(snsPage, `${sns.name}_connect_1`)
 
             // click the 'next' button
             const nextButton = await snsPage.waitForFunction(
@@ -89,6 +95,9 @@ describe(`${SETUP_STORY_URL}-Workflow2:ConnectProfile`, () => {
             )
             const proveContent = await proveTextarea.asElement()?.evaluate((e) => e.textContent)
             expect(proveContent).toBeTruthy()
+
+            // take screenshot
+            await helpers.screenshot(snsPage, `${sns.name}_connect_2`)
 
             // wait for UI update
             await snsPage.waitFor(500)
@@ -136,6 +145,9 @@ describe(`${SETUP_STORY_URL}-Workflow2:ConnectProfile`, () => {
             )
             await (finishButton as any).click()
             await snsPage.waitFor(500)
+
+            // take screenshot
+            await helpers.screenshot(snsPage, `${sns.name}_connect_3`)
 
             // close the page
             await snsPage.close()
