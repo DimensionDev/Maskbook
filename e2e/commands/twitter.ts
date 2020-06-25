@@ -160,7 +160,9 @@ class Twitter implements SNS {
             const closeButton = await page.$('[role="button"][aria-label="Close"]')
 
             if (closeButton) {
-                closeButton.click()
+                try {
+                    closeButton.click()
+                } catch (e) {}
                 await page.waitFor(500)
             }
         }
