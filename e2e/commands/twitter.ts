@@ -153,6 +153,18 @@ class Twitter implements SNS {
         await confirmButton.click()
         await page.waitFor('[href="/settings/profile"]') // confirm back to profile page
     }
+
+    async dimissAnyDialog(page: Page, maxRetries = 3) {
+        for await (const i of new Array(maxRetries).fill(0)) {
+            // click any close buttons on the page
+            const closeButton = await page.$('[role="button"][aria-label="Close"]')
+
+            if (closeButton) {
+                closeButton.click()
+                await page.waitFor(500)
+            }
+        }
+    }
 }
 
 export default Twitter

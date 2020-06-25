@@ -107,6 +107,8 @@ class Facebook implements SNS {
     async unsetBio(page: Page) {}
 
     async deletePost(page: Page) {}
+
+    async dimissAnyDialog(page: Page) {}
 }
 
 export default Facebook
