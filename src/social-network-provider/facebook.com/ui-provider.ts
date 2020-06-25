@@ -40,7 +40,7 @@ export const facebookUISelf = defineSocialNetworkUI({
     friendlyName: 'Facebook',
     requestPermission() {
         // TODO: wait for webextension-shim to support <all_urls> in permission.
-        if (webpackEnv.target === 'WKWebview') return Promise.resolve(true)
+        if (webpackEnv.target === 'WKWebview' || webpackEnv.target === 'E2E') return Promise.resolve(true)
         return browser.permissions
             .request({ origins: ['https://www.facebook.com/*', 'https://m.facebook.com/*'] })
             .then(notifyPermissionUpdate)
@@ -102,6 +102,6 @@ export const facebookUISelf = defineSocialNetworkUI({
     taskGotoProfilePage(profilePage) {
         // there is no PWA way on Facebook desktop.
         // mobile not tested
-        location.assign(getProfilePageUrlAtFacebook(profilePage, 'open'))
+        location.href = getProfilePageUrlAtFacebook(profilePage, 'open')
     },
 })

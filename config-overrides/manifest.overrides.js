@@ -46,7 +46,9 @@ function development(manifest, target) {
  */
 function E2E(manifest) {
     // can not capture premission dialog in pptr
-    manifest.permissions.push(...manifest.optional_permissions, ...['<all_urls>'])
+    manifest.permissions = Array.from(
+        new Set([...manifest.permissions, ...manifest.optional_permissions, ...['<all_urls>']]),
+    )
     manifest.optional_permissions = []
 }
 function production(manifest, target) {}
