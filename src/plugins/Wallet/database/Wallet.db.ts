@@ -11,7 +11,7 @@ function path<T>(x: T) {
     return x
 }
 export const createWalletDBAccess = createDBAccess(() => {
-    return openDB<WalletDB>('maskbook-plugin-wallet', 2, {
+    return openDB<WalletDB>('maskbook-plugin-wallet', 3, {
         async upgrade(db, oldVersion, newVersion, tx) {
             function v0_v1() {
                 // @ts-expect-error
