@@ -27,17 +27,17 @@ export const createWalletDBAccess = createDBAccess(() => {
             }
             /**
              * The following store has been removed from v3
-            // GitcoinDonation: {
-            //     value: GitcoinDonationRecordInDatabase
-            //     key: string
-            // }
-            // RedPacket: {
-            //     value: RedPacketRecordInDatabase
-            //     key: string
-            //     indexes: {
-            //         red_packet_id: string
-            //     }
-            // }
+             * GitcoinDonation: {
+             *     value: GitcoinDonationRecordInDatabase
+             *     key: string
+             * }
+             * RedPacket: {
+             *     value: RedPacketRecordInDatabase
+             *     key: string
+             *     indexes: {
+             *         red_packet_id: string
+             *     }
+             * }
              */
             async function v2_v3() {
                 const os = db.createObjectStore('PluginStore', { keyPath: 'record_id' })
