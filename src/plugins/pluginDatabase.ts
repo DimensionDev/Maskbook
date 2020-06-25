@@ -1,5 +1,6 @@
 import { createTransaction, IDBPSafeTransaction } from '../database/helpers/openDB'
 import { createWalletDBAccess, WalletDB } from './Wallet/database/Wallet.db'
+import { unwrap, IDBPTransaction } from 'idb/with-async-ittr-cjs'
 
 type AllKeys = 0 | 1 | 2
 export type PluginReificatedWalletDB<
@@ -18,17 +19,17 @@ export function createPluginWalletAccess<Data, Index extends [IDBValidKey?, IDBV
         type ROT = T<'readonly'>
         type RWT = T<'readwrite'>
         function add(this: RWT, data: Data) {
-            return this.objectStore('PluginStore').add(wrap(data))
+            return this.objectStore('PluginStore').add(_wrap(data))
         }
         function index<K extends keyof IndexMap>(this: ROT, index: K) {
             const finalIndex = indexMap[index]
             return this.objectStore('PluginStore').index(finalIndex!)
         }
         function get(this: ROT, id: string) {
-            return this.objectStore('PluginStore').get(`${pluginID}:${id}`).then(unwrap)
+            return this.objectStore('PluginStore').get(`${pluginID}:${id}`).then(_unwrap)
         }
         function put(this: ROT, data: Data) {
-            return this.objectStore('PluginStore').put(wrap(data))
+            return this.objectStore('PluginStore').put(_wrap(data))
         }
         function getAll(this: ROT) {
             return this.objectStore('PluginStore').index('plugin_id').getAll().then(unwrapArray)
@@ -38,12 +39,14 @@ export function createPluginWalletAccess<Data, Index extends [IDBValidKey?, IDBV
             mode: Mode,
         ): Promise<T<Mode> & typeof extraMethods> {
             const t = createTransaction(await createWalletDBAccess(), mode)('ERC20Token', 'PluginStore', 'Wallet')
-            Object.assign(t, extraMethods)
+            const origT = unwrap((t as any) as IDBPTransaction<any, any>)
+            // @ts-ignore
+            Object.entries(extraMethods).map(([k, v]) => (origT[k] = v.bind(t)))
             return t as any
         }
         return createPluginTransaction
 
-        function wrap(data: Data) {
+        function _wrap(data: Data) {
             const obj = {
                 plugin_id: pluginID,
                 record_id: `${pluginID}:${data[keyOfUniqueIDInData]}`,
@@ -51,11 +54,11 @@ export function createPluginWalletAccess<Data, Index extends [IDBValidKey?, IDBV
             }
             Object.entries(indexMap).forEach(([key, index]) => {
                 // @ts-ignore
-                obj[index] = data[index]
+                obj['index' + index] = data[key]
             })
             return obj
         }
-        function unwrap(x?: { value: Data }) {
+        function _unwrap(x?: { value: Data }) {
             return x?.value
         }
         function unwrapArray(x: { value: Data }[]) {
