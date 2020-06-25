@@ -41,8 +41,8 @@ export type CreateRedPacketInit = Pick<
  */
 export async function discoverRedPacket(payload: RedPacketJSONPayload, foundInURL: string) {
     const t = await createRedPacketTransaction('readwrite')
-    const original = await t.index('red_packet_id').get(payload.rpid)
-    if (original) return RedPacketRecordOutDB(original.value)
+    const original = await t.getByIndex('red_packet_id', payload.rpid)
+    if (original) return RedPacketRecordOutDB(original)
     const record: RedPacketRecord = {
         _data_source_: getProvider().dataSource,
         aes_version: 1,
@@ -330,9 +330,9 @@ sideEffect.then(() => {
 
 export async function getRedPacketByID(t: undefined | RedPacketPluginReificatedWalletDBReadOnly, id: string) {
     if (!t) t = await createRedPacketTransaction('readonly')
-    const record = await t.index('red_packet_id').get(id)
+    const record = await t.getByIndex('red_packet_id', id)
     assert(record)
-    return RedPacketRecordOutDB(record.value)
+    return RedPacketRecordOutDB(record)
 }
 function setNextState(rec: RedPacketRecord, nextState: RedPacketStatus) {
     assert(

@@ -190,7 +190,7 @@ export const redPacketAPI = {
      */
     async refund(id: RedPacketID, receipt = false): Promise<{ refund_transaction_hash: string }> {
         const t = await createRedPacketTransaction('readonly')
-        const packet = (await t.index('red_packet_id').get(id.redPacketID))?.value
+        const packet = await t.getByIndex('red_packet_id', id.redPacketID)
         const wallets = await t.objectStore('Wallet').getAll()
 
         if (!packet) throw new Error(`can not find red packet with id: ${id}`)

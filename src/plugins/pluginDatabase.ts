@@ -1,6 +1,6 @@
 import { createTransaction, IDBPSafeTransaction } from '../database/helpers/openDB'
 import { createWalletDBAccess, WalletDB } from './Wallet/database/Wallet.db'
-import { unwrap, IDBPTransaction } from 'idb/with-async-ittr-cjs'
+import { unwrap, IDBPTransaction, IndexKey } from 'idb/with-async-ittr-cjs'
 
 type AllKeys = 0 | 1 | 2
 export type PluginReificatedWalletDB<
@@ -21,9 +21,17 @@ export function createPluginWalletAccess<Data, Index extends [IDBValidKey?, IDBV
         function add(this: RWT, data: Data) {
             return this.objectStore('PluginStore').add(_wrap(data))
         }
-        function index<K extends keyof IndexMap>(this: ROT, index: K) {
-            const finalIndex = indexMap[index]
-            return this.objectStore('PluginStore').index(finalIndex!)
+        function getByIndex<K extends keyof IndexMap>(
+            this: ROT,
+            index: K,
+            key: IndexKey<T<'readonly'>, 'PluginStore', K extends string ? K : never>,
+        ) {
+            return this.objectStore('PluginStore')
+                .index(indexMap[index]!)
+                .getAll(key as any)
+                .then((x) => x.filter((y) => y.plugin_id === pluginID))
+                .then(unwrapArray)
+                .then((x) => x[0])
         }
         function get(this: ROT, id: string) {
             return this.objectStore('PluginStore').get(`${pluginID}:${id}`).then(_unwrap)
@@ -34,7 +42,7 @@ export function createPluginWalletAccess<Data, Index extends [IDBValidKey?, IDBV
         function getAll(this: ROT) {
             return this.objectStore('PluginStore').index('plugin_id').getAll().then(unwrapArray)
         }
-        const extraMethods = { add, index, getAll, get, put }
+        const extraMethods = { add, getByIndex, getAll, get, put }
         async function createPluginTransaction<Mode extends 'readonly' | 'readwrite'>(
             mode: Mode,
         ): Promise<T<Mode> & typeof extraMethods> {

@@ -70,6 +70,10 @@ export const createWalletDBAccess = createDBAccess(() => {
                         value: each,
                     })
                 }
+                // @ts-ignore
+                db.deleteObjectStore('GitcoinDonation')
+                // @ts-ignore
+                db.deleteObjectStore('RedPacket')
             }
             if (oldVersion < 1) v0_v1()
             if (oldVersion < 2) v1_v2()
