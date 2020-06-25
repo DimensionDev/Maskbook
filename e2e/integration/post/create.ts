@@ -52,6 +52,9 @@ describe(`${CREATE_POST_STORY_URL}#Story:CreatePost(?br=wip)-BasicWorkflow`, () 
                 // open sns news feed
                 await sns.openNewsFeed(snsFeedPage)
 
+                // ads or notification dialogs will fail clicking
+                await sns.dimissAnyDialog(snsFeedPage)
+
                 // click compose button if needed
                 if (sns.composeButtonSelector) {
                     const composeButton = await snsFeedPage.waitFor(sns.composeButtonSelector)
