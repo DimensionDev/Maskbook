@@ -1,5 +1,5 @@
 import type { Page, ElementHandle } from 'puppeteer'
-import { uploadFile, updateInput, loadFile, loadFileTmp } from '../support/helpers'
+import { uploadFile, updateInput, loadFile, loadFileTmp, screenshot } from '../support/helpers'
 
 export async function fromFile(page: Page, backup: string) {
     const fileTab = await page.waitFor('[data-testid="file_tab"]')
