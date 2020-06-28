@@ -336,7 +336,7 @@ enum RestoreStep {
     ConfirmBackup = 'confirm-backup',
 }
 
-export function DashboardRestoreDialog(props: WrappedDialogProps) {
+export function DashboardRestoreDialog(props: WrappedDialogProps<object>) {
     const [step, setStep] = useState(RestoreStep.SelectBackup)
     const [backup, setBackup] = useState<BackupJSONFileLatest | null>(null)
     const [restoreId, setRestoreId] = useState('')

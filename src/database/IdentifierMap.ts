@@ -67,7 +67,10 @@ export class IdentifierMap<IdentifierType extends Identifier, T> implements Map<
             yield [identifier, data]
         }
     }
-    forEach(callbackfn: (value: T, key: IdentifierType, map: IdentifierMap<IdentifierType, T>) => void, thisArg?: any) {
+    forEach(
+        callbackfn: (value: T, key: IdentifierType, map: IdentifierMap<IdentifierType, T>) => void,
+        thisArg?: unknown,
+    ) {
         this.__raw_map__.forEach((value, key) => {
             const i = this._identifierFromString(key)
             if (!i) return

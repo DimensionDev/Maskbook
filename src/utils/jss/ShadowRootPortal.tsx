@@ -14,7 +14,7 @@ untilDomLoaded().then(() => document.body.appendChild(div))
 globalThis.getComputedStyle = new Proxy(
     globalThis?.window?.getComputedStyle || globalThis.getComputedStyle || (() => {}),
     {
-        apply(target, thisArg, args) {
+        apply(target, thisArg: unknown, args: unknown[]) {
             // ! getComputedStyle won't work with proxy
             if (!(args[0] instanceof Element)) args[0] = document.body
             return Reflect.apply(target, thisArg, args)
@@ -27,12 +27,12 @@ let proxy: ShadowRoot | undefined
 const handler: ProxyHandler<ShadowRoot> = {
     // ! (1) to make it more like a Document
     // ! (2) to make it more like an Element
-    get(target, property, handler) {
+    get(target, property, receiver: EventTarget) {
         // ! (1) make react move event listeners to shadowroot instead of document
-        if (property === 'ownerDocument') return handler
+        if (property === 'ownerDocument') return receiver
 
         // ! (2) if it's a function, use ours
-        const val = Reflect.get(target, property, target)
+        const val: unknown = Reflect.get(target, property, target)
         if (typeof val === 'function') return val.bind(target)
 
         // @ts-ignore
@@ -50,7 +50,7 @@ const handler: ProxyHandler<ShadowRoot> = {
         const self = portalShadowRoot[property]
         return body ?? self
     },
-    set(target, property, value) {
+    set(target, property, value: unknown) {
         return Reflect.set(target, property, value, target)
     },
 }

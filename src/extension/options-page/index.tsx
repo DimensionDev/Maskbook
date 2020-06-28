@@ -103,7 +103,7 @@ const useStyles = makeStyles((theme) => {
 function DashboardUI() {
     const { t } = useI18N()
     const classes = useStyles()
-    const history = useHistory()
+    const history = useHistory<unknown>()
 
     const routers = ([
         [t('personas'), DashboardRoute.Personas, <PeopleOutlinedIcon />],

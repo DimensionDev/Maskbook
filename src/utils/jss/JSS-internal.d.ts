@@ -1,9 +1,9 @@
 // MIT (Expat) License
 declare module 'warning' {
-    export default function warning(...args: any[]): void
+    export default function warning(...args: unknown[]): void
 }
 declare module 'tiny-warning' {
-    export default function warning(...args: any[]): void
+    export default function warning(...args: unknown[]): void
 }
 
 declare module 'jss' {

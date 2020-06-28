@@ -21,7 +21,7 @@ Object.assign(globalThis, {
                 get() {
                     return JSON.parse(localStorage.getItem('storybook') || '{}')
                 },
-                set(v: any) {
+                set(v: unknown) {
                     localStorage.setItem('storybook', JSON.stringify(v))
                 },
             },
@@ -48,11 +48,11 @@ defineSocialNetworkUI({
     ...emptyDefinition,
     friendlyName: 'telnet',
     setupAccount: 'Embrace the eternal September!',
-    isDangerousNetwork: true as false,
+    isDangerousNetwork: true,
 })
 defineSocialNetworkUI({
     ...emptyDefinition,
     friendlyName: 'MySpace',
-    isDangerousNetwork: true as false,
+    isDangerousNetwork: true,
 })
 activateSocialNetworkUI()

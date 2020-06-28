@@ -56,10 +56,10 @@ export async function JsonWebKeyToCryptoKey(
 export async function CryptoKeyToJsonWebKey<T extends JsonWebKey = JsonWebKey>(key: CryptoKey): Promise<T> {
     // Any of nominal subtype of JsonWebKey in this project is runtime equivalent to JsonWebKey
     // so it is safe to do the force cast
-    if (JsonWebKeyCache.has(key)) return JsonWebKeyCache.get(key)! as any
+    if (JsonWebKeyCache.has(key)) return JsonWebKeyCache.get(key)! as T
     const jwk = await crypto.subtle.exportKey('jwk', key)
     JsonWebKeyCache.set(key, jwk)
     const hash = stableStringify(jwk) + [...key.usages].sort().join(',')
     CryptoKeyCache.set(hash, key)
-    return jwk as any
+    return jwk as T
 }

@@ -76,13 +76,13 @@ export function decompressBackupFile(short: string): BackupJSONFileLatest {
 
     if (version !== '1') throw new Error(`QR Code cannot be shared between different version of Maskbook`)
 
-    const localKeyJWK: AESJsonWebKey = ({
+    const localKeyJWK = {
         alg: 'A256GCM',
         ext: true,
         k: localKey,
         key_ops: ['encrypt', 'decrypt'],
         kty: 'oct',
-    } as JsonWebKey) as any
+    } as AESJsonWebKey
     const publicJWK = decompressSecp256k1Key(privateKey, 'public')
     const privateJWK = decompressSecp256k1Key(privateKey, 'private')
 

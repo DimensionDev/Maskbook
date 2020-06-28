@@ -28,7 +28,7 @@ declare global {
         __polyfilled_root_: HTMLElement
     }
 }
-interface CSSRuleBase<T extends { type: any }> {
+interface CSSRuleBase<T extends { type: unknown }> {
     type: T['type']
     CSSRule?: CSSRule
     CSSStyleSheet?: CSSStyleSheet

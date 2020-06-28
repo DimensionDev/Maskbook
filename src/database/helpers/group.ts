@@ -19,13 +19,11 @@ export function createDefaultFriendsGroup(who: ProfileIdentifier) {
 }
 
 export async function addProfileToFriendsGroup(group: GroupIdentifier, newMembers: (Profile | ProfileIdentifier)[]) {
-    const memberList = newMembers.map((x) => (x instanceof ProfileIdentifier ? x : x.identifier)) as ProfileIdentifier[]
+    const memberList = newMembers.map<ProfileIdentifier>((x) => (x instanceof ProfileIdentifier ? x : x.identifier))
     await updateUserGroupDatabase({ identifier: group, members: memberList }, 'append')
 }
 export function removeProfileFromFriendsGroup(group: GroupIdentifier, removedFriend: (Profile | ProfileIdentifier)[]) {
-    const friendList = removedFriend.map((x) =>
-        x instanceof ProfileIdentifier ? x : x.identifier,
-    ) as ProfileIdentifier[]
+    const friendList = removedFriend.map<ProfileIdentifier>((x) => (x instanceof ProfileIdentifier ? x : x.identifier))
     return updateUserGroupDatabase({ identifier: group }, (r) => {
         r.members = r.members.filter((x) => !friendList.some((y) => y.equals(x)))
     })

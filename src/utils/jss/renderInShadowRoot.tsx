@@ -134,7 +134,7 @@ export const useSheetsRegistryStyles = (_current: Node | null) => {
         }
         return {
             getCurrentValue: () => registry?.toString(),
-            subscribe: (callback: any) => registry?.addListener(callback) ?? (() => 0),
+            subscribe: (callback: () => void) => registry?.addListener(callback) ?? (() => 0),
         }
     }, [_current])
     return useSubscription(subscription)

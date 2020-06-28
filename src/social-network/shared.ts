@@ -18,7 +18,7 @@ export interface SocialNetworkWorkerAndUIDefinition {
     /**
      * If using Maskbook on this network is dangerous, set it to true (not supported yet)
      */
-    isDangerousNetwork: false
+    isDangerousNetwork: boolean
     /**
      * Used to detect if an Identifier belongs to this provider.
      *

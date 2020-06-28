@@ -44,7 +44,7 @@ export function decompressSecp256k1Key(compressed: string, type: 'public' | 'pri
     if (type === 'private' && privateKey.length < 1) throw new Error('Private key does not contain secret')
     const arr = decodeArrayBuffer(compressedPublic)
     const key = decompressSecp256k1Point(arr)
-    return ({
+    const jwk: JsonWebKey = {
         crv: 'K-256',
         ext: true,
         x: key.x,
@@ -52,5 +52,6 @@ export function decompressSecp256k1Key(compressed: string, type: 'public' | 'pri
         key_ops: ['deriveKey', 'deriveBits'],
         kty: 'EC',
         d: type === 'private' ? privateKey : undefined,
-    } as JsonWebKey) as any
+    }
+    return jwk as EC_JsonWebKey
 }

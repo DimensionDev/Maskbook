@@ -4,6 +4,7 @@ import { GroupIdentifier, Identifier, ProfileIdentifier } from './type'
 import { MessageCenter } from '../utils/messages'
 import { PrototypeLess, restorePrototypeArray } from '../utils/type'
 import { createDBAccess } from './helpers/openDB'
+import type { Ok } from 'ts-results'
 
 //#region Schema
 interface GroupRecordBase {
@@ -128,8 +129,8 @@ export async function updateUserGroupDatabase(
             groupName: group.groupName || orig.groupName,
             members: Array.from(nextMembers)
                 .map((x) => Identifier.fromString(x, ProfileIdentifier))
-                .filter((x) => x.ok)
-                .map((x) => x.val as ProfileIdentifier),
+                .filter((x): x is Ok<ProfileIdentifier> => x.ok)
+                .map((x) => x.val),
         }
     } else {
         nextRecord = type(orig) || orig

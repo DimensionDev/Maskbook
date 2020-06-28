@@ -1,4 +1,4 @@
-import uuid from 'uuid/v4'
+import { v4 as uuid } from 'uuid'
 import { IdentifierMap } from '../../IdentifierMap'
 import { ProfileIdentifier, ECKeyIdentifier } from '../../type'
 import {

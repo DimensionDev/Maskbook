@@ -1,4 +1,4 @@
-import uuid from 'uuid/v4'
+import { v4 as uuid } from 'uuid'
 import { web3 } from '../../../plugins/Wallet/web3'
 import {
     createPersonaByMnemonic,

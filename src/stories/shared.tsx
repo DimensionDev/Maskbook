@@ -11,7 +11,7 @@ storiesOf('Shared Components', module)
         return <ChooseIdentity />
     })
     .add('SettingsUI', () => {
-        function D(props: { x: ValueRef<any> }) {
+        function D(props: { x: ValueRef<unknown> }) {
             const x = useValueRef(props.x)
             return (
                 <span>

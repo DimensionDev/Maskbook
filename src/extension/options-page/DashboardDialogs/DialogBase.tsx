@@ -72,7 +72,7 @@ interface DialogContentItemProps {
 export function DialogContentItem(props: DialogContentItemProps) {
     const { title, content, actions, onExit, actionsAlign, simplified, tabs, icon } = props
     const classes = useStyles()
-    const history = useHistory()
+    const history = useHistory<unknown>()
 
     const onExitAction =
         typeof onExit === 'function'
@@ -114,7 +114,7 @@ interface DialogRouterProps {
 
 export function DialogRouter(props: DialogRouterProps) {
     const { component, children, path, fullscreen, onExit } = props
-    const history = useHistory()
+    const history = useHistory<unknown>()
     const prevMatch = useRouteMatch()
     const matchPattern = useRouteMatch((prevMatch?.path ?? '/').replace(/\/$/, '') + path)
     const routeMatching = !path ? true : !!matchPattern

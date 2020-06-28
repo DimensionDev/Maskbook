@@ -29,7 +29,7 @@ declare module 'typeson' {
     export default class Typeson {
         constructor(options?: {
             cyclic?: boolean
-            encapsulateObserver?: (...args: any) => void
+            encapsulateObserver?: (...args: unknown[]) => void
             sync?: true
             throwOnBadSyncType?: true
         })

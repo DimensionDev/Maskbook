@@ -19,7 +19,7 @@ interface TabPanelProps extends BoxProps {
 
 export interface AbstractTabProps {
     tabs: Omit<TabPanelProps, 'height' | 'minHeight'>[]
-    state: [number, React.Dispatch<React.SetStateAction<number>>]
+    state: readonly [number, (next: number) => void]
     margin?: true | 'top' | 'bottom'
     height?: number | string
 }

@@ -115,7 +115,7 @@ storiesOf('Plugin: Red Packets', module)
             total: (knobs.total * 10 ** 18).toString(),
             creation_time: Date.now(),
         }
-        const meta = new Map<string, any>([[RedPacketMetaKey, payload]])
+        const meta = new Map<string, unknown>([[RedPacketMetaKey, payload]])
         return (
             <Paper style={{ maxWidth: 400 }}>
                 <div>
@@ -174,7 +174,7 @@ function createRecord(opts: {
         token_type: opts.type,
         _found_in_url_: 'https://g.cn/',
         claim_amount: new BigNumber(opts.claimedAmount),
-        raw_payload: { token: opts.token } as any,
+        raw_payload: { token: opts.token } as RedPacketJSONPayload,
         erc20_token: opts.token ? 'aefwf' : undefined,
     }
     // @ts-ignore

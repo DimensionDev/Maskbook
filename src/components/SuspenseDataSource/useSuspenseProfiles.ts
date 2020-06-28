@@ -42,7 +42,7 @@ export function useSWRProfiles(query: string | undefined) {
             itemsMap.set(each.identifier, each)
         }
     }
-    const items = [...itemsMap.__raw_map__.values()]
+    const items: Profile[] = [...itemsMap.__raw_map__.values()]
     // const items = swr.pageSWRs
     //     .filter((x) => x)
     //     .reduce((x, y) => (y.data ? x.concat(y.data) : x), [] as Profile[])
