@@ -14,6 +14,7 @@ export const resetProvider = () => {
         provider.removeListener('end', resetProvider) // prevent from circular reseting
         provider.disconnect(1000, 'change provider')
     }
+    console.log('Try to connect web3')
     provider = new Web3.providers.WebsocketProvider(getNetworkSettings().middlewareAddress, {
         // @ts-ignore
         clientConfig: {
