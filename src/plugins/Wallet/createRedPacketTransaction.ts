@@ -1,6 +1,6 @@
 import type { RedPacketRecordInDatabase } from './database/types'
 import { createPluginWalletAccess } from '../pluginDatabase'
-import type { _UnboxPromise } from 'async-call-rpc'
+import type { _UnboxPromise } from 'async-call-rpc/full'
 export const createRedPacketTransaction = createPluginWalletAccess<RedPacketRecordInDatabase, [string]>(
     'com.maskbook.redpacket',
 )({ red_packet_id: 0 }, 'id')
