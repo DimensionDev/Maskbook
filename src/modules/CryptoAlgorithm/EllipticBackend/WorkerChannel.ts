@@ -1,4 +1,4 @@
-import type { AsyncCallOptions } from 'async-call-rpc'
+import type { AsyncCallOptions } from 'async-call-rpc/full'
 import { OnlyRunInContext } from '@holoflows/kit'
 type MessageChannel = AsyncCallOptions['messageChannel']
 

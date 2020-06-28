@@ -1,4 +1,4 @@
-import { AsyncCall, AsyncGeneratorCall, AsyncCallOptions } from 'async-call-rpc'
+import { AsyncCall, AsyncGeneratorCall, AsyncCallOptions } from 'async-call-rpc/full'
 import { GetContext, OnlyRunInContext } from '@holoflows/kit/es'
 import * as MockService from './mock-service'
 import Serialization from '../utils/type-transform/Serialization'
@@ -107,6 +107,7 @@ function register<T extends Service>(service: T, name: keyof Services, mock?: Pa
                 messageChannel: mc,
                 preferLocalImplementation: GetContext() === 'background',
                 preservePauseOnException: process.env.NODE_ENV === 'development',
+                strict: false,
             }),
         })
         Object.assign(globalThis, { [name]: Object.assign({}, service) })
@@ -126,6 +127,7 @@ function register<T extends Service>(service: T, name: keyof Services, mock?: Pa
                 log: logOptions,
                 messageChannel: new MessageCenter(true),
                 preservePauseOnException: process.env.NODE_ENV === 'development',
+                strict: false,
             })
         }
     } else {
