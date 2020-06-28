@@ -1,6 +1,6 @@
 import type { Page, Browser } from 'puppeteer'
 import type { SNS } from '../types/SNS'
-import { getPageByUrl, setupPage } from '../support/helpers'
+import * as helpers from '../support/helpers'
 
 class Facebook implements SNS {
     constructor(public id: string, public username: string, public password: string) {}
@@ -12,7 +12,7 @@ class Facebook implements SNS {
     composeImageSelector = '#feedx_sprouts_container .fbScrollableArea img'
     composeEditorSelector = '#feedx_sprouts_container [contenteditable="true"]'
     profileSelector = '#profile_timeline_intro_card'
-    bioTextareaSelector = 'textarea[name="description"]'
+    bioTextareaSelector = 'textarea[name="bio"]'
     commentInputSelector = '.userContentWrapper form.commentable_item form [contenteditable="true"]'
 
     setupGuideSelector = 'body > span'
@@ -24,9 +24,9 @@ class Facebook implements SNS {
     commentBoxSelector = '.userContentWrapper form.commentable_item form ~ span:last-child'
 
     async getActivePage(browser: Browser) {
-        const page = await getPageByUrl(browser, 'https://www.facebook.com/')
+        const page = await helpers.getPageByUrl(browser, 'https://www.facebook.com/')
         if (page) {
-            await setupPage(page)
+            await helpers.setupPage(page)
         }
         return page
     }
@@ -108,7 +108,7 @@ class Facebook implements SNS {
 
     async deletePost(page: Page) {}
 
-    async dimissAnyDialog(page: Page) {}
+    async dimissDialog(page: Page) {}
 }
 
 export default Facebook

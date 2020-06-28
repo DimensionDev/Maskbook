@@ -10,7 +10,7 @@ class Twitter implements SNS {
     // selectors
     composeButtonSelector = '' // no compose button for twitter
     composeImageSelector = '[data-testid="primaryColumn"] [data-testid="attachments"] img'
-    composeEditorSelector = '[data-testid="primaryColumn"] .DraftEditor-root [contenteditable="true"]'
+    composeEditorSelector = '[data-testid="primaryColumn"] .DraftEditor-root [contenteditable]'
     profileSelector = '[data-testid="primaryColumn"]'
     bioTextareaSelector = 'textarea[name="description"]'
     commentInputSelector = '' // no comment form for twitter
@@ -154,14 +154,14 @@ class Twitter implements SNS {
         await page.waitFor('[href="/settings/profile"]') // confirm back to profile page
     }
 
-    async dimissAnyDialog(page: Page, maxRetries = 3) {
+    async dimissDialog(page: Page, maxRetries = 3) {
         for await (const i of new Array(maxRetries).fill(0)) {
             // click any close buttons on the page
             const closeButton = await page.$('[role="button"][aria-label="Close"]')
 
             if (closeButton) {
                 try {
-                    closeButton.click()
+                    await closeButton.click()
                 } catch (e) {}
                 await page.waitFor(500)
             }

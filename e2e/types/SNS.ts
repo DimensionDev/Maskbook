@@ -95,5 +95,5 @@ export interface SNS {
     deletePost(page: Page, postId: string): Promise<void>
 
     // helpers
-    dimissAnyDialog(page: Page, maxRetries?: number): Promise<void>
+    dimissDialog(page: Page, maxRetries?: number): Promise<void>
 }

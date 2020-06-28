@@ -38,6 +38,9 @@ module.exports = {
         dumpio: true,
         headless: false,
 
+        // more: https://github.com/puppeteer/puppeteer/issues/1649#issuecomment-354046341
+        executablePath: process.env.CHROMIUM_PATH,
+
         // more: https://peter.sh/experiments/chromium-command-line-switches/
         args: [
             '--no-sandbox',

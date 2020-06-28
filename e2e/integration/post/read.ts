@@ -59,7 +59,7 @@ describe(`${READ_POST_STORY_URL}#Story:ReadPost(?br=wip)-BasicWorkflow`, () => {
                 })
 
                 // dismiss dialogs
-                await sns.dimissAnyDialog(snsPostPage)
+                await sns.dimissDialog(snsPostPage)
 
                 // wait maskbook decrypt the payload
                 await snsPostPage.waitFor(sns.postAffixingCanvasSelector)

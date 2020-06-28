@@ -53,7 +53,7 @@ describe(`${CREATE_POST_STORY_URL}#Story:CreatePost(?br=wip)-BasicWorkflow`, () 
                 await sns.openNewsFeed(snsFeedPage)
 
                 // ads or notification dialogs will fail clicking
-                await sns.dimissAnyDialog(snsFeedPage)
+                await sns.dimissDialog(snsFeedPage)
 
                 // click compose button if needed
                 if (sns.composeButtonSelector) {
@@ -101,17 +101,19 @@ describe(`${CREATE_POST_STORY_URL}#Story:CreatePost(?br=wip)-BasicWorkflow`, () 
                     await snsFeedPage.waitFor(500)
                 }
 
+                // take screenshot
+                await helpers.screenshot(snsFeedPage, `${sns.name}_post_compose_${enableImageMode ? 'image' : 'text'}`)
+
                 // click the finish
                 const finishButton = await snsFeedPage.waitForFunction(
                     `document.querySelector('${sns.postDialogModalSelector}').shadowRoot.querySelector('[data-testid="finish_button"]')`,
                 )
                 await (finishButton as any).click()
-                await snsFeedPage.waitFor(3000)
+                await snsFeedPage.waitFor(5000)
 
                 // validate text
                 const payloadTextarea = await snsFeedPage.waitFor(sns.composeEditorSelector)
                 const cipherText = await payloadTextarea.evaluate((e) => e.textContent)
-
                 expect(cipherText?.includes('Maskbook')).toBeTruthy()
 
                 // valdiate attachment
