@@ -1,4 +1,4 @@
-import { AsyncCall } from 'async-call-rpc'
+import { AsyncCall } from 'async-call-rpc/full'
 
 /**
  * This describes what JSONRPC calls that Native side should implement
@@ -42,4 +42,5 @@ export const iOSHost = AsyncCall<iOSHost>(ThisSideImplementation, {
     key: '',
     log: false,
     messageChannel: new iOSWebkitChannel(),
+    strict: false,
 })

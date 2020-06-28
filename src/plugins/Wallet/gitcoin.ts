@@ -7,7 +7,7 @@ import {
     EthereumTokenType,
 } from './database/types'
 import { PluginMessageCenter } from '../PluginMessages'
-import type { _UnboxPromise } from '@holoflows/kit/node_modules/async-call-rpc'
+import type { _UnboxPromise } from 'async-call-rpc/full'
 import { omit } from 'lodash-es'
 import { getNetworkSettings } from './UI/Developer/EthereumNetworkSettings'
 import { createPluginWalletAccess } from '../pluginDatabase'

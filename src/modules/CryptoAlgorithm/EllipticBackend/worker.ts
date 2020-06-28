@@ -1,4 +1,4 @@
-import { AsyncCall } from 'async-call-rpc'
+import { AsyncCall } from 'async-call-rpc/full'
 import type methods from './methods'
 import { WorkerMessage } from './WorkerChannel'
 
@@ -8,7 +8,6 @@ const worker: typeof methods =
           require('./methods').default
         : AsyncCall<typeof methods>(typeof document === 'object' ? {} : require('./methods').default, {
               messageChannel: new WorkerMessage(),
-              strict: { methodNotFound: true, unknownMessage: true },
               log: false,
           })
 export default worker

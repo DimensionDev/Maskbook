@@ -5207,10 +5207,10 @@ async-call-rpc@^1.0.4:
   resolved "https://registry.yarnpkg.com/async-call-rpc/-/async-call-rpc-1.0.4.tgz#ded3ef0fac75d0ae90e0ac574adda1ffae4a5cc9"
   integrity sha512-dsLSfuF+n1GmgsL5Y+uGCkd+/wYZtHObKPxUncEoJ05bb1Lk3wUlU4ppTXL5sBsRuIXPEUxEdb6w86d0u59udg==
 
-async-call-rpc@^2.0.2:
-  version "2.0.2"
-  resolved "https://registry.yarnpkg.com/async-call-rpc/-/async-call-rpc-2.0.2.tgz#61499760bfb5a0f3e0ed4ef528c84b676e106ef2"
-  integrity sha512-vZFWBISiOVYTFgMC55gEES83f+u6dA9pMT2B+SsvJRrVyXsLbevs2tSU/YNT50BGth955peUOCq5b84tFCIoQw==
+async-call-rpc@^3.2.2:
+  version "3.2.2"
+  resolved "https://registry.yarnpkg.com/async-call-rpc/-/async-call-rpc-3.2.2.tgz#1f139913c465e1820a4c8c3152017f5c78e0aa90"
+  integrity sha512-0pCSCQhwPFZr6SuAhXKPYwHIvMSfVRily5ZaCpk15Y21sSCVHhFKSD+QOu9NKYVfW6arxL9TpIdb9XimqkBI1Q==
 
 async-each@^1.0.1:
   version "1.0.3"

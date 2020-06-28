@@ -54,7 +54,7 @@ const _tasks = {
 }
 const realTasks = AutomatedTabTask(_tasks, {
     memorable: true,
-    AsyncCallOptions: { serializer: Serialization },
+    AsyncCallOptions: { serializer: Serialization, strict: false },
 })!
 // console.log('To debug tasks, use globalThis.tasks, sleep fn is also available')
 Object.assign(globalThis, { tasks: _tasks, sleep: sleep })

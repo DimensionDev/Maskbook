@@ -2,7 +2,7 @@ import type { SocialNetworkWorker } from '../../social-network/worker'
 import getCurrentNetworkWorker from '../../social-network/utils/getCurrentNetworkWorker'
 import type { Identifier } from '../../database/type'
 import { GetContext, OnlyRunInContext, MessageCenter } from '@holoflows/kit/es'
-import { AsyncCall } from 'async-call-rpc'
+import { AsyncCall } from 'async-call-rpc/full'
 import Serialization from '../../utils/type-transform/Serialization'
 import { memoize } from 'lodash-es'
 
@@ -14,6 +14,7 @@ const getServiceFromNetworkWorker = memoize((worker: SocialNetworkWorker) => {
         serializer: Serialization,
         key: worker.internalName,
         messageChannel: new MessageCenter(false),
+        strict: false,
     })
 })
 export function getCurrentNetworkWorkerService(network: string | Identifier) {
@@ -36,6 +37,6 @@ export function startWorkerService(e: SocialNetworkWorker) {
         key: e.internalName,
         messageChannel: new MessageCenter(false),
         log: true,
-        strict: { methodNotFound: true, noUndefined: false, unknownMessage: false },
+        strict: { methodNotFound: true, unknownMessage: false },
     })
 }
