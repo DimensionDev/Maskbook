@@ -62,7 +62,7 @@ describe(`${SETUP_STORY_URL}-Workflow2:ConnectProfile`, () => {
             if (!snsPage) throw new Error(`fail to find ${sns.name} home page`)
 
             // dimiss dialogs
-            await sns.dimissAnyDialog(snsPage)
+            await sns.dimissDialog(snsPage)
 
             // wait maskbook inject immersive dialog
             await snsPage.waitFor(sns.setupGuideSelector)

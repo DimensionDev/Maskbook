@@ -71,6 +71,9 @@ describe(`${READ_COMMENT_STORY_URL}#Story:ReadComment(?br=wip)-BasicWorkflow`, (
                     `document.querySelector('${sns.commentSelector}').shadowRoot.querySelector('[data-testid="comment_field"]')`,
                 )
 
+                // take screenshot
+                await helpers.screenshot(snsPostPage, `${sns.name}_comment_read`)
+
                 // validate comment
                 const comment = await commentField.asElement()?.evaluate((e) => e.textContent)
                 expect(comment?.includes(text)).toBeTruthy()

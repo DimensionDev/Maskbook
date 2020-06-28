@@ -48,6 +48,12 @@ describe(`${CREATE_COMMENT_STORY_URL}#Story:CreateComment(?br=wip)-BasicWorkflow
         if (!posts || !posts.length) continue
 
         it(`create comment on ${sns.name}`, async () => {
+            // login sns account
+            const loginPage = await helpers.newPage(page)
+            await sns.login(loginPage)
+            await helpers.screenshot(loginPage, `${sns.name}_login`)
+            await loginPage.close()
+
             // setup a new page
             const snsPostPage = await helpers.newPage(page)
 
@@ -76,6 +82,9 @@ describe(`${CREATE_COMMENT_STORY_URL}#Story:CreateComment(?br=wip)-BasicWorkflow
 
             // wait for auto pasting
             await snsPostPage.waitFor(500)
+
+            // take screenshot
+            await helpers.screenshot(snsPostPage, `${sns.name}_comment_create`)
 
             // validate comment
             const originalCommentInput = await snsPostPage.waitFor(sns.commentInputSelector)
