@@ -33,7 +33,7 @@ export default function InitStep1S() {
     const [name, setName] = useState('')
 
     const classes = useStyles()
-    const history = useHistory()
+    const history = useHistory<unknown>()
 
     //#region validation
     type ValidationResult = [boolean, string]

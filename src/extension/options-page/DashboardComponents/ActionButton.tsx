@@ -78,7 +78,7 @@ export function DebounceButton(_props: DebounceButtonProps) {
     )
 }
 
-interface ActionButtonProps extends ButtonProps, PropsOf<typeof Button> {
+interface ActionButtonProps extends PropsOf<typeof Button> {
     width?: number | string
     loading?: boolean
     component?: keyof JSX.IntrinsicElements | React.ComponentType<any>

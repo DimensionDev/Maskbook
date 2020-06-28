@@ -49,7 +49,7 @@ test('log', async () => {
     await expect(iOSHost.log(1, 2, 3)).resolves.toBeUndefined()
     expect(postMessageSpy).toHaveBeenCalled()
 
-    const data = postMessageSpy.calls.first().args[0]
+    const data: any = postMessageSpy.calls.first().args[0]
     expect(data.id).toEqual(id)
     expect(data.method).toEqual('log')
     expect(data.params).toEqual([1, 2, 3])

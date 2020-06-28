@@ -25,7 +25,7 @@ import { SetupStep } from '../SetupStep'
 export function DashboardPersonaCreateDialog(props: WrappedDialogProps) {
     const { t } = useI18N()
     const [name, setName] = useState('')
-    const history = useHistory()
+    const history = useHistory<unknown>()
 
     const createPersonaAndNext = async () => {
         const persona = await Services.Identity.createPersonaByMnemonic(name, '')
@@ -77,7 +77,7 @@ export function DashboardPersonaCreateDialog(props: WrappedDialogProps) {
 export function DashboardImportPersonaDialog(props: WrappedDialogProps) {
     const { t } = useI18N()
     const { enqueueSnackbar } = useSnackbar()
-    const history = useHistory()
+    const history = useHistory<unknown>()
 
     const [nickname, setNickname] = useState('')
     const [mnemonicWordsValue, setMnemonicWordsValue] = useState('')

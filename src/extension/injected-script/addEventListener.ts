@@ -9,7 +9,7 @@ export interface CustomEvents {
     const { error } = console
     const hijack = (key: string) => (store[key as keyof DocumentEventMap] = new Map())
     const isHacked = (key: string): key is keyof typeof store => key in store
-    const isConnectedGetter = Object.getOwnPropertyDescriptor(Node.prototype, 'isConnected' as keyof Node)!.get!
+    const isConnectedGetter: () => boolean = Object.getOwnPropertyDescriptor(Node.prototype, 'isConnected')!.get!
     const isConnected = (x: unknown) => {
         try {
             return isConnectedGetter.call(x)
@@ -83,7 +83,7 @@ export interface CustomEvents {
             // Skip for Non-Node target
             if (!isConnected(target)) continue
             try {
-                const hack: any = hacks[eventName]
+                const hack: Function = hacks[eventName]
                 if (hack) f(hack(...param))
                 else f(param as any)
             } catch (e) {
@@ -100,7 +100,7 @@ export interface CustomEvents {
     }
     document.addEventListener(CustomEventId, invokeCustomEvent)
     EventTarget.prototype.addEventListener = new Proxy(EventTarget.prototype.addEventListener, {
-        apply(target, thisRef, args) {
+        apply(target, thisRef: EventTarget, args: Parameters<EventTarget['addEventListener']>) {
             const [[event, f], once] = normalizeArgs(args)
             if (isHacked(event) && f) {
                 if (once) store[event]?.set((e) => (store[event]?.delete(f), f(e)), thisRef)
@@ -110,7 +110,7 @@ export interface CustomEvents {
         },
     })
     EventTarget.prototype.removeEventListener = new Proxy(EventTarget.prototype.removeEventListener, {
-        apply(target, thisRef, args: Parameters<EventTarget['removeEventListener']>) {
+        apply(target, thisRef: unknown, args: Parameters<EventTarget['removeEventListener']>) {
             const [[event, f]] = normalizeArgs(args)
             if (isHacked(event) && f) store[event]?.delete(f)
             return apply(target, thisRef, args)

@@ -42,7 +42,7 @@ const _tasks = {
         return fetch(...args).then((x) => x.text())
     },
     memoizeFetch: memoizePromise(
-        (url) => {
+        (url: string): Promise<string> => {
             return fetch(url).then((x) => x.text())
         },
         (x) => x,
@@ -94,7 +94,8 @@ export function exclusiveTasks(...args: Parameters<typeof realTasks>) {
     if (webpackEnv.genericTarget !== 'facebookApp') return tasks(uri, { ...updatedOptions, ...options }, ...others)
     let _key: keyof typeof _tasks
     let _args: any[]
-    const promise = Promise.resolve(browser.tabs.query({})).then((tabs) => {
+    async function p() {
+        const tabs = await browser.tabs.query({})
         const target = uri.toString().replace(/\/.+$/, '')
         const [tab] = tabs.filter((tab) => tab.url?.startsWith(target))
         if (tab) {
@@ -109,7 +110,8 @@ export function exclusiveTasks(...args: Parameters<typeof realTasks>) {
         // @ts-ignore
         if (_key in task) return task[_key](..._args)
         return task
-    })
+    }
+    const promise = p()
     return new Proxy({} as typeof _tasks, {
         get(_, key: keyof typeof _tasks | 'then') {
             if (key === 'then') return undefined

@@ -1,6 +1,6 @@
 import React, { useCallback, useState, useEffect } from 'react'
 import TextField from '@material-ui/core/TextField'
-import Autocomplete, { RenderGroupParams } from '@material-ui/lab/Autocomplete'
+import Autocomplete, { AutocompleteRenderGroupParams } from '@material-ui/lab/Autocomplete'
 import useMediaQuery from '@material-ui/core/useMediaQuery'
 import ListSubheader from '@material-ui/core/ListSubheader'
 import { useTheme, makeStyles } from '@material-ui/core/styles'
@@ -144,7 +144,7 @@ const useAutoCompleteStyles = makeStyles({
 
 const getNameOfToken = (x: typeof mainnet[0]) => (x.name + ` (${x.symbol})`).replace(/^ +/g, '')
 
-const renderGroup = (params: RenderGroupParams) => [
+const renderGroup = (params: AutocompleteRenderGroupParams) => [
     <ListSubheader key={params.key} component="div">
         {params.group}
     </ListSubheader>,

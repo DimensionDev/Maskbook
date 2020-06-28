@@ -25,7 +25,7 @@ interface IdentifierFromString {
      * fromString("some string", ProfileIdentifier)
      * fromString("some string", ECKeyIdentifier)
      */
-    <T extends Identifier>(id: string, c: new (...args: any) => T): Result<T, TypeError>
+    <T extends Identifier>(id: string, c: new (...args: any[]) => T): Result<T, TypeError>
     /**
      * fromString("some string")
      */
@@ -34,6 +34,34 @@ interface IdentifierFromString {
      * fromString(identifier) // typeof identifier
      */
     // <T extends Identifier>(id: T): T
+}
+const fromString = (id: string | Identifier, constructor?: typeof Identifier): Result<Identifier, TypeError> => {
+    let result: Identifier | undefined | null = null
+    // the third overload
+    if (id instanceof Identifier) result = id
+    else {
+        const [type, ...rest] = id.split(':') as [Identifiers, string]
+        // the second overload
+        if (fromStringCache.has(id)) result = fromStringCache.get(id)
+        else if (type === 'person') result = ProfileIdentifier[$fromString](rest.join(':'))
+        else if (type === 'group') result = GroupIdentifier[$fromString](rest.join(':'))
+        else if (type === 'post') result = PostIdentifier[$fromString](rest.join(':'))
+        else if (type === 'post_iv') result = PostIVIdentifier[$fromString](rest.join(':'))
+        else if (type === 'ec_key') result = ECKeyIdentifier[$fromString](rest.join(':'))
+        else return new Err(new TypeError('Unreachable case:' + type))
+        fromStringCache.set(id, result)
+    }
+    const err = new Err(
+        new TypeError(
+            `Can't cast to Identifier. Expected: ${
+                constructor?.name || 'Any Identifier'
+            }, Try to convert from string: ${id}`,
+        ),
+    )
+    if (!constructor) return result ? new Ok(result) : err
+    // the first overload
+    else if (result instanceof constructor) return new Ok(result)
+    else return err
 }
 export abstract class Identifier {
     static equals(a?: Identifier | null, b?: Identifier | null) {
@@ -44,37 +72,7 @@ export abstract class Identifier {
         return this === other || this.toText() === other.toText()
     }
     abstract toText(): string
-    static fromString: IdentifierFromString = ((
-        id: string | Identifier,
-        constructor?: typeof Identifier,
-    ): Result<Identifier, TypeError> => {
-        let result: Identifier | undefined | null = null
-        // the third overload
-        if (id instanceof Identifier) result = id
-        else {
-            const [type, ...rest] = id.split(':') as [Identifiers, string]
-            // the second overload
-            if (fromStringCache.has(id)) result = fromStringCache.get(id)
-            else if (type === 'person') result = ProfileIdentifier[$fromString](rest.join(':'))
-            else if (type === 'group') result = GroupIdentifier[$fromString](rest.join(':'))
-            else if (type === 'post') result = PostIdentifier[$fromString](rest.join(':'))
-            else if (type === 'post_iv') result = PostIVIdentifier[$fromString](rest.join(':'))
-            else if (type === 'ec_key') result = ECKeyIdentifier[$fromString](rest.join(':'))
-            else return new Err(new TypeError('Unreachable case:' + type))
-            fromStringCache.set(id, result)
-        }
-        const err = new Err(
-            new TypeError(
-                `Can't cast to Identifier. Expected: ${
-                    constructor?.name || 'Any Identifier'
-                }, Try to convert from string: ${id}`,
-            ),
-        )
-        if (!constructor) return result ? new Ok(result) : err
-        // the first overload
-        else if (result instanceof constructor) return new Ok(result)
-        else return err
-    }) as any
+    static fromString: IdentifierFromString = fromString as any
 
     static IdentifiersToString(a: Identifier[], isOrderImportant = false) {
         const ax = a.map((x) => x.toText())

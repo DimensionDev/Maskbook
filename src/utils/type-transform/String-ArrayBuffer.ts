@@ -6,7 +6,7 @@ export function decodeText(str: ArrayBuffer) {
 }
 export function decodeArrayBuffer(str: string): ArrayBuffer {
     const decodedString = atob(str)
-    const uintArr = []
+    const uintArr: number[] = []
     for (const i of decodedString) uintArr.push(i.charCodeAt(0))
     return new Uint8Array(uintArr).buffer
 }

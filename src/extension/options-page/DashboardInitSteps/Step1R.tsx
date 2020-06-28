@@ -79,7 +79,7 @@ export default function InitStep1R() {
     const [textValue, setTextValue] = React.useState('')
     const [restoreState, setRestoreState] = React.useState<'success' | Error | null>(null)
     const [requiredPermissions, setRequiredPermissions] = React.useState<string[] | null>(null)
-    const history = useHistory()
+    const history = useHistory<unknown>()
 
     const header = t('restore_database')
 

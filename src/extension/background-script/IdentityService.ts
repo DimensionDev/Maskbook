@@ -52,7 +52,7 @@ export async function updateProfileInfo(
             createdAt: new Date(),
             updatedAt: new Date(),
         }
-        await consistentPersonaDBWriteAccess((t) => createOrUpdateProfileDB(rec, t as any))
+        await consistentPersonaDBWriteAccess((t) => createOrUpdateProfileDB(rec, t))
     }
     if (data.avatarURL) await storeAvatar(identifier, data.avatarURL, data.forceUpdateAvatar)
 }

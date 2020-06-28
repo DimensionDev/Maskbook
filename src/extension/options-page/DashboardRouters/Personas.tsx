@@ -49,7 +49,6 @@ export default function DashboardPersonasRouter() {
     const { t } = useI18N()
     const classes = useStyles()
     const personas = useMyPersonas()
-    const history = useHistory()
 
     const [createPersona, openCreatePersona] = useModal(DashboardPersonaCreateDialog)
     const [importPersona, openImportPersona] = useModal(DashboardImportPersonaDialog)

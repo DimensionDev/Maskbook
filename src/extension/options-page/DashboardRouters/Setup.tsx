@@ -219,7 +219,7 @@ export function CreatePersona() {
     const setupFormClasses = useSetupFormSetyles()
     const createPersonaClasses = userCreatePersonaStyles()
     const [name, setName] = useState('')
-    const history = useHistory()
+    const history = useHistory<unknown>()
 
     const createPersonaAndNext = async () => {
         const persona = await Services.Identity.createPersonaByMnemonic(name, '')
@@ -290,7 +290,7 @@ export function ConnectNetwork() {
     const { t } = useI18N()
     const classes = useSetupFormSetyles()
     const providerLineClasses = useProviderLineStyle()
-    const history = useHistory()
+    const history = useHistory<unknown>()
 
     const [persona, setPersona] = useState<Persona | null>(null)
     // a restored persona threat as initialized persona
@@ -393,7 +393,7 @@ const useRestoreDatabaseStyle = makeStyles((theme) =>
 
 export function RestoreDatabase() {
     const { t } = useI18N()
-    const history = useHistory()
+    const history = useHistory<unknown>()
     const classes = useSetupFormSetyles()
     const restoreDatabaseClasses = useRestoreDatabaseStyle()
     const { enqueueSnackbar, closeSnackbar } = useSnackbar()
@@ -505,8 +505,8 @@ export function RestoreDatabase() {
 //#region advance restore
 export function RestoreDatabaseAdvance() {
     const { t } = useI18N()
-    const { enqueueSnackbar, closeSnackbar } = useSnackbar()
-    const history = useHistory()
+    const { enqueueSnackbar } = useSnackbar()
+    const history = useHistory<unknown>()
 
     const classes = useSetupFormSetyles()
 
@@ -682,7 +682,7 @@ export function RestoreDatabaseConfirmation() {
     const { t } = useI18N()
     const classes = useSetupFormSetyles()
     const restoreDatabaseConfirmationClasses = useRestoreDatabaseConfirmationStyles()
-    const history = useHistory()
+    const history = useHistory<unknown>()
     const { enqueueSnackbar, closeSnackbar } = useSnackbar()
 
     const [imported, setImported] = useState<boolean | 'loading'>(false)
@@ -838,8 +838,8 @@ const setupTheme = (theme: Theme): Theme =>
     })
 
 const CurrentStep = () => {
-    const { step } = useParams()
-    switch (step as SetupStep) {
+    const { step } = useParams<{ step: SetupStep }>()
+    switch (step) {
         case SetupStep.ConsentDataCollection:
             return <ConsentDataCollection />
         case SetupStep.CreatePersona:
@@ -852,6 +852,8 @@ const CurrentStep = () => {
             return <RestoreDatabaseAdvance />
         case SetupStep.RestoreDatabaseConfirmation:
             return <RestoreDatabaseConfirmation />
+        default:
+            return null
     }
 }
 

@@ -111,36 +111,32 @@ export async function queryPersonasWithQuery(query?: Parameters<typeof queryPers
 
 export async function deletePersona(id: PersonaIdentifier, confirm: 'delete even with private' | 'safe delete') {
     return consistentPersonaDBWriteAccess(async (t) => {
-        const d = await queryPersonaDB(id, t as any)
+        const d = await queryPersonaDB(id, t)
         if (!d) return
         for (const e of d.linkedProfiles) {
-            await detachProfileDB(e[0], t as any)
+            await detachProfileDB(e[0], t)
         }
-        if (confirm === 'delete even with private') await deletePersonaDB(id, 'delete even with private', t as any)
-        else if (confirm === 'safe delete') await safeDeletePersonaDB(id, t as any)
+        if (confirm === 'delete even with private') await deletePersonaDB(id, 'delete even with private', t)
+        else if (confirm === 'safe delete') await safeDeletePersonaDB(id, t)
     })
 }
 
 export async function renamePersona(identifier: PersonaIdentifier, nickname: string) {
     return consistentPersonaDBWriteAccess((t) =>
-        updatePersonaDB(
-            { identifier, nickname },
-            { linkedProfiles: 'merge', explicitUndefinedField: 'ignore' },
-            t as any,
-        ),
+        updatePersonaDB({ identifier, nickname }, { linkedProfiles: 'merge', explicitUndefinedField: 'ignore' }, t),
     )
 }
 
 export async function setupPersona(id: PersonaIdentifier) {
     return consistentPersonaDBWriteAccess(async (t) => {
-        const d = await queryPersonaDB(id, t as any)
+        const d = await queryPersonaDB(id, t)
         if (!d) throw new Error('cannot find persona')
         if (d.linkedProfiles.size === 0) throw new Error('persona should link at least one profile')
         if (d.uninitialized) {
             await updatePersonaDB(
                 { identifier: id, uninitialized: false },
                 { linkedProfiles: 'merge', explicitUndefinedField: 'ignore' },
-                t as any,
+                t,
             )
         }
     })
@@ -203,7 +199,7 @@ export async function createPersonaByJsonWebKey(options: {
         localKey: options.localKey,
         uninitialized: options.uninitialized,
     }
-    await consistentPersonaDBWriteAccess((t) => createPersonaDB(record, t as any))
+    await consistentPersonaDBWriteAccess((t) => createPersonaDB(record, t))
     return identifier
 }
 export async function createProfileWithPersona(
@@ -230,7 +226,7 @@ export async function createProfileWithPersona(
         mnemonic: keys.mnemonic,
     }
     await consistentPersonaDBWriteAccess(async (t) => {
-        await createOrUpdatePersonaDB(rec, { explicitUndefinedField: 'ignore', linkedProfiles: 'merge' }, t as any)
+        await createOrUpdatePersonaDB(rec, { explicitUndefinedField: 'ignore', linkedProfiles: 'merge' }, t)
         await attachProfileDB(profileID, ec_id, data, t)
     })
 }

@@ -18,12 +18,12 @@ export function serializable<T, Q>(name: string, ser?: (x: T) => Q, des?: (x: Q)
                     ? [(x) => x instanceof constructor, ser, des]
                     : [
                           (x) => x instanceof constructor,
-                          (x) => {
+                          (x: unknown) => {
                               const y = Object.assign({}, x)
-                              Object.getOwnPropertySymbols(y).forEach((x) => delete y[x])
+                              Object.getOwnPropertySymbols(y).forEach((x) => Reflect.deleteProperty(y, x))
                               return typeson.encapsulate(y)
                           },
-                          (x) => {
+                          (x: unknown) => {
                               const y = typeson.revive(x)
                               Object.setPrototypeOf(y, constructor.prototype)
                               return y
@@ -53,8 +53,8 @@ typeson.register(builtins)
 typeson.register([customTypes])
 serializable('Ok')(Ok)
 serializable('Err')(Err)
-export default {
-    async serialization(from) {
+const serialization: Serialization = {
+    async serialization(from: unknown) {
         return typeson.encapsulate(from)
     },
     async deserialization(to: string) {
@@ -65,4 +65,6 @@ export default {
             return {}
         }
     },
-} as Serialization
+}
+
+export default serialization

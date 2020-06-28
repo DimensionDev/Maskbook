@@ -42,7 +42,7 @@ import { sleep } from '../../../utils/utils'
 import { currentEthereumNetworkSettings } from '../../../plugins/Wallet/UI/Developer/EthereumNetworkSettings'
 
 //#region wallet import dialog
-export function DashboardWalletImportDialog(props: WrappedDialogProps) {
+export function DashboardWalletImportDialog(props: WrappedDialogProps<object>) {
     const { t } = useI18N()
     const state = useState(0)
 
@@ -261,7 +261,7 @@ export function DashboardWalletAddTokenDialog(props: WrappedDialogProps<WalletPr
                     setToken(null)
                     return setTabState(state)
                 },
-            ] as [number, React.Dispatch<React.SetStateAction<number>>],
+            ] as const,
         [tabState],
     )
     const tabProps: AbstractTabProps = {
@@ -530,9 +530,9 @@ export function DashboardWalletDeleteConfirmDialog(props: WrappedDialogProps<Wal
 //#endregion
 
 //#region wallet error dialog
-export function DashboardWalletErrorDialog(props: WrappedDialogProps) {
+export function DashboardWalletErrorDialog(props: WrappedDialogProps<object>) {
     const { t } = useI18N()
-    const history = useHistory()
+    const history = useHistory<unknown>()
     const { error } = useQueryParams(['error'])
 
     let message = ''

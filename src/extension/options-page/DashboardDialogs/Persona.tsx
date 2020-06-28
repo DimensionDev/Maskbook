@@ -22,7 +22,7 @@ export function PersonaImportDialog() {
     const [password, setPassword] = useState('')
     const [base64Value, setBase64Value] = useState('')
 
-    const history = useHistory()
+    const history = useHistory<unknown>()
 
     const [restoreState, setRestoreState] = React.useState<'success' | 'failed' | null>(null)
 
