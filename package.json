@@ -111,7 +111,6 @@
     "webextension-polyfill": "^0.6.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.10.3",
     "@commitlint/cli": "^9.0.1",
     "@commitlint/config-conventional": "^9.0.1",
     "@nice-labs/git-flow-init": "^1.0.1",
