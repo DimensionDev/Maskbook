@@ -37,6 +37,7 @@ export function CommentBox(props: CommentBoxProps) {
     const classes = useStyles()
     const [binder, inputRef, node] = useCapturedInput(() => {})
     const { t } = useI18N()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     useEffect(
         binder(['keypress'], (e) => {
             if (!node || !node.value) return

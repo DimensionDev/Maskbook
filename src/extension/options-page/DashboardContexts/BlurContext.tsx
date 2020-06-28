@@ -52,7 +52,7 @@ export function DashboardBlurContextUI({ children }: DashboardBlurContextUIProps
     )
     const theme = useTheme()
 
-    useEffect(unblur, [location])
+    useEffect(unblur, [location, unblur])
     useEffect(() => {
         // global filter blur color fix
         document.body.style.backgroundColor = theme.palette.background.paper
