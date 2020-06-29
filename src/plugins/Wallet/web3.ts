@@ -10,22 +10,31 @@ import { OnlyRunInContext } from '@holoflows/kit/es'
 OnlyRunInContext('background', 'web3')
 
 export const web3 = new Web3()
+export const pool = new Map<string, WebsocketProvider>()
 
 let provider: WebsocketProvider
 
 export const resetProvider = () => {
-    if (provider) {
-        provider.removeListener('end', resetProvider) // prevent from circular reseting
-        provider.disconnect(1000, 'change provider')
-    }
-    provider = new Web3.providers.WebsocketProvider(getNetworkSettings().middlewareAddress, {
-        // @ts-ignore
-        clientConfig: {
-            keepalive: true,
-            keepaliveInterval: 1e4, // milliseconds
-        },
-    })
-    provider.on('end', resetProvider)
+    const url = getNetworkSettings().middlewareAddress
+    provider = pool.has(url)
+        ? pool.get(url)!
+        : // more: https://github.com/ethereum/web3.js/blob/1.x/packages/web3-providers-ws/README.md
+          new Web3.providers.WebsocketProvider(url, {
+              timeout: 5000, // ms
+              // @ts-ignore
+              clientConfig: {
+                  keepalive: true,
+                  keepaliveInterval: 1, // ms
+              },
+              reconnect: {
+                  auto: true,
+                  delay: 5000, // ms
+                  maxAttempts: Number.MAX_SAFE_INTEGER,
+                  onTimeout: true,
+              },
+          })
+    if (pool.has(url)) provider.reset()
+    else pool.set(url, provider)
     web3.setProvider(provider)
 }
 
