@@ -40,6 +40,8 @@ public/polyfill
 /.pptr-alice
 /.pptr-bob
 /screenshots
+/.env
+/.pptr-*
 
 npm-debug.log*
 yarn-debug.log*

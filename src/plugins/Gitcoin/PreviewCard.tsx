@@ -62,7 +62,7 @@ const useStyles = makeStyles((theme: Theme) =>
             color: 'rgb(0, 154, 87)',
         },
         secondaryArea: {
-            color: theme.palette.common.black,
+            color: theme.palette.type === 'dark' ? '#BDBDBD' : theme.palette.common.black,
         },
     }),
 )
