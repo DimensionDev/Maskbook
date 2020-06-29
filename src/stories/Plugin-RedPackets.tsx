@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { storiesOf } from '@storybook/react'
 import { RedPacketWithStateUI, RedPacket } from '../plugins/Wallet/UI/Dashboard/Components/RedPacket'
 import {
@@ -13,7 +13,7 @@ import { Typography, Paper } from '@material-ui/core'
 import { action } from '@storybook/addon-actions'
 import BigNumber from 'bignumber.js'
 import { makeTypedMessage } from '../extension/background-script/CryptoServices/utils'
-import { DAI_ADDRESS, OKB_ADDRESS } from '../plugins/Wallet/token'
+import { DAI_ADDRESS } from '../plugins/Wallet/token'
 import { DecryptPostSuccess } from '../components/InjectedComponents/DecryptedPost/DecryptedPostSuccess'
 import { RedPacketMetaKey } from '../plugins/Wallet/RedPacketMetaKey'
 
@@ -48,17 +48,6 @@ storiesOf('Plugin: Red Packets', module)
                 symbol: erc20symbol,
             },
         })
-        const okb = createRecord({
-            ...opts,
-            type: EthereumTokenType.ERC20,
-            total: total * 10 ** decimals,
-            token: {
-                address: OKB_ADDRESS,
-                name: 'OKB',
-                decimals,
-                symbol: erc20symbol,
-            },
-        })
         return (
             <>
                 <Typography>ETH</Typography>
@@ -69,9 +58,6 @@ storiesOf('Plugin: Red Packets', module)
                 <hr />
                 <Typography>DAI</Typography>
                 <RedPacketWithStateUI onClick={action('onClick')} loading={loading} redPacket={dai} />
-                <hr />
-                <Typography>OKB</Typography>
-                <RedPacketWithStateUI onClick={action('onClick')} loading={loading} redPacket={okb} />
             </>
         )
     })

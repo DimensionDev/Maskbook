@@ -6,7 +6,7 @@ import { PluginMessageCenter } from '../PluginMessages'
 import { HDKey, EthereumAddress } from 'wallet.ts'
 import * as bip39 from 'bip39'
 import { walletAPI, erc20API } from './api'
-import { ERC20Token, OKB_ADDRESS, DAI_ADDRESS } from './token'
+import { ERC20Token, DAI_ADDRESS } from './token'
 import { memoizePromise } from '../../utils/memoize'
 import { BigNumber } from 'bignumber.js'
 import { ec as EC } from 'elliptic'
@@ -150,11 +150,8 @@ export async function importNewWallet(
         passphrase,
         address,
         eth_balance: bal,
-        /** Builtin Dai Stablecoin */
-        erc20_token_balance: new Map([
-            [DAI_ADDRESS, undefined],
-            [OKB_ADDRESS, undefined],
-        ]),
+        /** Builtin tokens */
+        erc20_token_balance: new Map([[DAI_ADDRESS, undefined]]),
         _data_source_: getWalletProvider().dataSource,
         createdAt: new Date(),
         updatedAt: new Date(),
