@@ -24,6 +24,10 @@ import { definedSocialNetworkWorkers } from './social-network/worker'
 import { getWelcomePageURL } from './extension/options-page/Welcome/getWelcomePageURL'
 import { exclusiveTasks } from './extension/content-script/tasks'
 
+if (process.env.NODE_ENV === 'development') {
+    require('./protocols/wallet-provider/metamask-provider')
+}
+
 if (GetContext() === 'background') {
     const injectedScript = getInjectedScript()
     const contentScripts: Array<{ code: string } | { file: string }> = []

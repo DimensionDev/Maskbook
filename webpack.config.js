@@ -117,7 +117,18 @@ module.exports = (argvEnv, argv) => {
             strictExportPresence: true,
             // ? We're going to move to ESModule in future.
             // ? Don't add new loaders if the motivation is not strong enough.
-            rules: [{ parser: { requireEnsure: false } }, addTSLoader()],
+            rules: [
+                {
+                    test: /\.js$/,
+                    enforce: 'pre',
+                    use: ['source-map-loader'],
+                },
+                { parser: { requireEnsure: false } },
+                addTSLoader(),
+            ],
+        },
+        stats: {
+            warningsFilter: [/Failed to parse source map/],
         },
         plugins: [
             new webpack.EnvironmentPlugin({
