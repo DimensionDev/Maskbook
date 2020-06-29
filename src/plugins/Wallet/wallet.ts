@@ -7,7 +7,7 @@ import { PluginMessageCenter } from '../PluginMessages'
 import { HDKey, EthereumAddress } from 'wallet.ts'
 import * as bip39 from 'bip39'
 import { walletAPI, erc20API } from './api'
-import { ERC20TokenPredefinedData, OKB_ADDRESS, DAI_ADDRESS } from './erc20'
+import { ERC20TokenPredefinedData, DAI_ADDRESS } from './erc20'
 import { memoizePromise } from '../../utils/memoize'
 import { buf2hex } from './web3'
 import { BigNumber } from 'bignumber.js'
@@ -131,11 +131,8 @@ export async function importNewWallet(
         passphrase,
         address,
         eth_balance: bal,
-        /** Builtin Dai Stablecoin */
-        erc20_token_balance: new Map([
-            [DAI_ADDRESS, undefined],
-            [OKB_ADDRESS, undefined],
-        ]),
+        /** Builtin tokens */
+        erc20_token_balance: new Map([[DAI_ADDRESS, undefined]]),
         _data_source_: getWalletProvider().dataSource,
     }
     /** Wallet recover from private key */
@@ -150,14 +147,6 @@ export async function importNewWallet(
             symbol: 'DAI',
             name: 'Dai Stablecoin',
             address: DAI_ADDRESS,
-            network: EthereumNetwork.Mainnet,
-            is_user_defined: false,
-        })
-        t.objectStore('ERC20Token').put({
-            decimals: 18,
-            symbol: 'OKB',
-            name: 'OKB',
-            address: OKB_ADDRESS,
             network: EthereumNetwork.Mainnet,
             is_user_defined: false,
         })
