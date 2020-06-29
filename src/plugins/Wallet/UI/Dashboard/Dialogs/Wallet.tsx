@@ -315,16 +315,10 @@ export function WalletRedPacketDetailDialog(props: WalletRedPacketDetailDialogPr
         } else {
             const user = redPacket._found_in_url_!.match(/(?!\/)[\d\w]+(?=\/status)/)
             const userText = user ? ` from @${user}` : ''
-            const text =
-                redPacket.erc20_token === OKB_ADDRESS
-                    ? [
-                          `#OKBAprilReport Wow! I just received an #OKB Red Packet${userText} using Maskbook. Follow @JayHao8 and answer quiz to gain more #OKB.`,
-                          'https://twitter.com/JayHao8/status/1260482603079122946',
-                      ].join('\n')
-                    : [
-                          `I just received a Red Packet${userText}. Follow @realMaskbook (maskbook.com) to get your first Twitter #RedPacket.`,
-                          `#maskbook ${redPacket._found_in_url_}`,
-                      ].join('\n')
+            const text = [
+                `I just received a Red Packet${userText}. Follow @realMaskbook (maskbook.com) to get your first Twitter #RedPacket.`,
+                `#maskbook ${redPacket._found_in_url_}`,
+            ].join('\n')
             window.open(
                 `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`,
                 '_blank',

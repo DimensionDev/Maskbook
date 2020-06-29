@@ -18,6 +18,7 @@ import { EthereumTokenType } from '../Wallet/database/types'
 import { isNumber } from 'lodash-es'
 import { DonateSuccessDialog, DonateFailDialog } from './Dialogs'
 import { getNetworkSettings } from '../Wallet/UI/Developer/EthereumNetworkSettings'
+import { formatBalance } from '../Wallet/formatter'
 
 const isGitcoin = (x: string): boolean => x.startsWith('https://gitcoin.co/grants')
 export const GitcoinPluginDefine: PluginConfig = {
@@ -71,9 +72,9 @@ function Gitcoin(props: { url: string }) {
         },
     })
     const {
-        amount,
-        contributors,
-        finalAmount,
+        transactions,
+        daiAmount,
+        estimatedAmount,
         title,
         permalink,
         image,
@@ -119,10 +120,10 @@ function Gitcoin(props: { url: string }) {
                 loading={isValidating}
                 logo={image}
                 title={grantTitle}
-                line1={isNumber(finalAmount) ? `${finalAmount} DAI` : ''}
+                line1={BigNumber.isBigNumber(estimatedAmount) ? `${estimatedAmount.toFixed(2)} USD` : ''}
                 line2="ESTIMATED"
-                line3={isNumber(amount) ? `${amount} DAI` : ''}
-                line4={isNumber(contributors) ? `${contributors} contributors` : ''}
+                line3={BigNumber.isBigNumber(daiAmount) ? `${formatBalance(daiAmount, 18)} DAI` : ''}
+                line4={isNumber(transactions) ? `${transactions} transactions` : ''}
                 address={donationAddress}
                 originalURL={url ?? ''}
             />

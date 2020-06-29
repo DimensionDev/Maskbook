@@ -37,6 +37,8 @@ public/polyfill
 
 # e2e
 /screenshots
+/.env
+/.pptr-*
 
 npm-debug.log*
 yarn-debug.log*
