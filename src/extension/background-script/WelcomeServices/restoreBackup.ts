@@ -1,5 +1,5 @@
 import type { ProfileIdentifier } from '../../../database/type'
-import { UpgradeBackupJSONFile } from '../../../utils/type-transform/BackupFormat/JSON/latest'
+import { UpgradeBackupJSONFile, BackupJSONFileLatest } from '../../../utils/type-transform/BackupFormat/JSON/latest'
 import {
     attachProfileDB,
     createOrUpdatePersonaDB,
@@ -65,13 +65,30 @@ export async function restoreBackup(json: object, whoAmI?: ProfileIdentifier) {
     }
 }
 
-const uncomfirmedBackup = new Map<string, object>()
+const uncomfirmedBackup = new Map<string, BackupJSONFileLatest>()
 
-export async function restoreBackupAfterConfirmation(id: string, json: object) {
+/**
+ * Restore backup step 1: store the unconfirmed backup in cached
+ * @param id the uuid for each restoration
+ * @param json the backup to be cached
+ */
+export async function setUnconfirmedBackup(id: string, json: BackupJSONFileLatest) {
     uncomfirmedBackup.set(id, json)
 }
 
-export async function restoreBackupConfirmation(id: string, whoAmI?: ProfileIdentifier) {
+/**
+ * Get the unconfirmed backup with uuid
+ * @param id the uuid for each restoration
+ */
+export async function getUnconfirmedBackup(id: string) {
+    return uncomfirmedBackup.get(id)
+}
+
+/**
+ * Restore backup step 2: restore the unconfirmed backup with uuid
+ * @param id the uuid for each restoration
+ */
+export async function confirmBackup(id: string, whoAmI?: ProfileIdentifier) {
     if (uncomfirmedBackup.has(id)) {
         await restoreBackup(uncomfirmedBackup.get(id)!, whoAmI)
         uncomfirmedBackup.delete(id)

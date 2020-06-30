@@ -145,7 +145,10 @@ const WalletContent = React.forwardRef<HTMLDivElement, WalletContentProps>(funct
             <MenuItem onClick={setAsDefault}>{t('set_as_default')}</MenuItem>,
             <MenuItem onClick={() => openWalletRename({ wallet: wallet })}>{t('rename')}</MenuItem>,
             <MenuItem onClick={() => openWalletBackup({ wallet: wallet })}>{t('backup')}</MenuItem>,
-            <MenuItem onClick={() => openWalletDelete({ wallet: wallet })} className={color.error}>
+            <MenuItem
+                onClick={() => openWalletDelete({ wallet: wallet })}
+                className={color.error}
+                data-testid="delete_button">
                 {t('delete')}
             </MenuItem>,
         ],
@@ -172,7 +175,8 @@ const WalletContent = React.forwardRef<HTMLDivElement, WalletContentProps>(funct
                     <IconButton
                         className={classes.moreButton}
                         size="small"
-                        onClick={(e) => openMenu({ anchorEl: e.currentTarget })}>
+                        onClick={(e) => openMenu({ anchorEl: e.currentTarget })}
+                        data-testid="setting_icon">
                         <MoreVertOutlinedIcon />
                     </IconButton>
                     {menu}
