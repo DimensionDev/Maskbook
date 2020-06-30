@@ -14,7 +14,7 @@ export const PluginRedPacketTheme = unstable_createMuiStrictModeTheme({
                     top: 250,
                     width: 60,
                     height: 60,
-                    right: -8,
+                    right: 8,
                     opacity: 0.8,
                     backgroundAttachment: 'local',
                     backgroundPosition: 'center',
