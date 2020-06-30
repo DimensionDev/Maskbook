@@ -21,19 +21,19 @@ import {
     DashboardWalletRenameDialog,
     DashboardWalletErrorDialog,
 } from '../Dialogs/Wallet'
-import { useMyWallets } from '../../../components/DataSource/independent'
 import DashboardMenu from '../DashboardComponents/DashboardMenu'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { useColorProvider } from '../../../utils/theme'
 import Services from '../../service'
 import { merge, cloneDeep } from 'lodash-es'
 import BigNumber from 'bignumber.js'
-import type { WalletRecord, ERC20TokenRecord } from '../../../plugins/Wallet/database/types'
 import { sleep } from '../../../utils/utils'
 import { ETH_ADDRESS, isDAI } from '../../../plugins/Wallet/token'
 import { useValueRef } from '../../../utils/hooks/useValueRef'
 import useQueryParams from '../../../utils/hooks/useQueryParams'
 import { currentEthereumNetworkSettings } from '../../../plugins/Wallet/UI/Developer/EthereumNetworkSettings'
+import { useWallet } from '../../../plugins/shared/useWallet'
+import type { WalletDetails, ERC20TokenDetails } from '../../background-script/PluginService'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -109,24 +109,27 @@ const walletTheme = (theme: Theme): Theme =>
     })
 
 interface WalletContentProps {
-    wallet: WalletRecord & { privateKey: string }
-    tokens: ERC20TokenRecord[]
+    wallet: WalletDetails
+    tokens?: ERC20TokenDetails[]
 }
 
-function WalletContent({ wallet, tokens }: WalletContentProps) {
+const WalletContent = React.forwardRef<HTMLDivElement, WalletContentProps>(function WalletContent(
+    { wallet, tokens }: WalletContentProps,
+    ref,
+) {
     const classes = useStyles()
     const { t } = useI18N()
     const color = useColorProvider()
 
     const network = useValueRef(currentEthereumNetworkSettings)
     const [addToken, , openAddToken] = useModal(DashboardWalletAddTokenDialog)
-    const [walletHistory, , oepnWalletHistory] = useModal(DashboardWalletHistoryDialog)
-    const [walletBackup, , oepnWalletBackup] = useModal(DashboardWalletBackupDialog)
-    const [walletDelete, , oepnWalletDelete] = useModal(DashboardWalletDeleteConfirmDialog)
-    const [walletRename, , oepnWalletRename] = useModal(DashboardWalletRenameDialog)
+    const [walletHistory, , openWalletHistory] = useModal(DashboardWalletHistoryDialog)
+    const [walletBackup, , openWalletBackup] = useModal(DashboardWalletBackupDialog)
+    const [walletDelete, , openWalletDelete] = useModal(DashboardWalletDeleteConfirmDialog)
+    const [walletRename, , openWalletRename] = useModal(DashboardWalletRenameDialog)
 
     const addedTokens = tokens
-        .filter((token) => wallet?.erc20_token_balance.has(token.address))
+        ?.filter((token) => wallet?.erc20tokens.has(token.address))
         .sort((token, otherToken) => {
             if (isDAI(token.address)) return -1
             if (isDAI(otherToken.address)) return 1
@@ -140,19 +143,19 @@ function WalletContent({ wallet, tokens }: WalletContentProps) {
     const menus = useMemo(
         () => [
             <MenuItem onClick={setAsDefault}>{t('set_as_default')}</MenuItem>,
-            <MenuItem onClick={() => oepnWalletRename({ wallet: wallet })}>{t('rename')}</MenuItem>,
-            <MenuItem onClick={() => oepnWalletBackup({ wallet: wallet })}>{t('backup')}</MenuItem>,
-            <MenuItem onClick={() => oepnWalletDelete({ wallet: wallet })} className={color.error}>
+            <MenuItem onClick={() => openWalletRename({ wallet: wallet })}>{t('rename')}</MenuItem>,
+            <MenuItem onClick={() => openWalletBackup({ wallet: wallet })}>{t('backup')}</MenuItem>,
+            <MenuItem onClick={() => openWalletDelete({ wallet: wallet })} className={color.error}>
                 {t('delete')}
             </MenuItem>,
         ],
-        [color.error, wallet, oepnWalletBackup, oepnWalletDelete, oepnWalletRename, setAsDefault, t],
+        [color.error, wallet, openWalletBackup, openWalletDelete, openWalletRename, setAsDefault, t],
     )
     const [menu, , openMenu] = useModal(DashboardMenu, { menus })
 
     if (!wallet) return null
     return (
-        <>
+        <div ref={ref}>
             <ThemeProvider theme={walletTheme}>
                 <Box pt={3} pb={2} pl={3} pr={2} display="flex" alignItems="center">
                     <Typography className={classes.title} variant="h5">
@@ -176,18 +179,17 @@ function WalletContent({ wallet, tokens }: WalletContentProps) {
                 </Box>
                 <List className={classes.tokenList} disablePadding>
                     <TokenListItem
-                        balance={wallet.eth_balance ?? new BigNumber(0)}
+                        balance={wallet.ethBalance ?? new BigNumber(0)}
                         token={{
                             address: ETH_ADDRESS,
                             name: 'Ether',
                             symbol: 'ETH',
                             network,
                             decimals: 18,
-                            is_user_defined: false,
                         }}></TokenListItem>
-                    {addedTokens.map((token) => (
+                    {addedTokens?.map((token) => (
                         <TokenListItem
-                            balance={wallet.erc20_token_balance.get(token.address) ?? new BigNumber(0)}
+                            balance={wallet.erc20tokens.get(token.address) ?? new BigNumber(0)}
                             token={token}
                             key={token.address}
                         />
@@ -196,7 +198,7 @@ function WalletContent({ wallet, tokens }: WalletContentProps) {
             </ThemeProvider>
             <div className={classes.footer}>
                 <Button
-                    onClick={() => oepnWalletHistory({ wallet: wallet })}
+                    onClick={() => openWalletHistory({ wallet: wallet })}
                     startIcon={<HistoryIcon />}
                     variant="text"
                     color="primary">
@@ -208,9 +210,9 @@ function WalletContent({ wallet, tokens }: WalletContentProps) {
             {walletBackup}
             {walletDelete}
             {walletRename}
-        </>
+        </div>
     )
-}
+})
 
 export default function DashboardWalletsRouter() {
     const classes = useStyles()
@@ -221,14 +223,15 @@ export default function DashboardWalletsRouter() {
     const [walletCreate, openWalletCreate] = useModal(DashboardWalletCreateDialog)
     const [walletError, openWalletError] = useModal(DashboardWalletErrorDialog)
 
-    const [wallets, tokens] = useMyWallets()
+    const { wallets, tokens } = useWallet()
     const [current, setCurrent] = useState('')
-    const currentWallet = wallets.find((wallet) => wallet.address === current)
+    const currentWallet = wallets?.find((wallet) => wallet.address === current)
 
     // auto select first wallet
     useEffect(() => {
         if (current) return
-        if (wallets[0]?.address) setCurrent(wallets[0]?.address)
+        const first = wallets?.[0]?.address
+        if (first) setCurrent(first)
     }, [current, wallets])
 
     // show error dialog
@@ -239,7 +242,7 @@ export default function DashboardWalletsRouter() {
     return (
         <DashboardRouterContainer
             padded={false}
-            empty={!wallets.length}
+            empty={!wallets?.length}
             title={t('my_wallets')}
             actions={[
                 <Button color="primary" variant="outlined" onClick={openWalletImport}>
@@ -250,7 +253,7 @@ export default function DashboardWalletsRouter() {
                 </Button>,
             ]}>
             <div className={classes.root}>
-                {wallets.length ? (
+                {wallets?.length ? (
                     <div className={classes.scroller}>
                         {wallets.map((wallet) => (
                             <WalletItem
@@ -262,7 +265,7 @@ export default function DashboardWalletsRouter() {
                                     setCurrent(wallet.address)
                                 }}
                                 wallet={wallet}
-                                tokens={tokens.filter((token) => wallet.erc20_token_balance.has(token.address))}
+                                tokens={tokens?.filter((token) => token.address in wallet.erc20tokens)}
                                 selected={wallet.address === current}
                             />
                         ))}

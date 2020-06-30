@@ -192,10 +192,7 @@ export function PostDialogUI(props: PostDialogUIProps) {
                                     ChipProps={{
                                         label: '💰 Red Packet',
                                         onClick: async () => {
-                                            const [wallets] = await Services.Plugin.invokePlugin(
-                                                'maskbook.wallet',
-                                                'getWallets',
-                                            )
+                                            const { wallets } = await Services.Plugin.getWallets()
                                             if (wallets.length) {
                                                 setRedPacketDialogOpen(true)
                                             } else {

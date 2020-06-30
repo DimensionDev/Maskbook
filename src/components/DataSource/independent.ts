@@ -12,7 +12,6 @@ import { currentEthereumNetworkSettings } from '../../plugins/Wallet/UI/Develope
 const independentRef = {
     myPersonasRef: new ValueRef<Persona[]>([], PersonaArrayComparer),
     myUninitializedPersonasRef: new ValueRef<Persona[]>([], PersonaArrayComparer),
-    walletTokenRef: new ValueRef<[(WalletRecord & { privateKey: string })[], ERC20TokenRecord[]]>([[], []]),
 }
 
 {
@@ -26,24 +25,10 @@ const independentRef = {
     }
 }
 
-{
-    const ref = independentRef.walletTokenRef
-    sideEffect.then(query)
-    PluginMessageCenter.on('maskbook.wallets.update', query)
-    currentEthereumNetworkSettings.addListener(query)
-    function query() {
-        Services.Plugin.invokePlugin('maskbook.wallet', 'getWallets').then((x) => (ref.value = x))
-    }
-}
-
 export function useMyPersonas() {
     return useValueRef(independentRef.myPersonasRef)
 }
 
 export function useMyUninitializedPersonas() {
     return useValueRef(independentRef.myUninitializedPersonasRef)
-}
-
-export function useMyWallets() {
-    return useValueRef(independentRef.walletTokenRef)
 }

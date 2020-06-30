@@ -31,6 +31,7 @@ import {
 import { useCapturedInput } from '../../utils/hooks/useCapturedEvents'
 import BigNumber from 'bignumber.js'
 import { formatBalance } from '../Wallet/formatter'
+import type { ERC20TokenDetails, WalletDetails } from '../../extension/background-script/PluginService'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -55,7 +56,7 @@ const useStyles = makeStyles((theme: Theme) =>
 export interface DonatePayload {
     amount: number
     address: string
-    token: ERC20TokenRecord
+    token: ERC20TokenDetails
     tokenType: EthereumTokenType
 }
 
@@ -80,30 +81,22 @@ interface DonateDialogUIProps
     open: boolean
     onDonate(opt: DonatePayload): Promise<void> | void
     onClose(): void
-    onRequireNewWallet(): void
-    wallets: WalletRecord[] | 'loading'
-    tokens: ERC20TokenRecord[]
+    requestConnectWallet(): void
+    wallets: WalletDetails[] | undefined
+    tokens: ERC20TokenDetails[] | undefined
 }
 
 function DonateDialogUI(props: DonateDialogUIProps) {
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
-    const useSelectWalletResult = useSelectWallet(props.wallets, props.tokens, props.onRequireNewWallet)
-    const {
-        erc20Balance,
-        ethBalance,
-        selectedToken,
-        selectedTokenType,
-        selectedTokenAddress,
-        selectedWallet,
-        selectedWalletAddress,
-    } = useSelectWalletResult
+    const useSelectWalletResult = useSelectWallet(props.wallets, props.tokens, props.requestConnectWallet)
+    const { erc20Balance, ethBalance, selectedToken, selectedTokenType, selectedWallet } = useSelectWalletResult
 
     const [amount, setAmount] = useState(0.01)
     const [, amountInputRef] = useCapturedInput((x) => setAmount(parseFloat(x)))
     const amountMaxBigint = selectedWallet
         ? selectedTokenType === EthereumTokenType.ETH
-            ? selectedWallet.eth_balance
+            ? selectedWallet.ethBalance
             : selectedToken?.amount
         : undefined
     const amountMaxNumber = BigNumber.isBigNumber(amountMaxBigint)

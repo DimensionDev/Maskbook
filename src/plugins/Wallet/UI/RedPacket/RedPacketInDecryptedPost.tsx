@@ -28,8 +28,9 @@ import { useI18N } from '../../../../utils/i18n-next-ui'
 import ShadowRootDialog from '../../../../utils/jss/ShadowRootDialog'
 import { getPostUrl } from '../../../../social-network/utils/getPostUrl'
 import { RedPacketMetaKey } from '../../RedPacketMetaKey'
-import { useWalletDataSource } from '../../../shared/useWallet'
+import { useWallet } from '../../../shared/useWallet'
 import { usePostInfoDetails } from '../../../../components/DataSource/usePostInfo'
+import type { WalletDetails } from '../../../../extension/background-script/PluginService'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -69,7 +70,7 @@ export default function RedPacketInDecryptedPost(props: RedPacketInDecryptedPost
     }
 
     const claimRedPacket = (
-        walletAddress: WalletRecord['address'],
+        walletAddress: WalletDetails['address'],
         rpid?: RedPacketRecord['red_packet_id'],
         setAsDefault?: boolean,
     ) => {
@@ -84,16 +85,16 @@ export default function RedPacketInDecryptedPost(props: RedPacketInDecryptedPost
             .catch((e) => Services.Welcome.openOptionsPage(`/wallets?error=${e.message}`))
             .finally(() => setLoading(false))
     }
-    const [wallets, , onRequireNewWallet] = useWalletDataSource()
+    const { wallets, requestConnectWallet } = useWallet()
 
     const onClick = async (state: RedPacketStatus, rpid: RedPacketRecord['red_packet_id']) => {
         if (!rpid) return
         if (state === 'incoming' || state === 'normal') {
             setLoading(true)
             try {
-                if (wallets === 'loading') throw new Error('Loading')
+                if (!wallets) throw new Error('Loading')
                 if (!wallets[0]) {
-                    onRequireNewWallet()
+                    requestConnectWallet()
                     throw new Error('Claim failed')
                 }
                 if (wallets.length > 1) setClaiming({ rpid, wallets })
@@ -121,7 +122,7 @@ export default function RedPacketInDecryptedPost(props: RedPacketInDecryptedPost
 }
 type Claiming = {
     rpid: RedPacketRecord['red_packet_id']
-    wallets: WalletRecord[]
+    wallets: WalletDetails[]
 } | null
 export function RedPacketInDecryptedPostCard(
     props: RedPacketInDecryptedPostProps & {
@@ -211,7 +212,7 @@ export function RedPacketInDecryptedPostClaimDialog(
                             value={selectedWalletAddress || ''}>
                             {claiming?.wallets.map((x) => (
                                 <MenuItem key={x.address} value={x.address}>
-                                    {x.name} ({x.address})
+                                    {x.walletName} ({x.address})
                                 </MenuItem>
                             ))}
                         </Select>

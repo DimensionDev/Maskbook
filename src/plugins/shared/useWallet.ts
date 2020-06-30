@@ -1,32 +1,36 @@
 import { useState, useEffect, useCallback } from 'react'
-import { WalletRecord, ERC20TokenRecord, EthereumTokenType } from '../Wallet/database/types'
+import { EthereumTokenType } from '../Wallet/database/types'
 import Services from '../../extension/service'
 import { PluginMessageCenter } from '../PluginMessages'
 import { formatBalance } from '../Wallet/formatter'
 import { ETH_ADDRESS } from '../Wallet/token'
 import { currentEthereumNetworkSettings } from '../Wallet/UI/Developer/EthereumNetworkSettings'
+import useSWR from 'swr'
+import type { WalletDetails, ERC20TokenDetails } from '../../extension/background-script/PluginService'
 
-export function useWalletDataSource() {
-    const [wallets, setWallets] = useState<WalletRecord[] | 'loading'>('loading')
-    const [tokens, setTokens] = useState<ERC20TokenRecord[]>([])
-
-    useEffect(() => {
-        const update = () =>
-            Services.Plugin.invokePlugin('maskbook.wallet', 'getWallets').then(([x, y]) => {
-                setWallets(x)
-                setTokens(y)
-            })
-        update()
-        currentEthereumNetworkSettings.addListener(update)
-        return PluginMessageCenter.on('maskbook.wallets.update', update)
-    }, [])
-    return [
-        wallets,
-        tokens,
-        useCallback(() => {
+const getWallets = () => Services.Plugin.getWallets()
+const getManagedWallets = Services.Plugin.getManagedWalletDetail
+export function useWallet() {
+    const swr = useSWR('query', {
+        fetcher: getWallets,
+    })
+    const { revalidate, data } = swr
+    useEffect(() => PluginMessageCenter.on('maskbook.wallets.update', revalidate), [revalidate])
+    useEffect(() => currentEthereumNetworkSettings.addListener(revalidate), [revalidate])
+    return {
+        ...swr,
+        wallets: data?.wallets,
+        tokens: data?.tokens,
+        requestConnectWallet: useCallback(() => {
             Services.Welcome.openOptionsPage('/wallets/error?reason=nowallet')
         }, []),
-    ] as const
+    }
+}
+export function useManagedWalletDetail(address: string | undefined) {
+    const swr = useSWR(address ?? null, { fetcher: getManagedWallets })
+    const { revalidate } = swr
+    useEffect(() => PluginMessageCenter.on('maskbook.wallets.update', revalidate), [revalidate])
+    return swr
 }
 export type SelectedTokenType =
     | {
@@ -36,16 +40,20 @@ export type SelectedTokenType =
           type: 'erc20'
           address: string
       }
-export function useSelectWallet(...[wallets, tokens, onRequireNewWallet]: ReturnType<typeof useWalletDataSource>) {
+export function useSelectWallet(
+    wallets: WalletDetails[] | undefined,
+    tokens: ERC20TokenDetails[] | undefined,
+    requestConnectWallet: () => void,
+) {
     const [selectedWalletAddress, setSelectedWalletAddress] = useState<undefined | string>(undefined)
 
     const [selectedTokenAddress, setSelectedTokenAddress] = useState(ETH_ADDRESS)
     const [selectedTokenType, setSelectedTokenType] = useState<EthereumTokenType>(EthereumTokenType.ETH)
-    const selectedWallet = wallets === 'loading' ? undefined : wallets.find((x) => x.address === selectedWalletAddress)
+    const selectedWallet = wallets?.find((x) => x.address === selectedWalletAddress)
 
-    const availableTokens = Array.from(selectedWallet?.erc20_token_balance || [])
-        .filter(([address]) => tokens.find((x) => x.address === address))
-        .map(([address, amount]) => ({ amount, ...tokens.find((x) => x.address === address)! }))
+    const availableTokens = Array.from(Object.entries(selectedWallet?.erc20tokens || {}) || [])
+        .filter(([address]) => tokens?.find((x) => x.address === address))
+        .map(([address, amount]) => ({ amount, ...tokens?.find((x) => x.address === address)! }))
     const selectedToken =
         selectedTokenType === EthereumTokenType.ETH
             ? undefined
@@ -53,14 +61,14 @@ export function useSelectWallet(...[wallets, tokens, onRequireNewWallet]: Return
 
     useEffect(() => {
         if (selectedWalletAddress === undefined) {
-            if (wallets === 'loading') return
-            if (wallets.length === 0) onRequireNewWallet()
+            if (!wallets) return
+            if (wallets?.length === 0) requestConnectWallet()
             else setSelectedWalletAddress(wallets[0].address)
         }
-    }, [onRequireNewWallet, selectedWalletAddress, wallets])
+    }, [requestConnectWallet, selectedWalletAddress, wallets])
 
     const ethBalance = selectedWallet
-        ? `${formatBalance(selectedWallet.eth_balance, 18) ?? '(Syncing...)'} ETH`
+        ? `${formatBalance(selectedWallet.ethBalance, 18) ?? '(Syncing...)'} ETH`
         : undefined
     const erc20Balance = selectedToken
         ? `${formatBalance(selectedToken.amount, selectedToken.decimals) ?? '(Syncing...)'} ${selectedToken.symbol}`

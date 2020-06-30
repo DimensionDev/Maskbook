@@ -112,8 +112,6 @@ export interface WalletRecordInDatabase extends Omit<WalletRecord, 'eth_balance'
     erc20_token_balance: Map<string, string | bigint | undefined>
 }
 export interface ERC20TokenRecord {
-    /** same to address */
-    // id: string
     /** token address */
     address: string
     /** token name */
