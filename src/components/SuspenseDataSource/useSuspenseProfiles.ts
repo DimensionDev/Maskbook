@@ -2,8 +2,7 @@ import type { Profile } from '../../database'
 import { ProfileIdentifier } from '../../database/type'
 import Services from '../../extension/service'
 // TODO: Currently using build from github:innocentiv/swr#reset-pages-build because there is a bug in SWR
-// See https://github.com/zeit/swr/pull/269
-// Change dependency to swr latest after this PR is merged and released
+// Wait for swr release later than 0.2.3 (maybe 0.3 or 0.2.4)
 import useSWR, { useSWRPages } from 'swr'
 import { last } from 'lodash-es'
 import React, { useCallback, unstable_useTransition } from 'react'

@@ -176,6 +176,7 @@ export function isNextRedPacketStatusValid(current: RedPacketStatus, next: RedPa
             return unreachable(current)
     }
 }
+export type RedPacketMetadata = RedPacketJSONPayload
 export interface RedPacketJSONPayload {
     contract_version: number
     contract_address: string

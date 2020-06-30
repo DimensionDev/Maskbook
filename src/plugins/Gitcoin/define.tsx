@@ -21,6 +21,7 @@ import { formatBalance } from '../Wallet/formatter'
 const isGitcoin = (x: string): boolean => x.startsWith('https://gitcoin.co/grants')
 
 export const GitcoinPluginDefine: PluginConfig = {
+    pluginName: 'Gitcoin',
     identifier: 'co.gitcoin',
     successDecryptionInspector: function Component(props): JSX.Element | null {
         const text = useMemo(() => extractTextFromTypedMessage(props.message), [props.message])
@@ -36,6 +37,7 @@ export const GitcoinPluginDefine: PluginConfig = {
         if (!link) return null
         return <Renderer url={link} />
     },
+    postDialogMetadataBadge: new Map([['abc', (meta) => 'Wow my meta']]),
 }
 
 function Renderer(props: React.PropsWithChildren<{ url: string }>) {

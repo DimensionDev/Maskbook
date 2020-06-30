@@ -14,8 +14,8 @@ import {
     ThemeProvider,
     Theme,
     DialogProps,
+    Tooltip,
 } from '@material-ui/core'
-import { BigNumber } from 'bignumber.js'
 import { MessageCenter, CompositionEvent } from '../../utils/messages'
 import { useCapturedInput } from '../../utils/hooks/useCapturedEvents'
 import { useStylesExtends, or } from '../custom-ui-helper'
@@ -35,16 +35,16 @@ import {
     withMetadata,
     readTypedMessageMetadata,
     extractTextFromTypedMessage,
+    withMetadataUntyped,
 } from '../../extension/background-script/CryptoServices/utils'
-import { formatBalance } from '../../plugins/Wallet/formatter'
 import { EthereumTokenType } from '../../plugins/Wallet/database/types'
 import { isDAI, isOKB } from '../../plugins/Wallet/token'
 import { PluginRedPacketTheme } from '../../plugins/Wallet/theme'
-import { sleep } from '../../utils/utils'
 import { useI18N } from '../../utils/i18n-next-ui'
 import ShadowRootDialog from '../../utils/jss/ShadowRootDialog'
 import { twitterUrl } from '../../social-network-provider/twitter.com/utils/url'
 import { RedPacketMetaKey } from '../../plugins/Wallet/RedPacketMetaKey'
+import { PluginUI } from '../../plugins/plugin'
 
 const defaultTheme = {}
 
@@ -118,7 +118,27 @@ export function PostDialogUI(props: PostDialogUIProps) {
     const [redPacketDialogOpen, setRedPacketDialogOpen] = useState(false)
 
     if (props.postContent.type !== 'text') return <>Unsupported type to edit</>
-
+    const metadataBadge = [...PluginUI].flatMap((plugin) => {
+        const knownMeta = plugin.postDialogMetadataBadge
+        if (!knownMeta) return undefined
+        return [...knownMeta.entries()].map(([metadataKey, tag]) => {
+            return withMetadataUntyped(props.postContent.meta, metadataKey, (r) => (
+                <Box key={metadataKey} marginRight={1} marginTop={1} display="inline-block">
+                    <Tooltip title={`Provided by plugin "${plugin.pluginName}"`}>
+                        <Chip
+                            onDelete={() => {
+                                const ref = getActivatedUI().typedMessageMetadata
+                                const next = new Map(ref.value.entries())
+                                next.delete(metadataKey)
+                                ref.value = next
+                            }}
+                            label={tag(r)}
+                        />
+                    </Tooltip>
+                </Box>
+            ))
+        })
+    })
     return (
         <div className={classes.root}>
             <ThemeProvider theme={props.theme ?? defaultTheme}>
@@ -151,25 +171,7 @@ export function PostDialogUI(props: PostDialogUIProps) {
                         </Typography>
                     </DialogTitle>
                     <DialogContent className={classes.content}>
-                        {/* TODO: move into the plugin system */}
-                        {withMetadata(props.postContent.meta, RedPacketMetaKey, (r) => (
-                            <Chip
-                                onDelete={async () => {
-                                    const ref = getActivatedUI().typedMessageMetadata
-                                    const next = new Map(ref.value.entries())
-                                    next.delete(RedPacketMetaKey)
-                                    ref.value = next
-                                    if (props.onShareToEveryoneChanged) {
-                                        await sleep(300)
-                                        props.onShareToEveryoneChanged(false)
-                                    }
-                                }}
-                                label={`A Red Packet with ${formatBalance(
-                                    new BigNumber(r.total),
-                                    r.token?.decimals ?? 18,
-                                )} $${r.token?.name || 'ETH'} from ${r.sender.name}`}
-                            />
-                        ))}
+                        {metadataBadge}
                         <InputBase
                             classes={{
                                 root: classes.MUIInputRoot,

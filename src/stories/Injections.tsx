@@ -9,7 +9,7 @@ import { DecryptPostSuccess } from '../components/InjectedComponents/DecryptedPo
 import { AddToKeyStoreUI } from '../components/InjectedComponents/AddToKeyStore'
 import { useShareMenu } from '../components/InjectedComponents/SelectPeopleDialog'
 import { sleep } from '../utils/utils'
-import { Paper, MuiThemeProvider, Typography, Divider, Button, Link } from '@material-ui/core'
+import { Paper, MuiThemeProvider, Typography, Divider, Button, Link, SnackbarContent } from '@material-ui/core'
 import { demoPeople as demoProfiles, demoGroup } from './demoPeopleOrGroups'
 import { PostCommentDecrypted } from '../components/InjectedComponents/PostComments'
 import { CommentBox } from '../components/InjectedComponents/CommentBox'
@@ -34,6 +34,8 @@ import { useTwitterButton } from '../social-network-provider/twitter.com/utils/t
 import { TwitterThemeProvider } from '../social-network-provider/twitter.com/ui/custom'
 import { PersonKnownSelf } from '../components/InjectedComponents/PersonKnown'
 import { figmaLink } from './utils'
+import type { RedPacketMetadata } from '../plugins/Wallet/database/types'
+import { RedPacketMetaKey } from '../plugins/Wallet/RedPacketMetaKey'
 
 storiesOf('Injections', module)
     .add('PersonOrGroupInChip', () => (
@@ -217,15 +219,34 @@ storiesOf('Injections', module)
             const decoder = (encodedStr: string) => {
                 const parser = new DOMParser()
                 const dom = parser.parseFromString('<!doctype html><body>' + encodedStr, 'text/html')
-                console.log(dom.body.textContent)
-                // eslint-disable-next-line no-eval
-                return new Map(Object.entries(eval(`(${dom.body.textContent})`)))
+                const map = new Map(
+                    Object.entries(
+                        // eslint-disable-next-line no-eval
+                        eval(
+                            `var redpacket = {"${RedPacketMetaKey}":${JSON.stringify(redpacket)}}; (${
+                                dom.body.textContent
+                            })`,
+                        ),
+                    ),
+                )
+                console.log(map)
+                return map
             }
             try {
-                const meta = decoder(text('Metadata', '{}'))
-                return <PostDialog open={[true, () => void 0]} typedMessageMetadata={meta} />
+                const meta = decoder(text('Metadata', '{"test": ""}'))
+                return (
+                    <>
+                        <SnackbarContent message={`Use {...redpacket} to include red packet metadata`} />
+                        <PostDialog open={[true, () => void 0]} typedMessageMetadata={meta} />
+                    </>
+                )
             } catch (e) {
-                return <>{e.message}</>
+                return (
+                    <>
+                        <SnackbarContent message={`Invalid metadata: ${e.message}`}></SnackbarContent>
+                        <PostDialog open={[true, () => void 0]} typedMessageMetadata={new Map()} />
+                    </>
+                )
             }
         },
         figmaLink('https://www.figma.com/file/nDyLQp036eHgcgUXeFmNA1/Post-Composition-v1'),
@@ -266,4 +287,18 @@ function FakePost(props: React.PropsWithChildren<{ title: string }>) {
             </div>
         </MuiThemeProvider>
     )
+}
+
+const redpacket: RedPacketMetadata = {
+    contract_address: 'addr',
+    contract_version: 1,
+    creation_time: Date.now(),
+    duration: 2000,
+    is_random: true,
+    password: 'password',
+    rpid: 'rpid',
+    sender: { address: 'addr', message: 'message', name: 'Name' },
+    shares: 5,
+    token_type: 20,
+    total: '5000000000000000',
 }
