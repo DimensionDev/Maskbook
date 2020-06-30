@@ -141,6 +141,7 @@
     "babel-loader": "^8.1.0",
     "chrome-launcher": "^0.13.3",
     "copy-webpack-plugin": "^6.0.2",
+    "dotenv": "^8.2.0",
     "enzyme": "^3.11.0",
     "enzyme-adapter-react-16": "^1.15.2",
     "eslint": "^7.3.1",
