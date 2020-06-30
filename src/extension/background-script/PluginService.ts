@@ -20,11 +20,11 @@ export async function invokePlugin<K extends keyof Plugins, M extends keyof Plug
 }
 
 export type WalletDetails = {
-    address: string
+    walletAddress: string
     /** undefined means "syncing..." */
     ethBalance: BigNumber | undefined
     /** key: address of erc20 token; value: undefined means "syncing..." */
-    erc20tokens: Map<string, BigNumber | undefined>
+    erc20tokensBalanceMap: Map<string, BigNumber | undefined>
     walletName?: string
 }
 export type ERC20TokenDetails = Pick<ERC20TokenRecord, 'address' | 'decimals' | 'name' | 'network' | 'symbol'>
@@ -33,9 +33,9 @@ export async function getWallets(): Promise<{ wallets: WalletDetails[]; tokens: 
     const { tokens, wallets: walletList } = await Wallet.getManagedWallets()
     const wallets = walletList
         .sort((x) => (x._wallet_is_default ? 1 : 0))
-        .map((x) => ({
-            address: x.address,
-            erc20tokens: x.erc20_token_balance,
+        .map<WalletDetails>((x) => ({
+            walletAddress: x.address,
+            erc20tokensBalanceMap: x.erc20_token_balance,
             ethBalance: x.eth_balance,
             walletName: x.name ?? undefined,
         }))

@@ -44,8 +44,8 @@ storiesOf('Plugin: Gitcoin', module)
                     tokens={[]}
                     wallets={[
                         {
-                            address: '0x23333',
-                            erc20tokens: new Map(),
+                            walletAddress: '0x23333',
+                            erc20tokensBalanceMap: new Map(),
                             walletName: 'Wallet Name',
                             ethBalance: new BigNumber(2).multipliedBy(new BigNumber(10).pow(18)), // 2 * (10 ** 18)
                         },

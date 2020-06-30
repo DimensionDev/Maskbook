@@ -49,9 +49,9 @@ export function useSelectWallet(
 
     const [selectedTokenAddress, setSelectedTokenAddress] = useState(ETH_ADDRESS)
     const [selectedTokenType, setSelectedTokenType] = useState<EthereumTokenType>(EthereumTokenType.ETH)
-    const selectedWallet = wallets?.find((x) => x.address === selectedWalletAddress)
+    const selectedWallet = wallets?.find((x) => x.walletAddress === selectedWalletAddress)
 
-    const availableTokens = Array.from(Object.entries(selectedWallet?.erc20tokens || {}) || [])
+    const availableTokens = Array.from(Object.entries(selectedWallet?.erc20tokensBalanceMap || {}) || [])
         .filter(([address]) => tokens?.find((x) => x.address === address))
         .map(([address, amount]) => ({ amount, ...tokens?.find((x) => x.address === address)! }))
     const selectedToken =
@@ -63,7 +63,7 @@ export function useSelectWallet(
         if (selectedWalletAddress === undefined) {
             if (!wallets) return
             if (wallets?.length === 0) requestConnectWallet()
-            else setSelectedWalletAddress(wallets[0].address)
+            else setSelectedWalletAddress(wallets[0].walletAddress)
         }
     }, [requestConnectWallet, selectedWalletAddress, wallets])
 
