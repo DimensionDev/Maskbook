@@ -1,5 +1,5 @@
 import * as dashboard from '../../commands/dashboard'
-import { INITIALIZATION_STORY_URL } from '../../support/constants'
+import { SETUP_STORY_URL } from '../../support/constants'
 import * as helpers from '../../support/helpers'
 import Twitter from '../../commands/twitter'
 import Facebook from '../../commands/facebook'
@@ -12,7 +12,12 @@ beforeEach(async () => {
     await dashboard.openSetupCreatePersona(page)
 })
 
-describe(`${INITIALIZATION_STORY_URL}-Workflow1A:CoreInit/NewUser`, () => {
+afterEach(async () => {
+    // reset dashboard
+    await dashboard.reset(page)
+})
+
+describe(`${SETUP_STORY_URL}-Workflow1A:CoreInit/NewUser`, () => {
     for (const sns of [new Twitter('', '', ''), new Facebook('', '', '')]) {
         it(sns.name, async () => {
             // fill & submit the form
@@ -39,9 +44,6 @@ describe(`${INITIALIZATION_STORY_URL}-Workflow1A:CoreInit/NewUser`, () => {
                     .url()
                     .includes(sns.name),
             ).toBeTruthy()
-
-            // reset dashboard
-            await dashboard.reset(page)
         })
     }
 })

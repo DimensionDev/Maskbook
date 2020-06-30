@@ -74,7 +74,7 @@ export default function PersonaCard({ persona }: Props) {
         () => [
             <MenuItem onClick={() => setRename(true)}>{t('rename')}</MenuItem>,
             <MenuItem onClick={openBackupPersona}>{t('backup')}</MenuItem>,
-            <MenuItem onClick={openDeletePersona} className={color.error}>
+            <MenuItem onClick={openDeletePersona} className={color.error} data-testid="delete_button">
                 {t('delete')}
             </MenuItem>,
         ],
@@ -99,17 +99,14 @@ export default function PersonaCard({ persona }: Props) {
             <Typography className={classes.header} variant="h5" component="h2">
                 {!rename ? (
                     <>
-                        <span
-                            title={persona.nickname}
-                            className={classes.title}
-                            data-testid="initialization_persona_title">
+                        <span title={persona.nickname} className={classes.title} data-testid="persona_title">
                             {persona.nickname}
                         </span>
                         <IconButton
                             size="small"
                             className={classes.menu}
                             onClick={(e) => openMenu({ anchorEl: e.currentTarget })}
-                            data-testid="initialization_persona_setting_icon">
+                            data-testid="setting_icon">
                             <MoreVertIcon />
                         </IconButton>
                         {menu}
