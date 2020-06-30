@@ -24,6 +24,9 @@ export function getWalletProvider() {
         ...erc20API,
     }
 }
+
+export const queryBalance = getWalletProvider().queryBalance
+
 const memoGetWalletBalance = memoizePromise(
     async (addr: string) => {
         const x = await getWalletProvider().queryBalance(addr)

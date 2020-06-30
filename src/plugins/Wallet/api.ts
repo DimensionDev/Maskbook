@@ -17,6 +17,9 @@ import { createTransaction } from '../../database/helpers/openDB'
 import { sendTx } from './tx'
 import { getNetworkSettings } from './UI/Developer/EthereumNetworkSettings'
 import { GITCOIN_ETH_ADDRESS, USDT_ADDRESS, USDT_RINKEBY_ADDRESS } from './erc20'
+import { OnlyRunInContext } from '@holoflows/kit/es'
+
+OnlyRunInContext('background', 'api')
 
 function createRedPacketContract(address: string) {
     return (new web3.eth.Contract(HappyRedPacketABI as AbiItem[], address) as unknown) as HappyRedPacket
