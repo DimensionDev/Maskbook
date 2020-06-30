@@ -16,7 +16,7 @@ if (isMobileFacebook) {
 }
 export function injectPostBoxFacebook() {
     const watcher = new MutationObserverWatcher(composeBox.clone().enableSingleMode())
-        .setDOMProxyOption({ afterShadowRootInit: { mode: 'closed' } })
+        .setDOMProxyOption({ afterShadowRootInit: { mode: webpackEnv.shadowRootMode } })
         .startWatch({
             childList: true,
             subtree: true,
