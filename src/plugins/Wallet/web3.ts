@@ -12,6 +12,9 @@ let provider: WebsocketProvider
 
 export const resetProvider = () => {
     const url = getNetworkSettings().middlewareAddress
+
+    console.log(`DEBUG: Reset to ${url}`)
+
     provider = pool.has(url)
         ? pool.get(url)!
         : // more: https://github.com/ethereum/web3.js/blob/1.x/packages/web3-providers-ws/README.md
