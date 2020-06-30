@@ -34,8 +34,8 @@ export function WalletSelect({ useSelectWalletHooks, wallets, ...p }: WalletSele
                 {!wallets
                     ? null
                     : wallets.map((x) => (
-                          <MenuItem key={x.address} value={x.address}>
-                              {x.walletName} ({x.address})
+                          <MenuItem key={x.walletAddress} value={x.walletAddress}>
+                              {x.walletName} ({x.walletAddress})
                           </MenuItem>
                       ))}
             </Select>

@@ -92,7 +92,7 @@ export function WalletItem(props: WalletItemProps) {
     const classes = useStyles()
     const { wallet, selected, onClick, tokens } = props
     const [, copyToClipboard] = useCopyToClipboard()
-    const { data: managedWallet } = useManagedWalletDetail(wallet?.address)
+    const { data: managedWallet } = useManagedWalletDetail(wallet?.walletAddress)
     const copyWalletAddress = useSnackbarCallback(async (address: string) => copyToClipboard(address), [])
     return (
         <ButtonBase
@@ -110,7 +110,7 @@ export function WalletItem(props: WalletItemProps) {
                     {t('wallet_address')}
                 </Typography>
                 <Typography className={classes.address} component="code">
-                    {wallet.address}
+                    {wallet.walletAddress}
                 </Typography>
             </Box>
             <ActionButton
@@ -120,7 +120,7 @@ export function WalletItem(props: WalletItemProps) {
                 startIcon={<FileCopyOutlinedIcon />}
                 onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
                     e.stopPropagation()
-                    copyWalletAddress(wallet.address)
+                    copyWalletAddress(wallet.walletAddress)
                 }}>
                 {t('copy')}
             </ActionButton>

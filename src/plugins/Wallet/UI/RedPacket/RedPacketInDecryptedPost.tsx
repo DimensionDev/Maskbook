@@ -70,7 +70,7 @@ export default function RedPacketInDecryptedPost(props: RedPacketInDecryptedPost
     }
 
     const claimRedPacket = (
-        walletAddress: WalletDetails['address'],
+        walletAddress: WalletDetails['walletAddress'],
         rpid?: RedPacketRecord['red_packet_id'],
         setAsDefault?: boolean,
     ) => {
@@ -98,7 +98,7 @@ export default function RedPacketInDecryptedPost(props: RedPacketInDecryptedPost
                     throw new Error('Claim failed')
                 }
                 if (wallets.length > 1) setClaiming({ rpid, wallets })
-                else claimRedPacket(wallets[0].address, rpid)
+                else claimRedPacket(wallets[0].walletAddress, rpid)
             } catch {
                 setLoading(false)
             }
@@ -211,8 +211,8 @@ export function RedPacketInDecryptedPostClaimDialog(
                             MenuProps={{ container: PortalShadowRoot }}
                             value={selectedWalletAddress || ''}>
                             {claiming?.wallets.map((x) => (
-                                <MenuItem key={x.address} value={x.address}>
-                                    {x.walletName} ({x.address})
+                                <MenuItem key={x.walletAddress} value={x.walletAddress}>
+                                    {x.walletName} ({x.walletAddress})
                                 </MenuItem>
                             ))}
                         </Select>
