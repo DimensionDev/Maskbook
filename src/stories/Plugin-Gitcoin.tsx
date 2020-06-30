@@ -44,19 +44,14 @@ storiesOf('Plugin: Gitcoin', module)
                     tokens={[]}
                     wallets={[
                         {
-                            _data_source_: 'mock',
                             address: '0x23333',
-                            erc20_token_balance: new Map(),
-                            mnemonic: ['mem'],
-                            name: 'Wallet Name',
-                            passphrase: 'password',
-                            createdAt: new Date(),
-                            updatedAt: new Date(),
-                            eth_balance: new BigNumber(2).multipliedBy(new BigNumber(10).pow(18)), // 2 * (10 ** 18)
+                            erc20tokens: new Map(),
+                            walletName: 'Wallet Name',
+                            ethBalance: new BigNumber(2).multipliedBy(new BigNumber(10).pow(18)), // 2 * (10 ** 18)
                         },
                     ]}
                     address="fake"
-                    onRequireNewWallet={action('onRequestNewWallet')}
+                    requestConnectWallet={action('onRequestNewWallet')}
                     onClose={action('onClose')}
                     title={text('Title', 'Mask + Test Kit Mutual Aid Fund')}
                     description={text('Description', 'It is accepting contributions in any token.')}

@@ -11,7 +11,6 @@ import { memoizePromise } from '../../utils/memoize'
 import { BigNumber } from 'bignumber.js'
 import { ec as EC } from 'elliptic'
 import { currentEthereumNetworkSettings } from './UI/Developer/EthereumNetworkSettings'
-import { sideEffect } from '../../utils/side-effects'
 
 // Private key at m/44'/coinType'/account'/change/addressIndex
 // coinType = ether
@@ -58,7 +57,10 @@ export async function isEmptyWallets() {
     return count === 0
 }
 
-export async function getWallets(): Promise<[(WalletRecord & { privateKey: string })[], ERC20TokenRecord[]]> {
+export async function getManagedWallets(): Promise<{
+    wallets: (WalletRecord & { privateKey: string })[]
+    tokens: ERC20TokenRecord[]
+}> {
     const t = createTransaction(await createWalletDBAccess(), 'readonly')('Wallet', 'ERC20Token')
     const wallets = await t.objectStore('Wallet').getAll()
     const tokens = await t.objectStore('ERC20Token').getAll()
@@ -89,7 +91,7 @@ export async function getWallets(): Promise<[(WalletRecord & { privateKey: strin
             return '0x' + buf2hex(recover.privateKey)
         }
     }
-    return [await makeWallets(), tokens]
+    return { wallets: await makeWallets(), tokens }
 }
 
 export async function getDefaultWallet(): Promise<WalletRecord> {

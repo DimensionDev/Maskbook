@@ -8,7 +8,7 @@ import Services from '../../extension/service'
 import MaskbookPluginWrapper from '../MaskbookPluginWrapper'
 import { extractTextFromTypedMessage } from '../../extension/background-script/CryptoServices/utils'
 import { DonateDialog, DonatePayload } from './DonateDialog'
-import { useWalletDataSource } from '../shared/useWallet'
+import { useWallet } from '../shared/useWallet'
 import type { GitcoinGrantMetadata } from './Services'
 import BigNumber from 'bignumber.js'
 import { EthereumTokenType } from '../Wallet/database/types'
@@ -50,7 +50,7 @@ function Renderer(props: React.PropsWithChildren<{ url: string }>) {
 
 function Gitcoin(props: { url: string }) {
     const [open, setOpen] = useState(false)
-    const [wallets, tokens, onRequireNewWallet] = useWalletDataSource()
+    const { wallets, tokens, requestConnectWallet } = useWallet()
     const url = props.url
     const { revalidate, data, isValidating } = useSWR(url, {
         fetcher(url: string) {
@@ -100,7 +100,7 @@ function Gitcoin(props: { url: string }) {
     return (
         <>
             <PreviewCard
-                onRequestGrant={() => (wallets.length === 0 ? onRequireNewWallet() : setOpen(true))}
+                onRequestGrant={() => (wallets?.length === 0 ? requestConnectWallet() : setOpen(true))}
                 requestPermission={() => {}}
                 hasPermission={true}
                 loading={isValidating}
@@ -113,11 +113,11 @@ function Gitcoin(props: { url: string }) {
                 address={donationAddress}
                 originalURL={url ?? ''}
             />
-            {wallets.length ? (
+            {wallets?.length ? (
                 <DonateDialog
                     loading={loading}
                     address={donationAddress}
-                    onRequireNewWallet={onRequireNewWallet}
+                    requestConnectWallet={requestConnectWallet}
                     wallets={wallets}
                     tokens={tokens}
                     open={!!(open && donationAddress?.length)}

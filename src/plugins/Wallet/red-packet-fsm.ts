@@ -10,7 +10,7 @@ import {
 } from './database/types'
 import { v4 as uuid } from 'uuid'
 import type { RedPacketCreationResult, RedPacketClaimResult } from './types'
-import { getWalletProvider, getWallets, recoverWallet, getDefaultWallet, setDefaultWallet } from './wallet'
+import { getWalletProvider, recoverWallet, getDefaultWallet, setDefaultWallet, getManagedWallets } from './wallet'
 import { PluginMessageCenter } from '../PluginMessages'
 import Web3Utils from 'web3-utils'
 import { redPacketAPI } from './api'
@@ -227,7 +227,7 @@ export async function claimRedPacket(
         .catch(async (e) => {
             console.log(e.message)
             if ((e.message as string).includes('insufficient funds for gas')) {
-                const wallet = (await getWallets())[0].find((x) => x.address === claimWithWallet)!
+                const wallet = (await getManagedWallets()).wallets.find((x) => x.address === claimWithWallet)!
                 const { privateKey } = await recoverWallet(wallet.mnemonic, wallet.passphrase)
                 return getProvider().claimByServer(claimWithWallet, privateKey, rec.raw_payload!)
             }

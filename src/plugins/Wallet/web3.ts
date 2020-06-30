@@ -28,7 +28,7 @@ export const resetProvider = () => {
 export const resetWallet = async () => {
     web3.eth.accounts.wallet.clear()
 
-    const [wallets] = await Services.Plugin.invokePlugin('maskbook.wallet', 'getWallets')
+    const { wallets } = await Services.Plugin.invokePlugin('maskbook.wallet', 'getManagedWallets')
     for await (const { mnemonic, passphrase, privateKey } of wallets) {
         const { privateKeyInHex } =
             mnemonic && passphrase

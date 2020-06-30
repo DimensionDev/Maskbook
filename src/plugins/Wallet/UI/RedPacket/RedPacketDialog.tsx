@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
     makeStyles,
     DialogTitle,
@@ -15,20 +15,13 @@ import {
     DialogProps,
     CircularProgress,
 } from '@material-ui/core'
-import { useStylesExtends, or } from '../../../../components/custom-ui-helper'
+import { useStylesExtends } from '../../../../components/custom-ui-helper'
 import { DialogDismissIconUI } from '../../../../components/InjectedComponents/DialogDismissIcon'
 import AbstractTab, { AbstractTabProps } from '../../../../extension/options-page/DashboardComponents/AbstractTab'
 import { RedPacketWithState } from '../Dashboard/Components/RedPacket'
 import Services from '../../../../extension/service'
 import type { CreateRedPacketInit } from '../../red-packet-fsm'
-import {
-    EthereumTokenType,
-    RedPacketRecord,
-    RedPacketStatus,
-    RedPacketJSONPayload,
-    WalletRecord,
-    ERC20TokenRecord,
-} from '../../database/types'
+import { EthereumTokenType, RedPacketRecord, RedPacketStatus, RedPacketJSONPayload } from '../../database/types'
 import { useCurrentIdentity } from '../../../../components/DataSource/useActivatedUI'
 import { useCapturedInput } from '../../../../utils/hooks/useCapturedEvents'
 import { PluginMessageCenter } from '../../../PluginMessages'
@@ -38,12 +31,13 @@ import { formatBalance } from '../../formatter'
 import ShadowRootDialog from '../../../../utils/jss/ShadowRootDialog'
 import { PortalShadowRoot } from '../../../../utils/jss/ShadowRootPortal'
 import BigNumber from 'bignumber.js'
-import { useWalletDataSource, useSelectWallet } from '../../../shared/useWallet'
+import { useSelectWallet, useWallet } from '../../../shared/useWallet'
 import { WalletSelect } from '../../../shared/WalletSelect'
 import { TokenSelect } from '../../../shared/TokenSelect'
 import { RedPacketMetaKey } from '../../RedPacketMetaKey'
 import { currentEthereumNetworkSettings } from '../Developer/EthereumNetworkSettings'
 import { FeedbackDialog } from './Dialogs'
+import type { WalletDetails, ERC20TokenDetails } from '../../../../extension/background-script/PluginService'
 
 //#region new red packet
 const useNewPacketStyles = makeStyles((theme) =>
@@ -69,15 +63,15 @@ const useNewPacketStyles = makeStyles((theme) =>
 interface NewPacketProps {
     senderName?: string
     loading: boolean
-    wallets: WalletRecord[] | 'loading'
-    tokens: ERC20TokenRecord[]
+    wallets: WalletDetails[] | undefined
+    tokens: ERC20TokenDetails[] | undefined
     onCreateNewPacket: (opt: CreateRedPacketInit) => void
-    onRequireNewWallet: () => void
+    requestConnectWallet: () => void
 }
 
 function NewPacketUI(props: RedPacketDialogProps & NewPacketProps) {
     const classes = useStylesExtends(useNewPacketStyles(), props)
-    const { loading, wallets, tokens, onRequireNewWallet } = props
+    const { loading, wallets, tokens, requestConnectWallet } = props
     const [is_random, setIsRandom] = useState(0)
 
     const [send_message, setMsg] = useState('Best Wishes!')
@@ -91,7 +85,7 @@ function NewPacketUI(props: RedPacketDialogProps & NewPacketProps) {
 
     const currentEtherenumNetwork = useValueRef(currentEthereumNetworkSettings)
 
-    const useSelectWalletResult = useSelectWallet(wallets, tokens, onRequireNewWallet)
+    const useSelectWalletResult = useSelectWallet(wallets, tokens, requestConnectWallet)
     const {
         erc20Balance,
         ethBalance,
@@ -104,7 +98,7 @@ function NewPacketUI(props: RedPacketDialogProps & NewPacketProps) {
 
     const amountPreShareMaxBigint = selectedWallet
         ? selectedTokenType === EthereumTokenType.ETH
-            ? selectedWallet.eth_balance
+            ? selectedWallet.ethBalance
             : selectedToken?.amount
         : undefined
     const amountPreShareMaxNumber = BigNumber.isBigNumber(amountPreShareMaxBigint)
@@ -323,7 +317,7 @@ const useStyles = makeStyles({
 })
 
 export default function RedPacketDialog(props: RedPacketDialogProps) {
-    const [wallets, tokens, onRequireNewWallet] = useWalletDataSource()
+    const { wallets, tokens, requestConnectWallet } = useWallet()
     const [availableRedPackets, setAvailableRedPackets] = useState<RedPacketRecord[]>([])
     const [justCreatedRedPacket, setJustCreatedRedPacket] = useState<RedPacketRecord | undefined>(undefined)
 
@@ -386,7 +380,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                         wallets={wallets}
                         tokens={tokens}
                         onCreateNewPacket={createRedPacket}
-                        onRequireNewWallet={onRequireNewWallet}
+                        requestConnectWallet={requestConnectWallet}
                     />
                 ),
                 p: 0,

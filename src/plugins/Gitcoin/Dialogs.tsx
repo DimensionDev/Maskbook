@@ -13,6 +13,7 @@ import { EthereumTokenType, ERC20TokenRecord } from '../Wallet/database/types'
 import ShadowRootDialog from '../../utils/jss/ShadowRootDialog'
 import { useStylesExtends } from '../../components/custom-ui-helper'
 import { getActivatedUI } from '../../social-network/ui'
+import type { ERC20TokenDetails } from '../../extension/background-script/PluginService'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -34,7 +35,7 @@ export interface DonateSuccessDialogProps extends GitcoinDialogProps {
     title: string
     url: string
     amount: number
-    token: ERC20TokenRecord | null
+    token: ERC20TokenDetails | null
     tokenType: EthereumTokenType
 }
 

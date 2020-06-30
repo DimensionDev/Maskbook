@@ -7,10 +7,10 @@ import {
     makeStyles,
     createStyles,
 } from '@material-ui/core'
-import type { ERC20TokenRecord } from '../../../plugins/Wallet/database/types'
 import type BigNumber from 'bignumber.js'
 import { formatBalance } from '../../../plugins/Wallet/formatter'
 import { TokenIcon } from './TokenIcon'
+import type { ERC20TokenDetails } from '../../background-script/PluginService'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -29,7 +29,7 @@ const useStyles = makeStyles((theme) =>
 
 interface TokenListItemProps {
     balance: BigNumber
-    token: ERC20TokenRecord
+    token: ERC20TokenDetails
 }
 
 export function TokenListItem(props: TokenListItemProps) {

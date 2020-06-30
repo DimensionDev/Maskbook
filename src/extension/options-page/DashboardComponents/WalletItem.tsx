@@ -1,7 +1,6 @@
 import React from 'react'
 import { Typography, makeStyles, createStyles, Box, Button, Avatar, ButtonBase } from '@material-ui/core'
 import FileCopyOutlinedIcon from '@material-ui/icons/FileCopyOutlined'
-import type { WalletRecord, ERC20TokenRecord } from '../../../plugins/Wallet/database/types'
 import classNames from 'classnames'
 import { useCopyToClipboard } from 'react-use'
 import { useI18N } from '../../../utils/i18n-next-ui'
@@ -9,6 +8,8 @@ import { useSnackbarCallback } from '../Dialogs/Base'
 import ActionButton from './ActionButton'
 import { ETH_ADDRESS } from '../../../plugins/Wallet/token'
 import { TokenIcon } from './TokenIcon'
+import type { ERC20TokenDetails, WalletDetails } from '../../background-script/PluginService'
+import { useManagedWalletDetail } from '../../../plugins/shared/useWallet'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -80,9 +81,9 @@ const useStyles = makeStyles((theme) =>
 )
 
 interface WalletItemProps {
-    wallet: Partial<WalletRecord>
+    wallet: Partial<WalletDetails>
     selected?: boolean
-    tokens?: ERC20TokenRecord[]
+    tokens?: ERC20TokenDetails[]
     onClick?(): void
 }
 
@@ -91,6 +92,7 @@ export function WalletItem(props: WalletItemProps) {
     const classes = useStyles()
     const { wallet, selected, onClick, tokens } = props
     const [, copyToClipboard] = useCopyToClipboard()
+    const { data: managedWallet } = useManagedWalletDetail(wallet?.address)
     const copyWalletAddress = useSnackbarCallback(async (address: string) => copyToClipboard(address), [])
     return (
         <ButtonBase
@@ -98,10 +100,10 @@ export function WalletItem(props: WalletItemProps) {
             onClick={onClick}
             className={classNames(classes.container, {
                 [classes.selected]: selected,
-                [classes.default]: wallet._wallet_is_default,
+                [classes.default]: managedWallet?._wallet_is_default,
             })}>
             <Typography className={classes.title} variant="h5">
-                {wallet.name}
+                {wallet.walletName}
             </Typography>
             <Box py={2}>
                 <Typography className={classes.label} component="p" color="textSecondary" variant="overline">
