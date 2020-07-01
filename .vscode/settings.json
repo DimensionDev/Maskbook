@@ -7,5 +7,6 @@
     "i18n-ally.sortKeys": true,
     "i18n-ally.keystyle": "nested",
     "i18n-ally.annotations": true,
-    "i18n-ally.indent": 4
+    "i18n-ally.indent": 4,
+    "i18n-ally.enabledParsers": ["json"]
 }
