@@ -67,15 +67,15 @@ export const languageSettings = createGlobalSettings<Language>(
     { primary: () => i18n.t('settings_language') },
 )
 
-export const currentImagePayloadStatus = createNetworkSettings('currentImagePayloadStatus')
-export const currentSelectedIdentity = createNetworkSettings('currentSelectedIdentity')
+export const currentPayloadType = createNetworkSettings<'image' | 'text'>('currentPayloadType', 'text')
+export const currentSelectedIdentity = createNetworkSettings<string>('currentSelectedIdentity', '')
 
 export type ImmersiveSetupCrossContextStatus = {
     status?: false | 'during'
     persona?: string
     username?: string
 }
-export const currentImmersiveSetupStatus = createNetworkSettings('currentImmersiveSetupStatus')
+export const currentImmersiveSetupStatus = createNetworkSettings<string>('currentImmersiveSetupStatus', '')
 export const currentImportingBackup = createGlobalSettings<boolean>('importingBackup', false, {
     primary: () => 'DO NOT DISPLAY IT IN UI',
 })

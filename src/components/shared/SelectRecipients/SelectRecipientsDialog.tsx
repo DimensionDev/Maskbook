@@ -11,6 +11,7 @@ import {
     DialogTitle,
     DialogContent,
     DialogActions,
+    DialogProps,
 } from '@material-ui/core'
 import { useStylesExtends } from '../../custom-ui-helper'
 import { useI18N } from '../../../utils/i18n-next-ui'
@@ -28,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }))
 
-export interface SelectRecipientsDialogUIProps
+export interface SelectRecipientsDialogProps
     extends withClasses<
         | KeysInferFromUseStyles<typeof useStyles>
         | 'dialog'
@@ -43,15 +44,14 @@ export interface SelectRecipientsDialogUIProps
     open: boolean
     items: Profile[]
     selected: Profile[]
-    disabled: boolean
     disabledItems?: Profile[]
-    submitDisabled: boolean
     onSubmit: () => void
     onClose: () => void
     onSelect: (item: Profile) => void
     onDeselect: (item: Profile) => void
+    DialogProps?: Partial<DialogProps>
 }
-export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
+export function SelectRecipientsDialog(props: SelectRecipientsDialogProps) {
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
     const { items, disabledItems } = props
@@ -72,7 +72,8 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
             onEscapeKeyDown={props.onClose}
             BackdropProps={{
                 className: classes.backdrop,
-            }}>
+            }}
+            {...props.DialogProps}>
             <DialogTitle className={classes.header}>
                 <IconButton
                     classes={{ root: classes.close }}
@@ -94,7 +95,7 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
                                 props.selected.some((x) => x.identifier.equals(item.identifier)) ||
                                 disabledItems?.includes(item)
                             }
-                            disabled={props.disabled || disabledItems?.includes(item)}
+                            disabled={disabledItems?.includes(item)}
                             onChange={(_, checked) => {
                                 if (checked) {
                                     props.onSelect(item)
@@ -112,7 +113,6 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
                     style={{ marginLeft: 'auto' }}
                     color="primary"
                     variant="contained"
-                    disabled={props.submitDisabled}
                     onClick={props.onSubmit}>
                     {t('select_specific_friends_dialog__button')}
                 </Button>

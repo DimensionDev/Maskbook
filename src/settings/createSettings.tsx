@@ -2,6 +2,7 @@ import { ValueRef, GetContext } from '@holoflows/kit'
 import { MessageCenter } from '../utils/messages'
 import { defer } from '../utils/utils'
 import { getStorage, setStorage } from '../extension/background-script/StorageService'
+import { initial } from 'lodash-es'
 
 export interface SettingsTexts {
     primary: () => string
@@ -97,26 +98,27 @@ export function createGlobalSettings<T extends browser.storage.StorageValue>(
     return settings
 }
 
-export function createNetworkSettings(settingsKey: string) {
+export function createNetworkSettings<T extends string = string>(settingsKey: string, initialValue: T) {
     const cached: {
-        [networkKey: string]: ValueRef<string> & {
+        [networkKey: string]: ValueRef<T> & {
             ready: boolean
-            readyPromise: Promise<string>
+            readyPromise: Promise<T>
         }
     } = {}
     MessageCenter.on('settingsCreated', (networkKey) => {
-        if (!(networkKey in cached)) cached[networkKey] = createInternalSettings(`${networkKey}+${settingsKey}`, '')
+        if (networkKey in cached) return
+        cached[networkKey] = createInternalSettings<T>(`${networkKey}+${settingsKey}`, initialValue)
     })
     return new Proxy(cached, {
         get(target, networkKey: string) {
             if (!(networkKey in target)) {
-                const settings = createInternalSettings(`${networkKey}+${settingsKey}`, '')
+                const settings = createInternalSettings<T>(`${networkKey}+${settingsKey}`, initialValue)
                 target[networkKey] = settings
                 settings.readyPromise.then(() => MessageCenter.emit('settingsCreated', networkKey))
             }
             return target[networkKey]
         },
-        set(target, settingKey: string, value: string) {
+        set(target, settingKey: string, value: T) {
             const settings = target[settingKey]
             settings.value = value
             return true

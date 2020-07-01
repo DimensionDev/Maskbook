@@ -66,13 +66,11 @@ function PostDialogAtTwitter(props: { reason: 'timeline' | 'popup' }) {
                 ...useTwitterCloseButton(),
             }}
             DialogProps={dialogProps}
-            SelectRecipientsUIProps={{
-                SelectRecipientsDialogUIProps: {
-                    classes: {
-                        ...useTwitterDialog(),
-                        ...useTwitterButton(),
-                        ...useTwitterCloseButton(),
-                    },
+            SelectRecipientsDialogProps={{
+                classes: {
+                    ...useTwitterDialog(),
+                    ...useTwitterButton(),
+                    ...useTwitterCloseButton(),
                 },
             }}
             reason={props.reason}

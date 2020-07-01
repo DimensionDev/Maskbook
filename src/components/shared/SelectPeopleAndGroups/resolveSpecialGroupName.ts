@@ -4,7 +4,7 @@ import { useFriendsList, useMyIdentities } from '../../DataSource/useActivatedUI
 import type { I18NStrings } from '../../../utils/i18n-next'
 import { useI18N, I18NFunction } from '../../../utils/i18n-next-ui'
 
-function resolveSpecialGroupName(t: I18NFunction, group: Group, knownPeople: Profile[]): string {
+export function resolveSpecialGroupName(t: I18NFunction, group: Group, knownPeople: Profile[]): string {
     let owner: string = group.identifier.virtualGroupOwner || 'Unknown'
 
     for (const profile of knownPeople.filter((x) => x.identifier.equals(group.identifier.ownerIdentifier))) {
