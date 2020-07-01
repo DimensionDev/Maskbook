@@ -343,7 +343,6 @@ function addTSLoader() {
         options: {
             transpileOnly: true,
             compilerOptions: {
-                module: 'esnext',
                 noEmit: false,
                 importsNotUsedAsValues: 'remove',
             },
