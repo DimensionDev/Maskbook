@@ -94,7 +94,7 @@
     "react-feather": "^2.0.3",
     "react-i18next": "^11.7.0",
     "react-router-dom": "^5.2.0",
-    "react-use": "^15.2.5",
+    "react-use": "^15.3.2",
     "react-virtualized-auto-sizer": "^1.0.2",
     "react-window": "^1.8.5",
     "swr": "github:innocentiv/swr#reset-pages-build",
