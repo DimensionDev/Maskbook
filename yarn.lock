@@ -18564,8 +18564,9 @@ swarm-js@^0.1.40:
     xhr-request "^1.0.1"
 
 "swr@github:innocentiv/swr#reset-pages-build":
-  version "0.1.17"
-  resolved "https://codeload.github.com/innocentiv/swr/tar.gz/893ea968d33371a48803eb3f8bb818dd116e3764"
+  version "0.2.2"
+  uid a98e2df4520cd8e590c25d33d7ecd9f42afa6118
+  resolved "https://codeload.github.com/innocentiv/swr/tar.gz/a98e2df4520cd8e590c25d33d7ecd9f42afa6118"
   dependencies:
     fast-deep-equal "2.0.1"
 
