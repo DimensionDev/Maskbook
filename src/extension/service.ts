@@ -81,6 +81,7 @@ export const ServicesWithProgress = AsyncGeneratorCall<ServicesWithProgress>(
         log: logOptions,
         serializer: Serialization,
         messageChannel: new MessageCenter(false),
+        strict: false,
     },
 )
 
