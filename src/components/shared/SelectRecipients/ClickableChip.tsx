@@ -6,7 +6,9 @@ import Chip, { ChipProps } from '@material-ui/core/Chip'
 
 export interface ClickableChipProps {
     checked?: boolean
-    ChipProps?: ChipProps
+    ChipProps?: ChipProps & {
+        'data-testid'?: string
+    }
 }
 
 const useStyles = makeStyles({

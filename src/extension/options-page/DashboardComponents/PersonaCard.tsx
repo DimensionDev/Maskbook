@@ -5,7 +5,7 @@ import type { Persona } from '../../../database'
 import { TextField, MenuItem, Card, IconButton } from '@material-ui/core'
 import Services from '../../service'
 import MoreVertIcon from '@material-ui/icons/MoreVert'
-import { useColorProvider } from '../../../utils/theme'
+import { useColorStyles } from '../../../utils/theme'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import ProfileBox from './ProfileBox'
 import type { ProfileIdentifier } from '../../../database/type'
@@ -54,7 +54,7 @@ const useStyles = makeStyles((theme) =>
 export default function PersonaCard({ persona }: Props) {
     const { t } = useI18N()
     const classes = useStyles()
-    const color = useColorProvider()
+    const color = useColorStyles()
 
     const [rename, setRename] = useState(false)
     type Inputable = HTMLInputElement | HTMLTextAreaElement
@@ -74,7 +74,7 @@ export default function PersonaCard({ persona }: Props) {
         () => [
             <MenuItem onClick={() => setRename(true)}>{t('rename')}</MenuItem>,
             <MenuItem onClick={openBackupPersona}>{t('backup')}</MenuItem>,
-            <MenuItem onClick={openDeletePersona} className={color.error}>
+            <MenuItem onClick={openDeletePersona} className={color.error} data-testid="delete_button">
                 {t('delete')}
             </MenuItem>,
         ],
@@ -99,13 +99,14 @@ export default function PersonaCard({ persona }: Props) {
             <Typography className={classes.header} variant="h5" component="h2">
                 {!rename ? (
                     <>
-                        <span title={persona.nickname} className={classes.title}>
+                        <span title={persona.nickname} className={classes.title} data-testid="persona_title">
                             {persona.nickname}
                         </span>
                         <IconButton
                             size="small"
                             className={classes.menu}
-                            onClick={(e) => openMenu({ anchorEl: e.currentTarget })}>
+                            onClick={(e) => openMenu({ anchorEl: e.currentTarget })}
+                            data-testid="setting_icon">
                             <MoreVertIcon />
                         </IconButton>
                         {menu}

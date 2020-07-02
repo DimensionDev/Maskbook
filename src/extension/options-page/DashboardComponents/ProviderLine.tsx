@@ -65,7 +65,8 @@ export default function ProviderLine(props: ProviderLineProps) {
                 color={connected ? 'textPrimary' : 'primary'}
                 variant="body1"
                 component="a"
-                onClick={connected ? undefined : onAction}>
+                onClick={connected ? undefined : onAction}
+                data-testid={`connect_button_${network.toLowerCase()}`}>
                 <span title={connected ? `@${userId}` : undefined}>
                     {connected ? `@${userId}` : `${t('connect_to')} ${network}`}
                 </span>

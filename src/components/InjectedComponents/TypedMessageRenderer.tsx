@@ -56,7 +56,7 @@ export const DefaultTypedMessageTextRenderer = React.memo(function DefaultTypedM
 ) {
     return renderWithMetadata(
         props,
-        <Typography variant="body1" style={{ lineBreak: 'anywhere' }}>
+        <Typography variant="body1" style={{ lineBreak: 'anywhere' }} data-testid="text_payload">
             <RenderText text={props.message.content}></RenderText>
         </Typography>,
     )

@@ -50,7 +50,8 @@ export const PostDialogHintUI = React.memo(function PostDialogHintUI(props: Post
                     className={classes.button}
                     variant="contained"
                     color="primary"
-                    onClick={props.onHintButtonClicked}>
+                    onClick={props.onHintButtonClicked}
+                    data-testid="hint_button">
                     {t('post_modal_hint__button')}
                 </Button>
             </div>

@@ -279,7 +279,8 @@ function FindUsername({ username, onNext, onClose, onUsernameChange = noop }: Fi
                                 </InputAdornment>
                             ),
                         }}
-                        inputRef={inputRef}></TextField>
+                        inputRef={inputRef}
+                        inputProps={{ 'data-testid': 'username_input' }}></TextField>
                     <Typography
                         className={classes.tip}
                         variant="body2"
@@ -292,7 +293,8 @@ function FindUsername({ username, onNext, onClose, onUsernameChange = noop }: Fi
                     variant="contained"
                     color="primary"
                     onClick={onNext}
-                    disabled={!username}>
+                    disabled={!username}
+                    data-testid="next_button">
                     {t('next')}
                 </ActionButton>
             }
@@ -353,7 +355,10 @@ function PasteIntoBio({ provePost, onClose, onCancel }: PasteIntoBioProps) {
                             ? t('immersive_setup_paste_into_bio_failed')
                             : t('immersive_setup_add_bio_text')}
                     </Typography>
-                    <ShowcaseBox ContentProps={{ className: pasteIntoBioClasses.showcaseBoxContent }}>
+                    <ShowcaseBox
+                        ContentProps={{
+                            className: pasteIntoBioClasses.showcaseBoxContent,
+                        }}>
                         {provePost}
                     </ShowcaseBox>
                 </form>
@@ -372,8 +377,14 @@ function PasteIntoBio({ provePost, onClose, onCancel }: PasteIntoBioProps) {
                         completeOnClick={onClose}
                         completeIcon={null}
                         failIcon={null}
-                        failedOnClick="use executor"></ActionButtonPromise>
-                    <ActionButton className={classes.textButton} variant="text" onClick={onCancel}>
+                        failedOnClick="use executor"
+                        data-testid="add_button"
+                    />
+                    <ActionButton
+                        className={classes.textButton}
+                        variant="text"
+                        onClick={onCancel}
+                        data-testid="cancel_button">
                         {t('cancel')}
                     </ActionButton>
                 </>

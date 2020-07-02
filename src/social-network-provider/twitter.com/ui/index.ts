@@ -52,7 +52,7 @@ export const instanceOfTwitterUI = defineSocialNetworkUI({
     friendlyName: 'Twitter (Insider Preview)',
     requestPermission() {
         // TODO: wait for webextension-shim to support <all_urls> in permission.
-        if (webpackEnv.target === 'WKWebview') return Promise.resolve(true)
+        if (webpackEnv.target === 'WKWebview' || webpackEnv.target === 'E2E') return Promise.resolve(true)
         return browser.permissions
             .request({
                 origins: [`${twitterUrl.hostLeadingUrl}/*`, `${twitterUrl.hostLeadingUrlMobile}/*`],

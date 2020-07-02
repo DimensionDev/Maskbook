@@ -43,7 +43,7 @@ export function DashboardBackupDialog(props: WrappedDialogProps) {
         { type: DatabaseRecordType.Persona, length: value?.personas.length ?? 0, checked: false },
         { type: DatabaseRecordType.Profile, length: value?.profiles.length ?? 0, checked: false },
         { type: DatabaseRecordType.Post, length: value?.posts.length ?? 0, checked: false },
-        { type: DatabaseRecordType.Contact, length: value?.userGroups.length ?? 0, checked: false },
+        { type: DatabaseRecordType.Group, length: value?.userGroups.length ?? 0, checked: false },
     ]
 
     const onConfirm = async () => {
@@ -127,6 +127,7 @@ function SelectBackup({ onConfirm }: SelectBackupProps) {
     const tabProps: AbstractTabProps = {
         tabs: [
             {
+                id: 'file',
                 label: t('restore_database_file'),
                 children: (
                     <RestoreFromBackupBox
@@ -140,6 +141,7 @@ function SelectBackup({ onConfirm }: SelectBackupProps) {
                 p: 0,
             },
             {
+                id: 'text',
                 label: t('restore_database_text'),
                 children: (
                     <InputBase
@@ -149,6 +151,9 @@ function SelectBackup({ onConfirm }: SelectBackupProps) {
                         multiline
                         value={textValue}
                         onChange={(e) => setTextValue(e.target.value)}
+                        inputProps={{
+                            'data-testid': 'upload_textarea',
+                        }}
                     />
                 ),
                 p: 0,
@@ -171,7 +176,7 @@ function SelectBackup({ onConfirm }: SelectBackupProps) {
                     if (!granted) return
                 }
                 const restoreId = uuid()
-                await Services.Welcome.restoreBackupAfterConfirmation(restoreId, json)
+                await Services.Welcome.setUnconfirmedBackup(restoreId, json)
                 onConfirm?.(restoreId, json)
             } catch (e) {
                 enqueueSnackbar(t('set_up_restore_fail'), { variant: 'error' })
@@ -201,7 +206,8 @@ function SelectBackup({ onConfirm }: SelectBackupProps) {
                         variant="contained"
                         color="primary"
                         disabled={!(state[0] === 0 && backupValue) && !(state[0] === 1 && textValue)}
-                        onClick={() => restoreDB(state[0] === 0 ? backupValue : textValue)}>
+                        onClick={() => restoreDB(state[0] === 0 ? backupValue : textValue)}
+                        data-testid="restore_button">
                         {t('set_up_button_restore')}
                     </ActionButton>
                 </Box>
@@ -249,7 +255,7 @@ function ConfirmBackup({ restoreId, date, backup, onDone }: ConfirmBackupProps) 
         { type: DatabaseRecordType.Persona, length: backup?.personas.length ?? 0, checked: imported === true },
         { type: DatabaseRecordType.Profile, length: backup?.profiles.length ?? 0, checked: imported === true },
         { type: DatabaseRecordType.Post, length: backup?.posts.length ?? 0, checked: imported === true },
-        { type: DatabaseRecordType.Contact, length: backup?.userGroups.length ?? 0, checked: imported === true },
+        { type: DatabaseRecordType.Group, length: backup?.userGroups.length ?? 0, checked: imported === true },
     ]
 
     const onConfirm = async () => {
@@ -257,7 +263,7 @@ function ConfirmBackup({ restoreId, date, backup, onDone }: ConfirmBackupProps) 
         if (restoreId) {
             try {
                 setImported('loading')
-                await Services.Welcome.restoreBackupConfirmation(restoreId)
+                await Services.Welcome.confirmBackup(restoreId)
                 setImported(true)
             } catch (e) {
                 failToRestore()

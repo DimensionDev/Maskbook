@@ -248,6 +248,9 @@ export function CreatePersona() {
                         }}
                         label={t('name')}
                         helperText={' '}
+                        inputProps={{
+                            'data-testid': 'username_input',
+                        }}
                     />
                 </>
             }
@@ -258,7 +261,8 @@ export function CreatePersona() {
                         variant="contained"
                         color="primary"
                         onClick={createPersonaAndNext}
-                        disabled={!name}>
+                        disabled={!name}
+                        data-testid="next_button">
                         {t('set_up_button_next')}
                     </ActionButton>
                     <Typography className={setupFormClasses.or} variant="body1">
@@ -268,7 +272,8 @@ export function CreatePersona() {
                         color="primary"
                         variant="text"
                         component={Link}
-                        to={SetupStep.RestoreDatabase}>
+                        to={SetupStep.RestoreDatabase}
+                        data-testid="backup_button">
                         {t('set_up_button_from_backup')}
                     </ActionButton>
                 </>
@@ -406,6 +411,7 @@ export function RestoreDatabase() {
     const tabProps: AbstractTabProps = {
         tabs: [
             {
+                id: 'file',
                 label: t('restore_database_file'),
                 children: (
                     <RestoreFromBackupBox
@@ -419,6 +425,7 @@ export function RestoreDatabase() {
                 p: 0,
             },
             {
+                id: 'text',
                 label: t('restore_database_text'),
                 children: (
                     <InputBase
@@ -428,6 +435,9 @@ export function RestoreDatabase() {
                         multiline
                         value={textValue}
                         onChange={(e) => setTextValue(e.target.value)}
+                        inputProps={{
+                            'data-testid': 'text_textarea',
+                        }}
                     />
                 ),
                 p: 0,
@@ -451,13 +461,8 @@ export function RestoreDatabase() {
                 }
                 const restoreParams = new URLSearchParams()
                 const restoreId = uuid()
-                restoreParams.append('personas', String(json.personas?.length ?? ''))
-                restoreParams.append('profiles', String(json.profiles?.length ?? ''))
-                restoreParams.append('posts', String(json.posts?.length ?? ''))
-                restoreParams.append('contacts', String(json.userGroups?.length ?? ''))
-                restoreParams.append('date', String(json._meta_?.createdAt ?? ''))
                 restoreParams.append('uuid', restoreId)
-                await Services.Welcome.restoreBackupAfterConfirmation(restoreId, json)
+                await Services.Welcome.setUnconfirmedBackup(restoreId, json)
                 history.push(`${SetupStep.RestoreDatabaseConfirmation}?${restoreParams.toString()}`)
             } catch (e) {
                 enqueueSnackbar(t('set_up_restore_fail'), { variant: 'error' })
@@ -478,7 +483,8 @@ export function RestoreDatabase() {
                         color="primary"
                         variant="contained"
                         disabled={!(state[0] === 0 && backupValue) && !(state[0] === 1 && textValue)}
-                        onClick={() => restoreDB(state[0] === 0 ? backupValue : textValue)}>
+                        onClick={() => restoreDB(state[0] === 0 ? backupValue : textValue)}
+                        data-testid="restore_button">
                         {t('set_up_button_restore')}
                     </ActionButton>
                     <ActionButton<typeof Link>
@@ -486,13 +492,18 @@ export function RestoreDatabase() {
                         color="primary"
                         variant="outlined"
                         component={Link}
-                        to={SetupStep.RestoreDatabaseAdvance}>
+                        to={SetupStep.RestoreDatabaseAdvance}
+                        data-testid="advance_button">
                         {t('set_up_button_advance')}
                     </ActionButton>
                     <Typography className={classes.or} variant="body1">
                         {t('set_up_tip_or')}
                     </Typography>
-                    <ActionButton color="primary" variant="text" onClick={() => history.goBack()}>
+                    <ActionButton
+                        color="primary"
+                        variant="text"
+                        onClick={() => history.goBack()}
+                        data-testid="restart_button">
                         {t('set_up_button_from_scratch')}
                     </ActionButton>
                 </>
@@ -548,17 +559,26 @@ export function RestoreDatabaseAdvance() {
                             value={nickname}
                             required
                             label={t('name')}
+                            inputProps={{
+                                'data-testid': 'username_input',
+                            }}
                         />
                         <TextField
                             value={mnemonicWordsValue}
                             onChange={(e) => setMnemonicWordsValue(e.target.value)}
                             required
                             label={t('mnemonic_words')}
+                            inputProps={{
+                                'data-testid': 'mnemonic_input',
+                            }}
                         />
                         <TextField
                             onChange={(e) => setPassword(e.target.value)}
                             value={password}
                             label={t('password')}
+                            inputProps={{
+                                'data-testid': 'password_input',
+                            }}
                         />
                     </>
                 ),
@@ -568,12 +588,15 @@ export function RestoreDatabaseAdvance() {
                 label: 'Base64',
                 children: (
                     <TextField
-                        inputProps={{ style: { height: 147 } }}
                         multiline
                         rows={1}
                         placeholder={t('dashboard_paste_database_base64_hint')}
                         onChange={(e) => setBase64Value(e.target.value)}
                         value={base64Value}
+                        inputProps={{
+                            style: { height: 147 },
+                            'data-testid': 'base64_input',
+                        }}
                     />
                 ),
                 display: 'flex',
@@ -643,10 +666,11 @@ export function RestoreDatabaseAdvance() {
                                     variant: 'error',
                                 })
                             }
-                        }}>
+                        }}
+                        data-testid="import_button">
                         {t('set_up_button_import')}
                     </ActionButton>
-                    <ActionButton variant="text" onClick={() => history.goBack()}>
+                    <ActionButton variant="text" onClick={() => history.goBack()} data-testid="cancel_button">
                         {t('set_up_button_cancel')}
                     </ActionButton>
                 </>
@@ -685,30 +709,37 @@ export function RestoreDatabaseConfirmation() {
     const history = useHistory<unknown>()
     const { enqueueSnackbar, closeSnackbar } = useSnackbar()
 
+    const { uuid } = useQueryParams(['uuid'])
     const [imported, setImported] = useState<boolean | 'loading'>(false)
-    const { personas, profiles, posts, contacts, date, uuid } = useQueryParams([
-        'personas',
-        'profiles',
-        'posts',
-        'contacts',
-        'date',
-        'uuid',
-    ])
 
-    const time = new Date(date ? Number(date) : 0)
+    const { value: backup } = useAsync(() => Services.Welcome.getUnconfirmedBackup(uuid ?? ''))
+    const time = new Date(backup?._meta_.createdAt ?? 0)
+    const personas = backup?.personas.length ?? 0
+    const profiles = backup?.profiles.length ?? 0
+    const posts = backup?.posts.length ?? 0
+    const contacts = backup?.userGroups.length ?? 0
     const records = [
-        { type: DatabaseRecordType.Persona, length: Number.parseInt(personas ?? '0'), checked: imported === true },
-        { type: DatabaseRecordType.Profile, length: Number.parseInt(profiles ?? '0'), checked: imported === true },
-        { type: DatabaseRecordType.Post, length: Number.parseInt(posts ?? '0'), checked: imported === true },
-        { type: DatabaseRecordType.Contact, length: Number.parseInt(contacts ?? '0'), checked: imported === true },
+        { type: DatabaseRecordType.Persona, length: personas, checked: imported === true },
+        { type: DatabaseRecordType.Profile, length: profiles, checked: imported === true },
+        { type: DatabaseRecordType.Post, length: posts, checked: imported === true },
+        { type: DatabaseRecordType.Group, length: contacts, checked: imported === true },
     ]
 
+    const restoreFinish = async () => {
+        if (backup?.personas && personas === 1 && profiles === 0) {
+            history.push(`${SetupStep.ConnectNetwork}?identifier=${encodeURIComponent(backup.personas[0].identifier)}`)
+        } else if (personas === 0 && profiles === 0) {
+            history.replace(SetupStep.CreatePersona)
+        } else {
+            history.replace('/')
+        }
+    }
     const restoreConfirmation = async () => {
         const failToRestore = () => enqueueSnackbar(t('set_up_restore_fail'), { variant: 'error' })
         if (uuid) {
             try {
                 setImported('loading')
-                await Services.Welcome.restoreBackupConfirmation(uuid)
+                await Services.Welcome.confirmBackup(uuid)
                 setImported(true)
             } catch (e) {
                 failToRestore()
@@ -746,7 +777,8 @@ export function RestoreDatabaseConfirmation() {
                     <ActionButton
                         className={classNames(classes.button, classes.doneButton)}
                         variant="contained"
-                        onClick={() => history.replace('/')}>
+                        onClick={restoreFinish}
+                        data-testid="finish_button">
                         {t('set_up_button_done')}
                     </ActionButton>
                 ) : (
@@ -756,7 +788,8 @@ export function RestoreDatabaseConfirmation() {
                             variant="contained"
                             color="primary"
                             disabled={imported === 'loading'}
-                            onClick={restoreConfirmation}>
+                            onClick={restoreConfirmation}
+                            data-testid="confirm_button">
                             {t('set_up_button_confirm')}
                         </ActionButton>
                         <ActionButton variant="text" onClick={() => history.goBack()}>

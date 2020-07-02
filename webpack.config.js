@@ -265,6 +265,11 @@ module.exports = (argvEnv, argv) => {
             genericTarget = 'facebookApp'
         }
         if (target.E2E) buildTarget = 'E2E'
+        config.plugins.push(
+            new webpack.DefinePlugin({
+                'webpackEnv.shadowRootMode': JSON.stringify(target.E2E ? 'open' : 'closed'),
+            }),
+        )
         if (buildTarget)
             config.plugins.push(
                 new webpack.DefinePlugin({
@@ -290,6 +295,7 @@ module.exports = (argvEnv, argv) => {
         if (target.FirefoxForAndroid) modifiers.firefox(manifest)
         if (target.StandaloneGeckoView) modifiers.geckoview(manifest)
         if (target.WKWebview) modifiers.WKWebview(manifest)
+        if (target.E2E) modifiers.E2E(manifest)
         if (env === 'development' || target.E2E) modifiers.development(manifest, target)
         else modifiers.production(manifest, target)
 

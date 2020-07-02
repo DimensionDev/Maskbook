@@ -23,7 +23,14 @@ export function PostCommentDecrypted(props: PostCommentDecryptedProps) {
     const chipClasses = useStylesExtends(useStyle(), props.ChipProps || {})
     return (
         <>
-            <Chip icon={<Lock />} label={props.children} color="secondary" {...props.ChipProps} classes={chipClasses} />
+            <Chip
+                data-testid="comment_field"
+                icon={<Lock />}
+                label={props.children}
+                color="secondary"
+                {...props.ChipProps}
+                classes={chipClasses}
+            />
         </>
     )
 }

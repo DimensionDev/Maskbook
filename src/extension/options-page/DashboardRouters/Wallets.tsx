@@ -23,7 +23,7 @@ import {
 } from '../Dialogs/Wallet'
 import DashboardMenu from '../DashboardComponents/DashboardMenu'
 import { useI18N } from '../../../utils/i18n-next-ui'
-import { useColorProvider } from '../../../utils/theme'
+import { useColorStyles } from '../../../utils/theme'
 import Services from '../../service'
 import { merge, cloneDeep } from 'lodash-es'
 import BigNumber from 'bignumber.js'
@@ -59,6 +59,11 @@ const useStyles = makeStyles((theme) =>
             flex: '1 1 auto',
             display: 'flex',
             flexDirection: 'column',
+        },
+        wrapper: {
+            display: 'flex',
+            flexDirection: 'column',
+            height: '100%',
         },
         title: {
             color: theme.palette.text.primary,
@@ -119,7 +124,7 @@ const WalletContent = React.forwardRef<HTMLDivElement, WalletContentProps>(funct
 ) {
     const classes = useStyles()
     const { t } = useI18N()
-    const color = useColorProvider()
+    const color = useColorStyles()
 
     const network = useValueRef(currentEthereumNetworkSettings)
     const [addToken, , openAddToken] = useModal(DashboardWalletAddTokenDialog)
@@ -145,14 +150,16 @@ const WalletContent = React.forwardRef<HTMLDivElement, WalletContentProps>(funct
             <MenuItem onClick={setAsDefault}>{t('set_as_default')}</MenuItem>,
             <MenuItem onClick={() => openWalletRename({ wallet: wallet })}>{t('rename')}</MenuItem>,
             <MenuItem onClick={() => openWalletBackup({ wallet: wallet })}>{t('backup')}</MenuItem>,
-            <MenuItem onClick={() => openWalletDelete({ wallet: wallet })} className={color.error}>
+            <MenuItem
+                onClick={() => openWalletDelete({ wallet: wallet })}
+                className={color.error}
+                data-testid="delete_button">
                 {t('delete')}
             </MenuItem>,
         ],
         [color.error, wallet, openWalletBackup, openWalletDelete, openWalletRename, setAsDefault, t],
     )
     const [menu, , openMenu] = useModal(DashboardMenu, { menus })
-
     if (!wallet) return null
     return (
         <div ref={ref}>
@@ -172,7 +179,8 @@ const WalletContent = React.forwardRef<HTMLDivElement, WalletContentProps>(funct
                     <IconButton
                         className={classes.moreButton}
                         size="small"
-                        onClick={(e) => openMenu({ anchorEl: e.currentTarget })}>
+                        onClick={(e) => openMenu({ anchorEl: e.currentTarget })}
+                        data-testid="setting_icon">
                         <MoreVertOutlinedIcon />
                     </IconButton>
                     {menu}
@@ -248,7 +256,12 @@ export default function DashboardWalletsRouter() {
                 <Button color="primary" variant="outlined" onClick={openWalletImport}>
                     {t('import')}
                 </Button>,
-                <Button color="primary" variant="contained" onClick={openWalletCreate} endIcon={<AddCircleIcon />}>
+                <Button
+                    color="primary"
+                    variant="contained"
+                    onClick={openWalletCreate}
+                    endIcon={<AddCircleIcon />}
+                    data-testid="create_button">
                     {t('create_wallet')}
                 </Button>,
             ]}>
@@ -273,11 +286,9 @@ export default function DashboardWalletsRouter() {
                 ) : null}
                 <div className={classes.content}>
                     <Fade in={Boolean(current)}>
-                        {currentWallet ? (
-                            <WalletContent wallet={currentWallet} tokens={tokens}></WalletContent>
-                        ) : (
-                            <div></div>
-                        )}
+                        <div className={classes.wrapper}>
+                            {currentWallet && <WalletContent wallet={currentWallet} tokens={tokens} />}
+                        </div>
                     </Fade>
                 </div>
             </div>

@@ -42,7 +42,7 @@ export function createTaskStartImmersiveSetupDefault(_: () => SocialNetworkUI, p
             {
                 shadow: () => {
                     if (!shadowRoot) {
-                        shadowRoot = dom.attachShadow({ mode: 'closed' })
+                        shadowRoot = dom.attachShadow({ mode: webpackEnv.shadowRootMode })
                     }
                     return shadowRoot
                 },

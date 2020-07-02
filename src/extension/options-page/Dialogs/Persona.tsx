@@ -107,6 +107,7 @@ export function DashboardImportPersonaDialog(props: WrappedDialogProps) {
     const tabProps: AbstractTabProps = {
         tabs: [
             {
+                id: 'mnemonic',
                 label: t('mnemonic_words'),
                 children: (
                     <>
@@ -115,23 +116,33 @@ export function DashboardImportPersonaDialog(props: WrappedDialogProps) {
                             value={nickname}
                             required
                             label={t('name')}
+                            inputProps={{
+                                'data-testid': 'username_input',
+                            }}
                         />
                         <TextField
                             value={mnemonicWordsValue}
                             onChange={(e) => setMnemonicWordsValue(e.target.value)}
                             required
                             label={t('mnemonic_words')}
+                            inputProps={{
+                                'data-testid': 'mnemonic_input',
+                            }}
                         />
                         <TextField
                             onChange={(e) => setPassword(e.target.value)}
                             value={password}
                             label={t('password')}
+                            inputProps={{
+                                'data-testid': 'password_input',
+                            }}
                         />
                     </>
                 ),
                 p: 0,
             },
             {
+                id: 'text',
                 label: 'Base64',
                 children: (
                     <TextField
@@ -146,6 +157,7 @@ export function DashboardImportPersonaDialog(props: WrappedDialogProps) {
                 p: 0,
             },
             {
+                id: 'qr',
                 label: t('qr_code'),
                 children: (
                     <>
@@ -209,7 +221,8 @@ export function DashboardImportPersonaDialog(props: WrappedDialogProps) {
                                     variant: 'error',
                                 })
                             }
-                        }}>
+                        }}
+                        data-testid="import_button">
                         {t('import')}
                     </DebounceButton>
                 }></DashboardDialogWrapper>
@@ -246,14 +259,17 @@ export function DashboardPersonaBackupDialog(props: WrappedDialogProps<PersonaPr
     const tabProps: AbstractTabProps = {
         tabs: [
             {
+                id: 'mnemonic',
                 label: t('mnemonic_words'),
                 children: <ShowcaseBox>{mnemonicWordsValue}</ShowcaseBox>,
             },
             {
+                id: 'base64',
                 label: 'Base64',
                 children: <ShowcaseBox>{base64Value}</ShowcaseBox>,
             },
             {
+                id: 'qr',
                 label: t('qr_code'),
                 children: compressedQRString ? (
                     <QRCode
@@ -300,7 +316,11 @@ export function DashboardPersonaDeleteConfirmDialog(props: WrappedDialogProps<Pe
                 secondary={t('dashboard_delete_persona_confirm_hint', { name: persona.nickname })}
                 footer={
                     <SpacedButtonGroup>
-                        <DebounceButton variant="contained" color="danger" onClick={deletePersona}>
+                        <DebounceButton
+                            variant="contained"
+                            color="danger"
+                            onClick={deletePersona}
+                            data-testid="confirm_button">
                             {t('confirm')}
                         </DebounceButton>
                         <DebounceButton variant="outlined" color="primary" onClick={props.onClose}>

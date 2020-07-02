@@ -83,7 +83,7 @@ export function collectPostsFacebook(this: SocialNetworkUI) {
                 onRemove: () => this.posts.delete(metadata),
             }
         })
-        .setDOMProxyOption({ afterShadowRootInit: { mode: 'closed' } })
+        .setDOMProxyOption({ afterShadowRootInit: { mode: webpackEnv.shadowRootMode } })
         .startWatch({
             childList: true,
             subtree: true,
@@ -124,6 +124,7 @@ function getPostID(node: DOMProxy): null | string {
 }
 async function getSteganographyContent(node: DOMProxy) {
     const parent = node.current.parentElement
+
     if (!parent) return ''
     const imgNodes = parent.querySelectorAll<HTMLElement>(
         isMobileFacebook ? 'div>div>div>a>div>div>i.img' : '.userContentWrapper a[data-ploi]',

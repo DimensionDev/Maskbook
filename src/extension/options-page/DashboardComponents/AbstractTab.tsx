@@ -14,6 +14,7 @@ const useStyles = makeStyles((theme: Theme) =>
 )
 
 interface TabPanelProps extends BoxProps {
+    id?: string
     label: string
 }
 
@@ -38,7 +39,13 @@ export default function AbstractTab({ tabs, state, height = 200 }: AbstractTabPr
                     textColor="primary"
                     onChange={(_: React.ChangeEvent<{}>, newValue: number) => setValue(newValue)}>
                     {tabs.map((tab) => (
-                        <Tab className={classes.tab} component="span" label={tab.label} key={tab.label} />
+                        <Tab
+                            className={classes.tab}
+                            component="span"
+                            label={tab.label}
+                            key={tab.label}
+                            data-testid={`${tab.id?.toLowerCase()}_tab`}
+                        />
                     ))}
                 </Tabs>
             </Paper>

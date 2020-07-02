@@ -56,7 +56,12 @@ export default function InitStep1S() {
             <ActionButton<typeof Link> variant="outlined" color="default" component={Link} to="start">
                 {t('back')}
             </ActionButton>
-            <ActionButton variant="contained" color="primary" onClick={createPersonaAndNext} component="a">
+            <ActionButton
+                variant="contained"
+                color="primary"
+                onClick={createPersonaAndNext}
+                component="a"
+                data-testid="next_button">
                 {t('next')}
             </ActionButton>
         </>
@@ -74,6 +79,9 @@ export default function InitStep1S() {
                 onChange={(e) => setName(e.target.value)}
                 label="Name"
                 helperText={(submitted && nameErrorMessage) || ' '}
+                inputProps={{
+                    'data-testid': 'initialization_username_input',
+                }}
             />
         </div>
     )
