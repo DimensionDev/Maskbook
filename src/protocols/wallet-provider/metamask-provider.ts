@@ -5,7 +5,7 @@ import { EventEmitter } from 'events'
 import type { AbstractProvider } from 'web3-core'
 
 const web3 = new w3()
-const provider = createMetaMaskProvider()
+export const metamaskProvider = createMetaMaskProvider()
 class Web3JSONRpcChannel implements EventBasedChannel {
     private e = new EventEmitter()
     constructor(public currentProvider: AbstractProvider) {}
@@ -17,16 +17,13 @@ class Web3JSONRpcChannel implements EventBasedChannel {
         return () => void this.e.off('m', eventListener)
     }
 }
-const metamask = AsyncCall<Web3API>(
+export const metamask = AsyncCall<Web3API>(
     {},
-    { channel: new Web3JSONRpcChannel(provider), parameterStructures: 'by-name', strict: false },
+    { channel: new Web3JSONRpcChannel(metamaskProvider), parameterStructures: 'by-name', strict: false },
 )
-web3.setProvider(provider)
-console.log(web3, provider)
-Object.assign(globalThis, {
-    req: () => web3.eth.getAccounts(),
-})
+web3.setProvider(metamaskProvider)
 
 interface Web3API {
-    eth_accounts(): string[]
+    eth_requestAccounts(): string[]
+    eth_getBalance(account: string, type: 'latest' | 'earliest' | 'pending'): string
 }

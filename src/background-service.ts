@@ -27,10 +27,6 @@ import { definedSocialNetworkWorkers } from './social-network/worker'
 import { getWelcomePageURL } from './extension/options-page/Welcome/getWelcomePageURL'
 import { exclusiveTasks } from './extension/content-script/tasks'
 
-if (process.env.NODE_ENV === 'development') {
-    require('./protocols/wallet-provider/metamask-provider')
-}
-
 if (GetContext() === 'background') {
     const injectedScript = getInjectedScript()
     const contentScripts: Array<{ code: string } | { file: string }> = []
@@ -120,11 +116,10 @@ function IgnoreError(arg: unknown): (reason: Error) => void {
         if (e.message.includes('non-structured-clonable data')) {
             // It's okay we don't need the result, happened on Firefox
         } else if (e.message.includes('Frame not found, or missing host permission')) {
-            // It's maybe okay, happened on Firefox
+            // It's okay, we inject to the wrong site and browser rejected it.
         } else if (e.message.includes('must request permission')) {
-            // It's okay, we inject to the wrong site and browser rejected it.
         } else if (e.message.includes('Cannot access a chrome')) {
-            // It's okay, we inject to the wrong site and browser rejected it.
+        } else if (e.message.includes('extension:// URL of different extension')) {
         } else console.error('Inject error', e, arg, Object.entries(e))
     }
 }

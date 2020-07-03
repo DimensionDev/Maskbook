@@ -1,55 +1,24 @@
 import Web3 from 'web3'
-import type { HttpProvider } from 'web3-core'
+import type { AbstractProvider, HttpProvider } from 'web3-core'
 import { PluginMessageCenter } from '../PluginMessages'
 import { sideEffect } from '../../utils/side-effects'
 import { currentEthereumNetworkSettings } from '../../settings/settings'
-import { getNetworkSettings } from './UI/Developer/EthereumNetworkSettings'
-import Services from '../../extension/service'
 import { OnlyRunInContext } from '@holoflows/kit/es'
 
 OnlyRunInContext('background', 'web3')
+import { metamaskProvider } from '../../protocols/wallet-provider/metamask-provider'
 
 export const web3 = new Web3()
 export const pool = new Map<string, HttpProvider>()
 
-let provider: HttpProvider
+let provider: AbstractProvider
 
 export const resetProvider = () => {
-    const url = getNetworkSettings().middlewareAddress
-    provider = pool.has(url)
-        ? pool.get(url)!
-        : // more: https://github.com/ethereum/web3.js/blob/1.x/packages/web3-providers-ws/README.md
-          new Web3.providers.HttpProvider(url, {
-              timeout: 5000, // ms
-              // @ts-ignore
-              clientConfig: {
-                  keepalive: true,
-                  keepaliveInterval: 1, // ms
-              },
-              reconnect: {
-                  auto: true,
-                  delay: 5000, // ms
-                  maxAttempts: Number.MAX_SAFE_INTEGER,
-                  onTimeout: true,
-              },
-          })
-    if (pool.has(url)) provider.disconnect()
-    else pool.set(url, provider)
+    provider = metamaskProvider
     web3.setProvider(provider)
 }
 
-export const resetWallet = async () => {
-    web3.eth.accounts.wallet.clear()
-
-    const { wallets } = await Services.Plugin.invokePlugin('maskbook.wallet', 'getManagedWallets')
-    for await (const { mnemonic, passphrase, privateKey } of wallets) {
-        const { privateKeyValid, privateKeyInHex } =
-            mnemonic && passphrase
-                ? await Services.Plugin.invokePlugin('maskbook.wallet', 'recoverWallet', mnemonic, passphrase)
-                : await Services.Plugin.invokePlugin('maskbook.wallet', 'recoverWalletFromPrivateKey', privateKey)
-        if (privateKeyValid) web3.eth.accounts.wallet.add(privateKeyInHex)
-    }
-}
+export const resetWallet = async () => {}
 
 currentEthereumNetworkSettings.addListener(resetProvider)
 PluginMessageCenter.on('maskbook.wallets.reset', resetWallet)
