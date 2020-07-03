@@ -48,6 +48,7 @@ storiesOf('Plugin: Gitcoin', module)
                             erc20tokensBalanceMap: new Map(),
                             walletName: 'Wallet Name',
                             ethBalance: new BigNumber(2).multipliedBy(new BigNumber(10).pow(18)), // 2 * (10 ** 18)
+                            type: 'managed',
                         },
                     ]}
                     address="fake"
