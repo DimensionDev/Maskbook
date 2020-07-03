@@ -90,23 +90,6 @@ export interface RedPacketRecordInDatabase
     erc20_approve_value?: string | bigint
     shares: string | bigint
 }
-export interface WalletRecord {
-    /** ethereum hex address */
-    address: string
-    /** User define wallet name. Default address.prefix(6) */
-    name: string | null
-    /** Wallet ethereum balance */
-    eth_balance?: BigNumber
-    erc20_token_balance: Map</** address of the erc20 token */ string, BigNumber | undefined>
-    mnemonic: string[]
-    passphrase: string
-    createdAt: Date
-    updatedAt: Date
-    _data_source_: 'real' | 'mock'
-    /** Wallet recover from private key */
-    _private_key_?: string
-    _wallet_is_default?: boolean
-}
 export interface WalletRecordInDatabase extends Omit<WalletRecord, 'eth_balance' | 'erc20_token_balance'> {
     eth_balance?: string | bigint
     erc20_token_balance: Map<string, string | bigint | undefined>
@@ -177,6 +160,7 @@ export function isNextRedPacketStatusValid(current: RedPacketStatus, next: RedPa
     }
 }
 export type RedPacketMetadata = RedPacketJSONPayload
+export type WalletRecord = ManagedWalletRecord | ExoticWalletRecord
 export interface RedPacketJSONPayload {
     contract_version: number
     contract_address: string
@@ -199,7 +183,7 @@ export interface RedPacketJSONPayload {
 //#endregion
 
 //#region wallet
-export interface WalletRecord {
+export interface WalletRecordProperties {
     /** ethereum hex address */
     address: string
     /** User define wallet name. Default address.prefix(6) */
@@ -207,36 +191,26 @@ export interface WalletRecord {
     /** Wallet ethereum balance */
     eth_balance?: BigNumber
     erc20_token_balance: Map</** address of the erc20 token */ string, BigNumber | undefined>
+    _wallet_is_default?: boolean
+    /**
+     * undefined means "managed"
+     * "exotic" means the wallet is managed by an external wallet. for example, Metamask
+     */
+    type?: 'managed' | 'exotic'
+    createdAt: Date
+    updatedAt: Date
+}
+export interface ExoticWalletRecord extends WalletRecordProperties {
+    provider: 'metamask'
+    type: 'exotic'
+}
+export interface ManagedWalletRecord extends WalletRecordProperties {
+    type?: 'managed'
     mnemonic: string[]
     passphrase: string
     _data_source_: 'real' | 'mock'
     /** Wallet recover from private key */
     _private_key_?: string
-    _wallet_is_default?: boolean
-}
-export interface WalletRecordInDatabase extends Omit<WalletRecord, 'eth_balance' | 'erc20_token_balance'> {
-    eth_balance?: string | bigint
-    erc20_token_balance: Map<string, string | bigint | undefined>
-}
-//#endregion
-
-//#region erc20
-export interface ERC20TokenRecord {
-    /** same to address */
-    // id: string
-    /** token address */
-    address: string
-    /** token name */
-    name: string
-    /** token decimal */
-    decimals: number
-    /** token symbol */
-    symbol: string
-    network: EthereumNetwork
-    /** Yes if user added token */
-    is_user_defined: boolean
-    /** Delete time for soft delete */
-    deleted_at?: Date
 }
 //#endregion
 
