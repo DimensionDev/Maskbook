@@ -20,7 +20,7 @@ import { DialogDismissIconUI } from '../../components/InjectedComponents/DialogD
 import { TokenSelect } from '../shared/TokenSelect'
 import { WalletSelect } from '../shared/WalletSelect'
 import { useSelectWallet } from '../shared/useWallet'
-import { WalletRecord, ERC20TokenRecord, EthereumTokenType } from '../Wallet/database/types'
+import { EthereumTokenType } from '../Wallet/database/types'
 import { useStylesExtends } from '../../components/custom-ui-helper'
 import { getActivatedUI } from '../../social-network/ui'
 import {

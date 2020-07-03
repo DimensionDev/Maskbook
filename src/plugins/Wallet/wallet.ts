@@ -1,7 +1,13 @@
 import { omit, noop } from 'lodash-es'
 import { createTransaction, IDBPSafeTransaction } from '../../database/helpers/openDB'
 import { createWalletDBAccess, WalletDB } from './database/Wallet.db'
-import { WalletRecord, ERC20TokenRecord, EthereumNetwork, WalletRecordInDatabase } from './database/types'
+import {
+    WalletRecord,
+    ERC20TokenRecord,
+    EthereumNetwork,
+    WalletRecordInDatabase,
+    ManagedWalletRecord,
+} from './database/types'
 import { PluginMessageCenter } from '../PluginMessages'
 import { HDKey, EthereumAddress } from 'wallet.ts'
 import * as bip39 from 'bip39'
@@ -58,7 +64,7 @@ export async function isEmptyWallets() {
 }
 
 export async function getManagedWallets(): Promise<{
-    wallets: (WalletRecord & { privateKey: string })[]
+    wallets: (ManagedWalletRecord & { privateKey: string })[]
     tokens: ERC20TokenRecord[]
 }> {
     const t = createTransaction(await createWalletDBAccess(), 'readonly')('Wallet', 'ERC20Token')
@@ -73,6 +79,7 @@ export async function getManagedWallets(): Promise<{
     async function makeWallets() {
         const records = wallets
             .map(WalletRecordOutDB)
+            .filter((x): x is ManagedWalletRecord => x.type !== 'exotic')
             .map(async (record) => ({ ...record, privateKey: await makePrivateKey(record) }))
         const recordWithKeys = await Promise.all(records)
         return recordWithKeys.sort((a, b) => {
@@ -84,7 +91,7 @@ export async function getManagedWallets(): Promise<{
             if (a.createdAt < b.createdAt) return 1
             return 0
         })
-        async function makePrivateKey(record: WalletRecord) {
+        async function makePrivateKey(record: ManagedWalletRecord) {
             const recover = record._private_key_
                 ? await recoverWalletFromPrivateKey(record._private_key_)
                 : await recoverWallet(record.mnemonic, record.passphrase)
@@ -116,7 +123,7 @@ export async function setDefaultWallet(address: WalletRecord['address']) {
 
 export async function createNewWallet(
     rec: Omit<
-        WalletRecord,
+        ManagedWalletRecord,
         | 'id'
         | 'address'
         | 'mnemonic'
@@ -133,7 +140,10 @@ export async function createNewWallet(
 
 export async function importNewWallet(
     rec: PartialRequired<
-        Omit<WalletRecord, 'id' | 'eth_balance' | '_data_source_' | 'erc20_token_balance' | 'createdAt' | 'updatedAt'>,
+        Omit<
+            ManagedWalletRecord,
+            'id' | 'eth_balance' | '_data_source_' | 'erc20_token_balance' | 'createdAt' | 'updatedAt'
+        >,
         'name'
     >,
 ) {
@@ -146,7 +156,7 @@ export async function importNewWallet(
     if (rec.name === null) {
         rec.name = address.slice(0, 6)
     }
-    const record: WalletRecord = {
+    const record: ManagedWalletRecord = {
         name,
         mnemonic,
         passphrase,
@@ -325,7 +335,7 @@ function WalletRecordOutDB(x: WalletRecordInDatabase): WalletRecord {
     return record
 }
 function WalletRecordIntoDB(x: WalletRecord): WalletRecordInDatabase {
-    const record = omit(x, ['eth_balance', 'erc20_token_balance']) as WalletRecordInDatabase
+    const record = x as WalletRecordInDatabase
     if (x.eth_balance) {
         record.eth_balance = x.eth_balance.toString()
     }

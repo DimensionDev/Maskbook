@@ -4,10 +4,7 @@ import { PersonaArrayComparer } from '../../utils/comparer'
 import { MessageCenter } from '../../utils/messages'
 import type { Persona } from '../../database'
 import { useValueRef } from '../../utils/hooks/useValueRef'
-import { PluginMessageCenter } from '../../plugins/PluginMessages'
-import type { WalletRecord, ERC20TokenRecord } from '../../plugins/Wallet/database/types'
 import { sideEffect } from '../../utils/side-effects'
-import { currentEthereumNetworkSettings } from '../../plugins/Wallet/UI/Developer/EthereumNetworkSettings'
 
 const independentRef = {
     myPersonasRef: new ValueRef<Persona[]>([], PersonaArrayComparer),
@@ -15,7 +12,7 @@ const independentRef = {
 }
 
 {
-    const ref = sideEffect.then(query)
+    sideEffect.then(query)
     MessageCenter.on('personaUpdated', query)
     function query() {
         Services.Identity.queryMyPersonas().then((p) => {
