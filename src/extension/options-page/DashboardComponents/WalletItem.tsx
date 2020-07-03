@@ -81,7 +81,7 @@ const useStyles = makeStyles((theme) =>
 )
 
 interface WalletItemProps {
-    wallet: Partial<WalletDetails>
+    wallet: WalletDetails
     selected?: boolean
     tokens?: ERC20TokenDetails[]
     onClick?(): void
@@ -94,6 +94,8 @@ export function WalletItem(props: WalletItemProps) {
     const [, copyToClipboard] = useCopyToClipboard()
     const { data: managedWallet } = useManagedWalletDetail(wallet?.walletAddress)
     const copyWalletAddress = useSnackbarCallback(async (address: string) => copyToClipboard(address), [])
+    const isExotic = wallet.type === 'exotic'
+    const provider = wallet.type === 'exotic' ? wallet.provider : ''
     return (
         <ButtonBase
             component="section"
@@ -105,7 +107,7 @@ export function WalletItem(props: WalletItemProps) {
             <Typography className={classes.title} variant="h5">
                 {wallet.walletName}
             </Typography>
-            <Box py={2}>
+            <Box paddingY={2}>
                 <Typography className={classes.label} component="p" color="textSecondary" variant="overline">
                     {t('wallet_address')}
                 </Typography>
@@ -113,6 +115,16 @@ export function WalletItem(props: WalletItemProps) {
                     {wallet.walletAddress}
                 </Typography>
             </Box>
+            {isExotic ? (
+                <Box paddingBottom={2} marginTop={-2}>
+                    <Typography className={classes.label} component="p" color="textSecondary" variant="overline">
+                        Managed by
+                    </Typography>
+                    <Typography className={classes.address} component="code">
+                        {provider}
+                    </Typography>
+                </Box>
+            ) : null}
             <ActionButton
                 color="primary"
                 size="small"

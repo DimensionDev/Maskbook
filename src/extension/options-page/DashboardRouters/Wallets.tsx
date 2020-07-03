@@ -145,19 +145,32 @@ const WalletContent = React.forwardRef<HTMLDivElement, WalletContentProps>(funct
         [wallet?.walletAddress],
     )
 
-    const menus = useMemo(
-        () => [
-            <MenuItem onClick={setAsDefault}>{t('set_as_default')}</MenuItem>,
-            <MenuItem onClick={() => openWalletRename({ wallet: wallet })}>{t('rename')}</MenuItem>,
-            <MenuItem onClick={() => openWalletBackup({ wallet: wallet })}>{t('backup')}</MenuItem>,
+    const backupMenuItem =
+        wallet.type === 'managed' ? (
+            <MenuItem onClick={() => openWalletBackup({ wallet: wallet })}>{t('backup')}</MenuItem>
+        ) : (
+            undefined!
+        )
+    const deleteMenuItem =
+        wallet.type === 'managed' ? (
             <MenuItem
                 onClick={() => openWalletDelete({ wallet: wallet })}
                 className={color.error}
                 data-testid="delete_button">
                 {t('delete')}
-            </MenuItem>,
-        ],
-        [color.error, wallet, openWalletBackup, openWalletDelete, openWalletRename, setAsDefault, t],
+            </MenuItem>
+        ) : (
+            undefined!
+        )
+    const menus = useMemo(
+        () =>
+            [
+                <MenuItem onClick={setAsDefault}>{t('set_as_default')}</MenuItem>,
+                <MenuItem onClick={() => openWalletRename({ wallet: wallet })}>{t('rename')}</MenuItem>,
+                backupMenuItem,
+                deleteMenuItem,
+            ].filter((x) => x),
+        [setAsDefault, t, backupMenuItem, deleteMenuItem, openWalletRename, wallet],
     )
     const [menu, , openMenu] = useModal(DashboardMenu, { menus })
     if (!wallet) return null
@@ -204,15 +217,17 @@ const WalletContent = React.forwardRef<HTMLDivElement, WalletContentProps>(funct
                     ))}
                 </List>
             </ThemeProvider>
-            <div className={classes.footer}>
-                <Button
-                    onClick={() => openWalletHistory({ wallet: wallet })}
-                    startIcon={<HistoryIcon />}
-                    variant="text"
-                    color="primary">
-                    {t('history')}
-                </Button>
-            </div>
+            {wallet.type === 'managed' ? (
+                <div className={classes.footer}>
+                    <Button
+                        onClick={() => openWalletHistory({ wallet: wallet })}
+                        startIcon={<HistoryIcon />}
+                        variant="text"
+                        color="primary">
+                        {t('history')}
+                    </Button>
+                </div>
+            ) : null}
             {addToken}
             {walletHistory}
             {walletBackup}

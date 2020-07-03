@@ -26,18 +26,21 @@ export type WalletDetails = {
     /** key: address of erc20 token; value: undefined means "syncing..." */
     erc20tokensBalanceMap: Map<string, BigNumber | undefined>
     walletName?: string
-}
+} & ({ type: 'managed' } | { type: 'exotic'; provider: 'metamask' })
 export type ERC20TokenDetails = Pick<ERC20TokenRecord, 'address' | 'decimals' | 'name' | 'network' | 'symbol'>
 export async function getWallets(): Promise<{ wallets: WalletDetails[]; tokens: ERC20TokenDetails[] }> {
     // TODO: support Metamask
-    const { tokens, wallets: walletList } = await Wallet.getManagedWallets()
-    const wallets = walletList
+    const { tokens, wallets: managedList } = await Wallet.getManagedWallets()
+    const wallets = managedList
         .sort((x) => (x._wallet_is_default ? 1 : 0))
         .map<WalletDetails>((x) => ({
             walletAddress: x.address,
             erc20tokensBalanceMap: x.erc20_token_balance,
             ethBalance: x.eth_balance,
             walletName: x.name ?? undefined,
+            type: x.type || 'managed',
+            // @ts-expect-error
+            provider: x.provider,
         }))
     return { wallets, tokens }
 }
