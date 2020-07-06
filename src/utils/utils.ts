@@ -222,3 +222,12 @@ export function defer<T, E = unknown>() {
     })
     return [p, a, b] as const
 }
+
+export function buf2hex(buffer: ArrayBuffer) {
+    return Array.prototype.map.call(new Uint8Array(buffer), (x) => ('00' + x.toString(16)).slice(-2)).join('')
+}
+
+export function assert(x: any, ...args: any): asserts x {
+    console.assert(x, ...args)
+    if (!x) throw new Error('Assert failed!')
+}

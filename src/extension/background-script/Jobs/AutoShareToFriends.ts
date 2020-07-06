@@ -5,7 +5,7 @@ import { appendShareTarget } from '../CryptoService'
 import { queryUserGroup } from '../UserGroupService'
 import { IdentifierMap } from '../../../database/IdentifierMap'
 import { queryMyProfiles } from '../IdentityService'
-import { currentImportingBackup } from '../../../components/shared-settings/settings'
+import { currentImportingBackup } from '../../../settings/settings'
 
 interface ShareTarget {
     share: ProfileIdentifier[]

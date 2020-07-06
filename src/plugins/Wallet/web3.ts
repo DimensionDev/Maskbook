@@ -2,9 +2,11 @@ import Web3 from 'web3'
 import type { WebsocketProvider, HttpProvider } from 'web3-core'
 import { PluginMessageCenter } from '../PluginMessages'
 import { sideEffect } from '../../utils/side-effects'
-import { currentEthereumNetworkSettings, getNetworkSettings } from './UI/Developer/EthereumNetworkSettings'
+import { getNetworkSettings } from './UI/Developer/EthereumNetworkSettings'
 import Services from '../../extension/service'
 import { OnlyRunInContext } from '@holoflows/kit/es'
+import { buf2hex } from '../../utils/utils'
+import { currentEthereumNetworkSettings } from '../../settings/settings'
 
 OnlyRunInContext('background', 'web3')
 
@@ -61,7 +63,3 @@ sideEffect.then(() => {
     resetWallet()
     resetProvider()
 })
-
-export function buf2hex(buffer: ArrayBuffer) {
-    return Array.prototype.map.call(new Uint8Array(buffer), (x) => ('00' + x.toString(16)).slice(-2)).join('')
-}

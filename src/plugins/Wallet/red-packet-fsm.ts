@@ -19,6 +19,7 @@ import { redPacketAPI } from './api'
 import { sideEffect } from '../../utils/side-effects'
 import BigNumber from 'bignumber.js'
 import { getNetworkSettings } from './UI/Developer/EthereumNetworkSettings'
+import { assert } from '../../utils/utils'
 
 function getProvider() {
     return redPacketAPI
@@ -351,11 +352,6 @@ function setNextState(rec: RedPacketRecord, nextState: RedPacketStatus) {
         nextState,
     )
     rec.status = nextState
-}
-
-export function assert(x: any, ...args: any): asserts x {
-    console.assert(x, ...args)
-    if (!x) throw new Error('Assert failed!')
 }
 
 function RedPacketRecordOutDB(x: RedPacketRecordInDatabase): RedPacketRecord {

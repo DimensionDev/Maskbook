@@ -34,7 +34,7 @@ import { useCapturedInput } from '../../../../utils/hooks/useCapturedEvents'
 import { PluginMessageCenter } from '../../../PluginMessages'
 import { getActivatedUI } from '../../../../social-network/ui'
 import { useValueRef } from '../../../../utils/hooks/useValueRef'
-import { debugModeSetting } from '../../../../components/shared-settings/settings'
+import { debugModeSetting, currentEthereumNetworkSettings } from '../../../../settings/settings'
 import { formatBalance } from '../../formatter'
 import ShadowRootDialog from '../../../../utils/jss/ShadowRootDialog'
 import { PortalShadowRoot } from '../../../../utils/jss/ShadowRootPortal'
@@ -43,7 +43,6 @@ import { useWalletDataSource, useSelectWallet } from '../../../shared/useWallet'
 import { WalletSelect } from '../../../shared/WalletSelect'
 import { TokenSelect } from '../../../shared/TokenSelect'
 import { RedPacketMetaKey } from '../../RedPacketMetaKey'
-import { currentEthereumNetworkSettings } from '../Developer/EthereumNetworkSettings'
 
 interface RedPacketDialogProps
     extends withClasses<

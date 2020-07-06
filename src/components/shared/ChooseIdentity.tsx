@@ -11,7 +11,7 @@ import { getActivatedUI } from '../../social-network/ui'
 import { useCurrentIdentity, useMyIdentities } from '../DataSource/useActivatedUI'
 import { ProfileIdentifier } from '../../database/type'
 import { useI18N } from '../../utils/i18n-next-ui'
-import { currentSelectedIdentity } from '../../components/shared-settings/settings'
+import { currentSelectedIdentity } from '../../settings/settings'
 import { useStylesExtends } from '../custom-ui-helper'
 
 const useStyles = makeStyles({

@@ -1,10 +1,5 @@
 import { AutomatedTabTask, GetContext, AutomatedTabTaskRuntimeOptions } from '@holoflows/kit'
 import { ProfileIdentifier, ECKeyIdentifier, Identifier } from '../../database/type'
-import {
-    disableOpenNewTabInBackgroundSettings,
-    currentImmersiveSetupStatus,
-    ImmersiveSetupCrossContextStatus,
-} from '../../components/shared-settings/settings'
 import type { SocialNetworkUI } from '../../social-network/ui'
 import { memoizePromise } from '../../utils/memoize'
 import { safeGetActiveUI } from '../../utils/safeRequire'
@@ -12,6 +7,11 @@ import Serialization from '../../utils/type-transform/Serialization'
 import { sideEffect } from '../../utils/side-effects'
 import { untilDocumentReady } from '../../utils/dom'
 import { sleep } from '../../utils/utils'
+import {
+    disableOpenNewTabInBackgroundSettings,
+    currentImmersiveSetupStatus,
+    ImmersiveSetupCrossContextStatus,
+} from '../../settings/settings'
 
 function getActivatedUI() {
     return safeGetActiveUI()

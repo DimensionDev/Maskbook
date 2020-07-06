@@ -123,6 +123,7 @@
     "finish": "Finish",
     "go_to": "Go to",
     "home": "Home",
+    "wallets": "Wallets",
     "immersive_setup_add_bio_text": "Add the text above in your bio to access advanced features. Please don't delete or change it.",
     "immersive_setup_connect_as": "Connect as {{profile}}?",
     "immersive_setup_connect_as_unknown": "Connect as who?",

@@ -4,7 +4,7 @@ import Services from '../../extension/service'
 import { PluginMessageCenter } from '../PluginMessages'
 import { formatBalance } from '../Wallet/formatter'
 import { ETH_ADDRESS } from '../Wallet/erc20'
-import { currentEthereumNetworkSettings } from '../Wallet/UI/Developer/EthereumNetworkSettings'
+import { currentEthereumNetworkSettings } from '../../settings/settings'
 
 export function useWalletDataSource() {
     const [wallets, setWallets] = useState<WalletRecord[] | 'loading'>('loading')

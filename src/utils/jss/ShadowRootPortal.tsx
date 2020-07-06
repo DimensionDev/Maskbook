@@ -1,6 +1,6 @@
 import { GetContext } from '@holoflows/kit/es'
 import { untilDomLoaded } from '../dom'
-import { renderInShadowRootSettings } from '../../components/shared-settings/settings'
+import { renderInShadowRootSettings } from '../../settings/settings'
 
 const div = document.createElement('div')
 export const portalShadowRoot = div.attachShadow({ mode: 'closed' })

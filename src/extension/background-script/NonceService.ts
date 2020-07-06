@@ -3,16 +3,12 @@ import { web3 } from '../../plugins/Wallet/web3'
 
 OnlyRunInContext(['background', 'debugging'], 'NonceService')
 
-type NonceManagerTask =
-    | { type: 'set'; nonce: number; callback: (e: Error | null) => void }
-    | { type: 'get'; callback: (e: Error | null, nonce: number) => void }
-
 class NonceManager {
     constructor(private address: string) {}
-
     private nonce = NonceManager.INITIAL_NONCE
-    private locked = false
-    private tasks: NonceManagerTask[] = []
+    private locked: boolean = false
+    private tasks: (() => void)[] = []
+
     private lock() {
         this.locked = true
     }
@@ -20,12 +16,8 @@ class NonceManager {
         this.locked = false
     }
     private contine() {
-        if (this.locked || this.tasks.length === 0) return
-        const task = this.tasks.shift()!
-        if (task.type === 'get') this.getRemoteNonce()
-        else this.setLocalNonce(task.nonce)
+        if (!this.locked) this.tasks.shift()?.()
     }
-
     private async getRemoteNonce() {
         return new Promise<number>(async (resolve, reject) => {
             const callback = (e: Error | null, nonce?: number) => {
@@ -34,8 +26,7 @@ class NonceManager {
                 this.unlock()
                 this.contine()
             }
-            if (this.locked) this.tasks.push({ type: 'get', callback })
-            else {
+            const run = async () => {
                 try {
                     this.lock()
                     callback(null, await web3.eth.getTransactionCount(this.address))
@@ -43,6 +34,8 @@ class NonceManager {
                     callback(e)
                 }
             }
+            if (this.locked) this.tasks.push(run)
+            else run()
         })
     }
     private async setLocalNonce(nonce: number) {
@@ -53,12 +46,13 @@ class NonceManager {
                 this.unlock()
                 this.contine()
             }
-            if (this.locked) this.tasks.push({ type: 'set', nonce, callback })
-            else {
+            const run = async () => {
                 this.lock()
                 this.nonce = nonce
                 callback(null)
             }
+            if (this.locked) this.tasks.push(run)
+            else run()
         })
     }
 
@@ -67,11 +61,9 @@ class NonceManager {
         await this.setLocalNonce(nonce)
         return nonce
     }
-
     public async setNonce(nonce: number) {
         await this.setLocalNonce(nonce)
     }
-
     public async resetNonce() {
         const nonce = await this.getRemoteNonce()
         await this.setLocalNonce(nonce)

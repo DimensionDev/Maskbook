@@ -12,12 +12,10 @@ import type { ProfileIdentifier } from '../../../database/type'
 import { DialogRouter } from '../DashboardDialogs/DialogBase'
 import { ProfileDisconnectDialog, ProfileConnectDialog } from '../DashboardDialogs/Profile'
 import getCurrentNetworkUI from '../../../social-network/utils/getCurrentNetworkUI'
-import {
-    currentImmersiveSetupStatus,
-    ImmersiveSetupCrossContextStatus,
-} from '../../../components/shared-settings/settings'
+import { currentImmersiveSetupStatus, ImmersiveSetupCrossContextStatus } from '../../../settings/settings'
 import { exclusiveTasks } from '../../content-script/tasks'
 import stringify from 'json-stable-stringify'
+import { sleep } from '../../../utils/utils'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -104,6 +102,7 @@ export default function ProfileBox({ persona, border }: Props) {
             status: 'during',
             persona: persona.identifier.toText(),
         } as ImmersiveSetupCrossContextStatus)
+        await sleep(100)
         exclusiveTasks(getCurrentNetworkUI(provider.network).getHomePage(), {
             active: true,
             autoClose: false,

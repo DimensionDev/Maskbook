@@ -14,7 +14,7 @@ import { GroupRecordFromJSONFormat } from '../../../utils/type-transform/BackupF
 import { createOrUpdateUserGroupDatabase } from '../../../database/group'
 import { i18n } from '../../../utils/i18n-next'
 import { MessageCenter } from '../../../utils/messages'
-import { currentImportingBackup } from '../../../components/shared-settings/settings'
+import { currentImportingBackup } from '../../../settings/settings'
 
 /**
  * Restore the backup

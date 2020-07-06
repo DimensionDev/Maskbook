@@ -4,7 +4,7 @@ import type { TOptions } from 'i18next'
 import React from 'react'
 import type en from '../_locales/en/messages.json'
 import i18nNextInstance from './i18n-next'
-import { languageSettings } from '../components/shared-settings/settings'
+import { languageSettings } from '../settings/settings'
 
 i18nNextInstance.use(initReactI18next)
 
