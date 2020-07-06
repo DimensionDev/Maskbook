@@ -1,27 +1,31 @@
 import { registerMatrixAccount, loginMatrixAccount, MatrixMessage } from './matrix'
 import { sideEffect } from '../../utils/side-effects'
-import { createNewSettings } from '../../components/shared-settings/createSettings'
+import { createGlobalSettings } from '../../settings/createSettings'
 import { v4 as uuid } from 'uuid'
+import { difference } from 'lodash-es'
 
-const matrixAccount = createNewSettings<[string, string]>('matrix-account', undefined!, { primary: () => 'internal' })
-console.log(sideEffect, matrixAccount)
+const matrixAccount = createGlobalSettings<[string, string]>(
+    'matrix-account',
+    ['', ''],
+    {
+        primary: () => 'internal',
+    },
+    (a, b) => difference(a, b).length === 0,
+)
 sideEffect.then(() => matrixAccount.readyPromise).then(console.trace)
 sideEffect
     .then(() => matrixAccount.readyPromise)
     .then(() => {
         if (process.env.NODE_ENV === 'production') throw 'Not enabled in prod'
-        if (!matrixAccount.value) {
-            const username = 'maskbook-bot-' + uuid()
-            const password = uuid()
+        const [username_, password_] = matrixAccount.value
+        const username = username_ || 'maskbook-bot-' + uuid()
+        const password = password_ || uuid()
+        if (!username_ && !password_) {
             matrixAccount.value = [username, password]
             return registerMatrixAccount(username, password)
-        } else {
-            const [username, password] = matrixAccount.value
-            return loginMatrixAccount(username, password)
         }
+        return loginMatrixAccount(username, password)
     })
     .then(([cred, client]) => new MatrixMessage(client))
-    .then((msg) => {
-        console.log(msg)
-    })
+    .then(console.log)
     .catch(console.warn)

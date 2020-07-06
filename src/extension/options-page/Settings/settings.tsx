@@ -13,7 +13,7 @@ import {
     languageSettings,
     Language,
     renderInShadowRootSettings,
-} from '../../../components/shared-settings/settings'
+} from '../../../settings/settings'
 import { useValueRef } from '../../../utils/hooks/useValueRef'
 import EnhancedEncryptionIcon from '@material-ui/icons/EnhancedEncryption'
 import NoEncryptionIcon from '@material-ui/icons/NoEncryption'

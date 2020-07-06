@@ -9,7 +9,7 @@ import { ChooseIdentity, ChooseIdentityProps } from '../shared/ChooseIdentity'
 import type { BannerProps } from '../Welcomes/Banner'
 import { NotSetupYetPrompt } from '../shared/NotSetupYetPrompt'
 import { useValueRef } from '../../utils/hooks/useValueRef'
-import { currentImmersiveSetupStatus } from '../shared-settings/settings'
+import { currentImmersiveSetupStatus } from '../../settings/settings'
 import { getActivatedUI } from '../../social-network/ui'
 
 const useStyles = makeStyles((theme) => ({

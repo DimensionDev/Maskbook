@@ -123,7 +123,7 @@ function Dashboard() {
 
     const routers: [string, string, JSX.Element][] = [
         [t('home'), '/home/', <HomeIcon />],
-        ['wallets', '/wallets/', <CreditCardIcon />],
+        [t('wallets'), '/wallets/', <CreditCardIcon />],
         [t('settings'), '/settings/', <SettingsIcon />],
         // ['About', '/about/', <InfoOutlinedIcon />],
         [t('debug'), '/debug/', <BugReportIcon />],

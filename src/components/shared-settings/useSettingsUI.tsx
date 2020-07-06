@@ -13,7 +13,7 @@ import {
 } from '@material-ui/core'
 import type { ValueRef } from '@holoflows/kit/es'
 import { useValueRef } from '../../utils/hooks/useValueRef'
-import { texts } from './createSettings'
+import { texts } from '../../settings/createSettings'
 
 function withDefaultText<T>(props: SettingsUIProps<T>): SettingsUIProps<T> {
     const { value, primary, secondary } = props

@@ -8,7 +8,7 @@ import type {
 import { DebugList } from '../../DebugModeUI/DebugList'
 import { DebugModeUI_PostHashDialog } from '../../DebugModeUI/PostHashDialog'
 import { useValueRef } from '../../../utils/hooks/useValueRef'
-import { debugModeSetting } from '../../shared-settings/settings'
+import { debugModeSetting } from '../../../settings/settings'
 import { GetContext } from '@holoflows/kit'
 
 interface DebugDisplayProps {

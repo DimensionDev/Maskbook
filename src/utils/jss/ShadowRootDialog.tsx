@@ -4,7 +4,7 @@ import '../../utils/jss/ShadowRootPortal'
 import { PortalShadowRoot } from '../../utils/jss/ShadowRootPortal'
 import { useSheetsRegistryStyles } from './renderInShadowRoot'
 import { useValueRef } from '../hooks/useValueRef'
-import { renderInShadowRootSettings } from '../../components/shared-settings/settings'
+import { renderInShadowRootSettings } from '../../settings/settings'
 
 const ResponsiveDialog = withMobileDialog({ breakpoint: 'xs' })(Dialog)
 

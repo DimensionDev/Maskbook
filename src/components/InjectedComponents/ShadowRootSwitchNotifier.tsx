@@ -1,5 +1,5 @@
 import { sideEffect } from '../../utils/side-effects'
-import { renderInShadowRootSettings } from '../shared-settings/settings'
+import { renderInShadowRootSettings } from '../../settings/settings'
 import { renderInShadowRoot } from '../../utils/jss/renderInShadowRoot'
 import { DOMProxy, GetContext } from '@holoflows/kit/es'
 import React from 'react'
