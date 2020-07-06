@@ -4,7 +4,7 @@ import {
     disableOpenNewTabInBackgroundSettings,
     currentImmersiveSetupStatus,
     ImmersiveSetupCrossContextStatus,
-} from '../../components/shared-settings/settings'
+} from '../../settings/settings'
 import type { SocialNetworkUI } from '../../social-network/ui'
 import { memoizePromise } from '../../utils/memoize'
 import { safeGetActiveUI } from '../../utils/safeRequire'

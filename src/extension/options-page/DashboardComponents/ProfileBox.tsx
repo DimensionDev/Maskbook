@@ -4,14 +4,12 @@ import { definedSocialNetworkWorkers } from '../../../social-network/worker'
 
 import ProviderLine, { ProviderLineProps } from './ProviderLine'
 import getCurrentNetworkUI from '../../../social-network/utils/getCurrentNetworkUI'
-import {
-    currentImmersiveSetupStatus,
-    ImmersiveSetupCrossContextStatus,
-} from '../../../components/shared-settings/settings'
+import { currentImmersiveSetupStatus, ImmersiveSetupCrossContextStatus } from '../../../settings/settings'
 import { exclusiveTasks } from '../../content-script/tasks'
 import stringify from 'json-stable-stringify'
 import { useModal } from '../Dialogs/Base'
 import { DashboardPersonaUnlinkConfirmDialog } from '../Dialogs/Persona'
+import { sleep } from '../../../utils/utils'
 
 interface ProfileBoxProps {
     persona: Persona | null
@@ -50,6 +48,7 @@ export default function ProfileBox({ persona, ProviderLineProps }: ProfileBoxPro
             status: 'during',
             persona: persona.identifier.toText(),
         } as ImmersiveSetupCrossContextStatus)
+        await sleep(100)
         exclusiveTasks(getCurrentNetworkUI(provider.network).getHomePage(), {
             active: true,
             autoClose: false,

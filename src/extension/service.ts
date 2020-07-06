@@ -18,13 +18,7 @@ interface Services {
     Helper: typeof import('./background-script/HelperService')
     Nonce: typeof import('./background-script/NonceService')
 }
-const Services = {
-    Plugin: {
-        invokePlugin() {
-            return new Promise(() => {})
-        },
-    } as any,
-} as Services
+const Services = {} as Services
 export default Services
 
 const logOptions: AsyncCallOptions['log'] = {
@@ -42,11 +36,7 @@ if (!('Services' in globalThis)) {
     register(createProxyToService('SteganographyService'), 'Steganography', MockService.SteganographyService)
     register(createProxyToService('IdentityService'), 'Identity', {})
     register(createProxyToService('UserGroupService'), 'UserGroup', {})
-    register(createProxyToService('PluginService'), 'Plugin', {
-        invokePlugin() {
-            return new Promise(() => {})
-        },
-    })
+    register(createProxyToService('PluginService'), 'Plugin', MockService.PluginService)
     register(createProxyToService('HelperService'), 'Helper', {})
     register(createProxyToService('NonceService'), 'Nonce', {})
 }
@@ -62,13 +52,11 @@ function createProxyToService(name: string) {
             get(_, key) {
                 // @ts-ignore
                 const service = globalThis[name] || {}
-                if (key === 'methods') {
-                    return () => {
-                        return Object.keys(service)
+                if (key === 'methods')
+                    return () =>
+                        Object.keys(service)
                             .map((f) => f + ': ' + service[f].toString().split('\n')[0])
                             .join('\n')
-                    }
-                }
                 return service[key]
             },
         },
@@ -94,6 +82,7 @@ Object.assign(globalThis, {
     ECKeyIdentifier,
     IdentifierMap,
 })
+
 //#region
 type Service = Record<string, (...args: unknown[]) => Promise<unknown>>
 function register<T extends Service>(service: T, name: keyof Services, mock?: Partial<T>) {

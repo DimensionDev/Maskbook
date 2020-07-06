@@ -16,7 +16,7 @@ import { ERC20Token, DAI_ADDRESS } from './token'
 import { memoizePromise } from '../../utils/memoize'
 import { BigNumber } from 'bignumber.js'
 import { ec as EC } from 'elliptic'
-import { currentEthereumNetworkSettings } from './UI/Developer/EthereumNetworkSettings'
+import { currentEthereumNetworkSettings } from '../../settings/settings'
 
 // Private key at m/44'/coinType'/account'/change/addressIndex
 // coinType = ether

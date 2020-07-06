@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useCallback } from 'react'
 import React from 'react'
-import { renderInShadowRootSettings } from '../../components/shared-settings/settings'
+import { renderInShadowRootSettings } from '../../settings/settings'
 import { useValueRef } from './useValueRef'
 
 export const captureEvents: (keyof HTMLElementEventMap)[] = [

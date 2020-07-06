@@ -93,3 +93,9 @@ export const useErrorStyles = makeStyles((theme) => {
         },
     })
 })
+
+export enum Appearance {
+    default = 'default',
+    light = 'light',
+    dark = 'dark',
+}

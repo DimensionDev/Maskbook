@@ -22,8 +22,8 @@ import { useSnackbar } from 'notistack'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { merge, cloneDeep } from 'lodash-es'
 import { useValueRef } from '../../../utils/hooks/useValueRef'
-import { appearanceSettings, Appearance } from '../../../components/shared-settings/settings'
-import { MaskbookLightTheme, MaskbookDarkTheme } from '../../../utils/theme'
+import { appearanceSettings } from '../../../settings/settings'
+import { MaskbookLightTheme, MaskbookDarkTheme, Appearance } from '../../../utils/theme'
 
 const Transition = React.forwardRef<unknown, TransitionProps & Pick<FadeProps, 'children'>>(function Transition(
     props,

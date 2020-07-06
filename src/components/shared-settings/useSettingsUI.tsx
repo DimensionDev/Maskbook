@@ -1,7 +1,7 @@
 import React, { useRef } from 'react'
 import type { ValueRef } from '@holoflows/kit/es'
 import { useValueRef } from '../../utils/hooks/useValueRef'
-import { texts } from './createSettings'
+import { texts } from '../../settings/createSettings'
 import {
     ListItem,
     ListItemText,

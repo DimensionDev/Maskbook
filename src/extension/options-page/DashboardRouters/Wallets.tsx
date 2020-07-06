@@ -31,7 +31,7 @@ import { sleep } from '../../../utils/utils'
 import { ETH_ADDRESS, isDAI } from '../../../plugins/Wallet/token'
 import { useValueRef } from '../../../utils/hooks/useValueRef'
 import useQueryParams from '../../../utils/hooks/useQueryParams'
-import { currentEthereumNetworkSettings } from '../../../plugins/Wallet/UI/Developer/EthereumNetworkSettings'
+import { currentEthereumNetworkSettings } from '../../../settings/settings'
 import { useWallet } from '../../../plugins/shared/useWallet'
 import type { WalletDetails, ERC20TokenDetails } from '../../background-script/PluginService'
 

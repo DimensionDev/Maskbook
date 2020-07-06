@@ -2,8 +2,12 @@ import Web3 from 'web3'
 import type { WebsocketProvider } from 'web3-core'
 import { PluginMessageCenter } from '../PluginMessages'
 import { sideEffect } from '../../utils/side-effects'
-import { currentEthereumNetworkSettings, getNetworkSettings } from './UI/Developer/EthereumNetworkSettings'
+import { currentEthereumNetworkSettings } from '../../settings/settings'
+import { getNetworkSettings } from './UI/Developer/EthereumNetworkSettings'
 import Services from '../../extension/service'
+import { OnlyRunInContext } from '@holoflows/kit/es'
+
+OnlyRunInContext('background', 'web3')
 
 export const web3 = new Web3()
 

@@ -22,10 +22,25 @@ interface MaskbookMessages {
      */
     settingsCreated: string
     /**
-     * emit when the settings updated.
-     * value is instanceKey
+     * emit when the settings changed.
      */
-    settingsUpdated: string
+    settingsChanged: {
+        id: number
+        key: string
+        value: browser.storage.StorageValue
+        initial: boolean
+        context: string
+    }
+    /**
+     * emit when the settings finished syncing with storage.
+     */
+    settingsUpdated: {
+        id: number
+        key: string
+        value: browser.storage.StorageValue
+        initial: boolean
+        context: string
+    }
     /** emit when my identities created. */
     identityCreated: undefined
     /** emit when my identities updated. */

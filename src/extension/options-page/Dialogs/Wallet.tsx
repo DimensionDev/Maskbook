@@ -39,7 +39,7 @@ import useQueryParams from '../../../utils/hooks/useQueryParams'
 import { useHistory } from 'react-router-dom'
 import { DashboardRoute } from '../Route'
 import { sleep } from '../../../utils/utils'
-import { currentEthereumNetworkSettings } from '../../../plugins/Wallet/UI/Developer/EthereumNetworkSettings'
+import { currentEthereumNetworkSettings } from '../../../settings/settings'
 import type { WalletDetails } from '../../background-script/PluginService'
 import { useManagedWalletDetail } from '../../../plugins/shared/useWallet'
 

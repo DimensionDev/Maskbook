@@ -35,7 +35,7 @@ import { useSelectWallet, useWallet } from '../../../shared/useWallet'
 import { WalletSelect } from '../../../shared/WalletSelect'
 import { TokenSelect } from '../../../shared/TokenSelect'
 import { RedPacketMetaKey } from '../../RedPacketMetaKey'
-import { currentEthereumNetworkSettings } from '../Developer/EthereumNetworkSettings'
+import { currentEthereumNetworkSettings } from '../../../../settings/settings'
 import { FeedbackDialog } from './Dialogs'
 import type { WalletDetails, ERC20TokenDetails } from '../../../../extension/background-script/PluginService'
 

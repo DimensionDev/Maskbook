@@ -25,3 +25,9 @@ export const SteganographyService: Partial<typeof import('./background-script/St
         return ''
     },
 }
+
+export const PluginService: Partial<typeof import('./background-script/PluginService')> = {
+    invokePlugin() {
+        return new Promise(() => {})
+    },
+}

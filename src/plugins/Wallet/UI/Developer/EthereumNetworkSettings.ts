@@ -1,5 +1,5 @@
 import { EthereumNetwork } from '../../database/types'
-import { createNewSettings } from '../../../../components/shared-settings/createSettings'
+import { currentEthereumNetworkSettings } from '../../../../settings/settings'
 
 const settings = {
     gitcoinMaintainerAddress: {
@@ -46,13 +46,3 @@ export function getNetworkSettings() {
         middlewareAddress: settings.middlewareAddress[networkType],
     }
 }
-
-export const currentEthereumNetworkSettings = createNewSettings<EthereumNetwork>(
-    'eth network',
-    EthereumNetwork.Mainnet,
-    {
-        primary: () => 'Ethereum Network',
-        secondary: () =>
-            `You can choose ${EthereumNetwork.Mainnet}, ${EthereumNetwork.Rinkeby} or ${EthereumNetwork.Ropsten}`,
-    },
-)

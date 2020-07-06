@@ -1,11 +1,11 @@
 import { GetContext } from '@holoflows/kit/es'
 import { MessageCenter } from './utils/messages'
-import './_background_loader.0'
 import 'webcrypto-liner'
+import './_background_loader.0'
 import './_background_loader.1'
+import './_background_loader.2'
 import './extension/service'
 import './provider.worker'
-
 import './network/matrix/instance'
 
 import * as PersonaDB from './database/Persona/Persona.db'

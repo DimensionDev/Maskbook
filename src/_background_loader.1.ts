@@ -14,7 +14,7 @@ import * as HelperService from './extension/background-script/HelperService'
 import * as NonceService from './extension/background-script/NonceService'
 import { decryptFromMessageWithProgress } from './extension/background-script/CryptoServices/decryptFrom'
 
-Object.assign(window, {
+Object.assign(globalThis, {
     CryptoService,
     WelcomeService,
     SteganographyService,
@@ -24,7 +24,8 @@ Object.assign(window, {
     HelperService,
     NonceService,
 })
-Object.assign(window, {
+
+Object.assign(globalThis, {
     ServicesWithProgress: {
         decryptFrom: decryptFromMessageWithProgress,
     },

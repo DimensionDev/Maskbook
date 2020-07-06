@@ -9,9 +9,9 @@ import {
     languageSettings,
     Language,
     renderInShadowRootSettings,
-    Appearance,
+    currentEthereumNetworkSettings,
     appearanceSettings,
-} from '../../../components/shared-settings/settings'
+} from '../../../settings/settings'
 import { useValueRef } from '../../../utils/hooks/useValueRef'
 
 import EnhancedEncryptionIcon from '@material-ui/icons/EnhancedEncryption'
@@ -28,8 +28,8 @@ import { useI18N } from '../../../utils/i18n-next-ui'
 import { merge, cloneDeep } from 'lodash-es'
 import { useModal } from '../Dialogs/Base'
 import { EthereumNetwork } from '../../../plugins/Wallet/database/types'
-import { currentEthereumNetworkSettings } from '../../../plugins/Wallet/UI/Developer/EthereumNetworkSettings'
 import { DashboardBackupDialog, DashboardRestoreDialog } from '../Dialogs/Backup'
+import { Appearance } from '../../../utils/theme'
 
 const useStyles = makeStyles((theme) =>
     createStyles({

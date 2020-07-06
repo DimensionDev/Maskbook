@@ -4,7 +4,7 @@ import Services from '../../extension/service'
 import { PluginMessageCenter } from '../PluginMessages'
 import { formatBalance } from '../Wallet/formatter'
 import { ETH_ADDRESS } from '../Wallet/token'
-import { currentEthereumNetworkSettings } from '../Wallet/UI/Developer/EthereumNetworkSettings'
+import { currentEthereumNetworkSettings } from '../../settings/settings'
 import useSWR from 'swr'
 import type { WalletDetails, ERC20TokenDetails } from '../../extension/background-script/PluginService'
 
