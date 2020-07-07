@@ -1,7 +1,7 @@
 import { ValueRef, GetContext } from '@holoflows/kit'
 import { MessageCenter } from '../utils/messages'
 import { defer } from '../utils/utils'
-import { getStorage, setStorage } from '../utils/mutexStorage'
+import { getStorage, setStorage } from '../extension/background-script/StorageService'
 
 export interface SettingsTexts {
     primary: () => string
