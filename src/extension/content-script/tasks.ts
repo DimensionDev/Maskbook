@@ -126,7 +126,14 @@ sideEffect.then(untilDocumentReady).then(() => {
     if (GetContext() !== 'content') return
     const network = getActivatedUI().networkIdentifier
     const id = currentImmersiveSetupStatus[network].value
-    const onStatusUpdate = (id: string) => {
+    const onStatusUpdate = async (id: string) => {
+        console.log(`DEBUG: onStatusUpdate`)
+        console.log(`DEBUG: id: ${id} typeof id: ${typeof id}`)
+        const stored = await browser.storage.local.get('facebook.com+currentImmersiveSetupStatus')
+        console.log(stored)
+        console.log(typeof stored)
+        console.log('\n')
+
         const status: ImmersiveSetupCrossContextStatus = JSON.parse(id || '{}')
         if (status.persona && status.status === 'during') {
             _tasks.immersiveSetup(Identifier.fromString(status.persona, ECKeyIdentifier).unwrap())
