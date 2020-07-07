@@ -26,6 +26,14 @@ if (GetContext() === 'background') {
         const stored = await getStorage(key)
         if (!initial || (initial && typeof stored === 'undefined')) await setStorage(key, value)
 
+        console.log(`DEBUG: setting changed`)
+        console.log(payload)
+        console.log('\n')
+
+        console.log(`DEBUG: stored`)
+        console.log(stored)
+        console.log('\n')
+
         const updated = await getStorage(key)
         if (typeof updated === 'undefined') return
         MessageCenter.emit('settingsUpdated', {
@@ -43,6 +51,11 @@ MessageCenter.on('settingsUpdated', async (payload) => {
     const settings = cached.get(key)
     if (!settings) return
     if ((lastEventId.get(key) ?? 0) > id) return
+
+    console.log(`DEBUG: setting updated`)
+    console.log(payload)
+    console.log('\n')
+
     settings.value = value
     settings.resolve(settings.value)
 })

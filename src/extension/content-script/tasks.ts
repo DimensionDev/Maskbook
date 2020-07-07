@@ -127,6 +127,10 @@ sideEffect.then(untilDocumentReady).then(() => {
     const network = getActivatedUI().networkIdentifier
     const id = currentImmersiveSetupStatus[network].value
     const onStatusUpdate = (id: string) => {
+        console.log(`DEBUG: onStatusUpdate`)
+        console.log(`DEBUG: id: ${id} typeof id: ${typeof id}`)
+        console.log('\n')
+
         const status: ImmersiveSetupCrossContextStatus = JSON.parse(id || '{}')
         if (status.persona && status.status === 'during') {
             _tasks.immersiveSetup(Identifier.fromString(status.persona, ECKeyIdentifier).unwrap())
