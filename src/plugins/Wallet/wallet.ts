@@ -304,6 +304,11 @@ export async function walletAddERC20Token(
 }
 
 export async function onWalletERC20TokenBalanceUpdated(address: string, tokenAddress: string, newBalance: BigNumber) {
+    console.log(`DEBUG: onWalletERC20TokenBalanceUpdated`)
+    console.log(`DEBUG: address: ${address}`)
+    console.log(`DEBUG: tokenAddress: ${tokenAddress}`)
+    console.log(`DEBUG: newBalance: ${newBalance}`)
+
     const t = createTransaction(await createWalletDBAccess(), 'readwrite')('Wallet')
     const wallet = await getWalletByAddress(t, address)
     if (wallet.erc20_token_balance.get(tokenAddress)?.isEqualTo(newBalance)) return // wallet.erc20_token_balance.get(tokenAddress) === newBalance
