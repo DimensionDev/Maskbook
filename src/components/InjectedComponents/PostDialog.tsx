@@ -49,6 +49,7 @@ import { twitterUrl } from '../../social-network-provider/twitter.com/utils/url'
 import { RedPacketMetadataReader } from '../../plugins/RedPacket/utils'
 import { PluginUI } from '../../plugins/plugin'
 import { Flags } from '../../utils/flags'
+import PollsDialog from '../../plugins/Polls/UI/PollsDialog'
 
 const defaultTheme = {}
 
@@ -122,6 +123,7 @@ export function PostDialogUI(props: PostDialogUIProps) {
     )
     const [redPacketDialogOpen, setRedPacketDialogOpen] = useState(false)
     const [fileServiceDialogOpen, setFileServiceDialogOpen] = useState(false)
+    const [pollsDialogOpen, setPollsDialogOpen] = useState(false)
 
     if (!isTypedMessageText(props.postContent)) return <>Unsupported type to edit</>
     const metadataBadge = [...PluginUI].flatMap((plugin) => {
@@ -222,6 +224,19 @@ export function PostDialogUI(props: PostDialogUIProps) {
                                     }}
                                 />
                             )}
+                            <ClickableChip
+                                ChipProps={{
+                                    label: '🗳️ Poll',
+                                    onClick: async () => {
+                                        const { wallets } = await Services.Plugin.getWallets()
+                                        if (wallets.length) {
+                                            setPollsDialogOpen(true)
+                                        } else {
+                                            Services.Welcome.openOptionsPage('/wallets?error=nowallet')
+                                        }
+                                    },
+                                }}
+                            />
                         </Box>
                         <Typography style={{ marginBottom: 10 }}>
                             {t('post_dialog__select_recipients_title')}
@@ -299,6 +314,15 @@ export function PostDialogUI(props: PostDialogUIProps) {
                     open={props.open && fileServiceDialogOpen}
                     onConfirm={() => setFileServiceDialogOpen(false)}
                     onDecline={() => setFileServiceDialogOpen(false)}
+                    DialogProps={props.DialogProps}
+                />
+            )}
+            {!process.env.STORYBOOK && (
+                <PollsDialog
+                    classes={classes}
+                    open={props.open && pollsDialogOpen}
+                    onConfirm={() => setPollsDialogOpen(true)}
+                    onDecline={() => setPollsDialogOpen(false)}
                     DialogProps={props.DialogProps}
                 />
             )}
