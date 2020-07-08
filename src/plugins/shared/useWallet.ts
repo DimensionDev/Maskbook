@@ -6,10 +6,15 @@ import { formatBalance } from '../Wallet/formatter'
 import { ETH_ADDRESS } from '../Wallet/token'
 import { currentEthereumNetworkSettings } from '../../settings/settings'
 import useSWR from 'swr'
-import type { WalletDetails, ERC20TokenDetails } from '../../extension/background-script/PluginService'
+import type {
+    WalletDetails,
+    ERC20TokenDetails,
+    getManagedWalletDetail,
+} from '../../extension/background-script/PluginService'
 
 const getWallets = () => Services.Plugin.getWallets()
-const getManagedWallets = Services.Plugin.getManagedWalletDetail
+const getManagedWallets = (...args: Parameters<typeof getManagedWalletDetail>) =>
+    Services.Plugin.getManagedWalletDetail(...args)
 export function useWallet() {
     const swr = useSWR('query', {
         fetcher: getWallets,

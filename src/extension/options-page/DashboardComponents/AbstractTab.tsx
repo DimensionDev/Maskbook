@@ -41,7 +41,6 @@ export default function AbstractTab({ tabs, state, height = 200 }: AbstractTabPr
                     {tabs.map((tab) => (
                         <Tab
                             className={classes.tab}
-                            component="span"
                             label={tab.label}
                             key={tab.label}
                             data-testid={`${tab.id?.toLowerCase()}_tab`}

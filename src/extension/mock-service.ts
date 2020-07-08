@@ -30,4 +30,10 @@ export const PluginService: Partial<typeof import('./background-script/PluginSer
     invokePlugin() {
         return new Promise(() => {})
     },
+    async getManagedWalletDetail() {
+        return {} as any
+    },
+    async getWallets() {
+        return { tokens: [], wallets: [] }
+    },
 }
