@@ -84,13 +84,13 @@ const useStyles = makeStyles((theme) => {
             width: '100%',
             height: '100%',
             overflow: 'auto',
-            borderRadius: 0,
+            borderRadius: 12,
             backgroundColor: dark ? '#121212' : '#FFFFFF',
             gridRow: 'content-start / content-end',
             gridColumn: 'content-start / content-end',
             display: 'flex',
-            [theme.breakpoints.up('sm')]: {
-                borderRadius: 12,
+            [theme.breakpoints.down('xs')]: {
+                borderRadius: 0,
             },
         },
         footer: {
@@ -108,7 +108,7 @@ function DashboardUI() {
     const classes = useStyles()
     const history = useHistory<unknown>()
 
-    const smMatched = useMediaQuery((theme: Theme) => theme.breakpoints.down('xs'))
+    const xsMatched = useMediaQuery((theme: Theme) => theme.breakpoints.down('xs'))
 
     const routers = ([
         [t('personas'), DashboardRoute.Personas, <PeopleOutlinedIcon />],
@@ -138,7 +138,7 @@ function DashboardUI() {
                 <div className={classes.container}>
                     {loading ? null : (
                         <>
-                            {smMatched ? null : <Drawer routers={routers} exitDashboard={null} />}
+                            {xsMatched ? null : <Drawer routers={routers} exitDashboard={null} />}
                             <Switch>
                                 <Route path={DashboardRoute.Personas} component={DashboardPersonasRouter} />
                                 <Route path={DashboardRoute.Wallets} component={DashboardWalletsRouter} />
@@ -158,7 +158,7 @@ function DashboardUI() {
                         </>
                     )}
                 </div>
-                {smMatched ? null : (
+                {xsMatched ? null : (
                     <footer className={classes.footer}>
                         <FooterLine />
                     </footer>

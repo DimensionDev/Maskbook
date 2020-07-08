@@ -46,9 +46,12 @@ const useStyles = makeStyles((theme) =>
         section: {
             padding: '26px 40px',
             margin: theme.spacing(3, 0),
+            [theme.breakpoints.down('xs')]: {
+                padding: theme.spacing(2),
+            },
         },
         secondaryAction: {
-            paddingRight: '90px',
+            paddingRight: 90,
         },
         listItemRoot: {
             paddingTop: theme.spacing(1.5),
@@ -61,6 +64,9 @@ const useStyles = makeStyles((theme) =>
             minWidth: 'unset',
             marginLeft: 0,
             marginRight: theme.spacing(3),
+            [theme.breakpoints.down('xs')]: {
+                display: 'none',
+            },
         },
     }),
 )
@@ -68,7 +74,7 @@ const useStyles = makeStyles((theme) =>
 const settingsTheme = (theme: Theme): Theme =>
     merge(cloneDeep(theme), {
         wrapper: {
-            padding: '0 24px',
+            padding: theme.spacing(0, 3),
         },
         typography: {
             body1: {
@@ -78,7 +84,7 @@ const settingsTheme = (theme: Theme): Theme =>
         overrides: {
             MuiPaper: {
                 rounded: {
-                    borderRadius: '12px',
+                    borderRadius: 12,
                 },
             },
             MuiCard: {
