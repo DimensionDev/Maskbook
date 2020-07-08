@@ -7,10 +7,10 @@ import {
 } from '../extension/options-page/DashboardDialogs/Persona'
 import { HashRouter as Router } from 'react-router-dom'
 import { ThemeProvider, useMediaQuery, Dialog } from '@material-ui/core'
-import { MaskbookDarkTheme, MaskbookLightTheme, Appearance } from '../utils/theme'
+import { MaskbookDarkTheme, MaskbookLightTheme } from '../utils/theme'
 import { action } from '@storybook/addon-actions'
 import { useCurrentIdentity } from '../components/DataSource/useActivatedUI'
-import { appearanceSettings } from '../settings/settings'
+import { appearanceSettings, Appearance } from '../settings/settings'
 import { useValueRef } from '../utils/hooks/useValueRef'
 
 function DashboardDialog({ children }: { children: React.ReactNode }) {

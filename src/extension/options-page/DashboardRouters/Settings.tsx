@@ -11,6 +11,7 @@ import {
     renderInShadowRootSettings,
     currentEthereumNetworkSettings,
     appearanceSettings,
+    Appearance,
 } from '../../../settings/settings'
 import { useValueRef } from '../../../utils/hooks/useValueRef'
 
@@ -29,7 +30,6 @@ import { merge, cloneDeep } from 'lodash-es'
 import { useModal } from '../Dialogs/Base'
 import { EthereumNetwork } from '../../../plugins/Wallet/database/types'
 import { DashboardBackupDialog, DashboardRestoreDialog } from '../Dialogs/Backup'
-import { Appearance } from '../../../utils/theme'
 
 const useStyles = makeStyles((theme) =>
     createStyles({

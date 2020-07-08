@@ -2,7 +2,6 @@ import { createGlobalSettings, createNetworkSettings } from './createSettings'
 import i18nNextInstance, { i18n } from '../utils/i18n-next'
 import { sideEffect } from '../utils/side-effects'
 import { EthereumNetwork } from '../plugins/Wallet/database/types'
-import { Appearance } from '../utils/theme'
 
 /**
  * Does the debug mode on
@@ -36,6 +35,11 @@ export const renderInShadowRootSettings = createGlobalSettings<boolean>(
     },
 )
 
+export enum Appearance {
+    default = 'default',
+    light = 'light',
+    dark = 'dark',
+}
 const appearance = Appearance.default
 export const appearanceSettings = createGlobalSettings<Appearance>('apperance', appearance, {
     primary: () => i18n.t('settings_appearance'),
