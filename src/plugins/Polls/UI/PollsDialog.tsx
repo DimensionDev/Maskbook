@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import {
     makeStyles,
     createStyles,
@@ -8,22 +8,20 @@ import {
     Typography,
     IconButton,
     Button,
+    Input,
     InputLabel,
-    TextField,
     FormControl,
     Select,
     MenuItem,
     Divider,
 } from '@material-ui/core'
 import AddIcon from '@material-ui/icons/Add'
-import ShadowRootDialog from '../../../utils/jss/ShadowRootDialog'
-import { PortalShadowRoot } from '../../../utils/jss/ShadowRootPortal'
+import ShadowRootDialog from '../../../utils/shadow-root/ShadowRootDialog'
+import { PortalShadowRoot } from '../../../utils/shadow-root/ShadowRootPortal'
 import { DialogDismissIconUI } from '../../../components/InjectedComponents/DialogDismissIcon'
 import { useStylesExtends, or } from '../../../components/custom-ui-helper'
 import AbstractTab, { AbstractTabProps } from '../../../extension/options-page/DashboardComponents/AbstractTab'
-import { useCapturedInput } from '../../../utils/hooks/useCapturedEvents'
-import { createNewPoll, getExistingPolls, PollGunDB } from '../Services'
-import { PollCardUI } from './Polls'
+import { array } from 'yargs'
 
 const useNewPollStyles = makeStyles((theme) =>
     createStyles({
@@ -35,6 +33,14 @@ const useNewPollStyles = makeStyles((theme) =>
             flex: 1,
             margin: theme.spacing(1),
         },
+        input: {
+            flex: 1,
+            padding: theme.spacing(1),
+            backgroundColor: '#F5F8FA',
+        },
+        inputLabel: {
+            zIndex: 99,
+        },
         pollWrap: {
             border: '1px solid #ccd6dd',
             borderRadius: '10px',
@@ -43,9 +49,8 @@ const useNewPollStyles = makeStyles((theme) =>
         },
         optionsWrap: {
             position: 'relative',
-            '& >div': {
-                width: '80%',
-                margin: theme.spacing(2),
+            '& div': {
+                width: '90%',
             },
         },
         addButton: {
@@ -61,50 +66,21 @@ interface NewPollProps {}
 function NewPollUI(props: PollsDialogProps & NewPollProps) {
     const classes = useStylesExtends(useNewPollStyles(), props)
     const [question, setQuestion] = useState('')
-    const [, questionRef] = useCapturedInput(setQuestion)
-
-    const [optionsInput, setOptionsInput] = useState<Object>({ 0: '', 1: '' })
-    const options = Object.values(optionsInput)
-
-    const [days, setDays] = useState(1)
-    const [hours, setHours] = useState(0)
-    const [minutes, setMinutes] = useState(0)
-
-    const handleOptionsInput = (index: number, e: any) => {
-        setOptionsInput({
-            ...optionsInput,
-            [index]: (e.target as HTMLInputElement)?.value,
-        })
-    }
+    const [options, setOptions] = useState(new Array(2).fill(''))
 
     const addNewOption = () => {
-        const length = options.length
-        setOptionsInput({
-            ...optionsInput,
-            [length]: '',
-        })
+        setOptions([...options, ''])
     }
 
-    const sendPoll = () => {
-        const start_time = new Date()
-        const end_time = new Date(
-            start_time.getTime() + days * 24 * 60 * 60 * 1000 + hours * 60 * 60 * 1000 + minutes * 60 * 1000,
-        )
-        createNewPoll({ question, options: optionsInput, start_time, end_time })
-    }
-
-    const renderSelect = (count: number, fn: (newVal: number) => void, defaultIndex = 0) => {
+    const renderSelect = (count: number, defaultIndex?: number) => {
         const options = new Array(count).fill('')
 
         return (
             <Select
                 MenuProps={{ container: props.DialogProps?.container ?? PortalShadowRoot }}
-                value={defaultIndex}
-                onChange={(e) => fn(e.target.value as number)}>
+                value={defaultIndex || 0}>
                 {options.map((item, index) => (
-                    <MenuItem value={index} key={index}>
-                        {index}
-                    </MenuItem>
+                    <MenuItem value={index}>{index}</MenuItem>
                 ))}
             </Select>
         )
@@ -113,21 +89,15 @@ function NewPollUI(props: PollsDialogProps & NewPollProps) {
     return (
         <>
             <FormControl className={classes.line}>
-                <TextField label="Ask a question..." variant="filled" InputProps={{ inputRef: questionRef }} />
+                <InputLabel className={classes.inputLabel}>Ask a question...</InputLabel>
+                <Input className={classes.input}></Input>
             </FormControl>
             <div className={classes.pollWrap}>
                 <div className={classes.optionsWrap}>
                     {options.map((option, index) => (
-                        <FormControl className={classes.line} key={index}>
-                            <TextField
-                                label={`choice${index + 1}`}
-                                variant="filled"
-                                InputProps={{
-                                    onChange: (e) => {
-                                        handleOptionsInput(index, e)
-                                    },
-                                }}
-                            />
+                        <FormControl className={classes.line}>
+                            <InputLabel className={classes.inputLabel}>{`choice${index + 1}`}</InputLabel>
+                            <Input className={classes.input}></Input>
                         </FormControl>
                     ))}
                     <IconButton onClick={addNewOption} classes={{ root: classes.addButton }}>
@@ -141,50 +111,24 @@ function NewPollUI(props: PollsDialogProps & NewPollProps) {
                 <div className={classes.line}>
                     <FormControl variant="filled" className={classes.item}>
                         <InputLabel>Days</InputLabel>
-                        {renderSelect(8, setDays, days)}
+                        {renderSelect(8, 1)}
                     </FormControl>
                     <FormControl variant="filled" className={classes.item}>
                         <InputLabel>Hours</InputLabel>
-                        {renderSelect(25, setHours, hours)}
+                        {renderSelect(25)}
                     </FormControl>
                     <FormControl variant="filled" className={classes.item}>
                         <InputLabel>Minutes</InputLabel>
-                        {renderSelect(61, setMinutes, minutes)}
+                        {renderSelect(61)}
                     </FormControl>
                 </div>
             </div>
             <div className={classes.line} style={{ justifyContent: 'flex-end' }}>
-                <Button
-                    className={classes.button}
-                    color="primary"
-                    variant="contained"
-                    style={{ color: '#fff' }}
-                    onClick={sendPoll}>
+                <Button className={classes.button} color="primary" variant="contained" style={{ color: '#fff' }}>
                     Send Poll
                 </Button>
             </div>
         </>
-    )
-}
-
-interface ExistingPollsProps {}
-
-function ExistingPollsUI(props: PollsDialogProps & ExistingPollsProps) {
-    const [polls, setPolls] = useState<Array<PollGunDB>>([])
-    const classes = useStylesExtends(useNewPollStyles(), props)
-
-    useEffect(() => {
-        getExistingPolls().then((data) => {
-            setPolls(data.reverse() as Array<PollGunDB>)
-        })
-    }, [])
-
-    return (
-        <div className={classes.wrapper}>
-            {polls.map((p) => (
-                <PollCardUI poll={p} key={p.key as string | number} />
-            ))}
-        </div>
     )
 }
 
@@ -203,7 +147,6 @@ interface PollsDialogProps
     extends withClasses<
         | KeysInferFromUseStyles<typeof useStyles>
         | 'dialog'
-        | 'wrapper'
         | 'backdrop'
         | 'container'
         | 'close'
@@ -233,7 +176,7 @@ export default function PollsDialog(props: PollsDialogProps) {
             },
             {
                 label: 'Select Existing',
-                children: <ExistingPollsUI {...props} />,
+                children: <div>Select Existing</div>,
                 p: 0,
             },
         ],
