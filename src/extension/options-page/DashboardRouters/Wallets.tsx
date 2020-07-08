@@ -35,35 +35,12 @@ import { currentEthereumNetworkSettings } from '../../../settings/settings'
 import { useWallet } from '../../../plugins/shared/useWallet'
 import type { WalletDetails, ERC20TokenDetails } from '../../background-script/PluginService'
 
-const useStyles = makeStyles((theme) =>
+const useWalletContentStyles = makeStyles((theme) =>
     createStyles({
         root: {
-            display: 'flex',
-            flex: '0 0 100%',
             height: '100%',
-        },
-        scroller: {
-            width: 224,
-            height: '100%',
-            flex: '0 0 auto',
-            borderRight: `1px solid ${theme.palette.divider}`,
-            overflowY: 'auto',
-            scrollbarWidth: 'none',
-            '&::-webkit-scrollbar': {
-                display: 'none',
-            },
-        },
-        content: {
-            width: '100%',
-            overflow: 'auto',
-            flex: '1 1 auto',
             display: 'flex',
             flexDirection: 'column',
-        },
-        wrapper: {
-            display: 'flex',
-            flexDirection: 'column',
-            height: '100%',
         },
         title: {
             color: theme.palette.text.primary,
@@ -122,7 +99,7 @@ const WalletContent = React.forwardRef<HTMLDivElement, WalletContentProps>(funct
     { wallet, tokens }: WalletContentProps,
     ref,
 ) {
-    const classes = useStyles()
+    const classes = useWalletContentStyles()
     const { t } = useI18N()
     const color = useColorStyles()
 
@@ -174,8 +151,14 @@ const WalletContent = React.forwardRef<HTMLDivElement, WalletContentProps>(funct
     )
     const [menu, , openMenu] = useModal(DashboardMenu, { menus })
     if (!wallet) return null
+
+    console.log('DEBUG: added tokens')
+    console.log(tokens)
+    console.log(addedTokens)
+    console.log(wallet?.erc20tokensBalanceMap)
+
     return (
-        <div ref={ref}>
+        <div className={classes.root} ref={ref}>
             <ThemeProvider theme={walletTheme}>
                 <Box pt={3} pb={2} pl={3} pr={2} display="flex" alignItems="center">
                     <Typography className={classes.title} variant="h5">
@@ -207,7 +190,8 @@ const WalletContent = React.forwardRef<HTMLDivElement, WalletContentProps>(funct
                             symbol: 'ETH',
                             network,
                             decimals: 18,
-                        }}></TokenListItem>
+                        }}
+                    />
                     {addedTokens?.map((token) => (
                         <TokenListItem
                             balance={wallet.erc20tokensBalanceMap.get(token.address) ?? new BigNumber(0)}
@@ -236,6 +220,39 @@ const WalletContent = React.forwardRef<HTMLDivElement, WalletContentProps>(funct
         </div>
     )
 })
+
+const useStyles = makeStyles((theme) =>
+    createStyles({
+        root: {
+            display: 'flex',
+            flex: '0 0 100%',
+            height: '100%',
+        },
+        scroller: {
+            width: 224,
+            height: '100%',
+            flex: '0 0 auto',
+            borderRight: `1px solid ${theme.palette.divider}`,
+            overflowY: 'auto',
+            scrollbarWidth: 'none',
+            '&::-webkit-scrollbar': {
+                display: 'none',
+            },
+        },
+        content: {
+            width: '100%',
+            overflow: 'auto',
+            flex: '1 1 auto',
+            display: 'flex',
+            flexDirection: 'column',
+        },
+        wrapper: {
+            display: 'flex',
+            flexDirection: 'column',
+            height: '100%',
+        },
+    }),
+)
 
 export default function DashboardWalletsRouter() {
     const classes = useStyles()
