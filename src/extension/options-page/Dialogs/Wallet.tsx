@@ -29,7 +29,7 @@ import type { EthereumNetwork, RedPacketRecord } from '../../../plugins/Wallet/d
 import {
     ERC20PredefinedTokenSelector,
     ERC20CustomizedTokenSelector,
-} from '../../../plugins/Wallet/UI/Dashboard/Dialogs/WalletAddTokenDialogContent'
+} from '../../../plugins/Wallet/UI/Dashboard/Dialogs/WalletAddTokenDialog'
 import type { ERC20Token } from '../../../plugins/Wallet/token'
 import { PluginMessageCenter } from '../../../plugins/PluginMessages'
 import WalletLine from '../../../plugins/Wallet/UI/Dashboard/Components/WalletLine'
@@ -272,7 +272,6 @@ export function DashboardWalletAddTokenDialog(props: WrappedDialogProps<WalletPr
                 label: 'Well-know token',
                 children: (
                     <ERC20PredefinedTokenSelector
-                        token={token}
                         excludeTokens={addedTokens}
                         network={network}
                         onTokenChange={setToken}
@@ -284,7 +283,6 @@ export function DashboardWalletAddTokenDialog(props: WrappedDialogProps<WalletPr
                 label: 'Add your own',
                 children: (
                     <ERC20CustomizedTokenSelector
-                        token={token}
                         excludeTokens={addedTokens}
                         network={network}
                         onTokenChange={setToken}

@@ -54,6 +54,11 @@ const useWalletContentStyles = makeStyles((theme) =>
         },
         tokenList: {
             flex: 1,
+            overflow: 'auto',
+            scrollbarWidth: 'none',
+            '&::-webkit-scrollbar': {
+                display: 'none',
+            },
         },
         footer: {
             flex: 0,
@@ -110,13 +115,12 @@ const WalletContent = React.forwardRef<HTMLDivElement, WalletContentProps>(funct
     const [walletDelete, , openWalletDelete] = useModal(DashboardWalletDeleteConfirmDialog)
     const [walletRename, , openWalletRename] = useModal(DashboardWalletRenameDialog)
 
-    const addedTokens = tokens
-        ?.filter((token) => wallet?.erc20tokensBalanceMap.has(token.address))
-        .sort((token, otherToken) => {
-            if (isDAI(token.address)) return -1
-            if (isDAI(otherToken.address)) return 1
-            return token.name < otherToken.name ? -1 : 1
-        })
+    // ?.filter((token) => wallet?.erc20tokensBalanceMap.has(token.address))
+    const addedTokens = tokens?.sort((token, otherToken) => {
+        if (isDAI(token.address)) return -1
+        if (isDAI(otherToken.address)) return 1
+        return token.name < otherToken.name ? -1 : 1
+    })
     const setAsDefault = useSnackbarCallback(
         () => Services.Plugin.invokePlugin('maskbook.wallet', 'setDefaultWallet', wallet!.walletAddress),
         [wallet?.walletAddress],
@@ -151,12 +155,6 @@ const WalletContent = React.forwardRef<HTMLDivElement, WalletContentProps>(funct
     )
     const [menu, , openMenu] = useModal(DashboardMenu, { menus })
     if (!wallet) return null
-
-    console.log('DEBUG: added tokens')
-    console.log(tokens)
-    console.log(addedTokens)
-    console.log(wallet?.erc20tokensBalanceMap)
-
     return (
         <div className={classes.root} ref={ref}>
             <ThemeProvider theme={walletTheme}>
