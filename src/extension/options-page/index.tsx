@@ -3,7 +3,7 @@ import '../../setup.ui'
 
 import React from 'react'
 import { CssBaseline, useMediaQuery, NoSsr } from '@material-ui/core'
-import { ThemeProvider, makeStyles, createStyles } from '@material-ui/core/styles'
+import { ThemeProvider, makeStyles, createStyles, Theme } from '@material-ui/core/styles'
 
 import PeopleOutlinedIcon from '@material-ui/icons/PeopleOutlined'
 import CreditCardIcon from '@material-ui/icons/CreditCard'
@@ -45,25 +45,26 @@ const useStyles = makeStyles((theme) => {
     return createStyles({
         wrapper: {
             '--monospace': 'SFMono-Regular, Consolas, "Liberation Mono", Menlo, monospace',
-
             '--drawerHeader': dark ? '#121212' : theme.palette.primary.main,
             '--drawerBody': dark ? '#121212' : theme.palette.primary.main,
+            '--thumbBG': 'rgba(0, 0, 0, 0.15)',
+            '--scrollbarBG': 'rgba(15, 34, 0, 0.05)',
 
-            position: 'absolute',
+            backgroundColor: dark ? grey[900] : grey[50],
+            userSelect: 'none',
             width: '100vw',
             height: '100vh',
-            backgroundColor: dark ? grey[900] : grey[50],
-            display: 'grid',
-            gridTemplateColumns: '1fr [content-start] 1110px [content-end] 1fr',
-            gridTemplateRows: '32px [content-start] auto [content-end] 50px',
-            placeItems: 'center',
-            userSelect: 'none',
+            position: 'absolute',
+
+            [theme.breakpoints.up('sm')]: {
+                display: 'grid',
+                gridTemplateColumns: '1fr [content-start] 1110px [content-end] 1fr',
+                gridTemplateRows: '32px [content-start] auto [content-end] 50px',
+                placeItems: 'center',
+            },
 
             transition: 'filter 0.3s linear',
             willChange: 'filter',
-
-            '--thumbBG': 'rgba(0, 0, 0, 0.15)',
-            '--scrollbarBG': 'rgba(15, 34, 0, 0.05)',
 
             scrollbarWidth: 'thin',
             scrollbarColor: 'var(--thumbBG) var(--scrollbarBG)',
@@ -83,12 +84,14 @@ const useStyles = makeStyles((theme) => {
             width: '100%',
             height: '100%',
             overflow: 'auto',
-            borderRadius: '12px',
+            borderRadius: 0,
             backgroundColor: dark ? '#121212' : '#FFFFFF',
             gridRow: 'content-start / content-end',
             gridColumn: 'content-start / content-end',
-
             display: 'flex',
+            [theme.breakpoints.up('sm')]: {
+                borderRadius: 12,
+            },
         },
         footer: {
             gridRow: 'content-end / span 1',
@@ -104,6 +107,8 @@ function DashboardUI() {
     const { t } = useI18N()
     const classes = useStyles()
     const history = useHistory<unknown>()
+
+    const smMatched = useMediaQuery((theme: Theme) => theme.breakpoints.down('xs'))
 
     const routers = ([
         [t('personas'), DashboardRoute.Personas, <PeopleOutlinedIcon />],
@@ -133,7 +138,7 @@ function DashboardUI() {
                 <div className={classes.container}>
                     {loading ? null : (
                         <>
-                            <Drawer routers={routers} exitDashboard={null} />
+                            {smMatched ? null : <Drawer routers={routers} exitDashboard={null} />}
                             <Switch>
                                 <Route path={DashboardRoute.Personas} component={DashboardPersonasRouter} />
                                 <Route path={DashboardRoute.Wallets} component={DashboardWalletsRouter} />
@@ -153,9 +158,11 @@ function DashboardUI() {
                         </>
                     )}
                 </div>
-                <footer className={classes.footer}>
-                    <FooterLine />
-                </footer>
+                {smMatched ? null : (
+                    <footer className={classes.footer}>
+                        <FooterLine />
+                    </footer>
+                )}
             </div>
         </DashboardBlurContextUI>
     )
