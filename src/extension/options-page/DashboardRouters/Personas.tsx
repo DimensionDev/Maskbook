@@ -8,7 +8,6 @@ import { useModal } from '../Dialogs/Base'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { merge, cloneDeep } from 'lodash-es'
 import { useMyPersonas } from '../../../components/DataSource/independent'
-import { useHistory } from 'react-router-dom'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -22,6 +21,11 @@ const useStyles = makeStyles((theme) =>
             // keep the shadow of the persona card
             marginLeft: -4,
             paddingLeft: 4,
+
+            [theme.breakpoints.down('xs')]: {
+                margin: 0,
+                paddingLeft: 0,
+            },
         },
         databaseButton: {
             paddingTop: 0,
