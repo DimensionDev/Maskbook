@@ -54,7 +54,7 @@ export interface DashboardDialogCoreProps extends DialogProps {
 export function DashboardDialogCore(props: DashboardDialogCoreProps) {
     const { fullScreen, children, CloseIconProps, CloseButtonProps, ...dialogProps } = props
 
-    const mobile = useMediaQuery('(mIax-width: 600px)')
+    const xsMatched = useMediaQuery((theme: Theme) => theme.breakpoints.down('xs'))
     const classes = useStyles()
     useBlurContext(dialogProps.open)
 
@@ -62,7 +62,7 @@ export function DashboardDialogCore(props: DashboardDialogCoreProps) {
         <Dialog
             className={classes.root}
             closeAfterTransition
-            fullScreen={fullScreen ?? mobile}
+            fullScreen={fullScreen ?? xsMatched}
             TransitionComponent={Transition}
             hideBackdrop
             {...dialogProps}>
@@ -150,6 +150,9 @@ const useDashboardDialogWrapperStyles = makeStyles((theme) =>
             flexDirection: 'column',
             width: (props) => (props.size === 'small' ? 280 : 440),
             padding: (props) => (props.size === 'small' ? '40px 24px !important' : '40px 36px !important'),
+            [theme.breakpoints.down('xs')]: {
+                width: '100% !important',
+            },
         },
         header: {
             textAlign: 'center',
