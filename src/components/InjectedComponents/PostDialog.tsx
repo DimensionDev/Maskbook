@@ -45,6 +45,7 @@ import ShadowRootDialog from '../../utils/jss/ShadowRootDialog'
 import { twitterUrl } from '../../social-network-provider/twitter.com/utils/url'
 import { RedPacketMetaKey } from '../../plugins/Wallet/RedPacketMetaKey'
 import { PluginUI } from '../../plugins/plugin'
+import PollsDialog from '../../plugins/Polls/UI/PollsDialog'
 
 const defaultTheme = {}
 
@@ -116,6 +117,7 @@ export function PostDialogUI(props: PostDialogUIProps) {
         [props.open, props.postContent],
     )
     const [redPacketDialogOpen, setRedPacketDialogOpen] = useState(false)
+    const [pollsDialogOpen, setPollsDialogOpen] = useState(false)
 
     if (props.postContent.type !== 'text') return <>Unsupported type to edit</>
     const metadataBadge = [...PluginUI].flatMap((plugin) => {
@@ -204,6 +206,19 @@ export function PostDialogUI(props: PostDialogUIProps) {
                                     }}
                                 />
                             )}
+                            <ClickableChip
+                                ChipProps={{
+                                    label: '🗳️ Poll',
+                                    onClick: async () => {
+                                        const { wallets } = await Services.Plugin.getWallets()
+                                        if (wallets.length) {
+                                            setPollsDialogOpen(true)
+                                        } else {
+                                            Services.Welcome.openOptionsPage('/wallets?error=nowallet')
+                                        }
+                                    },
+                                }}
+                            />
                         </Box>
                         <Typography style={{ marginBottom: 10 }}>
                             {t('post_dialog__select_recipients_title')}
@@ -272,6 +287,15 @@ export function PostDialogUI(props: PostDialogUIProps) {
                     open={props.open && redPacketDialogOpen}
                     onConfirm={() => setRedPacketDialogOpen(false)}
                     onDecline={() => setRedPacketDialogOpen(false)}
+                    DialogProps={props.DialogProps}
+                />
+            )}
+            {!process.env.STORYBOOK && (
+                <PollsDialog
+                    classes={classes}
+                    open={props.open && pollsDialogOpen}
+                    onConfirm={() => setPollsDialogOpen(true)}
+                    onDecline={() => setPollsDialogOpen(false)}
                     DialogProps={props.DialogProps}
                 />
             )}
